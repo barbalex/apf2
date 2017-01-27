@@ -19,6 +19,7 @@ import OsmColorLayer from './layers/OsmColor'
 import OsmBwLayer from './layers/OsmBw'
 import SwissTopoPixelFarbeLayer from './layers/SwisstopoPixelFarbe'
 import BingAerialLayer from './layers/BingAerial'
+import '../../../../node_modules/leaflet/dist/leaflet.css'
 
 const { BaseLayer, Overlay } = LayersControl
 const StyledMap = styled(Map)`

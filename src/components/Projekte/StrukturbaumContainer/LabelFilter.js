@@ -12,6 +12,9 @@ import tables from '../../../modules/tables'
 const FilterField = styled(TextField)`
   margin-top: -0.6em;
   padding: 0 0.8em 0 0.8em;
+  div hr {
+    width: calc(100% - 20px) !important;
+  }
 `
 
 const enhance = compose(
