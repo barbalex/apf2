@@ -1,0 +1,111 @@
+/**
+ * global styles
+ */
+
+html,
+body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  overflow: hidden;
+}
+
+body.fontLoaded {
+  font-family: 'Roboto', sans-serif;
+}
+
+:global(#root) {
+  background-color: rgb(48, 48, 48);
+  min-height: 100%;
+  min-width: 100%;
+  color: rgb(255, 255, 255);
+  height: 100vh;
+}
+
+:global(#root) > div {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+:global a {
+  color: orange;
+}
+
+/* css for context menu */
+:global .react-contextmenu {
+  min-width: 160px;
+  padding: 5px 0;
+  margin: 2px 0 0;
+  font-size: 14px;
+  text-align: left;
+  background-color: rgb(66, 66, 66);
+  background-clip: padding-box;
+  border: 1px solid grey;
+  border-radius: .25rem;
+  outline: none;
+  opacity: 0;
+  pointer-events: none;
+  font-family: 'Roboto', sans-serif;
+}
+
+:global .react-contextmenu.react-contextmenu--visible {
+  color: white;
+  opacity: 1;
+  pointer-events: auto;
+  z-index: 10;
+}
+
+:global .react-contextmenu-title {
+  opacity: 0;
+}
+
+:global .react-contextmenu--visible .react-contextmenu-title {
+  color: #b3b3b3;
+  padding-left: 10px;
+  opacity: 1;
+}
+:global .react-contextmenu-title::after {
+  content: ":";
+}
+
+:global .react-contextmenu-item {
+  display: inline-block;
+  width: 100%;
+  padding: 3px 20px;
+  clear: both;
+  font-weight: 400;
+  line-height: 1.5;
+  color: white;
+  text-align: inherit;
+  white-space: nowrap;
+  background: 0 0;
+  border: 0;
+  text-decoration: none;
+}
+
+:global .react-contextmenu-item.active,
+:global .react-contextmenu-item:hover {
+  color: orange;
+  border-color: #0275d8;
+  text-decoration: none;
+}
+:global .react-contextmenu-item.submenu > a {
+  padding-right: 27px;
+}
+
+:global .react-contextmenu-item.submenu > a:after {
+  content: "▶";
+  display: inline-block;
+  position: absolute;
+  right: 7px;
+}
+
+.example-multiple-targets::after {
+  content: attr(data-count);
+  display: block;
+}
