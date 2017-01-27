@@ -77,7 +77,7 @@ const MyAppBar = ({ store, onClickButton }) => {
             style={{ paddingLeft: 10 }}
           >
             <MenuItem
-              primaryText="Über apflora.ch"
+              primaryText="über apflora.ch"
               onTouchTap={() =>
                 window.open(`https://github.com/FNSKtZH/apflora/wiki`)
               }
