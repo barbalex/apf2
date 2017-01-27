@@ -15,7 +15,7 @@ import withState from 'recompose/withState'
 import withProps from 'recompose/withProps'
 import withHandlers from 'recompose/withHandlers'
 
-// import beziehungen from '../../../../etc/beziehungen.png'
+import beziehungen from '../../../../etc/beziehungen.png'
 import FormTitle from '../../../shared/FormTitle'
 import apiBaseUrl from '../../../../modules/apiBaseUrl'
 import Tipps from './Tipps'
@@ -613,7 +613,7 @@ const Exporte = ({
             label="Datenstruktur grafisch dargestellt"
             onClick={() => {
               // fileDownload(beziehungen, `apfloraBeziehungen.png`)
-              window.open(`${apiBaseUrl}/etc/beziehungen.png`)
+              window.open(beziehungen)
             }}
           />
         </DownloadCardText>
