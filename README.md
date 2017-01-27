@@ -2,7 +2,7 @@
 
 verwendet:
 
-- [react-boilerplate](https://github.com/mxstbr/react-boilerplate)
+- [create-react-app](https://github.com/facebookincubator/create-react-app)
 - [mobX](https://github.com/mobxjs/mobx)
 - [socket.io](http://socket.io/)
 
@@ -11,6 +11,7 @@ verwendet:
 - mehrere Projekte verwalten
 - Die Daten in der Benutzeroberfläche werden laufend aktualisiert, wenn mehrere Personen gleichzeitig arbeiten
 - Grundlage schaffen, um Berichte direkt aus der Webanwendung heraus produzieren zu können
+  Jede Artverantwortliche soll jederzeit den Jahresbericht für ihre Art selber erzeugen und kontrollieren können
 - Grundlage schaffen, um auf das Access-Admin-Tool zu verzichten
 - Architektur modernisieren
 - Unterhalt- und Erweiterbarkeit verbessern
