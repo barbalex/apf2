@@ -157,7 +157,10 @@ const fetchQk = ({ store }) => {
     .then((res) => {
       // kontrolliere die Relevanz ausserkantonaler Tpop
       const tpops = res.data.filter(tpop =>
-        tpop.TPopApBerichtRelevant === 1 && !isPointInsidePolygon(zhGeojson, tpop.TPopXKoord, tpop.TPopYKoord)
+        tpop.TPopApBerichtRelevant === 1 &&
+        tpop.TPopXKoord &&
+        tpop.TPopYKoord &&
+        !isPointInsidePolygon(zhGeojson, tpop.TPopXKoord, tpop.TPopYKoord)
       )
       if (tpops.length > 0) {
         const messages = {
