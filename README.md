@@ -13,6 +13,7 @@ verwendet:
 - Grundlage schaffen, um Berichte direkt aus der Webanwendung heraus produzieren zu können
   Artverantwortliche sollen Jahresberichte für ihre Arten selber erzeugen und kontrollieren können
 - Grundlage schaffen, um auf das Access-Admin-Tool verzichten zu können
+- Grundlage schaffen, um später allenfalls neutzunabhängig (im Feld) arbeiten zu können
 - Architektur modernisieren
 - Unterhalt- und Erweiterbarkeit verbessern
 - es soll künftig einfacher und mit weniger Risiko verbunden sein, neue Features einzuführen
