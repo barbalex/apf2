@@ -1,10 +1,11 @@
+// @flow
 import axios from 'axios'
 import { runInAction } from 'mobx'
 import app from 'ampersand-app'
 
 import apiBaseUrl from './apiBaseUrl'
 
-export default (store) => {
+export default (store:Object) => {
   // only fetch if not yet done
   if (store.app.fields.length === 0 && !store.app.fieldsLoading) {
     store.app.fieldsLoading = true

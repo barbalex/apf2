@@ -1,3 +1,4 @@
+// @flow
 import { runInAction, computed } from 'mobx'
 import axios from 'axios'
 import app from 'ampersand-app'
@@ -27,7 +28,7 @@ const writeToStore = (store, data) => {
   })
 }
 
-export default (store, apArtId) => {
+export default (store:Object, apArtId:number) => {
   // console.log(`module fetchBeobzuordnung: apArtId:`, apArtId)
   const { valuesForWhichTableDataWasFetched } = store
   if (!apArtId) {

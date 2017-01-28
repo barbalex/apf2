@@ -1,3 +1,4 @@
+// @flow
 /**
  * Problem: Same data is refetched very often
  * Idea 1: Compare activeUrlElements with previous activeUrlElements
@@ -7,7 +8,7 @@
 import { runInAction } from 'mobx'
 import forEach from 'lodash/forEach'
 
-const fetchDataForActiveUrlElements = (store) => {
+const fetchDataForActiveUrlElements = (store:Object) => {
   const { activeUrlElements } = store
   const fetchingFromActiveElements = {
     exporte() {
