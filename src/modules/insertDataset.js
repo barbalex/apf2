@@ -1,3 +1,4 @@
+// @flow
 import axios from 'axios'
 import queryString from 'query-string'
 
@@ -5,7 +6,7 @@ import apiBaseUrl from './apiBaseUrl'
 import tables from './tables'
 import insertDatasetInIdb from './insertDatasetInIdb'
 
-export default (store, tablePassed, parentId, baseUrl) => {
+export default (store:Object, tablePassed:string, parentId:number, baseUrl:Array<string>) => {
   let table = tablePassed
   if (!table) {
     return store.listError(

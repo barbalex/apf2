@@ -1,6 +1,7 @@
+// @flow
 import isEqual from 'lodash/isEqual'
 
-export default (node, activeUrl) => {
+export default (node:Object, activeUrl:Array<string>) => {
   if (!node) return false
   if (!node.url) return false
   if (!activeUrl) return false
