@@ -1,3 +1,4 @@
+// @flow
 /**
  * need to build a singleton from history
  * where the needed methods are returned

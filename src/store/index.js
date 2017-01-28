@@ -1,5 +1,4 @@
-/* eslint-disable no-console, no-param-reassign */
-
+// @flow
 import { extendObservable, action, autorun, autorunAsync, computed, observable } from 'mobx'
 import $ from 'jquery'
 
@@ -149,6 +148,7 @@ function Store() {
      * url paths are used to control tree and forms
      */
     url: computed(() =>
+      //$FlowIssue
       getUrl(this.history.location.pathname)
     ),
     /**
@@ -156,6 +156,7 @@ function Store() {
      * for instance: Entwicklung or Biotop in tpopfeldkontr
      */
     urlQuery: computed(() =>
+      //$FlowIssue
       getUrlQuery(this.history.location.search)
     ),
     projektNodes: computed(() =>
