@@ -1,4 +1,15 @@
-export default ({ store, table, field, value }) => {
+// @flow
+export default ({
+  store,
+  table,
+  field,
+  value,
+}:{
+  store:Object,
+  table:string,
+  field:string,
+  value:string|number,
+}) => {
   const { valuesForWhichTableDataWasFetched } = store
   // record that data was fetched for this value
   if (!valuesForWhichTableDataWasFetched[table]) {

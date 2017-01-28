@@ -1,3 +1,4 @@
+// @flow
 import dateFns from 'date-fns'
 import compose from 'recompose/compose'
 import renameProps from 'recompose/renameProps'
@@ -12,7 +13,17 @@ const enhance = compose(
   })
 )
 
-const setQk = ({ store, berichtjahrPassed, messagesPassed, filterPassed }) => {
+const setQk = ({
+  store,
+  berichtjahrPassed,
+  messagesPassed,
+  filterPassed,
+}:{
+  store:Object,
+  berichtjahrPassed:number,
+  messagesPassed:Array<Object>,
+  filterPassed:string,
+}) => {
   const apArtId = store.activeUrlElements.ap
   let berichtjahr = berichtjahrPassed
   const messages = messagesPassed || []

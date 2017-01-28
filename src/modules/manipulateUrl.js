@@ -1,8 +1,9 @@
+// @flow
 import isEqual from 'lodash/isEqual'
 import clone from 'lodash/clone'
 import queryString from 'query-string'
 
-export default (store) => {
+export default (store:Object) => {
   const url = clone(store.url)
   // forward apflora.ch to Projekte
   if (url.length === 0) {
