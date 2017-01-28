@@ -1,9 +1,14 @@
+// @flow
 import { extendObservable, computed } from 'mobx'
 
 export default ({
   berichtjahr,
   messages,
   filter,
+}:{
+  berichtjahr:number,
+  messages:Array<Object>,
+  filter:string
 }) => {
   const value = {
     berichtjahr,

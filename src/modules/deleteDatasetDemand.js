@@ -1,6 +1,7 @@
+// @flow
 import tables from './tables'
 
-export default (store, table, id, url, label) => {
+export default (store:Object, table:string, id:string|number, url:string, label:string) => {
   if (!table) {
     return store.listError(new Error(`no table passed`))
   }

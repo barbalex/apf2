@@ -1,3 +1,4 @@
+// @flow
 import axios from 'axios'
 import queryString from 'query-string'
 
@@ -5,7 +6,7 @@ import apiBaseUrl from './apiBaseUrl'
 import tables from './tables'
 import deleteDatasetInIdb from './deleteDatasetInIdb'
 
-export default (store) => {
+export default (store:Object) => {
   // deleteDatasetDemand checks variables
   const { table: tablePassed, id, idField, url } = store.datasetToDelete
   let table = tablePassed

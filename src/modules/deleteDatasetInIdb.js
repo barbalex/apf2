@@ -1,6 +1,7 @@
+// @flow
 import app from 'ampersand-app'
 
-export default (store, table, idPassed) => {
+export default (store:Object, table:string, idPassed:string|number) => {
   let id = idPassed
   // DANGEROUS: if number is passed as string, delete will fail
   if (!isNaN(id) && typeof id === `string`) {

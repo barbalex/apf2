@@ -1,3 +1,4 @@
+// @flow
 /**
  * idea:
  * use nodeIdPath
@@ -42,7 +43,7 @@ const findActiveNodeInNodes = (store, nodes, nodeIdPathPassed) => {
   }
 }
 
-export default (store, nodes, activeNode, previousCount) => {
+export default (store:Object, nodes:Array<Object>, activeNode:Object, previousCount:number) => {
   // if anything goes wrong: return previous count
   if (!nodes) return previousCount
   if (!nodes.length) return previousCount
