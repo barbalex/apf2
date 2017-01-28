@@ -1,3 +1,4 @@
+// @flow
 /* eslint-disable no-console, jsx-a11y/no-static-element-interactions */
 
 import React, { PropTypes } from 'react'
@@ -5,7 +6,6 @@ import { observer, inject } from 'mobx-react'
 import TextField from 'material-ui/TextField'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
-import withHandlers from 'recompose/withHandlers'
 
 import tables from '../../../modules/tables'
 
@@ -19,18 +19,10 @@ const FilterField = styled(TextField)`
 
 const enhance = compose(
   inject(`store`),
-  withHandlers({
-    onChange: props => (event, val) =>
-      props.store.updateLabelFilter(props.filteredTable, val)
-    ,
-  }),
   observer
 )
 
-const LabelFilter = ({
-  store,
-  onChange,
-}) => {
+const LabelFilter = ({ store }) => {
   const { node } = store
   const { activeDataset } = store
   let filteredTable = ``
@@ -55,14 +47,15 @@ const LabelFilter = ({
       floatingLabelText={labelText}
       fullWidth
       value={filterValue}
-      onChange={onChange}
+      onChange={(event, val) =>
+        store.updateLabelFilter(filteredTable, val)
+      }
     />
   )
 }
 
 LabelFilter.propTypes = {
   store: PropTypes.object.isRequired,
-  onChange: PropTypes.func.isRequired,
 }
 
 export default enhance(LabelFilter)
