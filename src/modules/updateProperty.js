@@ -1,6 +1,7 @@
+// @flow
 import queryString from 'query-string'
 
-export default (store, key, valuePassed) => {
+export default (store:Object, key:string, valuePassed:string|number) => {
   const { table, row } = store.activeDataset
   let value = valuePassed
   // ensure primary data exists

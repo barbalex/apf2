@@ -1,6 +1,7 @@
+// @flow
 import tables from './tables'
 
-export default (store, payload) => {
+export default (store:Object, payload:Object) => {
   const { table, type, row } = payload
   const tableMeta = tables.find(t => t.table === table)
   const idField = tableMeta.idField

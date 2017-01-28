@@ -1,4 +1,4 @@
-
+// @flow
 import axios from 'axios'
 import queryString from 'query-string'
 import objectValues from 'lodash/values'
@@ -7,7 +7,7 @@ import apiBaseUrl from './apiBaseUrl'
 import tables from './tables'
 import updatePropertyInIdb from './updatePropertyInIdb'
 
-export default (store, key, valuePassed) => {
+export default (store:Object, key:string, valuePassed:string|number) => {
   const { row, valid } = store.activeDataset
   const tablePassed = store.activeDataset.table
   let value = valuePassed

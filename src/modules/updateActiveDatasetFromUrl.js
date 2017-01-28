@@ -1,6 +1,7 @@
+// @flow
 import validateActiveDataset from './validateActiveDataset'
 
-export default (store) => {
+export default (store:Object) => {
   const aEl = store.activeUrlElements
   let activeDataset = {
     table: null,
