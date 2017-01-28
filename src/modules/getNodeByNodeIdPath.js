@@ -1,3 +1,4 @@
+// @flow
 /**
  * gets nodes and a path
  * finds the node that has same nodeId as first path element
