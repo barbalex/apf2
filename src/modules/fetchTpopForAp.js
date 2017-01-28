@@ -1,3 +1,4 @@
+// @flow
 import axios from 'axios'
 import app from 'ampersand-app'
 
@@ -5,7 +6,7 @@ import apiBaseUrl from './apiBaseUrl'
 import recordValuesForWhichTableDataWasFetched from './recordValuesForWhichTableDataWasFetched'
 import writeToStore from './writeToStore'
 
-export default (store, apArtId) => {
+export default (store:Object, apArtId:number) => {
   if (!apArtId) {
     return new Error(`action fetchTpopForAp: apArtId must be passed`)
   }

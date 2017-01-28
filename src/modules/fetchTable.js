@@ -1,3 +1,4 @@
+// @flow
 import axios from 'axios'
 import app from 'ampersand-app'
 
@@ -5,7 +6,7 @@ import apiBaseUrl from './apiBaseUrl'
 import tables from './tables'
 import writeToStore from './writeToStore'
 
-export default (store, schemaNamePassed, tableName) => {
+export default (store:Object, schemaNamePassed:string, tableName:string) => {
   if (!tableName) {
     return store.listError(new Error(`action fetchTable: tableName must be passed`))
   }
