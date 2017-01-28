@@ -16,6 +16,7 @@ verwendet:
 - Grundlage schaffen, um später allenfalls neutzunabhängig (im Feld) arbeiten zu können
 - Architektur modernisieren
 - Unterhalt- und Erweiterbarkeit verbessern
+- Anzahl Karten-Werkzeuge auf eines reduzieren (bisher: Google-Maps und OpenLayers)
 - es soll künftig einfacher und mit weniger Risiko verbunden sein, neue Features einzuführen
 - einige in der alten Architektur schwierig zu lösende Fehler beheben
 - veraltete Abhängikeiten loswerden (z.B. jsTree 2)
