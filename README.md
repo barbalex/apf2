@@ -9,10 +9,10 @@ verwendet:
 ##Ziele:
 
 - mehrere Projekte verwalten
-- Die Daten in der Benutzeroberfläche werden laufend aktualisiert, wenn mehrere Personen gleichzeitig arbeiten
+- die Daten in der Benutzeroberfläche werden laufend aktualisiert, wenn mehrere Personen gleichzeitig arbeiten
 - Grundlage schaffen, um Berichte direkt aus der Webanwendung heraus produzieren zu können
   Artverantwortliche sollen Jahresberichte für ihre Arten selber erzeugen und kontrollieren können
-- Grundlage schaffen, um auf das Access-Admin-Tool zu verzichten
+- Grundlage schaffen, um auf das Access-Admin-Tool verzichten zu können
 - Architektur modernisieren
 - Unterhalt- und Erweiterbarkeit verbessern
 - es soll künftig einfacher und mit weniger Risiko verbunden sein, neue Features einzuführen
