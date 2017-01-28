@@ -1,4 +1,5 @@
-export default (pathname) => {
+// @flow
+export default (pathname:string) => {
   const pathNamePassed = pathname
   const pathName = pathNamePassed.replace(`/`, ``)
   const pathElements = pathName.split(`/`)

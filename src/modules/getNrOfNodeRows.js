@@ -1,4 +1,5 @@
-const countRows = (nodes) => {
+// @flow
+const countRows = (nodes:Array<Object>) => {
   if (!nodes || !nodes.length) {
     return 0
   }

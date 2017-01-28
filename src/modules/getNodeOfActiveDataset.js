@@ -1,4 +1,5 @@
-export default (store) => {
+// @flow
+export default (store:Object) => {
   const { activeDataset } = store
   const { table, row } = activeDataset
   const nodes = store[`${table}Nodes`]
