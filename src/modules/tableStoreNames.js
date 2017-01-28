@@ -1,3 +1,4 @@
+// @flow
 export default [
   `adb_eigenschaften`,
   `adb_lr`,

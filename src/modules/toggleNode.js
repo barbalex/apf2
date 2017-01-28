@@ -1,6 +1,7 @@
+// @flow
 import queryString from 'query-string'
 
-export default (store, node) => {
+export default (store:Object, node:Object) => {
   if (node) {
     const newUrl = node.url
     if (node.expanded) {

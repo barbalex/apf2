@@ -1,4 +1,4 @@
-/* eslint-disable max-len */
+// @flow
 // TODO: parentTable is not used any more, remove
 
 export default [
