@@ -1,3 +1,4 @@
+// @flow
 import React, { PropTypes } from 'react'
 import { observer } from 'mobx-react'
 import Popover from 'material-ui/Popover'

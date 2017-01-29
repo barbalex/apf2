@@ -1,3 +1,4 @@
+// @flow
 import React, { PropTypes } from 'react'
 import styled from 'styled-components'
 
@@ -10,7 +11,7 @@ const Title = styled.div`
   font-weight: bold;
 `
 
-const FormTitle = ({ title }) =>
+const FormTitle = ({ title }:{title:string}) =>
   <Container>
     <Title>
       {title}
