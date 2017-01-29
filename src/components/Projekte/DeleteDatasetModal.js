@@ -1,3 +1,4 @@
+// @flow
 import React, { PropTypes } from 'react'
 import { inject } from 'mobx-react'
 import Dialog from 'material-ui/Dialog'
