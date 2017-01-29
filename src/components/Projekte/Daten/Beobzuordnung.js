@@ -3,6 +3,7 @@ import { observer, inject } from 'mobx-react'
 import styled from 'styled-components'
 import sortBy from 'lodash/sortBy'
 import compose from 'recompose/compose'
+import { Scrollbars } from 'react-custom-scrollbars'
 
 import FormTitle from '../../shared/FormTitle'
 import RadioButtonGroup from '../../shared/RadioButtonGroup'
@@ -151,7 +152,7 @@ const Beob = ({ store }) => {
   const showTPopId = activeDataset.row.BeobNichtZuordnen !== 1
 
   return (
-    <Container>
+    <Scrollbars>
       <FormTitle title="Beobachtung" />
       <FieldsContainer>
         <Label label="Nicht zuordnen" />
@@ -191,7 +192,7 @@ const Beob = ({ store }) => {
       <FieldsContainer>
         {getBeobFields({ store })}
       </FieldsContainer>
-    </Container>
+    </Scrollbars>
   )
 }
 
