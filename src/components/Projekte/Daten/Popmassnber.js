@@ -4,6 +4,7 @@ import sortBy from 'lodash/sortBy'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
 import withProps from 'recompose/withProps'
+import { Scrollbars } from 'react-custom-scrollbars'
 
 import RadioButtonGroup from '../../shared/RadioButtonGroup'
 import Label from '../../shared/Label'
@@ -16,9 +17,7 @@ const Container = styled.div`
 const FieldsContainer = styled.div`
   padding-left: 10px;
   padding-right: 10px;
-  overflow-x: auto;
-  height: 100%;
-  padding-bottom: 95px;
+  padding-bottom: 45px;
 `
 
 const enhance = compose(
@@ -44,36 +43,38 @@ const Popmassnber = ({
   return (
     <Container>
       <FormTitle title="Massnahmen-Bericht Population" />
-      <FieldsContainer>
-        <TextField
-          label="Jahr"
-          fieldName="PopMassnBerJahr"
-          value={activeDataset.row.PopMassnBerJahr}
-          errorText={activeDataset.valid.PopMassnBerJahr}
-          type="number"
-          updateProperty={store.updateProperty}
-          updatePropertyInDb={store.updatePropertyInDb}
-        />
-        <Label label="Entwicklung" />
-        <RadioButtonGroup
-          fieldName="PopMassnBerErfolgsbeurteilung"
-          value={activeDataset.row.PopMassnBerErfolgsbeurteilung}
-          errorText={activeDataset.valid.PopMassnBerErfolgsbeurteilung}
-          dataSource={tpopmassnErfbeurtWerte}
-          updatePropertyInDb={store.updatePropertyInDb}
-        />
-        <TextField
-          label="Interpretation"
-          fieldName="PopMassnBerTxt"
-          value={activeDataset.row.PopMassnBerTxt}
-          errorText={activeDataset.valid.PopMassnBerTxt}
-          type="text"
-          multiLine
-          fullWidth
-          updateProperty={store.updateProperty}
-          updatePropertyInDb={store.updatePropertyInDb}
-        />
-      </FieldsContainer>
+      <Scrollbars>
+        <FieldsContainer>
+          <TextField
+            label="Jahr"
+            fieldName="PopMassnBerJahr"
+            value={activeDataset.row.PopMassnBerJahr}
+            errorText={activeDataset.valid.PopMassnBerJahr}
+            type="number"
+            updateProperty={store.updateProperty}
+            updatePropertyInDb={store.updatePropertyInDb}
+          />
+          <Label label="Entwicklung" />
+          <RadioButtonGroup
+            fieldName="PopMassnBerErfolgsbeurteilung"
+            value={activeDataset.row.PopMassnBerErfolgsbeurteilung}
+            errorText={activeDataset.valid.PopMassnBerErfolgsbeurteilung}
+            dataSource={tpopmassnErfbeurtWerte}
+            updatePropertyInDb={store.updatePropertyInDb}
+          />
+          <TextField
+            label="Interpretation"
+            fieldName="PopMassnBerTxt"
+            value={activeDataset.row.PopMassnBerTxt}
+            errorText={activeDataset.valid.PopMassnBerTxt}
+            type="text"
+            multiLine
+            fullWidth
+            updateProperty={store.updateProperty}
+            updatePropertyInDb={store.updatePropertyInDb}
+          />
+        </FieldsContainer>
+      </Scrollbars>
     </Container>
   )
 }
