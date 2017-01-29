@@ -86,6 +86,10 @@ const LoadingDiv = styled.div`
   font-size: 14px;
 `
 const StyledScrollbars = styled(Scrollbars)`
+  div:first-child {
+    /* without this a hideous white line appears on the right */
+    margin-right: -25px !important;
+  }
   .ReactVirtualized__Grid {
     overflow: visible !important;
   }
