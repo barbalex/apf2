@@ -1,7 +1,8 @@
+// @flow
 import React, { PropTypes } from 'react'
 import { ContextMenu, MenuItem } from 'react-contextmenu'
 
-const Tpopmassn = ({ onClick }) =>
+const Tpopmassn = ({ onClick }:{onClick:() => void}) =>
   <ContextMenu id="tpopmassn" >
     <div className="react-contextmenu-title">Massnahme</div>
     <MenuItem
