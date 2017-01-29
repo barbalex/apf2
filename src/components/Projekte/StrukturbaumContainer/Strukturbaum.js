@@ -14,6 +14,7 @@ import { AutoSizer, List } from 'react-virtualized'
 import { ContextMenuTrigger } from 'react-contextmenu'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
+import { Scrollbars } from 'react-custom-scrollbars'
 
 import getNrOfNodeRows from '../../../modules/getNrOfNodeRows'
 import isNodeInActiveNodePath from '../../../modules/isNodeInActiveNodePath'
@@ -83,6 +84,11 @@ const StyledTextInActiveNodePathSpan = styled(StyledTextSpan)`
 const LoadingDiv = styled.div`
   padding-left: 15px;
   font-size: 14px;
+`
+const StyledScrollbars = styled(Scrollbars)`
+  .ReactVirtualized__Grid {
+    overflow: visible !important;
+  }
 `
 const enhance = compose(
   inject(`store`),
@@ -228,17 +234,22 @@ class Strukturbaum extends Component { // eslint-disable-line react/prefer-state
       <Container>
         <AutoSizer>
           {({ height, width }) => (
-            <ListContainer
-              height={height}
-              rowCount={nodes.length}
-              rowHeight={rowHeight}
-              rowRenderer={this.rowRenderer}
-              noRowsRenderer={this.noRowsRenderer}
-              width={width}
-              scrollTop={scrolltop}
-              ref={(c) => { this.tree = c }}
-              {...store.projektNodes}
-            />
+            <StyledScrollbars
+              style={{ width, height }}
+              autoHide
+            >
+              <ListContainer
+                height={height}
+                rowCount={nodes.length}
+                rowHeight={rowHeight}
+                rowRenderer={this.rowRenderer}
+                noRowsRenderer={this.noRowsRenderer}
+                width={width}
+                scrollTop={scrolltop}
+                ref={(c) => { this.tree = c }}
+                {...store.projektNodes}
+              />
+            </StyledScrollbars>
           )}
         </AutoSizer>
       </Container>
