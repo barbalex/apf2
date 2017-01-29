@@ -1,7 +1,8 @@
+// @flow
 import React, { PropTypes } from 'react'
 import { ContextMenu, MenuItem } from 'react-contextmenu'
 
-const BerFolder = ({ onClick }) =>
+const BerFolder = ({ onClick }:{onClick:() => void}) =>
   <ContextMenu id="berFolder" >
     <div className="react-contextmenu-title">Bericht</div>
     <MenuItem

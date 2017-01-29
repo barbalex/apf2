@@ -1,7 +1,8 @@
+// @flow
 import React, { PropTypes } from 'react'
 import { ContextMenu, MenuItem } from 'react-contextmenu'
 
-const ErfkritFolder = ({ onClick }) =>
+const ErfkritFolder = ({ onClick }:{onClick:() => void}) =>
   <ContextMenu id="erfkritFolder" >
     <div className="react-contextmenu-title">AP-Erfolgskriterien</div>
     <MenuItem
