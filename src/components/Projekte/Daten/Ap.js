@@ -5,6 +5,7 @@ import filter from 'lodash/filter'
 import sortBy from 'lodash/sortBy'
 import compose from 'recompose/compose'
 import withProps from 'recompose/withProps'
+import { Scrollbars } from 'react-custom-scrollbars'
 
 import AutoComplete from '../../shared/Autocomplete'
 import RadioButtonGroup from '../../shared/RadioButtonGroup'
@@ -19,9 +20,7 @@ const Container = styled.div`
 const FieldsContainer = styled.div`
   padding-left: 10px;
   padding-right: 10px;
-  overflow-x: auto;
-  height: 100%;
-  padding-bottom: 95px;
+  padding-bottom: 45px;
 `
 const FieldContainer = styled.div`
   display: flex;
@@ -134,108 +133,110 @@ const Ap = ({
 }) =>
   <Container>
     <FormTitle title="Art" />
-    <FieldsContainer>
-      <AutoComplete
-        label="Art"
-        fieldName="ApArtId"
-        valueText={artValues.artname}
-        errorText={activeDataset.valid.ApArtId}
-        dataSource={artList}
-        dataSourceConfig={{
-          value: `TaxonomieId`,
-          text: `Artname`,
-        }}
-        updatePropertyInDb={updatePropertyInDb}
-      />
-      <FieldContainer>
-        <LabelWithPopover label="Aktionsplan">
-          <LabelPopoverTitleRow>
-            Legende
-          </LabelPopoverTitleRow>
-          <LabelPopoverContentRow>
-            <LabelPopoverRowColumnLeft>
-              keiner:
-            </LabelPopoverRowColumnLeft>
-            <LabelPopoverRowColumnRight>
-              kein Aktionsplan vorgesehen
-            </LabelPopoverRowColumnRight>
-          </LabelPopoverContentRow>
-          <LabelPopoverContentRow>
-            <LabelPopoverRowColumnLeft>
-              erstellt:
-            </LabelPopoverRowColumnLeft>
-            <LabelPopoverRowColumnRight>
-              Aktionsplan fertig, auf der Webseite der FNS
-            </LabelPopoverRowColumnRight>
-          </LabelPopoverContentRow>
-        </LabelWithPopover>
-        <RadioButtonGroup
-          fieldName="ApStatus"
-          value={activeDataset.row.ApStatus}
-          errorText={activeDataset.valid.ApStatus}
-          dataSource={apStati}
+    <Scrollbars>
+      <FieldsContainer>
+        <AutoComplete
+          label="Art"
+          fieldName="ApArtId"
+          valueText={artValues.artname}
+          errorText={activeDataset.valid.ApArtId}
+          dataSource={artList}
+          dataSourceConfig={{
+            value: `TaxonomieId`,
+            text: `Artname`,
+          }}
           updatePropertyInDb={updatePropertyInDb}
         />
-      </FieldContainer>
-      <TextField
-        label="Start im Jahr"
-        fieldName="ApJahr"
-        value={activeDataset.row.ApJahr}
-        errorText={activeDataset.valid.ApJahr}
-        type="number"
-        updateProperty={updateProperty}
-        updatePropertyInDb={updatePropertyInDb}
-      />
-      <FieldContainer>
-        <LabelWithPopover label="Stand Umsetzung">
-          <LabelPopoverTitleRow>
-            Legende
-          </LabelPopoverTitleRow>
-          <LabelPopoverContentRow>
-            <LabelPopoverRowColumnLeft>
-              noch keine<br />Umsetzung:
-            </LabelPopoverRowColumnLeft>
-            <LabelPopoverRowColumnRight>
-              noch keine Massnahmen ausgeführt
-            </LabelPopoverRowColumnRight>
-          </LabelPopoverContentRow>
-          <LabelPopoverContentRow>
-            <LabelPopoverRowColumnLeft>
-              in Umsetzung:
-            </LabelPopoverRowColumnLeft>
-            <LabelPopoverRowColumnRight>
-              bereits Massnahmen ausgeführt (auch wenn AP noch nicht erstellt)
-            </LabelPopoverRowColumnRight>
-          </LabelPopoverContentRow>
-        </LabelWithPopover>
-        <RadioButtonGroup
-          fieldName="ApUmsetzung"
-          value={activeDataset.row.ApUmsetzung}
-          errorText={activeDataset.valid.ApUmsetzung}
-          dataSource={apUmsetzungen}
-          updatePropertyInDb={updatePropertyInDb}
-        />
-      </FieldContainer>
-      <SelectField
-        label="Verantwortlich"
-        fieldName="ApBearb"
-        value={activeDataset.row.ApBearb}
-        errorText={activeDataset.valid.ApBearb}
-        dataSource={adressen}
-        valueProp="AdrId"
-        labelProp="AdrName"
-        updatePropertyInDb={updatePropertyInDb}
-      />
-      <FieldContainer>
+        <FieldContainer>
+          <LabelWithPopover label="Aktionsplan">
+            <LabelPopoverTitleRow>
+              Legende
+            </LabelPopoverTitleRow>
+            <LabelPopoverContentRow>
+              <LabelPopoverRowColumnLeft>
+                keiner:
+              </LabelPopoverRowColumnLeft>
+              <LabelPopoverRowColumnRight>
+                kein Aktionsplan vorgesehen
+              </LabelPopoverRowColumnRight>
+            </LabelPopoverContentRow>
+            <LabelPopoverContentRow>
+              <LabelPopoverRowColumnLeft>
+                erstellt:
+              </LabelPopoverRowColumnLeft>
+              <LabelPopoverRowColumnRight>
+                Aktionsplan fertig, auf der Webseite der FNS
+              </LabelPopoverRowColumnRight>
+            </LabelPopoverContentRow>
+          </LabelWithPopover>
+          <RadioButtonGroup
+            fieldName="ApStatus"
+            value={activeDataset.row.ApStatus}
+            errorText={activeDataset.valid.ApStatus}
+            dataSource={apStati}
+            updatePropertyInDb={updatePropertyInDb}
+          />
+        </FieldContainer>
         <TextField
-          label="Artwert"
+          label="Start im Jahr"
           fieldName="ApJahr"
-          value={artValues.artwert}
-          type="text"
-          disabled
+          value={activeDataset.row.ApJahr}
+          errorText={activeDataset.valid.ApJahr}
+          type="number"
+          updateProperty={updateProperty}
+          updatePropertyInDb={updatePropertyInDb}
         />
-      </FieldContainer>
-    </FieldsContainer>
+        <FieldContainer>
+          <LabelWithPopover label="Stand Umsetzung">
+            <LabelPopoverTitleRow>
+              Legende
+            </LabelPopoverTitleRow>
+            <LabelPopoverContentRow>
+              <LabelPopoverRowColumnLeft>
+                noch keine<br />Umsetzung:
+              </LabelPopoverRowColumnLeft>
+              <LabelPopoverRowColumnRight>
+                noch keine Massnahmen ausgeführt
+              </LabelPopoverRowColumnRight>
+            </LabelPopoverContentRow>
+            <LabelPopoverContentRow>
+              <LabelPopoverRowColumnLeft>
+                in Umsetzung:
+              </LabelPopoverRowColumnLeft>
+              <LabelPopoverRowColumnRight>
+                bereits Massnahmen ausgeführt (auch wenn AP noch nicht erstellt)
+              </LabelPopoverRowColumnRight>
+            </LabelPopoverContentRow>
+          </LabelWithPopover>
+          <RadioButtonGroup
+            fieldName="ApUmsetzung"
+            value={activeDataset.row.ApUmsetzung}
+            errorText={activeDataset.valid.ApUmsetzung}
+            dataSource={apUmsetzungen}
+            updatePropertyInDb={updatePropertyInDb}
+          />
+        </FieldContainer>
+        <SelectField
+          label="Verantwortlich"
+          fieldName="ApBearb"
+          value={activeDataset.row.ApBearb}
+          errorText={activeDataset.valid.ApBearb}
+          dataSource={adressen}
+          valueProp="AdrId"
+          labelProp="AdrName"
+          updatePropertyInDb={updatePropertyInDb}
+        />
+        <FieldContainer>
+          <TextField
+            label="Artwert"
+            fieldName="ApJahr"
+            value={artValues.artwert}
+            type="text"
+            disabled
+          />
+        </FieldContainer>
+      </FieldsContainer>
+    </Scrollbars>
   </Container>
 
 Ap.propTypes = {
