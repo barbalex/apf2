@@ -1,3 +1,4 @@
+// @flow
 import React, { PropTypes } from 'react'
 import { observer, inject } from 'mobx-react'
 import sortBy from 'lodash/sortBy'
