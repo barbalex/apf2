@@ -4,6 +4,7 @@ import sortBy from 'lodash/sortBy'
 import filter from 'lodash/filter'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
+import { Scrollbars } from 'react-custom-scrollbars'
 
 import TextField from '../../shared/TextField'
 import AutoComplete from '../../shared/Autocomplete'
@@ -15,9 +16,7 @@ const Container = styled.div`
 const FieldsContainer = styled.div`
   padding-left: 10px;
   padding-right: 10px;
-  overflow-x: auto;
-  height: 100%;
-  padding-bottom: 95px;
+  padding-bottom: 45px;
 `
 
 const enhance = compose(
@@ -54,31 +53,33 @@ const Assozart = ({ store }) => {
   return (
     <Container>
       <FormTitle title="assoziierte Art" />
-      <FieldsContainer>
-        <AutoComplete
-          label="Art"
-          fieldName="AaSisfNr"
-          valueText={getArtname({ store })}
-          errorText={activeDataset.valid.ApArtId}
-          dataSource={getArtList({ store })}
-          dataSourceConfig={{
-            value: `TaxonomieId`,
-            text: `Artname`,
-          }}
-          updatePropertyInDb={store.updatePropertyInDb}
-        />
-        <TextField
-          label="Bemerkungen zur Assoziation"
-          fieldName="AaBem"
-          value={activeDataset.row.AaBem}
-          errorText={activeDataset.valid.AaBem}
-          type="text"
-          multiLine
-          fullWidth
-          updateProperty={store.updateProperty}
-          updatePropertyInDb={store.updatePropertyInDb}
-        />
-      </FieldsContainer>
+      <Scrollbars>
+        <FieldsContainer>
+          <AutoComplete
+            label="Art"
+            fieldName="AaSisfNr"
+            valueText={getArtname({ store })}
+            errorText={activeDataset.valid.ApArtId}
+            dataSource={getArtList({ store })}
+            dataSourceConfig={{
+              value: `TaxonomieId`,
+              text: `Artname`,
+            }}
+            updatePropertyInDb={store.updatePropertyInDb}
+          />
+          <TextField
+            label="Bemerkungen zur Assoziation"
+            fieldName="AaBem"
+            value={activeDataset.row.AaBem}
+            errorText={activeDataset.valid.AaBem}
+            type="text"
+            multiLine
+            fullWidth
+            updateProperty={store.updateProperty}
+            updatePropertyInDb={store.updatePropertyInDb}
+          />
+        </FieldsContainer>
+      </Scrollbars>
     </Container>
   )
 }
