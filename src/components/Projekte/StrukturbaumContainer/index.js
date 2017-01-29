@@ -1,3 +1,4 @@
+// @flow
 /**
  * need to keep class because of ref
  */
