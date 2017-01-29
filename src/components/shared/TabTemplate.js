@@ -1,6 +1,13 @@
+// @flow
 import { PropTypes } from 'react'
 
-const TabTemplate = ({ selected, children }) => {
+const TabTemplate = ({
+  selected,
+  children,
+}:{
+  selected:boolean,
+  children:any,
+}) => {
   if (!selected) {
     return null
   }
