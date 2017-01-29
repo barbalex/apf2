@@ -1,3 +1,4 @@
+// @flow
 import React, { PropTypes } from 'react'
 import { observer } from 'mobx-react'
 import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton'
