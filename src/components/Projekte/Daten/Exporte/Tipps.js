@@ -145,17 +145,6 @@ const Tipps = () =>
           </ul>
         </CardText>
       </SecondLevelCard>
-      <SecondLevelCard>
-        <CardHeader
-          title="Hilfe, nach dem Herunterladen ist das Exportformular verschwunden und es muss wieder eine Art gewählt werden!"
-          actAsExpander
-          showExpandableButton
-        />
-        <CardText expandable>
-          {`In Safari auf Mac scheint das leider die Standardeinstellung zu sein. Man kann dies korrigieren: "Safari" > "Tabs" > "Neue Tabs oder Fenster im Vordergrund öffnen" wählen.`}<br />
-          {`Falls das auf einem anderen Browser passiert: Einstellungen suchen, die das Öffnen von neuen Tabs beeinflussen und ausprobieren.`}
-        </CardText>
-      </SecondLevelCard>
     </CardText>
   </FirstLevelCard>
 
