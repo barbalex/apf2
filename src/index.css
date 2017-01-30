@@ -86,6 +86,7 @@ body.fontLoaded {
   background: 0 0;
   border: 0;
   text-decoration: none;
+  cursor: pointer;
 }
 
 :global .react-contextmenu-item.active,
@@ -103,9 +104,4 @@ body.fontLoaded {
   display: inline-block;
   position: absolute;
   right: 7px;
-}
-
-.example-multiple-targets::after {
-  content: attr(data-count);
-  display: block;
 }
