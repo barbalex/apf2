@@ -19,7 +19,7 @@ export default (store, projId) => {
   // filter by node.apFilter
   if (store.node.apFilter) {
     // ApStatus between 3 and 5
-    ap = ap.filter(a => [3, 4, 5].includes(a.ApStatus))
+    ap = ap.filter(a => [1, 2, 3].includes(a.ApStatus))
 
   }
   // map through all ap and create array of nodes

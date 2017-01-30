@@ -76,6 +76,7 @@ const NurApDiv = styled.div`
   display: flex;
   flex-direction: column;
   padding-right: 5px;
+  min-width: 40px;
 `
 const ApDivToggle = styled(Toggle)`
   margin-left: -10px;
@@ -136,23 +137,35 @@ class StrukturbaumContainer extends Component { // eslint-disable-line react/pre
   }
 
   render() {
-    const { activeUrlElements, node } = this.props.store
+    const { store } = this.props
+    const { activeUrlElements, activeDataset, node, toggleApFilter } = store
     const Container = activeUrlElements.exporte ? ContainerExporte : StyledContainer
-    console.log(`node.apFilter:`, node.apFilter)
+    const showApDivToggle = (
+      activeDataset &&
+      activeDataset.table &&
+      (
+        activeDataset.table === `projekt` ||
+        activeDataset.table === `ap`
+      )
+    )
 
     return (
       <Container>
         <LabelFilterContainer>
           <LabelFilter />
-          <NurApDiv>
-            <Label
-              label="nur AP"
-            />
-            <ApDivToggle
-              toggled={node.apFilter}
-              onToggle={() => console.log(`apToggle`)}
-            />
-        </NurApDiv>
+          {
+            showApDivToggle &&
+            <NurApDiv>
+              <Label
+                label="nur AP"
+              />
+              <ApDivToggle
+                toggled={node.apFilter}
+                thumbStyle={{ backgroundColor: `rgb(245, 245, 245)` }}
+                onToggle={() => toggleApFilter()}
+              />
+            </NurApDiv>
+          }
         </LabelFilterContainer>
         <div
           style={{

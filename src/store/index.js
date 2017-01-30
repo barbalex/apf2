@@ -70,6 +70,9 @@ function Store() {
   extendObservable(this, {
     datasetToDelete: {},
     qkLoading: false,
+    toggleApFilter: action(() => {
+      this.node.apFilter = !this.node.apFilter
+    }),
     setQkLoading: action((loading) => {
       this.qkLoading = loading
     }),
