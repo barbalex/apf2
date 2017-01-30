@@ -16,6 +16,12 @@ export default (store, projId) => {
   let ap = Array.from(store.table.ap.values())
   // show only ap of active projekt
   ap = ap.filter(a => a.ProjId === projId)
+  // filter by node.apFilter
+  if (store.node.apFilter) {
+    // ApStatus between 3 and 5
+    ap = ap.filter(a => [3, 4, 5].includes(a.ApStatus))
+
+  }
   // map through all ap and create array of nodes
   let nodes = ap.map((el) => {
     let label = `...`

@@ -1,5 +1,12 @@
 // @flow
-import { extendObservable, action, autorun, autorunAsync, computed, observable } from 'mobx'
+import {
+  extendObservable,
+  action,
+  autorun,
+  autorunAsync,
+  computed,
+  observable,
+} from 'mobx'
 import $ from 'jquery'
 
 import fetchTable from '../modules/fetchTable'
@@ -37,7 +44,6 @@ function Store() {
   this.node = {
     loadingAllNodes: observable(false),
     nodeLabelFilter: observable.map({}),
-    nrOfRowsAboveActiveNode: observable(0),
   }
   this.ui = {
     windowWidth: observable($(window).width()),
@@ -57,6 +63,10 @@ function Store() {
   this.table = TableStore
   this.valuesForWhichTableDataWasFetched = {}
   this.qk = observable.map()
+  extendObservable(this.node, {
+    apFilter: false,
+    nrOfRowsAboveActiveNode: 0,
+  })
   extendObservable(this, {
     datasetToDelete: {},
     qkLoading: false,

@@ -136,8 +136,9 @@ class StrukturbaumContainer extends Component { // eslint-disable-line react/pre
   }
 
   render() {
-    const { activeUrlElements } = this.props.store
+    const { activeUrlElements, node } = this.props.store
     const Container = activeUrlElements.exporte ? ContainerExporte : StyledContainer
+    console.log(`node.apFilter:`, node.apFilter)
 
     return (
       <Container>
@@ -148,7 +149,8 @@ class StrukturbaumContainer extends Component { // eslint-disable-line react/pre
               label="nur AP"
             />
             <ApDivToggle
-              onToggle={() => console.log(`apToggle: this.toggled:`, this.toggled)}
+              toggled={node.apFilter}
+              onToggle={() => console.log(`apToggle`)}
             />
         </NurApDiv>
         </LabelFilterContainer>
