@@ -6,7 +6,9 @@ import React, { Component, PropTypes } from 'react'
 import { observer, inject } from 'mobx-react'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
+import Toggle from 'material-ui/Toggle'
 
+import Label from '../../shared/Label'
 import LabelFilter from './LabelFilter'
 import Strukturbaum from './Strukturbaum'
 import CmProjekt from './contextmenu/Projekt'
@@ -67,7 +69,16 @@ const ContainerExporte = styled(StyledContainer)`
   flex-shrink: 0;
 `
 const LabelFilterContainer = styled.div`
-  padding-right: 30px;
+  display: flex;
+  justify-content: space-between;
+`
+const NurApDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding-right: 5px;
+`
+const ApDivToggle = styled(Toggle)`
+  margin-left: -10px;
 `
 
 const enhance = compose(
@@ -132,6 +143,14 @@ class StrukturbaumContainer extends Component { // eslint-disable-line react/pre
       <Container>
         <LabelFilterContainer>
           <LabelFilter />
+          <NurApDiv>
+            <Label
+              label="nur AP"
+            />
+            <ApDivToggle
+              onToggle={() => console.log(`apToggle: this.toggled:`, this.toggled)}
+            />
+        </NurApDiv>
         </LabelFilterContainer>
         <div
           style={{
