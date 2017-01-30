@@ -22,7 +22,7 @@ const Apfolder = ({ onClick }:{onClick:() => void}) =>
         idTable: `projekt`,
       }}
     >
-      auf Karte zeigen
+      Populationen auf Karte zeigen
     </MenuItem>
   </ContextMenu>
 

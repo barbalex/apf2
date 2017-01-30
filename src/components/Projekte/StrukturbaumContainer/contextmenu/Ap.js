@@ -31,7 +31,7 @@ const Ap = ({ onClick }:{onClick:() => void}) =>
         idTable: `ap`,
       }}
     >
-      auf Karte zeigen
+      Populationen auf Karte zeigen
     </MenuItem>
   </ContextMenu>
 
