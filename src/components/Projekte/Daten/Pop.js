@@ -3,7 +3,6 @@ import React, { PropTypes } from 'react'
 import { observer, inject } from 'mobx-react'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
-import withProps from 'recompose/withProps'
 import { Scrollbars } from 'react-custom-scrollbars'
 
 import TextField from '../../shared/TextField'
@@ -46,20 +45,12 @@ const FieldWithInfoContainer = styled.div`
 
 const enhance = compose(
   inject(`store`),
-  withProps((props) => {
-    const { store } = props
-    const { activeDataset } = store
-    const apJahr = store.table.ap.get(activeDataset.row.ApArtId).ApJahr
-    return { apJahr }
-  }),
   observer
 )
 
-const Pop = ({
-  store,
-  apJahr,
-}) => {
+const Pop = ({ store }) => {
   const { activeDataset } = store
+  const apJahr = store.table.ap.get(activeDataset.row.ApArtId).ApJahr
   return (
     <Container>
       <FormTitle title="Population" />
@@ -143,11 +134,6 @@ const Pop = ({
 
 Pop.propTypes = {
   store: PropTypes.object.isRequired,
-  apJahr: PropTypes.number,
-}
-
-Pop.defaultProps = {
-  apJahr: ``,
 }
 
 export default enhance(Pop)
