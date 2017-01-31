@@ -8,6 +8,7 @@ import getUrls from 'get-urls'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
+import withState from 'recompose/withState'
 
 const Container = styled.div`
   display: flex;
@@ -18,11 +19,20 @@ const StyledFontIcon = styled(FontIcon)`
 `
 
 const enhance = compose(
+  withState(`valueOnFocus`, `changeValueOnFocus`, ``),
   withHandlers({
     onChange: props => (event, val) =>
       props.updateProperty(props.fieldName, val),
-    onBlur: props => event =>
-      props.updatePropertyInDb(props.fieldName, event.target.value),
+    onBlur: props => (event) => {
+      const { value } = event.target
+      // only update if value has changed
+      if (value != props.valueOnFocus) {  // eslint-disable-line eqeqeq
+        props.updatePropertyInDb(props.fieldName, value)
+      }
+    },
+    onFocus: props =>
+      () =>
+        props.changeValueOnFocus(props.value),
   }),
   observer
 )
@@ -36,6 +46,7 @@ const MyTextFieldWithUrl = ({
   disabled,
   onChange,
   onBlur,
+  onFocus,
 }) => {
   const urls = value ? getUrls(value) : []
 
@@ -51,6 +62,7 @@ const MyTextFieldWithUrl = ({
         fullWidth
         onChange={onChange}
         onBlur={onBlur}
+        onFocus={onFocus}
       />
       {
         Array.from(urls).map((url, index) => (
@@ -73,6 +85,7 @@ MyTextFieldWithUrl.propTypes = {
   label: PropTypes.string.isRequired,
   fieldName: PropTypes.string.isRequired,
   value: PropTypes.any,
+  valueOnFocus: PropTypes.any,
   errorText: PropTypes.string,
   type: PropTypes.string,
   multiLine: PropTypes.bool,
@@ -81,10 +94,12 @@ MyTextFieldWithUrl.propTypes = {
   updatePropertyInDb: PropTypes.func.isRequired,
   onChange: PropTypes.func.isRequired,
   onBlur: PropTypes.func.isRequired,
+  onFocus: PropTypes.func.isRequired,
 }
 
 MyTextFieldWithUrl.defaultProps = {
   value: ``,
+  valueOnFocus: ``,
   errorText: ``,
   type: `text`,
   multiLine: false,
