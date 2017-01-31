@@ -43,6 +43,7 @@ export default (store:Object, key:string, valuePassed:string|number) => {
   if (!idField) {
     return store.listError(
       new Error(
+        // $FlowIssue
         `change was not saved:
         field: ${key}, table: ${table}, value: ${value}
         Reason: idField was not found`
@@ -53,6 +54,7 @@ export default (store:Object, key:string, valuePassed:string|number) => {
   if (!tabelleId && tabelleId !== 0) {
     return store.listError(
       new Error(
+        // $FlowIssue
         `change was not saved:
         field: ${key}, table: ${table}, value: ${value}
         Reason: tabelleId was not found`
@@ -94,6 +96,7 @@ export default (store:Object, key:string, valuePassed:string|number) => {
       // need to set row[key] for select fields, checkboxes, radios...
       row[key] = value
     }
+    // $FlowIssue
     const url = `${apiBaseUrl}/update/apflora/tabelle=${table}/tabelleIdFeld=${idField}/tabelleId=${tabelleId}/feld=${key}/wert=${value}/user=${user}`
     axios.put(url)
       .then(() => {
