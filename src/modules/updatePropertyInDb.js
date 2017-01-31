@@ -12,9 +12,8 @@ import insertDatasetInIdb from './insertDatasetInIdb'
 
 export default (store:Object, key:string, valuePassed:string|number) => {
   const { row, valid } = store.activeDataset
-  const tablePassed = store.activeDataset.table
   let value = valuePassed
-  let table = tablePassed
+  let table = store.activeDataset.table
 
   // ensure primary data exists
   if (!key || !table || !row) {
