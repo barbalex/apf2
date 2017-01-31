@@ -55,7 +55,6 @@ const LabelPopoverRowColumnRight = styled.div`
 
 const enhance = compose(
   inject(`store`),
-  observer,
   withProps((props) => {
     const { store } = props
     const {
@@ -119,7 +118,8 @@ const enhance = compose(
       updateProperty,
       updatePropertyInDb,
     }
-  })
+  }),
+  observer
 )
 
 const Ap = ({
