@@ -73,7 +73,6 @@ export default (store:Object, key:string, valuePassed:string|number) => {
   if (combinedValidationMessages.length === 0) {
     const { user } = store.app
     const oldValue = row[key]
-    // need to set row[key] for select fields, checkboxes, radios...
     const artWasChanged = table === `ap` && key === `ApArtId`
     if (artWasChanged) {
       // if this was ap, then the map key has changed!
@@ -92,6 +91,7 @@ export default (store:Object, key:string, valuePassed:string|number) => {
       deleteDatasetInIdb(store, `ap`, oldValue)
       insertDatasetInIdb(store, `ap`, rowCloned)
     } else {
+      // need to set row[key] for select fields, checkboxes, radios...
       row[key] = value
     }
     const url = `${apiBaseUrl}/update/apflora/tabelle=${table}/tabelleIdFeld=${idField}/tabelleId=${tabelleId}/feld=${key}/wert=${value}/user=${user}`
