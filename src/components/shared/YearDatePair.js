@@ -6,8 +6,12 @@ import DatePicker from 'material-ui/DatePicker'
 import format from 'date-fns/format'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
+import withState from 'recompose/withState'
+import compareAsc from 'date-fns/compare_asc'
 
 const enhance = compose(
+  withState(`yearValueOnFocus`, `changeYearValueOnFocus`, ``),
+  withState(`dateValueOnFocus`, `changeDateValueOnFocus`, ``),
   withHandlers({
     onBlurYear: props => (event) => {
       const {
@@ -16,13 +20,17 @@ const enhance = compose(
         dateValue,
         updateProperty,
         updatePropertyInDb,
+        yearValueOnFocus,
       } = props
-
-      updatePropertyInDb(yearFieldName, event.target.value)
-      // nullify date
-      if (dateValue) {
-        updateProperty(dateFieldName, null)
-        updatePropertyInDb(dateFieldName, null)
+      const { value } = event.target
+      // only update if value has changed
+      if (value != yearValueOnFocus) {  // eslint-disable-line eqeqeq
+        updatePropertyInDb(yearFieldName, value)
+        // nullify date
+        if (dateValue) {
+          updateProperty(dateFieldName, null)
+          updatePropertyInDb(dateFieldName, null)
+        }
       }
     },
     onChangeDate: props => (event, value) => {
@@ -32,16 +40,26 @@ const enhance = compose(
         dateFieldName,
         updateProperty,
         updatePropertyInDb,
+        dateValueOnFocus,
       } = props
 
-      updateProperty(dateFieldName, format(value, `YYYY-MM-DD`))
-      updatePropertyInDb(dateFieldName, format(value, `YYYY-MM-DD`))
-      // set year
-      const year = format(value, `YYYY`)
-      if (yearValue !== year) {
-        updatePropertyInDb(yearFieldName, year)
+      // only update if value has changed
+      if (compareAsc(value, dateValueOnFocus)) {
+        updateProperty(dateFieldName, format(value, `YYYY-MM-DD`))
+        updatePropertyInDb(dateFieldName, format(value, `YYYY-MM-DD`))
+        // set year
+        const year = format(value, `YYYY`)
+        if (yearValue !== year) {
+          updatePropertyInDb(yearFieldName, year)
+        }
       }
     },
+    onFocusYear: props =>
+      () =>
+        props.changeYearValueOnFocus(props.yearValue),
+    onFocusDate: props =>
+      () =>
+        props.changeDateValueOnFocus(props.dateValue),
   }),
   observer
 )
@@ -57,6 +75,8 @@ const YearDatePair = ({
   updateProperty,
   onBlurYear,
   onChangeDate,
+  onFocusYear,
+  onFocusDate,
 }) => {
   const dateValueObject = dateValue ? new Date(dateValue) : {}
   return (
@@ -71,6 +91,7 @@ const YearDatePair = ({
           updateProperty(yearFieldName, val)
         }
         onBlur={onBlurYear}
+        onFocus={onFocusYear}
       />
       <DatePicker
         floatingLabelText={dateLabel}
@@ -83,6 +104,7 @@ const YearDatePair = ({
         fullWidth
         cancelLabel="schliessen"
         onChange={onChangeDate}
+        onFocus={onFocusDate}
       />
     </div>
   )
@@ -92,21 +114,27 @@ YearDatePair.propTypes = {
   yearLabel: PropTypes.string.isRequired,
   yearFieldName: PropTypes.string.isRequired,
   yearValue: PropTypes.any,
+  yearValueOnFocus: PropTypes.any,
   yearErrorText: PropTypes.string,
   dateLabel: PropTypes.string.isRequired,
   dateFieldName: PropTypes.string.isRequired,
   dateValue: PropTypes.any,
+  dateValueOnFocus: PropTypes.any,
   dateErrorText: PropTypes.string,
   updateProperty: PropTypes.func.isRequired,
   updatePropertyInDb: PropTypes.func.isRequired,
   onBlurYear: PropTypes.func.isRequired,
   onChangeDate: PropTypes.func.isRequired,
+  onFocusYear: PropTypes.func.isRequired,
+  onFocusDate: PropTypes.func.isRequired,
 }
 
 YearDatePair.defaultProps = {
   yearValue: ``,
+  yearValueOnFocus: ``,
   yearErrorText: ``,
   dateValue: ``,
+  dateValueOnFocus: ``,
   dateErrorText: ``,
 }
 
