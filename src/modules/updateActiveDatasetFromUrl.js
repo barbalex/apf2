@@ -10,7 +10,7 @@ export default (store:Object) => {
   if (aEl.projektFolder) {
     if (aEl.apberuebersicht) {
       activeDataset = { table: `apberuebersicht`, row: store.table.apberuebersicht.get(aEl.apberuebersicht), folder: null }
-    } else if (aEl.ap) {
+    } else if (aEl.ap || aEl.ap === 0) {
       if (aEl.ziel) {
         if (aEl.zielber) {
           activeDataset = { table: `zielber`, row: store.table.zielber.get(aEl.zielber), folder: null }
