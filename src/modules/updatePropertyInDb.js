@@ -70,7 +70,6 @@ export default (store:Object, key:string, valuePassed:string|number) => {
   if (combinedValidationMessages.length === 0) {
     const { user } = store.app
     const oldValue = row[key]
-    row[key] = value
     const url = `${apiBaseUrl}/update/apflora/tabelle=${table}/tabelleIdFeld=${idField}/tabelleId=${tabelleId}/feld=${key}/wert=${value}/user=${user}`
     axios.put(url)
       .then(() => {
