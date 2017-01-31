@@ -4,15 +4,25 @@ import { observer } from 'mobx-react'
 import TextField from 'material-ui/TextField'
 import withHandlers from 'recompose/withHandlers'
 import compose from 'recompose/compose'
+import withState from 'recompose/withState'
 
 const enhance = compose(
+  withState(`valueOnFocus`, `changeValueOnFocus`, ``),
   withHandlers({
     onChange: props =>
       (event, val) =>
         props.updateProperty(props.fieldName, val),
     onBlur: props =>
-      event =>
-        props.updatePropertyInDb(props.fieldName, event.target.value),
+      (event) => {
+        const { value } = event.target
+        // only update if value has changed
+        if (value != props.valueOnFocus) {  // eslint-disable-line eqeqeq
+          props.updatePropertyInDb(props.fieldName, value)
+        }
+      },
+    onFocus: props =>
+      () =>
+        props.changeValueOnFocus(props.value),
   }),
   observer
 )
@@ -27,6 +37,7 @@ const MyTextField = ({
   hintText,
   onChange,
   onBlur,
+  onFocus,
 }) =>
   <TextField
     floatingLabelText={label}
@@ -39,12 +50,14 @@ const MyTextField = ({
     fullWidth
     onChange={onChange}
     onBlur={onBlur}
+    onFocus={onFocus}
   />
 
 MyTextField.propTypes = {
   label: PropTypes.string.isRequired,
   fieldName: PropTypes.string.isRequired,
   value: PropTypes.any,
+  valueOnFocus: PropTypes.any,
   errorText: PropTypes.string,
   type: PropTypes.string,
   multiLine: PropTypes.bool,
@@ -52,6 +65,7 @@ MyTextField.propTypes = {
   hintText: PropTypes.string,
   onChange: PropTypes.func.isRequired,
   onBlur: PropTypes.func.isRequired,
+  onFocus: PropTypes.func.isRequired,
   // no idea why but this CAN get passed as undefined...
   updateProperty: PropTypes.func,
   updatePropertyInDb: PropTypes.func,
@@ -59,6 +73,7 @@ MyTextField.propTypes = {
 
 MyTextField.defaultProps = {
   value: ``,
+  valueOnFocus: ``,
   errorText: ``,
   type: `text`,
   multiLine: false,
