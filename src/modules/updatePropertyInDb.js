@@ -2,10 +2,13 @@
 import axios from 'axios'
 import queryString from 'query-string'
 import objectValues from 'lodash/values'
+import clone from 'lodash/clone'
 
 import apiBaseUrl from './apiBaseUrl'
 import tables from './tables'
 import updatePropertyInIdb from './updatePropertyInIdb'
+import deleteDatasetInIdb from './deleteDatasetInIdb'
+import insertDatasetInIdb from './insertDatasetInIdb'
 
 export default (store:Object, key:string, valuePassed:string|number) => {
   const { row, valid } = store.activeDataset
@@ -46,8 +49,8 @@ export default (store:Object, key:string, valuePassed:string|number) => {
       )
     )
   }
-  const tabelleId = row[idField] || undefined
-  if (!tabelleId) {
+  const tabelleId = row[idField]
+  if (!tabelleId && tabelleId !== 0) {
     return store.listError(
       new Error(
         `change was not saved:
@@ -70,13 +73,36 @@ export default (store:Object, key:string, valuePassed:string|number) => {
   if (combinedValidationMessages.length === 0) {
     const { user } = store.app
     const oldValue = row[key]
+    // need to set row[key] for select fields, checkboxes, radios...
+    const artWasChanged = table === `ap` && key === `ApArtId`
+    if (artWasChanged) {
+      // if this was ap, then the map key has changed!
+      // need to delete map value and create new one
+      // then set activeDataset to this value
+      const rowCloned = clone(row)
+      rowCloned[key] = value
+      store.table.ap.delete(oldValue)
+      store.table.ap.set(value, rowCloned)
+      // correct url
+      // activeDataset will then be updated
+      const newUrl = store.url
+      newUrl.pop()
+      newUrl.push(value)
+      store.history.push(newUrl)
+      deleteDatasetInIdb(store, `ap`, oldValue)
+      insertDatasetInIdb(store, `ap`, rowCloned)
+    } else {
+      row[key] = value
+    }
     const url = `${apiBaseUrl}/update/apflora/tabelle=${table}/tabelleIdFeld=${idField}/tabelleId=${tabelleId}/feld=${key}/wert=${value}/user=${user}`
     axios.put(url)
       .then(() => {
         // update in idb
-        updatePropertyInIdb(store, table, tabelleId, key, value)
+        if (!artWasChanged) {
+          updatePropertyInIdb(store, table, tabelleId, key, value)
+        }
         // if ApArtId of ap is updated, url needs to change
-        if (table === `ap` && key === `ApArtId`) {
+        if (artWasChanged) {
           store.url[3] = value
           const newUrl = `/${store.url.join(`/`)}${Object.keys(store.urlQuery).length > 0 ? `?${queryString.stringify(store.urlQuery)}` : ``}`
           store.history.push(newUrl)
