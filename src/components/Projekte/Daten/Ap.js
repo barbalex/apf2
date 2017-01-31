@@ -97,7 +97,7 @@ const enhance = compose(
     )
     artList = sortBy(artList, `Artname`)
     let artwert = `Diese Art hat keinen Artwert`
-    let artname = `(kein Name gewählt)`
+    let artname = ``
     if (store.activeUrlElements.ap && adb_eigenschaften.size > 0) {
       const ae = adb_eigenschaften.get(store.activeUrlElements.ap)
       if (ae && ae.Artwert) {
