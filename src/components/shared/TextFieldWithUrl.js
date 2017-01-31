@@ -53,7 +53,7 @@ const MyTextFieldWithUrl = ({
         onBlur={onBlur}
       />
       {
-        urls.map((url, index) => (
+        Array.from(urls).map((url, index) => (
           <StyledFontIcon
             className={`material-icons`}
             onClick={() => window.open(url, `_blank`)}
