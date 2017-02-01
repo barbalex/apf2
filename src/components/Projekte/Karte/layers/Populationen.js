@@ -1,22 +1,20 @@
 // @flow
 import React from 'react'
 import { observer, inject } from 'mobx-react'
-import { Marker, Popup } from 'react-leaflet'
+import { Marker, Popup, Tooltip } from 'react-leaflet'
 import compose from 'recompose/compose'
 import 'leaflet'
-import 'proj4'
-import 'proj4leaflet'
 
 import floraIconOrange from '../../../../etc/ic_local_florist_orange.svg'
 import floraIconGelb from '../../../../etc/ic_local_florist_yellow.svg'
 
 const PopIcon = window.L.icon({
   iconUrl: floraIconOrange,
-  iconSize: [32, 32],
+  iconSize: [28, 28],
 })
-const PopIconFiltered = window.L.icon({
+const PopIconHighlighted = window.L.icon({
   iconUrl: floraIconGelb,
-  iconSize: [32, 32],
+  iconSize: [28, 28],
 })
 
 const enhance = compose(
@@ -27,23 +25,28 @@ const enhance = compose(
 const Populationen = ({ store, map, ...props }) =>
   <div style={{ display: `none` }}>
     {
-      store.popsForKarte.map(p =>
-        <Marker
-          position={p.PopKoordWgs84}
-          key={p.PopId}
-          icon={
-            store.karte.layer.pop.highlightedIds.includes(p.PopId) ?
-            PopIconFiltered :
-            PopIcon
-          }
-          map={map}
-          {...props}
-        >
-          <Popup>
-            <span>A pretty CSS3 popup. <br /> Easily customizable.</span>
-          </Popup>
-        </Marker>
-      )
+      store.popsForKarte.map((p) => {
+        const title = p.PopNr ? `${p.PopNr}: ${p.PopName}` : p.PopName
+        const icon = (
+          store.karte.layer.pop.highlightedIds.includes(p.PopId) ?
+          PopIconHighlighted :
+          PopIcon
+        )
+        return (
+          <Marker
+            position={p.PopKoordWgs84}
+            key={p.PopId}
+            icon={icon}
+            map={map}
+            title={title}
+            {...props}
+          >
+            <Popup>
+              <span>{p.PopNr}<br />{p.PopName}</span>
+            </Popup>
+          </Marker>
+        )
+      })
     }
   </div>
 

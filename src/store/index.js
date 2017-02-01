@@ -174,7 +174,7 @@ function Store() {
       this.karte.layer[layer].visible = bool
     ),
     highlightIdOnMap: action((layer, id) =>
-      this.karte.layer[layer].highlightedIds = this.karte.layer[layer].highlightedIds.concat(id)
+      this.karte.layer[layer].highlightedIds = [...this.karte.layer[layer].highlightedIds, parseInt(id, 10)]
     ),
     unhighlightIdOnMap: action((layer, id) =>
       this.karte.layer[layer].highlightedIds = this.karte.layer[layer].highlightedIds.filter(i => i !== id)

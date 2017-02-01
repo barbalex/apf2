@@ -96,6 +96,7 @@ class StrukturbaumContainer extends Component { // eslint-disable-line react/pre
   constructor() {
     super()
     this.handleClick = this.handleClick.bind(this)
+    this.showMapIfNotYetVisible = this.showMapIfNotYetVisible.bind(this)
   }
 
   componentDidMount() {
@@ -103,6 +104,16 @@ class StrukturbaumContainer extends Component { // eslint-disable-line react/pre
     store.ui.treeHeight = this.tree.clientHeight
     const treeRect = this.tree.getBoundingClientRect()
     store.ui.treeTopPosition = treeRect.top
+  }
+
+  showMapIfNotYetVisible() {
+    const { store } = this.props
+    const projekteTabs = store.urlQuery.projekteTabs ? clone(store.urlQuery.projekteTabs) : []
+    const isVisible = projekteTabs.includes(`karte`)
+    if (!isVisible) {
+      projekteTabs.push(`karte`)
+      store.setUrlQuery(`projekteTabs`, projekteTabs)
+    }
   }
 
   handleClick(e, data, element) {
@@ -135,19 +146,16 @@ class StrukturbaumContainer extends Component { // eslint-disable-line react/pre
       console.log(`id:`, id)  // eslint-disable-line no-console
       console.log(`parentId:`, parentId)  // eslint-disable-line no-console
       // 1. open map if not yet open
-      const projekteTabs = store.urlQuery.projekteTabs ? clone(store.urlQuery.projekteTabs) : []
-      const isVisible = projekteTabs.includes(`karte`)
-      if (!isVisible) {
-        projekteTabs.push(`karte`)
-        store.setUrlQuery(`projekteTabs`, projekteTabs)
-      }
+      this.showMapIfNotYetVisible()
       // 2 add layer for actionTable
       store.showMapLayer(actionTable, !store.karte.layer[actionTable].visible)
     } else if (action === `highlightOnMap`) {
+      this.showMapIfNotYetVisible()
+      store.showMapLayer(actionTable, true)
       if (store.karte.layer[actionTable].highlightedIds.includes(id)) {
-        store.unhighlightIdOnMap(actionTable, id)
+        store.unhighlightIdOnMap(actionTable, parseInt(id, 10))
       } else {
-        store.highlightIdOnMap(actionTable, id)
+        store.highlightIdOnMap(actionTable, parseInt(id, 10))
       }
     }
   }
