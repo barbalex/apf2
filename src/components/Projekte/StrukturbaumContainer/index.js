@@ -7,6 +7,7 @@ import { observer, inject } from 'mobx-react'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
 import Toggle from 'material-ui/Toggle'
+import clone from 'lodash/clone'
 
 import Label from '../../shared/Label'
 import LabelFilter from './LabelFilter'
@@ -133,6 +134,14 @@ class StrukturbaumContainer extends Component { // eslint-disable-line react/pre
       console.log(`idTable:`, idTable)  // eslint-disable-line no-console
       console.log(`actionTable:`, actionTable)  // eslint-disable-line no-console
       console.log(`should show karte`)  // eslint-disable-line no-console
+      // 1. open map if not yet open
+      const projekteTabs = store.urlQuery.projekteTabs ? clone(store.urlQuery.projekteTabs) : []
+      const isVisible = projekteTabs.includes(`karte`)
+      if (!isVisible) {
+        projekteTabs.push(`karte`)
+        store.setUrlQuery(`projekteTabs`, projekteTabs)
+      }
+      // 2 add layer for actionTable
     }
   }
 

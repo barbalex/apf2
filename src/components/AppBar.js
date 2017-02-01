@@ -19,7 +19,7 @@ const enhance = compose(
     onClickButton: props => (name) => {
       const { store } = props
       const projekteTabs = store.urlQuery.projekteTabs ? clone(store.urlQuery.projekteTabs) : []
-      const isVisible = projekteTabs && projekteTabs.includes(name)
+      const isVisible = projekteTabs.includes(name)
       if (isVisible) {
         remove(projekteTabs, el => el === name)
       } else {
