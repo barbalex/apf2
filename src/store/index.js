@@ -61,6 +61,9 @@ function Store() {
     fieldsLoading: observable(true),
     map: observable(null),
   }
+  this.karte = {
+    showPopLayer: observable(false),
+  }
   this.table = TableStore
   this.valuesForWhichTableDataWasFetched = {}
   this.qk = observable.map()
