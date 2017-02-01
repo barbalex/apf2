@@ -67,7 +67,10 @@ const Karte = ({ store }) => {
       }}
     >
       <OsmColorLayer />
-      <Populationen />
+      {
+        store.karte.layer.pop.visible &&
+        <Populationen />
+      }
       <ScaleControl
         imperial={false}
       />

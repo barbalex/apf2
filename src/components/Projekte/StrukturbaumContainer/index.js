@@ -134,7 +134,6 @@ class StrukturbaumContainer extends Component { // eslint-disable-line react/pre
       console.log(`actionTable:`, actionTable)  // eslint-disable-line no-console
       console.log(`id:`, id)  // eslint-disable-line no-console
       console.log(`parentId:`, parentId)  // eslint-disable-line no-console
-      console.log(`should show karte`)  // eslint-disable-line no-console
       // 1. open map if not yet open
       const projekteTabs = store.urlQuery.projekteTabs ? clone(store.urlQuery.projekteTabs) : []
       const isVisible = projekteTabs.includes(`karte`)
@@ -143,6 +142,7 @@ class StrukturbaumContainer extends Component { // eslint-disable-line react/pre
         store.setUrlQuery(`projekteTabs`, projekteTabs)
       }
       // 2 add layer for actionTable
+      store.showKarteLayer(actionTable, !store.karte.layer[actionTable].visible)
     }
   }
 

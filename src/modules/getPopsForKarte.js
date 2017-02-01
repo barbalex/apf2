@@ -13,10 +13,7 @@ export default (store:Object) => {
   if (popFilterString) {
     pops = pops.filter((p) => {
       const label = `${p.PopNr || `(keine Nr)`}: ${p.PopName || `(kein Name)`}`
-      if (popFilterString) {
-        return label.toLowerCase().includes(popFilterString.toLowerCase())
-      }
-      return true
+      return label.toLowerCase().includes(popFilterString.toLowerCase())
     })
   }
   pops = pops.map((p) => {

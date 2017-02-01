@@ -1,8 +1,15 @@
 // @flow
 import React, { PropTypes } from 'react'
 import { ContextMenu, MenuItem } from 'react-contextmenu'
+import { inject, observer } from 'mobx-react'
+import compose from 'recompose/compose'
 
-const PopFolder = ({ onClick }:{onClick:() => void}) =>
+const enhance = compose(
+  inject(`store`),
+  observer
+)
+
+const PopFolder = ({ onClick, store }:{onClick:() => void, store:Object}) =>
   <ContextMenu id="popFolder" >
     <div className="react-contextmenu-title">Populationen</div>
     <MenuItem
@@ -22,7 +29,7 @@ const PopFolder = ({ onClick }:{onClick:() => void}) =>
         idTable: `ap`,
       }}
     >
-      auf Karte zeigen
+      {`in Karte ${store.karte.layer.pop.visible ? `ausblenden` : `zeigen`}`}
     </MenuItem>
   </ContextMenu>
 
@@ -30,4 +37,4 @@ PopFolder.propTypes = {
   onClick: PropTypes.func.isRequired,
 }
 
-export default PopFolder
+export default enhance(PopFolder)

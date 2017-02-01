@@ -62,7 +62,14 @@ function Store() {
     map: observable(null),
   }
   this.karte = {
-    showPopLayer: observable(false),
+    layer: {
+      pop: observable({
+        visible: false
+      }),
+      tpop: observable({
+        visible: false
+      }),
+    }
   }
   this.table = TableStore
   this.valuesForWhichTableDataWasFetched = {}
@@ -160,6 +167,9 @@ function Store() {
      */
     setUrlQuery: action((key, value) =>
       setUrlQuery(this, key, value)
+    ),
+    showKarteLayer: action((layer, bool) =>
+      this.karte.layer[layer].visible = bool
     ),
     /**
      * url paths are used to control tree and forms
