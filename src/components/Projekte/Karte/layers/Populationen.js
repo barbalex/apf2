@@ -31,7 +31,11 @@ const Populationen = ({ store, map, ...props }) =>
         <Marker
           position={p.PopKoordWgs84}
           key={p.PopId}
-          icon={p.filtered ? PopIconFiltered : PopIcon}
+          icon={
+            store.karte.layer.pop.highlightedIds.includes(p.PopId) ?
+            PopIconFiltered :
+            PopIcon
+          }
           map={map}
           {...props}
         >

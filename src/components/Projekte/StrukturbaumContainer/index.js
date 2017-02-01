@@ -127,7 +127,7 @@ class StrukturbaumContainer extends Component { // eslint-disable-line react/pre
       store.insertDataset(table, idToPass, baseUrl)
     } else if (action === `delete`) {
       store.deleteDatasetDemand(table, id, baseUrl, label)
-    } else if (action === `karte`) {
+    } else if (action === `showOnMap`) {
       // actionTable: table to show on map
       // idTable: table from which to filter datasets of actionTable
       console.log(`idTable:`, idTable)  // eslint-disable-line no-console
@@ -142,7 +142,13 @@ class StrukturbaumContainer extends Component { // eslint-disable-line react/pre
         store.setUrlQuery(`projekteTabs`, projekteTabs)
       }
       // 2 add layer for actionTable
-      store.showKarteLayer(actionTable, !store.karte.layer[actionTable].visible)
+      store.showMapLayer(actionTable, !store.karte.layer[actionTable].visible)
+    } else if (action === `highlightOnMap`) {
+      if (store.karte.layer[actionTable].highlightedIds.includes(id)) {
+        store.unhighlightIdOnMap(actionTable, id)
+      } else {
+        store.highlightIdOnMap(actionTable, id)
+      }
     }
   }
 

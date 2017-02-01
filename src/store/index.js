@@ -64,10 +64,12 @@ function Store() {
   this.karte = {
     layer: {
       pop: observable({
-        visible: false
+        visible: false,
+        highlightedIds: [],
       }),
       tpop: observable({
-        visible: false
+        visible: false,
+        highlightedIds: [],
       }),
     }
   }
@@ -168,8 +170,14 @@ function Store() {
     setUrlQuery: action((key, value) =>
       setUrlQuery(this, key, value)
     ),
-    showKarteLayer: action((layer, bool) =>
+    showMapLayer: action((layer, bool) =>
       this.karte.layer[layer].visible = bool
+    ),
+    highlightIdOnMap: action((layer, id) =>
+      this.karte.layer[layer].highlightedIds = this.karte.layer[layer].highlightedIds.concat(id)
+    ),
+    unhighlightIdOnMap: action((layer, id) =>
+      this.karte.layer[layer].highlightedIds = this.karte.layer[layer].highlightedIds.filter(i => i !== id)
     ),
     /**
      * url paths are used to control tree and forms

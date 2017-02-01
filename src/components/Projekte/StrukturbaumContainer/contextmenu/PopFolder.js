@@ -24,7 +24,7 @@ const PopFolder = ({ onClick, store }:{onClick:() => void, store:Object}) =>
     <MenuItem
       onClick={onClick}
       data={{
-        action: `karte`,
+        action: `showOnMap`,
         actionTable: `pop`,
         idTable: `ap`,
       }}
