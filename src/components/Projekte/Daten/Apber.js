@@ -71,6 +71,17 @@ const Apber = ({ store }) => {
             updateProperty={store.updateProperty}
             updatePropertyInDb={store.updatePropertyInDb}
           />
+          <TextField
+            label="Vergleich Vorjahr - Gesamtziel"
+            fieldName="JBerVergleichVorjahrGesamtziel"
+            value={activeDataset.row.JBerVergleichVorjahrGesamtziel}
+            errorText={activeDataset.valid.JBerVergleichVorjahrGesamtziel}
+            type="text"
+            multiLine
+            fullWidth
+            updateProperty={store.updateProperty}
+            updatePropertyInDb={store.updatePropertyInDb}
+          />
           <Label label="Beurteilung" />
           <RadioButtonGroup
             fieldName="JBerBeurteilung"
