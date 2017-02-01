@@ -18,6 +18,8 @@ import 'proj4leaflet'
 import LayersControl from './LayersControl'
 import '../../../../node_modules/leaflet/dist/leaflet.css'
 import epsg4326to21781 from '../../../modules/epsg4326to21781'
+import Populationen from './layers/Populationen'
+import OsmColorLayer from './layers/OsmColor'
 
 const StyledMap = styled(Map)`
   height: 100%;
@@ -64,6 +66,8 @@ const Karte = ({ store }) => {
         console.log(`Lat, Lon: `, coord)
       }}
     >
+      <OsmColorLayer />
+      <Populationen />
       <ScaleControl
         imperial={false}
       />
