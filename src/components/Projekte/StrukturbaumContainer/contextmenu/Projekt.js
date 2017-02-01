@@ -6,6 +6,7 @@ const Projekt = ({ onClick }:{onClick:() => void}) =>
   <ContextMenu id="projekt" >
     <div className="react-contextmenu-title">Projekt</div>
     <MenuItem
+      disabled
       onClick={onClick}
       data={{
         action: `karte`,

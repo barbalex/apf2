@@ -14,16 +14,6 @@ const Apfolder = ({ onClick }:{onClick:() => void}) =>
     >
       neu
     </MenuItem>
-    <MenuItem
-      onClick={onClick}
-      data={{
-        action: `karte`,
-        actionTable: `pop`,
-        idTable: `projekt`,
-      }}
-    >
-      Populationen auf Karte zeigen
-    </MenuItem>
   </ContextMenu>
 
 Apfolder.propTypes = {

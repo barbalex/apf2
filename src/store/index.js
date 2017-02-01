@@ -35,6 +35,7 @@ import setQk from '../modules/setQk'
 import setQkFilter from '../modules/setQkFilter'
 import fetchQk from '../modules/fetchQk'
 import addMessagesToQk from '../modules/addMessagesToQk'
+import getPopsForKarte from '../modules/getPopsForKarte'
 
 import TableStore from './table'
 import ObservableHistory from './ObservableHistory'
@@ -180,6 +181,9 @@ function Store() {
     ),
     activeUrlElements: computed(() =>
       getActiveUrlElements(this.url)
+    ),
+    popsForKarte: computed(() =>
+      getPopsForKarte(this)
     ),
   })
 }

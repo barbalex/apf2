@@ -133,6 +133,8 @@ class StrukturbaumContainer extends Component { // eslint-disable-line react/pre
       // idTable: table from which to filter datasets of actionTable
       console.log(`idTable:`, idTable)  // eslint-disable-line no-console
       console.log(`actionTable:`, actionTable)  // eslint-disable-line no-console
+      console.log(`id:`, id)  // eslint-disable-line no-console
+      console.log(`parentId:`, parentId)  // eslint-disable-line no-console
       console.log(`should show karte`)  // eslint-disable-line no-console
       // 1. open map if not yet open
       const projekteTabs = store.urlQuery.projekteTabs ? clone(store.urlQuery.projekteTabs) : []
@@ -185,7 +187,6 @@ class StrukturbaumContainer extends Component { // eslint-disable-line react/pre
         >
           <Strukturbaum />
         </div>
-        <CmProjekt onClick={this.handleClick} />
         <CmApFolder onClick={this.handleClick} />
         <CmAp onClick={this.handleClick} />
         <CmApberuebersichtFolder onClick={this.handleClick} />
