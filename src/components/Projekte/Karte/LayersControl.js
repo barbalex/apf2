@@ -12,6 +12,7 @@ import OsmBwLayer from './layers/OsmBw'
 import SwissTopoPixelFarbeLayer from './layers/SwisstopoPixelFarbe'
 import BingAerialLayer from './layers/BingAerial'
 import '../../../../node_modules/leaflet/dist/leaflet.css'
+import floraIconGelb from '../../../etc/ic_local_florist_orange.svg'
 
 const { BaseLayer, Overlay } = LayersControl
 
@@ -20,12 +21,19 @@ const enhance = compose(
   observer
 )
 
+const PopIcon = window.L.icon({
+  iconUrl: floraIconGelb,
+  iconSize: [32, 32],
+})
+
 const popMarkers = (populationen) => {
   if (populationen.length > 0) {
     return populationen.map(p =>
       <Marker
         position={p.PopKoordWgs84}
         key={p.PopId}
+        icon={PopIcon}
+        opacity={0.5}
       >
         <Popup>
           <span>A pretty CSS3 popup. <br /> Easily customizable.</span>
@@ -36,6 +44,7 @@ const popMarkers = (populationen) => {
   return (
     <Marker
       position={[47.295, 8.58]}
+      icon={PopIcon}
     >
       <Popup>
         <span>A pretty CSS3 popup. <br /> Easily customizable.</span>
