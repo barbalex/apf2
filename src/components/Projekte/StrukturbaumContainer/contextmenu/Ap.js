@@ -1,8 +1,15 @@
 // @flow
 import React, { PropTypes } from 'react'
 import { ContextMenu, MenuItem } from 'react-contextmenu'
+import { inject, observer } from 'mobx-react'
+import compose from 'recompose/compose'
 
-const Ap = ({ onClick }:{onClick:() => void}) =>
+const enhance = compose(
+  inject(`store`),
+  observer
+)
+
+const Ap = ({ onClick, store }:{onClick:() => void,store:Object}) =>
   <ContextMenu id="ap" >
     <div className="react-contextmenu-title">Art</div>
     <MenuItem
@@ -26,12 +33,12 @@ const Ap = ({ onClick }:{onClick:() => void}) =>
     <MenuItem
       onClick={onClick}
       data={{
-        action: `karte`,
+        action: `showOnMap`,
         actionTable: `pop`,
         idTable: `ap`,
       }}
     >
-      Populationen auf Karte zeigen
+      {`Populationen in Karte ${store.karte.layer.pop.visible ? `ausblenden` : `zeigen`}`}
     </MenuItem>
   </ContextMenu>
 
@@ -39,4 +46,4 @@ Ap.propTypes = {
   onClick: PropTypes.func.isRequired,
 }
 
-export default Ap
+export default enhance(Ap)
