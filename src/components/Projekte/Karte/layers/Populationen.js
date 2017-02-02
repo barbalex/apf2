@@ -1,7 +1,7 @@
 // @flow
 import React from 'react'
 import { observer, inject } from 'mobx-react'
-import { Marker, Popup, Tooltip } from 'react-leaflet'
+import { Marker, Popup } from 'react-leaflet'
 import compose from 'recompose/compose'
 import 'leaflet'
 

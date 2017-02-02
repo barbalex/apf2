@@ -141,19 +141,18 @@ class StrukturbaumContainer extends Component { // eslint-disable-line react/pre
     } else if (action === `showOnMap`) {
       // actionTable: table to show on map
       // idTable: table from which to filter datasets of actionTable
-      console.log(`action:`, action)  // eslint-disable-line no-console
-      console.log(`idTable:`, idTable)  // eslint-disable-line no-console
-      console.log(`actionTable:`, actionTable)  // eslint-disable-line no-console
-      console.log(`id:`, id)  // eslint-disable-line no-console
-      console.log(`parentId:`, parentId)  // eslint-disable-line no-console
-      // 0. load missing data if necessary
+      // console.log(`action:`, action)  // eslint-disable-line no-console
+      // console.log(`idTable:`, idTable)  // eslint-disable-line no-console
+      // console.log(`actionTable:`, actionTable)  // eslint-disable-line no-console
+      // console.log(`id:`, id)  // eslint-disable-line no-console
+      // console.log(`parentId:`, parentId)  // eslint-disable-line no-console
+      // 1. load missing data if necessary
       if (actionTable === `tpop`) {
-        console.log(`fetching tpop for ap:`, store.activeUrlElements.ap)
         store.fetchTpopForAp(store.activeUrlElements.ap)
       }
-      // 1. open map if not yet open
+      // 2. open map if not yet open
       this.showMapIfNotYetVisible()
-      // 2 add layer for actionTable
+      // 3 add layer for actionTable
       store.showMapLayer(actionTable, !store.map.layer[actionTable].visible)
     } else if (action === `highlightOnMap`) {
       this.showMapIfNotYetVisible()

@@ -19,6 +19,7 @@ import LayersControl from './LayersControl'
 import '../../../../node_modules/leaflet/dist/leaflet.css'
 import epsg4326to21781 from '../../../modules/epsg4326to21781'
 import Populationen from './layers/Populationen'
+import Teilpopulationen from './layers/Teilpopulationen'
 import OsmColorLayer from './layers/OsmColor'
 
 const StyledMap = styled(Map)`
@@ -57,7 +58,6 @@ const Karte = ({ store }) => {
       // crs={crs}
       bounds={bounds}
       onClick={(e) => {
-        // epsg4326to21781
         const coord = epsg4326to21781(e.latlng.lng, e.latlng.lat)
         console.log(`Lat, Lon: `, coord)
       }}
@@ -66,6 +66,10 @@ const Karte = ({ store }) => {
       {
         store.map.layer.pop.visible &&
         <Populationen />
+      }
+      {
+        store.map.layer.tpop.visible &&
+        <Teilpopulationen />
       }
       <ScaleControl
         imperial={false}
