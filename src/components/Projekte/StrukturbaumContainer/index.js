@@ -148,6 +148,7 @@ class StrukturbaumContainer extends Component { // eslint-disable-line react/pre
       console.log(`parentId:`, parentId)  // eslint-disable-line no-console
       // 0. load missing data if necessary
       if (actionTable === `tpop`) {
+        console.log(`fetching tpop for ap:`, store.activeUrlElements.ap)
         store.fetchTpopForAp(store.activeUrlElements.ap)
       }
       // 1. open map if not yet open

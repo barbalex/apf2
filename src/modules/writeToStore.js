@@ -15,10 +15,9 @@ export default ({
   data:Array<Object>,
   table:string,
   field:string,
-}) => {
+}) =>
   runInAction(() => {
     data.forEach(d =>
       store.table[table].set(d[field], d)
     )
   })
-}

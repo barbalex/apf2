@@ -11,7 +11,7 @@ export default (store:Object) => {
   let tpops = Array.from(table.tpop.values())
     .filter(p => popIdsOfActiveAp.includes(p.PopId))
     // omit tpops without coordinates
-    .filter(p => p.PopXKoord && p.PopYKoord)
+    .filter(p => p.TPopXKoord && p.TPopYKoord)
   // filter them by nodeLabelFilter
   const tpopFilterString = node.nodeLabelFilter.get(`tpop`)
   if (tpopFilterString) {

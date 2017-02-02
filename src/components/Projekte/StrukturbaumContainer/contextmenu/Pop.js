@@ -9,7 +9,7 @@ const enhance = compose(
   observer
 )
 
-const Pop = ({ onClick }:{onClick:() => void}) =>
+const Pop = ({ onClick, store }:{onClick:() => void,store:Object}) =>
   <ContextMenu id="pop" >
     <div className="react-contextmenu-title">Population</div>
     <MenuItem
@@ -38,7 +38,17 @@ const Pop = ({ onClick }:{onClick:() => void}) =>
         idTable: `pop`,
       }}
     >
-      auf Karte hervorheben
+      Population auf Karte hervorheben
+    </MenuItem>
+    <MenuItem
+      onClick={onClick}
+      data={{
+        action: `showOnMap`,
+        actionTable: `tpop`,
+        idTable: `ap`,
+      }}
+    >
+      {`Teil-Populationen in Karte ${store.map.layer.tpop.visible ? `ausblenden` : `zeigen`}`}
     </MenuItem>
   </ContextMenu>
 
