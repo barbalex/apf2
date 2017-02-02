@@ -25,7 +25,7 @@ const enhance = compose(
 const Populationen = ({ store, map, ...props }) =>
   <div style={{ display: `none` }}>
     {
-      store.popsForKarte.map((p) => {
+      store.karte.pops.map((p) => {
         const title = p.PopNr ? `${p.PopNr}: ${p.PopName}` : p.PopName
         const icon = (
           store.karte.layer.pop.highlightedIds.includes(p.PopId) ?
