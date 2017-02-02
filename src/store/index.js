@@ -67,26 +67,28 @@ function Store() {
     fieldsLoading: observable(true),
     map: observable(null),
   }
-  this.karte = {
-    pops: [],
-    popBounds: [],
+  this.map = {
     layer: {
-      pop: observable({
+      pop: {
+        pops: [],
+        popBounds: [],
         visible: false,
         highlightedIds: [],
-      }),
+      },
       tpop: observable({
         visible: false,
         highlightedIds: [],
       }),
     }
   }
-  extendObservable(this.karte, {
+  extendObservable(this.map.layer.pop, {
+    visible: false,
+    highlightedIds: [],
     pops: computed(() =>
       getPopsForKarte(this)
     ),
     popBounds: computed(() =>
-      getPopBounds(this.karte.pops)
+      getPopBounds(this.map.layer.pop.pops)
     ),
   })
   this.table = TableStore
@@ -177,19 +179,19 @@ function Store() {
     /**
      * urlQueries are used to control tabs
      * for instance: Entwicklung or Biotop in tpopfeldkontr
-     * or: strukturbaum, daten and karte in projekte
+     * or: strukturbaum, daten and map in projekte
      */
     setUrlQuery: action((key, value) =>
       setUrlQuery(this, key, value)
     ),
     showMapLayer: action((layer, bool) =>
-      this.karte.layer[layer].visible = bool
+      this.map.layer[layer].visible = bool
     ),
     highlightIdOnMap: action((layer, id) =>
-      this.karte.layer[layer].highlightedIds = [...this.karte.layer[layer].highlightedIds, parseInt(id, 10)]
+      this.map.layer[layer].highlightedIds = [...this.map.layer[layer].highlightedIds, parseInt(id, 10)]
     ),
     unhighlightIdOnMap: action((layer, id) =>
-      this.karte.layer[layer].highlightedIds = this.karte.layer[layer].highlightedIds.filter(i => i !== id)
+      this.map.layer[layer].highlightedIds = this.map.layer[layer].highlightedIds.filter(i => i !== id)
     ),
     /**
      * url paths are used to control tree and forms

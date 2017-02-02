@@ -148,11 +148,11 @@ class StrukturbaumContainer extends Component { // eslint-disable-line react/pre
       // 1. open map if not yet open
       this.showMapIfNotYetVisible()
       // 2 add layer for actionTable
-      store.showMapLayer(actionTable, !store.karte.layer[actionTable].visible)
+      store.showMapLayer(actionTable, !store.map.layer[actionTable].visible)
     } else if (action === `highlightOnMap`) {
       this.showMapIfNotYetVisible()
       store.showMapLayer(actionTable, true)
-      if (store.karte.layer[actionTable].highlightedIds.includes(id)) {
+      if (store.map.layer[actionTable].highlightedIds.includes(id)) {
         store.unhighlightIdOnMap(actionTable, parseInt(id, 10))
       } else {
         store.highlightIdOnMap(actionTable, parseInt(id, 10))

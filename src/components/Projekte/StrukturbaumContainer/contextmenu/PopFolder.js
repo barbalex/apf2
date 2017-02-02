@@ -29,7 +29,7 @@ const PopFolder = ({ onClick, store }:{onClick:() => void, store:Object}) =>
         idTable: `ap`,
       }}
     >
-      {`in Karte ${store.karte.layer.pop.visible ? `ausblenden` : `zeigen`}`}
+      {`in Karte ${store.map.layer.pop.visible ? `ausblenden` : `zeigen`}`}
     </MenuItem>
   </ContextMenu>
 

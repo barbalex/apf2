@@ -38,7 +38,7 @@ const Ap = ({ onClick, store }:{onClick:() => void,store:Object}) =>
         idTable: `ap`,
       }}
     >
-      {`Populationen in Karte ${store.karte.layer.pop.visible ? `ausblenden` : `zeigen`}`}
+      {`Populationen in Karte ${store.map.layer.pop.visible ? `ausblenden` : `zeigen`}`}
     </MenuItem>
   </ContextMenu>
 

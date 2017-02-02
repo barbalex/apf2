@@ -64,7 +64,7 @@ const Karte = ({ store }) => {
     >
       <OsmColorLayer />
       {
-        store.karte.layer.pop.visible &&
+        store.map.layer.pop.visible &&
         <Populationen />
       }
       <ScaleControl
