@@ -141,10 +141,15 @@ class StrukturbaumContainer extends Component { // eslint-disable-line react/pre
     } else if (action === `showOnMap`) {
       // actionTable: table to show on map
       // idTable: table from which to filter datasets of actionTable
+      console.log(`action:`, action)  // eslint-disable-line no-console
       console.log(`idTable:`, idTable)  // eslint-disable-line no-console
       console.log(`actionTable:`, actionTable)  // eslint-disable-line no-console
       console.log(`id:`, id)  // eslint-disable-line no-console
       console.log(`parentId:`, parentId)  // eslint-disable-line no-console
+      // 0. load missing data if necessary
+      if (actionTable === `tpop`) {
+        store.fetchTpopForAp(store.activeUrlElements.ap)
+      }
       // 1. open map if not yet open
       this.showMapIfNotYetVisible()
       // 2 add layer for actionTable

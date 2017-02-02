@@ -40,6 +40,16 @@ const Ap = ({ onClick, store }:{onClick:() => void,store:Object}) =>
     >
       {`Populationen in Karte ${store.map.layer.pop.visible ? `ausblenden` : `zeigen`}`}
     </MenuItem>
+    <MenuItem
+      onClick={onClick}
+      data={{
+        action: `showOnMap`,
+        actionTable: `tpop`,
+        idTable: `ap`,
+      }}
+    >
+      {`Teil-Populationen in Karte ${store.map.layer.tpop.visible ? `ausblenden` : `zeigen`}`}
+    </MenuItem>
   </ContextMenu>
 
 Ap.propTypes = {

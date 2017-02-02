@@ -29,7 +29,17 @@ const PopFolder = ({ onClick, store }:{onClick:() => void, store:Object}) =>
         idTable: `ap`,
       }}
     >
-      {`in Karte ${store.map.layer.pop.visible ? `ausblenden` : `zeigen`}`}
+      {`Populationen in Karte ${store.map.layer.pop.visible ? `ausblenden` : `zeigen`}`}
+    </MenuItem>
+    <MenuItem
+      onClick={onClick}
+      data={{
+        action: `showOnMap`,
+        actionTable: `tpop`,
+        idTable: `ap`,
+      }}
+    >
+      {`Teil-Populationen in Karte ${store.map.layer.tpop.visible ? `ausblenden` : `zeigen`}`}
     </MenuItem>
   </ContextMenu>
 
