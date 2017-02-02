@@ -1,0 +1,28 @@
+// @flow
+import epsg21781to4326 from './epsg21781to4326'
+
+export default (store:Object) => {
+  const { table, activeUrlElements, node } = store
+  // get pops of this ap
+  const popsOfActiveAp = Array.from(table.pop.values())
+    .filter(p => p.ApArtId === activeUrlElements.ap)
+  const popIdsOfActiveAp = popsOfActiveAp.map(p => p.PopId)
+  // get tpops of this ap
+  let tpops = Array.from(table.tpop.values())
+    .filter(p => popIdsOfActiveAp.includes(p.PopId))
+    // omit tpops without coordinates
+    .filter(p => p.PopXKoord && p.PopYKoord)
+  // filter them by nodeLabelFilter
+  const tpopFilterString = node.nodeLabelFilter.get(`tpop`)
+  if (tpopFilterString) {
+    tpops = tpops.filter((p) => {
+      const label = `${p.TPopNr || `(keine Nr)`}: ${p.TPopFlurname || `(kein Flurname)`}`
+      return label.toLowerCase().includes(tpopFilterString.toLowerCase())
+    })
+  }
+  tpops = tpops.map((p) => {
+    p.TPopKoordWgs84 = epsg21781to4326(p.TPopXKoord, p.TPopYKoord)
+    return p
+  })
+  return tpops
+}

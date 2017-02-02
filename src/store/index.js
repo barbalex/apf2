@@ -35,8 +35,10 @@ import setQk from '../modules/setQk'
 import setQkFilter from '../modules/setQkFilter'
 import fetchQk from '../modules/fetchQk'
 import addMessagesToQk from '../modules/addMessagesToQk'
-import getPopsForKarte from '../modules/getPopsForKarte'
+import getPopsForMap from '../modules/getPopsForMap'
+import getTpopsForMap from '../modules/getTpopsForMap'
 import getPopBounds from '../modules/getPopBounds'
+import getTpopBounds from '../modules/getTpopBounds'
 
 import TableStore from './table'
 import ObservableHistory from './ObservableHistory'
@@ -71,24 +73,36 @@ function Store() {
     layer: {
       pop: {
         pops: [],
-        popBounds: [],
+        bounds: [],
         visible: false,
         highlightedIds: [],
       },
-      tpop: observable({
+      tpop: {
+        tpops: [],
+        bounds: [],
         visible: false,
         highlightedIds: [],
-      }),
+      },
     }
   }
   extendObservable(this.map.layer.pop, {
     visible: false,
     highlightedIds: [],
     pops: computed(() =>
-      getPopsForKarte(this)
+      getPopsForMap(this)
     ),
-    popBounds: computed(() =>
+    bounds: computed(() =>
       getPopBounds(this.map.layer.pop.pops)
+    ),
+  })
+  extendObservable(this.map.layer.tpop, {
+    visible: false,
+    highlightedIds: [],
+    tpops: computed(() =>
+      getTpopsForMap(this)
+    ),
+    bounds: computed(() =>
+      getTpopBounds(this.map.layer.pop.pops)
     ),
   })
   this.table = TableStore
