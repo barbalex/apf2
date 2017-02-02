@@ -73,6 +73,23 @@ function Store() {
       }),
     }
   }
+  extendObservable(this.karte, {
+    pops: computed(() =>
+      getPopsForKarte(this)
+    ),
+  })
+  extendObservable(this.karte, {
+    popBounds: computed(() => {
+      const { pops } = this.karte
+      const xKoords = pops.map(p => p.PopKoordWgs84[0])
+      const yKoords = pops.map(p => p.PopKoordWgs84[1])
+      const maxX = Math.max(...xKoords)
+      const minX = Math.min(...xKoords)
+      const maxY = Math.max(...yKoords)
+      const minY = Math.min(...yKoords)
+      return [[minX, minY], [maxX, maxY]]
+    }),
+  })
   this.table = TableStore
   this.valuesForWhichTableDataWasFetched = {}
   this.qk = observable.map()
@@ -202,9 +219,6 @@ function Store() {
     ),
     activeUrlElements: computed(() =>
       getActiveUrlElements(this.url)
-    ),
-    popsForKarte: computed(() =>
-      getPopsForKarte(this)
     ),
   })
 }
