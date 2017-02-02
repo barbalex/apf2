@@ -38,6 +38,7 @@ const Karte = ({ store }) => {
   // if no active ap, need to fetch pops of projekt
   // uhm, let us not do this
 
+  // TODO: define projekt-bounds and use here
   const ktZhBounds = [[47.159, 8.354], [47.696, 8.984]]
   const popBounds = store.map.layer.pop.bounds
   const tpopBounds = store.map.layer.tpop.bounds
@@ -49,7 +50,6 @@ const Karte = ({ store }) => {
     boundsToUse.push(tpopBounds)
   }
   const bounds = getEncompassingBound(boundsToUse)
-  console.log(`bounds:`, bounds)
   // this does not work
   // see issue on proj4js: https://github.com/proj4js/proj4js/issues/214
   /*
