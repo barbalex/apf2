@@ -36,12 +36,8 @@ const Karte = ({ store }) => {
   // if no active ap, need to fetch pops of projekt
   // uhm, let us not do this
 
-  const position = [47.295, 8.58]
-  // const bounds = [[45.8300, 5.9700], [47.8100, 10.4900]]
-  // const bounds = [[485869.5728, 76443.1884], [837076.5648, 299941.7864]]
-  // const position = [685994, 238600]
-  // const bounds = [[76443.1884, 485869.5728], [299941.7864, 837076.5648]]
-  // const position = [238600, 685994]
+  // const position = [47.295, 8.58]
+  const bounds = [[47.159, 8.354], [47.696, 8.984]]
   // this does not work
   // see issue on proj4js: https://github.com/proj4js/proj4js/issues/214
   /*
@@ -56,10 +52,10 @@ const Karte = ({ store }) => {
 
   return (
     <StyledMap
-      center={position}
-      zoom={11}
+      // center={position}
+      // zoom={11}
       // crs={crs}
-      // bounds={bounds}
+      bounds={bounds}
       onClick={(e) => {
         // epsg4326to21781
         const coord = epsg4326to21781(e.latlng.lng, e.latlng.lat)
