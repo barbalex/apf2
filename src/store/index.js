@@ -102,7 +102,7 @@ function Store() {
       getTpopsForMap(this)
     ),
     bounds: computed(() =>
-      getTpopBounds(this.map.layer.pop.pops)
+      getTpopBounds(this.map.layer.tpop.tpops)
     ),
   })
   this.table = TableStore

@@ -1,4 +1,6 @@
-export default (tpops) => {
+export default (tpopsPassed) => {
+  const tpops = tpopsPassed.filter(t => !!t.TPopKoordWgs84)
+  if (tpops.length === 0) return null
   const xKoords = tpops.map(p => p.TPopKoordWgs84[0])
   const yKoords = tpops.map(p => p.TPopKoordWgs84[1])
   const maxX = Math.max(...xKoords)

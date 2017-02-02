@@ -18,6 +18,7 @@ import 'proj4leaflet'
 import LayersControl from './LayersControl'
 import '../../../../node_modules/leaflet/dist/leaflet.css'
 import epsg4326to21781 from '../../../modules/epsg4326to21781'
+import getEncompassingBound from '../../../modules/getEncompassingBound'
 import Populationen from './layers/Populationen'
 import Teilpopulationen from './layers/Teilpopulationen'
 import OsmColorLayer from './layers/OsmColor'
@@ -37,8 +38,18 @@ const Karte = ({ store }) => {
   // if no active ap, need to fetch pops of projekt
   // uhm, let us not do this
 
-  // const position = [47.295, 8.58]
-  const bounds = [[47.159, 8.354], [47.696, 8.984]]
+  const ktZhBounds = [[47.159, 8.354], [47.696, 8.984]]
+  const popBounds = store.map.layer.pop.bounds
+  const tpopBounds = store.map.layer.tpop.bounds
+  const boundsToUse = [ktZhBounds]
+  if (store.map.layer.pop.visible) {
+    boundsToUse.push(popBounds)
+  }
+  if (store.map.layer.tpop.visible) {
+    boundsToUse.push(tpopBounds)
+  }
+  const bounds = getEncompassingBound(boundsToUse)
+  console.log(`bounds:`, bounds)
   // this does not work
   // see issue on proj4js: https://github.com/proj4js/proj4js/issues/214
   /*
@@ -53,8 +64,6 @@ const Karte = ({ store }) => {
 
   return (
     <StyledMap
-      // center={position}
-      // zoom={11}
       // crs={crs}
       bounds={bounds}
       onClick={(e) => {

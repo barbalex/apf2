@@ -1,4 +1,6 @@
-export default (pops) => {
+export default (popsPassed) => {
+  const pops = popsPassed.filter(t => !!t.PopKoordWgs84)
+  if (pops.length === 0) return null
   const xKoords = pops.map(p => p.PopKoordWgs84[0])
   const yKoords = pops.map(p => p.PopKoordWgs84[1])
   const maxX = Math.max(...xKoords)
