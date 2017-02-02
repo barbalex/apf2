@@ -36,6 +36,7 @@ import setQkFilter from '../modules/setQkFilter'
 import fetchQk from '../modules/fetchQk'
 import addMessagesToQk from '../modules/addMessagesToQk'
 import getPopsForKarte from '../modules/getPopsForKarte'
+import getPopBounds from '../modules/getPopBounds'
 
 import TableStore from './table'
 import ObservableHistory from './ObservableHistory'
@@ -43,9 +44,14 @@ import ObservableHistory from './ObservableHistory'
 function Store() {
   this.history = ObservableHistory
   this.node = {
+    apFilter: false,
     loadingAllNodes: observable(false),
     nodeLabelFilter: observable.map({}),
   }
+  extendObservable(this.node, {
+    apFilter: false,
+    nrOfRowsAboveActiveNode: 0,
+  })
   this.ui = {
     windowWidth: observable($(window).width()),
     windowHeight: observable($(window).height()),
@@ -62,6 +68,8 @@ function Store() {
     map: observable(null),
   }
   this.karte = {
+    pops: [],
+    popBounds: [],
     layer: {
       pop: observable({
         visible: false,
@@ -77,26 +85,13 @@ function Store() {
     pops: computed(() =>
       getPopsForKarte(this)
     ),
-  })
-  extendObservable(this.karte, {
-    popBounds: computed(() => {
-      const { pops } = this.karte
-      const xKoords = pops.map(p => p.PopKoordWgs84[0])
-      const yKoords = pops.map(p => p.PopKoordWgs84[1])
-      const maxX = Math.max(...xKoords)
-      const minX = Math.min(...xKoords)
-      const maxY = Math.max(...yKoords)
-      const minY = Math.min(...yKoords)
-      return [[minX, minY], [maxX, maxY]]
-    }),
+    popBounds: computed(() =>
+      getPopBounds(this.karte.pops)
+    ),
   })
   this.table = TableStore
   this.valuesForWhichTableDataWasFetched = {}
   this.qk = observable.map()
-  extendObservable(this.node, {
-    apFilter: false,
-    nrOfRowsAboveActiveNode: 0,
-  })
   extendObservable(this, {
     datasetToDelete: {},
     qkLoading: false,
