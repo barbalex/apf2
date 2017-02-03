@@ -72,6 +72,9 @@ function Store() {
   this.map = {
     layer: {
       pop: {
+        // apArtId is needed because
+        // need to pass apArtId when activeUrlElements.ap
+        // is not yet set...
         apArtId: null,
         pops: [],
         bounds: [],

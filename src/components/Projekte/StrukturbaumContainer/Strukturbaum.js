@@ -81,7 +81,8 @@ const StyledTextSpan = styled.span`
   padding-left: .5em;
 `
 const StyledMapIcon = styled(FontIcon)`
-  padding-left: .3em;
+  padding-left: .2em;
+  margin-right: -0.1em;
   font-size: 20px !important;
 `
 const PopMapIcon = styled(StyledMapIcon)`
@@ -200,7 +201,8 @@ class Strukturbaum extends Component {
     }
     const Node = nodeIsInActiveNodePath ? StyledNodeInActiveNodePath : StyledNode
     const showPopMapIcon = (
-      node.menuType === `popFolder` &&
+      node.menuType === `ap` &&
+      node.id === (store.activeUrlElements.ap || store.map.layer.pop.apArtId) &&
       store.map.layer.pop.visible
     )
     const showPopFilteredMapIcon = (
@@ -209,7 +211,8 @@ class Strukturbaum extends Component {
       store.map.layer.pop.highlightedIds.includes(node.id)
     )
     const showTpopMapIcon = (
-      node.menuType === `popFolder` &&
+      node.menuType === `ap` &&
+      node.id === (store.activeUrlElements.ap || store.map.layer.pop.apArtId) &&
       store.map.layer.tpop.visible
     )
     const showTpopFilteredMapIcon = (
@@ -243,9 +246,6 @@ class Strukturbaum extends Component {
           <SymbolSpan>
             {symbol}
           </SymbolSpan>
-          <TextSpan>
-            {node.label}
-          </TextSpan>
           {
             showPopMapIcon &&
             <PopMapIcon
@@ -286,6 +286,9 @@ class Strukturbaum extends Component {
               local_florist
             </TpopFilteredMapIcon>
           }
+          <TextSpan>
+            {node.label}
+          </TextSpan>
         </Node>
       </ContextMenuTrigger>
     )
