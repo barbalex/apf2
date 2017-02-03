@@ -72,6 +72,7 @@ function Store() {
   this.map = {
     layer: {
       pop: {
+        apArtId: null,
         pops: [],
         bounds: [],
         visible: false,
@@ -87,6 +88,7 @@ function Store() {
     }
   }
   extendObservable(this.map.layer.pop, {
+    apArtId: null,
     visible: false,
     highlightedIds: [],
     pops: computed(() =>

@@ -9,7 +9,10 @@ const enhance = compose(
   observer
 )
 
-const PopFolder = ({ onClick, store }:{onClick:() => void, store:Object}) =>
+const PopFolder = (
+  { onClick, store }:
+  {onClick:() => void, store:Object}
+) =>
   <ContextMenu id="popFolder" >
     <div className="react-contextmenu-title">Populationen</div>
     <MenuItem

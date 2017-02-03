@@ -142,6 +142,12 @@ class StrukturbaumContainer extends Component { // eslint-disable-line react/pre
       // actionTable: table to show on map
       // idTable: table from which to filter datasets of actionTable
       // 1. load missing data if necessary
+      if (idTable === `ap`) {
+        console.log(`id:`, id)
+        store.map.layer.pop.apArtId = parseInt(id, 10)
+        store.fetchTableByParentId(`apflora`, `pop`, id)
+        store.fetchTpopForAp(id)
+      }
       if (actionTable === `tpop`) {
         store.fetchTpopForAp(store.activeUrlElements.ap)
       }
