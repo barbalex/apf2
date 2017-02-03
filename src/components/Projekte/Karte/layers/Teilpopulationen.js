@@ -25,12 +25,12 @@ const enhance = compose(
 const Teilpopulationen = ({ store, map, ...props }) =>
   <div style={{ display: `none` }}>
     {
-      store.map.layer.tpop.tpops.map((p) => {
+      store.map.tpop.tpops.map((p) => {
         const title = p.TPopNr ? `${p.TPopNr}: ${p.TPopFlurname}` : p.TPopFlurname
         const myIcon = (
           (
-            store.map.layer.tpop.highlightedIds.includes(p.TPopId) ||
-            store.map.layer.tpop.highlightedPopIds.includes(p.PopId)
+            store.map.tpop.highlightedIds.includes(p.TPopId) ||
+            store.map.tpop.highlightedPopIds.includes(p.PopId)
           ) ?
           iconHighlighted :
           icon

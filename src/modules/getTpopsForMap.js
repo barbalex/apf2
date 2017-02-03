@@ -3,7 +3,7 @@ import epsg21781to4326 from './epsg21781to4326'
 
 export default (store:Object) => {
   const { table, activeUrlElements, node } = store
-  const myApArtId = activeUrlElements.ap || store.map.layer.pop.apArtId
+  const myApArtId = activeUrlElements.ap || store.map.pop.apArtId
   // get pops of this ap
   const popsOfActiveAp = Array.from(table.pop.values())
     .filter(p => p.ApArtId === myApArtId)

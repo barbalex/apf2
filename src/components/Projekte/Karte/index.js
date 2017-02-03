@@ -40,13 +40,13 @@ const Karte = ({ store }) => {
 
   // TODO: define projekt-bounds and use here
   const ktZhBounds = [[47.159, 8.354], [47.696, 8.984]]
-  const popBounds = store.map.layer.pop.bounds
-  const tpopBounds = store.map.layer.tpop.bounds
+  const popBounds = store.map.pop.bounds
+  const tpopBounds = store.map.tpop.bounds
   const boundsToUse = [ktZhBounds]
-  if (store.map.layer.pop.visible) {
+  if (store.map.pop.visible) {
     boundsToUse.push(popBounds)
   }
-  if (store.map.layer.tpop.visible) {
+  if (store.map.tpop.visible) {
     boundsToUse.push(tpopBounds)
   }
   const bounds = getEncompassingBound(boundsToUse)
@@ -73,11 +73,11 @@ const Karte = ({ store }) => {
     >
       <OsmColorLayer />
       {
-        store.map.layer.pop.visible &&
+        store.map.pop.visible &&
         <Populationen />
       }
       {
-        store.map.layer.tpop.visible &&
+        store.map.tpop.visible &&
         <Teilpopulationen />
       }
       <ScaleControl

@@ -57,7 +57,7 @@ const Tpop = (
       }}
     >
       {
-        store.map.layer.tpop.highlightedIds.includes(id) ?
+        store.map.tpop.highlightedIds.includes(id) ?
         `Hervorhebung der Teil-Population aufheben` :
         `Teil-Population auf Karte hervorheben`
       }
@@ -70,7 +70,7 @@ const Tpop = (
         idTable: `ap`,
       }}
     >
-      {`Teil-Populationen in Karte ${store.map.layer.tpop.visible ? `ausblenden` : `zeigen`}`}
+      {`Teil-Populationen in Karte ${store.map.tpop.visible ? `ausblenden` : `zeigen`}`}
     </MenuItem>
   </ContextMenu>
 

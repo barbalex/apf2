@@ -47,7 +47,7 @@ const TpopFolder = (
       }}
     >
       {
-        store.map.layer.tpop.highlightedPopIds.includes(id) ?
+        store.map.tpop.highlightedPopIds.includes(id) ?
         `Hervorhebung der Teil-Populationen aufheben` :
         `Teil-Populationen auf Karte hervorheben`
       }

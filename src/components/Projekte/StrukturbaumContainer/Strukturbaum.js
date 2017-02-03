@@ -202,29 +202,29 @@ class Strukturbaum extends Component {
     const Node = nodeIsInActiveNodePath ? StyledNodeInActiveNodePath : StyledNode
     const showPopMapIcon = (
       node.menuType === `ap` &&
-      node.id === (store.activeUrlElements.ap || store.map.layer.pop.apArtId) &&
-      store.map.layer.pop.visible
+      node.id === (store.activeUrlElements.ap || store.map.pop.apArtId) &&
+      store.map.pop.visible
     )
     const showPopFilteredMapIcon = (
       node.menuType === `pop` &&
-      store.map.layer.pop.visible &&
-      store.map.layer.pop.highlightedIds.includes(node.id)
+      store.map.pop.visible &&
+      store.map.pop.highlightedIds.includes(node.id)
     )
     const showTpopMapIcon = (
       node.menuType === `ap` &&
-      node.id === (store.activeUrlElements.ap || store.map.layer.pop.apArtId) &&
-      store.map.layer.tpop.visible
+      node.id === (store.activeUrlElements.ap || store.map.pop.apArtId) &&
+      store.map.tpop.visible
     )
     const showTpopFilteredMapIcon = (
       (
         node.menuType === `tpop` &&
-        store.map.layer.tpop.visible &&
-        store.map.layer.tpop.highlightedIds.includes(node.id)
+        store.map.tpop.visible &&
+        store.map.tpop.highlightedIds.includes(node.id)
       ) ||
       (
         node.menuType === `tpopFolder` &&
-        store.map.layer.tpop.visible &&
-        store.map.layer.tpop.highlightedPopIds.includes(node.id)
+        store.map.tpop.visible &&
+        store.map.tpop.highlightedPopIds.includes(node.id)
       )
     )
 

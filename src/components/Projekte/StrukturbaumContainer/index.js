@@ -143,7 +143,7 @@ class StrukturbaumContainer extends Component { // eslint-disable-line react/pre
       // idTable: table from which to filter datasets of actionTable
       // 1. load missing data if necessary
       if (idTable === `ap`) {
-        store.map.layer.pop.apArtId = parseInt(id, 10)
+        store.map.pop.apArtId = parseInt(id, 10)
         store.fetchTableByParentId(`apflora`, `pop`, id)
         store.fetchTpopForAp(id)
       }
@@ -153,19 +153,19 @@ class StrukturbaumContainer extends Component { // eslint-disable-line react/pre
       // 2. open map if not yet open
       this.showMapIfNotYetVisible()
       // 3 add layer for actionTable
-      store.showMapLayer(actionTable, !store.map.layer[actionTable].visible)
+      store.showMapLayer(actionTable, !store.map[actionTable].visible)
     } else if (action === `highlightOnMap`) {
       this.showMapIfNotYetVisible()
       store.showMapLayer(actionTable, true)
       if (actionTable === `tpop` && idTable === `pop`) {
         // TPopFolder: is special as all tpop of pop can be highlighted
-        if (store.map.layer.tpop.highlightedPopIds.includes(parseInt(id, 10))) {
+        if (store.map.tpop.highlightedPopIds.includes(parseInt(id, 10))) {
           store.unhighlightTpopByPopIdOnMap(parseInt(id, 10))
         } else {
           store.highlightTpopByPopIdOnMap(parseInt(id, 10))
         }
       } else {
-        if (store.map.layer[actionTable].highlightedIds.includes(parseInt(id, 10))) {
+        if (store.map[actionTable].highlightedIds.includes(parseInt(id, 10))) {
           store.unhighlightIdOnMap(actionTable, parseInt(id, 10))
         } else {
           store.highlightIdOnMap(actionTable, parseInt(id, 10))

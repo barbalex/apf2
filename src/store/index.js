@@ -70,27 +70,25 @@ function Store() {
     map: observable(null),
   }
   this.map = {
-    layer: {
-      pop: {
-        // apArtId is needed because
-        // need to pass apArtId when activeUrlElements.ap
-        // is not yet set...
-        apArtId: null,
-        pops: [],
-        bounds: [],
-        visible: false,
-        highlightedIds: [],
-      },
-      tpop: {
-        tpops: [],
-        bounds: [],
-        visible: false,
-        highlightedIds: [],
-        highlightedPopIds: [],
-      },
-    }
+    pop: {
+      // apArtId is needed because
+      // need to pass apArtId when activeUrlElements.ap
+      // is not yet set...
+      apArtId: null,
+      pops: [],
+      bounds: [],
+      visible: false,
+      highlightedIds: [],
+    },
+    tpop: {
+      tpops: [],
+      bounds: [],
+      visible: false,
+      highlightedIds: [],
+      highlightedPopIds: [],
+    },
   }
-  extendObservable(this.map.layer.pop, {
+  extendObservable(this.map.pop, {
     apArtId: null,
     visible: false,
     highlightedIds: [],
@@ -98,10 +96,10 @@ function Store() {
       getPopsForMap(this)
     ),
     bounds: computed(() =>
-      getPopBounds(this.map.layer.pop.pops)
+      getPopBounds(this.map.pop.pops)
     ),
   })
-  extendObservable(this.map.layer.tpop, {
+  extendObservable(this.map.tpop, {
     visible: false,
     highlightedIds: [],
     highlightedPopIds: [],
@@ -109,7 +107,7 @@ function Store() {
       getTpopsForMap(this)
     ),
     bounds: computed(() =>
-      getTpopBounds(this.map.layer.tpop.tpops)
+      getTpopBounds(this.map.tpop.tpops)
     ),
   })
   this.table = TableStore
@@ -206,19 +204,19 @@ function Store() {
       setUrlQuery(this, key, value)
     ),
     showMapLayer: action((layer, bool) =>
-      this.map.layer[layer].visible = bool
+      this.map[layer].visible = bool
     ),
     highlightIdOnMap: action((layer, id) =>
-      this.map.layer[layer].highlightedIds = [...this.map.layer[layer].highlightedIds, parseInt(id, 10)]
+      this.map[layer].highlightedIds = [...this.map[layer].highlightedIds, parseInt(id, 10)]
     ),
     unhighlightIdOnMap: action((layer, id) =>
-      this.map.layer[layer].highlightedIds = this.map.layer[layer].highlightedIds.filter(i => i !== id)
+      this.map[layer].highlightedIds = this.map[layer].highlightedIds.filter(i => i !== id)
     ),
     highlightTpopByPopIdOnMap: action((id) =>
-      this.map.layer.tpop.highlightedPopIds = [...this.map.layer.tpop.highlightedPopIds, parseInt(id, 10)]
+      this.map.tpop.highlightedPopIds = [...this.map.tpop.highlightedPopIds, parseInt(id, 10)]
     ),
     unhighlightTpopByPopIdOnMap: action((id) =>
-      this.map.layer.tpop.highlightedPopIds = this.map.layer.tpop.highlightedPopIds.filter(i => i !== id)
+      this.map.tpop.highlightedPopIds = this.map.tpop.highlightedPopIds.filter(i => i !== id)
     ),
     /**
      * url paths are used to control tree and forms

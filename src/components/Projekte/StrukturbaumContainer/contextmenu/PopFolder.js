@@ -32,7 +32,7 @@ const PopFolder = (
         idTable: `ap`,
       }}
     >
-      {`Populationen in Karte ${store.map.layer.pop.visible ? `ausblenden` : `zeigen`}`}
+      {`Populationen in Karte ${store.map.pop.visible ? `ausblenden` : `zeigen`}`}
     </MenuItem>
     <MenuItem
       onClick={onClick}
@@ -42,7 +42,7 @@ const PopFolder = (
         idTable: `ap`,
       }}
     >
-      {`Teil-Populationen in Karte ${store.map.layer.tpop.visible ? `ausblenden` : `zeigen`}`}
+      {`Teil-Populationen in Karte ${store.map.tpop.visible ? `ausblenden` : `zeigen`}`}
     </MenuItem>
   </ContextMenu>
 
