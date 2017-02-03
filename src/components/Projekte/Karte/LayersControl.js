@@ -11,8 +11,9 @@ import OsmColorLayer from './layers/OsmColor'
 import OsmBwLayer from './layers/OsmBw'
 import SwissTopoPixelFarbeLayer from './layers/SwisstopoPixelFarbe'
 import BingAerialLayer from './layers/BingAerial'
+import DetailplaeneLayer from './layers/Detailplaene'
 
-const { BaseLayer } = LayersControl
+const { BaseLayer, Overlay } = LayersControl
 
 const enhance = compose(
   inject(`store`),
@@ -33,6 +34,9 @@ const MyLayersControl = ({ store }) =>
     <BaseLayer name="Bing Luftbild">
       <BingAerialLayer />
     </BaseLayer>
+    <Overlay name="Detailplaene">
+      <DetailplaeneLayer />
+    </Overlay>
   </LayersControl>
 
 export default enhance(MyLayersControl)
