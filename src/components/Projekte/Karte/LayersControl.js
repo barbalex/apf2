@@ -13,6 +13,7 @@ import SwissTopoPixelFarbeLayer from './layers/SwisstopoPixelFarbe'
 import BingAerialLayer from './layers/BingAerial'
 import DetailplaeneLayer from './layers/Detailplaene'
 import SvoColorLayer from './layers/SvoColor'
+import LrVegKartierungenZh from './layers/LrVegKartierungenZh'
 
 const { BaseLayer, Overlay } = LayersControl
 
@@ -40,6 +41,9 @@ const MyLayersControl = ({ store }) =>
     </Overlay>
     <Overlay name="SVO farbig">
       <SvoColorLayer />
+    </Overlay>
+    <Overlay name="Lebensraum- und Vegetationskartierungen">
+      <LrVegKartierungenZh />
     </Overlay>
   </LayersControl>
 

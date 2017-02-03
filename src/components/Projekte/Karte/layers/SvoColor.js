@@ -8,7 +8,7 @@ const SvoColorLayer = () =>
     layers="zonen-schutzverordnungen,ueberlagernde-schutzzonen,schutzverordnungsobjekte,svo-zonen-labels,schutzverordnungsobjekt-nr"
     opacity={0.5}
     transparent={true}
-    version="1.1.0"
+    version="1.3.0"
     format="image/png"
   />
 
