@@ -141,11 +141,6 @@ class StrukturbaumContainer extends Component { // eslint-disable-line react/pre
     } else if (action === `showOnMap`) {
       // actionTable: table to show on map
       // idTable: table from which to filter datasets of actionTable
-      // console.log(`action:`, action)  // eslint-disable-line no-console
-      // console.log(`idTable:`, idTable)  // eslint-disable-line no-console
-      // console.log(`actionTable:`, actionTable)  // eslint-disable-line no-console
-      // console.log(`id:`, id)  // eslint-disable-line no-console
-      // console.log(`parentId:`, parentId)  // eslint-disable-line no-console
       // 1. load missing data if necessary
       if (actionTable === `tpop`) {
         store.fetchTpopForAp(store.activeUrlElements.ap)
@@ -157,11 +152,8 @@ class StrukturbaumContainer extends Component { // eslint-disable-line react/pre
     } else if (action === `highlightOnMap`) {
       this.showMapIfNotYetVisible()
       store.showMapLayer(actionTable, true)
-      console.log(`actionTable:`, actionTable)
-      console.log(`idTable:`, idTable)
-      console.log(`id:`, id)
       if (actionTable === `tpop` && idTable === `pop`) {
-        // TPopFolder: is special
+        // TPopFolder: is special as all tpop of pop can be highlighted
         if (store.map.layer.tpop.highlightedPopIds.includes(parseInt(id, 10))) {
           store.unhighlightTpopByPopIdOnMap(parseInt(id, 10))
         } else {

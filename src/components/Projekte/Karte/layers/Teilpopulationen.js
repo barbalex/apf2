@@ -10,11 +10,11 @@ import floraIconGelb from '../../../../etc/ic_local_florist_yellow.svg'
 
 const icon = window.L.icon({
   iconUrl: floraIconGreen,
-  iconSize: [28, 28],
+  iconSize: [24, 24],
 })
 const iconHighlighted = window.L.icon({
   iconUrl: floraIconGelb,
-  iconSize: [28, 28],
+  iconSize: [24, 24],
 })
 
 const enhance = compose(

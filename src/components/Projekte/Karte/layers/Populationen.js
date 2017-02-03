@@ -10,11 +10,11 @@ import floraIconGelb from '../../../../etc/ic_local_florist_yellow.svg'
 
 const PopIcon = window.L.icon({
   iconUrl: floraIconOrange,
-  iconSize: [28, 28],
+  iconSize: [24, 24],
 })
 const PopIconHighlighted = window.L.icon({
   iconUrl: floraIconGelb,
-  iconSize: [28, 28],
+  iconSize: [24, 24],
 })
 
 const enhance = compose(

@@ -90,6 +90,9 @@ const PopMapIcon = styled(StyledMapIcon)`
 const TpopMapIcon = styled(StyledMapIcon)`
   color: #016f19 !important;
 `
+const PopFilteredMapIcon = styled(StyledMapIcon)`
+  color: #f5ef00 !important;
+`
 const TpopFilteredMapIcon = styled(StyledMapIcon)`
   color: #f5ef00 !important;
 `
@@ -200,6 +203,11 @@ class Strukturbaum extends Component {
       node.menuType === `popFolder` &&
       store.map.layer.pop.visible
     )
+    const showPopFilteredMapIcon = (
+      node.menuType === `pop` &&
+      store.map.layer.pop.visible &&
+      store.map.layer.pop.highlightedIds.includes(node.id)
+    )
     const showTpopMapIcon = (
       node.menuType === `popFolder` &&
       store.map.layer.tpop.visible
@@ -257,6 +265,16 @@ class Strukturbaum extends Component {
             >
               local_florist
             </TpopMapIcon>
+          }
+          {
+            showPopFilteredMapIcon &&
+            <PopFilteredMapIcon
+              id="map"
+              className="material-icons"
+              title="in Karte hervorgehoben"
+            >
+              local_florist
+            </PopFilteredMapIcon>
           }
           {
             showTpopFilteredMapIcon &&
