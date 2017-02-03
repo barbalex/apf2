@@ -26,7 +26,6 @@ const Populationen = ({ store, map, ...props }) =>
   <div style={{ display: `none` }}>
     {
       store.map.pop.pops.map((p) => {
-        const title = p.PopNr ? `${p.PopNr}: ${p.PopName}` : p.PopName
         const icon = (
           store.map.pop.highlightedIds.includes(p.PopId) ?
           PopIconHighlighted :
@@ -46,7 +45,6 @@ const Populationen = ({ store, map, ...props }) =>
                 direction="bottom"
                 className="mapTooltip"
                 opacity="1"
-                // offset={window.L.point(0, 75)}
               >
                 <div>{store.map.pop.labelUsingNr ? p.PopNr : p.PopName}</div>
               </Tooltip>

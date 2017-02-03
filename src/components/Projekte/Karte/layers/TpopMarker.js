@@ -1,7 +1,7 @@
 // @flow
 import React from 'react'
 import { observer, inject } from 'mobx-react'
-import { Marker, Popup } from 'react-leaflet'
+import { Marker, Popup, Tooltip } from 'react-leaflet'
 import compose from 'recompose/compose'
 import 'leaflet'
 
@@ -26,7 +26,6 @@ const Teilpopulationen = ({ store, map, ...props }) =>
   <div style={{ display: `none` }}>
     {
       store.map.tpop.tpops.map((p) => {
-        const title = p.TPopNr ? `${p.TPopNr}: ${p.TPopFlurname}` : p.TPopFlurname
         const myIcon = (
           (
             store.map.tpop.highlightedIds.includes(p.TPopId) ||
@@ -41,12 +40,21 @@ const Teilpopulationen = ({ store, map, ...props }) =>
             key={p.TPopId}
             icon={myIcon}
             map={map}
-            title={title}
             {...props}
           >
-            <Popup>
-              <span>{p.TPopNr}<br />{p.TPopFlurname}</span>
-            </Popup>
+            <div>
+              <Tooltip
+                permanent={true}
+                direction="bottom"
+                className="mapTooltip"
+                opacity="1"
+              >
+                <div>{store.map.tpop.labelUsingNr ? p.TPopNr : p.TPopFlurname}</div>
+              </Tooltip>
+              <Popup>
+                <span>{p.TPopNr}<br />{p.TPopFlurname}</span>
+              </Popup>
+            </div>
           </Marker>
         )
       })

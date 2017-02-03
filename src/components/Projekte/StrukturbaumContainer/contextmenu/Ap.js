@@ -69,6 +69,22 @@ const Ap = ({ onClick, store }:{onClick:() => void,store:Object}) =>
       >
         {`Teil-Populationen ${store.map.tpop.visible ? `ausblenden` : `einblenden`}`}
       </MenuItem>
+      {
+        store.map.tpop.visible &&
+        <MenuItem
+          onClick={onClick}
+          data={{
+            action: `toggleTooltip`,
+            actionTable: `tpop`,
+          }}
+        >
+          {
+            store.map.tpop.labelUsingNr ?
+            `Teil-Populationen mit Namen beschriften` :
+            `Teil-Populationen mit Nr. beschriften`
+          }
+        </MenuItem>
+      }
     </SubMenu>
   </ContextMenu>
 
