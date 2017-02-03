@@ -38,7 +38,6 @@ const Populationen = ({ store, map, ...props }) =>
             key={p.PopId}
             icon={icon}
             map={map}
-            title={title}
             {...props}
           >
             <div>
@@ -49,7 +48,7 @@ const Populationen = ({ store, map, ...props }) =>
                 opacity="1"
                 offset={window.L.point(0, 6)}
               >
-                <div>{p.PopNr}</div>
+                <div>{store.map.pop.labelUsingNr ? p.PopNr : p.PopName}</div>
               </Tooltip>
               <Popup>
                 <span>{p.PopNr}<br />{p.PopName}</span>
