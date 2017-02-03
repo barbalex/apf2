@@ -78,9 +78,8 @@ body.fontLoaded {
   content: ":";
 }
 
-:global .react-contextmenu-item {
+:global .react-contextmenu > .react-contextmenu-item {
   display: inline-block;
-  width: 100%;
   padding: 3px 20px;
   clear: both;
   font-weight: 400;
@@ -100,15 +99,16 @@ body.fontLoaded {
   border-color: #0275d8;
   text-decoration: none;
 }
-:global .react-contextmenu-item.submenu > a {
-  padding-right: 27px;
+:global .react-contextmenu-submenu {
+  padding-right: 27px !important;
 }
 
-:global .react-contextmenu-item.submenu > a:after {
+:global .react-contextmenu-submenu:after {
   content: "▶";
   display: inline-block;
   position: absolute;
   right: 7px;
+  bottom: 2px;
 }
 
 /*

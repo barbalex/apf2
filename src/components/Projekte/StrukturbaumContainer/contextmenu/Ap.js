@@ -1,6 +1,6 @@
 // @flow
 import React, { PropTypes } from 'react'
-import { ContextMenu, MenuItem } from 'react-contextmenu'
+import { ContextMenu, MenuItem, SubMenu } from 'react-contextmenu'
 import { inject, observer } from 'mobx-react'
 import compose from 'recompose/compose'
 
@@ -30,26 +30,39 @@ const Ap = ({ onClick, store }:{onClick:() => void,store:Object}) =>
     >
       löschen
     </MenuItem>
-    <MenuItem
-      onClick={onClick}
-      data={{
-        action: `showOnMap`,
-        actionTable: `pop`,
-        idTable: `ap`,
-      }}
+    <SubMenu
+      title="Karte"
     >
-      {`Populationen in Karte ${store.map.pop.visible ? `ausblenden` : `zeigen`}`}
-    </MenuItem>
-    <MenuItem
-      onClick={onClick}
-      data={{
-        action: `showOnMap`,
-        actionTable: `tpop`,
-        idTable: `ap`,
-      }}
-    >
-      {`Teil-Populationen in Karte ${store.map.tpop.visible ? `ausblenden` : `zeigen`}`}
-    </MenuItem>
+      <MenuItem
+        onClick={onClick}
+        data={{
+          action: `showOnMap`,
+          actionTable: `pop`,
+          idTable: `ap`,
+        }}
+      >
+        {`Populationen ${store.map.pop.visible ? `ausblenden` : `einblenden`}`}
+      </MenuItem>
+      <MenuItem
+        onClick={onClick}
+        data={{
+          action: `toggleTooltip`,
+          actionTable: `pop`,
+        }}
+      >
+        {store.map.pop.labelUsingNr ? `` : ``}
+      </MenuItem>
+      <MenuItem
+        onClick={onClick}
+        data={{
+          action: `showOnMap`,
+          actionTable: `tpop`,
+          idTable: `ap`,
+        }}
+      >
+        {`Teil-Populationen ${store.map.tpop.visible ? `ausblenden` : `einblenden`}`}
+      </MenuItem>
+    </SubMenu>
   </ContextMenu>
 
 Ap.propTypes = {
