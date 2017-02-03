@@ -66,14 +66,12 @@ const Karte = ({ store }) => {
 
   return (
     <StyledMap
-      // crs={crs}
       bounds={bounds}
       onClick={(e) => {
         const coord = epsg4326to21781(e.latlng.lng, e.latlng.lat)
         console.log(`Lat, Lon: `, coord)
       }}
     >
-      <OsmColorLayer />
       {
         store.map.pop.visible &&
         <PopMarker />
