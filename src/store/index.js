@@ -45,50 +45,38 @@ import ObservableHistory from './ObservableHistory'
 
 function Store() {
   this.history = ObservableHistory
-  this.node = {
-    apFilter: false,
-    loadingAllNodes: observable(false),
-    nodeLabelFilter: observable.map({}),
-  }
+  this.node = {}
   extendObservable(this.node, {
     apFilter: false,
+    loadingAllNodes: false,
+    nodeLabelFilter: observable.map({}),
     nrOfRowsAboveActiveNode: 0,
   })
-  this.ui = {
-    windowWidth: observable($(window).width()),
-    windowHeight: observable($(window).height()),
-    treeHeight: observable(0),
-    lastClickY: observable(0),
-    treeTopPosition: observable(0),
-  }
-  this.app = {
-    errors: observable([]),
+  this.ui = {}
+  extendObservable(this.ui, {
+    windowWidth: $(window).width(),
+    windowHeight: $(window).height(),
+    treeHeight: 0,
+    lastClickY: 0,
+    treeTopPosition: 0,
+  })
+  this.app = {}
+  extendObservable(this.app, {
+    errors: [],
     // TODO: get user else
-    user: observable(`z`),
-    fields: observable([]),
-    fieldsLoading: observable(true),
-    map: observable(null),
-  }
+    user: `z`,
+    fields: [],
+    fieldsLoading: true,
+    map: null,
+  })
   this.map = {
-    pop: {
-      // apArtId is needed because
-      // need to pass apArtId when activeUrlElements.ap
-      // is not yet set...
-      apArtId: null,
-      pops: [],
-      bounds: [],
-      visible: false,
-      highlightedIds: [],
-    },
-    tpop: {
-      tpops: [],
-      bounds: [],
-      visible: false,
-      highlightedIds: [],
-      highlightedPopIds: [],
-    },
+    pop: {},
+    tpop: {},
   }
   extendObservable(this.map.pop, {
+    // apArtId is needed because
+    // need to pass apArtId when activeUrlElements.ap
+    // is not yet set...
     apArtId: null,
     visible: false,
     highlightedIds: [],
