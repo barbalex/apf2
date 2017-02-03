@@ -171,6 +171,8 @@ class StrukturbaumContainer extends Component { // eslint-disable-line react/pre
           store.highlightIdOnMap(actionTable, parseInt(id, 10))
         }
       }
+    } else if (action === `toggleTooltip`) {
+      store.toggleMapPopLabelContent(actionTable)
     }
   }
 

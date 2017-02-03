@@ -46,7 +46,7 @@ const Populationen = ({ store, map, ...props }) =>
                 direction="bottom"
                 className="mapTooltip"
                 opacity="1"
-                offset={window.L.point(0, 6)}
+                // offset={window.L.point(0, 75)}
               >
                 <div>{store.map.pop.labelUsingNr ? p.PopNr : p.PopName}</div>
               </Tooltip>

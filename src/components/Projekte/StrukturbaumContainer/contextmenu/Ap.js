@@ -43,15 +43,22 @@ const Ap = ({ onClick, store }:{onClick:() => void,store:Object}) =>
       >
         {`Populationen ${store.map.pop.visible ? `ausblenden` : `einblenden`}`}
       </MenuItem>
-      <MenuItem
-        onClick={onClick}
-        data={{
-          action: `toggleTooltip`,
-          actionTable: `pop`,
-        }}
-      >
-        {store.map.pop.labelUsingNr ? `` : ``}
-      </MenuItem>
+      {
+        store.map.pop.visible &&
+        <MenuItem
+          onClick={onClick}
+          data={{
+            action: `toggleTooltip`,
+            actionTable: `pop`,
+          }}
+        >
+          {
+            store.map.pop.labelUsingNr ?
+            `Populationen mit Namen beschriften` :
+            `Populationen mit Nr. beschriften`
+          }
+        </MenuItem>
+      }
       <MenuItem
         onClick={onClick}
         data={{

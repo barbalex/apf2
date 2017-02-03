@@ -108,6 +108,9 @@ function Store() {
   extendObservable(this, {
     datasetToDelete: {},
     qkLoading: false,
+    toggleMapPopLabelContent: action((layer) =>
+      this.map[layer].labelUsingNr = !this.map[layer].labelUsingNr
+    ),
     toggleApFilter: action(() => {
       this.node.apFilter = !this.node.apFilter
     }),

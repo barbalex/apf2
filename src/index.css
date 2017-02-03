@@ -116,10 +116,23 @@ body.fontLoaded {
  */
 
 :global .mapTooltip {
-  background: white;
+  background: transparent;
   border: none;
-  border-radius: 15px;
-  padding: 0 2px 0 2px;
+  box-shadow: none;
+  padding: 4px 2px 0 2px;
+  width: 150px;
+}
+:global .mapTooltip > div {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
+  text-shadow: 0 1px 0 white, -0 -1px 0 white, 1px 0 0 white, -1px 0 0 white, 0 2px 0 white, -0 -2px 0 white, 2px 0 0 white, -2px 0 0 white, 0 3px 1px white, -0 -3px 1px white, 3px 0 1px white, -3px 0 1px white, 0 4px 2px white, -0 -4px 2px white, 4px 0 2px white, -4px 0 2px white, 0 5px 2px white, -0 -5px 2px white, 5px 0 2px white, -5px 0 2px white, 0 6px 2px white, -0 -6px 2px white, 6px 0 2px white, -6px 0 2px white, 0 7px 4px white, -0 -7px 4px white, 7px 0 4px white, -7px 0 4px white;
+  /*
+  font-size: 18px;
+  font-weight: bold;
+  text-stroke: 1px white;
+  -webkit-text-stroke: 1px white;*/
 }
 :global .leaflet-tooltip-bottom.mapTooltip:before {
   border-bottom-color: transparent;
