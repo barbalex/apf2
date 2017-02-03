@@ -157,10 +157,22 @@ class StrukturbaumContainer extends Component { // eslint-disable-line react/pre
     } else if (action === `highlightOnMap`) {
       this.showMapIfNotYetVisible()
       store.showMapLayer(actionTable, true)
-      if (store.map.layer[actionTable].highlightedIds.includes(id)) {
-        store.unhighlightIdOnMap(actionTable, parseInt(id, 10))
+      console.log(`actionTable:`, actionTable)
+      console.log(`idTable:`, idTable)
+      console.log(`id:`, id)
+      if (actionTable === `tpop` && idTable === `pop`) {
+        // TPopFolder: is special
+        if (store.map.layer.tpop.highlightedPopIds.includes(parseInt(id, 10))) {
+          store.unhighlightTpopByPopIdOnMap(parseInt(id, 10))
+        } else {
+          store.highlightTpopByPopIdOnMap(parseInt(id, 10))
+        }
       } else {
-        store.highlightIdOnMap(actionTable, parseInt(id, 10))
+        if (store.map.layer[actionTable].highlightedIds.includes(parseInt(id, 10))) {
+          store.unhighlightIdOnMap(actionTable, parseInt(id, 10))
+        } else {
+          store.highlightIdOnMap(actionTable, parseInt(id, 10))
+        }
       }
     }
   }

@@ -82,6 +82,7 @@ function Store() {
         bounds: [],
         visible: false,
         highlightedIds: [],
+        highlightedPopIds: [],
       },
     }
   }
@@ -98,6 +99,7 @@ function Store() {
   extendObservable(this.map.layer.tpop, {
     visible: false,
     highlightedIds: [],
+    highlightedPopIds: [],
     tpops: computed(() =>
       getTpopsForMap(this)
     ),
@@ -206,6 +208,12 @@ function Store() {
     ),
     unhighlightIdOnMap: action((layer, id) =>
       this.map.layer[layer].highlightedIds = this.map.layer[layer].highlightedIds.filter(i => i !== id)
+    ),
+    highlightTpopByPopIdOnMap: action((id) =>
+      this.map.layer.tpop.highlightedPopIds = [...this.map.layer.tpop.highlightedPopIds, parseInt(id, 10)]
+    ),
+    unhighlightTpopByPopIdOnMap: action((id) =>
+      this.map.layer.tpop.highlightedPopIds = this.map.layer.tpop.highlightedPopIds.filter(i => i !== id)
     ),
     /**
      * url paths are used to control tree and forms

@@ -28,7 +28,10 @@ const Teilpopulationen = ({ store, map, ...props }) =>
       store.map.layer.tpop.tpops.map((p) => {
         const title = p.TPopNr ? `${p.TPopNr}: ${p.TPopFlurname}` : p.TPopFlurname
         const myIcon = (
-          store.map.layer.tpop.highlightedIds.includes(p.TPopId) ?
+          (
+            store.map.layer.tpop.highlightedIds.includes(p.TPopId) ||
+            store.map.layer.tpop.highlightedPopIds.includes(p.PopId)
+          ) ?
           iconHighlighted :
           icon
         )

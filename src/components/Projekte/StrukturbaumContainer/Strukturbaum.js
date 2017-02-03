@@ -16,6 +16,7 @@ import { ContextMenuTrigger } from 'react-contextmenu'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
 import { Scrollbars } from 'react-custom-scrollbars'
+import FontIcon from 'material-ui/FontIcon'
 
 import getNrOfNodeRows from '../../../modules/getNrOfNodeRows'
 import isNodeInActiveNodePath from '../../../modules/isNodeInActiveNodePath'
@@ -79,6 +80,19 @@ const StyledSymbolOpenSpan = styled(StyledSymbolSpan)`
 const StyledTextSpan = styled.span`
   padding-left: .5em;
 `
+const StyledMapIcon = styled(FontIcon)`
+  padding-left: .3em;
+  font-size: 20px !important;
+`
+const PopMapIcon = styled(StyledMapIcon)`
+  color: #947500 !important;
+`
+const TpopMapIcon = styled(StyledMapIcon)`
+  color: #016f19 !important;
+`
+const TpopFilteredMapIcon = styled(StyledMapIcon)`
+  color: #f5ef00 !important;
+`
 const StyledTextInActiveNodePathSpan = styled(StyledTextSpan)`
   font-weight: 900;
 `
@@ -100,7 +114,7 @@ const enhance = compose(
   observer
 )
 
-class Strukturbaum extends Component { // eslint-disable-line react/prefer-stateless-function
+class Strukturbaum extends Component {
 
   static propTypes = {
     store: PropTypes.object.isRequired,
@@ -108,8 +122,11 @@ class Strukturbaum extends Component { // eslint-disable-line react/prefer-state
 
   constructor() {
     super()
+    // $FlowIssue
     this.rowRenderer = this.rowRenderer.bind(this)
+    // $FlowIssue
     this.renderNode = this.renderNode.bind(this)
+    // $FlowIssue
     this.noRowsRenderer = this.noRowsRenderer.bind(this)
   }
 
@@ -179,10 +196,32 @@ class Strukturbaum extends Component { // eslint-disable-line react/prefer-state
       props.onClick = onClick
     }
     const Node = nodeIsInActiveNodePath ? StyledNodeInActiveNodePath : StyledNode
+    const showPopMapIcon = (
+      node.menuType === `popFolder` &&
+      store.map.layer.pop.visible
+    )
+    const showTpopMapIcon = (
+      node.menuType === `popFolder` &&
+      store.map.layer.tpop.visible
+    )
+    const showTpopFilteredMapIcon = (
+      (
+        node.menuType === `tpop` &&
+        store.map.layer.tpop.visible &&
+        store.map.layer.tpop.highlightedIds.includes(node.id)
+      ) ||
+      (
+        node.menuType === `tpopFolder` &&
+        store.map.layer.tpop.visible &&
+        store.map.layer.tpop.highlightedPopIds.includes(node.id)
+      )
+    )
 
     childNodes.unshift(
       <ContextMenuTrigger
         id={node.menuType}
+        collect={props => props}
+        nodeId={node.id}
         key={`${index}-child`}
       >
         <Node
@@ -199,6 +238,36 @@ class Strukturbaum extends Component { // eslint-disable-line react/prefer-state
           <TextSpan>
             {node.label}
           </TextSpan>
+          {
+            showPopMapIcon &&
+            <PopMapIcon
+              id="map"
+              className="material-icons"
+              title="in Karte sichtbar"
+            >
+              local_florist
+            </PopMapIcon>
+          }
+          {
+            showTpopMapIcon &&
+            <TpopMapIcon
+              id="map"
+              className="material-icons"
+              title="in Karte sichtbar"
+            >
+              local_florist
+            </TpopMapIcon>
+          }
+          {
+            showTpopFilteredMapIcon &&
+            <TpopFilteredMapIcon
+              id="map"
+              className="material-icons"
+              title="in Karte hervorgehoben"
+            >
+              local_florist
+            </TpopFilteredMapIcon>
+          }
         </Node>
       </ContextMenuTrigger>
     )
