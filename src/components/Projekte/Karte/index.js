@@ -17,11 +17,13 @@ import 'proj4leaflet'
 
 import LayersControl from './LayersControl'
 import '../../../../node_modules/leaflet/dist/leaflet.css'
+import '../../../../node_modules/leaflet-measure/dist/leaflet-measure.css'
 import epsg4326to21781 from '../../../modules/epsg4326to21781'
 import getEncompassingBound from '../../../modules/getEncompassingBound'
 import PopMarker from './layers/PopMarker'
 import TpopMarker from './layers/TpopMarker'
 import OsmColorLayer from './layers/OsmColor'
+import MeasureControl from './MeasureControl'
 
 const StyledMap = styled(Map)`
   height: 100%;
@@ -84,6 +86,7 @@ const Karte = ({ store }) => {
         imperial={false}
       />
       <LayersControl />
+      <MeasureControl />
     </StyledMap>
   )
 }

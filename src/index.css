@@ -138,3 +138,12 @@ body.fontLoaded {
 :global .leaflet-tooltip-right.mapTooltip::before {
   border-right-color: transparent;
 }
+
+/**
+ * leaflet-measure
+ */
+.leaflet-control-measure {
+  color: black;
+  border: 2px solid rgba(0,0,0,0.2);
+  background-clip: padding-box;
+}
