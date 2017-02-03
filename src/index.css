@@ -105,3 +105,19 @@ body.fontLoaded {
   position: absolute;
   right: 7px;
 }
+
+:global .mapTooltip {
+  background: white;
+  border: none;
+  border-radius: 15px;
+  padding: 0 2px 0 2px;
+}
+:global .leaflet-tooltip-bottom.mapTooltip:before {
+  border-bottom-color: transparent;
+}
+:global .leaflet-tooltip-left.mapTooltip::before {
+  border-left-color: transparent;
+}
+:global .leaflet-tooltip-right.mapTooltip::before {
+  border-right-color: transparent;
+}

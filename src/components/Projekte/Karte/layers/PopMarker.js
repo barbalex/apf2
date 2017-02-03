@@ -1,7 +1,7 @@
 // @flow
 import React from 'react'
 import { observer, inject } from 'mobx-react'
-import { Marker, Popup } from 'react-leaflet'
+import { Marker, Popup, Tooltip } from 'react-leaflet'
 import compose from 'recompose/compose'
 import 'leaflet'
 
@@ -41,9 +41,20 @@ const Populationen = ({ store, map, ...props }) =>
             title={title}
             {...props}
           >
-            <Popup>
-              <span>{p.PopNr}<br />{p.PopName}</span>
-            </Popup>
+            <div>
+              <Tooltip
+                permanent={true}
+                direction="bottom"
+                className="mapTooltip"
+                opacity="1"
+                offset={window.L.point(0, 6)}
+              >
+                <div>{p.PopNr}</div>
+              </Tooltip>
+              <Popup>
+                <span>{p.PopNr}<br />{p.PopName}</span>
+              </Popup>
+            </div>
           </Marker>
         )
       })

@@ -19,8 +19,8 @@ import LayersControl from './LayersControl'
 import '../../../../node_modules/leaflet/dist/leaflet.css'
 import epsg4326to21781 from '../../../modules/epsg4326to21781'
 import getEncompassingBound from '../../../modules/getEncompassingBound'
-import Populationen from './layers/Populationen'
-import Teilpopulationen from './layers/Teilpopulationen'
+import PopMarker from './layers/PopMarker'
+import TpopMarker from './layers/TpopMarker'
 import OsmColorLayer from './layers/OsmColor'
 
 const StyledMap = styled(Map)`
@@ -74,11 +74,11 @@ const Karte = ({ store }) => {
       <OsmColorLayer />
       {
         store.map.pop.visible &&
-        <Populationen />
+        <PopMarker />
       }
       {
         store.map.tpop.visible &&
-        <Teilpopulationen />
+        <TpopMarker />
       }
       <ScaleControl
         imperial={false}

@@ -86,6 +86,8 @@ function Store() {
     bounds: computed(() =>
       getPopBounds(this.map.pop.pops)
     ),
+    // alternative is using names
+    labelUsingNr: true,
   })
   extendObservable(this.map.tpop, {
     visible: false,
@@ -97,6 +99,8 @@ function Store() {
     bounds: computed(() =>
       getTpopBounds(this.map.tpop.tpops)
     ),
+    // alternative is using names
+    labelUsingNr: true,
   })
   this.table = TableStore
   this.valuesForWhichTableDataWasFetched = {}
