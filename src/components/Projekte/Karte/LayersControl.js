@@ -12,6 +12,7 @@ import OsmBwLayer from './layers/OsmBw'
 import SwissTopoPixelFarbeLayer from './layers/SwisstopoPixelFarbe'
 import BingAerialLayer from './layers/BingAerial'
 import DetailplaeneLayer from './layers/Detailplaene'
+import SvoColorLayer from './layers/SvoColor'
 
 const { BaseLayer, Overlay } = LayersControl
 
@@ -36,6 +37,9 @@ const MyLayersControl = ({ store }) =>
     </BaseLayer>
     <Overlay name="Detailplaene">
       <DetailplaeneLayer />
+    </Overlay>
+    <Overlay name="SVO farbig">
+      <SvoColorLayer />
     </Overlay>
   </LayersControl>
 
