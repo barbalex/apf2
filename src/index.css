@@ -43,7 +43,7 @@ body.fontLoaded {
 :global .react-contextmenu {
   display: flex;
   flex-direction: column;
-  min-width: 160px;
+  min-width: 100px;
   padding: 5px 0;
   margin: 2px 0 0;
   font-size: 14px;
@@ -108,7 +108,7 @@ body.fontLoaded {
   display: inline-block;
   position: absolute;
   right: 7px;
-  bottom: 2px;
+  bottom: 3px;
 }
 
 /*
