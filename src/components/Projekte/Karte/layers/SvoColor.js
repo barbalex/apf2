@@ -2,9 +2,14 @@
 import React from 'react'
 import { WMSTileLayer } from 'react-leaflet'
 
-const OsmColorLayer = () =>
+const SvoColorLayer = () =>
   <WMSTileLayer
     url="//wms.zh.ch/FnsSVOZHWMS"
+    layers="zonen-schutzverordnungen,ueberlagernde-schutzzonen,schutzverordnungsobjekte,svo-zonen-labels,schutzverordnungsobjekt-nr"
+    opacity={0.5}
+    transparent={true}
+    version="1.1.0"
+    format="image/png"
   />
 
-export default OsmColorLayer
+export default SvoColorLayer
