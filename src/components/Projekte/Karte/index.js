@@ -22,8 +22,8 @@ import epsg4326to21781 from '../../../modules/epsg4326to21781'
 import getEncompassingBound from '../../../modules/getEncompassingBound'
 import PopMarker from './layers/PopMarker'
 import TpopMarker from './layers/TpopMarker'
-import OsmColorLayer from './layers/OsmColor'
 import MeasureControl from './MeasureControl'
+import PngControl from './PngControl'
 
 const StyledMap = styled(Map)`
   height: 100%;
@@ -67,6 +67,7 @@ const Karte = ({ store }) => {
   return (
     <StyledMap
       bounds={bounds}
+      preferCanvas
       onClick={(e) => {
         const coord = epsg4326to21781(e.latlng.lng, e.latlng.lat)
         console.log(`Lat, Lon: `, coord)
@@ -85,6 +86,7 @@ const Karte = ({ store }) => {
       />
       <LayersControl />
       <MeasureControl />
+      <PngControl />
     </StyledMap>
   )
 }
