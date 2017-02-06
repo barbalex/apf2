@@ -24,6 +24,7 @@ import PopMarker from './layers/PopMarker'
 import TpopMarker from './layers/TpopMarker'
 import MeasureControl from './MeasureControl'
 import PngControl from './PngControl'
+import CoordinatesControl from './CoordinatesControl'
 
 const StyledMap = styled(Map)`
   height: 100%;
@@ -72,6 +73,11 @@ const Karte = ({ store }) => {
         const coord = epsg4326to21781(e.latlng.lng, e.latlng.lat)
         console.log(`Lat, Lon: `, coord)
       }}
+      onMouseMove={(e) => {
+        const coord = epsg4326to21781(e.latlng.lng, e.latlng.lat)
+        console.log(`Lat, Lon: `, coord)
+        store.setMapMouseCoord(e)
+      }}
     >
       {
         store.map.pop.visible &&
@@ -87,6 +93,7 @@ const Karte = ({ store }) => {
       <LayersControl />
       <MeasureControl />
       <PngControl />
+      <CoordinatesControl />
     </StyledMap>
   )
 }

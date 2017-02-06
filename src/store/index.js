@@ -39,6 +39,7 @@ import getPopsForMap from '../modules/getPopsForMap'
 import getTpopsForMap from '../modules/getTpopsForMap'
 import getPopBounds from '../modules/getPopBounds'
 import getTpopBounds from '../modules/getTpopBounds'
+import epsg4326to21781 from '../modules/epsg4326to21781'
 
 import TableStore from './table'
 import ObservableHistory from './ObservableHistory'
@@ -70,9 +71,20 @@ function Store() {
     map: null,
   })
   this.map = {
+    mouseCoord: [],
+    mouseCoordEpsg21781: [],
     pop: {},
     tpop: {},
   }
+  extendObservable(this.map, {
+    mouseCoord: [],
+    mouseCoordEpsg21781: computed(() => {
+      if (this.map.mouseCoord[0]) {
+        return epsg4326to21781(this.map.mouseCoord[0], this.map.mouseCoord[1])
+      }
+      return []
+    }),
+  })
   extendObservable(this.map.pop, {
     // apArtId is needed because
     // need to pass apArtId when activeUrlElements.ap
@@ -108,6 +120,9 @@ function Store() {
   extendObservable(this, {
     datasetToDelete: {},
     qkLoading: false,
+    setMapMouseCoord: action((e) => {
+      this.map.mouseCoord = [e.latlng.lng, e.latlng.lat]
+    }),
     toggleMapPopLabelContent: action((layer) =>
       this.map[layer].labelUsingNr = !this.map[layer].labelUsingNr
     ),

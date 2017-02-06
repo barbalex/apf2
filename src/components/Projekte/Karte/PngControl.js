@@ -11,9 +11,6 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
 
-const StyledIcon = styled(FontIcon)`
-  /*font-size: 20px !important;*/
-`
 const StyledButton = styled.button`
   background-color: white;
   width: 47.6px;
@@ -54,12 +51,12 @@ const PngControl = ({ map, savePng }) =>
       <MuiThemeProvider
         muiTheme={getMuiTheme(theme)}
       >
-        <StyledIcon
+        <FontIcon
           id="karteAlsPngSpeichern"
           className="material-icons"
         >
           file_download
-        </StyledIcon>
+        </FontIcon>
       </MuiThemeProvider>
     </StyledButton>
   </Control>
