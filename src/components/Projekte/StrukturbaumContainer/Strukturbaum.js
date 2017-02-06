@@ -91,11 +91,11 @@ const PopMapIcon = styled(StyledMapIcon)`
 const TpopMapIcon = styled(StyledMapIcon)`
   color: #016f19 !important;
 `
-const PopFilteredMapIcon = styled(StyledMapIcon)`
-  color: #f5ef00 !important;
+const PopFilteredMapIcon = styled(PopMapIcon)`
+  -webkit-text-stroke: 2px #f5ef00;
 `
-const TpopFilteredMapIcon = styled(StyledMapIcon)`
-  color: #f5ef00 !important;
+const TpopFilteredMapIcon = styled(TpopMapIcon)`
+  -webkit-text-stroke: 2px #f5ef00;
 `
 const StyledTextInActiveNodePathSpan = styled(StyledTextSpan)`
   font-weight: 900;
