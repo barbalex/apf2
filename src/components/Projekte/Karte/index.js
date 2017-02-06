@@ -7,6 +7,7 @@
  */
 
 import React from 'react'
+import { toJS } from 'mobx'
 import { observer, inject } from 'mobx-react'
 import { Map, ScaleControl } from 'react-leaflet'
 import styled from 'styled-components'
@@ -18,9 +19,10 @@ import 'proj4leaflet'
 import LayersControl from './LayersControl'
 import '../../../../node_modules/leaflet/dist/leaflet.css'
 import '../../../../node_modules/leaflet-measure/dist/leaflet-measure.css'
-import epsg4326to21781 from '../../../modules/epsg4326to21781'
+import '../../../../node_modules/leaflet.markercluster/dist/MarkerCluster.css'
 import getEncompassingBound from '../../../modules/getEncompassingBound'
 import PopMarker from './layers/PopMarker'
+import PopMarkerCluster from './layers/PopMarkerCluster'
 import TpopMarker from './layers/TpopMarker'
 import MeasureControl from './MeasureControl'
 import PngControl from './PngControl'
@@ -70,10 +72,21 @@ const Karte = ({ store }) => {
       bounds={bounds}
       preferCanvas
       onMouseMove={store.setMapMouseCoord}
+      maxZoom={30}
+      pop={store.map.pop.pops}
     >
       {
-        store.map.pop.visible &&
+        store.map.pop.visible && false &&
         <PopMarker />
+      }
+      {
+        store.map.pop.visible &&
+        <PopMarkerCluster
+          highlightedIds={toJS(store.map.pop.highlightedIds)}
+          labelUsingNr={store.map.pop.labelUsingNr}
+          pops={store.map.pop.pops}
+          visible={store.map.pop.visible}
+        />
       }
       {
         store.map.tpop.visible &&
