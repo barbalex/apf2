@@ -69,15 +69,7 @@ const Karte = ({ store }) => {
     <StyledMap
       bounds={bounds}
       preferCanvas
-      onClick={(e) => {
-        const coord = epsg4326to21781(e.latlng.lng, e.latlng.lat)
-        console.log(`Lat, Lon: `, coord)
-      }}
-      onMouseMove={(e) => {
-        const coord = epsg4326to21781(e.latlng.lng, e.latlng.lat)
-        console.log(`Lat, Lon: `, coord)
-        store.setMapMouseCoord(e)
-      }}
+      onMouseMove={store.setMapMouseCoord}
     >
       {
         store.map.pop.visible &&
