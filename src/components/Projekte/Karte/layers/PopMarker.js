@@ -5,15 +5,15 @@ import { Marker, Popup, Tooltip } from 'react-leaflet'
 import compose from 'recompose/compose'
 import 'leaflet'
 
-import floraIconOrange from '../../../../etc/ic_local_florist_orange.svg'
-import floraIconGelb from '../../../../etc/ic_local_florist_yellow.svg'
+import popIcon from '../../../../etc/pop.svg'
+import popIconHighlighted from '../../../../etc/popHighlighted.svg'
 
 const PopIcon = window.L.icon({
-  iconUrl: floraIconOrange,
+  iconUrl: popIcon,
   iconSize: [24, 24],
 })
 const PopIconHighlighted = window.L.icon({
-  iconUrl: floraIconGelb,
+  iconUrl: popIconHighlighted,
   iconSize: [24, 24],
 })
 
