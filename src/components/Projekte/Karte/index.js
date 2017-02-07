@@ -21,7 +21,6 @@ import '../../../../node_modules/leaflet/dist/leaflet.css'
 import '../../../../node_modules/leaflet-measure/dist/leaflet-measure.css'
 import '../../../../node_modules/leaflet.markercluster/dist/MarkerCluster.css'
 import getEncompassingBound from '../../../modules/getEncompassingBound'
-import PopMarker from './layers/PopMarker'
 import PopMarkerCluster from './layers/PopMarkerCluster'
 import TpopMarker from './layers/TpopMarker'
 import MeasureControl from './MeasureControl'
@@ -75,10 +74,6 @@ const Karte = ({ store, popMarkers }) => {
       maxZoom={30}
       pop={store.map.pop.pops}
     >
-      {
-        store.map.pop.visible && false &&
-        <PopMarker />
-      }
       <PopMarkerCluster
         highlightedIds={toJS(store.map.pop.highlightedIds)}
         labelUsingNr={store.map.pop.labelUsingNr}

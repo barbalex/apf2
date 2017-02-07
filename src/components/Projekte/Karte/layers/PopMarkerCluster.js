@@ -31,14 +31,12 @@ class PopMarkerCluster extends Component { // eslint-disable-line react/prefer-s
   componentWillReceiveProps(nextProps) {
     const { map } = this.props
     if (this.props.markers && this.props.markers !== nextProps.markers) {
-      console.log(`PopMarkerCluster removes layer`)
       map.removeLayer(this.props.markers)
     }
   }
 
   componentDidUpdate() {
     const { map, markers, visible } = this.props
-    console.log(`PopMarkerCluster did update`)
     if (visible) {
       map.addLayer(markers)
     }

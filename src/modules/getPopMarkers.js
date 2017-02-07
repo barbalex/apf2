@@ -1,3 +1,4 @@
+import React from 'react'
 import 'leaflet'
 import '../../node_modules/leaflet.markercluster/dist/leaflet.markercluster-src.js'
 import some from 'lodash/some'
@@ -24,6 +25,16 @@ export default (store) => {
       if (title && title.toString) {
         title = title.toString()
       }
+      let tooltipText = store.map.pop.labelUsingNr ? p.PopNr : p.PopName
+      if (tooltipText && tooltipText.toString) {
+        tooltipText = tooltipText.toString()
+      }
+      const tooltipOptions = {
+        permanent: true,
+        direction: `bottom`,
+        className: `mapTooltip`,
+        opacity: 1,
+      }
       const isHighlighted = highlightedIds.includes(p.PopId)
       const latLng = new window.L.LatLng(...p.PopKoordWgs84)
       const icon = window.L.icon({
@@ -35,6 +46,7 @@ export default (store) => {
         title,
         icon,
       }).bindPopup(title)
+        .bindTooltip(tooltipText, tooltipOptions)
       markers.addLayer(marker)
     }
   })
