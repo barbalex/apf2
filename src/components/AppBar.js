@@ -13,6 +13,12 @@ import styled from 'styled-components'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 
+const StyledAppBar = styled(AppBar)`
+  @media print {
+    display: none !important;
+  }
+`
+
 const enhance = compose(
   inject(`store`),
   withHandlers({
@@ -45,7 +51,7 @@ const MyAppBar = ({ store, onClickButton }) => {
     }
   `
   return (
-    <AppBar
+    <StyledAppBar
       title="AP Flora"
       iconElementRight={
         <MenuDiv>

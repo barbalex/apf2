@@ -41,6 +41,9 @@ const Container = styled.div`
   flex-basis: 600px;
   flex-grow: 4;
   flex-shrink: 1;
+  @media print {
+    display: none !important;
+  }
 `
 
 const enhance = compose(

@@ -62,6 +62,9 @@ const StyledContainer = styled.div`
   border-color: #424242;
   border-width: 1px;
   border-style: solid;
+  @media print {
+    display: none !important;
+  }
 `
 const ContainerExporte = styled(StyledContainer)`
   flex-basis: 200px;

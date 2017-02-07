@@ -24,6 +24,7 @@ import getEncompassingBound from '../../../modules/getEncompassingBound'
 import PopMarkerCluster from './layers/PopMarkerCluster'
 import TpopMarkerCluster from './layers/TpopMarkerCluster'
 import MeasureControl from './MeasureControl'
+import PrintControl from './PrintControl'
 import PngControl from './PngControl'
 import CoordinatesControl from './CoordinatesControl'
 
@@ -94,6 +95,7 @@ const Karte = ({ store, popMarkers, tpopMarkers }) => {
       />
       <LayersControl />
       <MeasureControl />
+      <PrintControl />
       <PngControl />
       <CoordinatesControl />
     </StyledMap>
