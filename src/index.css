@@ -204,6 +204,11 @@ body.fontLoaded {
 	line-height: 30px;
 }
 
+#leafletEasyPrint {
+  width: 44px;
+  height: 44px;
+}
+
 @media print {
   .leaflet-control-container {
     display: none !important;

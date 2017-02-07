@@ -13,8 +13,8 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme'
 
 const StyledButton = styled.button`
   background-color: white;
-  width: 47.6px;
-  height: 47.6px;
+  width: 47px;
+  height: 47px;
   border-radius: 5px;
   border: 2px solid rgba(0,0,0,0.2);
   background-clip: padding-box;
