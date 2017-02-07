@@ -17,29 +17,26 @@ export default (store) => {
     },
   }
   const markers = window.L.markerClusterGroup(mcgOptions)
-  if (visible) {
-    pops.forEach((p) => {
-      if (p.PopKoordWgs84) {
-        let title = labelUsingNr ? p.PopNr : p.PopName
-        // beware: leaflet needs title to always be a string
-        if (title && title.toString) {
-          title = title.toString()
-        }
-        const isHighlighted = highlightedIds.includes(p.PopId)
-        const latLng = new window.L.LatLng(...p.PopKoordWgs84)
-        const icon = window.L.icon({
-          iconUrl: isHighlighted ? popIconHighlighted : popIcon,
-          iconSize: [24, 24],
-          className: isHighlighted ? `popIconHighlighted` : `popIcon`,
-        })
-        const marker = window.L.marker(latLng, {
-          title,
-          icon,
-        }).bindPopup(title)
-        markers.addLayer(marker)
+  pops.forEach((p) => {
+    if (p.PopKoordWgs84) {
+      let title = labelUsingNr ? p.PopNr : p.PopName
+      // beware: leaflet needs title to always be a string
+      if (title && title.toString) {
+        title = title.toString()
       }
-    })
-    return markers
-  }
-  return []
+      const isHighlighted = highlightedIds.includes(p.PopId)
+      const latLng = new window.L.LatLng(...p.PopKoordWgs84)
+      const icon = window.L.icon({
+        iconUrl: isHighlighted ? popIconHighlighted : popIcon,
+        iconSize: [24, 24],
+        className: isHighlighted ? `popIconHighlighted` : `popIcon`,
+      })
+      const marker = window.L.marker(latLng, {
+        title,
+        icon,
+      }).bindPopup(title)
+      markers.addLayer(marker)
+    }
+  })
+  return markers
 }

@@ -40,7 +40,7 @@ import getTpopsForMap from '../modules/getTpopsForMap'
 import getPopBounds from '../modules/getPopBounds'
 import getTpopBounds from '../modules/getTpopBounds'
 import epsg4326to21781 from '../modules/epsg4326to21781'
-import buildPopMarkers from '../modules/buildPopMarkers'
+import getPopMarkers from '../modules/getPopMarkers'
 
 import TableStore from './table'
 import ObservableHistory from './ObservableHistory'
@@ -104,7 +104,7 @@ function Store() {
   })
   extendObservable(this.map.pop, {
     markers: computed(() =>
-      buildPopMarkers(this)
+      getPopMarkers(this)
     ),
   })
   extendObservable(this.map.tpop, {

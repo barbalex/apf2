@@ -56,7 +56,9 @@ const Projekte = ({ store }) => {
         {
           karteIsVisible &&
           <KarteContainer>
-            <Karte />
+            <Karte
+              popMarkers={store.map.pop.markers}
+            />
           </KarteContainer>
         }
         {

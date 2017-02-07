@@ -6,7 +6,7 @@
  *
  */
 
-import React from 'react'
+import React, { PropTypes } from 'react'
 import { toJS } from 'mobx'
 import { observer, inject } from 'mobx-react'
 import { Map, ScaleControl } from 'react-leaflet'
@@ -37,7 +37,7 @@ const enhance = compose(
   observer
 )
 
-const Karte = ({ store }) => {
+const Karte = ({ store, popMarkers }) => {
   // if no active projekt, need to fetch pops of all Projekte
   // uhm, let us not do this
   // if no active ap, need to fetch pops of projekt
@@ -79,15 +79,13 @@ const Karte = ({ store }) => {
         store.map.pop.visible && false &&
         <PopMarker />
       }
-      {
-        store.map.pop.visible &&
-        <PopMarkerCluster
-          highlightedIds={toJS(store.map.pop.highlightedIds)}
-          labelUsingNr={store.map.pop.labelUsingNr}
-          pops={store.map.pop.pops}
-          visible={store.map.pop.visible}
-        />
-      }
+      <PopMarkerCluster
+        highlightedIds={toJS(store.map.pop.highlightedIds)}
+        labelUsingNr={store.map.pop.labelUsingNr}
+        pops={store.map.pop.pops}
+        visible={store.map.pop.visible}
+        markers={popMarkers}
+      />
       {
         store.map.tpop.visible &&
         <TpopMarker />
@@ -101,6 +99,11 @@ const Karte = ({ store }) => {
       <CoordinatesControl />
     </StyledMap>
   )
+}
+
+Karte.propTypes = {
+  store: PropTypes.object.isRequired,
+  popMarkers: PropTypes.object,
 }
 
 export default enhance(Karte)
