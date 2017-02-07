@@ -30,6 +30,11 @@ import CoordinatesControl from './CoordinatesControl'
 
 const StyledMap = styled(Map)`
   height: 100%;
+  @media print {
+    height: 100%;
+    width: 100%;
+    overflow: visible;
+  }
 `
 
 const enhance = compose(

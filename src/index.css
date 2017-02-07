@@ -203,3 +203,9 @@ body.fontLoaded {
 .tpopCluster span {
 	line-height: 30px;
 }
+
+@media print {
+  .leaflet-control-container {
+    display: none !important;
+  }
+}

@@ -4,7 +4,7 @@ import { WMSTileLayer } from 'react-leaflet'
 
 const LichtwaldLayer = () =>
   <WMSTileLayer
-    url="//maps.zh.ch/wms/FnsLWZH"
+    url="//agabriel:4zC6MgjM@maps.zh.ch/wms/FnsLWZH"
     layers="objekte-lichte-waelder-kanton-zuerich"
     opacity={0.5}
     transparent={true}

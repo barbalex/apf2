@@ -4,7 +4,7 @@ import { WMSTileLayer } from 'react-leaflet'
 
 const SvoColorLayer = () =>
   <WMSTileLayer
-    url="//wms.zh.ch/FnsSVOZHWMS"
+    url="//agabriel:4zC6MgjM@wms.zh.ch/FnsSVOZHWMS"
     layers="zonen-schutzverordnungen,ueberlagernde-schutzzonen,schutzverordnungsobjekte,svo-zonen-labels,schutzverordnungsobjekt-nr"
     opacity={0.5}
     transparent={true}

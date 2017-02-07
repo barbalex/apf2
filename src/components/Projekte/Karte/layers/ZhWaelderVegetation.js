@@ -4,7 +4,7 @@ import { WMSTileLayer } from 'react-leaflet'
 
 const LichtwaldLayer = () =>
   <WMSTileLayer
-    url="//wms.zh.ch/WaldVKWMS"
+    url="//agabriel:4zC6MgjM@wms.zh.ch/WaldVKWMS"
     layers="waldgesellschaften,beschriftung-einheit-nach-ek72"
     opacity={0.5}
     transparent={true}

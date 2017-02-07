@@ -4,7 +4,7 @@ import { WMSTileLayer } from 'react-leaflet'
 
 const DtmLayer = () =>
   <WMSTileLayer
-    url="//maps.zh.ch/wms/DTMBackgroundZH"
+    url="//agabriel:4zC6MgjM@maps.zh.ch/wms/DTMBackgroundZH"
     layers="dtm"
     transparent={true}
     version="1.3.0"
