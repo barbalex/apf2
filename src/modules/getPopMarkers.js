@@ -25,10 +25,6 @@ export default (store) => {
         if (title && title.toString) {
           title = title.toString()
         }
-        let tooltipText = store.map.pop.labelUsingNr ? p.PopNr : p.PopName
-        if (tooltipText && tooltipText.toString) {
-          tooltipText = tooltipText.toString()
-        }
         const tooltipOptions = {
           permanent: true,
           direction: `bottom`,
@@ -45,8 +41,12 @@ export default (store) => {
         const marker = window.L.marker(latLng, {
           title,
           icon,
-        }).bindPopup(title)
-          .bindTooltip(tooltipText, tooltipOptions)
+        }).bindPopup(`
+            Population
+            <h3>${p.PopNr ? `${p.PopNr}: ` : ``}${p.PopName}</h3>
+            Koordinaten: ${p.PopKoordWgs84 ? `${p.PopXKoord.toLocaleString(`de-ch`)} / ${p.PopYKoord.toLocaleString(`de-ch`)}` : `(keine)`}
+          `)
+          .bindTooltip(title, tooltipOptions)
         markers.addLayer(marker)
       }
     })
