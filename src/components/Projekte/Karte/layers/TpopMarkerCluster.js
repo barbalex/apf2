@@ -9,11 +9,11 @@ const enhance = compose(
   observer
 )
 
-class PopMarkerCluster extends Component { // eslint-disable-line react/prefer-stateless-function
+class TpopMarkerCluster extends Component { // eslint-disable-line react/prefer-stateless-function
 
   static propTypes = {
     map: PropTypes.object.isRequired,
-    pops: PropTypes.array.isRequired,
+    tpops: PropTypes.array.isRequired,
     labelUsingNr: PropTypes.bool.isRequired,
     highlightedIds: PropTypes.array.isRequired,
     visible: PropTypes.bool.isRequired,
@@ -48,4 +48,4 @@ class PopMarkerCluster extends Component { // eslint-disable-line react/prefer-s
   }
 }
 
-export default enhance(PopMarkerCluster)
+export default enhance(TpopMarkerCluster)

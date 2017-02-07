@@ -22,7 +22,7 @@ import '../../../../node_modules/leaflet-measure/dist/leaflet-measure.css'
 import '../../../../node_modules/leaflet.markercluster/dist/MarkerCluster.css'
 import getEncompassingBound from '../../../modules/getEncompassingBound'
 import PopMarkerCluster from './layers/PopMarkerCluster'
-import TpopMarker from './layers/TpopMarker'
+import TpopMarkerCluster from './layers/TpopMarkerCluster'
 import MeasureControl from './MeasureControl'
 import PngControl from './PngControl'
 import CoordinatesControl from './CoordinatesControl'
@@ -36,7 +36,7 @@ const enhance = compose(
   observer
 )
 
-const Karte = ({ store, popMarkers }) => {
+const Karte = ({ store, popMarkers, tpopMarkers }) => {
   // if no active projekt, need to fetch pops of all Projekte
   // uhm, let us not do this
   // if no active ap, need to fetch pops of projekt
@@ -71,7 +71,8 @@ const Karte = ({ store, popMarkers }) => {
       bounds={bounds}
       preferCanvas
       onMouseMove={store.setMapMouseCoord}
-      maxZoom={30}
+      // maxZoom={50}
+      // minZoom={1}
       pop={store.map.pop.pops}
     >
       <PopMarkerCluster
@@ -81,10 +82,13 @@ const Karte = ({ store, popMarkers }) => {
         visible={store.map.pop.visible}
         markers={popMarkers}
       />
-      {
-        store.map.tpop.visible &&
-        <TpopMarker />
-      }
+      <TpopMarkerCluster
+        highlightedIds={toJS(store.map.tpop.highlightedIds)}
+        labelUsingNr={store.map.tpop.labelUsingNr}
+        tpops={store.map.tpop.tpops}
+        visible={store.map.tpop.visible}
+        markers={tpopMarkers}
+      />
       <ScaleControl
         imperial={false}
       />
@@ -99,6 +103,7 @@ const Karte = ({ store, popMarkers }) => {
 Karte.propTypes = {
   store: PropTypes.object.isRequired,
   popMarkers: PropTypes.object,
+  tpopMarkers: PropTypes.object,
 }
 
 export default enhance(Karte)

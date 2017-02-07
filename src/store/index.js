@@ -41,6 +41,7 @@ import getPopBounds from '../modules/getPopBounds'
 import getTpopBounds from '../modules/getTpopBounds'
 import epsg4326to21781 from '../modules/epsg4326to21781'
 import getPopMarkers from '../modules/getPopMarkers'
+import getTpopMarkers from '../modules/getTpopMarkers'
 
 import TableStore from './table'
 import ObservableHistory from './ObservableHistory'
@@ -101,8 +102,6 @@ function Store() {
     ),
     // alternative is using names
     labelUsingNr: true,
-  })
-  extendObservable(this.map.pop, {
     markers: computed(() =>
       getPopMarkers(this)
     ),
@@ -119,6 +118,9 @@ function Store() {
     ),
     // alternative is using names
     labelUsingNr: true,
+    markers: computed(() =>
+      getTpopMarkers(this)
+    ),
   })
   this.table = TableStore
   this.valuesForWhichTableDataWasFetched = {}

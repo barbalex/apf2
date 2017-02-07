@@ -2,30 +2,30 @@ import 'leaflet'
 import '../../node_modules/leaflet.markercluster/dist/leaflet.markercluster-src.js'
 import some from 'lodash/some'
 
-import popIcon from '../etc/pop.svg'
-import popIconHighlighted from '../etc/popHighlighted.svg'
+import tpopIcon from '../etc/tpop.svg'
+import tpopIconHighlighted from '../etc/tpopHighlighted.svg'
 
 export default (store) => {
-  const { pops, labelUsingNr, highlightedIds, visible } = store.map.pop
+  const { tpops, labelUsingNr, highlightedIds, visible } = store.map.tpop
   const mcgOptions = {
     maxClusterRadius: 60,
     iconCreateFunction: function (cluster) {
       const markers = cluster.getAllChildMarkers()
-      const hasHighlightedPop = some(markers, (m) => m.options.icon.options.className === `popIconHighlighted`)
-      const className = hasHighlightedPop ? `popClusterHighlighted` : `popCluster`
+      const hasHighlightedTpop = some(markers, (m) => m.options.icon.options.className === `tpopIconHighlighted`)
+      const className = hasHighlightedTpop ? `tpopClusterHighlighted` : `tpopCluster`
       return window.L.divIcon({ html: markers.length, className, iconSize: window.L.point(40, 40) })
     },
   }
   const markers = window.L.markerClusterGroup(mcgOptions)
   if (visible) {
-    pops.forEach((p) => {
-      if (p.PopKoordWgs84) {
-        let title = labelUsingNr ? p.PopNr : p.PopName
+    tpops.forEach((p) => {
+      if (p.TPopKoordWgs84) {
+        let title = labelUsingNr ? p.TPopNr : p.TPopFlurname
         // beware: leaflet needs title to always be a string
         if (title && title.toString) {
           title = title.toString()
         }
-        let tooltipText = store.map.pop.labelUsingNr ? p.PopNr : p.PopName
+        let tooltipText = store.map.pop.labelUsingNr ? p.TPopNr : p.TPopFlurname
         if (tooltipText && tooltipText.toString) {
           tooltipText = tooltipText.toString()
         }
@@ -35,12 +35,12 @@ export default (store) => {
           className: `mapTooltip`,
           opacity: 1,
         }
-        const isHighlighted = highlightedIds.includes(p.PopId)
-        const latLng = new window.L.LatLng(...p.PopKoordWgs84)
+        const isHighlighted = highlightedIds.includes(p.TPopId)
+        const latLng = new window.L.LatLng(...p.TPopKoordWgs84)
         const icon = window.L.icon({
-          iconUrl: isHighlighted ? popIconHighlighted : popIcon,
+          iconUrl: isHighlighted ? tpopIconHighlighted : tpopIcon,
           iconSize: [24, 24],
-          className: isHighlighted ? `popIconHighlighted` : `popIcon`,
+          className: isHighlighted ? `tpopIconHighlighted` : `tpopIcon`,
         })
         const marker = window.L.marker(latLng, {
           title,
