@@ -90,6 +90,12 @@ const MyAppBar = ({ store, onClickButton }) => {
                 window.open(`https://github.com/FNSKtZH/apflora/wiki`)
               }
             />
+            <MenuItem
+              primaryText={`${store.user.name} abmelden`}
+              onTouchTap={() =>
+                store.logout()
+              }
+            />
           </IconMenu>
         </MenuDiv>
       }

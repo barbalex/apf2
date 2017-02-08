@@ -49,7 +49,7 @@ tables.forEach((t) => {
 // add fields
 tablesObject.fields = `[table_schema+table_name+column_name]`
 const db = new Dexie(`apflora`)
-db  // eslint-disable-line no-trailing-spaces
+db
   .version(1)
   .stores(tablesObject)
 

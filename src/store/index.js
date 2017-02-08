@@ -65,17 +65,17 @@ function Store() {
     treeTopPosition: 0,
   })
   this.app = {}
-  this.user = {}
-  extendObservable(this.user, {
-    name: ``,
-    roles: [],
-  })
   extendObservable(this.app, {
     errors: [],
     readOnly: false,
     fields: [],
     fieldsLoading: true,
     map: null,
+  })
+  this.user = {}
+  extendObservable(this.user, {
+    name: ``,
+    roles: [],
   })
   this.map = {
     mouseCoord: [],
@@ -136,6 +136,9 @@ function Store() {
     fetchLogin: action((name, password) => {
       fetchLogin(this, name, password)
     }),
+    logout: action(() =>
+      this.user.name = ``
+    ),
     setMapMouseCoord: action((e) => {
       this.map.mouseCoord = [e.latlng.lng, e.latlng.lat]
     }),

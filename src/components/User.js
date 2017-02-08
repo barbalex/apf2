@@ -22,7 +22,7 @@ const enhance = compose(
   withState(`passwordErrorText`, `changePasswordErrorText`, ``),
   withHandlers({
     fetchLogin: props => (namePassed, passwordPassed) => {
-      const { changeNameErrorText, changePasswordErrorText, store } = props
+      const { changeNameErrorText, changePasswordErrorText, changeName, changePassword, store } = props
       // when bluring fields need to pass event value
       // on the other hand when clicking on Anmelden button,
       // need to grab props
@@ -35,6 +35,12 @@ const enhance = compose(
         return changePasswordErrorText(`Bitte Passwort erfassen`)
       }
       store.fetchLogin(name, password)
+      setTimeout(() => {
+        if (store.user.name) {
+          changeName(``)
+          changePassword(``)
+        }
+      }, 2000)
     },
   }),
   withHandlers({
@@ -100,6 +106,11 @@ const User = ({
           errorText={nameErrorText}
           fullWidth
           autoFocus
+          onKeyPress={(e) => {
+            if (e.key === 'Enter') {
+              onBlurName(e)
+            }
+          }}
         />
         <TextField
           floatingLabelText="Passwort"
@@ -108,6 +119,11 @@ const User = ({
           onBlur={onBlurPassword}
           errorText={passwordErrorText}
           fullWidth
+          onKeyPress={(e) => {
+            if (e.key === 'Enter') {
+              onBlurPassword(e)
+            }
+          }}
         />
     </StyledDiv>
     </Dialog>
