@@ -75,8 +75,9 @@ function Store() {
     map: null,
   })
   this.user = {}
+  // name set to prevent Login Dialog from appearing before setLoginFromIdb has fetched from idb
   extendObservable(this.user, {
-    name: `temp`,
+    name: `temporaryValue`,
     roles: [],
   })
   this.map = {
