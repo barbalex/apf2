@@ -48,6 +48,7 @@ tables.forEach((t) => {
 })
 // add fields
 tablesObject.fields = `[table_schema+table_name+column_name]`
+tablesObject.currentUser = `name`
 const db = new Dexie(`apflora`)
 db
   .version(1)
@@ -79,6 +80,7 @@ const theme = Object.assign({}, darkBaseTheme, {
 window.app = app
 // window.app.writeToStoreWorker = writeToStoreWorker
 
+store.setLoginFromIdb()
 // load immediately because is used to validate active dataset
 store.fetchFields()
 

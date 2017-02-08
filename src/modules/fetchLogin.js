@@ -1,5 +1,6 @@
 // @flow
 import axios from 'axios'
+import app from 'ampersand-app'
 
 import apiBaseUrl from './apiBaseUrl'
 
@@ -19,6 +20,8 @@ export default (store:Object, name:string, password:string) => {
           store.app.readOnly = true
         }
         store.user.name = name
+        app.db.currentUser.clear()
+        app.db.currentUser.put({ name })
       } else {
         store.listError(new Error(`Anmeldung gescheitert`))
       }

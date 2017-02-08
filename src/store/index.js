@@ -43,6 +43,8 @@ import epsg4326to21781 from '../modules/epsg4326to21781'
 import getPopMarkers from '../modules/getPopMarkers'
 import getTpopMarkers from '../modules/getTpopMarkers'
 import fetchLogin from '../modules/fetchLogin'
+import logout from '../modules/logout'
+import setLoginFromIdb from '../modules/setLoginFromIdb'
 
 import TableStore from './table'
 import ObservableHistory from './ObservableHistory'
@@ -137,7 +139,10 @@ function Store() {
       fetchLogin(this, name, password)
     }),
     logout: action(() =>
-      this.user.name = ``
+      logout(this)
+    ),
+    setLoginFromIdb: action(() =>
+      setLoginFromIdb(this)
     ),
     setMapMouseCoord: action((e) => {
       this.map.mouseCoord = [e.latlng.lng, e.latlng.lat]
