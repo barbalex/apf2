@@ -64,6 +64,11 @@ function Store() {
     treeTopPosition: 0,
   })
   this.app = {}
+  this.user = {}
+  extendObservable(this.user, {
+    name: ``,
+    roles: [],
+  })
   extendObservable(this.app, {
     errors: [],
     // TODO: get user else

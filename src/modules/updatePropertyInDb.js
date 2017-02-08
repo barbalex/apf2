@@ -72,7 +72,7 @@ export default (store:Object, key:string, valuePassed:string|number) => {
   // update if no validation messages exist
   const combinedValidationMessages = objectValues(valid).join(``)
   if (combinedValidationMessages.length === 0) {
-    const { user } = store.app
+    const { user } = store.user.name
     const oldValue = row[key]
     const artWasChanged = table === `ap` && key === `ApArtId`
     if (artWasChanged) {
