@@ -13,7 +13,7 @@ export default (store:Object, name:string, password:string) => {
 
   const url = `${apiBaseUrl}/anmeldung/name=${name}/pwd=${password}`
   axios.get(url)
-    .then((data) => {
+    .then(({ data }) => {
       if (data && data.length > 0) {
         if (data[0].NurLesen === -1) {
           store.app.readOnly = true

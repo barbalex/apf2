@@ -14,16 +14,6 @@ const StyledDiv = styled.div`
   flex-direction: column;
 `
 
-const fetchLogin = ({ name, password, changeNameErrorText, changePasswordErrorText, store }) => {
-  if (!name) {
-    return changeNameErrorText(`Bitte Namen erfassen`)
-  }
-  if (!password) {
-    return changePasswordErrorText(`Bitte Passwort erfassen`)
-  }
-  store.fetchLogin(name, password)
-}
-
 const enhance = compose(
   inject(`store`),
   withState(`name`, `changeName`, ``),
@@ -31,28 +21,43 @@ const enhance = compose(
   withState(`nameErrorText`, `changeNameErrorText`, ``),
   withState(`passwordErrorText`, `changePasswordErrorText`, ``),
   withHandlers({
-    onChangeName: props => (e) => {
-      props.changeNameErrorText(``)
-      props.changeName(e.target.value)
+    fetchLogin: props => (namePassed, passwordPassed) => {
+      const { changeNameErrorText, changePasswordErrorText, store } = props
+      // when bluring fields need to pass event value
+      // on the other hand when clicking on Anmelden button,
+      // need to grab props
+      const name = namePassed || props.name
+      const password = passwordPassed || props.password
+      if (!name) {
+        return changeNameErrorText(`Bitte Namen erfassen`)
+      }
+      if (!password) {
+        return changePasswordErrorText(`Bitte Passwort erfassen`)
+      }
+      store.fetchLogin(name, password)
     },
-    onChangePassword: props => (e) => {
-      props.changePasswordErrorText(``)
-      props.changePassword(e.target.value)
-    },
-    onBlurName: props => () => {
-      const { name, password, changeNameErrorText, changePasswordErrorText, store } = props
-      if (password) {
-        fetchLogin({ name, password, changeNameErrorText, changePasswordErrorText, store })
-      } else {
+  }),
+  withHandlers({
+    onBlurName: props => (e) => {
+      const { password, changeName, changeNameErrorText, fetchLogin } = props
+      changeNameErrorText(``)
+      const name = e.target.value
+      changeName(name)
+      if (!name) {
         changeNameErrorText(`Bitte Namen erfassen`)
+      } else if (password) {
+        fetchLogin(name, password)
       }
     },
-    onBlurPassword: props => () => {
-      const { name, password, changeNameErrorText, changePasswordErrorText, store } = props
-      if (name) {
-        fetchLogin({ name, password, changeNameErrorText, changePasswordErrorText, store })
-      } else {
+    onBlurPassword: props => (e) => {
+      const { name, changePassword, changePasswordErrorText, fetchLogin } = props
+      changePasswordErrorText(``)
+      const password = e.target.value
+      changePassword(password)
+      if (!password) {
         changePasswordErrorText(`Bitte Passwort erfassen`)
+      } else if (name) {
+        fetchLogin(name, password)
       }
     },
   }),
@@ -67,16 +72,15 @@ const User = ({
   passwordErrorText,
   changeNameErrorText,
   changePasswordErrorText,
-  onChangeName,
   onBlurName,
-  onChangePassword,
   onBlurPassword,
+  fetchLogin,
 }) => {
   const actions = [
     <FlatButton
         label="anmelden"
         primary={true}
-        onTouchTap={fetchLogin({ name, password, changeNameErrorText, changePasswordErrorText, store })}
+        onTouchTap={fetchLogin}
       />
   ]
   return (
@@ -91,18 +95,16 @@ const User = ({
       <StyledDiv>
         <TextField
           floatingLabelText="Name"
-          value={name}
-          onChange={onChangeName}
+          defaultValue={name}
           onBlur={onBlurName}
-          autoFocus
           errorText={nameErrorText}
           fullWidth
+          autoFocus
         />
         <TextField
           floatingLabelText="Passwort"
           type="password"
-          value={password}
-          onChange={onChangePassword}
+          defaultValue={password}
           onBlur={onBlurPassword}
           errorText={passwordErrorText}
           fullWidth
@@ -122,10 +124,9 @@ User.propTypes = {
   changeNameErrorText: PropTypes.func.isRequired,
   passwordErrorText: PropTypes.string.isRequired,
   changePasswordErrorText: PropTypes.func.isRequired,
-  onChangeName: PropTypes.func.isRequired,
   onBlurName: PropTypes.func.isRequired,
-  onChangePassword: PropTypes.func.isRequired,
   onBlurPassword: PropTypes.func.isRequired,
+  fetchLogin: PropTypes.func.isRequired,
 }
 
 export default enhance(User)
