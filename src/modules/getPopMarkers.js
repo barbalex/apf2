@@ -1,9 +1,12 @@
+import React from 'react'
+import ReactDOMServer from 'react-dom/server'
 import 'leaflet'
 import '../../node_modules/leaflet.markercluster/dist/leaflet.markercluster-src.js'
 import some from 'lodash/some'
 
 import popIcon from '../etc/pop.svg'
 import popIconHighlighted from '../etc/popHighlighted.svg'
+import PopPopup from '../components/Projekte/Karte/PopPopup'
 
 export default (store) => {
   const { pops, labelUsingNr, highlightedIds, visible } = store.map.pop
@@ -25,6 +28,7 @@ export default (store) => {
         if (title && title.toString) {
           title = title.toString()
         }
+        const popup = ReactDOMServer.renderToStaticMarkup(<PopPopup store={store} pop={p} />)
         const tooltipOptions = {
           permanent: true,
           direction: `bottom`,
@@ -41,11 +45,7 @@ export default (store) => {
         const marker = window.L.marker(latLng, {
           title,
           icon,
-        }).bindPopup(`
-            Population
-            <h3>${p.PopNr ? `${p.PopNr}: ` : ``}${p.PopName}</h3>
-            Koordinaten: ${p.PopKoordWgs84 ? `${p.PopXKoord.toLocaleString(`de-ch`)} / ${p.PopYKoord.toLocaleString(`de-ch`)}` : `(keine)`}
-          `)
+        }).bindPopup(popup)
           .bindTooltip(title, tooltipOptions)
         markers.addLayer(marker)
       }
