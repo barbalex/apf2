@@ -18,6 +18,13 @@ const StyledAppBar = styled(AppBar)`
     display: none !important;
   }
 `
+const MenuDiv = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  > button {
+    padding-top: 4px !important;
+  }
+`
 
 const enhance = compose(
   inject(`store`),
@@ -43,13 +50,7 @@ const MyAppBar = ({ store, onClickButton }) => {
   const strukturbaumIsVisible = projekteTabs && projekteTabs.includes(`strukturbaum`)
   const datenIsVisible = projekteTabs && projekteTabs.includes(`daten`)
   const karteIsVisible = projekteTabs && projekteTabs.includes(`karte`)
-  const MenuDiv = styled.div`
-    display: flex;
-    flex-wrap: wrap;
-    > button {
-      padding-top: 4px !important;
-    }
-  `
+
   return (
     <StyledAppBar
       title="AP Flora"
