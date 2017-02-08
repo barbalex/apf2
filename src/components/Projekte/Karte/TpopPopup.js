@@ -7,19 +7,22 @@ const StyledH3 = styled.h3`
   margin: 7px 0;
 `
 
-const PopPopup = ({ store, pop }:{store:Object,pop:Object}) => {
+const PopPopup = ({ store, pop, tpop }:{store:Object,pop:Object,tpop:Object}) => {
   const { activeUrlElements } = store
   const { ap, projekt } = activeUrlElements
-  const popUrl = `${appBaseUrl}/Projekte/${projekt}/Arten/${ap}/Populationen/${pop.PopId}`
+  const popUrl = `${appBaseUrl}/Projekte/${projekt}/Arten/${ap}/Populationen/${tpop.PopId}/Teil-Populationen/${tpop.TPopId}`
 
   return (
     <div>
-      <div>Population</div>
+      <div>Teil-Population</div>
       <StyledH3>
-        {`${pop.PopNr ? `${pop.PopNr}: ` : ``}${pop.PopName}`}
+        {`${tpop.TPopNr ? `${tpop.TPopNr}: ` : ``}${tpop.TPopFlurname}`}
       </StyledH3>
       <div>
-        {`Koordinaten: ${pop.PopKoordWgs84 ? `${pop.PopXKoord.toLocaleString(`de-ch`)} / ${pop.PopYKoord.toLocaleString(`de-ch`)}` : `(keine)`}`}
+        {`Population: ${pop.PopNr ? `${pop.PopNr}: ` : ``}${pop.PopName}`}
+      </div>
+      <div>
+        {`Koordinaten: ${tpop.TPopKoordWgs84 ? `${tpop.TPopXKoord.toLocaleString(`de-ch`)} / ${tpop.TPopYKoord.toLocaleString(`de-ch`)}` : `(keine)`}`}
       </div>
       <a
         href={popUrl}
@@ -34,6 +37,7 @@ const PopPopup = ({ store, pop }:{store:Object,pop:Object}) => {
 PopPopup.propTypes = {
   store: PropTypes.object.isRequired,
   pop: PropTypes.object.isRequired,
+  tpop: PropTypes.object.isRequired,
 }
 
 export default PopPopup

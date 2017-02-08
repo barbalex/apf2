@@ -1,9 +1,12 @@
+import React from 'react'
+import ReactDOMServer from 'react-dom/server'
 import 'leaflet'
 import '../../node_modules/leaflet.markercluster/dist/leaflet.markercluster-src.js'
 import some from 'lodash/some'
 
 import tpopIcon from '../etc/tpop.svg'
 import tpopIconHighlighted from '../etc/tpopHighlighted.svg'
+import TpopPopup from '../components/Projekte/Karte/TpopPopup'
 
 export default (store) => {
   const { tpops, labelUsingNr, highlightedIds, visible } = store.map.tpop
@@ -18,6 +21,7 @@ export default (store) => {
   }
   const markers = window.L.markerClusterGroup(mcgOptions)
   if (visible) {
+    const pops = Array.from(store.table.pop.values())
     tpops.forEach((p) => {
       if (p.TPopKoordWgs84) {
         let title = labelUsingNr ? p.TPopNr : p.TPopFlurname
@@ -42,10 +46,12 @@ export default (store) => {
           iconSize: [24, 24],
           className: isHighlighted ? `tpopIconHighlighted` : `tpopIcon`,
         })
+        const pop = pops.find(pop => pop.PopId === p.PopId)
         const marker = window.L.marker(latLng, {
           title,
           icon,
-        }).bindPopup(title)
+        // }).bindPopup(title)
+      }).bindPopup(ReactDOMServer.renderToStaticMarkup(<TpopPopup store={store} pop={pop} tpop={p} />))
           .bindTooltip(tooltipText, tooltipOptions)
         markers.addLayer(marker)
       }

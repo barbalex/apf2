@@ -17,6 +17,7 @@ import ZhSvoColorLayer from './layers/ZhSvoColor'
 import ZhSvoGreyLayer from './layers/ZhSvoGrey'
 import ZhLrVegKartierungen from './layers/ZhLrVegKartierungen'
 import ZhLichteWaelder from './layers/ZhLichteWaelder'
+import ZhGemeindegrenzen from './layers/ZhGemeindegrenzen'
 import ZhWaelderVegetation from './layers/ZhWaelderVegetation'
 import ZhOrtho from './layers/ZhOrtho'
 import ZhOrthoIr from './layers/ZhOrthoIr'
@@ -24,7 +25,6 @@ import ZhOrtho2015 from './layers/ZhOrtho2015'
 import ZhOrtho2015Ir from './layers/ZhOrtho2015Ir'
 import ZhUep from './layers/ZhUep'
 import ZhUepOverlay from './layers/ZhUepOverlay'
-import ZhDtm from './layers/ZhDtm'
 
 const { BaseLayer, Overlay } = LayersControl
 
@@ -35,9 +35,6 @@ const enhance = compose(
 
 const MyLayersControl = ({ store }) =>
   <LayersControl>
-    <BaseLayer checked name="ZH Höhenmodell">
-      <ZhDtm />
-    </BaseLayer>
     <BaseLayer checked name="OpenStreetMap farbig">
       <OsmColorLayer />
     </BaseLayer>
@@ -73,6 +70,9 @@ const MyLayersControl = ({ store }) =>
     </Overlay>
     <Overlay name="Detailplaene">
       <DetailplaeneLayer />
+    </Overlay>
+    <Overlay name="ZH Gemeindegrenzen">
+      <ZhGemeindegrenzen />
     </Overlay>
     <Overlay name="SVO farbig">
       <ZhSvoColorLayer />

@@ -2,9 +2,9 @@
 import React from 'react'
 import { WMSTileLayer } from 'react-leaflet'
 
-const LichtwaldLayer = () =>
+const LichtwaldObjekteLayer = () =>
   <WMSTileLayer
-    url="//agabriel:4zC6MgjM@maps.zh.ch/wms/FnsLWZH"
+    url="//wms.zh.ch/FnsLWZHWMS"
     layers="objekte-lichte-waelder-kanton-zuerich"
     opacity={0.5}
     transparent={true}
@@ -12,4 +12,4 @@ const LichtwaldLayer = () =>
     format="image/png"
   />
 
-export default LichtwaldLayer
+export default LichtwaldObjekteLayer

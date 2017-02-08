@@ -28,7 +28,6 @@ export default (store) => {
         if (title && title.toString) {
           title = title.toString()
         }
-        const popup = ReactDOMServer.renderToStaticMarkup(<PopPopup store={store} pop={p} />)
         const tooltipOptions = {
           permanent: true,
           direction: `bottom`,
@@ -45,7 +44,7 @@ export default (store) => {
         const marker = window.L.marker(latLng, {
           title,
           icon,
-        }).bindPopup(popup)
+        }).bindPopup(ReactDOMServer.renderToStaticMarkup(<PopPopup store={store} pop={p} />))
           .bindTooltip(title, tooltipOptions)
         markers.addLayer(marker)
       }
