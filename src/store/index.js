@@ -42,6 +42,7 @@ import getTpopBounds from '../modules/getTpopBounds'
 import epsg4326to21781 from '../modules/epsg4326to21781'
 import getPopMarkers from '../modules/getPopMarkers'
 import getTpopMarkers from '../modules/getTpopMarkers'
+import fetchLogin from '../modules/fetchLogin'
 
 import TableStore from './table'
 import ObservableHistory from './ObservableHistory'
@@ -71,8 +72,7 @@ function Store() {
   })
   extendObservable(this.app, {
     errors: [],
-    // TODO: get user else
-    user: `z`,
+    readOnly: false,
     fields: [],
     fieldsLoading: true,
     map: null,
@@ -133,6 +133,9 @@ function Store() {
   extendObservable(this, {
     datasetToDelete: {},
     qkLoading: false,
+    fetchLogin: action((name, password) => {
+      fetchLogin(this, name, password)
+    }),
     setMapMouseCoord: action((e) => {
       this.map.mouseCoord = [e.latlng.lng, e.latlng.lat]
     }),

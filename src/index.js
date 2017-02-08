@@ -30,6 +30,7 @@ import store from './store'
 // import styles from './app.css'  // eslint-disable-line no-unused-vars
 import AppBar from './components/AppBar'
 import Projekte from './components/Projekte'
+import User from './components/User'
 
 import apiBaseUrl from './modules/apiBaseUrl'
 // import appBaseUrl from './modules/appBaseUrl'
@@ -98,6 +99,7 @@ ReactDOM.render(
         { false && <DevTools />}
         <AppBar />
         <Projekte />
+        <User />
       </AppContainer>
     </MuiThemeProvider>
   </Provider>,
