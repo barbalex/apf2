@@ -76,7 +76,7 @@ function Store() {
   })
   this.user = {}
   extendObservable(this.user, {
-    name: ``,
+    name: `temp`,
     roles: [],
   })
   this.map = {

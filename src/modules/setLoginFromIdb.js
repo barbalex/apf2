@@ -8,7 +8,12 @@ export default (store:Object) => {
     console.log(`setLoginFromIdb: users:`, users)
     if (users[0] && users[0].name) {
       store.user.name = users[0].name
+    } else {
+      store.user.name = ``
     }
   })
-  .catch((error) => console.log(error))
+  .catch((error) => {
+    console.log(error)
+    store.user.name = ``
+  })
 }
