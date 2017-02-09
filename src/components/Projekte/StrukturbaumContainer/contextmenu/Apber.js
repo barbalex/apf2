@@ -18,7 +18,7 @@ const enhance = compose(
 
 const Apber = (
   { onClick, changeLabel, label, onShow }:
-  {onClick:()=>void,changeLabel:()=>{},label:string,onShow:()=>{}}
+  {onClick:()=>void,changeLabel:()=>{},label:string|number,onShow:()=>void}
 ) =>
   <ContextMenu
     id="apber"
@@ -49,7 +49,8 @@ const Apber = (
 Apber.propTypes = {
   onClick: PropTypes.func.isRequired,
   changeLabel: PropTypes.func.isRequired,
-  label: PropTypes.string.isRequired,
+  label: PropTypes.any.isRequired,
+  onShow: PropTypes.func.isRequired,
 }
 
 export default enhance(Apber)
