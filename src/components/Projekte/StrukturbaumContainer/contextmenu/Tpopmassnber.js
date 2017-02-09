@@ -1,9 +1,30 @@
 // @flow
 import React, { PropTypes } from 'react'
 import { ContextMenu, MenuItem } from 'react-contextmenu'
+import compose from 'recompose/compose'
+import withState from 'recompose/withState'
+import withHandlers from 'recompose/withHandlers'
 
-const Tpopmassnber = ({ onClick }:{onClick:() => void}) =>
-  <ContextMenu id="tpopmassnber" >
+const enhance = compose(
+  withState(`label`, `changeLabel`, ``),
+  withHandlers({
+    // according to https://github.com/vkbansal/react-contextmenu/issues/65
+    // this is how to pass data from ContextMenuTrigger to ContextMenu
+    onShow: props => (event) =>
+      props.changeLabel(event.detail.data.nodeLabel)
+    ,
+  })
+)
+
+const Tpopmassnber = (
+  { onClick, changeLabel, label, onShow }:
+  {onClick:()=>void,changeLabel:()=>{},label:string|number,onShow:()=>void}
+) =>
+  <ContextMenu
+    id="tpopmassnber"
+    collect={props => props}
+    onShow={onShow}
+  >
     <div className="react-contextmenu-title" style={{ width: `180px` }}>Massnahmen-Bericht</div>
     <MenuItem
       onClick={onClick}
@@ -12,7 +33,7 @@ const Tpopmassnber = ({ onClick }:{onClick:() => void}) =>
         table: `tpopmassnber`,
       }}
     >
-      neu
+      erstelle neuen
     </MenuItem>
     <MenuItem
       onClick={onClick}
@@ -21,12 +42,15 @@ const Tpopmassnber = ({ onClick }:{onClick:() => void}) =>
         table: `tpopmassnber`,
       }}
     >
-      löschen
+      {`lösche "${label}"`}
     </MenuItem>
   </ContextMenu>
 
 Tpopmassnber.propTypes = {
   onClick: PropTypes.func.isRequired,
+  changeLabel: PropTypes.func.isRequired,
+  label: PropTypes.any.isRequired,
+  onShow: PropTypes.func.isRequired,
 }
 
-export default Tpopmassnber
+export default enhance(Tpopmassnber)
