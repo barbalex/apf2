@@ -10,6 +10,7 @@ import {
 import $ from 'jquery'
 
 import fetchTable from '../modules/fetchTable'
+import fetchArteigenschaften from '../modules/fetchArteigenschaften'
 import fetchBeobzuordnungModule from '../modules/fetchBeobzuordnung'
 import fetchTableByParentId from '../modules/fetchTableByParentId'
 import fetchTpopForAp from '../modules/fetchTpopForAp'
@@ -208,6 +209,9 @@ function Store() {
     // and projekt
     fetchTable: action((schemaName, tableName) =>
       fetchTable(this, schemaName, tableName)
+    ),
+    fetchArteigenschaften: action(() =>
+      fetchArteigenschaften(this)
     ),
     fetchBeobzuordnung: action(apArtId =>
       fetchBeobzuordnungModule(this, apArtId)
