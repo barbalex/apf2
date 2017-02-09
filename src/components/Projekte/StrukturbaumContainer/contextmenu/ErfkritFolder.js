@@ -12,7 +12,7 @@ const ErfkritFolder = ({ onClick }:{onClick:() => void}) =>
         table: `erfkrit`,
       }}
     >
-      neu
+      erstelle neues
     </MenuItem>
   </ContextMenu>
 
