@@ -105,6 +105,7 @@ const Ap = (
 
 Ap.propTypes = {
   onClick: PropTypes.func.isRequired,
+  onShow: PropTypes.func.isRequired,
   changeLabel: PropTypes.func.isRequired,
   label: PropTypes.string.isRequired,
 }
