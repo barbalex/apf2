@@ -77,8 +77,11 @@ const Karte = ({ store, popMarkers, tpopMarkers }) => {
       bounds={bounds}
       preferCanvas
       onMouseMove={store.setMapMouseCoord}
-      // maxZoom={50}
-      // minZoom={1}
+      // need max and min zoom because otherwise
+      // something errors
+      // probably clustering function
+      maxZoom={50}
+      minZoom={1}
       pop={store.map.pop.pops}
     >
       <PopMarkerCluster
