@@ -12,7 +12,7 @@ const ApberuebersichtFolder = ({ onClick }:{onClick:() => void}) =>
         table: `apberuebersicht`,
       }}
     >
-      neu
+      erstelle neuen
     </MenuItem>
   </ContextMenu>
 
