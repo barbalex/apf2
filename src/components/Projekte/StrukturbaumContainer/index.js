@@ -129,53 +129,68 @@ class StrukturbaumContainer extends Component { // eslint-disable-line react/pre
     const baseUrl = JSON.parse(url)
     const nodeType = element.firstElementChild.getAttribute(`data-nodeType`)
     const menuType = element.firstElementChild.getAttribute(`data-menuType`)
-    if (action === `insert`) {
-      if (nodeType === `table`) {
-        baseUrl.pop()
-      }
-      if (menuType === `zielFolder`) {
-        // db sets year 1 as standard
-        baseUrl.push(1)
-      }
-      const idToPass = parentId || id
-      store.insertDataset(table, idToPass, baseUrl)
-    } else if (action === `delete`) {
-      store.deleteDatasetDemand(table, id, baseUrl, label)
-    } else if (action === `showOnMap`) {
-      // actionTable: table to show on map
-      // idTable: table from which to filter datasets of actionTable
-      // 1. load missing data if necessary
-      if (idTable === `ap`) {
-        store.map.pop.apArtId = parseInt(id, 10)
-        store.fetchTableByParentId(`apflora`, `pop`, id)
-        store.fetchTpopForAp(id)
-      }
-      if (actionTable === `tpop`) {
-        store.fetchTpopForAp(store.activeUrlElements.ap)
-      }
-      // 2. open map if not yet open
-      this.showMapIfNotYetVisible()
-      // 3 add layer for actionTable
-      store.showMapLayer(actionTable, !store.map[actionTable].visible)
-    } else if (action === `highlightOnMap`) {
-      this.showMapIfNotYetVisible()
-      store.showMapLayer(actionTable, true)
-      if (actionTable === `tpop` && idTable === `pop`) {
-        // TPopFolder: is special as all tpop of pop can be highlighted
-        if (store.map.tpop.highlightedPopIds.includes(parseInt(id, 10))) {
-          store.unhighlightTpopByPopIdOnMap(parseInt(id, 10))
-        } else {
-          store.highlightTpopByPopIdOnMap(parseInt(id, 10))
+    const that = this
+    const actions = {
+      insert() {
+        if (nodeType === `table`) {
+          baseUrl.pop()
         }
-      } else {
-        if (store.map[actionTable].highlightedIds.includes(parseInt(id, 10))) {
-          store.unhighlightIdOnMap(actionTable, parseInt(id, 10))
-        } else {
-          store.highlightIdOnMap(actionTable, parseInt(id, 10))
+        if (menuType === `zielFolder`) {
+          // db sets year 1 as standard
+          baseUrl.push(1)
         }
+        const idToPass = parentId || id
+        store.insertDataset(table, idToPass, baseUrl)
+      },
+      delete() {
+        store.deleteDatasetDemand(table, id, baseUrl, label)
+      },
+      showOnMap() {
+        // actionTable: table to show on map
+        // idTable: table from which to filter datasets of actionTable
+        // 1. load missing data if necessary
+        if (idTable === `ap`) {
+          store.map.pop.apArtId = parseInt(id, 10)
+          store.fetchTableByParentId(`apflora`, `pop`, id)
+          store.fetchTpopForAp(id)
+        }
+        if (actionTable === `tpop`) {
+          store.fetchTpopForAp(store.activeUrlElements.ap)
+        }
+        // 2. open map if not yet open
+        that.showMapIfNotYetVisible()
+        // 3 add layer for actionTable
+        store.showMapLayer(actionTable, !store.map[actionTable].visible)
+      },
+      highlightOnMap() {
+        that.showMapIfNotYetVisible()
+        store.showMapLayer(actionTable, true)
+        if (actionTable === `tpop` && idTable === `pop`) {
+          // TPopFolder: is special as all tpop of pop can be highlighted
+          if (store.map.tpop.highlightedPopIds.includes(parseInt(id, 10))) {
+            store.unhighlightTpopByPopIdOnMap(parseInt(id, 10))
+          } else {
+            store.highlightTpopByPopIdOnMap(parseInt(id, 10))
+          }
+        } else {
+          if (store.map[actionTable].highlightedIds.includes(parseInt(id, 10))) {
+            store.unhighlightIdOnMap(actionTable, parseInt(id, 10))
+          } else {
+            store.highlightIdOnMap(actionTable, parseInt(id, 10))
+          }
+        }
+      },
+      toggleTooltip() {
+        store.toggleMapPopLabelContent(actionTable)
+      },
+      localizeOnMap() {
+        // on click on map, set coordinates of tpop
       }
-    } else if (action === `toggleTooltip`) {
-      store.toggleMapPopLabelContent(actionTable)
+    }
+    if (Object.keys(actions).includes(action)) {
+      actions[action]()
+    } else {
+      store.listError(new Error(`action "${action}" unknown, therefore not executed`))
     }
   }
 
