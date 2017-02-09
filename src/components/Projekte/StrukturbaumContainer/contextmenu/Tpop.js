@@ -45,7 +45,7 @@ const Tpop = (
       data={{
         action: `delete`,
         actionTable: `tpop`,
-        idTable: `tpop`,
+        table: `tpop`,
       }}
     >
       {`lösche "${label}"`}
@@ -75,6 +75,16 @@ const Tpop = (
         `Hebe Markierung von "${label}" auf` :
         `Markiere "${label}"`
       }
+    </MenuItem>
+    <MenuItem
+      onClick={onClick}
+      data={{
+        action: `localizeOnMap`,
+        actionTable: `tpop`,
+        idTable: `tpop`,
+      }}
+    >
+      verorte
     </MenuItem>
   </ContextMenu>
 
