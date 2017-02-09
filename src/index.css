@@ -72,6 +72,8 @@ body.fontLoaded {
 :global .react-contextmenu--visible .react-contextmenu-title {
   color: #b3b3b3;
   padding-left: 10px;
+  padding-right: 15px;
+  padding-bottom: 3px;
   opacity: 1;
 }
 :global .react-contextmenu-title::after {
@@ -101,7 +103,8 @@ body.fontLoaded {
 }
 :global .react-contextmenu-divider {
   border-top: 1px solid grey;
-  margin-bottom: 5px;
+  margin-top: 4px;
+  margin-bottom: 7px;
 }
 :global .react-contextmenu-submenu {
   padding-right: 27px !important;
