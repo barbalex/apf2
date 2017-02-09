@@ -33,9 +33,9 @@ import Projekte from './components/Projekte'
 import User from './components/User'
 
 import apiBaseUrl from './modules/apiBaseUrl'
-// import appBaseUrl from './modules/appBaseUrl'
 import updateFromSocket from './modules/updateFromSocket'
-// import './modules/writeToStoreWorker'
+
+// import appBaseUrl from './modules/appBaseUrl'
 
 import './index.css';
 
@@ -48,14 +48,17 @@ tables.forEach((t) => {
 })
 // add fields
 tablesObject.fields = `[table_schema+table_name+column_name]`
+// create table to save user name in
+// this helps in that user can open new tab and remain logged in!
 tablesObject.currentUser = `name`
 const db = new Dexie(`apflora`)
 db
   .version(1)
   .stores(tablesObject)
 
-// const writeToStoreWorker = new Worker(`${appBaseUrl}/modules/writeToStoreWorker.js`)
-// writeToStoreWorker.onmessage = e => console.log(`message received from writeToStoreWorker:`, e)
+// const writeToStoreWorker = new Worker(`${appBaseUrl}/writeToStoreWorker.js`)
+// writeToStoreWorker.postMessage(`test`)
+// writeToStoreWorker.onmessage = e => console.log(`message received from writeToStoreWorker:`, e.data)
 
 app.extend({
   init() {
