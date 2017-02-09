@@ -12,7 +12,7 @@ const TpopfreiwkontrzaehlFolder = ({ onClick }:{onClick:() => void}) =>
         table: `tpopfreiwkontrzaehl`,
       }}
     >
-      neu
+      erstelle neue
     </MenuItem>
   </ContextMenu>
 
