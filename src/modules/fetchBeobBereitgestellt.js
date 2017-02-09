@@ -2,6 +2,7 @@
 import { runInAction, computed } from 'mobx'
 import axios from 'axios'
 import app from 'ampersand-app'
+import cloneDeep from 'lodash/cloneDeep'
 
 import apiBaseUrl from './apiBaseUrl'
 import recordValuesForWhichTableDataWasFetched from './recordValuesForWhichTableDataWasFetched'
@@ -42,7 +43,11 @@ export default (store:Object, apArtId:number) => {
     .then(() => axios.get(url))
     .then(({ data }) => {
       // leave ui react before this happens
-      setTimeout(() => writeToStore(store, data))
+      // leave ui react before this happens
+      // copy array without the individual objects being references
+      // otherwise the computed values are passed to idb
+      // and this creates errors, ad they can't be cloned
+      setTimeout(() => writeToStore(store, cloneDeep(data)))
       setTimeout(() => app.db.beob_bereitgestellt.bulkPut(data))
     })
     .catch(error => new Error(`error fetching data for table beob_bereitgestellt:`, error))
