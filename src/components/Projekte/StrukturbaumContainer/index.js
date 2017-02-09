@@ -126,13 +126,13 @@ class StrukturbaumContainer extends Component { // eslint-disable-line react/pre
     const { table, action, idTable, actionTable } = data
     const { firstElementChild } = element
     if (!firstElementChild) return store.listError(new Error(`no firstElementChild passed with click`))
-    const id = element.firstElementChild.getAttribute(`data-id`)
-    const parentId = element.firstElementChild.getAttribute(`data-parentId`)
-    const url = element.firstElementChild.getAttribute(`data-url`)
-    const label = element.firstElementChild.getAttribute(`data-label`)
+    const id = firstElementChild.getAttribute(`data-id`)
+    const parentId = firstElementChild.getAttribute(`data-parentId`)
+    const url = firstElementChild.getAttribute(`data-url`)
+    const label = firstElementChild.getAttribute(`data-label`)
     const baseUrl = JSON.parse(url)
-    const nodeType = element.firstElementChild.getAttribute(`data-nodeType`)
-    const menuType = element.firstElementChild.getAttribute(`data-menuType`)
+    const nodeType = firstElementChild.getAttribute(`data-nodeType`)
+    const menuType = firstElementChild.getAttribute(`data-menuType`)
     const that = this
     const actions = {
       insert() {
@@ -188,7 +188,10 @@ class StrukturbaumContainer extends Component { // eslint-disable-line react/pre
         store.toggleMapPopLabelContent(actionTable)
       },
       localizeOnMap() {
-        // on click on map, set coordinates of tpop
+        that.showMapIfNotYetVisible()
+        store.showMapLayer(actionTable, true)
+        store.highlightIdOnMap(actionTable, parseInt(id, 10))
+        store.setIdOfTpopBeingLocalized(parseInt(id, 10))
       }
     }
     if (Object.keys(actions).includes(action)) {

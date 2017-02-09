@@ -46,6 +46,7 @@ import getTpopMarkers from '../modules/getTpopMarkers'
 import fetchLogin from '../modules/fetchLogin'
 import logout from '../modules/logout'
 import setLoginFromIdb from '../modules/setLoginFromIdb'
+import localizeTpop from '../modules/localizeTpop'
 
 import TableStore from './table'
 import ObservableHistory from './ObservableHistory'
@@ -130,6 +131,7 @@ function Store() {
     markers: computed(() =>
       getTpopMarkers(this)
     ),
+    idOfTpopBeingLocalized: 0,
   })
   this.table = TableStore
   this.valuesForWhichTableDataWasFetched = {}
@@ -137,6 +139,12 @@ function Store() {
   extendObservable(this, {
     datasetToDelete: {},
     qkLoading: false,
+    setIdOfTpopBeingLocalized: action((id) => {
+      this.map.tpop.idOfTpopBeingLocalized = id
+    }),
+    localizeTpop: action((x, y) =>
+      localizeTpop(this, x, y)
+    ),
     fetchLogin: action((name, password) => {
       fetchLogin(this, name, password)
     }),

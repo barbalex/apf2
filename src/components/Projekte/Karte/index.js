@@ -27,6 +27,7 @@ import MeasureControl from './MeasureControl'
 import PrintControl from './PrintControl'
 import PngControl from './PngControl'
 import CoordinatesControl from './CoordinatesControl'
+import epsg4326to21781 from '../../../modules/epsg4326to21781'
 
 const StyledMap = styled(Map)`
   height: 100%;
@@ -35,6 +36,9 @@ const StyledMap = styled(Map)`
     width: 100%;
     overflow: visible;
   }
+`
+const StyledMapLocalizing = styled(StyledMap)`
+  cursor: crosshair !important;
 `
 
 const enhance = compose(
@@ -60,6 +64,7 @@ const Karte = ({ store, popMarkers, tpopMarkers }) => {
     boundsToUse.push(tpopBounds)
   }
   const bounds = getEncompassingBound(boundsToUse)
+  const MapElement = !!store.map.tpop.idOfTpopBeingLocalized ? StyledMapLocalizing : StyledMap
   // this does not work
   // see issue on proj4js: https://github.com/proj4js/proj4js/issues/214
   /*
@@ -73,7 +78,7 @@ const Karte = ({ store, popMarkers, tpopMarkers }) => {
   )*/
 
   return (
-    <StyledMap
+    <MapElement
       bounds={bounds}
       preferCanvas
       onMouseMove={store.setMapMouseCoord}
@@ -83,6 +88,13 @@ const Karte = ({ store, popMarkers, tpopMarkers }) => {
       maxZoom={50}
       minZoom={1}
       pop={store.map.pop.pops}
+      onClick={(event) => {
+        if (!!store.map.tpop.idOfTpopBeingLocalized) {
+          const {lat, lng} = event.latlng
+          const [x, y] = epsg4326to21781(lng, lat)
+          store.localizeTpop(x, y)
+        }
+      }}
     >
       <PopMarkerCluster
         highlightedIds={toJS(store.map.pop.highlightedIds)}
@@ -106,7 +118,7 @@ const Karte = ({ store, popMarkers, tpopMarkers }) => {
       <PrintControl />
       <PngControl />
       <CoordinatesControl />
-    </StyledMap>
+    </MapElement>
   )
 }
 
