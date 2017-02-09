@@ -2,7 +2,7 @@
 import React, { PropTypes } from 'react'
 import { ContextMenu, MenuItem } from 'react-contextmenu'
 
-const AssozartFolder = ({ onClick }:{onClick:() => void}) =>
+const AssozartFolder = ({ onClick }:{onClick:()=>void}) =>
   <ContextMenu id="assozartFolder" >
     <div className="react-contextmenu-title">assoziierte Art</div>
     <MenuItem
@@ -12,7 +12,7 @@ const AssozartFolder = ({ onClick }:{onClick:() => void}) =>
         table: `assozart`,
       }}
     >
-      neu
+      erstelle neue
     </MenuItem>
   </ContextMenu>
 
