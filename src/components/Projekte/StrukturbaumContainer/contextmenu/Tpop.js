@@ -38,7 +38,7 @@ const Tpop = (
         table: `tpop`,
       }}
     >
-      neu
+      erstelle neue
     </MenuItem>
     <MenuItem
       onClick={onClick}
@@ -48,7 +48,7 @@ const Tpop = (
         idTable: `tpop`,
       }}
     >
-      {`"${label}" löschen`}
+      {`lösche "${label}"`}
     </MenuItem>
     <div className="react-contextmenu-divider" />
     <div className="react-contextmenu-title">Karte</div>
@@ -60,7 +60,7 @@ const Tpop = (
         idTable: `ap`,
       }}
     >
-      {`Teil-Populationen ${store.map.tpop.visible ? `ausblenden` : `zeigen`}`}
+      {`blende Teil-Populationen ${store.map.tpop.visible ? `aus` : `ein`}`}
     </MenuItem>
     <MenuItem
       onClick={onClick}
@@ -72,8 +72,8 @@ const Tpop = (
     >
       {
         store.map.tpop.highlightedIds.includes(id) ?
-        `Hervorhebung von "${label}" aufheben` :
-        `"${label}" hervorheben`
+        `Hebe Markierung von "${label}" auf` :
+        `Markiere "${label}"`
       }
     </MenuItem>
   </ContextMenu>
@@ -82,10 +82,10 @@ Tpop.propTypes = {
   onClick: PropTypes.func.isRequired,
   store: PropTypes.object.isRequired,
   changeId: PropTypes.func.isRequired,
-  changeLabel: PropTypes.func.isRequired,
-  onShow: PropTypes.func.isRequired,
   id: PropTypes.number.isRequired,
+  changeLabel: PropTypes.func.isRequired,
   label: PropTypes.string.isRequired,
+  onShow: PropTypes.func.isRequired,
 }
 
 export default enhance(Tpop)
