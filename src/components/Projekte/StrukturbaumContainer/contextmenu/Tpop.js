@@ -71,7 +71,7 @@ const Tpop = (
       }}
     >
       {
-        store.map.tpop.highlightedIds.includes(id) ?
+        store.map.tpop.highlightedIds.includes(id) && store.map.tpop.visible ?
         `Hebe Markierung von "${label}" auf` :
         `Markiere "${label}"`
       }
