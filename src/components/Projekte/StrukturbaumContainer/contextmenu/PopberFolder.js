@@ -12,7 +12,7 @@ const PopberFolder = ({ onClick }:{onClick:() => void}) =>
         table: `popber`,
       }}
     >
-      neu
+      erstelle neuen
     </MenuItem>
   </ContextMenu>
 
