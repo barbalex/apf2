@@ -121,7 +121,11 @@ class StrukturbaumContainer extends Component { // eslint-disable-line react/pre
 
   handleClick(e, data, element) {
     const { store } = this.props
+    if (!data) return store.listError(new Error(`no data passed with click`))
+    if (!element) return store.listError(new Error(`no element passed with click`))
     const { table, action, idTable, actionTable } = data
+    const { firstElementChild } = element
+    if (!firstElementChild) return store.listError(new Error(`no firstElementChild passed with click`))
     const id = element.firstElementChild.getAttribute(`data-id`)
     const parentId = element.firstElementChild.getAttribute(`data-parentId`)
     const url = element.firstElementChild.getAttribute(`data-url`)
