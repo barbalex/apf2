@@ -99,6 +99,10 @@ body.fontLoaded {
   border-color: #0275d8;
   text-decoration: none;
 }
+:global .react-contextmenu-divider {
+  border-top: 1px solid grey;
+  margin-bottom: 5px;
+}
 :global .react-contextmenu-submenu {
   padding-right: 27px !important;
 }

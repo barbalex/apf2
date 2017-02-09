@@ -233,6 +233,7 @@ class Strukturbaum extends Component {
         id={node.menuType}
         collect={props => props}
         nodeId={node.id}
+        nodeLabel={node.label}
         key={`${index}-child`}
       >
         <Node
