@@ -188,10 +188,10 @@ class StrukturbaumContainer extends Component { // eslint-disable-line react/pre
         store.toggleMapPopLabelContent(actionTable)
       },
       localizeOnMap() {
+        store.setIdOfTpopBeingLocalized(parseInt(id, 10))
         that.showMapIfNotYetVisible()
         store.showMapLayer(actionTable, true)
         store.highlightIdOnMap(actionTable, parseInt(id, 10))
-        store.setIdOfTpopBeingLocalized(parseInt(id, 10))
       }
     }
     if (Object.keys(actions).includes(action)) {

@@ -52,7 +52,7 @@ const Karte = ({ store, popMarkers, tpopMarkers }) => {
   // if no active ap, need to fetch pops of projekt
   // uhm, let us not do this
 
-  // TODO: define projekt-bounds and use here
+  // TODO: define projekt-bounds only at componentDidMount
   const ktZhBounds = [[47.159, 8.354], [47.696, 8.984]]
   const popBounds = store.map.pop.bounds
   const tpopBounds = store.map.tpop.bounds
