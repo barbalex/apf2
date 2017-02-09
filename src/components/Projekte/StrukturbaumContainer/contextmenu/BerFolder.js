@@ -12,7 +12,7 @@ const BerFolder = ({ onClick }:{onClick:() => void}) =>
         table: `ber`,
       }}
     >
-      neu
+      erstelle neuen
     </MenuItem>
   </ContextMenu>
 
