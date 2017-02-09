@@ -4,7 +4,7 @@ import { ContextMenu, MenuItem } from 'react-contextmenu'
 
 const PopmassnberFolder = ({ onClick }:{onClick:() => void}) =>
   <ContextMenu id="popmassnberFolder" >
-    <div className="react-contextmenu-title" style={{ width: `185px` }}>Massnahmen-Berichte</div>
+    <div className="react-contextmenu-title">Massnahmen-Berichte</div>
     <MenuItem
       onClick={onClick}
       data={{
@@ -12,7 +12,7 @@ const PopmassnberFolder = ({ onClick }:{onClick:() => void}) =>
         table: `popmassnber`,
       }}
     >
-      neu
+      erstelle neuen
     </MenuItem>
   </ContextMenu>
 
