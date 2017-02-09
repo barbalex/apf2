@@ -12,7 +12,7 @@ const Apfolder = ({ onClick }:{onClick:() => void}) =>
         table: `ap`,
       }}
     >
-      neu
+      erstelle neue
     </MenuItem>
   </ContextMenu>
 
