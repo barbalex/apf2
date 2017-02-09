@@ -42,7 +42,9 @@ export default (store:Object, schemaNamePassed:string, tableName:string, parentI
     .then(({ data }) => {
       // leave ui react before this happens
       setTimeout(() => writeToStore({ store, data, table: tableName, field: idField }))
-      setTimeout(() => app.db[tableName].bulkPut(data))
+      setTimeout(() =>
+        app.db[tableName].bulkPut(data)
+      )
     })
     .catch(error => new Error(`error fetching data for table ${tableName}:`, error))
 }
