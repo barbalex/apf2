@@ -36,8 +36,10 @@ const TpopFolder = (
         table: `tpop`,
       }}
     >
-      neu
+      erstelle neue
     </MenuItem>
+    <div className="react-contextmenu-divider" />
+    <div className="react-contextmenu-title">Karte</div>
     <MenuItem
       onClick={onClick}
       data={{
@@ -48,8 +50,8 @@ const TpopFolder = (
     >
       {
         store.map.tpop.highlightedPopIds.includes(id) ?
-        `Hervorhebung der Teil-Populationen aufheben` :
-        `Teil-Populationen auf Karte hervorheben`
+        `hebe Markierung Teil-Populationen auf` :
+        `markiere Teil-Populationen`
       }
     </MenuItem>
   </ContextMenu>

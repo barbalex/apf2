@@ -1,10 +1,31 @@
 // @flow
 import React, { PropTypes } from 'react'
 import { ContextMenu, MenuItem } from 'react-contextmenu'
+import compose from 'recompose/compose'
+import withState from 'recompose/withState'
+import withHandlers from 'recompose/withHandlers'
 
-const Tpopfreiwkontr = ({ onClick }:{onClick:() => void}) =>
-  <ContextMenu id="tpopfreiwkontr" >
-    <div className="react-contextmenu-title" style={{ width: `190px` }}>Freiwilligen-Kontrolle</div>
+const enhance = compose(
+  withState(`label`, `changeLabel`, ``),
+  withHandlers({
+    // according to https://github.com/vkbansal/react-contextmenu/issues/65
+    // this is how to pass data from ContextMenuTrigger to ContextMenu
+    onShow: props => (event) =>
+      props.changeLabel(event.detail.data.nodeLabel)
+    ,
+  })
+)
+
+const Tpopfreiwkontr = (
+  { onClick, changeLabel, label, onShow }:
+  {onClick:()=>void,changeLabel:()=>{},label:string|number,onShow:()=>void}
+) =>
+  <ContextMenu
+    id="tpopfreiwkontr"
+    collect={props => props}
+    onShow={onShow}
+  >
+    <div className="react-contextmenu-title">Freiwilligen-Kontrolle</div>
     <MenuItem
       onClick={onClick}
       data={{
@@ -12,7 +33,7 @@ const Tpopfreiwkontr = ({ onClick }:{onClick:() => void}) =>
         table: `tpopfreiwkontr`,
       }}
     >
-      neu
+      erstelle neue
     </MenuItem>
     <MenuItem
       onClick={onClick}
@@ -21,12 +42,15 @@ const Tpopfreiwkontr = ({ onClick }:{onClick:() => void}) =>
         table: `tpopfreiwkontr`,
       }}
     >
-      löschen
+      {`lösche "${label}"`}
     </MenuItem>
   </ContextMenu>
 
 Tpopfreiwkontr.propTypes = {
   onClick: PropTypes.func.isRequired,
+  changeLabel: PropTypes.func.isRequired,
+  label: PropTypes.any.isRequired,
+  onShow: PropTypes.func.isRequired,
 }
 
-export default Tpopfreiwkontr
+export default enhance(Tpopfreiwkontr)
