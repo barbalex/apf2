@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import 'leaflet'
 import 'leaflet-easyprint'
 
-class PrintControl extends Component { // eslint-disable-line react/prefer-stateless-function
+class PrintControl extends Component {
 
   static propTypes = {
     map: PropTypes.object,
