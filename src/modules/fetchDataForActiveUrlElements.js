@@ -41,6 +41,13 @@ const fetchDataForActiveUrlElements = (store:Object) => {
       store.fetchTable(`apflora`, `ap_umsetzung_werte`)
       store.fetchBeobBereitgestellt(activeUrlElements.ap)
       store.fetchBeobzuordnung(activeUrlElements.ap)
+      if (store.map.tpop.visible) {
+        store.fetchTpopForAp(activeUrlElements.ap)
+        store.fetchPopForAp(activeUrlElements.ap)
+      }
+      if (store.map.pop.visible) {
+        store.fetchPopForAp(activeUrlElements.ap)
+      }
     },
     qk() {
       store.fetchQk()

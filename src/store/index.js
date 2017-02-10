@@ -14,6 +14,7 @@ import fetchArteigenschaften from '../modules/fetchArteigenschaften'
 import fetchBeobzuordnungModule from '../modules/fetchBeobzuordnung'
 import fetchTableByParentId from '../modules/fetchTableByParentId'
 import fetchTpopForAp from '../modules/fetchTpopForAp'
+import fetchPopForAp from '../modules/fetchPopForAp'
 import fetchDatasetById from '../modules/fetchDatasetById'
 import fetchBeobBereitgestellt from '../modules/fetchBeobBereitgestellt'
 import updateActiveDatasetFromUrl from '../modules/updateActiveDatasetFromUrl'
@@ -231,6 +232,9 @@ function Store() {
     ),
     fetchTpopForAp: action(apArtId =>
       fetchTpopForAp(this, apArtId)
+    ),
+    fetchPopForAp: action(apArtId =>
+      fetchPopForAp(this, apArtId)
     ),
     fetchDatasetById: action(({ schemaName, tableName, id }) =>
       fetchDatasetById({ store: this, schemaName, tableName, id })

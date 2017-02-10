@@ -159,7 +159,10 @@ class StrukturbaumContainer extends Component { // eslint-disable-line react/pre
           store.fetchTpopForAp(id)
         }
         if (actionTable === `tpop`) {
-          store.fetchTpopForAp(store.activeUrlElements.ap)
+          // TODO: this does not work when ap is changed
+          // while visible is true!!!
+          // need an autorun?
+          store.fetchTpopForAp(id)
         }
         // 2. open map if not yet open
         that.showMapIfNotYetVisible()
