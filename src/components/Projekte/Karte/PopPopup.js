@@ -7,7 +7,10 @@ const StyledH3 = styled.h3`
   margin: 7px 0;
 `
 
-const PopPopup = ({ store, pop }:{store:Object,pop:Object}) => {
+const PopPopup = (
+  { store, pop }:
+  {store:Object,pop:Object}
+) => {
   const { activeUrlElements } = store
   const { ap, projekt } = activeUrlElements
   const popUrl = `${appBaseUrl}/Projekte/${projekt}/Arten/${ap}/Populationen/${pop.PopId}`
