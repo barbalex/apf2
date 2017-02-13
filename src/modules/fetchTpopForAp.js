@@ -22,7 +22,7 @@ export default (store:Object, apArtId:number) => {
   }
 
   const url = `${apiBaseUrl}/tpopForAp/${apArtId}`
-
+  store.loading.push(`tpopForAp`)
   app.db.tpop
     .toArray()
     .then((data) => {
@@ -31,9 +31,13 @@ export default (store:Object, apArtId:number) => {
       return axios.get(url)
     })
     .then(({ data }) => {
+      store.loading = store.loading.filter(el => el !== `tpopForAp`)
       // leave ui react before this happens
       setTimeout(() => writeToStore({ store, data, table: `tpop`, field: `TPopId` }))
       setTimeout(() => app.db.tpop.bulkPut(data))
     })
-    .catch(error => new Error(`error fetching tpop for ap ${apArtId}:`, error))
+    .catch(error => {
+      store.loading = store.loading.filter(el => el !== `tpopForAp`)
+      store.listError(error)
+    })
 }

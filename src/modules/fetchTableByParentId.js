@@ -29,22 +29,25 @@ export default (store:Object, schemaNamePassed:string, tableName:string, parentI
   }
 
   const url = `${apiBaseUrl}/schema/${schemaName}/table/${tableName}/field/${parentIdField}/value/${parentId}`
-  store.table[`${tableName}Loading`] = true
+  store.loading.push(tableName)
 
   app.db[tableName]
     .toArray()
     .then((data) => {
       writeToStore({ store, data, table: tableName, field: idField })
-      store.table[`${tableName}Loading`] = false
       recordValuesForWhichTableDataWasFetched({ store, table: tableName, field: idField, value: parentId })
     })
     .then(() => axios.get(url))
     .then(({ data }) => {
+      store.loading = store.loading.filter(el => el !== tableName)
       // leave ui react before this happens
       setTimeout(() => writeToStore({ store, data, table: tableName, field: idField }))
       setTimeout(() =>
         app.db[tableName].bulkPut(data)
       )
     })
-    .catch(error => new Error(`error fetching data for table ${tableName}:`, error))
+    .catch(error => {
+      store.loading = store.loading.filter(el => el !== tableName)
+      store.listError(error)
+    })
 }
