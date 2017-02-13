@@ -4,7 +4,7 @@ export default (store, projId, apArtId) => {
   const { activeUrlElements } = store
   const myBeobzuordnungNodes = beobzuordnungNodes(store, apArtId)
   let message = myBeobzuordnungNodes.length
-  if (store.table.beob_bereitgestelltLoading) {
+  if (store.loading.includes(`beob_bereitgestellt`)) {
     message = `...`
   }
   if (store.node.nodeLabelFilter.get(`beobzuordnung`)) {

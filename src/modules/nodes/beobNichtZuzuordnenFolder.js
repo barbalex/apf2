@@ -4,7 +4,7 @@ export default (store, projId, apArtId) => {
   const { activeUrlElements } = store
   const myBeobNichtZuzuordnenNodes = beobNichtZuzuordnenNodes(store, apArtId)
   let message = myBeobNichtZuzuordnenNodes.length
-  if (store.table.beobzuordnungLoading) {
+  if (store.loading.includes(`beobzuordnung`)) {
     message = `...`
   }
   if (store.node.nodeLabelFilter.get(`beobNichtZuzuordnen`)) {
