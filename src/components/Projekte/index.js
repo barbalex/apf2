@@ -15,6 +15,10 @@ const Container = styled.div`
   flex-direction: column;
   height: 100%;
 `
+// TODO: this does not always work
+const ContainerLoading = styled(Container)`
+  cursor: wait;
+`
 const Content = styled.div`
   display: flex;
   flex-wrap: nowrap;
@@ -41,9 +45,10 @@ const Projekte = ({ store }) => {
   const datenIsVisible = projekteTabs && projekteTabs.includes(`daten`)
   const karteIsVisible = projekteTabs && projekteTabs.includes(`karte`)
   const deleteDatasetModalIsVisible = !!store.datasetToDelete.id
+  const MyContainer = store.loading.length > 0 ? ContainerLoading : Container
 
   return (
-    <Container>
+    <MyContainer>
       <Content>
         {
           strukturbaumIsVisible
@@ -67,7 +72,7 @@ const Projekte = ({ store }) => {
           <DeleteDatasetModal />
         }
       </Content>
-    </Container>
+    </MyContainer>
   )
 }
 
