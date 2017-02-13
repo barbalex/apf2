@@ -6,7 +6,7 @@ import apiBaseUrl from './apiBaseUrl'
 import writeToStore from './writeToStore'
 
 export default async (store:Object) => {
-  store.table.adb_eigenschaftenLoading = true
+  store.loading.push(`adb_eigenschaften`)
   let url = `${apiBaseUrl}/schema/beob/table/adb_eigenschaften`
 
   let data
@@ -26,5 +26,5 @@ export default async (store:Object) => {
       app.db.adb_eigenschaften.bulkPut(data)
     )
   }
-  store.table.adb_eigenschaftenLoading = false
+  store.loading = store.loading.filter(el => el !== `adb_eigenschaften`)
 }

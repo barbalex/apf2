@@ -46,16 +46,16 @@ export default (store:Object, apArtId:number) => {
   }
 
   const url = `${apiBaseUrl}/beobzuordnung/${apArtId}`
-  store.table.beobzuordnungLoading = true
+  store.loading.push(`beobzuordnung`)
   app.db.beobzuordnung
     .toArray()
     .then((data) => {
       writeToStore(store, data)
-      store.table.beobzuordnungLoading = false
       recordValuesForWhichTableDataWasFetched({ store, table: `beobzuordnung`, field: `NO_ISFS`, value: apArtId })
     })
     .then(() => axios.get(url))
     .then(({ data }) => {
+      store.loading = store.loading.filter(el => el !== `beobzuordnung`)
       // leave ui react before this happens
       // copy array without the individual objects being references
       // otherwise the computed values are passed to idb
@@ -63,5 +63,8 @@ export default (store:Object, apArtId:number) => {
       setTimeout(() => writeToStore(store, cloneDeep(data)))
       setTimeout(() => app.db.beobzuordnung.bulkPut(data))
     })
-    .catch(error => new Error(`error fetching table beobzuordnung:`, error))
+    .catch(error => {
+      store.loading = store.loading.filter(el => el !== `beobzuordnung`)
+      store.listError(error)
+    })
 }

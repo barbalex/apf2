@@ -32,16 +32,16 @@ export default (store:Object, apArtId:number) => {
   }
 
   const url = `${apiBaseUrl}/schema/beob/table/beob_bereitgestellt/field/NO_ISFS/value/${apArtId}`
-  store.table.beob_bereitgestelltLoading = true
+  store.loading.push(`beob_bereitgestellt`)
   app.db.beob_bereitgestellt
     .toArray()
     .then((data) => {
       writeToStore(store, data)
-      store.table.beob_bereitgestelltLoading = false
       recordValuesForWhichTableDataWasFetched({ store, table: `beob_bereitgestellt`, field: `NO_ISFS`, value: apArtId })
     })
     .then(() => axios.get(url))
     .then(({ data }) => {
+      store.loading = store.loading.filter(el => el !== `beob_bereitgestellt`)
       // leave ui react before this happens
       // leave ui react before this happens
       // copy array without the individual objects being references
@@ -50,5 +50,8 @@ export default (store:Object, apArtId:number) => {
       setTimeout(() => writeToStore(store, cloneDeep(data)))
       setTimeout(() => app.db.beob_bereitgestellt.bulkPut(data))
     })
-    .catch(error => new Error(`error fetching data for table beob_bereitgestellt:`, error))
+    .catch(error => {
+      store.loading = store.loading.filter(el => el !== `beob_bereitgestellt`)
+      store.listError(error)
+    })
 }
