@@ -4,7 +4,7 @@ export default ({ store, projId, apArtId, popId, tpopId }) => {
   const { activeUrlElements } = store
   const myTpopbeobNodes = tpopbeobNodes({ store, projId, apArtId, popId, tpopId })
   let message = myTpopbeobNodes.length
-  if (store.table.beobzuordnungLoading) {
+  if (store.loading.includes(`beobzuordnung`)) {
     message = `...`
   }
   if (store.node.nodeLabelFilter.get(`tpopbeob`)) {

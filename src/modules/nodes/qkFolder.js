@@ -15,7 +15,7 @@ export default (store, projId, apArtId) => {
     // only show number when qk is active
     nrOfQkMessages = null
   }
-  if (store.qkLoading) {
+  if (store.loading.includes(`qk`)) {
     nrOfQkMessages = `...`
   }
   const label = `Qualitätskontrollen${nrOfQkMessages ? ` (${nrOfQkMessages})` : ``}`
