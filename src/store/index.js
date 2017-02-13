@@ -54,6 +54,10 @@ import ObservableHistory from './ObservableHistory'
 
 function Store() {
   this.history = ObservableHistory
+  this.loading = []
+  extendObservable(this, {
+    loading: [],
+  })
   this.node = {}
   extendObservable(this.node, {
     apFilter: false,
@@ -74,7 +78,6 @@ function Store() {
     errors: [],
     readOnly: false,
     fields: [],
-    fieldsLoading: true,
     map: null,
   })
   this.user = {}
@@ -139,7 +142,6 @@ function Store() {
   this.qk = observable.map()
   extendObservable(this, {
     datasetToDelete: {},
-    qkLoading: false,
     setIdOfTpopBeingLocalized: action((id) => {
       this.map.tpop.idOfTpopBeingLocalized = id
     }),
@@ -163,9 +165,6 @@ function Store() {
     ),
     toggleApFilter: action(() => {
       this.node.apFilter = !this.node.apFilter
-    }),
-    setQkLoading: action((loading) => {
-      this.qkLoading = loading
     }),
     fetchQk: action(() =>
       fetchQk({ store: this })
