@@ -13,6 +13,7 @@ export default (store:Object, name:string, password:string) => {
   }
 
   const url = `${apiBaseUrl}/anmeldung/name=${name}/pwd=${password}`
+  store.loading.push(`user`)
   axios.get(url)
     .then(({ data }) => {
       if (data && data.length > 0) {
@@ -25,8 +26,10 @@ export default (store:Object, name:string, password:string) => {
       } else {
         store.listError(new Error(`Anmeldung gescheitert`))
       }
+      store.loading = store.loading.filter(el => el !== `user`)
     })
-    .catch((error) =>
+    .catch((error) => {
+      store.loading = store.loading.filter(el => el !== `user`)
       store.listError(error)
-    )
+    })
 }
