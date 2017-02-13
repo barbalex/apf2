@@ -7,15 +7,15 @@ import apiBaseUrl from './apiBaseUrl'
 
 export default (store:Object) => {
   // only fetch if not yet done
-  if (store.app.fields.length === 0 && !store.app.fieldsLoading) {
-    store.app.fieldsLoading = true
+  if (store.app.fields.length === 0 && !store.loading.includes(`fields`)) {
+    store.loading.push(`fields`)
     app.db.fields
       .toArray()
       .then((values) => {
         if (values.length > 0) {
           runInAction(() => {
             store.app.fields = values
-            store.app.fieldsLoading = false
+            store.loading = store.loading.filter(el => el !== `fields`)
           })
         }
       })
@@ -23,7 +23,7 @@ export default (store:Object) => {
       .then(({ data }) => {
         runInAction(() => {
           store.app.fields = data
-          store.app.fieldsLoading = false
+          store.loading = store.loading.filter(el => el !== `fields`)
         })
         // leave ui react before this happens
         setTimeout(() => app.db.fields.bulkPut(data))
