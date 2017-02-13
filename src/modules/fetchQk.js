@@ -7,7 +7,7 @@ import isPointInsidePolygon from './isPointInsidePolygon'
 import zhGeojson from '../etc/ktZh.json'
 
 const fetchQk = ({ store }:{store:Object}) => {
-  store.setQkLoading(true)
+  store.loading.push(`qk`)
   const apArtId = store.activeUrlElements.ap
   const qk = store.qk.get(apArtId)
   let berichtjahr
@@ -176,11 +176,11 @@ const fetchQk = ({ store }:{store:Object}) => {
         const messages = { hw: `Wow: Scheint alles i.O. zu sein!` }
         store.addMessagesToQk({ messages })
       }
-      store.setQkLoading(false)
+      store.loading = store.loading.filter(el => el !== `qk`)
     })
     .catch((error) => {
       store.listError(error)
-      store.setQkLoading(false)
+      store.loading = store.loading.filter(el => el !== `qk`)
     })
 }
 

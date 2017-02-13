@@ -21,7 +21,7 @@ export default async (store:Object, schemaNamePassed:string, tableName:string) =
     if (!idField) {
       return store.listError(new Error(`in den Metadaten kein ID-Feld gefunden für Tabelle ${tableName}`))
     }
-    store.table[`${tableName}Loading`] = true
+    store.loading.push(tableName)
     let url = `${apiBaseUrl}/schema/${schemaName}/table/${tableName}`
     if (tableName === `adb_lr`) {
       url = `${apiBaseUrl}/lrDelarze`
@@ -35,12 +35,12 @@ export default async (store:Object, schemaNamePassed:string, tableName:string) =
     }
     if (dataFromIdb) {
       writeToStore({ store, data: dataFromIdb, table: tableName, field: idField })
-      store.table[`${tableName}Loading`] = false
+      store.loading = store.loading.filter(el => el !== tableName)
     }
 
     // don't reload adb_eigenschaften
     if (tableName === `adb_eigenschaften`) {
-      store.table[`${tableName}Loading`] = false
+      store.loading = store.loading.filter(el => el !== tableName)
       return
     }
 
@@ -61,6 +61,6 @@ export default async (store:Object, schemaNamePassed:string, tableName:string) =
         app.db[tableName].bulkPut(dataFromDb)
       )
     }
-    store.table[`${tableName}Loading`] = false
+    store.loading = store.loading.filter(el => el !== tableName)
   }
 }
