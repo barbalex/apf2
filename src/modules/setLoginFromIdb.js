@@ -13,8 +13,10 @@ export default (store:Object) => {
   .then((users) => {
     if (users[0] && users[0].name) {
       store.user.name = users[0].name
+      store.user.readOnly = users[0].readOnly
     } else {
       store.user.name = ``
+      store.user.readOnly = true
     }
   })
   .catch((error) => {

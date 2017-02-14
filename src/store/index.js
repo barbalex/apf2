@@ -76,7 +76,6 @@ function Store() {
   this.app = {}
   extendObservable(this.app, {
     errors: [],
-    readOnly: false,
     fields: [],
     map: null,
   })
@@ -85,6 +84,7 @@ function Store() {
   extendObservable(this.user, {
     name: `temporaryValue`,
     roles: [],
+    readOnly: true,
   })
   this.map = {
     mouseCoord: [],
@@ -142,12 +142,17 @@ function Store() {
   this.qk = observable.map()
   extendObservable(this, {
     datasetToDelete: {},
+    tellUserReadOnly: action(() =>
+      this.listError(new Error(`Sie haben keine Schreibrechte`))
+    ),
     setIdOfTpopBeingLocalized: action((id) => {
+      if (this.user.readOnly) return this.tellUserReadOnly()
       this.map.tpop.idOfTpopBeingLocalized = id
     }),
-    localizeTpop: action((x, y) =>
+    localizeTpop: action((x, y) => {
+      if (this.user.readOnly) return this.tellUserReadOnly()
       localizeTpop(this, x, y)
-    ),
+    }),
     fetchLogin: action((name, password) => {
       fetchLogin(this, name, password)
     }),
@@ -189,29 +194,34 @@ function Store() {
       }
       this.node.nodeLabelFilter.set(table, value)
     }),
-    insertDataset: action((table, parentId, baseUrl) =>
+    insertDataset: action((table, parentId, baseUrl) => {
+      if (this.user.readOnly) return this.tellUserReadOnly()
       insertDataset(this, table, parentId, baseUrl)
-    ),
-    deleteDatasetDemand: action((table, id, url, label) =>
+    }),
+    deleteDatasetDemand: action((table, id, url, label) => {
+      if (this.user.readOnly) return this.tellUserReadOnly()
       deleteDatasetDemand(this, table, id, url, label)
-    ),
+    }),
     deleteDatasetAbort: action(() => {
       this.datasetToDelete = {}
     }),
-    deleteDatasetExecute: action(() =>
+    deleteDatasetExecute: action(() => {
+      if (this.user.readOnly) return this.tellUserReadOnly()
       deleteDatasetExecute(this)
-    ),
+    }),
     listError: action(error =>
       listError(this, error)
     ),
     // updates data in store
-    updateProperty: action((key, value) =>
+    updateProperty: action((key, value) => {
+      if (this.user.readOnly) return this.tellUserReadOnly()
       updateProperty(this, key, value)
-    ),
+    }),
     // updates data in database
-    updatePropertyInDb: action((key, value) =>
+    updatePropertyInDb: action((key, value) => {
+      if (this.user.readOnly) return this.tellUserReadOnly()
       updatePropertyInDb(this, key, value)
-    ),
+    }),
     // fetch all data of a table
     // primarily used for werte (domain) tables
     // and projekt

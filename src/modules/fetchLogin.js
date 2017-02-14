@@ -17,12 +17,11 @@ export default (store:Object, name:string, password:string) => {
   axios.get(url)
     .then(({ data }) => {
       if (data && data.length > 0) {
-        if (data[0].NurLesen === -1) {
-          store.app.readOnly = true
-        }
+        const readOnly = data[0].NurLesen === -1
+        store.user.readOnly = readOnly
         store.user.name = name
         app.db.currentUser.clear()
-        app.db.currentUser.put({ name })
+        app.db.currentUser.put({ name, readOnly })
       } else {
         store.listError(new Error(`Anmeldung gescheitert`))
       }
