@@ -31,6 +31,7 @@ import store from './store'
 import AppBar from './components/AppBar'
 import Projekte from './components/Projekte'
 import User from './components/User'
+import Errors from './components/Errors'
 
 import apiBaseUrl from './modules/apiBaseUrl'
 import updateFromSocket from './modules/updateFromSocket'
@@ -105,6 +106,7 @@ ReactDOM.render(
         <AppBar />
         <Projekte />
         <User />
+        <Errors />
       </AppContainer>
     </MuiThemeProvider>
   </Provider>,
