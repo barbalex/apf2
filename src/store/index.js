@@ -226,30 +226,30 @@ function Store() {
     // primarily used for werte (domain) tables
     // and projekt
     fetchTable: action((schemaName, tableName) =>
-      setTimeout(() => fetchTable(this, schemaName, tableName))
+      fetchTable(this, schemaName, tableName)
     ),
     fetchArteigenschaften: action(() =>
-      setTimeout(() => fetchArteigenschaften(this))
+      fetchArteigenschaften(this)
     ),
     fetchBeobzuordnung: action(apArtId =>
-      setTimeout(() => fetchBeobzuordnungModule(this, apArtId))
+      fetchBeobzuordnungModule(this, apArtId)
     ),
     // fetch data of table for id of parent table
     // used for actual apflora data (but projekt)
     fetchTableByParentId: action((schemaName, tableName, parentId) =>
-      setTimeout(() => fetchTableByParentId(this, schemaName, tableName, parentId))
+      fetchTableByParentId(this, schemaName, tableName, parentId)
     ),
     fetchTpopForAp: action(apArtId =>
-      setTimeout(() => fetchTpopForAp(this, apArtId))
+      fetchTpopForAp(this, apArtId)
     ),
     fetchPopForAp: action(apArtId =>
-      setTimeout(() => fetchPopForAp(this, apArtId))
+      fetchPopForAp(this, apArtId)
     ),
     fetchDatasetById: action(({ schemaName, tableName, id }) =>
-      setTimeout(() => fetchDatasetById({ store: this, schemaName, tableName, id }))
+      fetchDatasetById({ store: this, schemaName, tableName, id })
     ),
     fetchBeobBereitgestellt: action(apArtId =>
-      setTimeout(() => fetchBeobBereitgestellt(this, apArtId))
+      fetchBeobBereitgestellt(this, apArtId)
     ),
     // action when user clicks on a node in the tree
     toggleNode: action(node =>
