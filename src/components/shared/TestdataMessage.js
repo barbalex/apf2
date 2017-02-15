@@ -4,7 +4,7 @@ import styled from 'styled-components'
 
 const Div = styled.div`
   color: green;
-  padding: 0 10px 0 10px;
+  padding: 10px 10px 0 10px;
 `
 
 const TestdataMessage = ({ store }) => {

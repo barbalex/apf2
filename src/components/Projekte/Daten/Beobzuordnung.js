@@ -189,7 +189,7 @@ const Beob = ({ store }) => {
           updatePropertyInDb={store.updatePropertyInDb}
         />
       </FieldsContainer>
-      <FormTitle title={beobTitle} />
+      <FormTitle title={beobTitle} noTestdataMessage={true} />
       <FieldsContainer>
         {getBeobFields({ store })}
       </FieldsContainer>

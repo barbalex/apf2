@@ -9,21 +9,29 @@ const Container = styled.div`
   padding-bottom: 10px;
 `
 const Title = styled.div`
-  padding: 10px;
+  padding: 10px 10px 0 10px;
   color: #b3b3b3;
   font-weight: bold;
 `
 
-const FormTitle = ({ title }:{title:string}) =>
+const FormTitle = ({ title, noTestdataMessage }:{title:string,noTestdataMessage:boolean}) =>
   <Container>
     <Title>
       {title}
     </Title>
-    <TestdataMessage />
+    {
+      !noTestdataMessage &&
+      <TestdataMessage />
+    }
   </Container>
 
 FormTitle.propTypes = {
   title: PropTypes.string.isRequired,
+  noTestdataMessage: PropTypes.bool,
+}
+
+FormTitle.defaultProps = {
+  noTestdataMessage: false,
 }
 
 export default FormTitle
