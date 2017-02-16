@@ -325,6 +325,8 @@ class Strukturbaum extends Component {
     const roomAboveClick = store.ui.lastClickY - store.ui.treeTopPosition
     // correcting by 10px seems to keep the tree from jumping
     const scrolltop = (treeHeightAboveActiveNode - roomAboveClick) + 10
+    const popVisible = store.map.pop.visible
+    const tpopVisible = store.map.tpop.visible
 
     return (
       <Container>
@@ -342,6 +344,8 @@ class Strukturbaum extends Component {
                 noRowsRenderer={this.noRowsRenderer}
                 width={width}
                 scrollTop={scrolltop}
+                popVisible={popVisible}
+                tpopVisible={tpopVisible}
                 ref={(c) => { this.tree = c }}
                 {...store.projektNodes}
               />
