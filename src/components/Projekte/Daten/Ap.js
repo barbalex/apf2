@@ -9,9 +9,7 @@ import withProps from 'recompose/withProps'
 import { Scrollbars } from 'react-custom-scrollbars'
 
 import AutoComplete from '../../shared/Autocomplete'
-import RadioButtonGroup from '../../shared/RadioButtonGroup'
 import RadioButtonGroupWithInfo from '../../shared/RadioButtonGroupWithInfo'
-import LabelWithPopover from '../../shared/LabelWithPopover'
 import Label from '../../shared/Label'
 import TextField from '../../shared/TextField'
 import SelectField from '../../shared/SelectField'
@@ -192,33 +190,36 @@ const Ap = ({
           updatePropertyInDb={updatePropertyInDb}
         />
         <FieldContainer>
-          <LabelWithPopover label="Stand Umsetzung">
-            <LabelPopoverTitleRow>
-              Legende
-            </LabelPopoverTitleRow>
-            <LabelPopoverContentRow>
-              <LabelPopoverRowColumnLeft>
-                noch keine<br />Umsetzung:
-              </LabelPopoverRowColumnLeft>
-              <LabelPopoverRowColumnRight>
-                noch keine Massnahmen ausgeführt
-              </LabelPopoverRowColumnRight>
-            </LabelPopoverContentRow>
-            <LabelPopoverContentRow>
-              <LabelPopoverRowColumnLeft>
-                in Umsetzung:
-              </LabelPopoverRowColumnLeft>
-              <LabelPopoverRowColumnRight>
-                bereits Massnahmen ausgeführt (auch wenn AP noch nicht erstellt)
-              </LabelPopoverRowColumnRight>
-            </LabelPopoverContentRow>
-          </LabelWithPopover>
-          <RadioButtonGroup
+          <Label label="Stand Umsetzung" />
+          <RadioButtonGroupWithInfo
             fieldName="ApUmsetzung"
             value={activeDataset.row.ApUmsetzung}
             errorText={activeDataset.valid.ApUmsetzung}
             dataSource={apUmsetzungen}
             updatePropertyInDb={updatePropertyInDb}
+            popover={
+              <div>
+                <LabelPopoverTitleRow>
+                  Legende
+                </LabelPopoverTitleRow>
+                <LabelPopoverContentRow>
+                  <LabelPopoverRowColumnLeft>
+                    noch keine<br />Umsetzung:
+                  </LabelPopoverRowColumnLeft>
+                  <LabelPopoverRowColumnRight>
+                    noch keine Massnahmen ausgeführt
+                  </LabelPopoverRowColumnRight>
+                </LabelPopoverContentRow>
+                <LabelPopoverContentRow>
+                  <LabelPopoverRowColumnLeft>
+                    in Umsetzung:
+                  </LabelPopoverRowColumnLeft>
+                  <LabelPopoverRowColumnRight>
+                    bereits Massnahmen ausgeführt (auch wenn AP noch nicht erstellt)
+                  </LabelPopoverRowColumnRight>
+                </LabelPopoverContentRow>
+              </div>
+            }
           />
         </FieldContainer>
         <SelectField
