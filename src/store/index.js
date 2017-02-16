@@ -10,7 +10,6 @@ import {
 import $ from 'jquery'
 
 import fetchTable from '../modules/fetchTable'
-import fetchArteigenschaften from '../modules/fetchArteigenschaften'
 import fetchBeobzuordnungModule from '../modules/fetchBeobzuordnung'
 import fetchTableByParentId from '../modules/fetchTableByParentId'
 import fetchTpopForAp from '../modules/fetchTpopForAp'
@@ -27,6 +26,7 @@ import manipulateUrl from '../modules/manipulateUrl'
 import getUrl from '../modules/getUrl'
 import getUrlQuery from '../modules/getUrlQuery'
 import fetchFields from '../modules/fetchFields'
+import fetchFieldsFromIdb from '../modules/fetchFieldsFromIdb'
 import insertDataset from '../modules/insertDataset'
 import deleteDatasetDemand from '../modules/deleteDatasetDemand'
 import deleteDatasetExecute from '../modules/deleteDatasetExecute'
@@ -48,6 +48,7 @@ import fetchLogin from '../modules/fetchLogin'
 import logout from '../modules/logout'
 import setLoginFromIdb from '../modules/setLoginFromIdb'
 import localizeTpop from '../modules/localizeTpop'
+import fetchStammdatenTables from '../modules/fetchStammdatenTables'
 
 import TableStore from './table'
 import ObservableHistory from './ObservableHistory'
@@ -183,8 +184,8 @@ function Store() {
     addMessagesToQk: action(({ messages }) => {
       addMessagesToQk({ store: this, messages })
     }),
-    fetchFields: action(() =>
-      fetchFields(this)
+    fetchFieldsFromIdb: action(() =>
+      fetchFieldsFromIdb(this)
     ),
     updateLabelFilter: action((table, value) => {
       if (!table) {
@@ -228,9 +229,10 @@ function Store() {
     fetchTable: action((schemaName, tableName) =>
       fetchTable(this, schemaName, tableName)
     ),
-    fetchArteigenschaften: action(() =>
-      fetchArteigenschaften(this)
-    ),
+    fetchStammdaten: action(() => {
+      fetchFields(this)
+      fetchStammdatenTables(this)
+    }),
     fetchBeobzuordnung: action(apArtId =>
       fetchBeobzuordnungModule(this, apArtId)
     ),

@@ -85,9 +85,9 @@ const MyAppBar = ({ store, onClickButton }) => {
             style={{ paddingLeft: 10 }}
           >
             <MenuItem
-              primaryText="Arteigenschaften aktualisieren"
+              primaryText="Stammdaten aktualisieren (Arteigenschaften, Adressen, Auswahllisten)"
               onTouchTap={() =>
-                store.fetchArteigenschaften()
+                store.fetchStammdaten()
               }
             />
             <MenuItem

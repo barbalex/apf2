@@ -86,7 +86,7 @@ window.app = app
 
 store.setLoginFromIdb()
 // load immediately because is used to validate active dataset
-store.fetchFields()
+store.fetchFieldsFromIdb()
 
 const socket = window.io(apiBaseUrl)
 socket.on(`tabelle_update`, payload => updateFromSocket(store, payload))

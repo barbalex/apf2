@@ -38,8 +38,8 @@ export default async (store:Object, schemaNamePassed:string, tableName:string) =
       store.loading = store.loading.filter(el => el !== tableName)
     }
 
-    // don't reload adb_eigenschaften
-    if (tableName === `adb_eigenschaften`) {
+    // don't fetch any stammdaten if they already existed in idb
+    if (tableName !== `projekt` && dataFromIdb.length > 0) {
       store.loading = store.loading.filter(el => el !== tableName)
       return
     }
