@@ -7,7 +7,10 @@ export default (table:string, row:Object, allFields:Array<Object>) => {
   if (!table || !row || !allFields || !allFields.length) {
     return valid
   }
-  const fields = allFields.filter(f => f.table_schema === `apflora` && f.table_name === table)
+  const tableName = table
+    .replace(`tpopfeldkontr`, `tpopkontr`)
+    .replace(`tpopfreiwkontr`, `tpopkontr`)
+  const fields = allFields.filter(f => f.table_schema === `apflora` && f.table_name === tableName)
   if (fields.length === 0) {
     // eslint-disable-next-line no-console
     console.log(`validateActiveDataset: no fields found for table ${table}`)
