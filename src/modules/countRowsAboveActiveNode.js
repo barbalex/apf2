@@ -25,7 +25,7 @@ const findActiveNodeInNodes = (store, nodes, nodeIdPathPassed) => {
   if (!nodes) return
   const nodeIdPath = nodeIdPathPassed.slice(0)
   const nodeId = nodeIdPath.shift()
-  const activeNodesIndex = findIndex(nodes, n => n.nodeId === nodeId)
+  const activeNodesIndex = findIndex(nodes, n => n.id === nodeId)
   const activeNode = nodes[activeNodesIndex]
   if (activeNodesIndex > -1) {
     globalCounter += activeNodesIndex + 1
