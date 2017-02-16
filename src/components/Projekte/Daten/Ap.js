@@ -10,7 +10,9 @@ import { Scrollbars } from 'react-custom-scrollbars'
 
 import AutoComplete from '../../shared/Autocomplete'
 import RadioButtonGroup from '../../shared/RadioButtonGroup'
+import RadioButtonGroupWithInfo from '../../shared/RadioButtonGroupWithInfo'
 import LabelWithPopover from '../../shared/LabelWithPopover'
+import Label from '../../shared/Label'
 import TextField from '../../shared/TextField'
 import SelectField from '../../shared/SelectField'
 import FormTitle from '../../shared/FormTitle'
@@ -149,33 +151,35 @@ const Ap = ({
           updatePropertyInDb={updatePropertyInDb}
         />
         <FieldContainer>
-          <LabelWithPopover label="Aktionsplan">
-            <LabelPopoverTitleRow>
-              Legende
-            </LabelPopoverTitleRow>
-            <LabelPopoverContentRow>
-              <LabelPopoverRowColumnLeft>
-                keiner:
-              </LabelPopoverRowColumnLeft>
-              <LabelPopoverRowColumnRight>
-                kein Aktionsplan vorgesehen
-              </LabelPopoverRowColumnRight>
-            </LabelPopoverContentRow>
-            <LabelPopoverContentRow>
-              <LabelPopoverRowColumnLeft>
-                erstellt:
-              </LabelPopoverRowColumnLeft>
-              <LabelPopoverRowColumnRight>
-                Aktionsplan fertig, auf der Webseite der FNS
-              </LabelPopoverRowColumnRight>
-            </LabelPopoverContentRow>
-          </LabelWithPopover>
-          <RadioButtonGroup
+          <Label label="Aktionsplan" />
+          <RadioButtonGroupWithInfo
             fieldName="ApStatus"
             value={activeDataset.row.ApStatus}
-            errorText={activeDataset.valid.ApStatus}
             dataSource={apStati}
             updatePropertyInDb={updatePropertyInDb}
+            popover={
+              <div>
+                <LabelPopoverTitleRow>
+                  Legende
+                </LabelPopoverTitleRow>
+                <LabelPopoverContentRow>
+                  <LabelPopoverRowColumnLeft>
+                    keiner:
+                  </LabelPopoverRowColumnLeft>
+                  <LabelPopoverRowColumnRight>
+                    kein Aktionsplan vorgesehen
+                  </LabelPopoverRowColumnRight>
+                </LabelPopoverContentRow>
+                <LabelPopoverContentRow>
+                  <LabelPopoverRowColumnLeft>
+                    erstellt:
+                  </LabelPopoverRowColumnLeft>
+                  <LabelPopoverRowColumnRight>
+                    Aktionsplan fertig, auf der Webseite der FNS
+                  </LabelPopoverRowColumnRight>
+                </LabelPopoverContentRow>
+              </div>
+            }
           />
         </FieldContainer>
         <TextField
