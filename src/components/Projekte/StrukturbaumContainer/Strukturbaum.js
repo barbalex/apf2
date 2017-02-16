@@ -20,6 +20,7 @@ import FontIcon from 'material-ui/FontIcon'
 
 import getNrOfNodeRows from '../../../modules/getNrOfNodeRows'
 import isNodeInActiveNodePath from '../../../modules/isNodeInActiveNodePath'
+import countRowsAboveActiveNode from '../../../modules/countRowsAboveActiveNode'
 
 const singleRowHeight = 23
 const Container = styled.div`
@@ -331,6 +332,9 @@ class Strukturbaum extends Component {
     // to make it rerender when highlighting changes
     const popHighlighted = store.map.pop.highlightedIds.length
     const tpopHighlighted = store.map.tpop.highlightedIds.length
+
+    const nrOfRowsAboveActiveNode = countRowsAboveActiveNode(store)
+    console.log(`Strukturbaum: nrOfRowsAboveActiveNode:`, nrOfRowsAboveActiveNode)
 
     return (
       <Container>

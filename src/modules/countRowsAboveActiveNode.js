@@ -10,6 +10,7 @@
  */
 
 import { findIndex } from 'lodash'
+import Joi from 'joi-browser'
 
 let globalCounter
 
@@ -43,15 +44,29 @@ const findActiveNodeInNodes = (store, nodes, nodeIdPathPassed) => {
   }
 }
 
-export default (store:Object, nodes:Array<Object>, activeNode:Object, previousCount:number) => {
+export default (store:Object) => {
   // if anything goes wrong: return previous count
-  if (!nodes) return previousCount
-  if (!nodes.length) return previousCount
-  if (!activeNode) return previousCount
+  const nodes = store.projektNodes
+  if (!nodes) return 0
+  if (!nodes.length) return 0
   globalCounter = 0
-  const nodeIdPath = activeNode.nodeIdPath.slice(0)
+  // get nodeIdPath from url, filtering only numbers and guids
+  const nodeIdPath = store.url.filter(el =>
+    Joi.validate(
+      el,
+      Joi.alternatives()
+        .try(
+          Joi.number()
+            .integer()
+            .min(-2147483648)
+            .max(+2147483647),
+            Joi.string()
+              .guid()
+        )
+    )
+  )
   findActiveNodeInNodes(store, nodes, nodeIdPath)
   // seems like this is always one too much
   if (globalCounter > 1) return globalCounter - 1
-  return previousCount
+  return 0
 }
