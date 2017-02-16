@@ -31,7 +31,9 @@ const Errors = ({ store }) =>
   <Container>
     {
       store.app.errors.map((error, index) =>
-        <ErrorDiv>
+        <ErrorDiv
+          key={index}
+        >
           {error.message}
         </ErrorDiv>
       )
