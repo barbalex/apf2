@@ -327,6 +327,10 @@ class Strukturbaum extends Component {
     const scrolltop = (treeHeightAboveActiveNode - roomAboveClick) + 10
     const popVisible = store.map.pop.visible
     const tpopVisible = store.map.tpop.visible
+    // pass length of highlightedIds to List
+    // to make it rerender when highlighting changes
+    const popHighlighted = store.map.pop.highlightedIds.length
+    const tpopHighlighted = store.map.tpop.highlightedIds.length
 
     return (
       <Container>
@@ -345,7 +349,9 @@ class Strukturbaum extends Component {
                 width={width}
                 scrollTop={scrolltop}
                 popVisible={popVisible}
+                popHighlighted={popHighlighted}
                 tpopVisible={tpopVisible}
+                tpopHighlighted={tpopHighlighted}
                 ref={(c) => { this.tree = c }}
                 {...store.projektNodes}
               />
