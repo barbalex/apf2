@@ -11,7 +11,7 @@ import TpopPopup from '../components/Projekte/Karte/TpopPopup'
 export default (store) => {
   const { tpops, labelUsingNr, highlightedIds, visible } = store.map.tpop
   const mcgOptions = {
-    maxClusterRadius: 60,
+    maxClusterRadius: 66,
     iconCreateFunction: function (cluster) {
       const markers = cluster.getAllChildMarkers()
       const hasHighlightedTpop = some(markers, (m) => m.options.icon.options.className === `tpopIconHighlighted`)

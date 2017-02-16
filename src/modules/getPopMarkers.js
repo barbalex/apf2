@@ -11,7 +11,7 @@ import PopPopup from '../components/Projekte/Karte/PopPopup'
 export default (store) => {
   const { pops, labelUsingNr, highlightedIds, visible } = store.map.pop
   const mcgOptions = {
-    maxClusterRadius: 60,
+    maxClusterRadius: 66,
     iconCreateFunction: function (cluster) {
       const markers = cluster.getAllChildMarkers()
       const hasHighlightedPop = some(markers, (m) => m.options.icon.options.className === `popIconHighlighted`)
