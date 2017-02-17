@@ -322,10 +322,16 @@ class Strukturbaum extends Component {
     const nodes = store.projektNodes
     const nrOfRows = getNrOfNodeRows(nodes)
     const rowHeight = nrOfRows * singleRowHeight
-    const treeHeightAboveActiveNode = store.node.nrOfRowsAboveActiveNode * singleRowHeight
+    console.log(`Strukturbaum: nodes.length:`, nodes.length)
+    console.log(`Strukturbaum: nrOfRows:`, nrOfRows)
+    console.log(`Strukturbaum: rowHeight:`, rowHeight)
+    const nrOfRowsAboveActiveNode = countRowsAboveActiveNode(store)
+    const treeHeightAboveActiveNode = nrOfRowsAboveActiveNode * singleRowHeight
+    console.log(`Strukturbaum: nrOfRowsAboveActiveNode:`, nrOfRowsAboveActiveNode)
+    console.log(`Strukturbaum: treeHeightAboveActiveNode:`, treeHeightAboveActiveNode)
     const roomAboveClick = store.ui.lastClickY - store.ui.treeTopPosition
     // correcting by 10px seems to keep the tree from jumping
-    const scrolltop = (treeHeightAboveActiveNode - roomAboveClick) + 10
+    // const scrolltop = (treeHeightAboveActiveNode - roomAboveClick) + 10
     const popVisible = store.map.pop.visible
     const tpopVisible = store.map.tpop.visible
     // pass length of highlightedIds to List
@@ -333,8 +339,7 @@ class Strukturbaum extends Component {
     const popHighlighted = store.map.pop.highlightedIds.length
     const tpopHighlighted = store.map.tpop.highlightedIds.length
 
-    const nrOfRowsAboveActiveNode = countRowsAboveActiveNode(store)
-    console.log(`Strukturbaum: nrOfRowsAboveActiveNode:`, nrOfRowsAboveActiveNode)
+    // console.log(`Strukturbaum: nrOfRowsAboveActiveNode:`, nrOfRowsAboveActiveNode)
 
     return (
       <Container>
@@ -351,7 +356,7 @@ class Strukturbaum extends Component {
                 rowRenderer={this.rowRenderer}
                 noRowsRenderer={this.noRowsRenderer}
                 width={width}
-                scrollTop={scrolltop}
+                scrollTop={treeHeightAboveActiveNode}
                 popVisible={popVisible}
                 popHighlighted={popHighlighted}
                 tpopVisible={tpopVisible}

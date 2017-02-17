@@ -1,53 +1,27 @@
 // @flow
-/**
- * idea:
- * use nodeIdPath
- * 1 level: find index of element with nodeId
- * add expanded children of previous elements
- * next level: find index of element with nodeId
- * add expanded children of previous elements
- * ...
- */
-
-import { findIndex } from 'lodash'
-import Joi from 'joi-browser'
 import isEqual from 'lodash/isEqual'
 
 let globalCounter
 let depth
 
-const findActiveNodeInNodes = (store, nodes, depthPassed) => {
+const findActiveNodeInNodes = (store, nodes, depth) => {
   if (!nodes) return
   const { url } = store
-  const urlForThisDepth = url.slice(depthPassed)
-  let activeNodesIndex
+  const urlForThisDepth = url.slice(0, depth)
+  let activeNodeIndex
   const activeNode = nodes.find((node, index) => {
     if (isEqual(node.url, urlForThisDepth)) {
-      activeNodesIndex = index
+      activeNodeIndex = index
       return true
     }
     return false
   })
 
   if (activeNode) {
-    globalCounter += activeNodesIndex + 1
-    // remove first element IF
-    // children are not folders
-    // (because these would have same id)
-    // or there are no children
-    if (!activeNode.children) {
-      nodeIdPath.shift()
-    }
-    const childrenAreNotFolders = (
-      activeNode.children &&
-      activeNode.children[0].nodeType !== `folder`
-    )
-    if (childrenAreNotFolders) {
-      nodeIdPath.shift()
-    }
-    if (nodeIdPath.length > 0) {
+    globalCounter += activeNodeIndex + 1
+    if (url.length > depth) {
       if (activeNode.children && activeNode.children.length > 0 && activeNode.expanded) {
-        findActiveNodeInNodes(store, activeNode.children, nodeIdPath)
+        findActiveNodeInNodes(store, activeNode.children, depth + 1)
       } else {
         store.listError(new Error(`nodeIdPath not yet empty but no more children`))  // eslint-disable-line no-console
       }
@@ -63,10 +37,12 @@ export default (store:Object) => {
   if (!nodes) return 0
   if (!nodes.length) return 0
   globalCounter = 0
-  depth = 1
+  // first url is `Projekte`, 1...
+  depth = 2
 
   findActiveNodeInNodes(store, nodes, depth)
   // seems like this is always one too much
-  if (globalCounter > 1) return globalCounter - 1
-  return 0
+  // if (globalCounter > 1) return globalCounter - 1
+  return globalCounter
+  // return 0
 }
