@@ -18,9 +18,7 @@ import compose from 'recompose/compose'
 import { Scrollbars } from 'react-custom-scrollbars'
 import FontIcon from 'material-ui/FontIcon'
 
-import getNrOfNodeRows from '../../../modules/getNrOfNodeRows'
 import isNodeInActiveNodePath from '../../../modules/isNodeInActiveNodePath'
-import countRowsAboveActiveNode from '../../../modules/countRowsAboveActiveNode'
 
 const singleRowHeight = 23
 const Container = styled.div`
@@ -123,6 +121,8 @@ class Strukturbaum extends Component {
 
   static propTypes = {
     store: PropTypes.object.isRequired,
+    nrOfRows: PropTypes.number.isRequired,
+    rowNrOfActiveNode: PropTypes.number.isRequired,
   }
 
   constructor() {
@@ -314,20 +314,17 @@ class Strukturbaum extends Component {
   }
 
   render() {  // eslint-disable-line class-methods-use-this
-    const { store } = this.props
+    const { store, nrOfNodeRows, rowNrOfActiveNode } = this.props
 
     // calculate scrolltop
     // without this if a folder low in the tree is opened,
     // it always gets scrolled down out of sight
     const nodes = store.projektNodes
-    const nrOfRows = getNrOfNodeRows(nodes)
-    const rowHeight = nrOfRows * singleRowHeight
-    console.log(`Strukturbaum: nodes.length:`, nodes.length)
-    console.log(`Strukturbaum: nrOfRows:`, nrOfRows)
+    const rowHeight = nrOfNodeRows * singleRowHeight
+    const treeHeightAboveActiveNode = rowNrOfActiveNode * singleRowHeight
+    console.log(`Strukturbaum: nrOfNodeRows:`, nrOfNodeRows)
     console.log(`Strukturbaum: rowHeight:`, rowHeight)
-    const nrOfRowsAboveActiveNode = countRowsAboveActiveNode(store)
-    const treeHeightAboveActiveNode = nrOfRowsAboveActiveNode * singleRowHeight
-    console.log(`Strukturbaum: nrOfRowsAboveActiveNode:`, nrOfRowsAboveActiveNode)
+    console.log(`Strukturbaum: rowNrOfActiveNode:`, rowNrOfActiveNode)
     console.log(`Strukturbaum: treeHeightAboveActiveNode:`, treeHeightAboveActiveNode)
     const roomAboveClick = store.ui.lastClickY - store.ui.treeTopPosition
     // correcting by 10px seems to keep the tree from jumping
@@ -339,7 +336,7 @@ class Strukturbaum extends Component {
     const popHighlighted = store.map.pop.highlightedIds.length
     const tpopHighlighted = store.map.tpop.highlightedIds.length
 
-    // console.log(`Strukturbaum: nrOfRowsAboveActiveNode:`, nrOfRowsAboveActiveNode)
+    // console.log(`Strukturbaum: rowNrOfActiveNode:`, rowNrOfActiveNode)
 
     return (
       <Container>

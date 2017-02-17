@@ -23,7 +23,8 @@ const findActiveNodeInNodes = (store, nodes, depth) => {
       if (activeNode.children && activeNode.children.length > 0 && activeNode.expanded) {
         findActiveNodeInNodes(store, activeNode.children, depth + 1)
       } else {
-        store.listError(new Error(`nodeIdPath not yet empty but no more children`))  // eslint-disable-line no-console
+        // store.listError(new Error(`nodeIdPath not yet empty but no more children`))
+        console.log(`found no children`)
       }
     }
   } else {
@@ -37,12 +38,8 @@ export default (store:Object) => {
   if (!nodes) return 0
   if (!nodes.length) return 0
   globalCounter = 0
-  // first url is `Projekte`, 1...
+  // first url is [`Projekte`, 1]
   depth = 2
-
   findActiveNodeInNodes(store, nodes, depth)
-  // seems like this is always one too much
-  // if (globalCounter > 1) return globalCounter - 1
   return globalCounter
-  // return 0
 }

@@ -49,12 +49,16 @@ import logout from '../modules/logout'
 import setLoginFromIdb from '../modules/setLoginFromIdb'
 import localizeTpop from '../modules/localizeTpop'
 import fetchStammdatenTables from '../modules/fetchStammdatenTables'
+import getNrOfNodeRows from '../modules/getNrOfNodeRows'
+import getRowNrOfActiveNode from '../modules/getRowNrOfActiveNode'
 
 import TableStore from './table'
 import ObservableHistory from './ObservableHistory'
 
 function Store() {
   this.history = ObservableHistory
+  this.nrOfRows = 0
+  this.rowNrOfActiveNode = 0
   this.loading = []
   extendObservable(this, {
     loading: [],
@@ -64,6 +68,7 @@ function Store() {
     apFilter: false,
     loadingAllNodes: false,
     nodeLabelFilter: observable.map({}),
+    nrOfRows: 0,
     nrOfRowsAboveActiveNode: 0,
   })
   this.ui = {}
@@ -297,6 +302,12 @@ function Store() {
     ),
     projektNodes: computed(() =>
       buildProjektNodes(this)
+    ),
+    nrOfNodeRows: computed(() =>
+      getNrOfNodeRows(this.projektNodes)
+    ),
+    rowNrOfActiveNode: computed(() =>
+      getRowNrOfActiveNode(this)
     ),
     activeDataset: computed(() =>
       updateActiveDatasetFromUrl(this)
