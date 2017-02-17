@@ -121,7 +121,7 @@ class Strukturbaum extends Component {
 
   static propTypes = {
     store: PropTypes.object.isRequired,
-    nrOfRows: PropTypes.number.isRequired,
+    nrOfNodeRows: PropTypes.number.isRequired,
     rowNrOfActiveNode: PropTypes.number.isRequired,
   }
 
@@ -360,6 +360,7 @@ class Strukturbaum extends Component {
                 tpopHighlighted={tpopHighlighted}
                 ref={(c) => { this.tree = c }}
                 {...store.projektNodes}
+                {...treeHeightAboveActiveNode}
               />
             </StyledScrollbars>
           )}
