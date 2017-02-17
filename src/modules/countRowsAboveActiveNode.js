@@ -11,30 +11,43 @@
 
 import { findIndex } from 'lodash'
 import Joi from 'joi-browser'
+import isEqual from 'lodash/isEqual'
 
 let globalCounter
+let depth
 
-const addExpandedChildren = (node) => {
-  if (node && node.children && node.children.length && node.expanded) {
-    globalCounter += node.children.length
-    node.children.forEach(child => addExpandedChildren(child))
-  }
-}
-
-const findActiveNodeInNodes = (store, nodes, nodeIdPathPassed) => {
+const findActiveNodeInNodes = (store, nodes, depthPassed) => {
   if (!nodes) return
-  const nodeIdPath = nodeIdPathPassed.slice(0)
-  const nodeId = nodeIdPath.shift()
-  const activeNodesIndex = findIndex(nodes, n => n.id === nodeId)
-  const activeNode = nodes[activeNodesIndex]
-  if (activeNodesIndex > -1) {
+  const { url } = store
+  const urlForThisDepth = url.slice(depthPassed)
+  let activeNodesIndex
+  const activeNode = nodes.find((node, index) => {
+    if (isEqual(node.url, urlForThisDepth)) {
+      activeNodesIndex = index
+      return true
+    }
+    return false
+  })
+
+  if (activeNode) {
     globalCounter += activeNodesIndex + 1
-    for (let i = 0; i < activeNodesIndex; i += 1) {
-      addExpandedChildren(nodes[i])
+    // remove first element IF
+    // children are not folders
+    // (because these would have same id)
+    // or there are no children
+    if (!activeNode.children) {
+      nodeIdPath.shift()
+    }
+    const childrenAreNotFolders = (
+      activeNode.children &&
+      activeNode.children[0].nodeType !== `folder`
+    )
+    if (childrenAreNotFolders) {
+      nodeIdPath.shift()
     }
     if (nodeIdPath.length > 0) {
       if (activeNode.children && activeNode.children.length > 0 && activeNode.expanded) {
-        findActiveNodeInNodes(activeNode.children, nodeIdPath)
+        findActiveNodeInNodes(store, activeNode.children, nodeIdPath)
       } else {
         store.listError(new Error(`nodeIdPath not yet empty but no more children`))  // eslint-disable-line no-console
       }
@@ -50,22 +63,9 @@ export default (store:Object) => {
   if (!nodes) return 0
   if (!nodes.length) return 0
   globalCounter = 0
-  // get nodeIdPath from url, filtering only numbers and guids
-  const nodeIdPath = store.url.filter(el =>
-    Joi.validate(
-      el,
-      Joi.alternatives()
-        .try(
-          Joi.number()
-            .integer()
-            .min(-2147483648)
-            .max(+2147483647),
-            Joi.string()
-              .guid()
-        )
-    )
-  )
-  findActiveNodeInNodes(store, nodes, nodeIdPath)
+  depth = 1
+
+  findActiveNodeInNodes(store, nodes, depth)
   // seems like this is always one too much
   if (globalCounter > 1) return globalCounter - 1
   return 0
