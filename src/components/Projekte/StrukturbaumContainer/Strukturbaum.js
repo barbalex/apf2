@@ -125,17 +125,7 @@ class Strukturbaum extends Component {
     rowNrOfActiveNode: PropTypes.number.isRequired,
   }
 
-  constructor() {
-    super()
-    // $FlowIssue
-    this.rowRenderer = this.rowRenderer.bind(this)
-    // $FlowIssue
-    this.renderNode = this.renderNode.bind(this)
-    // $FlowIssue
-    this.noRowsRenderer = this.noRowsRenderer.bind(this)
-  }
-
-  rowRenderer({ key, index }) {
+  rowRenderer = ({ key, index }) => {
     const { store } = this.props
     return (
       <div key={key}>
@@ -144,7 +134,7 @@ class Strukturbaum extends Component {
     )
   }
 
-  noRowsRenderer() {
+  noRowsRenderer = () => {
     const { store } = this.props
     const message = (
       store.table.projektLoading ?
@@ -160,7 +150,7 @@ class Strukturbaum extends Component {
     )
   }
 
-  renderNode(node, index) {
+  renderNode = (node, index) => {
     const { store } = this.props
     const onClick = (event) => {
       event.stopPropagation()
