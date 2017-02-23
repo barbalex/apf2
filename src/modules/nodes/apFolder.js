@@ -7,8 +7,7 @@ export default (store) => {
   if (!projId) return []
   const projIndex = findIndex(store.table.filteredAndSorted.projekt, { ProjId: projId })
   // build label
-  //const apNodesLength = store.node.node.ap.length
-  const apNodesLength = 0
+  const apNodesLength = store.node.node.ap.length
   let message = apNodesLength
   if (store.table.apLoading) {
     message = `...`

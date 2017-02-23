@@ -6,7 +6,7 @@
 
 export default (store) => {
   const { activeUrlElements } = store
-  const { projekt, apFolder, apberuebersichtFolder, exporteFolder, apberuebersicht } = store.node.node
+  const { projekt, apFolder, apberuebersichtFolder, exporteFolder, apberuebersicht, ap } = store.node.node
   let nodes = projekt
   if (activeUrlElements.projekt) {
     nodes = nodes.concat(apFolder)
@@ -19,6 +19,9 @@ export default (store) => {
   }
   if (activeUrlElements.apberuebersichtFolder) {
     nodes = nodes.concat(apberuebersicht)
+  }
+  if (activeUrlElements.apFolder) {
+    nodes = nodes.concat(ap)
   }
   return nodes.sort((a, b) => (
     a.sort[0] - b.sort[0] ||
