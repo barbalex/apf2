@@ -205,20 +205,20 @@ function Store() {
         // ApStatus between 3 and 5
         ap = ap.filter(a => [1, 2, 3].includes(a.ApStatus))
       }
-      // filter by node.nodeLabelFilter
-      const filterString = this.node.nodeLabelFilter.get(`ap`)
-      if (filterString) {
-        ap = ap.filter(p =>
-          p.label.toLowerCase().includes(filterString.toLowerCase())
-        )
-      }
       // sort
-      // need to add artnameVollständig to sort
+      // need to add artnameVollständig to sort and filter by nodeLabelFilter
       if (adb_eigenschaften.size > 0) {
         ap.forEach(x => {
           const ae = adb_eigenschaften.get(x.ApArtId)
           return x.label = ae ? ae.Artname : `(keine Art gewählt)`
         })
+        // filter by node.nodeLabelFilter
+        const filterString = this.node.nodeLabelFilter.get(`ap`)
+        if (filterString) {
+          ap = ap.filter(p =>
+            p.label.toLowerCase().includes(filterString.toLowerCase())
+          )
+        }
         ap = sortBy(ap, `label`)
       }
       return ap
