@@ -17,6 +17,8 @@ import styled from 'styled-components'
 import compose from 'recompose/compose'
 import { Scrollbars } from 'react-custom-scrollbars'
 import FontIcon from 'material-ui/FontIcon'
+import findIndex from 'lodash/findIndex'
+import isEqual from 'lodash/isEqual'
 
 import isNodeInActiveNodePath from '../../../modules/isNodeInActiveNodePath'
 
@@ -124,32 +126,6 @@ class Strukturbaum extends Component {
       store.ui.lastClickY = event.pageY
       store.toggleNode(node)
     }
-
-    return (
-      <div key={key} style={style} onClick={onClick}>
-        {this.renderNode(node, index)}
-      </div>
-    )
-  }
-
-  noRowsRenderer = () => {
-    const { store } = this.props
-    const message = (
-      store.table.projektLoading ?
-      `lade Daten...` :
-      `keine Daten`
-    )
-    return (
-      <Container>
-        <LoadingDiv>
-          {message}
-        </LoadingDiv>
-      </Container>
-    )
-  }
-
-  renderNode = (node, index) => {
-    const { store } = this.props
     const myProps = { key: index }
     const nodeHasChildren = node.childrenLength > 0
     const symbolTypes = {
@@ -204,71 +180,89 @@ class Strukturbaum extends Component {
     )
 
     return (
-      <ContextMenuTrigger
-        id={node.menuType}
-        collect={props => myProps}
-        nodeId={node.id}
-        nodeLabel={node.label}
-        key={`${index}-child`}
-      >
-        <StyledNode
-          level={node.level}
-          nodeIsInActiveNodePath={nodeIsInActiveNodePath}
-          data-id={node.id}
-          data-parentId={node.parentId}
-          data-url={JSON.stringify(node.url)}
-          data-nodeType={node.nodeType}
-          data-label={node.label}
-          data-menuType={node.menuType}
+      <div key={key} style={style} onClick={onClick}>
+        <ContextMenuTrigger
+          id={node.menuType}
+          collect={props => myProps}
+          nodeId={node.id}
+          nodeLabel={node.label}
+          key={`${index}-child`}
         >
-          <SymbolSpan>
-            {symbol}
-          </SymbolSpan>
-          {
-            showPopMapIcon &&
-            <PopMapIcon
-              id="map"
-              className="material-icons"
-              title="in Karte sichtbar"
-            >
-              local_florist
-            </PopMapIcon>
-          }
-          {
-            showTpopMapIcon &&
-            <TpopMapIcon
-              id="map"
-              className="material-icons"
-              title="in Karte sichtbar"
-            >
-              local_florist
-            </TpopMapIcon>
-          }
-          {
-            showPopFilteredMapIcon &&
-            <PopFilteredMapIcon
-              id="map"
-              className="material-icons"
-              title="in Karte hervorgehoben"
-            >
-              local_florist
-            </PopFilteredMapIcon>
-          }
-          {
-            showTpopFilteredMapIcon &&
-            <TpopFilteredMapIcon
-              id="map"
-              className="material-icons"
-              title="in Karte hervorgehoben"
-            >
-              local_florist
-            </TpopFilteredMapIcon>
-          }
-          <TextSpan>
-            {node.label}
-          </TextSpan>
-        </StyledNode>
-      </ContextMenuTrigger>
+          <StyledNode
+            level={node.level}
+            nodeIsInActiveNodePath={nodeIsInActiveNodePath}
+            data-id={node.id}
+            data-parentId={node.parentId}
+            data-url={JSON.stringify(node.url)}
+            data-nodeType={node.nodeType}
+            data-label={node.label}
+            data-menuType={node.menuType}
+          >
+            <SymbolSpan>
+              {symbol}
+            </SymbolSpan>
+            {
+              showPopMapIcon &&
+              <PopMapIcon
+                id="map"
+                className="material-icons"
+                title="in Karte sichtbar"
+              >
+                local_florist
+              </PopMapIcon>
+            }
+            {
+              showTpopMapIcon &&
+              <TpopMapIcon
+                id="map"
+                className="material-icons"
+                title="in Karte sichtbar"
+              >
+                local_florist
+              </TpopMapIcon>
+            }
+            {
+              showPopFilteredMapIcon &&
+              <PopFilteredMapIcon
+                id="map"
+                className="material-icons"
+                title="in Karte hervorgehoben"
+              >
+                local_florist
+              </PopFilteredMapIcon>
+            }
+            {
+              showTpopFilteredMapIcon &&
+              <TpopFilteredMapIcon
+                id="map"
+                className="material-icons"
+                title="in Karte hervorgehoben"
+              >
+                local_florist
+              </TpopFilteredMapIcon>
+            }
+            <TextSpan>
+              {node.label}
+            </TextSpan>
+          </StyledNode>
+        </ContextMenuTrigger>
+      </div>
+    )
+  }
+
+  noRowsRenderer = () => {
+    const { store } = this.props
+    const message = (
+      store.table.projektLoading ?
+      `lade Daten...` :
+      `keine Daten`
+    )
+    return (
+      <Container>
+        <LoadingDiv>
+          {message}
+        </LoadingDiv>
+      </Container>
     )
   }
 
@@ -279,6 +273,11 @@ class Strukturbaum extends Component {
     // without this if a folder low in the tree is opened,
     // it always gets scrolled down out of sight
     const nodes = store.node.node.nodes
+    const activeNodeIndex = findIndex(nodes, node =>
+      isEqual(node.url, store.url)
+    )
+    console.log(`activeNodeIndex:`, activeNodeIndex)
+
     const popVisible = store.map.pop.visible
     const tpopVisible = store.map.tpop.visible
     // pass length of highlightedIds to List
@@ -300,6 +299,7 @@ class Strukturbaum extends Component {
                 rowHeight={singleRowHeight}
                 rowRenderer={this.rowRenderer}
                 noRowsRenderer={this.noRowsRenderer}
+                scrollToIndex={activeNodeIndex}
                 width={width}
                 popVisible={popVisible}
                 popHighlighted={popHighlighted}
