@@ -1,14 +1,19 @@
-import apberuebersichtNodes from './apberuebersicht'
+import findIndex from 'lodash/findIndex'
 
-export default (store, projId) => {
+export default (store) => {
   const { activeUrlElements } = store
-  const myApberuebersichtnodes = apberuebersichtNodes(store, projId)
-  let message = myApberuebersichtnodes.length
+  // fetch sorting indexes of parents
+  const projId = activeUrlElements.projekt
+  if (!projId) return []
+  const projIndex = findIndex(store.table.filteredAndSorted.projekt, { ProjId: projId })
+  // build label
+  const apberuebersichtNodesLength = store.node.node.apberuebersicht.length
+  let message = apberuebersichtNodesLength
   if (store.table.apberuebersichtLoading) {
     message = `...`
   }
   if (store.node.nodeLabelFilter.get(`apberuebersicht`)) {
-    message = `${myApberuebersichtnodes.length} gefiltert`
+    message = `${apberuebersichtNodesLength} gefiltert`
   }
 
   return {
@@ -17,6 +22,8 @@ export default (store, projId) => {
     label: `AP-Berichte (${message})`,
     expanded: activeUrlElements.apberuebersichtFolder,
     url: [`Projekte`, projId, `AP-Berichte`],
-    children: myApberuebersichtnodes,
+    level: 2,
+    sort: [projIndex, 2],
+    childrenLength: apberuebersichtNodesLength,
   }
 }
