@@ -96,6 +96,13 @@ class StrukturbaumContainer extends Component { // eslint-disable-line react/pre
     store: PropTypes.object.isRequired,
   }
 
+  componentDidMount() {
+    const { store } = this.props
+    store.ui.treeHeight = this.tree.clientHeight
+    const treeRect = this.tree.getBoundingClientRect()
+    store.ui.treeTopPosition = treeRect.top
+  }
+
   showMapIfNotYetVisible = () => {
     const { store } = this.props
     const projekteTabs = store.urlQuery.projekteTabs ? clone(store.urlQuery.projekteTabs) : []

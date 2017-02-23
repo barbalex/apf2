@@ -120,8 +120,10 @@ class Strukturbaum extends Component {
   rowRenderer = ({ key, index, style }) => {
     const { store } = this.props
     const node = store.node.node.nodes[index]
-    const onClick = (event) =>
+    const onClick = (event) => {
+      store.ui.lastClickY = event.pageY
       store.toggleNode(node)
+    }
 
     return (
       <div key={key} style={style} onClick={onClick}>
