@@ -15,7 +15,6 @@ import { AutoSizer, List } from 'react-virtualized'
 import { ContextMenuTrigger } from 'react-contextmenu'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
-import { Scrollbars } from 'react-custom-scrollbars'
 import FontIcon from 'material-ui/FontIcon'
 import findIndex from 'lodash/findIndex'
 import isEqual from 'lodash/isEqual'
@@ -30,6 +29,12 @@ const Container = styled.div`
     margin: 0;
     list-style: none;
     padding: 0 0 0 1.1em;
+  }
+  /* need this because react-virtualized scrolls to far down, see
+   * https://github.com/bvaughn/react-virtualized/issues/543
+   */
+  .ReactVirtualized__Grid {
+    overflow-x: hidden !important;
   }
 `
 const ListContainer = styled(List)`
@@ -98,15 +103,6 @@ const StyledTextInActiveNodePathSpan = styled(StyledTextSpan)`
 const LoadingDiv = styled.div`
   padding-left: 15px;
   font-size: 14px;
-`
-const StyledScrollbars = styled(Scrollbars)`
-  div:first-child {
-    /* without this a hideous white line appears on the right */
-    margin-right: -25px !important;
-  }
-  .ReactVirtualized__Grid {
-    overflow: visible !important;
-  }
 `
 const enhance = compose(
   inject(`store`),
@@ -276,7 +272,6 @@ class Strukturbaum extends Component {
     const activeNodeIndex = findIndex(nodes, node =>
       isEqual(node.url, store.url)
     )
-    console.log(`activeNodeIndex:`, activeNodeIndex)
 
     const popVisible = store.map.pop.visible
     const tpopVisible = store.map.tpop.visible
@@ -288,28 +283,23 @@ class Strukturbaum extends Component {
     return (
       <Container>
         <AutoSizer>
-          {({ height, width }) => (
-            <StyledScrollbars
-              style={{ width, height }}
-              autoHide
-            >
-              <ListContainer
-                height={height}
-                rowCount={nodes.length}
-                rowHeight={singleRowHeight}
-                rowRenderer={this.rowRenderer}
-                noRowsRenderer={this.noRowsRenderer}
-                scrollToIndex={activeNodeIndex}
-                width={width}
-                popVisible={popVisible}
-                popHighlighted={popHighlighted}
-                tpopVisible={tpopVisible}
-                tpopHighlighted={tpopHighlighted}
-                ref={(c) => { this.tree = c }}
-                {...store.node.node.nodes}
-              />
-            </StyledScrollbars>
-          )}
+          {({ height, width }) =>
+            <ListContainer
+              height={height}
+              rowCount={nodes.length}
+              rowHeight={singleRowHeight}
+              rowRenderer={this.rowRenderer}
+              noRowsRenderer={this.noRowsRenderer}
+              scrollToIndex={activeNodeIndex}
+              width={width}
+              popVisible={popVisible}
+              popHighlighted={popHighlighted}
+              tpopVisible={tpopVisible}
+              tpopHighlighted={tpopHighlighted}
+              ref={(c) => { this.tree = c }}
+              {...store.node.node.nodes}
+            />
+          }
         </AutoSizer>
       </Container>
     )
