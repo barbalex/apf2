@@ -8,7 +8,8 @@ import {
   observable,
 } from 'mobx'
 import $ from 'jquery'
-import treeFlatten from 'tree-flatten'
+import sortBy from 'lodash/sortBy'
+import flatten from 'tree-flatten'
 
 import fetchTable from '../modules/fetchTable'
 import fetchBeobzuordnungModule from '../modules/fetchBeobzuordnung'
@@ -50,27 +51,36 @@ import logout from '../modules/logout'
 import setLoginFromIdb from '../modules/setLoginFromIdb'
 import localizeTpop from '../modules/localizeTpop'
 import fetchStammdatenTables from '../modules/fetchStammdatenTables'
-import getNrOfNodeRows from '../modules/getNrOfNodeRows'
-import getRowNrOfActiveNode from '../modules/getRowNrOfActiveNode'
+import projektNodes from '../modules/nodes/projekt'
+import apFolderNodes from '../modules/nodes/apFolder'
+import apberuebersichtFolderNodes from '../modules/nodes/apberuebersichtFolder'
+import apberuebersichtNodes from '../modules/nodes/apberuebersicht'
+import exporteFolderNodes from '../modules/nodes/exporteFolder'
+import allNodes from '../modules/nodes/allNodes'
 
 import TableStore from './table'
 import ObservableHistory from './ObservableHistory'
 
 function Store() {
   this.history = ObservableHistory
-  this.nrOfRows = 0
-  this.rowNrOfActiveNode = 0
   this.loading = []
   extendObservable(this, {
     loading: [],
   })
-  this.node = {}
+  this.node = {
+    node: {}
+  }
   extendObservable(this.node, {
     apFilter: false,
-    loadingAllNodes: false,
     nodeLabelFilter: observable.map({}),
-    nrOfRows: 0,
-    nrOfRowsAboveActiveNode: 0,
+  })
+  extendObservable(this.node.node, {
+    projekt: computed(() => projektNodes(this)),
+    apFolder: computed(() => apFolderNodes(this)),
+    apberuebersichtFolder: computed(() => apberuebersichtFolderNodes(this)),
+    exporteFolder: computed(() => exporteFolderNodes(this)),
+    apberuebersicht: computed(() => apberuebersichtNodes(this)),
+    nodes: computed(() => allNodes(this)),
   })
   this.ui = {}
   extendObservable(this.ui, {
@@ -145,6 +155,43 @@ function Store() {
     idOfTpopBeingLocalized: 0,
   })
   this.table = TableStore
+  extendObservable(this.table.filteredAndSorted, {
+    projekt: computed(() => {
+      // grab projekte as array and sort them by name
+      let projekte = Array.from(this.table.projekt.values())
+      // filter by node.nodeLabelFilter
+      const filterString = this.node.nodeLabelFilter.get(`projekt`)
+      if (filterString) {
+        projekte = projekte.filter(p =>
+          p.ProjName
+            .toLowerCase()
+            .includes(filterString.toLowerCase())
+        )
+      }
+      // sort
+      projekte = sortBy(projekte, `ProjName`)
+      return projekte
+    }),
+    apberuebersicht: computed(() => {
+      const { activeUrlElements } = this
+      // grab apberuebersicht as array and sort them by year
+      let apberuebersicht = Array.from(this.table.apberuebersicht.values())
+      // show only nodes of active projekt
+      apberuebersicht = apberuebersicht.filter(a => a.ProjId === activeUrlElements.projekt)
+      // filter by node.nodeLabelFilter
+      const filterString = this.node.nodeLabelFilter.get(`apberuebersicht`)
+      if (filterString) {
+        apberuebersicht = apberuebersicht.filter(p =>
+          p.JbuJahr
+            .toString()
+            .includes(filterString)
+        )
+      }
+      // sort
+      apberuebersicht = sortBy(apberuebersicht, `JbuJahr`)
+      return apberuebersicht
+    })
+  })
   this.valuesForWhichTableDataWasFetched = {}
   this.qk = observable.map()
   extendObservable(this, {
@@ -304,15 +351,16 @@ function Store() {
     projektNodes: computed(() =>
       buildProjektNodes(this)
     ),
-    nodesFlattened: computed(() =>
-      treeFlatten(this.projektNodes)
-    ),
-    nrOfNodeRows: computed(() =>
-      getNrOfNodeRows(this.projektNodes)
-    ),
-    rowNrOfActiveNode: computed(() =>
-      getRowNrOfActiveNode(this)
-    ),
+    nodesFlattened: computed(() => {
+      let nodes = []
+      this.projektNodes.forEach(n => {
+        // console.log(`node:`, n)
+        const nodeFlattended = flatten(n, `children`)
+        // console.log(`nodeFlattended:`, nodeFlattended)
+        nodes = nodes.concat(nodeFlattended)
+      })
+      return nodes
+    }),
     activeDataset: computed(() =>
       updateActiveDatasetFromUrl(this)
     ),
