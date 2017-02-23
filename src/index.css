@@ -223,10 +223,12 @@ body.fontLoaded {
 }
 
 /* scrollbars */
-
-
 ::-webkit-scrollbar {
   width: 12px;
+}
+
+::-webkit-scrollbar:horizontal {
+  height: 12px;
 }
 
 ::-webkit-scrollbar-track {
