@@ -7,6 +7,7 @@ import {
   computed,
   observable,
 } from 'mobx'
+import $ from 'jquery'
 import sortBy from 'lodash/sortBy'
 import flatten from 'tree-flatten'
 
@@ -82,6 +83,14 @@ function Store() {
     apberuebersicht: computed(() => apberuebersichtNodes(this)),
     ap: computed(() => apNodes(this)),
     nodes: computed(() => allNodes(this)),
+  })
+  this.ui = {}
+  extendObservable(this.ui, {
+    windowWidth: $(window).width(),
+    windowHeight: $(window).height(),
+    treeHeight: 0,
+    lastClickY: 0,
+    treeTopPosition: 0,
   })
   this.app = {}
   extendObservable(this.app, {
