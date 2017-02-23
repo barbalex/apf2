@@ -120,11 +120,8 @@ class Strukturbaum extends Component {
   rowRenderer = ({ key, index, style }) => {
     const { store } = this.props
     const node = store.node.node.nodes[index]
-    const onClick = (event) => {
-      // event.stopPropagation()
-      store.ui.lastClickY = event.pageY
+    const onClick = (event) =>
       store.toggleNode(node)
-    }
 
     return (
       <div key={key} style={style} onClick={onClick}>
@@ -151,7 +148,7 @@ class Strukturbaum extends Component {
 
   renderNode = (node, index) => {
     const { store } = this.props
-    const props = { key: index }
+    const myProps = { key: index }
     const nodeHasChildren = node.childrenLength > 0
     const symbolTypes = {
       open: `${String.fromCharCode(709)}`,
@@ -207,7 +204,7 @@ class Strukturbaum extends Component {
     return (
       <ContextMenuTrigger
         id={node.menuType}
-        collect={props => props}
+        collect={props => myProps}
         nodeId={node.id}
         nodeLabel={node.label}
         key={`${index}-child`}
@@ -280,10 +277,6 @@ class Strukturbaum extends Component {
     // without this if a folder low in the tree is opened,
     // it always gets scrolled down out of sight
     const nodes = store.node.node.nodes
-    const rowHeight = singleRowHeight
-    // const roomAboveClick = store.ui.lastClickY - store.ui.treeTopPosition
-    // correcting by 10px seems to keep the tree from jumping
-    // const scrolltop = (treeHeightAboveActiveNode - roomAboveClick) + 10
     const popVisible = store.map.pop.visible
     const tpopVisible = store.map.tpop.visible
     // pass length of highlightedIds to List
@@ -302,7 +295,7 @@ class Strukturbaum extends Component {
               <ListContainer
                 height={height}
                 rowCount={nodes.length}
-                rowHeight={rowHeight}
+                rowHeight={singleRowHeight}
                 rowRenderer={this.rowRenderer}
                 noRowsRenderer={this.noRowsRenderer}
                 width={width}
