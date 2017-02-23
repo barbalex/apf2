@@ -2,7 +2,13 @@
 // http://stackoverflow.com/questions/13211709/javascript-sort-array-by-multiple-number-fields
 // also: needed to account for elements not having the next array elements
 // to be sorted befor those that have
-// that is why there is || 0
+// that is why there is if (a !== 0 && !a)
+
+const compare = (a, b) => {
+  if (a !== 0 && !a) return -1
+  if (b !== 0 && !b) return 1
+  return a - b
+}
 
 export default (store) => {
   const { activeUrlElements } = store
@@ -24,14 +30,16 @@ export default (store) => {
     nodes = nodes.concat(ap)
   }
   return nodes.sort((a, b) => (
-    a.sort[0] - b.sort[0] ||
-    (a.sort[1] || 0) - b.sort[1] ||
-    (a.sort[2] || 0) - b.sort[2] ||
-    (a.sort[3] || 0) - b.sort[3] ||
-    (a.sort[4] || 0) - b.sort[4] ||
-    (a.sort[5] || 0) - b.sort[5] ||
-    (a.sort[6] || 0) - b.sort[6] ||
-    (a.sort[7] || 0) - b.sort[7] ||
-    (a.sort[8] || 0) - b.sort[8]
+    compare(a.sort[0], b.sort[0]) ||
+    compare(a.sort[1], b.sort[1]) ||
+    compare(a.sort[2], b.sort[2]) ||
+    compare(a.sort[3], b.sort[3]) ||
+    compare(a.sort[4], b.sort[4]) ||
+    compare(a.sort[5], b.sort[5]) ||
+    compare(a.sort[6], b.sort[6]) ||
+    compare(a.sort[7], b.sort[7]) ||
+    compare(a.sort[8], b.sort[8]) ||
+    compare(a.sort[9], b.sort[9]) ||
+    compare(a.sort[10], b.sort[10])
   ))
 }
