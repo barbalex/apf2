@@ -242,10 +242,7 @@ class StrukturbaumContainer extends Component { // eslint-disable-line react/pre
           }}
           ref={(c) => { this.tree = c }}
         >
-          <Strukturbaum
-            nrOfNodeRows={store.nrOfNodeRows}
-            rowNrOfActiveNode={store.rowNrOfActiveNode}
-          />
+          <Strukturbaum />
         </div>
         <CmApFolder onClick={this.handleClick} />
         <CmAp onClick={this.handleClick} />
