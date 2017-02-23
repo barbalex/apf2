@@ -11,10 +11,8 @@ export default (store) => {
   let nodes = table.filteredAndSorted.ap.map((el, index) => {
     let label = `...`
     const { adb_eigenschaften } = store.table
-    if (adb_eigenschaften.size > 0) {
-      const ae = adb_eigenschaften.get(el.ApArtId)
-      label = ae ? ae.Artname : `(keine Art gewählt)`
-    }
+    const ae = adb_eigenschaften.get(el.ApArtId)
+    label = ae ? ae.Artname : `(keine Art gewählt)`
     const sort = [projIndex, 1, index]
     return {
       nodeType: `table`,
