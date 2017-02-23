@@ -8,6 +8,7 @@ import {
   observable,
 } from 'mobx'
 import $ from 'jquery'
+import treeFlatten from 'tree-flatten'
 
 import fetchTable from '../modules/fetchTable'
 import fetchBeobzuordnungModule from '../modules/fetchBeobzuordnung'
@@ -302,6 +303,9 @@ function Store() {
     ),
     projektNodes: computed(() =>
       buildProjektNodes(this)
+    ),
+    nodesFlattened: computed(() =>
+      treeFlatten(this.projektNodes)
     ),
     nrOfNodeRows: computed(() =>
       getNrOfNodeRows(this.projektNodes)
