@@ -9,7 +9,6 @@ import {
 } from 'mobx'
 import $ from 'jquery'
 import sortBy from 'lodash/sortBy'
-import flatten from 'tree-flatten'
 
 import fetchTable from '../modules/fetchTable'
 import fetchBeobzuordnungModule from '../modules/fetchBeobzuordnung'
@@ -61,6 +60,7 @@ import allNodes from '../modules/nodes/allNodes'
 import qkFolderNode from '../modules/nodes/qkFolder'
 import assozartFolderNode from '../modules/nodes/assozartFolder'
 import assozartNode from '../modules/nodes/assozart'
+import idealbiotopFolderNode from '../modules/nodes/idealbiotopFolder'
 
 import TableStore from './table'
 import ObservableHistory from './ObservableHistory'
@@ -89,6 +89,7 @@ function Store() {
     qkFolder: computed(() => qkFolderNode(this)),
     assozartFolder: computed(() => assozartFolderNode(this)),
     assozart: computed(() => assozartNode(this)),
+    idealbiotopFolder: computed(() => idealbiotopFolderNode(this)),
   })
   this.ui = {}
   extendObservable(this.ui, {
@@ -254,6 +255,14 @@ function Store() {
       }
       return assozart
     }),
+    idealbiotop: computed(() => {
+      const { activeUrlElements } = this
+      // grab assozart as array and sort them by year
+      let idealbiotop = Array.from(this.table.idealbiotop.values())
+      // show only nodes of active ap
+      idealbiotop = idealbiotop.filter(a => a.IbApArtId === activeUrlElements.ap)
+      return idealbiotop
+    }),
   })
   this.valuesForWhichTableDataWasFetched = {}
   this.qk = observable.map()
@@ -414,16 +423,6 @@ function Store() {
     projektNodes: computed(() =>
       buildProjektNodes(this)
     ),
-    nodesFlattened: computed(() => {
-      let nodes = []
-      this.projektNodes.forEach(n => {
-        // console.log(`node:`, n)
-        const nodeFlattended = flatten(n, `children`)
-        // console.log(`nodeFlattended:`, nodeFlattended)
-        nodes = nodes.concat(nodeFlattended)
-      })
-      return nodes
-    }),
     activeDataset: computed(() =>
       updateActiveDatasetFromUrl(this)
     ),

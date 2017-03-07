@@ -53,8 +53,7 @@
     "react-tap-event-plugin": "2.0.1",
     "react-virtualized": "9.2.1",
     "recompose": "0.22.0",
-    "styled-components": "1.4.4",
-    "tree-flatten": "1.0.0"
+    "styled-components": "1.4.4"
   },
   "scripts": {
     "start": "react-scripts start",

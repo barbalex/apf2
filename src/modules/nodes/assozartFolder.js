@@ -10,6 +10,7 @@ export default (store) => {
   const apArtId = activeUrlElements.ap
   if (!apArtId) return []
   const apIndex = findIndex(store.table.filteredAndSorted.ap, { ApArtId: apArtId })
+
   const assozartNodesLength = table.filteredAndSorted.assozart.length
   let message = assozartNodesLength
   if (store.table.assozartLoading) {
