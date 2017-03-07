@@ -62,6 +62,7 @@ import assozartFolderNode from '../modules/nodes/assozartFolder'
 import assozartNode from '../modules/nodes/assozart'
 import idealbiotopFolderNode from '../modules/nodes/idealbiotopFolder'
 import beobNichtZuzuordnenFolderNode from '../modules/nodes/beobNichtZuzuordnenFolder'
+import beobNichtZuzuordnenNode from '../modules/nodes/beobNichtZuzuordnen'
 
 import TableStore from './table'
 import ObservableHistory from './ObservableHistory'
@@ -92,6 +93,7 @@ function Store() {
     assozart: computed(() => assozartNode(this)),
     idealbiotopFolder: computed(() => idealbiotopFolderNode(this)),
     beobNichtZuzuordnenFolder: computed(() => beobNichtZuzuordnenFolderNode(this)),
+    beobNichtZuzuordnen: computed(() => beobNichtZuzuordnenNode(this)),
   })
   this.ui = {}
   extendObservable(this.ui, {
