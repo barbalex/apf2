@@ -1,15 +1,26 @@
-import apberNodes from './apber'
+import findIndex from 'lodash/findIndex'
 
-export default (store, projId, apArtId) => {
-  const { activeUrlElements } = store
-  const myApberNodes = apberNodes(store, apArtId)
-  let message = myApberNodes.length
-  if (store.table.apberLoading) {
+export default (store) => {
+  const { activeUrlElements, table, node } = store
+
+  // fetch sorting indexes of parents
+  const projId = activeUrlElements.projekt
+  if (!projId) return []
+  const projIndex = findIndex(store.table.filteredAndSorted.projekt, { ProjId: projId })
+  const apArtId = activeUrlElements.ap
+  if (!apArtId) return []
+  const apIndex = findIndex(store.table.filteredAndSorted.ap, { ApArtId: apArtId })
+
+  const apberNodesLength = table.filteredAndSorted.apber.length
+
+  let message = apberNodesLength
+  if (table.apberLoading) {
     message = `...`
   }
-  if (store.node.nodeLabelFilter.get(`apber`)) {
-    message = `${myApberNodes.length} gefiltert`
+  if (node.nodeLabelFilter.get(`apber`)) {
+    message = `${apberNodesLength} gefiltert`
   }
+  const sort = [projIndex, 1, apIndex, 4]
 
   return {
     nodeType: `folder`,
@@ -18,6 +29,8 @@ export default (store, projId, apArtId) => {
     label: `AP-Berichte (${message})`,
     expanded: activeUrlElements.apberFolder,
     url: [`Projekte`, projId, `Arten`, apArtId, `AP-Berichte`],
-    children: myApberNodes,
+    level: 4,
+    sort,
+    childrenLength: apberNodesLength,
   }
 }
