@@ -1,13 +1,17 @@
+import findIndex from 'lodash/findIndex'
 import sortBy from 'lodash/sortBy'
 
-export default (store, apArtId) => {
-  const { activeUrlElements } = store
-  // grab assozart as array and sort them by year
-  let assozart = Array.from(store.table.assozart.values())
-  // show only nodes of active ap
-  assozart = assozart.filter(a => a.AaApArtId === apArtId)
-  // map through all projekt and create array of nodes
-  let nodes = assozart.map((el) => {
+export default (store) => {
+  const { activeUrlElements, table } = store
+  // fetch sorting indexes of parents
+  const projId = activeUrlElements.projekt
+  if (!projId) return []
+  const projIndex = findIndex(store.table.filteredAndSorted.projekt, { ProjId: projId })
+  const apArtId = activeUrlElements.ap
+  if (!apArtId) return []
+  const apIndex = findIndex(store.table.filteredAndSorted.ap, { ApArtId: apArtId })
+
+  let nodes = table.filteredAndSorted.assozart.map((el, index) => {
     let label = `...`
     const { adb_eigenschaften } = store.table
     if (adb_eigenschaften.size > 0) {
@@ -18,14 +22,16 @@ export default (store, apArtId) => {
       }
     }
     const projId = store.table.ap.get(el.AaApArtId).ProjId
+    const sort = [projIndex, 1, apIndex, 9, index]
+
     return {
       nodeType: `table`,
       menuType: `assozart`,
       id: el.AaId,
-      parentId: el.AaApArtId,
+      parentId: apArtId,
       label,
       expanded: el.AaId === activeUrlElements.assozart,
-      url: [`Projekte`, projId, `Arten`, el.AaApArtId, `assoziierte-Arten`, el.AaId],
+      url: [`Projekte`, projId, `Arten`, apArtId, `assoziierte-Arten`, el.AaId],
     }
   })
   // filter by node.nodeLabelFilter
