@@ -1,15 +1,26 @@
-import beobNichtZuzuordnenNodes from './beobNichtZuzuordnen'
+import findIndex from 'lodash/findIndex'
 
-export default (store, projId, apArtId) => {
-  const { activeUrlElements } = store
-  const myBeobNichtZuzuordnenNodes = beobNichtZuzuordnenNodes(store, apArtId)
-  let message = myBeobNichtZuzuordnenNodes.length
+export default (store) => {
+  const { activeUrlElements, table } = store
+
+  // fetch sorting indexes of parents
+  const projId = activeUrlElements.projekt
+  if (!projId) return []
+  const projIndex = findIndex(store.table.filteredAndSorted.projekt, { ProjId: projId })
+  const apArtId = activeUrlElements.ap
+  if (!apArtId) return []
+  const apIndex = findIndex(store.table.filteredAndSorted.ap, { ApArtId: apArtId })
+
+  const beobNichtZuzuordnenNodesLength = table.filteredAndSorted.beobNichtZuzuordnen.length
+
+  let message = beobNichtZuzuordnenNodesLength
   if (store.loading.includes(`beobzuordnung`)) {
     message = `...`
   }
   if (store.node.nodeLabelFilter.get(`beobNichtZuzuordnen`)) {
-    message = `${myBeobNichtZuzuordnenNodes.length} gefiltert`
+    message = `${beobNichtZuzuordnenNodesLength} gefiltert`
   }
+  const sort = [projIndex, 1, apIndex, 7]
 
   return {
     nodeType: `folder`,
@@ -18,6 +29,8 @@ export default (store, projId, apArtId) => {
     label: `nicht zuzuordnende Beobachtungen (${message})`,
     expanded: activeUrlElements.beobNichtZuzuordnenFolder,
     url: [`Projekte`, projId, `Arten`, apArtId, `nicht-zuzuordnende-Beobachtungen`],
-    children: myBeobNichtZuzuordnenNodes,
+    level: 4,
+    sort,
+    childrenLength: beobNichtZuzuordnenNodesLength,
   }
 }
