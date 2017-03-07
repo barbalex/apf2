@@ -12,7 +12,6 @@ export default (store) => {
 
   // map through all projekt and create array of nodes
   return table.filteredAndSorted.ber.map((el, index) => {
-    const projId = store.table.ap.get(el.ApArtId).ProjId
     const sort = [projIndex, 1, apIndex, 5, index]
 
     return {

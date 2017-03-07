@@ -70,6 +70,7 @@ import berNode from '../modules/nodes/ber'
 import apberFolderNode from '../modules/nodes/apberFolder'
 import apberNode from '../modules/nodes/apber'
 import erfkritFolderNode from '../modules/nodes/erfkritFolder'
+import erfkritNode from '../modules/nodes/erfkrit'
 
 import TableStore from './table'
 import ObservableHistory from './ObservableHistory'
@@ -108,6 +109,7 @@ function Store() {
     apberFolder: computed(() => apberFolderNode(this)),
     apber: computed(() => apberNode(this)),
     erfkritFolder: computed(() => erfkritFolderNode(this)),
+    erfkrit: computed(() => erfkritNode(this)),
   })
   this.ui = {}
   extendObservable(this.ui, {
