@@ -1,7 +1,7 @@
 // for sorting see:
 // http://stackoverflow.com/questions/13211709/javascript-sort-array-by-multiple-number-fields
 // also: needed to account for elements not having the next array elements
-// to be sorted befor those that have
+// to be sorted before those that have
 // that is why there is if (a !== 0 && !a)
 
 const compare = (a, b) => {
@@ -12,7 +12,15 @@ const compare = (a, b) => {
 
 export default (store) => {
   const { activeUrlElements } = store
-  const { projekt, apFolder, apberuebersichtFolder, exporteFolder, apberuebersicht, ap } = store.node.node
+  const {
+    projekt,
+    apFolder,
+    apberuebersichtFolder,
+    exporteFolder,
+    apberuebersicht,
+    ap,
+    qkFolder,
+  } = store.node.node
   let nodes = projekt
   if (activeUrlElements.projekt) {
     nodes = nodes.concat(apFolder)
@@ -28,6 +36,9 @@ export default (store) => {
   }
   if (activeUrlElements.apFolder) {
     nodes = nodes.concat(ap)
+  }
+  if (activeUrlElements.ap) {
+    nodes = nodes.concat(qkFolder)
   }
   return nodes.sort((a, b) => (
     compare(a.sort[0], b.sort[0]) ||

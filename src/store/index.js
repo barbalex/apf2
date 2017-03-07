@@ -58,6 +58,7 @@ import apberuebersichtNodes from '../modules/nodes/apberuebersicht'
 import exporteFolderNodes from '../modules/nodes/exporteFolder'
 import apNodes from '../modules/nodes/ap'
 import allNodes from '../modules/nodes/allNodes'
+import qkFolderNode from '../modules/nodes/qkFolder'
 
 import TableStore from './table'
 import ObservableHistory from './ObservableHistory'
@@ -83,6 +84,7 @@ function Store() {
     apberuebersicht: computed(() => apberuebersichtNodes(this)),
     ap: computed(() => apNodes(this)),
     nodes: computed(() => allNodes(this)),
+    qkFolder: computed(() => qkFolderNode(this)),
   })
   this.ui = {}
   extendObservable(this.ui, {
