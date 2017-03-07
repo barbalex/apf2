@@ -60,6 +60,7 @@ import apNodes from '../modules/nodes/ap'
 import allNodes from '../modules/nodes/allNodes'
 import qkFolderNode from '../modules/nodes/qkFolder'
 import assozartFolderNode from '../modules/nodes/assozartFolder'
+import assozartNode from '../modules/nodes/assozart'
 
 import TableStore from './table'
 import ObservableHistory from './ObservableHistory'
@@ -87,6 +88,7 @@ function Store() {
     nodes: computed(() => allNodes(this)),
     qkFolder: computed(() => qkFolderNode(this)),
     assozartFolder: computed(() => assozartFolderNode(this)),
+    assozart: computed(() => assozartNode(this)),
   })
   this.ui = {}
   extendObservable(this.ui, {
@@ -238,7 +240,7 @@ function Store() {
       // need to add artnameVollständig to sort and filter by nodeLabelFilter
       if (adb_eigenschaften.size > 0) {
         assozart.forEach(x => {
-          const ae = adb_eigenschaften.get(x.ApArtId)
+          const ae = adb_eigenschaften.get(x.AaSisfNr)
           return x.label = ae ? ae.Artname : `(keine Art gewählt)`
         })
         // filter by node.nodeLabelFilter

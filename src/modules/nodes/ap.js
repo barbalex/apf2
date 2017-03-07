@@ -9,17 +9,13 @@ export default (store) => {
 
   // map through all ap and create array of nodes
   let nodes = table.filteredAndSorted.ap.map((el, index) => {
-    let label = `...`
-    const { adb_eigenschaften } = store.table
-    const ae = adb_eigenschaften.get(el.ApArtId)
-    label = ae ? ae.Artname : `(keine Art gewählt)`
     const sort = [projIndex, 1, index]
     return {
       nodeType: `table`,
       menuType: `ap`,
       id: el.ApArtId,
       parentId: el.ProjId,
-      label,
+      label: el.label,
       expanded: el.ApArtId === activeUrlElements.ap,
       url: [`Projekte`, el.ProjId, `Arten`, el.ApArtId],
       level: 3,
