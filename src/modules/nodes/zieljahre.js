@@ -1,16 +1,24 @@
+import findIndex from 'lodash/findIndex'
 import uniq from 'lodash/uniq'
 import sortBy from 'lodash/sortBy'
-import buildZielNodes from './ziel'
 
-export default (store, apArtId) => {
-  const { activeUrlElements } = store
+export default (store) => {
+  const { activeUrlElements, table } = store
+  // fetch sorting indexes of parents
+  const projId = activeUrlElements.projekt
+  if (!projId) return []
+  const projIndex = findIndex(table.filteredAndSorted.projekt, { ProjId: projId })
+  const apArtId = activeUrlElements.ap
+  if (!apArtId) return []
+  const apIndex = findIndex(table.filteredAndSorted.ap, { ApArtId: apArtId })
+
   // grab ziele as array
-  let ziele = Array.from(store.table.ziel.values())
+  let ziele = Array.from(table.ziel.values())
   // show only nodes of active ap
-  ziele = ziele.filter(a => a.ApArtId === apArtId)
+  ziele = ziele.filter(a => a.ApArtId === activeUrlElements.ap)
   // filter by node.nodeLabelFilter
-  const filterString = store.node.nodeLabelFilter.get(`ziel`)
-  const zieltypWerte = Array.from(store.table.ziel_typ_werte.values())
+  const filterString = node.nodeLabelFilter.get(`ziel`)
+  const zieltypWerte = Array.from(table.ziel_typ_werte.values())
   if (filterString) {
     ziele = ziele.filter((p) => {
       const zielWert = zieltypWerte.find(e => e.ZieltypId === p.ZielTyp)
@@ -19,25 +27,20 @@ export default (store, apArtId) => {
       return label.toLowerCase().includes(filterString.toLowerCase())
     })
   }
-  if (ziele.length > 0) {
-    const projId = store.table.ap.get(apArtId).ProjId
-    const zielJahre = uniq(ziele.map(z => z.ZielJahr))
-    // map through all and create array of nodes
-    const nodes = zielJahre.map((jahr) => {
-      const zielNodes = buildZielNodes(store, jahr)
-      return {
-        nodeType: `folder`,
-        menuType: `zieljahr`,
-        id: apArtId,
-        parentId: apArtId,
-        label: `${jahr == null ? `kein Jahr` : jahr} (${zielNodes.length})`,
-        expanded: jahr && jahr === activeUrlElements.zieljahr,
-        url: [`Projekte`, projId, `Arten`, apArtId, `AP-Ziele`, jahr],
-        children: zielNodes,
-      }
-    })
-    // sort by label and return
-    return sortBy(nodes, `label`)
-  }
-  return []
+
+  const nodes = table.filteredAndSorted.zieljahr.map((jahr, index) => {
+    const sort = [projIndex, 1, apIndex, 2, index]
+    // get nr of ziele for year
+
+
+    return {
+      nodeType: `folder`,
+      menuType: `zieljahr`,
+      id: apArtId,
+      parentId: apArtId,
+      label: `${jahr == null ? `kein Jahr` : jahr} (${zielNodes.length})`,
+      expanded: jahr && jahr === activeUrlElements.zieljahr,
+      url: [`Projekte`, projId, `Arten`, apArtId, `AP-Ziele`, jahr],
+    }
+  })
 }
