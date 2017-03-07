@@ -1,34 +1,31 @@
-import sortBy from 'lodash/sortBy'
+import findIndex from 'lodash/findIndex'
 
-export default (store, apArtId) => {
-  const { activeUrlElements } = store
-  // grab apber as array and sort them by year
-  let apber = Array.from(store.table.apber.values())
-  // show only nodes of active ap
-  apber = apber.filter(a => a.ApArtId === apArtId)
-  // filter by node.nodeLabelFilter
-  const filterString = store.node.nodeLabelFilter.get(`apber`)
-  if (filterString) {
-    apber = apber.filter((p) => {
-      if (p.JBerJahr !== undefined && p.JBerJahr !== null) {
-        return p.JBerJahr.toString().includes(filterString)
-      }
-      return false
-    })
-  }
-  // sort
-  apber = sortBy(apber, `JBerJahr`)
+export default (store) => {
+  const { activeUrlElements, table } = store
+  // fetch sorting indexes of parents
+  const projId = activeUrlElements.projekt
+  if (!projId) return []
+  const projIndex = findIndex(store.table.filteredAndSorted.projekt, { ProjId: projId })
+  const apArtId = activeUrlElements.ap
+  if (!apArtId) return []
+  const apIndex = findIndex(store.table.filteredAndSorted.ap, { ApArtId: apArtId })
+
   // map through all projekt and create array of nodes
-  return apber.map((el) => {
+  return table.filteredAndSorted.apber.map((el, index) => {
     const projId = store.table.ap.get(el.ApArtId).ProjId
+    const sort = [projIndex, 1, apIndex, 4, index]
+
     return {
       nodeType: `table`,
       menuType: `apber`,
       id: el.JBerId,
       parentId: el.ApArtId,
-      label: el.JBerJahr || `(kein Jahr)`,
+      label: el.label,
       expanded: el.JBerJahr === activeUrlElements.apber,
       url: [`Projekte`, projId, `Arten`, el.ApArtId, `AP-Berichte`, el.JBerId],
+      level: 5,
+      sort,
+      childrenLength: 0,
     }
   })
 }

@@ -68,6 +68,7 @@ import beobzuordnungNode from '../modules/nodes/beobzuordnung'
 import berFolderNode from '../modules/nodes/berFolder'
 import berNode from '../modules/nodes/ber'
 import apberFolderNode from '../modules/nodes/apberFolder'
+import apberNode from '../modules/nodes/apber'
 
 import TableStore from './table'
 import ObservableHistory from './ObservableHistory'
@@ -104,6 +105,7 @@ function Store() {
     berFolder: computed(() => berFolderNode(this)),
     ber: computed(() => berNode(this)),
     apberFolder: computed(() => apberFolderNode(this)),
+    apber: computed(() => apberNode(this)),
   })
   this.ui = {}
   extendObservable(this.ui, {
@@ -383,6 +385,10 @@ function Store() {
           return false
         })
       }
+      // add label
+      apber.forEach((el) => {
+        el.label = el.JBerJahr || `(kein Jahr)`
+      })
       // sort
       apber = sortBy(apber, `JBerJahr`)
       return apber

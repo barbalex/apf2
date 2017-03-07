@@ -30,6 +30,7 @@ export default (store) => {
     berFolder,
     ber,
     apberFolder,
+    apber,
   } = store.node.node
   let nodes = projekt
   if (activeUrlElements.projekt) {
@@ -79,6 +80,9 @@ export default (store) => {
   }
   if (activeUrlElements.ap) {
     nodes = nodes.concat(apberFolder)
+  }
+  if (activeUrlElements.apberFolder) {
+    nodes = nodes.concat(apber)
   }
   return nodes.sort((a, b) => (
     compare(a.sort[0], b.sort[0]) ||
