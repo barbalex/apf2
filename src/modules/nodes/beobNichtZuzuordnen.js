@@ -1,8 +1,8 @@
 import findIndex from 'lodash/findIndex'
-import sortBy from 'lodash/sortBy'
 
 export default (store) => {
   const { activeUrlElements, table } = store
+
   // fetch sorting indexes of parents
   const projId = activeUrlElements.projekt
   if (!projId) return []
@@ -12,7 +12,7 @@ export default (store) => {
   const apIndex = findIndex(store.table.filteredAndSorted.ap, { ApArtId: apArtId })
 
   // map through all and create array of nodes
-  let nodes = table.filteredAndSorted.beobNichtZuzuordnen.map((el, index) => {
+  const nodes = table.filteredAndSorted.beobNichtZuzuordnen.map((el, index) => {
     const beobId = isNaN(el.NO_NOTE) ? el.NO_NOTE : parseInt(el.NO_NOTE, 10)
     const sort = [projIndex, 1, apIndex, 7, index]
 
@@ -29,13 +29,5 @@ export default (store) => {
       childrenLength: 0,
     }
   })
-  // filter by node.nodeLabelFilter
-  const filterString = store.node.nodeLabelFilter.get(`beobNichtZuzuordnen`)
-  if (filterString) {
-    nodes = nodes.filter(p =>
-      p.label.toLowerCase().includes(filterString.toLowerCase())
-    )
-  }
-  // sort by label and return
-  return sortBy(nodes, `label`)
+  return nodes
 }

@@ -64,6 +64,7 @@ import idealbiotopFolderNode from '../modules/nodes/idealbiotopFolder'
 import beobNichtZuzuordnenFolderNode from '../modules/nodes/beobNichtZuzuordnenFolder'
 import beobNichtZuzuordnenNode from '../modules/nodes/beobNichtZuzuordnen'
 import beobzuordnungFolderNode from '../modules/nodes/beobzuordnungFolder'
+import beobzuordnungNode from '../modules/nodes/beobzuordnung'
 
 import TableStore from './table'
 import ObservableHistory from './ObservableHistory'
@@ -96,6 +97,7 @@ function Store() {
     beobNichtZuzuordnenFolder: computed(() => beobNichtZuzuordnenFolderNode(this)),
     beobNichtZuzuordnen: computed(() => beobNichtZuzuordnenNode(this)),
     beobzuordnungFolder: computed(() => beobzuordnungFolderNode(this)),
+    beobzuordnung: computed(() => beobzuordnungNode(this)),
   })
   this.ui = {}
   extendObservable(this.ui, {
@@ -306,7 +308,7 @@ function Store() {
         )
       }
       // sort by label
-      beobNichtZuzuordnen = sortBy(beobNichtZuzuordnen, `label`)
+      beobNichtZuzuordnen = sortBy(beobNichtZuzuordnen, `label`).reverse()
       return beobNichtZuzuordnen
     }),
     beobzuordnung: computed(() => {
