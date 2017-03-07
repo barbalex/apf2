@@ -74,6 +74,7 @@ import erfkritFolderNode from '../modules/nodes/erfkritFolder'
 import erfkritNode from '../modules/nodes/erfkrit'
 import zieljahreFolderNode from '../modules/nodes/zieljahreFolder'
 import zieljahreNode from '../modules/nodes/zieljahre'
+import zielNode from '../modules/nodes/ziel'
 
 import TableStore from './table'
 import ObservableHistory from './ObservableHistory'
@@ -115,6 +116,7 @@ function Store() {
     erfkrit: computed(() => erfkritNode(this)),
     zieljahreFolder: computed(() => zieljahreFolderNode(this)),
     zieljahre: computed(() => zieljahreNode(this)),
+    ziel: computed(() => zielNode(this)),
   })
   this.ui = {}
   extendObservable(this.ui, {

@@ -1,9 +1,8 @@
 import findIndex from 'lodash/findIndex'
 import sortBy from 'lodash/sortBy'
-import zielberFolderNode from './zielberFolder'
 
 export default (store, jahr) => {
-  const { activeUrlElements, table, node } = store
+  const { activeUrlElements, table } = store
   // fetch sorting indexes of parents
   const projId = activeUrlElements.projekt
   if (!projId) return []
@@ -15,7 +14,7 @@ export default (store, jahr) => {
   const zieljahrIndex = findIndex(table.filteredAndSorted.zieljahr, zieljahr)
 
   // map through all and create array of nodes
-  let nodes = table.filteredAndSorted.ziele.map((el, index) => {
+  let nodes = table.filteredAndSorted.ziel.map((el, index) => {
     const sort = [projIndex, 1, apIndex, 2, zieljahrIndex, index]
 
     return {
@@ -26,9 +25,9 @@ export default (store, jahr) => {
       label: el.label,
       expanded: el.ZielId === activeUrlElements.ziel,
       url: [`Projekte`, projId, `Arten`, el.ApArtId, `AP-Ziele`, el.ZielJahr, el.ZielId],
-      children: [
-        zielberFolderNode(store, projId, el.ApArtId, el.ZielJahr, el.ZielId),
-      ],
+      level: 6,
+      sort,
+      childrenLength: 1,
     }
   })
   // filter by node.nodeLabelFilter
