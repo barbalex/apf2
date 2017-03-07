@@ -73,6 +73,7 @@ import apberNode from '../modules/nodes/apber'
 import erfkritFolderNode from '../modules/nodes/erfkritFolder'
 import erfkritNode from '../modules/nodes/erfkrit'
 import zieljahreFolderNode from '../modules/nodes/zieljahreFolder'
+import zieljahreNode from '../modules/nodes/zieljahre'
 
 import TableStore from './table'
 import ObservableHistory from './ObservableHistory'
@@ -113,6 +114,7 @@ function Store() {
     erfkritFolder: computed(() => erfkritFolderNode(this)),
     erfkrit: computed(() => erfkritNode(this)),
     zieljahreFolder: computed(() => zieljahreFolderNode(this)),
+    zieljahre: computed(() => zieljahreNode(this)),
   })
   this.ui = {}
   extendObservable(this.ui, {
