@@ -65,6 +65,7 @@ import beobNichtZuzuordnenFolderNode from '../modules/nodes/beobNichtZuzuordnenF
 import beobNichtZuzuordnenNode from '../modules/nodes/beobNichtZuzuordnen'
 import beobzuordnungFolderNode from '../modules/nodes/beobzuordnungFolder'
 import beobzuordnungNode from '../modules/nodes/beobzuordnung'
+import berFolderNode from '../modules/nodes/berFolder'
 
 import TableStore from './table'
 import ObservableHistory from './ObservableHistory'
@@ -98,6 +99,7 @@ function Store() {
     beobNichtZuzuordnen: computed(() => beobNichtZuzuordnenNode(this)),
     beobzuordnungFolder: computed(() => beobzuordnungFolderNode(this)),
     beobzuordnung: computed(() => beobzuordnungNode(this)),
+    berFolder: computed(() => berFolderNode(this)),
   })
   this.ui = {}
   extendObservable(this.ui, {
@@ -339,6 +341,24 @@ function Store() {
       }
       // sort by label and return
       return sortBy(beobzuordnung, `label`).reverse()
+    }),
+    ber: computed(() => {
+      const { activeUrlElements, table, node } = this
+      // grab ber as array and sort them by year
+      let ber = Array.from(table.ber.values())
+      // show only nodes of active ap
+      ber = ber.filter(a => a.ApArtId === activeUrlElements.ap)
+      // filter by node.nodeLabelFilter
+      const filterString = node.nodeLabelFilter.get(`ber`)
+      if (filterString) {
+        ber = ber.filter((p) => {
+          const filterValue = `${p.BerJahr || `(kein Jahr)`}: ${p.BerTitel || `(kein Titel)`}`
+          return filterValue.includes(filterString)
+        })
+      }
+      // sort
+      ber = sortBy(ber, () => `${ber.BerJahr || `(kein Jahr)`}: ${ber.BerTitel || `(kein Titel)`}`)
+      return ber
     }),
   })
   this.valuesForWhichTableDataWasFetched = {}

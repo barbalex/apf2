@@ -27,6 +27,7 @@ export default (store) => {
     beobNichtZuzuordnen,
     beobzuordnungFolder,
     beobzuordnung,
+    berFolder,
   } = store.node.node
   let nodes = projekt
   if (activeUrlElements.projekt) {
@@ -67,6 +68,9 @@ export default (store) => {
   }
   if (activeUrlElements.beobzuordnungFolder) {
     nodes = nodes.concat(beobzuordnung)
+  }
+  if (activeUrlElements.ap) {
+    nodes = nodes.concat(berFolder)
   }
   return nodes.sort((a, b) => (
     compare(a.sort[0], b.sort[0]) ||
