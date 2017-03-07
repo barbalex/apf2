@@ -3,7 +3,7 @@ import uniq from 'lodash/uniq'
 import sortBy from 'lodash/sortBy'
 
 export default (store) => {
-  const { activeUrlElements, table } = store
+  const { activeUrlElements, table, node } = store
   // fetch sorting indexes of parents
   const projId = activeUrlElements.projekt
   if (!projId) return []
@@ -31,7 +31,7 @@ export default (store) => {
   const nodes = table.filteredAndSorted.zieljahr.map((jahr, index) => {
     const sort = [projIndex, 1, apIndex, 2, index]
     // get nr of ziele for year
-
+    const nrOfZieleThisYear = ziele.filter(z => z.ZielJahr === jahr).length
 
     return {
       nodeType: `folder`,
