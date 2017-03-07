@@ -25,6 +25,7 @@ export default (store) => {
     idealbiotopFolder,
     beobNichtZuzuordnenFolder,
     beobNichtZuzuordnen,
+    beobzuordnungFolder,
   } = store.node.node
   let nodes = projekt
   if (activeUrlElements.projekt) {
@@ -59,6 +60,9 @@ export default (store) => {
   }
   if (activeUrlElements.beobNichtZuzuordnenFolder) {
     nodes = nodes.concat(beobNichtZuzuordnen)
+  }
+  if (activeUrlElements.ap) {
+    nodes = nodes.concat(beobzuordnungFolder)
   }
   return nodes.sort((a, b) => (
     compare(a.sort[0], b.sort[0]) ||

@@ -63,6 +63,7 @@ import assozartNode from '../modules/nodes/assozart'
 import idealbiotopFolderNode from '../modules/nodes/idealbiotopFolder'
 import beobNichtZuzuordnenFolderNode from '../modules/nodes/beobNichtZuzuordnenFolder'
 import beobNichtZuzuordnenNode from '../modules/nodes/beobNichtZuzuordnen'
+import beobzuordnungFolderNode from '../modules/nodes/beobzuordnungFolder'
 
 import TableStore from './table'
 import ObservableHistory from './ObservableHistory'
@@ -94,6 +95,7 @@ function Store() {
     idealbiotopFolder: computed(() => idealbiotopFolderNode(this)),
     beobNichtZuzuordnenFolder: computed(() => beobNichtZuzuordnenFolderNode(this)),
     beobNichtZuzuordnen: computed(() => beobNichtZuzuordnenNode(this)),
+    beobzuordnungFolder: computed(() => beobzuordnungFolderNode(this)),
   })
   this.ui = {}
   extendObservable(this.ui, {
@@ -269,10 +271,10 @@ function Store() {
       return idealbiotop
     }),
     beobNichtZuzuordnen: computed(() => {
-      const { activeUrlElements } = this
+      const { activeUrlElements, table, node } = this
       // grab beobNichtZuzuordnen as array and sort them by year
       let beobNichtZuzuordnen = Array
-        .from(this.table.beobzuordnung.values())
+        .from(table.beobzuordnung.values())
         .filter(b => b.BeobNichtZuordnen === 1)
         // show only nodes of active ap
         .filter(a => (
@@ -292,12 +294,12 @@ function Store() {
             autor = el.beobBereitgestellt.Autor
           }
         }
-        const quelle = this.table.beob_quelle.get(el.QuelleId)
+        const quelle = table.beob_quelle.get(el.QuelleId)
         const quelleName = quelle && quelle.name ? quelle.name : ``
         el.label  = `${datum || `(kein Datum)`}: ${autor || `(kein Autor)`} (${quelleName})`
       })
       // filter by node.nodeLabelFilter
-      const filterString = this.node.nodeLabelFilter.get(`beobNichtZuzuordnen`)
+      const filterString = node.nodeLabelFilter.get(`beobNichtZuzuordnen`)
       if (filterString) {
         beobNichtZuzuordnen = beobNichtZuzuordnen.filter(p =>
           p.label.toLowerCase().includes(filterString.toLowerCase())
@@ -306,6 +308,35 @@ function Store() {
       // sort by label
       beobNichtZuzuordnen = sortBy(beobNichtZuzuordnen, `label`)
       return beobNichtZuzuordnen
+    }),
+    beobzuordnung: computed(() => {
+      const { activeUrlElements, table, node } = this
+      // grab beob_bereitgestellt as array and sort them by year
+      let beobzuordnung = Array.from(table.beob_bereitgestellt.values())
+      // show only nodes of active ap
+      beobzuordnung = beobzuordnung.filter(a =>
+        a.NO_ISFS === activeUrlElements.ap &&
+        (
+          (a.beobzuordnung &&
+          a.beobzuordnung.type &&
+          a.beobzuordnung.type === `nichtBeurteilt`) ||
+          !a.beobzuordnung
+        )
+      )
+      beobzuordnung.forEach((el) => {
+        const quelle = table.beob_quelle.get(el.QuelleId)
+        const quelleName = quelle && quelle.name ? quelle.name : ``
+        el.label = `${el.Datum || `(kein Datum)`}: ${el.Autor || `(kein Autor)`} (${quelleName})`
+      })
+      // filter by node.nodeLabelFilter
+      const filterString = node.nodeLabelFilter.get(`beobzuordnung`)
+      if (filterString) {
+        beobzuordnung = beobzuordnung.filter(p =>
+          p.label.toLowerCase().includes(filterString.toLowerCase())
+        )
+      }
+      // sort by label and return
+      return sortBy(beobzuordnung, `label`).reverse()
     }),
   })
   this.valuesForWhichTableDataWasFetched = {}
