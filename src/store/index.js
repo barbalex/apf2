@@ -59,6 +59,7 @@ import exporteFolderNodes from '../modules/nodes/exporteFolder'
 import apNodes from '../modules/nodes/ap'
 import allNodes from '../modules/nodes/allNodes'
 import qkFolderNode from '../modules/nodes/qkFolder'
+import assozartFolderNode from '../modules/nodes/assozartFolder'
 
 import TableStore from './table'
 import ObservableHistory from './ObservableHistory'
@@ -85,6 +86,7 @@ function Store() {
     ap: computed(() => apNodes(this)),
     nodes: computed(() => allNodes(this)),
     qkFolder: computed(() => qkFolderNode(this)),
+    assozartFolder: computed(() => assozartFolderNode(this)),
   })
   this.ui = {}
   extendObservable(this.ui, {
@@ -224,6 +226,31 @@ function Store() {
         ap = sortBy(ap, `label`)
       }
       return ap
+    }),
+    assozart: computed(() => {
+      const { activeUrlElements, table } = this
+      const { adb_eigenschaften } = table
+      // grab assozart as array and sort them by year
+      let assozart = Array.from(this.table.assozart.values())
+      // show only nodes of active ap
+      assozart = assozart.filter(a => a.AaApArtId === activeUrlElements.ap)
+      // sort
+      // need to add artnameVollständig to sort and filter by nodeLabelFilter
+      if (adb_eigenschaften.size > 0) {
+        assozart.forEach(x => {
+          const ae = adb_eigenschaften.get(x.ApArtId)
+          return x.label = ae ? ae.Artname : `(keine Art gewählt)`
+        })
+        // filter by node.nodeLabelFilter
+        const filterString = this.node.nodeLabelFilter.get(`assozart`)
+        if (filterString) {
+          assozart = assozart.filter(p =>
+            p.label.toLowerCase().includes(filterString.toLowerCase())
+          )
+        }
+        assozart = sortBy(assozart, `label`)
+      }
+      return assozart
     }),
   })
   this.valuesForWhichTableDataWasFetched = {}

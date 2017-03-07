@@ -2,7 +2,7 @@ import findIndex from 'lodash/findIndex'
 import reduce from 'lodash/reduce'
 
 export default (store) => {
-  const { activeUrlElements, table } = store
+  const { activeUrlElements } = store
   // fetch sorting indexes of parents
   const projId = activeUrlElements.projekt
   if (!projId) return []

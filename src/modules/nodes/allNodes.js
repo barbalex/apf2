@@ -20,6 +20,7 @@ export default (store) => {
     apberuebersicht,
     ap,
     qkFolder,
+    assozartFolder,
   } = store.node.node
   let nodes = projekt
   if (activeUrlElements.projekt) {
@@ -39,6 +40,9 @@ export default (store) => {
   }
   if (activeUrlElements.ap) {
     nodes = nodes.concat(qkFolder)
+  }
+  if (activeUrlElements.ap) {
+    nodes = nodes.concat(assozartFolder)
   }
   return nodes.sort((a, b) => (
     compare(a.sort[0], b.sort[0]) ||
