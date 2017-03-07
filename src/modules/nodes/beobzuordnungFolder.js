@@ -1,15 +1,26 @@
-import beobzuordnungNodes from './beobzuordnung'
+import findIndex from 'lodash/findIndex'
 
-export default (store, projId, apArtId) => {
-  const { activeUrlElements } = store
-  const myBeobzuordnungNodes = beobzuordnungNodes(store, apArtId)
-  let message = myBeobzuordnungNodes.length
+export default (store) => {
+  const { activeUrlElements, table } = store
+
+  // fetch sorting indexes of parents
+  const projId = activeUrlElements.projekt
+  if (!projId) return []
+  const projIndex = findIndex(store.table.filteredAndSorted.projekt, { ProjId: projId })
+  const apArtId = activeUrlElements.ap
+  if (!apArtId) return []
+  const apIndex = findIndex(store.table.filteredAndSorted.ap, { ApArtId: apArtId })
+
+  const beobzuordnungNodesLength = table.filteredAndSorted.beobzuordnung.length
+
+  let message = beobzuordnungNodesLength
   if (store.loading.includes(`beob_bereitgestellt`)) {
     message = `...`
   }
   if (store.node.nodeLabelFilter.get(`beobzuordnung`)) {
-    message = `${myBeobzuordnungNodes.length} gefiltert`
+    message = `${beobzuordnungNodesLength} gefiltert`
   }
+  const sort = [projIndex, 1, apIndex, 6]
 
   return {
     nodeType: `folder`,
@@ -18,6 +29,8 @@ export default (store, projId, apArtId) => {
     label: `nicht beurteilte Beobachtungen (${message})`,
     expanded: activeUrlElements.beobzuordnungFolder,
     url: [`Projekte`, projId, `Arten`, apArtId, `nicht-beurteilte-Beobachtungen`],
-    children: myBeobzuordnungNodes,
+    level: 4,
+    sort,
+    childrenLength: beobzuordnungNodesLength,
   }
 }

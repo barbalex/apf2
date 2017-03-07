@@ -8,7 +8,8 @@ import {
   observable,
 } from 'mobx'
 import $ from 'jquery'
-import treeFlatten from 'tree-flatten'
+import sortBy from 'lodash/sortBy'
+import uniq from 'lodash/uniq'
 
 import fetchTable from '../modules/fetchTable'
 import fetchBeobzuordnungModule from '../modules/fetchBeobzuordnung'
@@ -50,27 +51,72 @@ import logout from '../modules/logout'
 import setLoginFromIdb from '../modules/setLoginFromIdb'
 import localizeTpop from '../modules/localizeTpop'
 import fetchStammdatenTables from '../modules/fetchStammdatenTables'
-import getNrOfNodeRows from '../modules/getNrOfNodeRows'
-import getRowNrOfActiveNode from '../modules/getRowNrOfActiveNode'
+import projektNodes from '../modules/nodes/projekt'
+import apFolderNodes from '../modules/nodes/apFolder'
+import apberuebersichtFolderNodes from '../modules/nodes/apberuebersichtFolder'
+import apberuebersichtNodes from '../modules/nodes/apberuebersicht'
+import exporteFolderNodes from '../modules/nodes/exporteFolder'
+import apNodes from '../modules/nodes/ap'
+import allNodes from '../modules/nodes/allNodes'
+import qkFolderNode from '../modules/nodes/qkFolder'
+import assozartFolderNode from '../modules/nodes/assozartFolder'
+import assozartNode from '../modules/nodes/assozart'
+import idealbiotopFolderNode from '../modules/nodes/idealbiotopFolder'
+import beobNichtZuzuordnenFolderNode from '../modules/nodes/beobNichtZuzuordnenFolder'
+import beobNichtZuzuordnenNode from '../modules/nodes/beobNichtZuzuordnen'
+import beobzuordnungFolderNode from '../modules/nodes/beobzuordnungFolder'
+import beobzuordnungNode from '../modules/nodes/beobzuordnung'
+import berFolderNode from '../modules/nodes/berFolder'
+import berNode from '../modules/nodes/ber'
+import apberFolderNode from '../modules/nodes/apberFolder'
+import apberNode from '../modules/nodes/apber'
+import erfkritFolderNode from '../modules/nodes/erfkritFolder'
+import erfkritNode from '../modules/nodes/erfkrit'
+import zieljahreFolderNode from '../modules/nodes/zieljahreFolder'
+import zieljahreNode from '../modules/nodes/zieljahre'
+import zielNode from '../modules/nodes/ziel'
 
 import TableStore from './table'
 import ObservableHistory from './ObservableHistory'
 
 function Store() {
   this.history = ObservableHistory
-  this.nrOfRows = 0
-  this.rowNrOfActiveNode = 0
   this.loading = []
   extendObservable(this, {
     loading: [],
   })
-  this.node = {}
+  this.node = {
+    node: {}
+  }
   extendObservable(this.node, {
     apFilter: false,
-    loadingAllNodes: false,
     nodeLabelFilter: observable.map({}),
-    nrOfRows: 0,
-    nrOfRowsAboveActiveNode: 0,
+  })
+  extendObservable(this.node.node, {
+    projekt: computed(() => projektNodes(this)),
+    apFolder: computed(() => apFolderNodes(this)),
+    apberuebersichtFolder: computed(() => apberuebersichtFolderNodes(this)),
+    exporteFolder: computed(() => exporteFolderNodes(this)),
+    apberuebersicht: computed(() => apberuebersichtNodes(this)),
+    ap: computed(() => apNodes(this)),
+    nodes: computed(() => allNodes(this)),
+    qkFolder: computed(() => qkFolderNode(this)),
+    assozartFolder: computed(() => assozartFolderNode(this)),
+    assozart: computed(() => assozartNode(this)),
+    idealbiotopFolder: computed(() => idealbiotopFolderNode(this)),
+    beobNichtZuzuordnenFolder: computed(() => beobNichtZuzuordnenFolderNode(this)),
+    beobNichtZuzuordnen: computed(() => beobNichtZuzuordnenNode(this)),
+    beobzuordnungFolder: computed(() => beobzuordnungFolderNode(this)),
+    beobzuordnung: computed(() => beobzuordnungNode(this)),
+    berFolder: computed(() => berFolderNode(this)),
+    ber: computed(() => berNode(this)),
+    apberFolder: computed(() => apberFolderNode(this)),
+    apber: computed(() => apberNode(this)),
+    erfkritFolder: computed(() => erfkritFolderNode(this)),
+    erfkrit: computed(() => erfkritNode(this)),
+    zieljahreFolder: computed(() => zieljahreFolderNode(this)),
+    zieljahre: computed(() => zieljahreNode(this)),
+    ziel: computed(() => zielNode(this)),
   })
   this.ui = {}
   extendObservable(this.ui, {
@@ -145,6 +191,301 @@ function Store() {
     idOfTpopBeingLocalized: 0,
   })
   this.table = TableStore
+  extendObservable(this.table.filteredAndSorted, {
+    projekt: computed(() => {
+      // grab projekte as array and sort them by name
+      let projekte = Array.from(this.table.projekt.values())
+      // filter by node.nodeLabelFilter
+      const filterString = this.node.nodeLabelFilter.get(`projekt`)
+      if (filterString) {
+        projekte = projekte.filter(p =>
+          p.ProjName
+            .toLowerCase()
+            .includes(filterString.toLowerCase())
+        )
+      }
+      // sort
+      projekte = sortBy(projekte, `ProjName`)
+      return projekte
+    }),
+    apberuebersicht: computed(() => {
+      const { activeUrlElements } = this
+      // grab apberuebersicht as array and sort them by year
+      let apberuebersicht = Array.from(this.table.apberuebersicht.values())
+      // show only nodes of active projekt
+      apberuebersicht = apberuebersicht.filter(a => a.ProjId === activeUrlElements.projekt)
+      // filter by node.nodeLabelFilter
+      const filterString = this.node.nodeLabelFilter.get(`apberuebersicht`)
+      if (filterString) {
+        apberuebersicht = apberuebersicht.filter(p =>
+          p.JbuJahr
+            .toString()
+            .includes(filterString)
+        )
+      }
+      // sort
+      apberuebersicht = sortBy(apberuebersicht, `JbuJahr`)
+      return apberuebersicht
+    }),
+    ap: computed(() => {
+      const { activeUrlElements, table } = this
+      const { adb_eigenschaften } = table
+      // grab ap as array and sort them by name
+      let ap = Array.from(this.table.ap.values())
+      // show only ap of active projekt
+      ap = ap.filter(a => a.ProjId === activeUrlElements.projekt)
+      // filter by node.apFilter
+      if (this.node.apFilter) {
+        // ApStatus between 3 and 5
+        ap = ap.filter(a => [1, 2, 3].includes(a.ApStatus))
+      }
+      // sort
+      // need to add artnameVollständig to sort and filter by nodeLabelFilter
+      if (adb_eigenschaften.size > 0) {
+        ap.forEach(x => {
+          const ae = adb_eigenschaften.get(x.ApArtId)
+          return x.label = ae ? ae.Artname : `(keine Art gewählt)`
+        })
+        // filter by node.nodeLabelFilter
+        const filterString = this.node.nodeLabelFilter.get(`ap`)
+        if (filterString) {
+          ap = ap.filter(p =>
+            p.label.toLowerCase().includes(filterString.toLowerCase())
+          )
+        }
+        ap = sortBy(ap, `label`)
+      }
+      return ap
+    }),
+    assozart: computed(() => {
+      const { activeUrlElements, table } = this
+      const { adb_eigenschaften } = table
+      // grab assozart as array and sort them by year
+      let assozart = Array.from(this.table.assozart.values())
+      // show only nodes of active ap
+      assozart = assozart.filter(a => a.AaApArtId === activeUrlElements.ap)
+      // sort
+      // need to add artnameVollständig to sort and filter by nodeLabelFilter
+      if (adb_eigenschaften.size > 0) {
+        assozart.forEach(x => {
+          const ae = adb_eigenschaften.get(x.AaSisfNr)
+          return x.label = ae ? ae.Artname : `(keine Art gewählt)`
+        })
+        // filter by node.nodeLabelFilter
+        const filterString = this.node.nodeLabelFilter.get(`assozart`)
+        if (filterString) {
+          assozart = assozart.filter(p =>
+            p.label.toLowerCase().includes(filterString.toLowerCase())
+          )
+        }
+        // sort by label
+        assozart = sortBy(assozart, `label`)
+      }
+      return assozart
+    }),
+    idealbiotop: computed(() => {
+      const { activeUrlElements } = this
+      // grab assozart as array and sort them by year
+      let idealbiotop = Array.from(this.table.idealbiotop.values())
+      // show only nodes of active ap
+      idealbiotop = idealbiotop.filter(a => a.IbApArtId === activeUrlElements.ap)
+      return idealbiotop
+    }),
+    beobNichtZuzuordnen: computed(() => {
+      const { activeUrlElements, table, node } = this
+      // grab beobNichtZuzuordnen as array and sort them by year
+      let beobNichtZuzuordnen = Array
+        .from(table.beobzuordnung.values())
+        .filter(b => b.BeobNichtZuordnen === 1)
+        // show only nodes of active ap
+        .filter(a => (
+          a.beobBereitgestellt &&
+          a.beobBereitgestellt.NO_ISFS &&
+          a.beobBereitgestellt.NO_ISFS === activeUrlElements.ap
+        ))
+      // add label
+      beobNichtZuzuordnen.forEach((el) => {
+        let datum = ``
+        let autor = ``
+        if (el.beobBereitgestellt) {
+          if (el.beobBereitgestellt.Datum) {
+            datum = el.beobBereitgestellt.Datum
+          }
+          if (el.beobBereitgestellt.Autor) {
+            autor = el.beobBereitgestellt.Autor
+          }
+        }
+        const quelle = table.beob_quelle.get(el.QuelleId)
+        const quelleName = quelle && quelle.name ? quelle.name : ``
+        el.label  = `${datum || `(kein Datum)`}: ${autor || `(kein Autor)`} (${quelleName})`
+      })
+      // filter by node.nodeLabelFilter
+      const filterString = node.nodeLabelFilter.get(`beobNichtZuzuordnen`)
+      if (filterString) {
+        beobNichtZuzuordnen = beobNichtZuzuordnen.filter(p =>
+          p.label.toLowerCase().includes(filterString.toLowerCase())
+        )
+      }
+      // sort by label
+      beobNichtZuzuordnen = sortBy(beobNichtZuzuordnen, `label`).reverse()
+      return beobNichtZuzuordnen
+    }),
+    beobzuordnung: computed(() => {
+      const { activeUrlElements, table, node } = this
+      // grab beob_bereitgestellt as array and sort them by year
+      let beobzuordnung = Array.from(table.beob_bereitgestellt.values())
+      // show only nodes of active ap
+      beobzuordnung = beobzuordnung.filter(a =>
+        a.NO_ISFS === activeUrlElements.ap &&
+        (
+          (a.beobzuordnung &&
+          a.beobzuordnung.type &&
+          a.beobzuordnung.type === `nichtBeurteilt`) ||
+          !a.beobzuordnung
+        )
+      )
+      beobzuordnung.forEach((el) => {
+        const quelle = table.beob_quelle.get(el.QuelleId)
+        const quelleName = quelle && quelle.name ? quelle.name : ``
+        el.label = `${el.Datum || `(kein Datum)`}: ${el.Autor || `(kein Autor)`} (${quelleName})`
+      })
+      // filter by node.nodeLabelFilter
+      const filterString = node.nodeLabelFilter.get(`beobzuordnung`)
+      if (filterString) {
+        beobzuordnung = beobzuordnung.filter(p =>
+          p.label.toLowerCase().includes(filterString.toLowerCase())
+        )
+      }
+      // sort by label and return
+      return sortBy(beobzuordnung, `label`).reverse()
+    }),
+    ber: computed(() => {
+      const { activeUrlElements, table, node } = this
+      // grab ber as array and sort them by year
+      let ber = Array.from(table.ber.values())
+      // show only nodes of active ap
+      ber = ber.filter(a => a.ApArtId === activeUrlElements.ap)
+      // add label
+      ber.forEach((el) => {
+        el.label = `${el.BerJahr || `(kein Jahr)`}: ${el.BerTitel || `(kein Titel)`}`
+      })
+      // filter by node.nodeLabelFilter
+      const filterString = node.nodeLabelFilter.get(`ber`)
+      if (filterString) {
+        ber = ber.filter((p) => {
+          return p.label.toLowerCase().includes(filterString)
+        })
+      }
+      // sort
+      ber = sortBy(ber, `label`)
+      return ber
+    }),
+    apber: computed(() => {
+      const { activeUrlElements, table, node } = this
+      // grab apber as array and sort them by year
+      let apber = Array.from(table.apber.values())
+      // show only nodes of active ap
+      apber = apber.filter(a => a.ApArtId === activeUrlElements.ap)
+      // filter by node.nodeLabelFilter
+      const filterString = node.nodeLabelFilter.get(`apber`)
+      if (filterString) {
+        apber = apber.filter((p) => {
+          if (p.JBerJahr !== undefined && p.JBerJahr !== null) {
+            return p.JBerJahr.toString().includes(filterString)
+          }
+          return false
+        })
+      }
+      // add label
+      apber.forEach((el) => {
+        el.label = el.JBerJahr || `(kein Jahr)`
+      })
+      // sort
+      apber = sortBy(apber, `JBerJahr`)
+      return apber
+    }),
+    erfkrit: computed(() => {
+      const { activeUrlElements, table, node } = this
+      // grab erfkrit as array and sort them by year
+      let erfkrit = Array.from(table.erfkrit.values())
+      // show only nodes of active ap
+      erfkrit = erfkrit.filter(a => a.ApArtId === activeUrlElements.ap)
+      // get erfkritWerte
+      const apErfkritWerte = Array.from(table.ap_erfkrit_werte.values())
+      erfkrit.forEach((el, index) => {
+        const erfkritWert = apErfkritWerte.find(e => e.BeurteilId === el.ErfkritErreichungsgrad)
+        const beurteilTxt = erfkritWert ? erfkritWert.BeurteilTxt : null
+        el.sort = erfkritWert ? erfkritWert.BeurteilOrd : null
+        el.label = `${beurteilTxt || `(nicht beurteilt)`}: ${el.ErfkritTxt || `(keine Kriterien erfasst)`}`
+      })
+      // filter by node.nodeLabelFilter
+      const filterString = node.nodeLabelFilter.get(`erfkrit`)
+      if (filterString) {
+        erfkrit = erfkrit.filter(p =>
+          p.label.toLowerCase().includes(filterString.toLowerCase())
+        )
+      }
+      // sort by label and return
+      erfkrit = sortBy(erfkrit, `sort`)
+      return erfkrit
+    }),
+    zieljahr: computed(() => {
+      const { activeUrlElements, table, node } = this
+      // grab ziele as array
+      let ziele = Array.from(table.ziel.values())
+      // show only nodes of active ap
+      ziele = ziele.filter(a => a.ApArtId === activeUrlElements.ap)
+      // filter by node.nodeLabelFilter
+      const filterString = node.nodeLabelFilter.get(`ziel`)
+      const zieltypWerte = Array.from(table.ziel_typ_werte.values())
+      if (filterString) {
+        ziele = ziele.filter((p) => {
+          const zielWert = zieltypWerte.find(e => e.ZieltypId === p.ZielTyp)
+          const zieltypTxt = zielWert ? zielWert.ZieltypTxt : `kein Zieltyp`
+          const label = `${p.ZielBezeichnung || `(kein Ziel)`} (${zieltypTxt})`
+          return label.toLowerCase().includes(filterString.toLowerCase())
+        })
+      }
+      if (ziele.length > 0) {
+        const zielJahre = uniq(ziele.map(z => z.ZielJahr))
+        return zielJahre.sort()
+      }
+      return []
+    }),
+    ziel: computed(() => {
+      const { activeUrlElements, table, node } = this
+      // grab ziele as array
+      let ziele = Array.from(table.ziel.values())
+      // show only nodes of active ap
+      const activeAp = activeUrlElements.ap
+      ziele = ziele.filter(a => a.ApArtId === activeAp)
+      // show only nodes of active zieljahr
+      const jahr = activeUrlElements.zieljahr
+      ziele = ziele.filter((a) => {
+        if (jahr === null || jahr === undefined) {
+          return a.ZielJahr !== 0 && !a.ZielJahr
+        }
+        return a.ZielJahr === jahr
+      })
+      // get zielWerte
+      const zieltypWerte = Array.from(table.ziel_typ_werte.values())
+      // map through all and create array of nodes
+      ziele.forEach((el) => {
+        const zielWert = zieltypWerte.find(e => e.ZieltypId === el.ZielTyp)
+        const zieltypTxt = zielWert ? zielWert.ZieltypTxt : `kein Zieltyp`
+        el.label = `${el.ZielBezeichnung || `(kein Ziel)`} (${zieltypTxt})`
+      })
+      // filter by node.nodeLabelFilter
+      const filterString = node.nodeLabelFilter.get(`ziel`)
+      if (filterString) {
+        ziele = ziele.filter(p =>
+          p.label.toLowerCase().includes(filterString.toLowerCase())
+        )
+      }
+      // sort by label and return
+      return sortBy(ziele, `label`)
+    }),
+  })
   this.valuesForWhichTableDataWasFetched = {}
   this.qk = observable.map()
   extendObservable(this, {
@@ -303,15 +644,6 @@ function Store() {
     ),
     projektNodes: computed(() =>
       buildProjektNodes(this)
-    ),
-    nodesFlattened: computed(() =>
-      treeFlatten(this.projektNodes)
-    ),
-    nrOfNodeRows: computed(() =>
-      getNrOfNodeRows(this.projektNodes)
-    ),
-    rowNrOfActiveNode: computed(() =>
-      getRowNrOfActiveNode(this)
     ),
     activeDataset: computed(() =>
       updateActiveDatasetFromUrl(this)

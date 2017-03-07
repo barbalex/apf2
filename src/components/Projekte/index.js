@@ -51,12 +51,12 @@ const Projekte = ({ store }) => {
     <MyContainer>
       <Content>
         {
-          strukturbaumIsVisible
-            && <StrukturbaumContainer />
+          strukturbaumIsVisible &&
+          <StrukturbaumContainer />
         }
         {
-          datenIsVisible
-            && <Daten />
+          datenIsVisible &&
+          <Daten />
         }
         {
           karteIsVisible &&

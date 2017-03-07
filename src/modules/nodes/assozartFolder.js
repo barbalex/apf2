@@ -1,15 +1,25 @@
-import assozartNodes from './assozart'
+import findIndex from 'lodash/findIndex'
 
-export default (store, projId, apArtId) => {
-  const { activeUrlElements } = store
-  const myAssozartNodes = assozartNodes(store, apArtId)
-  let message = myAssozartNodes.length
+export default (store) => {
+  const { activeUrlElements, table } = store
+
+  // fetch sorting indexes of parents
+  const projId = activeUrlElements.projekt
+  if (!projId) return []
+  const projIndex = findIndex(store.table.filteredAndSorted.projekt, { ProjId: projId })
+  const apArtId = activeUrlElements.ap
+  if (!apArtId) return []
+  const apIndex = findIndex(store.table.filteredAndSorted.ap, { ApArtId: apArtId })
+
+  const assozartNodesLength = table.filteredAndSorted.assozart.length
+  let message = assozartNodesLength
   if (store.table.assozartLoading) {
     message = `...`
   }
   if (store.node.nodeLabelFilter.get(`assozart`)) {
-    message = `${myAssozartNodes.length} gefiltert`
+    message = `${assozartNodesLength} gefiltert`
   }
+  const sort = [projIndex, 1, apIndex, 9]
 
   return {
     nodeType: `folder`,
@@ -18,6 +28,8 @@ export default (store, projId, apArtId) => {
     label: `assoziierte Arten (${message})`,
     expanded: activeUrlElements.assozartFolder,
     url: [`Projekte`, projId, `Arten`, apArtId, `assoziierte-Arten`],
-    children: myAssozartNodes,
+    level: 4,
+    sort,
+    childrenLength: assozartNodesLength,
   }
 }

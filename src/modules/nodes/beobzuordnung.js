@@ -1,43 +1,32 @@
-import sortBy from 'lodash/sortBy'
+import findIndex from 'lodash/findIndex'
 
-export default (store, apArtId) => {
+export default (store) => {
   const { activeUrlElements, table } = store
-  // grab beob_bereitgestellt as array and sort them by year
-  let beobBereitgestellt = Array.from(table.beob_bereitgestellt.values())
-  // show only nodes of active ap
-  beobBereitgestellt = beobBereitgestellt.filter(a =>
-    a.NO_ISFS === apArtId &&
-    (
-      (a.beobzuordnung &&
-      a.beobzuordnung.type &&
-      a.beobzuordnung.type === `nichtBeurteilt`) ||
-      !a.beobzuordnung
-    )
-  )
+  // fetch sorting indexes of parents
+  const projId = activeUrlElements.projekt
+  if (!projId) return []
+  const projIndex = findIndex(store.table.filteredAndSorted.projekt, { ProjId: projId })
+  const apArtId = activeUrlElements.ap
+  if (!apArtId) return []
+  const apIndex = findIndex(store.table.filteredAndSorted.ap, { ApArtId: apArtId })
+
   // map through all and create array of nodes
-  let nodes = beobBereitgestellt.map((el) => {
-    const quelle = table.beob_quelle.get(el.QuelleId)
-    const quelleName = quelle && quelle.name ? quelle.name : ``
-    const label = `${el.Datum || `(kein Datum)`}: ${el.Autor || `(kein Autor)`} (${quelleName})`
-    const projId = table.ap.get(apArtId).ProjId
+  const nodes = table.filteredAndSorted.beobzuordnung.map((el, index) => {
     const beobId = isNaN(el.BeobId) ? el.BeobId : parseInt(el.BeobId, 10)
+    const sort = [projIndex, 1, apIndex, 6, index]
+
     return {
       nodeType: `table`,
       menuType: `beobzuordnung`,
       id: beobId,
       parentId: apArtId,
-      label,
+      label: el.label,
       expanded: beobId === activeUrlElements.beobzuordnung,
       url: [`Projekte`, projId, `Arten`, apArtId, `nicht-beurteilte-Beobachtungen`, beobId],
+      level: 5,
+      sort,
+      childrenLength: 0,
     }
   })
-  // filter by node.nodeLabelFilter
-  const filterString = store.node.nodeLabelFilter.get(`beobzuordnung`)
-  if (filterString) {
-    nodes = nodes.filter(p =>
-      p.label.toLowerCase().includes(filterString.toLowerCase())
-    )
-  }
-  // sort by label and return
-  return sortBy(nodes, `label`).reverse()
+  return nodes
 }

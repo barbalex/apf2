@@ -1,37 +1,31 @@
-import sortBy from 'lodash/sortBy'
+import findIndex from 'lodash/findIndex'
 
-export default (store, apArtId) => {
-  const { activeUrlElements } = store
-  // grab erfkrit as array and sort them by year
-  let erfkrit = Array.from(store.table.erfkrit.values())
-  // show only nodes of active ap
-  erfkrit = erfkrit.filter(a => a.ApArtId === apArtId)
-  // get erfkritWerte
-  const apErfkritWerte = Array.from(store.table.ap_erfkrit_werte.values())
+export default (store) => {
+  const { activeUrlElements, table } = store
+  // fetch sorting indexes of parents
+  const projId = activeUrlElements.projekt
+  if (!projId) return []
+  const projIndex = findIndex(table.filteredAndSorted.projekt, { ProjId: projId })
+  const apArtId = activeUrlElements.ap
+  if (!apArtId) return []
+  const apIndex = findIndex(table.filteredAndSorted.ap, { ApArtId: apArtId })
+
   // map through all projekt and create array of nodes
-  let nodes = erfkrit.map((el) => {
-    const projId = store.table.ap.get(el.ApArtId).ProjId
-    const erfkritWert = apErfkritWerte.find(e => e.BeurteilId === el.ErfkritErreichungsgrad)
-    const beurteilTxt = erfkritWert ? erfkritWert.BeurteilTxt : null
-    const erfkritSort = erfkritWert ? erfkritWert.BeurteilOrd : null
+  let nodes = table.filteredAndSorted.erfkrit.map((el, index) => {
+    const sort = [projIndex, 1, apIndex, 3, index]
+
     return {
       nodeType: `table`,
       menuType: `erfkrit`,
       id: el.ErfkritId,
       parentId: el.ApArtId,
-      label: `${beurteilTxt || `(nicht beurteilt)`}: ${el.ErfkritTxt || `(keine Kriterien erfasst)`}`,
+      label: el.label,
       expanded: el.ErfkritId === activeUrlElements.erfkrit,
       url: [`Projekte`, projId, `Arten`, el.ApArtId, `AP-Erfolgskriterien`, el.ErfkritId],
-      sort: erfkritSort,
+      level: 5,
+      sort,
+      childrenLength: 0,
     }
   })
-  // filter by node.nodeLabelFilter
-  const filterString = store.node.nodeLabelFilter.get(`erfkrit`)
-  if (filterString) {
-    nodes = nodes.filter(p =>
-      p.label.toLowerCase().includes(filterString.toLowerCase())
-    )
-  }
-  // sort by label and return
-  return sortBy(nodes, `sort`)
+  return nodes
 }

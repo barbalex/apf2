@@ -1,15 +1,26 @@
-import erfkritNodes from './erfkrit'
+import findIndex from 'lodash/findIndex'
 
-export default (store, projId, apArtId) => {
-  const { activeUrlElements } = store
-  const myErfkritNodes = erfkritNodes(store, apArtId)
-  let message = myErfkritNodes.length
+export default (store) => {
+  const { activeUrlElements, table, node } = store
+
+  // fetch sorting indexes of parents
+  const projId = activeUrlElements.projekt
+  if (!projId) return []
+  const projIndex = findIndex(store.table.filteredAndSorted.projekt, { ProjId: projId })
+  const apArtId = activeUrlElements.ap
+  if (!apArtId) return []
+  const apIndex = findIndex(store.table.filteredAndSorted.ap, { ApArtId: apArtId })
+
+  const erfkritNodesLength = table.filteredAndSorted.erfkrit.length
+
+  let message = erfkritNodesLength
   if (store.table.erfkritLoading) {
     message = `...`
   }
-  if (store.node.nodeLabelFilter.get(`erfkrit`)) {
-    message = `${myErfkritNodes.length} gefiltert`
+  if (node.nodeLabelFilter.get(`erfkrit`)) {
+    message = `${erfkritNodesLength} gefiltert`
   }
+  const sort = [projIndex, 1, apIndex, 3]
 
   return {
     nodeType: `folder`,
@@ -18,6 +29,8 @@ export default (store, projId, apArtId) => {
     label: `AP-Erfolgskriterien (${message})`,
     expanded: activeUrlElements.erfkritFolder,
     url: [`Projekte`, projId, `Arten`, apArtId, `AP-Erfolgskriterien`],
-    children: myErfkritNodes,
+    level: 4,
+    sort,
+    childrenLength: erfkritNodesLength,
   }
 }

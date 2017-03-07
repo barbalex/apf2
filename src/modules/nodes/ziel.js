@@ -1,38 +1,33 @@
+import findIndex from 'lodash/findIndex'
 import sortBy from 'lodash/sortBy'
-import zielberFolderNode from './zielberFolder'
 
 export default (store, jahr) => {
-  const { activeUrlElements } = store
-  // grab ziele as array
-  let ziele = Array.from(store.table.ziel.values())
-  // show only nodes of active ap
-  const activeAp = store.activeUrlElements.ap
-  ziele = ziele.filter(a => a.ApArtId === activeAp)
-  // show only nodes of active zieljahr
-  ziele = ziele.filter((a) => {
-    if (jahr === null || jahr === undefined) {
-      return a.ZielJahr !== 0 && !a.ZielJahr
-    }
-    return a.ZielJahr === jahr
-  })
-  // get zielWerte
-  const zieltypWerte = Array.from(store.table.ziel_typ_werte.values())
+  const { activeUrlElements, table } = store
+  // fetch sorting indexes of parents
+  const projId = activeUrlElements.projekt
+  if (!projId) return []
+  const projIndex = findIndex(table.filteredAndSorted.projekt, { ProjId: projId })
+  const apArtId = activeUrlElements.ap
+  if (!apArtId) return []
+  const apIndex = findIndex(table.filteredAndSorted.ap, { ApArtId: apArtId })
+  const zieljahr = activeUrlElements.zieljahr
+  const zieljahrIndex = findIndex(table.filteredAndSorted.zieljahr, zieljahr)
+
   // map through all and create array of nodes
-  let nodes = ziele.map((el) => {
-    const projId = store.table.ap.get(el.ApArtId).ProjId
-    const zielWert = zieltypWerte.find(e => e.ZieltypId === el.ZielTyp)
-    const zieltypTxt = zielWert ? zielWert.ZieltypTxt : `kein Zieltyp`
+  let nodes = table.filteredAndSorted.ziel.map((el, index) => {
+    const sort = [projIndex, 1, apIndex, 2, zieljahrIndex, index]
+
     return {
       nodeType: `table`,
       menuType: `ziel`,
       id: el.ZielId,
       parentId: el.ApArtId,
-      label: `${el.ZielBezeichnung || `(kein Ziel)`} (${zieltypTxt})`,
+      label: el.label,
       expanded: el.ZielId === activeUrlElements.ziel,
       url: [`Projekte`, projId, `Arten`, el.ApArtId, `AP-Ziele`, el.ZielJahr, el.ZielId],
-      children: [
-        zielberFolderNode(store, projId, el.ApArtId, el.ZielJahr, el.ZielId),
-      ],
+      level: 6,
+      sort,
+      childrenLength: 1,
     }
   })
   // filter by node.nodeLabelFilter

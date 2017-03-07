@@ -96,12 +96,6 @@ class StrukturbaumContainer extends Component { // eslint-disable-line react/pre
     store: PropTypes.object.isRequired,
   }
 
-  constructor() {
-    super()
-    this.handleClick = this.handleClick.bind(this)
-    this.showMapIfNotYetVisible = this.showMapIfNotYetVisible.bind(this)
-  }
-
   componentDidMount() {
     const { store } = this.props
     store.ui.treeHeight = this.tree.clientHeight
@@ -109,7 +103,7 @@ class StrukturbaumContainer extends Component { // eslint-disable-line react/pre
     store.ui.treeTopPosition = treeRect.top
   }
 
-  showMapIfNotYetVisible() {
+  showMapIfNotYetVisible = () => {
     const { store } = this.props
     const projekteTabs = store.urlQuery.projekteTabs ? clone(store.urlQuery.projekteTabs) : []
     const isVisible = projekteTabs.includes(`karte`)
@@ -119,7 +113,7 @@ class StrukturbaumContainer extends Component { // eslint-disable-line react/pre
     }
   }
 
-  handleClick(e, data, element) {
+  handleClick = (e, data, element) => {
     const { store } = this.props
     if (!data) return store.listError(new Error(`no data passed with click`))
     if (!element) return store.listError(new Error(`no element passed with click`))
@@ -242,10 +236,7 @@ class StrukturbaumContainer extends Component { // eslint-disable-line react/pre
           }}
           ref={(c) => { this.tree = c }}
         >
-          <Strukturbaum
-            nrOfNodeRows={store.nrOfNodeRows}
-            rowNrOfActiveNode={store.rowNrOfActiveNode}
-          />
+          <Strukturbaum />
         </div>
         <CmApFolder onClick={this.handleClick} />
         <CmAp onClick={this.handleClick} />

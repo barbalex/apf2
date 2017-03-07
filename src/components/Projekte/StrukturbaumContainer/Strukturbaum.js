@@ -15,8 +15,9 @@ import { AutoSizer, List } from 'react-virtualized'
 import { ContextMenuTrigger } from 'react-contextmenu'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
-import { Scrollbars } from 'react-custom-scrollbars'
 import FontIcon from 'material-ui/FontIcon'
+import findIndex from 'lodash/findIndex'
+import isEqual from 'lodash/isEqual'
 
 import isNodeInActiveNodePath from '../../../modules/isNodeInActiveNodePath'
 
@@ -28,6 +29,12 @@ const Container = styled.div`
     margin: 0;
     list-style: none;
     padding: 0 0 0 1.1em;
+  }
+  /* need this because react-virtualized scrolls to far down, see
+   * https://github.com/bvaughn/react-virtualized/issues/543
+   */
+  .ReactVirtualized__Grid {
+    overflow-x: hidden !important;
   }
 `
 const ListContainer = styled(List)`
@@ -43,11 +50,8 @@ const ListContainer = styled(List)`
     outline-color: rgb(48, 48, 48) !important;
   }
 `
-const TopUl = styled.ul``
-const TopUlForPathLength1 = styled(TopUl)`
-  padding: 0 0 0 0.5em !important;
-`
-const StyledNode = styled.div`
+const StyledNode = styled(({ level, nodeIsInActiveNodePath, children, ...rest }) => <div {...rest}>{children}</div>)`
+  padding-left: ${(props) => `${props.level * 16}px`};
   height: ${singleRowHeight}px;
   max-height: ${singleRowHeight}px;
   box-sizing: border-box;
@@ -56,17 +60,14 @@ const StyledNode = styled.div`
   flex-direction: row;
   white-space: nowrap;
   user-select: none;
+  font-weight: ${(props) => (props.nodeIsInActiveNodePath ? `14px` : `1.1em`)};
+  font-size: ${(props) => (props.nodeIsInActiveNodePath ? `rgb(255, 94, 94)` : `rgb(247, 247, 247)`)};
   font-size: 1.1em;
   cursor: pointer;
-  color: rgb(247, 247, 247);
+  color: ${(props) => (props.nodeIsInActiveNodePath ? `rgb(255, 94, 94)` : `rgb(247, 247, 247)`)};
   &:hover {
     color: orange;
   }
-`
-const StyledNodeInActiveNodePath = styled(StyledNode)`
-  font-weight: 900;
-  color: rgb(255, 94, 94);
-  font-size: 14px;
 `
 const StyledSymbolSpan = styled.span`
   margin-right: 0;
@@ -103,15 +104,6 @@ const LoadingDiv = styled.div`
   padding-left: 15px;
   font-size: 14px;
 `
-const StyledScrollbars = styled(Scrollbars)`
-  div:first-child {
-    /* without this a hideous white line appears on the right */
-    margin-right: -25px !important;
-  }
-  .ReactVirtualized__Grid {
-    overflow: visible !important;
-  }
-`
 const enhance = compose(
   inject(`store`),
   observer
@@ -121,46 +113,17 @@ class Strukturbaum extends Component {
 
   static propTypes = {
     store: PropTypes.object.isRequired,
-    nrOfNodeRows: PropTypes.number.isRequired,
-    rowNrOfActiveNode: PropTypes.number.isRequired,
   }
 
-  rowRenderer = ({ key, index }) => {
+  rowRenderer = ({ key, index, style }) => {
     const { store } = this.props
-    return (
-      <div key={key}>
-        {this.renderNode(store.projektNodes[index], index)}
-      </div>
-    )
-  }
-
-  noRowsRenderer = () => {
-    const { store } = this.props
-    const message = (
-      store.table.projektLoading ?
-      `lade Daten...` :
-      `keine Daten`
-    )
-    return (
-      <Container>
-        <LoadingDiv>
-          {message}
-        </LoadingDiv>
-      </Container>
-    )
-  }
-
-  renderNode = (node, index) => {
-    const { store } = this.props
+    const node = store.node.node.nodes[index]
     const onClick = (event) => {
-      event.stopPropagation()
       store.ui.lastClickY = event.pageY
       store.toggleNode(node)
     }
-
-    const props = { key: index }
-    const nodeHasChildren = node.children && node.children.length
-    let childNodes = []
+    const myProps = { key: index }
+    const nodeHasChildren = node.childrenLength > 0
     const symbolTypes = {
       open: `${String.fromCharCode(709)}`,
       closed: `>`,
@@ -173,24 +136,17 @@ class Strukturbaum extends Component {
     const TextSpan = nodeIsInActiveNodePath ? StyledTextInActiveNodePathSpan : StyledTextSpan
 
     if (nodeHasChildren && node.expanded) {
-      props.onClick = onClick
       symbol = symbolTypes.open
       if (nodeIsInActiveNodePath) {
         SymbolSpan = StyledSymbolOpenSpan
       }
-      childNodes = node.children.map(child =>
-        this.renderNode(child, child.url.join(`/`))
-      )
     } else if (nodeHasChildren) {
-      props.onClick = onClick
       symbol = symbolTypes.closed
     } else if (node.label === `lade Daten...`) {
       symbol = symbolTypes.loadingData
     } else {
       symbol = symbolTypes.hasNoChildren
-      props.onClick = onClick
     }
-    const Node = nodeIsInActiveNodePath ? StyledNodeInActiveNodePath : StyledNode
     const showPopMapIcon = (
       node.menuType === `ap` &&
       node.id === (store.activeUrlElements.ap || store.map.pop.apArtId) &&
@@ -219,106 +175,104 @@ class Strukturbaum extends Component {
       )
     )
 
-    childNodes.unshift(
-      <ContextMenuTrigger
-        id={node.menuType}
-        collect={props => props}
-        nodeId={node.id}
-        nodeLabel={node.label}
-        key={`${index}-child`}
-      >
-        <Node
-          data-id={node.id}
-          data-parentId={node.parentId}
-          data-url={JSON.stringify(node.url)}
-          data-nodeType={node.nodeType}
-          data-label={node.label}
-          data-menuType={node.menuType}
-        >
-          <SymbolSpan>
-            {symbol}
-          </SymbolSpan>
-          {
-            showPopMapIcon &&
-            <PopMapIcon
-              id="map"
-              className="material-icons"
-              title="in Karte sichtbar"
-            >
-              local_florist
-            </PopMapIcon>
-          }
-          {
-            showTpopMapIcon &&
-            <TpopMapIcon
-              id="map"
-              className="material-icons"
-              title="in Karte sichtbar"
-            >
-              local_florist
-            </TpopMapIcon>
-          }
-          {
-            showPopFilteredMapIcon &&
-            <PopFilteredMapIcon
-              id="map"
-              className="material-icons"
-              title="in Karte hervorgehoben"
-            >
-              local_florist
-            </PopFilteredMapIcon>
-          }
-          {
-            showTpopFilteredMapIcon &&
-            <TpopFilteredMapIcon
-              id="map"
-              className="material-icons"
-              title="in Karte hervorgehoben"
-            >
-              local_florist
-            </TpopFilteredMapIcon>
-          }
-          <TextSpan>
-            {node.label}
-          </TextSpan>
-        </Node>
-      </ContextMenuTrigger>
-    )
-
-    const TopChildUl = (
-      node.urlPath && node.urlPath.length && node.urlPath.length === 1 ?
-      TopUlForPathLength1 :
-      TopUl
-    )
-
     return (
-      <TopChildUl
-        key={index}
-        onClick={props.onClick}
-      >
-        <li>
-          {childNodes}
-        </li>
-      </TopChildUl>
+      <div key={key} style={style} onClick={onClick}>
+        <ContextMenuTrigger
+          id={node.menuType}
+          collect={props => myProps}
+          nodeId={node.id}
+          nodeLabel={node.label}
+          key={`${index}-child`}
+        >
+          <StyledNode
+            level={node.level}
+            nodeIsInActiveNodePath={nodeIsInActiveNodePath}
+            data-id={node.id}
+            data-parentId={node.parentId}
+            data-url={JSON.stringify(node.url)}
+            data-nodeType={node.nodeType}
+            data-label={node.label}
+            data-menuType={node.menuType}
+          >
+            <SymbolSpan>
+              {symbol}
+            </SymbolSpan>
+            {
+              showPopMapIcon &&
+              <PopMapIcon
+                id="map"
+                className="material-icons"
+                title="in Karte sichtbar"
+              >
+                local_florist
+              </PopMapIcon>
+            }
+            {
+              showTpopMapIcon &&
+              <TpopMapIcon
+                id="map"
+                className="material-icons"
+                title="in Karte sichtbar"
+              >
+                local_florist
+              </TpopMapIcon>
+            }
+            {
+              showPopFilteredMapIcon &&
+              <PopFilteredMapIcon
+                id="map"
+                className="material-icons"
+                title="in Karte hervorgehoben"
+              >
+                local_florist
+              </PopFilteredMapIcon>
+            }
+            {
+              showTpopFilteredMapIcon &&
+              <TpopFilteredMapIcon
+                id="map"
+                className="material-icons"
+                title="in Karte hervorgehoben"
+              >
+                local_florist
+              </TpopFilteredMapIcon>
+            }
+            <TextSpan>
+              {node.label}
+            </TextSpan>
+          </StyledNode>
+        </ContextMenuTrigger>
+      </div>
+    )
+  }
+
+  noRowsRenderer = () => {
+    const { store } = this.props
+    const message = (
+      store.table.projektLoading ?
+      `lade Daten...` :
+      `keine Daten`
+    )
+    return (
+      <Container>
+        <LoadingDiv>
+          {message}
+        </LoadingDiv>
+      </Container>
     )
   }
 
   render() {  // eslint-disable-line class-methods-use-this
-    const { store, nrOfNodeRows, rowNrOfActiveNode } = this.props
+    const { store } = this.props
 
     // calculate scrolltop
     // without this if a folder low in the tree is opened,
     // it always gets scrolled down out of sight
-    const nodes = store.projektNodes
-    const rowHeight = nrOfNodeRows * singleRowHeight
-    const treeHeightAboveActiveNode = rowNrOfActiveNode * singleRowHeight
-    console.log(`Strukturbaum: nrOfNodeRows:`, nrOfNodeRows)
-    console.log(`Strukturbaum: rowHeight:`, rowHeight)
-    console.log(`Strukturbaum: rowNrOfActiveNode:`, rowNrOfActiveNode)
-    console.log(`Strukturbaum: treeHeightAboveActiveNode:`, treeHeightAboveActiveNode)
-    const roomAboveClick = store.ui.lastClickY - store.ui.treeTopPosition
-    // correcting by 10px seems to keep the tree from jumping
-    // const scrolltop = (treeHeightAboveActiveNode - roomAboveClick) + 10
+    const nodes = store.node.node.nodes
+    const activeNodeIndex = findIndex(nodes, node =>
+      isEqual(node.url, store.url)
+    )
+
     const popVisible = store.map.pop.visible
     const tpopVisible = store.map.tpop.visible
     // pass length of highlightedIds to List
@@ -326,34 +280,26 @@ class Strukturbaum extends Component {
     const popHighlighted = store.map.pop.highlightedIds.length
     const tpopHighlighted = store.map.tpop.highlightedIds.length
 
-    // console.log(`Strukturbaum: rowNrOfActiveNode:`, rowNrOfActiveNode)
-
     return (
       <Container>
         <AutoSizer>
-          {({ height, width }) => (
-            <StyledScrollbars
-              style={{ width, height }}
-              autoHide
-            >
-              <ListContainer
-                height={height}
-                rowCount={nodes.length}
-                rowHeight={rowHeight}
-                rowRenderer={this.rowRenderer}
-                noRowsRenderer={this.noRowsRenderer}
-                width={width}
-                scrollTop={treeHeightAboveActiveNode}
-                popVisible={popVisible}
-                popHighlighted={popHighlighted}
-                tpopVisible={tpopVisible}
-                tpopHighlighted={tpopHighlighted}
-                ref={(c) => { this.tree = c }}
-                {...store.projektNodes}
-                {...treeHeightAboveActiveNode}
-              />
-            </StyledScrollbars>
-          )}
+          {({ height, width }) =>
+            <ListContainer
+              height={height}
+              rowCount={nodes.length}
+              rowHeight={singleRowHeight}
+              rowRenderer={this.rowRenderer}
+              noRowsRenderer={this.noRowsRenderer}
+              scrollToIndex={activeNodeIndex}
+              width={width}
+              popVisible={popVisible}
+              popHighlighted={popHighlighted}
+              tpopVisible={tpopVisible}
+              tpopHighlighted={tpopHighlighted}
+              ref={(c) => { this.tree = c }}
+              {...store.node.node.nodes}
+            />
+          }
         </AutoSizer>
       </Container>
     )
