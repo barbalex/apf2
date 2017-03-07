@@ -1,7 +1,7 @@
 import findIndex from 'lodash/findIndex'
 
 export default (store) => {
-  const { activeUrlElements, table, node } = store
+  const { activeUrlElements, table } = store
 
   // fetch sorting indexes of parents
   const projId = activeUrlElements.projekt
@@ -11,7 +11,7 @@ export default (store) => {
   if (!apArtId) return []
   const apIndex = findIndex(store.table.filteredAndSorted.ap, { ApArtId: apArtId })
 
-  const zieljahreNodesLength = table.filteredAndSorted.erfkrit.length
+  const zieljahreNodesLength = table.filteredAndSorted.zieljahr.length
 
   let message = `${zieljahreNodesLength} Jahre`
   if (store.table.zielLoading) {

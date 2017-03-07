@@ -31,19 +31,20 @@ export default (store) => {
   const nodes = table.filteredAndSorted.zieljahr.map((jahr, index) => {
     const sort = [projIndex, 1, apIndex, 2, index]
     // get nr of ziele for year
-    const nrOfZieleThisYear = ziele.filter(z => z.ZielJahr === jahr).length
+    // const nrOfZieleThisYear = ziele.filter(z => z.ZielJahr === jahr).length
+    const childrenLength = table.filteredAndSorted.ziel.length
 
     return {
       nodeType: `folder`,
       menuType: `zieljahr`,
       id: apArtId,
       parentId: apArtId,
-      label: `${jahr == null ? `kein Jahr` : jahr} (${nrOfZieleThisYear})`,
+      label: `${jahr == null ? `kein Jahr` : jahr} (${childrenLength})`,
       expanded: jahr && jahr === activeUrlElements.zieljahr,
       url: [`Projekte`, projId, `Arten`, apArtId, `AP-Ziele`, jahr],
       level: 5,
       sort,
-      childrenLength: 0,
+      childrenLength,
     }
   })
   return nodes
