@@ -1,7 +1,5 @@
 import findIndex from 'lodash/findIndex'
 
-import erfkritNodes from './erfkrit'
-
 export default (store) => {
   const { activeUrlElements, table, node } = store
 
@@ -19,7 +17,7 @@ export default (store) => {
   if (store.table.erfkritLoading) {
     message = `...`
   }
-  if (store.node.nodeLabelFilter.get(`erfkrit`)) {
+  if (node.nodeLabelFilter.get(`erfkrit`)) {
     message = `${erfkritNodesLength} gefiltert`
   }
   const sort = [projIndex, 1, apIndex, 3]

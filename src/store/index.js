@@ -9,6 +9,7 @@ import {
 } from 'mobx'
 import $ from 'jquery'
 import sortBy from 'lodash/sortBy'
+import uniq from 'lodash/uniq'
 
 import fetchTable from '../modules/fetchTable'
 import fetchBeobzuordnungModule from '../modules/fetchBeobzuordnung'
@@ -71,6 +72,7 @@ import apberFolderNode from '../modules/nodes/apberFolder'
 import apberNode from '../modules/nodes/apber'
 import erfkritFolderNode from '../modules/nodes/erfkritFolder'
 import erfkritNode from '../modules/nodes/erfkrit'
+import zieljahreFolderNode from '../modules/nodes/zieljahreFolder'
 
 import TableStore from './table'
 import ObservableHistory from './ObservableHistory'
@@ -110,6 +112,7 @@ function Store() {
     apber: computed(() => apberNode(this)),
     erfkritFolder: computed(() => erfkritFolderNode(this)),
     erfkrit: computed(() => erfkritNode(this)),
+    zieljahreFolder: computed(() => zieljahreFolderNode(this)),
   })
   this.ui = {}
   extendObservable(this.ui, {
@@ -421,6 +424,32 @@ function Store() {
       // sort by label and return
       erfkrit = sortBy(erfkrit, `sort`)
       return erfkrit
+    }),
+    zieljahr: computed(() => {
+      const { activeUrlElements, table, node } = this
+      // grab ziele as array
+      let ziele = Array.from(table.ziel.values())
+      // show only nodes of active ap
+      ziele = ziele.filter(a => a.ApArtId === activeUrlElements.ap)
+      // filter by node.nodeLabelFilter
+      const filterString = node.nodeLabelFilter.get(`ziel`)
+      const zieltypWerte = Array.from(table.ziel_typ_werte.values())
+      if (filterString) {
+        ziele = ziele.filter((p) => {
+          const zielWert = zieltypWerte.find(e => e.ZieltypId === p.ZielTyp)
+          const zieltypTxt = zielWert ? zielWert.ZieltypTxt : `kein Zieltyp`
+          const label = `${p.ZielBezeichnung || `(kein Ziel)`} (${zieltypTxt})`
+          return label.toLowerCase().includes(filterString.toLowerCase())
+        })
+      }
+      if (ziele.length > 0) {
+        const zielJahre = uniq(ziele.map(z => z.ZielJahr))
+        return zielJahre.sort()
+      }
+      return []
+    }),
+    ziel: computed(() => {
+
     }),
   })
   this.valuesForWhichTableDataWasFetched = {}
