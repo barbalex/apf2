@@ -38,9 +38,13 @@ export default (store) => {
       menuType: `zieljahr`,
       id: apArtId,
       parentId: apArtId,
-      label: `${jahr == null ? `kein Jahr` : jahr} (${zielNodes.length})`,
+      label: `${jahr == null ? `kein Jahr` : jahr} (${nrOfZieleThisYear})`,
       expanded: jahr && jahr === activeUrlElements.zieljahr,
       url: [`Projekte`, projId, `Arten`, apArtId, `AP-Ziele`, jahr],
+      level: 5,
+      sort,
+      childrenLength: 0,
     }
   })
+  return nodes
 }
