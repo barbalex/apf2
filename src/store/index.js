@@ -69,6 +69,7 @@ import berFolderNode from '../modules/nodes/berFolder'
 import berNode from '../modules/nodes/ber'
 import apberFolderNode from '../modules/nodes/apberFolder'
 import apberNode from '../modules/nodes/apber'
+import erfkritFolderNode from '../modules/nodes/erfkritFolder'
 
 import TableStore from './table'
 import ObservableHistory from './ObservableHistory'
@@ -106,6 +107,7 @@ function Store() {
     ber: computed(() => berNode(this)),
     apberFolder: computed(() => apberFolderNode(this)),
     apber: computed(() => apberNode(this)),
+    erfkritFolder: computed(() => erfkritFolderNode(this)),
   })
   this.ui = {}
   extendObservable(this.ui, {
@@ -392,6 +394,31 @@ function Store() {
       // sort
       apber = sortBy(apber, `JBerJahr`)
       return apber
+    }),
+    erfkrit: computed(() => {
+      const { activeUrlElements, table, node } = this
+      // grab erfkrit as array and sort them by year
+      let erfkrit = Array.from(table.erfkrit.values())
+      // show only nodes of active ap
+      erfkrit = erfkrit.filter(a => a.ApArtId === activeUrlElements.ap)
+      // get erfkritWerte
+      const apErfkritWerte = Array.from(table.ap_erfkrit_werte.values())
+      erfkrit.forEach((el, index) => {
+        const erfkritWert = apErfkritWerte.find(e => e.BeurteilId === el.ErfkritErreichungsgrad)
+        const beurteilTxt = erfkritWert ? erfkritWert.BeurteilTxt : null
+        el.sort = erfkritWert ? erfkritWert.BeurteilOrd : null
+        el.label = `${beurteilTxt || `(nicht beurteilt)`}: ${el.ErfkritTxt || `(keine Kriterien erfasst)`}`
+      })
+      // filter by node.nodeLabelFilter
+      const filterString = node.nodeLabelFilter.get(`erfkrit`)
+      if (filterString) {
+        erfkrit = erfkrit.filter(p =>
+          p.label.toLowerCase().includes(filterString.toLowerCase())
+        )
+      }
+      // sort by label and return
+      erfkrit = sortBy(erfkrit, `sort`)
+      return erfkrit
     }),
   })
   this.valuesForWhichTableDataWasFetched = {}
