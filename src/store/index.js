@@ -81,6 +81,7 @@ import popFolderNode from '../modules/nodes/popFolder'
 import popNode from '../modules/nodes/pop'
 import popmassnberFolderNode from '../modules/nodes/popmassnberFolder'
 import popmassnberNode from '../modules/nodes/popmassnber'
+import popberFolderNode from '../modules/nodes/popberFolder'
 
 import TableStore from './table'
 import ObservableHistory from './ObservableHistory'
@@ -129,6 +130,7 @@ function Store() {
     pop: computed(() => popNode(this)),
     popmassnberFolder: computed(() => popmassnberFolderNode(this)),
     popmassnber: computed(() => popmassnberNode(this)),
+    popberFolder: computed(() => popberFolderNode(this)),
   })
   this.ui = {}
   extendObservable(this.ui, {
@@ -563,6 +565,30 @@ function Store() {
       }
       // sort by label and return
       return sortBy(popmassnber, `label`)
+    }),
+    popber: computed(() => {
+      const { activeUrlElements, table, node } = this
+      // grab popber as array and sort them by year
+      let popber = Array.from(table.popber.values())
+      // show only nodes of active pop
+      popber = popber.filter(a => a.PopId === activeUrlElements.pop)
+      // get erfkritWerte
+      const popEntwicklungWerte = Array.from(table.pop_entwicklung_werte.values())
+      // map through all projekt and create array of nodes
+      popber.forEach((el) => {
+        const popEntwicklungWert = popEntwicklungWerte.find(e => e.EntwicklungId === el.PopBerEntwicklung)
+        const entwicklungTxt = popEntwicklungWert ? popEntwicklungWert.EntwicklungTxt : null
+        el.label = `${el.PopBerJahr || `(kein Jahr)`}: ${entwicklungTxt || `(nicht beurteilt)`}`
+      })
+      // filter by node.nodeLabelFilter
+      const filterString = node.nodeLabelFilter.get(`popber`)
+      if (filterString) {
+        popber = popber.filter(p =>
+          p.label.toLowerCase().includes(filterString.toLowerCase())
+        )
+      }
+      // sort by label and return
+      return sortBy(popber, `label`)
     }),
   })
   this.valuesForWhichTableDataWasFetched = {}

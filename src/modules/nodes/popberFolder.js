@@ -1,15 +1,29 @@
-import popberNodes from './popber'
+import findIndex from 'lodash/findIndex'
 
-export default (store, projId, apArtId, popId) => {
-  const { activeUrlElements } = store
-  const myPopberNodes = popberNodes({ store, apArtId, projId, popId })
-  let message = myPopberNodes.length
-  if (store.table.popberLoading) {
+export default (store) => {
+  const { activeUrlElements, node, table } = store
+
+  // fetch sorting indexes of parents
+  const projId = activeUrlElements.projekt
+  if (!projId) return []
+  const projIndex = findIndex(table.filteredAndSorted.projekt, { ProjId: projId })
+  const apArtId = activeUrlElements.ap
+  if (!apArtId) return []
+  const apIndex = findIndex(table.filteredAndSorted.ap, { ApArtId: apArtId })
+  const popId = activeUrlElements.pop
+  if (!popId) return []
+  const popIndex = findIndex(table.filteredAndSorted.pop, { PopId: popId })
+
+  const popberNodesLength = table.filteredAndSorted.popber.length
+
+  let message = popberNodesLength
+  if (table.popberLoading) {
     message = `...`
   }
-  if (store.node.nodeLabelFilter.get(`popber`)) {
-    message = `${myPopberNodes.length} gefiltert`
+  if (node.nodeLabelFilter.get(`popber`)) {
+    message = `${popberNodesLength} gefiltert`
   }
+  const sort = [projIndex, 1, apIndex, 1, popIndex, 2]
 
   return {
     nodeType: `folder`,
@@ -18,6 +32,8 @@ export default (store, projId, apArtId, popId) => {
     label: `Kontroll-Berichte (${message})`,
     expanded: activeUrlElements.popberFolder,
     url: [`Projekte`, projId, `Arten`, apArtId, `Populationen`, popId, `Kontroll-Berichte`],
-    children: myPopberNodes,
+    level: 6,
+    sort,
+    childrenLength: popberNodesLength,
   }
 }
