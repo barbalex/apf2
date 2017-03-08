@@ -1,15 +1,32 @@
-import tpopbeobNodes from './tpopbeob'
+import findIndex from 'lodash/findIndex'
 
-export default ({ store, projId, apArtId, popId, tpopId }) => {
-  const { activeUrlElements } = store
-  const myTpopbeobNodes = tpopbeobNodes({ store, projId, apArtId, popId, tpopId })
-  let message = myTpopbeobNodes.length
+export default (store) => {
+  const { activeUrlElements, node, table } = store
+
+  // fetch sorting indexes of parents
+  const projId = activeUrlElements.projekt
+  if (!projId) return []
+  const projIndex = findIndex(table.filteredAndSorted.projekt, { ProjId: projId })
+  const apArtId = activeUrlElements.ap
+  if (!apArtId) return []
+  const apIndex = findIndex(table.filteredAndSorted.ap, { ApArtId: apArtId })
+  const popId = activeUrlElements.pop
+  if (!popId) return []
+  const popIndex = findIndex(table.filteredAndSorted.pop, { PopId: popId })
+  const tpopId = activeUrlElements.tpop
+  if (!tpopId) return []
+  const tpopIndex = findIndex(table.filteredAndSorted.tpop, { TPopId: tpopId })
+
+  const childrenLength = table.filteredAndSorted.tpop.length
+
+  let message = childrenLength
   if (store.loading.includes(`beobzuordnung`)) {
     message = `...`
   }
-  if (store.node.nodeLabelFilter.get(`tpopbeob`)) {
-    message = `${myTpopbeobNodes.length} gefiltert`
+  if (node.nodeLabelFilter.get(`tpopbeob`)) {
+    message = `${childrenLength} gefiltert`
   }
+  const sort = [projIndex, 1, apIndex, 1, popIndex, 1, tpopIndex, 6]
 
   return {
     nodeType: `folder`,
@@ -18,6 +35,8 @@ export default ({ store, projId, apArtId, popId, tpopId }) => {
     label: `Beobachtungen (${message})`,
     expanded: activeUrlElements.tpopbeobFolder,
     url: [`Projekte`, projId, `Arten`, apArtId, `Populationen`, popId, `Teil-Populationen`, tpopId, `Beobachtungen`],
-    children: myTpopbeobNodes,
+    level: 8,
+    sort,
+    childrenLength,
   }
 }
