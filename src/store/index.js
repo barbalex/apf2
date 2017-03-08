@@ -92,6 +92,7 @@ import tpopberNode from '../modules/nodes/tpopber'
 import tpopfreiwkontrFolderNode from '../modules/nodes/tpopfreiwkontrFolder'
 import tpopfreiwkontrNode from '../modules/nodes/tpopfreiwkontr'
 import tpopfreiwkontrzaehlFolderNode from '../modules/nodes/tpopfreiwkontrzaehlFolder'
+import tpopfreiwkontrzaehlNode from '../modules/nodes/tpopfreiwkontrzaehl'
 import tpopfeldkontrFolderNode from '../modules/nodes/tpopfeldkontrFolder'
 import tpopfeldkontrNode from '../modules/nodes/tpopfeldkontr'
 import tpopmassnberFolderNode from '../modules/nodes/tpopmassnberFolder'
@@ -157,6 +158,7 @@ function Store() {
     tpopfreiwkontrFolder: computed(() => tpopfreiwkontrFolderNode(this)),
     tpopfreiwkontr: computed(() => tpopfreiwkontrNode(this)),
     tpopfreiwkontrzaehlFolder: computed(() => tpopfreiwkontrzaehlFolderNode(this)),
+    tpopfreiwkontrzaehl: computed(() => tpopfreiwkontrzaehlNode(this)),
     tpopfeldkontrFolder: computed(() => tpopfeldkontrFolderNode(this)),
     tpopfeldkontr: computed(() => tpopfeldkontrNode(this)),
     tpopmassnberFolder: computed(() => tpopmassnberFolderNode(this)),

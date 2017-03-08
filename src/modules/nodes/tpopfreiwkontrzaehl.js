@@ -1,40 +1,38 @@
-import sortBy from 'lodash/sortBy'
+import findIndex from 'lodash/findIndex'
 
-export default ({ store, projId, apArtId, popId, tpopId, tpopkontrId }) => {
-  const { activeUrlElements } = store
-  // grab tpopkontrzaehl as array
-  let tpopkontrzaehl = Array.from(store.table.tpopkontrzaehl.values())
-  // show only nodes of active tpopkontr
-  tpopkontrzaehl = tpopkontrzaehl.filter(a => a.TPopKontrId === tpopkontrId)
+export default (store) => {
+  const { activeUrlElements, table } = store
+  // fetch sorting indexes of parents
+  const projId = activeUrlElements.projekt
+  if (!projId) return []
+  const projIndex = findIndex(table.filteredAndSorted.projekt, { ProjId: projId })
+  const apArtId = activeUrlElements.ap
+  if (!apArtId) return []
+  const apIndex = findIndex(table.filteredAndSorted.ap, { ApArtId: apArtId })
+  const popId = activeUrlElements.pop
+  if (!popId) return []
+  const popIndex = findIndex(table.filteredAndSorted.pop, { PopId: popId })
+  const tpopId = activeUrlElements.tpop
+  if (!tpopId) return []
+  const tpopIndex = findIndex(table.filteredAndSorted.tpop, { TPopId: tpopId })
+  const tpopfreiwkontrId = activeUrlElements.tpopfreiwkontr
+  if (!tpopfreiwkontrId) return []
+  const tpopfreiwkontrIndex = findIndex(table.filteredAndSorted.tpopfreiwkontr, { TPopKontrId: tpopfreiwkontrId })
 
-  // get zaehleinheitWerte
-  const zaehleinheitWerte = Array.from(store.table.tpopkontrzaehl_einheit_werte.values())
-  const methodeWerte = Array.from(store.table.tpopkontrzaehl_methode_werte.values())
-
-  // map through all projekt and create array of nodes
-  let nodes = tpopkontrzaehl.map((el) => {
-    const zaehleinheitWert = zaehleinheitWerte.find(e => e.ZaehleinheitCode === el.Zaehleinheit)
-    const zaehleinheitTxt = zaehleinheitWert ? zaehleinheitWert.ZaehleinheitTxt : null
-    const methodeWert = methodeWerte.find(e => e.BeurteilCode === el.Methode)
-    const methodeTxt = methodeWert ? methodeWert.BeurteilTxt : null
+  return table.filteredAndSorted.tpopfreiwkontrzaehl.map((el, index) => {
+    const sort = [projIndex, 1, apIndex, 1, popIndex, 1, tpopIndex, 4, tpopfreiwkontrIndex, index]
 
     return {
       nodeType: `table`,
       menuType: `tpopfreiwkontrzaehl`,
       id: el.TPopKontrZaehlId,
-      parentId: tpopkontrId,
-      label: `${el.Anzahl || `(keine Anzahl)`} ${zaehleinheitTxt || `(keine Einheit)`} (${methodeTxt || `keine Methode`})`,
+      parentId: tpopfreiwkontrId,
+      label: el.label,
       expanded: el.TPopKontrZaehlId === activeUrlElements.tpopfreiwkontrzaehl,
-      url: [`Projekte`, projId, `Arten`, apArtId, `Populationen`, popId, `Teil-Populationen`, tpopId, `Freiwilligen-Kontrollen`, tpopkontrId, `Zaehlungen`, el.TPopKontrZaehlId],
+      url: [`Projekte`, projId, `Arten`, apArtId, `Populationen`, popId, `Teil-Populationen`, tpopId, `Freiwilligen-Kontrollen`, tpopfreiwkontrId, `Zaehlungen`, el.TPopKontrZaehlId],
+      level: 11,
+      sort,
+      childrenLength: 0,
     }
   })
-  // filter by node.nodeLabelFilter
-  const filterString = store.node.nodeLabelFilter.get(`tpopkontrzaehl`)
-  if (filterString) {
-    nodes = nodes.filter(p =>
-      p.label.toLowerCase().includes(filterString.toLowerCase())
-    )
-  }
-  // sort by label and return
-  return sortBy(nodes, `label`)
 }
