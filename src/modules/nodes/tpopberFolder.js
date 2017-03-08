@@ -17,7 +17,7 @@ export default (store) => {
   if (!tpopId) return []
   const tpopIndex = findIndex(table.filteredAndSorted.tpop, { TPopId: tpopId })
 
-  const childrenLength = table.filteredAndSorted.tpop.length
+  const childrenLength = table.filteredAndSorted.tpopber.length
 
   let message = childrenLength
   if (table.tpopberLoading) {

@@ -1,34 +1,35 @@
-import sortBy from 'lodash/sortBy'
+import findIndex from 'lodash/findIndex'
 
-export default ({ store, projId, apArtId, popId, tpopId }) => {
-  const { activeUrlElements } = store
-  // grab tpopber as array and sort them by year
-  let tpopber = Array.from(store.table.tpopber.values())
-  // show only nodes of active ap
-  tpopber = tpopber.filter(a => a.TPopId === tpopId)
-  // get entwicklungWerte
-  const tpopEntwicklungWerte = Array.from(store.table.tpop_entwicklung_werte.values())
-  // map through all projekt and create array of nodes
-  let nodes = tpopber.map((el) => {
-    const tpopEntwicklungWert = tpopEntwicklungWerte.find(e => e.EntwicklungCode === el.TPopBerEntwicklung)
-    const entwicklungTxt = tpopEntwicklungWert ? tpopEntwicklungWert.EntwicklungTxt : null
+export default (store) => {
+  const { activeUrlElements, table } = store
+  // fetch sorting indexes of parents
+  const projId = activeUrlElements.projekt
+  if (!projId) return []
+  const projIndex = findIndex(table.filteredAndSorted.projekt, { ProjId: projId })
+  const apArtId = activeUrlElements.ap
+  if (!apArtId) return []
+  const apIndex = findIndex(table.filteredAndSorted.ap, { ApArtId: apArtId })
+  const popId = activeUrlElements.pop
+  if (!popId) return []
+  const popIndex = findIndex(table.filteredAndSorted.pop, { PopId: popId })
+  const tpopId = activeUrlElements.tpop
+  if (!tpopId) return []
+  const tpopIndex = findIndex(table.filteredAndSorted.tpop, { TPopId: tpopId })
+
+  return table.filteredAndSorted.tpopber.map((el, index) => {
+    const sort = [projIndex, 1, apIndex, 1, popIndex, 1, tpopIndex, 5, index]
+
     return {
       nodeType: `table`,
       menuType: `tpopber`,
       parentId: tpopId,
       id: el.TPopBerId,
-      label: `${el.TPopBerJahr || `(kein Jahr)`}: ${entwicklungTxt || `(nicht beurteilt)`}`,
+      label: el.label,
       expanded: el.TPopBerId === activeUrlElements.tpopber,
       url: [`Projekte`, projId, `Arten`, apArtId, `Populationen`, popId, `Teil-Populationen`, tpopId, `Kontroll-Berichte`, el.TPopBerId],
+      level: 8,
+      sort,
+      childrenLength: 0,
     }
   })
-  // filter by node.nodeLabelFilter
-  const filterString = store.node.nodeLabelFilter.get(`tpopber`)
-  if (filterString) {
-    nodes = nodes.filter(p =>
-      p.label.toLowerCase().includes(filterString.toLowerCase())
-    )
-  }
-  // sort by label and return
-  return sortBy(nodes, `label`)
 }
