@@ -25,12 +25,6 @@ export default (store) => {
       level: 5,
       sort,
       childrenLength: 3,
-      /*
-      children: [
-        tpopFolderNode(store, projId, el.ApArtId, el.PopId),
-        popberFolderNode(store, projId, el.ApArtId, el.PopId),
-        popmassnberFolderNode(store, projId, el.ApArtId, el.PopId),
-      ],*/
     }
   })
 }
