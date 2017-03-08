@@ -21,7 +21,7 @@ export default (store) => {
       menuType: `tpop`,
       id: el.TPopId,
       parentId: el.PopId,
-      label: `${el.TPopNr || `(keine Nr)`}: ${el.TPopFlurname || `(kein Flurname)`}`,
+      label: el.label,
       expanded: el.TPopId === activeUrlElements.tpop,
       url: [`Projekte`, projId, `Arten`, apArtId, `Populationen`, el.PopId, `Teil-Populationen`, el.TPopId],
       level: 7,

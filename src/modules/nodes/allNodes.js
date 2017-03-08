@@ -149,6 +149,9 @@ export default (store) => {
   if (activeUrlElements.tpop) {
     nodes = nodes.concat(tpopbeobFolder)
   }
+  if (activeUrlElements.tpopbeobFolder) {
+    nodes = nodes.concat(tpopbeob)
+  }
   return nodes.sort((a, b) => (
     compare(a.sort[0], b.sort[0]) ||
     compare(a.sort[1], b.sort[1]) ||

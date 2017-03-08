@@ -1,44 +1,35 @@
-import sortBy from 'lodash/sortBy'
+import findIndex from 'lodash/findIndex'
 
-export default ({ store, tpopId }) => {
-  const { activeUrlElements } = store
-  // grab tpopbeob as array and sort them by year
-  const tpopbeob = Array
-    .from(store.table.beobzuordnung.values())
-    .filter(b => b.TPopId === tpopId)
-  // map through all and create array of nodes
-  let nodes = tpopbeob.map((el) => {
-    let datum = ``
-    let autor = ``
-    if (el.beobBereitgestellt) {
-      if (el.beobBereitgestellt.Datum) {
-        datum = el.beobBereitgestellt.Datum
-      }
-      if (el.beobBereitgestellt.Autor) {
-        autor = el.beobBereitgestellt.Autor
-      }
-    }
-    const quelle = store.table.beob_quelle.get(el.QuelleId)
-    const quelleName = quelle && quelle.name ? quelle.name : ``
-    const label = `${datum || `(kein Datum)`}: ${autor || `(kein Autor)`} (${quelleName})`
-    const beobId = isNaN(el.NO_NOTE) ? el.NO_NOTE : parseInt(el.NO_NOTE, 10)
+export default (store) => {
+  const { activeUrlElements, table } = store
+  // fetch sorting indexes of parents
+  const projId = activeUrlElements.projekt
+  if (!projId) return []
+  const projIndex = findIndex(table.filteredAndSorted.projekt, { ProjId: projId })
+  const apArtId = activeUrlElements.ap
+  if (!apArtId) return []
+  const apIndex = findIndex(table.filteredAndSorted.ap, { ApArtId: apArtId })
+  const popId = activeUrlElements.pop
+  if (!popId) return []
+  const popIndex = findIndex(table.filteredAndSorted.pop, { PopId: popId })
+  const tpopId = activeUrlElements.tpop
+  if (!tpopId) return []
+  const tpopIndex = findIndex(table.filteredAndSorted.tpop, { TPopId: tpopId })
+
+  return table.filteredAndSorted.tpopbeob.map((el, index) => {
+    const sort = [projIndex, 1, apIndex, 1, popIndex, 1, tpopIndex, 6, index]
+
     return {
       nodeType: `table`,
       menuType: `tpopbeob`,
-      id: beobId,
+      id: el.beobId,
       parentId: tpopId,
-      label,
-      expanded: beobId === activeUrlElements.tpopbeob,
-      url: [`Projekte`, activeUrlElements.projekt, `Arten`, activeUrlElements.ap, `Populationen`, activeUrlElements.pop, `Teil-Populationen`, el.TPopId, `Beobachtungen`, beobId],
+      label: el.label,
+      expanded: el.beobId === activeUrlElements.tpopbeob,
+      url: [`Projekte`, activeUrlElements.projekt, `Arten`, activeUrlElements.ap, `Populationen`, activeUrlElements.pop, `Teil-Populationen`, el.TPopId, `Beobachtungen`, el.beobId],
+      level: 8,
+      sort,
+      childrenLength: 0,
     }
   })
-  // filter by node.nodeLabelFilter
-  const filterString = store.node.nodeLabelFilter.get(`tpopbeob`)
-  if (filterString) {
-    nodes = nodes.filter(p =>
-      p.label.toLowerCase().includes(filterString.toLowerCase())
-    )
-  }
-  // sort by label and return
-  return sortBy(nodes, `label`).reverse()
 }
