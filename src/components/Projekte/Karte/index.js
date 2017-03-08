@@ -102,6 +102,7 @@ const Karte = ({ store, popMarkers, tpopMarkers }) => {
         pops={store.map.pop.pops}
         visible={store.map.pop.visible}
         markers={popMarkers}
+        map={store.map}
       />
       <TpopMarkerCluster
         highlightedIds={toJS(store.map.tpop.highlightedIds)}
@@ -109,6 +110,7 @@ const Karte = ({ store, popMarkers, tpopMarkers }) => {
         tpops={store.map.tpop.tpops}
         visible={store.map.tpop.visible}
         markers={tpopMarkers}
+        map={store.map}
       />
       <ScaleControl
         imperial={false}

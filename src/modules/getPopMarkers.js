@@ -44,7 +44,7 @@ export default (store) => {
         const marker = window.L.marker(latLng, {
           title,
           icon,
-        }).bindPopup(ReactDOMServer.renderToStaticMarkup(<PopPopup store={store} pop={p} />))
+        }).bindPopup(ReactDOMServer.renderToStaticMarkup(<PopPopup pop={p} />))
           .bindTooltip(title, tooltipOptions)
         markers.addLayer(marker)
       }

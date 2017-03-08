@@ -1,13 +1,21 @@
 // @flow
 import React, { PropTypes } from 'react'
 import styled from 'styled-components'
+import { observer, inject } from 'mobx-react'
+import compose from 'recompose/compose'
 
 import appBaseUrl from '../../../modules/appBaseUrl'
+
 const StyledH3 = styled.h3`
   margin: 7px 0;
 `
 
-const PopPopup = (
+const enhance = compose(
+  inject(`store`),
+  observer
+)
+
+const TpopPopup = (
   { store, pop, tpop }:
   {store:Object,pop:Object,tpop:Object}
 ) => {
@@ -37,10 +45,10 @@ const PopPopup = (
   )
 }
 
-PopPopup.propTypes = {
+TpopPopup.propTypes = {
   store: PropTypes.object.isRequired,
   pop: PropTypes.object.isRequired,
   tpop: PropTypes.object.isRequired,
 }
 
-export default PopPopup
+export default enhance(TpopPopup)

@@ -1,18 +1,25 @@
 import React, { Component, PropTypes } from 'react'
 import 'leaflet'
+import { inject, observer } from 'mobx-react'
+import compose from 'recompose/compose'
 // regular import results in error,
 // see: https://github.com/ljagis/leaflet-measure/issues/68
 // import 'leaflet-measure'
 import '../../../../node_modules/leaflet-measure/dist/leaflet-measure'
 
+const enhance = compose(
+  inject(`store`),
+  observer
+)
+
 class MeasureControl extends Component { // eslint-disable-line react/prefer-stateless-function
 
   static propTypes = {
-    map: PropTypes.object,
+    store: PropTypes.object.isRequired,
   }
 
   componentDidMount() {
-    const { map } = this.props
+    const { map } = this.props.store
     const options = {
       primaryLengthUnit: `meters`,
       secondaryLengthUnit: `kilometers`,
@@ -35,4 +42,4 @@ class MeasureControl extends Component { // eslint-disable-line react/prefer-sta
   }
 }
 
-export default MeasureControl
+export default enhance(MeasureControl)

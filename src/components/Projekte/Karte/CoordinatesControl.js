@@ -21,7 +21,7 @@ const enhance = compose(
   observer
 )
 
-const CoordinatesControl = ({ map, store }) => {
+const CoordinatesControl = ({ store }) => {
   let [x, y] = store.map.mouseCoordEpsg21781
   let coord = ``
   if (x && y) {
@@ -39,7 +39,6 @@ const CoordinatesControl = ({ map, store }) => {
 }
 
 CoordinatesControl.propTypes = {
-  map: PropTypes.object.isRequired,
   store: PropTypes.object.isRequired,
 }
 

@@ -1,15 +1,22 @@
 import React, { Component, PropTypes } from 'react'
 import 'leaflet'
 import 'leaflet-easyprint'
+import { observer, inject } from 'mobx-react'
+import compose from 'recompose/compose'
+
+const enhance = compose(
+  inject(`store`),
+  observer
+)
 
 class PrintControl extends Component {
 
   static propTypes = {
-    map: PropTypes.object,
+    store: PropTypes.object.isRequired,
   }
 
   componentDidMount() {
-    const { map } = this.props
+    const { map } = this.props.store
     const options = {
       title: `drucken`,
       position: `topright`,
@@ -24,4 +31,4 @@ class PrintControl extends Component {
   }
 }
 
-export default PrintControl
+export default enhance(PrintControl)
