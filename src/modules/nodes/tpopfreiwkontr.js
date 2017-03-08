@@ -30,18 +30,6 @@ export default (store) => {
       level: 9,
       sort,
       childrenLength: 1,
-      /*
-      children: [
-        {
-          nodeType: `folder`,
-          menuType: `tpopfreiwkontrzaehlFolder`,
-          id: el.TPopKontrId,
-          label: `Zählungen (${myZaehlNodes.length})`,
-          expanded: activeUrlElements.tpopfreiwkontrzaehlFolder,
-          url: [`Projekte`, projId, `Arten`, apArtId, `Populationen`, popId, `Teil-Populationen`, tpopId, `Freiwilligen-Kontrollen`, el.TPopKontrId, `Zaehlungen`],
-          children: myZaehlNodes,
-        },
-      ],*/
     }
   })
 }
