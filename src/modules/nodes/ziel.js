@@ -1,5 +1,4 @@
 import findIndex from 'lodash/findIndex'
-import sortBy from 'lodash/sortBy'
 
 export default (store, jahr) => {
   const { activeUrlElements, table } = store

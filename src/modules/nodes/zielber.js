@@ -1,33 +1,35 @@
-import sortBy from 'lodash/sortBy'
+import findIndex from 'lodash/findIndex'
 
 export default (store, zielId) => {
-  const { activeUrlElements } = store
-  // grab zielbere as array and sort them by year
-  let zielbere = Array.from(store.table.zielber.values())
-  zielbere = zielbere.filter(a => a.ZielId === zielId)
+  const { activeUrlElements, table } = store
+  // fetch sorting indexes of parents
+  const projId = activeUrlElements.projekt
+  if (!projId) return []
+  const projIndex = findIndex(table.filteredAndSorted.projekt, { ProjId: projId })
+  const apArtId = activeUrlElements.ap
+  if (!apArtId) return []
+  const apIndex = findIndex(table.filteredAndSorted.ap, { ApArtId: apArtId })
+  const zieljahr = activeUrlElements.zieljahr
+  const zieljahrIndex = findIndex(table.filteredAndSorted.zieljahr, { jahr: zieljahr })
+  const ziel = activeUrlElements.ziel
+  const zielIndex = findIndex(table.filteredAndSorted.ziel, { ZielId: ziel })
+
   // map through all and create array of nodes
-  let nodes = zielbere.map((el) => {
-    const ziel = store.table.ziel.get(el.ZielId)
-    const ApArtId = ziel.ApArtId
-    const projId = store.table.ap.get(ApArtId).ProjId
-    const zielJahr = ziel.ZielJahr
+  let nodes = table.filteredAndSorted.zielber.map((el, index) => {
+    const sort = [projIndex, 1, apIndex, 2, zieljahrIndex, zielIndex, 1, index]
+
     return {
       nodeType: `table`,
       menuType: `zielber`,
       id: el.ZielBerId,
       parentId: el.ZielId,
-      label: `${el.ZielBerJahr || `(kein Jahr)`}: ${el.ZielBerErreichung || `(keine Entwicklung)`}`,
+      label: el.label,
       expanded: el.ZielBerId === activeUrlElements.zielber,
-      url: [`Projekte`, projId, `Arten`, ApArtId, `AP-Ziele`, zielJahr, el.ZielId, `Berichte`, el.ZielBerId],
+      url: [`Projekte`, projId, `Arten`, apArtId, `AP-Ziele`, zieljahr, el.ZielId, `Berichte`, el.ZielBerId],
+      level: 8,
+      sort,
+      childrenLength: 0,
     }
   })
-  // filter by node.nodeLabelFilter
-  const filterString = store.node.nodeLabelFilter.get(`zielber`)
-  if (filterString) {
-    nodes = nodes.filter(p =>
-      p.label.toLowerCase().includes(filterString.toLowerCase())
-    )
-  }
-  // sort by label and return
-  return sortBy(nodes, `label`)
+  return nodes
 }

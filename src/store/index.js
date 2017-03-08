@@ -76,6 +76,7 @@ import zieljahreFolderNode from '../modules/nodes/zieljahrFolder'
 import zieljahrNode from '../modules/nodes/zieljahr'
 import zielNode from '../modules/nodes/ziel'
 import zielberFolderNode from '../modules/nodes/zielberFolder'
+import zielberNode from '../modules/nodes/zielber'
 
 import TableStore from './table'
 import ObservableHistory from './ObservableHistory'
@@ -119,6 +120,7 @@ function Store() {
     zieljahr: computed(() => zieljahrNode(this)),
     ziel: computed(() => zielNode(this)),
     zielberFolder: computed(() => zielberFolderNode(this)),
+    zielber: computed(() => zielberNode(this)),
   })
   this.ui = {}
   extendObservable(this.ui, {
