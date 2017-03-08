@@ -1,23 +1,39 @@
-import zielberNodes from './zielber'
+import findIndex from 'lodash/findIndex'
 
-export default (store, projId, apArtId, zieljahr, zielId) => {
-  const { activeUrlElements } = store
-  const myZielberNodes = zielberNodes(store, zielId)
-  let message = myZielberNodes.length
+export default (store) => {
+  const { activeUrlElements, table } = store
+  // fetch sorting indexes of parents
+  const projId = activeUrlElements.projekt
+  if (!projId) return []
+  const projIndex = findIndex(table.filteredAndSorted.projekt, { ProjId: projId })
+  const apArtId = activeUrlElements.ap
+  if (!apArtId) return []
+  const apIndex = findIndex(table.filteredAndSorted.ap, { ApArtId: apArtId })
+  const zieljahr = activeUrlElements.zieljahr
+  const zieljahrIndex = findIndex(table.filteredAndSorted.zieljahr, { jahr: zieljahr })
+  const ziel = activeUrlElements.ziel
+  const zielIndex = findIndex(table.filteredAndSorted.ziel, { ZielId: ziel })
+
+  const zielberNodesLength = table.filteredAndSorted.zielber.length
+
+  let message = zielberNodesLength
   if (store.table.zielberLoading) {
     message = `...`
   }
   if (store.node.nodeLabelFilter.get(`zielber`)) {
-    message = `${myZielberNodes.length} gefiltert`
+    message = `${zielberNodesLength} gefiltert`
   }
+  const sort = [projIndex, 1, apIndex, 2, zieljahrIndex, zielIndex, 1]
 
   return {
     nodeType: `folder`,
     menuType: `zielberFolder`,
-    id: zielId,
+    id: ziel,
     label: `Berichte (${message})`,
-    expanded: zielId === activeUrlElements.ziel && activeUrlElements.zielberFolder,
-    url: [`Projekte`, projId, `Arten`, apArtId, `AP-Ziele`, zieljahr, zielId, `Berichte`],
-    children: myZielberNodes,
+    expanded: activeUrlElements.zielberFolder,
+    url: [`Projekte`, projId, `Arten`, apArtId, `AP-Ziele`, zieljahr, ziel, `Berichte`],
+    level: 7,
+    sort,
+    childrenLength: zielberNodesLength,
   }
 }

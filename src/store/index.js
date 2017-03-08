@@ -75,6 +75,7 @@ import erfkritNode from '../modules/nodes/erfkrit'
 import zieljahreFolderNode from '../modules/nodes/zieljahrFolder'
 import zieljahrNode from '../modules/nodes/zieljahr'
 import zielNode from '../modules/nodes/ziel'
+import zielberFolderNode from '../modules/nodes/zielberFolder'
 
 import TableStore from './table'
 import ObservableHistory from './ObservableHistory'
@@ -117,6 +118,7 @@ function Store() {
     zieljahrFolder: computed(() => zieljahreFolderNode(this)),
     zieljahr: computed(() => zieljahrNode(this)),
     ziel: computed(() => zielNode(this)),
+    zielberFolder: computed(() => zielberFolderNode(this)),
   })
   this.ui = {}
   extendObservable(this.ui, {
@@ -488,6 +490,25 @@ function Store() {
       }
       // sort by label and return
       return sortBy(ziele, `label`)
+    }),
+    zielber: computed(() => {
+      const { activeUrlElements, table, node } = this
+      // grab zielbere as array and sort them by year
+      let zielbere = Array.from(table.zielber.values())
+      zielbere = zielbere.filter(a => a.ZielId === activeUrlElements.ziel)
+      // map through all and create array of nodes
+      zielbere.forEach((el) => {
+        el.label = `${el.ZielBerJahr || `(kein Jahr)`}: ${el.ZielBerErreichung || `(keine Entwicklung)`}`
+      })
+      // filter by node.nodeLabelFilter
+      const filterString = node.nodeLabelFilter.get(`zielber`)
+      if (filterString) {
+        zielbere = zielbere.filter(p =>
+          p.label.toLowerCase().includes(filterString.toLowerCase())
+        )
+      }
+      // sort by label and return
+      return sortBy(zielbere, `label`)
     }),
   })
   this.valuesForWhichTableDataWasFetched = {}

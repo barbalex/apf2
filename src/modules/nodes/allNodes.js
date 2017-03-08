@@ -36,6 +36,7 @@ export default (store) => {
     zieljahrFolder,
     zieljahr,
     ziel,
+    zielberFolder,
   } = store.node.node
   let nodes = projekt
   if (activeUrlElements.projekt) {
@@ -103,6 +104,9 @@ export default (store) => {
   }
   if (activeUrlElements.zieljahr) {
     nodes = nodes.concat(ziel)
+  }
+  if (activeUrlElements.ziel) {
+    nodes = nodes.concat(zielberFolder)
   }
   return nodes.sort((a, b) => (
     compare(a.sort[0], b.sort[0]) ||

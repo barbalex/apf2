@@ -12,9 +12,6 @@ export default (store, jahr) => {
   const apIndex = findIndex(table.filteredAndSorted.ap, { ApArtId: apArtId })
   const zieljahr = activeUrlElements.zieljahr
   const zieljahrIndex = findIndex(table.filteredAndSorted.zieljahr, { jahr: zieljahr })
-  console.log(`zieljahr:`, zieljahr)
-  console.log(`zieljahrIndex:`, zieljahrIndex)
-  console.log(`table.filteredAndSorted.ziel:`, table.filteredAndSorted.ziel)
 
   // map through all and create array of nodes
   let nodes = table.filteredAndSorted.ziel.map((el, index) => {
