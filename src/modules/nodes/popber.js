@@ -5,10 +5,10 @@ export default (store) => {
   // fetch sorting indexes of parents
   const projId = activeUrlElements.projekt
   if (!projId) return []
-  const projIndex = findIndex(store.table.filteredAndSorted.projekt, { ProjId: projId })
+  const projIndex = findIndex(table.filteredAndSorted.projekt, { ProjId: projId })
   const apArtId = activeUrlElements.ap
   if (!apArtId) return []
-  const apIndex = findIndex(store.table.filteredAndSorted.ap, { ApArtId: apArtId })
+  const apIndex = findIndex(table.filteredAndSorted.ap, { ApArtId: apArtId })
   const popId = activeUrlElements.pop
   if (!popId) return []
   const popIndex = findIndex(table.filteredAndSorted.pop, { PopId: popId })

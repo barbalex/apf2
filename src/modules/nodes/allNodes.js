@@ -141,6 +141,9 @@ export default (store) => {
   if (activeUrlElements.pop) {
     nodes = nodes.concat(tpopFolder)
   }
+  if (activeUrlElements.tpopFolder) {
+    nodes = nodes.concat(tpop)
+  }
   return nodes.sort((a, b) => (
     compare(a.sort[0], b.sort[0]) ||
     compare(a.sort[1], b.sort[1]) ||

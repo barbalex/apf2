@@ -84,6 +84,7 @@ import popmassnberNode from '../modules/nodes/popmassnber'
 import popberFolderNode from '../modules/nodes/popberFolder'
 import popberNode from '../modules/nodes/popber'
 import tpopFolderNode from '../modules/nodes/tpopFolder'
+import tpopNode from '../modules/nodes/tpop'
 
 import TableStore from './table'
 import ObservableHistory from './ObservableHistory'
@@ -135,6 +136,7 @@ function Store() {
     popberFolder: computed(() => popberFolderNode(this)),
     popber: computed(() => popberNode(this)),
     tpopFolder: computed(() => tpopFolderNode(this)),
+    tpop: computed(() => tpopNode(this)),
   })
   this.ui = {}
   extendObservable(this.ui, {
