@@ -54,6 +54,8 @@ export default (store) => {
     tpopfreiwkontr,
     tpopfeldkontrFolder,
     tpopfeldkontr,
+    tpopmassnberFolder,
+    tpopmassnber,
   } = store.node.node
   let nodes = projekt
   if (activeUrlElements.projekt) {
@@ -175,6 +177,12 @@ export default (store) => {
   }
   if (activeUrlElements.tpopfeldkontrFolder) {
     nodes = nodes.concat(tpopfeldkontr)
+  }
+  if (activeUrlElements.tpop) {
+    nodes = nodes.concat(tpopmassnberFolder)
+  }
+  if (activeUrlElements.tpopmassnberFolder) {
+    nodes = nodes.concat(tpopmassnber)
   }
   return nodes.sort((a, b) => (
     compare(a.sort[0], b.sort[0]) ||

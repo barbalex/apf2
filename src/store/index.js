@@ -93,6 +93,7 @@ import tpopfreiwkontrFolderNode from '../modules/nodes/tpopfreiwkontrFolder'
 import tpopfreiwkontrNode from '../modules/nodes/tpopfreiwkontr'
 import tpopfeldkontrFolderNode from '../modules/nodes/tpopfeldkontrFolder'
 import tpopfeldkontrNode from '../modules/nodes/tpopfeldkontr'
+import tpopmassnberFolderNode from '../modules/nodes/tpopmassnberFolder'
 
 import TableStore from './table'
 import ObservableHistory from './ObservableHistory'
@@ -153,6 +154,7 @@ function Store() {
     tpopfreiwkontr: computed(() => tpopfreiwkontrNode(this)),
     tpopfeldkontrFolder: computed(() => tpopfeldkontrFolderNode(this)),
     tpopfeldkontr: computed(() => tpopfeldkontrNode(this)),
+    tpopmassnberFolder: computed(() => tpopmassnberFolderNode(this)),
   })
   this.ui = {}
   extendObservable(this.ui, {
@@ -731,6 +733,30 @@ function Store() {
       // sort by label and return
       return sortBy(tpopkontr, `label`)
     }),
+    tpopmassnber: computed(() => {
+      const { activeUrlElements, table, node } = this
+      // grab tpopmassnber as array and sort them by year
+      let tpopmassnber = Array.from(table.tpopmassnber.values())
+      // show only nodes of active ap
+      tpopmassnber = tpopmassnber.filter(a => a.TPopId === activeUrlElements.tpop)
+      // get erfkritWerte
+      const tpopmassnErfbeurtWerte = Array.from(table.tpopmassn_erfbeurt_werte.values())
+      // map through all projekt and create array of nodes
+      tpopmassnber.forEach((el) => {
+        const tpopmassnErfbeurtWert = tpopmassnErfbeurtWerte.find(e => e.BeurteilId === el.TPopMassnBerErfolgsbeurteilung)
+        const beurteilTxt = tpopmassnErfbeurtWert ? tpopmassnErfbeurtWert.BeurteilTxt : null
+        el.label = `${el.TPopMassnBerJahr || `(kein Jahr)`}: ${beurteilTxt || `(nicht beurteilt)`}`
+      })
+      // filter by node.nodeLabelFilter
+      const filterString = node.nodeLabelFilter.get(`tpopmassnber`)
+      if (filterString) {
+        tpopmassnber = tpopmassnber.filter(p =>
+          p.label.toLowerCase().includes(filterString.toLowerCase())
+        )
+      }
+      // sort by label and return
+      return sortBy(tpopmassnber, `label`)
+    })
   })
   this.valuesForWhichTableDataWasFetched = {}
   this.qk = observable.map()
