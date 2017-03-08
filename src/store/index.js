@@ -92,6 +92,7 @@ import tpopberNode from '../modules/nodes/tpopber'
 import tpopfreiwkontrFolderNode from '../modules/nodes/tpopfreiwkontrFolder'
 import tpopfreiwkontrNode from '../modules/nodes/tpopfreiwkontr'
 import tpopfeldkontrFolderNode from '../modules/nodes/tpopfeldkontrFolder'
+import tpopfeldkontrNode from '../modules/nodes/tpopfeldkontr'
 
 import TableStore from './table'
 import ObservableHistory from './ObservableHistory'
@@ -151,6 +152,7 @@ function Store() {
     tpopfreiwkontrFolder: computed(() => tpopfreiwkontrFolderNode(this)),
     tpopfreiwkontr: computed(() => tpopfreiwkontrNode(this)),
     tpopfeldkontrFolder: computed(() => tpopfeldkontrFolderNode(this)),
+    tpopfeldkontr: computed(() => tpopfeldkontrNode(this)),
   })
   this.ui = {}
   extendObservable(this.ui, {
