@@ -1,15 +1,32 @@
-import tpopberNodes from './tpopber'
+import findIndex from 'lodash/findIndex'
 
-export default ({ store, projId, apArtId, popId, tpopId }) => {
-  const { activeUrlElements } = store
-  const myTpopberNodes = tpopberNodes({ store, projId, apArtId, popId, tpopId })
-  let message = myTpopberNodes.length
-  if (store.table.tpopberLoading) {
+export default (store) => {
+  const { activeUrlElements, node, table } = store
+
+  // fetch sorting indexes of parents
+  const projId = activeUrlElements.projekt
+  if (!projId) return []
+  const projIndex = findIndex(table.filteredAndSorted.projekt, { ProjId: projId })
+  const apArtId = activeUrlElements.ap
+  if (!apArtId) return []
+  const apIndex = findIndex(table.filteredAndSorted.ap, { ApArtId: apArtId })
+  const popId = activeUrlElements.pop
+  if (!popId) return []
+  const popIndex = findIndex(table.filteredAndSorted.pop, { PopId: popId })
+  const tpopId = activeUrlElements.tpop
+  if (!tpopId) return []
+  const tpopIndex = findIndex(table.filteredAndSorted.tpop, { TPopId: tpopId })
+
+  const childrenLength = table.filteredAndSorted.tpop.length
+
+  let message = childrenLength
+  if (table.tpopberLoading) {
     message = `...`
   }
-  if (store.node.nodeLabelFilter.get(`tpopber`)) {
-    message = `${myTpopberNodes.length} gefiltert`
+  if (node.nodeLabelFilter.get(`tpopber`)) {
+    message = `${childrenLength} gefiltert`
   }
+  const sort = [projIndex, 1, apIndex, 1, popIndex, 1, tpopIndex, 5]
 
   return {
     nodeType: `folder`,
@@ -18,6 +35,8 @@ export default ({ store, projId, apArtId, popId, tpopId }) => {
     label: `Kontroll-Berichte (${message})`,
     expanded: activeUrlElements.tpopberFolder,
     url: [`Projekte`, projId, `Arten`, apArtId, `Populationen`, popId, `Teil-Populationen`, tpopId, `Kontroll-Berichte`],
-    children: myTpopberNodes,
+    level: 8,
+    sort,
+    childrenLength,
   }
 }

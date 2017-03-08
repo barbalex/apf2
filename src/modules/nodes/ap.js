@@ -21,18 +21,6 @@ export default (store) => {
       level: 3,
       sort,
       childrenLength: 0,
-      children: [
-        // popFolderNode(store, el.ProjId, el.ApArtId),
-        // zieljahreFolderNode(store, el.ProjId, el.ApArtId),
-        // erfkritFolderNode(store, el.ProjId, el.ApArtId),
-        // apberFolderNode(store, el.ProjId, el.ApArtId),
-        // berFolderNode(store, el.ProjId, el.ApArtId),
-        // beobzuordnungFolderNode(store, el.ProjId, el.ApArtId),
-        // beobNichtZuzuordnenFolderNode(store, el.ProjId, el.ApArtId),
-        // idealbiotopFolderNode(store, el.ProjId, el.ApArtId),
-        // assozartFolderNode(store, el.ProjId, el.ApArtId),
-        // qkFolderNode(store, el.ProjId, el.ApArtId),
-      ],
     }
   })
   return nodes
