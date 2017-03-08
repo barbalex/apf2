@@ -27,7 +27,7 @@ export default (store) => {
       label: el.label,
       expanded: el.beobId === activeUrlElements.tpopbeob,
       url: [`Projekte`, activeUrlElements.projekt, `Arten`, activeUrlElements.ap, `Populationen`, activeUrlElements.pop, `Teil-Populationen`, el.TPopId, `Beobachtungen`, el.beobId],
-      level: 8,
+      level: 9,
       sort,
       childrenLength: 0,
     }

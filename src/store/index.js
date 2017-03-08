@@ -90,6 +90,8 @@ import tpopbeobNode from '../modules/nodes/tpopbeob'
 import tpopberFolderNode from '../modules/nodes/tpopberFolder'
 import tpopberNode from '../modules/nodes/tpopber'
 import tpopfreiwkontrFolderNode from '../modules/nodes/tpopfreiwkontrFolder'
+import tpopfreiwkontrNode from '../modules/nodes/tpopfreiwkontr'
+import tpopfeldkontrFolderNode from '../modules/nodes/tpopfeldkontrFolder'
 
 import TableStore from './table'
 import ObservableHistory from './ObservableHistory'
@@ -147,6 +149,8 @@ function Store() {
     tpopberFolder: computed(() => tpopberFolderNode(this)),
     tpopber: computed(() => tpopberNode(this)),
     tpopfreiwkontrFolder: computed(() => tpopfreiwkontrFolderNode(this)),
+    tpopfreiwkontr: computed(() => tpopfreiwkontrNode(this)),
+    tpopfeldkontrFolder: computed(() => tpopfeldkontrFolderNode(this)),
   })
   this.ui = {}
   extendObservable(this.ui, {
@@ -696,6 +700,27 @@ function Store() {
       })
       // filter by node.nodeLabelFilter
       const filterString = node.nodeLabelFilter.get(`tpopfreiwkontr`)
+      if (filterString) {
+        tpopkontr = tpopkontr.filter(p =>
+          p.label.toLowerCase().includes(filterString.toLowerCase())
+        )
+      }
+      // sort by label and return
+      return sortBy(tpopkontr, `label`)
+    }),
+    tpopfeldkontr: computed(() => {
+      const { activeUrlElements, table, node } = this
+      // grab tpopkontr as array and sort them by year
+      let tpopkontr = Array.from(table.tpopkontr.values())
+        .filter(t => t.TPopKontrTyp !== `Freiwilligen-Erfolgskontrolle`)
+      // show only nodes of active ap
+      tpopkontr = tpopkontr.filter(a => a.TPopId === activeUrlElements.tpop)
+      // map through all projekt and create array of nodes
+      tpopkontr.forEach((el) => {
+        el.label = `${el.TPopKontrJahr || `(kein Jahr)`}: ${el.TPopKontrTyp || `(kein Typ)`}`
+      })
+      // filter by node.nodeLabelFilter
+      const filterString = node.nodeLabelFilter.get(`tpopfeldkontr`)
       if (filterString) {
         tpopkontr = tpopkontr.filter(p =>
           p.label.toLowerCase().includes(filterString.toLowerCase())
