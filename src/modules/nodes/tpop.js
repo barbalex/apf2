@@ -27,15 +27,6 @@ export default (store) => {
       level: 7,
       sort,
       childrenLength: 6,
-      /*
-      children: [
-        tpopmassnFolderNode({ store, projId, apArtId, popId, tpopId }),
-        tpopmassnberFolderNode({ store, projId, apArtId, popId, tpopId }),
-        tpopfeldkontrFolderNode({ store, projId, apArtId, popId, tpopId }),
-        tpopfreiwkontrFolderNode({ store, projId, apArtId, popId, tpopId }),
-        tpopberFolderNode({ store, projId, apArtId, popId, tpopId }),
-        tpopbeobFolderNode({ store, projId, apArtId, popId, tpopId }),
-      ],*/
     }
   })
 }

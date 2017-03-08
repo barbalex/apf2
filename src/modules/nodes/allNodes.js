@@ -52,6 +52,8 @@ export default (store) => {
     tpopber,
     tpopfreiwkontrFolder,
     tpopfreiwkontr,
+    tpopfreiwkontrzaehlFolder,
+    tpopfreiwkontrzaehl,
     tpopfeldkontrFolder,
     tpopfeldkontr,
     tpopmassnberFolder,
@@ -173,6 +175,12 @@ export default (store) => {
   }
   if (activeUrlElements.tpopfreiwkontrFolder) {
     nodes = nodes.concat(tpopfreiwkontr)
+  }
+  if (activeUrlElements.tpopfreiwkontr) {
+    nodes = nodes.concat(tpopfreiwkontrzaehlFolder)
+  }
+  if (activeUrlElements.tpopfreiwkontrzaehlFolder) {
+    nodes = nodes.concat(tpopfreiwkontrzaehl)
   }
   if (activeUrlElements.tpop) {
     nodes = nodes.concat(tpopfeldkontrFolder)
