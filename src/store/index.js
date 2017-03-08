@@ -72,8 +72,8 @@ import apberFolderNode from '../modules/nodes/apberFolder'
 import apberNode from '../modules/nodes/apber'
 import erfkritFolderNode from '../modules/nodes/erfkritFolder'
 import erfkritNode from '../modules/nodes/erfkrit'
-import zieljahreFolderNode from '../modules/nodes/zieljahreFolder'
-import zieljahreNode from '../modules/nodes/zieljahre'
+import zieljahreFolderNode from '../modules/nodes/zieljahrFolder'
+import zieljahrNode from '../modules/nodes/zieljahr'
 import zielNode from '../modules/nodes/ziel'
 
 import TableStore from './table'
@@ -114,8 +114,8 @@ function Store() {
     apber: computed(() => apberNode(this)),
     erfkritFolder: computed(() => erfkritFolderNode(this)),
     erfkrit: computed(() => erfkritNode(this)),
-    zieljahreFolder: computed(() => zieljahreFolderNode(this)),
-    zieljahre: computed(() => zieljahreNode(this)),
+    zieljahrFolder: computed(() => zieljahreFolderNode(this)),
+    zieljahr: computed(() => zieljahrNode(this)),
     ziel: computed(() => zielNode(this)),
   })
   this.ui = {}
@@ -447,8 +447,12 @@ function Store() {
         })
       }
       if (ziele.length > 0) {
-        const zielJahre = uniq(ziele.map(z => z.ZielJahr))
-        return zielJahre.sort()
+        const zielJahrWerte = uniq(ziele.map(z => z.ZielJahr)).sort()
+        const zielJahreObjects = zielJahrWerte.map(z => ({
+          jahr: z,
+          length: ziele.filter(zj => zj.ZielJahr === z).length
+        }))
+        return zielJahreObjects
       }
       return []
     }),

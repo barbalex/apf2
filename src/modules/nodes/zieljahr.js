@@ -10,7 +10,7 @@ export default (store) => {
   if (!apArtId) return []
   const apIndex = findIndex(table.filteredAndSorted.ap, { ApArtId: apArtId })
 
-  const nodes = table.filteredAndSorted.zieljahr.map((jahr, index) => {
+  const nodes = table.filteredAndSorted.zieljahr.map((z, index) => {
     const sort = [projIndex, 1, apIndex, 2, index]
     // get nr of ziele for year
     // const nrOfZieleThisYear = ziele.filter(z => z.ZielJahr === jahr).length
@@ -21,9 +21,9 @@ export default (store) => {
       menuType: `zieljahr`,
       id: apArtId,
       parentId: apArtId,
-      label: `${jahr == null ? `kein Jahr` : jahr} (${childrenLength})`,
-      expanded: jahr && jahr === activeUrlElements.zieljahr,
-      url: [`Projekte`, projId, `Arten`, apArtId, `AP-Ziele`, jahr],
+      label: `${z.jahr == null ? `kein Jahr` : z.jahr} (${z.length})`,
+      expanded: z.jahr && z.jahr === activeUrlElements.zieljahr,
+      url: [`Projekte`, projId, `Arten`, apArtId, `AP-Ziele`, z.jahr],
       level: 5,
       sort,
       childrenLength,

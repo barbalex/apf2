@@ -11,7 +11,10 @@ export default (store, jahr) => {
   if (!apArtId) return []
   const apIndex = findIndex(table.filteredAndSorted.ap, { ApArtId: apArtId })
   const zieljahr = activeUrlElements.zieljahr
-  const zieljahrIndex = findIndex(table.filteredAndSorted.zieljahr, zieljahr)
+  const zieljahrIndex = findIndex(table.filteredAndSorted.zieljahr, { jahr: zieljahr })
+  console.log(`zieljahr:`, zieljahr)
+  console.log(`zieljahrIndex:`, zieljahrIndex)
+  console.log(`table.filteredAndSorted.ziel:`, table.filteredAndSorted.ziel)
 
   // map through all and create array of nodes
   let nodes = table.filteredAndSorted.ziel.map((el, index) => {
@@ -30,13 +33,6 @@ export default (store, jahr) => {
       childrenLength: 1,
     }
   })
-  // filter by node.nodeLabelFilter
-  const filterString = store.node.nodeLabelFilter.get(`ziel`)
-  if (filterString) {
-    nodes = nodes.filter(p =>
-      p.label.toLowerCase().includes(filterString.toLowerCase())
-    )
-  }
-  // sort by label and return
-  return sortBy(nodes, `label`)
+  console.log(`nodes:`, nodes)
+  return nodes
 }

@@ -33,8 +33,8 @@ export default (store) => {
     apber,
     erfkritFolder,
     erfkrit,
-    zieljahreFolder,
-    zieljahre,
+    zieljahrFolder,
+    zieljahr,
     ziel,
   } = store.node.node
   let nodes = projekt
@@ -96,12 +96,12 @@ export default (store) => {
     nodes = nodes.concat(erfkrit)
   }
   if (activeUrlElements.ap) {
-    nodes = nodes.concat(zieljahreFolder)
+    nodes = nodes.concat(zieljahrFolder)
   }
   if (activeUrlElements.zielFolder) {
-    nodes = nodes.concat(zieljahre)
+    nodes = nodes.concat(zieljahr)
   }
-  if (activeUrlElements.zieljahre) {
+  if (activeUrlElements.zieljahr) {
     nodes = nodes.concat(ziel)
   }
   return nodes.sort((a, b) => (
