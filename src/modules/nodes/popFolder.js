@@ -13,10 +13,10 @@ export default (store) => {
 
   const popNodesLength = table.filteredAndSorted.pop.length
   let message = popNodesLength
-  if (store.table.popLoading) {
+  if (table.popLoading) {
     message = `...`
   }
-  if (store.node.nodeLabelFilter.get(`pop`)) {
+  if (node.nodeLabelFilter.get(`pop`)) {
     message = `${popNodesLength} gefiltert`
   }
   const sort = [projIndex, 1, apIndex, 1]

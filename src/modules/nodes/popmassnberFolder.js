@@ -1,15 +1,29 @@
-import popmassnberNodes from './popmassnber'
+import findIndex from 'lodash/findIndex'
 
-export default (store, projId, apArtId, popId) => {
-  const { activeUrlElements } = store
-  const myPopmassnberNodes = popmassnberNodes({ store, apArtId, projId, popId })
-  let message = myPopmassnberNodes.length
-  if (store.table.popmassnberLoading) {
+export default (store) => {
+  const { activeUrlElements, node, table } = store
+
+  // fetch sorting indexes of parents
+  const projId = activeUrlElements.projekt
+  if (!projId) return []
+  const projIndex = findIndex(table.filteredAndSorted.projekt, { ProjId: projId })
+  const apArtId = activeUrlElements.ap
+  if (!apArtId) return []
+  const apIndex = findIndex(table.filteredAndSorted.ap, { ApArtId: apArtId })
+  const popId = activeUrlElements.pop
+  if (!popId) return []
+  const popIndex = findIndex(table.filteredAndSorted.pop, { PopId: popId })
+
+  const popmassnberNodesLength = table.filteredAndSorted.popmassnber.length
+
+  let message = popmassnberNodesLength
+  if (table.popmassnberLoading) {
     message = `...`
   }
-  if (store.node.nodeLabelFilter.get(`popmassnber`)) {
-    message = `${myPopmassnberNodes.length} gefiltert`
+  if (node.nodeLabelFilter.get(`popmassnber`)) {
+    message = `${popmassnberNodesLength} gefiltert`
   }
+  const sort = [projIndex, 1, apIndex, 1, popIndex, 3]
 
   return {
     nodeType: `folder`,
@@ -18,6 +32,8 @@ export default (store, projId, apArtId, popId) => {
     label: `Massnahmen-Berichte (${message})`,
     expanded: activeUrlElements.popmassnberFolder,
     url: [`Projekte`, projId, `Arten`, apArtId, `Populationen`, popId, `Massnahmen-Berichte`],
-    children: myPopmassnberNodes,
+    level: 6,
+    sort,
+    childrenLength: popmassnberNodesLength,
   }
 }
