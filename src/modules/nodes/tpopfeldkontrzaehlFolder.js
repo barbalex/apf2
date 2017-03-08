@@ -1,7 +1,8 @@
 import findIndex from 'lodash/findIndex'
 
 export default (store) => {
-  const { activeUrlElements, table } = store
+  const { activeUrlElements, node, table } = store
+
   // fetch sorting indexes of parents
   const projId = activeUrlElements.projekt
   if (!projId) return []
@@ -19,20 +20,26 @@ export default (store) => {
   if (!tpopfeldkontrId) return []
   const tpopfeldkontrIndex = findIndex(table.filteredAndSorted.tpopfeldkontr, { TPopKontrId: tpopfeldkontrId })
 
-  return table.filteredAndSorted.tpopfeldkontrzaehl.map((el, index) => {
-    const sort = [projIndex, 1, apIndex, 1, popIndex, 1, tpopIndex, 3, tpopfeldkontrIndex, index]
+  const childrenLength = table.filteredAndSorted.tpopfeldkontrzaehl.length
 
-    return {
-      nodeType: `table`,
-      menuType: `tpopfeldkontrzaehl`,
-      id: el.TPopKontrZaehlId,
-      parentId: tpopfeldkontrId,
-      label: el.label,
-      expanded: el.TPopKontrZaehlId === activeUrlElements.tpopfeldkontrzaehl,
-      url: [`Projekte`, projId, `Arten`, apArtId, `Populationen`, popId, `Teil-Populationen`, tpopId, `Feld-Kontrollen`, tpopfeldkontrId, `Zaehlungen`, el.TPopKontrZaehlId],
-      level: 11,
-      sort,
-      childrenLength: 0,
-    }
-  })
+  let message = childrenLength
+  if (table.tpopkontrLoading) {
+    message = `...`
+  }
+  if (node.nodeLabelFilter.get(`tpopfeldkontr`)) {
+    message = `${childrenLength} gefiltert`
+  }
+  const sort = [projIndex, 1, apIndex, 1, popIndex, 1, tpopIndex, 3, tpopfeldkontrIndex]
+
+  return {
+    nodeType: `folder`,
+    menuType: `tpopfeldkontrzaehlFolder`,
+    id: tpopfeldkontrId,
+    label: `Zählungen (${message})`,
+    expanded: activeUrlElements.tpopfeldkontrzaehlFolder,
+    url: [`Projekte`, projId, `Arten`, apArtId, `Populationen`, popId, `Teil-Populationen`, tpopId, `Feld-Kontrollen`, tpopfeldkontrId, `Zaehlungen`],
+    level: 10,
+    sort,
+    childrenLength,
+  }
 }
