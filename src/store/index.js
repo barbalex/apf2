@@ -83,6 +83,7 @@ import popmassnberFolderNode from '../modules/nodes/popmassnberFolder'
 import popmassnberNode from '../modules/nodes/popmassnber'
 import popberFolderNode from '../modules/nodes/popberFolder'
 import popberNode from '../modules/nodes/popber'
+import tpopFolderNode from '../modules/nodes/tpopFolder'
 
 import TableStore from './table'
 import ObservableHistory from './ObservableHistory'
@@ -133,6 +134,7 @@ function Store() {
     popmassnber: computed(() => popmassnberNode(this)),
     popberFolder: computed(() => popberFolderNode(this)),
     popber: computed(() => popberNode(this)),
+    tpopFolder: computed(() => tpopFolderNode(this)),
   })
   this.ui = {}
   extendObservable(this.ui, {
@@ -591,6 +593,26 @@ function Store() {
       }
       // sort by label and return
       return sortBy(popber, `label`)
+    }),
+    tpop: computed(() => {
+      const { activeUrlElements, table, node } = this
+      // grab tpop as array and sort them by year
+      let tpop = Array.from(table.tpop.values())
+      // show only nodes of active pop
+      tpop = tpop.filter(a => a.PopId === activeUrlElements.pop)
+      tpop = sortBy(tpop, `TPopNr`)
+      // map through all projekt and create array of nodes
+      tpop.forEach((el) => {
+        el.label = `${el.TPopNr || `(keine Nr)`}: ${el.TPopFlurname || `(kein Flurname)`}`
+      })
+      // filter by node.nodeLabelFilter
+      const filterString = node.nodeLabelFilter.get(`tpop`)
+      if (filterString) {
+        tpop = tpop.filter(p =>
+          p.label.toLowerCase().includes(filterString.toLowerCase())
+        )
+      }
+      return tpop
     }),
   })
   this.valuesForWhichTableDataWasFetched = {}
