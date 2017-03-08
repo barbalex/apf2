@@ -29,6 +29,5 @@ export default (store, jahr) => {
       childrenLength: 1,
     }
   })
-  console.log(`nodes:`, nodes)
   return nodes
 }
