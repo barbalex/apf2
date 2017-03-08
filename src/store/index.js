@@ -78,6 +78,7 @@ import zielNode from '../modules/nodes/ziel'
 import zielberFolderNode from '../modules/nodes/zielberFolder'
 import zielberNode from '../modules/nodes/zielber'
 import popFolderNode from '../modules/nodes/popFolder'
+import popNode from '../modules/nodes/pop'
 
 import TableStore from './table'
 import ObservableHistory from './ObservableHistory'
@@ -123,6 +124,7 @@ function Store() {
     zielberFolder: computed(() => zielberFolderNode(this)),
     zielber: computed(() => zielberNode(this)),
     popFolder: computed(() => popFolderNode(this)),
+    pop: computed(() => popNode(this)),
   })
   this.ui = {}
   extendObservable(this.ui, {

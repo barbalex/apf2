@@ -1,40 +1,36 @@
-import sortBy from 'lodash/sortBy'
-import popmassnberFolderNode from './popmassnberFolder'
-import popberFolderNode from './popberFolder'
-import tpopFolderNode from './tpopFolder'
+import findIndex from 'lodash/findIndex'
 
-export default (store, apArtId) => {
-  const { activeUrlElements } = store
-  // grab pop as array and sort them by year
-  let pop = Array.from(store.table.pop.values())
-  // show only nodes of active ap
-  pop = pop.filter(a => a.ApArtId === apArtId)
-  pop = sortBy(pop, `PopNr`)
+export default (store) => {
+  const { activeUrlElements, table } = store
+  // fetch sorting indexes of parents
+  const projId = activeUrlElements.projekt
+  if (!projId) return []
+  const projIndex = findIndex(store.table.filteredAndSorted.projekt, { ProjId: projId })
+  const apArtId = activeUrlElements.ap
+  if (!apArtId) return []
+  const apIndex = findIndex(store.table.filteredAndSorted.ap, { ApArtId: apArtId })
+
   // map through all projekt and create array of nodes
-  let nodes = pop.map((el) => {
-    const projId = store.table.ap.get(el.ApArtId).ProjId
+  return table.filteredAndSorted.pop.map((el, index) => {
+    const sort = [projIndex, 1, apIndex, 1, index]
+
     return {
       nodeType: `table`,
       menuType: `pop`,
       id: el.PopId,
       parentId: el.ApArtId,
-      label: `${el.PopNr || `(keine Nr)`}: ${el.PopName || `(kein Name)`}`,
+      label: el.label,
       expanded: el.PopId === activeUrlElements.pop,
       url: [`Projekte`, projId, `Arten`, el.ApArtId, `Populationen`, el.PopId],
+      level: 5,
+      sort,
+      childrenLength: 3,
+      /*
       children: [
         tpopFolderNode(store, projId, el.ApArtId, el.PopId),
         popberFolderNode(store, projId, el.ApArtId, el.PopId),
         popmassnberFolderNode(store, projId, el.ApArtId, el.PopId),
-      ],
+      ],*/
     }
   })
-  // filter by node.nodeLabelFilter
-  const filterString = store.node.nodeLabelFilter.get(`pop`)
-  if (filterString) {
-    nodes = nodes.filter(p =>
-      p.label.toLowerCase().includes(filterString.toLowerCase())
-    )
-  }
-  // sort by label and return
-  return nodes
 }
