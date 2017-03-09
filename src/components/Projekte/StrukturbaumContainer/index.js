@@ -203,12 +203,12 @@ class StrukturbaumContainer extends Component { // eslint-disable-line react/pre
     const { activeUrlElements, activeDataset, node, toggleApFilter } = store
     const Container = activeUrlElements.exporte ? ContainerExporte : StyledContainer
     const showApDivToggle = (
-      activeDataset &&
+      activeDataset/* &&
       activeDataset.table &&
       (
         activeDataset.table === `projekt` ||
         activeDataset.table === `ap`
-      )
+      )*/
     )
 
     return (
