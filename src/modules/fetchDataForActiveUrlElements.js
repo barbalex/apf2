@@ -41,6 +41,7 @@ const fetchDataForActiveUrlElements = (store:Object) => {
       store.fetchTable(`apflora`, `ap_umsetzung_werte`)
       store.fetchBeobBereitgestellt(activeUrlElements.ap)
       store.fetchBeobzuordnung(activeUrlElements.ap)
+      store.fetchTable(`apflora`, `pop_status_werte`)
       if (store.map.tpop.visible) {
         store.fetchTpopForAp(activeUrlElements.ap)
         store.fetchPopForAp(activeUrlElements.ap)

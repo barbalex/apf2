@@ -389,6 +389,14 @@ export default [
   },
   {
     database: `apflora`,
+    table: `pop_status_werte`,
+    idField: `HerkunftId`,
+    stammdaten: true,
+    mutWannField: `MutWann`,
+    mitWerField: `MutWer`,
+  },
+  {
+    database: `apflora`,
     table: `tpop_apberrelevant_werte`,
     idField: `DomainCode`,
     stammdaten: true,
