@@ -68,7 +68,7 @@ const getBeob = ({ store }) => {
   const beob = (
     beobzuordnung.QuelleId === 1 ?
     store.table.beob_evab.get(beobzuordnung.NO_NOTE) :
-    store.table.beob_infospezies.get(beobzuordnung.NO_NOTE)
+    store.table.beob_infospezies.get(parseInt(beobzuordnung.NO_NOTE, 10))
   )
   return beob
 }
@@ -115,7 +115,7 @@ const getTpopZuordnenSource = ({ store }) => {
       Array.from(store.table.pop_status_werte.values()).find(x => x.HerkunftId === t.TPopHerkunft).HerkunftTxt :
       `ohne Status`
     )
-    t.label = `${t.distance.toLocaleString(`de-ch`)}m: ${t.popNr}/${t.TPopNr}, (${t.herkunft})`
+    t.label = `${t.distance.toLocaleString(`de-ch`)}m: ${t.popNr}/${t.TPopNr} (${t.herkunft})`
   })
   // order them by distance
   tpopList = sortBy(tpopList, `distance`)

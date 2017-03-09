@@ -27,7 +27,7 @@ export default (store:Object) => {
         activeDataset = { table: `ber`, row: store.table.ber.get(aEl.ber), folder: null }
       } else if (aEl.beobzuordnung) {
         activeDataset = {
-          table: `beobzuordnung`,
+          table: `beob_bereitgestellt`,
           row: store.table.beob_bereitgestellt.get(aEl.beobzuordnung),
           folder: null,
         }

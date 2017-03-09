@@ -59,9 +59,35 @@ const fetchDataForActiveUrlElements = (store:Object) => {
       store.fetchTable(`beob`, `beob_quelle`)
       store.fetchTpopForAp(activeUrlElements.ap)
     },
+    beobNichtZuzuordnen () {
+      const id = activeUrlElements.beobNichtZuzuordnen
+      const table = (
+        isNaN(id) ?
+        `beob_evab` :
+        `beob_infospezies`
+      )
+      store.fetchDatasetById({
+        schemaName: `beob`,
+        tableName: table,
+        id,
+      })
+    },
     beobzuordnungFolder() {
       store.fetchTable(`beob`, `beob_quelle`)
       store.fetchTpopForAp(activeUrlElements.ap)
+    },
+    beobzuordnung() {
+      const id = activeUrlElements.beobzuordnung
+      const table = (
+        isNaN(id) ?
+        `beob_evab` :
+        `beob_infospezies`
+      )
+      store.fetchDatasetById({
+        schemaName: `beob`,
+        tableName: table,
+        id,
+      })
     },
     berFolder() {
       store.fetchTableByParentId(`apflora`, `ber`, activeUrlElements.ap)
