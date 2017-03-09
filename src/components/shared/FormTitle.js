@@ -14,7 +14,10 @@ const Title = styled.div`
   font-weight: bold;
 `
 
-const FormTitle = ({ title, noTestdataMessage }:{title:string,noTestdataMessage:boolean}) =>
+const FormTitle = (
+  { title, noTestdataMessage }:
+  {title:string,noTestdataMessage:boolean}
+) =>
   <Container>
     <Title>
       {title}
