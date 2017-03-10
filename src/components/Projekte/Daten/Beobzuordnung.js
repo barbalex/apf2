@@ -4,6 +4,7 @@ import { observer, inject } from 'mobx-react'
 import styled from 'styled-components'
 import sortBy from 'lodash/sortBy'
 import compose from 'recompose/compose'
+import withHandlers from 'recompose/withHandlers'
 import { Scrollbars } from 'react-custom-scrollbars'
 
 import FormTitle from '../../shared/FormTitle'
@@ -58,12 +59,7 @@ const nichtZuordnenPopover = (
   </Container>
 )
 
-const enhance = compose(
-  inject(`store`),
-  observer
-)
-
-const getTpopZuordnenSource = ({ store }) => {
+const getTpopZuordnenSource = (store) => {
   const { activeDataset } = store
   const beobzuordnung = activeDataset.row
   // get all popIds of active ap
@@ -116,7 +112,21 @@ const getTpopZuordnenSource = ({ store }) => {
   }))
 }
 
-const Beobzuordnung = ({ store }) => {
+const enhance = compose(
+  inject(`store`),
+  withHandlers({
+    updatePropertyInDb: props => (fieldname, val) => {
+      if (props.store.activeDataset.table === `beob_bereitgestellt`) {
+        props.store.insertBeobzuordnung(fieldname, val)
+      } else {
+        props.store.updatePropertyInDb(fieldname, val)
+      }
+    },
+  }),
+  observer
+)
+
+const Beobzuordnung = ({ store, updatePropertyInDb }) => {
   const { activeDataset } = store
   const beobzuordnung = activeDataset.row
   const beobTitle = (
@@ -134,7 +144,7 @@ const Beobzuordnung = ({ store }) => {
         <RadioButtonWithInfo
           fieldName="BeobNichtZuordnen"
           value={activeDataset.row.BeobNichtZuordnen}
-          updatePropertyInDb={store.updatePropertyInDb}
+          updatePropertyInDb={updatePropertyInDb}
           popover={nichtZuordnenPopover}
         />
         {
@@ -145,8 +155,9 @@ const Beobzuordnung = ({ store }) => {
               <RadioButtonGroup
                 fieldName="TPopId"
                 value={activeDataset.row.TPopId}
-                dataSource={getTpopZuordnenSource({ store })}
-                updatePropertyInDb={store.updatePropertyInDb}
+                dataSource={getTpopZuordnenSource(store)}
+                updatePropertyInDb={updatePropertyInDb}
+                onChange={() => console.log('changed')}
               />
             </MaxHeightDiv>
           </div>
@@ -173,7 +184,7 @@ const Beobzuordnung = ({ store }) => {
 
 Beobzuordnung.propTypes = {
   store: PropTypes.object.isRequired,
-  typ: PropTypes.string.isRequired,
+  updatePropertyInDb: PropTypes.func.isRequired,
 }
 
 export default enhance(Beobzuordnung)

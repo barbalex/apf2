@@ -30,6 +30,7 @@ import getUrlQuery from '../modules/getUrlQuery'
 import fetchFields from '../modules/fetchFields'
 import fetchFieldsFromIdb from '../modules/fetchFieldsFromIdb'
 import insertDataset from '../modules/insertDataset'
+import insertBeobzuordnung from '../modules/insertBeobzuordnung'
 import deleteDatasetDemand from '../modules/deleteDatasetDemand'
 import deleteDatasetExecute from '../modules/deleteDatasetExecute'
 import toggleNode from '../modules/toggleNode'
@@ -907,6 +908,10 @@ function Store() {
         )
       }
       this.node.nodeLabelFilter.set(table, value)
+    }),
+    insertBeobzuordnung: action((newKey, newValue) => {
+      if (this.user.readOnly) return this.tellUserReadOnly()
+      insertBeobzuordnung(this, newKey, newValue)
     }),
     insertDataset: action((table, parentId, baseUrl) => {
       if (this.user.readOnly) return this.tellUserReadOnly()
