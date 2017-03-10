@@ -116,10 +116,15 @@ const enhance = compose(
   inject(`store`),
   withHandlers({
     updatePropertyInDb: props => (fieldname, val) => {
-      if (props.store.activeDataset.table === `beob_bereitgestellt`) {
-        props.store.insertBeobzuordnung(fieldname, val)
+      if (val) {
+        if (props.store.activeDataset.table === `beob_bereitgestellt`) {
+          props.store.insertBeobzuordnung(fieldname, val)
+        } else {
+          // probably beobzuordnung was moved from one TPopId to another
+          props.store.updatePropertyInDb(fieldname, val)
+        }
       } else {
-        props.store.updatePropertyInDb(fieldname, val)
+        console.log(`need to delete beobzuordnung`)
       }
     },
   }),

@@ -3,7 +3,6 @@ import axios from 'axios'
 import queryString from 'query-string'
 
 import apiBaseUrl from './apiBaseUrl'
-import appBaseUrl from './appBaseUrl'
 import insertDatasetInIdb from './insertDatasetInIdb'
 
 const updateBeobzuordnungData = (store, beobBereitgestellt, newKey, newValue) => {
@@ -49,10 +48,10 @@ export default (store:Object, newKey:string, newValue:number) => {
   axios.post(url)
     .then(({ data }) => {
       const row = data
-      // insert this dataset in store.table
-      store.table.beobzuordnung.set(row.NO_NOTE, row)
       // insert this dataset in idb
       insertDatasetInIdb(store, `beobzuordnung`, row)
+      // insert this dataset in store.table
+      store.table.beobzuordnung.set(row.NO_NOTE, row)
       continueWithBeobBereitgestellt(store, beobBereitgestellt, newKey, newValue)
     })
     .catch(error => store.listError(error))
