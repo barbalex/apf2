@@ -27,7 +27,7 @@ const MyTextField = ({
   <TextField
     floatingLabelText={label}
     errorText={errorText}
-    value={value || ``}
+    value={value || value === 0 ? value : ``}
     fullWidth
     errorStyle={{ color: orange500 }}
     onChange={onChange}
