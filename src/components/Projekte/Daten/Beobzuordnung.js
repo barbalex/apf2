@@ -64,11 +64,11 @@ const enhance = compose(
 
 const getBeob = ({ store }) => {
   const { activeDataset } = store
-  const beobzuordnung = activeDataset.row
+  const { row } = activeDataset
   const beob = (
-    beobzuordnung.QuelleId === 1 ?
-    store.table.beob_evab.get(beobzuordnung.NO_NOTE) :
-    store.table.beob_infospezies.get(parseInt(beobzuordnung.NO_NOTE, 10))
+    row.QuelleId === 1 ?
+    store.table.beob_evab.get(row.NO_NOTE_PROJET) :
+    store.table.beob_infospezies.get(parseInt(row.NO_NOTE, 10))
   )
   return beob
 }
