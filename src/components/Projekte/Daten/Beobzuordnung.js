@@ -9,9 +9,10 @@ import { Scrollbars } from 'react-custom-scrollbars'
 import FormTitle from '../../shared/FormTitle'
 import RadioButtonGroup from '../../shared/RadioButtonGroup'
 import TextField from '../../shared/TextField'
-import TextFieldNonUpdatable from '../../shared/TextFieldNonUpdatable'
 import RadioButtonWithInfo from '../../shared/RadioButtonWithInfo'
 import Label from '../../shared/Label'
+import Beob from './Beob'
+import getBeobFromBeobBereitgestelltInActiveDataset from '../../../modules/getBeobFromBeobBereitgestelltInActiveDataset'
 
 const Container = styled.div`
   height: 100%;
@@ -62,17 +63,6 @@ const enhance = compose(
   observer
 )
 
-const getBeob = ({ store }) => {
-  const { activeDataset } = store
-  const { row } = activeDataset
-  const beob = (
-    row.QuelleId === 1 ?
-    store.table.beob_evab.get(row.NO_NOTE_PROJET) :
-    store.table.beob_infospezies.get(parseInt(row.NO_NOTE, 10))
-  )
-  return beob
-}
-
 const getTpopZuordnenSource = ({ store }) => {
   const { activeDataset } = store
   const beobzuordnung = activeDataset.row
@@ -87,7 +77,7 @@ const getTpopZuordnenSource = ({ store }) => {
     // with coordinates
     .filter(t => t.TPopXKoord && t.TPopYKoord)
   // calculate their distance to this beobzuordnung
-  const beob = getBeob({ store })
+  const beob = getBeobFromBeobBereitgestelltInActiveDataset(store)
   // beob loads later
   // prevent an error occuring if it does not yet exist
   // by passing back an empty array
@@ -126,28 +116,7 @@ const getTpopZuordnenSource = ({ store }) => {
   }))
 }
 
-const getBeobFields = ({ store }) => {
-  const beob = getBeob({ store })
-  const beobFields = []
-  if (beob) {
-    Object.keys(beob).forEach((key) => {
-      const value = beob[key]
-      if (value || value === 0) {
-        beobFields.push(
-          <div key={key}>
-            <TextFieldNonUpdatable
-              label={key}
-              value={value}
-            />
-          </div>
-        )
-      }
-    })
-  }
-  return beobFields
-}
-
-const Beob = ({ store }) => {
+const Beobzuordnung = ({ store }) => {
   const { activeDataset } = store
   const beobzuordnung = activeDataset.row
   const beobTitle = (
@@ -196,15 +165,15 @@ const Beob = ({ store }) => {
       </FieldsContainer>
       <FormTitle title={beobTitle} noTestdataMessage={true} />
       <FieldsContainer>
-        {getBeobFields({ store })}
+        <Beob />
       </FieldsContainer>
     </Scrollbars>
   )
 }
 
-Beob.propTypes = {
+Beobzuordnung.propTypes = {
   store: PropTypes.object.isRequired,
   typ: PropTypes.string.isRequired,
 }
 
-export default enhance(Beob)
+export default enhance(Beobzuordnung)
