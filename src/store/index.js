@@ -659,12 +659,13 @@ function Store() {
       tpopbeob.forEach((el) => {
         let datum = ``
         let autor = ``
-        if (el.beobBereitgestellt) {
-          if (el.beobBereitgestellt.Datum) {
-            datum = el.beobBereitgestellt.Datum
+        const beob = this.table.beob_bereitgestellt.get(el.beobId)
+        if (beob) {
+          if (beob.Datum) {
+            datum = beob.Datum
           }
-          if (el.beobBereitgestellt.Autor) {
-            autor = el.beobBereitgestellt.Autor
+          if (beob.Autor) {
+            autor = beob.Autor
           }
         }
         const quelle = table.beob_quelle.get(el.QuelleId)
