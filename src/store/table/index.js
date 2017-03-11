@@ -1,7 +1,7 @@
 // @flow
 import { observable } from 'mobx'
 
-import tableNames from '../modules/tableStoreNames'
+import tableNames from '../../modules/tableStoreNames'
 
 const initiateObservables = (tableObject) => {
   tableNames.forEach((tableName) => {

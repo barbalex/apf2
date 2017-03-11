@@ -132,7 +132,6 @@ const enhance = compose(
           updatePropertyInDb(fieldname, val)
         }
       } else {
-        console.log(`deleting beobzuordnung`)
         deleteBeobzuordnung(activeDataset.row.NO_NOTE)
       }
     },

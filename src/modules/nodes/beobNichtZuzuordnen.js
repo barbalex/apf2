@@ -6,10 +6,10 @@ export default (store) => {
   // fetch sorting indexes of parents
   const projId = activeUrlElements.projekt
   if (!projId) return []
-  const projIndex = findIndex(store.table.filteredAndSorted.projekt, { ProjId: projId })
+  const projIndex = findIndex(table.filteredAndSorted.projekt, { ProjId: projId })
   const apArtId = activeUrlElements.ap
   if (!apArtId) return []
-  const apIndex = findIndex(store.table.filteredAndSorted.ap, { ApArtId: apArtId })
+  const apIndex = findIndex(table.filteredAndSorted.ap, { ApArtId: apArtId })
 
   // map through all and create array of nodes
   const nodes = table.filteredAndSorted.beobNichtZuzuordnen.map((el, index) => {

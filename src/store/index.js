@@ -104,6 +104,7 @@ import tpopmassnberFolderNode from '../modules/nodes/tpopmassnberFolder'
 import tpopmassnberNode from '../modules/nodes/tpopmassnber'
 import tpopmassnFolderNode from '../modules/nodes/tpopmassnFolder'
 import tpopmassnNode from '../modules/nodes/tpopmassn'
+import filteredAndSortedProjekt from './table/filteredAndSorted/projekt'
 
 import TableStore from './table'
 import ObservableHistory from './ObservableHistory'
@@ -249,22 +250,7 @@ function Store() {
   })
   this.table = TableStore
   extendObservable(this.table.filteredAndSorted, {
-    projekt: computed(() => {
-      // grab projekte as array and sort them by name
-      let projekte = Array.from(this.table.projekt.values())
-      // filter by node.nodeLabelFilter
-      const filterString = this.node.nodeLabelFilter.get(`projekt`)
-      if (filterString) {
-        projekte = projekte.filter(p =>
-          p.ProjName
-            .toLowerCase()
-            .includes(filterString.toLowerCase())
-        )
-      }
-      // sort
-      projekte = sortBy(projekte, `ProjName`)
-      return projekte
-    }),
+    projekt: computed(() => filteredAndSortedProjekt(this)),
     apberuebersicht: computed(() => {
       const { activeUrlElements } = this
       // grab apberuebersicht as array and sort them by year
