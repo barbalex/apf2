@@ -104,6 +104,8 @@ import tpopmassnberNode from '../modules/nodes/tpopmassnber'
 import tpopmassnFolderNode from '../modules/nodes/tpopmassnFolder'
 import tpopmassnNode from '../modules/nodes/tpopmassn'
 import filteredAndSortedProjekt from './table/filteredAndSorted/projekt'
+import filteredAndSortedAssozart from './table/filteredAndSorted/assozart'
+import filteredAndSortedIdealbiotop from './table/filteredAndSorted/idealbiotop'
 import filteredAndSortedBeobNichtZuzuordnen from './table/filteredAndSorted/beobNichtZuzuordnen'
 import filteredAndSortedBeobzuordnung from './table/filteredAndSorted/beobzuordnung'
 import filteredAndSortedBer from './table/filteredAndSorted/ber'
@@ -319,40 +321,8 @@ function Store() {
       }
       return ap
     }),
-    assozart: computed(() => {
-      const { activeUrlElements, table } = this
-      const { adb_eigenschaften } = table
-      // grab assozart as array and sort them by year
-      let assozart = Array.from(this.table.assozart.values())
-      // show only nodes of active ap
-      assozart = assozart.filter(a => a.AaApArtId === activeUrlElements.ap)
-      // sort
-      // need to add artnameVollständig to sort and filter by nodeLabelFilter
-      if (adb_eigenschaften.size > 0) {
-        assozart.forEach(x => {
-          const ae = adb_eigenschaften.get(x.AaSisfNr)
-          return x.label = ae ? ae.Artname : `(keine Art gewählt)`
-        })
-        // filter by node.nodeLabelFilter
-        const filterString = this.node.nodeLabelFilter.get(`assozart`)
-        if (filterString) {
-          assozart = assozart.filter(p =>
-            p.label.toLowerCase().includes(filterString.toLowerCase())
-          )
-        }
-        // sort by label
-        assozart = sortBy(assozart, `label`)
-      }
-      return assozart
-    }),
-    idealbiotop: computed(() => {
-      const { activeUrlElements } = this
-      // grab assozart as array and sort them by year
-      let idealbiotop = Array.from(this.table.idealbiotop.values())
-      // show only nodes of active ap
-      idealbiotop = idealbiotop.filter(a => a.IbApArtId === activeUrlElements.ap)
-      return idealbiotop
-    }),
+    assozart: computed(() => filteredAndSortedAssozart(this)),
+    idealbiotop: computed(() => filteredAndSortedIdealbiotop(this)),
     beobNichtZuzuordnen: computed(() => filteredAndSortedBeobNichtZuzuordnen(this)),
     beobzuordnung: computed(() => filteredAndSortedBeobzuordnung(this)),
     ber: computed(() => filteredAndSortedBer(this)),
