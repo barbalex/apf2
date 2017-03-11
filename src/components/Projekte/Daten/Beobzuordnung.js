@@ -101,7 +101,9 @@ const getTpopZuordnenSource = (store) => {
       Array.from(store.table.pop_status_werte.values()).find(x => x.HerkunftId === t.TPopHerkunft).HerkunftTxt :
       `ohne Status`
     )
-    t.label = `${t.distance.toLocaleString(`de-ch`)}m: ${t.popNr}/${t.TPopNr} (${t.herkunft})`
+    const popNr = t.popNr || t.popNr === 0 ? t.popNr : `(keine Nr)`
+    const tpopNr = t.TPopNr || t.TPopNr === 0 ? t.TPopNr : `(keine Nr)`
+    t.label = `${t.distance.toLocaleString(`de-ch`)}m: ${popNr}/${tpopNr} (${t.herkunft})`
   })
   // order them by distance
   tpopList = sortBy(tpopList, `distance`)

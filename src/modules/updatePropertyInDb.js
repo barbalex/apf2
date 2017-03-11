@@ -116,7 +116,9 @@ export default (store:Object, key:string, valuePassed:string|number) => {
             `nicht-zuzuordnende-Beobachtungen` :
             `nicht-beurteilte-Beobachtungen`
           )
-          const newUrl = `/${store.url.join(`/`)}${Object.keys(store.urlQuery).length > 0 ? `?${queryString.stringify(store.urlQuery)}` : ``}`
+          store.url[5] = store.activeDataset.row.beobId
+          const newUrlArray = store.url.slice(0, 6)
+          const newUrl = `/${newUrlArray.join(`/`)}${Object.keys(store.urlQuery).length > 0 ? `?${queryString.stringify(store.urlQuery)}` : ``}`
           store.history.push(newUrl)
         }
         // if for a beobZugeordnet TPopId is set, url needs to change
