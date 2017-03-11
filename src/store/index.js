@@ -105,6 +105,7 @@ import tpopmassnberNode from '../modules/nodes/tpopmassnber'
 import tpopmassnFolderNode from '../modules/nodes/tpopmassnFolder'
 import tpopmassnNode from '../modules/nodes/tpopmassn'
 import filteredAndSortedProjekt from './table/filteredAndSorted/projekt'
+import filteredAndSortedTpopfreiwkontr from './table/filteredAndSorted/tpopfreiwkontr'
 import filteredAndSortedTpopfreiwkontrzaehl from './table/filteredAndSorted/tpopfreiwkontrzaehl'
 import filteredAndSortedTpopfeldkontr from './table/filteredAndSorted/tpopfeldkontr'
 import filteredAndSortedTpopfeldkontrzaehl from './table/filteredAndSorted/tpopfeldkontrzaehl'
@@ -703,27 +704,7 @@ function Store() {
       // sort by label and return
       return sortBy(tpopber, `label`)
     }),
-    tpopfreiwkontr: computed(() => {
-      const { activeUrlElements, table, node } = this
-      // grab tpopkontr as array and sort them by year
-      let tpopkontr = Array.from(table.tpopkontr.values())
-        .filter(t => t.TPopKontrTyp === `Freiwilligen-Erfolgskontrolle`)
-      // show only nodes of active ap
-      tpopkontr = tpopkontr.filter(a => a.TPopId === activeUrlElements.tpop)
-      // add label
-      tpopkontr.forEach((el) => {
-        el.label = `${el.TPopKontrJahr || `(kein Jahr)`}`
-      })
-      // filter by node.nodeLabelFilter
-      const filterString = node.nodeLabelFilter.get(`tpopfreiwkontr`)
-      if (filterString) {
-        tpopkontr = tpopkontr.filter(p =>
-          p.label.toLowerCase().includes(filterString.toLowerCase())
-        )
-      }
-      // sort by label and return
-      return sortBy(tpopkontr, `label`)
-    }),
+    tpopfreiwkontr: computed(() => filteredAndSortedTpopfreiwkontr(this)),
     tpopfreiwkontrzaehl: computed(() => filteredAndSortedTpopfreiwkontrzaehl(this)),
     tpopfeldkontr: computed(() => filteredAndSortedTpopfeldkontr(this)),
     tpopfeldkontrzaehl: computed(() => filteredAndSortedTpopfeldkontrzaehl(this)),
