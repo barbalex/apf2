@@ -104,6 +104,7 @@ import tpopmassnberNode from '../modules/nodes/tpopmassnber'
 import tpopmassnFolderNode from '../modules/nodes/tpopmassnFolder'
 import tpopmassnNode from '../modules/nodes/tpopmassn'
 import filteredAndSortedProjekt from './table/filteredAndSorted/projekt'
+import filteredAndSortedBeobzuordnung from './table/filteredAndSorted/beobzuordnung'
 import filteredAndSortedBer from './table/filteredAndSorted/ber'
 import filteredAndSortedApber from './table/filteredAndSorted/apber'
 import filteredAndSortedErfkrit from './table/filteredAndSorted/erfkrit'
@@ -391,35 +392,7 @@ function Store() {
       beobNichtZuzuordnen = sortBy(beobNichtZuzuordnen, `label`).reverse()
       return beobNichtZuzuordnen
     }),
-    beobzuordnung: computed(() => {
-      const { activeUrlElements, table, node } = this
-      // grab beob_bereitgestellt as array and sort them by year
-      let beobzuordnung = Array.from(table.beob_bereitgestellt.values())
-      // show only nodes of active ap
-      beobzuordnung = beobzuordnung.filter(a =>
-        a.NO_ISFS === activeUrlElements.ap &&
-        (
-          (a.beobzuordnung &&
-          a.beobzuordnung.type &&
-          a.beobzuordnung.type === `nichtBeurteilt`) ||
-          !a.beobzuordnung
-        )
-      )
-      beobzuordnung.forEach((el) => {
-        const quelle = table.beob_quelle.get(el.QuelleId)
-        const quelleName = quelle && quelle.name ? quelle.name : ``
-        el.label = `${el.Datum || `(kein Datum)`}: ${el.Autor || `(kein Autor)`} (${quelleName})`
-      })
-      // filter by node.nodeLabelFilter
-      const filterString = node.nodeLabelFilter.get(`beobzuordnung`)
-      if (filterString) {
-        beobzuordnung = beobzuordnung.filter(p =>
-          p.label.toLowerCase().includes(filterString.toLowerCase())
-        )
-      }
-      // sort by label and return
-      return sortBy(beobzuordnung, `label`).reverse()
-    }),
+    beobzuordnung: computed(() => filteredAndSortedBeobzuordnung(this)),
     ber: computed(() => filteredAndSortedBer(this)),
     apber: computed(() => filteredAndSortedApber(this)),
     erfkrit: computed(() => filteredAndSortedErfkrit(this)),
