@@ -105,6 +105,7 @@ import tpopmassnberNode from '../modules/nodes/tpopmassnber'
 import tpopmassnFolderNode from '../modules/nodes/tpopmassnFolder'
 import tpopmassnNode from '../modules/nodes/tpopmassn'
 import filteredAndSortedProjekt from './table/filteredAndSorted/projekt'
+import filteredAndSortedTpop from './table/filteredAndSorted/tpop'
 import filteredAndSortedTpopbeob from './table/filteredAndSorted/tpopbeob'
 import filteredAndSortedTopber from './table/filteredAndSorted/tpopber'
 import filteredAndSortedTpopfreiwkontr from './table/filteredAndSorted/tpopfreiwkontr'
@@ -628,26 +629,7 @@ function Store() {
       // sort by label and return
       return sortBy(popber, `label`)
     }),
-    tpop: computed(() => {
-      const { activeUrlElements, table, node } = this
-      // grab tpop as array and sort them by year
-      let tpop = Array.from(table.tpop.values())
-      // show only nodes of active pop
-      tpop = tpop.filter(a => a.PopId === activeUrlElements.pop)
-      tpop = sortBy(tpop, `TPopNr`)
-      // map through all projekt and create array of nodes
-      tpop.forEach((el) => {
-        el.label = `${el.TPopNr || `(keine Nr)`}: ${el.TPopFlurname || `(kein Flurname)`}`
-      })
-      // filter by node.nodeLabelFilter
-      const filterString = node.nodeLabelFilter.get(`tpop`)
-      if (filterString) {
-        tpop = tpop.filter(p =>
-          p.label.toLowerCase().includes(filterString.toLowerCase())
-        )
-      }
-      return tpop
-    }),
+    tpop: computed(() => filteredAndSortedTpop(this)),
     tpopbeob: computed(() => filteredAndSortedTpopbeob(this)),
     tpopber: computed(() => filteredAndSortedTopber(this)),
     tpopfreiwkontr: computed(() => filteredAndSortedTpopfreiwkontr(this)),
