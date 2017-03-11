@@ -105,6 +105,8 @@ import tpopmassnberNode from '../modules/nodes/tpopmassnber'
 import tpopmassnFolderNode from '../modules/nodes/tpopmassnFolder'
 import tpopmassnNode from '../modules/nodes/tpopmassn'
 import filteredAndSortedProjekt from './table/filteredAndSorted/projekt'
+import filteredAndSortedTpopbeob from './table/filteredAndSorted/tpopbeob'
+import filteredAndSortedTopber from './table/filteredAndSorted/tpopber'
 import filteredAndSortedTpopfreiwkontr from './table/filteredAndSorted/tpopfreiwkontr'
 import filteredAndSortedTpopfreiwkontrzaehl from './table/filteredAndSorted/tpopfreiwkontrzaehl'
 import filteredAndSortedTpopfeldkontr from './table/filteredAndSorted/tpopfeldkontr'
@@ -646,64 +648,8 @@ function Store() {
       }
       return tpop
     }),
-    tpopbeob: computed(() => {
-      const { activeUrlElements, table, node } = this
-      // grab tpopbeob as array and sort them by year
-      let tpopbeob = Array
-        .from(table.beobzuordnung.values())
-        .filter(b => b.TPopId === activeUrlElements.tpop)
-      // map through all and create array of nodes
-      tpopbeob.forEach((el) => {
-        let datum = ``
-        let autor = ``
-        const beob = this.table.beob_bereitgestellt.get(el.beobId)
-        if (beob) {
-          if (beob.Datum) {
-            datum = beob.Datum
-          }
-          if (beob.Autor) {
-            autor = beob.Autor
-          }
-        }
-        const quelle = table.beob_quelle.get(el.QuelleId)
-        const quelleName = quelle && quelle.name ? quelle.name : ``
-        el.label = `${datum || `(kein Datum)`}: ${autor || `(kein Autor)`} (${quelleName})`
-        el.beobId = isNaN(el.NO_NOTE) ? el.NO_NOTE : parseInt(el.NO_NOTE, 10)
-      })
-      // filter by node.nodeLabelFilter
-      const filterString = node.nodeLabelFilter.get(`tpopbeob`)
-      if (filterString) {
-        tpopbeob = tpopbeob.filter(p =>
-          p.label.toLowerCase().includes(filterString.toLowerCase())
-        )
-      }
-      // sort by label and return
-      return sortBy(tpopbeob, `label`).reverse()
-    }),
-    tpopber: computed(() => {
-      const { activeUrlElements, table, node } = this
-      // grab tpopber as array and sort them by year
-      let tpopber = Array.from(table.tpopber.values())
-      // show only nodes of active ap
-      tpopber = tpopber.filter(a => a.TPopId === activeUrlElements.tpop)
-      // get entwicklungWerte
-      const tpopEntwicklungWerte = Array.from(table.tpop_entwicklung_werte.values())
-      // map through all projekt and create array of nodes
-      tpopber.forEach((el) => {
-        const tpopEntwicklungWert = tpopEntwicklungWerte.find(e => e.EntwicklungCode === el.TPopBerEntwicklung)
-        const entwicklungTxt = tpopEntwicklungWert ? tpopEntwicklungWert.EntwicklungTxt : null
-        el.label = `${el.TPopBerJahr || `(kein Jahr)`}: ${entwicklungTxt || `(nicht beurteilt)`}`
-      })
-      // filter by node.nodeLabelFilter
-      const filterString = node.nodeLabelFilter.get(`tpopber`)
-      if (filterString) {
-        tpopber = tpopber.filter(p =>
-          p.label.toLowerCase().includes(filterString.toLowerCase())
-        )
-      }
-      // sort by label and return
-      return sortBy(tpopber, `label`)
-    }),
+    tpopbeob: computed(() => filteredAndSortedTpopbeob(this)),
+    tpopber: computed(() => filteredAndSortedTopber(this)),
     tpopfreiwkontr: computed(() => filteredAndSortedTpopfreiwkontr(this)),
     tpopfreiwkontrzaehl: computed(() => filteredAndSortedTpopfreiwkontrzaehl(this)),
     tpopfeldkontr: computed(() => filteredAndSortedTpopfeldkontr(this)),
