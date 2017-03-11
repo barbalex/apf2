@@ -9,7 +9,6 @@ import {
 } from 'mobx'
 import $ from 'jquery'
 import sortBy from 'lodash/sortBy'
-import uniq from 'lodash/uniq'
 import queryString from 'query-string'
 import axios from 'axios'
 
@@ -105,6 +104,7 @@ import tpopmassnberNode from '../modules/nodes/tpopmassnber'
 import tpopmassnFolderNode from '../modules/nodes/tpopmassnFolder'
 import tpopmassnNode from '../modules/nodes/tpopmassn'
 import filteredAndSortedProjekt from './table/filteredAndSorted/projekt'
+import filteredAndSortedErfkrit from './table/filteredAndSorted/erfkrit'
 import filteredAndSortedZieljahr from './table/filteredAndSorted/zieljahr'
 import filteredAndSortedZiel from './table/filteredAndSorted/ziel'
 import filteredAndSortedZielber from './table/filteredAndSorted/zielber'
@@ -463,31 +463,7 @@ function Store() {
       apber = sortBy(apber, `JBerJahr`)
       return apber
     }),
-    erfkrit: computed(() => {
-      const { activeUrlElements, table, node } = this
-      // grab erfkrit as array and sort them by year
-      let erfkrit = Array.from(table.erfkrit.values())
-      // show only nodes of active ap
-      erfkrit = erfkrit.filter(a => a.ApArtId === activeUrlElements.ap)
-      // get erfkritWerte
-      const apErfkritWerte = Array.from(table.ap_erfkrit_werte.values())
-      erfkrit.forEach((el, index) => {
-        const erfkritWert = apErfkritWerte.find(e => e.BeurteilId === el.ErfkritErreichungsgrad)
-        const beurteilTxt = erfkritWert ? erfkritWert.BeurteilTxt : null
-        el.sort = erfkritWert ? erfkritWert.BeurteilOrd : null
-        el.label = `${beurteilTxt || `(nicht beurteilt)`}: ${el.ErfkritTxt || `(keine Kriterien erfasst)`}`
-      })
-      // filter by node.nodeLabelFilter
-      const filterString = node.nodeLabelFilter.get(`erfkrit`)
-      if (filterString) {
-        erfkrit = erfkrit.filter(p =>
-          p.label.toLowerCase().includes(filterString.toLowerCase())
-        )
-      }
-      // sort by label and return
-      erfkrit = sortBy(erfkrit, `sort`)
-      return erfkrit
-    }),
+    erfkrit: computed(() => filteredAndSortedErfkrit(this)),
     zieljahr: computed(() => filteredAndSortedZieljahr(this)),
     ziel: computed(() => filteredAndSortedZiel(this)),
     zielber: computed(() => filteredAndSortedZielber(this)),
