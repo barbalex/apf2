@@ -241,33 +241,21 @@ function Store() {
     apArtId: null,
     visible: false,
     highlightedIds: [],
-    pops: computed(() =>
-      getPopsForMap(this)
-    ),
-    bounds: computed(() =>
-      getPopBounds(this.map.pop.pops)
-    ),
+    pops: computed(() => getPopsForMap(this)),
+    bounds: computed(() => getPopBounds(this.map.pop.pops)),
     // alternative is using names
     labelUsingNr: true,
-    markers: computed(() =>
-      getPopMarkers(this)
-    ),
+    markers: computed(() => getPopMarkers(this)),
   })
   extendObservable(this.map.tpop, {
     visible: false,
     highlightedIds: [],
     highlightedPopIds: [],
-    tpops: computed(() =>
-      getTpopsForMap(this)
-    ),
-    bounds: computed(() =>
-      getTpopBounds(this.map.tpop.tpops)
-    ),
+    tpops: computed(() => getTpopsForMap(this)),
+    bounds: computed(() => getTpopBounds(this.map.tpop.tpops)),
     // alternative is using names
     labelUsingNr: true,
-    markers: computed(() =>
-      getTpopMarkers(this)
-    ),
+    markers: computed(() => getTpopMarkers(this)),
     idOfTpopBeingLocalized: 0,
   })
   this.table = TableStore
@@ -313,15 +301,9 @@ function Store() {
       if (this.user.readOnly) return this.tellUserReadOnly()
       localizeTpop(this, x, y)
     }),
-    fetchLogin: action((name, password) => {
-      fetchLogin(this, name, password)
-    }),
-    logout: action(() =>
-      logout(this)
-    ),
-    setLoginFromIdb: action(() =>
-      setLoginFromIdb(this)
-    ),
+    fetchLogin: action((name, password) => fetchLogin(this, name, password)),
+    logout: action(() => logout(this)),
+    setLoginFromIdb: action(() => setLoginFromIdb(this)),
     setMapMouseCoord: action((e) => {
       this.map.mouseCoord = [e.latlng.lng, e.latlng.lat]
     }),
@@ -331,9 +313,7 @@ function Store() {
     toggleApFilter: action(() => {
       this.node.apFilter = !this.node.apFilter
     }),
-    fetchQk: action(() =>
-      fetchQk({ store: this })
-    ),
+    fetchQk: action(() => fetchQk({ store: this })),
     setQk: action(({ berichtjahr, messages, filter }) =>
       setQk({ store: this, berichtjahr, messages, filter })
     ),
@@ -343,9 +323,7 @@ function Store() {
     addMessagesToQk: action(({ messages }) => {
       addMessagesToQk({ store: this, messages })
     }),
-    fetchFieldsFromIdb: action(() =>
-      fetchFieldsFromIdb(this)
-    ),
+    fetchFieldsFromIdb: action(() => fetchFieldsFromIdb(this)),
     updateLabelFilter: action((table, value) => {
       if (!table) {
         return this.listError(
