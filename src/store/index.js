@@ -104,6 +104,7 @@ import tpopmassnberNode from '../modules/nodes/tpopmassnber'
 import tpopmassnFolderNode from '../modules/nodes/tpopmassnFolder'
 import tpopmassnNode from '../modules/nodes/tpopmassn'
 import filteredAndSortedProjekt from './table/filteredAndSorted/projekt'
+import filteredAndSortedBer from './table/filteredAndSorted/ber'
 import filteredAndSortedApber from './table/filteredAndSorted/apber'
 import filteredAndSortedErfkrit from './table/filteredAndSorted/erfkrit'
 import filteredAndSortedZieljahr from './table/filteredAndSorted/zieljahr'
@@ -419,27 +420,7 @@ function Store() {
       // sort by label and return
       return sortBy(beobzuordnung, `label`).reverse()
     }),
-    ber: computed(() => {
-      const { activeUrlElements, table, node } = this
-      // grab ber as array and sort them by year
-      let ber = Array.from(table.ber.values())
-      // show only nodes of active ap
-      ber = ber.filter(a => a.ApArtId === activeUrlElements.ap)
-      // add label
-      ber.forEach((el) => {
-        el.label = `${el.BerJahr || `(kein Jahr)`}: ${el.BerTitel || `(kein Titel)`}`
-      })
-      // filter by node.nodeLabelFilter
-      const filterString = node.nodeLabelFilter.get(`ber`)
-      if (filterString) {
-        ber = ber.filter((p) => {
-          return p.label.toLowerCase().includes(filterString)
-        })
-      }
-      // sort
-      ber = sortBy(ber, `label`)
-      return ber
-    }),
+    ber: computed(() => filteredAndSortedBer(this)),
     apber: computed(() => filteredAndSortedApber(this)),
     erfkrit: computed(() => filteredAndSortedErfkrit(this)),
     zieljahr: computed(() => filteredAndSortedZieljahr(this)),
