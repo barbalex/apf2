@@ -1,7 +1,7 @@
 import sortBy from 'lodash/sortBy'
 
 export default (store) => {
-  const { activeUrlElements, table, node } = this
+  const { activeUrlElements, table, node } = store
   // grab tpopkontrzaehl as array
   let tpopkontrzaehl = Array.from(table.tpopkontrzaehl.values())
   // show only nodes of active tpopkontr

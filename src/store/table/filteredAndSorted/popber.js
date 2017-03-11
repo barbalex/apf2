@@ -1,7 +1,7 @@
 import sortBy from 'lodash/sortBy'
 
 export default (store) => {
-  const { activeUrlElements, table, node } = this
+  const { activeUrlElements, table, node } = store
   // grab popber as array and sort them by year
   let popber = Array.from(table.popber.values())
   // show only nodes of active pop

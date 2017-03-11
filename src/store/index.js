@@ -105,6 +105,8 @@ import tpopmassnberNode from '../modules/nodes/tpopmassnber'
 import tpopmassnFolderNode from '../modules/nodes/tpopmassnFolder'
 import tpopmassnNode from '../modules/nodes/tpopmassn'
 import filteredAndSortedProjekt from './table/filteredAndSorted/projekt'
+import filteredAndSortedZielber from './table/filteredAndSorted/zielber'
+import filteredAndSortedPop from './table/filteredAndSorted/pop'
 import filteredAndSortedPopmassnber from './table/filteredAndSorted/popmassnber'
 import filteredAndSortedPopber from './table/filteredAndSorted/popber'
 import filteredAndSortedTpop from './table/filteredAndSorted/tpop'
@@ -544,45 +546,8 @@ function Store() {
       // sort by label and return
       return sortBy(ziele, `label`)
     }),
-    zielber: computed(() => {
-      const { activeUrlElements, table, node } = this
-      // grab zielbere as array and sort them by year
-      let zielbere = Array.from(table.zielber.values())
-      zielbere = zielbere.filter(a => a.ZielId === activeUrlElements.ziel)
-      // map through all and create array of nodes
-      zielbere.forEach((el) => {
-        el.label = `${el.ZielBerJahr || `(kein Jahr)`}: ${el.ZielBerErreichung || `(keine Entwicklung)`}`
-      })
-      // filter by node.nodeLabelFilter
-      const filterString = node.nodeLabelFilter.get(`zielber`)
-      if (filterString) {
-        zielbere = zielbere.filter(p =>
-          p.label.toLowerCase().includes(filterString.toLowerCase())
-        )
-      }
-      // sort by label and return
-      return sortBy(zielbere, `label`)
-    }),
-    pop: computed(() => {
-      const { activeUrlElements, table, node } = this
-      // grab pop as array and sort them by year
-      let pop = Array.from(table.pop.values())
-      // show only nodes of active ap
-      pop = pop.filter(a => a.ApArtId === activeUrlElements.ap)
-      pop = sortBy(pop, `PopNr`)
-      // map through all projekt and create array of nodes
-      pop.forEach((el) => {
-        el.label = `${el.PopNr || `(keine Nr)`}: ${el.PopName || `(kein Name)`}`
-      })
-      // filter by node.nodeLabelFilter
-      const filterString = node.nodeLabelFilter.get(`pop`)
-      if (filterString) {
-        pop = pop.filter(p =>
-          p.label.toLowerCase().includes(filterString.toLowerCase())
-        )
-      }
-      return pop
-    }),
+    zielber: computed(() => filteredAndSortedZielber(this)),
+    pop: computed(() => filteredAndSortedPop(this)),
     popmassnber: computed(() => filteredAndSortedPopmassnber(this)),
     popber: computed(() => filteredAndSortedPopber(this)),
     tpop: computed(() => filteredAndSortedTpop(this)),

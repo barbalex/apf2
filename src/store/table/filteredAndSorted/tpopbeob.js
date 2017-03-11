@@ -1,7 +1,7 @@
 import sortBy from 'lodash/sortBy'
 
 export default (store) => {
-  const { activeUrlElements, table, node } = this
+  const { activeUrlElements, table, node } = store
   // grab tpopbeob as array and sort them by year
   let tpopbeob = Array
     .from(table.beobzuordnung.values())
@@ -10,7 +10,7 @@ export default (store) => {
   tpopbeob.forEach((el) => {
     let datum = ``
     let autor = ``
-    const beob = this.table.beob_bereitgestellt.get(el.beobId)
+    const beob = table.beob_bereitgestellt.get(el.beobId)
     if (beob) {
       if (beob.Datum) {
         datum = beob.Datum
