@@ -104,6 +104,7 @@ import tpopmassnberNode from '../modules/nodes/tpopmassnber'
 import tpopmassnFolderNode from '../modules/nodes/tpopmassnFolder'
 import tpopmassnNode from '../modules/nodes/tpopmassn'
 import filteredAndSortedProjekt from './table/filteredAndSorted/projekt'
+import filteredAndSortedAp from './table/filteredAndSorted/ap'
 import filteredAndSortedAssozart from './table/filteredAndSorted/assozart'
 import filteredAndSortedIdealbiotop from './table/filteredAndSorted/idealbiotop'
 import filteredAndSortedBeobNichtZuzuordnen from './table/filteredAndSorted/beobNichtZuzuordnen'
@@ -291,36 +292,7 @@ function Store() {
       apberuebersicht = sortBy(apberuebersicht, `JbuJahr`)
       return apberuebersicht
     }),
-    ap: computed(() => {
-      const { activeUrlElements, table } = this
-      const { adb_eigenschaften } = table
-      // grab ap as array and sort them by name
-      let ap = Array.from(this.table.ap.values())
-      // show only ap of active projekt
-      ap = ap.filter(a => a.ProjId === activeUrlElements.projekt)
-      // filter by node.apFilter
-      if (this.node.apFilter) {
-        // ApStatus between 3 and 5
-        ap = ap.filter(a => [1, 2, 3].includes(a.ApStatus))
-      }
-      // sort
-      // need to add artnameVollständig to sort and filter by nodeLabelFilter
-      if (adb_eigenschaften.size > 0) {
-        ap.forEach(x => {
-          const ae = adb_eigenschaften.get(x.ApArtId)
-          return x.label = ae ? ae.Artname : `(keine Art gewählt)`
-        })
-        // filter by node.nodeLabelFilter
-        const filterString = this.node.nodeLabelFilter.get(`ap`)
-        if (filterString) {
-          ap = ap.filter(p =>
-            p.label.toLowerCase().includes(filterString.toLowerCase())
-          )
-        }
-        ap = sortBy(ap, `label`)
-      }
-      return ap
-    }),
+    ap: computed(() => filteredAndSortedAp(this)),
     assozart: computed(() => filteredAndSortedAssozart(this)),
     idealbiotop: computed(() => filteredAndSortedIdealbiotop(this)),
     beobNichtZuzuordnen: computed(() => filteredAndSortedBeobNichtZuzuordnen(this)),
