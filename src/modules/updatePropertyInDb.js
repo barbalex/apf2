@@ -116,7 +116,7 @@ export default (store:Object, key:string, valuePassed:string|number) => {
             `nicht-zuzuordnende-Beobachtungen` :
             `nicht-beurteilte-Beobachtungen`
           )
-          store.url[5] = store.activeDataset.row.beobId
+          store.url[5] = store.activeDataset.row.NO_NOTE
           const newUrlArray = store.url.slice(0, 6)
           const newUrl = `/${newUrlArray.join(`/`)}${Object.keys(store.urlQuery).length > 0 ? `?${queryString.stringify(store.urlQuery)}` : ``}`
           store.history.push(newUrl)

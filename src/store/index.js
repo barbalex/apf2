@@ -10,6 +10,8 @@ import {
 import $ from 'jquery'
 import sortBy from 'lodash/sortBy'
 import uniq from 'lodash/uniq'
+import queryString from 'query-string'
+import axios from 'axios'
 
 import fetchTable from '../modules/fetchTable'
 import fetchBeobzuordnungModule from '../modules/fetchBeobzuordnung'
@@ -105,6 +107,8 @@ import tpopmassnNode from '../modules/nodes/tpopmassn'
 
 import TableStore from './table'
 import ObservableHistory from './ObservableHistory'
+import apiBaseUrl from '../modules/apiBaseUrl'
+import deleteDatasetInIdb from '../modules/deleteDatasetInIdb'
 
 function Store() {
   this.history = ObservableHistory
@@ -360,12 +364,13 @@ function Store() {
       beobNichtZuzuordnen.forEach((el) => {
         let datum = ``
         let autor = ``
-        if (el.beobBereitgestellt) {
-          if (el.beobBereitgestellt.Datum) {
-            datum = el.beobBereitgestellt.Datum
+        const beobBereitgestellt = this.table.beob_bereitgestellt.get(el.NO_NOTE)
+        if (beobBereitgestellt) {
+          if (beobBereitgestellt.Datum) {
+            datum = beobBereitgestellt.Datum
           }
-          if (el.beobBereitgestellt.Autor) {
-            autor = el.beobBereitgestellt.Autor
+          if (beobBereitgestellt.Autor) {
+            autor = beobBereitgestellt.Autor
           }
         }
         const quelle = table.beob_quelle.get(el.QuelleId)
@@ -928,6 +933,25 @@ function Store() {
     deleteDatasetExecute: action(() => {
       if (this.user.readOnly) return this.tellUserReadOnly()
       deleteDatasetExecute(this)
+    }),
+    deleteBeobzuordnung: action((beobId) => {
+      const { activeUrlElements, urlQuery, history, table } = this
+      // delete beobzuordnung
+      const deleteUrl = `${apiBaseUrl}/apflora/tabelle=beobzuordnung/tabelleIdFeld=NO_NOTE/tabelleId=${beobId}`
+      axios.delete(deleteUrl)
+        .then(() => {
+          // remove this dataset in store.table
+          table.beobzuordnung.delete(beobId)
+          // remove from idb
+          deleteDatasetInIdb(this, `beobzuordnung`, beobId)
+          // set url to corresponding beob_bereitgestellt
+          const query = `${Object.keys(urlQuery).length > 0 ? `?${queryString.stringify(urlQuery)}` : ``}`
+          const newUrl = `/Projekte/${activeUrlElements.projekt}/Arten/${activeUrlElements.ap}/nicht-beurteilte-Beobachtungen/${beobId}${query}`
+          history.push(newUrl)
+        })
+        .catch((error) =>
+          this.listError(error)
+        )
     }),
     listError: action(error =>
       listError(this, error)
