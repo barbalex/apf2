@@ -8,8 +8,6 @@ import {
   observable,
 } from 'mobx'
 import $ from 'jquery'
-import queryString from 'query-string'
-import axios from 'axios'
 
 import fetchTable from '../modules/fetchTable'
 import fetchBeobzuordnungModule from '../modules/fetchBeobzuordnung'
@@ -127,11 +125,10 @@ import filteredAndSortedTpopfeldkontr from './table/filteredAndSorted/tpopfeldko
 import filteredAndSortedTpopfeldkontrzaehl from './table/filteredAndSorted/tpopfeldkontrzaehl'
 import filteredAndSortedTpopmassnber from './table/filteredAndSorted/tpopmassnber'
 import filteredAndSortedTpopmassn from './table/filteredAndSorted/tpopmassn'
+import deleteBeobzuordnung from './action/deleteBeobzuordnung'
 
 import TableStore from './table'
 import ObservableHistory from './ObservableHistory'
-import apiBaseUrl from '../modules/apiBaseUrl'
-import deleteDatasetInIdb from '../modules/deleteDatasetInIdb'
 
 function Store() {
   this.history = ObservableHistory
@@ -351,25 +348,7 @@ function Store() {
       if (this.user.readOnly) return this.tellUserReadOnly()
       deleteDatasetExecute(this)
     }),
-    deleteBeobzuordnung: action((beobId) => {
-      const { activeUrlElements, urlQuery, history, table } = this
-      // delete beobzuordnung
-      const deleteUrl = `${apiBaseUrl}/apflora/tabelle=beobzuordnung/tabelleIdFeld=NO_NOTE/tabelleId=${beobId}`
-      axios.delete(deleteUrl)
-        .then(() => {
-          // remove this dataset in store.table
-          table.beobzuordnung.delete(beobId)
-          // remove from idb
-          deleteDatasetInIdb(this, `beobzuordnung`, beobId)
-          // set url to corresponding beob_bereitgestellt
-          const query = `${Object.keys(urlQuery).length > 0 ? `?${queryString.stringify(urlQuery)}` : ``}`
-          const newUrl = `/Projekte/${activeUrlElements.projekt}/Arten/${activeUrlElements.ap}/nicht-beurteilte-Beobachtungen/${beobId}${query}`
-          history.push(newUrl)
-        })
-        .catch((error) =>
-          this.listError(error)
-        )
-    }),
+    deleteBeobzuordnung: action((beobId) => deleteBeobzuordnung(this, beobId)),
     listError: action(error =>
       listError(this, error)
     ),
