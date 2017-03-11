@@ -105,6 +105,8 @@ import tpopmassnberNode from '../modules/nodes/tpopmassnber'
 import tpopmassnFolderNode from '../modules/nodes/tpopmassnFolder'
 import tpopmassnNode from '../modules/nodes/tpopmassn'
 import filteredAndSortedProjekt from './table/filteredAndSorted/projekt'
+import filteredAndSortedTpopfreiwkontrzaehl from './table/filteredAndSorted/tpopfreiwkontrzaehl'
+import filteredAndSortedTpopfeldkontr from './table/filteredAndSorted/tpopfeldkontr'
 import filteredAndSortedTpopfeldkontrzaehl from './table/filteredAndSorted/tpopfeldkontrzaehl'
 import filteredAndSortedTpopmassnber from './table/filteredAndSorted/tpopmassnber'
 import filteredAndSortedTpopmassn from './table/filteredAndSorted/tpopmassn'
@@ -722,55 +724,8 @@ function Store() {
       // sort by label and return
       return sortBy(tpopkontr, `label`)
     }),
-    tpopfreiwkontrzaehl: computed(() => {
-      const { activeUrlElements, table, node } = this
-      // grab tpopkontrzaehl as array
-      let tpopkontrzaehl = Array.from(table.tpopkontrzaehl.values())
-      // show only nodes of active tpopkontr
-      tpopkontrzaehl = tpopkontrzaehl.filter(a => a.TPopKontrId === activeUrlElements.tpopfreiwkontr)
-
-      // get zaehleinheitWerte
-      const zaehleinheitWerte = Array.from(table.tpopkontrzaehl_einheit_werte.values())
-      const methodeWerte = Array.from(table.tpopkontrzaehl_methode_werte.values())
-
-      tpopkontrzaehl.forEach((el) => {
-        const zaehleinheitWert = zaehleinheitWerte.find(e => e.ZaehleinheitCode === el.Zaehleinheit)
-        const zaehleinheitTxt = zaehleinheitWert ? zaehleinheitWert.ZaehleinheitTxt : null
-        const methodeWert = methodeWerte.find(e => e.BeurteilCode === el.Methode)
-        const methodeTxt = methodeWert ? methodeWert.BeurteilTxt : null
-        el.label = `${el.Anzahl || `(keine Anzahl)`} ${zaehleinheitTxt || `(keine Einheit)`} (${methodeTxt || `keine Methode`})`
-      })
-      // filter by node.nodeLabelFilter
-      const filterString = node.nodeLabelFilter.get(`tpopkontrzaehl`)
-      if (filterString) {
-        tpopkontrzaehl = tpopkontrzaehl.filter(p =>
-          p.label.toLowerCase().includes(filterString.toLowerCase())
-        )
-      }
-      // sort by label and return
-      return sortBy(tpopkontrzaehl, `label`)
-    }),
-    tpopfeldkontr: computed(() => {
-      const { activeUrlElements, table, node } = this
-      // grab tpopkontr as array and sort them by year
-      let tpopkontr = Array.from(table.tpopkontr.values())
-        .filter(t => t.TPopKontrTyp !== `Freiwilligen-Erfolgskontrolle`)
-      // show only nodes of active ap
-      tpopkontr = tpopkontr.filter(a => a.TPopId === activeUrlElements.tpop)
-      // map through all projekt and create array of nodes
-      tpopkontr.forEach((el) => {
-        el.label = `${el.TPopKontrJahr || `(kein Jahr)`}: ${el.TPopKontrTyp || `(kein Typ)`}`
-      })
-      // filter by node.nodeLabelFilter
-      const filterString = node.nodeLabelFilter.get(`tpopfeldkontr`)
-      if (filterString) {
-        tpopkontr = tpopkontr.filter(p =>
-          p.label.toLowerCase().includes(filterString.toLowerCase())
-        )
-      }
-      // sort by label and return
-      return sortBy(tpopkontr, `label`)
-    }),
+    tpopfreiwkontrzaehl: computed(() => filteredAndSortedTpopfreiwkontrzaehl(this)),
+    tpopfeldkontr: computed(() => filteredAndSortedTpopfeldkontr(this)),
     tpopfeldkontrzaehl: computed(() => filteredAndSortedTpopfeldkontrzaehl(this)),
     tpopmassnber: computed(() => filteredAndSortedTpopmassnber(this)),
     tpopmassn: computed(() => filteredAndSortedTpopmassn(this)),
