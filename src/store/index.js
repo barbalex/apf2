@@ -8,7 +8,6 @@ import {
   observable,
 } from 'mobx'
 import $ from 'jquery'
-import sortBy from 'lodash/sortBy'
 import queryString from 'query-string'
 import axios from 'axios'
 
@@ -104,6 +103,7 @@ import tpopmassnberNode from '../modules/nodes/tpopmassnber'
 import tpopmassnFolderNode from '../modules/nodes/tpopmassnFolder'
 import tpopmassnNode from '../modules/nodes/tpopmassn'
 import filteredAndSortedProjekt from './table/filteredAndSorted/projekt'
+import filteredAndSortedApberuebersicht from './table/filteredAndSorted/apberuebersicht'
 import filteredAndSortedAp from './table/filteredAndSorted/ap'
 import filteredAndSortedAssozart from './table/filteredAndSorted/assozart'
 import filteredAndSortedIdealbiotop from './table/filteredAndSorted/idealbiotop'
@@ -273,25 +273,7 @@ function Store() {
   this.table = TableStore
   extendObservable(this.table.filteredAndSorted, {
     projekt: computed(() => filteredAndSortedProjekt(this)),
-    apberuebersicht: computed(() => {
-      const { activeUrlElements } = this
-      // grab apberuebersicht as array and sort them by year
-      let apberuebersicht = Array.from(this.table.apberuebersicht.values())
-      // show only nodes of active projekt
-      apberuebersicht = apberuebersicht.filter(a => a.ProjId === activeUrlElements.projekt)
-      // filter by node.nodeLabelFilter
-      const filterString = this.node.nodeLabelFilter.get(`apberuebersicht`)
-      if (filterString) {
-        apberuebersicht = apberuebersicht.filter(p =>
-          p.JbuJahr
-            .toString()
-            .includes(filterString)
-        )
-      }
-      // sort
-      apberuebersicht = sortBy(apberuebersicht, `JbuJahr`)
-      return apberuebersicht
-    }),
+    apberuebersicht: computed(() => filteredAndSortedApberuebersicht(this)),
     ap: computed(() => filteredAndSortedAp(this)),
     assozart: computed(() => filteredAndSortedAssozart(this)),
     idealbiotop: computed(() => filteredAndSortedIdealbiotop(this)),
