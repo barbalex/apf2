@@ -15,7 +15,7 @@ verwendet:
 - Grundlage schaffen, um auf das Access-Admin-Tool verzichten zu können
 - Grundlage schaffen, um später allenfalls später netzunabhängig (im Feld) arbeiten zu können
 - Sicherheit erhöhen
-- Architektur modernisieren
+- Architektur modernisieren:
   - Unterhalt- und Erweiterbarkeit verbessern
   - Anzahl Karten-Werkzeuge auf eines reduzieren (bisher: Google-Maps und OpenLayers)
   - es soll künftig einfacher und mit weniger Risiko verbunden sein, neue Features einzuführen
@@ -24,5 +24,5 @@ verwendet:
   - (Infra-)Struktur für Tests bereitstellen
   - nach und nach Tests einführen
   - URL ist Teil des Flux-Stores, steuert die Benutzeroberfläche und das Laden von Daten. Vorteile:
-    - fast alles ist verlinkbar
+    - vieles ist verlinkbar
     - auf einen Router kann verzichtet werden
