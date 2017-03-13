@@ -4,8 +4,8 @@ import { TileLayer } from 'react-leaflet'
 
 const OsmBwLayer = () =>
   <TileLayer
-    attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a>'
-    url="http://{s}.tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png"
+    url="//tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png"
+    attribution='&copy; <a href="//osm.org/copyright">OpenStreetMap</a>'
   />
 
 export default OsmBwLayer

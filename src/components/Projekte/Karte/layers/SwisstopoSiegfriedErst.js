@@ -7,8 +7,8 @@ import { TileLayer } from 'react-leaflet'
 
 const SwissTopoSiegfriedErstLayer = () =>
   <TileLayer
-    url="http://wmts10.geo.admin.ch/1.0.0/ch.swisstopo.hiks-siegfried/default/current/3857/{z}/{x}/{y}.png"
-    attribution='&copy; <a href="http://swisstopo.ch">Swisstopo</a>'
+    url="//wmts10.geo.admin.ch/1.0.0/ch.swisstopo.hiks-siegfried/default/current/3857/{z}/{x}/{y}.png"
+    attribution='&copy; <a href="//swisstopo.ch">Swisstopo</a>'
   />
 
 export default SwissTopoSiegfriedErstLayer
