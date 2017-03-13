@@ -6,13 +6,14 @@
 const Hapi = require('hapi')
 const Inert = require('inert')
 
+/*
 const serverOptionsDevelopment = {
   debug: {
     log: ['error'],
     request: ['error']
   }
-}
-const server = new Hapi.Server(serverOptionsDevelopment)
+}*/
+const server = new Hapi.Server()
 
 server.register(Inert, function () {
   server.connection({
