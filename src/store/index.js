@@ -225,7 +225,7 @@ function Store() {
   extendObservable(this.map, {
     mouseCoord: [],
     mouseCoordEpsg21781: computed(() => {
-      if (this.map.mouseCoord[0]) {
+      if (this.map.mouseCoord.length > 0) {
         return epsg4326to21781(this.map.mouseCoord[0], this.map.mouseCoord[1])
       }
       return []
