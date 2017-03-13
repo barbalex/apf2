@@ -52,7 +52,7 @@ export default (store) => {
           title,
           icon,
         // }).bindPopup(title)
-      }).bindPopup(ReactDOMServer.renderToStaticMarkup(<TpopPopup pop={pop} tpop={p} />))
+      }).bindPopup(ReactDOMServer.renderToStaticMarkup(<TpopPopup store={store} pop={pop} tpop={p} />))
           .bindTooltip(tooltipText, tooltipOptions)
         markers.addLayer(marker)
       }

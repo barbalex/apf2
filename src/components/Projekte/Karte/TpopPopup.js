@@ -1,8 +1,6 @@
 // @flow
 import React, { PropTypes } from 'react'
 import styled from 'styled-components'
-import { observer, inject } from 'mobx-react'
-import compose from 'recompose/compose'
 
 import appBaseUrl from '../../../modules/appBaseUrl'
 
@@ -10,10 +8,11 @@ const StyledH3 = styled.h3`
   margin: 7px 0;
 `
 
-const enhance = compose(
-  inject(`store`),
-  observer
-)
+/**
+ * This is rendered to static markup
+ * So not possible to add store via context
+ * or to observe
+ */
 
 const TpopPopup = (
   { store, pop, tpop }:
@@ -51,4 +50,4 @@ TpopPopup.propTypes = {
   tpop: PropTypes.object.isRequired,
 }
 
-export default enhance(TpopPopup)
+export default TpopPopup
