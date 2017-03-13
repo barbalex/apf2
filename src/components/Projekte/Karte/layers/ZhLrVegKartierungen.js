@@ -2,8 +2,8 @@
 import React from 'react'
 import { WMSTileLayer } from 'react-leaflet'
 
-// http://wms.zh.ch/FnsLRKZHWMS?SERVICE=WMS&Request=GetCapabilities
-// legend: http://wms.zh.ch/FnsLRKZHWMS?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=uebersicht&format=image/png&STYLE=default
+// //wms.zh.ch/FnsLRKZHWMS?SERVICE=WMS&Request=GetCapabilities
+// legend: //wms.zh.ch/FnsLRKZHWMS?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=uebersicht&format=image/png&STYLE=default
 const LrVegKartierungenLayer = () =>
   <WMSTileLayer
     url="//wms.zh.ch/FnsLRKZHWMS"

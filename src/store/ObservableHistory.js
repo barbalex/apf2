@@ -7,7 +7,7 @@
  * see: https://github.com/mobxjs/mobx/issues/710
  *
  * get ui to follow url changes when user clicks browser back and forwards buttons:
- * http://stackoverflow.com/questions/25806608/how-to-detect-browser-back-button-event-cross-browser
+ * //stackoverflow.com/questions/25806608/how-to-detect-browser-back-button-event-cross-browser
  */
 
 import { extendObservable } from 'mobx'

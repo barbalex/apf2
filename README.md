@@ -2,9 +2,9 @@
 
 verwendet:
 
-- [create-react-app](https://github.com/facebookincubator/create-react-app)
-- [MobX](https://github.com/mobxjs/mobx)
-- [socket.io](http://socket.io/)
+- [create-react-app](//github.com/facebookincubator/create-react-app)
+- [MobX](//github.com/mobxjs/mobx)
+- [socket.io](//socket.io/)
 
 ##Ziele:
 

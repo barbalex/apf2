@@ -59,7 +59,7 @@ const MyTextFieldWithUrl = ({
   return (
     <Container>
       <TextField
-        floatingLabelText={`${label} (bitte "www." statt "http://" eingeben)`}
+        floatingLabelText={`${label} (bitte "www." statt "https://" eingeben)`}
         type={type}
         multiLine={multiLine}
         value={value || ``}

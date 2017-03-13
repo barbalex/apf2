@@ -72,7 +72,7 @@ app.extend({
 app.init()
 
 // Needed for onTouchTap
-// http://stackoverflow.com/a/34015469/988941
+// //stackoverflow.com/a/34015469/988941
 injectTapEventPlugin()
 
 const theme = Object.assign({}, darkBaseTheme, {

@@ -1,5 +1,5 @@
 // for sorting see:
-// http://stackoverflow.com/questions/13211709/javascript-sort-array-by-multiple-number-fields
+// //stackoverflow.com/questions/13211709/javascript-sort-array-by-multiple-number-fields
 // also: needed to account for elements not having the next array elements
 // to be sorted before those that have
 // that is why there is if (a !== 0 && !a)
