@@ -33,8 +33,9 @@ import Projekte from './components/Projekte'
 import User from './components/User'
 import Errors from './components/Errors'
 
-import apiBaseUrl from './modules/apiBaseUrl'
-import updateFromSocket from './modules/updateFromSocket'
+// turned off because of errors in production
+// import apiBaseUrl from './modules/apiBaseUrl'
+// import updateFromSocket from './modules/updateFromSocket'
 
 // import appBaseUrl from './modules/appBaseUrl'
 
@@ -88,8 +89,9 @@ store.setLoginFromIdb()
 // load immediately because is used to validate active dataset
 store.fetchFieldsFromIdb()
 
-const socket = window.io(apiBaseUrl)
-socket.on(`tabelle_update`, payload => updateFromSocket(store, payload))
+// turned off because of errors in production
+// const socket = window.io(apiBaseUrl)
+// socket.on(`tabelle_update`, payload => updateFromSocket(store, payload))
 
 const AppContainer = styled.div`
   display: flex;

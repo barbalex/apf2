@@ -3,6 +3,10 @@ export default (pathname:string) => {
   const pathNamePassed = pathname
   const pathName = pathNamePassed.replace(`/`, ``)
   const pathElements = pathName.split(`/`)
+  if (pathElements[0] === `v2`) {
+    // get rid of empty element(s) at start
+    pathElements.shift()
+  }
   if (pathElements[0] === ``) {
     // get rid of empty element(s) at start
     pathElements.shift()
