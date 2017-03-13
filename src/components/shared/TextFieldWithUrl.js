@@ -4,6 +4,12 @@ import { observer } from 'mobx-react'
 import TextField from 'material-ui/TextField'
 import FontIcon from 'material-ui/FontIcon'
 import { greenA200 } from 'material-ui/styles/colors'
+/**
+ * DO NOT UPDATE get-urls
+ * before create-react-app moves to using babili
+ * see: https://github.com/facebookincubator/create-react-app/issues/984#issuecomment-257105773
+ * and: https://github.com/sindresorhus/get-urls/issues/17
+ */
 import getUrls from 'get-urls'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
