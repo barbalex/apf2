@@ -1,6 +1,5 @@
 import React, { PropTypes } from 'react'
 import 'leaflet'
-import { observer, inject } from 'mobx-react'
 import leafletImage from 'leaflet-image'
 import fileSaver from 'file-saver'
 import Control from 'react-leaflet-control'
@@ -32,7 +31,6 @@ const theme = Object.assign({}, darkBaseTheme, {
 })
 
 const enhance = compose(
-  inject(`store`),
   getContext({ map: PropTypes.object.isRequired }),
   withHandlers({
     savePng: props => () => {
@@ -44,10 +42,9 @@ const enhance = compose(
       })
     },
   }),
-  observer
 )
 
-const PngControl = ({ store, savePng }) =>
+const PngControl = ({ savePng }) =>
   <Control position="topright">
     <StyledButton
       onClick={savePng}
@@ -67,7 +64,6 @@ const PngControl = ({ store, savePng }) =>
   </Control>
 
 PngControl.propTypes = {
-  store: PropTypes.object.isRequired,
   savePng: PropTypes.func.isRequired,
 }
 

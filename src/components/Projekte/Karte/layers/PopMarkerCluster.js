@@ -1,14 +1,11 @@
 import React, { Component, PropTypes } from 'react'
-import { observer, inject } from 'mobx-react'
 import compose from 'recompose/compose'
 import getContext from 'recompose/getContext'
 import 'leaflet'
 import '../../../../../node_modules/leaflet.markercluster/dist/leaflet.markercluster-src.js'
 
 const enhance = compose(
-  inject(`store`),
   getContext({ map: PropTypes.object.isRequired }),
-  observer
 )
 
 class PopMarkerCluster extends Component { // eslint-disable-line react/prefer-stateless-function

@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from 'react'
 import 'leaflet'
-import { inject, observer } from 'mobx-react'
 import compose from 'recompose/compose'
 import getContext from 'recompose/getContext'
 // regular import results in error,
@@ -9,16 +8,10 @@ import getContext from 'recompose/getContext'
 import '../../../../node_modules/leaflet-measure/dist/leaflet-measure'
 
 const enhance = compose(
-  inject(`store`),
   getContext({ map: PropTypes.object.isRequired }),
-  observer
 )
 
 class MeasureControl extends Component { // eslint-disable-line react/prefer-stateless-function
-
-  static propTypes = {
-    store: PropTypes.object.isRequired,
-  }
 
   componentDidMount() {
     const { map } = this.props
