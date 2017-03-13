@@ -1,3 +1,9 @@
 // @flow
 // in development should return local path
-export default `${window.location.protocol}//${window.location.hostname}:3000`
+
+const hostnameWithoutWww = window.location.hostname.replace('www.', '')
+const isLocalhost = hostnameWithoutWww === 'localhost'
+const hostname = isLocalhost ? `localhost` : window.location.hostname
+const appHost = `https://${hostname}:3000/v2`
+
+export default appHost
