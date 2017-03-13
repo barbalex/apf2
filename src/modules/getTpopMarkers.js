@@ -4,8 +4,8 @@ import 'leaflet'
 import '../../node_modules/leaflet.markercluster/dist/leaflet.markercluster-src.js'
 import some from 'lodash/some'
 
-import tpopIcon from '../etc/tpop.svg'
-import tpopIconHighlighted from '../etc/tpopHighlighted.svg'
+import tpopIcon from '../etc/tpop.png'
+import tpopIconHighlighted from '../etc/tpopHighlighted.png'
 import TpopPopup from '../components/Projekte/Karte/TpopPopup'
 
 export default (store) => {

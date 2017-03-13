@@ -4,8 +4,12 @@ import 'leaflet'
 import '../../node_modules/leaflet.markercluster/dist/leaflet.markercluster-src.js'
 import some from 'lodash/some'
 
-import popIcon from '../etc/pop.svg'
-import popIconHighlighted from '../etc/popHighlighted.svg'
+/**
+ * TODO: the svg path on production contains "Projekte/1/" !!??
+ * Maybe give an absolute path?
+ */
+import popIcon from '../etc/pop.png'
+import popIconHighlighted from '../etc/popHighlighted.png'
 import PopPopup from '../components/Projekte/Karte/PopPopup'
 
 export default (store) => {
