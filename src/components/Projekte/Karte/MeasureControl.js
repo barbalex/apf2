@@ -27,7 +27,7 @@ class MeasureControl extends Component { // eslint-disable-line react/prefer-sta
       secondaryLengthUnit: `kilometers`,
       primaryAreaUnit: `sqmeters`,
       secondaryAreaUnit: `hectares`,
-      localization: `de`,
+      localization: `de_CH`,
       activeColor: `#f45942`,
       completedColor: `#b22c25`,
       thousandsSep: `'`,
