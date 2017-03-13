@@ -33,7 +33,7 @@ const theme = Object.assign({}, darkBaseTheme, {
 
 const enhance = compose(
   inject(`store`),
-  getContext({ map: PropTypes.object }),
+  getContext({ map: PropTypes.object.isRequired }),
   withHandlers({
     savePng: props => () => {
       const { map } = props

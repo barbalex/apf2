@@ -7,7 +7,7 @@ import getContext from 'recompose/getContext'
 
 const enhance = compose(
   inject(`store`),
-  getContext({ map: PropTypes.object }),
+  getContext({ map: PropTypes.object.isRequired }),
   observer
 )
 

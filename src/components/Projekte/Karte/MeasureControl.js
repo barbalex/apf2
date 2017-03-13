@@ -10,7 +10,7 @@ import '../../../../node_modules/leaflet-measure/dist/leaflet-measure'
 
 const enhance = compose(
   inject(`store`),
-  getContext({ map: PropTypes.object }),
+  getContext({ map: PropTypes.object.isRequired }),
   observer
 )
 
