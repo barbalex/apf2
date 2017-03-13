@@ -3,9 +3,11 @@ import 'leaflet'
 import 'leaflet-easyprint'
 import { observer, inject } from 'mobx-react'
 import compose from 'recompose/compose'
+import getContext from 'recompose/getContext'
 
 const enhance = compose(
   inject(`store`),
+  getContext({ map: PropTypes.object }),
   observer
 )
 
@@ -16,7 +18,7 @@ class PrintControl extends Component {
   }
 
   componentDidMount() {
-    const { map } = this.props.store
+    const { map } = this.props
     const options = {
       title: `drucken`,
       position: `topright`,

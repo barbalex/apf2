@@ -8,6 +8,7 @@ import FontIcon from 'material-ui/FontIcon'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
+import getContext from 'recompose/getContext'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
@@ -32,9 +33,10 @@ const theme = Object.assign({}, darkBaseTheme, {
 
 const enhance = compose(
   inject(`store`),
+  getContext({ map: PropTypes.object }),
   withHandlers({
     savePng: props => () => {
-      const { map } = props.store
+      const { map } = props
       leafletImage(map, function(error, canvas) {
         canvas.toBlob(function (blob) {
           fileSaver.saveAs(blob, 'map.png');
