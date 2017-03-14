@@ -6,12 +6,13 @@
  *
  */
 
-import React, { PropTypes } from 'react'
+import React, { Component, PropTypes } from 'react'
 import { toJS } from 'mobx'
 import { observer, inject } from 'mobx-react'
 import { Map, ScaleControl } from 'react-leaflet'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
+import withState from 'recompose/withState'
 import 'leaflet'
 import 'proj4'
 import 'proj4leaflet'
@@ -40,90 +41,111 @@ const StyledMap = styled(Map)`
 const StyledMapLocalizing = styled(StyledMap)`
   cursor: crosshair !important;
 `
+const ktZhBounds = [[47.159, 8.354], [47.696, 8.984]]
 
 const enhance = compose(
   inject(`store`),
+  withState(`bounds`, `changeBounds`, ktZhBounds),
   observer
 )
 
-const Karte = ({ store, popMarkers, tpopMarkers }) => {
-  // if no active projekt, need to fetch pops of all Projekte
-  // uhm, let us not do this
-  // if no active ap, need to fetch pops of projekt
-  // uhm, let us not do this
+class Karte extends Component {
 
-  // TODO: define bounds only at componentDidMount
-  const ktZhBounds = [[47.159, 8.354], [47.696, 8.984]]
-  const popBounds = store.map.pop.bounds
-  const tpopBounds = store.map.tpop.bounds
-  const boundsToUse = [ktZhBounds]
-  if (store.map.pop.visible) {
-    boundsToUse.push(popBounds)
+  static propTypes = {
+    store: PropTypes.object.isRequired,
+    popMarkers: PropTypes.object,
+    tpopMarkers: PropTypes.object,
+    idOfTpopBeingLocalized: PropTypes.number.isRequired,
+    changeBounds: PropTypes.func.isRequired,
+    bounds: PropTypes.array,
   }
-  if (store.map.tpop.visible) {
-    boundsToUse.push(tpopBounds)
-  }
-  const bounds = getEncompassingBound(boundsToUse)
-  const MapElement = !!store.map.tpop.idOfTpopBeingLocalized ? StyledMapLocalizing : StyledMap
-  // this does not work
-  // see issue on proj4js: https://github.com/proj4js/proj4js/issues/214
-  /*
-  const crs = new window.L.Proj.CRS(
-    `EPSG:21781`,
-    `+proj=somerc +lat_0=46.95240555555556 +lon_0=7.439583333333333 +k_0=1 +x_0=600000 +y_0=200000 +ellps=bessel +towgs84=674.374,15.056,405.346,0,0,0,0 +units=m +no_defs`,
-    {
-      resolutions: [8192, 4096, 2048], // 3 example zoom level resolutions
-      bounds,
+
+  componentDidMount() {
+    console.log(`Karte, componentDidMount`)
+    const { store, changeBounds } = this.props
+    if (store.map.tpop.idOfTpopBeingLocalized) {
+      changeBounds(store.map.tpop.bounds)
+    } else {
+      const popBounds = store.map.pop.bounds
+      const tpopBounds = store.map.tpop.bounds
+      const boundsToUse = [ktZhBounds]
+      if (store.map.pop.visible) {
+        boundsToUse.push(popBounds)
+      }
+      if (store.map.tpop.visible) {
+        boundsToUse.push(tpopBounds)
+      }
+      changeBounds(getEncompassingBound(boundsToUse))
     }
-  )*/
+  }
 
-  return (
-    <MapElement
-      bounds={bounds}
-      preferCanvas
-      onMouseMove={store.setMapMouseCoord}
-      // need max and min zoom because otherwise
-      // something errors
-      // probably clustering function
-      maxZoom={50}
-      minZoom={1}
-      pop={store.map.pop.pops}
-      onClick={(event) => {
-        if (!!store.map.tpop.idOfTpopBeingLocalized) {
-          const {lat, lng} = event.latlng
-          const [x, y] = epsg4326to21781(lng, lat)
-          store.localizeTpop(x, y)
-        }
-      }}
-    >
-      <PopMarkerCluster
-        highlightedIds={toJS(store.map.pop.highlightedIds)}
-        labelUsingNr={store.map.pop.labelUsingNr}
-        pops={store.map.pop.pops}
-        visible={store.map.pop.visible}
-        markers={popMarkers}
-      />
-      <TpopMarkerCluster
-        highlightedIds={toJS(store.map.tpop.highlightedIds)}
-        labelUsingNr={store.map.tpop.labelUsingNr}
-        tpops={store.map.tpop.tpops}
-        visible={store.map.tpop.visible}
-        markers={tpopMarkers}
-      />
-      <ScaleControl imperial={false} />
-      <LayersControl />
-      <MeasureControl />
-      <PrintControl />
-      <PngControl />
-      <CoordinatesControl />
-    </MapElement>
-  )
-}
+  componentDidUpdate(prevProps, prevState) {
+    console.log(`Karte, componentDidUpdate, prevProps:`, prevProps)
+    console.log(`Karte, componentDidUpdate, this.props:`, this.props)
+    const { store, changeBounds } = this.props
+    if (this.props.idOfTpopBeingLocalized && prevProps.idOfTpopBeingLocalized !== this.props.idOfTpopBeingLocalized) {
+      console.log(`Karte, componentDidUpdate, changing bounds`)
+      changeBounds(store.map.tpop.bounds)
+    }
+  }
 
-Karte.propTypes = {
-  store: PropTypes.object.isRequired,
-  popMarkers: PropTypes.object,
-  tpopMarkers: PropTypes.object,
+  render() {
+    const { store, popMarkers, tpopMarkers, bounds, idOfTpopBeingLocalized } = this.props
+    const MapElement = !!idOfTpopBeingLocalized ? StyledMapLocalizing : StyledMap
+    // this does not work
+    // see issue on proj4js: https://github.com/proj4js/proj4js/issues/214
+    /*
+    const crs = new window.L.Proj.CRS(
+      `EPSG:21781`,
+      `+proj=somerc +lat_0=46.95240555555556 +lon_0=7.439583333333333 +k_0=1 +x_0=600000 +y_0=200000 +ellps=bessel +towgs84=674.374,15.056,405.346,0,0,0,0 +units=m +no_defs`,
+      {
+        resolutions: [8192, 4096, 2048], // 3 example zoom level resolutions
+        bounds,
+      }
+    )*/
+
+    return (
+      <MapElement
+        bounds={bounds}
+        preferCanvas
+        onMouseMove={store.setMapMouseCoord}
+        // need max and min zoom because otherwise
+        // something errors
+        // probably clustering function
+        maxZoom={50}
+        minZoom={1}
+        pop={store.map.pop.pops}
+        onClick={(event) => {
+          if (!!idOfTpopBeingLocalized) {
+            const {lat, lng} = event.latlng
+            const [x, y] = epsg4326to21781(lng, lat)
+            store.localizeTpop(x, y)
+          }
+        }}
+      >
+        <PopMarkerCluster
+          highlightedIds={toJS(store.map.pop.highlightedIds)}
+          labelUsingNr={store.map.pop.labelUsingNr}
+          pops={store.map.pop.pops}
+          visible={store.map.pop.visible}
+          markers={popMarkers}
+        />
+        <TpopMarkerCluster
+          highlightedIds={toJS(store.map.tpop.highlightedIds)}
+          labelUsingNr={store.map.tpop.labelUsingNr}
+          tpops={store.map.tpop.tpops}
+          visible={store.map.tpop.visible}
+          markers={tpopMarkers}
+        />
+        <ScaleControl imperial={false} />
+        <LayersControl />
+        <MeasureControl />
+        <PrintControl />
+        <PngControl />
+        <CoordinatesControl />
+      </MapElement>
+    )
+  }
 }
 
 export default enhance(Karte)

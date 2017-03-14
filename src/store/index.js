@@ -248,7 +248,7 @@ function Store() {
     highlightedIds: [],
     highlightedPopIds: [],
     tpops: computed(() => getTpopsForMap(this)),
-    bounds: computed(() => getTpopBounds(this.map.tpop.tpops)),
+    bounds: computed(() => getTpopBounds(this)),
     // alternative is using names
     labelUsingNr: true,
     markers: computed(() => getTpopMarkers(this)),
