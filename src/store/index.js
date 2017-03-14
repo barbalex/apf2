@@ -16,6 +16,8 @@ import fetchTpopForAp from '../modules/fetchTpopForAp'
 import fetchPopForAp from '../modules/fetchPopForAp'
 import fetchDatasetById from '../modules/fetchDatasetById'
 import fetchBeobBereitgestellt from '../modules/fetchBeobBereitgestellt'
+import fetchBeobEvab from '../modules/fetchBeobEvab'
+import fetchBeobInfospezies from '../modules/fetchBeobInfospezies'
 import updateActiveDatasetFromUrl from '../modules/updateActiveDatasetFromUrl'
 import getActiveUrlElements from '../modules/getActiveUrlElements'
 import fetchDataForActiveUrlElements from '../modules/fetchDataForActiveUrlElements'
@@ -398,6 +400,12 @@ function Store() {
     ),
     fetchBeobBereitgestellt: action(apArtId =>
       fetchBeobBereitgestellt(this, apArtId)
+    ),
+    fetchBeobEvab: action(apArtId =>
+      fetchBeobEvab(this, apArtId)
+    ),
+    fetchBeobInfospezies: action(apArtId =>
+      fetchBeobInfospezies(this, apArtId)
     ),
     // action when user clicks on a node in the tree
     toggleNode: action(node =>
