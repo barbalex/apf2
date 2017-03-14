@@ -42,6 +42,7 @@ import fetchQk from '../modules/fetchQk'
 import addMessagesToQk from '../modules/addMessagesToQk'
 import getPopsForMap from '../modules/getPopsForMap'
 import getTpopsForMap from '../modules/getTpopsForMap'
+import getBeobForMap from '../modules/getBeobForMap'
 import getPopBounds from '../modules/getPopBounds'
 import getTpopBounds from '../modules/getTpopBounds'
 import epsg4326to21781 from '../modules/epsg4326to21781'
@@ -260,7 +261,7 @@ function Store() {
   extendObservable(this.map.beob, {
     visible: false,
     highlightedIds: [],
-    beobs: computed(() => getTpopsForMap(this)),
+    beobs: computed(() => getBeobForMap(this)),
     markers: computed(() => getTpopMarkers(this)),
     idOfBeobBeingAssigned: 0,
   })

@@ -2,28 +2,30 @@
 import epsg21781to4326 from './epsg21781to4326'
 
 export default (store:Object) => {
-  const { table, activeUrlElements, node } = store
+  const { table, activeUrlElements } = store
   const myApArtId = activeUrlElements.ap || store.map.pop.apArtId
   // get beob of this ap
-  const beobOfActiveAp = Array.from(table.beob_bereitgestellt.values())
+  let beob = Array.from(table.beob_bereitgestellt.values())
     .filter(beob => beob.NO_ISFS === myApArtId)
-  const beobIdsOfActiveAp = beobOfActiveAp.map(beob => beob.BeobId)
-  // get beob_evab and beob_infospezies of this ap
-  let tpops = Array.from(table.tpop.values())
-    .filter(p => popIdsOfActiveAp.includes(p.PopId))
-    // omit tpops without coordinates
-    .filter(p => p.TPopXKoord && p.TPopYKoord)
-  // filter them by nodeLabelFilter
-  const tpopFilterString = node.nodeLabelFilter.get(`tpop`)
-  if (tpopFilterString) {
-    tpops = tpops.filter((p) => {
-      const label = `${p.TPopNr || `(keine Nr)`}: ${p.TPopFlurname || `(kein Flurname)`}`
-      return label.toLowerCase().includes(tpopFilterString.toLowerCase())
-    })
-  }
-  tpops = tpops.map((p) => {
-    p.TPopKoordWgs84 = epsg21781to4326(p.TPopXKoord, p.TPopYKoord)
-    return p
-  })
-  return tpops
+
+  beob = beob.map((b) => {
+    // add original beobachtung
+    b.beob = (
+      b.quelle === 1 ?
+      table.beob_evab.get(b.BeobId) :
+      table.beob_infospezies.get(b.BeobId)
+    )
+    // add beobzuordnung
+    b.beobzuordnung = table.beobzuordnung.get(b.BeobId)
+    if (b.beob) {
+      // add KoordWgs84
+      b.KoordWgs84 = (
+        b.quelle === 1 ?
+        epsg21781to4326(b.beob.COORDONNEE_FED_E, b.beob.COORDONNEE_FED_N) :
+        epsg21781to4326(b.beob.FNS_XGIS, b.beob.FNS_YGIS)
+      )
+    }
+    return b
+  }).filter(b => !!b.KoordWgs84)
+  return beob
 }
