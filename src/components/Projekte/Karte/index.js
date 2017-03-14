@@ -45,6 +45,7 @@ const ktZhBounds = [[47.159, 8.354], [47.696, 8.984]]
 
 const enhance = compose(
   inject(`store`),
+  // make bounds state, need to manage them manually
   withState(`bounds`, `changeBounds`, ktZhBounds),
   observer
 )
@@ -61,8 +62,8 @@ class Karte extends Component {
   }
 
   componentDidMount() {
-    const { store, changeBounds } = this.props
-    if (store.map.tpop.idOfTpopBeingLocalized) {
+    const { store, changeBounds, idOfTpopBeingLocalized } = this.props
+    if (idOfTpopBeingLocalized) {
       changeBounds(store.map.tpop.bounds)
     } else {
       const popBounds = store.map.pop.bounds
@@ -79,17 +80,24 @@ class Karte extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { store, changeBounds } = this.props
+    const { store, changeBounds, idOfTpopBeingLocalized } = this.props
     /**
      * when tpops are localized, need to zoom to tpop if it has coordinates
      */
-    if (this.props.idOfTpopBeingLocalized && prevProps.idOfTpopBeingLocalized !== this.props.idOfTpopBeingLocalized) {
+    if (idOfTpopBeingLocalized && prevProps.idOfTpopBeingLocalized !== idOfTpopBeingLocalized) {
       changeBounds(store.map.tpop.bounds)
     }
   }
 
   render() {
-    const { store, popMarkers, tpopMarkers, bounds, changeBounds, idOfTpopBeingLocalized } = this.props
+    const {
+      store,
+      popMarkers,
+      tpopMarkers,
+      bounds,
+      changeBounds,
+      idOfTpopBeingLocalized,
+    } = this.props
     const MapElement = !!idOfTpopBeingLocalized ? StyledMapLocalizing : StyledMap
     // this does not work
     // see issue on proj4js: https://github.com/proj4js/proj4js/issues/214
