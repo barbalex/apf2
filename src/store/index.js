@@ -220,6 +220,7 @@ function Store() {
     mouseCoordEpsg21781: [],
     pop: {},
     tpop: {},
+    beob: {},
   }
   extendObservable(this.map, {
     mouseCoord: [],
@@ -253,6 +254,13 @@ function Store() {
     labelUsingNr: true,
     markers: computed(() => getTpopMarkers(this)),
     idOfTpopBeingLocalized: 0,
+  })
+  extendObservable(this.map.beob, {
+    visible: false,
+    highlightedIds: [],
+    beobs: computed(() => getTpopsForMap(this)),
+    markers: computed(() => getTpopMarkers(this)),
+    idOfBeobBeingAssigned: 0,
   })
   this.table = TableStore
   extendObservable(this.table.filteredAndSorted, {
