@@ -61,7 +61,6 @@ class Karte extends Component {
   }
 
   componentDidMount() {
-    console.log(`Karte, componentDidMount`)
     const { store, changeBounds } = this.props
     if (store.map.tpop.idOfTpopBeingLocalized) {
       changeBounds(store.map.tpop.bounds)
@@ -80,17 +79,17 @@ class Karte extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    console.log(`Karte, componentDidUpdate, prevProps:`, prevProps)
-    console.log(`Karte, componentDidUpdate, this.props:`, this.props)
     const { store, changeBounds } = this.props
+    /**
+     * when tpops are localized, need to zoom to tpop if it has coordinates
+     */
     if (this.props.idOfTpopBeingLocalized && prevProps.idOfTpopBeingLocalized !== this.props.idOfTpopBeingLocalized) {
-      console.log(`Karte, componentDidUpdate, changing bounds`)
       changeBounds(store.map.tpop.bounds)
     }
   }
 
   render() {
-    const { store, popMarkers, tpopMarkers, bounds, idOfTpopBeingLocalized } = this.props
+    const { store, popMarkers, tpopMarkers, bounds, changeBounds, idOfTpopBeingLocalized } = this.props
     const MapElement = !!idOfTpopBeingLocalized ? StyledMapLocalizing : StyledMap
     // this does not work
     // see issue on proj4js: https://github.com/proj4js/proj4js/issues/214
@@ -121,6 +120,22 @@ class Karte extends Component {
             const [x, y] = epsg4326to21781(lng, lat)
             store.localizeTpop(x, y)
           }
+        }}
+        onZoomlevelschange={(event) => {
+          // need to update bounds, otherwise map jumps back
+          // when adding new tpop
+          const bounds = event.target.getBounds()
+          changeBounds([bounds._southWest, bounds._northEast])
+        }}
+        onZoomend={(event) => {
+          // need to update bounds, otherwise map jumps back
+          const bounds = event.target.getBounds()
+          changeBounds([bounds._southWest, bounds._northEast])
+        }}
+        onMoveend={(event) => {
+          // need to update bounds, otherwise map jumps back
+          const bounds = event.target.getBounds()
+          changeBounds([bounds._southWest, bounds._northEast])
         }}
       >
         <PopMarkerCluster

@@ -5,7 +5,7 @@ export default (store) => {
     if (tpopBeingLocalized.TPopKoordWgs84) {
       const x = tpopBeingLocalized.TPopKoordWgs84[0]
       const y = tpopBeingLocalized.TPopKoordWgs84[1]
-      return [[x - 0.001, y - 0.001], [x + 0.001, y + 0.001]]
+      return [[x - 0.01, y - 0.01], [x + 0.001, y + 0.01]]
     }
   }
   const tpops = tpopsOnMap.filter(t => !!t.TPopKoordWgs84)
