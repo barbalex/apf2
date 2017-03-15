@@ -264,6 +264,12 @@ function Store() {
     highlightedIds: [],
     beobs: computed(() => getBeobForMap(this)),
     markersClustered: computed(() => getBeobMarkersClustered(this)),
+    beobsNichtBeurteilt: computed(() =>
+      getBeobForMap(this).filter(b => !b.beobzuordnung)
+    ),
+    beobsNichtZuzuordnen: computed(() =>
+      getBeobForMap(this).filter(b => b.NichtZuzuordnen === 1)
+    ),
     idOfBeobBeingAssigned: 0,
   })
   this.table = TableStore
