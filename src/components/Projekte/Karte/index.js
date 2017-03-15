@@ -24,7 +24,7 @@ import '../../../../node_modules/leaflet.markercluster/dist/MarkerCluster.css'
 import getEncompassingBound from '../../../modules/getEncompassingBound'
 import PopMarkerCluster from './layers/PopMarkerCluster'
 import TpopMarkerCluster from './layers/TpopMarkerCluster'
-import BeobNichtBeurteiltMarkerCluster from './layers/BeobNichtBeurteiltMarkerCluster'
+import BeobMarkerCluster from './layers/BeobMarkerCluster'
 import MeasureControl from './MeasureControl'
 import PrintControl from './PrintControl'
 import PngControl from './PngControl'
@@ -58,6 +58,7 @@ class Karte extends Component {
     popMarkers: PropTypes.object,
     tpopMarkers: PropTypes.object,
     beobNichtBeurteiltMarkers: PropTypes.object,
+    beobNichtZuzuordnenMarkers: PropTypes.object,
     idOfTpopBeingLocalized: PropTypes.number.isRequired,
     changeBounds: PropTypes.func.isRequired,
     bounds: PropTypes.array,
@@ -97,6 +98,7 @@ class Karte extends Component {
       popMarkers,
       tpopMarkers,
       beobNichtBeurteiltMarkers,
+      beobNichtZuzuordnenMarkers,
       bounds,
       changeBounds,
       idOfTpopBeingLocalized,
@@ -163,11 +165,17 @@ class Karte extends Component {
           visible={store.map.tpop.visible}
           markers={tpopMarkers}
         />
-        <BeobNichtBeurteiltMarkerCluster
+        <BeobMarkerCluster
           highlightedIds={toJS(store.map.beobNichtBeurteilt.highlightedIds)}
           beobs={store.map.beobNichtBeurteilt.beobs}
           visible={store.map.beobNichtBeurteilt.visible}
           markers={beobNichtBeurteiltMarkers}
+        />
+        <BeobMarkerCluster
+          highlightedIds={toJS(store.map.beobNichtZuzuordnen.highlightedIds)}
+          beobs={store.map.beobNichtZuzuordnen.beobs}
+          visible={store.map.beobNichtZuzuordnen.visible}
+          markers={beobNichtZuzuordnenMarkers}
         />
         <ScaleControl imperial={false} />
         <LayersControl />

@@ -273,15 +273,6 @@ class Strukturbaum extends Component {
       isEqual(node.url, store.url)
     )
 
-    const popVisible = store.map.pop.visible
-    const tpopVisible = store.map.tpop.visible
-    const beobNichtBeurteiltVisible = store.map.beobNichtBeurteilt.visible
-    // pass length of highlightedIds to List
-    // to make it rerender when highlighting changes
-    const popHighlighted = store.map.pop.highlightedIds.length
-    const tpopHighlighted = store.map.tpop.highlightedIds.length
-    const beobNichtBeurteiltHighlighted = store.map.beobNichtBeurteilt.highlightedIds.length
-
     return (
       <Container>
         <AutoSizer>
@@ -294,12 +285,16 @@ class Strukturbaum extends Component {
               noRowsRenderer={this.noRowsRenderer}
               scrollToIndex={activeNodeIndex}
               width={width}
-              popVisible={popVisible}
-              popHighlighted={popHighlighted}
-              tpopVisible={tpopVisible}
-              tpopHighlighted={tpopHighlighted}
-              beobNichtBeurteiltVisible={beobNichtBeurteiltVisible}
-              beobNichtBeurteiltHighlighted={beobNichtBeurteiltHighlighted}
+              // pass visibilty and length of highlightedIds to List
+              // to make it rerender when they changes
+              popVisible={store.map.pop.visible}
+              popHighlighted={store.map.pop.highlightedIds.length}
+              tpopVisible={store.map.tpop.visible}
+              tpopHighlighted={store.map.tpop.highlightedIds.length}
+              beobNichtBeurteiltVisible={store.map.beobNichtBeurteilt.visible}
+              beobNichtBeurteiltHighlighted={store.map.beobNichtBeurteilt.highlightedIds.length}
+              beobNichtZuzuordnenVisible={store.map.beobNichtZuzuordnen.visible}
+              beobNichtZuzuordnenHighlighted={store.map.beobNichtZuzuordnen.highlightedIds.length}
               ref={(c) => { this.tree = c }}
               {...store.node.node.nodes}
             />

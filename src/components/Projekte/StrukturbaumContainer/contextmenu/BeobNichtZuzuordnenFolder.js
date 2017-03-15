@@ -19,21 +19,21 @@ const enhance = compose(
   observer
 )
 
-const BeobNichtBeurteiltFolder = (
+const BeobNichtZuzuordnenFolder = (
   { onClick, store, changeId, id, onShow }:
   {onClick:() => void,store:Object,changeId:()=>{},id:number,onShow:()=>{}}
 ) =>
   <ContextMenu
-    id="beobzuordnungFolder"
+    id="beobNichtZuzuordnenFolder"
     collect={props => props}
     onShow={onShow}
   >
-    <div className="react-contextmenu-title">nicht beurteilte Beobachtungen</div>
+    <div className="react-contextmenu-title">nicht zuzuordnende Beobachtungen</div>
     <MenuItem
       onClick={onClick}
       data={{
         action: `showBeobOnMap`,
-        actionTable: `beobNichtBeurteilt`,
+        actionTable: `beobNichtZuzuordnen`,
         idTable: `ap`,
       }}
     >
@@ -41,7 +41,7 @@ const BeobNichtBeurteiltFolder = (
     </MenuItem>
   </ContextMenu>
 
-BeobNichtBeurteiltFolder.propTypes = {
+BeobNichtZuzuordnenFolder.propTypes = {
   onClick: PropTypes.func.isRequired,
   store: PropTypes.object.isRequired,
   changeId: PropTypes.func.isRequired,
@@ -49,4 +49,4 @@ BeobNichtBeurteiltFolder.propTypes = {
   onShow: PropTypes.func.isRequired,
 }
 
-export default enhance(BeobNichtBeurteiltFolder)
+export default enhance(BeobNichtZuzuordnenFolder)

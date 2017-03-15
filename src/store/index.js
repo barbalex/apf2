@@ -289,7 +289,7 @@ function Store() {
       getBeobNichtZuzuordnenMarkersClustered(this)
     ),
     beobs: computed(() =>
-      getBeobForMap(this).filter(b => b.NichtZuzuordnen === 1)
+      getBeobForMap(this).filter(b => b.beobzuordnung && b.beobzuordnung.BeobNichtZuordnen === 1)
     ),
   })
   this.table = TableStore

@@ -19,6 +19,7 @@ import CmApberuebersicht from './contextmenu/Apberuebersicht'
 import CmAssozartFolder from './contextmenu/AssozartFolder'
 import CmAssozart from './contextmenu/Assozart'
 import CmBeobNichtBeurteiltFolder from './contextmenu/BeobNichtBeurteiltFolder'
+import CmBeobNichtZuzuordnenFolder from './contextmenu/BeobNichtZuzuordnenFolder'
 import CmBerFolder from './contextmenu/BerFolder'
 import CmBer from './contextmenu/Ber'
 import CmApberFolder from './contextmenu/ApberFolder'
@@ -144,7 +145,7 @@ class StrukturbaumContainer extends Component { // eslint-disable-line react/pre
       delete() {
         store.deleteDatasetDemand(table, id, baseUrl, label)
       },
-      showBeobNichtBeurteiltOnMap() {
+      showBeobOnMap() {
         // 1. open map if not yet open
         that.showMapIfNotYetVisible()
         // 2 add layer for actionTable
@@ -252,6 +253,7 @@ class StrukturbaumContainer extends Component { // eslint-disable-line react/pre
         <CmAssozartFolder onClick={this.handleClick} />
         <CmAssozart onClick={this.handleClick} />
         <CmBeobNichtBeurteiltFolder onClick={this.handleClick} />
+        <CmBeobNichtZuzuordnenFolder onClick={this.handleClick} />
         <CmBerFolder onClick={this.handleClick} />
         <CmBer onClick={this.handleClick} />
         <CmApberFolder onClick={this.handleClick} />

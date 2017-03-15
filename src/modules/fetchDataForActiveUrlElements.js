@@ -49,6 +49,15 @@ const fetchDataForActiveUrlElements = (store:Object) => {
       if (store.map.pop.visible) {
         store.fetchPopForAp(activeUrlElements.ap)
       }
+      if (
+        store.map.beobNichtBeurteilt.visible ||
+        store.map.beobNichtZuzuordnen.visible
+      ) {
+        store.fetchTable(`beob`, `beob_quelle`)
+        store.fetchTpopForAp(activeUrlElements.ap)
+        store.fetchBeobEvab(activeUrlElements.ap)
+        store.fetchBeobInfospezies(activeUrlElements.ap)
+      }
     },
     qk() {
       store.fetchQk()
@@ -58,6 +67,8 @@ const fetchDataForActiveUrlElements = (store:Object) => {
     beobNichtZuzuordnenFolder() {
       store.fetchTable(`beob`, `beob_quelle`)
       store.fetchTpopForAp(activeUrlElements.ap)
+      store.fetchBeobEvab(activeUrlElements.ap)
+      store.fetchBeobInfospezies(activeUrlElements.ap)
     },
     beobNichtZuzuordnen () {
       const id = activeUrlElements.beobNichtZuzuordnen
