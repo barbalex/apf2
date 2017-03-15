@@ -5,7 +5,7 @@ import epsg21781to4326 from './epsg21781to4326'
 
 export default (store:Object) => {
   const { table, activeUrlElements } = store
-  const myApArtId = activeUrlElements.ap || store.map.pop.apArtId
+  const myApArtId = activeUrlElements.ap
   // get beob of this ap
   let beob = Array.from(table.beob_bereitgestellt.values())
     .filter(beob => beob.NO_ISFS === myApArtId)

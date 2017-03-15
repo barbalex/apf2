@@ -275,10 +275,12 @@ class Strukturbaum extends Component {
 
     const popVisible = store.map.pop.visible
     const tpopVisible = store.map.tpop.visible
+    const beobNichtBeurteiltVisible = store.map.beobNichtBeurteilt.visible
     // pass length of highlightedIds to List
     // to make it rerender when highlighting changes
     const popHighlighted = store.map.pop.highlightedIds.length
     const tpopHighlighted = store.map.tpop.highlightedIds.length
+    const beobNichtBeurteiltHighlighted = store.map.beobNichtBeurteilt.highlightedIds.length
 
     return (
       <Container>
@@ -296,6 +298,8 @@ class Strukturbaum extends Component {
               popHighlighted={popHighlighted}
               tpopVisible={tpopVisible}
               tpopHighlighted={tpopHighlighted}
+              beobNichtBeurteiltVisible={beobNichtBeurteiltVisible}
+              beobNichtBeurteiltHighlighted={beobNichtBeurteiltHighlighted}
               ref={(c) => { this.tree = c }}
               {...store.node.node.nodes}
             />
