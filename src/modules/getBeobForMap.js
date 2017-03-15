@@ -14,7 +14,7 @@ export default (store:Object) => {
     const b = clone(bb)
     // add original beobachtung
     b.beob = (
-      b.quelle === 1 ?
+      b.QuelleId === 1 ?
       table.beob_evab.get(b.BeobId) :
       table.beob_infospezies.get(b.BeobId)
     )
@@ -23,7 +23,7 @@ export default (store:Object) => {
     if (b.beob) {
       // add KoordWgs84
       b.KoordWgs84 = (
-        b.quelle === 1 ?
+        b.QuelleId === 1 ?
         epsg21781to4326(b.beob.COORDONNEE_FED_E, b.beob.COORDONNEE_FED_N) :
         epsg21781to4326(b.beob.FNS_XGIS, b.beob.FNS_YGIS)
       )

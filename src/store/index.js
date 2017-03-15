@@ -280,9 +280,6 @@ function Store() {
     beobs: computed(() =>
       getBeobForMap(this).filter(b => !b.beobzuordnung)
     ),
-    beobsNichtZuzuordnen: computed(() =>
-      getBeobForMap(this).filter(b => b.NichtZuzuordnen === 1)
-    ),
     idOfBeobBeingAssigned: 0,
   })
   extendObservable(this.map.beobNichtZuzuordnen, {

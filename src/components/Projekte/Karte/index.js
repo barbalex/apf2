@@ -164,9 +164,9 @@ class Karte extends Component {
           markers={tpopMarkers}
         />
         <BeobNichtBeurteiltMarkerCluster
-          highlightedIds={toJS(store.map.beob.highlightedIds)}
-          beobs={store.map.beob.beobs}
-          visible={store.map.beob.visible}
+          highlightedIds={toJS(store.map.beobNichtBeurteilt.highlightedIds)}
+          beobs={store.map.beobNichtBeurteilt.beobs}
+          visible={store.map.beobNichtBeurteilt.visible}
           markers={beobNichtBeurteiltMarkers}
         />
         <ScaleControl imperial={false} />
