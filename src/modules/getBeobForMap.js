@@ -1,4 +1,6 @@
 // @flow
+import clone from 'lodash/clone'
+
 import epsg21781to4326 from './epsg21781to4326'
 
 export default (store:Object) => {
@@ -8,7 +10,8 @@ export default (store:Object) => {
   let beob = Array.from(table.beob_bereitgestellt.values())
     .filter(beob => beob.NO_ISFS === myApArtId)
 
-  beob = beob.map((b) => {
+  return beob.map((bb) => {
+    const b = clone(bb)
     // add original beobachtung
     b.beob = (
       b.quelle === 1 ?
@@ -27,5 +30,4 @@ export default (store:Object) => {
     }
     return b
   }).filter(b => !!b.KoordWgs84)
-  return beob
 }

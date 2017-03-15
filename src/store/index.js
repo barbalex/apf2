@@ -48,6 +48,7 @@ import getTpopBounds from '../modules/getTpopBounds'
 import epsg4326to21781 from '../modules/epsg4326to21781'
 import getPopMarkers from '../modules/getPopMarkers'
 import getTpopMarkers from '../modules/getTpopMarkers'
+import getBeobMarkersClustered from '../modules/getBeobMarkersClustered'
 import fetchLogin from '../modules/fetchLogin'
 import logout from '../modules/logout'
 import setLoginFromIdb from '../modules/setLoginFromIdb'
@@ -262,7 +263,7 @@ function Store() {
     visible: false,
     highlightedIds: [],
     beobs: computed(() => getBeobForMap(this)),
-    markers: computed(() => getTpopMarkers(this)),
+    markersClustered: computed(() => getBeobMarkersClustered(this)),
     idOfBeobBeingAssigned: 0,
   })
   this.table = TableStore
