@@ -66,6 +66,7 @@ const Projekte = ({ store }) => {
               tpopMarkers={store.map.tpop.markers}
               beobNichtBeurteiltMarkers={store.map.beobNichtBeurteilt.markersClustered}
               beobNichtZuzuordnenMarkers={store.map.beobNichtZuzuordnen.markersClustered}
+              tpopBeobMarkers={store.map.tpopBeob.markersClustered}
               idOfTpopBeingLocalized={store.map.tpop.idOfTpopBeingLocalized}
             />
           </KarteContainer>

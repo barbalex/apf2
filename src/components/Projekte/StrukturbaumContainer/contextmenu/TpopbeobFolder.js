@@ -19,29 +19,29 @@ const enhance = compose(
   observer
 )
 
-const BeobNichtZuzuordnenFolder = (
+const TpopbeobFolder = (
   { onClick, store, changeId, id, onShow }:
   {onClick:() => void,store:Object,changeId:()=>{},id:number,onShow:()=>{}}
 ) =>
   <ContextMenu
-    id="beobNichtZuzuordnenFolder"
+    id="tpopbeobFolder"
     collect={props => props}
     onShow={onShow}
   >
-    <div className="react-contextmenu-title">nicht zuzuordnende Beobachtungen</div>
+    <div className="react-contextmenu-title">Beobachtungen</div>
     <MenuItem
       onClick={onClick}
       data={{
         action: `showBeobOnMap`,
-        actionTable: `beobNichtZuzuordnen`,
+        actionTable: `tpopBeob`,
         idTable: `ap`,
       }}
     >
-      {`blende auf Karte ${store.map.beobNichtZuzuordnen.visible ? `aus` : `ein`}`}
+      {`blende auf Karte ${store.map.tpopBeob.visible ? `aus` : `ein`}`}
     </MenuItem>
   </ContextMenu>
 
-BeobNichtZuzuordnenFolder.propTypes = {
+TpopbeobFolder.propTypes = {
   onClick: PropTypes.func.isRequired,
   store: PropTypes.object.isRequired,
   changeId: PropTypes.func.isRequired,
@@ -49,4 +49,4 @@ BeobNichtZuzuordnenFolder.propTypes = {
   onShow: PropTypes.func.isRequired,
 }
 
-export default enhance(BeobNichtZuzuordnenFolder)
+export default enhance(TpopbeobFolder)

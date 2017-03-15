@@ -59,6 +59,7 @@ class Karte extends Component {
     tpopMarkers: PropTypes.object,
     beobNichtBeurteiltMarkers: PropTypes.object,
     beobNichtZuzuordnenMarkers: PropTypes.object,
+    tpopBeobMarkers: PropTypes.object,
     idOfTpopBeingLocalized: PropTypes.number.isRequired,
     changeBounds: PropTypes.func.isRequired,
     bounds: PropTypes.array,
@@ -99,6 +100,7 @@ class Karte extends Component {
       tpopMarkers,
       beobNichtBeurteiltMarkers,
       beobNichtZuzuordnenMarkers,
+      tpopBeobMarkers,
       bounds,
       changeBounds,
       idOfTpopBeingLocalized,
@@ -176,6 +178,12 @@ class Karte extends Component {
           beobs={store.map.beobNichtZuzuordnen.beobs}
           visible={store.map.beobNichtZuzuordnen.visible}
           markers={beobNichtZuzuordnenMarkers}
+        />
+        <BeobMarkerCluster
+          highlightedIds={toJS(store.map.tpopBeob.highlightedIds)}
+          beobs={store.map.tpopBeob.beobs}
+          visible={store.map.tpopBeob.visible}
+          markers={tpopBeobMarkers}
         />
         <ScaleControl imperial={false} />
         <LayersControl />

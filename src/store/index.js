@@ -305,7 +305,11 @@ function Store() {
   })
   extendObservable(this.map.tpopBeob, {
     visible: false,
-    highlightedIds: [],
+    highlightedIds: computed(() => (
+      this.activeUrlElements.tpopbeob ?
+      [this.activeUrlElements.tpopbeob] :
+      []
+    )),
     markersClustered: computed(() =>
       getTpopBeobMarkersClustered(this)
     ),
