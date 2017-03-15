@@ -23,7 +23,8 @@ export default (store) => {
   if (visible) {
     beobs.forEach((p) => {
       const title = p.label
-      const isHighlighted = highlightedIds.includes(p.BeobId)
+      const beobId = isNaN(p.BeobId) ? p.BeobId : Number(p.BeobId)
+      const isHighlighted = highlightedIds.includes(beobId)
       const latLng = new window.L.LatLng(...p.KoordWgs84)
       const icon = window.L.icon({
         iconUrl: isHighlighted ? beobIconHighlighted : beobIcon,

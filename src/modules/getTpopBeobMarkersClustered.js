@@ -9,7 +9,7 @@ import beobIconHighlighted from '../etc/beobHighlighted.png'
 import BeobPopup from '../components/Projekte/Karte/BeobPopup'
 
 export default (store) => {
-  const { beobs, highlightedIds, visible } = store.map.beobNichtZuzuordnen
+  const { beobs, highlightedIds, visible } = store.map.tpopBeob
   const mcgOptions = {
     maxClusterRadius: 66,
     iconCreateFunction: function (cluster) {
@@ -30,8 +30,7 @@ export default (store) => {
         className: `mapTooltip`,
         opacity: 1,
       }
-      const beobId = isNaN(p.BeobId) ? p.BeobId : Number(p.BeobId)
-      const isHighlighted = highlightedIds.includes(beobId)
+      const isHighlighted = highlightedIds.includes(p.BeobId)
       const latLng = new window.L.LatLng(...p.KoordWgs84)
       const icon = window.L.icon({
         iconUrl: isHighlighted ? beobIconHighlighted : beobIcon,

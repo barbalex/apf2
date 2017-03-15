@@ -51,7 +51,8 @@ const fetchDataForActiveUrlElements = (store:Object) => {
       }
       if (
         store.map.beobNichtBeurteilt.visible ||
-        store.map.beobNichtZuzuordnen.visible
+        store.map.beobNichtZuzuordnen.visible ||
+        store.map.tpopBeob.visible
       ) {
         store.fetchTable(`beob`, `beob_quelle`)
         store.fetchTpopForAp(activeUrlElements.ap)
@@ -156,6 +157,8 @@ const fetchDataForActiveUrlElements = (store:Object) => {
     tpopbeobFolder() {
       store.fetchTable(`beob`, `beob_quelle`)
       store.fetchTpopForAp(activeUrlElements.ap)
+      store.fetchBeobEvab(activeUrlElements.ap)
+      store.fetchBeobInfospezies(activeUrlElements.ap)
     },
     tpopbeob() {
       const id = activeUrlElements.tpopbeob

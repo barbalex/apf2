@@ -51,6 +51,7 @@ import getTpopMarkers from '../modules/getTpopMarkers'
 import getBeobMarkersClustered from '../modules/getBeobMarkersClustered'
 import getBeobNichtBeurteiltMarkersClustered from '../modules/getBeobNichtBeurteiltMarkersClustered'
 import getBeobNichtZuzuordnenMarkersClustered from '../modules/getBeobNichtZuzuordnenMarkersClustered'
+import getTpopBeobMarkersClustered from '../modules/getTpopBeobMarkersClustered'
 import fetchLogin from '../modules/fetchLogin'
 import logout from '../modules/logout'
 import setLoginFromIdb from '../modules/setLoginFromIdb'
@@ -139,6 +140,7 @@ import ObservableHistory from './ObservableHistory'
 function Store() {
   this.history = ObservableHistory
   this.loading = []
+  this.activeUrlElements = {}
   extendObservable(this, {
     loading: [],
   })
@@ -229,6 +231,7 @@ function Store() {
     beob: {},
     beobNichtBeurteilt: {},
     beobNichtZuzuordnen: {},
+    tpopBeob: {},
   }
   extendObservable(this.map, {
     mouseCoord: [],
@@ -273,7 +276,11 @@ function Store() {
   })
   extendObservable(this.map.beobNichtBeurteilt, {
     visible: false,
-    highlightedIds: [],
+    highlightedIds: computed(() => (
+      this.activeUrlElements.beobzuordnung ?
+      [this.activeUrlElements.beobzuordnung] :
+      []
+    )),
     markersClustered: computed(() =>
       getBeobNichtBeurteiltMarkersClustered(this)
     ),
@@ -284,12 +291,26 @@ function Store() {
   })
   extendObservable(this.map.beobNichtZuzuordnen, {
     visible: false,
-    highlightedIds: [],
+    highlightedIds: computed(() => (
+      this.activeUrlElements.beobNichtZuzuordnen ?
+      [this.activeUrlElements.beobNichtZuzuordnen] :
+      []
+    )),
     markersClustered: computed(() =>
       getBeobNichtZuzuordnenMarkersClustered(this)
     ),
     beobs: computed(() =>
       getBeobForMap(this).filter(b => b.beobzuordnung && b.beobzuordnung.BeobNichtZuordnen === 1)
+    ),
+  })
+  extendObservable(this.map.tpopBeob, {
+    visible: false,
+    highlightedIds: [],
+    markersClustered: computed(() =>
+      getTpopBeobMarkersClustered(this)
+    ),
+    beobs: computed(() =>
+      getBeobForMap(this).filter(b => b.beobzuordnung && b.beobzuordnung.TPopId === this.activeUrlElements.tpop)
     ),
   })
   this.table = TableStore
@@ -323,6 +344,31 @@ function Store() {
   this.valuesForWhichTableDataWasFetched = {}
   this.qk = observable.map()
   extendObservable(this, {
+
+    /**
+     * url paths are used to control tree and forms
+     */
+    url: computed(() =>
+      //$FlowIssue
+      getUrl(this.history.location.pathname)
+    ),
+    /**
+     * urlQueries are used to control tabs
+     * for instance: Entwicklung or Biotop in tpopfeldkontr
+     */
+    urlQuery: computed(() =>
+      //$FlowIssue
+      getUrlQuery(this.history.location.search)
+    ),
+    projektNodes: computed(() =>
+      buildProjektNodes(this)
+    ),
+    activeDataset: computed(() =>
+      updateActiveDatasetFromUrl(this)
+    ),
+    activeUrlElements: computed(() =>
+      getActiveUrlElements(this.url)
+    ),
     datasetToDelete: {},
     tellUserReadOnly: action(() =>
       this.listError(new Error(`Sie haben keine Schreibrechte`))
@@ -461,30 +507,6 @@ function Store() {
     ),
     unhighlightTpopByPopIdOnMap: action((id) =>
       this.map.tpop.highlightedPopIds = this.map.tpop.highlightedPopIds.filter(i => i !== id)
-    ),
-    /**
-     * url paths are used to control tree and forms
-     */
-    url: computed(() =>
-      //$FlowIssue
-      getUrl(this.history.location.pathname)
-    ),
-    /**
-     * urlQueries are used to control tabs
-     * for instance: Entwicklung or Biotop in tpopfeldkontr
-     */
-    urlQuery: computed(() =>
-      //$FlowIssue
-      getUrlQuery(this.history.location.search)
-    ),
-    projektNodes: computed(() =>
-      buildProjektNodes(this)
-    ),
-    activeDataset: computed(() =>
-      updateActiveDatasetFromUrl(this)
-    ),
-    activeUrlElements: computed(() =>
-      getActiveUrlElements(this.url)
     ),
   })
 }
