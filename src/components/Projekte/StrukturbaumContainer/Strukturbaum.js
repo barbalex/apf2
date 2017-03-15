@@ -91,10 +91,16 @@ const PopMapIcon = styled(StyledMapIcon)`
 const TpopMapIcon = styled(StyledMapIcon)`
   color: #016f19 !important;
 `
+const BeobMapIcon = styled(StyledMapIcon)`
+  color: #9a009a !important;
+`
 const PopFilteredMapIcon = styled(PopMapIcon)`
   -webkit-text-stroke: 2px #f5ef00;
 `
 const TpopFilteredMapIcon = styled(TpopMapIcon)`
+  -webkit-text-stroke: 2px #f5ef00;
+`
+const BeobFilteredMapIcon = styled(BeobMapIcon)`
   -webkit-text-stroke: 2px #f5ef00;
 `
 const StyledTextInActiveNodePathSpan = styled(StyledTextSpan)`
@@ -174,6 +180,31 @@ class Strukturbaum extends Component {
         store.map.tpop.highlightedPopIds.includes(node.id)
       )
     )
+    const showBeobMapIcon = (
+      (
+        node.menuType === `beobNichtZuzuordnenFolder` &&
+        node.id === store.activeUrlElements.ap &&
+        store.map.beobNichtZuzuordnen.visible
+      ) ||
+      (
+        node.menuType === `beobzuordnungFolder` &&
+        node.id === store.activeUrlElements.ap &&
+        store.map.beobNichtBeurteilt.visible
+      )
+    )
+    if (showBeobMapIcon) console.log(`showBeobMapIcon:`, showBeobMapIcon)
+    const showBeobFilteredMapIcon = (
+      (
+        node.menuType === `tpop` &&
+        store.map.tpop.visible &&
+        store.map.tpop.highlightedIds.includes(node.id)
+      ) ||
+      (
+        node.menuType === `tpopFolder` &&
+        store.map.tpop.visible &&
+        store.map.tpop.highlightedPopIds.includes(node.id)
+      )
+    )
 
     return (
       <div key={key} style={style} onClick={onClick}>
@@ -218,6 +249,16 @@ class Strukturbaum extends Component {
               </TpopMapIcon>
             }
             {
+              showBeobMapIcon &&
+              <BeobMapIcon
+                id="map"
+                className="material-icons"
+                title="in Karte sichtbar"
+              >
+                local_florist
+              </BeobMapIcon>
+            }
+            {
               showPopFilteredMapIcon &&
               <PopFilteredMapIcon
                 id="map"
@@ -236,6 +277,16 @@ class Strukturbaum extends Component {
               >
                 local_florist
               </TpopFilteredMapIcon>
+            }
+            {
+              showBeobFilteredMapIcon &&
+              <BeobFilteredMapIcon
+                id="map"
+                className="material-icons"
+                title="in Karte hervorgehoben"
+              >
+                local_florist
+              </BeobFilteredMapIcon>
             }
             <TextSpan>
               {node.label}
