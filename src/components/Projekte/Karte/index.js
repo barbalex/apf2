@@ -24,6 +24,7 @@ import '../../../../node_modules/leaflet.markercluster/dist/MarkerCluster.css'
 import getEncompassingBound from '../../../modules/getEncompassingBound'
 import PopMarkerCluster from './layers/PopMarkerCluster'
 import TpopMarkerCluster from './layers/TpopMarkerCluster'
+import BeobNichtBeurteiltMarkerCluster from './layers/BeobNichtBeurteiltMarkerCluster'
 import MeasureControl from './MeasureControl'
 import PrintControl from './PrintControl'
 import PngControl from './PngControl'
@@ -56,6 +57,7 @@ class Karte extends Component {
     store: PropTypes.object.isRequired,
     popMarkers: PropTypes.object,
     tpopMarkers: PropTypes.object,
+    beobNichtBeurteiltMarkers: PropTypes.object,
     idOfTpopBeingLocalized: PropTypes.number.isRequired,
     changeBounds: PropTypes.func.isRequired,
     bounds: PropTypes.array,
@@ -94,6 +96,7 @@ class Karte extends Component {
       store,
       popMarkers,
       tpopMarkers,
+      beobNichtBeurteiltMarkers,
       bounds,
       changeBounds,
       idOfTpopBeingLocalized,
@@ -159,6 +162,12 @@ class Karte extends Component {
           tpops={store.map.tpop.tpops}
           visible={store.map.tpop.visible}
           markers={tpopMarkers}
+        />
+        <BeobNichtBeurteiltMarkerCluster
+          highlightedIds={toJS(store.map.beob.highlightedIds)}
+          beobs={store.map.beob.beobs}
+          visible={store.map.beob.visible}
+          markers={beobNichtBeurteiltMarkers}
         />
         <ScaleControl imperial={false} />
         <LayersControl />

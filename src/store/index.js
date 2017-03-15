@@ -49,6 +49,8 @@ import epsg4326to21781 from '../modules/epsg4326to21781'
 import getPopMarkers from '../modules/getPopMarkers'
 import getTpopMarkers from '../modules/getTpopMarkers'
 import getBeobMarkersClustered from '../modules/getBeobMarkersClustered'
+import getBeobNichtBeurteiltMarkersClustered from '../modules/getBeobNichtBeurteiltMarkersClustered'
+import getBeobNichtZuzuordnenMarkersClustered from '../modules/getBeobNichtZuzuordnenMarkersClustered'
 import fetchLogin from '../modules/fetchLogin'
 import logout from '../modules/logout'
 import setLoginFromIdb from '../modules/setLoginFromIdb'
@@ -225,6 +227,8 @@ function Store() {
     pop: {},
     tpop: {},
     beob: {},
+    beobNichtBeurteilt: {},
+    beobNichtZuzuordnen: {},
   }
   extendObservable(this.map, {
     mouseCoord: [],
@@ -263,14 +267,33 @@ function Store() {
     visible: false,
     highlightedIds: [],
     beobs: computed(() => getBeobForMap(this)),
-    markersClustered: computed(() => getBeobMarkersClustered(this)),
-    beobsNichtBeurteilt: computed(() =>
+    markersClustered: computed(() =>
+      getBeobMarkersClustered(this)
+    ),
+  })
+  extendObservable(this.map.beobNichtBeurteilt, {
+    visible: false,
+    highlightedIds: [],
+    markersClustered: computed(() =>
+      getBeobNichtBeurteiltMarkersClustered(this)
+    ),
+    beobs: computed(() =>
       getBeobForMap(this).filter(b => !b.beobzuordnung)
     ),
     beobsNichtZuzuordnen: computed(() =>
       getBeobForMap(this).filter(b => b.NichtZuzuordnen === 1)
     ),
     idOfBeobBeingAssigned: 0,
+  })
+  extendObservable(this.map.beobNichtZuzuordnen, {
+    visible: false,
+    highlightedIds: [],
+    markersClustered: computed(() =>
+      getBeobNichtZuzuordnenMarkersClustered(this)
+    ),
+    beobs: computed(() =>
+      getBeobForMap(this).filter(b => b.NichtZuzuordnen === 1)
+    ),
   })
   this.table = TableStore
   extendObservable(this.table.filteredAndSorted, {
