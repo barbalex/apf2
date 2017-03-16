@@ -59,6 +59,7 @@ const MyLayersControl = () =>
     <BaseLayer name="ZH Orthofoto Frühjahr 2015/16 Falschfarbeninfrarot">
       <ZhOrtho2015Ir />
     </BaseLayer>
+
     <Overlay name="ZH Übersichtsplan zum darüberlegen">
       <ZhUepOverlay />
     </Overlay>

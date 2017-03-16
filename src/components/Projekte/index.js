@@ -47,6 +47,8 @@ const Projekte = ({ store }) => {
   const deleteDatasetModalIsVisible = !!store.datasetToDelete.id
   const MyContainer = store.loading.length > 0 ? ContainerLoading : Container
 
+  console.log(`Projekt, render, activeBaseLayer:`, store.map.activeBaseLayer)
+
   return (
     <MyContainer>
       <Content>
@@ -68,6 +70,7 @@ const Projekte = ({ store }) => {
               beobNichtZuzuordnenMarkers={store.map.beobNichtZuzuordnen.markersClustered}
               tpopBeobMarkers={store.map.tpopBeob.markersClustered}
               idOfTpopBeingLocalized={store.map.tpop.idOfTpopBeingLocalized}
+              activeBaseLayer={store.map.activeBaseLayer}
             />
           </KarteContainer>
         }

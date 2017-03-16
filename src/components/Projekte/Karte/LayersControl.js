@@ -3,13 +3,16 @@ import Control from 'react-leaflet-control'
 import { observer, inject } from 'mobx-react'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
+import withHandlers from 'recompose/withHandlers'
 import withState from 'recompose/withState'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
-import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme'
+import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme'
 import FontIcon from 'material-ui/FontIcon'
 
-const theme = Object.assign({}, darkBaseTheme, {
+import RadioButtonGroup from '../../shared/RadioButtonGroup'
+
+const theme = Object.assign({}, baseTheme, {
   appBar: {
     height: 51,
   },
@@ -51,6 +54,16 @@ const enhance = compose(
   inject(`store`),
   withState(`baseLayersExpanded`, `toggleBaseLayersExpanded`, false),
   withState(`overlaysExpanded`, `toggleOverlaysExpanded`, false),
+  withHandlers({
+    onToggleBaseLayersExpanded: props => () => {
+      const { baseLayersExpanded, toggleBaseLayersExpanded } = props
+      toggleBaseLayersExpanded(!baseLayersExpanded)
+    },
+    onToggleOverlaysExpanded: props => () => {
+      const { overlaysExpanded, toggleOverlaysExpanded } = props
+      toggleOverlaysExpanded(!overlaysExpanded)
+    },
+  }),
   observer
 )
 
@@ -58,8 +71,8 @@ const LayersControl = ({
   store,
   baseLayersExpanded,
   overlaysExpanded,
-  toggleBaseLayersExpanded,
-  toggleOverlaysExpanded,
+  onToggleBaseLayersExpanded,
+  onToggleOverlaysExpanded,
 }) => {
   return (
     <Control position="topright" >
@@ -68,9 +81,7 @@ const LayersControl = ({
       >
         <CardContainer>
           <Card>
-            <CardHeader onClick={() =>
-                toggleBaseLayersExpanded(!baseLayersExpanded)
-              }
+            <CardHeader onClick={onToggleBaseLayersExpanded}
             >
               <div>Hintergrund</div>
               <div>
@@ -82,14 +93,30 @@ const LayersControl = ({
             {
               baseLayersExpanded &&
               <CardContent>
-                base layers
+                <RadioButtonGroup
+                  fieldName="activeBaseLayer"
+                  value={store.map.activeBaseLayer}
+                  dataSource={[
+                    { label: `OpenStreetMap farbig`, value: `OsmColor` },
+                    { label: `OpenStreetMap grau`, value: `OsmBw` },
+                    { label: `Swisstopo farbig`, value: `SwissTopoPixelFarbe` },
+                    { label: `Swisstopo grau`, value: `SwissTopoPixelGrau` },
+                    { label: `ZH Übersichtsplan`, value: `ZhUep` },
+                    { label: `Bing Luftbild`, value: `BingAerial` },
+                    { label: `ZH Orthofoto Sommer RGB`, value: `ZhOrtho` },
+                    { label: `ZH Orthofoto Sommer infrarot`, value: `ZhOrthoIr` },
+                    { label: `ZH Orthofoto Frühjahr 2015/16 RGB`, value: `ZhOrtho2015` },
+                    { label: `ZH Orthofoto Frühjahr 2015/16 infrarot`, value: `ZhOrtho2015Ir` },
+                  ]}
+                  updatePropertyInDb={(a, layer) => {
+                    store.map.setActiveBaseLayer(layer)
+                  }}
+                />
               </CardContent>
             }
           </Card>
           <Card>
-            <CardHeader onClick={() =>
-                toggleOverlaysExpanded(!overlaysExpanded)
-              }
+            <CardHeader onClick={onToggleOverlaysExpanded}
             >
               <div>überlagernd</div>
               <div>
@@ -117,6 +144,8 @@ LayersControl.propTypes = {
   overlaysExpanded: PropTypes.bool.isRequired,
   toggleBaseLayersExpanded: PropTypes.func.isRequired,
   toggleOverlaysExpanded: PropTypes.func.isRequired,
+  onToggleBaseLayersExpanded: PropTypes.func.isRequired,
+  onToggleOverlaysExpanded: PropTypes.func.isRequired,
 }
 
 export default enhance(LayersControl)

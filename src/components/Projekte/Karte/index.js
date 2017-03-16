@@ -72,20 +72,26 @@ class Karte extends Component {
     idOfTpopBeingLocalized: PropTypes.number.isRequired,
     changeBounds: PropTypes.func.isRequired,
     bounds: PropTypes.array,
+    activeBaseLayer: PropTypes.string.isRequired,
   }
 
   componentDidMount() {
     const { store, changeBounds } = this.props
+    console.log(`Karte: componentDidMount`)
     changeBounds(store.map.bounds)
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { store, changeBounds, idOfTpopBeingLocalized } = this.props
+    const { store, changeBounds, idOfTpopBeingLocalized, activeBaseLayer } = this.props
+    console.log(`Karte: componentDidUpdate`)
     /**
      * when tpops are localized, need to zoom to tpop if it has coordinates
      */
     if (idOfTpopBeingLocalized && prevProps.idOfTpopBeingLocalized !== idOfTpopBeingLocalized) {
       changeBounds(store.map.tpop.bounds)
+    }
+    if (prevProps.activeBaseLayer !== activeBaseLayer) {
+      console.log(`should force update for activeBaseLayer`)
     }
   }
 
@@ -100,8 +106,10 @@ class Karte extends Component {
       bounds,
       changeBounds,
       idOfTpopBeingLocalized,
+      activeBaseLayer,
     } = this.props
     const MapElement = !!idOfTpopBeingLocalized ? StyledMapLocalizing : StyledMap
+    console.log(`Karte, render: activeBaseLayer:`, activeBaseLayer)
     // this does not work
     // see issue on proj4js: https://github.com/proj4js/proj4js/issues/214
     /*
@@ -113,16 +121,16 @@ class Karte extends Component {
         bounds,
       }
     )*/
-    const showOsmColorLayer = store.map.activeBaseLayer === `OsmColor`
-    const showOsmBwLayer = store.map.activeBaseLayer === `OsmBw`
-    const showSwissTopoPixelFarbeLayer = store.map.activeBaseLayer === `SwissTopoPixelFarbe`
-    const showSwissTopoPixelGrauLayer = store.map.activeBaseLayer === `SwissTopoPixelGrau`
-    const showZhUep = store.map.activeBaseLayer === `ZhUep`
-    const showBingAerialLayer = store.map.activeBaseLayer === `BingAerial`
-    const showZhOrtho = store.map.activeBaseLayer === `ZhOrtho`
-    const showZhOrthoIr = store.map.activeBaseLayer === `ZhOrthoIr`
-    const showZhOrtho2015 = store.map.activeBaseLayer === `ZhOrtho2015`
-    const showZhOrtho2015Ir = store.map.activeBaseLayer === `ZhOrtho2015Ir`
+    const showOsmColorLayer = activeBaseLayer === `OsmColor`
+    const showOsmBwLayer = activeBaseLayer === `OsmBw`
+    const showSwissTopoPixelFarbeLayer = activeBaseLayer === `SwissTopoPixelFarbe`
+    const showSwissTopoPixelGrauLayer = activeBaseLayer === `SwissTopoPixelGrau`
+    const showZhUep = activeBaseLayer === `ZhUep`
+    const showBingAerialLayer = activeBaseLayer === `BingAerial`
+    const showZhOrtho = activeBaseLayer === `ZhOrtho`
+    const showZhOrthoIr = activeBaseLayer === `ZhOrthoIr`
+    const showZhOrtho2015 = activeBaseLayer === `ZhOrtho2015`
+    const showZhOrtho2015Ir = activeBaseLayer === `ZhOrtho2015Ir`
 
     return (
       <MapElement
