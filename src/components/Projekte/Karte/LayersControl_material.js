@@ -1,35 +1,24 @@
+/**
+ * this does not work:
+ * the card does not expand
+ * maybe onTouchTap does not work in map?
+ */
+
 import React, { PropTypes } from 'react'
 import Control from 'react-leaflet-control'
 import { observer, inject } from 'mobx-react'
-import styled from 'styled-components'
 import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme'
+import { Card, CardHeader, CardText } from 'material-ui/Card'
 
 const theme = Object.assign({}, darkBaseTheme, {
   appBar: {
     height: 51,
   },
 })
-
-const CardContainer = styled.div`
-  background-color: rgb(48, 48, 48);
-  border-radius: 5px;
-  border: 2px solid rgba(0,0,0,0.2);
-`
-const Card = styled.div`
-  padding-top: 3px;
-  padding-bottom: 3px;
-  padding-left: 5px;
-  padding-right: 5px;
-  border: 1px solid rgba(0,0,0,0.2);
-`
-const CardHeader = styled.div``
-const CardContent = styled.div`
-  color: rgb(247, 247, 247);
-`
 
 const enhance = compose(
   inject(`store`),
@@ -50,38 +39,40 @@ const LayersControl = ({
       <MuiThemeProvider
         muiTheme={getMuiTheme(theme)}
       >
-        <CardContainer>
-          <Card>
-            <CardHeader onClick={() => {
-                console.log(`expand change`)
-                toggleBaseLayersExpanded(!baseLayersExpanded)
-              }}
-            >
-              Hintergrund
-            </CardHeader>
-            {
-              baseLayersExpanded &&
-              <CardContent>
-                base layers
-              </CardContent>
-            }
+        <div>
+          <Card
+            expanded={baseLayersExpanded}
+            onExpandChange={() => {
+              console.log(`expand change`)
+              toggleBaseLayersExpanded(!baseLayersExpanded)
+            }}
+          >
+            <CardHeader
+              title="Hintergrund"
+              actAsExpander
+              showExpandableButton
+            />
+            <CardText expandable>
+              base layers
+            </CardText>
           </Card>
-          <Card>
-            <CardHeader onClick={() => {
-                console.log(`expand change`)
-                toggleOverlaysExpanded(!overlaysExpanded)
-              }}
-            >
-              Überlagerungen
-            </CardHeader>
-            {
-              overlaysExpanded &&
-              <CardContent>
-                overlayed layers
-              </CardContent>
-            }
+          <Card
+            expanded={overlaysExpanded}
+            onExpandChange={() => {
+              console.log(`expand change`)
+              toggleOverlaysExpanded(!overlaysExpanded)
+            }}
+          >
+            <CardHeader
+              title="Überlagerungen"
+              actAsExpander
+              showExpandableButton
+            />
+            <CardText expandable>
+              overlayed layers
+            </CardText>
           </Card>
-        </CardContainer>
+        </div>
       </MuiThemeProvider>
     </Control>
   )

@@ -71,7 +71,7 @@ app.extend({
 })
 app.init()
 
-// Needed for onTouchTap
+// Needed for onTouchTap and material-ui
 // //stackoverflow.com/a/34015469/988941
 injectTapEventPlugin()
 
