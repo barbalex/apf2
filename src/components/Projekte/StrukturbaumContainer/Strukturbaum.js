@@ -190,19 +190,28 @@ class Strukturbaum extends Component {
         node.menuType === `beobzuordnungFolder` &&
         node.id === store.activeUrlElements.ap &&
         store.map.beobNichtBeurteilt.visible
-      )
-    )
-    if (showBeobMapIcon) console.log(`showBeobMapIcon:`, showBeobMapIcon)
-    const showBeobFilteredMapIcon = (
-      (
-        node.menuType === `tpop` &&
-        store.map.tpop.visible &&
-        store.map.tpop.highlightedIds.includes(node.id)
       ) ||
       (
-        node.menuType === `tpopFolder` &&
-        store.map.tpop.visible &&
-        store.map.tpop.highlightedPopIds.includes(node.id)
+        node.menuType === `tpopbeobFolder` &&
+        node.id === store.activeUrlElements.tpop &&
+        store.map.tpopBeob.visible
+      )
+    )
+    const showBeobFilteredMapIcon = (
+      (
+        node.menuType === `tpopbeob` &&
+        store.map.tpopBeob.visible &&
+        store.map.tpopBeob.highlightedIds.includes(node.id)
+      ) ||
+      (
+        node.menuType === `beobzuordnung` &&
+        store.map.beobNichtBeurteilt.visible &&
+        store.map.beobNichtBeurteilt.highlightedPopIds.includes(node.id)
+      ) ||
+      (
+        node.menuType === `beobNichtZuzuordnen` &&
+        store.map.beobNichtZuzuordnen.visible &&
+        store.map.beobNichtZuzuordnen.highlightedPopIds.includes(node.id)
       )
     )
 
