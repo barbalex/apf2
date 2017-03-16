@@ -18,6 +18,16 @@ import 'proj4'
 import 'proj4leaflet'
 
 import LayersControl from './LayersControl'
+import OsmColorLayer from './layers/OsmColor'
+import OsmBwLayer from './layers/OsmBw'
+import SwissTopoPixelFarbeLayer from './layers/SwisstopoPixelFarbe'
+import SwissTopoPixelGrauLayer from './layers/SwisstopoPixelGrau'
+import BingAerialLayer from './layers/BingAerial'
+import ZhOrtho from './layers/ZhOrtho'
+import ZhOrthoIr from './layers/ZhOrthoIr'
+import ZhOrtho2015 from './layers/ZhOrtho2015'
+import ZhOrtho2015Ir from './layers/ZhOrtho2015Ir'
+import ZhUep from './layers/ZhUep'
 import '../../../../node_modules/leaflet/dist/leaflet.css'
 import '../../../../node_modules/leaflet-measure/dist/leaflet-measure.css'
 import '../../../../node_modules/leaflet.markercluster/dist/MarkerCluster.css'
@@ -103,6 +113,16 @@ class Karte extends Component {
         bounds,
       }
     )*/
+    const showOsmColorLayer = store.map.activeBaseLayer === `OsmColor`
+    const showOsmBwLayer = store.map.activeBaseLayer === `OsmBw`
+    const showSwissTopoPixelFarbeLayer = store.map.activeBaseLayer === `SwissTopoPixelFarbe`
+    const showSwissTopoPixelGrauLayer = store.map.activeBaseLayer === `SwissTopoPixelGrau`
+    const showZhUep = store.map.activeBaseLayer === `ZhUep`
+    const showBingAerialLayer = store.map.activeBaseLayer === `BingAerial`
+    const showZhOrtho = store.map.activeBaseLayer === `ZhOrtho`
+    const showZhOrthoIr = store.map.activeBaseLayer === `ZhOrthoIr`
+    const showZhOrtho2015 = store.map.activeBaseLayer === `ZhOrtho2015`
+    const showZhOrtho2015Ir = store.map.activeBaseLayer === `ZhOrtho2015Ir`
 
     return (
       <MapElement
@@ -139,6 +159,46 @@ class Karte extends Component {
           changeBounds([bounds._southWest, bounds._northEast])
         }}
       >
+        {
+          showOsmColorLayer &&
+          <OsmColorLayer />
+        }
+        {
+          showOsmBwLayer &&
+          <OsmBwLayer />
+        }
+        {
+          showSwissTopoPixelFarbeLayer &&
+          <SwissTopoPixelFarbeLayer />
+        }
+        {
+          showSwissTopoPixelGrauLayer &&
+          <SwissTopoPixelGrauLayer />
+        }
+        {
+          showZhUep &&
+          <ZhUep />
+        }
+        {
+          showBingAerialLayer &&
+          <BingAerialLayer />
+        }
+        {
+          showZhOrtho &&
+          <ZhOrtho />
+        }
+        {
+          showZhOrthoIr &&
+          <ZhOrthoIr />
+        }
+        {
+          showZhOrtho2015 &&
+          <ZhOrtho2015 />
+        }
+        {
+          showZhOrtho2015Ir &&
+          <ZhOrtho2015Ir />
+        }
         <PopMarkerCluster
           highlightedIds={toJS(store.map.pop.highlightedIds)}
           labelUsingNr={store.map.pop.labelUsingNr}

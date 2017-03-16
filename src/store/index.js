@@ -237,6 +237,8 @@ function Store() {
     beobNichtBeurteilt: {},
     beobNichtZuzuordnen: {},
     tpopBeob: {},
+    activeBaseLayer: `OsmColor`,
+    activeOverlays: [],
   }
   extendObservable(this.map, {
     bounds: computed(() => getMapBounds(this)),
@@ -246,6 +248,14 @@ function Store() {
         return epsg4326to21781(this.map.mouseCoord[0], this.map.mouseCoord[1])
       }
       return []
+    }),
+    setActiveBaseLayer: action((layer) => this.map.activeBaseLayer = layer),
+    addActiveOverlay: action((layer, indexPassed) => {
+      const index = indexPassed || this.map.activeOverlays.length
+      this.map.activeOverlays.splice(index, 0, layer)
+    }),
+    removeActiveOverlay: action((layer) => {
+      this.map.activeOverlays = this.map.activeOverlays.filter(o => o !== layer)
     }),
   })
   extendObservable(this.map.pop, {
