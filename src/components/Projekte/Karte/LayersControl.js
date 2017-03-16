@@ -15,11 +15,7 @@ import { Checkbox } from 'material-ui/Checkbox'
 import RadioButtonGroup from '../../shared/RadioButtonGroup'
 import Label from '../../shared/Label'
 
-const theme = Object.assign({}, baseTheme, {
-  appBar: {
-    height: 51,
-  },
-})
+const theme = Object.assign({}, baseTheme)
 
 const CardContainer = styled.div`
   background-color: white;
@@ -93,7 +89,6 @@ const LayersControl = ({
     { label: `Wälder: Vegetation`, value: `ZhWaelderVegetation` },
   ]
   const activeOverlays = toJS(store.map.activeOverlays)
-  console.log(`activeOverlays:`, activeOverlays)
 
   return (
     <Control position="topright" >
@@ -102,8 +97,7 @@ const LayersControl = ({
       >
         <CardContainer>
           <Card>
-            <CardHeader onClick={onToggleBaseLayersExpanded}
-            >
+            <CardHeader onClick={onToggleBaseLayersExpanded}>
               <div>Hintergrund</div>
               <div>
                 <StyledFontIcon className="material-icons">
@@ -137,8 +131,7 @@ const LayersControl = ({
             }
           </Card>
           <Card>
-            <CardHeader onClick={onToggleOverlaysExpanded}
-            >
+            <CardHeader onClick={onToggleOverlaysExpanded}>
               <div>überlagernd</div>
               <div>
                 <StyledFontIcon className="material-icons">
