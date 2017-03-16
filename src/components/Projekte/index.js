@@ -47,8 +47,6 @@ const Projekte = ({ store }) => {
   const deleteDatasetModalIsVisible = !!store.datasetToDelete.id
   const MyContainer = store.loading.length > 0 ? ContainerLoading : Container
 
-  console.log(`Projekt, render, activeBaseLayer:`, store.map.activeBaseLayer)
-
   return (
     <MyContainer>
       <Content>

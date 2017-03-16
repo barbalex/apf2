@@ -249,6 +249,8 @@ function Store() {
       }
       return []
     }),
+    activeBaseLayer: `OsmColor`,
+    activeOverlays: [],
     setActiveBaseLayer: action((layer) => this.map.activeBaseLayer = layer),
     addActiveOverlay: action((layer, indexPassed) => {
       const index = indexPassed || this.map.activeOverlays.length
