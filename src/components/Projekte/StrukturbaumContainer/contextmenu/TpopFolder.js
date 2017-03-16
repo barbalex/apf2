@@ -44,16 +44,6 @@ const TpopFolder = (
       onClick={onClick}
       data={{
         action: `showOnMap`,
-        actionTable: `pop`,
-        idTable: `ap`,
-      }}
-    >
-      {`blende Populationen ${store.map.pop.visible ? `aus` : `ein`}`}
-    </MenuItem>
-    <MenuItem
-      onClick={onClick}
-      data={{
-        action: `showOnMap`,
         actionTable: `tpop`,
         idTable: `ap`,
       }}

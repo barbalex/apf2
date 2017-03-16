@@ -66,21 +66,8 @@ class Karte extends Component {
   }
 
   componentDidMount() {
-    const { store, changeBounds, idOfTpopBeingLocalized } = this.props
-    if (idOfTpopBeingLocalized) {
-      changeBounds(store.map.tpop.bounds)
-    } else {
-      const popBounds = store.map.pop.bounds
-      const tpopBounds = store.map.tpop.bounds
-      const boundsToUse = [ktZhBounds]
-      if (store.map.pop.visible) {
-        boundsToUse.push(popBounds)
-      }
-      if (store.map.tpop.visible) {
-        boundsToUse.push(tpopBounds)
-      }
-      changeBounds(getEncompassingBound(boundsToUse))
-    }
+    const { store, changeBounds } = this.props
+    changeBounds(store.map.bounds)
   }
 
   componentDidUpdate(prevProps, prevState) {

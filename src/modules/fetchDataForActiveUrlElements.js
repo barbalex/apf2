@@ -55,6 +55,7 @@ const fetchDataForActiveUrlElements = (store:Object) => {
         store.map.tpopBeob.visible
       ) {
         store.fetchTable(`beob`, `beob_quelle`)
+        store.fetchPopForAp(activeUrlElements.ap)
         store.fetchTpopForAp(activeUrlElements.ap)
         store.fetchBeobEvab(activeUrlElements.ap)
         store.fetchBeobInfospezies(activeUrlElements.ap)

@@ -40,11 +40,15 @@ import setQk from '../modules/setQk'
 import setQkFilter from '../modules/setQkFilter'
 import fetchQk from '../modules/fetchQk'
 import addMessagesToQk from '../modules/addMessagesToQk'
+import getMapBounds from '../modules/getMapBounds'
 import getPopsForMap from '../modules/getPopsForMap'
 import getTpopsForMap from '../modules/getTpopsForMap'
 import getBeobForMap from '../modules/getBeobForMap'
 import getPopBounds from '../modules/getPopBounds'
 import getTpopBounds from '../modules/getTpopBounds'
+import getTpopBeobBounds from '../modules/getTpopBeobBounds'
+import getBeobNichtZuzuordnenBounds from '../modules/getBeobNichtZuzuordnenBounds'
+import getBeobNichtBeurteiltBounds from '../modules/getBeobNichtBeurteiltBounds'
 import epsg4326to21781 from '../modules/epsg4326to21781'
 import getPopMarkers from '../modules/getPopMarkers'
 import getTpopMarkers from '../modules/getTpopMarkers'
@@ -224,6 +228,7 @@ function Store() {
     readOnly: true,
   })
   this.map = {
+    bounds: [],
     mouseCoord: [],
     mouseCoordEpsg21781: [],
     pop: {},
@@ -234,6 +239,7 @@ function Store() {
     tpopBeob: {},
   }
   extendObservable(this.map, {
+    bounds: computed(() => getMapBounds(this)),
     mouseCoord: [],
     mouseCoordEpsg21781: computed(() => {
       if (this.map.mouseCoord.length > 0) {
@@ -295,6 +301,7 @@ function Store() {
     beobs: computed(() =>
       getBeobForMap(this).filter(b => !b.beobzuordnung)
     ),
+    bounds: computed(() => getBeobNichtBeurteiltBounds(this)),
     idOfBeobBeingAssigned: 0,
   })
   extendObservable(this.map.beobNichtZuzuordnen, {
@@ -310,6 +317,7 @@ function Store() {
     beobs: computed(() =>
       getBeobForMap(this).filter(b => b.beobzuordnung && b.beobzuordnung.BeobNichtZuordnen === 1)
     ),
+    bounds: computed(() => getBeobNichtZuzuordnenBounds(this)),
   })
   extendObservable(this.map.tpopBeob, {
     visible: false,
@@ -324,6 +332,7 @@ function Store() {
     beobs: computed(() =>
       getBeobForMap(this).filter(b => b.beobzuordnung && b.beobzuordnung.TPopId === this.activeUrlElements.tpop)
     ),
+    bounds: computed(() => getTpopBeobBounds(this)),
   })
   this.table = TableStore
   extendObservable(this.table.filteredAndSorted, {
