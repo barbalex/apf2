@@ -21,20 +21,19 @@ export default (store:Object, apArtId:number) => {
     return
   }
 
-  const url = `${apiBaseUrl}/popForAp/${apArtId}`
   store.loading.push(`popForAp`)
   app.db.pop
     .toArray()
     .then((data) => {
       writeToStore({ store, data, table: `pop`, field: `PopId` })
       recordValuesForWhichTableDataWasFetched({ store, table: `popForAp`, field: `ApArtId`, value: apArtId })
-      return axios.get(url)
+      return axios.get(`${apiBaseUrl}/popForAp/${apArtId}`)
     })
     .then(({ data }) => {
       store.loading = store.loading.filter(el => el !== `popForAp`)
       // leave ui react before this happens
       setTimeout(() => writeToStore({ store, data, table: `pop`, field: `PopId` }))
-      setTimeout(() => app.db.tpop.bulkPut(data))
+      setTimeout(() => app.db.pop.bulkPut(data))
     })
     .catch(error => {
       store.loading = store.loading.filter(el => el !== `popForAp`)
