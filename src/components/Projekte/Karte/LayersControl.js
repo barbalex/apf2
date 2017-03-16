@@ -7,6 +7,7 @@ import withState from 'recompose/withState'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme'
+import FontIcon from 'material-ui/FontIcon'
 
 const theme = Object.assign({}, darkBaseTheme, {
   appBar: {
@@ -15,20 +16,35 @@ const theme = Object.assign({}, darkBaseTheme, {
 })
 
 const CardContainer = styled.div`
-  background-color: rgb(48, 48, 48);
+  background-color: white;
+  background-clip: padding-box;
   border-radius: 5px;
   border: 2px solid rgba(0,0,0,0.2);
 `
 const Card = styled.div`
   padding-top: 3px;
-  padding-bottom: 3px;
+  border: 1px solid rgba(0,0,0,0.2);
+  color: rgb(48, 48, 48);
+`
+const CardHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
   padding-left: 5px;
   padding-right: 5px;
-  border: 1px solid rgba(0,0,0,0.2);
+  border-bottom: 1px solid rgba(0,0,0,0.2);
+  cursor: pointer;
+  font-weight: bold;
 `
-const CardHeader = styled.div``
 const CardContent = styled.div`
-  color: rgb(247, 247, 247);
+  color: rgb(48, 48, 48);
+  padding-left: 5px;
+  padding-right: 5px;
+  padding-top: 3px;
+  padding-bottom: 3px;
+`
+const StyledFontIcon = styled(FontIcon)`
+  font-size: 18px !important;
+  color: rgb(48, 48, 48) !important;
 `
 
 const enhance = compose(
@@ -52,12 +68,16 @@ const LayersControl = ({
       >
         <CardContainer>
           <Card>
-            <CardHeader onClick={() => {
-                console.log(`expand change`)
+            <CardHeader onClick={() =>
                 toggleBaseLayersExpanded(!baseLayersExpanded)
-              }}
+              }
             >
-              Hintergrund
+              <div>Hintergrund</div>
+              <div>
+                <StyledFontIcon className="material-icons">
+                  expand_more
+                </StyledFontIcon>
+              </div>
             </CardHeader>
             {
               baseLayersExpanded &&
@@ -67,12 +87,16 @@ const LayersControl = ({
             }
           </Card>
           <Card>
-            <CardHeader onClick={() => {
-                console.log(`expand change`)
+            <CardHeader onClick={() =>
                 toggleOverlaysExpanded(!overlaysExpanded)
-              }}
+              }
             >
-              Überlagerungen
+              <div>überlagernd</div>
+              <div>
+                <StyledFontIcon className="material-icons">
+                  expand_more
+                </StyledFontIcon>
+              </div>
             </CardHeader>
             {
               overlaysExpanded &&
