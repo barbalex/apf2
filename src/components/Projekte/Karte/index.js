@@ -28,6 +28,14 @@ import ZhOrthoIr from './layers/ZhOrthoIr'
 import ZhOrtho2015 from './layers/ZhOrtho2015'
 import ZhOrtho2015Ir from './layers/ZhOrtho2015Ir'
 import ZhUep from './layers/ZhUep'
+import DetailplaeneLayer from './layers/Detailplaene'
+import ZhSvoColorLayer from './layers/ZhSvoColor'
+import ZhSvoGreyLayer from './layers/ZhSvoGrey'
+import ZhLrVegKartierungen from './layers/ZhLrVegKartierungen'
+import ZhLichteWaelder from './layers/ZhLichteWaelder'
+import ZhGemeindegrenzen from './layers/ZhGemeindegrenzen'
+import ZhWaelderVegetation from './layers/ZhWaelderVegetation'
+import ZhUepOverlay from './layers/ZhUepOverlay'
 import '../../../../node_modules/leaflet/dist/leaflet.css'
 import '../../../../node_modules/leaflet-measure/dist/leaflet-measure.css'
 import '../../../../node_modules/leaflet.markercluster/dist/MarkerCluster.css'
@@ -72,26 +80,20 @@ class Karte extends Component {
     idOfTpopBeingLocalized: PropTypes.number.isRequired,
     changeBounds: PropTypes.func.isRequired,
     bounds: PropTypes.array,
-    activeBaseLayer: PropTypes.string.isRequired,
   }
 
   componentDidMount() {
     const { store, changeBounds } = this.props
-    console.log(`Karte: componentDidMount`)
     changeBounds(store.map.bounds)
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { store, changeBounds, idOfTpopBeingLocalized, activeBaseLayer } = this.props
-    console.log(`Karte: componentDidUpdate`)
+    const { store, changeBounds, idOfTpopBeingLocalized } = this.props
     /**
      * when tpops are localized, need to zoom to tpop if it has coordinates
      */
     if (idOfTpopBeingLocalized && prevProps.idOfTpopBeingLocalized !== idOfTpopBeingLocalized) {
       changeBounds(store.map.tpop.bounds)
-    }
-    if (prevProps.activeBaseLayer !== activeBaseLayer) {
-      console.log(`should force update for activeBaseLayer`)
     }
   }
 
@@ -106,10 +108,9 @@ class Karte extends Component {
       bounds,
       changeBounds,
       idOfTpopBeingLocalized,
-      activeBaseLayer,
     } = this.props
+    const { activeBaseLayer, activeOverlays } = store.map
     const MapElement = !!idOfTpopBeingLocalized ? StyledMapLocalizing : StyledMap
-    console.log(`Karte, render: activeBaseLayer:`, activeBaseLayer)
     // this does not work
     // see issue on proj4js: https://github.com/proj4js/proj4js/issues/214
     /*
@@ -131,6 +132,14 @@ class Karte extends Component {
     const showZhOrthoIr = activeBaseLayer === `ZhOrthoIr`
     const showZhOrtho2015 = activeBaseLayer === `ZhOrtho2015`
     const showZhOrtho2015Ir = activeBaseLayer === `ZhOrtho2015Ir`
+    const showZhUepOverlay = activeOverlays.includes(`ZhUep`)
+    const showDetailplaene = activeOverlays.includes(`Detailplaene`)
+    const showZhGemeindegrenzen = activeOverlays.includes(`ZhGemeindegrenzen`)
+    const showZhSvoColor = activeOverlays.includes(`ZhSvoColor`)
+    const showZhSvoGrey = activeOverlays.includes(`ZhSvoGrey`)
+    const showZhLrVegKartierungen = activeOverlays.includes(`ZhLrVegKartierungen`)
+    const showZhLichteWaelder = activeOverlays.includes(`ZhLichteWaelder`)
+    const showZhWaelderVegetation = activeOverlays.includes(`ZhWaelderVegetation`)
 
     return (
       <MapElement
@@ -206,6 +215,38 @@ class Karte extends Component {
         {
           showZhOrtho2015Ir &&
           <ZhOrtho2015Ir />
+        }
+        {
+          showZhUepOverlay &&
+          <ZhUepOverlay />
+        }
+        {
+          showDetailplaene &&
+          <DetailplaeneLayer />
+        }
+        {
+          showZhGemeindegrenzen &&
+          <ZhGemeindegrenzen />
+        }
+        {
+          showZhSvoColor &&
+          <ZhSvoColorLayer />
+        }
+        {
+          showZhSvoGrey &&
+          <ZhSvoGreyLayer />
+        }
+        {
+          showZhLrVegKartierungen &&
+          <ZhLrVegKartierungen />
+        }
+        {
+          showZhLichteWaelder &&
+          <ZhLichteWaelder />
+        }
+        {
+          showZhWaelderVegetation &&
+          <ZhWaelderVegetation />
         }
         <PopMarkerCluster
           highlightedIds={toJS(store.map.pop.highlightedIds)}

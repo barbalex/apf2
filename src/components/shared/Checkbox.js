@@ -33,7 +33,7 @@ const MyCheckbox = ({
 
 MyCheckbox.propTypes = {
   fieldName: PropTypes.string.isRequired,
-  value: PropTypes.number,
+  value: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   label: PropTypes.string.isRequired,
   updatePropertyInDb: PropTypes.func.isRequired,
   onCheck: PropTypes.func.isRequired,

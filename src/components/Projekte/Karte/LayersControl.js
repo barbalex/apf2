@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react'
 import Control from 'react-leaflet-control'
+import { toJS } from 'mobx'
 import { observer, inject } from 'mobx-react'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
@@ -9,8 +10,10 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme'
 import FontIcon from 'material-ui/FontIcon'
+import { Checkbox } from 'material-ui/Checkbox'
 
 import RadioButtonGroup from '../../shared/RadioButtonGroup'
+import Label from '../../shared/Label'
 
 const theme = Object.assign({}, baseTheme, {
   appBar: {
@@ -63,6 +66,10 @@ const enhance = compose(
       const { overlaysExpanded, toggleOverlaysExpanded } = props
       toggleOverlaysExpanded(!overlaysExpanded)
     },
+    onCheckOverlay: props => (event, isChecked) => {
+      console.log(`event:`, event)
+      console.log(`isChequed:`, isChecked)
+    },
   }),
   observer
 )
@@ -73,7 +80,21 @@ const LayersControl = ({
   overlaysExpanded,
   onToggleBaseLayersExpanded,
   onToggleOverlaysExpanded,
+  onCheckOverlay,
 }) => {
+  const overlays = [
+    { label: `ZH Übersichtsplan`, value: `ZhUep` },
+    { label: `Detailplaene`, value: `Detailplaene` },
+    { label: `ZH Gemeindegrenzen`, value: `ZhGemeindegrenzen` },
+    { label: `SVO farbig`, value: `ZhSvoColor` },
+    { label: `SVO grau`, value: `ZhSvoGrey` },
+    { label: `Lebensraum- und Vegetationskartierungen`, value: `ZhLrVegKartierungen` },
+    { label: `Wälder: lichte`, value: `ZhLichteWaelder` },
+    { label: `Wälder: Vegetation`, value: `ZhWaelderVegetation` },
+  ]
+  const activeOverlays = toJS(store.map.activeOverlays)
+  console.log(`activeOverlays:`, activeOverlays)
+
   return (
     <Control position="topright" >
       <MuiThemeProvider
@@ -108,9 +129,9 @@ const LayersControl = ({
                     { label: `ZH Orthofoto Frühjahr 2015/16 RGB`, value: `ZhOrtho2015` },
                     { label: `ZH Orthofoto Frühjahr 2015/16 infrarot`, value: `ZhOrtho2015Ir` },
                   ]}
-                  updatePropertyInDb={(a, layer) => {
+                  updatePropertyInDb={(a, layer) =>
                     store.map.setActiveBaseLayer(layer)
-                  }}
+                  }
                 />
               </CardContent>
             }
@@ -128,7 +149,17 @@ const LayersControl = ({
             {
               overlaysExpanded &&
               <CardContent>
-                overlayed layers
+                {
+                  overlays.map((o, index) =>
+                    <div key={index}>
+                      <Label label={o.label} />
+                      <Checkbox
+                        checked={activeOverlays.includes(o.value)}
+                        onCheck={onCheckOverlay}
+                      />
+                    </div>
+                  )
+                }
               </CardContent>
             }
           </Card>
@@ -146,6 +177,7 @@ LayersControl.propTypes = {
   toggleOverlaysExpanded: PropTypes.func.isRequired,
   onToggleBaseLayersExpanded: PropTypes.func.isRequired,
   onToggleOverlaysExpanded: PropTypes.func.isRequired,
+  onCheckOverlay: PropTypes.func.isRequired,
 }
 
 export default enhance(LayersControl)

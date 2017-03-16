@@ -23,6 +23,7 @@ const MyRadioButtonGroup = ({
   onChange,
 }) => {
   const valueSelected = (value !== null && value !== undefined) ? value : ``
+
   return (
     <RadioButtonGroup
       name={fieldName}
