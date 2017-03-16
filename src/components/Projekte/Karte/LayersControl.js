@@ -144,13 +144,12 @@ const LayersControl = ({
               <CardContent>
                 {
                   overlays.map((o, index) =>
-                    <div key={index}>
-                      <Label label={o.label} />
-                      <Checkbox
-                        checked={activeOverlays.includes(o.value)}
-                        onCheck={onCheckOverlay}
-                      />
-                    </div>
+                    <Checkbox
+                      key={index}
+                      label={o.label}
+                      checked={activeOverlays.includes(o.value)}
+                      onCheck={onCheckOverlay}
+                    />
                   )
                 }
               </CardContent>
