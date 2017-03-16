@@ -119,26 +119,42 @@ class Strukturbaum extends Component {
 
   static propTypes = {
     store: PropTypes.object.isRequired,
-    tpopBeobVisible: PropTypes.bool.isRequired,
-    beobNichtBeurteiltVisible: PropTypes.bool.isRequired,
-    beobNichtZuzuordnenVisible: PropTypes.bool.isRequired,
+    mapTpopBeobVisible: PropTypes.bool.isRequired,
+    mapBeobNichtBeurteiltVisible: PropTypes.bool.isRequired,
+    mapBeobNichtZuzuordnenVisible: PropTypes.bool.isRequired,
+    mapPopVisible: PropTypes.bool.isRequired,
+    mapPopHighlightedIds: PropTypes.array.isRequired,
+    mapTpopVisible: PropTypes.bool.isRequired,
+    mapTpopHighlightedIds: PropTypes.array.isRequired,
   }
 
   componentDidUpdate(prevProps) {
     const {
-      tpopBeobVisible,
-      beobNichtBeurteiltVisible,
-      beobNichtZuzuordnenVisible,
+      mapTpopBeobVisible,
+      mapBeobNichtBeurteiltVisible,
+      mapBeobNichtZuzuordnenVisible,
+      mapPopVisible,
+      mapPopHighlightedIds,
+      mapTpopVisible,
+      mapTpopHighlightedIds,
     } = this.props
     const {
-      tpopBeobVisible: prevTpopBeobVisible,
-      beobNichtBeurteiltVisible: prevBeobNichtBeurteiltVisible,
-      beobNichtZuzuordnenVisible: prevBeobNichtZuzuordnenVisible,
+      mapTpopBeobVisible: prevMapTpopBeobVisible,
+      mapBeobNichtBeurteiltVisible: prevMapBeobNichtBeurteiltVisible,
+      mapBeobNichtZuzuordnenVisible: prevMapBeobNichtZuzuordnenVisible,
+      mapPopVisible: prevMapPopVisible,
+      mapPopHighlightedIds: prevMapPopHighlightedIds,
+      mapTpopVisible: prevMapTpopVisible,
+      mapTpopHighlightedIds: prevMapTpopHighlightedIds,
     } = prevProps
     const somethingHasChanged = (
-      tpopBeobVisible !== prevTpopBeobVisible ||
-      beobNichtBeurteiltVisible !== prevBeobNichtBeurteiltVisible ||
-      beobNichtZuzuordnenVisible !== prevBeobNichtZuzuordnenVisible
+      mapTpopBeobVisible !== prevMapTpopBeobVisible ||
+      mapBeobNichtBeurteiltVisible !== prevMapBeobNichtBeurteiltVisible ||
+      mapBeobNichtZuzuordnenVisible !== prevMapBeobNichtZuzuordnenVisible ||
+      mapPopVisible !== prevMapPopVisible ||
+      JSON.stringify(mapPopHighlightedIds) !== JSON.stringify(prevMapPopHighlightedIds) ||
+      mapTpopVisible !== prevMapTpopVisible ||
+      JSON.stringify(mapTpopHighlightedIds) !== JSON.stringify(prevMapTpopHighlightedIds)
     )
     if (somethingHasChanged) {
       this.tree.forceUpdateGrid()
@@ -370,12 +386,6 @@ class Strukturbaum extends Component {
               scrollToIndex={activeNodeIndex}
               width={width}
               {...store.node.node.nodes}
-              // pass visibilty and length of highlightedIds to List
-              // to make it rerender when they change
-              {...store.map.pop.visible}
-              {...store.map.pop.highlightedIds}
-              {...store.map.tpop.visible}
-              {...store.map.tpop.highlightedIds}
               // need to use innerRef because ListContainer is a styled component
               innerRef={(c) => { this.tree = c }}
             />
