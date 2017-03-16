@@ -56,25 +56,21 @@ const Tpop = (
       onClick={onClick}
       data={{
         action: `showOnMap`,
+        actionTable: `pop`,
+        idTable: `ap`,
+      }}
+    >
+      {`blende Populationen ${store.map.pop.visible ? `aus` : `ein`}`}
+    </MenuItem>
+    <MenuItem
+      onClick={onClick}
+      data={{
+        action: `showOnMap`,
         actionTable: `tpop`,
         idTable: `ap`,
       }}
     >
       {`blende Teil-Populationen ${store.map.tpop.visible ? `aus` : `ein`}`}
-    </MenuItem>
-    <MenuItem
-      onClick={onClick}
-      data={{
-        action: `highlightOnMap`,
-        actionTable: `tpop`,
-        idTable: `tpop`,
-      }}
-    >
-      {
-        store.map.tpop.highlightedIds.includes(id) && store.map.tpop.visible ?
-        `Hebe Markierung von "${label}" auf` :
-        `Markiere "${label}"`
-      }
     </MenuItem>
     <MenuItem
       onClick={onClick}

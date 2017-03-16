@@ -1,12 +1,7 @@
 // @flow
 /*
- *
  * Strukturbaum
- * https://rawgit.com/bvaughn/react-virtualized/master/playground/tree.html
- * https://github.com/bvaughn/react-virtualized/blob/master/playground/tree.js
- *
- * need class because of ref
- *
+ * need class because of ref and componentDidUpdate
  */
 
 import React, { Component, PropTypes } from 'react'
@@ -123,9 +118,7 @@ class Strukturbaum extends Component {
     mapBeobNichtBeurteiltVisible: PropTypes.bool.isRequired,
     mapBeobNichtZuzuordnenVisible: PropTypes.bool.isRequired,
     mapPopVisible: PropTypes.bool.isRequired,
-    mapPopHighlightedIds: PropTypes.array.isRequired,
     mapTpopVisible: PropTypes.bool.isRequired,
-    mapTpopHighlightedIds: PropTypes.array.isRequired,
   }
 
   componentDidUpdate(prevProps) {
@@ -134,27 +127,21 @@ class Strukturbaum extends Component {
       mapBeobNichtBeurteiltVisible,
       mapBeobNichtZuzuordnenVisible,
       mapPopVisible,
-      mapPopHighlightedIds,
       mapTpopVisible,
-      mapTpopHighlightedIds,
     } = this.props
     const {
       mapTpopBeobVisible: prevMapTpopBeobVisible,
       mapBeobNichtBeurteiltVisible: prevMapBeobNichtBeurteiltVisible,
       mapBeobNichtZuzuordnenVisible: prevMapBeobNichtZuzuordnenVisible,
       mapPopVisible: prevMapPopVisible,
-      mapPopHighlightedIds: prevMapPopHighlightedIds,
       mapTpopVisible: prevMapTpopVisible,
-      mapTpopHighlightedIds: prevMapTpopHighlightedIds,
     } = prevProps
     const somethingHasChanged = (
       mapTpopBeobVisible !== prevMapTpopBeobVisible ||
       mapBeobNichtBeurteiltVisible !== prevMapBeobNichtBeurteiltVisible ||
       mapBeobNichtZuzuordnenVisible !== prevMapBeobNichtZuzuordnenVisible ||
       mapPopVisible !== prevMapPopVisible ||
-      JSON.stringify(mapPopHighlightedIds) !== JSON.stringify(prevMapPopHighlightedIds) ||
-      mapTpopVisible !== prevMapTpopVisible ||
-      JSON.stringify(mapTpopHighlightedIds) !== JSON.stringify(prevMapTpopHighlightedIds)
+      mapTpopVisible !== prevMapTpopVisible
     )
     if (somethingHasChanged) {
       this.tree.forceUpdateGrid()
@@ -209,16 +196,9 @@ class Strukturbaum extends Component {
       store.map.tpop.visible
     )
     const showTpopFilteredMapIcon = (
-      (
-        node.menuType === `tpop` &&
-        store.map.tpop.visible &&
-        store.map.tpop.highlightedIds.includes(node.id)
-      ) ||
-      (
-        node.menuType === `tpopFolder` &&
-        store.map.tpop.visible &&
-        store.map.tpop.highlightedPopIds.includes(node.id)
-      )
+      node.menuType === `tpop` &&
+      store.map.tpop.visible &&
+      store.map.tpop.highlightedIds.includes(node.id)
     )
     const showBeobMapIcon = (
       (

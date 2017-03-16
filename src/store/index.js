@@ -248,7 +248,11 @@ function Store() {
     // is not yet set...
     apArtId: null,
     visible: false,
-    highlightedIds: [],
+    highlightedIds: computed(() => (
+      this.activeUrlElements.pop ?
+      [this.activeUrlElements.pop] :
+      []
+    )),
     pops: computed(() => getPopsForMap(this)),
     bounds: computed(() => getPopBounds(this.map.pop.pops)),
     // alternative is using names
@@ -257,7 +261,11 @@ function Store() {
   })
   extendObservable(this.map.tpop, {
     visible: false,
-    highlightedIds: [],
+    highlightedIds: computed(() => (
+      this.activeUrlElements.tpop ?
+      [this.activeUrlElements.tpop] :
+      []
+    )),
     highlightedPopIds: [],
     tpops: computed(() => getTpopsForMap(this)),
     bounds: computed(() => getTpopBounds(this)),

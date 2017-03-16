@@ -54,16 +54,12 @@ const Pop = (
     <MenuItem
       onClick={onClick}
       data={{
-        action: `highlightOnMap`,
+        action: `showOnMap`,
         actionTable: `pop`,
-        idTable: `pop`,
+        idTable: `ap`,
       }}
     >
-      {
-        store.map.pop.highlightedIds.includes(id) && store.map.pop.visible ?
-        `Hebe Markierung von "${label}" auf` :
-        `Markiere "${label}"`
-      }
+      {`blende Populationen ${store.map.pop.visible ? `aus` : `ein`}`}
     </MenuItem>
     <MenuItem
       onClick={onClick}

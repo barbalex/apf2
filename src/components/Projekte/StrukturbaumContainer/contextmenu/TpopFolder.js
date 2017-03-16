@@ -43,16 +43,22 @@ const TpopFolder = (
     <MenuItem
       onClick={onClick}
       data={{
-        action: `highlightOnMap`,
-        actionTable: `tpop`,
-        idTable: `pop`
+        action: `showOnMap`,
+        actionTable: `pop`,
+        idTable: `ap`,
       }}
     >
-      {
-        store.map.tpop.highlightedPopIds.includes(id) ?
-        `hebe Markierung Teil-Populationen auf` :
-        `markiere Teil-Populationen`
-      }
+      {`blende Populationen ${store.map.pop.visible ? `aus` : `ein`}`}
+    </MenuItem>
+    <MenuItem
+      onClick={onClick}
+      data={{
+        action: `showOnMap`,
+        actionTable: `tpop`,
+        idTable: `ap`,
+      }}
+    >
+      {`blende Teil-Populationen ${store.map.tpop.visible ? `aus` : `ein`}`}
     </MenuItem>
   </ContextMenu>
 

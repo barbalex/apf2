@@ -250,9 +250,7 @@ class StrukturbaumContainer extends Component { // eslint-disable-line react/pre
             mapBeobNichtBeurteiltVisible={store.map.beobNichtBeurteilt.visible}
             mapBeobNichtZuzuordnenVisible={store.map.beobNichtZuzuordnen.visible}
             mapPopVisible={store.map.pop.visible}
-            mapPopHighlightedIds={store.map.pop.highlightedIds}
             mapTpopVisible={store.map.tpop.visible}
-            mapTpopHighlightedIds={store.map.tpop.highlightedIds}
           />
         </div>
         <CmApFolder onClick={this.handleClick} />
