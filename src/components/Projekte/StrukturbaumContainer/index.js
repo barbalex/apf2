@@ -245,7 +245,11 @@ class StrukturbaumContainer extends Component { // eslint-disable-line react/pre
           }}
           ref={(c) => { this.tree = c }}
         >
-          <Strukturbaum />
+          <Strukturbaum
+            tpopBeobVisible={store.map.tpopBeob.visible}
+            beobNichtBeurteiltVisible={store.map.beobNichtBeurteilt.visible}
+            beobNichtZuzuordnenVisible={store.map.beobNichtZuzuordnen.visible}
+          />
         </div>
         <CmApFolder onClick={this.handleClick} />
         <CmAp onClick={this.handleClick} />

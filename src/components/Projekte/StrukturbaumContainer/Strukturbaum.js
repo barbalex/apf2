@@ -119,6 +119,30 @@ class Strukturbaum extends Component {
 
   static propTypes = {
     store: PropTypes.object.isRequired,
+    tpopBeobVisible: PropTypes.bool.isRequired,
+    beobNichtBeurteiltVisible: PropTypes.bool.isRequired,
+    beobNichtZuzuordnenVisible: PropTypes.bool.isRequired,
+  }
+
+  componentDidUpdate(prevProps) {
+    const {
+      tpopBeobVisible,
+      beobNichtBeurteiltVisible,
+      beobNichtZuzuordnenVisible,
+    } = this.props
+    const {
+      tpopBeobVisible: prevTpopBeobVisible,
+      beobNichtBeurteiltVisible: prevBeobNichtBeurteiltVisible,
+      beobNichtZuzuordnenVisible: prevBeobNichtZuzuordnenVisible,
+    } = prevProps
+    const somethingHasChanged = (
+      tpopBeobVisible !== prevTpopBeobVisible ||
+      beobNichtBeurteiltVisible !== prevBeobNichtBeurteiltVisible ||
+      beobNichtZuzuordnenVisible !== prevBeobNichtZuzuordnenVisible
+    )
+    if (somethingHasChanged) {
+      this.tree.forceUpdateGrid()
+    }
   }
 
   rowRenderer = ({ key, index, style }) => {
@@ -206,12 +230,12 @@ class Strukturbaum extends Component {
       (
         node.menuType === `beobzuordnung` &&
         store.map.beobNichtBeurteilt.visible &&
-        store.map.beobNichtBeurteilt.highlightedPopIds.includes(node.id)
+        store.map.beobNichtBeurteilt.highlightedIds.includes(node.id)
       ) ||
       (
         node.menuType === `beobNichtZuzuordnen` &&
         store.map.beobNichtZuzuordnen.visible &&
-        store.map.beobNichtZuzuordnen.highlightedPopIds.includes(node.id)
+        store.map.beobNichtZuzuordnen.highlightedIds.includes(node.id)
       )
     )
 
@@ -345,18 +369,15 @@ class Strukturbaum extends Component {
               noRowsRenderer={this.noRowsRenderer}
               scrollToIndex={activeNodeIndex}
               width={width}
-              // pass visibilty and length of highlightedIds to List
-              // to make it rerender when they changes
-              popVisible={store.map.pop.visible}
-              popHighlighted={store.map.pop.highlightedIds.length}
-              tpopVisible={store.map.tpop.visible}
-              tpopHighlighted={store.map.tpop.highlightedIds.length}
-              beobNichtBeurteiltVisible={store.map.beobNichtBeurteilt.visible}
-              beobNichtBeurteiltHighlighted={store.map.beobNichtBeurteilt.highlightedIds.length}
-              beobNichtZuzuordnenVisible={store.map.beobNichtZuzuordnen.visible}
-              beobNichtZuzuordnenHighlighted={store.map.beobNichtZuzuordnen.highlightedIds.length}
-              ref={(c) => { this.tree = c }}
               {...store.node.node.nodes}
+              // pass visibilty and length of highlightedIds to List
+              // to make it rerender when they change
+              {...store.map.pop.visible}
+              {...store.map.pop.highlightedIds}
+              {...store.map.tpop.visible}
+              {...store.map.tpop.highlightedIds}
+              // need to use innerRef because ListContainer is a styled component
+              innerRef={(c) => { this.tree = c }}
             />
           }
         </AutoSizer>
