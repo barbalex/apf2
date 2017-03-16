@@ -517,18 +517,6 @@ function Store() {
     showMapLayer: action((layer, bool) =>
       this.map[layer].visible = bool
     ),
-    highlightIdOnMap: action((layer, id) =>
-      this.map[layer].highlightedIds = [...this.map[layer].highlightedIds, parseInt(id, 10)]
-    ),
-    unhighlightIdOnMap: action((layer, id) =>
-      this.map[layer].highlightedIds = this.map[layer].highlightedIds.filter(i => i !== id)
-    ),
-    highlightTpopByPopIdOnMap: action((id) =>
-      this.map.tpop.highlightedPopIds = [...this.map.tpop.highlightedPopIds, parseInt(id, 10)]
-    ),
-    unhighlightTpopByPopIdOnMap: action((id) =>
-      this.map.tpop.highlightedPopIds = this.map.tpop.highlightedPopIds.filter(i => i !== id)
-    ),
   })
 }
 

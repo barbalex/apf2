@@ -172,24 +172,6 @@ class StrukturbaumContainer extends Component { // eslint-disable-line react/pre
         // 3 add layer for actionTable
         store.showMapLayer(actionTable, !store.map[actionTable].visible)
       },
-      highlightOnMap() {
-        that.showMapIfNotYetVisible()
-        store.showMapLayer(actionTable, true)
-        if (actionTable === `tpop` && idTable === `pop`) {
-          // TPopFolder: is special as all tpop of pop can be highlighted
-          if (store.map.tpop.highlightedPopIds.includes(parseInt(id, 10))) {
-            store.unhighlightTpopByPopIdOnMap(parseInt(id, 10))
-          } else {
-            store.highlightTpopByPopIdOnMap(parseInt(id, 10))
-          }
-        } else {
-          if (store.map[actionTable].highlightedIds.includes(parseInt(id, 10))) {
-            store.unhighlightIdOnMap(actionTable, parseInt(id, 10))
-          } else {
-            store.highlightIdOnMap(actionTable, parseInt(id, 10))
-          }
-        }
-      },
       toggleTooltip() {
         store.toggleMapPopLabelContent(actionTable)
       },
@@ -197,7 +179,6 @@ class StrukturbaumContainer extends Component { // eslint-disable-line react/pre
         store.setIdOfTpopBeingLocalized(parseInt(id, 10))
         that.showMapIfNotYetVisible()
         store.showMapLayer(actionTable, true)
-        store.highlightIdOnMap(actionTable, parseInt(id, 10))
       }
     }
     if (Object.keys(actions).includes(action)) {
