@@ -4,6 +4,9 @@ import { observer } from 'mobx-react'
 import styled from 'styled-components'
 import FontIcon from 'material-ui/FontIcon'
 import { SortableContainer, SortableElement } from 'react-sortable-hoc'
+import compose from 'recompose/compose'
+import withHandlers from 'recompose/withHandlers'
+import withState from 'recompose/withState'
 
 const CardContent = styled.div`
   color: rgb(48, 48, 48);
@@ -34,6 +37,13 @@ const Label = styled.label`
  * with mobx inject does not work here
  * so passed in from parent
  */
+
+
+ const enhance = compose(
+   // make bounds state, need to manage them manually
+   withState(`bounds`, `changeBounds`, ktZhBounds),
+   observer
+ )
 
 const Overlays = ({ store }) => {
   const activeOverlays = toJS(store.map.activeOverlays)
@@ -86,4 +96,4 @@ Overlays.propTypes = {
   store: PropTypes.object.isRequired,
 }
 
-export default observer(Overlays)
+export default enhance(Overlays)
