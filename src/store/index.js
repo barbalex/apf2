@@ -8,6 +8,7 @@ import {
   observable,
 } from 'mobx'
 import $ from 'jquery'
+import { arrayMove } from 'react-sortable-hoc'
 
 import fetchTable from '../modules/fetchTable'
 import fetchBeobzuordnungModule from '../modules/fetchBeobzuordnung'
@@ -141,6 +142,16 @@ import deleteBeobzuordnung from './action/deleteBeobzuordnung'
 import TableStore from './table'
 import ObservableHistory from './ObservableHistory'
 
+Array.prototype.move = function (old_index, new_index) {
+  if (new_index >= this.length) {
+    var k = new_index - this.length
+    while ((k--) + 1) {
+      this.push(undefined)
+    }
+  }
+  this.splice(new_index, 0, this.splice(old_index, 1)[0])
+}
+
 function Store() {
   this.history = ObservableHistory
   this.loading = []
@@ -269,6 +280,12 @@ function Store() {
       { label: `apflora: nicht zuzuordnende Beobachtungen`, value: `beobNichtZuzuordnen` },
       { label: `apflora: zugeordnete Beobachtungen`, value: `tpopBeob` },
     ],
+    moveOverlay: action(({ oldIndex, newIndex }) => {
+      console.log(`moveOverlay: oldIndex:`, oldIndex)
+      console.log(`moveOverlay: newIndex:`, newIndex)
+      // arrayMove(this.map.overlays, oldIndex, newIndex)
+      this.map.overlays.move(oldIndex, newIndex)
+    }),
     activeOverlays: [],
     setActiveBaseLayer: action((layer) => this.map.activeBaseLayer = layer),
     addActiveOverlay: action((layer, indexPassed) => {

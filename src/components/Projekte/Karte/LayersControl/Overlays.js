@@ -3,17 +3,15 @@ import { toJS } from 'mobx'
 import { observer } from 'mobx-react'
 import styled from 'styled-components'
 import FontIcon from 'material-ui/FontIcon'
-import { SortableContainer, SortableElement } from 'react-sortable-hoc'
+import { SortableContainer, SortableElement, SortableHandle } from 'react-sortable-hoc'
 import compose from 'recompose/compose'
-import withHandlers from 'recompose/withHandlers'
-import withState from 'recompose/withState'
 
 const CardContent = styled.div`
   color: rgb(48, 48, 48);
   padding-left: 5px;
   padding-right: 5px;
 `
-const DragHandle = styled(FontIcon)`
+const DragHandleIcon = styled(FontIcon)`
   font-size: 18px !important;
   color: #7b7b7b !important;
   cursor: grab;
@@ -39,11 +37,15 @@ const Label = styled.label`
  */
 
 
- const enhance = compose(
-   // make bounds state, need to manage them manually
-   withState(`bounds`, `changeBounds`, ktZhBounds),
-   observer
- )
+const enhance = compose(
+ observer
+)
+
+const DragHandle = SortableHandle(() =>
+  <DragHandleIcon className="material-icons">
+    drag_handle
+  </DragHandleIcon>
+)
 
 const Overlays = ({ store }) => {
   const activeOverlays = toJS(store.map.activeOverlays)
@@ -64,17 +66,14 @@ const Overlays = ({ store }) => {
         {overlay.label}
       </Label>
       <div>
-        <DragHandle className="material-icons">
-          drag_handle
-        </DragHandle>
+        <DragHandle />
       </div>
     </LayerDiv>
   )
-  const overlays = store.map.overlays
-  const SortableList = SortableContainer(({ overlays }) =>
+  const SortableList = SortableContainer(({ items }) =>
     <div>
       {
-        overlays.map((overlay, index) =>
+        items.map((overlay, index) =>
           <SortableItem key={index} index={index} overlay={overlay} />
         )
       }
@@ -83,11 +82,14 @@ const Overlays = ({ store }) => {
 
   return (
     <CardContent>
-      {
-        store.map.overlays.map((overlay, index) =>
-          <SortableItem key={index} index={index} overlay={overlay} />
-        )
-      }
+      <SortableList
+        items={store.map.overlays}
+        onSortEnd={({ oldIndex, newIndex }) =>
+          store.map.moveOverlay({ oldIndex, newIndex })
+        }
+        useDragHandle
+        lockAxis="y"
+      />
     </CardContent>
   )
 }
