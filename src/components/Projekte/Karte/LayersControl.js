@@ -96,21 +96,6 @@ const LayersControl = ({
     { label: `ZH Orthofoto Frühjahr 2015/16 RGB`, value: `ZhOrtho2015` },
     { label: `ZH Orthofoto Frühjahr 2015/16 infrarot`, value: `ZhOrtho2015Ir` },
   ]
-  const overlays = [
-    { label: `ZH Übersichtsplan`, value: `ZhUep` },
-    { label: `Detailplaene`, value: `Detailplaene` },
-    { label: `ZH Gemeindegrenzen`, value: `ZhGemeindegrenzen` },
-    { label: `SVO farbig`, value: `ZhSvoColor` },
-    { label: `SVO grau`, value: `ZhSvoGrey` },
-    { label: `Lebensraum- und Vegetationskartierungen`, value: `ZhLrVegKartierungen` },
-    { label: `Wälder: lichte`, value: `ZhLichteWaelder` },
-    { label: `Wälder: Vegetation`, value: `ZhWaelderVegetation` },
-    { label: `apflora: Populationen`, value: `pop` },
-    { label: `apflora: Teil-Populationen`, value: `tpop` },
-    { label: `apflora: nicht beurteilte Beobachtungen`, value: `beobNichtBeurteilt` },
-    { label: `apflora: nicht zuzuordnende Beobachtungen`, value: `beobNichtZuzuordnen` },
-    { label: `apflora: zugeordnete Beobachtungen`, value: `tpopBeob` },
-  ]
   const activeOverlays = toJS(store.map.activeOverlays)
 
   return (
@@ -161,7 +146,7 @@ const LayersControl = ({
               overlaysExpanded &&
               <CardContent>
                 {
-                  overlays.map((o, index) =>
+                  store.map.overlays.map((o, index) =>
                     <div key={index}>
                       <Label>
                         <Input
