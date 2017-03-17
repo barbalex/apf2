@@ -330,16 +330,33 @@ function Store() {
     bounds: computed(() => getBeobNichtZuzuordnenBounds(this)),
   })
   extendObservable(this.map.tpopBeob, {
-    highlightedIds: computed(() => (
-      this.activeUrlElements.tpopbeob ?
-      [this.activeUrlElements.tpopbeob] :
-      []
-    )),
+    highlightedIds: computed(() => {
+      const { activeUrlElements } = this
+      if (activeUrlElements.tpopbeob) {
+        return [activeUrlElements.tpopbeob]
+      } else if (activeUrlElements.tpop) {
+        return this.map.tpopBeob.beobs.filter(b =>
+          b.beobzuordnung && b.beobzuordnung.TPopId === activeUrlElements.tpop
+        ).map(b => b.BeobId)
+      } else if (activeUrlElements.pop) {
+        return this.map.tpopBeob.beobs.filter((b) => {
+          const tpop = this.table.tpop.get(b.beobzuordnung.TPopId)
+          if (tpop) {
+            const popId = tpop.PopId
+            return popId && popId === activeUrlElements.pop
+          }
+          return false
+        }).map(b => b.BeobId)
+      }
+      return []
+    }),
     markersClustered: computed(() =>
       getTpopBeobMarkersClustered(this)
     ),
     beobs: computed(() =>
-      getBeobForMap(this).filter(b => b.beobzuordnung && b.beobzuordnung.TPopId === this.activeUrlElements.tpop)
+      getBeobForMap(this).filter(b =>
+        b.beobzuordnung && b.beobzuordnung.TPopId
+      )
     ),
     bounds: computed(() => getTpopBeobBounds(this)),
   })

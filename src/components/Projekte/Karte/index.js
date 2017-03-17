@@ -141,10 +141,6 @@ class Karte extends Component {
     const showZhLichteWaelder = activeOverlays.includes(`ZhLichteWaelder`)
     const showZhWaelderVegetation = activeOverlays.includes(`ZhWaelderVegetation`)
 
-    const showTpopBeob = activeOverlays.includes(`tpopBeob`)
-    const showBeobNichtBeurteilt = activeOverlays.includes(`beobNichtBeurteilt`)
-    const showBeobNichtZuzuordnen = activeOverlays.includes(`beobNichtZuzuordnen`)
-
     return (
       <MapElement
         bounds={bounds}

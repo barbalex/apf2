@@ -28,7 +28,8 @@ const BeobPopup = (
       url = `${appBaseUrl}/Projekte/${projekt}/Arten/${ap}/nicht-zuzuordnende-Beobachtungen/${beobBereitgestellt.BeobId}`
     } else {
       const tpopId = beobBereitgestellt.beobzuordnung.TPopId
-      const popId = store.table.tpop.get(tpopId).PopId
+      const tpop = store.table.tpop.get(tpopId)
+      const popId = tpop ? tpop.PopId : ``
       url = `${appBaseUrl}/Projekte/${projekt}/Arten/${ap}/Populationen/${popId}/Teil-Populationen/${tpopId}/Beobachtungen/${beobBereitgestellt.BeobId}`
     }
   }

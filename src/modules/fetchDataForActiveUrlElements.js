@@ -17,7 +17,6 @@ const fetchDataForActiveUrlElements = (
   showBeobNichtZuzuordnen:boolean
 ) => {
   const { activeUrlElements } = store
-  console.log(`fetchDataForActiveUrlElements running`)
   const fetchingFromActiveElements = {
     exporte() {
       store.fetchTableByParentId(`apflora`, `ap`, activeUrlElements.projekt)
