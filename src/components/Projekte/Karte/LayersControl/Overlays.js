@@ -3,6 +3,7 @@ import { toJS } from 'mobx'
 import { observer } from 'mobx-react'
 import styled from 'styled-components'
 import FontIcon from 'material-ui/FontIcon'
+import { SortableContainer, SortableElement } from 'react-sortable-hoc'
 
 const CardContent = styled.div`
   color: rgb(48, 48, 48);
@@ -36,32 +37,45 @@ const Label = styled.label`
 
 const Overlays = ({ store }) => {
   const activeOverlays = toJS(store.map.activeOverlays)
+  const SortableItem = SortableElement(({ overlay }) =>
+    <LayerDiv>
+      <Label>
+        <Input
+          type="checkbox"
+          value={overlay.value}
+          checked={activeOverlays.includes(overlay.value)}
+          onChange={() => {
+            if (activeOverlays.includes(overlay.value)) {
+              return store.map.removeActiveOverlay(overlay.value)
+            }
+            return store.map.addActiveOverlay(overlay.value)
+          }}
+        />
+        {overlay.label}
+      </Label>
+      <div>
+        <DragHandle className="material-icons">
+          drag_handle
+        </DragHandle>
+      </div>
+    </LayerDiv>
+  )
+  const overlays = store.map.overlays
+  const SortableList = SortableContainer(({ overlays }) =>
+    <div>
+      {
+        overlays.map((overlay, index) =>
+          <SortableItem key={index} index={index} overlay={overlay} />
+        )
+      }
+    </div>
+  )
 
   return (
     <CardContent>
       {
-        store.map.overlays.map((o, index) =>
-          <LayerDiv key={index}>
-            <Label>
-              <Input
-                type="checkbox"
-                value={o.value}
-                checked={activeOverlays.includes(o.value)}
-                onChange={() => {
-                  if (activeOverlays.includes(o.value)) {
-                    return store.map.removeActiveOverlay(o.value)
-                  }
-                  return store.map.addActiveOverlay(o.value)
-                }}
-              />
-              {o.label}
-            </Label>
-            <div>
-              <DragHandle className="material-icons">
-                drag_handle
-              </DragHandle>
-            </div>
-          </LayerDiv>
+        store.map.overlays.map((overlay, index) =>
+          <SortableItem key={index} index={index} overlay={overlay} />
         )
       }
     </CardContent>
