@@ -232,6 +232,18 @@ class Strukturbaum extends Component {
         node.menuType === `beobNichtZuzuordnen` &&
         store.map.activeOverlays.includes(`beobNichtZuzuordnen`) &&
         store.map.beobNichtZuzuordnen.highlightedIds.includes(node.id)
+      ) ||
+      (
+        node.menuType === `tpop` &&
+        !store.activeUrlElements.tpopbeob &&
+        store.map.activeOverlays.includes(`tpopBeob`) &&
+        node.id === store.activeUrlElements.tpop
+      ) ||
+      (
+        node.menuType === `pop` &&
+        !store.activeUrlElements.tpop &&
+        store.map.activeOverlays.includes(`tpopBeob`) &&
+        node.id === store.activeUrlElements.pop
       )
     )
 
