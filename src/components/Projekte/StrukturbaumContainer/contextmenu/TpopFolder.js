@@ -48,7 +48,7 @@ const TpopFolder = (
         idTable: `ap`,
       }}
     >
-      {`blende Teil-Populationen ${store.map.tpop.visible ? `aus` : `ein`}`}
+      {`blende Teil-Populationen ${store.map.activeOverlays.includes(`tpop`) ? `aus` : `ein`}`}
     </MenuItem>
   </ContextMenu>
 

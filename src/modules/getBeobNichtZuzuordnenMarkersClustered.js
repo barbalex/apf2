@@ -9,7 +9,8 @@ import beobIconHighlighted from '../etc/beobHighlighted.png'
 import BeobPopup from '../components/Projekte/Karte/BeobPopup'
 
 export default (store) => {
-  const { beobs, highlightedIds, visible } = store.map.beobNichtZuzuordnen
+  const { beobs, highlightedIds } = store.map.beobNichtZuzuordnen
+  const visible = store.map.activeOverlays.includes(`beobNichtZuzuordnen`)
   const mcgOptions = {
     maxClusterRadius: 66,
     iconCreateFunction: function (cluster) {

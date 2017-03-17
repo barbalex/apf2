@@ -9,7 +9,8 @@ import tpopIconHighlighted from '../etc/tpopHighlighted.png'
 import TpopPopup from '../components/Projekte/Karte/TpopPopup'
 
 export default (store) => {
-  const { tpops, labelUsingNr, highlightedIds, visible } = store.map.tpop
+  const { tpops, labelUsingNr, highlightedIds } = store.map.tpop
+  const visible = store.map.activeOverlays.includes(`tpop`)
   const mcgOptions = {
     maxClusterRadius: 66,
     iconCreateFunction: function (cluster) {

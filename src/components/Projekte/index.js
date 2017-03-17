@@ -69,6 +69,7 @@ const Projekte = ({ store }) => {
               tpopBeobMarkers={store.map.tpopBeob.markersClustered}
               idOfTpopBeingLocalized={store.map.tpop.idOfTpopBeingLocalized}
               activeBaseLayer={store.map.activeBaseLayer}
+              activeOverlays={store.map.activeOverlays}
             />
           </KarteContainer>
         }

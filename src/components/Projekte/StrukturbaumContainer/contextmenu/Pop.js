@@ -59,7 +59,7 @@ const Pop = (
         idTable: `ap`,
       }}
     >
-      {`blende Populationen ${store.map.pop.visible ? `aus` : `ein`}`}
+      {`blende Populationen ${store.map.activeOverlays.includes(`pop`) ? `aus` : `ein`}`}
     </MenuItem>
     <MenuItem
       onClick={onClick}
@@ -69,7 +69,7 @@ const Pop = (
         idTable: `ap`,
       }}
     >
-      {`blende Teil-Populationen ${store.map.tpop.visible ? `aus` : `ein`}`}
+      {`blende Teil-Populationen ${store.map.activeOverlays.includes(`tpop`) ? `aus` : `ein`}`}
     </MenuItem>
   </ContextMenu>
 

@@ -183,54 +183,54 @@ class Strukturbaum extends Component {
     const showPopMapIcon = (
       node.menuType === `ap` &&
       node.id === (store.activeUrlElements.ap || store.map.pop.apArtId) &&
-      store.map.pop.visible
+      store.map.activeOverlays.includes(`pop`)
     )
     const showPopFilteredMapIcon = (
       node.menuType === `pop` &&
-      store.map.pop.visible &&
+      store.map.activeOverlays.includes(`pop`) &&
       store.map.pop.highlightedIds.includes(node.id)
     )
     const showTpopMapIcon = (
       node.menuType === `ap` &&
       node.id === (store.activeUrlElements.ap || store.map.pop.apArtId) &&
-      store.map.tpop.visible
+      store.map.activeOverlays.includes(`tpop`)
     )
     const showTpopFilteredMapIcon = (
       node.menuType === `tpop` &&
-      store.map.tpop.visible &&
+      store.map.activeOverlays.includes(`tpop`) &&
       store.map.tpop.highlightedIds.includes(node.id)
     )
     const showBeobMapIcon = (
       (
         node.menuType === `beobNichtZuzuordnenFolder` &&
         node.id === store.activeUrlElements.ap &&
-        store.map.beobNichtZuzuordnen.visible
+        store.map.activeOverlays.includes(`beobNichtZuzuordnen`)
       ) ||
       (
         node.menuType === `beobzuordnungFolder` &&
         node.id === store.activeUrlElements.ap &&
-        store.map.beobNichtBeurteilt.visible
+        store.map.activeOverlays.includes(`beobNichtBeurteilt`)
       ) ||
       (
         node.menuType === `tpopbeobFolder` &&
         node.id === store.activeUrlElements.tpop &&
-        store.map.tpopBeob.visible
+        store.map.activeOverlays.includes(`tpopBeob`)
       )
     )
     const showBeobFilteredMapIcon = (
       (
         node.menuType === `tpopbeob` &&
-        store.map.tpopBeob.visible &&
+        store.map.activeOverlays.includes(`tpopBeob`) &&
         store.map.tpopBeob.highlightedIds.includes(node.id)
       ) ||
       (
         node.menuType === `beobzuordnung` &&
-        store.map.beobNichtBeurteilt.visible &&
+        store.map.activeOverlays.includes(`beobNichtBeurteilt`) &&
         store.map.beobNichtBeurteilt.highlightedIds.includes(node.id)
       ) ||
       (
         node.menuType === `beobNichtZuzuordnen` &&
-        store.map.beobNichtZuzuordnen.visible &&
+        store.map.activeOverlays.includes(`beobNichtZuzuordnen`) &&
         store.map.beobNichtZuzuordnen.highlightedIds.includes(node.id)
       )
     )

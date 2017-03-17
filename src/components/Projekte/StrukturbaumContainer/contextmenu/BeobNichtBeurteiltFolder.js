@@ -37,7 +37,7 @@ const BeobNichtBeurteiltFolder = (
         idTable: `ap`,
       }}
     >
-      {`blende auf Karte ${store.map.beobNichtBeurteilt.visible ? `aus` : `ein`}`}
+      {`blende auf Karte ${store.map.activeOverlays.includes(`beobNichtBeurteilt`) ? `aus` : `ein`}`}
     </MenuItem>
   </ContextMenu>
 

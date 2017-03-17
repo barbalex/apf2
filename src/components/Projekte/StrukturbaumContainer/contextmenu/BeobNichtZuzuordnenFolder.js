@@ -37,7 +37,7 @@ const BeobNichtZuzuordnenFolder = (
         idTable: `ap`,
       }}
     >
-      {`blende auf Karte ${store.map.beobNichtZuzuordnen.visible ? `aus` : `ein`}`}
+      {`blende auf Karte ${store.map.activeOverlays.includes(`beobNichtZuzuordnen`) ? `aus` : `ein`}`}
     </MenuItem>
   </ContextMenu>
 

@@ -8,8 +8,16 @@
 import { runInAction } from 'mobx'
 import forEach from 'lodash/forEach'
 
-const fetchDataForActiveUrlElements = (store:Object) => {
+const fetchDataForActiveUrlElements = (
+  store:Object,
+  showPop:boolean,
+  showTpop:boolean,
+  showTpopBeob:boolean,
+  showBeobNichtBeurteilt:boolean,
+  showBeobNichtZuzuordnen:boolean
+) => {
   const { activeUrlElements } = store
+  console.log(`fetchDataForActiveUrlElements running`)
   const fetchingFromActiveElements = {
     exporte() {
       store.fetchTableByParentId(`apflora`, `ap`, activeUrlElements.projekt)
@@ -42,17 +50,17 @@ const fetchDataForActiveUrlElements = (store:Object) => {
       store.fetchBeobBereitgestellt(activeUrlElements.ap)
       store.fetchBeobzuordnung(activeUrlElements.ap)
       store.fetchTable(`apflora`, `pop_status_werte`)
-      if (store.map.tpop.visible) {
+      if (showTpop) {
         store.fetchTpopForAp(activeUrlElements.ap)
         store.fetchPopForAp(activeUrlElements.ap)
       }
-      if (store.map.pop.visible) {
+      if (showPop) {
         store.fetchPopForAp(activeUrlElements.ap)
       }
       if (
-        store.map.beobNichtBeurteilt.visible ||
-        store.map.beobNichtZuzuordnen.visible ||
-        store.map.tpopBeob.visible
+        showBeobNichtBeurteilt ||
+        showBeobNichtZuzuordnen ||
+        showTpopBeob
       ) {
         store.fetchTable(`beob`, `beob_quelle`)
         store.fetchPopForAp(activeUrlElements.ap)

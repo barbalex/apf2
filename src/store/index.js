@@ -239,6 +239,9 @@ function Store() {
     tpopBeob: {},
     activeBaseLayer: `OsmColor`,
     activeOverlays: [],
+    addActiveOverlay: () => {},
+    removeActiveOverlay: () => {},
+    setActiveBaseLayer: () => {},
   }
   extendObservable(this.map, {
     bounds: computed(() => getMapBounds(this)),
@@ -265,7 +268,6 @@ function Store() {
     // need to pass apArtId when activeUrlElements.ap
     // is not yet set...
     apArtId: null,
-    visible: false,
     highlightedIds: computed(() => (
       this.activeUrlElements.pop ?
       [this.activeUrlElements.pop] :
@@ -278,7 +280,6 @@ function Store() {
     markers: computed(() => getPopMarkers(this)),
   })
   extendObservable(this.map.tpop, {
-    visible: false,
     highlightedIds: computed(() => (
       this.activeUrlElements.tpop ?
       [this.activeUrlElements.tpop] :
@@ -293,7 +294,6 @@ function Store() {
     idOfTpopBeingLocalized: 0,
   })
   extendObservable(this.map.beob, {
-    visible: false,
     highlightedIds: [],
     beobs: computed(() => getBeobForMap(this)),
     markersClustered: computed(() =>
@@ -301,7 +301,6 @@ function Store() {
     ),
   })
   extendObservable(this.map.beobNichtBeurteilt, {
-    visible: false,
     highlightedIds: computed(() => (
       this.activeUrlElements.beobzuordnung ?
       [this.activeUrlElements.beobzuordnung] :
@@ -317,7 +316,6 @@ function Store() {
     idOfBeobBeingAssigned: 0,
   })
   extendObservable(this.map.beobNichtZuzuordnen, {
-    visible: false,
     highlightedIds: computed(() => (
       this.activeUrlElements.beobNichtZuzuordnen ?
       [this.activeUrlElements.beobNichtZuzuordnen] :
@@ -332,7 +330,6 @@ function Store() {
     bounds: computed(() => getBeobNichtZuzuordnenBounds(this)),
   })
   extendObservable(this.map.tpopBeob, {
-    visible: false,
     highlightedIds: computed(() => (
       this.activeUrlElements.tpopbeob ?
       [this.activeUrlElements.tpopbeob] :
@@ -526,9 +523,13 @@ function Store() {
     setUrlQuery: action((key, value) =>
       setUrlQuery(this, key, value)
     ),
-    showMapLayer: action((layer, bool) =>
-      this.map[layer].visible = bool
-    ),
+    showMapLayer: action((layer, bool) => {
+      if (bool) {
+        this.map.addActiveOverlay(layer)
+      } else {
+        this.map.removeActiveOverlay(layer)
+      }
+    }),
   })
 }
 
@@ -547,7 +548,13 @@ extendObservable(
     reactWhenUrlHasChanged: autorunAsync(
       `reactWhenUrlHasChanged`,
       () => {
-        fetchDataForActiveUrlElements(MyStore)
+        // need to pass visibility of layers to make data fetched on changing layers
+        const showTpop = MyStore.map.activeOverlays.includes(`tpop`)
+        const showPop = MyStore.map.activeOverlays.includes(`pop`)
+        const showTpopBeob = MyStore.map.activeOverlays.includes(`tpopBeob`)
+        const showBeobNichtBeurteilt = MyStore.map.activeOverlays.includes(`beobNichtBeurteilt`)
+        const showBeobNichtZuzuordnen = MyStore.map.activeOverlays.includes(`beobNichtZuzuordnen`)
+        fetchDataForActiveUrlElements(MyStore, showPop, showTpop, showTpopBeob, showBeobNichtBeurteilt, showBeobNichtZuzuordnen)
       }
     ),
   }

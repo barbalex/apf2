@@ -141,6 +141,10 @@ class Karte extends Component {
     const showZhLichteWaelder = activeOverlays.includes(`ZhLichteWaelder`)
     const showZhWaelderVegetation = activeOverlays.includes(`ZhWaelderVegetation`)
 
+    const showTpopBeob = activeOverlays.includes(`tpopBeob`)
+    const showBeobNichtBeurteilt = activeOverlays.includes(`beobNichtBeurteilt`)
+    const showBeobNichtZuzuordnen = activeOverlays.includes(`beobNichtZuzuordnen`)
+
     return (
       <MapElement
         bounds={bounds}
@@ -252,32 +256,32 @@ class Karte extends Component {
           highlightedIds={toJS(store.map.pop.highlightedIds)}
           labelUsingNr={store.map.pop.labelUsingNr}
           pops={store.map.pop.pops}
-          visible={store.map.pop.visible}
+          visible={store.map.activeOverlays.includes(`pop`)}
           markers={popMarkers}
         />
         <TpopMarkerCluster
           highlightedIds={toJS(store.map.tpop.highlightedIds)}
           labelUsingNr={store.map.tpop.labelUsingNr}
           tpops={store.map.tpop.tpops}
-          visible={store.map.tpop.visible}
+          visible={store.map.activeOverlays.includes(`tpop`)}
           markers={tpopMarkers}
         />
         <BeobMarkerCluster
           highlightedIds={toJS(store.map.beobNichtBeurteilt.highlightedIds)}
           beobs={store.map.beobNichtBeurteilt.beobs}
-          visible={store.map.beobNichtBeurteilt.visible}
+          visible={store.map.activeOverlays.includes(`beobNichtBeurteilt`)}
           markers={beobNichtBeurteiltMarkers}
         />
         <BeobMarkerCluster
           highlightedIds={toJS(store.map.beobNichtZuzuordnen.highlightedIds)}
           beobs={store.map.beobNichtZuzuordnen.beobs}
-          visible={store.map.beobNichtZuzuordnen.visible}
+          visible={store.map.activeOverlays.includes(`beobNichtZuzuordnen`)}
           markers={beobNichtZuzuordnenMarkers}
         />
         <BeobMarkerCluster
           highlightedIds={toJS(store.map.tpopBeob.highlightedIds)}
           beobs={store.map.tpopBeob.beobs}
-          visible={store.map.tpopBeob.visible}
+          visible={store.map.activeOverlays.includes(`tpopBeob`)}
           markers={tpopBeobMarkers}
         />
         <ScaleControl imperial={false} />

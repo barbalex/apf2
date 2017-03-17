@@ -37,7 +37,7 @@ const TpopbeobFolder = (
         idTable: `ap`,
       }}
     >
-      {`blende auf Karte ${store.map.tpopBeob.visible ? `aus` : `ein`}`}
+      {`blende auf Karte ${store.map.activeOverlays.includes(`tpopBeob`) ? `aus` : `ein`}`}
     </MenuItem>
   </ContextMenu>
 

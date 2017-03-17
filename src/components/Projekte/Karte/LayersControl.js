@@ -104,7 +104,12 @@ const LayersControl = ({
     { label: `SVO grau`, value: `ZhSvoGrey` },
     { label: `Lebensraum- und Vegetationskartierungen`, value: `ZhLrVegKartierungen` },
     { label: `Wälder: lichte`, value: `ZhLichteWaelder` },
-    { label: `Wälder: Vegetation`, value: `ZhWaelderVegetation` }
+    { label: `Wälder: Vegetation`, value: `ZhWaelderVegetation` },
+    { label: `apflora: Populationen`, value: `pop` },
+    { label: `apflora: Teil-Populationen`, value: `tpop` },
+    { label: `apflora: nicht beurteilte Beobachtungen`, value: `beobNichtBeurteilt` },
+    { label: `apflora: nicht zuzuordnende Beobachtungen`, value: `beobNichtZuzuordnen` },
+    { label: `apflora: zugeordnete Beobachtungen`, value: `tpopBeob` },
   ]
   const activeOverlays = toJS(store.map.activeOverlays)
 
@@ -162,7 +167,8 @@ const LayersControl = ({
                         <Input
                           type="checkbox"
                           value={o.value}
-                          onClick={() => {
+                          checked={activeOverlays.includes(o.value)}
+                          onChange={() => {
                             if (activeOverlays.includes(o.value)) {
                               return store.map.removeActiveOverlay(o.value)
                             }

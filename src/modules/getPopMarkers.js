@@ -13,7 +13,8 @@ import popIconHighlighted from '../etc/popHighlighted.png'
 import PopPopup from '../components/Projekte/Karte/PopPopup'
 
 export default (store) => {
-  const { pops, labelUsingNr, highlightedIds, visible } = store.map.pop
+  const { pops, labelUsingNr, highlightedIds } = store.map.pop
+  const visible = store.map.activeOverlays.includes(`pop`)
   const mcgOptions = {
     maxClusterRadius: 66,
     iconCreateFunction: function (cluster) {

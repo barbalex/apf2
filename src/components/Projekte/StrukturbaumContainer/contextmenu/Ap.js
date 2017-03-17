@@ -57,10 +57,10 @@ const Ap = (
         idTable: `ap`,
       }}
     >
-      {`blende Populationen ${store.map.pop.visible ? `aus` : `ein`}`}
+      {`blende Populationen ${store.map.activeOverlays.includes(`pop`) ? `aus` : `ein`}`}
     </MenuItem>
     {
-      store.map.pop.visible &&
+      store.map.activeOverlays.includes(`pop`) &&
       <MenuItem
         onClick={onClick}
         data={{
@@ -83,10 +83,10 @@ const Ap = (
         idTable: `ap`,
       }}
     >
-      {`blende Teil-Populationen ${store.map.tpop.visible ? `aus` : `ein`}`}
+      {`blende Teil-Populationen ${store.map.activeOverlays.includes(`tpop`) ? `aus` : `ein`}`}
     </MenuItem>
     {
-      store.map.tpop.visible &&
+      store.map.activeOverlays.includes(`tpop`) &&
       <MenuItem
         onClick={onClick}
         data={{

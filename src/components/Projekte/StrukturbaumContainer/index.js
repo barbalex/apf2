@@ -150,7 +150,7 @@ class StrukturbaumContainer extends Component { // eslint-disable-line react/pre
         // 1. open map if not yet open
         that.showMapIfNotYetVisible()
         // 2 add layer for actionTable
-        store.showMapLayer(actionTable, !store.map[actionTable].visible)
+        store.showMapLayer(actionTable, !store.map.activeOverlays.includes(actionTable))
       },
       showOnMap() {
         // actionTable: table to show on map
@@ -162,15 +162,12 @@ class StrukturbaumContainer extends Component { // eslint-disable-line react/pre
           store.fetchTpopForAp(id)
         }
         if (actionTable === `tpop`) {
-          // TODO: this does not work when ap is changed
-          // while visible is true!!!
-          // need an autorun?
           store.fetchTpopForAp(id)
         }
         // 2. open map if not yet open
         that.showMapIfNotYetVisible()
         // 3 add layer for actionTable
-        store.showMapLayer(actionTable, !store.map[actionTable].visible)
+        store.showMapLayer(actionTable, !store.map.activeOverlays.includes(actionTable))
       },
       toggleTooltip() {
         store.toggleMapPopLabelContent(actionTable)
@@ -227,11 +224,11 @@ class StrukturbaumContainer extends Component { // eslint-disable-line react/pre
           ref={(c) => { this.tree = c }}
         >
           <Strukturbaum
-            mapTpopBeobVisible={store.map.tpopBeob.visible}
-            mapBeobNichtBeurteiltVisible={store.map.beobNichtBeurteilt.visible}
-            mapBeobNichtZuzuordnenVisible={store.map.beobNichtZuzuordnen.visible}
-            mapPopVisible={store.map.pop.visible}
-            mapTpopVisible={store.map.tpop.visible}
+            mapTpopBeobVisible={store.map.activeOverlays.includes(`tpopBeob`)}
+            mapBeobNichtBeurteiltVisible={store.map.activeOverlays.includes(`beobNichtBeurteilt`)}
+            mapBeobNichtZuzuordnenVisible={store.map.activeOverlays.includes(`beobNichtZuzuordnen`)}
+            mapPopVisible={store.map.activeOverlays.includes(`pop`)}
+            mapTpopVisible={store.map.activeOverlays.includes(`tpop`)}
           />
         </div>
         <CmApFolder onClick={this.handleClick} />
