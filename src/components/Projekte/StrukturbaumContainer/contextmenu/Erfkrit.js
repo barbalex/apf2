@@ -42,7 +42,7 @@ const Erfkrit = (
         table: `erfkrit`,
       }}
     >
-      {`lösche "${label}"`}
+      lösche
     </MenuItem>
   </ContextMenu>
 

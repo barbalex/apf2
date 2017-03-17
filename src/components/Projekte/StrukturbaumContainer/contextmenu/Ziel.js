@@ -42,7 +42,7 @@ const Ziel = (
         table: `ziel`,
       }}
     >
-      {`lösche "${label}"`}
+      lösche
     </MenuItem>
   </ContextMenu>
 

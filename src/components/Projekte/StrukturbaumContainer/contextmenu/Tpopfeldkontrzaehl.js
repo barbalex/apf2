@@ -42,7 +42,7 @@ const Tpopfeldkontrzaehl = (
         table: `tpopfeldkontrzaehl`,
       }}
     >
-      {`lösche "${label}"`}
+      lösche
     </MenuItem>
   </ContextMenu>
 

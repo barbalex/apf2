@@ -42,7 +42,7 @@ const Tpopmassn = (
         table: `tpopmassn`,
       }}
     >
-      {`lösche "${label}"`}
+      lösche
     </MenuItem>
   </ContextMenu>
 

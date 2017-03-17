@@ -18,7 +18,6 @@ import CmApberuebersichtFolder from './contextmenu/ApberuebersichtFolder'
 import CmApberuebersicht from './contextmenu/Apberuebersicht'
 import CmAssozartFolder from './contextmenu/AssozartFolder'
 import CmAssozart from './contextmenu/Assozart'
-import CmBeobNichtBeurteiltFolder from './contextmenu/BeobNichtBeurteiltFolder'
 import CmBeobNichtZuzuordnenFolder from './contextmenu/BeobNichtZuzuordnenFolder'
 import CmTpopbeobFolder from './contextmenu/TpopbeobFolder'
 import CmBerFolder from './contextmenu/BerFolder'
@@ -237,7 +236,6 @@ class StrukturbaumContainer extends Component { // eslint-disable-line react/pre
         <CmApberuebersicht onClick={this.handleClick} />
         <CmAssozartFolder onClick={this.handleClick} />
         <CmAssozart onClick={this.handleClick} />
-        <CmBeobNichtBeurteiltFolder onClick={this.handleClick} />
         <CmBeobNichtZuzuordnenFolder onClick={this.handleClick} />
         <CmTpopbeobFolder onClick={this.handleClick} />
         <CmBerFolder onClick={this.handleClick} />

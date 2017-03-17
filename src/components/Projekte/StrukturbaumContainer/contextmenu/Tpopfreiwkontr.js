@@ -42,7 +42,7 @@ const Tpopfreiwkontr = (
         table: `tpopfreiwkontr`,
       }}
     >
-      {`lösche "${label}"`}
+      lösche
     </MenuItem>
   </ContextMenu>
 

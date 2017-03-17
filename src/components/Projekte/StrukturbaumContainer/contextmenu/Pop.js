@@ -47,29 +47,7 @@ const Pop = (
         table: `pop`,
       }}
     >
-      {`lösche "${label}"`}
-    </MenuItem>
-    <div className="react-contextmenu-divider" />
-    <div className="react-contextmenu-title">Karte</div>
-    <MenuItem
-      onClick={onClick}
-      data={{
-        action: `showOnMap`,
-        actionTable: `pop`,
-        idTable: `ap`,
-      }}
-    >
-      {`blende Populationen ${store.map.activeOverlays.includes(`pop`) ? `aus` : `ein`}`}
-    </MenuItem>
-    <MenuItem
-      onClick={onClick}
-      data={{
-        action: `showOnMap`,
-        actionTable: `tpop`,
-        idTable: `ap`,
-      }}
-    >
-      {`blende Teil-Populationen ${store.map.activeOverlays.includes(`tpop`) ? `aus` : `ein`}`}
+      lösche
     </MenuItem>
   </ContextMenu>
 

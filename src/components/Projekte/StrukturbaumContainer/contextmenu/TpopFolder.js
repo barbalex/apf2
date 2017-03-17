@@ -38,18 +38,6 @@ const TpopFolder = (
     >
       erstelle neue
     </MenuItem>
-    <div className="react-contextmenu-divider" />
-    <div className="react-contextmenu-title">Karte</div>
-    <MenuItem
-      onClick={onClick}
-      data={{
-        action: `showOnMap`,
-        actionTable: `tpop`,
-        idTable: `ap`,
-      }}
-    >
-      {`blende Teil-Populationen ${store.map.activeOverlays.includes(`tpop`) ? `aus` : `ein`}`}
-    </MenuItem>
   </ContextMenu>
 
 TpopFolder.propTypes = {

@@ -42,7 +42,7 @@ const BerFolder = (
         table: `ber`,
       }}
     >
-      {`lösche "${label}"`}
+      lösche
     </MenuItem>
   </ContextMenu>
 

@@ -12,9 +12,9 @@ const enhance = compose(
   withHandlers({
     // according to https://github.com/vkbansal/react-contextmenu/issues/65
     // this is how to pass data from ContextMenuTrigger to ContextMenu
-    onShow: props => (event) =>
-      props.changeLabel(event.detail.data.nodeLabel)
-    ,
+    onShow: props => (event) => {
+      // props.changeLabel(event.detail.data.nodeLabel)
+    },
   }),
   observer
 )
@@ -45,20 +45,18 @@ const Ap = (
         table: `ap`,
       }}
     >
-      {`lösche "${label}"`}
+      lösche
     </MenuItem>
-    <div className="react-contextmenu-divider" />
-    <div className="react-contextmenu-title">Karte</div>
-    <MenuItem
-      onClick={onClick}
-      data={{
-        action: `showOnMap`,
-        actionTable: `pop`,
-        idTable: `ap`,
-      }}
-    >
-      {`blende Populationen ${store.map.activeOverlays.includes(`pop`) ? `aus` : `ein`}`}
-    </MenuItem>
+    {
+      (
+        store.map.activeOverlays.includes(`pop`) ||
+        store.map.activeOverlays.includes(`tpop`)
+      ) &&
+      <div>
+        <div className="react-contextmenu-divider" />
+        <div className="react-contextmenu-title">Karte</div>
+      </div>
+    }
     {
       store.map.activeOverlays.includes(`pop`) &&
       <MenuItem
@@ -75,16 +73,6 @@ const Ap = (
         }
       </MenuItem>
     }
-    <MenuItem
-      onClick={onClick}
-      data={{
-        action: `showOnMap`,
-        actionTable: `tpop`,
-        idTable: `ap`,
-      }}
-    >
-      {`blende Teil-Populationen ${store.map.activeOverlays.includes(`tpop`) ? `aus` : `ein`}`}
-    </MenuItem>
     {
       store.map.activeOverlays.includes(`tpop`) &&
       <MenuItem
