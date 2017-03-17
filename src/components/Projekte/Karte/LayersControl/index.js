@@ -11,6 +11,7 @@ import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme'
 import FontIcon from 'material-ui/FontIcon'
 
 import Overlays from './Overlays'
+import BaseLayers from './BaseLayers'
 
 const theme = Object.assign({}, baseTheme)
 
@@ -37,22 +38,9 @@ const CardHeader = styled.div`
 const CardTitle = styled.div`
   padding-right: 5px;
 `
-const CardContent = styled.div`
-  color: rgb(48, 48, 48);
-  padding-left: 5px;
-  padding-right: 5px;
-`
 const StyledFontIcon = styled(FontIcon)`
   font-size: 18px !important;
   color: rgb(48, 48, 48) !important;
-`
-const Input = styled.input`
-  margin-right: 4px;
-  /*vertical-align: -2px;*/
-`
-const Label = styled.label`
-  padding-right: 4px;
-  user-select: none;
 `
 
 const enhance = compose(
@@ -68,10 +56,6 @@ const enhance = compose(
       const { overlaysExpanded, toggleOverlaysExpanded } = props
       toggleOverlaysExpanded(!overlaysExpanded)
     },
-    onCheckOverlay: props => (event, isChecked) => {
-      console.log(`event:`, event)
-      console.log(`isChequed:`, isChecked)
-    },
   }),
   observer
 )
@@ -82,21 +66,7 @@ const LayersControl = ({
   overlaysExpanded,
   onToggleBaseLayersExpanded,
   onToggleOverlaysExpanded,
-  onCheckOverlay,
 }) => {
-  const baseLayers = [
-    { label: `OpenStreetMap farbig`, value: `OsmColor` },
-    { label: `OpenStreetMap grau`, value: `OsmBw` },
-    { label: `Swisstopo farbig`, value: `SwissTopoPixelFarbe` },
-    { label: `Swisstopo grau`, value: `SwissTopoPixelGrau` },
-    { label: `ZH Übersichtsplan`, value: `ZhUep` },
-    { label: `Bing Luftbild`, value: `BingAerial` },
-    { label: `ZH Orthofoto Sommer RGB`, value: `ZhOrtho` },
-    { label: `ZH Orthofoto Sommer infrarot`, value: `ZhOrthoIr` },
-    { label: `ZH Orthofoto Frühjahr 2015/16 RGB`, value: `ZhOrtho2015` },
-    { label: `ZH Orthofoto Frühjahr 2015/16 infrarot`, value: `ZhOrtho2015Ir` },
-  ]
-
   return (
     <Control position="topright">
       <MuiThemeProvider muiTheme={getMuiTheme(theme)}>
@@ -106,30 +76,13 @@ const LayersControl = ({
               <CardTitle>Hintergrund</CardTitle>
               <div>
                 <StyledFontIcon className="material-icons">
-                  expand_more
+                  { baseLayersExpanded ? `expand_less` : `expand_more` }
                 </StyledFontIcon>
               </div>
             </CardHeader>
             {
               baseLayersExpanded &&
-              <CardContent>
-                {
-                  baseLayers.map((l, index) =>
-                    <div key={index}>
-                      <Label>
-                        <Input
-                          type="radio"
-                          name="baseLayers"
-                          value={l.value}
-                          checked={store.map.activeBaseLayer === l.value}
-                          onChange={() => store.map.setActiveBaseLayer(l.value)}
-                        />
-                        {l.label}
-                      </Label>
-                    </div>
-                  )
-                }
-              </CardContent>
+              <BaseLayers store={store} />
             }
           </Card>
           <Card>
@@ -137,7 +90,7 @@ const LayersControl = ({
               <CardTitle>überlagernd</CardTitle>
               <div>
                 <StyledFontIcon className="material-icons">
-                  expand_more
+                  { overlaysExpanded ? `expand_less` : `expand_more` }
                 </StyledFontIcon>
               </div>
             </CardHeader>
@@ -160,7 +113,6 @@ LayersControl.propTypes = {
   toggleOverlaysExpanded: PropTypes.func.isRequired,
   onToggleBaseLayersExpanded: PropTypes.func.isRequired,
   onToggleOverlaysExpanded: PropTypes.func.isRequired,
-  onCheckOverlay: PropTypes.func.isRequired,
 }
 
 export default enhance(LayersControl)

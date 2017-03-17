@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react'
 import { toJS } from 'mobx'
+import { observer } from 'mobx-react'
 import styled from 'styled-components'
 import FontIcon from 'material-ui/FontIcon'
 
@@ -10,7 +11,7 @@ const CardContent = styled.div`
 `
 const DragHandle = styled(FontIcon)`
   font-size: 18px !important;
-  color: rgb(48, 48, 48) !important;
+  color: #7b7b7b !important;
   cursor: grab;
 `
 const LayerDiv = styled.div`
@@ -71,4 +72,4 @@ Overlays.propTypes = {
   store: PropTypes.object.isRequired,
 }
 
-export default Overlays
+export default observer(Overlays)
