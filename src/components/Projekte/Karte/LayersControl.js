@@ -40,15 +40,24 @@ const CardContent = styled.div`
   color: rgb(48, 48, 48);
   padding-left: 5px;
   padding-right: 5px;
-  padding-top: 3px;
-  padding-bottom: 3px;
 `
 const StyledFontIcon = styled(FontIcon)`
   font-size: 18px !important;
   color: rgb(48, 48, 48) !important;
 `
+const DragHandle = styled(FontIcon)`
+  font-size: 18px !important;
+  color: rgb(48, 48, 48) !important;
+  cursor: grab;
+`
+const LayerDiv = styled.div`
+  border-bottom: 1px solid #ececec;
+  display: flex;
+  justify-content: space-between;
+  padding-top: 4px;
+`
 const Input = styled.input`
-  vertical-align: -2px;
+  /*vertical-align: -2px;*/
 `
 const Label = styled.label`
   padding-right: 4px;
@@ -147,7 +156,7 @@ const LayersControl = ({
               <CardContent>
                 {
                   store.map.overlays.map((o, index) =>
-                    <div key={index}>
+                    <LayerDiv key={index}>
                       <Label>
                         <Input
                           type="checkbox"
@@ -162,7 +171,12 @@ const LayersControl = ({
                         />
                         {o.label}
                       </Label>
-                    </div>
+                      <div>
+                        <DragHandle className="material-icons">
+                          drag_handle
+                        </DragHandle>
+                      </div>
+                    </LayerDiv>
                   )
                 }
               </CardContent>
