@@ -10,10 +10,6 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme'
 import FontIcon from 'material-ui/FontIcon'
-import { Checkbox } from 'material-ui/Checkbox'
-
-import RadioButtonGroup from '../../shared/RadioButtonGroup'
-import Label from '../../shared/Label'
 
 const theme = Object.assign({}, baseTheme)
 
@@ -37,6 +33,9 @@ const CardHeader = styled.div`
   cursor: pointer;
   font-weight: bold;
 `
+const CardTitle = styled.div`
+  padding-right: 5px;
+`
 const CardContent = styled.div`
   color: rgb(48, 48, 48);
   padding-left: 5px;
@@ -47,6 +46,13 @@ const CardContent = styled.div`
 const StyledFontIcon = styled(FontIcon)`
   font-size: 18px !important;
   color: rgb(48, 48, 48) !important;
+`
+const Input = styled.input`
+  vertical-align: -2px;
+`
+const Label = styled.label`
+  padding-right: 4px;
+  user-select: none;
 `
 
 const enhance = compose(
@@ -78,6 +84,18 @@ const LayersControl = ({
   onToggleOverlaysExpanded,
   onCheckOverlay,
 }) => {
+  const baseLayers = [
+    { label: `OpenStreetMap farbig`, value: `OsmColor` },
+    { label: `OpenStreetMap grau`, value: `OsmBw` },
+    { label: `Swisstopo farbig`, value: `SwissTopoPixelFarbe` },
+    { label: `Swisstopo grau`, value: `SwissTopoPixelGrau` },
+    { label: `ZH Übersichtsplan`, value: `ZhUep` },
+    { label: `Bing Luftbild`, value: `BingAerial` },
+    { label: `ZH Orthofoto Sommer RGB`, value: `ZhOrtho` },
+    { label: `ZH Orthofoto Sommer infrarot`, value: `ZhOrthoIr` },
+    { label: `ZH Orthofoto Frühjahr 2015/16 RGB`, value: `ZhOrtho2015` },
+    { label: `ZH Orthofoto Frühjahr 2015/16 infrarot`, value: `ZhOrtho2015Ir` },
+  ]
   const overlays = [
     { label: `ZH Übersichtsplan`, value: `ZhUep` },
     { label: `Detailplaene`, value: `Detailplaene` },
@@ -86,19 +104,17 @@ const LayersControl = ({
     { label: `SVO grau`, value: `ZhSvoGrey` },
     { label: `Lebensraum- und Vegetationskartierungen`, value: `ZhLrVegKartierungen` },
     { label: `Wälder: lichte`, value: `ZhLichteWaelder` },
-    { label: `Wälder: Vegetation`, value: `ZhWaelderVegetation` },
+    { label: `Wälder: Vegetation`, value: `ZhWaelderVegetation` }
   ]
   const activeOverlays = toJS(store.map.activeOverlays)
 
   return (
-    <Control position="topright" >
-      <MuiThemeProvider
-        muiTheme={getMuiTheme(theme)}
-      >
+    <Control position="topright">
+      <MuiThemeProvider muiTheme={getMuiTheme(theme)}>
         <CardContainer>
           <Card>
             <CardHeader onClick={onToggleBaseLayersExpanded}>
-              <div>Hintergrund</div>
+              <CardTitle>Hintergrund</CardTitle>
               <div>
                 <StyledFontIcon className="material-icons">
                   expand_more
@@ -108,31 +124,28 @@ const LayersControl = ({
             {
               baseLayersExpanded &&
               <CardContent>
-                <RadioButtonGroup
-                  fieldName="activeBaseLayer"
-                  value={store.map.activeBaseLayer}
-                  dataSource={[
-                    { label: `OpenStreetMap farbig`, value: `OsmColor` },
-                    { label: `OpenStreetMap grau`, value: `OsmBw` },
-                    { label: `Swisstopo farbig`, value: `SwissTopoPixelFarbe` },
-                    { label: `Swisstopo grau`, value: `SwissTopoPixelGrau` },
-                    { label: `ZH Übersichtsplan`, value: `ZhUep` },
-                    { label: `Bing Luftbild`, value: `BingAerial` },
-                    { label: `ZH Orthofoto Sommer RGB`, value: `ZhOrtho` },
-                    { label: `ZH Orthofoto Sommer infrarot`, value: `ZhOrthoIr` },
-                    { label: `ZH Orthofoto Frühjahr 2015/16 RGB`, value: `ZhOrtho2015` },
-                    { label: `ZH Orthofoto Frühjahr 2015/16 infrarot`, value: `ZhOrtho2015Ir` },
-                  ]}
-                  updatePropertyInDb={(a, layer) =>
-                    store.map.setActiveBaseLayer(layer)
-                  }
-                />
+                {
+                  baseLayers.map((l, index) =>
+                    <div key={index}>
+                      <Label>
+                        <Input
+                          type="radio"
+                          name="baseLayers"
+                          value={l.value}
+                          checked={store.map.activeBaseLayer === l.value}
+                          onChange={() => store.map.setActiveBaseLayer(l.value)}
+                        />
+                        {l.label}
+                      </Label>
+                    </div>
+                  )
+                }
               </CardContent>
             }
           </Card>
           <Card>
             <CardHeader onClick={onToggleOverlaysExpanded}>
-              <div>überlagernd</div>
+              <CardTitle>überlagernd</CardTitle>
               <div>
                 <StyledFontIcon className="material-icons">
                   expand_more
@@ -144,12 +157,21 @@ const LayersControl = ({
               <CardContent>
                 {
                   overlays.map((o, index) =>
-                    <Checkbox
-                      key={index}
-                      label={o.label}
-                      checked={activeOverlays.includes(o.value)}
-                      onCheck={onCheckOverlay}
-                    />
+                    <div key={index}>
+                      <Label>
+                        <Input
+                          type="checkbox"
+                          value={o.value}
+                          onClick={() => {
+                            if (activeOverlays.includes(o.value)) {
+                              return store.map.removeActiveOverlay(o.value)
+                            }
+                            return store.map.addActiveOverlay(o.value)
+                          }}
+                        />
+                        {o.label}
+                      </Label>
+                    </div>
                   )
                 }
               </CardContent>
