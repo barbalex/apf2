@@ -8,7 +8,6 @@ import {
   observable,
 } from 'mobx'
 import $ from 'jquery'
-import { arrayMove } from 'react-sortable-hoc'
 
 import fetchTable from '../modules/fetchTable'
 import fetchBeobzuordnungModule from '../modules/fetchBeobzuordnung'
@@ -142,16 +141,6 @@ import deleteBeobzuordnung from './action/deleteBeobzuordnung'
 import TableStore from './table'
 import ObservableHistory from './ObservableHistory'
 
-Array.prototype.move = function (old_index, new_index) {
-  if (new_index >= this.length) {
-    var k = new_index - this.length
-    while ((k--) + 1) {
-      this.push(undefined)
-    }
-  }
-  this.splice(new_index, 0, this.splice(old_index, 1)[0])
-}
-
 function Store() {
   this.history = ObservableHistory
   this.loading = []
@@ -265,7 +254,7 @@ function Store() {
       return []
     }),
     activeBaseLayer: `OsmColor`,
-    overlays: [
+    overlays: observable([
       { label: `ZH Übersichtsplan`, value: `ZhUep` },
       { label: `Detailplaene`, value: `Detailplaene` },
       { label: `ZH Gemeindegrenzen`, value: `ZhGemeindegrenzen` },
@@ -279,13 +268,20 @@ function Store() {
       { label: `apflora: nicht beurteilte Beobachtungen`, value: `beobNichtBeurteilt` },
       { label: `apflora: nicht zuzuordnende Beobachtungen`, value: `beobNichtZuzuordnen` },
       { label: `apflora: zugeordnete Beobachtungen`, value: `tpopBeob` },
-    ],
-    moveOverlay: action(({ oldIndex, newIndex }) => {
-      console.log(`moveOverlay: oldIndex:`, oldIndex)
-      console.log(`moveOverlay: newIndex:`, newIndex)
-      // arrayMove(this.map.overlays, oldIndex, newIndex)
-      this.map.overlays.move(oldIndex, newIndex)
-    }),
+    ]),
+    moveOverlay: action(({ oldIndex, newIndex }) =>
+    /**
+     * need to move array elements in overlays array
+     * when user moves them in layer list
+     * react-sortable-hoc has arrayMove method
+     * but that does not work when using mobx
+     * because it returns new array
+     * so  use method that changes sequence while
+     * keeping same array
+     * from: http://stackoverflow.com/a/7180095/712005
+     */
+      this.map.overlays.splice(newIndex, 0, this.map.overlays.splice(oldIndex, 1)[0])
+    ),
     activeOverlays: [],
     setActiveBaseLayer: action((layer) => this.map.activeBaseLayer = layer),
     addActiveOverlay: action((layer, indexPassed) => {

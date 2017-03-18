@@ -4,7 +4,6 @@ import { observer } from 'mobx-react'
 import styled from 'styled-components'
 import FontIcon from 'material-ui/FontIcon'
 import { SortableContainer, SortableElement, SortableHandle } from 'react-sortable-hoc'
-import compose from 'recompose/compose'
 
 const CardContent = styled.div`
   color: rgb(48, 48, 48);
@@ -36,20 +35,15 @@ const Label = styled.label`
  * so passed in from parent
  */
 
-
-const enhance = compose(
- observer
-)
-
 const DragHandle = SortableHandle(() =>
   <DragHandleIcon className="material-icons">
     drag_handle
   </DragHandleIcon>
 )
-
-const Overlays = ({ store }) => {
+const SortableItem = SortableElement(({ overlay, store }) => {
   const activeOverlays = toJS(store.map.activeOverlays)
-  const SortableItem = SortableElement(({ overlay }) =>
+
+  return (
     <LayerDiv>
       <Label>
         <Input
@@ -70,15 +64,25 @@ const Overlays = ({ store }) => {
       </div>
     </LayerDiv>
   )
-  const SortableList = SortableContainer(({ items }) =>
-    <div>
-      {
-        items.map((overlay, index) =>
-          <SortableItem key={index} index={index} overlay={overlay} />
-        )
-      }
-    </div>
-  )
+})
+const SortableList = SortableContainer(({ items, store }) =>
+  <div>
+    {
+      items.map((overlay, index) =>
+        <SortableItem
+          key={index}
+          index={index}
+          overlay={overlay}
+          store={store}
+        />
+      )
+    }
+  </div>
+)
+
+const Overlays = ({ store }) => {
+
+  console.log(`overlays:`, store.map.overlays.map(o => o.label))
 
   return (
     <CardContent>
@@ -89,6 +93,7 @@ const Overlays = ({ store }) => {
         }
         useDragHandle
         lockAxis="y"
+        store={store}
       />
     </CardContent>
   )
@@ -98,4 +103,4 @@ Overlays.propTypes = {
   store: PropTypes.object.isRequired,
 }
 
-export default enhance(Overlays)
+export default observer(Overlays)
