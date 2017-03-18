@@ -55,12 +55,28 @@ const enhance = compose(
   withState(`overlaysExpanded`, `toggleOverlaysExpanded`, false),
   withHandlers({
     onToggleBaseLayersExpanded: props => () => {
-      const { baseLayersExpanded, toggleBaseLayersExpanded } = props
+      const {
+        overlaysExpanded,
+        baseLayersExpanded,
+        toggleOverlaysExpanded,
+        toggleBaseLayersExpanded,
+      } = props
       toggleBaseLayersExpanded(!baseLayersExpanded)
+      if (overlaysExpanded) {
+        toggleOverlaysExpanded(!overlaysExpanded)
+      }
     },
     onToggleOverlaysExpanded: props => () => {
-      const { overlaysExpanded, toggleOverlaysExpanded } = props
+      const {
+        overlaysExpanded,
+        baseLayersExpanded,
+        toggleOverlaysExpanded,
+        toggleBaseLayersExpanded,
+      } = props
       toggleOverlaysExpanded(!overlaysExpanded)
+      if (baseLayersExpanded) {
+        toggleBaseLayersExpanded(!baseLayersExpanded)
+      }
     },
   }),
   observer
@@ -79,7 +95,7 @@ const LayersControl = ({
         <CardContainer>
           <Card>
             <CardHeader onClick={onToggleBaseLayersExpanded}>
-              <CardTitle>Hintergrund</CardTitle>
+              <CardTitle>Hintergrund-Ebene</CardTitle>
               <div>
                 <StyledFontIcon className="material-icons">
                   { baseLayersExpanded ? `expand_less` : `expand_more` }
@@ -93,7 +109,7 @@ const LayersControl = ({
           </Card>
           <Card>
             <CardHeader onClick={onToggleOverlaysExpanded}>
-              <CardTitle>überlagernd</CardTitle>
+              <CardTitle>überlagernde Ebenen</CardTitle>
               <div>
                 <StyledFontIcon className="material-icons">
                   { overlaysExpanded ? `expand_less` : `expand_more` }
