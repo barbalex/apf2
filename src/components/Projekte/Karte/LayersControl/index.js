@@ -23,8 +23,14 @@ const CardContainer = styled.div`
 `
 const Card = styled.div`
   padding-top: 3px;
-  border: 1px solid rgba(0,0,0,0.2);
   color: rgb(48, 48, 48);
+  &:not(:first-of-type) {
+    border-top: 1px solid rgba(0,0,0,0.2);
+  }
+  /*
+  &:not(:last-of-type) {
+    border-bottom: 1px solid rgba(0,0,0,0.2);
+  }*/
 `
 const CardHeader = styled.div`
   display: flex;

@@ -16,10 +16,12 @@ const DragHandleIcon = styled(FontIcon)`
   cursor: grab;
 `
 const LayerDiv = styled.div`
-  border-bottom: 1px solid #ececec;
   display: flex;
   justify-content: space-between;
   padding-top: 4px;
+  &:not(:last-of-type) {
+    border-bottom: 1px solid #ececec;
+  }
 `
 const Input = styled.input`
   margin-right: 4px;
@@ -36,7 +38,10 @@ const Label = styled.label`
  */
 
 const DragHandle = SortableHandle(() =>
-  <DragHandleIcon className="material-icons">
+  <DragHandleIcon
+    className="material-icons"
+    title="ziehen, um Layer zu stapeln"
+  >
     drag_handle
   </DragHandleIcon>
 )
