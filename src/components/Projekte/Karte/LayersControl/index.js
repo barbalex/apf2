@@ -125,6 +125,7 @@ const LayersControl = ({
                  * even when only the sorting changes
                  */
                 overlaysString={store.map.overlaysString}
+                assigning={store.map.beob.assigning}
               />
             }
           </Card>

@@ -52,7 +52,7 @@ export default (store) => {
         const marker = window.L.marker(latLng, {
           title,
           icon,
-        // }).bindPopup(title)
+          draggable: store.map.beob.assigning,
       }).bindPopup(ReactDOMServer.renderToStaticMarkup(<TpopPopup store={store} pop={pop} tpop={p} />))
           .bindTooltip(tooltipText, tooltipOptions)
         markers.addLayer(marker)

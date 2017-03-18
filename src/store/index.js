@@ -334,6 +334,10 @@ function Store() {
     markersClustered: computed(() =>
       getBeobMarkersClustered(this)
     ),
+    assigning: false,
+    toggleAssigning: action(() =>
+      this.map.beob.assigning = !this.map.beob.assigning
+    ),
   })
   extendObservable(this.map.beobNichtBeurteilt, {
     highlightedIds: computed(() => (
