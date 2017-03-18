@@ -5,13 +5,13 @@ export default (store) => {
   const { idOfTpopBeingLocalized } = store.map.tpop
   if (idOfTpopBeingLocalized) {
     return store.map.tpop.bounds
-  } if (store.map.activeOverlays.includes(`TpopBeob`)) {
+  } if (store.map.activeApfloraLayers.includes(`TpopBeob`)) {
     return store.map.tpopBeob.bounds
   } else if (
-    !store.map.activeOverlays.includes(`Pop`) &&
-    !store.map.activeOverlays.includes(`Tpop`) &&
-    !store.map.activeOverlays.includes(`BeobNichtZuzuordnen`) &&
-    !store.map.activeOverlays.includes(`BeobNichtBeurteilt`)
+    !store.map.activeApfloraLayers.includes(`Pop`) &&
+    !store.map.activeApfloraLayers.includes(`Tpop`) &&
+    !store.map.activeApfloraLayers.includes(`BeobNichtZuzuordnen`) &&
+    !store.map.activeApfloraLayers.includes(`BeobNichtBeurteilt`)
   ) {
     return ktZhBounds
   } else {
@@ -20,16 +20,16 @@ export default (store) => {
     const beobNichtZuzuordnenBounds = store.map.beobNichtZuzuordnen.bounds
     const beobNichtBeurteiltBounds = store.map.beobNichtBeurteilt.bounds
     const boundsToUse = []
-    if (store.map.activeOverlays.includes(`Pop`) && popBounds) {
+    if (store.map.activeApfloraLayers.includes(`Pop`) && popBounds) {
       boundsToUse.push(popBounds)
     }
-    if (store.map.activeOverlays.includes(`Tpop`) && tpopBounds) {
+    if (store.map.activeApfloraLayers.includes(`Tpop`) && tpopBounds) {
       boundsToUse.push(tpopBounds)
     }
-    if (store.map.activeOverlays.includes(`BeobNichtZuzuordnen`) && beobNichtZuzuordnenBounds) {
+    if (store.map.activeApfloraLayers.includes(`BeobNichtZuzuordnen`) && beobNichtZuzuordnenBounds) {
       boundsToUse.push(beobNichtZuzuordnenBounds)
     }
-    if (store.map.activeOverlays.includes(`BeobNichtBeurteilt`) && beobNichtBeurteiltBounds) {
+    if (store.map.activeApfloraLayers.includes(`BeobNichtBeurteilt`) && beobNichtBeurteiltBounds) {
       boundsToUse.push(beobNichtBeurteiltBounds)
     }
     if (boundsToUse.length === 0) {

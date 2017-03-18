@@ -11,6 +11,7 @@ import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme'
 import FontIcon from 'material-ui/FontIcon'
 
 import Overlays from './Overlays'
+import ApfloraLayers from './ApfloraLayers'
 import BaseLayers from './BaseLayers'
 
 const theme = Object.assign({}, baseTheme)
@@ -53,6 +54,7 @@ const enhance = compose(
   inject(`store`),
   withState(`baseLayersExpanded`, `toggleBaseLayersExpanded`, false),
   withState(`overlaysExpanded`, `toggleOverlaysExpanded`, false),
+  withState(`apfloraLayersExpanded`, `toggleApfloraLayersExpanded`, false),
   withHandlers({
     onToggleBaseLayersExpanded: props => () => {
       const {
@@ -60,10 +62,15 @@ const enhance = compose(
         baseLayersExpanded,
         toggleOverlaysExpanded,
         toggleBaseLayersExpanded,
+        toggleApfloraLayersExpanded,
+        apfloraLayersExpanded,
       } = props
       toggleBaseLayersExpanded(!baseLayersExpanded)
       if (overlaysExpanded) {
         toggleOverlaysExpanded(!overlaysExpanded)
+      }
+      if (apfloraLayersExpanded) {
+        toggleApfloraLayersExpanded(!apfloraLayersExpanded)
       }
     },
     onToggleOverlaysExpanded: props => () => {
@@ -72,8 +79,30 @@ const enhance = compose(
         baseLayersExpanded,
         toggleOverlaysExpanded,
         toggleBaseLayersExpanded,
+        toggleApfloraLayersExpanded,
+        apfloraLayersExpanded,
       } = props
       toggleOverlaysExpanded(!overlaysExpanded)
+      if (baseLayersExpanded) {
+        toggleBaseLayersExpanded(!baseLayersExpanded)
+      }
+      if (apfloraLayersExpanded) {
+        toggleApfloraLayersExpanded(!apfloraLayersExpanded)
+      }
+    },
+    onToggleApfloraLayersExpanded: props => () => {
+      const {
+        overlaysExpanded,
+        baseLayersExpanded,
+        toggleOverlaysExpanded,
+        toggleBaseLayersExpanded,
+        toggleApfloraLayersExpanded,
+        apfloraLayersExpanded,
+      } = props
+      toggleApfloraLayersExpanded(!apfloraLayersExpanded)
+      if (overlaysExpanded) {
+        toggleOverlaysExpanded(!overlaysExpanded)
+      }
       if (baseLayersExpanded) {
         toggleBaseLayersExpanded(!baseLayersExpanded)
       }
@@ -86,30 +115,40 @@ const LayersControl = ({
   store,
   baseLayersExpanded,
   overlaysExpanded,
+  apfloraLayersExpanded,
   onToggleBaseLayersExpanded,
   onToggleOverlaysExpanded,
+  onToggleApfloraLayersExpanded,
 }) => {
   return (
     <Control position="topright">
       <MuiThemeProvider muiTheme={getMuiTheme(theme)}>
         <CardContainer>
           <Card>
-            <CardHeader onClick={onToggleBaseLayersExpanded}>
-              <CardTitle>Hintergrund-Ebene</CardTitle>
+            <CardHeader onClick={onToggleApfloraLayersExpanded}>
+              <CardTitle>apflora</CardTitle>
               <div>
                 <StyledFontIcon className="material-icons">
-                  { baseLayersExpanded ? `expand_less` : `expand_more` }
+                  { apfloraLayersExpanded ? `expand_less` : `expand_more` }
                 </StyledFontIcon>
               </div>
             </CardHeader>
             {
-              baseLayersExpanded &&
-              <BaseLayers store={store} />
+              apfloraLayersExpanded &&
+              <ApfloraLayers
+                store={store}
+                /**
+                 * overlaysString enforces rererender
+                 * even when only the sorting changes
+                 */
+                apfloraLayersString={store.map.apfloraLayersString}
+                assigning={store.map.beob.assigning}
+              />
             }
           </Card>
           <Card>
             <CardHeader onClick={onToggleOverlaysExpanded}>
-              <CardTitle>überlagernde Ebenen</CardTitle>
+              <CardTitle>überlagernd</CardTitle>
               <div>
                 <StyledFontIcon className="material-icons">
                   { overlaysExpanded ? `expand_less` : `expand_more` }
@@ -127,6 +166,20 @@ const LayersControl = ({
                 overlaysString={store.map.overlaysString}
                 assigning={store.map.beob.assigning}
               />
+            }
+          </Card>
+          <Card>
+            <CardHeader onClick={onToggleBaseLayersExpanded}>
+              <CardTitle>Hintergrund</CardTitle>
+              <div>
+                <StyledFontIcon className="material-icons">
+                  { baseLayersExpanded ? `expand_less` : `expand_more` }
+                </StyledFontIcon>
+              </div>
+            </CardHeader>
+            {
+              baseLayersExpanded &&
+              <BaseLayers store={store} />
             }
           </Card>
         </CardContainer>

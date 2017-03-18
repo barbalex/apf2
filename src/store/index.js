@@ -256,20 +256,16 @@ function Store() {
       return []
     }),
     activeBaseLayer: `OsmColor`,
+    setActiveBaseLayer: action((layer) => this.map.activeBaseLayer = layer),
     overlays: observable([
       { label: `ZH Übersichtsplan`, value: `ZhUep` },
       { label: `Detailplaene`, value: `Detailplaene` },
       { label: `ZH Gemeindegrenzen`, value: `ZhGemeindegrenzen` },
-      { label: `SVO farbig`, value: `ZhSvoColor` },
       { label: `SVO grau`, value: `ZhSvoGrey` },
+      { label: `SVO farbig`, value: `ZhSvoColor` },
       { label: `Lebensraum- und Vegetationskartierungen`, value: `ZhLrVegKartierungen` },
       { label: `Wälder: lichte`, value: `ZhLichteWaelder` },
       { label: `Wälder: Vegetation`, value: `ZhWaelderVegetation` },
-      { label: `apflora: Populationen`, value: `Pop` },
-      { label: `apflora: Teil-Populationen`, value: `Tpop` },
-      { label: `apflora: nicht beurteilte Beobachtungen`, value: `BeobNichtBeurteilt` },
-      { label: `apflora: nicht zuzuordnende Beobachtungen`, value: `BeobNichtZuzuordnen` },
-      { label: `apflora: zugeordnete Beobachtungen`, value: `TpopBeob` },
     ]),
     overlaysString: computed(() => this.map.overlays.map(o => o.value).join()),
     moveOverlay: action(({ oldIndex, newIndex }) =>
@@ -292,10 +288,31 @@ function Store() {
       )
     ),
     activeOverlaysSortedString: computed(() => this.map.activeOverlaysSorted.join()),
-    setActiveBaseLayer: action((layer) => this.map.activeBaseLayer = layer),
     addActiveOverlay: action(layer => this.map.activeOverlays.push(layer)),
     removeActiveOverlay: action((layer) => {
       this.map.activeOverlays = this.map.activeOverlays.filter(o => o !== layer)
+    }),
+    apfloraLayers: observable([
+      { label: `apflora: Populationen`, value: `Pop` },
+      { label: `apflora: Teil-Populationen`, value: `Tpop` },
+      { label: `apflora: nicht beurteilte Beobachtungen`, value: `BeobNichtBeurteilt` },
+      { label: `apflora: nicht zuzuordnende Beobachtungen`, value: `BeobNichtZuzuordnen` },
+      { label: `apflora: zugeordnete Beobachtungen`, value: `TpopBeob` },
+    ]),
+    apfloraLayersString: computed(() => this.map.apfloraLayers.map(o => o.value).join()),
+    moveApfloraLayer: action(({ oldIndex, newIndex }) =>
+      this.map.apfloraLayers.splice(newIndex, 0, this.map.apfloraLayers.splice(oldIndex, 1)[0])
+    ),
+    activeApfloraLayers: [],
+    activeApfloraLayersSorted: computed(() =>
+      sortBy(this.map.activeApfloraLayers, (activeApfloraLayer) =>
+        this.map.apfloraLayers.findIndex((apfloraLayer) => apfloraLayer.value === activeApfloraLayer)
+      )
+    ),
+    activeApfloraLayersSortedString: computed(() => this.map.activeApfloraLayersSorted.join()),
+    addActiveApfloraLayer: action(layer => this.map.activeApfloraLayers.push(layer)),
+    removeActiveApfloraLayer: action((layer) => {
+      this.map.activeApfloraLayers = this.map.activeApfloraLayers.filter(o => o !== layer)
     }),
   })
   extendObservable(this.map.pop, {
@@ -605,11 +622,11 @@ extendObservable(
       `reactWhenUrlHasChanged`,
       () => {
         // need to pass visibility of layers to make data fetched on changing layers
-        const showTpop = MyStore.map.activeOverlays.includes(`Tpop`)
-        const showPop = MyStore.map.activeOverlays.includes(`Pop`)
-        const showTpopBeob = MyStore.map.activeOverlays.includes(`TpopBeob`)
-        const showBeobNichtBeurteilt = MyStore.map.activeOverlays.includes(`BeobNichtBeurteilt`)
-        const showBeobNichtZuzuordnen = MyStore.map.activeOverlays.includes(`BeobNichtZuzuordnen`)
+        const showTpop = MyStore.map.activeApfloraLayers.includes(`Tpop`)
+        const showPop = MyStore.map.activeApfloraLayers.includes(`Pop`)
+        const showTpopBeob = MyStore.map.activeApfloraLayers.includes(`TpopBeob`)
+        const showBeobNichtBeurteilt = MyStore.map.activeApfloraLayers.includes(`BeobNichtBeurteilt`)
+        const showBeobNichtZuzuordnen = MyStore.map.activeApfloraLayers.includes(`BeobNichtZuzuordnen`)
         fetchDataForActiveUrlElements(MyStore, showPop, showTpop, showTpopBeob, showBeobNichtBeurteilt, showBeobNichtZuzuordnen)
       }
     ),

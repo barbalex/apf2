@@ -10,7 +10,7 @@ import BeobPopup from '../components/Projekte/Karte/BeobPopup'
 
 export default (store) => {
   const { beobs, highlightedIds } = store.map.tpopBeob
-  const visible = store.map.activeOverlays.includes(`TpopBeob`)
+  const visible = store.map.activeApfloraLayers.includes(`TpopBeob`)
   const mcgOptions = {
     maxClusterRadius: 66,
     iconCreateFunction: function (cluster) {
@@ -42,6 +42,7 @@ export default (store) => {
       const marker = window.L.marker(latLng, {
         title,
         icon,
+        draggable: store.map.beob.assigning,
       }).bindPopup(ReactDOMServer.renderToStaticMarkup(<BeobPopup store={store} beobBereitgestellt={p} />))
         .bindTooltip(tooltipText, tooltipOptions)
       markers.addLayer(marker)

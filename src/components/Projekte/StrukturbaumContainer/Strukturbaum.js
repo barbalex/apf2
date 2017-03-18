@@ -183,66 +183,66 @@ class Strukturbaum extends Component {
     const showPopMapIcon = (
       node.menuType === `ap` &&
       node.id === (store.activeUrlElements.ap || store.map.pop.apArtId) &&
-      store.map.activeOverlays.includes(`Pop`)
+      store.map.activeApfloraLayers.includes(`Pop`)
     )
     const showPopFilteredMapIcon = (
       node.menuType === `pop` &&
-      store.map.activeOverlays.includes(`Pop`) &&
+      store.map.activeApfloraLayers.includes(`Pop`) &&
       store.map.pop.highlightedIds.includes(node.id)
     )
     const showTpopMapIcon = (
       node.menuType === `ap` &&
       node.id === (store.activeUrlElements.ap || store.map.pop.apArtId) &&
-      store.map.activeOverlays.includes(`Tpop`)
+      store.map.activeApfloraLayers.includes(`Tpop`)
     )
     const showTpopFilteredMapIcon = (
       node.menuType === `tpop` &&
-      store.map.activeOverlays.includes(`Tpop`) &&
+      store.map.activeApfloraLayers.includes(`Tpop`) &&
       store.map.tpop.highlightedIds.includes(node.id)
     )
     const showBeobMapIcon = (
       (
         node.menuType === `beobNichtZuzuordnenFolder` &&
         node.id === store.activeUrlElements.ap &&
-        store.map.activeOverlays.includes(`BeobNichtZuzuordnen`)
+        store.map.activeApfloraLayers.includes(`BeobNichtZuzuordnen`)
       ) ||
       (
         node.menuType === `beobzuordnungFolder` &&
         node.id === store.activeUrlElements.ap &&
-        store.map.activeOverlays.includes(`BeobNichtBeurteilt`)
+        store.map.activeApfloraLayers.includes(`BeobNichtBeurteilt`)
       ) ||
       (
         node.menuType === `tpopbeobFolder` &&
         node.id === store.activeUrlElements.tpop &&
-        store.map.activeOverlays.includes(`TpopBeob`)
+        store.map.activeApfloraLayers.includes(`TpopBeob`)
       )
     )
     const showBeobFilteredMapIcon = (
       (
         node.menuType === `tpopbeob` &&
-        store.map.activeOverlays.includes(`TpopBeob`) &&
+        store.map.activeApfloraLayers.includes(`TpopBeob`) &&
         store.map.tpopBeob.highlightedIds.includes(node.id)
       ) ||
       (
         node.menuType === `beobzuordnung` &&
-        store.map.activeOverlays.includes(`BeobNichtBeurteilt`) &&
+        store.map.activeApfloraLayers.includes(`BeobNichtBeurteilt`) &&
         store.map.beobNichtBeurteilt.highlightedIds.includes(node.id)
       ) ||
       (
         node.menuType === `beobNichtZuzuordnen` &&
-        store.map.activeOverlays.includes(`BeobNichtZuzuordnen`) &&
+        store.map.activeApfloraLayers.includes(`BeobNichtZuzuordnen`) &&
         store.map.beobNichtZuzuordnen.highlightedIds.includes(node.id)
       ) ||
       (
         node.menuType === `tpop` &&
         !store.activeUrlElements.tpopbeob &&
-        store.map.activeOverlays.includes(`TpopBeob`) &&
+        store.map.activeApfloraLayers.includes(`TpopBeob`) &&
         node.id === store.activeUrlElements.tpop
       ) ||
       (
         node.menuType === `pop` &&
         !store.activeUrlElements.tpop &&
-        store.map.activeOverlays.includes(`TpopBeob`) &&
+        store.map.activeApfloraLayers.includes(`TpopBeob`) &&
         node.id === store.activeUrlElements.pop
       )
     )

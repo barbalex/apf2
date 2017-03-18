@@ -49,8 +49,8 @@ const Ap = (
     </MenuItem>
     {
       (
-        store.map.activeOverlays.includes(`Pop`) ||
-        store.map.activeOverlays.includes(`Tpop`)
+        store.map.activeApfloraLayers.includes(`Pop`) ||
+        store.map.activeApfloraLayers.includes(`Tpop`)
       ) &&
       <div>
         <div className="react-contextmenu-divider" />
@@ -58,7 +58,7 @@ const Ap = (
       </div>
     }
     {
-      store.map.activeOverlays.includes(`Pop`) &&
+      store.map.activeApfloraLayers.includes(`Pop`) &&
       <MenuItem
         onClick={onClick}
         data={{
@@ -74,7 +74,7 @@ const Ap = (
       </MenuItem>
     }
     {
-      store.map.activeOverlays.includes(`Tpop`) &&
+      store.map.activeApfloraLayers.includes(`Tpop`) &&
       <MenuItem
         onClick={onClick}
         data={{

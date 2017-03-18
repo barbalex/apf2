@@ -14,7 +14,7 @@ import PopPopup from '../components/Projekte/Karte/PopPopup'
 
 export default (store) => {
   const { pops, labelUsingNr, highlightedIds } = store.map.pop
-  const visible = store.map.activeOverlays.includes(`Pop`)
+  const visible = store.map.activeApfloraLayers.includes(`Pop`)
   const mcgOptions = {
     maxClusterRadius: 66,
     iconCreateFunction: function (cluster) {

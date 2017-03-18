@@ -10,7 +10,7 @@ import BeobPopup from '../components/Projekte/Karte/BeobPopup'
 
 export default (store) => {
   const { beobs, highlightedIds } = store.map.beobNichtZuzuordnen
-  const visible = store.map.activeOverlays.includes(`BeobNichtZuzuordnen`)
+  const visible = store.map.activeApfloraLayers.includes(`BeobNichtZuzuordnen`)
   const mcgOptions = {
     maxClusterRadius: 66,
     iconCreateFunction: function (cluster) {

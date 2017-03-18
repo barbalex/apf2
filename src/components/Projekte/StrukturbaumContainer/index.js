@@ -222,11 +222,11 @@ class StrukturbaumContainer extends Component { // eslint-disable-line react/pre
           ref={(c) => { this.tree = c }}
         >
           <Strukturbaum
-            mapTpopBeobVisible={store.map.activeOverlays.includes(`TpopBeob`)}
-            mapBeobNichtBeurteiltVisible={store.map.activeOverlays.includes(`BeobNichtBeurteilt`)}
-            mapBeobNichtZuzuordnenVisible={store.map.activeOverlays.includes(`BeobNichtZuzuordnen`)}
-            mapPopVisible={store.map.activeOverlays.includes(`Pop`)}
-            mapTpopVisible={store.map.activeOverlays.includes(`Tpop`)}
+            mapTpopBeobVisible={store.map.activeApfloraLayers.includes(`TpopBeob`)}
+            mapBeobNichtBeurteiltVisible={store.map.activeApfloraLayers.includes(`BeobNichtBeurteilt`)}
+            mapBeobNichtZuzuordnenVisible={store.map.activeApfloraLayers.includes(`BeobNichtZuzuordnen`)}
+            mapPopVisible={store.map.activeApfloraLayers.includes(`Pop`)}
+            mapTpopVisible={store.map.activeApfloraLayers.includes(`Tpop`)}
           />
         </div>
         <CmApFolder onClick={this.handleClick} />

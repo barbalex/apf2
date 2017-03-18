@@ -10,7 +10,7 @@ import TpopPopup from '../components/Projekte/Karte/TpopPopup'
 
 export default (store) => {
   const { tpops, labelUsingNr, highlightedIds } = store.map.tpop
-  const visible = store.map.activeOverlays.includes(`Tpop`)
+  const visible = store.map.activeApfloraLayers.includes(`Tpop`)
   const mcgOptions = {
     maxClusterRadius: 66,
     iconCreateFunction: function (cluster) {
@@ -52,7 +52,6 @@ export default (store) => {
         const marker = window.L.marker(latLng, {
           title,
           icon,
-          draggable: store.map.beob.assigning,
       }).bindPopup(ReactDOMServer.renderToStaticMarkup(<TpopPopup store={store} pop={pop} tpop={p} />))
           .bindTooltip(tooltipText, tooltipOptions)
         markers.addLayer(marker)

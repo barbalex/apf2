@@ -10,7 +10,7 @@ import BeobPopup from '../components/Projekte/Karte/BeobPopup'
 
 export default (store) => {
   const { beobs, highlightedIds } = store.map.beobNichtBeurteilt
-  const visible = store.map.activeOverlays.includes(`BeobNichtBeurteilt`)
+  const visible = store.map.activeApfloraLayers.includes(`BeobNichtBeurteilt`)
   const mcgOptions = {
     maxClusterRadius: 66,
     iconCreateFunction: function (cluster) {
@@ -36,6 +36,7 @@ export default (store) => {
       const marker = window.L.marker(latLng, {
         title,
         icon,
+        draggable: store.map.beob.assigning,
       }).bindPopup(ReactDOMServer.renderToStaticMarkup(<BeobPopup store={store} beobBereitgestellt={p} />))
       markers.addLayer(marker)
     })

@@ -136,6 +136,40 @@ class Karte extends Component {
      * need an object whose methods return overlays
      * in order to dynamically display active overlays
      */
+    const ApfloraLayerComponents = {
+      Pop: () => <Pop
+        highlightedIds={toJS(store.map.pop.highlightedIds)}
+        labelUsingNr={store.map.pop.labelUsingNr}
+        pops={store.map.pop.pops}
+        visible={store.map.activeApfloraLayers.includes(`Pop`)}
+        markers={popMarkers}
+      />,
+      Tpop: () => <Tpop
+        highlightedIds={toJS(store.map.tpop.highlightedIds)}
+        labelUsingNr={store.map.tpop.labelUsingNr}
+        tpops={store.map.tpop.tpops}
+        visible={store.map.activeApfloraLayers.includes(`Tpop`)}
+        markers={tpopMarkers}
+      />,
+      BeobNichtBeurteilt: () => <Beob
+        highlightedIds={toJS(store.map.beobNichtBeurteilt.highlightedIds)}
+        beobs={store.map.beobNichtBeurteilt.beobs}
+        visible={store.map.activeApfloraLayers.includes(`BeobNichtBeurteilt`)}
+        markers={beobNichtBeurteiltMarkers}
+      />,
+      BeobNichtZuzuordnen: () => <Beob
+        highlightedIds={toJS(store.map.beobNichtZuzuordnen.highlightedIds)}
+        beobs={store.map.beobNichtZuzuordnen.beobs}
+        visible={store.map.activeApfloraLayers.includes(`BeobNichtZuzuordnen`)}
+        markers={beobNichtZuzuordnenMarkers}
+      />,
+      TpopBeob: () => <Beob
+        highlightedIds={toJS(store.map.tpopBeob.highlightedIds)}
+        beobs={store.map.tpopBeob.beobs}
+        visible={store.map.activeApfloraLayers.includes(`TpopBeob`)}
+        markers={tpopBeobMarkers}
+      />,
+    }
     const OverlayComponents = {
       ZhUep: () => <ZhUep />,
       Detailplaene: () => <Detailplaene />,
@@ -145,38 +179,6 @@ class Karte extends Component {
       ZhLrVegKartierungen: () => <ZhLrVegKartierungen />,
       ZhLichteWaelder: () => <ZhLichteWaelder />,
       ZhWaelderVegetation: () => <ZhWaelderVegetation />,
-      Pop: () => <Pop
-        highlightedIds={toJS(store.map.pop.highlightedIds)}
-        labelUsingNr={store.map.pop.labelUsingNr}
-        pops={store.map.pop.pops}
-        visible={store.map.activeOverlays.includes(`Pop`)}
-        markers={popMarkers}
-      />,
-      Tpop: () => <Tpop
-        highlightedIds={toJS(store.map.tpop.highlightedIds)}
-        labelUsingNr={store.map.tpop.labelUsingNr}
-        tpops={store.map.tpop.tpops}
-        visible={store.map.activeOverlays.includes(`Tpop`)}
-        markers={tpopMarkers}
-      />,
-      BeobNichtBeurteilt: () => <Beob
-        highlightedIds={toJS(store.map.beobNichtBeurteilt.highlightedIds)}
-        beobs={store.map.beobNichtBeurteilt.beobs}
-        visible={store.map.activeOverlays.includes(`BeobNichtBeurteilt`)}
-        markers={beobNichtBeurteiltMarkers}
-      />,
-      BeobNichtZuzuordnen: () => <Beob
-        highlightedIds={toJS(store.map.beobNichtZuzuordnen.highlightedIds)}
-        beobs={store.map.beobNichtZuzuordnen.beobs}
-        visible={store.map.activeOverlays.includes(`BeobNichtZuzuordnen`)}
-        markers={beobNichtZuzuordnenMarkers}
-      />,
-      TpopBeob: () => <Beob
-        highlightedIds={toJS(store.map.tpopBeob.highlightedIds)}
-        beobs={store.map.tpopBeob.beobs}
-        visible={store.map.activeOverlays.includes(`TpopBeob`)}
-        markers={tpopBeobMarkers}
-      />,
     }
 
     return (
@@ -258,12 +260,19 @@ class Karte extends Component {
           store.map.activeOverlaysSorted.map((overlayName, index) => {
             const MyComponent = OverlayComponents[overlayName]
             return <MyComponent key={index} />
-          })
+          }).reverse()
+        }
+        {
+          store.map.activeApfloraLayersSorted.map((apfloraLayerName, index) => {
+            const MyComponent = ApfloraLayerComponents[apfloraLayerName]
+            return <MyComponent key={index} />
+          }).reverse()
         }
         <ScaleControl imperial={false} />
         <LayersControl
           // this enforces rerendering when sorting changes
           activeOverlaysSortedString={store.map.activeOverlaysSortedString}
+          activeApfloraLayersSortedString={store.map.activeApfloraLayersSortedString}
         />
         <MeasureControl />
         <PrintControl />

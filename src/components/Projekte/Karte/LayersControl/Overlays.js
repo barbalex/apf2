@@ -15,9 +15,6 @@ const DragHandleIcon = styled(FontIcon)`
   color: #7b7b7b !important;
   cursor: grab;
 `
-const ZuordnenIcon = styled(FontIcon)`
-  font-size: 18px !important;
-`
 const LayerDiv = styled.div`
   display: flex;
   justify-content: space-between;
@@ -38,9 +35,6 @@ const LayerDiv = styled.div`
 `
 const IconsDiv = styled.div`
   display: flex;
-`
-const ZuordnenDiv = styled.div`
-  padding-right: 3px;
 `
 const Input = styled.input`
   margin-right: 4px;
@@ -64,64 +58,30 @@ const DragHandle = SortableHandle(() =>
     drag_handle
   </DragHandleIcon>
 )
-const SortableItem = SortableElement(({ overlay, store, activeOverlays }) => {
-  const assigningIsPossible = (
-    store.map.activeOverlays.includes(`Tpop`) &&
-    (
-      (
-        store.map.activeOverlays.includes(`BeobNichtBeurteilt`) &&
-        overlay.value === `BeobNichtBeurteilt`
-      ) ||
-      (
-        store.map.activeOverlays.includes(`TpopBeob`) &&
-        overlay.value === `TpopBeob`
-      )
-    )
-  )
-  return (
-    <LayerDiv>
-      <Label>
-        <Input
-          type="checkbox"
-          value={overlay.value}
-          checked={activeOverlays.includes(overlay.value)}
-          onChange={() => {
-            if (activeOverlays.includes(overlay.value)) {
-              return store.map.removeActiveOverlay(overlay.value)
-            }
-            return store.map.addActiveOverlay(overlay.value)
-          }}
-        />
-        {overlay.label}
-      </Label>
-      <IconsDiv>
-        {
-          [`BeobNichtBeurteilt`, `TpopBeob`].includes(overlay.value) &&
-          <ZuordnenDiv>
-            <ZuordnenIcon
-              className="material-icons"
-              title={store.map.beob.assigning ? `Zuordnung beenden` : `Teil-Populationen zuordnen`}
-              style={{
-                color: assigningIsPossible ? `black` : `#e2e2e2`,
-                cursor: assigningIsPossible ? `pointer` : `inherit`,
-              }}
-              onClick={() => {
-                if (store.map.activeOverlays.includes(`Tpop`)) {
-                  store.map.beob.toggleAssigning()
-                }
-              }}
-            >
-              { store.map.beob.assigning ? `pause_circle_outline` : `play_circle_outline` }
-            </ZuordnenIcon>
-          </ZuordnenDiv>
-        }
-        <div>
-          <DragHandle />
-        </div>
-      </IconsDiv>
-    </LayerDiv>
+const SortableItem = SortableElement(({ overlay, store, activeOverlays }) =>
+  <LayerDiv>
+    <Label>
+      <Input
+        type="checkbox"
+        value={overlay.value}
+        checked={activeOverlays.includes(overlay.value)}
+        onChange={() => {
+          if (activeOverlays.includes(overlay.value)) {
+            return store.map.removeActiveOverlay(overlay.value)
+          }
+          return store.map.addActiveOverlay(overlay.value)
+        }}
+      />
+      {overlay.label}
+    </Label>
+    <IconsDiv>
+      <div>
+        <DragHandle />
+      </div>
+    </IconsDiv>
+  </LayerDiv>
 )
-})
+
 const SortableList = SortableContainer(({ items, store, activeOverlays }) =>
   <div>
     {

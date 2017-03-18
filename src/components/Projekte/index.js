@@ -72,6 +72,8 @@ const Projekte = ({ store }) => {
               activeOverlays={store.map.activeOverlays}
               // activeOverlaysSortedString enforces rerendering when sorting changes
               activeOverlaysSortedString={store.map.activeOverlaysSortedString}
+              activeApfloraLayers={store.map.activeApfloraLayers}
+              activeApfloraLayersSortedString={store.map.activeApfloraLayersSortedString}
             />
           </KarteContainer>
         }
