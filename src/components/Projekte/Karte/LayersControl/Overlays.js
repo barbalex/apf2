@@ -22,6 +22,16 @@ const LayerDiv = styled.div`
   &:not(:last-of-type) {
     border-bottom: 1px solid #ececec;
   }
+  /*
+   * z-index is needed because leaflet
+   * sets high one for controls
+   */
+  z-index: 2000;
+  /*
+   * font-size is lost while moving a layer
+   * because it is inherited from higher up
+   */
+  font-size: 12px;
 `
 const Input = styled.input`
   margin-right: 4px;
@@ -76,7 +86,7 @@ const SortableList = SortableContainer(({ items, store, activeOverlays }) =>
           overlay={overlay}
           store={store}
           activeOverlays={activeOverlays}
-          // style={{ zIndex: `100000 !important`, color: `black` }}
+          style={{ zIndex: 100000, color: `black` }}
         />
       )
     }

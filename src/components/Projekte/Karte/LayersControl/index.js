@@ -35,7 +35,7 @@ const Card = styled.div`
 const CardHeader = styled.div`
   display: flex;
   justify-content: space-between;
-  padding-left: 5px;
+  padding-left: 7px;
   padding-right: 5px;
   border-bottom: 1px solid rgba(0,0,0,0.2);
   cursor: pointer;
