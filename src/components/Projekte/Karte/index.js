@@ -261,7 +261,10 @@ class Karte extends Component {
           })
         }
         <ScaleControl imperial={false} />
-        <LayersControl />
+        <LayersControl
+          // this enforces rerendering when sorting changes
+          activeOverlaysSortedString={store.map.activeOverlaysSortedString}
+        />
         <MeasureControl />
         <PrintControl />
         <PngControl />

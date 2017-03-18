@@ -118,7 +118,14 @@ const LayersControl = ({
             </CardHeader>
             {
               overlaysExpanded &&
-              <Overlays store={store} />
+              <Overlays
+                store={store}
+                /**
+                 * overlaysString enforces rererender
+                 * even when only the sorting changes
+                 */
+                overlaysString={store.map.overlaysString}
+              />
             }
           </Card>
         </CardContainer>

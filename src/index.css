@@ -242,11 +242,6 @@ body.fontLoaded {
   height: 44px;
 }
 
-#react-sortable-hoc
-.sortableHelper {
-   z-index: 10000 !important;
-}
-
 @media print {
   .leaflet-control-container {
     display: none !important;

@@ -271,6 +271,7 @@ function Store() {
       { label: `apflora: nicht zuzuordnende Beobachtungen`, value: `BeobNichtZuzuordnen` },
       { label: `apflora: zugeordnete Beobachtungen`, value: `TpopBeob` },
     ]),
+    overlaysString: computed(() => this.map.overlays.map(o => o.value).join()),
     moveOverlay: action(({ oldIndex, newIndex }) =>
     /**
      * need to move array elements in overlays array
