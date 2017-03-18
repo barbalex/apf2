@@ -8,6 +8,7 @@ import {
   observable,
 } from 'mobx'
 import $ from 'jquery'
+import sortBy from 'lodash/sortBy'
 
 import fetchTable from '../modules/fetchTable'
 import fetchBeobzuordnungModule from '../modules/fetchBeobzuordnung'
@@ -239,6 +240,7 @@ function Store() {
     tpopBeob: {},
     activeBaseLayer: `OsmColor`,
     activeOverlays: [],
+    activeOverlaysSorted: [],
     overlays: [],
     addActiveOverlay: () => {},
     removeActiveOverlay: () => {},
@@ -263,11 +265,11 @@ function Store() {
       { label: `Lebensraum- und Vegetationskartierungen`, value: `ZhLrVegKartierungen` },
       { label: `Wälder: lichte`, value: `ZhLichteWaelder` },
       { label: `Wälder: Vegetation`, value: `ZhWaelderVegetation` },
-      { label: `apflora: Populationen`, value: `pop` },
-      { label: `apflora: Teil-Populationen`, value: `tpop` },
-      { label: `apflora: nicht beurteilte Beobachtungen`, value: `beobNichtBeurteilt` },
-      { label: `apflora: nicht zuzuordnende Beobachtungen`, value: `beobNichtZuzuordnen` },
-      { label: `apflora: zugeordnete Beobachtungen`, value: `tpopBeob` },
+      { label: `apflora: Populationen`, value: `Pop` },
+      { label: `apflora: Teil-Populationen`, value: `Tpop` },
+      { label: `apflora: nicht beurteilte Beobachtungen`, value: `BeobNichtBeurteilt` },
+      { label: `apflora: nicht zuzuordnende Beobachtungen`, value: `BeobNichtZuzuordnen` },
+      { label: `apflora: zugeordnete Beobachtungen`, value: `TpopBeob` },
     ]),
     moveOverlay: action(({ oldIndex, newIndex }) =>
     /**
@@ -283,11 +285,15 @@ function Store() {
       this.map.overlays.splice(newIndex, 0, this.map.overlays.splice(oldIndex, 1)[0])
     ),
     activeOverlays: [],
+    activeOverlaysSorted: computed(() =>
+      sortBy(this.map.activeOverlays, (activeOverlay) =>
+        this.map.overlays.findIndex((overlay) =>
+          overlay.value === activeOverlay
+        )
+      )
+    ),
     setActiveBaseLayer: action((layer) => this.map.activeBaseLayer = layer),
-    addActiveOverlay: action((layer, indexPassed) => {
-      const index = indexPassed || this.map.activeOverlays.length
-      this.map.activeOverlays.splice(index, 0, layer)
-    }),
+    addActiveOverlay: action(layer => this.map.activeOverlays.push(layer)),
     removeActiveOverlay: action((layer) => {
       this.map.activeOverlays = this.map.activeOverlays.filter(o => o !== layer)
     }),
@@ -595,11 +601,11 @@ extendObservable(
       `reactWhenUrlHasChanged`,
       () => {
         // need to pass visibility of layers to make data fetched on changing layers
-        const showTpop = MyStore.map.activeOverlays.includes(`tpop`)
-        const showPop = MyStore.map.activeOverlays.includes(`pop`)
-        const showTpopBeob = MyStore.map.activeOverlays.includes(`tpopBeob`)
-        const showBeobNichtBeurteilt = MyStore.map.activeOverlays.includes(`beobNichtBeurteilt`)
-        const showBeobNichtZuzuordnen = MyStore.map.activeOverlays.includes(`beobNichtZuzuordnen`)
+        const showTpop = MyStore.map.activeOverlays.includes(`Tpop`)
+        const showPop = MyStore.map.activeOverlays.includes(`Pop`)
+        const showTpopBeob = MyStore.map.activeOverlays.includes(`TpopBeob`)
+        const showBeobNichtBeurteilt = MyStore.map.activeOverlays.includes(`BeobNichtBeurteilt`)
+        const showBeobNichtZuzuordnen = MyStore.map.activeOverlays.includes(`BeobNichtZuzuordnen`)
         fetchDataForActiveUrlElements(MyStore, showPop, showTpop, showTpopBeob, showBeobNichtBeurteilt, showBeobNichtZuzuordnen)
       }
     ),

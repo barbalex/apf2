@@ -45,32 +45,28 @@ const DragHandle = SortableHandle(() =>
     drag_handle
   </DragHandleIcon>
 )
-const SortableItem = SortableElement(({ overlay, store }) => {
-  const activeOverlays = toJS(store.map.activeOverlays)
-
-  return (
-    <LayerDiv>
-      <Label>
-        <Input
-          type="checkbox"
-          value={overlay.value}
-          checked={activeOverlays.includes(overlay.value)}
-          onChange={() => {
-            if (activeOverlays.includes(overlay.value)) {
-              return store.map.removeActiveOverlay(overlay.value)
-            }
-            return store.map.addActiveOverlay(overlay.value)
-          }}
-        />
-        {overlay.label}
-      </Label>
-      <div>
-        <DragHandle />
-      </div>
-    </LayerDiv>
-  )
-})
-const SortableList = SortableContainer(({ items, store }) =>
+const SortableItem = SortableElement(({ overlay, store, activeOverlays }) =>
+  <LayerDiv>
+    <Label>
+      <Input
+        type="checkbox"
+        value={overlay.value}
+        checked={activeOverlays.includes(overlay.value)}
+        onChange={() => {
+          if (activeOverlays.includes(overlay.value)) {
+            return store.map.removeActiveOverlay(overlay.value)
+          }
+          return store.map.addActiveOverlay(overlay.value)
+        }}
+      />
+      {overlay.label}
+    </Label>
+    <div>
+      <DragHandle />
+    </div>
+  </LayerDiv>
+)
+const SortableList = SortableContainer(({ items, store, activeOverlays }) =>
   <div>
     {
       items.map((overlay, index) =>
@@ -79,6 +75,7 @@ const SortableList = SortableContainer(({ items, store }) =>
           index={index}
           overlay={overlay}
           store={store}
+          activeOverlays={activeOverlays}
         />
       )
     }
@@ -86,8 +83,10 @@ const SortableList = SortableContainer(({ items, store }) =>
 )
 
 const Overlays = ({ store }) => {
-
-  console.log(`overlays:`, store.map.overlays.map(o => o.label))
+  const activeOverlays = toJS(store.map.activeOverlays)
+  console.log(`Overlays: overlays:`, toJS(store.map.overlays).map(o => o.value))
+  console.log(`Overlays: activeOverlays:`, activeOverlays)
+  console.log(`Overlays: activeOverlaysSorted:`, toJS(store.map.activeOverlaysSorted))
 
   return (
     <CardContent>
@@ -99,6 +98,7 @@ const Overlays = ({ store }) => {
         useDragHandle
         lockAxis="y"
         store={store}
+        activeOverlays={activeOverlays}
       />
     </CardContent>
   )

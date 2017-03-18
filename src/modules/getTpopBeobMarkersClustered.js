@@ -10,7 +10,7 @@ import BeobPopup from '../components/Projekte/Karte/BeobPopup'
 
 export default (store) => {
   const { beobs, highlightedIds } = store.map.tpopBeob
-  const visible = store.map.activeOverlays.includes(`tpopBeob`)
+  const visible = store.map.activeOverlays.includes(`TpopBeob`)
   const mcgOptions = {
     maxClusterRadius: 66,
     iconCreateFunction: function (cluster) {

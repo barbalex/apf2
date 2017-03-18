@@ -27,15 +27,15 @@ import ZhOrtho from './layers/ZhOrtho'
 import ZhOrthoIr from './layers/ZhOrthoIr'
 import ZhOrtho2015 from './layers/ZhOrtho2015'
 import ZhOrtho2015Ir from './layers/ZhOrtho2015Ir'
-import ZhUep from './layers/ZhUep'
-import DetailplaeneLayer from './layers/Detailplaene'
-import ZhSvoColorLayer from './layers/ZhSvoColor'
-import ZhSvoGreyLayer from './layers/ZhSvoGrey'
+import ZhUepBase from './layers/ZhUep'
+import Detailplaene from './layers/Detailplaene'
+import ZhSvoColor from './layers/ZhSvoColor'
+import ZhSvoGrey from './layers/ZhSvoGrey'
 import ZhLrVegKartierungen from './layers/ZhLrVegKartierungen'
 import ZhLichteWaelder from './layers/ZhLichteWaelder'
 import ZhGemeindegrenzen from './layers/ZhGemeindegrenzen'
 import ZhWaelderVegetation from './layers/ZhWaelderVegetation'
-import ZhUepOverlay from './layers/ZhUepOverlay'
+import ZhUep from './layers/ZhUepOverlay'
 import '../../../../node_modules/leaflet/dist/leaflet.css'
 import '../../../../node_modules/leaflet-measure/dist/leaflet-measure.css'
 import '../../../../node_modules/leaflet.markercluster/dist/MarkerCluster.css'
@@ -194,7 +194,7 @@ class Karte extends Component {
         }
         {
           showZhUep &&
-          <ZhUep />
+          <ZhUepBase />
         }
         {
           showBingAerialLayer &&
@@ -218,11 +218,11 @@ class Karte extends Component {
         }
         {
           showZhUepOverlay &&
-          <ZhUepOverlay />
+          <ZhUep />
         }
         {
           showDetailplaene &&
-          <DetailplaeneLayer />
+          <Detailplaene />
         }
         {
           showZhGemeindegrenzen &&
@@ -230,11 +230,11 @@ class Karte extends Component {
         }
         {
           showZhSvoColor &&
-          <ZhSvoColorLayer />
+          <ZhSvoColor />
         }
         {
           showZhSvoGrey &&
-          <ZhSvoGreyLayer />
+          <ZhSvoGrey />
         }
         {
           showZhLrVegKartierungen &&
@@ -252,32 +252,32 @@ class Karte extends Component {
           highlightedIds={toJS(store.map.pop.highlightedIds)}
           labelUsingNr={store.map.pop.labelUsingNr}
           pops={store.map.pop.pops}
-          visible={store.map.activeOverlays.includes(`pop`)}
+          visible={store.map.activeOverlays.includes(`Pop`)}
           markers={popMarkers}
         />
         <TpopMarkerCluster
           highlightedIds={toJS(store.map.tpop.highlightedIds)}
           labelUsingNr={store.map.tpop.labelUsingNr}
           tpops={store.map.tpop.tpops}
-          visible={store.map.activeOverlays.includes(`tpop`)}
+          visible={store.map.activeOverlays.includes(`Tpop`)}
           markers={tpopMarkers}
         />
         <BeobMarkerCluster
           highlightedIds={toJS(store.map.beobNichtBeurteilt.highlightedIds)}
           beobs={store.map.beobNichtBeurteilt.beobs}
-          visible={store.map.activeOverlays.includes(`beobNichtBeurteilt`)}
+          visible={store.map.activeOverlays.includes(`BeobNichtBeurteilt`)}
           markers={beobNichtBeurteiltMarkers}
         />
         <BeobMarkerCluster
           highlightedIds={toJS(store.map.beobNichtZuzuordnen.highlightedIds)}
           beobs={store.map.beobNichtZuzuordnen.beobs}
-          visible={store.map.activeOverlays.includes(`beobNichtZuzuordnen`)}
+          visible={store.map.activeOverlays.includes(`BeobNichtZuzuordnen`)}
           markers={beobNichtZuzuordnenMarkers}
         />
         <BeobMarkerCluster
           highlightedIds={toJS(store.map.tpopBeob.highlightedIds)}
           beobs={store.map.tpopBeob.beobs}
-          visible={store.map.activeOverlays.includes(`tpopBeob`)}
+          visible={store.map.activeOverlays.includes(`TpopBeob`)}
           markers={tpopBeobMarkers}
         />
         <ScaleControl imperial={false} />
