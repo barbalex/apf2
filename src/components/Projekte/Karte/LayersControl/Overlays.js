@@ -76,6 +76,7 @@ const SortableList = SortableContainer(({ items, store, activeOverlays }) =>
           overlay={overlay}
           store={store}
           activeOverlays={activeOverlays}
+          // style={{ zIndex: `100000 !important`, color: `black` }}
         />
       )
     }
@@ -91,6 +92,7 @@ const Overlays = ({ store }) =>
       }
       useDragHandle
       lockAxis="y"
+      helperClass="sortableHelper"
       store={store}
       activeOverlays={toJS(store.map.activeOverlays)}
     />
