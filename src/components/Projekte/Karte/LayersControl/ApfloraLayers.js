@@ -59,7 +59,7 @@ const Label = styled.label`
 const DragHandle = SortableHandle(() =>
   <DragHandleIcon
     className="material-icons"
-    title="ziehen, um Layer zu stapeln"
+    title="ziehen, um Layer höher/tiefer zu stapeln"
   >
     drag_handle
   </DragHandleIcon>
