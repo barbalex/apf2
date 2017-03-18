@@ -256,7 +256,13 @@ function Store() {
       return []
     }),
     activeBaseLayer: `OsmColor`,
-    setActiveBaseLayer: action((layer) => this.map.activeBaseLayer = layer),
+    setActiveBaseLayer: action((layer) => {
+      if (layer === this.map.activeBaseLayer) {
+        this.map.activeBaseLayer = null
+      } else {
+        this.map.activeBaseLayer = layer
+      }
+    }),
     overlays: observable([
       { label: `ZH Übersichtsplan`, value: `ZhUep` },
       { label: `Detailplaene`, value: `Detailplaene` },
