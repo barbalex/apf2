@@ -287,11 +287,10 @@ function Store() {
     activeOverlays: [],
     activeOverlaysSorted: computed(() =>
       sortBy(this.map.activeOverlays, (activeOverlay) =>
-        this.map.overlays.findIndex((overlay) =>
-          overlay.value === activeOverlay
-        )
+        this.map.overlays.findIndex((overlay) => overlay.value === activeOverlay)
       )
     ),
+    activeOverlaysSortedString: computed(() => this.map.activeOverlaysSorted.join()),
     setActiveBaseLayer: action((layer) => this.map.activeBaseLayer = layer),
     addActiveOverlay: action(layer => this.map.activeOverlays.push(layer)),
     removeActiveOverlay: action((layer) => {

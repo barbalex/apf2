@@ -39,9 +39,9 @@ import ZhUep from './layers/ZhUepOverlay'
 import '../../../../node_modules/leaflet/dist/leaflet.css'
 import '../../../../node_modules/leaflet-measure/dist/leaflet-measure.css'
 import '../../../../node_modules/leaflet.markercluster/dist/MarkerCluster.css'
-import PopMarkerCluster from './layers/PopMarkerCluster'
-import TpopMarkerCluster from './layers/TpopMarkerCluster'
-import BeobMarkerCluster from './layers/BeobMarkerCluster'
+import Pop from './layers/PopMarkerCluster'
+import Tpop from './layers/TpopMarkerCluster'
+import Beob from './layers/BeobMarkerCluster'
 import MeasureControl from './MeasureControl'
 import PrintControl from './PrintControl'
 import PngControl from './PngControl'
@@ -109,7 +109,7 @@ class Karte extends Component {
       changeBounds,
       idOfTpopBeingLocalized,
     } = this.props
-    const { activeBaseLayer, activeOverlays } = store.map
+    const { activeBaseLayer } = store.map
     const MapElement = !!idOfTpopBeingLocalized ? StyledMapLocalizing : StyledMap
     // this does not work
     // see issue on proj4js: https://github.com/proj4js/proj4js/issues/214
@@ -132,14 +132,52 @@ class Karte extends Component {
     const showZhOrthoIr = activeBaseLayer === `ZhOrthoIr`
     const showZhOrtho2015 = activeBaseLayer === `ZhOrtho2015`
     const showZhOrtho2015Ir = activeBaseLayer === `ZhOrtho2015Ir`
-    const showZhUepOverlay = activeOverlays.includes(`ZhUep`)
-    const showDetailplaene = activeOverlays.includes(`Detailplaene`)
-    const showZhGemeindegrenzen = activeOverlays.includes(`ZhGemeindegrenzen`)
-    const showZhSvoColor = activeOverlays.includes(`ZhSvoColor`)
-    const showZhSvoGrey = activeOverlays.includes(`ZhSvoGrey`)
-    const showZhLrVegKartierungen = activeOverlays.includes(`ZhLrVegKartierungen`)
-    const showZhLichteWaelder = activeOverlays.includes(`ZhLichteWaelder`)
-    const showZhWaelderVegetation = activeOverlays.includes(`ZhWaelderVegetation`)
+    /**
+     * need an object whose methods return overlays
+     * in order to dynamically display active overlays
+     */
+    const OverlayComponents = {
+      ZhUep: () => <ZhUep />,
+      Detailplaene: () => <Detailplaene />,
+      ZhGemeindegrenzen: () => <ZhGemeindegrenzen />,
+      ZhSvoColor: () => <ZhSvoColor />,
+      ZhSvoGrey: () => <ZhSvoGrey />,
+      ZhLrVegKartierungen: () => <ZhLrVegKartierungen />,
+      ZhLichteWaelder: () => <ZhLichteWaelder />,
+      ZhWaelderVegetation: () => <ZhWaelderVegetation />,
+      Pop: () => <Pop
+        highlightedIds={toJS(store.map.pop.highlightedIds)}
+        labelUsingNr={store.map.pop.labelUsingNr}
+        pops={store.map.pop.pops}
+        visible={store.map.activeOverlays.includes(`Pop`)}
+        markers={popMarkers}
+      />,
+      Tpop: () => <Tpop
+        highlightedIds={toJS(store.map.tpop.highlightedIds)}
+        labelUsingNr={store.map.tpop.labelUsingNr}
+        tpops={store.map.tpop.tpops}
+        visible={store.map.activeOverlays.includes(`Tpop`)}
+        markers={tpopMarkers}
+      />,
+      BeobNichtBeurteilt: () => <Beob
+        highlightedIds={toJS(store.map.beobNichtBeurteilt.highlightedIds)}
+        beobs={store.map.beobNichtBeurteilt.beobs}
+        visible={store.map.activeOverlays.includes(`BeobNichtBeurteilt`)}
+        markers={beobNichtBeurteiltMarkers}
+      />,
+      BeobNichtZuzuordnen: () => <Beob
+        highlightedIds={toJS(store.map.beobNichtZuzuordnen.highlightedIds)}
+        beobs={store.map.beobNichtZuzuordnen.beobs}
+        visible={store.map.activeOverlays.includes(`BeobNichtZuzuordnen`)}
+        markers={beobNichtZuzuordnenMarkers}
+      />,
+      TpopBeob: () => <Beob
+        highlightedIds={toJS(store.map.tpopBeob.highlightedIds)}
+        beobs={store.map.tpopBeob.beobs}
+        visible={store.map.activeOverlays.includes(`TpopBeob`)}
+        markers={tpopBeobMarkers}
+      />,
+    }
 
     return (
       <MapElement
@@ -217,69 +255,11 @@ class Karte extends Component {
           <ZhOrtho2015Ir />
         }
         {
-          showZhUepOverlay &&
-          <ZhUep />
+          store.map.activeOverlaysSorted.map((overlayName, index) => {
+            const MyComponent = OverlayComponents[overlayName]
+            return <MyComponent key={index} />
+          })
         }
-        {
-          showDetailplaene &&
-          <Detailplaene />
-        }
-        {
-          showZhGemeindegrenzen &&
-          <ZhGemeindegrenzen />
-        }
-        {
-          showZhSvoColor &&
-          <ZhSvoColor />
-        }
-        {
-          showZhSvoGrey &&
-          <ZhSvoGrey />
-        }
-        {
-          showZhLrVegKartierungen &&
-          <ZhLrVegKartierungen />
-        }
-        {
-          showZhLichteWaelder &&
-          <ZhLichteWaelder />
-        }
-        {
-          showZhWaelderVegetation &&
-          <ZhWaelderVegetation />
-        }
-        <PopMarkerCluster
-          highlightedIds={toJS(store.map.pop.highlightedIds)}
-          labelUsingNr={store.map.pop.labelUsingNr}
-          pops={store.map.pop.pops}
-          visible={store.map.activeOverlays.includes(`Pop`)}
-          markers={popMarkers}
-        />
-        <TpopMarkerCluster
-          highlightedIds={toJS(store.map.tpop.highlightedIds)}
-          labelUsingNr={store.map.tpop.labelUsingNr}
-          tpops={store.map.tpop.tpops}
-          visible={store.map.activeOverlays.includes(`Tpop`)}
-          markers={tpopMarkers}
-        />
-        <BeobMarkerCluster
-          highlightedIds={toJS(store.map.beobNichtBeurteilt.highlightedIds)}
-          beobs={store.map.beobNichtBeurteilt.beobs}
-          visible={store.map.activeOverlays.includes(`BeobNichtBeurteilt`)}
-          markers={beobNichtBeurteiltMarkers}
-        />
-        <BeobMarkerCluster
-          highlightedIds={toJS(store.map.beobNichtZuzuordnen.highlightedIds)}
-          beobs={store.map.beobNichtZuzuordnen.beobs}
-          visible={store.map.activeOverlays.includes(`BeobNichtZuzuordnen`)}
-          markers={beobNichtZuzuordnenMarkers}
-        />
-        <BeobMarkerCluster
-          highlightedIds={toJS(store.map.tpopBeob.highlightedIds)}
-          beobs={store.map.tpopBeob.beobs}
-          visible={store.map.activeOverlays.includes(`TpopBeob`)}
-          markers={tpopBeobMarkers}
-        />
         <ScaleControl imperial={false} />
         <LayersControl />
         <MeasureControl />

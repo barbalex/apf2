@@ -82,27 +82,19 @@ const SortableList = SortableContainer(({ items, store, activeOverlays }) =>
   </div>
 )
 
-const Overlays = ({ store }) => {
-  const activeOverlays = toJS(store.map.activeOverlays)
-  console.log(`Overlays: overlays:`, toJS(store.map.overlays).map(o => o.value))
-  console.log(`Overlays: activeOverlays:`, activeOverlays)
-  console.log(`Overlays: activeOverlaysSorted:`, toJS(store.map.activeOverlaysSorted))
-
-  return (
-    <CardContent>
-      <SortableList
-        items={store.map.overlays}
-        onSortEnd={({ oldIndex, newIndex }) =>
-          store.map.moveOverlay({ oldIndex, newIndex })
-        }
-        useDragHandle
-        lockAxis="y"
-        store={store}
-        activeOverlays={activeOverlays}
-      />
-    </CardContent>
-  )
-}
+const Overlays = ({ store }) =>
+  <CardContent>
+    <SortableList
+      items={store.map.overlays}
+      onSortEnd={({ oldIndex, newIndex }) =>
+        store.map.moveOverlay({ oldIndex, newIndex })
+      }
+      useDragHandle
+      lockAxis="y"
+      store={store}
+      activeOverlays={toJS(store.map.activeOverlays)}
+    />
+  </CardContent>
 
 Overlays.propTypes = {
   store: PropTypes.object.isRequired,
