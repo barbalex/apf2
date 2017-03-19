@@ -37,6 +37,9 @@ export default (store) => {
         title,
         icon,
         draggable: store.map.beob.assigning,
+        zIndexOffset: -store.map.apfloraLayers.findIndex((apfloraLayer) =>
+          apfloraLayer.value === `BeobNichtBeurteilt`
+        )
       }).bindPopup(ReactDOMServer.renderToStaticMarkup(<BeobPopup store={store} beobBereitgestellt={p} />))
       markers.addLayer(marker)
     })

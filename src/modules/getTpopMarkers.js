@@ -52,6 +52,9 @@ export default (store) => {
         const marker = window.L.marker(latLng, {
           title,
           icon,
+          zIndexOffset: -store.map.apfloraLayers.findIndex((apfloraLayer) =>
+            apfloraLayer.value === `Tpop`
+          )
       }).bindPopup(ReactDOMServer.renderToStaticMarkup(<TpopPopup store={store} pop={pop} tpop={p} />))
           .bindTooltip(tooltipText, tooltipOptions)
         markers.addLayer(marker)
