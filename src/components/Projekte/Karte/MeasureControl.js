@@ -31,6 +31,7 @@ class MeasureControl extends Component { // eslint-disable-line react/prefer-sta
   }
 
   render() {
+    console.log(`zoom:`, this.props.map.getZoom())
     return (
       <div style={{ display: `none` }} />
     )

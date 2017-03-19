@@ -189,7 +189,7 @@ class Karte extends Component {
         // need max and min zoom because otherwise
         // something errors
         // probably clustering function
-        maxZoom={50}
+        maxZoom={22}
         minZoom={1}
         pop={store.map.pop.pops}
         onClick={(event) => {
