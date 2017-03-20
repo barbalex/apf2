@@ -5,7 +5,10 @@ export default (store) => {
   // grab tpopbeob as array and sort them by year
   let tpopbeob = Array
     .from(table.beobzuordnung.values())
-    .filter(b => b.TPopId === activeUrlElements.tpop)
+    .filter(b =>
+      b.TPopId === activeUrlElements.tpop &&
+      b.beobNichtZuzuordnen !== 1
+    )
   // map through all and create array of nodes
   tpopbeob.forEach((el) => {
     let datum = ``
