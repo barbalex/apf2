@@ -6,13 +6,7 @@ export default (store) => {
   let beobzuordnung = Array.from(table.beob_bereitgestellt.values())
   // show only nodes of active ap
   beobzuordnung = beobzuordnung.filter(a =>
-    a.NO_ISFS === activeUrlElements.ap &&
-    (
-      (a.beobzuordnung &&
-      a.beobzuordnung.type &&
-      a.beobzuordnung.type === `nichtBeurteilt`) ||
-      !a.beobzuordnung
-    )
+    a.NO_ISFS === activeUrlElements.ap
   )
   beobzuordnung.forEach((el) => {
     const quelle = table.beob_quelle.get(el.QuelleId)
