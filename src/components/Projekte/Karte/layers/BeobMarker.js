@@ -1,0 +1,53 @@
+import React, { Component, PropTypes } from 'react'
+import compose from 'recompose/compose'
+import getContext from 'recompose/getContext'
+import 'leaflet'
+import '../../../../../node_modules/leaflet.markercluster/dist/leaflet.markercluster-src.js'
+
+const enhance = compose(
+  getContext({ map: PropTypes.object.isRequired }),
+)
+
+class BeobMarkerCluster extends Component { // eslint-disable-line react/prefer-stateless-function
+
+  static propTypes = {
+    beobs: PropTypes.array.isRequired,
+    highlightedIds: PropTypes.array.isRequired,
+    visible: PropTypes.bool.isRequired,
+    markers: PropTypes.array,
+  }
+
+  componentDidMount() {
+    const { map, markers, visible } = this.props
+    if (visible) {
+      markers.forEach(m => m.addTo(map))
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { map, markers } = this.props
+    if (markers && markers !== nextProps.markers) {
+      markers.forEach(m => m.removeLayer(map))
+    }
+  }
+
+  componentDidUpdate() {
+    const { map, markers, visible } = this.props
+    if (visible) {
+      markers.forEach(m => m.addTo(map))
+    }
+  }
+
+  componentWillUnmount() {
+    const { map, markers } = this.props
+    markers.forEach(m => m.removeLayer(map))
+  }
+
+  render() {
+    return (
+      <div style={{ display: `none` }} />
+    )
+  }
+}
+
+export default enhance(BeobMarkerCluster)

@@ -45,7 +45,6 @@ export default (store) => {
         const icon = window.L.icon({
           iconUrl: isHighlighted ? tpopIconHighlighted : tpopIcon,
           iconSize: [24, 24],
-          // iconAnchor: [12, 12],
           className: isHighlighted ? `tpopIconHighlighted` : `tpopIcon`,
         })
         const pop = pops.find(pop => pop.PopId === p.PopId)

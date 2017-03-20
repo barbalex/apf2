@@ -15,9 +15,14 @@ export default (store) => {
     maxClusterRadius: 66,
     iconCreateFunction: function (cluster) {
       const markers = cluster.getAllChildMarkers()
-      const hasHighlightedTpop = some(markers, (m) => m.options.icon.options.className === `beobIconHighlighted`)
-      const className = hasHighlightedTpop ? `beobClusterHighlighted` : `beobCluster`
-      return window.L.divIcon({ html: markers.length, className, iconSize: window.L.point(40, 40) })
+      const hasHighlightedTpop = some(markers, (m) =>
+        m.options.icon.options.className === `beobIconHighlighted`
+      )
+      return window.L.divIcon({
+        html: markers.length,
+        className: hasHighlightedTpop ? `beobClusterHighlighted` : `beobCluster`,
+        iconSize: window.L.point(40, 40),
+      })
     },
   }
   const markers = window.L.markerClusterGroup(mcgOptions)
@@ -36,7 +41,6 @@ export default (store) => {
       const icon = window.L.icon({
         iconUrl: isHighlighted ? beobIconHighlighted : beobIcon,
         iconSize: [24, 24],
-        // iconAnchor: [12, 12],
         className: isHighlighted ? `beobIconHighlighted` : `beobIcon`,
       })
       const marker = window.L.marker(latLng, {
@@ -46,8 +50,19 @@ export default (store) => {
         zIndexOffset: -store.map.apfloraLayers.findIndex((apfloraLayer) =>
           apfloraLayer.value === `Beob`
         )
-      }).bindPopup(ReactDOMServer.renderToStaticMarkup(<BeobPopup store={store} beobBereitgestellt={p} />))
+      }).bindPopup(ReactDOMServer.renderToStaticMarkup(
+        <BeobPopup store={store} beobBereitgestellt={p} />
+      ))
         .bindTooltip(tooltipText, tooltipOptions)
+      /**
+       * TODO:
+       * why does this not work?
+       * works in bin with one markerClusterGroup: http://playground-leaflet.rhcloud.com/medi/1/edit?html,output
+       * BUT NOT with iconCreateFunction: http://playground-leaflet.rhcloud.com/nebu/1/edit?html,output
+       */
+      marker.on('dragend', function() {
+        console.log(`dragend`)
+      });
       markers.addLayer(marker)
     })
   }

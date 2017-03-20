@@ -54,9 +54,12 @@ import epsg4326to21781 from '../modules/epsg4326to21781'
 import getPopMarkers from '../modules/getPopMarkers'
 import getTpopMarkers from '../modules/getTpopMarkers'
 import getBeobMarkersClustered from '../modules/getBeobMarkersClustered'
+import getBeobMarkers from '../modules/getBeobMarkers'
 import getBeobNichtBeurteiltMarkersClustered from '../modules/getBeobNichtBeurteiltMarkersClustered'
+import getBeobNichtBeurteiltMarkers from '../modules/getBeobNichtBeurteiltMarkers'
 import getBeobNichtZuzuordnenMarkersClustered from '../modules/getBeobNichtZuzuordnenMarkersClustered'
 import getTpopBeobMarkersClustered from '../modules/getTpopBeobMarkersClustered'
+import getTpopBeobMarkers from '../modules/getTpopBeobMarkers'
 import getTpopBeobAssignPolylines from '../modules/getTpopBeobAssignPolylines'
 import fetchLogin from '../modules/fetchLogin'
 import logout from '../modules/logout'
@@ -241,9 +244,13 @@ function Store() {
     pop: {},
     tpop: {},
     beob: {},
-    beobNichtBeurteilt: {},
+    beobNichtBeurteilt: {
+      markers: [],
+    },
     beobNichtZuzuordnen: {},
-    tpopBeob: {},
+    tpopBeob: {
+      markers: [],
+    },
     activeBaseLayer: `OsmColor`,
     activeOverlays: [],
     activeApfloraLayers: [],
@@ -351,6 +358,9 @@ function Store() {
     markersClustered: computed(() =>
       getBeobMarkersClustered(this)
     ),
+    markers: computed(() =>
+      getBeobMarkers(this)
+    ),
     assigning: false,
     toggleAssigning: action(() =>
       this.map.beob.assigning = !this.map.beob.assigning
@@ -364,6 +374,9 @@ function Store() {
     )),
     markersClustered: computed(() =>
       getBeobNichtBeurteiltMarkersClustered(this)
+    ),
+    markers: computed(() =>
+      getBeobNichtBeurteiltMarkers(this)
     ),
     beobs: computed(() =>
       getBeobForMap(this).filter(b => !b.beobzuordnung)
@@ -408,6 +421,9 @@ function Store() {
     }),
     markersClustered: computed(() =>
       getTpopBeobMarkersClustered(this)
+    ),
+    markers: computed(() =>
+      getTpopBeobMarkers(this)
     ),
     assignPolylines: computed(() =>
       getTpopBeobAssignPolylines(this)

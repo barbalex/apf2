@@ -9,20 +9,10 @@ import beobIconHighlighted from '../etc/beobHighlighted.png'
 import BeobPopup from '../components/Projekte/Karte/BeobPopup'
 
 export default (store) => {
-  const { beobs, highlightedIds } = store.map.tpopBeob
-  const visible = store.map.activeApfloraLayers.includes(`TpopBeob`)
-  const mcgOptions = {
-    maxClusterRadius: 66,
-    iconCreateFunction: function (cluster) {
-      const markers = cluster.getAllChildMarkers()
-      const hasHighlightedTpop = some(markers, (m) => m.options.icon.options.className === `beobIconHighlighted`)
-      const className = hasHighlightedTpop ? `beobClusterHighlighted` : `beobCluster`
-      return window.L.divIcon({ html: markers.length, className, iconSize: window.L.point(40, 40) })
-    },
-  }
-  const markers = window.L.markerClusterGroup(mcgOptions)
+  const { beobs, highlightedIds } = store.map.beob
+  const visible = store.map.activeOverlays.includes(`beob`)
   if (visible) {
-    beobs.forEach((p) => {
+    return beobs.map((p) => {
       const title = p.label
       const tooltipText = p.label
       const tooltipOptions = {
@@ -38,17 +28,22 @@ export default (store) => {
         iconSize: [24, 24],
         className: isHighlighted ? `beobIconHighlighted` : `beobIcon`,
       })
-      const marker = window.L.marker(latLng, {
+      return window.L.marker(latLng, {
         title,
         icon,
         draggable: store.map.beob.assigning,
         zIndexOffset: -store.map.apfloraLayers.findIndex((apfloraLayer) =>
-          apfloraLayer.value === `TpopBeob`
+          apfloraLayer.value === `Beob`
         )
-      }).bindPopup(ReactDOMServer.renderToStaticMarkup(<BeobPopup store={store} beobBereitgestellt={p} />))
+      })
+        .bindPopup(ReactDOMServer.renderToStaticMarkup(
+          <BeobPopup store={store} beobBereitgestellt={p} />
+        ))
         .bindTooltip(tooltipText, tooltipOptions)
-      markers.addLayer(marker)
+        .on('dragend', function() {
+          console.log(`dragend`)
+        });
     })
   }
-  return markers
+  return []
 }

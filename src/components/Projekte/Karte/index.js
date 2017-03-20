@@ -41,7 +41,8 @@ import '../../../../node_modules/leaflet-measure/dist/leaflet-measure.css'
 import '../../../../node_modules/leaflet.markercluster/dist/MarkerCluster.css'
 import Pop from './layers/PopMarkerCluster'
 import Tpop from './layers/TpopMarkerCluster'
-import Beob from './layers/BeobMarkerCluster'
+import Beob from './layers/BeobMarker'
+import BeobCluster from './layers/BeobMarkerCluster'
 import TpopBeobAssignPolylines from './layers/TpopBeobAssignPolylines'
 import MeasureControl from './MeasureControl'
 import PrintControl from './PrintControl'
@@ -75,9 +76,11 @@ class Karte extends Component {
     store: PropTypes.object.isRequired,
     popMarkers: PropTypes.object,
     tpopMarkers: PropTypes.object,
-    beobNichtBeurteiltMarkers: PropTypes.object,
+    beobNichtBeurteiltMarkers: PropTypes.array,
+    beobNichtBeurteiltMarkersClustered: PropTypes.object,
     beobNichtZuzuordnenMarkers: PropTypes.object,
-    tpopBeobMarkers: PropTypes.object,
+    tpopBeobMarkers: PropTypes.array,
+    tpopBeobMarkersClustered: PropTypes.object,
     tpopBeobAssignPolylines: PropTypes.array,
     tpopBeobAssignPolylinesLength: PropTypes.number,
     idOfTpopBeingLocalized: PropTypes.number.isRequired,
@@ -106,8 +109,10 @@ class Karte extends Component {
       popMarkers,
       tpopMarkers,
       beobNichtBeurteiltMarkers,
+      beobNichtBeurteiltMarkersClustered,
       beobNichtZuzuordnenMarkers,
       tpopBeobMarkers,
+      tpopBeobMarkersClustered,
       tpopBeobAssignPolylines,
       bounds,
       changeBounds,
@@ -145,24 +150,52 @@ class Karte extends Component {
         visible={store.map.activeApfloraLayers.includes(`Tpop`)}
         markers={tpopMarkers}
       />,
-      BeobNichtBeurteilt: () => <Beob
-        highlightedIds={toJS(store.map.beobNichtBeurteilt.highlightedIds)}
-        beobs={store.map.beobNichtBeurteilt.beobs}
-        visible={store.map.activeApfloraLayers.includes(`BeobNichtBeurteilt`)}
-        markers={beobNichtBeurteiltMarkers}
-      />,
-      BeobNichtZuzuordnen: () => <Beob
+      BeobNichtBeurteilt: () => {
+        if (store.map.beob.assigning) {
+          return (
+            <Beob
+              highlightedIds={toJS(store.map.beobNichtBeurteilt.highlightedIds)}
+              beobs={store.map.beobNichtBeurteilt.beobs}
+              visible={store.map.activeApfloraLayers.includes(`BeobNichtBeurteilt`)}
+              markers={beobNichtBeurteiltMarkers}
+            />
+          )
+        }
+        return (
+          <BeobCluster
+            highlightedIds={toJS(store.map.beobNichtBeurteilt.highlightedIds)}
+            beobs={store.map.beobNichtBeurteilt.beobs}
+            visible={store.map.activeApfloraLayers.includes(`BeobNichtBeurteilt`)}
+            markers={beobNichtBeurteiltMarkersClustered}
+          />
+        )
+      },
+      BeobNichtZuzuordnen: () => <BeobCluster
         highlightedIds={toJS(store.map.beobNichtZuzuordnen.highlightedIds)}
         beobs={store.map.beobNichtZuzuordnen.beobs}
         visible={store.map.activeApfloraLayers.includes(`BeobNichtZuzuordnen`)}
         markers={beobNichtZuzuordnenMarkers}
       />,
-      TpopBeob: () => <Beob
-        highlightedIds={toJS(store.map.tpopBeob.highlightedIds)}
-        beobs={store.map.tpopBeob.beobs}
-        visible={store.map.activeApfloraLayers.includes(`TpopBeob`)}
-        markers={tpopBeobMarkers}
-      />,
+      TpopBeob: () => {
+        if (store.map.beob.assigning) {
+          return (
+            <Beob
+              highlightedIds={toJS(store.map.tpopBeob.highlightedIds)}
+              beobs={store.map.tpopBeob.beobs}
+              visible={store.map.activeApfloraLayers.includes(`TpopBeob`)}
+              markers={tpopBeobMarkers}
+            />
+          )
+        }
+        return (
+          <BeobCluster
+            highlightedIds={toJS(store.map.tpopBeob.highlightedIds)}
+            beobs={store.map.tpopBeob.beobs}
+            visible={store.map.activeApfloraLayers.includes(`TpopBeob`)}
+            markers={tpopBeobMarkersClustered}
+          />
+        )
+      },
       TpopBeobAssignPolylines: () => <TpopBeobAssignPolylines
         highlightedIds={toJS(store.map.tpopBeob.highlightedIds)}
         beobs={store.map.tpopBeob.beobs}

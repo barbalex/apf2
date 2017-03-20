@@ -64,9 +64,12 @@ const Projekte = ({ store }) => {
             <Karte
               popMarkers={store.map.pop.markers}
               tpopMarkers={store.map.tpop.markers}
-              beobNichtBeurteiltMarkers={store.map.beobNichtBeurteilt.markersClustered}
+              beobNichtBeurteiltMarkers={store.map.beobNichtBeurteilt.markers}
+              beobNichtBeurteiltMarkersClustered={store.map.beobNichtBeurteilt.markersClustered}
               beobNichtZuzuordnenMarkers={store.map.beobNichtZuzuordnen.markersClustered}
-              tpopBeobMarkers={store.map.tpopBeob.markersClustered}
+              tpopBeobMarkers={store.map.tpopBeob.markers}
+              tpopBeobMarkersClustered={store.map.tpopBeob.markersClustered}
+              tpopBeobAssigning={store.map.beob.assigning}
               tpopBeobAssignPolylines={store.map.tpopBeob.assignPolylines}
               tpopBeobAssignPolylinesLength={store.map.tpopBeob.assignPolylines.length}
               idOfTpopBeingLocalized={store.map.tpop.idOfTpopBeingLocalized}
