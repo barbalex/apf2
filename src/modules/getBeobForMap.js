@@ -18,8 +18,6 @@ export default (store:Object) => {
       table.beob_evab.get(b.BeobId) :
       table.beob_infospezies.get(b.BeobId)
     )
-    // add beobzuordnung
-    b.beobzuordnung = table.beobzuordnung.get(b.BeobId)
     if (b.beob) {
       // add KoordWgs84
       b.KoordWgs84 = (
@@ -28,6 +26,8 @@ export default (store:Object) => {
         epsg21781to4326(b.beob.FNS_XGIS, b.beob.FNS_YGIS)
       )
     }
+    // add beobzuordnung
+    b.beobzuordnung = table.beobzuordnung.get(b.BeobId)
     return b
   }).filter(b => !!b.KoordWgs84)
 }
