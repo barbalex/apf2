@@ -38,6 +38,11 @@ class BeobMarkerCluster extends Component { // eslint-disable-line react/prefer-
     }
   }
 
+  componentWillUnmount() {
+    const { map, markers } = this.props
+    map.removeLayer(markers)
+  }
+
   render() {
     return (
       <div style={{ display: `none` }} />
