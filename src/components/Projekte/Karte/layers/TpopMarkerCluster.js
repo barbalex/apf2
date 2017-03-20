@@ -26,9 +26,9 @@ class TpopMarkerCluster extends Component { // eslint-disable-line react/prefer-
   }
 
   componentWillReceiveProps(nextProps) {
-    const { map } = this.props
-    if (this.props.markers && this.props.markers !== nextProps.markers) {
-      map.removeLayer(this.props.markers)
+    const { map, markers } = this.props
+    if (markers && markers !== nextProps.markers) {
+      map.removeLayer(markers)
     }
   }
 
@@ -37,6 +37,11 @@ class TpopMarkerCluster extends Component { // eslint-disable-line react/prefer-
     if (visible) {
       map.addLayer(markers)
     }
+  }
+
+  componentWillUnmount() {
+    const { map, markers } = this.props
+    map.removeLayer(markers)
   }
 
   render() {
