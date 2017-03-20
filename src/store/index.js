@@ -139,6 +139,8 @@ import filteredAndSortedTpopmassnber from './table/filteredAndSorted/tpopmassnbe
 import filteredAndSortedTpopmassn from './table/filteredAndSorted/tpopmassn'
 import deleteBeobzuordnung from './action/deleteBeobzuordnung'
 import setActiveBaseLayer from './action/setActiveBaseLayer'
+import moveOverlay from './action/moveOverlay'
+import moveApfloraLayer from './action/moveApfloraLayer'
 
 import TableStore from './table'
 import ObservableHistory from './ObservableHistory'
@@ -151,6 +153,8 @@ function Store() {
     loading: [],
   })
   this.node = {
+    apFilter: false,
+    nodeLabelFilter: {},
     node: {}
   }
   extendObservable(this.node, {
@@ -241,8 +245,11 @@ function Store() {
     tpopBeob: {},
     activeBaseLayer: `OsmColor`,
     activeOverlays: [],
+    activeApfloraLayers: [],
     activeOverlaysSorted: [],
+    activeApfloraLayersSorted: [],
     overlays: [],
+    apfloraLayers: [],
     addActiveOverlay: () => {},
     removeActiveOverlay: () => {},
     setActiveBaseLayer: () => {},
@@ -270,17 +277,7 @@ function Store() {
     ]),
     overlaysString: computed(() => this.map.overlays.map(o => o.value).join()),
     moveOverlay: action(({ oldIndex, newIndex }) =>
-    /**
-     * need to move array elements in overlays array
-     * when user moves them in layer list
-     * react-sortable-hoc has arrayMove method
-     * but that does not work when using mobx
-     * because it returns new array
-     * so  use method that changes sequence while
-     * keeping same array
-     * from: http://stackoverflow.com/a/7180095/712005
-     */
-      this.map.overlays.splice(newIndex, 0, this.map.overlays.splice(oldIndex, 1)[0])
+      moveOverlay(this, oldIndex, newIndex)
     ),
     activeOverlays: [],
     activeOverlaysSorted: computed(() =>
@@ -302,7 +299,7 @@ function Store() {
     ]),
     apfloraLayersString: computed(() => this.map.apfloraLayers.map(o => o.value).join()),
     moveApfloraLayer: action(({ oldIndex, newIndex }) =>
-      this.map.apfloraLayers.splice(newIndex, 0, this.map.apfloraLayers.splice(oldIndex, 1)[0])
+      moveApfloraLayer(this, oldIndex, newIndex)
     ),
     activeApfloraLayers: [],
     activeApfloraLayersSorted: computed(() =>
