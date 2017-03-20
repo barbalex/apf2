@@ -11,7 +11,7 @@ const Label = styled.label`
   user-select: none;
 `
 
-const Checkbox = ({ store, value, label, checked, onChange }) =>
+const Checkbox = ({ value, label, checked, onChange }) =>
   <Label>
     <Input
       type="checkbox"
@@ -23,7 +23,6 @@ const Checkbox = ({ store, value, label, checked, onChange }) =>
   </Label>
 
 Checkbox.propTypes = {
-  store: PropTypes.object.isRequired,
   value: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
   checked: PropTypes.bool.isRequired,
