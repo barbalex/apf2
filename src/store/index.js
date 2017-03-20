@@ -414,7 +414,7 @@ function Store() {
     ),
     beobs: computed(() =>
       getBeobForMap(this).filter(b =>
-        b.beobzuordnung && b.beobzuordnung.TPopId
+        b.beobzuordnung && b.beobzuordnung.TPopId && !b.beobzuordnung.BeobNichtZuzuordnen
       )
     ),
     bounds: computed(() => getTpopBeobBounds(this)),
