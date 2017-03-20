@@ -57,6 +57,7 @@ import getBeobMarkersClustered from '../modules/getBeobMarkersClustered'
 import getBeobNichtBeurteiltMarkersClustered from '../modules/getBeobNichtBeurteiltMarkersClustered'
 import getBeobNichtZuzuordnenMarkersClustered from '../modules/getBeobNichtZuzuordnenMarkersClustered'
 import getTpopBeobMarkersClustered from '../modules/getTpopBeobMarkersClustered'
+import getTpopBeobAssignPolylines from '../modules/getTpopBeobAssignPolylines'
 import fetchLogin from '../modules/fetchLogin'
 import logout from '../modules/logout'
 import setLoginFromIdb from '../modules/setLoginFromIdb'
@@ -406,6 +407,9 @@ function Store() {
     }),
     markersClustered: computed(() =>
       getTpopBeobMarkersClustered(this)
+    ),
+    assignPolylines: computed(() =>
+      getTpopBeobAssignPolylines(this)
     ),
     beobs: computed(() =>
       getBeobForMap(this).filter(b =>

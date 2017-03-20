@@ -67,6 +67,7 @@ const Projekte = ({ store }) => {
               beobNichtBeurteiltMarkers={store.map.beobNichtBeurteilt.markersClustered}
               beobNichtZuzuordnenMarkers={store.map.beobNichtZuzuordnen.markersClustered}
               tpopBeobMarkers={store.map.tpopBeob.markersClustered}
+              tpopBeobAssignPolylines={store.map.tpopBeob.assignPolylines}
               idOfTpopBeingLocalized={store.map.tpop.idOfTpopBeingLocalized}
               activeBaseLayer={store.map.activeBaseLayer}
               activeOverlays={store.map.activeOverlays}

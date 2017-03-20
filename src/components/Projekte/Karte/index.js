@@ -42,6 +42,7 @@ import '../../../../node_modules/leaflet.markercluster/dist/MarkerCluster.css'
 import Pop from './layers/PopMarkerCluster'
 import Tpop from './layers/TpopMarkerCluster'
 import Beob from './layers/BeobMarkerCluster'
+import TpopBeobAssignPolylines from './layers/TpopBeobAssignPolylines'
 import MeasureControl from './MeasureControl'
 import PrintControl from './PrintControl'
 import PngControl from './PngControl'
@@ -77,6 +78,7 @@ class Karte extends Component {
     beobNichtBeurteiltMarkers: PropTypes.object,
     beobNichtZuzuordnenMarkers: PropTypes.object,
     tpopBeobMarkers: PropTypes.object,
+    tpopBeobAssignPolylines: PropTypes.object,
     idOfTpopBeingLocalized: PropTypes.number.isRequired,
     changeBounds: PropTypes.func.isRequired,
     bounds: PropTypes.array,
@@ -105,6 +107,7 @@ class Karte extends Component {
       beobNichtBeurteiltMarkers,
       beobNichtZuzuordnenMarkers,
       tpopBeobMarkers,
+      tpopBeobAssignPolylines,
       bounds,
       changeBounds,
       idOfTpopBeingLocalized,
@@ -158,6 +161,12 @@ class Karte extends Component {
         beobs={store.map.tpopBeob.beobs}
         visible={store.map.activeApfloraLayers.includes(`TpopBeob`)}
         markers={tpopBeobMarkers}
+      />,
+      TpopBeobAssignPolylines: () => <TpopBeobAssignPolylines
+        highlightedIds={toJS(store.map.tpopBeob.highlightedIds)}
+        beobs={store.map.tpopBeob.beobs}
+        visible={store.map.activeApfloraLayers.includes(`TpopBeobAssignPolylines`)}
+        markers={tpopBeobAssignPolylines}
       />,
     }
     const OverlayComponents = {
