@@ -27,7 +27,7 @@ import ZhOrtho from './layers/ZhOrtho'
 import ZhOrthoIr from './layers/ZhOrthoIr'
 import ZhOrtho2015 from './layers/ZhOrtho2015'
 import ZhOrtho2015Ir from './layers/ZhOrtho2015Ir'
-import ZhUepBase from './layers/ZhUep'
+import ZhUep from './layers/ZhUep'
 import Detailplaene from './layers/Detailplaene'
 import ZhSvoColor from './layers/ZhSvoColor'
 import ZhSvoGrey from './layers/ZhSvoGrey'
@@ -35,7 +35,7 @@ import ZhLrVegKartierungen from './layers/ZhLrVegKartierungen'
 import ZhLichteWaelder from './layers/ZhLichteWaelder'
 import ZhGemeindegrenzen from './layers/ZhGemeindegrenzen'
 import ZhWaelderVegetation from './layers/ZhWaelderVegetation'
-import ZhUep from './layers/ZhUepOverlay'
+import ZhUepOverlay from './layers/ZhUepOverlay'
 import '../../../../node_modules/leaflet/dist/leaflet.css'
 import '../../../../node_modules/leaflet-measure/dist/leaflet-measure.css'
 import '../../../../node_modules/leaflet.markercluster/dist/MarkerCluster.css'
@@ -175,7 +175,7 @@ class Karte extends Component {
       OsmBw: () => <OsmBw />,
       SwissTopoPixelFarbe: () => <SwissTopoPixelFarbe />,
       SwissTopoPixelGrau: () => <SwissTopoPixelGrau />,
-      ZhUep: () => <ZhUep />,
+      ZhUep: () => <ZhUepOverlay />,
       BingAerial: () => <BingAerial />,
       ZhOrtho: () => <ZhOrtho />,
       ZhOrthoIr: () => <ZhOrthoIr />,
@@ -220,7 +220,10 @@ class Karte extends Component {
           changeBounds([bounds._southWest, bounds._northEast])
         }}
       >
-        <BaseLayerComponent />
+        {
+          activeBaseLayer &&
+          <BaseLayerComponent />
+        }
         {
           store.map.activeOverlaysSorted.map((overlayName, index) => {
             const OverlayComponent = OverlayComponents[overlayName]
