@@ -5,6 +5,8 @@ import styled from 'styled-components'
 import FontIcon from 'material-ui/FontIcon'
 import { SortableContainer, SortableElement, SortableHandle } from 'react-sortable-hoc'
 
+import Checkbox from './shared/Checkbox'
+
 const CardContent = styled.div`
   color: rgb(48, 48, 48);
   padding-left: 5px;
@@ -36,14 +38,6 @@ const LayerDiv = styled.div`
 const IconsDiv = styled.div`
   display: flex;
 `
-const Input = styled.input`
-  margin-right: 4px;
-  /*vertical-align: -2px;*/
-`
-const Label = styled.label`
-  padding-right: 4px;
-  user-select: none;
-`
 /**
  * don't know why but passing store
  * with mobx inject does not work here
@@ -60,20 +54,17 @@ const DragHandle = SortableHandle(() =>
 )
 const SortableItem = SortableElement(({ overlay, store, activeOverlays }) =>
   <LayerDiv>
-    <Label>
-      <Input
-        type="checkbox"
-        value={overlay.value}
-        checked={activeOverlays.includes(overlay.value)}
-        onChange={() => {
-          if (activeOverlays.includes(overlay.value)) {
-            return store.map.removeActiveOverlay(overlay.value)
-          }
-          return store.map.addActiveOverlay(overlay.value)
-        }}
-      />
-      {overlay.label}
-    </Label>
+    <Checkbox
+      value={overlay.value}
+      label={overlay.label}
+      checked={activeOverlays.includes(overlay.value)}
+      onChange={() => {
+        if (activeOverlays.includes(overlay.value)) {
+          return store.map.removeActiveOverlay(overlay.value)
+        }
+        return store.map.addActiveOverlay(overlay.value)
+      }}
+    />
     <IconsDiv>
       <div>
         <DragHandle />

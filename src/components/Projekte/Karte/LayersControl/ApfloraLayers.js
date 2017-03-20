@@ -5,6 +5,8 @@ import styled from 'styled-components'
 import FontIcon from 'material-ui/FontIcon'
 import { SortableContainer, SortableElement, SortableHandle } from 'react-sortable-hoc'
 
+import Checkbox from './shared/Checkbox'
+
 const CardContent = styled.div`
   color: rgb(48, 48, 48);
   padding-left: 5px;
@@ -42,14 +44,6 @@ const IconsDiv = styled.div`
 const ZuordnenDiv = styled.div`
   padding-right: 3px;
 `
-const Input = styled.input`
-  margin-right: 4px;
-  /*vertical-align: -2px;*/
-`
-const Label = styled.label`
-  padding-right: 4px;
-  user-select: none;
-`
 /**
  * don't know why but passing store
  * with mobx inject does not work here
@@ -80,20 +74,17 @@ const SortableItem = SortableElement(({ apfloraLayer, store, activeApfloraLayers
   )
   return (
     <LayerDiv>
-      <Label>
-        <Input
-          type="checkbox"
-          value={apfloraLayer.value}
-          checked={activeApfloraLayers.includes(apfloraLayer.value)}
-          onChange={() => {
-            if (activeApfloraLayers.includes(apfloraLayer.value)) {
-              return store.map.removeActiveApfloraLayer(apfloraLayer.value)
-            }
-            return store.map.addActiveApfloraLayer(apfloraLayer.value)
-          }}
-        />
-        {apfloraLayer.label}
-      </Label>
+      <Checkbox
+        value={apfloraLayer.value}
+        label={apfloraLayer.label}
+        checked={activeApfloraLayers.includes(apfloraLayer.value)}
+        onChange={() => {
+          if (activeApfloraLayers.includes(apfloraLayer.value)) {
+            return store.map.removeActiveApfloraLayer(apfloraLayer.value)
+          }
+          return store.map.addActiveApfloraLayer(apfloraLayer.value)
+        }}
+      />
       <IconsDiv>
         {
           [`BeobNichtBeurteilt`, `TpopBeob`].includes(apfloraLayer.value) &&
