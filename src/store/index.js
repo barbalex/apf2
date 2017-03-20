@@ -414,7 +414,9 @@ function Store() {
     ),
     beobs: computed(() =>
       getBeobForMap(this).filter(b =>
-        b.beobzuordnung && b.beobzuordnung.TPopId && !b.beobzuordnung.BeobNichtZuzuordnen
+        b.beobzuordnung &&
+        b.beobzuordnung.TPopId &&
+        !b.beobzuordnung.BeobNichtZuzuordnen
       )
     ),
     bounds: computed(() => getTpopBeobBounds(this)),
@@ -627,7 +629,7 @@ extendObservable(
         // need to pass visibility of layers to make data fetched on changing layers
         const showTpop = MyStore.map.activeApfloraLayers.includes(`Tpop`)
         const showPop = MyStore.map.activeApfloraLayers.includes(`Pop`)
-        const showTpopBeob = MyStore.map.activeApfloraLayers.includes(`TpopBeob`)
+        const showTpopBeob = MyStore.map.activeApfloraLayers.includes(`TpopBeob`) || MyStore.map.activeApfloraLayers.includes(`TpopBeobAssignPolylines`)
         const showBeobNichtBeurteilt = MyStore.map.activeApfloraLayers.includes(`BeobNichtBeurteilt`)
         const showBeobNichtZuzuordnen = MyStore.map.activeApfloraLayers.includes(`BeobNichtZuzuordnen`)
         fetchDataForActiveUrlElements(MyStore, showPop, showTpop, showTpopBeob, showBeobNichtBeurteilt, showBeobNichtZuzuordnen)
