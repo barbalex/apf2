@@ -2,18 +2,12 @@ import React, { PropTypes } from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react'
 
+import Radio from './shared/Radio'
+
 const CardContent = styled.div`
   color: rgb(48, 48, 48);
   padding-left: 5px;
   padding-right: 5px;
-`
-const Input = styled.input`
-  margin-right: 4px;
-  /*vertical-align: -2px;*/
-`
-const Label = styled.label`
-  padding-right: 4px;
-  user-select: none;
 `
 const LayerDiv = styled.div`
   border-bottom: 1px solid #ececec;
@@ -47,16 +41,13 @@ const LayersControl = ({ store }) => {
       {
         baseLayers.map((l, index) =>
           <LayerDiv key={index}>
-            <Label>
-              <Input
-                type="radio"
-                name="baseLayers"
-                value={l.value}
-                checked={store.map.activeBaseLayer === l.value}
-                onChange={() => store.map.setActiveBaseLayer(l.value)}
-              />
-              {l.label}
-            </Label>
+            <Radio
+              name="baseLayers"
+              value={l.value}
+              label={l.label}
+              checked={store.map.activeBaseLayer === l.value}
+              onChange={() => store.map.setActiveBaseLayer(l.value)}
+            />
           </LayerDiv>
         )
       }
