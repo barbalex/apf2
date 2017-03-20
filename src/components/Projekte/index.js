@@ -72,7 +72,7 @@ const Projekte = ({ store }) => {
               idOfTpopBeingLocalized={store.map.tpop.idOfTpopBeingLocalized}
               activeBaseLayer={store.map.activeBaseLayer}
               activeOverlays={store.map.activeOverlays}
-              // activeOverlaysSortedString enforces rerendering when sorting changes
+              // activeOverlaysSortedString enforces rerendering when sorting or visibility changes
               activeOverlaysSortedString={store.map.activeOverlaysSortedString}
               activeApfloraLayers={store.map.activeApfloraLayers}
               activeApfloraLayersSortedString={store.map.activeApfloraLayersSortedString}
