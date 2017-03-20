@@ -138,6 +138,7 @@ import filteredAndSortedTpopfeldkontrzaehl from './table/filteredAndSorted/tpopf
 import filteredAndSortedTpopmassnber from './table/filteredAndSorted/tpopmassnber'
 import filteredAndSortedTpopmassn from './table/filteredAndSorted/tpopmassn'
 import deleteBeobzuordnung from './action/deleteBeobzuordnung'
+import setActiveBaseLayer from './action/setActiveBaseLayer'
 
 import TableStore from './table'
 import ObservableHistory from './ObservableHistory'
@@ -256,13 +257,7 @@ function Store() {
       return []
     }),
     activeBaseLayer: `OsmColor`,
-    setActiveBaseLayer: action((layer) => {
-      if (layer === this.map.activeBaseLayer) {
-        this.map.activeBaseLayer = null
-      } else {
-        this.map.activeBaseLayer = layer
-      }
-    }),
+    setActiveBaseLayer: action((layer) => setActiveBaseLayer(this, layer)),
     overlays: observable([
       { label: `ZH Übersichtsplan`, value: `ZhUep` },
       { label: `Detailplaene`, value: `Detailplaene` },
