@@ -297,6 +297,7 @@ function Store() {
       { label: `apflora: nicht beurteilte Beobachtungen`, value: `BeobNichtBeurteilt` },
       { label: `apflora: nicht zuzuordnende Beobachtungen`, value: `BeobNichtZuzuordnen` },
       { label: `apflora: zugeordnete Beobachtungen`, value: `TpopBeob` },
+      { label: `apflora: Zuordnungs-Linien`, value: `TpopBeobAssignPolylines` },
     ]),
     apfloraLayersString: computed(() => this.map.apfloraLayers.map(o => o.value).join()),
     moveApfloraLayer: action(({ oldIndex, newIndex }) =>

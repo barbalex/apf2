@@ -1,0 +1,26 @@
+import 'leaflet'
+
+
+export default (store) => {
+  const { beobs, highlightedIds } = store.map.tpopBeob
+  const visible = store.map.activeApfloraLayers.includes(`TpopBeobAssignPolylines`)
+  if (visible) {
+    return beobs.map((p) => {
+      const tooltipText = p.label
+      const tooltipOptions = {
+        permanent: true,
+        direction: `bottom`,
+        className: `mapTooltip`,
+        opacity: 1,
+      }
+      const isHighlighted = highlightedIds.includes(p.BeobId)
+      const tpop = store.table.tpop.get(p.beobzuordnung.TPopId)
+      const latlngs = [p.KoordWgs84, tpop.TPopKoordWgs84]
+
+      return window.L.polyline(latlngs, {
+        color: isHighlighted ? `yellow` : `#9a009a`,
+      }).bindTooltip(tooltipText, tooltipOptions)
+    })
+  }
+  return []
+}

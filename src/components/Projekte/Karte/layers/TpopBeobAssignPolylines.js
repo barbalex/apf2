@@ -8,33 +8,38 @@ const enhance = compose(
   getContext({ map: PropTypes.object.isRequired }),
 )
 
-class BeobTpopAssignPolylines extends Component { // eslint-disable-line react/prefer-stateless-function
+class TpopBeobAssignPolylines extends Component { // eslint-disable-line react/prefer-stateless-function
 
   static propTypes = {
     highlightedIds: PropTypes.array.isRequired,
     visible: PropTypes.bool.isRequired,
-    assignPolylines: PropTypes.object,
+    assignPolylines: PropTypes.array,
   }
 
   componentDidMount() {
     const { map, assignPolylines, visible } = this.props
-    if (visible) {
-      map.addLayer(assignPolylines)
+    if (visible && assignPolylines) {
+      assignPolylines.forEach(p => p.addTo(map))
     }
   }
 
   componentWillReceiveProps(nextProps) {
-    const { map } = this.props
+    const { map, assignPolylines } = this.props
     if (this.props.assignPolylines && this.props.assignPolylines !== nextProps.assignPolylines) {
-      map.removeLayer(this.props.assignPolylines)
+      assignPolylines.forEach(p => map.removeLayer(p))
     }
   }
 
   componentDidUpdate() {
     const { map, assignPolylines, visible } = this.props
-    if (visible) {
-      map.addLayer(assignPolylines)
+    if (visible && assignPolylines) {
+      assignPolylines.forEach(p => p.addTo(map))
     }
+  }
+
+  componentWillUnmount() {
+    const { map, assignPolylines } = this.props
+    assignPolylines.forEach(p => map.removeLayer(p))
   }
 
   render() {
@@ -44,4 +49,4 @@ class BeobTpopAssignPolylines extends Component { // eslint-disable-line react/p
   }
 }
 
-export default enhance(BeobTpopAssignPolylines)
+export default enhance(TpopBeobAssignPolylines)

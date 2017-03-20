@@ -78,7 +78,8 @@ class Karte extends Component {
     beobNichtBeurteiltMarkers: PropTypes.object,
     beobNichtZuzuordnenMarkers: PropTypes.object,
     tpopBeobMarkers: PropTypes.object,
-    tpopBeobAssignPolylines: PropTypes.object,
+    tpopBeobAssignPolylines: PropTypes.array,
+    tpopBeobAssignPolylinesLength: PropTypes.number,
     idOfTpopBeingLocalized: PropTypes.number.isRequired,
     changeBounds: PropTypes.func.isRequired,
     bounds: PropTypes.array,
@@ -166,7 +167,7 @@ class Karte extends Component {
         highlightedIds={toJS(store.map.tpopBeob.highlightedIds)}
         beobs={store.map.tpopBeob.beobs}
         visible={store.map.activeApfloraLayers.includes(`TpopBeobAssignPolylines`)}
-        markers={tpopBeobAssignPolylines}
+        assignPolylines={tpopBeobAssignPolylines}
       />,
     }
     const OverlayComponents = {
