@@ -4,6 +4,8 @@ import { observer } from 'mobx-react'
 import styled from 'styled-components'
 import FontIcon from 'material-ui/FontIcon'
 import { SortableContainer, SortableElement, SortableHandle } from 'react-sortable-hoc'
+import compose from 'recompose/compose'
+import withHandlers from 'recompose/withHandlers'
 
 import Checkbox from './shared/Checkbox'
 
@@ -89,13 +91,20 @@ const SortableList = SortableContainer(({ items, store, activeOverlays }) =>
   </div>
 )
 
-const Overlays = ({ store }) =>
+const enhance = compose(
+  withHandlers({
+    onSortEnd: props => ({ oldIndex, newIndex }) =>
+      props.store.map.moveOverlay({ oldIndex, newIndex })
+    ,
+  }),
+  observer
+)
+
+const Overlays = ({ store, onSortEnd }) =>
   <CardContent>
     <SortableList
       items={store.map.overlays}
-      onSortEnd={({ oldIndex, newIndex }) =>
-        store.map.moveOverlay({ oldIndex, newIndex })
-      }
+      onSortEnd={onSortEnd}
       useDragHandle
       lockAxis="y"
       store={store}
@@ -105,6 +114,7 @@ const Overlays = ({ store }) =>
 
 Overlays.propTypes = {
   store: PropTypes.object.isRequired,
+  onSortEnd: PropTypes.func.isRequired,
 }
 
-export default observer(Overlays)
+export default enhance(Overlays)
