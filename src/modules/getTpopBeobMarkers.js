@@ -29,6 +29,13 @@ export default (store) => {
         )
       })
         .bindPopup(ReactDOMServer.renderToStaticMarkup(<BeobPopup store={store} beobBereitgestellt={p} />))
+        .on(`movestart`, () => {
+          const { activeUrlElements } = store
+          // make this beob the active dataset
+          // i.e. set url
+          const newUrl = `/Projekte/${activeUrlElements.projekt}/Arten/${activeUrlElements.ap}/nicht-beurteilte-Beobachtungen/${p.BeobId}`
+          store.history.push(newUrl)
+        })
         .on('moveend', (event) => {
           console.log(`latlng:`, event.target._latlng)
           /**

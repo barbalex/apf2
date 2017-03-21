@@ -1,10 +1,12 @@
 import React from 'react'
 import ReactDOMServer from 'react-dom/server'
 import 'leaflet'
+import queryString from 'query-string'
 
 import beobIcon from '../etc/beob.png'
 import beobIconHighlighted from '../etc/beobHighlighted.png'
 import BeobPopup from '../components/Projekte/Karte/BeobPopup'
+import getNearestTpopId from './getNearestTpopId'
 
 export default (store) => {
   const { beobs, highlightedIds } = store.map.beobNichtBeurteilt
@@ -30,8 +32,17 @@ export default (store) => {
         .bindPopup(ReactDOMServer.renderToStaticMarkup(
           <BeobPopup store={store} beobBereitgestellt={p} />)
         )
-        .on('dragend', (event) => {
-          console.log(`latlng:`, event.target._latlng)
+        .on('moveend', (event) => {
+          /**
+           * assign to nearest tpop
+           * point url to moved beob
+           * open form of beob?
+           */
+          const { activeUrlElements, insertBeobzuordnung, history } = store
+          const nearestTpopId = getNearestTpopId(store, event.target._latlng)
+          const newUrl = `/Projekte/${activeUrlElements.projekt}/Arten/${activeUrlElements.ap}/nicht-beurteilte-Beobachtungen/${p.BeobId}${Object.keys(store.urlQuery).length > 0 ? `?${queryString.stringify(store.urlQuery)}` : ``}`
+          history.push(newUrl)
+          insertBeobzuordnung(`TPopId`, nearestTpopId)
         })
     })
   }

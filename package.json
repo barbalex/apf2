@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@turf/inside": "3.13.0",
+    "@turf/nearest": "3.13.0",
     "ampersand-app": "2.0.0",
     "axios": "0.15.3",
     "babel-polyfill": "6.23.0",

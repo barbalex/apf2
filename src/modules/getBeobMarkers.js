@@ -5,6 +5,7 @@ import 'leaflet'
 import beobIcon from '../etc/beob.png'
 import beobIconHighlighted from '../etc/beobHighlighted.png'
 import BeobPopup from '../components/Projekte/Karte/BeobPopup'
+import getNearestTpopId from './getNearestTpopId'
 
 export default (store) => {
   const { beobs, highlightedIds } = store.map.beob
@@ -44,6 +45,8 @@ export default (store) => {
            * assign to nearest tpop
            * open form of beob
            */
+          const nearestTpopId = getNearestTpopId(store, event.target._latlng)
+          console.log(`getBeobMarkers, nearestTpopId:`, nearestTpopId)
         })
     })
   }
