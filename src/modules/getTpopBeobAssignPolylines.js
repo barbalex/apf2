@@ -10,7 +10,7 @@ export default (store) => {
       const latlngs = [p.KoordWgs84, tpop.TPopKoordWgs84]
 
       return window.L.polyline(latlngs, {
-        color: isHighlighted ? `yellow` : `#9a009a`,
+        color: isHighlighted ? `yellow` : `#FF00FF`,
       })
     })
   }

@@ -3,8 +3,8 @@ import ReactDOMServer from 'react-dom/server'
 import 'leaflet'
 import queryString from 'query-string'
 
-import beobIcon from '../etc/beob.png'
-import beobIconHighlighted from '../etc/beobHighlighted.png'
+import beobIcon from '../etc/beobZugeordnet.png'
+import beobIconHighlighted from '../etc/beobZugeordnetHighlighted.png'
 import BeobPopup from '../components/Projekte/Karte/BeobPopup'
 import getNearestTpopId from './getNearestTpopId'
 

@@ -4,8 +4,8 @@ import 'leaflet'
 import '../../node_modules/leaflet.markercluster/dist/leaflet.markercluster-src.js'
 import some from 'lodash/some'
 
-import beobIcon from '../etc/beob.png'
-import beobIconHighlighted from '../etc/beobHighlighted.png'
+import beobIcon from '../etc/beobZugeordnet.png'
+import beobIconHighlighted from '../etc/beobZugeordnetHighlighted.png'
 import BeobPopup from '../components/Projekte/Karte/BeobPopup'
 
 export default (store) => {
@@ -16,7 +16,7 @@ export default (store) => {
     iconCreateFunction: function (cluster) {
       const markers = cluster.getAllChildMarkers()
       const hasHighlightedTpop = some(markers, (m) => m.options.icon.options.className === `beobIconHighlighted`)
-      const className = hasHighlightedTpop ? `beobClusterHighlighted` : `beobCluster`
+      const className = hasHighlightedTpop ? `beobZugeordnetClusterHighlighted` : `beobZugeordnetCluster`
       return window.L.divIcon({ html: markers.length, className, iconSize: window.L.point(40, 40) })
     },
   }
