@@ -1,10 +1,12 @@
 import React from 'react'
 import ReactDOMServer from 'react-dom/server'
 import 'leaflet'
+import queryString from 'query-string'
 
 import beobIcon from '../etc/beob.png'
 import beobIconHighlighted from '../etc/beobHighlighted.png'
 import BeobPopup from '../components/Projekte/Karte/BeobPopup'
+import getNearestTpopId from './getNearestTpopId'
 
 export default (store) => {
   const { beobs, highlightedIds } = store.map.tpopBeob
@@ -28,20 +30,21 @@ export default (store) => {
           apfloraLayer.value === `TpopBeob`
         )
       })
-        .bindPopup(ReactDOMServer.renderToStaticMarkup(<BeobPopup store={store} beobBereitgestellt={p} />))
-        .on(`movestart`, () => {
-          const { activeUrlElements } = store
-          // make this beob the active dataset
-          // i.e. set url
-          const newUrl = `/Projekte/${activeUrlElements.projekt}/Arten/${activeUrlElements.ap}/nicht-beurteilte-Beobachtungen/${p.BeobId}`
-          store.history.push(newUrl)
-        })
+        .bindPopup(ReactDOMServer.renderToStaticMarkup(
+          <BeobPopup store={store} beobBereitgestellt={p} />
+        ))
         .on('moveend', (event) => {
-          console.log(`latlng:`, event.target._latlng)
           /**
            * assign to nearest tpop
-           * open form of beob
+           * point url to moved beob
+           * open form of beob?
            */
+          const { activeUrlElements, history, table, updatePropertyInDb } = store
+          const nearestTpopId = getNearestTpopId(store, event.target._latlng)
+          const popId = table.tpop.get(nearestTpopId).PopId
+          const newUrl = `/Projekte/${activeUrlElements.projekt}/Arten/${activeUrlElements.ap}/Populationen/${popId}/Teil-Populationen/${nearestTpopId}/Beobachtungen/${p.BeobId}${Object.keys(store.urlQuery).length > 0 ? `?${queryString.stringify(store.urlQuery)}` : ``}`
+          history.push(newUrl)
+          updatePropertyInDb(`TPopId`, nearestTpopId)
         })
     })
   }
