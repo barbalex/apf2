@@ -127,21 +127,25 @@ const LayersControl = ({
   onToggleApfloraLayersExpanded,
 }) => {
   const { activeUrlElements, table } = store
-  const apfloraLayersTitle = (
-    activeUrlElements.ap ? table.ap.get(activeUrlElements.ap).label : `apflora`
-  )
+  const getApfloraLayersTitle = () => {
+    if (!activeUrlElements.ap) return `apflora`
+    const ap = table.ap.get(activeUrlElements.ap)
+    if (!ap || !ap.label) return `apflora`
+    return ap.label
+  }
   const ApfloraCard = (
     baseLayersExpanded || apfloraLayersExpanded || overlaysExpanded ?
     CardTitle :
     CardTitleApfloraOpen
   )
+
   return (
     <Control position="topright">
       <MuiThemeProvider muiTheme={getMuiTheme(theme)}>
         <CardContainer>
           <Card>
             <CardHeader onClick={onToggleApfloraLayersExpanded}>
-              <ApfloraCard>{apfloraLayersTitle}</ApfloraCard>
+              <ApfloraCard>{getApfloraLayersTitle()}</ApfloraCard>
               <div>
                 <StyledFontIcon className="material-icons">
                   { apfloraLayersExpanded ? `expand_less` : `expand_more` }
