@@ -45,6 +45,12 @@ const CardHeader = styled.div`
 const CardTitle = styled.div`
   padding-right: 5px;
 `
+const CardTitleApfloraOpen = styled(CardTitle)`
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 70px;
+`
 const StyledFontIcon = styled(FontIcon)`
   font-size: 18px !important;
   color: rgb(48, 48, 48) !important;
@@ -120,13 +126,22 @@ const LayersControl = ({
   onToggleOverlaysExpanded,
   onToggleApfloraLayersExpanded,
 }) => {
+  const { activeUrlElements, table } = store
+  const apfloraLayersTitle = (
+    activeUrlElements.ap ? table.ap.get(activeUrlElements.ap).label : `apflora`
+  )
+  const ApfloraCard = (
+    baseLayersExpanded || apfloraLayersExpanded || overlaysExpanded ?
+    CardTitle :
+    CardTitleApfloraOpen
+  )
   return (
     <Control position="topright">
       <MuiThemeProvider muiTheme={getMuiTheme(theme)}>
         <CardContainer>
           <Card>
             <CardHeader onClick={onToggleApfloraLayersExpanded}>
-              <CardTitle>apflora</CardTitle>
+              <ApfloraCard>{apfloraLayersTitle}</ApfloraCard>
               <div>
                 <StyledFontIcon className="material-icons">
                   { apfloraLayersExpanded ? `expand_less` : `expand_more` }

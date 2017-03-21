@@ -296,12 +296,12 @@ function Store() {
       this.map.activeOverlays = this.map.activeOverlays.filter(o => o !== layer)
     }),
     apfloraLayers: observable([
-      { label: `apflora: Populationen`, value: `Pop` },
-      { label: `apflora: Teil-Populationen`, value: `Tpop` },
-      { label: `apflora: nicht beurteilte Beobachtungen`, value: `BeobNichtBeurteilt` },
-      { label: `apflora: nicht zuzuordnende Beobachtungen`, value: `BeobNichtZuzuordnen` },
-      { label: `apflora: zugeordnete Beobachtungen`, value: `TpopBeob` },
-      { label: `apflora: Zuordnungs-Linien`, value: `TpopBeobAssignPolylines` },
+      { label: `Populationen`, value: `Pop` },
+      { label: `Teil-Populationen`, value: `Tpop` },
+      { label: `Beobachtungen: nicht beurteilt`, value: `BeobNichtBeurteilt` },
+      { label: `Beobachtungen: nicht zuzuordnen`, value: `BeobNichtZuzuordnen` },
+      { label: `Beobachtungen: zugeordnet`, value: `TpopBeob` },
+      { label: `Zuordnungs-Linien`, value: `TpopBeobAssignPolylines` },
     ]),
     apfloraLayersString: computed(() => this.map.apfloraLayers.map(o => o.value).join()),
     moveApfloraLayer: action(({ oldIndex, newIndex }) =>
