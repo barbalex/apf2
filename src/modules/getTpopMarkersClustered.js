@@ -1,6 +1,8 @@
 import React from 'react'
 import ReactDOMServer from 'react-dom/server'
 import 'leaflet'
+import '../../node_modules/leaflet.markercluster/dist/leaflet.markercluster-src.js'
+import some from 'lodash/some'
 
 import tpopIcon from '../etc/tpop.png'
 import tpopIconHighlighted from '../etc/tpopHighlighted.png'
@@ -9,10 +11,20 @@ import TpopPopup from '../components/Projekte/Karte/TpopPopup'
 export default (store) => {
   const { tpops, labelUsingNr, highlightedIds } = store.map.tpop
   const visible = store.map.activeApfloraLayers.includes(`Tpop`)
+  const mcgOptions = {
+    maxClusterRadius: 66,
+    iconCreateFunction: function (cluster) {
+      const markers = cluster.getAllChildMarkers()
+      const hasHighlightedTpop = some(markers, (m) => m.options.icon.options.className === `tpopIconHighlighted`)
+      const className = hasHighlightedTpop ? `tpopClusterHighlighted` : `tpopCluster`
+      return window.L.divIcon({ html: markers.length, className, iconSize: window.L.point(40, 40) })
+    },
+  }
+  const markers = window.L.markerClusterGroup(mcgOptions)
   if (visible) {
     const pops = Array.from(store.table.pop.values())
     const tpopsWithKoord = tpops.filter(p => p.TPopKoordWgs84)
-    return tpopsWithKoord.map((p) => {
+    tpopsWithKoord.forEach((p) => {
       let title = labelUsingNr ? p.TPopNr : p.TPopFlurname
       // beware: leaflet needs title to always be a string
       if (title && title.toString) {
@@ -36,7 +48,7 @@ export default (store) => {
         className: isHighlighted ? `tpopIconHighlighted` : `tpopIcon`,
       })
       const pop = pops.find(pop => pop.PopId === p.PopId)
-      return window.L.marker(latLng, {
+      const marker = window.L.marker(latLng, {
         title,
         icon,
         zIndexOffset: -store.map.apfloraLayers.findIndex((apfloraLayer) =>
@@ -47,7 +59,8 @@ export default (store) => {
           <TpopPopup store={store} pop={pop} tpop={p} />
         ))
         .bindTooltip(tooltipText, tooltipOptions)
+      markers.addLayer(marker)
     })
   }
-  return []
+  return markers
 }

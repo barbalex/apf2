@@ -1,8 +1,6 @@
 import React from 'react'
 import ReactDOMServer from 'react-dom/server'
 import 'leaflet'
-import '../../node_modules/leaflet.markercluster/dist/leaflet.markercluster-src.js'
-import some from 'lodash/some'
 
 import beobIcon from '../etc/beob.png'
 import beobIconHighlighted from '../etc/beobHighlighted.png'

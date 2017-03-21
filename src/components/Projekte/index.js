@@ -64,6 +64,7 @@ const Projekte = ({ store }) => {
             <Karte
               popMarkers={store.map.pop.markers}
               tpopMarkers={store.map.tpop.markers}
+              tpopMarkersClustered={store.map.tpop.markersClustered}
               beobNichtBeurteiltMarkers={store.map.beobNichtBeurteilt.markers}
               beobNichtBeurteiltMarkersClustered={store.map.beobNichtBeurteilt.markersClustered}
               beobNichtZuzuordnenMarkers={store.map.beobNichtZuzuordnen.markersClustered}

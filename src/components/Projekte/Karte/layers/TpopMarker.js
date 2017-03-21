@@ -7,10 +7,11 @@ const enhance = compose(
   getContext({ map: PropTypes.object.isRequired }),
 )
 
-class BeobMarker extends Component { // eslint-disable-line react/prefer-stateless-function
+class TpopMarker extends Component { // eslint-disable-line react/prefer-stateless-function
 
   static propTypes = {
-    beobs: PropTypes.array.isRequired,
+    tpops: PropTypes.array.isRequired,
+    labelUsingNr: PropTypes.bool.isRequired,
     highlightedIds: PropTypes.array.isRequired,
     visible: PropTypes.bool.isRequired,
     markers: PropTypes.array,
@@ -49,4 +50,4 @@ class BeobMarker extends Component { // eslint-disable-line react/prefer-statele
   }
 }
 
-export default enhance(BeobMarker)
+export default enhance(TpopMarker)

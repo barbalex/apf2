@@ -40,7 +40,8 @@ import '../../../../node_modules/leaflet/dist/leaflet.css'
 import '../../../../node_modules/leaflet-measure/dist/leaflet-measure.css'
 import '../../../../node_modules/leaflet.markercluster/dist/MarkerCluster.css'
 import Pop from './layers/PopMarkerCluster'
-import Tpop from './layers/TpopMarkerCluster'
+import Tpop from './layers/TpopMarker'
+import TpopCluster from './layers/TpopMarkerCluster'
 import Beob from './layers/BeobMarker'
 import BeobCluster from './layers/BeobMarkerCluster'
 import TpopBeobAssignPolylines from './layers/TpopBeobAssignPolylines'
@@ -75,7 +76,8 @@ class Karte extends Component {
   static propTypes = {
     store: PropTypes.object.isRequired,
     popMarkers: PropTypes.object,
-    tpopMarkers: PropTypes.object,
+    tpopMarkers: PropTypes.array,
+    tpopMarkersClustered: PropTypes.object,
     beobNichtBeurteiltMarkers: PropTypes.array,
     beobNichtBeurteiltMarkersClustered: PropTypes.object,
     beobNichtZuzuordnenMarkers: PropTypes.object,
@@ -108,6 +110,7 @@ class Karte extends Component {
       store,
       popMarkers,
       tpopMarkers,
+      tpopMarkersClustered,
       beobNichtBeurteiltMarkers,
       beobNichtBeurteiltMarkersClustered,
       beobNichtZuzuordnenMarkers,
@@ -143,13 +146,31 @@ class Karte extends Component {
         visible={store.map.activeApfloraLayers.includes(`Pop`)}
         markers={popMarkers}
       />,
-      Tpop: () => <Tpop
-        highlightedIds={toJS(store.map.tpop.highlightedIds)}
-        labelUsingNr={store.map.tpop.labelUsingNr}
-        tpops={store.map.tpop.tpops}
-        visible={store.map.activeApfloraLayers.includes(`Tpop`)}
-        markers={tpopMarkers}
-      />,
+      Tpop: () => {
+        if (
+          store.map.beob.assigning ||
+          store.map.activeApfloraLayers.includes(`TpopBeobAssignPolylines`)
+        ) {
+          return (
+            <Tpop
+              highlightedIds={toJS(store.map.tpop.highlightedIds)}
+              labelUsingNr={store.map.tpop.labelUsingNr}
+              tpops={store.map.tpop.tpops}
+              visible={store.map.activeApfloraLayers.includes(`Tpop`)}
+              markers={tpopMarkers}
+            />
+          )
+        }
+        return (
+          <TpopCluster
+            highlightedIds={toJS(store.map.tpop.highlightedIds)}
+            labelUsingNr={store.map.tpop.labelUsingNr}
+            tpops={store.map.tpop.tpops}
+            visible={store.map.activeApfloraLayers.includes(`Tpop`)}
+            markers={tpopMarkersClustered}
+          />
+        )
+      },
       BeobNichtBeurteilt: () => {
         if (
           store.map.beob.assigning ||

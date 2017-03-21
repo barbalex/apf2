@@ -53,6 +53,7 @@ import getBeobNichtBeurteiltBounds from '../modules/getBeobNichtBeurteiltBounds'
 import epsg4326to21781 from '../modules/epsg4326to21781'
 import getPopMarkers from '../modules/getPopMarkers'
 import getTpopMarkers from '../modules/getTpopMarkers'
+import getTpopMarkersClustered from '../modules/getTpopMarkersClustered'
 import getBeobMarkersClustered from '../modules/getBeobMarkersClustered'
 import getBeobMarkers from '../modules/getBeobMarkers'
 import getBeobNichtBeurteiltMarkersClustered from '../modules/getBeobNichtBeurteiltMarkersClustered'
@@ -346,6 +347,7 @@ function Store() {
     // alternative is using names
     labelUsingNr: true,
     markers: computed(() => getTpopMarkers(this)),
+    markersClustered: computed(() => getTpopMarkersClustered(this)),
     idOfTpopBeingLocalized: 0,
   })
   extendObservable(this.map.beob, {
