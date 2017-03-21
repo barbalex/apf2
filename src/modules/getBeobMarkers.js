@@ -44,7 +44,7 @@ export default (store) => {
            * assign to nearest tpop
            * open form of beob
            */
-        });
+        })
     })
   }
   return []
