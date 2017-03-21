@@ -38,8 +38,12 @@ export default (store) => {
           <BeobPopup store={store} beobBereitgestellt={p} />
         ))
         .bindTooltip(tooltipText, tooltipOptions)
-        .on('dragend', function() {
-          console.log(`dragend`)
+        .on('moveend', (event) => {
+          console.log(`latlng:`, event.target._latlng)
+          /**
+           * assign to nearest tpop
+           * open form of beob
+           */
         });
     })
   }

@@ -31,6 +31,10 @@ export default (store) => {
         .bindPopup(ReactDOMServer.renderToStaticMarkup(<BeobPopup store={store} beobBereitgestellt={p} />))
         .on('moveend', (event) => {
           console.log(`latlng:`, event.target._latlng)
+          /**
+           * assign to nearest tpop
+           * open form of beob
+           */
         })
     })
   }
