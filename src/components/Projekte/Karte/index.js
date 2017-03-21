@@ -151,7 +151,10 @@ class Karte extends Component {
         markers={tpopMarkers}
       />,
       BeobNichtBeurteilt: () => {
-        if (store.map.beob.assigning) {
+        if (
+          store.map.beob.assigning ||
+          store.map.activeApfloraLayers.includes(`TpopBeobAssignPolylines`)
+        ) {
           return (
             <Beob
               highlightedIds={toJS(store.map.beobNichtBeurteilt.highlightedIds)}
@@ -177,7 +180,10 @@ class Karte extends Component {
         markers={beobNichtZuzuordnenMarkers}
       />,
       TpopBeob: () => {
-        if (store.map.beob.assigning) {
+        if (
+          store.map.beob.assigning ||
+          store.map.activeApfloraLayers.includes(`TpopBeobAssignPolylines`)
+        ) {
           return (
             <Beob
               highlightedIds={toJS(store.map.tpopBeob.highlightedIds)}

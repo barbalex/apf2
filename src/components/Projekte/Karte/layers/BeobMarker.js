@@ -8,7 +8,7 @@ const enhance = compose(
   getContext({ map: PropTypes.object.isRequired }),
 )
 
-class BeobMarkerCluster extends Component { // eslint-disable-line react/prefer-stateless-function
+class BeobMarker extends Component { // eslint-disable-line react/prefer-stateless-function
 
   static propTypes = {
     beobs: PropTypes.array.isRequired,
@@ -27,7 +27,7 @@ class BeobMarkerCluster extends Component { // eslint-disable-line react/prefer-
   componentWillReceiveProps(nextProps) {
     const { map, markers } = this.props
     if (markers && markers !== nextProps.markers) {
-      markers.forEach(m => m.removeLayer(map))
+      markers.forEach(m => map.removeLayer(m))
     }
   }
 
@@ -40,7 +40,7 @@ class BeobMarkerCluster extends Component { // eslint-disable-line react/prefer-
 
   componentWillUnmount() {
     const { map, markers } = this.props
-    markers.forEach(m => m.removeLayer(map))
+    markers.forEach(m => map.removeLayer(m))
   }
 
   render() {
@@ -50,4 +50,4 @@ class BeobMarkerCluster extends Component { // eslint-disable-line react/prefer-
   }
 }
 
-export default enhance(BeobMarkerCluster)
+export default enhance(BeobMarker)

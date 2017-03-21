@@ -15,13 +15,6 @@ export default (store) => {
   if (visible) {
     return beobs.map((p) => {
       const title = p.label
-      const tooltipText = p.label
-      const tooltipOptions = {
-        permanent: true,
-        direction: `bottom`,
-        className: `mapTooltip`,
-        opacity: 1,
-      }
       const isHighlighted = highlightedIds.includes(p.BeobId)
       const latLng = new window.L.LatLng(...p.KoordWgs84)
       const icon = window.L.icon({
@@ -38,7 +31,6 @@ export default (store) => {
         )
       })
         .bindPopup(ReactDOMServer.renderToStaticMarkup(<BeobPopup store={store} beobBereitgestellt={p} />))
-        .bindTooltip(tooltipText, tooltipOptions)
         .on('dragend', function() {
           console.log(`dragend`)
         })

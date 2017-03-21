@@ -244,13 +244,9 @@ function Store() {
     pop: {},
     tpop: {},
     beob: {},
-    beobNichtBeurteilt: {
-      markers: [],
-    },
+    beobNichtBeurteilt: {},
     beobNichtZuzuordnen: {},
-    tpopBeob: {
-      markers: [],
-    },
+    tpopBeob: {},
     activeBaseLayer: `OsmColor`,
     activeOverlays: [],
     activeApfloraLayers: [],

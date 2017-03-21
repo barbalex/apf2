@@ -11,19 +11,17 @@ export default (store) => {
   const { beobs, highlightedIds } = store.map.beobNichtBeurteilt
   const visible = store.map.activeApfloraLayers.includes(`BeobNichtBeurteilt`)
   if (visible) {
-    return beobs.forEach((p) => {
-      const title = p.label
+    return beobs.map((p) => {
       const beobId = isNaN(p.BeobId) ? p.BeobId : Number(p.BeobId)
       const isHighlighted = highlightedIds.includes(beobId)
       const latLng = new window.L.LatLng(...p.KoordWgs84)
       const icon = window.L.icon({
         iconUrl: isHighlighted ? beobIconHighlighted : beobIcon,
         iconSize: [24, 24],
-        // iconAnchor: [12, 12],
         className: isHighlighted ? `beobIconHighlighted` : `beobIcon`,
       })
       return window.L.marker(latLng, {
-        title,
+        title: p.label,
         icon,
         draggable: store.map.beob.assigning,
         zIndexOffset: -store.map.apfloraLayers.findIndex((apfloraLayer) =>
