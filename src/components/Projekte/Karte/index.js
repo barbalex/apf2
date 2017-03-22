@@ -75,13 +75,6 @@ class Karte extends Component {
 
   static propTypes = {
     store: PropTypes.object.isRequired,
-    beobNichtBeurteiltMarkers: PropTypes.array,
-    beobNichtBeurteiltMarkersClustered: PropTypes.object,
-    beobNichtZuzuordnenMarkers: PropTypes.object,
-    tpopBeobMarkers: PropTypes.array,
-    tpopBeobMarkersClustered: PropTypes.object,
-    tpopBeobAssignPolylines: PropTypes.array,
-    tpopBeobAssignPolylinesLength: PropTypes.number,
     idOfTpopBeingLocalized: PropTypes.number.isRequired,
     changeBounds: PropTypes.func.isRequired,
     bounds: PropTypes.array,
@@ -106,17 +99,11 @@ class Karte extends Component {
   render() {
     const {
       store,
-      beobNichtBeurteiltMarkers,
-      beobNichtBeurteiltMarkersClustered,
-      beobNichtZuzuordnenMarkers,
-      tpopBeobMarkers,
-      tpopBeobMarkersClustered,
-      tpopBeobAssignPolylines,
       bounds,
       changeBounds,
       idOfTpopBeingLocalized,
     } = this.props
-    const { activeBaseLayer } = store.map
+    const { activeBaseLayer, activeApfloraLayers } = store.map
     const MapElement = !!idOfTpopBeingLocalized ? StyledMapLocalizing : StyledMap
     // this does not work
     // see issue on proj4js: https://github.com/proj4js/proj4js/issues/214
@@ -138,20 +125,20 @@ class Karte extends Component {
         highlightedIds={toJS(store.map.pop.highlightedIds)}
         labelUsingNr={store.map.pop.labelUsingNr}
         pops={store.map.pop.pops}
-        visible={store.map.activeApfloraLayers.includes(`Pop`)}
+        visible={activeApfloraLayers.includes(`Pop`)}
         markers={store.map.pop.markers}
       />,
       Tpop: () => {
         if (
           store.map.beob.assigning ||
-          store.map.activeApfloraLayers.includes(`TpopBeobAssignPolylines`)
+          activeApfloraLayers.includes(`TpopBeobAssignPolylines`)
         ) {
           return (
             <Tpop
               highlightedIds={toJS(store.map.tpop.highlightedIds)}
               labelUsingNr={store.map.tpop.labelUsingNr}
               tpops={store.map.tpop.tpops}
-              visible={store.map.activeApfloraLayers.includes(`Tpop`)}
+              visible={activeApfloraLayers.includes(`Tpop`)}
               markers={store.map.tpop.markers}
             />
           )
@@ -161,7 +148,7 @@ class Karte extends Component {
             highlightedIds={toJS(store.map.tpop.highlightedIds)}
             labelUsingNr={store.map.tpop.labelUsingNr}
             tpops={store.map.tpop.tpops}
-            visible={store.map.activeApfloraLayers.includes(`Tpop`)}
+            visible={activeApfloraLayers.includes(`Tpop`)}
             markers={store.map.tpop.markersClustered}
           />
         )
@@ -169,14 +156,14 @@ class Karte extends Component {
       BeobNichtBeurteilt: () => {
         if (
           store.map.beob.assigning ||
-          store.map.activeApfloraLayers.includes(`TpopBeobAssignPolylines`)
+          activeApfloraLayers.includes(`TpopBeobAssignPolylines`)
         ) {
           return (
             <Beob
               highlightedIds={toJS(store.map.beobNichtBeurteilt.highlightedIds)}
               beobs={store.map.beobNichtBeurteilt.beobs}
-              visible={store.map.activeApfloraLayers.includes(`BeobNichtBeurteilt`)}
-              markers={beobNichtBeurteiltMarkers}
+              visible={activeApfloraLayers.includes(`BeobNichtBeurteilt`)}
+              markers={store.map.beobNichtBeurteilt.markers}
             />
           )
         }
@@ -184,28 +171,28 @@ class Karte extends Component {
           <BeobCluster
             highlightedIds={toJS(store.map.beobNichtBeurteilt.highlightedIds)}
             beobs={store.map.beobNichtBeurteilt.beobs}
-            visible={store.map.activeApfloraLayers.includes(`BeobNichtBeurteilt`)}
-            markers={beobNichtBeurteiltMarkersClustered}
+            visible={activeApfloraLayers.includes(`BeobNichtBeurteilt`)}
+            markers={store.map.beobNichtBeurteilt.markersClustered}
           />
         )
       },
       BeobNichtZuzuordnen: () => <BeobCluster
         highlightedIds={toJS(store.map.beobNichtZuzuordnen.highlightedIds)}
         beobs={store.map.beobNichtZuzuordnen.beobs}
-        visible={store.map.activeApfloraLayers.includes(`BeobNichtZuzuordnen`)}
-        markers={beobNichtZuzuordnenMarkers}
+        visible={activeApfloraLayers.includes(`BeobNichtZuzuordnen`)}
+        markers={store.map.beobNichtZuzuordnen.markersClustered}
       />,
       TpopBeob: () => {
         if (
           store.map.beob.assigning ||
-          store.map.activeApfloraLayers.includes(`TpopBeobAssignPolylines`)
+          activeApfloraLayers.includes(`TpopBeobAssignPolylines`)
         ) {
           return (
             <Beob
               highlightedIds={toJS(store.map.tpopBeob.highlightedIds)}
               beobs={store.map.tpopBeob.beobs}
-              visible={store.map.activeApfloraLayers.includes(`TpopBeob`)}
-              markers={tpopBeobMarkers}
+              visible={activeApfloraLayers.includes(`TpopBeob`)}
+              markers={store.map.tpopBeob.markers}
             />
           )
         }
@@ -213,16 +200,16 @@ class Karte extends Component {
           <BeobCluster
             highlightedIds={toJS(store.map.tpopBeob.highlightedIds)}
             beobs={store.map.tpopBeob.beobs}
-            visible={store.map.activeApfloraLayers.includes(`TpopBeob`)}
-            markers={tpopBeobMarkersClustered}
+            visible={activeApfloraLayers.includes(`TpopBeob`)}
+            markers={store.map.tpopBeob.markersClustered}
           />
         )
       },
       TpopBeobAssignPolylines: () => <TpopBeobAssignPolylines
         highlightedIds={toJS(store.map.tpopBeob.highlightedIds)}
         beobs={store.map.tpopBeob.beobs}
-        visible={store.map.activeApfloraLayers.includes(`TpopBeobAssignPolylines`)}
-        assignPolylines={tpopBeobAssignPolylines}
+        visible={activeApfloraLayers.includes(`TpopBeobAssignPolylines`)}
+        assignPolylines={store.map.tpopBeob.assignPolylines}
       />,
     }
     const OverlayComponents = {
