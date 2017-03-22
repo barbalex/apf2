@@ -300,9 +300,9 @@ function Store() {
     apfloraLayers: observable([
       { label: `Populationen`, value: `Pop` },
       { label: `Teil-Populationen`, value: `Tpop` },
+      { label: `Beobachtungen: zugeordnet`, value: `TpopBeob` },
       { label: `Beobachtungen: nicht beurteilt`, value: `BeobNichtBeurteilt` },
       { label: `Beobachtungen: nicht zuzuordnen`, value: `BeobNichtZuzuordnen` },
-      { label: `Beobachtungen: zugeordnet`, value: `TpopBeob` },
       { label: `Zuordnungs-Linien`, value: `TpopBeobAssignPolylines` },
     ]),
     apfloraLayersString: computed(() => this.map.apfloraLayers.map(o => o.value).join()),

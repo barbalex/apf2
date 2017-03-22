@@ -31,9 +31,6 @@ const LayerDiv = styled.div`
   display: flex;
   justify-content: space-between;
   padding-top: 4px;
-  &:last-of-type {
-    padding-bottom: 4px;
-  }
   &:not(:last-of-type) {
     border-bottom: 1px solid #ececec;
   }
