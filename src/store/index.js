@@ -41,7 +41,6 @@ import setQk from '../modules/setQk'
 import setQkFilter from '../modules/setQkFilter'
 import fetchQk from '../modules/fetchQk'
 import addMessagesToQk from '../modules/addMessagesToQk'
-import getMapBounds from '../modules/getMapBounds'
 import getPopsForMap from '../modules/getPopsForMap'
 import getTpopsForMap from '../modules/getTpopsForMap'
 import getBeobForMap from '../modules/getBeobForMap'
@@ -262,7 +261,8 @@ function Store() {
     removeActiveApfloraLayer: () => {},
   }
   extendObservable(this.map, {
-    bounds: computed(() => getMapBounds(this)),
+    bounds: [[47.159, 8.354], [47.696, 8.984]],
+    changeBounds: action((bounds) => this.map.bounds = bounds),
     mouseCoord: [],
     mouseCoordEpsg21781: computed(() => {
       if (this.map.mouseCoord.length > 0) {

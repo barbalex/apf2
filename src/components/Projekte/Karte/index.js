@@ -12,7 +12,6 @@ import { observer, inject } from 'mobx-react'
 import { Map, ScaleControl } from 'react-leaflet'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
-import withState from 'recompose/withState'
 import 'leaflet'
 import 'proj4'
 import 'proj4leaflet'
@@ -62,12 +61,9 @@ const StyledMap = styled(Map)`
 const StyledMapLocalizing = styled(StyledMap)`
   cursor: crosshair !important;
 `
-const ktZhBounds = [[47.159, 8.354], [47.696, 8.984]]
 
 const enhance = compose(
   inject(`store`),
-  // make bounds state, need to manage them manually
-  withState(`bounds`, `changeBounds`, ktZhBounds),
   observer
 )
 
@@ -76,31 +72,15 @@ class Karte extends Component {
   static propTypes = {
     store: PropTypes.object.isRequired,
     idOfTpopBeingLocalized: PropTypes.number.isRequired,
-    changeBounds: PropTypes.func.isRequired,
-    bounds: PropTypes.array,
   }
 
   componentDidMount() {
-    const { store, changeBounds } = this.props
     console.log(`Karte did mount`)
-    changeBounds(store.map.bounds)
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    const { store, changeBounds, idOfTpopBeingLocalized } = this.props
-    /**
-     * when tpops are localized, need to zoom to tpop if it has coordinates
-     */
-    if (idOfTpopBeingLocalized && prevProps.idOfTpopBeingLocalized !== idOfTpopBeingLocalized) {
-      changeBounds(store.map.tpop.bounds)
-    }
   }
 
   render() {
     const {
       store,
-      bounds,
-      changeBounds,
       idOfTpopBeingLocalized,
     } = this.props
     const { activeBaseLayer, activeApfloraLayers } = store.map
@@ -239,7 +219,7 @@ class Karte extends Component {
 
     return (
       <MapElement
-        bounds={bounds}
+        bounds={toJS(store.map.bounds)}
         preferCanvas
         onMouseMove={store.setMapMouseCoord}
         // need max and min zoom because otherwise
@@ -259,17 +239,17 @@ class Karte extends Component {
           // need to update bounds, otherwise map jumps back
           // when adding new tpop
           const bounds = event.target.getBounds()
-          changeBounds([bounds._southWest, bounds._northEast])
+          store.map.changeBounds([bounds._southWest, bounds._northEast])
         }}
         onZoomend={(event) => {
           // need to update bounds, otherwise map jumps back
           const bounds = event.target.getBounds()
-          changeBounds([bounds._southWest, bounds._northEast])
+          store.map.changeBounds([bounds._southWest, bounds._northEast])
         }}
         onMoveend={(event) => {
           // need to update bounds, otherwise map jumps back
           const bounds = event.target.getBounds()
-          changeBounds([bounds._southWest, bounds._northEast])
+          store.map.changeBounds([bounds._southWest, bounds._northEast])
         }}
       >
         {
