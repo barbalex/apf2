@@ -25,7 +25,7 @@
 
 Die wichtigsten sind:
 
-- [create-react-app](//github.com/facebookincubator/create-react-app): Ganz einfach Abhängigkeiten aktuell halten
+- [create-react-app](//github.com/facebookincubator/create-react-app): Abhängigkeiten einfach aktuell halten
 - [MobX](//github.com/mobxjs/mobx): Computed data wie in Excel. Und viel simpler als redux. Genial!
 - [React](//facebook.github.io/react): Deklarative Benutzer-Oberfläche. Aufgebaut aus Komponenten. Genial!
 - [socket.io](//socket.io/): Änderungen laufend bei allen Benutzern sichtbar machen
@@ -34,10 +34,10 @@ Die wichtigsten sind:
 
 ### Neue:
 
-- Mehrere Projekte anzeigen
+- Mehrere Projekte bearbeiten
 - Der Strukturbaum ist wesentlich leistungsfähiger.<br />Es gibt keine Grenzen mehr, wieviele Elemente einen Ebene darstellen kann!
 - Karten:
-  - Standardmässig werden Open-Street-Maps als Hintergrund verwendet, statt Swisstopo Karten. Grund: Kosten vermeiden. Natürlich können immer noch Swisstopo Karten eigeblendet werden
+  - Standardmässig werden Open-Street-Maps statt Swisstopo Karten als Hintergrund verwendet. Grund: Kosten vermeiden. Natürlich können immer noch Swisstopo Karten eigeblendet werden
   - Ebenen über-/untereinander stapeln
   - In der Karte verwendete Symbole werden im Ebenen-Tool und im Strukturbaum eingeblendet
   - Es werden immer alle Elemente einer Ebene angezeigt: aktive sind gelb umrahmt
