@@ -21,7 +21,8 @@ export default (store:Object, key:string, valuePassed:string|number) => {
   // if jahr of ziel is updated, url needs to change
   if (table === `ziel` && key === `ZielJahr`) {
     store.url[5] = value
-    const newUrl = `/${store.url.join(`/`)}${Object.keys(store.urlQuery).length > 0 ? `?${queryString.stringify(store.urlQuery)}` : ``}`
+    const query = `${Object.keys(store.urlQuery).length > 0 ? `?${queryString.stringify(store.urlQuery)}` : ``}`
+    const newUrl = `/${store.url.join(`/`)}${query}`
     store.history.push(newUrl)
   }
   row[key] = value

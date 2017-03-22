@@ -42,7 +42,8 @@ export default (store) => {
           const { activeUrlElements, history, table, updatePropertyInDb } = store
           const nearestTpopId = getNearestTpopId(store, event.target._latlng)
           const popId = table.tpop.get(nearestTpopId).PopId
-          const newUrl = `/Projekte/${activeUrlElements.projekt}/Arten/${activeUrlElements.ap}/Populationen/${popId}/Teil-Populationen/${nearestTpopId}/Beobachtungen/${p.BeobId}${Object.keys(store.urlQuery).length > 0 ? `?${queryString.stringify(store.urlQuery)}` : ``}`
+          const query = `${Object.keys(store.urlQuery).length > 0 ? `?${queryString.stringify(store.urlQuery)}` : ``}`
+          const newUrl = `/Projekte/${activeUrlElements.projekt}/Arten/${activeUrlElements.ap}/Populationen/${popId}/Teil-Populationen/${nearestTpopId}/Beobachtungen/${p.BeobId}${query}`
           history.push(newUrl)
           updatePropertyInDb(`TPopId`, nearestTpopId)
         })

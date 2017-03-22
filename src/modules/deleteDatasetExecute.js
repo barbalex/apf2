@@ -29,7 +29,8 @@ export default (store:Object) => {
       deleteDatasetInIdb(store, table, id)
       // set new url
       url.pop()
-      store.history.push(`/${url.join(`/`)}${Object.keys(store.urlQuery).length > 0 ? `?${queryString.stringify(store.urlQuery)}` : ``}`)
+      const query = `${Object.keys(store.urlQuery).length > 0 ? `?${queryString.stringify(store.urlQuery)}` : ``}`
+      store.history.push(`/${url.join(`/`)}${query}`)
       store.datasetToDelete = {}
       // if zieljahr is active, need to pop again, if there is no other ziel left in same year
       if (store.activeUrlElements.zieljahr && !store.activeUrlElements.zielber) {
@@ -40,7 +41,7 @@ export default (store:Object) => {
           )
         if (zieleWithActiveZieljahr.length === 0) {
           url.pop()
-          store.history.push(`/${url.join(`/`)}${Object.keys(store.urlQuery).length > 0 ? `?${queryString.stringify(store.urlQuery)}` : ``}`)
+          store.history.push(`/${url.join(`/`)}${query}`)
         }
       }
     })

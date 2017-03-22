@@ -7,7 +7,8 @@ export default (store:Object, node:Object) => {
     if (node.expanded) {
       newUrl.pop()
     }
-    const url = `/${newUrl.join(`/`)}${Object.keys(store.urlQuery).length > 0 ? `?${queryString.stringify(store.urlQuery)}` : ``}`
+    const query = `${Object.keys(store.urlQuery).length > 0 ? `?${queryString.stringify(store.urlQuery)}` : ``}`
+    const url = `/${newUrl.join(`/`)}${query}`
     store.history.push(url)
     node.expanded = !node.expanded
   }

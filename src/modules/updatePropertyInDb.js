@@ -88,7 +88,9 @@ export default (store:Object, key:string, valuePassed:string|number) => {
       const newUrl = store.url
       newUrl.pop()
       newUrl.push(value)
-      store.history.push(newUrl)
+      const query = `${Object.keys(store.urlQuery).length > 0 ? `?${queryString.stringify(store.urlQuery)}` : ``}`
+      const newUrlString = `/${newUrl.join(`/`)}${query}`
+      store.history.push(newUrlString)
       deleteDatasetInIdb(store, `ap`, oldValue)
       insertDatasetInIdb(store, `ap`, rowCloned)
     } else {
@@ -103,10 +105,11 @@ export default (store:Object, key:string, valuePassed:string|number) => {
         if (!artWasChanged) {
           updatePropertyInIdb(store, table, tabelleId, key, value)
         }
+        const query = `${Object.keys(store.urlQuery).length > 0 ? `?${queryString.stringify(store.urlQuery)}` : ``}`
         // if ApArtId of ap is updated, url needs to change
         if (artWasChanged) {
           store.url[3] = value
-          const newUrl = `/${store.url.join(`/`)}${Object.keys(store.urlQuery).length > 0 ? `?${queryString.stringify(store.urlQuery)}` : ``}`
+          const newUrl = `/${store.url.join(`/`)}${query}`
           store.history.push(newUrl)
         }
         // if beobNichtBeurteilt is set to beobNichtZuordnen, url needs to change
@@ -118,7 +121,7 @@ export default (store:Object, key:string, valuePassed:string|number) => {
           )
           store.url[5] = store.activeDataset.row.NO_NOTE
           const newUrlArray = store.url.slice(0, 6)
-          const newUrl = `/${newUrlArray.join(`/`)}${Object.keys(store.urlQuery).length > 0 ? `?${queryString.stringify(store.urlQuery)}` : ``}`
+          const newUrl = `/${newUrlArray.join(`/`)}${query}`
           store.history.push(newUrl)
         }
         // if for a beobZugeordnet TPopId is set, url needs to change
@@ -127,7 +130,7 @@ export default (store:Object, key:string, valuePassed:string|number) => {
           const tpop = store.table.tpop.get(value)
           store.url[5] = tpop.PopId
           store.url[7] = value
-          const newUrl = `/${store.url.join(`/`)}${Object.keys(store.urlQuery).length > 0 ? `?${queryString.stringify(store.urlQuery)}` : ``}`
+          const newUrl = `/${store.url.join(`/`)}${query}`
           store.history.push(newUrl)
         }
       })

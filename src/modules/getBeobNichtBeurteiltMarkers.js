@@ -40,7 +40,8 @@ export default (store) => {
            */
           const { activeUrlElements, insertBeobzuordnung, history } = store
           const nearestTpopId = getNearestTpopId(store, event.target._latlng)
-          const newUrl = `/Projekte/${activeUrlElements.projekt}/Arten/${activeUrlElements.ap}/nicht-beurteilte-Beobachtungen/${p.BeobId}${Object.keys(store.urlQuery).length > 0 ? `?${queryString.stringify(store.urlQuery)}` : ``}`
+          const query = `${Object.keys(store.urlQuery).length > 0 ? `?${queryString.stringify(store.urlQuery)}` : ``}`
+          const newUrl = `/Projekte/${activeUrlElements.projekt}/Arten/${activeUrlElements.ap}/nicht-beurteilte-Beobachtungen/${p.BeobId}${query}`
           history.push(newUrl)
           insertBeobzuordnung(`TPopId`, nearestTpopId)
         })

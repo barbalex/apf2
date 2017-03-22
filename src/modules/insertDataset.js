@@ -41,7 +41,8 @@ export default (store:Object, tablePassed:string, parentId:number, baseUrl:Array
       insertDatasetInIdb(store, table, row)
       // set new url
       baseUrl.push(row[idField])
-      const newUrl = `/${baseUrl.join(`/`)}${Object.keys(store.urlQuery).length > 0 ? `?${queryString.stringify(store.urlQuery)}` : ``}`
+      const query = `${Object.keys(store.urlQuery).length > 0 ? `?${queryString.stringify(store.urlQuery)}` : ``}`
+      const newUrl = `/${baseUrl.join(`/`)}${query}`
       store.history.push(newUrl)
       // if zieljahr, need to update ZielJahr
       if (store.activeUrlElements.zieljahr) {
