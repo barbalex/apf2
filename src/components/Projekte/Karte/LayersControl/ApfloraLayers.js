@@ -17,6 +17,10 @@ const DragHandleIcon = styled(FontIcon)`
   color: #7b7b7b !important;
   cursor: grab;
 `
+const DragHandleDiv = styled.div`
+  padding-left: 3px;
+  min-width: 18px;
+`
 const ZuordnenIcon = styled(FontIcon)`
   font-size: 18px !important;
 `
@@ -24,6 +28,9 @@ const LayerDiv = styled.div`
   display: flex;
   justify-content: space-between;
   padding-top: 4px;
+  &:last-of-type {
+    padding-bottom: 4px;
+  }
   &:not(:last-of-type) {
     border-bottom: 1px solid #ececec;
   }
@@ -41,9 +48,30 @@ const LayerDiv = styled.div`
 const IconsDiv = styled.div`
   display: flex;
 `
-const ZuordnenDiv = styled.div`
-  padding-right: 3px;
+const ZuordnenDiv = styled.div``
+const MapIcon = styled(FontIcon)`
+  margin-right: -0.1em;
+  font-size: 20px !important;
 `
+const PopMapIcon = styled(MapIcon)`
+  color: #947500 !important;
+`
+const TpopMapIcon = styled(MapIcon)`
+  color: #016f19 !important;
+`
+const BeobNichtBeurteiltMapIcon = styled(MapIcon)`
+  color: #9a009a !important;
+`
+const BeobNichtZuzuordnenMapIcon = styled(MapIcon)`
+  color: #9a009a !important;
+`
+const TpopBeobMapIcon = styled(MapIcon)`
+  color: #FF00FF !important;
+`
+const TpopBeobAssignPolylinesIcon = styled(MapIcon)`
+  color: #FF00FF !important;
+`
+const MapIconDiv = styled.div``
 /**
  * don't know why but passing store
  * with mobx inject does not work here
@@ -72,6 +100,7 @@ const SortableItem = SortableElement(({ apfloraLayer, store, activeApfloraLayers
       )
     )
   )
+
   return (
     <LayerDiv>
       <Checkbox
@@ -106,9 +135,84 @@ const SortableItem = SortableElement(({ apfloraLayer, store, activeApfloraLayers
             </ZuordnenIcon>
           </ZuordnenDiv>
         }
-        <div>
-          <DragHandle />
-        </div>
+        {
+          apfloraLayer.value === `Pop` &&
+          activeApfloraLayers.includes(`Pop`) &&
+          <MapIconDiv>
+            <PopMapIcon
+              id="PopMapIcon"
+              className="material-icons"
+            >
+              local_florist
+            </PopMapIcon>
+          </MapIconDiv>
+        }
+        {
+          apfloraLayer.value === `Tpop` &&
+          activeApfloraLayers.includes(`Tpop`) &&
+          <MapIconDiv>
+            <TpopMapIcon
+              id="TpopMapIcon"
+              className="material-icons"
+            >
+              local_florist
+            </TpopMapIcon>
+          </MapIconDiv>
+        }
+        {
+          apfloraLayer.value === `BeobNichtBeurteilt` &&
+          activeApfloraLayers.includes(`BeobNichtBeurteilt`) &&
+          <MapIconDiv>
+            <BeobNichtBeurteiltMapIcon
+              id="BeobNichtBeurteiltMapIcon"
+              className="material-icons"
+            >
+              local_florist
+            </BeobNichtBeurteiltMapIcon>
+          </MapIconDiv>
+        }
+        {
+          apfloraLayer.value === `BeobNichtZuzuordnen` &&
+          activeApfloraLayers.includes(`BeobNichtZuzuordnen`) &&
+          <MapIconDiv>
+            <BeobNichtZuzuordnenMapIcon
+              id="BeobNichtZuzuordnenMapIcon"
+              className="material-icons"
+            >
+              local_florist
+            </BeobNichtZuzuordnenMapIcon>
+          </MapIconDiv>
+        }
+        {
+          apfloraLayer.value === `TpopBeob` &&
+          activeApfloraLayers.includes(`TpopBeob`) &&
+          <MapIconDiv>
+            <TpopBeobMapIcon
+              id="TpopBeobMapIcon"
+              className="material-icons"
+            >
+              local_florist
+            </TpopBeobMapIcon>
+          </MapIconDiv>
+        }
+        {
+          apfloraLayer.value === `TpopBeobAssignPolylines` &&
+          activeApfloraLayers.includes(`TpopBeobAssignPolylines`) &&
+          <MapIconDiv>
+            <TpopBeobAssignPolylinesIcon
+              id="TpopBeobAssignPolylinesMapIcon"
+              className="material-icons"
+            >
+              remove
+            </TpopBeobAssignPolylinesIcon>
+          </MapIconDiv>
+        }
+        <DragHandleDiv>
+          {
+            apfloraLayer.value !== `TpopBeobAssignPolylines` &&
+            <DragHandle />
+          }
+        </DragHandleDiv>
       </IconsDiv>
     </LayerDiv>
 )
