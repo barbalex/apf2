@@ -22,7 +22,7 @@ const DragHandleDiv = styled.div`
   min-width: 18px;
 `
 const ZuordnenIcon = styled(FontIcon)`
-  font-size: 18px !important;
+  font-size: 20px !important;
 `
 const LayerDiv = styled.div`
   display: flex;
@@ -101,6 +101,11 @@ const SortableItem = SortableElement(({ apfloraLayer, store, activeApfloraLayers
       )
     )
   )
+  const getZuordnenIconTitle = () => {
+    if (store.map.beob.assigning) return `Zuordnung beenden`
+    if (assigningIsPossible) return `Teil-Populationen zuordnen`
+    return `Teil-Populationen zuordnen (aktivierbar, wenn auch Teil-Populationen eingeblendet werden)`
+  }
 
   return (
     <LayerDiv>
@@ -121,7 +126,7 @@ const SortableItem = SortableElement(({ apfloraLayer, store, activeApfloraLayers
           <ZuordnenDiv>
             <ZuordnenIcon
               className="material-icons"
-              title={store.map.beob.assigning ? `Zuordnung beenden` : `Teil-Populationen zuordnen`}
+              title={getZuordnenIconTitle()}
               style={{
                 color: assigningIsPossible ? `black` : `#e2e2e2`,
                 cursor: assigningIsPossible ? `pointer` : `inherit`,
