@@ -26,3 +26,31 @@ verwendet:
   - URL ist Teil des Flux-Stores, steuert die Benutzeroberfläche und das Laden von Daten. Vorteile:
     - vieles ist verlinkbar
     - auf einen Router kann verzichtet werden
+
+##Neue Fähigkeiten:
+
+- Karten
+  - Standardmässig werden Open-Street-Maps als Hintergrund verwendet, statt Swisstopo Karten. Grund: Kosten vermeiden
+  - Ebenen über-/untereinander stapeln
+  - In der Karte verwendete Symbole werden im Ebenen-Tool und im Strukturbaum eingeblendet
+  - Es werden immer alle Elemente einer Ebene angezeigt: aktive sind gelb umrahmt
+  - Bequeme(re) Messung von Flächen und Linien
+  - Differenzierte(re) Darstellung der verschiedenen Typen von Beobachtungen (nicht beurteilt, nicht zuzuordnen, zugeordnet)
+  - Bequeme(re) Zuordnung von Beobachtungen zu Teil-Populationen
+  - Bequemer(re) Darstellung von nahe bzw. direkt aufeinander liegenden Elementen
+
+##Bekannte Fehler/Probleme:
+
+Siehe [hier](https://github.com/FNSKtZH/apflora/issues?q=is%3Aopen+is%3Aissue+label%3Av2).
+
+##Noch nicht realisiert:
+
+###Umsetzung geplant:
+
+- Kopieren und Verschieben von Datensätzen, gemäss Absprache mit Topos
+- Generell Funktionen von v1 prüfen und fehlende nachtragen
+
+###Umsetzung unsicher:
+
+- Karten
+  - eigene Ebenen hineinziehen
