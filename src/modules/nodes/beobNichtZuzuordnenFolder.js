@@ -26,7 +26,7 @@ export default (store) => {
     nodeType: `folder`,
     menuType: `beobNichtZuzuordnenFolder`,
     id: apArtId,
-    label: `nicht zuzuordnende Beobachtungen (${message})`,
+    label: `Beobachtungen nicht zuzuordnen (${message})`,
     expanded: activeUrlElements.beobNichtZuzuordnenFolder,
     url: [`Projekte`, projId, `Arten`, apArtId, `nicht-zuzuordnende-Beobachtungen`],
     level: 4,

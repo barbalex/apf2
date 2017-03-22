@@ -26,7 +26,7 @@ export default (store) => {
     nodeType: `folder`,
     menuType: `beobzuordnungFolder`,
     id: apArtId,
-    label: `nicht beurteilte Beobachtungen (${message})`,
+    label: `Beobachtungen nicht beurteilt (${message})`,
     expanded: activeUrlElements.beobzuordnungFolder,
     url: [`Projekte`, projId, `Arten`, apArtId, `nicht-beurteilte-Beobachtungen`],
     level: 4,
