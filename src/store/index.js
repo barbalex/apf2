@@ -258,6 +258,8 @@ function Store() {
     addActiveOverlay: () => {},
     removeActiveOverlay: () => {},
     setActiveBaseLayer: () => {},
+    addActiveApfloraLayer: () => {},
+    removeActiveApfloraLayer: () => {},
   }
   extendObservable(this.map, {
     bounds: computed(() => getMapBounds(this)),
@@ -620,6 +622,13 @@ function Store() {
         this.map.addActiveOverlay(layer)
       } else {
         this.map.removeActiveOverlay(layer)
+      }
+    }),
+    showMapApfloraLayer: action((layer, bool) => {
+      if (bool) {
+        this.map.addActiveApfloraLayer(layer)
+      } else {
+        this.map.removeActiveApfloraLayer(layer)
       }
     }),
   })

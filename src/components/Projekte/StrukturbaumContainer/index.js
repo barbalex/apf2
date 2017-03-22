@@ -173,7 +173,7 @@ class StrukturbaumContainer extends Component { // eslint-disable-line react/pre
       localizeOnMap() {
         store.setIdOfTpopBeingLocalized(parseInt(id, 10))
         that.showMapIfNotYetVisible()
-        store.showMapLayer(actionTable, true)
+        store.showMapApfloraLayer(`Tpop`, true)
       }
     }
     if (Object.keys(actions).includes(action)) {

@@ -75,9 +75,6 @@ class Karte extends Component {
 
   static propTypes = {
     store: PropTypes.object.isRequired,
-    popMarkers: PropTypes.object,
-    tpopMarkers: PropTypes.array,
-    tpopMarkersClustered: PropTypes.object,
     beobNichtBeurteiltMarkers: PropTypes.array,
     beobNichtBeurteiltMarkersClustered: PropTypes.object,
     beobNichtZuzuordnenMarkers: PropTypes.object,
@@ -92,6 +89,7 @@ class Karte extends Component {
 
   componentDidMount() {
     const { store, changeBounds } = this.props
+    console.log(`Karte did mount`)
     changeBounds(store.map.bounds)
   }
 
@@ -108,9 +106,6 @@ class Karte extends Component {
   render() {
     const {
       store,
-      popMarkers,
-      tpopMarkers,
-      tpopMarkersClustered,
       beobNichtBeurteiltMarkers,
       beobNichtBeurteiltMarkersClustered,
       beobNichtZuzuordnenMarkers,
@@ -144,7 +139,7 @@ class Karte extends Component {
         labelUsingNr={store.map.pop.labelUsingNr}
         pops={store.map.pop.pops}
         visible={store.map.activeApfloraLayers.includes(`Pop`)}
-        markers={popMarkers}
+        markers={store.map.pop.markers}
       />,
       Tpop: () => {
         if (
@@ -157,7 +152,7 @@ class Karte extends Component {
               labelUsingNr={store.map.tpop.labelUsingNr}
               tpops={store.map.tpop.tpops}
               visible={store.map.activeApfloraLayers.includes(`Tpop`)}
-              markers={tpopMarkers}
+              markers={store.map.tpop.markers}
             />
           )
         }
@@ -167,7 +162,7 @@ class Karte extends Component {
             labelUsingNr={store.map.tpop.labelUsingNr}
             tpops={store.map.tpop.tpops}
             visible={store.map.activeApfloraLayers.includes(`Tpop`)}
-            markers={tpopMarkersClustered}
+            markers={store.map.tpop.markersClustered}
           />
         )
       },
