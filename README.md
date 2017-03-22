@@ -37,10 +37,10 @@ Die wichtigsten sind:
 - Mehrere Projekte bearbeiten
 - Der Strukturbaum ist wesentlich leistungsfähiger.<br />Es gibt keine Grenzen mehr, wieviele Elemente einen Ebene darstellen kann!
 - Karten:
-  - Standardmässig werden Open-Street-Maps statt Swisstopo Karten als Hintergrund verwendet. Grund: Kosten vermeiden. Natürlich können immer noch Swisstopo Karten eigeblendet werden
+  - Standardmässig werden Open-Street-Maps statt Swisstopo Karten als Hintergrund verwendet, um Kosten zu vermeiden. Natürlich können weiterhin Swisstopo Karten eigeblendet werden
   - Ebenen über-/untereinander stapeln
   - In der Karte verwendete Symbole werden im Ebenen-Tool und im Strukturbaum eingeblendet
-  - Es werden immer alle Elemente einer Ebene angezeigt: aktive sind gelb umrahmt
+  - Es werden immer alle Elemente einer Ebene angezeigt. Aktive sind gelb umrahmt
   - Bequeme(re) Messung von Flächen und Linien
   - Differenzierte(re) Darstellung der verschiedenen Typen von Beobachtungen (nicht beurteilt, nicht zuzuordnen, zugeordnet)
   - Bequeme(re) Zuordnung von Beobachtungen zu Teil-Populationen
@@ -51,14 +51,14 @@ Die wichtigsten sind:
 #### Umsetzung geplant:
 
 - Kopieren und Verschieben von Datensätzen, gemäss Absprache mit Topos
-- Generell Funktionen von v1 prüfen und fehlende nachtragen
+- Generell Funktionen von Version 1 prüfen und fehlende nachtragen
+- Geographische Filter. Genaue Umsetzung ist noch festzulegen
 - Login steuert, welche Projekte sichtbar sind
-- API-Zugriff besser absichern (erst möglich, wenn v1 nicht mehr zugreifen können muss)
+- API-Zugriff besser absichern (erst möglich, wenn Version 1 nicht mehr zugreifen können muss)
 
 #### Umsetzung unsicher:
 
-- Karten
-  - eigene Ebenen hineinziehen
+- Karten: eigene Ebenen hineinziehen
 
 ## Bekannte Fehler/Probleme:
 
