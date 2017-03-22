@@ -89,6 +89,9 @@ const TpopMapIcon = styled(StyledMapIcon)`
 const BeobMapIcon = styled(StyledMapIcon)`
   color: #9a009a !important;
 `
+const TpopBeobMapIcon = styled(StyledMapIcon)`
+  color: #FF00FF !important;
+`
 const PopFilteredMapIcon = styled(PopMapIcon)`
   -webkit-text-stroke: 2px #f5ef00;
 `
@@ -96,6 +99,9 @@ const TpopFilteredMapIcon = styled(TpopMapIcon)`
   -webkit-text-stroke: 2px #f5ef00;
 `
 const BeobFilteredMapIcon = styled(BeobMapIcon)`
+  -webkit-text-stroke: 2px #f5ef00;
+`
+const TpopBeobFilteredMapIcon = styled(TpopBeobMapIcon)`
   -webkit-text-stroke: 2px #f5ef00;
 `
 const StyledTextInActiveNodePathSpan = styled(StyledTextSpan)`
@@ -210,19 +216,14 @@ class Strukturbaum extends Component {
         node.menuType === `beobzuordnungFolder` &&
         node.id === store.activeUrlElements.ap &&
         store.map.activeApfloraLayers.includes(`BeobNichtBeurteilt`)
-      ) ||
-      (
-        node.menuType === `tpopbeobFolder` &&
-        node.id === store.activeUrlElements.tpop &&
-        store.map.activeApfloraLayers.includes(`TpopBeob`)
       )
     )
+    const showTpopBeobMapIcon = (
+      node.menuType === `tpopbeobFolder` &&
+      node.id === store.activeUrlElements.tpop &&
+      store.map.activeApfloraLayers.includes(`TpopBeob`)
+    )
     const showBeobFilteredMapIcon = (
-      (
-        node.menuType === `tpopbeob` &&
-        store.map.activeApfloraLayers.includes(`TpopBeob`) &&
-        store.map.tpopBeob.highlightedIds.includes(node.id)
-      ) ||
       (
         node.menuType === `beobzuordnung` &&
         store.map.activeApfloraLayers.includes(`BeobNichtBeurteilt`) &&
@@ -232,6 +233,13 @@ class Strukturbaum extends Component {
         node.menuType === `beobNichtZuzuordnen` &&
         store.map.activeApfloraLayers.includes(`BeobNichtZuzuordnen`) &&
         store.map.beobNichtZuzuordnen.highlightedIds.includes(node.id)
+      )
+    )
+    const showTpopBeobFilteredMapIcon = (
+      (
+        node.menuType === `tpopbeob` &&
+        store.map.activeApfloraLayers.includes(`TpopBeob`) &&
+        store.map.tpopBeob.highlightedIds.includes(node.id)
       ) ||
       (
         node.menuType === `tpop` &&
@@ -300,6 +308,16 @@ class Strukturbaum extends Component {
               </BeobMapIcon>
             }
             {
+              showTpopBeobMapIcon &&
+              <TpopBeobMapIcon
+                id="map"
+                className="material-icons"
+                title="in Karte sichtbar"
+              >
+                local_florist
+              </TpopBeobMapIcon>
+            }
+            {
               showPopFilteredMapIcon &&
               <PopFilteredMapIcon
                 id="map"
@@ -328,6 +346,16 @@ class Strukturbaum extends Component {
               >
                 local_florist
               </BeobFilteredMapIcon>
+            }
+            {
+              showTpopBeobFilteredMapIcon &&
+              <TpopBeobFilteredMapIcon
+                id="map"
+                className="material-icons"
+                title="in Karte hervorgehoben"
+              >
+                local_florist
+              </TpopBeobFilteredMapIcon>
             }
             <TextSpan>
               {node.label}
