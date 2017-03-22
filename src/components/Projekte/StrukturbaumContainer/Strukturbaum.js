@@ -97,18 +97,23 @@ const TpopBeobMapIcon = styled(StyledMapIcon)`
 `
 const PopFilteredMapIcon = styled(PopMapIcon)`
   -webkit-text-stroke: 1px #f5ef00;
+  -moz-text-stroke: 1px #f5ef00;
 `
 const TpopFilteredMapIcon = styled(TpopMapIcon)`
   -webkit-text-stroke: 1px #f5ef00;
+  -moz-text-stroke: 1px #f5ef00;
 `
 const BeobNichtBeurteiltFilteredMapIcon = styled(BeobNichtBeurteiltMapIcon)`
   -webkit-text-stroke: 1px #f5ef00;
+  -moz-text-stroke: 1px #f5ef00;
 `
 const BeobNichtZuzuordnenFilteredMapIcon = styled(BeobNichtZuzuordnenMapIcon)`
   -webkit-text-stroke: 1px #f5ef00;
+  -moz-text-stroke: 1px #f5ef00;
 `
 const TpopBeobFilteredMapIcon = styled(TpopBeobMapIcon)`
   -webkit-text-stroke: 1px #f5ef00;
+  -moz-text-stroke: 1px #f5ef00;
 `
 const StyledTextInActiveNodePathSpan = styled(StyledTextSpan)`
   font-weight: 900;

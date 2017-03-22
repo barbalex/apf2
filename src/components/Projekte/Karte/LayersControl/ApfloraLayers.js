@@ -53,6 +53,7 @@ const MapIcon = styled(FontIcon)`
   margin-right: -0.1em;
   font-size: 20px !important;
   -webkit-text-stroke: 1px black;
+  -moz-text-stroke: 1px black;
 `
 const PopMapIcon = styled(MapIcon)`
   color: #947500 !important;
@@ -71,6 +72,8 @@ const TpopBeobMapIcon = styled(MapIcon)`
 `
 const TpopBeobAssignPolylinesIcon = styled(MapIcon)`
   color: #FF00FF !important;
+  -webkit-text-stroke: 0 black;
+  -moz-text-stroke: 0 black;
 `
 const MapIconDiv = styled.div``
 /**
