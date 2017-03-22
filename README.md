@@ -26,7 +26,7 @@
 Die wichtigsten sind:
 
 - [create-react-app](//github.com/facebookincubator/create-react-app): Ganz einfach Abhängigkeiten aktuell halten
-- [MobX](//github.com/mobxjs/mobx): Excel für apflora. Genial!
+- [MobX](//github.com/mobxjs/mobx): Computed data wie in Excel. Und viel simpler als redux. Genial!
 - [React](//facebook.github.io/react): Deklarative Benutzer-Oberfläche. Aufgebaut aus Komponenten. Genial!
 - [socket.io](//socket.io/): Änderungen laufend bei allen Benutzern sichtbar machen
 
@@ -35,7 +35,7 @@ Die wichtigsten sind:
 ### Neue:
 
 - Mehrere Projekte anzeigen
-- Der Strukturbaum ist wesentlich leistungsfähiger. Es gibt keine Grenzen mehr, wieviele Elemente einen Ebene darstellen kann!
+- Der Strukturbaum ist wesentlich leistungsfähiger.<br />Es gibt keine Grenzen mehr, wieviele Elemente einen Ebene darstellen kann!
 - Karten:
   - Standardmässig werden Open-Street-Maps als Hintergrund verwendet, statt Swisstopo Karten. Grund: Kosten vermeiden. Natürlich können immer noch Swisstopo Karten eigeblendet werden
   - Ebenen über-/untereinander stapeln
