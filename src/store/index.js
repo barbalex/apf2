@@ -333,6 +333,12 @@ function Store() {
     )),
     pops: computed(() => getPopsForMap(this)),
     bounds: computed(() => getPopBounds(this.map.pop.pops)),
+    boundsOfHighlightedIds: computed(() =>
+      getPopBounds(
+        this.map.pop.pops
+          .filter(p => this.map.pop.highlightedIds.includes(p.PopId))
+      )
+    ),
     // alternative is using names
     labelUsingNr: true,
     markers: computed(() => getPopMarkers(this)),
@@ -345,7 +351,13 @@ function Store() {
     )),
     highlightedPopIds: [],
     tpops: computed(() => getTpopsForMap(this)),
-    bounds: computed(() => getTpopBounds(this)),
+    bounds: computed(() => getTpopBounds(this.map.tpop.tpops)),
+    boundsOfHighlightedIds: computed(() =>
+      getTpopBounds(
+        this.map.tpop.tpops
+          .filter(t => this.map.tpop.highlightedIds.includes(t.TPopId))
+      )
+    ),
     // alternative is using names
     labelUsingNr: true,
     markers: computed(() => getTpopMarkers(this)),
@@ -381,7 +393,13 @@ function Store() {
     beobs: computed(() =>
       getBeobForMap(this).filter(b => !b.beobzuordnung)
     ),
-    bounds: computed(() => getBeobNichtBeurteiltBounds(this)),
+    bounds: computed(() => getBeobNichtBeurteiltBounds(this.map.beobNichtBeurteilt.beobs)),
+    boundsOfHighlightedIds: computed(() =>
+      getBeobNichtBeurteiltBounds(
+        this.map.beobNichtBeurteilt.beobs
+          .filter(b => this.map.beobNichtBeurteilt.highlightedIds.includes(b.BeobId))
+      )
+    ),
     idOfBeobBeingAssigned: 0,
   })
   extendObservable(this.map.beobNichtZuzuordnen, {
@@ -396,7 +414,17 @@ function Store() {
     beobs: computed(() =>
       getBeobForMap(this).filter(b => b.beobzuordnung && b.beobzuordnung.BeobNichtZuordnen === 1)
     ),
-    bounds: computed(() => getBeobNichtZuzuordnenBounds(this)),
+    bounds: computed(() => getBeobNichtZuzuordnenBounds(this.map.beobNichtZuzuordnen.beobs)),
+    boundsOfHighlightedIds: computed(() =>
+      getBeobNichtZuzuordnenBounds(
+        this.map.beobNichtZuzuordnen.beobs
+          .filter(b =>
+            this.map.beobNichtZuzuordnen.highlightedIds.includes(
+              isNaN(b.BeobId) ? b.BeobId : Number(b.BeobId)
+            )
+          )
+      )
+    ),
   })
   extendObservable(this.map.tpopBeob, {
     highlightedIds: computed(() => {
@@ -435,7 +463,13 @@ function Store() {
         !b.beobzuordnung.BeobNichtZuzuordnen
       )
     ),
-    bounds: computed(() => getTpopBeobBounds(this)),
+    bounds: computed(() => getTpopBeobBounds(this.map.tpopBeob.beobs)),
+    boundsOfHighlightedIds: computed(() =>
+      getTpopBeobBounds(
+        this.map.tpopBeob.beobs
+          .filter(b => this.map.tpopBeob.highlightedIds.includes(b.BeobId))
+      )
+    ),
   })
   this.table = TableStore
   extendObservable(this.table.filteredAndSorted, {

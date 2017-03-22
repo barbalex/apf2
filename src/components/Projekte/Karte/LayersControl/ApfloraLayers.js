@@ -24,6 +24,9 @@ const DragHandleDiv = styled.div`
 const ZuordnenIcon = styled(FontIcon)`
   font-size: 20px !important;
 `
+const ZoomToIcon = styled(FontIcon)`
+  font-size: 20px !important;
+`
 const LayerDiv = styled.div`
   display: flex;
   justify-content: space-between;
@@ -49,6 +52,9 @@ const IconsDiv = styled.div`
   display: flex;
 `
 const ZuordnenDiv = styled.div``
+const ZoomToDiv = styled.div`
+  padding-left: 3px;
+`
 const MapIcon = styled(FontIcon)`
   margin-right: -0.1em;
   font-size: 20px !important;
@@ -108,6 +114,14 @@ const SortableItem = SortableElement(({ apfloraLayer, store, activeApfloraLayers
     if (store.map.beob.assigning) return `Zuordnung beenden`
     if (assigningIsPossible) return `Teil-Populationen zuordnen`
     return `Teil-Populationen zuordnen (aktivierbar, wenn auch Teil-Populationen eingeblendet werden)`
+  }
+  const mapNameToStoreNameObject = {
+    Pop: `pop`,
+    Tpop: `tpop`,
+    BeobNichtBeurteilt: `beobNichtBeurteilt`,
+    BeobNichtZuzuordnen: `beobNichtZuzuordnen`,
+    TpopBeob: `tpopBeob`,
+    TpopBeobAssignPolylines: `tpopBeob`,
   }
 
   return (
@@ -216,6 +230,64 @@ const SortableItem = SortableElement(({ apfloraLayer, store, activeApfloraLayers
             </TpopBeobAssignPolylinesIcon>
           </MapIconDiv>
         }
+        <ZoomToDiv>
+          <ZoomToIcon
+            className="material-icons"
+            title={`auf alle '${apfloraLayer.label}' zoomen`}
+            style={{
+              color: activeApfloraLayers.includes(apfloraLayer.value) ? `black` : `#e2e2e2`,
+              cursor: activeApfloraLayers.includes(apfloraLayer.value) ? `pointer` : `inherit`,
+            }}
+            onClick={() => {
+              if (activeApfloraLayers.includes(apfloraLayer.value)) {
+                store.map.changeBounds(
+                  store.map[mapNameToStoreNameObject[apfloraLayer.value]].bounds
+                )
+              }
+            }}
+          >
+            filter_center_focus
+          </ZoomToIcon>
+        </ZoomToDiv>
+        <ZoomToDiv>
+          <ZoomToIcon
+            className="material-icons"
+            title={`auf aktive '${apfloraLayer.label}' zoomen`}
+            style={{
+              color: (
+                (
+                  activeApfloraLayers.includes(apfloraLayer.value) &&
+                  store.map[mapNameToStoreNameObject[apfloraLayer.value]].highlightedIds.length > 0
+                ) ?
+                `#fbec04` :
+                `#e2e2e2`
+              ),
+                fontWeight: (
+                  (
+                    activeApfloraLayers.includes(apfloraLayer.value) &&
+                    store.map[mapNameToStoreNameObject[apfloraLayer.value]].highlightedIds.length > 0
+                  ) ?
+                  `bold` :
+                  `normal`
+                ),
+              cursor: (
+                (
+                  activeApfloraLayers.includes(apfloraLayer.value) &&
+                  store.map[mapNameToStoreNameObject[apfloraLayer.value]].highlightedIds.length > 0
+                ) ?
+                `pointer` :
+                `inherit`
+              ),
+            }}
+            onClick={() => {
+              if (activeApfloraLayers.includes(apfloraLayer.value)) {
+                store.map.changeBounds(store.map[mapNameToStoreNameObject[apfloraLayer.value]].boundsOfHighlightedIds)
+              }
+            }}
+          >
+            filter_center_focus
+          </ZoomToIcon>
+        </ZoomToDiv>
         <DragHandleDiv>
           {
             apfloraLayer.value !== `TpopBeobAssignPolylines` &&
