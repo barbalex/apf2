@@ -5,8 +5,11 @@
 // that is why there is if (a !== 0 && !a)
 
 const compare = (a, b) => {
+  // sort a before, if it has no value at this index
   if (a !== 0 && !a) return -1
+  // sort a after if b has no value at this index
   if (b !== 0 && !b) return 1
+  // sort a before if its value is smaller
   return a - b
 }
 
@@ -208,6 +211,19 @@ export default (store) => {
   if (activeUrlElements.tpopmassnFolder) {
     nodes = nodes.concat(tpopmassn)
   }
+  /**
+   * This is an important and pretty ingenieous sorting algorithm:
+   *
+   * compare the sort array value in the nodes
+   * to determine sorting
+   *
+   * compare arrays element by element, starting with first
+   * if a has no value at this index (> a is folder), sort a before b
+   * if b has no value at this index (> b is folder), sort a after b
+   * if a is smaller than b, sort a before b
+   * if both array elements at this index are same,
+   * compare values at next index
+   */
   return nodes.sort((a, b) => (
     compare(a.sort[0], b.sort[0]) ||
     compare(a.sort[1], b.sort[1]) ||
