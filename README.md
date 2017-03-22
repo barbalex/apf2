@@ -42,7 +42,7 @@ Die wichtigsten sind:
   - In der Karte verwendete Symbole werden im Ebenen-Tool und im Strukturbaum eingeblendet
   - Es werden immer alle Elemente einer Ebene angezeigt. Aktive sind gelb umrahmt
   - Bequeme(re) Messung von Flächen und Linien
-  - Differenzierte(re) Darstellung der verschiedenen Typen von Beobachtungen (nicht beurteilt, nicht zuzuordnen, zugeordnet)
+  - Differenzierte(re) Darstellung der verschiedenen Typen von Beobachtungen<br />(nicht beurteilt, nicht zuzuordnen, zugeordnet)
   - Bequeme(re) Zuordnung von Beobachtungen zu Teil-Populationen
   - Bequemer(re) Darstellung von nahe bzw. direkt aufeinander liegenden Elementen
 
@@ -54,11 +54,13 @@ Die wichtigsten sind:
 - Generell Funktionen von Version 1 prüfen und fehlende nachtragen
 - Geographische Filter. Genaue Umsetzung ist noch festzulegen
 - Login steuert, welche Projekte sichtbar sind
-- API-Zugriff besser absichern (erst möglich, wenn Version 1 nicht mehr zugreifen können muss)
+- API-Zugriff besser absichern (erst möglich, wenn Version 1 nicht mehr zugreift)
 
 #### Umsetzung unsicher:
 
-- Karten: eigene Ebenen hineinziehen
+- Karten:
+  - eigene Ebenen hineinziehen
+  - eigene Ebenen bearbeiten
 
 ## Bekannte Fehler/Probleme:
 
