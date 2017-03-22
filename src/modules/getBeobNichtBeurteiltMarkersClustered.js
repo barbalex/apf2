@@ -23,25 +23,25 @@ export default (store) => {
   const markers = window.L.markerClusterGroup(mcgOptions)
   if (visible) {
     beobs.forEach((p) => {
-      const title = p.label
       const beobId = isNaN(p.BeobId) ? p.BeobId : Number(p.BeobId)
       const isHighlighted = highlightedIds.includes(beobId)
       const latLng = new window.L.LatLng(...p.KoordWgs84)
       const icon = window.L.icon({
         iconUrl: isHighlighted ? beobIconHighlighted : beobIcon,
         iconSize: [24, 24],
-        // iconAnchor: [12, 12],
         className: isHighlighted ? `beobIconHighlighted` : `beobIcon`,
       })
       const marker = window.L.marker(latLng, {
-        title,
+        title: p.label,
         icon,
         draggable: store.map.beob.assigning,
         zIndexOffset: -store.map.apfloraLayers.findIndex((apfloraLayer) =>
           apfloraLayer.value === `BeobNichtBeurteilt`
         )
       })
-        // .bindPopup(ReactDOMServer.renderToStaticMarkup(<BeobPopup store={store} beobBereitgestellt={p} />))
+        .bindPopup(ReactDOMServer.renderToStaticMarkup(
+          <BeobPopup store={store} beobBereitgestellt={p} />)
+        )
       markers.addLayer(marker)
     })
   }

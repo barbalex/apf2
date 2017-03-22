@@ -52,6 +52,7 @@ const ZuordnenDiv = styled.div``
 const MapIcon = styled(FontIcon)`
   margin-right: -0.1em;
   font-size: 20px !important;
+  -webkit-text-stroke: 1px black;
 `
 const PopMapIcon = styled(MapIcon)`
   color: #947500 !important;
@@ -63,7 +64,7 @@ const BeobNichtBeurteiltMapIcon = styled(MapIcon)`
   color: #9a009a !important;
 `
 const BeobNichtZuzuordnenMapIcon = styled(MapIcon)`
-  color: #9a009a !important;
+  color: #ffe4ff !important;
 `
 const TpopBeobMapIcon = styled(MapIcon)`
   color: #FF00FF !important;

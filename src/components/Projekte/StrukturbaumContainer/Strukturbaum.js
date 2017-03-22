@@ -86,23 +86,29 @@ const PopMapIcon = styled(StyledMapIcon)`
 const TpopMapIcon = styled(StyledMapIcon)`
   color: #016f19 !important;
 `
-const BeobMapIcon = styled(StyledMapIcon)`
+const BeobNichtBeurteiltMapIcon = styled(StyledMapIcon)`
   color: #9a009a !important;
+`
+const BeobNichtZuzuordnenMapIcon = styled(StyledMapIcon)`
+  color: #ffe4ff !important;
 `
 const TpopBeobMapIcon = styled(StyledMapIcon)`
   color: #FF00FF !important;
 `
 const PopFilteredMapIcon = styled(PopMapIcon)`
-  -webkit-text-stroke: 2px #f5ef00;
+  -webkit-text-stroke: 1px #f5ef00;
 `
 const TpopFilteredMapIcon = styled(TpopMapIcon)`
-  -webkit-text-stroke: 2px #f5ef00;
+  -webkit-text-stroke: 1px #f5ef00;
 `
-const BeobFilteredMapIcon = styled(BeobMapIcon)`
-  -webkit-text-stroke: 2px #f5ef00;
+const BeobNichtBeurteiltFilteredMapIcon = styled(BeobNichtBeurteiltMapIcon)`
+  -webkit-text-stroke: 1px #f5ef00;
+`
+const BeobNichtZuzuordnenFilteredMapIcon = styled(BeobNichtZuzuordnenMapIcon)`
+  -webkit-text-stroke: 1px #f5ef00;
 `
 const TpopBeobFilteredMapIcon = styled(TpopBeobMapIcon)`
-  -webkit-text-stroke: 2px #f5ef00;
+  -webkit-text-stroke: 1px #f5ef00;
 `
 const StyledTextInActiveNodePathSpan = styled(StyledTextSpan)`
   font-weight: 900;
@@ -206,34 +212,30 @@ class Strukturbaum extends Component {
       store.map.activeApfloraLayers.includes(`Tpop`) &&
       store.map.tpop.highlightedIds.includes(node.id)
     )
-    const showBeobMapIcon = (
-      (
-        node.menuType === `beobNichtZuzuordnenFolder` &&
-        node.id === store.activeUrlElements.ap &&
-        store.map.activeApfloraLayers.includes(`BeobNichtZuzuordnen`)
-      ) ||
-      (
-        node.menuType === `beobzuordnungFolder` &&
-        node.id === store.activeUrlElements.ap &&
-        store.map.activeApfloraLayers.includes(`BeobNichtBeurteilt`)
-      )
+    const showBeobNichtBeurteiltMapIcon = (
+      node.menuType === `beobzuordnungFolder` &&
+      node.id === store.activeUrlElements.ap &&
+      store.map.activeApfloraLayers.includes(`BeobNichtBeurteilt`)
+    )
+    const showBeobNichtZuzuordnenMapIcon = (
+      node.menuType === `beobNichtZuzuordnenFolder` &&
+      node.id === store.activeUrlElements.ap &&
+      store.map.activeApfloraLayers.includes(`BeobNichtZuzuordnen`)
     )
     const showTpopBeobMapIcon = (
       node.menuType === `tpopbeobFolder` &&
       node.id === store.activeUrlElements.tpop &&
       store.map.activeApfloraLayers.includes(`TpopBeob`)
     )
-    const showBeobFilteredMapIcon = (
-      (
-        node.menuType === `beobzuordnung` &&
-        store.map.activeApfloraLayers.includes(`BeobNichtBeurteilt`) &&
-        store.map.beobNichtBeurteilt.highlightedIds.includes(node.id)
-      ) ||
-      (
-        node.menuType === `beobNichtZuzuordnen` &&
-        store.map.activeApfloraLayers.includes(`BeobNichtZuzuordnen`) &&
-        store.map.beobNichtZuzuordnen.highlightedIds.includes(node.id)
-      )
+    const showBeobNichtBeurteiltFilteredMapIcon = (
+      node.menuType === `beobzuordnung` &&
+      store.map.activeApfloraLayers.includes(`BeobNichtBeurteilt`) &&
+      store.map.beobNichtBeurteilt.highlightedIds.includes(node.id)
+    )
+    const showBeobNichtZuzuordnenFilteredMapIcon = (
+      node.menuType === `beobNichtZuzuordnen` &&
+      store.map.activeApfloraLayers.includes(`BeobNichtZuzuordnen`) &&
+      store.map.beobNichtZuzuordnen.highlightedIds.includes(node.id)
     )
     const showTpopBeobFilteredMapIcon = (
       (
@@ -298,14 +300,24 @@ class Strukturbaum extends Component {
               </TpopMapIcon>
             }
             {
-              showBeobMapIcon &&
-              <BeobMapIcon
+              showBeobNichtBeurteiltMapIcon &&
+              <BeobNichtBeurteiltMapIcon
                 id="map"
                 className="material-icons"
                 title="in Karte sichtbar"
               >
                 local_florist
-              </BeobMapIcon>
+              </BeobNichtBeurteiltMapIcon>
+            }
+            {
+              showBeobNichtZuzuordnenMapIcon &&
+              <BeobNichtZuzuordnenMapIcon
+                id="map"
+                className="material-icons"
+                title="in Karte sichtbar"
+              >
+                local_florist
+              </BeobNichtZuzuordnenMapIcon>
             }
             {
               showTpopBeobMapIcon &&
@@ -338,19 +350,29 @@ class Strukturbaum extends Component {
               </TpopFilteredMapIcon>
             }
             {
-              showBeobFilteredMapIcon &&
-              <BeobFilteredMapIcon
-                id="map"
+              showBeobNichtBeurteiltFilteredMapIcon &&
+              <BeobNichtBeurteiltFilteredMapIcon
+                id="BeobNichtBeurteiltFilteredMapIcon"
                 className="material-icons"
                 title="in Karte hervorgehoben"
               >
                 local_florist
-              </BeobFilteredMapIcon>
+              </BeobNichtBeurteiltFilteredMapIcon>
+            }
+            {
+              showBeobNichtZuzuordnenFilteredMapIcon &&
+              <BeobNichtZuzuordnenFilteredMapIcon
+                id="BeobNichtZuzuordnenFilteredMapIcon"
+                className="material-icons"
+                title="in Karte hervorgehoben"
+              >
+                local_florist
+              </BeobNichtZuzuordnenFilteredMapIcon>
             }
             {
               showTpopBeobFilteredMapIcon &&
               <TpopBeobFilteredMapIcon
-                id="map"
+                id="TpopBeobFilteredMapIcon"
                 className="material-icons"
                 title="in Karte hervorgehoben"
               >

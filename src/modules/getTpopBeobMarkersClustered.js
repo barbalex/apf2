@@ -23,14 +23,6 @@ export default (store) => {
   const markers = window.L.markerClusterGroup(mcgOptions)
   if (visible) {
     beobs.forEach((p) => {
-      const title = p.label
-      const tooltipText = p.label
-      const tooltipOptions = {
-        permanent: true,
-        direction: `bottom`,
-        className: `mapTooltip`,
-        opacity: 1,
-      }
       const isHighlighted = highlightedIds.includes(p.BeobId)
       const latLng = new window.L.LatLng(...p.KoordWgs84)
       const icon = window.L.icon({
@@ -39,14 +31,16 @@ export default (store) => {
         className: isHighlighted ? `beobIconHighlighted` : `beobIcon`,
       })
       const marker = window.L.marker(latLng, {
-        title,
+        title: p.label,
         icon,
         draggable: store.map.beob.assigning,
         zIndexOffset: -store.map.apfloraLayers.findIndex((apfloraLayer) =>
           apfloraLayer.value === `TpopBeob`
         )
-      }).bindPopup(ReactDOMServer.renderToStaticMarkup(<BeobPopup store={store} beobBereitgestellt={p} />))
-        .bindTooltip(tooltipText, tooltipOptions)
+      })
+        .bindPopup(ReactDOMServer.renderToStaticMarkup(
+          <BeobPopup store={store} beobBereitgestellt={p} />)
+        )
       markers.addLayer(marker)
     })
   }
