@@ -1,4 +1,4 @@
-#Neues Frontend für apflora.ch
+# Neues Frontend für apflora.ch
 
 verwendet:
 
@@ -6,7 +6,7 @@ verwendet:
 - [MobX](//github.com/mobxjs/mobx)
 - [socket.io](//socket.io/)
 
-##Ziele:
+## Ziele:
 
 - mehrere Projekte verwalten
 - wenn mehrere Personen gleichzeitig arbeiten werden die Daten in der Benutzeroberfläche laufend aktualisiert
@@ -27,7 +27,9 @@ verwendet:
     - vieles ist verlinkbar
     - auf einen Router kann verzichtet werden
 
-##Neue Fähigkeiten:
+## Fähigkeiten:
+
+### Neue:
 
 - Karten
   - Standardmässig werden Open-Street-Maps als Hintergrund verwendet, statt Swisstopo Karten. Grund: Kosten vermeiden
@@ -39,18 +41,18 @@ verwendet:
   - Bequeme(re) Zuordnung von Beobachtungen zu Teil-Populationen
   - Bequemer(re) Darstellung von nahe bzw. direkt aufeinander liegenden Elementen
 
-##Bekannte Fehler/Probleme:
+### Noch nicht realisiert:
 
-Siehe [hier](https://github.com/FNSKtZH/apflora/issues?q=is%3Aopen+is%3Aissue+label%3Av2).
-
-##Noch nicht realisiert:
-
-###Umsetzung geplant:
+#### Umsetzung geplant:
 
 - Kopieren und Verschieben von Datensätzen, gemäss Absprache mit Topos
 - Generell Funktionen von v1 prüfen und fehlende nachtragen
 
-###Umsetzung unsicher:
+#### Umsetzung unsicher:
 
 - Karten
   - eigene Ebenen hineinziehen
+
+## Bekannte Fehler/Probleme:
+
+Siehe [hier](https://github.com/FNSKtZH/apflora/issues?q=is%3Aopen+is%3Aissue+label%3Av2).
