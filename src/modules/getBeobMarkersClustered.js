@@ -53,16 +53,7 @@ export default (store) => {
       }).bindPopup(ReactDOMServer.renderToStaticMarkup(
         <BeobPopup store={store} beobBereitgestellt={p} />
       ))
-        .bindTooltip(tooltipText, tooltipOptions)
-      /**
-       * TODO:
-       * why does this not work?
-       * works in bin with one markerClusterGroup: http://playground-leaflet.rhcloud.com/medi/1/edit?html,output
-       * BUT NOT with iconCreateFunction: http://playground-leaflet.rhcloud.com/nebu/1/edit?html,output
-       */
-      marker.on('dragend', function() {
-        console.log(`dragend`)
-      });
+        // .bindTooltip(tooltipText, tooltipOptions)
       markers.addLayer(marker)
     })
   }

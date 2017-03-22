@@ -46,8 +46,9 @@ export default (store) => {
         zIndexOffset: -store.map.apfloraLayers.findIndex((apfloraLayer) =>
           apfloraLayer.value === `BeobNichtZuzuordnen`
         )
-      }).bindPopup(ReactDOMServer.renderToStaticMarkup(<BeobPopup store={store} beobBereitgestellt={p} />))
-        .bindTooltip(tooltipText, tooltipOptions)
+      })
+        .bindPopup(ReactDOMServer.renderToStaticMarkup(<BeobPopup store={store} beobBereitgestellt={p} />))
+        // .bindTooltip(tooltipText, tooltipOptions)
       markers.addLayer(marker)
     })
   }
