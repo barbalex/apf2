@@ -12,7 +12,7 @@ export default (store) => {
 
   let nodes = table.filteredAndSorted.assozart.map((el, index) => {
     const projId = store.table.ap.get(el.AaApArtId).ProjId
-    const sort = [projIndex, 1, apIndex, 9, index]
+    const sort = [projIndex, 1, apIndex, 7, index]
 
     return {
       nodeType: `table`,

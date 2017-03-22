@@ -10,7 +10,7 @@ export default (store) => {
   const apArtId = activeUrlElements.ap
   if (!apArtId) return []
   const apIndex = findIndex(store.table.filteredAndSorted.ap, { ApArtId: apArtId })
-  const sort = [projIndex, 1, apIndex, 8]
+  const sort = [projIndex, 1, apIndex, 6]
 
   return {
     nodeType: `folder`,

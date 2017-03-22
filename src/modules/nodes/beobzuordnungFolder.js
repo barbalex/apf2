@@ -20,7 +20,7 @@ export default (store) => {
   if (store.node.nodeLabelFilter.get(`beobzuordnung`)) {
     message = `${beobzuordnungNodesLength} gefiltert`
   }
-  const sort = [projIndex, 1, apIndex, 6]
+  const sort = [projIndex, 1, apIndex, 8]
 
   return {
     nodeType: `folder`,

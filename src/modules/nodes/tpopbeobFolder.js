@@ -31,7 +31,7 @@ export default (store) => {
     nodeType: `folder`,
     menuType: `tpopbeobFolder`,
     id: tpopId,
-    label: `Beobachtungen (${message})`,
+    label: `Beobachtungen zugeordnet (${message})`,
     expanded: activeUrlElements.tpopbeobFolder,
     url: [`Projekte`, projId, `Arten`, apArtId, `Populationen`, popId, `Teil-Populationen`, tpopId, `Beobachtungen`],
     level: 8,

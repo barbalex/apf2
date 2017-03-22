@@ -19,7 +19,7 @@ export default (store) => {
   if (store.node.nodeLabelFilter.get(`assozart`)) {
     message = `${assozartNodesLength} gefiltert`
   }
-  const sort = [projIndex, 1, apIndex, 9]
+  const sort = [projIndex, 1, apIndex, 7]
 
   return {
     nodeType: `folder`,

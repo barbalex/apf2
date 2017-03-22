@@ -14,7 +14,7 @@ export default (store) => {
   // map through all and create array of nodes
   const nodes = table.filteredAndSorted.beobNichtZuzuordnen.map((el, index) => {
     const beobId = isNaN(el.NO_NOTE) ? el.NO_NOTE : parseInt(el.NO_NOTE, 10)
-    const sort = [projIndex, 1, apIndex, 7, index]
+    const sort = [projIndex, 1, apIndex, 9, index]
 
     return {
       nodeType: `table`,

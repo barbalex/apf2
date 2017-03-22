@@ -20,7 +20,7 @@ export default (store) => {
   if (store.node.nodeLabelFilter.get(`beobNichtZuzuordnen`)) {
     message = `${beobNichtZuzuordnenNodesLength} gefiltert`
   }
-  const sort = [projIndex, 1, apIndex, 7]
+  const sort = [projIndex, 1, apIndex, 9]
 
   return {
     nodeType: `folder`,
