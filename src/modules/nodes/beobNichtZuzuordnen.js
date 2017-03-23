@@ -14,7 +14,6 @@ export default (store) => {
   // map through all and create array of nodes
   const nodes = table.filteredAndSorted.beobNichtZuzuordnen.map((el, index) => {
     const beobId = isNaN(el.NO_NOTE) ? el.NO_NOTE : parseInt(el.NO_NOTE, 10)
-    const sort = [projIndex, 1, apIndex, 9, index]
 
     return {
       nodeType: `table`,
@@ -25,7 +24,7 @@ export default (store) => {
       expanded: beobId === activeUrlElements.beobNichtZuzuordnen,
       url: [`Projekte`, projId, `Arten`, apArtId, `nicht-zuzuordnende-Beobachtungen`, beobId],
       level: 5,
-      sort,
+      sort: [projIndex, 1, apIndex, 9, index],
       childrenLength: 0,
     }
   })

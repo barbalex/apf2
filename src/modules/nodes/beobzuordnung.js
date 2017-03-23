@@ -13,7 +13,6 @@ export default (store) => {
   // map through all and create array of nodes
   const nodes = table.filteredAndSorted.beobzuordnung.map((el, index) => {
     const beobId = isNaN(el.BeobId) ? el.BeobId : parseInt(el.BeobId, 10)
-    const sort = [projIndex, 1, apIndex, 8, index]
 
     return {
       nodeType: `table`,
@@ -24,7 +23,7 @@ export default (store) => {
       expanded: beobId === activeUrlElements.beobzuordnung,
       url: [`Projekte`, projId, `Arten`, apArtId, `nicht-beurteilte-Beobachtungen`, beobId],
       level: 5,
-      sort,
+      sort: [projIndex, 1, apIndex, 8, index],
       childrenLength: 0,
     }
   })

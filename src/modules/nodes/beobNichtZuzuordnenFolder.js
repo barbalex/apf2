@@ -20,7 +20,6 @@ export default (store) => {
   if (store.node.nodeLabelFilter.get(`beobNichtZuzuordnen`)) {
     message = `${beobNichtZuzuordnenNodesLength} gefiltert`
   }
-  const sort = [projIndex, 1, apIndex, 9]
 
   return {
     nodeType: `folder`,
@@ -30,7 +29,7 @@ export default (store) => {
     expanded: activeUrlElements.beobNichtZuzuordnenFolder,
     url: [`Projekte`, projId, `Arten`, apArtId, `nicht-zuzuordnende-Beobachtungen`],
     level: 4,
-    sort,
+    sort: [projIndex, 1, apIndex, 9],
     childrenLength: beobNichtZuzuordnenNodesLength,
   }
 }
