@@ -68,7 +68,7 @@ export default (store) => {
   } = store.node.node
   let nodes = projekt
   if (activeUrlElements.projekt) {
-    nodes = nodes.concat(apFolder)
+    nodes.concat(apFolder)
   }
   if (activeUrlElements.projekt) {
     nodes = nodes.concat(apberuebersichtFolder)
@@ -82,63 +82,51 @@ export default (store) => {
   if (activeUrlElements.apFolder) {
     nodes = nodes.concat(ap)
   }
+  // const apIsAp = activeUrlElements.ap && [1, 2, 3].includes(ap.ApStatus)
   if (activeUrlElements.ap) {
     nodes = nodes.concat(qkFolder)
-  }
-  if (activeUrlElements.ap) {
     nodes = nodes.concat(assozartFolder)
-  }
-  if (activeUrlElements.assozartFolder) {
-    nodes = nodes.concat(assozart)
-  }
-  if (activeUrlElements.ap) {
+    if (activeUrlElements.assozartFolder) {
+      nodes = nodes.concat(assozart)
+    }
     nodes = nodes.concat(idealbiotopFolder)
-  }
-  if (activeUrlElements.ap) {
     nodes = nodes.concat(beobNichtZuzuordnenFolder)
-  }
-  if (activeUrlElements.beobNichtZuzuordnenFolder) {
-    nodes = nodes.concat(beobNichtZuzuordnen)
-  }
-  if (activeUrlElements.ap) {
+    if (activeUrlElements.beobNichtZuzuordnenFolder) {
+      nodes = nodes.concat(beobNichtZuzuordnen)
+    }
     nodes = nodes.concat(beobzuordnungFolder)
-  }
-  if (activeUrlElements.beobzuordnungFolder) {
-    nodes = nodes.concat(beobzuordnung)
-  }
-  if (activeUrlElements.ap) {
+    if (activeUrlElements.beobzuordnungFolder) {
+      nodes = nodes.concat(beobzuordnung)
+    }
     nodes = nodes.concat(berFolder)
-  }
-  if (activeUrlElements.berFolder) {
-    nodes = nodes.concat(ber)
-  }
-  if (activeUrlElements.ap) {
+    if (activeUrlElements.berFolder) {
+      nodes = nodes.concat(ber)
+    }
     nodes = nodes.concat(apberFolder)
-  }
-  if (activeUrlElements.apberFolder) {
-    nodes = nodes.concat(apber)
-  }
-  if (activeUrlElements.ap) {
+    if (activeUrlElements.apberFolder) {
+      nodes = nodes.concat(apber)
+    }
     nodes = nodes.concat(erfkritFolder)
-  }
-  if (activeUrlElements.erfkritFolder) {
-    nodes = nodes.concat(erfkrit)
-  }
-  if (activeUrlElements.ap) {
+    if (activeUrlElements.erfkritFolder) {
+      nodes = nodes.concat(erfkrit)
+    }
     nodes = nodes.concat(zieljahrFolder)
   }
   if (activeUrlElements.zielFolder) {
     nodes = nodes.concat(zieljahr)
+    if (activeUrlElements.zieljahr) {
+      nodes = nodes.concat(ziel)
+      if (activeUrlElements.ziel) {
+        nodes = nodes.concat(zielberFolder)
+        if (activeUrlElements.zielberFolder) {
+          nodes = nodes.concat(zielber)
+        }
+      }
+    }
   }
-  if (activeUrlElements.zieljahr) {
-    nodes = nodes.concat(ziel)
-  }
-  if (activeUrlElements.ziel) {
-    nodes = nodes.concat(zielberFolder)
-  }
-  if (activeUrlElements.zielberFolder) {
-    nodes = nodes.concat(zielber)
-  }
+
+
+
   if (activeUrlElements.ap) {
     nodes = nodes.concat(popFolder)
   }
