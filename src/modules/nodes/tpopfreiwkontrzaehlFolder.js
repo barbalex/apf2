@@ -29,7 +29,6 @@ export default (store) => {
   if (node.nodeLabelFilter.get(`tpopfreiwkontr`)) {
     message = `${childrenLength} gefiltert`
   }
-  const sort = [projIndex, 1, apIndex, 1, popIndex, 1, tpopIndex, 4, tpopfreiwkontrIndex, 1]
 
   return {
     nodeType: `folder`,
@@ -39,7 +38,7 @@ export default (store) => {
     expanded: activeUrlElements.tpopfreiwkontrzaehlFolder,
     url: [`Projekte`, projId, `Arten`, apArtId, `Populationen`, popId, `Teil-Populationen`, tpopId, `Freiwilligen-Kontrollen`, tpopfreiwkontrId, `Zaehlungen`],
     level: 10,
-    sort,
+    sort: [projIndex, 1, apIndex, 1, popIndex, 1, tpopIndex, 4, tpopfreiwkontrIndex, 1],
     childrenLength,
   }
 }

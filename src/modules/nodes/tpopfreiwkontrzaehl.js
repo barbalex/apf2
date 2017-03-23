@@ -19,20 +19,16 @@ export default (store) => {
   if (!tpopfreiwkontrId) return []
   const tpopfreiwkontrIndex = findIndex(table.filteredAndSorted.tpopfreiwkontr, { TPopKontrId: tpopfreiwkontrId })
 
-  return table.filteredAndSorted.tpopfreiwkontrzaehl.map((el, index) => {
-    const sort = [projIndex, 1, apIndex, 1, popIndex, 1, tpopIndex, 4, tpopfreiwkontrIndex, 1, index]
-
-    return {
-      nodeType: `table`,
-      menuType: `tpopfreiwkontrzaehl`,
-      id: el.TPopKontrZaehlId,
-      parentId: tpopfreiwkontrId,
-      label: el.label,
-      expanded: el.TPopKontrZaehlId === activeUrlElements.tpopfreiwkontrzaehl,
-      url: [`Projekte`, projId, `Arten`, apArtId, `Populationen`, popId, `Teil-Populationen`, tpopId, `Freiwilligen-Kontrollen`, tpopfreiwkontrId, `Zaehlungen`, el.TPopKontrZaehlId],
-      level: 11,
-      sort,
-      childrenLength: 0,
-    }
-  })
+  return table.filteredAndSorted.tpopfreiwkontrzaehl.map((el, index) => ({
+    nodeType: `table`,
+    menuType: `tpopfreiwkontrzaehl`,
+    id: el.TPopKontrZaehlId,
+    parentId: tpopfreiwkontrId,
+    label: el.label,
+    expanded: el.TPopKontrZaehlId === activeUrlElements.tpopfreiwkontrzaehl,
+    url: [`Projekte`, projId, `Arten`, apArtId, `Populationen`, popId, `Teil-Populationen`, tpopId, `Freiwilligen-Kontrollen`, tpopfreiwkontrId, `Zaehlungen`, el.TPopKontrZaehlId],
+    level: 11,
+    sort: [projIndex, 1, apIndex, 1, popIndex, 1, tpopIndex, 4, tpopfreiwkontrIndex, 1, index],
+    childrenLength: 0,
+  }))
 }
