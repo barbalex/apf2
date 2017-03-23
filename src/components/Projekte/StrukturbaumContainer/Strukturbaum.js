@@ -170,7 +170,7 @@ class Strukturbaum extends Component {
     const node = store.node.node.nodes[index]
     const onClick = (event) => {
       store.ui.lastClickY = event.pageY
-      store.toggleNode(node)
+      store.node.toggleNode(node)
     }
     const myProps = { key: index }
     const nodeHasChildren = node.childrenLength > 0

@@ -164,6 +164,10 @@ function Store() {
   extendObservable(this.node, {
     apFilter: false,
     nodeLabelFilter: observable.map({}),
+    // action when user clicks on a node in the tree
+    toggleNode: action(node =>
+      toggleNode(this, node)
+    ),
   })
   extendObservable(this.node.node, {
     projekt: computed(() => projektNodes(this)),
@@ -320,6 +324,34 @@ function Store() {
     removeActiveApfloraLayer: action((layer) => {
       this.map.activeApfloraLayers = this.map.activeApfloraLayers.filter(o => o !== layer)
     }),
+    showMapLayer: action((layer, bool) => {
+      if (bool) {
+        this.map.addActiveOverlay(layer)
+      } else {
+        this.map.removeActiveOverlay(layer)
+      }
+    }),
+    showMapApfloraLayer: action((layer, bool) => {
+      if (bool) {
+        this.map.addActiveApfloraLayer(layer)
+      } else {
+        this.map.removeActiveApfloraLayer(layer)
+      }
+    }),
+    setIdOfTpopBeingLocalized: action((id) => {
+      if (this.user.readOnly) return this.tellUserReadOnly()
+      this.map.tpop.idOfTpopBeingLocalized = id
+    }),
+    localizeTpop: action((x, y) => {
+      if (this.user.readOnly) return this.tellUserReadOnly()
+      localizeTpop(this, x, y)
+    }),
+    setMapMouseCoord: action((e) => {
+      this.map.mouseCoord = [e.latlng.lng, e.latlng.lat]
+    }),
+    toggleMapPopLabelContent: action((layer) =>
+      this.map[layer].labelUsingNr = !this.map[layer].labelUsingNr
+    ),
   })
   extendObservable(this.map.pop, {
     // apArtId is needed because
@@ -502,7 +534,6 @@ function Store() {
   this.valuesForWhichTableDataWasFetched = {}
   this.qk = observable.map()
   extendObservable(this, {
-
     /**
      * url paths are used to control tree and forms
      */
@@ -531,23 +562,9 @@ function Store() {
     tellUserReadOnly: action(() =>
       this.listError(new Error(`Sie haben keine Schreibrechte`))
     ),
-    setIdOfTpopBeingLocalized: action((id) => {
-      if (this.user.readOnly) return this.tellUserReadOnly()
-      this.map.tpop.idOfTpopBeingLocalized = id
-    }),
-    localizeTpop: action((x, y) => {
-      if (this.user.readOnly) return this.tellUserReadOnly()
-      localizeTpop(this, x, y)
-    }),
     fetchLogin: action((name, password) => fetchLogin(this, name, password)),
     logout: action(() => logout(this)),
     setLoginFromIdb: action(() => setLoginFromIdb(this)),
-    setMapMouseCoord: action((e) => {
-      this.map.mouseCoord = [e.latlng.lng, e.latlng.lat]
-    }),
-    toggleMapPopLabelContent: action((layer) =>
-      this.map[layer].labelUsingNr = !this.map[layer].labelUsingNr
-    ),
     toggleApFilter: action(() => {
       this.node.apFilter = !this.node.apFilter
     }),
@@ -639,10 +656,6 @@ function Store() {
     fetchBeobInfospezies: action(apArtId =>
       fetchBeobInfospezies(this, apArtId)
     ),
-    // action when user clicks on a node in the tree
-    toggleNode: action(node =>
-      toggleNode(this, node)
-    ),
     /**
      * urlQueries are used to control tabs
      * for instance: Entwicklung or Biotop in tpopfeldkontr
@@ -651,20 +664,6 @@ function Store() {
     setUrlQuery: action((key, value) =>
       setUrlQuery(this, key, value)
     ),
-    showMapLayer: action((layer, bool) => {
-      if (bool) {
-        this.map.addActiveOverlay(layer)
-      } else {
-        this.map.removeActiveOverlay(layer)
-      }
-    }),
-    showMapApfloraLayer: action((layer, bool) => {
-      if (bool) {
-        this.map.addActiveApfloraLayer(layer)
-      } else {
-        this.map.removeActiveApfloraLayer(layer)
-      }
-    }),
   })
 }
 

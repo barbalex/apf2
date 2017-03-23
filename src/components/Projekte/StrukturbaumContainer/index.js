@@ -148,7 +148,7 @@ class StrukturbaumContainer extends Component { // eslint-disable-line react/pre
         // 1. open map if not yet open
         that.showMapIfNotYetVisible()
         // 2 add layer for actionTable
-        store.showMapLayer(actionTable, !store.map.activeOverlays.includes(actionTable))
+        store.map.showMapLayer(actionTable, !store.map.activeOverlays.includes(actionTable))
       },
       showOnMap() {
         // actionTable: table to show on map
@@ -165,15 +165,15 @@ class StrukturbaumContainer extends Component { // eslint-disable-line react/pre
         // 2. open map if not yet open
         that.showMapIfNotYetVisible()
         // 3 add layer for actionTable
-        store.showMapLayer(actionTable, !store.map.activeOverlays.includes(actionTable))
+        store.map.showMapLayer(actionTable, !store.map.activeOverlays.includes(actionTable))
       },
       toggleTooltip() {
-        store.toggleMapPopLabelContent(actionTable)
+        store.map.toggleMapPopLabelContent(actionTable)
       },
       localizeOnMap() {
-        store.setIdOfTpopBeingLocalized(parseInt(id, 10))
+        store.map.setIdOfTpopBeingLocalized(parseInt(id, 10))
         that.showMapIfNotYetVisible()
-        store.showMapApfloraLayer(`Tpop`, true)
+        store.map.showMapApfloraLayer(`Tpop`, true)
       }
     }
     if (Object.keys(actions).includes(action)) {

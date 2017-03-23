@@ -221,7 +221,7 @@ class Karte extends Component {
       <MapElement
         bounds={toJS(store.map.bounds)}
         preferCanvas
-        onMouseMove={store.setMapMouseCoord}
+        onMouseMove={store.map.setMapMouseCoord}
         // need max and min zoom because otherwise
         // something errors
         // probably clustering function
@@ -232,7 +232,7 @@ class Karte extends Component {
           if (!!idOfTpopBeingLocalized) {
             const {lat, lng} = event.latlng
             const [x, y] = epsg4326to21781(lng, lat)
-            store.localizeTpop(x, y)
+            store.map.localizeTpop(x, y)
           }
         }}
         onZoomlevelschange={(event) => {
