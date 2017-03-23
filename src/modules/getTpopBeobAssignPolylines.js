@@ -7,7 +7,12 @@ export default (store) => {
     return beobs.map((p) => {
       const isHighlighted = highlightedIds.includes(p.BeobId)
       const tpop = store.table.tpop.get(p.beobzuordnung.TPopId)
-      const latlngs = [p.KoordWgs84, tpop.TPopKoordWgs84]
+      const tpopKoord = (
+        tpop && tpop.TPopKoordWgs84 ?
+        tpop.TPopKoordWgs84 :
+        p.KoordWgs84
+      )
+      const latlngs = [p.KoordWgs84, tpopKoord]
 
       return window.L.polyline(latlngs, {
         color: isHighlighted ? `yellow` : `#FF00FF`,
