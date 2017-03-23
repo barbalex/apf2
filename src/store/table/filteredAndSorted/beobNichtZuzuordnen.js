@@ -12,6 +12,16 @@ export default (store) => {
       a.beobBereitgestellt.NO_ISFS &&
       a.beobBereitgestellt.NO_ISFS === activeUrlElements.ap
     ))
+    // filter by node.apFilter
+    .filter((b) => {
+      if (!node.apFilter) return true
+      let ap
+      const beob = table.beob_bereitgestellt.get(b.NO_NOTE)
+      if (beob) ap = table.ap.get(beob.NO_ISFS)
+      if (ap) return [1, 2, 3].includes(ap.ApStatus)
+      return true
+    })
+
   // add label
   beobNichtZuzuordnen.forEach((el) => {
     let datum = ``

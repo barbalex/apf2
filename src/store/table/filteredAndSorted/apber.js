@@ -6,6 +6,14 @@ export default (store) => {
   let apber = Array.from(table.apber.values())
   // show only nodes of active ap
   apber = apber.filter(a => a.ApArtId === activeUrlElements.ap)
+  // filter by node.apFilter
+  if (node.apFilter) {
+    // ApStatus between 3 and 5
+    apber = apber.filter((a) => {
+      const ap = table.ap.get(a.ApArtId)
+      return [1, 2, 3].includes(ap.ApStatus)
+    })
+  }
   // filter by node.nodeLabelFilter
   const filterString = node.nodeLabelFilter.get(`apber`)
   if (filterString) {
