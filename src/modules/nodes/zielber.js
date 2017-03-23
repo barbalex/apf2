@@ -15,21 +15,16 @@ export default (store, zielId) => {
   const zielIndex = findIndex(table.filteredAndSorted.ziel, { ZielId: ziel })
 
   // map through all and create array of nodes
-  let nodes = table.filteredAndSorted.zielber.map((el, index) => {
-    const sort = [projIndex, 1, apIndex, 2, zieljahrIndex, zielIndex, 1, index]
-
-    return {
-      nodeType: `table`,
-      menuType: `zielber`,
-      id: el.ZielBerId,
-      parentId: el.ZielId,
-      label: el.label,
-      expanded: el.ZielBerId === activeUrlElements.zielber,
-      url: [`Projekte`, projId, `Arten`, apArtId, `AP-Ziele`, zieljahr, el.ZielId, `Berichte`, el.ZielBerId],
-      level: 8,
-      sort,
-      childrenLength: 0,
-    }
-  })
-  return nodes
+  return table.filteredAndSorted.zielber.map((el, index) => ({
+    nodeType: `table`,
+    menuType: `zielber`,
+    id: el.ZielBerId,
+    parentId: el.ZielId,
+    label: el.label,
+    expanded: el.ZielBerId === activeUrlElements.zielber,
+    url: [`Projekte`, projId, `Arten`, apArtId, `AP-Ziele`, zieljahr, el.ZielId, `Berichte`, el.ZielBerId],
+    level: 8,
+    sort: [projIndex, 1, apIndex, 2, zieljahrIndex, zielIndex, 1, index],
+    childrenLength: 0,
+  }))
 }

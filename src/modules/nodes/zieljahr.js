@@ -11,7 +11,6 @@ export default (store) => {
   const apIndex = findIndex(table.filteredAndSorted.ap, { ApArtId: apArtId })
 
   const nodes = table.filteredAndSorted.zieljahr.map((z, index) => {
-    const sort = [projIndex, 1, apIndex, 2, index]
     // get nr of ziele for year
     // const nrOfZieleThisYear = ziele.filter(z => z.ZielJahr === jahr).length
     const childrenLength = table.filteredAndSorted.ziel.length
@@ -25,7 +24,7 @@ export default (store) => {
       expanded: z.jahr && z.jahr === activeUrlElements.zieljahr,
       url: [`Projekte`, projId, `Arten`, apArtId, `AP-Ziele`, z.jahr],
       level: 5,
-      sort,
+      sort: [projIndex, 1, apIndex, 2, index],
       childrenLength,
     }
   })

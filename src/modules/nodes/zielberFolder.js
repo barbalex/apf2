@@ -23,7 +23,6 @@ export default (store) => {
   if (store.node.nodeLabelFilter.get(`zielber`)) {
     message = `${zielberNodesLength} gefiltert`
   }
-  const sort = [projIndex, 1, apIndex, 2, zieljahrIndex, zielIndex, 1]
 
   return {
     nodeType: `folder`,
@@ -33,7 +32,7 @@ export default (store) => {
     expanded: activeUrlElements.zielberFolder,
     url: [`Projekte`, projId, `Arten`, apArtId, `AP-Ziele`, zieljahr, ziel, `Berichte`],
     level: 7,
-    sort,
+    sort: [projIndex, 1, apIndex, 2, zieljahrIndex, zielIndex, 1],
     childrenLength: zielberNodesLength,
   }
 }
