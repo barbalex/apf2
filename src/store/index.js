@@ -165,61 +165,161 @@ function Store() {
     apFilter: false,
     nodeLabelFilter: observable.map({}),
     // action when user clicks on a node in the tree
-    toggleNode: action(node =>
+    toggleNode: action(`toggleNode`, node =>
       toggleNode(this, node)
     ),
   })
   extendObservable(this.node.node, {
-    projekt: computed(() => projektNodes(this)),
-    apFolder: computed(() => apFolderNodes(this)),
-    apberuebersichtFolder: computed(() => apberuebersichtFolderNodes(this)),
-    exporteFolder: computed(() => exporteFolderNodes(this)),
-    apberuebersicht: computed(() => apberuebersichtNodes(this)),
-    ap: computed(() => apNodes(this)),
-    nodes: computed(() => allNodes(this)),
-    qkFolder: computed(() => qkFolderNode(this)),
-    assozartFolder: computed(() => assozartFolderNode(this)),
-    assozart: computed(() => assozartNode(this)),
-    idealbiotopFolder: computed(() => idealbiotopFolderNode(this)),
-    beobNichtZuzuordnenFolder: computed(() => beobNichtZuzuordnenFolderNode(this)),
-    beobNichtZuzuordnen: computed(() => beobNichtZuzuordnenNode(this)),
-    beobzuordnungFolder: computed(() => beobzuordnungFolderNode(this)),
-    beobzuordnung: computed(() => beobzuordnungNode(this)),
-    berFolder: computed(() => berFolderNode(this)),
-    ber: computed(() => berNode(this)),
-    apberFolder: computed(() => apberFolderNode(this)),
-    apber: computed(() => apberNode(this)),
-    erfkritFolder: computed(() => erfkritFolderNode(this)),
-    erfkrit: computed(() => erfkritNode(this)),
-    zieljahrFolder: computed(() => zieljahreFolderNode(this)),
-    zieljahr: computed(() => zieljahrNode(this)),
-    ziel: computed(() => zielNode(this)),
-    zielberFolder: computed(() => zielberFolderNode(this)),
-    zielber: computed(() => zielberNode(this)),
-    popFolder: computed(() => popFolderNode(this)),
-    pop: computed(() => popNode(this)),
-    popmassnberFolder: computed(() => popmassnberFolderNode(this)),
-    popmassnber: computed(() => popmassnberNode(this)),
-    popberFolder: computed(() => popberFolderNode(this)),
-    popber: computed(() => popberNode(this)),
-    tpopFolder: computed(() => tpopFolderNode(this)),
-    tpop: computed(() => tpopNode(this)),
-    tpopbeobFolder: computed(() => tpopbeobFolderNode(this)),
-    tpopbeob: computed(() => tpopbeobNode(this)),
-    tpopberFolder: computed(() => tpopberFolderNode(this)),
-    tpopber: computed(() => tpopberNode(this)),
-    tpopfreiwkontrFolder: computed(() => tpopfreiwkontrFolderNode(this)),
-    tpopfreiwkontr: computed(() => tpopfreiwkontrNode(this)),
-    tpopfreiwkontrzaehlFolder: computed(() => tpopfreiwkontrzaehlFolderNode(this)),
-    tpopfreiwkontrzaehl: computed(() => tpopfreiwkontrzaehlNode(this)),
-    tpopfeldkontrFolder: computed(() => tpopfeldkontrFolderNode(this)),
-    tpopfeldkontr: computed(() => tpopfeldkontrNode(this)),
-    tpopfeldkontrzaehlFolder: computed(() => tpopfeldkontrzaehlFolderNode(this)),
-    tpopfeldkontrzaehl: computed(() => tpopfeldkontrzaehlNode(this)),
-    tpopmassnberFolder: computed(() => tpopmassnberFolderNode(this)),
-    tpopmassnber: computed(() => tpopmassnberNode(this)),
-    tpopmassnFolder: computed(() => tpopmassnFolderNode(this)),
-    tpopmassn: computed(() => tpopmassnNode(this)),
+    projekt: computed(
+      () => projektNodes(this)
+    ),
+    apFolder: computed(
+      () => apFolderNodes(this)
+    ),
+    apberuebersichtFolder: computed(
+      () => apberuebersichtFolderNodes(this)
+    ),
+    exporteFolder: computed(
+      () => exporteFolderNodes(this)
+    ),
+    apberuebersicht: computed(
+      () => apberuebersichtNodes(this)
+    ),
+    ap: computed(
+      () => apNodes(this)
+    ),
+    nodes: computed(
+      () => allNodes(this)
+    ),
+    qkFolder: computed(
+      () => qkFolderNode(this),
+    ),
+    assozartFolder: computed(
+      () => assozartFolderNode(this),
+    ),
+    assozart: computed(
+      () => assozartNode(this),
+    ),
+    idealbiotopFolder: computed(
+      () => idealbiotopFolderNode(this),
+    ),
+    beobNichtZuzuordnenFolder: computed(
+      () => beobNichtZuzuordnenFolderNode(this),
+    ),
+    beobNichtZuzuordnen: computed(
+      () => beobNichtZuzuordnenNode(this),
+    ),
+    beobzuordnungFolder: computed(
+      () => beobzuordnungFolderNode(this),
+    ),
+    beobzuordnung: computed(
+      () => beobzuordnungNode(this),
+    ),
+    berFolder: computed(
+      () => berFolderNode(this),
+    ),
+    ber: computed(
+      () => berNode(this),
+    ),
+    apberFolder: computed(
+      () => apberFolderNode(this),
+    ),
+    apber: computed(
+      () => apberNode(this),
+    ),
+    erfkritFolder: computed(
+      () => erfkritFolderNode(this),
+    ),
+    erfkrit: computed(
+      () => erfkritNode(this),
+    ),
+    zieljahrFolder: computed(
+      () => zieljahreFolderNode(this),
+    ),
+    zieljahr: computed(
+      () => zieljahrNode(this),
+    ),
+    ziel: computed(
+      () => zielNode(this),
+    ),
+    zielberFolder: computed(
+      () => zielberFolderNode(this),
+    ),
+    zielber: computed(
+      () => zielberNode(this),
+    ),
+    popFolder: computed(
+      () => popFolderNode(this),
+    ),
+    pop: computed(
+      () => popNode(this),
+    ),
+    popmassnberFolder: computed(
+      () => popmassnberFolderNode(this),
+    ),
+    popmassnber: computed(
+      () => popmassnberNode(this),
+    ),
+    popberFolder: computed(
+      () => popberFolderNode(this),
+    ),
+    popber: computed(
+      () => popberNode(this),
+    ),
+    tpopFolder: computed(
+      () => tpopFolderNode(this),
+    ),
+    tpop: computed(
+      () => tpopNode(this),
+    ),
+    tpopbeobFolder: computed(
+      () => tpopbeobFolderNode(this),
+    ),
+    tpopbeob: computed(
+      () => tpopbeobNode(this),
+    ),
+    tpopberFolder: computed(
+      () => tpopberFolderNode(this),
+    ),
+    tpopber: computed(
+      () => tpopberNode(this),
+    ),
+    tpopfreiwkontrFolder: computed(
+      () => tpopfreiwkontrFolderNode(this),
+    ),
+    tpopfreiwkontr: computed(
+      () => tpopfreiwkontrNode(this),
+    ),
+    tpopfreiwkontrzaehlFolder: computed(
+      () => tpopfreiwkontrzaehlFolderNode(this),
+    ),
+    tpopfreiwkontrzaehl: computed(
+      () => tpopfreiwkontrzaehlNode(this),
+    ),
+    tpopfeldkontrFolder: computed(
+      () => tpopfeldkontrFolderNode(this),
+    ),
+    tpopfeldkontr: computed(
+      () => tpopfeldkontrNode(this),
+    ),
+    tpopfeldkontrzaehlFolder: computed(
+      () => tpopfeldkontrzaehlFolderNode(this),
+    ),
+    tpopfeldkontrzaehl: computed(
+      () => tpopfeldkontrzaehlNode(this),
+    ),
+    tpopmassnberFolder: computed(
+      () => tpopmassnberFolderNode(this),
+    ),
+    tpopmassnber: computed(
+      () => tpopmassnberNode(this),
+    ),
+    tpopmassnFolder: computed(
+      () => tpopmassnFolderNode(this),
+    ),
+    tpopmassn: computed(
+      () => tpopmassnNode(this),
+    ),
   })
   this.ui = {}
   extendObservable(this.ui, {
@@ -266,16 +366,18 @@ function Store() {
   }
   extendObservable(this.map, {
     bounds: [[47.159, 8.354], [47.696, 8.984]],
-    changeBounds: action((bounds) => this.map.bounds = bounds),
+    changeBounds: action(`changeBounds`, (bounds) => this.map.bounds = bounds),
     mouseCoord: [],
-    mouseCoordEpsg21781: computed(() => {
-      if (this.map.mouseCoord.length > 0) {
-        return epsg4326to21781(this.map.mouseCoord[0], this.map.mouseCoord[1])
-      }
-      return []
-    }),
+    mouseCoordEpsg21781: computed(
+      () => {
+        if (this.map.mouseCoord.length > 0) {
+          return epsg4326to21781(this.map.mouseCoord[0], this.map.mouseCoord[1])
+        }
+        return []
+      },
+    ),
     activeBaseLayer: `OsmColor`,
-    setActiveBaseLayer: action((layer) => setActiveBaseLayer(this, layer)),
+    setActiveBaseLayer: action(`setActiveBaseLayer`, (layer) => setActiveBaseLayer(this, layer)),
     overlays: observable([
       { label: `ZH Übersichtsplan`, value: `ZhUep` },
       { label: `Detailplaene`, value: `Detailplaene` },
@@ -286,19 +388,23 @@ function Store() {
       { label: `Wälder: lichte`, value: `ZhLichteWaelder` },
       { label: `Wälder: Vegetation`, value: `ZhWaelderVegetation` },
     ]),
-    overlaysString: computed(() => this.map.overlays.map(o => o.value).join()),
-    moveOverlay: action(({ oldIndex, newIndex }) =>
+    overlaysString: computed(
+      () => this.map.overlays.map(o => o.value).join(),
+    ),
+    moveOverlay: action(`moveOverlay`, ({ oldIndex, newIndex }) =>
       moveOverlay(this, oldIndex, newIndex)
     ),
     activeOverlays: [],
-    activeOverlaysSorted: computed(() =>
-      sortBy(this.map.activeOverlays, (activeOverlay) =>
+    activeOverlaysSorted: computed(
+      () => sortBy(this.map.activeOverlays, (activeOverlay) =>
         this.map.overlays.findIndex((overlay) => overlay.value === activeOverlay)
-      )
+      ),
     ),
-    activeOverlaysSortedString: computed(() => this.map.activeOverlaysSorted.join()),
-    addActiveOverlay: action(layer => this.map.activeOverlays.push(layer)),
-    removeActiveOverlay: action((layer) => {
+    activeOverlaysSortedString: computed(
+      () => this.map.activeOverlaysSorted.join(),
+    ),
+    addActiveOverlay: action(`addActiveOverlay`, layer => this.map.activeOverlays.push(layer)),
+    removeActiveOverlay: action(`removeActiveOverlay`, (layer) => {
       this.map.activeOverlays = this.map.activeOverlays.filter(o => o !== layer)
     }),
     apfloraLayers: observable([
@@ -309,47 +415,55 @@ function Store() {
       { label: `Beobachtungen: nicht zuzuordnen`, value: `BeobNichtZuzuordnen` },
       { label: `Zuordnungs-Linien`, value: `TpopBeobAssignPolylines` },
     ]),
-    apfloraLayersString: computed(() => this.map.apfloraLayers.map(o => o.value).join()),
-    moveApfloraLayer: action(({ oldIndex, newIndex }) =>
+    apfloraLayersString: computed(
+      () => this.map.apfloraLayers.map(o => o.value).join(),
+    ),
+    moveApfloraLayer: action(`moveApfloraLayer`, ({ oldIndex, newIndex }) =>
       moveApfloraLayer(this, oldIndex, newIndex)
     ),
     activeApfloraLayers: [],
-    activeApfloraLayersSorted: computed(() =>
-      sortBy(this.map.activeApfloraLayers, (activeApfloraLayer) =>
-        this.map.apfloraLayers.findIndex((apfloraLayer) => apfloraLayer.value === activeApfloraLayer)
-      )
+    activeApfloraLayersSorted: computed(
+      () => sortBy(this.map.activeApfloraLayers, (activeApfloraLayer) =>
+        this.map.apfloraLayers.findIndex((apfloraLayer) =>
+          apfloraLayer.value === activeApfloraLayer
+        )
+      ),
     ),
-    activeApfloraLayersSortedString: computed(() => this.map.activeApfloraLayersSorted.join()),
-    addActiveApfloraLayer: action(layer => this.map.activeApfloraLayers.push(layer)),
-    removeActiveApfloraLayer: action((layer) => {
+    activeApfloraLayersSortedString: computed(
+      () => this.map.activeApfloraLayersSorted.join(),
+    ),
+    addActiveApfloraLayer: action(`addActiveApfloraLayer`, layer =>
+      this.map.activeApfloraLayers.push(layer)
+    ),
+    removeActiveApfloraLayer: action(`removeActiveApfloraLayer`, (layer) => {
       this.map.activeApfloraLayers = this.map.activeApfloraLayers.filter(o => o !== layer)
     }),
-    showMapLayer: action((layer, bool) => {
+    showMapLayer: action(`showMapLayer`, (layer, bool) => {
       if (bool) {
         this.map.addActiveOverlay(layer)
       } else {
         this.map.removeActiveOverlay(layer)
       }
     }),
-    showMapApfloraLayer: action((layer, bool) => {
+    showMapApfloraLayer: action(`showMapApfloraLayer`, (layer, bool) => {
       if (bool) {
         this.map.addActiveApfloraLayer(layer)
       } else {
         this.map.removeActiveApfloraLayer(layer)
       }
     }),
-    setIdOfTpopBeingLocalized: action((id) => {
+    setIdOfTpopBeingLocalized: action(`setIdOfTpopBeingLocalized`, (id) => {
       if (this.user.readOnly) return this.tellUserReadOnly()
       this.map.tpop.idOfTpopBeingLocalized = id
     }),
-    localizeTpop: action((x, y) => {
+    localizeTpop: action(`localizeTpop`, (x, y) => {
       if (this.user.readOnly) return this.tellUserReadOnly()
       localizeTpop(this, x, y)
     }),
-    setMapMouseCoord: action((e) => {
+    setMapMouseCoord: action(`setMapMouseCoord`, (e) => {
       this.map.mouseCoord = [e.latlng.lng, e.latlng.lat]
     }),
-    toggleMapPopLabelContent: action((layer) =>
+    toggleMapPopLabelContent: action(`toggleMapPopLabelContent`, (layer) =>
       this.map[layer].labelUsingNr = !this.map[layer].labelUsingNr
     ),
   })
@@ -358,34 +472,38 @@ function Store() {
     // need to pass apArtId when activeUrlElements.ap
     // is not yet set...
     apArtId: null,
-    highlightedIds: computed(() => (
-      this.activeUrlElements.pop ?
-      [this.activeUrlElements.pop] :
-      []
-    )),
+    highlightedIds: computed(
+      () => (
+        this.activeUrlElements.pop ?
+        [this.activeUrlElements.pop] :
+        []
+      ),
+    ),
     pops: computed(() => getPopsForMap(this)),
     bounds: computed(() => getPopBounds(this.map.pop.pops)),
-    boundsOfHighlightedIds: computed(() =>
-      getPopBounds(
+    boundsOfHighlightedIds: computed(
+      () => getPopBounds(
         this.map.pop.pops
           .filter(p => this.map.pop.highlightedIds.includes(p.PopId))
-      )
+      ),
     ),
     // alternative is using names
     labelUsingNr: true,
     markers: computed(() => getPopMarkers(this)),
   })
   extendObservable(this.map.tpop, {
-    highlightedIds: computed(() => (
-      this.activeUrlElements.tpop ?
-      [this.activeUrlElements.tpop] :
-      []
-    )),
+    highlightedIds: computed(
+      () => (
+        this.activeUrlElements.tpop ?
+        [this.activeUrlElements.tpop] :
+        []
+      ),
+    ),
     highlightedPopIds: [],
     tpops: computed(() => getTpopsForMap(this)),
     bounds: computed(() => getTpopBounds(this.map.tpop.tpops)),
-    boundsOfHighlightedIds: computed(() =>
-      getTpopBounds(
+    boundsOfHighlightedIds: computed(
+      () => getTpopBounds(
         this.map.tpop.tpops
           .filter(t => this.map.tpop.highlightedIds.includes(t.TPopId))
       )
@@ -399,35 +517,39 @@ function Store() {
   extendObservable(this.map.beob, {
     highlightedIds: [],
     beobs: computed(() => getBeobForMap(this)),
-    markersClustered: computed(() =>
-      getBeobMarkersClustered(this)
+    markersClustered: computed(
+      () => getBeobMarkersClustered(this)
     ),
-    markers: computed(() =>
-      getBeobMarkers(this)
+    markers: computed(
+      () => getBeobMarkers(this)
     ),
     assigning: false,
-    toggleAssigning: action(() =>
+    toggleAssigning: action(`toggleAssigning`, () =>
       this.map.beob.assigning = !this.map.beob.assigning
     ),
   })
   extendObservable(this.map.beobNichtBeurteilt, {
-    highlightedIds: computed(() => (
-      this.activeUrlElements.beobzuordnung ?
-      [this.activeUrlElements.beobzuordnung] :
-      []
-    )),
-    markersClustered: computed(() =>
-      getBeobNichtBeurteiltMarkersClustered(this)
+    highlightedIds: computed(
+      () => (
+        this.activeUrlElements.beobzuordnung ?
+        [this.activeUrlElements.beobzuordnung] :
+        []
+      )
     ),
-    markers: computed(() =>
-      getBeobNichtBeurteiltMarkers(this)
+    markersClustered: computed(
+      () => getBeobNichtBeurteiltMarkersClustered(this)
     ),
-    beobs: computed(() =>
-      getBeobForMap(this).filter(b => !b.beobzuordnung)
+    markers: computed(
+      () => getBeobNichtBeurteiltMarkers(this)
     ),
-    bounds: computed(() => getBeobNichtBeurteiltBounds(this.map.beobNichtBeurteilt.beobs)),
-    boundsOfHighlightedIds: computed(() =>
-      getBeobNichtBeurteiltBounds(
+    beobs: computed(
+      () => getBeobForMap(this).filter(b => !b.beobzuordnung)
+    ),
+    bounds: computed(
+      () => getBeobNichtBeurteiltBounds(this.map.beobNichtBeurteilt.beobs)
+    ),
+    boundsOfHighlightedIds: computed(
+      () => getBeobNichtBeurteiltBounds(
         this.map.beobNichtBeurteilt.beobs
           .filter(b => this.map.beobNichtBeurteilt.highlightedIds.includes(b.BeobId))
       )
@@ -435,20 +557,24 @@ function Store() {
     idOfBeobBeingAssigned: 0,
   })
   extendObservable(this.map.beobNichtZuzuordnen, {
-    highlightedIds: computed(() => (
-      this.activeUrlElements.beobNichtZuzuordnen ?
-      [this.activeUrlElements.beobNichtZuzuordnen] :
-      []
-    )),
-    markersClustered: computed(() =>
-      getBeobNichtZuzuordnenMarkersClustered(this)
+    highlightedIds: computed(
+      () => (
+        this.activeUrlElements.beobNichtZuzuordnen ?
+        [this.activeUrlElements.beobNichtZuzuordnen] :
+        []
+      )
     ),
-    beobs: computed(() =>
-      getBeobForMap(this).filter(b => b.beobzuordnung && b.beobzuordnung.BeobNichtZuordnen === 1)
+    markersClustered: computed(
+      () => getBeobNichtZuzuordnenMarkersClustered(this)
     ),
-    bounds: computed(() => getBeobNichtZuzuordnenBounds(this.map.beobNichtZuzuordnen.beobs)),
-    boundsOfHighlightedIds: computed(() =>
-      getBeobNichtZuzuordnenBounds(
+    beobs: computed(
+      () => getBeobForMap(this).filter(b => b.beobzuordnung && b.beobzuordnung.BeobNichtZuordnen === 1)
+    ),
+    bounds: computed(
+      () => getBeobNichtZuzuordnenBounds(this.map.beobNichtZuzuordnen.beobs)
+    ),
+    boundsOfHighlightedIds: computed(
+      () => getBeobNichtZuzuordnenBounds(
         this.map.beobNichtZuzuordnen.beobs
           .filter(b =>
             this.map.beobNichtZuzuordnen.highlightedIds.includes(
@@ -459,45 +585,49 @@ function Store() {
     ),
   })
   extendObservable(this.map.tpopBeob, {
-    highlightedIds: computed(() => {
-      const { activeUrlElements } = this
-      if (activeUrlElements.tpopbeob) {
-        return [activeUrlElements.tpopbeob]
-      } else if (activeUrlElements.tpop) {
-        return this.map.tpopBeob.beobs.filter(b =>
-          b.beobzuordnung && b.beobzuordnung.TPopId === activeUrlElements.tpop
-        ).map(b => b.BeobId)
-      } else if (activeUrlElements.pop) {
-        return this.map.tpopBeob.beobs.filter((b) => {
-          const tpop = this.table.tpop.get(b.beobzuordnung.TPopId)
-          if (tpop) {
-            const popId = tpop.PopId
-            return popId && popId === activeUrlElements.pop
-          }
-          return false
-        }).map(b => b.BeobId)
+    highlightedIds: computed(
+      () => {
+        const { activeUrlElements } = this
+        if (activeUrlElements.tpopbeob) {
+          return [activeUrlElements.tpopbeob]
+        } else if (activeUrlElements.tpop) {
+          return this.map.tpopBeob.beobs.filter(b =>
+            b.beobzuordnung && b.beobzuordnung.TPopId === activeUrlElements.tpop
+          ).map(b => b.BeobId)
+        } else if (activeUrlElements.pop) {
+          return this.map.tpopBeob.beobs.filter((b) => {
+            const tpop = this.table.tpop.get(b.beobzuordnung.TPopId)
+            if (tpop) {
+              const popId = tpop.PopId
+              return popId && popId === activeUrlElements.pop
+            }
+            return false
+          }).map(b => b.BeobId)
+        }
+        return []
       }
-      return []
-    }),
-    markersClustered: computed(() =>
-      getTpopBeobMarkersClustered(this)
     ),
-    markers: computed(() =>
-      getTpopBeobMarkers(this)
+    markersClustered: computed(
+      () => getTpopBeobMarkersClustered(this)
     ),
-    assignPolylines: computed(() =>
-      getTpopBeobAssignPolylines(this)
+    markers: computed(
+      () => getTpopBeobMarkers(this)
     ),
-    beobs: computed(() =>
-      getBeobForMap(this).filter(b =>
+    assignPolylines: computed(
+      () => getTpopBeobAssignPolylines(this)
+    ),
+    beobs: computed(
+      () => getBeobForMap(this).filter(b =>
         b.beobzuordnung &&
         b.beobzuordnung.TPopId &&
         !b.beobzuordnung.BeobNichtZuzuordnen
       )
     ),
-    bounds: computed(() => getTpopBeobBounds(this.map.tpopBeob.beobs)),
-    boundsOfHighlightedIds: computed(() =>
-      getTpopBeobBounds(
+    bounds: computed(
+      () => getTpopBeobBounds(this.map.tpopBeob.beobs)
+    ),
+    boundsOfHighlightedIds: computed(
+      () => getTpopBeobBounds(
         this.map.tpopBeob.beobs
           .filter(b => this.map.tpopBeob.highlightedIds.includes(b.BeobId))
       )
@@ -505,31 +635,81 @@ function Store() {
   })
   this.table = TableStore
   extendObservable(this.table.filteredAndSorted, {
-    projekt: computed(() => filteredAndSortedProjekt(this)),
-    apberuebersicht: computed(() => filteredAndSortedApberuebersicht(this)),
-    ap: computed(() => filteredAndSortedAp(this)),
-    assozart: computed(() => filteredAndSortedAssozart(this)),
-    idealbiotop: computed(() => filteredAndSortedIdealbiotop(this)),
-    beobNichtZuzuordnen: computed(() => filteredAndSortedBeobNichtZuzuordnen(this)),
-    beobzuordnung: computed(() => filteredAndSortedBeobzuordnung(this)),
-    ber: computed(() => filteredAndSortedBer(this)),
-    apber: computed(() => filteredAndSortedApber(this)),
-    erfkrit: computed(() => filteredAndSortedErfkrit(this)),
-    zieljahr: computed(() => filteredAndSortedZieljahr(this)),
-    ziel: computed(() => filteredAndSortedZiel(this)),
-    zielber: computed(() => filteredAndSortedZielber(this)),
-    pop: computed(() => filteredAndSortedPop(this)),
-    popmassnber: computed(() => filteredAndSortedPopmassnber(this)),
-    popber: computed(() => filteredAndSortedPopber(this)),
-    tpop: computed(() => filteredAndSortedTpop(this)),
-    tpopbeob: computed(() => filteredAndSortedTpopbeob(this)),
-    tpopber: computed(() => filteredAndSortedTopber(this)),
-    tpopfreiwkontr: computed(() => filteredAndSortedTpopfreiwkontr(this)),
-    tpopfreiwkontrzaehl: computed(() => filteredAndSortedTpopfreiwkontrzaehl(this)),
-    tpopfeldkontr: computed(() => filteredAndSortedTpopfeldkontr(this)),
-    tpopfeldkontrzaehl: computed(() => filteredAndSortedTpopfeldkontrzaehl(this)),
-    tpopmassnber: computed(() => filteredAndSortedTpopmassnber(this)),
-    tpopmassn: computed(() => filteredAndSortedTpopmassn(this)),
+    projekt: computed(
+      () => filteredAndSortedProjekt(this)
+    ),
+    apberuebersicht: computed(
+      () => filteredAndSortedApberuebersicht(this)
+    ),
+    ap: computed(
+      () => filteredAndSortedAp(this)
+    ),
+    assozart: computed(
+      () => filteredAndSortedAssozart(this)
+    ),
+    idealbiotop: computed(
+      () => filteredAndSortedIdealbiotop(this)
+    ),
+    beobNichtZuzuordnen: computed(
+      () => filteredAndSortedBeobNichtZuzuordnen(this)
+    ),
+    beobzuordnung: computed(
+      () => filteredAndSortedBeobzuordnung(this)
+    ),
+    ber: computed(
+      () => filteredAndSortedBer(this)
+    ),
+    apber: computed(
+      () => filteredAndSortedApber(this)
+    ),
+    erfkrit: computed(
+      () => filteredAndSortedErfkrit(this)
+    ),
+    zieljahr: computed(
+      () => filteredAndSortedZieljahr(this)
+    ),
+    ziel: computed(
+      () => filteredAndSortedZiel(this)
+    ),
+    zielber: computed(
+      () => filteredAndSortedZielber(this)
+    ),
+    pop: computed(
+      () => filteredAndSortedPop(this)
+    ),
+    popmassnber: computed(
+      () => filteredAndSortedPopmassnber(this)
+    ),
+    popber: computed(
+      () => filteredAndSortedPopber(this)
+    ),
+    tpop: computed(
+      () => filteredAndSortedTpop(this)
+    ),
+    tpopbeob: computed(
+      () => filteredAndSortedTpopbeob(this)
+    ),
+    tpopber: computed(
+      () => filteredAndSortedTopber(this)
+    ),
+    tpopfreiwkontr: computed(
+      () => filteredAndSortedTpopfreiwkontr(this)
+    ),
+    tpopfreiwkontrzaehl: computed(
+      () => filteredAndSortedTpopfreiwkontrzaehl(this)
+    ),
+    tpopfeldkontr: computed(
+      () => filteredAndSortedTpopfeldkontr(this)
+    ),
+    tpopfeldkontrzaehl: computed(
+      () => filteredAndSortedTpopfeldkontrzaehl(this)
+    ),
+    tpopmassnber: computed(
+      () => filteredAndSortedTpopmassnber(this)
+    ),
+    tpopmassn: computed(
+      () => filteredAndSortedTpopmassn(this)
+    ),
   })
   this.valuesForWhichTableDataWasFetched = {}
   this.qk = observable.map()
@@ -537,49 +717,57 @@ function Store() {
     /**
      * url paths are used to control tree and forms
      */
-    url: computed(() =>
+    url: computed(
       //$FlowIssue
-      getUrl(this.history.location.pathname)
+      () => getUrl(this.history.location.pathname)
     ),
     /**
      * urlQueries are used to control tabs
      * for instance: Entwicklung or Biotop in tpopfeldkontr
      */
-    urlQuery: computed(() =>
+    urlQuery: computed(
       //$FlowIssue
-      getUrlQuery(this.history.location.search)
+      () => getUrlQuery(this.history.location.search)
     ),
-    projektNodes: computed(() =>
-      buildProjektNodes(this)
+    projektNodes: computed(
+      () => buildProjektNodes(this)
     ),
-    activeDataset: computed(() =>
-      updateActiveDatasetFromUrl(this)
+    activeDataset: computed(
+      () => updateActiveDatasetFromUrl(this)
     ),
-    activeUrlElements: computed(() =>
-      getActiveUrlElements(this.url)
+    activeUrlElements: computed(
+      () => getActiveUrlElements(this.url)
     ),
     datasetToDelete: {},
-    tellUserReadOnly: action(() =>
+    tellUserReadOnly: action(`tellUserReadOnly`, () =>
       this.listError(new Error(`Sie haben keine Schreibrechte`))
     ),
-    fetchLogin: action((name, password) => fetchLogin(this, name, password)),
-    logout: action(() => logout(this)),
-    setLoginFromIdb: action(() => setLoginFromIdb(this)),
-    toggleApFilter: action(() => {
+    fetchLogin: action(`fetchLogin`, (name, password) =>
+      fetchLogin(this, name, password)
+    ),
+    logout: action(`logout`, () =>
+      logout(this)
+    ),
+    setLoginFromIdb: action(`setLoginFromIdb`, () =>
+      setLoginFromIdb(this)
+    ),
+    toggleApFilter: action(`toggleApFilter`, () => {
       this.node.apFilter = !this.node.apFilter
     }),
-    fetchQk: action(() => fetchQk({ store: this })),
-    setQk: action(({ berichtjahr, messages, filter }) =>
+    fetchQk: action(`fetchQk`, () => fetchQk({ store: this })),
+    setQk: action(`setQk`, ({ berichtjahr, messages, filter }) =>
       setQk({ store: this, berichtjahr, messages, filter })
     ),
-    setQkFilter: action(({ filter }) =>
+    setQkFilter: action(`setQkFilter`, ({ filter }) =>
       setQkFilter({ store: this, filter })
     ),
-    addMessagesToQk: action(({ messages }) => {
+    addMessagesToQk: action(`addMessagesToQk`, ({ messages }) => {
       addMessagesToQk({ store: this, messages })
     }),
-    fetchFieldsFromIdb: action(() => fetchFieldsFromIdb(this)),
-    updateLabelFilter: action((table, value) => {
+    fetchFieldsFromIdb: action(`fetchFieldsFromIdb`, () =>
+      fetchFieldsFromIdb(this)
+    ),
+    updateLabelFilter: action(`updateLabelFilter`, (table, value) => {
       if (!table) {
         return this.listError(
           new Error(`nodeLabelFilter cant be updated: no table passed`)
@@ -587,73 +775,75 @@ function Store() {
       }
       this.node.nodeLabelFilter.set(table, value)
     }),
-    insertBeobzuordnung: action((newKey, newValue) => {
+    insertBeobzuordnung: action(`insertBeobzuordnung`, (newKey, newValue) => {
       if (this.user.readOnly) return this.tellUserReadOnly()
       insertBeobzuordnung(this, newKey, newValue)
     }),
-    insertDataset: action((table, parentId, baseUrl) => {
+    insertDataset: action(`insertDataset`, (table, parentId, baseUrl) => {
       if (this.user.readOnly) return this.tellUserReadOnly()
       insertDataset(this, table, parentId, baseUrl)
     }),
-    deleteDatasetDemand: action((table, id, url, label) => {
+    deleteDatasetDemand: action(`deleteDatasetDemand`, (table, id, url, label) => {
       if (this.user.readOnly) return this.tellUserReadOnly()
       deleteDatasetDemand(this, table, id, url, label)
     }),
-    deleteDatasetAbort: action(() => {
+    deleteDatasetAbort: action(`deleteDatasetAbort`, () => {
       this.datasetToDelete = {}
     }),
-    deleteDatasetExecute: action(() => {
+    deleteDatasetExecute: action(`deleteDatasetExecute`, () => {
       if (this.user.readOnly) return this.tellUserReadOnly()
       deleteDatasetExecute(this)
     }),
-    deleteBeobzuordnung: action((beobId) => deleteBeobzuordnung(this, beobId)),
-    listError: action(error =>
+    deleteBeobzuordnung: action(`deleteBeobzuordnung`, (beobId) =>
+      deleteBeobzuordnung(this, beobId)
+    ),
+    listError: action(`listError`, error =>
       listError(this, error)
     ),
     // updates data in store
-    updateProperty: action((key, value) => {
+    updateProperty: action(`updateProperty`, (key, value) => {
       if (this.user.readOnly) return this.tellUserReadOnly()
       updateProperty(this, key, value)
     }),
     // updates data in database
-    updatePropertyInDb: action((key, value) => {
+    updatePropertyInDb: action(`updatePropertyInDb`, (key, value) => {
       if (this.user.readOnly) return this.tellUserReadOnly()
       updatePropertyInDb(this, key, value)
     }),
     // fetch all data of a table
     // primarily used for werte (domain) tables
     // and projekt
-    fetchTable: action((schemaName, tableName) =>
+    fetchTable: action(`fetchTable`, (schemaName, tableName) =>
       fetchTable(this, schemaName, tableName)
     ),
-    fetchStammdaten: action(() => {
+    fetchStammdaten: action(`fetchStammdaten`, () => {
       fetchFields(this)
       fetchStammdatenTables(this)
     }),
-    fetchBeobzuordnung: action(apArtId =>
+    fetchBeobzuordnung: action(`fetchBeobzuordnung`, apArtId =>
       fetchBeobzuordnungModule(this, apArtId)
     ),
     // fetch data of table for id of parent table
     // used for actual apflora data (but projekt)
-    fetchTableByParentId: action((schemaName, tableName, parentId) =>
+    fetchTableByParentId: action(`fetchTableByParentId`, (schemaName, tableName, parentId) =>
       fetchTableByParentId(this, schemaName, tableName, parentId)
     ),
-    fetchTpopForAp: action(apArtId =>
+    fetchTpopForAp: action(`fetchTpopForAp`, apArtId =>
       fetchTpopForAp(this, apArtId)
     ),
-    fetchPopForAp: action(apArtId =>
+    fetchPopForAp: action(`fetchPopForAp`, apArtId =>
       fetchPopForAp(this, apArtId)
     ),
-    fetchDatasetById: action(({ schemaName, tableName, id }) =>
+    fetchDatasetById: action(`fetchDatasetById`, ({ schemaName, tableName, id }) =>
       fetchDatasetById({ store: this, schemaName, tableName, id })
     ),
-    fetchBeobBereitgestellt: action(apArtId =>
+    fetchBeobBereitgestellt: action(`fetchBeobBereitgestellt`, apArtId =>
       fetchBeobBereitgestellt(this, apArtId)
     ),
-    fetchBeobEvab: action(apArtId =>
+    fetchBeobEvab: action(`fetchBeobEvab`, apArtId =>
       fetchBeobEvab(this, apArtId)
     ),
-    fetchBeobInfospezies: action(apArtId =>
+    fetchBeobInfospezies: action(`fetchBeobInfospezies`, apArtId =>
       fetchBeobInfospezies(this, apArtId)
     ),
     /**
@@ -661,7 +851,7 @@ function Store() {
      * for instance: Entwicklung or Biotop in tpopfeldkontr
      * or: strukturbaum, daten and map in projekte
      */
-    setUrlQuery: action((key, value) =>
+    setUrlQuery: action(`setUrlQuery`, (key, value) =>
       setUrlQuery(this, key, value)
     ),
   })
