@@ -11,20 +11,16 @@ export default (store) => {
   const apIndex = findIndex(store.table.filteredAndSorted.ap, { ApArtId: apArtId })
 
   // map through all projekt and create array of nodes
-  return table.filteredAndSorted.apber.map((el, index) => {
-    const sort = [projIndex, 1, apIndex, 4, index]
-
-    return {
-      nodeType: `table`,
-      menuType: `apber`,
-      id: el.JBerId,
-      parentId: el.ApArtId,
-      label: el.label,
-      expanded: el.JBerJahr === activeUrlElements.apber,
-      url: [`Projekte`, projId, `Arten`, el.ApArtId, `AP-Berichte`, el.JBerId],
-      level: 5,
-      sort,
-      childrenLength: 0,
-    }
-  })
+  return table.filteredAndSorted.apber.map((el, index) => ({
+    nodeType: `table`,
+    menuType: `apber`,
+    id: el.JBerId,
+    parentId: el.ApArtId,
+    label: el.label,
+    expanded: el.JBerJahr === activeUrlElements.apber,
+    url: [`Projekte`, projId, `Arten`, el.ApArtId, `AP-Berichte`, el.JBerId],
+    level: 5,
+    sort: [projIndex, 1, apIndex, 4, index],
+    childrenLength: 0,
+  }))
 }

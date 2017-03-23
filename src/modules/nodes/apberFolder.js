@@ -20,7 +20,6 @@ export default (store) => {
   if (node.nodeLabelFilter.get(`apber`)) {
     message = `${apberNodesLength} gefiltert`
   }
-  const sort = [projIndex, 1, apIndex, 4]
 
   return {
     nodeType: `folder`,
@@ -30,7 +29,7 @@ export default (store) => {
     expanded: activeUrlElements.apberFolder,
     url: [`Projekte`, projId, `Arten`, apArtId, `AP-Berichte`],
     level: 4,
-    sort,
+    sort: [projIndex, 1, apIndex, 4],
     childrenLength: apberNodesLength,
   }
 }
