@@ -14,7 +14,7 @@ const compare = (a, b) => {
 }
 
 export default (store) => {
-  const { activeUrlElements } = store
+  const { activeUrlElements, table } = store
   const {
     projekt,
     apFolder,
@@ -78,10 +78,23 @@ export default (store) => {
     nodes = nodes.concat(exporteFolder)
     if (activeUrlElements.apFolder) {
       nodes = nodes.concat(ap)
-      if (activeUrlElements.ap) {
+      if (
+        activeUrlElements.ap &&
+        // make sure a pops lower levels are not shown
+        // if an apFilter exists
+        // and the species is not ap species
+        (
+          !store.node.apFilter ||
+          (
+            store.node.apFilter &&
+            table &&
+            table.ap &&
+            table.ap.get(activeUrlElements.ap) &&
+            [1, 2, 3].includes(table.ap.get(activeUrlElements.ap).ApStatus)
+          )
+        )
+      ) {
         nodes = nodes.concat(qkFolder)
-      }
-      if (activeUrlElements.ap) {
         nodes = nodes.concat(assozartFolder)
         if (activeUrlElements.assozartFolder) {
           nodes = nodes.concat(assozart)
