@@ -107,98 +107,84 @@ export default (store) => {
         if (activeUrlElements.erfkritFolder) {
           nodes = nodes.concat(erfkrit)
         }
+        nodes = nodes.concat(zieljahrFolder)
+        if (activeUrlElements.zielFolder) {
+          nodes = nodes.concat(zieljahr)
+          if (activeUrlElements.zieljahr) {
+            nodes = nodes.concat(ziel)
+            if (activeUrlElements.ziel) {
+              nodes = nodes.concat(zielberFolder)
+              if (activeUrlElements.zielberFolder) {
+                nodes = nodes.concat(zielber)
+              }
+            }
+          }
+        }
+        nodes = nodes.concat(popFolder)
+        if (activeUrlElements.popFolder) {
+          nodes = nodes.concat(pop)
+          if (activeUrlElements.pop) {
+            nodes = nodes.concat(popmassnberFolder)
+            if (activeUrlElements.popmassnberFolder) {
+              nodes = nodes.concat(popmassnber)
+            }
+            nodes = nodes.concat(popberFolder)
+            if (activeUrlElements.popberFolder) {
+              nodes = nodes.concat(popber)
+            }
+            nodes = nodes.concat(tpopFolder)
+            if (activeUrlElements.tpopFolder) {
+              nodes = nodes.concat(tpop)
+              if (activeUrlElements.tpop) {
+                nodes = nodes.concat(tpopbeobFolder)
+                if (activeUrlElements.tpopbeobFolder) {
+                  nodes = nodes.concat(tpopbeob)
+                }
+                nodes = nodes.concat(tpopberFolder)
+                if (activeUrlElements.tpopberFolder) {
+                  nodes = nodes.concat(tpopber)
+                }
+                nodes = nodes.concat(tpopfreiwkontrFolder)
+                if (activeUrlElements.tpopfreiwkontrFolder) {
+                  nodes = nodes.concat(tpopfreiwkontr)
+                  if (activeUrlElements.tpopfreiwkontr) {
+                    nodes = nodes.concat(tpopfreiwkontrzaehlFolder)
+                    if (activeUrlElements.tpopfreiwkontrzaehlFolder) {
+                      nodes = nodes.concat(tpopfreiwkontrzaehl)
+                    }
+                  }
+                }
+                nodes = nodes.concat(tpopfeldkontrFolder)
+                if (activeUrlElements.tpopfeldkontrFolder) {
+                  nodes = nodes.concat(tpopfeldkontr)
+                  if (activeUrlElements.tpopfeldkontr) {
+                    nodes = nodes.concat(tpopfeldkontrzaehlFolder)
+                    if (activeUrlElements.tpopfeldkontrzaehlFolder) {
+                      nodes = nodes.concat(tpopfeldkontrzaehl)
+                    }
+                  }
+                }
+                nodes = nodes.concat(tpopmassnberFolder)
+                if (activeUrlElements.tpopmassnberFolder) {
+                  nodes = nodes.concat(tpopmassnber)
+                }
+                nodes = nodes.concat(tpopmassnFolder)
+                if (activeUrlElements.tpopmassnFolder) {
+                  nodes = nodes.concat(tpopmassn)
+                }
+              }
+            }
+          }
+        }
       }
     }
   }
-  if (activeUrlElements.ap) {
-    nodes = nodes.concat(zieljahrFolder)
-  }
-  if (activeUrlElements.zielFolder) {
-    nodes = nodes.concat(zieljahr)
-  }
-  if (activeUrlElements.zieljahr) {
-    nodes = nodes.concat(ziel)
-  }
-  if (activeUrlElements.ziel) {
-    nodes = nodes.concat(zielberFolder)
-  }
-  if (activeUrlElements.zielberFolder) {
-    nodes = nodes.concat(zielber)
-  }
-  if (activeUrlElements.ap) {
-    nodes = nodes.concat(popFolder)
-  }
-  if (activeUrlElements.popFolder) {
-    nodes = nodes.concat(pop)
-  }
-  if (activeUrlElements.pop) {
-    nodes = nodes.concat(popmassnberFolder)
-  }
-  if (activeUrlElements.popmassnberFolder) {
-    nodes = nodes.concat(popmassnber)
-  }
-  if (activeUrlElements.pop) {
-    nodes = nodes.concat(popberFolder)
-  }
-  if (activeUrlElements.popberFolder) {
-    nodes = nodes.concat(popber)
-  }
-  if (activeUrlElements.pop) {
-    nodes = nodes.concat(tpopFolder)
-  }
-  if (activeUrlElements.tpopFolder) {
-    nodes = nodes.concat(tpop)
-  }
-  if (activeUrlElements.tpop) {
-    nodes = nodes.concat(tpopbeobFolder)
-  }
-  if (activeUrlElements.tpopbeobFolder) {
-    nodes = nodes.concat(tpopbeob)
-  }
-  if (activeUrlElements.tpop) {
-    nodes = nodes.concat(tpopberFolder)
-  }
-  if (activeUrlElements.tpopberFolder) {
-    nodes = nodes.concat(tpopber)
-  }
-  if (activeUrlElements.tpop) {
-    nodes = nodes.concat(tpopfreiwkontrFolder)
-  }
-  if (activeUrlElements.tpopfreiwkontrFolder) {
-    nodes = nodes.concat(tpopfreiwkontr)
-  }
-  if (activeUrlElements.tpopfreiwkontr) {
-    nodes = nodes.concat(tpopfreiwkontrzaehlFolder)
-  }
-  if (activeUrlElements.tpopfreiwkontrzaehlFolder) {
-    nodes = nodes.concat(tpopfreiwkontrzaehl)
-  }
-  if (activeUrlElements.tpop) {
-    nodes = nodes.concat(tpopfeldkontrFolder)
-  }
-  if (activeUrlElements.tpopfeldkontrFolder) {
-    nodes = nodes.concat(tpopfeldkontr)
-  }
-  if (activeUrlElements.tpopfeldkontr) {
-    nodes = nodes.concat(tpopfeldkontrzaehlFolder)
-  }
-  if (activeUrlElements.tpopfeldkontrzaehlFolder) {
-    nodes = nodes.concat(tpopfeldkontrzaehl)
-  }
-  if (activeUrlElements.tpop) {
-    nodes = nodes.concat(tpopmassnberFolder)
-  }
-  if (activeUrlElements.tpopmassnberFolder) {
-    nodes = nodes.concat(tpopmassnber)
-  }
-  if (activeUrlElements.tpop) {
-    nodes = nodes.concat(tpopmassnFolder)
-  }
-  if (activeUrlElements.tpopmassnFolder) {
-    nodes = nodes.concat(tpopmassn)
-  }
+
   /**
-   * This is an important and pretty ingenieous sorting algorithm:
+   * As all nodes are now in one flat list,
+   * we need to sort them
+   *
+   * This is the sorting algorithm:
    *
    * compare the sort array value in the nodes
    * to determine sorting
