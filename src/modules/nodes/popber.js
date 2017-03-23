@@ -13,20 +13,16 @@ export default (store) => {
   if (!popId) return []
   const popIndex = findIndex(table.filteredAndSorted.pop, { PopId: popId })
 
-  return table.filteredAndSorted.popber.map((el, index) => {
-    const sort = [projIndex, 1, apIndex, 1, popIndex, 2, index]
-
-    return {
-      nodeType: `table`,
-      menuType: `popber`,
-      id: el.PopBerId,
-      parentId: popId,
-      label: el.label,
-      expanded: el.PopBerId === activeUrlElements.popber,
-      url: [`Projekte`, projId, `Arten`, apArtId, `Populationen`, popId, `Kontroll-Berichte`, el.PopBerId],
-      level: 7,
-      sort,
-      childrenLength: 0,
-    }
-  })
+  return table.filteredAndSorted.popber.map((el, index) => ({
+    nodeType: `table`,
+    menuType: `popber`,
+    id: el.PopBerId,
+    parentId: popId,
+    label: el.label,
+    expanded: el.PopBerId === activeUrlElements.popber,
+    url: [`Projekte`, projId, `Arten`, apArtId, `Populationen`, popId, `Kontroll-Berichte`, el.PopBerId],
+    level: 7,
+    sort: [projIndex, 1, apIndex, 1, popIndex, 2, index],
+    childrenLength: 0,
+  }))
 }

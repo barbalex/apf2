@@ -23,7 +23,6 @@ export default (store) => {
   if (node.nodeLabelFilter.get(`popber`)) {
     message = `${popberNodesLength} gefiltert`
   }
-  const sort = [projIndex, 1, apIndex, 1, popIndex, 2]
 
   return {
     nodeType: `folder`,
@@ -33,7 +32,7 @@ export default (store) => {
     expanded: activeUrlElements.popberFolder,
     url: [`Projekte`, projId, `Arten`, apArtId, `Populationen`, popId, `Kontroll-Berichte`],
     level: 6,
-    sort,
+    sort: [projIndex, 1, apIndex, 1, popIndex, 2],
     childrenLength: popberNodesLength,
   }
 }
