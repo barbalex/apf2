@@ -10,22 +10,17 @@ export default (store) => {
   if (!apArtId) return []
   const apIndex = findIndex(table.filteredAndSorted.ap, { ApArtId: apArtId })
 
-  // map through all projekt and create array of nodes
-  let nodes = table.filteredAndSorted.erfkrit.map((el, index) => {
-    const sort = [projIndex, 1, apIndex, 3, index]
-
-    return {
-      nodeType: `table`,
-      menuType: `erfkrit`,
-      id: el.ErfkritId,
-      parentId: el.ApArtId,
-      label: el.label,
-      expanded: el.ErfkritId === activeUrlElements.erfkrit,
-      url: [`Projekte`, projId, `Arten`, el.ApArtId, `AP-Erfolgskriterien`, el.ErfkritId],
-      level: 5,
-      sort,
-      childrenLength: 0,
-    }
-  })
-  return nodes
+  // map through all erfkrit and create array of nodes
+  return table.filteredAndSorted.erfkrit.map((el, index) => ({
+    nodeType: `table`,
+    menuType: `erfkrit`,
+    id: el.ErfkritId,
+    parentId: el.ApArtId,
+    label: el.label,
+    expanded: el.ErfkritId === activeUrlElements.erfkrit,
+    url: [`Projekte`, projId, `Arten`, el.ApArtId, `AP-Erfolgskriterien`, el.ErfkritId],
+    level: 5,
+    sort: [projIndex, 1, apIndex, 3, index],
+    childrenLength: 0,
+  }))
 }

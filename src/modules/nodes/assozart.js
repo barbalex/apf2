@@ -10,7 +10,7 @@ export default (store) => {
   if (!apArtId) return []
   const apIndex = findIndex(store.table.filteredAndSorted.ap, { ApArtId: apArtId })
 
-  let nodes = table.filteredAndSorted.assozart.map((el, index) => ({
+  return table.filteredAndSorted.assozart.map((el, index) => ({
     nodeType: `table`,
     menuType: `assozart`,
     id: el.AaId,
@@ -22,5 +22,4 @@ export default (store) => {
     sort: [projIndex, 1, apIndex, 7, index],
     childrenLength: 0,
   }))
-  return nodes
 }

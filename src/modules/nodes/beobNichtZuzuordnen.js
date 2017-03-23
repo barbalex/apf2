@@ -12,7 +12,7 @@ export default (store) => {
   const apIndex = findIndex(table.filteredAndSorted.ap, { ApArtId: apArtId })
 
   // map through all and create array of nodes
-  const nodes = table.filteredAndSorted.beobNichtZuzuordnen.map((el, index) => {
+  return table.filteredAndSorted.beobNichtZuzuordnen.map((el, index) => {
     const beobId = isNaN(el.NO_NOTE) ? el.NO_NOTE : parseInt(el.NO_NOTE, 10)
 
     return {
@@ -28,5 +28,4 @@ export default (store) => {
       childrenLength: 0,
     }
   })
-  return nodes
 }

@@ -8,7 +8,7 @@ export default (store) => {
   const projIndex = findIndex(store.table.filteredAndSorted.projekt, { ProjId: projId })
 
   // map through all ap and create array of nodes
-  let nodes = table.filteredAndSorted.ap.map((el, index) => ({
+  return table.filteredAndSorted.ap.map((el, index) => ({
     nodeType: `table`,
     menuType: `ap`,
     id: el.ApArtId,
@@ -20,5 +20,4 @@ export default (store) => {
     sort: [projIndex, 1, index],
     childrenLength: 6,
   }))
-  return nodes
 }

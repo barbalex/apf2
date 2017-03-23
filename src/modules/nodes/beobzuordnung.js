@@ -11,7 +11,7 @@ export default (store) => {
   const apIndex = findIndex(store.table.filteredAndSorted.ap, { ApArtId: apArtId })
 
   // map through all and create array of nodes
-  const nodes = table.filteredAndSorted.beobzuordnung.map((el, index) => {
+  return table.filteredAndSorted.beobzuordnung.map((el, index) => {
     const beobId = isNaN(el.BeobId) ? el.BeobId : parseInt(el.BeobId, 10)
 
     return {
@@ -27,5 +27,4 @@ export default (store) => {
       childrenLength: 0,
     }
   })
-  return nodes
 }
