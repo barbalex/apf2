@@ -71,7 +71,6 @@ class Karte extends Component {
 
   static propTypes = {
     store: PropTypes.object.isRequired,
-    idOfTpopBeingLocalized: PropTypes.number.isRequired,
   }
 
   componentDidMount() {
@@ -79,11 +78,9 @@ class Karte extends Component {
   }
 
   render() {
-    const {
-      store,
-      idOfTpopBeingLocalized,
-    } = this.props
+    const { store } = this.props
     const { activeBaseLayer, activeApfloraLayers } = store.map
+    const { idOfTpopBeingLocalized } = store.map.tpop
     const MapElement = !!idOfTpopBeingLocalized ? StyledMapLocalizing : StyledMap
     // this does not work
     // see issue on proj4js: https://github.com/proj4js/proj4js/issues/214
