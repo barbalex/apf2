@@ -20,7 +20,7 @@ export default (store) => {
   const tpopfreiwkontrIndex = findIndex(table.filteredAndSorted.tpopfreiwkontr, { TPopKontrId: tpopfreiwkontrId })
 
   return table.filteredAndSorted.tpopfreiwkontrzaehl.map((el, index) => {
-    const sort = [projIndex, 1, apIndex, 1, popIndex, 1, tpopIndex, 4, tpopfreiwkontrIndex, index]
+    const sort = [projIndex, 1, apIndex, 1, popIndex, 1, tpopIndex, 4, tpopfreiwkontrIndex, 1, index]
 
     return {
       nodeType: `table`,

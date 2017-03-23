@@ -19,20 +19,16 @@ export default (store) => {
   if (!tpopfeldkontrId) return []
   const tpopfeldkontrIndex = findIndex(table.filteredAndSorted.tpopfeldkontr, { TPopKontrId: tpopfeldkontrId })
 
-  return table.filteredAndSorted.tpopfeldkontrzaehl.map((el, index) => {
-    const sort = [projIndex, 1, apIndex, 1, popIndex, 1, tpopIndex, 3, tpopfeldkontrIndex, index]
-
-    return {
-      nodeType: `table`,
-      menuType: `tpopfeldkontrzaehl`,
-      id: el.TPopKontrZaehlId,
-      parentId: tpopfeldkontrId,
-      label: el.label,
-      expanded: el.TPopKontrZaehlId === activeUrlElements.tpopfeldkontrzaehl,
-      url: [`Projekte`, projId, `Arten`, apArtId, `Populationen`, popId, `Teil-Populationen`, tpopId, `Feld-Kontrollen`, tpopfeldkontrId, `Zaehlungen`, el.TPopKontrZaehlId],
-      level: 11,
-      sort,
-      childrenLength: 0,
-    }
-  })
+  return table.filteredAndSorted.tpopfeldkontrzaehl.map((el, index) => ({
+    nodeType: `table`,
+    menuType: `tpopfeldkontrzaehl`,
+    id: el.TPopKontrZaehlId,
+    parentId: tpopfeldkontrId,
+    label: el.label,
+    expanded: el.TPopKontrZaehlId === activeUrlElements.tpopfeldkontrzaehl,
+    url: [`Projekte`, projId, `Arten`, apArtId, `Populationen`, popId, `Teil-Populationen`, tpopId, `Feld-Kontrollen`, tpopfeldkontrId, `Zaehlungen`, el.TPopKontrZaehlId],
+    level: 11,
+    sort: [projIndex, 1, apIndex, 1, popIndex, 1, tpopIndex, 3, tpopfeldkontrIndex, 1, index],
+    childrenLength: 0,
+  }))
 }

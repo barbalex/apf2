@@ -46,7 +46,7 @@ const ListContainer = styled(List)`
   }
 `
 const StyledNode = styled(({ level, nodeIsInActiveNodePath, children, ...rest }) => <div {...rest}>{children}</div>)`
-  padding-left: ${(props) => `${props.level * 16}px`};
+  padding-left: ${(props) => `${Number(props.level) * 16}px`};
   height: ${singleRowHeight}px;
   max-height: ${singleRowHeight}px;
   box-sizing: border-box;

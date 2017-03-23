@@ -29,7 +29,7 @@ export default (store) => {
   if (node.nodeLabelFilter.get(`tpopfreiwkontr`)) {
     message = `${childrenLength} gefiltert`
   }
-  const sort = [projIndex, 1, apIndex, 1, popIndex, 1, tpopIndex, 4, tpopfreiwkontrIndex]
+  const sort = [projIndex, 1, apIndex, 1, popIndex, 1, tpopIndex, 4, tpopfreiwkontrIndex, 1]
 
   return {
     nodeType: `folder`,

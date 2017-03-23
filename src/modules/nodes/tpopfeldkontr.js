@@ -16,20 +16,16 @@ export default (store) => {
   if (!tpopId) return []
   const tpopIndex = findIndex(table.filteredAndSorted.tpop, { TPopId: tpopId })
 
-  return table.filteredAndSorted.tpopfeldkontr.map((el, index) => {
-    const sort = [projIndex, 1, apIndex, 1, popIndex, 1, tpopIndex, 3, index]
-
-    return {
-      nodeType: `table`,
-      menuType: `tpopfeldkontr`,
-      id: el.TPopKontrId,
-      parentId: tpopId,
-      label: el.label,
-      expanded: el.TPopKontrId === activeUrlElements.tpopfeldkontr,
-      url: [`Projekte`, projId, `Arten`, apArtId, `Populationen`, popId, `Teil-Populationen`, tpopId, `Feld-Kontrollen`, el.TPopKontrId],
-      level: 9,
-      sort,
-      childrenLength: 1,
-    }
-  })
+  return table.filteredAndSorted.tpopfeldkontr.map((el, index) => ({
+    nodeType: `table`,
+    menuType: `tpopfeldkontr`,
+    id: el.TPopKontrId,
+    parentId: tpopId,
+    label: el.label,
+    expanded: el.TPopKontrId === activeUrlElements.tpopfeldkontr,
+    url: [`Projekte`, projId, `Arten`, apArtId, `Populationen`, popId, `Teil-Populationen`, tpopId, `Feld-Kontrollen`, el.TPopKontrId],
+    level: 9,
+    sort: [projIndex, 1, apIndex, 1, popIndex, 1, tpopIndex, 3, index],
+    childrenLength: 1,
+  }))
 }
