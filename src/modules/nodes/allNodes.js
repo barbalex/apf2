@@ -66,63 +66,49 @@ export default (store) => {
     tpopmassnFolder,
     tpopmassn,
   } = store.node.node
+
   let nodes = projekt
+
   if (activeUrlElements.projekt) {
     nodes = nodes.concat(apFolder)
-  }
-  if (activeUrlElements.projekt) {
     nodes = nodes.concat(apberuebersichtFolder)
-  }
-  if (activeUrlElements.projekt) {
+    if (activeUrlElements.apberuebersichtFolder) {
+      nodes = nodes.concat(apberuebersicht)
+    }
     nodes = nodes.concat(exporteFolder)
-  }
-  if (activeUrlElements.apberuebersichtFolder) {
-    nodes = nodes.concat(apberuebersicht)
-  }
-  if (activeUrlElements.apFolder) {
-    nodes = nodes.concat(ap)
-  }
-  if (activeUrlElements.ap) {
-    nodes = nodes.concat(qkFolder)
-  }
-  if (activeUrlElements.ap) {
-    nodes = nodes.concat(assozartFolder)
-  }
-  if (activeUrlElements.assozartFolder) {
-    nodes = nodes.concat(assozart)
-  }
-  if (activeUrlElements.ap) {
-    nodes = nodes.concat(idealbiotopFolder)
-  }
-  if (activeUrlElements.ap) {
-    nodes = nodes.concat(beobNichtZuzuordnenFolder)
-  }
-  if (activeUrlElements.beobNichtZuzuordnenFolder) {
-    nodes = nodes.concat(beobNichtZuzuordnen)
-  }
-  if (activeUrlElements.ap) {
-    nodes = nodes.concat(beobzuordnungFolder)
-  }
-  if (activeUrlElements.beobzuordnungFolder) {
-    nodes = nodes.concat(beobzuordnung)
-  }
-  if (activeUrlElements.ap) {
-    nodes = nodes.concat(berFolder)
-  }
-  if (activeUrlElements.berFolder) {
-    nodes = nodes.concat(ber)
-  }
-  if (activeUrlElements.ap) {
-    nodes = nodes.concat(apberFolder)
-  }
-  if (activeUrlElements.apberFolder) {
-    nodes = nodes.concat(apber)
-  }
-  if (activeUrlElements.ap) {
-    nodes = nodes.concat(erfkritFolder)
-  }
-  if (activeUrlElements.erfkritFolder) {
-    nodes = nodes.concat(erfkrit)
+    if (activeUrlElements.apFolder) {
+      nodes = nodes.concat(ap)
+      if (activeUrlElements.ap) {
+        nodes = nodes.concat(qkFolder)
+      }
+      if (activeUrlElements.ap) {
+        nodes = nodes.concat(assozartFolder)
+        if (activeUrlElements.assozartFolder) {
+          nodes = nodes.concat(assozart)
+        }
+        nodes = nodes.concat(idealbiotopFolder)
+        nodes = nodes.concat(beobNichtZuzuordnenFolder)
+        if (activeUrlElements.beobNichtZuzuordnenFolder) {
+          nodes = nodes.concat(beobNichtZuzuordnen)
+        }
+        nodes = nodes.concat(beobzuordnungFolder)
+        if (activeUrlElements.beobzuordnungFolder) {
+          nodes = nodes.concat(beobzuordnung)
+        }
+        nodes = nodes.concat(berFolder)
+        if (activeUrlElements.berFolder) {
+          nodes = nodes.concat(ber)
+        }
+        nodes = nodes.concat(apberFolder)
+        if (activeUrlElements.apberFolder) {
+          nodes = nodes.concat(apber)
+        }
+        nodes = nodes.concat(erfkritFolder)
+        if (activeUrlElements.erfkritFolder) {
+          nodes = nodes.concat(erfkrit)
+        }
+      }
+    }
   }
   if (activeUrlElements.ap) {
     nodes = nodes.concat(zieljahrFolder)
