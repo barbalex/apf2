@@ -28,17 +28,16 @@ export default (store) => {
   if (store.loading.includes(`qk`)) {
     nrOfQkMessages = `...`
   }
-  const label = `Qualitätskontrollen${nrOfQkMessages ? ` (${nrOfQkMessages})` : ``}`
-  const sort = [projIndex, 1, apIndex, 10]
+
   return {
     nodeType: `folder`,
     menuType: `qkFolder`,
     id: apArtId,
-    label,
+    label: `Qualitätskontrollen${nrOfQkMessages ? ` (${nrOfQkMessages})` : ``}`,
     expanded: false,
     url: [`Projekte`, projId, `Arten`, apArtId, `Qualitaetskontrollen`],
     level: 4,
-    sort,
+    sort: [projIndex, 1, apIndex, 10],
     childrenLength: 0,
   }
 }

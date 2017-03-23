@@ -16,20 +16,16 @@ export default (store) => {
   if (!tpopId) return []
   const tpopIndex = findIndex(table.filteredAndSorted.tpop, { TPopId: tpopId })
 
-  return table.filteredAndSorted.tpopbeob.map((el, index) => {
-    const sort = [projIndex, 1, apIndex, 1, popIndex, 1, tpopIndex, 6, index]
-
-    return {
-      nodeType: `table`,
-      menuType: `tpopbeob`,
-      id: el.beobId,
-      parentId: tpopId,
-      label: el.label,
-      expanded: el.beobId === activeUrlElements.tpopbeob,
-      url: [`Projekte`, activeUrlElements.projekt, `Arten`, activeUrlElements.ap, `Populationen`, activeUrlElements.pop, `Teil-Populationen`, el.TPopId, `Beobachtungen`, el.beobId],
-      level: 9,
-      sort,
-      childrenLength: 0,
-    }
-  })
+  return table.filteredAndSorted.tpopbeob.map((el, index) => ({
+    nodeType: `table`,
+    menuType: `tpopbeob`,
+    id: el.beobId,
+    parentId: tpopId,
+    label: el.label,
+    expanded: el.beobId === activeUrlElements.tpopbeob,
+    url: [`Projekte`, activeUrlElements.projekt, `Arten`, activeUrlElements.ap, `Populationen`, activeUrlElements.pop, `Teil-Populationen`, el.TPopId, `Beobachtungen`, el.beobId],
+    level: 9,
+    sort: [projIndex, 1, apIndex, 1, popIndex, 1, tpopIndex, 6, index],
+    childrenLength: 0,
+  }))
 }
