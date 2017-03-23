@@ -23,7 +23,6 @@ export default (store) => {
   if (node.nodeLabelFilter.get(`tpop`)) {
     message = `${childrenLength} gefiltert`
   }
-  const sort = [projIndex, 1, apIndex, 1, popIndex, 1]
 
   return {
     nodeType: `folder`,
@@ -33,7 +32,7 @@ export default (store) => {
     expanded: activeUrlElements.tpopFolder,
     url: [`Projekte`, projId, `Arten`, apArtId, `Populationen`, popId, `Teil-Populationen`],
     level: 6,
-    sort,
+    sort: [projIndex, 1, apIndex, 1, popIndex, 1],
     childrenLength,
   }
 }

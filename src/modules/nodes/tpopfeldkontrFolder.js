@@ -26,7 +26,6 @@ export default (store) => {
   if (node.nodeLabelFilter.get(`tpopfeldkontr`)) {
     message = `${childrenLength} gefiltert`
   }
-  const sort = [projIndex, 1, apIndex, 1, popIndex, 1, tpopIndex, 3]
 
   return {
     nodeType: `folder`,
@@ -36,7 +35,7 @@ export default (store) => {
     expanded: activeUrlElements.tpopfeldkontrFolder,
     url: [`Projekte`, projId, `Arten`, apArtId, `Populationen`, popId, `Teil-Populationen`, tpopId, `Feld-Kontrollen`],
     level: 8,
-    sort,
+    sort: [projIndex, 1, apIndex, 1, popIndex, 1, tpopIndex, 3],
     childrenLength,
   }
 }
