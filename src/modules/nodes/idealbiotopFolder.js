@@ -10,7 +10,6 @@ export default (store) => {
   const apArtId = activeUrlElements.ap
   if (!apArtId) return []
   const apIndex = findIndex(store.table.filteredAndSorted.ap, { ApArtId: apArtId })
-  const sort = [projIndex, 1, apIndex, 6]
 
   return {
     nodeType: `folder`,
@@ -20,7 +19,7 @@ export default (store) => {
     expanded: activeUrlElements.idealbiotopFolder,
     url: [`Projekte`, projId, `Arten`, apArtId, `Idealbiotop`],
     level: 4,
-    sort,
+    sort: [projIndex, 1, apIndex, 6],
     childrenLength: 0,
   }
 }

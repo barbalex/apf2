@@ -10,21 +10,17 @@ export default (store) => {
   if (!apArtId) return []
   const apIndex = findIndex(store.table.filteredAndSorted.ap, { ApArtId: apArtId })
 
-  // map through all projekt and create array of nodes
-  return table.filteredAndSorted.pop.map((el, index) => {
-    const sort = [projIndex, 1, apIndex, 1, index]
-
-    return {
-      nodeType: `table`,
-      menuType: `pop`,
-      id: el.PopId,
-      parentId: el.ApArtId,
-      label: el.label,
-      expanded: el.PopId === activeUrlElements.pop,
-      url: [`Projekte`, projId, `Arten`, el.ApArtId, `Populationen`, el.PopId],
-      level: 5,
-      sort,
-      childrenLength: 3,
-    }
-  })
+  // map through all pop and create array of nodes
+  return table.filteredAndSorted.pop.map((el, index) => ({
+    nodeType: `table`,
+    menuType: `pop`,
+    id: el.PopId,
+    parentId: el.ApArtId,
+    label: el.label,
+    expanded: el.PopId === activeUrlElements.pop,
+    url: [`Projekte`, projId, `Arten`, el.ApArtId, `Populationen`, el.PopId],
+    level: 5,
+    sort: [projIndex, 1, apIndex, 1, index],
+    childrenLength: 3,
+  }))
 }

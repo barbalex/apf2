@@ -21,7 +21,6 @@ export default (store) => {
     const jahreTxt = zieljahreNodesLength === 1 ? `Jahr` : `Jahre`
     message = `${zieljahreNodesLength} ${jahreTxt} gefiltert`
   }
-  const sort = [projIndex, 1, apIndex, 2]
 
   return {
     nodeType: `folder`,
@@ -31,7 +30,7 @@ export default (store) => {
     expanded: activeUrlElements.zielFolder,
     url: [`Projekte`, projId, `Arten`, apArtId, `AP-Ziele`],
     level: 4,
-    sort,
+    sort: [projIndex, 1, apIndex, 2],
     childrenLength: zieljahreNodesLength,
   }
 }

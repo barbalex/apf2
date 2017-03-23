@@ -20,7 +20,6 @@ export default (store) => {
   if (node.nodeLabelFilter.get(`erfkrit`)) {
     message = `${erfkritNodesLength} gefiltert`
   }
-  const sort = [projIndex, 1, apIndex, 3]
 
   return {
     nodeType: `folder`,
@@ -30,7 +29,7 @@ export default (store) => {
     expanded: activeUrlElements.erfkritFolder,
     url: [`Projekte`, projId, `Arten`, apArtId, `AP-Erfolgskriterien`],
     level: 4,
-    sort,
+    sort: [projIndex, 1, apIndex, 3],
     childrenLength: erfkritNodesLength,
   }
 }
