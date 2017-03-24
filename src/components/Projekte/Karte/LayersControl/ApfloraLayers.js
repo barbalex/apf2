@@ -27,6 +27,9 @@ const ZuordnenIcon = styled(FontIcon)`
 const ZoomToIcon = styled(FontIcon)`
   font-size: 20px !important;
 `
+const FilterIcon = styled(FontIcon)`
+  font-size: 20px !important;
+`
 const LayerDiv = styled.div`
   display: flex;
   min-height: 24px;
@@ -51,6 +54,10 @@ const IconsDiv = styled.div`
 `
 const ZuordnenDiv = styled.div``
 const ZoomToDiv = styled.div`
+  padding-left: 3px;
+  min-width: 18px;
+`
+const FilterDiv = styled.div`
   padding-left: 3px;
 `
 const MapIcon = styled(FontIcon)`
@@ -228,6 +235,27 @@ const SortableItem = SortableElement(({ apfloraLayer, store, activeApfloraLayers
             </TpopBeobAssignPolylinesIcon>
           </MapIconDiv>
         }
+        <FilterDiv>
+          {
+            [`Pop`, `Tpop`, `BeobNichtBeurteilt`, `BeobNichtZuzuordnen`, `TpopBeob`].includes(apfloraLayer.value) &&
+            <FilterIcon
+              className="material-icons"
+              title="filtern"
+              style={{
+                color: store.map.activeApfloraLayers.includes(apfloraLayer.value) ? `black` : `#e2e2e2`,
+                cursor: store.map.activeApfloraLayers.includes(apfloraLayer.value) ? `pointer` : `inherit`,
+              }}
+              onClick={() => {
+                if (activeApfloraLayers.includes(`MapFilter`)) {
+                  return store.map.removeActiveApfloraLayer(`MapFilter`)
+                }
+                return store.map.addActiveApfloraLayer(`MapFilter`)
+              }}
+            >
+              filter_list
+            </FilterIcon>
+          }
+        </FilterDiv>
         <ZoomToDiv>
           {
             apfloraLayer.value !== `MapFilter` &&
