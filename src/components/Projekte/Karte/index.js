@@ -37,6 +37,7 @@ import ZhWaelderVegetation from './layers/ZhWaelderVegetation'
 import ZhUepOverlay from './layers/ZhUepOverlay'
 import '../../../../node_modules/leaflet/dist/leaflet.css'
 import '../../../../node_modules/leaflet-measure/dist/leaflet-measure.css'
+import '../../../../node_modules/leaflet-draw/dist/leaflet.draw.css'
 import '../../../../node_modules/leaflet.markercluster/dist/MarkerCluster.css'
 import Pop from './layers/PopMarkerCluster'
 import Tpop from './layers/TpopMarker'
@@ -45,6 +46,7 @@ import Beob from './layers/BeobMarker'
 import BeobCluster from './layers/BeobMarkerCluster'
 import TpopBeobAssignPolylines from './layers/TpopBeobAssignPolylines'
 import MeasureControl from './MeasureControl'
+import DrawControl from './DrawControl'
 import PrintControl from './PrintControl'
 import PngControl from './PngControl'
 import CoordinatesControl from './CoordinatesControl'
@@ -272,6 +274,7 @@ class Karte extends Component {
           activeApfloraLayersSortedString={store.map.activeApfloraLayersSortedString}
         />
         <MeasureControl />
+        <DrawControl />
         <PrintControl />
         <PngControl />
         <CoordinatesControl />
