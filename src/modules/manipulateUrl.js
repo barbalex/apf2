@@ -12,13 +12,17 @@ export default (store:Object) => {
 
   // if new store set projekte tabs
   const urlQuery = clone(store.urlQuery)
-  if ((url.length === 0 || url[0] === `Projekte`) && !urlQuery.projekteTabs) {
-    console.log(`manipulateUrl manipulating tabs`)
+  if (
+    (url.length === 0 || url[0] === `Projekte`) &&
+    !urlQuery.projekteTabs
+  ) {
     urlQuery.projekteTabs = [`strukturbaum`, `daten`]
   }
   const search = queryString.stringify(urlQuery)
-  if (!isEqual(url, store.url) || !isEqual(urlQuery, store.urlQuery)) {
-    console.log(`manipulateUrl manipulating url`)
+  if (
+    !isEqual(url, store.url) ||
+    !isEqual(urlQuery, store.urlQuery)
+  ) {
     const query = `${Object.keys(urlQuery).length > 0 ? `?${search}` : ``}`
     store.history.push(`/${url.join(`/`)}${query}`)
   }
