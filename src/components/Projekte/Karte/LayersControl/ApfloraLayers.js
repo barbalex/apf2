@@ -29,6 +29,7 @@ const ZoomToIcon = styled(FontIcon)`
 `
 const LayerDiv = styled.div`
   display: flex;
+  min-height: 24px;
   justify-content: space-between;
   padding-top: 4px;
   &:not(:last-of-type) {

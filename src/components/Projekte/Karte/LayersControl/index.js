@@ -28,10 +28,6 @@ const Card = styled.div`
   &:not(:first-of-type) {
     border-top: 1px solid rgba(0,0,0,0.2);
   }
-  /*
-  &:not(:last-of-type) {
-    border-bottom: 1px solid rgba(0,0,0,0.2);
-  }*/
 `
 const CardHeader = styled.div`
   display: flex;
@@ -41,6 +37,7 @@ const CardHeader = styled.div`
   border-bottom: 1px solid rgba(0,0,0,0.2);
   cursor: pointer;
   font-weight: bold;
+  user-select: none;
 `
 const CardTitle = styled.div`
   padding-right: 5px;
