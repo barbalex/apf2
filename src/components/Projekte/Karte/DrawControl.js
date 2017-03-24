@@ -36,7 +36,7 @@ class DrawControl extends Component {
         circle: false,
         toolbar: {
           buttons: {
-            polygon: `Mit Polygon filtern`
+            polygon: `Mit Polygon filtern`,
           }
         }
       },
