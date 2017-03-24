@@ -62,6 +62,13 @@ const Projekte = ({ store }) => {
           karteIsVisible &&
           <KarteContainer>
             <Karte
+              /**
+               * key of tabs is added to force mounting
+               * when tabs change
+               * without remounting grey space remains
+               * when daten or strukturbaum tab is removed :-(
+               */
+              key={store.urlQuery.projekteTabs.toString()}
               popMarkers={store.map.pop.markers}
               tpopMarkers={store.map.tpop.markers}
               tpopMarkersClustered={store.map.tpop.markersClustered}
