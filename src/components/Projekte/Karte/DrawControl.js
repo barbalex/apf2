@@ -34,6 +34,11 @@ class DrawControl extends Component {
         marker: false,
         polyline: false,
         circle: false,
+        toolbar: {
+          buttons: {
+            polygon: `Mit Polygon filtern`
+          }
+        }
       },
       edit: {
         featureGroup: mapFilter,
