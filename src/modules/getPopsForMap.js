@@ -17,6 +17,7 @@ export default (store:Object) => {
       return label.toLowerCase().includes(popFilterString.toLowerCase())
     })
   }
+
   pops = pops.map((p) => {
     p.PopKoordWgs84 = epsg21781to4326(p.PopXKoord, p.PopYKoord)
     return p

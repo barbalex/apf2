@@ -175,7 +175,10 @@ function Store() {
       }
       this.node.nodeLabelFilter.set(table, value)
     }),
-    nodeMapFilter: observable.map({}),
+    nodeMapFilter: observable.map({
+      pop: [],
+      tpop: [],
+    }),
     updateMapFilter: action(`updateMapFilter`, (mapFilterItems) => {
       if (!mapFilterItems) {
         this.node.nodeMapFilter.set(`tpop`, [])
@@ -495,11 +498,16 @@ function Store() {
     // is not yet set...
     apArtId: null,
     highlightedIds: computed(
-      () => (
-        this.activeUrlElements.pop ?
-        [this.activeUrlElements.pop] :
-        []
-      ),
+      () => {
+        const nodeMapFilterPop = this.node.nodeMapFilter.get(`pop`)
+        if (nodeMapFilterPop.length > 0) {
+          return nodeMapFilterPop
+        }
+        if (this.activeUrlElements.pop) {
+          return [this.activeUrlElements.pop]
+        }
+        return []
+      },
     ),
     pops: computed(() => getPopsForMap(this)),
     bounds: computed(() => getPopBounds(this.map.pop.pops)),
