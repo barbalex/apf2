@@ -240,7 +240,7 @@ const SortableItem = SortableElement(({ apfloraLayer, store, activeApfloraLayers
             [`Pop`, `Tpop`, `BeobNichtBeurteilt`, `BeobNichtZuzuordnen`, `TpopBeob`].includes(apfloraLayer.value) &&
             <FilterIcon
               className="material-icons"
-              title="filtern"
+              title="mit Umriss(en) filtern"
               style={{
                 color: store.map.activeApfloraLayers.includes(apfloraLayer.value) ? `black` : `#e2e2e2`,
                 cursor: store.map.activeApfloraLayers.includes(apfloraLayer.value) ? `pointer` : `inherit`,
