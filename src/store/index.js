@@ -148,6 +148,7 @@ import moveApfloraLayer from './action/moveApfloraLayer'
 import tpopIdsInsideFeatureCollection from '../modules/tpopIdsInsideFeatureCollection'
 import popIdsInsideFeatureCollection from '../modules/popIdsInsideFeatureCollection'
 import beobNichtBeurteiltIdsInsideFeatureCollection from '../modules/beobNichtBeurteiltIdsInsideFeatureCollection'
+import beobNichtZuzuordnenIdsInsideFeatureCollection from '../modules/beobNichtZuzuordnenIdsInsideFeatureCollection'
 
 import TableStore from './table'
 import ObservableHistory from './ObservableHistory'
@@ -188,10 +189,12 @@ function Store() {
         this.node.nodeMapFilter.set(`tpop`, [])
         this.node.nodeMapFilter.set(`pop`, [])
         this.node.nodeMapFilter.set(`beobNichtBeurtteilt`, [])
+        this.node.nodeMapFilter.set(`beobNichtZuzuordnen`, [])
       } else {
         this.node.nodeMapFilter.set(`tpop`, tpopIdsInsideFeatureCollection(this, mapFilterItems.toGeoJSON()))
         this.node.nodeMapFilter.set(`pop`, popIdsInsideFeatureCollection(this, mapFilterItems.toGeoJSON()))
         this.node.nodeMapFilter.set(`beobNichtBeurteilt`, beobNichtBeurteiltIdsInsideFeatureCollection(this, mapFilterItems.toGeoJSON()))
+        this.node.nodeMapFilter.set(`beobNichtZuzuordnen`, beobNichtZuzuordnenIdsInsideFeatureCollection(this, mapFilterItems.toGeoJSON()))
       }
     }),
     // action when user clicks on a node in the tree
@@ -607,11 +610,16 @@ function Store() {
   })
   extendObservable(this.map.beobNichtZuzuordnen, {
     highlightedIds: computed(
-      () => (
-        this.activeUrlElements.beobNichtZuzuordnen ?
-        [this.activeUrlElements.beobNichtZuzuordnen] :
-        []
-      )
+      () => {
+        const nodeMapFilterBeobNichtZuzuordnen = this.node.nodeMapFilter.get(`beobNichtZuzuordnen`)
+        if (nodeMapFilterBeobNichtZuzuordnen.length > 0) {
+          return nodeMapFilterBeobNichtZuzuordnen
+        }
+        if (this.activeUrlElements.beobNichtZuzuordnen) {
+          return [this.activeUrlElements.beobNichtZuzuordnen]
+        }
+        return []
+      }
     ),
     markersClustered: computed(
       () => getBeobNichtZuzuordnenMarkersClustered(this)
