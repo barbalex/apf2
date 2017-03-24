@@ -523,11 +523,16 @@ function Store() {
   })
   extendObservable(this.map.tpop, {
     highlightedIds: computed(
-      () => (
-        this.activeUrlElements.tpop ?
-        [this.activeUrlElements.tpop] :
-        []
-      ),
+      () => {
+        const nodeMapFilterTpop = this.node.nodeMapFilter.get(`tpop`)
+        if (nodeMapFilterTpop.length > 0) {
+          return nodeMapFilterTpop
+        }
+        if (this.activeUrlElements.tpop) {
+          return [this.activeUrlElements.tpop]
+        }
+        return []
+      }
     ),
     highlightedPopIds: [],
     tpops: computed(() => getTpopsForMap(this)),
