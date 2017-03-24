@@ -374,6 +374,7 @@ function Store() {
     activeApfloraLayersSorted: [],
     overlays: [],
     apfloraLayers: [],
+    mapFilter: null,
     addActiveOverlay: () => {},
     removeActiveOverlay: () => {},
     setActiveBaseLayer: () => {},
@@ -423,6 +424,8 @@ function Store() {
     removeActiveOverlay: action(`removeActiveOverlay`, (layer) => {
       this.map.activeOverlays = this.map.activeOverlays.filter(o => o !== layer)
     }),
+    mapFilter: null,
+    setMapFilter: action(`setMapFilter`, (mapFilter) => this.map.mapFilter = mapFilter),
     apfloraLayers: observable([
       { label: `Populationen`, value: `Pop` },
       { label: `Teil-Populationen`, value: `Tpop` },
@@ -430,6 +433,7 @@ function Store() {
       { label: `Beobachtungen: nicht beurteilt`, value: `BeobNichtBeurteilt` },
       { label: `Beobachtungen: nicht zuzuordnen`, value: `BeobNichtZuzuordnen` },
       { label: `Zuordnungs-Linien`, value: `TpopBeobAssignPolylines` },
+      { label: `Karten-Filter`, value: `MapFilter` },
     ]),
     apfloraLayersString: computed(
       () => this.map.apfloraLayers.map(o => o.value).join(),

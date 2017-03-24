@@ -100,6 +100,7 @@ class Karte extends Component {
      * in order to dynamically display active overlays
      */
     const ApfloraLayerComponents = {
+      MapFilter: () => null,
       Pop: () => <Pop
         highlightedIds={toJS(store.map.pop.highlightedIds)}
         labelUsingNr={store.map.pop.labelUsingNr}
@@ -274,7 +275,10 @@ class Karte extends Component {
           activeApfloraLayersSortedString={store.map.activeApfloraLayersSortedString}
         />
         <MeasureControl />
-        <DrawControl />
+        {
+          store.map.activeApfloraLayers.includes(`MapFilter`) &&
+          <DrawControl />
+        }
         <PrintControl />
         <PngControl />
         <CoordinatesControl />
