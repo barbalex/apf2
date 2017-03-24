@@ -145,6 +145,8 @@ import deleteBeobzuordnung from './action/deleteBeobzuordnung'
 import setActiveBaseLayer from './action/setActiveBaseLayer'
 import moveOverlay from './action/moveOverlay'
 import moveApfloraLayer from './action/moveApfloraLayer'
+import tpopIdsInsideFeatureCollection from '../modules/tpopIdsInsideFeatureCollection'
+import popIdsInsideFeatureCollection from '../modules/popIdsInsideFeatureCollection'
 
 import TableStore from './table'
 import ObservableHistory from './ObservableHistory'
@@ -159,11 +161,25 @@ function Store() {
   this.node = {
     apFilter: false,
     nodeLabelFilter: {},
+    nodeMapFilter: {},
     node: {}
   }
   extendObservable(this.node, {
     apFilter: false,
     nodeLabelFilter: observable.map({}),
+    updateLabelFilter: action(`updateLabelFilter`, (table, value) => {
+      if (!table) {
+        return this.listError(
+          new Error(`nodeLabelFilter cant be updated: no table passed`)
+        )
+      }
+      this.node.nodeLabelFilter.set(table, value)
+    }),
+    nodeMapFilter: observable.map({}),
+    updateMapFilter: action(`updateMapFilter`, (mapFilterItems) => {
+      this.node.nodeMapFilter.set(`tpop`, tpopIdsInsideFeatureCollection(this, mapFilterItems.toGeoJSON()))
+      this.node.nodeMapFilter.set(`pop`, popIdsInsideFeatureCollection(this, mapFilterItems.toGeoJSON()))
+    }),
     // action when user clicks on a node in the tree
     toggleNode: action(`toggleNode`, node =>
       toggleNode(this, node)
@@ -767,14 +783,6 @@ function Store() {
     fetchFieldsFromIdb: action(`fetchFieldsFromIdb`, () =>
       fetchFieldsFromIdb(this)
     ),
-    updateLabelFilter: action(`updateLabelFilter`, (table, value) => {
-      if (!table) {
-        return this.listError(
-          new Error(`nodeLabelFilter cant be updated: no table passed`)
-        )
-      }
-      this.node.nodeLabelFilter.set(table, value)
-    }),
     insertBeobzuordnung: action(`insertBeobzuordnung`, (newKey, newValue) => {
       if (this.user.readOnly) return this.tellUserReadOnly()
       insertBeobzuordnung(this, newKey, newValue)

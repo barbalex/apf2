@@ -3,38 +3,48 @@ import 'leaflet'
 import 'leaflet-draw'
 import compose from 'recompose/compose'
 import getContext from 'recompose/getContext'
+import { inject } from 'mobx-react'
+
+import tpopIdsInsideFeatureCollection from '../../../modules/tpopIdsInsideFeatureCollection'
 
 const enhance = compose(
+  inject(`store`),
   getContext({ map: PropTypes.object.isRequired }),
 )
 
 class DrawControl extends Component {
 
+  static propTypes = {
+    store: PropTypes.object.isRequired,
+    map: PropTypes.object.isRequired,
+  }
+
   componentDidMount() {
-    const { map } = this.props
-    const drawnItems = new window.L.FeatureGroup()
-    map.addLayer(drawnItems)
+    const { map, store } = this.props
+    const mapFilterItems = new window.L.FeatureGroup()
+    map.addLayer(mapFilterItems)
     const drawControl = new window.L.Control.Draw({
       draw: {
         marker: false,
         polyline: false,
+        circle: false,
       },
       edit: {
-        featureGroup: drawnItems,
+        featureGroup: mapFilterItems,
       }
     })
     map.addControl(drawControl)
 
     map.on('draw:created', (e) => {
-      console.log(`created e:`, e)
-      drawnItems.addLayer(e.layer)
+      mapFilterItems.addLayer(e.layer)
+      store.node.updateMapFilter(mapFilterItems)
     })
-    map.on('draw:edited', (e) => {
-      console.log(`edited e:`, e)
-    })
-    map.on('draw:deleted', (e) => {
-      console.log(`deleted e:`, e)
-    })
+    map.on('draw:edited', (e) =>
+      store.node.updateMapFilter(mapFilterItems)
+    )
+    map.on('draw:deleted', (e) =>
+      store.node.updateMapFilter(mapFilterItems)
+    )
   }
 
   render() {

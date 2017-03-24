@@ -48,7 +48,7 @@ const LabelFilter = ({ store }) => {
       fullWidth
       value={filterValue}
       onChange={(event, val) =>
-        store.updateLabelFilter(filteredTable, val)
+        store.node.updateLabelFilter(filteredTable, val)
       }
     />
   )
