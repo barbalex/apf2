@@ -29,6 +29,7 @@
     "joi-browser": "10.0.6",
     "jquery": "3.2.1",
     "leaflet": "1.0.3",
+    "leaflet-draw": "0.4.9",
     "leaflet-easyprint": "1.0.0",
     "leaflet-image": "0.4.0",
     "leaflet-measure": "2.1.7",
