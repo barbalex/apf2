@@ -70,12 +70,17 @@ const Projekte = ({ store }) => {
                */
               key={store.urlQuery.projekteTabs.toString()}
               popMarkers={store.map.pop.markers}
+              popHighlighted={store.map.pop.highlightedIds.join()}
               tpopMarkers={store.map.tpop.markers}
+              tpopHighlighted={store.map.tpop.highlightedIds.join()}
               tpopMarkersClustered={store.map.tpop.markersClustered}
               beobNichtBeurteiltMarkers={store.map.beobNichtBeurteilt.markers}
+              beobNichtBeurteiltHighlighted={store.map.beobNichtBeurteilt.highlightedIds.join()}
               beobNichtBeurteiltMarkersClustered={store.map.beobNichtBeurteilt.markersClustered}
               beobNichtZuzuordnenMarkers={store.map.beobNichtZuzuordnen.markersClustered}
+              beobNichtZuzuordnenHighlighted={store.map.beobNichtZuzuordnen.highlightedIds.join()}
               tpopBeobMarkers={store.map.tpopBeob.markers}
+              tpopBeobHighlighted={store.map.tpopBeob.highlightedIds.join()}
               tpopBeobMarkersClustered={store.map.tpopBeob.markersClustered}
               tpopBeobAssigning={store.map.beob.assigning}
               tpopBeobAssignPolylines={store.map.tpopBeob.assignPolylines}
