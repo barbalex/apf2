@@ -177,8 +177,13 @@ function Store() {
     }),
     nodeMapFilter: observable.map({}),
     updateMapFilter: action(`updateMapFilter`, (mapFilterItems) => {
-      this.node.nodeMapFilter.set(`tpop`, tpopIdsInsideFeatureCollection(this, mapFilterItems.toGeoJSON()))
-      this.node.nodeMapFilter.set(`pop`, popIdsInsideFeatureCollection(this, mapFilterItems.toGeoJSON()))
+      if (!mapFilterItems) {
+        this.node.nodeMapFilter.set(`tpop`, [])
+        this.node.nodeMapFilter.set(`pop`, [])
+      } else {
+        this.node.nodeMapFilter.set(`tpop`, tpopIdsInsideFeatureCollection(this, mapFilterItems.toGeoJSON()))
+        this.node.nodeMapFilter.set(`pop`, popIdsInsideFeatureCollection(this, mapFilterItems.toGeoJSON()))
+      }
     }),
     // action when user clicks on a node in the tree
     toggleNode: action(`toggleNode`, node =>
@@ -374,7 +379,6 @@ function Store() {
     activeApfloraLayersSorted: [],
     overlays: [],
     apfloraLayers: [],
-    mapFilter: null,
     addActiveOverlay: () => {},
     removeActiveOverlay: () => {},
     setActiveBaseLayer: () => {},
@@ -424,8 +428,6 @@ function Store() {
     removeActiveOverlay: action(`removeActiveOverlay`, (layer) => {
       this.map.activeOverlays = this.map.activeOverlays.filter(o => o !== layer)
     }),
-    mapFilter: null,
-    setMapFilter: action(`setMapFilter`, (mapFilter) => this.map.mapFilter = mapFilter),
     apfloraLayers: observable([
       { label: `Populationen`, value: `Pop` },
       { label: `Teil-Populationen`, value: `Tpop` },

@@ -31,7 +31,7 @@ class MeasureControl extends Component { // eslint-disable-line react/prefer-sta
   }
 
   render() {
-    console.log(`map:`, this.props.map)
+    // console.log(`map:`, this.props.map)
     return (
       <div style={{ display: `none` }} />
     )
