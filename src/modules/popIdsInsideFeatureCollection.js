@@ -4,22 +4,18 @@ import within from '@turf/within'
 import epsg21781to4326 from './epsg21781to4326notReverse'
 
 export default (store:Object, featureCollectionToSearchWithin:Object) => {
-  const { table } = store
-  const pop = Array.from(table.pop.values())
-    .filter(t => t.PopXKoord && t.PopYKoord)
-
   const points = {
     type: `FeatureCollection`,
     // build an array of geoJson points
-    features: pop.map(t => ({
+    features: store.map.pop.pops.map(p => ({
       type: `Feature`,
       properties: {
-        PopId: t.PopId,
+        PopId: p.PopId,
       },
       geometry: {
         type: `Point`,
         // convert koordinates to wgs84
-        coordinates: epsg21781to4326(t.PopXKoord, t.PopYKoord),
+        coordinates: epsg21781to4326(p.PopXKoord, p.PopYKoord),
       },
     }))
   }

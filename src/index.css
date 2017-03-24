@@ -234,6 +234,29 @@ body.fontLoaded {
 	border-radius: 20px;
 }
 
+.beobNichtBeurteiltCluster {
+	width: 40px;
+	height: 40px;
+  line-height: 40px;
+	text-align: center;
+	background-color: #9a009a;
+
+  background-clip: padding-box;
+	border-radius: 20px;
+}
+.beobNichtBeurteiltClusterHighlighted {
+	width: 40px;
+	height: 40px;
+  line-height: 28px;
+	text-align: center;
+	background-color: #9a009a;
+  border: 7px solid yellow;
+  box-sizing: border-box;
+
+  background-clip: padding-box;
+	border-radius: 20px;
+}
+
 .beobZugeordnetCluster {
 	width: 40px;
 	height: 40px;

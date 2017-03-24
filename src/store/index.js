@@ -147,6 +147,7 @@ import moveOverlay from './action/moveOverlay'
 import moveApfloraLayer from './action/moveApfloraLayer'
 import tpopIdsInsideFeatureCollection from '../modules/tpopIdsInsideFeatureCollection'
 import popIdsInsideFeatureCollection from '../modules/popIdsInsideFeatureCollection'
+import beobNichtBeurteiltIdsInsideFeatureCollection from '../modules/beobNichtBeurteiltIdsInsideFeatureCollection'
 
 import TableStore from './table'
 import ObservableHistory from './ObservableHistory'
@@ -178,14 +179,19 @@ function Store() {
     nodeMapFilter: observable.map({
       pop: [],
       tpop: [],
+      beobNichtBeurteilt: [],
+      beobNichtZuzuordnen: [],
+      tpopBeob: [],
     }),
     updateMapFilter: action(`updateMapFilter`, (mapFilterItems) => {
       if (!mapFilterItems) {
         this.node.nodeMapFilter.set(`tpop`, [])
         this.node.nodeMapFilter.set(`pop`, [])
+        this.node.nodeMapFilter.set(`beobNichtBeurtteilt`, [])
       } else {
         this.node.nodeMapFilter.set(`tpop`, tpopIdsInsideFeatureCollection(this, mapFilterItems.toGeoJSON()))
         this.node.nodeMapFilter.set(`pop`, popIdsInsideFeatureCollection(this, mapFilterItems.toGeoJSON()))
+        this.node.nodeMapFilter.set(`beobNichtBeurteilt`, beobNichtBeurteiltIdsInsideFeatureCollection(this, mapFilterItems.toGeoJSON()))
       }
     }),
     // action when user clicks on a node in the tree
@@ -565,11 +571,16 @@ function Store() {
   })
   extendObservable(this.map.beobNichtBeurteilt, {
     highlightedIds: computed(
-      () => (
-        this.activeUrlElements.beobzuordnung ?
-        [this.activeUrlElements.beobzuordnung] :
-        []
-      )
+      () => {
+        const nodeMapFilterBeobNichtBeurteilt = this.node.nodeMapFilter.get(`beobNichtBeurteilt`)
+        if (nodeMapFilterBeobNichtBeurteilt.length > 0) {
+          return nodeMapFilterBeobNichtBeurteilt
+        }
+        if (this.activeUrlElements.beobzuordnung) {
+          return [this.activeUrlElements.beobzuordnung]
+        }
+        return []
+      }
     ),
     markersClustered: computed(
       () => getBeobNichtBeurteiltMarkersClustered(this)
@@ -578,7 +589,10 @@ function Store() {
       () => getBeobNichtBeurteiltMarkers(this)
     ),
     beobs: computed(
-      () => getBeobForMap(this).filter(b => !b.beobzuordnung)
+      () => getBeobForMap(this).filter(b =>
+        !b.beobzuordnung ||
+        (!b.beobzuordnung.BeobNichtZuordnen && !b.beobzuordnung.TPopId)
+      )
     ),
     bounds: computed(
       () => getBeobNichtBeurteiltBounds(this.map.beobNichtBeurteilt.beobs)
