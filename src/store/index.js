@@ -149,6 +149,7 @@ import tpopIdsInsideFeatureCollection from '../modules/tpopIdsInsideFeatureColle
 import popIdsInsideFeatureCollection from '../modules/popIdsInsideFeatureCollection'
 import beobNichtBeurteiltIdsInsideFeatureCollection from '../modules/beobNichtBeurteiltIdsInsideFeatureCollection'
 import beobNichtZuzuordnenIdsInsideFeatureCollection from '../modules/beobNichtZuzuordnenIdsInsideFeatureCollection'
+import tpopBeobIdsInsideFeatureCollection from '../modules/tpopBeobIdsInsideFeatureCollection'
 
 import TableStore from './table'
 import ObservableHistory from './ObservableHistory'
@@ -188,13 +189,16 @@ function Store() {
       if (!mapFilterItems) {
         this.node.nodeMapFilter.set(`tpop`, [])
         this.node.nodeMapFilter.set(`pop`, [])
-        this.node.nodeMapFilter.set(`beobNichtBeurtteilt`, [])
+        this.node.nodeMapFilter.set(`beobNichtBeurteilt`, [])
         this.node.nodeMapFilter.set(`beobNichtZuzuordnen`, [])
+        this.node.nodeMapFilter.set(`tpopBeob`, [])
       } else {
-        this.node.nodeMapFilter.set(`tpop`, tpopIdsInsideFeatureCollection(this, mapFilterItems.toGeoJSON()))
-        this.node.nodeMapFilter.set(`pop`, popIdsInsideFeatureCollection(this, mapFilterItems.toGeoJSON()))
-        this.node.nodeMapFilter.set(`beobNichtBeurteilt`, beobNichtBeurteiltIdsInsideFeatureCollection(this, mapFilterItems.toGeoJSON()))
-        this.node.nodeMapFilter.set(`beobNichtZuzuordnen`, beobNichtZuzuordnenIdsInsideFeatureCollection(this, mapFilterItems.toGeoJSON()))
+        const items = mapFilterItems.toGeoJSON()
+        this.node.nodeMapFilter.set(`tpop`, tpopIdsInsideFeatureCollection(this, items))
+        this.node.nodeMapFilter.set(`pop`, popIdsInsideFeatureCollection(this, items))
+        this.node.nodeMapFilter.set(`beobNichtBeurteilt`, beobNichtBeurteiltIdsInsideFeatureCollection(this, items))
+        this.node.nodeMapFilter.set(`beobNichtZuzuordnen`, beobNichtZuzuordnenIdsInsideFeatureCollection(this, items))
+        this.node.nodeMapFilter.set(`tpopBeob`, tpopBeobIdsInsideFeatureCollection(this, items))
       }
     }),
     // action when user clicks on a node in the tree
@@ -645,6 +649,10 @@ function Store() {
     highlightedIds: computed(
       () => {
         const { activeUrlElements } = this
+        const nodeMapFilterTpopBeob = this.node.nodeMapFilter.get(`tpopBeob`)
+        if (nodeMapFilterTpopBeob.length > 0) {
+          return nodeMapFilterTpopBeob
+        }
         if (activeUrlElements.tpopbeob) {
           return [activeUrlElements.tpopbeob]
         } else if (activeUrlElements.tpop) {
