@@ -208,154 +208,203 @@ function Store() {
   })
   extendObservable(this.node.node, {
     projekt: computed(
-      () => projektNodes(this)
+      () => projektNodes(this),
+      { name: `` }
     ),
     apFolder: computed(
-      () => apFolderNodes(this)
+      () => apFolderNodes(this),
+      { name: `apFolderNode` }
     ),
     apberuebersichtFolder: computed(
-      () => apberuebersichtFolderNodes(this)
+      () => apberuebersichtFolderNodes(this),
+      { name: `apberuebersichtFolderNode` }
     ),
     exporteFolder: computed(
-      () => exporteFolderNodes(this)
+      () => exporteFolderNodes(this),
+      { name: `exporteFolderNode` }
     ),
     apberuebersicht: computed(
-      () => apberuebersichtNodes(this)
+      () => apberuebersichtNodes(this),
+      { name: `apberuebersichtNode` }
     ),
     ap: computed(
-      () => apNodes(this)
+      () => apNodes(this),
+      { name: `apNode` }
     ),
     nodes: computed(
-      () => allNodes(this)
+      () => allNodes(this),
+      { name: `nodesNode` }
     ),
     qkFolder: computed(
       () => qkFolderNode(this),
     ),
     assozartFolder: computed(
       () => assozartFolderNode(this),
+      { name: `assozartFolderNode` }
     ),
     assozart: computed(
       () => assozartNode(this),
+      { name: `assozartNode` }
     ),
     idealbiotopFolder: computed(
       () => idealbiotopFolderNode(this),
+      { name: `idealbiotopFolderNode` }
     ),
     beobNichtZuzuordnenFolder: computed(
       () => beobNichtZuzuordnenFolderNode(this),
+      { name: `beobNichtZuzuordnenFolderNode` }
     ),
     beobNichtZuzuordnen: computed(
       () => beobNichtZuzuordnenNode(this),
+      { name: `beobNichtZuzuordnenNode` }
     ),
     beobzuordnungFolder: computed(
       () => beobzuordnungFolderNode(this),
+      { name: `beobzuordnungFolderNode` }
     ),
     beobzuordnung: computed(
       () => beobzuordnungNode(this),
+      { name: `beobzuordnungNode` }
     ),
     berFolder: computed(
       () => berFolderNode(this),
+      { name: `berFolderNode` }
     ),
     ber: computed(
       () => berNode(this),
+      { name: `berNode` }
     ),
     apberFolder: computed(
       () => apberFolderNode(this),
+      { name: `apberFolderNode` }
     ),
     apber: computed(
       () => apberNode(this),
+      { name: `apberNode` }
     ),
     erfkritFolder: computed(
       () => erfkritFolderNode(this),
+      { name: `erfkritFolderNode` }
     ),
     erfkrit: computed(
       () => erfkritNode(this),
+      { name: `erfkritNode` }
     ),
     zieljahrFolder: computed(
       () => zieljahreFolderNode(this),
+      { name: `zieljahrFolderNode` }
     ),
     zieljahr: computed(
       () => zieljahrNode(this),
+      { name: `zieljahrNode` }
     ),
     ziel: computed(
       () => zielNode(this),
+      { name: `zielNode` }
     ),
     zielberFolder: computed(
       () => zielberFolderNode(this),
+      { name: `zielberFolderNode` }
     ),
     zielber: computed(
       () => zielberNode(this),
+      { name: `zielberNode` }
     ),
     popFolder: computed(
       () => popFolderNode(this),
+      { name: `popFolderNode` }
     ),
     pop: computed(
       () => popNode(this),
+      { name: `popNode` }
     ),
     popmassnberFolder: computed(
       () => popmassnberFolderNode(this),
+      { name: `popmassnberFolderNode` }
     ),
     popmassnber: computed(
       () => popmassnberNode(this),
+      { name: `popmassnberNode` }
     ),
     popberFolder: computed(
       () => popberFolderNode(this),
+      { name: `popberFolderNode` }
     ),
     popber: computed(
       () => popberNode(this),
+      { name: `popberNode` }
     ),
     tpopFolder: computed(
       () => tpopFolderNode(this),
+      { name: `tpopFolderNode` }
     ),
     tpop: computed(
       () => tpopNode(this),
+      { name: `tpopNode` }
     ),
     tpopbeobFolder: computed(
       () => tpopbeobFolderNode(this),
+      { name: `tpopbeobFolderNode` }
     ),
     tpopbeob: computed(
       () => tpopbeobNode(this),
+      { name: `tpopbeobNode` }
     ),
     tpopberFolder: computed(
       () => tpopberFolderNode(this),
+      { name: `tpopberFolderNode` }
     ),
     tpopber: computed(
       () => tpopberNode(this),
+      { name: `tpopberNode` }
     ),
     tpopfreiwkontrFolder: computed(
       () => tpopfreiwkontrFolderNode(this),
+      { name: `tpopfreiwkontrFolderNode` }
     ),
     tpopfreiwkontr: computed(
       () => tpopfreiwkontrNode(this),
+      { name: `tpopfreiwkontrNode` }
     ),
     tpopfreiwkontrzaehlFolder: computed(
       () => tpopfreiwkontrzaehlFolderNode(this),
+      { name: `tpopfreiwkontrzaehlFolderNode` }
     ),
     tpopfreiwkontrzaehl: computed(
       () => tpopfreiwkontrzaehlNode(this),
+      { name: `tpopfreiwkontrzaehlNode` }
     ),
     tpopfeldkontrFolder: computed(
       () => tpopfeldkontrFolderNode(this),
+      { name: `tpopfeldkontrFolderNode` }
     ),
     tpopfeldkontr: computed(
       () => tpopfeldkontrNode(this),
+      { name: `tpopfeldkontrNode` }
     ),
     tpopfeldkontrzaehlFolder: computed(
       () => tpopfeldkontrzaehlFolderNode(this),
+      { name: `tpopfeldkontrzaehlFolderNode` }
     ),
     tpopfeldkontrzaehl: computed(
       () => tpopfeldkontrzaehlNode(this),
+      { name: `tpopfeldkontrzaehlNode` }
     ),
     tpopmassnberFolder: computed(
       () => tpopmassnberFolderNode(this),
+      { name: `tpopmassnberFolderNode` }
     ),
     tpopmassnber: computed(
       () => tpopmassnberNode(this),
+      { name: `tpopmassnberNode` }
     ),
     tpopmassnFolder: computed(
       () => tpopmassnFolderNode(this),
+      { name: `tpopmassnFolderNode` }
     ),
     tpopmassn: computed(
       () => tpopmassnNode(this),
+      { name: `tpopmassnNode` }
     ),
   })
   this.ui = {}
@@ -412,6 +461,7 @@ function Store() {
         }
         return []
       },
+      { name: `mouseCoordEpsg21781` }
     ),
     activeBaseLayer: `OsmColor`,
     setActiveBaseLayer: action(`setActiveBaseLayer`, (layer) => setActiveBaseLayer(this, layer)),
@@ -427,6 +477,7 @@ function Store() {
     ]),
     overlaysString: computed(
       () => this.map.overlays.map(o => o.value).join(),
+      { name: `computed` }
     ),
     moveOverlay: action(`moveOverlay`, ({ oldIndex, newIndex }) =>
       moveOverlay(this, oldIndex, newIndex)
@@ -436,9 +487,11 @@ function Store() {
       () => sortBy(this.map.activeOverlays, (activeOverlay) =>
         this.map.overlays.findIndex((overlay) => overlay.value === activeOverlay)
       ),
+      { name: `activeOverlaysSorted` }
     ),
     activeOverlaysSortedString: computed(
       () => this.map.activeOverlaysSorted.join(),
+      { name: `activeOverlaysSortedString` }
     ),
     addActiveOverlay: action(`addActiveOverlay`, layer => this.map.activeOverlays.push(layer)),
     removeActiveOverlay: action(`removeActiveOverlay`, (layer) => {
@@ -454,6 +507,7 @@ function Store() {
     ]),
     apfloraLayersString: computed(
       () => this.map.apfloraLayers.map(o => o.value).join(),
+      { name: `apfloraLayersString` }
     ),
     moveApfloraLayer: action(`moveApfloraLayer`, ({ oldIndex, newIndex }) =>
       moveApfloraLayer(this, oldIndex, newIndex)
@@ -465,6 +519,7 @@ function Store() {
           apfloraLayer.value === activeApfloraLayer
         )
       ),
+      { name: `activeApfloraLayersSorted` }
     ),
     activeApfloraLayersSortedString: computed(
       () => this.map.activeApfloraLayersSorted.join(),
@@ -521,18 +576,29 @@ function Store() {
         }
         return []
       },
+      { name: `highlightedIds` }
     ),
-    pops: computed(() => getPopsForMap(this)),
-    bounds: computed(() => getPopBounds(this.map.pop.pops)),
+    pops: computed(() =>
+      getPopsForMap(this),
+      { name: `mapPops` }
+    ),
+    bounds: computed(() =>
+      getPopBounds(this.map.pop.pops),
+      { name: `mapPopBounds` }
+    ),
     boundsOfHighlightedIds: computed(
       () => getPopBounds(
         this.map.pop.pops
           .filter(p => this.map.pop.highlightedIds.includes(p.PopId))
       ),
+      { name: `mapPopBoundsOfHighlightedIds` }
     ),
     // alternative is using names
     labelUsingNr: true,
-    markers: computed(() => getPopMarkers(this)),
+    markers: computed(() =>
+      getPopMarkers(this),
+      { name: `mapPopMarkers` }
+    ),
   })
   extendObservable(this.map.tpop, {
     highlightedIds: computed(
@@ -545,21 +611,35 @@ function Store() {
           return [this.activeUrlElements.tpop]
         }
         return []
-      }
+      },
+      { name: `mapTpopHighlightedIds` }
     ),
     highlightedPopIds: [],
-    tpops: computed(() => getTpopsForMap(this)),
-    bounds: computed(() => getTpopBounds(this.map.tpop.tpops)),
+    tpops: computed(() =>
+      getTpopsForMap(this),
+      { name: `mapTpopTpops` }
+    ),
+    bounds: computed(() =>
+      getTpopBounds(this.map.tpop.tpops),
+      { name: `mapTpopBounds` }
+    ),
     boundsOfHighlightedIds: computed(
       () => getTpopBounds(
         this.map.tpop.tpops
           .filter(t => this.map.tpop.highlightedIds.includes(t.TPopId))
-      )
+      ),
+      { name: `mapTpopBoundsOfHighlightedIds` }
     ),
     // alternative is using names
     labelUsingNr: true,
-    markers: computed(() => getTpopMarkers(this)),
-    markersClustered: computed(() => getTpopMarkersClustered(this)),
+    markers: computed(() =>
+      getTpopMarkers(this),
+      { name: `mapTpopMarkers` }
+    ),
+    markersClustered: computed(() =>
+      getTpopMarkersClustered(this),
+      { name: `mapTpopMarkersClustered` }
+    ),
     idOfTpopBeingLocalized: 0,
   })
   extendObservable(this.map.beob, {
