@@ -100,6 +100,7 @@ class Karte extends Component {
      * in order to dynamically display active overlays
      */
     const ApfloraLayerComponents = {
+      // MapFilter is used for filtering, need to return null
       MapFilter: () => null,
       Pop: () => <Pop
         highlightedIds={toJS(store.map.pop.highlightedIds)}
