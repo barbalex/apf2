@@ -26,6 +26,7 @@ class DrawControl extends Component {
 
   componentDidMount() {
     const { map, store, setMapFilter, setDrawControl } = this.props
+    window.L.drawLocal.draw.toolbar.buttons.polygon = `Polygon zeichnen, um zu filtern`
     const mapFilter = new window.L.FeatureGroup()
     setMapFilter(mapFilter)
     map.addLayer(mapFilter)
