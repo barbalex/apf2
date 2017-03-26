@@ -913,7 +913,8 @@ function Store() {
      */
     url: computed(
       //$FlowIssue
-      () => getUrl(this.history.location.pathname)
+      () => getUrl(this.history.location.pathname),
+      { name: `url` }
     ),
     /**
      * urlQueries are used to control tabs
@@ -921,16 +922,20 @@ function Store() {
      */
     urlQuery: computed(
       //$FlowIssue
-      () => getUrlQuery(this.history.location.search)
+      () => getUrlQuery(this.history.location.search),
+      { name: `urlQuery` }
     ),
     projektNodes: computed(
-      () => buildProjektNodes(this)
+      () => buildProjektNodes(this),
+      { name: `projektNodes` }
     ),
     activeDataset: computed(
-      () => updateActiveDatasetFromUrl(this)
+      () => updateActiveDatasetFromUrl(this),
+      { name: `activeDataset` }
     ),
     activeUrlElements: computed(
-      () => getActiveUrlElements(this.url)
+      () => getActiveUrlElements(this.url),
+      { name: `activeUrlElements` }
     ),
     datasetToDelete: {},
     tellUserReadOnly: action(`tellUserReadOnly`, () =>
