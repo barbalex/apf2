@@ -131,11 +131,15 @@ class Strukturbaum extends Component {
 
   static propTypes = {
     store: PropTypes.object.isRequired,
+    projektLoading: PropTypes.bool,
+    nodes: PropTypes.array.isRequired,
     mapTpopBeobVisible: PropTypes.bool.isRequired,
     mapBeobNichtBeurteiltVisible: PropTypes.bool.isRequired,
     mapBeobNichtZuzuordnenVisible: PropTypes.bool.isRequired,
     mapPopVisible: PropTypes.bool.isRequired,
     mapTpopVisible: PropTypes.bool.isRequired,
+    url: PropTypes.array.isRequired,
+    activeUrlElementsAp: PropTypes.number,
   }
 
   componentDidUpdate(prevProps) {
@@ -166,8 +170,8 @@ class Strukturbaum extends Component {
   }
 
   rowRenderer = ({ key, index, style }) => {
-    const { store } = this.props
-    const node = store.node.node.nodes[index]
+    const { store, nodes, url, activeUrlElementsAp } = this.props
+    const node = nodes[index]
     const onClick = (event) => {
       store.ui.lastClickY = event.pageY
       store.node.toggleNode(node)
@@ -181,7 +185,7 @@ class Strukturbaum extends Component {
       loadingData: ``,
     }
     let symbol
-    const nodeIsInActiveNodePath = isNodeInActiveNodePath(node, store.url)
+    const nodeIsInActiveNodePath = isNodeInActiveNodePath(node, url)
     let SymbolSpan = StyledSymbolSpan
     const TextSpan = nodeIsInActiveNodePath ? StyledTextInActiveNodePathSpan : StyledTextSpan
 
@@ -199,7 +203,7 @@ class Strukturbaum extends Component {
     }
     const showPopMapIcon = (
       node.menuType === `ap` &&
-      node.id === (store.activeUrlElements.ap || store.map.pop.apArtId) &&
+      node.id === (activeUrlElementsAp || store.map.pop.apArtId) &&
       store.map.activeApfloraLayers.includes(`Pop`)
     )
     const showPopFilteredMapIcon = (
@@ -209,7 +213,7 @@ class Strukturbaum extends Component {
     )
     const showTpopMapIcon = (
       node.menuType === `ap` &&
-      node.id === (store.activeUrlElements.ap || store.map.pop.apArtId) &&
+      node.id === (activeUrlElementsAp || store.map.pop.apArtId) &&
       store.map.activeApfloraLayers.includes(`Tpop`)
     )
     const showTpopFilteredMapIcon = (
@@ -219,12 +223,12 @@ class Strukturbaum extends Component {
     )
     const showBeobNichtBeurteiltMapIcon = (
       node.menuType === `beobzuordnungFolder` &&
-      node.id === store.activeUrlElements.ap &&
+      node.id === activeUrlElementsAp &&
       store.map.activeApfloraLayers.includes(`BeobNichtBeurteilt`)
     )
     const showBeobNichtZuzuordnenMapIcon = (
       node.menuType === `beobNichtZuzuordnenFolder` &&
-      node.id === store.activeUrlElements.ap &&
+      node.id === activeUrlElementsAp &&
       store.map.activeApfloraLayers.includes(`BeobNichtZuzuordnen`)
     )
     const showTpopBeobMapIcon = (
@@ -395,9 +399,9 @@ class Strukturbaum extends Component {
   }
 
   noRowsRenderer = () => {
-    const { store } = this.props
+    const { projektLoading } = this.props
     const message = (
-      store.table.projektLoading ?
+      projektLoading ?
       `lade Daten...` :
       `keine Daten`
     )

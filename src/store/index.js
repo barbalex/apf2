@@ -166,7 +166,11 @@ function Store() {
     apFilter: false,
     nodeLabelFilter: {},
     nodeMapFilter: {},
-    node: {}
+    node: {
+      node: {
+        nodes: [],
+      }
+    }
   }
   extendObservable(this.node, {
     apFilter: false,
