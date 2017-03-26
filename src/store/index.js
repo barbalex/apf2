@@ -150,6 +150,7 @@ import popIdsInsideFeatureCollection from '../modules/popIdsInsideFeatureCollect
 import beobNichtBeurteiltIdsInsideFeatureCollection from '../modules/beobNichtBeurteiltIdsInsideFeatureCollection'
 import beobNichtZuzuordnenIdsInsideFeatureCollection from '../modules/beobNichtZuzuordnenIdsInsideFeatureCollection'
 import tpopBeobIdsInsideFeatureCollection from '../modules/tpopBeobIdsInsideFeatureCollection'
+import writeToStore from '../modules/writeToStore'
 
 import TableStore from './table'
 import ObservableHistory from './ObservableHistory'
@@ -1036,6 +1037,10 @@ function Store() {
     ),
     fetchBeobInfospezies: action(`fetchBeobInfospezies`, apArtId =>
       fetchBeobInfospezies(this, apArtId)
+    ),
+    writeToStore: action(
+      `writeToStore`,
+      ({ data, table, field }) => writeToStore({ store: this, data, table, field })
     ),
     /**
      * urlQueries are used to control tabs

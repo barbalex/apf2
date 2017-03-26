@@ -4,7 +4,6 @@ import app from 'ampersand-app'
 
 import apiBaseUrl from './apiBaseUrl'
 import recordValuesForWhichTableDataWasFetched from './recordValuesForWhichTableDataWasFetched'
-import writeToStore from './writeToStore'
 
 export default (store:Object, apArtId:number) => {
   if (!apArtId) {
@@ -25,14 +24,14 @@ export default (store:Object, apArtId:number) => {
   app.db.pop
     .toArray()
     .then((data) => {
-      writeToStore({ store, data, table: `pop`, field: `PopId` })
+      store.writeToStore({ data, table: `pop`, field: `PopId` })
       recordValuesForWhichTableDataWasFetched({ store, table: `popForAp`, field: `ApArtId`, value: apArtId })
       return axios.get(`${apiBaseUrl}/popForAp/${apArtId}`)
     })
     .then(({ data }) => {
       store.loading = store.loading.filter(el => el !== `popForAp`)
       // leave ui react before this happens
-      setTimeout(() => writeToStore({ store, data, table: `pop`, field: `PopId` }))
+      setTimeout(() => store.writeToStore({ data, table: `pop`, field: `PopId` }))
       setTimeout(() => app.db.pop.bulkPut(data))
     })
     .catch(error => {

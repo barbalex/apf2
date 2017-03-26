@@ -3,7 +3,6 @@ import axios from 'axios'
 import app from 'ampersand-app'
 
 import apiBaseUrl from './apiBaseUrl'
-import writeToStore from './writeToStore'
 
 export default async (store:Object) => {
   store.loading.push(`adb_eigenschaften`)
@@ -20,7 +19,7 @@ export default async (store:Object) => {
     // leave ui react before this happens
     setTimeout(() => {
       // app.writeToStoreWorker.postMessage(`testmessage`)
-      writeToStore({ store, data, table: `adb_eigenschaften`, field: `TaxonomieId` })
+      store.writeToStore({ data, table: `adb_eigenschaften`, field: `TaxonomieId` })
     })
     setTimeout(() =>
       app.db.adb_eigenschaften.bulkPut(data)

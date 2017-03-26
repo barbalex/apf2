@@ -4,7 +4,6 @@ import app from 'ampersand-app'
 
 import apiBaseUrl from './apiBaseUrl'
 import tables from './tables'
-import writeToStore from './writeToStore'
 
 export default async (store:Object, schemaNamePassed:string, tableName:string) => {
   if (!tableName) {
@@ -34,7 +33,7 @@ export default async (store:Object, schemaNamePassed:string, tableName:string) =
       store.listError(error)
     }
     if (dataFromIdb) {
-      writeToStore({ store, data: dataFromIdb, table: tableName, field: idField })
+      store.writeToStore({ data: dataFromIdb, table: tableName, field: idField })
       store.loading = store.loading.filter(el => el !== tableName)
     }
 
@@ -55,7 +54,7 @@ export default async (store:Object, schemaNamePassed:string, tableName:string) =
       // leave ui react before this happens
       setTimeout(() => {
         // app.writeToStoreWorker.postMessage(`testmessage`)
-        writeToStore({ store, data: dataFromDb, table: tableName, field: idField })
+        store.writeToStore({ data: dataFromDb, table: tableName, field: idField })
       })
       setTimeout(() =>
         app.db[tableName].bulkPut(dataFromDb)

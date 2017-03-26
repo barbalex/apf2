@@ -3,7 +3,6 @@ import axios from 'axios'
 import app from 'ampersand-app'
 
 import apiBaseUrl from './apiBaseUrl'
-import writeToStore from './writeToStore'
 
 export default async (store:Object, metadata:object, tableName:string) => {
   if (!metadata) {
@@ -26,7 +25,7 @@ export default async (store:Object, metadata:object, tableName:string) => {
   if (dataFromDb && dataFromDb.length) {
     // leave ui react before this happens
     setTimeout(() => {
-      writeToStore({ store, data: dataFromDb, table, field: idField })
+      store.writeToStore({ data: dataFromDb, table, field: idField })
     })
     setTimeout(() =>
       app.db[table].bulkPut(dataFromDb)

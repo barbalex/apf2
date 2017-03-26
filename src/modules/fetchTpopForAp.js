@@ -4,7 +4,6 @@ import app from 'ampersand-app'
 
 import apiBaseUrl from './apiBaseUrl'
 import recordValuesForWhichTableDataWasFetched from './recordValuesForWhichTableDataWasFetched'
-import writeToStore from './writeToStore'
 
 export default (store:Object, apArtId:number) => {
   if (!apArtId) {
@@ -26,14 +25,14 @@ export default (store:Object, apArtId:number) => {
   app.db.tpop
     .toArray()
     .then((data) => {
-      writeToStore({ store, data, table: `tpop`, field: `TPopId` })
+      store.writeToStore({ data, table: `tpop`, field: `TPopId` })
       recordValuesForWhichTableDataWasFetched({ store, table: `tpopForAp`, field: `ApArtId`, value: apArtId })
       return axios.get(url)
     })
     .then(({ data }) => {
       store.loading = store.loading.filter(el => el !== `tpopForAp`)
       // leave ui react before this happens
-      setTimeout(() => writeToStore({ store, data, table: `tpop`, field: `TPopId` }))
+      setTimeout(() => store.writeToStore({ data, table: `tpop`, field: `TPopId` }))
       setTimeout(() => app.db.tpop.bulkPut(data))
     })
     .catch(error => {

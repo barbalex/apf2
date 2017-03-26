@@ -5,7 +5,6 @@ import app from 'ampersand-app'
 import apiBaseUrl from './apiBaseUrl'
 import tables from './tables'
 import recordValuesForWhichTableDataWasFetched from './recordValuesForWhichTableDataWasFetched'
-import writeToStore from './writeToStore'
 
 export default (store:Object, schemaNamePassed:string, tableName:string, parentId:number) => {
   if (!tableName) {
@@ -34,14 +33,14 @@ export default (store:Object, schemaNamePassed:string, tableName:string, parentI
   app.db[tableName]
     .toArray()
     .then((data) => {
-      writeToStore({ store, data, table: tableName, field: idField })
+      store.writeToStore({ data, table: tableName, field: idField })
       recordValuesForWhichTableDataWasFetched({ store, table: tableName, field: idField, value: parentId })
     })
     .then(() => axios.get(url))
     .then(({ data }) => {
       store.loading = store.loading.filter(el => el !== tableName)
       // leave ui react before this happens
-      setTimeout(() => writeToStore({ store, data, table: tableName, field: idField }))
+      setTimeout(() => store.writeToStore({ data, table: tableName, field: idField }))
       setTimeout(() =>
         app.db[tableName].bulkPut(data)
       )
