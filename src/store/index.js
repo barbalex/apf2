@@ -644,12 +644,17 @@ function Store() {
   })
   extendObservable(this.map.beob, {
     highlightedIds: [],
-    beobs: computed(() => getBeobForMap(this)),
+    beobs: computed(() =>
+      getBeobForMap(this),
+      { name: `mapBeobBeobs` }
+    ),
     markersClustered: computed(
-      () => getBeobMarkersClustered(this)
+      () => getBeobMarkersClustered(this),
+      { name: `mapBeobMarkersClustered` }
     ),
     markers: computed(
-      () => getBeobMarkers(this)
+      () => getBeobMarkers(this),
+      { name: `mapBeobMarkers` }
     ),
     assigning: false,
     toggleAssigning: action(`toggleAssigning`, () =>
@@ -667,28 +672,34 @@ function Store() {
           return [this.activeUrlElements.beobzuordnung]
         }
         return []
-      }
+      },
+      { name: `mapBeobNichtBeurteiltHighlightedIds` }
     ),
     markersClustered: computed(
-      () => getBeobNichtBeurteiltMarkersClustered(this)
+      () => getBeobNichtBeurteiltMarkersClustered(this),
+      { name: `mapBeobNichtBeurteiltMarkersClustered` }
     ),
     markers: computed(
-      () => getBeobNichtBeurteiltMarkers(this)
+      () => getBeobNichtBeurteiltMarkers(this),
+      { name: `mapBeobNichtBeurteiltMarkers` }
     ),
     beobs: computed(
       () => getBeobForMap(this).filter(b =>
         !b.beobzuordnung ||
         (!b.beobzuordnung.BeobNichtZuordnen && !b.beobzuordnung.TPopId)
-      )
+      ),
+      { name: `mapBeobNichtBeurteiltBeobs` }
     ),
     bounds: computed(
-      () => getBeobNichtBeurteiltBounds(this.map.beobNichtBeurteilt.beobs)
+      () => getBeobNichtBeurteiltBounds(this.map.beobNichtBeurteilt.beobs),
+      { name: `mapBeobNichtBeurteiltBounds` }
     ),
     boundsOfHighlightedIds: computed(
       () => getBeobNichtBeurteiltBounds(
         this.map.beobNichtBeurteilt.beobs
           .filter(b => this.map.beobNichtBeurteilt.highlightedIds.includes(b.BeobId))
-      )
+      ),
+      { name: `mapBeobNichtBeurteiltBoundsOfHighlightedIds` }
     ),
     idOfBeobBeingAssigned: 0,
   })
@@ -703,16 +714,21 @@ function Store() {
           return [this.activeUrlElements.beobNichtZuzuordnen]
         }
         return []
-      }
+      },
+      { name: `mapBeobNichtZuzuordnenHighlightedIds` }
     ),
     markersClustered: computed(
-      () => getBeobNichtZuzuordnenMarkersClustered(this)
+      () => getBeobNichtZuzuordnenMarkersClustered(this),
+      { name: `mapBeobNichtZuzuordnenMarkersClustered` }
     ),
     beobs: computed(
-      () => getBeobForMap(this).filter(b => b.beobzuordnung && b.beobzuordnung.BeobNichtZuordnen === 1)
+      () => getBeobForMap(this)
+        .filter(b => b.beobzuordnung && b.beobzuordnung.BeobNichtZuordnen === 1),
+      { name: `mapBeobNichtZuzuordnenBeobs` }
     ),
     bounds: computed(
-      () => getBeobNichtZuzuordnenBounds(this.map.beobNichtZuzuordnen.beobs)
+      () => getBeobNichtZuzuordnenBounds(this.map.beobNichtZuzuordnen.beobs),
+    { name: `mapBeobNichtZuzuordnenBounds` }
     ),
     boundsOfHighlightedIds: computed(
       () => getBeobNichtZuzuordnenBounds(
@@ -722,7 +738,8 @@ function Store() {
               isNaN(b.BeobId) ? b.BeobId : Number(b.BeobId)
             )
           )
-      )
+      ),
+      { name: `mapBeobNichtZuzuordnenBoundsOfHighlightedIds` }
     ),
   })
   extendObservable(this.map.tpopBeob, {
@@ -750,110 +767,142 @@ function Store() {
           }).map(b => b.BeobId)
         }
         return []
-      }
+      },
+      { name: `mapTpopBeobHighlightedIds` }
     ),
     markersClustered: computed(
-      () => getTpopBeobMarkersClustered(this)
+      () => getTpopBeobMarkersClustered(this),
+      { name: `mapTpopBeobMarkersClustered` }
     ),
     markers: computed(
-      () => getTpopBeobMarkers(this)
+      () => getTpopBeobMarkers(this),
+      { name: `mapTpopBeobMarkers` }
     ),
     assignPolylines: computed(
-      () => getTpopBeobAssignPolylines(this)
+      () => getTpopBeobAssignPolylines(this),
+      { name: `mapTpopBeobAssignPolylines` }
     ),
     beobs: computed(
       () => getBeobForMap(this).filter(b =>
         b.beobzuordnung &&
         b.beobzuordnung.TPopId &&
         !b.beobzuordnung.BeobNichtZuzuordnen
-      )
+      ),
+      { name: `mapTpopBeobBeobs` }
     ),
     bounds: computed(
-      () => getTpopBeobBounds(this.map.tpopBeob.beobs)
+      () => getTpopBeobBounds(this.map.tpopBeob.beobs),
+      { name: `mapTpopBeobBounds` }
     ),
     boundsOfHighlightedIds: computed(
       () => getTpopBeobBounds(
         this.map.tpopBeob.beobs
           .filter(b => this.map.tpopBeob.highlightedIds.includes(b.BeobId))
-      )
+      ),
+      { name: `mapTpopBeobBoundsOfHighlightedIds` }
     ),
   })
   this.table = TableStore
   extendObservable(this.table.filteredAndSorted, {
     projekt: computed(
-      () => filteredAndSortedProjekt(this)
+      () => filteredAndSortedProjekt(this),
+      { name: `projektFilteredAndSorted` }
     ),
     apberuebersicht: computed(
-      () => filteredAndSortedApberuebersicht(this)
+      () => filteredAndSortedApberuebersicht(this),
+      { name: `xxxFilteredAndSorted` }
     ),
     ap: computed(
-      () => filteredAndSortedAp(this)
+      () => filteredAndSortedAp(this),
+      { name: `apFilteredAndSorted` }
     ),
     assozart: computed(
-      () => filteredAndSortedAssozart(this)
+      () => filteredAndSortedAssozart(this),
+      { name: `assozartFilteredAndSorted` }
     ),
     idealbiotop: computed(
-      () => filteredAndSortedIdealbiotop(this)
+      () => filteredAndSortedIdealbiotop(this),
+      { name: `idealbiotopFilteredAndSorted` }
     ),
     beobNichtZuzuordnen: computed(
-      () => filteredAndSortedBeobNichtZuzuordnen(this)
+      () => filteredAndSortedBeobNichtZuzuordnen(this),
+      { name: `beobNichtZuzuordnenFilteredAndSorted` }
     ),
     beobzuordnung: computed(
-      () => filteredAndSortedBeobzuordnung(this)
+      () => filteredAndSortedBeobzuordnung(this),
+      { name: `beobzuordnungFilteredAndSorted` }
     ),
     ber: computed(
-      () => filteredAndSortedBer(this)
+      () => filteredAndSortedBer(this),
+      { name: `berFilteredAndSorted` }
     ),
     apber: computed(
-      () => filteredAndSortedApber(this)
+      () => filteredAndSortedApber(this),
+      { name: `apberFilteredAndSorted` }
     ),
     erfkrit: computed(
-      () => filteredAndSortedErfkrit(this)
+      () => filteredAndSortedErfkrit(this),
+      { name: `erfkritFilteredAndSorted` }
     ),
     zieljahr: computed(
-      () => filteredAndSortedZieljahr(this)
+      () => filteredAndSortedZieljahr(this),
+      { name: `zieljahrFilteredAndSorted` }
     ),
     ziel: computed(
-      () => filteredAndSortedZiel(this)
+      () => filteredAndSortedZiel(this),
+      { name: `zielFilteredAndSorted` }
     ),
     zielber: computed(
-      () => filteredAndSortedZielber(this)
+      () => filteredAndSortedZielber(this),
+      { name: `xxxFilteredAndSorted` }
     ),
     pop: computed(
-      () => filteredAndSortedPop(this)
+      () => filteredAndSortedPop(this),
+      { name: `popFilteredAndSorted` }
     ),
     popmassnber: computed(
-      () => filteredAndSortedPopmassnber(this)
+      () => filteredAndSortedPopmassnber(this),
+      { name: `popmassnberFilteredAndSorted` }
     ),
     popber: computed(
-      () => filteredAndSortedPopber(this)
+      () => filteredAndSortedPopber(this),
+      { name: `popberFilteredAndSorted` }
     ),
     tpop: computed(
-      () => filteredAndSortedTpop(this)
+      () => filteredAndSortedTpop(this),
+      { name: `tpopFilteredAndSorted` }
     ),
     tpopbeob: computed(
-      () => filteredAndSortedTpopbeob(this)
+      () => filteredAndSortedTpopbeob(this),
+      { name: `tpopbeobFilteredAndSorted` }
     ),
     tpopber: computed(
-      () => filteredAndSortedTopber(this)
+      () => filteredAndSortedTopber(this),
+      { name: `tpopberFilteredAndSorted` }
     ),
     tpopfreiwkontr: computed(
-      () => filteredAndSortedTpopfreiwkontr(this)
+      () => filteredAndSortedTpopfreiwkontr(this),
+      { name: `tpopfreiwkontrFilteredAndSorted` }
     ),
     tpopfreiwkontrzaehl: computed(
-      () => filteredAndSortedTpopfreiwkontrzaehl(this)
+      () => filteredAndSortedTpopfreiwkontrzaehl(this),
+      { name: `tpopfreiwkontrzaehlFilteredAndSorted` }
     ),
     tpopfeldkontr: computed(
-      () => filteredAndSortedTpopfeldkontr(this)
+      () => filteredAndSortedTpopfeldkontr(this),
+      { name: `tpopfeldkontrFilteredAndSorted` }
     ),
     tpopfeldkontrzaehl: computed(
-      () => filteredAndSortedTpopfeldkontrzaehl(this)
+      () => filteredAndSortedTpopfeldkontrzaehl(this),
+      { name: `tpopfeldkontrzaehlFilteredAndSorted` }
     ),
     tpopmassnber: computed(
-      () => filteredAndSortedTpopmassnber(this)
+      () => filteredAndSortedTpopmassnber(this),
+      { name: `tpopmassnberFilteredAndSorted` }
     ),
     tpopmassn: computed(
-      () => filteredAndSortedTpopmassn(this)
+      () => filteredAndSortedTpopmassn(this),
+      { name: `tpopmassnFilteredAndSorted` }
     ),
   })
   this.valuesForWhichTableDataWasFetched = {}
