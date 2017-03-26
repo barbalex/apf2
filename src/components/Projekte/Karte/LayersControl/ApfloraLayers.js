@@ -4,6 +4,8 @@ import { observer } from 'mobx-react'
 import styled from 'styled-components'
 import FontIcon from 'material-ui/FontIcon'
 import { SortableContainer, SortableElement, SortableHandle } from 'react-sortable-hoc'
+import 'leaflet'
+import 'leaflet-draw'
 
 import Checkbox from './shared/Checkbox'
 
@@ -249,10 +251,12 @@ const SortableItem = SortableElement(({ apfloraLayer, store, activeApfloraLayers
                 if (activeApfloraLayers.includes(`MapFilter`)) {
                   return store.map.removeActiveApfloraLayer(`MapFilter`)
                 }
-                return store.map.addActiveApfloraLayer(`MapFilter`)
+                store.map.addActiveApfloraLayer(`MapFilter`)
+                // this does not work, see: https://github.com/Leaflet/Leaflet.draw/issues/708
+                //window.L.Draw.Rectangle.initialize()
               }}
             >
-              filter_list
+              photo_filter
             </FilterIcon>
           }
         </FilterDiv>
