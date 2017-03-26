@@ -230,7 +230,6 @@ class StrukturbaumContainer extends Component { // eslint-disable-line react/pre
             mapPopVisible={store.map.activeApfloraLayers.includes(`Pop`)}
             mapTpopVisible={store.map.activeApfloraLayers.includes(`Tpop`)}
             url={store.url}
-            activeUrlElementsAp={store.activeUrlElements.ap}
           />
         </div>
         <CmApFolder onClick={this.handleClick} />
