@@ -261,6 +261,7 @@ class Strukturbaum extends Component {
         node.id === store.activeUrlElements.pop
       )
     )
+    const dataUrl = JSON.stringify(node.url)
 
     return (
       <div key={key} style={style} onClick={onClick}>
@@ -269,14 +270,14 @@ class Strukturbaum extends Component {
           collect={props => myProps}
           nodeId={node.id}
           nodeLabel={node.label}
-          key={`${index}-child`}
+          key={`${node.menuType}${node.id}`}
         >
           <StyledNode
             level={node.level}
             nodeIsInActiveNodePath={nodeIsInActiveNodePath}
             data-id={node.id}
             data-parentId={node.parentId}
-            data-url={JSON.stringify(node.url)}
+            data-url={dataUrl}
             data-nodeType={node.nodeType}
             data-label={node.label}
             data-menuType={node.menuType}
