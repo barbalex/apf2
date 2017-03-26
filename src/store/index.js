@@ -469,6 +469,7 @@ function Store() {
     ),
     activeApfloraLayersSortedString: computed(
       () => this.map.activeApfloraLayersSorted.join(),
+      { name: `activeApfloraLayersSortedString` }
     ),
     addActiveApfloraLayer: action(`addActiveApfloraLayer`, layer =>
       this.map.activeApfloraLayers.push(layer)
