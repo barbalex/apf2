@@ -103,6 +103,7 @@ class Strukturbaum extends Component {
         nodes={store.node.node.nodes}
         url={store.url}
         activeUrlElementsAp={store.activeUrlElements.ap}
+        popApArtId={store.map.pop.apArtId}
       />
     )
   }

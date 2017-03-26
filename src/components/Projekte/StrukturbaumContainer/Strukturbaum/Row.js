@@ -19,28 +19,25 @@ const StyledNode = styled(({ level, nodeIsInActiveNodePath, children, ...rest })
   flex-direction: row;
   white-space: nowrap;
   user-select: none;
-  font-weight: ${(props) => (props.nodeIsInActiveNodePath ? `14px` : `1.1em`)};
-  font-size: ${(props) => (props.nodeIsInActiveNodePath ? `rgb(255, 94, 94)` : `rgb(247, 247, 247)`)};
-  font-size: 1.1em;
-  cursor: pointer;
   color: ${(props) => (props.nodeIsInActiveNodePath ? `rgb(255, 94, 94)` : `rgb(247, 247, 247)`)};
+  cursor: pointer;
   &:hover {
     color: orange;
   }
 `
 const StyledSymbolSpan = styled.span`
-  margin-right: 0;
-  font-weight: 900;
+  margin-right: 0 !important;
+  font-weight: 900 !important;
 `
 const StyledSymbolOpenSpan = styled(StyledSymbolSpan)`
   /*margin-top: -0.2em; only necessary on mac!!!*/
-  font-size: 1.4em;
+  font-size: 1.4em !important;
 `
 const StyledTextSpan = styled.span`
   padding-left: .5em;
 `
 const StyledTextInActiveNodePathSpan = styled(StyledTextSpan)`
-  font-weight: 900;
+  font-weight: 900 !important;
 `
 const StyledMapIcon = styled(FontIcon)`
   padding-left: .2em;
@@ -88,7 +85,7 @@ const enhance = compose(
   observer
 )
 
-const Ber = ({ key, index, style, store, nodes, url, activeUrlElementsAp }) => {
+const Row = ({ key, index, style, store, nodes, url, activeUrlElementsAp, popApArtId }) => {
   const node = nodes[index]
   const onClick = (event) => {
     store.ui.lastClickY = event.pageY
@@ -121,7 +118,7 @@ const Ber = ({ key, index, style, store, nodes, url, activeUrlElementsAp }) => {
   }
   const showPopMapIcon = (
     node.menuType === `ap` &&
-    node.id === (activeUrlElementsAp || store.map.pop.apArtId) &&
+    node.id === (activeUrlElementsAp || popApArtId) &&
     store.map.activeApfloraLayers.includes(`Pop`)
   )
   const showPopFilteredMapIcon = (
@@ -316,8 +313,15 @@ const Ber = ({ key, index, style, store, nodes, url, activeUrlElementsAp }) => {
   )
 }
 
-Ber.propTypes = {
+Row.propTypes = {
   store: PropTypes.object.isRequired,
+  key: PropTypes.number,
+  index: PropTypes.number.isRequired,
+  style: PropTypes.object.isRequired,
+  nodes: PropTypes.array.isRequired,
+  url: PropTypes.array.isRequired,
+  activeUrlElementsAp: PropTypes.number,
+  popApArtId: PropTypes.number,
 }
 
-export default enhance(Ber)
+export default enhance(Row)
