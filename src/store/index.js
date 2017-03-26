@@ -451,7 +451,6 @@ function Store() {
       { label: `Beobachtungen: nicht beurteilt`, value: `BeobNichtBeurteilt` },
       { label: `Beobachtungen: nicht zuzuordnen`, value: `BeobNichtZuzuordnen` },
       { label: `Zuordnungs-Linien`, value: `TpopBeobAssignPolylines` },
-      { label: `Karten-Filter`, value: `MapFilter` },
     ]),
     apfloraLayersString: computed(
       () => this.map.apfloraLayers.map(o => o.value).join(),
