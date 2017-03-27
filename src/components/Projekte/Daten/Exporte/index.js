@@ -20,6 +20,7 @@ import beziehungen from '../../../../etc/beziehungen.png'
 import FormTitle from '../../../shared/FormTitle'
 import apiBaseUrl from '../../../../modules/apiBaseUrl'
 import Tipps from './Tipps'
+import Optionen from './Optionen'
 
 const Container = styled.div`
   height: 100%;
@@ -133,6 +134,7 @@ const enhance = compose(
 )
 
 const Exporte = ({
+  store,
   artFuerEierlegendeWollmilchsau,
   changeArtFuerEierlegendeWollmilchsau,
   artList,
@@ -141,6 +143,7 @@ const Exporte = ({
   <Container>
     <FormTitle title="Exporte" />
     <FieldsContainer>
+      <Optionen />
       <Tipps />
       <FirstLevelCard>
         <CardHeader

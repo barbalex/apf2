@@ -428,7 +428,15 @@ function Store() {
       tpopBeob: [],
     }),
     applyMapFilterToTree: false,
+    toggleApplyMapFilterToTree: action(
+      `toggleApplyMapFilterToTree`,
+      () => this.node.applyMapFilterToTree = !this.node.applyMapFilterToTree
+    ),
     applyMapFilterToExport: false,
+    toggleApplyMapFilterToExport: action(
+      `toggleApplyMapFilterToExport`,
+      () => this.node.applyMapFilterToExport = !this.node.applyMapFilterToExport
+    ),
     updateMapFilter: action(`updateMapFilter`, (mapFilterItems) => {
       if (!mapFilterItems) {
         this.node.nodeMapFilter.set(`tpop`, [])
