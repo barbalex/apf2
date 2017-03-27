@@ -85,6 +85,11 @@ const NurApDiv = styled.div`
 const ApDivToggle = styled(Toggle)`
   margin-left: -10px;
 `
+const apDivToggleThumbStyle = { backgroundColor: `rgb(245, 245, 245)` }
+const strukturbaumContainerDivStyle = {
+  flexGrow: 1,
+  flexBasis: `100%`,
+}
 
 const enhance = compose(
   inject(`store`),
@@ -187,14 +192,7 @@ class StrukturbaumContainer extends Component { // eslint-disable-line react/pre
     const { store } = this.props
     const { activeUrlElements, activeDataset, node, toggleApFilter } = store
     const Container = activeUrlElements.exporte ? ContainerExporte : StyledContainer
-    const showApDivToggle = (
-      activeDataset/* &&
-      activeDataset.table &&
-      (
-        activeDataset.table === `projekt` ||
-        activeDataset.table === `ap`
-      )*/
-    )
+    const showApDivToggle = activeDataset
 
     return (
       <Container>
@@ -203,22 +201,17 @@ class StrukturbaumContainer extends Component { // eslint-disable-line react/pre
           {
             showApDivToggle &&
             <NurApDiv>
-              <Label
-                label="nur AP"
-              />
+              <Label label="nur AP" />
               <ApDivToggle
                 toggled={node.apFilter}
-                thumbStyle={{ backgroundColor: `rgb(245, 245, 245)` }}
-                onToggle={() => toggleApFilter()}
+                thumbStyle={apDivToggleThumbStyle}
+                onToggle={toggleApFilter}
               />
             </NurApDiv>
           }
         </LabelFilterContainer>
         <div
-          style={{
-            flexGrow: 1,
-            flexBasis: `100%`,
-          }}
+          style={strukturbaumContainerDivStyle}
           ref={(c) => { this.tree = c }}
         >
           <Strukturbaum

@@ -25,6 +25,9 @@ const MenuDiv = styled.div`
     padding-top: 4px !important;
   }
 `
+const iconMenuAnchorOrigin = { horizontal: `left`, vertical: `bottom` }
+const iconMenuTargetOrigin = { horizontal: `left`, vertical: `top` }
+const iconMenuStyle = { paddingLeft: 10 }
 
 const enhance = compose(
   inject(`store`),
@@ -40,11 +43,25 @@ const enhance = compose(
       }
       store.setUrlQuery(`projekteTabs`, projekteTabs)
     },
+    ueberApfloraChOnTouchTap: props => () =>
+      window.open(`https://github.com/FNSKtZH/apflora/wiki`)
+    ,
+  }),
+  withHandlers({
+    onClickButtonStrukturbaum: props => () => props.onClickButton(`strukturbaum`),
+    onClickButtonDaten: props => () => props.onClickButton(`daten`),
+    onClickButtonKarte: props => () => props.onClickButton(`karte`),
   }),
   observer
 )
 
-const MyAppBar = ({ store, onClickButton }) => {
+const MyAppBar = ({
+  store,
+  onClickButtonStrukturbaum,
+  onClickButtonDaten,
+  onClickButtonKarte,
+  ueberApfloraChOnTouchTap,
+}) => {
   const { activeUrlElements } = store
   const projekteTabs = clone(store.urlQuery.projekteTabs)
   const strukturbaumIsVisible = projekteTabs && projekteTabs.includes(`strukturbaum`)
@@ -59,48 +76,40 @@ const MyAppBar = ({ store, onClickButton }) => {
           <FlatButton
             label="Strukturbaum"
             secondary={!strukturbaumIsVisible}
-            onClick={() =>
-              onClickButton(`strukturbaum`)
-            }
+            onClick={onClickButtonStrukturbaum}
           />
           <FlatButton
             label="Daten"
             secondary={!datenIsVisible}
-            onClick={() => {
-              onClickButton(`daten`)
-            }}
+            onClick={onClickButtonDaten}
           />
           <FlatButton
             label="Karte"
             secondary={!karteIsVisible}
             disabled={activeUrlElements.exporte}
-            onClick={() =>
-              onClickButton(`karte`)
-            }
+            onClick={onClickButtonKarte}
           />
           <IconMenu
-            iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
-            anchorOrigin={{ horizontal: `left`, vertical: `bottom` }}
-            targetOrigin={{ horizontal: `left`, vertical: `top` }}
-            style={{ paddingLeft: 10 }}
+            iconButtonElement={
+              <IconButton>
+                <MoreVertIcon />
+              </IconButton>
+            }
+            anchorOrigin={iconMenuAnchorOrigin}
+            targetOrigin={iconMenuTargetOrigin}
+            style={iconMenuStyle}
           >
             <MenuItem
               primaryText="Stammdaten aktualisieren (Arteigenschaften, Adressen, Auswahllisten)"
-              onTouchTap={() =>
-                store.fetchStammdaten()
-              }
+              onTouchTap={store.fetchStammdaten}
             />
             <MenuItem
               primaryText="über apflora.ch"
-              onTouchTap={() =>
-                window.open(`https://github.com/FNSKtZH/apflora/wiki`)
-              }
+              onTouchTap={ueberApfloraChOnTouchTap}
             />
             <MenuItem
               primaryText={`${store.user.name} abmelden`}
-              onTouchTap={() =>
-                store.logout()
-              }
+              onTouchTap={store.logout}
             />
           </IconMenu>
         </MenuDiv>
@@ -113,6 +122,10 @@ const MyAppBar = ({ store, onClickButton }) => {
 MyAppBar.propTypes = {
   store: PropTypes.object.isRequired,
   onClickButton: PropTypes.func.isRequired,
+  onClickButtonStrukturbaum: PropTypes.func.isRequired,
+  onClickButtonDaten: PropTypes.func.isRequired,
+  onClickButtonKarte: PropTypes.func.isRequired,
+  ueberApfloraChOnTouchTap: PropTypes.func.isRequired,
 }
 
 export default enhance(MyAppBar)
