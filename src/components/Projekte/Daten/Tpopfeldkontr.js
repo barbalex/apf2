@@ -53,39 +53,32 @@ const FormContainer = styled.div`
 const TabChildDiv = styled.div`
   height: 100%;
 `
+const tpopkontrTypWerte = [{
+  value: `Ausgangszustand`,
+  label: `Ausgangszustand`,
+}, {
+  value: `Zwischenbeurteilung`,
+  label: `Zwischenbeurteilung`,
+}]
+const styles = {
+  root: {
+    flex: `1 1 100%`,
+    minHeight: 0,
+    height: `100%`,
+    display: `flex`,
+    flexDirection: `column`,
+  },
+  container: {
+    height: `100%`,
+  },
+}
 
 const enhance = compose(
   inject(`store`),
   withProps((props) => {
     const { store } = props
-    const styles = {
-      root: {
-        flex: `1 1 100%`,
-        minHeight: 0,
-        height: `100%`,
-        display: `flex`,
-        flexDirection: `column`,
-      },
-      container: {
-        height: `100%`,
-      },
-    }
-    let lr = Array.from(store.table.adb_lr.values())
-    lr = lr.map(e => e.Einheit.replace(/  +/g, ` `)) // eslint-disable-line no-regex-spaces
-    const tpopkontrTypWerte = [{
-      value: `Ausgangszustand`,
-      label: `Ausgangszustand`,
-    }, {
-      value: `Zwischenbeurteilung`,
-      label: `Zwischenbeurteilung`,
-    }]
     const tab = store.urlQuery.feldkontrTab || `entwicklung`
-    return {
-      lr,
-      tpopkontrTypWerte,
-      tab,
-      styles,
-    }
+    return { tab }
   }),
   withHandlers({
     onChangeTab: props => value =>
@@ -97,9 +90,6 @@ const enhance = compose(
 const Tpopfeldkontr = ({
   store,
   onChangeTab,
-  styles,
-  lr,
-  tpopkontrTypWerte,
   tab,
 }) => {
   const { activeDataset } = store
@@ -271,7 +261,7 @@ const Tpopfeldkontr = ({
                     fullWidth
                     searchText={activeDataset.row.TPopKontrLeb || ``}
                     errorText={activeDataset.valid.TPopKontrLeb}
-                    dataSource={lr}
+                    dataSource={store.dropdownList.lr}
                     filter={AutoComplete.caseInsensitiveFilter}
                     maxSearchResults={20}
                     onNewRequest={val =>
@@ -287,7 +277,7 @@ const Tpopfeldkontr = ({
                     fullWidth
                     searchText={activeDataset.row.TPopKontrLebUmg || ``}
                     errorText={activeDataset.valid.TPopKontrLebUmg}
-                    dataSource={lr}
+                    dataSource={store.dropdownList.lr}
                     filter={AutoComplete.caseInsensitiveFilter}
                     maxSearchResults={20}
                     onNewRequest={val =>
@@ -447,9 +437,6 @@ const Tpopfeldkontr = ({
 Tpopfeldkontr.propTypes = {
   store: PropTypes.object.isRequired,
   onChangeTab: PropTypes.func.isRequired,
-  styles: PropTypes.object.isRequired,
-  lr: PropTypes.array.isRequired,
-  tpopkontrTypWerte: PropTypes.array.isRequired,
   tab: PropTypes.string.isRequired,
 }
 

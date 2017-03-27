@@ -186,6 +186,7 @@ function Store() {
     tpopApBerichtRelevantWerte: [],
     gemeinden: [],
     idbiotopuebereinstWerte: [],
+    lr: [],
   }
   extendObservable(this.dropdownList, {
     adressen: computed(
@@ -322,6 +323,14 @@ function Store() {
         }))
       },
       { name: `dropdownListIdbiotopuebereinstWerte` }
+    ),
+    lr: computed(
+      () => {
+        let lr = Array.from(this.table.adb_lr.values())
+        // eslint-disable-next-line no-regex-spaces
+        return lr.map(e => e.Einheit.replace(/  +/g, ` `))
+      },
+      { name: `dropdownListLr` }
     ),
   })
   extendObservable(this.node, {
