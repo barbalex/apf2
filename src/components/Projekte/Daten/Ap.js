@@ -62,22 +62,6 @@ const enhance = compose(
       updateProperty,
       updatePropertyInDb,
     } = store
-    let apUmsetzungen = Array.from(
-      store.table.ap_umsetzung_werte.values()
-    )
-    apUmsetzungen = sortBy(apUmsetzungen, `DomainOrd`)
-    apUmsetzungen = apUmsetzungen.map(el => ({
-      value: el.DomainCode,
-      label: el.DomainTxt,
-    }))
-    let apStati = Array.from(
-      store.table.ap_bearbstand_werte.values()
-    )
-    apStati = sortBy(apStati, `DomainOrd`)
-    apStati = apStati.map(el => ({
-      value: el.DomainCode,
-      label: el.DomainTxt,
-    }))
     const { adb_eigenschaften } = store.table
     const alreadyUsedApIds = Array.from(store.table.ap.keys()).map(a => Number(a))
     // let user choose this ApArtId
@@ -101,8 +85,6 @@ const enhance = compose(
     }
     const artValues = { artwert, artname }
     return {
-      apUmsetzungen,
-      apStati,
       artList,
       artValues,
       activeDataset,
@@ -118,8 +100,6 @@ const Ap = ({
   activeDataset,
   updateProperty,
   updatePropertyInDb,
-  apUmsetzungen,
-  apStati,
   artList,
   artValues,
 }) =>
@@ -144,7 +124,7 @@ const Ap = ({
           <RadioButtonGroupWithInfo
             fieldName="ApStatus"
             value={activeDataset.row.ApStatus}
-            dataSource={apStati}
+            dataSource={store.dropdownList.apStati}
             updatePropertyInDb={updatePropertyInDb}
             popover={
               <div>
@@ -186,7 +166,7 @@ const Ap = ({
             fieldName="ApUmsetzung"
             value={activeDataset.row.ApUmsetzung}
             errorText={activeDataset.valid.ApUmsetzung}
-            dataSource={apUmsetzungen}
+            dataSource={store.dropdownList.apUmsetzungen}
             updatePropertyInDb={updatePropertyInDb}
             popover={
               <div>
@@ -238,8 +218,6 @@ const Ap = ({
 
 Ap.propTypes = {
   store: PropTypes.object.isRequired,
-  apUmsetzungen: PropTypes.array.isRequired,
-  apStati: PropTypes.array.isRequired,
   artList: PropTypes.array.isRequired,
   artValues: PropTypes.object.isRequired,
   activeDataset: PropTypes.object.isRequired,

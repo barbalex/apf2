@@ -174,7 +174,9 @@ function Store() {
     }
   }
   this.dropdownList = {
-    adressen: []
+    adressen: [],
+    apUmsetzungen: [],
+    apStati: [],
   }
   extendObservable(this.dropdownList, {
     adressen: computed(
@@ -190,7 +192,33 @@ function Store() {
         return adressen
       },
       { name: `dropdownListAdressen` }
-    )
+    ),
+    apUmsetzungen: computed(
+      () => {
+        let apUmsetzungen = Array.from(
+          this.table.ap_umsetzung_werte.values()
+        )
+        apUmsetzungen = sortBy(apUmsetzungen, `DomainOrd`)
+        return apUmsetzungen.map(el => ({
+          value: el.DomainCode,
+          label: el.DomainTxt,
+        }))
+      },
+      { name: `dropdownListApUmsetzungen` }
+    ),
+    apStati: computed(
+      () => {
+        let apStati = Array.from(
+          this.table.ap_bearbstand_werte.values()
+        )
+        apStati = sortBy(apStati, `DomainOrd`)
+        return apStati.map(el => ({
+          value: el.DomainCode,
+          label: el.DomainTxt,
+        }))
+      },
+      { name: `dropdownListApStati` }
+    ),
   })
   extendObservable(this.node, {
     apFilter: false,
