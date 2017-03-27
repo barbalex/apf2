@@ -1,10 +1,8 @@
 // @flow
 import React, { PropTypes } from 'react'
 import { observer, inject } from 'mobx-react'
-import sortBy from 'lodash/sortBy'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
-import withProps from 'recompose/withProps'
 import { Scrollbars } from 'react-custom-scrollbars'
 
 import RadioButtonGroup from '../../shared/RadioButtonGroup'
@@ -23,24 +21,12 @@ const FieldsContainer = styled.div`
 
 const enhance = compose(
   inject(`store`),
-  withProps((props) => {
-    const { store } = props
-    let popEntwicklungWerte = Array.from(store.table.pop_entwicklung_werte.values())
-    popEntwicklungWerte = sortBy(popEntwicklungWerte, `EntwicklungOrd`)
-    popEntwicklungWerte = popEntwicklungWerte.map(el => ({
-      value: el.EntwicklungId,
-      label: el.EntwicklungTxt,
-    }))
-    return { popEntwicklungWerte }
-  }),
   observer
 )
 
-const Popber = ({
-  store,
-  popEntwicklungWerte,
-}) => {
+const Popber = ({ store }) => {
   const { activeDataset } = store
+
   return (
     <Container>
       <FormTitle title="Kontroll-Bericht Population" />
@@ -60,7 +46,7 @@ const Popber = ({
             fieldName="PopBerEntwicklung"
             value={activeDataset.row.PopBerEntwicklung}
             errorText={activeDataset.valid.PopBerEntwicklung}
-            dataSource={popEntwicklungWerte}
+            dataSource={store.dropdownList.popEntwicklungWerte}
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
@@ -82,7 +68,6 @@ const Popber = ({
 
 Popber.propTypes = {
   store: PropTypes.object.isRequired,
-  popEntwicklungWerte: PropTypes.array.isRequired,
 }
 
 export default enhance(Popber)

@@ -178,6 +178,8 @@ function Store() {
     adressen: [],
     apUmsetzungen: [],
     apStati: [],
+    artListForAp: [],
+    popEntwicklungWerte: [],
   }
   extendObservable(this.dropdownList, {
     adressen: computed(
@@ -233,6 +235,17 @@ function Store() {
         return sortBy(artList, `Artname`)
       },
       { name: `dropdownListArtListForAp` }
+    ),
+    popEntwicklungWerte: computed(
+      () => {
+        let popEntwicklungWerte = Array.from(this.table.pop_entwicklung_werte.values())
+        popEntwicklungWerte = sortBy(popEntwicklungWerte, `EntwicklungOrd`)
+        return popEntwicklungWerte.map(el => ({
+          value: el.EntwicklungId,
+          label: el.EntwicklungTxt,
+        }))
+      },
+      { name: `dropdownListPopEntwicklungWerte` }
     ),
   })
   extendObservable(this.node, {
