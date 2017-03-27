@@ -180,6 +180,7 @@ function Store() {
     apStati: [],
     artListForAp: [],
     popEntwicklungWerte: [],
+    apErfkritWerte: [],
   }
   extendObservable(this.dropdownList, {
     adressen: computed(
@@ -246,6 +247,19 @@ function Store() {
         }))
       },
       { name: `dropdownListPopEntwicklungWerte` }
+    ),
+    apErfkritWerte: computed(
+      () => {
+        let apErfkritWerte = Array.from(
+          this.table.ap_erfkrit_werte.values()
+        )
+        apErfkritWerte = sortBy(apErfkritWerte, `BeurteilOrd`)
+        return apErfkritWerte.map(el => ({
+          value: el.BeurteilId,
+          label: el.BeurteilTxt,
+        }))
+      },
+      { name: `dropdownListApErfkritWerte` }
     ),
   })
   extendObservable(this.node, {

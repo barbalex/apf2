@@ -1,10 +1,8 @@
 // @flow
 import React, { PropTypes } from 'react'
 import { observer, inject } from 'mobx-react'
-import sortBy from 'lodash/sortBy'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
-import withProps from 'recompose/withProps'
 import { Scrollbars } from 'react-custom-scrollbars'
 
 import RadioButtonGroup from '../../shared/RadioButtonGroup'
@@ -23,24 +21,10 @@ const FieldsContainer = styled.div`
 
 const enhance = compose(
   inject(`store`),
-  withProps((props) => {
-    let apErfkritWerte = Array.from(
-      props.store.table.ap_erfkrit_werte.values()
-    )
-    apErfkritWerte = sortBy(apErfkritWerte, `BeurteilOrd`)
-    apErfkritWerte = apErfkritWerte.map(el => ({
-      value: el.BeurteilId,
-      label: el.BeurteilTxt,
-    }))
-    return { apErfkritWerte }
-  }),
   observer
 )
 
-const Erfkrit = ({
-  store,
-  apErfkritWerte,
-}) => {
+const Erfkrit = ({ store }) => {
   const { activeDataset } = store
   return (
     <Container>
@@ -52,7 +36,7 @@ const Erfkrit = ({
             fieldName="ErfkritErreichungsgrad"
             value={activeDataset.row.ErfkritErreichungsgrad}
             errorText={activeDataset.valid.ErfkritErreichungsgrad}
-            dataSource={apErfkritWerte}
+            dataSource={store.dropdownList.apErfkritWerte}
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
@@ -74,7 +58,6 @@ const Erfkrit = ({
 
 Erfkrit.propTypes = {
   store: PropTypes.object.isRequired,
-  apErfkritWerte: PropTypes.array.isRequired,
 }
 
 export default enhance(Erfkrit)
