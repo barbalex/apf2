@@ -189,6 +189,7 @@ function Store() {
     lr: [],
     zaehleinheitWerte: [],
     methodeWerte: [],
+    tpopMassnTypWerte: [],
   }
   extendObservable(this.dropdownList, {
     adressen: computed(
@@ -365,6 +366,19 @@ function Store() {
         return methodeWerte
       },
       { name: `dropdownListMethodeWerte` }
+    ),
+    tpopMassnTypWerte: computed(
+      () => {
+        let tpopMassnTypWerte = Array.from(
+          this.table.tpopmassn_typ_werte.values()
+        )
+        tpopMassnTypWerte = sortBy(tpopMassnTypWerte, `MassnTypOrd`)
+        return tpopMassnTypWerte.map(el => ({
+          value: el.MassnTypCode,
+          label: el.MassnTypTxt,
+        }))
+      },
+      { name: `dropdownListTpopMassnTypWerte` }
     ),
   })
   extendObservable(this.node, {

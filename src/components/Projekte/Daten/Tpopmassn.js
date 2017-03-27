@@ -1,7 +1,6 @@
 // @flow
 import React, { PropTypes } from 'react'
 import { observer, inject } from 'mobx-react'
-import sortBy from 'lodash/sortBy'
 import AutoComplete from 'material-ui/AutoComplete'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
@@ -31,20 +30,11 @@ const enhance = compose(
   inject(`store`),
   withProps((props) => {
     const { store } = props
-    let tpopMassnTypWerte = Array.from(
-      store.table.tpopmassn_typ_werte.values()
-    )
-    tpopMassnTypWerte = sortBy(tpopMassnTypWerte, `MassnTypOrd`)
-    tpopMassnTypWerte = tpopMassnTypWerte.map(el => ({
-      value: el.MassnTypCode,
-      label: el.MassnTypTxt,
-    }))
     let artnamen = Array.from(
       store.table.adb_eigenschaften.values()
     )
     artnamen = artnamen.map(a => a.Artname).sort()
     return {
-      tpopMassnTypWerte,
       artnamen,
     }
   }),
@@ -59,7 +49,6 @@ const enhance = compose(
 )
 
 const Tpopmassn = ({
-  tpopMassnTypWerte,
   artnamen,
   store,
   onNewRequestWirtspflanze,
@@ -89,7 +78,7 @@ const Tpopmassn = ({
             fieldName="TPopMassnTyp"
             value={activeDataset.row.TPopMassnTyp}
             errorText={activeDataset.valid.TPopMassnTyp}
-            dataSource={tpopMassnTypWerte}
+            dataSource={store.dropdownList.tpopMassnTypWerte}
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
@@ -241,7 +230,6 @@ const Tpopmassn = ({
 
 Tpopmassn.propTypes = {
   store: PropTypes.object.isRequired,
-  tpopMassnTypWerte: PropTypes.array.isRequired,
   artnamen: PropTypes.array.isRequired,
   onNewRequestWirtspflanze: PropTypes.func.isRequired,
   onBlurWirtspflanze: PropTypes.func.isRequired,
