@@ -3,6 +3,7 @@ import React, { PropTypes } from 'react'
 import { observer, inject } from 'mobx-react'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
+import shouldUpdate from 'recompose/shouldUpdate'
 import { ContextMenuTrigger } from 'react-contextmenu'
 import FontIcon from 'material-ui/FontIcon'
 
@@ -79,14 +80,101 @@ const TpopBeobFilteredMapIcon = styled(TpopBeobMapIcon)`
   -webkit-text-stroke: 1px #f5ef00;
   -moz-text-stroke: 1px #f5ef00;
 `
+const showPopMapIcon = (store, node) => (
+  node.menuType === `ap` &&
+  node.id === (store.activeUrlElements.ap || store.map.pop.apArtId) &&
+  store.map.activeApfloraLayers.includes(`Pop`)
+)
+const showPopFilteredMapIcon = (store, node) => (
+  node.menuType === `pop` &&
+  store.map.activeApfloraLayers.includes(`Pop`) &&
+  store.map.pop.highlightedIds.includes(node.id)
+)
+const showTpopMapIcon = (store, node) => (
+  node.menuType === `ap` &&
+  node.id === (store.activeUrlElements.ap || store.map.pop.apArtId) &&
+  store.map.activeApfloraLayers.includes(`Tpop`)
+)
+const showTpopFilteredMapIcon = (store, node) => (
+  node.menuType === `tpop` &&
+  store.map.activeApfloraLayers.includes(`Tpop`) &&
+  store.map.tpop.highlightedIds.includes(node.id)
+)
+const showBeobNichtBeurteiltMapIcon = (store, node) => (
+  node.menuType === `beobzuordnungFolder` &&
+  node.id === store.activeUrlElements.ap &&
+  store.map.activeApfloraLayers.includes(`BeobNichtBeurteilt`)
+)
+const showBeobNichtZuzuordnenMapIcon = (store, node) => (
+  node.menuType === `beobNichtZuzuordnenFolder` &&
+  node.id === store.activeUrlElements.ap &&
+  store.map.activeApfloraLayers.includes(`BeobNichtZuzuordnen`)
+)
+const showTpopBeobMapIcon = (store, node) => (
+  node.menuType === `tpopbeobFolder` &&
+  node.id === store.activeUrlElements.tpop &&
+  store.map.activeApfloraLayers.includes(`TpopBeob`)
+)
+const showBeobNichtBeurteiltFilteredMapIcon = (store, node) => (
+  node.menuType === `beobzuordnung` &&
+  store.map.activeApfloraLayers.includes(`BeobNichtBeurteilt`) &&
+  store.map.beobNichtBeurteilt.highlightedIds.includes(node.id)
+)
+const showBeobNichtZuzuordnenFilteredMapIcon = (store, node) => (
+  node.menuType === `beobNichtZuzuordnen` &&
+  store.map.activeApfloraLayers.includes(`BeobNichtZuzuordnen`) &&
+  store.map.beobNichtZuzuordnen.highlightedIds.includes(node.id)
+)
+const showTpopBeobFilteredMapIcon = (store, node) => (
+  (
+    node.menuType === `tpopbeob` &&
+    store.map.activeApfloraLayers.includes(`TpopBeob`) &&
+    store.map.tpopBeob.highlightedIds.includes(node.id)
+  ) ||
+  (
+    node.menuType === `tpop` &&
+    !store.activeUrlElements.tpopbeob &&
+    store.map.activeApfloraLayers.includes(`TpopBeob`) &&
+    node.id === store.activeUrlElements.tpop
+  ) ||
+  (
+    node.menuType === `pop` &&
+    !store.activeUrlElements.tpop &&
+    store.map.activeApfloraLayers.includes(`TpopBeob`) &&
+    node.id === store.activeUrlElements.pop
+  )
+)
+
+const checkPropsChange = (props, nextProps) => {
+  return (
+    nextProps.node !== props.node ||
+    nextProps.store.url.join() !== props.store.url.join() ||
+    showPopMapIcon(nextProps.store, nextProps.node) !== showPopMapIcon(props.store, props.node) ||
+    showPopFilteredMapIcon(nextProps.store, nextProps.node) !== showPopFilteredMapIcon(props.store, props.node) ||
+    showTpopMapIcon(nextProps.store, nextProps.node) !== showTpopMapIcon(props.store, props.node) ||
+    showTpopFilteredMapIcon(nextProps.store, nextProps.node) !== showTpopFilteredMapIcon(props.store, props.node) ||
+    showBeobNichtBeurteiltMapIcon(nextProps.store, nextProps.node) !== showBeobNichtBeurteiltMapIcon(props.store, props.node) ||
+    showBeobNichtZuzuordnenMapIcon(nextProps.store, nextProps.node) !== showBeobNichtZuzuordnenMapIcon(props.store, props.node) ||
+    showTpopBeobMapIcon(nextProps.store, nextProps.node) !== showTpopBeobMapIcon(props.store, props.node) ||
+    showBeobNichtBeurteiltFilteredMapIcon(nextProps.store, nextProps.node) !== showBeobNichtBeurteiltFilteredMapIcon(props.store, props.node) ||
+    showBeobNichtZuzuordnenFilteredMapIcon(nextProps.store, nextProps.node) !== showBeobNichtZuzuordnenFilteredMapIcon(props.store, props.node) ||
+    showTpopBeobFilteredMapIcon(nextProps.store, nextProps.node) !== showTpopBeobFilteredMapIcon(props.store, props.node)
+  )
+}
 
 const enhance = compose(
   inject(`store`),
+  shouldUpdate(checkPropsChange),
   observer
 )
 
-const Row = ({ key, index, style, store, nodes, url, activeUrlElementsAp, popApArtId }) => {
-  const node = nodes[index]
+const Row = ({
+  key,
+  index,
+  style,
+  store,
+  node,
+}) => {
   const onClick = (event) => {
     store.ui.lastClickY = event.pageY
     store.node.toggleNode(node)
@@ -100,7 +188,7 @@ const Row = ({ key, index, style, store, nodes, url, activeUrlElementsAp, popApA
     loadingData: ``,
   }
   let symbol
-  const nodeIsInActiveNodePath = isNodeInActiveNodePath(node, url)
+  const nodeIsInActiveNodePath = isNodeInActiveNodePath(node, store.url)
   let SymbolSpan = StyledSymbolSpan
   const TextSpan = nodeIsInActiveNodePath ? StyledTextInActiveNodePathSpan : StyledTextSpan
 
@@ -116,70 +204,6 @@ const Row = ({ key, index, style, store, nodes, url, activeUrlElementsAp, popApA
   } else {
     symbol = symbolTypes.hasNoChildren
   }
-  const showPopMapIcon = (
-    node.menuType === `ap` &&
-    node.id === (activeUrlElementsAp || popApArtId) &&
-    store.map.activeApfloraLayers.includes(`Pop`)
-  )
-  const showPopFilteredMapIcon = (
-    node.menuType === `pop` &&
-    store.map.activeApfloraLayers.includes(`Pop`) &&
-    store.map.pop.highlightedIds.includes(node.id)
-  )
-  const showTpopMapIcon = (
-    node.menuType === `ap` &&
-    node.id === (activeUrlElementsAp || store.map.pop.apArtId) &&
-    store.map.activeApfloraLayers.includes(`Tpop`)
-  )
-  const showTpopFilteredMapIcon = (
-    node.menuType === `tpop` &&
-    store.map.activeApfloraLayers.includes(`Tpop`) &&
-    store.map.tpop.highlightedIds.includes(node.id)
-  )
-  const showBeobNichtBeurteiltMapIcon = (
-    node.menuType === `beobzuordnungFolder` &&
-    node.id === activeUrlElementsAp &&
-    store.map.activeApfloraLayers.includes(`BeobNichtBeurteilt`)
-  )
-  const showBeobNichtZuzuordnenMapIcon = (
-    node.menuType === `beobNichtZuzuordnenFolder` &&
-    node.id === activeUrlElementsAp &&
-    store.map.activeApfloraLayers.includes(`BeobNichtZuzuordnen`)
-  )
-  const showTpopBeobMapIcon = (
-    node.menuType === `tpopbeobFolder` &&
-    node.id === store.activeUrlElements.tpop &&
-    store.map.activeApfloraLayers.includes(`TpopBeob`)
-  )
-  const showBeobNichtBeurteiltFilteredMapIcon = (
-    node.menuType === `beobzuordnung` &&
-    store.map.activeApfloraLayers.includes(`BeobNichtBeurteilt`) &&
-    store.map.beobNichtBeurteilt.highlightedIds.includes(node.id)
-  )
-  const showBeobNichtZuzuordnenFilteredMapIcon = (
-    node.menuType === `beobNichtZuzuordnen` &&
-    store.map.activeApfloraLayers.includes(`BeobNichtZuzuordnen`) &&
-    store.map.beobNichtZuzuordnen.highlightedIds.includes(node.id)
-  )
-  const showTpopBeobFilteredMapIcon = (
-    (
-      node.menuType === `tpopbeob` &&
-      store.map.activeApfloraLayers.includes(`TpopBeob`) &&
-      store.map.tpopBeob.highlightedIds.includes(node.id)
-    ) ||
-    (
-      node.menuType === `tpop` &&
-      !store.activeUrlElements.tpopbeob &&
-      store.map.activeApfloraLayers.includes(`TpopBeob`) &&
-      node.id === store.activeUrlElements.tpop
-    ) ||
-    (
-      node.menuType === `pop` &&
-      !store.activeUrlElements.tpop &&
-      store.map.activeApfloraLayers.includes(`TpopBeob`) &&
-      node.id === store.activeUrlElements.pop
-    )
-  )
   const dataUrl = JSON.stringify(node.url)
 
   return (
@@ -205,7 +229,7 @@ const Row = ({ key, index, style, store, nodes, url, activeUrlElementsAp, popApA
             {symbol}
           </SymbolSpan>
           {
-            showPopMapIcon &&
+            showPopMapIcon(store, node) &&
             <PopMapIcon
               id="map"
               className="material-icons"
@@ -215,7 +239,7 @@ const Row = ({ key, index, style, store, nodes, url, activeUrlElementsAp, popApA
             </PopMapIcon>
           }
           {
-            showTpopMapIcon &&
+            showTpopMapIcon(store, node) &&
             <TpopMapIcon
               id="map"
               className="material-icons"
@@ -225,7 +249,7 @@ const Row = ({ key, index, style, store, nodes, url, activeUrlElementsAp, popApA
             </TpopMapIcon>
           }
           {
-            showBeobNichtBeurteiltMapIcon &&
+            showBeobNichtBeurteiltMapIcon(store, node) &&
             <BeobNichtBeurteiltMapIcon
               id="map"
               className="material-icons"
@@ -235,7 +259,7 @@ const Row = ({ key, index, style, store, nodes, url, activeUrlElementsAp, popApA
             </BeobNichtBeurteiltMapIcon>
           }
           {
-            showBeobNichtZuzuordnenMapIcon &&
+            showBeobNichtZuzuordnenMapIcon(store, node) &&
             <BeobNichtZuzuordnenMapIcon
               id="map"
               className="material-icons"
@@ -245,7 +269,7 @@ const Row = ({ key, index, style, store, nodes, url, activeUrlElementsAp, popApA
             </BeobNichtZuzuordnenMapIcon>
           }
           {
-            showTpopBeobMapIcon &&
+            showTpopBeobMapIcon(store, node) &&
             <TpopBeobMapIcon
               id="map"
               className="material-icons"
@@ -255,7 +279,7 @@ const Row = ({ key, index, style, store, nodes, url, activeUrlElementsAp, popApA
             </TpopBeobMapIcon>
           }
           {
-            showPopFilteredMapIcon &&
+            showPopFilteredMapIcon(store, node) &&
             <PopFilteredMapIcon
               id="map"
               className="material-icons"
@@ -265,7 +289,7 @@ const Row = ({ key, index, style, store, nodes, url, activeUrlElementsAp, popApA
             </PopFilteredMapIcon>
           }
           {
-            showTpopFilteredMapIcon &&
+            showTpopFilteredMapIcon(store, node) &&
             <TpopFilteredMapIcon
               id="map"
               className="material-icons"
@@ -275,7 +299,7 @@ const Row = ({ key, index, style, store, nodes, url, activeUrlElementsAp, popApA
             </TpopFilteredMapIcon>
           }
           {
-            showBeobNichtBeurteiltFilteredMapIcon &&
+            showBeobNichtBeurteiltFilteredMapIcon(store, node) &&
             <BeobNichtBeurteiltFilteredMapIcon
               id="BeobNichtBeurteiltFilteredMapIcon"
               className="material-icons"
@@ -285,7 +309,7 @@ const Row = ({ key, index, style, store, nodes, url, activeUrlElementsAp, popApA
             </BeobNichtBeurteiltFilteredMapIcon>
           }
           {
-            showBeobNichtZuzuordnenFilteredMapIcon &&
+            showBeobNichtZuzuordnenFilteredMapIcon(store, node) &&
             <BeobNichtZuzuordnenFilteredMapIcon
               id="BeobNichtZuzuordnenFilteredMapIcon"
               className="material-icons"
@@ -295,7 +319,7 @@ const Row = ({ key, index, style, store, nodes, url, activeUrlElementsAp, popApA
             </BeobNichtZuzuordnenFilteredMapIcon>
           }
           {
-            showTpopBeobFilteredMapIcon &&
+            showTpopBeobFilteredMapIcon(store, node) &&
             <TpopBeobFilteredMapIcon
               id="TpopBeobFilteredMapIcon"
               className="material-icons"
@@ -318,10 +342,7 @@ Row.propTypes = {
   key: PropTypes.number,
   index: PropTypes.number.isRequired,
   style: PropTypes.object.isRequired,
-  nodes: PropTypes.array.isRequired,
-  url: PropTypes.array.isRequired,
-  activeUrlElementsAp: PropTypes.number,
-  popApArtId: PropTypes.number,
+  node: PropTypes.object.isRequired,
 }
 
 export default enhance(Row)

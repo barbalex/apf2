@@ -229,6 +229,7 @@ class StrukturbaumContainer extends Component { // eslint-disable-line react/pre
             mapBeobNichtZuzuordnenVisible={store.map.activeApfloraLayers.includes(`BeobNichtZuzuordnen`)}
             mapPopVisible={store.map.activeApfloraLayers.includes(`Pop`)}
             mapTpopVisible={store.map.activeApfloraLayers.includes(`Tpop`)}
+            popHighlightedIdsString={store.map.pop.highlightedIds.join()}
             url={store.url}
           />
         </div>

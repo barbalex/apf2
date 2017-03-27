@@ -100,10 +100,7 @@ class Strukturbaum extends Component {
         key={key}
         index={index}
         style={style}
-        nodes={store.node.node.nodes}
-        url={store.url}
-        activeUrlElementsAp={store.activeUrlElements.ap}
-        popApArtId={store.map.pop.apArtId}
+        node={store.node.node.nodes[index]}
       />
     )
   }
@@ -125,7 +122,7 @@ class Strukturbaum extends Component {
   }
 
   render() {  // eslint-disable-line class-methods-use-this
-    const { store, nodes, url } = this.props
+    const { nodes, url } = this.props
 
     // calculate scrolltop
     // without this if a folder low in the tree is opened,
