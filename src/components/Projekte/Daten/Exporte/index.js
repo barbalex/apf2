@@ -14,6 +14,7 @@ import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import withProps from 'recompose/withProps'
 import withHandlers from 'recompose/withHandlers'
+import json2csv from 'json2csv'
 
 import beziehungen from '../../../../etc/beziehungen.png'
 import FormTitle from '../../../shared/FormTitle'
@@ -73,6 +74,33 @@ const enhance = compose(
   withHandlers({
     downloadFromView: props => ({ view, fileName, apArtId }) => {
       const { store, changeArtFuerEierlegendeWollmilchsau, artFuerEierlegendeWollmilchsau } = props
+      const url = `${apiBaseUrl}/exportView/json/view=${view}${apArtId ? `/${apArtId}` : ``}`
+
+      axios.get(url)
+        .then(({ data }) => {
+          // now we could manipulate the data, for instance apply mapFilter
+          console.log(`data:`, data)
+          try {
+            const csvData = json2csv({ data })
+            const file = `${fileName}_${format(new Date(), `YYYY-MM-DD_HH-mm-ss`)}`
+            fileDownload(csvData, `${file}.csv`)
+            if (artFuerEierlegendeWollmilchsau) {
+              changeArtFuerEierlegendeWollmilchsau(``)
+            }
+          } catch (err) {
+            throw err
+          }
+        })
+        .catch((error) => {
+          if (artFuerEierlegendeWollmilchsau) {
+            changeArtFuerEierlegendeWollmilchsau(``)
+          }
+          store.listError(error)
+        })
+    },
+    /*
+    downloadFromViewCsvFromApi: props => ({ view, fileName, apArtId }) => {
+      const { store, changeArtFuerEierlegendeWollmilchsau, artFuerEierlegendeWollmilchsau } = props
       const file = `${fileName}_${format(new Date(), `YYYY-MM-DD_HH-mm-ss`)}`
       const url = `${apiBaseUrl}/exportView/csv/view=${view}/filename=${file}${apArtId ? `/${apArtId}` : ``}`
       axios.get(url)
@@ -88,7 +116,7 @@ const enhance = compose(
           }
           store.listError(error)
         })
-    },
+    },*/
   }),
   observer,
   withProps((props) => {
