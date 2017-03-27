@@ -8,6 +8,7 @@ import format from 'date-fns/format'
 import axios from 'axios'
 import sortBy from 'lodash/sortBy'
 import filter from 'lodash/filter'
+import clone from 'lodash/clone'
 import AutoComplete from 'material-ui/AutoComplete'
 import { orange500 } from 'material-ui/styles/colors'
 import compose from 'recompose/compose'
@@ -79,7 +80,7 @@ const enhance = compose(
 
       axios.get(url)
         .then(({ data }) => {
-          let jsonData = data
+          let jsonData = clone(data)
           // now we could manipulate the data, for instance apply mapFilter
           if (store.node.applyMapFilterToExport) {
             console.log(`jsonData before filtering:`, jsonData)
@@ -94,7 +95,7 @@ const enhance = compose(
             }
           }
           try {
-            const csvData = json2csv({ jsonData })
+            const csvData = json2csv({ data })
             const file = `${fileName}_${format(new Date(), `YYYY-MM-DD_HH-mm-ss`)}`
             fileDownload(csvData, `${file}.csv`)
             if (artFuerEierlegendeWollmilchsau) {
