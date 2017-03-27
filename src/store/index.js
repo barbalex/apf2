@@ -187,6 +187,7 @@ function Store() {
     gemeinden: [],
     idbiotopuebereinstWerte: [],
     lr: [],
+    zaehleinheitWerte: [],
   }
   extendObservable(this.dropdownList, {
     adressen: computed(
@@ -331,6 +332,24 @@ function Store() {
         return lr.map(e => e.Einheit.replace(/  +/g, ` `))
       },
       { name: `dropdownListLr` }
+    ),
+    zaehleinheitWerte: computed(
+      () => {
+        let zaehleinheitWerte = Array.from(
+          this.table.tpopkontrzaehl_einheit_werte.values()
+        )
+        zaehleinheitWerte = sortBy(zaehleinheitWerte, `ZaehleinheitOrd`)
+        zaehleinheitWerte = zaehleinheitWerte.map(el => ({
+          value: el.ZaehleinheitCode,
+          label: el.ZaehleinheitTxt,
+        }))
+        zaehleinheitWerte.unshift({
+          value: null,
+          label: ``,
+        })
+        return zaehleinheitWerte
+      },
+      { name: `dropdownListZaehleinheitWerte` }
     ),
   })
   extendObservable(this.node, {

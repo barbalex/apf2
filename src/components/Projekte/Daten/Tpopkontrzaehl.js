@@ -26,18 +26,6 @@ const enhance = compose(
   inject(`store`),
   withProps((props) => {
     const { store } = props
-    let zaehleinheitWerte = Array.from(
-      store.table.tpopkontrzaehl_einheit_werte.values()
-    )
-    zaehleinheitWerte = sortBy(zaehleinheitWerte, `ZaehleinheitOrd`)
-    zaehleinheitWerte = zaehleinheitWerte.map(el => ({
-      value: el.ZaehleinheitCode,
-      label: el.ZaehleinheitTxt,
-    }))
-    zaehleinheitWerte.unshift({
-      value: null,
-      label: ``,
-    })
     let methodeWerte = Array.from(
       store.table.tpopkontrzaehl_methode_werte.values()
     )
@@ -47,7 +35,6 @@ const enhance = compose(
       label: el.BeurteilTxt,
     }))
     return {
-      zaehleinheitWerte,
       methodeWerte,
     }
   }),
@@ -56,7 +43,6 @@ const enhance = compose(
 
 const Tpopkontrzaehl = ({
   store,
-  zaehleinheitWerte,
   methodeWerte,
 }) => {
   const { activeDataset } = store
@@ -79,7 +65,7 @@ const Tpopkontrzaehl = ({
             fieldName="Zaehleinheit"
             value={activeDataset.row.Zaehleinheit}
             errorText={activeDataset.valid.Zaehleinheit}
-            dataSource={zaehleinheitWerte}
+            dataSource={store.dropdownList.zaehleinheitWerte}
             valueProp="value"
             labelProp="label"
             updatePropertyInDb={store.updatePropertyInDb}
@@ -100,7 +86,6 @@ const Tpopkontrzaehl = ({
 
 Tpopkontrzaehl.propTypes = {
   store: PropTypes.object.isRequired,
-  zaehleinheitWerte: PropTypes.array.isRequired,
   methodeWerte: PropTypes.array.isRequired,
 }
 
