@@ -104,7 +104,9 @@ class StrukturbaumContainer extends Component { // eslint-disable-line react/pre
 
   componentDidMount() {
     const { store } = this.props
+    // $FlowIssue
     store.ui.treeHeight = this.tree.clientHeight
+    // $FlowIssue
     const treeRect = this.tree.getBoundingClientRect()
     store.ui.treeTopPosition = treeRect.top
   }
@@ -212,6 +214,7 @@ class StrukturbaumContainer extends Component { // eslint-disable-line react/pre
         </LabelFilterContainer>
         <div
           style={strukturbaumContainerDivStyle}
+          // $FlowIssue
           ref={(c) => { this.tree = c }}
         >
           <Strukturbaum

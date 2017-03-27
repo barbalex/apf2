@@ -27,6 +27,7 @@ const History = {
   goForward: history.goForward,
   length: history.length,
   createHref: history.createHref,
+  location: null,
 }
 
 extendObservable(History, {
@@ -35,16 +36,16 @@ extendObservable(History, {
 history.listen((location) => {
   History.location = location
 })
-document.onmouseover = () => {
+window.document.onmouseover = () => {
   History.mouseIsInDoc = true
 }
-document.onmouseleave = () => {
+window.document.onmouseleave = () => {
   History.mouseIsInDoc = false
 }
 window.onpopstate = () => {
   if (!History.mouseIsInDoc) {
-    History.location.pathname = document.location.pathname
-    History.location.search = document.location.search
+    History.location.pathname = window.document.location.pathname
+    History.location.search = window.document.location.search
   }
 }
 
