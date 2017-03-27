@@ -159,6 +159,7 @@ function Store() {
   this.history = ObservableHistory
   this.loading = []
   this.activeUrlElements = {}
+  this.urlQuery = {}
   extendObservable(this, {
     loading: [],
   })
@@ -172,6 +173,25 @@ function Store() {
       }
     }
   }
+  this.dropdownList = {
+    adressen: []
+  }
+  extendObservable(this.dropdownList, {
+    adressen: computed(
+      () => {
+        const adressen = sortBy(
+          Array.from(this.table.adresse.values()),
+          `AdrName`
+        )
+        adressen.unshift({
+          id: null,
+          AdrName: ``,
+        })
+        return adressen
+      },
+      { name: `dropdownListAdressen` }
+    )
+  })
   extendObservable(this.node, {
     apFilter: false,
     nodeLabelFilter: observable.map({}),

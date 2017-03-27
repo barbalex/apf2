@@ -33,18 +33,6 @@ const getApErfkritWerte = ({ store }) => {
   }))
 }
 
-const getAdressen = ({ store }) => {
-  const adressen = sortBy(
-    Array.from(store.table.adresse.values()),
-    `AdrName`
-  )
-  adressen.unshift({
-    id: null,
-    AdrName: ``,
-  })
-  return adressen
-}
-
 const enhance = compose(
   inject(`store`),
   observer
@@ -189,7 +177,7 @@ const Apber = ({ store }) => {
             fieldName="JBerBearb"
             value={activeDataset.row.JBerBearb}
             errorText={activeDataset.valid.JBerBearb}
-            dataSource={getAdressen({ store })}
+            dataSource={store.dropdownList.adressen}
             valueProp="AdrId"
             labelProp="AdrName"
             updatePropertyInDb={store.updatePropertyInDb}

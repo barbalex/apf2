@@ -12,6 +12,7 @@ import remove from 'lodash/remove'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
+import shouldUpdate from 'recompose/shouldUpdate'
 
 const StyledAppBar = styled(AppBar)`
   @media print {
@@ -29,8 +30,17 @@ const iconMenuAnchorOrigin = { horizontal: `left`, vertical: `bottom` }
 const iconMenuTargetOrigin = { horizontal: `left`, vertical: `top` }
 const iconMenuStyle = { paddingLeft: 10 }
 
+/**
+ * checking props change according to
+ * https://marmelab.com/blog/2017/02/06/react-is-slow-react-is-fast.html
+ */
+const checkPropsChange = (props, nextProps) =>
+  nextProps.store.urlQuery.projekteTabs.join() !== props.store.urlQuery.projekteTabs.join() ||
+  nextProps.store.user.name !== props.store.user.name
+
 const enhance = compose(
   inject(`store`),
+  shouldUpdate(checkPropsChange),
   withHandlers({
     onClickButton: props => (name) => {
       const { store } = props

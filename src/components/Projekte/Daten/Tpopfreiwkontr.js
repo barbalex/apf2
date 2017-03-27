@@ -1,10 +1,8 @@
 // @flow
 import React, { PropTypes } from 'react'
 import { observer, inject } from 'mobx-react'
-import sortBy from 'lodash/sortBy'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
-import withProps from 'recompose/withProps'
 import { Scrollbars } from 'react-custom-scrollbars'
 
 import RadioButton from '../../shared/RadioButton'
@@ -26,25 +24,10 @@ const FieldsContainer = styled.div`
 
 const enhance = compose(
   inject(`store`),
-  withProps((props) => {
-    const { store } = props
-    const adressen = sortBy(
-      Array.from(store.table.adresse.values()),
-      `AdrName`
-    )
-    adressen.unshift({
-      id: null,
-      AdrName: ``,
-    })
-    return { adressen }
-  }),
   observer
 )
 
-const Tpopfreiwkontr = ({
-  store,
-  adressen,
-}) => {
+const Tpopfreiwkontr = ({ store }) => {
   const { activeDataset } = store
   return (
     <Container>
@@ -68,7 +51,7 @@ const Tpopfreiwkontr = ({
             fieldName="TPopKontrBearb"
             value={activeDataset.row.TPopKontrBearb}
             errorText={activeDataset.valid.TPopKontrBearb}
-            dataSource={adressen}
+            dataSource={store.dropdownList.adressen}
             valueProp="AdrId"
             labelProp="AdrName"
             updatePropertyInDb={store.updatePropertyInDb}
@@ -162,7 +145,6 @@ const Tpopfreiwkontr = ({
 
 Tpopfreiwkontr.propTypes = {
   store: PropTypes.object.isRequired,
-  adressen: PropTypes.array.isRequired,
 }
 
 export default enhance(Tpopfreiwkontr)

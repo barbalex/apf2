@@ -70,14 +70,6 @@ const enhance = compose(
       value: el.DomainCode,
       label: el.DomainTxt,
     }))
-    const adressen = sortBy(
-      Array.from(store.table.adresse.values()),
-      `AdrName`
-    )
-    adressen.unshift({
-      id: null,
-      AdrName: ``,
-    })
     let apStati = Array.from(
       store.table.ap_bearbstand_werte.values()
     )
@@ -110,7 +102,6 @@ const enhance = compose(
     const artValues = { artwert, artname }
     return {
       apUmsetzungen,
-      adressen,
       apStati,
       artList,
       artValues,
@@ -123,11 +114,11 @@ const enhance = compose(
 )
 
 const Ap = ({
+  store,
   activeDataset,
   updateProperty,
   updatePropertyInDb,
   apUmsetzungen,
-  adressen,
   apStati,
   artList,
   artValues,
@@ -227,7 +218,7 @@ const Ap = ({
           fieldName="ApBearb"
           value={activeDataset.row.ApBearb}
           errorText={activeDataset.valid.ApBearb}
-          dataSource={adressen}
+          dataSource={store.dropdownList.adressen}
           valueProp="AdrId"
           labelProp="AdrName"
           updatePropertyInDb={updatePropertyInDb}
@@ -248,7 +239,6 @@ const Ap = ({
 Ap.propTypes = {
   store: PropTypes.object.isRequired,
   apUmsetzungen: PropTypes.array.isRequired,
-  adressen: PropTypes.array.isRequired,
   apStati: PropTypes.array.isRequired,
   artList: PropTypes.array.isRequired,
   artValues: PropTypes.object.isRequired,

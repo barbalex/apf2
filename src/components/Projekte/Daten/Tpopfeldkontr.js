@@ -76,14 +76,6 @@ const enhance = compose(
       value: el.BeurteilId,
       label: el.BeurteilTxt,
     }))
-    const adressen = sortBy(
-      Array.from(store.table.adresse.values()),
-      `AdrName`
-    )
-    adressen.unshift({
-      id: null,
-      AdrName: ``,
-    })
     let tpopEntwicklungWerte = Array.from(
       store.table.tpop_entwicklung_werte.values()
     )
@@ -110,7 +102,6 @@ const enhance = compose(
     const tab = store.urlQuery.feldkontrTab || `entwicklung`
     return {
       tpopmassnErfbeurtWerte,
-      adressen,
       tpopEntwicklungWerte,
       idbiotopuebereinstWerte,
       lr,
@@ -130,7 +121,6 @@ const Tpopfeldkontr = ({
   store,
   onChangeTab,
   styles,
-  adressen,
   tpopEntwicklungWerte,
   idbiotopuebereinstWerte,
   lr,
@@ -181,7 +171,7 @@ const Tpopfeldkontr = ({
                     fieldName="TPopKontrBearb"
                     value={activeDataset.row.TPopKontrBearb}
                     errorText={activeDataset.valid.TPopKontrBearb}
-                    dataSource={adressen}
+                    dataSource={store.dropdownList.adressen}
                     valueProp="AdrId"
                     labelProp="AdrName"
                     updatePropertyInDb={store.updatePropertyInDb}
@@ -483,7 +473,6 @@ Tpopfeldkontr.propTypes = {
   store: PropTypes.object.isRequired,
   onChangeTab: PropTypes.func.isRequired,
   styles: PropTypes.object.isRequired,
-  adressen: PropTypes.array.isRequired,
   tpopEntwicklungWerte: PropTypes.array.isRequired,
   idbiotopuebereinstWerte: PropTypes.array.isRequired,
   lr: PropTypes.array.isRequired,

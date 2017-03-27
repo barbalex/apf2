@@ -39,21 +39,12 @@ const enhance = compose(
       value: el.MassnTypCode,
       label: el.MassnTypTxt,
     }))
-    const adressen = sortBy(
-      Array.from(store.table.adresse.values()),
-      `AdrName`
-    )
-    adressen.unshift({
-      id: null,
-      AdrName: ``,
-    })
     let artnamen = Array.from(
       store.table.adb_eigenschaften.values()
     )
     artnamen = artnamen.map(a => a.Artname).sort()
     return {
       tpopMassnTypWerte,
-      adressen,
       artnamen,
     }
   }),
@@ -69,13 +60,13 @@ const enhance = compose(
 
 const Tpopmassn = ({
   tpopMassnTypWerte,
-  adressen,
   artnamen,
   store,
   onNewRequestWirtspflanze,
   onBlurWirtspflanze,
 }) => {
   const { activeDataset } = store
+
   return (
     <Container>
       <FormTitle title="Massnahme" />
@@ -115,7 +106,7 @@ const Tpopmassn = ({
             fieldName="TPopMassnBearb"
             value={activeDataset.row.TPopMassnBearb}
             errorText={activeDataset.valid.TPopMassnBearb}
-            dataSource={adressen}
+            dataSource={store.dropdownList.adressen}
             valueProp="AdrId"
             labelProp="AdrName"
             updatePropertyInDb={store.updatePropertyInDb}
@@ -251,7 +242,6 @@ const Tpopmassn = ({
 Tpopmassn.propTypes = {
   store: PropTypes.object.isRequired,
   tpopMassnTypWerte: PropTypes.array.isRequired,
-  adressen: PropTypes.array.isRequired,
   artnamen: PropTypes.array.isRequired,
   onNewRequestWirtspflanze: PropTypes.func.isRequired,
   onBlurWirtspflanze: PropTypes.func.isRequired,
