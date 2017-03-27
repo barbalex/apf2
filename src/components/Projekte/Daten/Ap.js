@@ -63,15 +63,6 @@ const enhance = compose(
       updatePropertyInDb,
     } = store
     const { adb_eigenschaften } = store.table
-    const alreadyUsedApIds = Array.from(store.table.ap.keys()).map(a => Number(a))
-    // let user choose this ApArtId
-    const apArtIdsNotToShow = alreadyUsedApIds
-      .filter(r => r !== store.activeUrlElements.ap)
-    let artList = filter(
-      Array.from(adb_eigenschaften.values()),
-      r => !apArtIdsNotToShow.includes(r.TaxonomieId)
-    )
-    artList = sortBy(artList, `Artname`)
     let artwert = `Diese Art hat keinen Artwert`
     let artname = ``
     if (store.activeUrlElements.ap && adb_eigenschaften.size > 0) {
@@ -85,7 +76,6 @@ const enhance = compose(
     }
     const artValues = { artwert, artname }
     return {
-      artList,
       artValues,
       activeDataset,
       updateProperty,
@@ -100,7 +90,6 @@ const Ap = ({
   activeDataset,
   updateProperty,
   updatePropertyInDb,
-  artList,
   artValues,
 }) =>
   <Container>
@@ -112,7 +101,7 @@ const Ap = ({
           fieldName="ApArtId"
           valueText={artValues.artname}
           errorText={activeDataset.valid.ApArtId}
-          dataSource={artList}
+          dataSource={store.dropdownList.artListForAp}
           dataSourceConfig={{
             value: `TaxonomieId`,
             text: `Artname`,
@@ -218,7 +207,6 @@ const Ap = ({
 
 Ap.propTypes = {
   store: PropTypes.object.isRequired,
-  artList: PropTypes.array.isRequired,
   artValues: PropTypes.object.isRequired,
   activeDataset: PropTypes.object.isRequired,
   updateProperty: PropTypes.func.isRequired,

@@ -9,6 +9,7 @@ import {
 } from 'mobx'
 import $ from 'jquery'
 import sortBy from 'lodash/sortBy'
+import filter from 'lodash/filter'
 
 import fetchTable from '../modules/fetchTable'
 import fetchBeobzuordnungModule from '../modules/fetchBeobzuordnung'
@@ -218,6 +219,20 @@ function Store() {
         }))
       },
       { name: `dropdownListApStati` }
+    ),
+    artListForAp: computed(
+      () => {
+        const alreadyUsedApIds = Array.from(this.table.ap.keys()).map(a => Number(a))
+        // let user choose this ApArtId
+        const apArtIdsNotToShow = alreadyUsedApIds
+          .filter(r => r !== this.activeUrlElements.ap)
+        const artList = filter(
+          Array.from(this.table.adb_eigenschaften.values()),
+          r => !apArtIdsNotToShow.includes(r.TaxonomieId)
+        )
+        return sortBy(artList, `Artname`)
+      },
+      { name: `dropdownListArtListForAp` }
     ),
   })
   extendObservable(this.node, {
