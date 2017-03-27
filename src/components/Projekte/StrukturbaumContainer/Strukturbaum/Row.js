@@ -145,6 +145,10 @@ const showTpopBeobFilteredMapIcon = (store, node) => (
   )
 )
 
+/**
+ * checking props change according to
+ * https://marmelab.com/blog/2017/02/06/react-is-slow-react-is-fast.html
+ */
 const checkPropsChange = (props, nextProps) => {
   return (
     nextProps.node !== props.node ||
