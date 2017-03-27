@@ -4,7 +4,6 @@ import { observer, inject } from 'mobx-react'
 import AutoComplete from 'material-ui/AutoComplete'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
-import withProps from 'recompose/withProps'
 import withHandlers from 'recompose/withHandlers'
 import { Scrollbars } from 'react-custom-scrollbars'
 
@@ -28,16 +27,6 @@ const FieldsContainer = styled.div`
 
 const enhance = compose(
   inject(`store`),
-  withProps((props) => {
-    const { store } = props
-    let artnamen = Array.from(
-      store.table.adb_eigenschaften.values()
-    )
-    artnamen = artnamen.map(a => a.Artname).sort()
-    return {
-      artnamen,
-    }
-  }),
   withHandlers({
     onNewRequestWirtspflanze: props => val =>
       props.store.updatePropertyInDb(`TPopMassnAnsiedWirtspfl`, val),
@@ -49,7 +38,6 @@ const enhance = compose(
 )
 
 const Tpopmassn = ({
-  artnamen,
   store,
   onNewRequestWirtspflanze,
   onBlurWirtspflanze,
@@ -197,7 +185,7 @@ const Tpopmassn = ({
             searchText={activeDataset.row.TPopMassnAnsiedWirtspfl || ``}
             errorText={activeDataset.valid.TPopMassnAnsiedWirtspfl}
             filter={AutoComplete.caseInsensitiveFilter}
-            dataSource={artnamen}
+            dataSource={store.dropdownList.artnamen}
             maxSearchResults={20}
             onNewRequest={onNewRequestWirtspflanze}
             onBlur={onBlurWirtspflanze}
@@ -230,7 +218,6 @@ const Tpopmassn = ({
 
 Tpopmassn.propTypes = {
   store: PropTypes.object.isRequired,
-  artnamen: PropTypes.array.isRequired,
   onNewRequestWirtspflanze: PropTypes.func.isRequired,
   onBlurWirtspflanze: PropTypes.func.isRequired,
 }

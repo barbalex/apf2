@@ -179,6 +179,7 @@ function Store() {
     apUmsetzungen: [],
     apStati: [],
     artListForAp: [],
+    artnamen: [],
     popEntwicklungWerte: [],
     tpopEntwicklungWerte: [],
     apErfkritWerte: [],
@@ -245,6 +246,17 @@ function Store() {
         return sortBy(artList, `Artname`)
       },
       { name: `dropdownListArtListForAp` }
+    ),
+    artnamen: computed(
+      () => {
+        let artnamen = Array.from(
+          this.table.adb_eigenschaften.values()
+        )
+        artnamen = artnamen.map(a => a.Artname).sort()
+        // artnamen.unshift(``)
+        return artnamen
+      },
+      { name: `dropdownListArtnamen` }
     ),
     popEntwicklungWerte: computed(
       () => {
