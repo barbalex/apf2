@@ -1,10 +1,8 @@
 // @flow
 import React, { PropTypes } from 'react'
 import { observer, inject } from 'mobx-react'
-import sortBy from 'lodash/sortBy'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
-import withProps from 'recompose/withProps'
 
 import RadioButtonGroup from '../../shared/RadioButtonGroup'
 import Label from '../../shared/Label'
@@ -24,21 +22,10 @@ const FieldsContainer = styled.div`
 
 const enhance = compose(
   inject(`store`),
-  withProps((props) => {
-    let zielTypWerte = Array.from(
-      props.store.table.ziel_typ_werte.values()
-    )
-    zielTypWerte = sortBy(zielTypWerte, `ZieltypOrd`)
-    zielTypWerte = zielTypWerte.map(el => ({
-      value: el.ZieltypId,
-      label: el.ZieltypTxt,
-    }))
-    return { zielTypWerte }
-  }),
   observer
 )
 
-const Ziel = ({ store, zielTypWerte }) => {
+const Ziel = ({ store }) => {
   const { activeDataset } = store
   return (
     <Container>
@@ -58,7 +45,7 @@ const Ziel = ({ store, zielTypWerte }) => {
           fieldName="ZielTyp"
           value={activeDataset.row.ZielTyp}
           errorText={activeDataset.valid.ZielTyp}
-          dataSource={zielTypWerte}
+          dataSource={store.dropdownList.zielTypWerte}
           updatePropertyInDb={store.updatePropertyInDb}
         />
         <TextField
@@ -79,7 +66,6 @@ const Ziel = ({ store, zielTypWerte }) => {
 
 Ziel.propTypes = {
   store: PropTypes.object.isRequired,
-  zielTypWerte: PropTypes.array.isRequired,
 }
 
 export default enhance(Ziel)
