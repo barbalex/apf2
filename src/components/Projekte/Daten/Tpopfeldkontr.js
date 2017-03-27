@@ -1,7 +1,6 @@
 // @flow
 import React, { PropTypes } from 'react'
 import { observer, inject } from 'mobx-react'
-import sortBy from 'lodash/sortBy'
 import { Tabs, Tab } from 'material-ui/Tabs'
 import AutoComplete from 'material-ui/AutoComplete'
 import styled from 'styled-components'
