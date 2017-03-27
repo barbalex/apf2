@@ -1,10 +1,8 @@
 // @flow
 import React, { PropTypes } from 'react'
 import { observer, inject } from 'mobx-react'
-import sortBy from 'lodash/sortBy'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
-import withProps from 'recompose/withProps'
 import { Scrollbars } from 'react-custom-scrollbars'
 
 import RadioButtonGroup from '../../shared/RadioButtonGroup'
@@ -24,27 +22,10 @@ const FieldsContainer = styled.div`
 
 const enhance = compose(
   inject(`store`),
-  withProps((props) => {
-    const { store } = props
-    let methodeWerte = Array.from(
-      store.table.tpopkontrzaehl_methode_werte.values()
-    )
-    methodeWerte = sortBy(methodeWerte, `BeurteilOrd`)
-    methodeWerte = methodeWerte.map(el => ({
-      value: el.BeurteilCode,
-      label: el.BeurteilTxt,
-    }))
-    return {
-      methodeWerte,
-    }
-  }),
   observer
 )
 
-const Tpopkontrzaehl = ({
-  store,
-  methodeWerte,
-}) => {
+const Tpopkontrzaehl = ({ store }) => {
   const { activeDataset } = store
   return (
     <Container>
@@ -75,7 +56,7 @@ const Tpopkontrzaehl = ({
             fieldName="Methode"
             value={activeDataset.row.Methode}
             errorText={activeDataset.valid.Methode}
-            dataSource={methodeWerte}
+            dataSource={store.dropdownList.methodeWerte}
             updatePropertyInDb={store.updatePropertyInDb}
           />
         </FieldsContainer>
@@ -86,7 +67,6 @@ const Tpopkontrzaehl = ({
 
 Tpopkontrzaehl.propTypes = {
   store: PropTypes.object.isRequired,
-  methodeWerte: PropTypes.array.isRequired,
 }
 
 export default enhance(Tpopkontrzaehl)

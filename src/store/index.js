@@ -188,6 +188,7 @@ function Store() {
     idbiotopuebereinstWerte: [],
     lr: [],
     zaehleinheitWerte: [],
+    methodeWerte: [],
   }
   extendObservable(this.dropdownList, {
     adressen: computed(
@@ -350,6 +351,20 @@ function Store() {
         return zaehleinheitWerte
       },
       { name: `dropdownListZaehleinheitWerte` }
+    ),
+    methodeWerte: computed(
+      () => {
+        let methodeWerte = Array.from(
+          this.table.tpopkontrzaehl_methode_werte.values()
+        )
+        methodeWerte = sortBy(methodeWerte, `BeurteilOrd`)
+        methodeWerte = methodeWerte.map(el => ({
+          value: el.BeurteilCode,
+          label: el.BeurteilTxt,
+        }))
+        return methodeWerte
+      },
+      { name: `dropdownListMethodeWerte` }
     ),
   })
   extendObservable(this.node, {
