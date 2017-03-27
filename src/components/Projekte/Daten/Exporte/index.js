@@ -79,10 +79,22 @@ const enhance = compose(
 
       axios.get(url)
         .then(({ data }) => {
+          let jsonData = data
           // now we could manipulate the data, for instance apply mapFilter
-          console.log(`data:`, data)
+          if (store.node.applyMapFilterToExport) {
+            console.log(`jsonData before filtering:`, jsonData)
+            // filter data
+            const popIds = store.node.nodeMapFilter.get(`pop`)
+            const tpopIds = store.node.nodeMapFilter.get(`tpop`)
+            if (popIds.length > 0) {
+
+            }
+            if (tpopIds.length > 0) {
+
+            }
+          }
           try {
-            const csvData = json2csv({ data })
+            const csvData = json2csv({ jsonData })
             const file = `${fileName}_${format(new Date(), `YYYY-MM-DD_HH-mm-ss`)}`
             fileDownload(csvData, `${file}.csv`)
             if (artFuerEierlegendeWollmilchsau) {
