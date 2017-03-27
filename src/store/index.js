@@ -182,6 +182,7 @@ function Store() {
     popEntwicklungWerte: [],
     apErfkritWerte: [],
     tpopmassnErfbeurtWerte: [],
+    tpopApBerichtRelevantWerte: [],
   }
   extendObservable(this.dropdownList, {
     adressen: computed(
@@ -272,6 +273,18 @@ function Store() {
         }))
       },
       { name: `dropdownListTpopmassnErfbeurtWerte` }
+    ),
+    tpopApBerichtRelevantWerte: computed(
+      () => {
+        const tpopApBerichtRelevantWerte = Array.from(
+          this.table.tpop_apberrelevant_werte.values()
+        )
+        return tpopApBerichtRelevantWerte.map(t => ({
+          value: t.DomainCode,
+          label: t.DomainTxt,
+        }))
+      },
+      { name: `dropdownListTpopApBerichtRelevantWerte` }
     ),
   })
   extendObservable(this.node, {

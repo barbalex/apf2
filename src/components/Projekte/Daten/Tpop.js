@@ -43,26 +43,18 @@ const enhance = compose(
   inject(`store`),
   withProps((props) => {
     const { store } = props
-    let tpopApBerichtRelevantWerte = Array.from(
-      store.table.tpop_apberrelevant_werte.values()
-    )
-    tpopApBerichtRelevantWerte = tpopApBerichtRelevantWerte.map(t => ({
-      value: t.DomainCode,
-      label: t.DomainTxt,
-    }))
     let gemeinden = Array.from(
       store.table.gemeinde.values()
     )
     gemeinden = sortBy(gemeinden, `GmdName`)
     gemeinden = gemeinden.map(el => el.GmdName)
-    return { tpopApBerichtRelevantWerte, gemeinden }
+    return { gemeinden }
   }),
   observer
 )
 
 const Tpop = ({
   store,
-  tpopApBerichtRelevantWerte,
   gemeinden,
 }) => {
   const { activeDataset } = store
@@ -129,7 +121,7 @@ const Tpop = ({
           <RadioButtonGroupWithInfo
             fieldName="TPopApBerichtRelevant"
             value={activeDataset.row.TPopApBerichtRelevant}
-            dataSource={tpopApBerichtRelevantWerte}
+            dataSource={store.dropdownList.tpopApBerichtRelevantWerte}
             updatePropertyInDb={store.updatePropertyInDb}
             popover={TpopAbBerRelevantInfoPopover}
           />
@@ -295,7 +287,6 @@ const Tpop = ({
 
 Tpop.propTypes = {
   store: PropTypes.object.isRequired,
-  tpopApBerichtRelevantWerte: PropTypes.array.isRequired,
   gemeinden: PropTypes.array.isRequired,
 }
 
