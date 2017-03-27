@@ -80,22 +80,60 @@ const enhance = compose(
 
       axios.get(url)
         .then(({ data }) => {
+          console.log(`data:`, data)
+          console.log(`data.length:`, data.length)
+          const { applyMapFilterToExport, nodeMapFilter } = store.node
           let jsonData = clone(data)
           // now we could manipulate the data, for instance apply mapFilter
-          if (store.node.applyMapFilterToExport) {
-            console.log(`jsonData before filtering:`, jsonData)
+          if (applyMapFilterToExport) {
+            const keys = Object.keys(data[0])
+            console.log(`keys:`, keys)
             // filter data
-            const popIds = store.node.nodeMapFilter.get(`pop`)
-            const tpopIds = store.node.nodeMapFilter.get(`tpop`)
-            if (popIds.length > 0) {
-
+            const popIds = nodeMapFilter.get(`pop`)
+            const tpopIds = nodeMapFilter.get(`tpop`)
+            const beobNichtZuzuordnenIds = nodeMapFilter.get(`beobNichtZuzuordnen`)
+            const tpopBeobIds = nodeMapFilter.get(`tpopBeob`)
+            const beobNichtBeurteiltIds = nodeMapFilter.get(`beobNichtBeurteilt`)
+            if (popIds.length > 0 && keys.includes(`PopId`)) {
+              console.log(`filtering by PopId`)
+              jsonData = jsonData.filter(d => popIds.includes(d.PopId))
             }
-            if (tpopIds.length > 0) {
-
+            if (tpopIds.length > 0 && keys.includes(`TPopId`)) {
+              console.log(`filtering by TPopId`)
+              jsonData = jsonData.filter(d => tpopIds.includes(d.TPopId))
+            }
+            if (beobNichtZuzuordnenIds.length > 0 && keys.includes(`BeobId`)) {
+              console.log(`filtering by beobNichtZuzuordnenId`)
+              jsonData = jsonData.filter((d) => {
+                if (d.BeobNichtZuordnen && d.BeobNichtZuordnen === 1) {
+                  return beobNichtZuzuordnenIds.includes(d.BeobId)
+                }
+                return true
+              })
+            }
+            if (tpopBeobIds.length > 0 && keys.includes(`BeobId`)) {
+              console.log(`filtering by tpopBeobId`)
+              jsonData = jsonData.filter((d) => {
+                if (d.TPopId && d.TPopId > 0) {
+                  return tpopBeobIds.includes(d.BeobId)
+                }
+                return true
+              })
+            }
+            if (beobNichtBeurteiltIds.length > 0 && keys.includes(`BeobId`)) {
+              console.log(`filtering by beobNichtBeurteiltId`)
+              jsonData = jsonData.filter((d) => {
+                if (!d.TPopId && !d.beobNichtZuordnen) {
+                  return beobNichtBeurteiltIds.includes(d.BeobId)
+                }
+                return true
+              })
             }
           }
           try {
-            const csvData = json2csv({ data })
+            console.log(`data before filtering:`, jsonData)
+            console.log(`data.length before filtering:`, jsonData.length)
+            const csvData = json2csv({ data: jsonData })
             const file = `${fileName}_${format(new Date(), `YYYY-MM-DD_HH-mm-ss`)}`
             fileDownload(csvData, `${file}.csv`)
             if (artFuerEierlegendeWollmilchsau) {
