@@ -70,12 +70,6 @@ const enhance = compose(
         height: `100%`,
       },
     }
-    let tpopmassnErfbeurtWerte = Array.from(store.table.tpopmassn_erfbeurt_werte.values())
-    tpopmassnErfbeurtWerte = sortBy(tpopmassnErfbeurtWerte, `BeurteilOrd`)
-    tpopmassnErfbeurtWerte = tpopmassnErfbeurtWerte.map(el => ({
-      value: el.BeurteilId,
-      label: el.BeurteilTxt,
-    }))
     let tpopEntwicklungWerte = Array.from(
       store.table.tpop_entwicklung_werte.values()
     )
@@ -101,7 +95,6 @@ const enhance = compose(
     }]
     const tab = store.urlQuery.feldkontrTab || `entwicklung`
     return {
-      tpopmassnErfbeurtWerte,
       tpopEntwicklungWerte,
       idbiotopuebereinstWerte,
       lr,

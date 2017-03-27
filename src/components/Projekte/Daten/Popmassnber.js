@@ -1,10 +1,8 @@
 // @flow
 import React, { PropTypes } from 'react'
 import { observer, inject } from 'mobx-react'
-import sortBy from 'lodash/sortBy'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
-import withProps from 'recompose/withProps'
 import { Scrollbars } from 'react-custom-scrollbars'
 
 import RadioButtonGroup from '../../shared/RadioButtonGroup'
@@ -23,23 +21,10 @@ const FieldsContainer = styled.div`
 
 const enhance = compose(
   inject(`store`),
-  withProps((props) => {
-    const { store } = props
-    let tpopmassnErfbeurtWerte = Array.from(store.table.tpopmassn_erfbeurt_werte.values())
-    tpopmassnErfbeurtWerte = sortBy(tpopmassnErfbeurtWerte, `BeurteilOrd`)
-    tpopmassnErfbeurtWerte = tpopmassnErfbeurtWerte.map(el => ({
-      value: el.BeurteilId,
-      label: el.BeurteilTxt,
-    }))
-    return { tpopmassnErfbeurtWerte }
-  }),
   observer
 )
 
-const Popmassnber = ({
-  store,
-  tpopmassnErfbeurtWerte,
-}) => {
+const Popmassnber = ({ store }) => {
   const { activeDataset } = store
   return (
     <Container>
@@ -60,7 +45,7 @@ const Popmassnber = ({
             fieldName="PopMassnBerErfolgsbeurteilung"
             value={activeDataset.row.PopMassnBerErfolgsbeurteilung}
             errorText={activeDataset.valid.PopMassnBerErfolgsbeurteilung}
-            dataSource={tpopmassnErfbeurtWerte}
+            dataSource={store.dropdownList.tpopmassnErfbeurtWerte}
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
@@ -82,7 +67,6 @@ const Popmassnber = ({
 
 Popmassnber.propTypes = {
   store: PropTypes.object.isRequired,
-  tpopmassnErfbeurtWerte: PropTypes.array.isRequired,
 }
 
 export default enhance(Popmassnber)

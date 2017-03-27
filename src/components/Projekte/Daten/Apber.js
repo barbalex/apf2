@@ -22,17 +22,6 @@ const FieldsContainer = styled.div`
   padding-bottom: 45px;
 `
 
-const getApErfkritWerte = ({ store }) => {
-  let apErfkritWerte = Array.from(
-    store.table.ap_erfkrit_werte.values()
-  )
-  apErfkritWerte = sortBy(apErfkritWerte, `BeurteilOrd`)
-  return apErfkritWerte.map(el => ({
-    value: el.BeurteilId,
-    label: el.BeurteilTxt,
-  }))
-}
-
 const enhance = compose(
   inject(`store`),
   observer
@@ -75,7 +64,7 @@ const Apber = ({ store }) => {
             fieldName="JBerBeurteilung"
             value={activeDataset.row.JBerBeurteilung}
             errorText={activeDataset.valid.JBerBeurteilung}
-            dataSource={getApErfkritWerte({ store })}
+            dataSource={store.dropdownList.apErfkritWerte}
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <Label label="Veränderung zum Vorjahr" />

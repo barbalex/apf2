@@ -181,6 +181,7 @@ function Store() {
     artListForAp: [],
     popEntwicklungWerte: [],
     apErfkritWerte: [],
+    tpopmassnErfbeurtWerte: [],
   }
   extendObservable(this.dropdownList, {
     adressen: computed(
@@ -260,6 +261,17 @@ function Store() {
         }))
       },
       { name: `dropdownListApErfkritWerte` }
+    ),
+    tpopmassnErfbeurtWerte: computed(
+      () => {
+        let tpopmassnErfbeurtWerte = Array.from(this.table.tpopmassn_erfbeurt_werte.values())
+        tpopmassnErfbeurtWerte = sortBy(tpopmassnErfbeurtWerte, `BeurteilOrd`)
+        return tpopmassnErfbeurtWerte.map(el => ({
+          value: el.BeurteilId,
+          label: el.BeurteilTxt,
+        }))
+      },
+      { name: `dropdownListTpopmassnErfbeurtWerte` }
     ),
   })
   extendObservable(this.node, {
