@@ -2,8 +2,6 @@
 import React, { PropTypes } from 'react'
 import { observer, inject } from 'mobx-react'
 import styled from 'styled-components'
-import filter from 'lodash/filter'
-import sortBy from 'lodash/sortBy'
 import compose from 'recompose/compose'
 import withProps from 'recompose/withProps'
 import { Scrollbars } from 'react-custom-scrollbars'
@@ -74,9 +72,9 @@ const enhance = compose(
         artname = ae.Artname
       }
     }
-    const artValues = { artwert, artname }
     return {
-      artValues,
+      artwert,
+      artname,
       activeDataset,
       updateProperty,
       updatePropertyInDb,
@@ -90,7 +88,8 @@ const Ap = ({
   activeDataset,
   updateProperty,
   updatePropertyInDb,
-  artValues,
+  artwert,
+  artname,
 }) =>
   <Container>
     <FormTitle title="Art" />
@@ -99,7 +98,7 @@ const Ap = ({
         <AutoComplete
           label="Art"
           fieldName="ApArtId"
-          valueText={artValues.artname}
+          valueText={artname}
           errorText={activeDataset.valid.ApArtId}
           dataSource={store.dropdownList.artListForAp}
           dataSourceConfig={{
@@ -196,7 +195,7 @@ const Ap = ({
           <TextField
             label="Artwert"
             fieldName="ApJahr"
-            value={artValues.artwert}
+            value={artwert}
             type="text"
             disabled
           />
@@ -207,7 +206,6 @@ const Ap = ({
 
 Ap.propTypes = {
   store: PropTypes.object.isRequired,
-  artValues: PropTypes.object.isRequired,
   activeDataset: PropTypes.object.isRequired,
   updateProperty: PropTypes.func.isRequired,
   updatePropertyInDb: PropTypes.func.isRequired,
