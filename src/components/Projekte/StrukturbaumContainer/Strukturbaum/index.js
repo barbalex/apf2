@@ -89,6 +89,7 @@ class Strukturbaum extends Component {
       mapTpopVisible !== prevMapTpopVisible
     )
     if (somethingHasChanged) {
+      // $FlowIssue
       this.tree.forceUpdateGrid()
     }
   }
@@ -145,6 +146,7 @@ class Strukturbaum extends Component {
               width={width}
               {...nodes}
               // need to use innerRef because ListContainer is a styled component
+              // $FlowIssue
               innerRef={(c) => { this.tree = c }}
             />
           }
