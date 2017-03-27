@@ -168,6 +168,8 @@ function Store() {
     apFilter: false,
     nodeLabelFilter: {},
     nodeMapFilter: {},
+    applyMapFilterToTree: false,
+    applyMapFilterToExport: false,
     node: {
       node: {
         nodes: [],
@@ -425,6 +427,8 @@ function Store() {
       beobNichtZuzuordnen: [],
       tpopBeob: [],
     }),
+    applyMapFilterToTree: false,
+    applyMapFilterToExport: false,
     updateMapFilter: action(`updateMapFilter`, (mapFilterItems) => {
       if (!mapFilterItems) {
         this.node.nodeMapFilter.set(`tpop`, [])
