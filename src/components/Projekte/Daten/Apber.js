@@ -3,7 +3,6 @@ import React, { PropTypes } from 'react'
 import { observer, inject } from 'mobx-react'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
-import sortBy from 'lodash/sortBy'
 import { Scrollbars } from 'react-custom-scrollbars'
 
 import RadioButtonGroup from '../../shared/RadioButtonGroup'
