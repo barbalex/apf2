@@ -70,12 +70,6 @@ const enhance = compose(
         height: `100%`,
       },
     }
-    let idbiotopuebereinstWerte = Array.from(store.table.tpopkontr_idbiotuebereinst_werte.values())
-    idbiotopuebereinstWerte = sortBy(idbiotopuebereinstWerte, `DomainOrd`)
-    idbiotopuebereinstWerte = idbiotopuebereinstWerte.map(el => ({
-      value: el.DomainCode,
-      label: el.DomainTxt,
-    }))
     let lr = Array.from(store.table.adb_lr.values())
     lr = lr.map(e => e.Einheit.replace(/  +/g, ` `)) // eslint-disable-line no-regex-spaces
     const tpopkontrTypWerte = [{
@@ -87,7 +81,6 @@ const enhance = compose(
     }]
     const tab = store.urlQuery.feldkontrTab || `entwicklung`
     return {
-      idbiotopuebereinstWerte,
       lr,
       tpopkontrTypWerte,
       tab,
@@ -105,7 +98,6 @@ const Tpopfeldkontr = ({
   store,
   onChangeTab,
   styles,
-  idbiotopuebereinstWerte,
   lr,
   tpopkontrTypWerte,
   tab,
@@ -439,7 +431,7 @@ const Tpopfeldkontr = ({
                     fieldName="TPopKontrIdealBiotopUebereinst"
                     value={activeDataset.row.TPopKontrIdealBiotopUebereinst}
                     errorText={activeDataset.valid.TPopKontrIdealBiotopUebereinst}
-                    dataSource={idbiotopuebereinstWerte}
+                    dataSource={store.dropdownList.idbiotopuebereinstWerte}
                     updatePropertyInDb={store.updatePropertyInDb}
                   />
                 </FormContainer>
@@ -456,7 +448,6 @@ Tpopfeldkontr.propTypes = {
   store: PropTypes.object.isRequired,
   onChangeTab: PropTypes.func.isRequired,
   styles: PropTypes.object.isRequired,
-  idbiotopuebereinstWerte: PropTypes.array.isRequired,
   lr: PropTypes.array.isRequired,
   tpopkontrTypWerte: PropTypes.array.isRequired,
   tab: PropTypes.string.isRequired,

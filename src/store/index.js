@@ -185,6 +185,7 @@ function Store() {
     tpopmassnErfbeurtWerte: [],
     tpopApBerichtRelevantWerte: [],
     gemeinden: [],
+    idbiotopuebereinstWerte: [],
   }
   extendObservable(this.dropdownList, {
     adressen: computed(
@@ -310,6 +311,17 @@ function Store() {
         return gemeinden.map(el => el.GmdName)
       },
       { name: `dropdownListGemeinden` }
+    ),
+    idbiotopuebereinstWerte: computed(
+      () => {
+        let idbiotopuebereinstWerte = Array.from(this.table.tpopkontr_idbiotuebereinst_werte.values())
+        idbiotopuebereinstWerte = sortBy(idbiotopuebereinstWerte, `DomainOrd`)
+        return idbiotopuebereinstWerte.map(el => ({
+          value: el.DomainCode,
+          label: el.DomainTxt,
+        }))
+      },
+      { name: `dropdownListIdbiotopuebereinstWerte` }
     ),
   })
   extendObservable(this.node, {
