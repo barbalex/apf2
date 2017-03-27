@@ -180,9 +180,11 @@ function Store() {
     apStati: [],
     artListForAp: [],
     popEntwicklungWerte: [],
+    tpopEntwicklungWerte: [],
     apErfkritWerte: [],
     tpopmassnErfbeurtWerte: [],
     tpopApBerichtRelevantWerte: [],
+    gemeinden: [],
   }
   extendObservable(this.dropdownList, {
     adressen: computed(
@@ -250,6 +252,19 @@ function Store() {
       },
       { name: `dropdownListPopEntwicklungWerte` }
     ),
+    tpopEntwicklungWerte: computed(
+      () => {
+        let tpopEntwicklungWerte = Array.from(
+          this.table.tpop_entwicklung_werte.values()
+        )
+        tpopEntwicklungWerte = sortBy(tpopEntwicklungWerte, `EntwicklungOrd`)
+        return tpopEntwicklungWerte.map(el => ({
+          value: el.EntwicklungCode,
+          label: el.EntwicklungTxt,
+        }))
+      },
+      { name: `dropdownListTpopEntwicklungWerte` }
+    ),
     apErfkritWerte: computed(
       () => {
         let apErfkritWerte = Array.from(
@@ -285,6 +300,16 @@ function Store() {
         }))
       },
       { name: `dropdownListTpopApBerichtRelevantWerte` }
+    ),
+    gemeinden: computed(
+      () => {
+        let gemeinden = Array.from(
+          this.table.gemeinde.values()
+        )
+        gemeinden = sortBy(gemeinden, `GmdName`)
+        return gemeinden.map(el => el.GmdName)
+      },
+      { name: `dropdownListGemeinden` }
     ),
   })
   extendObservable(this.node, {

@@ -1,10 +1,8 @@
 // @flow
 import React, { PropTypes } from 'react'
 import { observer, inject } from 'mobx-react'
-import sortBy from 'lodash/sortBy'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
-import withProps from 'recompose/withProps'
 import { Scrollbars } from 'react-custom-scrollbars'
 
 import RadioButtonGroup from '../../shared/RadioButtonGroup'
@@ -23,25 +21,10 @@ const FieldsContainer = styled.div`
 
 const enhance = compose(
   inject(`store`),
-  withProps((props) => {
-    const { store } = props
-    let tpopEntwicklungWerte = Array.from(
-      store.table.tpop_entwicklung_werte.values()
-    )
-    tpopEntwicklungWerte = sortBy(tpopEntwicklungWerte, `EntwicklungOrd`)
-    tpopEntwicklungWerte = tpopEntwicklungWerte.map(el => ({
-      value: el.EntwicklungCode,
-      label: el.EntwicklungTxt,
-    }))
-    return { tpopEntwicklungWerte }
-  }),
   observer
 )
 
-const Tpopber = ({
-  store,
-  tpopEntwicklungWerte,
-}) => {
+const Tpopber = ({ store }) => {
   const { activeDataset } = store
   return (
     <Container>
@@ -62,7 +45,7 @@ const Tpopber = ({
             fieldName="TPopBerEntwicklung"
             value={activeDataset.row.TPopBerEntwicklung}
             errorText={activeDataset.valid.TPopBerEntwicklung}
-            dataSource={tpopEntwicklungWerte}
+            dataSource={store.dropdownList.tpopEntwicklungWerte}
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
@@ -84,7 +67,6 @@ const Tpopber = ({
 
 Tpopber.propTypes = {
   store: PropTypes.object.isRequired,
-  tpopEntwicklungWerte: PropTypes.array.isRequired,
 }
 
 export default enhance(Tpopber)

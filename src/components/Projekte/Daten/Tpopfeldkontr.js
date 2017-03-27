@@ -70,14 +70,6 @@ const enhance = compose(
         height: `100%`,
       },
     }
-    let tpopEntwicklungWerte = Array.from(
-      store.table.tpop_entwicklung_werte.values()
-    )
-    tpopEntwicklungWerte = sortBy(tpopEntwicklungWerte, `EntwicklungOrd`)
-    tpopEntwicklungWerte = tpopEntwicklungWerte.map(el => ({
-      value: el.EntwicklungCode,
-      label: el.EntwicklungTxt,
-    }))
     let idbiotopuebereinstWerte = Array.from(store.table.tpopkontr_idbiotuebereinst_werte.values())
     idbiotopuebereinstWerte = sortBy(idbiotopuebereinstWerte, `DomainOrd`)
     idbiotopuebereinstWerte = idbiotopuebereinstWerte.map(el => ({
@@ -95,7 +87,6 @@ const enhance = compose(
     }]
     const tab = store.urlQuery.feldkontrTab || `entwicklung`
     return {
-      tpopEntwicklungWerte,
       idbiotopuebereinstWerte,
       lr,
       tpopkontrTypWerte,
@@ -114,7 +105,6 @@ const Tpopfeldkontr = ({
   store,
   onChangeTab,
   styles,
-  tpopEntwicklungWerte,
   idbiotopuebereinstWerte,
   lr,
   tpopkontrTypWerte,
@@ -200,7 +190,7 @@ const Tpopfeldkontr = ({
                   <RadioButtonGroupWithInfo
                     fieldName="TPopKontrEntwicklung"
                     value={activeDataset.row.TPopKontrEntwicklung}
-                    dataSource={tpopEntwicklungWerte}
+                    dataSource={store.dropdownList.tpopEntwicklungWerte}
                     updatePropertyInDb={store.updatePropertyInDb}
                     popover={TpopfeldkontrentwicklungPopover}
                   />
@@ -466,7 +456,6 @@ Tpopfeldkontr.propTypes = {
   store: PropTypes.object.isRequired,
   onChangeTab: PropTypes.func.isRequired,
   styles: PropTypes.object.isRequired,
-  tpopEntwicklungWerte: PropTypes.array.isRequired,
   idbiotopuebereinstWerte: PropTypes.array.isRequired,
   lr: PropTypes.array.isRequired,
   tpopkontrTypWerte: PropTypes.array.isRequired,

@@ -1,11 +1,9 @@
 // @flow
 import React, { PropTypes } from 'react'
 import { observer, inject } from 'mobx-react'
-import sortBy from 'lodash/sortBy'
 import AutoComplete from 'material-ui/AutoComplete'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
-import withProps from 'recompose/withProps'
 import { Scrollbars } from 'react-custom-scrollbars'
 
 import TextField from '../../shared/TextField'
@@ -41,22 +39,10 @@ const PopoverContentRow = styled.div`
 
 const enhance = compose(
   inject(`store`),
-  withProps((props) => {
-    const { store } = props
-    let gemeinden = Array.from(
-      store.table.gemeinde.values()
-    )
-    gemeinden = sortBy(gemeinden, `GmdName`)
-    gemeinden = gemeinden.map(el => el.GmdName)
-    return { gemeinden }
-  }),
   observer
 )
 
-const Tpop = ({
-  store,
-  gemeinden,
-}) => {
+const Tpop = ({ store }) => {
   const { activeDataset } = store
   const apArtId = store.table.pop.get(activeDataset.row.PopId).ApArtId
   const apJahr = store.table.ap.get(apArtId).ApJahr
@@ -144,11 +130,11 @@ const Tpop = ({
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <AutoComplete
-            hintText={gemeinden.length === 0 ? `lade Daten...` : ``}
+            hintText={store.dropdownList.gemeinden.length === 0 ? `lade Daten...` : ``}
             fullWidth
             floatingLabelText="Gemeinde"
             openOnFocus
-            dataSource={gemeinden}
+            dataSource={store.dropdownList.gemeinden}
             searchText={activeDataset.row.TPopGemeinde || ``}
             filter={AutoComplete.caseInsensitiveFilter}
             maxSearchResults={20}
@@ -287,7 +273,6 @@ const Tpop = ({
 
 Tpop.propTypes = {
   store: PropTypes.object.isRequired,
-  gemeinden: PropTypes.array.isRequired,
 }
 
 export default enhance(Tpop)
