@@ -82,8 +82,7 @@ const enhance = compose(
 
       axios.get(url)
         .then(({ data }) => {
-          console.log(`data:`, data)
-          console.log(`data.length:`, data.length)
+          console.log(`data.length before filtering:`, data.length)
           const {
             nodeMapFilter,
             applyMapFilterToExport,
@@ -92,25 +91,24 @@ const enhance = compose(
           } = store.node
           let jsonData = clone(data)
           // now we could manipulate the data, for instance apply mapFilter
-          if (applyMapFilterToExport) {
+          if (filterFeatures.length > 0 && applyMapFilterToExport) {
             const keys = Object.keys(data[0])
             console.log(`keys:`, keys)
             // filter data
-            const filterFeatures = nodeMapFilter.filter.features
             const beobNichtZuzuordnenIds = nodeMapFilter.beobNichtZuzuordnen
             const tpopBeobIds = nodeMapFilter.tpopBeob
             const beobNichtBeurteiltIds = nodeMapFilter.beobNichtBeurteilt
-            if (filterFeatures.length > 0 && keys.includes(`PopId`)) {
+            if (keys.includes(`PopId`)) {
               console.log(`filtering by PopId`)
               const popIds = popIdsInsideFeatureCollection(store, data)
               jsonData = jsonData.filter(d => popIds.includes(d.PopId))
             }
-            if (filterFeatures.length > 0 && keys.includes(`TPopId`)) {
+            if (keys.includes(`TPopId`)) {
               console.log(`filtering by TPopId`)
               const tpopIds = tpopIdsInsideFeatureCollection(store, data)
               jsonData = jsonData.filter(d => tpopIds.includes(d.TPopId))
             }
-            if (filterFeatures.length > 0 && keys.includes(`BeobId`)) {
+            if (keys.includes(`BeobId`)) {
               console.log(`filtering by beobNichtZuzuordnenId`)
               jsonData = jsonData.filter((d) => {
                 if (d.BeobNichtZuordnen && d.BeobNichtZuordnen === 1) {
@@ -119,7 +117,7 @@ const enhance = compose(
                 return true
               })
             }
-            if (filterFeatures.length > 0 && keys.includes(`BeobId`)) {
+            if (keys.includes(`BeobId`)) {
               console.log(`filtering by tpopBeobId`)
               jsonData = jsonData.filter((d) => {
                 if (d.TPopId && d.TPopId > 0) {
@@ -128,7 +126,7 @@ const enhance = compose(
                 return true
               })
             }
-            if (filterFeatures.length > 0 && keys.includes(`BeobId`)) {
+            if (keys.includes(`BeobId`)) {
               console.log(`filtering by beobNichtBeurteiltId`)
               jsonData = jsonData.filter((d) => {
                 if (!d.TPopId && !d.beobNichtZuordnen) {
@@ -139,8 +137,7 @@ const enhance = compose(
             }
           }
           try {
-            console.log(`data before filtering:`, jsonData)
-            console.log(`data.length before filtering:`, jsonData.length)
+            console.log(`data.length after filtering:`, jsonData.length)
             const csvData = json2csv({ data: jsonData })
             const file = `${fileName}_${format(new Date(), `YYYY-MM-DD_HH-mm-ss`)}`
             fileDownload(csvData, `${file}.csv`)
