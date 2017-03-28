@@ -23,6 +23,7 @@ import apiBaseUrl from '../../../../modules/apiBaseUrl'
 import Tipps from './Tipps'
 import Optionen from './Optionen'
 import popIdsInsideFeatureCollection from '../../../../modules/popIdsInsideFeatureCollection'
+import tpopIdsInsideFeatureCollection from '../../../../modules/tpopIdsInsideFeatureCollection'
 
 const Container = styled.div`
   height: 100%;
@@ -83,7 +84,12 @@ const enhance = compose(
         .then(({ data }) => {
           console.log(`data:`, data)
           console.log(`data.length:`, data.length)
-          const { nodeMapFilter, applyMapFilterToExport } = store.node
+          const {
+            nodeMapFilter,
+            applyMapFilterToExport,
+            applyNodeLabelFilterToExport,
+            applyActiveNodeFilterToExport,
+          } = store.node
           let jsonData = clone(data)
           // now we could manipulate the data, for instance apply mapFilter
           if (applyMapFilterToExport) {
@@ -91,7 +97,6 @@ const enhance = compose(
             console.log(`keys:`, keys)
             // filter data
             const filterFeatures = nodeMapFilter.filter.features
-            const tpopIds = nodeMapFilter.tpop
             const beobNichtZuzuordnenIds = nodeMapFilter.beobNichtZuzuordnen
             const tpopBeobIds = nodeMapFilter.tpopBeob
             const beobNichtBeurteiltIds = nodeMapFilter.beobNichtBeurteilt
@@ -102,6 +107,7 @@ const enhance = compose(
             }
             if (filterFeatures.length > 0 && keys.includes(`TPopId`)) {
               console.log(`filtering by TPopId`)
+              const tpopIds = tpopIdsInsideFeatureCollection(store, data)
               jsonData = jsonData.filter(d => tpopIds.includes(d.TPopId))
             }
             if (filterFeatures.length > 0 && keys.includes(`BeobId`)) {
