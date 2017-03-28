@@ -237,90 +237,99 @@ const SortableItem = SortableElement(({ apfloraLayer, store, activeApfloraLayers
             </TpopBeobAssignPolylinesIcon>
           </MapIconDiv>
         }
-        <FilterDiv>
+        {
+          false &&
+          <FilterDiv>
+            {
+              [`Pop`, `Tpop`, `BeobNichtBeurteilt`, `BeobNichtZuzuordnen`, `TpopBeob`].includes(apfloraLayer.value) &&
+              <FilterIcon
+                className="material-icons"
+                title="mit Umriss(en) filtern"
+                style={{
+                  color: store.map.activeApfloraLayers.includes(apfloraLayer.value) ? `black` : `#e2e2e2`,
+                  cursor: store.map.activeApfloraLayers.includes(apfloraLayer.value) ? `pointer` : `inherit`,
+                }}
+                onClick={() => {
+                  if (activeApfloraLayers.includes(`MapFilter`)) {
+                    return store.map.removeActiveApfloraLayer(`MapFilter`)
+                  }
+                  store.map.addActiveApfloraLayer(`MapFilter`)
+                  // this does not work, see: https://github.com/Leaflet/Leaflet.draw/issues/708
+                  //window.L.Draw.Rectangle.initialize()
+                }}
+              >
+                photo_filter
+              </FilterIcon>
+            }
+          </FilterDiv>
+        }
+        <ZoomToDiv>
           {
-            [`Pop`, `Tpop`, `BeobNichtBeurteilt`, `BeobNichtZuzuordnen`, `TpopBeob`].includes(apfloraLayer.value) &&
-            <FilterIcon
+            apfloraLayer.value !== `MapFilter` &&
+            <ZoomToIcon
               className="material-icons"
-              title="mit Umriss(en) filtern"
+              title={`auf alle '${apfloraLayer.label}' zoomen`}
               style={{
-                color: store.map.activeApfloraLayers.includes(apfloraLayer.value) ? `black` : `#e2e2e2`,
-                cursor: store.map.activeApfloraLayers.includes(apfloraLayer.value) ? `pointer` : `inherit`,
+                color: activeApfloraLayers.includes(apfloraLayer.value) ? `black` : `#e2e2e2`,
+                cursor: activeApfloraLayers.includes(apfloraLayer.value) ? `pointer` : `inherit`,
               }}
               onClick={() => {
-                if (activeApfloraLayers.includes(`MapFilter`)) {
-                  return store.map.removeActiveApfloraLayer(`MapFilter`)
+                if (activeApfloraLayers.includes(apfloraLayer.value)) {
+                  store.map.changeBounds(
+                    store.map[mapNameToStoreNameObject[apfloraLayer.value]].bounds
+                  )
                 }
-                store.map.addActiveApfloraLayer(`MapFilter`)
-                // this does not work, see: https://github.com/Leaflet/Leaflet.draw/issues/708
-                //window.L.Draw.Rectangle.initialize()
               }}
             >
-              photo_filter
-            </FilterIcon>
+              filter_center_focus
+            </ZoomToIcon>
           }
-        </FilterDiv>
-        <ZoomToDiv>
-          <ZoomToIcon
-            className="material-icons"
-            title={`auf alle '${apfloraLayer.label}' zoomen`}
-            style={{
-              color: activeApfloraLayers.includes(apfloraLayer.value) ? `black` : `#e2e2e2`,
-              cursor: activeApfloraLayers.includes(apfloraLayer.value) ? `pointer` : `inherit`,
-            }}
-            onClick={() => {
-              if (activeApfloraLayers.includes(apfloraLayer.value)) {
-                store.map.changeBounds(
-                  store.map[mapNameToStoreNameObject[apfloraLayer.value]].bounds
-                )
-              }
-            }}
-          >
-            filter_center_focus
-          </ZoomToIcon>
         </ZoomToDiv>
         <ZoomToDiv>
-          <ZoomToIcon
-            className="material-icons"
-            title={`auf aktive '${apfloraLayer.label}' zoomen`}
-            style={{
-              color: (
-                (
-                  activeApfloraLayers.includes(apfloraLayer.value) &&
-                  store.map[mapNameToStoreNameObject[apfloraLayer.value]].highlightedIds.length > 0
-                ) ?
-                `#fbec04` :
-                `#e2e2e2`
-              ),
-                fontWeight: (
+          {
+            apfloraLayer.value !== `MapFilter` &&
+            <ZoomToIcon
+              className="material-icons"
+              title={`auf aktive '${apfloraLayer.label}' zoomen`}
+              style={{
+                color: (
                   (
                     activeApfloraLayers.includes(apfloraLayer.value) &&
                     store.map[mapNameToStoreNameObject[apfloraLayer.value]].highlightedIds.length > 0
                   ) ?
-                  `bold` :
-                  `normal`
+                  `#fbec04` :
+                  `#e2e2e2`
                 ),
-              cursor: (
-                (
-                  activeApfloraLayers.includes(apfloraLayer.value) &&
-                  store.map[mapNameToStoreNameObject[apfloraLayer.value]].highlightedIds.length > 0
-                ) ?
-                `pointer` :
-                `inherit`
-              ),
-            }}
-            onClick={() => {
-              if (activeApfloraLayers.includes(apfloraLayer.value)) {
-                store.map.changeBounds(store.map[mapNameToStoreNameObject[apfloraLayer.value]].boundsOfHighlightedIds)
-              }
-            }}
-          >
-            filter_center_focus
-          </ZoomToIcon>
+                  fontWeight: (
+                    (
+                      activeApfloraLayers.includes(apfloraLayer.value) &&
+                      store.map[mapNameToStoreNameObject[apfloraLayer.value]].highlightedIds.length > 0
+                    ) ?
+                    `bold` :
+                    `normal`
+                  ),
+                cursor: (
+                  (
+                    activeApfloraLayers.includes(apfloraLayer.value) &&
+                    store.map[mapNameToStoreNameObject[apfloraLayer.value]].highlightedIds.length > 0
+                  ) ?
+                  `pointer` :
+                  `inherit`
+                ),
+              }}
+              onClick={() => {
+                if (activeApfloraLayers.includes(apfloraLayer.value)) {
+                  store.map.changeBounds(store.map[mapNameToStoreNameObject[apfloraLayer.value]].boundsOfHighlightedIds)
+                }
+              }}
+            >
+              filter_center_focus
+            </ZoomToIcon>
+          }
         </ZoomToDiv>
         <DragHandleDiv>
           {
-            apfloraLayer.value !== `TpopBeobAssignPolylines` &&
+            ![`TpopBeobAssignPolylines`, `MapFilter`].includes(apfloraLayer.value) &&
             <DragHandle />
           }
         </DragHandleDiv>
