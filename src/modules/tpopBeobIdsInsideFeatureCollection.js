@@ -3,8 +3,7 @@ import within from '@turf/within'
 
 import epsg21781to4326 from './epsg21781to4326notReverse'
 
-export default (store:Object) => {
-  const filter = store.node.nodeMapFilter.filter
+export default (store:Object, beobs:Array<Object>) => {
   const points = {
     type: `FeatureCollection`,
     // build an array of geoJson points
@@ -29,6 +28,6 @@ export default (store:Object) => {
   }
 
   // let turf check what points are within filter
-  const result = within(points, filter)
+  const result = within(points, store.node.nodeMapFilter.filter)
   return result.features.map(r => r.properties.BeobId)
 }
