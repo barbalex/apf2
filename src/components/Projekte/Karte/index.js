@@ -76,7 +76,7 @@ class Karte extends Component {
   }
 
   componentDidMount() {
-    console.log(`Karte did mount`)
+    // console.log(`Karte did mount`)
   }
 
   render() {

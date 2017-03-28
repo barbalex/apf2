@@ -495,6 +495,9 @@ function Store() {
       toggleNode(this, node)
     ),
   })
+  extendObservable(this.node.nodeMapFilter.filter, {
+    features: [],
+  })
   extendObservable(this.node.node, {
     projekt: computed(
       () => projektNodes(this),

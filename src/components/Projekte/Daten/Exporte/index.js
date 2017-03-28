@@ -87,35 +87,31 @@ const enhance = compose(
           const {
             nodeMapFilter,
             applyMapFilterToExport,
-            applyNodeLabelFilterToExport,
-            applyActiveNodeFilterToExport,
+            // TODO: add this
+            applyNodeLabelFilterToExport,  // eslint-disable-line no-unused-vars
+            applyActiveNodeFilterToExport,  // eslint-disable-line no-unused-vars
           } = store.node
           let jsonData = clone(data)
           // now we could manipulate the data, for instance apply mapFilter
           const filterFeatures = nodeMapFilter.filter.features
           if (filterFeatures.length > 0 && applyMapFilterToExport) {
             const keys = Object.keys(data[0])
-            console.log(`keys:`, keys)
             // filter data
             // beob can also have PopId and TPopId, so dont filter by TPopId if you filter by BeobId
             if (keys.includes(`BeobId`)) {
-              console.log(`filtering by beobNichtZuzuordnenId`)
               const beobIds = beobIdsFromServerInsideFeatureCollection(store, data)
               jsonData = jsonData.filter(d => beobIds.includes(d.BeobId))
             } else if (keys.includes(`TPopId`)) {
               // data sets with TPopId usually also deliver PopId,
               // so only filter by TPopid then
-              console.log(`filtering by TPopId`)
               const tpopIds = tpopIdsInsideFeatureCollection(store, data)
               jsonData = jsonData.filter(d => tpopIds.includes(d.TPopId))
             } else if (keys.includes(`PopId`)) {
-              console.log(`filtering by PopId`)
               const popIds = popIdsInsideFeatureCollection(store, data)
               jsonData = jsonData.filter(d => popIds.includes(d.PopId))
             }
           }
           try {
-            console.log(`data.length after filtering:`, jsonData.length)
             const csvData = json2csv({ data: jsonData })
             const file = `${fileName}_${format(new Date(), `YYYY-MM-DD_HH-mm-ss`)}`
             fileDownload(csvData, `${file}.csv`)

@@ -25,23 +25,38 @@ const Optionen = ({ store }) =>
       expandable
     >
       <Checkbox
-        label={`Karten-Filter anwenden`}
+        label={
+          (
+            store.node.nodeMapFilter.filter.features.length > 0 ?
+            `Karten-Filter anwenden` :
+            `Karten-Filter anwenden (verfügbar, wenn ein Karten-Filter erstellt wurde)`
+          )
+        }
         value={store.node.applyMapFilterToExport}
         checked={store.node.applyMapFilterToExport}
         onCheck={store.node.toggleApplyMapFilterToExport}
+        disabled={!(store.node.nodeMapFilter.filter.features.length > 0)}
       />
-      <Checkbox
-        label={`Strukturbaum-Filter anwenden`}
-        value={store.node.applyNodeLabelFilterToExport}
-        checked={store.node.applyNodeLabelFilterToExport}
-        onCheck={store.node.toggleApplyNodeLabelFilterToExport}
-      />
-      <Checkbox
-        label={`Nach den aktuell im Strukturbaum gewählten Elementen filtern`}
-        value={store.node.applyActiveNodeFilterToExport}
-        checked={store.node.applyActiveNodeFilterToExport}
-        onCheck={store.node.toggleApplyActiveNodeFilterToExport}
-      />
+      {
+        false &&
+        <Checkbox
+          label={`Strukturbaum-Filter anwenden`}
+          value={store.node.applyNodeLabelFilterToExport}
+          checked={store.node.applyNodeLabelFilterToExport}
+          onCheck={store.node.toggleApplyNodeLabelFilterToExport}
+          disabled
+        />
+      }
+      {
+        false &&
+        <Checkbox
+          label={`Nach den aktuell im Strukturbaum gewählten Elementen filtern`}
+          value={store.node.applyActiveNodeFilterToExport}
+          checked={store.node.applyActiveNodeFilterToExport}
+          onCheck={store.node.toggleApplyActiveNodeFilterToExport}
+          disabled
+        />
+      }
     </CardText>
   </FirstLevelCard>
 

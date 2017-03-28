@@ -51,9 +51,7 @@ const enhance = compose(
   observer
 )
 
-const Daten = ({
-  store,
-}) => {
+const Daten = ({ store }) => {
   const { activeDataset, activeUrlElements } = store
   if (!activeDataset || !activeDataset.table || !activeDataset.row) {
     return <div />
