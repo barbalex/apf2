@@ -168,6 +168,9 @@ function Store() {
     apFilter: false,
     nodeLabelFilter: {},
     applyNodeLabelFilterToExport: false,
+    toggleApplyNodeLabelFilterToExport: null,
+    activeNodeFilter: {},
+    applyActiveNodeFilterToExport: false,
     nodeMapFilter: {
       filter: {
         features: []
@@ -423,6 +426,10 @@ function Store() {
     apFilter: false,
     nodeLabelFilter: observable.map({}),
     applyNodeLabelFilterToExport: false,
+    toggleApplyNodeLabelFilterToExport: action(
+      `toggleApplyNodeLabelFilterToExport`,
+      () => this.node.applyNodeLabelFilterToExport = !this.node.applyNodeLabelFilterToExport
+    ),
     updateLabelFilter: action(`updateLabelFilter`, (table, value) => {
       if (!table) {
         return this.listError(
@@ -431,6 +438,17 @@ function Store() {
       }
       this.node.nodeLabelFilter.set(table, value)
     }),
+    activeNodeFilter: {
+      ap: computed(
+        () => this.activeUrlElements.ap,
+        { name: `activeNodeFilterAp` }
+      ),
+    },
+    applyActiveNodeFilterToExport: false,
+    toggleApplyActiveNodeFilterToExport: action(
+      `toggleApplyActiveNodeFilterToExport`,
+      () => this.node.applyActiveNodeFilterToExport = !this.node.applyActiveNodeFilterToExport
+    ),
     nodeMapFilter: {
       filter: {
         features: [],

@@ -38,9 +38,9 @@ const Optionen = ({ store }) =>
       />
       <Checkbox
         label={`Nach den aktuell im Strukturbaum gewählten Elementen filtern`}
-        value={store.node.applyMapFilterToExport}
-        checked={store.node.applyMapFilterToExport}
-        onCheck={store.node.toggleApplyMapFilterToExport}
+        value={store.node.applyActiveNodeFilterToExport}
+        checked={store.node.applyActiveNodeFilterToExport}
+        onCheck={store.node.toggleApplyActiveNodeFilterToExport}
       />
     </CardText>
   </FirstLevelCard>
