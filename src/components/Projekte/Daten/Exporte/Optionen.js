@@ -26,9 +26,21 @@ const Optionen = ({ store }) =>
     >
       <Checkbox
         label={`Karten-Filter anwenden`}
-        value={store.node.nodeMapFilter.applyToExport}
-        checked={store.node.nodeMapFilter.applyToExport}
-        onCheck={store.node.nodeMapFilter.toggleApplyToExport}
+        value={store.node.applyMapFilterToExport}
+        checked={store.node.applyMapFilterToExport}
+        onCheck={store.node.toggleApplyMapFilterToExport}
+      />
+      <Checkbox
+        label={`Strukturbaum-Filter anwenden`}
+        value={store.node.applyNodeLabelFilterToExport}
+        checked={store.node.applyNodeLabelFilterToExport}
+        onCheck={store.node.toggleApplyNodeLabelFilterToExport}
+      />
+      <Checkbox
+        label={`Nach den aktuell im Strukturbaum gewählten Elementen filtern`}
+        value={store.node.applyMapFilterToExport}
+        checked={store.node.applyMapFilterToExport}
+        onCheck={store.node.toggleApplyMapFilterToExport}
       />
     </CardText>
   </FirstLevelCard>

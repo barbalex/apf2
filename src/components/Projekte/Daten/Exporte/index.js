@@ -83,15 +83,14 @@ const enhance = compose(
         .then(({ data }) => {
           console.log(`data:`, data)
           console.log(`data.length:`, data.length)
-          const { nodeMapFilter } = store.node
+          const { nodeMapFilter, applyMapFilterToExport } = store.node
           let jsonData = clone(data)
           // now we could manipulate the data, for instance apply mapFilter
-          if (nodeMapFilter.applyToExport) {
+          if (applyMapFilterToExport) {
             const keys = Object.keys(data[0])
             console.log(`keys:`, keys)
             // filter data
             const filterFeatures = nodeMapFilter.filter.features
-            const popIds = nodeMapFilter.pop
             const tpopIds = nodeMapFilter.tpop
             const beobNichtZuzuordnenIds = nodeMapFilter.beobNichtZuzuordnen
             const tpopBeobIds = nodeMapFilter.tpopBeob
@@ -101,11 +100,11 @@ const enhance = compose(
               const popIds = popIdsInsideFeatureCollection(store, data)
               jsonData = jsonData.filter(d => popIds.includes(d.PopId))
             }
-            if (tpopIds.length > 0 && keys.includes(`TPopId`)) {
+            if (filterFeatures.length > 0 && keys.includes(`TPopId`)) {
               console.log(`filtering by TPopId`)
               jsonData = jsonData.filter(d => tpopIds.includes(d.TPopId))
             }
-            if (beobNichtZuzuordnenIds.length > 0 && keys.includes(`BeobId`)) {
+            if (filterFeatures.length > 0 && keys.includes(`BeobId`)) {
               console.log(`filtering by beobNichtZuzuordnenId`)
               jsonData = jsonData.filter((d) => {
                 if (d.BeobNichtZuordnen && d.BeobNichtZuordnen === 1) {
@@ -114,7 +113,7 @@ const enhance = compose(
                 return true
               })
             }
-            if (tpopBeobIds.length > 0 && keys.includes(`BeobId`)) {
+            if (filterFeatures.length > 0 && keys.includes(`BeobId`)) {
               console.log(`filtering by tpopBeobId`)
               jsonData = jsonData.filter((d) => {
                 if (d.TPopId && d.TPopId > 0) {
@@ -123,7 +122,7 @@ const enhance = compose(
                 return true
               })
             }
-            if (beobNichtBeurteiltIds.length > 0 && keys.includes(`BeobId`)) {
+            if (filterFeatures.length > 0 && keys.includes(`BeobId`)) {
               console.log(`filtering by beobNichtBeurteiltId`)
               jsonData = jsonData.filter((d) => {
                 if (!d.TPopId && !d.beobNichtZuordnen) {

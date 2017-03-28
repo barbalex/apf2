@@ -167,6 +167,7 @@ function Store() {
   this.node = {
     apFilter: false,
     nodeLabelFilter: {},
+    applyNodeLabelFilterToExport: false,
     nodeMapFilter: {
       filter: {
         features: []
@@ -176,8 +177,8 @@ function Store() {
       beobNichtZuzuordnen: [],
       beobNichtBeurteilt: [],
       tpopBeob: [],
-      applyToExport: false,
     },
+    applyMapFilterToExport: false,
     applyMapFilterToTree: false,
     node: {
       node: {
@@ -421,6 +422,7 @@ function Store() {
   extendObservable(this.node, {
     apFilter: false,
     nodeLabelFilter: observable.map({}),
+    applyNodeLabelFilterToExport: false,
     updateLabelFilter: action(`updateLabelFilter`, (table, value) => {
       if (!table) {
         return this.listError(
@@ -453,12 +455,12 @@ function Store() {
         () => tpopBeobIdsInsideFeatureCollection(this),
         { name: `nodeMapFilterPTpopBeob` }
       ),
-      applyToExport: false,
-      toggleApplyToExport: action(
-        `toggleApplyToExport`,
-        () => this.node.nodeMapFilter.applyToExport = !this.node.nodeMapFilter.applyToExport
-      ),
     },
+    toggleApplyMapFilterToExport: action(
+      `toggleApplyMapFilterToExport`,
+      () => this.node.applyMapFilterToExport = !this.node.applyMapFilterToExport
+    ),
+    applyMapFilterToExport: false,
     applyMapFilterToTree: false,
     toggleApplyMapFilterToTree: action(
       `toggleApplyMapFilterToTree`,
