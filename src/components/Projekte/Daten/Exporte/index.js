@@ -91,6 +91,7 @@ const enhance = compose(
           } = store.node
           let jsonData = clone(data)
           // now we could manipulate the data, for instance apply mapFilter
+          const filterFeatures = nodeMapFilter.filter.features
           if (filterFeatures.length > 0 && applyMapFilterToExport) {
             const keys = Object.keys(data[0])
             console.log(`keys:`, keys)
