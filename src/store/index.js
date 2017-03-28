@@ -167,7 +167,16 @@ function Store() {
   this.node = {
     apFilter: false,
     nodeLabelFilter: {},
-    nodeMapFilter: {},
+    nodeMapFilter: {
+      filter: {
+        features: []
+      },
+      pop: [],
+      tpop: [],
+      beobNichtZuzuordnen: [],
+      beobNichtBeurteilt: [],
+      tpopBeob: [],
+    },
     applyMapFilterToTree: false,
     applyMapFilterToExport: false,
     node: {
@@ -420,13 +429,31 @@ function Store() {
       }
       this.node.nodeLabelFilter.set(table, value)
     }),
-    nodeMapFilter: observable.map({
-      pop: [],
-      tpop: [],
-      beobNichtBeurteilt: [],
-      beobNichtZuzuordnen: [],
-      tpopBeob: [],
-    }),
+    nodeMapFilter: {
+      filter: {
+        features: [],
+      },
+      pop: computed(
+        () => popIdsInsideFeatureCollection(this),
+        { name: `nodeMapFilterPop` }
+      ),
+      tpop: computed(
+        () => tpopIdsInsideFeatureCollection(this),
+        { name: `nodeMapFilterTpop` }
+      ),
+      beobNichtBeurteilt: computed(
+        () => beobNichtBeurteiltIdsInsideFeatureCollection(this),
+        { name: `nodeMapFilterBeobNichtBeurteilt` }
+      ),
+      beobNichtZuzuordnen: computed(
+        () => beobNichtZuzuordnenIdsInsideFeatureCollection(this),
+        { name: `nodeMapFilterBeobNichtZuzuordnen` }
+      ),
+      tpopBeob: computed(
+        () => tpopBeobIdsInsideFeatureCollection(this),
+        { name: `nodeMapFilterPTpopBeob` }
+      ),
+    },
     applyMapFilterToTree: false,
     toggleApplyMapFilterToTree: action(
       `toggleApplyMapFilterToTree`,
@@ -438,20 +465,7 @@ function Store() {
       () => this.node.applyMapFilterToExport = !this.node.applyMapFilterToExport
     ),
     updateMapFilter: action(`updateMapFilter`, (mapFilterItems) => {
-      if (!mapFilterItems) {
-        this.node.nodeMapFilter.set(`tpop`, [])
-        this.node.nodeMapFilter.set(`pop`, [])
-        this.node.nodeMapFilter.set(`beobNichtBeurteilt`, [])
-        this.node.nodeMapFilter.set(`beobNichtZuzuordnen`, [])
-        this.node.nodeMapFilter.set(`tpopBeob`, [])
-      } else {
-        const items = mapFilterItems.toGeoJSON()
-        this.node.nodeMapFilter.set(`tpop`, tpopIdsInsideFeatureCollection(this, items))
-        this.node.nodeMapFilter.set(`pop`, popIdsInsideFeatureCollection(this, items))
-        this.node.nodeMapFilter.set(`beobNichtBeurteilt`, beobNichtBeurteiltIdsInsideFeatureCollection(this, items))
-        this.node.nodeMapFilter.set(`beobNichtZuzuordnen`, beobNichtZuzuordnenIdsInsideFeatureCollection(this, items))
-        this.node.nodeMapFilter.set(`tpopBeob`, tpopBeobIdsInsideFeatureCollection(this, items))
-      }
+      this.node.nodeMapFilter.filter = mapFilterItems.toGeoJSON()
     }),
     // action when user clicks on a node in the tree
     toggleNode: action(`toggleNode`, node =>
@@ -819,7 +833,7 @@ function Store() {
     apArtId: null,
     highlightedIds: computed(
       () => {
-        const nodeMapFilterPop = this.node.nodeMapFilter.get(`pop`)
+        const nodeMapFilterPop = this.node.nodeMapFilter.pop
         if (nodeMapFilterPop.length > 0) {
           return nodeMapFilterPop
         }
@@ -855,7 +869,7 @@ function Store() {
   extendObservable(this.map.tpop, {
     highlightedIds: computed(
       () => {
-        const nodeMapFilterTpop = this.node.nodeMapFilter.get(`tpop`)
+        const nodeMapFilterTpop = this.node.nodeMapFilter.tpop
         if (nodeMapFilterTpop.length > 0) {
           return nodeMapFilterTpop
         }
@@ -916,7 +930,7 @@ function Store() {
   extendObservable(this.map.beobNichtBeurteilt, {
     highlightedIds: computed(
       () => {
-        const nodeMapFilterBeobNichtBeurteilt = this.node.nodeMapFilter.get(`beobNichtBeurteilt`)
+        const nodeMapFilterBeobNichtBeurteilt = this.node.nodeMapFilter.beobNichtBeurteilt
         if (nodeMapFilterBeobNichtBeurteilt.length > 0) {
           return nodeMapFilterBeobNichtBeurteilt
         }
@@ -958,7 +972,7 @@ function Store() {
   extendObservable(this.map.beobNichtZuzuordnen, {
     highlightedIds: computed(
       () => {
-        const nodeMapFilterBeobNichtZuzuordnen = this.node.nodeMapFilter.get(`beobNichtZuzuordnen`)
+        const nodeMapFilterBeobNichtZuzuordnen = this.node.nodeMapFilter.beobNichtZuzuordnen
         if (nodeMapFilterBeobNichtZuzuordnen.length > 0) {
           return nodeMapFilterBeobNichtZuzuordnen
         }
@@ -998,7 +1012,7 @@ function Store() {
     highlightedIds: computed(
       () => {
         const { activeUrlElements } = this
-        const nodeMapFilterTpopBeob = this.node.nodeMapFilter.get(`tpopBeob`)
+        const nodeMapFilterTpopBeob = this.node.nodeMapFilter.tpopBeob
         if (nodeMapFilterTpopBeob.length > 0) {
           return nodeMapFilterTpopBeob
         }

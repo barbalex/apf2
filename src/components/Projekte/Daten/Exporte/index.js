@@ -89,11 +89,11 @@ const enhance = compose(
             const keys = Object.keys(data[0])
             console.log(`keys:`, keys)
             // filter data
-            const popIds = nodeMapFilter.get(`pop`)
-            const tpopIds = nodeMapFilter.get(`tpop`)
-            const beobNichtZuzuordnenIds = nodeMapFilter.get(`beobNichtZuzuordnen`)
-            const tpopBeobIds = nodeMapFilter.get(`tpopBeob`)
-            const beobNichtBeurteiltIds = nodeMapFilter.get(`beobNichtBeurteilt`)
+            const popIds = nodeMapFilter.pop
+            const tpopIds = nodeMapFilter.tpop
+            const beobNichtZuzuordnenIds = nodeMapFilter.beobNichtZuzuordnen
+            const tpopBeobIds = nodeMapFilter.tpopBeob
+            const beobNichtBeurteiltIds = nodeMapFilter.beobNichtBeurteilt
             if (popIds.length > 0 && keys.includes(`PopId`)) {
               console.log(`filtering by PopId`)
               jsonData = jsonData.filter(d => popIds.includes(d.PopId))
