@@ -83,7 +83,6 @@ const enhance = compose(
 
       axios.get(url)
         .then(({ data }) => {
-          console.log(`data.length before filtering:`, data.length)
           const {
             nodeMapFilter,
             applyMapFilterToExport,
