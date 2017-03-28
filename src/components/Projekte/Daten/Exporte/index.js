@@ -22,6 +22,7 @@ import FormTitle from '../../../shared/FormTitle'
 import apiBaseUrl from '../../../../modules/apiBaseUrl'
 import Tipps from './Tipps'
 import Optionen from './Optionen'
+import popIdsInsideFeatureCollection from '../../../../modules/popIdsInsideFeatureCollection'
 
 const Container = styled.div`
   height: 100%;
@@ -82,20 +83,22 @@ const enhance = compose(
         .then(({ data }) => {
           console.log(`data:`, data)
           console.log(`data.length:`, data.length)
-          const { applyMapFilterToExport, nodeMapFilter } = store.node
+          const { nodeMapFilter } = store.node
           let jsonData = clone(data)
           // now we could manipulate the data, for instance apply mapFilter
-          if (applyMapFilterToExport) {
+          if (nodeMapFilter.applyToExport) {
             const keys = Object.keys(data[0])
             console.log(`keys:`, keys)
             // filter data
+            const filterFeatures = nodeMapFilter.filter.features
             const popIds = nodeMapFilter.pop
             const tpopIds = nodeMapFilter.tpop
             const beobNichtZuzuordnenIds = nodeMapFilter.beobNichtZuzuordnen
             const tpopBeobIds = nodeMapFilter.tpopBeob
             const beobNichtBeurteiltIds = nodeMapFilter.beobNichtBeurteilt
-            if (popIds.length > 0 && keys.includes(`PopId`)) {
+            if (filterFeatures.length > 0 && keys.includes(`PopId`)) {
               console.log(`filtering by PopId`)
+              const popIds = popIdsInsideFeatureCollection(store, data)
               jsonData = jsonData.filter(d => popIds.includes(d.PopId))
             }
             if (tpopIds.length > 0 && keys.includes(`TPopId`)) {

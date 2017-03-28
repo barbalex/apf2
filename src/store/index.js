@@ -176,9 +176,9 @@ function Store() {
       beobNichtZuzuordnen: [],
       beobNichtBeurteilt: [],
       tpopBeob: [],
+      applyToExport: false,
     },
     applyMapFilterToTree: false,
-    applyMapFilterToExport: false,
     node: {
       node: {
         nodes: [],
@@ -434,11 +434,11 @@ function Store() {
         features: [],
       },
       pop: computed(
-        () => popIdsInsideFeatureCollection(this),
+        () => popIdsInsideFeatureCollection(this, this.map.pop.pops),
         { name: `nodeMapFilterPop` }
       ),
       tpop: computed(
-        () => tpopIdsInsideFeatureCollection(this),
+        () => tpopIdsInsideFeatureCollection(this, this.map.tpop.tpops),
         { name: `nodeMapFilterTpop` }
       ),
       beobNichtBeurteilt: computed(
@@ -453,18 +453,21 @@ function Store() {
         () => tpopBeobIdsInsideFeatureCollection(this),
         { name: `nodeMapFilterPTpopBeob` }
       ),
+      applyToExport: false,
+      toggleApplyToExport: action(
+        `toggleApplyToExport`,
+        () => this.node.nodeMapFilter.applyToExport = !this.node.nodeMapFilter.applyToExport
+      ),
     },
     applyMapFilterToTree: false,
     toggleApplyMapFilterToTree: action(
       `toggleApplyMapFilterToTree`,
       () => this.node.applyMapFilterToTree = !this.node.applyMapFilterToTree
     ),
-    applyMapFilterToExport: false,
-    toggleApplyMapFilterToExport: action(
-      `toggleApplyMapFilterToExport`,
-      () => this.node.applyMapFilterToExport = !this.node.applyMapFilterToExport
-    ),
     updateMapFilter: action(`updateMapFilter`, (mapFilterItems) => {
+      if (!mapFilterItems) {
+        return this.node.nodeMapFilter.filter = { features: [] }
+      }
       this.node.nodeMapFilter.filter = mapFilterItems.toGeoJSON()
     }),
     // action when user clicks on a node in the tree

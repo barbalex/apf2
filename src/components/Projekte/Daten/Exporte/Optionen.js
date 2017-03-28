@@ -26,9 +26,9 @@ const Optionen = ({ store }) =>
     >
       <Checkbox
         label={`Karten-Filter anwenden`}
-        value={store.node.applyMapFilterToExport}
-        checked={store.node.applyMapFilterToExport}
-        onCheck={store.node.toggleApplyMapFilterToExport}
+        value={store.node.nodeMapFilter.applyToExport}
+        checked={store.node.nodeMapFilter.applyToExport}
+        onCheck={store.node.nodeMapFilter.toggleApplyToExport}
       />
     </CardText>
   </FirstLevelCard>
