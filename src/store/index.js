@@ -462,15 +462,15 @@ function Store() {
         { name: `nodeMapFilterTpop` }
       ),
       beobNichtBeurteilt: computed(
-        () => beobNichtBeurteiltIdsInsideFeatureCollection(this),
+        () => beobNichtBeurteiltIdsInsideFeatureCollection(this, this.map.beobNichtBeurteilt.beobs),
         { name: `nodeMapFilterBeobNichtBeurteilt` }
       ),
       beobNichtZuzuordnen: computed(
-        () => beobNichtZuzuordnenIdsInsideFeatureCollection(this),
+        () => beobNichtZuzuordnenIdsInsideFeatureCollection(this, this.map.beobNichtZuzuordnen.beobs),
         { name: `nodeMapFilterBeobNichtZuzuordnen` }
       ),
       tpopBeob: computed(
-        () => tpopBeobIdsInsideFeatureCollection(this),
+        () => tpopBeobIdsInsideFeatureCollection(this, this.map.tpopBeob.beobs),
         { name: `nodeMapFilterPTpopBeob` }
       ),
     },

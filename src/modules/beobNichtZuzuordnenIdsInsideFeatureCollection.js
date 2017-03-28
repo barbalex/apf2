@@ -7,7 +7,7 @@ export default (store:Object, beobs:Array<Object>) => {
   const points = {
     type: `FeatureCollection`,
     // build an array of geoJson points
-    features: store.map.beobNichtZuzuordnen.beobs.map((b) => {
+    features: beobs.map((b) => {
       const coordinates = (
         b.QuelleId === 1 ?
         // convert koordinates to wgs84

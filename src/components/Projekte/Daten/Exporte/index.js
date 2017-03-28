@@ -24,6 +24,7 @@ import Tipps from './Tipps'
 import Optionen from './Optionen'
 import popIdsInsideFeatureCollection from '../../../../modules/popIdsInsideFeatureCollection'
 import tpopIdsInsideFeatureCollection from '../../../../modules/tpopIdsInsideFeatureCollection'
+import beobIdsFromServerInsideFeatureCollection from '../../../../modules/beobIdsFromServerInsideFeatureCollection'
 
 const Container = styled.div`
   height: 100%;
@@ -96,45 +97,21 @@ const enhance = compose(
             const keys = Object.keys(data[0])
             console.log(`keys:`, keys)
             // filter data
-            const beobNichtZuzuordnenIds = nodeMapFilter.beobNichtZuzuordnen
-            const tpopBeobIds = nodeMapFilter.tpopBeob
-            const beobNichtBeurteiltIds = nodeMapFilter.beobNichtBeurteilt
-            if (keys.includes(`PopId`)) {
-              console.log(`filtering by PopId`)
-              const popIds = popIdsInsideFeatureCollection(store, data)
-              jsonData = jsonData.filter(d => popIds.includes(d.PopId))
-            }
-            if (keys.includes(`TPopId`)) {
+            // beob can also have PopId and TPopId, so dont filter by TPopId if you filter by BeobId
+            if (keys.includes(`BeobId`)) {
+              console.log(`filtering by beobNichtZuzuordnenId`)
+              const beobIds = beobIdsFromServerInsideFeatureCollection(store, data)
+              jsonData = jsonData.filter(d => beobIds.includes(d.BeobId))
+            } else if (keys.includes(`TPopId`)) {
+              // data sets with TPopId usually also deliver PopId,
+              // so only filter by TPopid then
               console.log(`filtering by TPopId`)
               const tpopIds = tpopIdsInsideFeatureCollection(store, data)
               jsonData = jsonData.filter(d => tpopIds.includes(d.TPopId))
-            }
-            if (keys.includes(`BeobId`)) {
-              console.log(`filtering by beobNichtZuzuordnenId`)
-              jsonData = jsonData.filter((d) => {
-                if (d.BeobNichtZuordnen && d.BeobNichtZuordnen === 1) {
-                  return beobNichtZuzuordnenIds.includes(d.BeobId)
-                }
-                return true
-              })
-            }
-            if (keys.includes(`BeobId`)) {
-              console.log(`filtering by tpopBeobId`)
-              jsonData = jsonData.filter((d) => {
-                if (d.TPopId && d.TPopId > 0) {
-                  return tpopBeobIds.includes(d.BeobId)
-                }
-                return true
-              })
-            }
-            if (keys.includes(`BeobId`)) {
-              console.log(`filtering by beobNichtBeurteiltId`)
-              jsonData = jsonData.filter((d) => {
-                if (!d.TPopId && !d.beobNichtZuordnen) {
-                  return beobNichtBeurteiltIds.includes(d.BeobId)
-                }
-                return true
-              })
+            } else if (keys.includes(`PopId`)) {
+              console.log(`filtering by PopId`)
+              const popIds = popIdsInsideFeatureCollection(store, data)
+              jsonData = jsonData.filter(d => popIds.includes(d.PopId))
             }
           }
           try {
