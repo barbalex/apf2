@@ -103,6 +103,7 @@ class StrukturbaumContainer extends Component { // eslint-disable-line react/pre
   }
 
   componentDidMount() {
+    // console.log(`StrukturbaumContainer did mount`)
     const { store } = this.props
     // $FlowIssue
     store.ui.treeHeight = this.tree.clientHeight

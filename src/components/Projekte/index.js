@@ -4,20 +4,18 @@ import { observer, inject } from 'mobx-react'
 import clone from 'lodash/clone'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
+import lifecycle from 'recompose/lifecycle'
 
 import StrukturbaumContainer from './StrukturbaumContainer'
 import DeleteDatasetModal from './DeleteDatasetModal'
 import Daten from './Daten'
 import Karte from './Karte'
 
-const Container = styled.div`
+const Container = styled(({ loading, children, ...rest }) => <div {...rest}>{children}</div>)`
   display: flex;
   flex-direction: column;
   height: 100%;
-`
-// TODO: this does not always work
-const ContainerLoading = styled(Container)`
-  cursor: wait;
+  cursor: ${(props) => (props.loading ? `wait` : `inherit`)}
 `
 const Content = styled.div`
   display: flex;
@@ -36,6 +34,11 @@ const KarteContainer = styled.div`
 
 const enhance = compose(
   inject(`store`),
+  lifecycle({
+    componentDidMount: function() {
+      // console.log(`Projekte did mount`)
+    }
+  }),
   observer
 )
 
@@ -45,10 +48,9 @@ const Projekte = ({ store }) => {
   const datenIsVisible = projekteTabs && projekteTabs.includes(`daten`)
   const karteIsVisible = projekteTabs && projekteTabs.includes(`karte`)
   const deleteDatasetModalIsVisible = !!store.datasetToDelete.id
-  const MyContainer = store.loading.length > 0 ? ContainerLoading : Container
 
   return (
-    <MyContainer>
+    <Container loading={store.loading.length > 0}>
       <Content>
         {
           strukturbaumIsVisible &&
@@ -100,7 +102,7 @@ const Projekte = ({ store }) => {
           <DeleteDatasetModal />
         }
       </Content>
-    </MyContainer>
+    </Container>
   )
 }
 
