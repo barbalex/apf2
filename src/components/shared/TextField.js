@@ -44,7 +44,7 @@ const MyTextField = ({
     hintText={hintText}
     type={type}
     multiLine={multiLine}
-    value={value || ``}
+    value={value || value === 0 ? value : ``}
     errorText={errorText}
     disabled={disabled}
     fullWidth
