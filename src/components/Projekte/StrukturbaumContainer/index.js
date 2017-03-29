@@ -53,24 +53,19 @@ import CmTpopmassnber from './contextmenu/Tpopmassnber'
 import CmTpopmassnFolder from './contextmenu/TpopmassnFolder'
 import CmTpopmassn from './contextmenu/Tpopmassn'
 
-const StyledContainer = styled.div`
+const Container = styled(({ exporte, children, ...rest }) => <div {...rest}>{children}</div>)`
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  flex-grow: 1;
-  flex-shrink: 1;
-  flex-basis: 500px;
+  flex-grow: ${(props) => (props.exporte ? 0 : 1)};
+  flex-shrink: ${(props) => (props.exporte ? 0 : 1)};
+  flex-basis: ${(props) => (props.exporte ? `200px` : `500px`)};
   border-color: #424242;
   border-width: 1px;
   border-style: solid;
   @media print {
     display: none !important;
   }
-`
-const ContainerExporte = styled(StyledContainer)`
-  flex-basis: 200px;
-  flex-grow: 0;
-  flex-shrink: 0;
 `
 const LabelFilterContainer = styled.div`
   display: flex;
@@ -194,11 +189,10 @@ class StrukturbaumContainer extends Component { // eslint-disable-line react/pre
   render() {
     const { store } = this.props
     const { activeUrlElements, activeDataset, node, toggleApFilter } = store
-    const Container = activeUrlElements.exporte ? ContainerExporte : StyledContainer
     const showApDivToggle = activeDataset
 
     return (
-      <Container>
+      <Container exporte={activeUrlElements.exporte}>
         <LabelFilterContainer>
           <LabelFilter />
           {
