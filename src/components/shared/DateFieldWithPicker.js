@@ -3,7 +3,11 @@
  * need textfield combined with datepicker
  * see for instance:
  * https://github.com/callemall/material-ui/issues/3933#issuecomment-234711632
- * https://github.com/callemall/material-ui/blob/master/src/DatePicker/DatePicker.js
+ * Basic idea:
+ * material-ui DatePicker is hidden by sizing it 0x0 pixels
+ * instead, a textfield is shown and next to it a calendar icon
+ * when this icon is clicked, focus is set to the DatePicker
+ * which opens the calendar
  */
 import React, { Component, PropTypes } from 'react'
 import { observer } from 'mobx-react'
@@ -35,9 +39,12 @@ const DatePickerDiv = styled.div`
 `
 
 const enhance = compose(
-  withState(`valueOnFocus`, `changeValueOnFocus`, ``),
   // stringValue is shown to user
   withState(`stringValue`, `changeStringValue`, (props) => format(props.value, `DD.MM.YYYY`)),
+  // on bluring the textfield, changes are only written do db if value has changed
+  // so when the textfield is focused the value is saved to state in order to know
+  // if it has changed on blur
+  withState(`valueOnFocus`, `changeValueOnFocus`, ``),
   withHandlers({
     onChangeDatePicker: props => (event, val) => {
       props.updateProperty(props.fieldName, format(val, `YYYY-MM-DD`))
@@ -64,8 +71,7 @@ const enhance = compose(
         }
       },
     onFocus: props =>
-      () =>
-        props.changeValueOnFocus(props.value),
+      () => props.changeValueOnFocus(props.value),
   }),
   observer
 )
@@ -116,6 +122,7 @@ class MyDatePicker extends Component {
           type="text"
           value={stringValue || ``}
           errorText={errorText}
+          disabled={disabled}
           fullWidth
           onChange={onChange}
           onBlur={onBlur}
