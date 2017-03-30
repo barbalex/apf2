@@ -8,7 +8,6 @@ import { Scrollbars } from 'react-custom-scrollbars'
 import RadioButtonGroup from '../../shared/RadioButtonGroup'
 import Label from '../../shared/Label'
 import TextField from '../../shared/TextField'
-import DatePicker from '../../shared/DatePicker'
 import DateFieldWithPicker from '../../shared/DateFieldWithPicker'
 import SelectField from '../../shared/SelectField'
 import FormTitle from '../../shared/FormTitle'
@@ -148,15 +147,6 @@ const Apber = ({ store }) => {
             errorText={activeDataset.valid.JBerDTxt}
             type="text"
             multiLine
-            fullWidth
-            updateProperty={store.updateProperty}
-            updatePropertyInDb={store.updatePropertyInDb}
-          />
-          <DatePicker
-            label="Datum"
-            fieldName="JBerDatum"
-            value={activeDataset.row.JBerDatum}
-            errorText={activeDataset.valid.JBerDatum}
             fullWidth
             updateProperty={store.updateProperty}
             updatePropertyInDb={store.updatePropertyInDb}
