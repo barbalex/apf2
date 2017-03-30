@@ -183,7 +183,7 @@ const Karte = ({ store }) => {
     />,
   }
   const OverlayComponents = {
-    ZhUep: () => <ZhUep />,
+    ZhUep: () => <ZhUepOverlay />,
     Detailplaene: () => <Detailplaene />,
     ZhGemeindegrenzen: () => <ZhGemeindegrenzen />,
     ZhSvoColor: () => <ZhSvoColor />,
@@ -197,7 +197,7 @@ const Karte = ({ store }) => {
     OsmBw: () => <OsmBw />,
     SwissTopoPixelFarbe: () => <SwissTopoPixelFarbe />,
     SwissTopoPixelGrau: () => <SwissTopoPixelGrau />,
-    ZhUep: () => <ZhUepOverlay />,
+    ZhUep: () => <ZhUep />,
     BingAerial: () => <BingAerial />,
     ZhOrtho: () => <ZhOrtho />,
     ZhOrthoIr: () => <ZhOrthoIr />,
