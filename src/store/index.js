@@ -71,7 +71,6 @@ import projektNodes from '../modules/nodes/projekt'
 import apFolderNodes from '../modules/nodes/apFolder'
 import apberuebersichtFolderNodes from '../modules/nodes/apberuebersichtFolder'
 import apberuebersichtNodes from '../modules/nodes/apberuebersicht'
-import exporteFolderNodes from '../modules/nodes/exporteFolder'
 import apNodes from '../modules/nodes/ap'
 import allNodes from '../modules/nodes/allNodes'
 import qkFolderNode from '../modules/nodes/qkFolder'
@@ -510,10 +509,6 @@ function Store() {
     apberuebersichtFolder: computed(
       () => apberuebersichtFolderNodes(this),
       { name: `apberuebersichtFolderNode` }
-    ),
-    exporteFolder: computed(
-      () => exporteFolderNodes(this),
-      { name: `exporteFolderNode` }
     ),
     apberuebersicht: computed(
       () => apberuebersichtNodes(this),

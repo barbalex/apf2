@@ -46,7 +46,10 @@ const enhance = compose(
 const Projekte = ({ store }) => {
   const projekteTabs = clone(store.urlQuery.projekteTabs) || []
   const strukturbaumIsVisible = projekteTabs.includes(`strukturbaum`)
-  const datenIsVisible = projekteTabs.includes(`daten`) && !projekteTabs.includes(`exporte`)
+  const datenIsVisible = (
+    projekteTabs.includes(`daten`) &&
+    !projekteTabs.includes(`exporte`)
+  )
   const karteIsVisible = projekteTabs.includes(`karte`)
   const exporteIsVisible = projekteTabs.includes(`exporte`)
   const deleteDatasetModalIsVisible = !!store.datasetToDelete.id
@@ -61,6 +64,10 @@ const Projekte = ({ store }) => {
         {
           datenIsVisible &&
           <Daten />
+        }
+        {
+          exporteIsVisible &&
+          <Exporte />
         }
         {
           karteIsVisible &&
@@ -98,10 +105,6 @@ const Projekte = ({ store }) => {
               activeApfloraLayersSortedString={store.map.activeApfloraLayersSortedString}
             />
           </KarteContainer>
-        }
-        {
-          exporteIsVisible &&
-          <Exporte />
         }
         {
           deleteDatasetModalIsVisible &&

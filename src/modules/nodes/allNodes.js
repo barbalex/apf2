@@ -19,7 +19,6 @@ export default (store) => {
     projekt,
     apFolder,
     apberuebersichtFolder,
-    exporteFolder,
     apberuebersicht,
     ap,
     qkFolder,
@@ -75,7 +74,6 @@ export default (store) => {
     if (activeUrlElements.apberuebersichtFolder) {
       nodes = nodes.concat(apberuebersicht)
     }
-    nodes = nodes.concat(exporteFolder)
     if (activeUrlElements.apFolder) {
       nodes = nodes.concat(ap)
       if (
