@@ -8,7 +8,21 @@ import withHandlers from 'recompose/withHandlers'
 
 import TextField from './TextField'
 import Label from './Label'
+import InfoWithPopover from './InfoWithPopover'
 
+const FieldWithInfoContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+`
+const PopoverContentRow = styled.div`
+  padding: 2px 5px 2px 5px;
+  display: flex;
+  border-color: grey;
+  border-width: thin;
+  border-style: solid;
+  border-radius: 4px;
+`
 const StatusContainer = styled.div`
   padding-top: 10px;
 `
@@ -58,15 +72,22 @@ const Status = ({
 
   return (
     <div>
-      <TextField
-        label="bekannt seit"
-        fieldName={bekanntSeitFieldName}
-        value={bekanntSeitValue}
-        errorText={bekanntSeitValid}
-        type="number"
-        updateProperty={updateProperty}
-        updatePropertyInDb={updatePropertyInDb}
-      />
+      <FieldWithInfoContainer>
+        <TextField
+          label="bekannt seit"
+          fieldName={bekanntSeitFieldName}
+          value={bekanntSeitValue}
+          errorText={bekanntSeitValid}
+          type="number"
+          updateProperty={updateProperty}
+          updatePropertyInDb={updatePropertyInDb}
+        />
+        <InfoWithPopover>
+          <PopoverContentRow>
+            Dieses Feld immer ausfüllen
+          </PopoverContentRow>
+        </InfoWithPopover>
+      </FieldWithInfoContainer>
       <StatusContainer>
         <Label label="Status" />
         <HerkunftContainer>
