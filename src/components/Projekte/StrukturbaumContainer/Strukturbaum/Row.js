@@ -11,7 +11,7 @@ import isNodeInActiveNodePath from '../../../../modules/isNodeInActiveNodePath'
 
 const singleRowHeight = 23
 const StyledNode = styled(({ level, nodeIsInActiveNodePath, children, ...rest }) => <div {...rest}>{children}</div>)`
-  padding-left: ${(props) => `${(Number(props.level) * 18) - 4}px`};
+  padding-left: ${(props) => `${(Number(props.level) * 17) - (props.nodeIsInActiveNodePath ? 4 : 0)}px`};
   height: ${singleRowHeight}px;
   max-height: ${singleRowHeight}px;
   box-sizing: border-box;
@@ -20,7 +20,7 @@ const StyledNode = styled(({ level, nodeIsInActiveNodePath, children, ...rest })
   flex-direction: row;
   white-space: nowrap;
   user-select: none;
-  color: ${(props) => (props.nodeIsInActiveNodePath ? `rgb(255, 94, 94)` : `rgb(247, 247, 247)`)};
+  color: ${(props) => (props.nodeIsInActiveNodePath ? `rgb(255, 60, 0)` : `rgb(247, 247, 247)`)};
   cursor: pointer;
   &:hover {
     color: orange;
@@ -29,16 +29,17 @@ const StyledNode = styled(({ level, nodeIsInActiveNodePath, children, ...rest })
 const StyledSymbolSpan = styled.span`
   font-family: 'Roboto Mono', monospace;
   margin-right: 0 !important;
-  margin-top: -4px !important;
+  margin-top: -1px !important;
   font-weight: 900 !important;
   font-size: 16px !important;
 `
 const StyledSymbolOpenSpan = styled(StyledSymbolSpan)`
-  margin-top: -1px !important;
-  font-size: 24px !important;
+  margin-top: 2px !important;
+  font-size: 22px !important;
 `
 const StyledTextSpan = styled.span`
   padding-left: .5em;
+  font-size: 16px !important;
 `
 const StyledTextInActiveNodePathSpan = styled(StyledTextSpan)`
   font-weight: 900 !important;

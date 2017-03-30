@@ -3,7 +3,7 @@ import { inject } from 'mobx-react'
 import styled from 'styled-components'
 
 const Div = styled.div`
-  color: green;
+  color: #00ff2f;
   padding: 10px 10px 0 10px;
 `
 
