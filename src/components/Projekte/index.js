@@ -10,6 +10,7 @@ import StrukturbaumContainer from './StrukturbaumContainer'
 import DeleteDatasetModal from './DeleteDatasetModal'
 import Daten from './Daten'
 import Karte from './Karte'
+import Exporte from './Exporte'
 
 const Container = styled(({ loading, children, ...rest }) => <div {...rest}>{children}</div>)`
   display: flex;
@@ -43,10 +44,11 @@ const enhance = compose(
 )
 
 const Projekte = ({ store }) => {
-  const projekteTabs = clone(store.urlQuery.projekteTabs)
-  const strukturbaumIsVisible = projekteTabs && projekteTabs.includes(`strukturbaum`)
-  const datenIsVisible = projekteTabs && projekteTabs.includes(`daten`)
-  const karteIsVisible = projekteTabs && projekteTabs.includes(`karte`)
+  const projekteTabs = clone(store.urlQuery.projekteTabs) || []
+  const strukturbaumIsVisible = projekteTabs.includes(`strukturbaum`)
+  const datenIsVisible = projekteTabs.includes(`daten`) && !projekteTabs.includes(`exporte`)
+  const karteIsVisible = projekteTabs.includes(`karte`)
+  const exporteIsVisible = projekteTabs.includes(`exporte`)
   const deleteDatasetModalIsVisible = !!store.datasetToDelete.id
 
   return (
@@ -96,6 +98,10 @@ const Projekte = ({ store }) => {
               activeApfloraLayersSortedString={store.map.activeApfloraLayersSortedString}
             />
           </KarteContainer>
+        }
+        {
+          exporteIsVisible &&
+          <Exporte />
         }
         {
           deleteDatasetModalIsVisible &&

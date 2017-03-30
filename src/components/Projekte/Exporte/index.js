@@ -28,6 +28,12 @@ import beobIdsFromServerInsideFeatureCollection from '../../../modules/beobIdsFr
 
 const Container = styled.div`
   height: 100%;
+  flex-basis: 600px;
+  flex-grow: 4;
+  flex-shrink: 1;
+  @media print {
+    display: none !important;
+  }
 `
 const FieldsContainer = styled.div`
   padding: 10px;

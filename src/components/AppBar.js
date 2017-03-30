@@ -44,7 +44,7 @@ const enhance = compose(
   withHandlers({
     onClickButton: props => (name) => {
       const { store } = props
-      const projekteTabs = store.urlQuery.projekteTabs ? clone(store.urlQuery.projekteTabs) : []
+      const projekteTabs = clone(store.urlQuery.projekteTabs) || []
       const isVisible = projekteTabs.includes(name)
       if (isVisible) {
         remove(projekteTabs, el => el === name)
@@ -61,6 +61,7 @@ const enhance = compose(
     onClickButtonStrukturbaum: props => () => props.onClickButton(`strukturbaum`),
     onClickButtonDaten: props => () => props.onClickButton(`daten`),
     onClickButtonKarte: props => () => props.onClickButton(`karte`),
+    onClickButtonExporte: props => () => props.onClickButton(`exporte`),
   }),
   observer
 )
@@ -70,13 +71,14 @@ const MyAppBar = ({
   onClickButtonStrukturbaum,
   onClickButtonDaten,
   onClickButtonKarte,
+  onClickButtonExporte,
   ueberApfloraChOnTouchTap,
 }) => {
-  const { activeUrlElements } = store
-  const projekteTabs = clone(store.urlQuery.projekteTabs)
-  const strukturbaumIsVisible = projekteTabs && projekteTabs.includes(`strukturbaum`)
-  const datenIsVisible = projekteTabs && projekteTabs.includes(`daten`)
-  const karteIsVisible = projekteTabs && projekteTabs.includes(`karte`)
+  const projekteTabs = clone(store.urlQuery.projekteTabs) || []
+  const strukturbaumIsVisible = projekteTabs.includes(`strukturbaum`)
+  const datenIsVisible = projekteTabs.includes(`daten`)
+  const karteIsVisible = projekteTabs.includes(`karte`)
+  const exporteIsVisible = projekteTabs.includes(`exporte`)
 
   return (
     <StyledAppBar
@@ -96,8 +98,12 @@ const MyAppBar = ({
           <FlatButton
             label="Karte"
             secondary={!karteIsVisible}
-            disabled={activeUrlElements.exporte}
             onClick={onClickButtonKarte}
+          />
+          <FlatButton
+            label="Exporte"
+            secondary={!exporteIsVisible}
+            onClick={onClickButtonExporte}
           />
           <IconMenu
             iconButtonElement={
