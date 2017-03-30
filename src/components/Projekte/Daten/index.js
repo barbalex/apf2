@@ -30,7 +30,7 @@ import Tpopmassnber from './Tpopmassnber'
 import Tpopfeldkontr from './Tpopfeldkontr'
 import Tpopfreiwkontr from './Tpopfreiwkontr'
 import Tpopkontrzaehl from './Tpopkontrzaehl'
-import Exporte from './Exporte'
+import Exporte from '../Exporte'
 import Qk from './Qk'
 import Beobzuordnung from './Beobzuordnung'
 

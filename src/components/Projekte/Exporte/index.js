@@ -17,14 +17,14 @@ import withProps from 'recompose/withProps'
 import withHandlers from 'recompose/withHandlers'
 import json2csv from 'json2csv'
 
-import beziehungen from '../../../../etc/beziehungen.png'
-import FormTitle from '../../../shared/FormTitle'
-import apiBaseUrl from '../../../../modules/apiBaseUrl'
+import beziehungen from '../../../etc/beziehungen.png'
+import FormTitle from '../../shared/FormTitle'
+import apiBaseUrl from '../../../modules/apiBaseUrl'
 import Tipps from './Tipps'
 import Optionen from './Optionen'
-import popIdsInsideFeatureCollection from '../../../../modules/popIdsInsideFeatureCollection'
-import tpopIdsInsideFeatureCollection from '../../../../modules/tpopIdsInsideFeatureCollection'
-import beobIdsFromServerInsideFeatureCollection from '../../../../modules/beobIdsFromServerInsideFeatureCollection'
+import popIdsInsideFeatureCollection from '../../../modules/popIdsInsideFeatureCollection'
+import tpopIdsInsideFeatureCollection from '../../../modules/tpopIdsInsideFeatureCollection'
+import beobIdsFromServerInsideFeatureCollection from '../../../modules/beobIdsFromServerInsideFeatureCollection'
 
 const Container = styled.div`
   height: 100%;
