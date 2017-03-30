@@ -19,6 +19,9 @@ const StyledAppBar = styled(AppBar)`
     display: none !important;
   }
 `
+const Button = styled(({ visible, ...rest}) => <FlatButton {...rest} />)`
+  color: ${(props) => (props.visible ? `rgb(255, 255, 255) !important` : `rgba(255, 255, 255, 0.298039) !important`)}
+`
 const MenuDiv = styled.div`
   display: flex;
   flex-wrap: wrap;
@@ -76,7 +79,7 @@ const MyAppBar = ({
 }) => {
   const projekteTabs = clone(store.urlQuery.projekteTabs) || []
   const strukturbaumIsVisible = projekteTabs.includes(`strukturbaum`)
-  const datenIsVisible = projekteTabs.includes(`daten`)
+  const datenIsVisible = projekteTabs.includes(`daten`) && !projekteTabs.includes(`exporte`)
   const karteIsVisible = projekteTabs.includes(`karte`)
   const exporteIsVisible = projekteTabs.includes(`exporte`)
 
@@ -85,24 +88,24 @@ const MyAppBar = ({
       title="AP Flora"
       iconElementRight={
         <MenuDiv>
-          <FlatButton
+          <Button
             label="Strukturbaum"
-            secondary={!strukturbaumIsVisible}
+            visible={strukturbaumIsVisible}
             onClick={onClickButtonStrukturbaum}
           />
-          <FlatButton
+          <Button
             label="Daten"
-            secondary={!datenIsVisible}
+            visible={datenIsVisible}
             onClick={onClickButtonDaten}
           />
-          <FlatButton
+          <Button
             label="Karte"
-            secondary={!karteIsVisible}
+            visible={karteIsVisible}
             onClick={onClickButtonKarte}
           />
-          <FlatButton
+          <Button
             label="Exporte"
-            secondary={!exporteIsVisible}
+            visible={exporteIsVisible}
             onClick={onClickButtonExporte}
           />
           <IconMenu
