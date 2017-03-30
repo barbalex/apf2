@@ -11,7 +11,7 @@ import isNodeInActiveNodePath from '../../../../modules/isNodeInActiveNodePath'
 
 const singleRowHeight = 23
 const StyledNode = styled(({ level, nodeIsInActiveNodePath, children, ...rest }) => <div {...rest}>{children}</div>)`
-  padding-left: ${(props) => `${Number(props.level) * 16}px`};
+  padding-left: ${(props) => `${(Number(props.level) * 18) - 4}px`};
   height: ${singleRowHeight}px;
   max-height: ${singleRowHeight}px;
   box-sizing: border-box;
@@ -27,12 +27,15 @@ const StyledNode = styled(({ level, nodeIsInActiveNodePath, children, ...rest })
   }
 `
 const StyledSymbolSpan = styled.span`
+  font-family: 'Roboto Mono', monospace;
   margin-right: 0 !important;
+  margin-top: -4px !important;
   font-weight: 900 !important;
+  font-size: 16px !important;
 `
 const StyledSymbolOpenSpan = styled(StyledSymbolSpan)`
-  /*margin-top: -0.2em; only necessary on mac!!!*/
-  font-size: 1.4em !important;
+  margin-top: -1px !important;
+  font-size: 24px !important;
 `
 const StyledTextSpan = styled.span`
   padding-left: .5em;
