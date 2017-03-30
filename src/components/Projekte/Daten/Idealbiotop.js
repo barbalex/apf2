@@ -6,7 +6,7 @@ import compose from 'recompose/compose'
 import { Scrollbars } from 'react-custom-scrollbars'
 
 import TextField from '../../shared/TextField'
-import DatePicker from '../../shared/DatePicker'
+import DateFieldWithPicker from '../../shared/DateFieldWithPicker'
 import FormTitle from '../../shared/FormTitle'
 
 const Container = styled.div`
@@ -41,7 +41,7 @@ const Idealbiotop = ({
       <FormTitle title="Idealbiotop" />
       <Scrollbars>
         <FieldsContainer>
-          <DatePicker
+          <DateFieldWithPicker
             label="Erstelldatum"
             fieldName="IbErstelldatum"
             value={activeDataset.row.IbErstelldatum}
