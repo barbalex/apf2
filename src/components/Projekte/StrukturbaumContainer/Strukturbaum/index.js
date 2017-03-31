@@ -101,7 +101,7 @@ class Strukturbaum extends Component {
         key={key}
         index={index}
         style={style}
-        node={store.node.node.nodes[index]}
+        node={store.tree.node.nodes[index]}
       />
     )
   }

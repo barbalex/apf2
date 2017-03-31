@@ -6,10 +6,10 @@ export default (store) => {
   // fetch sorting indexes of parents
   const projId = activeUrlElements.projekt
   if (!projId) return []
-  const projIndex = findIndex(store.node.filteredAndSorted.projekt, { ProjId: projId })
+  const projIndex = findIndex(store.tree.filteredAndSorted.projekt, { ProjId: projId })
   const apArtId = activeUrlElements.ap
   if (!apArtId) return []
-  const apIndex = findIndex(store.node.filteredAndSorted.ap, { ApArtId: apArtId })
+  const apIndex = findIndex(store.tree.filteredAndSorted.ap, { ApArtId: apArtId })
 
   return {
     nodeType: `folder`,

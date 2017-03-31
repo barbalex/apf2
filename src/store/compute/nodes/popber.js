@@ -1,19 +1,19 @@
 import findIndex from 'lodash/findIndex'
 
 export default (store) => {
-  const { activeUrlElements, node } = store
+  const { activeUrlElements, tree } = store
   // fetch sorting indexes of parents
   const projId = activeUrlElements.projekt
   if (!projId) return []
-  const projIndex = findIndex(node.filteredAndSorted.projekt, { ProjId: projId })
+  const projIndex = findIndex(tree.filteredAndSorted.projekt, { ProjId: projId })
   const apArtId = activeUrlElements.ap
   if (!apArtId) return []
-  const apIndex = findIndex(node.filteredAndSorted.ap, { ApArtId: apArtId })
+  const apIndex = findIndex(tree.filteredAndSorted.ap, { ApArtId: apArtId })
   const popId = activeUrlElements.pop
   if (!popId) return []
-  const popIndex = findIndex(node.filteredAndSorted.pop, { PopId: popId })
+  const popIndex = findIndex(tree.filteredAndSorted.pop, { PopId: popId })
 
-  return node.filteredAndSorted.popber.map((el, index) => ({
+  return tree.filteredAndSorted.popber.map((el, index) => ({
     nodeType: `table`,
     menuType: `popber`,
     id: el.PopBerId,

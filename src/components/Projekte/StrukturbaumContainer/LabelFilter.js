@@ -23,7 +23,7 @@ const enhance = compose(
 )
 
 const LabelFilter = ({ store }) => {
-  const { node } = store
+  const { tree } = store
   const { activeDataset } = store
   let filteredTable = ``
   if (activeDataset && activeDataset.folder) {
@@ -34,7 +34,7 @@ const LabelFilter = ({ store }) => {
   let labelText = `filtern`
   let filterValue = ``
   if (filteredTable) {
-    filterValue = node.nodeLabelFilter.get(filteredTable) || ``
+    filterValue = tree.nodeLabelFilter.get(filteredTable) || ``
     const table = tables.find(t => t.table === filteredTable)
     const tableLabel = table ? table.label : null
     if (tableLabel) {
@@ -48,7 +48,7 @@ const LabelFilter = ({ store }) => {
       fullWidth
       value={filterValue}
       onChange={(event, val) =>
-        store.node.updateLabelFilter(filteredTable, val)
+        store.tree.updateLabelFilter(filteredTable, val)
       }
     />
   )
