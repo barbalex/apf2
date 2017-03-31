@@ -28,7 +28,6 @@ export default (store) => {
     label: `Berichte (${message})`,
     expanded: activeUrlElements.berFolder,
     url: [`Projekte`, projId, `Arten`, apArtId, `Berichte`],
-    level: 4,
     sort: [projIndex, 1, apIndex, 5],
     hasChildren: berNodesLength > 0,
   }

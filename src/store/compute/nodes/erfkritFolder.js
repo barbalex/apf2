@@ -28,7 +28,6 @@ export default (store) => {
     label: `AP-Erfolgskriterien (${message})`,
     expanded: activeUrlElements.erfkritFolder,
     url: [`Projekte`, projId, `Arten`, apArtId, `AP-Erfolgskriterien`],
-    level: 4,
     sort: [projIndex, 1, apIndex, 3],
     hasChildren: erfkritNodesLength > 0,
   }

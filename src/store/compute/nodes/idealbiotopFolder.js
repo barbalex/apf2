@@ -18,7 +18,6 @@ export default (store) => {
     label: `Idealbiotop`,
     expanded: activeUrlElements.idealbiotopFolder,
     url: [`Projekte`, projId, `Arten`, apArtId, `Idealbiotop`],
-    level: 4,
     sort: [projIndex, 1, apIndex, 6],
     hasChildren: false,
   }

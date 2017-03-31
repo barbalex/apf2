@@ -28,7 +28,6 @@ export default (store) => {
     label: `Beobachtungen nicht beurteilt (${message})`,
     expanded: activeUrlElements.beobzuordnungFolder,
     url: [`Projekte`, projId, `Arten`, apArtId, `nicht-beurteilte-Beobachtungen`],
-    level: 4,
     sort: [projIndex, 1, apIndex, 8],
     hasChildren: beobzuordnungNodesLength > 0,
   }

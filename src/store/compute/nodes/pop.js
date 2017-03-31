@@ -19,7 +19,6 @@ export default (store) => {
     label: el.label,
     expanded: el.PopId === activeUrlElements.pop,
     url: [`Projekte`, projId, `Arten`, el.ApArtId, `Populationen`, el.PopId],
-    level: 5,
     sort: [projIndex, 1, apIndex, 1, index],
     hasChildren: true,
   }))

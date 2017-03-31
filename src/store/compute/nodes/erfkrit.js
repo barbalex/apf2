@@ -19,7 +19,6 @@ export default (store) => {
     label: el.label,
     expanded: el.ErfkritId === activeUrlElements.erfkrit,
     url: [`Projekte`, projId, `Arten`, el.ApArtId, `AP-Erfolgskriterien`, el.ErfkritId],
-    level: 5,
     sort: [projIndex, 1, apIndex, 3, index],
     hasChildren: false,
   }))
