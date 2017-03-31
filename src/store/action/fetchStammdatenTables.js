@@ -1,5 +1,5 @@
 // @flow
-import tables from './tables'
+import tables from '../../modules/tables'
 import fetchStammdatenTable from './fetchStammdatenTable'
 
 export default async (store:Object) => {

@@ -8,8 +8,8 @@ import {
   autorunAsync,
 } from 'mobx'
 
-import fetchDataForActiveUrlElements from '../../modules/fetchDataForActiveUrlElements'
-import manipulateUrl from '../../modules/manipulateUrl'
+import fetchDataForActiveUrlElements from '../action/fetchDataForActiveUrlElements'
+import manipulateUrl from '../action/manipulateUrl'
 
 export default (store:Object) => {
   extendObservable(store, {
