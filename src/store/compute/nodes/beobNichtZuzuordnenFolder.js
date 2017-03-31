@@ -28,7 +28,6 @@ export default (store) => {
     label: `Beobachtungen nicht zuzuordnen (${message})`,
     expanded: activeUrlElements.beobNichtZuzuordnenFolder,
     url: [`Projekte`, projId, `Arten`, apArtId, `nicht-zuzuordnende-Beobachtungen`],
-    level: 4,
     sort: [projIndex, 1, apIndex, 9],
     hasChildren: beobNichtZuzuordnenNodesLength > 0,
   }

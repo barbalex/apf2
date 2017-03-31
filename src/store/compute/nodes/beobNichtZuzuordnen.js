@@ -23,7 +23,6 @@ export default (store) => {
       label: el.label,
       expanded: beobId === activeUrlElements.beobNichtZuzuordnen,
       url: [`Projekte`, projId, `Arten`, apArtId, `nicht-zuzuordnende-Beobachtungen`, beobId],
-      level: 5,
       sort: [projIndex, 1, apIndex, 9, index],
       hasChildren: false,
     }

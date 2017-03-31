@@ -22,7 +22,6 @@ export default (store) => {
     label: `AP-Berichte (${message})`,
     expanded: activeUrlElements.apberuebersichtFolder,
     url: [`Projekte`, projId, `AP-Berichte`],
-    level: 2,
     sort: [projIndex, 2],
     hasChildren: apberuebersichtNodesLength > 0,
   }

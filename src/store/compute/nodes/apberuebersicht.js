@@ -15,7 +15,6 @@ export default (store) => {
     label: el.JbuJahr,
     expanded: el.JbuJahr === activeUrlElements.apberuebersicht,
     url: [`Projekte`, el.ProjId, `AP-Berichte`, el.JbuJahr],
-    level: 3,
     sort: [projIndex, 2, el.JbuJahr],
     hasChildren: false,
   }))

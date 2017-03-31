@@ -27,7 +27,6 @@ export default (store) => {
     label: `assoziierte Arten (${message})`,
     expanded: activeUrlElements.assozartFolder,
     url: [`Projekte`, projId, `Arten`, apArtId, `assoziierte-Arten`],
-    level: 4,
     sort: [projIndex, 1, apIndex, 7],
     hasChildren: assozartNodesLength > 0,
   }

@@ -22,7 +22,6 @@ export default (store) => {
       label: el.label,
       expanded: beobId === activeUrlElements.beobzuordnung,
       url: [`Projekte`, projId, `Arten`, apArtId, `nicht-beurteilte-Beobachtungen`, beobId],
-      level: 5,
       sort: [projIndex, 1, apIndex, 8, index],
       hasChildren: false,
     }

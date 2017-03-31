@@ -23,7 +23,6 @@ export default (store) => {
     label: `Arten (${message})`,
     expanded: activeUrlElements.apFolder,
     url: [`Projekte`, projId, `Arten`],
-    level: 2,
     sort: [projIndex, 1],
     hasChildren: apNodesLength > 0,
   }

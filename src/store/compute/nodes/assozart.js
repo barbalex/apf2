@@ -18,7 +18,6 @@ export default (store) => {
     label: el.label,
     expanded: el.AaId === activeUrlElements.assozart,
     url: [`Projekte`, projId, `Arten`, apArtId, `assoziierte-Arten`, el.AaId],
-    level: 5,
     sort: [projIndex, 1, apIndex, 7, index],
     hasChildren: false,
   }))
