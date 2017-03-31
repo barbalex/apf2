@@ -1,17 +1,12 @@
 // @flow
 import {
-  extendObservable,
-  autorun,
-  autorunAsync,
   observable,
 } from 'mobx'
-
-import fetchDataForActiveUrlElements from '../modules/fetchDataForActiveUrlElements'
-import manipulateUrl from '../modules/manipulateUrl'
 
 import TableStore from './table'
 import ObservableHistory from './ObservableHistory'
 import extendStore from './extendStore'
+import extendStoreAutoruns from './extendStoreAutoruns'
 import extendNode from './extendNode'
 import extendDropdownList from './extendDropdownList'
 import extendApp from './extendApp'
@@ -121,30 +116,6 @@ extendMapBeobNichtBeurteilt(MyStore)
 extendMapBeobNichtZuzuordnen(MyStore)
 extendMapTpopBeob(MyStore)
 extendTableFilteredAndSorted(MyStore)
-
-// don't know why but combining this with last extend call
-// creates an error in an autorun
-// maybe needed actions are not part of Store yet?
-extendObservable(
-  MyStore,
-  {
-    manipulateUrl: autorun(
-      `manipulateUrl`,
-      () => manipulateUrl(MyStore)
-    ),
-    reactWhenUrlHasChanged: autorunAsync(
-      `reactWhenUrlHasChanged`,
-      () => {
-        // need to pass visibility of layers to make data fetched on changing layers
-        const showTpop = MyStore.map.activeApfloraLayers.includes(`Tpop`)
-        const showPop = MyStore.map.activeApfloraLayers.includes(`Pop`)
-        const showTpopBeob = MyStore.map.activeApfloraLayers.includes(`TpopBeob`) || MyStore.map.activeApfloraLayers.includes(`TpopBeobAssignPolylines`)
-        const showBeobNichtBeurteilt = MyStore.map.activeApfloraLayers.includes(`BeobNichtBeurteilt`)
-        const showBeobNichtZuzuordnen = MyStore.map.activeApfloraLayers.includes(`BeobNichtZuzuordnen`)
-        fetchDataForActiveUrlElements(MyStore, showPop, showTpop, showTpopBeob, showBeobNichtBeurteilt, showBeobNichtZuzuordnen)
-      }
-    ),
-  }
-)
+extendStoreAutoruns(MyStore)
 
 export default MyStore
