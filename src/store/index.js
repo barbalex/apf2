@@ -44,7 +44,7 @@ function Store() {
   this.fetchBeobInfospezies = null
   this.writeToStore = null
   this.setUrlQuery = null
-  this.node = {
+  this.tree = {
     apFilter: false,
     toggleApFilter: null,
     nodeLabelFilter: {},
