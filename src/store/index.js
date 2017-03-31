@@ -3,7 +3,7 @@ import {
   observable,
 } from 'mobx'
 
-import TableStore from './table'
+import TableStore from './Table'
 import ObservableHistory from './ObservableHistory'
 import extendStore from './extend'
 
