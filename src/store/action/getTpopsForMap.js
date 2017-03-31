@@ -2,7 +2,7 @@
 import epsg21781to4326 from '../../modules/epsg21781to4326'
 
 export default (store:Object) => {
-  const { table, activeUrlElements, node } = store
+  const { table, activeUrlElements, tree } = store
   const myApArtId = activeUrlElements.ap || store.map.pop.apArtId
   // get pops of this ap
   const popsOfActiveAp = Array.from(table.pop.values())
@@ -14,7 +14,7 @@ export default (store:Object) => {
     // omit tpops without coordinates
     .filter(p => p.TPopXKoord && p.TPopYKoord)
   // filter them by nodeLabelFilter
-  const tpopFilterString = node.nodeLabelFilter.get(`tpop`)
+  const tpopFilterString = tree.nodeLabelFilter.get(`tpop`)
   if (tpopFilterString) {
     tpops = tpops.filter((p) => {
       const label = `${p.TPopNr || `(keine Nr)`}: ${p.TPopFlurname || `(kein Flurname)`}`

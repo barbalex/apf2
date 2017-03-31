@@ -185,7 +185,7 @@ const Row = ({
 }) => {
   const onClick = (event) => {
     store.ui.lastClickY = event.pageY
-    store.node.toggleNode(node)
+    store.tree.toggleNode(node)
   }
   const myProps = { key: index }
   const nodeHasChildren = node.hasChildren
