@@ -23,7 +23,6 @@ export default (store, zielId) => {
     label: el.label,
     expanded: el.ZielBerId === activeUrlElements.zielber,
     url: [`Projekte`, projId, `Arten`, apArtId, `AP-Ziele`, zieljahr, el.ZielId, `Berichte`, el.ZielBerId],
-    level: 8,
     sort: [projIndex, 1, apIndex, 2, zieljahrIndex, zielIndex, 1, index],
     hasChildren: false,
   }))

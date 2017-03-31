@@ -29,7 +29,6 @@ export default (store) => {
     label: `AP-Ziele (${message})`,
     expanded: activeUrlElements.zielFolder,
     url: [`Projekte`, projId, `Arten`, apArtId, `AP-Ziele`],
-    level: 4,
     sort: [projIndex, 1, apIndex, 2],
     hasChildren: zieljahreNodesLength > 0,
   }

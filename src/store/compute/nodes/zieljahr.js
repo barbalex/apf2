@@ -23,7 +23,6 @@ export default (store) => {
       label: `${z.jahr == null ? `kein Jahr` : z.jahr} (${z.length})`,
       expanded: z.jahr && z.jahr === activeUrlElements.zieljahr,
       url: [`Projekte`, projId, `Arten`, apArtId, `AP-Ziele`, z.jahr],
-      level: 5,
       sort: [projIndex, 1, apIndex, 2, index],
       hasChildren: childrenLength > 0,
     }
