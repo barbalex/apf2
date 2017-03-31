@@ -11,6 +11,7 @@ function Store() {
   this.history = ObservableHistory
   this.loading = []
   this.activeUrlElements = {}
+  this.url = []
   this.urlQuery = {}
   this.node = {
     apFilter: false,
