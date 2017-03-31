@@ -95,7 +95,7 @@ const enhance = compose(
             // TODO: add this
             applyNodeLabelFilterToExport,  // eslint-disable-line no-unused-vars
             applyActiveNodeFilterToExport,  // eslint-disable-line no-unused-vars
-          } = store.node
+          } = store.tree
           let jsonData = clone(data)
           // now we could manipulate the data, for instance apply mapFilter
           const filterFeatures = mapFilter.filter.features

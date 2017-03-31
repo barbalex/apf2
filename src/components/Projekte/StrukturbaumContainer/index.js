@@ -188,7 +188,7 @@ class StrukturbaumContainer extends Component { // eslint-disable-line react/pre
 
   render() {
     const { store } = this.props
-    const { activeUrlElements, activeDataset, node } = store
+    const { activeUrlElements, activeDataset, tree } = store
     const showApDivToggle = activeDataset
 
     return (
@@ -200,9 +200,9 @@ class StrukturbaumContainer extends Component { // eslint-disable-line react/pre
             <NurApDiv>
               <Label label="nur AP" />
               <ApDivToggle
-                toggled={node.apFilter}
+                toggled={tree.apFilter}
                 thumbStyle={apDivToggleThumbStyle}
-                onToggle={node.toggleApFilter}
+                onToggle={tree.toggleApFilter}
               />
             </NurApDiv>
           }
@@ -214,7 +214,7 @@ class StrukturbaumContainer extends Component { // eslint-disable-line react/pre
         >
           <Strukturbaum
             projektLoading={store.table.projektLoading}
-            nodes={store.node.node.nodes}
+            nodes={store.tree.node.nodes}
             mapTpopBeobVisible={store.map.activeApfloraLayers.includes(`TpopBeob`)}
             mapBeobNichtBeurteiltVisible={store.map.activeApfloraLayers.includes(`BeobNichtBeurteilt`)}
             mapBeobNichtZuzuordnenVisible={store.map.activeApfloraLayers.includes(`BeobNichtZuzuordnen`)}
