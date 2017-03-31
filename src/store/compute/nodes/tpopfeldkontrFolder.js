@@ -34,7 +34,6 @@ export default (store) => {
     label: `Feld-Kontrollen (${message})`,
     expanded: activeUrlElements.tpopfeldkontrFolder,
     url: [`Projekte`, projId, `Arten`, apArtId, `Populationen`, popId, `Teil-Populationen`, tpopId, `Feld-Kontrollen`],
-    level: 8,
     sort: [projIndex, 1, apIndex, 1, popIndex, 1, tpopIndex, 3],
     hasChildren: childrenLength > 0,
   }

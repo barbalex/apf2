@@ -33,7 +33,6 @@ export default (store) => {
     label: `Beobachtungen zugeordnet (${message})`,
     expanded: activeUrlElements.tpopbeobFolder,
     url: [`Projekte`, projId, `Arten`, apArtId, `Populationen`, popId, `Teil-Populationen`, tpopId, `Beobachtungen`],
-    level: 8,
     sort: [projIndex, 1, apIndex, 1, popIndex, 1, tpopIndex, 6],
     hasChildren: childrenLength > 0,
   }

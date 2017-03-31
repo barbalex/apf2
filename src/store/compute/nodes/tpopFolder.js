@@ -31,7 +31,6 @@ export default (store) => {
     label: `Teil-Populationen (${message})`,
     expanded: activeUrlElements.tpopFolder,
     url: [`Projekte`, projId, `Arten`, apArtId, `Populationen`, popId, `Teil-Populationen`],
-    level: 6,
     sort: [projIndex, 1, apIndex, 1, popIndex, 1],
     hasChildren: childrenLength > 0,
   }

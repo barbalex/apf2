@@ -24,7 +24,6 @@ export default (store) => {
     label: el.label,
     expanded: el.TPopKontrId === activeUrlElements.tpopfeldkontr,
     url: [`Projekte`, projId, `Arten`, apArtId, `Populationen`, popId, `Teil-Populationen`, tpopId, `Feld-Kontrollen`, el.TPopKontrId],
-    level: 9,
     sort: [projIndex, 1, apIndex, 1, popIndex, 1, tpopIndex, 3, index],
     hasChildren: true,
   }))
