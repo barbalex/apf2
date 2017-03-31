@@ -30,6 +30,6 @@ export default (store) => {
     url: [`Projekte`, projId, `Arten`, apArtId, `AP-Erfolgskriterien`],
     level: 4,
     sort: [projIndex, 1, apIndex, 3],
-    childrenLength: erfkritNodesLength,
+    hasChildren: erfkritNodesLength > 0,
   }
 }

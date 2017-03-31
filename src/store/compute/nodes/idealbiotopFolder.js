@@ -20,6 +20,6 @@ export default (store) => {
     url: [`Projekte`, projId, `Arten`, apArtId, `Idealbiotop`],
     level: 4,
     sort: [projIndex, 1, apIndex, 6],
-    childrenLength: 0,
+    hasChildren: false,
   }
 }

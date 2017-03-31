@@ -23,6 +23,6 @@ export default (store) => {
     url: [`Projekte`, projId, `Arten`, apArtId, `Populationen`, popId, `Kontroll-Berichte`, el.PopBerId],
     level: 7,
     sort: [projIndex, 1, apIndex, 1, popIndex, 2, index],
-    childrenLength: 0,
+    hasChildren: false,
   }))
 }
