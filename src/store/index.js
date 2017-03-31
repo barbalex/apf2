@@ -20,6 +20,7 @@ function Store() {
     toggleApplyNodeLabelFilterToExport: null,
     activeNodeFilter: {},
     applyActiveNodeFilterToExport: false,
+    // TODO: does not belong here
     nodeMapFilter: {
       filter: {
         features: []
