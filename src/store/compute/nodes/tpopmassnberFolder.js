@@ -34,7 +34,6 @@ export default (store) => {
     label: `Massnahmen-Berichte (${message})`,
     expanded: activeUrlElements.tpopmassnberFolder,
     url: [`Projekte`, projId, `Arten`, apArtId, `Populationen`, popId, `Teil-Populationen`, tpopId, `Massnahmen-Berichte`],
-    level: 8,
     sort: [projIndex, 1, apIndex, 1, popIndex, 1, tpopIndex, 2],
     hasChildren: childrenLength > 0,
   }

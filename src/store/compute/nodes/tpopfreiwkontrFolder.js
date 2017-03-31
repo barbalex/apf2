@@ -34,7 +34,6 @@ export default (store) => {
     label: `Freiwilligen-Kontrollen (${message})`,
     expanded: activeUrlElements.tpopfreiwkontrFolder,
     url: [`Projekte`, projId, `Arten`, apArtId, `Populationen`, popId, `Teil-Populationen`, tpopId, `Freiwilligen-Kontrollen`],
-    level: 8,
     sort: [projIndex, 1, apIndex, 1, popIndex, 1, tpopIndex, 4],
     hasChildren: childrenLength > 0,
   }
