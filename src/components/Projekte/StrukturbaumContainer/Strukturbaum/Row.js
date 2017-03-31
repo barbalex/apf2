@@ -20,7 +20,7 @@ const StyledNode = styled(({ level, nodeIsInActiveNodePath, children, ...rest })
   flex-direction: row;
   white-space: nowrap;
   user-select: none;
-  color: ${(props) => (props.nodeIsInActiveNodePath ? `rgb(255, 60, 0)` : `rgb(247, 247, 247)`)};
+  color: ${(props) => (props.nodeIsInActiveNodePath ? `rgb(255, 90, 0)` : `rgb(247, 247, 247)`)};
   cursor: pointer;
   &:hover {
     color: orange;
