@@ -25,7 +25,7 @@ export default (store) => {
       url: [`Projekte`, projId, `Arten`, apArtId, `AP-Ziele`, z.jahr],
       level: 5,
       sort: [projIndex, 1, apIndex, 2, index],
-      childrenLength,
+      hasChildren: childrenLength > 0,
     }
   })
   return nodes

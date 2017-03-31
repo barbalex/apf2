@@ -33,6 +33,6 @@ export default (store) => {
     url: [`Projekte`, projId, `Arten`, apArtId, `AP-Ziele`, zieljahr, ziel, `Berichte`],
     level: 7,
     sort: [projIndex, 1, apIndex, 2, zieljahrIndex, zielIndex, 1],
-    childrenLength: zielberNodesLength,
+    hasChildren: zielberNodesLength > 0,
   }
 }

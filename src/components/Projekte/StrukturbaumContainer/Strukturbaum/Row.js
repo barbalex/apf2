@@ -188,7 +188,7 @@ const Row = ({
     store.node.toggleNode(node)
   }
   const myProps = { key: index }
-  const nodeHasChildren = node.childrenLength > 0
+  const nodeHasChildren = node.hasChildren
   const symbolTypes = {
     open: `${String.fromCharCode(709)}`,
     closed: `>`,

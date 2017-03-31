@@ -23,6 +23,6 @@ export default (store, jahr) => {
     url: [`Projekte`, projId, `Arten`, el.ApArtId, `AP-Ziele`, el.ZielJahr, el.ZielId],
     level: 6,
     sort: [projIndex, 1, apIndex, 2, zieljahrIndex, index],
-    childrenLength: 1,
+    hasChildren: true,
   }))
 }
