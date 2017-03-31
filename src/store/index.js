@@ -38,25 +38,6 @@ import setQk from '../modules/setQk'
 import setQkFilter from '../modules/setQkFilter'
 import fetchQk from '../modules/fetchQk'
 import addMessagesToQk from '../modules/addMessagesToQk'
-import getPopsForMap from '../modules/getPopsForMap'
-import getTpopsForMap from '../modules/getTpopsForMap'
-import getBeobForMap from '../modules/getBeobForMap'
-import getPopBounds from '../modules/getPopBounds'
-import getTpopBounds from '../modules/getTpopBounds'
-import getTpopBeobBounds from '../modules/getTpopBeobBounds'
-import getBeobNichtZuzuordnenBounds from '../modules/getBeobNichtZuzuordnenBounds'
-import getBeobNichtBeurteiltBounds from '../modules/getBeobNichtBeurteiltBounds'
-import getPopMarkers from '../modules/getPopMarkers'
-import getTpopMarkers from '../modules/getTpopMarkers'
-import getTpopMarkersClustered from '../modules/getTpopMarkersClustered'
-import getBeobMarkersClustered from '../modules/getBeobMarkersClustered'
-import getBeobMarkers from '../modules/getBeobMarkers'
-import getBeobNichtBeurteiltMarkersClustered from '../modules/getBeobNichtBeurteiltMarkersClustered'
-import getBeobNichtBeurteiltMarkers from '../modules/getBeobNichtBeurteiltMarkers'
-import getBeobNichtZuzuordnenMarkersClustered from '../modules/getBeobNichtZuzuordnenMarkersClustered'
-import getTpopBeobMarkersClustered from '../modules/getTpopBeobMarkersClustered'
-import getTpopBeobMarkers from '../modules/getTpopBeobMarkers'
-import getTpopBeobAssignPolylines from '../modules/getTpopBeobAssignPolylines'
 import fetchLogin from '../modules/fetchLogin'
 import logout from '../modules/logout'
 import setLoginFromIdb from '../modules/setLoginFromIdb'
@@ -97,6 +78,12 @@ import extendApp from './extendApp'
 import extendUi from './extendUi'
 import extendUser from './extendUser'
 import extendMap from './extendMap'
+import extendMapPop from './extendMapPop'
+import extendMapTpop from './extendMapTpop'
+import extendMapBeob from './extendMapBeob'
+import extendMapBeobNichtBeurteilt from './extendMapBeobNichtBeurteilt'
+import extendMapBeobNichtZuzuordnen from './extendMapBeobNichtZuzuordnen'
+import extendMapTpopBeob from './extendMapTpopBeob'
 
 function Store() {
   this.history = ObservableHistory
@@ -175,248 +162,6 @@ function Store() {
     addActiveApfloraLayer: () => {},
     removeActiveApfloraLayer: () => {},
   }
-  extendObservable(this.map.pop, {
-    // apArtId is needed because
-    // need to pass apArtId when activeUrlElements.ap
-    // is not yet set...
-    apArtId: null,
-    highlightedIds: computed(
-      () => {
-        const nodeMapFilterPop = this.node.nodeMapFilter.pop
-        if (nodeMapFilterPop.length > 0) {
-          return nodeMapFilterPop
-        }
-        if (this.activeUrlElements.pop) {
-          return [this.activeUrlElements.pop]
-        }
-        return []
-      },
-      { name: `highlightedIds` }
-    ),
-    pops: computed(() =>
-      getPopsForMap(this),
-      { name: `mapPops` }
-    ),
-    bounds: computed(() =>
-      getPopBounds(this.map.pop.pops),
-      { name: `mapPopBounds` }
-    ),
-    boundsOfHighlightedIds: computed(
-      () => getPopBounds(
-        this.map.pop.pops
-          .filter(p => this.map.pop.highlightedIds.includes(p.PopId))
-      ),
-      { name: `mapPopBoundsOfHighlightedIds` }
-    ),
-    // alternative is using names
-    labelUsingNr: true,
-    markers: computed(() =>
-      getPopMarkers(this),
-      { name: `mapPopMarkers` }
-    ),
-  })
-  extendObservable(this.map.tpop, {
-    highlightedIds: computed(
-      () => {
-        const nodeMapFilterTpop = this.node.nodeMapFilter.tpop
-        if (nodeMapFilterTpop.length > 0) {
-          return nodeMapFilterTpop
-        }
-        if (this.activeUrlElements.tpop) {
-          return [this.activeUrlElements.tpop]
-        }
-        return []
-      },
-      { name: `mapTpopHighlightedIds` }
-    ),
-    highlightedPopIds: [],
-    tpops: computed(() =>
-      getTpopsForMap(this),
-      { name: `mapTpopTpops` }
-    ),
-    bounds: computed(() =>
-      getTpopBounds(this.map.tpop.tpops),
-      { name: `mapTpopBounds` }
-    ),
-    boundsOfHighlightedIds: computed(
-      () => getTpopBounds(
-        this.map.tpop.tpops
-          .filter(t => this.map.tpop.highlightedIds.includes(t.TPopId))
-      ),
-      { name: `mapTpopBoundsOfHighlightedIds` }
-    ),
-    // alternative is using names
-    labelUsingNr: true,
-    markers: computed(() =>
-      getTpopMarkers(this),
-      { name: `mapTpopMarkers` }
-    ),
-    markersClustered: computed(() =>
-      getTpopMarkersClustered(this),
-      { name: `mapTpopMarkersClustered` }
-    ),
-    idOfTpopBeingLocalized: 0,
-  })
-  extendObservable(this.map.beob, {
-    highlightedIds: [],
-    beobs: computed(() =>
-      getBeobForMap(this),
-      { name: `mapBeobBeobs` }
-    ),
-    markersClustered: computed(
-      () => getBeobMarkersClustered(this),
-      { name: `mapBeobMarkersClustered` }
-    ),
-    markers: computed(
-      () => getBeobMarkers(this),
-      { name: `mapBeobMarkers` }
-    ),
-    assigning: false,
-    toggleAssigning: action(`toggleAssigning`, () =>
-      this.map.beob.assigning = !this.map.beob.assigning
-    ),
-  })
-  extendObservable(this.map.beobNichtBeurteilt, {
-    highlightedIds: computed(
-      () => {
-        const nodeMapFilterBeobNichtBeurteilt = this.node.nodeMapFilter.beobNichtBeurteilt
-        if (nodeMapFilterBeobNichtBeurteilt.length > 0) {
-          return nodeMapFilterBeobNichtBeurteilt
-        }
-        if (this.activeUrlElements.beobzuordnung) {
-          return [this.activeUrlElements.beobzuordnung]
-        }
-        return []
-      },
-      { name: `mapBeobNichtBeurteiltHighlightedIds` }
-    ),
-    markersClustered: computed(
-      () => getBeobNichtBeurteiltMarkersClustered(this),
-      { name: `mapBeobNichtBeurteiltMarkersClustered` }
-    ),
-    markers: computed(
-      () => getBeobNichtBeurteiltMarkers(this),
-      { name: `mapBeobNichtBeurteiltMarkers` }
-    ),
-    beobs: computed(
-      () => getBeobForMap(this).filter(b =>
-        !b.beobzuordnung ||
-        (!b.beobzuordnung.BeobNichtZuordnen && !b.beobzuordnung.TPopId)
-      ),
-      { name: `mapBeobNichtBeurteiltBeobs` }
-    ),
-    bounds: computed(
-      () => getBeobNichtBeurteiltBounds(this.map.beobNichtBeurteilt.beobs),
-      { name: `mapBeobNichtBeurteiltBounds` }
-    ),
-    boundsOfHighlightedIds: computed(
-      () => getBeobNichtBeurteiltBounds(
-        this.map.beobNichtBeurteilt.beobs
-          .filter(b => this.map.beobNichtBeurteilt.highlightedIds.includes(b.BeobId))
-      ),
-      { name: `mapBeobNichtBeurteiltBoundsOfHighlightedIds` }
-    ),
-    idOfBeobBeingAssigned: 0,
-  })
-  extendObservable(this.map.beobNichtZuzuordnen, {
-    highlightedIds: computed(
-      () => {
-        const nodeMapFilterBeobNichtZuzuordnen = this.node.nodeMapFilter.beobNichtZuzuordnen
-        if (nodeMapFilterBeobNichtZuzuordnen.length > 0) {
-          return nodeMapFilterBeobNichtZuzuordnen
-        }
-        if (this.activeUrlElements.beobNichtZuzuordnen) {
-          return [this.activeUrlElements.beobNichtZuzuordnen]
-        }
-        return []
-      },
-      { name: `mapBeobNichtZuzuordnenHighlightedIds` }
-    ),
-    markersClustered: computed(
-      () => getBeobNichtZuzuordnenMarkersClustered(this),
-      { name: `mapBeobNichtZuzuordnenMarkersClustered` }
-    ),
-    beobs: computed(
-      () => getBeobForMap(this)
-        .filter(b => b.beobzuordnung && b.beobzuordnung.BeobNichtZuordnen === 1),
-      { name: `mapBeobNichtZuzuordnenBeobs` }
-    ),
-    bounds: computed(
-      () => getBeobNichtZuzuordnenBounds(this.map.beobNichtZuzuordnen.beobs),
-    { name: `mapBeobNichtZuzuordnenBounds` }
-    ),
-    boundsOfHighlightedIds: computed(
-      () => getBeobNichtZuzuordnenBounds(
-        this.map.beobNichtZuzuordnen.beobs
-          .filter(b =>
-            this.map.beobNichtZuzuordnen.highlightedIds.includes(
-              isNaN(b.BeobId) ? b.BeobId : Number(b.BeobId)
-            )
-          )
-      ),
-      { name: `mapBeobNichtZuzuordnenBoundsOfHighlightedIds` }
-    ),
-  })
-  extendObservable(this.map.tpopBeob, {
-    highlightedIds: computed(
-      () => {
-        const { activeUrlElements } = this
-        const nodeMapFilterTpopBeob = this.node.nodeMapFilter.tpopBeob
-        if (nodeMapFilterTpopBeob.length > 0) {
-          return nodeMapFilterTpopBeob
-        }
-        if (activeUrlElements.tpopbeob) {
-          return [activeUrlElements.tpopbeob]
-        } else if (activeUrlElements.tpop) {
-          return this.map.tpopBeob.beobs.filter(b =>
-            b.beobzuordnung && b.beobzuordnung.TPopId === activeUrlElements.tpop
-          ).map(b => b.BeobId)
-        } else if (activeUrlElements.pop) {
-          return this.map.tpopBeob.beobs.filter((b) => {
-            const tpop = this.table.tpop.get(b.beobzuordnung.TPopId)
-            if (tpop) {
-              const popId = tpop.PopId
-              return popId && popId === activeUrlElements.pop
-            }
-            return false
-          }).map(b => b.BeobId)
-        }
-        return []
-      },
-      { name: `mapTpopBeobHighlightedIds` }
-    ),
-    markersClustered: computed(
-      () => getTpopBeobMarkersClustered(this),
-      { name: `mapTpopBeobMarkersClustered` }
-    ),
-    markers: computed(
-      () => getTpopBeobMarkers(this),
-      { name: `mapTpopBeobMarkers` }
-    ),
-    assignPolylines: computed(
-      () => getTpopBeobAssignPolylines(this),
-      { name: `mapTpopBeobAssignPolylines` }
-    ),
-    beobs: computed(
-      () => getBeobForMap(this).filter(b =>
-        b.beobzuordnung &&
-        b.beobzuordnung.TPopId &&
-        !b.beobzuordnung.BeobNichtZuzuordnen
-      ),
-      { name: `mapTpopBeobBeobs` }
-    ),
-    bounds: computed(
-      () => getTpopBeobBounds(this.map.tpopBeob.beobs),
-      { name: `mapTpopBeobBounds` }
-    ),
-    boundsOfHighlightedIds: computed(
-      () => getTpopBeobBounds(
-        this.map.tpopBeob.beobs
-          .filter(b => this.map.tpopBeob.highlightedIds.includes(b.BeobId))
-      ),
-      { name: `mapTpopBeobBoundsOfHighlightedIds` }
-    ),
-  })
   this.table = TableStore
   extendObservable(this.table.filteredAndSorted, {
     projekt: computed(
@@ -672,6 +417,12 @@ extendApp(MyStore)
 extendUi(MyStore)
 extendUser(MyStore)
 extendMap(MyStore)
+extendMapPop(MyStore)
+extendMapTpop(MyStore)
+extendMapBeob(MyStore)
+extendMapBeobNichtBeurteilt(MyStore)
+extendMapBeobNichtZuzuordnen(MyStore)
+extendMapTpopBeob(MyStore)
 
 // don't know why but combining this with last extend call
 // creates an error in an autorun
