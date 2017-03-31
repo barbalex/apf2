@@ -2,8 +2,8 @@
 import axios from 'axios'
 import app from 'ampersand-app'
 
-import apiBaseUrl from './apiBaseUrl'
-import recordValuesForWhichTableDataWasFetched from './recordValuesForWhichTableDataWasFetched'
+import apiBaseUrl from '../../modules/apiBaseUrl'
+import recordValuesForWhichTableDataWasFetched from '../../modules/recordValuesForWhichTableDataWasFetched'
 
 export default (store:Object, apArtId:number) => {
   if (!apArtId) {

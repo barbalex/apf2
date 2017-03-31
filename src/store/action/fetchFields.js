@@ -3,7 +3,7 @@ import axios from 'axios'
 import { runInAction } from 'mobx'
 import app from 'ampersand-app'
 
-import apiBaseUrl from './apiBaseUrl'
+import apiBaseUrl from '../../modules/apiBaseUrl'
 
 export default (store:Object) => {
   // only fetch if not yet done

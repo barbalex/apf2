@@ -2,9 +2,9 @@
 import axios from 'axios'
 import isArray from 'lodash/isArray'
 
-import apiBaseUrl from './apiBaseUrl'
-import isPointInsidePolygon from './isPointInsidePolygon'
-import zhGeojson from '../etc/ktZh.json'
+import apiBaseUrl from '../../modules/apiBaseUrl'
+import isPointInsidePolygon from '../../modules/isPointInsidePolygon'
+import zhGeojson from '../../etc/ktZh.json'
 
 const fetchQk = ({ store }:{store:Object}) => {
   store.loading.push(`qk`)
