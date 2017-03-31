@@ -50,6 +50,7 @@ function Store() {
     nodeLabelFilter: {},
     activeNodeFilter: {},
     applyMapFilterToTree: false,
+    filteredAndSorted: {},
     node: {
       nodes: [],
       projekt: null,
