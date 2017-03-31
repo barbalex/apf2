@@ -10,9 +10,40 @@ import extendStore from './extend'
 function Store() {
   this.history = ObservableHistory
   this.loading = []
-  this.activeUrlElements = {}
   this.url = []
   this.urlQuery = {}
+  this.activeDataset = {}
+  this.activeUrlElements = {}
+  this.datasetToDelete = {}
+  this.tellUserReadOnly = null
+  this.fetchLogin = null
+  this.logout = null
+  this.setLoginFromIdb = null
+  this.fetchQk = null
+  this.setQkFilter = null
+  this.addMessagesToQk = null
+  this.fetchFieldsFromIdb = null
+  this.insertBeobzuordnung = null
+  this.insertDataset = null
+  this.deleteDatasetDemand = null
+  this.deleteDatasetAbort = null
+  this.deleteDatasetExecute = null
+  this.deleteBeobzuordnung = null
+  this.listError = null
+  this.updateProperty = null
+  this.updatePropertyInDb = null
+  this.fetchTable = null
+  this.fetchStammdaten = null
+  this.fetchBeobzuordnung = null
+  this.fetchTableByParentId = null
+  this.fetchTpopForAp = null
+  this.fetchPopForAp = null
+  this.fetchDatasetById = null
+  this.fetchBeobBereitgestellt = null
+  this.fetchBeobEvab = null
+  this.fetchBeobInfospezies = null
+  this.writeToStore = null
+  this.setUrlQuery = null
   this.node = {
     apFilter: false,
     toggleApFilter: null,
