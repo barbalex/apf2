@@ -36,7 +36,6 @@ export default (store) => {
     label: `Qualitätskontrollen${nrOfQkMessages ? ` (${nrOfQkMessages})` : ``}`,
     expanded: false,
     url: [`Projekte`, projId, `Arten`, apArtId, `Qualitaetskontrollen`],
-    level: 4,
     sort: [projIndex, 1, apIndex, 10],
     hasChildren: false,
   }

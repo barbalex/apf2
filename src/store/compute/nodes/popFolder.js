@@ -27,7 +27,6 @@ export default (store) => {
     label: `Populationen (${message})`,
     expanded: activeUrlElements.popFolder,
     url: [`Projekte`, projId, `Arten`, apArtId, `Populationen`],
-    level: 4,
     sort: [projIndex, 1, apIndex, 1],
     hasChildren: popNodesLength > 0,
   }

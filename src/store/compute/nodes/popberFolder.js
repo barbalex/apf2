@@ -31,7 +31,6 @@ export default (store) => {
     label: `Kontroll-Berichte (${message})`,
     expanded: activeUrlElements.popberFolder,
     url: [`Projekte`, projId, `Arten`, apArtId, `Populationen`, popId, `Kontroll-Berichte`],
-    level: 6,
     sort: [projIndex, 1, apIndex, 1, popIndex, 2],
     hasChildren: popberNodesLength > 0,
   }

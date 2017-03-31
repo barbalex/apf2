@@ -21,7 +21,6 @@ export default (store) => {
     label: el.label,
     expanded: el.TPopId === activeUrlElements.tpop,
     url: [`Projekte`, projId, `Arten`, apArtId, `Populationen`, el.PopId, `Teil-Populationen`, el.TPopId],
-    level: 7,
     sort: [projIndex, 1, apIndex, 1, popIndex, 1, index],
     hasChildren: true,
   }))

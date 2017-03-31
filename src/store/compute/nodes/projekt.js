@@ -10,7 +10,6 @@ export default (store) => {
     expanded: el.ProjId === activeUrlElements.projekt,
     url: [`Projekte`, el.ProjId],
     sort: [index],
-    level: 1,
     hasChildren: true,
   }))
 }
