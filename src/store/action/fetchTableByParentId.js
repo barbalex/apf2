@@ -2,9 +2,9 @@
 import axios from 'axios'
 import app from 'ampersand-app'
 
-import apiBaseUrl from './apiBaseUrl'
-import tables from './tables'
-import recordValuesForWhichTableDataWasFetched from './recordValuesForWhichTableDataWasFetched'
+import apiBaseUrl from '../../modules/apiBaseUrl'
+import tables from '../../modules/tables'
+import recordValuesForWhichTableDataWasFetched from '../../modules/recordValuesForWhichTableDataWasFetched'
 
 export default (store:Object, schemaNamePassed:string, tableName:string, parentId:number) => {
   if (!tableName) {

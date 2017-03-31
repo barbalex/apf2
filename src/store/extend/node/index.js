@@ -6,7 +6,7 @@ import {
   observable,
 } from 'mobx'
 
-import toggleNode from '../../../modules/toggleNode'
+import toggleNode from '../../action/toggleNode'
 import projektNodes from '../../compute/nodes/projekt'
 import apFolderNodes from '../../compute/nodes/apFolder'
 import apberuebersichtFolderNodes from '../../compute/nodes/apberuebersichtFolder'

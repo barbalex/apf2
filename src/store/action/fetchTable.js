@@ -2,8 +2,8 @@
 import axios from 'axios'
 import app from 'ampersand-app'
 
-import apiBaseUrl from './apiBaseUrl'
-import tables from './tables'
+import apiBaseUrl from '../../modules/apiBaseUrl'
+import tables from '../../modules/tables'
 
 export default async (store:Object, schemaNamePassed:string, tableName:string) => {
   if (!tableName) {
