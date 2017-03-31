@@ -30,6 +30,6 @@ export default (store) => {
     url: [`Projekte`, projId, `Arten`, apArtId, `nicht-zuzuordnende-Beobachtungen`],
     level: 4,
     sort: [projIndex, 1, apIndex, 9],
-    childrenLength: beobNichtZuzuordnenNodesLength,
+    hasChildren: beobNichtZuzuordnenNodesLength > 0,
   }
 }

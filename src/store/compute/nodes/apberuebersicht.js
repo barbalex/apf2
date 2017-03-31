@@ -17,6 +17,6 @@ export default (store) => {
     url: [`Projekte`, el.ProjId, `AP-Berichte`, el.JbuJahr],
     level: 3,
     sort: [projIndex, 2, el.JbuJahr],
-    childrenLength: 0,
+    hasChildren: false,
   }))
 }

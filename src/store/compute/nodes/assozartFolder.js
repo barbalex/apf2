@@ -29,6 +29,6 @@ export default (store) => {
     url: [`Projekte`, projId, `Arten`, apArtId, `assoziierte-Arten`],
     level: 4,
     sort: [projIndex, 1, apIndex, 7],
-    childrenLength: assozartNodesLength,
+    hasChildren: assozartNodesLength > 0,
   }
 }

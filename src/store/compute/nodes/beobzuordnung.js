@@ -24,7 +24,7 @@ export default (store) => {
       url: [`Projekte`, projId, `Arten`, apArtId, `nicht-beurteilte-Beobachtungen`, beobId],
       level: 5,
       sort: [projIndex, 1, apIndex, 8, index],
-      childrenLength: 0,
+      hasChildren: false,
     }
   })
 }

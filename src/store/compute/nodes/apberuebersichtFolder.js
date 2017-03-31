@@ -24,6 +24,6 @@ export default (store) => {
     url: [`Projekte`, projId, `AP-Berichte`],
     level: 2,
     sort: [projIndex, 2],
-    childrenLength: apberuebersichtNodesLength,
+    hasChildren: apberuebersichtNodesLength > 0,
   }
 }
