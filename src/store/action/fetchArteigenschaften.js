@@ -2,7 +2,7 @@
 import axios from 'axios'
 import app from 'ampersand-app'
 
-import apiBaseUrl from './apiBaseUrl'
+import apiBaseUrl from '../../modules/apiBaseUrl'
 
 export default async (store:Object) => {
   store.loading.push(`adb_eigenschaften`)

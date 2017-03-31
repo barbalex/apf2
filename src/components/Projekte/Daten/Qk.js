@@ -11,7 +11,6 @@ import { Scrollbars } from 'react-custom-scrollbars'
 
 import FormTitle from '../../shared/FormTitle'
 import appBaseUrl from '../../../modules/appBaseUrl'
-import fetchQk from '../../../modules/fetchQk'
 
 const Container = styled.div`
   height: 100%;
@@ -39,7 +38,7 @@ const enhance = compose(
       props.store.setQk({ berichtjahr: val })
       if ((isNaN(val) && val.length === 4) || (!isNaN(val) && val > 1000)) {
         props.store.setQk({})
-        setTimeout(() => fetchQk({ store: props.store, berichtjahr: val }))
+        setTimeout(() => props.store.fetchQk({ store: props.store, berichtjahr: val }))
       }
     },
   }),

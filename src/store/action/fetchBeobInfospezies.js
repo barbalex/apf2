@@ -4,8 +4,8 @@ import axios from 'axios'
 import app from 'ampersand-app'
 import cloneDeep from 'lodash/cloneDeep'
 
-import apiBaseUrl from './apiBaseUrl'
-import recordValuesForWhichTableDataWasFetched from './recordValuesForWhichTableDataWasFetched'
+import apiBaseUrl from '../../modules/apiBaseUrl'
+import recordValuesForWhichTableDataWasFetched from '../../modules/recordValuesForWhichTableDataWasFetched'
 
 const writeToStore = (store, data) => {
   runInAction(() => {
