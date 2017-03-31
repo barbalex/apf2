@@ -1,16 +1,16 @@
 // @flow
 import buildQkMessages from './buildQkMessages'
 
-export default ({ store, messages }:{store:Object,messages:Array<Object>}) => {
+const setQk = ({ store, filter }:{store:Object,filter:string}) => {
   const apArtId = store.activeUrlElements.ap
   const existingQk = store.qk.get(apArtId)
-  const newMessages = existingQk.messages.concat(messages)
-  const filter = existingQk.filter
-  const berichtjahr = existingQk.berichtjahr
+  const { berichtjahr, messages } = existingQk
   const value = buildQkMessages({
     berichtjahr,
-    messages: newMessages,
+    messages,
     filter,
   })
   store.qk.set(apArtId, value)
 }
+
+export default setQk
