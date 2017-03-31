@@ -35,7 +35,6 @@ import insertDataset from '../modules/insertDataset'
 import insertBeobzuordnung from '../modules/insertBeobzuordnung'
 import deleteDatasetDemand from '../modules/deleteDatasetDemand'
 import deleteDatasetExecute from '../modules/deleteDatasetExecute'
-import toggleNode from '../modules/toggleNode'
 import listError from '../modules/listError'
 import setUrlQuery from '../modules/setUrlQuery'
 import setQk from '../modules/setQk'
@@ -67,55 +66,6 @@ import logout from '../modules/logout'
 import setLoginFromIdb from '../modules/setLoginFromIdb'
 import localizeTpop from '../modules/localizeTpop'
 import fetchStammdatenTables from '../modules/fetchStammdatenTables'
-import projektNodes from '../modules/nodes/projekt'
-import apFolderNodes from '../modules/nodes/apFolder'
-import apberuebersichtFolderNodes from '../modules/nodes/apberuebersichtFolder'
-import apberuebersichtNodes from '../modules/nodes/apberuebersicht'
-import apNodes from '../modules/nodes/ap'
-import allNodes from '../modules/nodes/allNodes'
-import qkFolderNode from '../modules/nodes/qkFolder'
-import assozartFolderNode from '../modules/nodes/assozartFolder'
-import assozartNode from '../modules/nodes/assozart'
-import idealbiotopFolderNode from '../modules/nodes/idealbiotopFolder'
-import beobNichtZuzuordnenFolderNode from '../modules/nodes/beobNichtZuzuordnenFolder'
-import beobNichtZuzuordnenNode from '../modules/nodes/beobNichtZuzuordnen'
-import beobzuordnungFolderNode from '../modules/nodes/beobzuordnungFolder'
-import beobzuordnungNode from '../modules/nodes/beobzuordnung'
-import berFolderNode from '../modules/nodes/berFolder'
-import berNode from '../modules/nodes/ber'
-import apberFolderNode from '../modules/nodes/apberFolder'
-import apberNode from '../modules/nodes/apber'
-import erfkritFolderNode from '../modules/nodes/erfkritFolder'
-import erfkritNode from '../modules/nodes/erfkrit'
-import zieljahreFolderNode from '../modules/nodes/zieljahrFolder'
-import zieljahrNode from '../modules/nodes/zieljahr'
-import zielNode from '../modules/nodes/ziel'
-import zielberFolderNode from '../modules/nodes/zielberFolder'
-import zielberNode from '../modules/nodes/zielber'
-import popFolderNode from '../modules/nodes/popFolder'
-import popNode from '../modules/nodes/pop'
-import popmassnberFolderNode from '../modules/nodes/popmassnberFolder'
-import popmassnberNode from '../modules/nodes/popmassnber'
-import popberFolderNode from '../modules/nodes/popberFolder'
-import popberNode from '../modules/nodes/popber'
-import tpopFolderNode from '../modules/nodes/tpopFolder'
-import tpopNode from '../modules/nodes/tpop'
-import tpopbeobFolderNode from '../modules/nodes/tpopbeobFolder'
-import tpopbeobNode from '../modules/nodes/tpopbeob'
-import tpopberFolderNode from '../modules/nodes/tpopberFolder'
-import tpopberNode from '../modules/nodes/tpopber'
-import tpopfreiwkontrFolderNode from '../modules/nodes/tpopfreiwkontrFolder'
-import tpopfreiwkontrNode from '../modules/nodes/tpopfreiwkontr'
-import tpopfreiwkontrzaehlFolderNode from '../modules/nodes/tpopfreiwkontrzaehlFolder'
-import tpopfreiwkontrzaehlNode from '../modules/nodes/tpopfreiwkontrzaehl'
-import tpopfeldkontrFolderNode from '../modules/nodes/tpopfeldkontrFolder'
-import tpopfeldkontrNode from '../modules/nodes/tpopfeldkontr'
-import tpopfeldkontrzaehlFolderNode from '../modules/nodes/tpopfeldkontrzaehlFolder'
-import tpopfeldkontrzaehlNode from '../modules/nodes/tpopfeldkontrzaehl'
-import tpopmassnberFolderNode from '../modules/nodes/tpopmassnberFolder'
-import tpopmassnberNode from '../modules/nodes/tpopmassnber'
-import tpopmassnFolderNode from '../modules/nodes/tpopmassnFolder'
-import tpopmassnNode from '../modules/nodes/tpopmassn'
 import filteredAndSortedProjekt from './table/filteredAndSorted/projekt'
 import filteredAndSortedApberuebersicht from './table/filteredAndSorted/apberuebersicht'
 import filteredAndSortedAp from './table/filteredAndSorted/ap'
@@ -145,14 +95,10 @@ import deleteBeobzuordnung from './action/deleteBeobzuordnung'
 import setActiveBaseLayer from './action/setActiveBaseLayer'
 import moveOverlay from './action/moveOverlay'
 import moveApfloraLayer from './action/moveApfloraLayer'
-import tpopIdsInsideFeatureCollection from '../modules/tpopIdsInsideFeatureCollection'
-import popIdsInsideFeatureCollection from '../modules/popIdsInsideFeatureCollection'
-import beobNichtBeurteiltIdsInsideFeatureCollection from '../modules/beobNichtBeurteiltIdsInsideFeatureCollection'
-import beobNichtZuzuordnenIdsInsideFeatureCollection from '../modules/beobNichtZuzuordnenIdsInsideFeatureCollection'
-import tpopBeobIdsInsideFeatureCollection from '../modules/tpopBeobIdsInsideFeatureCollection'
 import writeToStore from '../modules/writeToStore'
 
 import TableStore from './table'
+import NodeStore from './node'
 import ObservableHistory from './ObservableHistory'
 
 function Store() {
@@ -163,31 +109,7 @@ function Store() {
   extendObservable(this, {
     loading: [],
   })
-  this.node = {
-    apFilter: false,
-    nodeLabelFilter: {},
-    applyNodeLabelFilterToExport: false,
-    toggleApplyNodeLabelFilterToExport: null,
-    activeNodeFilter: {},
-    applyActiveNodeFilterToExport: false,
-    nodeMapFilter: {
-      filter: {
-        features: []
-      },
-      pop: [],
-      tpop: [],
-      beobNichtZuzuordnen: [],
-      beobNichtBeurteilt: [],
-      tpopBeob: [],
-    },
-    applyMapFilterToExport: false,
-    applyMapFilterToTree: false,
-    node: {
-      node: {
-        nodes: [],
-      }
-    }
-  }
+  this.node = NodeStore
   this.dropdownList = {
     adressen: [],
     apUmsetzungen: [],
@@ -419,279 +341,6 @@ function Store() {
         }))
       },
       { name: `dropdownListZielTypWerte` }
-    ),
-  })
-  extendObservable(this.node, {
-    apFilter: false,
-    nodeLabelFilter: observable.map({}),
-    applyNodeLabelFilterToExport: false,
-    toggleApplyNodeLabelFilterToExport: action(
-      `toggleApplyNodeLabelFilterToExport`,
-      () => this.node.applyNodeLabelFilterToExport = !this.node.applyNodeLabelFilterToExport
-    ),
-    updateLabelFilter: action(`updateLabelFilter`, (table, value) => {
-      if (!table) {
-        return this.listError(
-          new Error(`nodeLabelFilter cant be updated: no table passed`)
-        )
-      }
-      this.node.nodeLabelFilter.set(table, value)
-    }),
-    activeNodeFilter: {
-      ap: computed(
-        () => this.activeUrlElements.ap,
-        { name: `activeNodeFilterAp` }
-      ),
-    },
-    applyActiveNodeFilterToExport: false,
-    toggleApplyActiveNodeFilterToExport: action(
-      `toggleApplyActiveNodeFilterToExport`,
-      () => this.node.applyActiveNodeFilterToExport = !this.node.applyActiveNodeFilterToExport
-    ),
-    nodeMapFilter: {
-      filter: {
-        features: [],
-      },
-      pop: computed(
-        () => popIdsInsideFeatureCollection(this, this.map.pop.pops),
-        { name: `nodeMapFilterPop` }
-      ),
-      tpop: computed(
-        () => tpopIdsInsideFeatureCollection(this, this.map.tpop.tpops),
-        { name: `nodeMapFilterTpop` }
-      ),
-      beobNichtBeurteilt: computed(
-        () => beobNichtBeurteiltIdsInsideFeatureCollection(this, this.map.beobNichtBeurteilt.beobs),
-        { name: `nodeMapFilterBeobNichtBeurteilt` }
-      ),
-      beobNichtZuzuordnen: computed(
-        () => beobNichtZuzuordnenIdsInsideFeatureCollection(this, this.map.beobNichtZuzuordnen.beobs),
-        { name: `nodeMapFilterBeobNichtZuzuordnen` }
-      ),
-      tpopBeob: computed(
-        () => tpopBeobIdsInsideFeatureCollection(this, this.map.tpopBeob.beobs),
-        { name: `nodeMapFilterPTpopBeob` }
-      ),
-    },
-    toggleApplyMapFilterToExport: action(
-      `toggleApplyMapFilterToExport`,
-      () => this.node.applyMapFilterToExport = !this.node.applyMapFilterToExport
-    ),
-    applyMapFilterToExport: false,
-    applyMapFilterToTree: false,
-    toggleApplyMapFilterToTree: action(
-      `toggleApplyMapFilterToTree`,
-      () => this.node.applyMapFilterToTree = !this.node.applyMapFilterToTree
-    ),
-    updateMapFilter: action(`updateMapFilter`, (mapFilterItems) => {
-      if (!mapFilterItems) {
-        return this.node.nodeMapFilter.filter = { features: [] }
-      }
-      this.node.nodeMapFilter.filter = mapFilterItems.toGeoJSON()
-    }),
-    // action when user clicks on a node in the tree
-    toggleNode: action(`toggleNode`, node =>
-      toggleNode(this, node)
-    ),
-  })
-  extendObservable(this.node.nodeMapFilter.filter, {
-    features: [],
-  })
-  extendObservable(this.node.node, {
-    projekt: computed(
-      () => projektNodes(this),
-      { name: `` }
-    ),
-    apFolder: computed(
-      () => apFolderNodes(this),
-      { name: `apFolderNode` }
-    ),
-    apberuebersichtFolder: computed(
-      () => apberuebersichtFolderNodes(this),
-      { name: `apberuebersichtFolderNode` }
-    ),
-    apberuebersicht: computed(
-      () => apberuebersichtNodes(this),
-      { name: `apberuebersichtNode` }
-    ),
-    ap: computed(
-      () => apNodes(this),
-      { name: `apNode` }
-    ),
-    nodes: computed(
-      () => allNodes(this),
-      { name: `nodesNode` }
-    ),
-    qkFolder: computed(
-      () => qkFolderNode(this),
-    ),
-    assozartFolder: computed(
-      () => assozartFolderNode(this),
-      { name: `assozartFolderNode` }
-    ),
-    assozart: computed(
-      () => assozartNode(this),
-      { name: `assozartNode` }
-    ),
-    idealbiotopFolder: computed(
-      () => idealbiotopFolderNode(this),
-      { name: `idealbiotopFolderNode` }
-    ),
-    beobNichtZuzuordnenFolder: computed(
-      () => beobNichtZuzuordnenFolderNode(this),
-      { name: `beobNichtZuzuordnenFolderNode` }
-    ),
-    beobNichtZuzuordnen: computed(
-      () => beobNichtZuzuordnenNode(this),
-      { name: `beobNichtZuzuordnenNode` }
-    ),
-    beobzuordnungFolder: computed(
-      () => beobzuordnungFolderNode(this),
-      { name: `beobzuordnungFolderNode` }
-    ),
-    beobzuordnung: computed(
-      () => beobzuordnungNode(this),
-      { name: `beobzuordnungNode` }
-    ),
-    berFolder: computed(
-      () => berFolderNode(this),
-      { name: `berFolderNode` }
-    ),
-    ber: computed(
-      () => berNode(this),
-      { name: `berNode` }
-    ),
-    apberFolder: computed(
-      () => apberFolderNode(this),
-      { name: `apberFolderNode` }
-    ),
-    apber: computed(
-      () => apberNode(this),
-      { name: `apberNode` }
-    ),
-    erfkritFolder: computed(
-      () => erfkritFolderNode(this),
-      { name: `erfkritFolderNode` }
-    ),
-    erfkrit: computed(
-      () => erfkritNode(this),
-      { name: `erfkritNode` }
-    ),
-    zieljahrFolder: computed(
-      () => zieljahreFolderNode(this),
-      { name: `zieljahrFolderNode` }
-    ),
-    zieljahr: computed(
-      () => zieljahrNode(this),
-      { name: `zieljahrNode` }
-    ),
-    ziel: computed(
-      () => zielNode(this),
-      { name: `zielNode` }
-    ),
-    zielberFolder: computed(
-      () => zielberFolderNode(this),
-      { name: `zielberFolderNode` }
-    ),
-    zielber: computed(
-      () => zielberNode(this),
-      { name: `zielberNode` }
-    ),
-    popFolder: computed(
-      () => popFolderNode(this),
-      { name: `popFolderNode` }
-    ),
-    pop: computed(
-      () => popNode(this),
-      { name: `popNode` }
-    ),
-    popmassnberFolder: computed(
-      () => popmassnberFolderNode(this),
-      { name: `popmassnberFolderNode` }
-    ),
-    popmassnber: computed(
-      () => popmassnberNode(this),
-      { name: `popmassnberNode` }
-    ),
-    popberFolder: computed(
-      () => popberFolderNode(this),
-      { name: `popberFolderNode` }
-    ),
-    popber: computed(
-      () => popberNode(this),
-      { name: `popberNode` }
-    ),
-    tpopFolder: computed(
-      () => tpopFolderNode(this),
-      { name: `tpopFolderNode` }
-    ),
-    tpop: computed(
-      () => tpopNode(this),
-      { name: `tpopNode` }
-    ),
-    tpopbeobFolder: computed(
-      () => tpopbeobFolderNode(this),
-      { name: `tpopbeobFolderNode` }
-    ),
-    tpopbeob: computed(
-      () => tpopbeobNode(this),
-      { name: `tpopbeobNode` }
-    ),
-    tpopberFolder: computed(
-      () => tpopberFolderNode(this),
-      { name: `tpopberFolderNode` }
-    ),
-    tpopber: computed(
-      () => tpopberNode(this),
-      { name: `tpopberNode` }
-    ),
-    tpopfreiwkontrFolder: computed(
-      () => tpopfreiwkontrFolderNode(this),
-      { name: `tpopfreiwkontrFolderNode` }
-    ),
-    tpopfreiwkontr: computed(
-      () => tpopfreiwkontrNode(this),
-      { name: `tpopfreiwkontrNode` }
-    ),
-    tpopfreiwkontrzaehlFolder: computed(
-      () => tpopfreiwkontrzaehlFolderNode(this),
-      { name: `tpopfreiwkontrzaehlFolderNode` }
-    ),
-    tpopfreiwkontrzaehl: computed(
-      () => tpopfreiwkontrzaehlNode(this),
-      { name: `tpopfreiwkontrzaehlNode` }
-    ),
-    tpopfeldkontrFolder: computed(
-      () => tpopfeldkontrFolderNode(this),
-      { name: `tpopfeldkontrFolderNode` }
-    ),
-    tpopfeldkontr: computed(
-      () => tpopfeldkontrNode(this),
-      { name: `tpopfeldkontrNode` }
-    ),
-    tpopfeldkontrzaehlFolder: computed(
-      () => tpopfeldkontrzaehlFolderNode(this),
-      { name: `tpopfeldkontrzaehlFolderNode` }
-    ),
-    tpopfeldkontrzaehl: computed(
-      () => tpopfeldkontrzaehlNode(this),
-      { name: `tpopfeldkontrzaehlNode` }
-    ),
-    tpopmassnberFolder: computed(
-      () => tpopmassnberFolderNode(this),
-      { name: `tpopmassnberFolderNode` }
-    ),
-    tpopmassnber: computed(
-      () => tpopmassnberNode(this),
-      { name: `tpopmassnberNode` }
-    ),
-    tpopmassnFolder: computed(
-      () => tpopmassnFolderNode(this),
-      { name: `tpopmassnFolderNode` }
-    ),
-    tpopmassn: computed(
-      () => tpopmassnNode(this),
-      { name: `tpopmassnNode` }
     ),
   })
   this.ui = {}
