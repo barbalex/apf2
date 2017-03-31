@@ -6,12 +6,12 @@ export default (store) => {
   // fetch sorting indexes of parents
   const projId = activeUrlElements.projekt
   if (!projId) return []
-  const projIndex = findIndex(table.filteredAndSorted.projekt, { ProjId: projId })
+  const projIndex = findIndex(node.filteredAndSorted.projekt, { ProjId: projId })
   const apArtId = activeUrlElements.ap
   if (!apArtId) return []
-  const apIndex = findIndex(table.filteredAndSorted.ap, { ApArtId: apArtId })
+  const apIndex = findIndex(node.filteredAndSorted.ap, { ApArtId: apArtId })
 
-  const berNodesLength = table.filteredAndSorted.ber.length
+  const berNodesLength = node.filteredAndSorted.ber.length
 
   let message = berNodesLength
   if (table.berLoading) {

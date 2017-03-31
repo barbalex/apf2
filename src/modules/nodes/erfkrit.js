@@ -1,17 +1,17 @@
 import findIndex from 'lodash/findIndex'
 
 export default (store) => {
-  const { activeUrlElements, table } = store
+  const { activeUrlElements, node } = store
   // fetch sorting indexes of parents
   const projId = activeUrlElements.projekt
   if (!projId) return []
-  const projIndex = findIndex(table.filteredAndSorted.projekt, { ProjId: projId })
+  const projIndex = findIndex(node.filteredAndSorted.projekt, { ProjId: projId })
   const apArtId = activeUrlElements.ap
   if (!apArtId) return []
-  const apIndex = findIndex(table.filteredAndSorted.ap, { ApArtId: apArtId })
+  const apIndex = findIndex(node.filteredAndSorted.ap, { ApArtId: apArtId })
 
   // map through all erfkrit and create array of nodes
-  return table.filteredAndSorted.erfkrit.map((el, index) => ({
+  return node.filteredAndSorted.erfkrit.map((el, index) => ({
     nodeType: `table`,
     menuType: `erfkrit`,
     id: el.ErfkritId,
