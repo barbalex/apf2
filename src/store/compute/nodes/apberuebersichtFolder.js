@@ -5,14 +5,14 @@ export default (store) => {
   // fetch sorting indexes of parents
   const projId = activeUrlElements.projekt
   if (!projId) return []
-  const projIndex = findIndex(store.node.filteredAndSorted.projekt, { ProjId: projId })
+  const projIndex = findIndex(store.tree.filteredAndSorted.projekt, { ProjId: projId })
   // build label
-  const apberuebersichtNodesLength = store.node.node.apberuebersicht.length
+  const apberuebersichtNodesLength = store.tree.node.apberuebersicht.length
   let message = apberuebersichtNodesLength
   if (store.table.apberuebersichtLoading) {
     message = `...`
   }
-  if (store.node.nodeLabelFilter.get(`apberuebersicht`)) {
+  if (store.tree.nodeLabelFilter.get(`apberuebersicht`)) {
     message = `${apberuebersichtNodesLength} gefiltert`
   }
 
