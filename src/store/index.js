@@ -7,9 +7,7 @@ import {
   computed,
   observable,
 } from 'mobx'
-import $ from 'jquery'
 import sortBy from 'lodash/sortBy'
-import filter from 'lodash/filter'
 
 import fetchTable from '../modules/fetchTable'
 import fetchBeobzuordnungModule from '../modules/fetchBeobzuordnung'
@@ -98,18 +96,44 @@ import moveApfloraLayer from './action/moveApfloraLayer'
 import writeToStore from '../modules/writeToStore'
 
 import TableStore from './table'
-import NodeStore from './node'
 import ObservableHistory from './ObservableHistory'
+import extendNode from './extendNode'
+import extendDropdownList from './extendDropdownList'
+import extendApp from './extendApp'
+import extendUi from './extendUi'
 
 function Store() {
   this.history = ObservableHistory
   this.loading = []
-  this.activeUrlElements = {}
-  this.urlQuery = {}
   extendObservable(this, {
     loading: [],
   })
-  this.node = NodeStore
+  this.activeUrlElements = {}
+  this.urlQuery = {}
+  this.node = {
+    apFilter: false,
+    toggleApFilter: null,
+    nodeLabelFilter: {},
+    applyNodeLabelFilterToExport: false,
+    toggleApplyNodeLabelFilterToExport: null,
+    activeNodeFilter: {},
+    applyActiveNodeFilterToExport: false,
+    nodeMapFilter: {
+      filter: {
+        features: []
+      },
+      pop: [],
+      tpop: [],
+      beobNichtZuzuordnen: [],
+      beobNichtBeurteilt: [],
+      tpopBeob: [],
+    },
+    applyMapFilterToExport: false,
+    applyMapFilterToTree: false,
+    node: {
+      nodes: [],
+    }
+  }
   this.dropdownList = {
     adressen: [],
     apUmsetzungen: [],
@@ -129,233 +153,8 @@ function Store() {
     tpopMassnTypWerte: [],
     zielTypWerte: [],
   }
-  extendObservable(this.dropdownList, {
-    adressen: computed(
-      () => {
-        const adressen = sortBy(
-          Array.from(this.table.adresse.values()),
-          `AdrName`
-        )
-        adressen.unshift({
-          id: null,
-          AdrName: ``,
-        })
-        return adressen
-      },
-      { name: `dropdownListAdressen` }
-    ),
-    apUmsetzungen: computed(
-      () => {
-        let apUmsetzungen = Array.from(
-          this.table.ap_umsetzung_werte.values()
-        )
-        apUmsetzungen = sortBy(apUmsetzungen, `DomainOrd`)
-        return apUmsetzungen.map(el => ({
-          value: el.DomainCode,
-          label: el.DomainTxt,
-        }))
-      },
-      { name: `dropdownListApUmsetzungen` }
-    ),
-    apStati: computed(
-      () => {
-        let apStati = Array.from(
-          this.table.ap_bearbstand_werte.values()
-        )
-        apStati = sortBy(apStati, `DomainOrd`)
-        return apStati.map(el => ({
-          value: el.DomainCode,
-          label: el.DomainTxt,
-        }))
-      },
-      { name: `dropdownListApStati` }
-    ),
-    artListForAp: computed(
-      () => {
-        const alreadyUsedApIds = Array.from(this.table.ap.keys()).map(a => Number(a))
-        // let user choose this ApArtId
-        const apArtIdsNotToShow = alreadyUsedApIds
-          .filter(r => r !== this.activeUrlElements.ap)
-        const artList = filter(
-          Array.from(this.table.adb_eigenschaften.values()),
-          r => !apArtIdsNotToShow.includes(r.TaxonomieId)
-        )
-        return sortBy(artList, `Artname`)
-      },
-      { name: `dropdownListArtListForAp` }
-    ),
-    artnamen: computed(
-      () => {
-        let artnamen = Array.from(
-          this.table.adb_eigenschaften.values()
-        )
-        artnamen = artnamen.map(a => a.Artname).sort()
-        // artnamen.unshift(``)
-        return artnamen
-      },
-      { name: `dropdownListArtnamen` }
-    ),
-    popEntwicklungWerte: computed(
-      () => {
-        let popEntwicklungWerte = Array.from(this.table.pop_entwicklung_werte.values())
-        popEntwicklungWerte = sortBy(popEntwicklungWerte, `EntwicklungOrd`)
-        return popEntwicklungWerte.map(el => ({
-          value: el.EntwicklungId,
-          label: el.EntwicklungTxt,
-        }))
-      },
-      { name: `dropdownListPopEntwicklungWerte` }
-    ),
-    tpopEntwicklungWerte: computed(
-      () => {
-        let tpopEntwicklungWerte = Array.from(
-          this.table.tpop_entwicklung_werte.values()
-        )
-        tpopEntwicklungWerte = sortBy(tpopEntwicklungWerte, `EntwicklungOrd`)
-        return tpopEntwicklungWerte.map(el => ({
-          value: el.EntwicklungCode,
-          label: el.EntwicklungTxt,
-        }))
-      },
-      { name: `dropdownListTpopEntwicklungWerte` }
-    ),
-    apErfkritWerte: computed(
-      () => {
-        let apErfkritWerte = Array.from(
-          this.table.ap_erfkrit_werte.values()
-        )
-        apErfkritWerte = sortBy(apErfkritWerte, `BeurteilOrd`)
-        return apErfkritWerte.map(el => ({
-          value: el.BeurteilId,
-          label: el.BeurteilTxt,
-        }))
-      },
-      { name: `dropdownListApErfkritWerte` }
-    ),
-    tpopmassnErfbeurtWerte: computed(
-      () => {
-        let tpopmassnErfbeurtWerte = Array.from(this.table.tpopmassn_erfbeurt_werte.values())
-        tpopmassnErfbeurtWerte = sortBy(tpopmassnErfbeurtWerte, `BeurteilOrd`)
-        return tpopmassnErfbeurtWerte.map(el => ({
-          value: el.BeurteilId,
-          label: el.BeurteilTxt,
-        }))
-      },
-      { name: `dropdownListTpopmassnErfbeurtWerte` }
-    ),
-    tpopApBerichtRelevantWerte: computed(
-      () => {
-        const tpopApBerichtRelevantWerte = Array.from(
-          this.table.tpop_apberrelevant_werte.values()
-        )
-        return tpopApBerichtRelevantWerte.map(t => ({
-          value: t.DomainCode,
-          label: t.DomainTxt,
-        }))
-      },
-      { name: `dropdownListTpopApBerichtRelevantWerte` }
-    ),
-    gemeinden: computed(
-      () => {
-        let gemeinden = Array.from(
-          this.table.gemeinde.values()
-        )
-        gemeinden = sortBy(gemeinden, `GmdName`)
-        return gemeinden.map(el => el.GmdName)
-      },
-      { name: `dropdownListGemeinden` }
-    ),
-    idbiotopuebereinstWerte: computed(
-      () => {
-        let idbiotopuebereinstWerte = Array.from(this.table.tpopkontr_idbiotuebereinst_werte.values())
-        idbiotopuebereinstWerte = sortBy(idbiotopuebereinstWerte, `DomainOrd`)
-        return idbiotopuebereinstWerte.map(el => ({
-          value: el.DomainCode,
-          label: el.DomainTxt,
-        }))
-      },
-      { name: `dropdownListIdbiotopuebereinstWerte` }
-    ),
-    lr: computed(
-      () => {
-        let lr = Array.from(this.table.adb_lr.values())
-        // eslint-disable-next-line no-regex-spaces
-        return lr.map(e => e.Einheit.replace(/  +/g, ` `))
-      },
-      { name: `dropdownListLr` }
-    ),
-    zaehleinheitWerte: computed(
-      () => {
-        let zaehleinheitWerte = Array.from(
-          this.table.tpopkontrzaehl_einheit_werte.values()
-        )
-        zaehleinheitWerte = sortBy(zaehleinheitWerte, `ZaehleinheitOrd`)
-        zaehleinheitWerte = zaehleinheitWerte.map(el => ({
-          value: el.ZaehleinheitCode,
-          label: el.ZaehleinheitTxt,
-        }))
-        zaehleinheitWerte.unshift({
-          value: null,
-          label: ``,
-        })
-        return zaehleinheitWerte
-      },
-      { name: `dropdownListZaehleinheitWerte` }
-    ),
-    methodeWerte: computed(
-      () => {
-        let methodeWerte = Array.from(
-          this.table.tpopkontrzaehl_methode_werte.values()
-        )
-        methodeWerte = sortBy(methodeWerte, `BeurteilOrd`)
-        methodeWerte = methodeWerte.map(el => ({
-          value: el.BeurteilCode,
-          label: el.BeurteilTxt,
-        }))
-        return methodeWerte
-      },
-      { name: `dropdownListMethodeWerte` }
-    ),
-    tpopMassnTypWerte: computed(
-      () => {
-        let tpopMassnTypWerte = Array.from(
-          this.table.tpopmassn_typ_werte.values()
-        )
-        tpopMassnTypWerte = sortBy(tpopMassnTypWerte, `MassnTypOrd`)
-        return tpopMassnTypWerte.map(el => ({
-          value: el.MassnTypCode,
-          label: el.MassnTypTxt,
-        }))
-      },
-      { name: `dropdownListTpopMassnTypWerte` }
-    ),
-    zielTypWerte: computed(
-      () => {
-        let zielTypWerte = Array.from(
-          this.table.ziel_typ_werte.values()
-        )
-        zielTypWerte = sortBy(zielTypWerte, `ZieltypOrd`)
-        return zielTypWerte.map(el => ({
-          value: el.ZieltypId,
-          label: el.ZieltypTxt,
-        }))
-      },
-      { name: `dropdownListZielTypWerte` }
-    ),
-  })
   this.ui = {}
-  extendObservable(this.ui, {
-    windowWidth: $(window).width(),
-    windowHeight: $(window).height(),
-    treeHeight: 0,
-    lastClickY: 0,
-    treeTopPosition: 0,
-  })
   this.app = {}
-  extendObservable(this.app, {
-    errors: [],
-    fields: [],
-  })
   this.user = {}
   // name set to prevent Login Dialog from appearing before setLoginFromIdb has fetched from idb
   extendObservable(this.user, {
@@ -887,9 +686,6 @@ function Store() {
     setLoginFromIdb: action(`setLoginFromIdb`, () =>
       setLoginFromIdb(this)
     ),
-    toggleApFilter: action(`toggleApFilter`, () => {
-      this.node.apFilter = !this.node.apFilter
-    }),
     fetchQk: action(`fetchQk`, () => fetchQk({ store: this })),
     setQk: action(`setQk`, ({ berichtjahr, messages, filter }) =>
       setQk({ store: this, berichtjahr, messages, filter })
@@ -990,6 +786,11 @@ function Store() {
 }
 
 const MyStore = new Store()
+
+extendNode(MyStore)
+extendDropdownList(MyStore)
+extendApp(MyStore)
+extendUi(MyStore)
 
 // don't know why but combining this with last extend call
 // creates an error in an autorun

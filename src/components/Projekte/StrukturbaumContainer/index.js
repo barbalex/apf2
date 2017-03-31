@@ -188,7 +188,7 @@ class StrukturbaumContainer extends Component { // eslint-disable-line react/pre
 
   render() {
     const { store } = this.props
-    const { activeUrlElements, activeDataset, node, toggleApFilter } = store
+    const { activeUrlElements, activeDataset, node } = store
     const showApDivToggle = activeDataset
 
     return (
@@ -202,7 +202,7 @@ class StrukturbaumContainer extends Component { // eslint-disable-line react/pre
               <ApDivToggle
                 toggled={node.apFilter}
                 thumbStyle={apDivToggleThumbStyle}
-                onToggle={toggleApFilter}
+                onToggle={node.toggleApFilter}
               />
             </NurApDiv>
           }
