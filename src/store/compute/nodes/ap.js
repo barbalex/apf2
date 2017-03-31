@@ -16,7 +16,6 @@ export default (store) => {
     label: el.label,
     expanded: el.ApArtId === activeUrlElements.ap,
     url: [`Projekte`, el.ProjId, `Arten`, el.ApArtId],
-    level: 3,
     sort: [projIndex, 1, index],
     hasChildren: true,
   }))

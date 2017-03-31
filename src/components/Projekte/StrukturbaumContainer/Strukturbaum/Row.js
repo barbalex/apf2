@@ -213,6 +213,7 @@ const Row = ({
     symbol = symbolTypes.hasNoChildren
   }
   const dataUrl = JSON.stringify(node.url)
+  const level = node.url.length - 1
 
   return (
     <div key={key} style={style} onClick={onClick}>
@@ -224,7 +225,7 @@ const Row = ({
         key={`${node.menuType}${node.id}`}
       >
         <StyledNode
-          level={node.level}
+          level={level}
           nodeIsInActiveNodePath={nodeIsInActiveNodePath}
           data-id={node.id}
           data-parentId={node.parentId}

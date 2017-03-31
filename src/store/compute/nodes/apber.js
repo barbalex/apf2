@@ -19,7 +19,6 @@ export default (store) => {
     label: el.label,
     expanded: el.JBerJahr === activeUrlElements.apber,
     url: [`Projekte`, projId, `Arten`, el.ApArtId, `AP-Berichte`, el.JBerId],
-    level: 5,
     sort: [projIndex, 1, apIndex, 4, index],
     hasChildren: false,
   }))

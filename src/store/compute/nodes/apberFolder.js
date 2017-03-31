@@ -34,7 +34,6 @@ export default (store) => {
     label: `AP-Berichte (${message})`,
     expanded: activeUrlElements.apberFolder,
     url: [`Projekte`, projId, `Arten`, apArtId, `AP-Berichte`],
-    level: 4,
     sort: [projIndex, 1, apIndex, 4],
     hasChildren: apberNodesLength > 0,
   }
