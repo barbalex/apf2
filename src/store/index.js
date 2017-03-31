@@ -7,7 +7,6 @@ import {
   computed,
   observable,
 } from 'mobx'
-import sortBy from 'lodash/sortBy'
 
 import fetchTable from '../modules/fetchTable'
 import fetchBeobzuordnungModule from '../modules/fetchBeobzuordnung'
@@ -47,7 +46,6 @@ import getTpopBounds from '../modules/getTpopBounds'
 import getTpopBeobBounds from '../modules/getTpopBeobBounds'
 import getBeobNichtZuzuordnenBounds from '../modules/getBeobNichtZuzuordnenBounds'
 import getBeobNichtBeurteiltBounds from '../modules/getBeobNichtBeurteiltBounds'
-import epsg4326to21781 from '../modules/epsg4326to21781'
 import getPopMarkers from '../modules/getPopMarkers'
 import getTpopMarkers from '../modules/getTpopMarkers'
 import getTpopMarkersClustered from '../modules/getTpopMarkersClustered'
@@ -62,7 +60,6 @@ import getTpopBeobAssignPolylines from '../modules/getTpopBeobAssignPolylines'
 import fetchLogin from '../modules/fetchLogin'
 import logout from '../modules/logout'
 import setLoginFromIdb from '../modules/setLoginFromIdb'
-import localizeTpop from '../modules/localizeTpop'
 import fetchStammdatenTables from '../modules/fetchStammdatenTables'
 import filteredAndSortedProjekt from './table/filteredAndSorted/projekt'
 import filteredAndSortedApberuebersicht from './table/filteredAndSorted/apberuebersicht'
@@ -90,9 +87,6 @@ import filteredAndSortedTpopfeldkontrzaehl from './table/filteredAndSorted/tpopf
 import filteredAndSortedTpopmassnber from './table/filteredAndSorted/tpopmassnber'
 import filteredAndSortedTpopmassn from './table/filteredAndSorted/tpopmassn'
 import deleteBeobzuordnung from './action/deleteBeobzuordnung'
-import setActiveBaseLayer from './action/setActiveBaseLayer'
-import moveOverlay from './action/moveOverlay'
-import moveApfloraLayer from './action/moveApfloraLayer'
 import writeToStore from '../modules/writeToStore'
 
 import TableStore from './table'
@@ -101,6 +95,8 @@ import extendNode from './extendNode'
 import extendDropdownList from './extendDropdownList'
 import extendApp from './extendApp'
 import extendUi from './extendUi'
+import extendUser from './extendUser'
+import extendMap from './extendMap'
 
 function Store() {
   this.history = ObservableHistory
@@ -156,12 +152,6 @@ function Store() {
   this.ui = {}
   this.app = {}
   this.user = {}
-  // name set to prevent Login Dialog from appearing before setLoginFromIdb has fetched from idb
-  extendObservable(this.user, {
-    name: `temporaryValue`,
-    roles: [],
-    readOnly: true,
-  })
   this.map = {
     bounds: [],
     mouseCoord: [],
@@ -185,117 +175,6 @@ function Store() {
     addActiveApfloraLayer: () => {},
     removeActiveApfloraLayer: () => {},
   }
-  extendObservable(this.map, {
-    bounds: [[47.159, 8.354], [47.696, 8.984]],
-    changeBounds: action(`changeBounds`, (bounds) => this.map.bounds = bounds),
-    mouseCoord: [],
-    mouseCoordEpsg21781: computed(
-      () => {
-        if (this.map.mouseCoord.length > 0) {
-          return epsg4326to21781(this.map.mouseCoord[0], this.map.mouseCoord[1])
-        }
-        return []
-      },
-      { name: `mouseCoordEpsg21781` }
-    ),
-    activeBaseLayer: `OsmColor`,
-    setActiveBaseLayer: action(`setActiveBaseLayer`, (layer) => setActiveBaseLayer(this, layer)),
-    overlays: observable([
-      { label: `ZH Übersichtsplan`, value: `ZhUep` },
-      { label: `Detailplaene`, value: `Detailplaene` },
-      { label: `ZH Gemeindegrenzen`, value: `ZhGemeindegrenzen` },
-      { label: `SVO grau`, value: `ZhSvoGrey` },
-      { label: `SVO farbig`, value: `ZhSvoColor` },
-      { label: `Lebensraum- und Vegetationskartierungen`, value: `ZhLrVegKartierungen` },
-      { label: `Wälder: lichte`, value: `ZhLichteWaelder` },
-      { label: `Wälder: Vegetation`, value: `ZhWaelderVegetation` },
-    ]),
-    overlaysString: computed(
-      () => this.map.overlays.map(o => o.value).join(),
-      { name: `computed` }
-    ),
-    moveOverlay: action(`moveOverlay`, ({ oldIndex, newIndex }) =>
-      moveOverlay(this, oldIndex, newIndex)
-    ),
-    activeOverlays: [],
-    activeOverlaysSorted: computed(
-      () => sortBy(this.map.activeOverlays, (activeOverlay) =>
-        this.map.overlays.findIndex((overlay) => overlay.value === activeOverlay)
-      ),
-      { name: `activeOverlaysSorted` }
-    ),
-    activeOverlaysSortedString: computed(
-      () => this.map.activeOverlaysSorted.join(),
-      { name: `activeOverlaysSortedString` }
-    ),
-    addActiveOverlay: action(`addActiveOverlay`, layer => this.map.activeOverlays.push(layer)),
-    removeActiveOverlay: action(`removeActiveOverlay`, (layer) => {
-      this.map.activeOverlays = this.map.activeOverlays.filter(o => o !== layer)
-    }),
-    apfloraLayers: observable([
-      { label: `Populationen`, value: `Pop` },
-      { label: `Teil-Populationen`, value: `Tpop` },
-      { label: `Beobachtungen: zugeordnet`, value: `TpopBeob` },
-      { label: `Beobachtungen: nicht beurteilt`, value: `BeobNichtBeurteilt` },
-      { label: `Beobachtungen: nicht zuzuordnen`, value: `BeobNichtZuzuordnen` },
-      { label: `Zuordnungs-Linien`, value: `TpopBeobAssignPolylines` },
-      { label: `Karten-Filter`, value: `MapFilter` },
-    ]),
-    apfloraLayersString: computed(
-      () => this.map.apfloraLayers.map(o => o.value).join(),
-      { name: `apfloraLayersString` }
-    ),
-    moveApfloraLayer: action(`moveApfloraLayer`, ({ oldIndex, newIndex }) =>
-      moveApfloraLayer(this, oldIndex, newIndex)
-    ),
-    activeApfloraLayers: [],
-    activeApfloraLayersSorted: computed(
-      () => sortBy(this.map.activeApfloraLayers, (activeApfloraLayer) =>
-        this.map.apfloraLayers.findIndex((apfloraLayer) =>
-          apfloraLayer.value === activeApfloraLayer
-        )
-      ),
-      { name: `activeApfloraLayersSorted` }
-    ),
-    activeApfloraLayersSortedString: computed(
-      () => this.map.activeApfloraLayersSorted.join(),
-      { name: `activeApfloraLayersSortedString` }
-    ),
-    addActiveApfloraLayer: action(`addActiveApfloraLayer`, layer =>
-      this.map.activeApfloraLayers.push(layer)
-    ),
-    removeActiveApfloraLayer: action(`removeActiveApfloraLayer`, (layer) => {
-      this.map.activeApfloraLayers = this.map.activeApfloraLayers.filter(o => o !== layer)
-    }),
-    showMapLayer: action(`showMapLayer`, (layer, bool) => {
-      if (bool) {
-        this.map.addActiveOverlay(layer)
-      } else {
-        this.map.removeActiveOverlay(layer)
-      }
-    }),
-    showMapApfloraLayer: action(`showMapApfloraLayer`, (layer, bool) => {
-      if (bool) {
-        this.map.addActiveApfloraLayer(layer)
-      } else {
-        this.map.removeActiveApfloraLayer(layer)
-      }
-    }),
-    setIdOfTpopBeingLocalized: action(`setIdOfTpopBeingLocalized`, (id) => {
-      if (this.user.readOnly) return this.tellUserReadOnly()
-      this.map.tpop.idOfTpopBeingLocalized = id
-    }),
-    localizeTpop: action(`localizeTpop`, (x, y) => {
-      if (this.user.readOnly) return this.tellUserReadOnly()
-      localizeTpop(this, x, y)
-    }),
-    setMapMouseCoord: action(`setMapMouseCoord`, (e) => {
-      this.map.mouseCoord = [e.latlng.lng, e.latlng.lat]
-    }),
-    toggleMapPopLabelContent: action(`toggleMapPopLabelContent`, (layer) =>
-      this.map[layer].labelUsingNr = !this.map[layer].labelUsingNr
-    ),
-  })
   extendObservable(this.map.pop, {
     // apArtId is needed because
     // need to pass apArtId when activeUrlElements.ap
@@ -791,6 +670,8 @@ extendNode(MyStore)
 extendDropdownList(MyStore)
 extendApp(MyStore)
 extendUi(MyStore)
+extendUser(MyStore)
+extendMap(MyStore)
 
 // don't know why but combining this with last extend call
 // creates an error in an autorun
