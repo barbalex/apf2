@@ -58,10 +58,6 @@ export default (store:Object) => {
       () => getUrlQuery(store.history.location.search),
       { name: `urlQuery` }
     ),
-    projektNodes: computed(
-      () => buildProjektNodes(store),
-      { name: `projektNodes` }
-    ),
     activeDataset: computed(
       () => updateActiveDatasetFromUrl(store),
       { name: `activeDataset` }
