@@ -16,14 +16,19 @@ function Store() {
     apFilter: false,
     toggleApFilter: null,
     nodeLabelFilter: {},
-    applyNodeLabelFilterToExport: false,
-    toggleApplyNodeLabelFilterToExport: null,
     activeNodeFilter: {},
-    applyActiveNodeFilterToExport: false,
     applyMapFilterToTree: false,
     node: {
       nodes: [],
     }
+  }
+  this.export = {
+    applyNodeLabelFilterToExport: false,
+    toggleApplyNodeLabelFilterToExport: null,
+    applyActiveNodeFilterToExport: false,
+    toggleApplyActiveNodeFilterToExport: null,
+    applyMapFilterToExport: false,
+    toggleApplyMapFilterToExport: null,
   }
   this.dropdownList = {
     adressen: [],
@@ -79,7 +84,7 @@ function Store() {
       beobNichtBeurteilt: [],
       tpopBeob: [],
     },
-    applyMapFilterToExport: false,
+    updateMapFilter: null,
   }
   this.table = TableStore
   this.valuesForWhichTableDataWasFetched = {}

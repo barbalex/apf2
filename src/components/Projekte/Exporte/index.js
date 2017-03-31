@@ -89,7 +89,8 @@ const enhance = compose(
 
       axios.get(url)
         .then(({ data }) => {
-          const { applyMapFilterToExport, mapFilter } = store.map
+          const { mapFilter } = store.map
+          const { applyMapFilterToExport } = store.export
           const {
             // TODO: add this
             applyNodeLabelFilterToExport,  // eslint-disable-line no-unused-vars

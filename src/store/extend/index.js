@@ -13,6 +13,7 @@ import extendMapBeobNichtBeurteilt from './mapBeobNichtBeurteilt'
 import extendMapBeobNichtZuzuordnen from './mapBeobNichtZuzuordnen'
 import extendMapTpopBeob from './mapTpopBeob'
 import extendTableFilteredAndSorted from './tableFilteredAndSorted'
+import extendExport from './export'
 
 export default (store:Object) => {
   extendStore(store)
@@ -30,4 +31,5 @@ export default (store:Object) => {
   extendMapTpopBeob(store)
   extendTableFilteredAndSorted(store)
   extendStoreAutoruns(store)
+  extendExport(store)
 }

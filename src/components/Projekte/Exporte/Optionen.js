@@ -32,18 +32,18 @@ const Optionen = ({ store }) =>
             `Karten-Filter anwenden (verfügbar, wenn ein Karten-Filter erstellt wurde)`
           )
         }
-        value={store.map.applyMapFilterToExport}
-        checked={store.map.applyMapFilterToExport}
-        onCheck={store.map.toggleApplyMapFilterToExport}
+        value={store.export.applyMapFilterToExport}
+        checked={store.export.applyMapFilterToExport}
+        onCheck={store.export.toggleApplyMapFilterToExport}
         disabled={!(store.map.mapFilter.filter.features.length > 0)}
       />
       {
         false &&
         <Checkbox
           label={`Strukturbaum-Filter anwenden`}
-          value={store.node.applyNodeLabelFilterToExport}
-          checked={store.node.applyNodeLabelFilterToExport}
-          onCheck={store.node.toggleApplyNodeLabelFilterToExport}
+          value={store.export.applyNodeLabelFilterToExport}
+          checked={store.export.applyNodeLabelFilterToExport}
+          onCheck={store.export.toggleApplyNodeLabelFilterToExport}
           disabled
         />
       }
@@ -51,9 +51,9 @@ const Optionen = ({ store }) =>
         false &&
         <Checkbox
           label={`Nach den aktuell im Strukturbaum gewählten Elementen filtern`}
-          value={store.node.applyActiveNodeFilterToExport}
-          checked={store.node.applyActiveNodeFilterToExport}
-          onCheck={store.node.toggleApplyActiveNodeFilterToExport}
+          value={store.export.applyActiveNodeFilterToExport}
+          checked={store.export.applyActiveNodeFilterToExport}
+          onCheck={store.export.toggleApplyActiveNodeFilterToExport}
           disabled
         />
       }

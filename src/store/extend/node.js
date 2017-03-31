@@ -64,11 +64,6 @@ export default (store:Object) => {
       store.node.apFilter = !store.node.apFilter
     }),
     nodeLabelFilter: observable.map({}),
-    applyNodeLabelFilterToExport: false,
-    toggleApplyNodeLabelFilterToExport: action(
-      `toggleApplyNodeLabelFilterToExport`,
-      () => store.node.applyNodeLabelFilterToExport = !store.node.applyNodeLabelFilterToExport
-    ),
     updateLabelFilter: action(`updateLabelFilter`, (table, value) => {
       if (!table) {
         return store.listError(
@@ -83,11 +78,6 @@ export default (store:Object) => {
         { name: `activeNodeFilterAp` }
       ),
     },
-    applyActiveNodeFilterToExport: false,
-    toggleApplyActiveNodeFilterToExport: action(
-      `toggleApplyActiveNodeFilterToExport`,
-      () => store.node.applyActiveNodeFilterToExport = !store.node.applyActiveNodeFilterToExport
-    ),
     applyMapFilterToTree: false,
     toggleApplyMapFilterToTree: action(
       `toggleApplyMapFilterToTree`,

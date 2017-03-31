@@ -154,11 +154,6 @@ export default (store:Object) => {
         { name: `mapFilterPTpopBeob` }
       ),
     },
-    toggleApplyMapFilterToExport: action(
-      `toggleApplyMapFilterToExport`,
-      () => store.map.applyMapFilterToExport = !store.map.applyMapFilterToExport
-    ),
-    applyMapFilterToExport: false,
     updateMapFilter: action(`updateMapFilter`, (mapFilterItems) => {
       if (!mapFilterItems) {
         return store.map.mapFilter.filter = { features: [] }
