@@ -1,8 +1,8 @@
 export default (store) => {
-  const { activeUrlElements, table } = store
+  const { activeUrlElements, node } = store
 
   // map through all filtered and sorted projekt and create array of nodes
-  return table.filteredAndSorted.projekt.map((el, index) => ({
+  return node.filteredAndSorted.projekt.map((el, index) => ({
     nodeType: `table`,
     menuType: `projekt`,
     id: el.ProjId,
