@@ -2,7 +2,7 @@ import queryString from 'query-string'
 import axios from 'axios'
 
 import apiBaseUrl from '../../modules/apiBaseUrl'
-import deleteDatasetInIdb from '../../modules/deleteDatasetInIdb'
+import deleteDatasetInIdb from './deleteDatasetInIdb'
 
 export default (store, beobId) => {
   const { activeUrlElements, urlQuery, history, table } = store
