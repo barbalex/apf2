@@ -11,6 +11,5 @@ const initiateObservables = (tableObject) => {
 
 const Table = {}
 initiateObservables(Table)
-Table.filteredAndSorted = {}
 
 export default Table
