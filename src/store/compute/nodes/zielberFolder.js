@@ -1,26 +1,26 @@
 import findIndex from 'lodash/findIndex'
 
 export default (store) => {
-  const { activeUrlElements, node } = store
+  const { activeUrlElements, tree } = store
   // fetch sorting indexes of parents
   const projId = activeUrlElements.projekt
   if (!projId) return []
-  const projIndex = findIndex(node.filteredAndSorted.projekt, { ProjId: projId })
+  const projIndex = findIndex(tree.filteredAndSorted.projekt, { ProjId: projId })
   const apArtId = activeUrlElements.ap
   if (!apArtId) return []
-  const apIndex = findIndex(node.filteredAndSorted.ap, { ApArtId: apArtId })
+  const apIndex = findIndex(tree.filteredAndSorted.ap, { ApArtId: apArtId })
   const zieljahr = activeUrlElements.zieljahr
-  const zieljahrIndex = findIndex(node.filteredAndSorted.zieljahr, { jahr: zieljahr })
+  const zieljahrIndex = findIndex(tree.filteredAndSorted.zieljahr, { jahr: zieljahr })
   const ziel = activeUrlElements.ziel
-  const zielIndex = findIndex(node.filteredAndSorted.ziel, { ZielId: ziel })
+  const zielIndex = findIndex(tree.filteredAndSorted.ziel, { ZielId: ziel })
 
-  const zielberNodesLength = node.filteredAndSorted.zielber.length
+  const zielberNodesLength = tree.filteredAndSorted.zielber.length
 
   let message = zielberNodesLength
   if (store.table.zielberLoading) {
     message = `...`
   }
-  if (store.node.nodeLabelFilter.get(`zielber`)) {
+  if (store.tree.nodeLabelFilter.get(`zielber`)) {
     message = `${zielberNodesLength} gefiltert`
   }
 

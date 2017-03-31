@@ -1,6 +1,6 @@
 import extendStore from './store'
 import extendStoreAutoruns from './storeAutoruns'
-import extendNode from './node'
+import extendTree from './tree'
 import extendDropdownList from './dropdownList'
 import extendApp from './app'
 import extendUi from './ui'
@@ -12,13 +12,13 @@ import extendMapBeob from './mapBeob'
 import extendMapBeobNichtBeurteilt from './mapBeobNichtBeurteilt'
 import extendMapBeobNichtZuzuordnen from './mapBeobNichtZuzuordnen'
 import extendMapTpopBeob from './mapTpopBeob'
-import extendNodeFilteredAndSorted from './node/filteredAndSorted'
+import extendTreeFilteredAndSorted from './tree/filteredAndSorted'
 import extendExport from './export'
 
 export default (store:Object) => {
   extendStore(store)
-  extendNode(store)
-  extendNodeFilteredAndSorted(store)
+  extendTree(store)
+  extendTreeFilteredAndSorted(store)
   extendDropdownList(store)
   extendApp(store)
   extendUi(store)
