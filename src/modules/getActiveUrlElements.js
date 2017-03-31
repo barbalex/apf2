@@ -1,5 +1,5 @@
 // @flow
-export default (url:string) => {
+export default (url:Array<mixed>) => {
   const projektFolder = (url.length > 0 && url[0] === `Projekte`) || false
   const projekt = projektFolder && url.length > 1 ? parseInt(url[1], 10) : null
   const apberuebersichtFolder = (projekt && url.length > 2 && url[2] === `AP-Berichte`) || false
