@@ -1,5 +1,5 @@
 // @flow
-import validateActiveDataset from './validateActiveDataset'
+import validateActiveDataset from '../../modules/validateActiveDataset'
 
 export default (store:Object) => {
   const aEl = store.activeUrlElements

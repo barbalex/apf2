@@ -2,8 +2,8 @@
 import axios from 'axios'
 import queryString from 'query-string'
 
-import apiBaseUrl from './apiBaseUrl'
-import tables from './tables'
+import apiBaseUrl from '../../modules/apiBaseUrl'
+import tables from '../../modules/tables'
 import insertDatasetInIdb from './insertDatasetInIdb'
 
 export default (store:Object, tablePassed:string, parentId:number, baseUrl:Array<string>) => {
