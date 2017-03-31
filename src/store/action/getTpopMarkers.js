@@ -2,9 +2,9 @@ import React from 'react'
 import ReactDOMServer from 'react-dom/server'
 import 'leaflet'
 
-import tpopIcon from '../etc/tpop.png'
-import tpopIconHighlighted from '../etc/tpopHighlighted.png'
-import TpopPopup from '../components/Projekte/Karte/TpopPopup'
+import tpopIcon from '../../etc/tpop.png'
+import tpopIconHighlighted from '../../etc/tpopHighlighted.png'
+import TpopPopup from '../../components/Projekte/Karte/TpopPopup'
 
 export default (store) => {
   const { tpops, labelUsingNr, highlightedIds } = store.map.tpop

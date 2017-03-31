@@ -8,7 +8,7 @@ import {
 import sortBy from 'lodash/sortBy'
 
 import epsg4326to21781 from '../../modules/epsg4326to21781'
-import localizeTpop from '../../modules/localizeTpop'
+import localizeTpop from '../action/localizeTpop'
 import setActiveBaseLayer from '../action/setActiveBaseLayer'
 import moveOverlay from '../action/moveOverlay'
 import moveApfloraLayer from '../action/moveApfloraLayer'

@@ -1,12 +1,12 @@
 import React from 'react'
 import ReactDOMServer from 'react-dom/server'
 import 'leaflet'
-import '../../node_modules/leaflet.markercluster/dist/leaflet.markercluster-src.js'
+import '../../../node_modules/leaflet.markercluster/dist/leaflet.markercluster-src.js'
 import some from 'lodash/some'
 
-import beobIcon from '../etc/beob.png'
-import beobIconHighlighted from '../etc/beobHighlighted.png'
-import BeobPopup from '../components/Projekte/Karte/BeobPopup'
+import beobIcon from '../../etc/beob.png'
+import beobIconHighlighted from '../../etc/beobHighlighted.png'
+import BeobPopup from '../../components/Projekte/Karte/BeobPopup'
 
 export default (store) => {
   const { beobs, highlightedIds } = store.map.beob

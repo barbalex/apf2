@@ -3,10 +3,10 @@ import ReactDOMServer from 'react-dom/server'
 import 'leaflet'
 import queryString from 'query-string'
 
-import beobIcon from '../etc/beob.png'
-import beobIconHighlighted from '../etc/beobHighlighted.png'
-import BeobPopup from '../components/Projekte/Karte/BeobPopup'
-import getNearestTpopId from './getNearestTpopId'
+import beobIcon from '../../etc/beob.png'
+import beobIconHighlighted from '../../etc/beobHighlighted.png'
+import BeobPopup from '../../components/Projekte/Karte/BeobPopup'
+import getNearestTpopId from '../../modules/getNearestTpopId'
 
 export default (store) => {
   const { beobs, highlightedIds } = store.map.beobNichtBeurteilt

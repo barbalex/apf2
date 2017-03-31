@@ -4,10 +4,10 @@ import {
   computed,
 } from 'mobx'
 
-import getTpopsForMap from '../../modules/getTpopsForMap'
-import getTpopBounds from '../../modules/getTpopBounds'
-import getTpopMarkers from '../../modules/getTpopMarkers'
-import getTpopMarkersClustered from '../../modules/getTpopMarkersClustered'
+import getTpopsForMap from '../action/getTpopsForMap'
+import getTpopBounds from '../action/getTpopBounds'
+import getTpopMarkers from '../action/getTpopMarkers'
+import getTpopMarkersClustered from '../action/getTpopMarkersClustered'
 
 export default (store:Object) => {
   extendObservable(store.map.tpop, {

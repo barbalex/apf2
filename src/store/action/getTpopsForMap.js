@@ -1,5 +1,5 @@
 // @flow
-import epsg21781to4326 from './epsg21781to4326'
+import epsg21781to4326 from '../../modules/epsg21781to4326'
 
 export default (store:Object) => {
   const { table, activeUrlElements, node } = store

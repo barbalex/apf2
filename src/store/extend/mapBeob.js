@@ -5,9 +5,9 @@ import {
   action,
 } from 'mobx'
 
-import getBeobMarkersClustered from '../../modules/getBeobMarkersClustered'
-import getBeobMarkers from '../../modules/getBeobMarkers'
-import getBeobForMap from '../../modules/getBeobForMap'
+import getBeobMarkersClustered from '../action/getBeobMarkersClustered'
+import getBeobMarkers from '../action/getBeobMarkers'
+import getBeobForMap from '../action/getBeobForMap'
 
 export default (store:Object) => {
   extendObservable(store.map.beob, {

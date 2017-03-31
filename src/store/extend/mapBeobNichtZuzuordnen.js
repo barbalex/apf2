@@ -4,9 +4,9 @@ import {
   computed,
 } from 'mobx'
 
-import getBeobNichtZuzuordnenBounds from '../../modules/getBeobNichtZuzuordnenBounds'
-import getBeobNichtZuzuordnenMarkersClustered from '../../modules/getBeobNichtZuzuordnenMarkersClustered'
-import getBeobForMap from '../../modules/getBeobForMap'
+import getBeobNichtZuzuordnenBounds from '../action/getBeobNichtZuzuordnenBounds'
+import getBeobNichtZuzuordnenMarkersClustered from '../action/getBeobNichtZuzuordnenMarkersClustered'
+import getBeobForMap from '../action/getBeobForMap'
 
 export default (store:Object) => {
   extendObservable(store.map.beobNichtZuzuordnen, {

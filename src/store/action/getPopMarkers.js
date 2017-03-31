@@ -1,16 +1,16 @@
 import React from 'react'
 import ReactDOMServer from 'react-dom/server'
 import 'leaflet'
-import '../../node_modules/leaflet.markercluster/dist/leaflet.markercluster-src.js'
+import '../../../node_modules/leaflet.markercluster/dist/leaflet.markercluster-src.js'
 import some from 'lodash/some'
 
 /**
  * TODO: the svg path on production contains "Projekte/1/" !!??
  * Maybe give an absolute path?
  */
-import popIcon from '../etc/pop.png'
-import popIconHighlighted from '../etc/popHighlighted.png'
-import PopPopup from '../components/Projekte/Karte/PopPopup'
+import popIcon from '../../etc/pop.png'
+import popIconHighlighted from '../../etc/popHighlighted.png'
+import PopPopup from '../../components/Projekte/Karte/PopPopup'
 
 export default (store) => {
   const { pops, labelUsingNr, highlightedIds } = store.map.pop

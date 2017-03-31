@@ -4,11 +4,11 @@ import {
   computed,
 } from 'mobx'
 
-import getBeobForMap from '../../modules/getBeobForMap'
-import getTpopBeobBounds from '../../modules/getTpopBeobBounds'
-import getTpopBeobMarkersClustered from '../../modules/getTpopBeobMarkersClustered'
-import getTpopBeobMarkers from '../../modules/getTpopBeobMarkers'
-import getTpopBeobAssignPolylines from '../../modules/getTpopBeobAssignPolylines'
+import getBeobForMap from '../action/getBeobForMap'
+import getTpopBeobBounds from '../action/getTpopBeobBounds'
+import getTpopBeobMarkersClustered from '../action/getTpopBeobMarkersClustered'
+import getTpopBeobMarkers from '../action/getTpopBeobMarkers'
+import getTpopBeobAssignPolylines from '../action/getTpopBeobAssignPolylines'
 
 export default (store:Object) => {
   extendObservable(store.map.tpopBeob, {

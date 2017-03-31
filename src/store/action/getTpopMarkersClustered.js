@@ -1,12 +1,12 @@
 import React from 'react'
 import ReactDOMServer from 'react-dom/server'
 import 'leaflet'
-import '../../node_modules/leaflet.markercluster/dist/leaflet.markercluster-src.js'
+import '../../../node_modules/leaflet.markercluster/dist/leaflet.markercluster-src.js'
 import some from 'lodash/some'
 
-import tpopIcon from '../etc/tpop.png'
-import tpopIconHighlighted from '../etc/tpopHighlighted.png'
-import TpopPopup from '../components/Projekte/Karte/TpopPopup'
+import tpopIcon from '../../etc/tpop.png'
+import tpopIconHighlighted from '../../etc/tpopHighlighted.png'
+import TpopPopup from '../../components/Projekte/Karte/TpopPopup'
 
 export default (store) => {
   const { tpops, labelUsingNr, highlightedIds } = store.map.tpop

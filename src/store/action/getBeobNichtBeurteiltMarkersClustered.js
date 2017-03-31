@@ -1,22 +1,22 @@
 import React from 'react'
 import ReactDOMServer from 'react-dom/server'
 import 'leaflet'
-import '../../node_modules/leaflet.markercluster/dist/leaflet.markercluster-src.js'
+import '../../../node_modules/leaflet.markercluster/dist/leaflet.markercluster-src.js'
 import some from 'lodash/some'
 
-import beobIcon from '../etc/beobNichtZuzuordnen.png'
-import beobIconHighlighted from '../etc/beobNichtZuzuordnenHighlighted.png'
-import BeobPopup from '../components/Projekte/Karte/BeobPopup'
+import beobIcon from '../../etc/beob.png'
+import beobIconHighlighted from '../../etc/beobHighlighted.png'
+import BeobPopup from '../../components/Projekte/Karte/BeobPopup'
 
 export default (store) => {
-  const { beobs, highlightedIds } = store.map.beobNichtZuzuordnen
-  const visible = store.map.activeApfloraLayers.includes(`BeobNichtZuzuordnen`)
+  const { beobs, highlightedIds } = store.map.beobNichtBeurteilt
+  const visible = store.map.activeApfloraLayers.includes(`BeobNichtBeurteilt`)
   const mcgOptions = {
     maxClusterRadius: 66,
     iconCreateFunction: function (cluster) {
       const markers = cluster.getAllChildMarkers()
-      const hasHighlightedTpop = some(markers, (m) => m.options.icon.options.className === `beobIconHighlighted`)
-      const className = hasHighlightedTpop ? `beobNichtZuzuordnenClusterHighlighted` : `beobNichtZuzuordnenCluster`
+      const hasHighlightedBeob = some(markers, (m) => m.options.icon.options.className === `beobIconHighlighted`)
+      const className = hasHighlightedBeob ? `beobClusterHighlighted` : `beobCluster`
       return window.L.divIcon({ html: markers.length, className, iconSize: window.L.point(40, 40) })
     },
   }
@@ -34,8 +34,9 @@ export default (store) => {
       const marker = window.L.marker(latLng, {
         title: p.label,
         icon,
+        draggable: store.map.beob.assigning,
         zIndexOffset: -store.map.apfloraLayers.findIndex((apfloraLayer) =>
-          apfloraLayer.value === `BeobNichtZuzuordnen`
+          apfloraLayer.value === `BeobNichtBeurteilt`
         )
       })
         .bindPopup(ReactDOMServer.renderToStaticMarkup(

@@ -1,29 +1,30 @@
 import React from 'react'
 import ReactDOMServer from 'react-dom/server'
 import 'leaflet'
-import '../../node_modules/leaflet.markercluster/dist/leaflet.markercluster-src.js'
+import '../../../node_modules/leaflet.markercluster/dist/leaflet.markercluster-src.js'
 import some from 'lodash/some'
 
-import beobIcon from '../etc/beobZugeordnet.png'
-import beobIconHighlighted from '../etc/beobZugeordnetHighlighted.png'
-import BeobPopup from '../components/Projekte/Karte/BeobPopup'
+import beobIcon from '../../etc/beobNichtZuzuordnen.png'
+import beobIconHighlighted from '../../etc/beobNichtZuzuordnenHighlighted.png'
+import BeobPopup from '../../components/Projekte/Karte/BeobPopup'
 
 export default (store) => {
-  const { beobs, highlightedIds } = store.map.tpopBeob
-  const visible = store.map.activeApfloraLayers.includes(`TpopBeob`)
+  const { beobs, highlightedIds } = store.map.beobNichtZuzuordnen
+  const visible = store.map.activeApfloraLayers.includes(`BeobNichtZuzuordnen`)
   const mcgOptions = {
     maxClusterRadius: 66,
     iconCreateFunction: function (cluster) {
       const markers = cluster.getAllChildMarkers()
       const hasHighlightedTpop = some(markers, (m) => m.options.icon.options.className === `beobIconHighlighted`)
-      const className = hasHighlightedTpop ? `beobZugeordnetClusterHighlighted` : `beobZugeordnetCluster`
+      const className = hasHighlightedTpop ? `beobNichtZuzuordnenClusterHighlighted` : `beobNichtZuzuordnenCluster`
       return window.L.divIcon({ html: markers.length, className, iconSize: window.L.point(40, 40) })
     },
   }
   const markers = window.L.markerClusterGroup(mcgOptions)
   if (visible) {
     beobs.forEach((p) => {
-      const isHighlighted = highlightedIds.includes(p.BeobId)
+      const beobId = isNaN(p.BeobId) ? p.BeobId : Number(p.BeobId)
+      const isHighlighted = highlightedIds.includes(beobId)
       const latLng = new window.L.LatLng(...p.KoordWgs84)
       const icon = window.L.icon({
         iconUrl: isHighlighted ? beobIconHighlighted : beobIcon,
@@ -33,9 +34,8 @@ export default (store) => {
       const marker = window.L.marker(latLng, {
         title: p.label,
         icon,
-        draggable: store.map.beob.assigning,
         zIndexOffset: -store.map.apfloraLayers.findIndex((apfloraLayer) =>
-          apfloraLayer.value === `TpopBeob`
+          apfloraLayer.value === `BeobNichtZuzuordnen`
         )
       })
         .bindPopup(ReactDOMServer.renderToStaticMarkup(
