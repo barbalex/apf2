@@ -20,18 +20,6 @@ function Store() {
     toggleApplyNodeLabelFilterToExport: null,
     activeNodeFilter: {},
     applyActiveNodeFilterToExport: false,
-    // TODO: does not belong here
-    nodeMapFilter: {
-      filter: {
-        features: []
-      },
-      pop: [],
-      tpop: [],
-      beobNichtZuzuordnen: [],
-      beobNichtBeurteilt: [],
-      tpopBeob: [],
-    },
-    applyMapFilterToExport: false,
     applyMapFilterToTree: false,
     node: {
       nodes: [],
@@ -81,6 +69,17 @@ function Store() {
     setActiveBaseLayer: () => {},
     addActiveApfloraLayer: () => {},
     removeActiveApfloraLayer: () => {},
+    mapFilter: {
+      filter: {
+        features: []
+      },
+      pop: [],
+      tpop: [],
+      beobNichtZuzuordnen: [],
+      beobNichtBeurteilt: [],
+      tpopBeob: [],
+    },
+    applyMapFilterToExport: false,
   }
   this.table = TableStore
   this.valuesForWhichTableDataWasFetched = {}

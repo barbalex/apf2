@@ -13,9 +13,9 @@ export default (store:Object) => {
   extendObservable(store.map.beobNichtBeurteilt, {
     highlightedIds: computed(
       () => {
-        const nodeMapFilterBeobNichtBeurteilt = store.node.nodeMapFilter.beobNichtBeurteilt
-        if (nodeMapFilterBeobNichtBeurteilt.length > 0) {
-          return nodeMapFilterBeobNichtBeurteilt
+        const mapFilterBeobNichtBeurteilt = store.map.mapFilter.beobNichtBeurteilt
+        if (mapFilterBeobNichtBeurteilt.length > 0) {
+          return mapFilterBeobNichtBeurteilt
         }
         if (store.activeUrlElements.beobzuordnung) {
           return [store.activeUrlElements.beobzuordnung]

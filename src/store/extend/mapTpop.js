@@ -13,9 +13,9 @@ export default (store:Object) => {
   extendObservable(store.map.tpop, {
     highlightedIds: computed(
       () => {
-        const nodeMapFilterTpop = store.node.nodeMapFilter.tpop
-        if (nodeMapFilterTpop.length > 0) {
-          return nodeMapFilterTpop
+        const mapFilterTpop = store.map.mapFilter.tpop
+        if (mapFilterTpop.length > 0) {
+          return mapFilterTpop
         }
         if (store.activeUrlElements.tpop) {
           return [store.activeUrlElements.tpop]

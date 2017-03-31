@@ -28,6 +28,6 @@ export default (store:Object, beobs:Array<Object>) => {
   }
 
   // let turf check what points are within filter
-  const result = within(points, store.node.nodeMapFilter.filter)
+  const result = within(points, store.map.mapFilter.filter)
   return result.features.map(r => r.properties.BeobId)
 }

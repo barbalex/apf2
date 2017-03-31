@@ -69,13 +69,13 @@ class DrawControl extends Component {
     setDrawControl(drawControl)
     map.on(`draw:created`, (e) => {
       mapFilter.addLayer(e.layer)
-      store.node.updateMapFilter(mapFilter)
+      store.map.updateMapFilter(mapFilter)
     })
     map.on(`draw:edited`, (e) =>
-      store.node.updateMapFilter(mapFilter)
+      store.map.updateMapFilter(mapFilter)
     )
     map.on(`draw:deleted`, (e) =>
-      store.node.updateMapFilter(mapFilter)
+      store.map.updateMapFilter(mapFilter)
     )
   }
 
@@ -86,7 +86,7 @@ class DrawControl extends Component {
     map.off(`draw:created`)
     map.off(`draw:edited`)
     map.off(`draw:deleted`)
-    store.node.updateMapFilter(null)
+    store.map.updateMapFilter(null)
   }
 
   render() {

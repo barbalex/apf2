@@ -89,16 +89,15 @@ const enhance = compose(
 
       axios.get(url)
         .then(({ data }) => {
+          const { applyMapFilterToExport, mapFilter } = store.map
           const {
-            nodeMapFilter,
-            applyMapFilterToExport,
             // TODO: add this
             applyNodeLabelFilterToExport,  // eslint-disable-line no-unused-vars
             applyActiveNodeFilterToExport,  // eslint-disable-line no-unused-vars
           } = store.node
           let jsonData = clone(data)
           // now we could manipulate the data, for instance apply mapFilter
-          const filterFeatures = nodeMapFilter.filter.features
+          const filterFeatures = mapFilter.filter.features
           if (filterFeatures.length > 0 && applyMapFilterToExport) {
             const keys = Object.keys(data[0])
             // filter data

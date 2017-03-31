@@ -27,15 +27,15 @@ const Optionen = ({ store }) =>
       <Checkbox
         label={
           (
-            store.node.nodeMapFilter.filter.features.length > 0 ?
+            store.map.mapFilter.filter.features.length > 0 ?
             `Karten-Filter anwenden` :
             `Karten-Filter anwenden (verfügbar, wenn ein Karten-Filter erstellt wurde)`
           )
         }
-        value={store.node.applyMapFilterToExport}
-        checked={store.node.applyMapFilterToExport}
-        onCheck={store.node.toggleApplyMapFilterToExport}
-        disabled={!(store.node.nodeMapFilter.filter.features.length > 0)}
+        value={store.map.applyMapFilterToExport}
+        checked={store.map.applyMapFilterToExport}
+        onCheck={store.map.toggleApplyMapFilterToExport}
+        disabled={!(store.map.mapFilter.filter.features.length > 0)}
       />
       {
         false &&

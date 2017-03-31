@@ -56,11 +56,6 @@ import tpopmassnberFolderNode from '../../modules/nodes/tpopmassnberFolder'
 import tpopmassnberNode from '../../modules/nodes/tpopmassnber'
 import tpopmassnFolderNode from '../../modules/nodes/tpopmassnFolder'
 import tpopmassnNode from '../../modules/nodes/tpopmassn'
-import tpopIdsInsideFeatureCollection from '../../modules/tpopIdsInsideFeatureCollection'
-import popIdsInsideFeatureCollection from '../../modules/popIdsInsideFeatureCollection'
-import beobNichtBeurteiltIdsInsideFeatureCollection from '../../modules/beobNichtBeurteiltIdsInsideFeatureCollection'
-import beobNichtZuzuordnenIdsInsideFeatureCollection from '../../modules/beobNichtZuzuordnenIdsInsideFeatureCollection'
-import tpopBeobIdsInsideFeatureCollection from '../../modules/tpopBeobIdsInsideFeatureCollection'
 
 export default (store:Object) => {
   extendObservable(store.node, {
@@ -93,54 +88,15 @@ export default (store:Object) => {
       `toggleApplyActiveNodeFilterToExport`,
       () => store.node.applyActiveNodeFilterToExport = !store.node.applyActiveNodeFilterToExport
     ),
-    nodeMapFilter: {
-      filter: {
-        features: [],
-      },
-      pop: computed(
-        () => popIdsInsideFeatureCollection(store, store.map.pop.pops),
-        { name: `nodeMapFilterPop` }
-      ),
-      tpop: computed(
-        () => tpopIdsInsideFeatureCollection(store, store.map.tpop.tpops),
-        { name: `nodeMapFilterTpop` }
-      ),
-      beobNichtBeurteilt: computed(
-        () => beobNichtBeurteiltIdsInsideFeatureCollection(store, store.map.beobNichtBeurteilt.beobs),
-        { name: `nodeMapFilterBeobNichtBeurteilt` }
-      ),
-      beobNichtZuzuordnen: computed(
-        () => beobNichtZuzuordnenIdsInsideFeatureCollection(store, store.map.beobNichtZuzuordnen.beobs),
-        { name: `nodeMapFilterBeobNichtZuzuordnen` }
-      ),
-      tpopBeob: computed(
-        () => tpopBeobIdsInsideFeatureCollection(store, store.map.tpopBeob.beobs),
-        { name: `nodeMapFilterPTpopBeob` }
-      ),
-    },
-    toggleApplyMapFilterToExport: action(
-      `toggleApplyMapFilterToExport`,
-      () => store.node.applyMapFilterToExport = !store.node.applyMapFilterToExport
-    ),
-    applyMapFilterToExport: false,
     applyMapFilterToTree: false,
     toggleApplyMapFilterToTree: action(
       `toggleApplyMapFilterToTree`,
       () => store.node.applyMapFilterToTree = !store.node.applyMapFilterToTree
     ),
-    updateMapFilter: action(`updateMapFilter`, (mapFilterItems) => {
-      if (!mapFilterItems) {
-        return store.node.nodeMapFilter.filter = { features: [] }
-      }
-      store.node.nodeMapFilter.filter = mapFilterItems.toGeoJSON()
-    }),
     // action when user clicks on a node in the tree
     toggleNode: action(`toggleNode`, node =>
       toggleNode(store, node)
     ),
-  })
-  extendObservable(store.node.nodeMapFilter.filter, {
-    features: [],
   })
   extendObservable(store.node.node, {
     projekt: computed(

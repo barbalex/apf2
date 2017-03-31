@@ -12,6 +12,11 @@ import localizeTpop from '../action/localizeTpop'
 import setActiveBaseLayer from '../action/setActiveBaseLayer'
 import moveOverlay from '../action/moveOverlay'
 import moveApfloraLayer from '../action/moveApfloraLayer'
+import tpopIdsInsideFeatureCollection from '../../modules/tpopIdsInsideFeatureCollection'
+import popIdsInsideFeatureCollection from '../../modules/popIdsInsideFeatureCollection'
+import beobNichtBeurteiltIdsInsideFeatureCollection from '../../modules/beobNichtBeurteiltIdsInsideFeatureCollection'
+import beobNichtZuzuordnenIdsInsideFeatureCollection from '../../modules/beobNichtZuzuordnenIdsInsideFeatureCollection'
+import tpopBeobIdsInsideFeatureCollection from '../../modules/tpopBeobIdsInsideFeatureCollection'
 
 export default (store:Object) => {
   extendObservable(store.map, {
@@ -124,5 +129,44 @@ export default (store:Object) => {
     toggleMapPopLabelContent: action(`toggleMapPopLabelContent`, (layer) =>
       store.map[layer].labelUsingNr = !store.map[layer].labelUsingNr
     ),
+    mapFilter: {
+      filter: {
+        features: [],
+      },
+      pop: computed(
+        () => popIdsInsideFeatureCollection(store, store.map.pop.pops),
+        { name: `mapFilterPop` }
+      ),
+      tpop: computed(
+        () => tpopIdsInsideFeatureCollection(store, store.map.tpop.tpops),
+        { name: `mapFilterTpop` }
+      ),
+      beobNichtBeurteilt: computed(
+        () => beobNichtBeurteiltIdsInsideFeatureCollection(store, store.map.beobNichtBeurteilt.beobs),
+        { name: `mapFilterBeobNichtBeurteilt` }
+      ),
+      beobNichtZuzuordnen: computed(
+        () => beobNichtZuzuordnenIdsInsideFeatureCollection(store, store.map.beobNichtZuzuordnen.beobs),
+        { name: `mapFilterBeobNichtZuzuordnen` }
+      ),
+      tpopBeob: computed(
+        () => tpopBeobIdsInsideFeatureCollection(store, store.map.tpopBeob.beobs),
+        { name: `mapFilterPTpopBeob` }
+      ),
+    },
+    toggleApplyMapFilterToExport: action(
+      `toggleApplyMapFilterToExport`,
+      () => store.map.applyMapFilterToExport = !store.map.applyMapFilterToExport
+    ),
+    applyMapFilterToExport: false,
+    updateMapFilter: action(`updateMapFilter`, (mapFilterItems) => {
+      if (!mapFilterItems) {
+        return store.map.mapFilter.filter = { features: [] }
+      }
+      store.map.mapFilter.filter = mapFilterItems.toGeoJSON()
+    }),
+  })
+  extendObservable(store.map.mapFilter.filter, {
+    features: [],
   })
 }

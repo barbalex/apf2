@@ -15,9 +15,9 @@ export default (store:Object) => {
     highlightedIds: computed(
       () => {
         const { activeUrlElements } = store
-        const nodeMapFilterTpopBeob = store.node.nodeMapFilter.tpopBeob
-        if (nodeMapFilterTpopBeob.length > 0) {
-          return nodeMapFilterTpopBeob
+        const mapFilterTpopBeob = store.map.mapFilter.tpopBeob
+        if (mapFilterTpopBeob.length > 0) {
+          return mapFilterTpopBeob
         }
         if (activeUrlElements.tpopbeob) {
           return [activeUrlElements.tpopbeob]

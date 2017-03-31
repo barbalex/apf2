@@ -12,9 +12,9 @@ export default (store:Object) => {
   extendObservable(store.map.beobNichtZuzuordnen, {
     highlightedIds: computed(
       () => {
-        const nodeMapFilterBeobNichtZuzuordnen = store.node.nodeMapFilter.beobNichtZuzuordnen
-        if (nodeMapFilterBeobNichtZuzuordnen.length > 0) {
-          return nodeMapFilterBeobNichtZuzuordnen
+        const mapFilterBeobNichtZuzuordnen = store.map.mapFilter.beobNichtZuzuordnen
+        if (mapFilterBeobNichtZuzuordnen.length > 0) {
+          return mapFilterBeobNichtZuzuordnen
         }
         if (store.activeUrlElements.beobNichtZuzuordnen) {
           return [store.activeUrlElements.beobNichtZuzuordnen]

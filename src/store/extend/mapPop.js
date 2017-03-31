@@ -16,9 +16,9 @@ export default (store:Object) => {
     apArtId: null,
     highlightedIds: computed(
       () => {
-        const nodeMapFilterPop = store.node.nodeMapFilter.pop
-        if (nodeMapFilterPop.length > 0) {
-          return nodeMapFilterPop
+        const mapFilterPop = store.map.mapFilter.pop
+        if (mapFilterPop.length > 0) {
+          return mapFilterPop
         }
         if (store.activeUrlElements.pop) {
           return [store.activeUrlElements.pop]
