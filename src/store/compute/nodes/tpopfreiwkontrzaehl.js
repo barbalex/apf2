@@ -29,6 +29,6 @@ export default (store) => {
     url: [`Projekte`, projId, `Arten`, apArtId, `Populationen`, popId, `Teil-Populationen`, tpopId, `Freiwilligen-Kontrollen`, tpopfreiwkontrId, `Zaehlungen`, el.TPopKontrZaehlId],
     level: 11,
     sort: [projIndex, 1, apIndex, 1, popIndex, 1, tpopIndex, 4, tpopfreiwkontrIndex, 1, index],
-    childrenLength: 0,
+    hasChildren: false,
   }))
 }

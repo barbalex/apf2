@@ -36,6 +36,6 @@ export default (store) => {
     url: [`Projekte`, projId, `Arten`, apArtId, `Populationen`, popId, `Teil-Populationen`, tpopId, `Freiwilligen-Kontrollen`],
     level: 8,
     sort: [projIndex, 1, apIndex, 1, popIndex, 1, tpopIndex, 4],
-    childrenLength,
+    hasChildren: childrenLength > 0,
   }
 }
