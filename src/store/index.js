@@ -5,21 +5,7 @@ import {
 
 import TableStore from './table'
 import ObservableHistory from './ObservableHistory'
-import extendStore from './extendStore'
-import extendStoreAutoruns from './extendStoreAutoruns'
-import extendNode from './extendNode'
-import extendDropdownList from './extendDropdownList'
-import extendApp from './extendApp'
-import extendUi from './extendUi'
-import extendUser from './extendUser'
-import extendMap from './extendMap'
-import extendMapPop from './extendMapPop'
-import extendMapTpop from './extendMapTpop'
-import extendMapBeob from './extendMapBeob'
-import extendMapBeobNichtBeurteilt from './extendMapBeobNichtBeurteilt'
-import extendMapBeobNichtZuzuordnen from './extendMapBeobNichtZuzuordnen'
-import extendMapTpopBeob from './extendMapTpopBeob'
-import extendTableFilteredAndSorted from './extendTableFilteredAndSorted'
+import extendStore from './extend'
 
 function Store() {
   this.history = ObservableHistory
@@ -103,19 +89,5 @@ function Store() {
 const MyStore = new Store()
 
 extendStore(MyStore)
-extendNode(MyStore)
-extendDropdownList(MyStore)
-extendApp(MyStore)
-extendUi(MyStore)
-extendUser(MyStore)
-extendMap(MyStore)
-extendMapPop(MyStore)
-extendMapTpop(MyStore)
-extendMapBeob(MyStore)
-extendMapBeobNichtBeurteilt(MyStore)
-extendMapBeobNichtZuzuordnen(MyStore)
-extendMapTpopBeob(MyStore)
-extendTableFilteredAndSorted(MyStore)
-extendStoreAutoruns(MyStore)
 
 export default MyStore

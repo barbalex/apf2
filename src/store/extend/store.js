@@ -5,40 +5,40 @@ import {
   action,
 } from 'mobx'
 
-import fetchTable from '../modules/fetchTable'
-import fetchBeobzuordnungModule from '../modules/fetchBeobzuordnung'
-import fetchTableByParentId from '../modules/fetchTableByParentId'
-import fetchTpopForAp from '../modules/fetchTpopForAp'
-import fetchPopForAp from '../modules/fetchPopForAp'
-import fetchDatasetById from '../modules/fetchDatasetById'
-import fetchBeobBereitgestellt from '../modules/fetchBeobBereitgestellt'
-import fetchBeobEvab from '../modules/fetchBeobEvab'
-import fetchBeobInfospezies from '../modules/fetchBeobInfospezies'
-import updateActiveDatasetFromUrl from '../modules/updateActiveDatasetFromUrl'
-import getActiveUrlElements from '../modules/getActiveUrlElements'
-import buildProjektNodes from '../modules/nodes/projekt'
-import updateProperty from '../modules/updateProperty'
-import updatePropertyInDb from '../modules/updatePropertyInDb'
-import getUrl from '../modules/getUrl'
-import getUrlQuery from '../modules/getUrlQuery'
-import fetchFields from '../modules/fetchFields'
-import fetchFieldsFromIdb from '../modules/fetchFieldsFromIdb'
-import insertDataset from '../modules/insertDataset'
-import insertBeobzuordnung from '../modules/insertBeobzuordnung'
-import deleteDatasetDemand from '../modules/deleteDatasetDemand'
-import deleteDatasetExecute from '../modules/deleteDatasetExecute'
-import listError from '../modules/listError'
-import setUrlQuery from '../modules/setUrlQuery'
-import setQk from '../modules/setQk'
-import setQkFilter from '../modules/setQkFilter'
-import fetchQk from '../modules/fetchQk'
-import addMessagesToQk from '../modules/addMessagesToQk'
-import fetchLogin from '../modules/fetchLogin'
-import logout from '../modules/logout'
-import setLoginFromIdb from '../modules/setLoginFromIdb'
-import fetchStammdatenTables from '../modules/fetchStammdatenTables'
-import deleteBeobzuordnung from './action/deleteBeobzuordnung'
-import writeToStore from '../modules/writeToStore'
+import fetchTable from '../../modules/fetchTable'
+import fetchBeobzuordnungModule from '../../modules/fetchBeobzuordnung'
+import fetchTableByParentId from '../../modules/fetchTableByParentId'
+import fetchTpopForAp from '../../modules/fetchTpopForAp'
+import fetchPopForAp from '../../modules/fetchPopForAp'
+import fetchDatasetById from '../../modules/fetchDatasetById'
+import fetchBeobBereitgestellt from '../../modules/fetchBeobBereitgestellt'
+import fetchBeobEvab from '../../modules/fetchBeobEvab'
+import fetchBeobInfospezies from '../../modules/fetchBeobInfospezies'
+import updateActiveDatasetFromUrl from '../../modules/updateActiveDatasetFromUrl'
+import getActiveUrlElements from '../../modules/getActiveUrlElements'
+import buildProjektNodes from '../../modules/nodes/projekt'
+import updateProperty from '../../modules/updateProperty'
+import updatePropertyInDb from '../../modules/updatePropertyInDb'
+import getUrl from '../../modules/getUrl'
+import getUrlQuery from '../../modules/getUrlQuery'
+import fetchFields from '../../modules/fetchFields'
+import fetchFieldsFromIdb from '../../modules/fetchFieldsFromIdb'
+import insertDataset from '../../modules/insertDataset'
+import insertBeobzuordnung from '../../modules/insertBeobzuordnung'
+import deleteDatasetDemand from '../../modules/deleteDatasetDemand'
+import deleteDatasetExecute from '../../modules/deleteDatasetExecute'
+import listError from '../../modules/listError'
+import setUrlQuery from '../../modules/setUrlQuery'
+import setQk from '../../modules/setQk'
+import setQkFilter from '../../modules/setQkFilter'
+import fetchQk from '../../modules/fetchQk'
+import addMessagesToQk from '../../modules/addMessagesToQk'
+import fetchLogin from '../../modules/fetchLogin'
+import logout from '../../modules/logout'
+import setLoginFromIdb from '../../modules/setLoginFromIdb'
+import fetchStammdatenTables from '../../modules/fetchStammdatenTables'
+import deleteBeobzuordnung from '../action/deleteBeobzuordnung'
+import writeToStore from '../../modules/writeToStore'
 
 export default (store:Object) => {
   extendObservable(store, {
@@ -47,7 +47,6 @@ export default (store:Object) => {
      * url paths are used to control tree and forms
      */
     url: computed(
-      //$FlowIssue
       () => getUrl(store.history.location.pathname),
       { name: `url` }
     ),
@@ -56,7 +55,6 @@ export default (store:Object) => {
      * for instance: Entwicklung or Biotop in tpopfeldkontr
      */
     urlQuery: computed(
-      //$FlowIssue
       () => getUrlQuery(store.history.location.search),
       { name: `urlQuery` }
     ),

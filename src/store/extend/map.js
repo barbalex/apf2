@@ -7,11 +7,11 @@ import {
 } from 'mobx'
 import sortBy from 'lodash/sortBy'
 
-import epsg4326to21781 from '../modules/epsg4326to21781'
-import localizeTpop from '../modules/localizeTpop'
-import setActiveBaseLayer from './action/setActiveBaseLayer'
-import moveOverlay from './action/moveOverlay'
-import moveApfloraLayer from './action/moveApfloraLayer'
+import epsg4326to21781 from '../../modules/epsg4326to21781'
+import localizeTpop from '../../modules/localizeTpop'
+import setActiveBaseLayer from '../action/setActiveBaseLayer'
+import moveOverlay from '../action/moveOverlay'
+import moveApfloraLayer from '../action/moveApfloraLayer'
 
 export default (store:Object) => {
   extendObservable(store.map, {

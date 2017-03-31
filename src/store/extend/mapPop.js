@@ -4,9 +4,9 @@ import {
   computed,
 } from 'mobx'
 
-import getPopsForMap from '../modules/getPopsForMap'
-import getPopBounds from '../modules/getPopBounds'
-import getPopMarkers from '../modules/getPopMarkers'
+import getPopsForMap from '../../modules/getPopsForMap'
+import getPopBounds from '../../modules/getPopBounds'
+import getPopMarkers from '../../modules/getPopMarkers'
 
 export default (store:Object) => {
   extendObservable(store.map.pop, {

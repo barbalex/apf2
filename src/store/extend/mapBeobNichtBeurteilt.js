@@ -4,10 +4,10 @@ import {
   computed,
 } from 'mobx'
 
-import getBeobNichtBeurteiltBounds from '../modules/getBeobNichtBeurteiltBounds'
-import getBeobNichtBeurteiltMarkersClustered from '../modules/getBeobNichtBeurteiltMarkersClustered'
-import getBeobNichtBeurteiltMarkers from '../modules/getBeobNichtBeurteiltMarkers'
-import getBeobForMap from '../modules/getBeobForMap'
+import getBeobNichtBeurteiltBounds from '../../modules/getBeobNichtBeurteiltBounds'
+import getBeobNichtBeurteiltMarkersClustered from '../../modules/getBeobNichtBeurteiltMarkersClustered'
+import getBeobNichtBeurteiltMarkers from '../../modules/getBeobNichtBeurteiltMarkers'
+import getBeobForMap from '../../modules/getBeobForMap'
 
 export default (store:Object) => {
   extendObservable(store.map.beobNichtBeurteilt, {
