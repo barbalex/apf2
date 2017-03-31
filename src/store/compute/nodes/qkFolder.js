@@ -38,6 +38,6 @@ export default (store) => {
     url: [`Projekte`, projId, `Arten`, apArtId, `Qualitaetskontrollen`],
     level: 4,
     sort: [projIndex, 1, apIndex, 10],
-    childrenLength: 0,
+    hasChildren: false,
   }
 }
