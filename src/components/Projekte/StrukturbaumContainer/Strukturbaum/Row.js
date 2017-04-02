@@ -156,7 +156,7 @@ const showTpopBeobFilteredMapIcon = (store, node) => (
 const checkPropsChange = (props, nextProps) => {
   return (
     nextProps.node !== props.node ||
-    nextProps.store.url.join() !== props.store.url.join() ||
+    nextProps.store.activeNodeArray.join() !== props.store.activeNodeArray.join() ||
     showPopMapIcon(nextProps.store, nextProps.node) !== showPopMapIcon(props.store, props.node) ||
     showPopFilteredMapIcon(nextProps.store, nextProps.node) !== showPopFilteredMapIcon(props.store, props.node) ||
     showTpopMapIcon(nextProps.store, nextProps.node) !== showTpopMapIcon(props.store, props.node) ||
@@ -196,7 +196,7 @@ const Row = ({
     loadingData: ``,
   }
   let symbol
-  const nodeIsInActiveNodePath = isNodeInActiveNodePath(node, store.url)
+  const nodeIsInActiveNodePath = isNodeInActiveNodePath(node, store.activeNodeArray)
   let SymbolSpan = StyledSymbolSpan
   const TextSpan = nodeIsInActiveNodePath ? StyledTextInActiveNodePathSpan : StyledTextSpan
 

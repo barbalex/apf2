@@ -12,6 +12,6 @@ export default (store:Object, key:string, value:string) => {
   const search = queryString.stringify(urlQuery)
   const query = `${Object.keys(urlQuery).length > 0 ? `?${search}` : ``}`
   store.history.push(
-    `/${store.url.join(`/`)}${query}`
+    `/${store.activeNodeArray.join(`/`)}${query}`
   )
 }

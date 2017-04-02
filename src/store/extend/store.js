@@ -45,9 +45,9 @@ export default (store:Object) => {
     /**
      * url paths are used to control tree and forms
      */
-    url: computed(
+    activeNodeArray: computed(
       () => getUrl(store.history.location.pathname),
-      { name: `url` }
+      { name: `activeNodeArray` }
     ),
     /**
      * urlQueries are used to control tabs
@@ -62,7 +62,7 @@ export default (store:Object) => {
       { name: `activeDataset` }
     ),
     activeUrlElements: computed(
-      () => getActiveUrlElements(store.url),
+      () => getActiveUrlElements(store.activeNodeArray),
       { name: `activeUrlElements` }
     ),
     datasetToDelete: {},

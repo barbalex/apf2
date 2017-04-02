@@ -10,7 +10,7 @@ import extendStore from './extend'
 function Store() {
   this.history = ObservableHistory
   this.loading = []
-  this.url = []
+  this.activeNodeArray = []
   this.urlQuery = {}
   this.activeDataset = {}
   this.activeUrlElements = {}

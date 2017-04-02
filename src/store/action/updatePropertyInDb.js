@@ -85,7 +85,7 @@ export default (store:Object, key:string, valuePassed:string|number) => {
       store.table.ap.set(value, rowCloned)
       // correct url
       // activeDataset will then be updated
-      const newUrl = store.url
+      const newUrl = store.activeNodeArray
       newUrl.pop()
       newUrl.push(value)
       const query = `${Object.keys(store.urlQuery).length > 0 ? `?${queryString.stringify(store.urlQuery)}` : ``}`
@@ -108,19 +108,19 @@ export default (store:Object, key:string, valuePassed:string|number) => {
         const query = `${Object.keys(store.urlQuery).length > 0 ? `?${queryString.stringify(store.urlQuery)}` : ``}`
         // if ApArtId of ap is updated, url needs to change
         if (artWasChanged) {
-          store.url[3] = value
-          const newUrl = `/${store.url.join(`/`)}${query}`
+          store.activeNodeArray[3] = value
+          const newUrl = `/${store.activeNodeArray.join(`/`)}${query}`
           store.history.push(newUrl)
         }
         // if beobNichtBeurteilt is set to beobNichtZuordnen, url needs to change
         if (table === `beobzuordnung` && key === `BeobNichtZuordnen`) {
-          store.url[4] = (
+          store.activeNodeArray[4] = (
             value === 1 ?
             `nicht-zuzuordnende-Beobachtungen` :
             `nicht-beurteilte-Beobachtungen`
           )
-          store.url[5] = store.activeDataset.row.NO_NOTE
-          const newUrlArray = store.url.slice(0, 6)
+          store.activeNodeArray[5] = store.activeDataset.row.NO_NOTE
+          const newUrlArray = store.activeNodeArray.slice(0, 6)
           const newUrl = `/${newUrlArray.join(`/`)}${query}`
           store.history.push(newUrl)
         }
@@ -128,9 +128,9 @@ export default (store:Object, key:string, valuePassed:string|number) => {
         // namely: PopId and TPopId
         if (table === `beobzuordnung` && key === `TPopId` && value) {
           const tpop = store.table.tpop.get(value)
-          store.url[5] = tpop.PopId
-          store.url[7] = value
-          const newUrl = `/${store.url.join(`/`)}${query}`
+          store.activeNodeArray[5] = tpop.PopId
+          store.activeNodeArray[7] = value
+          const newUrl = `/${store.activeNodeArray.join(`/`)}${query}`
           store.history.push(newUrl)
         }
       })
