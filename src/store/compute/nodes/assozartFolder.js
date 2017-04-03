@@ -1,22 +1,20 @@
 import findIndex from 'lodash/findIndex'
 
-export default (store) => {
-  const { tree } = store
-
+export default (store, tree) => {
   // fetch sorting indexes of parents
   const projId = tree.activeNodes.projekt
   if (!projId) return []
-  const projIndex = findIndex(store.tree.filteredAndSorted.projekt, { ProjId: projId })
+  const projIndex = findIndex(tree.filteredAndSorted.projekt, { ProjId: projId })
   const apArtId = tree.activeNodes.ap
   if (!apArtId) return []
-  const apIndex = findIndex(store.tree.filteredAndSorted.ap, { ApArtId: apArtId })
+  const apIndex = findIndex(tree.filteredAndSorted.ap, { ApArtId: apArtId })
 
   const assozartNodesLength = tree.filteredAndSorted.assozart.length
   let message = assozartNodesLength
   if (store.table.assozartLoading) {
     message = `...`
   }
-  if (store.tree.nodeLabelFilter.get(`assozart`)) {
+  if (tree.nodeLabelFilter.get(`assozart`)) {
     message = `${assozartNodesLength} gefiltert`
   }
 
