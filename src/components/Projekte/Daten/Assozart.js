@@ -26,7 +26,8 @@ const enhance = compose(
 )
 
 const getArtList = ({ store }) => {
-  const { activeDataset, activeNodes } = store
+  const { activeDataset, tree } = store
+  const { activeNodes } = tree
   const { adb_eigenschaften } = store.table
   const assozartenOfAp = Array.from(store.table.assozart.values()).filter(a =>
     a.AaApArtId === activeDataset.row.AaApArtId

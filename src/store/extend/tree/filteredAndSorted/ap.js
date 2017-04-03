@@ -1,7 +1,8 @@
 import sortBy from 'lodash/sortBy'
 
 export default (store) => {
-  const { activeNodes, table, tree } = store
+  const { table, tree } = store
+  const { activeNodes } = tree
   const { adb_eigenschaften } = table
   // grab ap as array and sort them by name
   let ap = Array.from(table.ap.values())
