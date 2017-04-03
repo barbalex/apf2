@@ -1,7 +1,8 @@
 import findIndex from 'lodash/findIndex'
 
 export default (store) => {
-  const { activeNodes, tree, table } = store
+  const { tree, table } = store
+  const { activeNodes } = tree
 
   // fetch sorting indexes of parents
   const projId = activeNodes.projekt
