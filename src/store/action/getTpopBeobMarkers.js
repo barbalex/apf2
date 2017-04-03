@@ -39,11 +39,11 @@ export default (store) => {
            * point url to moved beob
            * open form of beob?
            */
-          const { activeUrlElements, history, table, updatePropertyInDb } = store
+          const { activeNodes, history, table, updatePropertyInDb } = store
           const nearestTpopId = getNearestTpopId(store, event.target._latlng)
           const popId = table.tpop.get(nearestTpopId).PopId
           const query = `${Object.keys(store.urlQuery).length > 0 ? `?${queryString.stringify(store.urlQuery)}` : ``}`
-          const newUrl = `/Projekte/${activeUrlElements.projekt}/Arten/${activeUrlElements.ap}/Populationen/${popId}/Teil-Populationen/${nearestTpopId}/Beobachtungen/${p.BeobId}${query}`
+          const newUrl = `/Projekte/${activeNodes.projekt}/Arten/${activeNodes.ap}/Populationen/${popId}/Teil-Populationen/${nearestTpopId}/Beobachtungen/${p.BeobId}${query}`
           history.push(newUrl)
           updatePropertyInDb(`TPopId`, nearestTpopId)
         })

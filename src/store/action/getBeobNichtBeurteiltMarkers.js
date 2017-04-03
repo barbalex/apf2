@@ -38,10 +38,10 @@ export default (store) => {
            * point url to moved beob
            * open form of beob?
            */
-          const { activeUrlElements, insertBeobzuordnung, history } = store
+          const { activeNodes, insertBeobzuordnung, history } = store
           const nearestTpopId = getNearestTpopId(store, event.target._latlng)
           const query = `${Object.keys(store.urlQuery).length > 0 ? `?${queryString.stringify(store.urlQuery)}` : ``}`
-          const newUrl = `/Projekte/${activeUrlElements.projekt}/Arten/${activeUrlElements.ap}/nicht-beurteilte-Beobachtungen/${p.BeobId}${query}`
+          const newUrl = `/Projekte/${activeNodes.projekt}/Arten/${activeNodes.ap}/nicht-beurteilte-Beobachtungen/${p.BeobId}${query}`
           history.push(newUrl)
           insertBeobzuordnung(`TPopId`, nearestTpopId)
         })
