@@ -2,13 +2,13 @@ import uniq from 'lodash/uniq'
 
 export default (store) => {
   const { table, tree } = store
-  const { activeNodes } = tree
+  const { activeNodes, nodeLabelFilter } = tree
   // grab ziele as array
   let ziele = Array.from(table.ziel.values())
   // show only nodes of active ap
   ziele = ziele.filter(a => a.ApArtId === activeNodes.ap)
-  // filter by tree.nodeLabelFilter
-  const filterString = tree.nodeLabelFilter.get(`ziel`)
+  // filter by nodeLabelFilter
+  const filterString = nodeLabelFilter.get(`ziel`)
   const zieltypWerte = Array.from(table.ziel_typ_werte.values())
   if (filterString) {
     ziele = ziele.filter((p) => {

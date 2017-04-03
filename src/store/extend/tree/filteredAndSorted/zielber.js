@@ -2,7 +2,7 @@ import sortBy from 'lodash/sortBy'
 
 export default (store) => {
   const { table, tree } = store
-  const { activeNodes } = tree
+  const { activeNodes, nodeLabelFilter } = tree
   // grab zielbere as array and sort them by year
   let zielbere = Array.from(table.zielber.values())
   zielbere = zielbere.filter(a => a.ZielId === activeNodes.ziel)
@@ -10,8 +10,8 @@ export default (store) => {
   zielbere.forEach((el) => {
     el.label = `${el.ZielBerJahr || `(kein Jahr)`}: ${el.ZielBerErreichung || `(keine Entwicklung)`}`
   })
-  // filter by tree.nodeLabelFilter
-  const filterString = tree.nodeLabelFilter.get(`zielber`)
+  // filter by nodeLabelFilter
+  const filterString = nodeLabelFilter.get(`zielber`)
   if (filterString) {
     zielbere = zielbere.filter(p =>
       p.label.toLowerCase().includes(filterString.toLowerCase())

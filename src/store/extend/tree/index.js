@@ -65,11 +65,17 @@ export default (store:Object) => {
      * url is used to control tree and forms
      * activeNodeArray is computed from it
      */
+    /**
+     * in tree2 activeNodeArray is cloned from tree on mount
+     * then is changed on click on nodes
+     * when fetchDataForActiveNodes is also called (autorun?)
+     */
     activeNodeArray: computed(
       () => getActiveNodeArrayFromPathname(store.history.location.pathname),
       { name: `activeNodeArray` }
     ),
     activeNodes: computed(
+      // in tree2: pass it's own activeNodeArray
       () => getActiveNodes(store.tree.activeNodeArray),
       { name: `activeNodes` }
     ),
