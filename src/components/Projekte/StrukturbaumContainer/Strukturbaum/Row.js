@@ -86,7 +86,7 @@ const TpopBeobFilteredMapIcon = styled(TpopBeobMapIcon)`
 `
 const showPopMapIcon = (store, node) => (
   node.menuType === `ap` &&
-  node.id === (store.activeUrlElements.ap || store.map.pop.apArtId) &&
+  node.id === (store.activeNodes.ap || store.map.pop.apArtId) &&
   store.map.activeApfloraLayers.includes(`Pop`)
 )
 const showPopFilteredMapIcon = (store, node) => (
@@ -96,7 +96,7 @@ const showPopFilteredMapIcon = (store, node) => (
 )
 const showTpopMapIcon = (store, node) => (
   node.menuType === `ap` &&
-  node.id === (store.activeUrlElements.ap || store.map.pop.apArtId) &&
+  node.id === (store.activeNodes.ap || store.map.pop.apArtId) &&
   store.map.activeApfloraLayers.includes(`Tpop`)
 )
 const showTpopFilteredMapIcon = (store, node) => (
@@ -106,17 +106,17 @@ const showTpopFilteredMapIcon = (store, node) => (
 )
 const showBeobNichtBeurteiltMapIcon = (store, node) => (
   node.menuType === `beobzuordnungFolder` &&
-  node.id === store.activeUrlElements.ap &&
+  node.id === store.activeNodes.ap &&
   store.map.activeApfloraLayers.includes(`BeobNichtBeurteilt`)
 )
 const showBeobNichtZuzuordnenMapIcon = (store, node) => (
   node.menuType === `beobNichtZuzuordnenFolder` &&
-  node.id === store.activeUrlElements.ap &&
+  node.id === store.activeNodes.ap &&
   store.map.activeApfloraLayers.includes(`BeobNichtZuzuordnen`)
 )
 const showTpopBeobMapIcon = (store, node) => (
   node.menuType === `tpopbeobFolder` &&
-  node.id === store.activeUrlElements.tpop &&
+  node.id === store.activeNodes.tpop &&
   store.map.activeApfloraLayers.includes(`TpopBeob`)
 )
 const showBeobNichtBeurteiltFilteredMapIcon = (store, node) => (
@@ -137,15 +137,15 @@ const showTpopBeobFilteredMapIcon = (store, node) => (
   ) ||
   (
     node.menuType === `tpop` &&
-    !store.activeUrlElements.tpopbeob &&
+    !store.activeNodes.tpopbeob &&
     store.map.activeApfloraLayers.includes(`TpopBeob`) &&
-    node.id === store.activeUrlElements.tpop
+    node.id === store.activeNodes.tpop
   ) ||
   (
     node.menuType === `pop` &&
-    !store.activeUrlElements.tpop &&
+    !store.activeNodes.tpop &&
     store.map.activeApfloraLayers.includes(`TpopBeob`) &&
-    node.id === store.activeUrlElements.pop
+    node.id === store.activeNodes.pop
   )
 )
 

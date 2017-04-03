@@ -18,8 +18,8 @@ const BeobPopup = (
   { store, beobBereitgestellt }:
   {store:Object,beobBereitgestellt:Object}
 ) => {
-  const { activeUrlElements } = store
-  const { ap, projekt } = activeUrlElements
+  const { activeNodes } = store
+  const { ap, projekt } = activeNodes
 
   // build url to open beob form
   let url = `${appBaseUrl}/Projekte/${projekt}/Arten/${ap}/nicht-beurteilte-Beobachtungen/${beobBereitgestellt.BeobId}`

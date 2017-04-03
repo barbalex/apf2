@@ -8,10 +8,10 @@ const Div = styled.div`
 `
 
 const TestdataMessage = ({ store }) => {
-  const { activeUrlElements } = store
+  const { activeNodes } = store
   const isTestSpecies = (
-    activeUrlElements.ap &&
-    activeUrlElements.ap < 200
+    activeNodes.ap &&
+    activeNodes.ap < 200
   )
   if (isTestSpecies) {
     return (

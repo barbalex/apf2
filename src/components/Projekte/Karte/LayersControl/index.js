@@ -123,10 +123,10 @@ const LayersControl = ({
   onToggleOverlaysExpanded,
   onToggleApfloraLayersExpanded,
 }) => {
-  const { activeUrlElements, table } = store
+  const { activeNodes, table } = store
   const getApfloraLayersTitle = () => {
-    if (!activeUrlElements.ap) return `apflora`
-    const ap = table.ap.get(activeUrlElements.ap)
+    if (!activeNodes.ap) return `apflora`
+    const ap = table.ap.get(activeNodes.ap)
     if (!ap || !ap.label) return `apflora`
     return ap.label
   }

@@ -188,11 +188,11 @@ class StrukturbaumContainer extends Component { // eslint-disable-line react/pre
 
   render() {
     const { store } = this.props
-    const { activeUrlElements, activeDataset, tree } = store
+    const { activeNodes, activeDataset, tree } = store
     const showApDivToggle = activeDataset
 
     return (
-      <Container exporte={activeUrlElements.exporte}>
+      <Container exporte={activeNodes.exporte}>
         <LabelFilterContainer>
           <LabelFilter />
           {
