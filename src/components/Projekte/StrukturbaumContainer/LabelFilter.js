@@ -22,8 +22,7 @@ const enhance = compose(
   observer
 )
 
-const LabelFilter = ({ store }) => {
-  const { tree } = store
+const LabelFilter = ({ store, tree }) => {
   const { activeDataset } = store
   let filteredTable = ``
   if (activeDataset && activeDataset.folder) {
@@ -48,7 +47,7 @@ const LabelFilter = ({ store }) => {
       fullWidth
       value={filterValue}
       onChange={(event, val) =>
-        store.tree.updateLabelFilter(filteredTable, val)
+        tree.updateLabelFilter(filteredTable, val)
       }
     />
   )
@@ -56,6 +55,7 @@ const LabelFilter = ({ store }) => {
 
 LabelFilter.propTypes = {
   store: PropTypes.object.isRequired,
+  tree: PropTypes.object.isRequired,
 }
 
 export default enhance(LabelFilter)

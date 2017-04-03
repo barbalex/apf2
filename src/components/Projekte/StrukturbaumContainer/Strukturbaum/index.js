@@ -56,6 +56,7 @@ class Strukturbaum extends Component {
 
   static propTypes = {
     store: PropTypes.object.isRequired,
+    tree: PropTypes.object.isRequired,
     projektLoading: PropTypes.bool,
     nodes: PropTypes.array.isRequired,
     mapTpopBeobVisible: PropTypes.bool.isRequired,
@@ -95,13 +96,14 @@ class Strukturbaum extends Component {
   }
 
   rowRenderer = ({ key, index, style }) => {
-    const { store } = this.props
+    const { tree } = this.props
     return (
       <Row
         key={key}
         index={index}
         style={style}
-        node={store.tree.node.nodes[index]}
+        node={tree.node.nodes[index]}
+        tree={tree}
       />
     )
   }
