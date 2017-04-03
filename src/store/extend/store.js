@@ -15,7 +15,7 @@ import fetchBeobBereitgestellt from '../action/fetchBeobBereitgestellt'
 import fetchBeobEvab from '../action/fetchBeobEvab'
 import fetchBeobInfospezies from '../action/fetchBeobInfospezies'
 import updateActiveDatasetFromUrl from '../action/updateActiveDatasetFromUrl'
-import getActiveUrlElements from '../action/getActiveUrlElements'
+import getActiveNodes from '../action/getActiveNodes'
 import updateProperty from '../action/updateProperty'
 import updatePropertyInDb from '../action/updatePropertyInDb'
 import getUrl from '../action/getUrl'
@@ -62,7 +62,7 @@ export default (store:Object) => {
       { name: `activeDataset` }
     ),
     activeNodes: computed(
-      () => getActiveUrlElements(store.activeNodeArray),
+      () => getActiveNodes(store.activeNodeArray),
       { name: `activeNodes` }
     ),
     datasetToDelete: {},

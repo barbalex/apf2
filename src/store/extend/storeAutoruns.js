@@ -8,7 +8,7 @@ import {
   autorunAsync,
 } from 'mobx'
 
-import fetchDataForActiveUrlElements from '../action/fetchDataForActiveUrlElements'
+import fetchDataForActiveNodes from '../action/fetchDataForActiveNodes'
 import manipulateUrl from '../action/manipulateUrl'
 
 export default (store:Object) => {
@@ -26,7 +26,7 @@ export default (store:Object) => {
         const showTpopBeob = store.map.activeApfloraLayers.includes(`TpopBeob`) || store.map.activeApfloraLayers.includes(`TpopBeobAssignPolylines`)
         const showBeobNichtBeurteilt = store.map.activeApfloraLayers.includes(`BeobNichtBeurteilt`)
         const showBeobNichtZuzuordnen = store.map.activeApfloraLayers.includes(`BeobNichtZuzuordnen`)
-        fetchDataForActiveUrlElements(store, showPop, showTpop, showTpopBeob, showBeobNichtBeurteilt, showBeobNichtZuzuordnen)
+        fetchDataForActiveNodes(store, showPop, showTpop, showTpopBeob, showBeobNichtBeurteilt, showBeobNichtZuzuordnen)
       }
     ),
   })

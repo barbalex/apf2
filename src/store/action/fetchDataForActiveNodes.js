@@ -8,7 +8,7 @@
 import { runInAction } from 'mobx'
 import forEach from 'lodash/forEach'
 
-const fetchDataForActiveUrlElements = (
+const fetchDataForActiveNodes = (
   store:Object,
   showPop:boolean,
   showTpop:boolean,
@@ -192,4 +192,4 @@ const fetchDataForActiveUrlElements = (
   })
 }
 
-export default fetchDataForActiveUrlElements
+export default fetchDataForActiveNodes
