@@ -20,8 +20,8 @@ export default (store:Object) => {
         if (mapFilterPop.length > 0) {
           return mapFilterPop
         }
-        if (store.activeNodes.pop) {
-          return [store.activeNodes.pop]
+        if (store.tree.activeNodes.pop) {
+          return [store.tree.activeNodes.pop]
         }
         return []
       },

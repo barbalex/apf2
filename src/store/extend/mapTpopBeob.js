@@ -14,7 +14,7 @@ export default (store:Object) => {
   extendObservable(store.map.tpopBeob, {
     highlightedIds: computed(
       () => {
-        const { activeNodes } = store
+        const { activeNodes } = store.tree
         const mapFilterTpopBeob = store.map.mapFilter.tpopBeob
         if (mapFilterTpopBeob.length > 0) {
           return mapFilterTpopBeob

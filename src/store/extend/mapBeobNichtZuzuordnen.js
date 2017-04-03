@@ -16,8 +16,8 @@ export default (store:Object) => {
         if (mapFilterBeobNichtZuzuordnen.length > 0) {
           return mapFilterBeobNichtZuzuordnen
         }
-        if (store.activeNodes.beobNichtZuzuordnen) {
-          return [store.activeNodes.beobNichtZuzuordnen]
+        if (store.tree.activeNodes.beobNichtZuzuordnen) {
+          return [store.tree.activeNodes.beobNichtZuzuordnen]
         }
         return []
       },

@@ -15,10 +15,8 @@ import fetchBeobBereitgestellt from '../action/fetchBeobBereitgestellt'
 import fetchBeobEvab from '../action/fetchBeobEvab'
 import fetchBeobInfospezies from '../action/fetchBeobInfospezies'
 import updateActiveDatasetFromUrl from '../action/updateActiveDatasetFromUrl'
-import getActiveNodes from '../action/getActiveNodes'
 import updateProperty from '../action/updateProperty'
 import updatePropertyInDb from '../action/updatePropertyInDb'
-import getActiveNodeArrayFromPathname from '../action/getActiveNodeArrayFromPathname'
 import getUrlQuery from '../action/getUrlQuery'
 import fetchFields from '../action/fetchFields'
 import fetchFieldsFromIdb from '../action/fetchFieldsFromIdb'
@@ -43,13 +41,6 @@ export default (store:Object) => {
   extendObservable(store, {
     loading: [],
     /**
-     * url paths are used to control tree and forms
-     */
-    activeNodeArray: computed(
-      () => getActiveNodeArrayFromPathname(store.history.location.pathname),
-      { name: `activeNodeArray` }
-    ),
-    /**
      * urlQueries are used to control tabs
      * for instance: Entwicklung or Biotop in tpopfeldkontr
      */
@@ -60,10 +51,6 @@ export default (store:Object) => {
     activeDataset: computed(
       () => updateActiveDatasetFromUrl(store),
       { name: `activeDataset` }
-    ),
-    activeNodes: computed(
-      () => getActiveNodes(store.activeNodeArray),
-      { name: `activeNodes` }
     ),
     datasetToDelete: {},
     tellUserReadOnly: action(`tellUserReadOnly`, () =>
