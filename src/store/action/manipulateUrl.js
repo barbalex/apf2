@@ -4,7 +4,7 @@ import clone from 'lodash/clone'
 import queryString from 'query-string'
 
 export default (store:Object) => {
-  const activeNodeArray = clone(store.activeNodeArray)
+  const activeNodeArray = clone(store.tree.activeNodeArray)
   // forward apflora.ch to Projekte
   if (activeNodeArray.length === 0) {
     activeNodeArray.push(`Projekte`)
@@ -20,7 +20,7 @@ export default (store:Object) => {
   }
   const search = queryString.stringify(urlQuery)
   if (
-    !isEqual(activeNodeArray, store.activeNodeArray) ||
+    !isEqual(activeNodeArray, store.tree.activeNodeArray) ||
     !isEqual(urlQuery, store.urlQuery)
   ) {
     const query = `${Object.keys(urlQuery).length > 0 ? `?${search}` : ``}`

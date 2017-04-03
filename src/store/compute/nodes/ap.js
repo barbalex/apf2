@@ -1,9 +1,9 @@
 import findIndex from 'lodash/findIndex'
 
 export default (store) => {
-  const { activeNodes, tree } = store
+  const { tree } = store
   // fetch sorting indexes of parents
-  const projId = activeNodes.projekt
+  const projId = tree.activeNodes.projekt
   if (!projId) return []
   const projIndex = findIndex(store.tree.filteredAndSorted.projekt, { ProjId: projId })
 
@@ -14,7 +14,7 @@ export default (store) => {
     id: el.ApArtId,
     parentId: el.ProjId,
     label: el.label,
-    expanded: el.ApArtId === activeNodes.ap,
+    expanded: el.ApArtId === tree.activeNodes.ap,
     url: [`Projekte`, el.ProjId, `Arten`, el.ApArtId],
     sort: [projIndex, 1, index],
     hasChildren: true,

@@ -2,7 +2,7 @@
 import validateActiveDataset from '../../modules/validateActiveDataset'
 
 export default (store:Object) => {
-  const aEl = store.activeNodes
+  const aEl = store.tree.activeNodes
   let activeDataset = {
     table: null,
     row: null,

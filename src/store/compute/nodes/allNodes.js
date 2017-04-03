@@ -14,7 +14,7 @@ const compare = (a, b) => {
 }
 
 export default (store) => {
-  const { activeNodes, table } = store
+  const { tree, table } = store
   const {
     projekt,
     apFolder,
@@ -65,6 +65,7 @@ export default (store) => {
     tpopmassnFolder,
     tpopmassn,
   } = store.tree.node
+  const { activeNodes } = tree
 
   let nodes = projekt
 
