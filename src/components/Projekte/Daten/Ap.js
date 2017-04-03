@@ -63,8 +63,8 @@ const enhance = compose(
     const { adb_eigenschaften } = store.table
     let artwert = `Diese Art hat keinen Artwert`
     let artname = ``
-    if (store.activeUrlElements.ap && adb_eigenschaften.size > 0) {
-      const ae = adb_eigenschaften.get(store.activeUrlElements.ap)
+    if (store.activeNodes.ap && adb_eigenschaften.size > 0) {
+      const ae = adb_eigenschaften.get(store.activeNodes.ap)
       if (ae && ae.Artwert) {
         artwert = ae.Artwert
       }

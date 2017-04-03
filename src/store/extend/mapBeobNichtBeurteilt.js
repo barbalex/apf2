@@ -17,8 +17,8 @@ export default (store:Object) => {
         if (mapFilterBeobNichtBeurteilt.length > 0) {
           return mapFilterBeobNichtBeurteilt
         }
-        if (store.activeUrlElements.beobzuordnung) {
-          return [store.activeUrlElements.beobzuordnung]
+        if (store.activeNodes.beobzuordnung) {
+          return [store.activeNodes.beobzuordnung]
         }
         return []
       },

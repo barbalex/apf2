@@ -1,17 +1,17 @@
 import findIndex from 'lodash/findIndex'
 
 export default (store) => {
-  const { activeUrlElements, tree } = store
+  const { activeNodes, tree } = store
   // fetch sorting indexes of parents
-  const projId = activeUrlElements.projekt
+  const projId = activeNodes.projekt
   if (!projId) return []
   const projIndex = findIndex(tree.filteredAndSorted.projekt, { ProjId: projId })
-  const apArtId = activeUrlElements.ap
+  const apArtId = activeNodes.ap
   if (!apArtId) return []
   const apIndex = findIndex(tree.filteredAndSorted.ap, { ApArtId: apArtId })
-  const zieljahr = activeUrlElements.zieljahr
+  const zieljahr = activeNodes.zieljahr
   const zieljahrIndex = findIndex(tree.filteredAndSorted.zieljahr, { jahr: zieljahr })
-  const ziel = activeUrlElements.ziel
+  const ziel = activeNodes.ziel
   const zielIndex = findIndex(tree.filteredAndSorted.ziel, { ZielId: ziel })
 
   const zielberNodesLength = tree.filteredAndSorted.zielber.length
@@ -29,7 +29,7 @@ export default (store) => {
     menuType: `zielberFolder`,
     id: ziel,
     label: `Berichte (${message})`,
-    expanded: activeUrlElements.zielberFolder,
+    expanded: activeNodes.zielberFolder,
     url: [`Projekte`, projId, `Arten`, apArtId, `AP-Ziele`, zieljahr, ziel, `Berichte`],
     sort: [projIndex, 1, apIndex, 2, zieljahrIndex, zielIndex, 1],
     hasChildren: zielberNodesLength > 0,

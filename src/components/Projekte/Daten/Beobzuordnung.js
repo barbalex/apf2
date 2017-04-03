@@ -64,7 +64,7 @@ const getTpopZuordnenSource = (store) => {
   const beobzuordnung = activeDataset.row
   // get all popIds of active ap
   const popList = Array.from(store.table.pop.values())
-    .filter(p => p.ApArtId === store.activeUrlElements.ap)
+    .filter(p => p.ApArtId === store.activeNodes.ap)
   const popIdList = popList.map(p => p.PopId)
   // get all tpop
   let tpopList = Array.from(store.table.tpop.values())
