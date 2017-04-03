@@ -95,6 +95,7 @@ class StrukturbaumContainer extends Component { // eslint-disable-line react/pre
 
   static propTypes = {
     store: PropTypes.object.isRequired,
+    tree: PropTypes.object.isRequired,
   }
 
   componentDidMount() {
@@ -187,14 +188,14 @@ class StrukturbaumContainer extends Component { // eslint-disable-line react/pre
   }
 
   render() {
-    const { store } = this.props
-    const { activeDataset, tree } = store
+    const { store, tree } = this.props
+    const { activeDataset } = store
     const showApDivToggle = activeDataset
 
     return (
       <Container exporte={tree.activeNodes.exporte}>
         <LabelFilterContainer>
-          <LabelFilter />
+          <LabelFilter tree={tree} />
           {
             showApDivToggle &&
             <NurApDiv>
@@ -214,14 +215,15 @@ class StrukturbaumContainer extends Component { // eslint-disable-line react/pre
         >
           <Strukturbaum
             projektLoading={store.table.projektLoading}
-            nodes={store.tree.node.nodes}
+            nodes={tree.node.nodes}
             mapTpopBeobVisible={store.map.activeApfloraLayers.includes(`TpopBeob`)}
             mapBeobNichtBeurteiltVisible={store.map.activeApfloraLayers.includes(`BeobNichtBeurteilt`)}
             mapBeobNichtZuzuordnenVisible={store.map.activeApfloraLayers.includes(`BeobNichtZuzuordnen`)}
             mapPopVisible={store.map.activeApfloraLayers.includes(`Pop`)}
             mapTpopVisible={store.map.activeApfloraLayers.includes(`Tpop`)}
             popHighlightedIdsString={store.map.pop.highlightedIds.join()}
-            url={store.tree.activeNodeArray}
+            url={tree.activeNodeArray}
+            tree={tree}
           />
         </div>
         <CmApFolder onClick={this.handleClick} />

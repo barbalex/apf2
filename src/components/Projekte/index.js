@@ -59,7 +59,7 @@ const Projekte = ({ store }) => {
       <Content>
         {
           strukturbaumIsVisible &&
-          <StrukturbaumContainer />
+          <StrukturbaumContainer tree={store.tree} />
         }
         {
           datenIsVisible &&
