@@ -1,14 +1,14 @@
 import sortBy from 'lodash/sortBy'
 
 export default (store) => {
-  const { activeUrlElements, table, tree } = store
+  const { activeNodes, table, tree } = store
   // grab ziele as array
   let ziele = Array.from(table.ziel.values())
   // show only nodes of active ap
-  const activeAp = activeUrlElements.ap
+  const activeAp = activeNodes.ap
   ziele = ziele.filter(a => a.ApArtId === activeAp)
   // show only nodes of active zieljahr
-  const jahr = activeUrlElements.zieljahr
+  const jahr = activeNodes.zieljahr
   ziele = ziele.filter((a) => {
     if (jahr === null || jahr === undefined) {
       return a.ZielJahr !== 0 && !a.ZielJahr

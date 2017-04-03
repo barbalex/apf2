@@ -1,10 +1,10 @@
 import sortBy from 'lodash/sortBy'
 
 export default (store) => {
-  const { activeUrlElements, table, tree } = store
+  const { activeNodes, table, tree } = store
   // grab zielbere as array and sort them by year
   let zielbere = Array.from(table.zielber.values())
-  zielbere = zielbere.filter(a => a.ZielId === activeUrlElements.ziel)
+  zielbere = zielbere.filter(a => a.ZielId === activeNodes.ziel)
   // map through all and create array of nodes
   zielbere.forEach((el) => {
     el.label = `${el.ZielBerJahr || `(kein Jahr)`}: ${el.ZielBerErreichung || `(keine Entwicklung)`}`

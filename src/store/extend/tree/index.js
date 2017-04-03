@@ -74,7 +74,7 @@ export default (store:Object) => {
     }),
     activeNodeFilter: {
       ap: computed(
-        () => store.activeUrlElements.ap,
+        () => store.activeNodes.ap,
         { name: `activeNodeFilterAp` }
       ),
     },

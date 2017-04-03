@@ -13,7 +13,7 @@ function Store() {
   this.activeNodeArray = []
   this.urlQuery = {}
   this.activeDataset = {}
-  this.activeUrlElements = {}
+  this.activeNodes = {}
   this.datasetToDelete = {}
   this.tellUserReadOnly = null
   this.fetchLogin = null
