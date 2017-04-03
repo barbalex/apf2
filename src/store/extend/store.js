@@ -18,7 +18,7 @@ import updateActiveDatasetFromUrl from '../action/updateActiveDatasetFromUrl'
 import getActiveNodes from '../action/getActiveNodes'
 import updateProperty from '../action/updateProperty'
 import updatePropertyInDb from '../action/updatePropertyInDb'
-import getUrl from '../action/getUrl'
+import getActiveNodeArrayFromPathname from '../action/getActiveNodeArrayFromPathname'
 import getUrlQuery from '../action/getUrlQuery'
 import fetchFields from '../action/fetchFields'
 import fetchFieldsFromIdb from '../action/fetchFieldsFromIdb'
@@ -46,7 +46,7 @@ export default (store:Object) => {
      * url paths are used to control tree and forms
      */
     activeNodeArray: computed(
-      () => getUrl(store.history.location.pathname),
+      () => getActiveNodeArrayFromPathname(store.history.location.pathname),
       { name: `activeNodeArray` }
     ),
     /**
