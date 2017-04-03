@@ -24,7 +24,7 @@ const setQk = ({
   messagesPassed:Array<Object>,
   filterPassed:string,
 }) => {
-  const apArtId = store.activeNodes.ap
+  const apArtId = store.tree.activeNodes.ap
   let berichtjahr = berichtjahrPassed
   const messages = messagesPassed || []
   let filter = filterPassed

@@ -45,9 +45,9 @@ export default (store:Object, tablePassed:string, parentId:number, baseUrl:Array
       const newUrl = `/${baseUrl.join(`/`)}${query}`
       store.history.push(newUrl)
       // if zieljahr, need to update ZielJahr
-      if (store.activeNodes.zieljahr) {
-        store.updateProperty(`ZielJahr`, store.activeNodes.zieljahr)
-        store.updatePropertyInDb(`ZielJahr`, store.activeNodes.zieljahr)
+      if (store.tree.activeNodes.zieljahr) {
+        store.updateProperty(`ZielJahr`, store.tree.activeNodes.zieljahr)
+        store.updatePropertyInDb(`ZielJahr`, store.tree.activeNodes.zieljahr)
       }
       // if tpopfreiwkontr need to update TPopKontrTyp
       if (tablePassed === `tpopfreiwkontr`) {

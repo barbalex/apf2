@@ -39,7 +39,8 @@ export default (store) => {
            * point url to moved beob
            * open form of beob?
            */
-          const { activeNodes, history, table, updatePropertyInDb } = store
+          const { tree, history, table, updatePropertyInDb } = store
+          const { activeNodes } = tree
           const nearestTpopId = getNearestTpopId(store, event.target._latlng)
           const popId = table.tpop.get(nearestTpopId).PopId
           const query = `${Object.keys(store.urlQuery).length > 0 ? `?${queryString.stringify(store.urlQuery)}` : ``}`

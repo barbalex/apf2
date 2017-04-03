@@ -15,7 +15,7 @@ const updateBeobzuordnungData = (store, beobBereitgestellt, newKey, newValue) =>
 }
 
 const continueWithBeobBereitgestellt = (store, beobBereitgestellt, newKey, newValue) => {
-  const { projekt, ap } = store.activeNodes
+  const { projekt, ap } = store.tree.activeNodes
   // set new url
   const query = `${Object.keys(store.urlQuery).length > 0 ? `?${queryString.stringify(store.urlQuery)}` : ``}`
   if (newKey === `BeobNichtZuordnen`) {
