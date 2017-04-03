@@ -26,7 +26,7 @@ export default (store:Object) => {
         const showTpopBeob = store.map.activeApfloraLayers.includes(`TpopBeob`) || store.map.activeApfloraLayers.includes(`TpopBeobAssignPolylines`)
         const showBeobNichtBeurteilt = store.map.activeApfloraLayers.includes(`BeobNichtBeurteilt`)
         const showBeobNichtZuzuordnen = store.map.activeApfloraLayers.includes(`BeobNichtZuzuordnen`)
-        fetchDataForActiveNodes(store, showPop, showTpop, showTpopBeob, showBeobNichtBeurteilt, showBeobNichtZuzuordnen)
+        fetchDataForActiveNodes(store, showPop, showTpop, showTpopBeob, showBeobNichtBeurteilt, showBeobNichtZuzuordnen, store.tree.activeNodes)
       }
     ),
   })

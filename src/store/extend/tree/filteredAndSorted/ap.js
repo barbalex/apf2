@@ -2,14 +2,14 @@ import sortBy from 'lodash/sortBy'
 
 export default (store) => {
   const { table, tree } = store
-  const { activeNodes } = tree
+  const { activeNodes, nodeLabelFilter, apFilter } = tree
   const { adb_eigenschaften } = table
   // grab ap as array and sort them by name
   let ap = Array.from(table.ap.values())
   // show only ap of active projekt
   ap = ap.filter(a => a.ProjId === activeNodes.projekt)
-  // filter by tree.apFilter
-  if (tree.apFilter) {
+  // filter by apFilter
+  if (apFilter) {
     // ApStatus between 3 and 5
     ap = ap.filter(a => [1, 2, 3].includes(a.ApStatus))
   }
@@ -20,8 +20,8 @@ export default (store) => {
       const ae = adb_eigenschaften.get(x.ApArtId)
       return x.label = ae ? ae.Artname : `(keine Art gewählt)`
     })
-    // filter by tree.nodeLabelFilter
-    const filterString = tree.nodeLabelFilter.get(`ap`)
+    // filter by nodeLabelFilter
+    const filterString = nodeLabelFilter.get(`ap`)
     if (filterString) {
       ap = ap.filter(p =>
         p.label.toLowerCase().includes(filterString.toLowerCase())

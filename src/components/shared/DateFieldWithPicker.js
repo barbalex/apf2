@@ -132,6 +132,7 @@ class MyDatePicker extends Component {
           id="iconCalendar"
           className="material-icons"
           title="Kalender öffnen"
+          // $FlowIssue
           onClick={() => this.datePicker.focus()}
         >
           event
