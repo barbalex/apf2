@@ -17,7 +17,7 @@ const PopPopup = (
   { store, pop }:
   {store:Object,pop:Object}
 ) => {
-  const { activeNodes } = store
+  const { activeNodes } = store.tree
   const { ap, projekt } = activeNodes
   const popUrl = `${appBaseUrl}/Projekte/${projekt}/Arten/${ap}/Populationen/${pop.PopId}`
 

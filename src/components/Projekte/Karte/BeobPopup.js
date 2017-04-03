@@ -18,7 +18,7 @@ const BeobPopup = (
   { store, beobBereitgestellt }:
   {store:Object,beobBereitgestellt:Object}
 ) => {
-  const { activeNodes } = store
+  const { activeNodes } = store.tree
   const { ap, projekt } = activeNodes
 
   // build url to open beob form

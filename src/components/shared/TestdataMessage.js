@@ -8,7 +8,7 @@ const Div = styled.div`
 `
 
 const TestdataMessage = ({ store }) => {
-  const { activeNodes } = store
+  const { activeNodes } = store.tree
   const isTestSpecies = (
     activeNodes.ap &&
     activeNodes.ap < 200

@@ -188,11 +188,11 @@ class StrukturbaumContainer extends Component { // eslint-disable-line react/pre
 
   render() {
     const { store } = this.props
-    const { activeNodes, activeDataset, tree } = store
+    const { activeDataset, tree } = store
     const showApDivToggle = activeDataset
 
     return (
-      <Container exporte={activeNodes.exporte}>
+      <Container exporte={tree.activeNodes.exporte}>
         <LabelFilterContainer>
           <LabelFilter />
           {
@@ -221,7 +221,7 @@ class StrukturbaumContainer extends Component { // eslint-disable-line react/pre
             mapPopVisible={store.map.activeApfloraLayers.includes(`Pop`)}
             mapTpopVisible={store.map.activeApfloraLayers.includes(`Tpop`)}
             popHighlightedIdsString={store.map.pop.highlightedIds.join()}
-            url={store.activeNodeArray}
+            url={store.tree.activeNodeArray}
           />
         </div>
         <CmApFolder onClick={this.handleClick} />
