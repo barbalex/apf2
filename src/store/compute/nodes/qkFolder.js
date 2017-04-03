@@ -1,15 +1,15 @@
 import findIndex from 'lodash/findIndex'
 import reduce from 'lodash/reduce'
 
-export default (store) => {
-  const { activeNodes } = store.tree
+export default (store, tree) => {
+  const { activeNodes } = tree
   // fetch sorting indexes of parents
   const projId = activeNodes.projekt
   if (!projId) return []
-  const projIndex = findIndex(store.tree.filteredAndSorted.projekt, { ProjId: projId })
+  const projIndex = findIndex(tree.filteredAndSorted.projekt, { ProjId: projId })
   const apArtId = activeNodes.ap
   if (!apArtId) return []
-  const apIndex = findIndex(store.tree.filteredAndSorted.ap, { ApArtId: apArtId })
+  const apIndex = findIndex(tree.filteredAndSorted.ap, { ApArtId: apArtId })
 
   const qk = store.qk.get(apArtId)
   let nrOfQkMessages = 0
@@ -21,7 +21,7 @@ export default (store) => {
   if (qk && qk.filter) {
     nrOfQkMessages = `${nrOfQkMessages} gefiltert`
   }
-  if (!store.tree.activeNodes.qk) {
+  if (!tree.activeNodes.qk) {
     // only show number when qk is active
     nrOfQkMessages = null
   }

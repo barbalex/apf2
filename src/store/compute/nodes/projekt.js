@@ -1,8 +1,5 @@
-export default (store) => {
-  const { tree } = store
-
-  // map through all filtered and sorted projekt and create array of nodes
-  return tree.filteredAndSorted.projekt.map((el, index) => ({
+export default (store, tree) =>
+  tree.filteredAndSorted.projekt.map((el, index) => ({
     nodeType: `table`,
     menuType: `projekt`,
     id: el.ProjId,
@@ -12,4 +9,3 @@ export default (store) => {
     sort: [index],
     hasChildren: true,
   }))
-}
