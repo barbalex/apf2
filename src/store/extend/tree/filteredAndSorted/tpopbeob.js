@@ -1,7 +1,8 @@
 import sortBy from 'lodash/sortBy'
 
 export default (store) => {
-  const { activeNodes, table, tree } = store
+  const { table, tree } = store
+  const { activeNodes } = tree
   // grab tpopbeob as array and sort them by year
   let tpopbeob = Array
     .from(table.beobzuordnung.values())

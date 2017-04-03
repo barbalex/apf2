@@ -1,7 +1,8 @@
 import sortBy from 'lodash/sortBy'
 
 export default (store) => {
-  const { activeNodes, table, tree } = store
+  const { table, tree } = store
+  const { activeNodes } = tree
   // grab tpopkontr as array and sort them by year
   let tpopkontr = Array.from(table.tpopkontr.values())
     .filter(t => t.TPopKontrTyp !== `Freiwilligen-Erfolgskontrolle`)
