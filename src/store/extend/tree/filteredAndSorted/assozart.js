@@ -1,12 +1,12 @@
 import sortBy from 'lodash/sortBy'
 
 export default (store) => {
-  const { activeUrlElements, table, tree } = store
+  const { activeNodes, table, tree } = store
   const { adb_eigenschaften } = table
   // grab assozart as array and sort them by year
   let assozart = Array.from(table.assozart.values())
   // show only nodes of active ap
-  assozart = assozart.filter(a => a.AaApArtId === activeUrlElements.ap)
+  assozart = assozart.filter(a => a.AaApArtId === activeNodes.ap)
   // filter by tree.apFilter
   if (tree.apFilter) {
     // ApStatus between 3 and 5

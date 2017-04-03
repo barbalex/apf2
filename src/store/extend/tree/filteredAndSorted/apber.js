@@ -1,11 +1,11 @@
 import sortBy from 'lodash/sortBy'
 
 export default (store) => {
-  const { activeUrlElements, table, tree } = store
+  const { activeNodes, table, tree } = store
   // grab apber as array and sort them by year
   let apber = Array.from(table.apber.values())
   // show only nodes of active ap
-  apber = apber.filter(a => a.ApArtId === activeUrlElements.ap)
+  apber = apber.filter(a => a.ApArtId === activeNodes.ap)
   // filter by tree.apFilter
   if (tree.apFilter) {
     // ApStatus between 3 and 5

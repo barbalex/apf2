@@ -1,11 +1,11 @@
 import sortBy from 'lodash/sortBy'
 
 export default (store) => {
-  const { activeUrlElements, table, tree } = store
+  const { activeNodes, table, tree } = store
   // grab beob_bereitgestellt as array and sort them by year
   let beobNichtBeurteilt = Array.from(table.beob_bereitgestellt.values())
     // show only nodes of active ap
-    .filter(a => a.NO_ISFS === activeUrlElements.ap)
+    .filter(a => a.NO_ISFS === activeNodes.ap)
     // filter by tree.apFilter
     .filter((b) => {
       if (!tree.apFilter) return true

@@ -1,7 +1,7 @@
 import sortBy from 'lodash/sortBy'
 
 export default (store) => {
-  const { activeUrlElements, table, tree } = store
+  const { activeNodes, table, tree } = store
   // grab beobNichtZuzuordnen as array and sort them by year
   let beobNichtZuzuordnen = Array
     .from(table.beobzuordnung.values())
@@ -10,7 +10,7 @@ export default (store) => {
     .filter(a => (
       a.beobBereitgestellt &&
       a.beobBereitgestellt.NO_ISFS &&
-      a.beobBereitgestellt.NO_ISFS === activeUrlElements.ap
+      a.beobBereitgestellt.NO_ISFS === activeNodes.ap
     ))
     // filter by tree.apFilter
     .filter((b) => {

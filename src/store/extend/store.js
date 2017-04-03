@@ -61,9 +61,9 @@ export default (store:Object) => {
       () => updateActiveDatasetFromUrl(store),
       { name: `activeDataset` }
     ),
-    activeUrlElements: computed(
+    activeNodes: computed(
       () => getActiveUrlElements(store.activeNodeArray),
-      { name: `activeUrlElements` }
+      { name: `activeNodes` }
     ),
     datasetToDelete: {},
     tellUserReadOnly: action(`tellUserReadOnly`, () =>
