@@ -2,7 +2,7 @@ import sortBy from 'lodash/sortBy'
 
 export default (store) => {
   const { table, tree } = store
-  const { activeNodes } = tree
+  const { activeNodes, nodeLabelFilter } = tree
   // grab popber as array and sort them by year
   let popber = Array.from(table.popber.values())
   // show only nodes of active pop
@@ -15,8 +15,8 @@ export default (store) => {
     const entwicklungTxt = popEntwicklungWert ? popEntwicklungWert.EntwicklungTxt : null
     el.label = `${el.PopBerJahr || `(kein Jahr)`}: ${entwicklungTxt || `(nicht beurteilt)`}`
   })
-  // filter by tree.nodeLabelFilter
-  const filterString = tree.nodeLabelFilter.get(`popber`)
+  // filter by nodeLabelFilter
+  const filterString = nodeLabelFilter.get(`popber`)
   if (filterString) {
     popber = popber.filter(p =>
       p.label.toLowerCase().includes(filterString.toLowerCase())

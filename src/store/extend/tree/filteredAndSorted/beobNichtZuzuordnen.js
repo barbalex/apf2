@@ -2,7 +2,7 @@ import sortBy from 'lodash/sortBy'
 
 export default (store) => {
   const { table, tree } = store
-  const { activeNodes } = tree
+  const { activeNodes, nodeLabelFilter, apFilter } = tree
   // grab beobNichtZuzuordnen as array and sort them by year
   let beobNichtZuzuordnen = Array
     .from(table.beobzuordnung.values())
@@ -13,9 +13,9 @@ export default (store) => {
       a.beobBereitgestellt.NO_ISFS &&
       a.beobBereitgestellt.NO_ISFS === activeNodes.ap
     ))
-    // filter by tree.apFilter
+    // filter by apFilter
     .filter((b) => {
-      if (!tree.apFilter) return true
+      if (!apFilter) return true
       let ap
       const beob = table.beob_bereitgestellt.get(b.NO_NOTE)
       if (beob) ap = table.ap.get(beob.NO_ISFS)
@@ -40,8 +40,8 @@ export default (store) => {
     const quelleName = quelle && quelle.name ? quelle.name : ``
     el.label  = `${datum || `(kein Datum)`}: ${autor || `(kein Autor)`} (${quelleName})`
   })
-  // filter by tree.nodeLabelFilter
-  const filterString = tree.nodeLabelFilter.get(`beobNichtZuzuordnen`)
+  // filter by nodeLabelFilter
+  const filterString = nodeLabelFilter.get(`beobNichtZuzuordnen`)
   if (filterString) {
     beobNichtZuzuordnen = beobNichtZuzuordnen.filter(p =>
       p.label.toLowerCase().includes(filterString.toLowerCase())

@@ -2,7 +2,7 @@ import sortBy from 'lodash/sortBy'
 
 export default (store) => {
   const { table, tree } = store
-  const { activeNodes } = tree
+  const { activeNodes, nodeLabelFilter } = tree
   // grab erfkrit as array and sort them by year
   let erfkrit = Array.from(table.erfkrit.values())
   // show only nodes of active ap
@@ -15,8 +15,8 @@ export default (store) => {
     el.sort = erfkritWert ? erfkritWert.BeurteilOrd : null
     el.label = `${beurteilTxt || `(nicht beurteilt)`}: ${el.ErfkritTxt || `(keine Kriterien erfasst)`}`
   })
-  // filter by tree.nodeLabelFilter
-  const filterString = tree.nodeLabelFilter.get(`erfkrit`)
+  // filter by nodeLabelFilter
+  const filterString = nodeLabelFilter.get(`erfkrit`)
   if (filterString) {
     erfkrit = erfkrit.filter(p =>
       p.label.toLowerCase().includes(filterString.toLowerCase())

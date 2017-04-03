@@ -2,7 +2,7 @@ import sortBy from 'lodash/sortBy'
 
 export default (store) => {
   const { table, tree } = store
-  const { activeNodes } = tree
+  const { activeNodes, nodeLabelFilter } = tree
   // grab ber as array and sort them by year
   let ber = Array.from(table.ber.values())
   // show only nodes of active ap
@@ -11,8 +11,8 @@ export default (store) => {
   ber.forEach((el) => {
     el.label = `${el.BerJahr || `(kein Jahr)`}: ${el.BerTitel || `(kein Titel)`}`
   })
-  // filter by tree.nodeLabelFilter
-  const filterString = tree.nodeLabelFilter.get(`ber`)
+  // filter by nodeLabelFilter
+  const filterString = nodeLabelFilter.get(`ber`)
   if (filterString) {
     ber = ber.filter((p) => {
       return p.label.toLowerCase().includes(filterString)
