@@ -10,10 +10,8 @@ import extendStore from './extend'
 function Store() {
   this.history = ObservableHistory
   this.loading = []
-  this.activeNodeArray = []
   this.urlQuery = {}
   this.activeDataset = {}
-  this.activeNodes = {}
   this.datasetToDelete = {}
   this.tellUserReadOnly = null
   this.fetchLogin = null
@@ -45,6 +43,8 @@ function Store() {
   this.writeToStore = null
   this.setUrlQuery = null
   this.tree = {
+    activeNodeArray: [],
+    activeNodes: {},
     apFilter: false,
     toggleApFilter: null,
     nodeLabelFilter: {},

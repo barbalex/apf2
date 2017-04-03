@@ -1,7 +1,8 @@
 import uniq from 'lodash/uniq'
 
 export default (store) => {
-  const { activeNodes, table, tree } = store
+  const { table, tree } = store
+  const { activeNodes } = tree
   // grab ziele as array
   let ziele = Array.from(table.ziel.values())
   // show only nodes of active ap

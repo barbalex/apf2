@@ -56,9 +56,23 @@ import tpopmassnberFolderNode from '../../compute/nodes/tpopmassnberFolder'
 import tpopmassnberNode from '../../compute/nodes/tpopmassnber'
 import tpopmassnFolderNode from '../../compute/nodes/tpopmassnFolder'
 import tpopmassnNode from '../../compute/nodes/tpopmassn'
+import getActiveNodes from '../../action/getActiveNodes'
+import getActiveNodeArrayFromPathname from '../../action/getActiveNodeArrayFromPathname'
 
 export default (store:Object) => {
   extendObservable(store.tree, {
+    /**
+     * url is used to control tree and forms
+     * activeNodeArray is computed from it
+     */
+    activeNodeArray: computed(
+      () => getActiveNodeArrayFromPathname(store.history.location.pathname),
+      { name: `activeNodeArray` }
+    ),
+    activeNodes: computed(
+      () => getActiveNodes(store.tree.activeNodeArray),
+      { name: `activeNodes` }
+    ),
     apFilter: false,
     toggleApFilter: action(`toggleApFilter`, () => {
       store.tree.apFilter = !store.tree.apFilter
@@ -74,7 +88,7 @@ export default (store:Object) => {
     }),
     activeNodeFilter: {
       ap: computed(
-        () => store.activeNodes.ap,
+        () => store.tree.activeNodes.ap,
         { name: `activeNodeFilterAp` }
       ),
     },

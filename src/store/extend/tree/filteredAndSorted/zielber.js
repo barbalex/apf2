@@ -1,7 +1,8 @@
 import sortBy from 'lodash/sortBy'
 
 export default (store) => {
-  const { activeNodes, table, tree } = store
+  const { table, tree } = store
+  const { activeNodes } = tree
   // grab zielbere as array and sort them by year
   let zielbere = Array.from(table.zielber.values())
   zielbere = zielbere.filter(a => a.ZielId === activeNodes.ziel)
