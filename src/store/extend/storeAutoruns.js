@@ -30,4 +30,18 @@ export default (store:Object) => {
       }
     ),
   })
+  extendObservable(store.tree2, {
+    fetchDataForTree2WhenActiveNodeArrayChanges: autorunAsync(
+      `fetchDataForTree2WhenActiveNodeArrayChanges`,
+      () => {
+        // need to pass visibility of layers to make data fetched on changing layers
+        const showTpop = store.map.activeApfloraLayers.includes(`Tpop`)
+        const showPop = store.map.activeApfloraLayers.includes(`Pop`)
+        const showTpopBeob = store.map.activeApfloraLayers.includes(`TpopBeob`) || store.map.activeApfloraLayers.includes(`TpopBeobAssignPolylines`)
+        const showBeobNichtBeurteilt = store.map.activeApfloraLayers.includes(`BeobNichtBeurteilt`)
+        const showBeobNichtZuzuordnen = store.map.activeApfloraLayers.includes(`BeobNichtZuzuordnen`)
+        fetchDataForActiveNodes(store, showPop, showTpop, showTpopBeob, showBeobNichtBeurteilt, showBeobNichtZuzuordnen, store.tree2.activeNodes)
+      }
+    ),
+  })
 }

@@ -1,6 +1,7 @@
 import extendStore from './store'
 import extendStoreAutoruns from './storeAutoruns'
 import extendTree from './tree'
+import extendTree2 from './tree2'
 import extendDropdownList from './dropdownList'
 import extendApp from './app'
 import extendUi from './ui'
@@ -17,6 +18,7 @@ import extendExport from './export'
 export default (store:Object) => {
   extendStore(store)
   extendTree(store)
+  extendTree2(store)
   extendDropdownList(store)
   extendApp(store)
   extendUi(store)

@@ -5,6 +5,7 @@ import {
   computed,
   observable,
 } from 'mobx'
+import clone from 'lodash/clone'
 
 import toggleNode from '../../action/toggleNode'
 import getActiveNodes from '../../action/getActiveNodes'
@@ -31,6 +32,10 @@ export default (store:Object) => {
       // in tree2: pass it's own activeNodeArray
       () => getActiveNodes(store.tree.activeNodeArray),
       { name: `activeNodes` }
+    ),
+    cloneActiveNodeArrayToTree2: action(
+      `cloneActiveNodeArrayToTree2`,
+      () => store.tree2.activeNodeArray = clone(store.tree.activeNodeArray)
     ),
     apFilter: false,
     toggleApFilter: action(`toggleApFilter`, () => {
