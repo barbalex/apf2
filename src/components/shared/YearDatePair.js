@@ -95,10 +95,9 @@ const enhance = compose(
             changeDateStringValue,
             dateValueOnFocus,
           } = props
-          console.log(`onBlurDate, dateValueOnFocus:`, dateValueOnFocus)
-          console.log(`onBlurDate, value:`, `'${value}'`)
         // only update if value has changed
         // there is a weird case where dataValueOnFocus is null and value is ''
+        // which led to year being deleted when focus moved out of date!
         if (!dateValueOnFocus && !value) return
         if (value != dateValueOnFocus) {  // eslint-disable-line eqeqeq
           if (!value) {
