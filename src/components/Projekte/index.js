@@ -6,7 +6,7 @@ import styled from 'styled-components'
 import compose from 'recompose/compose'
 import lifecycle from 'recompose/lifecycle'
 
-import StrukturbaumContainer from './StrukturbaumContainer'
+import TreeContainer from './TreeContainer'
 import DeleteDatasetModal from './DeleteDatasetModal'
 import Daten from './Daten'
 import Karte from './Karte'
@@ -45,7 +45,7 @@ const enhance = compose(
 
 const Projekte = ({ store }) => {
   const projekteTabs = clone(store.urlQuery.projekteTabs) || []
-  const strukturbaumIsVisible = projekteTabs.includes(`strukturbaum`)
+  const treeIsVisible = projekteTabs.includes(`tree`)
   const datenIsVisible = (
     projekteTabs.includes(`daten`) &&
     !projekteTabs.includes(`exporte`)
@@ -58,8 +58,8 @@ const Projekte = ({ store }) => {
     <Container loading={store.loading.length > 0}>
       <Content>
         {
-          strukturbaumIsVisible &&
-          <StrukturbaumContainer tree={store.tree} />
+          treeIsVisible &&
+          <TreeContainer tree={store.tree} />
         }
         {
           datenIsVisible &&
@@ -77,7 +77,7 @@ const Projekte = ({ store }) => {
                * key of tabs is added to force mounting
                * when tabs change
                * without remounting grey space remains
-               * when daten or strukturbaum tab is removed :-(
+               * when daten or tree tab is removed :-(
                */
               key={store.urlQuery.projekteTabs.toString()}
               popMarkers={store.map.pop.markers}

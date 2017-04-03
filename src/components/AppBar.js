@@ -61,7 +61,7 @@ const enhance = compose(
     ,
   }),
   withHandlers({
-    onClickButtonStrukturbaum: props => () => props.onClickButton(`strukturbaum`),
+    onClickButtonStrukturbaum: props => () => props.onClickButton(`tree`),
     onClickButtonDaten: props => () => props.onClickButton(`daten`),
     onClickButtonKarte: props => () => props.onClickButton(`karte`),
     onClickButtonExporte: props => () => props.onClickButton(`exporte`),
@@ -78,7 +78,7 @@ const MyAppBar = ({
   ueberApfloraChOnTouchTap,
 }) => {
   const projekteTabs = clone(store.urlQuery.projekteTabs) || []
-  const strukturbaumIsVisible = projekteTabs.includes(`strukturbaum`)
+  const treeIsVisible = projekteTabs.includes(`tree`)
   const datenIsVisible = projekteTabs.includes(`daten`) && !projekteTabs.includes(`exporte`)
   const karteIsVisible = projekteTabs.includes(`karte`)
   const exporteIsVisible = projekteTabs.includes(`exporte`)
@@ -90,7 +90,7 @@ const MyAppBar = ({
         <MenuDiv>
           <Button
             label="Strukturbaum"
-            visible={strukturbaumIsVisible}
+            visible={treeIsVisible}
             onClick={onClickButtonStrukturbaum}
           />
           <Button
