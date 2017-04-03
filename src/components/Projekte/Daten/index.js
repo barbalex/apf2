@@ -52,7 +52,7 @@ const enhance = compose(
 )
 
 const Daten = ({ store }) => {
-  const { activeDataset, activeUrlElements } = store
+  const { activeDataset, activeNodes } = store
   if (!activeDataset || !activeDataset.table || !activeDataset.row) {
     return <div />
   }
@@ -92,15 +92,15 @@ const Daten = ({ store }) => {
     </div>
   )
   let key
-  if (activeUrlElements.exporte) {
+  if (activeNodes.exporte) {
     key = `exporte`
-  } else if (activeUrlElements.qk) {
+  } else if (activeNodes.qk) {
     key = `qk`
-  } else if (activeUrlElements.beobNichtZuzuordnen) {
+  } else if (activeNodes.beobNichtZuzuordnen) {
     key = `beobNichtZuzuordnen`
-  } else if (activeUrlElements.beobzuordnung) {
+  } else if (activeNodes.beobzuordnung) {
     key = `beobzuordnung`
-  } else if (activeUrlElements.tpopbeob) {
+  } else if (activeNodes.tpopbeob) {
     key = `tpopbeob`
   } else {
     key = activeDataset.table
