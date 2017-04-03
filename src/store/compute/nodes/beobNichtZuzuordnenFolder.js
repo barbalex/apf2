@@ -1,13 +1,13 @@
 import findIndex from 'lodash/findIndex'
 
 export default (store) => {
-  const { activeNodes, tree } = store
+  const { tree } = store
 
   // fetch sorting indexes of parents
-  const projId = activeNodes.projekt
+  const projId = tree.activeNodes.projekt
   if (!projId) return []
   const projIndex = findIndex(store.tree.filteredAndSorted.projekt, { ProjId: projId })
-  const apArtId = activeNodes.ap
+  const apArtId = tree.activeNodes.ap
   if (!apArtId) return []
   const apIndex = findIndex(store.tree.filteredAndSorted.ap, { ApArtId: apArtId })
 
@@ -26,7 +26,7 @@ export default (store) => {
     menuType: `beobNichtZuzuordnenFolder`,
     id: apArtId,
     label: `Beobachtungen nicht zuzuordnen (${message})`,
-    expanded: activeNodes.beobNichtZuzuordnenFolder,
+    expanded: tree.activeNodes.beobNichtZuzuordnenFolder,
     url: [`Projekte`, projId, `Arten`, apArtId, `nicht-zuzuordnende-Beobachtungen`],
     sort: [projIndex, 1, apIndex, 9],
     hasChildren: beobNichtZuzuordnenNodesLength > 0,
