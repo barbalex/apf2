@@ -62,8 +62,8 @@ class Qk extends Component { // eslint-disable-line react/prefer-stateless-funct
       onChangeBerichtjahr,
     } = this.props
 
-    const { activeUrlElements, qk } = store
-    const apArtId = activeUrlElements.ap
+    const { activeNodes, qk } = store
+    const apArtId = activeNodes.ap
     // need to pass value for when qk does not yet exist
     const myQk = qk.get(apArtId) || {
       berichtjahr: ``,
