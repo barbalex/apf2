@@ -8,7 +8,7 @@ import zhGeojson from '../../etc/ktZh.json'
 
 const fetchQk = ({ store }:{store:Object}) => {
   store.loading.push(`qk`)
-  const apArtId = store.activeUrlElements.ap
+  const apArtId = store.activeNodes.ap
   const qk = store.qk.get(apArtId)
   let berichtjahr
   store.setQk({ messages: [] })
@@ -130,7 +130,7 @@ const fetchQk = ({ store }:{store:Object}) => {
   ]
   let nrOfMessages = 0
   const urls = qkTypes.map(t =>
-    `${apiBaseUrl}/${t.type === `view` ? `qkView/` : ``}${t.name}/${store.activeUrlElements.ap}${t.berichtjahr ? `/${t.berichtjahr}` : ``}`
+    `${apiBaseUrl}/${t.type === `view` ? `qkView/` : ``}${t.name}/${store.activeNodes.ap}${t.berichtjahr ? `/${t.berichtjahr}` : ``}`
   )
   const dataFetchingPromises = urls.map(dataUrl =>
     axios.get(dataUrl)
@@ -154,7 +154,7 @@ const fetchQk = ({ store }:{store:Object}) => {
       .catch(e => e)
   )
   Promise.all(dataFetchingPromises)
-    .then(() => axios.get(`${apiBaseUrl}/tpopKoordFuerProgramm/apId=${store.activeUrlElements.ap}`))
+    .then(() => axios.get(`${apiBaseUrl}/tpopKoordFuerProgramm/apId=${store.activeNodes.ap}`))
     .then((res) => {
       // kontrolliere die Relevanz ausserkantonaler Tpop
       const tpops = res.data.filter(tpop =>

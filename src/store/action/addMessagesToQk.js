@@ -2,7 +2,7 @@
 import buildQkMessages from './buildQkMessages'
 
 export default ({ store, messages }:{store:Object,messages:Array<Object>}) => {
-  const apArtId = store.activeUrlElements.ap
+  const apArtId = store.activeNodes.ap
   const existingQk = store.qk.get(apArtId)
   const newMessages = existingQk.messages.concat(messages)
   const filter = existingQk.filter

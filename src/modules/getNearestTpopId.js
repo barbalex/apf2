@@ -5,7 +5,7 @@
 import nearest from '@turf/nearest'
 
 export default (store, latLng) => {
-  const { table, activeUrlElements } = store
+  const { table, activeNodes } = store
   const { lat, lng } = latLng
   const point = {
     "type": "Feature",
@@ -16,7 +16,7 @@ export default (store, latLng) => {
     }
   }
   const popIds = Array.from(table.pop.values())
-    .filter(p => p.ApArtId === activeUrlElements.ap)
+    .filter(p => p.ApArtId === activeNodes.ap)
     .map(p => p.PopId)
   const tpopFeatures = Array.from(table.tpop.values())
     .filter(t => popIds.includes(t.PopId))

@@ -5,7 +5,7 @@ import apiBaseUrl from '../../modules/apiBaseUrl'
 import deleteDatasetInIdb from './deleteDatasetInIdb'
 
 export default (store, beobId) => {
-  const { activeUrlElements, urlQuery, history, table } = store
+  const { activeNodes, urlQuery, history, table } = store
   // delete beobzuordnung
   const deleteUrl = `${apiBaseUrl}/apflora/tabelle=beobzuordnung/tabelleIdFeld=NO_NOTE/tabelleId=${beobId}`
   axios.delete(deleteUrl)
@@ -16,7 +16,7 @@ export default (store, beobId) => {
       deleteDatasetInIdb(store, `beobzuordnung`, beobId)
       // set url to corresponding beob_bereitgestellt
       const query = `${Object.keys(urlQuery).length > 0 ? `?${queryString.stringify(urlQuery)}` : ``}`
-      const newUrl = `/Projekte/${activeUrlElements.projekt}/Arten/${activeUrlElements.ap}/nicht-beurteilte-Beobachtungen/${beobId}${query}`
+      const newUrl = `/Projekte/${activeNodes.projekt}/Arten/${activeNodes.ap}/nicht-beurteilte-Beobachtungen/${beobId}${query}`
       history.push(newUrl)
     })
     .catch((error) =>

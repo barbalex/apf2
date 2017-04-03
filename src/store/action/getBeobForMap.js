@@ -4,8 +4,8 @@ import clone from 'lodash/clone'
 import epsg21781to4326 from '../../modules/epsg21781to4326'
 
 export default (store:Object) => {
-  const { table, activeUrlElements } = store
-  const myApArtId = activeUrlElements.ap
+  const { table, activeNodes } = store
+  const myApArtId = activeNodes.ap
   // get beob of this ap
   let beob = Array.from(table.beob_bereitgestellt.values())
     .filter(beob => beob.NO_ISFS === myApArtId)
