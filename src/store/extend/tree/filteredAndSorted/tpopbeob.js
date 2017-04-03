@@ -2,7 +2,7 @@ import sortBy from 'lodash/sortBy'
 
 export default (store) => {
   const { table, tree } = store
-  const { activeNodes } = tree
+  const { activeNodes, nodeLabelFilter } = tree
   // grab tpopbeob as array and sort them by year
   let tpopbeob = Array
     .from(table.beobzuordnung.values())
@@ -28,8 +28,8 @@ export default (store) => {
     el.label = `${datum || `(kein Datum)`}: ${autor || `(kein Autor)`} (${quelleName})`
     el.beobId = isNaN(el.NO_NOTE) ? el.NO_NOTE : parseInt(el.NO_NOTE, 10)
   })
-  // filter by tree.nodeLabelFilter
-  const filterString = tree.nodeLabelFilter.get(`tpopbeob`)
+  // filter by nodeLabelFilter
+  const filterString = nodeLabelFilter.get(`tpopbeob`)
   if (filterString) {
     tpopbeob = tpopbeob.filter(p =>
       p.label.toLowerCase().includes(filterString.toLowerCase())

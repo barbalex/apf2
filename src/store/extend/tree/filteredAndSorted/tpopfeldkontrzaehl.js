@@ -2,7 +2,7 @@ import sortBy from 'lodash/sortBy'
 
 export default (store) => {
   const { table, tree } = store
-  const { activeNodes } = tree
+  const { activeNodes, nodeLabelFilter } = tree
   // grab tpopkontrzaehl as array
   let tpopkontrzaehl = Array.from(table.tpopkontrzaehl.values())
   // show only nodes of active tpopkontr
@@ -19,8 +19,8 @@ export default (store) => {
     const methodeTxt = methodeWert ? methodeWert.BeurteilTxt : null
     el.label = `${el.Anzahl || `(keine Anzahl)`} ${zaehleinheitTxt || `(keine Einheit)`} (${methodeTxt || `keine Methode`})`
   })
-  // filter by tree.nodeLabelFilter
-  const filterString = tree.nodeLabelFilter.get(`tpopkontrzaehl`)
+  // filter by nodeLabelFilter
+  const filterString = nodeLabelFilter.get(`tpopkontrzaehl`)
   if (filterString) {
     tpopkontrzaehl = tpopkontrzaehl.filter(p =>
       p.label.toLowerCase().includes(filterString.toLowerCase())

@@ -2,7 +2,7 @@ import sortBy from 'lodash/sortBy'
 
 export default (store) => {
   const { table, tree } = store
-  const { activeNodes } = tree
+  const { activeNodes, nodeLabelFilter } = tree
   // grab tpop as array and sort them by year
   let tpop = Array.from(table.tpop.values())
   // show only nodes of active pop
@@ -12,8 +12,8 @@ export default (store) => {
   tpop.forEach((el) => {
     el.label = `${el.TPopNr || `(keine Nr)`}: ${el.TPopFlurname || `(kein Flurname)`}`
   })
-  // filter by tree.nodeLabelFilter
-  const filterString = tree.nodeLabelFilter.get(`tpop`)
+  // filter by nodeLabelFilter
+  const filterString = nodeLabelFilter.get(`tpop`)
   if (filterString) {
     tpop = tpop.filter(p =>
       p.label.toLowerCase().includes(filterString.toLowerCase())
