@@ -17,8 +17,8 @@ export default (store:Object) => {
         if (mapFilterTpop.length > 0) {
           return mapFilterTpop
         }
-        if (store.activeUrlElements.tpop) {
-          return [store.activeUrlElements.tpop]
+        if (store.activeNodes.tpop) {
+          return [store.activeNodes.tpop]
         }
         return []
       },

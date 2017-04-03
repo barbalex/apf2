@@ -51,7 +51,7 @@ export default (store:Object) => {
         const alreadyUsedApIds = Array.from(store.table.ap.keys()).map(a => Number(a))
         // let user choose store ApArtId
         const apArtIdsNotToShow = alreadyUsedApIds
-          .filter(r => r !== store.activeUrlElements.ap)
+          .filter(r => r !== store.activeNodes.ap)
         const artList = filter(
           Array.from(store.table.adb_eigenschaften.values()),
           r => !apArtIdsNotToShow.includes(r.TaxonomieId)

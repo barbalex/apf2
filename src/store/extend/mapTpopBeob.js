@@ -14,23 +14,23 @@ export default (store:Object) => {
   extendObservable(store.map.tpopBeob, {
     highlightedIds: computed(
       () => {
-        const { activeUrlElements } = store
+        const { activeNodes } = store
         const mapFilterTpopBeob = store.map.mapFilter.tpopBeob
         if (mapFilterTpopBeob.length > 0) {
           return mapFilterTpopBeob
         }
-        if (activeUrlElements.tpopbeob) {
-          return [activeUrlElements.tpopbeob]
-        } else if (activeUrlElements.tpop) {
+        if (activeNodes.tpopbeob) {
+          return [activeNodes.tpopbeob]
+        } else if (activeNodes.tpop) {
           return store.map.tpopBeob.beobs.filter(b =>
-            b.beobzuordnung && b.beobzuordnung.TPopId === activeUrlElements.tpop
+            b.beobzuordnung && b.beobzuordnung.TPopId === activeNodes.tpop
           ).map(b => b.BeobId)
-        } else if (activeUrlElements.pop) {
+        } else if (activeNodes.pop) {
           return store.map.tpopBeob.beobs.filter((b) => {
             const tpop = store.table.tpop.get(b.beobzuordnung.TPopId)
             if (tpop) {
               const popId = tpop.PopId
-              return popId && popId === activeUrlElements.pop
+              return popId && popId === activeNodes.pop
             }
             return false
           }).map(b => b.BeobId)

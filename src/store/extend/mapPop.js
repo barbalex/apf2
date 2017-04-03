@@ -11,7 +11,7 @@ import getPopMarkers from '../action/getPopMarkers'
 export default (store:Object) => {
   extendObservable(store.map.pop, {
     // apArtId is needed because
-    // need to pass apArtId when activeUrlElements.ap
+    // need to pass apArtId when activeNodes.ap
     // is not yet set...
     apArtId: null,
     highlightedIds: computed(
@@ -20,8 +20,8 @@ export default (store:Object) => {
         if (mapFilterPop.length > 0) {
           return mapFilterPop
         }
-        if (store.activeUrlElements.pop) {
-          return [store.activeUrlElements.pop]
+        if (store.activeNodes.pop) {
+          return [store.activeNodes.pop]
         }
         return []
       },
