@@ -110,198 +110,198 @@ export default (store:Object) => {
   })
   extendObservable(store.tree.node, {
     projekt: computed(
-      () => projektNodes(store),
+      () => projektNodes(store, store.tree),
       { name: `` }
     ),
     apFolder: computed(
-      () => apFolderNodes(store),
+      () => apFolderNodes(store, store.tree),
       { name: `apFolderNode` }
     ),
     apberuebersichtFolder: computed(
-      () => apberuebersichtFolderNodes(store),
+      () => apberuebersichtFolderNodes(store, store.tree),
       { name: `apberuebersichtFolderNode` }
     ),
     apberuebersicht: computed(
-      () => apberuebersichtNodes(store),
+      () => apberuebersichtNodes(store, store.tree),
       { name: `apberuebersichtNode` }
     ),
     ap: computed(
-      () => apNodes(store),
+      () => apNodes(store, store.tree),
       { name: `apNode` }
     ),
     nodes: computed(
-      () => allNodes(store),
+      () => allNodes(store, store.tree),
       { name: `nodesNode` }
     ),
     qkFolder: computed(
-      () => qkFolderNode(store),
+      () => qkFolderNode(store, store.tree),
     ),
     assozartFolder: computed(
-      () => assozartFolderNode(store),
+      () => assozartFolderNode(store, store.tree),
       { name: `assozartFolderNode` }
     ),
     assozart: computed(
-      () => assozartNode(store),
+      () => assozartNode(store, store.tree),
       { name: `assozartNode` }
     ),
     idealbiotopFolder: computed(
-      () => idealbiotopFolderNode(store),
+      () => idealbiotopFolderNode(store, store.tree),
       { name: `idealbiotopFolderNode` }
     ),
     beobNichtZuzuordnenFolder: computed(
-      () => beobNichtZuzuordnenFolderNode(store),
+      () => beobNichtZuzuordnenFolderNode(store, store.tree),
       { name: `beobNichtZuzuordnenFolderNode` }
     ),
     beobNichtZuzuordnen: computed(
-      () => beobNichtZuzuordnenNode(store),
+      () => beobNichtZuzuordnenNode(store, store.tree),
       { name: `beobNichtZuzuordnenNode` }
     ),
     beobzuordnungFolder: computed(
-      () => beobzuordnungFolderNode(store),
+      () => beobzuordnungFolderNode(store, store.tree),
       { name: `beobzuordnungFolderNode` }
     ),
     beobzuordnung: computed(
-      () => beobzuordnungNode(store),
+      () => beobzuordnungNode(store, store.tree),
       { name: `beobzuordnungNode` }
     ),
     berFolder: computed(
-      () => berFolderNode(store),
+      () => berFolderNode(store, store.tree),
       { name: `berFolderNode` }
     ),
     ber: computed(
-      () => berNode(store),
+      () => berNode(store, store.tree),
       { name: `berNode` }
     ),
     apberFolder: computed(
-      () => apberFolderNode(store),
+      () => apberFolderNode(store, store.tree),
       { name: `apberFolderNode` }
     ),
     apber: computed(
-      () => apberNode(store),
+      () => apberNode(store, store.tree),
       { name: `apberNode` }
     ),
     erfkritFolder: computed(
-      () => erfkritFolderNode(store),
+      () => erfkritFolderNode(store, store.tree),
       { name: `erfkritFolderNode` }
     ),
     erfkrit: computed(
-      () => erfkritNode(store),
+      () => erfkritNode(store, store.tree),
       { name: `erfkritNode` }
     ),
     zieljahrFolder: computed(
-      () => zieljahreFolderNode(store),
+      () => zieljahreFolderNode(store, store.tree),
       { name: `zieljahrFolderNode` }
     ),
     zieljahr: computed(
-      () => zieljahrNode(store),
+      () => zieljahrNode(store, store.tree),
       { name: `zieljahrNode` }
     ),
     ziel: computed(
-      () => zielNode(store),
+      () => zielNode(store, store.tree),
       { name: `zielNode` }
     ),
     zielberFolder: computed(
-      () => zielberFolderNode(store),
+      () => zielberFolderNode(store, store.tree),
       { name: `zielberFolderNode` }
     ),
     zielber: computed(
-      () => zielberNode(store),
+      () => zielberNode(store, store.tree),
       { name: `zielberNode` }
     ),
     popFolder: computed(
-      () => popFolderNode(store),
+      () => popFolderNode(store, store.tree),
       { name: `popFolderNode` }
     ),
     pop: computed(
-      () => popNode(store),
+      () => popNode(store, store.tree),
       { name: `popNode` }
     ),
     popmassnberFolder: computed(
-      () => popmassnberFolderNode(store),
+      () => popmassnberFolderNode(store, store.tree),
       { name: `popmassnberFolderNode` }
     ),
     popmassnber: computed(
-      () => popmassnberNode(store),
+      () => popmassnberNode(store, store.tree),
       { name: `popmassnberNode` }
     ),
     popberFolder: computed(
-      () => popberFolderNode(store),
+      () => popberFolderNode(store, store.tree),
       { name: `popberFolderNode` }
     ),
     popber: computed(
-      () => popberNode(store),
+      () => popberNode(store, store.tree),
       { name: `popberNode` }
     ),
     tpopFolder: computed(
-      () => tpopFolderNode(store),
+      () => tpopFolderNode(store, store.tree),
       { name: `tpopFolderNode` }
     ),
     tpop: computed(
-      () => tpopNode(store),
+      () => tpopNode(store, store.tree),
       { name: `tpopNode` }
     ),
     tpopbeobFolder: computed(
-      () => tpopbeobFolderNode(store),
+      () => tpopbeobFolderNode(store, store.tree),
       { name: `tpopbeobFolderNode` }
     ),
     tpopbeob: computed(
-      () => tpopbeobNode(store),
+      () => tpopbeobNode(store, store.tree),
       { name: `tpopbeobNode` }
     ),
     tpopberFolder: computed(
-      () => tpopberFolderNode(store),
+      () => tpopberFolderNode(store, store.tree),
       { name: `tpopberFolderNode` }
     ),
     tpopber: computed(
-      () => tpopberNode(store),
+      () => tpopberNode(store, store.tree),
       { name: `tpopberNode` }
     ),
     tpopfreiwkontrFolder: computed(
-      () => tpopfreiwkontrFolderNode(store),
+      () => tpopfreiwkontrFolderNode(store, store.tree),
       { name: `tpopfreiwkontrFolderNode` }
     ),
     tpopfreiwkontr: computed(
-      () => tpopfreiwkontrNode(store),
+      () => tpopfreiwkontrNode(store, store.tree),
       { name: `tpopfreiwkontrNode` }
     ),
     tpopfreiwkontrzaehlFolder: computed(
-      () => tpopfreiwkontrzaehlFolderNode(store),
+      () => tpopfreiwkontrzaehlFolderNode(store, store.tree),
       { name: `tpopfreiwkontrzaehlFolderNode` }
     ),
     tpopfreiwkontrzaehl: computed(
-      () => tpopfreiwkontrzaehlNode(store),
+      () => tpopfreiwkontrzaehlNode(store, store.tree),
       { name: `tpopfreiwkontrzaehlNode` }
     ),
     tpopfeldkontrFolder: computed(
-      () => tpopfeldkontrFolderNode(store),
+      () => tpopfeldkontrFolderNode(store, store.tree),
       { name: `tpopfeldkontrFolderNode` }
     ),
     tpopfeldkontr: computed(
-      () => tpopfeldkontrNode(store),
+      () => tpopfeldkontrNode(store, store.tree),
       { name: `tpopfeldkontrNode` }
     ),
     tpopfeldkontrzaehlFolder: computed(
-      () => tpopfeldkontrzaehlFolderNode(store),
+      () => tpopfeldkontrzaehlFolderNode(store, store.tree),
       { name: `tpopfeldkontrzaehlFolderNode` }
     ),
     tpopfeldkontrzaehl: computed(
-      () => tpopfeldkontrzaehlNode(store),
+      () => tpopfeldkontrzaehlNode(store, store.tree),
       { name: `tpopfeldkontrzaehlNode` }
     ),
     tpopmassnberFolder: computed(
-      () => tpopmassnberFolderNode(store),
+      () => tpopmassnberFolderNode(store, store.tree),
       { name: `tpopmassnberFolderNode` }
     ),
     tpopmassnber: computed(
-      () => tpopmassnberNode(store),
+      () => tpopmassnberNode(store, store.tree),
       { name: `tpopmassnberNode` }
     ),
     tpopmassnFolder: computed(
-      () => tpopmassnFolderNode(store),
+      () => tpopmassnFolderNode(store, store.tree),
       { name: `tpopmassnFolderNode` }
     ),
     tpopmassn: computed(
-      () => tpopmassnNode(store),
+      () => tpopmassnNode(store, store.tree),
       { name: `tpopmassnNode` }
     ),
   })
