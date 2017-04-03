@@ -2,7 +2,7 @@ import findIndex from 'lodash/findIndex'
 import reduce from 'lodash/reduce'
 
 export default (store) => {
-  const { activeNodes } = store
+  const { activeNodes } = store.tree
   // fetch sorting indexes of parents
   const projId = activeNodes.projekt
   if (!projId) return []
@@ -21,7 +21,7 @@ export default (store) => {
   if (qk && qk.filter) {
     nrOfQkMessages = `${nrOfQkMessages} gefiltert`
   }
-  if (!store.activeNodes.qk) {
+  if (!store.tree.activeNodes.qk) {
     // only show number when qk is active
     nrOfQkMessages = null
   }
