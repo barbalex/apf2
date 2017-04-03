@@ -1,13 +1,13 @@
 import findIndex from 'lodash/findIndex'
 
 export default (store) => {
-  const { activeNodes, tree, table } = store
+  const { tree, table } = store
 
   // fetch sorting indexes of parents
-  const projId = activeNodes.projekt
+  const projId = tree.activeNodes.projekt
   if (!projId) return []
   const projIndex = findIndex(tree.filteredAndSorted.projekt, { ProjId: projId })
-  const apArtId = activeNodes.ap
+  const apArtId = tree.activeNodes.ap
   if (!apArtId) return []
   const apIndex = findIndex(tree.filteredAndSorted.ap, { ApArtId: apArtId })
 
@@ -26,7 +26,7 @@ export default (store) => {
     menuType: `berFolder`,
     id: apArtId,
     label: `Berichte (${message})`,
-    expanded: activeNodes.berFolder,
+    expanded: tree.activeNodes.berFolder,
     url: [`Projekte`, projId, `Arten`, apArtId, `Berichte`],
     sort: [projIndex, 1, apIndex, 5],
     hasChildren: berNodesLength > 0,
