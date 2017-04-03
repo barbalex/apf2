@@ -1,11 +1,11 @@
 import sortBy from 'lodash/sortBy'
 
 export default (store) => {
-  const { activeUrlElements, table, tree } = store
+  const { activeNodes, table, tree } = store
   // grab erfkrit as array and sort them by year
   let erfkrit = Array.from(table.erfkrit.values())
   // show only nodes of active ap
-  erfkrit = erfkrit.filter(a => a.ApArtId === activeUrlElements.ap)
+  erfkrit = erfkrit.filter(a => a.ApArtId === activeNodes.ap)
   // get erfkritWerte
   const apErfkritWerte = Array.from(table.ap_erfkrit_werte.values())
   erfkrit.forEach((el, index) => {

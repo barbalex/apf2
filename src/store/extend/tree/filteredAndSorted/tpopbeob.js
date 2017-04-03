@@ -1,12 +1,12 @@
 import sortBy from 'lodash/sortBy'
 
 export default (store) => {
-  const { activeUrlElements, table, tree } = store
+  const { activeNodes, table, tree } = store
   // grab tpopbeob as array and sort them by year
   let tpopbeob = Array
     .from(table.beobzuordnung.values())
     .filter(b =>
-      b.TPopId === activeUrlElements.tpop &&
+      b.TPopId === activeNodes.tpop &&
       b.beobNichtZuzuordnen !== 1
     )
   // map through all and create array of nodes

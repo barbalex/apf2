@@ -1,11 +1,11 @@
 import sortBy from 'lodash/sortBy'
 
 export default (store) => {
-  const { activeUrlElements, table, tree } = store
+  const { activeNodes, table, tree } = store
   // grab pop as array and sort them by year
   let pop = Array.from(table.pop.values())
   // show only nodes of active ap
-  pop = pop.filter(a => a.ApArtId === activeUrlElements.ap)
+  pop = pop.filter(a => a.ApArtId === activeNodes.ap)
   pop = sortBy(pop, `PopNr`)
   // map through all projekt and create array of nodes
   pop.forEach((el) => {
