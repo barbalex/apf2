@@ -1,7 +1,8 @@
 import sortBy from 'lodash/sortBy'
 
 export default (store) => {
-  const { activeNodes, table, tree } = store
+  const { table, tree } = store
+  const { activeNodes } = tree
   // grab ber as array and sort them by year
   let ber = Array.from(table.ber.values())
   // show only nodes of active ap
