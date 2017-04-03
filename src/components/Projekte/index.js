@@ -46,6 +46,7 @@ const enhance = compose(
 const Projekte = ({ store }) => {
   const projekteTabs = clone(store.urlQuery.projekteTabs) || []
   const treeIsVisible = projekteTabs.includes(`tree`)
+  const tree2IsVisible = projekteTabs.includes(`tree2`)
   const datenIsVisible = (
     projekteTabs.includes(`daten`) &&
     !projekteTabs.includes(`exporte`)
@@ -60,6 +61,10 @@ const Projekte = ({ store }) => {
         {
           treeIsVisible &&
           <TreeContainer tree={store.tree} />
+        }
+        {
+          tree2IsVisible &&
+          <TreeContainer tree={store.tree2} />
         }
         {
           datenIsVisible &&

@@ -53,6 +53,9 @@ const enhance = compose(
         remove(projekteTabs, el => el === name)
       } else {
         projekteTabs.push(name)
+        if (name === `tree2`) {
+          store.tree.cloneActiveNodeArrayToTree2()
+        }
       }
       store.setUrlQuery(`projekteTabs`, projekteTabs)
     },
@@ -62,6 +65,7 @@ const enhance = compose(
   }),
   withHandlers({
     onClickButtonStrukturbaum: props => () => props.onClickButton(`tree`),
+    onClickButtonStrukturbaum2: props => () => props.onClickButton(`tree2`),
     onClickButtonDaten: props => () => props.onClickButton(`daten`),
     onClickButtonKarte: props => () => props.onClickButton(`karte`),
     onClickButtonExporte: props => () => props.onClickButton(`exporte`),
@@ -72,6 +76,7 @@ const enhance = compose(
 const MyAppBar = ({
   store,
   onClickButtonStrukturbaum,
+  onClickButtonStrukturbaum2,
   onClickButtonDaten,
   onClickButtonKarte,
   onClickButtonExporte,
@@ -79,6 +84,7 @@ const MyAppBar = ({
 }) => {
   const projekteTabs = clone(store.urlQuery.projekteTabs) || []
   const treeIsVisible = projekteTabs.includes(`tree`)
+  const tree2IsVisible = projekteTabs.includes(`tree2`)
   const datenIsVisible = projekteTabs.includes(`daten`) && !projekteTabs.includes(`exporte`)
   const karteIsVisible = projekteTabs.includes(`karte`)
   const exporteIsVisible = projekteTabs.includes(`exporte`)
@@ -92,6 +98,11 @@ const MyAppBar = ({
             label="Strukturbaum"
             visible={treeIsVisible}
             onClick={onClickButtonStrukturbaum}
+          />
+          <Button
+            label="Strukturbaum 2"
+            visible={tree2IsVisible}
+            onClick={onClickButtonStrukturbaum2}
           />
           <Button
             label="Daten"
@@ -142,6 +153,7 @@ MyAppBar.propTypes = {
   store: PropTypes.object.isRequired,
   onClickButton: PropTypes.func.isRequired,
   onClickButtonStrukturbaum: PropTypes.func.isRequired,
+  onClickButtonStrukturbaum2: PropTypes.func.isRequired,
   onClickButtonDaten: PropTypes.func.isRequired,
   onClickButtonKarte: PropTypes.func.isRequired,
   ueberApfloraChOnTouchTap: PropTypes.func.isRequired,
