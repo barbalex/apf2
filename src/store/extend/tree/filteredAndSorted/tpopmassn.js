@@ -1,11 +1,11 @@
 import sortBy from 'lodash/sortBy'
 
 export default (store) => {
-  const { activeUrlElements, table, tree } = store
+  const { activeNodes, table, tree } = store
   // grab tpopmassn as array and sort them by year
   let tpopmassn = Array.from(table.tpopmassn.values())
   // show only nodes of active ap
-  tpopmassn = tpopmassn.filter(a => a.TPopId === activeUrlElements.tpop)
+  tpopmassn = tpopmassn.filter(a => a.TPopId === activeNodes.tpop)
   // get erfkritWerte
   const tpopmassntypWerte = Array.from(table.tpopmassn_typ_werte.values())
   // map through all projekt and create array of nodes

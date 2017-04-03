@@ -1,12 +1,12 @@
 import sortBy from 'lodash/sortBy'
 
 export default (store) => {
-  const { activeUrlElements, table, tree } = store
+  const { activeNodes, table, tree } = store
   // grab tpopkontr as array and sort them by year
   let tpopkontr = Array.from(table.tpopkontr.values())
     .filter(t => t.TPopKontrTyp !== `Freiwilligen-Erfolgskontrolle`)
   // show only nodes of active ap
-  tpopkontr = tpopkontr.filter(a => a.TPopId === activeUrlElements.tpop)
+  tpopkontr = tpopkontr.filter(a => a.TPopId === activeNodes.tpop)
   // map through all projekt and create array of nodes
   tpopkontr.forEach((el) => {
     el.label = `${el.TPopKontrJahr || `(kein Jahr)`}: ${el.TPopKontrTyp || `(kein Typ)`}`

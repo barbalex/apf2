@@ -1,11 +1,11 @@
 import sortBy from 'lodash/sortBy'
 
 export default (store) => {
-  const { activeUrlElements, table, tree } = store
+  const { activeNodes, table, tree } = store
   // grab tpopkontrzaehl as array
   let tpopkontrzaehl = Array.from(table.tpopkontrzaehl.values())
   // show only nodes of active tpopkontr
-  tpopkontrzaehl = tpopkontrzaehl.filter(a => a.TPopKontrId === activeUrlElements.tpopfreiwkontr)
+  tpopkontrzaehl = tpopkontrzaehl.filter(a => a.TPopKontrId === activeNodes.tpopfreiwkontr)
 
   // get zaehleinheitWerte
   const zaehleinheitWerte = Array.from(table.tpopkontrzaehl_einheit_werte.values())
