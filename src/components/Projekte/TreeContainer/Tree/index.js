@@ -1,6 +1,6 @@
 // @flow
 /*
- * Strukturbaum
+ * Tree
  * need class because of ref and componentDidUpdate
  */
 
@@ -52,7 +52,7 @@ const enhance = compose(
   observer
 )
 
-class Strukturbaum extends Component {
+class Tree extends Component {
 
   static propTypes = {
     store: PropTypes.object.isRequired,
@@ -64,7 +64,7 @@ class Strukturbaum extends Component {
     mapBeobNichtZuzuordnenVisible: PropTypes.bool.isRequired,
     mapPopVisible: PropTypes.bool.isRequired,
     mapTpopVisible: PropTypes.bool.isRequired,
-    url: PropTypes.array.isRequired,
+    activeNodeArray: PropTypes.array.isRequired,
   }
 
   componentDidUpdate(prevProps) {
@@ -125,14 +125,13 @@ class Strukturbaum extends Component {
   }
 
   render() {  // eslint-disable-line class-methods-use-this
-    const { nodes, url } = this.props
-
-    // calculate scrolltop
-    // without this if a folder low in the tree is opened,
-    // it always gets scrolled down out of sight
+    const { nodes, activeNodeArray } = this.props
     const activeNodeIndex = findIndex(nodes, node =>
-      isEqual(node.url, url)
+      isEqual(node.url, activeNodeArray)
     )
+    console.log(`Tree: activeNodeArray:`, activeNodeArray)
+    console.log(`Tree: nodes:`, nodes)
+    console.log(`Tree: activeNodeIndex:`, activeNodeIndex)
 
     return (
       <Container>
@@ -158,4 +157,4 @@ class Strukturbaum extends Component {
   }
 }
 
-export default enhance(Strukturbaum)
+export default enhance(Tree)

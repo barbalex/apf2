@@ -2,6 +2,7 @@
 import queryString from 'query-string'
 
 export default (store:Object, node:Object) => {
+  console.log(`toggleNode`)
   if (node) {
     const newUrl = node.url
     if (node.expanded) {

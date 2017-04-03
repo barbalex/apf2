@@ -60,11 +60,11 @@ const Projekte = ({ store }) => {
       <Content>
         {
           treeIsVisible &&
-          <TreeContainer tree={store.tree} />
+          <TreeContainer tree={store.tree} treeName="tree" />
         }
         {
           tree2IsVisible &&
-          <TreeContainer tree={store.tree2} />
+          <TreeContainer tree={store.tree2} treeName="tree2" />
         }
         {
           datenIsVisible &&

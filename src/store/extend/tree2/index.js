@@ -4,9 +4,10 @@ import {
   action,
   computed,
   observable,
+  toJS,
 } from 'mobx'
 
-import toggleNode from '../../action/toggleNode'
+import toggleNode from '../../action/toggleNodeTree2'
 import getActiveNodes from '../../action/getActiveNodes'
 import extendNode from './node'
 import extendFilteredAndSorted from './filteredAndSorted'
@@ -20,9 +21,13 @@ export default (store:Object) => {
      * fetchDataForActiveNodes is called by autorun fetchDataForTree2WhenActiveNodeArrayChanges
      */
     activeNodeArray: [],
+    setActiveNodeArray: action(
+      `setActiveNodeArray`,
+      (nodeArray) => store.tree2.activeNodeArray = nodeArray
+    ),
     activeNodes: computed(
       // in tree2: pass it's own activeNodeArray
-      () => getActiveNodes(store.tree2.activeNodeArray),
+      () => getActiveNodes(toJS(store.tree2.activeNodeArray)),
       { name: `activeNodes` }
     ),
     apFilter: false,

@@ -1,5 +1,6 @@
 // @flow
 import React, { PropTypes } from 'react'
+import { toJS } from 'mobx'
 import { observer, inject } from 'mobx-react'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
@@ -156,8 +157,8 @@ const showTpopBeobFilteredMapIcon = (store, tree, node) => (
 const checkPropsChange = (props, nextProps) => {
   return (
     nextProps.node !== props.node ||
-    nextProps.store.tree.activeNodeArray.join() !== props.store.tree.activeNodeArray.join() ||
     nextProps.tree !== props.tree ||
+    toJS(nextProps.tree.activeNodeArray).join() !== toJS(props.tree.activeNodeArray).join() ||
     showPopMapIcon(nextProps.store, nextProps.tree, nextProps.node) !== showPopMapIcon(props.store, props.tree, props.node) ||
     showPopFilteredMapIcon(nextProps.store, nextProps.node) !== showPopFilteredMapIcon(props.store, props.node) ||
     showTpopMapIcon(nextProps.store, nextProps.tree, nextProps.node) !== showTpopMapIcon(props.store, props.tree, props.node) ||
@@ -173,7 +174,7 @@ const checkPropsChange = (props, nextProps) => {
 
 const enhance = compose(
   inject(`store`),
-  shouldUpdate(checkPropsChange),
+  // shouldUpdate(checkPropsChange),
   observer
 )
 
@@ -198,7 +199,7 @@ const Row = ({
     loadingData: ``,
   }
   let symbol
-  const nodeIsInActiveNodePath = isNodeInActiveNodePath(node, tree.activeNodeArray)
+  const nodeIsInActiveNodePath = isNodeInActiveNodePath(node, toJS(tree.activeNodeArray))
   let SymbolSpan = StyledSymbolSpan
   const TextSpan = nodeIsInActiveNodePath ? StyledTextInActiveNodePathSpan : StyledTextSpan
 

@@ -3,6 +3,7 @@
  * need to keep class because of ref
  */
 import React, { Component, PropTypes } from 'react'
+import { toJS } from 'mobx'
 import { observer, inject } from 'mobx-react'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
@@ -96,6 +97,7 @@ class TreeContainer extends Component { // eslint-disable-line react/prefer-stat
   static propTypes = {
     store: PropTypes.object.isRequired,
     tree: PropTypes.object.isRequired,
+    treeName: PropTypes.string.isRequired,
   }
 
   componentDidMount() {
@@ -188,7 +190,7 @@ class TreeContainer extends Component { // eslint-disable-line react/prefer-stat
   }
 
   render() {
-    const { store, tree } = this.props
+    const { store, tree, treeName } = this.props
     const { activeDataset } = store
     const showApDivToggle = activeDataset
 
@@ -222,8 +224,9 @@ class TreeContainer extends Component { // eslint-disable-line react/prefer-stat
             mapPopVisible={store.map.activeApfloraLayers.includes(`Pop`)}
             mapTpopVisible={store.map.activeApfloraLayers.includes(`Tpop`)}
             popHighlightedIdsString={store.map.pop.highlightedIds.join()}
-            url={tree.activeNodeArray}
+            activeNodeArray={toJS(tree.activeNodeArray)}
             tree={tree}
+            treeName={treeName}
           />
         </div>
         <CmApFolder onClick={this.handleClick} />
