@@ -33,11 +33,11 @@ export default (store:Object) => {
       store.history.push(`/${url.join(`/`)}${query}`)
       store.datasetToDelete = {}
       // if zieljahr is active, need to pop again, if there is no other ziel left in same year
-      if (store.activeNodes.zieljahr && !store.activeNodes.zielber) {
+      if (store.tree.activeNodes.zieljahr && !store.tree.activeNodes.zielber) {
         // see if there are ziele left with this zieljahr
         const zieleWithActiveZieljahr = Array.from(store.table.ziel.values())
           .filter(ziel =>
-            ziel.ApArtId === store.activeNodes.ap && ziel.ZielJahr === store.activeNodes.zieljahr
+            ziel.ApArtId === store.tree.activeNodes.ap && ziel.ZielJahr === store.tree.activeNodes.zieljahr
           )
         if (zieleWithActiveZieljahr.length === 0) {
           url.pop()

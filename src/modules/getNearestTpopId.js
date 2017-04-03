@@ -5,7 +5,8 @@
 import nearest from '@turf/nearest'
 
 export default (store, latLng) => {
-  const { table, activeNodes } = store
+  const { table, tree } = store
+  const { activeNodes } = tree
   const { lat, lng } = latLng
   const point = {
     "type": "Feature",
