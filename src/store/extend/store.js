@@ -156,7 +156,7 @@ export default (store:Object) => {
     /**
      * urlQueries are used to control tabs
      * for instance: Entwicklung or Biotop in tpopfeldkontr
-     * or: strukturbaum, daten and map in projekte
+     * or: tree, daten and map in projekte
      */
     setUrlQuery: action(`setUrlQuery`, (key, value) =>
       setUrlQuery(store, key, value)

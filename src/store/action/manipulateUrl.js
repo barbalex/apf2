@@ -16,7 +16,7 @@ export default (store:Object) => {
     (activeNodeArray.length === 0 || activeNodeArray[0] === `Projekte`) &&
     !urlQuery.projekteTabs
   ) {
-    urlQuery.projekteTabs = [`strukturbaum`, `daten`]
+    urlQuery.projekteTabs = [`tree`, `daten`]
   }
   const search = queryString.stringify(urlQuery)
   if (
