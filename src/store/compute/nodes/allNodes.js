@@ -13,8 +13,8 @@ const compare = (a, b) => {
   return a - b
 }
 
-export default (store) => {
-  const { tree, table } = store
+export default (store, tree) => {
+  const { table } = store
   const {
     projekt,
     apFolder,
