@@ -4,7 +4,6 @@ import extendTree from './tree'
 import extendTree2 from './tree2'
 import extendDropdownList from './dropdownList'
 import extendApp from './app'
-import extendUi from './ui'
 import extendUser from './user'
 import extendMap from './map'
 import extendMapPop from './mapPop'
@@ -21,7 +20,6 @@ export default (store:Object) => {
   extendTree2(store)
   extendDropdownList(store)
   extendApp(store)
-  extendUi(store)
   extendUser(store)
   extendMap(store)
   extendMapPop(store)

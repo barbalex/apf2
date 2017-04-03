@@ -97,6 +97,7 @@ class Tree extends Component {
 
   rowRenderer = ({ key, index, style }) => {
     const { tree } = this.props
+
     return (
       <Row
         key={key}
@@ -129,9 +130,9 @@ class Tree extends Component {
     const activeNodeIndex = findIndex(nodes, node =>
       isEqual(node.url, activeNodeArray)
     )
-    console.log(`Tree: activeNodeArray:`, activeNodeArray)
-    console.log(`Tree: nodes:`, nodes)
-    console.log(`Tree: activeNodeIndex:`, activeNodeIndex)
+    // console.log(`Tree: activeNodeArray:`, activeNodeArray)
+    // console.log(`Tree: nodes:`, nodes)
+    // console.log(`Tree: activeNodeIndex:`, activeNodeIndex)
 
     return (
       <Container>

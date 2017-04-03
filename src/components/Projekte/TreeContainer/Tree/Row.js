@@ -186,10 +186,7 @@ const Row = ({
   tree,
   node,
 }) => {
-  const onClick = (event) => {
-    store.ui.lastClickY = event.pageY
-    tree.toggleNode(node)
-  }
+  const onClick = (event) => tree.toggleNode(node)
   const myProps = { key: index }
   const nodeHasChildren = node.hasChildren
   const symbolTypes = {
@@ -351,6 +348,7 @@ const Row = ({
 
 Row.propTypes = {
   store: PropTypes.object.isRequired,
+  tree: PropTypes.object.isRequired,
   key: PropTypes.number,
   index: PropTypes.number.isRequired,
   style: PropTypes.object.isRequired,

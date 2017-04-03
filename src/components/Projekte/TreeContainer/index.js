@@ -100,16 +100,6 @@ class TreeContainer extends Component { // eslint-disable-line react/prefer-stat
     treeName: PropTypes.string.isRequired,
   }
 
-  componentDidMount() {
-    // console.log(`TreeContainer did mount`)
-    const { store } = this.props
-    // $FlowIssue
-    store.ui.treeHeight = this.tree.clientHeight
-    // $FlowIssue
-    const treeRect = this.tree.getBoundingClientRect()
-    store.ui.treeTopPosition = treeRect.top
-  }
-
   showMapIfNotYetVisible = () => {
     const { store } = this.props
     const projekteTabs = store.urlQuery.projekteTabs ? clone(store.urlQuery.projekteTabs) : []
