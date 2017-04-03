@@ -16,11 +16,11 @@
     "sw-precache": "5.1.0"
   },
   "dependencies": {
-    "@turf/inside": "3.14.0",
-    "@turf/nearest": "3.14.0",
-    "@turf/within": "3.14.0",
+    "@turf/inside": "4.0.0",
+    "@turf/nearest": "4.0.0",
+    "@turf/within": "4.0.0",
     "ampersand-app": "2.0.0",
-    "axios": "0.15.3",
+    "axios": "0.16.0",
     "babel-polyfill": "6.23.0",
     "date-fns": "1.28.2",
     "dexie": "1.5.1",
@@ -57,7 +57,7 @@
     "react-linkify": "0.2.0",
     "react-sortable-hoc": "0.6.1",
     "react-tap-event-plugin": "2.0.1",
-    "react-virtualized": "9.4.1",
+    "react-virtualized": "9.4.2",
     "recompose": "0.22.0",
     "styled-components": "1.4.4"
   },
