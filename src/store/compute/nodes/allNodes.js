@@ -14,7 +14,7 @@ const compare = (a, b) => {
 }
 
 export default (store) => {
-  const { activeUrlElements, table } = store
+  const { activeNodes, table } = store
   const {
     projekt,
     apFolder,
@@ -68,16 +68,16 @@ export default (store) => {
 
   let nodes = projekt
 
-  if (activeUrlElements.projekt) {
+  if (activeNodes.projekt) {
     nodes = nodes.concat(apFolder)
     nodes = nodes.concat(apberuebersichtFolder)
-    if (activeUrlElements.apberuebersichtFolder) {
+    if (activeNodes.apberuebersichtFolder) {
       nodes = nodes.concat(apberuebersicht)
     }
-    if (activeUrlElements.apFolder) {
+    if (activeNodes.apFolder) {
       nodes = nodes.concat(ap)
       if (
-        activeUrlElements.ap &&
+        activeNodes.ap &&
         // make sure a pops lower levels are not shown
         // if an apFilter exists
         // and the species is not ap species
@@ -87,100 +87,100 @@ export default (store) => {
             store.tree.apFilter &&
             table &&
             table.ap &&
-            table.ap.get(activeUrlElements.ap) &&
-            [1, 2, 3].includes(table.ap.get(activeUrlElements.ap).ApStatus)
+            table.ap.get(activeNodes.ap) &&
+            [1, 2, 3].includes(table.ap.get(activeNodes.ap).ApStatus)
           )
         )
       ) {
         nodes = nodes.concat(qkFolder)
         nodes = nodes.concat(assozartFolder)
-        if (activeUrlElements.assozartFolder) {
+        if (activeNodes.assozartFolder) {
           nodes = nodes.concat(assozart)
         }
         nodes = nodes.concat(idealbiotopFolder)
         nodes = nodes.concat(beobNichtZuzuordnenFolder)
-        if (activeUrlElements.beobNichtZuzuordnenFolder) {
+        if (activeNodes.beobNichtZuzuordnenFolder) {
           nodes = nodes.concat(beobNichtZuzuordnen)
         }
         nodes = nodes.concat(beobzuordnungFolder)
-        if (activeUrlElements.beobzuordnungFolder) {
+        if (activeNodes.beobzuordnungFolder) {
           nodes = nodes.concat(beobzuordnung)
         }
         nodes = nodes.concat(berFolder)
-        if (activeUrlElements.berFolder) {
+        if (activeNodes.berFolder) {
           nodes = nodes.concat(ber)
         }
         nodes = nodes.concat(apberFolder)
-        if (activeUrlElements.apberFolder) {
+        if (activeNodes.apberFolder) {
           nodes = nodes.concat(apber)
         }
         nodes = nodes.concat(erfkritFolder)
-        if (activeUrlElements.erfkritFolder) {
+        if (activeNodes.erfkritFolder) {
           nodes = nodes.concat(erfkrit)
         }
         nodes = nodes.concat(zieljahrFolder)
-        if (activeUrlElements.zielFolder) {
+        if (activeNodes.zielFolder) {
           nodes = nodes.concat(zieljahr)
-          if (activeUrlElements.zieljahr) {
+          if (activeNodes.zieljahr) {
             nodes = nodes.concat(ziel)
-            if (activeUrlElements.ziel) {
+            if (activeNodes.ziel) {
               nodes = nodes.concat(zielberFolder)
-              if (activeUrlElements.zielberFolder) {
+              if (activeNodes.zielberFolder) {
                 nodes = nodes.concat(zielber)
               }
             }
           }
         }
         nodes = nodes.concat(popFolder)
-        if (activeUrlElements.popFolder) {
+        if (activeNodes.popFolder) {
           nodes = nodes.concat(pop)
-          if (activeUrlElements.pop) {
+          if (activeNodes.pop) {
             nodes = nodes.concat(popmassnberFolder)
-            if (activeUrlElements.popmassnberFolder) {
+            if (activeNodes.popmassnberFolder) {
               nodes = nodes.concat(popmassnber)
             }
             nodes = nodes.concat(popberFolder)
-            if (activeUrlElements.popberFolder) {
+            if (activeNodes.popberFolder) {
               nodes = nodes.concat(popber)
             }
             nodes = nodes.concat(tpopFolder)
-            if (activeUrlElements.tpopFolder) {
+            if (activeNodes.tpopFolder) {
               nodes = nodes.concat(tpop)
-              if (activeUrlElements.tpop) {
+              if (activeNodes.tpop) {
                 nodes = nodes.concat(tpopbeobFolder)
-                if (activeUrlElements.tpopbeobFolder) {
+                if (activeNodes.tpopbeobFolder) {
                   nodes = nodes.concat(tpopbeob)
                 }
                 nodes = nodes.concat(tpopberFolder)
-                if (activeUrlElements.tpopberFolder) {
+                if (activeNodes.tpopberFolder) {
                   nodes = nodes.concat(tpopber)
                 }
                 nodes = nodes.concat(tpopfreiwkontrFolder)
-                if (activeUrlElements.tpopfreiwkontrFolder) {
+                if (activeNodes.tpopfreiwkontrFolder) {
                   nodes = nodes.concat(tpopfreiwkontr)
-                  if (activeUrlElements.tpopfreiwkontr) {
+                  if (activeNodes.tpopfreiwkontr) {
                     nodes = nodes.concat(tpopfreiwkontrzaehlFolder)
-                    if (activeUrlElements.tpopfreiwkontrzaehlFolder) {
+                    if (activeNodes.tpopfreiwkontrzaehlFolder) {
                       nodes = nodes.concat(tpopfreiwkontrzaehl)
                     }
                   }
                 }
                 nodes = nodes.concat(tpopfeldkontrFolder)
-                if (activeUrlElements.tpopfeldkontrFolder) {
+                if (activeNodes.tpopfeldkontrFolder) {
                   nodes = nodes.concat(tpopfeldkontr)
-                  if (activeUrlElements.tpopfeldkontr) {
+                  if (activeNodes.tpopfeldkontr) {
                     nodes = nodes.concat(tpopfeldkontrzaehlFolder)
-                    if (activeUrlElements.tpopfeldkontrzaehlFolder) {
+                    if (activeNodes.tpopfeldkontrzaehlFolder) {
                       nodes = nodes.concat(tpopfeldkontrzaehl)
                     }
                   }
                 }
                 nodes = nodes.concat(tpopmassnberFolder)
-                if (activeUrlElements.tpopmassnberFolder) {
+                if (activeNodes.tpopmassnberFolder) {
                   nodes = nodes.concat(tpopmassnber)
                 }
                 nodes = nodes.concat(tpopmassnFolder)
-                if (activeUrlElements.tpopmassnFolder) {
+                if (activeNodes.tpopmassnFolder) {
                   nodes = nodes.concat(tpopmassn)
                 }
               }

@@ -1,16 +1,16 @@
 import findIndex from 'lodash/findIndex'
 
 export default (store) => {
-  const { activeUrlElements, table, tree } = store
+  const { activeNodes, table, tree } = store
 
   // fetch sorting indexes of parents
-  const projId = activeUrlElements.projekt
+  const projId = activeNodes.projekt
   if (!projId) return []
   const projIndex = findIndex(
     store.tree.filteredAndSorted.projekt,
     { ProjId: projId }
   )
-  const apArtId = activeUrlElements.ap
+  const apArtId = activeNodes.ap
   if (!apArtId) return []
   const apIndex = findIndex(
     store.tree.filteredAndSorted.ap,
@@ -32,7 +32,7 @@ export default (store) => {
     menuType: `apberFolder`,
     id: apArtId,
     label: `AP-Berichte (${message})`,
-    expanded: activeUrlElements.apberFolder,
+    expanded: activeNodes.apberFolder,
     url: [`Projekte`, projId, `Arten`, apArtId, `AP-Berichte`],
     sort: [projIndex, 1, apIndex, 4],
     hasChildren: apberNodesLength > 0,
