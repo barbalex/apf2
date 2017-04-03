@@ -12,13 +12,11 @@ import extendMapBeob from './mapBeob'
 import extendMapBeobNichtBeurteilt from './mapBeobNichtBeurteilt'
 import extendMapBeobNichtZuzuordnen from './mapBeobNichtZuzuordnen'
 import extendMapTpopBeob from './mapTpopBeob'
-import extendTreeFilteredAndSorted from './tree/filteredAndSorted'
 import extendExport from './export'
 
 export default (store:Object) => {
   extendStore(store)
   extendTree(store)
-  extendTreeFilteredAndSorted(store)
   extendDropdownList(store)
   extendApp(store)
   extendUi(store)
