@@ -10,6 +10,8 @@ export default (store, tree) => {
   const apArtId = activeNodes.ap
   if (!apArtId) return []
   const apIndex = findIndex(store.tree.filteredAndSorted.ap, { ApArtId: apArtId })
+  // prevent folder from showing when nodeFilter is set
+  if (apIndex === -1) return []
 
   const zieljahreNodesLength = tree.filteredAndSorted.zieljahr.length
 

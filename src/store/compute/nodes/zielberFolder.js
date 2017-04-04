@@ -13,6 +13,8 @@ export default (store, tree) => {
   const zieljahrIndex = findIndex(tree.filteredAndSorted.zieljahr, { jahr: zieljahr })
   const ziel = activeNodes.ziel
   const zielIndex = findIndex(tree.filteredAndSorted.ziel, { ZielId: ziel })
+  // prevent folder from showing when nodeFilter is set
+  if (zielIndex === -1) return []
 
   const zielberNodesLength = tree.filteredAndSorted.zielber.length
 

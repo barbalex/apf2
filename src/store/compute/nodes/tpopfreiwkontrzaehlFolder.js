@@ -20,6 +20,8 @@ export default (store, tree) => {
   const tpopfreiwkontrId = activeNodes.tpopfreiwkontr
   if (!tpopfreiwkontrId) return []
   const tpopfreiwkontrIndex = findIndex(tree.filteredAndSorted.tpopfreiwkontr, { TPopKontrId: tpopfreiwkontrId })
+  // prevent folder from showing when nodeFilter is set
+  if (tpopfreiwkontrIndex === -1) return []
 
   const childrenLength = tree.filteredAndSorted.tpopfreiwkontrzaehl.length
 
