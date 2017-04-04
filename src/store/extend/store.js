@@ -40,6 +40,26 @@ import writeToStore from '../action/writeToStore'
 export default (store:Object) => {
   extendObservable(store, {
     loading: [],
+    moving: {
+      table: null,
+      id: null,
+    },
+    markForMoving: action(`markForMoving`, (table, id) => {
+      store.moving.table = table
+      store.moving.id = id
+    }),
+    moveTo: action(`move`, (table, id) => {
+      // check if this is correct table
+
+      // change parent id of dataset marked for moving
+
+      // reset moving
+
+    }),
+    copying: {
+      table: null,
+      id: null,
+    },
     /**
      * urlQueries are used to control tabs
      * for instance: Entwicklung or Biotop in tpopfeldkontr

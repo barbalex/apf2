@@ -231,6 +231,14 @@ function Store() {
   this.table = TableStore
   this.valuesForWhichTableDataWasFetched = {}
   this.qk = observable.map()
+  this.moving = {
+    table: null,
+    id: null,
+  }
+  this.copying = {
+    table: null,
+    id: null,
+  }
 }
 
 const MyStore = new Store()
