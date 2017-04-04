@@ -11,6 +11,8 @@ export default (store, tree) => {
   const apArtId = activeNodes.ap
   if (!apArtId) return []
   const apIndex = findIndex(tree.filteredAndSorted.ap, { ApArtId: apArtId })
+  // prevent folder from showing when nodeFilter is set
+  if (apIndex === -1) return []
 
   const popNodesLength = tree.filteredAndSorted.pop.length
   let message = popNodesLength

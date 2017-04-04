@@ -14,6 +14,8 @@ export default (store, tree) => {
   const popId = activeNodes.pop
   if (!popId) return []
   const popIndex = findIndex(tree.filteredAndSorted.pop, { PopId: popId })
+  // prevent folder from showing when nodeFilter is set
+  if (popIndex === -1) return []
 
   const popberNodesLength = tree.filteredAndSorted.popber.length
 
