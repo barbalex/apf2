@@ -10,10 +10,10 @@ const enhance = compose(
 )
 
 const Tpop = (
-  { onClick, store }:
-  {onClick:()=>void,store:Object}
+  { onClick, store, treeName }:
+  {onClick:()=>void,store:Object,treeName:string}
 ) =>
-  <ContextMenu id="tpop">
+  <ContextMenu id={treeName}>
     <div className="react-contextmenu-title">Teil-Population</div>
     <MenuItem
       onClick={onClick}

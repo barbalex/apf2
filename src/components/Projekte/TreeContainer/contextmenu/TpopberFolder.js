@@ -2,8 +2,11 @@
 import React, { PropTypes } from 'react'
 import { ContextMenu, MenuItem } from 'react-contextmenu'
 
-const TpopberFolder = ({ onClick }:{onClick:() => void}) =>
-  <ContextMenu id="tpopberFolder" >
+const TpopberFolder = (
+  { onClick, treeName }:
+  {onClick:()=>void,treeName:string}
+) =>
+  <ContextMenu id={treeName} >
     <div className="react-contextmenu-title">Kontroll-Berichte</div>
     <MenuItem
       onClick={onClick}

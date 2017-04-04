@@ -20,11 +20,11 @@ const enhance = compose(
 )
 
 const TpopbeobFolder = (
-  { onClick, store, changeId, id, onShow }:
-  {onClick:() => void,store:Object,changeId:()=>{},id:number,onShow:()=>{}}
+  { onClick, store, treeName, changeId, id, onShow }:
+  {onClick:() => void,store:Object,treeName:string,changeId:()=>{},id:number,onShow:()=>{}}
 ) =>
   <ContextMenu
-    id="tpopbeobFolder"
+    id={treeName}
     collect={props => props}
     onShow={onShow}
   >
