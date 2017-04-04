@@ -221,7 +221,7 @@ const Row = ({
   return (
     <div key={key} style={style} onClick={onClick}>
       <ContextMenuTrigger
-        id={treeName}
+        id={`${treeName}${node.menuType}`}
         // id={node.menuType}
         collect={props => myProps}
         nodeId={node.id}

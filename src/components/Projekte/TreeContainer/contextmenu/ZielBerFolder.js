@@ -6,7 +6,7 @@ const ZielBerFolder = (
   { onClick, treeName }:
   {onClick:()=>void,treeName:string}
 ) =>
-  <ContextMenu id={treeName} >
+  <ContextMenu id={`${treeName}zielberFolder`} >
     <div className="react-contextmenu-title">Berichte</div>
     <MenuItem
       onClick={onClick}

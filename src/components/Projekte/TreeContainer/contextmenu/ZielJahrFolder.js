@@ -6,7 +6,7 @@ const ZielJahrFolder = (
   { onClick, treeName }:
   {onClick:()=>void,treeName:string}
 ) =>
-  <ContextMenu id={treeName} >
+  <ContextMenu id={`${treeName}zieljahrFolder`} >
     <div className="react-contextmenu-title">Ziele</div>
     <MenuItem
       onClick={onClick}
