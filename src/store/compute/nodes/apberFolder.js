@@ -16,6 +16,8 @@ export default (store, tree) => {
     tree.filteredAndSorted.ap,
     { ApArtId: apArtId }
   )
+  // prevent folder from showing when nodeFilter is set
+  if (apIndex === -1) return []
 
   const apberNodesLength = tree.filteredAndSorted.apber.length
 

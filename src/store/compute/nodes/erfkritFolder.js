@@ -8,6 +8,8 @@ export default (store, tree) => {
   const apArtId = tree.activeNodes.ap
   if (!apArtId) return []
   const apIndex = findIndex(tree.filteredAndSorted.ap, { ApArtId: apArtId })
+  // prevent folder from showing when nodeFilter is set
+  if (apIndex === -1) return []
 
   const erfkritNodesLength = tree.filteredAndSorted.erfkrit.length
 

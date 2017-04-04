@@ -6,11 +6,7 @@ const PopberFolder = (
   { onClick, treeName }:
   {onClick:()=>void,treeName:string}
 ) =>
-  <ContextMenu
-    // id="popberfolder"
-    id={`${treeName}popberFolder`}
-    // id={treeName}
-  >
+  <ContextMenu id={`${treeName}popberFolder`}>
     <div className="react-contextmenu-title">Kontroll-Berichte</div>
     <MenuItem
       onClick={onClick}
