@@ -17,8 +17,8 @@ export default (store:Object) => {
       `manipulateUrl`,
       () => manipulateUrl(store)
     ),
-    reactWhenUrlHasChanged: autorunAsync(
-      `reactWhenUrlHasChanged`,
+    fetchDataWhenUrlChanges: autorunAsync(
+      `fetchDataWhenUrlChanges`,
       () => {
         // need to pass visibility of layers to make data fetched on changing layers
         const showTpop = store.map.activeApfloraLayers.includes(`Tpop`)
@@ -31,8 +31,8 @@ export default (store:Object) => {
     ),
   })
   extendObservable(store.tree2, {
-    fetchDataForTree2WhenActiveNodeArrayChanges: autorunAsync(
-      `fetchDataForTree2WhenActiveNodeArrayChanges`,
+    fetchDataWhenActiveNodeArrayChanges: autorunAsync(
+      `fetchDataWhenActiveNodeArrayChanges`,
       () => {
         // need to pass visibility of layers to make data fetched on changing layers
         const showTpop = store.map.activeApfloraLayers.includes(`Tpop`)

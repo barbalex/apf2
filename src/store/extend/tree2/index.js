@@ -18,7 +18,7 @@ export default (store:Object) => {
      * in tree2 activeNodeArray is cloned from tree on mount
      * using store.tree.cloneActiveNodeArrayToTree2
      * then is changed on nodes click
-     * fetchDataForActiveNodes is called by autorun fetchDataForTree2WhenActiveNodeArrayChanges
+     * fetchDataForActiveNodes is called by autorun fetchDataWhenActiveNodeArrayChanges
      */
     activeNodeArray: [],
     setActiveNodeArray: action(
