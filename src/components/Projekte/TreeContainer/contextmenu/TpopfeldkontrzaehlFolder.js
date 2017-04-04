@@ -6,7 +6,7 @@ const TpopfeldkontrzaehlFolder = (
   { onClick, treeName }:
   {onClick:()=>void,treeName:string}
 ) =>
-  <ContextMenu id={treeName} >
+  <ContextMenu id={`${treeName}tpopfeldkontrzaehlFolder`} >
     <div className="react-contextmenu-title">Zählungen</div>
     <MenuItem
       onClick={onClick}

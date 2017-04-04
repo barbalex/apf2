@@ -13,7 +13,7 @@ const Tpop = (
   { onClick, store, treeName }:
   {onClick:()=>void,store:Object,treeName:string}
 ) =>
-  <ContextMenu id={treeName}>
+  <ContextMenu id={`${treeName}tpop`}>
     <div className="react-contextmenu-title">Teil-Population</div>
     <MenuItem
       onClick={onClick}
