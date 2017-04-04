@@ -14,6 +14,8 @@ export default (store, tree) => {
   const tpopId = tree.activeNodes.tpop
   if (!tpopId) return []
   const tpopIndex = findIndex(tree.filteredAndSorted.tpop, { TPopId: tpopId })
+  // prevent folder from showing when nodeFilter is set
+  if (tpopIndex === -1) return []
 
   const childrenLength = tree.filteredAndSorted.tpopbeob.length
   let message = childrenLength
