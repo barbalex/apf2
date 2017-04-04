@@ -24,32 +24,49 @@ const enhance = compose(
 const Pop = (
   { onClick, store, treeName, changeId, id, changeLabel, label, onShow }:
   {onClick:()=>void,store:Object,treeName:string,changeId:()=>{},id:number,changeLabel:()=>{},label:string,onShow:()=>void}
-) =>
-  <ContextMenu
-    id={`${treeName}pop`}
-    collect={props => props}
-    onShow={onShow}
-  >
-    <div className="react-contextmenu-title">Population</div>
-    <MenuItem
-      onClick={onClick}
-      data={{
-        action: `insert`,
-        table: `pop`,
-      }}
+) => {
+  const moving = store.moving.table && store.moving.table === `tpop`
+
+  return (
+    <ContextMenu
+      id={`${treeName}pop`}
+      collect={props => props}
+      onShow={onShow}
     >
-      erstelle neue
-    </MenuItem>
-    <MenuItem
-      onClick={onClick}
-      data={{
-        action: `delete`,
-        table: `pop`,
-      }}
-    >
-      lösche
-    </MenuItem>
-  </ContextMenu>
+      <div className="react-contextmenu-title">Population</div>
+      <MenuItem
+        onClick={onClick}
+        data={{
+          action: `insert`,
+          table: `pop`,
+        }}
+      >
+        erstelle neue
+      </MenuItem>
+      <MenuItem
+        onClick={onClick}
+        data={{
+          action: `delete`,
+          table: `pop`,
+        }}
+      >
+        lösche
+      </MenuItem>
+      {
+        moving &&
+        <MenuItem
+          onClick={onClick}
+          data={{
+            action: `move`,
+            table: `pop`,
+          }}
+        >
+          {`verschiebe '${store.moving.label}' hierhin`}
+        </MenuItem>
+      }
+    </ContextMenu>
+  )
+}
 
 Pop.propTypes = {
   onClick: PropTypes.func.isRequired,

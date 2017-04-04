@@ -43,10 +43,12 @@ export default (store:Object) => {
     moving: {
       table: null,
       id: null,
+      label: null,
     },
-    markForMoving: action(`markForMoving`, (table, id) => {
+    markForMoving: action(`markForMoving`, (table, id, label) => {
       store.moving.table = table
       store.moving.id = id
+      store.moving.label = label
     }),
     moveTo: action(`move`, (table, id) => {
       // check if this is correct table

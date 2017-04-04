@@ -37,6 +37,15 @@ const Tpop = (
     <MenuItem
       onClick={onClick}
       data={{
+        action: `markForMoving`,
+        table: `tpop`,
+      }}
+    >
+      verschiebe
+    </MenuItem>
+    <MenuItem
+      onClick={onClick}
+      data={{
         action: `localizeOnMap`,
         actionTable: `tpop`,
         idTable: `tpop`,

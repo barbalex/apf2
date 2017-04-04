@@ -111,7 +111,6 @@ class TreeContainer extends Component { // eslint-disable-line react/prefer-stat
   }
 
   handleClick = (e, data, element) => {
-    console.log(`Tree, handleClick`)
     const { store } = this.props
     if (!data) return store.listError(new Error(`no data passed with click`))
     if (!element) return store.listError(new Error(`no element passed with click`))
@@ -171,7 +170,13 @@ class TreeContainer extends Component { // eslint-disable-line react/prefer-stat
         store.map.setIdOfTpopBeingLocalized(parseInt(id, 10))
         that.showMapIfNotYetVisible()
         store.map.showMapApfloraLayer(`Tpop`, true)
-      }
+      },
+      markForMoving() {
+        store.markForMoving(table, parseInt(id, 10), label)
+      },
+      move() {
+        store.moveTo(table, parseInt(id, 10))
+      },
     }
     if (Object.keys(actions).includes(action)) {
       actions[action]()
