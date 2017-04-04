@@ -21,7 +21,7 @@ const Tpopmassn = (
   {onClick:()=>void,treeName:string,changeLabel:()=>{},label:string|number,onShow:()=>void}
 ) =>
   <ContextMenu
-    id={treeName}
+    id={`${treeName}tpopmassn`}
     collect={props => props}
     onShow={onShow}
   >

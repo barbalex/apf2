@@ -6,7 +6,7 @@ const TpopmassnFolder = (
   { onClick, treeName }:
   {onClick:()=>void,treeName:string}
 ) =>
-  <ContextMenu id={treeName} >
+  <ContextMenu id={`${treeName}tpopmassnFolder`} >
     <div className="react-contextmenu-title">Massnahmen</div>
     <MenuItem
       onClick={onClick}
