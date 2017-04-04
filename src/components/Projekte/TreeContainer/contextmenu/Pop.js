@@ -26,7 +26,7 @@ const Pop = (
   {onClick:()=>void,store:Object,treeName:string,changeId:()=>{},id:number,changeLabel:()=>{},label:string,onShow:()=>void}
 ) =>
   <ContextMenu
-    id={treeName}
+    id={`${treeName}pop`}
     collect={props => props}
     onShow={onShow}
   >

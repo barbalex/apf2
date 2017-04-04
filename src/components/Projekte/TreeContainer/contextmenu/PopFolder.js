@@ -24,7 +24,7 @@ const PopFolder = (
   {onClick:()=>void,store:Object,treeName:string,changeLabel:()=>{},label:string|number,onShow:()=>void}
 ) =>
   <ContextMenu
-    id={treeName}
+    id={`${treeName}popFolder`}
     collect={props => props}
     onShow={onShow}
   >

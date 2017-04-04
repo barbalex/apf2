@@ -6,7 +6,7 @@ const ErfkritFolder = (
   { onClick, treeName }:
   {onClick:()=>void,treeName:string}
 ) =>
-  <ContextMenu id={treeName} >
+  <ContextMenu id={`${treeName}erfkritFolder`} >
     <div className="react-contextmenu-title">AP-Erfolgskriterien</div>
     <MenuItem
       onClick={onClick}
