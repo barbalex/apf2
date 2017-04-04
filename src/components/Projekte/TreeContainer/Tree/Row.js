@@ -4,7 +4,7 @@ import { toJS } from 'mobx'
 import { observer, inject } from 'mobx-react'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
-import shouldUpdate from 'recompose/shouldUpdate'
+// import shouldUpdate from 'recompose/shouldUpdate'
 import { ContextMenuTrigger } from 'react-contextmenu'
 import FontIcon from 'material-ui/FontIcon'
 
@@ -153,7 +153,9 @@ const showTpopBeobFilteredMapIcon = (store, tree, node) => (
 /**
  * checking props change according to
  * https://marmelab.com/blog/2017/02/06/react-is-slow-react-is-fast.html
+ * turned off: does not seem to be better than what mobx does
  */
+/*
 const checkPropsChange = (props, nextProps) => {
   return (
     nextProps.node !== props.node ||
@@ -170,7 +172,7 @@ const checkPropsChange = (props, nextProps) => {
     showBeobNichtZuzuordnenFilteredMapIcon(nextProps.store, nextProps.node) !== showBeobNichtZuzuordnenFilteredMapIcon(props.store, props.node) ||
     showTpopBeobFilteredMapIcon(nextProps.store, nextProps.tree, nextProps.node) !== showTpopBeobFilteredMapIcon(props.store, props.tree, props.node)
   )
-}
+}*/
 
 const enhance = compose(
   inject(`store`),
@@ -184,6 +186,7 @@ const Row = ({
   style,
   store,
   tree,
+  treeName,
   node,
 }) => {
   const onClick = (event) => tree.toggleNode(node)
@@ -218,7 +221,8 @@ const Row = ({
   return (
     <div key={key} style={style} onClick={onClick}>
       <ContextMenuTrigger
-        id={node.menuType}
+        id={treeName}
+        // id={node.menuType}
         collect={props => myProps}
         nodeId={node.id}
         nodeLabel={node.label}
@@ -349,6 +353,7 @@ const Row = ({
 Row.propTypes = {
   store: PropTypes.object.isRequired,
   tree: PropTypes.object.isRequired,
+  treeName: PropTypes.string.isRequired,
   key: PropTypes.number,
   index: PropTypes.number.isRequired,
   style: PropTypes.object.isRequired,

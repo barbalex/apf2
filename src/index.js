@@ -104,7 +104,7 @@ ReactDOM.render(
       muiTheme={getMuiTheme(theme)}
     >
       <AppContainer>
-        { false && <DevTools />}
+        { true && <DevTools />}
         <AppBar />
         <Projekte />
         <User />

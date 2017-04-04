@@ -111,6 +111,7 @@ class TreeContainer extends Component { // eslint-disable-line react/prefer-stat
   }
 
   handleClick = (e, data, element) => {
+    console.log(`Tree, handleClick`)
     const { store } = this.props
     if (!data) return store.listError(new Error(`no data passed with click`))
     if (!element) return store.listError(new Error(`no element passed with click`))
@@ -219,46 +220,46 @@ class TreeContainer extends Component { // eslint-disable-line react/prefer-stat
             treeName={treeName}
           />
         </div>
-        <CmApFolder onClick={this.handleClick} />
-        <CmAp onClick={this.handleClick} />
-        <CmApberuebersichtFolder onClick={this.handleClick} />
-        <CmApberuebersicht onClick={this.handleClick} />
-        <CmAssozartFolder onClick={this.handleClick} />
-        <CmAssozart onClick={this.handleClick} />
-        <CmTpopbeobFolder onClick={this.handleClick} />
-        <CmBerFolder onClick={this.handleClick} />
-        <CmBer onClick={this.handleClick} />
-        <CmApberFolder onClick={this.handleClick} />
-        <CmApber onClick={this.handleClick} />
-        <CmErfkritFolder onClick={this.handleClick} />
-        <CmErfkrit onClick={this.handleClick} />
-        <CmZielFolder onClick={this.handleClick} />
-        <CmZielJahrFolder onClick={this.handleClick} />
-        <CmZiel onClick={this.handleClick} />
-        <CmZielBerFolder onClick={this.handleClick} />
-        <CmZielBer onClick={this.handleClick} />
-        <CmPopFolder onClick={this.handleClick} />
-        <CmPop onClick={this.handleClick} />
-        <CmPopmassnberFolder onClick={this.handleClick} />
-        <CmPopmassnber onClick={this.handleClick} />
-        <CmPopberFolder onClick={this.handleClick} />
-        <CmPopber onClick={this.handleClick} />
-        <CmTpopFolder onClick={this.handleClick} />
-        <CmTpop onClick={this.handleClick} />
-        <CmTpopberFolder onClick={this.handleClick} />
-        <CmTpopber onClick={this.handleClick} />
-        <CmTpopfreiwkontrFolder onClick={this.handleClick} />
-        <CmTpopfreiwkontr onClick={this.handleClick} />
-        <CmTpopfreiwkontrzaehlFolder onClick={this.handleClick} />
-        <CmTpopfreiwkontrzaehl onClick={this.handleClick} />
-        <CmTpopfeldkontrFolder onClick={this.handleClick} />
-        <CmTpopfeldkontr onClick={this.handleClick} />
-        <CmTpopfeldkontrzaehlFolder onClick={this.handleClick} />
-        <CmTpopfeldkontrzaehl onClick={this.handleClick} />
-        <CmTpopmassnberFolder onClick={this.handleClick} />
-        <CmTpopmassnber onClick={this.handleClick} />
-        <CmTpopmassnFolder onClick={this.handleClick} />
-        <CmTpopmassn onClick={this.handleClick} />
+        <CmApFolder onClick={this.handleClick} treeName={treeName} />
+        <CmAp onClick={this.handleClick} treeName={treeName} />
+        <CmApberuebersichtFolder onClick={this.handleClick} treeName={treeName} />
+        <CmApberuebersicht onClick={this.handleClick} treeName={treeName} />
+        <CmAssozartFolder onClick={this.handleClick} treeName={treeName} />
+        <CmAssozart onClick={this.handleClick} treeName={treeName} />
+        <CmTpopbeobFolder onClick={this.handleClick} treeName={treeName} />
+        <CmBerFolder onClick={this.handleClick} treeName={treeName} />
+        <CmBer onClick={this.handleClick} treeName={treeName} />
+        <CmApberFolder onClick={this.handleClick} treeName={treeName} />
+        <CmApber onClick={this.handleClick} treeName={treeName} />
+        <CmErfkritFolder onClick={this.handleClick} treeName={treeName} />
+        <CmErfkrit onClick={this.handleClick} treeName={treeName} />
+        <CmZielFolder onClick={this.handleClick} treeName={treeName} />
+        <CmZielJahrFolder onClick={this.handleClick} treeName={treeName} />
+        <CmZiel onClick={this.handleClick} treeName={treeName} />
+        <CmZielBerFolder onClick={this.handleClick} treeName={treeName} />
+        <CmZielBer onClick={this.handleClick} treeName={treeName} />
+        <CmPopFolder onClick={this.handleClick} treeName={treeName} />
+        <CmPop onClick={this.handleClick} treeName={treeName} />
+        <CmPopmassnberFolder onClick={this.handleClick} treeName={treeName} />
+        <CmPopmassnber onClick={this.handleClick} treeName={treeName} />
+        <CmPopberFolder onClick={this.handleClick} treeName={treeName} />
+        <CmPopber onClick={this.handleClick} treeName={treeName} />
+        <CmTpopFolder onClick={this.handleClick} treeName={treeName} />
+        <CmTpop onClick={this.handleClick} treeName={treeName} />
+        <CmTpopberFolder onClick={this.handleClick} treeName={treeName} />
+        <CmTpopber onClick={this.handleClick} treeName={treeName} />
+        <CmTpopfreiwkontrFolder onClick={this.handleClick} treeName={treeName} />
+        <CmTpopfreiwkontr onClick={this.handleClick} treeName={treeName} />
+        <CmTpopfreiwkontrzaehlFolder onClick={this.handleClick} treeName={treeName} />
+        <CmTpopfreiwkontrzaehl onClick={this.handleClick} treeName={treeName} />
+        <CmTpopfeldkontrFolder onClick={this.handleClick} treeName={treeName} />
+        <CmTpopfeldkontr onClick={this.handleClick} treeName={treeName} />
+        <CmTpopfeldkontrzaehlFolder onClick={this.handleClick} treeName={treeName} />
+        <CmTpopfeldkontrzaehl onClick={this.handleClick} treeName={treeName} />
+        <CmTpopmassnberFolder onClick={this.handleClick} treeName={treeName} />
+        <CmTpopmassnber onClick={this.handleClick} treeName={treeName} />
+        <CmTpopmassnFolder onClick={this.handleClick} treeName={treeName} />
+        <CmTpopmassn onClick={this.handleClick} treeName={treeName} />
       </Container>
     )
   }
