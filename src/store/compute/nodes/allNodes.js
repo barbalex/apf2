@@ -64,7 +64,7 @@ export default (store, tree) => {
     tpopmassnber,
     tpopmassnFolder,
     tpopmassn,
-  } = store.tree.node
+  } = tree.node
   const { activeNodes } = tree
 
   let nodes = projekt
@@ -83,9 +83,9 @@ export default (store, tree) => {
         // if an apFilter exists
         // and the species is not ap species
         (
-          !store.tree.apFilter ||
+          !tree.apFilter ||
           (
-            store.tree.apFilter &&
+            tree.apFilter &&
             table &&
             table.ap &&
             table.ap.get(activeNodes.ap) &&
