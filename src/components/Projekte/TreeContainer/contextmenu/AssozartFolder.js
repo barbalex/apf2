@@ -3,10 +3,10 @@ import React, { PropTypes } from 'react'
 import { ContextMenu, MenuItem } from 'react-contextmenu'
 
 const AssozartFolder = (
-  { onClick }:
-  {onClick:()=>void}
+  { onClick, treeName }:
+  {onClick:()=>void,treeName:string}
 ) =>
-  <ContextMenu id="assozartFolder" >
+  <ContextMenu id={treeName} >
     <div className="react-contextmenu-title">assoziierte Art</div>
     <MenuItem
       onClick={onClick}

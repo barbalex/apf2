@@ -20,17 +20,22 @@ const enhance = compose(
 )
 
 const Ap = (
-  { onClick, store, changeLabel, label, onShow }:
-  {onClick:() => void,store:Object,changeLabel:()=>{},label:string,onShow:()=>{}}
+  { onClick, store, treeName, changeLabel, label, onShow }:
+  {onClick:() => void,store:Object,treeName:string,changeLabel:()=>{},label:string,onShow:()=>{}}
 ) =>
   <ContextMenu
-    id="ap"
+    id={treeName}
     collect={props => props}
     onShow={onShow}
   >
     <div className="react-contextmenu-title">Art</div>
     <MenuItem
-      onClick={onClick}
+      onClick={(e, data, element) => {
+        console.log(`Ap, onClick: e`, e)
+        console.log(`Ap, onClick: data`, data)
+        console.log(`Ap, onClick: element`, element)
+        onClick(e, data, element)
+      }}
       data={{
         action: `insert`,
         table: `ap`,
