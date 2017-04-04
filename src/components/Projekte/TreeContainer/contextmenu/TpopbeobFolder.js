@@ -24,7 +24,7 @@ const TpopbeobFolder = (
   {onClick:() => void,store:Object,treeName:string,changeId:()=>{},id:number,onShow:()=>{}}
 ) =>
   <ContextMenu
-    id={treeName}
+    id={`${treeName}tpopBeobFolder`}
     collect={props => props}
     onShow={onShow}
   >

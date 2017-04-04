@@ -21,7 +21,7 @@ const Popmassnber = (
   {onClick:()=>void,treeName:string,changeLabel:()=>{},label:string|number,onShow:()=>void}
 ) =>
   <ContextMenu
-    id={treeName}
+    id={`${treeName}popmassnber`}
     collect={props => props}
     onShow={onShow}
   >

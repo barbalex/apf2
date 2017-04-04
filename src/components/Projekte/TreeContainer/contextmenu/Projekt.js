@@ -6,7 +6,7 @@ const Projekt = (
   { onClick, treeName }:
   {onClick:()=>void,treeName:string}
 ) =>
-  <ContextMenu id={treeName} >
+  <ContextMenu id={`${treeName}projekt`} >
     <div className="react-contextmenu-title">Projekt</div>
     // TODO: add MenuItem for admins to add new projekt
   </ContextMenu>

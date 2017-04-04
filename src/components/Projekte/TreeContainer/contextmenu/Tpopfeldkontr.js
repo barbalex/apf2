@@ -21,7 +21,7 @@ const Tpopfeldkontr = (
   {onClick:()=>void,treeName:string,changeLabel:()=>{},label:string|number,onShow:()=>void}
 ) =>
   <ContextMenu
-    id={treeName}
+    id={`${treeName}tpopfeldkontr`}
     collect={props => props}
     onShow={onShow}
   >
