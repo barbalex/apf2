@@ -20,11 +20,11 @@ const enhance = compose(
 )
 
 const PopFolder = (
-  { onClick, store, changeLabel, label, onShow }:
-  {onClick:()=>void,store:Object,changeLabel:()=>{},label:string|number,onShow:()=>void}
+  { onClick, store, treeName, changeLabel, label, onShow }:
+  {onClick:()=>void,store:Object,treeName:string,changeLabel:()=>{},label:string|number,onShow:()=>void}
 ) =>
   <ContextMenu
-    id="popFolder"
+    id={treeName}
     collect={props => props}
     onShow={onShow}
   >

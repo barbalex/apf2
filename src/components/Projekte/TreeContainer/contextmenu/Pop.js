@@ -22,11 +22,11 @@ const enhance = compose(
 )
 
 const Pop = (
-  { onClick, store, changeId, id, changeLabel, label, onShow }:
-  {onClick:()=>void,store:Object,changeId:()=>{},id:number,changeLabel:()=>{},label:string,onShow:()=>void}
+  { onClick, store, treeName, changeId, id, changeLabel, label, onShow }:
+  {onClick:()=>void,store:Object,treeName:string,changeId:()=>{},id:number,changeLabel:()=>{},label:string,onShow:()=>void}
 ) =>
   <ContextMenu
-    id="pop"
+    id={treeName}
     collect={props => props}
     onShow={onShow}
   >
