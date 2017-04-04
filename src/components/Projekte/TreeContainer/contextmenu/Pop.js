@@ -58,7 +58,6 @@ const Pop = (
           onClick={onClick}
           data={{
             action: `move`,
-            table: `pop`,
           }}
         >
           {`verschiebe '${store.moving.label}' hierhin`}

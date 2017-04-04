@@ -36,6 +36,7 @@ import setLoginFromIdb from '../action/setLoginFromIdb'
 import fetchStammdatenTables from '../action/fetchStammdatenTables'
 import deleteBeobzuordnung from '../action/deleteBeobzuordnung'
 import writeToStore from '../action/writeToStore'
+import moveTo from '../action/moveTo'
 
 export default (store:Object) => {
   extendObservable(store, {
@@ -50,13 +51,16 @@ export default (store:Object) => {
       store.moving.id = id
       store.moving.label = label
     }),
-    moveTo: action(`move`, (table, id) => {
+    moveTo: action(`move`, (newParentId) => {
       // check if this is correct table
-
+      // nope, not necessary because context menu
+      // only shows menu when table is correct
       // change parent id of dataset marked for moving
-
+      moveTo(store, newParentId)
       // reset moving
-
+      store.moving.table = null
+      store.moving.id = null
+      store.moving.label = null
     }),
     copying: {
       table: null,
