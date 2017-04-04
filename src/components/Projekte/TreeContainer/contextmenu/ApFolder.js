@@ -6,7 +6,7 @@ const Apfolder = (
   { onClick, treeName }:
   {onClick:()=>void,treeName:string}
 ) =>
-  <ContextMenu id={treeName} >
+  <ContextMenu id={`${treeName}apFolder`} >
     <div className="react-contextmenu-title">Art</div>
     <MenuItem
       onClick={onClick}

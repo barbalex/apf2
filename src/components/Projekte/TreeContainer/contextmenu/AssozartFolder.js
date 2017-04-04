@@ -6,7 +6,7 @@ const AssozartFolder = (
   { onClick, treeName }:
   {onClick:()=>void,treeName:string}
 ) =>
-  <ContextMenu id={treeName} >
+  <ContextMenu id={`${treeName}assozartFolder`} >
     <div className="react-contextmenu-title">assoziierte Art</div>
     <MenuItem
       onClick={onClick}

@@ -24,7 +24,7 @@ const Ap = (
   {onClick:() => void,store:Object,treeName:string,changeLabel:()=>{},label:string,onShow:()=>{}}
 ) =>
   <ContextMenu
-    id={treeName}
+    id={`${treeName}ap`}
     collect={props => props}
     onShow={onShow}
   >

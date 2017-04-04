@@ -6,7 +6,7 @@ const Apberuebersicht = (
   { onClick, treeName }:
   {onClick:()=>void,treeName:string}
 ) =>
-  <ContextMenu id={treeName}>
+  <ContextMenu id={`${treeName}apberuebersicht`}>
     <div className="react-contextmenu-title">AP-Bericht</div>
     <MenuItem
       onClick={onClick}
