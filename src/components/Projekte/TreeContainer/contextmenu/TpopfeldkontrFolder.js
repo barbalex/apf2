@@ -28,7 +28,7 @@ const TpopfeldkontrFolder = (
         erstelle neue
       </MenuItem>
       {
-        moving&&
+        moving &&
         <MenuItem
           onClick={onClick}
           data={{

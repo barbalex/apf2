@@ -15,6 +15,7 @@ const Tpop = (
 ) => {
   const movingTpopmassn = store.moving.table && store.moving.table === `tpopmassn`
   const movingTpopfeldkontr = store.moving.table && store.moving.table === `tpopfeldkontr`
+  const movingTpopfreiwkontr = store.moving.table && store.moving.table === `tpopfreiwkontr`
 
   return (
     <ContextMenu id={`${treeName}tpop`}>
@@ -70,6 +71,17 @@ const Tpop = (
       }
       {
         movingTpopfeldkontr &&
+        <MenuItem
+          onClick={onClick}
+          data={{
+            action: `move`,
+          }}
+        >
+          {`verschiebe '${store.moving.label}' hierhin`}
+        </MenuItem>
+      }
+      {
+        movingTpopfreiwkontr &&
         <MenuItem
           onClick={onClick}
           data={{
