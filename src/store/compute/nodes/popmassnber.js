@@ -17,6 +17,7 @@ export default (store, tree) => {
     menuType: `popmassnber`,
     id: el.PopMassnBerId,
     parentId: popId,
+    urlLabel: el.PopMassnBerId,
     label: el.label,
     expanded: el.PopMassnBerId === tree.activeNodes.popmassnber,
     url: [`Projekte`, projId, `Arten`, apArtId, `Populationen`, popId, `Massnahmen-Berichte`, el.PopMassnBerId],

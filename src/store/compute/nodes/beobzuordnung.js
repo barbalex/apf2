@@ -18,6 +18,7 @@ export default (store, tree) => {
       menuType: `beobzuordnung`,
       id: beobId,
       parentId: apArtId,
+      urlLabel: beobId,
       label: el.label,
       expanded: beobId === tree.activeNodes.beobzuordnung,
       url: [`Projekte`, projId, `Arten`, apArtId, `nicht-beurteilte-Beobachtungen`, beobId],

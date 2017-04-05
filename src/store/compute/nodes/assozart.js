@@ -14,6 +14,7 @@ export default (store, tree) => {
     menuType: `assozart`,
     id: el.AaId,
     parentId: apArtId,
+    urlLabel: el.AaId,
     label: el.label,
     expanded: el.AaId === tree.activeNodes.assozart,
     url: [`Projekte`, projId, `Arten`, apArtId, `assoziierte-Arten`, el.AaId],

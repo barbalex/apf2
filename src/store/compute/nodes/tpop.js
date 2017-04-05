@@ -18,6 +18,7 @@ export default (store, tree) => {
     menuType: `tpop`,
     id: el.TPopId,
     parentId: el.PopId,
+    urlLabel: el.TPopId,
     label: el.label,
     expanded: el.TPopId === activeNodes.tpop,
     url: [`Projekte`, projId, `Arten`, apArtId, `Populationen`, el.PopId, `Teil-Populationen`, el.TPopId],

@@ -30,6 +30,7 @@ export default (store, tree) => {
     nodeType: `folder`,
     menuType: `tpopbeobFolder`,
     id: tpopId,
+    urlLabel: `Beobachtungen`,
     label: `Beobachtungen zugeordnet (${message})`,
     expanded: tree.activeNodes.tpopbeobFolder,
     url: [`Projekte`, projId, `Arten`, apArtId, `Populationen`, popId, `Teil-Populationen`, tpopId, `Beobachtungen`],

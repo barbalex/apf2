@@ -20,6 +20,7 @@ export default (store, tree) => {
     menuType: `zielber`,
     id: el.ZielBerId,
     parentId: el.ZielId,
+    urlLabel: el.ZielBerId,
     label: el.label,
     expanded: el.ZielBerId === activeNodes.zielber,
     url: [`Projekte`, projId, `Arten`, apArtId, `AP-Ziele`, zieljahr, el.ZielId, `Berichte`, el.ZielBerId],

@@ -27,6 +27,7 @@ export default (store, tree) => {
     nodeType: `folder`,
     menuType: `berFolder`,
     id: apArtId,
+    urlLabel: `Berichte`,
     label: `Berichte (${message})`,
     expanded: tree.activeNodes.berFolder,
     url: [`Projekte`, projId, `Arten`, apArtId, `Berichte`],

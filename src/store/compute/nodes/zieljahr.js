@@ -20,6 +20,7 @@ export default (store, tree) => {
       menuType: `zieljahr`,
       id: apArtId,
       parentId: apArtId,
+      urlLabel: z.jahr == null ? `kein-Jahr` : z.jahr,
       label: `${z.jahr == null ? `kein Jahr` : z.jahr} (${z.length})`,
       expanded: z.jahr && z.jahr === activeNodes.zieljahr,
       url: [`Projekte`, projId, `Arten`, apArtId, `AP-Ziele`, z.jahr],

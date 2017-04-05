@@ -24,6 +24,7 @@ export default (store, tree) => {
     nodeType: `folder`,
     menuType: `assozartFolder`,
     id: apArtId,
+    urlLabel: `assoziierte-Arten`,
     label: `assoziierte Arten (${message})`,
     expanded: tree.activeNodes.assozartFolder,
     url: [`Projekte`, projId, `Arten`, apArtId, `assoziierte-Arten`],

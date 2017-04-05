@@ -34,6 +34,7 @@ export default (store, tree) => {
     nodeType: `folder`,
     menuType: `tpopfreiwkontrFolder`,
     id: tpopId,
+    urlLabel: `Freiwilligen-Kontrollen`,
     label: `Freiwilligen-Kontrollen (${message})`,
     expanded: activeNodes.tpopfreiwkontrFolder,
     url: [`Projekte`, projId, `Arten`, apArtId, `Populationen`, popId, `Teil-Populationen`, tpopId, `Freiwilligen-Kontrollen`],

@@ -19,6 +19,7 @@ export default (store, tree) => {
     nodeType: `folder`,
     menuType: `apFolder`,
     id: projId,
+    urlLabel: `Arten`,
     label: `Arten (${message})`,
     expanded: tree.activeNodes.apFolder,
     url: [`Projekte`, projId, `Arten`],

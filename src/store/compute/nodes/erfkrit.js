@@ -15,6 +15,7 @@ export default (store, tree) => {
     menuType: `erfkrit`,
     id: el.ErfkritId,
     parentId: el.ApArtId,
+    urlLabel: el.ErfkritId,
     label: el.label,
     expanded: el.ErfkritId === tree.activeNodes.erfkrit,
     url: [`Projekte`, projId, `Arten`, el.ApArtId, `AP-Erfolgskriterien`, el.ErfkritId],

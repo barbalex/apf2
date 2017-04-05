@@ -27,6 +27,7 @@ export default (store, tree) => {
     nodeType: `folder`,
     menuType: `popFolder`,
     id: apArtId,
+    urlLabel: `Populationen`,
     label: `Populationen (${message})`,
     expanded: activeNodes.popFolder,
     url: [`Projekte`, projId, `Arten`, apArtId, `Populationen`],

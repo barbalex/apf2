@@ -35,6 +35,7 @@ export default (store, tree) => {
     nodeType: `folder`,
     menuType: `qkFolder`,
     id: apArtId,
+    urlLabel: `Qualitaetskontrollen`,
     label: `Qualitätskontrollen${nrOfQkMessages ? ` (${nrOfQkMessages})` : ``}`,
     expanded: false,
     url: [`Projekte`, projId, `Arten`, apArtId, `Qualitaetskontrollen`],

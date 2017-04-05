@@ -19,6 +19,7 @@ export default (store, tree) => {
   return {
     menuType: `apberuebersichtFolder`,
     id: projId,
+    urlLabel: `AP-Berichte`,
     label: `AP-Berichte (${message})`,
     expanded: activeNodes.apberuebersichtFolder,
     url: [`Projekte`, projId, `AP-Berichte`],

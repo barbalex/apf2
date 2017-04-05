@@ -28,6 +28,7 @@ export default (store, tree) => {
     nodeType: `folder`,
     menuType: `zielFolder`,
     id: apArtId,
+    urlLabel: `AP-Ziele`,
     label: `AP-Ziele (${message})`,
     expanded: activeNodes.zielFolder,
     url: [`Projekte`, projId, `Arten`, apArtId, `AP-Ziele`],

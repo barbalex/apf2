@@ -33,6 +33,7 @@ export default (store, tree) => {
     nodeType: `folder`,
     menuType: `apberFolder`,
     id: apArtId,
+    urlLabel: `AP-Berichte`,
     label: `AP-Berichte (${message})`,
     expanded: tree.activeNodes.apberFolder,
     url: [`Projekte`, projId, `Arten`, apArtId, `AP-Berichte`],

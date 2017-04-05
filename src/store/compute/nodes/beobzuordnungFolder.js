@@ -25,6 +25,7 @@ export default (store, tree) => {
     nodeType: `folder`,
     menuType: `beobzuordnungFolder`,
     id: apArtId,
+    urlLabel: `nicht-beurteilte-Beobachtungen`,
     label: `Beobachtungen nicht beurteilt (${message})`,
     expanded: tree.activeNodes.beobzuordnungFolder,
     url: [`Projekte`, projId, `Arten`, apArtId, `nicht-beurteilte-Beobachtungen`],

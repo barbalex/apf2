@@ -21,6 +21,7 @@ export default (store, tree) => {
     menuType: `tpopfeldkontr`,
     id: el.TPopKontrId,
     parentId: tpopId,
+    urlLabel: el.TPopKontrId,
     label: el.label,
     expanded: el.TPopKontrId === activeNodes.tpopfeldkontr,
     url: [`Projekte`, projId, `Arten`, apArtId, `Populationen`, popId, `Teil-Populationen`, tpopId, `Feld-Kontrollen`, el.TPopKontrId],

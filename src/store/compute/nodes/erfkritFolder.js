@@ -25,6 +25,7 @@ export default (store, tree) => {
     nodeType: `folder`,
     menuType: `erfkritFolder`,
     id: apArtId,
+    urlLabel: `AP-Erfolgskriterien`,
     label: `AP-Erfolgskriterien (${message})`,
     expanded: tree.activeNodes.erfkritFolder,
     url: [`Projekte`, projId, `Arten`, apArtId, `AP-Erfolgskriterien`],

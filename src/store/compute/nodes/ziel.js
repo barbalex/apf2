@@ -18,6 +18,7 @@ export default (store, tree) => {
     menuType: `ziel`,
     id: el.ZielId,
     parentId: el.ApArtId,
+    urlLabel: el.ZielId,
     label: el.label,
     expanded: el.ZielId === activeNodes.ziel,
     url: [`Projekte`, projId, `Arten`, el.ApArtId, `AP-Ziele`, el.ZielJahr, el.ZielId],

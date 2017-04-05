@@ -17,6 +17,7 @@ export default (store, tree) => {
     nodeType: `folder`,
     menuType: `idealbiotopFolder`,
     id: apArtId,
+    urlLabel: `Idealbiotop`,
     label: `Idealbiotop`,
     expanded: activeNodes.idealbiotopFolder,
     url: [`Projekte`, projId, `Arten`, apArtId, `Idealbiotop`],

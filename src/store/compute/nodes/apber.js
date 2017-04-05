@@ -15,6 +15,7 @@ export default (store, tree) => {
     menuType: `apber`,
     id: el.JBerId,
     parentId: el.ApArtId,
+    urlLabel: el.JBerId,
     label: el.label,
     expanded: el.JBerJahr === tree.activeNodes.apber,
     url: [`Projekte`, projId, `Arten`, el.ApArtId, `AP-Berichte`, el.JBerId],

@@ -31,6 +31,7 @@ export default (store, tree) => {
     nodeType: `folder`,
     menuType: `popmassnberFolder`,
     id: popId,
+    urlLabel: `Massnahmen-Berichte`,
     label: `Massnahmen-Berichte (${message})`,
     expanded: activeNodes.popmassnberFolder,
     url: [`Projekte`, projId, `Arten`, apArtId, `Populationen`, popId, `Massnahmen-Berichte`],
