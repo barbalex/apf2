@@ -85,6 +85,11 @@ const TpopBeobFilteredMapIcon = styled(TpopBeobMapIcon)`
   -webkit-text-stroke: 1px #f5ef00;
   -moz-text-stroke: 1px #f5ef00;
 `
+const MovingIcon = styled(FontIcon)`
+  padding-left: .2em;
+  font-size: 20px !important;
+  color: rgb(255, 90, 0) !important;
+`
 const showPopMapIcon = (store, tree, node) => (
   node.menuType === `ap` &&
   node.id === (tree.activeNodes.ap || store.map.pop.apArtId) &&
@@ -217,6 +222,11 @@ const Row = ({
   }
   const dataUrl = JSON.stringify(node.url)
   const level = node.url.length - 1
+  const moving = (
+    node.nodeType === `table` &&
+    node.menuType === store.moving.table &&
+    node.id === store.moving.id
+  )
 
   return (
     <div key={key} style={style} onClick={onClick}>
@@ -344,6 +354,16 @@ const Row = ({
           <TextSpan>
             {node.label}
           </TextSpan>
+          {
+            moving &&
+            <MovingIcon
+              id="moving"
+              className="material-icons"
+              title="verschieben"
+            >
+              swap_vertical_circle
+            </MovingIcon>
+          }
         </StyledNode>
       </ContextMenuTrigger>
     </div>
