@@ -6,6 +6,7 @@ import {
   observable,
   toJS,
 } from 'mobx'
+import isEqual from 'lodash/isEqual'
 
 import toggleNode from '../../action/toggleNodeTree2'
 import getActiveNodes from '../../action/getActiveNodes'
@@ -29,6 +30,12 @@ export default (store:Object) => {
       // in tree2: pass it's own activeNodeArray
       () => getActiveNodes(toJS(store.tree2.activeNodeArray)),
       { name: `activeNodes` }
+    ),
+    activeNode: computed(
+      () => store.tree2.node.nodes.find(n =>
+        isEqual(toJS(store.tree2.activeNodeArray), n.url)
+      ),
+      { name: `activeNode` }
     ),
     apFilter: false,
     toggleApFilter: action(`toggleApFilter`, () => {

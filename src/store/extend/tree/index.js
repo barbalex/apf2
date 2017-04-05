@@ -6,6 +6,7 @@ import {
   observable,
 } from 'mobx'
 import clone from 'lodash/clone'
+import isEqual from 'lodash/isEqual'
 
 import toggleNode from '../../action/toggleNode'
 import getActiveNodes from '../../action/getActiveNodes'
@@ -27,6 +28,12 @@ export default (store:Object) => {
       // in tree2: pass it's own activeNodeArray
       () => getActiveNodes(store.tree.activeNodeArray),
       { name: `activeNodes` }
+    ),
+    activeNode: computed(
+      () => store.tree.node.nodes.find(n =>
+        isEqual(store.tree.activeNodeArray, n.url)
+      ),
+      { name: `activeNode` }
     ),
     cloneActiveNodeArrayToTree2: action(
       `cloneActiveNodeArrayToTree2`,

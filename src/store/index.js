@@ -45,6 +45,7 @@ function Store() {
   this.tree = {
     activeNodeArray: [],
     activeNodes: {},
+    activeNode: null,
     apFilter: false,
     toggleApFilter: null,
     nodeLabelFilter: {},
@@ -106,6 +107,7 @@ function Store() {
   this.tree2 = {
     activeNodeArray: [],
     activeNodes: {},
+    activeNode: null,
     apFilter: false,
     toggleApFilter: null,
     nodeLabelFilter: {},

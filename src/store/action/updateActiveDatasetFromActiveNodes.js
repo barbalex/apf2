@@ -1,85 +1,86 @@
 // @flow
 import validateActiveDataset from '../../modules/validateActiveDataset'
 
-export default (store:Object) => {
-  const aEl = store.tree.activeNodes
+export default (store:Object, tree:Object) => {
+  const { table } = store
+  const aEl = tree.activeNodes
   let activeDataset = {
     table: null,
     row: null,
   }
   if (aEl.projektFolder) {
     if (aEl.apberuebersicht) {
-      activeDataset = { table: `apberuebersicht`, row: store.table.apberuebersicht.get(aEl.apberuebersicht), folder: null }
+      activeDataset = { table: `apberuebersicht`, row: table.apberuebersicht.get(aEl.apberuebersicht), folder: null }
     } else if (aEl.ap || aEl.ap === 0) {
       if (aEl.ziel) {
         if (aEl.zielber) {
-          activeDataset = { table: `zielber`, row: store.table.zielber.get(aEl.zielber), folder: null }
+          activeDataset = { table: `zielber`, row: table.zielber.get(aEl.zielber), folder: null }
         } else {
           let folder = null
           if (aEl.zielberFolder) folder = `zielber`
-          activeDataset = { table: `ziel`, row: store.table.ziel.get(aEl.ziel), folder }
+          activeDataset = { table: `ziel`, row: table.ziel.get(aEl.ziel), folder }
         }
       } else if (aEl.erfkrit) {
-        activeDataset = { table: `erfkrit`, row: store.table.erfkrit.get(aEl.erfkrit), folder: null }
+        activeDataset = { table: `erfkrit`, row: table.erfkrit.get(aEl.erfkrit), folder: null }
       } else if (aEl.apber) {
-        activeDataset = { table: `apber`, row: store.table.apber.get(aEl.apber), folder: null }
+        activeDataset = { table: `apber`, row: table.apber.get(aEl.apber), folder: null }
       } else if (aEl.ber) {
-        activeDataset = { table: `ber`, row: store.table.ber.get(aEl.ber), folder: null }
+        activeDataset = { table: `ber`, row: table.ber.get(aEl.ber), folder: null }
       } else if (aEl.beobzuordnung) {
         activeDataset = {
           table: `beob_bereitgestellt`,
-          row: store.table.beob_bereitgestellt.get(aEl.beobzuordnung),
+          row: table.beob_bereitgestellt.get(aEl.beobzuordnung),
           folder: null,
         }
       } else if (aEl.beobNichtZuzuordnen) {
         activeDataset = {
           table: `beobzuordnung`,
-          row: store.table.beobzuordnung.get(aEl.beobNichtZuzuordnen),
+          row: table.beobzuordnung.get(aEl.beobNichtZuzuordnen),
           folder: null,
         }
       } else if (aEl.assozart) {
         activeDataset = {
           table: `assozart`,
-          row: store.table.assozart.get(aEl.assozart),
+          row: table.assozart.get(aEl.assozart),
           folder: null,
         }
       } else if (aEl.idealbiotopFolder) {
         activeDataset = {
           table: `idealbiotop`,
-          row: store.table.idealbiotop.get(aEl.ap),
+          row: table.idealbiotop.get(aEl.ap),
           folder: null,
         }
       } else if (aEl.pop) {
         if (aEl.popmassnber) {
           activeDataset = {
             table: `popmassnber`,
-            row: store.table.popmassnber.get(aEl.popmassnber),
+            row: table.popmassnber.get(aEl.popmassnber),
             folder: null,
           }
         } else if (aEl.popber) {
           activeDataset = {
             table: `popber`,
-            row: store.table.popber.get(aEl.popber),
+            row: table.popber.get(aEl.popber),
             folder: null,
           }
         } else if (aEl.tpop) {
           if (aEl.tpopbeob) {
             activeDataset = {
               table: `beobzuordnung`,
-              row: store.table.beobzuordnung.get(aEl.tpopbeob),
+              row: table.beobzuordnung.get(aEl.tpopbeob),
               folder: null,
             }
           } else if (aEl.tpopber) {
             activeDataset = {
               table: `tpopber`,
-              row: store.table.tpopber.get(aEl.tpopber),
+              row: table.tpopber.get(aEl.tpopber),
               folder: null,
             }
           } else if (aEl.tpopfreiwkontr) {
             if (aEl.tpopfreiwkontrzaehl) {
               activeDataset = {
                 table: `tpopkontrzaehl`,
-                row: store.table.tpopkontrzaehl.get(aEl.tpopfreiwkontrzaehl),
+                row: table.tpopkontrzaehl.get(aEl.tpopfreiwkontrzaehl),
                 folder: null,
               }
             } else {
@@ -87,7 +88,7 @@ export default (store:Object) => {
               if (aEl.tpopfreiwkontrzaehlFolder) folder = `tpopkontrzaehl`
               activeDataset = {
                 table: `tpopfreiwkontr`,
-                row: store.table.tpopkontr.get(aEl.tpopfreiwkontr),
+                row: table.tpopkontr.get(aEl.tpopfreiwkontr),
                 folder,
               }
             }
@@ -95,7 +96,7 @@ export default (store:Object) => {
             if (aEl.tpopfeldkontrzaehl) {
               activeDataset = {
                 table: `tpopkontrzaehl`,
-                row: store.table.tpopkontrzaehl.get(aEl.tpopfeldkontrzaehl),
+                row: table.tpopkontrzaehl.get(aEl.tpopfeldkontrzaehl),
                 folder: null,
               }
             } else {
@@ -103,20 +104,20 @@ export default (store:Object) => {
               if (aEl.tpopfeldkontrzaehlFolder) folder = `tpopkontrzaehl`
               activeDataset = {
                 table: `tpopfeldkontr`,
-                row: store.table.tpopkontr.get(aEl.tpopfeldkontr),
+                row: table.tpopkontr.get(aEl.tpopfeldkontr),
                 folder,
               }
             }
           } else if (aEl.tpopmassnber) {
             activeDataset = {
               table: `tpopmassnber`,
-              row: store.table.tpopmassnber.get(aEl.tpopmassnber),
+              row: table.tpopmassnber.get(aEl.tpopmassnber),
               folder: null,
             }
           } else if (aEl.tpopmassn) {
             activeDataset = {
               table: `tpopmassn`,
-              row: store.table.tpopmassn.get(aEl.tpopmassn),
+              row: table.tpopmassn.get(aEl.tpopmassn),
               folder: null,
             }
           } else {
@@ -129,7 +130,7 @@ export default (store:Object) => {
             if (aEl.tpopbeobFolder) folder = `tpopbeob`
             activeDataset = {
               table: `tpop`,
-              row: store.table.tpop.get(aEl.tpop),
+              row: table.tpop.get(aEl.tpop),
               folder,
             }
           }
@@ -141,7 +142,7 @@ export default (store:Object) => {
           if (aEl.tpopFolder) folder = `tpop`
           activeDataset = {
             table: `pop`,
-            row: store.table.pop.get(aEl.pop),
+            row: table.pop.get(aEl.pop),
             folder,
           }
         }
@@ -160,7 +161,7 @@ export default (store:Object) => {
         if (aEl.zieljahr) folder = `ziel`
         activeDataset = {
           table: `ap`,
-          row: store.table.ap.get(aEl.ap),
+          row: table.ap.get(aEl.ap),
           folder,
         }
       }
@@ -170,7 +171,7 @@ export default (store:Object) => {
       if (aEl.apberuebersichtFolder) folder = `apberuebersicht`
       activeDataset = {
         table: `projekt`,
-        row: store.table.projekt.get(aEl.projekt),
+        row: table.projekt.get(aEl.projekt),
         folder,
       }
     } else {
