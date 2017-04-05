@@ -24,7 +24,19 @@ const enhance = compose(
 
 const LabelFilter = ({ store, tree }) => {
   const { activeDataset } = store
+  const { activeNode } = tree
   let filteredTable = ``
+  /**
+   * TODO:
+   * activeDataset only works for first tree
+   */
+  /*
+  if (activeNode && activeNode.nodeType === `folder`) {
+    filteredTable = activeNode.menuType.replace(`Folder`, ``)
+  } else if (activeNode && activeNode.menuType) {
+    filteredTable = activeNode.menuType
+  }*/
+
   if (activeDataset && activeDataset.folder) {
     filteredTable = activeDataset.folder
   } else if (activeDataset && activeDataset.table) {
