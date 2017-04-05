@@ -22,23 +22,39 @@ const enhance = compose(
 const TpopFolder = (
   { onClick, store, treeName, changeId, id, onShow }:
   {onClick:() => void,store:Object,treeName:string,changeId:()=>{},id:number,onShow:()=>{}}
-) =>
-  <ContextMenu
-    id={`${treeName}tpopFolder`}
-    collect={props => props}
-    onShow={onShow}
-  >
-    <div className="react-contextmenu-title">Teil-Populationen</div>
-    <MenuItem
-      onClick={onClick}
-      data={{
-        action: `insert`,
-        table: `tpop`,
-      }}
+) => {
+  const moving = store.moving.table && store.moving.table === `tpop`
+
+  return (
+    <ContextMenu
+      id={`${treeName}tpopFolder`}
+      collect={props => props}
+      onShow={onShow}
     >
-      erstelle neue
-    </MenuItem>
-  </ContextMenu>
+      <div className="react-contextmenu-title">Teil-Populationen</div>
+      <MenuItem
+        onClick={onClick}
+        data={{
+          action: `insert`,
+          table: `tpop`,
+        }}
+      >
+        erstelle neue
+      </MenuItem>
+      {
+        moving &&
+        <MenuItem
+          onClick={onClick}
+          data={{
+            action: `move`,
+          }}
+        >
+          {`verschiebe '${store.moving.label}' hierhin`}
+        </MenuItem>
+      }
+    </ContextMenu>
+  )
+}
 
 TpopFolder.propTypes = {
   onClick: PropTypes.func.isRequired,
