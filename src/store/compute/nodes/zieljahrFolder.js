@@ -6,10 +6,10 @@ export default (store, tree) => {
   // fetch sorting indexes of parents
   const projId = activeNodes.projekt
   if (!projId) return []
-  const projIndex = findIndex(store.tree.filteredAndSorted.projekt, { ProjId: projId })
+  const projIndex = findIndex(tree.filteredAndSorted.projekt, { ProjId: projId })
   const apArtId = activeNodes.ap
   if (!apArtId) return []
-  const apIndex = findIndex(store.tree.filteredAndSorted.ap, { ApArtId: apArtId })
+  const apIndex = findIndex(tree.filteredAndSorted.ap, { ApArtId: apArtId })
   // prevent folder from showing when nodeFilter is set
   if (apIndex === -1) return []
 
@@ -19,7 +19,7 @@ export default (store, tree) => {
   if (store.table.zielLoading) {
     message = `...`
   }
-  if (store.tree.nodeLabelFilter.get(`ziel`)) {
+  if (tree.nodeLabelFilter.get(`ziel`)) {
     const jahreTxt = zieljahreNodesLength === 1 ? `Jahr` : `Jahre`
     message = `${zieljahreNodesLength} ${jahreTxt} gefiltert`
   }
