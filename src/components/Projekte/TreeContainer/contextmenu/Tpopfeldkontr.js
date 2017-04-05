@@ -44,6 +44,15 @@ const Tpopfeldkontr = (
     >
       lösche
     </MenuItem>
+    <MenuItem
+      onClick={onClick}
+      data={{
+        action: `markForMoving`,
+        table: `tpopfeldkontr`,
+      }}
+    >
+      verschiebe
+    </MenuItem>
   </ContextMenu>
 
 Tpopfeldkontr.propTypes = {

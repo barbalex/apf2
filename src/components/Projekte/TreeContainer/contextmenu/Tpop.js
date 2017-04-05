@@ -13,7 +13,8 @@ const Tpop = (
   { onClick, store, treeName }:
   {onClick:()=>void,store:Object,treeName:string}
 ) => {
-  const moving = store.moving.table && store.moving.table === `tpopmassn`
+  const movingTpopmassn = store.moving.table && store.moving.table === `tpopmassn`
+  const movingTpopfeldkontr = store.moving.table && store.moving.table === `tpopfeldkontr`
 
   return (
     <ContextMenu id={`${treeName}tpop`}>
@@ -57,7 +58,18 @@ const Tpop = (
         verorte auf Karte
       </MenuItem>
       {
-        moving &&
+        movingTpopmassn &&
+        <MenuItem
+          onClick={onClick}
+          data={{
+            action: `move`,
+          }}
+        >
+          {`verschiebe '${store.moving.label}' hierhin`}
+        </MenuItem>
+      }
+      {
+        movingTpopfeldkontr &&
         <MenuItem
           onClick={onClick}
           data={{
