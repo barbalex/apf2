@@ -17,7 +17,6 @@ import fetchBeobInfospezies from '../action/fetchBeobInfospezies'
 import updateActiveDatasetFromActiveNodes from '../action/updateActiveDatasetFromActiveNodes'
 import updateProperty from '../action/updateProperty'
 import updatePropertyInDb from '../action/updatePropertyInDb'
-import getUrlQuery from '../action/getUrlQuery'
 import fetchFields from '../action/fetchFields'
 import fetchFieldsFromIdb from '../action/fetchFieldsFromIdb'
 import insertDataset from '../action/insertDataset'
@@ -25,7 +24,6 @@ import insertBeobzuordnung from '../action/insertBeobzuordnung'
 import deleteDatasetDemand from '../action/deleteDatasetDemand'
 import deleteDatasetExecute from '../action/deleteDatasetExecute'
 import listError from '../action/listError'
-import setUrlQuery from '../action/setUrlQuery'
 import setQk from '../action/setQk'
 import setQkFilter from '../action/setQkFilter'
 import fetchQk from '../action/fetchQk'
@@ -70,10 +68,22 @@ export default (store:Object) => {
      * urlQueries are used to control tabs
      * for instance: Entwicklung or Biotop in tpopfeldkontr
      */
-    urlQuery: computed(
-      () => getUrlQuery(store.history.location.search),
-      { name: `urlQuery` }
+    urlQuery: {
+      projekteTabs: [],
+      feldkontrTab: `entwicklung`,
+    },
+    setUrlQuery: action(`setUrlQuery`, (query) =>
+      Object.keys(query).forEach(k =>
+        store.urlQuery[k] = query[k]
+      )
     ),
+    setUrlQueryValue: action(`setUrlQueryValue`, (key, value) => {
+      if (!value && value !== 0) {
+        delete store.urlQuery[key]
+      } else {
+        store.urlQuery[key] = value
+      }
+    }),
     activeDataset: computed(
       () => updateActiveDatasetFromActiveNodes(store, store.tree),
       { name: `activeDataset` }
@@ -178,14 +188,6 @@ export default (store:Object) => {
     writeToStore: action(
       `writeToStore`,
       ({ data, table, field }) => writeToStore({ store: store, data, table, field })
-    ),
-    /**
-     * urlQueries are used to control tabs
-     * for instance: Entwicklung or Biotop in tpopfeldkontr
-     * or: tree, daten and map in projekte
-     */
-    setUrlQuery: action(`setUrlQuery`, (key, value) =>
-      setUrlQuery(store, key, value)
     ),
   })
 }

@@ -9,16 +9,29 @@ import {
 } from 'mobx'
 
 import fetchDataForActiveNodes from '../action/fetchDataForActiveNodes'
+import manipulateActiveNodeArray from '../action/manipulateActiveNodeArray'
+import manipulateUrlQuery from '../action/manipulateUrlQuery'
 import manipulateUrl from '../action/manipulateUrl'
 
 export default (store:Object) => {
   extendObservable(store, {
-    manipulateUrl: autorun(
+    manipulateActiveNodeArray: autorun(
+      `manipulateActiveNodeArray`,
+      () => manipulateActiveNodeArray(store)
+    ),
+    manipulateUrlQuery: autorun(
+      `manipulateUrlQuery`,
+      () => manipulateUrlQuery(store)
+    ),
+    // manipulateUrl needs to be async so on first load
+    // index.js can change activeNodeArray based on url
+    // BEFORE autorun changes url
+    manipulateUrl: autorunAsync(
       `manipulateUrl`,
       () => manipulateUrl(store)
     ),
-    fetchDataWhenUrlChanges: autorunAsync(
-      `fetchDataWhenUrlChanges`,
+    fetchDataWhenTreeActiveNodeArrayChanges: autorunAsync(
+      `fetchDataWhenTreeActiveNodeArrayChanges`,
       () => {
         // need to pass visibility of layers to make data fetched on changing layers
         const showTpop = store.map.activeApfloraLayers.includes(`Tpop`)
@@ -31,8 +44,8 @@ export default (store:Object) => {
     ),
   })
   extendObservable(store.tree2, {
-    fetchDataWhenActiveNodeArrayChanges: autorunAsync(
-      `fetchDataWhenActiveNodeArrayChanges`,
+    fetchDataWhenTree2ActiveNodeArrayChanges: autorunAsync(
+      `fetchDataWhenTree2ActiveNodeArrayChanges`,
       () => {
         // need to pass visibility of layers to make data fetched on changing layers
         const showTpop = store.map.activeApfloraLayers.includes(`Tpop`)

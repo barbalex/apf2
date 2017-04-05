@@ -1,6 +1,5 @@
 // @flow
 import axios from 'axios'
-import queryString from 'query-string'
 
 import apiBaseUrl from '../../modules/apiBaseUrl'
 import tables from '../../modules/tables'
@@ -41,9 +40,7 @@ export default (store:Object, tablePassed:string, parentId:number, baseUrl:Array
       insertDatasetInIdb(store, table, row)
       // set new url
       baseUrl.push(row[idField])
-      const query = `${Object.keys(store.urlQuery).length > 0 ? `?${queryString.stringify(store.urlQuery)}` : ``}`
-      const newUrl = `/${baseUrl.join(`/`)}${query}`
-      store.history.push(newUrl)
+      store.tree.setActiveNodeArray(baseUrl)
       // if zieljahr, need to update ZielJahr
       if (store.tree.activeNodes.zieljahr) {
         store.updateProperty(`ZielJahr`, store.tree.activeNodes.zieljahr)

@@ -1,5 +1,6 @@
 // @flow
-import queryString from 'query-string'
+import clone from 'lodash/clone'
+import { toJS } from 'mobx'
 
 export default (store:Object, key:string, valuePassed:string|number) => {
   const { table, row } = store.activeDataset
@@ -20,10 +21,10 @@ export default (store:Object, key:string, valuePassed:string|number) => {
   // edge cases:
   // if jahr of ziel is updated, url needs to change
   if (table === `ziel` && key === `ZielJahr`) {
-    store.tree.activeNodeArray[5] = value
-    const query = `${Object.keys(store.urlQuery).length > 0 ? `?${queryString.stringify(store.urlQuery)}` : ``}`
-    const newUrl = `/${store.tree.activeNodeArray.join(`/`)}${query}`
-    store.history.push(newUrl)
+    const newActiveNodeArray = clone(toJS(store.tree.activeNodeArray))
+    console.log(`newActiveNodeArray:`, newActiveNodeArray)
+    newActiveNodeArray[5] = value
+    store.tree.setActiveNodeArray(newActiveNodeArray)
   }
   row[key] = value
 }

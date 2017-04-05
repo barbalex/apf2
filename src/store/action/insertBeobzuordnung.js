@@ -1,6 +1,5 @@
 // @flow
 import axios from 'axios'
-import queryString from 'query-string'
 
 import apiBaseUrl from '../../modules/apiBaseUrl'
 import insertDatasetInIdb from './insertDatasetInIdb'
@@ -16,18 +15,17 @@ const updateBeobzuordnungData = (store, beobBereitgestellt, newKey, newValue) =>
 
 const continueWithBeobBereitgestellt = (store, beobBereitgestellt, newKey, newValue) => {
   const { projekt, ap } = store.tree.activeNodes
-  // set new url
-  const query = `${Object.keys(store.urlQuery).length > 0 ? `?${queryString.stringify(store.urlQuery)}` : ``}`
+  // set new activeNodeArray
   if (newKey === `BeobNichtZuordnen`) {
-    const newUrl = `/Projekte/${projekt}/Arten/${ap}/nicht-zuzuordnende-Beobachtungen/${beobBereitgestellt.BeobId}${query}`
-    store.history.push(newUrl)
+    const newActiveNodeArray = [`Projekte`, projekt, `Arten`, ap, `nicht-zuzuordnende-Beobachtungen`, beobBereitgestellt.BeobId]
+    store.tree.setActiveNodeArray(newActiveNodeArray)
     updateBeobzuordnungData(store, beobBereitgestellt, newKey, newValue)
   } else if (newKey === `TPopId`) {
-    // ouch. Need to get url for this tpop
+    // ouch. Need to get activeNodeArray for this tpop
     // Nice: tpop was already loaded for building tpop list
     const tpop = store.table.tpop.get(newValue)
-    const newUrl = `/Projekte/${projekt}/Arten/${ap}/Populationen/${tpop.PopId}/Teil-Populationen/${newValue}/Beobachtungen/${beobBereitgestellt.BeobId}${query}`
-    store.history.push(newUrl)
+    const newActiveNodeArray = [`Projekte`, projekt, `Arten`, ap, `Populationen`, tpop.PopId, `Teil-Populationen`, newValue, `Beobachtungen`, beobBereitgestellt.BeobId]
+    store.tree.setActiveNodeArray(newActiveNodeArray)
     updateBeobzuordnungData(store, beobBereitgestellt, newKey, newValue)
   }
 }

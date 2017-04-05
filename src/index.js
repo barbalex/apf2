@@ -32,6 +32,8 @@ import AppBar from './components/AppBar'
 import Projekte from './components/Projekte'
 import User from './components/User'
 import Errors from './components/Errors'
+import getActiveNodeArrayFromPathname from './store/action/getActiveNodeArrayFromPathname'
+import getUrlQuery from './store/action/getUrlQuery'
 
 // turned off because of errors in production
 // import apiBaseUrl from './modules/apiBaseUrl'
@@ -97,6 +99,12 @@ const AppContainer = styled.div`
   display: flex;
   flex-direction: column;
 `
+
+// initiate activeNodeArray
+const activeNodeArrayFromUrl = getActiveNodeArrayFromPathname(window.location.pathname)
+store.tree.setActiveNodeArray(activeNodeArrayFromUrl)
+const urlQuery = getUrlQuery(window.location.search)
+store.setUrlQuery(urlQuery)
 
 ReactDOM.render(
   <Provider store={store}>

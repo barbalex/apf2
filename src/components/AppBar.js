@@ -1,5 +1,6 @@
 // @flow
 import React, { PropTypes } from 'react'
+import { toJS } from 'mobx'
 import { observer, inject } from 'mobx-react'
 import AppBar from 'material-ui/AppBar'
 import IconMenu from 'material-ui/IconMenu'
@@ -38,7 +39,7 @@ const iconMenuStyle = { paddingLeft: 10 }
  * https://marmelab.com/blog/2017/02/06/react-is-slow-react-is-fast.html
  */
 const checkPropsChange = (props, nextProps) =>
-  nextProps.store.urlQuery.projekteTabs.join() !== props.store.urlQuery.projekteTabs.join() ||
+  toJS(nextProps.store.urlQuery.projekteTabs).join() !== toJS(props.store.urlQuery.projekteTabs).join() ||
   nextProps.store.user.name !== props.store.user.name
 
 const enhance = compose(
@@ -47,7 +48,7 @@ const enhance = compose(
   withHandlers({
     onClickButton: props => (name) => {
       const { store } = props
-      const projekteTabs = clone(store.urlQuery.projekteTabs) || []
+      const projekteTabs = clone(toJS(store.urlQuery.projekteTabs))
       const isVisible = projekteTabs.includes(name)
       if (isVisible) {
         remove(projekteTabs, el => el === name)
@@ -57,7 +58,7 @@ const enhance = compose(
           store.tree.cloneActiveNodeArrayToTree2()
         }
       }
-      store.setUrlQuery(`projekteTabs`, projekteTabs)
+      store.setUrlQueryValue(`projekteTabs`, projekteTabs)
     },
     ueberApfloraChOnTouchTap: props => () =>
       window.open(`https://github.com/FNSKtZH/apflora/wiki`)
@@ -82,7 +83,7 @@ const MyAppBar = ({
   onClickButtonExporte,
   ueberApfloraChOnTouchTap,
 }) => {
-  const projekteTabs = clone(store.urlQuery.projekteTabs) || []
+  const projekteTabs = toJS(store.urlQuery.projekteTabs)
   const treeIsVisible = projekteTabs.includes(`tree`)
   const tree2IsVisible = projekteTabs.includes(`tree2`)
   const datenIsVisible = projekteTabs.includes(`daten`) && !projekteTabs.includes(`exporte`)

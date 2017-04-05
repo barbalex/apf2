@@ -1,7 +1,6 @@
 import React from 'react'
 import ReactDOMServer from 'react-dom/server'
 import 'leaflet'
-import queryString from 'query-string'
 
 import beobIcon from '../../etc/beobZugeordnet.png'
 import beobIconHighlighted from '../../etc/beobZugeordnetHighlighted.png'
@@ -39,13 +38,12 @@ export default (store) => {
            * point url to moved beob
            * open form of beob?
            */
-          const { tree, history, table, updatePropertyInDb } = store
+          const { tree, table, updatePropertyInDb } = store
           const { activeNodes } = tree
           const nearestTpopId = getNearestTpopId(store, event.target._latlng)
           const popId = table.tpop.get(nearestTpopId).PopId
-          const query = `${Object.keys(store.urlQuery).length > 0 ? `?${queryString.stringify(store.urlQuery)}` : ``}`
-          const newUrl = `/Projekte/${activeNodes.projekt}/Arten/${activeNodes.ap}/Populationen/${popId}/Teil-Populationen/${nearestTpopId}/Beobachtungen/${p.BeobId}${query}`
-          history.push(newUrl)
+          const newActiveNodeArray = [`Projekte`, activeNodes.projekt, `Arten`, activeNodes.ap, `Populationen`, popId, `Teil-Populationen`, nearestTpopId, `Beobachtungen`, p.BeobId]
+          store.tree.setActiveNodeArray(newActiveNodeArray)
           updatePropertyInDb(`TPopId`, nearestTpopId)
         })
     })

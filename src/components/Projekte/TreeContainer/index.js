@@ -102,11 +102,11 @@ class TreeContainer extends Component { // eslint-disable-line react/prefer-stat
 
   showMapIfNotYetVisible = () => {
     const { store } = this.props
-    const projekteTabs = store.urlQuery.projekteTabs ? clone(store.urlQuery.projekteTabs) : []
+    const projekteTabs = clone(toJS(store.urlQuery.projekteTabs))
     const isVisible = projekteTabs.includes(`karte`)
     if (!isVisible) {
       projekteTabs.push(`karte`)
-      store.setUrlQuery(`projekteTabs`, projekteTabs)
+      store.setUrlQueryValue(`projekteTabs`, projekteTabs)
     }
   }
 

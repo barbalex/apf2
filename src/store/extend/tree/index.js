@@ -4,13 +4,13 @@ import {
   action,
   computed,
   observable,
+  toJS,
 } from 'mobx'
 import clone from 'lodash/clone'
 import isEqual from 'lodash/isEqual'
 
 import toggleNode from '../../action/toggleNode'
 import getActiveNodes from '../../action/getActiveNodes'
-import getActiveNodeArrayFromPathname from '../../action/getActiveNodeArrayFromPathname'
 import extendNode from './node'
 import extendFilteredAndSorted from './filteredAndSorted'
 
@@ -20,24 +20,25 @@ export default (store:Object) => {
      * url is used to control tree and forms
      * activeNodeArray is computed from it
      */
-    activeNodeArray: computed(
-      () => getActiveNodeArrayFromPathname(store.history.location.pathname),
-      { name: `activeNodeArray` }
+    activeNodeArray: [],
+    setActiveNodeArray: action(
+      `setActiveNodeArray`,
+      (nodeArray) => store.tree.activeNodeArray = nodeArray
     ),
     activeNodes: computed(
       // in tree2: pass it's own activeNodeArray
-      () => getActiveNodes(store.tree.activeNodeArray),
+      () => getActiveNodes(toJS(store.tree.activeNodeArray)),
       { name: `activeNodes` }
     ),
     activeNode: computed(
       () => store.tree.node.nodes.find(n =>
-        isEqual(store.tree.activeNodeArray, n.url)
+        isEqual(toJS(store.tree.activeNodeArray), n.url)
       ),
       { name: `activeNode` }
     ),
     cloneActiveNodeArrayToTree2: action(
       `cloneActiveNodeArrayToTree2`,
-      () => store.tree2.activeNodeArray = clone(store.tree.activeNodeArray)
+      () => store.tree2.activeNodeArray = clone(toJS(store.tree.activeNodeArray))
     ),
     apFilter: false,
     toggleApFilter: action(`toggleApFilter`, () => {

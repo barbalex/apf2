@@ -1,8 +1,8 @@
 // @flow
 import axios from 'axios'
-import queryString from 'query-string'
 import objectValues from 'lodash/values'
 import clone from 'lodash/clone'
+import { toJS } from 'mobx'
 
 import apiBaseUrl from '../../modules/apiBaseUrl'
 import tables from '../../modules/tables'
@@ -85,18 +85,17 @@ export default (store:Object, key:string, valuePassed:string|number) => {
       store.table.ap.set(value, rowCloned)
       // correct url
       // activeDataset will then be updated
-      const newUrl = store.tree.activeNodeArray
-      newUrl.pop()
-      newUrl.push(value)
-      const query = `${Object.keys(store.urlQuery).length > 0 ? `?${queryString.stringify(store.urlQuery)}` : ``}`
-      const newUrlString = `/${newUrl.join(`/`)}${query}`
-      store.history.push(newUrlString)
+      const newActiveNodeArray = clone(toJS(store.tree.activeNodeArray))
+      newActiveNodeArray.pop()
+      newActiveNodeArray.push(value)
+      store.tree.setActiveNodeArray(newActiveNodeArray)
       deleteDatasetInIdb(store, `ap`, oldValue)
       insertDatasetInIdb(store, `ap`, rowCloned)
     } else {
       // need to set row[key] for select fields, checkboxes, radios...
       row[key] = value
     }
+    const newActiveNodeArray = clone(toJS(store.tree.activeNodeArray))
     // $FlowIssue
     const url = `${apiBaseUrl}/update/apflora/tabelle=${table}/tabelleIdFeld=${idField}/tabelleId=${tabelleId}/feld=${key}/wert=${value}/user=${user}`
     axios.put(url)
@@ -105,33 +104,28 @@ export default (store:Object, key:string, valuePassed:string|number) => {
         if (!artWasChanged) {
           updatePropertyInIdb(store, table, tabelleId, key, value)
         }
-        const query = `${Object.keys(store.urlQuery).length > 0 ? `?${queryString.stringify(store.urlQuery)}` : ``}`
         // if ApArtId of ap is updated, url needs to change
         if (artWasChanged) {
-          store.tree.activeNodeArray[3] = value
-          const newUrl = `/${store.tree.activeNodeArray.join(`/`)}${query}`
-          store.history.push(newUrl)
+          newActiveNodeArray[3] = value
+          store.tree.setActiveNodeArray(newActiveNodeArray)
         }
         // if beobNichtBeurteilt is set to beobNichtZuordnen, url needs to change
         if (table === `beobzuordnung` && key === `BeobNichtZuordnen`) {
-          store.tree.activeNodeArray[4] = (
+          newActiveNodeArray[4] = (
             value === 1 ?
             `nicht-zuzuordnende-Beobachtungen` :
             `nicht-beurteilte-Beobachtungen`
           )
-          store.tree.activeNodeArray[5] = store.activeDataset.row.NO_NOTE
-          const newUrlArray = store.tree.activeNodeArray.slice(0, 6)
-          const newUrl = `/${newUrlArray.join(`/`)}${query}`
-          store.history.push(newUrl)
+          newActiveNodeArray[5] = store.activeDataset.row.NO_NOTE
+          store.tree.setActiveNodeArray(newActiveNodeArray.slice(0, 6))
         }
         // if for a beobZugeordnet TPopId is set, url needs to change
         // namely: PopId and TPopId
         if (table === `beobzuordnung` && key === `TPopId` && value) {
           const tpop = store.table.tpop.get(value)
-          store.tree.activeNodeArray[5] = tpop.PopId
-          store.tree.activeNodeArray[7] = value
-          const newUrl = `/${store.tree.activeNodeArray.join(`/`)}${query}`
-          store.history.push(newUrl)
+          newActiveNodeArray[5] = tpop.PopId
+          newActiveNodeArray[7] = value
+          store.tree.setActiveNodeArray(newActiveNodeArray)
         }
       })
       .catch((error) => {

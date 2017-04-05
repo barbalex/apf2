@@ -1,11 +1,11 @@
 // @flow
 import React, { PropTypes } from 'react'
+import { toJS } from 'mobx'
 import { observer, inject } from 'mobx-react'
 import { Tabs, Tab } from 'material-ui/Tabs'
 import AutoComplete from 'material-ui/AutoComplete'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
-import withProps from 'recompose/withProps'
 import withHandlers from 'recompose/withHandlers'
 import { Scrollbars } from 'react-custom-scrollbars'
 
@@ -74,14 +74,9 @@ const styles = {
 
 const enhance = compose(
   inject(`store`),
-  withProps((props) => {
-    const { store } = props
-    const tab = store.urlQuery.feldkontrTab || `entwicklung`
-    return { tab }
-  }),
   withHandlers({
     onChangeTab: props => value =>
-      props.store.setUrlQuery(`feldkontrTab`, value),
+      props.store.setUrlQueryValue(`feldkontrTab`, value),
   }),
   observer
 )
@@ -89,7 +84,6 @@ const enhance = compose(
 const Tpopfeldkontr = ({
   store,
   onChangeTab,
-  tab,
 }) => {
   const { activeDataset } = store
   return (
@@ -100,7 +94,7 @@ const Tpopfeldkontr = ({
           style={styles.root}
           contentContainerStyle={styles.container}
           tabTemplate={TabTemplate}
-          value={tab}
+          value={toJS(store.urlQuery.feldkontrTab) || `entwicklung`}
           onChange={onChangeTab}
         >
           <Tab
@@ -436,7 +430,6 @@ const Tpopfeldkontr = ({
 Tpopfeldkontr.propTypes = {
   store: PropTypes.object.isRequired,
   onChangeTab: PropTypes.func.isRequired,
-  tab: PropTypes.string.isRequired,
 }
 
 export default enhance(Tpopfeldkontr)

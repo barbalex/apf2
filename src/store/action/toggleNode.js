@@ -1,15 +1,12 @@
 // @flow
-import queryString from 'query-string'
 
 export default (store:Object, node:Object) => {
   if (node) {
-    const newUrl = node.url
+    const newActiveNodeArray = node.url
     if (node.expanded) {
-      newUrl.pop()
+      newActiveNodeArray.pop()
     }
-    const query = `${Object.keys(store.urlQuery).length > 0 ? `?${queryString.stringify(store.urlQuery)}` : ``}`
-    const url = `/${newUrl.join(`/`)}${query}`
-    store.history.push(url)
+    store.tree.setActiveNodeArray(newActiveNodeArray)
     node.expanded = !node.expanded
   }
 }

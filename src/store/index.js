@@ -10,7 +10,10 @@ import extendStore from './extend'
 function Store() {
   this.history = ObservableHistory
   this.loading = []
-  this.urlQuery = {}
+  this.urlQuery = {
+    projekteTabs: [],
+    feldkontrTab: `entwicklung`,
+  }
   this.activeDataset = {}
   this.datasetToDelete = {}
   this.tellUserReadOnly = null

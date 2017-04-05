@@ -1,7 +1,6 @@
 import React from 'react'
 import ReactDOMServer from 'react-dom/server'
 import 'leaflet'
-import queryString from 'query-string'
 
 import beobIcon from '../../etc/beob.png'
 import beobIconHighlighted from '../../etc/beobHighlighted.png'
@@ -38,12 +37,11 @@ export default (store) => {
            * point url to moved beob
            * open form of beob?
            */
-          const { tree, insertBeobzuordnung, history } = store
+          const { tree, insertBeobzuordnung } = store
           const { activeNodes } = tree
           const nearestTpopId = getNearestTpopId(store, event.target._latlng)
-          const query = `${Object.keys(store.urlQuery).length > 0 ? `?${queryString.stringify(store.urlQuery)}` : ``}`
-          const newUrl = `/Projekte/${activeNodes.projekt}/Arten/${activeNodes.ap}/nicht-beurteilte-Beobachtungen/${p.BeobId}${query}`
-          history.push(newUrl)
+          const newActiveNodeArray = [`Projekte`, activeNodes.projekt, `Arten`, activeNodes.ap, `nicht-beurteilte-Beobachtungen`, p.BeobId]
+          store.tree.setActiveNodeArray(newActiveNodeArray)
           insertBeobzuordnung(`TPopId`, nearestTpopId)
         })
     })

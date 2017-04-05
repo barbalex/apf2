@@ -1,28 +1,21 @@
 // @flow
 import isEqual from 'lodash/isEqual'
-import clone from 'lodash/clone'
 import queryString from 'query-string'
+import { toJS } from 'mobx'
+
+import getActiveNodeArrayFromPathname from './getActiveNodeArrayFromPathname'
 
 export default (store:Object) => {
-  const activeNodeArray = clone(store.tree.activeNodeArray)
-  // forward apflora.ch to Projekte
-  if (activeNodeArray.length === 0) {
-    activeNodeArray.push(`Projekte`)
-  }
+  const activeNodeArrayFromUrl = getActiveNodeArrayFromPathname(window.location.pathname)
+  const activeNodeArray = toJS(store.tree.activeNodeArray)
+  const urlQueryFromUrl = queryString.parse(window.location.search)
+  const urlQuery = toJS(store.urlQuery)
 
-  // if new store set projekte tabs
-  const urlQuery = clone(store.urlQuery)
   if (
-    (activeNodeArray.length === 0 || activeNodeArray[0] === `Projekte`) &&
-    !urlQuery.projekteTabs
+    !isEqual(activeNodeArrayFromUrl, activeNodeArray) ||
+    !isEqual(urlQueryFromUrl, urlQuery)
   ) {
-    urlQuery.projekteTabs = [`tree`, `daten`]
-  }
-  const search = queryString.stringify(urlQuery)
-  if (
-    !isEqual(activeNodeArray, store.tree.activeNodeArray) ||
-    !isEqual(urlQuery, store.urlQuery)
-  ) {
+    const search = queryString.stringify(urlQuery)
     const query = `${Object.keys(urlQuery).length > 0 ? `?${search}` : ``}`
     store.history.push(`/${activeNodeArray.join(`/`)}${query}`)
   }
