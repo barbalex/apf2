@@ -1,9 +1,5 @@
 // @flow
-import {
-  extendObservable,
-  computed,
-  action,
-} from 'mobx'
+import { extendObservable, action } from 'mobx'
 
 import fetchTable from '../action/fetchTable'
 import fetchBeobzuordnungModule from '../action/fetchBeobzuordnung'
@@ -14,7 +10,6 @@ import fetchDatasetById from '../action/fetchDatasetById'
 import fetchBeobBereitgestellt from '../action/fetchBeobBereitgestellt'
 import fetchBeobEvab from '../action/fetchBeobEvab'
 import fetchBeobInfospezies from '../action/fetchBeobInfospezies'
-import updateActiveDatasetFromActiveNodes from '../action/updateActiveDatasetFromActiveNodes'
 import updateProperty from '../action/updateProperty'
 import updatePropertyInDb from '../action/updatePropertyInDb'
 import fetchFields from '../action/fetchFields'

@@ -22,23 +22,39 @@ const enhance = compose(
 const PopFolder = (
   { onClick, store, treeName, changeLabel, label, onShow }:
   {onClick:()=>void,store:Object,treeName:string,changeLabel:()=>{},label:string|number,onShow:()=>void}
-) =>
-  <ContextMenu
-    id={`${treeName}popFolder`}
-    collect={props => props}
-    onShow={onShow}
-  >
-    <div className="react-contextmenu-title">Populationen</div>
-    <MenuItem
-      onClick={onClick}
-      data={{
-        action: `insert`,
-        table: `pop`,
-      }}
+) => {
+  const moving = store.moving.table && store.moving.table === `pop`
+
+  return (
+    <ContextMenu
+      id={`${treeName}popFolder`}
+      collect={props => props}
+      onShow={onShow}
     >
-      erstelle neue
-    </MenuItem>
-  </ContextMenu>
+      <div className="react-contextmenu-title">Populationen</div>
+      <MenuItem
+        onClick={onClick}
+        data={{
+          action: `insert`,
+          table: `pop`,
+        }}
+      >
+        erstelle neue
+      </MenuItem>
+      {
+        moving &&
+        <MenuItem
+          onClick={onClick}
+          data={{
+            action: `move`,
+          }}
+        >
+          {`verschiebe '${store.moving.label}' hierhin`}
+        </MenuItem>
+      }
+    </ContextMenu>
+  )
+}
 
 PopFolder.propTypes = {
   onClick: PropTypes.func.isRequired,

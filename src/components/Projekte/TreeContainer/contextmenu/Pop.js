@@ -52,6 +52,15 @@ const Pop = (
       >
         lösche
       </MenuItem>
+      <MenuItem
+        onClick={onClick}
+        data={{
+          action: `markForMoving`,
+          table: `pop`,
+        }}
+      >
+        verschiebe
+      </MenuItem>
       {
         moving &&
         <MenuItem

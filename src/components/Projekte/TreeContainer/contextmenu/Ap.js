@@ -22,79 +22,95 @@ const enhance = compose(
 const Ap = (
   { onClick, store, treeName, changeLabel, label, onShow }:
   {onClick:() => void,store:Object,treeName:string,changeLabel:()=>{},label:string,onShow:()=>{}}
-) =>
-  <ContextMenu
-    id={`${treeName}ap`}
-    collect={props => props}
-    onShow={onShow}
-  >
-    <div className="react-contextmenu-title">Art</div>
-    <MenuItem
-      onClick={(e, data, element) => {
-        console.log(`Ap, onClick: e`, e)
-        console.log(`Ap, onClick: data`, data)
-        console.log(`Ap, onClick: element`, element)
-        onClick(e, data, element)
-      }}
-      data={{
-        action: `insert`,
-        table: `ap`,
-      }}
+) => {
+  const moving = store.moving.table && store.moving.table === `pop`
+
+  return (
+    <ContextMenu
+      id={`${treeName}ap`}
+      collect={props => props}
+      onShow={onShow}
     >
-      erstelle neue
-    </MenuItem>
-    <MenuItem
-      onClick={onClick}
-      data={{
-        action: `delete`,
-        table: `ap`,
-      }}
-    >
-      lösche
-    </MenuItem>
-    {
-      (
-        store.map.activeApfloraLayers.includes(`Pop`) ||
-        store.map.activeApfloraLayers.includes(`Tpop`)
-      ) &&
-      <div>
-        <div className="react-contextmenu-divider" />
-        <div className="react-contextmenu-title">Karte</div>
-      </div>
-    }
-    {
-      store.map.activeApfloraLayers.includes(`Pop`) &&
+      <div className="react-contextmenu-title">Art</div>
+      <MenuItem
+        onClick={(e, data, element) => {
+          console.log(`Ap, onClick: e`, e)
+          console.log(`Ap, onClick: data`, data)
+          console.log(`Ap, onClick: element`, element)
+          onClick(e, data, element)
+        }}
+        data={{
+          action: `insert`,
+          table: `ap`,
+        }}
+      >
+        erstelle neue
+      </MenuItem>
       <MenuItem
         onClick={onClick}
         data={{
-          action: `toggleTooltip`,
-          actionTable: `pop`,
+          action: `delete`,
+          table: `ap`,
         }}
       >
-        {
-          store.map.pop.labelUsingNr ?
-          `beschrifte Populationen mit Namen` :
-          `beschrifte Populationen mit Nummer`
-        }
+        lösche
       </MenuItem>
-    }
-    {
-      store.map.activeApfloraLayers.includes(`Tpop`) &&
-      <MenuItem
-        onClick={onClick}
-        data={{
-          action: `toggleTooltip`,
-          actionTable: `tpop`,
-        }}
-      >
-        {
-          store.map.tpop.labelUsingNr ?
-          `beschrifte Teil-Populationen mit Namen` :
-          `beschrifte Teil-Populationen mit Nummer`
-        }
-      </MenuItem>
-    }
-  </ContextMenu>
+      {
+        moving &&
+        <MenuItem
+          onClick={onClick}
+          data={{
+            action: `move`,
+          }}
+        >
+          {`verschiebe '${store.moving.label}' hierhin`}
+        </MenuItem>
+      }
+      {
+        (
+          store.map.activeApfloraLayers.includes(`Pop`) ||
+          store.map.activeApfloraLayers.includes(`Tpop`)
+        ) &&
+        <div>
+          <div className="react-contextmenu-divider" />
+          <div className="react-contextmenu-title">Karte</div>
+        </div>
+      }
+      {
+        store.map.activeApfloraLayers.includes(`Pop`) &&
+        <MenuItem
+          onClick={onClick}
+          data={{
+            action: `toggleTooltip`,
+            actionTable: `pop`,
+          }}
+        >
+          {
+            store.map.pop.labelUsingNr ?
+            `beschrifte Populationen mit Namen` :
+            `beschrifte Populationen mit Nummer`
+          }
+        </MenuItem>
+      }
+      {
+        store.map.activeApfloraLayers.includes(`Tpop`) &&
+        <MenuItem
+          onClick={onClick}
+          data={{
+            action: `toggleTooltip`,
+            actionTable: `tpop`,
+          }}
+        >
+          {
+            store.map.tpop.labelUsingNr ?
+            `beschrifte Teil-Populationen mit Namen` :
+            `beschrifte Teil-Populationen mit Nummer`
+          }
+        </MenuItem>
+      }
+    </ContextMenu>
+  )
+}
 
 Ap.propTypes = {
   onClick: PropTypes.func.isRequired,
