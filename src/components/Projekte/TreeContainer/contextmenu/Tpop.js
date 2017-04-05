@@ -12,48 +12,64 @@ const enhance = compose(
 const Tpop = (
   { onClick, store, treeName }:
   {onClick:()=>void,store:Object,treeName:string}
-) =>
-  <ContextMenu id={`${treeName}tpop`}>
-    <div className="react-contextmenu-title">Teil-Population</div>
-    <MenuItem
-      onClick={onClick}
-      data={{
-        action: `insert`,
-        table: `tpop`,
-      }}
-    >
-      erstelle neue
-    </MenuItem>
-    <MenuItem
-      onClick={onClick}
-      data={{
-        action: `delete`,
-        actionTable: `tpop`,
-        table: `tpop`,
-      }}
-    >
-      lösche
-    </MenuItem>
-    <MenuItem
-      onClick={onClick}
-      data={{
-        action: `markForMoving`,
-        table: `tpop`,
-      }}
-    >
-      verschiebe
-    </MenuItem>
-    <MenuItem
-      onClick={onClick}
-      data={{
-        action: `localizeOnMap`,
-        actionTable: `tpop`,
-        idTable: `tpop`,
-      }}
-    >
-      verorte auf Karte
-    </MenuItem>
-  </ContextMenu>
+) => {
+  const moving = store.moving.table && store.moving.table === `tpopmassn`
+
+  return (
+    <ContextMenu id={`${treeName}tpop`}>
+      <div className="react-contextmenu-title">Teil-Population</div>
+      <MenuItem
+        onClick={onClick}
+        data={{
+          action: `insert`,
+          table: `tpop`,
+        }}
+      >
+        erstelle neue
+      </MenuItem>
+      <MenuItem
+        onClick={onClick}
+        data={{
+          action: `delete`,
+          actionTable: `tpop`,
+          table: `tpop`,
+        }}
+      >
+        lösche
+      </MenuItem>
+      <MenuItem
+        onClick={onClick}
+        data={{
+          action: `markForMoving`,
+          table: `tpop`,
+        }}
+      >
+        verschiebe
+      </MenuItem>
+      <MenuItem
+        onClick={onClick}
+        data={{
+          action: `localizeOnMap`,
+          actionTable: `tpop`,
+          idTable: `tpop`,
+        }}
+      >
+        verorte auf Karte
+      </MenuItem>
+      {
+        moving &&
+        <MenuItem
+          onClick={onClick}
+          data={{
+            action: `move`,
+          }}
+        >
+          {`verschiebe '${store.moving.label}' hierhin`}
+        </MenuItem>
+      }
+    </ContextMenu>
+  )
+}
 
 Tpop.propTypes = {
   onClick: PropTypes.func.isRequired,
