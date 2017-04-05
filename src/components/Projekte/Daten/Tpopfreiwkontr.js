@@ -28,7 +28,7 @@ const enhance = compose(
 )
 
 const Tpopfreiwkontr = ({ store }) => {
-  const { activeDataset } = store
+  const { activeDataset } = store.tree
   return (
     <Container>
       <FormTitle title="Freiwilligen-Kontrolle" />

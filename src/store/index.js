@@ -14,7 +14,6 @@ function Store() {
     projekteTabs: [],
     feldkontrTab: `entwicklung`,
   }
-  this.activeDataset = {}
   this.datasetToDelete = {}
   this.tellUserReadOnly = null
   this.fetchLogin = null
@@ -49,6 +48,7 @@ function Store() {
     activeNodeArray: [],
     activeNodes: {},
     activeNode: null,
+    activeDataset: {},
     apFilter: false,
     toggleApFilter: null,
     nodeLabelFilter: {},
@@ -111,6 +111,7 @@ function Store() {
     activeNodeArray: [],
     activeNodes: {},
     activeNode: null,
+    activeDataset: {},
     apFilter: false,
     toggleApFilter: null,
     nodeLabelFilter: {},

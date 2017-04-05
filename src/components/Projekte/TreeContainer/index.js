@@ -187,7 +187,7 @@ class TreeContainer extends Component { // eslint-disable-line react/prefer-stat
 
   render() {
     const { store, tree, treeName } = this.props
-    const { activeDataset } = store
+    const { activeDataset } = store.tree
     const showApDivToggle = activeDataset
 
     return (

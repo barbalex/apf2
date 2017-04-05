@@ -56,11 +56,13 @@ const enhance = compose(
   withProps((props) => {
     const { store } = props
     const {
-      activeDataset,
       updateProperty,
       updatePropertyInDb,
+      table,
+      tree,
     } = store
-    const { adb_eigenschaften } = store.table
+    const { activeDataset } = tree
+    const { adb_eigenschaften } = table
     let artwert = `Diese Art hat keinen Artwert`
     let artname = ``
     if (store.tree.activeNodes.ap && adb_eigenschaften.size > 0) {

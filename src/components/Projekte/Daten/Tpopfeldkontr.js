@@ -85,7 +85,7 @@ const Tpopfeldkontr = ({
   store,
   onChangeTab,
 }) => {
-  const { activeDataset } = store
+  const { activeDataset } = store.tree
   return (
     <Container>
       <FormTitle title="Feld-Kontrolle" />

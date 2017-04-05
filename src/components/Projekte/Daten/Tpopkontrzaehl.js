@@ -26,7 +26,7 @@ const enhance = compose(
 )
 
 const Tpopkontrzaehl = ({ store }) => {
-  const { activeDataset } = store
+  const { activeDataset } = store.tree
   return (
     <Container>
       <FormTitle title="Zählung" />

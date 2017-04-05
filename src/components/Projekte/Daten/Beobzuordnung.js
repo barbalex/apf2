@@ -60,7 +60,7 @@ const nichtZuordnenPopover = (
 )
 
 const getTpopZuordnenSource = (store) => {
-  const { activeDataset } = store
+  const { activeDataset } = store.tree
   const beobzuordnung = activeDataset.row
   // get all popIds of active ap
   const popList = Array.from(store.table.pop.values())
@@ -119,11 +119,11 @@ const enhance = compose(
   withHandlers({
     updatePropertyInDb: props => (fieldname, val) => {
       const {
-        activeDataset,
         insertBeobzuordnung,
         updatePropertyInDb,
         deleteBeobzuordnung,
       } = props.store
+      const { activeDataset } = props.store.tree
       if (val) {
         if (activeDataset.table === `beob_bereitgestellt`) {
           insertBeobzuordnung(fieldname, val)
@@ -140,7 +140,7 @@ const enhance = compose(
 )
 
 const Beobzuordnung = ({ store, updatePropertyInDb }) => {
-  const { activeDataset } = store
+  const { activeDataset } = store.tree
   const beobzuordnung = activeDataset.row
   const beobTitle = (
     beobzuordnung.QuelleId === 1 ?

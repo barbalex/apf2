@@ -26,8 +26,8 @@ const enhance = compose(
 )
 
 const getArtList = ({ store }) => {
-  const { activeDataset, tree } = store
-  const { activeNodes } = tree
+  const { tree } = store
+  const { activeDataset, activeNodes } = tree
   const { adb_eigenschaften } = store.table
   const assozartenOfAp = Array.from(store.table.assozart.values()).filter(a =>
     a.AaApArtId === activeDataset.row.AaApArtId
@@ -42,7 +42,7 @@ const getArtList = ({ store }) => {
 
 const getArtname = ({ store }) => {
   const { adb_eigenschaften } = store.table
-  const { activeDataset } = store
+  const { activeDataset } = store.tree
   let name = ``
   if (activeDataset.row.AaSisfNr && adb_eigenschaften.size > 0) {
     name = adb_eigenschaften.get(activeDataset.row.AaSisfNr).Artname
@@ -51,7 +51,7 @@ const getArtname = ({ store }) => {
 }
 
 const Assozart = ({ store }) => {
-  const { activeDataset } = store
+  const { activeDataset } = store.tree
   return (
     <Container>
       <FormTitle title="assoziierte Art" />

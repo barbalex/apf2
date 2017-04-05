@@ -35,7 +35,7 @@ const enhance = compose(
 const Idealbiotop = ({
   store,
 }) => {
-  const { activeDataset } = store
+  const { activeDataset } = store.tree
   return (
     <Container>
       <FormTitle title="Idealbiotop" />

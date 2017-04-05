@@ -1,5 +1,5 @@
 export default (store) => {
-  const { activeDataset } = store
+  const { activeDataset } = store.tree
   const { row, table } = activeDataset
   const idFieldNameForEvab = table === `beob_bereitgestellt` ? `NO_NOTE_PROJET` : `NO_NOTE`
   const beob = (

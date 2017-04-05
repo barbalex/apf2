@@ -52,8 +52,8 @@ const enhance = compose(
 )
 
 const Daten = ({ store }) => {
-  const { activeDataset, tree } = store
-  const { activeNodes } = tree
+  const { tree } = store
+  const { activeNodes, activeDataset } = tree
   if (!activeDataset || !activeDataset.table || !activeDataset.row) {
     return <div />
   }

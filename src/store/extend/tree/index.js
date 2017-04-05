@@ -13,6 +13,7 @@ import toggleNode from '../../action/toggleNode'
 import getActiveNodes from '../../action/getActiveNodes'
 import extendNode from './node'
 import extendFilteredAndSorted from './filteredAndSorted'
+import updateActiveDatasetFromActiveNodes from '../../action/updateActiveDatasetFromActiveNodes'
 
 export default (store:Object) => {
   extendObservable(store.tree, {
@@ -34,6 +35,10 @@ export default (store:Object) => {
         isEqual(toJS(store.tree.activeNodeArray), n.url)
       ),
       { name: `activeNode` }
+    ),
+    activeDataset: computed(
+      () => updateActiveDatasetFromActiveNodes(store, store.tree),
+      { name: `activeDataset` }
     ),
     cloneActiveNodeArrayToTree2: action(
       `cloneActiveNodeArrayToTree2`,

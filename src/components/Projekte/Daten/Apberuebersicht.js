@@ -23,7 +23,7 @@ const enhance = compose(
 )
 
 const Apberuebersicht = ({ store }) => {
-  const { activeDataset } = store
+  const { activeDataset } = store.tree
 
   return (
     <Container>

@@ -12,6 +12,7 @@ import toggleNode from '../../action/toggleNodeTree2'
 import getActiveNodes from '../../action/getActiveNodes'
 import extendNode from './node'
 import extendFilteredAndSorted from './filteredAndSorted'
+import updateActiveDatasetFromActiveNodes from '../../action/updateActiveDatasetFromActiveNodes'
 
 export default (store:Object) => {
   extendObservable(store.tree2, {
@@ -35,6 +36,10 @@ export default (store:Object) => {
         isEqual(toJS(store.tree2.activeNodeArray), n.url)
       ),
       { name: `activeNode` }
+    ),
+    activeDataset: computed(
+      () => updateActiveDatasetFromActiveNodes(store, store.tree2),
+      { name: `activeDataset` }
     ),
     apFilter: false,
     toggleApFilter: action(`toggleApFilter`, () => {

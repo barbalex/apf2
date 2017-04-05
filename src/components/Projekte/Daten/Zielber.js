@@ -23,7 +23,7 @@ const enhance = compose(
 )
 
 const Zielber = ({ store }) => {
-  const { activeDataset } = store
+  const { activeDataset } = store.tree
   return (
     <Container>
       <FormTitle title="Ziel-Bericht" />

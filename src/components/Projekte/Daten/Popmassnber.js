@@ -25,7 +25,7 @@ const enhance = compose(
 )
 
 const Popmassnber = ({ store }) => {
-  const { activeDataset } = store
+  const { activeDataset } = store.tree
   return (
     <Container>
       <FormTitle title="Massnahmen-Bericht Population" />

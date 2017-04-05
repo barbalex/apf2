@@ -27,7 +27,7 @@ const enhance = compose(
 )
 
 const Apber = ({ store }) => {
-  const { activeDataset } = store
+  const { activeDataset } = store.tree
   const veraenGegenVorjahrWerte = [
     { value: `+`, label: `+` },
     { value: `-`, label: `-` },

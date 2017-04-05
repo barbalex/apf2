@@ -25,7 +25,7 @@ const enhance = compose(
 )
 
 const Tpopber = ({ store }) => {
-  const { activeDataset } = store
+  const { activeDataset } = store.tree
   return (
     <Container>
       <FormTitle title="Kontroll-Bericht Teil-Population" />

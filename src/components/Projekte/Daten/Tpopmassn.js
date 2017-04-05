@@ -42,7 +42,7 @@ const Tpopmassn = ({
   onNewRequestWirtspflanze,
   onBlurWirtspflanze,
 }) => {
-  const { activeDataset } = store
+  const { activeDataset } = store.tree
 
   return (
     <Container>

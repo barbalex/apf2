@@ -43,7 +43,7 @@ const enhance = compose(
 )
 
 const Tpop = ({ store }) => {
-  const { activeDataset } = store
+  const { activeDataset } = store.tree
   const apArtId = store.table.pop.get(activeDataset.row.PopId).ApArtId
   const apJahr = store.table.ap.get(apArtId).ApJahr
   return (

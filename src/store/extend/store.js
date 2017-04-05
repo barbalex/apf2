@@ -84,10 +84,6 @@ export default (store:Object) => {
         store.urlQuery[key] = value
       }
     }),
-    activeDataset: computed(
-      () => updateActiveDatasetFromActiveNodes(store, store.tree),
-      { name: `activeDataset` }
-    ),
     datasetToDelete: {},
     tellUserReadOnly: action(`tellUserReadOnly`, () =>
       store.listError(new Error(`Sie haben keine Schreibrechte`))

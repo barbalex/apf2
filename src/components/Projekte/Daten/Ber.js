@@ -24,7 +24,7 @@ const enhance = compose(
 )
 
 const Ber = ({ store }) => {
-  const { activeDataset } = store
+  const { activeDataset } = store.tree
 
   return (
     <Container>
