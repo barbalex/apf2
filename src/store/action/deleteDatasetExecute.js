@@ -5,7 +5,7 @@ import apiBaseUrl from '../../modules/apiBaseUrl'
 import tables from '../../modules/tables'
 import deleteDatasetInIdb from './deleteDatasetInIdb'
 
-export default (store:Object) => {
+export default (store:Object, tree:Object) => {
   // deleteDatasetDemand checks variables
   const { table: tablePassed, id, idField, url } = store.datasetToDelete
   let table = tablePassed
@@ -28,18 +28,18 @@ export default (store:Object) => {
       deleteDatasetInIdb(store, table, id)
       // set new url
       url.pop()
-      store.tree.setActiveNodeArray(url)
+      tree.setActiveNodeArray(url)
       store.datasetToDelete = {}
       // if zieljahr is active, need to pop again, if there is no other ziel left in same year
-      if (store.tree.activeNodes.zieljahr && !store.tree.activeNodes.zielber) {
+      if (tree.activeNodes.zieljahr && !tree.activeNodes.zielber) {
         // see if there are ziele left with this zieljahr
         const zieleWithActiveZieljahr = Array.from(store.table.ziel.values())
           .filter(ziel =>
-            ziel.ApArtId === store.tree.activeNodes.ap && ziel.ZielJahr === store.tree.activeNodes.zieljahr
+            ziel.ApArtId === tree.activeNodes.ap && ziel.ZielJahr === tree.activeNodes.zieljahr
           )
         if (zieleWithActiveZieljahr.length === 0) {
           url.pop()
-          store.tree.setActiveNodeArray(url)
+          tree.setActiveNodeArray(url)
         }
       }
     })

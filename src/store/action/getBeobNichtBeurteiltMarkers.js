@@ -41,8 +41,8 @@ export default (store) => {
           const { activeNodes } = tree
           const nearestTpopId = getNearestTpopId(store, event.target._latlng)
           const newActiveNodeArray = [`Projekte`, activeNodes.projekt, `Arten`, activeNodes.ap, `nicht-beurteilte-Beobachtungen`, p.BeobId]
-          store.tree.setActiveNodeArray(newActiveNodeArray)
-          insertBeobzuordnung(`TPopId`, nearestTpopId)
+          tree.setActiveNodeArray(newActiveNodeArray)
+          insertBeobzuordnung(tree, `TPopId`, nearestTpopId)
         })
     })
   }

@@ -1,10 +1,11 @@
+// @flow
 import axios from 'axios'
 
 import apiBaseUrl from '../../modules/apiBaseUrl'
 import deleteDatasetInIdb from './deleteDatasetInIdb'
 
-export default (store, beobId) => {
-  const { tree, table } = store
+export default (store:Object, tree:Object, beobId:number|string) => {
+  const { table } = store
   const { activeNodes } = tree
   // delete beobzuordnung
   const deleteUrl = `${apiBaseUrl}/apflora/tabelle=beobzuordnung/tabelleIdFeld=NO_NOTE/tabelleId=${beobId}`
@@ -16,7 +17,7 @@ export default (store, beobId) => {
       deleteDatasetInIdb(store, `beobzuordnung`, beobId)
       // set activeNodeArray to corresponding beob_bereitgestellt
       const newActiveNodeArray = [`Projekte`, activeNodes.projekt, `Arten`, activeNodes.ap, `nicht-beurteilte-Beobachtungen`, beobId]
-      store.tree.setActiveNodeArray(newActiveNodeArray)
+      tree.setActiveNodeArray(newActiveNodeArray)
     })
     .catch((error) =>
       store.listError(error)

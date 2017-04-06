@@ -11,7 +11,7 @@ const fetchQk = ({ store, tree }:{store:Object,tree:Object}) => {
   const apArtId = store.tree.activeNodes.ap
   const qk = store.qk.get(apArtId)
   let berichtjahr
-  store.setQk({ messages: [] })
+  store.setQk({ tree, messages: [] })
   if (qk && qk.berichtjahr) {
     berichtjahr = qk.berichtjahr
   } else {
@@ -146,7 +146,7 @@ const fetchQk = ({ store, tree }:{store:Object,tree:Object}) => {
             }
           })
           const messages = ({ hw, url })
-          store.addMessagesToQk({ messages })
+          store.addMessagesToQk({ tree, messages })
           nrOfMessages += 1
         }
         return null
@@ -168,13 +168,13 @@ const fetchQk = ({ store, tree }:{store:Object,tree:Object}) => {
           hw: `Teilpopulation ist als 'Für AP-Bericht relevant' markiert, liegt aber ausserhalb des Kt. Zürich und sollte daher nicht relevant sein:`,
           url: tpops.map(tpop => [`Projekte`, 1, `Arten`, tpop.ApArtId, `Populationen`, tpop.PopId, `Teil-Populationen`, tpop.TPopId]),
         }
-        store.addMessagesToQk({ messages })
+        store.addMessagesToQk({ tree, messages })
         nrOfMessages += 1
       }
       // if no messages: tell user
       if (nrOfMessages === 0) {
         const messages = { hw: `Wow: Scheint alles i.O. zu sein!` }
-        store.addMessagesToQk({ messages })
+        store.addMessagesToQk({ tree, messages })
       }
       store.loading = store.loading.filter(el => el !== `qk`)
     })
