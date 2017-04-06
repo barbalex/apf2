@@ -3,10 +3,10 @@ import React, { PropTypes } from 'react'
 import { ContextMenu, MenuItem } from 'react-contextmenu'
 
 const ZielJahrFolder = (
-  { onClick, treeName }:
-  {onClick:()=>void,treeName:string}
+  { onClick, tree }:
+  {onClick:()=>void,tree:Object}
 ) =>
-  <ContextMenu id={`${treeName}zieljahrFolder`} >
+  <ContextMenu id={`${tree.name}zieljahrFolder`} >
     <div className="react-contextmenu-title">Ziele</div>
     <MenuItem
       onClick={onClick}
