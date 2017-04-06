@@ -36,10 +36,11 @@ const Idealbiotop = ({ store, tree }) => {
   const { activeDataset } = tree
   return (
     <Container>
-      <FormTitle title="Idealbiotop" />
+      <FormTitle tree={tree} title="Idealbiotop" />
       <Scrollbars>
         <FieldsContainer>
           <DateFieldWithPicker
+            tree={tree}
             label="Erstelldatum"
             fieldName="IbErstelldatum"
             value={activeDataset.row.IbErstelldatum}
@@ -50,6 +51,7 @@ const Idealbiotop = ({ store, tree }) => {
           />
           <Section>Lage</Section>
           <TextField
+            tree={tree}
             label="Höhe"
             fieldName="IbHoehenlage"
             value={activeDataset.row.IbHoehenlage}
@@ -61,6 +63,7 @@ const Idealbiotop = ({ store, tree }) => {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            tree={tree}
             label="Region"
             fieldName="IbRegion"
             value={activeDataset.row.IbRegion}
@@ -72,6 +75,7 @@ const Idealbiotop = ({ store, tree }) => {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            tree={tree}
             label="Exposition"
             fieldName="IbExposition"
             value={activeDataset.row.IbExposition}
@@ -83,6 +87,7 @@ const Idealbiotop = ({ store, tree }) => {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            tree={tree}
             label="Besonnung"
             fieldName="IbBesonnung"
             value={activeDataset.row.IbBesonnung}
@@ -94,6 +99,7 @@ const Idealbiotop = ({ store, tree }) => {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            tree={tree}
             label="Hangneigung"
             fieldName="IbHangneigung"
             value={activeDataset.row.IbHangneigung}
@@ -106,6 +112,7 @@ const Idealbiotop = ({ store, tree }) => {
           />
           <Section>Boden</Section>
           <TextField
+            tree={tree}
             label="Typ"
             fieldName="IbBodenTyp"
             value={activeDataset.row.IbBodenTyp}
@@ -117,6 +124,7 @@ const Idealbiotop = ({ store, tree }) => {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            tree={tree}
             label="Kalkgehalt"
             fieldName="IbBodenKalkgehalt"
             value={activeDataset.row.IbBodenKalkgehalt}
@@ -128,6 +136,7 @@ const Idealbiotop = ({ store, tree }) => {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            tree={tree}
             label="Durchlässigkeit"
             fieldName="IbBodenDurchlaessigkeit"
             value={activeDataset.row.IbBodenDurchlaessigkeit}
@@ -139,6 +148,7 @@ const Idealbiotop = ({ store, tree }) => {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            tree={tree}
             label="Humus"
             fieldName="IbBodenHumus"
             value={activeDataset.row.IbBodenHumus}
@@ -150,6 +160,7 @@ const Idealbiotop = ({ store, tree }) => {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            tree={tree}
             label="Nährstoffgehalt"
             fieldName="IbBodenNaehrstoffgehalt"
             value={activeDataset.row.IbBodenNaehrstoffgehalt}
@@ -161,6 +172,7 @@ const Idealbiotop = ({ store, tree }) => {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            tree={tree}
             label="Wasserhaushalt"
             fieldName="IbWasserhaushalt"
             value={activeDataset.row.IbWasserhaushalt}
@@ -173,6 +185,7 @@ const Idealbiotop = ({ store, tree }) => {
           />
           <Section>Vegetation</Section>
           <TextField
+            tree={tree}
             label="Konkurrenz"
             fieldName="IbKonkurrenz"
             value={activeDataset.row.IbKonkurrenz}
@@ -184,6 +197,7 @@ const Idealbiotop = ({ store, tree }) => {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            tree={tree}
             label="Moosschicht"
             fieldName="IbMoosschicht"
             value={activeDataset.row.IbMoosschicht}
@@ -195,6 +209,7 @@ const Idealbiotop = ({ store, tree }) => {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            tree={tree}
             label="Krautschicht"
             fieldName="IbKrautschicht"
             value={activeDataset.row.IbKrautschicht}
@@ -206,6 +221,7 @@ const Idealbiotop = ({ store, tree }) => {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            tree={tree}
             label="Strauchschicht"
             fieldName="IbStrauchschicht"
             value={activeDataset.row.IbStrauchschicht}
@@ -217,6 +233,7 @@ const Idealbiotop = ({ store, tree }) => {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            tree={tree}
             label="Baumschicht"
             fieldName="IbBaumschicht"
             value={activeDataset.row.IbBaumschicht}
@@ -228,6 +245,7 @@ const Idealbiotop = ({ store, tree }) => {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            tree={tree}
             label="Bemerkungen"
             fieldName="IbBemerkungen"
             value={activeDataset.row.IbBemerkungen}

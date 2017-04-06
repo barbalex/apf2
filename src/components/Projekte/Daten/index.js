@@ -33,6 +33,7 @@ import Tpopkontrzaehl from './Tpopkontrzaehl'
 import Exporte from '../Exporte'
 import Qk from './Qk'
 import Beobzuordnung from './Beobzuordnung'
+import DeleteDatasetModal from './DeleteDatasetModal'
 
 const Container = styled.div`
   border-color: #424242;
@@ -106,10 +107,15 @@ const Daten = ({ store, tree }) => {
     key = activeDataset.table
   }
   const form = formObject[key] || standardForm
+  const deleteDatasetModalIsVisible = !!store.datasetToDelete.id
 
   return (
     <Container>
       {form}
+      {
+        deleteDatasetModalIsVisible &&
+        <DeleteDatasetModal tree={tree} />
+      }
     </Container>
   )
 }

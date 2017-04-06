@@ -26,10 +26,11 @@ const Projekt = ({ store, tree }) => {
   const { activeDataset } = tree
   return (
     <Container>
-      <FormTitle title="Projekt" />
+      <FormTitle tree={tree} title="Projekt" />
       <Scrollbars>
         <FieldsContainer>
           <TextField
+            tree={tree}
             label="Name"
             fieldName="ProjName"
             value={

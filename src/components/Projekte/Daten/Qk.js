@@ -76,10 +76,11 @@ class Qk extends Component { // eslint-disable-line react/prefer-stateless-funct
 
     return (
       <Container>
-        <FormTitle title="Qualitätskontrollen" />
+        <FormTitle tree={tree} title="Qualitätskontrollen" />
         <Scrollbars>
           <FieldsContainer>
             <TextField
+              tree={tree}
               floatingLabelText="Berichtjahr"
               type="number"
               value={berichtjahr}
@@ -92,7 +93,7 @@ class Qk extends Component { // eslint-disable-line react/prefer-stateless-funct
               value={filter || ``}
               fullWidth
               onChange={(event, val) =>
-                store.setQkFilter({ filter: val })
+                store.setQkFilter({ tree, filter: val })
               }
             />
             {

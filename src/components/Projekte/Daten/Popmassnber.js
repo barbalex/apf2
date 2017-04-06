@@ -28,10 +28,11 @@ const Popmassnber = ({ store, tree }) => {
   const { activeDataset } = tree
   return (
     <Container>
-      <FormTitle title="Massnahmen-Bericht Population" />
+      <FormTitle tree={tree} title="Massnahmen-Bericht Population" />
       <Scrollbars>
         <FieldsContainer>
           <TextField
+            tree={tree}
             label="Jahr"
             fieldName="PopMassnBerJahr"
             value={activeDataset.row.PopMassnBerJahr}
@@ -42,6 +43,7 @@ const Popmassnber = ({ store, tree }) => {
           />
           <Label label="Entwicklung" />
           <RadioButtonGroup
+            tree={tree}
             fieldName="PopMassnBerErfolgsbeurteilung"
             value={activeDataset.row.PopMassnBerErfolgsbeurteilung}
             errorText={activeDataset.valid.PopMassnBerErfolgsbeurteilung}
@@ -49,6 +51,7 @@ const Popmassnber = ({ store, tree }) => {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            tree={tree}
             label="Interpretation"
             fieldName="PopMassnBerTxt"
             value={activeDataset.row.PopMassnBerTxt}
