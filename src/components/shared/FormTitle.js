@@ -15,8 +15,8 @@ const Title = styled.div`
 `
 
 const FormTitle = (
-  { title, noTestdataMessage }:
-  {title:string,noTestdataMessage?:boolean}
+  { tree, title, noTestdataMessage }:
+  {tree:Object,title:string,noTestdataMessage?:boolean}
 ) =>
   <Container>
     <Title>
@@ -24,11 +24,12 @@ const FormTitle = (
     </Title>
     {
       !noTestdataMessage &&
-      <TestdataMessage />
+      <TestdataMessage tree={tree} />
     }
   </Container>
 
 FormTitle.propTypes = {
+  tree: PropTypes.object.isRequired,
   title: PropTypes.string.isRequired,
   noTestdataMessage: PropTypes.bool,
 }

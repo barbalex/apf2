@@ -47,8 +47,8 @@ const enhance = compose(
   withState(`valueOnFocus`, `changeValueOnFocus`, ``),
   withHandlers({
     onChangeDatePicker: props => (event, val) => {
-      props.updateProperty(props.fieldName, format(val, `YYYY-MM-DD`))
-      props.updatePropertyInDb(props.fieldName, format(val, `YYYY-MM-DD`))
+      props.updateProperty(props.tree, props.fieldName, format(val, `YYYY-MM-DD`))
+      props.updatePropertyInDb(props.tree, props.fieldName, format(val, `YYYY-MM-DD`))
       props.changeStringValue(format(val, `DD.MM.YYYY`))
     },
     onChange: props =>
@@ -60,12 +60,12 @@ const enhance = compose(
         if (value != props.valueOnFocus) {  // eslint-disable-line eqeqeq
           if (!value) {
             // avoid creating an invalid date
-            props.updatePropertyInDb(props.fieldName, null)
+            props.updatePropertyInDb(props.tree, props.fieldName, null)
             props.changeStringValue(``)
           } else {
             // write a real date to db
             const date = new Date(convertDateToYyyyMmDd(value))
-            props.updatePropertyInDb(props.fieldName, format(date, `YYYY-MM-DD`))
+            props.updatePropertyInDb(props.tree, props.fieldName, format(date, `YYYY-MM-DD`))
             props.changeStringValue(format(date, `DD.MM.YYYY`))
           }
         }
@@ -79,6 +79,7 @@ const enhance = compose(
 class MyDatePicker extends Component {
 
   static propTypes = {
+    tree: PropTypes.object.isRequired,
     label: PropTypes.string.isRequired,
     fieldName: PropTypes.string.isRequired,
     value: PropTypes.any,

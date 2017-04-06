@@ -12,7 +12,7 @@ const enhance = compose(
     onCheck: props => (e, isInputChecked) => {
       const { updatePropertyInDb, fieldName } = props
       const val = isInputChecked ? 1 : null
-      updatePropertyInDb(fieldName, val)
+      updatePropertyInDb(props.tree, fieldName, val)
     },
   }),
   observer
@@ -32,6 +32,7 @@ const MyCheckbox = ({
   </div>
 
 MyCheckbox.propTypes = {
+  tree: PropTypes.object.isRequired,
   fieldName: PropTypes.string.isRequired,
   value: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   label: PropTypes.string.isRequired,

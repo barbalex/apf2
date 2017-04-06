@@ -9,7 +9,7 @@ const enhance = compose(
   withHandlers({
     onNewRequest: props => (val) => {
       const { updatePropertyInDb, fieldName, dataSourceConfig } = props
-      updatePropertyInDb(fieldName, val[dataSourceConfig.value])
+      updatePropertyInDb(props.tree, fieldName, val[dataSourceConfig.value])
     },
   }),
   observer
@@ -39,6 +39,7 @@ const MyAutocomplete = ({
   />
 
 MyAutocomplete.propTypes = {
+  tree: PropTypes.object.isRequired,
   label: PropTypes.string.isRequired,
   fieldName: PropTypes.string.isRequired,
   valueText: PropTypes.string,

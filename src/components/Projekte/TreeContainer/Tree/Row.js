@@ -196,7 +196,6 @@ const Row = ({
   style,
   store,
   tree,
-  treeName,
   node,
 }) => {
   const onClick = (event) => tree.toggleNode(node)
@@ -241,7 +240,7 @@ const Row = ({
   return (
     <div key={key} style={style} onClick={onClick}>
       <ContextMenuTrigger
-        id={`${treeName}${node.menuType}`}
+        id={`${tree.name}${node.menuType}`}
         // id={node.menuType}
         collect={props => myProps}
         nodeId={node.id}
@@ -393,7 +392,6 @@ const Row = ({
 Row.propTypes = {
   store: PropTypes.object.isRequired,
   tree: PropTypes.object.isRequired,
-  treeName: PropTypes.string.isRequired,
   key: PropTypes.number,
   index: PropTypes.number.isRequired,
   style: PropTypes.object.isRequired,
