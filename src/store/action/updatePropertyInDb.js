@@ -11,9 +11,9 @@ import deleteDatasetInIdb from './deleteDatasetInIdb'
 import insertDatasetInIdb from './insertDatasetInIdb'
 
 export default (store:Object, key:string, valuePassed:string|number) => {
-  const { row, valid } = store.activeDataset
+  const { row, valid } = store.tree.activeDataset
   let value = valuePassed
-  let table = store.activeDataset.table
+  let table = store.tree.activeDataset.table
 
   // ensure primary data exists
   if (!key || !table || !row) {
@@ -116,7 +116,7 @@ export default (store:Object, key:string, valuePassed:string|number) => {
             `nicht-zuzuordnende-Beobachtungen` :
             `nicht-beurteilte-Beobachtungen`
           )
-          newActiveNodeArray[5] = store.activeDataset.row.NO_NOTE
+          newActiveNodeArray[5] = store.tree.activeDataset.row.NO_NOTE
           store.tree.setActiveNodeArray(newActiveNodeArray.slice(0, 6))
         }
         // if for a beobZugeordnet TPopId is set, url needs to change

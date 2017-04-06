@@ -3,7 +3,7 @@ import clone from 'lodash/clone'
 import { toJS } from 'mobx'
 
 export default (store:Object, key:string, valuePassed:string|number) => {
-  const { table, row } = store.activeDataset
+  const { table, row } = store.tree.activeDataset
   let value = valuePassed
   // ensure primary data exists
   if (!key || !table || !row) {

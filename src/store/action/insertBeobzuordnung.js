@@ -35,7 +35,7 @@ export default (store:Object, newKey:string, newValue:number) => {
    * newKey is either BeobNichtZuordnen or TPopId
    */
   // get data from beob_bereitgestellt in activeDataset
-  const beobBereitgestellt = store.activeDataset.row
+  const beobBereitgestellt = store.tree.activeDataset.row
   // check if a corresponding beobzuordnung already exists
   const beobzuordnungExists = !!store.table.beobzuordnung.get(beobBereitgestellt.BeobId)
   if (beobzuordnungExists) {
