@@ -109,9 +109,9 @@ export default (store:Object) => {
     setLoginFromIdb: action(`setLoginFromIdb`, () =>
       setLoginFromIdb(store)
     ),
-    fetchQk: action(`fetchQk`, () => fetchQk({ store: store })),
-    setQk: action(`setQk`, ({ berichtjahr, messages, filter }) =>
-      setQk({ store: store, berichtjahr, messages, filter })
+    fetchQk: action(`fetchQk`, (tree) => fetchQk({ store, tree })),
+    setQk: action(`setQk`, ({ tree, berichtjahr, messages, filter }) =>
+      setQk({ store: store, tree, berichtjahr, messages, filter })
     ),
     setQkFilter: action(`setQkFilter`, ({ filter }) =>
       setQkFilter({ store: store, filter })
@@ -126,9 +126,9 @@ export default (store:Object) => {
       if (store.user.readOnly) return store.tellUserReadOnly()
       insertBeobzuordnung(store, newKey, newValue)
     }),
-    insertDataset: action(`insertDataset`, (table, parentId, baseUrl) => {
+    insertDataset: action(`insertDataset`, (tree, table, parentId, baseUrl) => {
       if (store.user.readOnly) return store.tellUserReadOnly()
-      insertDataset(store, table, parentId, baseUrl)
+      insertDataset(store, tree, table, parentId, baseUrl)
     }),
     deleteDatasetDemand: action(`deleteDatasetDemand`, (table, id, url, label) => {
       if (store.user.readOnly) return store.tellUserReadOnly()

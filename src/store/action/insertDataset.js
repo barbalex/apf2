@@ -5,7 +5,7 @@ import apiBaseUrl from '../../modules/apiBaseUrl'
 import tables from '../../modules/tables'
 import insertDatasetInIdb from './insertDatasetInIdb'
 
-export default (store:Object, tablePassed:string, parentId:number, baseUrl:Array<string>) => {
+export default (store:Object, tree:Object, tablePassed:string, parentId:number, baseUrl:Array<string>) => {
   let table = tablePassed
   if (!table) {
     return store.listError(
@@ -40,11 +40,11 @@ export default (store:Object, tablePassed:string, parentId:number, baseUrl:Array
       insertDatasetInIdb(store, table, row)
       // set new url
       baseUrl.push(row[idField])
-      store.tree.setActiveNodeArray(baseUrl)
+      tree.setActiveNodeArray(baseUrl)
       // if zieljahr, need to update ZielJahr
-      if (store.tree.activeNodes.zieljahr) {
-        store.updateProperty(`ZielJahr`, store.tree.activeNodes.zieljahr)
-        store.updatePropertyInDb(`ZielJahr`, store.tree.activeNodes.zieljahr)
+      if (tree.activeNodes.zieljahr) {
+        store.updateProperty(`ZielJahr`, tree.activeNodes.zieljahr)
+        store.updatePropertyInDb(`ZielJahr`, tree.activeNodes.zieljahr)
       }
       // if tpopfreiwkontr need to update TPopKontrTyp
       if (tablePassed === `tpopfreiwkontr`) {

@@ -15,16 +15,18 @@ const enhance = compose(
 
 const setQk = ({
   store,
+  tree,
   berichtjahrPassed,
   messagesPassed,
   filterPassed,
 }:{
   store:Object,
+  tree:Object,
   berichtjahrPassed:number,
   messagesPassed:Array<Object>,
   filterPassed:string,
 }) => {
-  const apArtId = store.tree.activeNodes.ap
+  const apArtId = tree.activeNodes.ap
   let berichtjahr = berichtjahrPassed
   const messages = messagesPassed || []
   let filter = filterPassed

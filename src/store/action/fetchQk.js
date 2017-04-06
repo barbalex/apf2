@@ -6,7 +6,7 @@ import apiBaseUrl from '../../modules/apiBaseUrl'
 import isPointInsidePolygon from '../../modules/isPointInsidePolygon'
 import zhGeojson from '../../etc/ktZh.json'
 
-const fetchQk = ({ store }:{store:Object}) => {
+const fetchQk = ({ store, tree }:{store:Object,tree:Object}) => {
   store.loading.push(`qk`)
   const apArtId = store.tree.activeNodes.ap
   const qk = store.qk.get(apArtId)
@@ -15,7 +15,7 @@ const fetchQk = ({ store }:{store:Object}) => {
   if (qk && qk.berichtjahr) {
     berichtjahr = qk.berichtjahr
   } else {
-    return setTimeout(() => fetchQk({ store }))
+    return setTimeout(() => fetchQk({ store, tree }))
   }
   const qkTypes = [
     // Population: ohne Nr/Name/Status/bekannt seit/Koordinaten/tpop

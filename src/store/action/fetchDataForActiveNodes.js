@@ -10,6 +10,7 @@ import forEach from 'lodash/forEach'
 
 const fetchDataForActiveNodes = (
   store:Object,
+  tree:Object,
   showPop:boolean,
   showTpop:boolean,
   showTpopBeob:boolean,
@@ -69,7 +70,7 @@ const fetchDataForActiveNodes = (
       }
     },
     qk() {
-      store.fetchQk()
+      store.fetchQk({ tree })
     },
     assozartFolder() {},
     idealbiotopFolder() {},

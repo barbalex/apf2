@@ -35,10 +35,10 @@ const enhance = compose(
   inject(`store`),
   withHandlers({
     onChangeBerichtjahr: props => (event, val) => {
-      props.store.setQk({ berichtjahr: val })
+      props.store.setQk({ tree: props.tree, berichtjahr: val })
       if ((isNaN(val) && val.length === 4) || (!isNaN(val) && val > 1000)) {
-        props.store.setQk({})
-        setTimeout(() => props.store.fetchQk({ store: props.store, berichtjahr: val }))
+        props.store.setQk({ tree: props.tree })
+        setTimeout(() => props.store.fetchQk({ store: props.store, tree: props.tree }))
       }
     },
   }),

@@ -111,7 +111,7 @@ class TreeContainer extends Component { // eslint-disable-line react/prefer-stat
   }
 
   handleClick = (e, data, element) => {
-    const { store } = this.props
+    const { store, tree } = this.props
     if (!data) return store.listError(new Error(`no data passed with click`))
     if (!element) return store.listError(new Error(`no element passed with click`))
     const { table, action, idTable, actionTable } = data
@@ -135,7 +135,7 @@ class TreeContainer extends Component { // eslint-disable-line react/prefer-stat
           baseUrl.push(1)
         }
         const idToPass = parentId || id
-        store.insertDataset(table, idToPass, baseUrl)
+        store.insertDataset(tree, table, idToPass, baseUrl)
       },
       delete() {
         store.deleteDatasetDemand(table, id, baseUrl, label)
