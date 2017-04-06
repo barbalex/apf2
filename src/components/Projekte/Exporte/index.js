@@ -176,7 +176,7 @@ const Exporte = ({
   downloadFromView,
 }) =>
   <Container>
-    <FormTitle title="Exporte" />
+    <FormTitle tree={store.tree} title="Exporte" />
     <FieldsContainer>
       <Optionen />
       <Tipps />
@@ -535,6 +535,7 @@ const Exporte = ({
           </DownloadCardButton>
           <AutocompleteContainer>
             <StyledAutoComplete
+              tree={store.tree}
               hintText={artList.length === 0 ? `lade Daten...` : `Art wählen`}
               floatingLabelText={`"Eier legende Wollmilchsau" für eine Art`}
               openOnFocus

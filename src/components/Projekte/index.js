@@ -7,7 +7,6 @@ import compose from 'recompose/compose'
 import lifecycle from 'recompose/lifecycle'
 
 import TreeContainer from './TreeContainer'
-import DeleteDatasetModal from './DeleteDatasetModal'
 import Daten from './Daten'
 import Karte from './Karte'
 import Exporte from './Exporte'
@@ -57,14 +56,13 @@ const Projekte = ({ store }) => {
   )
   const karteIsVisible = projekteTabs.includes(`karte`)
   const exporteIsVisible = projekteTabs.includes(`exporte`)
-  const deleteDatasetModalIsVisible = !!store.datasetToDelete.id
 
   return (
     <Container loading={store.loading.length > 0}>
       <Content>
         {
           treeIsVisible &&
-          <TreeContainer tree={store.tree} treeName="tree" />
+          <TreeContainer tree={store.tree} />
         }
         {
           datenIsVisible &&
@@ -72,7 +70,7 @@ const Projekte = ({ store }) => {
         }
         {
           tree2IsVisible &&
-          <TreeContainer tree={store.tree2} treeName="tree2" />
+          <TreeContainer tree={store.tree2} />
         }
         {
           daten2IsVisible &&
@@ -118,10 +116,6 @@ const Projekte = ({ store }) => {
               activeApfloraLayersSortedString={store.map.activeApfloraLayersSortedString}
             />
           </KarteContainer>
-        }
-        {
-          deleteDatasetModalIsVisible &&
-          <DeleteDatasetModal />
         }
       </Content>
     </Container>

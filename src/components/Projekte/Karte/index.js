@@ -222,7 +222,8 @@ const Karte = ({ store }) => {
         if (!!idOfTpopBeingLocalized) {
           const {lat, lng} = event.latlng
           const [x, y] = epsg4326to21781(lng, lat)
-          store.map.localizeTpop(x, y)
+          // TODO: cannot localize from map2!!!
+          store.map.localizeTpop(store.tree, x, y)
         }
       }}
       onZoomlevelschange={(event) => {
