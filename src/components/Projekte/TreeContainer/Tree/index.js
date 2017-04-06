@@ -57,7 +57,6 @@ class Tree extends Component {
   static propTypes = {
     store: PropTypes.object.isRequired,
     tree: PropTypes.object.isRequired,
-    treeName: PropTypes.string.isRequired,
     projektLoading: PropTypes.bool,
     nodes: PropTypes.array.isRequired,
     mapTpopBeobVisible: PropTypes.bool.isRequired,
@@ -97,7 +96,7 @@ class Tree extends Component {
   }
 
   rowRenderer = ({ key, index, style }) => {
-    const { tree, treeName } = this.props
+    const { tree } = this.props
 
     return (
       <Row
@@ -106,7 +105,6 @@ class Tree extends Component {
         style={style}
         node={tree.node.nodes[index]}
         tree={tree}
-        treeName={treeName}
       />
     )
   }

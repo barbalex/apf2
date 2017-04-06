@@ -10,14 +10,14 @@ const enhance = compose(
 )
 
 const TpopmassnFolder = (
-  { store, onClick, treeName }:
-  {store:Object,onClick:()=>void,treeName:string}
+  { store, onClick, tree }:
+  {store:Object,tree:Object,onClick:()=>void}
 ) => {
   const moving = store.moving.table && store.moving.table === `tpopmassn`
   const copying = store.copying.table && store.copying.table === `tpopmassn`
 
   return (
-    <ContextMenu id={`${treeName}tpopmassnFolder`} >
+    <ContextMenu id={`${tree.name}tpopmassnFolder`} >
       <div className="react-contextmenu-title">Massnahmen</div>
       <MenuItem
         onClick={onClick}
