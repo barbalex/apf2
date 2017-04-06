@@ -20,15 +20,15 @@ const enhance = compose(
 )
 
 const PopFolder = (
-  { onClick, store, treeName, changeLabel, label, onShow }:
-  {onClick:()=>void,store:Object,treeName:string,changeLabel:()=>{},label:string|number,onShow:()=>void}
+  { tree, onClick, store, changeLabel, label, onShow }:
+  {tree:Object,onClick:()=>void,store:Object,changeLabel:()=>{},label:string|number,onShow:()=>void}
 ) => {
   const moving = store.moving.table && store.moving.table === `pop`
   const copying = store.copying.table && store.copying.table === `pop`
 
   return (
     <ContextMenu
-      id={`${treeName}popFolder`}
+      id={`${tree.name}popFolder`}
       collect={props => props}
       onShow={onShow}
     >
