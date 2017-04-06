@@ -30,9 +30,10 @@ const Ziel = ({ store, tree }) => {
 
   return (
     <Container>
-      <FormTitle title="Ziel" />
+      <FormTitle tree={tree} title="Ziel" />
       <FieldsContainer>
         <TextField
+          tree={tree}
           label="Jahr"
           fieldName="ZielJahr"
           value={activeDataset.row.ZielJahr}
@@ -43,6 +44,7 @@ const Ziel = ({ store, tree }) => {
         />
         <Label label="Zieltyp" />
         <RadioButtonGroup
+          tree={tree}
           fieldName="ZielTyp"
           value={activeDataset.row.ZielTyp}
           errorText={activeDataset.valid.ZielTyp}
@@ -50,6 +52,7 @@ const Ziel = ({ store, tree }) => {
           updatePropertyInDb={store.updatePropertyInDb}
         />
         <TextField
+          tree={tree}
           label="Ziel"
           fieldName="ZielBezeichnung"
           value={activeDataset.row.ZielBezeichnung}

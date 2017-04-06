@@ -27,10 +27,11 @@ const Zielber = ({ store, tree }) => {
 
   return (
     <Container>
-      <FormTitle title="Ziel-Bericht" />
+      <FormTitle tree={tree} title="Ziel-Bericht" />
       <Scrollbars>
         <FieldsContainer>
           <TextField
+            tree={tree}
             label="Jahr"
             fieldName="ZielBerJahr"
             value={activeDataset.row.ZielBerJahr}
@@ -40,6 +41,7 @@ const Zielber = ({ store, tree }) => {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            tree={tree}
             label="Entwicklung"
             fieldName="ZielBerErreichung"
             value={activeDataset.row.ZielBerErreichung}
@@ -50,6 +52,7 @@ const Zielber = ({ store, tree }) => {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            tree={tree}
             label="Bemerkungen"
             fieldName="ZielBerTxt"
             value={activeDataset.row.ZielBerTxt}

@@ -29,10 +29,11 @@ const Tpopmassnber = ({ store, tree }) => {
 
   return (
     <Container>
-      <FormTitle title="Massnahmen-Bericht Teil-Population" />
+      <FormTitle tree={tree} title="Massnahmen-Bericht Teil-Population" />
       <Scrollbars>
         <FieldsContainer>
           <TextField
+            tree={tree}
             label="Jahr"
             fieldName="TPopMassnBerJahr"
             value={activeDataset.row.TPopMassnBerJahr}
@@ -43,6 +44,7 @@ const Tpopmassnber = ({ store, tree }) => {
           />
           <Label label="Entwicklung" />
           <RadioButtonGroup
+            tree={tree}
             fieldName="TPopMassnBerErfolgsbeurteilung"
             value={activeDataset.row.TPopMassnBerErfolgsbeurteilung}
             errorText={activeDataset.valid.TPopMassnBerErfolgsbeurteilung}
@@ -50,6 +52,7 @@ const Tpopmassnber = ({ store, tree }) => {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            tree={tree}
             label="Interpretation"
             fieldName="TPopMassnBerTxt"
             value={activeDataset.row.TPopMassnBerTxt}
