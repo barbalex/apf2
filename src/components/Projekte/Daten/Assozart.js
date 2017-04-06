@@ -53,10 +53,11 @@ const Assozart = ({ store, tree }) => {
   const { activeDataset } = tree
   return (
     <Container>
-      <FormTitle title="assoziierte Art" />
+      <FormTitle tree={tree} title="assoziierte Art" />
       <Scrollbars>
         <FieldsContainer>
           <AutoComplete
+            tree={tree}
             label="Art"
             fieldName="AaSisfNr"
             valueText={getArtname({ store, tree })}
@@ -69,6 +70,7 @@ const Assozart = ({ store, tree }) => {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            tree={tree}
             label="Bemerkungen zur Assoziation"
             fieldName="AaBem"
             value={activeDataset.row.AaBem}

@@ -126,13 +126,13 @@ const enhance = compose(
       const { activeDataset } = props.tree
       if (val) {
         if (activeDataset.table === `beob_bereitgestellt`) {
-          insertBeobzuordnung(fieldname, val)
+          insertBeobzuordnung(props.tree, fieldname, val)
         } else {
           // beobzuordnung was moved from one TPopId to another
-          updatePropertyInDb(fieldname, val)
+          updatePropertyInDb(props.tree, fieldname, val)
         }
       } else {
-        deleteBeobzuordnung(activeDataset.row.NO_NOTE)
+        deleteBeobzuordnung(props.tree, activeDataset.row.NO_NOTE)
       }
     },
   }),
@@ -151,10 +151,11 @@ const Beobzuordnung = ({ store, tree, updatePropertyInDb }) => {
 
   return (
     <Scrollbars>
-      <FormTitle title="Beobachtung" />
+      <FormTitle tree={tree} title="Beobachtung" />
       <FieldsContainer>
         <Label label="Nicht zuordnen" />
         <RadioButtonWithInfo
+          tree={tree}
           fieldName="BeobNichtZuordnen"
           value={activeDataset.row.BeobNichtZuordnen}
           updatePropertyInDb={updatePropertyInDb}
@@ -166,6 +167,7 @@ const Beobzuordnung = ({ store, tree, updatePropertyInDb }) => {
             <Label label="Einer Teilpopulation zuordnen" />
             <MaxHeightDiv>
               <RadioButtonGroup
+                tree={tree}
                 fieldName="TPopId"
                 value={activeDataset.row.TPopId}
                 dataSource={getTpopZuordnenSource(store, tree)}
@@ -176,6 +178,7 @@ const Beobzuordnung = ({ store, tree, updatePropertyInDb }) => {
           </div>
         }
         <TextField
+          tree={tree}
           label="Bemerkungen zur Zuordnung"
           fieldName="BeobBemerkungen"
           value={activeDataset.row.BeobBemerkungen}
@@ -187,7 +190,7 @@ const Beobzuordnung = ({ store, tree, updatePropertyInDb }) => {
           updatePropertyInDb={store.updatePropertyInDb}
         />
       </FieldsContainer>
-      <FormTitle title={beobTitle} noTestdataMessage={true} />
+      <FormTitle tree={tree} title={beobTitle} noTestdataMessage={true} />
       <FieldsContainer>
         <Beob />
       </FieldsContainer>

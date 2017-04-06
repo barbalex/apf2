@@ -87,6 +87,7 @@ const enhance = compose(
 
 const Ap = ({
   store,
+  tree,
   activeDataset,
   updateProperty,
   updatePropertyInDb,
@@ -94,10 +95,11 @@ const Ap = ({
   artname,
 }) =>
   <Container>
-    <FormTitle title="Art" />
+    <FormTitle tree={tree} title="Art" />
     <Scrollbars>
       <FieldsContainer>
         <AutoComplete
+          tree={tree}
           label="Art"
           fieldName="ApArtId"
           valueText={artname}
@@ -112,6 +114,7 @@ const Ap = ({
         <FieldContainer>
           <Label label="Aktionsplan" />
           <RadioButtonGroupWithInfo
+            tree={tree}
             fieldName="ApStatus"
             value={activeDataset.row.ApStatus}
             dataSource={store.dropdownList.apStati}
@@ -142,6 +145,7 @@ const Ap = ({
           />
         </FieldContainer>
         <TextField
+          tree={tree}
           label="Start im Jahr"
           fieldName="ApJahr"
           value={activeDataset.row.ApJahr}
@@ -153,6 +157,7 @@ const Ap = ({
         <FieldContainer>
           <Label label="Stand Umsetzung" />
           <RadioButtonGroupWithInfo
+            tree={tree}
             fieldName="ApUmsetzung"
             value={activeDataset.row.ApUmsetzung}
             errorText={activeDataset.valid.ApUmsetzung}
@@ -184,6 +189,7 @@ const Ap = ({
           />
         </FieldContainer>
         <SelectField
+          tree={tree}
           label="Verantwortlich"
           fieldName="ApBearb"
           value={activeDataset.row.ApBearb}
@@ -195,6 +201,7 @@ const Ap = ({
         />
         <FieldContainer>
           <TextField
+            tree={tree}
             label="Artwert"
             fieldName="ApJahr"
             value={artwert}
@@ -208,6 +215,7 @@ const Ap = ({
 
 Ap.propTypes = {
   store: PropTypes.object.isRequired,
+  tree: PropTypes.object.isRequired,
   activeDataset: PropTypes.object.isRequired,
   updateProperty: PropTypes.func.isRequired,
   updatePropertyInDb: PropTypes.func.isRequired,

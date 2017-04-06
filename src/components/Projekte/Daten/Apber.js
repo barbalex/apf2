@@ -35,10 +35,11 @@ const Apber = ({ store, tree }) => {
 
   return (
     <Container>
-      <FormTitle title="AP-Bericht" />
+      <FormTitle tree={tree} title="AP-Bericht" />
       <Scrollbars>
         <FieldsContainer>
           <TextField
+            tree={tree}
             label="Jahr"
             fieldName="JBerJahr"
             value={activeDataset.row.JBerJahr}
@@ -48,6 +49,7 @@ const Apber = ({ store, tree }) => {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            tree={tree}
             label="Vergleich Vorjahr - Gesamtziel"
             fieldName="JBerVergleichVorjahrGesamtziel"
             value={activeDataset.row.JBerVergleichVorjahrGesamtziel}
@@ -60,6 +62,7 @@ const Apber = ({ store, tree }) => {
           />
           <Label label="Beurteilung" />
           <RadioButtonGroup
+            tree={tree}
             fieldName="JBerBeurteilung"
             value={activeDataset.row.JBerBeurteilung}
             errorText={activeDataset.valid.JBerBeurteilung}
@@ -68,6 +71,7 @@ const Apber = ({ store, tree }) => {
           />
           <Label label="Veränderung zum Vorjahr" />
           <RadioButtonGroup
+            tree={tree}
             fieldName="JBerVeraenGegenVorjahr"
             value={activeDataset.row.JBerVeraenGegenVorjahr}
             errorText={activeDataset.valid.JBerVeraenGegenVorjahr}
@@ -75,6 +79,7 @@ const Apber = ({ store, tree }) => {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            tree={tree}
             label="Analyse"
             fieldName="JBerAnalyse"
             value={activeDataset.row.JBerAnalyse}
@@ -86,6 +91,7 @@ const Apber = ({ store, tree }) => {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            tree={tree}
             label="Konsequenzen Umsetzung"
             fieldName="JBerUmsetzung"
             value={activeDataset.row.JBerUmsetzung}
@@ -97,6 +103,7 @@ const Apber = ({ store, tree }) => {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            tree={tree}
             label="Konsequenzen Erfolgskontrolle"
             fieldName="JBerErfko"
             value={activeDataset.row.JBerErfko}
@@ -108,6 +115,7 @@ const Apber = ({ store, tree }) => {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            tree={tree}
             label="Bemerkungen zum Aussagebereich A (neue Biotope)"
             fieldName="JBerATxt"
             value={activeDataset.row.JBerATxt}
@@ -119,6 +127,7 @@ const Apber = ({ store, tree }) => {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            tree={tree}
             label="Bemerkungen zum Aussagebereich B (Optimierung Biotope)"
             fieldName="JBerBTxt"
             value={activeDataset.row.JBerBTxt}
@@ -130,6 +139,7 @@ const Apber = ({ store, tree }) => {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            tree={tree}
             label="Bemerkungen zum Aussagebereich C (Optimierung Massnahmen)"
             fieldName="JBerCTxt"
             value={activeDataset.row.JBerCTxt}
@@ -141,6 +151,7 @@ const Apber = ({ store, tree }) => {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            tree={tree}
             label="Bemerkungen zum Aussagebereich D"
             fieldName="JBerDTxt"
             value={activeDataset.row.JBerDTxt}
@@ -152,6 +163,7 @@ const Apber = ({ store, tree }) => {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <DateFieldWithPicker
+            tree={tree}
             label="Datum"
             fieldName="JBerDatum"
             value={activeDataset.row.JBerDatum}
@@ -161,6 +173,7 @@ const Apber = ({ store, tree }) => {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <SelectField
+            tree={tree}
             label="BearbeiterIn"
             fieldName="JBerBearb"
             value={activeDataset.row.JBerBearb}
