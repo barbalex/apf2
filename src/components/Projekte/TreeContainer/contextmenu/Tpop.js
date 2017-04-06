@@ -13,12 +13,8 @@ const Tpop = (
   { onClick, store, treeName }:
   {onClick:()=>void,store:Object,treeName:string}
 ) => {
-  const movingTpopmassn = store.moving.table && store.moving.table === `tpopmassn`
-  const copyingTpopmassn = store.copying.table && store.copying.table === `tpopmassn`
-  const movingTpopfeldkontr = store.moving.table && store.moving.table === `tpopfeldkontr`
-  const copyingTpopfeldkontr = store.copying.table && store.copying.table === `tpopfeldkontr`
-  const movingTpopfreiwkontr = store.moving.table && store.moving.table === `tpopfreiwkontr`
-  const copyingTpopfreiwkontr = store.copying.table && store.copying.table === `tpopfreiwkontr`
+  const moving = store.moving.table && [`tpopmassn`, `tpopfeldkontr`, `tpopfreiwkontr`].includes(store.moving.table)
+  const copying = store.copying.table && [`tpopmassn`, `tpopfeldkontr`, `tpopfreiwkontr`].includes(store.copying.table)
 
   return (
     <ContextMenu id={`${treeName}tpop`}>
@@ -45,6 +41,16 @@ const Tpop = (
       <MenuItem
         onClick={onClick}
         data={{
+          action: `localizeOnMap`,
+          actionTable: `tpop`,
+          idTable: `tpop`,
+        }}
+      >
+        verorte auf Karte
+      </MenuItem>
+      <MenuItem
+        onClick={onClick}
+        data={{
           action: `markForMoving`,
           table: `tpop`,
         }}
@@ -54,15 +60,14 @@ const Tpop = (
       <MenuItem
         onClick={onClick}
         data={{
-          action: `localizeOnMap`,
-          actionTable: `tpop`,
-          idTable: `tpop`,
+          action: `markForCopying`,
+          table: `tpop`,
         }}
       >
-        verorte auf Karte
+        kopiere
       </MenuItem>
       {
-        movingTpopmassn &&
+        moving &&
         <MenuItem
           onClick={onClick}
           data={{
@@ -73,7 +78,7 @@ const Tpop = (
         </MenuItem>
       }
       {
-        copyingTpopmassn &&
+        copying &&
         <MenuItem
           onClick={onClick}
           data={{
@@ -84,47 +89,14 @@ const Tpop = (
         </MenuItem>
       }
       {
-        movingTpopfeldkontr &&
+        copying &&
         <MenuItem
           onClick={onClick}
           data={{
-            action: `move`,
+            action: `resetCopying`,
           }}
         >
-          {`verschiebe '${store.moving.label}' hierhin`}
-        </MenuItem>
-      }
-      {
-        copyingTpopfeldkontr &&
-        <MenuItem
-          onClick={onClick}
-          data={{
-            action: `copy`,
-          }}
-        >
-          {`kopiere '${store.copying.label}' hierhin`}
-        </MenuItem>
-      }
-      {
-        movingTpopfreiwkontr &&
-        <MenuItem
-          onClick={onClick}
-          data={{
-            action: `move`,
-          }}
-        >
-          {`verschiebe '${store.moving.label}' hierhin`}
-        </MenuItem>
-      }
-      {
-        copyingTpopfreiwkontr &&
-        <MenuItem
-          onClick={onClick}
-          data={{
-            action: `copy`,
-          }}
-        >
-          {`kopiere '${store.copying.label}' hierhin`}
+          Kopieren aufheben
         </MenuItem>
       }
     </ContextMenu>

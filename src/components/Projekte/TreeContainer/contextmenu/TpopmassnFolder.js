@@ -50,6 +50,17 @@ const TpopmassnFolder = (
           {`kopiere '${store.copying.label}' hierhin`}
         </MenuItem>
       }
+      {
+        store.copying.table &&
+        <MenuItem
+          onClick={onClick}
+          data={{
+            action: `resetCopying`,
+          }}
+        >
+          Kopieren aufheben
+        </MenuItem>
+      }
     </ContextMenu>
   )
 }

@@ -70,7 +70,8 @@ export default (store:Object) => {
       // - data of dataset with id copying.id
       // - parentId as passed
       copyTo(store, parentId)
-      // reset copying
+    }),
+    resetCopying: action(`resetCopying`, () => {
       store.copying.table = null
       store.copying.id = null
       store.copying.label = null

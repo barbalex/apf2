@@ -1,11 +1,13 @@
 // @flow
 import React, { PropTypes } from 'react'
 import { ContextMenu, MenuItem } from 'react-contextmenu'
+import { inject } from 'mobx-react'
 import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
 
 const enhance = compose(
+  inject(`store`),
   withState(`label`, `changeLabel`, ``),
   withHandlers({
     // according to https://github.com/vkbansal/react-contextmenu/issues/65
@@ -17,8 +19,8 @@ const enhance = compose(
 )
 
 const Tpopmassn = (
-  { onClick, treeName, changeLabel, label, onShow }:
-  {onClick:()=>void,treeName:string,changeLabel:()=>{},label:string|number,onShow:()=>void}
+  { store, onClick, treeName, changeLabel, label, onShow }:
+  {store:Object,onClick:()=>void,treeName:string,changeLabel:()=>{},label:string|number,onShow:()=>void}
 ) =>
   <ContextMenu
     id={`${treeName}tpopmassn`}
@@ -62,9 +64,21 @@ const Tpopmassn = (
     >
       kopiere
     </MenuItem>
+    {
+      store.copying.table &&
+      <MenuItem
+        onClick={onClick}
+        data={{
+          action: `resetCopying`,
+        }}
+      >
+        Kopieren aufheben
+      </MenuItem>
+    }
   </ContextMenu>
 
 Tpopmassn.propTypes = {
+  store: PropTypes.object.isRequired,
   onClick: PropTypes.func.isRequired,
   changeLabel: PropTypes.func.isRequired,
   label: PropTypes.any.isRequired,

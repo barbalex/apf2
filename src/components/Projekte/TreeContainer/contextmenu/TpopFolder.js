@@ -24,6 +24,7 @@ const TpopFolder = (
   {onClick:() => void,store:Object,treeName:string,changeId:()=>{},id:number,onShow:()=>{}}
 ) => {
   const moving = store.moving.table && store.moving.table === `tpop`
+  const copying = store.copying.table && store.copying.table === `tpop`
 
   return (
     <ContextMenu
@@ -50,6 +51,28 @@ const TpopFolder = (
           }}
         >
           {`verschiebe '${store.moving.label}' hierhin`}
+        </MenuItem>
+      }
+      {
+        copying &&
+        <MenuItem
+          onClick={onClick}
+          data={{
+            action: `copy`,
+          }}
+        >
+          {`kopiere '${store.copying.label}' hierhin`}
+        </MenuItem>
+      }
+      {
+        copying &&
+        <MenuItem
+          onClick={onClick}
+          data={{
+            action: `resetCopying`,
+          }}
+        >
+          Kopieren aufheben
         </MenuItem>
       }
     </ContextMenu>

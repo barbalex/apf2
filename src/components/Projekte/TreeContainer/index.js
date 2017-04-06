@@ -180,6 +180,9 @@ class TreeContainer extends Component { // eslint-disable-line react/prefer-stat
       markForCopying() {
         store.markForCopying(table, parseInt(id, 10), label)
       },
+      resetCopying() {
+        store.resetCopying()
+      },
       copy() {
         store.copyTo(parseInt(id, 10))
       },
