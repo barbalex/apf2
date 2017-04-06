@@ -57,6 +57,7 @@ const DragHandle = SortableHandle(() =>
 const SortableItem = SortableElement(({ overlay, store, activeOverlays }) =>
   <LayerDiv>
     <Checkbox
+      tree={store.tree}
       value={overlay.value}
       label={overlay.label}
       checked={activeOverlays.includes(overlay.value)}

@@ -20,14 +20,14 @@ const enhance = compose(
 )
 
 const Ap = (
-  { onClick, store, treeName, changeLabel, label, onShow }:
-  {onClick:() => void,store:Object,treeName:string,changeLabel:()=>{},label:string,onShow:()=>{}}
+  { onClick, store, tree, changeLabel, label, onShow }:
+  {onClick:() => void,store:Object,tree:Object,changeLabel:()=>{},label:string,onShow:()=>{}}
 ) => {
   const moving = store.moving.table && store.moving.table === `pop`
 
   return (
     <ContextMenu
-      id={`${treeName}ap`}
+      id={`${tree.name}ap`}
       collect={props => props}
       onShow={onShow}
     >

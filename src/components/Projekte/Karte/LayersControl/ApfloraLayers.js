@@ -134,6 +134,7 @@ const SortableItem = SortableElement(({ apfloraLayer, store, activeApfloraLayers
   return (
     <LayerDiv>
       <Checkbox
+        tree={store.tree}
         value={apfloraLayer.value}
         label={apfloraLayer.label}
         checked={activeApfloraLayers.includes(apfloraLayer.value)}
