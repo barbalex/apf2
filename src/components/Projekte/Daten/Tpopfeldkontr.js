@@ -89,7 +89,7 @@ const Tpopfeldkontr = ({
   const { activeDataset } = tree
   return (
     <Container>
-      <FormTitle title="Feld-Kontrolle" />
+      <FormTitle tree={tree} title="Feld-Kontrolle" />
       <FieldsContainer>
         <Tabs
           style={styles.root}
@@ -106,6 +106,7 @@ const Tpopfeldkontr = ({
               <Scrollbars>
                 <FormContainer>
                   <YearDatePair
+                    tree={tree}
                     yearLabel="Jahr"
                     yearFieldName="TPopKontrJahr"
                     yearValue={activeDataset.row.TPopKontrJahr}
@@ -119,6 +120,7 @@ const Tpopfeldkontr = ({
                   />
                   <Label label="Kontrolltyp" />
                   <RadioButtonGroup
+                    tree={tree}
                     fieldName="TPopKontrTyp"
                     value={activeDataset.row.TPopKontrTyp}
                     errorText={activeDataset.valid.TPopKontrTyp}
@@ -126,6 +128,7 @@ const Tpopfeldkontr = ({
                     updatePropertyInDb={store.updatePropertyInDb}
                   />
                   <SelectField
+                    tree={tree}
                     label="BearbeiterIn"
                     fieldName="TPopKontrBearb"
                     value={activeDataset.row.TPopKontrBearb}
@@ -136,6 +139,7 @@ const Tpopfeldkontr = ({
                     updatePropertyInDb={store.updatePropertyInDb}
                   />
                   <TextField
+                    tree={tree}
                     label="Anzahl Jungpflanzen"
                     fieldName="TPopKontrJungpfl"
                     value={activeDataset.row.TPopKontrJungpfl}
@@ -145,6 +149,7 @@ const Tpopfeldkontr = ({
                     updatePropertyInDb={store.updatePropertyInDb}
                   />
                   <TextField
+                    tree={tree}
                     label="Vitalität"
                     fieldName="TPopKontrVitalitaet"
                     value={activeDataset.row.TPopKontrVitalitaet}
@@ -154,6 +159,7 @@ const Tpopfeldkontr = ({
                     updatePropertyInDb={store.updatePropertyInDb}
                   />
                   <TextField
+                    tree={tree}
                     label="Überlebensrate"
                     fieldName="TPopKontrUeberleb"
                     value={activeDataset.row.TPopKontrUeberleb}
@@ -164,6 +170,7 @@ const Tpopfeldkontr = ({
                   />
                   <Label label="Entwicklung" />
                   <RadioButtonGroupWithInfo
+                    tree={tree}
                     fieldName="TPopKontrEntwicklung"
                     value={activeDataset.row.TPopKontrEntwicklung}
                     dataSource={store.dropdownList.tpopEntwicklungWerte}
@@ -171,6 +178,7 @@ const Tpopfeldkontr = ({
                     popover={TpopfeldkontrentwicklungPopover}
                   />
                   <TextField
+                    tree={tree}
                     label="Ursachen"
                     fieldName="TPopKontrUrsach"
                     value={activeDataset.row.TPopKontrUrsach}
@@ -183,6 +191,7 @@ const Tpopfeldkontr = ({
                     updatePropertyInDb={store.updatePropertyInDb}
                   />
                   <TextField
+                    tree={tree}
                     label="Erfolgsbeurteilung"
                     fieldName="TPopKontrUrteil"
                     value={activeDataset.row.TPopKontrUrteil}
@@ -194,6 +203,7 @@ const Tpopfeldkontr = ({
                     updatePropertyInDb={store.updatePropertyInDb}
                   />
                   <TextField
+                    tree={tree}
                     label="Änderungs-Vorschläge Umsetzung"
                     fieldName="TPopKontrAendUms"
                     value={activeDataset.row.TPopKontrAendUms}
@@ -205,6 +215,7 @@ const Tpopfeldkontr = ({
                     updatePropertyInDb={store.updatePropertyInDb}
                   />
                   <TextField
+                    tree={tree}
                     label="Änderungs-Vorschläge Kontrolle"
                     fieldName="TPopKontrAendKontr"
                     value={activeDataset.row.TPopKontrAendKontr}
@@ -216,6 +227,7 @@ const Tpopfeldkontr = ({
                     updatePropertyInDb={store.updatePropertyInDb}
                   />
                   <TextField
+                    tree={tree}
                     label="Bemerkungen"
                     fieldName="TPopKontrTxt"
                     value={activeDataset.row.TPopKontrTxt}
@@ -240,6 +252,7 @@ const Tpopfeldkontr = ({
               <Scrollbars>
                 <FormContainer>
                   <TextField
+                    tree={tree}
                     label="Fläche"
                     fieldName="TPopKontrFlaeche"
                     value={activeDataset.row.TPopKontrFlaeche}
@@ -250,6 +263,7 @@ const Tpopfeldkontr = ({
                   />
                   <Section>Vegetation</Section>
                   <AutoComplete
+                    tree={tree}
                     floatingLabelText="Lebensraum nach Delarze"
                     openOnFocus
                     fullWidth
@@ -259,13 +273,14 @@ const Tpopfeldkontr = ({
                     filter={AutoComplete.caseInsensitiveFilter}
                     maxSearchResults={20}
                     onNewRequest={val =>
-                      store.updatePropertyInDb(`TPopKontrLeb`, val)
+                      store.updatePropertyInDb(tree, `TPopKontrLeb`, val)
                     }
                     onBlur={e =>
-                      store.updatePropertyInDb(`TPopKontrLeb`, e.target.value)
+                      store.updatePropertyInDb(tree, `TPopKontrLeb`, e.target.value)
                     }
                   />
                   <AutoComplete
+                    tree={tree}
                     floatingLabelText="Umgebung nach Delarze"
                     openOnFocus
                     fullWidth
@@ -275,13 +290,14 @@ const Tpopfeldkontr = ({
                     filter={AutoComplete.caseInsensitiveFilter}
                     maxSearchResults={20}
                     onNewRequest={val =>
-                      store.updatePropertyInDb(`TPopKontrLebUmg`, val)
+                      store.updatePropertyInDb(tree, `TPopKontrLebUmg`, val)
                     }
                     onBlur={e =>
-                      store.updatePropertyInDb(`TPopKontrLebUmg`, e.target.value)
+                      store.updatePropertyInDb(tree, `TPopKontrLebUmg`, e.target.value)
                     }
                   />
                   <TextField
+                    tree={tree}
                     label="Vegetationstyp"
                     fieldName="TPopKontrVegTyp"
                     value={activeDataset.row.TPopKontrVegTyp}
@@ -291,6 +307,7 @@ const Tpopfeldkontr = ({
                     updatePropertyInDb={store.updatePropertyInDb}
                   />
                   <TextField
+                    tree={tree}
                     label="Konkurrenz"
                     fieldName="TPopKontrKonkurrenz"
                     value={activeDataset.row.TPopKontrKonkurrenz}
@@ -300,6 +317,7 @@ const Tpopfeldkontr = ({
                     updatePropertyInDb={store.updatePropertyInDb}
                   />
                   <TextField
+                    tree={tree}
                     label="Moosschicht"
                     fieldName="TPopKontrMoosschicht"
                     value={activeDataset.row.TPopKontrMoosschicht}
@@ -309,6 +327,7 @@ const Tpopfeldkontr = ({
                     updatePropertyInDb={store.updatePropertyInDb}
                   />
                   <TextField
+                    tree={tree}
                     label="Krautschicht"
                     fieldName="TPopKontrKrautschicht"
                     value={activeDataset.row.TPopKontrKrautschicht}
@@ -318,6 +337,7 @@ const Tpopfeldkontr = ({
                     updatePropertyInDb={store.updatePropertyInDb}
                   />
                   <TextField
+                    tree={tree}
                     label="Strauchschicht"
                     fieldName="TPopKontrStrauchschicht"
                     value={activeDataset.row.TPopKontrStrauchschicht}
@@ -327,6 +347,7 @@ const Tpopfeldkontr = ({
                     updatePropertyInDb={store.updatePropertyInDb}
                   />
                   <TextField
+                    tree={tree}
                     label="Baumschicht"
                     fieldName="TPopKontrBaumschicht"
                     value={activeDataset.row.TPopKontrBaumschicht}
@@ -337,6 +358,7 @@ const Tpopfeldkontr = ({
                   />
                   <Section>Boden</Section>
                   <TextField
+                    tree={tree}
                     label="Typ"
                     fieldName="TPopKontrBodenTyp"
                     value={activeDataset.row.TPopKontrBodenTyp}
@@ -346,6 +368,7 @@ const Tpopfeldkontr = ({
                     updatePropertyInDb={store.updatePropertyInDb}
                   />
                   <TextField
+                    tree={tree}
                     label="Kalkgehalt"
                     fieldName="TPopKontrBodenKalkgehalt"
                     value={activeDataset.row.TPopKontrBodenKalkgehalt}
@@ -355,6 +378,7 @@ const Tpopfeldkontr = ({
                     updatePropertyInDb={store.updatePropertyInDb}
                   />
                   <TextField
+                    tree={tree}
                     label="Durchlässigkeit"
                     fieldName="TPopKontrBodenDurchlaessigkeit"
                     value={activeDataset.row.TPopKontrBodenDurchlaessigkeit}
@@ -364,6 +388,7 @@ const Tpopfeldkontr = ({
                     updatePropertyInDb={store.updatePropertyInDb}
                   />
                   <TextField
+                    tree={tree}
                     label="Humusgehalt"
                     fieldName="TPopKontrBodenHumus"
                     value={activeDataset.row.TPopKontrBodenHumus}
@@ -373,6 +398,7 @@ const Tpopfeldkontr = ({
                     updatePropertyInDb={store.updatePropertyInDb}
                   />
                   <TextField
+                    tree={tree}
                     label="Nährstoffgehalt"
                     fieldName="TPopKontrBodenNaehrstoffgehalt"
                     value={activeDataset.row.TPopKontrBodenNaehrstoffgehalt}
@@ -382,6 +408,7 @@ const Tpopfeldkontr = ({
                     updatePropertyInDb={store.updatePropertyInDb}
                   />
                   <TextField
+                    tree={tree}
                     label="Bodenabtrag"
                     fieldName="TPopKontrBodenAbtrag"
                     value={activeDataset.row.TPopKontrBodenAbtrag}
@@ -391,6 +418,7 @@ const Tpopfeldkontr = ({
                     updatePropertyInDb={store.updatePropertyInDb}
                   />
                   <TextField
+                    tree={tree}
                     label="Wasserhaushalt"
                     fieldName="TPopKontrWasserhaushalt"
                     value={activeDataset.row.TPopKontrWasserhaushalt}
@@ -401,6 +429,7 @@ const Tpopfeldkontr = ({
                   />
                   <Section>Beurteilung</Section>
                   <TextField
+                    tree={tree}
                     label="Handlungsbedarf"
                     fieldName="TPopKontrHandlungsbedarf"
                     value={activeDataset.row.TPopKontrHandlungsbedarf}
@@ -412,6 +441,7 @@ const Tpopfeldkontr = ({
                   />
                   <Label label="Übereinstimmung mit Idealbiotop" />
                   <RadioButtonGroup
+                    tree={tree}
                     fieldName="TPopKontrIdealBiotopUebereinst"
                     value={activeDataset.row.TPopKontrIdealBiotopUebereinst}
                     errorText={activeDataset.valid.TPopKontrIdealBiotopUebereinst}

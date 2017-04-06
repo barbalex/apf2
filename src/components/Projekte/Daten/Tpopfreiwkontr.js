@@ -32,10 +32,11 @@ const Tpopfreiwkontr = ({ store, tree }) => {
 
   return (
     <Container>
-      <FormTitle title="Freiwilligen-Kontrolle" />
+      <FormTitle tree={tree} title="Freiwilligen-Kontrolle" />
       <Scrollbars>
         <FieldsContainer>
           <YearDatePair
+            tree={tree}
             yearLabel="Jahr"
             yearFieldName="TPopKontrJahr"
             yearValue={activeDataset.row.TPopKontrJahr}
@@ -48,6 +49,7 @@ const Tpopfreiwkontr = ({ store, tree }) => {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <SelectField
+            tree={tree}
             label="BearbeiterIn"
             fieldName="TPopKontrBearb"
             value={activeDataset.row.TPopKontrBearb}
@@ -59,11 +61,13 @@ const Tpopfreiwkontr = ({ store, tree }) => {
           />
           <Label label="Auf Plan eingezeichnet" />
           <RadioButton
+            tree={tree}
             fieldName="TPopKontrPlan"
             value={activeDataset.row.TPopKontrPlan}
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            tree={tree}
             label="Überprüfte Fläche in m2"
             fieldName="TPopKontrUebFlaeche"
             value={activeDataset.row.TPopKontrUebFlaeche}
@@ -73,6 +77,7 @@ const Tpopfreiwkontr = ({ store, tree }) => {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            tree={tree}
             label="Deckung überprüfte Art (%)"
             fieldName="TPopKontrUebPfl"
             value={activeDataset.row.TPopKontrUebPfl}
@@ -82,6 +87,7 @@ const Tpopfreiwkontr = ({ store, tree }) => {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            tree={tree}
             label="Deckung nackter Boden (%)"
             fieldName="TPopKontrNaBo"
             value={activeDataset.row.TPopKontrNaBo}
@@ -92,11 +98,13 @@ const Tpopfreiwkontr = ({ store, tree }) => {
           />
           <Label label="Auch junge Pflanzen vorhanden" />
           <RadioButton
+            tree={tree}
             fieldName="TPopKontrJungPflJN"
             value={activeDataset.row.TPopKontrJungPflJN}
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            tree={tree}
             label="Maximum der Vegetationshöhe in cm"
             fieldName="TPopKontrVegHoeMax"
             value={activeDataset.row.TPopKontrVegHoeMax}
@@ -106,6 +114,7 @@ const Tpopfreiwkontr = ({ store, tree }) => {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            tree={tree}
             label="Mittelwert der Vegetationshöhe in cm"
             fieldName="TPopKontrVegHoeMit"
             value={activeDataset.row.TPopKontrVegHoeMit}
@@ -115,6 +124,7 @@ const Tpopfreiwkontr = ({ store, tree }) => {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            tree={tree}
             label="Gefährdung"
             fieldName="TPopKontrGefaehrdung"
             value={activeDataset.row.TPopKontrGefaehrdung}
@@ -126,6 +136,7 @@ const Tpopfreiwkontr = ({ store, tree }) => {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            tree={tree}
             label="Bemerkungen"
             fieldName="TPopKontrTxt"
             value={activeDataset.row.TPopKontrTxt}

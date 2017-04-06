@@ -30,10 +30,11 @@ const Tpopkontrzaehl = ({ store, tree }) => {
 
   return (
     <Container>
-      <FormTitle title="Zählung" />
+      <FormTitle tree={tree} title="Zählung" />
       <Scrollbars>
         <FieldsContainer>
           <TextField
+            tree={tree}
             label="Anzahl"
             fieldName="Anzahl"
             value={activeDataset.row.Anzahl}
@@ -43,6 +44,7 @@ const Tpopkontrzaehl = ({ store, tree }) => {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <SelectField
+            tree={tree}
             label="Einheit"
             fieldName="Zaehleinheit"
             value={activeDataset.row.Zaehleinheit}
@@ -54,6 +56,7 @@ const Tpopkontrzaehl = ({ store, tree }) => {
           />
           <Label label="Methode" />
           <RadioButtonGroup
+            tree={tree}
             fieldName="Methode"
             value={activeDataset.row.Methode}
             errorText={activeDataset.valid.Methode}

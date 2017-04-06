@@ -48,10 +48,11 @@ const Tpop = ({ store, tree }) => {
   const apJahr = store.table.ap.get(apArtId).ApJahr
   return (
     <Container>
-      <FormTitle title="Teil-Population" />
+      <FormTitle tree={tree} title="Teil-Population" />
       <Scrollbars>
         <FieldsContainer>
           <TextField
+            tree={tree}
             label="Nr."
             fieldName="TPopNr"
             value={activeDataset.row.TPopNr}
@@ -62,6 +63,7 @@ const Tpop = ({ store, tree }) => {
           />
           <FieldWithInfoContainer>
             <TextField
+              tree={tree}
               label="Flurname"
               fieldName="TPopFlurname"
               value={activeDataset.row.TPopFlurname}
@@ -77,6 +79,7 @@ const Tpop = ({ store, tree }) => {
             </InfoWithPopover>
           </FieldWithInfoContainer>
           <Status
+            tree={tree}
             apJahr={apJahr}
             herkunftFieldName="TPopHerkunft"
             herkunftValue={activeDataset.row.TPopHerkunft}
@@ -88,11 +91,13 @@ const Tpop = ({ store, tree }) => {
           />
           <Label label="Status unklar" />
           <RadioButton
+            tree={tree}
             fieldName="TPopHerkunftUnklar"
             value={activeDataset.row.TPopHerkunftUnklar}
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            tree={tree}
             label="Begründung"
             fieldName="TPopHerkunftUnklarBegruendung"
             value={activeDataset.row.TPopHerkunftUnklarBegruendung}
@@ -105,6 +110,7 @@ const Tpop = ({ store, tree }) => {
           />
           <Label label="Für AP-Bericht relevant" />
           <RadioButtonGroupWithInfo
+            tree={tree}
             fieldName="TPopApBerichtRelevant"
             value={activeDataset.row.TPopApBerichtRelevant}
             dataSource={store.dropdownList.tpopApBerichtRelevantWerte}
@@ -112,6 +118,7 @@ const Tpop = ({ store, tree }) => {
             popover={TpopAbBerRelevantInfoPopover}
           />
           <TextField
+            tree={tree}
             label="X-Koordinaten"
             fieldName="TPopXKoord"
             value={activeDataset.row.TPopXKoord}
@@ -121,6 +128,7 @@ const Tpop = ({ store, tree }) => {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            tree={tree}
             label="Y-Koordinaten"
             fieldName="TPopYKoord"
             value={activeDataset.row.TPopYKoord}
@@ -130,6 +138,7 @@ const Tpop = ({ store, tree }) => {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <AutoComplete
+            tree={tree}
             hintText={store.dropdownList.gemeinden.length === 0 ? `lade Daten...` : ``}
             fullWidth
             floatingLabelText="Gemeinde"
@@ -139,14 +148,15 @@ const Tpop = ({ store, tree }) => {
             filter={AutoComplete.caseInsensitiveFilter}
             maxSearchResults={20}
             onNewRequest={val =>
-              store.updatePropertyInDb(`TPopGemeinde`, val)
+              store.updatePropertyInDb(tree, `TPopGemeinde`, val)
             }
             onBlur={e =>
-              store.updatePropertyInDb(`TPopGemeinde`, e.target.value)
+              store.updatePropertyInDb(tree, `TPopGemeinde`, e.target.value)
             }
             value={activeDataset.row.TPopGemeinde || ``}
           />
           <TextField
+            tree={tree}
             label="Radius (m)"
             fieldName="TPopRadius"
             value={activeDataset.row.TPopRadius}
@@ -156,6 +166,7 @@ const Tpop = ({ store, tree }) => {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            tree={tree}
             label="Höhe (m.ü.M.)"
             fieldName="TPopHoehe"
             value={activeDataset.row.TPopHoehe}
@@ -165,6 +176,7 @@ const Tpop = ({ store, tree }) => {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            tree={tree}
             label="Exposition, Besonnung"
             fieldName="TPopExposition"
             value={activeDataset.row.TPopExposition}
@@ -174,6 +186,7 @@ const Tpop = ({ store, tree }) => {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            tree={tree}
             label="Klima"
             fieldName="TPopKlima"
             value={activeDataset.row.TPopKlima}
@@ -183,6 +196,7 @@ const Tpop = ({ store, tree }) => {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            tree={tree}
             label="Hangneigung"
             fieldName="TPopNeigung"
             value={activeDataset.row.TPopNeigung}
@@ -192,6 +206,7 @@ const Tpop = ({ store, tree }) => {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            tree={tree}
             label="Beschreibung"
             fieldName="TPopBeschr"
             value={activeDataset.row.TPopBeschr}
@@ -202,6 +217,7 @@ const Tpop = ({ store, tree }) => {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            tree={tree}
             label="Kataster-Nr."
             fieldName="TPopKatNr"
             value={activeDataset.row.TPopKatNr}
@@ -211,6 +227,7 @@ const Tpop = ({ store, tree }) => {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            tree={tree}
             label="EigentümerIn"
             fieldName="TPopEigen"
             value={activeDataset.row.TPopEigen}
@@ -220,6 +237,7 @@ const Tpop = ({ store, tree }) => {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            tree={tree}
             label="Kontakt vor Ort"
             fieldName="TPopKontakt"
             value={activeDataset.row.TPopKontakt}
@@ -229,6 +247,7 @@ const Tpop = ({ store, tree }) => {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            tree={tree}
             label="Nutzungszone"
             fieldName="TPopNutzungszone"
             value={activeDataset.row.TPopNutzungszone}
@@ -238,6 +257,7 @@ const Tpop = ({ store, tree }) => {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            tree={tree}
             label="BewirtschafterIn"
             fieldName="TPopBewirtschafterIn"
             value={activeDataset.row.TPopBewirtschafterIn}
@@ -247,6 +267,7 @@ const Tpop = ({ store, tree }) => {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            tree={tree}
             label="Bewirtschaftung"
             fieldName="TPopBewirtschaftung"
             value={activeDataset.row.TPopBewirtschaftung}
@@ -256,6 +277,7 @@ const Tpop = ({ store, tree }) => {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            tree={tree}
             label="Bemerkungen"
             fieldName="TPopTxt"
             value={activeDataset.row.TPopTxt}

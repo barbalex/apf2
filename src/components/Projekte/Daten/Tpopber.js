@@ -29,10 +29,11 @@ const Tpopber = ({ store, tree }) => {
 
   return (
     <Container>
-      <FormTitle title="Kontroll-Bericht Teil-Population" />
+      <FormTitle tree={tree} title="Kontroll-Bericht Teil-Population" />
       <Scrollbars>
         <FieldsContainer>
           <TextField
+            tree={tree}
             label="Jahr"
             fieldName="TPopBerJahr"
             value={activeDataset.row.TPopBerJahr}
@@ -43,6 +44,7 @@ const Tpopber = ({ store, tree }) => {
           />
           <Label label="Entwicklung" />
           <RadioButtonGroup
+            tree={tree}
             fieldName="TPopBerEntwicklung"
             value={activeDataset.row.TPopBerEntwicklung}
             errorText={activeDataset.valid.TPopBerEntwicklung}
@@ -50,6 +52,7 @@ const Tpopber = ({ store, tree }) => {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            tree={tree}
             label="Bemerkungen"
             fieldName="TPopBerTxt"
             value={activeDataset.row.TPopBerTxt}
