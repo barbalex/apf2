@@ -80,7 +80,6 @@ class Qk extends Component { // eslint-disable-line react/prefer-stateless-funct
         <Scrollbars>
           <FieldsContainer>
             <TextField
-              tree={tree}
               floatingLabelText="Berichtjahr"
               type="number"
               value={berichtjahr}
