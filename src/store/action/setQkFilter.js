@@ -1,8 +1,8 @@
 // @flow
 import buildQkMessages from './buildQkMessages'
 
-const setQk = ({ store, filter }:{store:Object,filter:string}) => {
-  const apArtId = store.tree.activeNodes.ap
+const setQkFilter = ({ store, tree, filter }:{store:Object,tree:Object,filter:string}) => {
+  const apArtId = tree.activeNodes.ap
   const existingQk = store.qk.get(apArtId)
   const { berichtjahr, messages } = existingQk
   const value = buildQkMessages({
@@ -13,4 +13,4 @@ const setQk = ({ store, filter }:{store:Object,filter:string}) => {
   store.qk.set(apArtId, value)
 }
 
-export default setQk
+export default setQkFilter

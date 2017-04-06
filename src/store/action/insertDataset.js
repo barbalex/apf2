@@ -43,13 +43,13 @@ export default (store:Object, tree:Object, tablePassed:string, parentId:number, 
       tree.setActiveNodeArray(baseUrl)
       // if zieljahr, need to update ZielJahr
       if (tree.activeNodes.zieljahr) {
-        store.updateProperty(`ZielJahr`, tree.activeNodes.zieljahr)
-        store.updatePropertyInDb(`ZielJahr`, tree.activeNodes.zieljahr)
+        store.updateProperty(tree, `ZielJahr`, tree.activeNodes.zieljahr)
+        store.updatePropertyInDb(tree, `ZielJahr`, tree.activeNodes.zieljahr)
       }
       // if tpopfreiwkontr need to update TPopKontrTyp
       if (tablePassed === `tpopfreiwkontr`) {
-        store.updateProperty(`TPopKontrTyp`, `Freiwilligen-Erfolgskontrolle`)
-        store.updatePropertyInDb(`TPopKontrTyp`, `Freiwilligen-Erfolgskontrolle`)
+        store.updateProperty(tree, `TPopKontrTyp`, `Freiwilligen-Erfolgskontrolle`)
+        store.updatePropertyInDb(tree, `TPopKontrTyp`, `Freiwilligen-Erfolgskontrolle`)
       }
     })
     .catch(error => store.listError(error))

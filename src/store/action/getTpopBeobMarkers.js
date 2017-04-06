@@ -44,7 +44,7 @@ export default (store) => {
           const popId = table.tpop.get(nearestTpopId).PopId
           const newActiveNodeArray = [`Projekte`, activeNodes.projekt, `Arten`, activeNodes.ap, `Populationen`, popId, `Teil-Populationen`, nearestTpopId, `Beobachtungen`, p.BeobId]
           store.tree.setActiveNodeArray(newActiveNodeArray)
-          updatePropertyInDb(`TPopId`, nearestTpopId)
+          updatePropertyInDb(tree, `TPopId`, nearestTpopId)
         })
     })
   }
