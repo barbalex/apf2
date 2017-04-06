@@ -10,14 +10,14 @@ const enhance = compose(
 )
 
 const TpopfreiwkontrFolder = (
-  { store, onClick, treeName }:
-  {store:Object,onClick:()=>void,treeName:string}
+  { store, onClick, tree }:
+  {store:Object,tree:Object,onClick:()=>void}
 ) => {
   const moving = store.moving.table && store.moving.table === `tpopfreiwkontr`
   const copying = store.copying.table && store.copying.table === `tpopfreiwkontr`
 
   return (
-    <ContextMenu id={`${treeName}tpopfreiwkontrFolder`} >
+    <ContextMenu id={`${tree.name}tpopfreiwkontrFolder`} >
       <div className="react-contextmenu-title">Freiwilligen-Kontrollen</div>
       <MenuItem
         onClick={onClick}
