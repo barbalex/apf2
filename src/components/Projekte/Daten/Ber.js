@@ -28,10 +28,11 @@ const Ber = ({ store, tree }) => {
 
   return (
     <Container>
-      <FormTitle title="Bericht" />
+      <FormTitle tree={tree} title="Bericht" />
       <Scrollbars>
         <FieldsContainer>
           <TextField
+            tree={tree}
             label="AutorIn"
             fieldName="BerAutor"
             value={activeDataset.row.BerAutor}
@@ -41,6 +42,7 @@ const Ber = ({ store, tree }) => {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            tree={tree}
             label="Jahr"
             fieldName="BerJahr"
             value={activeDataset.row.BerJahr}
@@ -50,6 +52,7 @@ const Ber = ({ store, tree }) => {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            tree={tree}
             label="Titel"
             fieldName="BerTitel"
             value={activeDataset.row.BerTitel}
@@ -61,6 +64,7 @@ const Ber = ({ store, tree }) => {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextFieldWithUrl
+            tree={tree}
             label="URL"
             fieldName="BerURL"
             value={activeDataset.row.BerURL}

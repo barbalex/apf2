@@ -28,11 +28,12 @@ const Erfkrit = ({ store, tree }) => {
   const { activeDataset } = tree
   return (
     <Container>
-      <FormTitle title="Erfolgs-Kriterium" />
+      <FormTitle tree={tree} title="Erfolgs-Kriterium" />
       <Scrollbars>
         <FieldsContainer>
           <Label label="Beurteilung" />
           <RadioButtonGroup
+            tree={tree}
             fieldName="ErfkritErreichungsgrad"
             value={activeDataset.row.ErfkritErreichungsgrad}
             errorText={activeDataset.valid.ErfkritErreichungsgrad}
@@ -40,6 +41,7 @@ const Erfkrit = ({ store, tree }) => {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            tree={tree}
             label="Kriterien"
             fieldName="ErfkritTxt"
             value={activeDataset.row.ErfkritTxt}

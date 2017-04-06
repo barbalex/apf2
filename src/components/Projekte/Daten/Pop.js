@@ -53,10 +53,11 @@ const Pop = ({ store, tree }) => {
   const apJahr = store.table.ap.get(activeDataset.row.ApArtId).ApJahr
   return (
     <Container>
-      <FormTitle title="Population" />
+      <FormTitle tree={tree} title="Population" />
       <Scrollbars>
         <FieldsContainer>
           <TextField
+            tree={tree}
             label="Nr."
             fieldName="PopNr"
             value={activeDataset.row.PopNr}
@@ -67,6 +68,7 @@ const Pop = ({ store, tree }) => {
           />
           <FieldWithInfoContainer>
             <TextField
+              tree={tree}
               label="Name"
               fieldName="PopName"
               value={activeDataset.row.PopName}
@@ -82,6 +84,7 @@ const Pop = ({ store, tree }) => {
             </InfoWithPopover>
           </FieldWithInfoContainer>
           <Status
+            tree={tree}
             apJahr={apJahr}
             herkunftFieldName="PopHerkunft"
             herkunftValue={activeDataset.row.PopHerkunft}
@@ -93,11 +96,13 @@ const Pop = ({ store, tree }) => {
           />
           <Label label="Status unklar" />
           <RadioButton
+            tree={tree}
             fieldName="PopHerkunftUnklar"
             value={activeDataset.row.PopHerkunftUnklar}
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            tree={tree}
             label="Begründung"
             fieldName="PopHerkunftUnklarBegruendung"
             value={activeDataset.row.PopHerkunftUnklarBegruendung}
@@ -109,6 +114,7 @@ const Pop = ({ store, tree }) => {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            tree={tree}
             label="X-Koordinaten"
             fieldName="PopXKoord"
             value={activeDataset.row.PopXKoord}
@@ -118,6 +124,7 @@ const Pop = ({ store, tree }) => {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            tree={tree}
             label="Y-Koordinaten"
             fieldName="PopYKoord"
             value={activeDataset.row.PopYKoord}

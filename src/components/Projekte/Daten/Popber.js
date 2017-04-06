@@ -29,10 +29,11 @@ const Popber = ({ store, tree }) => {
 
   return (
     <Container>
-      <FormTitle title="Kontroll-Bericht Population" />
+      <FormTitle tree={tree} title="Kontroll-Bericht Population" />
       <Scrollbars>
         <FieldsContainer>
           <TextField
+            tree={tree}
             label="Jahr"
             fieldName="PopBerJahr"
             value={activeDataset.row.PopBerJahr}
@@ -43,6 +44,7 @@ const Popber = ({ store, tree }) => {
           />
           <Label label="Entwicklung" />
           <RadioButtonGroup
+            tree={tree}
             fieldName="PopBerEntwicklung"
             value={activeDataset.row.PopBerEntwicklung}
             errorText={activeDataset.valid.PopBerEntwicklung}
@@ -50,6 +52,7 @@ const Popber = ({ store, tree }) => {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            tree={tree}
             label="Bemerkungen"
             fieldName="PopBerTxt"
             value={activeDataset.row.PopBerTxt}
