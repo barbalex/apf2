@@ -21,7 +21,17 @@ const StyledAppBar = styled(AppBar)`
   }
 `
 const Button = styled(({ visible, ...rest}) => <FlatButton {...rest} />)`
-  color: ${(props) => (props.visible ? `rgb(255, 255, 255) !important` : `rgba(255, 255, 255, 0.298039) !important`)}
+  color: ${(props) => (props.visible ? `rgb(255, 255, 255) !important` : `rgba(255, 255, 255, 0.298039) !important`)};
+`
+const TreeButton = styled(Button)`
+  > div > span {
+    padding-right: 6px !important;
+  }
+`
+const DatenButton = styled(Button)`
+  > div > span {
+    padding-left: 6px !important;
+  }
 `
 const MenuDiv = styled.div`
   display: flex;
@@ -68,6 +78,7 @@ const enhance = compose(
     onClickButtonStrukturbaum: props => () => props.onClickButton(`tree`),
     onClickButtonStrukturbaum2: props => () => props.onClickButton(`tree2`),
     onClickButtonDaten: props => () => props.onClickButton(`daten`),
+    onClickButtonDaten2: props => () => props.onClickButton(`daten2`),
     onClickButtonKarte: props => () => props.onClickButton(`karte`),
     onClickButtonExporte: props => () => props.onClickButton(`exporte`),
   }),
@@ -79,6 +90,7 @@ const MyAppBar = ({
   onClickButtonStrukturbaum,
   onClickButtonStrukturbaum2,
   onClickButtonDaten,
+  onClickButtonDaten2,
   onClickButtonKarte,
   onClickButtonExporte,
   ueberApfloraChOnTouchTap,
@@ -87,6 +99,7 @@ const MyAppBar = ({
   const treeIsVisible = projekteTabs.includes(`tree`)
   const tree2IsVisible = projekteTabs.includes(`tree2`)
   const datenIsVisible = projekteTabs.includes(`daten`) && !projekteTabs.includes(`exporte`)
+  const daten2IsVisible = projekteTabs.includes(`daten2`) && !projekteTabs.includes(`exporte`)
   const karteIsVisible = projekteTabs.includes(`karte`)
   const exporteIsVisible = projekteTabs.includes(`exporte`)
 
@@ -95,20 +108,25 @@ const MyAppBar = ({
       title="AP Flora"
       iconElementRight={
         <MenuDiv>
-          <Button
+          <TreeButton
             label="Strukturbaum"
             visible={treeIsVisible}
             onClick={onClickButtonStrukturbaum}
           />
-          <Button
+          <DatenButton
+            label="Daten"
+            visible={datenIsVisible}
+            onClick={onClickButtonDaten}
+          />
+          <TreeButton
             label="Strukturbaum 2"
             visible={tree2IsVisible}
             onClick={onClickButtonStrukturbaum2}
           />
-          <Button
-            label="Daten"
-            visible={datenIsVisible}
-            onClick={onClickButtonDaten}
+          <DatenButton
+            label="Daten 2"
+            visible={daten2IsVisible}
+            onClick={onClickButtonDaten2}
           />
           <Button
             label="Karte"
@@ -156,6 +174,7 @@ MyAppBar.propTypes = {
   onClickButtonStrukturbaum: PropTypes.func.isRequired,
   onClickButtonStrukturbaum2: PropTypes.func.isRequired,
   onClickButtonDaten: PropTypes.func.isRequired,
+  onClickButtonDaten2: PropTypes.func.isRequired,
   onClickButtonKarte: PropTypes.func.isRequired,
   ueberApfloraChOnTouchTap: PropTypes.func.isRequired,
 }
