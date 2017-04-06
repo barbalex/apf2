@@ -7,8 +7,8 @@ const Div = styled.div`
   padding: 10px 10px 0 10px;
 `
 
-const TestdataMessage = ({ store }) => {
-  const { activeNodes } = store.tree
+const TestdataMessage = ({ store, tree }) => {
+  const { activeNodes } = tree
   const isTestSpecies = (
     activeNodes.ap &&
     activeNodes.ap < 200
@@ -25,6 +25,7 @@ const TestdataMessage = ({ store }) => {
 
 TestdataMessage.propTypes = {
   store: PropTypes.object.isRequired,
+  tree: PropTypes.object.isRequired,
 }
 
 export default inject(`store`)(TestdataMessage)

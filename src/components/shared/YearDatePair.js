@@ -43,6 +43,7 @@ const enhance = compose(
   withHandlers({
     onBlurYear: props => (event) => {
       const {
+        tree,
         yearFieldName,
         dateFieldName,
         dateValue,
@@ -54,17 +55,18 @@ const enhance = compose(
       const { value } = event.target
       // only update if value has changed
       if (value != yearValueOnFocus) {  // eslint-disable-line eqeqeq
-        updatePropertyInDb(yearFieldName, value)
+        updatePropertyInDb(tree, yearFieldName, value)
         // nullify date
         if (dateValue) {
-          updateProperty(dateFieldName, null)
-          updatePropertyInDb(dateFieldName, null)
+          updateProperty(props.tree, dateFieldName, null)
+          updatePropertyInDb(tree, dateFieldName, null)
           changeDateStringValue(``)
         }
       }
     },
     onChangeDatePicker: props => (event, val) => {
       const {
+        tree,
         yearFieldName,
         dateFieldName,
         yearValue,
@@ -73,13 +75,13 @@ const enhance = compose(
         changeDateStringValue,
       } = props
       // date picker returns a val that is a date
-      updateProperty(dateFieldName, format(val, `YYYY-MM-DD`))
-      updatePropertyInDb(dateFieldName, format(val, `YYYY-MM-DD`))
+      updateProperty(props.tree, dateFieldName, format(val, `YYYY-MM-DD`))
+      updatePropertyInDb(tree, dateFieldName, format(val, `YYYY-MM-DD`))
       changeDateStringValue(format(val, `DD.MM.YYYY`))
       // set year
       const year = format(val, `YYYY`)
       if (yearValue !== year) {
-        updatePropertyInDb(yearFieldName, year)
+        updatePropertyInDb(tree, yearFieldName, year)
       }
     },
     onChangeDate: props =>
@@ -88,6 +90,7 @@ const enhance = compose(
       (event) => {
         const { value } = event.target
           const {
+            tree,
             yearFieldName,
             dateFieldName,
             yearValue,
@@ -102,21 +105,21 @@ const enhance = compose(
         if (value != dateValueOnFocus) {  // eslint-disable-line eqeqeq
           if (!value) {
             // avoid creating an invalid date
-            updatePropertyInDb(dateFieldName, null)
+            updatePropertyInDb(tree, dateFieldName, null)
             changeDateStringValue(``)
             // set year
             if (yearValue !== null) {
-              updatePropertyInDb(yearFieldName, null)
+              updatePropertyInDb(tree, yearFieldName, null)
             }
           } else {
             // write a real date to db
             const date = new Date(convertDateToYyyyMmDd(value))
-            updatePropertyInDb(dateFieldName, format(date, `YYYY-MM-DD`))
+            updatePropertyInDb(tree, dateFieldName, format(date, `YYYY-MM-DD`))
             changeDateStringValue(format(date, `DD.MM.YYYY`))
             // set year
             const year = format(date, `YYYY`)
             if (yearValue !== year) {
-              updatePropertyInDb(yearFieldName, year)
+              updatePropertyInDb(tree, yearFieldName, year)
             }
           }
         }
@@ -134,6 +137,7 @@ const enhance = compose(
 class YearDatePair extends Component {
 
   static propTypes = {
+    tree: PropTypes.object.isRequired,
     yearLabel: PropTypes.string.isRequired,
     yearFieldName: PropTypes.string.isRequired,
     yearValue: PropTypes.any,
@@ -168,6 +172,7 @@ class YearDatePair extends Component {
 
   render() {
     const {
+      tree,
       yearLabel,
       yearFieldName,
       yearValue,
@@ -195,7 +200,7 @@ class YearDatePair extends Component {
           errorText={yearErrorText}
           fullWidth
           onChange={(event, val) =>
-            updateProperty(yearFieldName, val)
+            updateProperty(tree, yearFieldName, val)
           }
           onBlur={onBlurYear}
           onFocus={onFocusYear}

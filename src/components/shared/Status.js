@@ -41,13 +41,14 @@ const enhance = compose(
     onChange: props => (event, valuePassed) => {
       // if clicked element is active herkunftValue: set null
       const val = valuePassed === props.herkunftValue ? null : valuePassed
-      props.updatePropertyInDb(props.herkunftFieldName, val)
+      props.updatePropertyInDb(props.tree, props.herkunftFieldName, val)
     },
   }),
   observer
 )
 
 const Status = ({
+  tree,
   apJahr,
   herkunftFieldName,
   herkunftValue,
@@ -74,6 +75,7 @@ const Status = ({
     <div>
       <FieldWithInfoContainer>
         <TextField
+          tree={tree}
           label="bekannt seit"
           fieldName={bekanntSeitFieldName}
           value={bekanntSeitValue}
@@ -161,6 +163,7 @@ const Status = ({
 }
 
 Status.propTypes = {
+  tree: PropTypes.object.isRequired,
   apJahr: PropTypes.number,
   herkunftFieldName: PropTypes.string.isRequired,
   herkunftValue: PropTypes.number,

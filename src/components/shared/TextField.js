@@ -11,13 +11,13 @@ const enhance = compose(
   withHandlers({
     onChange: props =>
       (event, val) =>
-        props.updateProperty(props.fieldName, val),
+        props.updateProperty(props.tree, props.fieldName, val),
     onBlur: props =>
       (event) => {
         const { value } = event.target
         // only update if value has changed
         if (value != props.valueOnFocus) {  // eslint-disable-line eqeqeq
-          props.updatePropertyInDb(props.fieldName, value)
+          props.updatePropertyInDb(props.tree, props.fieldName, value)
         }
       },
     onFocus: props =>
@@ -54,6 +54,7 @@ const MyTextField = ({
   />
 
 MyTextField.propTypes = {
+  tree: PropTypes.object.isRequired,
   label: PropTypes.string.isRequired,
   fieldName: PropTypes.string.isRequired,
   value: PropTypes.any,
