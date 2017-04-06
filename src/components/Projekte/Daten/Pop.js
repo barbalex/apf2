@@ -48,8 +48,8 @@ const enhance = compose(
   observer
 )
 
-const Pop = ({ store }) => {
-  const { activeDataset } = store.tree
+const Pop = ({ store, tree }) => {
+  const { activeDataset } = tree
   const apJahr = store.table.ap.get(activeDataset.row.ApArtId).ApJahr
   return (
     <Container>
@@ -134,6 +134,7 @@ const Pop = ({ store }) => {
 
 Pop.propTypes = {
   store: PropTypes.object.isRequired,
+  tree: PropTypes.object.isRequired,
 }
 
 export default enhance(Pop)

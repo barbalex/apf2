@@ -83,9 +83,10 @@ const enhance = compose(
 
 const Tpopfeldkontr = ({
   store,
+  tree,
   onChangeTab,
 }) => {
-  const { activeDataset } = store.tree
+  const { activeDataset } = tree
   return (
     <Container>
       <FormTitle title="Feld-Kontrolle" />
@@ -429,6 +430,7 @@ const Tpopfeldkontr = ({
 
 Tpopfeldkontr.propTypes = {
   store: PropTypes.object.isRequired,
+  tree: PropTypes.object.isRequired,
   onChangeTab: PropTypes.func.isRequired,
 }
 

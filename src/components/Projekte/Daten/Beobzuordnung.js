@@ -59,12 +59,12 @@ const nichtZuordnenPopover = (
   </Container>
 )
 
-const getTpopZuordnenSource = (store) => {
-  const { activeDataset } = store.tree
+const getTpopZuordnenSource = (store, tree) => {
+  const { activeDataset, activeNodes } = tree
   const beobzuordnung = activeDataset.row
   // get all popIds of active ap
   const popList = Array.from(store.table.pop.values())
-    .filter(p => p.ApArtId === store.tree.activeNodes.ap)
+    .filter(p => p.ApArtId === activeNodes.ap)
   const popIdList = popList.map(p => p.PopId)
   // get all tpop
   let tpopList = Array.from(store.table.tpop.values())
@@ -123,7 +123,7 @@ const enhance = compose(
         updatePropertyInDb,
         deleteBeobzuordnung,
       } = props.store
-      const { activeDataset } = props.store.tree
+      const { activeDataset } = props.tree
       if (val) {
         if (activeDataset.table === `beob_bereitgestellt`) {
           insertBeobzuordnung(fieldname, val)
@@ -139,8 +139,8 @@ const enhance = compose(
   observer
 )
 
-const Beobzuordnung = ({ store, updatePropertyInDb }) => {
-  const { activeDataset } = store.tree
+const Beobzuordnung = ({ store, tree, updatePropertyInDb }) => {
+  const { activeDataset } = tree
   const beobzuordnung = activeDataset.row
   const beobTitle = (
     beobzuordnung.QuelleId === 1 ?
@@ -168,7 +168,7 @@ const Beobzuordnung = ({ store, updatePropertyInDb }) => {
               <RadioButtonGroup
                 fieldName="TPopId"
                 value={activeDataset.row.TPopId}
-                dataSource={getTpopZuordnenSource(store)}
+                dataSource={getTpopZuordnenSource(store, tree)}
                 updatePropertyInDb={updatePropertyInDb}
                 onChange={() => console.log('changed')}
               />
@@ -197,6 +197,7 @@ const Beobzuordnung = ({ store, updatePropertyInDb }) => {
 
 Beobzuordnung.propTypes = {
   store: PropTypes.object.isRequired,
+  tree: PropTypes.object.isRequired,
   updatePropertyInDb: PropTypes.func.isRequired,
 }
 

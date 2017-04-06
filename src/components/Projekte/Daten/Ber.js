@@ -23,8 +23,8 @@ const enhance = compose(
   observer
 )
 
-const Ber = ({ store }) => {
-  const { activeDataset } = store.tree
+const Ber = ({ store, tree }) => {
+  const { activeDataset } = tree
 
   return (
     <Container>
@@ -79,6 +79,7 @@ const Ber = ({ store }) => {
 
 Ber.propTypes = {
   store: PropTypes.object.isRequired,
+  tree: PropTypes.object.isRequired,
 }
 
 export default enhance(Ber)

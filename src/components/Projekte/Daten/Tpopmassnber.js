@@ -24,8 +24,9 @@ const enhance = compose(
   observer
 )
 
-const Tpopmassnber = ({ store }) => {
-  const { activeDataset } = store.tree
+const Tpopmassnber = ({ store, tree }) => {
+  const { activeDataset } = tree
+
   return (
     <Container>
       <FormTitle title="Massnahmen-Bericht Teil-Population" />
@@ -67,6 +68,7 @@ const Tpopmassnber = ({ store }) => {
 
 Tpopmassnber.propTypes = {
   store: PropTypes.object.isRequired,
+  tree: PropTypes.object.isRequired,
 }
 
 export default enhance(Tpopmassnber)

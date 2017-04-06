@@ -27,8 +27,9 @@ const enhance = compose(
   observer
 )
 
-const Tpopfreiwkontr = ({ store }) => {
-  const { activeDataset } = store.tree
+const Tpopfreiwkontr = ({ store, tree }) => {
+  const { activeDataset } = tree
+
   return (
     <Container>
       <FormTitle title="Freiwilligen-Kontrolle" />
@@ -145,6 +146,7 @@ const Tpopfreiwkontr = ({ store }) => {
 
 Tpopfreiwkontr.propTypes = {
   store: PropTypes.object.isRequired,
+  tree: PropTypes.object.isRequired,
 }
 
 export default enhance(Tpopfreiwkontr)

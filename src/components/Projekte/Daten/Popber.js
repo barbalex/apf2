@@ -24,8 +24,8 @@ const enhance = compose(
   observer
 )
 
-const Popber = ({ store }) => {
-  const { activeDataset } = store.tree
+const Popber = ({ store, tree }) => {
+  const { activeDataset } = tree
 
   return (
     <Container>
@@ -68,6 +68,7 @@ const Popber = ({ store }) => {
 
 Popber.propTypes = {
   store: PropTypes.object.isRequired,
+  tree: PropTypes.object.isRequired,
 }
 
 export default enhance(Popber)

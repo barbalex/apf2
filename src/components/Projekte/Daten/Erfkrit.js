@@ -24,8 +24,8 @@ const enhance = compose(
   observer
 )
 
-const Erfkrit = ({ store }) => {
-  const { activeDataset } = store.tree
+const Erfkrit = ({ store, tree }) => {
+  const { activeDataset } = tree
   return (
     <Container>
       <FormTitle title="Erfolgs-Kriterium" />
@@ -58,6 +58,7 @@ const Erfkrit = ({ store }) => {
 
 Erfkrit.propTypes = {
   store: PropTypes.object.isRequired,
+  tree: PropTypes.object.isRequired,
 }
 
 export default enhance(Erfkrit)

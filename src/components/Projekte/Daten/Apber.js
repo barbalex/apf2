@@ -26,8 +26,8 @@ const enhance = compose(
   observer
 )
 
-const Apber = ({ store }) => {
-  const { activeDataset } = store.tree
+const Apber = ({ store, tree }) => {
+  const { activeDataset } = tree
   const veraenGegenVorjahrWerte = [
     { value: `+`, label: `+` },
     { value: `-`, label: `-` },
@@ -178,6 +178,7 @@ const Apber = ({ store }) => {
 
 Apber.propTypes = {
   store: PropTypes.object.isRequired,
+  tree: PropTypes.object.isRequired,
 }
 
 export default enhance(Apber)

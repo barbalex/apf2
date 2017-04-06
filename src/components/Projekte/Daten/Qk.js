@@ -49,6 +49,7 @@ class Qk extends Component { // eslint-disable-line react/prefer-stateless-funct
 
   static propTypes = {
     store: PropTypes.object.isRequired,
+    tree: PropTypes.object.isRequired,
     onChangeBerichtjahr: PropTypes.func.isRequired,
   }
 
@@ -59,10 +60,11 @@ class Qk extends Component { // eslint-disable-line react/prefer-stateless-funct
   render() {
     const {
       store,
+      tree,
       onChangeBerichtjahr,
     } = this.props
 
-    const { tree, qk } = store
+    const { qk } = store
     const apArtId = tree.activeNodes.ap
     // need to pass value for when qk does not yet exist
     const myQk = qk.get(apArtId) || {

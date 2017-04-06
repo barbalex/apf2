@@ -25,8 +25,7 @@ const enhance = compose(
   observer
 )
 
-const getArtList = ({ store }) => {
-  const { tree } = store
+const getArtList = ({ store, tree }) => {
   const { activeDataset, activeNodes } = tree
   const { adb_eigenschaften } = store.table
   const assozartenOfAp = Array.from(store.table.assozart.values()).filter(a =>
@@ -40,9 +39,9 @@ const getArtList = ({ store }) => {
   return sortBy(artList, `Artname`)
 }
 
-const getArtname = ({ store }) => {
+const getArtname = ({ store, tree }) => {
   const { adb_eigenschaften } = store.table
-  const { activeDataset } = store.tree
+  const { activeDataset } = tree
   let name = ``
   if (activeDataset.row.AaSisfNr && adb_eigenschaften.size > 0) {
     name = adb_eigenschaften.get(activeDataset.row.AaSisfNr).Artname
@@ -50,8 +49,8 @@ const getArtname = ({ store }) => {
   return name
 }
 
-const Assozart = ({ store }) => {
-  const { activeDataset } = store.tree
+const Assozart = ({ store, tree }) => {
+  const { activeDataset } = tree
   return (
     <Container>
       <FormTitle title="assoziierte Art" />
@@ -60,9 +59,9 @@ const Assozart = ({ store }) => {
           <AutoComplete
             label="Art"
             fieldName="AaSisfNr"
-            valueText={getArtname({ store })}
+            valueText={getArtname({ store, tree })}
             errorText={activeDataset.valid.ApArtId}
-            dataSource={getArtList({ store })}
+            dataSource={getArtList({ store, tree })}
             dataSourceConfig={{
               value: `TaxonomieId`,
               text: `Artname`,
@@ -88,6 +87,7 @@ const Assozart = ({ store }) => {
 
 Assozart.propTypes = {
   store: PropTypes.object.isRequired,
+  tree: PropTypes.object.isRequired,
 }
 
 export default enhance(Assozart)

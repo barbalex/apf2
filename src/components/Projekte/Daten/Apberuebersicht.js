@@ -22,8 +22,8 @@ const enhance = compose(
   observer
 )
 
-const Apberuebersicht = ({ store }) => {
-  const { activeDataset } = store.tree
+const Apberuebersicht = ({ store, tree }) => {
+  const { activeDataset } = tree
 
   return (
     <Container>
@@ -59,6 +59,7 @@ const Apberuebersicht = ({ store }) => {
 
 Apberuebersicht.propTypes = {
   store: PropTypes.object.isRequired,
+  tree: PropTypes.object.isRequired,
 }
 
 export default enhance(Apberuebersicht)

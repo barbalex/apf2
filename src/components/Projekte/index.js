@@ -51,6 +51,10 @@ const Projekte = ({ store }) => {
     projekteTabs.includes(`daten`) &&
     !projekteTabs.includes(`exporte`)
   )
+  const daten2IsVisible = (
+    projekteTabs.includes(`daten2`) &&
+    !projekteTabs.includes(`exporte`)
+  )
   const karteIsVisible = projekteTabs.includes(`karte`)
   const exporteIsVisible = projekteTabs.includes(`exporte`)
   const deleteDatasetModalIsVisible = !!store.datasetToDelete.id
@@ -63,12 +67,16 @@ const Projekte = ({ store }) => {
           <TreeContainer tree={store.tree} treeName="tree" />
         }
         {
+          datenIsVisible &&
+          <Daten tree={store.tree} />
+        }
+        {
           tree2IsVisible &&
           <TreeContainer tree={store.tree2} treeName="tree2" />
         }
         {
-          datenIsVisible &&
-          <Daten />
+          daten2IsVisible &&
+          <Daten tree={store.tree2} />
         }
         {
           exporteIsVisible &&

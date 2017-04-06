@@ -25,8 +25,9 @@ const enhance = compose(
   observer
 )
 
-const Ziel = ({ store }) => {
-  const { activeDataset } = store.tree
+const Ziel = ({ store, tree }) => {
+  const { activeDataset } = tree
+
   return (
     <Container>
       <FormTitle title="Ziel" />
@@ -66,6 +67,7 @@ const Ziel = ({ store }) => {
 
 Ziel.propTypes = {
   store: PropTypes.object.isRequired,
+  tree: PropTypes.object.isRequired,
 }
 
 export default enhance(Ziel)

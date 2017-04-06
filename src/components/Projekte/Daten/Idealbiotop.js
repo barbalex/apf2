@@ -32,10 +32,8 @@ const enhance = compose(
   observer
 )
 
-const Idealbiotop = ({
-  store,
-}) => {
-  const { activeDataset } = store.tree
+const Idealbiotop = ({ store, tree }) => {
+  const { activeDataset } = tree
   return (
     <Container>
       <FormTitle title="Idealbiotop" />
@@ -248,6 +246,7 @@ const Idealbiotop = ({
 
 Idealbiotop.propTypes = {
   store: PropTypes.object.isRequired,
+  tree: PropTypes.object.isRequired,
 }
 
 export default enhance(Idealbiotop)

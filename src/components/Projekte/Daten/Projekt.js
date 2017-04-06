@@ -22,10 +22,8 @@ const enhance = compose(
   observer
 )
 
-const Projekt = ({
-  store,
-}) => {
-  const { activeDataset } = store.tree
+const Projekt = ({ store, tree }) => {
+  const { activeDataset } = tree
   return (
     <Container>
       <FormTitle title="Projekt" />
@@ -56,6 +54,7 @@ const Projekt = ({
 
 Projekt.propTypes = {
   store: PropTypes.object.isRequired,
+  tree: PropTypes.object.isRequired,
 }
 
 export default enhance(Projekt)

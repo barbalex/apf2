@@ -39,10 +39,11 @@ const enhance = compose(
 
 const Tpopmassn = ({
   store,
+  tree,
   onNewRequestWirtspflanze,
   onBlurWirtspflanze,
 }) => {
-  const { activeDataset } = store.tree
+  const { activeDataset } = tree
 
   return (
     <Container>
@@ -218,6 +219,7 @@ const Tpopmassn = ({
 
 Tpopmassn.propTypes = {
   store: PropTypes.object.isRequired,
+  tree: PropTypes.object.isRequired,
   onNewRequestWirtspflanze: PropTypes.func.isRequired,
   onBlurWirtspflanze: PropTypes.func.isRequired,
 }

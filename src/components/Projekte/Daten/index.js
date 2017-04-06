@@ -51,38 +51,37 @@ const enhance = compose(
   observer
 )
 
-const Daten = ({ store }) => {
-  const { tree } = store
+const Daten = ({ store, tree }) => {
   const { activeNodes, activeDataset } = tree
   if (!activeDataset || !activeDataset.table || !activeDataset.row) {
     return <div />
   }
   const formObject = {
-    projekt: <Projekt />,
-    apberuebersicht: <Apberuebersicht />,
-    ap: <Ap />,
-    assozart: <Assozart />,
-    idealbiotop: <Idealbiotop />,
-    erfkrit: <Erfkrit />,
-    apber: <Apber />,
-    ber: <Ber />,
-    ziel: <Ziel />,
-    zielber: <Zielber />,
-    pop: <Pop />,
-    popmassnber: <Popmassnber />,
-    popber: <Popber />,
-    tpop: <Tpop />,
-    tpopber: <Tpopber />,
-    tpopmassn: <Tpopmassn />,
-    tpopmassnber: <Tpopmassnber />,
-    tpopfeldkontr: <Tpopfeldkontr />,
-    tpopfreiwkontr: <Tpopfreiwkontr />,
-    tpopkontrzaehl: <Tpopkontrzaehl />,
-    exporte: <Exporte />,
-    qk: <Qk />,
-    beobNichtZuzuordnen: <Beobzuordnung typ="beobNichtZuzuordnen" />,
-    beobzuordnung: <Beobzuordnung typ="beobzuordnung" />,
-    tpopbeob: <Beobzuordnung typ="tpopbeob" />,
+    projekt: <Projekt tree={tree} />,
+    apberuebersicht: <Apberuebersicht tree={tree} />,
+    ap: <Ap tree={tree} />,
+    assozart: <Assozart tree={tree} />,
+    idealbiotop: <Idealbiotop tree={tree} />,
+    erfkrit: <Erfkrit tree={tree} />,
+    apber: <Apber tree={tree} />,
+    ber: <Ber tree={tree} />,
+    ziel: <Ziel tree={tree} />,
+    zielber: <Zielber tree={tree} />,
+    pop: <Pop tree={tree} />,
+    popmassnber: <Popmassnber tree={tree} />,
+    popber: <Popber tree={tree} />,
+    tpop: <Tpop tree={tree} />,
+    tpopber: <Tpopber tree={tree} />,
+    tpopmassn: <Tpopmassn tree={tree} />,
+    tpopmassnber: <Tpopmassnber tree={tree} />,
+    tpopfeldkontr: <Tpopfeldkontr tree={tree} />,
+    tpopfreiwkontr: <Tpopfreiwkontr tree={tree} />,
+    tpopkontrzaehl: <Tpopkontrzaehl tree={tree} />,
+    exporte: <Exporte tree={tree} />,
+    qk: <Qk tree={tree} />,
+    beobNichtZuzuordnen: <Beobzuordnung typ="beobNichtZuzuordnen" tree={tree} />,
+    beobzuordnung: <Beobzuordnung typ="beobzuordnung" tree={tree} />,
+    tpopbeob: <Beobzuordnung typ="tpopbeob" tree={tree} />,
   }
   const standardForm = (
     <div>
@@ -117,6 +116,7 @@ const Daten = ({ store }) => {
 
 Daten.propTypes = {
   store: PropTypes.object.isRequired,
+  tree: PropTypes.object.isRequired,
 }
 
 export default enhance(Daten)
