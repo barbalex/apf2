@@ -53,6 +53,15 @@ const Tpopfeldkontr = (
     >
       verschiebe
     </MenuItem>
+    <MenuItem
+      onClick={onClick}
+      data={{
+        action: `markForCopying`,
+        table: `tpopfeldkontr`,
+      }}
+    >
+      kopiere
+    </MenuItem>
   </ContextMenu>
 
 Tpopfeldkontr.propTypes = {

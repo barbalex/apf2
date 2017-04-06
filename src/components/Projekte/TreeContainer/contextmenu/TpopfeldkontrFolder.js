@@ -14,6 +14,7 @@ const TpopfeldkontrFolder = (
   {store:Object,onClick:()=>void,treeName:string}
 ) => {
   const moving = store.moving.table && store.moving.table === `tpopfeldkontr`
+  const copying = store.copying.table && store.copying.table === `tpopfeldkontr`
 
   return (
     <ContextMenu id={`${treeName}tpopfeldkontrFolder`} >
@@ -36,6 +37,17 @@ const TpopfeldkontrFolder = (
           }}
         >
           {`verschiebe '${store.moving.label}' hierhin`}
+        </MenuItem>
+      }
+      {
+        copying &&
+        <MenuItem
+          onClick={onClick}
+          data={{
+            action: `copy`,
+          }}
+        >
+          {`kopiere '${store.copying.label}' hierhin`}
         </MenuItem>
       }
     </ContextMenu>

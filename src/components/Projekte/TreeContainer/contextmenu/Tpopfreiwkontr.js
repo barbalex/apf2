@@ -53,6 +53,15 @@ const Tpopfreiwkontr = (
     >
       verschiebe
     </MenuItem>
+    <MenuItem
+      onClick={onClick}
+      data={{
+        action: `markForCopying`,
+        table: `tpopfreiwkontr`,
+      }}
+    >
+      kopiere
+    </MenuItem>
   </ContextMenu>
 
 Tpopfreiwkontr.propTypes = {

@@ -16,7 +16,9 @@ const Tpop = (
   const movingTpopmassn = store.moving.table && store.moving.table === `tpopmassn`
   const copyingTpopmassn = store.copying.table && store.copying.table === `tpopmassn`
   const movingTpopfeldkontr = store.moving.table && store.moving.table === `tpopfeldkontr`
+  const copyingTpopfeldkontr = store.copying.table && store.copying.table === `tpopfeldkontr`
   const movingTpopfreiwkontr = store.moving.table && store.moving.table === `tpopfreiwkontr`
+  const copyingTpopfreiwkontr = store.copying.table && store.copying.table === `tpopfreiwkontr`
 
   return (
     <ContextMenu id={`${treeName}tpop`}>
@@ -93,6 +95,17 @@ const Tpop = (
         </MenuItem>
       }
       {
+        copyingTpopfeldkontr &&
+        <MenuItem
+          onClick={onClick}
+          data={{
+            action: `copy`,
+          }}
+        >
+          {`kopiere '${store.copying.label}' hierhin`}
+        </MenuItem>
+      }
+      {
         movingTpopfreiwkontr &&
         <MenuItem
           onClick={onClick}
@@ -101,6 +114,17 @@ const Tpop = (
           }}
         >
           {`verschiebe '${store.moving.label}' hierhin`}
+        </MenuItem>
+      }
+      {
+        copyingTpopfreiwkontr &&
+        <MenuItem
+          onClick={onClick}
+          data={{
+            action: `copy`,
+          }}
+        >
+          {`kopiere '${store.copying.label}' hierhin`}
         </MenuItem>
       }
     </ContextMenu>
