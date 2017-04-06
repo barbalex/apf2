@@ -57,15 +57,6 @@ const Tpop = (
       >
         verschiebe
       </MenuItem>
-      <MenuItem
-        onClick={onClick}
-        data={{
-          action: `markForCopying`,
-          table: `tpop`,
-        }}
-      >
-        kopiere
-      </MenuItem>
       {
         moving &&
         <MenuItem
@@ -77,6 +68,15 @@ const Tpop = (
           {`verschiebe '${store.moving.label}' hierhin`}
         </MenuItem>
       }
+      <MenuItem
+        onClick={onClick}
+        data={{
+          action: `markForCopying`,
+          table: `tpop`,
+        }}
+      >
+        kopiere
+      </MenuItem>
       {
         copying &&
         <MenuItem

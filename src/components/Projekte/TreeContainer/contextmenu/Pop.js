@@ -26,7 +26,7 @@ const Pop = (
   {onClick:()=>void,store:Object,treeName:string,changeId:()=>{},id:number,changeLabel:()=>{},label:string,onShow:()=>void}
 ) => {
   const moving = store.moving.table && store.moving.table === `tpop`
-  const copying = store.copying.table && [`tpop`].includes(store.copying.table)
+  const copying = store.copying.table && store.copying.table === `tpop`
 
   return (
     <ContextMenu
@@ -73,6 +73,15 @@ const Pop = (
           {`verschiebe '${store.moving.label}' hierhin`}
         </MenuItem>
       }
+      <MenuItem
+        onClick={onClick}
+        data={{
+          action: `markForCopying`,
+          table: `pop`,
+        }}
+      >
+        kopiere
+      </MenuItem>
       {
         copying &&
         <MenuItem

@@ -65,6 +65,7 @@ export default (store:Object, parentId:number) => {
   delete newRow[idField]
   // remove label: field does not exist in db, is computed
   delete newRow.label
+  delete newRow.PopKoordWgs84
 
   // update db
   const url = `${apiBaseUrl}/insertFields/apflora/tabelle=${table}/felder=${JSON.stringify(newRow)}`

@@ -24,6 +24,7 @@ const PopFolder = (
   {onClick:()=>void,store:Object,treeName:string,changeLabel:()=>{},label:string|number,onShow:()=>void}
 ) => {
   const moving = store.moving.table && store.moving.table === `pop`
+  const copying = store.copying.table && store.copying.table === `pop`
 
   return (
     <ContextMenu
@@ -50,6 +51,28 @@ const PopFolder = (
           }}
         >
           {`verschiebe '${store.moving.label}' hierhin`}
+        </MenuItem>
+      }
+      {
+        copying &&
+        <MenuItem
+          onClick={onClick}
+          data={{
+            action: `copy`,
+          }}
+        >
+          {`kopiere '${store.copying.label}' hierhin`}
+        </MenuItem>
+      }
+      {
+        copying &&
+        <MenuItem
+          onClick={onClick}
+          data={{
+            action: `resetCopying`,
+          }}
+        >
+          Kopieren aufheben
         </MenuItem>
       }
     </ContextMenu>
