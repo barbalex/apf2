@@ -20,15 +20,15 @@ const enhance = compose(
 )
 
 const TpopFolder = (
-  { onClick, store, treeName, changeId, id, onShow }:
-  {onClick:() => void,store:Object,treeName:string,changeId:()=>{},id:number,onShow:()=>{}}
+  { tree, onClick, store, changeId, id, onShow }:
+  {tree:Object,onClick:()=>void,store:Object,changeId:()=>{},id:number,onShow:()=>{}}
 ) => {
   const moving = store.moving.table && store.moving.table === `tpop`
   const copying = store.copying.table && store.copying.table === `tpop`
 
   return (
     <ContextMenu
-      id={`${treeName}tpopFolder`}
+      id={`${tree.name}tpopFolder`}
       collect={props => props}
       onShow={onShow}
     >
