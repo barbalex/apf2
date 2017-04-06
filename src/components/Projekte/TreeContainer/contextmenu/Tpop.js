@@ -14,6 +14,7 @@ const Tpop = (
   {onClick:()=>void,store:Object,treeName:string}
 ) => {
   const movingTpopmassn = store.moving.table && store.moving.table === `tpopmassn`
+  const copyingTpopmassn = store.copying.table && store.copying.table === `tpopmassn`
   const movingTpopfeldkontr = store.moving.table && store.moving.table === `tpopfeldkontr`
   const movingTpopfreiwkontr = store.moving.table && store.moving.table === `tpopfreiwkontr`
 
@@ -67,6 +68,17 @@ const Tpop = (
           }}
         >
           {`verschiebe '${store.moving.label}' hierhin`}
+        </MenuItem>
+      }
+      {
+        copyingTpopmassn &&
+        <MenuItem
+          onClick={onClick}
+          data={{
+            action: `copy`,
+          }}
+        >
+          {`kopiere '${store.copying.label}' hierhin`}
         </MenuItem>
       }
       {

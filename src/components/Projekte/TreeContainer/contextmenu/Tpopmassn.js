@@ -53,6 +53,15 @@ const Tpopmassn = (
     >
       verschiebe
     </MenuItem>
+    <MenuItem
+      onClick={onClick}
+      data={{
+        action: `markForCopying`,
+        table: `tpopmassn`,
+      }}
+    >
+      kopiere
+    </MenuItem>
   </ContextMenu>
 
 Tpopmassn.propTypes = {

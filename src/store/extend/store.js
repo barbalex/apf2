@@ -30,6 +30,7 @@ import fetchStammdatenTables from '../action/fetchStammdatenTables'
 import deleteBeobzuordnung from '../action/deleteBeobzuordnung'
 import writeToStore from '../action/writeToStore'
 import moveTo from '../action/moveTo'
+import copyTo from '../action/copyTo'
 
 export default (store:Object) => {
   extendObservable(store, {
@@ -45,8 +46,7 @@ export default (store:Object) => {
       store.moving.label = label
     }),
     moveTo: action(`move`, (newParentId) => {
-      // check if this is correct table
-      // nope, not necessary because context menu
+      // check if this is correct table is not necessary because context menu
       // only shows menu when table is correct
       // change parent id of dataset marked for moving
       moveTo(store, newParentId)
@@ -58,7 +58,23 @@ export default (store:Object) => {
     copying: {
       table: null,
       id: null,
+      label: null,
     },
+    markForCopying: action(`markForCopying`, (table, id, label) => {
+      store.copying.table = table
+      store.copying.id = id
+      store.copying.label = label
+    }),
+    copyTo: action(`copyTo`, (parentId) => {
+      // insert new dataset with:
+      // - data of dataset with id copying.id
+      // - parentId as passed
+      copyTo(store, parentId)
+      // reset copying
+      store.copying.table = null
+      store.copying.id = null
+      store.copying.label = null
+    }),
     /**
      * urlQueries are used to control tabs
      * for instance: Entwicklung or Biotop in tpopfeldkontr

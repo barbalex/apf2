@@ -177,6 +177,12 @@ class TreeContainer extends Component { // eslint-disable-line react/prefer-stat
       move() {
         store.moveTo(parseInt(id, 10))
       },
+      markForCopying() {
+        store.markForCopying(table, parseInt(id, 10), label)
+      },
+      copy() {
+        store.copyTo(parseInt(id, 10))
+      },
     }
     if (Object.keys(actions).includes(action)) {
       actions[action]()

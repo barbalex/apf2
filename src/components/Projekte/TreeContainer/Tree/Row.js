@@ -90,6 +90,11 @@ const MovingIcon = styled(FontIcon)`
   font-size: 20px !important;
   color: rgb(255, 90, 0) !important;
 `
+const CopyingIcon = styled(FontIcon)`
+  padding-left: .2em;
+  font-size: 20px !important;
+  color: rgb(255, 90, 0) !important;
+`
 const showPopMapIcon = (store, tree, node) => (
   node.menuType === `ap` &&
   node.id === (tree.activeNodes.ap || store.map.pop.apArtId) &&
@@ -227,6 +232,11 @@ const Row = ({
     node.menuType === store.moving.table &&
     node.id === store.moving.id
   )
+  const copying = (
+    node.nodeType === `table` &&
+    node.menuType === store.copying.table &&
+    node.id === store.copying.id
+  )
 
   return (
     <div key={key} style={style} onClick={onClick}>
@@ -359,9 +369,19 @@ const Row = ({
             <MovingIcon
               id="moving"
               className="material-icons"
-              title="verschieben"
+              title="zum Verschieben gemerkt, bereit zum Einfügen"
             >
               swap_vertical_circle
+            </MovingIcon>
+          }
+          {
+            copying &&
+            <MovingIcon
+              id="copying"
+              className="material-icons"
+              title="kopiert, bereit zum Einfügen"
+            >
+              content_copy
             </MovingIcon>
           }
         </StyledNode>
