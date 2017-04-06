@@ -18,13 +18,13 @@ const enhance = compose(
     onChange: props => (event, valuePassed) => {
       // if clicked element is active value: set 0
       const val = valuePassed === props.value ? 0 : valuePassed
-      props.updatePropertyInDb(props.fieldName, val)
+      props.updatePropertyInDb(props.tree, props.fieldName, val)
     },
   }),
   observer
 )
 
-const MyRadioButton = ({
+const RadioButtonWithInfo = ({
   fieldName,
   value,
   popover,
@@ -45,7 +45,8 @@ const MyRadioButton = ({
     </InfoWithPopover>
   </Container>
 
-MyRadioButton.propTypes = {
+RadioButtonWithInfo.propTypes = {
+  tree: PropTypes.object.isRequired,
   fieldName: PropTypes.string.isRequired,
   value: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   updatePropertyInDb: PropTypes.func.isRequired,
@@ -53,8 +54,8 @@ MyRadioButton.propTypes = {
   popover: PropTypes.element.isRequired,
 }
 
-MyRadioButton.defaultProps = {
+RadioButtonWithInfo.defaultProps = {
   value: ``,
 }
 
-export default enhance(MyRadioButton)
+export default enhance(RadioButtonWithInfo)

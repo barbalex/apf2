@@ -9,7 +9,7 @@ import withHandlers from 'recompose/withHandlers'
 const enhance = compose(
   withHandlers({
     onChange: props => (event, key, payload) =>
-      props.updatePropertyInDb(props.fieldName, payload),
+      props.updatePropertyInDb(props.tree, props.fieldName, payload),
   }),
   observer
 )
@@ -40,6 +40,7 @@ const MySelectField = ({
   </SelectField>
 
 MySelectField.propTypes = {
+  tree: PropTypes.object.isRequired,
   label: PropTypes.string.isRequired,
   fieldName: PropTypes.string.isRequired,
   value: PropTypes.any,

@@ -16,6 +16,7 @@ const ButtonGroup = styled.div`
 `
 
 const RadioButtonGroupWithInfo = ({
+  tree,
   fieldName,
   value,
   dataSource,
@@ -25,6 +26,7 @@ const RadioButtonGroupWithInfo = ({
   <Container>
     <ButtonGroup>
       <RadioButtonGroup
+        tree={tree}
         fieldName={fieldName}
         value={value}
         dataSource={dataSource}
@@ -37,6 +39,7 @@ const RadioButtonGroupWithInfo = ({
   </Container>
 
 RadioButtonGroupWithInfo.propTypes = {
+  tree: PropTypes.object.isRequired,
   fieldName: PropTypes.string.isRequired,
   value: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   dataSource: PropTypes.arrayOf(PropTypes.object).isRequired,

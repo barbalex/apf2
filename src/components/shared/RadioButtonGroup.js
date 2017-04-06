@@ -10,7 +10,7 @@ const enhance = compose(
     onChange: props => (event, valuePassed) => {
       // if clicked element is active value: set null
       const val = valuePassed === props.value ? null : valuePassed
-      props.updatePropertyInDb(props.fieldName, val)
+      props.updatePropertyInDb(props.tree, props.fieldName, val)
     },
   }),
   observer
@@ -44,6 +44,7 @@ const MyRadioButtonGroup = ({
 }
 
 MyRadioButtonGroup.propTypes = {
+  tree: PropTypes.object.isRequired,
   fieldName: PropTypes.string.isRequired,
   value: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   dataSource: PropTypes.arrayOf(PropTypes.object),

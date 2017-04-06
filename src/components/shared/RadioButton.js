@@ -11,7 +11,7 @@ const enhance = compose(
       (event, valuePassed) => {
         // if clicked element is active value: set 0
         const val = valuePassed === props.value ? 0 : valuePassed
-        props.updatePropertyInDb(props.fieldName, val)
+        props.updatePropertyInDb(props.tree, props.fieldName, val)
       },
   }),
   observer
@@ -33,6 +33,7 @@ const MyRadioButton = ({
   </RadioButtonGroup>
 
 MyRadioButton.propTypes = {
+  tree: PropTypes.object.isRequired,
   fieldName: PropTypes.string.isRequired,
   value: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   updatePropertyInDb: PropTypes.func.isRequired,
