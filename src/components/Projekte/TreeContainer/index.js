@@ -201,7 +201,7 @@ class TreeContainer extends Component { // eslint-disable-line react/prefer-stat
     return (
       <Container exporte={tree.activeNodes.exporte}>
         <LabelFilterContainer>
-          <LabelFilter />
+          <LabelFilter tree={tree} />
           {
             showApDivToggle &&
             <NurApDiv>
@@ -220,6 +220,7 @@ class TreeContainer extends Component { // eslint-disable-line react/prefer-stat
           ref={(c) => { this.tree = c }}
         >
           <Tree
+            tree={tree}
             projektLoading={store.table.projektLoading}
             nodes={tree.node.nodes}
             mapTpopBeobVisible={store.map.activeApfloraLayers.includes(`TpopBeob`)}

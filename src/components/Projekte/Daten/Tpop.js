@@ -138,7 +138,6 @@ const Tpop = ({ store, tree }) => {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <AutoComplete
-            tree={tree}
             hintText={store.dropdownList.gemeinden.length === 0 ? `lade Daten...` : ``}
             fullWidth
             floatingLabelText="Gemeinde"

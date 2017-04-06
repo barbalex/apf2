@@ -193,7 +193,6 @@ const Tpopmassn = ({
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <AutoComplete
-            tree={tree}
             floatingLabelText="Wirtspflanze"
             fullWidth
             openOnFocus

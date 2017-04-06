@@ -44,7 +44,6 @@ const LabelFilter = ({ store, tree }) => {
 
   return (
     <FilterField
-      tree={tree}
       floatingLabelText={labelText}
       fullWidth
       value={filterValue}

@@ -263,7 +263,6 @@ const Tpopfeldkontr = ({
                   />
                   <Section>Vegetation</Section>
                   <AutoComplete
-                    tree={tree}
                     floatingLabelText="Lebensraum nach Delarze"
                     openOnFocus
                     fullWidth
@@ -280,7 +279,6 @@ const Tpopfeldkontr = ({
                     }
                   />
                   <AutoComplete
-                    tree={tree}
                     floatingLabelText="Umgebung nach Delarze"
                     openOnFocus
                     fullWidth
