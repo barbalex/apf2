@@ -10,10 +10,10 @@ import updatePropertyInIdb from './updatePropertyInIdb'
 import deleteDatasetInIdb from './deleteDatasetInIdb'
 import insertDatasetInIdb from './insertDatasetInIdb'
 
-export default (store:Object, key:string, valuePassed:string|number) => {
-  const { row, valid } = store.tree.activeDataset
+export default (store:Object, tree:Object, key:string, valuePassed:string|number) => {
+  const { row, valid } = tree.activeDataset
   let value = valuePassed
-  let table = store.tree.activeDataset.table
+  let table = tree.activeDataset.table
 
   // ensure primary data exists
   if (!key || !table || !row) {
@@ -85,17 +85,17 @@ export default (store:Object, key:string, valuePassed:string|number) => {
       store.table.ap.set(value, rowCloned)
       // correct url
       // activeDataset will then be updated
-      const newActiveNodeArray = clone(toJS(store.tree.activeNodeArray))
+      const newActiveNodeArray = clone(toJS(tree.activeNodeArray))
       newActiveNodeArray.pop()
       newActiveNodeArray.push(value)
-      store.tree.setActiveNodeArray(newActiveNodeArray)
+      tree.setActiveNodeArray(newActiveNodeArray)
       deleteDatasetInIdb(store, `ap`, oldValue)
       insertDatasetInIdb(store, `ap`, rowCloned)
     } else {
       // need to set row[key] for select fields, checkboxes, radios...
       row[key] = value
     }
-    const newActiveNodeArray = clone(toJS(store.tree.activeNodeArray))
+    const newActiveNodeArray = clone(toJS(tree.activeNodeArray))
     // $FlowIssue
     const url = `${apiBaseUrl}/update/apflora/tabelle=${table}/tabelleIdFeld=${idField}/tabelleId=${tabelleId}/feld=${key}/wert=${value}/user=${user}`
     axios.put(url)
@@ -107,7 +107,7 @@ export default (store:Object, key:string, valuePassed:string|number) => {
         // if ApArtId of ap is updated, url needs to change
         if (artWasChanged) {
           newActiveNodeArray[3] = value
-          store.tree.setActiveNodeArray(newActiveNodeArray)
+          tree.setActiveNodeArray(newActiveNodeArray)
         }
         // if beobNichtBeurteilt is set to beobNichtZuordnen, url needs to change
         if (table === `beobzuordnung` && key === `BeobNichtZuordnen`) {
@@ -116,8 +116,8 @@ export default (store:Object, key:string, valuePassed:string|number) => {
             `nicht-zuzuordnende-Beobachtungen` :
             `nicht-beurteilte-Beobachtungen`
           )
-          newActiveNodeArray[5] = store.tree.activeDataset.row.NO_NOTE
-          store.tree.setActiveNodeArray(newActiveNodeArray.slice(0, 6))
+          newActiveNodeArray[5] = tree.activeDataset.row.NO_NOTE
+          tree.setActiveNodeArray(newActiveNodeArray.slice(0, 6))
         }
         // if for a beobZugeordnet TPopId is set, url needs to change
         // namely: PopId and TPopId
@@ -125,7 +125,7 @@ export default (store:Object, key:string, valuePassed:string|number) => {
           const tpop = store.table.tpop.get(value)
           newActiveNodeArray[5] = tpop.PopId
           newActiveNodeArray[7] = value
-          store.tree.setActiveNodeArray(newActiveNodeArray)
+          tree.setActiveNodeArray(newActiveNodeArray)
         }
       })
       .catch((error) => {

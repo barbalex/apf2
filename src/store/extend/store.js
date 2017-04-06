@@ -113,18 +113,18 @@ export default (store:Object) => {
     setQk: action(`setQk`, ({ tree, berichtjahr, messages, filter }) =>
       setQk({ store: store, tree, berichtjahr, messages, filter })
     ),
-    setQkFilter: action(`setQkFilter`, ({ filter }) =>
-      setQkFilter({ store: store, filter })
+    setQkFilter: action(`setQkFilter`, ({ filter, tree }) =>
+      setQkFilter({ store: store, tree, filter })
     ),
-    addMessagesToQk: action(`addMessagesToQk`, ({ messages }) => {
-      addMessagesToQk({ store: store, messages })
+    addMessagesToQk: action(`addMessagesToQk`, ({ tree, messages }) => {
+      addMessagesToQk({ store, tree, messages })
     }),
     fetchFieldsFromIdb: action(`fetchFieldsFromIdb`, () =>
       fetchFieldsFromIdb(store)
     ),
-    insertBeobzuordnung: action(`insertBeobzuordnung`, (newKey, newValue) => {
+    insertBeobzuordnung: action(`insertBeobzuordnung`, (tree, newKey, newValue) => {
       if (store.user.readOnly) return store.tellUserReadOnly()
-      insertBeobzuordnung(store, newKey, newValue)
+      insertBeobzuordnung(store, tree, newKey, newValue)
     }),
     insertDataset: action(`insertDataset`, (tree, table, parentId, baseUrl) => {
       if (store.user.readOnly) return store.tellUserReadOnly()
@@ -137,25 +137,25 @@ export default (store:Object) => {
     deleteDatasetAbort: action(`deleteDatasetAbort`, () => {
       store.datasetToDelete = {}
     }),
-    deleteDatasetExecute: action(`deleteDatasetExecute`, () => {
+    deleteDatasetExecute: action(`deleteDatasetExecute`, (tree) => {
       if (store.user.readOnly) return store.tellUserReadOnly()
-      deleteDatasetExecute(store)
+      deleteDatasetExecute(store, tree)
     }),
-    deleteBeobzuordnung: action(`deleteBeobzuordnung`, (beobId) =>
-      deleteBeobzuordnung(store, beobId)
+    deleteBeobzuordnung: action(`deleteBeobzuordnung`, (tree, beobId) =>
+      deleteBeobzuordnung(store, tree, beobId)
     ),
     listError: action(`listError`, error =>
       listError(store, error)
     ),
     // updates data in store
-    updateProperty: action(`updateProperty`, (key, value) => {
+    updateProperty: action(`updateProperty`, (tree, key, value) => {
       if (store.user.readOnly) return store.tellUserReadOnly()
-      updateProperty(store, key, value)
+      updateProperty(store, tree, key, value)
     }),
     // updates data in database
-    updatePropertyInDb: action(`updatePropertyInDb`, (key, value) => {
+    updatePropertyInDb: action(`updatePropertyInDb`, (tree, key, value) => {
       if (store.user.readOnly) return store.tellUserReadOnly()
-      updatePropertyInDb(store, key, value)
+      updatePropertyInDb(store, tree, key, value)
     }),
     // fetch all data of a table
     // primarily used for werte (domain) tables

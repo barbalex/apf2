@@ -119,9 +119,9 @@ export default (store:Object) => {
       if (store.user.readOnly) return store.tellUserReadOnly()
       store.map.tpop.idOfTpopBeingLocalized = id
     }),
-    localizeTpop: action(`localizeTpop`, (x, y) => {
+    localizeTpop: action(`localizeTpop`, (tree, x, y) => {
       if (store.user.readOnly) return store.tellUserReadOnly()
-      localizeTpop(store, x, y)
+      localizeTpop(store, tree, x, y)
     }),
     setMapMouseCoord: action(`setMapMouseCoord`, (e) => {
       store.map.mouseCoord = [e.latlng.lng, e.latlng.lat]

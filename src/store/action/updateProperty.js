@@ -2,8 +2,8 @@
 import clone from 'lodash/clone'
 import { toJS } from 'mobx'
 
-export default (store:Object, key:string, valuePassed:string|number) => {
-  const { table, row } = store.tree.activeDataset
+export default (store:Object, tree:Object, key:string, valuePassed:string|number) => {
+  const { table, row } = tree.activeDataset
   let value = valuePassed
   // ensure primary data exists
   if (!key || !table || !row) {
@@ -21,10 +21,10 @@ export default (store:Object, key:string, valuePassed:string|number) => {
   // edge cases:
   // if jahr of ziel is updated, url needs to change
   if (table === `ziel` && key === `ZielJahr`) {
-    const newActiveNodeArray = clone(toJS(store.tree.activeNodeArray))
+    const newActiveNodeArray = clone(toJS(tree.activeNodeArray))
     console.log(`newActiveNodeArray:`, newActiveNodeArray)
     newActiveNodeArray[5] = value
-    store.tree.setActiveNodeArray(newActiveNodeArray)
+    tree.setActiveNodeArray(newActiveNodeArray)
   }
   row[key] = value
 }

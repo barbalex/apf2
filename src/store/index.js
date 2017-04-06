@@ -45,6 +45,7 @@ function Store() {
   this.writeToStore = null
   this.setUrlQuery = null
   this.tree = {
+    name: `tree`,
     activeNodeArray: [],
     activeNodes: {},
     activeNode: null,
@@ -108,6 +109,7 @@ function Store() {
     }
   }
   this.tree2 = {
+    name: `tree2`,
     activeNodeArray: [],
     activeNodes: {},
     activeNode: null,
