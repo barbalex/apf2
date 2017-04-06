@@ -19,11 +19,11 @@ const enhance = compose(
 )
 
 const Tpopfeldkontr = (
-  { store, onClick, treeName, changeLabel, label, onShow }:
-  {store:Object,onClick:()=>void,treeName:string,changeLabel:()=>{},label:string|number,onShow:()=>void}
+  { store, tree, onClick, changeLabel, label, onShow }:
+  {store:Object,tree:Object,onClick:()=>void,changeLabel:()=>{},label:string|number,onShow:()=>void}
 ) =>
   <ContextMenu
-    id={`${treeName}tpopfeldkontr`}
+    id={`${tree.name}tpopfeldkontr`}
     collect={props => props}
     onShow={onShow}
   >

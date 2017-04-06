@@ -10,14 +10,14 @@ const enhance = compose(
 )
 
 const Tpop = (
-  { onClick, store, treeName }:
-  {onClick:()=>void,store:Object,treeName:string}
+  { onClick, store, tree }:
+  {onClick:()=>void,store:Object,tree:Object}
 ) => {
   const moving = store.moving.table && [`tpopmassn`, `tpopfeldkontr`, `tpopfreiwkontr`].includes(store.moving.table)
   const copying = store.copying.table && [`tpopmassn`, `tpopfeldkontr`, `tpopfreiwkontr`].includes(store.copying.table)
 
   return (
-    <ContextMenu id={`${treeName}tpop`}>
+    <ContextMenu id={`${tree.name}tpop`}>
       <div className="react-contextmenu-title">Teil-Population</div>
       <MenuItem
         onClick={onClick}
@@ -38,16 +38,19 @@ const Tpop = (
       >
         lösche
       </MenuItem>
-      <MenuItem
-        onClick={onClick}
-        data={{
-          action: `localizeOnMap`,
-          actionTable: `tpop`,
-          idTable: `tpop`,
-        }}
-      >
-        verorte auf Karte
-      </MenuItem>
+      {
+        tree.name === `tree` &&
+        <MenuItem
+          onClick={onClick}
+          data={{
+            action: `localizeOnMap`,
+            actionTable: `tpop`,
+            idTable: `tpop`,
+          }}
+        >
+          verorte auf Karte
+        </MenuItem>
+      }
       <MenuItem
         onClick={onClick}
         data={{
