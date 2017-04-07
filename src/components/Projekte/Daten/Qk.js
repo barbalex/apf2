@@ -38,7 +38,7 @@ const enhance = compose(
       props.store.setQk({ tree: props.tree, berichtjahr: val })
       if ((isNaN(val) && val.length === 4) || (!isNaN(val) && val > 1000)) {
         props.store.setQk({ tree: props.tree })
-        setTimeout(() => props.store.fetchQk({ store: props.store, tree: props.tree }))
+        setTimeout(() => props.store.fetchQk({ tree: props.tree }))
       }
     },
   }),
@@ -63,6 +63,8 @@ class Qk extends Component { // eslint-disable-line react/prefer-stateless-funct
       tree,
       onChangeBerichtjahr,
     } = this.props
+
+    console.log(`Qk: tree:`, tree)
 
     const { qk } = store
     const apArtId = tree.activeNodes.ap

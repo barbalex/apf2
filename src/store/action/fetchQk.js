@@ -6,9 +6,13 @@ import apiBaseUrl from '../../modules/apiBaseUrl'
 import isPointInsidePolygon from '../../modules/isPointInsidePolygon'
 import zhGeojson from '../../etc/ktZh.json'
 
-const fetchQk = ({ store, tree }:{store:Object,tree:Object}) => {
+const fetchQk = (
+  { store, tree }:
+  {store:Object,tree:Object}
+) => {
+  console.log(`fetchQk: tree:`, tree)
   store.loading.push(`qk`)
-  const apArtId = store.tree.activeNodes.ap
+  const apArtId = tree.activeNodes.ap
   const qk = store.qk.get(apArtId)
   let berichtjahr
   store.setQk({ tree, messages: [] })
@@ -130,7 +134,7 @@ const fetchQk = ({ store, tree }:{store:Object,tree:Object}) => {
   ]
   let nrOfMessages = 0
   const urls = qkTypes.map(t =>
-    `${apiBaseUrl}/${t.type === `view` ? `qkView/` : ``}${t.name}/${store.tree.activeNodes.ap}${t.berichtjahr ? `/${t.berichtjahr}` : ``}`
+    `${apiBaseUrl}/${t.type === `view` ? `qkView/` : ``}${t.name}/${tree.activeNodes.ap}${t.berichtjahr ? `/${t.berichtjahr}` : ``}`
   )
   const dataFetchingPromises = urls.map(dataUrl =>
     axios.get(dataUrl)
@@ -154,7 +158,7 @@ const fetchQk = ({ store, tree }:{store:Object,tree:Object}) => {
       .catch(e => e)
   )
   Promise.all(dataFetchingPromises)
-    .then(() => axios.get(`${apiBaseUrl}/tpopKoordFuerProgramm/apId=${store.tree.activeNodes.ap}`))
+    .then(() => axios.get(`${apiBaseUrl}/tpopKoordFuerProgramm/apId=${tree.activeNodes.ap}`))
     .then((res) => {
       // kontrolliere die Relevanz ausserkantonaler Tpop
       const tpops = res.data.filter(tpop =>

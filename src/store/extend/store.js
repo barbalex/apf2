@@ -109,12 +109,14 @@ export default (store:Object) => {
     setLoginFromIdb: action(`setLoginFromIdb`, () =>
       setLoginFromIdb(store)
     ),
-    fetchQk: action(`fetchQk`, (tree) => fetchQk({ store, tree })),
+    fetchQk: action(`fetchQk`, ({ tree }) =>
+      fetchQk({ store, tree })
+    ),
     setQk: action(`setQk`, ({ tree, berichtjahr, messages, filter }) =>
-      setQk({ store: store, tree, berichtjahr, messages, filter })
+      setQk({ store, tree, berichtjahr, messages, filter })
     ),
     setQkFilter: action(`setQkFilter`, ({ filter, tree }) =>
-      setQkFilter({ store: store, tree, filter })
+      setQkFilter({ store, tree, filter })
     ),
     addMessagesToQk: action(`addMessagesToQk`, ({ tree, messages }) => {
       addMessagesToQk({ store, tree, messages })

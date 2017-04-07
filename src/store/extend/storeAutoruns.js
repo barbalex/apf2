@@ -39,7 +39,7 @@ export default (store:Object) => {
         const showTpopBeob = store.map.activeApfloraLayers.includes(`TpopBeob`) || store.map.activeApfloraLayers.includes(`TpopBeobAssignPolylines`)
         const showBeobNichtBeurteilt = store.map.activeApfloraLayers.includes(`BeobNichtBeurteilt`)
         const showBeobNichtZuzuordnen = store.map.activeApfloraLayers.includes(`BeobNichtZuzuordnen`)
-        fetchDataForActiveNodes(store, store.tree, showPop, showTpop, showTpopBeob, showBeobNichtBeurteilt, showBeobNichtZuzuordnen, store.tree.activeNodes)
+        fetchDataForActiveNodes(store, store.tree, showPop, showTpop, showTpopBeob, showBeobNichtBeurteilt, showBeobNichtZuzuordnen)
       }
     ),
   })
@@ -53,7 +53,7 @@ export default (store:Object) => {
         const showTpopBeob = store.map.activeApfloraLayers.includes(`TpopBeob`) || store.map.activeApfloraLayers.includes(`TpopBeobAssignPolylines`)
         const showBeobNichtBeurteilt = store.map.activeApfloraLayers.includes(`BeobNichtBeurteilt`)
         const showBeobNichtZuzuordnen = store.map.activeApfloraLayers.includes(`BeobNichtZuzuordnen`)
-        fetchDataForActiveNodes(store, store.tree2, showPop, showTpop, showTpopBeob, showBeobNichtBeurteilt, showBeobNichtZuzuordnen, store.tree2.activeNodes)
+        fetchDataForActiveNodes(store, store.tree2, showPop, showTpop, showTpopBeob, showBeobNichtBeurteilt, showBeobNichtZuzuordnen)
       }
     ),
   })
