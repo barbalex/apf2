@@ -18,7 +18,6 @@ const fetchDataForActiveNodes = (
   showBeobNichtZuzuordnen:boolean
 ) => {
   const { activeNodes } = tree
-  console.log(`fetchDataForActiveNodes: tree:`, tree)
   const fetchingFromActiveElements = {
     exporte() {
       store.fetchTableByParentId(`apflora`, `ap`, activeNodes.projekt)
