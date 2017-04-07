@@ -14,6 +14,7 @@ import getActiveNodes from '../../action/getActiveNodes'
 import extendNode from './node'
 import extendFilteredAndSorted from './filteredAndSorted'
 import updateActiveDatasetFromActiveNodes from '../../action/updateActiveDatasetFromActiveNodes'
+import allNodes from '../../compute/nodes/allNodes'
 
 export default (store:Object) => {
   extendObservable(store.tree, {
@@ -31,9 +32,12 @@ export default (store:Object) => {
       { name: `activeNodes` }
     ),
     activeNode: computed(
-      () => store.tree.node.nodes.find(n =>
-        isEqual(toJS(store.tree.activeNodeArray), n.url)
-      ),
+      () => {
+        const nodes = allNodes(store, store.tree)
+        return nodes.find(n =>
+          isEqual(toJS(store.tree.activeNodeArray), n.url)
+        )
+      },
       { name: `activeNode` }
     ),
     activeDataset: computed(
