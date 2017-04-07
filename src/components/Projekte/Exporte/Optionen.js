@@ -25,7 +25,6 @@ const Optionen = ({ store }) =>
       expandable
     >
       <Checkbox
-        tree={store.tree}
         label={
           (
             store.map.mapFilter.filter.features.length > 0 ?
@@ -41,7 +40,6 @@ const Optionen = ({ store }) =>
       {
         false &&
         <Checkbox
-          tree={store.tree}
           label={`Strukturbaum-Filter anwenden`}
           value={store.export.applyNodeLabelFilterToExport}
           checked={store.export.applyNodeLabelFilterToExport}
@@ -52,7 +50,6 @@ const Optionen = ({ store }) =>
       {
         false &&
         <Checkbox
-          tree={store.tree}
           label={`Nach den aktuell im Strukturbaum gewählten Elementen filtern`}
           value={store.export.applyActiveNodeFilterToExport}
           checked={store.export.applyActiveNodeFilterToExport}
