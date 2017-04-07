@@ -117,9 +117,6 @@ class Tree extends Component {
     const activeNodeIndex = findIndex(nodes, node =>
       isEqual(node.url, activeNodeArray)
     )
-    // console.log(`Tree: activeNodeArray:`, activeNodeArray)
-    // console.log(`Tree: nodes:`, nodes)
-    // console.log(`Tree: activeNodeIndex:`, activeNodeIndex)
 
     return (
       <Container>
