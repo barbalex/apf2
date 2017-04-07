@@ -93,18 +93,13 @@ class Tree extends Component {
     }
   }
 
-  rowRenderer = ({ key, index, style }) => {
-    const { tree } = this.props
-
-    return (
-      <Row
-        key={key}
-        index={index}
-        style={style}
-        tree={tree}
-      />
-    )
-  }
+  rowRenderer = ({ key, index, style }) =>
+    <Row
+      key={key}
+      index={index}
+      style={style}
+      tree={this.props.tree}
+    />
 
   noRowsRenderer = () => {
     const { projektLoading } = this.props
