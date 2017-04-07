@@ -13,6 +13,7 @@ import getActiveNodes from '../../action/getActiveNodes'
 import extendNode from './node'
 import extendFilteredAndSorted from './filteredAndSorted'
 import updateActiveDatasetFromActiveNodes from '../../action/updateActiveDatasetFromActiveNodes'
+import allNodes from '../../compute/nodes/allNodes'
 
 export default (store:Object) => {
   extendObservable(store.tree2, {
@@ -28,13 +29,16 @@ export default (store:Object) => {
       (nodeArray) => store.tree2.activeNodeArray = nodeArray
     ),
     activeNodes: computed(
-      () => getActiveNodes(toJS(store.tree2.activeNodeArray)),
+      () => getActiveNodes(store.tree2.activeNodeArray),
       { name: `activeNodes` }
     ),
     activeNode: computed(
-      () => store.tree2.node.nodes.find(n =>
-        isEqual(toJS(store.tree2.activeNodeArray), n.url)
-      ),
+      () => {
+        const nodes = allNodes(store, store.tree2)
+        return nodes.find(n =>
+          isEqual(toJS(store.tree2.activeNodeArray), n.url)
+        )
+      },
       { name: `activeNode` }
     ),
     activeDataset: computed(

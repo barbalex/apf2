@@ -28,7 +28,7 @@ export default (store:Object) => {
       (nodeArray) => store.tree.activeNodeArray = nodeArray
     ),
     activeNodes: computed(
-      () => getActiveNodes(toJS(store.tree.activeNodeArray)),
+      () => getActiveNodes(store.tree.activeNodeArray),
       { name: `activeNodes` }
     ),
     activeNode: computed(
