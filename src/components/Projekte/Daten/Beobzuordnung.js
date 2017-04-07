@@ -117,22 +117,23 @@ const getTpopZuordnenSource = (store, tree) => {
 const enhance = compose(
   inject(`store`),
   withHandlers({
-    updatePropertyInDb: props => (fieldname, val) => {
+    updatePropertyInDb: props => (treePassedByUpdatePropertyInDb, fieldname, val) => {
+      const { store, tree } = props
       const {
         insertBeobzuordnung,
         updatePropertyInDb,
         deleteBeobzuordnung,
-      } = props.store
-      const { activeDataset } = props.tree
+      } = store
+      const { activeDataset } = tree
       if (val) {
         if (activeDataset.table === `beob_bereitgestellt`) {
-          insertBeobzuordnung(props.tree, fieldname, val)
+          insertBeobzuordnung(tree, fieldname, val)
         } else {
           // beobzuordnung was moved from one TPopId to another
-          updatePropertyInDb(props.tree, fieldname, val)
+          updatePropertyInDb(tree, fieldname, val)
         }
       } else {
-        deleteBeobzuordnung(props.tree, activeDataset.row.NO_NOTE)
+        deleteBeobzuordnung(tree, activeDataset.row.NO_NOTE)
       }
     },
   }),
@@ -190,7 +191,11 @@ const Beobzuordnung = ({ store, tree, updatePropertyInDb }) => {
           updatePropertyInDb={store.updatePropertyInDb}
         />
       </FieldsContainer>
-      <FormTitle tree={tree} title={beobTitle} noTestdataMessage={true} />
+      <FormTitle
+        tree={tree}
+        title={beobTitle}
+        noTestdataMessage={true}
+      />
       <FieldsContainer>
         <Beob />
       </FieldsContainer>
