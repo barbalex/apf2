@@ -4,7 +4,6 @@ import { toJS } from 'mobx'
 import { observer, inject } from 'mobx-react'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
-// import shouldUpdate from 'recompose/shouldUpdate'
 import { ContextMenuTrigger } from 'react-contextmenu'
 import FontIcon from 'material-ui/FontIcon'
 
@@ -38,12 +37,10 @@ const StyledSymbolOpenSpan = styled(StyledSymbolSpan)`
   margin-top: 2px !important;
   font-size: 22px !important;
 `
-const StyledTextSpan = styled.span`
+const StyledTextSpan = styled(({ nodeIsInActiveNodePath, children, ...rest }) => <span {...rest}>{children}</span>)`
   padding-left: .5em;
   font-size: 16px !important;
-`
-const StyledTextInActiveNodePathSpan = styled(StyledTextSpan)`
-  font-weight: 900 !important;
+  font-weight: ${(props) => (props.nodeIsInActiveNodePath ? `900 !important` : `inherit`)};
 `
 const StyledMapIcon = styled(FontIcon)`
   padding-left: .2em;
@@ -156,33 +153,8 @@ const showTpopBeobFilteredMapIcon = (store, tree, node) => (
   )
 )
 
-/**
- * checking props change according to
- * https://marmelab.com/blog/2017/02/06/react-is-slow-react-is-fast.html
- * turned off: does not seem to be better than what mobx does
- */
-/*
-const checkPropsChange = (props, nextProps) => {
-  return (
-    nextProps.node !== props.node ||
-    nextProps.tree !== props.tree ||
-    toJS(nextProps.tree.activeNodeArray).join() !== toJS(props.tree.activeNodeArray).join() ||
-    showPopMapIcon(nextProps.store, nextProps.tree, nextProps.node) !== showPopMapIcon(props.store, props.tree, props.node) ||
-    showPopFilteredMapIcon(nextProps.store, nextProps.node) !== showPopFilteredMapIcon(props.store, props.node) ||
-    showTpopMapIcon(nextProps.store, nextProps.tree, nextProps.node) !== showTpopMapIcon(props.store, props.tree, props.node) ||
-    showTpopFilteredMapIcon(nextProps.store, nextProps.node) !== showTpopFilteredMapIcon(props.store, props.node) ||
-    showBeobNichtBeurteiltMapIcon(nextProps.store, nextProps.tree, nextProps.node) !== showBeobNichtBeurteiltMapIcon(props.store, props.tree, props.node) ||
-    showBeobNichtZuzuordnenMapIcon(nextProps.store, nextProps.tree, nextProps.node) !== showBeobNichtZuzuordnenMapIcon(props.store, props.tree, props.node) ||
-    showTpopBeobMapIcon(nextProps.store, nextProps.tree, nextProps.node) !== showTpopBeobMapIcon(props.store, props.tree, props.node) ||
-    showBeobNichtBeurteiltFilteredMapIcon(nextProps.store, nextProps.node) !== showBeobNichtBeurteiltFilteredMapIcon(props.store, props.node) ||
-    showBeobNichtZuzuordnenFilteredMapIcon(nextProps.store, nextProps.node) !== showBeobNichtZuzuordnenFilteredMapIcon(props.store, props.node) ||
-    showTpopBeobFilteredMapIcon(nextProps.store, nextProps.tree, nextProps.node) !== showTpopBeobFilteredMapIcon(props.store, props.tree, props.node)
-  )
-}*/
-
 const enhance = compose(
   inject(`store`),
-  // shouldUpdate(checkPropsChange),
   observer
 )
 
@@ -206,7 +178,6 @@ const Row = ({
   let symbol
   const nodeIsInActiveNodePath = isNodeInActiveNodePath(node, toJS(tree.activeNodeArray))
   let SymbolSpan = StyledSymbolSpan
-  const TextSpan = nodeIsInActiveNodePath ? StyledTextInActiveNodePathSpan : StyledTextSpan
 
   if (nodeHasChildren && node.expanded) {
     symbol = symbolTypes.open
@@ -356,9 +327,11 @@ const Row = ({
               local_florist
             </TpopBeobFilteredMapIcon>
           }
-          <TextSpan>
+          <StyledTextSpan
+            nodeIsInActiveNodePath={nodeIsInActiveNodePath}
+          >
             {node.label}
-          </TextSpan>
+          </StyledTextSpan>
           {
             moving &&
             <MovingIcon
