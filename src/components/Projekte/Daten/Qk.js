@@ -30,6 +30,13 @@ const FilterField = styled(TextField)`
   margin-top: -15px;
   margin-bottom: 10px;
 `
+const linkifyProperties = {
+  target: `_blank`,
+  style: {
+    color: `white`,
+    fontWeight: 100
+  }
+}
 
 const enhance = compose(
   inject(`store`),
@@ -45,84 +52,79 @@ const enhance = compose(
   observer
 )
 
-class Qk extends Component { // eslint-disable-line react/prefer-stateless-function
-
-  static propTypes = {
-    store: PropTypes.object.isRequired,
-    tree: PropTypes.object.isRequired,
-    onChangeBerichtjahr: PropTypes.func.isRequired,
-  }
-
-  static defaultProps = {
+const Qk = ({
+  store,
+  tree,
+  onChangeBerichtjahr,
+}) => {
+  const { qk } = store
+  const apArtId = tree.activeNodes.ap
+  // need to pass value for when qk does not yet exist
+  const myQk = qk.get(apArtId) || {
+    berichtjahr: ``,
     filter: ``,
+    messagesFiltered: [],
   }
+  const { berichtjahr, filter, messagesFiltered } = myQk
 
-  render() {
-    const {
-      store,
-      tree,
-      onChangeBerichtjahr,
-    } = this.props
-
-    console.log(`Qk: tree:`, tree)
-
-    const { qk } = store
-    const apArtId = tree.activeNodes.ap
-    // need to pass value for when qk does not yet exist
-    const myQk = qk.get(apArtId) || {
-      berichtjahr: ``,
-      filter: ``,
-      messagesFiltered: [],
-    }
-    const { berichtjahr, filter, messagesFiltered } = myQk
-
-    return (
-      <Container>
-        <FormTitle tree={tree} title="Qualitätskontrollen" />
-        <Scrollbars>
-          <FieldsContainer>
-            <TextField
-              floatingLabelText="Berichtjahr"
-              type="number"
-              value={berichtjahr}
-              fullWidth
-              onChange={onChangeBerichtjahr}
-            />
-            <FilterField
-              floatingLabelText="nach Typ filtern"
-              type="text"
-              value={filter || ``}
-              fullWidth
-              onChange={(event, val) =>
-                store.setQkFilter({ tree, filter: val })
-              }
-            />
-            {
-              messagesFiltered.map((m, index) => {
-                const children = m.url.map((u, i) => (
-                  <div key={i}>{`${appBaseUrl}/${u.join(`/`)}`}</div>
-                ))
-                return (
-                  <StyledCard key={index}>
-                    <CardText>
-                      <Title>
-                        {m.hw}
-                      </Title>
-                      <div>
-                        <Linkify properties={{ target: `_blank`, style: { color: `white`, fontWeight: 100 } }}>
-                          {children}
-                        </Linkify>
-                      </div>
-                    </CardText>
-                  </StyledCard>
-                )
-              })
+  return (
+    <Container>
+      <FormTitle tree={tree} title="Qualitätskontrollen" />
+      <Scrollbars>
+        <FieldsContainer>
+          <TextField
+            floatingLabelText="Berichtjahr"
+            type="number"
+            value={berichtjahr}
+            fullWidth
+            onChange={onChangeBerichtjahr}
+          />
+          <FilterField
+            floatingLabelText="nach Typ filtern"
+            type="text"
+            value={filter || ``}
+            fullWidth
+            onChange={(event, val) =>
+              store.setQkFilter({ tree, filter: val })
             }
-          </FieldsContainer>
-        </Scrollbars>
-      </Container>
-    )
-  }
+          />
+          {
+            messagesFiltered.map((m, index) => {
+              const children = m.url.map((u, i) =>
+                <div key={i}>
+                  {`${appBaseUrl}/${u.join(`/`)}`}
+                </div>
+              )
+              return (
+                <StyledCard key={index}>
+                  <CardText>
+                    <Title>
+                      {m.hw}
+                    </Title>
+                    <div>
+                      <Linkify properties={linkifyProperties}>
+                        {children}
+                      </Linkify>
+                    </div>
+                  </CardText>
+                </StyledCard>
+              )
+            })
+          }
+        </FieldsContainer>
+      </Scrollbars>
+    </Container>
+  )
+}
+
+Qk.propTypes = {
+  store: PropTypes.object.isRequired,
+  tree: PropTypes.object.isRequired,
+  onChangeBerichtjahr: PropTypes.func.isRequired,
+}
+
+Qk.defaultProps = {
+  filter: ``,
 }
 
 export default enhance(Qk)
