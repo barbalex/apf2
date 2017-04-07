@@ -11,7 +11,7 @@ import isNodeInActiveNodePath from '../../../../modules/isNodeInActiveNodePath'
 
 const singleRowHeight = 23
 const StyledNode = styled(({ level, nodeIsInActiveNodePath, children, ...rest }) => <div {...rest}>{children}</div>)`
-  padding-left: ${(props) => `${(Number(props.level) * 17) - (props.nodeIsInActiveNodePath ? 4 : 0)}px`};
+  padding-left: ${(props) => `${(Number(props.level) * 17) - 10}px`};
   height: ${singleRowHeight}px;
   max-height: ${singleRowHeight}px;
   box-sizing: border-box;
@@ -27,8 +27,8 @@ const StyledNode = styled(({ level, nodeIsInActiveNodePath, children, ...rest })
   }
 `
 const SymbolIcon = styled(({ nodeIsInActiveNodePath, node, children, ...rest }) => <FontIcon {...rest}>{children}</FontIcon>)`
-  margin-left: -5px;
   margin-top: ${({ nodeIsInActiveNodePath, node }) => (nodeIsInActiveNodePath ? `-5px !important` : `-2px !important`)};
+  padding-left: ${({ nodeIsInActiveNodePath }) => (nodeIsInActiveNodePath ? `2px` : `2px`)};
   font-size: ${({ nodeIsInActiveNodePath }) => (nodeIsInActiveNodePath ? `26px !important` : `22px !important`)};
   font-weight: ${({ nodeIsInActiveNodePath }) => (nodeIsInActiveNodePath ? `900 !important` : `inherit`)};
   color: ${({ nodeIsInActiveNodePath }) => (nodeIsInActiveNodePath ? `rgb(255, 90, 0) !important` : `rgb(247, 247, 247)`)};
@@ -36,14 +36,14 @@ const SymbolIcon = styled(({ nodeIsInActiveNodePath, node, children, ...rest }) 
 `
 const SymbolSpan = styled(({ nodeIsInActiveNodePath, children, ...rest }) => <span {...rest}>{children}</span>)`
   padding-right: 8px !important;
-  padding-left: ${(props) => (props.nodeIsInActiveNodePath ? `5px` : `3px`)};
+  padding-left: ${(props) => (props.nodeIsInActiveNodePath ? `7px` : `9px`)};
   font-weight: ${(props) => (props.nodeIsInActiveNodePath ? `900 !important` : `inherit`)};
   margin-top: -10px !important;
   font-size: 28px !important;
-  width: ${(props) => (props.nodeIsInActiveNodePath ? `20px` : `18px`)};
+  width: 26px;
 `
 const TextSpan = styled(({ nodeIsInActiveNodePath, node, children, ...rest }) => <span {...rest}>{children}</span>)`
-  margin-left: ${(props) => (props.nodeIsInActiveNodePath && props.node.hasChildren ? `-1px` : `1px`)};
+  margin-left: 0;
   font-size: 16px !important;
   font-weight: ${(props) => (props.nodeIsInActiveNodePath ? `900 !important` : `inherit`)};
 `
