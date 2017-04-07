@@ -26,19 +26,24 @@ const StyledNode = styled(({ level, nodeIsInActiveNodePath, children, ...rest })
     color: orange;
   }
 `
-const StyledSymbolSpan = styled.span`
-  font-family: 'Roboto Mono', monospace;
-  margin-right: 0 !important;
-  margin-top: -1px !important;
-  font-weight: 900 !important;
-  font-size: 16px !important;
+const SymbolIcon = styled(({ nodeIsInActiveNodePath, node, children, ...rest }) => <FontIcon {...rest}>{children}</FontIcon>)`
+  margin-left: -5px;
+  margin-top: ${({ nodeIsInActiveNodePath, node }) => (nodeIsInActiveNodePath ? `-5px !important` : `-2px !important`)};
+  font-size: ${({ nodeIsInActiveNodePath }) => (nodeIsInActiveNodePath ? `26px !important` : `22px !important`)};
+  font-weight: ${({ nodeIsInActiveNodePath }) => (nodeIsInActiveNodePath ? `900 !important` : `inherit`)};
+  color: ${({ nodeIsInActiveNodePath }) => (nodeIsInActiveNodePath ? `rgb(255, 90, 0) !important` : `rgb(247, 247, 247)`)};
+  width: 26px;
 `
-const StyledSymbolOpenSpan = styled(StyledSymbolSpan)`
-  margin-top: 2px !important;
-  font-size: 22px !important;
+const SymbolSpan = styled(({ nodeIsInActiveNodePath, children, ...rest }) => <span {...rest}>{children}</span>)`
+  padding-right: 8px !important;
+  padding-left: ${(props) => (props.nodeIsInActiveNodePath ? `5px` : `3px`)};
+  font-weight: ${(props) => (props.nodeIsInActiveNodePath ? `900 !important` : `inherit`)};
+  margin-top: -10px !important;
+  font-size: 28px !important;
+  width: ${(props) => (props.nodeIsInActiveNodePath ? `20px` : `18px`)};
 `
-const StyledTextSpan = styled(({ nodeIsInActiveNodePath, children, ...rest }) => <span {...rest}>{children}</span>)`
-  padding-left: .5em;
+const TextSpan = styled(({ nodeIsInActiveNodePath, node, children, ...rest }) => <span {...rest}>{children}</span>)`
+  margin-left: ${(props) => (props.nodeIsInActiveNodePath && props.node.hasChildren ? `-1px` : `1px`)};
   font-size: 16px !important;
   font-weight: ${(props) => (props.nodeIsInActiveNodePath ? `900 !important` : `inherit`)};
 `
@@ -168,28 +173,20 @@ const Row = ({
 }) => {
   const onClick = (event) => tree.toggleNode(node)
   const myProps = { key: index }
-  const nodeHasChildren = node.hasChildren
-  const symbolTypes = {
-    open: `${String.fromCharCode(709)}`,
-    closed: `>`,
-    hasNoChildren: `-`,
-    loadingData: ``,
-  }
-  let symbol
   const nodeIsInActiveNodePath = isNodeInActiveNodePath(node, toJS(tree.activeNodeArray))
-  let SymbolSpan = StyledSymbolSpan
-
-  if (nodeHasChildren && node.expanded) {
-    symbol = symbolTypes.open
-    if (nodeIsInActiveNodePath) {
-      SymbolSpan = StyledSymbolOpenSpan
-    }
-  } else if (nodeHasChildren) {
-    symbol = symbolTypes.closed
+  // build symbols
+  let useSymbolIcon = true
+  let useSymbolSpan = false
+  let symbolIcon
+  if (node.hasChildren && node.expanded) {
+    symbolIcon = `expand_more`
+  } else if (node.hasChildren) {
+    symbolIcon = `chevron_right`
   } else if (node.label === `lade Daten...`) {
-    symbol = symbolTypes.loadingData
+    symbolIcon = `more_horiz`
   } else {
-    symbol = symbolTypes.hasNoChildren
+    useSymbolSpan = true
+    useSymbolIcon = false
   }
   const dataUrl = JSON.stringify(node.url)
   const level = node.url.length - 1
@@ -224,9 +221,25 @@ const Row = ({
           data-label={node.label}
           data-menuType={node.menuType}
         >
-          <SymbolSpan>
-            {symbol}
-          </SymbolSpan>
+          {
+            useSymbolIcon &&
+            <SymbolIcon
+              nodeIsInActiveNodePath={nodeIsInActiveNodePath}
+              node={node}
+              id="symbol"
+              className="material-icons"
+            >
+              {symbolIcon}
+            </SymbolIcon>
+          }
+          {
+            useSymbolSpan &&
+            <SymbolSpan
+              nodeIsInActiveNodePath={nodeIsInActiveNodePath}
+            >
+              {`-`}
+            </SymbolSpan>
+          }
           {
             showPopMapIcon(store, tree, node) &&
             <PopMapIcon
@@ -327,11 +340,12 @@ const Row = ({
               local_florist
             </TpopBeobFilteredMapIcon>
           }
-          <StyledTextSpan
+          <TextSpan
             nodeIsInActiveNodePath={nodeIsInActiveNodePath}
+            node={node}
           >
             {node.label}
-          </StyledTextSpan>
+          </TextSpan>
           {
             moving &&
             <MovingIcon
