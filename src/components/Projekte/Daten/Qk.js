@@ -1,5 +1,5 @@
 // @flow
-import React, { Component, PropTypes } from 'react'
+import React, { PropTypes } from 'react'
 import { observer, inject } from 'mobx-react'
 import TextField from 'material-ui/TextField'
 import Linkify from 'react-linkify'
