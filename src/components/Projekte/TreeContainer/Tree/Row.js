@@ -38,7 +38,7 @@ const SymbolSpan = styled(({ nodeIsInActiveNodePath, children, ...rest }) => <sp
   padding-right: 8px !important;
   padding-left: ${(props) => (props.nodeIsInActiveNodePath ? `7px` : `9px`)};
   font-weight: ${(props) => (props.nodeIsInActiveNodePath ? `900 !important` : `inherit`)};
-  margin-top: -10px !important;
+  margin-top: -9px !important;
   font-size: 28px !important;
   width: 26px;
 `
