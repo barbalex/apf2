@@ -17,7 +17,6 @@ import Row from './Row'
 const singleRowHeight = 23
 const Container = styled.div`
   height: 100%;
-  /*font-family: 'Roboto Mono', sans-serif;*/
   ul {
     margin: 0;
     list-style: none;
@@ -31,7 +30,6 @@ const Container = styled.div`
   }
 `
 const ListContainer = styled(List)`
-  /*font-family: 'Roboto Mono', sans-serif;*/
   font-size: 14px;
   font-weight: normal;
   * {
