@@ -101,21 +101,16 @@ class Tree extends Component {
       tree={this.props.tree}
     />
 
-  noRowsRenderer = () => {
-    const { projektLoading } = this.props
-    const message = (
-      projektLoading ?
-      `lade Daten...` :
-      `keine Daten`
-    )
-    return (
-      <Container>
-        <LoadingDiv>
-          {message}
-        </LoadingDiv>
-      </Container>
-    )
-  }
+  noRowsRenderer = () =>
+    <Container>
+      <LoadingDiv>
+        {
+          this.props.projektLoading ?
+          `lade Daten...` :
+          `keine Daten`
+        }
+      </LoadingDiv>
+    </Container>
 
   render() {  // eslint-disable-line class-methods-use-this
     const { nodes, activeNodeArray } = this.props
