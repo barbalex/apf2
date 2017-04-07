@@ -1,6 +1,5 @@
 // @flow
 import React, { PropTypes } from 'react'
-import { toJS } from 'mobx'
 import { observer, inject } from 'mobx-react'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
@@ -43,7 +42,7 @@ const enhance = compose(
 )
 
 const Projekte = ({ store }) => {
-  const projekteTabs = toJS(store.urlQuery.projekteTabs)
+  const projekteTabs = store.urlQuery.projekteTabs
   const treeIsVisible = projekteTabs.includes(`tree`)
   const tree2IsVisible = projekteTabs.includes(`tree2`)
   const datenIsVisible = (
@@ -90,7 +89,7 @@ const Projekte = ({ store }) => {
                * without remounting grey space remains
                * when daten or tree tab is removed :-(
                */
-              key={toJS(store.urlQuery.projekteTabs).toString()}
+              key={store.urlQuery.projekteTabs.toString()}
               popMarkers={store.map.pop.markers}
               popHighlighted={store.map.pop.highlightedIds.join()}
               tpopMarkers={store.map.tpop.markers}

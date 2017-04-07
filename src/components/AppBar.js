@@ -95,7 +95,7 @@ const MyAppBar = ({
   onClickButtonExporte,
   ueberApfloraChOnTouchTap,
 }) => {
-  const projekteTabs = toJS(store.urlQuery.projekteTabs)
+  const projekteTabs = store.urlQuery.projekteTabs
   const treeIsVisible = projekteTabs.includes(`tree`)
   const tree2IsVisible = projekteTabs.includes(`tree2`)
   const datenIsVisible = projekteTabs.includes(`daten`) && !projekteTabs.includes(`exporte`)

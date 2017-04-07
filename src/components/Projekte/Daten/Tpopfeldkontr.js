@@ -1,6 +1,5 @@
 // @flow
 import React, { PropTypes } from 'react'
-import { toJS } from 'mobx'
 import { observer, inject } from 'mobx-react'
 import { Tabs, Tab } from 'material-ui/Tabs'
 import AutoComplete from 'material-ui/AutoComplete'
@@ -95,7 +94,7 @@ const Tpopfeldkontr = ({
           style={styles.root}
           contentContainerStyle={styles.container}
           tabTemplate={TabTemplate}
-          value={toJS(store.urlQuery.feldkontrTab) || `entwicklung`}
+          value={store.urlQuery.feldkontrTab || `entwicklung`}
           onChange={onChangeTab}
         >
           <Tab
