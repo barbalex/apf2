@@ -90,11 +90,7 @@ const MovingIcon = styled(FontIcon)`
   font-size: 20px !important;
   color: rgb(255, 90, 0) !important;
 `
-const CopyingIcon = styled(FontIcon)`
-  padding-left: .2em;
-  font-size: 20px !important;
-  color: rgb(255, 90, 0) !important;
-`
+const CopyingIcon = styled(MovingIcon)``
 const showPopMapIcon = (store, tree, node) => (
   node.menuType === `ap` &&
   node.id === (tree.activeNodes.ap || store.map.pop.apArtId) &&
@@ -375,13 +371,13 @@ const Row = ({
           }
           {
             copying &&
-            <MovingIcon
+            <CopyingIcon
               id="copying"
               className="material-icons"
               title="kopiert, bereit zum Einfügen"
             >
               content_copy
-            </MovingIcon>
+            </CopyingIcon>
           }
         </StyledNode>
       </ContextMenuTrigger>
