@@ -10,7 +10,6 @@ const fetchQk = (
   { store, tree }:
   {store:Object,tree:Object}
 ) => {
-  console.log(`fetchQk: tree:`, tree)
   store.loading.push(`qk`)
   const apArtId = tree.activeNodes.ap
   const qk = store.qk.get(apArtId)
