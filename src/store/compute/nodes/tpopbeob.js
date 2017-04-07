@@ -1,22 +1,22 @@
 import findIndex from 'lodash/findIndex'
 
 export default (store, tree) => {
-  const { activeNodes } = tree
+  const { activeNodes, filteredAndSorted } = tree
   // fetch sorting indexes of parents
   const projId = activeNodes.projekt
   if (!projId) return []
-  const projIndex = findIndex(tree.filteredAndSorted.projekt, { ProjId: projId })
+  const projIndex = findIndex(filteredAndSorted.projekt, { ProjId: projId })
   const apArtId = activeNodes.ap
   if (!apArtId) return []
-  const apIndex = findIndex(tree.filteredAndSorted.ap, { ApArtId: apArtId })
+  const apIndex = findIndex(filteredAndSorted.ap, { ApArtId: apArtId })
   const popId = activeNodes.pop
   if (!popId) return []
-  const popIndex = findIndex(tree.filteredAndSorted.pop, { PopId: popId })
+  const popIndex = findIndex(filteredAndSorted.pop, { PopId: popId })
   const tpopId = activeNodes.tpop
   if (!tpopId) return []
-  const tpopIndex = findIndex(tree.filteredAndSorted.tpop, { TPopId: tpopId })
+  const tpopIndex = findIndex(filteredAndSorted.tpop, { TPopId: tpopId })
 
-  return tree.filteredAndSorted.tpopbeob.map((el, index) => ({
+  return filteredAndSorted.tpopbeob.map((el, index) => ({
     nodeType: `table`,
     menuType: `tpopbeob`,
     id: el.beobId,

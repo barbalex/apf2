@@ -1,16 +1,17 @@
 import findIndex from 'lodash/findIndex'
 
 export default (store, tree) => {
+  const { activeNodes, filteredAndSorted } = tree
   // fetch sorting indexes of parents
-  const projId = tree.activeNodes.projekt
+  const projId = activeNodes.projekt
   if (!projId) return []
-  const projIndex = findIndex(tree.filteredAndSorted.projekt, { ProjId: projId })
-  const apArtId = tree.activeNodes.ap
+  const projIndex = findIndex(filteredAndSorted.projekt, { ProjId: projId })
+  const apArtId = activeNodes.ap
   if (!apArtId) return []
-  const apIndex = findIndex(tree.filteredAndSorted.ap, { ApArtId: apArtId })
+  const apIndex = findIndex(filteredAndSorted.ap, { ApArtId: apArtId })
 
   // map through all and create array of nodes
-  return tree.filteredAndSorted.beobzuordnung.map((el, index) => {
+  return filteredAndSorted.beobzuordnung.map((el, index) => {
     const beobId = isNaN(el.BeobId) ? el.BeobId : parseInt(el.BeobId, 10)
 
     return {
@@ -20,7 +21,7 @@ export default (store, tree) => {
       parentId: apArtId,
       urlLabel: beobId,
       label: el.label,
-      expanded: beobId === tree.activeNodes.beobzuordnung,
+      expanded: beobId === activeNodes.beobzuordnung,
       url: [`Projekte`, projId, `Arten`, apArtId, `nicht-beurteilte-Beobachtungen`, beobId],
       sort: [projIndex, 1, apIndex, 8, index],
       hasChildren: false,
