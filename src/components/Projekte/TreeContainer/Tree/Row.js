@@ -169,8 +169,8 @@ const Row = ({
   style,
   store,
   tree,
-  node,
 }) => {
+  const node = tree.node.nodes[index]
   const onClick = (event) => tree.toggleNode(node)
   const myProps = { key: index }
   const nodeIsInActiveNodePath = isNodeInActiveNodePath(node, toJS(tree.activeNodeArray))
@@ -378,7 +378,6 @@ Row.propTypes = {
   key: PropTypes.number,
   index: PropTypes.number.isRequired,
   style: PropTypes.object.isRequired,
-  node: PropTypes.object.isRequired,
 }
 
 export default enhance(Row)

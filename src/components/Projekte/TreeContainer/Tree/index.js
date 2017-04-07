@@ -101,7 +101,6 @@ class Tree extends Component {
         key={key}
         index={index}
         style={style}
-        node={tree.node.nodes[index]}
         tree={tree}
       />
     )
