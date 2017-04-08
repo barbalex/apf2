@@ -200,6 +200,10 @@ const Row = ({
     node.menuType === store.copying.table &&
     node.id === store.copying.id
   )
+  const copyingBiotop = (
+    node.nodeType === `table` &&
+    node.id === store.copyingBiotop.id
+  )
 
   return (
     <div key={key} style={style} onClick={onClick}>
@@ -364,6 +368,16 @@ const Row = ({
               title="kopiert, bereit zum Einfügen"
             >
               content_copy
+            </CopyingIcon>
+          }
+          {
+            copyingBiotop &&
+            <CopyingIcon
+              id="copyingBiotop"
+              className="material-icons"
+              title="Biotop kopiert, bereit zum Einfügen"
+            >
+              photo_library
             </CopyingIcon>
           }
         </StyledNode>

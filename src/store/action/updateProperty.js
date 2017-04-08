@@ -22,7 +22,6 @@ export default (store:Object, tree:Object, key:string, valuePassed:string|number
   // if jahr of ziel is updated, url needs to change
   if (table === `ziel` && key === `ZielJahr`) {
     const newActiveNodeArray = clone(toJS(tree.activeNodeArray))
-    console.log(`newActiveNodeArray:`, newActiveNodeArray)
     newActiveNodeArray[5] = value
     tree.setActiveNodeArray(newActiveNodeArray)
   }

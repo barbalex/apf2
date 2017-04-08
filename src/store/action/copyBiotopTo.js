@@ -1,11 +1,7 @@
 // @flow
-/**
-* moves a dataset to a different parent
-* used when copying for instance tpop to other pop in tree
-*/
-
 import axios from 'axios'
 import clone from 'lodash/clone'
+import { toJS } from 'mobx'
 
 import apiBaseUrl from '../../modules/apiBaseUrl'
 import biotopFields from '../../modules/biotopFields'
@@ -13,8 +9,8 @@ import insertDatasetInIdb from './insertDatasetInIdb'
 
 export default (store:Object, newId:number) => {
   const { id } = store.copyingBiotop
-  const row = store.table.tpopkontr.get(id)
-  if (!row) {
+  const rowToGetBiotopFrom = store.table.tpopkontr.get(id)
+  if (!rowToGetBiotopFrom) {
     return store.listError(
       new Error(
         `change was not saved because dataset was not found in store`
@@ -22,28 +18,46 @@ export default (store:Object, newId:number) => {
     )
   }
 
-  // build new row (for now without idField)
-  const newRow = clone(row)
-  // need to remove empty values and non Biotop fields
-  Object.keys(newRow).forEach((k) => {
-    if (
-      (!newRow[k] && newRow[k] !== 0) ||
-      !biotopFields.includes(k)
-    ) {
-      delete newRow[k]
+  let rowToUpdate = store.table.tpopkontr.get(newId)
+  const rowToUpdateBeforeUpdating = clone(rowToUpdate)
+  // add biotop values from rowToGetBiotopFrom
+  biotopFields.forEach((f) => {
+    if (rowToGetBiotopFrom[f] || rowToGetBiotopFrom[f] === 0) {
+      rowToUpdate[f] = rowToGetBiotopFrom[f]
     }
   })
+  rowToUpdate.MutWer = store.user.name
+  rowToUpdate.MutWann = new Date().toISOString()
+  const rowForDb = clone(toJS(rowToUpdate))
+  // remove empty values
+  Object.keys(rowForDb).forEach((k) => {
+    if (
+      (!rowForDb[k] && rowForDb[k] !== 0) ||
+      rowForDb[k] === `undefined`
+    ) {
+      delete rowForDb[k]
+    }
+  })
+  // remove label: field does not exist in db, is computed
+  delete rowForDb.label
+  const rowForIdb = clone(rowForDb)
+  // server expects TPopId to be called id
+  rowForDb.id = rowForDb.TPopKontrId
+  delete rowForDb.TPopKontrId
+  // server expects user to be added as user
+  rowForDb.user = store.user.name
+  delete rowForDb.MutWer
+  delete rowForDb.MutWann
 
   // update db
-  const url = `${apiBaseUrl}/insertFields/apflora/tabelle=tpopkontr/felder=${JSON.stringify(newRow)}`
-  axios.post(url)
-    .then(({ data }) => {
-      // can't write to store before, because db creates id and guid
-      store.writeToStore({ data: [data], table: `tpopkontr`, field: `TPopKontrId` })
-      // insert this dataset in idb
-      insertDatasetInIdb(store, `tpopkontr`, data)
+  const url = `${apiBaseUrl}/updateMultiple/apflora/tabelle=tpopkontr/felder=${JSON.stringify(rowForDb)}`
+  axios.put(url)
+    .then(() => {
+      // put this dataset in idb
+      insertDatasetInIdb(store, `tpopkontr`, rowForIdb)
     })
-    .catch((error) =>
+    .catch((error) => {
+      rowToUpdate = rowToUpdateBeforeUpdating
       store.listError(error)
-    )
+    })
 }
