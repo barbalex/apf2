@@ -21,61 +21,97 @@ const enhance = compose(
 const Tpopfeldkontr = (
   { store, tree, onClick, changeLabel, label, onShow }:
   {store:Object,tree:Object,onClick:()=>void,changeLabel:()=>{},label:string|number,onShow:()=>void}
-) =>
-  <ContextMenu
-    id={`${tree.name}tpopfeldkontr`}
-    collect={props => props}
-    onShow={onShow}
-  >
-    <div className="react-contextmenu-title">Feld-Kontrolle</div>
-    <MenuItem
-      onClick={onClick}
-      data={{
-        action: `insert`,
-        table: `tpopfeldkontr`,
-      }}
+) => {
+  const copyingBiotop = store.copyingBiotop.id
+
+  return (
+    <ContextMenu
+      id={`${tree.name}tpopfeldkontr`}
+      collect={props => props}
+      onShow={onShow}
     >
-      erstelle neue
-    </MenuItem>
-    <MenuItem
-      onClick={onClick}
-      data={{
-        action: `delete`,
-        table: `tpopfeldkontr`,
-      }}
-    >
-      lösche
-    </MenuItem>
-    <MenuItem
-      onClick={onClick}
-      data={{
-        action: `markForMoving`,
-        table: `tpopfeldkontr`,
-      }}
-    >
-      verschiebe
-    </MenuItem>
-    <MenuItem
-      onClick={onClick}
-      data={{
-        action: `markForCopying`,
-        table: `tpopfeldkontr`,
-      }}
-    >
-      kopiere
-    </MenuItem>
-    {
-      store.copying.table &&
+      <div className="react-contextmenu-title">Feld-Kontrolle</div>
       <MenuItem
         onClick={onClick}
         data={{
-          action: `resetCopying`,
+          action: `insert`,
+          table: `tpopfeldkontr`,
         }}
       >
-        Kopieren aufheben
+        erstelle neue
       </MenuItem>
-    }
-  </ContextMenu>
+      <MenuItem
+        onClick={onClick}
+        data={{
+          action: `delete`,
+          table: `tpopfeldkontr`,
+        }}
+      >
+        lösche
+      </MenuItem>
+      <MenuItem
+        onClick={onClick}
+        data={{
+          action: `markForMoving`,
+          table: `tpopfeldkontr`,
+        }}
+      >
+        verschiebe
+      </MenuItem>
+      <MenuItem
+        onClick={onClick}
+        data={{
+          action: `markForCopying`,
+          table: `tpopfeldkontr`,
+        }}
+      >
+        kopiere
+      </MenuItem>
+      {
+        store.copying.table &&
+        <MenuItem
+          onClick={onClick}
+          data={{
+            action: `resetCopying`,
+          }}
+        >
+          Kopieren aufheben
+        </MenuItem>
+      }
+      <MenuItem
+        onClick={onClick}
+        data={{
+          action: `markForCopyingBiotop`,
+          table: `tpopfeldkontr`,
+        }}
+      >
+        kopiere Biotop
+      </MenuItem>
+      {
+        copyingBiotop &&
+        <MenuItem
+          onClick={onClick}
+          data={{
+            action: `copyBiotop`,
+          }}
+        >
+          {`kopiere Biotop von '${store.copyingBiotop.label}' hierhin`}
+        </MenuItem>
+      }
+      {
+        store.copyingBiotop.id &&
+        <MenuItem
+          onClick={onClick}
+          data={{
+            action: `resetCopyingBiotop`,
+          }}
+        >
+          Biotop Kopieren aufheben
+        </MenuItem>
+      }
+    </ContextMenu>
+  )
+}
 
 Tpopfeldkontr.propTypes = {
   store: PropTypes.object.isRequired,

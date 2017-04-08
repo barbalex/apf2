@@ -31,6 +31,7 @@ import deleteBeobzuordnung from '../action/deleteBeobzuordnung'
 import writeToStore from '../action/writeToStore'
 import moveTo from '../action/moveTo'
 import copyTo from '../action/copyTo'
+import copyBiotopTo from '../action/copyBiotopTo'
 
 export default (store:Object) => {
   extendObservable(store, {
@@ -75,6 +76,24 @@ export default (store:Object) => {
       store.copying.table = null
       store.copying.id = null
       store.copying.label = null
+    }),
+    copyingBiotop: {
+      id: null,
+      label: null,
+    },
+    markForCopyingBiotop: action(`markForCopyingBiotop`, (id, label) => {
+      store.copyingBiotop.id = id
+      store.copyingBiotop.label = label
+    }),
+    copyBiotopTo: action(`copyBiotopTo`, (parentId) => {
+      // insert new dataset with:
+      // - data of dataset with id copying.id
+      // - parentId as passed
+      copyBiotopTo(store, parentId)
+    }),
+    resetCopyingBiotop: action(`resetCopyingBiotop`, () => {
+      store.copyingBiotop.id = null
+      store.copyingBiotop.label = null
     }),
     /**
      * urlQueries are used to control tabs

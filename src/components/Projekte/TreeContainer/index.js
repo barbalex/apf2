@@ -185,6 +185,15 @@ class TreeContainer extends Component { // eslint-disable-line react/prefer-stat
       copy() {
         store.copyTo(parseInt(id, 10))
       },
+      markForCopyingBiotop() {
+        store.markForCopyingBiotop(parseInt(id, 10), label)
+      },
+      resetCopyingBiotop() {
+        store.resetCopyingBiotop()
+      },
+      copyBiotop() {
+        store.copyBiotopTo(parseInt(id, 10))
+      },
     }
     if (Object.keys(actions).includes(action)) {
       actions[action]()
