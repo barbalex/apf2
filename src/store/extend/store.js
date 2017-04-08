@@ -85,11 +85,11 @@ export default (store:Object) => {
       store.copyingBiotop.id = id
       store.copyingBiotop.label = label
     }),
-    copyBiotopTo: action(`copyBiotopTo`, (parentId) => {
+    copyBiotopTo: action(`copyBiotopTo`, (id) => {
       // insert new dataset with:
       // - data of dataset with id copying.id
-      // - parentId as passed
-      copyBiotopTo(store, parentId)
+      // - id as passed
+      copyBiotopTo(store, id)
     }),
     resetCopyingBiotop: action(`resetCopyingBiotop`, () => {
       store.copyingBiotop.id = null

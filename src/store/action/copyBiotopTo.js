@@ -11,7 +11,7 @@ import apiBaseUrl from '../../modules/apiBaseUrl'
 import biotopFields from '../../modules/biotopFields'
 import insertDatasetInIdb from './insertDatasetInIdb'
 
-export default (store:Object, parentId:number) => {
+export default (store:Object, newId:number) => {
   const { id } = store.copyingBiotop
   const row = store.table.tpopkontr.get(id)
   if (!row) {
@@ -33,7 +33,6 @@ export default (store:Object, parentId:number) => {
       delete newRow[k]
     }
   })
-  newRow.TPopId = parentId
 
   // update db
   const url = `${apiBaseUrl}/insertFields/apflora/tabelle=tpopkontr/felder=${JSON.stringify(newRow)}`
