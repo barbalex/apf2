@@ -20,11 +20,11 @@ const setQk = ({
   messagesPassed,
   filterPassed,
 }:{
-  store:Object,
-  tree:Object,
-  berichtjahrPassed:number,
+  store: Object,
+  tree: Object,
+  berichtjahrPassed: number,
   messagesPassed:Array<Object>,
-  filterPassed:string,
+  filterPassed: string,
 }) => {
   const apArtId = tree.activeNodes.ap
   let berichtjahr = berichtjahrPassed

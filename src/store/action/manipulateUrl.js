@@ -5,7 +5,7 @@ import { toJS } from 'mobx'
 
 import getActiveNodeArrayFromPathname from './getActiveNodeArrayFromPathname'
 
-export default (store:Object) => {
+export default (store: Object) => {
   const activeNodeArrayFromUrl = getActiveNodeArrayFromPathname(window.location.pathname)
   const activeNodeArray = toJS(store.tree.activeNodeArray)
   const urlQueryFromUrl = queryString.parse(window.location.search)

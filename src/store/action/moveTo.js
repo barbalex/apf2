@@ -10,7 +10,7 @@
  import tables from '../../modules/tables'
  import updatePropertyInIdb from './updatePropertyInIdb'
 
- export default (store:Object, newParentId:number) => {
+ export default (store: Object, newParentId: number) => {
    let { table } = store.moving
    const { id } = store.moving
 

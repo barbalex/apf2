@@ -1,5 +1,5 @@
 // @flow
-export default (store:Object, tree:Object, x:number, y:number) => {
+export default (store: Object, tree: Object, x: number, y: number) => {
   if (!store) return console.log(`no store passed to localizeTpop`)
   if (!x) return store.listError(new Error(`no x coordinate passed to localizeTpop`))
   if (!y) return store.listError(new Error(`no y coordinate passed to localizeTpop`))

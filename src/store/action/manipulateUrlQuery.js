@@ -1,6 +1,6 @@
 // @flow
 
-export default (store:Object) => {
+export default (store: Object) => {
   const { activeNodeArray } = store.tree
 
   // if new store set projekte tabs

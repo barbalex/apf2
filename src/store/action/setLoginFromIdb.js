@@ -7,7 +7,7 @@ import app from 'ampersand-app'
 // fetched from idb
 // so need to set store.user.name to `` if something
 // goes wrong or no user name is received
-export default (store:Object) => {
+export default (store: Object) => {
   app.db.currentUser
   .toArray()
   .then((users) => {
