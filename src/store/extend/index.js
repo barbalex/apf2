@@ -14,7 +14,7 @@ import extendMapBeobNichtZuzuordnen from './mapBeobNichtZuzuordnen'
 import extendMapTpopBeob from './mapTpopBeob'
 import extendExport from './export'
 
-export default (store:Object) => {
+export default (store: Object) => {
   extendStore(store)
   extendTree(store)
   extendTree2(store)

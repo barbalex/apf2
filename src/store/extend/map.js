@@ -18,7 +18,7 @@ import beobNichtBeurteiltIdsInsideFeatureCollection from '../../modules/beobNich
 import beobNichtZuzuordnenIdsInsideFeatureCollection from '../../modules/beobNichtZuzuordnenIdsInsideFeatureCollection'
 import tpopBeobIdsInsideFeatureCollection from '../../modules/tpopBeobIdsInsideFeatureCollection'
 
-export default (store:Object) => {
+export default (store: Object) => {
   extendObservable(store.map, {
     bounds: [[47.159, 8.354], [47.696, 8.984]],
     changeBounds: action(`changeBounds`, (bounds) => store.map.bounds = bounds),

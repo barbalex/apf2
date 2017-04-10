@@ -7,10 +7,10 @@ export default ({
   table,
   field,
 }:{
-  store:Object,
+  store: Object,
   data:Array<Object>,
-  table:string,
-  field:string,
+  table: string,
+  field: string,
 }) =>
   runInAction(() => {
     data.forEach(d =>

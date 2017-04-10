@@ -9,7 +9,7 @@ import getBeobMarkersClustered from '../action/getBeobMarkersClustered'
 import getBeobMarkers from '../action/getBeobMarkers'
 import getBeobForMap from '../action/getBeobForMap'
 
-export default (store:Object) => {
+export default (store: Object) => {
   extendObservable(store.map.beob, {
     highlightedIds: [],
     beobs: computed(() =>

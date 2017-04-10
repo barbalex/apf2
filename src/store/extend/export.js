@@ -4,7 +4,7 @@ import {
   action,
 } from 'mobx'
 
-export default (store:Object) => {
+export default (store: Object) => {
   extendObservable(store.export, {
     applyNodeLabelFilterToExport: false,
     toggleApplyNodeLabelFilterToExport: action(

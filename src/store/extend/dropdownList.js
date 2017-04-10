@@ -4,7 +4,7 @@ import { extendObservable, computed } from 'mobx'
 import sortBy from 'lodash/sortBy'
 import filter from 'lodash/filter'
 
-export default (store:Object) => {
+export default (store: Object) => {
   extendObservable(store.dropdownList, {
     adressen: computed(
       () => {

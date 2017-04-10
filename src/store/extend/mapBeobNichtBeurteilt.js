@@ -9,7 +9,7 @@ import getBeobNichtBeurteiltMarkersClustered from '../action/getBeobNichtBeurtei
 import getBeobNichtBeurteiltMarkers from '../action/getBeobNichtBeurteiltMarkers'
 import getBeobForMap from '../action/getBeobForMap'
 
-export default (store:Object) => {
+export default (store: Object) => {
   extendObservable(store.map.beobNichtBeurteilt, {
     highlightedIds: computed(
       () => {
