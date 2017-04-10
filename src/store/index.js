@@ -242,10 +242,16 @@ function Store() {
   this.moving = {
     table: null,
     id: null,
+    label: null,
   }
   this.copying = {
     table: null,
     id: null,
+    label: null,
+  }
+  this.copyingBiotop = {
+    id: null,
+    label: null,
   }
 }
 
