@@ -1,5 +1,5 @@
 // @flow
-import React, { PropTypes } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 
 import appBaseUrl from '../../../modules/appBaseUrl'
@@ -14,8 +14,14 @@ const StyledH3 = styled.h3`
  */
 
 const PopPopup = (
-  { store, pop }:
-  {store: Object,pop: Object}
+  {
+    store,
+    pop,
+  }:
+  {
+    store: Object,
+    pop: Object,
+  }
 ) => {
   const { activeNodes } = store.tree
   const { ap, projekt } = activeNodes
@@ -38,11 +44,6 @@ const PopPopup = (
       </a>
     </div>
   )
-}
-
-PopPopup.propTypes = {
-  store: PropTypes.object.isRequired,
-  pop: PropTypes.object.isRequired,
 }
 
 export default PopPopup

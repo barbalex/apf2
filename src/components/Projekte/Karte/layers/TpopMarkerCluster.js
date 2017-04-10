@@ -9,7 +9,7 @@ const enhance = compose(
   getContext({ map: PropTypes.object.isRequired }),
 )
 
-class TpopMarkerCluster extends Component { // eslint-disable-line react/prefer-stateless-function
+class TpopMarkerCluster extends Component {
 
   props: {
     visible: boolean,

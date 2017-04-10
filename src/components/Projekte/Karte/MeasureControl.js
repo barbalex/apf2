@@ -1,7 +1,8 @@
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
 import 'leaflet'
 import compose from 'recompose/compose'
 import getContext from 'recompose/getContext'
+import PropTypes from 'prop-types'
 // regular import results in error,
 // see: https://github.com/ljagis/leaflet-measure/issues/68
 // import 'leaflet-measure'
@@ -11,8 +12,7 @@ const enhance = compose(
   getContext({ map: PropTypes.object.isRequired }),
 )
 
-class MeasureControl extends Component { // eslint-disable-line react/prefer-stateless-function
-
+class MeasureControl extends Component {
   componentDidMount() {
     const { map } = this.props
     const options = {

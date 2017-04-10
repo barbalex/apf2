@@ -1,4 +1,4 @@
-import React, { PropTypes } from 'react'
+import React from 'react'
 import { toJS } from 'mobx'
 import { observer } from 'mobx-react'
 import styled from 'styled-components'
@@ -101,7 +101,16 @@ const enhance = compose(
   observer
 )
 
-const Overlays = ({ store, onSortEnd }) =>
+const Overlays = (
+  {
+    store,
+    onSortEnd,
+  }:
+  {
+    store: Object,
+    onSortEnd: () => void,
+  }
+) =>
   <CardContent>
     <SortableList
       items={store.map.overlays}
@@ -112,10 +121,5 @@ const Overlays = ({ store, onSortEnd }) =>
       activeOverlays={toJS(store.map.activeOverlays)}
     />
   </CardContent>
-
-Overlays.propTypes = {
-  store: PropTypes.object.isRequired,
-  onSortEnd: PropTypes.func.isRequired,
-}
 
 export default enhance(Overlays)

@@ -1,4 +1,4 @@
-import React, { PropTypes } from 'react'
+import React from 'react'
 import 'leaflet'
 import leafletImage from 'leaflet-image'
 import fileSaver from 'file-saver'
@@ -11,6 +11,7 @@ import getContext from 'recompose/getContext'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
+import PropTypes from 'prop-types'
 
 const StyledButton = styled.button`
   background-color: white;
@@ -44,7 +45,10 @@ const enhance = compose(
   }),
 )
 
-const PngControl = ({ savePng }) =>
+const PngControl = (
+  { savePng }:
+  { savePng: () => void }
+) =>
   <Control position="topright">
     <StyledButton
       onClick={savePng}
@@ -62,9 +66,5 @@ const PngControl = ({ savePng }) =>
       </MuiThemeProvider>
     </StyledButton>
   </Control>
-
-PngControl.propTypes = {
-  savePng: PropTypes.func.isRequired,
-}
 
 export default enhance(PngControl)

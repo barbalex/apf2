@@ -9,7 +9,7 @@ const enhance = compose(
   getContext({ map: PropTypes.object.isRequired }),
 )
 
-class TpopBeobAssignPolylines extends Component { // eslint-disable-line react/prefer-stateless-function
+class TpopBeobAssignPolylines extends Component {
 
   props: {
     visible: boolean,

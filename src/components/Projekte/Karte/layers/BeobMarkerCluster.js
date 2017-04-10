@@ -9,7 +9,7 @@ const enhance = compose(
   getContext({ map: PropTypes.object.isRequired }),
 )
 
-class BeobMarkerCluster extends Component { // eslint-disable-line react/prefer-stateless-function
+class BeobMarkerCluster extends Component {
 
   props: {
     visible: boolean,
