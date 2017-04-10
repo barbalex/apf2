@@ -1,5 +1,5 @@
 // @flow
-export default (store:Object) => {
+export default (store: Object) => {
   const { activeDataset } = store.tree
   const { table, row } = activeDataset
   const nodes = store[`${table}Nodes`]

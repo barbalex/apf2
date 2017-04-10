@@ -1,5 +1,5 @@
 // @flow
-export default (table:string) => {
+export default (table: string) => {
   const names = {
     ap: `Arten`,
     apber: `AP-Berichte`,
