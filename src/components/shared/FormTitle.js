@@ -16,7 +16,7 @@ const Title = styled.div`
 
 const FormTitle = (
   { tree, title, noTestdataMessage }:
-  {tree:Object,title:string,noTestdataMessage?:boolean}
+  {tree: Object,title: string,noTestdataMessage?:boolean}
 ) =>
   <Container>
     <Title>

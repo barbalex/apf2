@@ -4,7 +4,7 @@
  * need class because of ref and componentDidUpdate
  */
 
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
 import { observer, inject } from 'mobx-react'
 import { AutoSizer, List } from 'react-virtualized'
 import styled from 'styled-components'
@@ -52,17 +52,21 @@ const enhance = compose(
 
 class Tree extends Component {
 
-  static propTypes = {
-    store: PropTypes.object.isRequired,
-    tree: PropTypes.object.isRequired,
-    projektLoading: PropTypes.bool,
-    nodes: PropTypes.array.isRequired,
-    mapTpopBeobVisible: PropTypes.bool.isRequired,
-    mapBeobNichtBeurteiltVisible: PropTypes.bool.isRequired,
-    mapBeobNichtZuzuordnenVisible: PropTypes.bool.isRequired,
-    mapPopVisible: PropTypes.bool.isRequired,
-    mapTpopVisible: PropTypes.bool.isRequired,
-    activeNodeArray: PropTypes.array.isRequired,
+  props: {
+    store: Object,
+    tree: Object,
+    projektLoading: boolean,
+    nodes: Array<Object>,
+    mapTpopBeobVisible: boolean,
+    mapBeobNichtBeurteiltVisible: boolean,
+    mapBeobNichtZuzuordnenVisible: boolean,
+    mapPopVisible: boolean,
+    mapTpopVisible: boolean,
+    activeNodeArray: Array<Object>,
+  }
+
+  static defaultProps = {
+    projektLoading: false,
   }
 
   componentDidUpdate(prevProps) {
