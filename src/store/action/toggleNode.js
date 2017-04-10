@@ -1,6 +1,6 @@
 // @flow
 
-export default (store:Object, node:Object) => {
+export default (store: Object, node: Object) => {
   if (node) {
     const newActiveNodeArray = node.url
     if (node.expanded) {

@@ -2,7 +2,7 @@
 import clone from 'lodash/clone'
 import { toJS } from 'mobx'
 
-export default (store:Object, tree:Object, key:string, valuePassed:string|number) => {
+export default (store: Object, tree: Object, key: string, valuePassed: string|number) => {
   const { table, row } = tree.activeDataset
   let value = valuePassed
   // ensure primary data exists

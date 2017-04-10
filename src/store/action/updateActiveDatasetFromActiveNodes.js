@@ -1,7 +1,7 @@
 // @flow
 import validateActiveDataset from '../../modules/validateActiveDataset'
 
-export default (store:Object, tree:Object) => {
+export default (store: Object, tree: Object) => {
   const { table } = store
   const aEl = tree.activeNodes
   let activeDataset = {

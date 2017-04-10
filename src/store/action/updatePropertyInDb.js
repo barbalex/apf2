@@ -10,7 +10,7 @@ import updatePropertyInIdb from './updatePropertyInIdb'
 import deleteDatasetInIdb from './deleteDatasetInIdb'
 import insertDatasetInIdb from './insertDatasetInIdb'
 
-export default (store:Object, tree:Object, key:string, valuePassed:string|number) => {
+export default (store: Object, tree: Object, key: string, valuePassed: string|number) => {
   const { row, valid } = tree.activeDataset
   let value = valuePassed
   let table = tree.activeDataset.table
