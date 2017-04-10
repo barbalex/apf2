@@ -1,5 +1,5 @@
 // @flow
-import React, { PropTypes } from 'react'
+import React from 'react'
 import { ContextMenu, MenuItem } from 'react-contextmenu'
 import compose from 'recompose/compose'
 import withState from 'recompose/withState'
@@ -17,8 +17,20 @@ const enhance = compose(
 )
 
 const Tpopfeldkontrzaehl = (
-  { tree, onClick, changeLabel, label, onShow }:
-  {tree:Object,onClick:()=>void,changeLabel:()=>{},label:string|number,onShow:()=>void}
+  {
+    tree,
+    onClick,
+    changeLabel,
+    label,
+    onShow,
+  }:
+  {
+    tree: Object,
+    onClick: () => void,
+    changeLabel: () => void,
+    label: string|number,
+    onShow: () => void,
+  }
 ) =>
   <ContextMenu
     id={`${tree.name}tpopfeldkontrzaehl`}
@@ -45,12 +57,5 @@ const Tpopfeldkontrzaehl = (
       lösche
     </MenuItem>
   </ContextMenu>
-
-Tpopfeldkontrzaehl.propTypes = {
-  onClick: PropTypes.func.isRequired,
-  changeLabel: PropTypes.func.isRequired,
-  label: PropTypes.any.isRequired,
-  onShow: PropTypes.func.isRequired,
-}
 
 export default enhance(Tpopfeldkontrzaehl)
