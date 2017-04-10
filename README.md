@@ -28,6 +28,7 @@ Die wichtigsten sind:
 - [create-react-app](//github.com/facebookincubator/create-react-app): Abhängigkeiten einfach aktuell halten
 - [MobX](//github.com/mobxjs/mobx): Computed data wie in Excel. Und viel simpler als redux. Genial!
 - [React](//facebook.github.io/react): Deklarative Benutzer-Oberfläche. Aufgebaut aus Komponenten. Genial!
+- [Flow](//flow.org): Static type checker. Fehler finden, bevor der Code ausgeführt wird!
 - [socket.io](//socket.io/): Änderungen laufend bei allen Benutzern sichtbar machen
 
 ## Fähigkeiten:
