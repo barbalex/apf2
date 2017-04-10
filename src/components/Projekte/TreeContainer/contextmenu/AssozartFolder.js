@@ -1,10 +1,16 @@
 // @flow
-import React, { PropTypes } from 'react'
+import React from 'react'
 import { ContextMenu, MenuItem } from 'react-contextmenu'
 
 const AssozartFolder = (
-  { onClick, tree }:
-  {onClick:()=>void,tree:Object}
+  {
+    onClick,
+    tree,
+  }:
+  {
+    onClick: () => void,
+    tree: Object,
+  }
 ) =>
   <ContextMenu id={`${tree.name}assozartFolder`} >
     <div className="react-contextmenu-title">assoziierte Art</div>
@@ -18,9 +24,5 @@ const AssozartFolder = (
       erstelle neue
     </MenuItem>
   </ContextMenu>
-
-AssozartFolder.propTypes = {
-  onClick: PropTypes.func.isRequired,
-}
 
 export default AssozartFolder
