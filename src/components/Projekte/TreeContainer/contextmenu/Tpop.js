@@ -102,6 +102,14 @@ const Tpop = (
           Kopieren aufheben
         </MenuItem>
       }
+      <MenuItem
+        onClick={onClick}
+        data={{
+          action: `copyTpopKoordToPop`,
+        }}
+      >
+        Kopiere Koordinaten in die Population
+      </MenuItem>
     </ContextMenu>
   )
 }

@@ -32,6 +32,7 @@ import writeToStore from '../action/writeToStore'
 import moveTo from '../action/moveTo'
 import copyTo from '../action/copyTo'
 import copyBiotopTo from '../action/copyBiotopTo'
+import copyTpopKoordToPop from '../action/copyTpopKoordToPop'
 
 export default (store:Object) => {
   extendObservable(store, {
@@ -95,6 +96,9 @@ export default (store:Object) => {
       store.copyingBiotop.id = null
       store.copyingBiotop.label = null
     }),
+    copyTpopKoordToPop: action(`copyTpopKoordToPop`, (tpopId) =>
+      copyTpopKoordToPop(store, tpopId)
+    ),
     /**
      * urlQueries are used to control tabs
      * for instance: Entwicklung or Biotop in tpopfeldkontr
