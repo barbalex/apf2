@@ -1,5 +1,5 @@
 // @flow
-import React, { PropTypes } from 'react'
+import React from 'react'
 import { observer, inject } from 'mobx-react'
 import styled from 'styled-components'
 import sortBy from 'lodash/sortBy'
@@ -140,7 +140,18 @@ const enhance = compose(
   observer
 )
 
-const Beobzuordnung = ({ store, tree, updatePropertyInDb }) => {
+const Beobzuordnung = (
+  {
+    store,
+    tree,
+    updatePropertyInDb,
+  }:
+  {
+    store: Object,
+    tree: Object,
+    updatePropertyInDb: () => void,
+  }
+) => {
   const { activeDataset } = tree
   const beobzuordnung = activeDataset.row
   const beobTitle = (
@@ -201,12 +212,6 @@ const Beobzuordnung = ({ store, tree, updatePropertyInDb }) => {
       </FieldsContainer>
     </Scrollbars>
   )
-}
-
-Beobzuordnung.propTypes = {
-  store: PropTypes.object.isRequired,
-  tree: PropTypes.object.isRequired,
-  updatePropertyInDb: PropTypes.func.isRequired,
 }
 
 export default enhance(Beobzuordnung)

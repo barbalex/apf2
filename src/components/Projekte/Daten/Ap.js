@@ -1,5 +1,5 @@
 // @flow
-import React, { PropTypes } from 'react'
+import React from 'react'
 import { observer, inject } from 'mobx-react'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
@@ -85,15 +85,26 @@ const enhance = compose(
   observer
 )
 
-const Ap = ({
-  store,
-  tree,
-  activeDataset,
-  updateProperty,
-  updatePropertyInDb,
-  artwert,
-  artname,
-}) =>
+const Ap = (
+  {
+    store,
+    tree,
+    activeDataset,
+    updateProperty,
+    updatePropertyInDb,
+    artwert,
+    artname,
+  }:
+  {
+    store: Object,
+    tree: Object,
+    activeDataset: Object,
+    updateProperty: () => void,
+    updatePropertyInDb: () => void,
+    artwert?: number,
+    artname?: string,
+  }
+) =>
   <Container>
     <FormTitle tree={tree} title="Art" />
     <Scrollbars>
@@ -212,13 +223,5 @@ const Ap = ({
       </FieldsContainer>
     </Scrollbars>
   </Container>
-
-Ap.propTypes = {
-  store: PropTypes.object.isRequired,
-  tree: PropTypes.object.isRequired,
-  activeDataset: PropTypes.object.isRequired,
-  updateProperty: PropTypes.func.isRequired,
-  updatePropertyInDb: PropTypes.func.isRequired,
-}
 
 export default enhance(Ap)

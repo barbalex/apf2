@@ -1,5 +1,5 @@
 // @flow
-import React, { PropTypes } from 'react'
+import React from 'react'
 import { observer, inject } from 'mobx-react'
 import compose from 'recompose/compose'
 
@@ -11,14 +11,17 @@ const enhance = compose(
   observer
 )
 
-const Beob = ({ store }) => {
+const Beob = (
+  { store }:
+  { store: Object }
+) => {
   const beob = getBeobFromBeobBereitgestelltInActiveDataset(store)
   if (!beob) return null
-
   const beobFields = Object.entries(beob)
     .filter(([key, value]) =>
       value || value === 0
     )
+
   return (
     <div>
       {
@@ -33,10 +36,6 @@ const Beob = ({ store }) => {
       }
     </div>
   )
-}
-
-Beob.propTypes = {
-  store: PropTypes.object.isRequired,
 }
 
 export default enhance(Beob)

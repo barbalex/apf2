@@ -1,5 +1,5 @@
 // @flow
-import React, { PropTypes } from 'react'
+import React from 'react'
 import { observer, inject } from 'mobx-react'
 import sortBy from 'lodash/sortBy'
 import filter from 'lodash/filter'
@@ -49,8 +49,18 @@ const getArtname = ({ store, tree }) => {
   return name
 }
 
-const Assozart = ({ store, tree }) => {
+const Assozart = (
+  {
+    store,
+    tree,
+  }:
+  {
+    store: Object,
+    tree: Object,
+  }
+) => {
   const { activeDataset } = tree
+
   return (
     <Container>
       <FormTitle tree={tree} title="assoziierte Art" />
@@ -85,11 +95,6 @@ const Assozart = ({ store, tree }) => {
       </Scrollbars>
     </Container>
   )
-}
-
-Assozart.propTypes = {
-  store: PropTypes.object.isRequired,
-  tree: PropTypes.object.isRequired,
 }
 
 export default enhance(Assozart)

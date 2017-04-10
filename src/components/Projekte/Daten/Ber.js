@@ -1,5 +1,5 @@
 // @flow
-import React, { PropTypes } from 'react'
+import React from 'react'
 import { observer, inject } from 'mobx-react'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
@@ -23,7 +23,16 @@ const enhance = compose(
   observer
 )
 
-const Ber = ({ store, tree }) => {
+const Ber = (
+  {
+    store,
+    tree,
+  }:
+  {
+    store: Object,
+    tree: Object,
+  }
+) => {
   const { activeDataset } = tree
 
   return (
@@ -79,11 +88,6 @@ const Ber = ({ store, tree }) => {
       </Scrollbars>
     </Container>
   )
-}
-
-Ber.propTypes = {
-  store: PropTypes.object.isRequired,
-  tree: PropTypes.object.isRequired,
 }
 
 export default enhance(Ber)
