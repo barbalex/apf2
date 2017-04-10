@@ -5,10 +5,10 @@ export default ({
   field,
   value,
 }:{
-  store:Object,
-  table:string,
-  field:string,
-  value:string|number,
+  store: Object,
+  table: string,
+  field: string,
+  value: string|number,
 }) => {
   const { valuesForWhichTableDataWasFetched } = store
   // record that data was fetched for this value

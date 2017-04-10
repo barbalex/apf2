@@ -2,7 +2,7 @@
 import _forEach from 'lodash/forEach'
 import Joi from 'joi-browser'
 
-export default (table:string, row:Object, allFields:Array<Object>) => {
+export default (table: string, row: Object, allFields:Array<Object>) => {
   const valid = {}
   if (!table || !row || !allFields || !allFields.length) {
     return valid

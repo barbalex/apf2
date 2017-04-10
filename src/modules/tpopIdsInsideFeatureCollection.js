@@ -3,7 +3,7 @@ import within from '@turf/within'
 
 import epsg21781to4326 from './epsg21781to4326notReverse'
 
-export default (store:Object, tpops:Array<Object>) => {
+export default (store: Object, tpops:Array<Object>) => {
   /**
    * data is passed from map.pop.pops OR a view fetched from the server
    * so need to filter to data with coordinates first...
