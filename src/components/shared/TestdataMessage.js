@@ -7,7 +7,16 @@ const Div = styled.div`
   padding: 10px 10px 0 10px;
 `
 
-const TestdataMessage = ({ store, tree }) => {
+const TestdataMessage = (
+  {
+    store,
+    tree,
+  }:
+  {
+    store: Object,
+    tree: Object,
+  }
+) => {
   const { activeNodes } = tree
   const isTestSpecies = (
     activeNodes.ap &&

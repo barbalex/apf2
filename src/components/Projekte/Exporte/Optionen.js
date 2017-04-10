@@ -1,4 +1,4 @@
-import React, { PropTypes } from 'react'
+import React from 'react'
 import { Card, CardHeader, CardText } from 'material-ui/Card'
 import Checkbox from 'material-ui/Checkbox'
 import { observer, inject } from 'mobx-react'
@@ -14,7 +14,10 @@ const enhance = compose(
   observer
 )
 
-const Optionen = ({ store }) =>
+const Optionen = (
+  { store }:
+  { store: Object }
+) =>
   <FirstLevelCard initiallyExpanded>
     <CardHeader
       title="Optionen"
@@ -59,9 +62,5 @@ const Optionen = ({ store }) =>
       }
     </CardText>
   </FirstLevelCard>
-
-Optionen.propTypes = {
-  store: PropTypes.object.isRequired,
-}
 
 export default enhance(Optionen)

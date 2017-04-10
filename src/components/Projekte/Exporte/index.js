@@ -1,4 +1,4 @@
-import React, { PropTypes } from 'react'
+import React from 'react'
 import { observer, inject } from 'mobx-react'
 import styled from 'styled-components'
 import { Card, CardHeader, CardText } from 'material-ui/Card'
@@ -168,13 +168,22 @@ const enhance = compose(
   })
 )
 
-const Exporte = ({
-  store,
-  artFuerEierlegendeWollmilchsau,
-  changeArtFuerEierlegendeWollmilchsau,
-  artList,
-  downloadFromView,
-}) =>
+const Exporte = (
+  {
+    store,
+    artFuerEierlegendeWollmilchsau,
+    changeArtFuerEierlegendeWollmilchsau,
+    artList,
+    downloadFromView,
+  }:
+  {
+    store: Object,
+    artFuerEierlegendeWollmilchsau: string,
+    changeArtFuerEierlegendeWollmilchsau: () => void,
+    artList: Array<Object>,
+    downloadFromView: () => void,
+  }
+) =>
   <Container>
     <FormTitle tree={store.tree} title="Exporte" />
     <FieldsContainer>
@@ -687,13 +696,5 @@ const Exporte = ({
       </FirstLevelCard>
     </FieldsContainer>
   </Container>
-
-Exporte.propTypes = {
-  store: PropTypes.object.isRequired,
-  artFuerEierlegendeWollmilchsau: PropTypes.string.isRequired,
-  changeArtFuerEierlegendeWollmilchsau: PropTypes.func.isRequired,
-  artList: PropTypes.array.isRequired,
-  downloadFromView: PropTypes.func.isRequired,
-}
 
 export default enhance(Exporte)

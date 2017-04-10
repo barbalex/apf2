@@ -133,7 +133,16 @@ export default (store: Object) => {
       setLoginFromIdb(store)
     ),
     fetchQk: action(`fetchQk`, ({ tree }) =>
-      fetchQk({ store, tree })
+      fetchQk(
+  {
+    store,
+    tree,
+  }:
+  {
+    store: Object,
+    tree: Object,
+  }
+)
     ),
     setQk: action(`setQk`, ({ tree, berichtjahr, messages, filter }) =>
       setQk({ store, tree, berichtjahr, messages, filter })

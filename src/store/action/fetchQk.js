@@ -18,7 +18,16 @@ const fetchQk = (
   if (qk && qk.berichtjahr) {
     berichtjahr = qk.berichtjahr
   } else {
-    return setTimeout(() => fetchQk({ store, tree }))
+    return setTimeout(() => fetchQk(
+  {
+    store,
+    tree,
+  }:
+  {
+    store: Object,
+    tree: Object,
+  }
+))
   }
   const qkTypes = [
     // Population: ohne Nr/Name/Status/bekannt seit/Koordinaten/tpop
