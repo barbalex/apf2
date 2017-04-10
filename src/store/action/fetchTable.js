@@ -5,7 +5,7 @@ import app from 'ampersand-app'
 import apiBaseUrl from '../../modules/apiBaseUrl'
 import tables from '../../modules/tables'
 
-export default async (store:Object, schemaNamePassed:string, tableName:string) => {
+export default async (store: Object, schemaNamePassed: string, tableName: string) => {
   if (!tableName) {
     return store.listError(new Error(`action fetchTable: tableName must be passed`))
   }

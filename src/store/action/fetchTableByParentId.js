@@ -6,7 +6,7 @@ import apiBaseUrl from '../../modules/apiBaseUrl'
 import tables from '../../modules/tables'
 import recordValuesForWhichTableDataWasFetched from '../../modules/recordValuesForWhichTableDataWasFetched'
 
-export default (store:Object, schemaNamePassed:string, tableName:string, parentId:number) => {
+export default (store: Object, schemaNamePassed: string, tableName: string, parentId: number) => {
   if (!tableName) {
     return new Error(`action fetchTableByParentId: tableName must be passed`)
   }

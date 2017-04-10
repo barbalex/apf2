@@ -5,7 +5,7 @@ import app from 'ampersand-app'
 import apiBaseUrl from '../../modules/apiBaseUrl'
 import recordValuesForWhichTableDataWasFetched from '../../modules/recordValuesForWhichTableDataWasFetched'
 
-export default (store:Object, apArtId:number) => {
+export default (store: Object, apArtId: number) => {
   if (!apArtId) {
     return new Error(`action fetchTpopForAp: apArtId must be passed`)
   }

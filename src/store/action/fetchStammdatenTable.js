@@ -4,7 +4,7 @@ import app from 'ampersand-app'
 
 import apiBaseUrl from '../../modules/apiBaseUrl'
 
-export default async (store:Object, metadata:object, tableName:string) => {
+export default async (store: Object, metadata:object, tableName: string) => {
   if (!metadata) {
     return store.listError(new Error(`action fetchStammdatenTable: metadata must be passed`))
   }

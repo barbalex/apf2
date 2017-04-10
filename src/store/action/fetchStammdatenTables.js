@@ -2,7 +2,7 @@
 import tables from '../../modules/tables'
 import fetchStammdatenTable from './fetchStammdatenTable'
 
-export default async (store:Object) => {
+export default async (store: Object) => {
   const stammdatenTablesMetadata = tables
     .filter(t => t.stammdaten)
     // this table is listed but does not exist in db
