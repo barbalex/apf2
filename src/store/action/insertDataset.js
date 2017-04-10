@@ -5,7 +5,7 @@ import apiBaseUrl from '../../modules/apiBaseUrl'
 import tables from '../../modules/tables'
 import insertDatasetInIdb from './insertDatasetInIdb'
 
-export default (store:Object, tree:Object, tablePassed:string, parentId:number, baseUrl:Array<string>) => {
+export default (store: Object, tree: Object, tablePassed: string, parentId: number, baseUrl:Array<string>) => {
   let table = tablePassed
   if (!table) {
     return store.listError(

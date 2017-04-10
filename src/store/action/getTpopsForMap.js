@@ -1,7 +1,7 @@
 // @flow
 import epsg21781to4326 from '../../modules/epsg21781to4326'
 
-export default (store:Object) => {
+export default (store: Object) => {
   const { table, tree } = store
   const myApArtId = tree.activeNodes.ap || store.map.pop.apArtId
   // get pops of this ap

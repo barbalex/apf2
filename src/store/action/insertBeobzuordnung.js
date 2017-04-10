@@ -30,7 +30,7 @@ const continueWithBeobBereitgestellt = (store, tree, beobBereitgestellt, newKey,
   }
 }
 
-export default (store:Object, tree:Object, newKey:string, newValue:number) => {
+export default (store: Object, tree: Object, newKey: string, newValue: number) => {
   /**
    * newKey is either BeobNichtZuordnen or TPopId
    */

@@ -2,7 +2,7 @@
 import isString from 'lodash/isString'
 import queryString from 'query-string'
 
-export default (search:string) => {
+export default (search: string) => {
   const query = queryString.parse(search)
   /**
    * arrays are converted to strings in url if only one element is contained
