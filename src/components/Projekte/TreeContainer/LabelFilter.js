@@ -1,7 +1,7 @@
 // @flow
 /* eslint-disable no-console, jsx-a11y/no-static-element-interactions */
 
-import React, { PropTypes } from 'react'
+import React from 'react'
 import { observer, inject } from 'mobx-react'
 import TextField from 'material-ui/TextField'
 import styled from 'styled-components'
@@ -22,7 +22,16 @@ const enhance = compose(
   observer
 )
 
-const LabelFilter = ({ store, tree }) => {
+const LabelFilter = (
+  {
+    store,
+    tree,
+  }:
+  {
+    store: Object,
+    tree: Object,
+  }
+) => {
   const { activeDataset } = tree
   let filteredTable = ``
 
@@ -52,11 +61,6 @@ const LabelFilter = ({ store, tree }) => {
       }
     />
   )
-}
-
-LabelFilter.propTypes = {
-  store: PropTypes.object.isRequired,
-  tree: PropTypes.object.isRequired,
 }
 
 export default enhance(LabelFilter)

@@ -1,5 +1,5 @@
 // @flow
-import React, { PropTypes } from 'react'
+import React from 'react'
 import { observer, inject } from 'mobx-react'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
@@ -260,11 +260,6 @@ const Idealbiotop = ({ store, tree }) => {
       </Scrollbars>
     </Container>
   )
-}
-
-Idealbiotop.propTypes = {
-  store: PropTypes.object.isRequired,
-  tree: PropTypes.object.isRequired,
 }
 
 export default enhance(Idealbiotop)

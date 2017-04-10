@@ -1,5 +1,5 @@
 // @flow
-import React, { PropTypes } from 'react'
+import React from 'react'
 import { inject } from 'mobx-react'
 import Dialog from 'material-ui/Dialog'
 import FlatButton from 'material-ui/FlatButton'
@@ -18,11 +18,18 @@ const enhance = compose(
   })
 )
 
-const DatasetDeleteModal = ({
-  store,
-  onClickAbort,
-  onClickDelete,
-}) => {
+const DatasetDeleteModal = (
+  {
+    store,
+    onClickAbort,
+    onClickDelete,
+  }:
+  {
+    store: Object,
+    onClickAbort: () => void,
+    onClickDelete: () => void,
+  }
+) => {
   const actions = [
     <FlatButton
       label="Abbrechen"
@@ -52,13 +59,6 @@ const DatasetDeleteModal = ({
       {`${tableName ? `${tableName} "` : ``}${store.datasetToDelete.label}${tableName ? `"` : ``} löschen?`}
     </Dialog>
   )
-}
-
-DatasetDeleteModal.propTypes = {
-  store: PropTypes.object.isRequired,
-  tree: PropTypes.object.isRequired,
-  onClickAbort: PropTypes.func.isRequired,
-  onClickDelete: PropTypes.func.isRequired,
 }
 
 export default enhance(DatasetDeleteModal)

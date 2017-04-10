@@ -2,7 +2,7 @@
 /**
  * need to keep class because of ref
  */
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
 import { toJS } from 'mobx'
 import { observer, inject } from 'mobx-react'
 import styled from 'styled-components'
@@ -92,11 +92,11 @@ const enhance = compose(
   observer
 )
 
-class TreeContainer extends Component { // eslint-disable-line react/prefer-stateless-function
+class TreeContainer extends Component {
 
-  static propTypes = {
-    store: PropTypes.object.isRequired,
-    tree: PropTypes.object.isRequired,
+  props: {
+    store: Object,
+    tree: Object,
   }
 
   showMapIfNotYetVisible = () => {

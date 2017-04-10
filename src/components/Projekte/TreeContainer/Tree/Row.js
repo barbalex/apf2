@@ -1,5 +1,5 @@
 // @flow
-import React, { PropTypes } from 'react'
+import React from 'react'
 import { toJS } from 'mobx'
 import { observer, inject } from 'mobx-react'
 import styled from 'styled-components'
@@ -163,13 +163,22 @@ const enhance = compose(
   observer
 )
 
-const Row = ({
-  key,
-  index,
-  style,
-  store,
-  tree,
-}) => {
+const Row = (
+  {
+    key,
+    index,
+    style,
+    store,
+    tree,
+  }:
+  {
+    key?: number,
+    index: number,
+    style: Object,
+    store: Object,
+    tree: Object,
+  }
+) => {
   const node = tree.node.nodes[index]
   const onClick = (event) => tree.toggleNode(node)
   const myProps = { key: index }
@@ -384,14 +393,6 @@ const Row = ({
       </ContextMenuTrigger>
     </div>
   )
-}
-
-Row.propTypes = {
-  store: PropTypes.object.isRequired,
-  tree: PropTypes.object.isRequired,
-  key: PropTypes.number,
-  index: PropTypes.number.isRequired,
-  style: PropTypes.object.isRequired,
 }
 
 export default enhance(Row)

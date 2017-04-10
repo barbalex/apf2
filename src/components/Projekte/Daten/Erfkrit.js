@@ -1,5 +1,5 @@
 // @flow
-import React, { PropTypes } from 'react'
+import React from 'react'
 import { observer, inject } from 'mobx-react'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
@@ -24,7 +24,16 @@ const enhance = compose(
   observer
 )
 
-const Erfkrit = ({ store, tree }) => {
+const Erfkrit = (
+  {
+    store,
+    tree,
+  }:
+  {
+    store: Object,
+    tree: Object,
+  }
+) => {
   const { activeDataset } = tree
   return (
     <Container>
@@ -56,11 +65,6 @@ const Erfkrit = ({ store, tree }) => {
       </Scrollbars>
     </Container>
   )
-}
-
-Erfkrit.propTypes = {
-  store: PropTypes.object.isRequired,
-  tree: PropTypes.object.isRequired,
 }
 
 export default enhance(Erfkrit)
