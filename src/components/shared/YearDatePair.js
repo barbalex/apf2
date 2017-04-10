@@ -1,5 +1,5 @@
 // @flow
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
 import { observer } from 'mobx-react'
 import TextField from 'material-ui/TextField'
 import DatePicker from 'material-ui/DatePicker'
@@ -136,28 +136,28 @@ const enhance = compose(
 
 class YearDatePair extends Component {
 
-  static propTypes = {
-    tree: PropTypes.object.isRequired,
-    yearLabel: PropTypes.string.isRequired,
-    yearFieldName: PropTypes.string.isRequired,
-    yearValue: PropTypes.any,
-    yearValueOnFocus: PropTypes.any,
-    yearErrorText: PropTypes.string,
-    dateLabel: PropTypes.string.isRequired,
-    dateFieldName: PropTypes.string.isRequired,
-    dateValue: PropTypes.any,
-    dateStringValue: PropTypes.any,
-    dateValueOnFocus: PropTypes.any,
-    dateErrorText: PropTypes.string,
-    updateProperty: PropTypes.func.isRequired,
-    updatePropertyInDb: PropTypes.func.isRequired,
-    onBlurYear: PropTypes.func.isRequired,
-    onChangeDate: PropTypes.func.isRequired,
-    onChangeDatePicker: PropTypes.func.isRequired,
-    onBlurDate: PropTypes.func.isRequired,
-    onFocusYear: PropTypes.func.isRequired,
-    onFocusDate: PropTypes.func.isRequired,
-    changeDateStringValue: PropTypes.func.isRequired,
+  props: {
+    tree: Object,
+    yearLabel: string,
+    yearFieldName: string,
+    yearValue?: ?number|?string,
+    yearValueOnFocus?: ?number|?string,
+    yearErrorText?: string,
+    dateLabel: string,
+    dateFieldName: string,
+    dateValue?: ?number|?string,
+    dateStringValue?: ?number|?string,
+    dateValueOnFocus?: ?number|?string,
+    dateErrorText?: string,
+    updateProperty: () => void,
+    updatePropertyInDb: () => void,
+    onBlurYear: () => void,
+    onChangeDate: () => void,
+    onChangeDatePicker: () => void,
+    onBlurDate: () => void,
+    onFocusYear: () => void,
+    onFocusDate: () => void,
+    changeDateStringValue: () => void,
   }
 
   static defaultProps = {

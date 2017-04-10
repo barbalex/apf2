@@ -1,5 +1,5 @@
 // @flow
-import React, { PropTypes } from 'react'
+import React from 'react'
 import CopyToClipboard from 'react-copy-to-clipboard'
 import FlatButton from 'material-ui/FlatButton'
 import styled from 'styled-components'
@@ -19,11 +19,18 @@ const enhance = compose(
   }),
 )
 
-const StringToCopy = ({
-  text,
-  copied,
-  onCopy,
-}) => {
+const StringToCopy = (
+  {
+    text,
+    copied,
+    onCopy,
+  }:
+  {
+    text: string,
+    copied: boolean,
+    onCopy: () => void,
+  }
+) => {
   const Container = styled.div`
     display: flex;
     justify-content: space-between;
@@ -52,12 +59,6 @@ const StringToCopy = ({
       </CopyButtonContainer>
     </Container>
   )
-}
-
-StringToCopy.propTypes = {
-  text: PropTypes.string.isRequired,
-  copied: PropTypes.bool.isRequired,
-  onCopy: PropTypes.func.isRequired,
 }
 
 export default enhance(StringToCopy)

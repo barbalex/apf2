@@ -1,5 +1,5 @@
 // @flow
-import React, { PropTypes } from 'react'
+import React from 'react'
 import { observer } from 'mobx-react'
 import TextField from 'material-ui/TextField'
 import { orange500 } from 'material-ui/styles/colors'
@@ -18,12 +18,20 @@ const enhance = compose(
   observer
 )
 
-const MyTextField = ({
-  label,
-  value,
-  errorText,
-  onChange,
-}) =>
+const MyTextField = (
+  {
+    label,
+    value,
+    errorText,
+    onChange,
+  }:
+  {
+    label: string,
+    value?: ?number|?string,
+    errorText: string,
+    onChange: () => void,
+  }
+) =>
   <TextField
     floatingLabelText={label}
     errorText={errorText}
@@ -32,13 +40,6 @@ const MyTextField = ({
     errorStyle={{ color: orange500 }}
     onChange={onChange}
   />
-
-MyTextField.propTypes = {
-  label: PropTypes.string.isRequired,
-  value: PropTypes.any,
-  errorText: PropTypes.string.isRequired,
-  onChange: PropTypes.func.isRequired,
-}
 
 MyTextField.defaultProps = {
   value: ``,

@@ -1,5 +1,5 @@
 // @flow
-import React, { PropTypes } from 'react'
+import React from 'react'
 import { observer } from 'mobx-react'
 import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton'
 import styled from 'styled-components'
@@ -47,18 +47,32 @@ const enhance = compose(
   observer
 )
 
-const Status = ({
-  tree,
-  apJahr,
-  herkunftFieldName,
-  herkunftValue,
-  bekanntSeitFieldName,
-  bekanntSeitValue,
-  bekanntSeitValid,
-  updateProperty,
-  updatePropertyInDb,
-  onChange,
-}) => {
+const Status = (
+  {
+    tree,
+    apJahr,
+    herkunftFieldName,
+    herkunftValue,
+    bekanntSeitFieldName,
+    bekanntSeitValue,
+    bekanntSeitValid,
+    updateProperty,
+    updatePropertyInDb,
+    onChange,
+  }:
+  {
+    tree: Object,
+    apJahr?: number,
+    herkunftFieldName: string,
+    herkunftValue?: number,
+    bekanntSeitFieldName: string,
+    bekanntSeitValue?: number,
+    bekanntSeitValid?: string,
+    updateProperty: () => void,
+    updatePropertyInDb: () => void,
+    onChange: () => void,
+  }
+) => {
   const valueSelected = (
     (herkunftValue !== null && herkunftValue !== undefined) ?
     herkunftValue :
@@ -160,19 +174,6 @@ const Status = ({
       </StatusContainer>
     </div>
   )
-}
-
-Status.propTypes = {
-  tree: PropTypes.object.isRequired,
-  apJahr: PropTypes.number,
-  herkunftFieldName: PropTypes.string.isRequired,
-  herkunftValue: PropTypes.number,
-  bekanntSeitFieldName: PropTypes.string.isRequired,
-  bekanntSeitValue: PropTypes.number,
-  bekanntSeitValid: PropTypes.string,
-  updateProperty: PropTypes.func.isRequired,
-  updatePropertyInDb: PropTypes.func.isRequired,
-  onChange: PropTypes.func.isRequired,
 }
 
 Status.defaultProps = {

@@ -1,4 +1,4 @@
-import React, { PropTypes } from 'react'
+import React from 'react'
 import { inject } from 'mobx-react'
 import styled from 'styled-components'
 
@@ -30,11 +30,6 @@ const TestdataMessage = (
     )
   }
   return null
-}
-
-TestdataMessage.propTypes = {
-  store: PropTypes.object.isRequired,
-  tree: PropTypes.object.isRequired,
 }
 
 export default inject(`store`)(TestdataMessage)

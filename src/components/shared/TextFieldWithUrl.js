@@ -1,5 +1,5 @@
 // @flow
-import React, { PropTypes } from 'react'
+import React from 'react'
 import { observer } from 'mobx-react'
 import TextField from 'material-ui/TextField'
 import FontIcon from 'material-ui/FontIcon'
@@ -43,17 +43,30 @@ const enhance = compose(
   observer
 )
 
-const MyTextFieldWithUrl = ({
-  label,
-  value,
-  errorText,
-  type,
-  multiLine,
-  disabled,
-  onChange,
-  onBlur,
-  onFocus,
-}) => {
+const MyTextFieldWithUrl = (
+  {
+    label,
+    value,
+    errorText,
+    type,
+    multiLine,
+    disabled,
+    onChange,
+    onBlur,
+    onFocus,
+  }:
+  {
+    label: string,
+    value?: ?number|?string,
+    errorText?: string,
+    type?: string,
+    multiLine?: boolean,
+    disabled?: boolean,
+    onChange: () => void,
+    onBlur: () => void,
+    onFocus: () => void,
+  }
+) => {
   const urls = value ? getUrls(value) : []
 
   return (
@@ -85,23 +98,6 @@ const MyTextFieldWithUrl = ({
       }
     </Container>
   )
-}
-
-MyTextFieldWithUrl.propTypes = {
-  tree: PropTypes.object.isRequired,
-  label: PropTypes.string.isRequired,
-  fieldName: PropTypes.string.isRequired,
-  value: PropTypes.any,
-  valueOnFocus: PropTypes.any,
-  errorText: PropTypes.string,
-  type: PropTypes.string,
-  multiLine: PropTypes.bool,
-  disabled: PropTypes.bool,
-  updateProperty: PropTypes.func.isRequired,
-  updatePropertyInDb: PropTypes.func.isRequired,
-  onChange: PropTypes.func.isRequired,
-  onBlur: PropTypes.func.isRequired,
-  onFocus: PropTypes.func.isRequired,
 }
 
 MyTextFieldWithUrl.defaultProps = {

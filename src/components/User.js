@@ -1,5 +1,5 @@
 // @flow
-import React, { PropTypes } from 'react'
+import React from 'react'
 import { observer, inject } from 'mobx-react'
 import Dialog from 'material-ui/Dialog'
 import TextField  from 'material-ui/TextField'
@@ -70,18 +70,34 @@ const enhance = compose(
   observer
 )
 
-const User = ({
-  store,
-  name,
-  password,
-  nameErrorText,
-  passwordErrorText,
-  changeNameErrorText,
-  changePasswordErrorText,
-  onBlurName,
-  onBlurPassword,
-  fetchLogin,
-}) => {
+const User = (
+  {
+    store,
+    name,
+    password,
+    nameErrorText,
+    passwordErrorText,
+    changeNameErrorText,
+    changePasswordErrorText,
+    onBlurName,
+    onBlurPassword,
+    fetchLogin,
+  }:
+  {
+    store: Object,
+    name: string,
+    changeName: () => void,
+    password: string,
+    changePassword: () => void,
+    nameErrorText: string,
+    changeNameErrorText: () => void,
+    passwordErrorText: string,
+    changePasswordErrorText: () => void,
+    onBlurName: () => void,
+    onBlurPassword: () => void,
+    fetchLogin: () => void,
+  }
+) => {
   const actions = [
     <FlatButton
         label="anmelden"
@@ -128,21 +144,6 @@ const User = ({
     </StyledDiv>
     </Dialog>
   )
-}
-
-User.propTypes = {
-  store: PropTypes.object.isRequired,
-  name: PropTypes.string.isRequired,
-  changeName: PropTypes.func.isRequired,
-  password: PropTypes.string.isRequired,
-  changePassword: PropTypes.func.isRequired,
-  nameErrorText: PropTypes.string.isRequired,
-  changeNameErrorText: PropTypes.func.isRequired,
-  passwordErrorText: PropTypes.string.isRequired,
-  changePasswordErrorText: PropTypes.func.isRequired,
-  onBlurName: PropTypes.func.isRequired,
-  onBlurPassword: PropTypes.func.isRequired,
-  fetchLogin: PropTypes.func.isRequired,
 }
 
 export default enhance(User)
