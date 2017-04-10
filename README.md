@@ -46,16 +46,17 @@ Die wichtigsten sind:
   - Differenzierte(re) Darstellung der verschiedenen Typen von Beobachtungen<br />(nicht beurteilt, nicht zuzuordnen, zugeordnet)
   - Bequeme(re) Zuordnung von Beobachtungen zu Teil-Populationen
   - Bequemer(re) Darstellung von nahe bzw. direkt aufeinander liegenden Elementen
+  - Populationen, Teilpopulationen und Beobachtungen durch das Zeichnen von einem oder mehreren Umrissen (Recht- oder Vielecken) filtern
+  - Diesen geographischen Filter auf Exporte anwenden
 
 ### Noch nicht realisiert:
 
 #### Umsetzung geplant:
 
-- Kopieren und Verschieben von Datensätzen, gemäss Absprache mit Topos
 - Generell Funktionen von Version 1 prüfen und fehlende nachtragen
-- Geographische Filter. Genaue Umsetzung ist noch festzulegen
 - Login steuert, welche Projekte sichtbar sind
 - API-Zugriff besser absichern (erst möglich, wenn Version 1 nicht mehr zugreift)
+- Beobachtungen besser organisieren. Mit dem Ziel, Beobachtungen beliebiger Datenstruktur jederzeit importieren zu können
 
 #### Umsetzung unsicher:
 
