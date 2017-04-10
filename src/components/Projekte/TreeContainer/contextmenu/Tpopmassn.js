@@ -1,5 +1,5 @@
 // @flow
-import React, { PropTypes } from 'react'
+import React from 'react'
 import { ContextMenu, MenuItem } from 'react-contextmenu'
 import { inject } from 'mobx-react'
 import compose from 'recompose/compose'
@@ -19,8 +19,22 @@ const enhance = compose(
 )
 
 const Tpopmassn = (
-  { store, tree, onClick, changeLabel, label, onShow }:
-  {store:Object,tree:Object,onClick:()=>void,changeLabel:()=>{},label:string|number,onShow:()=>void}
+  {
+    store,
+    tree,
+    onClick,
+    changeLabel,
+    label,
+    onShow,
+  }:
+  {
+    store: Object,
+    tree: Object,
+    onClick: () => void,
+    changeLabel: () => void,
+    label: string|number,
+    onShow: () => void,
+  }
 ) =>
   <ContextMenu
     id={`${tree.name}tpopmassn`}
@@ -76,13 +90,5 @@ const Tpopmassn = (
       </MenuItem>
     }
   </ContextMenu>
-
-Tpopmassn.propTypes = {
-  store: PropTypes.object.isRequired,
-  onClick: PropTypes.func.isRequired,
-  changeLabel: PropTypes.func.isRequired,
-  label: PropTypes.any.isRequired,
-  onShow: PropTypes.func.isRequired,
-}
 
 export default enhance(Tpopmassn)
