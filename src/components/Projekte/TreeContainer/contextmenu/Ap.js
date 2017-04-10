@@ -1,5 +1,5 @@
 // @flow
-import React, { PropTypes } from 'react'
+import React from 'react'
 import { ContextMenu, MenuItem } from 'react-contextmenu'
 import { inject, observer } from 'mobx-react'
 import compose from 'recompose/compose'
@@ -20,8 +20,22 @@ const enhance = compose(
 )
 
 const Ap = (
-  { onClick, store, tree, changeLabel, label, onShow }:
-  {onClick:() => void,store:Object,tree:Object,changeLabel:()=>{},label:string,onShow:()=>{}}
+  {
+    onClick,
+    store,
+    tree,
+    changeLabel,
+    label,
+    onShow,
+  }:
+  {
+    onClick: () => void,
+    store: Object,
+    tree: Object,
+    changeLabel: () => void,
+    label: string,
+    onShow: () => {}
+  }
 ) => {
   const moving = store.moving.table && store.moving.table === `pop`
 
@@ -110,13 +124,6 @@ const Ap = (
       }
     </ContextMenu>
   )
-}
-
-Ap.propTypes = {
-  onClick: PropTypes.func.isRequired,
-  onShow: PropTypes.func.isRequired,
-  changeLabel: PropTypes.func.isRequired,
-  label: PropTypes.string.isRequired,
 }
 
 export default enhance(Ap)

@@ -1,10 +1,16 @@
 // @flow
-import React, { PropTypes } from 'react'
+import React from 'react'
 import { ContextMenu, MenuItem } from 'react-contextmenu'
 
 const Apber = (
-  { onClick, tree }:
-  {onClick:()=>void,tree:Object}
+  {
+    onClick,
+    tree,
+  }:
+  {
+    onClick: () => void,
+    tree: Object
+  }
 ) =>
   <ContextMenu id={`${tree.name}apber`}>
     <div className="react-contextmenu-title">AP-Bericht</div>
@@ -27,9 +33,5 @@ const Apber = (
       lösche
     </MenuItem>
   </ContextMenu>
-
-Apber.propTypes = {
-  onClick: PropTypes.func.isRequired,
-}
 
 export default Apber

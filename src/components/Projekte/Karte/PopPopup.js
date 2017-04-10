@@ -15,7 +15,7 @@ const StyledH3 = styled.h3`
 
 const PopPopup = (
   { store, pop }:
-  {store:Object,pop:Object}
+  {store: Object,pop: Object}
 ) => {
   const { activeNodes } = store.tree
   const { ap, projekt } = activeNodes
