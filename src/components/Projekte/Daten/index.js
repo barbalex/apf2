@@ -5,7 +5,7 @@
  *
  */
 
-import React, { PropTypes } from 'react'
+import React from 'react'
 import { observer, inject } from 'mobx-react'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
@@ -52,7 +52,16 @@ const enhance = compose(
   observer
 )
 
-const Daten = ({ store, tree }) => {
+const Daten = (
+  {
+    store,
+    tree,
+  }:
+  {
+    store: Object,
+    tree: Object,
+  }
+) => {
   const { activeNodes, activeDataset } = tree
   if (!activeDataset || !activeDataset.table || !activeDataset.row) {
     return <div />
@@ -118,11 +127,6 @@ const Daten = ({ store, tree }) => {
       }
     </Container>
   )
-}
-
-Daten.propTypes = {
-  store: PropTypes.object.isRequired,
-  tree: PropTypes.object.isRequired,
 }
 
 export default enhance(Daten)

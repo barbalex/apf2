@@ -32,7 +32,16 @@ const enhance = compose(
   observer
 )
 
-const Idealbiotop = ({ store, tree }) => {
+const Idealbiotop = (
+  {
+    store,
+    tree,
+  }:
+  {
+    store: Object,
+    tree: Object,
+  }
+) => {
   const { activeDataset } = tree
   return (
     <Container>

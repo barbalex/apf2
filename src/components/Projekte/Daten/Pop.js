@@ -1,5 +1,5 @@
 // @flow
-import React, { PropTypes } from 'react'
+import React from 'react'
 import { observer, inject } from 'mobx-react'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
@@ -48,9 +48,19 @@ const enhance = compose(
   observer
 )
 
-const Pop = ({ store, tree }) => {
+const Pop = (
+  {
+    store,
+    tree,
+  }:
+  {
+    store: Object,
+    tree: Object,
+  }
+) => {
   const { activeDataset } = tree
   const apJahr = store.table.ap.get(activeDataset.row.ApArtId).ApJahr
+
   return (
     <Container>
       <FormTitle tree={tree} title="Population" />
@@ -137,11 +147,6 @@ const Pop = ({ store, tree }) => {
       </Scrollbars>
     </Container>
   )
-}
-
-Pop.propTypes = {
-  store: PropTypes.object.isRequired,
-  tree: PropTypes.object.isRequired,
 }
 
 export default enhance(Pop)

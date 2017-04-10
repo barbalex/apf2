@@ -25,7 +25,16 @@ const enhance = compose(
   observer
 )
 
-const getArtList = ({ store, tree }) => {
+const getArtList = (
+  {
+    store,
+    tree,
+  }:
+  {
+    store: Object,
+    tree: Object,
+  }
+) => {
   const { activeDataset, activeNodes } = tree
   const { adb_eigenschaften } = store.table
   const assozartenOfAp = Array.from(store.table.assozart.values()).filter(a =>
@@ -39,7 +48,16 @@ const getArtList = ({ store, tree }) => {
   return sortBy(artList, `Artname`)
 }
 
-const getArtname = ({ store, tree }) => {
+const getArtname = (
+  {
+    store,
+    tree,
+  }:
+  {
+    store: Object,
+    tree: Object,
+  }
+) => {
   const { adb_eigenschaften } = store.table
   const { activeDataset } = tree
   let name = ``
@@ -70,9 +88,27 @@ const Assozart = (
             tree={tree}
             label="Art"
             fieldName="AaSisfNr"
-            valueText={getArtname({ store, tree })}
+            valueText={getArtname(
+  {
+    store,
+    tree,
+  }:
+  {
+    store: Object,
+    tree: Object,
+  }
+)}
             errorText={activeDataset.valid.ApArtId}
-            dataSource={getArtList({ store, tree })}
+            dataSource={getArtList(
+  {
+    store,
+    tree,
+  }:
+  {
+    store: Object,
+    tree: Object,
+  }
+)}
             dataSourceConfig={{
               value: `TaxonomieId`,
               text: `Artname`,

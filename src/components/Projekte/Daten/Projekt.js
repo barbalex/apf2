@@ -1,5 +1,5 @@
 // @flow
-import React, { PropTypes } from 'react'
+import React from 'react'
 import { observer, inject } from 'mobx-react'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
@@ -22,8 +22,18 @@ const enhance = compose(
   observer
 )
 
-const Projekt = ({ store, tree }) => {
+const Projekt = (
+  {
+    store,
+    tree,
+  }:
+  {
+    store: Object,
+    tree: Object,
+  }
+) => {
   const { activeDataset } = tree
+
   return (
     <Container>
       <FormTitle tree={tree} title="Projekt" />
@@ -51,11 +61,6 @@ const Projekt = ({ store, tree }) => {
       </Scrollbars>
     </Container>
   )
-}
-
-Projekt.propTypes = {
-  store: PropTypes.object.isRequired,
-  tree: PropTypes.object.isRequired,
 }
 
 export default enhance(Projekt)
