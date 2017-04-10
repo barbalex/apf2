@@ -6,9 +6,9 @@ export default ({
   messages,
   filter,
 }:{
-  berichtjahr:number,
+  berichtjahr: number,
   messages:Array<Object>,
-  filter:string
+  filter: string
 }) => {
   const value = {
     berichtjahr,

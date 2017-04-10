@@ -4,7 +4,7 @@ import axios from 'axios'
 import apiBaseUrl from '../../modules/apiBaseUrl'
 import deleteDatasetInIdb from './deleteDatasetInIdb'
 
-export default (store:Object, tree:Object, beobId:number|string) => {
+export default (store: Object, tree: Object, beobId: number|string) => {
   const { table } = store
   const { activeNodes } = tree
   // delete beobzuordnung

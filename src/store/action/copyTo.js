@@ -11,7 +11,7 @@ import apiBaseUrl from '../../modules/apiBaseUrl'
 import tables from '../../modules/tables'
 import insertDatasetInIdb from './insertDatasetInIdb'
 
-export default (store:Object, parentId:number) => {
+export default (store: Object, parentId: number) => {
   let { table } = store.copying
   const { id } = store.copying
 

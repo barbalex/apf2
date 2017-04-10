@@ -6,7 +6,7 @@ import { toJS } from 'mobx'
 import apiBaseUrl from '../../modules/apiBaseUrl'
 import insertDatasetInIdb from './insertDatasetInIdb'
 
-export default (store:Object, tpopId:number) => {
+export default (store: Object, tpopId: number) => {
   if (!tpopId) {
     return store.listError(new Error(`keine tpopId übergeben`))
   }

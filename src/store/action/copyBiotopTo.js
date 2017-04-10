@@ -7,7 +7,7 @@ import apiBaseUrl from '../../modules/apiBaseUrl'
 import biotopFields from '../../modules/biotopFields'
 import insertDatasetInIdb from './insertDatasetInIdb'
 
-export default (store:Object, newId:number) => {
+export default (store: Object, newId: number) => {
   const { id } = store.copyingBiotop
   const rowToGetBiotopFrom = store.table.tpopkontr.get(id)
   if (!rowToGetBiotopFrom) {
