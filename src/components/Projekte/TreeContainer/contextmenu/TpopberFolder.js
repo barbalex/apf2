@@ -1,10 +1,16 @@
 // @flow
-import React, { PropTypes } from 'react'
+import React from 'react'
 import { ContextMenu, MenuItem } from 'react-contextmenu'
 
 const TpopberFolder = (
-  { onClick, tree }:
-  {onClick:()=>void,tree:Object}
+  {
+    onClick,
+    tree,
+  }:
+  {
+    onClick: () => void,
+    tree: Object,
+  }
 ) =>
   <ContextMenu id={`${tree.name}tpopberFolder`} >
     <div className="react-contextmenu-title">Kontroll-Berichte</div>
@@ -18,9 +24,5 @@ const TpopberFolder = (
       erstelle neuen
     </MenuItem>
   </ContextMenu>
-
-TpopberFolder.propTypes = {
-  onClick: PropTypes.func.isRequired,
-}
 
 export default TpopberFolder

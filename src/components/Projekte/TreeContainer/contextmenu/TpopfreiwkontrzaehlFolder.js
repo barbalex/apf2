@@ -1,10 +1,16 @@
 // @flow
-import React, { PropTypes } from 'react'
+import React from 'react'
 import { ContextMenu, MenuItem } from 'react-contextmenu'
 
 const TpopfreiwkontrzaehlFolder = (
-  { onClick, tree }:
-  {onClick:()=>void,tree:Object}
+  {
+    onClick,
+    tree,
+  }:
+  {
+    onClick: () => void,
+    tree: Object,
+  }
 ) =>
   <ContextMenu id={`${tree.name}tpopfreiwkontrzaehlFolder`} >
     <div className="react-contextmenu-title">Zählungen</div>
@@ -18,9 +24,5 @@ const TpopfreiwkontrzaehlFolder = (
       erstelle neue
     </MenuItem>
   </ContextMenu>
-
-TpopfreiwkontrzaehlFolder.propTypes = {
-  onClick: PropTypes.func.isRequired,
-}
 
 export default TpopfreiwkontrzaehlFolder

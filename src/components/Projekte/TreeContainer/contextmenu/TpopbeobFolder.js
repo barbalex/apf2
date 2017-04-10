@@ -1,5 +1,5 @@
 // @flow
-import React, { PropTypes } from 'react'
+import React from 'react'
 import { ContextMenu, MenuItem } from 'react-contextmenu'
 import { inject, observer } from 'mobx-react'
 import compose from 'recompose/compose'
@@ -20,8 +20,21 @@ const enhance = compose(
 )
 
 const TpopbeobFolder = (
-  { tree, onClick, store, changeId, id, onShow }:
-  {tree:Object,onClick:() => void,store:Object,changeId:()=>{},id:number,onShow:()=>{}}
+  {
+    store,
+    tree,
+    onClick,
+    changeId,
+    id,
+    onShow,
+  }:
+  {
+    store: Object,changeId: () => {},
+    tree: Object,
+    onClick: () => void,
+    id: number,
+    onShow: () => {},
+  }
 ) =>
   <ContextMenu
     id={`${tree.name}tpopBeobFolder`}
@@ -40,13 +53,5 @@ const TpopbeobFolder = (
       {`blende auf Karte ${store.map.activeApfloraLayers.includes(`TpopBeob`) ? `aus` : `ein`}`}
     </MenuItem>
   </ContextMenu>
-
-TpopbeobFolder.propTypes = {
-  onClick: PropTypes.func.isRequired,
-  store: PropTypes.object.isRequired,
-  changeId: PropTypes.func.isRequired,
-  id: PropTypes.number.isRequired,
-  onShow: PropTypes.func.isRequired,
-}
 
 export default enhance(TpopbeobFolder)
