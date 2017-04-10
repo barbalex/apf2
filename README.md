@@ -3,7 +3,7 @@
 ## Ziele:
 
 - Mehrere Projekte verwalten
-- Wenn mehrere Personen gleichzeitig arbeiten werden die Daten in der Benutzeroberfläche laufend aktualisiert
+- Arbeiten mehrere Personen gleichzeitig, werden die Daten in der Benutzeroberfläche laufend aktualisiert
 - Grundlage schaffen, um Berichte direkt aus der Webanwendung heraus produzieren zu können<br/>
   Artverantwortliche sollen Jahresberichte für ihre Arten selber erzeugen und kontrollieren können
 - Grundlage schaffen, um auf das Access-Admin-Tool verzichten zu können
