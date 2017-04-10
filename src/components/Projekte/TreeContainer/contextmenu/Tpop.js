@@ -118,6 +118,14 @@ const Tpop = (
       >
         Kopiere Koordinaten in die Population
       </MenuItem>
+      <MenuItem
+        onClick={onClick}
+        data={{
+          action: `showCoordOfTpopOnMapsZhCh`,
+        }}
+      >
+        Zeige auf maps.zh.ch
+      </MenuItem>
     </ContextMenu>
   )
 }

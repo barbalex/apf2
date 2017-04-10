@@ -99,6 +99,9 @@ export default (store: Object) => {
     copyTpopKoordToPop: action(`copyTpopKoordToPop`, (tpopId) =>
       copyTpopKoordToPop(store, tpopId)
     ),
+    showCoordOnMapsZhCh: action(`showCoordOnMapsZhCh`, (x, y) =>
+      window.open(`https://maps.zh.ch/?x=${x}&y=${y}&scale=3000&markers=ring`, `target="_blank"`)
+    ),
     /**
      * urlQueries are used to control tabs
      * for instance: Entwicklung or Biotop in tpopfeldkontr
