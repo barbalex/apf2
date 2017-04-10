@@ -3,7 +3,7 @@ import within from '@turf/within'
 
 import epsg21781to4326 from './epsg21781to4326notReverse'
 
-export default (store:Object, beobs:Array<Object>) => {
+export default (store: Object, beobs:Array<Object>) => {
   const points = {
     type: `FeatureCollection`,
     // build an array of geoJson points
