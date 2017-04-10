@@ -1,4 +1,4 @@
-import React, { PropTypes } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import { observer } from 'mobx-react'
 
@@ -22,7 +22,10 @@ const LayerDiv = styled.div`
  * so passed in from parent
  */
 
-const LayersControl = ({ store }) => {
+const LayersControl = (
+  { store }:
+  { store: Object }
+) => {
   const baseLayers = [
     { label: `OpenStreetMap farbig`, value: `OsmColor` },
     { label: `OpenStreetMap grau`, value: `OsmBw` },
@@ -53,10 +56,6 @@ const LayersControl = ({ store }) => {
       }
     </CardContent>
   )
-}
-
-LayersControl.propTypes = {
-  store: PropTypes.object.isRequired,
 }
 
 export default observer(LayersControl)

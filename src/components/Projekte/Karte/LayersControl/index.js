@@ -1,4 +1,4 @@
-import React, { PropTypes } from 'react'
+import React from 'react'
 import Control from 'react-leaflet-control'
 import { observer, inject } from 'mobx-react'
 import styled from 'styled-components'
@@ -114,15 +114,26 @@ const enhance = compose(
   observer
 )
 
-const LayersControl = ({
-  store,
-  baseLayersExpanded,
-  overlaysExpanded,
-  apfloraLayersExpanded,
-  onToggleBaseLayersExpanded,
-  onToggleOverlaysExpanded,
-  onToggleApfloraLayersExpanded,
-}) => {
+const LayersControl = (
+  {
+    store,
+    baseLayersExpanded,
+    overlaysExpanded,
+    apfloraLayersExpanded,
+    onToggleBaseLayersExpanded,
+    onToggleOverlaysExpanded,
+    onToggleApfloraLayersExpanded,
+  }:
+  {
+    store: Object,
+    baseLayersExpanded: boolean,
+    overlaysExpanded: boolean,
+    toggleBaseLayersExpanded: () => void,
+    toggleOverlaysExpanded: () => void,
+    onToggleBaseLayersExpanded: () => void,
+    onToggleOverlaysExpanded: () => void,
+  }
+) => {
   const { tree, table } = store
   const { activeNodes } = tree
   const getApfloraLayersTitle = () => {
@@ -203,16 +214,6 @@ const LayersControl = ({
       </MuiThemeProvider>
     </Control>
   )
-}
-
-LayersControl.propTypes = {
-  store: PropTypes.object.isRequired,
-  baseLayersExpanded: PropTypes.bool.isRequired,
-  overlaysExpanded: PropTypes.bool.isRequired,
-  toggleBaseLayersExpanded: PropTypes.func.isRequired,
-  toggleOverlaysExpanded: PropTypes.func.isRequired,
-  onToggleBaseLayersExpanded: PropTypes.func.isRequired,
-  onToggleOverlaysExpanded: PropTypes.func.isRequired,
 }
 
 export default enhance(LayersControl)

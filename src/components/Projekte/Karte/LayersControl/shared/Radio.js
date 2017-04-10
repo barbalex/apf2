@@ -1,4 +1,4 @@
-import React, { PropTypes } from 'react'
+import React from 'react'
 import { observer } from 'mobx-react'
 import styled from 'styled-components'
 
@@ -11,7 +11,22 @@ const Label = styled.label`
   user-select: none;
 `
 
-const Radio = ({ name, value, label, checked, onChange }) =>
+const Radio = (
+  {
+    name,
+    value,
+    label,
+    checked,
+    onChange,
+  }:
+  {
+    name: string,
+    value: string,
+    label: string,
+    checked: boolean,
+    onChange: () => void,
+  }
+) =>
   <Label>
     <Input
       type="radio"
@@ -22,13 +37,5 @@ const Radio = ({ name, value, label, checked, onChange }) =>
     />
     {label}
   </Label>
-
-Radio.propTypes = {
-  name: PropTypes.string.isRequired,
-  value: PropTypes.string.isRequired,
-  label: PropTypes.string.isRequired,
-  checked: PropTypes.bool.isRequired,
-  onChange: PropTypes.func.isRequired,
-}
 
 export default observer(Radio)

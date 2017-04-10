@@ -1,20 +1,18 @@
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
 import compose from 'recompose/compose'
 import getContext from 'recompose/getContext'
 import 'leaflet'
+import PropTypes from 'prop-types'
 
 const enhance = compose(
   getContext({ map: PropTypes.object.isRequired }),
 )
 
-class TpopMarker extends Component { // eslint-disable-line react/prefer-stateless-function
+class TpopMarker extends Component {
 
-  static propTypes = {
-    tpops: PropTypes.array.isRequired,
-    labelUsingNr: PropTypes.bool.isRequired,
-    highlightedIds: PropTypes.array.isRequired,
-    visible: PropTypes.bool.isRequired,
-    markers: PropTypes.array,
+  props: {
+    visible: boolean,
+    markers: Array<Object>,
   }
 
   componentDidMount() {

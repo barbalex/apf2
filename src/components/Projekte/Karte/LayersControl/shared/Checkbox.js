@@ -1,4 +1,4 @@
-import React, { PropTypes } from 'react'
+import React from 'react'
 import { observer } from 'mobx-react'
 import styled from 'styled-components'
 
@@ -11,7 +11,20 @@ const Label = styled.label`
   user-select: none;
 `
 
-const Checkbox = ({ value, label, checked, onChange }) =>
+const Checkbox = (
+  {
+    value,
+    label,
+    checked,
+    onChange,
+  }:
+  {
+    value: string,
+    label: string,
+    checked: boolean,
+    onChange: () => void,
+  }
+) =>
   <Label>
     <Input
       type="checkbox"
@@ -21,12 +34,5 @@ const Checkbox = ({ value, label, checked, onChange }) =>
     />
     {label}
   </Label>
-
-Checkbox.propTypes = {
-  value: PropTypes.string.isRequired,
-  label: PropTypes.string.isRequired,
-  checked: PropTypes.bool.isRequired,
-  onChange: PropTypes.func.isRequired,
-}
 
 export default observer(Checkbox)

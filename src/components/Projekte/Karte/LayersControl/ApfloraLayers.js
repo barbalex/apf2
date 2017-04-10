@@ -1,4 +1,4 @@
-import React, { PropTypes } from 'react'
+import React from 'react'
 import { toJS } from 'mobx'
 import { observer } from 'mobx-react'
 import styled from 'styled-components'
@@ -103,7 +103,13 @@ const DragHandle = SortableHandle(() =>
     drag_handle
   </DragHandleIcon>
 )
-const SortableItem = SortableElement(({ apfloraLayer, store, activeApfloraLayers }) => {
+const SortableItem = SortableElement((
+  {
+    apfloraLayer,
+    store,
+    activeApfloraLayers,
+  }
+) => {
   const assigningIsPossible = (
     store.map.activeApfloraLayers.includes(`Tpop`) &&
     (
@@ -354,7 +360,10 @@ const SortableList = SortableContainer(({ items, store, activeApfloraLayers }) =
   </div>
 )
 
-const ApfloraLayers = ({ store }) =>
+const ApfloraLayers = (
+  { store }:
+  { store: Object }
+) =>
   <CardContent>
     <SortableList
       items={store.map.apfloraLayers}
@@ -367,9 +376,5 @@ const ApfloraLayers = ({ store }) =>
       activeApfloraLayers={toJS(store.map.activeApfloraLayers)}
     />
   </CardContent>
-
-ApfloraLayers.propTypes = {
-  store: PropTypes.object.isRequired,
-}
 
 export default observer(ApfloraLayers)
