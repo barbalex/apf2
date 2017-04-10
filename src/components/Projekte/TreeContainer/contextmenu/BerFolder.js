@@ -1,10 +1,16 @@
 // @flow
-import React, { PropTypes } from 'react'
+import React from 'react'
 import { ContextMenu, MenuItem } from 'react-contextmenu'
 
 const BerFolder = (
-  { onClick, tree }:
-  {onClick:()=>void,tree:Object}
+  {
+    onClick,
+    tree,
+  }:
+  {
+    onClick: () => void,
+    tree: Object,
+  }
 ) =>
   <ContextMenu id={`${tree.name}berFolder`} >
     <div className="react-contextmenu-title">Bericht</div>
@@ -18,9 +24,5 @@ const BerFolder = (
       erstelle neuen
     </MenuItem>
   </ContextMenu>
-
-BerFolder.propTypes = {
-  onClick: PropTypes.func.isRequired,
-}
 
 export default BerFolder
