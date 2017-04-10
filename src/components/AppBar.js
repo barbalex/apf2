@@ -1,5 +1,5 @@
 // @flow
-import React, { PropTypes } from 'react'
+import React from 'react'
 import { toJS } from 'mobx'
 import { observer, inject } from 'mobx-react'
 import AppBar from 'material-ui/AppBar'
@@ -85,16 +85,29 @@ const enhance = compose(
   observer
 )
 
-const MyAppBar = ({
-  store,
-  onClickButtonStrukturbaum,
-  onClickButtonStrukturbaum2,
-  onClickButtonDaten,
-  onClickButtonDaten2,
-  onClickButtonKarte,
-  onClickButtonExporte,
-  ueberApfloraChOnTouchTap,
-}) => {
+const MyAppBar = (
+  {
+    store,
+    onClickButtonStrukturbaum,
+    onClickButtonStrukturbaum2,
+    onClickButtonDaten,
+    onClickButtonDaten2,
+    onClickButtonKarte,
+    onClickButtonExporte,
+    ueberApfloraChOnTouchTap,
+  }:
+  {
+    store: Object,
+    onClickButton: () => void,
+    onClickButtonStrukturbaum: () => void,
+    onClickButtonStrukturbaum2: () => void,
+    onClickButtonDaten: () => void,
+    onClickButtonDaten2: () => void,
+    onClickButtonKarte: () => void,
+    onClickButtonExporte: () => void,
+    ueberApfloraChOnTouchTap: () => void,
+  }
+) => {
   const projekteTabs = store.urlQuery.projekteTabs
   const treeIsVisible = projekteTabs.includes(`tree`)
   const tree2IsVisible = projekteTabs.includes(`tree2`)
@@ -166,17 +179,6 @@ const MyAppBar = ({
       showMenuIconButton={false}
     />
   )
-}
-
-MyAppBar.propTypes = {
-  store: PropTypes.object.isRequired,
-  onClickButton: PropTypes.func.isRequired,
-  onClickButtonStrukturbaum: PropTypes.func.isRequired,
-  onClickButtonStrukturbaum2: PropTypes.func.isRequired,
-  onClickButtonDaten: PropTypes.func.isRequired,
-  onClickButtonDaten2: PropTypes.func.isRequired,
-  onClickButtonKarte: PropTypes.func.isRequired,
-  ueberApfloraChOnTouchTap: PropTypes.func.isRequired,
 }
 
 export default enhance(MyAppBar)

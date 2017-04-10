@@ -1,4 +1,4 @@
-import React, { PropTypes } from 'react'
+import React from 'react'
 import 'leaflet'
 import { inject, observer } from 'mobx-react'
 import Control from 'react-leaflet-control'
@@ -21,7 +21,10 @@ const enhance = compose(
   observer
 )
 
-const CoordinatesControl = ({ store }) => {
+const CoordinatesControl = (
+  { store }:
+  { store: Object }
+) => {
   let [x, y] = store.map.mouseCoordEpsg21781
   let coord = ``
   if (x && y) {
@@ -29,6 +32,7 @@ const CoordinatesControl = ({ store }) => {
     y = parseInt(y, 10).toLocaleString(`de-ch`)
     coord = `${x}, ${y}`
   }
+
   return (
     <StyledControl position="bottomright">
       <StyledDiv>
@@ -36,10 +40,6 @@ const CoordinatesControl = ({ store }) => {
       </StyledDiv>
     </StyledControl>
   )
-}
-
-CoordinatesControl.propTypes = {
-  store: PropTypes.object.isRequired,
 }
 
 export default enhance(CoordinatesControl)

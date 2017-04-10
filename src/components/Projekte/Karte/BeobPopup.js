@@ -1,5 +1,5 @@
 // @flow
-import React, { PropTypes } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 
 import appBaseUrl from '../../../modules/appBaseUrl'
@@ -15,8 +15,14 @@ const StyledH3 = styled.h3`
  */
 
 const BeobPopup = (
-  { store, beobBereitgestellt }:
-  {store: Object,beobBereitgestellt: Object}
+  {
+    store,
+    beobBereitgestellt,
+  }:
+  {
+    store: Object,
+    beobBereitgestellt: Object,
+  }
 ) => {
   const { activeNodes } = store.tree
   const { ap, projekt } = activeNodes
@@ -62,11 +68,6 @@ const BeobPopup = (
       </a>
     </div>
   )
-}
-
-BeobPopup.propTypes = {
-  store: PropTypes.object.isRequired,
-  beobBereitgestellt: PropTypes.object.isRequired,
 }
 
 export default BeobPopup

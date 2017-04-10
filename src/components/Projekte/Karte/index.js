@@ -6,7 +6,7 @@
  *
  */
 
-import React, { PropTypes } from 'react'
+import React from 'react'
 import { toJS } from 'mobx'
 import { observer, inject } from 'mobx-react'
 import { Map, ScaleControl } from 'react-leaflet'
@@ -69,7 +69,10 @@ const enhance = compose(
   observer
 )
 
-const Karte = ({ store }) => {
+const Karte = (
+  { store }:
+  { store: Object }
+) => {
   const { activeBaseLayer, activeApfloraLayers } = store.map
   const { idOfTpopBeingLocalized } = store.map.tpop
   const MapElement = !!idOfTpopBeingLocalized ? StyledMapLocalizing : StyledMap
@@ -254,10 +257,6 @@ const Karte = ({ store }) => {
       <CoordinatesControl />
     </MapElement>
   )
-}
-
-Karte.propTypes = {
-  store: PropTypes.object.isRequired,
 }
 
 export default enhance(Karte)

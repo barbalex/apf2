@@ -1,10 +1,11 @@
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
 import 'leaflet'
 import 'leaflet-draw'
 import compose from 'recompose/compose'
 import getContext from 'recompose/getContext'
 import withState from 'recompose/withState'
 import { inject } from 'mobx-react'
+import PropTypes from 'prop-types'
 
 const enhance = compose(
   inject(`store`),
@@ -15,13 +16,13 @@ const enhance = compose(
 
 class DrawControl extends Component {
 
-  static propTypes = {
-    store: PropTypes.object.isRequired,
-    map: PropTypes.object.isRequired,
-    mapFilter: PropTypes.object,
-    setMapFilter: PropTypes.func.isRequired,
-    drawControl: PropTypes.object,
-    setDrawControl: PropTypes.func.isRequired,
+  props: {
+    store: Object,
+    map: Object,
+    mapFilter?: Object,
+    setMapFilter: () => void,
+    drawControl?: Object,
+    setDrawControl: () => void,
   }
 
   componentDidMount() {

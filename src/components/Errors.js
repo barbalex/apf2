@@ -1,5 +1,5 @@
 // @flow
-import React, { PropTypes } from 'react'
+import React from 'react'
 import { observer, inject } from 'mobx-react'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
@@ -27,7 +27,10 @@ const enhance = compose(
   observer
 )
 
-const Errors = ({ store }) =>
+const Errors = (
+  { store }:
+  { store: Object }
+) =>
   <Container>
     {
       store.app.errors.map((error, index) =>
@@ -39,9 +42,5 @@ const Errors = ({ store }) =>
       )
     }
   </Container>
-
-Errors.propTypes = {
-  store: PropTypes.object.isRequired,
-}
 
 export default enhance(Errors)
