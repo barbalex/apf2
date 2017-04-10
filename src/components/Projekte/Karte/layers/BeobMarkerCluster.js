@@ -1,7 +1,8 @@
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
 import compose from 'recompose/compose'
 import getContext from 'recompose/getContext'
 import 'leaflet'
+import PropTypes from 'prop-types'
 import '../../../../../node_modules/leaflet.markercluster/dist/leaflet.markercluster-src.js'
 
 const enhance = compose(
@@ -10,11 +11,9 @@ const enhance = compose(
 
 class BeobMarkerCluster extends Component { // eslint-disable-line react/prefer-stateless-function
 
-  static propTypes = {
-    beobs: PropTypes.array.isRequired,
-    highlightedIds: PropTypes.array.isRequired,
-    visible: PropTypes.bool.isRequired,
-    markers: PropTypes.object,
+  props: {
+    visible: boolean,
+    markers: Object,
   }
 
   componentDidMount() {

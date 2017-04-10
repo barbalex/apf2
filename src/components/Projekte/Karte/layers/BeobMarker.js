@@ -1,19 +1,18 @@
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
 import compose from 'recompose/compose'
 import getContext from 'recompose/getContext'
 import 'leaflet'
+import PropTypes from 'prop-types'
 
 const enhance = compose(
-  getContext({ map: PropTypes.object.isRequired }),
+  getContext({ map: PropTypes.object.isRequired  }),
 )
 
 class BeobMarker extends Component { // eslint-disable-line react/prefer-stateless-function
 
-  static propTypes = {
-    beobs: PropTypes.array.isRequired,
-    highlightedIds: PropTypes.array.isRequired,
-    visible: PropTypes.bool.isRequired,
-    markers: PropTypes.array,
+  props: {
+    visible: boolean,
+    markers: Array<Object>,
   }
 
   componentDidMount() {

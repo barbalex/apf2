@@ -92,9 +92,6 @@ const Karte = ({ store }) => {
     // MapFilter is used for filtering, need to return null
     MapFilter: () => null,
     Pop: () => <Pop
-      highlightedIds={store.map.pop.highlightedIds}
-      labelUsingNr={store.map.pop.labelUsingNr}
-      pops={store.map.pop.pops}
       visible={activeApfloraLayers.includes(`Pop`)}
       markers={store.map.pop.markers}
     />,
@@ -105,9 +102,6 @@ const Karte = ({ store }) => {
       ) {
         return (
           <Tpop
-            highlightedIds={store.map.tpop.highlightedIds}
-            labelUsingNr={store.map.tpop.labelUsingNr}
-            tpops={store.map.tpop.tpops}
             visible={activeApfloraLayers.includes(`Tpop`)}
             markers={store.map.tpop.markers}
           />
@@ -115,9 +109,6 @@ const Karte = ({ store }) => {
       }
       return (
         <TpopCluster
-          highlightedIds={store.map.tpop.highlightedIds}
-          labelUsingNr={store.map.tpop.labelUsingNr}
-          tpops={store.map.tpop.tpops}
           visible={activeApfloraLayers.includes(`Tpop`)}
           markers={store.map.tpop.markersClustered}
         />
@@ -130,8 +121,6 @@ const Karte = ({ store }) => {
       ) {
         return (
           <Beob
-            highlightedIds={store.map.beobNichtBeurteilt.highlightedIds}
-            beobs={store.map.beobNichtBeurteilt.beobs}
             visible={activeApfloraLayers.includes(`BeobNichtBeurteilt`)}
             markers={store.map.beobNichtBeurteilt.markers}
           />
@@ -139,16 +128,12 @@ const Karte = ({ store }) => {
       }
       return (
         <BeobCluster
-          highlightedIds={store.map.beobNichtBeurteilt.highlightedIds}
-          beobs={store.map.beobNichtBeurteilt.beobs}
           visible={activeApfloraLayers.includes(`BeobNichtBeurteilt`)}
           markers={store.map.beobNichtBeurteilt.markersClustered}
         />
       )
     },
     BeobNichtZuzuordnen: () => <BeobCluster
-      highlightedIds={store.map.beobNichtZuzuordnen.highlightedIds}
-      beobs={store.map.beobNichtZuzuordnen.beobs}
       visible={activeApfloraLayers.includes(`BeobNichtZuzuordnen`)}
       markers={store.map.beobNichtZuzuordnen.markersClustered}
     />,
@@ -159,8 +144,6 @@ const Karte = ({ store }) => {
       ) {
         return (
           <Beob
-            highlightedIds={store.map.tpopBeob.highlightedIds}
-            beobs={store.map.tpopBeob.beobs}
             visible={activeApfloraLayers.includes(`TpopBeob`)}
             markers={store.map.tpopBeob.markers}
           />
@@ -168,16 +151,12 @@ const Karte = ({ store }) => {
       }
       return (
         <BeobCluster
-          highlightedIds={store.map.tpopBeob.highlightedIds}
-          beobs={store.map.tpopBeob.beobs}
           visible={activeApfloraLayers.includes(`TpopBeob`)}
           markers={store.map.tpopBeob.markersClustered}
         />
       )
     },
     TpopBeobAssignPolylines: () => <TpopBeobAssignPolylines
-      highlightedIds={store.map.tpopBeob.highlightedIds}
-      beobs={store.map.tpopBeob.beobs}
       visible={activeApfloraLayers.includes(`TpopBeobAssignPolylines`)}
       assignPolylines={store.map.tpopBeob.assignPolylines}
     />,
