@@ -4,7 +4,7 @@ import app from 'ampersand-app'
 
 import apiBaseUrl from '../../modules/apiBaseUrl'
 
-export default (store:Object, name:string, password:string) => {
+export default (store: Object, name: string, password: string) => {
   if (!name) {
     return new Error(`action fetchLogin: name must be passed`)
   }

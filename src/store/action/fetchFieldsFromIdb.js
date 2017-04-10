@@ -4,7 +4,7 @@ import app from 'ampersand-app'
 
 import fetchFields from './fetchFields'
 
-export default (store:Object) => {
+export default (store: Object) => {
   // only fetch if not yet done
   if (store.app.fields.length === 0 && !store.loading.includes(`fields`)) {
     app.db.fields

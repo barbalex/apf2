@@ -8,7 +8,7 @@ import zhGeojson from '../../etc/ktZh.json'
 
 const fetchQk = (
   { store, tree }:
-  {store:Object,tree:Object}
+  {store: Object,tree: Object}
 ) => {
   store.loading.push(`qk`)
   const apArtId = tree.activeNodes.ap

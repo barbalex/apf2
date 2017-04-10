@@ -8,7 +8,7 @@ import recordValuesForWhichTableDataWasFetched from '../../modules/recordValuesF
 
 export default (
   { store, schemaName, tableName, id }:
-  {store:Object,schemaName:string,tableName:string,id:number|string}
+  {store: Object,schemaName: string,tableName: string,id: number|string}
 ) => {
   if (!tableName) {
     return new Error(`action fetchDatasetById: tableName must be passed`)
