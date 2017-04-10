@@ -1,5 +1,5 @@
 // @flow
-import React, { PropTypes } from 'react'
+import React from 'react'
 import { observer } from 'mobx-react'
 import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton'
 import withHandlers from 'recompose/withHandlers'
@@ -17,11 +17,18 @@ const enhance = compose(
   observer
 )
 
-const MyRadioButton = ({
-  fieldName,
-  value,
-  onChange,
-}) =>
+const MyRadioButton = (
+  {
+    fieldName,
+    value,
+    onChange,
+  }:
+  {
+    fieldName: string,
+    value?: ?number|?string,
+    onChange: () => void,
+  }
+) =>
   <RadioButtonGroup
     name={fieldName}
     valueSelected={value}
@@ -31,14 +38,6 @@ const MyRadioButton = ({
       value={1}
     />
   </RadioButtonGroup>
-
-MyRadioButton.propTypes = {
-  tree: PropTypes.object.isRequired,
-  fieldName: PropTypes.string.isRequired,
-  value: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-  updatePropertyInDb: PropTypes.func.isRequired,
-  onChange: PropTypes.func.isRequired,
-}
 
 MyRadioButton.defaultProps = {
   value: ``,

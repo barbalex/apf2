@@ -1,5 +1,5 @@
 // @flow
-import React, { PropTypes } from 'react'
+import React from 'react'
 import { observer } from 'mobx-react'
 import styled from 'styled-components'
 
@@ -13,13 +13,12 @@ const StyledLabel = styled.div`
   padding-bottom: 8px;
 `
 
-const Label = ({ label }) =>
+const Label = (
+  { label }:
+  { label: string }
+) =>
   <StyledLabel>
     {label}
   </StyledLabel>
-
-Label.propTypes = {
-  label: PropTypes.string.isRequired,
-}
 
 export default observer(Label)

@@ -1,5 +1,5 @@
 // @flow
-import React, { PropTypes } from 'react'
+import React from 'react'
 import { observer } from 'mobx-react'
 import SelectField from 'material-ui/SelectField'
 import MenuItem from 'material-ui/MenuItem'
@@ -14,14 +14,24 @@ const enhance = compose(
   observer
 )
 
-const MySelectField = ({
-  label,
-  value,
-  dataSource,
-  valueProp,
-  labelProp,
-  onChange,
-}) =>
+const MySelectField = (
+  {
+    label,
+    value,
+    dataSource,
+    valueProp,
+    labelProp,
+    onChange,
+  }:
+  {
+    label: string,
+    value?: ?number|?string,
+    dataSource: Array<Object>,
+    valueProp: string,
+    labelProp: string,
+    onChange: () => void,
+  }
+) =>
   <SelectField
     floatingLabelText={label}
     value={value}
@@ -38,18 +48,6 @@ const MySelectField = ({
       )
     }
   </SelectField>
-
-MySelectField.propTypes = {
-  tree: PropTypes.object.isRequired,
-  label: PropTypes.string.isRequired,
-  fieldName: PropTypes.string.isRequired,
-  value: PropTypes.any,
-  dataSource: PropTypes.arrayOf(PropTypes.object).isRequired,
-  valueProp: PropTypes.string.isRequired,
-  labelProp: PropTypes.string.isRequired,
-  updatePropertyInDb: PropTypes.func.isRequired,
-  onChange: PropTypes.func.isRequired,
-}
 
 MySelectField.defaultProps = {
   value: ``,

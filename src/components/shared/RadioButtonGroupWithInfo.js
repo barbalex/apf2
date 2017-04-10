@@ -1,5 +1,5 @@
 // @flow
-import React, { PropTypes } from 'react'
+import React from 'react'
 import { observer } from 'mobx-react'
 import styled from 'styled-components'
 
@@ -15,14 +15,24 @@ const ButtonGroup = styled.div`
   flex-grow: 1;
 `
 
-const RadioButtonGroupWithInfo = ({
-  tree,
-  fieldName,
-  value,
-  dataSource,
-  updatePropertyInDb,
-  popover,
-}) =>
+const RadioButtonGroupWithInfo = (
+  {
+    tree,
+    fieldName,
+    value,
+    dataSource,
+    updatePropertyInDb,
+    popover,
+  }:
+  {
+    tree: Object,
+    fieldName: string,
+    value?: ?number|?string,
+    dataSource: Array<Object>,
+    updatePropertyInDb: () => void,
+    popover: Object,
+  }
+) =>
   <Container>
     <ButtonGroup>
       <RadioButtonGroup
@@ -37,15 +47,6 @@ const RadioButtonGroupWithInfo = ({
       {popover}
     </InfoWithPopover>
   </Container>
-
-RadioButtonGroupWithInfo.propTypes = {
-  tree: PropTypes.object.isRequired,
-  fieldName: PropTypes.string.isRequired,
-  value: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-  dataSource: PropTypes.arrayOf(PropTypes.object).isRequired,
-  updatePropertyInDb: PropTypes.func.isRequired,
-  popover: PropTypes.element.isRequired,
-}
 
 RadioButtonGroupWithInfo.defaultProps = {
   value: ``,

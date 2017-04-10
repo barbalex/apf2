@@ -1,5 +1,5 @@
 // @flow
-import React, { PropTypes } from 'react'
+import React from 'react'
 import { observer } from 'mobx-react'
 import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton'
 import styled from 'styled-components'
@@ -24,12 +24,20 @@ const enhance = compose(
   observer
 )
 
-const RadioButtonWithInfo = ({
-  fieldName,
-  value,
-  popover,
-  onChange,
-}) =>
+const RadioButtonWithInfo = (
+  {
+    fieldName,
+    value,
+    popover,
+    onChange,
+  }:
+  {
+    fieldName: string,
+    value?: ?number|?string,
+    popover: Object,
+    onChange: () => void,
+  }
+) =>
   <Container>
     <RadioButtonGroup
       name={fieldName}
@@ -44,15 +52,6 @@ const RadioButtonWithInfo = ({
       {popover}
     </InfoWithPopover>
   </Container>
-
-RadioButtonWithInfo.propTypes = {
-  tree: PropTypes.object.isRequired,
-  fieldName: PropTypes.string.isRequired,
-  value: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-  updatePropertyInDb: PropTypes.func.isRequired,
-  onChange: PropTypes.func.isRequired,
-  popover: PropTypes.element.isRequired,
-}
 
 RadioButtonWithInfo.defaultProps = {
   value: ``,

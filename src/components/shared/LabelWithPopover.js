@@ -1,5 +1,5 @@
 // @flow
-import React, { PropTypes } from 'react'
+import React from 'react'
 import { observer } from 'mobx-react'
 import Popover from 'material-ui/Popover'
 import compose from 'recompose/compose'
@@ -37,14 +37,24 @@ const StyledPopover = styled(Popover)`
   border-radius: 4px;
 `
 
-const LabelWithPopover = ({
-  label,
-  popupOpen,
-  popupAnchorEl,
-  children,
-  onClickDiv,
-  onRequestClosePopover,
-}) =>
+const LabelWithPopover = (
+  {
+    label,
+    popupOpen,
+    popupAnchorEl,
+    children,
+    onClickDiv,
+    onRequestClosePopover,
+  }:
+  {
+    label: string,
+    children: Array<Object>|Object,
+    popupOpen: boolean,
+    popupAnchorEl?: Object,
+    onClickDiv: () => void,
+    onRequestClosePopover: () => void,
+  }
+) =>
   <StyledDiv
     onClick={onClickDiv}
   >
@@ -62,17 +72,6 @@ const LabelWithPopover = ({
       {children}
     </StyledPopover>
   </StyledDiv>
-
-LabelWithPopover.propTypes = {
-  label: PropTypes.string.isRequired,
-  children: PropTypes.oneOfType([PropTypes.array, PropTypes.object]).isRequired,
-  popupOpen: PropTypes.bool.isRequired,
-  changePopupOpen: PropTypes.func.isRequired,
-  popupAnchorEl: PropTypes.object,
-  changePopupAnchorEl: PropTypes.func.isRequired,
-  onClickDiv: PropTypes.func.isRequired,
-  onRequestClosePopover: PropTypes.func.isRequired,
-}
 
 LabelWithPopover.defaultProps = {
   popupAnchorEl: null,
