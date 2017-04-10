@@ -4,7 +4,7 @@ import app from 'ampersand-app'
 
 import apiBaseUrl from '../../modules/apiBaseUrl'
 
-export default async (store:Object) => {
+export default async (store: Object) => {
   store.loading.push(`adb_eigenschaften`)
   let url = `${apiBaseUrl}/schema/beob/table/adb_eigenschaften`
 

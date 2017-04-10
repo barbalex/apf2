@@ -29,7 +29,7 @@ const writeToStore = (store, data) => {
   })
 }
 
-export default (store:Object, apArtId:number) => {
+export default (store: Object, apArtId: number) => {
   // console.log(`module fetchBeobzuordnung: apArtId:`, apArtId)
   const { valuesForWhichTableDataWasFetched } = store
   if (!apArtId) {

@@ -5,7 +5,7 @@ import apiBaseUrl from '../../modules/apiBaseUrl'
 import tables from '../../modules/tables'
 import deleteDatasetInIdb from './deleteDatasetInIdb'
 
-export default (store:Object, tree:Object) => {
+export default (store: Object, tree: Object) => {
   // deleteDatasetDemand checks variables
   const { table: tablePassed, id, idField, url } = store.datasetToDelete
   let table = tablePassed

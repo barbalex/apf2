@@ -16,7 +16,7 @@ const writeToStore = (store, data) => {
   })
 }
 
-export default (store:Object, apArtId:number) => {
+export default (store: Object, apArtId: number) => {
   if (!apArtId) {
     return new Error(`action fetchBeobBereitgestellt: apArtId must be passed`)
   }
