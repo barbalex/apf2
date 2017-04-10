@@ -54,7 +54,7 @@ import tpopmassnberNode from '../../compute/nodes/tpopmassnber'
 import tpopmassnFolderNode from '../../compute/nodes/tpopmassnFolder'
 import tpopmassnNode from '../../compute/nodes/tpopmassn'
 
-export default (store:Object) => {
+export default (store: Object) => {
   extendObservable(store.tree2.node, {
     projekt: computed(
       () => projektNodes(store, store.tree2),

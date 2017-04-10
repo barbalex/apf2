@@ -30,7 +30,7 @@ import filteredAndSortedTpopfeldkontrzaehl from '../../compute/filteredAndSorted
 import filteredAndSortedTpopmassnber from '../../compute/filteredAndSorted/tpopmassnber'
 import filteredAndSortedTpopmassn from '../../compute/filteredAndSorted/tpopmassn'
 
-export default (store:Object) => {
+export default (store: Object) => {
   extendObservable(store.tree2.filteredAndSorted, {
     projekt: computed(
       () => filteredAndSortedProjekt(store, store.tree2),

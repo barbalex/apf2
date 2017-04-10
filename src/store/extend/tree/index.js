@@ -16,7 +16,7 @@ import extendFilteredAndSorted from './filteredAndSorted'
 import updateActiveDatasetFromActiveNodes from '../../action/updateActiveDatasetFromActiveNodes'
 import allNodes from '../../compute/nodes/allNodes'
 
-export default (store:Object) => {
+export default (store: Object) => {
   extendObservable(store.tree, {
     /**
      * url is used to control tree and forms

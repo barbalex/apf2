@@ -15,7 +15,7 @@ import extendFilteredAndSorted from './filteredAndSorted'
 import updateActiveDatasetFromActiveNodes from '../../action/updateActiveDatasetFromActiveNodes'
 import allNodes from '../../compute/nodes/allNodes'
 
-export default (store:Object) => {
+export default (store: Object) => {
   extendObservable(store.tree2, {
     /**
      * in tree2 activeNodeArray is cloned from tree on mount
