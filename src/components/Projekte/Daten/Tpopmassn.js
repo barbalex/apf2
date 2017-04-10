@@ -1,5 +1,5 @@
 // @flow
-import React, { PropTypes } from 'react'
+import React from 'react'
 import { observer, inject } from 'mobx-react'
 import AutoComplete from 'material-ui/AutoComplete'
 import styled from 'styled-components'
@@ -37,12 +37,20 @@ const enhance = compose(
   observer
 )
 
-const Tpopmassn = ({
-  store,
-  tree,
-  onNewRequestWirtspflanze,
-  onBlurWirtspflanze,
-}) => {
+const Tpopmassn = (
+  {
+    store,
+    tree,
+    onNewRequestWirtspflanze,
+    onBlurWirtspflanze,
+  }:
+  {
+    store: Object,
+    tree: Object,
+    onNewRequestWirtspflanze: () => void,
+    onBlurWirtspflanze: () => void,
+  }
+) => {
   const { activeDataset } = tree
 
   return (
@@ -231,13 +239,6 @@ const Tpopmassn = ({
       </Scrollbars>
     </Container>
   )
-}
-
-Tpopmassn.propTypes = {
-  store: PropTypes.object.isRequired,
-  tree: PropTypes.object.isRequired,
-  onNewRequestWirtspflanze: PropTypes.func.isRequired,
-  onBlurWirtspflanze: PropTypes.func.isRequired,
 }
 
 export default enhance(Tpopmassn)

@@ -1,5 +1,5 @@
 // @flow
-import React, { PropTypes } from 'react'
+import React from 'react'
 import { observer, inject } from 'mobx-react'
 import TextField from 'material-ui/TextField'
 import Linkify from 'react-linkify'
@@ -52,11 +52,18 @@ const enhance = compose(
   observer
 )
 
-const Qk = ({
-  store,
-  tree,
-  onChangeBerichtjahr,
-}) => {
+const Qk = (
+  {
+    store,
+    tree,
+    onChangeBerichtjahr,
+  }:
+  {
+    store: Object,
+    tree: Object,
+    onChangeBerichtjahr: () => void,
+  }
+) => {
   const { qk } = store
   const apArtId = tree.activeNodes.ap
   // need to pass value for when qk does not yet exist
@@ -115,16 +122,6 @@ const Qk = ({
       </Scrollbars>
     </Container>
   )
-}
-
-Qk.propTypes = {
-  store: PropTypes.object.isRequired,
-  tree: PropTypes.object.isRequired,
-  onChangeBerichtjahr: PropTypes.func.isRequired,
-}
-
-Qk.defaultProps = {
-  filter: ``,
 }
 
 export default enhance(Qk)

@@ -1,5 +1,5 @@
 // @flow
-import React, { PropTypes } from 'react'
+import React from 'react'
 import { observer, inject } from 'mobx-react'
 import AutoComplete from 'material-ui/AutoComplete'
 import styled from 'styled-components'
@@ -42,10 +42,20 @@ const enhance = compose(
   observer
 )
 
-const Tpop = ({ store, tree }) => {
+const Tpop = (
+  {
+    store,
+    tree,
+  }:
+  {
+    store: Object,
+    tree: Object,
+  }
+) => {
   const { activeDataset } = tree
   const apArtId = store.table.pop.get(activeDataset.row.PopId).ApArtId
   const apJahr = store.table.ap.get(apArtId).ApJahr
+
   return (
     <Container>
       <FormTitle tree={tree} title="Teil-Population" />
@@ -290,11 +300,6 @@ const Tpop = ({ store, tree }) => {
       </Scrollbars>
     </Container>
   )
-}
-
-Tpop.propTypes = {
-  store: PropTypes.object.isRequired,
-  tree: PropTypes.object.isRequired,
 }
 
 export default enhance(Tpop)

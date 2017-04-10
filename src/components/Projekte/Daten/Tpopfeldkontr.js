@@ -1,5 +1,5 @@
 // @flow
-import React, { PropTypes } from 'react'
+import React from 'react'
 import { observer, inject } from 'mobx-react'
 import { Tabs, Tab } from 'material-ui/Tabs'
 import AutoComplete from 'material-ui/AutoComplete'
@@ -80,12 +80,20 @@ const enhance = compose(
   observer
 )
 
-const Tpopfeldkontr = ({
-  store,
-  tree,
-  onChangeTab,
-}) => {
+const Tpopfeldkontr = (
+  {
+    store,
+    tree,
+    onChangeTab,
+  }:
+  {
+    store: Object,
+    tree: Object,
+    onChangeTab: () => void,
+  }
+) => {
   const { activeDataset } = tree
+
   return (
     <Container>
       <FormTitle tree={tree} title="Feld-Kontrolle" />
@@ -453,12 +461,6 @@ const Tpopfeldkontr = ({
       </FieldsContainer>
     </Container>
   )
-}
-
-Tpopfeldkontr.propTypes = {
-  store: PropTypes.object.isRequired,
-  tree: PropTypes.object.isRequired,
-  onChangeTab: PropTypes.func.isRequired,
 }
 
 export default enhance(Tpopfeldkontr)

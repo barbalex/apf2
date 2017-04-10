@@ -1,5 +1,5 @@
 // @flow
-import React, { PropTypes } from 'react'
+import React from 'react'
 import { observer, inject } from 'mobx-react'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
@@ -24,7 +24,16 @@ const enhance = compose(
   observer
 )
 
-const Tpopmassnber = ({ store, tree }) => {
+const Tpopmassnber = (
+  {
+    store,
+    tree,
+  }:
+  {
+    store: Object,
+    tree: Object,
+  }
+) => {
   const { activeDataset } = tree
 
   return (
@@ -67,11 +76,6 @@ const Tpopmassnber = ({ store, tree }) => {
       </Scrollbars>
     </Container>
   )
-}
-
-Tpopmassnber.propTypes = {
-  store: PropTypes.object.isRequired,
-  tree: PropTypes.object.isRequired,
 }
 
 export default enhance(Tpopmassnber)
