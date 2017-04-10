@@ -1,5 +1,5 @@
 // @flow
-import React, { PropTypes } from 'react'
+import React from 'react'
 import { ContextMenu, MenuItem } from 'react-contextmenu'
 import { inject, observer } from 'mobx-react'
 import compose from 'recompose/compose'
@@ -10,8 +10,16 @@ const enhance = compose(
 )
 
 const Tpop = (
-  { onClick, store, tree }:
-  {onClick:()=>void,store:Object,tree:Object}
+  {
+    onClick,
+    store,
+    tree,
+  }:
+  {
+    onClick: () => void,
+    store: Object,
+    tree: Object,
+  }
 ) => {
   const moving = store.moving.table && [`tpopmassn`, `tpopfeldkontr`, `tpopfreiwkontr`].includes(store.moving.table)
   const copying = store.copying.table && [`tpopmassn`, `tpopfeldkontr`, `tpopfreiwkontr`].includes(store.copying.table)
@@ -112,11 +120,6 @@ const Tpop = (
       </MenuItem>
     </ContextMenu>
   )
-}
-
-Tpop.propTypes = {
-  onClick: PropTypes.func.isRequired,
-  store: PropTypes.object.isRequired,
 }
 
 export default enhance(Tpop)

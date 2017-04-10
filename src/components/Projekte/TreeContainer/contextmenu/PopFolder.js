@@ -1,5 +1,5 @@
 // @flow
-import React, { PropTypes } from 'react'
+import React from 'react'
 import { ContextMenu, MenuItem } from 'react-contextmenu'
 import { inject, observer } from 'mobx-react'
 import compose from 'recompose/compose'
@@ -20,8 +20,22 @@ const enhance = compose(
 )
 
 const PopFolder = (
-  { tree, onClick, store, changeLabel, label, onShow }:
-  {tree:Object,onClick:()=>void,store:Object,changeLabel:()=>{},label:string|number,onShow:()=>void}
+  {
+    tree,
+    onClick,
+    store,
+    changeLabel,
+    label,
+    onShow,
+  }:
+  {
+    tree: Object,
+    onClick: () => void,
+    store: Object,
+    changeLabel: () => void,
+    label: string|number,
+    onShow: () => void,
+  }
 ) => {
   const moving = store.moving.table && store.moving.table === `pop`
   const copying = store.copying.table && store.copying.table === `pop`
@@ -77,13 +91,6 @@ const PopFolder = (
       }
     </ContextMenu>
   )
-}
-
-PopFolder.propTypes = {
-  onClick: PropTypes.func.isRequired,
-  changeLabel: PropTypes.func.isRequired,
-  label: PropTypes.any.isRequired,
-  onShow: PropTypes.func.isRequired,
 }
 
 export default enhance(PopFolder)
