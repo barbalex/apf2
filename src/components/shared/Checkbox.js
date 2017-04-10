@@ -1,5 +1,5 @@
 // @flow
-import React, { PropTypes } from 'react'
+import React from 'react'
 import { observer } from 'mobx-react'
 import { Checkbox } from 'material-ui/Checkbox'
 import compose from 'recompose/compose'
@@ -18,11 +18,18 @@ const enhance = compose(
   observer
 )
 
-const MyCheckbox = ({
-  value,
-  label,
-  onCheck,
-}) =>
+const MyCheckbox = (
+  {
+    value,
+    label,
+    onCheck,
+  }:
+  {
+    value?: number|string,
+    label: string,
+    onCheck: () => void,
+  }
+) =>
   <div>
     <Label label={label} />
     <Checkbox
@@ -30,15 +37,6 @@ const MyCheckbox = ({
       onCheck={onCheck}
     />
   </div>
-
-MyCheckbox.propTypes = {
-  tree: PropTypes.object.isRequired,
-  fieldName: PropTypes.string.isRequired,
-  value: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-  label: PropTypes.string.isRequired,
-  updatePropertyInDb: PropTypes.func.isRequired,
-  onCheck: PropTypes.func.isRequired,
-}
 
 MyCheckbox.defaultProps = {
   value: null,

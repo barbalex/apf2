@@ -1,5 +1,5 @@
 // @flow
-import React, { PropTypes } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 
 import TestdataMessage from './TestdataMessage'
@@ -15,8 +15,16 @@ const Title = styled.div`
 `
 
 const FormTitle = (
-  { tree, title, noTestdataMessage }:
-  {tree: Object,title: string,noTestdataMessage?:boolean}
+  {
+    tree,
+    title,
+    noTestdataMessage = false,
+  }:
+  {
+    tree: Object,
+    title: string,
+    noTestdataMessage?: boolean,
+  }
 ) =>
   <Container>
     <Title>
@@ -27,15 +35,5 @@ const FormTitle = (
       <TestdataMessage tree={tree} />
     }
   </Container>
-
-FormTitle.propTypes = {
-  tree: PropTypes.object.isRequired,
-  title: PropTypes.string.isRequired,
-  noTestdataMessage: PropTypes.bool,
-}
-
-FormTitle.defaultProps = {
-  noTestdataMessage: false,
-}
 
 export default FormTitle

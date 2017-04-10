@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import 'leaflet'
 import 'leaflet-easyprint'
 import compose from 'recompose/compose'
@@ -9,7 +10,6 @@ const enhance = compose(
 )
 
 class PrintControl extends Component {
-
   componentDidMount() {
     const { map } = this.props
     const options = {

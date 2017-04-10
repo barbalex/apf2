@@ -9,7 +9,7 @@
  * when this icon is clicked, focus is set to the DatePicker
  * which opens the calendar
  */
-import React, { Component, PropTypes } from 'react'
+import React, { Component } from 'react'
 import { observer } from 'mobx-react'
 import TextField from 'material-ui/TextField'
 import DatePicker from 'material-ui/DatePicker'
@@ -78,20 +78,20 @@ const enhance = compose(
 
 class MyDatePicker extends Component {
 
-  static propTypes = {
-    tree: PropTypes.object.isRequired,
-    label: PropTypes.string.isRequired,
-    fieldName: PropTypes.string.isRequired,
-    value: PropTypes.any,
-    stringValue: PropTypes.any,
-    errorText: PropTypes.string,
-    disabled: PropTypes.bool,
-    updateProperty: PropTypes.func.isRequired,
-    updatePropertyInDb: PropTypes.func.isRequired,
-    onChangeDatePicker: PropTypes.func.isRequired,
-    onChange: PropTypes.func.isRequired,
-    onBlur: PropTypes.func.isRequired,
-    onFocus: PropTypes.func.isRequired,
+  props: {
+    tree: Object,
+    label: string,
+    fieldName: string,
+    value?: string|number,
+    stringValue?: string|number,
+    errorText?: string,
+    disabled?: boolean,
+    updateProperty: () => void,
+    updatePropertyInDb: () => void,
+    onChangeDatePicker: () => void,
+    onChange: () => void,
+    onBlur: () => void,
+    onFocus: () => void,
   }
 
   static defaultProps = {

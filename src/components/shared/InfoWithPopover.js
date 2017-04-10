@@ -1,5 +1,5 @@
 // @flow
-import React, { PropTypes } from 'react'
+import React from 'react'
 import { observer } from 'mobx-react'
 import Popover from 'material-ui/Popover'
 import FontIcon from 'material-ui/FontIcon'
@@ -32,13 +32,22 @@ const StyledPopover = styled(Popover)`
   border-radius: 4px;
 `
 
-const InfoWithPopover = ({
-  popupOpen,
-  popupAnchorEl,
-  onRequestClosePopover,
-  onClickFontIcon,
-  children,
-}) =>
+const InfoWithPopover = (
+  {
+    popupOpen,
+    popupAnchorEl,
+    onRequestClosePopover,
+    onClickFontIcon,
+    children,
+  }:
+  {
+    popupOpen: boolean,
+    popupAnchorEl?: Object,
+    onRequestClosePopover: () => void,
+    onClickFontIcon: () => void,
+    children: Array<Object>|Object,
+  }
+) =>
   <div>
     <StyledFontIcon
       id="iconEl"
@@ -60,16 +69,6 @@ const InfoWithPopover = ({
       {children}
     </StyledPopover>
   </div>
-
-InfoWithPopover.propTypes = {
-  children: PropTypes.oneOfType([PropTypes.array, PropTypes.object]).isRequired,
-  popupOpen: PropTypes.bool.isRequired,
-  changePopupOpen: PropTypes.func.isRequired,
-  popupAnchorEl: PropTypes.object,
-  changePopupAnchorEl: PropTypes.func.isRequired,
-  onClickFontIcon: PropTypes.func.isRequired,
-  onRequestClosePopover: PropTypes.func.isRequired,
-}
 
 InfoWithPopover.defaultProps = {
   popupAnchorEl: null,
