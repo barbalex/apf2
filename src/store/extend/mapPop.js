@@ -8,7 +8,7 @@ import getPopsForMap from '../action/getPopsForMap'
 import getPopBounds from '../action/getPopBounds'
 import getPopMarkers from '../action/getPopMarkers'
 
-export default (store:Object) => {
+export default (store: Object) => {
   extendObservable(store.map.pop, {
     // apArtId is needed because
     // need to pass apArtId when activeNodes.ap

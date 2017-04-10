@@ -9,7 +9,7 @@ import getTpopBounds from '../action/getTpopBounds'
 import getTpopMarkers from '../action/getTpopMarkers'
 import getTpopMarkersClustered from '../action/getTpopMarkersClustered'
 
-export default (store:Object) => {
+export default (store: Object) => {
   extendObservable(store.map.tpop, {
     highlightedIds: computed(
       () => {

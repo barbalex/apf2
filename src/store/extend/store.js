@@ -34,7 +34,7 @@ import copyTo from '../action/copyTo'
 import copyBiotopTo from '../action/copyBiotopTo'
 import copyTpopKoordToPop from '../action/copyTpopKoordToPop'
 
-export default (store:Object) => {
+export default (store: Object) => {
   extendObservable(store, {
     loading: [],
     moving: {

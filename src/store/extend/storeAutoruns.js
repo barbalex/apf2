@@ -13,7 +13,7 @@ import manipulateActiveNodeArray from '../action/manipulateActiveNodeArray'
 import manipulateUrlQuery from '../action/manipulateUrlQuery'
 import manipulateUrl from '../action/manipulateUrl'
 
-export default (store:Object) => {
+export default (store: Object) => {
   extendObservable(store, {
     manipulateActiveNodeArray: autorun(
       `manipulateActiveNodeArray`,

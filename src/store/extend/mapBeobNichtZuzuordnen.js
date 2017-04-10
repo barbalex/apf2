@@ -8,7 +8,7 @@ import getBeobNichtZuzuordnenBounds from '../action/getBeobNichtZuzuordnenBounds
 import getBeobNichtZuzuordnenMarkersClustered from '../action/getBeobNichtZuzuordnenMarkersClustered'
 import getBeobForMap from '../action/getBeobForMap'
 
-export default (store:Object) => {
+export default (store: Object) => {
   extendObservable(store.map.beobNichtZuzuordnen, {
     highlightedIds: computed(
       () => {

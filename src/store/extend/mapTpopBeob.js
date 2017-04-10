@@ -10,7 +10,7 @@ import getTpopBeobMarkersClustered from '../action/getTpopBeobMarkersClustered'
 import getTpopBeobMarkers from '../action/getTpopBeobMarkers'
 import getTpopBeobAssignPolylines from '../action/getTpopBeobAssignPolylines'
 
-export default (store:Object) => {
+export default (store: Object) => {
   extendObservable(store.map.tpopBeob, {
     highlightedIds: computed(
       () => {
