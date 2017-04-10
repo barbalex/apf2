@@ -48,8 +48,8 @@ const TextSpan = styled(({ nodeIsInActiveNodePath, node, children, ...rest }) =>
   font-weight: ${(props) => (props.nodeIsInActiveNodePath ? `900 !important` : `inherit`)};
 `
 const StyledMapIcon = styled(FontIcon)`
-  padding-right: .2em;
-  margin-left: -0.1em;
+  padding-right: 2px;
+  margin-left: -2px;
   font-size: 20px !important;
 `
 const PopMapIcon = styled(StyledMapIcon)`
