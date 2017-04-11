@@ -16,9 +16,9 @@
     "sw-precache": "5.1.0"
   },
   "dependencies": {
-    "@turf/inside": "4.0.1",
-    "@turf/nearest": "4.0.1",
-    "@turf/within": "4.0.1",
+    "@turf/inside": "4.1.0",
+    "@turf/nearest": "4.1.0",
+    "@turf/within": "4.1.0",
     "ampersand-app": "2.0.0",
     "axios": "0.16.1",
     "babel-polyfill": "6.23.0",
@@ -36,14 +36,14 @@
     "leaflet-measure": "2.1.7",
     "leaflet.markercluster": "1.0.4",
     "lodash": "4.17.4",
-    "material-ui": "0.17.2",
+    "material-ui": "0.17.3",
     "mobx": "3.1.9",
     "mobx-react": "4.1.7",
     "moment": "2.18.1",
     "npm": "4.4.4",
     "proj4": "2.4.3",
     "proj4leaflet": "1.0.1",
-    "prop-types": "^15.5.6",
+    "prop-types": "15.5.6",
     "query-string": "4.3.2",
     "react": "15.5.3",
     "react-contextmenu": "2.4.0",
@@ -58,7 +58,7 @@
     "react-sortable-hoc": "0.6.1",
     "react-tap-event-plugin": "2.0.1",
     "react-virtualized": "9.7.2",
-    "recompose": "0.23.0",
+    "recompose": "0.23.1",
     "styled-components": "1.4.4"
   },
   "scripts": {
