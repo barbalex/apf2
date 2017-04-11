@@ -76,7 +76,6 @@ export default (store: Object, tree: Object, beobId: string) => {
       if (!tpop) {
         throw new Error(`Fehler bei der Erstellung einer neuen Teil-Population`)
       }
-      console.log(`tpop:`, tpop)
       store.table.tpop.set(tpop.TPopId, tpop)
       insertDatasetInIdb(store, `tpop`, tpop)
       // create new beobzuordnung
