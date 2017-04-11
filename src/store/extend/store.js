@@ -33,6 +33,8 @@ import moveTo from '../action/moveTo'
 import copyTo from '../action/copyTo'
 import copyBiotopTo from '../action/copyBiotopTo'
 import copyTpopKoordToPop from '../action/copyTpopKoordToPop'
+import copyTpopBeobKoordToPop from '../action/copyTpopBeobKoordToPop'
+import createNewPopFromBeob from '../action/createNewPopFromBeob'
 
 export default (store: Object) => {
   extendObservable(store, {
@@ -98,6 +100,12 @@ export default (store: Object) => {
     }),
     copyTpopKoordToPop: action(`copyTpopKoordToPop`, (tpopId) =>
       copyTpopKoordToPop(store, tpopId)
+    ),
+    copyTpopBeobKoordToPop: action(`copyTpopBeobKoordToPop`, (beobId) =>
+      copyTpopBeobKoordToPop(store, beobId)
+    ),
+    createNewPopFromBeob: action(`createNewPopFromBeob`, (tree, beobId) =>
+      createNewPopFromBeob(store, tree, beobId)
     ),
     showCoordOnMapsZhCh: action(`showCoordOnMapsZhCh`, (x, y) =>
       window.open(`https://maps.zh.ch/?x=${x}&y=${y}&scale=3000&markers=ring`, `target="_blank"`)

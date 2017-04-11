@@ -44,8 +44,7 @@ export default (store: Object, tree: Object, newKey: string, newValue: number) =
   // insert new dataset in db and fetch id
   const url = `${apiBaseUrl}/apflora/beobzuordnung/NO_NOTE/${beobBereitgestellt.BeobId}`
   axios.post(url)
-    .then(({ data }) => {
-      const row = data
+    .then(({ data: row }) => {
       // insert this dataset in idb
       insertDatasetInIdb(store, `beobzuordnung`, row)
       // insert this dataset in store.table

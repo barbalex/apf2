@@ -41,6 +41,8 @@ import CmTpopFolder from './contextmenu/TpopFolder'
 import CmTpop from './contextmenu/Tpop'
 import CmTpopberFolder from './contextmenu/TpopberFolder'
 import CmTpopber from './contextmenu/Tpopber'
+import CmTpopbeob from './contextmenu/Tpopbeob'
+import CmBeobnichtbeurteilt from './contextmenu/Beobnichtbeurteilt'
 import CmTpopfreiwkontrFolder from './contextmenu/TpopfreiwkontrFolder'
 import CmTpopfreiwkontr from './contextmenu/Tpopfreiwkontr'
 import CmTpopfreiwkontrzaehlFolder from './contextmenu/TpopfreiwkontrzaehlFolder'
@@ -197,6 +199,9 @@ class TreeContainer extends Component {
       copyTpopKoordToPop() {
         store.copyTpopKoordToPop(parseInt(id, 10))
       },
+      createNewPopFromBeob() {
+        store.createNewPopFromBeob(tree, id)
+      },
       showCoordOfTpopOnMapsZhCh() {
         const myId = parseInt(id, 10)
         const tpop = store.table.tpop.get(myId)
@@ -286,6 +291,8 @@ class TreeContainer extends Component {
         <CmTpop onClick={this.handleClick} tree={tree} />
         <CmTpopberFolder onClick={this.handleClick} tree={tree} />
         <CmTpopber onClick={this.handleClick} tree={tree} />
+        <CmTpopbeob onClick={this.handleClick} tree={tree} />
+        <CmBeobnichtbeurteilt onClick={this.handleClick} tree={tree} />
         <CmTpopfreiwkontrFolder onClick={this.handleClick} tree={tree} />
         <CmTpopfreiwkontr onClick={this.handleClick} tree={tree} />
         <CmTpopfreiwkontrzaehlFolder onClick={this.handleClick} tree={tree} />

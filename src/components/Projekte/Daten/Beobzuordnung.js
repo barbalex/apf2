@@ -184,7 +184,6 @@ const Beobzuordnung = (
                 value={activeDataset.row.TPopId}
                 dataSource={getTpopZuordnenSource(store, tree)}
                 updatePropertyInDb={updatePropertyInDb}
-                onChange={() => console.log('changed')}
               />
             </MaxHeightDiv>
           </div>
