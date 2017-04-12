@@ -66,7 +66,11 @@ export default (store: Object) => {
     boundsOfHighlightedIds: computed(
       () => getTpopBeobBounds(
         store.map.tpopBeob.beobs
-          .filter(b => store.map.tpopBeob.highlightedIds.includes(b.BeobId))
+          .filter(b =>
+            store.map.tpopBeob.highlightedIds.includes(
+              isNaN(b.BeobId) ? b.BeobId : Number(b.BeobId)
+            )
+          )
       ),
       { name: `mapTpopBeobBoundsOfHighlightedIds` }
     ),

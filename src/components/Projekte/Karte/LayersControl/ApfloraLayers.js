@@ -325,6 +325,8 @@ const SortableItem = SortableElement((
                 ),
               }}
               onClick={() => {
+                console.log(`activeApfloraLayers:`, activeApfloraLayers)
+                console.log(`apfloraLayer.value:`, apfloraLayer.value)
                 if (activeApfloraLayers.includes(apfloraLayer.value)) {
                   store.map.changeBounds(store.map[mapNameToStoreNameObject[apfloraLayer.value]].boundsOfHighlightedIds)
                 }

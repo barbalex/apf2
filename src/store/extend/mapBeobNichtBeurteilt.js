@@ -46,7 +46,11 @@ export default (store: Object) => {
     boundsOfHighlightedIds: computed(
       () => getBeobNichtBeurteiltBounds(
         store.map.beobNichtBeurteilt.beobs
-          .filter(b => store.map.beobNichtBeurteilt.highlightedIds.includes(b.BeobId))
+          .filter(b =>
+            store.map.beobNichtBeurteilt.highlightedIds.includes(
+              isNaN(b.BeobId) ? b.BeobId : Number(b.BeobId)
+            )
+          )
       ),
       { name: `mapBeobNichtBeurteiltBoundsOfHighlightedIds` }
     ),

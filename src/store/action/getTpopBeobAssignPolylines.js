@@ -5,7 +5,9 @@ export default (store) => {
   const visible = store.map.activeApfloraLayers.includes(`TpopBeobAssignPolylines`)
   if (visible) {
     return beobs.map((p) => {
-      const isHighlighted = highlightedIds.includes(p.BeobId)
+      const isHighlighted = highlightedIds.includes(
+        isNaN(p.BeobId) ? p.BeobId : Number(p.BeobId)
+      )
       const tpop = store.table.tpop.get(p.beobzuordnung.TPopId)
       const tpopKoord = (
         tpop && tpop.TPopKoordWgs84 ?
