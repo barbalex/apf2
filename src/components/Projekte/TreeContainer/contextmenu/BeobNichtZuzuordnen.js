@@ -2,7 +2,7 @@
 import React from 'react'
 import { ContextMenu, MenuItem } from 'react-contextmenu'
 
-const Tpopbeob = (
+const BeobNichtZuzuordnen = (
   {
     tree,
     onClick,
@@ -13,16 +13,16 @@ const Tpopbeob = (
   }
 ) =>
   <ContextMenu
-    id={`${tree.name}tpopbeob`}
+    id={`${tree.name}beobNichtZuzuordnen`}
   >
     <div className="react-contextmenu-title">Beobachtung</div>
     <MenuItem
       onClick={onClick}
       data={{
-        action: `copyTpopBeobKoordToPop`,
+        action: `createNewPopFromBeob`,
       }}
     >
-      Koordinaten auf die Teilpopulation übertragen
+      neue Population und Teil-Population gründen und Beobachtung der Teil-Population zuordnen
     </MenuItem>
     <MenuItem
       onClick={onClick}
@@ -42,4 +42,4 @@ const Tpopbeob = (
     </MenuItem>
   </ContextMenu>
 
-export default Tpopbeob
+export default BeobNichtZuzuordnen

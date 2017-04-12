@@ -43,6 +43,7 @@ import CmTpopberFolder from './contextmenu/TpopberFolder'
 import CmTpopber from './contextmenu/Tpopber'
 import CmTpopbeob from './contextmenu/Tpopbeob'
 import CmBeobnichtbeurteilt from './contextmenu/Beobnichtbeurteilt'
+import CmBeobNichtZuzuordnen from './contextmenu/BeobNichtZuzuordnen'
 import CmTpopfreiwkontrFolder from './contextmenu/TpopfreiwkontrFolder'
 import CmTpopfreiwkontr from './contextmenu/Tpopfreiwkontr'
 import CmTpopfreiwkontrzaehlFolder from './contextmenu/TpopfreiwkontrzaehlFolder'
@@ -100,6 +101,31 @@ const getAndValidateCoordinatesOfTpop = (store, id) => {
   const y = tpop.TPopYKoord
   if (!x || !y) {
     store.listError(new Error(`Die Teilpopulation mit der ID ${myId} kat keine (vollständigen) Koordinaten`))
+    return { x: null, y: null }
+  }
+  return { x, y }
+}
+
+const getAndValidateCoordinatesOfBeob = (store, beobId) => {
+  const beobBereitgestellt = store.table.beob_bereitgestellt.get(beobId)
+  if (!beobBereitgestellt) {
+    store.listError(new Error(`Die bereitgestellte Beobachtung mit der ID ${beobId} wurde nicht gefunden`))
+    return { x: null, y: null }
+  }
+  let beob
+  if (beobBereitgestellt.QuelleId === 1) {
+    beob = store.table.beob_evab.get(beobId)
+  } else {
+    beob = store.table.beob_infospezies.get(beobId)
+  }
+  if (!beob) {
+    store.listError(new Error(`Die Beobachtung mit der ID ${beobId} wurde nicht gefunden`))
+    return { x: null, y: null }
+  }
+  const x = beob.FNS_XGIS ? beob.FNS_XGIS : beob.COORDONNEE_FED_E
+  const y = beob.FNS_YGIS ? beob.FNS_YGIS : beob.COORDONNEE_FED_N
+  if (!x || !y) {
+    store.listError(new Error(`Die Teilpopulation mit der ID ${beobId} kat keine (vollständigen) Koordinaten`))
     return { x: null, y: null }
   }
   return { x, y }
@@ -229,6 +255,18 @@ class TreeContainer extends Component {
         if (x && y) {
           store.showCoordOnMapGeoAdminCh(x, y)
         }
+      },
+      showCoordOfBeobOnMapsZhCh() {
+        const { x, y } = getAndValidateCoordinatesOfBeob(store, id)
+        if (x && y) {
+          store.showCoordOnMapsZhCh(x, y)
+        }
+      },
+      showCoordOfBeobOnMapGeoAdminCh() {
+        const { x, y } = getAndValidateCoordinatesOfBeob(store, id)
+        if (x && y) {
+          store.showCoordOnMapGeoAdminCh(x, y)
+        }
       }
     }
     if (Object.keys(actions).includes(action)) {
@@ -308,6 +346,7 @@ class TreeContainer extends Component {
         <CmTpopber onClick={this.handleClick} tree={tree} />
         <CmTpopbeob onClick={this.handleClick} tree={tree} />
         <CmBeobnichtbeurteilt onClick={this.handleClick} tree={tree} />
+        <CmBeobNichtZuzuordnen onClick={this.handleClick} tree={tree} />
         <CmTpopfreiwkontrFolder onClick={this.handleClick} tree={tree} />
         <CmTpopfreiwkontr onClick={this.handleClick} tree={tree} />
         <CmTpopfreiwkontrzaehlFolder onClick={this.handleClick} tree={tree} />

@@ -24,6 +24,22 @@ const BeobNichtBeurteilt = (
     >
       neue Population und Teil-Population gründen und Beobachtung der Teil-Population zuordnen
     </MenuItem>
+    <MenuItem
+      onClick={onClick}
+      data={{
+        action: `showCoordOfBeobOnMapsZhCh`,
+      }}
+    >
+      Zeige auf maps.zh.ch
+    </MenuItem>
+    <MenuItem
+      onClick={onClick}
+      data={{
+        action: `showCoordOfBeobOnMapGeoAdminCh`,
+      }}
+    >
+      Zeige auf map.geo.admin.ch
+    </MenuItem>
   </ContextMenu>
 
 export default BeobNichtBeurteilt
