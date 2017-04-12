@@ -126,6 +126,14 @@ const Tpop = (
       >
         Zeige auf maps.zh.ch
       </MenuItem>
+      <MenuItem
+        onClick={onClick}
+        data={{
+          action: `showCoordOfTpopOnMapGeoAdminCh`,
+        }}
+      >
+        Zeige auf map.geo.admin.ch
+      </MenuItem>
     </ContextMenu>
   )
 }

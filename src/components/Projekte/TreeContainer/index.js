@@ -214,6 +214,19 @@ class TreeContainer extends Component {
           return store.listError(new Error(`Die Teilpopulation mit der ID ${myId} kat keine (vollständigen) Koordinaten`))
         }
         store.showCoordOnMapsZhCh(x, y)
+      },
+      showCoordOfTpopOnMapGeoAdminCh() {
+        const myId = parseInt(id, 10)
+        const tpop = store.table.tpop.get(myId)
+        if (!tpop) {
+          return store.listError(new Error(`Die Teilpopulation mit der ID ${myId} wurde nicht gefunden`))
+        }
+        const x = tpop.TPopXKoord
+        const y = tpop.TPopYKoord
+        if (!x || !y) {
+          return store.listError(new Error(`Die Teilpopulation mit der ID ${myId} kat keine (vollständigen) Koordinaten`))
+        }
+        store.showCoordOnMapGeoAdminCh(x, y)
       }
     }
     if (Object.keys(actions).includes(action)) {
