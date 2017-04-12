@@ -13,6 +13,12 @@ export default (store, tree) => {
       const ap = table.ap.get(b.NO_ISFS)
       return [1, 2, 3].includes(ap.ApStatus)
     })
+    // fetch only those without beobzuordnung
+    .filter((b) => {
+      const beobzuordnung = store.table.beobzuordnung.get(b.BeobId)
+      const hasBeobzuordnung = beobzuordnung && (beobzuordnung.TPopId || beobzuordnung.BeobNichtZuordnen)
+      return !hasBeobzuordnung
+    })
 
   beobNichtBeurteilt.forEach((el) => {
     const quelle = table.beob_quelle.get(el.QuelleId)
