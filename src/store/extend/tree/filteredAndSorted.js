@@ -30,106 +30,106 @@ import filteredAndSortedTpopfeldkontrzaehl from '../../compute/filteredAndSorted
 import filteredAndSortedTpopmassnber from '../../compute/filteredAndSorted/tpopmassnber'
 import filteredAndSortedTpopmassn from '../../compute/filteredAndSorted/tpopmassn'
 
-export default (store: Object) => {
-  extendObservable(store.tree.filteredAndSorted, {
+export default (store: Object, tree: Object) => {
+  extendObservable(tree.filteredAndSorted, {
     projekt: computed(
-      () => filteredAndSortedProjekt(store, store.tree),
+      () => filteredAndSortedProjekt(store, tree),
       { name: `projektFilteredAndSorted` }
     ),
     apberuebersicht: computed(
-      () => filteredAndSortedApberuebersicht(store, store.tree),
+      () => filteredAndSortedApberuebersicht(store, tree),
       { name: `xxxFilteredAndSorted` }
     ),
     ap: computed(
-      () => filteredAndSortedAp(store, store.tree),
+      () => filteredAndSortedAp(store, tree),
       { name: `apFilteredAndSorted` }
     ),
     assozart: computed(
-      () => filteredAndSortedAssozart(store, store.tree),
+      () => filteredAndSortedAssozart(store, tree),
       { name: `assozartFilteredAndSorted` }
     ),
     idealbiotop: computed(
-      () => filteredAndSortedIdealbiotop(store, store.tree),
+      () => filteredAndSortedIdealbiotop(store, tree),
       { name: `idealbiotopFilteredAndSorted` }
     ),
     beobNichtZuzuordnen: computed(
-      () => filteredAndSortedBeobNichtZuzuordnen(store, store.tree),
+      () => filteredAndSortedBeobNichtZuzuordnen(store, tree),
       { name: `beobNichtZuzuordnenFilteredAndSorted` }
     ),
     beobzuordnung: computed(
-      () => filteredAndSortedBeobzuordnung(store, store.tree),
+      () => filteredAndSortedBeobzuordnung(store, tree),
       { name: `beobzuordnungFilteredAndSorted` }
     ),
     ber: computed(
-      () => filteredAndSortedBer(store, store.tree),
+      () => filteredAndSortedBer(store, tree),
       { name: `berFilteredAndSorted` }
     ),
     apber: computed(
-      () => filteredAndSortedApber(store, store.tree),
+      () => filteredAndSortedApber(store, tree),
       { name: `apberFilteredAndSorted` }
     ),
     erfkrit: computed(
-      () => filteredAndSortedErfkrit(store, store.tree),
+      () => filteredAndSortedErfkrit(store, tree),
       { name: `erfkritFilteredAndSorted` }
     ),
     zieljahr: computed(
-      () => filteredAndSortedZieljahr(store, store.tree),
+      () => filteredAndSortedZieljahr(store, tree),
       { name: `zieljahrFilteredAndSorted` }
     ),
     ziel: computed(
-      () => filteredAndSortedZiel(store, store.tree),
+      () => filteredAndSortedZiel(store, tree),
       { name: `zielFilteredAndSorted` }
     ),
     zielber: computed(
-      () => filteredAndSortedZielber(store, store.tree),
+      () => filteredAndSortedZielber(store, tree),
       { name: `xxxFilteredAndSorted` }
     ),
     pop: computed(
-      () => filteredAndSortedPop(store, store.tree),
+      () => filteredAndSortedPop(store, tree),
       { name: `popFilteredAndSorted` }
     ),
     popmassnber: computed(
-      () => filteredAndSortedPopmassnber(store, store.tree),
+      () => filteredAndSortedPopmassnber(store, tree),
       { name: `popmassnberFilteredAndSorted` }
     ),
     popber: computed(
-      () => filteredAndSortedPopber(store, store.tree),
+      () => filteredAndSortedPopber(store, tree),
       { name: `popberFilteredAndSorted` }
     ),
     tpop: computed(
-      () => filteredAndSortedTpop(store, store.tree),
+      () => filteredAndSortedTpop(store, tree),
       { name: `tpopFilteredAndSorted` }
     ),
     tpopbeob: computed(
-      () => filteredAndSortedTpopbeob(store, store.tree),
+      () => filteredAndSortedTpopbeob(store, tree),
       { name: `tpopbeobFilteredAndSorted` }
     ),
     tpopber: computed(
-      () => filteredAndSortedTopber(store, store.tree),
+      () => filteredAndSortedTopber(store, tree),
       { name: `tpopberFilteredAndSorted` }
     ),
     tpopfreiwkontr: computed(
-      () => filteredAndSortedTpopfreiwkontr(store, store.tree),
+      () => filteredAndSortedTpopfreiwkontr(store, tree),
       { name: `tpopfreiwkontrFilteredAndSorted` }
     ),
     tpopfreiwkontrzaehl: computed(
-      () => filteredAndSortedTpopfreiwkontrzaehl(store, store.tree),
+      () => filteredAndSortedTpopfreiwkontrzaehl(store, tree),
       { name: `tpopfreiwkontrzaehlFilteredAndSorted` }
     ),
     tpopfeldkontr: computed(
-      () => filteredAndSortedTpopfeldkontr(store, store.tree),
+      () => filteredAndSortedTpopfeldkontr(store, tree),
       { name: `tpopfeldkontrFilteredAndSorted` }
     ),
     tpopfeldkontrzaehl: computed(
-      () => filteredAndSortedTpopfeldkontrzaehl(store, store.tree),
+      () => filteredAndSortedTpopfeldkontrzaehl(store, tree),
       { name: `tpopfeldkontrzaehlFilteredAndSorted` }
     ),
     tpopmassnber: computed(
-      () => filteredAndSortedTpopmassnber(store, store.tree),
+      () => filteredAndSortedTpopmassnber(store, tree),
       { name: `tpopmassnberFilteredAndSorted` }
     ),
     tpopmassn: computed(
-      () => filteredAndSortedTpopmassn(store, store.tree),
+      () => filteredAndSortedTpopmassn(store, tree),
       { name: `tpopmassnFilteredAndSorted` }
     ),
   })
