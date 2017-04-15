@@ -8,7 +8,7 @@ import {
 } from 'mobx'
 import isEqual from 'lodash/isEqual'
 
-import toggleNode from '../../action/toggleNodeTree2'
+import toggleNode from '../../action/toggleNode'
 import getActiveNodes from '../../action/getActiveNodes'
 import extendNode from './node'
 import extendFilteredAndSorted from './filteredAndSorted'
@@ -70,8 +70,8 @@ export default (store: Object) => {
       () => store.tree2.applyMapFilterToTree = !store.tree2.applyMapFilterToTree
     ),
     // action when user clicks on a node in the tree
-    toggleNode: action(`toggleNode`, node =>
-      toggleNode(store, node)
+    toggleNode: action(`toggleNode`, (tree, node) =>
+      toggleNode(store, tree, node)
     ),
   })
   extendNode(store)

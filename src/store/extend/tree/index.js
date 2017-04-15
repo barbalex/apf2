@@ -19,8 +19,8 @@ import allNodes from '../../compute/nodes/allNodes'
 export default (store: Object) => {
   extendObservable(store.tree, {
     /**
-     * url is used to control tree and forms
-     * activeNodeArray is computed from it
+     * activeNodeArray is used to control tree and forms
+     * url is computed from it
      */
     activeNodeArray: [],
     setActiveNodeArray: action(
@@ -73,8 +73,8 @@ export default (store: Object) => {
       () => store.tree.applyMapFilterToTree = !store.tree.applyMapFilterToTree
     ),
     // action when user clicks on a node in the tree
-    toggleNode: action(`toggleNode`, node =>
-      toggleNode(store, node)
+    toggleNode: action(`toggleNode`, (tree, node) =>
+      toggleNode(store, tree, node)
     ),
   })
   extendNode(store)

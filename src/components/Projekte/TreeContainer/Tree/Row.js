@@ -180,7 +180,7 @@ const Row = (
   }
 ) => {
   const node = tree.node.nodes[index]
-  const onClick = (event) => tree.toggleNode(node)
+  const onClick = (event) => tree.toggleNode(tree, node)
   const myProps = { key: index }
   const nodeIsInActiveNodePath = isNodeInActiveNodePath(node, toJS(tree.activeNodeArray))
   // build symbols
