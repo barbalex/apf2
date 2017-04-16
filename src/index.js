@@ -32,7 +32,8 @@ import AppBar from './components/AppBar'
 import Projekte from './components/Projekte'
 import User from './components/User'
 import Errors from './components/Errors'
-import getActiveNodeArrayFromPathname from './store/action/getActiveNodeArrayFromPathname'
+import getActiveNodeArrayFromPathname
+  from './store/action/getActiveNodeArrayFromPathname'
 import getUrlQuery from './store/action/getUrlQuery'
 
 // turned off because of errors in production
@@ -41,11 +42,11 @@ import getUrlQuery from './store/action/getUrlQuery'
 
 // import appBaseUrl from './modules/appBaseUrl'
 
-import './index.css';
+import './index.css'
 
 // initiate idb
 const tablesObject = {}
-tables.forEach((t) => {
+tables.forEach(t => {
   if (t.table && t.idField) {
     tablesObject[t.table] = `${t.idField}`
   }
@@ -56,9 +57,7 @@ tablesObject.fields = `[table_schema+table_name+column_name]`
 // this helps in that user can open new tab and remain logged in!
 tablesObject.currentUser = `name`
 const db = new Dexie(`apflora`)
-db
-  .version(1)
-  .stores(tablesObject)
+db.version(1).stores(tablesObject)
 
 // const writeToStoreWorker = new Worker(`${appBaseUrl}/writeToStoreWorker.js`)
 // writeToStoreWorker.postMessage(`test`)
@@ -69,7 +68,7 @@ app.extend({
     this.db = db
     this.store = store
     // this.writeToStoreWorker = writeToStoreWorker
-  },
+  }
 })
 app.init()
 
@@ -79,8 +78,8 @@ injectTapEventPlugin()
 
 const theme = Object.assign({}, darkBaseTheme, {
   appBar: {
-    height: 51,
-  },
+    height: 51
+  }
 })
 
 // make store accessible in dev
@@ -101,18 +100,16 @@ const AppContainer = styled.div`
 `
 
 // initiate activeNodeArray
-const activeNodeArrayFromUrl = getActiveNodeArrayFromPathname(window.location.pathname)
+const activeNodeArrayFromUrl = getActiveNodeArrayFromPathname()
 store.tree.setActiveNodeArray(activeNodeArrayFromUrl)
 const urlQuery = getUrlQuery(window.location.search)
 store.setUrlQuery(urlQuery)
 
 ReactDOM.render(
   <Provider store={store}>
-    <MuiThemeProvider
-      muiTheme={getMuiTheme(theme)}
-    >
+    <MuiThemeProvider muiTheme={getMuiTheme(theme)}>
       <AppContainer>
-        { false && <DevTools />}
+        {false && <DevTools />}
         <AppBar />
         <Projekte />
         <User />
