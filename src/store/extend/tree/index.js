@@ -1,11 +1,5 @@
 // @flow
-import {
-  extendObservable,
-  action,
-  computed,
-  observable,
-  toJS,
-} from 'mobx'
+import { extendObservable, action, computed, observable, toJS } from 'mobx'
 import clone from 'lodash/clone'
 import isEqual from 'lodash/isEqual'
 
@@ -14,7 +8,8 @@ import toggleNodeSymbol from '../../action/toggleNodeSymbol'
 import getActiveNodes from '../../action/getActiveNodes'
 import extendNode from './node'
 import extendFilteredAndSorted from './filteredAndSorted'
-import updateActiveDatasetFromActiveNodes from '../../action/updateActiveDatasetFromActiveNodes'
+import updateActiveDatasetFromActiveNodes
+  from '../../action/updateActiveDatasetFromActiveNodes'
 import allNodes from '../../compute/nodes/allNodes'
 
 export default (store: Object, tree: Object) => {
@@ -26,18 +21,15 @@ export default (store: Object, tree: Object) => {
     activeNodeArray: [],
     setActiveNodeArray: action(
       `setActiveNodeArray`,
-      (nodeArray) => tree.activeNodeArray = nodeArray
+      nodeArray => tree.activeNodeArray = nodeArray
     ),
-    activeNodes: computed(
-      () => getActiveNodes(tree.activeNodeArray),
-      { name: `activeNodes` }
-    ),
+    activeNodes: computed(() => getActiveNodes(tree.activeNodeArray), {
+      name: `activeNodes`
+    }),
     activeNode: computed(
       () => {
         const nodes = allNodes(store, tree)
-        return nodes.find(n =>
-          isEqual(toJS(tree.activeNodeArray), n.url)
-        )
+        return nodes.find(n => isEqual(toJS(tree.activeNodeArray), n.url))
       },
       { name: `activeNode` }
     ),
@@ -49,6 +41,7 @@ export default (store: Object, tree: Object) => {
       `cloneActiveNodeArrayToTree2`,
       () => store.tree2.activeNodeArray = clone(toJS(tree.activeNodeArray))
     ),
+    openNodes: [],
     apFilter: false,
     toggleApFilter: action(`toggleApFilter`, () => {
       tree.apFilter = !tree.apFilter
@@ -63,10 +56,7 @@ export default (store: Object, tree: Object) => {
       tree.nodeLabelFilter.set(table, value)
     }),
     activeNodeFilter: {
-      ap: computed(
-        () => tree.activeNodes.ap,
-        { name: `activeNodeFilterAp` }
-      ),
+      ap: computed(() => tree.activeNodes.ap, { name: `activeNodeFilterAp` })
     },
     applyMapFilterToTree: false,
     toggleApplyMapFilterToTree: action(
@@ -80,7 +70,7 @@ export default (store: Object, tree: Object) => {
     // action when user clicks on a node symbol in the tree
     toggleNodeSymbol: action(`toggleNodeSymbol`, node =>
       toggleNodeSymbol(store, node)
-    ),
+    )
   })
   extendNode(store, tree)
   extendFilteredAndSorted(store, tree)
