@@ -50,7 +50,7 @@
     "react-copy-to-clipboard": "4.3.0",
     "react-custom-scrollbars": "4.1.0",
     "react-dom": "15.5.4",
-    "react-file-download": "0.3.2",
+    "react-file-download": "0.3.3",
     "react-leaflet": "1.1.6",
     "react-leaflet-bing": "2.0.0",
     "react-leaflet-control": "1.3.0",
