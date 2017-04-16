@@ -10,6 +10,7 @@ import clone from 'lodash/clone'
 import isEqual from 'lodash/isEqual'
 
 import toggleNode from '../../action/toggleNode'
+import toggleNodeSymbol from '../../action/toggleNodeSymbol'
 import getActiveNodes from '../../action/getActiveNodes'
 import extendNode from './node'
 import extendFilteredAndSorted from './filteredAndSorted'
@@ -75,6 +76,10 @@ export default (store: Object, tree: Object) => {
     // action when user clicks on a node in the tree
     toggleNode: action(`toggleNode`, (tree, node) =>
       toggleNode(store, tree, node)
+    ),
+    // action when user clicks on a node symbol in the tree
+    toggleNodeSymbol: action(`toggleNodeSymbol`, node =>
+      toggleNodeSymbol(store, node)
     ),
   })
   extendNode(store, tree)

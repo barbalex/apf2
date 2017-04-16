@@ -21,10 +21,6 @@ const StyledNode = styled(({ level, nodeIsInActiveNodePath, children, ...rest })
   white-space: nowrap;
   user-select: none;
   color: ${(props) => (props.nodeIsInActiveNodePath ? `rgb(255, 90, 0)` : `rgb(247, 247, 247)`)};
-  cursor: pointer;
-  &:hover {
-    color: orange;
-  }
 `
 const SymbolIcon = styled(({ nodeIsInActiveNodePath, node, children, ...rest }) => <FontIcon {...rest}>{children}</FontIcon>)`
   margin-top: ${({ nodeIsInActiveNodePath, node }) => (nodeIsInActiveNodePath ? `-5px !important` : `-2px !important`)};
@@ -33,6 +29,10 @@ const SymbolIcon = styled(({ nodeIsInActiveNodePath, node, children, ...rest }) 
   font-weight: ${({ nodeIsInActiveNodePath }) => (nodeIsInActiveNodePath ? `900 !important` : `inherit`)};
   color: ${({ nodeIsInActiveNodePath }) => (nodeIsInActiveNodePath ? `rgb(255, 90, 0) !important` : `rgb(247, 247, 247)`)};
   width: 26px;
+  cursor: pointer;
+  &:hover {
+    color: orange !important;
+  }
 `
 const SymbolSpan = styled(({ nodeIsInActiveNodePath, children, ...rest }) => <span {...rest}>{children}</span>)`
   padding-right: 8px !important;
@@ -46,6 +46,10 @@ const TextSpan = styled(({ nodeIsInActiveNodePath, node, children, ...rest }) =>
   margin-left: 0;
   font-size: 16px !important;
   font-weight: ${(props) => (props.nodeIsInActiveNodePath ? `900 !important` : `inherit`)};
+  cursor: pointer;
+  &:hover {
+    color: orange;
+  }
 `
 const StyledMapIcon = styled(FontIcon)`
   padding-right: 2px;
@@ -180,7 +184,8 @@ const Row = (
   }
 ) => {
   const node = tree.node.nodes[index]
-  const onClick = (event) => tree.toggleNode(tree, node)
+  const onClickNode = (event) => tree.toggleNode(tree, node)
+  const onClickNodeSymbol = (event) => tree.toggleNodeSymbol(node)
   const myProps = { key: index }
   const nodeIsInActiveNodePath = isNodeInActiveNodePath(node, toJS(tree.activeNodeArray))
   // build symbols
@@ -215,10 +220,9 @@ const Row = (
   )
 
   return (
-    <div key={key} style={style} onClick={onClick}>
+    <div key={key} style={style}>
       <ContextMenuTrigger
         id={`${tree.name}${node.menuType}`}
-        // id={node.menuType}
         collect={props => myProps}
         nodeId={node.id}
         nodeLabel={node.label}
@@ -241,6 +245,7 @@ const Row = (
               node={node}
               id="symbol"
               className="material-icons"
+              onClick={onClickNodeSymbol}
             >
               {symbolIcon}
             </SymbolIcon>
@@ -356,6 +361,7 @@ const Row = (
           <TextSpan
             nodeIsInActiveNodePath={nodeIsInActiveNodePath}
             node={node}
+            onClick={onClickNode}
           >
             {node.label}
           </TextSpan>
