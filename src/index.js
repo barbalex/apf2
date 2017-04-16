@@ -102,6 +102,8 @@ const AppContainer = styled.div`
 // initiate activeNodeArray
 const activeNodeArrayFromUrl = getActiveNodeArrayFromPathname()
 store.tree.setActiveNodeArray(activeNodeArrayFromUrl)
+// need to set openNodes
+store.tree.setOpenNodesFromActiveNodeArray()
 const urlQuery = getUrlQuery(window.location.search)
 store.setUrlQuery(urlQuery)
 

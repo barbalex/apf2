@@ -42,6 +42,10 @@ export default (store: Object, tree: Object) => {
       () => store.tree2.activeNodeArray = clone(toJS(tree.activeNodeArray))
     ),
     openNodes: [],
+    setOpenNodesFromActiveNodeArray: action(
+      `setOpenNodesFromActiveNodeArray`,
+      () => store.tree.openNodes = [store.tree.activeNodeArray]
+    ),
     apFilter: false,
     toggleApFilter: action(`toggleApFilter`, () => {
       tree.apFilter = !tree.apFilter
