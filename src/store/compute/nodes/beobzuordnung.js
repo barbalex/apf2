@@ -21,10 +21,16 @@ export default (store, tree) => {
       parentId: apArtId,
       urlLabel: beobId,
       label: el.label,
-      expanded: beobId === activeNodes.beobzuordnung,
-      url: [`Projekte`, projId, `Arten`, apArtId, `nicht-beurteilte-Beobachtungen`, beobId],
+      url: [
+        `Projekte`,
+        projId,
+        `Arten`,
+        apArtId,
+        `nicht-beurteilte-Beobachtungen`,
+        beobId
+      ],
       sort: [projIndex, 1, apIndex, 8, index],
-      hasChildren: false,
+      hasChildren: false
     }
   })
 }
