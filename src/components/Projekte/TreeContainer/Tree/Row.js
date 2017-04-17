@@ -8,7 +8,7 @@ import { ContextMenuTrigger } from 'react-contextmenu'
 import FontIcon from 'material-ui/FontIcon'
 
 import isNodeInActiveNodePath from '../../../../modules/isNodeInActiveNodePath'
-import nodeIsOpen from '../../../../modules/nodeIsOpen'
+import isNodeOpen from '../../../../modules/isNodeOpen'
 
 const singleRowHeight = 23
 const StyledNode = styled(({
@@ -191,7 +191,7 @@ const Row = ({
   let useSymbolIcon = true
   let useSymbolSpan = false
   let symbolIcon
-  if (node.hasChildren && nodeIsOpen(tree, node.url)) {
+  if (node.hasChildren && isNodeOpen(tree, node.url)) {
     symbolIcon = `expand_more`
   } else if (node.hasChildren) {
     symbolIcon = `chevron_right`

@@ -3,7 +3,7 @@ import { toJS } from 'mobx'
 import remove from 'lodash/remove'
 import isEqual from 'lodash/isEqual'
 
-import nodeIsOpen from '../../modules/nodeIsOpen'
+import isNodeOpen from '../../modules/isNodeOpen'
 
 export default (store: Object, tree: Object, node: Object) => {
   console.log('toggling node symbol')
@@ -11,7 +11,7 @@ export default (store: Object, tree: Object, node: Object) => {
   if (!node) return store.listError(new Error('no node passed'))
   if (!node.url) return store.listError(new Error('node has no url'))
 
-  if (nodeIsOpen(tree, node.url)) {
+  if (isNodeOpen(tree, node.url)) {
     remove(tree.openNodes, n => isEqual(n, node.url))
   } else {
     tree.openNodes.push(node.url)
