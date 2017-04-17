@@ -4,7 +4,9 @@ export default (store, tree) => {
   // fetch sorting indexes of parents
   const projId = tree.activeNodes.projekt
   if (!projId) return []
-  const projIndex = findIndex(tree.filteredAndSorted.projekt, { ProjId: projId })
+  const projIndex = findIndex(tree.filteredAndSorted.projekt, {
+    ProjId: projId
+  })
   const apArtId = tree.activeNodes.ap
   if (!apArtId) return []
   const apIndex = findIndex(tree.filteredAndSorted.ap, { ApArtId: apArtId })
@@ -32,9 +34,18 @@ export default (store, tree) => {
     id: tpopId,
     urlLabel: `Beobachtungen`,
     label: `Beobachtungen zugeordnet (${message})`,
-    expanded: tree.activeNodes.tpopbeobFolder,
-    url: [`Projekte`, projId, `Arten`, apArtId, `Populationen`, popId, `Teil-Populationen`, tpopId, `Beobachtungen`],
+    url: [
+      `Projekte`,
+      projId,
+      `Arten`,
+      apArtId,
+      `Populationen`,
+      popId,
+      `Teil-Populationen`,
+      tpopId,
+      `Beobachtungen`
+    ],
     sort: [projIndex, 1, apIndex, 1, popIndex, 1, tpopIndex, 6],
-    hasChildren: childrenLength > 0,
+    hasChildren: childrenLength > 0
   }
 }

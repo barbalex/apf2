@@ -23,9 +23,19 @@ export default (store, tree) => {
     parentId: tpopId,
     urlLabel: el.beobId,
     label: el.label,
-    expanded: el.beobId === activeNodes.tpopbeob,
-    url: [`Projekte`, activeNodes.projekt, `Arten`, activeNodes.ap, `Populationen`, activeNodes.pop, `Teil-Populationen`, el.TPopId, `Beobachtungen`, el.beobId],
+    url: [
+      `Projekte`,
+      activeNodes.projekt,
+      `Arten`,
+      activeNodes.ap,
+      `Populationen`,
+      activeNodes.pop,
+      `Teil-Populationen`,
+      el.TPopId,
+      `Beobachtungen`,
+      el.beobId
+    ],
     sort: [projIndex, 1, apIndex, 1, popIndex, 1, tpopIndex, 6, index],
-    hasChildren: false,
+    hasChildren: false
   }))
 }

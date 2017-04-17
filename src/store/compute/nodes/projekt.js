@@ -5,8 +5,7 @@ export default (store, tree) =>
     id: el.ProjId,
     urlLabel: el.ProjId,
     label: el.ProjName || `(kein Name)`,
-    expanded: el.ProjId === tree.activeNodes.projekt,
     url: [`Projekte`, el.ProjId],
     sort: [index],
-    hasChildren: true,
+    hasChildren: true
   }))
