@@ -4,7 +4,9 @@ export default (store, tree) => {
   // fetch sorting indexes of parents
   const projId = tree.activeNodes.projekt
   if (!projId) return []
-  const projIndex = findIndex(tree.filteredAndSorted.projekt, { ProjId: projId })
+  const projIndex = findIndex(tree.filteredAndSorted.projekt, {
+    ProjId: projId
+  })
   // build label
   const apNodesLength = tree.filteredAndSorted.ap.length
   let message = apNodesLength
@@ -21,9 +23,8 @@ export default (store, tree) => {
     id: projId,
     urlLabel: `Arten`,
     label: `Arten (${message})`,
-    expanded: tree.activeNodes.apFolder,
     url: [`Projekte`, projId, `Arten`],
     sort: [projIndex, 1],
-    hasChildren: apNodesLength > 0,
+    hasChildren: apNodesLength > 0
   }
 }
