@@ -72,8 +72,8 @@ export default (store: Object, tree: Object) => {
       toggleNode(store, tree, node)
     ),
     // action when user clicks on a node symbol in the tree
-    toggleNodeSymbol: action(`toggleNodeSymbol`, node =>
-      toggleNodeSymbol(store, node)
+    toggleNodeSymbol: action(`toggleNodeSymbol`, (tree, node) =>
+      toggleNodeSymbol(store, tree, node)
     )
   })
   extendNode(store, tree)

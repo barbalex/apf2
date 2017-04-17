@@ -10,8 +10,13 @@ import FontIcon from 'material-ui/FontIcon'
 import isNodeInActiveNodePath from '../../../../modules/isNodeInActiveNodePath'
 
 const singleRowHeight = 23
-const StyledNode = styled(({ level, nodeIsInActiveNodePath, children, ...rest }) => <div {...rest}>{children}</div>)`
-  padding-left: ${(props) => `${(Number(props.level) * 17) - 10}px`};
+const StyledNode = styled(({
+  level,
+  nodeIsInActiveNodePath,
+  children,
+  ...rest
+}) => <div {...rest}>{children}</div>)`
+  padding-left: ${props => `${Number(props.level) * 17 - 10}px`};
   height: ${singleRowHeight}px;
   max-height: ${singleRowHeight}px;
   box-sizing: border-box;
@@ -20,9 +25,14 @@ const StyledNode = styled(({ level, nodeIsInActiveNodePath, children, ...rest })
   flex-direction: row;
   white-space: nowrap;
   user-select: none;
-  color: ${(props) => (props.nodeIsInActiveNodePath ? `rgb(255, 90, 0)` : `rgb(247, 247, 247)`)};
+  color: ${props => (props.nodeIsInActiveNodePath ? `rgb(255, 90, 0)` : `rgb(247, 247, 247)`)};
 `
-const SymbolIcon = styled(({ nodeIsInActiveNodePath, node, children, ...rest }) => <FontIcon {...rest}>{children}</FontIcon>)`
+const SymbolIcon = styled(({
+  nodeIsInActiveNodePath,
+  node,
+  children,
+  ...rest
+}) => <FontIcon {...rest}>{children}</FontIcon>)`
   margin-top: ${({ nodeIsInActiveNodePath, node }) => (nodeIsInActiveNodePath ? `-5px !important` : `-2px !important`)};
   padding-left: ${({ nodeIsInActiveNodePath }) => (nodeIsInActiveNodePath ? `2px` : `2px`)};
   font-size: ${({ nodeIsInActiveNodePath }) => (nodeIsInActiveNodePath ? `26px !important` : `22px !important`)};
@@ -34,18 +44,25 @@ const SymbolIcon = styled(({ nodeIsInActiveNodePath, node, children, ...rest }) 
     color: orange !important;
   }
 `
-const SymbolSpan = styled(({ nodeIsInActiveNodePath, children, ...rest }) => <span {...rest}>{children}</span>)`
+const SymbolSpan = styled(({ nodeIsInActiveNodePath, children, ...rest }) => (
+  <span {...rest}>{children}</span>
+))`
   padding-right: 8px !important;
-  padding-left: ${(props) => (props.nodeIsInActiveNodePath ? `7px` : `9px`)};
-  font-weight: ${(props) => (props.nodeIsInActiveNodePath ? `900 !important` : `inherit`)};
+  padding-left: ${props => (props.nodeIsInActiveNodePath ? `7px` : `9px`)};
+  font-weight: ${props => (props.nodeIsInActiveNodePath ? `900 !important` : `inherit`)};
   margin-top: -9px !important;
   font-size: 28px !important;
   width: 26px;
 `
-const TextSpan = styled(({ nodeIsInActiveNodePath, node, children, ...rest }) => <span {...rest}>{children}</span>)`
+const TextSpan = styled(({
+  nodeIsInActiveNodePath,
+  node,
+  children,
+  ...rest
+}) => <span {...rest}>{children}</span>)`
   margin-left: 0;
   font-size: 16px !important;
-  font-weight: ${(props) => (props.nodeIsInActiveNodePath ? `900 !important` : `inherit`)};
+  font-weight: ${props => (props.nodeIsInActiveNodePath ? `900 !important` : `inherit`)};
   cursor: pointer;
   &:hover {
     color: orange;
@@ -97,97 +114,78 @@ const MovingIcon = styled(FontIcon)`
   color: rgb(255, 90, 0) !important;
 `
 const CopyingIcon = styled(MovingIcon)``
-const showPopMapIcon = (store, tree, node) => (
+const showPopMapIcon = (store, tree, node) =>
   node.menuType === `ap` &&
   node.id === (tree.activeNodes.ap || store.map.pop.apArtId) &&
   store.map.activeApfloraLayers.includes(`Pop`)
-)
-const showPopFilteredMapIcon = (store, node) => (
+const showPopFilteredMapIcon = (store, node) =>
   node.menuType === `pop` &&
   store.map.activeApfloraLayers.includes(`Pop`) &&
   store.map.pop.highlightedIds.includes(node.id)
-)
-const showTpopMapIcon = (store, tree, node) => (
+const showTpopMapIcon = (store, tree, node) =>
   node.menuType === `ap` &&
   node.id === (tree.activeNodes.ap || store.map.pop.apArtId) &&
   store.map.activeApfloraLayers.includes(`Tpop`)
-)
-const showTpopFilteredMapIcon = (store, node) => (
+const showTpopFilteredMapIcon = (store, node) =>
   node.menuType === `tpop` &&
   store.map.activeApfloraLayers.includes(`Tpop`) &&
   store.map.tpop.highlightedIds.includes(node.id)
-)
-const showBeobNichtBeurteiltMapIcon = (store, tree, node) => (
+const showBeobNichtBeurteiltMapIcon = (store, tree, node) =>
   node.menuType === `beobzuordnungFolder` &&
   node.id === tree.activeNodes.ap &&
   store.map.activeApfloraLayers.includes(`BeobNichtBeurteilt`)
-)
-const showBeobNichtZuzuordnenMapIcon = (store, tree, node) => (
+const showBeobNichtZuzuordnenMapIcon = (store, tree, node) =>
   node.menuType === `beobNichtZuzuordnenFolder` &&
   node.id === tree.activeNodes.ap &&
   store.map.activeApfloraLayers.includes(`BeobNichtZuzuordnen`)
-)
-const showTpopBeobMapIcon = (store, tree, node) => (
+const showTpopBeobMapIcon = (store, tree, node) =>
   node.menuType === `tpopbeobFolder` &&
   node.id === tree.activeNodes.tpop &&
   store.map.activeApfloraLayers.includes(`TpopBeob`)
-)
-const showBeobNichtBeurteiltFilteredMapIcon = (store, node) => (
+const showBeobNichtBeurteiltFilteredMapIcon = (store, node) =>
   node.menuType === `beobzuordnung` &&
   store.map.activeApfloraLayers.includes(`BeobNichtBeurteilt`) &&
   store.map.beobNichtBeurteilt.highlightedIds.includes(node.id)
-)
-const showBeobNichtZuzuordnenFilteredMapIcon = (store, node) => (
+const showBeobNichtZuzuordnenFilteredMapIcon = (store, node) =>
   node.menuType === `beobNichtZuzuordnen` &&
   store.map.activeApfloraLayers.includes(`BeobNichtZuzuordnen`) &&
   store.map.beobNichtZuzuordnen.highlightedIds.includes(node.id)
-)
-const showTpopBeobFilteredMapIcon = (store, tree, node) => (
-  (
-    node.menuType === `tpopbeob` &&
+const showTpopBeobFilteredMapIcon = (store, tree, node) =>
+  (node.menuType === `tpopbeob` &&
     store.map.activeApfloraLayers.includes(`TpopBeob`) &&
-    store.map.tpopBeob.highlightedIds.includes(node.id)
-  ) ||
-  (
-    node.menuType === `tpop` &&
+    store.map.tpopBeob.highlightedIds.includes(node.id)) ||
+  (node.menuType === `tpop` &&
     !tree.activeNodes.tpopbeob &&
     store.map.activeApfloraLayers.includes(`TpopBeob`) &&
-    node.id === tree.activeNodes.tpop
-  ) ||
-  (
-    node.menuType === `pop` &&
+    node.id === tree.activeNodes.tpop) ||
+  (node.menuType === `pop` &&
     !tree.activeNodes.tpop &&
     store.map.activeApfloraLayers.includes(`TpopBeob`) &&
-    node.id === tree.activeNodes.pop
-  )
-)
+    node.id === tree.activeNodes.pop)
 
-const enhance = compose(
-  inject(`store`),
-  observer
-)
+const enhance = compose(inject(`store`), observer)
 
-const Row = (
-  {
-    key,
-    index,
-    style,
-    store,
-    tree,
-  }:
-  {
-    key?: number,
-    index: number,
-    style: Object,
-    store: Object,
-    tree: Object,
-  }
-) => {
+const Row = ({
+  key,
+  index,
+  style,
+  store,
+  tree
+}: {
+  key?: number,
+  index: number,
+  style: Object,
+  store: Object,
+  tree: Object
+}) => {
   const node = tree.node.nodes[index]
-  const onClickNode = (event) => tree.toggleNode(tree, node)
-  const onClickNodeSymbol = (event) => tree.toggleNodeSymbol(node)
+  const onClickNode = event => tree.toggleNode(tree, node)
+  const onClickNodeSymbol = event => tree.toggleNodeSymbol(tree, node)
   const myProps = { key: index }
-  const nodeIsInActiveNodePath = isNodeInActiveNodePath(node, toJS(tree.activeNodeArray))
+  const nodeIsInActiveNodePath = isNodeInActiveNodePath(
+    node,
+    toJS(tree.activeNodeArray)
+  )
   // build symbols
   let useSymbolIcon = true
   let useSymbolSpan = false
@@ -204,20 +202,16 @@ const Row = (
   }
   const dataUrl = JSON.stringify(node.url)
   const level = node.url.length - 1
-  const moving = (
+  const moving =
     node.nodeType === `table` &&
     node.menuType === store.moving.table &&
     node.id === store.moving.id
-  )
-  const copying = (
+  const copying =
     node.nodeType === `table` &&
     node.menuType === store.copying.table &&
     node.id === store.copying.id
-  )
-  const copyingBiotop = (
-    node.nodeType === `table` &&
-    node.id === store.copyingBiotop.id
-  )
+  const copyingBiotop =
+    node.nodeType === `table` && node.id === store.copyingBiotop.id
 
   return (
     <div key={key} style={style}>
@@ -238,8 +232,7 @@ const Row = (
           data-label={node.label}
           data-menuType={node.menuType}
         >
-          {
-            useSymbolIcon &&
+          {useSymbolIcon &&
             <SymbolIcon
               nodeIsInActiveNodePath={nodeIsInActiveNodePath}
               node={node}
@@ -248,116 +241,91 @@ const Row = (
               onClick={onClickNodeSymbol}
             >
               {symbolIcon}
-            </SymbolIcon>
-          }
-          {
-            useSymbolSpan &&
-            <SymbolSpan
-              nodeIsInActiveNodePath={nodeIsInActiveNodePath}
-            >
+            </SymbolIcon>}
+          {useSymbolSpan &&
+            <SymbolSpan nodeIsInActiveNodePath={nodeIsInActiveNodePath}>
               {`-`}
-            </SymbolSpan>
-          }
-          {
-            showPopMapIcon(store, tree, node) &&
+            </SymbolSpan>}
+          {showPopMapIcon(store, tree, node) &&
             <PopMapIcon
               id="map"
               className="material-icons"
               title="in Karte sichtbar"
             >
               local_florist
-            </PopMapIcon>
-          }
-          {
-            showTpopMapIcon(store, tree, node) &&
+            </PopMapIcon>}
+          {showTpopMapIcon(store, tree, node) &&
             <TpopMapIcon
               id="map"
               className="material-icons"
               title="in Karte sichtbar"
             >
               local_florist
-            </TpopMapIcon>
-          }
-          {
-            showBeobNichtBeurteiltMapIcon(store, tree, node) &&
+            </TpopMapIcon>}
+          {showBeobNichtBeurteiltMapIcon(store, tree, node) &&
             <BeobNichtBeurteiltMapIcon
               id="map"
               className="material-icons"
               title="in Karte sichtbar"
             >
               local_florist
-            </BeobNichtBeurteiltMapIcon>
-          }
-          {
-            showBeobNichtZuzuordnenMapIcon(store, tree, node) &&
+            </BeobNichtBeurteiltMapIcon>}
+          {showBeobNichtZuzuordnenMapIcon(store, tree, node) &&
             <BeobNichtZuzuordnenMapIcon
               id="map"
               className="material-icons"
               title="in Karte sichtbar"
             >
               local_florist
-            </BeobNichtZuzuordnenMapIcon>
-          }
-          {
-            showTpopBeobMapIcon(store, tree, node) &&
+            </BeobNichtZuzuordnenMapIcon>}
+          {showTpopBeobMapIcon(store, tree, node) &&
             <TpopBeobMapIcon
               id="map"
               className="material-icons"
               title="in Karte sichtbar"
             >
               local_florist
-            </TpopBeobMapIcon>
-          }
-          {
-            showPopFilteredMapIcon(store, node) &&
+            </TpopBeobMapIcon>}
+          {showPopFilteredMapIcon(store, node) &&
             <PopFilteredMapIcon
               id="map"
               className="material-icons"
               title="in Karte hervorgehoben"
             >
               local_florist
-            </PopFilteredMapIcon>
-          }
-          {
-            showTpopFilteredMapIcon(store, node) &&
+            </PopFilteredMapIcon>}
+          {showTpopFilteredMapIcon(store, node) &&
             <TpopFilteredMapIcon
               id="map"
               className="material-icons"
               title="in Karte hervorgehoben"
             >
               local_florist
-            </TpopFilteredMapIcon>
-          }
-          {
-            showBeobNichtBeurteiltFilteredMapIcon(store, node) &&
+            </TpopFilteredMapIcon>}
+          {showBeobNichtBeurteiltFilteredMapIcon(store, node) &&
             <BeobNichtBeurteiltFilteredMapIcon
               id="BeobNichtBeurteiltFilteredMapIcon"
               className="material-icons"
               title="in Karte hervorgehoben"
             >
               local_florist
-            </BeobNichtBeurteiltFilteredMapIcon>
-          }
-          {
-            showBeobNichtZuzuordnenFilteredMapIcon(store, node) &&
+            </BeobNichtBeurteiltFilteredMapIcon>}
+          {showBeobNichtZuzuordnenFilteredMapIcon(store, node) &&
             <BeobNichtZuzuordnenFilteredMapIcon
               id="BeobNichtZuzuordnenFilteredMapIcon"
               className="material-icons"
               title="in Karte hervorgehoben"
             >
               local_florist
-            </BeobNichtZuzuordnenFilteredMapIcon>
-          }
-          {
-            showTpopBeobFilteredMapIcon(store, tree, node) &&
+            </BeobNichtZuzuordnenFilteredMapIcon>}
+          {showTpopBeobFilteredMapIcon(store, tree, node) &&
             <TpopBeobFilteredMapIcon
               id="TpopBeobFilteredMapIcon"
               className="material-icons"
               title="in Karte hervorgehoben"
             >
               local_florist
-            </TpopBeobFilteredMapIcon>
-          }
+            </TpopBeobFilteredMapIcon>}
           <TextSpan
             nodeIsInActiveNodePath={nodeIsInActiveNodePath}
             node={node}
@@ -365,36 +333,30 @@ const Row = (
           >
             {node.label}
           </TextSpan>
-          {
-            moving &&
+          {moving &&
             <MovingIcon
               id="moving"
               className="material-icons"
               title="zum Verschieben gemerkt, bereit zum Einfügen"
             >
               swap_vertical_circle
-            </MovingIcon>
-          }
-          {
-            copying &&
+            </MovingIcon>}
+          {copying &&
             <CopyingIcon
               id="copying"
               className="material-icons"
               title="kopiert, bereit zum Einfügen"
             >
               content_copy
-            </CopyingIcon>
-          }
-          {
-            copyingBiotop &&
+            </CopyingIcon>}
+          {copyingBiotop &&
             <CopyingIcon
               id="copyingBiotop"
               className="material-icons"
               title="Biotop kopiert, bereit zum Einfügen"
             >
               photo_library
-            </CopyingIcon>
-          }
+            </CopyingIcon>}
         </StyledNode>
       </ContextMenuTrigger>
     </div>
