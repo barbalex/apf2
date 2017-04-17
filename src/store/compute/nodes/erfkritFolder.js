@@ -4,7 +4,9 @@ export default (store, tree) => {
   // fetch sorting indexes of parents
   const projId = tree.activeNodes.projekt
   if (!projId) return []
-  const projIndex = findIndex(tree.filteredAndSorted.projekt, { ProjId: projId })
+  const projIndex = findIndex(tree.filteredAndSorted.projekt, {
+    ProjId: projId
+  })
   const apArtId = tree.activeNodes.ap
   if (!apArtId) return []
   const apIndex = findIndex(tree.filteredAndSorted.ap, { ApArtId: apArtId })
@@ -27,9 +29,8 @@ export default (store, tree) => {
     id: apArtId,
     urlLabel: `AP-Erfolgskriterien`,
     label: `AP-Erfolgskriterien (${message})`,
-    expanded: tree.activeNodes.erfkritFolder,
     url: [`Projekte`, projId, `Arten`, apArtId, `AP-Erfolgskriterien`],
     sort: [projIndex, 1, apIndex, 3],
-    hasChildren: erfkritNodesLength > 0,
+    hasChildren: erfkritNodesLength > 0
   }
 }

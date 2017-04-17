@@ -4,7 +4,9 @@ export default (store, tree) => {
   // fetch sorting indexes of parents
   const projId = tree.activeNodes.projekt
   if (!projId) return []
-  const projIndex = findIndex(tree.filteredAndSorted.projekt, { ProjId: projId })
+  const projIndex = findIndex(tree.filteredAndSorted.projekt, {
+    ProjId: projId
+  })
   const apArtId = tree.activeNodes.ap
   if (!apArtId) return []
   const apIndex = findIndex(tree.filteredAndSorted.ap, { ApArtId: apArtId })
@@ -17,9 +19,8 @@ export default (store, tree) => {
     parentId: el.ApArtId,
     urlLabel: el.PopId,
     label: el.label,
-    expanded: el.PopId === tree.activeNodes.pop,
     url: [`Projekte`, projId, `Arten`, el.ApArtId, `Populationen`, el.PopId],
     sort: [projIndex, 1, apIndex, 1, index],
-    hasChildren: true,
+    hasChildren: true
   }))
 }
