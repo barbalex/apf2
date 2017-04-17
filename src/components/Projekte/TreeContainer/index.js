@@ -46,7 +46,8 @@ import CmBeobnichtbeurteilt from './contextmenu/Beobnichtbeurteilt'
 import CmBeobNichtZuzuordnen from './contextmenu/BeobNichtZuzuordnen'
 import CmTpopfreiwkontrFolder from './contextmenu/TpopfreiwkontrFolder'
 import CmTpopfreiwkontr from './contextmenu/Tpopfreiwkontr'
-import CmTpopfreiwkontrzaehlFolder from './contextmenu/TpopfreiwkontrzaehlFolder'
+import CmTpopfreiwkontrzaehlFolder
+  from './contextmenu/TpopfreiwkontrzaehlFolder'
 import CmTpopfreiwkontrzaehl from './contextmenu/Tpopfreiwkontrzaehl'
 import CmTpopfeldkontrFolder from './contextmenu/TpopfeldkontrFolder'
 import CmTpopfeldkontr from './contextmenu/Tpopfeldkontr'
@@ -57,13 +58,15 @@ import CmTpopmassnber from './contextmenu/Tpopmassnber'
 import CmTpopmassnFolder from './contextmenu/TpopmassnFolder'
 import CmTpopmassn from './contextmenu/Tpopmassn'
 
-const Container = styled(({ exporte, children, ...rest }) => <div {...rest}>{children}</div>)`
+const Container = styled(({ exporte, children, ...rest }) => (
+  <div {...rest}>{children}</div>
+))`
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  flex-grow: ${(props) => (props.exporte ? 0 : 1)};
-  flex-shrink: ${(props) => (props.exporte ? 0 : 1)};
-  flex-basis: ${(props) => (props.exporte ? `200px` : `500px`)};
+  flex-grow: ${props => (props.exporte ? 0 : 1)};
+  flex-shrink: ${props => (props.exporte ? 0 : 1)};
+  flex-basis: ${props => (props.exporte ? `200px` : `500px`)};
   border-color: #424242;
   border-width: 1px;
   border-style: solid;
@@ -87,20 +90,26 @@ const ApDivToggle = styled(Toggle)`
 const apDivToggleThumbStyle = { backgroundColor: `rgb(245, 245, 245)` }
 const strukturbaumContainerDivStyle = {
   flexGrow: 1,
-  flexBasis: `100%`,
+  flexBasis: `100%`
 }
 
 const getAndValidateCoordinatesOfTpop = (store, id) => {
   const myId = parseInt(id, 10)
   const tpop = store.table.tpop.get(myId)
   if (!tpop) {
-    store.listError(new Error(`Die Teilpopulation mit der ID ${myId} wurde nicht gefunden`))
+    store.listError(
+      new Error(`Die Teilpopulation mit der ID ${myId} wurde nicht gefunden`)
+    )
     return { x: null, y: null }
   }
   const x = tpop.TPopXKoord
   const y = tpop.TPopYKoord
   if (!x || !y) {
-    store.listError(new Error(`Die Teilpopulation mit der ID ${myId} kat keine (vollständigen) Koordinaten`))
+    store.listError(
+      new Error(
+        `Die Teilpopulation mit der ID ${myId} kat keine (vollständigen) Koordinaten`
+      )
+    )
     return { x: null, y: null }
   }
   return { x, y }
@@ -109,7 +118,11 @@ const getAndValidateCoordinatesOfTpop = (store, id) => {
 const getAndValidateCoordinatesOfBeob = (store, beobId) => {
   const beobBereitgestellt = store.table.beob_bereitgestellt.get(beobId)
   if (!beobBereitgestellt) {
-    store.listError(new Error(`Die bereitgestellte Beobachtung mit der ID ${beobId} wurde nicht gefunden`))
+    store.listError(
+      new Error(
+        `Die bereitgestellte Beobachtung mit der ID ${beobId} wurde nicht gefunden`
+      )
+    )
     return { x: null, y: null }
   }
   let beob
@@ -119,28 +132,30 @@ const getAndValidateCoordinatesOfBeob = (store, beobId) => {
     beob = store.table.beob_infospezies.get(beobId)
   }
   if (!beob) {
-    store.listError(new Error(`Die Beobachtung mit der ID ${beobId} wurde nicht gefunden`))
+    store.listError(
+      new Error(`Die Beobachtung mit der ID ${beobId} wurde nicht gefunden`)
+    )
     return { x: null, y: null }
   }
   const x = beob.FNS_XGIS ? beob.FNS_XGIS : beob.COORDONNEE_FED_E
   const y = beob.FNS_YGIS ? beob.FNS_YGIS : beob.COORDONNEE_FED_N
   if (!x || !y) {
-    store.listError(new Error(`Die Teilpopulation mit der ID ${beobId} kat keine (vollständigen) Koordinaten`))
+    store.listError(
+      new Error(
+        `Die Teilpopulation mit der ID ${beobId} kat keine (vollständigen) Koordinaten`
+      )
+    )
     return { x: null, y: null }
   }
   return { x, y }
 }
 
-const enhance = compose(
-  inject(`store`),
-  observer
-)
+const enhance = compose(inject(`store`), observer)
 
 class TreeContainer extends Component {
-
   props: {
     store: Object,
-    tree: Object,
+    tree: Object
   }
 
   showMapIfNotYetVisible = () => {
@@ -156,10 +171,14 @@ class TreeContainer extends Component {
   handleClick = (e, data, element) => {
     const { store, tree } = this.props
     if (!data) return store.listError(new Error(`no data passed with click`))
-    if (!element) return store.listError(new Error(`no element passed with click`))
+    if (!element)
+      return store.listError(new Error(`no element passed with click`))
     const { table, action, idTable, actionTable } = data
     const { firstElementChild } = element
-    if (!firstElementChild) return store.listError(new Error(`no firstElementChild passed with click`))
+    if (!firstElementChild)
+      return store.listError(
+        new Error(`no firstElementChild passed with click`)
+      )
     const id = firstElementChild.getAttribute(`data-id`)
     const parentId = firstElementChild.getAttribute(`data-parentId`)
     const url = firstElementChild.getAttribute(`data-url`)
@@ -187,7 +206,10 @@ class TreeContainer extends Component {
         // 1. open map if not yet open
         that.showMapIfNotYetVisible()
         // 2 add layer for actionTable
-        store.map.showMapLayer(actionTable, !store.map.activeOverlays.includes(actionTable))
+        store.map.showMapLayer(
+          actionTable,
+          !store.map.activeOverlays.includes(actionTable)
+        )
       },
       showOnMap() {
         // actionTable: table to show on map
@@ -204,7 +226,10 @@ class TreeContainer extends Component {
         // 2. open map if not yet open
         that.showMapIfNotYetVisible()
         // 3 add layer for actionTable
-        store.map.showMapLayer(actionTable, !store.map.activeOverlays.includes(actionTable))
+        store.map.showMapLayer(
+          actionTable,
+          !store.map.activeOverlays.includes(actionTable)
+        )
       },
       toggleTooltip() {
         store.map.toggleMapPopLabelContent(actionTable)
@@ -245,13 +270,19 @@ class TreeContainer extends Component {
         store.createNewPopFromBeob(tree, id)
       },
       showCoordOfTpopOnMapsZhCh() {
-        const { x, y } = getAndValidateCoordinatesOfTpop(store, parseInt(id, 10))
+        const { x, y } = getAndValidateCoordinatesOfTpop(
+          store,
+          parseInt(id, 10)
+        )
         if (x && y) {
           store.showCoordOnMapsZhCh(x, y)
         }
       },
       showCoordOfTpopOnMapGeoAdminCh() {
-        const { x, y } = getAndValidateCoordinatesOfTpop(store, parseInt(id, 10))
+        const { x, y } = getAndValidateCoordinatesOfTpop(
+          store,
+          parseInt(id, 10)
+        )
         if (x && y) {
           store.showCoordOnMapGeoAdminCh(x, y)
         }
@@ -272,7 +303,9 @@ class TreeContainer extends Component {
     if (Object.keys(actions).includes(action)) {
       actions[action]()
     } else {
-      store.listError(new Error(`action "${action}" unknown, therefore not executed`))
+      store.listError(
+        new Error(`action "${action}" unknown, therefore not executed`)
+      )
     }
   }
 
@@ -285,8 +318,7 @@ class TreeContainer extends Component {
       <Container exporte={tree.activeNodes.exporte}>
         <LabelFilterContainer>
           <LabelFilter tree={tree} />
-          {
-            showApDivToggle &&
+          {showApDivToggle &&
             <NurApDiv>
               <Label label="nur AP" />
               <ApDivToggle
@@ -294,26 +326,33 @@ class TreeContainer extends Component {
                 thumbStyle={apDivToggleThumbStyle}
                 onToggle={tree.toggleApFilter}
               />
-            </NurApDiv>
-          }
+            </NurApDiv>}
         </LabelFilterContainer>
         <div
           style={strukturbaumContainerDivStyle}
           // $FlowIssue
-          ref={(c) => { this.tree = c }}
+          ref={c => {
+            this.tree = c
+          }}
         >
           <Tree
             tree={tree}
             projektLoading={store.table.projektLoading}
             nodes={tree.node.nodes}
-            mapTpopBeobVisible={store.map.activeApfloraLayers.includes(`TpopBeob`)}
-            mapBeobNichtBeurteiltVisible={store.map.activeApfloraLayers.includes(`BeobNichtBeurteilt`)}
-            mapBeobNichtZuzuordnenVisible={store.map.activeApfloraLayers.includes(`BeobNichtZuzuordnen`)}
+            mapTpopBeobVisible={store.map.activeApfloraLayers.includes(
+              `TpopBeob`
+            )}
+            mapBeobNichtBeurteiltVisible={store.map.activeApfloraLayers.includes(
+              `BeobNichtBeurteilt`
+            )}
+            mapBeobNichtZuzuordnenVisible={store.map.activeApfloraLayers.includes(
+              `BeobNichtZuzuordnen`
+            )}
             mapPopVisible={store.map.activeApfloraLayers.includes(`Pop`)}
             mapTpopVisible={store.map.activeApfloraLayers.includes(`Tpop`)}
             popHighlightedIdsString={store.map.pop.highlightedIds.join()}
             activeNodeArray={toJS(tree.activeNodeArray)}
-
+            openNodes={tree.openNodes}
           />
         </div>
         <CmApFolder onClick={this.handleClick} tree={tree} />

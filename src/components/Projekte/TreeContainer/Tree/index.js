@@ -45,13 +45,9 @@ const LoadingDiv = styled.div`
   padding-left: 15px;
   font-size: 14px;
 `
-const enhance = compose(
-  inject(`store`),
-  observer
-)
+const enhance = compose(inject(`store`), observer)
 
 class Tree extends Component {
-
   props: {
     store: Object,
     tree: Object,
@@ -62,11 +58,11 @@ class Tree extends Component {
     mapBeobNichtZuzuordnenVisible: boolean,
     mapPopVisible: boolean,
     mapTpopVisible: boolean,
-    activeNodeArray: Array<Object>,
+    activeNodeArray: Array<Object>
   }
 
   static defaultProps = {
-    projektLoading: false,
+    projektLoading: false
   }
 
   componentDidUpdate(prevProps) {
@@ -75,48 +71,47 @@ class Tree extends Component {
       mapBeobNichtBeurteiltVisible,
       mapBeobNichtZuzuordnenVisible,
       mapPopVisible,
-      mapTpopVisible,
+      mapTpopVisible
     } = this.props
     const {
       mapTpopBeobVisible: prevMapTpopBeobVisible,
       mapBeobNichtBeurteiltVisible: prevMapBeobNichtBeurteiltVisible,
       mapBeobNichtZuzuordnenVisible: prevMapBeobNichtZuzuordnenVisible,
       mapPopVisible: prevMapPopVisible,
-      mapTpopVisible: prevMapTpopVisible,
+      mapTpopVisible: prevMapTpopVisible
     } = prevProps
-    const somethingHasChanged = (
+    const somethingHasChanged =
       mapTpopBeobVisible !== prevMapTpopBeobVisible ||
       mapBeobNichtBeurteiltVisible !== prevMapBeobNichtBeurteiltVisible ||
       mapBeobNichtZuzuordnenVisible !== prevMapBeobNichtZuzuordnenVisible ||
       mapPopVisible !== prevMapPopVisible ||
       mapTpopVisible !== prevMapTpopVisible
-    )
     if (somethingHasChanged) {
       // $FlowIssue
       this.tree.forceUpdateGrid()
     }
   }
 
-  rowRenderer = ({ key, index, style }) =>
+  rowRenderer = ({ key, index, style }) => (
     <Row
       key={key}
       index={index}
       style={style}
       tree={this.props.tree}
+      openNodes={this.props.tree.openNodes}
     />
+  )
 
-  noRowsRenderer = () =>
+  noRowsRenderer = () => (
     <Container>
       <LoadingDiv>
-        {
-          this.props.projektLoading ?
-          `lade Daten...` :
-          `keine Daten`
-        }
+        {this.props.projektLoading ? `lade Daten...` : `keine Daten`}
       </LoadingDiv>
     </Container>
+  )
 
-  render() {  // eslint-disable-line class-methods-use-this
+  render() {
+    // eslint-disable-line class-methods-use-this
     const { nodes, activeNodeArray } = this.props
     const activeNodeIndex = findIndex(nodes, node =>
       isEqual(node.url, activeNodeArray)
@@ -125,7 +120,7 @@ class Tree extends Component {
     return (
       <Container>
         <AutoSizer>
-          {({ height, width }) =>
+          {({ height, width }) => (
             <ListContainer
               height={height}
               rowCount={nodes.length}
@@ -137,9 +132,11 @@ class Tree extends Component {
               {...nodes}
               // need to use innerRef because ListContainer is a styled component
               // $FlowIssue
-              innerRef={(c) => { this.tree = c }}
+              innerRef={c => {
+                this.tree = c
+              }}
             />
-          }
+          )}
         </AutoSizer>
       </Container>
     )
