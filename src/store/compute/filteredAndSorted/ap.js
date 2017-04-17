@@ -7,9 +7,7 @@ export default (store, tree) => {
   const { adb_eigenschaften } = table
   // grab ap as array and sort them by name
   let ap = Array.from(table.ap.values())
-  // show only ap of active projekt
-  //ap = ap.filter(a => a.ProjId === activeNodes.projekt)
-  // show only open nodes of open projects
+  // show only open projects
   const openProjectUrls = tree.openNodes.filter(
     n => n.length === 2 && n[0] === 'Projekte'
   )
