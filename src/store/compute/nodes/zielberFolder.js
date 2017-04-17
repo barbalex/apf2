@@ -5,12 +5,16 @@ export default (store, tree) => {
   // fetch sorting indexes of parents
   const projId = activeNodes.projekt
   if (!projId) return []
-  const projIndex = findIndex(tree.filteredAndSorted.projekt, { ProjId: projId })
+  const projIndex = findIndex(tree.filteredAndSorted.projekt, {
+    ProjId: projId
+  })
   const apArtId = activeNodes.ap
   if (!apArtId) return []
   const apIndex = findIndex(tree.filteredAndSorted.ap, { ApArtId: apArtId })
   const zieljahr = activeNodes.zieljahr
-  const zieljahrIndex = findIndex(tree.filteredAndSorted.zieljahr, { jahr: zieljahr })
+  const zieljahrIndex = findIndex(tree.filteredAndSorted.zieljahr, {
+    jahr: zieljahr
+  })
   const ziel = activeNodes.ziel
   const zielIndex = findIndex(tree.filteredAndSorted.ziel, { ZielId: ziel })
   // prevent folder from showing when nodeFilter is set
@@ -32,9 +36,17 @@ export default (store, tree) => {
     id: ziel,
     urlLabel: `Berichte`,
     label: `Berichte (${message})`,
-    expanded: activeNodes.zielberFolder,
-    url: [`Projekte`, projId, `Arten`, apArtId, `AP-Ziele`, zieljahr, ziel, `Berichte`],
+    url: [
+      `Projekte`,
+      projId,
+      `Arten`,
+      apArtId,
+      `AP-Ziele`,
+      zieljahr,
+      ziel,
+      `Berichte`
+    ],
     sort: [projIndex, 1, apIndex, 2, zieljahrIndex, zielIndex, 1],
-    hasChildren: zielberNodesLength > 0,
+    hasChildren: zielberNodesLength > 0
   }
 }

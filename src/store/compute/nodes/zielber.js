@@ -5,12 +5,16 @@ export default (store, tree) => {
   // fetch sorting indexes of parents
   const projId = activeNodes.projekt
   if (!projId) return []
-  const projIndex = findIndex(tree.filteredAndSorted.projekt, { ProjId: projId })
+  const projIndex = findIndex(tree.filteredAndSorted.projekt, {
+    ProjId: projId
+  })
   const apArtId = activeNodes.ap
   if (!apArtId) return []
   const apIndex = findIndex(tree.filteredAndSorted.ap, { ApArtId: apArtId })
   const zieljahr = activeNodes.zieljahr
-  const zieljahrIndex = findIndex(tree.filteredAndSorted.zieljahr, { jahr: zieljahr })
+  const zieljahrIndex = findIndex(tree.filteredAndSorted.zieljahr, {
+    jahr: zieljahr
+  })
   const ziel = activeNodes.ziel
   const zielIndex = findIndex(tree.filteredAndSorted.ziel, { ZielId: ziel })
 
@@ -22,9 +26,18 @@ export default (store, tree) => {
     parentId: el.ZielId,
     urlLabel: el.ZielBerId,
     label: el.label,
-    expanded: el.ZielBerId === activeNodes.zielber,
-    url: [`Projekte`, projId, `Arten`, apArtId, `AP-Ziele`, zieljahr, el.ZielId, `Berichte`, el.ZielBerId],
+    url: [
+      `Projekte`,
+      projId,
+      `Arten`,
+      apArtId,
+      `AP-Ziele`,
+      zieljahr,
+      el.ZielId,
+      `Berichte`,
+      el.ZielBerId
+    ],
     sort: [projIndex, 1, apIndex, 2, zieljahrIndex, zielIndex, 1, index],
-    hasChildren: false,
+    hasChildren: false
   }))
 }
