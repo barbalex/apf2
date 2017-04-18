@@ -1,5 +1,6 @@
 // @flow
 import clone from 'lodash/clone'
+import union from 'lodash/union'
 
 import isNodeOpen from '../../modules/isNodeOpen'
 
@@ -14,7 +15,8 @@ export default (store: Object, tree: Object, node: Object) => {
     newActiveNodeArray.pop()
     // but don't close node
   } else {
-    tree.openNodes.push(node.url)
+    // tree.openNodes.push(node.url)
+    tree.openNodes = union([...tree.openNodes, node.url])
   }
   tree.setActiveNodeArray(newActiveNodeArray)
 }

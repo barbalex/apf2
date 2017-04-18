@@ -11,6 +11,8 @@ import extendFilteredAndSorted from './filteredAndSorted'
 import updateActiveDatasetFromActiveNodes
   from '../../action/updateActiveDatasetFromActiveNodes'
 import allNodes from '../../compute/nodes/allNodes'
+import setOpenNodesFromActiveNodeArray
+  from '../../action/setOpenNodesFromActiveNodeArray'
 
 export default (store: Object, tree: Object) => {
   extendObservable(tree, {
@@ -44,7 +46,7 @@ export default (store: Object, tree: Object) => {
     openNodes: [],
     setOpenNodesFromActiveNodeArray: action(
       `setOpenNodesFromActiveNodeArray`,
-      () => store.tree.openNodes = [store.tree.activeNodeArray]
+      () => setOpenNodesFromActiveNodeArray(store.tree)
     ),
     apFilter: false,
     toggleApFilter: action(`toggleApFilter`, () => {
