@@ -1,6 +1,5 @@
 // @flow
 import { toJS } from 'mobx'
-import remove from 'lodash/remove'
 import isEqual from 'lodash/isEqual'
 
 import isNodeOpen from '../../modules/isNodeOpen'
@@ -12,7 +11,6 @@ export default (store: Object, tree: Object, node: Object) => {
   if (!node.url) return store.listError(new Error('node has no url'))
 
   if (isNodeOpen(tree, node.url)) {
-    // remove(tree.openNodes, n => isEqual(n, node.url))
     tree.openNodes = tree.openNodes.filter(n => !isEqual(n.url, node.url))
   } else {
     tree.openNodes.push(node.url)
