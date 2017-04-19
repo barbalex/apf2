@@ -1,6 +1,6 @@
 import findIndex from 'lodash/findIndex'
 
-export default (store, tree, apArtId, projId) => {
+export default (store, tree, projId, apArtId) => {
   // check passed variables
   if (!store) return store.listError(new Error('no store passed'))
   if (!tree) return store.listError(new Error('no tree passed'))
