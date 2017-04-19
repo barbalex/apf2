@@ -10,7 +10,7 @@
   "license": "MIT",
   "private": true,
   "devDependencies": {
-    "flow-bin": "0.44.0",
+    "flow-bin": "0.44.2",
     "mobx-react-devtools": "4.2.11",
     "react-scripts": "0.9.5",
     "sw-precache": "5.1.0"
@@ -44,9 +44,9 @@
     "proj4": "2.4.3",
     "proj4leaflet": "1.0.1",
     "prop-types": "15.5.8",
-    "query-string": "4.3.2",
+    "query-string": "4.3.3",
     "react": "15.5.4",
-    "react-contextmenu": "2.4.1",
+    "react-contextmenu": "2.5.0",
     "react-copy-to-clipboard": "4.3.0",
     "react-custom-scrollbars": "4.1.0",
     "react-dom": "15.5.4",
