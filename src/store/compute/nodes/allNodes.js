@@ -39,7 +39,7 @@ const compare = (a, b) => {
 }
 
 export default (store, tree) => {
-  const { openNodes } = tree
+  const openNodes = toJS(tree.openNodes)
 
   let nodes = projektNodes(store, tree)
   // do not process ['Projekte']
@@ -54,21 +54,20 @@ export default (store, tree) => {
     if (
       node.length === 3 &&
       node[2] === 'AP-Berichte' &&
-      isNodeOpen(toJS(openNodes), node.slice(0, node.length - 1))
+      isNodeOpen(openNodes, node.slice(0, node.length - 1))
     ) {
       nodes = [...nodes, ...apberuebersichtNodes(store, tree, projId)]
     }
     if (
       node.length === 3 &&
       node[2] === 'Arten' &&
-      isNodeOpen(toJS(openNodes), node.slice(0, node.length - 1))
+      isNodeOpen(openNodes, node.slice(0, node.length - 1))
     ) {
       nodes = [...nodes, ...apNodes(store, tree, projId)]
     }
     // if node.length > 3, node[2] is always 'Arten'
     if (
-      node.length === 4 &&
-      isNodeOpen(toJS(openNodes), node.slice(0, node.length - 1))
+      node.length === 4 && isNodeOpen(openNodes, node.slice(0, node.length - 1))
     ) {
       const apArtId = node[3]
       nodes = [...nodes, ...popFolderNodes(store, tree, projId, apArtId)]
@@ -94,7 +93,7 @@ export default (store, tree) => {
     if (
       node.length === 5 &&
       node[4] === 'AP-Ziele' &&
-      isNodeOpen(toJS(openNodes), node.slice(0, node.length - 1))
+      isNodeOpen(openNodes, node.slice(0, node.length - 1))
     ) {
       const apArtId = node[3]
       nodes = [...nodes, ...zieljahrNodes(store, tree, projId, apArtId)]
@@ -102,7 +101,7 @@ export default (store, tree) => {
     if (
       node.length === 6 &&
       node[4] === 'AP-Ziele' &&
-      isNodeOpen(toJS(openNodes), node.slice(0, node.length - 1))
+      isNodeOpen(openNodes, node.slice(0, node.length - 1))
     ) {
       const apArtId = node[3]
       const zieljahr = node[5]
@@ -111,7 +110,7 @@ export default (store, tree) => {
     if (
       node.length === 7 &&
       node[4] === 'AP-Ziele' &&
-      isNodeOpen(toJS(openNodes), node.slice(0, node.length - 1))
+      isNodeOpen(openNodes, node.slice(0, node.length - 1))
     ) {
       const apArtId = node[3]
       const zieljahr = node[5]
@@ -125,7 +124,7 @@ export default (store, tree) => {
       node.length === 8 &&
       node[4] === 'AP-Ziele' &&
       node[7] === 'Berichte' &&
-      isNodeOpen(toJS(openNodes), node.slice(0, node.length - 1))
+      isNodeOpen(openNodes, node.slice(0, node.length - 1))
     ) {
       const apArtId = node[3]
       const zieljahr = node[5]
