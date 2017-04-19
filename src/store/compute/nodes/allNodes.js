@@ -16,6 +16,8 @@ import beobNichtZuzuordnenFolderNodes
   from '../../../modules/nodes/beobNichtZuzuordnenFolder'
 import beobzuordnungFolderNodes
   from '../../../modules/nodes/beobzuordnungFolder'
+import assozartFolderNodes from '../../../modules/nodes/assozartFolder'
+import idealbiotopFolderNodes from '../../../modules/nodes/idealbiotopFolder'
 
 const compare = (a, b) => {
   // sort a before, if it has no value at this index
@@ -57,6 +59,11 @@ export default (store, tree) => {
       nodes = [
         ...nodes,
         ...beobzuordnungFolderNodes(store, tree, projId, apArtId)
+      ]
+      nodes = [...nodes, ...assozartFolderNodes(store, tree, projId, apArtId)]
+      nodes = [
+        ...nodes,
+        ...idealbiotopFolderNodes(store, tree, projId, apArtId)
       ]
     }
   })
