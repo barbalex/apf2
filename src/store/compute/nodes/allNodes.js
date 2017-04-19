@@ -18,6 +18,11 @@ import beobzuordnungFolderNodes
   from '../../../modules/nodes/beobzuordnungFolder'
 import assozartFolderNodes from '../../../modules/nodes/assozartFolder'
 import idealbiotopFolderNodes from '../../../modules/nodes/idealbiotopFolder'
+import berFolderNodes from '../../../modules/nodes/berFolder'
+import apberFolderNodes from '../../../modules/nodes/apberFolder'
+import erfkritFolderNodes from '../../../modules/nodes/erfkritFolder'
+import zieljahrFolderNodes from '../../../modules/nodes/zieljahrFolder'
+import zieljahrNodes from '../../../modules/nodes/zieljahr'
 
 const compare = (a, b) => {
   // sort a before, if it has no value at this index
@@ -65,6 +70,14 @@ export default (store, tree) => {
         ...nodes,
         ...idealbiotopFolderNodes(store, tree, projId, apArtId)
       ]
+      nodes = [...nodes, ...berFolderNodes(store, tree, projId, apArtId)]
+      nodes = [...nodes, ...apberFolderNodes(store, tree, projId, apArtId)]
+      nodes = [...nodes, ...erfkritFolderNodes(store, tree, projId, apArtId)]
+      nodes = [...nodes, ...zieljahrFolderNodes(store, tree, projId, apArtId)]
+    }
+    if (node.length === 5 && node[4] === 'AP-Ziele') {
+      const apArtId = node[3]
+      nodes = [...nodes, ...zieljahrNodes(store, tree, projId, apArtId)]
     }
   })
 
