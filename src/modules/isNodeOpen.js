@@ -1,7 +1,10 @@
 // @flow
 import isEqual from 'lodash/isEqual'
 
-export default (openNodes: Array<Object>, url: Object) => {
+export default (
+  openNodes: Array<Array<string | number>>,
+  url: Array<string | number>
+) => {
   if (!url) return false
   if (!openNodes) return false
 
