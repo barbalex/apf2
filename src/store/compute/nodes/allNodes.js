@@ -11,6 +11,11 @@ import apberuebersichtFolderNodes
 import apberuebersichtNodes from '../../../modules/nodes/apberuebersicht'
 import apNodes from '../../../modules/nodes/ap'
 import popFolderNodes from '../../../modules/nodes/popFolder'
+import qkFolderNodes from '../../../modules/nodes/qkFolder'
+import beobNichtZuzuordnenFolderNodes
+  from '../../../modules/nodes/beobNichtZuzuordnenFolder'
+import beobzuordnungFolderNodes
+  from '../../../modules/nodes/beobzuordnungFolder'
 
 const compare = (a, b) => {
   // sort a before, if it has no value at this index
@@ -30,7 +35,6 @@ export default (store, tree) => {
 
   nodesToProcess.forEach(node => {
     const projId = node[1]
-    console.log('allNodes: node:', node)
     if (node.length === 2) {
       nodes = [...nodes, ...apFolderNodes(store, tree, projId)]
       nodes = [...nodes, ...apberuebersichtFolderNodes(store, tree, projId)]
@@ -45,6 +49,15 @@ export default (store, tree) => {
     if (node.length === 4) {
       const apArtId = node[3]
       nodes = [...nodes, ...popFolderNodes(store, tree, projId, apArtId)]
+      nodes = [...nodes, ...qkFolderNodes(store, tree, projId, apArtId)]
+      nodes = [
+        ...nodes,
+        ...beobNichtZuzuordnenFolderNodes(store, tree, projId, apArtId)
+      ]
+      nodes = [
+        ...nodes,
+        ...beobzuordnungFolderNodes(store, tree, projId, apArtId)
+      ]
     }
   })
 
