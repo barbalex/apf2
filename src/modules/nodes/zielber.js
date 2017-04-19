@@ -19,40 +19,26 @@ export default (store, tree, projId, apArtId, zieljahr, zielId) => {
   })
   const zielIndex = findIndex(tree.filteredAndSorted.ziel, { ZielId: zielId })
 
-  // prevent folder from showing when nodeFilter is set
-  if (zielIndex === -1) return []
-
-  const zielberNodesLength = tree.filteredAndSorted.zielber.filter(
-    z => z.ZielId === zielId
-  ).length
-
-  let message = zielberNodesLength
-  if (store.table.zielberLoading) {
-    message = `...`
-  }
-  if (store.tree.nodeLabelFilter.get(`zielber`)) {
-    message = `${zielberNodesLength} gefiltert`
-  }
-
-  return [
-    {
-      nodeType: `folder`,
-      menuType: `zielberFolder`,
-      id: zielId,
-      urlLabel: `Berichte`,
-      label: `Berichte (${message})`,
-      url: [
-        `Projekte`,
-        projId,
-        `Arten`,
-        apArtId,
-        `AP-Ziele`,
-        zieljahr,
-        zielId,
-        `Berichte`
-      ],
-      sort: [projIndex, 1, apIndex, 2, zieljahrIndex, zielIndex, 1],
-      hasChildren: zielberNodesLength > 0
-    }
-  ]
+  // map through all and create array of nodes
+  return tree.filteredAndSorted.zielber.map((el, index) => ({
+    nodeType: `table`,
+    menuType: `zielber`,
+    id: el.ZielBerId,
+    parentId: el.ZielId,
+    urlLabel: el.ZielBerId,
+    label: el.label,
+    url: [
+      `Projekte`,
+      projId,
+      `Arten`,
+      apArtId,
+      `AP-Ziele`,
+      zieljahr,
+      el.ZielId,
+      `Berichte`,
+      el.ZielBerId
+    ],
+    sort: [projIndex, 1, apIndex, 2, zieljahrIndex, zielIndex, 1, index],
+    hasChildren: false
+  }))
 }

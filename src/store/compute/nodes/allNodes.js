@@ -24,6 +24,8 @@ import erfkritFolderNodes from '../../../modules/nodes/erfkritFolder'
 import zieljahrFolderNodes from '../../../modules/nodes/zieljahrFolder'
 import zieljahrNodes from '../../../modules/nodes/zieljahr'
 import zielNodes from '../../../modules/nodes/ziel'
+import zielberFolderNodes from '../../../modules/nodes/zielberFolder'
+import zielberNodes from '../../../modules/nodes/zielber'
 
 const compare = (a, b) => {
   // sort a before, if it has no value at this index
@@ -84,6 +86,25 @@ export default (store, tree) => {
       const apArtId = node[3]
       const zieljahr = node[5]
       nodes = [...nodes, ...zielNodes(store, tree, projId, apArtId, zieljahr)]
+    }
+    if (node.length === 7 && node[4] === 'AP-Ziele') {
+      const apArtId = node[3]
+      const zieljahr = node[5]
+      const zielId = node[6]
+      nodes = [
+        ...nodes,
+        ...zielberFolderNodes(store, tree, projId, apArtId, zieljahr, zielId)
+      ]
+    }
+    if (node.length === 8 && node[4] === 'AP-Ziele' && node[7] === 'Berichte') {
+      console.log('node:', node)
+      const apArtId = node[3]
+      const zieljahr = node[5]
+      const zielId = node[6]
+      nodes = [
+        ...nodes,
+        ...zielberNodes(store, tree, projId, apArtId, zieljahr, zielId)
+      ]
     }
   })
 
