@@ -25,21 +25,25 @@ export default (store, tree) => {
   const { openNodes } = tree
 
   let nodes = projektNodes(store, tree)
+  // do not process ['Projekte']
+  const nodesToProcess = openNodes.filter(n => n.length > 1)
 
-  openNodes.forEach(openNode => {
-    const projId = openNode.length > 1 ? openNode[1] : null
-    if (openNode.length === 2) {
+  nodesToProcess.forEach(node => {
+    const projId = node[1]
+    console.log('allNodes: node:', node)
+    if (node.length === 2) {
       nodes = [...nodes, ...apFolderNodes(store, tree, projId)]
       nodes = [...nodes, ...apberuebersichtFolderNodes(store, tree, projId)]
     }
-    if (openNode.length === 3 && openNode[2] === 'AP-Berichte') {
+    if (node.length === 3 && node[2] === 'AP-Berichte') {
       nodes = [...nodes, ...apberuebersichtNodes(store, tree, projId)]
     }
-    if (openNode.length === 3 && openNode[2] === 'Arten') {
+    if (node.length === 3 && node[2] === 'Arten') {
       nodes = [...nodes, ...apNodes(store, tree, projId)]
     }
-    if (openNode.length === 4 && openNode[2] === 'Arten') {
-      const apArtId = openNode[3]
+    // if node.length > 3, node[2] is always 'Arten'
+    if (node.length === 4) {
+      const apArtId = node[3]
       nodes = [...nodes, ...popFolderNodes(store, tree, projId, apArtId)]
     }
   })
