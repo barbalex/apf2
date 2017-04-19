@@ -10,12 +10,11 @@ export default (store: Object, tree: Object, node: Object) => {
   if (!node.url) return store.listError(new Error('node has no url'))
 
   const newActiveNodeArray = clone(node.url)
-  if (isNodeOpen(tree, node.url)) {
+  if (isNodeOpen(tree.openNodes, node.url)) {
     // shorten activeNodeArray
-    newActiveNodeArray.pop()
     // but don't close node
+    newActiveNodeArray.pop()
   } else {
-    // tree.openNodes.push(node.url)
     tree.openNodes = union([...tree.openNodes, node.url])
   }
   tree.setActiveNodeArray(newActiveNodeArray)

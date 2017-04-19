@@ -10,7 +10,7 @@ export default (store: Object, tree: Object, node: Object) => {
   if (!node) return store.listError(new Error('no node passed'))
   if (!node.url) return store.listError(new Error('node has no url'))
 
-  if (isNodeOpen(tree, node.url)) {
+  if (isNodeOpen(tree.openNodes, node.url)) {
     tree.openNodes = tree.openNodes.filter(n => !isEqual(n.url, node.url))
   } else {
     tree.openNodes.push(node.url)
