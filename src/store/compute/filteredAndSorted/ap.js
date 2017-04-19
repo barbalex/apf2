@@ -1,19 +1,11 @@
 import sortBy from 'lodash/sortBy'
-import union from 'lodash/union'
 
 export default (store, tree) => {
   const { table } = store
-  const { nodeLabelFilter, apFilter, openNodes } = tree
+  const { nodeLabelFilter, apFilter } = tree
   const { adb_eigenschaften } = table
   // grab ap as array and sort them by name
   let ap = Array.from(table.ap.values())
-  // show only open projects
-  const openProjectUrls = openNodes.filter(
-    n => n.length === 2 && n[0] === 'Projekte'
-  )
-  const openProjects = union(openProjectUrls.map(u => u[1]))
-  // show only ap of open projekts
-  ap = ap.filter(a => openProjects.includes(a.ProjId))
 
   // filter by apFilter
   if (apFilter) {

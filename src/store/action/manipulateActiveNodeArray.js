@@ -5,6 +5,7 @@ export default (store: Object) => {
   if (store.tree.activeNodeArray.length === 0) {
     store.tree.activeNodeArray.push(`Projekte`)
   }
+
   /**
    * make sure no nodes are included, that are filtered out by tree.nodeLabelFilter
    * idea:
@@ -15,7 +16,7 @@ export default (store: Object) => {
    * find id in filteredAndSorted
    * if not included, remove these elements
    *
-   * danger: special caso of AP-Ziele:
+   * danger: special case of AP-Ziele:
    * - not next element is id but index + 2
    * - also check zieljahr
    */

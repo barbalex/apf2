@@ -1,6 +1,7 @@
 // @flow
 import clone from 'lodash/clone'
 import union from 'lodash/union'
+import { toJS } from 'mobx'
 
 import isNodeOpen from '../../modules/isNodeOpen'
 
@@ -10,7 +11,7 @@ export default (store: Object, tree: Object, node: Object) => {
   if (!node.url) return store.listError(new Error('node has no url'))
 
   const newActiveNodeArray = clone(node.url)
-  if (isNodeOpen(tree.openNodes, node.url)) {
+  if (isNodeOpen(toJS(tree.openNodes), node.url)) {
     // shorten activeNodeArray
     // but don't close node
     newActiveNodeArray.pop()
