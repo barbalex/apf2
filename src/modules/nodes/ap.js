@@ -11,18 +11,18 @@ export default (store, tree, projId) => {
     ProjId: projId
   })
 
-  // map through all projekt and create array of nodes
-  return tree.filteredAndSorted.apberuebersicht
+  // map through all pop and create array of nodes
+  return tree.filteredAndSorted.ap
     .filter(n => n.ProjId === projId)
     .map((el, index) => ({
       nodeType: `table`,
-      menuType: `apberuebersicht`,
-      id: el.JbuJahr,
+      menuType: `ap`,
+      id: el.ApArtId,
       parentId: el.ProjId,
-      urlLabel: el.JbuJahr,
-      label: el.JbuJahr,
-      url: [`Projekte`, el.ProjId, `AP-Berichte`, el.JbuJahr],
-      sort: [projIndex, 2, el.JbuJahr],
-      hasChildren: false
+      urlLabel: el.ApArtId,
+      label: el.label,
+      url: [`Projekte`, el.ProjId, `Arten`, el.ApArtId],
+      sort: [projIndex, 1, index],
+      hasChildren: true
     }))
 }

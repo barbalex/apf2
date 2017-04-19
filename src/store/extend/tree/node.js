@@ -1,7 +1,6 @@
 // @flow
 import { extendObservable, computed } from 'mobx'
 
-import apNodes from '../../compute/nodes/ap'
 import allNodes from '../../compute/nodes/allNodes'
 import qkFolderNode from '../../compute/nodes/qkFolder'
 import assozartFolderNode from '../../compute/nodes/assozartFolder'
@@ -52,7 +51,6 @@ import tpopmassnNode from '../../compute/nodes/tpopmassn'
 
 export default (store: Object, tree: Object) => {
   extendObservable(tree.node, {
-    ap: computed(() => apNodes(store, tree), { name: `apNode` }),
     nodes: computed(() => allNodes(store, tree), { name: `nodesNode` }),
     qkFolder: computed(() => qkFolderNode(store, tree)),
     assozartFolder: computed(() => assozartFolderNode(store, tree), {

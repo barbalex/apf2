@@ -6,8 +6,6 @@ export default (store, tree, projId) => {
   if (!tree) return store.listError(new Error('no tree passed'))
   if (!projId) return store.listError(new Error('no projId passed'))
 
-  console.log('apberuebersichtFolder: projId:', projId)
-
   // fetch sorting indexes of parents
   const projIndex = findIndex(tree.filteredAndSorted.projekt, {
     ProjId: projId

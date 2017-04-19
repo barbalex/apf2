@@ -9,6 +9,7 @@ import apFolderNodes from '../../../modules/nodes/apFolder'
 import apberuebersichtFolderNodes
   from '../../../modules/nodes/apberuebersichtFolder'
 import apberuebersichtNodes from '../../../modules/nodes/apberuebersicht'
+import apNodes from '../../../modules/nodes/ap'
 
 const compare = (a, b) => {
   // sort a before, if it has no value at this index
@@ -32,6 +33,9 @@ export default (store, tree) => {
     }
     if (openNode.length === 3 && openNode[2] === 'AP-Berichte') {
       nodes = [...nodes, ...apberuebersichtNodes(store, tree, projId)]
+    }
+    if (openNode.length === 3 && openNode[2] === 'Arten') {
+      nodes = [...nodes, ...apNodes(store, tree, projId)]
     }
   })
 
