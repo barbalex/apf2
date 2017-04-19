@@ -2,14 +2,13 @@ import sortBy from 'lodash/sortBy'
 
 export default (store, tree) => {
   const { table } = store
-  const { activeNodes, nodeLabelFilter } = tree
+  const { nodeLabelFilter } = tree
   // grab tpopkontr as array and sort them by year
-  let tpopkontr = Array.from(table.tpopkontr.values())
-    .filter(t => t.TPopKontrTyp === `Freiwilligen-Erfolgskontrolle`)
-  // show only nodes of active ap
-  tpopkontr = tpopkontr.filter(a => a.TPopId === activeNodes.tpop)
+  let tpopkontr = Array.from(table.tpopkontr.values()).filter(
+    t => t.TPopKontrTyp === `Freiwilligen-Erfolgskontrolle`
+  )
   // add label
-  tpopkontr.forEach((el) => {
+  tpopkontr.forEach(el => {
     el.label = `${el.TPopKontrJahr || `(kein Jahr)`}`
   })
   // filter by nodeLabelFilter
