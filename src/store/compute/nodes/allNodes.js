@@ -4,6 +4,8 @@
 // to be sorted before those that have
 // that is why there is if (a !== 0 && !a)
 
+import { toJS } from 'mobx'
+import isNodeOpen from '../../../modules/isNodeOpen'
 import projektNodes from '../../../modules/nodes/projekt'
 import apFolderNodes from '../../../modules/nodes/apFolder'
 import apberuebersichtFolderNodes
@@ -49,14 +51,25 @@ export default (store, tree) => {
       nodes = [...nodes, ...apFolderNodes(store, tree, projId)]
       nodes = [...nodes, ...apberuebersichtFolderNodes(store, tree, projId)]
     }
-    if (node.length === 3 && node[2] === 'AP-Berichte') {
+    if (
+      node.length === 3 &&
+      node[2] === 'AP-Berichte' &&
+      isNodeOpen(toJS(openNodes), node.slice(0, node.length - 1))
+    ) {
       nodes = [...nodes, ...apberuebersichtNodes(store, tree, projId)]
     }
-    if (node.length === 3 && node[2] === 'Arten') {
+    if (
+      node.length === 3 &&
+      node[2] === 'Arten' &&
+      isNodeOpen(toJS(openNodes), node.slice(0, node.length - 1))
+    ) {
       nodes = [...nodes, ...apNodes(store, tree, projId)]
     }
     // if node.length > 3, node[2] is always 'Arten'
-    if (node.length === 4) {
+    if (
+      node.length === 4 &&
+      isNodeOpen(toJS(openNodes), node.slice(0, node.length - 1))
+    ) {
       const apArtId = node[3]
       nodes = [...nodes, ...popFolderNodes(store, tree, projId, apArtId)]
       nodes = [...nodes, ...qkFolderNodes(store, tree, projId, apArtId)]
@@ -78,16 +91,28 @@ export default (store, tree) => {
       nodes = [...nodes, ...erfkritFolderNodes(store, tree, projId, apArtId)]
       nodes = [...nodes, ...zieljahrFolderNodes(store, tree, projId, apArtId)]
     }
-    if (node.length === 5 && node[4] === 'AP-Ziele') {
+    if (
+      node.length === 5 &&
+      node[4] === 'AP-Ziele' &&
+      isNodeOpen(toJS(openNodes), node.slice(0, node.length - 1))
+    ) {
       const apArtId = node[3]
       nodes = [...nodes, ...zieljahrNodes(store, tree, projId, apArtId)]
     }
-    if (node.length === 6 && node[4] === 'AP-Ziele') {
+    if (
+      node.length === 6 &&
+      node[4] === 'AP-Ziele' &&
+      isNodeOpen(toJS(openNodes), node.slice(0, node.length - 1))
+    ) {
       const apArtId = node[3]
       const zieljahr = node[5]
       nodes = [...nodes, ...zielNodes(store, tree, projId, apArtId, zieljahr)]
     }
-    if (node.length === 7 && node[4] === 'AP-Ziele') {
+    if (
+      node.length === 7 &&
+      node[4] === 'AP-Ziele' &&
+      isNodeOpen(toJS(openNodes), node.slice(0, node.length - 1))
+    ) {
       const apArtId = node[3]
       const zieljahr = node[5]
       const zielId = node[6]
@@ -96,8 +121,12 @@ export default (store, tree) => {
         ...zielberFolderNodes(store, tree, projId, apArtId, zieljahr, zielId)
       ]
     }
-    if (node.length === 8 && node[4] === 'AP-Ziele' && node[7] === 'Berichte') {
-      console.log('node:', node)
+    if (
+      node.length === 8 &&
+      node[4] === 'AP-Ziele' &&
+      node[7] === 'Berichte' &&
+      isNodeOpen(toJS(openNodes), node.slice(0, node.length - 1))
+    ) {
       const apArtId = node[3]
       const zieljahr = node[5]
       const zielId = node[6]
