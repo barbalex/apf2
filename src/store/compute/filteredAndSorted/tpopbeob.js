@@ -2,16 +2,13 @@ import sortBy from 'lodash/sortBy'
 
 export default (store, tree) => {
   const { table } = store
-  const { activeNodes, nodeLabelFilter } = tree
+  const { nodeLabelFilter } = tree
   // grab tpopbeob as array and sort them by year
-  let tpopbeob = Array
-    .from(table.beobzuordnung.values())
-    .filter(b =>
-      b.TPopId === activeNodes.tpop &&
-      b.beobNichtZuzuordnen !== 1
-    )
+  let tpopbeob = Array.from(table.beobzuordnung.values()).filter(
+    b => b.beobNichtZuzuordnen !== 1
+  )
   // map through all and create array of nodes
-  tpopbeob.forEach((el) => {
+  tpopbeob.forEach(el => {
     let datum = ``
     let autor = ``
     const beob = table.beob_bereitgestellt.get(el.beobId)
