@@ -2,19 +2,12 @@ import sortBy from 'lodash/sortBy'
 
 export default (store, tree) => {
   const { table } = store
-  const { activeNodes, nodeLabelFilter, apFilter } = tree
+  const { nodeLabelFilter, apFilter } = tree
   // grab beobNichtZuzuordnen as array and sort them by year
-  let beobNichtZuzuordnen = Array
-    .from(table.beobzuordnung.values())
+  let beobNichtZuzuordnen = Array.from(table.beobzuordnung.values())
     .filter(b => b.BeobNichtZuordnen === 1)
-    // show only nodes of active ap
-    .filter(a => (
-      a.beobBereitgestellt &&
-      a.beobBereitgestellt.NO_ISFS &&
-      a.beobBereitgestellt.NO_ISFS === activeNodes.ap
-    ))
     // filter by apFilter
-    .filter((b) => {
+    .filter(b => {
       if (!apFilter) return true
       let ap
       const beob = table.beob_bereitgestellt.get(b.NO_NOTE)
@@ -24,7 +17,7 @@ export default (store, tree) => {
     })
 
   // add label
-  beobNichtZuzuordnen.forEach((el) => {
+  beobNichtZuzuordnen.forEach(el => {
     let datum = ``
     let autor = ``
     const beobBereitgestellt = table.beob_bereitgestellt.get(el.NO_NOTE)
@@ -38,7 +31,7 @@ export default (store, tree) => {
     }
     const quelle = table.beob_quelle.get(el.QuelleId)
     const quelleName = quelle && quelle.name ? quelle.name : ``
-    el.label  = `${datum || `(kein Datum)`}: ${autor || `(kein Autor)`} (${quelleName})`
+    el.label = `${datum || `(kein Datum)`}: ${autor || `(kein Autor)`} (${quelleName})`
   })
   // filter by nodeLabelFilter
   const filterString = nodeLabelFilter.get(`beobNichtZuzuordnen`)
