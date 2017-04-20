@@ -4,7 +4,7 @@ import { extendObservable, computed } from 'mobx'
 import sortBy from 'lodash/sortBy'
 import filter from 'lodash/filter'
 
-export default (store: Object) => {
+export default (store: Object): void => {
   extendObservable(store.dropdownList, {
     adressen: computed(
       () => {
@@ -14,7 +14,7 @@ export default (store: Object) => {
         )
         adressen.unshift({
           id: null,
-          AdrName: ``,
+          AdrName: ``
         })
         return adressen
       },
@@ -22,36 +22,35 @@ export default (store: Object) => {
     ),
     apUmsetzungen: computed(
       () => {
-        let apUmsetzungen = Array.from(
-          store.table.ap_umsetzung_werte.values()
-        )
+        let apUmsetzungen = Array.from(store.table.ap_umsetzung_werte.values())
         apUmsetzungen = sortBy(apUmsetzungen, `DomainOrd`)
         return apUmsetzungen.map(el => ({
           value: el.DomainCode,
-          label: el.DomainTxt,
+          label: el.DomainTxt
         }))
       },
       { name: `dropdownListApUmsetzungen` }
     ),
     apStati: computed(
       () => {
-        let apStati = Array.from(
-          store.table.ap_bearbstand_werte.values()
-        )
+        let apStati = Array.from(store.table.ap_bearbstand_werte.values())
         apStati = sortBy(apStati, `DomainOrd`)
         return apStati.map(el => ({
           value: el.DomainCode,
-          label: el.DomainTxt,
+          label: el.DomainTxt
         }))
       },
       { name: `dropdownListApStati` }
     ),
     artListForAp: computed(
       () => {
-        const alreadyUsedApIds = Array.from(store.table.ap.keys()).map(a => Number(a))
+        const alreadyUsedApIds = Array.from(store.table.ap.keys()).map(a =>
+          Number(a)
+        )
         // let user choose store ApArtId
-        const apArtIdsNotToShow = alreadyUsedApIds
-          .filter(r => r !== store.tree.activeNodes.ap)
+        const apArtIdsNotToShow = alreadyUsedApIds.filter(
+          r => r !== store.tree.activeNodes.ap
+        )
         const artList = filter(
           Array.from(store.table.adb_eigenschaften.values()),
           r => !apArtIdsNotToShow.includes(r.TaxonomieId)
@@ -62,9 +61,7 @@ export default (store: Object) => {
     ),
     artnamen: computed(
       () => {
-        let artnamen = Array.from(
-          store.table.adb_eigenschaften.values()
-        )
+        let artnamen = Array.from(store.table.adb_eigenschaften.values())
         artnamen = artnamen.map(a => a.Artname).sort()
         // artnamen.unshift(``)
         return artnamen
@@ -73,11 +70,13 @@ export default (store: Object) => {
     ),
     popEntwicklungWerte: computed(
       () => {
-        let popEntwicklungWerte = Array.from(store.table.pop_entwicklung_werte.values())
+        let popEntwicklungWerte = Array.from(
+          store.table.pop_entwicklung_werte.values()
+        )
         popEntwicklungWerte = sortBy(popEntwicklungWerte, `EntwicklungOrd`)
         return popEntwicklungWerte.map(el => ({
           value: el.EntwicklungId,
-          label: el.EntwicklungTxt,
+          label: el.EntwicklungTxt
         }))
       },
       { name: `dropdownListPopEntwicklungWerte` }
@@ -90,31 +89,31 @@ export default (store: Object) => {
         tpopEntwicklungWerte = sortBy(tpopEntwicklungWerte, `EntwicklungOrd`)
         return tpopEntwicklungWerte.map(el => ({
           value: el.EntwicklungCode,
-          label: el.EntwicklungTxt,
+          label: el.EntwicklungTxt
         }))
       },
       { name: `dropdownListTpopEntwicklungWerte` }
     ),
     apErfkritWerte: computed(
       () => {
-        let apErfkritWerte = Array.from(
-          store.table.ap_erfkrit_werte.values()
-        )
+        let apErfkritWerte = Array.from(store.table.ap_erfkrit_werte.values())
         apErfkritWerte = sortBy(apErfkritWerte, `BeurteilOrd`)
         return apErfkritWerte.map(el => ({
           value: el.BeurteilId,
-          label: el.BeurteilTxt,
+          label: el.BeurteilTxt
         }))
       },
       { name: `dropdownListApErfkritWerte` }
     ),
     tpopmassnErfbeurtWerte: computed(
       () => {
-        let tpopmassnErfbeurtWerte = Array.from(store.table.tpopmassn_erfbeurt_werte.values())
+        let tpopmassnErfbeurtWerte = Array.from(
+          store.table.tpopmassn_erfbeurt_werte.values()
+        )
         tpopmassnErfbeurtWerte = sortBy(tpopmassnErfbeurtWerte, `BeurteilOrd`)
         return tpopmassnErfbeurtWerte.map(el => ({
           value: el.BeurteilId,
-          label: el.BeurteilTxt,
+          label: el.BeurteilTxt
         }))
       },
       { name: `dropdownListTpopmassnErfbeurtWerte` }
@@ -126,16 +125,14 @@ export default (store: Object) => {
         )
         return tpopApBerichtRelevantWerte.map(t => ({
           value: t.DomainCode,
-          label: t.DomainTxt,
+          label: t.DomainTxt
         }))
       },
       { name: `dropdownListTpopApBerichtRelevantWerte` }
     ),
     gemeinden: computed(
       () => {
-        let gemeinden = Array.from(
-          store.table.gemeinde.values()
-        )
+        let gemeinden = Array.from(store.table.gemeinde.values())
         gemeinden = sortBy(gemeinden, `GmdName`)
         return gemeinden.map(el => el.GmdName)
       },
@@ -143,11 +140,13 @@ export default (store: Object) => {
     ),
     idbiotopuebereinstWerte: computed(
       () => {
-        let idbiotopuebereinstWerte = Array.from(store.table.tpopkontr_idbiotuebereinst_werte.values())
+        let idbiotopuebereinstWerte = Array.from(
+          store.table.tpopkontr_idbiotuebereinst_werte.values()
+        )
         idbiotopuebereinstWerte = sortBy(idbiotopuebereinstWerte, `DomainOrd`)
         return idbiotopuebereinstWerte.map(el => ({
           value: el.DomainCode,
-          label: el.DomainTxt,
+          label: el.DomainTxt
         }))
       },
       { name: `dropdownListIdbiotopuebereinstWerte` }
@@ -168,11 +167,11 @@ export default (store: Object) => {
         zaehleinheitWerte = sortBy(zaehleinheitWerte, `ZaehleinheitOrd`)
         zaehleinheitWerte = zaehleinheitWerte.map(el => ({
           value: el.ZaehleinheitCode,
-          label: el.ZaehleinheitTxt,
+          label: el.ZaehleinheitTxt
         }))
         zaehleinheitWerte.unshift({
           value: null,
-          label: ``,
+          label: ``
         })
         return zaehleinheitWerte
       },
@@ -186,7 +185,7 @@ export default (store: Object) => {
         methodeWerte = sortBy(methodeWerte, `BeurteilOrd`)
         methodeWerte = methodeWerte.map(el => ({
           value: el.BeurteilCode,
-          label: el.BeurteilTxt,
+          label: el.BeurteilTxt
         }))
         return methodeWerte
       },
@@ -200,23 +199,21 @@ export default (store: Object) => {
         tpopMassnTypWerte = sortBy(tpopMassnTypWerte, `MassnTypOrd`)
         return tpopMassnTypWerte.map(el => ({
           value: el.MassnTypCode,
-          label: el.MassnTypTxt,
+          label: el.MassnTypTxt
         }))
       },
       { name: `dropdownListTpopMassnTypWerte` }
     ),
     zielTypWerte: computed(
       () => {
-        let zielTypWerte = Array.from(
-          store.table.ziel_typ_werte.values()
-        )
+        let zielTypWerte = Array.from(store.table.ziel_typ_werte.values())
         zielTypWerte = sortBy(zielTypWerte, `ZieltypOrd`)
         return zielTypWerte.map(el => ({
           value: el.ZieltypId,
-          label: el.ZieltypTxt,
+          label: el.ZieltypTxt
         }))
       },
       { name: `dropdownListZielTypWerte` }
-    ),
+    )
   })
 }

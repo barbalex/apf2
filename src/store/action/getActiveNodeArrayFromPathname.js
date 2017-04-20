@@ -1,5 +1,5 @@
 // @flow
-export default () => {
+export default (): Array<number | string> => {
   const pathName = window.location.pathname.replace(`/`, ``)
   const pathElements = pathName.split(`/`)
   if (pathElements[0] === `v2`) {

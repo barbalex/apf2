@@ -13,7 +13,7 @@ import extendMapBeobNichtZuzuordnen from './mapBeobNichtZuzuordnen'
 import extendMapTpopBeob from './mapTpopBeob'
 import extendExport from './export'
 
-export default (store: Object) => {
+export default (store: Object): void => {
   extendStore(store)
   extendTree(store, store.tree)
   extendTree(store, store.tree2)
