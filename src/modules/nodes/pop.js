@@ -17,7 +17,10 @@ export default (
   const projIndex = findIndex(tree.filteredAndSorted.projekt, {
     ProjId: projId
   })
-  const apIndex = findIndex(tree.filteredAndSorted.ap, { ApArtId: apArtId })
+  const apIndex = findIndex(
+    tree.filteredAndSorted.ap.filter(a => a.ProjId === projId),
+    { ApArtId: apArtId }
+  )
 
   // map through all pop and create array of nodes
   return tree.filteredAndSorted.pop
