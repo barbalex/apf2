@@ -4,6 +4,7 @@ import tables from './tables'
 export default (store: Object, payload: Object): void => {
   const { table, type, row } = payload
   const tableMeta = tables.find(t => t.table === table)
+  // $FlowIssue
   const idField = tableMeta.idField
   if (tableMeta && idField) {
     const id = row[idField]

@@ -18,18 +18,17 @@ export default (store: Object, parentId: number): void => {
   // ensure derived data exists
   const tabelle = tables.find(t => t.table === table)
   // in tpopfeldkontr and tpopfreiwkontr need to find dbTable
+  // $FlowIssue
   if (tabelle.dbTable) {
     table = tabelle.dbTable
   }
   const idField = tabelle ? tabelle.idField : undefined
   if (!idField) {
     return store.listError(
-      new Error(
-        // $FlowIssue
-        `change was not saved because idField was not found`
-      )
+      new Error('change was not saved because idField was not found')
     )
   }
+  // $FlowIssue
   const parentIdField = tabelle.parentIdField
   if (!parentIdField) {
     return store.listError(
