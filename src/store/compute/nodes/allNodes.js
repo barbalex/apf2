@@ -55,6 +55,7 @@ import tpopberNodes from '../../../modules/nodes/tpopber'
 import tpopfreiwkontrNodes from '../../../modules/nodes/tpopfreiwkontr'
 import tpopfeldkontrNodes from '../../../modules/nodes/tpopfeldkontr'
 import tpopmassnberNodes from '../../../modules/nodes/tpopmassnber'
+import tpopmassnNodes from '../../../modules/nodes/tpopmassn'
 
 const compare = (a, b) => {
   // sort a before, if it has no value at this index
@@ -368,6 +369,21 @@ export default (store, tree) => {
       nodes = [
         ...nodes,
         ...tpopmassnberNodes(store, tree, projId, apArtId, popId, tpopId)
+      ]
+    }
+    if (
+      node.length === 9 &&
+      node[4] === 'Populationen' &&
+      node[6] === 'Teil-Populationen' &&
+      node[8] === 'Massnahmen' &&
+      allParentNodesAreOpen(openNodes, node)
+    ) {
+      const apArtId = node[3]
+      const popId = node[5]
+      const tpopId = node[7]
+      nodes = [
+        ...nodes,
+        ...tpopmassnNodes(store, tree, projId, apArtId, popId, tpopId)
       ]
     }
   })
