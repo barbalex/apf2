@@ -1,3 +1,4 @@
+// @flow
 import React from 'react'
 import ReactDOMServer from 'react-dom/server'
 import 'leaflet'
@@ -12,21 +13,30 @@ import popIcon from '../../etc/pop.png'
 import popIconHighlighted from '../../etc/popHighlighted.png'
 import PopPopup from '../../components/Projekte/Karte/PopPopup'
 
-export default (store) => {
+export default (store: Object): Object => {
   const { pops, labelUsingNr, highlightedIds } = store.map.pop
   const visible = store.map.activeApfloraLayers.includes(`Pop`)
   const mcgOptions = {
     maxClusterRadius: 66,
-    iconCreateFunction: function (cluster) {
+    iconCreateFunction: function(cluster) {
       const markers = cluster.getAllChildMarkers()
-      const hasHighlightedPop = some(markers, (m) => m.options.icon.options.className === `popIconHighlighted`)
-      const className = hasHighlightedPop ? `popClusterHighlighted` : `popCluster`
-      return window.L.divIcon({ html: markers.length, className, iconSize: window.L.point(40, 40) })
-    },
+      const hasHighlightedPop = some(
+        markers,
+        m => m.options.icon.options.className === `popIconHighlighted`
+      )
+      const className = hasHighlightedPop
+        ? `popClusterHighlighted`
+        : `popCluster`
+      return window.L.divIcon({
+        html: markers.length,
+        className,
+        iconSize: window.L.point(40, 40)
+      })
+    }
   }
   const markers = window.L.markerClusterGroup(mcgOptions)
   if (visible) {
-    pops.forEach((p) => {
+    pops.forEach(p => {
       if (p.PopKoordWgs84) {
         let title = labelUsingNr ? p.PopNr : p.PopName
         // beware: leaflet needs title to always be a string
@@ -37,22 +47,28 @@ export default (store) => {
           permanent: true,
           direction: `bottom`,
           className: `mapTooltip`,
-          opacity: 1,
+          opacity: 1
         }
         const isHighlighted = highlightedIds.includes(p.PopId)
         const latLng = new window.L.LatLng(...p.PopKoordWgs84)
         const icon = window.L.icon({
           iconUrl: isHighlighted ? popIconHighlighted : popIcon,
           iconSize: [24, 24],
-          className: isHighlighted ? `popIconHighlighted` : `popIcon`,
+          className: isHighlighted ? `popIconHighlighted` : `popIcon`
         })
-        const marker = window.L.marker(latLng, {
-          title,
-          icon,
-          zIndexOffset: -store.map.apfloraLayers.findIndex((apfloraLayer) =>
-            apfloraLayer.value === `Pop`
+        const marker = window.L
+          .marker(latLng, {
+            title,
+            icon,
+            zIndexOffset: -store.map.apfloraLayers.findIndex(
+              apfloraLayer => apfloraLayer.value === `Pop`
+            )
+          })
+          .bindPopup(
+            ReactDOMServer.renderToStaticMarkup(
+              <PopPopup store={store} pop={p} />
+            )
           )
-        }).bindPopup(ReactDOMServer.renderToStaticMarkup(<PopPopup store={store} pop={p} />))
           .bindTooltip(title, tooltipOptions)
         markers.addLayer(marker)
       }

@@ -1,6 +1,7 @@
-export default (popsPassed) => {
+// @flow
+export default (popsPassed: Array<Object>): Array<Array<number>> => {
   const pops = popsPassed.filter(t => !!t.PopKoordWgs84)
-  if (pops.length === 0) return null
+  if (pops.length === 0) return []
   const xKoords = pops.map(p => p.PopKoordWgs84[0])
   const yKoords = pops.map(p => p.PopKoordWgs84[1])
   const maxX = Math.max(...xKoords)
