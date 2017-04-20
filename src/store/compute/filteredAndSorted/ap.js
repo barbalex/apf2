@@ -1,6 +1,7 @@
+// @flow
 import sortBy from 'lodash/sortBy'
 
-export default (store, tree) => {
+export default (store: Object, tree: Object): Object => {
   const { table } = store
   const { nodeLabelFilter, apFilter } = tree
   const { adb_eigenschaften } = table

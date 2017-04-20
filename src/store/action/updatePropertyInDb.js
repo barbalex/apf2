@@ -10,7 +10,12 @@ import updatePropertyInIdb from './updatePropertyInIdb'
 import deleteDatasetInIdb from './deleteDatasetInIdb'
 import insertDatasetInIdb from './insertDatasetInIdb'
 
-export default (store: Object, tree: Object, key: string, valuePassed: string|number) => {
+export default (
+  store: Object,
+  tree: Object,
+  key: string,
+  valuePassed: string | number
+): any => {
   const { row, valid } = tree.activeDataset
   let value = valuePassed
   let table = tree.activeDataset.table
@@ -31,10 +36,9 @@ export default (store: Object, tree: Object, key: string, valuePassed: string|nu
   }
 
   // ensure derived data exists
-  const tabelle = tables.find(t =>
-    t.table === table
-  )
+  const tabelle = tables.find(t => t.table === table)
   // in tpopfeldkontr and tpopfreiwkontr need to find dbTable
+  // $FlowIssue
   if (tabelle.dbTable) {
     table = tabelle.dbTable
   }
@@ -98,7 +102,8 @@ export default (store: Object, tree: Object, key: string, valuePassed: string|nu
     const newActiveNodeArray = clone(toJS(tree.activeNodeArray))
     // $FlowIssue
     const url = `${apiBaseUrl}/update/apflora/tabelle=${table}/tabelleIdFeld=${idField}/tabelleId=${tabelleId}/feld=${key}/wert=${value}/user=${user}`
-    axios.put(url)
+    axios
+      .put(url)
       .then(() => {
         // update in idb
         if (!artWasChanged) {
@@ -111,11 +116,9 @@ export default (store: Object, tree: Object, key: string, valuePassed: string|nu
         }
         // if beobNichtBeurteilt is set to beobNichtZuordnen, url needs to change
         if (table === `beobzuordnung` && key === `BeobNichtZuordnen`) {
-          newActiveNodeArray[4] = (
-            value === 1 ?
-            `nicht-zuzuordnende-Beobachtungen` :
-            `nicht-beurteilte-Beobachtungen`
-          )
+          newActiveNodeArray[4] = value === 1
+            ? `nicht-zuzuordnende-Beobachtungen`
+            : `nicht-beurteilte-Beobachtungen`
           newActiveNodeArray[5] = tree.activeDataset.row.NO_NOTE
           tree.setActiveNodeArray(newActiveNodeArray.slice(0, 6))
         }
@@ -128,7 +131,7 @@ export default (store: Object, tree: Object, key: string, valuePassed: string|nu
           tree.setActiveNodeArray(newActiveNodeArray)
         }
       })
-      .catch((error) => {
+      .catch(error => {
         // revert change in store
         row[key] = oldValue
         store.listError(error)

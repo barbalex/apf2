@@ -5,15 +5,13 @@ export default ({
   store,
   data,
   table,
-  field,
-}:{
+  field
+}: {
   store: Object,
-  data:Array<Object>,
+  data: Array<Object>,
   table: string,
-  field: string,
-}) =>
+  field: string
+}): void =>
   runInAction(() => {
-    data.forEach(d =>
-      store.table[table].set(d[field], d)
-    )
+    data.forEach(d => store.table[table].set(d[field], d))
   })
