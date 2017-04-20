@@ -9,7 +9,7 @@ const enhance = compose(
   renameProps({
     berichtjahr: `berichtjahrPassed`,
     messages: `messagesPassed`,
-    filter: `filterPassed`,
+    filter: `filterPassed`
   })
 )
 
@@ -18,21 +18,23 @@ const setQk = ({
   tree,
   berichtjahrPassed,
   messagesPassed,
-  filterPassed,
-}:{
+  filterPassed
+}: {
   store: Object,
   tree: Object,
   berichtjahrPassed: number,
-  messagesPassed:Array<Object>,
-  filterPassed: string,
-}) => {
+  messagesPassed: Array<Object>,
+  filterPassed: string
+}): void => {
   const apArtId = tree.activeNodes.ap
   let berichtjahr = berichtjahrPassed
   const messages = messagesPassed || []
   let filter = filterPassed
   const existingQk = store.qk.get(apArtId)
   if (!berichtjahr && berichtjahr !== 0) {
-    const existingBerichtjahr = existingQk && existingQk.berichtjahr ? existingQk.berichtjahr : ``
+    const existingBerichtjahr = existingQk && existingQk.berichtjahr
+      ? existingQk.berichtjahr
+      : ``
     if (existingBerichtjahr) {
       berichtjahr = existingBerichtjahr
     } else {
@@ -47,7 +49,7 @@ const setQk = ({
   const value = buildQkMessages({
     berichtjahr,
     messages,
-    filter,
+    filter
   })
   store.qk.set(apArtId, value)
 }

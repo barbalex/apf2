@@ -7,20 +7,19 @@ import app from 'ampersand-app'
 // fetched from idb
 // so need to set store.user.name to `` if something
 // goes wrong or no user name is received
-export default (store: Object) => {
+export default (store: Object): void =>
   app.db.currentUser
-  .toArray()
-  .then((users) => {
-    if (users[0] && users[0].name) {
-      store.user.name = users[0].name
-      store.user.readOnly = users[0].readOnly
-    } else {
+    .toArray()
+    .then(users => {
+      if (users[0] && users[0].name) {
+        store.user.name = users[0].name
+        store.user.readOnly = users[0].readOnly
+      } else {
+        store.user.name = ``
+        store.user.readOnly = true
+      }
+    })
+    .catch(error => {
+      store.listError(error)
       store.user.name = ``
-      store.user.readOnly = true
-    }
-  })
-  .catch((error) => {
-    store.listError(error)
-    store.user.name = ``
-  })
-}
+    })
