@@ -4,10 +4,8 @@ import isEqual from 'lodash/isEqual'
 
 import isNodeOpen from '../../modules/isNodeOpen'
 
-export default (store: Object, tree: Object, node: Object) => {
-  if (!tree) return store.listError(new Error('no tree passed'))
-  if (!node) return store.listError(new Error('no node passed'))
-  if (!node.url) return store.listError(new Error('node has no url'))
+export default (store: Object, tree: Object, node: Object): any => {
+  if (!node.url) return store.listError(new Error('passed node has no url'))
 
   if (isNodeOpen(toJS(tree.openNodes), node.url)) {
     tree.openNodes = toJS(tree.openNodes).filter(n => !isEqual(n, node.url))
