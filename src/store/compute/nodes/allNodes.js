@@ -49,6 +49,7 @@ import tpopfreiwkontrFolderNodes
 import tpopfeldkontrFolderNodes
   from '../../../modules/nodes/tpopfeldkontrFolder'
 import tpopmassnberFolderNodes from '../../../modules/nodes/tpopmassnberFolder'
+import tpopmassnFolderNodes from '../../../modules/nodes/tpopmassnFolder'
 
 const compare = (a, b) => {
   // sort a before, if it has no value at this index
@@ -267,6 +268,7 @@ export default (store, tree) => {
       const tpopId = node[7]
       nodes = [
         ...nodes,
+        ...tpopmassnFolderNodes(store, tree, projId, apArtId, popId, tpopId),
         ...tpopmassnberFolderNodes(store, tree, projId, apArtId, popId, tpopId),
         ...tpopfeldkontrFolderNodes(
           store,
