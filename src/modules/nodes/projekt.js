@@ -1,4 +1,5 @@
-export default (store, tree) =>
+// @flow
+export default (store: Object, tree: Object): Array<Object> =>
   tree.filteredAndSorted.projekt.map((el, index) => ({
     nodeType: `table`,
     menuType: `projekt`,
