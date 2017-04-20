@@ -36,6 +36,7 @@ import assozartNodes from '../../../modules/nodes/assozart'
 import berNodes from '../../../modules/nodes/ber'
 import apberNodes from '../../../modules/nodes/apber'
 import erfkritNodes from '../../../modules/nodes/erfkrit'
+import tpopFolderNodes from '../../../modules/nodes/tpopFolder'
 
 const compare = (a, b) => {
   // sort a before, if it has no value at this index
@@ -198,6 +199,18 @@ export default (store, tree) => {
     ) {
       const apArtId = node[3]
       nodes = [...nodes, ...erfkritNodes(store, tree, projId, apArtId)]
+    }
+    if (
+      node.length === 6 &&
+      node[4] === 'Populationen' &&
+      allParentNodesAreOpen(openNodes, node)
+    ) {
+      const apArtId = node[3]
+      const popId = node[5]
+      nodes = [
+        ...nodes,
+        ...tpopFolderNodes(store, tree, projId, apArtId, popId)
+      ]
     }
   })
 
