@@ -14,7 +14,7 @@ import nodes from '../../compute/nodes'
 import setOpenNodesFromActiveNodeArray
   from '../../action/setOpenNodesFromActiveNodeArray'
 
-export default (store: Object, tree: Object) => {
+export default (store: Object, tree: Object): void => {
   extendObservable(tree, {
     /**
      * activeNodeArray is used to control tree and forms

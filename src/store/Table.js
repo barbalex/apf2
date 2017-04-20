@@ -3,8 +3,8 @@ import { observable } from 'mobx'
 
 import tableNames from '../modules/tableStoreNames'
 
-const initiateObservables = (tableObject) => {
-  tableNames.forEach((tableName) => {
+const initiateObservables = (tableObject: Object): void => {
+  tableNames.forEach(tableName => {
     tableObject[tableName] = observable.map()
   })
 }

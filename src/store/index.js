@@ -1,49 +1,47 @@
 // @flow
-import {
-  observable,
-} from 'mobx'
+import { observable } from 'mobx'
 
 import TableStore from './Table'
 import ObservableHistory from './ObservableHistory'
 import extendStore from './extend'
 
-function Store() {
+function Store(): void {
   this.history = ObservableHistory
   this.loading = []
   this.urlQuery = {
     projekteTabs: [],
-    feldkontrTab: `entwicklung`,
+    feldkontrTab: `entwicklung`
   }
   this.datasetToDelete = {}
-  this.tellUserReadOnly = null
-  this.fetchLogin = null
-  this.logout = null
-  this.setLoginFromIdb = null
-  this.fetchQk = null
-  this.setQkFilter = null
-  this.addMessagesToQk = null
-  this.fetchFieldsFromIdb = null
-  this.insertBeobzuordnung = null
-  this.insertDataset = null
-  this.deleteDatasetDemand = null
-  this.deleteDatasetAbort = null
-  this.deleteDatasetExecute = null
-  this.deleteBeobzuordnung = null
-  this.listError = null
-  this.updateProperty = null
-  this.updatePropertyInDb = null
-  this.fetchTable = null
-  this.fetchStammdaten = null
-  this.fetchBeobzuordnung = null
-  this.fetchTableByParentId = null
-  this.fetchTpopForAp = null
-  this.fetchPopForAp = null
-  this.fetchDatasetById = null
-  this.fetchBeobBereitgestellt = null
-  this.fetchBeobEvab = null
-  this.fetchBeobInfospezies = null
-  this.writeToStore = null
-  this.setUrlQuery = null
+  this.tellUserReadOnly = () => {}
+  this.fetchLogin = () => {}
+  this.logout = () => {}
+  this.setLoginFromIdb = () => {}
+  this.fetchQk = () => {}
+  this.setQkFilter = () => {}
+  this.addMessagesToQk = () => {}
+  this.fetchFieldsFromIdb = () => {}
+  this.insertBeobzuordnung = () => {}
+  this.insertDataset = () => {}
+  this.deleteDatasetDemand = () => {}
+  this.deleteDatasetAbort = () => {}
+  this.deleteDatasetExecute = () => {}
+  this.deleteBeobzuordnung = () => {}
+  this.listError = () => {}
+  this.updateProperty = () => {}
+  this.updatePropertyInDb = () => {}
+  this.fetchTable = () => {}
+  this.fetchStammdaten = () => {}
+  this.fetchBeobzuordnung = () => {}
+  this.fetchTableByParentId = () => {}
+  this.fetchTpopForAp = () => {}
+  this.fetchPopForAp = () => {}
+  this.fetchDatasetById = () => {}
+  this.fetchBeobBereitgestellt = () => {}
+  this.fetchBeobEvab = () => {}
+  this.fetchBeobInfospezies = () => {}
+  this.writeToStore = () => {}
+  this.setUrlQuery = () => {}
   this.tree = {
     name: `tree`,
     activeNodeArray: [],
@@ -51,7 +49,7 @@ function Store() {
     activeNode: null,
     activeDataset: {},
     apFilter: false,
-    toggleApFilter: null,
+    toggleApFilter: () => {},
     nodeLabelFilter: {},
     activeNodeFilter: {},
     applyMapFilterToTree: false,
@@ -105,7 +103,7 @@ function Store() {
       tpopmassnberFolder: null,
       tpopmassnber: null,
       tpopmassnFolder: null,
-      tpopmassn: null,
+      tpopmassn: null
     }
   }
   this.tree2 = {
@@ -115,7 +113,7 @@ function Store() {
     activeNode: null,
     activeDataset: {},
     apFilter: false,
-    toggleApFilter: null,
+    toggleApFilter: () => {},
     nodeLabelFilter: {},
     activeNodeFilter: {},
     applyMapFilterToTree: false,
@@ -169,16 +167,16 @@ function Store() {
       tpopmassnberFolder: null,
       tpopmassnber: null,
       tpopmassnFolder: null,
-      tpopmassn: null,
+      tpopmassn: null
     }
   }
   this.export = {
     applyNodeLabelFilterToExport: false,
-    toggleApplyNodeLabelFilterToExport: null,
+    toggleApplyNodeLabelFilterToExport: () => {},
     applyActiveNodeFilterToExport: false,
-    toggleApplyActiveNodeFilterToExport: null,
+    toggleApplyActiveNodeFilterToExport: () => {},
     applyMapFilterToExport: false,
-    toggleApplyMapFilterToExport: null,
+    toggleApplyMapFilterToExport: () => {}
   }
   this.dropdownList = {
     adressen: [],
@@ -197,7 +195,7 @@ function Store() {
     zaehleinheitWerte: [],
     methodeWerte: [],
     tpopMassnTypWerte: [],
-    zielTypWerte: [],
+    zielTypWerte: []
   }
   this.ui = {}
   this.app = {}
@@ -232,9 +230,9 @@ function Store() {
       tpop: [],
       beobNichtZuzuordnen: [],
       beobNichtBeurteilt: [],
-      tpopBeob: [],
+      tpopBeob: []
     },
-    updateMapFilter: null,
+    updateMapFilter: () => {}
   }
   this.table = TableStore
   this.valuesForWhichTableDataWasFetched = {}
@@ -242,16 +240,16 @@ function Store() {
   this.moving = {
     table: null,
     id: null,
-    label: null,
+    label: null
   }
   this.copying = {
     table: null,
     id: null,
-    label: null,
+    label: null
   }
   this.copyingBiotop = {
     id: null,
-    label: null,
+    label: null
   }
 }
 
