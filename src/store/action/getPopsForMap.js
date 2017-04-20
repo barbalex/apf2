@@ -1,7 +1,7 @@
 // @flow
 import epsg21781to4326 from '../../modules/epsg21781to4326'
 
-export default (store: Object) => {
+export default (store: Object): Array<Object> => {
   const { table, tree } = store
   const myApArtId = tree.activeNodes.ap || store.map.pop.apArtId
   // get pops of this ap
@@ -12,13 +12,13 @@ export default (store: Object) => {
   // filter them by nodeLabelFilter
   const popFilterString = tree.nodeLabelFilter.get(`pop`)
   if (popFilterString) {
-    pops = pops.filter((p) => {
+    pops = pops.filter(p => {
       const label = `${p.PopNr || `(keine Nr)`}: ${p.PopName || `(kein Name)`}`
       return label.toLowerCase().includes(popFilterString.toLowerCase())
     })
   }
 
-  pops = pops.map((p) => {
+  pops = pops.map(p => {
     p.PopKoordWgs84 = epsg21781to4326(p.PopXKoord, p.PopYKoord)
     return p
   })

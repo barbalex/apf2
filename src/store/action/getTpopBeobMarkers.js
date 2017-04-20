@@ -1,3 +1,4 @@
+// @flow
 import React from 'react'
 import ReactDOMServer from 'react-dom/server'
 import 'leaflet'
@@ -7,12 +8,12 @@ import beobIconHighlighted from '../../etc/beobZugeordnetHighlighted.png'
 import BeobPopup from '../../components/Projekte/Karte/BeobPopup'
 import getNearestTpopId from '../../modules/getNearestTpopId'
 
-export default (store) => {
+export default (store: Object): Array<Object> => {
   const { beobs, highlightedIds } = store.map.tpopBeob
   const visible = store.map.activeApfloraLayers.includes(`TpopBeob`)
 
   if (visible) {
-    return beobs.map((p) => {
+    return beobs.map(p => {
       const title = p.label
       const isHighlighted = highlightedIds.includes(
         isNaN(p.BeobId) ? p.BeobId : Number(p.BeobId)
@@ -21,20 +22,23 @@ export default (store) => {
       const icon = window.L.icon({
         iconUrl: isHighlighted ? beobIconHighlighted : beobIcon,
         iconSize: [24, 24],
-        className: isHighlighted ? `beobIconHighlighted` : `beobIcon`,
+        className: isHighlighted ? `beobIconHighlighted` : `beobIcon`
       })
-      return window.L.marker(latLng, {
-        title,
-        icon,
-        draggable: store.map.beob.assigning,
-        zIndexOffset: -store.map.apfloraLayers.findIndex((apfloraLayer) =>
-          apfloraLayer.value === `TpopBeob`
+      return window.L
+        .marker(latLng, {
+          title,
+          icon,
+          draggable: store.map.beob.assigning,
+          zIndexOffset: -store.map.apfloraLayers.findIndex(
+            apfloraLayer => apfloraLayer.value === `TpopBeob`
+          )
+        })
+        .bindPopup(
+          ReactDOMServer.renderToStaticMarkup(
+            <BeobPopup store={store} beobBereitgestellt={p} />
+          )
         )
-      })
-        .bindPopup(ReactDOMServer.renderToStaticMarkup(
-          <BeobPopup store={store} beobBereitgestellt={p} />
-        ))
-        .on('moveend', (event) => {
+        .on('moveend', event => {
           /**
            * assign to nearest tpop
            * point url to moved beob
@@ -44,7 +48,18 @@ export default (store) => {
           const { activeNodes } = tree
           const nearestTpopId = getNearestTpopId(store, event.target._latlng)
           const popId = table.tpop.get(nearestTpopId).PopId
-          const newActiveNodeArray = [`Projekte`, activeNodes.projekt, `Arten`, activeNodes.ap, `Populationen`, popId, `Teil-Populationen`, nearestTpopId, `Beobachtungen`, p.BeobId]
+          const newActiveNodeArray = [
+            `Projekte`,
+            activeNodes.projekt,
+            `Arten`,
+            activeNodes.ap,
+            `Populationen`,
+            popId,
+            `Teil-Populationen`,
+            nearestTpopId,
+            `Beobachtungen`,
+            p.BeobId
+          ]
           store.tree.setActiveNodeArray(newActiveNodeArray)
           updatePropertyInDb(tree, `TPopId`, nearestTpopId)
         })

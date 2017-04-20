@@ -1,23 +1,24 @@
+// @flow
 import 'leaflet'
 
-export default (store) => {
+export default (store: Object): Array<Object> => {
   const { beobs, highlightedIds } = store.map.tpopBeob
-  const visible = store.map.activeApfloraLayers.includes(`TpopBeobAssignPolylines`)
+  const visible = store.map.activeApfloraLayers.includes(
+    `TpopBeobAssignPolylines`
+  )
   if (visible) {
-    return beobs.map((p) => {
+    return beobs.map(p => {
       const isHighlighted = highlightedIds.includes(
         isNaN(p.BeobId) ? p.BeobId : Number(p.BeobId)
       )
       const tpop = store.table.tpop.get(p.beobzuordnung.TPopId)
-      const tpopKoord = (
-        tpop && tpop.TPopKoordWgs84 ?
-        tpop.TPopKoordWgs84 :
-        p.KoordWgs84
-      )
+      const tpopKoord = tpop && tpop.TPopKoordWgs84
+        ? tpop.TPopKoordWgs84
+        : p.KoordWgs84
       const latlngs = [p.KoordWgs84, tpopKoord]
 
       return window.L.polyline(latlngs, {
-        color: isHighlighted ? `yellow` : `#FF00FF`,
+        color: isHighlighted ? `yellow` : `#FF00FF`
       })
     })
   }
