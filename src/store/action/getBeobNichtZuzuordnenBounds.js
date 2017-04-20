@@ -1,5 +1,6 @@
-export default (beobs) => {
-  if (beobs.length === 0) return null
+// @flow
+export default (beobs: Array<Object>): Array<Array<number>> => {
+  if (beobs.length === 0) return []
   const xKoords = beobs.map(p => p.KoordWgs84[0])
   const yKoords = beobs.map(p => p.KoordWgs84[1])
   const maxX = Math.max(...xKoords)
