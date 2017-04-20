@@ -4,19 +4,31 @@ import app from 'ampersand-app'
 
 import apiBaseUrl from '../../modules/apiBaseUrl'
 import tables from '../../modules/tables'
-import recordValuesForWhichTableDataWasFetched from '../../modules/recordValuesForWhichTableDataWasFetched'
+import recordValuesForWhichTableDataWasFetched
+  from '../../modules/recordValuesForWhichTableDataWasFetched'
 
-export default (
-  { store, schemaName, tableName, id }:
-  {store: Object,schemaName: string,tableName: string,id: number|string}
-) => {
+export default ({
+  store,
+  schemaName,
+  tableName,
+  id
+}: {
+  store: Object,
+  schemaName: string,
+  tableName: string,
+  id: number | string
+}): any => {
   if (!tableName) {
-    return new Error(`action fetchDatasetById: tableName must be passed`)
+    return store.listError(
+      new Error(`action fetchDatasetById: tableName must be passed`)
+    )
   }
   if (!id) {
-    return new Error(`action fetchDatasetById: id must be passed`)
+    return store.listError(
+      new Error(`action fetchDatasetById: id must be passed`)
+    )
   }
-  schemaName = schemaName || `apflora`  // eslint-disable-line no-param-reassign
+  schemaName = schemaName || `apflora` // eslint-disable-line no-param-reassign
 
   const idField = tables.find(t => t.table === tableName).idField
 
@@ -35,17 +47,28 @@ export default (
   store.loading.push(tableName)
   app.db[tableName]
     .toArray()
-    .then((data) => {
+    .then(data => {
       // dont write all data - filter for needed id first
       const dataToWrite = data.filter(d => d[idField] === id)
-      store.writeToStore({ data: dataToWrite, table: tableName, field: idField })
-      recordValuesForWhichTableDataWasFetched({ store, table: tableName, field: idField, value: id })
+      store.writeToStore({
+        data: dataToWrite,
+        table: tableName,
+        field: idField
+      })
+      recordValuesForWhichTableDataWasFetched({
+        store,
+        table: tableName,
+        field: idField,
+        value: id
+      })
     })
     .then(() => axios.get(url))
     .then(({ data }) => {
       store.loading = store.loading.filter(el => el !== tableName)
       // leave ui react before this happens
-      setTimeout(() => store.writeToStore({ data, table: tableName, field: idField }))
+      setTimeout(() =>
+        store.writeToStore({ data, table: tableName, field: idField })
+      )
       setTimeout(() => app.db[tableName].bulkPut(data))
     })
     .catch(error => {

@@ -11,12 +11,12 @@ import forEach from 'lodash/forEach'
 const fetchDataForActiveNodes = (
   store: Object,
   tree: Object,
-  showPop:boolean,
-  showTpop:boolean,
-  showTpopBeob:boolean,
-  showBeobNichtBeurteilt:boolean,
-  showBeobNichtZuzuordnen:boolean
-) => {
+  showPop: boolean,
+  showTpop: boolean,
+  showTpopBeob: boolean,
+  showBeobNichtBeurteilt: boolean,
+  showBeobNichtZuzuordnen: boolean
+): void => {
   const { activeNodes } = tree
   const fetchingFromActiveElements = {
     exporte() {
@@ -28,10 +28,18 @@ const fetchDataForActiveNodes = (
     },
     projekt() {
       store.fetchTableByParentId(`apflora`, `ap`, activeNodes.projekt)
-      store.fetchTableByParentId(`apflora`, `apberuebersicht`, activeNodes.projekt)
+      store.fetchTableByParentId(
+        `apflora`,
+        `apberuebersicht`,
+        activeNodes.projekt
+      )
     },
     apberuebersichtFolder() {
-      store.fetchTableByParentId(`apflora`, `apberuebersicht`, activeNodes.projekt)
+      store.fetchTableByParentId(
+        `apflora`,
+        `apberuebersicht`,
+        activeNodes.projekt
+      )
     },
     apFolder() {
       store.fetchTable(`beob`, `adb_eigenschaften`)
@@ -57,11 +65,7 @@ const fetchDataForActiveNodes = (
       if (showPop) {
         store.fetchPopForAp(activeNodes.ap)
       }
-      if (
-        showBeobNichtBeurteilt ||
-        showBeobNichtZuzuordnen ||
-        showTpopBeob
-      ) {
+      if (showBeobNichtBeurteilt || showBeobNichtZuzuordnen || showTpopBeob) {
         store.fetchTable(`beob`, `beob_quelle`)
         store.fetchPopForAp(activeNodes.ap)
         store.fetchTpopForAp(activeNodes.ap)
@@ -80,17 +84,13 @@ const fetchDataForActiveNodes = (
       store.fetchBeobEvab(activeNodes.ap)
       store.fetchBeobInfospezies(activeNodes.ap)
     },
-    beobNichtZuzuordnen () {
+    beobNichtZuzuordnen() {
       const id = activeNodes.beobNichtZuzuordnen
-      const table = (
-        isNaN(id) ?
-        `beob_evab` :
-        `beob_infospezies`
-      )
+      const table = isNaN(id) ? `beob_evab` : `beob_infospezies`
       store.fetchDatasetById({
         schemaName: `beob`,
         tableName: table,
-        id,
+        id
       })
     },
     beobzuordnungFolder() {
@@ -151,13 +151,21 @@ const fetchDataForActiveNodes = (
       store.fetchTable(`beob`, `adb_lr`)
     },
     tpopfeldkontr() {
-      store.fetchTableByParentId(`apflora`, `tpopkontrzaehl`, activeNodes.tpopfeldkontr)
+      store.fetchTableByParentId(
+        `apflora`,
+        `tpopkontrzaehl`,
+        activeNodes.tpopfeldkontr
+      )
       store.fetchTable(`apflora`, `tpopkontrzaehl_einheit_werte`)
       store.fetchTable(`apflora`, `tpopkontrzaehl_methode_werte`)
     },
     tpopfreiwkontrFolder() {},
     tpopfreiwkontr() {
-      store.fetchTableByParentId(`apflora`, `tpopkontrzaehl`, activeNodes.tpopfreiwkontr)
+      store.fetchTableByParentId(
+        `apflora`,
+        `tpopkontrzaehl`,
+        activeNodes.tpopfreiwkontr
+      )
       store.fetchTable(`apflora`, `tpopkontrzaehl_einheit_werte`)
       store.fetchTable(`apflora`, `tpopkontrzaehl_methode_werte`)
     },
@@ -171,17 +179,13 @@ const fetchDataForActiveNodes = (
     },
     tpopbeob() {
       const id = activeNodes.tpopbeob
-      const table = (
-        isNaN(id) ?
-        `beob_evab` :
-        `beob_infospezies`
-      )
+      const table = isNaN(id) ? `beob_evab` : `beob_infospezies`
       store.fetchDatasetById({
         schemaName: `beob`,
         tableName: table,
-        id,
+        id
       })
-    },
+    }
   }
 
   runInAction(() => {
