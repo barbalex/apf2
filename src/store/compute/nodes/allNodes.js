@@ -50,6 +50,7 @@ import tpopfeldkontrFolderNodes
   from '../../../modules/nodes/tpopfeldkontrFolder'
 import tpopmassnberFolderNodes from '../../../modules/nodes/tpopmassnberFolder'
 import tpopmassnFolderNodes from '../../../modules/nodes/tpopmassnFolder'
+import tpopbeobNodes from '../../../modules/nodes/tpopbeob'
 
 const compare = (a, b) => {
   // sort a before, if it has no value at this index
@@ -288,6 +289,21 @@ export default (store, tree) => {
         ),
         ...tpopberFolderNodes(store, tree, projId, apArtId, popId, tpopId),
         ...tpopbeobFolderNodes(store, tree, projId, apArtId, popId, tpopId)
+      ]
+    }
+    if (
+      node.length === 9 &&
+      node[4] === 'Populationen' &&
+      node[6] === 'Teil-Populationen' &&
+      node[8] === 'Beobachtungen' &&
+      allParentNodesAreOpen(openNodes, node)
+    ) {
+      const apArtId = node[3]
+      const popId = node[5]
+      const tpopId = node[7]
+      nodes = [
+        ...nodes,
+        ...tpopbeobNodes(store, tree, projId, apArtId, popId, tpopId)
       ]
     }
   })
