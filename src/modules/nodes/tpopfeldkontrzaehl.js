@@ -34,34 +34,24 @@ export default (
     tree.filteredAndSorted.tpop.filter(t => t.PopId === popId),
     { TPopId: tpopId }
   )
-  const tpopfreiwkontrIndex = findIndex(
-    tree.filteredAndSorted.tpopfreiwkontr.filter(t => t.TPopId === tpopId),
+  const tpopfeldkontrIndex = findIndex(
+    tree.filteredAndSorted.tpopfeldkontr.filter(t => t.TPopId === tpopId),
     {
       TPopKontrId: tpopkontrId
     }
   )
   // prevent folder from showing when nodeFilter is set
-  if (tpopfreiwkontrIndex === -1) return []
+  if (tpopfeldkontrIndex === -1) return []
 
-  const childrenLength = tree.filteredAndSorted.tpopfreiwkontrzaehl.filter(
-    z => z.TPopKontrId === tpopkontrId
-  ).length
-
-  let message = childrenLength
-  if (store.table.tpopkontrLoading) {
-    message = `...`
-  }
-  if (tree.nodeLabelFilter.get(`tpopfreiwkontr`)) {
-    message = `${childrenLength} gefiltert`
-  }
-
-  return [
-    {
-      nodeType: `folder`,
-      menuType: `tpopfreiwkontrzaehlFolder`,
-      id: tpopkontrId,
-      urlLabel: `Zaehlungen`,
-      label: `Zählungen (${message})`,
+  return tree.filteredAndSorted.tpopfeldkontrzaehl
+    .filter(z => z.TPopKontrId === tpopkontrId)
+    .map((el, index) => ({
+      nodeType: `table`,
+      menuType: `tpopfeldkontrzaehl`,
+      id: el.TPopKontrZaehlId,
+      parentId: tpopkontrId,
+      urlLabel: el.TPopKontrZaehlId,
+      label: el.label,
       url: [
         `Projekte`,
         projId,
@@ -71,9 +61,10 @@ export default (
         popId,
         `Teil-Populationen`,
         tpopId,
-        `Freiwilligen-Kontrollen`,
+        `Feld-Kontrollen`,
         tpopkontrId,
-        `Zaehlungen`
+        `Zaehlungen`,
+        el.TPopKontrZaehlId
       ],
       sort: [
         projIndex,
@@ -83,11 +74,11 @@ export default (
         popIndex,
         1,
         tpopIndex,
-        4,
-        tpopfreiwkontrIndex,
-        1
+        3,
+        tpopfeldkontrIndex,
+        1,
+        index
       ],
-      hasChildren: childrenLength > 0
-    }
-  ]
+      hasChildren: false
+    }))
 }

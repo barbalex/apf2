@@ -44,7 +44,7 @@ export default (
   if (tpopfeldkontrIndex === -1) return []
 
   const childrenLength = tree.filteredAndSorted.tpopfeldkontrzaehl.filter(
-    z => z.TPopKontrId = tpopkontrId
+    z => z.TPopKontrId === tpopkontrId
   ).length
 
   let message = childrenLength
