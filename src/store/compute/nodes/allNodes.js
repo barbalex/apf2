@@ -41,6 +41,7 @@ import popberFolderNodes from '../../../modules/nodes/popberFolder'
 import popmassnberFolderNodes from '../../../modules/nodes/popmassnberFolder'
 import popmassnberNodes from '../../../modules/nodes/popmassnber'
 import popberNodes from '../../../modules/nodes/popber'
+import tpopNodes from '../../../modules/nodes/tpop'
 
 const compare = (a, b) => {
   // sort a before, if it has no value at this index
@@ -237,6 +238,16 @@ export default (store, tree) => {
       const apArtId = node[3]
       const popId = node[5]
       nodes = [...nodes, ...popberNodes(store, tree, projId, apArtId, popId)]
+    }
+    if (
+      node.length === 7 &&
+      node[4] === 'Populationen' &&
+      node[6] === 'Teil-Populationen' &&
+      allParentNodesAreOpen(openNodes, node)
+    ) {
+      const apArtId = node[3]
+      const popId = node[5]
+      nodes = [...nodes, ...tpopNodes(store, tree, projId, apArtId, popId)]
     }
   })
 
