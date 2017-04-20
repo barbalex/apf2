@@ -34,6 +34,7 @@ import beobNichtZuzuordnenNodes
 import beobzuordnungNodes from '../../../modules/nodes/beobzuordnung'
 import assozartNodes from '../../../modules/nodes/assozart'
 import berNodes from '../../../modules/nodes/ber'
+import apberNodes from '../../../modules/nodes/apber'
 
 const compare = (a, b) => {
   // sort a before, if it has no value at this index
@@ -182,6 +183,14 @@ export default (store, tree) => {
     ) {
       const apArtId = node[3]
       nodes = [...nodes, ...berNodes(store, tree, projId, apArtId)]
+    }
+    if (
+      node.length === 5 &&
+      node[4] === 'AP-Berichte' &&
+      isNodeOpen(openNodes, node.slice(0, node.length - 1))
+    ) {
+      const apArtId = node[3]
+      nodes = [...nodes, ...apberNodes(store, tree, projId, apArtId)]
     }
   })
 
