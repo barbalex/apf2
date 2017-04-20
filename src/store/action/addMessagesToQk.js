@@ -1,10 +1,11 @@
 // @flow
 import buildQkMessages from './buildQkMessages'
 
-export default (
-  { store, tree, messages }:
-  {store: Object,tree: Object,messages:Array<Object>}
-) => {
+export default ({
+  store,
+  tree,
+  messages
+}: { store: Object, tree: Object, messages: Array<Object> }): void => {
   const apArtId = tree.activeNodes.ap
   const existingQk = store.qk.get(apArtId)
   const newMessages = existingQk.messages.concat(messages)
@@ -13,7 +14,7 @@ export default (
   const value = buildQkMessages({
     berichtjahr,
     messages: newMessages,
-    filter,
+    filter
   })
   store.qk.set(apArtId, value)
 }

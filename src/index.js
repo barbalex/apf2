@@ -1,3 +1,4 @@
+// @flow
 /**
  * app.js
  *
@@ -67,6 +68,7 @@ app.extend({
   init() {
     this.db = db
     this.store = store
+
     // this.writeToStoreWorker = writeToStoreWorker
   }
 })

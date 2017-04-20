@@ -4,25 +4,26 @@ import { extendObservable, computed } from 'mobx'
 export default ({
   berichtjahr,
   messages,
-  filter,
-}:{
+  filter
+}: {
   berichtjahr: number,
-  messages:Array<Object>,
+  messages: Array<Object>,
   filter: string
-}) => {
+}): Object => {
   const value = {
     berichtjahr,
     messages,
-    filter,
+    filter
   }
   extendObservable(value, {
-    messagesFiltered: computed(() => (
-      filter ?
-      messages.filter(m =>
-        m.hw.toLowerCase().includes(filter.toLowerCase())
-      ) :
-      messages
-    )),
+    messagesFiltered: computed(
+      () =>
+        (filter
+          ? messages.filter(m =>
+              m.hw.toLowerCase().includes(filter.toLowerCase())
+            )
+          : messages)
+    )
   })
   return value
 }

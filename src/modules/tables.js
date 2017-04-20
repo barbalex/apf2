@@ -1,5 +1,4 @@
 // @flow
-// TODO: parentTable is not used any more, remove
 
 export default [
   {
@@ -8,10 +7,9 @@ export default [
     label: `Arten`,
     labelSingular: `Art`,
     idField: `ApArtId`,
-    parentTable: `projekt`,
     parentIdField: `ProjId`,
     mutWannField: `MutWann`,
-    mutWerField: `MutWer`,
+    mutWerField: `MutWer`
   },
   {
     database: `apflora`,
@@ -19,10 +17,9 @@ export default [
     label: `Populationen`,
     labelSingular: `Population`,
     idField: `PopId`,
-    parentTable: `ap`,
     parentIdField: `ApArtId`,
     mutWannField: `MutWann`,
-    mutWerField: `MutWer`,
+    mutWerField: `MutWer`
   },
   {
     database: `apflora`,
@@ -30,10 +27,9 @@ export default [
     label: `Teil-Populationen`,
     labelSingular: `Teil-Population`,
     idField: `TPopId`,
-    parentTable: `pop`,
     parentIdField: `PopId`,
     mutWannField: `MutWann`,
-    mutWerField: `MutWer`,
+    mutWerField: `MutWer`
   },
   {
     database: `apflora`,
@@ -41,10 +37,9 @@ export default [
     label: `Kontrollen`,
     labelSingular: `Kontrolle`,
     idField: `TPopKontrId`,
-    parentTable: `tpop`,
     parentIdField: `TPopId`,
     mutWannField: `MutWann`,
-    mutWerField: `MutWer`,
+    mutWerField: `MutWer`
   },
   {
     database: `apflora`,
@@ -53,10 +48,9 @@ export default [
     label: `Feld-Kontrollen`,
     labelSingular: `Feld-Kontrolle`,
     idField: `TPopKontrId`,
-    parentTable: `tpop`,
     parentIdField: `TPopId`,
     mutWannField: `MutWann`,
-    mutWerField: `MutWer`,
+    mutWerField: `MutWer`
   },
   {
     database: `apflora`,
@@ -65,10 +59,9 @@ export default [
     label: `Freiwilligen-Kontrollen`,
     labelSingular: `Freiwilligen-Kontrolle`,
     idField: `TPopKontrId`,
-    parentTable: `tpop`,
     parentIdField: `TPopId`,
     mutWannField: `MutWann`,
-    mutWerField: `MutWer`,
+    mutWerField: `MutWer`
   },
   {
     database: `apflora`,
@@ -76,7 +69,7 @@ export default [
     idField: `ZaehleinheitCode`,
     stammdaten: true,
     mutWannField: `MutWann`,
-    mutWerField: `MutWer`,
+    mutWerField: `MutWer`
   },
   {
     database: `apflora`,
@@ -84,7 +77,7 @@ export default [
     idField: `BeurteilCode`,
     stammdaten: true,
     mutWannField: `MutWann`,
-    mutWerField: `MutWer`,
+    mutWerField: `MutWer`
   },
   {
     database: `apflora`,
@@ -92,10 +85,9 @@ export default [
     label: `Zählungen`,
     labelSingular: `Zählung`,
     idField: `TPopKontrZaehlId`,
-    parentTable: `tpopkontr`,
     parentIdField: `TPopKontrId`,
     mutWannField: `MutWann`,
-    mutWerField: `MutWer`,
+    mutWerField: `MutWer`
   },
   {
     database: `apflora`,
@@ -104,10 +96,9 @@ export default [
     label: `Zählungen`,
     labelSingular: `Zählung`,
     idField: `TPopKontrZaehlId`,
-    parentTable: `tpopkontr`,
     parentIdField: `TPopKontrId`,
     mutWannField: `MutWann`,
-    mutWerField: `MutWer`,
+    mutWerField: `MutWer`
   },
   {
     database: `apflora`,
@@ -116,10 +107,9 @@ export default [
     label: `Zählungen`,
     labelSingular: `Zählung`,
     idField: `TPopKontrZaehlId`,
-    parentTable: `tpopkontr`,
     parentIdField: `TPopKontrId`,
     mutWannField: `MutWann`,
-    mutWerField: `MutWer`,
+    mutWerField: `MutWer`
   },
   {
     database: `apflora`,
@@ -127,10 +117,9 @@ export default [
     label: `Massnahmen`,
     labelSingular: `Massnahme`,
     idField: `TPopMassnId`,
-    parentTable: `tpop`,
     parentIdField: `TPopId`,
     mutWannField: `MutWann`,
-    mutWerField: `MutWer`,
+    mutWerField: `MutWer`
   },
   {
     database: `apflora`,
@@ -138,7 +127,7 @@ export default [
     idField: `MassnTypCode`,
     stammdaten: true,
     mutWannField: `MutWann`,
-    mutWerField: `MutWer`,
+    mutWerField: `MutWer`
   },
   {
     database: `apflora`,
@@ -146,7 +135,7 @@ export default [
     idField: `BeurteilId`,
     stammdaten: true,
     mutWannField: `MutWann`,
-    mutWerField: `MutWer`,
+    mutWerField: `MutWer`
   },
   {
     database: `apflora`,
@@ -154,7 +143,7 @@ export default [
     idField: `BeurteilId`,
     stammdaten: true,
     mutWannField: `MutWann`,
-    mutWerField: `MutWer`,
+    mutWerField: `MutWer`
   },
   {
     database: `apflora`,
@@ -162,10 +151,9 @@ export default [
     label: `AP-Ziele`,
     labelSingular: `AP-Ziel`,
     idField: `ZielId`,
-    parentTable: `ap`,
     parentIdField: `ApArtId`,
     mutWannField: `MutWann`,
-    mutWerField: `MutWer`,
+    mutWerField: `MutWer`
   },
   {
     database: `apflora`,
@@ -173,7 +161,7 @@ export default [
     idField: `ZieltypId`,
     stammdaten: true,
     mutWannField: `MutWann`,
-    mutWerField: `MutWer`,
+    mutWerField: `MutWer`
   },
   {
     database: `apflora`,
@@ -181,10 +169,9 @@ export default [
     label: `Berichte`,
     labelSingular: `Bericht`,
     idField: `ZielBerId`,
-    parentTable: `ziel`,
     parentIdField: `ZielId`,
     mutWannField: `MutWann`,
-    mutWerField: `MutWer`,
+    mutWerField: `MutWer`
   },
   {
     database: `apflora`,
@@ -192,10 +179,9 @@ export default [
     label: `AP-Erfolgskriterien`,
     labelSingular: `AP-Erfolgskriterium`,
     idField: `ErfkritId`,
-    parentTable: `ap`,
     parentIdField: `ApArtId`,
     mutWannField: `MutWann`,
-    mutWerField: `MutWer`,
+    mutWerField: `MutWer`
   },
   {
     database: `apflora`,
@@ -203,10 +189,9 @@ export default [
     label: `AP-Berichte`,
     labelSingular: `AP-Bericht`,
     idField: `JBerId`,
-    parentTable: `ap`,
     parentIdField: `ApArtId`,
     mutWannField: `MutWann`,
-    mutWerField: `MutWer`,
+    mutWerField: `MutWer`
   },
   {
     database: `apflora`,
@@ -214,10 +199,9 @@ export default [
     label: `AP-Berichte`,
     labelSingular: `AP-Bericht`,
     idField: `JbuJahr`,
-    parentTable: `projekt`,
     parentIdField: `ProjId`,
     mutWannField: `MutWann`,
-    mutWerField: `MutWer`,
+    mutWerField: `MutWer`
   },
   {
     database: `apflora`,
@@ -225,10 +209,9 @@ export default [
     label: `Berichte`,
     labelSingular: `Bericht`,
     idField: `BerId`,
-    parentTable: `ap`,
     parentIdField: `ApArtId`,
     mutWannField: `MutWann`,
-    mutWerField: `MutWer`,
+    mutWerField: `MutWer`
   },
   {
     database: `apflora`,
@@ -236,10 +219,9 @@ export default [
     label: `Idealbiotop`,
     labelSingular: `Idealbiotop`,
     idField: `IbApArtId`,
-    parentTable: `ap`,
     parentIdField: `IbApArtId`,
     mutWannField: `MutWann`,
-    mutWerField: `MutWer`,
+    mutWerField: `MutWer`
   },
   {
     database: `apflora`,
@@ -247,10 +229,9 @@ export default [
     label: `assoziierte Arten`,
     labelSingular: `assoziierte Art`,
     idField: `AaId`,
-    parentTable: `ap`,
     parentIdField: `AaApArtId`,
     mutWannField: `MutWann`,
-    mutWerField: `MutWer`,
+    mutWerField: `MutWer`
   },
   {
     database: `apflora`,
@@ -258,10 +239,9 @@ export default [
     label: `Kontroll-Berichte`,
     labelSingular: `Kontroll-Bericht`,
     idField: `PopBerId`,
-    parentTable: `pop`,
     parentIdField: `PopId`,
     mutWannField: `MutWann`,
-    mutWerField: `MutWer`,
+    mutWerField: `MutWer`
   },
   {
     database: `apflora`,
@@ -269,10 +249,9 @@ export default [
     label: `Massnahmen-Berichte`,
     labelSingular: `Massnahmen-Bericht`,
     idField: `PopMassnBerId`,
-    parentTable: `pop`,
     parentIdField: `PopId`,
     mutWannField: `MutWann`,
-    mutWerField: `MutWer`,
+    mutWerField: `MutWer`
   },
   {
     database: `apflora`,
@@ -280,10 +259,9 @@ export default [
     label: `Kontroll-Berichte`,
     labelSingular: `Kontroll-Bericht`,
     idField: `TPopBerId`,
-    parentTable: `tpop`,
     parentIdField: `TPopId`,
     mutWannField: `MutWann`,
-    mutWerField: `MutWer`,
+    mutWerField: `MutWer`
   },
   {
     database: `apflora`,
@@ -291,37 +269,33 @@ export default [
     label: `Massnahmen-Berichte`,
     labelSingular: `Massnahmen-Bericht`,
     idField: `TPopMassnBerId`,
-    parentTable: `tpop`,
     parentIdField: `TPopId`,
     mutWannField: `MutWann`,
-    mutWerField: `MutWer`,
+    mutWerField: `MutWer`
   },
   {
     database: `apflora`,
     table: `beobzuordnung`,
     idField: `NO_NOTE`,
-    parentTable: `tpop`,
     parentIdField: `TPopId`,
     mutWannField: `BeobMutWann`,
-    mutWerField: `BeobMutWer`,
+    mutWerField: `BeobMutWer`
   },
   {
     database: `apflora`,
     table: `beobzuordnung`,
     idField: `NO_NOTE`,
-    parentTable: ``,
     parentIdField: `NO_NOTE`,
     mutWannField: `BeobMutWann`,
-    mutWerField: `BeobMutWer`,
+    mutWerField: `BeobMutWer`
   },
   {
     database: `apflora`,
     table: `beobzuordnung`,
     idField: `NO_NOTE`,
-    parentTable: ``,
     parentIdField: `NO_NOTE`,
     mutWannField: `BeobMutWann`,
-    mutWerField: `BeobMutWer`,
+    mutWerField: `BeobMutWer`
   },
   {
     database: `apflora`,
@@ -330,14 +304,13 @@ export default [
     labelSingular: `Projekt`,
     idField: `ProjId`,
     mutWannField: `MutWann`,
-    mutWerField: `MutWer`,
+    mutWerField: `MutWer`
   },
   {
     database: `beob`,
     table: `beob_bereitgestellt`,
     idField: `BeobId`,
-    parentTable: `beob_bereitgestellt`,
-    parentIdField: `NO_ISFS`,
+    parentIdField: `NO_ISFS`
   },
   {
     database: `beob`,
@@ -345,7 +318,7 @@ export default [
     idField: `TaxonomieId`,
     stammdaten: true,
     mutWannField: null,
-    mitWerField: null,
+    mitWerField: null
   },
   {
     database: `apflora`,
@@ -353,7 +326,7 @@ export default [
     idField: `DomainCode`,
     stammdaten: true,
     mutWannField: `MutWann`,
-    mitWerField: `MutWer`,
+    mitWerField: `MutWer`
   },
   {
     database: `apflora`,
@@ -361,7 +334,7 @@ export default [
     idField: `DomainCode`,
     stammdaten: true,
     mutWannField: `MutWann`,
-    mitWerField: `MutWer`,
+    mitWerField: `MutWer`
   },
   {
     database: `apflora`,
@@ -369,7 +342,7 @@ export default [
     idField: `AdrId`,
     stammdaten: true,
     mutWannField: `MutWann`,
-    mitWerField: `MutWer`,
+    mitWerField: `MutWer`
   },
   {
     database: `apflora`,
@@ -377,7 +350,7 @@ export default [
     idField: `BeurteilId`,
     stammdaten: true,
     mutWannField: `MutWann`,
-    mitWerField: `MutWer`,
+    mitWerField: `MutWer`
   },
   {
     database: `apflora`,
@@ -385,7 +358,7 @@ export default [
     idField: `EntwicklungId`,
     stammdaten: true,
     mutWannField: `MutWann`,
-    mitWerField: `MutWer`,
+    mitWerField: `MutWer`
   },
   {
     database: `apflora`,
@@ -393,7 +366,7 @@ export default [
     idField: `HerkunftId`,
     stammdaten: true,
     mutWannField: `MutWann`,
-    mitWerField: `MutWer`,
+    mitWerField: `MutWer`
   },
   {
     database: `apflora`,
@@ -401,7 +374,7 @@ export default [
     idField: `DomainCode`,
     stammdaten: true,
     mutWannField: `MutWann`,
-    mitWerField: `MutWer`,
+    mitWerField: `MutWer`
   },
   {
     database: `apflora`,
@@ -409,7 +382,7 @@ export default [
     idField: `BfsNr`,
     stammdaten: true,
     mutWannField: `MutWann`,
-    mitWerField: `MutWer`,
+    mitWerField: `MutWer`
   },
   {
     database: `apflora`,
@@ -417,7 +390,7 @@ export default [
     idField: `EntwicklungCode`,
     stammdaten: true,
     mutWannField: `MutWann`,
-    mitWerField: `MutWer`,
+    mitWerField: `MutWer`
   },
   {
     database: `apflora`,
@@ -425,28 +398,28 @@ export default [
     idField: `DomainCode`,
     stammdaten: true,
     mutWannField: `MutWann`,
-    mitWerField: `MutWer`,
+    mitWerField: `MutWer`
   },
   {
     database: `beob`,
     table: `beob_quelle`,
     idField: `id`,
-    stammdaten: true,
+    stammdaten: true
   },
   {
     database: `beob`,
     table: `adb_lr`,
     idField: `id`,
-    stammdaten: true,
+    stammdaten: true
   },
   {
     database: `beob`,
     table: `beob_evab`,
-    idField: `NO_NOTE_PROJET`,
+    idField: `NO_NOTE_PROJET`
   },
   {
     database: `beob`,
     table: `beob_infospezies`,
-    idField: `NO_NOTE`,
-  },
+    idField: `NO_NOTE`
+  }
 ]
