@@ -9,15 +9,6 @@ export default (
   tpopId: number,
   tpopkontrId: number
 ): Array<Object> => {
-  // check passed variables
-  if (!store) return store.listError(new Error('no store passed'))
-  if (!tree) return store.listError(new Error('no tree passed'))
-  if (!projId) return store.listError(new Error('no projId passed'))
-  if (!apArtId) return store.listError(new Error('no apArtId passed'))
-  if (!popId) return store.listError(new Error('no popId passed'))
-  if (!tpopId) return store.listError(new Error('no tpopId passed'))
-  if (!tpopkontrId) return store.listError(new Error('no tpopkontrId passed'))
-
   // fetch sorting indexes of parents
   const projIndex = findIndex(tree.filteredAndSorted.projekt, {
     ProjId: projId
