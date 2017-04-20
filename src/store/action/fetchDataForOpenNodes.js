@@ -7,8 +7,9 @@
 
 import { runInAction } from 'mobx'
 import forEach from 'lodash/forEach'
-import clone from 'lodash/clone'
-import idEqual from 'lodash/idEqual'
+import isEqual from 'lodash/isEqual'
+import uniq from 'lodash/uniq'
+import difference from 'lodash/difference'
 import { toJS } from 'mobx'
 
 import getActiveNodes from './getActiveNodes'
@@ -22,19 +23,31 @@ const fetchDataForOpenNodes = (
   showBeobNichtBeurteilt: boolean,
   showBeobNichtZuzuordnen: boolean
 ): void => {
-  const { openNodes } = tree
+  const openNodes = toJS(tree.openNodes)
 
-  // TODO: first reduce nodeArrays to minimum
+  // first reduce nodeArrays to minimum
   // idea: check for each node if is included in other
   // if true: remove
-  console.log('openNodes:', toJS(openNodes))
-  const openNodesToUse = clone(toJS(openNodes))
-  console.log('openNodesToUse:', openNodesToUse)
+  let nodesToRemove = []
+  openNodes.forEach(node => {
+    openNodes.forEach((n, index) => {
+      if (n.length < node.length) {
+        const nodePartWithEqualLength = node.slice(0, n.length)
+        if (isEqual(nodePartWithEqualLength, n)) {
+          nodesToRemove.push(n)
+        }
+      } else if (n.length > node.length) {
+        const nPartWithEqualLength = n.slice(0, node.length)
+        if (isEqual(nPartWithEqualLength, node)) {
+          nodesToRemove.push(node)
+        }
+      }
+    })
+  })
+  const uniqNodesToRemove = uniq(nodesToRemove)
+  const openNodesToUse = difference(openNodes, uniqNodesToRemove)
 
   openNodesToUse.forEach(node => {
-    // TODO: see in isNodeInActiveNodePath how to find if is included in other
-    // const sameNodeInOpenNodes = openNodes.find(n => isEqual(n, node.url))
-
     const activeNodes = getActiveNodes(node)
     const fetchingFromActiveElements = {
       exporte() {

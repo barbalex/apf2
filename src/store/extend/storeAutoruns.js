@@ -4,7 +4,6 @@
 // maybe needed actions are not part of Store yet?
 import { extendObservable, autorun, autorunAsync } from 'mobx'
 
-import fetchDataForActiveNodes from '../action/fetchDataForActiveNodes'
 import fetchDataForOpenNodes from '../action/fetchDataForOpenNodes'
 import manipulateActiveNodeArray from '../action/manipulateActiveNodeArray'
 import manipulateUrlQuery from '../action/manipulateUrlQuery'
@@ -22,33 +21,6 @@ export default (store: Object): void => {
     // index.js can change activeNodeArray based on url
     // BEFORE autorun changes url
     manipulateUrl: autorunAsync(`manipulateUrl`, () => manipulateUrl(store)),
-    /*
-    fetchDataWhenTreeActiveNodeArrayChanges: autorunAsync(
-      `fetchDataWhenTreeActiveNodeArrayChanges`,
-      () => {
-        // need to pass visibility of layers to make data fetched on changing layers
-        const showTpop = store.map.activeApfloraLayers.includes(`Tpop`)
-        const showPop = store.map.activeApfloraLayers.includes(`Pop`)
-        const showTpopBeob =
-          store.map.activeApfloraLayers.includes(`TpopBeob`) ||
-          store.map.activeApfloraLayers.includes(`TpopBeobAssignPolylines`)
-        const showBeobNichtBeurteilt = store.map.activeApfloraLayers.includes(
-          `BeobNichtBeurteilt`
-        )
-        const showBeobNichtZuzuordnen = store.map.activeApfloraLayers.includes(
-          `BeobNichtZuzuordnen`
-        )
-        fetchDataForActiveNodes(
-          store,
-          store.tree,
-          showPop,
-          showTpop,
-          showTpopBeob,
-          showBeobNichtBeurteilt,
-          showBeobNichtZuzuordnen
-        )
-      }
-    ),*/
     fetchDataWhenTreeOpenNodesChanges: autorunAsync(
       `fetchDataWhenTreeOpenNodesChanges`,
       () => {
@@ -77,8 +49,8 @@ export default (store: Object): void => {
     )
   })
   extendObservable(store.tree2, {
-    fetchDataWhenTree2ActiveNodeArrayChanges: autorunAsync(
-      `fetchDataWhenTree2ActiveNodeArrayChanges`,
+    fetchDataWhenTreeOpenNodesChanges: autorunAsync(
+      `fetchDataWhenTreeOpenNodesChanges`,
       () => {
         // need to pass visibility of layers to make data fetched on changing layers
         const showTpop = store.map.activeApfloraLayers.includes(`Tpop`)
@@ -92,7 +64,7 @@ export default (store: Object): void => {
         const showBeobNichtZuzuordnen = store.map.activeApfloraLayers.includes(
           `BeobNichtZuzuordnen`
         )
-        fetchDataForActiveNodes(
+        fetchDataForOpenNodes(
           store,
           store.tree2,
           showPop,
