@@ -5,20 +5,23 @@ import app from 'ampersand-app'
 import cloneDeep from 'lodash/cloneDeep'
 
 import apiBaseUrl from '../../modules/apiBaseUrl'
-import recordValuesForWhichTableDataWasFetched from '../../modules/recordValuesForWhichTableDataWasFetched'
+import recordValuesForWhichTableDataWasFetched
+  from '../../modules/recordValuesForWhichTableDataWasFetched'
 
 const writeToStore = (store, data) => {
   runInAction(() => {
-    data.forEach((d) => {
+    data.forEach(d => {
       d.beobzuordnung = computed(() => store.table.beobzuordnung.get(d.BeobId))
       store.table.beob_bereitgestellt.set(d.BeobId, d)
     })
   })
 }
 
-export default (store: Object, apArtId: number) => {
+export default (store: Object, apArtId: number): any => {
   if (!apArtId) {
-    return new Error(`action fetchBeobBereitgestellt: apArtId must be passed`)
+    return store.listError(
+      new Error(`action fetchBeobBereitgestellt: apArtId must be passed`)
+    )
   }
 
   // only fetch if not yet fetched
@@ -26,7 +29,9 @@ export default (store: Object, apArtId: number) => {
   if (
     valuesForWhichTableDataWasFetched.beob_bereitgestellt &&
     valuesForWhichTableDataWasFetched.beob_bereitgestellt.NO_ISFS &&
-    valuesForWhichTableDataWasFetched.beob_bereitgestellt.NO_ISFS.includes(apArtId)
+    valuesForWhichTableDataWasFetched.beob_bereitgestellt.NO_ISFS.includes(
+      apArtId
+    )
   ) {
     return
   }
@@ -35,9 +40,14 @@ export default (store: Object, apArtId: number) => {
   store.loading.push(`beob_bereitgestellt`)
   app.db.beob_bereitgestellt
     .toArray()
-    .then((data) => {
+    .then(data => {
       writeToStore(store, data)
-      recordValuesForWhichTableDataWasFetched({ store, table: `beob_bereitgestellt`, field: `NO_ISFS`, value: apArtId })
+      recordValuesForWhichTableDataWasFetched({
+        store,
+        table: `beob_bereitgestellt`,
+        field: `NO_ISFS`,
+        value: apArtId
+      })
     })
     .then(() => axios.get(url))
     .then(({ data }) => {
