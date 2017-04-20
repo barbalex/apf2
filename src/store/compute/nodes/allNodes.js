@@ -38,6 +38,7 @@ import apberNodes from '../../../modules/nodes/apber'
 import erfkritNodes from '../../../modules/nodes/erfkrit'
 import tpopFolderNodes from '../../../modules/nodes/tpopFolder'
 import popberFolderNodes from '../../../modules/nodes/popberFolder'
+import popmassnberFolderNodes from '../../../modules/nodes/popmassnberFolder'
 
 const compare = (a, b) => {
   // sort a before, if it has no value at this index
@@ -208,7 +209,8 @@ export default (store, tree) => {
       nodes = [
         ...nodes,
         ...tpopFolderNodes(store, tree, projId, apArtId, popId),
-        ...popberFolderNodes(store, tree, projId, apArtId, popId)
+        ...popberFolderNodes(store, tree, projId, apArtId, popId),
+        ...popmassnberFolderNodes(store, tree, projId, apArtId, popId)
       ]
     }
   })
