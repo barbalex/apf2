@@ -32,6 +32,7 @@ import popNodes from '../../../modules/nodes/pop'
 import beobNichtZuzuordnenNodes
   from '../../../modules/nodes/beobNichtZuzuordnen'
 import beobzuordnungNodes from '../../../modules/nodes/beobzuordnung'
+import assozartNodes from '../../../modules/nodes/assozart'
 
 const compare = (a, b) => {
   // sort a before, if it has no value at this index
@@ -164,6 +165,14 @@ export default (store, tree) => {
     ) {
       const apArtId = node[3]
       nodes = [...nodes, ...beobzuordnungNodes(store, tree, projId, apArtId)]
+    }
+    if (
+      node.length === 5 &&
+      node[4] === 'assoziierte-Arten' &&
+      isNodeOpen(openNodes, node.slice(0, node.length - 1))
+    ) {
+      const apArtId = node[3]
+      nodes = [...nodes, ...assozartNodes(store, tree, projId, apArtId)]
     }
   })
 

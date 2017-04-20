@@ -13,18 +13,17 @@ export default (store, tree, projId, apArtId) => {
   })
   const apIndex = findIndex(tree.filteredAndSorted.ap, { ApArtId: apArtId })
 
-  // map through all pop and create array of nodes
-  return tree.filteredAndSorted.pop
-    .filter(p => p.ApArtId === apArtId)
+  return tree.filteredAndSorted.assozart
+    .filter(p => p.AaApArtId === apArtId)
     .map((el, index) => ({
       nodeType: `table`,
-      menuType: `pop`,
-      id: el.PopId,
-      parentId: el.ApArtId,
-      urlLabel: el.PopId,
+      menuType: `assozart`,
+      id: el.AaId,
+      parentId: apArtId,
+      urlLabel: el.AaId,
       label: el.label,
-      url: [`Projekte`, projId, `Arten`, el.ApArtId, `Populationen`, el.PopId],
-      sort: [projIndex, 1, apIndex, 1, index],
-      hasChildren: true
+      url: [`Projekte`, projId, `Arten`, apArtId, `assoziierte-Arten`, el.AaId],
+      sort: [projIndex, 1, apIndex, 7, index],
+      hasChildren: false
     }))
 }
