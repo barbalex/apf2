@@ -330,15 +330,15 @@ class TreeContainer extends Component {
         </LabelFilterContainer>
         <div
           style={strukturbaumContainerDivStyle}
-          // $FlowIssue
           ref={c => {
+            // $FlowIssue
             this.tree = c
           }}
         >
           <Tree
             tree={tree}
             projektLoading={store.table.projektLoading}
-            nodes={tree.node.nodes}
+            nodes={tree.nodes}
             mapTpopBeobVisible={store.map.activeApfloraLayers.includes(
               `TpopBeob`
             )}

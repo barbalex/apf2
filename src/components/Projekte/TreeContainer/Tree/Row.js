@@ -179,7 +179,7 @@ const Row = ({
   store: Object,
   tree: Object
 }) => {
-  const node = tree.node.nodes[index]
+  const node = tree.nodes[index]
   const onClickNode = event => tree.toggleNode(tree, node)
   const onClickNodeSymbol = event => tree.toggleNodeSymbol(tree, node)
   const myProps = { key: index }

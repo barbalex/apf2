@@ -56,9 +56,7 @@ function Store(): void {
     activeNodeFilter: {},
     applyMapFilterToTree: false,
     filteredAndSorted: {},
-    node: {
-      nodes: []
-    }
+    nodes: []
   }
   this.tree2 = {
     name: `tree2`,
@@ -73,9 +71,7 @@ function Store(): void {
     activeNodeFilter: {},
     applyMapFilterToTree: false,
     filteredAndSorted: {},
-    node: {
-      nodes: []
-    }
+    nodes: []
   }
   this.export = {
     applyNodeLabelFilterToExport: false,

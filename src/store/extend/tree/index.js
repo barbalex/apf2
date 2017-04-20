@@ -6,7 +6,6 @@ import isEqual from 'lodash/isEqual'
 import toggleNode from '../../action/toggleNode'
 import toggleNodeSymbol from '../../action/toggleNodeSymbol'
 import getActiveNodes from '../../action/getActiveNodes'
-import extendNode from './node'
 import extendFilteredAndSorted from './filteredAndSorted'
 import updateActiveDatasetFromActiveNodes
   from '../../action/updateActiveDatasetFromActiveNodes'
@@ -48,6 +47,7 @@ export default (store: Object, tree: Object): void => {
       `setOpenNodesFromActiveNodeArray`,
       () => setOpenNodesFromActiveNodeArray(store.tree)
     ),
+    nodes: computed(() => nodes(store, tree), { name: `nodesNode` }),
     apFilter: false,
     toggleApFilter: action(`toggleApFilter`, () => {
       tree.apFilter = !tree.apFilter
@@ -78,6 +78,5 @@ export default (store: Object, tree: Object): void => {
       toggleNodeSymbol(store, tree, node)
     )
   })
-  extendNode(store, tree)
   extendFilteredAndSorted(store, tree)
 }
