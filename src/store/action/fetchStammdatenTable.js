@@ -4,10 +4,7 @@ import app from 'ampersand-app'
 
 import apiBaseUrl from '../../modules/apiBaseUrl'
 
-export default async (store: Object, metadata:object, tableName: string) => {
-  if (!metadata) {
-    return store.listError(new Error(`action fetchStammdatenTable: metadata must be passed`))
-  }
+export default async (store: Object, metadata: Object): Promise<any> => {
   const { database, table, idField } = metadata
   store.loading.push(table)
   let url = `${apiBaseUrl}/schema/${database}/table/${table}`
@@ -19,7 +16,7 @@ export default async (store: Object, metadata:object, tableName: string) => {
   try {
     const dataFromDbObject = await axios.get(url)
     dataFromDb = dataFromDbObject.data
-  } catch(error) {
+  } catch (error) {
     store.listError(error)
   }
   if (dataFromDb && dataFromDb.length) {
@@ -27,9 +24,7 @@ export default async (store: Object, metadata:object, tableName: string) => {
     setTimeout(() => {
       store.writeToStore({ data: dataFromDb, table, field: idField })
     })
-    setTimeout(() =>
-      app.db[table].bulkPut(dataFromDb)
-    )
+    setTimeout(() => app.db[table].bulkPut(dataFromDb))
   }
   store.loading = store.loading.filter(el => el !== table)
 }

@@ -5,20 +5,27 @@ import app from 'ampersand-app'
 import apiBaseUrl from '../../modules/apiBaseUrl'
 import tables from '../../modules/tables'
 
-export default async (store: Object, schemaNamePassed: string, tableName: string) => {
-  if (!tableName) {
-    return store.listError(new Error(`action fetchTable: tableName must be passed`))
-  }
+export default async (
+  store: Object,
+  schemaNamePassed: string,
+  tableName: string
+) => {
   const schemaName = schemaNamePassed || `apflora`
   // only fetch if not yet fetched
   if (store.table[tableName].size === 0) {
     const tableMetadata = tables.find(t => t.table === tableName)
     if (!tableMetadata) {
-      return store.listError(new Error(`keine Metadaten gefunden für Tabelle ${tableName}`))
+      return store.listError(
+        new Error(`keine Metadaten gefunden für Tabelle ${tableName}`)
+      )
     }
     const idField = tableMetadata.idField
     if (!idField) {
-      return store.listError(new Error(`in den Metadaten kein ID-Feld gefunden für Tabelle ${tableName}`))
+      return store.listError(
+        new Error(
+          `in den Metadaten kein ID-Feld gefunden für Tabelle ${tableName}`
+        )
+      )
     }
     store.loading.push(tableName)
     let url = `${apiBaseUrl}/schema/${schemaName}/table/${tableName}`
@@ -29,16 +36,25 @@ export default async (store: Object, schemaNamePassed: string, tableName: string
     let dataFromIdb
     try {
       dataFromIdb = await app.db[tableName].toArray()
-    } catch(error) {
+    } catch (error) {
       store.listError(error)
     }
     if (dataFromIdb) {
-      store.writeToStore({ data: dataFromIdb, table: tableName, field: idField })
+      store.writeToStore({
+        data: dataFromIdb,
+        table: tableName,
+        field: idField
+      })
       store.loading = store.loading.filter(el => el !== tableName)
     }
 
     // don't fetch any stammdaten if they already existed in idb
-    if (tableName !== `projekt` && dataFromIdb.length > 0) {
+    if (
+      tableName !== `projekt` &&
+      dataFromIdb &&
+      dataFromIdb.length &&
+      dataFromIdb.length > 0
+    ) {
       store.loading = store.loading.filter(el => el !== tableName)
       return
     }
@@ -47,18 +63,20 @@ export default async (store: Object, schemaNamePassed: string, tableName: string
     try {
       const dataFromDbObject = await axios.get(url)
       dataFromDb = dataFromDbObject.data
-    } catch(error) {
+    } catch (error) {
       store.listError(error)
     }
     if (dataFromDb && dataFromDb.length) {
       // leave ui react before this happens
       setTimeout(() => {
         // app.writeToStoreWorker.postMessage(`testmessage`)
-        store.writeToStore({ data: dataFromDb, table: tableName, field: idField })
+        store.writeToStore({
+          data: dataFromDb,
+          table: tableName,
+          field: idField
+        })
       })
-      setTimeout(() =>
-        app.db[tableName].bulkPut(dataFromDb)
-      )
+      setTimeout(() => app.db[tableName].bulkPut(dataFromDb))
     }
     store.loading = store.loading.filter(el => el !== tableName)
   }

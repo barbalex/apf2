@@ -4,15 +4,15 @@ import app from 'ampersand-app'
 
 import apiBaseUrl from '../../modules/apiBaseUrl'
 import tables from '../../modules/tables'
-import recordValuesForWhichTableDataWasFetched from '../../modules/recordValuesForWhichTableDataWasFetched'
+import recordValuesForWhichTableDataWasFetched
+  from '../../modules/recordValuesForWhichTableDataWasFetched'
 
-export default (store: Object, schemaNamePassed: string, tableName: string, parentId: number) => {
-  if (!tableName) {
-    return new Error(`action fetchTableByParentId: tableName must be passed`)
-  }
-  if (!parentId) {
-    return new Error(`action fetchTableByParentId: parentId must be passed`)
-  }
+export default (
+  store: Object,
+  schemaNamePassed: string,
+  tableName: string,
+  parentId: number
+): void => {
   const schemaName = schemaNamePassed || `apflora`
   const idField = tables.find(t => t.table === tableName).idField
   const parentIdField = tables.find(t => t.table === tableName).parentIdField
@@ -32,18 +32,23 @@ export default (store: Object, schemaNamePassed: string, tableName: string, pare
 
   app.db[tableName]
     .toArray()
-    .then((data) => {
+    .then(data => {
       store.writeToStore({ data, table: tableName, field: idField })
-      recordValuesForWhichTableDataWasFetched({ store, table: tableName, field: idField, value: parentId })
+      recordValuesForWhichTableDataWasFetched({
+        store,
+        table: tableName,
+        field: idField,
+        value: parentId
+      })
     })
     .then(() => axios.get(url))
     .then(({ data }) => {
       store.loading = store.loading.filter(el => el !== tableName)
       // leave ui react before this happens
-      setTimeout(() => store.writeToStore({ data, table: tableName, field: idField }))
       setTimeout(() =>
-        app.db[tableName].bulkPut(data)
+        store.writeToStore({ data, table: tableName, field: idField })
       )
+      setTimeout(() => app.db[tableName].bulkPut(data))
     })
     .catch(error => {
       store.loading = store.loading.filter(el => el !== tableName)
