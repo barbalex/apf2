@@ -4,7 +4,7 @@ import axios from 'axios'
 import apiBaseUrl from '../../modules/apiBaseUrl'
 import insertDatasetInIdb from './insertDatasetInIdb'
 
-export default (store: Object, tree: Object, beobId: string) => {
+export default (store: Object, tree: Object, beobId: string): void => {
   if (!beobId) {
     return store.listError(new Error(`keine beobId übergeben`))
   }
@@ -22,7 +22,9 @@ export default (store: Object, tree: Object, beobId: string) => {
     beob = store.table.beob_evab.get(beobId)
     if (!beob) {
       return store.listError(
-        new Error(`Die EvAB-Beobachtung mit beobId ${beobId} wurde nicht gefunden`)
+        new Error(
+          `Die EvAB-Beobachtung mit beobId ${beobId} wurde nicht gefunden`
+        )
       )
     }
     x = beob.COORDONNEE_FED_E
@@ -31,7 +33,9 @@ export default (store: Object, tree: Object, beobId: string) => {
     beob = store.table.beob_infospezies.get(beobId)
     if (!beob) {
       return store.listError(
-        new Error(`Die Infospezies-Beobachtung mit beobId ${beobId} wurde nicht gefunden`)
+        new Error(
+          `Die Infospezies-Beobachtung mit beobId ${beobId} wurde nicht gefunden`
+        )
       )
     }
     x = beob.FNS_XGIS
@@ -40,16 +44,21 @@ export default (store: Object, tree: Object, beobId: string) => {
   const { ap, projekt } = tree.activeNodes
   const user = store.user.name
   // create new pop for ap
-  axios.post(`${apiBaseUrl}/insert/apflora/tabelle=pop/feld=ApArtId/wert=${ap}/user=${user}`)
+  axios
+    .post(
+      `${apiBaseUrl}/insert/apflora/tabelle=pop/feld=ApArtId/wert=${ap}/user=${user}`
+    )
     .then(({ data: popId }) => {
       // give pop koords of beob
       const felder = {
         id: popId,
         user: user,
         PopXKoord: x,
-        PopYKoord: y,
+        PopYKoord: y
       }
-      return axios.put(`${apiBaseUrl}/updateMultiple/apflora/tabelle=pop/felder=${JSON.stringify(felder)}`)
+      return axios.put(
+        `${apiBaseUrl}/updateMultiple/apflora/tabelle=pop/felder=${JSON.stringify(felder)}`
+      )
     })
     .then(({ data }) => {
       const pop = data[0]
@@ -59,7 +68,9 @@ export default (store: Object, tree: Object, beobId: string) => {
       store.table.pop.set(pop.PopId, pop)
       insertDatasetInIdb(store, `pop`, pop)
       // create new tpop for pop
-      return axios.post(`${apiBaseUrl}/insert/apflora/tabelle=tpop/feld=PopId/wert=${pop.PopId}/user=${user}`)
+      return axios.post(
+        `${apiBaseUrl}/insert/apflora/tabelle=tpop/feld=PopId/wert=${pop.PopId}/user=${user}`
+      )
     })
     .then(({ data: tpopId }) => {
       // give tpop koords of beob
@@ -67,9 +78,11 @@ export default (store: Object, tree: Object, beobId: string) => {
         id: tpopId,
         user: user,
         TPopXKoord: x,
-        TPopYKoord: y,
+        TPopYKoord: y
       }
-      return axios.put(`${apiBaseUrl}/updateMultiple/apflora/tabelle=tpop/felder=${JSON.stringify(felder)}`)
+      return axios.put(
+        `${apiBaseUrl}/updateMultiple/apflora/tabelle=tpop/felder=${JSON.stringify(felder)}`
+      )
     })
     .then(({ data }) => {
       tpop = data[0]
@@ -107,7 +120,5 @@ export default (store: Object, tree: Object, beobId: string) => {
       store.updateProperty(tree, `QuelleId`, beobBereitgestellt.QuelleId)
       store.updatePropertyInDb(tree, `QuelleId`, beobBereitgestellt.QuelleId)
     })
-    .catch((error) =>
-      store.listError(error)
-    )
+    .catch(error => store.listError(error))
 }

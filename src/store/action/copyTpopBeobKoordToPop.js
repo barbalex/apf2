@@ -6,7 +6,7 @@ import { toJS } from 'mobx'
 import apiBaseUrl from '../../modules/apiBaseUrl'
 import insertDatasetInIdb from './insertDatasetInIdb'
 
-export default (store: Object, beobId: string) => {
+export default (store: Object, beobId: string): void => {
   if (!beobId) {
     return store.listError(new Error(`keine beobId übergeben`))
   }
@@ -23,7 +23,9 @@ export default (store: Object, beobId: string) => {
     beob = store.table.beob_evab.get(beobId)
     if (!beob) {
       return store.listError(
-        new Error(`Die EvAB-Beobachtung mit beobId ${beobId} wurde nicht gefunden`)
+        new Error(
+          `Die EvAB-Beobachtung mit beobId ${beobId} wurde nicht gefunden`
+        )
       )
     }
     x = beob.COORDONNEE_FED_E
@@ -32,7 +34,9 @@ export default (store: Object, beobId: string) => {
     beob = store.table.beob_infospezies.get(beobId)
     if (!beob) {
       return store.listError(
-        new Error(`Die Infospezies-Beobachtung mit beobId ${beobId} wurde nicht gefunden`)
+        new Error(
+          `Die Infospezies-Beobachtung mit beobId ${beobId} wurde nicht gefunden`
+        )
       )
     }
     x = beob.FNS_XGIS
@@ -47,7 +51,9 @@ export default (store: Object, beobId: string) => {
   }
   if (!x || !y) {
     return store.listError(
-      new Error(`Es wurden keine Koordinaten gefunden. Daher wurden sie nicht in die Teilpopulation kopiert`)
+      new Error(
+        `Es wurden keine Koordinaten gefunden. Daher wurden sie nicht in die Teilpopulation kopiert`
+      )
     )
   }
   // keep original pop in case update fails
@@ -58,11 +64,8 @@ export default (store: Object, beobId: string) => {
   tpopInStore.MutWann = new Date().toISOString()
   const tpopForDb = clone(toJS(tpopInStore))
   // remove empty values
-  Object.keys(tpopForDb).forEach((k) => {
-    if (
-      (!tpopForDb[k] && tpopForDb[k] !== 0) ||
-      tpopForDb[k] === `undefined`
-    ) {
+  Object.keys(tpopForDb).forEach(k => {
+    if ((!tpopForDb[k] && tpopForDb[k] !== 0) || tpopForDb[k] === `undefined`) {
       delete tpopForDb[k]
     }
   })
@@ -82,12 +85,13 @@ export default (store: Object, beobId: string) => {
   delete tpopForDb.MutWann
   // update db
   const url = `${apiBaseUrl}/updateMultiple/apflora/tabelle=tpop/felder=${JSON.stringify(tpopForDb)}`
-  axios.put(url)
+  axios
+    .put(url)
     .then(() => {
       // put this dataset in idb
       insertDatasetInIdb(store, `tpop`, tpopForIdb)
     })
-    .catch((error) => {
+    .catch(error => {
       tpopInStore = originalTpop
       store.listError(error)
     })

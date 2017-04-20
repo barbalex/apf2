@@ -11,14 +11,12 @@ import apiBaseUrl from '../../modules/apiBaseUrl'
 import tables from '../../modules/tables'
 import insertDatasetInIdb from './insertDatasetInIdb'
 
-export default (store: Object, parentId: number) => {
+export default (store: Object, parentId: number): void => {
   let { table } = store.copying
   const { id } = store.copying
 
   // ensure derived data exists
-  const tabelle = tables.find(t =>
-    t.table === table
-  )
+  const tabelle = tables.find(t => t.table === table)
   // in tpopfeldkontr and tpopfreiwkontr need to find dbTable
   if (tabelle.dbTable) {
     table = tabelle.dbTable
@@ -35,29 +33,22 @@ export default (store: Object, parentId: number) => {
   const parentIdField = tabelle.parentIdField
   if (!parentIdField) {
     return store.listError(
-      new Error(
-        `change was not saved because parentIdField was not found`
-      )
+      new Error(`change was not saved because parentIdField was not found`)
     )
   }
 
   const row = store.table[table].get(id)
   if (!row) {
     return store.listError(
-      new Error(
-        `change was not saved because dataset was not found in store`
-      )
+      new Error(`change was not saved because dataset was not found in store`)
     )
   }
 
   // build new row (for now without idField)
   const newRow = clone(row)
   // need to remove empty values and guids
-  Object.keys(newRow).forEach((k) => {
-    if (
-      (!newRow[k] && newRow[k] !== 0) ||
-      k.endsWith(`Guid`)
-    ) {
+  Object.keys(newRow).forEach(k => {
+    if ((!newRow[k] && newRow[k] !== 0) || k.endsWith(`Guid`)) {
       delete newRow[k]
     }
   })
@@ -69,14 +60,13 @@ export default (store: Object, parentId: number) => {
 
   // update db
   const url = `${apiBaseUrl}/insertFields/apflora/tabelle=${table}/felder=${JSON.stringify(newRow)}`
-  axios.post(url)
+  axios
+    .post(url)
     .then(({ data }) => {
       // can't write to store before, because db creates id and guid
       store.writeToStore({ data: [data], table, field: idField })
       // insert this dataset in idb
       insertDatasetInIdb(store, table, data)
     })
-    .catch((error) =>
-      store.listError(error)
-    )
+    .catch(error => store.listError(error))
 }
