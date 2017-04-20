@@ -7,12 +7,6 @@ export default (
   projId: number,
   apArtId: number
 ): Array<Object> => {
-  // check passed variables
-  if (!store) return store.listError(new Error('no store passed'))
-  if (!tree) return store.listError(new Error('no tree passed'))
-  if (!apArtId) return store.listError(new Error('no apArtId passed'))
-  if (!projId) return store.listError(new Error('no projId passed'))
-
   const { table } = store
 
   // fetch sorting indexes of parents
