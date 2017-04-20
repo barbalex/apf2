@@ -1,4 +1,4 @@
-export default (arrayOfBoundsPassed) => {
+export default arrayOfBoundsPassed => {
   // remove array elements that are not arrays
   const arrayOfBounds = arrayOfBoundsPassed.filter(b => b && b.length)
   const xMinArray = arrayOfBounds.map(b => b[0][0])

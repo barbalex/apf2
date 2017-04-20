@@ -1,19 +1,20 @@
+// @flow
 /**
  * gets a latLng wgs 84
  * returns tpopId of nearest tpop
  */
 import nearest from '@turf/nearest'
 
-export default (store, latLng) => {
+export default (store: Object, latLng: Object): number => {
   const { table, tree } = store
   const { activeNodes } = tree
   const { lat, lng } = latLng
   const point = {
-    "type": "Feature",
-    "properties": {},
-    "geometry": {
-      "type": "Point",
-      "coordinates": [lat, lng]
+    type: 'Feature',
+    properties: {},
+    geometry: {
+      type: 'Point',
+      coordinates: [lat, lng]
     }
   }
   const popIds = Array.from(table.pop.values())
@@ -23,18 +24,18 @@ export default (store, latLng) => {
     .filter(t => popIds.includes(t.PopId))
     .filter(t => t.TPopKoordWgs84)
     .map(t => ({
-      "type": "Feature",
-      "properties": {
-        "TPopId": t.TPopId
+      type: 'Feature',
+      properties: {
+        TPopId: t.TPopId
       },
-      "geometry": {
-        "type": "Point",
-        "coordinates": t.TPopKoordWgs84
+      geometry: {
+        type: 'Point',
+        coordinates: t.TPopKoordWgs84
       }
     }))
   const against = {
-  "type": "FeatureCollection",
-    "features": tpopFeatures
+    type: 'FeatureCollection',
+    features: tpopFeatures
   }
   const nearestTpopFeature = nearest(point, against)
   return nearestTpopFeature.properties.TPopId

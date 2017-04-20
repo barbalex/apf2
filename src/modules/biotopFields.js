@@ -1,3 +1,4 @@
+// @flow
 export default [
   `TPopKontrFlaeche`,
   `TPopKontrLeb`,
@@ -16,5 +17,5 @@ export default [
   `TPopKontrBodenAbtrag`,
   `TPopKontrWasserhaushalt`,
   `TPopKontrHandlungsbedarf`,
-  `TPopKontrIdealBiotopUebereinst`,
+  `TPopKontrIdealBiotopUebereinst`
 ]
