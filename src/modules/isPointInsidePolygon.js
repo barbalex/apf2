@@ -4,11 +4,14 @@ import inside from '@turf/inside'
 import epsg21781to4326 from './epsg21781to4326'
 
 export default (
-  polygon: {type: string,properties: Object,geometry:{type: string,coordinates:Array<any>}},
+  polygon: {
+    type: string,
+    properties: Object,
+    geometry: { type: string, coordinates: Array<any> }
+  },
   x: number,
   y: number
-) => {
-
+): boolean => {
   // convert koordinates to wgs84
   const koordWgs84 = epsg21781to4326(x, y)
 
@@ -17,8 +20,8 @@ export default (
     type: `Feature`,
     geometry: {
       type: `Point`,
-      coordinates: koordWgs84,
-    },
+      coordinates: koordWgs84
+    }
   }
 
   // let turf check if the point is in zh

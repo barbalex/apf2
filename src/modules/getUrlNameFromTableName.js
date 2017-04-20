@@ -1,5 +1,5 @@
 // @flow
-export default (table: string) => {
+export default (table: string): string => {
   const names = {
     ap: `Arten`,
     apber: `AP-Berichte`,
@@ -23,9 +23,10 @@ export default (table: string) => {
     user: `Benutzer`,
     userprojekt: `Benutzer-Projekte`,
     ziel: `AP-Ziele`,
-    zielber: `Berichte`,
+    zielber: `Berichte`
   }
   const name = names[table]
-  if (!name) throw new Error(`Der Tabelle ${table} konnte kein Namen zugewiesen werden`)
+  if (!name)
+    throw new Error(`Der Tabelle ${table} konnte kein Namen zugewiesen werden`)
   return name
 }

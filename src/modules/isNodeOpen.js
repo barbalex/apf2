@@ -4,7 +4,7 @@ import isEqual from 'lodash/isEqual'
 export default (
   openNodes: Array<Array<string | number>>,
   url: Array<string | number>
-) => {
+): boolean => {
   if (!url) return false
   if (!openNodes) return false
 
