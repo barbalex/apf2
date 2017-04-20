@@ -9,7 +9,7 @@ import manipulateActiveNodeArray from '../action/manipulateActiveNodeArray'
 import manipulateUrlQuery from '../action/manipulateUrlQuery'
 import manipulateUrl from '../action/manipulateUrl'
 
-export default (store: Object) => {
+export default (store: Object): void => {
   extendObservable(store, {
     manipulateActiveNodeArray: autorun(`manipulateActiveNodeArray`, () =>
       manipulateActiveNodeArray(store)
