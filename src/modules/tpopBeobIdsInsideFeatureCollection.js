@@ -3,26 +3,27 @@ import within from '@turf/within'
 
 import epsg21781to4326 from './epsg21781to4326notReverse'
 
-export default (store: Object, beobs:Array<Object>) => {
+export default (
+  store: Object,
+  beobs: Array<Object>
+): Array<number | string> => {
   const points = {
     type: `FeatureCollection`,
     // build an array of geoJson points
-    features: beobs.map((b) => {
-      const coordinates = (
-        b.QuelleId === 1 ?
-        // convert koordinates to wgs84
-        epsg21781to4326(b.beob.COORDONNEE_FED_E, b.beob.COORDONNEE_FED_N) :
-        epsg21781to4326(b.beob.FNS_XGIS, b.beob.FNS_YGIS)
-      )
+    features: beobs.map(b => {
+      const coordinates = b.QuelleId === 1
+        ? // convert koordinates to wgs84
+          epsg21781to4326(b.beob.COORDONNEE_FED_E, b.beob.COORDONNEE_FED_N)
+        : epsg21781to4326(b.beob.FNS_XGIS, b.beob.FNS_YGIS)
       return {
         type: `Feature`,
         properties: {
-          BeobId: b.BeobId,
+          BeobId: b.BeobId
         },
         geometry: {
           type: `Point`,
-          coordinates,
-        },
+          coordinates
+        }
       }
     })
   }

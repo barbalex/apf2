@@ -3,19 +3,19 @@ import within from '@turf/within'
 
 import epsg21781to4326 from './epsg21781to4326notReverse'
 
-export default (store: Object, tpops:Array<Object>) => {
+export default (store: Object, tpops: Array<Object>): Array<number> => {
   /**
    * data is passed from map.pop.pops OR a view fetched from the server
    * so need to filter to data with coordinates first...
    */
-  let tpopsToUse = tpops.filter((p) => {
+  let tpopsToUse = tpops.filter(p => {
     if (!p.TPopId) return false
     if (p.TPopXKoord && p.TPopYKoord) return true
     if (p[`TPop X-Koordinaten`] && p[`TPop Y-Koordinaten`]) return true
     return false
   })
   // ...and account for user friendly field names in views
-  tpopsToUse = tpopsToUse.map((p) => {
+  tpopsToUse = tpopsToUse.map(p => {
     if (p[`TPop X-Koordinaten`] && p[`TPop Y-Koordinaten`]) {
       p.TPopXKoord = p[`TPop X-Koordinaten`]
       p.TPopYKoord = p[`TPop Y-Koordinaten`]
@@ -28,13 +28,13 @@ export default (store: Object, tpops:Array<Object>) => {
     features: tpopsToUse.map(t => ({
       type: `Feature`,
       properties: {
-        TPopId: t.TPopId,
+        TPopId: t.TPopId
       },
       geometry: {
         type: `Point`,
         // convert koordinates to wgs84
-        coordinates: epsg21781to4326(t.TPopXKoord, t.TPopYKoord),
-      },
+        coordinates: epsg21781to4326(t.TPopXKoord, t.TPopYKoord)
+      }
     }))
   }
 

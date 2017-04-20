@@ -118,7 +118,8 @@ export default (store, tree) => {
     if (
       node.length === 7 &&
       node[4] === 'AP-Ziele' &&
-      isNodeOpen(openNodes, node.slice(0, node.length - 1))
+      isNodeOpen(openNodes, node.slice(0, node.length - 1)) &&
+      isNodeOpen(openNodes, node.slice(0, node.length - 2))
     ) {
       const apArtId = node[3]
       const zieljahr = node[5]
@@ -132,7 +133,9 @@ export default (store, tree) => {
       node.length === 8 &&
       node[4] === 'AP-Ziele' &&
       node[7] === 'Berichte' &&
-      isNodeOpen(openNodes, node.slice(0, node.length - 1))
+      isNodeOpen(openNodes, node.slice(0, node.length - 1)) &&
+      isNodeOpen(openNodes, node.slice(0, node.length - 2)) &&
+      isNodeOpen(openNodes, node.slice(0, node.length - 3))
     ) {
       const apArtId = node[3]
       const zieljahr = node[5]
