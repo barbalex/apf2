@@ -1,6 +1,6 @@
 import sortBy from 'lodash/sortBy'
 
-export default (store, tree) => {
+export default (store: Object, tree: Object): Object => {
   const { table } = store
   const { nodeLabelFilter, apFilter } = tree
   // grab beobNichtZuzuordnen as array and sort them by year
