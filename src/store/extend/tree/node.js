@@ -1,10 +1,10 @@
 // @flow
 import { extendObservable, computed } from 'mobx'
 
-import allNodes from '../../compute/nodes/allNodes'
+import nodes from '../../compute/nodes'
 
 export default (store: Object, tree: Object) => {
   extendObservable(tree.node, {
-    nodes: computed(() => allNodes(store, tree), { name: `nodesNode` })
+    nodes: computed(() => nodes(store, tree), { name: `nodesNode` })
   })
 }

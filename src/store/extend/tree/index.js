@@ -10,7 +10,7 @@ import extendNode from './node'
 import extendFilteredAndSorted from './filteredAndSorted'
 import updateActiveDatasetFromActiveNodes
   from '../../action/updateActiveDatasetFromActiveNodes'
-import allNodes from '../../compute/nodes/allNodes'
+import nodes from '../../compute/nodes'
 import setOpenNodesFromActiveNodeArray
   from '../../action/setOpenNodesFromActiveNodeArray'
 
@@ -30,8 +30,8 @@ export default (store: Object, tree: Object) => {
     }),
     activeNode: computed(
       () => {
-        const nodes = allNodes(store, tree)
-        return nodes.find(n => isEqual(toJS(tree.activeNodeArray), n.url))
+        const myNodes = nodes(store, tree)
+        return myNodes.find(n => isEqual(toJS(tree.activeNodeArray), n.url))
       },
       { name: `activeNode` }
     ),
