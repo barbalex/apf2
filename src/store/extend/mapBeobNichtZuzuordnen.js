@@ -1,18 +1,18 @@
 // @flow
-import {
-  extendObservable,
-  computed,
-} from 'mobx'
+import { extendObservable, computed } from 'mobx'
 
-import getBeobNichtZuzuordnenBounds from '../action/getBeobNichtZuzuordnenBounds'
-import getBeobNichtZuzuordnenMarkersClustered from '../action/getBeobNichtZuzuordnenMarkersClustered'
+import getBeobNichtZuzuordnenBounds
+  from '../action/getBeobNichtZuzuordnenBounds'
+import getBeobNichtZuzuordnenMarkersClustered
+  from '../action/getBeobNichtZuzuordnenMarkersClustered'
 import getBeobForMap from '../action/getBeobForMap'
 
-export default (store: Object) => {
+export default (store: Object): void => {
   extendObservable(store.map.beobNichtZuzuordnen, {
     highlightedIds: computed(
       () => {
-        const mapFilterBeobNichtZuzuordnen = store.map.mapFilter.beobNichtZuzuordnen
+        const mapFilterBeobNichtZuzuordnen =
+          store.map.mapFilter.beobNichtZuzuordnen
         if (mapFilterBeobNichtZuzuordnen.length > 0) {
           return mapFilterBeobNichtZuzuordnen
         }
@@ -28,24 +28,26 @@ export default (store: Object) => {
       { name: `mapBeobNichtZuzuordnenMarkersClustered` }
     ),
     beobs: computed(
-      () => getBeobForMap(store)
-        .filter(b => b.beobzuordnung && b.beobzuordnung.BeobNichtZuordnen === 1),
+      () =>
+        getBeobForMap(store).filter(
+          b => b.beobzuordnung && b.beobzuordnung.BeobNichtZuordnen === 1
+        ),
       { name: `mapBeobNichtZuzuordnenBeobs` }
     ),
     bounds: computed(
       () => getBeobNichtZuzuordnenBounds(store.map.beobNichtZuzuordnen.beobs),
-    { name: `mapBeobNichtZuzuordnenBounds` }
+      { name: `mapBeobNichtZuzuordnenBounds` }
     ),
     boundsOfHighlightedIds: computed(
-      () => getBeobNichtZuzuordnenBounds(
-        store.map.beobNichtZuzuordnen.beobs
-          .filter(b =>
+      () =>
+        getBeobNichtZuzuordnenBounds(
+          store.map.beobNichtZuzuordnen.beobs.filter(b =>
             store.map.beobNichtZuzuordnen.highlightedIds.includes(
               isNaN(b.BeobId) ? b.BeobId : Number(b.BeobId)
             )
           )
-      ),
+        ),
       { name: `mapBeobNichtZuzuordnenBoundsOfHighlightedIds` }
-    ),
+    )
   })
 }
