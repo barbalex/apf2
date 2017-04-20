@@ -5,7 +5,7 @@
 // that is why there is if (a !== 0 && !a)
 
 import { toJS } from 'mobx'
-import isNodeOpen from '../../../modules/isNodeOpen'
+import allParentNodesAreOpen from '../../../modules/allParentNodesAreOpen'
 import projektNodes from '../../../modules/nodes/projekt'
 import apFolderNodes from '../../../modules/nodes/apFolder'
 import apberuebersichtFolderNodes
@@ -62,21 +62,19 @@ export default (store, tree) => {
     if (
       node.length === 3 &&
       node[2] === 'AP-Berichte' &&
-      isNodeOpen(openNodes, node.slice(0, node.length - 1))
+      allParentNodesAreOpen(openNodes, node)
     ) {
       nodes = [...nodes, ...apberuebersichtNodes(store, tree, projId)]
     }
     if (
       node.length === 3 &&
       node[2] === 'Arten' &&
-      isNodeOpen(openNodes, node.slice(0, node.length - 1))
+      allParentNodesAreOpen(openNodes, node)
     ) {
       nodes = [...nodes, ...apNodes(store, tree, projId)]
     }
     // if node.length > 3, node[2] is always 'Arten'
-    if (
-      node.length === 4 && isNodeOpen(openNodes, node.slice(0, node.length - 1))
-    ) {
+    if (node.length === 4 && allParentNodesAreOpen(openNodes, node)) {
       const apArtId = node[3]
       nodes = [...nodes, ...popFolderNodes(store, tree, projId, apArtId)]
       nodes = [...nodes, ...qkFolderNodes(store, tree, projId, apArtId)]
@@ -101,7 +99,7 @@ export default (store, tree) => {
     if (
       node.length === 5 &&
       node[4] === 'AP-Ziele' &&
-      isNodeOpen(openNodes, node.slice(0, node.length - 1))
+      allParentNodesAreOpen(openNodes, node)
     ) {
       const apArtId = node[3]
       nodes = [...nodes, ...zieljahrNodes(store, tree, projId, apArtId)]
@@ -109,7 +107,7 @@ export default (store, tree) => {
     if (
       node.length === 6 &&
       node[4] === 'AP-Ziele' &&
-      isNodeOpen(openNodes, node.slice(0, node.length - 1))
+      allParentNodesAreOpen(openNodes, node)
     ) {
       const apArtId = node[3]
       const zieljahr = node[5]
@@ -118,8 +116,7 @@ export default (store, tree) => {
     if (
       node.length === 7 &&
       node[4] === 'AP-Ziele' &&
-      isNodeOpen(openNodes, node.slice(0, node.length - 1)) &&
-      isNodeOpen(openNodes, node.slice(0, node.length - 2))
+      allParentNodesAreOpen(openNodes, node)
     ) {
       const apArtId = node[3]
       const zieljahr = node[5]
@@ -133,9 +130,7 @@ export default (store, tree) => {
       node.length === 8 &&
       node[4] === 'AP-Ziele' &&
       node[7] === 'Berichte' &&
-      isNodeOpen(openNodes, node.slice(0, node.length - 1)) &&
-      isNodeOpen(openNodes, node.slice(0, node.length - 2)) &&
-      isNodeOpen(openNodes, node.slice(0, node.length - 3))
+      allParentNodesAreOpen(openNodes, node)
     ) {
       const apArtId = node[3]
       const zieljahr = node[5]
@@ -148,7 +143,7 @@ export default (store, tree) => {
     if (
       node.length === 5 &&
       node[4] === 'Populationen' &&
-      isNodeOpen(openNodes, node.slice(0, node.length - 1))
+      allParentNodesAreOpen(openNodes, node)
     ) {
       const apArtId = node[3]
       nodes = [...nodes, ...popNodes(store, tree, projId, apArtId)]
@@ -156,7 +151,7 @@ export default (store, tree) => {
     if (
       node.length === 5 &&
       node[4] === 'nicht-zuzuordnende-Beobachtungen' &&
-      isNodeOpen(openNodes, node.slice(0, node.length - 1))
+      allParentNodesAreOpen(openNodes, node)
     ) {
       const apArtId = node[3]
       nodes = [
@@ -167,7 +162,7 @@ export default (store, tree) => {
     if (
       node.length === 5 &&
       node[4] === 'nicht-beurteilte-Beobachtungen' &&
-      isNodeOpen(openNodes, node.slice(0, node.length - 1))
+      allParentNodesAreOpen(openNodes, node)
     ) {
       const apArtId = node[3]
       nodes = [...nodes, ...beobzuordnungNodes(store, tree, projId, apArtId)]
@@ -175,7 +170,7 @@ export default (store, tree) => {
     if (
       node.length === 5 &&
       node[4] === 'assoziierte-Arten' &&
-      isNodeOpen(openNodes, node.slice(0, node.length - 1))
+      allParentNodesAreOpen(openNodes, node)
     ) {
       const apArtId = node[3]
       nodes = [...nodes, ...assozartNodes(store, tree, projId, apArtId)]
@@ -183,7 +178,7 @@ export default (store, tree) => {
     if (
       node.length === 5 &&
       node[4] === 'Berichte' &&
-      isNodeOpen(openNodes, node.slice(0, node.length - 1))
+      allParentNodesAreOpen(openNodes, node)
     ) {
       const apArtId = node[3]
       nodes = [...nodes, ...berNodes(store, tree, projId, apArtId)]
@@ -191,7 +186,7 @@ export default (store, tree) => {
     if (
       node.length === 5 &&
       node[4] === 'AP-Berichte' &&
-      isNodeOpen(openNodes, node.slice(0, node.length - 1))
+      allParentNodesAreOpen(openNodes, node)
     ) {
       const apArtId = node[3]
       nodes = [...nodes, ...apberNodes(store, tree, projId, apArtId)]
@@ -199,7 +194,7 @@ export default (store, tree) => {
     if (
       node.length === 5 &&
       node[4] === 'AP-Erfolgskriterien' &&
-      isNodeOpen(openNodes, node.slice(0, node.length - 1))
+      allParentNodesAreOpen(openNodes, node)
     ) {
       const apArtId = node[3]
       nodes = [...nodes, ...erfkritNodes(store, tree, projId, apArtId)]
