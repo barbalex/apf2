@@ -5,12 +5,16 @@ import apiBaseUrl from '../../modules/apiBaseUrl'
 import tables from '../../modules/tables'
 import insertDatasetInIdb from './insertDatasetInIdb'
 
-export default (store: Object, tree: Object, tablePassed: string, parentId: number, baseUrl:Array<string>) => {
+export default (
+  store: Object,
+  tree: Object,
+  tablePassed: string,
+  parentId: number,
+  baseUrl: Array<string>
+): any => {
   let table = tablePassed
   if (!table) {
-    return store.listError(
-      new Error(`no table passed`)
-    )
+    return store.listError(new Error(`no table passed`))
   }
   // insert new dataset in db and fetch id
   const tableMetadata = tables.find(t => t.table === table)
@@ -23,6 +27,7 @@ export default (store: Object, tree: Object, tablePassed: string, parentId: numb
   if (tableMetadata.dbTable) {
     table = tableMetadata.dbTable
   }
+  // $FlowIssue
   const parentIdField = tableMetadata.parentIdField
   const idField = tableMetadata.idField
   if (!idField) {
@@ -31,8 +36,9 @@ export default (store: Object, tree: Object, tablePassed: string, parentId: numb
     )
   }
   const url = `${apiBaseUrl}/apflora/${table}/${parentIdField}/${parentId}`
-  axios.post(url)
-    .then((result) => {
+  axios
+    .post(url)
+    .then(result => {
       const row = result.data
       // insert this dataset in store.table
       store.table[table].set(row[idField], row)
@@ -48,8 +54,16 @@ export default (store: Object, tree: Object, tablePassed: string, parentId: numb
       }
       // if tpopfreiwkontr need to update TPopKontrTyp
       if (tablePassed === `tpopfreiwkontr`) {
-        store.updateProperty(tree, `TPopKontrTyp`, `Freiwilligen-Erfolgskontrolle`)
-        store.updatePropertyInDb(tree, `TPopKontrTyp`, `Freiwilligen-Erfolgskontrolle`)
+        store.updateProperty(
+          tree,
+          `TPopKontrTyp`,
+          `Freiwilligen-Erfolgskontrolle`
+        )
+        store.updatePropertyInDb(
+          tree,
+          `TPopKontrTyp`,
+          `Freiwilligen-Erfolgskontrolle`
+        )
       }
     })
     .catch(error => store.listError(error))
