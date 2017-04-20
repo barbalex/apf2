@@ -37,6 +37,7 @@ import berNodes from '../../../modules/nodes/ber'
 import apberNodes from '../../../modules/nodes/apber'
 import erfkritNodes from '../../../modules/nodes/erfkrit'
 import tpopFolderNodes from '../../../modules/nodes/tpopFolder'
+import popberFolderNodes from '../../../modules/nodes/popberFolder'
 
 const compare = (a, b) => {
   // sort a before, if it has no value at this index
@@ -57,8 +58,11 @@ export default (store, tree) => {
   nodesToProcess.forEach(node => {
     const projId = node[1]
     if (node.length === 2) {
-      nodes = [...nodes, ...apFolderNodes(store, tree, projId)]
-      nodes = [...nodes, ...apberuebersichtFolderNodes(store, tree, projId)]
+      nodes = [
+        ...nodes,
+        ...apFolderNodes(store, tree, projId),
+        ...apberuebersichtFolderNodes(store, tree, projId)
+      ]
     }
     if (
       node.length === 3 &&
@@ -77,25 +81,19 @@ export default (store, tree) => {
     // if node.length > 3, node[2] is always 'Arten'
     if (node.length === 4 && allParentNodesAreOpen(openNodes, node)) {
       const apArtId = node[3]
-      nodes = [...nodes, ...popFolderNodes(store, tree, projId, apArtId)]
-      nodes = [...nodes, ...qkFolderNodes(store, tree, projId, apArtId)]
       nodes = [
         ...nodes,
-        ...beobNichtZuzuordnenFolderNodes(store, tree, projId, apArtId)
+        ...popFolderNodes(store, tree, projId, apArtId),
+        ...zieljahrFolderNodes(store, tree, projId, apArtId),
+        ...erfkritFolderNodes(store, tree, projId, apArtId),
+        ...apberFolderNodes(store, tree, projId, apArtId),
+        ...berFolderNodes(store, tree, projId, apArtId),
+        ...idealbiotopFolderNodes(store, tree, projId, apArtId),
+        ...assozartFolderNodes(store, tree, projId, apArtId),
+        ...beobzuordnungFolderNodes(store, tree, projId, apArtId),
+        ...beobNichtZuzuordnenFolderNodes(store, tree, projId, apArtId),
+        ...qkFolderNodes(store, tree, projId, apArtId)
       ]
-      nodes = [
-        ...nodes,
-        ...beobzuordnungFolderNodes(store, tree, projId, apArtId)
-      ]
-      nodes = [...nodes, ...assozartFolderNodes(store, tree, projId, apArtId)]
-      nodes = [
-        ...nodes,
-        ...idealbiotopFolderNodes(store, tree, projId, apArtId)
-      ]
-      nodes = [...nodes, ...berFolderNodes(store, tree, projId, apArtId)]
-      nodes = [...nodes, ...apberFolderNodes(store, tree, projId, apArtId)]
-      nodes = [...nodes, ...erfkritFolderNodes(store, tree, projId, apArtId)]
-      nodes = [...nodes, ...zieljahrFolderNodes(store, tree, projId, apArtId)]
     }
     if (
       node.length === 5 &&
@@ -209,7 +207,8 @@ export default (store, tree) => {
       const popId = node[5]
       nodes = [
         ...nodes,
-        ...tpopFolderNodes(store, tree, projId, apArtId, popId)
+        ...tpopFolderNodes(store, tree, projId, apArtId, popId),
+        ...popberFolderNodes(store, tree, projId, apArtId, popId)
       ]
     }
   })
