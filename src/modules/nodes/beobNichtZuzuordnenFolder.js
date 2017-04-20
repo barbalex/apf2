@@ -1,6 +1,12 @@
+// @flow
 import findIndex from 'lodash/findIndex'
 
-export default (store, tree, projId, apArtId) => {
+export default (
+  store: Object,
+  tree: Object,
+  projId: number,
+  apArtId: number
+): Array<Object> => {
   // check passed variables
   if (!store) return store.listError(new Error('no store passed'))
   if (!tree) return store.listError(new Error('no tree passed'))
