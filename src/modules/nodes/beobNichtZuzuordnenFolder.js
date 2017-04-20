@@ -17,7 +17,10 @@ export default (
   const projIndex = findIndex(tree.filteredAndSorted.projekt, {
     ProjId: projId
   })
-  const apIndex = findIndex(tree.filteredAndSorted.ap, { ApArtId: apArtId })
+  const apIndex = findIndex(
+    tree.filteredAndSorted.ap.filter(a => a.ProjId === projId),
+    { ApArtId: apArtId }
+  )
 
   // prevent folder from showing when nodeFilter is set
   if (apIndex === -1) return []
