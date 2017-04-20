@@ -3,11 +3,14 @@ import axios from 'axios'
 import app from 'ampersand-app'
 
 import apiBaseUrl from '../../modules/apiBaseUrl'
-import recordValuesForWhichTableDataWasFetched from '../../modules/recordValuesForWhichTableDataWasFetched'
+import recordValuesForWhichTableDataWasFetched
+  from '../../modules/recordValuesForWhichTableDataWasFetched'
 
-export default (store: Object, apArtId: number) => {
+export default (store: Object, apArtId: number): any => {
   if (!apArtId) {
-    return new Error(`action fetchPopForAp: apArtId must be passed`)
+    return store.listError(
+      new Error(`action fetchPopForAp: apArtId must be passed`)
+    )
   }
   const { valuesForWhichTableDataWasFetched } = store
 
@@ -23,15 +26,22 @@ export default (store: Object, apArtId: number) => {
   store.loading.push(`popForAp`)
   app.db.pop
     .toArray()
-    .then((data) => {
+    .then(data => {
       store.writeToStore({ data, table: `pop`, field: `PopId` })
-      recordValuesForWhichTableDataWasFetched({ store, table: `popForAp`, field: `ApArtId`, value: apArtId })
+      recordValuesForWhichTableDataWasFetched({
+        store,
+        table: `popForAp`,
+        field: `ApArtId`,
+        value: apArtId
+      })
       return axios.get(`${apiBaseUrl}/popForAp/${apArtId}`)
     })
     .then(({ data }) => {
       store.loading = store.loading.filter(el => el !== `popForAp`)
       // leave ui react before this happens
-      setTimeout(() => store.writeToStore({ data, table: `pop`, field: `PopId` }))
+      setTimeout(() =>
+        store.writeToStore({ data, table: `pop`, field: `PopId` })
+      )
       setTimeout(() => app.db.pop.bulkPut(data))
     })
     .catch(error => {

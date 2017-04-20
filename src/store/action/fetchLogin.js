@@ -4,17 +4,20 @@ import app from 'ampersand-app'
 
 import apiBaseUrl from '../../modules/apiBaseUrl'
 
-export default (store: Object, name: string, password: string) => {
+export default (store: Object, name: string, password: string): any => {
   if (!name) {
-    return new Error(`action fetchLogin: name must be passed`)
+    return store.listError(new Error(`action fetchLogin: name must be passed`))
   }
   if (!password) {
-    return new Error(`action fetchLogin: password must be passed`)
+    return store.listError(
+      new Error(`action fetchLogin: password must be passed`)
+    )
   }
 
   const url = `${apiBaseUrl}/anmeldung/name=${name}/pwd=${password}`
   store.loading.push(`user`)
-  axios.get(url)
+  axios
+    .get(url)
     .then(({ data }) => {
       if (data && data.length > 0) {
         const readOnly = data[0].NurLesen === -1
@@ -27,7 +30,7 @@ export default (store: Object, name: string, password: string) => {
       }
       store.loading = store.loading.filter(el => el !== `user`)
     })
-    .catch((error) => {
+    .catch(error => {
       store.loading = store.loading.filter(el => el !== `user`)
       store.listError(error)
     })

@@ -6,10 +6,7 @@ import apiBaseUrl from '../../modules/apiBaseUrl'
 import isPointInsidePolygon from '../../modules/isPointInsidePolygon'
 import zhGeojson from '../../etc/ktZh.json'
 
-const fetchQk = (
-  { store, tree }:
-  {store: Object,tree: Object}
-) => {
+const fetchQk = ({ store, tree }: { store: Object, tree: Object }) => {
   store.loading.push(`qk`)
   const apArtId = tree.activeNodes.ap
   const qk = store.qk.get(apArtId)
@@ -18,16 +15,12 @@ const fetchQk = (
   if (qk && qk.berichtjahr) {
     berichtjahr = qk.berichtjahr
   } else {
-    return setTimeout(() => fetchQk(
-  {
-    store,
-    tree,
-  }:
-  {
-    store: Object,
-    tree: Object,
-  }
-))
+    return setTimeout(() =>
+      fetchQk({
+        store,
+        tree
+      })
+    )
   }
   const qkTypes = [
     // Population: ohne Nr/Name/Status/bekannt seit/Koordinaten/tpop
@@ -53,7 +46,10 @@ const fetchQk = (
     // Population: Status ist ansaatversuch, alle tpop sind gemäss Status erloschen
     { type: `view`, name: `v_qk2_pop_statusansaatversuchalletpoperloschen` },
     // Population: Status ist ansaatversuch, es gibt tpop mit status ursprünglich erloschen
-    { type: `view`, name: `v_qk2_pop_statusansaatversuchmittpopursprerloschen` },
+    {
+      type: `view`,
+      name: `v_qk2_pop_statusansaatversuchmittpopursprerloschen`
+    },
     // Population: Status ist "erloschen" (ursprünglich oder angesiedelt),
     // es gibt aber eine Teilpopulation mit Status "aktuell" (ursprünglich oder angesiedelt)
     { type: `view`, name: `v_qk2_pop_statuserloschenmittpopaktuell` },
@@ -82,7 +78,10 @@ const fetchQk = (
     { type: `view`, name: `v_qk2_tpop_ohnekoordinaten` },
     // tpop relevant, die nicht relevant sein sollten
     { type: `view`, name: `v_qk2_tpop_statuspotentiellfuerapberrelevant` },
-    { type: `view`, name: `v_qk2_tpop_erloschenundrelevantaberletztebeobvor1950` },
+    {
+      type: `view`,
+      name: `v_qk2_tpop_erloschenundrelevantaberletztebeobvor1950`
+    },
     // tpop mit Status unklar ohne Begründung
     { type: `view`, name: `v_qk2_tpop_mitstatusunklarohnebegruendung` },
     // tpop mit mehrdeutiger Kombination von PopNr und TPopNr
@@ -92,7 +91,10 @@ const fetchQk = (
     // TPop ohne verlangten TPop-Massn.-Bericht im Berichtjahr
     { type: `query`, name: `qk2TpopOhneMassnber`, berichtjahr },
     // Teilpopulation mit Status "Ansaatversuch", bei denen in einer Kontrolle eine Anzahl festgestellt wurde:
-    { type: `view`, name: `v_qk2_tpop_mitstatusansaatversuchundzaehlungmitanzahl` },
+    {
+      type: `view`,
+      name: `v_qk2_tpop_mitstatusansaatversuchundzaehlungmitanzahl`
+    },
     // Teilpopulation mit Status "potentieller Wuchs-/Ansiedlungsort",
     // bei der eine Massnahme des Typs "Ansiedlung" existiert:
     { type: `view`, name: `v_qk2_tpop_mitstatuspotentiellundmassnansiedlung` },
@@ -135,29 +137,35 @@ const fetchQk = (
     { type: `view`, name: `v_qk2_erfkrit_ohnekriterien` },
     // AP-Bericht ohne Jahr/Vergleich Vorjahr-Gesamtziel/Beurteilung
     { type: `view`, name: `v_qk2_apber_ohnejahr` },
-    { type: `view`, name: `v_qk2_apber_ohnevergleichvorjahrgesamtziel`, berichtjahr },
+    {
+      type: `view`,
+      name: `v_qk2_apber_ohnevergleichvorjahrgesamtziel`,
+      berichtjahr
+    },
     { type: `view`, name: `v_qk2_apber_ohnebeurteilung`, berichtjahr },
     // assoziierte Art ohne Art
-    { type: `view`, name: `v_qk2_assozart_ohneart` },
+    { type: `view`, name: `v_qk2_assozart_ohneart` }
   ]
   let nrOfMessages = 0
-  const urls = qkTypes.map(t =>
-    `${apiBaseUrl}/${t.type === `view` ? `qkView/` : ``}${t.name}/${tree.activeNodes.ap}${t.berichtjahr ? `/${t.berichtjahr}` : ``}`
+  const urls = qkTypes.map(
+    t =>
+      `${apiBaseUrl}/${t.type === `view` ? `qkView/` : ``}${t.name}/${tree.activeNodes.ap}${t.berichtjahr ? `/${t.berichtjahr}` : ``}`
   )
   const dataFetchingPromises = urls.map(dataUrl =>
-    axios.get(dataUrl)
-      .then((res) => {
+    axios
+      .get(dataUrl)
+      .then(res => {
         if (res.data.length > 0) {
           const hw = res.data[0].hw
           let url = []
-          res.data.forEach((d) => {
+          res.data.forEach(d => {
             if (isArray(d.url[0])) {
               url = url.concat(d.url)
             } else {
               url.push(d.url)
             }
           })
-          const messages = ({ hw, url })
+          const messages = { hw, url }
           store.addMessagesToQk({ tree, messages })
           nrOfMessages += 1
         }
@@ -166,19 +174,33 @@ const fetchQk = (
       .catch(e => e)
   )
   Promise.all(dataFetchingPromises)
-    .then(() => axios.get(`${apiBaseUrl}/tpopKoordFuerProgramm/apId=${tree.activeNodes.ap}`))
-    .then((res) => {
+    .then(() =>
+      axios.get(
+        `${apiBaseUrl}/tpopKoordFuerProgramm/apId=${tree.activeNodes.ap}`
+      )
+    )
+    .then(res => {
       // kontrolliere die Relevanz ausserkantonaler Tpop
-      const tpops = res.data.filter(tpop =>
-        tpop.TPopApBerichtRelevant === 1 &&
-        tpop.TPopXKoord &&
-        tpop.TPopYKoord &&
-        !isPointInsidePolygon(zhGeojson, tpop.TPopXKoord, tpop.TPopYKoord)
+      const tpops = res.data.filter(
+        tpop =>
+          tpop.TPopApBerichtRelevant === 1 &&
+          tpop.TPopXKoord &&
+          tpop.TPopYKoord &&
+          !isPointInsidePolygon(zhGeojson, tpop.TPopXKoord, tpop.TPopYKoord)
       )
       if (tpops.length > 0) {
         const messages = {
           hw: `Teilpopulation ist als 'Für AP-Bericht relevant' markiert, liegt aber ausserhalb des Kt. Zürich und sollte daher nicht relevant sein:`,
-          url: tpops.map(tpop => [`Projekte`, 1, `Arten`, tpop.ApArtId, `Populationen`, tpop.PopId, `Teil-Populationen`, tpop.TPopId]),
+          url: tpops.map(tpop => [
+            `Projekte`,
+            1,
+            `Arten`,
+            tpop.ApArtId,
+            `Populationen`,
+            tpop.PopId,
+            `Teil-Populationen`,
+            tpop.TPopId
+          ])
         }
         store.addMessagesToQk({ tree, messages })
         nrOfMessages += 1
@@ -190,7 +212,7 @@ const fetchQk = (
       }
       store.loading = store.loading.filter(el => el !== `qk`)
     })
-    .catch((error) => {
+    .catch(error => {
       store.listError(error)
       store.loading = store.loading.filter(el => el !== `qk`)
     })
