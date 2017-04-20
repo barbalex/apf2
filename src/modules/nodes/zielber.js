@@ -17,7 +17,10 @@ export default (store, tree, projId, apArtId, zieljahr, zielId) => {
   const zieljahrIndex = findIndex(tree.filteredAndSorted.zieljahr, {
     jahr: zieljahr
   })
-  const zielIndex = findIndex(tree.filteredAndSorted.ziel, { ZielId: zielId })
+  const zielIndex = findIndex(
+    tree.filteredAndSorted.ziel.filter(z => z.ZielJahr === zieljahr),
+    { ZielId: zielId }
+  )
 
   // map through all and create array of nodes
   return tree.filteredAndSorted.zielber

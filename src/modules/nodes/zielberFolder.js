@@ -17,10 +17,17 @@ export default (store, tree, projId, apArtId, zieljahr, zielId) => {
   const zieljahrIndex = findIndex(tree.filteredAndSorted.zieljahr, {
     jahr: zieljahr
   })
-  const zielIndex = findIndex(tree.filteredAndSorted.ziel, { ZielId: zielId })
+  const zielIndex = findIndex(
+    tree.filteredAndSorted.ziel.filter(z => z.ZielJahr === zieljahr),
+    { ZielId: zielId }
+  )
+  console.log('zielberFolder: zielIndex:', zielIndex)
+  const zielIsVisible = !!tree.filteredAndSorted.ziel.filter(
+    z => z.ZielJahr === zieljahr && z.ZielId === zielId
+  )
 
   // prevent folder from showing when nodeFilter is set
-  if (zielIndex === -1) return []
+  if (!zielIsVisible) return []
 
   const zielberNodesLength = tree.filteredAndSorted.zielber.filter(
     z => z.ZielId === zielId
