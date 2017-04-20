@@ -3,13 +3,13 @@ export default ({
   store,
   table,
   field,
-  value,
-}:{
+  value
+}: {
   store: Object,
   table: string,
   field: string,
-  value: string|number,
-}) => {
+  value: string | number
+}): void => {
   const { valuesForWhichTableDataWasFetched } = store
   // record that data was fetched for this value
   if (!valuesForWhichTableDataWasFetched[table]) {
