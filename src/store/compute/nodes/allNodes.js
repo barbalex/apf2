@@ -28,6 +28,7 @@ import zieljahrNodes from '../../../modules/nodes/zieljahr'
 import zielNodes from '../../../modules/nodes/ziel'
 import zielberFolderNodes from '../../../modules/nodes/zielberFolder'
 import zielberNodes from '../../../modules/nodes/zielber'
+import popNodes from '../../../modules/nodes/pop'
 
 const compare = (a, b) => {
   // sort a before, if it has no value at this index
@@ -133,6 +134,14 @@ export default (store, tree) => {
         ...nodes,
         ...zielberNodes(store, tree, projId, apArtId, zieljahr, zielId)
       ]
+    }
+    if (
+      node.length === 5 &&
+      node[4] === 'Populationen' &&
+      isNodeOpen(openNodes, node.slice(0, node.length - 1))
+    ) {
+      const apArtId = node[3]
+      nodes = [...nodes, ...popNodes(store, tree, projId, apArtId)]
     }
   })
 
