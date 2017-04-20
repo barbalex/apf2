@@ -7,15 +7,6 @@ export default (
   apArtId: number,
   popId: number
 ): Array<Object> => {
-  // check passed variables
-  if (!store) return store.listError(new Error('no store passed'))
-  if (!tree) return store.listError(new Error('no tree passed'))
-  if (!projId) return store.listError(new Error('no projId passed'))
-  if (!apArtId) return store.listError(new Error('no apArtId passed'))
-  if (!popId) return store.listError(new Error('no popId passed'))
-
-  const { table } = store
-
   // fetch sorting indexes of parents
   const projIndex = findIndex(tree.filteredAndSorted.projekt, {
     ProjId: projId
@@ -36,7 +27,7 @@ export default (
   ).length
 
   let message = popmassnberNodesLength
-  if (table.popmassnberLoading) {
+  if (store.table.popmassnberLoading) {
     message = `...`
   }
   if (tree.nodeLabelFilter.get(`popmassnber`)) {
