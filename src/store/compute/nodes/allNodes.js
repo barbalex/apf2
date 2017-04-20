@@ -61,6 +61,8 @@ import tpopfeldkontrzaehlFolderNodes
 import tpopfreiwkontrzaehlFolderNodes
   from '../../../modules/nodes/tpopfreiwkontrzaehlFolder'
 import tpopfeldkontrzaehlNodes from '../../../modules/nodes/tpopfeldkontrzaehl'
+import tpopfreiwkontrzaehlNodes
+  from '../../../modules/nodes/tpopfreiwkontrzaehl'
 
 const compare = (a, b) => {
   // sort a before, if it has no value at this index
@@ -453,6 +455,30 @@ export default (store, tree) => {
       nodes = [
         ...nodes,
         ...tpopfeldkontrzaehlNodes(
+          store,
+          tree,
+          projId,
+          apArtId,
+          popId,
+          tpopId,
+          tpopkontrId
+        )
+      ]
+    }
+    if (
+      node.length === 11 &&
+      node[4] === 'Populationen' &&
+      node[6] === 'Teil-Populationen' &&
+      node[8] === 'Freiwilligen-Kontrollen' &&
+      allParentNodesAreOpen(openNodes, node)
+    ) {
+      const apArtId = node[3]
+      const popId = node[5]
+      const tpopId = node[7]
+      const tpopkontrId = node[9]
+      nodes = [
+        ...nodes,
+        ...tpopfreiwkontrzaehlNodes(
           store,
           tree,
           projId,
