@@ -1,3 +1,4 @@
+// @flow
 // for sorting see:
 // //stackoverflow.com/questions/13211709/javascript-sort-array-by-multiple-number-fields
 // also: needed to account for elements not having the next array elements
@@ -68,7 +69,7 @@ const compare = (a, b) => {
   return a - b
 }
 
-export default (store, tree) => {
+export default (store: Object, tree: Object): Array<Object> => {
   const openNodes = toJS(tree.openNodes)
 
   let nodes = projektNodes(store, tree)

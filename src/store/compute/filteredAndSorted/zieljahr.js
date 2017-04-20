@@ -1,6 +1,6 @@
 import uniq from 'lodash/uniq'
 
-export default (store, tree) => {
+export default (store: Object, tree: Object): Object => {
   const { table } = store
   const { nodeLabelFilter } = tree
   // grab ziele as array

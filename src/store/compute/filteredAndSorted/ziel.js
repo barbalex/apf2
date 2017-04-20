@@ -1,6 +1,6 @@
 import sortBy from 'lodash/sortBy'
 
-export default (store, tree) => {
+export default (store: Object, tree: Object): Object => {
   const { table } = store
   const { nodeLabelFilter } = tree
 
