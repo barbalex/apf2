@@ -29,6 +29,8 @@ import zielNodes from '../../../modules/nodes/ziel'
 import zielberFolderNodes from '../../../modules/nodes/zielberFolder'
 import zielberNodes from '../../../modules/nodes/zielber'
 import popNodes from '../../../modules/nodes/pop'
+import beobNichtZuzuordnenNodes
+  from '../../../modules/nodes/beobNichtZuzuordnen'
 
 const compare = (a, b) => {
   // sort a before, if it has no value at this index
@@ -142,6 +144,17 @@ export default (store, tree) => {
     ) {
       const apArtId = node[3]
       nodes = [...nodes, ...popNodes(store, tree, projId, apArtId)]
+    }
+    if (
+      node.length === 5 &&
+      node[4] === 'nicht-zuzuordnende-Beobachtungen' &&
+      isNodeOpen(openNodes, node.slice(0, node.length - 1))
+    ) {
+      const apArtId = node[3]
+      nodes = [
+        ...nodes,
+        ...beobNichtZuzuordnenNodes(store, tree, projId, apArtId)
+      ]
     }
   })
 
