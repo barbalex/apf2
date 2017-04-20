@@ -20,26 +20,20 @@ const FieldsContainer = styled.div`
   padding-bottom: 45px;
 `
 
-const enhance = compose(
-  inject(`store`),
-  observer
-)
+const enhance = compose(inject(`store`), observer)
 
-const getArtList = (
-  {
-    store,
-    tree,
-  }:
-  {
-    store: Object,
-    tree: Object,
-  }
-) => {
+const getArtList = ({
+  store,
+  tree
+}: {
+  store: Object,
+  tree: Object
+}) => {
   const { activeDataset, activeNodes } = tree
   const { adb_eigenschaften } = store.table
-  const assozartenOfAp = Array.from(store.table.assozart.values()).filter(a =>
-    a.AaApArtId === activeDataset.row.AaApArtId
-  ).map(a => a.AaSisfNr)
+  const assozartenOfAp = Array.from(store.table.assozart.values())
+    .filter(a => a.AaApArtId === activeDataset.row.AaApArtId)
+    .map(a => a.AaSisfNr)
   const apArtIdsNotToShow = assozartenOfAp.concat(activeNodes.ap)
   const artList = filter(
     Array.from(adb_eigenschaften.values()),
@@ -48,16 +42,13 @@ const getArtList = (
   return sortBy(artList, `Artname`)
 }
 
-const getArtname = (
-  {
-    store,
-    tree,
-  }:
-  {
-    store: Object,
-    tree: Object,
-  }
-) => {
+const getArtname = ({
+  store,
+  tree
+}: {
+  store: Object,
+  tree: Object
+}) => {
   const { adb_eigenschaften } = store.table
   const { activeDataset } = tree
   let name = ``
@@ -67,16 +58,13 @@ const getArtname = (
   return name
 }
 
-const Assozart = (
-  {
-    store,
-    tree,
-  }:
-  {
-    store: Object,
-    tree: Object,
-  }
-) => {
+const Assozart = ({
+  store,
+  tree
+}: {
+  store: Object,
+  tree: Object
+}) => {
   const { activeDataset } = tree
 
   return (
@@ -88,30 +76,18 @@ const Assozart = (
             tree={tree}
             label="Art"
             fieldName="AaSisfNr"
-            valueText={getArtname(
-  {
-    store,
-    tree,
-  }:
-  {
-    store: Object,
-    tree: Object,
-  }
-)}
+            valueText={getArtname({
+              store,
+              tree
+            })}
             errorText={activeDataset.valid.ApArtId}
-            dataSource={getArtList(
-  {
-    store,
-    tree,
-  }:
-  {
-    store: Object,
-    tree: Object,
-  }
-)}
+            dataSource={getArtList({
+              store,
+              tree
+            })}
             dataSourceConfig={{
               value: `TaxonomieId`,
-              text: `Artname`,
+              text: `Artname`
             }}
             updatePropertyInDb={store.updatePropertyInDb}
           />

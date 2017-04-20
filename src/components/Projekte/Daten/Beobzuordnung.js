@@ -13,7 +13,8 @@ import TextField from '../../shared/TextField'
 import RadioButtonWithInfo from '../../shared/RadioButtonWithInfo'
 import Label from '../../shared/Label'
 import Beob from './Beob'
-import getBeobFromBeobBereitgestelltInActiveDataset from '../../../modules/getBeobFromBeobBereitgestelltInActiveDataset'
+import getBeobFromBeobBereitgestelltInActiveDataset
+  from '../../../modules/getBeobFromBeobBereitgestelltInActiveDataset'
 
 const Container = styled.div`
   height: 100%;
@@ -63,8 +64,9 @@ const getTpopZuordnenSource = (store, tree) => {
   const { activeDataset, activeNodes } = tree
   const beobzuordnung = activeDataset.row
   // get all popIds of active ap
-  const popList = Array.from(store.table.pop.values())
-    .filter(p => p.ApArtId === activeNodes.ap)
+  const popList = Array.from(store.table.pop.values()).filter(
+    p => p.ApArtId === activeNodes.ap
+  )
   const popIdList = popList.map(p => p.PopId)
   // get all tpop
   let tpopList = Array.from(store.table.tpop.values())
@@ -80,27 +82,24 @@ const getTpopZuordnenSource = (store, tree) => {
   if (!beob) {
     return []
   }
-  const beobX = (
-    beobzuordnung.QuelleId === 2 ?
-    beob.FNS_XGIS :
-    beob.COORDONNEE_FED_E
-  )
-  const beobY = (
-    beobzuordnung.QuelleId === 2 ?
-    beob.FNS_YGIS :
-    beob.COORDONNEE_FED_N
-  )
-  tpopList.forEach((t) => {
+  const beobX = beobzuordnung.QuelleId === 2
+    ? beob.FNS_XGIS
+    : beob.COORDONNEE_FED_E
+  const beobY = beobzuordnung.QuelleId === 2
+    ? beob.FNS_YGIS
+    : beob.COORDONNEE_FED_N
+  tpopList.forEach(t => {
     const dX = Math.abs(beobX - t.TPopXKoord)
     const dY = Math.abs(beobY - t.TPopYKoord)
-    t.distance = Math.round(((dX ** 2) + (dY ** 2)) ** 0.5)
+    t.distance = Math.round((dX ** 2 + dY ** 2) ** 0.5)
     t.popNr = store.table.pop.get(t.PopId).PopNr
     // build label
-    t.herkunft = (
-      t.TPopHerkunft ?
-      Array.from(store.table.pop_status_werte.values()).find(x => x.HerkunftId === t.TPopHerkunft).HerkunftTxt :
-      `ohne Status`
-    )
+    t.herkunft = t.TPopHerkunft
+      ? // $FlowIssue
+        Array.from(store.table.pop_status_werte.values()).find(
+          x => x.HerkunftId === t.TPopHerkunft
+        ).HerkunftTxt
+      : `ohne Status`
     const popNr = t.popNr || t.popNr === 0 ? t.popNr : `(keine Nr)`
     const tpopNr = t.TPopNr || t.TPopNr === 0 ? t.TPopNr : `(keine Nr)`
     t.label = `${t.distance.toLocaleString(`de-ch`)}m: ${popNr}/${tpopNr} (${t.herkunft})`
@@ -110,19 +109,23 @@ const getTpopZuordnenSource = (store, tree) => {
   // return array of TPopId, label
   return tpopList.map(t => ({
     value: t.TPopId,
-    label: t.label,
+    label: t.label
   }))
 }
 
 const enhance = compose(
   inject(`store`),
   withHandlers({
-    updatePropertyInDb: props => (treePassedByUpdatePropertyInDb, fieldname, val) => {
+    updatePropertyInDb: props => (
+      treePassedByUpdatePropertyInDb,
+      fieldname,
+      val
+    ) => {
       const { store, tree } = props
       const {
         insertBeobzuordnung,
         updatePropertyInDb,
-        deleteBeobzuordnung,
+        deleteBeobzuordnung
       } = store
       const { activeDataset } = tree
       if (val) {
@@ -135,30 +138,25 @@ const enhance = compose(
       } else {
         deleteBeobzuordnung(tree, activeDataset.row.NO_NOTE)
       }
-    },
+    }
   }),
   observer
 )
 
-const Beobzuordnung = (
-  {
-    store,
-    tree,
-    updatePropertyInDb,
-  }:
-  {
-    store: Object,
-    tree: Object,
-    updatePropertyInDb: () => void,
-  }
-) => {
+const Beobzuordnung = ({
+  store,
+  tree,
+  updatePropertyInDb
+}: {
+  store: Object,
+  tree: Object,
+  updatePropertyInDb: () => void
+}) => {
   const { activeDataset } = tree
   const beobzuordnung = activeDataset.row
-  const beobTitle = (
-    beobzuordnung.QuelleId === 1 ?
-    `Informationen aus EvAB (nicht veränderbar)` :
-    `Informationen aus Infospezies (nicht veränderbar)`
-  )
+  const beobTitle = beobzuordnung.QuelleId === 1
+    ? `Informationen aus EvAB (nicht veränderbar)`
+    : `Informationen aus Infospezies (nicht veränderbar)`
   const showTPopId = activeDataset.row.BeobNichtZuordnen !== 1
 
   return (
@@ -173,8 +171,7 @@ const Beobzuordnung = (
           updatePropertyInDb={updatePropertyInDb}
           popover={nichtZuordnenPopover}
         />
-        {
-          showTPopId &&
+        {showTPopId &&
           <div>
             <Label label="Einer Teilpopulation zuordnen" />
             <MaxHeightDiv>
@@ -186,8 +183,7 @@ const Beobzuordnung = (
                 updatePropertyInDb={updatePropertyInDb}
               />
             </MaxHeightDiv>
-          </div>
-        }
+          </div>}
         <TextField
           tree={tree}
           label="Bemerkungen zur Zuordnung"
@@ -201,11 +197,7 @@ const Beobzuordnung = (
           updatePropertyInDb={store.updatePropertyInDb}
         />
       </FieldsContainer>
-      <FormTitle
-        tree={tree}
-        title={beobTitle}
-        noTestdataMessage={true}
-      />
+      <FormTitle tree={tree} title={beobTitle} noTestdataMessage={true} />
       <FieldsContainer>
         <Beob />
       </FieldsContainer>
