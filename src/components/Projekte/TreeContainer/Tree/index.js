@@ -131,8 +131,8 @@ class Tree extends Component {
               width={width}
               {...nodes}
               // need to use innerRef because ListContainer is a styled component
-              // $FlowIssue
               innerRef={c => {
+                // $FlowIssue
                 this.tree = c
               }}
             />

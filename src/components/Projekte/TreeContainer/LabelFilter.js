@@ -17,21 +17,15 @@ const FilterField = styled(TextField)`
   }
 `
 
-const enhance = compose(
-  inject(`store`),
-  observer
-)
+const enhance = compose(inject(`store`), observer)
 
-const LabelFilter = (
-  {
-    store,
-    tree,
-  }:
-  {
-    store: Object,
-    tree: Object,
-  }
-) => {
+const LabelFilter = ({
+  store,
+  tree
+}: {
+  store: Object,
+  tree: Object
+}) => {
   const { activeDataset } = tree
   let filteredTable = ``
 
@@ -45,6 +39,7 @@ const LabelFilter = (
   if (filteredTable) {
     filterValue = tree.nodeLabelFilter.get(filteredTable) || ``
     const table = tables.find(t => t.table === filteredTable)
+    // $FlowIssue
     const tableLabel = table ? table.label : null
     if (tableLabel) {
       labelText = `${tableLabel} filtern`
@@ -56,9 +51,7 @@ const LabelFilter = (
       floatingLabelText={labelText}
       fullWidth
       value={filterValue}
-      onChange={(event, val) =>
-        tree.updateLabelFilter(filteredTable, val)
-      }
+      onChange={(event, val) => tree.updateLabelFilter(filteredTable, val)}
     />
   )
 }
