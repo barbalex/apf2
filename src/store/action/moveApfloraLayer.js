@@ -1,4 +1,5 @@
-export default (store, oldIndex, newIndex) => {
+// @flow
+export default (store: Object, oldIndex: number, newIndex: number): void => {
   /**
    * need to move array elements in apfloraLayers array
    * when user moves them in layer list
@@ -9,5 +10,9 @@ export default (store, oldIndex, newIndex) => {
    * keeping same array
    * from: http://stackoverflow.com/a/7180095/712005
    */
-    store.map.apfloraLayers.splice(newIndex, 0, store.map.apfloraLayers.splice(oldIndex, 1)[0])
+  store.map.apfloraLayers.splice(
+    newIndex,
+    0,
+    store.map.apfloraLayers.splice(oldIndex, 1)[0]
+  )
 }
