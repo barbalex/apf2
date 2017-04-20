@@ -16,7 +16,10 @@ export default (
   const { filteredAndSorted } = tree
   // fetch sorting indexes of parents
   const projIndex = findIndex(filteredAndSorted.projekt, { ProjId: projId })
-  const apIndex = findIndex(filteredAndSorted.ap, { ApArtId: apArtId })
+  const apIndex = findIndex(
+    filteredAndSorted.ap.filter(a => a.ProjId === projId),
+    { ApArtId: apArtId }
+  )
 
   // map through all and create array of nodes
   return filteredAndSorted.beobNichtZuzuordnen
