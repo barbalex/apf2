@@ -21,7 +21,10 @@ export default (
   const projIndex = findIndex(tree.filteredAndSorted.projekt, {
     ProjId: projId
   })
-  const apIndex = findIndex(tree.filteredAndSorted.ap, { ApArtId: apArtId })
+  const apIndex = findIndex(
+    tree.filteredAndSorted.ap.filter(a => a.ProjId === projId),
+    { ApArtId: apArtId }
+  )
   const zieljahrIndex = findIndex(tree.filteredAndSorted.zieljahr, {
     jahr: zieljahr
   })
@@ -29,7 +32,6 @@ export default (
     tree.filteredAndSorted.ziel.filter(z => z.ZielJahr === zieljahr),
     { ZielId: zielId }
   )
-  console.log('zielberFolder: zielIndex:', zielIndex)
   const zielIsVisible = !!tree.filteredAndSorted.ziel.filter(
     z => z.ZielJahr === zieljahr && z.ZielId === zielId
   )
