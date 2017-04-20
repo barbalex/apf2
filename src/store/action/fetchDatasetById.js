@@ -30,6 +30,7 @@ export default ({
   }
   schemaName = schemaName || `apflora` // eslint-disable-line no-param-reassign
 
+  // $FlowIssue
   const idField = tables.find(t => t.table === tableName).idField
 
   // only fetch if not yet fetched

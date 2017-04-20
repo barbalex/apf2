@@ -14,7 +14,9 @@ export default (
   parentId: number
 ): void => {
   const schemaName = schemaNamePassed || `apflora`
+  // $FlowIssue
   const idField = tables.find(t => t.table === tableName).idField
+  // $FlowIssue
   const parentIdField = tables.find(t => t.table === tableName).parentIdField
 
   // only fetch if not yet fetched
