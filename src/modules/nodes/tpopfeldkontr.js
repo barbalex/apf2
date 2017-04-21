@@ -24,8 +24,6 @@ export default (
     tree.filteredAndSorted.tpop.filter(t => t.PopId === popId),
     { TPopId: tpopId }
   )
-  // prevent folder from showing when nodeFilter is set
-  if (tpopIndex === -1) return []
 
   return tree.filteredAndSorted.tpopfeldkontr
     .filter(t => t.TPopId === tpopId)

@@ -31,8 +31,6 @@ export default (
       TPopKontrId: tpopkontrId
     }
   )
-  // prevent folder from showing when nodeFilter is set
-  if (tpopfeldkontrIndex === -1) return []
 
   const childrenLength = tree.filteredAndSorted.tpopfeldkontrzaehl.filter(
     z => z.TPopKontrId === tpopkontrId

@@ -19,8 +19,6 @@ export default (
     tree.filteredAndSorted.pop.filter(p => p.ApArtId === apArtId),
     { PopId: popId }
   )
-  // prevent folder from showing when nodeFilter is set
-  if (popIndex === -1) return []
 
   const childrenLength = tree.filteredAndSorted.tpop.filter(
     t => t.PopId === popId
