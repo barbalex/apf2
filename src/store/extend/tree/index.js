@@ -38,10 +38,10 @@ export default (store: Object, tree: Object): void => {
       () => updateActiveDatasetFromActiveNodes(store, tree),
       { name: `activeDataset` }
     ),
-    cloneActiveNodeArrayToTree2: action(
-      `cloneActiveNodeArrayToTree2`,
-      () => store.tree2.activeNodeArray = clone(toJS(tree.activeNodeArray))
-    ),
+    cloneActiveNodeArrayToTree2: action(`cloneActiveNodeArrayToTree2`, () => {
+      store.tree2.activeNodeArray = clone(toJS(tree.activeNodeArray))
+      store.tree2.openNodes = clone(toJS(tree.openNodes))
+    }),
     openNodes: [],
     setOpenNodesFromActiveNodeArray: action(
       `setOpenNodesFromActiveNodeArray`,
