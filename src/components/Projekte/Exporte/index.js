@@ -131,6 +131,11 @@ const enhance = compose(
               jsonData = jsonData.filter(d => popIds.includes(d.PopId))
             }
           }
+          if (jsonData.length === 0) {
+            throw new Error(
+              'Es gibt offenbar keine Daten, welche exportiert werden können'
+            )
+          }
           try {
             const csvData = json2csv({ data: jsonData })
             const file = `${fileName}_${format(new Date(), `YYYY-MM-DD_HH-mm-ss`)}`
