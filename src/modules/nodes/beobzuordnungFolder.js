@@ -16,9 +16,6 @@ export default (
     { ApArtId: apArtId }
   )
 
-  // prevent folder from showing when nodeFilter is set
-  if (apIndex === -1) return []
-
   const beobzuordnungNodesLength = tree.filteredAndSorted.beobzuordnung.filter(
     n => n.NO_ISFS === apArtId
   ).length

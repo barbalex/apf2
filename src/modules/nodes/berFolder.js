@@ -18,9 +18,6 @@ export default (
     { ApArtId: apArtId }
   )
 
-  // prevent folder from showing when nodeFilter is set
-  if (apIndex === -1) return []
-
   const berNodesLength = tree.filteredAndSorted.ber.filter(
     n => n.ApArtId === apArtId
   ).length
