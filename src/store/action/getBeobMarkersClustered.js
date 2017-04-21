@@ -32,9 +32,7 @@ export default (store: Object): Object => {
   const markers = window.L.markerClusterGroup(mcgOptions)
   if (visible) {
     beobs.forEach(p => {
-      const isHighlighted = highlightedIds.includes(
-        isNaN(p.BeobId) ? p.BeobId : Number(p.BeobId)
-      )
+      const isHighlighted = highlightedIds.includes(p.id)
       const latLng = new window.L.LatLng(...p.KoordWgs84)
       const icon = window.L.icon({
         iconUrl: isHighlighted ? beobIconHighlighted : beobIcon,

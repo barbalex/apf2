@@ -13,8 +13,7 @@ export default (store: Object): Array<Object> => {
   const visible = store.map.activeApfloraLayers.includes(`BeobNichtBeurteilt`)
   if (visible) {
     return beobs.map(p => {
-      const beobId = isNaN(p.BeobId) ? p.BeobId : Number(p.BeobId)
-      const isHighlighted = highlightedIds.includes(beobId)
+      const isHighlighted = highlightedIds.includes(p.id)
       const latLng = new window.L.LatLng(...p.KoordWgs84)
       const icon = window.L.icon({
         iconUrl: isHighlighted ? beobIconHighlighted : beobIcon,

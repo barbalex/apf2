@@ -20,9 +20,7 @@ export default (store: Object): Array<Object> => {
         className: `mapTooltip`,
         opacity: 1
       }
-      const isHighlighted = highlightedIds.includes(
-        isNaN(p.BeobId) ? p.BeobId : Number(p.BeobId)
-      )
+      const isHighlighted = highlightedIds.includes(p.id)
       const latLng = new window.L.LatLng(...p.KoordWgs84)
       const icon = window.L.icon({
         iconUrl: isHighlighted ? beobIconHighlighted : beobIcon,
