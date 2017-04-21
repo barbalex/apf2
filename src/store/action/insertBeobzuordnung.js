@@ -13,8 +13,8 @@ const updateBeobzuordnungData = (
 ): void => {
   store.updateProperty(tree, newKey, newValue)
   store.updatePropertyInDb(tree, newKey, newValue)
-  store.updateProperty(tree, `NO_ISFS`, beobBereitgestellt.NO_ISFS)
-  store.updatePropertyInDb(tree, `NO_ISFS`, beobBereitgestellt.NO_ISFS)
+  store.updateProperty(tree, `ArtId`, beobBereitgestellt.ArtId)
+  store.updatePropertyInDb(tree, `ArtId`, beobBereitgestellt.ArtId)
   store.updateProperty(tree, `QuelleId`, beobBereitgestellt.QuelleId)
   store.updatePropertyInDb(tree, `QuelleId`, beobBereitgestellt.QuelleId)
 }
@@ -69,7 +69,7 @@ export default (
   /**
    * newKey is either BeobNichtZuordnen or TPopId
    */
-  // get data from beob_bereitgestellt in activeDataset
+  // get data from beob in activeDataset
   const beobBereitgestellt = tree.activeDataset.row
   // check if a corresponding beobzuordnung already exists
   const beobzuordnungExists = !!store.table.beobzuordnung.get(
@@ -85,14 +85,14 @@ export default (
     )
   }
   // insert new dataset in db and fetch id
-  const url = `${apiBaseUrl}/apflora/beobzuordnung/NO_NOTE/${beobBereitgestellt.BeobId}`
+  const url = `${apiBaseUrl}/apflora/beobzuordnung/ArtId/${beobBereitgestellt.BeobId}`
   axios
     .post(url)
     .then(({ data: row }) => {
       // insert this dataset in idb
       insertDatasetInIdb(store, `beobzuordnung`, row)
       // insert this dataset in store.table
-      store.table.beobzuordnung.set(row.NO_NOTE, row)
+      store.table.beobzuordnung.set(row.ArtId, row)
       continueWithBeobBereitgestellt(
         store,
         tree,

@@ -119,7 +119,7 @@ export default (
           newActiveNodeArray[4] = value === 1
             ? `nicht-zuzuordnende-Beobachtungen`
             : `nicht-beurteilte-Beobachtungen`
-          newActiveNodeArray[5] = tree.activeDataset.row.NO_NOTE
+          newActiveNodeArray[5] = tree.activeDataset.row.ArtId
           tree.setActiveNodeArray(newActiveNodeArray.slice(0, 6))
         }
         // if for a beobZugeordnet TPopId is set, url needs to change

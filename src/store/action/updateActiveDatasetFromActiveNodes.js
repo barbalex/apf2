@@ -52,8 +52,8 @@ export default (store: Object, tree: Object): Object => {
         }
       } else if (aEl.beobzuordnung) {
         activeDataset = {
-          table: `beob_bereitgestellt`,
-          row: table.beob_bereitgestellt.get(aEl.beobzuordnung),
+          table: `beob`,
+          row: table.beob.get(aEl.beobzuordnung),
           folder: null
         }
       } else if (aEl.beobNichtZuzuordnen) {
