@@ -309,7 +309,7 @@ export default [
   {
     database: 'beob',
     table: 'beob',
-    idField: 'BeobId',
+    idField: 'id',
     parentIdField: 'ArtId'
   },
   {
