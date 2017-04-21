@@ -16,9 +16,6 @@ export default (
     { ApArtId: apArtId }
   )
 
-  // prevent folder from showing when nodeFilter is set
-  if (apIndex === -1) return []
-
   const zieljahreNodesLength = tree.filteredAndSorted.zieljahr.length
 
   let message = `${zieljahreNodesLength} Jahre`
