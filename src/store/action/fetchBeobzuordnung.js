@@ -11,9 +11,9 @@ import recordValuesForWhichTableDataWasFetched
 const writeToStore = (store: Object, data: Array<Object>): void => {
   runInAction(() => {
     data.forEach(zuordnung => {
-      // set computed value "beob_bereitgestellt"
+      // set computed value "beob"
       zuordnung.beobBereitgestellt = computed(() =>
-        store.table.beob_bereitgestellt.get(zuordnung.NO_NOTE)
+        store.table.beob.get(zuordnung.BeobId)
       )
       // set computed value "type"
       zuordnung.type = computed(() => {
@@ -25,7 +25,7 @@ const writeToStore = (store: Object, data: Array<Object>): void => {
         }
         return `nichtBeurteilt`
       })
-      store.table.beobzuordnung.set(zuordnung.NO_NOTE, zuordnung)
+      store.table.beobzuordnung.set(zuordnung.BeobId, zuordnung)
     })
   })
 }
@@ -42,8 +42,8 @@ export default (store: Object, apArtId: number): any => {
   // only fetch if not yet fetched
   if (
     valuesForWhichTableDataWasFetched.beobzuordnung &&
-    valuesForWhichTableDataWasFetched.beobzuordnung.NO_ISFS &&
-    valuesForWhichTableDataWasFetched.beobzuordnung.NO_ISFS.includes(apArtId)
+    valuesForWhichTableDataWasFetched.beobzuordnung.ArtId &&
+    valuesForWhichTableDataWasFetched.beobzuordnung.ArtId.includes(apArtId)
   ) {
     return
   }
@@ -57,7 +57,7 @@ export default (store: Object, apArtId: number): any => {
       recordValuesForWhichTableDataWasFetched({
         store,
         table: `beobzuordnung`,
-        field: `NO_ISFS`,
+        field: `ArtId`,
         value: apArtId
       })
     })
