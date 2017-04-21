@@ -21,5 +21,6 @@ export default (store: Object, tree: Object, node: Object): any => {
       tree.openNodes.push(node.url)
     }
   }
+  tree.setLastClickedNode(node.url)
   tree.setActiveNodeArray(newActiveNodeArray)
 }

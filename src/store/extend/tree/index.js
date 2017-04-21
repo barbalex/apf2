@@ -34,6 +34,15 @@ export default (store: Object, tree: Object): void => {
       },
       { name: `activeNode` }
     ),
+    lastClickedNode: [],
+    initializeLastClickedNode: action(
+      'initializeLastClickedNode',
+      () => tree.lastClickedNode = tree.activeNode
+    ),
+    setLastClickedNode: action(
+      'setLastClickedNode',
+      url => tree.lastClickedNode = url
+    ),
     activeDataset: computed(
       () => updateActiveDatasetFromActiveNodes(store, tree),
       { name: `activeDataset` }
@@ -41,6 +50,7 @@ export default (store: Object, tree: Object): void => {
     cloneActiveNodeArrayToTree2: action(`cloneActiveNodeArrayToTree2`, () => {
       store.tree2.activeNodeArray = clone(toJS(tree.activeNodeArray))
       store.tree2.openNodes = clone(toJS(tree.openNodes))
+      store.tree2.lastClickedNode = clone(store.tree.activeNode)
     }),
     openNodes: [],
     setOpenNodesFromActiveNodeArray: action(

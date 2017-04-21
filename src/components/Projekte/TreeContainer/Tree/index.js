@@ -58,7 +58,8 @@ class Tree extends Component {
     mapBeobNichtZuzuordnenVisible: boolean,
     mapPopVisible: boolean,
     mapTpopVisible: boolean,
-    activeNodeArray: Array<Object>
+    activeNodeArray: Array<Object>,
+    lastClickedNode: Object
   }
 
   static defaultProps = {
@@ -112,10 +113,16 @@ class Tree extends Component {
 
   render() {
     // eslint-disable-line class-methods-use-this
-    const { nodes, activeNodeArray } = this.props
-    const activeNodeIndex = findIndex(nodes, node =>
-      isEqual(node.url, activeNodeArray)
+    const { nodes, activeNodeArray, lastClickedNode } = this.props
+    let lastClickedNodeIndex = findIndex(nodes, node =>
+      isEqual(node.url, lastClickedNode)
     )
+    // if no index found, use activeNodeArray
+    if (lastClickedNodeIndex === -1) {
+      lastClickedNodeIndex = findIndex(nodes, node =>
+        isEqual(node.url, activeNodeArray)
+      )
+    }
 
     return (
       <Container>
@@ -127,7 +134,7 @@ class Tree extends Component {
               rowHeight={singleRowHeight}
               rowRenderer={this.rowRenderer}
               noRowsRenderer={this.noRowsRenderer}
-              scrollToIndex={activeNodeIndex}
+              scrollToIndex={lastClickedNodeIndex}
               width={width}
               // need to use innerRef
               // because ListContainer is a styled component

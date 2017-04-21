@@ -352,6 +352,7 @@ class TreeContainer extends Component {
             mapTpopVisible={store.map.activeApfloraLayers.includes(`Tpop`)}
             popHighlightedIdsString={store.map.pop.highlightedIds.join()}
             activeNodeArray={toJS(tree.activeNodeArray)}
+            lastClickedNode={toJS(tree.lastClickedNode)}
             openNodes={tree.openNodes}
           />
         </div>
