@@ -116,38 +116,25 @@ const getAndValidateCoordinatesOfTpop = (store, id) => {
 }
 
 const getAndValidateCoordinatesOfBeob = (store, beobId) => {
-  const beobBereitgestellt = store.table.beob_bereitgestellt.get(beobId)
+  const beobBereitgestellt = store.table.beob.get(beobId)
   if (!beobBereitgestellt) {
     store.listError(
       new Error(
         `Die bereitgestellte Beobachtung mit der ID ${beobId} wurde nicht gefunden`
       )
     )
-    return { x: null, y: null }
+    return { X: null, Y: null }
   }
-  let beob
-  if (beobBereitgestellt.QuelleId === 1) {
-    beob = store.table.beob_evab.get(beobId)
-  } else {
-    beob = store.table.beob_infospezies.get(beobId)
-  }
-  if (!beob) {
-    store.listError(
-      new Error(`Die Beobachtung mit der ID ${beobId} wurde nicht gefunden`)
-    )
-    return { x: null, y: null }
-  }
-  const x = beob.FNS_XGIS ? beob.FNS_XGIS : beob.COORDONNEE_FED_E
-  const y = beob.FNS_YGIS ? beob.FNS_YGIS : beob.COORDONNEE_FED_N
-  if (!x || !y) {
+  const { X, Y } = beobBereitgestellt
+  if (!X || !Y) {
     store.listError(
       new Error(
         `Die Teilpopulation mit der ID ${beobId} kat keine (vollständigen) Koordinaten`
       )
     )
-    return { x: null, y: null }
+    return { X: null, Y: null }
   }
-  return { x, y }
+  return { X, Y }
 }
 
 const enhance = compose(inject(`store`), observer)
@@ -288,15 +275,15 @@ class TreeContainer extends Component {
         }
       },
       showCoordOfBeobOnMapsZhCh() {
-        const { x, y } = getAndValidateCoordinatesOfBeob(store, id)
-        if (x && y) {
-          store.showCoordOnMapsZhCh(x, y)
+        const { X, Y } = getAndValidateCoordinatesOfBeob(store, id)
+        if (X && Y) {
+          store.showCoordOnMapsZhCh(X, Y)
         }
       },
       showCoordOfBeobOnMapGeoAdminCh() {
-        const { x, y } = getAndValidateCoordinatesOfBeob(store, id)
-        if (x && y) {
-          store.showCoordOnMapGeoAdminCh(x, y)
+        const { X, Y } = getAndValidateCoordinatesOfBeob(store, id)
+        if (X && Y) {
+          store.showCoordOnMapGeoAdminCh(X, Y)
         }
       }
     }

@@ -13,8 +13,6 @@ import TextField from '../../shared/TextField'
 import RadioButtonWithInfo from '../../shared/RadioButtonWithInfo'
 import Label from '../../shared/Label'
 import Beob from './Beob'
-import getBeobFromBeobBereitgestelltInActiveDataset
-  from '../../../modules/getBeobFromBeobBereitgestelltInActiveDataset'
 
 const Container = styled.div`
   height: 100%;
@@ -75,7 +73,7 @@ const getTpopZuordnenSource = (store, tree) => {
     // with coordinates
     .filter(t => t.TPopXKoord && t.TPopYKoord)
   // calculate their distance to this beobzuordnung
-  const beob = getBeobFromBeobBereitgestelltInActiveDataset(store)
+  const beob = store.table.beob.get(tree.activeDataset.row.BeobId)
   // beob loads later
   // prevent an error occuring if it does not yet exist
   // by passing back an empty array
@@ -129,14 +127,14 @@ const enhance = compose(
       } = store
       const { activeDataset } = tree
       if (val) {
-        if (activeDataset.table === `beob_bereitgestellt`) {
+        if (activeDataset.table === `beob`) {
           insertBeobzuordnung(tree, fieldname, val)
         } else {
           // beobzuordnung was moved from one TPopId to another
           updatePropertyInDb(tree, fieldname, val)
         }
       } else {
-        deleteBeobzuordnung(tree, activeDataset.row.NO_NOTE)
+        deleteBeobzuordnung(tree, activeDataset.row.ArtId)
       }
     }
   }),
@@ -199,7 +197,7 @@ const Beobzuordnung = ({
       </FieldsContainer>
       <FormTitle tree={tree} title={beobTitle} noTestdataMessage={true} />
       <FieldsContainer>
-        <Beob />
+        <Beob tree={tree} />
       </FieldsContainer>
     </Scrollbars>
   )

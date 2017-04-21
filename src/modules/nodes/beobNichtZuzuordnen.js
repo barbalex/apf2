@@ -18,9 +18,9 @@ export default (
 
   // map through all and create array of nodes
   return filteredAndSorted.beobNichtZuzuordnen
-    .filter(b => b.NO_ISFS === apArtId)
+    .filter(b => b.ArtId === apArtId)
     .map((el, index) => {
-      const beobId = isNaN(el.NO_NOTE) ? el.NO_NOTE : parseInt(el.NO_NOTE, 10)
+      const beobId = el.BeobId
 
       return {
         nodeType: `table`,
