@@ -12,7 +12,7 @@ export default (
    * so need to filter to data with coordinates first...
    */
   const beobsToUse = beobs.filter(b => {
-    if (!b.BeobId) return false
+    if (!b.id) return false
     if (b.X && b.Y) return true
     return false
   })
@@ -22,7 +22,7 @@ export default (
     features: beobsToUse.map(b => ({
       type: `Feature`,
       properties: {
-        BeobId: b.BeobId
+        id: b.id
       },
       geometry: {
         type: `Point`,
@@ -33,5 +33,5 @@ export default (
 
   // let turf check what points are within filter
   const result = within(points, store.map.mapFilter.filter)
-  return result.features.map(r => r.properties.BeobId)
+  return result.features.map(r => r.properties.id)
 }

@@ -114,13 +114,13 @@ const enhance = compose(
           if (filterFeatures.length > 0 && applyMapFilterToExport) {
             const keys = Object.keys(data[0])
             // filter data
-            // beob can also have PopId and TPopId, so dont filter by TPopId if you filter by BeobId
-            if (keys.includes('BeobId')) {
+            // beob can also have PopId and TPopId, so dont filter by TPopId if you filter by beob id
+            if (keys.includes('id')) {
               const beobIds = beobIdsFromServerInsideFeatureCollection(
                 store,
                 data
               )
-              jsonData = jsonData.filter(d => beobIds.includes(d.BeobId))
+              jsonData = jsonData.filter(d => beobIds.includes(d.id))
             } else if (keys.includes('TPopId')) {
               // data sets with TPopId usually also deliver PopId,
               // so only filter by TPopid then

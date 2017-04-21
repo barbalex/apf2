@@ -14,42 +14,31 @@ const StyledH3 = styled.h3`
  * or to observe
  */
 
-const BeobPopup = (
-  {
-    store,
-    beobBereitgestellt,
-  }:
-  {
-    store: Object,
-    beobBereitgestellt: Object,
-  }
-) => {
+const BeobPopup = ({
+  store,
+  beobBereitgestellt
+}: {
+  store: Object,
+  beobBereitgestellt: Object
+}) => {
   const { activeNodes } = store.tree
   const { ap, projekt } = activeNodes
 
   // build url to open beob form
-  let url = `${appBaseUrl}/Projekte/${projekt}/Arten/${ap}/nicht-beurteilte-Beobachtungen/${beobBereitgestellt.BeobId}`
+  let url = `${appBaseUrl}/Projekte/${projekt}/Arten/${ap}/nicht-beurteilte-Beobachtungen/${beobBereitgestellt.id}`
   if (beobBereitgestellt.beobzuordnung) {
     if (beobBereitgestellt.beobzuordnung.BeobNichtZuordnen) {
-      url = `${appBaseUrl}/Projekte/${projekt}/Arten/${ap}/nicht-zuzuordnende-Beobachtungen/${beobBereitgestellt.BeobId}`
+      url = `${appBaseUrl}/Projekte/${projekt}/Arten/${ap}/nicht-zuzuordnende-Beobachtungen/${beobBereitgestellt.id}`
     } else {
       const tpopId = beobBereitgestellt.beobzuordnung.TPopId
       const tpop = store.table.tpop.get(tpopId)
       const popId = tpop ? tpop.PopId : ``
-      url = `${appBaseUrl}/Projekte/${projekt}/Arten/${ap}/Populationen/${popId}/Teil-Populationen/${tpopId}/Beobachtungen/${beobBereitgestellt.BeobId}`
+      url = `${appBaseUrl}/Projekte/${projekt}/Arten/${ap}/Populationen/${popId}/Teil-Populationen/${tpopId}/Beobachtungen/${beobBereitgestellt.id}`
     }
   }
 
-  const xKoord = (
-    beobBereitgestellt.QuelleId === 1 ?
-    beobBereitgestellt.beob.COORDONNEE_FED_E :
-    beobBereitgestellt.beob.FNS_XGIS
-  )
-  const yKoord = (
-    beobBereitgestellt.QuelleId === 1 ?
-    beobBereitgestellt.beob.COORDONNEE_FED_N :
-    beobBereitgestellt.beob.FNS_YGIS
-  )
+  const xKoord = beobBereitgestellt.X
+  const yKoord = beobBereitgestellt.Y
 
   return (
     <div>
@@ -60,10 +49,7 @@ const BeobPopup = (
       <div>
         {`Koordinaten: ${xKoord.toLocaleString(`de-ch`)} / ${yKoord.toLocaleString(`de-ch`)}`}
       </div>
-      <a
-        href={url}
-        target="_blank"
-      >
+      <a href={url} target="_blank">
         Formular in neuem Tab öffnen
       </a>
     </div>

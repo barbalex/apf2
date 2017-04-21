@@ -73,7 +73,7 @@ const getTpopZuordnenSource = (store, tree) => {
     // with coordinates
     .filter(t => t.TPopXKoord && t.TPopYKoord)
   // calculate their distance to this beobzuordnung
-  const beob = store.table.beob.get(tree.activeDataset.row.BeobId)
+  const beob = store.table.beob.get(tree.activeDataset.row.id)
   // beob loads later
   // prevent an error occuring if it does not yet exist
   // by passing back an empty array
