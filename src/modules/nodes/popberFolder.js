@@ -22,9 +22,6 @@ export default (
     { PopId: popId }
   )
 
-  // prevent folder from showing when nodeFilter is set
-  if (popIndex === -1) return []
-
   const popberNodesLength = tree.filteredAndSorted.popber.filter(
     p => p.PopId === popId
   ).length
