@@ -17,9 +17,6 @@ export default (
     { ApArtId: apArtId }
   )
 
-  // prevent folder from showing when nodeFilter is set
-  if (apIndex === -1) return []
-
   const qk = store.qk.get(apArtId)
   let nrOfQkMessages = 0
   if (qk && qk.messagesFiltered) {
