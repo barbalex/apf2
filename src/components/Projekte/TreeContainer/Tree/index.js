@@ -129,8 +129,8 @@ class Tree extends Component {
               noRowsRenderer={this.noRowsRenderer}
               scrollToIndex={activeNodeIndex}
               width={width}
-              {...nodes}
-              // need to use innerRef because ListContainer is a styled component
+              // need to use innerRef
+              // because ListContainer is a styled component
               innerRef={c => {
                 // $FlowIssue
                 this.tree = c
