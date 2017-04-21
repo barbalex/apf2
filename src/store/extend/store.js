@@ -8,8 +8,6 @@ import fetchTpopForAp from '../action/fetchTpopForAp'
 import fetchPopForAp from '../action/fetchPopForAp'
 import fetchDatasetById from '../action/fetchDatasetById'
 import fetchBeobBereitgestellt from '../action/fetchBeobBereitgestellt'
-import fetchBeobEvab from '../action/fetchBeobEvab'
-import fetchBeobInfospezies from '../action/fetchBeobInfospezies'
 import updateProperty from '../action/updateProperty'
 import updatePropertyInDb from '../action/updatePropertyInDb'
 import fetchFields from '../action/fetchFields'
@@ -241,12 +239,6 @@ export default (store: Object): void => {
     }) => fetchDatasetById({ store: store, schemaName, tableName, id })),
     fetchBeobBereitgestellt: action(`fetchBeobBereitgestellt`, apArtId =>
       fetchBeobBereitgestellt(store, apArtId)
-    ),
-    fetchBeobEvab: action(`fetchBeobEvab`, apArtId =>
-      fetchBeobEvab(store, apArtId)
-    ),
-    fetchBeobInfospezies: action(`fetchBeobInfospezies`, apArtId =>
-      fetchBeobInfospezies(store, apArtId)
     ),
     writeToStore: action(`writeToStore`, ({ data, table, field }) =>
       writeToStore({ store: store, data, table, field })

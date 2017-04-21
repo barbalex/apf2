@@ -38,8 +38,6 @@ function Store(): void {
   this.fetchPopForAp = () => {}
   this.fetchDatasetById = () => {}
   this.fetchBeobBereitgestellt = () => {}
-  this.fetchBeobEvab = () => {}
-  this.fetchBeobInfospezies = () => {}
   this.writeToStore = () => {}
   this.setUrlQuery = () => {}
   this.tree = {
