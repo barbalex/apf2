@@ -17,30 +17,30 @@ export default (
   )
 
   const beobzuordnungNodesLength = tree.filteredAndSorted.beobzuordnung.filter(
-    n => n.NO_ISFS === apArtId
+    n => n.ArtId === apArtId
   ).length
 
   let message = beobzuordnungNodesLength
-  if (store.loading.includes(`beob_bereitgestellt`)) {
-    message = `...`
+  if (store.loading.includes('beob')) {
+    message = '...'
   }
-  if (tree.nodeLabelFilter.get(`beobzuordnung`)) {
+  if (tree.nodeLabelFilter.get('beobzuordnung')) {
     message = `${beobzuordnungNodesLength} gefiltert`
   }
 
   return [
     {
-      nodeType: `folder`,
-      menuType: `beobzuordnungFolder`,
+      nodeType: 'folder',
+      menuType: 'beobzuordnungFolder',
       id: apArtId,
-      urlLabel: `nicht-beurteilte-Beobachtungen`,
+      urlLabel: 'nicht-beurteilte-Beobachtungen',
       label: `Beobachtungen nicht beurteilt (${message})`,
       url: [
-        `Projekte`,
+        'Projekte',
         projId,
-        `Arten`,
+        'Arten',
         apArtId,
-        `nicht-beurteilte-Beobachtungen`
+        'nicht-beurteilte-Beobachtungen'
       ],
       sort: [projIndex, 1, apIndex, 8],
       hasChildren: beobzuordnungNodesLength > 0
