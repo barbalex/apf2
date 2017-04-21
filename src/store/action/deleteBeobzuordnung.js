@@ -8,7 +8,7 @@ export default (store: Object, tree: Object, beobId: number | string): void => {
   const { table } = store
   const { activeNodes } = tree
   // delete beobzuordnung
-  const deleteUrl = `${apiBaseUrl}/apflora/tabelle=beobzuordnung/tabelleIdFeld=NO_NOTE/tabelleId=${beobId}`
+  const deleteUrl = `${apiBaseUrl}/apflora/tabelle=beobzuordnung/tabelleIdFeld=ArtId/tabelleId=${beobId}`
   axios
     .delete(deleteUrl)
     .then(() => {
@@ -16,7 +16,7 @@ export default (store: Object, tree: Object, beobId: number | string): void => {
       table.beobzuordnung.delete(beobId)
       // remove from idb
       deleteDatasetInIdb(store, `beobzuordnung`, beobId)
-      // set activeNodeArray to corresponding beob_bereitgestellt
+      // set activeNodeArray to corresponding beob
       const newActiveNodeArray = [
         `Projekte`,
         activeNodes.projekt,

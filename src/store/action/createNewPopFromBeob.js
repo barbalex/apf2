@@ -8,39 +8,14 @@ export default (store: Object, tree: Object, beobId: string): void => {
   if (!beobId) {
     return store.listError(new Error(`keine beobId übergeben`))
   }
-  const beobBereitgestellt = store.table.beob_bereitgestellt.get(beobId)
+  const beobBereitgestellt = store.table.beob.get(beobId)
   if (!beobBereitgestellt) {
     return store.listError(
       new Error(`Die Beobachtung mit beobId ${beobId} wurde nicht gefunden`)
     )
   }
-  let beob
-  let x
-  let y
+  const { X, Y } = beobBereitgestellt
   let tpop
-  if (beobBereitgestellt.QuelleId === 1) {
-    beob = store.table.beob_evab.get(beobId)
-    if (!beob) {
-      return store.listError(
-        new Error(
-          `Die EvAB-Beobachtung mit beobId ${beobId} wurde nicht gefunden`
-        )
-      )
-    }
-    x = beob.COORDONNEE_FED_E
-    y = beob.COORDONNEE_FED_N
-  } else {
-    beob = store.table.beob_infospezies.get(beobId)
-    if (!beob) {
-      return store.listError(
-        new Error(
-          `Die Infospezies-Beobachtung mit beobId ${beobId} wurde nicht gefunden`
-        )
-      )
-    }
-    x = beob.FNS_XGIS
-    y = beob.FNS_YGIS
-  }
   const { ap, projekt } = tree.activeNodes
   const user = store.user.name
   // create new pop for ap
@@ -53,8 +28,8 @@ export default (store: Object, tree: Object, beobId: string): void => {
       const felder = {
         id: popId,
         user: user,
-        PopXKoord: x,
-        PopYKoord: y
+        PopXKoord: X,
+        PopYKoord: Y
       }
       return axios.put(
         `${apiBaseUrl}/updateMultiple/apflora/tabelle=pop/felder=${JSON.stringify(felder)}`
@@ -77,8 +52,8 @@ export default (store: Object, tree: Object, beobId: string): void => {
       const felder = {
         id: tpopId,
         user: user,
-        TPopXKoord: x,
-        TPopYKoord: y
+        TPopXKoord: X,
+        TPopYKoord: Y
       }
       return axios.put(
         `${apiBaseUrl}/updateMultiple/apflora/tabelle=tpop/felder=${JSON.stringify(felder)}`
@@ -92,13 +67,13 @@ export default (store: Object, tree: Object, beobId: string): void => {
       store.table.tpop.set(tpop.TPopId, tpop)
       insertDatasetInIdb(store, `tpop`, tpop)
       // create new beobzuordnung
-      return axios.post(`${apiBaseUrl}/apflora/beobzuordnung/NO_NOTE/${beobId}`)
+      return axios.post(`${apiBaseUrl}/apflora/beobzuordnung/ArtId/${beobId}`)
     })
     .then(({ data: row }) => {
       // insert this dataset in idb
       insertDatasetInIdb(store, `beobzuordnung`, row)
       // insert this dataset in store.table
-      store.table.beobzuordnung.set(row.NO_NOTE, row)
+      store.table.beobzuordnung.set(row.ArtId, row)
       // set new activeNodeArray
       const newActiveNodeArray = [
         `Projekte`,
@@ -115,8 +90,8 @@ export default (store: Object, tree: Object, beobId: string): void => {
       tree.setActiveNodeArray(newActiveNodeArray)
       store.updateProperty(tree, `TPopId`, tpop.TPopId)
       store.updatePropertyInDb(tree, `TPopId`, tpop.TPopId)
-      store.updateProperty(tree, `NO_ISFS`, beobBereitgestellt.NO_ISFS)
-      store.updatePropertyInDb(tree, `NO_ISFS`, beobBereitgestellt.NO_ISFS)
+      store.updateProperty(tree, `ArtId`, beobBereitgestellt.ArtId)
+      store.updatePropertyInDb(tree, `ArtId`, beobBereitgestellt.ArtId)
       store.updateProperty(tree, `QuelleId`, beobBereitgestellt.QuelleId)
       store.updatePropertyInDb(tree, `QuelleId`, beobBereitgestellt.QuelleId)
     })

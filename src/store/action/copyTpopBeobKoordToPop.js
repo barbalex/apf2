@@ -16,32 +16,8 @@ export default (store: Object, beobId: string): void => {
       new Error(`Die Beobachtung mit beobId ${beobId} wurde nicht gefunden`)
     )
   }
-  let beob
-  let x
-  let y
-  if (beobzuordnung.QuelleId === 1) {
-    beob = store.table.beob_evab.get(beobId)
-    if (!beob) {
-      return store.listError(
-        new Error(
-          `Die EvAB-Beobachtung mit beobId ${beobId} wurde nicht gefunden`
-        )
-      )
-    }
-    x = beob.COORDONNEE_FED_E
-    y = beob.COORDONNEE_FED_N
-  } else {
-    beob = store.table.beob_infospezies.get(beobId)
-    if (!beob) {
-      return store.listError(
-        new Error(
-          `Die Infospezies-Beobachtung mit beobId ${beobId} wurde nicht gefunden`
-        )
-      )
-    }
-    x = beob.FNS_XGIS
-    y = beob.FNS_YGIS
-  }
+  const beob = store.table.beob.get(beobId)
+  const { X, Y } = beob
   const tpopId = beobzuordnung.TPopId
   let tpopInStore = store.table.tpop.get(tpopId)
   if (!tpopInStore) {
@@ -49,7 +25,7 @@ export default (store: Object, beobId: string): void => {
       new Error(`Die Teilpopulation mit tpopId ${tpopId} wurde nicht gefunden`)
     )
   }
-  if (!x || !y) {
+  if (!X || !Y) {
     return store.listError(
       new Error(
         `Es wurden keine Koordinaten gefunden. Daher wurden sie nicht in die Teilpopulation kopiert`
@@ -58,8 +34,8 @@ export default (store: Object, beobId: string): void => {
   }
   // keep original pop in case update fails
   const originalTpop = clone(tpopInStore)
-  tpopInStore.TPopXKoord = x
-  tpopInStore.TPopYKoord = y
+  tpopInStore.TPopXKoord = X
+  tpopInStore.TPopYKoord = Y
   tpopInStore.MutWer = store.user.name
   tpopInStore.MutWann = new Date().toISOString()
   const tpopForDb = clone(toJS(tpopInStore))

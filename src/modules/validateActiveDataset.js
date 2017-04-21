@@ -11,8 +11,8 @@ export default (
   if (!table || !row || !allFields || !allFields.length) {
     return valid
   }
-  // beob_bereitgestellt is read only, so do not validate
-  if (table === `beob_bereitgestellt`) return valid
+  // beob is read only, so do not validate
+  if (table === `beob`) return valid
   const tableName = table
     .replace(`tpopfeldkontr`, `tpopkontr`)
     .replace(`tpopfreiwkontr`, `tpopkontr`)
