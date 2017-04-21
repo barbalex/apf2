@@ -284,7 +284,7 @@ export default [
   {
     database: 'apflora',
     table: 'beobzuordnung',
-    idField: 'ArtId',
+    idField: 'BeobId',
     parentIdField: 'ArtId',
     mutWannField: 'BeobMutWann',
     mutWerField: 'BeobMutWer'
@@ -292,7 +292,7 @@ export default [
   {
     database: 'apflora',
     table: 'beobzuordnung',
-    idField: 'ArtId',
+    idField: 'BeobId',
     parentIdField: 'ArtId',
     mutWannField: 'BeobMutWann',
     mutWerField: 'BeobMutWer'
