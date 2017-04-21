@@ -68,14 +68,13 @@ export default async (
     }
     if (dataFromDb && dataFromDb.length) {
       // leave ui react before this happens
-      setTimeout(() => {
-        // app.writeToStoreWorker.postMessage(`testmessage`)
+      setTimeout(() =>
         store.writeToStore({
           data: dataFromDb,
           table: tableName,
           field: idField
         })
-      })
+      )
       setTimeout(() => app.db[tableName].bulkPut(dataFromDb))
     }
     store.loading = store.loading.filter(el => el !== tableName)

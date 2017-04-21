@@ -60,16 +60,10 @@ tablesObject.currentUser = `name`
 const db = new Dexie(`apflora`)
 db.version(1).stores(tablesObject)
 
-// const writeToStoreWorker = new Worker(`${appBaseUrl}/writeToStoreWorker.js`)
-// writeToStoreWorker.postMessage(`test`)
-// writeToStoreWorker.onmessage = e => console.log(`message received from writeToStoreWorker:`, e.data)
-
 app.extend({
   init() {
     this.db = db
     this.store = store
-
-    // this.writeToStoreWorker = writeToStoreWorker
   }
 })
 app.init()
@@ -86,7 +80,6 @@ const theme = Object.assign({}, darkBaseTheme, {
 
 // make store accessible in dev
 window.app = app
-// window.app.writeToStoreWorker = writeToStoreWorker
 
 store.setLoginFromIdb()
 // load immediately because is used to validate active dataset
