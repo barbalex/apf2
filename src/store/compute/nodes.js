@@ -7,6 +7,7 @@
 
 import { toJS } from 'mobx'
 import allParentNodesAreOpen from '../../modules/allParentNodesAreOpen'
+import allParentNodesAreVisible from '../../modules/allParentNodesAreVisible'
 import projektNodes from '../../modules/nodes/projekt'
 import apFolderNodes from '../../modules/nodes/apFolder'
 import apberuebersichtFolderNodes
@@ -69,16 +70,24 @@ const compare = (a, b) => {
   return a - b
 }
 
+const allParentNodesAreOpenAndVisible = (
+  nodes: Array<Object>,
+  nodeUrl: Array<string | number>,
+  openNodes: Array<Array<string | number>>
+): boolean =>
+  allParentNodesAreVisible(nodes, nodeUrl) &&
+  allParentNodesAreOpen(openNodes, nodeUrl)
+
 export default (store: Object, tree: Object): Array<Object> => {
   const openNodes = toJS(tree.openNodes)
 
   let nodes = projektNodes(store, tree)
   // do not process ['Projekte']
-  const nodesToProcess = openNodes.filter(n => n.length > 1)
+  const nodeUrlsToProcess = openNodes.filter(n => n.length > 1)
 
-  nodesToProcess.forEach(node => {
-    const projId = node[1]
-    if (node.length === 2) {
+  nodeUrlsToProcess.forEach(nodeUrl => {
+    const projId = nodeUrl[1]
+    if (nodeUrl.length === 2) {
       nodes = [
         ...nodes,
         ...apFolderNodes(store, tree, projId),
@@ -86,22 +95,25 @@ export default (store: Object, tree: Object): Array<Object> => {
       ]
     }
     if (
-      node.length === 3 &&
-      node[2] === 'AP-Berichte' &&
-      allParentNodesAreOpen(openNodes, node)
+      nodeUrl.length === 3 &&
+      nodeUrl[2] === 'AP-Berichte' &&
+      allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
     ) {
       nodes = [...nodes, ...apberuebersichtNodes(store, tree, projId)]
     }
     if (
-      node.length === 3 &&
-      node[2] === 'Arten' &&
-      allParentNodesAreOpen(openNodes, node)
+      nodeUrl.length === 3 &&
+      nodeUrl[2] === 'Arten' &&
+      allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
     ) {
       nodes = [...nodes, ...apNodes(store, tree, projId)]
     }
-    // if node.length > 3, node[2] is always 'Arten'
-    if (node.length === 4 && allParentNodesAreOpen(openNodes, node)) {
-      const apArtId = node[3]
+    // if nodeUrl.length > 3, nodeUrl[2] is always 'Arten'
+    if (
+      nodeUrl.length === 4 &&
+      allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
+    ) {
+      const apArtId = nodeUrl[3]
       nodes = [
         ...nodes,
         ...popFolderNodes(store, tree, projId, apArtId),
@@ -117,115 +129,115 @@ export default (store: Object, tree: Object): Array<Object> => {
       ]
     }
     if (
-      node.length === 5 &&
-      node[4] === 'AP-Ziele' &&
-      allParentNodesAreOpen(openNodes, node)
+      nodeUrl.length === 5 &&
+      nodeUrl[4] === 'AP-Ziele' &&
+      allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
     ) {
-      const apArtId = node[3]
+      const apArtId = nodeUrl[3]
       nodes = [...nodes, ...zieljahrNodes(store, tree, projId, apArtId)]
     }
     if (
-      node.length === 6 &&
-      node[4] === 'AP-Ziele' &&
-      allParentNodesAreOpen(openNodes, node)
+      nodeUrl.length === 6 &&
+      nodeUrl[4] === 'AP-Ziele' &&
+      allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
     ) {
-      const apArtId = node[3]
-      const zieljahr = node[5]
+      const apArtId = nodeUrl[3]
+      const zieljahr = nodeUrl[5]
       nodes = [...nodes, ...zielNodes(store, tree, projId, apArtId, zieljahr)]
     }
     if (
-      node.length === 7 &&
-      node[4] === 'AP-Ziele' &&
-      allParentNodesAreOpen(openNodes, node)
+      nodeUrl.length === 7 &&
+      nodeUrl[4] === 'AP-Ziele' &&
+      allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
     ) {
-      const apArtId = node[3]
-      const zieljahr = node[5]
-      const zielId = node[6]
+      const apArtId = nodeUrl[3]
+      const zieljahr = nodeUrl[5]
+      const zielId = nodeUrl[6]
       nodes = [
         ...nodes,
         ...zielberFolderNodes(store, tree, projId, apArtId, zieljahr, zielId)
       ]
     }
     if (
-      node.length === 8 &&
-      node[4] === 'AP-Ziele' &&
-      node[7] === 'Berichte' &&
-      allParentNodesAreOpen(openNodes, node)
+      nodeUrl.length === 8 &&
+      nodeUrl[4] === 'AP-Ziele' &&
+      nodeUrl[7] === 'Berichte' &&
+      allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
     ) {
-      const apArtId = node[3]
-      const zieljahr = node[5]
-      const zielId = node[6]
+      const apArtId = nodeUrl[3]
+      const zieljahr = nodeUrl[5]
+      const zielId = nodeUrl[6]
       nodes = [
         ...nodes,
         ...zielberNodes(store, tree, projId, apArtId, zieljahr, zielId)
       ]
     }
     if (
-      node.length === 5 &&
-      node[4] === 'Populationen' &&
-      allParentNodesAreOpen(openNodes, node)
+      nodeUrl.length === 5 &&
+      nodeUrl[4] === 'Populationen' &&
+      allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
     ) {
-      const apArtId = node[3]
+      const apArtId = nodeUrl[3]
       nodes = [...nodes, ...popNodes(store, tree, projId, apArtId)]
     }
     if (
-      node.length === 5 &&
-      node[4] === 'nicht-zuzuordnende-Beobachtungen' &&
-      allParentNodesAreOpen(openNodes, node)
+      nodeUrl.length === 5 &&
+      nodeUrl[4] === 'nicht-zuzuordnende-Beobachtungen' &&
+      allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
     ) {
-      const apArtId = node[3]
+      const apArtId = nodeUrl[3]
       nodes = [
         ...nodes,
         ...beobNichtZuzuordnenNodes(store, tree, projId, apArtId)
       ]
     }
     if (
-      node.length === 5 &&
-      node[4] === 'nicht-beurteilte-Beobachtungen' &&
-      allParentNodesAreOpen(openNodes, node)
+      nodeUrl.length === 5 &&
+      nodeUrl[4] === 'nicht-beurteilte-Beobachtungen' &&
+      allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
     ) {
-      const apArtId = node[3]
+      const apArtId = nodeUrl[3]
       nodes = [...nodes, ...beobzuordnungNodes(store, tree, projId, apArtId)]
     }
     if (
-      node.length === 5 &&
-      node[4] === 'assoziierte-Arten' &&
-      allParentNodesAreOpen(openNodes, node)
+      nodeUrl.length === 5 &&
+      nodeUrl[4] === 'assoziierte-Arten' &&
+      allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
     ) {
-      const apArtId = node[3]
+      const apArtId = nodeUrl[3]
       nodes = [...nodes, ...assozartNodes(store, tree, projId, apArtId)]
     }
     if (
-      node.length === 5 &&
-      node[4] === 'Berichte' &&
-      allParentNodesAreOpen(openNodes, node)
+      nodeUrl.length === 5 &&
+      nodeUrl[4] === 'Berichte' &&
+      allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
     ) {
-      const apArtId = node[3]
+      const apArtId = nodeUrl[3]
       nodes = [...nodes, ...berNodes(store, tree, projId, apArtId)]
     }
     if (
-      node.length === 5 &&
-      node[4] === 'AP-Berichte' &&
-      allParentNodesAreOpen(openNodes, node)
+      nodeUrl.length === 5 &&
+      nodeUrl[4] === 'AP-Berichte' &&
+      allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
     ) {
-      const apArtId = node[3]
+      const apArtId = nodeUrl[3]
       nodes = [...nodes, ...apberNodes(store, tree, projId, apArtId)]
     }
     if (
-      node.length === 5 &&
-      node[4] === 'AP-Erfolgskriterien' &&
-      allParentNodesAreOpen(openNodes, node)
+      nodeUrl.length === 5 &&
+      nodeUrl[4] === 'AP-Erfolgskriterien' &&
+      allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
     ) {
-      const apArtId = node[3]
+      const apArtId = nodeUrl[3]
       nodes = [...nodes, ...erfkritNodes(store, tree, projId, apArtId)]
     }
     if (
-      node.length === 6 &&
-      node[4] === 'Populationen' &&
-      allParentNodesAreOpen(openNodes, node)
+      nodeUrl.length === 6 &&
+      nodeUrl[4] === 'Populationen' &&
+      allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
     ) {
-      const apArtId = node[3]
-      const popId = node[5]
+      const apArtId = nodeUrl[3]
+      const popId = nodeUrl[5]
       nodes = [
         ...nodes,
         ...tpopFolderNodes(store, tree, projId, apArtId, popId),
@@ -234,47 +246,47 @@ export default (store: Object, tree: Object): Array<Object> => {
       ]
     }
     if (
-      node.length === 7 &&
-      node[4] === 'Populationen' &&
-      node[6] === 'Massnahmen-Berichte' &&
-      allParentNodesAreOpen(openNodes, node)
+      nodeUrl.length === 7 &&
+      nodeUrl[4] === 'Populationen' &&
+      nodeUrl[6] === 'Massnahmen-Berichte' &&
+      allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
     ) {
-      const apArtId = node[3]
-      const popId = node[5]
+      const apArtId = nodeUrl[3]
+      const popId = nodeUrl[5]
       nodes = [
         ...nodes,
         ...popmassnberNodes(store, tree, projId, apArtId, popId)
       ]
     }
     if (
-      node.length === 7 &&
-      node[4] === 'Populationen' &&
-      node[6] === 'Kontroll-Berichte' &&
-      allParentNodesAreOpen(openNodes, node)
+      nodeUrl.length === 7 &&
+      nodeUrl[4] === 'Populationen' &&
+      nodeUrl[6] === 'Kontroll-Berichte' &&
+      allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
     ) {
-      const apArtId = node[3]
-      const popId = node[5]
+      const apArtId = nodeUrl[3]
+      const popId = nodeUrl[5]
       nodes = [...nodes, ...popberNodes(store, tree, projId, apArtId, popId)]
     }
     if (
-      node.length === 7 &&
-      node[4] === 'Populationen' &&
-      node[6] === 'Teil-Populationen' &&
-      allParentNodesAreOpen(openNodes, node)
+      nodeUrl.length === 7 &&
+      nodeUrl[4] === 'Populationen' &&
+      nodeUrl[6] === 'Teil-Populationen' &&
+      allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
     ) {
-      const apArtId = node[3]
-      const popId = node[5]
+      const apArtId = nodeUrl[3]
+      const popId = nodeUrl[5]
       nodes = [...nodes, ...tpopNodes(store, tree, projId, apArtId, popId)]
     }
     if (
-      node.length === 8 &&
-      node[4] === 'Populationen' &&
-      node[6] === 'Teil-Populationen' &&
-      allParentNodesAreOpen(openNodes, node)
+      nodeUrl.length === 8 &&
+      nodeUrl[4] === 'Populationen' &&
+      nodeUrl[6] === 'Teil-Populationen' &&
+      allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
     ) {
-      const apArtId = node[3]
-      const popId = node[5]
-      const tpopId = node[7]
+      const apArtId = nodeUrl[3]
+      const popId = nodeUrl[5]
+      const tpopId = nodeUrl[7]
       nodes = [
         ...nodes,
         ...tpopmassnFolderNodes(store, tree, projId, apArtId, popId, tpopId),
@@ -300,106 +312,106 @@ export default (store: Object, tree: Object): Array<Object> => {
       ]
     }
     if (
-      node.length === 9 &&
-      node[4] === 'Populationen' &&
-      node[6] === 'Teil-Populationen' &&
-      node[8] === 'Beobachtungen' &&
-      allParentNodesAreOpen(openNodes, node)
+      nodeUrl.length === 9 &&
+      nodeUrl[4] === 'Populationen' &&
+      nodeUrl[6] === 'Teil-Populationen' &&
+      nodeUrl[8] === 'Beobachtungen' &&
+      allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
     ) {
-      const apArtId = node[3]
-      const popId = node[5]
-      const tpopId = node[7]
+      const apArtId = nodeUrl[3]
+      const popId = nodeUrl[5]
+      const tpopId = nodeUrl[7]
       nodes = [
         ...nodes,
         ...tpopbeobNodes(store, tree, projId, apArtId, popId, tpopId)
       ]
     }
     if (
-      node.length === 9 &&
-      node[4] === 'Populationen' &&
-      node[6] === 'Teil-Populationen' &&
-      node[8] === 'Kontroll-Berichte' &&
-      allParentNodesAreOpen(openNodes, node)
+      nodeUrl.length === 9 &&
+      nodeUrl[4] === 'Populationen' &&
+      nodeUrl[6] === 'Teil-Populationen' &&
+      nodeUrl[8] === 'Kontroll-Berichte' &&
+      allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
     ) {
-      const apArtId = node[3]
-      const popId = node[5]
-      const tpopId = node[7]
+      const apArtId = nodeUrl[3]
+      const popId = nodeUrl[5]
+      const tpopId = nodeUrl[7]
       nodes = [
         ...nodes,
         ...tpopberNodes(store, tree, projId, apArtId, popId, tpopId)
       ]
     }
     if (
-      node.length === 9 &&
-      node[4] === 'Populationen' &&
-      node[6] === 'Teil-Populationen' &&
-      node[8] === 'Freiwilligen-Kontrollen' &&
-      allParentNodesAreOpen(openNodes, node)
+      nodeUrl.length === 9 &&
+      nodeUrl[4] === 'Populationen' &&
+      nodeUrl[6] === 'Teil-Populationen' &&
+      nodeUrl[8] === 'Freiwilligen-Kontrollen' &&
+      allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
     ) {
-      const apArtId = node[3]
-      const popId = node[5]
-      const tpopId = node[7]
+      const apArtId = nodeUrl[3]
+      const popId = nodeUrl[5]
+      const tpopId = nodeUrl[7]
       nodes = [
         ...nodes,
         ...tpopfreiwkontrNodes(store, tree, projId, apArtId, popId, tpopId)
       ]
     }
     if (
-      node.length === 9 &&
-      node[4] === 'Populationen' &&
-      node[6] === 'Teil-Populationen' &&
-      node[8] === 'Feld-Kontrollen' &&
-      allParentNodesAreOpen(openNodes, node)
+      nodeUrl.length === 9 &&
+      nodeUrl[4] === 'Populationen' &&
+      nodeUrl[6] === 'Teil-Populationen' &&
+      nodeUrl[8] === 'Feld-Kontrollen' &&
+      allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
     ) {
-      const apArtId = node[3]
-      const popId = node[5]
-      const tpopId = node[7]
+      const apArtId = nodeUrl[3]
+      const popId = nodeUrl[5]
+      const tpopId = nodeUrl[7]
       nodes = [
         ...nodes,
         ...tpopfeldkontrNodes(store, tree, projId, apArtId, popId, tpopId)
       ]
     }
     if (
-      node.length === 9 &&
-      node[4] === 'Populationen' &&
-      node[6] === 'Teil-Populationen' &&
-      node[8] === 'Massnahmen-Berichte' &&
-      allParentNodesAreOpen(openNodes, node)
+      nodeUrl.length === 9 &&
+      nodeUrl[4] === 'Populationen' &&
+      nodeUrl[6] === 'Teil-Populationen' &&
+      nodeUrl[8] === 'Massnahmen-Berichte' &&
+      allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
     ) {
-      const apArtId = node[3]
-      const popId = node[5]
-      const tpopId = node[7]
+      const apArtId = nodeUrl[3]
+      const popId = nodeUrl[5]
+      const tpopId = nodeUrl[7]
       nodes = [
         ...nodes,
         ...tpopmassnberNodes(store, tree, projId, apArtId, popId, tpopId)
       ]
     }
     if (
-      node.length === 9 &&
-      node[4] === 'Populationen' &&
-      node[6] === 'Teil-Populationen' &&
-      node[8] === 'Massnahmen' &&
-      allParentNodesAreOpen(openNodes, node)
+      nodeUrl.length === 9 &&
+      nodeUrl[4] === 'Populationen' &&
+      nodeUrl[6] === 'Teil-Populationen' &&
+      nodeUrl[8] === 'Massnahmen' &&
+      allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
     ) {
-      const apArtId = node[3]
-      const popId = node[5]
-      const tpopId = node[7]
+      const apArtId = nodeUrl[3]
+      const popId = nodeUrl[5]
+      const tpopId = nodeUrl[7]
       nodes = [
         ...nodes,
         ...tpopmassnNodes(store, tree, projId, apArtId, popId, tpopId)
       ]
     }
     if (
-      node.length === 10 &&
-      node[4] === 'Populationen' &&
-      node[6] === 'Teil-Populationen' &&
-      node[8] === 'Freiwilligen-Kontrollen' &&
-      allParentNodesAreOpen(openNodes, node)
+      nodeUrl.length === 10 &&
+      nodeUrl[4] === 'Populationen' &&
+      nodeUrl[6] === 'Teil-Populationen' &&
+      nodeUrl[8] === 'Freiwilligen-Kontrollen' &&
+      allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
     ) {
-      const apArtId = node[3]
-      const popId = node[5]
-      const tpopId = node[7]
-      const tpopkontrId = node[9]
+      const apArtId = nodeUrl[3]
+      const popId = nodeUrl[5]
+      const tpopId = nodeUrl[7]
+      const tpopkontrId = nodeUrl[9]
       nodes = [
         ...nodes,
         ...tpopfreiwkontrzaehlFolderNodes(
@@ -414,16 +426,16 @@ export default (store: Object, tree: Object): Array<Object> => {
       ]
     }
     if (
-      node.length === 10 &&
-      node[4] === 'Populationen' &&
-      node[6] === 'Teil-Populationen' &&
-      node[8] === 'Feld-Kontrollen' &&
-      allParentNodesAreOpen(openNodes, node)
+      nodeUrl.length === 10 &&
+      nodeUrl[4] === 'Populationen' &&
+      nodeUrl[6] === 'Teil-Populationen' &&
+      nodeUrl[8] === 'Feld-Kontrollen' &&
+      allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
     ) {
-      const apArtId = node[3]
-      const popId = node[5]
-      const tpopId = node[7]
-      const tpopkontrId = node[9]
+      const apArtId = nodeUrl[3]
+      const popId = nodeUrl[5]
+      const tpopId = nodeUrl[7]
+      const tpopkontrId = nodeUrl[9]
       nodes = [
         ...nodes,
         ...tpopfeldkontrzaehlFolderNodes(
@@ -438,16 +450,16 @@ export default (store: Object, tree: Object): Array<Object> => {
       ]
     }
     if (
-      node.length === 11 &&
-      node[4] === 'Populationen' &&
-      node[6] === 'Teil-Populationen' &&
-      node[8] === 'Feld-Kontrollen' &&
-      allParentNodesAreOpen(openNodes, node)
+      nodeUrl.length === 11 &&
+      nodeUrl[4] === 'Populationen' &&
+      nodeUrl[6] === 'Teil-Populationen' &&
+      nodeUrl[8] === 'Feld-Kontrollen' &&
+      allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
     ) {
-      const apArtId = node[3]
-      const popId = node[5]
-      const tpopId = node[7]
-      const tpopkontrId = node[9]
+      const apArtId = nodeUrl[3]
+      const popId = nodeUrl[5]
+      const tpopId = nodeUrl[7]
+      const tpopkontrId = nodeUrl[9]
       nodes = [
         ...nodes,
         ...tpopfeldkontrzaehlNodes(
@@ -462,16 +474,16 @@ export default (store: Object, tree: Object): Array<Object> => {
       ]
     }
     if (
-      node.length === 11 &&
-      node[4] === 'Populationen' &&
-      node[6] === 'Teil-Populationen' &&
-      node[8] === 'Freiwilligen-Kontrollen' &&
-      allParentNodesAreOpen(openNodes, node)
+      nodeUrl.length === 11 &&
+      nodeUrl[4] === 'Populationen' &&
+      nodeUrl[6] === 'Teil-Populationen' &&
+      nodeUrl[8] === 'Freiwilligen-Kontrollen' &&
+      allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
     ) {
-      const apArtId = node[3]
-      const popId = node[5]
-      const tpopId = node[7]
-      const tpopkontrId = node[9]
+      const apArtId = nodeUrl[3]
+      const popId = nodeUrl[5]
+      const tpopId = nodeUrl[7]
+      const tpopkontrId = nodeUrl[9]
       nodes = [
         ...nodes,
         ...tpopfreiwkontrzaehlNodes(
