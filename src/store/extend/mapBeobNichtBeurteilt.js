@@ -48,9 +48,7 @@ export default (store: Object): void => {
       () =>
         getBeobNichtBeurteiltBounds(
           store.map.beobNichtBeurteilt.beobs.filter(b =>
-            store.map.beobNichtBeurteilt.highlightedIds.includes(
-              isNaN(b.BeobId) ? b.BeobId : Number(b.BeobId)
-            )
+            store.map.beobNichtBeurteilt.highlightedIds.includes(b.id)
           )
         ),
       { name: `mapBeobNichtBeurteiltBoundsOfHighlightedIds` }

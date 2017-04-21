@@ -10,7 +10,7 @@ export default (store: Object, tree: Object): Object => {
     .filter(b => {
       if (!apFilter) return true
       let ap
-      const beob = table.beob.get(b.BeobId)
+      const beob = table.beob.get(b.id)
       if (beob) ap = table.ap.get(beob.ArtId)
       if (ap) return [1, 2, 3].includes(ap.ApStatus)
       return true
@@ -20,7 +20,7 @@ export default (store: Object, tree: Object): Object => {
   beobNichtZuzuordnen.forEach(el => {
     let datum = ``
     let autor = ``
-    const beobBereitgestellt = table.beob.get(el.BeobId)
+    const beobBereitgestellt = table.beob.get(el.id)
     if (beobBereitgestellt) {
       if (beobBereitgestellt.Datum) {
         datum = beobBereitgestellt.Datum
