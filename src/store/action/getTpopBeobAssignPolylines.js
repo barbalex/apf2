@@ -8,9 +8,7 @@ export default (store: Object): Array<Object> => {
   )
   if (visible) {
     return beobs.map(p => {
-      const isHighlighted = highlightedIds.includes(
-        isNaN(p.BeobId) ? p.BeobId : Number(p.BeobId)
-      )
+      const isHighlighted = highlightedIds.includes(p.id)
       const tpop = store.table.tpop.get(p.beobzuordnung.TPopId)
       const tpopKoord = tpop && tpop.TPopKoordWgs84
         ? tpop.TPopKoordWgs84
