@@ -1,5 +1,3 @@
-import sortBy from 'lodash/sortBy'
-
 export default (store: Object, tree: Object): Object => {
   const { table } = store
   const { nodeLabelFilter } = tree
@@ -32,5 +30,7 @@ export default (store: Object, tree: Object): Object => {
     )
   }
   // sort by label and return
-  return sortBy(tpopkontrzaehl, `label`)
+  // DO NOT sort, shall be sorted as inserted
+  // return sortBy(tpopkontrzaehl, `label`)
+  return tpopkontrzaehl
 }
