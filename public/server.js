@@ -15,13 +15,13 @@ const serverOptionsDevelopment = {
 }*/
 const server = new Hapi.Server()
 
-server.register(Inert, function () {
+server.register(Inert, function() {
   server.connection({
     host: '0.0.0.0',
-    port: 5000
+    port: 5000,
   })
 
-  server.start(function (err) {
+  server.start(function(err) {
     if (err) {
       throw err
     }
@@ -33,7 +33,7 @@ server.register(Inert, function () {
     path: '/{path*}',
     handler: {
       file: 'index.html',
-    }
+    },
   })
 
   server.route({
@@ -43,8 +43,8 @@ server.register(Inert, function () {
       directory: {
         path: 'static/css',
         index: false,
-      }
-    }
+      },
+    },
   })
 
   server.route({
@@ -54,8 +54,8 @@ server.register(Inert, function () {
       directory: {
         path: 'static/js',
         index: false,
-      }
-    }
+      },
+    },
   })
 
   server.route({
@@ -65,7 +65,7 @@ server.register(Inert, function () {
       directory: {
         path: 'static/media',
         index: false,
-      }
-    }
+      },
+    },
   })
 })
