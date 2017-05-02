@@ -3,7 +3,11 @@ import { toJS } from 'mobx'
 import { observer } from 'mobx-react'
 import styled from 'styled-components'
 import FontIcon from 'material-ui/FontIcon'
-import { SortableContainer, SortableElement, SortableHandle } from 'react-sortable-hoc'
+import {
+  SortableContainer,
+  SortableElement,
+  SortableHandle,
+} from 'react-sortable-hoc'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 
@@ -40,21 +44,27 @@ const LayerDiv = styled.div`
 const IconsDiv = styled.div`
   display: flex;
 `
+// TODO: add icon: https://material.io/icons/#ic_info
+// for layers with legend
+const layersLegends = {
+  ZhSvoColor: '',
+  ZhPflegeplan: 'http://wms.zh.ch/FnsPflegeZHWMS?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=pfpl&format=image/png&STYLE=default',
+}
 /**
  * don't know why but passing store
  * with mobx inject does not work here
  * so passed in from parent
  */
 
-const DragHandle = SortableHandle(() =>
+const DragHandle = SortableHandle(() => (
   <DragHandleIcon
     className="material-icons"
     title="ziehen, um Layer höher/tiefer zu stapeln"
   >
     drag_handle
   </DragHandleIcon>
-)
-const SortableItem = SortableElement(({ overlay, store, activeOverlays }) =>
+))
+const SortableItem = SortableElement(({ overlay, store, activeOverlays }) => (
   <LayerDiv>
     <Checkbox
       tree={store.tree}
@@ -74,43 +84,37 @@ const SortableItem = SortableElement(({ overlay, store, activeOverlays }) =>
       </div>
     </IconsDiv>
   </LayerDiv>
-)
+))
 
-const SortableList = SortableContainer(({ items, store, activeOverlays }) =>
+const SortableList = SortableContainer(({ items, store, activeOverlays }) => (
   <div>
-    {
-      items.map((overlay, index) =>
-        <SortableItem
-          key={index}
-          index={index}
-          overlay={overlay}
-          store={store}
-          activeOverlays={activeOverlays}
-        />
-      )
-    }
+    {items.map((overlay, index) => (
+      <SortableItem
+        key={index}
+        index={index}
+        overlay={overlay}
+        store={store}
+        activeOverlays={activeOverlays}
+      />
+    ))}
   </div>
-)
+))
 
 const enhance = compose(
   withHandlers({
     onSortEnd: props => ({ oldIndex, newIndex }) =>
-      props.store.map.moveOverlay({ oldIndex, newIndex })
-    ,
+      props.store.map.moveOverlay({ oldIndex, newIndex }),
   }),
-  observer
+  observer,
 )
 
-const Overlays = (
-  {
-    store,
-    onSortEnd,
-  }:
-  {
-    store: Object,
-    onSortEnd: () => void,
-  }
-) =>
+const Overlays = ({
+  store,
+  onSortEnd,
+}: {
+  store: Object,
+  onSortEnd: () => void,
+}) => (
   <CardContent>
     <SortableList
       items={store.map.overlays}
@@ -121,5 +125,6 @@ const Overlays = (
       activeOverlays={toJS(store.map.activeOverlays)}
     />
   </CardContent>
+)
 
 export default enhance(Overlays)
