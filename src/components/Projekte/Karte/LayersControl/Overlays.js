@@ -23,6 +23,11 @@ const DragHandleIcon = styled(FontIcon)`
   color: #7b7b7b !important;
   cursor: grab;
 `
+const LegendIcon = styled(FontIcon)`
+  font-size: 18px !important;
+  color: #7b7b7b !important;
+  cursor: pointer;
+`
 const LayerDiv = styled.div`
   display: flex;
   justify-content: space-between;
@@ -41,13 +46,16 @@ const LayerDiv = styled.div`
    */
   font-size: 12px;
 `
+const IconsDivs = styled.div`
+  display: flex;
+`
 const IconsDiv = styled.div`
   display: flex;
 `
 // TODO: add icon: https://material.io/icons/#ic_info
 // for layers with legend
-const layersLegends = {
-  ZhSvoColor: '',
+const layerLegends = {
+  ZhSvoColor: 'http://wms.zh.ch/FnsSVOZHWMS?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=zonen-schutzverordnungen&format=image/png&STYLE=default',
   ZhPflegeplan: 'http://wms.zh.ch/FnsPflegeZHWMS?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=pfpl&format=image/png&STYLE=default',
 }
 /**
@@ -64,6 +72,7 @@ const DragHandle = SortableHandle(() => (
     drag_handle
   </DragHandleIcon>
 ))
+
 const SortableItem = SortableElement(({ overlay, store, activeOverlays }) => (
   <LayerDiv>
     <Checkbox
@@ -78,11 +87,27 @@ const SortableItem = SortableElement(({ overlay, store, activeOverlays }) => (
         return store.map.addActiveOverlay(overlay.value)
       }}
     />
-    <IconsDiv>
-      <div>
-        <DragHandle />
-      </div>
-    </IconsDiv>
+    <IconsDivs>
+      {!!layerLegends[overlay.value] &&
+        <IconsDiv>
+          <div>
+            <LegendIcon
+              className="material-icons"
+              title="Legende öffnen"
+              onClick={() => {
+                window.open(layerLegends[overlay.value])
+              }}
+            >
+              info_outline
+            </LegendIcon>
+          </div>
+        </IconsDiv>}
+      <IconsDiv>
+        <div>
+          <DragHandle />
+        </div>
+      </IconsDiv>
+    </IconsDivs>
   </LayerDiv>
 ))
 

@@ -29,6 +29,7 @@ import ZhOrtho2015Ir from './layers/ZhOrtho2015Ir'
 import ZhUep from './layers/ZhUep'
 import Detailplaene from './layers/Detailplaene'
 import ZhSvoColor from './layers/ZhSvoColor'
+import ZhPflegeplan from './layers/ZhPflegeplan'
 import ZhSvoGrey from './layers/ZhSvoGrey'
 import ZhLrVegKartierungen from './layers/ZhLrVegKartierungen'
 import ZhLichteWaelder from './layers/ZhLichteWaelder'
@@ -64,15 +65,9 @@ const StyledMapLocalizing = styled(StyledMap)`
   cursor: crosshair !important;
 `
 
-const enhance = compose(
-  inject(`store`),
-  observer
-)
+const enhance = compose(inject(`store`), observer)
 
-const Karte = (
-  { store }:
-  { store: Object }
-) => {
+const Karte = ({ store }: { store: Object }) => {
   const { activeBaseLayer, activeApfloraLayers } = store.map
   const { idOfTpopBeingLocalized } = store.map.tpop
   const MapElement = !!idOfTpopBeingLocalized ? StyledMapLocalizing : StyledMap
@@ -94,10 +89,12 @@ const Karte = (
   const ApfloraLayerComponents = {
     // MapFilter is used for filtering, need to return null
     MapFilter: () => null,
-    Pop: () => <Pop
-      visible={activeApfloraLayers.includes(`Pop`)}
-      markers={store.map.pop.markers}
-    />,
+    Pop: () => (
+      <Pop
+        visible={activeApfloraLayers.includes(`Pop`)}
+        markers={store.map.pop.markers}
+      />
+    ),
     Tpop: () => {
       if (
         store.map.beob.assigning ||
@@ -136,10 +133,12 @@ const Karte = (
         />
       )
     },
-    BeobNichtZuzuordnen: () => <BeobCluster
-      visible={activeApfloraLayers.includes(`BeobNichtZuzuordnen`)}
-      markers={store.map.beobNichtZuzuordnen.markersClustered}
-    />,
+    BeobNichtZuzuordnen: () => (
+      <BeobCluster
+        visible={activeApfloraLayers.includes(`BeobNichtZuzuordnen`)}
+        markers={store.map.beobNichtZuzuordnen.markersClustered}
+      />
+    ),
     TpopBeob: () => {
       if (
         store.map.beob.assigning ||
@@ -159,10 +158,12 @@ const Karte = (
         />
       )
     },
-    TpopBeobAssignPolylines: () => <TpopBeobAssignPolylines
-      visible={activeApfloraLayers.includes(`TpopBeobAssignPolylines`)}
-      assignPolylines={store.map.tpopBeob.assignPolylines}
-    />,
+    TpopBeobAssignPolylines: () => (
+      <TpopBeobAssignPolylines
+        visible={activeApfloraLayers.includes(`TpopBeobAssignPolylines`)}
+        assignPolylines={store.map.tpopBeob.assignPolylines}
+      />
+    ),
   }
   const OverlayComponents = {
     ZhUep: () => <ZhUepOverlay />,
@@ -170,6 +171,7 @@ const Karte = (
     ZhGemeindegrenzen: () => <ZhGemeindegrenzen />,
     ZhSvoColor: () => <ZhSvoColor />,
     ZhSvoGrey: () => <ZhSvoGrey />,
+    ZhPflegeplan: () => <ZhPflegeplan />,
     ZhLrVegKartierungen: () => <ZhLrVegKartierungen />,
     ZhLichteWaelder: () => <ZhLichteWaelder />,
     ZhWaelderVegetation: () => <ZhWaelderVegetation />,
@@ -185,7 +187,6 @@ const Karte = (
     ZhOrthoIr: () => <ZhOrthoIr />,
     ZhOrtho2015: () => <ZhOrtho2015 />,
     ZhOrtho2015Ir: () => <ZhOrtho2015Ir />,
-
   }
   const BaseLayerComponent = BaseLayerComponents[activeBaseLayer]
 
@@ -200,58 +201,54 @@ const Karte = (
       maxZoom={22}
       minZoom={1}
       pop={store.map.pop.pops}
-      onClick={(event) => {
+      onClick={event => {
         if (!!idOfTpopBeingLocalized) {
-          const {lat, lng} = event.latlng
+          const { lat, lng } = event.latlng
           const [x, y] = epsg4326to21781(lng, lat)
           // TODO: cannot localize from map2!!!
           store.map.localizeTpop(store.tree, x, y)
         }
       }}
-      onZoomlevelschange={(event) => {
+      onZoomlevelschange={event => {
         // need to update bounds, otherwise map jumps back
         // when adding new tpop
         const bounds = event.target.getBounds()
         store.map.changeBounds([bounds._southWest, bounds._northEast])
       }}
-      onZoomend={(event) => {
+      onZoomend={event => {
         // need to update bounds, otherwise map jumps back
         const bounds = event.target.getBounds()
         store.map.changeBounds([bounds._southWest, bounds._northEast])
       }}
-      onMoveend={(event) => {
+      onMoveend={event => {
         // need to update bounds, otherwise map jumps back
         const bounds = event.target.getBounds()
         store.map.changeBounds([bounds._southWest, bounds._northEast])
       }}
     >
-      {
-        activeBaseLayer &&
-        <BaseLayerComponent />
-      }
-      {
-        store.map.activeOverlaysSorted.map((overlayName, index) => {
+      {activeBaseLayer && <BaseLayerComponent />}
+      {store.map.activeOverlaysSorted
+        .map((overlayName, index) => {
           const OverlayComponent = OverlayComponents[overlayName]
           return <OverlayComponent key={index} />
-        }).reverse()
-      }
-      {
-        store.map.activeApfloraLayersSorted.map((apfloraLayerName, index) => {
+        })
+        .reverse()}
+      {store.map.activeApfloraLayersSorted
+        .map((apfloraLayerName, index) => {
           const ApfloraLayerComponent = ApfloraLayerComponents[apfloraLayerName]
           return <ApfloraLayerComponent key={index} />
-        }).reverse()
-      }
+        })
+        .reverse()}
       <ScaleControl imperial={false} />
       <LayersControl
         // this enforces rerendering when sorting changes
         activeOverlaysSortedString={store.map.activeOverlaysSortedString}
-        activeApfloraLayersSortedString={store.map.activeApfloraLayersSortedString}
+        activeApfloraLayersSortedString={
+          store.map.activeApfloraLayersSortedString
+        }
       />
       <MeasureControl />
-      {
-        store.map.activeApfloraLayers.includes(`MapFilter`) &&
-        <DrawControl />
-      }
+      {store.map.activeApfloraLayers.includes(`MapFilter`) && <DrawControl />}
       <PrintControl />
       <PngControl />
       <CoordinatesControl />
