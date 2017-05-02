@@ -27,7 +27,7 @@ export default (store: Object, tree: Object): Object => {
   beobNichtZuzuordnen.forEach(el => {
     let datum = ``
     let autor = ``
-    const beob = table.beob.get(el.id)
+    const beob = table.beob.get(el.BeobId)
     if (beob) {
       if (beob.Datum) {
         datum = format(beob.Datum, 'YYYY.MM.DD')

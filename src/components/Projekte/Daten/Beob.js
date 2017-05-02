@@ -8,7 +8,8 @@ import TextFieldNonUpdatable from '../../shared/TextFieldNonUpdatable'
 const enhance = compose(inject(`store`), observer)
 
 const Beob = ({ store, tree }: { store: Object, tree: Object }) => {
-  const beob = store.table.beob.get(tree.activeDataset.row.id)
+  const { row } = tree.activeDataset
+  const beob = store.table.beob.get(row.BeobId || row.id)
   if (!beob) return null
   const beobFields = Object.entries(beob.data).filter(
     ([key, value]) => value || value === 0,

@@ -17,7 +17,7 @@ export default (
   )
 
   const beobNichtZuzuordnenNodesLength = tree.filteredAndSorted.beobNichtZuzuordnen.filter(
-    n => n.beobBereitgestellt.ArtId === apArtId,
+    n => n.beob.ArtId === apArtId,
   ).length
 
   let message = beobNichtZuzuordnenNodesLength

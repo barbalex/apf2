@@ -18,7 +18,7 @@ export default (
 
   // map through all and create array of nodes
   return filteredAndSorted.beobNichtZuzuordnen
-    .filter(b => b.beobBereitgestellt.ArtId === apArtId)
+    .filter(b => b.beob.ArtId === apArtId)
     .map((el, index) => {
       const beobId = el.BeobId
 

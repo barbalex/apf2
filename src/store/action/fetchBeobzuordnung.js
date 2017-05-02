@@ -12,9 +12,7 @@ const writeToStore = (store: Object, data: Array<Object>): void => {
   runInAction(() => {
     data.forEach(zuordnung => {
       // set computed value "beob"
-      zuordnung.beobBereitgestellt = computed(() =>
-        store.table.beob.get(zuordnung.BeobId)
-      )
+      zuordnung.beob = computed(() => store.table.beob.get(zuordnung.BeobId))
       // set computed value "type"
       zuordnung.type = computed(() => {
         if (zuordnung.BeobNichtZuordnen && zuordnung.BeobNichtZuordnen === 1) {
@@ -35,7 +33,7 @@ export default (store: Object, apArtId: number): any => {
   const { valuesForWhichTableDataWasFetched } = store
   if (!apArtId) {
     return store.listError(
-      new Error(`action fetchBeobzuordnung: apArtId must be passed`)
+      new Error(`action fetchBeobzuordnung: apArtId must be passed`),
     )
   }
 
@@ -58,7 +56,7 @@ export default (store: Object, apArtId: number): any => {
         store,
         table: `beobzuordnung`,
         field: `ArtId`,
-        value: apArtId
+        value: apArtId,
       })
     })
     .then(() => axios.get(url))
