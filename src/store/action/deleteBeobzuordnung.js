@@ -8,7 +8,7 @@ export default (store: Object, tree: Object, beobId: number | string): void => {
   const { table } = store
   const { activeNodes } = tree
   // delete beobzuordnung
-  const deleteUrl = `${apiBaseUrl}/apflora/tabelle=beobzuordnung/tabelleIdFeld=ArtId/tabelleId=${beobId}`
+  const deleteUrl = `${apiBaseUrl}/apflora/tabelle=beobzuordnung/tabelleIdFeld=BeobId/tabelleId=${beobId}`
   axios
     .delete(deleteUrl)
     .then(() => {
@@ -23,7 +23,7 @@ export default (store: Object, tree: Object, beobId: number | string): void => {
         `Arten`,
         activeNodes.ap,
         `nicht-beurteilte-Beobachtungen`,
-        beobId
+        beobId,
       ]
       tree.setActiveNodeArray(newActiveNodeArray)
     })

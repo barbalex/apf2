@@ -127,7 +127,7 @@ const enhance = compose(
           updatePropertyInDb(tree, fieldname, val)
         }
       } else {
-        deleteBeobzuordnung(tree, activeDataset.row.ArtId)
+        deleteBeobzuordnung(tree, activeDataset.row.BeobId)
       }
     },
   }),

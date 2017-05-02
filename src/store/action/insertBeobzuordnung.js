@@ -9,12 +9,12 @@ const updateBeobzuordnungData = (
   tree: Object,
   beobBereitgestellt: Object,
   newKey: string,
-  newValue: string | number
+  newValue: string | number,
 ): void => {
   store.updateProperty(tree, newKey, newValue)
   store.updatePropertyInDb(tree, newKey, newValue)
-  store.updateProperty(tree, `ArtId`, beobBereitgestellt.ArtId)
-  store.updatePropertyInDb(tree, `ArtId`, beobBereitgestellt.ArtId)
+  store.updateProperty(tree, `BeobId`, beobBereitgestellt.BeobId)
+  store.updatePropertyInDb(tree, `BeobId`, beobBereitgestellt.BeobId)
   store.updateProperty(tree, `QuelleId`, beobBereitgestellt.QuelleId)
   store.updatePropertyInDb(tree, `QuelleId`, beobBereitgestellt.QuelleId)
 }
@@ -24,7 +24,7 @@ const continueWithBeobBereitgestellt = (
   tree: Object,
   beobBereitgestellt: Object,
   newKey: string,
-  newValue: string | number
+  newValue: string | number,
 ): void => {
   const { projekt, ap } = tree.activeNodes
   // set new activeNodeArray
@@ -35,7 +35,7 @@ const continueWithBeobBereitgestellt = (
       `Arten`,
       ap,
       `nicht-zuzuordnende-Beobachtungen`,
-      beobBereitgestellt.id
+      beobBereitgestellt.id,
     ]
     tree.setActiveNodeArray(newActiveNodeArray)
     updateBeobzuordnungData(store, tree, beobBereitgestellt, newKey, newValue)
@@ -53,7 +53,7 @@ const continueWithBeobBereitgestellt = (
       `Teil-Populationen`,
       newValue,
       `Beobachtungen`,
-      beobBereitgestellt.id
+      beobBereitgestellt.id,
     ]
     tree.setActiveNodeArray(newActiveNodeArray)
     updateBeobzuordnungData(store, tree, beobBereitgestellt, newKey, newValue)
@@ -64,7 +64,7 @@ export default (
   store: Object,
   tree: Object,
   newKey: string,
-  newValue: number
+  newValue: number,
 ): void => {
   /**
    * newKey is either BeobNichtZuordnen or TPopId
@@ -73,7 +73,7 @@ export default (
   const beobBereitgestellt = tree.activeDataset.row
   // check if a corresponding beobzuordnung already exists
   const beobzuordnungExists = !!store.table.beobzuordnung.get(
-    beobBereitgestellt.id
+    beobBereitgestellt.id,
   )
   if (beobzuordnungExists) {
     return continueWithBeobBereitgestellt(
@@ -81,24 +81,24 @@ export default (
       tree,
       beobBereitgestellt,
       newKey,
-      newValue
+      newValue,
     )
   }
   // insert new dataset in db and fetch id
-  const url = `${apiBaseUrl}/apflora/beobzuordnung/ArtId/${beobBereitgestellt.id}`
+  const url = `${apiBaseUrl}/apflora/beobzuordnung/BeobId/${beobBereitgestellt.id}`
   axios
     .post(url)
     .then(({ data: row }) => {
       // insert this dataset in idb
       insertDatasetInIdb(store, `beobzuordnung`, row)
       // insert this dataset in store.table
-      store.table.beobzuordnung.set(row.ArtId, row)
+      store.table.beobzuordnung.set(row.BeobId, row)
       continueWithBeobBereitgestellt(
         store,
         tree,
         beobBereitgestellt,
         newKey,
-        newValue
+        newValue,
       )
     })
     .catch(error => store.listError(error))

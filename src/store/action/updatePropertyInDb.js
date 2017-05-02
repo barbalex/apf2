@@ -14,7 +14,7 @@ export default (
   store: Object,
   tree: Object,
   key: string,
-  valuePassed: string | number
+  valuePassed: string | number,
 ): any => {
   const { row, valid } = tree.activeDataset
   let value = valuePassed
@@ -49,8 +49,8 @@ export default (
         // $FlowIssue
         `change was not saved:
         field: ${key}, table: ${table}, value: ${value}
-        Reason: idField was not found`
-      )
+        Reason: idField was not found`,
+      ),
     )
   }
   const tabelleId = row[idField]
@@ -60,18 +60,10 @@ export default (
         // $FlowIssue
         `change was not saved:
         field: ${key}, table: ${table}, value: ${value}
-        Reason: tabelleId was not found`
-      )
+        Reason: tabelleId was not found`,
+      ),
     )
   }
-
-  // some fields contain 1 for true, 0 for false
-  // not necessary: done by RadioButton component
-  /*
-  const booleanFields = [`TPopKontrJungPflJN`, `TPopKontrPlan`]
-  if (booleanFields.includes(key)) {
-    value = value === 1
-  }*/
 
   // update if no validation messages exist
   const combinedValidationMessages = objectValues(valid).join(``)
@@ -119,7 +111,7 @@ export default (
           newActiveNodeArray[4] = value === 1
             ? `nicht-zuzuordnende-Beobachtungen`
             : `nicht-beurteilte-Beobachtungen`
-          newActiveNodeArray[5] = tree.activeDataset.row.ArtId
+          newActiveNodeArray[5] = tree.activeDataset.row.BeobId
           tree.setActiveNodeArray(newActiveNodeArray.slice(0, 6))
         }
         // if for a beobZugeordnet TPopId is set, url needs to change
