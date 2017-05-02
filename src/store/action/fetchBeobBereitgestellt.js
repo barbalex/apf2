@@ -38,7 +38,7 @@ export default (store: Object, apArtId: number): any => {
         store,
         table: `beob`,
         field: `ArtId`,
-        value: apArtId
+        value: apArtId,
       })
     })
     .then(() => axios.get(url))
@@ -49,14 +49,8 @@ export default (store: Object, apArtId: number): any => {
       // copy array without the individual objects being references
       // otherwise the computed values are passed to idb
       // and this creates errors, as they can't be cloned
-      console.log(
-        'fetchBeobBereitgestellt: will write to store, data[0]:',
-        data[0]
-      )
       setTimeout(() => writeToStore(store, cloneDeep(data)))
-      console.log('fetchBeobBereitgestellt: finished writing to store')
       setTimeout(() => app.db.beob.bulkPut(data))
-      console.log('fetchBeobBereitgestellt: finished writing to idb')
     })
     .catch(error => {
       store.loading = store.loading.filter(el => el !== `beob`)
