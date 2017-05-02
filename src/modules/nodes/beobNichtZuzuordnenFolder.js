@@ -5,19 +5,19 @@ export default (
   store: Object,
   tree: Object,
   projId: number,
-  apArtId: number
+  apArtId: number,
 ): Array<Object> => {
   // fetch sorting indexes of parents
   const projIndex = findIndex(tree.filteredAndSorted.projekt, {
-    ProjId: projId
+    ProjId: projId,
   })
   const apIndex = findIndex(
     tree.filteredAndSorted.ap.filter(a => a.ProjId === projId),
-    { ApArtId: apArtId }
+    { ApArtId: apArtId },
   )
 
   const beobNichtZuzuordnenNodesLength = tree.filteredAndSorted.beobNichtZuzuordnen.filter(
-    n => n.ArtId === apArtId
+    n => n.beobBereitgestellt.ArtId === apArtId,
   ).length
 
   let message = beobNichtZuzuordnenNodesLength
@@ -40,10 +40,10 @@ export default (
         projId,
         `Arten`,
         apArtId,
-        `nicht-zuzuordnende-Beobachtungen`
+        `nicht-zuzuordnende-Beobachtungen`,
       ],
       sort: [projIndex, 1, apIndex, 9],
-      hasChildren: beobNichtZuzuordnenNodesLength > 0
-    }
+      hasChildren: beobNichtZuzuordnenNodesLength > 0,
+    },
   ]
 }
