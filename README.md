@@ -33,7 +33,7 @@ Die wichtigsten sind:
 
 ## Fähigkeiten:
 
-### Neue:
+### Neu:
 
 - Mehrere Projekte bearbeiten
 - Der Strukturbaum ist wesentlich leistungsfähiger.<br />Es gibt keine Grenzen mehr, wieviele Elemente einen Ebene darstellen kann!
