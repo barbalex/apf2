@@ -58,12 +58,11 @@ const nichtZuordnenPopover = (
   </Container>
 )
 
-const getTpopZuordnenSource = (store, tree) => {
+const getTpopZuordnenSource = (store: Object, tree: Object): Array<Object> => {
   const { activeDataset, activeNodes } = tree
-  const beobzuordnung = activeDataset.row
   // get all popIds of active ap
   const popList = Array.from(store.table.pop.values()).filter(
-    p => p.ApArtId === activeNodes.ap
+    p => p.ApArtId === activeNodes.ap,
   )
   const popIdList = popList.map(p => p.PopId)
   // get all tpop
@@ -73,29 +72,23 @@ const getTpopZuordnenSource = (store, tree) => {
     // with coordinates
     .filter(t => t.TPopXKoord && t.TPopYKoord)
   // calculate their distance to this beobzuordnung
-  const beob = store.table.beob.get(tree.activeDataset.row.id)
+  const beob = store.table.beob.get(activeDataset.row.id)
   // beob loads later
   // prevent an error occuring if it does not yet exist
   // by passing back an empty array
   if (!beob) {
     return []
   }
-  const beobX = beobzuordnung.QuelleId === 2
-    ? beob.FNS_XGIS
-    : beob.COORDONNEE_FED_E
-  const beobY = beobzuordnung.QuelleId === 2
-    ? beob.FNS_YGIS
-    : beob.COORDONNEE_FED_N
   tpopList.forEach(t => {
-    const dX = Math.abs(beobX - t.TPopXKoord)
-    const dY = Math.abs(beobY - t.TPopYKoord)
+    const dX = Math.abs(beob.X - t.TPopXKoord)
+    const dY = Math.abs(beob.Y - t.TPopYKoord)
     t.distance = Math.round((dX ** 2 + dY ** 2) ** 0.5)
     t.popNr = store.table.pop.get(t.PopId).PopNr
     // build label
     t.herkunft = t.TPopHerkunft
       ? // $FlowIssue
         Array.from(store.table.pop_status_werte.values()).find(
-          x => x.HerkunftId === t.TPopHerkunft
+          x => x.HerkunftId === t.TPopHerkunft,
         ).HerkunftTxt
       : `ohne Status`
     const popNr = t.popNr || t.popNr === 0 ? t.popNr : `(keine Nr)`
@@ -107,7 +100,7 @@ const getTpopZuordnenSource = (store, tree) => {
   // return array of TPopId, label
   return tpopList.map(t => ({
     value: t.TPopId,
-    label: t.label
+    label: t.label,
   }))
 }
 
@@ -117,13 +110,13 @@ const enhance = compose(
     updatePropertyInDb: props => (
       treePassedByUpdatePropertyInDb,
       fieldname,
-      val
+      val,
     ) => {
       const { store, tree } = props
       const {
         insertBeobzuordnung,
         updatePropertyInDb,
-        deleteBeobzuordnung
+        deleteBeobzuordnung,
       } = store
       const { activeDataset } = tree
       if (val) {
@@ -136,19 +129,19 @@ const enhance = compose(
       } else {
         deleteBeobzuordnung(tree, activeDataset.row.ArtId)
       }
-    }
+    },
   }),
-  observer
+  observer,
 )
 
 const Beobzuordnung = ({
   store,
   tree,
-  updatePropertyInDb
+  updatePropertyInDb,
 }: {
   store: Object,
   tree: Object,
-  updatePropertyInDb: () => void
+  updatePropertyInDb: () => void,
 }) => {
   const { activeDataset } = tree
   const beobzuordnung = activeDataset.row
