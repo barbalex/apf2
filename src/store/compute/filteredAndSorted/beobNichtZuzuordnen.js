@@ -1,4 +1,5 @@
 import sortBy from 'lodash/sortBy'
+import format from 'date-fns/format'
 
 export default (store: Object, tree: Object): Object => {
   const { table } = store
@@ -8,11 +9,17 @@ export default (store: Object, tree: Object): Object => {
     .filter(b => b.BeobNichtZuordnen === 1)
     // filter by apFilter
     .filter(b => {
-      if (!apFilter) return true
+      if (!apFilter) {
+        return true
+      }
       let ap
       const beob = table.beob.get(b.id)
-      if (beob) ap = table.ap.get(beob.ArtId)
-      if (ap) return [1, 2, 3].includes(ap.ApStatus)
+      if (beob) {
+        ap = table.ap.get(beob.ArtId)
+      }
+      if (ap && ap.ApStatus) {
+        return [1, 2, 3].includes(ap.ApStatus)
+      }
       return true
     })
 
@@ -20,13 +27,13 @@ export default (store: Object, tree: Object): Object => {
   beobNichtZuzuordnen.forEach(el => {
     let datum = ``
     let autor = ``
-    const beobBereitgestellt = table.beob.get(el.id)
-    if (beobBereitgestellt) {
-      if (beobBereitgestellt.Datum) {
-        datum = beobBereitgestellt.Datum
+    const beob = table.beob.get(el.id)
+    if (beob) {
+      if (beob.Datum) {
+        datum = format(beob.Datum, 'YYYY.MM.DD')
       }
-      if (beobBereitgestellt.Autor) {
-        autor = beobBereitgestellt.Autor
+      if (beob.Autor) {
+        autor = beob.Autor
       }
     }
     const quelle = table.beob_quelle.get(el.QuelleId)
@@ -37,7 +44,7 @@ export default (store: Object, tree: Object): Object => {
   const filterString = nodeLabelFilter.get(`beobNichtZuzuordnen`)
   if (filterString) {
     beobNichtZuzuordnen = beobNichtZuzuordnen.filter(p =>
-      p.label.toLowerCase().includes(filterString.toLowerCase())
+      p.label.toLowerCase().includes(filterString.toLowerCase()),
     )
   }
   // sort by label
