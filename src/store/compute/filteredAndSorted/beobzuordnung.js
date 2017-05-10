@@ -7,18 +7,15 @@ export default (store: Object, tree: Object): Object => {
   // grab beob as array and sort them by year
   let beobNichtBeurteilt = Array.from(table.beob.values())
     // filter by apFilter
-    .filter(b => {
+    .filter(beob => {
       if (!apFilter) return true
-      const ap = table.ap.get(b.ArtId)
+      const ap = table.ap.get(beob.ArtId)
       return [1, 2, 3].includes(ap.ApStatus)
     })
     // fetch only those without beobzuordnung
-    .filter(b => {
-      const beobzuordnung = store.table.beobzuordnung.get(b.BeobId)
-      const hasBeobzuordnung =
-        beobzuordnung &&
-        (beobzuordnung.TPopId || beobzuordnung.BeobNichtZuordnen)
-      return !hasBeobzuordnung
+    .filter(beob => {
+      const beobzuordnung = store.table.beobzuordnung.get(beob.id)
+      return !beobzuordnung
     })
 
   beobNichtBeurteilt.forEach(el => {
