@@ -10,15 +10,15 @@
   "license": "MIT",
   "private": true,
   "devDependencies": {
-    "flow-bin": "0.45.0",
+    "flow-bin": "0.46.0",
     "mobx-react-devtools": "4.2.11",
     "react-scripts": "0.9.5",
     "sw-precache": "5.1.1"
   },
   "dependencies": {
-    "@turf/inside": "4.2.0",
-    "@turf/nearest": "4.2.0",
-    "@turf/within": "4.2.0",
+    "@turf/inside": "4.3.0",
+    "@turf/nearest": "4.3.0",
+    "@turf/within": "4.3.0",
     "ampersand-app": "2.0.0",
     "axios": "0.16.1",
     "babel-polyfill": "6.23.0",
@@ -46,7 +46,7 @@
     "prop-types": "15.5.9",
     "query-string": "4.3.4",
     "react": "15.5.4",
-    "react-contextmenu": "2.5.1",
+    "react-contextmenu": "2.5.2",
     "react-copy-to-clipboard": "5.0.0",
     "react-custom-scrollbars": "4.1.1",
     "react-dom": "15.5.4",
@@ -54,11 +54,11 @@
     "react-leaflet": "1.1.6",
     "react-leaflet-bing": "2.0.0",
     "react-leaflet-control": "1.4.0",
-    "react-linkify": "0.2.0",
+    "react-linkify": "0.2.1",
     "react-sortable-hoc": "0.6.3",
     "react-tap-event-plugin": "2.0.1",
     "react-virtualized": "9.7.5",
-    "recompose": "0.23.1",
+    "recompose": "0.23.3",
     "styled-components": "1.4.6"
   },
   "scripts": {
