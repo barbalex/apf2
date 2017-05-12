@@ -49,16 +49,14 @@ Die wichtigsten sind:
   - Populationen, Teilpopulationen und Beobachtungen durch das Zeichnen von einem oder mehreren Umrissen (Recht- oder Vielecken) filtern
   - Diesen geographischen Filter auf Exporte anwenden
 
-### Noch nicht realisiert:
-
-#### Umsetzung geplant:
+### Geplant:
 
 - Generell Funktionen von Version 1 prüfen und fehlende nachtragen
 - Login steuert, welche Projekte sichtbar sind
 - API-Zugriff besser absichern (erst nach der Pensionierung von Version 1 möglich)
 - Beobachtungen besser organisieren. Mit dem Ziel, Beobachtungen beliebiger Datenstruktur jederzeit importieren zu können
 
-#### Umsetzung unsicher:
+### Nicht mehr vorgesehen:
 
 - Karten:
   - eigene Ebenen hineinziehen
