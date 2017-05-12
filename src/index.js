@@ -64,7 +64,7 @@ app.extend({
   init() {
     this.db = db
     this.store = store
-  }
+  },
 })
 app.init()
 
@@ -74,8 +74,8 @@ injectTapEventPlugin()
 
 const theme = Object.assign({}, darkBaseTheme, {
   appBar: {
-    height: 51
-  }
+    height: 51,
+  },
 })
 
 // make store accessible in dev
@@ -117,5 +117,5 @@ ReactDOM.render(
       </AppContainer>
     </MuiThemeProvider>
   </Provider>,
-  document.getElementById(`root`)
+  document.getElementById(`root`),
 )
