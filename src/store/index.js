@@ -37,7 +37,7 @@ function Store(): void {
   this.fetchTpopForAp = () => {}
   this.fetchPopForAp = () => {}
   this.fetchDatasetById = () => {}
-  this.fetchBeobBereitgestellt = () => {}
+  this.fetchBeob = () => {}
   this.writeToStore = () => {}
   this.setUrlQuery = () => {}
   this.tree = {

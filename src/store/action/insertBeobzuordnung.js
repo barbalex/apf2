@@ -7,22 +7,22 @@ import insertDatasetInIdb from './insertDatasetInIdb'
 const updateBeobzuordnungData = (
   store: Object,
   tree: Object,
-  beobBereitgestellt: Object,
+  beob: Object,
   newKey: string,
   newValue: string | number,
 ): void => {
   store.updateProperty(tree, newKey, newValue)
   store.updatePropertyInDb(tree, newKey, newValue)
-  store.updateProperty(tree, `BeobId`, beobBereitgestellt.BeobId)
-  store.updatePropertyInDb(tree, `BeobId`, beobBereitgestellt.BeobId)
-  store.updateProperty(tree, `QuelleId`, beobBereitgestellt.QuelleId)
-  store.updatePropertyInDb(tree, `QuelleId`, beobBereitgestellt.QuelleId)
+  store.updateProperty(tree, `BeobId`, beob.BeobId)
+  store.updatePropertyInDb(tree, `BeobId`, beob.BeobId)
+  store.updateProperty(tree, `QuelleId`, beob.QuelleId)
+  store.updatePropertyInDb(tree, `QuelleId`, beob.QuelleId)
 }
 
-const continueWithBeobBereitgestellt = (
+const continueWithBeob = (
   store: Object,
   tree: Object,
-  beobBereitgestellt: Object,
+  beob: Object,
   newKey: string,
   newValue: string | number,
 ): void => {
@@ -35,10 +35,10 @@ const continueWithBeobBereitgestellt = (
       `Arten`,
       ap,
       `nicht-zuzuordnende-Beobachtungen`,
-      beobBereitgestellt.id,
+      beob.id,
     ]
     tree.setActiveNodeArray(newActiveNodeArray)
-    updateBeobzuordnungData(store, tree, beobBereitgestellt, newKey, newValue)
+    updateBeobzuordnungData(store, tree, beob, newKey, newValue)
   } else if (newKey === `TPopId`) {
     // ouch. Need to get activeNodeArray for this tpop
     // Nice: tpop was already loaded for building tpop list
@@ -53,10 +53,10 @@ const continueWithBeobBereitgestellt = (
       `Teil-Populationen`,
       newValue,
       `Beobachtungen`,
-      beobBereitgestellt.id,
+      beob.id,
     ]
     tree.setActiveNodeArray(newActiveNodeArray)
-    updateBeobzuordnungData(store, tree, beobBereitgestellt, newKey, newValue)
+    updateBeobzuordnungData(store, tree, beob, newKey, newValue)
   }
 }
 
@@ -70,22 +70,14 @@ export default (
    * newKey is either BeobNichtZuordnen or TPopId
    */
   // get data from beob in activeDataset
-  const beobBereitgestellt = tree.activeDataset.row
+  const beob = tree.activeDataset.row
   // check if a corresponding beobzuordnung already exists
-  const beobzuordnungExists = !!store.table.beobzuordnung.get(
-    beobBereitgestellt.id,
-  )
+  const beobzuordnungExists = !!store.table.beobzuordnung.get(beob.id)
   if (beobzuordnungExists) {
-    return continueWithBeobBereitgestellt(
-      store,
-      tree,
-      beobBereitgestellt,
-      newKey,
-      newValue,
-    )
+    return continueWithBeob(store, tree, beob, newKey, newValue)
   }
   // insert new dataset in db and fetch id
-  const url = `${apiBaseUrl}/apflora/beobzuordnung/BeobId/${beobBereitgestellt.id}`
+  const url = `${apiBaseUrl}/apflora/beobzuordnung/BeobId/${beob.id}`
   axios
     .post(url)
     .then(({ data: row }) => {
@@ -93,13 +85,7 @@ export default (
       insertDatasetInIdb(store, `beobzuordnung`, row)
       // insert this dataset in store.table
       store.table.beobzuordnung.set(row.BeobId, row)
-      continueWithBeobBereitgestellt(
-        store,
-        tree,
-        beobBereitgestellt,
-        newKey,
-        newValue,
-      )
+      continueWithBeob(store, tree, beob, newKey, newValue)
     })
     .catch(error => store.listError(error))
 }

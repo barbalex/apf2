@@ -18,7 +18,7 @@ export default (store: Object): Object => {
       const markers = cluster.getAllChildMarkers()
       const hasHighlightedTpop = some(
         markers,
-        m => m.options.icon.options.className === `beobIconHighlighted`
+        m => m.options.icon.options.className === `beobIconHighlighted`,
       )
       const className = hasHighlightedTpop
         ? `beobZugeordnetClusterHighlighted`
@@ -26,9 +26,9 @@ export default (store: Object): Object => {
       return window.L.divIcon({
         html: markers.length,
         className,
-        iconSize: window.L.point(40, 40)
+        iconSize: window.L.point(40, 40),
       })
-    }
+    },
   }
   const markers = window.L.markerClusterGroup(mcgOptions)
   if (visible) {
@@ -38,7 +38,7 @@ export default (store: Object): Object => {
       const icon = window.L.icon({
         iconUrl: isHighlighted ? beobIconHighlighted : beobIcon,
         iconSize: [24, 24],
-        className: isHighlighted ? `beobIconHighlighted` : `beobIcon`
+        className: isHighlighted ? `beobIconHighlighted` : `beobIcon`,
       })
       const marker = window.L
         .marker(latLng, {
@@ -46,13 +46,13 @@ export default (store: Object): Object => {
           icon,
           draggable: store.map.beob.assigning,
           zIndexOffset: -store.map.apfloraLayers.findIndex(
-            apfloraLayer => apfloraLayer.value === `TpopBeob`
-          )
+            apfloraLayer => apfloraLayer.value === `TpopBeob`,
+          ),
         })
         .bindPopup(
           ReactDOMServer.renderToStaticMarkup(
-            <BeobPopup store={store} beobBereitgestellt={p} />
-          )
+            <BeobPopup store={store} beob={p} />,
+          ),
         )
       markers.addLayer(marker)
     })

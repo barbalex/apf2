@@ -86,7 +86,7 @@ const fetchDataForOpenNodes = (
         store.fetchTable('apflora', 'adresse')
         store.fetchTable('apflora', 'ap_bearbstand_werte')
         store.fetchTable('apflora', 'ap_umsetzung_werte')
-        store.fetchBeobBereitgestellt(activeNodes.ap)
+        store.fetchBeob(activeNodes.ap)
         store.fetchBeobzuordnung(activeNodes.ap)
         store.fetchTable('apflora', 'pop_status_werte')
         if (showTpop) {

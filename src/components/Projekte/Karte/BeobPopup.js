@@ -14,37 +14,31 @@ const StyledH3 = styled.h3`
  * or to observe
  */
 
-const BeobPopup = ({
-  store,
-  beobBereitgestellt
-}: {
-  store: Object,
-  beobBereitgestellt: Object
-}) => {
+const BeobPopup = ({ store, beob }: { store: Object, beob: Object }) => {
   const { activeNodes } = store.tree
   const { ap, projekt } = activeNodes
 
   // build url to open beob form
-  let url = `${appBaseUrl}/Projekte/${projekt}/Arten/${ap}/nicht-beurteilte-Beobachtungen/${beobBereitgestellt.id}`
-  if (beobBereitgestellt.beobzuordnung) {
-    if (beobBereitgestellt.beobzuordnung.BeobNichtZuordnen) {
-      url = `${appBaseUrl}/Projekte/${projekt}/Arten/${ap}/nicht-zuzuordnende-Beobachtungen/${beobBereitgestellt.id}`
+  let url = `${appBaseUrl}/Projekte/${projekt}/Arten/${ap}/nicht-beurteilte-Beobachtungen/${beob.id}`
+  if (beob.beobzuordnung) {
+    if (beob.beobzuordnung.BeobNichtZuordnen) {
+      url = `${appBaseUrl}/Projekte/${projekt}/Arten/${ap}/nicht-zuzuordnende-Beobachtungen/${beob.id}`
     } else {
-      const tpopId = beobBereitgestellt.beobzuordnung.TPopId
+      const tpopId = beob.beobzuordnung.TPopId
       const tpop = store.table.tpop.get(tpopId)
       const popId = tpop ? tpop.PopId : ``
-      url = `${appBaseUrl}/Projekte/${projekt}/Arten/${ap}/Populationen/${popId}/Teil-Populationen/${tpopId}/Beobachtungen/${beobBereitgestellt.id}`
+      url = `${appBaseUrl}/Projekte/${projekt}/Arten/${ap}/Populationen/${popId}/Teil-Populationen/${tpopId}/Beobachtungen/${beob.id}`
     }
   }
 
-  const xKoord = beobBereitgestellt.X
-  const yKoord = beobBereitgestellt.Y
+  const xKoord = beob.X
+  const yKoord = beob.Y
 
   return (
     <div>
       <div>Beobachtung</div>
       <StyledH3>
-        {beobBereitgestellt.label}
+        {beob.label}
       </StyledH3>
       <div>
         {`Koordinaten: ${xKoord.toLocaleString(`de-ch`)} / ${yKoord.toLocaleString(`de-ch`)}`}

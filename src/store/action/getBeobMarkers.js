@@ -18,14 +18,14 @@ export default (store: Object): Array<Object> => {
         permanent: true,
         direction: `bottom`,
         className: `mapTooltip`,
-        opacity: 1
+        opacity: 1,
       }
       const isHighlighted = highlightedIds.includes(p.id)
       const latLng = new window.L.LatLng(...p.KoordWgs84)
       const icon = window.L.icon({
         iconUrl: isHighlighted ? beobIconHighlighted : beobIcon,
         iconSize: [24, 24],
-        className: isHighlighted ? `beobIconHighlighted` : `beobIcon`
+        className: isHighlighted ? `beobIconHighlighted` : `beobIcon`,
       })
       return window.L
         .marker(latLng, {
@@ -33,13 +33,13 @@ export default (store: Object): Array<Object> => {
           icon,
           draggable: store.map.beob.assigning,
           zIndexOffset: -store.map.apfloraLayers.findIndex(
-            apfloraLayer => apfloraLayer.value === `Beob`
-          )
+            apfloraLayer => apfloraLayer.value === `Beob`,
+          ),
         })
         .bindPopup(
           ReactDOMServer.renderToStaticMarkup(
-            <BeobPopup store={store} beobBereitgestellt={p} />
-          )
+            <BeobPopup store={store} beob={p} />,
+          ),
         )
         .bindTooltip(tooltipText, tooltipOptions)
         .on('moveend', event => {

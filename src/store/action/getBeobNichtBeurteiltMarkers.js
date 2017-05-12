@@ -18,7 +18,7 @@ export default (store: Object): Array<Object> => {
       const icon = window.L.icon({
         iconUrl: isHighlighted ? beobIconHighlighted : beobIcon,
         iconSize: [24, 24],
-        className: isHighlighted ? `beobIconHighlighted` : `beobIcon`
+        className: isHighlighted ? `beobIconHighlighted` : `beobIcon`,
       })
       return window.L
         .marker(latLng, {
@@ -26,13 +26,13 @@ export default (store: Object): Array<Object> => {
           icon,
           draggable: store.map.beob.assigning,
           zIndexOffset: -store.map.apfloraLayers.findIndex(
-            apfloraLayer => apfloraLayer.value === `BeobNichtBeurteilt`
-          )
+            apfloraLayer => apfloraLayer.value === `BeobNichtBeurteilt`,
+          ),
         })
         .bindPopup(
           ReactDOMServer.renderToStaticMarkup(
-            <BeobPopup store={store} beobBereitgestellt={p} />
-          )
+            <BeobPopup store={store} beob={p} />,
+          ),
         )
         .on('moveend', event => {
           /**
@@ -49,7 +49,7 @@ export default (store: Object): Array<Object> => {
             `Arten`,
             activeNodes.ap,
             `nicht-beurteilte-Beobachtungen`,
-            p.BeobId
+            p.BeobId,
           ]
           tree.setActiveNodeArray(newActiveNodeArray)
           insertBeobzuordnung(tree, `TPopId`, nearestTpopId)

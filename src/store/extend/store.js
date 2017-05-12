@@ -7,7 +7,7 @@ import fetchTableByParentId from '../action/fetchTableByParentId'
 import fetchTpopForAp from '../action/fetchTpopForAp'
 import fetchPopForAp from '../action/fetchPopForAp'
 import fetchDatasetById from '../action/fetchDatasetById'
-import fetchBeobBereitgestellt from '../action/fetchBeobBereitgestellt'
+import fetchBeob from '../action/fetchBeob'
 import updateProperty from '../action/updateProperty'
 import updatePropertyInDb from '../action/updatePropertyInDb'
 import fetchFields from '../action/fetchFields'
@@ -237,8 +237,8 @@ export default (store: Object): void => {
       tableName,
       id
     }) => fetchDatasetById({ store: store, schemaName, tableName, id })),
-    fetchBeobBereitgestellt: action(`fetchBeobBereitgestellt`, apArtId =>
-      fetchBeobBereitgestellt(store, apArtId)
+    fetchBeob: action(`fetchBeob`, apArtId =>
+      fetchBeob(store, apArtId)
     ),
     writeToStore: action(`writeToStore`, ({ data, table, field }) =>
       writeToStore({ store: store, data, table, field })

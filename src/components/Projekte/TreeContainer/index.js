@@ -116,8 +116,8 @@ const getAndValidateCoordinatesOfTpop = (store, id) => {
 }
 
 const getAndValidateCoordinatesOfBeob = (store, beobId) => {
-  const beobBereitgestellt = store.table.beob.get(beobId)
-  if (!beobBereitgestellt) {
+  const beob = store.table.beob.get(beobId)
+  if (!beob) {
     store.listError(
       new Error(
         `Die bereitgestellte Beobachtung mit der ID ${beobId} wurde nicht gefunden`,
@@ -125,7 +125,7 @@ const getAndValidateCoordinatesOfBeob = (store, beobId) => {
     )
     return { X: null, Y: null }
   }
-  const { X, Y } = beobBereitgestellt
+  const { X, Y } = beob
   if (!X || !Y) {
     store.listError(
       new Error(
