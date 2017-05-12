@@ -55,7 +55,7 @@ Die wichtigsten sind:
 
 - Generell Funktionen von Version 1 prüfen und fehlende nachtragen
 - Login steuert, welche Projekte sichtbar sind
-- API-Zugriff besser absichern (erst möglich, wenn Version 1 nicht mehr zugreift)
+- API-Zugriff besser absichern (erst nach der Pensionierung von Version 1 möglich)
 - Beobachtungen besser organisieren. Mit dem Ziel, Beobachtungen beliebiger Datenstruktur jederzeit importieren zu können
 
 #### Umsetzung unsicher:
