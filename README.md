@@ -4,7 +4,7 @@
 
 - Architektur modernisieren:
   - Unterhalt- und Erweiterbarkeit verbessern.<br/>
-    Es soll künftig einfacher und mit weniger Risiko verbunden sein, neue Features einzuführen<br/>
+    Es soll künftig einfacher und mit weniger Risiko verbunden sein, neue Features einzuführen.<br/>
     Das ist der wichtigste Grund, wieso einen neue Version gebaut wurde
   - Anzahl Karten-Werkzeuge von zwei auf eines reduzieren
   - Einige in der alten Architektur schwierig zu lösende Fehler beheben
@@ -15,7 +15,8 @@
     - Vieles ist verlinkbar
     - Auf einen Router kann verzichtet werden
 - Mehrere Projekte verwalten
-- Arbeiten mehrere Personen gleichzeitig, werden die Daten in der Benutzeroberfläche laufend aktualisiert
+- Arbeiten mehrere Personen gleichzeitig, werden die Daten in der Benutzeroberfläche laufend aktualisiert<br/>
+  Somit werden benutzerseitig auch Daten aktualisiert, welche die Datenbank im Rahmen der Durchsetzung von Referenzierungsregeln verändert (z.B. Löschungen weiterleiten)
 - Grundlage schaffen, um Berichte direkt aus der Webanwendung heraus produzieren zu können<br/>
   Artverantwortliche sollen Jahresberichte für ihre Arten selber erzeugen und kontrollieren können
 - Grundlage schaffen, um auf das Access-Admin-Tool verzichten zu können
