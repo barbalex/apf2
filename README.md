@@ -14,8 +14,9 @@
   - URL ist Teil des Flux-Stores, steuert die Benutzeroberfläche und das Laden von Daten. Vorteile:
     - Vieles ist verlinkbar
     - Auf einen Router kann verzichtet werden
-- Mehrere Projekte verwalten
-- Arbeiten mehrere Personen gleichzeitig, werden die Daten in der Benutzeroberfläche laufend aktualisiert<br/>
+- Mehrere Projekte verwalten.<br/>
+  Andere Kantone bzw. Ökobüros können ähnliche Projekte verwalten. Damit können Kosten geteilt und verringert bzw. die Weiterentwicklung finanziert
+- Arbeiten mehrere Personen gleichzeitig, werden die Daten in der Benutzeroberfläche laufend aktualisiert.<br/>
   Somit werden benutzerseitig auch Daten aktualisiert, welche die Datenbank im Rahmen der Durchsetzung von Referenzierungsregeln verändert (z.B. Löschungen weiterleiten)
 - Grundlage schaffen, um Berichte direkt aus der Webanwendung heraus produzieren zu können<br/>
   Artverantwortliche sollen Jahresberichte für ihre Arten selber erzeugen und kontrollieren können
