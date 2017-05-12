@@ -62,6 +62,6 @@ Die wichtigsten sind:
   - eigene Ebenen hineinziehen
   - eigene Ebenen bearbeiten
 
-## Bekannte Fehler/Probleme:
+## Gemeldete Fehler und Ideen:
 
 Siehe [hier](//github.com/barbalex/apf2/issues).
