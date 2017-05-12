@@ -3,9 +3,10 @@
 ## Ziele:
 
 - Architektur modernisieren:
-  - Unterhalt- und Erweiterbarkeit verbessern.<br/>Das ist der wichtigste Grund, wieso einen neue Version gebaut wurde
+  - Unterhalt- und Erweiterbarkeit verbessern.<br/>
+    Es soll künftig einfacher und mit weniger Risiko verbunden sein, neue Features einzuführen<br/>
+    Das ist der wichtigste Grund, wieso einen neue Version gebaut wurde
   - Anzahl Karten-Werkzeuge von zwei auf eines reduzieren
-  - Es soll künftig einfacher und mit weniger Risiko verbunden sein, neue Features einzuführen
   - Einige in der alten Architektur schwierig zu lösende Fehler beheben
   - Veraltete Abhängikeiten loswerden
   - (Infra-)Struktur für Tests bereitstellen
