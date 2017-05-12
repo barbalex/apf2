@@ -59,11 +59,11 @@ class Tree extends Component {
     mapPopVisible: boolean,
     mapTpopVisible: boolean,
     activeNodeArray: Array<Object>,
-    lastClickedNode: Object
+    lastClickedNode: Object,
   }
 
   static defaultProps = {
-    projektLoading: false
+    projektLoading: false,
   }
 
   componentDidUpdate(prevProps) {
@@ -72,14 +72,14 @@ class Tree extends Component {
       mapBeobNichtBeurteiltVisible,
       mapBeobNichtZuzuordnenVisible,
       mapPopVisible,
-      mapTpopVisible
+      mapTpopVisible,
     } = this.props
     const {
       mapTpopBeobVisible: prevMapTpopBeobVisible,
       mapBeobNichtBeurteiltVisible: prevMapBeobNichtBeurteiltVisible,
       mapBeobNichtZuzuordnenVisible: prevMapBeobNichtZuzuordnenVisible,
       mapPopVisible: prevMapPopVisible,
-      mapTpopVisible: prevMapTpopVisible
+      mapTpopVisible: prevMapTpopVisible,
     } = prevProps
     const somethingHasChanged =
       mapTpopBeobVisible !== prevMapTpopBeobVisible ||
@@ -115,12 +115,12 @@ class Tree extends Component {
     // eslint-disable-line class-methods-use-this
     const { nodes, activeNodeArray, lastClickedNode } = this.props
     let lastClickedNodeIndex = findIndex(nodes, node =>
-      isEqual(node.url, lastClickedNode)
+      isEqual(node.url, lastClickedNode),
     )
     // if no index found, use activeNodeArray
     if (lastClickedNodeIndex === -1) {
       lastClickedNodeIndex = findIndex(nodes, node =>
-        isEqual(node.url, activeNodeArray)
+        isEqual(node.url, activeNodeArray),
       )
     }
 

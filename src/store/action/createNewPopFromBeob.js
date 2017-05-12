@@ -8,13 +8,13 @@ export default (store: Object, tree: Object, beobId: string): void => {
   if (!beobId) {
     return store.listError(new Error(`keine beobId übergeben`))
   }
-  const beobBereitgestellt = store.table.beob.get(beobId)
-  if (!beobBereitgestellt) {
+  const beob = store.table.beob.get(beobId)
+  if (!beob) {
     return store.listError(
       new Error(`Die Beobachtung mit beobId ${beobId} wurde nicht gefunden`),
     )
   }
-  const { X, Y } = beobBereitgestellt
+  const { X, Y } = beob
   let tpop
   const { ap, projekt } = tree.activeNodes
   const user = store.user.name
@@ -87,13 +87,15 @@ export default (store: Object, tree: Object, beobId: string): void => {
         `Beobachtungen`,
         beobId,
       ]
+      // TODO: new url is set but ui does not reflect it
       tree.setActiveNodeArray(newActiveNodeArray)
       store.updateProperty(tree, `TPopId`, tpop.TPopId)
       store.updatePropertyInDb(tree, `TPopId`, tpop.TPopId)
       store.updateProperty(tree, `BeobId`, beobId)
       store.updatePropertyInDb(tree, `BeobId`, beobId)
-      store.updateProperty(tree, `QuelleId`, beobBereitgestellt.QuelleId)
-      store.updatePropertyInDb(tree, `QuelleId`, beobBereitgestellt.QuelleId)
+      store.updateProperty(tree, `QuelleId`, beob.QuelleId)
+      store.updatePropertyInDb(tree, `QuelleId`, beob.QuelleId)
+      tree.setOpenNodesFromActiveNodeArray()
     })
     .catch(error => store.listError(error))
 }
