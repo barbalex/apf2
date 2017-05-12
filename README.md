@@ -18,7 +18,7 @@
   Andere Kantone bzw. Ökobüros können ähnliche Projekte verwalten. Damit können Kosten geteilt und verringert bzw. die Weiterentwicklung finanziert
 - Arbeiten mehrere Personen gleichzeitig, werden die Daten in der Benutzeroberfläche laufend aktualisiert.<br/>
   Somit werden benutzerseitig auch Daten aktualisiert, welche die Datenbank im Rahmen der Durchsetzung von Referenzierungsregeln verändert (z.B. Löschungen weiterleiten)
-- Grundlage schaffen, um Berichte direkt aus der Webanwendung heraus produzieren zu können<br/>
+- Grundlage schaffen, um Berichte direkt aus der Webanwendung heraus produzieren zu können.<br/>
   Artverantwortliche sollen Jahresberichte für ihre Arten selber erzeugen und kontrollieren können
 - Grundlage schaffen, um auf das Access-Admin-Tool verzichten zu können
 - Grundlage schaffen, um später allenfalls später netzunabhängig (im Feld) arbeiten zu können
@@ -32,7 +32,7 @@ Die wichtigsten sind:
 - [MobX](//github.com/mobxjs/mobx): Computed data wie in Excel. Und viel simpler als redux. Genial!
 - [React](//facebook.github.io/react): Deklarative Benutzer-Oberfläche. Aufgebaut aus Komponenten. Genial!
 - [Flow](//flow.org): Static type checker. Fehler finden, bevor der Code ausgeführt wird!
-- [socket.io](//socket.io/): Änderungen laufend bei allen Benutzern sichtbar machen
+- [socket.io](//socket.io/): Daten-Änderungen laufend allen Benutzern weiterleiten
 
 ## Fähigkeiten:
 
