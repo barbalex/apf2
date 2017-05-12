@@ -2,6 +2,17 @@
 
 ## Ziele:
 
+- Architektur modernisieren:
+  - Unterhalt- und Erweiterbarkeit verbessern. Das ist der wichtigste Grund
+  - Anzahl Karten-Werkzeuge von zwei auf eines reduzieren
+  - Es soll künftig einfacher und mit weniger Risiko verbunden sein, neue Features einzuführen
+  - Einige in der alten Architektur schwierig zu lösende Fehler beheben
+  - Veraltete Abhängikeiten loswerden
+  - (Infra-)Struktur für Tests bereitstellen
+  - Nach und nach Tests einführen
+  - URL ist Teil des Flux-Stores, steuert die Benutzeroberfläche und das Laden von Daten. Vorteile:
+    - Vieles ist verlinkbar
+    - Auf einen Router kann verzichtet werden
 - Mehrere Projekte verwalten
 - Arbeiten mehrere Personen gleichzeitig, werden die Daten in der Benutzeroberfläche laufend aktualisiert
 - Grundlage schaffen, um Berichte direkt aus der Webanwendung heraus produzieren zu können<br/>
@@ -9,17 +20,6 @@
 - Grundlage schaffen, um auf das Access-Admin-Tool verzichten zu können
 - Grundlage schaffen, um später allenfalls später netzunabhängig (im Feld) arbeiten zu können
 - Sicherheit erhöhen
-- Architektur modernisieren:
-  - Unterhalt- und Erweiterbarkeit verbessern
-  - Anzahl Karten-Werkzeuge auf eines reduzieren (bisher: Google-Maps und OpenLayers)
-  - Es soll künftig einfacher und mit weniger Risiko verbunden sein, neue Features einzuführen
-  - Einige in der alten Architektur schwierig zu lösende Fehler beheben
-  - Veraltete Abhängikeiten loswerden (z.B. jsTree 2)
-  - (Infra-)Struktur für Tests bereitstellen
-  - Nach und nach Tests einführen
-  - URL ist Teil des Flux-Stores, steuert die Benutzeroberfläche und das Laden von Daten. Vorteile:
-    - Vieles ist verlinkbar
-    - Auf einen Router kann verzichtet werden
 
 ## Neue Technologien:
 
