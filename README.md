@@ -5,7 +5,7 @@
 - Architektur modernisieren:
   - Unterhalt- und Erweiterbarkeit verbessern.<br/>
     Es soll künftig einfacher und mit weniger Risiko verbunden sein, neue Features einzuführen.<br/>
-    Das ist der wichtigste Grund, wieso einen neue Version gebaut wurde
+    Das war der Auslöser für die Modernisierung
   - Anzahl Karten-Werkzeuge von zwei auf eines reduzieren
   - Einige in der alten Architektur schwierig zu lösende Fehler beheben
   - Veraltete Abhängikeiten loswerden
