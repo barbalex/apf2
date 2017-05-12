@@ -21,7 +21,7 @@
 - Grundlage schaffen, um Berichte direkt aus der Webanwendung heraus produzieren zu können.<br/>
   Artverantwortliche sollen Jahresberichte für ihre Arten selber erzeugen und kontrollieren können
 - Grundlage schaffen, um auf das Access-Admin-Tool verzichten zu können
-- Grundlage schaffen, um später allenfalls später netzunabhängig (im Feld) arbeiten zu können
+- Grundlage schaffen, um allenfalls später netzunabhängig (im Feld) arbeiten zu können
 - Sicherheit erhöhen
 
 ## Neue Technologien:
