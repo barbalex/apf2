@@ -12,10 +12,10 @@ import manipulateUrl from '../action/manipulateUrl'
 export default (store: Object): void => {
   extendObservable(store, {
     manipulateActiveNodeArray: autorun(`manipulateActiveNodeArray`, () =>
-      manipulateActiveNodeArray(store)
+      manipulateActiveNodeArray(store),
     ),
     manipulateUrlQuery: autorun(`manipulateUrlQuery`, () =>
-      manipulateUrlQuery(store)
+      manipulateUrlQuery(store),
     ),
     // manipulateUrl needs to be async so on first load
     // index.js can change activeNodeArray based on url
@@ -31,10 +31,10 @@ export default (store: Object): void => {
           store.map.activeApfloraLayers.includes(`TpopBeob`) ||
           store.map.activeApfloraLayers.includes(`TpopBeobAssignPolylines`)
         const showBeobNichtBeurteilt = store.map.activeApfloraLayers.includes(
-          `BeobNichtBeurteilt`
+          `BeobNichtBeurteilt`,
         )
         const showBeobNichtZuzuordnen = store.map.activeApfloraLayers.includes(
-          `BeobNichtZuzuordnen`
+          `BeobNichtZuzuordnen`,
         )
         fetchDataForOpenNodes(
           store,
@@ -43,10 +43,10 @@ export default (store: Object): void => {
           showTpop,
           showTpopBeob,
           showBeobNichtBeurteilt,
-          showBeobNichtZuzuordnen
+          showBeobNichtZuzuordnen,
         )
-      }
-    )
+      },
+    ),
   })
   extendObservable(store.tree2, {
     fetchDataWhenTreeOpenNodesChanges: autorunAsync(
@@ -59,10 +59,10 @@ export default (store: Object): void => {
           store.map.activeApfloraLayers.includes(`TpopBeob`) ||
           store.map.activeApfloraLayers.includes(`TpopBeobAssignPolylines`)
         const showBeobNichtBeurteilt = store.map.activeApfloraLayers.includes(
-          `BeobNichtBeurteilt`
+          `BeobNichtBeurteilt`,
         )
         const showBeobNichtZuzuordnen = store.map.activeApfloraLayers.includes(
-          `BeobNichtZuzuordnen`
+          `BeobNichtZuzuordnen`,
         )
         fetchDataForOpenNodes(
           store,
@@ -71,9 +71,9 @@ export default (store: Object): void => {
           showTpop,
           showTpopBeob,
           showBeobNichtBeurteilt,
-          showBeobNichtZuzuordnen
+          showBeobNichtZuzuordnen,
         )
-      }
-    )
+      },
+    ),
   })
 }

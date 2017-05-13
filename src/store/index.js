@@ -10,7 +10,7 @@ function Store(): void {
   this.loading = []
   this.urlQuery = {
     projekteTabs: [],
-    feldkontrTab: `entwicklung`
+    feldkontrTab: `entwicklung`,
   }
   this.datasetToDelete = {}
   this.tellUserReadOnly = () => {}
@@ -56,10 +56,11 @@ function Store(): void {
     apFilter: false,
     toggleApFilter: () => {},
     nodeLabelFilter: {},
+    emptyNodeLabelFilter: () => {},
     activeNodeFilter: {},
     applyMapFilterToTree: false,
     filteredAndSorted: {},
-    nodes: []
+    nodes: [],
   }
   this.tree2 = {
     name: `tree2`,
@@ -80,7 +81,7 @@ function Store(): void {
     activeNodeFilter: {},
     applyMapFilterToTree: false,
     filteredAndSorted: {},
-    nodes: []
+    nodes: [],
   }
   this.export = {
     applyNodeLabelFilterToExport: false,
@@ -88,7 +89,7 @@ function Store(): void {
     applyActiveNodeFilterToExport: false,
     toggleApplyActiveNodeFilterToExport: () => {},
     applyMapFilterToExport: false,
-    toggleApplyMapFilterToExport: () => {}
+    toggleApplyMapFilterToExport: () => {},
   }
   this.dropdownList = {
     adressen: [],
@@ -107,7 +108,7 @@ function Store(): void {
     zaehleinheitWerte: [],
     methodeWerte: [],
     tpopMassnTypWerte: [],
-    zielTypWerte: []
+    zielTypWerte: [],
   }
   this.ui = {}
   this.app = {}
@@ -136,15 +137,15 @@ function Store(): void {
     removeActiveApfloraLayer: () => {},
     mapFilter: {
       filter: {
-        features: []
+        features: [],
       },
       pop: [],
       tpop: [],
       beobNichtZuzuordnen: [],
       beobNichtBeurteilt: [],
-      tpopBeob: []
+      tpopBeob: [],
     },
-    updateMapFilter: () => {}
+    updateMapFilter: () => {},
   }
   this.table = TableStore
   this.valuesForWhichTableDataWasFetched = {}
@@ -152,16 +153,16 @@ function Store(): void {
   this.moving = {
     table: null,
     id: null,
-    label: null
+    label: null,
   }
   this.copying = {
     table: null,
     id: null,
-    label: null
+    label: null,
   }
   this.copyingBiotop = {
     id: null,
-    label: null
+    label: null,
   }
 }
 

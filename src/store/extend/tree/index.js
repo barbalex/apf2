@@ -1,5 +1,12 @@
 // @flow
-import { extendObservable, action, computed, observable, toJS } from 'mobx'
+import {
+  extendObservable,
+  action,
+  computed,
+  reaction,
+  observable,
+  toJS,
+} from 'mobx'
 import clone from 'lodash/clone'
 import isEqual from 'lodash/isEqual'
 
@@ -22,30 +29,30 @@ export default (store: Object, tree: Object): void => {
     activeNodeArray: [],
     setActiveNodeArray: action(
       `setActiveNodeArray`,
-      nodeArray => tree.activeNodeArray = nodeArray
+      nodeArray => (tree.activeNodeArray = nodeArray),
     ),
     activeNodes: computed(() => getActiveNodes(tree.activeNodeArray), {
-      name: `activeNodes`
+      name: `activeNodes`,
     }),
     activeNode: computed(
       () => {
         const myNodes = nodes(store, tree)
         return myNodes.find(n => isEqual(toJS(tree.activeNodeArray), n.url))
       },
-      { name: `activeNode` }
+      { name: `activeNode` },
     ),
     lastClickedNode: [],
     initializeLastClickedNode: action(
       'initializeLastClickedNode',
-      () => tree.lastClickedNode = tree.activeNode
+      () => (tree.lastClickedNode = tree.activeNode),
     ),
     setLastClickedNode: action(
       'setLastClickedNode',
-      url => tree.lastClickedNode = url
+      url => (tree.lastClickedNode = url),
     ),
     activeDataset: computed(
       () => updateActiveDatasetFromActiveNodes(store, tree),
-      { name: `activeDataset` }
+      { name: `activeDataset` },
     ),
     cloneActiveNodeArrayToTree2: action(`cloneActiveNodeArrayToTree2`, () => {
       store.tree2.activeNodeArray = clone(toJS(tree.activeNodeArray))
@@ -55,7 +62,7 @@ export default (store: Object, tree: Object): void => {
     openNodes: [],
     setOpenNodesFromActiveNodeArray: action(
       `setOpenNodesFromActiveNodeArray`,
-      () => setOpenNodesFromActiveNodeArray(store.tree)
+      () => setOpenNodesFromActiveNodeArray(store.tree),
     ),
     nodes: computed(() => nodes(store, tree), { name: `nodesNode` }),
     apFilter: false,
@@ -66,27 +73,34 @@ export default (store: Object, tree: Object): void => {
     updateLabelFilter: action(`updateLabelFilter`, (table, value) => {
       if (!table) {
         return store.listError(
-          new Error(`nodeLabelFilter cant be updated: no table passed`)
+          new Error(`nodeLabelFilter cant be updated: no table passed`),
         )
       }
       tree.nodeLabelFilter.set(table, value)
     }),
     activeNodeFilter: {
-      ap: computed(() => tree.activeNodes.ap, { name: `activeNodeFilterAp` })
+      ap: computed(() => tree.activeNodes.ap, { name: `activeNodeFilterAp` }),
     },
     applyMapFilterToTree: false,
     toggleApplyMapFilterToTree: action(
       `toggleApplyMapFilterToTree`,
-      () => tree.applyMapFilterToTree = !tree.applyMapFilterToTree
+      () => (tree.applyMapFilterToTree = !tree.applyMapFilterToTree),
     ),
     // action when user clicks on a node in the tree
     toggleNode: action(`toggleNode`, (tree, node) =>
-      toggleNode(store, tree, node)
+      toggleNode(store, tree, node),
     ),
     // action when user clicks on a node symbol in the tree
     toggleNodeSymbol: action(`toggleNodeSymbol`, (tree, node) =>
-      toggleNodeSymbol(store, tree, node)
-    )
+      toggleNodeSymbol(store, tree, node),
+    ),
+  })
+  extendObservable(tree, {
+    emptyTreeNodeLabelFilterOnChangeAp: reaction(
+      () => tree.activeNodes.ap,
+      ap => tree.nodeLabelFilter.clear(),
+      { name: 'emptyTreeNodeLabelFilterOnChangeAp' },
+    ),
   })
   extendFilteredAndSorted(store, tree)
 }
