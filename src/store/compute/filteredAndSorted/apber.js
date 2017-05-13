@@ -15,7 +15,7 @@ export default (store: Object, tree: Object): Object => {
     })
   }
   // filter by nodeLabelFilter
-  const filterString = nodeLabelFilter.get(`apber`)
+  const filterString = nodeLabelFilter.get('apber')
   if (filterString) {
     apber = apber.filter(p => {
       if (p.JBerJahr !== undefined && p.JBerJahr !== null) {
@@ -26,9 +26,9 @@ export default (store: Object, tree: Object): Object => {
   }
   // add label
   apber.forEach(el => {
-    el.label = el.JBerJahr || `(kein Jahr)`
+    el.label = el.JBerJahr || '(kein Jahr)'
   })
   // sort
-  apber = sortBy(apber, `JBerJahr`)
+  apber = sortBy(apber, 'JBerJahr')
   return apber
 }

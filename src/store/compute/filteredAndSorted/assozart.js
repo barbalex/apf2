@@ -20,17 +20,17 @@ export default (store: Object, tree: Object): Object => {
   if (adb_eigenschaften.size > 0) {
     assozart.forEach(x => {
       const ae = adb_eigenschaften.get(x.AaSisfNr)
-      return (x.label = ae ? ae.Artname : `(keine Art gewählt)`)
+      return (x.label = ae ? ae.Artname : '(keine Art gewählt)')
     })
     // filter by nodeLabelFilter
-    const filterString = nodeLabelFilter.get(`assozart`)
+    const filterString = nodeLabelFilter.get('assozart')
     if (filterString) {
       assozart = assozart.filter(p =>
-        p.label.toLowerCase().includes(filterString.toLowerCase())
+        p.label.toLowerCase().includes(filterString.toLowerCase()),
       )
     }
     // sort by label
-    assozart = sortBy(assozart, `label`)
+    assozart = sortBy(assozart, 'label')
   }
   return assozart
 }

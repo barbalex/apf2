@@ -18,16 +18,16 @@ export default (store: Object, tree: Object): Object => {
   if (adb_eigenschaften.size > 0) {
     ap.forEach(x => {
       const ae = adb_eigenschaften.get(x.ApArtId)
-      return (x.label = ae ? ae.Artname : `(keine Art gewählt)`)
+      return (x.label = ae ? ae.Artname : '(keine Art gewählt)')
     })
     // filter by nodeLabelFilter
-    const filterString = nodeLabelFilter.get(`ap`)
+    const filterString = nodeLabelFilter.get('ap')
     if (filterString) {
       ap = ap.filter(p =>
-        p.label.toLowerCase().includes(filterString.toLowerCase())
+        p.label.toLowerCase().includes(filterString.toLowerCase()),
       )
     }
-    ap = sortBy(ap, `label`)
+    ap = sortBy(ap, 'label')
   }
   return ap
 }

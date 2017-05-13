@@ -8,15 +8,15 @@ export default (store: Object, tree: Object): Object => {
   let apberuebersicht = Array.from(table.apberuebersicht.values())
 
   // filter by nodeLabelFilter
-  const filterString = nodeLabelFilter.get(`apberuebersicht`)
+  const filterString = nodeLabelFilter.get('apberuebersicht')
   if (filterString) {
     apberuebersicht = apberuebersicht.filter(p =>
-      p.JbuJahr.toString().includes(filterString)
+      p.JbuJahr.toString().includes(filterString),
     )
   }
 
   // sort
-  apberuebersicht = sortBy(apberuebersicht, `JbuJahr`)
+  apberuebersicht = sortBy(apberuebersicht, 'JbuJahr')
 
   return apberuebersicht
 }
