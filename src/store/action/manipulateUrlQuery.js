@@ -5,9 +5,9 @@ export default (store: Object): void => {
 
   // if new store set projekte tabs
   if (
-    (activeNodeArray.length === 0 || activeNodeArray[0] === `Projekte`) &&
+    (activeNodeArray.length === 0 || activeNodeArray[0] === 'Projekte') &&
     store.urlQuery.projekteTabs.length === 0
   ) {
-    store.urlQuery.projekteTabs = [`tree`, `daten`]
+    store.urlQuery.projekteTabs = ['tree', 'daten']
   }
 }

@@ -16,7 +16,7 @@ export default (store: Object): void => {
     !isEqual(urlQueryFromUrl, urlQuery)
   ) {
     const search = queryString.stringify(urlQuery)
-    const query = `${Object.keys(urlQuery).length > 0 ? `?${search}` : ``}`
-    store.history.push(`/${activeNodeArray.join(`/`)}${query}`)
+    const query = `${Object.keys(urlQuery).length > 0 ? `?${search}` : ''}`
+    store.history.push(`/${activeNodeArray.join('/')}${query}`)
   }
 }

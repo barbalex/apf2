@@ -5,7 +5,7 @@ import app from 'ampersand-app'
 // because if it is empty, the login form appears for
 // just a very short time until currentUser was
 // fetched from idb
-// so need to set store.user.name to `` if something
+// so need to set store.user.name to '' if something
 // goes wrong or no user name is received
 export default (store: Object): void =>
   app.db.currentUser
@@ -15,11 +15,11 @@ export default (store: Object): void =>
         store.user.name = users[0].name
         store.user.readOnly = users[0].readOnly
       } else {
-        store.user.name = ``
+        store.user.name = ''
         store.user.readOnly = true
       }
     })
     .catch(error => {
       store.listError(error)
-      store.user.name = ``
+      store.user.name = ''
     })
