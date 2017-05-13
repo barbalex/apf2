@@ -10,7 +10,7 @@ function Store(): void {
   this.loading = []
   this.urlQuery = {
     projekteTabs: [],
-    feldkontrTab: `entwicklung`,
+    feldkontrTab: 'entwicklung',
   }
   this.datasetToDelete = {}
   this.tellUserReadOnly = () => {}
@@ -41,7 +41,7 @@ function Store(): void {
   this.writeToStore = () => {}
   this.setUrlQuery = () => {}
   this.tree = {
-    name: `tree`,
+    name: 'tree',
     activeNodeArray: [],
     setActiveNodeArray: () => {},
     setOpenNodesFromActiveNodeArray: () => {},
@@ -63,7 +63,7 @@ function Store(): void {
     nodes: [],
   }
   this.tree2 = {
-    name: `tree2`,
+    name: 'tree2',
     activeNodeArray: [],
     setActiveNodeArray: () => {},
     setOpenNodesFromActiveNodeArray: () => {},
@@ -123,7 +123,7 @@ function Store(): void {
     beobNichtBeurteilt: {},
     beobNichtZuzuordnen: {},
     tpopBeob: {},
-    activeBaseLayer: `OsmColor`,
+    activeBaseLayer: 'OsmColor',
     activeOverlays: [],
     activeApfloraLayers: [],
     activeOverlaysSorted: [],

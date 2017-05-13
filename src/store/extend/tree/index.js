@@ -28,18 +28,18 @@ export default (store: Object, tree: Object): void => {
      */
     activeNodeArray: [],
     setActiveNodeArray: action(
-      `setActiveNodeArray`,
+      'setActiveNodeArray',
       nodeArray => (tree.activeNodeArray = nodeArray),
     ),
     activeNodes: computed(() => getActiveNodes(tree.activeNodeArray), {
-      name: `activeNodes`,
+      name: 'activeNodes',
     }),
     activeNode: computed(
       () => {
         const myNodes = nodes(store, tree)
         return myNodes.find(n => isEqual(toJS(tree.activeNodeArray), n.url))
       },
-      { name: `activeNode` },
+      { name: 'activeNode' },
     ),
     lastClickedNode: [],
     initializeLastClickedNode: action(
@@ -52,46 +52,46 @@ export default (store: Object, tree: Object): void => {
     ),
     activeDataset: computed(
       () => updateActiveDatasetFromActiveNodes(store, tree),
-      { name: `activeDataset` },
+      { name: 'activeDataset' },
     ),
-    cloneActiveNodeArrayToTree2: action(`cloneActiveNodeArrayToTree2`, () => {
+    cloneActiveNodeArrayToTree2: action('cloneActiveNodeArrayToTree2', () => {
       store.tree2.activeNodeArray = clone(toJS(tree.activeNodeArray))
       store.tree2.openNodes = clone(toJS(tree.openNodes))
       store.tree2.lastClickedNode = clone(store.tree.activeNode)
     }),
     openNodes: [],
     setOpenNodesFromActiveNodeArray: action(
-      `setOpenNodesFromActiveNodeArray`,
+      'setOpenNodesFromActiveNodeArray',
       () => setOpenNodesFromActiveNodeArray(store.tree),
     ),
-    nodes: computed(() => nodes(store, tree), { name: `nodesNode` }),
+    nodes: computed(() => nodes(store, tree), { name: 'nodesNode' }),
     apFilter: false,
-    toggleApFilter: action(`toggleApFilter`, () => {
+    toggleApFilter: action('toggleApFilter', () => {
       tree.apFilter = !tree.apFilter
     }),
     nodeLabelFilter: observable.map({}),
-    updateLabelFilter: action(`updateLabelFilter`, (table, value) => {
+    updateLabelFilter: action('updateLabelFilter', (table, value) => {
       if (!table) {
         return store.listError(
-          new Error(`nodeLabelFilter cant be updated: no table passed`),
+          new Error('nodeLabelFilter cant be updated: no table passed'),
         )
       }
       tree.nodeLabelFilter.set(table, value)
     }),
     activeNodeFilter: {
-      ap: computed(() => tree.activeNodes.ap, { name: `activeNodeFilterAp` }),
+      ap: computed(() => tree.activeNodes.ap, { name: 'activeNodeFilterAp' }),
     },
     applyMapFilterToTree: false,
     toggleApplyMapFilterToTree: action(
-      `toggleApplyMapFilterToTree`,
+      'toggleApplyMapFilterToTree',
       () => (tree.applyMapFilterToTree = !tree.applyMapFilterToTree),
     ),
     // action when user clicks on a node in the tree
-    toggleNode: action(`toggleNode`, (tree, node) =>
+    toggleNode: action('toggleNode', (tree, node) =>
       toggleNode(store, tree, node),
     ),
     // action when user clicks on a node symbol in the tree
-    toggleNodeSymbol: action(`toggleNodeSymbol`, (tree, node) =>
+    toggleNodeSymbol: action('toggleNodeSymbol', (tree, node) =>
       toggleNodeSymbol(store, tree, node),
     ),
   })

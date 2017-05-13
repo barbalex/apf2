@@ -41,84 +41,84 @@ import filteredAndSortedTpopmassn
 export default (store: Object, tree: Object): void => {
   extendObservable(tree.filteredAndSorted, {
     projekt: computed(() => filteredAndSortedProjekt(store, tree), {
-      name: `projektFilteredAndSorted`
+      name: 'projektFilteredAndSorted',
     }),
     apberuebersicht: computed(
       () => filteredAndSortedApberuebersicht(store, tree),
-      { name: `xxxFilteredAndSorted` }
+      { name: 'xxxFilteredAndSorted' },
     ),
     ap: computed(() => filteredAndSortedAp(store, tree), {
-      name: `apFilteredAndSorted`
+      name: 'apFilteredAndSorted',
     }),
     assozart: computed(() => filteredAndSortedAssozart(store, tree), {
-      name: `assozartFilteredAndSorted`
+      name: 'assozartFilteredAndSorted',
     }),
     idealbiotop: computed(() => filteredAndSortedIdealbiotop(store, tree), {
-      name: `idealbiotopFilteredAndSorted`
+      name: 'idealbiotopFilteredAndSorted',
     }),
     beobNichtZuzuordnen: computed(
       () => filteredAndSortedBeobNichtZuzuordnen(store, tree),
-      { name: `beobNichtZuzuordnenFilteredAndSorted` }
+      { name: 'beobNichtZuzuordnenFilteredAndSorted' },
     ),
     beobzuordnung: computed(() => filteredAndSortedBeobzuordnung(store, tree), {
-      name: `beobzuordnungFilteredAndSorted`
+      name: 'beobzuordnungFilteredAndSorted',
     }),
     ber: computed(() => filteredAndSortedBer(store, tree), {
-      name: `berFilteredAndSorted`
+      name: 'berFilteredAndSorted',
     }),
     apber: computed(() => filteredAndSortedApber(store, tree), {
-      name: `apberFilteredAndSorted`
+      name: 'apberFilteredAndSorted',
     }),
     erfkrit: computed(() => filteredAndSortedErfkrit(store, tree), {
-      name: `erfkritFilteredAndSorted`
+      name: 'erfkritFilteredAndSorted',
     }),
     zieljahr: computed(() => filteredAndSortedZieljahr(store, tree), {
-      name: `zieljahrFilteredAndSorted`
+      name: 'zieljahrFilteredAndSorted',
     }),
     ziel: computed(() => filteredAndSortedZiel(store, tree), {
-      name: `zielFilteredAndSorted`
+      name: 'zielFilteredAndSorted',
     }),
     zielber: computed(() => filteredAndSortedZielber(store, tree), {
-      name: `xxxFilteredAndSorted`
+      name: 'xxxFilteredAndSorted',
     }),
     pop: computed(() => filteredAndSortedPop(store, tree), {
-      name: `popFilteredAndSorted`
+      name: 'popFilteredAndSorted',
     }),
     popmassnber: computed(() => filteredAndSortedPopmassnber(store, tree), {
-      name: `popmassnberFilteredAndSorted`
+      name: 'popmassnberFilteredAndSorted',
     }),
     popber: computed(() => filteredAndSortedPopber(store, tree), {
-      name: `popberFilteredAndSorted`
+      name: 'popberFilteredAndSorted',
     }),
     tpop: computed(() => filteredAndSortedTpop(store, tree), {
-      name: `tpopFilteredAndSorted`
+      name: 'tpopFilteredAndSorted',
     }),
     tpopbeob: computed(() => filteredAndSortedTpopbeob(store, tree), {
-      name: `tpopbeobFilteredAndSorted`
+      name: 'tpopbeobFilteredAndSorted',
     }),
     tpopber: computed(() => filteredAndSortedTopber(store, tree), {
-      name: `tpopberFilteredAndSorted`
+      name: 'tpopberFilteredAndSorted',
     }),
     tpopfreiwkontr: computed(
       () => filteredAndSortedTpopfreiwkontr(store, tree),
-      { name: `tpopfreiwkontrFilteredAndSorted` }
+      { name: 'tpopfreiwkontrFilteredAndSorted' },
     ),
     tpopfreiwkontrzaehl: computed(
       () => filteredAndSortedTpopfreiwkontrzaehl(store, tree),
-      { name: `tpopfreiwkontrzaehlFilteredAndSorted` }
+      { name: 'tpopfreiwkontrzaehlFilteredAndSorted' },
     ),
     tpopfeldkontr: computed(() => filteredAndSortedTpopfeldkontr(store, tree), {
-      name: `tpopfeldkontrFilteredAndSorted`
+      name: 'tpopfeldkontrFilteredAndSorted',
     }),
     tpopfeldkontrzaehl: computed(
       () => filteredAndSortedTpopfeldkontrzaehl(store, tree),
-      { name: `tpopfeldkontrzaehlFilteredAndSorted` }
+      { name: 'tpopfeldkontrzaehlFilteredAndSorted' },
     ),
     tpopmassnber: computed(() => filteredAndSortedTpopmassnber(store, tree), {
-      name: `tpopmassnberFilteredAndSorted`
+      name: 'tpopmassnberFilteredAndSorted',
     }),
     tpopmassn: computed(() => filteredAndSortedTpopmassn(store, tree), {
-      name: `tpopmassnFilteredAndSorted`
-    })
+      name: 'tpopmassnFilteredAndSorted',
+    }),
   })
 }
