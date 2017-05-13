@@ -19,28 +19,28 @@ export default (store: Object): void => {
         }
         return []
       },
-      { name: `mapTpopHighlightedIds` }
+      { name: 'mapTpopHighlightedIds' },
     ),
     highlightedPopIds: [],
-    tpops: computed(() => getTpopsForMap(store), { name: `mapTpopTpops` }),
+    tpops: computed(() => getTpopsForMap(store), { name: 'mapTpopTpops' }),
     bounds: computed(() => getTpopBounds(store.map.tpop.tpops), {
-      name: `mapTpopBounds`
+      name: 'mapTpopBounds',
     }),
     boundsOfHighlightedIds: computed(
       () =>
         getTpopBounds(
           store.map.tpop.tpops.filter(t =>
-            store.map.tpop.highlightedIds.includes(t.TPopId)
-          )
+            store.map.tpop.highlightedIds.includes(t.TPopId),
+          ),
         ),
-      { name: `mapTpopBoundsOfHighlightedIds` }
+      { name: 'mapTpopBoundsOfHighlightedIds' },
     ),
     // alternative is using names
     labelUsingNr: true,
-    markers: computed(() => getTpopMarkers(store), { name: `mapTpopMarkers` }),
+    markers: computed(() => getTpopMarkers(store), { name: 'mapTpopMarkers' }),
     markersClustered: computed(() => getTpopMarkersClustered(store), {
-      name: `mapTpopMarkersClustered`
+      name: 'mapTpopMarkersClustered',
     }),
-    idOfTpopBeingLocalized: 0
+    idOfTpopBeingLocalized: 0,
   })
 }

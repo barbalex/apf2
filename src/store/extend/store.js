@@ -40,14 +40,14 @@ export default (store: Object): void => {
     moving: {
       table: null,
       id: null,
-      label: null
+      label: null,
     },
-    markForMoving: action(`markForMoving`, (table, id, label) => {
+    markForMoving: action('markForMoving', (table, id, label) => {
       store.moving.table = table
       store.moving.id = id
       store.moving.label = label
     }),
-    moveTo: action(`move`, newParentId => {
+    moveTo: action('move', newParentId => {
       // check if this is correct table is not necessary because context menu
       // only shows menu when table is correct
       // change parent id of dataset marked for moving
@@ -60,62 +60,62 @@ export default (store: Object): void => {
     copying: {
       table: null,
       id: null,
-      label: null
+      label: null,
     },
-    markForCopying: action(`markForCopying`, (table, id, label) => {
+    markForCopying: action('markForCopying', (table, id, label) => {
       store.copying.table = table
       store.copying.id = id
       store.copying.label = label
     }),
-    copyTo: action(`copyTo`, parentId => {
+    copyTo: action('copyTo', parentId => {
       // insert new dataset with:
       // - data of dataset with id copying.id
       // - parentId as passed
       copyTo(store, parentId)
     }),
-    resetCopying: action(`resetCopying`, () => {
+    resetCopying: action('resetCopying', () => {
       store.copying.table = null
       store.copying.id = null
       store.copying.label = null
     }),
     copyingBiotop: {
       id: null,
-      label: null
+      label: null,
     },
-    markForCopyingBiotop: action(`markForCopyingBiotop`, (id, label) => {
+    markForCopyingBiotop: action('markForCopyingBiotop', (id, label) => {
       store.copyingBiotop.id = id
       store.copyingBiotop.label = label
     }),
-    copyBiotopTo: action(`copyBiotopTo`, id => {
+    copyBiotopTo: action('copyBiotopTo', id => {
       // insert new dataset with:
       // - data of dataset with id copying.id
       // - id as passed
       copyBiotopTo(store, id)
     }),
-    resetCopyingBiotop: action(`resetCopyingBiotop`, () => {
+    resetCopyingBiotop: action('resetCopyingBiotop', () => {
       store.copyingBiotop.id = null
       store.copyingBiotop.label = null
     }),
-    copyTpopKoordToPop: action(`copyTpopKoordToPop`, tpopId =>
-      copyTpopKoordToPop(store, tpopId)
+    copyTpopKoordToPop: action('copyTpopKoordToPop', tpopId =>
+      copyTpopKoordToPop(store, tpopId),
     ),
-    copyTpopBeobKoordToPop: action(`copyTpopBeobKoordToPop`, beobId =>
-      copyTpopBeobKoordToPop(store, beobId)
+    copyTpopBeobKoordToPop: action('copyTpopBeobKoordToPop', beobId =>
+      copyTpopBeobKoordToPop(store, beobId),
     ),
-    createNewPopFromBeob: action(`createNewPopFromBeob`, (tree, beobId) =>
-      createNewPopFromBeob(store, tree, beobId)
+    createNewPopFromBeob: action('createNewPopFromBeob', (tree, beobId) =>
+      createNewPopFromBeob(store, tree, beobId),
     ),
-    showCoordOnMapsZhCh: action(`showCoordOnMapsZhCh`, (x, y) =>
+    showCoordOnMapsZhCh: action('showCoordOnMapsZhCh', (x, y) =>
       window.open(
         `https://maps.zh.ch/?x=${x}&y=${y}&scale=3000&markers=ring`,
-        `target="_blank"`
-      )
+        'target="_blank"',
+      ),
     ),
-    showCoordOnMapGeoAdminCh: action(`showCoordOnMapGeoAdminCh`, (x, y) =>
+    showCoordOnMapGeoAdminCh: action('showCoordOnMapGeoAdminCh', (x, y) =>
       window.open(
         `https://map.geo.admin.ch/?bgLayer=ch.swisstopo.pixelkarte-farbe&Y=${x}&X=${y}&zoom=10&crosshair=circle`,
-        `target="_blank"`
-      )
+        'target="_blank"',
+      ),
     ),
     /**
      * urlQueries are used to control tabs
@@ -123,12 +123,12 @@ export default (store: Object): void => {
      */
     urlQuery: {
       projekteTabs: [],
-      feldkontrTab: `entwicklung`
+      feldkontrTab: 'entwicklung',
     },
-    setUrlQuery: action(`setUrlQuery`, query =>
-      Object.keys(query).forEach(k => store.urlQuery[k] = query[k])
+    setUrlQuery: action('setUrlQuery', query =>
+      Object.keys(query).forEach(k => (store.urlQuery[k] = query[k])),
     ),
-    setUrlQueryValue: action(`setUrlQueryValue`, (key, value) => {
+    setUrlQueryValue: action('setUrlQueryValue', (key, value) => {
       if (!value && value !== 0) {
         delete store.urlQuery[key]
       } else {
@@ -136,112 +136,110 @@ export default (store: Object): void => {
       }
     }),
     datasetToDelete: {},
-    tellUserReadOnly: action(`tellUserReadOnly`, () =>
-      store.listError(new Error(`Sie haben keine Schreibrechte`))
+    tellUserReadOnly: action('tellUserReadOnly', () =>
+      store.listError(new Error('Sie haben keine Schreibrechte')),
     ),
-    fetchLogin: action(`fetchLogin`, (name, password) =>
-      fetchLogin(store, name, password)
+    fetchLogin: action('fetchLogin', (name, password) =>
+      fetchLogin(store, name, password),
     ),
-    logout: action(`logout`, () => logout(store)),
-    setLoginFromIdb: action(`setLoginFromIdb`, () => setLoginFromIdb(store)),
-    fetchQk: action(`fetchQk`, ({ tree }) =>
+    logout: action('logout', () => logout(store)),
+    setLoginFromIdb: action('setLoginFromIdb', () => setLoginFromIdb(store)),
+    fetchQk: action('fetchQk', ({ tree }) =>
       fetchQk(
         ({
           store,
-          tree
+          tree,
         }: {
           store: Object,
-          tree: Object
-        })
-      )
+          tree: Object,
+        }),
+      ),
     ),
-    setQk: action(`setQk`, ({ tree, berichtjahr, messages, filter }) =>
-      setQk({ store, tree, berichtjahr, messages, filter })
+    setQk: action('setQk', ({ tree, berichtjahr, messages, filter }) =>
+      setQk({ store, tree, berichtjahr, messages, filter }),
     ),
-    setQkFilter: action(`setQkFilter`, ({ filter, tree }) =>
-      setQkFilter({ store, tree, filter })
+    setQkFilter: action('setQkFilter', ({ filter, tree }) =>
+      setQkFilter({ store, tree, filter }),
     ),
-    addMessagesToQk: action(`addMessagesToQk`, ({ tree, messages }) => {
+    addMessagesToQk: action('addMessagesToQk', ({ tree, messages }) => {
       addMessagesToQk({ store, tree, messages })
     }),
-    fetchFieldsFromIdb: action(`fetchFieldsFromIdb`, () =>
-      fetchFieldsFromIdb(store)
+    fetchFieldsFromIdb: action('fetchFieldsFromIdb', () =>
+      fetchFieldsFromIdb(store),
     ),
     insertBeobzuordnung: action(
-      `insertBeobzuordnung`,
+      'insertBeobzuordnung',
       (tree, newKey, newValue) => {
         if (store.user.readOnly) return store.tellUserReadOnly()
         insertBeobzuordnung(store, tree, newKey, newValue)
-      }
+      },
     ),
-    insertDataset: action(`insertDataset`, (tree, table, parentId, baseUrl) => {
+    insertDataset: action('insertDataset', (tree, table, parentId, baseUrl) => {
       if (store.user.readOnly) return store.tellUserReadOnly()
       insertDataset(store, tree, table, parentId, baseUrl)
     }),
     deleteDatasetDemand: action(
-      `deleteDatasetDemand`,
+      'deleteDatasetDemand',
       (table, id, url, label) => {
         if (store.user.readOnly) return store.tellUserReadOnly()
         deleteDatasetDemand(store, table, id, url, label)
-      }
+      },
     ),
-    deleteDatasetAbort: action(`deleteDatasetAbort`, () => {
+    deleteDatasetAbort: action('deleteDatasetAbort', () => {
       store.datasetToDelete = {}
     }),
-    deleteDatasetExecute: action(`deleteDatasetExecute`, tree => {
+    deleteDatasetExecute: action('deleteDatasetExecute', tree => {
       if (store.user.readOnly) return store.tellUserReadOnly()
       deleteDatasetExecute(store, tree)
     }),
-    deleteBeobzuordnung: action(`deleteBeobzuordnung`, (tree, beobId) =>
-      deleteBeobzuordnung(store, tree, beobId)
+    deleteBeobzuordnung: action('deleteBeobzuordnung', (tree, beobId) =>
+      deleteBeobzuordnung(store, tree, beobId),
     ),
-    listError: action(`listError`, error => listError(store, error)),
+    listError: action('listError', error => listError(store, error)),
     // updates data in store
-    updateProperty: action(`updateProperty`, (tree, key, value) => {
+    updateProperty: action('updateProperty', (tree, key, value) => {
       if (store.user.readOnly) return store.tellUserReadOnly()
       updateProperty(store, tree, key, value)
     }),
     // updates data in database
-    updatePropertyInDb: action(`updatePropertyInDb`, (tree, key, value) => {
+    updatePropertyInDb: action('updatePropertyInDb', (tree, key, value) => {
       if (store.user.readOnly) return store.tellUserReadOnly()
       updatePropertyInDb(store, tree, key, value)
     }),
     // fetch all data of a table
     // primarily used for werte (domain) tables
     // and projekt
-    fetchTable: action(`fetchTable`, (schemaName, tableName) =>
-      fetchTable(store, schemaName, tableName)
+    fetchTable: action('fetchTable', (schemaName, tableName) =>
+      fetchTable(store, schemaName, tableName),
     ),
-    fetchStammdaten: action(`fetchStammdaten`, () => {
+    fetchStammdaten: action('fetchStammdaten', () => {
       fetchFields(store)
       fetchStammdatenTables(store)
     }),
-    fetchBeobzuordnung: action(`fetchBeobzuordnung`, apArtId =>
-      fetchBeobzuordnungModule(store, apArtId)
+    fetchBeobzuordnung: action('fetchBeobzuordnung', apArtId =>
+      fetchBeobzuordnungModule(store, apArtId),
     ),
     // fetch data of table for id of parent table
     // used for actual apflora data (but projekt)
     fetchTableByParentId: action(
-      `fetchTableByParentId`,
+      'fetchTableByParentId',
       (schemaName, tableName, parentId) =>
-        fetchTableByParentId(store, schemaName, tableName, parentId)
+        fetchTableByParentId(store, schemaName, tableName, parentId),
     ),
-    fetchTpopForAp: action(`fetchTpopForAp`, apArtId =>
-      fetchTpopForAp(store, apArtId)
+    fetchTpopForAp: action('fetchTpopForAp', apArtId =>
+      fetchTpopForAp(store, apArtId),
     ),
-    fetchPopForAp: action(`fetchPopForAp`, apArtId =>
-      fetchPopForAp(store, apArtId)
+    fetchPopForAp: action('fetchPopForAp', apArtId =>
+      fetchPopForAp(store, apArtId),
     ),
-    fetchDatasetById: action(`fetchDatasetById`, ({
-      schemaName,
-      tableName,
-      id
-    }) => fetchDatasetById({ store: store, schemaName, tableName, id })),
-    fetchBeob: action(`fetchBeob`, apArtId =>
-      fetchBeob(store, apArtId)
+    fetchDatasetById: action(
+      'fetchDatasetById',
+      ({ schemaName, tableName, id }) =>
+        fetchDatasetById({ store: store, schemaName, tableName, id }),
     ),
-    writeToStore: action(`writeToStore`, ({ data, table, field }) =>
-      writeToStore({ store: store, data, table, field })
-    )
+    fetchBeob: action('fetchBeob', apArtId => fetchBeob(store, apArtId)),
+    writeToStore: action('writeToStore', ({ data, table, field }) =>
+      writeToStore({ store: store, data, table, field }),
+    ),
   })
 }

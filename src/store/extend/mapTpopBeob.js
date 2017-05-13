@@ -22,7 +22,7 @@ export default (store: Object): void => {
           return store.map.tpopBeob.beobs
             .filter(
               b =>
-                b.beobzuordnung && b.beobzuordnung.TPopId === activeNodes.tpop
+                b.beobzuordnung && b.beobzuordnung.TPopId === activeNodes.tpop,
             )
             .map(b => b.BeobId)
         } else if (activeNodes.pop) {
@@ -39,16 +39,16 @@ export default (store: Object): void => {
         }
         return []
       },
-      { name: `mapTpopBeobHighlightedIds` }
+      { name: 'mapTpopBeobHighlightedIds' },
     ),
     markersClustered: computed(() => getTpopBeobMarkersClustered(store), {
-      name: `mapTpopBeobMarkersClustered`
+      name: 'mapTpopBeobMarkersClustered',
     }),
     markers: computed(() => getTpopBeobMarkers(store), {
-      name: `mapTpopBeobMarkers`
+      name: 'mapTpopBeobMarkers',
     }),
     assignPolylines: computed(() => getTpopBeobAssignPolylines(store), {
-      name: `mapTpopBeobAssignPolylines`
+      name: 'mapTpopBeobAssignPolylines',
     }),
     beobs: computed(
       () =>
@@ -56,23 +56,23 @@ export default (store: Object): void => {
           b =>
             b.beobzuordnung &&
             b.beobzuordnung.TPopId &&
-            !b.beobzuordnung.BeobNichtZuzuordnen
+            !b.beobzuordnung.BeobNichtZuzuordnen,
         ),
-      { name: `mapTpopBeobBeobs` }
+      { name: 'mapTpopBeobBeobs' },
     ),
     bounds: computed(() => getTpopBeobBounds(store.map.tpopBeob.beobs), {
-      name: `mapTpopBeobBounds`
+      name: 'mapTpopBeobBounds',
     }),
     boundsOfHighlightedIds: computed(
       () =>
         getTpopBeobBounds(
           store.map.tpopBeob.beobs.filter(b =>
             store.map.tpopBeob.highlightedIds.includes(
-              isNaN(b.BeobId) ? b.BeobId : Number(b.BeobId)
-            )
-          )
+              isNaN(b.BeobId) ? b.BeobId : Number(b.BeobId),
+            ),
+          ),
         ),
-      { name: `mapTpopBeobBoundsOfHighlightedIds` }
-    )
+      { name: 'mapTpopBeobBoundsOfHighlightedIds' },
+    ),
   })
 }

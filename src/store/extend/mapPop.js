@@ -22,23 +22,23 @@ export default (store: Object): void => {
         }
         return []
       },
-      { name: `highlightedIds` }
+      { name: 'highlightedIds' },
     ),
-    pops: computed(() => getPopsForMap(store), { name: `mapPops` }),
+    pops: computed(() => getPopsForMap(store), { name: 'mapPops' }),
     bounds: computed(() => getPopBounds(store.map.pop.pops), {
-      name: `mapPopBounds`
+      name: 'mapPopBounds',
     }),
     boundsOfHighlightedIds: computed(
       () =>
         getPopBounds(
           store.map.pop.pops.filter(p =>
-            store.map.pop.highlightedIds.includes(p.PopId)
-          )
+            store.map.pop.highlightedIds.includes(p.PopId),
+          ),
         ),
-      { name: `mapPopBoundsOfHighlightedIds` }
+      { name: 'mapPopBoundsOfHighlightedIds' },
     ),
     // alternative is using names
     labelUsingNr: true,
-    markers: computed(() => getPopMarkers(store), { name: `mapPopMarkers` })
+    markers: computed(() => getPopMarkers(store), { name: 'mapPopMarkers' }),
   })
 }
