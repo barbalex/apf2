@@ -29,28 +29,32 @@ const enhance = compose(
   inject(`store`),
   withHandlers({
     onNewRequestWirtspflanze: props => val =>
-      props.store.updatePropertyInDb(props.tree, `TPopMassnAnsiedWirtspfl`, val),
+      props.store.updatePropertyInDb(
+        props.tree,
+        `TPopMassnAnsiedWirtspfl`,
+        val,
+      ),
     onBlurWirtspflanze: props => e =>
-      props.store.updatePropertyInDb(props.tree, `TPopMassnAnsiedWirtspfl`, e.target.value)
-    ,
+      props.store.updatePropertyInDb(
+        props.tree,
+        `TPopMassnAnsiedWirtspfl`,
+        e.target.value,
+      ),
   }),
-  observer
+  observer,
 )
 
-const Tpopmassn = (
-  {
-    store,
-    tree,
-    onNewRequestWirtspflanze,
-    onBlurWirtspflanze,
-  }:
-  {
-    store: Object,
-    tree: Object,
-    onNewRequestWirtspflanze: () => void,
-    onBlurWirtspflanze: () => void,
-  }
-) => {
+const Tpopmassn = ({
+  store,
+  tree,
+  onNewRequestWirtspflanze,
+  onBlurWirtspflanze,
+}: {
+  store: Object,
+  tree: Object,
+  onNewRequestWirtspflanze: () => void,
+  onBlurWirtspflanze: () => void,
+}) => {
   const { activeDataset } = tree
 
   return (
@@ -203,7 +207,6 @@ const Tpopmassn = (
           <AutoComplete
             floatingLabelText="Wirtspflanze"
             fullWidth
-            openOnFocus
             value={activeDataset.row.TPopMassnAnsiedWirtspfl || ``}
             searchText={activeDataset.row.TPopMassnAnsiedWirtspfl || ``}
             errorText={activeDataset.valid.TPopMassnAnsiedWirtspfl}

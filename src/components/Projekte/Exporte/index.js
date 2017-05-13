@@ -87,14 +87,14 @@ const enhance = compose(
   withState(
     'artFuerEierlegendeWollmilchsau',
     'changeArtFuerEierlegendeWollmilchsau',
-    ''
+    '',
   ),
   withHandlers({
     downloadFromView: props => ({ view, fileName, apArtId }) => {
       const {
         store,
         changeArtFuerEierlegendeWollmilchsau,
-        artFuerEierlegendeWollmilchsau
+        artFuerEierlegendeWollmilchsau,
       } = props
       const url = `${apiBaseUrl}/exportView/json/view=${view}${apArtId ? `/${apArtId}` : ``}`
 
@@ -106,7 +106,7 @@ const enhance = compose(
           const {
             // TODO: add this
             applyNodeLabelFilterToExport, // eslint-disable-line no-unused-vars
-            applyActiveNodeFilterToExport // eslint-disable-line no-unused-vars
+            applyActiveNodeFilterToExport, // eslint-disable-line no-unused-vars
           } = store.tree
           let jsonData = clone(data)
           // now we could manipulate the data, for instance apply mapFilter
@@ -118,7 +118,7 @@ const enhance = compose(
             if (keys.includes('id')) {
               const beobIds = beobIdsFromServerInsideFeatureCollection(
                 store,
-                data
+                data,
               )
               jsonData = jsonData.filter(d => beobIds.includes(d.id))
             } else if (keys.includes('TPopId')) {
@@ -133,7 +133,7 @@ const enhance = compose(
           }
           if (jsonData.length === 0) {
             throw new Error(
-              'Es gibt offenbar keine Daten, welche exportiert werden können'
+              'Es gibt offenbar keine Daten, welche exportiert werden können',
             )
           }
           try {
@@ -153,7 +153,7 @@ const enhance = compose(
           }
           store.listError(error)
         })
-    }
+    },
   }),
   observer,
   withProps(props => {
@@ -164,7 +164,7 @@ const enhance = compose(
     artList = filter(artList, r => apIds.includes(r.TaxonomieId))
     artList = sortBy(artList, 'Artname')
     return { artList }
-  })
+  }),
 )
 
 const Exporte = ({
@@ -172,13 +172,13 @@ const Exporte = ({
   artFuerEierlegendeWollmilchsau,
   changeArtFuerEierlegendeWollmilchsau,
   artList,
-  downloadFromView
+  downloadFromView,
 }: {
   store: Object,
   artFuerEierlegendeWollmilchsau: string,
   changeArtFuerEierlegendeWollmilchsau: () => void,
   artList: Array<Object>,
-  downloadFromView: () => void
+  downloadFromView: () => void,
 }) => {
   if (store.table.adb_eigenschaften.size === 0) {
     store.fetchTable('beob', 'adb_eigenschaften')
@@ -200,7 +200,7 @@ const Exporte = ({
               onClick={() =>
                 downloadFromView({
                   view: 'v_ap',
-                  fileName: 'Arten'
+                  fileName: 'Arten',
                 })}
             />
             <DownloadCardButton
@@ -208,7 +208,7 @@ const Exporte = ({
               onClick={() =>
                 downloadFromView({
                   view: 'v_ap_ohnepop',
-                  fileName: 'ArtenOhnePopulationen'
+                  fileName: 'ArtenOhnePopulationen',
                 })}
             />
             <DownloadCardButton
@@ -216,7 +216,7 @@ const Exporte = ({
               onClick={() =>
                 downloadFromView({
                   view: 'v_ap_anzmassn',
-                  fileName: 'ArtenAnzahlMassnahmen'
+                  fileName: 'ArtenAnzahlMassnahmen',
                 })}
             />
             <DownloadCardButton
@@ -224,7 +224,7 @@ const Exporte = ({
               onClick={() =>
                 downloadFromView({
                   view: 'v_ap_anzkontr',
-                  fileName: 'ArtenAnzahlKontrollen'
+                  fileName: 'ArtenAnzahlKontrollen',
                 })}
             />
             <DownloadCardButton
@@ -232,7 +232,7 @@ const Exporte = ({
               onClick={() =>
                 downloadFromView({
                   view: 'v_apber',
-                  fileName: 'Jahresberichte'
+                  fileName: 'Jahresberichte',
                 })}
             />
             <DownloadCardButton
@@ -240,7 +240,7 @@ const Exporte = ({
               onClick={() =>
                 downloadFromView({
                   view: 'v_ap_apberundmassn',
-                  fileName: 'ApJahresberichteUndMassnahmen'
+                  fileName: 'ApJahresberichteUndMassnahmen',
                 })}
             />
             <DownloadCardButton
@@ -248,7 +248,7 @@ const Exporte = ({
               onClick={() =>
                 downloadFromView({
                   view: 'v_ziel',
-                  fileName: 'ApZiele'
+                  fileName: 'ApZiele',
                 })}
             />
             <DownloadCardButton
@@ -256,7 +256,7 @@ const Exporte = ({
               onClick={() =>
                 downloadFromView({
                   view: 'v_zielber',
-                  fileName: 'Zielberichte'
+                  fileName: 'Zielberichte',
                 })}
             />
             <DownloadCardButton
@@ -264,7 +264,7 @@ const Exporte = ({
               onClick={() =>
                 downloadFromView({
                   view: 'v_ber',
-                  fileName: 'Berichte'
+                  fileName: 'Berichte',
                 })}
             />
             <DownloadCardButton
@@ -272,7 +272,7 @@ const Exporte = ({
               onClick={() =>
                 downloadFromView({
                   view: 'v_erfkrit',
-                  fileName: 'Erfolgskriterien'
+                  fileName: 'Erfolgskriterien',
                 })}
             />
             <DownloadCardButton
@@ -280,7 +280,7 @@ const Exporte = ({
               onClick={() =>
                 downloadFromView({
                   view: 'v_idealbiotop',
-                  fileName: 'Idealbiotope'
+                  fileName: 'Idealbiotope',
                 })}
             />
             <DownloadCardButton
@@ -288,7 +288,7 @@ const Exporte = ({
               onClick={() =>
                 downloadFromView({
                   view: 'v_assozart',
-                  fileName: 'AssoziierteArten'
+                  fileName: 'AssoziierteArten',
                 })}
             />
           </DownloadCardText>
@@ -301,14 +301,14 @@ const Exporte = ({
               onClick={() =>
                 downloadFromView({
                   view: 'v_pop',
-                  fileName: 'Populationen'
+                  fileName: 'Populationen',
                 })}
             />
             <DownloadCardButton
               onClick={() =>
                 downloadFromView({
                   view: 'v_pop_kml',
-                  fileName: 'Populationen'
+                  fileName: 'Populationen',
                 })}
             >
               <div>Populationen für Google Earth</div>
@@ -318,7 +318,7 @@ const Exporte = ({
               onClick={() =>
                 downloadFromView({
                   view: 'v_pop_kmlnamen',
-                  fileName: 'PopulationenNachNamen'
+                  fileName: 'PopulationenNachNamen',
                 })}
             >
               <div>Populationen für Google Earth</div>
@@ -329,7 +329,7 @@ const Exporte = ({
               onClick={() =>
                 downloadFromView({
                   view: 'v_pop_ohnetpop',
-                  fileName: 'PopulationenOhneTeilpopulationen'
+                  fileName: 'PopulationenOhneTeilpopulationen',
                 })}
             />
             <DownloadCardButton
@@ -337,7 +337,7 @@ const Exporte = ({
               onClick={() =>
                 downloadFromView({
                   view: 'v_pop_vonapohnestatus',
-                  fileName: 'PopulationenVonApArtenOhneStatus'
+                  fileName: 'PopulationenVonApArtenOhneStatus',
                 })}
             />
             <DownloadCardButton
@@ -345,7 +345,7 @@ const Exporte = ({
               onClick={() =>
                 downloadFromView({
                   view: 'v_pop_ohnekoord',
-                  fileName: 'PopulationenOhneKoordinaten'
+                  fileName: 'PopulationenOhneKoordinaten',
                 })}
             />
             <DownloadCardButton
@@ -353,7 +353,7 @@ const Exporte = ({
               onClick={() =>
                 downloadFromView({
                   view: 'v_popmassnber_anzmassn',
-                  fileName: 'PopulationenAnzMassnProMassnber'
+                  fileName: 'PopulationenAnzMassnProMassnber',
                 })}
             />
             <DownloadCardButton
@@ -361,7 +361,7 @@ const Exporte = ({
               onClick={() =>
                 downloadFromView({
                   view: 'v_pop_anzmassn',
-                  fileName: 'PopulationenAnzahlMassnahmen'
+                  fileName: 'PopulationenAnzahlMassnahmen',
                 })}
             />
             <DownloadCardButton
@@ -369,7 +369,7 @@ const Exporte = ({
               onClick={() =>
                 downloadFromView({
                   view: 'v_pop_anzkontr',
-                  fileName: 'PopulationenAnzahlKontrollen'
+                  fileName: 'PopulationenAnzahlKontrollen',
                 })}
             />
             <DownloadCardButton
@@ -377,7 +377,7 @@ const Exporte = ({
               onClick={() =>
                 downloadFromView({
                   view: 'v_pop_popberundmassnber',
-                  fileName: 'PopulationenPopUndMassnBerichte'
+                  fileName: 'PopulationenPopUndMassnBerichte',
                 })}
             />
             <DownloadCardButton
@@ -385,7 +385,7 @@ const Exporte = ({
               onClick={() =>
                 downloadFromView({
                   view: 'v_pop_mit_letzter_popber',
-                  fileName: 'PopulationenMitLetzemPopBericht'
+                  fileName: 'PopulationenMitLetzemPopBericht',
                 })}
             />
             <DownloadCardButton
@@ -393,7 +393,7 @@ const Exporte = ({
               onClick={() =>
                 downloadFromView({
                   view: 'v_pop_mit_letzter_popmassnber',
-                  fileName: 'PopulationenMitLetztemMassnBericht'
+                  fileName: 'PopulationenMitLetztemMassnBericht',
                 })}
             />
           </DownloadCardText>
@@ -410,14 +410,14 @@ const Exporte = ({
               onClick={() =>
                 downloadFromView({
                   view: 'v_tpop',
-                  fileName: 'Teilpopulationen'
+                  fileName: 'Teilpopulationen',
                 })}
             />
             <DownloadCardButton
               onClick={() =>
                 downloadFromView({
                   view: 'v_tpop_kml',
-                  fileName: 'Teilpopulationen'
+                  fileName: 'Teilpopulationen',
                 })}
             >
               <div>Teilpopulationen für Google Earth</div>
@@ -427,7 +427,7 @@ const Exporte = ({
               onClick={() =>
                 downloadFromView({
                   view: 'v_tpop_kmlnamen',
-                  fileName: 'TeilpopulationenNachNamen'
+                  fileName: 'TeilpopulationenNachNamen',
                 })}
             >
               <div>Teilpopulationen für Google Earth</div>
@@ -437,7 +437,7 @@ const Exporte = ({
               onClick={() =>
                 downloadFromView({
                   view: 'v_tpop_ohnebekanntseit',
-                  fileName: 'TeilpopulationenVonApArtenOhneBekanntSeit'
+                  fileName: 'TeilpopulationenVonApArtenOhneBekanntSeit',
                 })}
             >
               <div>Teilpopulationen von AP-Arten</div>
@@ -447,7 +447,7 @@ const Exporte = ({
               onClick={() =>
                 downloadFromView({
                   view: 'v_tpop_ohneapberichtrelevant',
-                  fileName: 'TeilpopulationenOhneApBerichtRelevant'
+                  fileName: 'TeilpopulationenOhneApBerichtRelevant',
                 })}
             >
               <div>Teilpopulationen ohne Eintrag</div>
@@ -457,7 +457,7 @@ const Exporte = ({
               onClick={() =>
                 downloadFromView({
                   view: 'v_tpop_popnrtpopnrmehrdeutig',
-                  fileName: 'TeilpopulationenPopnrTpopnrMehrdeutig'
+                  fileName: 'TeilpopulationenPopnrTpopnrMehrdeutig',
                 })}
             >
               <div>Teilpopulationen mit mehrdeutiger</div>
@@ -468,14 +468,14 @@ const Exporte = ({
               onClick={() =>
                 downloadFromView({
                   view: 'v_tpop_anzmassn',
-                  fileName: 'TeilpopulationenAnzahlMassnahmen'
+                  fileName: 'TeilpopulationenAnzahlMassnahmen',
                 })}
             />
             <DownloadCardButton
               onClick={() =>
                 downloadFromView({
                   view: 'v_tpop_anzkontrinklletzterundletztertpopber',
-                  fileName: 'TeilpopulationenAnzKontrInklusiveLetzteKontrUndLetztenTPopBericht'
+                  fileName: 'TeilpopulationenAnzKontrInklusiveLetzteKontrUndLetztenTPopBericht',
                 })}
               disabled={isRemoteHost}
               title={
@@ -489,7 +489,7 @@ const Exporte = ({
                 style={{
                   paddingLeft: '18px',
                   marginTop: '5px',
-                  marginBottom: '10px'
+                  marginBottom: '10px',
                 }}
               >
                 <li>Anzahl Kontrollen</li>
@@ -503,7 +503,6 @@ const Exporte = ({
               <StyledAutoComplete
                 hintText={artList.length === 0 ? 'lade Daten...' : 'Art wählen'}
                 floatingLabelText={'"Eier legende Wollmilchsau" für eine Art'}
-                openOnFocus
                 searchText={artFuerEierlegendeWollmilchsau}
                 errorText={
                   artFuerEierlegendeWollmilchsau ? 'hole Daten...' : ''
@@ -512,19 +511,19 @@ const Exporte = ({
                 dataSource={artList}
                 dataSourceConfig={{
                   value: 'TaxonomieId',
-                  text: 'Artname'
+                  text: 'Artname',
                 }}
                 filter={AutoComplete.caseInsensitiveFilter}
                 maxSearchResults={20}
                 menuStyle={{
-                  fontSize: '6px !important'
+                  fontSize: '6px !important',
                 }}
                 onNewRequest={val => {
                   changeArtFuerEierlegendeWollmilchsau(val.Artname)
                   downloadFromView({
                     view: 'v_tpop_anzkontrinklletzterundletztertpopber',
                     fileName: 'anzkontrinklletzterundletztertpopber_2016',
-                    apArtId: val.TaxonomieId
+                    apArtId: val.TaxonomieId,
                   })
                 }}
               />
@@ -534,7 +533,7 @@ const Exporte = ({
               onClick={() =>
                 downloadFromView({
                   view: 'v_tpop_popberundmassnber',
-                  fileName: 'TeilpopulationenTPopUndMassnBerichte'
+                  fileName: 'TeilpopulationenTPopUndMassnBerichte',
                 })}
             />
           </DownloadCardText>
@@ -547,7 +546,7 @@ const Exporte = ({
               onClick={() =>
                 downloadFromView({
                   view: 'v_tpopkontr',
-                  fileName: 'Kontrollen'
+                  fileName: 'Kontrollen',
                 })}
             />
             <DownloadCardButton
@@ -555,7 +554,7 @@ const Exporte = ({
               onClick={() =>
                 downloadFromView({
                   view: 'v_kontrzaehl_anzproeinheit',
-                  fileName: 'KontrollenAnzahlProZaehleinheit'
+                  fileName: 'KontrollenAnzahlProZaehleinheit',
                 })}
             />
           </DownloadCardText>
@@ -568,7 +567,7 @@ const Exporte = ({
               onClick={() =>
                 downloadFromView({
                   view: 'v_massn',
-                  fileName: 'Massnahmen'
+                  fileName: 'Massnahmen',
                 })}
             />
           </DownloadCardText>
@@ -584,7 +583,7 @@ const Exporte = ({
               onClick={() =>
                 downloadFromView({
                   view: 'v_beob',
-                  fileName: 'Beobachtungen'
+                  fileName: 'Beobachtungen',
                 })}
             >
               <div>Beobachtungen</div>
@@ -595,7 +594,7 @@ const Exporte = ({
               onClick={() =>
                 downloadFromView({
                   view: 'v_beob_infospezies',
-                  fileName: 'BeobachtungenInfospezies'
+                  fileName: 'BeobachtungenInfospezies',
                 })}
             >
               <div>Beobachtungen</div>
@@ -613,7 +612,7 @@ const Exporte = ({
               onClick={() =>
                 downloadFromView({
                   view: 'v_datenstruktur',
-                  fileName: 'Datenstruktur'
+                  fileName: 'Datenstruktur',
                 })}
             />
             <DownloadCardButton

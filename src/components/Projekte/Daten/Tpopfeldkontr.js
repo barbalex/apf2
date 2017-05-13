@@ -51,13 +51,16 @@ const FormContainer = styled.div`
 const TabChildDiv = styled.div`
   height: 100%;
 `
-const tpopkontrTypWerte = [{
-  value: `Ausgangszustand`,
-  label: `Ausgangszustand`,
-}, {
-  value: `Zwischenbeurteilung`,
-  label: `Zwischenbeurteilung`,
-}]
+const tpopkontrTypWerte = [
+  {
+    value: `Ausgangszustand`,
+    label: `Ausgangszustand`,
+  },
+  {
+    value: `Zwischenbeurteilung`,
+    label: `Zwischenbeurteilung`,
+  },
+]
 const styles = {
   root: {
     flex: `1 1 100%`,
@@ -77,21 +80,18 @@ const enhance = compose(
     onChangeTab: props => value =>
       props.store.setUrlQueryValue(`feldkontrTab`, value),
   }),
-  observer
+  observer,
 )
 
-const Tpopfeldkontr = (
-  {
-    store,
-    tree,
-    onChangeTab,
-  }:
-  {
-    store: Object,
-    tree: Object,
-    onChangeTab: () => void,
-  }
-) => {
+const Tpopfeldkontr = ({
+  store,
+  tree,
+  onChangeTab,
+}: {
+  store: Object,
+  tree: Object,
+  onChangeTab: () => void,
+}) => {
   const { activeDataset } = tree
 
   return (
@@ -105,10 +105,7 @@ const Tpopfeldkontr = (
           value={store.urlQuery.feldkontrTab || `entwicklung`}
           onChange={onChangeTab}
         >
-          <Tab
-            label="Entwicklung"
-            value="entwicklung"
-          >
+          <Tab label="Entwicklung" value="entwicklung">
             <TabChildDiv>
               <Scrollbars>
                 <FormContainer>
@@ -251,10 +248,7 @@ const Tpopfeldkontr = (
               </Scrollbars>
             </TabChildDiv>
           </Tab>
-          <Tab
-            label="Biotop"
-            value="biotop"
-          >
+          <Tab label="Biotop" value="biotop">
             <TabChildDiv>
               <Scrollbars>
                 <FormContainer>
@@ -271,7 +265,6 @@ const Tpopfeldkontr = (
                   <Section>Vegetation</Section>
                   <AutoComplete
                     floatingLabelText="Lebensraum nach Delarze"
-                    openOnFocus
                     fullWidth
                     searchText={activeDataset.row.TPopKontrLeb || ``}
                     errorText={activeDataset.valid.TPopKontrLeb}
@@ -279,15 +272,16 @@ const Tpopfeldkontr = (
                     filter={AutoComplete.caseInsensitiveFilter}
                     maxSearchResults={20}
                     onNewRequest={val =>
-                      store.updatePropertyInDb(tree, `TPopKontrLeb`, val)
-                    }
+                      store.updatePropertyInDb(tree, `TPopKontrLeb`, val)}
                     onBlur={e =>
-                      store.updatePropertyInDb(tree, `TPopKontrLeb`, e.target.value)
-                    }
+                      store.updatePropertyInDb(
+                        tree,
+                        `TPopKontrLeb`,
+                        e.target.value,
+                      )}
                   />
                   <AutoComplete
                     floatingLabelText="Umgebung nach Delarze"
-                    openOnFocus
                     fullWidth
                     searchText={activeDataset.row.TPopKontrLebUmg || ``}
                     errorText={activeDataset.valid.TPopKontrLebUmg}
@@ -295,11 +289,13 @@ const Tpopfeldkontr = (
                     filter={AutoComplete.caseInsensitiveFilter}
                     maxSearchResults={20}
                     onNewRequest={val =>
-                      store.updatePropertyInDb(tree, `TPopKontrLebUmg`, val)
-                    }
+                      store.updatePropertyInDb(tree, `TPopKontrLebUmg`, val)}
                     onBlur={e =>
-                      store.updatePropertyInDb(tree, `TPopKontrLebUmg`, e.target.value)
-                    }
+                      store.updatePropertyInDb(
+                        tree,
+                        `TPopKontrLebUmg`,
+                        e.target.value,
+                      )}
                   />
                   <TextField
                     tree={tree}
@@ -387,7 +383,9 @@ const Tpopfeldkontr = (
                     label="Durchlässigkeit"
                     fieldName="TPopKontrBodenDurchlaessigkeit"
                     value={activeDataset.row.TPopKontrBodenDurchlaessigkeit}
-                    errorText={activeDataset.valid.TPopKontrBodenDurchlaessigkeit}
+                    errorText={
+                      activeDataset.valid.TPopKontrBodenDurchlaessigkeit
+                    }
                     type="text"
                     updateProperty={store.updateProperty}
                     updatePropertyInDb={store.updatePropertyInDb}
@@ -407,7 +405,9 @@ const Tpopfeldkontr = (
                     label="Nährstoffgehalt"
                     fieldName="TPopKontrBodenNaehrstoffgehalt"
                     value={activeDataset.row.TPopKontrBodenNaehrstoffgehalt}
-                    errorText={activeDataset.valid.TPopKontrBodenNaehrstoffgehalt}
+                    errorText={
+                      activeDataset.valid.TPopKontrBodenNaehrstoffgehalt
+                    }
                     type="text"
                     updateProperty={store.updateProperty}
                     updatePropertyInDb={store.updatePropertyInDb}
@@ -449,7 +449,9 @@ const Tpopfeldkontr = (
                     tree={tree}
                     fieldName="TPopKontrIdealBiotopUebereinst"
                     value={activeDataset.row.TPopKontrIdealBiotopUebereinst}
-                    errorText={activeDataset.valid.TPopKontrIdealBiotopUebereinst}
+                    errorText={
+                      activeDataset.valid.TPopKontrIdealBiotopUebereinst
+                    }
                     dataSource={store.dropdownList.idbiotopuebereinstWerte}
                     updatePropertyInDb={store.updatePropertyInDb}
                   />

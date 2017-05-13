@@ -37,21 +37,9 @@ const PopoverContentRow = styled.div`
   border-radius: 4px;
 `
 
-const enhance = compose(
-  inject(`store`),
-  observer
-)
+const enhance = compose(inject(`store`), observer)
 
-const Tpop = (
-  {
-    store,
-    tree,
-  }:
-  {
-    store: Object,
-    tree: Object,
-  }
-) => {
+const Tpop = ({ store, tree }: { store: Object, tree: Object }) => {
   const { activeDataset } = tree
   const apArtId = store.table.pop.get(activeDataset.row.PopId).ApArtId
   const apJahr = store.table.ap.get(apArtId).ApJahr
@@ -148,20 +136,19 @@ const Tpop = (
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <AutoComplete
-            hintText={store.dropdownList.gemeinden.length === 0 ? `lade Daten...` : ``}
+            hintText={
+              store.dropdownList.gemeinden.length === 0 ? `lade Daten...` : ``
+            }
             fullWidth
             floatingLabelText="Gemeinde"
-            openOnFocus
             dataSource={store.dropdownList.gemeinden}
             searchText={activeDataset.row.TPopGemeinde || ``}
             filter={AutoComplete.caseInsensitiveFilter}
             maxSearchResults={20}
             onNewRequest={val =>
-              store.updatePropertyInDb(tree, `TPopGemeinde`, val)
-            }
+              store.updatePropertyInDb(tree, `TPopGemeinde`, val)}
             onBlur={e =>
-              store.updatePropertyInDb(tree, `TPopGemeinde`, e.target.value)
-            }
+              store.updatePropertyInDb(tree, `TPopGemeinde`, e.target.value)}
             value={activeDataset.row.TPopGemeinde || ``}
           />
           <TextField
