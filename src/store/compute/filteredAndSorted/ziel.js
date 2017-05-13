@@ -12,17 +12,17 @@ export default (store: Object, tree: Object): Object => {
   // map through all and create array of nodes
   ziele.forEach(el => {
     const zielWert = zieltypWerte.find(e => e.ZieltypId === el.ZielTyp)
-    const zieltypTxt = zielWert ? zielWert.ZieltypTxt : `kein Zieltyp`
-    el.label = `${el.ZielBezeichnung || `(kein Ziel)`} (${zieltypTxt})`
+    const zieltypTxt = zielWert ? zielWert.ZieltypTxt : 'kein Zieltyp'
+    el.label = `${el.ZielBezeichnung || '(kein Ziel)'} (${zieltypTxt})`
   })
 
   // filter by nodeLabelFilter
-  const filterString = nodeLabelFilter.get(`ziel`)
+  const filterString = nodeLabelFilter.get('ziel')
   if (filterString) {
     ziele = ziele.filter(p =>
-      p.label.toLowerCase().includes(filterString.toLowerCase())
+      p.label.toLowerCase().includes(filterString.toLowerCase()),
     )
   }
   // sort by label and return
-  return sortBy(ziele, `label`)
+  return sortBy(ziele, 'label')
 }

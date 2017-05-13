@@ -53,11 +53,11 @@ tables.forEach(t => {
   }
 })
 // add fields
-tablesObject.fields = `[table_schema+table_name+column_name]`
+tablesObject.fields = '[table_schema+table_name+column_name]'
 // create table to save user name in
 // this helps in that user can open new tab and remain logged in!
-tablesObject.currentUser = `name`
-const db = new Dexie(`apflora`)
+tablesObject.currentUser = 'name'
+const db = new Dexie('apflora')
 db.version(1).stores(tablesObject)
 
 app.extend({
@@ -87,7 +87,7 @@ store.fetchFieldsFromIdb()
 
 // turned off because of errors in production
 // const socket = window.io(apiBaseUrl)
-// socket.on(`tabelle_update`, payload => updateFromSocket(store, payload))
+// socket.on('tabelle_update', payload => updateFromSocket(store, payload))
 
 const AppContainer = styled.div`
   display: flex;
@@ -117,5 +117,5 @@ ReactDOM.render(
       </AppContainer>
     </MuiThemeProvider>
   </Provider>,
-  document.getElementById(`root`),
+  document.getElementById('root'),
 )

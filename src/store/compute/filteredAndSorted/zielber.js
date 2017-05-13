@@ -9,17 +9,17 @@ export default (store: Object, tree: Object): Object => {
 
   // map through all and create array of nodes
   zielbere.forEach(el => {
-    el.label = `${el.ZielBerJahr || `(kein Jahr)`}: ${el.ZielBerErreichung || `(keine Entwicklung)`}`
+    el.label = `${el.ZielBerJahr || '(kein Jahr)'}: ${el.ZielBerErreichung || '(keine Entwicklung)'}`
   })
 
   // filter by nodeLabelFilter
-  const filterString = nodeLabelFilter.get(`zielber`)
+  const filterString = nodeLabelFilter.get('zielber')
   if (filterString) {
     zielbere = zielbere.filter(p =>
-      p.label.toLowerCase().includes(filterString.toLowerCase())
+      p.label.toLowerCase().includes(filterString.toLowerCase()),
     )
   }
 
   // sort by label and return
-  return sortBy(zielbere, `label`)
+  return sortBy(zielbere, 'label')
 }
