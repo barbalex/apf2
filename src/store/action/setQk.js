@@ -7,10 +7,10 @@ import buildQkMessages from './buildQkMessages'
 
 const enhance = compose(
   renameProps({
-    berichtjahr: `berichtjahrPassed`,
-    messages: `messagesPassed`,
-    filter: `filterPassed`
-  })
+    berichtjahr: 'berichtjahrPassed',
+    messages: 'messagesPassed',
+    filter: 'filterPassed',
+  }),
 )
 
 const setQk = ({
@@ -18,13 +18,13 @@ const setQk = ({
   tree,
   berichtjahrPassed,
   messagesPassed,
-  filterPassed
+  filterPassed,
 }: {
   store: Object,
   tree: Object,
   berichtjahrPassed: number,
   messagesPassed: Array<Object>,
-  filterPassed: string
+  filterPassed: string,
 }): void => {
   const apArtId = tree.activeNodes.ap
   let berichtjahr = berichtjahrPassed
@@ -34,22 +34,22 @@ const setQk = ({
   if (!berichtjahr && berichtjahr !== 0) {
     const existingBerichtjahr = existingQk && existingQk.berichtjahr
       ? existingQk.berichtjahr
-      : ``
+      : ''
     if (existingBerichtjahr) {
       berichtjahr = existingBerichtjahr
     } else {
       const refDate = new Date()
       refDate.setMonth(refDate.getMonth() - 6)
-      berichtjahr = parseInt(dateFns.format(refDate, `YYYY`), 10)
+      berichtjahr = parseInt(dateFns.format(refDate, 'YYYY'), 10)
     }
   }
-  if (!filter && filter !== ``) {
-    filter = existingQk && existingQk.filter ? existingQk.filter : ``
+  if (!filter && filter !== '') {
+    filter = existingQk && existingQk.filter ? existingQk.filter : ''
   }
   const value = buildQkMessages({
     berichtjahr,
     messages,
-    filter
+    filter,
   })
   store.qk.set(apArtId, value)
 }

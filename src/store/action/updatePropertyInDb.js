@@ -66,11 +66,11 @@ export default (
   }
 
   // update if no validation messages exist
-  const combinedValidationMessages = objectValues(valid).join(``)
+  const combinedValidationMessages = objectValues(valid).join('')
   if (combinedValidationMessages.length === 0) {
     const { user } = store.user.name
     const oldValue = row[key]
-    const artWasChanged = table === `ap` && key === `ApArtId`
+    const artWasChanged = table === 'ap' && key === 'ApArtId'
     if (artWasChanged) {
       // if this was ap, then the map key has changed!
       // need to delete map value and create new one
@@ -85,8 +85,8 @@ export default (
       newActiveNodeArray.pop()
       newActiveNodeArray.push(value)
       tree.setActiveNodeArray(newActiveNodeArray)
-      deleteDatasetInIdb(store, `ap`, oldValue)
-      insertDatasetInIdb(store, `ap`, rowCloned)
+      deleteDatasetInIdb(store, 'ap', oldValue)
+      insertDatasetInIdb(store, 'ap', rowCloned)
     } else {
       // need to set row[key] for select fields, checkboxes, radios...
       row[key] = value
@@ -107,16 +107,16 @@ export default (
           tree.setActiveNodeArray(newActiveNodeArray)
         }
         // if beobNichtBeurteilt is set to beobNichtZuordnen, url needs to change
-        if (table === `beobzuordnung` && key === `BeobNichtZuordnen`) {
+        if (table === 'beobzuordnung' && key === 'BeobNichtZuordnen') {
           newActiveNodeArray[4] = value === 1
-            ? `nicht-zuzuordnende-Beobachtungen`
-            : `nicht-beurteilte-Beobachtungen`
+            ? 'nicht-zuzuordnende-Beobachtungen'
+            : 'nicht-beurteilte-Beobachtungen'
           newActiveNodeArray[5] = tree.activeDataset.row.BeobId
           tree.setActiveNodeArray(newActiveNodeArray.slice(0, 6))
         }
         // if for a beobZugeordnet TPopId is set, url needs to change
         // namely: PopId and TPopId
-        if (table === `beobzuordnung` && key === `TPopId` && value) {
+        if (table === 'beobzuordnung' && key === 'TPopId' && value) {
           const tpop = store.table.tpop.get(value)
           newActiveNodeArray[5] = tpop.PopId
           newActiveNodeArray[7] = value
