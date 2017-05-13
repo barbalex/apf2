@@ -8,16 +8,16 @@ export default (store: Object, tree: Object): Object => {
 
   // add label
   ber.forEach(el => {
-    el.label = `${el.BerJahr || `(kein Jahr)`}: ${el.BerTitel || `(kein Titel)`}`
+    el.label = `${el.BerJahr || '(kein Jahr)'}: ${el.BerTitel || '(kein Titel)'}`
   })
   // filter by nodeLabelFilter
-  const filterString = nodeLabelFilter.get(`ber`)
+  const filterString = nodeLabelFilter.get('ber')
   if (filterString) {
     ber = ber.filter(p => {
       return p.label.toLowerCase().includes(filterString)
     })
   }
   // sort
-  ber = sortBy(ber, `label`)
+  ber = sortBy(ber, 'label')
   return ber
 }

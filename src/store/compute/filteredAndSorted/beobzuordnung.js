@@ -20,17 +20,17 @@ export default (store: Object, tree: Object): Object => {
 
   beobNichtBeurteilt.forEach(el => {
     const quelle = table.beob_quelle.get(el.QuelleId)
-    const quelleName = quelle && quelle.name ? quelle.name : ``
+    const quelleName = quelle && quelle.name ? quelle.name : ''
     const datum = el.Datum ? format(el.Datum, 'YYYY.MM.DD') : '(kein Datum)'
-    el.label = `${datum}: ${el.Autor || `(kein Autor)`} (${quelleName})`
+    el.label = `${datum}: ${el.Autor || '(kein Autor)'} (${quelleName})`
   })
   // filter by nodeLabelFilter
-  const filterString = nodeLabelFilter.get(`beobzuordnung`)
+  const filterString = nodeLabelFilter.get('beobzuordnung')
   if (filterString) {
     beobNichtBeurteilt = beobNichtBeurteilt.filter(p =>
       p.label.toLowerCase().includes(filterString.toLowerCase()),
     )
   }
   // sort by label and return
-  return sortBy(beobNichtBeurteilt, `label`).reverse()
+  return sortBy(beobNichtBeurteilt, 'label').reverse()
 }

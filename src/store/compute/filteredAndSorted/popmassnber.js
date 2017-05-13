@@ -7,25 +7,25 @@ export default (store: Object, tree: Object): Object => {
   let popmassnber = Array.from(table.popmassnber.values())
   // get erfkritWerte
   const tpopmassnErfbeurtWerte = Array.from(
-    table.tpopmassn_erfbeurt_werte.values()
+    table.tpopmassn_erfbeurt_werte.values(),
   )
   // map through all projekt and create array of nodes
   popmassnber.forEach(el => {
     const tpopmassnErfbeurtWert = tpopmassnErfbeurtWerte.find(
-      e => e.BeurteilId === el.PopMassnBerErfolgsbeurteilung
+      e => e.BeurteilId === el.PopMassnBerErfolgsbeurteilung,
     )
     const beurteilTxt = tpopmassnErfbeurtWert
       ? tpopmassnErfbeurtWert.BeurteilTxt
       : null
-    el.label = `${el.PopMassnBerJahr || `(kein Jahr)`}: ${beurteilTxt || `(nicht beurteilt)`}`
+    el.label = `${el.PopMassnBerJahr || '(kein Jahr)'}: ${beurteilTxt || '(nicht beurteilt)'}`
   })
   // filter by nodeLabelFilter
-  const filterString = nodeLabelFilter.get(`popmassnber`)
+  const filterString = nodeLabelFilter.get('popmassnber')
   if (filterString) {
     popmassnber = popmassnber.filter(p =>
-      p.label.toLowerCase().includes(filterString.toLowerCase())
+      p.label.toLowerCase().includes(filterString.toLowerCase()),
     )
   }
   // sort by label and return
-  return sortBy(popmassnber, `label`)
+  return sortBy(popmassnber, 'label')
 }
