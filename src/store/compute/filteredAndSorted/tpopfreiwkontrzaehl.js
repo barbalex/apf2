@@ -20,10 +20,10 @@ export default (store: Object, tree: Object): Object => {
     const methodeWert = methodeWerte.find(e => e.BeurteilCode === el.Methode)
     const methodeTxt = methodeWert ? methodeWert.BeurteilTxt : null
     const anzahl = el.Anzahl || el.Anzahl === 0 ? el.Anzahl : '(keine Anzahl)'
-    el.label = `${anzahl} ${zaehleinheitTxt || `(keine Einheit)`} (${methodeTxt || `keine Methode`})`
+    el.label = `${anzahl} ${zaehleinheitTxt || '(keine Einheit)'} (${methodeTxt || 'keine Methode'})`
   })
   // filter by nodeLabelFilter
-  const filterString = nodeLabelFilter.get(`tpopkontrzaehl`)
+  const filterString = nodeLabelFilter.get('tpopkontrzaehl')
   if (filterString) {
     tpopkontrzaehl = tpopkontrzaehl.filter(p =>
       p.label.toLowerCase().includes(filterString.toLowerCase()),
@@ -31,6 +31,6 @@ export default (store: Object, tree: Object): Object => {
   }
   // sort by label and return
   // DO NOT sort, shall be sorted as inserted
-  // return sortBy(tpopkontrzaehl, `label`)
+  // return sortBy(tpopkontrzaehl, 'label')
   return tpopkontrzaehl
 }
