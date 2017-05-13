@@ -8,15 +8,15 @@ export default (store: Object, tree: Object): Object => {
   let projekte = Array.from(table.projekt.values())
 
   // filter by nodeLabelFilter
-  const filterString = nodeLabelFilter.get(`projekt`)
+  const filterString = nodeLabelFilter.get('projekt')
   if (filterString) {
     projekte = projekte.filter(p =>
-      p.ProjName.toLowerCase().includes(filterString.toLowerCase())
+      p.ProjName.toLowerCase().includes(filterString.toLowerCase()),
     )
   }
 
   // sort by name
-  projekte = sortBy(projekte, `ProjName`)
+  projekte = sortBy(projekte, 'ProjName')
 
   return projekte
 }
