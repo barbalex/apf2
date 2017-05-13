@@ -22,37 +22,37 @@ export default (store: Object): void => {
         }
         return []
       },
-      { name: `mapBeobNichtBeurteiltHighlightedIds` }
+      { name: 'mapBeobNichtBeurteiltHighlightedIds' },
     ),
     markersClustered: computed(
       () => getBeobNichtBeurteiltMarkersClustered(store),
-      { name: `mapBeobNichtBeurteiltMarkersClustered` }
+      { name: 'mapBeobNichtBeurteiltMarkersClustered' },
     ),
     markers: computed(() => getBeobNichtBeurteiltMarkers(store), {
-      name: `mapBeobNichtBeurteiltMarkers`
+      name: 'mapBeobNichtBeurteiltMarkers',
     }),
     beobs: computed(
       () =>
         getBeobForMap(store).filter(
           b =>
             !b.beobzuordnung ||
-            (!b.beobzuordnung.BeobNichtZuordnen && !b.beobzuordnung.TPopId)
+            (!b.beobzuordnung.BeobNichtZuordnen && !b.beobzuordnung.TPopId),
         ),
-      { name: `mapBeobNichtBeurteiltBeobs` }
+      { name: 'mapBeobNichtBeurteiltBeobs' },
     ),
     bounds: computed(
       () => getBeobNichtBeurteiltBounds(store.map.beobNichtBeurteilt.beobs),
-      { name: `mapBeobNichtBeurteiltBounds` }
+      { name: 'mapBeobNichtBeurteiltBounds' },
     ),
     boundsOfHighlightedIds: computed(
       () =>
         getBeobNichtBeurteiltBounds(
           store.map.beobNichtBeurteilt.beobs.filter(b =>
-            store.map.beobNichtBeurteilt.highlightedIds.includes(b.id)
-          )
+            store.map.beobNichtBeurteilt.highlightedIds.includes(b.id),
+          ),
         ),
-      { name: `mapBeobNichtBeurteiltBoundsOfHighlightedIds` }
+      { name: 'mapBeobNichtBeurteiltBoundsOfHighlightedIds' },
     ),
-    idOfBeobBeingAssigned: 0
+    idOfBeobBeingAssigned: 0,
   })
 }

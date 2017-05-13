@@ -5,24 +5,24 @@ export default (store: Object): void => {
   extendObservable(store.export, {
     applyNodeLabelFilterToExport: false,
     toggleApplyNodeLabelFilterToExport: action(
-      `toggleApplyNodeLabelFilterToExport`,
+      'toggleApplyNodeLabelFilterToExport',
       () =>
-        store.export.applyNodeLabelFilterToExport = !store.export
-          .applyNodeLabelFilterToExport
+        (store.export.applyNodeLabelFilterToExport = !store.export
+          .applyNodeLabelFilterToExport),
     ),
     applyActiveNodeFilterToExport: false,
     toggleApplyActiveNodeFilterToExport: action(
-      `toggleApplyActiveNodeFilterToExport`,
+      'toggleApplyActiveNodeFilterToExport',
       () =>
-        store.export.applyActiveNodeFilterToExport = !store.export
-          .applyActiveNodeFilterToExport
+        (store.export.applyActiveNodeFilterToExport = !store.export
+          .applyActiveNodeFilterToExport),
     ),
     applyMapFilterToExport: false,
     toggleApplyMapFilterToExport: action(
-      `toggleApplyMapFilterToExport`,
+      'toggleApplyMapFilterToExport',
       () =>
-        store.export.applyMapFilterToExport = !store.export
-          .applyMapFilterToExport
-    )
+        (store.export.applyMapFilterToExport = !store.export
+          .applyMapFilterToExport),
+    ),
   })
 }
