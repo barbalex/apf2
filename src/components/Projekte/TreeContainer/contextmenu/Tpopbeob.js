@@ -2,24 +2,13 @@
 import React from 'react'
 import { ContextMenu, MenuItem } from 'react-contextmenu'
 
-const Tpopbeob = (
-  {
-    tree,
-    onClick,
-  }:
-  {
-    tree: Object,
-    onClick: () => void,
-  }
-) =>
-  <ContextMenu
-    id={`${tree.name}tpopbeob`}
-  >
+const Tpopbeob = ({ tree, onClick }: { tree: Object, onClick: () => void }) => (
+  <ContextMenu id={`${tree.name}tpopbeob`}>
     <div className="react-contextmenu-title">Beobachtung</div>
     <MenuItem
       onClick={onClick}
       data={{
-        action: `copyTpopBeobKoordToPop`,
+        action: 'copyTpopBeobKoordToPop',
       }}
     >
       Koordinaten auf die Teilpopulation übertragen
@@ -27,7 +16,7 @@ const Tpopbeob = (
     <MenuItem
       onClick={onClick}
       data={{
-        action: `showCoordOfBeobOnMapsZhCh`,
+        action: 'showCoordOfBeobOnMapsZhCh',
       }}
     >
       Zeige auf maps.zh.ch
@@ -35,11 +24,12 @@ const Tpopbeob = (
     <MenuItem
       onClick={onClick}
       data={{
-        action: `showCoordOfBeobOnMapGeoAdminCh`,
+        action: 'showCoordOfBeobOnMapGeoAdminCh',
       }}
     >
       Zeige auf map.geo.admin.ch
     </MenuItem>
   </ContextMenu>
+)
 
 export default Tpopbeob

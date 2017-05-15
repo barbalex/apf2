@@ -4,25 +4,27 @@ import { ContextMenu, MenuItem } from 'react-contextmenu'
 import { inject, observer } from 'mobx-react'
 import compose from 'recompose/compose'
 
-const enhance = compose(
-  inject(`store`),
-  observer
-)
+const enhance = compose(inject('store'), observer)
 
-const Tpop = (
-  {
-    onClick,
-    store,
-    tree,
-  }:
-  {
-    onClick: () => void,
-    store: Object,
-    tree: Object,
-  }
-) => {
-  const moving = store.moving.table && [`tpopmassn`, `tpopfeldkontr`, `tpopfreiwkontr`].includes(store.moving.table)
-  const copying = store.copying.table && [`tpopmassn`, `tpopfeldkontr`, `tpopfreiwkontr`].includes(store.copying.table)
+const Tpop = ({
+  onClick,
+  store,
+  tree,
+}: {
+  onClick: () => void,
+  store: Object,
+  tree: Object,
+}) => {
+  const moving =
+    store.moving.table &&
+    ['tpopmassn', 'tpopfeldkontr', 'tpopfreiwkontr'].includes(
+      store.moving.table,
+    )
+  const copying =
+    store.copying.table &&
+    ['tpopmassn', 'tpopfeldkontr', 'tpopfreiwkontr'].includes(
+      store.copying.table,
+    )
 
   return (
     <ContextMenu id={`${tree.name}tpop`}>
@@ -30,8 +32,8 @@ const Tpop = (
       <MenuItem
         onClick={onClick}
         data={{
-          action: `insert`,
-          table: `tpop`,
+          action: 'insert',
+          table: 'tpop',
         }}
       >
         erstelle neue
@@ -39,81 +41,73 @@ const Tpop = (
       <MenuItem
         onClick={onClick}
         data={{
-          action: `delete`,
-          actionTable: `tpop`,
-          table: `tpop`,
+          action: 'delete',
+          actionTable: 'tpop',
+          table: 'tpop',
         }}
       >
         lösche
       </MenuItem>
-      {
-        tree.name === `tree` &&
+      {tree.name === 'tree' &&
         <MenuItem
           onClick={onClick}
           data={{
-            action: `localizeOnMap`,
-            actionTable: `tpop`,
-            idTable: `tpop`,
+            action: 'localizeOnMap',
+            actionTable: 'tpop',
+            idTable: 'tpop',
           }}
         >
           verorte auf Karte
-        </MenuItem>
-      }
+        </MenuItem>}
       <MenuItem
         onClick={onClick}
         data={{
-          action: `markForMoving`,
-          table: `tpop`,
+          action: 'markForMoving',
+          table: 'tpop',
         }}
       >
         verschiebe
       </MenuItem>
-      {
-        moving &&
+      {moving &&
         <MenuItem
           onClick={onClick}
           data={{
-            action: `move`,
+            action: 'move',
           }}
         >
           {`verschiebe '${store.moving.label}' hierhin`}
-        </MenuItem>
-      }
+        </MenuItem>}
       <MenuItem
         onClick={onClick}
         data={{
-          action: `markForCopying`,
-          table: `tpop`,
+          action: 'markForCopying',
+          table: 'tpop',
         }}
       >
         kopiere
       </MenuItem>
-      {
-        copying &&
+      {copying &&
         <MenuItem
           onClick={onClick}
           data={{
-            action: `copy`,
+            action: 'copy',
           }}
         >
           {`kopiere '${store.copying.label}' hierhin`}
-        </MenuItem>
-      }
-      {
-        copying &&
+        </MenuItem>}
+      {copying &&
         <MenuItem
           onClick={onClick}
           data={{
-            action: `resetCopying`,
+            action: 'resetCopying',
           }}
         >
           Kopieren aufheben
-        </MenuItem>
-      }
+        </MenuItem>}
       <MenuItem
         onClick={onClick}
         data={{
-          action: `copyTpopKoordToPop`,
+          action: 'copyTpopKoordToPop',
         }}
       >
         Kopiere Koordinaten in die Population
@@ -121,7 +115,7 @@ const Tpop = (
       <MenuItem
         onClick={onClick}
         data={{
-          action: `showCoordOfTpopOnMapsZhCh`,
+          action: 'showCoordOfTpopOnMapsZhCh',
         }}
       >
         Zeige auf maps.zh.ch
@@ -129,7 +123,7 @@ const Tpop = (
       <MenuItem
         onClick={onClick}
         data={{
-          action: `showCoordOfTpopOnMapGeoAdminCh`,
+          action: 'showCoordOfTpopOnMapGeoAdminCh',
         }}
       >
         Zeige auf map.geo.admin.ch
