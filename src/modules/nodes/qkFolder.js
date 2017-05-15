@@ -6,15 +6,15 @@ export default (
   store: Object,
   tree: Object,
   projId: number,
-  apArtId: number
+  apArtId: number,
 ): Array<Object> => {
   // fetch sorting indexes of parents
   const projIndex = findIndex(tree.filteredAndSorted.projekt, {
-    ProjId: projId
+    ProjId: projId,
   })
   const apIndex = findIndex(
     tree.filteredAndSorted.ap.filter(a => a.ProjId === projId),
-    { ApArtId: apArtId }
+    { ApArtId: apArtId },
   )
 
   const qk = store.qk.get(apArtId)
@@ -24,7 +24,7 @@ export default (
     const nrOfUrls = reduce(
       qk.messagesFiltered,
       (sum, n) => sum + n.url.length,
-      0
+      0,
     )
     nrOfQkMessages = nrOfUrls
   }
@@ -35,20 +35,20 @@ export default (
     // only show number when qk is active
     nrOfQkMessages = null
   }
-  if (store.loading.includes(`qk`)) {
-    nrOfQkMessages = `...`
+  if (store.loading.includes('qk')) {
+    nrOfQkMessages = '...'
   }
 
   return [
     {
-      nodeType: `folder`,
-      menuType: `qkFolder`,
+      nodeType: 'folder',
+      menuType: 'qkFolder',
       id: apArtId,
-      urlLabel: `Qualitaetskontrollen`,
-      label: `Qualitätskontrollen${nrOfQkMessages ? ` (${nrOfQkMessages})` : ``}`,
-      url: [`Projekte`, projId, `Arten`, apArtId, `Qualitaetskontrollen`],
+      urlLabel: 'Qualitaetskontrollen',
+      label: `Qualitätskontrollen${nrOfQkMessages ? ` (${nrOfQkMessages})` : ''}`,
+      url: ['Projekte', projId, 'Arten', apArtId, 'Qualitaetskontrollen'],
       sort: [projIndex, 1, apIndex, 10],
-      hasChildren: false
-    }
+      hasChildren: false,
+    },
   ]
 }
