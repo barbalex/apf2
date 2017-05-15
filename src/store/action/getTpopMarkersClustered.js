@@ -11,24 +11,24 @@ import TpopPopup from '../../components/Projekte/Karte/TpopPopup'
 
 export default (store: Object): Object => {
   const { tpops, labelUsingNr, highlightedIds } = store.map.tpop
-  const visible = store.map.activeApfloraLayers.includes(`Tpop`)
+  const visible = store.map.activeApfloraLayers.includes('Tpop')
   const mcgOptions = {
     maxClusterRadius: 66,
     iconCreateFunction: function(cluster) {
       const markers = cluster.getAllChildMarkers()
       const hasHighlightedTpop = some(
         markers,
-        m => m.options.icon.options.className === `tpopIconHighlighted`
+        m => m.options.icon.options.className === 'tpopIconHighlighted',
       )
       const className = hasHighlightedTpop
-        ? `tpopClusterHighlighted`
-        : `tpopCluster`
+        ? 'tpopClusterHighlighted'
+        : 'tpopCluster'
       return window.L.divIcon({
         html: markers.length,
         className,
-        iconSize: window.L.point(40, 40)
+        iconSize: window.L.point(40, 40),
       })
-    }
+    },
   }
   const markers = window.L.markerClusterGroup(mcgOptions)
   if (visible) {
@@ -46,16 +46,16 @@ export default (store: Object): Object => {
       }
       const tooltipOptions = {
         permanent: true,
-        direction: `bottom`,
-        className: `mapTooltip`,
-        opacity: 1
+        direction: 'bottom',
+        className: 'mapTooltip',
+        opacity: 1,
       }
       const isHighlighted = highlightedIds.includes(p.TPopId)
       const latLng = new window.L.LatLng(...p.TPopKoordWgs84)
       const icon = window.L.icon({
         iconUrl: isHighlighted ? tpopIconHighlighted : tpopIcon,
         iconSize: [24, 24],
-        className: isHighlighted ? `tpopIconHighlighted` : `tpopIcon`
+        className: isHighlighted ? 'tpopIconHighlighted' : 'tpopIcon',
       })
       const pop = pops.find(pop => pop.PopId === p.PopId)
       const marker = window.L
@@ -63,13 +63,13 @@ export default (store: Object): Object => {
           title,
           icon,
           zIndexOffset: -store.map.apfloraLayers.findIndex(
-            apfloraLayer => apfloraLayer.value === `Tpop`
-          )
+            apfloraLayer => apfloraLayer.value === 'Tpop',
+          ),
         })
         .bindPopup(
           ReactDOMServer.renderToStaticMarkup(
-            <TpopPopup store={store} pop={pop} tpop={p} />
-          )
+            <TpopPopup store={store} pop={pop} tpop={p} />,
+          ),
         )
         .bindTooltip(tooltipText, tooltipOptions)
       markers.addLayer(marker)

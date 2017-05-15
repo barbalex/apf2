@@ -13,10 +13,10 @@ const updateBeobzuordnungData = (
 ): void => {
   store.updateProperty(tree, newKey, newValue)
   store.updatePropertyInDb(tree, newKey, newValue)
-  store.updateProperty(tree, `BeobId`, beob.BeobId)
-  store.updatePropertyInDb(tree, `BeobId`, beob.BeobId)
-  store.updateProperty(tree, `QuelleId`, beob.QuelleId)
-  store.updatePropertyInDb(tree, `QuelleId`, beob.QuelleId)
+  store.updateProperty(tree, 'BeobId', beob.BeobId)
+  store.updatePropertyInDb(tree, 'BeobId', beob.BeobId)
+  store.updateProperty(tree, 'QuelleId', beob.QuelleId)
+  store.updatePropertyInDb(tree, 'QuelleId', beob.QuelleId)
 }
 
 const continueWithBeob = (
@@ -28,31 +28,31 @@ const continueWithBeob = (
 ): void => {
   const { projekt, ap } = tree.activeNodes
   // set new activeNodeArray
-  if (newKey === `BeobNichtZuordnen`) {
+  if (newKey === 'BeobNichtZuordnen') {
     const newActiveNodeArray = [
-      `Projekte`,
+      'Projekte',
       projekt,
-      `Arten`,
+      'Arten',
       ap,
-      `nicht-zuzuordnende-Beobachtungen`,
+      'nicht-zuzuordnende-Beobachtungen',
       beob.id,
     ]
     tree.setActiveNodeArray(newActiveNodeArray)
     updateBeobzuordnungData(store, tree, beob, newKey, newValue)
-  } else if (newKey === `TPopId`) {
+  } else if (newKey === 'TPopId') {
     // ouch. Need to get activeNodeArray for this tpop
     // Nice: tpop was already loaded for building tpop list
     const tpop = store.table.tpop.get(newValue)
     const newActiveNodeArray = [
-      `Projekte`,
+      'Projekte',
       projekt,
-      `Arten`,
+      'Arten',
       ap,
-      `Populationen`,
+      'Populationen',
       tpop.PopId,
-      `Teil-Populationen`,
+      'Teil-Populationen',
       newValue,
-      `Beobachtungen`,
+      'Beobachtungen',
       beob.id,
     ]
     tree.setActiveNodeArray(newActiveNodeArray)
@@ -82,7 +82,7 @@ export default (
     .post(url)
     .then(({ data: row }) => {
       // insert this dataset in idb
-      insertDatasetInIdb(store, `beobzuordnung`, row)
+      insertDatasetInIdb(store, 'beobzuordnung', row)
       // insert this dataset in store.table
       store.table.beobzuordnung.set(row.BeobId, row)
       continueWithBeob(store, tree, beob, newKey, newValue)
