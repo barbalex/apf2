@@ -11,18 +11,18 @@ import BeobPopup from '../../components/Projekte/Karte/BeobPopup'
 
 export default (store: Object): Object => {
   const { beobs, highlightedIds } = store.map.beobNichtBeurteilt
-  const visible = store.map.activeApfloraLayers.includes(`BeobNichtBeurteilt`)
+  const visible = store.map.activeApfloraLayers.includes('BeobNichtBeurteilt')
   const mcgOptions = {
     maxClusterRadius: 66,
     iconCreateFunction: function(cluster) {
       const markers = cluster.getAllChildMarkers()
       const hasHighlightedBeob = some(
         markers,
-        m => m.options.icon.options.className === `beobIconHighlighted`,
+        m => m.options.icon.options.className === 'beobIconHighlighted',
       )
       const className = hasHighlightedBeob
-        ? `beobClusterHighlighted`
-        : `beobCluster`
+        ? 'beobClusterHighlighted'
+        : 'beobCluster'
       return window.L.divIcon({
         html: markers.length,
         className,
@@ -38,7 +38,7 @@ export default (store: Object): Object => {
       const icon = window.L.icon({
         iconUrl: isHighlighted ? beobIconHighlighted : beobIcon,
         iconSize: [24, 24],
-        className: isHighlighted ? `beobIconHighlighted` : `beobIcon`,
+        className: isHighlighted ? 'beobIconHighlighted' : 'beobIcon',
       })
       const marker = window.L
         .marker(latLng, {
@@ -46,7 +46,7 @@ export default (store: Object): Object => {
           icon,
           draggable: store.map.beob.assigning,
           zIndexOffset: -store.map.apfloraLayers.findIndex(
-            apfloraLayer => apfloraLayer.value === `BeobNichtBeurteilt`,
+            apfloraLayer => apfloraLayer.value === 'BeobNichtBeurteilt',
           ),
         })
         .bindPopup(

@@ -1,25 +1,25 @@
 // @flow
 export default (activeNodeArray: Array<mixed>): Object => {
   const projektFolder =
-    (activeNodeArray.length > 0 && activeNodeArray[0] === `Projekte`) || false
+    (activeNodeArray.length > 0 && activeNodeArray[0] === 'Projekte') || false
   const projekt = projektFolder && activeNodeArray.length > 1
     ? parseInt(activeNodeArray[1], 10)
     : null
   const apberuebersichtFolder =
     (projekt &&
       activeNodeArray.length > 2 &&
-      activeNodeArray[2] === `AP-Berichte`) ||
+      activeNodeArray[2] === 'AP-Berichte') ||
     false
   const exporte =
     (projekt &&
       activeNodeArray.length > 2 &&
-      activeNodeArray[2] === `Exporte`) ||
+      activeNodeArray[2] === 'Exporte') ||
     false
   const apberuebersicht = apberuebersichtFolder && activeNodeArray.length > 3
     ? parseInt(activeNodeArray[3], 10)
     : null
   const apFolder =
-    (projekt && activeNodeArray.length > 2 && activeNodeArray[2] === `Arten`) ||
+    (projekt && activeNodeArray.length > 2 && activeNodeArray[2] === 'Arten') ||
     false
   const ap = apFolder && activeNodeArray.length > 3
     ? parseInt(activeNodeArray[3], 10)
@@ -27,12 +27,12 @@ export default (activeNodeArray: Array<mixed>): Object => {
   const assozartFolder =
     (ap &&
       activeNodeArray.length > 4 &&
-      activeNodeArray[4] === `assoziierte-Arten`) ||
+      activeNodeArray[4] === 'assoziierte-Arten') ||
     false
   const qk =
     (ap &&
       activeNodeArray.length > 4 &&
-      activeNodeArray[4] === `Qualitaetskontrollen`) ||
+      activeNodeArray[4] === 'Qualitaetskontrollen') ||
     false
   const assozart = assozartFolder && activeNodeArray.length > 5
     ? parseInt(activeNodeArray[5], 10)
@@ -40,7 +40,7 @@ export default (activeNodeArray: Array<mixed>): Object => {
   const idealbiotopFolder =
     (ap &&
       activeNodeArray.length > 4 &&
-      activeNodeArray[4] === `Idealbiotop`) ||
+      activeNodeArray[4] === 'Idealbiotop') ||
     false
   const idealbiotop = idealbiotopFolder
     ? parseInt(activeNodeArray[3], 10)
@@ -48,7 +48,7 @@ export default (activeNodeArray: Array<mixed>): Object => {
   const beobNichtZuzuordnenFolder =
     (ap &&
       activeNodeArray.length > 4 &&
-      activeNodeArray[4] === `nicht-zuzuordnende-Beobachtungen`) ||
+      activeNodeArray[4] === 'nicht-zuzuordnende-Beobachtungen') ||
     false
   let beobNichtZuzuordnen = beobNichtZuzuordnenFolder &&
     activeNodeArray.length > 5
@@ -60,7 +60,7 @@ export default (activeNodeArray: Array<mixed>): Object => {
   const beobzuordnungFolder =
     (ap &&
       activeNodeArray.length > 4 &&
-      activeNodeArray[4] === `nicht-beurteilte-Beobachtungen`) ||
+      activeNodeArray[4] === 'nicht-beurteilte-Beobachtungen') ||
     false
   let beobzuordnung = beobzuordnungFolder && activeNodeArray.length > 5
     ? activeNodeArray[5]
@@ -69,7 +69,7 @@ export default (activeNodeArray: Array<mixed>): Object => {
     beobzuordnung = parseInt(beobzuordnung, 10)
   }
   const berFolder =
-    (ap && activeNodeArray.length > 4 && activeNodeArray[4] === `Berichte`) ||
+    (ap && activeNodeArray.length > 4 && activeNodeArray[4] === 'Berichte') ||
     false
   const ber = berFolder && activeNodeArray.length > 5
     ? parseInt(activeNodeArray[5], 10)
@@ -77,7 +77,7 @@ export default (activeNodeArray: Array<mixed>): Object => {
   const apberFolder =
     (ap &&
       activeNodeArray.length > 4 &&
-      activeNodeArray[4] === `AP-Berichte`) ||
+      activeNodeArray[4] === 'AP-Berichte') ||
     false
   const apber = apberFolder && activeNodeArray.length > 5
     ? parseInt(activeNodeArray[5], 10)
@@ -85,13 +85,13 @@ export default (activeNodeArray: Array<mixed>): Object => {
   const erfkritFolder =
     (ap &&
       activeNodeArray.length > 4 &&
-      activeNodeArray[4] === `AP-Erfolgskriterien`) ||
+      activeNodeArray[4] === 'AP-Erfolgskriterien') ||
     false
   const erfkrit = erfkritFolder && activeNodeArray.length > 5
     ? parseInt(activeNodeArray[5], 10)
     : null
   const zielFolder =
-    (ap && activeNodeArray.length > 4 && activeNodeArray[4] === `AP-Ziele`) ||
+    (ap && activeNodeArray.length > 4 && activeNodeArray[4] === 'AP-Ziele') ||
     false
   const zieljahr = zielFolder && activeNodeArray.length > 5
     ? parseInt(activeNodeArray[5], 10)
@@ -100,7 +100,7 @@ export default (activeNodeArray: Array<mixed>): Object => {
     ? parseInt(activeNodeArray[6], 10)
     : null
   const zielberFolder =
-    (ziel && activeNodeArray.length > 7 && activeNodeArray[7] === `Berichte`) ||
+    (ziel && activeNodeArray.length > 7 && activeNodeArray[7] === 'Berichte') ||
     false
   const zielber = zielberFolder && activeNodeArray.length > 8
     ? parseInt(activeNodeArray[8], 10)
@@ -108,7 +108,7 @@ export default (activeNodeArray: Array<mixed>): Object => {
   const popFolder =
     (ap &&
       activeNodeArray.length > 4 &&
-      activeNodeArray[4] === `Populationen`) ||
+      activeNodeArray[4] === 'Populationen') ||
     false
   const pop = popFolder && activeNodeArray.length > 5
     ? parseInt(activeNodeArray[5], 10)
@@ -116,7 +116,7 @@ export default (activeNodeArray: Array<mixed>): Object => {
   const popberFolder =
     (pop &&
       activeNodeArray.length > 6 &&
-      activeNodeArray[6] === `Kontroll-Berichte`) ||
+      activeNodeArray[6] === 'Kontroll-Berichte') ||
     false
   const popber = popberFolder && activeNodeArray.length > 7
     ? parseInt(activeNodeArray[7], 10)
@@ -124,7 +124,7 @@ export default (activeNodeArray: Array<mixed>): Object => {
   const popmassnberFolder =
     (pop &&
       activeNodeArray.length > 6 &&
-      activeNodeArray[6] === `Massnahmen-Berichte`) ||
+      activeNodeArray[6] === 'Massnahmen-Berichte') ||
     false
   const popmassnber = popmassnberFolder && activeNodeArray.length > 7
     ? parseInt(activeNodeArray[7], 10)
@@ -132,7 +132,7 @@ export default (activeNodeArray: Array<mixed>): Object => {
   const tpopFolder =
     (pop &&
       activeNodeArray.length > 6 &&
-      activeNodeArray[6] === `Teil-Populationen`) ||
+      activeNodeArray[6] === 'Teil-Populationen') ||
     false
   const tpop = tpopFolder && activeNodeArray.length > 7
     ? parseInt(activeNodeArray[7], 10)
@@ -140,7 +140,7 @@ export default (activeNodeArray: Array<mixed>): Object => {
   const tpopmassnFolder =
     (tpop &&
       activeNodeArray.length > 8 &&
-      activeNodeArray[8] === `Massnahmen`) ||
+      activeNodeArray[8] === 'Massnahmen') ||
     false
   const tpopmassn = tpopmassnFolder && activeNodeArray.length > 9
     ? parseInt(activeNodeArray[9], 10)
@@ -148,7 +148,7 @@ export default (activeNodeArray: Array<mixed>): Object => {
   const tpopmassnberFolder =
     (tpop &&
       activeNodeArray.length > 8 &&
-      activeNodeArray[8] === `Massnahmen-Berichte`) ||
+      activeNodeArray[8] === 'Massnahmen-Berichte') ||
     false
   const tpopmassnber = tpopmassnberFolder && activeNodeArray.length > 9
     ? parseInt(activeNodeArray[9], 10)
@@ -156,7 +156,7 @@ export default (activeNodeArray: Array<mixed>): Object => {
   const tpopfeldkontrFolder =
     (tpop &&
       activeNodeArray.length > 8 &&
-      activeNodeArray[8] === `Feld-Kontrollen`) ||
+      activeNodeArray[8] === 'Feld-Kontrollen') ||
     false
   const tpopfeldkontr = tpopfeldkontrFolder && activeNodeArray.length > 9
     ? parseInt(activeNodeArray[9], 10)
@@ -164,7 +164,7 @@ export default (activeNodeArray: Array<mixed>): Object => {
   const tpopfeldkontrzaehlFolder =
     (tpopfeldkontr &&
       activeNodeArray.length > 10 &&
-      activeNodeArray[10] === `Zaehlungen`) ||
+      activeNodeArray[10] === 'Zaehlungen') ||
     false
   const tpopfeldkontrzaehl = tpopfeldkontrzaehlFolder &&
     activeNodeArray.length > 11
@@ -173,7 +173,7 @@ export default (activeNodeArray: Array<mixed>): Object => {
   const tpopfreiwkontrFolder =
     (tpop &&
       activeNodeArray.length > 8 &&
-      activeNodeArray[8] === `Freiwilligen-Kontrollen`) ||
+      activeNodeArray[8] === 'Freiwilligen-Kontrollen') ||
     false
   const tpopfreiwkontr = tpopfreiwkontrFolder && activeNodeArray.length > 9
     ? parseInt(activeNodeArray[9], 10)
@@ -181,7 +181,7 @@ export default (activeNodeArray: Array<mixed>): Object => {
   const tpopfreiwkontrzaehlFolder =
     (tpopfreiwkontr &&
       activeNodeArray.length > 10 &&
-      activeNodeArray[10] === `Zaehlungen`) ||
+      activeNodeArray[10] === 'Zaehlungen') ||
     false
   const tpopfreiwkontrzaehl = tpopfreiwkontrzaehlFolder &&
     activeNodeArray.length > 11
@@ -190,7 +190,7 @@ export default (activeNodeArray: Array<mixed>): Object => {
   const tpopberFolder =
     (tpop &&
       activeNodeArray.length > 8 &&
-      activeNodeArray[8] === `Kontroll-Berichte`) ||
+      activeNodeArray[8] === 'Kontroll-Berichte') ||
     false
   const tpopber = tpopberFolder && activeNodeArray.length > 9
     ? parseInt(activeNodeArray[9], 10)
@@ -198,7 +198,7 @@ export default (activeNodeArray: Array<mixed>): Object => {
   const tpopbeobFolder =
     (tpop &&
       activeNodeArray.length > 8 &&
-      activeNodeArray[8] === `Beobachtungen`) ||
+      activeNodeArray[8] === 'Beobachtungen') ||
     false
   const tpopbeob = tpopbeobFolder && activeNodeArray.length > 9
     ? activeNodeArray[9]
@@ -255,6 +255,6 @@ export default (activeNodeArray: Array<mixed>): Object => {
     tpopberFolder,
     tpopber,
     tpopbeobFolder,
-    tpopbeob
+    tpopbeob,
   }
 }

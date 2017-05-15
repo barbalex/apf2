@@ -10,7 +10,7 @@ import getNearestTpopId from '../../modules/getNearestTpopId'
 
 export default (store: Object): Array<Object> => {
   const { beobs, highlightedIds } = store.map.beobNichtBeurteilt
-  const visible = store.map.activeApfloraLayers.includes(`BeobNichtBeurteilt`)
+  const visible = store.map.activeApfloraLayers.includes('BeobNichtBeurteilt')
   if (visible) {
     return beobs.map(p => {
       const isHighlighted = highlightedIds.includes(p.id)
@@ -18,7 +18,7 @@ export default (store: Object): Array<Object> => {
       const icon = window.L.icon({
         iconUrl: isHighlighted ? beobIconHighlighted : beobIcon,
         iconSize: [24, 24],
-        className: isHighlighted ? `beobIconHighlighted` : `beobIcon`,
+        className: isHighlighted ? 'beobIconHighlighted' : 'beobIcon',
       })
       return window.L
         .marker(latLng, {
@@ -26,7 +26,7 @@ export default (store: Object): Array<Object> => {
           icon,
           draggable: store.map.beob.assigning,
           zIndexOffset: -store.map.apfloraLayers.findIndex(
-            apfloraLayer => apfloraLayer.value === `BeobNichtBeurteilt`,
+            apfloraLayer => apfloraLayer.value === 'BeobNichtBeurteilt',
           ),
         })
         .bindPopup(
@@ -44,15 +44,15 @@ export default (store: Object): Array<Object> => {
           const { activeNodes } = tree
           const nearestTpopId = getNearestTpopId(store, event.target._latlng)
           const newActiveNodeArray = [
-            `Projekte`,
+            'Projekte',
             activeNodes.projekt,
-            `Arten`,
+            'Arten',
             activeNodes.ap,
-            `nicht-beurteilte-Beobachtungen`,
+            'nicht-beurteilte-Beobachtungen',
             p.BeobId,
           ]
           tree.setActiveNodeArray(newActiveNodeArray)
-          insertBeobzuordnung(tree, `TPopId`, nearestTpopId)
+          insertBeobzuordnung(tree, 'TPopId', nearestTpopId)
         })
     })
   }

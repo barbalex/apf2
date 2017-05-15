@@ -9,15 +9,15 @@ import BeobPopup from '../../components/Projekte/Karte/BeobPopup'
 
 export default (store: Object): Array<Object> => {
   const { beobs, highlightedIds } = store.map.beob
-  const visible = store.map.activeOverlays.includes(`beob`)
+  const visible = store.map.activeOverlays.includes('beob')
   if (visible) {
     return beobs.map(p => {
       const title = p.label
       const tooltipText = p.label
       const tooltipOptions = {
         permanent: true,
-        direction: `bottom`,
-        className: `mapTooltip`,
+        direction: 'bottom',
+        className: 'mapTooltip',
         opacity: 1,
       }
       const isHighlighted = highlightedIds.includes(p.id)
@@ -25,7 +25,7 @@ export default (store: Object): Array<Object> => {
       const icon = window.L.icon({
         iconUrl: isHighlighted ? beobIconHighlighted : beobIcon,
         iconSize: [24, 24],
-        className: isHighlighted ? `beobIconHighlighted` : `beobIcon`,
+        className: isHighlighted ? 'beobIconHighlighted' : 'beobIcon',
       })
       return window.L
         .marker(latLng, {
@@ -33,7 +33,7 @@ export default (store: Object): Array<Object> => {
           icon,
           draggable: store.map.beob.assigning,
           zIndexOffset: -store.map.apfloraLayers.findIndex(
-            apfloraLayer => apfloraLayer.value === `Beob`,
+            apfloraLayer => apfloraLayer.value === 'Beob',
           ),
         })
         .bindPopup(
@@ -43,7 +43,7 @@ export default (store: Object): Array<Object> => {
         )
         .bindTooltip(tooltipText, tooltipOptions)
         .on('moveend', event => {
-          console.log(`latlng:`, event.target._latlng)
+          console.log('latlng:', event.target._latlng)
 
           /**
            * assign to nearest tpop
