@@ -51,9 +51,9 @@ const nichtZuordnenPopover = (
       Legende
     </LabelPopoverTitleRow>
     <LabelPopoverContentRow>
-      {`Will heissen: Die Beobachtung kann nicht zugeordnet werden.`}<br />
-      {`Mögliche Gründe: Unsichere Bestimmung, nicht lokalisierbar.`}<br />
-      {`Bitte im Bemerkungsfeld begründen.`}
+      {'Will heissen: Die Beobachtung kann nicht zugeordnet werden.'}<br />
+      {'Mögliche Gründe: Unsichere Bestimmung, nicht lokalisierbar.'}<br />
+      {'Bitte im Bemerkungsfeld begründen.'}
     </LabelPopoverContentRow>
   </Container>
 )
@@ -93,13 +93,13 @@ const getTpopZuordnenSource = (store: Object, tree: Object): Array<Object> => {
         Array.from(store.table.pop_status_werte.values()).find(
           x => x.HerkunftId === t.TPopHerkunft,
         ).HerkunftTxt
-      : `ohne Status`
-    const popNr = t.popNr || t.popNr === 0 ? t.popNr : `(keine Nr)`
-    const tpopNr = t.TPopNr || t.TPopNr === 0 ? t.TPopNr : `(keine Nr)`
-    t.label = `${t.distance.toLocaleString(`de-ch`)}m: ${popNr}/${tpopNr} (${t.herkunft})`
+      : 'ohne Status'
+    const popNr = t.popNr || t.popNr === 0 ? t.popNr : '(keine Nr)'
+    const tpopNr = t.TPopNr || t.TPopNr === 0 ? t.TPopNr : '(keine Nr)'
+    t.label = `${t.distance.toLocaleString('de-ch')}m: ${popNr}/${tpopNr} (${t.herkunft})`
   })
   // order them by distance
-  tpopList = sortBy(tpopList, `distance`)
+  tpopList = sortBy(tpopList, 'distance')
   // return array of TPopId, label
   return tpopList.map(t => ({
     value: t.TPopId,
@@ -108,7 +108,7 @@ const getTpopZuordnenSource = (store: Object, tree: Object): Array<Object> => {
 }
 
 const enhance = compose(
-  inject(`store`),
+  inject('store'),
   withHandlers({
     updatePropertyInDb: props => (
       treePassedByUpdatePropertyInDb,
@@ -123,7 +123,7 @@ const enhance = compose(
       } = store
       const { activeDataset } = tree
       if (val) {
-        if (activeDataset.table === `beob`) {
+        if (activeDataset.table === 'beob') {
           insertBeobzuordnung(tree, fieldname, val)
         } else {
           // beobzuordnung was moved from one TPopId to another
@@ -149,8 +149,8 @@ const Beobzuordnung = ({
   const { activeDataset } = tree
   const beobzuordnung = activeDataset.row
   const beobTitle = beobzuordnung.QuelleId === 1
-    ? `Informationen aus EvAB (nicht veränderbar)`
-    : `Informationen aus Infospezies (nicht veränderbar)`
+    ? 'Informationen aus EvAB (nicht veränderbar)'
+    : 'Informationen aus Infospezies (nicht veränderbar)'
   const showTPopId = activeDataset.row.BeobNichtZuordnen !== 1
 
   return (

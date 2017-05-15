@@ -9,32 +9,24 @@ import withHandlers from 'recompose/withHandlers'
 import tables from '../../../modules/tables'
 
 const enhance = compose(
-  inject(`store`),
+  inject('store'),
   withHandlers({
-    onClickAbort: props => () =>
-      props.store.deleteDatasetAbort(),
-    onClickDelete: props => () =>
-      props.store.deleteDatasetExecute(props.tree),
-  })
+    onClickAbort: props => () => props.store.deleteDatasetAbort(),
+    onClickDelete: props => () => props.store.deleteDatasetExecute(props.tree),
+  }),
 )
 
-const DatasetDeleteModal = (
-  {
-    store,
-    onClickAbort,
-    onClickDelete,
-  }:
-  {
-    store: Object,
-    onClickAbort: () => void,
-    onClickDelete: () => void,
-  }
-) => {
+const DatasetDeleteModal = ({
+  store,
+  onClickAbort,
+  onClickDelete,
+}: {
+  store: Object,
+  onClickAbort: () => void,
+  onClickDelete: () => void,
+}) => {
   const actions = [
-    <FlatButton
-      label="Abbrechen"
-      onTouchTap={onClickAbort}
-    />,
+    <FlatButton label="Abbrechen" onTouchTap={onClickAbort} />,
     <FlatButton
       label="Löschen"
       primary
@@ -42,21 +34,15 @@ const DatasetDeleteModal = (
       onTouchTap={onClickDelete}
     />,
   ]
-  const table = tables.find(t =>
-    t.table === store.datasetToDelete.table
-  )
+  const table = tables.find(t => t.table === store.datasetToDelete.table)
   let tableName = null
   if (table && table.labelSingular) {
     tableName = table.labelSingular
   }
 
   return (
-    <Dialog
-      actions={actions}
-      modal
-      open={!!store.datasetToDelete.id}
-    >
-      {`${tableName ? `${tableName} "` : ``}${store.datasetToDelete.label}${tableName ? `"` : ``} löschen?`}
+    <Dialog actions={actions} modal open={!!store.datasetToDelete.id}>
+      {`${tableName ? `${tableName} "` : ''}${store.datasetToDelete.label}${tableName ? '"' : ''} löschen?`}
     </Dialog>
   )
 }

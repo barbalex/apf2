@@ -27,21 +27,9 @@ const Section = styled.div`
   }
 `
 
-const enhance = compose(
-  inject(`store`),
-  observer
-)
+const enhance = compose(inject('store'), observer)
 
-const Idealbiotop = (
-  {
-    store,
-    tree,
-  }:
-  {
-    store: Object,
-    tree: Object,
-  }
-) => {
+const Idealbiotop = ({ store, tree }: { store: Object, tree: Object }) => {
   const { activeDataset } = tree
   return (
     <Container>
