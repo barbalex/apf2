@@ -21,25 +21,13 @@ const FieldsContainer = styled.div`
   padding-bottom: 45px;
 `
 
-const enhance = compose(
-  inject(`store`),
-  observer
-)
+const enhance = compose(inject('store'), observer)
 
-const Apber = (
-  {
-    store,
-    tree,
-  }:
-  {
-    store: Object,
-    tree: Object,
-  }
-) => {
+const Apber = ({ store, tree }: { store: Object, tree: Object }) => {
   const { activeDataset } = tree
   const veraenGegenVorjahrWerte = [
-    { value: `+`, label: `+` },
-    { value: `-`, label: `-` },
+    { value: '+', label: '+' },
+    { value: '-', label: '-' },
   ]
 
   return (

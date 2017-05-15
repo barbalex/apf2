@@ -5,7 +5,7 @@ import compose from 'recompose/compose'
 
 import TextFieldNonUpdatable from '../../shared/TextFieldNonUpdatable'
 
-const enhance = compose(inject(`store`), observer)
+const enhance = compose(inject('store'), observer)
 
 const Beob = ({ store, tree }: { store: Object, tree: Object }) => {
   const { row } = tree.activeDataset

@@ -20,15 +20,9 @@ const FieldsContainer = styled.div`
   padding-bottom: 45px;
 `
 
-const enhance = compose(inject(`store`), observer)
+const enhance = compose(inject('store'), observer)
 
-const getArtList = ({
-  store,
-  tree
-}: {
-  store: Object,
-  tree: Object
-}) => {
+const getArtList = ({ store, tree }: { store: Object, tree: Object }) => {
   const { activeDataset, activeNodes } = tree
   const { adb_eigenschaften } = store.table
   const assozartenOfAp = Array.from(store.table.assozart.values())
@@ -37,34 +31,22 @@ const getArtList = ({
   const apArtIdsNotToShow = assozartenOfAp.concat(activeNodes.ap)
   const artList = filter(
     Array.from(adb_eigenschaften.values()),
-    r => !apArtIdsNotToShow.includes(r.TaxonomieId)
+    r => !apArtIdsNotToShow.includes(r.TaxonomieId),
   )
-  return sortBy(artList, `Artname`)
+  return sortBy(artList, 'Artname')
 }
 
-const getArtname = ({
-  store,
-  tree
-}: {
-  store: Object,
-  tree: Object
-}) => {
+const getArtname = ({ store, tree }: { store: Object, tree: Object }) => {
   const { adb_eigenschaften } = store.table
   const { activeDataset } = tree
-  let name = ``
+  let name = ''
   if (activeDataset.row.AaSisfNr && adb_eigenschaften.size > 0) {
     name = adb_eigenschaften.get(activeDataset.row.AaSisfNr).Artname
   }
   return name
 }
 
-const Assozart = ({
-  store,
-  tree
-}: {
-  store: Object,
-  tree: Object
-}) => {
+const Assozart = ({ store, tree }: { store: Object, tree: Object }) => {
   const { activeDataset } = tree
 
   return (
@@ -78,16 +60,16 @@ const Assozart = ({
             fieldName="AaSisfNr"
             valueText={getArtname({
               store,
-              tree
+              tree,
             })}
             errorText={activeDataset.valid.ApArtId}
             dataSource={getArtList({
               store,
-              tree
+              tree,
             })}
             dataSourceConfig={{
-              value: `TaxonomieId`,
-              text: `Artname`
+              value: 'TaxonomieId',
+              text: 'Artname',
             }}
             updatePropertyInDb={store.updatePropertyInDb}
           />

@@ -52,19 +52,14 @@ const LabelPopoverRowColumnRight = styled.div`
 `
 
 const enhance = compose(
-  inject(`store`),
-  withProps((props) => {
+  inject('store'),
+  withProps(props => {
     const { store } = props
-    const {
-      updateProperty,
-      updatePropertyInDb,
-      table,
-      tree,
-    } = store
+    const { updateProperty, updatePropertyInDb, table, tree } = store
     const { activeDataset, activeNodes } = tree
     const { adb_eigenschaften } = table
-    let artwert = `Diese Art hat keinen Artwert`
-    let artname = ``
+    let artwert = 'Diese Art hat keinen Artwert'
+    let artname = ''
     if (activeNodes.ap && adb_eigenschaften.size > 0) {
       const ae = adb_eigenschaften.get(activeNodes.ap)
       if (ae && ae.Artwert) {
@@ -82,29 +77,26 @@ const enhance = compose(
       updatePropertyInDb,
     }
   }),
-  observer
+  observer,
 )
 
-const Ap = (
-  {
-    store,
-    tree,
-    activeDataset,
-    updateProperty,
-    updatePropertyInDb,
-    artwert,
-    artname,
-  }:
-  {
-    store: Object,
-    tree: Object,
-    activeDataset: Object,
-    updateProperty: () => void,
-    updatePropertyInDb: () => void,
-    artwert?: number,
-    artname?: string,
-  }
-) =>
+const Ap = ({
+  store,
+  tree,
+  activeDataset,
+  updateProperty,
+  updatePropertyInDb,
+  artwert,
+  artname,
+}: {
+  store: Object,
+  tree: Object,
+  activeDataset: Object,
+  updateProperty: () => void,
+  updatePropertyInDb: () => void,
+  artwert?: number,
+  artname?: string,
+}) => (
   <Container>
     <FormTitle tree={tree} title="Art" />
     <Scrollbars>
@@ -117,8 +109,8 @@ const Ap = (
           errorText={activeDataset.valid.ApArtId}
           dataSource={store.dropdownList.artListForAp}
           dataSourceConfig={{
-            value: `TaxonomieId`,
-            text: `Artname`,
+            value: 'TaxonomieId',
+            text: 'Artname',
           }}
           updatePropertyInDb={updatePropertyInDb}
         />
@@ -223,5 +215,6 @@ const Ap = (
       </FieldsContainer>
     </Scrollbars>
   </Container>
+)
 
 export default enhance(Ap)
