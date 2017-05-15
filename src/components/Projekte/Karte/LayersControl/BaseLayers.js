@@ -22,38 +22,33 @@ const LayerDiv = styled.div`
  * so passed in from parent
  */
 
-const LayersControl = (
-  { store }:
-  { store: Object }
-) => {
+const LayersControl = ({ store }: { store: Object }) => {
   const baseLayers = [
-    { label: `OpenStreetMap farbig`, value: `OsmColor` },
-    { label: `OpenStreetMap grau`, value: `OsmBw` },
-    { label: `Swisstopo farbig`, value: `SwissTopoPixelFarbe` },
-    { label: `Swisstopo grau`, value: `SwissTopoPixelGrau` },
-    { label: `ZH Übersichtsplan`, value: `ZhUep` },
-    { label: `Bing Luftbild`, value: `BingAerial` },
-    { label: `ZH Orthofoto Sommer RGB`, value: `ZhOrtho` },
-    { label: `ZH Orthofoto Sommer infrarot`, value: `ZhOrthoIr` },
-    { label: `ZH Orthofoto Frühjahr 2015/16 RGB`, value: `ZhOrtho2015` },
-    { label: `ZH Orthofoto Frühjahr 2015/16 infrarot`, value: `ZhOrtho2015Ir` },
+    { label: 'OpenStreetMap farbig', value: 'OsmColor' },
+    { label: 'OpenStreetMap grau', value: 'OsmBw' },
+    { label: 'Swisstopo farbig', value: 'SwissTopoPixelFarbe' },
+    { label: 'Swisstopo grau', value: 'SwissTopoPixelGrau' },
+    { label: 'ZH Übersichtsplan', value: 'ZhUep' },
+    { label: 'Bing Luftbild', value: 'BingAerial' },
+    { label: 'ZH Orthofoto Sommer RGB', value: 'ZhOrtho' },
+    { label: 'ZH Orthofoto Sommer infrarot', value: 'ZhOrthoIr' },
+    { label: 'ZH Orthofoto Frühjahr 2015/16 RGB', value: 'ZhOrtho2015' },
+    { label: 'ZH Orthofoto Frühjahr 2015/16 infrarot', value: 'ZhOrtho2015Ir' },
   ]
 
   return (
     <CardContent>
-      {
-        baseLayers.map((l, index) =>
-          <LayerDiv key={index}>
-            <Radio
-              name="baseLayers"
-              value={l.value}
-              label={l.label}
-              checked={store.map.activeBaseLayer === l.value}
-              onChange={() => store.map.setActiveBaseLayer(l.value)}
-            />
-          </LayerDiv>
-        )
-      }
+      {baseLayers.map((l, index) => (
+        <LayerDiv key={index}>
+          <Radio
+            name="baseLayers"
+            value={l.value}
+            label={l.label}
+            checked={store.map.activeBaseLayer === l.value}
+            onChange={() => store.map.setActiveBaseLayer(l.value)}
+          />
+        </LayerDiv>
+      ))}
     </CardContent>
   )
 }

@@ -8,33 +8,29 @@ import PropTypes from 'prop-types'
 // import 'leaflet-measure'
 import '../../../../node_modules/leaflet-measure/dist/leaflet-measure'
 
-const enhance = compose(
-  getContext({ map: PropTypes.object.isRequired }),
-)
+const enhance = compose(getContext({ map: PropTypes.object.isRequired }))
 
 class MeasureControl extends Component {
   componentDidMount() {
     const { map } = this.props
     const options = {
-      primaryLengthUnit: `meters`,
-      secondaryLengthUnit: `kilometers`,
-      primaryAreaUnit: `sqmeters`,
-      secondaryAreaUnit: `hectares`,
-      localization: `de_CH`,
-      activeColor: `#f45942`,
-      completedColor: `#b22c25`,
+      primaryLengthUnit: 'meters',
+      secondaryLengthUnit: 'kilometers',
+      primaryAreaUnit: 'sqmeters',
+      secondaryAreaUnit: 'hectares',
+      localization: 'de_CH',
+      activeColor: '#f45942',
+      completedColor: '#b22c25',
       thousandsSep: `'`,
-      decPoint: `.`,
+      decPoint: '.',
     }
     const measureControl = new window.L.Control.Measure(options)
     measureControl.addTo(map)
   }
 
   render() {
-    // console.log(`map:`, this.props.map)
-    return (
-      <div style={{ display: `none` }} />
-    )
+    // console.log('map:', this.props.map)
+    return <div style={{ display: 'none' }} />
   }
 }
 

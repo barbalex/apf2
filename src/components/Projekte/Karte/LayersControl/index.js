@@ -54,10 +54,10 @@ const StyledFontIcon = styled(FontIcon)`
 `
 
 const enhance = compose(
-  inject(`store`),
-  withState(`baseLayersExpanded`, `toggleBaseLayersExpanded`, false),
-  withState(`overlaysExpanded`, `toggleOverlaysExpanded`, false),
-  withState(`apfloraLayersExpanded`, `toggleApfloraLayersExpanded`, false),
+  inject('store'),
+  withState('baseLayersExpanded', 'toggleBaseLayersExpanded', false),
+  withState('overlaysExpanded', 'toggleOverlaysExpanded', false),
+  withState('apfloraLayersExpanded', 'toggleApfloraLayersExpanded', false),
   withHandlers({
     onToggleBaseLayersExpanded: props => () => {
       const {
@@ -111,42 +111,39 @@ const enhance = compose(
       }
     },
   }),
-  observer
+  observer,
 )
 
-const LayersControl = (
-  {
-    store,
-    baseLayersExpanded,
-    overlaysExpanded,
-    apfloraLayersExpanded,
-    onToggleBaseLayersExpanded,
-    onToggleOverlaysExpanded,
-    onToggleApfloraLayersExpanded,
-  }:
-  {
-    store: Object,
-    baseLayersExpanded: boolean,
-    overlaysExpanded: boolean,
-    toggleBaseLayersExpanded: () => void,
-    toggleOverlaysExpanded: () => void,
-    onToggleBaseLayersExpanded: () => void,
-    onToggleOverlaysExpanded: () => void,
-  }
-) => {
+const LayersControl = ({
+  store,
+  baseLayersExpanded,
+  overlaysExpanded,
+  apfloraLayersExpanded,
+  onToggleBaseLayersExpanded,
+  onToggleOverlaysExpanded,
+  onToggleApfloraLayersExpanded,
+}: {
+  store: Object,
+  baseLayersExpanded: boolean,
+  overlaysExpanded: boolean,
+  toggleBaseLayersExpanded: () => void,
+  toggleOverlaysExpanded: () => void,
+  onToggleBaseLayersExpanded: () => void,
+  onToggleOverlaysExpanded: () => void,
+}) => {
   const { tree, table } = store
   const { activeNodes } = tree
   const getApfloraLayersTitle = () => {
-    if (!activeNodes.ap) return `apflora`
+    if (!activeNodes.ap) return 'apflora'
     const ap = table.ap.get(activeNodes.ap)
-    if (!ap || !ap.label) return `apflora`
+    if (!ap || !ap.label) return 'apflora'
     return ap.label
   }
-  const ApfloraCard = (
-    baseLayersExpanded || apfloraLayersExpanded || overlaysExpanded ?
-    CardTitle :
-    CardTitleApfloraOpen
-  )
+  const ApfloraCard = baseLayersExpanded ||
+    apfloraLayersExpanded ||
+    overlaysExpanded
+    ? CardTitle
+    : CardTitleApfloraOpen
 
   return (
     <Control position="topright">
@@ -157,12 +154,11 @@ const LayersControl = (
               <ApfloraCard>{getApfloraLayersTitle()}</ApfloraCard>
               <div>
                 <StyledFontIcon className="material-icons">
-                  { apfloraLayersExpanded ? `expand_less` : `expand_more` }
+                  {apfloraLayersExpanded ? 'expand_less' : 'expand_more'}
                 </StyledFontIcon>
               </div>
             </CardHeader>
-            {
-              apfloraLayersExpanded &&
+            {apfloraLayersExpanded &&
               <ApfloraLayers
                 store={store}
                 /**
@@ -171,20 +167,18 @@ const LayersControl = (
                  */
                 apfloraLayersString={store.map.apfloraLayersString}
                 assigning={store.map.beob.assigning}
-              />
-            }
+              />}
           </Card>
           <Card>
             <CardHeader onClick={onToggleOverlaysExpanded}>
               <CardTitle>überlagernd</CardTitle>
               <div>
                 <StyledFontIcon className="material-icons">
-                  { overlaysExpanded ? `expand_less` : `expand_more` }
+                  {overlaysExpanded ? 'expand_less' : 'expand_more'}
                 </StyledFontIcon>
               </div>
             </CardHeader>
-            {
-              overlaysExpanded &&
+            {overlaysExpanded &&
               <Overlays
                 store={store}
                 /**
@@ -193,22 +187,18 @@ const LayersControl = (
                  */
                 overlaysString={store.map.overlaysString}
                 assigning={store.map.beob.assigning}
-              />
-            }
+              />}
           </Card>
           <Card>
             <CardHeader onClick={onToggleBaseLayersExpanded}>
               <CardTitle>Hintergrund</CardTitle>
               <div>
                 <StyledFontIcon className="material-icons">
-                  { baseLayersExpanded ? `expand_less` : `expand_more` }
+                  {baseLayersExpanded ? 'expand_less' : 'expand_more'}
                 </StyledFontIcon>
               </div>
             </CardHeader>
-            {
-              baseLayersExpanded &&
-              <BaseLayers store={store} />
-            }
+            {baseLayersExpanded && <BaseLayers store={store} />}
           </Card>
         </CardContainer>
       </MuiThemeProvider>
