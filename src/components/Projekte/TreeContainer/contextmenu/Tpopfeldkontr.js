@@ -7,35 +7,30 @@ import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
 
 const enhance = compose(
-  inject(`store`),
-  withState(`label`, `changeLabel`, ``),
+  inject('store'),
+  withState('label', 'changeLabel', ''),
   withHandlers({
     // according to https://github.com/vkbansal/react-contextmenu/issues/65
     // this is how to pass data from ContextMenuTrigger to ContextMenu
-    onShow: props => (event) =>
-      props.changeLabel(event.detail.data.nodeLabel)
-    ,
-  })
+    onShow: props => event => props.changeLabel(event.detail.data.nodeLabel),
+  }),
 )
 
-const Tpopfeldkontr = (
-  {
-    store,
-    tree,
-    onClick,
-    changeLabel,
-    label,
-    onShow,
-  }:
-  {
-    store: Object,
-    tree: Object,
-    onClick: () => void,
-    changeLabel: () => void,
-    label: string|number,
-    onShow: () => void,
-  }
-) => {
+const Tpopfeldkontr = ({
+  store,
+  tree,
+  onClick,
+  changeLabel,
+  label,
+  onShow,
+}: {
+  store: Object,
+  tree: Object,
+  onClick: () => void,
+  changeLabel: () => void,
+  label: string | number,
+  onShow: () => void,
+}) => {
   const copyingBiotop = store.copyingBiotop.id
 
   return (
@@ -48,8 +43,8 @@ const Tpopfeldkontr = (
       <MenuItem
         onClick={onClick}
         data={{
-          action: `insert`,
-          table: `tpopfeldkontr`,
+          action: 'insert',
+          table: 'tpopfeldkontr',
         }}
       >
         erstelle neue
@@ -57,8 +52,8 @@ const Tpopfeldkontr = (
       <MenuItem
         onClick={onClick}
         data={{
-          action: `delete`,
-          table: `tpopfeldkontr`,
+          action: 'delete',
+          table: 'tpopfeldkontr',
         }}
       >
         lösche
@@ -66,8 +61,8 @@ const Tpopfeldkontr = (
       <MenuItem
         onClick={onClick}
         data={{
-          action: `markForMoving`,
-          table: `tpopfeldkontr`,
+          action: 'markForMoving',
+          table: 'tpopfeldkontr',
         }}
       >
         verschiebe
@@ -75,54 +70,48 @@ const Tpopfeldkontr = (
       <MenuItem
         onClick={onClick}
         data={{
-          action: `markForCopying`,
-          table: `tpopfeldkontr`,
+          action: 'markForCopying',
+          table: 'tpopfeldkontr',
         }}
       >
         kopiere
       </MenuItem>
-      {
-        store.copying.table &&
+      {store.copying.table &&
         <MenuItem
           onClick={onClick}
           data={{
-            action: `resetCopying`,
+            action: 'resetCopying',
           }}
         >
           Kopieren aufheben
-        </MenuItem>
-      }
+        </MenuItem>}
       <MenuItem
         onClick={onClick}
         data={{
-          action: `markForCopyingBiotop`,
-          table: `tpopfeldkontr`,
+          action: 'markForCopyingBiotop',
+          table: 'tpopfeldkontr',
         }}
       >
         kopiere Biotop
       </MenuItem>
-      {
-        copyingBiotop &&
+      {copyingBiotop &&
         <MenuItem
           onClick={onClick}
           data={{
-            action: `copyBiotop`,
+            action: 'copyBiotop',
           }}
         >
           {`kopiere Biotop von '${store.copyingBiotop.label}' hierhin`}
-        </MenuItem>
-      }
-      {
-        store.copyingBiotop.id &&
+        </MenuItem>}
+      {store.copyingBiotop.id &&
         <MenuItem
           onClick={onClick}
           data={{
-            action: `resetCopyingBiotop`,
+            action: 'resetCopyingBiotop',
           }}
         >
           Biotop Kopieren aufheben
-        </MenuItem>
-      }
+        </MenuItem>}
     </ContextMenu>
   )
 }
