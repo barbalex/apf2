@@ -6,32 +6,27 @@ import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
 
 const enhance = compose(
-  withState(`label`, `changeLabel`, ``),
+  withState('label', 'changeLabel', ''),
   withHandlers({
     // according to https://github.com/vkbansal/react-contextmenu/issues/65
     // this is how to pass data from ContextMenuTrigger to ContextMenu
-    onShow: props => (event) =>
-      props.changeLabel(event.detail.data.nodeLabel)
-    ,
-  })
+    onShow: props => event => props.changeLabel(event.detail.data.nodeLabel),
+  }),
 )
 
-const Tpopfreiwkontrzaehl = (
-  {
-    tree,
-    onClick,
-    changeLabel,
-    label,
-    onShow,
-  }:
-  {
-    tree: Object,
-    onClick: () => void,
-    changeLabel: () => void,
-    label: string|number,
-    onShow: () => void,
-  }
-) =>
+const Tpopfreiwkontrzaehl = ({
+  tree,
+  onClick,
+  changeLabel,
+  label,
+  onShow,
+}: {
+  tree: Object,
+  onClick: () => void,
+  changeLabel: () => void,
+  label: string | number,
+  onShow: () => void,
+}) => (
   <ContextMenu
     id={`${tree.name}tpopfreiwkontrzaehl`}
     collect={props => props}
@@ -41,8 +36,8 @@ const Tpopfreiwkontrzaehl = (
     <MenuItem
       onClick={onClick}
       data={{
-        action: `insert`,
-        table: `tpopfreiwkontrzaehl`,
+        action: 'insert',
+        table: 'tpopfreiwkontrzaehl',
       }}
     >
       erstelle neue
@@ -50,12 +45,13 @@ const Tpopfreiwkontrzaehl = (
     <MenuItem
       onClick={onClick}
       data={{
-        action: `delete`,
-        table: `tpopfreiwkontrzaehl`,
+        action: 'delete',
+        table: 'tpopfreiwkontrzaehl',
       }}
     >
       lösche
     </MenuItem>
   </ContextMenu>
+)
 
 export default enhance(Tpopfreiwkontrzaehl)
