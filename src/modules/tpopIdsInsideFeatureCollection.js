@@ -11,31 +11,31 @@ export default (store: Object, tpops: Array<Object>): Array<number> => {
   let tpopsToUse = tpops.filter(p => {
     if (!p.TPopId) return false
     if (p.TPopXKoord && p.TPopYKoord) return true
-    if (p[`TPop X-Koordinaten`] && p[`TPop Y-Koordinaten`]) return true
+    if (p['TPop X-Koordinaten'] && p['TPop Y-Koordinaten']) return true
     return false
   })
   // ...and account for user friendly field names in views
   tpopsToUse = tpopsToUse.map(p => {
-    if (p[`TPop X-Koordinaten`] && p[`TPop Y-Koordinaten`]) {
-      p.TPopXKoord = p[`TPop X-Koordinaten`]
-      p.TPopYKoord = p[`TPop Y-Koordinaten`]
+    if (p['TPop X-Koordinaten'] && p['TPop Y-Koordinaten']) {
+      p.TPopXKoord = p['TPop X-Koordinaten']
+      p.TPopYKoord = p['TPop Y-Koordinaten']
     }
     return p
   })
   const points = {
-    type: `FeatureCollection`,
+    type: 'FeatureCollection',
     // build an array of geoJson points
     features: tpopsToUse.map(t => ({
-      type: `Feature`,
+      type: 'Feature',
       properties: {
-        TPopId: t.TPopId
+        TPopId: t.TPopId,
       },
       geometry: {
-        type: `Point`,
+        type: 'Point',
         // convert koordinates to wgs84
-        coordinates: epsg21781to4326(t.TPopXKoord, t.TPopYKoord)
-      }
-    }))
+        coordinates: epsg21781to4326(t.TPopXKoord, t.TPopYKoord),
+      },
+    })),
   }
 
   // let turf check what points are within filter

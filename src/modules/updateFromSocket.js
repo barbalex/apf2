@@ -8,9 +8,9 @@ export default (store: Object, payload: Object): void => {
   const idField = tableMeta.idField
   if (tableMeta && idField) {
     const id = row[idField]
-    if (type === `UPDATE` || type === `INSERT`) {
+    if (type === 'UPDATE' || type === 'INSERT') {
       store.table[table].set(id, row)
-    } else if (type === `DELETE`) {
+    } else if (type === 'DELETE') {
       store.table[table].delete(id)
     }
   }

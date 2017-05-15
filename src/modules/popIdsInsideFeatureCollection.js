@@ -11,31 +11,31 @@ export default (store: Object, pops: Array<Object>): Array<number> => {
   let popsToUse = pops.filter(p => {
     if (!p.PopId) return false
     if (p.PopXKoord && p.PopYKoord) return true
-    if (p[`Pop X-Koordinaten`] && p[`Pop Y-Koordinaten`]) return true
+    if (p['Pop X-Koordinaten'] && p['Pop Y-Koordinaten']) return true
     return false
   })
   // ...and account for user friendly field names in views
   popsToUse = popsToUse.map(p => {
-    if (p[`Pop X-Koordinaten`] && p[`Pop Y-Koordinaten`]) {
-      p.PopXKoord = p[`Pop X-Koordinaten`]
-      p.PopYKoord = p[`Pop Y-Koordinaten`]
+    if (p['Pop X-Koordinaten'] && p['Pop Y-Koordinaten']) {
+      p.PopXKoord = p['Pop X-Koordinaten']
+      p.PopYKoord = p['Pop Y-Koordinaten']
     }
     return p
   })
   const points = {
-    type: `FeatureCollection`,
+    type: 'FeatureCollection',
     // build an array of geoJson points
     features: popsToUse.map(p => ({
-      type: `Feature`,
+      type: 'Feature',
       properties: {
-        PopId: p.PopId
+        PopId: p.PopId,
       },
       geometry: {
-        type: `Point`,
+        type: 'Point',
         // convert koordinates to wgs84
-        coordinates: epsg21781to4326(p.PopXKoord, p.PopYKoord)
-      }
-    }))
+        coordinates: epsg21781to4326(p.PopXKoord, p.PopYKoord),
+      },
+    })),
   }
 
   // let turf check what points are within filter
