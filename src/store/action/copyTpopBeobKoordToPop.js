@@ -8,12 +8,12 @@ import insertDatasetInIdb from './insertDatasetInIdb'
 
 export default (store: Object, beobId: string): void => {
   if (!beobId) {
-    return store.listError(new Error(`keine beobId übergeben`))
+    return store.listError(new Error('keine beobId übergeben'))
   }
   const beobzuordnung = store.table.beobzuordnung.get(beobId)
   if (!beobzuordnung) {
     return store.listError(
-      new Error(`Die Beobachtung mit beobId ${beobId} wurde nicht gefunden`)
+      new Error(`Die Beobachtung mit beobId ${beobId} wurde nicht gefunden`),
     )
   }
   const beob = store.table.beob.get(beobId)
@@ -22,14 +22,14 @@ export default (store: Object, beobId: string): void => {
   let tpopInStore = store.table.tpop.get(tpopId)
   if (!tpopInStore) {
     return store.listError(
-      new Error(`Die Teilpopulation mit tpopId ${tpopId} wurde nicht gefunden`)
+      new Error(`Die Teilpopulation mit tpopId ${tpopId} wurde nicht gefunden`),
     )
   }
   if (!X || !Y) {
     return store.listError(
       new Error(
-        `Es wurden keine Koordinaten gefunden. Daher wurden sie nicht in die Teilpopulation kopiert`
-      )
+        'Es wurden keine Koordinaten gefunden. Daher wurden sie nicht in die Teilpopulation kopiert',
+      ),
     )
   }
   // keep original pop in case update fails
@@ -41,7 +41,7 @@ export default (store: Object, beobId: string): void => {
   const tpopForDb = clone(toJS(tpopInStore))
   // remove empty values
   Object.keys(tpopForDb).forEach(k => {
-    if ((!tpopForDb[k] && tpopForDb[k] !== 0) || tpopForDb[k] === `undefined`) {
+    if ((!tpopForDb[k] && tpopForDb[k] !== 0) || tpopForDb[k] === 'undefined') {
       delete tpopForDb[k]
     }
   })
@@ -65,7 +65,7 @@ export default (store: Object, beobId: string): void => {
     .put(url)
     .then(() => {
       // put this dataset in idb
-      insertDatasetInIdb(store, `tpop`, tpopForIdb)
+      insertDatasetInIdb(store, 'tpop', tpopForIdb)
     })
     .catch(error => {
       tpopInStore = originalTpop

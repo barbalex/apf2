@@ -12,7 +12,7 @@ export default (store: Object, newId: number): void => {
   const rowToGetBiotopFrom = store.table.tpopkontr.get(id)
   if (!rowToGetBiotopFrom) {
     return store.listError(
-      new Error(`change was not saved because dataset was not found in store`)
+      new Error('change was not saved because dataset was not found in store'),
     )
   }
 
@@ -29,7 +29,7 @@ export default (store: Object, newId: number): void => {
   const rowForDb = clone(toJS(rowToUpdate))
   // remove empty values
   Object.keys(rowForDb).forEach(k => {
-    if ((!rowForDb[k] && rowForDb[k] !== 0) || rowForDb[k] === `undefined`) {
+    if ((!rowForDb[k] && rowForDb[k] !== 0) || rowForDb[k] === 'undefined') {
       delete rowForDb[k]
     }
   })
@@ -50,7 +50,7 @@ export default (store: Object, newId: number): void => {
     .put(url)
     .then(() => {
       // put this dataset in idb
-      insertDatasetInIdb(store, `tpopkontr`, rowForIdb)
+      insertDatasetInIdb(store, 'tpopkontr', rowForIdb)
     })
     .catch(error => {
       rowToUpdate = rowToUpdateBeforeUpdating

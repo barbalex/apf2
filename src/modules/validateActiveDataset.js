@@ -5,19 +5,19 @@ import Joi from 'joi-browser'
 export default (
   table: ?string,
   row: ?Object,
-  allFields: Array<Object>
+  allFields: Array<Object>,
 ): Object => {
   const valid = {}
   if (!table || !row || !allFields || !allFields.length) {
     return valid
   }
   // beob is read only, so do not validate
-  if (table === `beob`) return valid
+  if (table === 'beob') return valid
   const tableName = table
-    .replace(`tpopfeldkontr`, `tpopkontr`)
-    .replace(`tpopfreiwkontr`, `tpopkontr`)
+    .replace('tpopfeldkontr', 'tpopkontr')
+    .replace('tpopfreiwkontr', 'tpopkontr')
   const fields = allFields.filter(
-    f => f.table_schema === `apflora` && f.table_name === tableName
+    f => f.table_schema === 'apflora' && f.table_name === tableName,
   )
   if (fields.length === 0) {
     // eslint-disable-next-line no-console
@@ -31,42 +31,47 @@ export default (
     if (field) {
       const dataType = field.data_type
       switch (dataType) {
-        case `integer`: {
+        case 'integer': {
           validDataType = Joi.validate(
             value,
             Joi.number()
               .integer()
               .min(-2147483648)
               .max(+2147483647)
-              .allow(``)
-              .allow(null)
+              .allow('')
+              .allow(null),
           )
           break
         }
 
-        case `smallint`: {
+        case 'smallint': {
           validDataType = Joi.validate(
             value,
-            Joi.number().integer().min(-32768).max(+32767).allow(``).allow(null)
+            Joi.number()
+              .integer()
+              .min(-32768)
+              .max(+32767)
+              .allow('')
+              .allow(null),
           )
           break
         }
 
-        case `double precision`: {
+        case 'double precision': {
           validDataType = Joi.validate(
             value,
-            Joi.number().precision(15).allow(``).allow(null)
+            Joi.number().precision(15).allow('').allow(null),
           )
           break
         }
 
-        case `character varying`: {
+        case 'character varying': {
           validDataType = Joi.validate(
             value,
             Joi.alternatives()
               .try(Joi.number(), Joi.string())
-              .allow(``)
-              .allow(null)
+              .allow('')
+              .allow(null),
           )
           // - if field type is varchar: check if value length complies to character_maximum_length
           const maxLen = field.character_maximum_length
@@ -75,30 +80,30 @@ export default (
               value,
               Joi.alternatives()
                 .try(Joi.string().max(maxLen), Joi.number())
-                .allow(``)
-                .allow(null)
+                .allow('')
+                .allow(null),
             )
           }
           break
         }
 
-        case `uuid`: {
+        case 'uuid': {
           validDataType = Joi.validate(value, Joi.string().guid().allow(null))
           break
         }
 
-        case `date`: {
+        case 'date': {
           validDataType = Joi.validate(value, Joi.string().allow(null))
           break
         }
 
-        case `text`: {
+        case 'text': {
           validDataType = Joi.validate(
             value,
             Joi.alternatives()
               .try(Joi.number(), Joi.string())
-              .allow(``)
-              .allow(null)
+              .allow('')
+              .allow(null),
           )
           break
         }
@@ -109,8 +114,8 @@ export default (
       }
       if (validDataType && validDataType.error && validDataType.error.message) {
         valid[key] = validDataType.error.message
-      } else if (valid[key] !== ``) {
-        valid[key] = ``
+      } else if (valid[key] !== '') {
+        valid[key] = ''
       }
     }
   })

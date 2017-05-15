@@ -25,21 +25,21 @@ export default (store: Object, parentId: number): void => {
   const idField = tabelle ? tabelle.idField : undefined
   if (!idField) {
     return store.listError(
-      new Error('change was not saved because idField was not found')
+      new Error('change was not saved because idField was not found'),
     )
   }
   // $FlowIssue
   const parentIdField = tabelle.parentIdField
   if (!parentIdField) {
     return store.listError(
-      new Error(`change was not saved because parentIdField was not found`)
+      new Error('change was not saved because parentIdField was not found'),
     )
   }
 
   const row = store.table[table].get(id)
   if (!row) {
     return store.listError(
-      new Error(`change was not saved because dataset was not found in store`)
+      new Error('change was not saved because dataset was not found in store'),
     )
   }
 
@@ -47,7 +47,7 @@ export default (store: Object, parentId: number): void => {
   const newRow = clone(row)
   // need to remove empty values and guids
   Object.keys(newRow).forEach(k => {
-    if ((!newRow[k] && newRow[k] !== 0) || k.endsWith(`Guid`)) {
+    if ((!newRow[k] && newRow[k] !== 0) || k.endsWith('Guid')) {
       delete newRow[k]
     }
   })

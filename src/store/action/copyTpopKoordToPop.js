@@ -8,34 +8,34 @@ import insertDatasetInIdb from './insertDatasetInIdb'
 
 export default (store: Object, tpopId: number): void => {
   if (!tpopId) {
-    return store.listError(new Error(`keine tpopId übergeben`))
+    return store.listError(new Error('keine tpopId übergeben'))
   }
   const tpop = store.table.tpop.get(tpopId)
   if (!tpop) {
     return store.listError(
       new Error(
-        `Für die Teilpopulation mit tpopId ${tpopId} wurde keine Teilpopulation gefunden`
-      )
+        `Für die Teilpopulation mit tpopId ${tpopId} wurde keine Teilpopulation gefunden`,
+      ),
     )
   }
   if (!tpop.TPopXKoord || !tpop.TPopYKoord) {
     return store.listError(
       new Error(
-        `Die Teilpopulation mit tpopId ${tpopId} hat keine (vollständigen) Koordinaten. Daher wurden sie nicht in die Population kopiert`
-      )
+        `Die Teilpopulation mit tpopId ${tpopId} hat keine (vollständigen) Koordinaten. Daher wurden sie nicht in die Population kopiert`,
+      ),
     )
   }
   if (!tpop.PopId) {
     return store.listError(
-      new Error(`Die Teilpopulation mit tpopId ${tpopId} hat keine Population`)
+      new Error(`Die Teilpopulation mit tpopId ${tpopId} hat keine Population`),
     )
   }
   let popInStore = store.table.pop.get(tpop.PopId)
   if (!popInStore) {
     return store.listError(
       new Error(
-        `Für die Teilpopulation mit tpopId ${tpopId} wurde keine Population gefunden`
-      )
+        `Für die Teilpopulation mit tpopId ${tpopId} wurde keine Population gefunden`,
+      ),
     )
   }
   // keep original pop in case update fails
@@ -47,7 +47,7 @@ export default (store: Object, tpopId: number): void => {
   const popForDb = clone(toJS(popInStore))
   // remove empty values
   Object.keys(popForDb).forEach(k => {
-    if ((!popForDb[k] && popForDb[k] !== 0) || popForDb[k] === `undefined`) {
+    if ((!popForDb[k] && popForDb[k] !== 0) || popForDb[k] === 'undefined') {
       delete popForDb[k]
     }
   })
@@ -69,7 +69,7 @@ export default (store: Object, tpopId: number): void => {
     .put(url)
     .then(() => {
       // put this dataset in idb
-      insertDatasetInIdb(store, `pop`, popForIdb)
+      insertDatasetInIdb(store, 'pop', popForIdb)
     })
     .catch(error => {
       popInStore = originalPop
