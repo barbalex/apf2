@@ -4,7 +4,7 @@ import 'leaflet'
 export default (store: Object): Array<Object> => {
   const { beobs, highlightedIds } = store.map.tpopBeob
   const visible = store.map.activeApfloraLayers.includes(
-    `TpopBeobAssignPolylines`
+    'TpopBeobAssignPolylines',
   )
   if (visible) {
     return beobs.map(p => {
@@ -16,7 +16,7 @@ export default (store: Object): Array<Object> => {
       const latlngs = [p.KoordWgs84, tpopKoord]
 
       return window.L.polyline(latlngs, {
-        color: isHighlighted ? `yellow` : `#FF00FF`
+        color: isHighlighted ? 'yellow' : '#FF00FF',
       })
     })
   }

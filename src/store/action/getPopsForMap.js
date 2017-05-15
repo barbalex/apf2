@@ -10,10 +10,10 @@ export default (store: Object): Array<Object> => {
     // omit pops without coordinates
     .filter(p => p.PopXKoord && p.PopYKoord)
   // filter them by nodeLabelFilter
-  const popFilterString = tree.nodeLabelFilter.get(`pop`)
+  const popFilterString = tree.nodeLabelFilter.get('pop')
   if (popFilterString) {
     pops = pops.filter(p => {
-      const label = `${p.PopNr || `(keine Nr)`}: ${p.PopName || `(kein Name)`}`
+      const label = `${p.PopNr || '(keine Nr)'}: ${p.PopName || '(kein Name)'}`
       return label.toLowerCase().includes(popFilterString.toLowerCase())
     })
   }

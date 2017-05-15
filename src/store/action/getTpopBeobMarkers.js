@@ -10,7 +10,7 @@ import getNearestTpopId from '../../modules/getNearestTpopId'
 
 export default (store: Object): Array<Object> => {
   const { beobs, highlightedIds } = store.map.tpopBeob
-  const visible = store.map.activeApfloraLayers.includes(`TpopBeob`)
+  const visible = store.map.activeApfloraLayers.includes('TpopBeob')
 
   if (visible) {
     return beobs.map(p => {
@@ -20,7 +20,7 @@ export default (store: Object): Array<Object> => {
       const icon = window.L.icon({
         iconUrl: isHighlighted ? beobIconHighlighted : beobIcon,
         iconSize: [24, 24],
-        className: isHighlighted ? `beobIconHighlighted` : `beobIcon`,
+        className: isHighlighted ? 'beobIconHighlighted' : 'beobIcon',
       })
       return window.L
         .marker(latLng, {
@@ -28,7 +28,7 @@ export default (store: Object): Array<Object> => {
           icon,
           draggable: store.map.beob.assigning,
           zIndexOffset: -store.map.apfloraLayers.findIndex(
-            apfloraLayer => apfloraLayer.value === `TpopBeob`,
+            apfloraLayer => apfloraLayer.value === 'TpopBeob',
           ),
         })
         .bindPopup(
@@ -47,19 +47,19 @@ export default (store: Object): Array<Object> => {
           const nearestTpopId = getNearestTpopId(store, event.target._latlng)
           const popId = table.tpop.get(nearestTpopId).PopId
           const newActiveNodeArray = [
-            `Projekte`,
+            'Projekte',
             activeNodes.projekt,
-            `Arten`,
+            'Arten',
             activeNodes.ap,
-            `Populationen`,
+            'Populationen',
             popId,
-            `Teil-Populationen`,
+            'Teil-Populationen',
             nearestTpopId,
-            `Beobachtungen`,
+            'Beobachtungen',
             p.BeobId,
           ]
           store.tree.setActiveNodeArray(newActiveNodeArray)
-          updatePropertyInDb(tree, `TPopId`, nearestTpopId)
+          updatePropertyInDb(tree, 'TPopId', nearestTpopId)
         })
     })
   }

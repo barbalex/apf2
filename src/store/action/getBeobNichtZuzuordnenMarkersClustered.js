@@ -11,18 +11,18 @@ import BeobPopup from '../../components/Projekte/Karte/BeobPopup'
 
 export default (store: Object): Object => {
   const { beobs, highlightedIds } = store.map.beobNichtZuzuordnen
-  const visible = store.map.activeApfloraLayers.includes(`BeobNichtZuzuordnen`)
+  const visible = store.map.activeApfloraLayers.includes('BeobNichtZuzuordnen')
   const mcgOptions = {
     maxClusterRadius: 66,
     iconCreateFunction: function(cluster) {
       const markers = cluster.getAllChildMarkers()
       const hasHighlightedTpop = some(
         markers,
-        m => m.options.icon.options.className === `beobIconHighlighted`,
+        m => m.options.icon.options.className === 'beobIconHighlighted',
       )
       const className = hasHighlightedTpop
-        ? `beobNichtZuzuordnenClusterHighlighted`
-        : `beobNichtZuzuordnenCluster`
+        ? 'beobNichtZuzuordnenClusterHighlighted'
+        : 'beobNichtZuzuordnenCluster'
       return window.L.divIcon({
         html: markers.length,
         className,
@@ -38,14 +38,14 @@ export default (store: Object): Object => {
       const icon = window.L.icon({
         iconUrl: isHighlighted ? beobIconHighlighted : beobIcon,
         iconSize: [24, 24],
-        className: isHighlighted ? `beobIconHighlighted` : `beobIcon`,
+        className: isHighlighted ? 'beobIconHighlighted' : 'beobIcon',
       })
       const marker = window.L
         .marker(latLng, {
           title: p.label,
           icon,
           zIndexOffset: -store.map.apfloraLayers.findIndex(
-            apfloraLayer => apfloraLayer.value === `BeobNichtZuzuordnen`,
+            apfloraLayer => apfloraLayer.value === 'BeobNichtZuzuordnen',
           ),
         })
         .bindPopup(

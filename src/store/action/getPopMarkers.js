@@ -15,24 +15,24 @@ import PopPopup from '../../components/Projekte/Karte/PopPopup'
 
 export default (store: Object): Object => {
   const { pops, labelUsingNr, highlightedIds } = store.map.pop
-  const visible = store.map.activeApfloraLayers.includes(`Pop`)
+  const visible = store.map.activeApfloraLayers.includes('Pop')
   const mcgOptions = {
     maxClusterRadius: 66,
     iconCreateFunction: function(cluster) {
       const markers = cluster.getAllChildMarkers()
       const hasHighlightedPop = some(
         markers,
-        m => m.options.icon.options.className === `popIconHighlighted`
+        m => m.options.icon.options.className === 'popIconHighlighted',
       )
       const className = hasHighlightedPop
-        ? `popClusterHighlighted`
-        : `popCluster`
+        ? 'popClusterHighlighted'
+        : 'popCluster'
       return window.L.divIcon({
         html: markers.length,
         className,
-        iconSize: window.L.point(40, 40)
+        iconSize: window.L.point(40, 40),
       })
-    }
+    },
   }
   const markers = window.L.markerClusterGroup(mcgOptions)
   if (visible) {
@@ -45,29 +45,29 @@ export default (store: Object): Object => {
         }
         const tooltipOptions = {
           permanent: true,
-          direction: `bottom`,
-          className: `mapTooltip`,
-          opacity: 1
+          direction: 'bottom',
+          className: 'mapTooltip',
+          opacity: 1,
         }
         const isHighlighted = highlightedIds.includes(p.PopId)
         const latLng = new window.L.LatLng(...p.PopKoordWgs84)
         const icon = window.L.icon({
           iconUrl: isHighlighted ? popIconHighlighted : popIcon,
           iconSize: [24, 24],
-          className: isHighlighted ? `popIconHighlighted` : `popIcon`
+          className: isHighlighted ? 'popIconHighlighted' : 'popIcon',
         })
         const marker = window.L
           .marker(latLng, {
             title,
             icon,
             zIndexOffset: -store.map.apfloraLayers.findIndex(
-              apfloraLayer => apfloraLayer.value === `Pop`
-            )
+              apfloraLayer => apfloraLayer.value === 'Pop',
+            ),
           })
           .bindPopup(
             ReactDOMServer.renderToStaticMarkup(
-              <PopPopup store={store} pop={p} />
-            )
+              <PopPopup store={store} pop={p} />,
+            ),
           )
           .bindTooltip(title, tooltipOptions)
         markers.addLayer(marker)
