@@ -6,43 +6,40 @@ import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
 
 const enhance = compose(
-  withState(`label`, `changeLabel`, ``),
+  withState('label', 'changeLabel', ''),
   withHandlers({
     // according to https://github.com/vkbansal/react-contextmenu/issues/65
     // this is how to pass data from ContextMenuTrigger to ContextMenu
-    onShow: props => (event) =>
-      props.changeLabel(event.detail.data.nodeLabel)
-    ,
-  })
+    onShow: props => event => props.changeLabel(event.detail.data.nodeLabel),
+  }),
 )
 
-const Tpopmassnber = (
-  {
-    tree,
-    onClick,
-    changeLabel,
-    label,
-    onShow,
-  }:
-  {
-    tree: Object,
-    onClick: () => void,
-    changeLabel: () => void,
-    label: string|number,
-    onShow: () => void,
-  }
-) =>
+const Tpopmassnber = ({
+  tree,
+  onClick,
+  changeLabel,
+  label,
+  onShow,
+}: {
+  tree: Object,
+  onClick: () => void,
+  changeLabel: () => void,
+  label: string | number,
+  onShow: () => void,
+}) => (
   <ContextMenu
     id={`${tree.name}tpopmassnber`}
     collect={props => props}
     onShow={onShow}
   >
-    <div className="react-contextmenu-title" style={{ width: `180px` }}>Massnahmen-Bericht</div>
+    <div className="react-contextmenu-title" style={{ width: '180px' }}>
+      Massnahmen-Bericht
+    </div>
     <MenuItem
       onClick={onClick}
       data={{
-        action: `insert`,
-        table: `tpopmassnber`,
+        action: 'insert',
+        table: 'tpopmassnber',
       }}
     >
       erstelle neuen
@@ -50,12 +47,13 @@ const Tpopmassnber = (
     <MenuItem
       onClick={onClick}
       data={{
-        action: `delete`,
-        table: `tpopmassnber`,
+        action: 'delete',
+        table: 'tpopmassnber',
       }}
     >
       lösche
     </MenuItem>
   </ContextMenu>
+)
 
 export default enhance(Tpopmassnber)
