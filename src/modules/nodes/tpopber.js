@@ -6,47 +6,47 @@ export default (
   projId: number,
   apArtId: number,
   popId: number,
-  tpopId: number
+  tpopId: number,
 ): Array<Object> => {
   // fetch sorting indexes of parents
   const projIndex = findIndex(tree.filteredAndSorted.projekt, {
-    ProjId: projId
+    ProjId: projId,
   })
   const apIndex = findIndex(
     tree.filteredAndSorted.ap.filter(a => a.ProjId === projId),
-    { ApArtId: apArtId }
+    { ApArtId: apArtId },
   )
   const popIndex = findIndex(
     tree.filteredAndSorted.pop.filter(p => p.ApArtId === apArtId),
-    { PopId: popId }
+    { PopId: popId },
   )
   const tpopIndex = findIndex(
     tree.filteredAndSorted.tpop.filter(t => t.PopId === popId),
-    { TPopId: tpopId }
+    { TPopId: tpopId },
   )
 
   return tree.filteredAndSorted.tpopber
     .filter(t => t.TPopId === tpopId)
     .map((el, index) => ({
-      nodeType: `table`,
-      menuType: `tpopber`,
+      nodeType: 'table',
+      menuType: 'tpopber',
       parentId: tpopId,
       id: el.TPopBerId,
       urlLabel: el.TPopBerId,
       label: el.label,
       url: [
-        `Projekte`,
+        'Projekte',
         projId,
-        `Arten`,
+        'Arten',
         apArtId,
-        `Populationen`,
+        'Populationen',
         popId,
-        `Teil-Populationen`,
+        'Teil-Populationen',
         tpopId,
-        `Kontroll-Berichte`,
-        el.TPopBerId
+        'Kontroll-Berichte',
+        el.TPopBerId,
       ],
       sort: [projIndex, 1, apIndex, 1, popIndex, 1, tpopIndex, 5, index],
-      hasChildren: false
+      hasChildren: false,
     }))
 }

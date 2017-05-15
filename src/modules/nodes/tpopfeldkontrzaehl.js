@@ -7,53 +7,53 @@ export default (
   apArtId: number,
   popId: number,
   tpopId: number,
-  tpopkontrId: number
+  tpopkontrId: number,
 ): Array<Object> => {
   // fetch sorting indexes of parents
   const projIndex = findIndex(tree.filteredAndSorted.projekt, {
-    ProjId: projId
+    ProjId: projId,
   })
   const apIndex = findIndex(
     tree.filteredAndSorted.ap.filter(a => a.ProjId === projId),
-    { ApArtId: apArtId }
+    { ApArtId: apArtId },
   )
   const popIndex = findIndex(
     tree.filteredAndSorted.pop.filter(p => p.ApArtId === apArtId),
-    { PopId: popId }
+    { PopId: popId },
   )
   const tpopIndex = findIndex(
     tree.filteredAndSorted.tpop.filter(t => t.PopId === popId),
-    { TPopId: tpopId }
+    { TPopId: tpopId },
   )
   const tpopfeldkontrIndex = findIndex(
     tree.filteredAndSorted.tpopfeldkontr.filter(t => t.TPopId === tpopId),
     {
-      TPopKontrId: tpopkontrId
-    }
+      TPopKontrId: tpopkontrId,
+    },
   )
 
   return tree.filteredAndSorted.tpopfeldkontrzaehl
     .filter(z => z.TPopKontrId === tpopkontrId)
     .map((el, index) => ({
-      nodeType: `table`,
-      menuType: `tpopfeldkontrzaehl`,
+      nodeType: 'table',
+      menuType: 'tpopfeldkontrzaehl',
       id: el.TPopKontrZaehlId,
       parentId: tpopkontrId,
       urlLabel: el.TPopKontrZaehlId,
       label: el.label,
       url: [
-        `Projekte`,
+        'Projekte',
         projId,
-        `Arten`,
+        'Arten',
         apArtId,
-        `Populationen`,
+        'Populationen',
         popId,
-        `Teil-Populationen`,
+        'Teil-Populationen',
         tpopId,
-        `Feld-Kontrollen`,
+        'Feld-Kontrollen',
         tpopkontrId,
-        `Zaehlungen`,
-        el.TPopKontrZaehlId
+        'Zaehlungen',
+        el.TPopKontrZaehlId,
       ],
       sort: [
         projIndex,
@@ -66,8 +66,8 @@ export default (
         3,
         tpopfeldkontrIndex,
         1,
-        index
+        index,
       ],
-      hasChildren: false
+      hasChildren: false,
     }))
 }
