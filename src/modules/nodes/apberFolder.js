@@ -5,41 +5,41 @@ export default (
   store: Object,
   tree: Object,
   projId: number,
-  apArtId: number
+  apArtId: number,
 ): Array<Object> => {
   const { table } = store
 
   // fetch sorting indexes of parents
   const projIndex = findIndex(tree.filteredAndSorted.projekt, {
-    ProjId: projId
+    ProjId: projId,
   })
   const apIndex = findIndex(
     tree.filteredAndSorted.ap.filter(a => a.ProjId === projId),
-    { ApArtId: apArtId }
+    { ApArtId: apArtId },
   )
 
   const apberNodesLength = tree.filteredAndSorted.apber.filter(
-    n => n.ApArtId === apArtId
+    n => n.ApArtId === apArtId,
   ).length
 
   let message = apberNodesLength
   if (table.apberLoading) {
-    message = `...`
+    message = '...'
   }
-  if (tree.nodeLabelFilter.get(`apber`)) {
+  if (tree.nodeLabelFilter.get('apber')) {
     message = `${apberNodesLength} gefiltert`
   }
 
   return [
     {
-      nodeType: `folder`,
-      menuType: `apberFolder`,
+      nodeType: 'folder',
+      menuType: 'apberFolder',
       id: apArtId,
-      urlLabel: `AP-Berichte`,
+      urlLabel: 'AP-Berichte',
       label: `AP-Berichte (${message})`,
-      url: [`Projekte`, projId, `Arten`, apArtId, `AP-Berichte`],
+      url: ['Projekte', projId, 'Arten', apArtId, 'AP-Berichte'],
       sort: [projIndex, 1, apIndex, 4],
-      hasChildren: apberNodesLength > 0
-    }
+      hasChildren: apberNodesLength > 0,
+    },
   ]
 }
