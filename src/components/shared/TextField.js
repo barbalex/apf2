@@ -7,64 +7,58 @@ import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 
 const enhance = compose(
-  withState(`valueOnFocus`, `changeValueOnFocus`, ``),
+  withState('valueOnFocus', 'changeValueOnFocus', ''),
   withHandlers({
-    onChange: props =>
-      (event, val) =>
-        props.updateProperty(props.tree, props.fieldName, val),
-    onBlur: props =>
-      (event) => {
-        const { value } = event.target
-        // only update if value has changed
-        if (value != props.valueOnFocus) {  // eslint-disable-line eqeqeq
-          props.updatePropertyInDb(props.tree, props.fieldName, value)
-        }
-      },
-    onFocus: props =>
-      () =>
-        props.changeValueOnFocus(props.value),
+    onChange: props => (event, val) =>
+      props.updateProperty(props.tree, props.fieldName, val),
+    onBlur: props => event => {
+      const { value } = event.target
+      // only update if value has changed
+      // eslint-disable-next-line eqeqeq
+      if (value != props.valueOnFocus) {
+        props.updatePropertyInDb(props.tree, props.fieldName, value)
+      }
+    },
+    onFocus: props => () => props.changeValueOnFocus(props.value),
   }),
-  observer
+  observer,
 )
 
-const MyTextField = (
-  {
-    label,
-    value,
-    errorText,
-    type,
-    multiLine,
-    disabled,
-    hintText,
-    onChange,
-    onBlur,
-    onFocus,
-  }:
-  {
-    tree: Object,
-    label: string,
-    fieldName: string,
-    value?: ?number|?string,
-    valueOnFocus?: ?number|?string,
-    errorText?: ?string,
-    type?: string,
-    multiLine?: boolean,
-    disabled?: boolean,
-    hintText?: string,
-    onChange: () => void,
-    onBlur: () => void,
-    onFocus: () => void,
-    // no idea why but this CAN get passed as undefined...
-    updateProperty: () => void,
-    updatePropertyInDb: () => void,
-  }
-) =>
+const MyTextField = ({
+  label,
+  value,
+  errorText,
+  type,
+  multiLine,
+  disabled,
+  hintText,
+  onChange,
+  onBlur,
+  onFocus,
+}: {
+  tree: Object,
+  label: string,
+  fieldName: string,
+  value?: ?number | ?string,
+  valueOnFocus?: ?number | ?string,
+  errorText?: ?string,
+  type?: string,
+  multiLine?: boolean,
+  disabled?: boolean,
+  hintText?: string,
+  onChange: () => void,
+  onBlur: () => void,
+  onFocus: () => void,
+  // no idea why but this CAN get passed as undefined...
+  updateProperty: () => void,
+  updatePropertyInDb: () => void,
+}) => (
   <TextField
     floatingLabelText={label}
     hintText={hintText}
     type={type}
     multiLine={multiLine}
-    value={value || value === 0 ? value : ``}
+    value={value || value === 0 ? value : ''}
     errorText={errorText}
     disabled={disabled}
     fullWidth
@@ -72,15 +66,16 @@ const MyTextField = (
     onBlur={onBlur}
     onFocus={onFocus}
   />
+)
 
 MyTextField.defaultProps = {
-  value: ``,
-  valueOnFocus: ``,
-  errorText: ``,
-  type: `text`,
+  value: '',
+  valueOnFocus: '',
+  errorText: '',
+  type: 'text',
   multiLine: false,
   disabled: false,
-  hintText: ``,
+  hintText: '',
   updateProperty: null,
   updatePropertyInDb: null,
 }

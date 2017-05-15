@@ -25,48 +25,44 @@ const StyledFontIcon = styled(FontIcon)`
 `
 
 const enhance = compose(
-  withState(`valueOnFocus`, `changeValueOnFocus`, ``),
+  withState('valueOnFocus', 'changeValueOnFocus', ''),
   withHandlers({
     onChange: props => (event, val) =>
       props.updateProperty(props.tree, props.fieldName, val),
-    onBlur: props => (event) => {
+    onBlur: props => event => {
       const { value } = event.target
       // only update if value has changed
-      if (value != props.valueOnFocus) {  // eslint-disable-line eqeqeq
+      // eslint-disable-next-line eqeqeq
+      if (value != props.valueOnFocus) {
         props.updatePropertyInDb(props.tree, props.fieldName, value)
       }
     },
-    onFocus: props =>
-      () =>
-        props.changeValueOnFocus(props.value),
+    onFocus: props => () => props.changeValueOnFocus(props.value),
   }),
-  observer
+  observer,
 )
 
-const MyTextFieldWithUrl = (
-  {
-    label,
-    value,
-    errorText,
-    type,
-    multiLine,
-    disabled,
-    onChange,
-    onBlur,
-    onFocus,
-  }:
-  {
-    label: string,
-    value?: ?number|?string,
-    errorText?: string,
-    type?: string,
-    multiLine?: boolean,
-    disabled?: boolean,
-    onChange: () => void,
-    onBlur: () => void,
-    onFocus: () => void,
-  }
-) => {
+const MyTextFieldWithUrl = ({
+  label,
+  value,
+  errorText,
+  type,
+  multiLine,
+  disabled,
+  onChange,
+  onBlur,
+  onFocus,
+}: {
+  label: string,
+  value?: ?number | ?string,
+  errorText?: string,
+  type?: string,
+  multiLine?: boolean,
+  disabled?: boolean,
+  onChange: () => void,
+  onBlur: () => void,
+  onFocus: () => void,
+}) => {
   const urls = value ? getUrls(value) : []
 
   return (
@@ -75,7 +71,7 @@ const MyTextFieldWithUrl = (
         floatingLabelText={`${label} (bitte "www." statt "https://" eingeben)`}
         type={type}
         multiLine={multiLine}
-        value={value || ``}
+        value={value || ''}
         errorText={errorText}
         disabled={disabled}
         fullWidth
@@ -83,28 +79,26 @@ const MyTextFieldWithUrl = (
         onBlur={onBlur}
         onFocus={onFocus}
       />
-      {
-        Array.from(urls).map((url, index) => (
-          <StyledFontIcon
-            className={`material-icons`}
-            onClick={() => window.open(url, `_blank`)}
-            hoverColor={greenA200}
-            title={`${url} öffnen`}
-            key={index}
-          >
-            open_in_new
-          </StyledFontIcon>
-        ))
-      }
+      {Array.from(urls).map((url, index) => (
+        <StyledFontIcon
+          className={'material-icons'}
+          onClick={() => window.open(url, '_blank')}
+          hoverColor={greenA200}
+          title={`${url} öffnen`}
+          key={index}
+        >
+          open_in_new
+        </StyledFontIcon>
+      ))}
     </Container>
   )
 }
 
 MyTextFieldWithUrl.defaultProps = {
-  value: ``,
-  valueOnFocus: ``,
-  errorText: ``,
-  type: `text`,
+  value: '',
+  valueOnFocus: '',
+  errorText: '',
+  type: 'text',
   multiLine: false,
   disabled: false,
 }

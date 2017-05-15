@@ -8,41 +8,39 @@ import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
 
 const enhance = compose(
-  withState(`errorText`, `updateErrorText`, ``),
+  withState('errorText', 'updateErrorText', ''),
   withHandlers({
     onChange: props => () => {
-      props.updateErrorText(`Dieser Wert ist nicht veränderbar`)
-      setTimeout(() => props.updateErrorText(``), 5000)
+      props.updateErrorText('Dieser Wert ist nicht veränderbar')
+      setTimeout(() => props.updateErrorText(''), 5000)
     },
   }),
-  observer
+  observer,
 )
 
-const MyTextField = (
-  {
-    label,
-    value,
-    errorText,
-    onChange,
-  }:
-  {
-    label: string,
-    value?: ?number|?string,
-    errorText: string,
-    onChange: () => void,
-  }
-) =>
+const MyTextField = ({
+  label,
+  value,
+  errorText,
+  onChange,
+}: {
+  label: string,
+  value?: ?number | ?string,
+  errorText: string,
+  onChange: () => void,
+}) => (
   <TextField
     floatingLabelText={label}
     errorText={errorText}
-    value={value || value === 0 ? value : ``}
+    value={value || value === 0 ? value : ''}
     fullWidth
     errorStyle={{ color: orange500 }}
     onChange={onChange}
   />
+)
 
 MyTextField.defaultProps = {
-  value: ``,
+  value: '',
 }
 
 export default enhance(MyTextField)

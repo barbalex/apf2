@@ -2,8 +2,8 @@
 import React from 'react'
 import { observer, inject } from 'mobx-react'
 import Dialog from 'material-ui/Dialog'
-import TextField  from 'material-ui/TextField'
-import FlatButton  from 'material-ui/FlatButton'
+import TextField from 'material-ui/TextField'
+import FlatButton from 'material-ui/FlatButton'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
@@ -15,95 +15,99 @@ const StyledDiv = styled.div`
 `
 
 const enhance = compose(
-  inject(`store`),
-  withState(`name`, `changeName`, ``),
-  withState(`password`, `changePassword`, ``),
-  withState(`nameErrorText`, `changeNameErrorText`, ``),
-  withState(`passwordErrorText`, `changePasswordErrorText`, ``),
+  inject('store'),
+  withState('name', 'changeName', ''),
+  withState('password', 'changePassword', ''),
+  withState('nameErrorText', 'changeNameErrorText', ''),
+  withState('passwordErrorText', 'changePasswordErrorText', ''),
   withHandlers({
     fetchLogin: props => (namePassed, passwordPassed) => {
-      const { changeNameErrorText, changePasswordErrorText, changeName, changePassword, store } = props
+      const {
+        changeNameErrorText,
+        changePasswordErrorText,
+        changeName,
+        changePassword,
+        store,
+      } = props
       // when bluring fields need to pass event value
       // on the other hand when clicking on Anmelden button,
       // need to grab props
       const name = namePassed || props.name
       const password = passwordPassed || props.password
       if (!name) {
-        return changeNameErrorText(`Bitte Namen erfassen`)
+        return changeNameErrorText('Bitte Namen erfassen')
       }
       if (!password) {
-        return changePasswordErrorText(`Bitte Passwort erfassen`)
+        return changePasswordErrorText('Bitte Passwort erfassen')
       }
       store.fetchLogin(name, password)
       setTimeout(() => {
         if (store.user.name) {
-          changeName(``)
-          changePassword(``)
+          changeName('')
+          changePassword('')
         }
       }, 2000)
     },
   }),
   withHandlers({
-    onBlurName: props => (e) => {
+    onBlurName: props => e => {
       const { password, changeName, changeNameErrorText, fetchLogin } = props
-      changeNameErrorText(``)
+      changeNameErrorText('')
       const name = e.target.value
       changeName(name)
       if (!name) {
-        changeNameErrorText(`Bitte Namen erfassen`)
+        changeNameErrorText('Bitte Namen erfassen')
       } else if (password) {
         fetchLogin(name, password)
       }
     },
-    onBlurPassword: props => (e) => {
-      const { name, changePassword, changePasswordErrorText, fetchLogin } = props
-      changePasswordErrorText(``)
+    onBlurPassword: props => e => {
+      const {
+        name,
+        changePassword,
+        changePasswordErrorText,
+        fetchLogin,
+      } = props
+      changePasswordErrorText('')
       const password = e.target.value
       changePassword(password)
       if (!password) {
-        changePasswordErrorText(`Bitte Passwort erfassen`)
+        changePasswordErrorText('Bitte Passwort erfassen')
       } else if (name) {
         fetchLogin(name, password)
       }
     },
   }),
-  observer
+  observer,
 )
 
-const User = (
-  {
-    store,
-    name,
-    password,
-    nameErrorText,
-    passwordErrorText,
-    changeNameErrorText,
-    changePasswordErrorText,
-    onBlurName,
-    onBlurPassword,
-    fetchLogin,
-  }:
-  {
-    store: Object,
-    name: string,
-    changeName: () => void,
-    password: string,
-    changePassword: () => void,
-    nameErrorText: string,
-    changeNameErrorText: () => void,
-    passwordErrorText: string,
-    changePasswordErrorText: () => void,
-    onBlurName: () => void,
-    onBlurPassword: () => void,
-    fetchLogin: () => void,
-  }
-) => {
+const User = ({
+  store,
+  name,
+  password,
+  nameErrorText,
+  passwordErrorText,
+  changeNameErrorText,
+  changePasswordErrorText,
+  onBlurName,
+  onBlurPassword,
+  fetchLogin,
+}: {
+  store: Object,
+  name: string,
+  changeName: () => void,
+  password: string,
+  changePassword: () => void,
+  nameErrorText: string,
+  changeNameErrorText: () => void,
+  passwordErrorText: string,
+  changePasswordErrorText: () => void,
+  onBlurName: () => void,
+  onBlurPassword: () => void,
+  fetchLogin: () => void,
+}) => {
   const actions = [
-    <FlatButton
-        label="anmelden"
-        primary={true}
-        onTouchTap={fetchLogin}
-      />
+    <FlatButton label="anmelden" primary={true} onTouchTap={fetchLogin} />,
   ]
   return (
     <Dialog
@@ -111,7 +115,7 @@ const User = (
       open={!store.user.name}
       actions={actions}
       contentStyle={{
-        maxWidth: `400px`,
+        maxWidth: '400px',
       }}
     >
       <StyledDiv>
@@ -122,7 +126,7 @@ const User = (
           errorText={nameErrorText}
           fullWidth
           autoFocus
-          onKeyPress={(e) => {
+          onKeyPress={e => {
             if (e.key === 'Enter') {
               onBlurName(e)
             }
@@ -135,13 +139,13 @@ const User = (
           onBlur={onBlurPassword}
           errorText={passwordErrorText}
           fullWidth
-          onKeyPress={(e) => {
+          onKeyPress={e => {
             if (e.key === 'Enter') {
               onBlurPassword(e)
             }
           }}
         />
-    </StyledDiv>
+      </StyledDiv>
     </Dialog>
   )
 }

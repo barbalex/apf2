@@ -30,18 +30,18 @@ const DatePickerDiv = styled.div`
 
 const enhance = compose(
   // dateStringValue is shown to user
-  withState(`dateStringValue`, `changeDateStringValue`, (props) =>
-    props.dateValue ?
-    format(props.dateValue, `DD.MM.YYYY`) :
-    ``
+  withState(
+    'dateStringValue',
+    'changeDateStringValue',
+    props => (props.dateValue ? format(props.dateValue, 'DD.MM.YYYY') : ''),
   ),
   // on bluring the fields, changes are only written do db if value has changed
   // so when the field is focused the value is saved to state in order to know
   // if it has changed on blur
-  withState(`yearValueOnFocus`, `changeYearValueOnFocus`, ``),
-  withState(`dateValueOnFocus`, `changeDateValueOnFocus`, ``),
+  withState('yearValueOnFocus', 'changeYearValueOnFocus', ''),
+  withState('dateValueOnFocus', 'changeDateValueOnFocus', ''),
   withHandlers({
-    onBlurYear: props => (event) => {
+    onBlurYear: props => event => {
       const {
         tree,
         yearFieldName,
@@ -54,13 +54,14 @@ const enhance = compose(
       } = props
       const { value } = event.target
       // only update if value has changed
-      if (value != yearValueOnFocus) {  // eslint-disable-line eqeqeq
+      // eslint-disable-next-line eqeqeq
+      if (value != yearValueOnFocus) {
         updatePropertyInDb(tree, yearFieldName, value)
         // nullify date
         if (dateValue) {
           updateProperty(props.tree, dateFieldName, null)
           updatePropertyInDb(tree, dateFieldName, null)
-          changeDateStringValue(``)
+          changeDateStringValue('')
         }
       }
     },
@@ -75,79 +76,73 @@ const enhance = compose(
         changeDateStringValue,
       } = props
       // date picker returns a val that is a date
-      updateProperty(props.tree, dateFieldName, format(val, `YYYY-MM-DD`))
-      updatePropertyInDb(tree, dateFieldName, format(val, `YYYY-MM-DD`))
-      changeDateStringValue(format(val, `DD.MM.YYYY`))
+      updateProperty(props.tree, dateFieldName, format(val, 'YYYY-MM-DD'))
+      updatePropertyInDb(tree, dateFieldName, format(val, 'YYYY-MM-DD'))
+      changeDateStringValue(format(val, 'DD.MM.YYYY'))
       // set year
-      const year = format(val, `YYYY`)
+      const year = format(val, 'YYYY')
       if (yearValue !== year) {
         updatePropertyInDb(tree, yearFieldName, year)
       }
     },
-    onChangeDate: props =>
-      (event, val) => props.changeDateStringValue(val),
-    onBlurDate: props =>
-      (event) => {
-        const { value } = event.target
-          const {
-            tree,
-            yearFieldName,
-            dateFieldName,
-            yearValue,
-            updatePropertyInDb,
-            changeDateStringValue,
-            dateValueOnFocus,
-          } = props
-        // only update if value has changed
-        // there is a weird case where dataValueOnFocus is null and value is ''
-        // which led to year being deleted when focus moved out of date!
-        if (!dateValueOnFocus && !value) return
-        if (value != dateValueOnFocus) {  // eslint-disable-line eqeqeq
-          if (!value) {
-            // avoid creating an invalid date
-            updatePropertyInDb(tree, dateFieldName, null)
-            changeDateStringValue(``)
-            // set year
-            if (yearValue !== null) {
-              updatePropertyInDb(tree, yearFieldName, null)
-            }
-          } else {
-            // write a real date to db
-            const date = new Date(convertDateToYyyyMmDd(value))
-            updatePropertyInDb(tree, dateFieldName, format(date, `YYYY-MM-DD`))
-            changeDateStringValue(format(date, `DD.MM.YYYY`))
-            // set year
-            const year = format(date, `YYYY`)
-            if (yearValue !== year) {
-              updatePropertyInDb(tree, yearFieldName, year)
-            }
+    onChangeDate: props => (event, val) => props.changeDateStringValue(val),
+    onBlurDate: props => event => {
+      const { value } = event.target
+      const {
+        tree,
+        yearFieldName,
+        dateFieldName,
+        yearValue,
+        updatePropertyInDb,
+        changeDateStringValue,
+        dateValueOnFocus,
+      } = props
+      // only update if value has changed
+      // there is a weird case where dataValueOnFocus is null and value is ''
+      // which led to year being deleted when focus moved out of date!
+      if (!dateValueOnFocus && !value) return
+      // eslint-disable-next-line eqeqeq
+      if (value != dateValueOnFocus) {
+        if (!value) {
+          // avoid creating an invalid date
+          updatePropertyInDb(tree, dateFieldName, null)
+          changeDateStringValue('')
+          // set year
+          if (yearValue !== null) {
+            updatePropertyInDb(tree, yearFieldName, null)
+          }
+        } else {
+          // write a real date to db
+          const date = new Date(convertDateToYyyyMmDd(value))
+          updatePropertyInDb(tree, dateFieldName, format(date, 'YYYY-MM-DD'))
+          changeDateStringValue(format(date, 'DD.MM.YYYY'))
+          // set year
+          const year = format(date, 'YYYY')
+          if (yearValue !== year) {
+            updatePropertyInDb(tree, yearFieldName, year)
           }
         }
-      },
-    onFocusYear: props =>
-      () =>
-        props.changeYearValueOnFocus(props.yearValue),
-    onFocusDate: props =>
-      () =>
-        props.changeDateValueOnFocus(props.dateValue),
+      }
+    },
+    onFocusYear: props => () => props.changeYearValueOnFocus(props.yearValue),
+    onFocusDate: props => () => props.changeDateValueOnFocus(props.dateValue),
   }),
-  observer
+  observer,
 )
 
 class YearDatePair extends Component {
-
   props: {
     tree: Object,
     yearLabel: string,
     yearFieldName: string,
-    yearValue?: ?number|?string,
-    yearValueOnFocus?: ?number|?string,
+    yearValue?: ?number | ?string,
+    yearValueOnFocus?: ?number | ?string,
     yearErrorText?: string,
     dateLabel: string,
     dateFieldName: string,
-    dateValue?: ?number|?string,
-    dateStringValue?: ?number|?string,
-    dateValueOnFocus?: ?number|?string,
+    dateValue?: ?number | ?string,
+    dateStringValue?: ?number | ?string,
+    dateValueOnFocus?: ?number | ?string,
     dateErrorText?: string,
     updateProperty: () => void,
     updatePropertyInDb: () => void,
@@ -161,13 +156,13 @@ class YearDatePair extends Component {
   }
 
   static defaultProps = {
-    yearValue: ``,
-    yearValueOnFocus: ``,
-    yearErrorText: ``,
-    dateValue: ``,
-    dateStringValue: ``,
-    dateValueOnFocus: ``,
-    dateErrorText: ``,
+    yearValue: '',
+    yearValueOnFocus: '',
+    yearErrorText: '',
+    dateValue: '',
+    dateStringValue: '',
+    dateValueOnFocus: '',
+    dateErrorText: '',
   }
 
   render() {
@@ -196,12 +191,10 @@ class YearDatePair extends Component {
         <TextField
           floatingLabelText={yearLabel}
           type="number"
-          value={yearValue || ``}
+          value={yearValue || ''}
           errorText={yearErrorText}
           fullWidth
-          onChange={(event, val) =>
-            updateProperty(tree, yearFieldName, val)
-          }
+          onChange={(event, val) => updateProperty(tree, yearFieldName, val)}
           onBlur={onBlurYear}
           onFocus={onFocusYear}
         />
@@ -228,18 +221,20 @@ class YearDatePair extends Component {
           <DatePickerDiv>
             <DatePicker
               id="dataPicker"
-              floatingLabelText={``}
+              floatingLabelText={''}
               value={dateValueObject}
               errorText={dateErrorText}
               DateTimeFormat={window.Intl.DateTimeFormat}
               locale="de-CH-1996"
-              formatDate={v => format(v, `DD.MM.YYYY`)}
+              formatDate={v => format(v, 'DD.MM.YYYY')}
               autoOk
               fullWidth
               cancelLabel="schliessen"
               onChange={onChangeDatePicker}
-              // $FlowIssue
-              ref={(c) => { this.datePicker = c }}
+              ref={c => {
+                // $FlowIssue
+                this.datePicker = c
+              }}
             />
           </DatePickerDiv>
         </DateFieldContainer>
