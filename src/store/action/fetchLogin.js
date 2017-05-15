@@ -6,16 +6,16 @@ import apiBaseUrl from '../../modules/apiBaseUrl'
 
 export default (store: Object, name: string, password: string): any => {
   if (!name) {
-    return store.listError(new Error(`action fetchLogin: name must be passed`))
+    return store.listError(new Error('action fetchLogin: name must be passed'))
   }
   if (!password) {
     return store.listError(
-      new Error(`action fetchLogin: password must be passed`)
+      new Error('action fetchLogin: password must be passed'),
     )
   }
 
   const url = `${apiBaseUrl}/anmeldung/name=${name}/pwd=${password}`
-  store.loading.push(`user`)
+  store.loading.push('user')
   axios
     .get(url)
     .then(({ data }) => {
@@ -26,12 +26,12 @@ export default (store: Object, name: string, password: string): any => {
         app.db.currentUser.clear()
         app.db.currentUser.put({ name, readOnly })
       } else {
-        store.listError(new Error(`Anmeldung gescheitert`))
+        store.listError(new Error('Anmeldung gescheitert'))
       }
-      store.loading = store.loading.filter(el => el !== `user`)
+      store.loading = store.loading.filter(el => el !== 'user')
     })
     .catch(error => {
-      store.loading = store.loading.filter(el => el !== `user`)
+      store.loading = store.loading.filter(el => el !== 'user')
       store.listError(error)
     })
 }

@@ -6,7 +6,7 @@ import fetchFields from './fetchFields'
 
 export default (store: Object): void => {
   // only fetch if not yet done
-  if (store.app.fields.length === 0 && !store.loading.includes(`fields`)) {
+  if (store.app.fields.length === 0 && !store.loading.includes('fields')) {
     app.db.fields
       .toArray()
       .then(values => {

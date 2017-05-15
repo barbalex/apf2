@@ -8,7 +8,7 @@ export default async (store: Object, metadata: Object): Promise<any> => {
   const { database, table, idField } = metadata
   store.loading.push(table)
   let url = `${apiBaseUrl}/schema/${database}/table/${table}`
-  if (table === `adb_lr`) {
+  if (table === 'adb_lr') {
     url = `${apiBaseUrl}/lrDelarze`
   }
 
