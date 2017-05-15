@@ -5,7 +5,7 @@ import epsg21781to4326 from './epsg21781to4326notReverse'
 
 export default (
   store: Object,
-  beobs: Array<Object>
+  beobs: Array<Object>,
 ): Array<string | number> => {
   /**
    * data is passed from view fetched from the server
@@ -17,18 +17,18 @@ export default (
     return false
   })
   const points = {
-    type: `FeatureCollection`,
+    type: 'FeatureCollection',
     // build an array of geoJson points
     features: beobsToUse.map(b => ({
-      type: `Feature`,
+      type: 'Feature',
       properties: {
-        id: b.id
+        id: b.id,
       },
       geometry: {
-        type: `Point`,
-        coordinates: epsg21781to4326(b.X, b.Y)
-      }
-    }))
+        type: 'Point',
+        coordinates: epsg21781to4326(b.X, b.Y),
+      },
+    })),
   }
 
   // let turf check what points are within filter
