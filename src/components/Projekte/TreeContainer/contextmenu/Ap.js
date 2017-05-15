@@ -7,55 +7,45 @@ import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
 
 const enhance = compose(
-  inject(`store`),
-  withState(`label`, `changeLabel`, ``),
+  inject('store'),
+  withState('label', 'changeLabel', ''),
   withHandlers({
     // according to https://github.com/vkbansal/react-contextmenu/issues/65
     // this is how to pass data from ContextMenuTrigger to ContextMenu
-    onShow: props => (event) => {
+    onShow: props => event => {
       // props.changeLabel(event.detail.data.nodeLabel)
     },
   }),
-  observer
+  observer,
 )
 
-const Ap = (
-  {
-    onClick,
-    store,
-    tree,
-    changeLabel,
-    label,
-    onShow,
-  }:
-  {
-    onClick: () => void,
-    store: Object,
-    tree: Object,
-    changeLabel: () => void,
-    label: string,
-    onShow: () => {}
-  }
-) => {
-  const moving = store.moving.table && store.moving.table === `pop`
+const Ap = ({
+  onClick,
+  store,
+  tree,
+  changeLabel,
+  label,
+  onShow,
+}: {
+  onClick: () => void,
+  store: Object,
+  tree: Object,
+  changeLabel: () => void,
+  label: string,
+  onShow: () => {},
+}) => {
+  const moving = store.moving.table && store.moving.table === 'pop'
 
   return (
-    <ContextMenu
-      id={`${tree.name}ap`}
-      collect={props => props}
-      onShow={onShow}
-    >
+    <ContextMenu id={`${tree.name}ap`} collect={props => props} onShow={onShow}>
       <div className="react-contextmenu-title">Art</div>
       <MenuItem
         onClick={(e, data, element) => {
-          console.log(`Ap, onClick: e`, e)
-          console.log(`Ap, onClick: data`, data)
-          console.log(`Ap, onClick: element`, element)
           onClick(e, data, element)
         }}
         data={{
-          action: `insert`,
-          table: `ap`,
+          action: 'insert',
+          table: 'ap',
         }}
       >
         erstelle neue
@@ -63,65 +53,51 @@ const Ap = (
       <MenuItem
         onClick={onClick}
         data={{
-          action: `delete`,
-          table: `ap`,
+          action: 'delete',
+          table: 'ap',
         }}
       >
         lösche
       </MenuItem>
-      {
-        moving &&
+      {moving &&
         <MenuItem
           onClick={onClick}
           data={{
-            action: `move`,
+            action: 'move',
           }}
         >
           {`verschiebe '${store.moving.label}' hierhin`}
-        </MenuItem>
-      }
-      {
-        (
-          store.map.activeApfloraLayers.includes(`Pop`) ||
-          store.map.activeApfloraLayers.includes(`Tpop`)
-        ) &&
+        </MenuItem>}
+      {(store.map.activeApfloraLayers.includes('Pop') ||
+        store.map.activeApfloraLayers.includes('Tpop')) &&
         <div>
           <div className="react-contextmenu-divider" />
           <div className="react-contextmenu-title">Karte</div>
-        </div>
-      }
-      {
-        store.map.activeApfloraLayers.includes(`Pop`) &&
+        </div>}
+      {store.map.activeApfloraLayers.includes('Pop') &&
         <MenuItem
           onClick={onClick}
           data={{
-            action: `toggleTooltip`,
-            actionTable: `pop`,
+            action: 'toggleTooltip',
+            actionTable: 'pop',
           }}
         >
-          {
-            store.map.pop.labelUsingNr ?
-            `beschrifte Populationen mit Namen` :
-            `beschrifte Populationen mit Nummer`
-          }
-        </MenuItem>
-      }
-      {
-        store.map.activeApfloraLayers.includes(`Tpop`) &&
+          {store.map.pop.labelUsingNr
+            ? 'beschrifte Populationen mit Namen'
+            : 'beschrifte Populationen mit Nummer'}
+        </MenuItem>}
+      {store.map.activeApfloraLayers.includes('Tpop') &&
         <MenuItem
           onClick={onClick}
           data={{
-            action: `toggleTooltip`,
-            actionTable: `tpop`,
+            action: 'toggleTooltip',
+            actionTable: 'tpop',
           }}
         >
-          {
-            store.map.tpop.labelUsingNr ?
-            `beschrifte Teil-Populationen mit Namen` :
-            `beschrifte Teil-Populationen mit Nummer`
-          }
-        </MenuItem>
-      }
+          {store.map.tpop.labelUsingNr
+            ? 'beschrifte Teil-Populationen mit Namen'
+            : 'beschrifte Teil-Populationen mit Nummer'}
+        </MenuItem>}
     </ContextMenu>
   )
 }
