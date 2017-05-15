@@ -40,50 +40,61 @@ const DatePickerDiv = styled.div`
 
 const enhance = compose(
   // stringValue is shown to user
-  withState(`stringValue`, `changeStringValue`, (props) => format(props.value, `DD.MM.YYYY`)),
+  withState('stringValue', 'changeStringValue', props =>
+    format(props.value, 'DD.MM.YYYY'),
+  ),
   // on bluring the textfield, changes are only written do db if value has changed
   // so when the textfield is focused the value is saved to state in order to know
   // if it has changed on blur
-  withState(`valueOnFocus`, `changeValueOnFocus`, ``),
+  withState('valueOnFocus', 'changeValueOnFocus', ''),
   withHandlers({
     onChangeDatePicker: props => (event, val) => {
-      props.updateProperty(props.tree, props.fieldName, format(val, `YYYY-MM-DD`))
-      props.updatePropertyInDb(props.tree, props.fieldName, format(val, `YYYY-MM-DD`))
-      props.changeStringValue(format(val, `DD.MM.YYYY`))
+      props.updateProperty(
+        props.tree,
+        props.fieldName,
+        format(val, 'YYYY-MM-DD'),
+      )
+      props.updatePropertyInDb(
+        props.tree,
+        props.fieldName,
+        format(val, 'YYYY-MM-DD'),
+      )
+      props.changeStringValue(format(val, 'DD.MM.YYYY'))
     },
-    onChange: props =>
-      (event, val) => props.changeStringValue(val),
-    onBlur: props =>
-      (event) => {
-        const { value } = event.target
-        // only update if value has changed
-        if (value != props.valueOnFocus) {  // eslint-disable-line eqeqeq
-          if (!value) {
-            // avoid creating an invalid date
-            props.updatePropertyInDb(props.tree, props.fieldName, null)
-            props.changeStringValue(``)
-          } else {
-            // write a real date to db
-            const date = new Date(convertDateToYyyyMmDd(value))
-            props.updatePropertyInDb(props.tree, props.fieldName, format(date, `YYYY-MM-DD`))
-            props.changeStringValue(format(date, `DD.MM.YYYY`))
-          }
+    onChange: props => (event, val) => props.changeStringValue(val),
+    onBlur: props => event => {
+      const { value } = event.target
+      // only update if value has changed
+      // eslint-disable-next-line eqeqeq
+      if (value != props.valueOnFocus) {
+        if (!value) {
+          // avoid creating an invalid date
+          props.updatePropertyInDb(props.tree, props.fieldName, null)
+          props.changeStringValue('')
+        } else {
+          // write a real date to db
+          const date = new Date(convertDateToYyyyMmDd(value))
+          props.updatePropertyInDb(
+            props.tree,
+            props.fieldName,
+            format(date, 'YYYY-MM-DD'),
+          )
+          props.changeStringValue(format(date, 'DD.MM.YYYY'))
         }
-      },
-    onFocus: props =>
-      () => props.changeValueOnFocus(props.value),
+      }
+    },
+    onFocus: props => () => props.changeValueOnFocus(props.value),
   }),
-  observer
+  observer,
 )
 
 class MyDatePicker extends Component {
-
   props: {
     tree: Object,
     label: string,
     fieldName: string,
-    value?: string|number,
-    stringValue?: string|number,
+    value?: string | number,
+    stringValue?: string | number,
     errorText?: string,
     disabled?: boolean,
     updateProperty: () => void,
@@ -96,8 +107,8 @@ class MyDatePicker extends Component {
 
   static defaultProps = {
     value: null,
-    stringValue: ``,
-    errorText: ``,
+    stringValue: '',
+    errorText: '',
     disabled: false,
   }
 
@@ -121,7 +132,7 @@ class MyDatePicker extends Component {
         <TextField
           floatingLabelText={label}
           type="text"
-          value={stringValue || ``}
+          value={stringValue || ''}
           errorText={errorText}
           disabled={disabled}
           fullWidth
@@ -141,19 +152,21 @@ class MyDatePicker extends Component {
         <DatePickerDiv>
           <DatePicker
             id="dataPicker"
-            floatingLabelText={``}
+            floatingLabelText={''}
             value={valueDate}
             errorText={errorText}
             disabled={disabled}
             DateTimeFormat={window.Intl.DateTimeFormat}
             locale="de-CH-1996"
-            formatDate={v => format(v, `DD.MM.YYYY`)}
+            formatDate={v => format(v, 'DD.MM.YYYY')}
             autoOk
             fullWidth
             cancelLabel="schliessen"
             onChange={onChangeDatePicker}
-            // $FlowIssue
-            ref={(c) => { this.datePicker = c }}
+            ref={c => {
+              // $FlowIssue
+              this.datePicker = c
+            }}
           />
         </DatePickerDiv>
       </Container>

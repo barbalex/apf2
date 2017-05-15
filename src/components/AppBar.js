@@ -20,8 +20,8 @@ const StyledAppBar = styled(AppBar)`
     display: none !important;
   }
 `
-const Button = styled(({ visible, ...rest}) => <FlatButton {...rest} />)`
-  color: ${(props) => (props.visible ? `rgb(255, 255, 255) !important` : `rgba(255, 255, 255, 0.298039) !important`)};
+const Button = styled(({ visible, ...rest }) => <FlatButton {...rest} />)`
+  color: ${props => (props.visible ? 'rgb(255, 255, 255) !important' : 'rgba(255, 255, 255, 0.298039) !important')};
 `
 const TreeButton = styled(Button)`
   > div > span {
@@ -40,8 +40,8 @@ const MenuDiv = styled.div`
     padding-top: 4px !important;
   }
 `
-const iconMenuAnchorOrigin = { horizontal: `left`, vertical: `bottom` }
-const iconMenuTargetOrigin = { horizontal: `left`, vertical: `top` }
+const iconMenuAnchorOrigin = { horizontal: 'left', vertical: 'bottom' }
+const iconMenuTargetOrigin = { horizontal: 'left', vertical: 'top' }
 const iconMenuStyle = { paddingLeft: 10 }
 
 /**
@@ -49,14 +49,15 @@ const iconMenuStyle = { paddingLeft: 10 }
  * https://marmelab.com/blog/2017/02/06/react-is-slow-react-is-fast.html
  */
 const checkPropsChange = (props, nextProps) =>
-  toJS(nextProps.store.urlQuery.projekteTabs).join() !== toJS(props.store.urlQuery.projekteTabs).join() ||
+  toJS(nextProps.store.urlQuery.projekteTabs).join() !==
+    toJS(props.store.urlQuery.projekteTabs).join() ||
   nextProps.store.user.name !== props.store.user.name
 
 const enhance = compose(
-  inject(`store`),
+  inject('store'),
   shouldUpdate(checkPropsChange),
   withHandlers({
-    onClickButton: props => (name) => {
+    onClickButton: props => name => {
       const { store } = props
       const projekteTabs = clone(toJS(store.urlQuery.projekteTabs))
       const isVisible = projekteTabs.includes(name)
@@ -64,57 +65,55 @@ const enhance = compose(
         remove(projekteTabs, el => el === name)
       } else {
         projekteTabs.push(name)
-        if (name === `tree2`) {
+        if (name === 'tree2') {
           store.tree.cloneActiveNodeArrayToTree2()
         }
       }
-      store.setUrlQueryValue(`projekteTabs`, projekteTabs)
+      store.setUrlQueryValue('projekteTabs', projekteTabs)
     },
     ueberApfloraChOnTouchTap: props => () =>
-      window.open(`https://github.com/FNSKtZH/apflora/wiki`)
-    ,
+      window.open('https://github.com/FNSKtZH/apflora/wiki'),
   }),
   withHandlers({
-    onClickButtonStrukturbaum: props => () => props.onClickButton(`tree`),
-    onClickButtonStrukturbaum2: props => () => props.onClickButton(`tree2`),
-    onClickButtonDaten: props => () => props.onClickButton(`daten`),
-    onClickButtonDaten2: props => () => props.onClickButton(`daten2`),
-    onClickButtonKarte: props => () => props.onClickButton(`karte`),
-    onClickButtonExporte: props => () => props.onClickButton(`exporte`),
+    onClickButtonStrukturbaum: props => () => props.onClickButton('tree'),
+    onClickButtonStrukturbaum2: props => () => props.onClickButton('tree2'),
+    onClickButtonDaten: props => () => props.onClickButton('daten'),
+    onClickButtonDaten2: props => () => props.onClickButton('daten2'),
+    onClickButtonKarte: props => () => props.onClickButton('karte'),
+    onClickButtonExporte: props => () => props.onClickButton('exporte'),
   }),
-  observer
+  observer,
 )
 
-const MyAppBar = (
-  {
-    store,
-    onClickButtonStrukturbaum,
-    onClickButtonStrukturbaum2,
-    onClickButtonDaten,
-    onClickButtonDaten2,
-    onClickButtonKarte,
-    onClickButtonExporte,
-    ueberApfloraChOnTouchTap,
-  }:
-  {
-    store: Object,
-    onClickButton: () => void,
-    onClickButtonStrukturbaum: () => void,
-    onClickButtonStrukturbaum2: () => void,
-    onClickButtonDaten: () => void,
-    onClickButtonDaten2: () => void,
-    onClickButtonKarte: () => void,
-    onClickButtonExporte: () => void,
-    ueberApfloraChOnTouchTap: () => void,
-  }
-) => {
+const MyAppBar = ({
+  store,
+  onClickButtonStrukturbaum,
+  onClickButtonStrukturbaum2,
+  onClickButtonDaten,
+  onClickButtonDaten2,
+  onClickButtonKarte,
+  onClickButtonExporte,
+  ueberApfloraChOnTouchTap,
+}: {
+  store: Object,
+  onClickButton: () => void,
+  onClickButtonStrukturbaum: () => void,
+  onClickButtonStrukturbaum2: () => void,
+  onClickButtonDaten: () => void,
+  onClickButtonDaten2: () => void,
+  onClickButtonKarte: () => void,
+  onClickButtonExporte: () => void,
+  ueberApfloraChOnTouchTap: () => void,
+}) => {
   const projekteTabs = store.urlQuery.projekteTabs
-  const treeIsVisible = projekteTabs.includes(`tree`)
-  const tree2IsVisible = projekteTabs.includes(`tree2`)
-  const datenIsVisible = projekteTabs.includes(`daten`) && !projekteTabs.includes(`exporte`)
-  const daten2IsVisible = projekteTabs.includes(`daten2`) && !projekteTabs.includes(`exporte`)
-  const karteIsVisible = projekteTabs.includes(`karte`)
-  const exporteIsVisible = projekteTabs.includes(`exporte`)
+  const treeIsVisible = projekteTabs.includes('tree')
+  const tree2IsVisible = projekteTabs.includes('tree2')
+  const datenIsVisible =
+    projekteTabs.includes('daten') && !projekteTabs.includes('exporte')
+  const daten2IsVisible =
+    projekteTabs.includes('daten2') && !projekteTabs.includes('exporte')
+  const karteIsVisible = projekteTabs.includes('karte')
+  const exporteIsVisible = projekteTabs.includes('exporte')
 
   return (
     <StyledAppBar

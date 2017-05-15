@@ -17,11 +17,11 @@ const enhance = compose(
 
 const MyAutocomplete = ({
   label,
-  valueText = ``,
+  valueText = '',
   dataSource,
   dataSourceConfig = {
-    value: `id`,
-    text: `label`,
+    value: 'id',
+    text: 'label',
   },
   onNewRequest,
 }: {
@@ -35,7 +35,7 @@ const MyAutocomplete = ({
   onNewRequest: () => void,
 }) => (
   <AutoComplete
-    hintText={dataSource.length === 0 ? `lade Daten...` : ``}
+    hintText={dataSource.length === 0 ? 'lade Daten...' : ''}
     fullWidth
     floatingLabelText={label}
     dataSource={dataSource}
