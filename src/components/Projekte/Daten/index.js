@@ -47,21 +47,9 @@ const Container = styled.div`
   }
 `
 
-const enhance = compose(
-  inject(`store`),
-  observer
-)
+const enhance = compose(inject('store'), observer)
 
-const Daten = (
-  {
-    store,
-    tree,
-  }:
-  {
-    store: Object,
-    tree: Object,
-  }
-) => {
+const Daten = ({ store, tree }: { store: Object, tree: Object }) => {
   const { activeNodes, activeDataset } = tree
   if (!activeDataset || !activeDataset.table || !activeDataset.row) {
     return <div />
@@ -89,7 +77,9 @@ const Daten = (
     tpopkontrzaehl: <Tpopkontrzaehl tree={tree} />,
     exporte: <Exporte tree={tree} />,
     qk: <Qk tree={tree} />,
-    beobNichtZuzuordnen: <Beobzuordnung typ="beobNichtZuzuordnen" tree={tree} />,
+    beobNichtZuzuordnen: (
+      <Beobzuordnung typ="beobNichtZuzuordnen" tree={tree} />
+    ),
     beobzuordnung: <Beobzuordnung typ="beobzuordnung" tree={tree} />,
     tpopbeob: <Beobzuordnung typ="tpopbeob" tree={tree} />,
   }
@@ -103,15 +93,15 @@ const Daten = (
   )
   let key
   if (activeNodes.exporte) {
-    key = `exporte`
+    key = 'exporte'
   } else if (activeNodes.qk) {
-    key = `qk`
+    key = 'qk'
   } else if (activeNodes.beobNichtZuzuordnen) {
-    key = `beobNichtZuzuordnen`
+    key = 'beobNichtZuzuordnen'
   } else if (activeNodes.beobzuordnung) {
-    key = `beobzuordnung`
+    key = 'beobzuordnung'
   } else if (activeNodes.tpopbeob) {
-    key = `tpopbeob`
+    key = 'tpopbeob'
   } else {
     key = activeDataset.table
   }
@@ -121,10 +111,7 @@ const Daten = (
   return (
     <Container>
       {form}
-      {
-        deleteDatasetModalIsVisible &&
-        <DeleteDatasetModal tree={tree} />
-      }
+      {deleteDatasetModalIsVisible && <DeleteDatasetModal tree={tree} />}
     </Container>
   )
 }
