@@ -1,7 +1,7 @@
 import sortBy from 'lodash/sortBy'
 import format from 'date-fns/format'
 
-export default (store: Object, tree: Object): Object => {
+export default (store: Object, tree: Object): Array<Object> => {
   const { table } = store
   const { nodeLabelFilter } = tree
   // grab tpopbeob as array and sort them by year

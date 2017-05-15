@@ -1,6 +1,6 @@
 import sortBy from 'lodash/sortBy'
 
-export default (store: Object, tree: Object): Object => {
+export default (store: Object, tree: Object): Array<Object> => {
   const { table } = store
   const { nodeLabelFilter } = tree
   // grab popmassnber as array and sort them by year
