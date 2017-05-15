@@ -19,29 +19,29 @@ export default (store: Object, apArtId: number): any => {
   }
 
   const url = `${apiBaseUrl}/tpopForAp/${apArtId}`
-  store.loading.push(`tpopForAp`)
+  store.loading.push('tpopForAp')
   app.db.tpop
     .toArray()
     .then(data => {
-      store.writeToStore({ data, table: `tpop`, field: `TPopId` })
+      store.writeToStore({ data, table: 'tpop', field: 'TPopId' })
       recordValuesForWhichTableDataWasFetched({
         store,
-        table: `tpopForAp`,
-        field: `ApArtId`,
-        value: apArtId
+        table: 'tpopForAp',
+        field: 'ApArtId',
+        value: apArtId,
       })
       return axios.get(url)
     })
     .then(({ data }) => {
-      store.loading = store.loading.filter(el => el !== `tpopForAp`)
+      store.loading = store.loading.filter(el => el !== 'tpopForAp')
       // leave ui react before this happens
       setTimeout(() =>
-        store.writeToStore({ data, table: `tpop`, field: `TPopId` })
+        store.writeToStore({ data, table: 'tpop', field: 'TPopId' }),
       )
       setTimeout(() => app.db.tpop.bulkPut(data))
     })
     .catch(error => {
-      store.loading = store.loading.filter(el => el !== `tpopForAp`)
+      store.loading = store.loading.filter(el => el !== 'tpopForAp')
       store.listError(error)
     })
 }

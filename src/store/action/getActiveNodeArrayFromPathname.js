@@ -1,12 +1,12 @@
 // @flow
 export default (): Array<number | string> => {
-  const pathName = window.location.pathname.replace(`/`, ``)
-  const pathElements = pathName.split(`/`)
-  if (pathElements[0] === `v2`) {
+  const pathName = window.location.pathname.replace('/', '')
+  const pathElements = pathName.split('/')
+  if (pathElements[0] === 'v2') {
     // get rid of empty element(s) at start
     pathElements.shift()
   }
-  if (pathElements[0] === ``) {
+  if (pathElements[0] === '') {
     // get rid of empty element(s) at start
     pathElements.shift()
   }

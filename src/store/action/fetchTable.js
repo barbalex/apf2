@@ -8,28 +8,28 @@ import tables from '../../modules/tables'
 export default async (
   store: Object,
   schemaNamePassed: string,
-  tableName: string
+  tableName: string,
 ) => {
-  const schemaName = schemaNamePassed || `apflora`
+  const schemaName = schemaNamePassed || 'apflora'
   // only fetch if not yet fetched
   if (store.table[tableName].size === 0) {
     const tableMetadata = tables.find(t => t.table === tableName)
     if (!tableMetadata) {
       return store.listError(
-        new Error(`keine Metadaten gefunden für Tabelle ${tableName}`)
+        new Error(`keine Metadaten gefunden für Tabelle ${tableName}`),
       )
     }
     const idField = tableMetadata.idField
     if (!idField) {
       return store.listError(
         new Error(
-          `in den Metadaten kein ID-Feld gefunden für Tabelle ${tableName}`
-        )
+          `in den Metadaten kein ID-Feld gefunden für Tabelle ${tableName}`,
+        ),
       )
     }
     store.loading.push(tableName)
     let url = `${apiBaseUrl}/schema/${schemaName}/table/${tableName}`
-    if (tableName === `adb_lr`) {
+    if (tableName === 'adb_lr') {
       url = `${apiBaseUrl}/lrDelarze`
     }
 
@@ -43,14 +43,14 @@ export default async (
       store.writeToStore({
         data: dataFromIdb,
         table: tableName,
-        field: idField
+        field: idField,
       })
       store.loading = store.loading.filter(el => el !== tableName)
     }
 
     // don't fetch any stammdaten if they already existed in idb
     if (
-      tableName !== `projekt` &&
+      tableName !== 'projekt' &&
       dataFromIdb &&
       dataFromIdb.length &&
       dataFromIdb.length > 0
@@ -72,8 +72,8 @@ export default async (
         store.writeToStore({
           data: dataFromDb,
           table: tableName,
-          field: idField
-        })
+          field: idField,
+        }),
       )
       setTimeout(() => app.db[tableName].bulkPut(dataFromDb))
     }

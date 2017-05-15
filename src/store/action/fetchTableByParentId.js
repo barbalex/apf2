@@ -11,9 +11,9 @@ export default (
   store: Object,
   schemaNamePassed: string,
   tableName: string,
-  parentId: number
+  parentId: number,
 ): void => {
-  const schemaName = schemaNamePassed || `apflora`
+  const schemaName = schemaNamePassed || 'apflora'
   // $FlowIssue
   const idField = tables.find(t => t.table === tableName).idField
   // $FlowIssue
@@ -40,7 +40,7 @@ export default (
         store,
         table: tableName,
         field: idField,
-        value: parentId
+        value: parentId,
       })
     })
     .then(() => axios.get(url))
@@ -48,7 +48,7 @@ export default (
       store.loading = store.loading.filter(el => el !== tableName)
       // leave ui react before this happens
       setTimeout(() =>
-        store.writeToStore({ data, table: tableName, field: idField })
+        store.writeToStore({ data, table: tableName, field: idField }),
       )
       setTimeout(() => app.db[tableName].bulkPut(data))
     })
