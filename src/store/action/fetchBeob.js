@@ -29,21 +29,21 @@ export default (store: Object, apArtId: number): any => {
   }
 
   const url = `${apiBaseUrl}/schema/beob/table/beob/field/ArtId/value/${apArtId}`
-  store.loading.push(`beob`)
+  store.loading.push('beob')
   app.db.beob
     .toArray()
     .then(data => {
       writeToStore(store, data)
       recordValuesForWhichTableDataWasFetched({
         store,
-        table: `beob`,
-        field: `ArtId`,
+        table: 'beob',
+        field: 'ArtId',
         value: apArtId,
       })
     })
     .then(() => axios.get(url))
     .then(({ data }) => {
-      store.loading = store.loading.filter(el => el !== `beob`)
+      store.loading = store.loading.filter(el => el !== 'beob')
       // leave ui react before this happens
       // leave ui react before this happens
       // copy array without the individual objects being references
@@ -53,7 +53,7 @@ export default (store: Object, apArtId: number): any => {
       setTimeout(() => app.db.beob.bulkPut(data))
     })
     .catch(error => {
-      store.loading = store.loading.filter(el => el !== `beob`)
+      store.loading = store.loading.filter(el => el !== 'beob')
       store.listError(error)
     })
 }

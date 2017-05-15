@@ -5,7 +5,7 @@ import app from 'ampersand-app'
 import apiBaseUrl from '../../modules/apiBaseUrl'
 
 export default async (store: Object): Promise<any> => {
-  store.loading.push(`adb_eigenschaften`)
+  store.loading.push('adb_eigenschaften')
   let url = `${apiBaseUrl}/schema/beob/table/adb_eigenschaften`
 
   let data
@@ -20,11 +20,11 @@ export default async (store: Object): Promise<any> => {
     setTimeout(() =>
       store.writeToStore({
         data,
-        table: `adb_eigenschaften`,
-        field: `TaxonomieId`
-      })
+        table: 'adb_eigenschaften',
+        field: 'TaxonomieId',
+      }),
     )
     setTimeout(() => app.db.adb_eigenschaften.bulkPut(data))
   }
-  store.loading = store.loading.filter(el => el !== `adb_eigenschaften`)
+  store.loading = store.loading.filter(el => el !== 'adb_eigenschaften')
 }

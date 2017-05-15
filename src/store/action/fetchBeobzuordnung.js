@@ -16,12 +16,12 @@ const writeToStore = (store: Object, data: Array<Object>): void => {
       // set computed value "type"
       zuordnung.type = computed(() => {
         if (zuordnung.BeobNichtZuordnen && zuordnung.BeobNichtZuordnen === 1) {
-          return `nichtZuzuordnen`
+          return 'nichtZuzuordnen'
         }
         if (zuordnung.TPopId) {
-          return `zugeordnet`
+          return 'zugeordnet'
         }
-        return `nichtBeurteilt`
+        return 'nichtBeurteilt'
       })
       store.table.beobzuordnung.set(zuordnung.BeobId, zuordnung)
     })
@@ -29,11 +29,11 @@ const writeToStore = (store: Object, data: Array<Object>): void => {
 }
 
 export default (store: Object, apArtId: number): any => {
-  // console.log(`module fetchBeobzuordnung: apArtId:`, apArtId)
+  // console.log('module fetchBeobzuordnung: apArtId:', apArtId)
   const { valuesForWhichTableDataWasFetched } = store
   if (!apArtId) {
     return store.listError(
-      new Error(`action fetchBeobzuordnung: apArtId must be passed`),
+      new Error('action fetchBeobzuordnung: apArtId must be passed'),
     )
   }
 
@@ -47,21 +47,21 @@ export default (store: Object, apArtId: number): any => {
   }
 
   const url = `${apiBaseUrl}/beobzuordnung/${apArtId}`
-  store.loading.push(`beobzuordnung`)
+  store.loading.push('beobzuordnung')
   app.db.beobzuordnung
     .toArray()
     .then(data => {
       writeToStore(store, data)
       recordValuesForWhichTableDataWasFetched({
         store,
-        table: `beobzuordnung`,
-        field: `ArtId`,
+        table: 'beobzuordnung',
+        field: 'ArtId',
         value: apArtId,
       })
     })
     .then(() => axios.get(url))
     .then(({ data }) => {
-      store.loading = store.loading.filter(el => el !== `beobzuordnung`)
+      store.loading = store.loading.filter(el => el !== 'beobzuordnung')
       // leave ui react before this happens
       // copy array without the individual objects being references
       // otherwise the computed values are passed to idb
@@ -70,7 +70,7 @@ export default (store: Object, apArtId: number): any => {
       setTimeout(() => app.db.beobzuordnung.bulkPut(data))
     })
     .catch(error => {
-      store.loading = store.loading.filter(el => el !== `beobzuordnung`)
+      store.loading = store.loading.filter(el => el !== 'beobzuordnung')
       store.listError(error)
     })
 }

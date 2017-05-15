@@ -11,24 +11,24 @@ export default ({
   store,
   schemaName,
   tableName,
-  id
+  id,
 }: {
   store: Object,
   schemaName: string,
   tableName: string,
-  id: number | string
+  id: number | string,
 }): any => {
   if (!tableName) {
     return store.listError(
-      new Error(`action fetchDatasetById: tableName must be passed`)
+      new Error('action fetchDatasetById: tableName must be passed'),
     )
   }
   if (!id) {
     return store.listError(
-      new Error(`action fetchDatasetById: id must be passed`)
+      new Error('action fetchDatasetById: id must be passed'),
     )
   }
-  schemaName = schemaName || `apflora` // eslint-disable-line no-param-reassign
+  schemaName = schemaName || 'apflora' // eslint-disable-line no-param-reassign
 
   // $FlowIssue
   const idField = tables.find(t => t.table === tableName).idField
@@ -54,13 +54,13 @@ export default ({
       store.writeToStore({
         data: dataToWrite,
         table: tableName,
-        field: idField
+        field: idField,
       })
       recordValuesForWhichTableDataWasFetched({
         store,
         table: tableName,
         field: idField,
-        value: id
+        value: id,
       })
     })
     .then(() => axios.get(url))
@@ -68,7 +68,7 @@ export default ({
       store.loading = store.loading.filter(el => el !== tableName)
       // leave ui react before this happens
       setTimeout(() =>
-        store.writeToStore({ data, table: tableName, field: idField })
+        store.writeToStore({ data, table: tableName, field: idField }),
       )
       setTimeout(() => app.db[tableName].bulkPut(data))
     })
