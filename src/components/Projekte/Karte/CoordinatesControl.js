@@ -16,20 +16,14 @@ const StyledDiv = styled.div`
   text-shadow: 0 1px 0 white, -0 -1px 0 white, 1px 0 0 white, -1px 0 0 white, 0 2px 1px white, -0 -2px 1px white, 2px 0 1px white, -2px 0 1px white, 0 3px 2px white, -0 -3px 2px white, 3px 0 2px white, -3px 0 2px white;
 `
 
-const enhance = compose(
-  inject(`store`),
-  observer
-)
+const enhance = compose(inject('store'), observer)
 
-const CoordinatesControl = (
-  { store }:
-  { store: Object }
-) => {
+const CoordinatesControl = ({ store }: { store: Object }) => {
   let [x, y] = store.map.mouseCoordEpsg21781
-  let coord = ``
+  let coord = ''
   if (x && y) {
-    x = parseInt(x, 10).toLocaleString(`de-ch`)
-    y = parseInt(y, 10).toLocaleString(`de-ch`)
+    x = parseInt(x, 10).toLocaleString('de-ch')
+    y = parseInt(y, 10).toLocaleString('de-ch')
     coord = `${x}, ${y}`
   }
 

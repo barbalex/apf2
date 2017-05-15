@@ -26,7 +26,7 @@ const BeobPopup = ({ store, beob }: { store: Object, beob: Object }) => {
     } else {
       const tpopId = beob.beobzuordnung.TPopId
       const tpop = store.table.tpop.get(tpopId)
-      const popId = tpop ? tpop.PopId : ``
+      const popId = tpop ? tpop.PopId : ''
       url = `${appBaseUrl}/Projekte/${projekt}/Arten/${ap}/Populationen/${popId}/Teil-Populationen/${tpopId}/Beobachtungen/${beob.id}`
     }
   }
@@ -41,7 +41,7 @@ const BeobPopup = ({ store, beob }: { store: Object, beob: Object }) => {
         {beob.label}
       </StyledH3>
       <div>
-        {`Koordinaten: ${xKoord.toLocaleString(`de-ch`)} / ${yKoord.toLocaleString(`de-ch`)}`}
+        {`Koordinaten: ${xKoord.toLocaleString('de-ch')} / ${yKoord.toLocaleString('de-ch')}`}
       </div>
       <a href={url} target="_blank">
         Formular in neuem Tab öffnen

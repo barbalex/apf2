@@ -80,7 +80,7 @@ const StyledAutoComplete = styled(AutoComplete)`
     font-color: red !important;
   }
 `
-const isRemoteHost = window.location.hostname !== `localhost`
+const isRemoteHost = window.location.hostname !== 'localhost'
 
 const enhance = compose(
   inject('store'),
@@ -96,7 +96,7 @@ const enhance = compose(
         changeArtFuerEierlegendeWollmilchsau,
         artFuerEierlegendeWollmilchsau,
       } = props
-      const url = `${apiBaseUrl}/exportView/json/view=${view}${apArtId ? `/${apArtId}` : ``}`
+      const url = `${apiBaseUrl}/exportView/json/view=${view}${apArtId ? `/${apArtId}` : ''}`
 
       axios
         .get(url)
@@ -138,7 +138,7 @@ const enhance = compose(
           }
           try {
             const csvData = json2csv({ data: jsonData })
-            const file = `${fileName}_${format(new Date(), `YYYY-MM-DD_HH-mm-ss`)}`
+            const file = `${fileName}_${format(new Date(), 'YYYY-MM-DD_HH-mm-ss')}`
             fileDownload(csvData, `${file}.csv`)
             if (artFuerEierlegendeWollmilchsau) {
               changeArtFuerEierlegendeWollmilchsau('')
