@@ -6,57 +6,57 @@ export default (
   projId: number,
   apArtId: number,
   popId: number,
-  tpopId: number
+  tpopId: number,
 ): Array<Object> => {
   // fetch sorting indexes of parents
   const projIndex = findIndex(tree.filteredAndSorted.projekt, {
-    ProjId: projId
+    ProjId: projId,
   })
   const apIndex = findIndex(
     tree.filteredAndSorted.ap.filter(a => a.ProjId === projId),
-    { ApArtId: apArtId }
+    { ApArtId: apArtId },
   )
   const popIndex = findIndex(
     tree.filteredAndSorted.pop.filter(p => p.ApArtId === apArtId),
-    { PopId: popId }
+    { PopId: popId },
   )
   const tpopIndex = findIndex(
     tree.filteredAndSorted.tpop.filter(t => t.PopId === popId),
-    { TPopId: tpopId }
+    { TPopId: tpopId },
   )
 
   const childrenLength = tree.filteredAndSorted.tpopmassn.filter(
-    t => t.TPopId === tpopId
+    t => t.TPopId === tpopId,
   ).length
 
   let message = childrenLength
   if (store.table.tpopmassnLoading) {
-    message = `...`
+    message = '...'
   }
-  if (tree.nodeLabelFilter.get(`tpopmassn`)) {
+  if (tree.nodeLabelFilter.get('tpopmassn')) {
     message = `${childrenLength} gefiltert`
   }
 
   return [
     {
-      nodeType: `folder`,
-      menuType: `tpopmassnFolder`,
+      nodeType: 'folder',
+      menuType: 'tpopmassnFolder',
       id: tpopId,
-      urlLabel: `Massnahmen`,
+      urlLabel: 'Massnahmen',
       label: `Massnahmen (${message})`,
       url: [
-        `Projekte`,
+        'Projekte',
         projId,
-        `Arten`,
+        'Arten',
         apArtId,
-        `Populationen`,
+        'Populationen',
         popId,
-        `Teil-Populationen`,
+        'Teil-Populationen',
         tpopId,
-        `Massnahmen`
+        'Massnahmen',
       ],
       sort: [projIndex, 1, apIndex, 1, popIndex, 1, tpopIndex, 1],
-      hasChildren: childrenLength > 0
-    }
+      hasChildren: childrenLength > 0,
+    },
   ]
 }

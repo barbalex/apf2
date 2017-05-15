@@ -7,62 +7,62 @@ export default (
   apArtId: number,
   popId: number,
   tpopId: number,
-  tpopkontrId: number
+  tpopkontrId: number,
 ): Array<Object> => {
   // fetch sorting indexes of parents
   const projIndex = findIndex(tree.filteredAndSorted.projekt, {
-    ProjId: projId
+    ProjId: projId,
   })
   const apIndex = findIndex(
     tree.filteredAndSorted.ap.filter(a => a.ProjId === projId),
-    { ApArtId: apArtId }
+    { ApArtId: apArtId },
   )
   const popIndex = findIndex(
     tree.filteredAndSorted.pop.filter(p => p.ApArtId === apArtId),
-    { PopId: popId }
+    { PopId: popId },
   )
   const tpopIndex = findIndex(
     tree.filteredAndSorted.tpop.filter(t => t.PopId === popId),
-    { TPopId: tpopId }
+    { TPopId: tpopId },
   )
   const tpopfreiwkontrIndex = findIndex(
     tree.filteredAndSorted.tpopfreiwkontr.filter(t => t.TPopId === tpopId),
     {
-      TPopKontrId: tpopkontrId
-    }
+      TPopKontrId: tpopkontrId,
+    },
   )
 
   const childrenLength = tree.filteredAndSorted.tpopfreiwkontrzaehl.filter(
-    z => z.TPopKontrId === tpopkontrId
+    z => z.TPopKontrId === tpopkontrId,
   ).length
 
   let message = childrenLength
   if (store.table.tpopkontrLoading) {
-    message = `...`
+    message = '...'
   }
-  if (tree.nodeLabelFilter.get(`tpopfreiwkontr`)) {
+  if (tree.nodeLabelFilter.get('tpopfreiwkontr')) {
     message = `${childrenLength} gefiltert`
   }
 
   return [
     {
-      nodeType: `folder`,
-      menuType: `tpopfreiwkontrzaehlFolder`,
+      nodeType: 'folder',
+      menuType: 'tpopfreiwkontrzaehlFolder',
       id: tpopkontrId,
-      urlLabel: `Zaehlungen`,
+      urlLabel: 'Zaehlungen',
       label: `Zählungen (${message})`,
       url: [
-        `Projekte`,
+        'Projekte',
         projId,
-        `Arten`,
+        'Arten',
         apArtId,
-        `Populationen`,
+        'Populationen',
         popId,
-        `Teil-Populationen`,
+        'Teil-Populationen',
         tpopId,
-        `Freiwilligen-Kontrollen`,
+        'Freiwilligen-Kontrollen',
         tpopkontrId,
-        `Zaehlungen`
+        'Zaehlungen',
       ],
       sort: [
         projIndex,
@@ -74,9 +74,9 @@ export default (
         tpopIndex,
         4,
         tpopfreiwkontrIndex,
-        1
+        1,
       ],
-      hasChildren: childrenLength > 0
-    }
+      hasChildren: childrenLength > 0,
+    },
   ]
 }
