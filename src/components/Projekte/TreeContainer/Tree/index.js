@@ -45,7 +45,7 @@ const LoadingDiv = styled.div`
   padding-left: 15px;
   font-size: 14px;
 `
-const enhance = compose(inject(`store`), observer)
+const enhance = compose(inject('store'), observer)
 
 class Tree extends Component {
   props: {
@@ -106,7 +106,7 @@ class Tree extends Component {
   noRowsRenderer = () => (
     <Container>
       <LoadingDiv>
-        {this.props.projektLoading ? `lade Daten...` : `keine Daten`}
+        {this.props.projektLoading ? 'lade Daten...' : 'keine Daten'}
       </LoadingDiv>
     </Container>
   )

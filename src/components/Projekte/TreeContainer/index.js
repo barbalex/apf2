@@ -66,7 +66,7 @@ const Container = styled(({ exporte, children, ...rest }) => (
   align-items: stretch;
   flex-grow: ${props => (props.exporte ? 0 : 1)};
   flex-shrink: ${props => (props.exporte ? 0 : 1)};
-  flex-basis: ${props => (props.exporte ? `200px` : `500px`)};
+  flex-basis: ${props => (props.exporte ? '200px' : '500px')};
   border-color: #424242;
   border-width: 1px;
   border-style: solid;
@@ -87,10 +87,10 @@ const NurApDiv = styled.div`
 const ApDivToggle = styled(Toggle)`
   margin-left: -10px;
 `
-const apDivToggleThumbStyle = { backgroundColor: `rgb(245, 245, 245)` }
+const apDivToggleThumbStyle = { backgroundColor: 'rgb(245, 245, 245)' }
 const strukturbaumContainerDivStyle = {
   flexGrow: 1,
-  flexBasis: `100%`,
+  flexBasis: '100%',
 }
 
 const getAndValidateCoordinatesOfTpop = (store, id) => {
@@ -137,7 +137,7 @@ const getAndValidateCoordinatesOfBeob = (store, beobId) => {
   return { X, Y }
 }
 
-const enhance = compose(inject(`store`), observer)
+const enhance = compose(inject('store'), observer)
 
 class TreeContainer extends Component {
   props: {
@@ -148,38 +148,38 @@ class TreeContainer extends Component {
   showMapIfNotYetVisible = () => {
     const { store } = this.props
     const projekteTabs = clone(toJS(store.urlQuery.projekteTabs))
-    const isVisible = projekteTabs.includes(`karte`)
+    const isVisible = projekteTabs.includes('karte')
     if (!isVisible) {
-      projekteTabs.push(`karte`)
-      store.setUrlQueryValue(`projekteTabs`, projekteTabs)
+      projekteTabs.push('karte')
+      store.setUrlQueryValue('projekteTabs', projekteTabs)
     }
   }
 
   handleClick = (e, data, element) => {
     const { store, tree } = this.props
-    if (!data) return store.listError(new Error(`no data passed with click`))
+    if (!data) return store.listError(new Error('no data passed with click'))
     if (!element)
-      return store.listError(new Error(`no element passed with click`))
+      return store.listError(new Error('no element passed with click'))
     const { table, action, idTable, actionTable } = data
     const { firstElementChild } = element
     if (!firstElementChild)
       return store.listError(
-        new Error(`no firstElementChild passed with click`),
+        new Error('no firstElementChild passed with click'),
       )
-    const id = firstElementChild.getAttribute(`data-id`)
-    const parentId = firstElementChild.getAttribute(`data-parentId`)
-    const url = firstElementChild.getAttribute(`data-url`)
-    const label = firstElementChild.getAttribute(`data-label`)
+    const id = firstElementChild.getAttribute('data-id')
+    const parentId = firstElementChild.getAttribute('data-parentId')
+    const url = firstElementChild.getAttribute('data-url')
+    const label = firstElementChild.getAttribute('data-label')
     const baseUrl = JSON.parse(url)
-    const nodeType = firstElementChild.getAttribute(`data-nodeType`)
-    const menuType = firstElementChild.getAttribute(`data-menuType`)
+    const nodeType = firstElementChild.getAttribute('data-nodeType')
+    const menuType = firstElementChild.getAttribute('data-menuType')
     const that = this
     const actions = {
       insert() {
-        if (nodeType === `table`) {
+        if (nodeType === 'table') {
           baseUrl.pop()
         }
-        if (menuType === `zielFolder`) {
+        if (menuType === 'zielFolder') {
           // db sets year 1 as standard
           baseUrl.push(1)
         }
@@ -202,12 +202,12 @@ class TreeContainer extends Component {
         // actionTable: table to show on map
         // idTable: table from which to filter datasets of actionTable
         // 1. load missing data if necessary
-        if (idTable === `ap`) {
+        if (idTable === 'ap') {
           store.map.pop.apArtId = parseInt(id, 10)
-          store.fetchTableByParentId(`apflora`, `pop`, id)
+          store.fetchTableByParentId('apflora', 'pop', id)
           store.fetchTpopForAp(id)
         }
-        if (actionTable === `tpop`) {
+        if (actionTable === 'tpop') {
           store.fetchTpopForAp(id)
         }
         // 2. open map if not yet open
@@ -224,7 +224,7 @@ class TreeContainer extends Component {
       localizeOnMap() {
         store.map.setIdOfTpopBeingLocalized(parseInt(id, 10))
         that.showMapIfNotYetVisible()
-        store.map.showMapApfloraLayer(`Tpop`, true)
+        store.map.showMapApfloraLayer('Tpop', true)
       },
       markForMoving() {
         store.markForMoving(table, parseInt(id, 10), label)
@@ -330,16 +330,16 @@ class TreeContainer extends Component {
             projektLoading={store.table.projektLoading}
             nodes={tree.nodes}
             mapTpopBeobVisible={store.map.activeApfloraLayers.includes(
-              `TpopBeob`,
+              'TpopBeob',
             )}
             mapBeobNichtBeurteiltVisible={store.map.activeApfloraLayers.includes(
-              `BeobNichtBeurteilt`,
+              'BeobNichtBeurteilt',
             )}
             mapBeobNichtZuzuordnenVisible={store.map.activeApfloraLayers.includes(
-              `BeobNichtZuzuordnen`,
+              'BeobNichtZuzuordnen',
             )}
-            mapPopVisible={store.map.activeApfloraLayers.includes(`Pop`)}
-            mapTpopVisible={store.map.activeApfloraLayers.includes(`Tpop`)}
+            mapPopVisible={store.map.activeApfloraLayers.includes('Pop')}
+            mapTpopVisible={store.map.activeApfloraLayers.includes('Tpop')}
             popHighlightedIdsString={store.map.pop.highlightedIds.join()}
             activeNodeArray={toJS(tree.activeNodeArray)}
             lastClickedNode={toJS(tree.lastClickedNode)}

@@ -11,12 +11,11 @@ import isNodeInActiveNodePath from '../../../../modules/isNodeInActiveNodePath'
 import isNodeOpen from '../../../../modules/isNodeOpen'
 
 const singleRowHeight = 23
-const StyledNode = styled(({
-  level,
-  nodeIsInActiveNodePath,
-  children,
-  ...rest
-}) => <div {...rest}>{children}</div>)`
+const StyledNode = styled(
+  ({ level, nodeIsInActiveNodePath, children, ...rest }) => (
+    <div {...rest}>{children}</div>
+  ),
+)`
   padding-left: ${props => `${Number(props.level) * 17 - 10}px`};
   height: ${singleRowHeight}px;
   max-height: ${singleRowHeight}px;
@@ -26,19 +25,18 @@ const StyledNode = styled(({
   flex-direction: row;
   white-space: nowrap;
   user-select: none;
-  color: ${props => (props.nodeIsInActiveNodePath ? `rgb(255, 90, 0)` : `rgb(247, 247, 247)`)};
+  color: ${props => (props.nodeIsInActiveNodePath ? 'rgb(255, 90, 0)' : 'rgb(247, 247, 247)')};
 `
-const SymbolIcon = styled(({
-  nodeIsInActiveNodePath,
-  node,
-  children,
-  ...rest
-}) => <FontIcon {...rest}>{children}</FontIcon>)`
-  margin-top: ${({ nodeIsInActiveNodePath, node }) => (nodeIsInActiveNodePath ? `-5px !important` : `-2px !important`)};
-  padding-left: ${({ nodeIsInActiveNodePath }) => (nodeIsInActiveNodePath ? `2px` : `2px`)};
-  font-size: ${({ nodeIsInActiveNodePath }) => (nodeIsInActiveNodePath ? `26px !important` : `22px !important`)};
-  font-weight: ${({ nodeIsInActiveNodePath }) => (nodeIsInActiveNodePath ? `900 !important` : `inherit`)};
-  color: ${({ nodeIsInActiveNodePath }) => (nodeIsInActiveNodePath ? `rgb(255, 90, 0) !important` : `rgb(247, 247, 247)`)};
+const SymbolIcon = styled(
+  ({ nodeIsInActiveNodePath, node, children, ...rest }) => (
+    <FontIcon {...rest}>{children}</FontIcon>
+  ),
+)`
+  margin-top: ${({ nodeIsInActiveNodePath, node }) => (nodeIsInActiveNodePath ? '-5px !important' : '-2px !important')};
+  padding-left: ${({ nodeIsInActiveNodePath }) => (nodeIsInActiveNodePath ? '2px' : '2px')};
+  font-size: ${({ nodeIsInActiveNodePath }) => (nodeIsInActiveNodePath ? '26px !important' : '22px !important')};
+  font-weight: ${({ nodeIsInActiveNodePath }) => (nodeIsInActiveNodePath ? '900 !important' : 'inherit')};
+  color: ${({ nodeIsInActiveNodePath }) => (nodeIsInActiveNodePath ? 'rgb(255, 90, 0) !important' : 'rgb(247, 247, 247)')};
   width: 26px;
   cursor: pointer;
   &:hover {
@@ -49,21 +47,20 @@ const SymbolSpan = styled(({ nodeIsInActiveNodePath, children, ...rest }) => (
   <span {...rest}>{children}</span>
 ))`
   padding-right: 8px !important;
-  padding-left: ${props => (props.nodeIsInActiveNodePath ? `7px` : `9px`)};
-  font-weight: ${props => (props.nodeIsInActiveNodePath ? `900 !important` : `inherit`)};
+  padding-left: ${props => (props.nodeIsInActiveNodePath ? '7px' : '9px')};
+  font-weight: ${props => (props.nodeIsInActiveNodePath ? '900 !important' : 'inherit')};
   margin-top: -9px !important;
   font-size: 28px !important;
   width: 26px;
 `
-const TextSpan = styled(({
-  nodeIsInActiveNodePath,
-  node,
-  children,
-  ...rest
-}) => <span {...rest}>{children}</span>)`
+const TextSpan = styled(
+  ({ nodeIsInActiveNodePath, node, children, ...rest }) => (
+    <span {...rest}>{children}</span>
+  ),
+)`
   margin-left: 0;
   font-size: 16px !important;
-  font-weight: ${props => (props.nodeIsInActiveNodePath ? `900 !important` : `inherit`)};
+  font-weight: ${props => (props.nodeIsInActiveNodePath ? '900 !important' : 'inherit')};
   cursor: pointer;
   &:hover {
     color: orange;
@@ -116,68 +113,68 @@ const MovingIcon = styled(FontIcon)`
 `
 const CopyingIcon = styled(MovingIcon)``
 const showPopMapIcon = (store, tree, node) =>
-  node.menuType === `ap` &&
+  node.menuType === 'ap' &&
   node.id === (tree.activeNodes.ap || store.map.pop.apArtId) &&
-  store.map.activeApfloraLayers.includes(`Pop`)
+  store.map.activeApfloraLayers.includes('Pop')
 const showPopFilteredMapIcon = (store, node) =>
-  node.menuType === `pop` &&
-  store.map.activeApfloraLayers.includes(`Pop`) &&
+  node.menuType === 'pop' &&
+  store.map.activeApfloraLayers.includes('Pop') &&
   store.map.pop.highlightedIds.includes(node.id)
 const showTpopMapIcon = (store, tree, node) =>
-  node.menuType === `ap` &&
+  node.menuType === 'ap' &&
   node.id === (tree.activeNodes.ap || store.map.pop.apArtId) &&
-  store.map.activeApfloraLayers.includes(`Tpop`)
+  store.map.activeApfloraLayers.includes('Tpop')
 const showTpopFilteredMapIcon = (store, node) =>
-  node.menuType === `tpop` &&
-  store.map.activeApfloraLayers.includes(`Tpop`) &&
+  node.menuType === 'tpop' &&
+  store.map.activeApfloraLayers.includes('Tpop') &&
   store.map.tpop.highlightedIds.includes(node.id)
 const showBeobNichtBeurteiltMapIcon = (store, tree, node) =>
-  node.menuType === `beobzuordnungFolder` &&
+  node.menuType === 'beobzuordnungFolder' &&
   node.id === tree.activeNodes.ap &&
-  store.map.activeApfloraLayers.includes(`BeobNichtBeurteilt`)
+  store.map.activeApfloraLayers.includes('BeobNichtBeurteilt')
 const showBeobNichtZuzuordnenMapIcon = (store, tree, node) =>
-  node.menuType === `beobNichtZuzuordnenFolder` &&
+  node.menuType === 'beobNichtZuzuordnenFolder' &&
   node.id === tree.activeNodes.ap &&
-  store.map.activeApfloraLayers.includes(`BeobNichtZuzuordnen`)
+  store.map.activeApfloraLayers.includes('BeobNichtZuzuordnen')
 const showTpopBeobMapIcon = (store, tree, node) =>
-  node.menuType === `tpopbeobFolder` &&
+  node.menuType === 'tpopbeobFolder' &&
   node.id === tree.activeNodes.tpop &&
-  store.map.activeApfloraLayers.includes(`TpopBeob`)
+  store.map.activeApfloraLayers.includes('TpopBeob')
 const showBeobNichtBeurteiltFilteredMapIcon = (store, node) =>
-  node.menuType === `beobzuordnung` &&
-  store.map.activeApfloraLayers.includes(`BeobNichtBeurteilt`) &&
+  node.menuType === 'beobzuordnung' &&
+  store.map.activeApfloraLayers.includes('BeobNichtBeurteilt') &&
   store.map.beobNichtBeurteilt.highlightedIds.includes(node.id)
 const showBeobNichtZuzuordnenFilteredMapIcon = (store, node) =>
-  node.menuType === `beobNichtZuzuordnen` &&
-  store.map.activeApfloraLayers.includes(`BeobNichtZuzuordnen`) &&
+  node.menuType === 'beobNichtZuzuordnen' &&
+  store.map.activeApfloraLayers.includes('BeobNichtZuzuordnen') &&
   store.map.beobNichtZuzuordnen.highlightedIds.includes(node.id)
 const showTpopBeobFilteredMapIcon = (store, tree, node) =>
-  (node.menuType === `tpopbeob` &&
-    store.map.activeApfloraLayers.includes(`TpopBeob`) &&
+  (node.menuType === 'tpopbeob' &&
+    store.map.activeApfloraLayers.includes('TpopBeob') &&
     store.map.tpopBeob.highlightedIds.includes(node.id)) ||
-  (node.menuType === `tpop` &&
+  (node.menuType === 'tpop' &&
     !tree.activeNodes.tpopbeob &&
-    store.map.activeApfloraLayers.includes(`TpopBeob`) &&
+    store.map.activeApfloraLayers.includes('TpopBeob') &&
     node.id === tree.activeNodes.tpop) ||
-  (node.menuType === `pop` &&
+  (node.menuType === 'pop' &&
     !tree.activeNodes.tpop &&
-    store.map.activeApfloraLayers.includes(`TpopBeob`) &&
+    store.map.activeApfloraLayers.includes('TpopBeob') &&
     node.id === tree.activeNodes.pop)
 
-const enhance = compose(inject(`store`), observer)
+const enhance = compose(inject('store'), observer)
 
 const Row = ({
   key,
   index,
   style,
   store,
-  tree
+  tree,
 }: {
   key?: number,
   index: number,
   style: Object,
   store: Object,
-  tree: Object
+  tree: Object,
 }) => {
   const node = tree.nodes[index]
   const onClickNode = event => tree.toggleNode(tree, node)
@@ -185,18 +182,18 @@ const Row = ({
   const myProps = { key: index }
   const nodeIsInActiveNodePath = isNodeInActiveNodePath(
     node,
-    toJS(tree.activeNodeArray)
+    toJS(tree.activeNodeArray),
   )
   // build symbols
   let useSymbolIcon = true
   let useSymbolSpan = false
   let symbolIcon
   if (node.hasChildren && isNodeOpen(toJS(tree.openNodes), node.url)) {
-    symbolIcon = `expand_more`
+    symbolIcon = 'expand_more'
   } else if (node.hasChildren) {
-    symbolIcon = `chevron_right`
-  } else if (node.label === `lade Daten...`) {
-    symbolIcon = `more_horiz`
+    symbolIcon = 'chevron_right'
+  } else if (node.label === 'lade Daten...') {
+    symbolIcon = 'more_horiz'
   } else {
     useSymbolSpan = true
     useSymbolIcon = false
@@ -204,15 +201,15 @@ const Row = ({
   const dataUrl = JSON.stringify(node.url)
   const level = node.url.length - 1
   const moving =
-    node.nodeType === `table` &&
+    node.nodeType === 'table' &&
     node.menuType === store.moving.table &&
     node.id === store.moving.id
   const copying =
-    node.nodeType === `table` &&
+    node.nodeType === 'table' &&
     node.menuType === store.copying.table &&
     node.id === store.copying.id
   const copyingBiotop =
-    node.nodeType === `table` && node.id === store.copyingBiotop.id
+    node.nodeType === 'table' && node.id === store.copyingBiotop.id
 
   return (
     <div key={key} style={style}>
@@ -245,7 +242,7 @@ const Row = ({
             </SymbolIcon>}
           {useSymbolSpan &&
             <SymbolSpan nodeIsInActiveNodePath={nodeIsInActiveNodePath}>
-              {`-`}
+              {'-'}
             </SymbolSpan>}
           {showPopMapIcon(store, tree, node) &&
             <PopMapIcon
