@@ -31,15 +31,15 @@ const FilterField = styled(TextField)`
   margin-bottom: 10px;
 `
 const linkifyProperties = {
-  target: `_blank`,
+  target: '_blank',
   style: {
-    color: `white`,
-    fontWeight: 100
-  }
+    color: 'white',
+    fontWeight: 100,
+  },
 }
 
 const enhance = compose(
-  inject(`store`),
+  inject('store'),
   withHandlers({
     onChangeBerichtjahr: props => (event, val) => {
       props.store.setQk({ tree: props.tree, berichtjahr: val })
@@ -49,27 +49,24 @@ const enhance = compose(
       }
     },
   }),
-  observer
+  observer,
 )
 
-const Qk = (
-  {
-    store,
-    tree,
-    onChangeBerichtjahr,
-  }:
-  {
-    store: Object,
-    tree: Object,
-    onChangeBerichtjahr: () => void,
-  }
-) => {
+const Qk = ({
+  store,
+  tree,
+  onChangeBerichtjahr,
+}: {
+  store: Object,
+  tree: Object,
+  onChangeBerichtjahr: () => void,
+}) => {
   const { qk } = store
   const apArtId = tree.activeNodes.ap
   // need to pass value for when qk does not yet exist
   const myQk = qk.get(apArtId) || {
-    berichtjahr: ``,
-    filter: ``,
+    berichtjahr: '',
+    filter: '',
     messagesFiltered: [],
   }
   const { berichtjahr, filter, messagesFiltered } = myQk
@@ -89,35 +86,31 @@ const Qk = (
           <FilterField
             floatingLabelText="nach Typ filtern"
             type="text"
-            value={filter || ``}
+            value={filter || ''}
             fullWidth
-            onChange={(event, val) =>
-              store.setQkFilter({ tree, filter: val })
-            }
+            onChange={(event, val) => store.setQkFilter({ tree, filter: val })}
           />
-          {
-            messagesFiltered.map((m, index) => {
-              const children = m.url.map((u, i) =>
-                <div key={i}>
-                  {`${appBaseUrl}/${u.join(`/`)}`}
-                </div>
-              )
-              return (
-                <StyledCard key={index}>
-                  <CardText>
-                    <Title>
-                      {m.hw}
-                    </Title>
-                    <div>
-                      <Linkify properties={linkifyProperties}>
-                        {children}
-                      </Linkify>
-                    </div>
-                  </CardText>
-                </StyledCard>
-              )
-            })
-          }
+          {messagesFiltered.map((m, index) => {
+            const children = m.url.map((u, i) => (
+              <div key={i}>
+                {`${appBaseUrl}/${u.join('/')}`}
+              </div>
+            ))
+            return (
+              <StyledCard key={index}>
+                <CardText>
+                  <Title>
+                    {m.hw}
+                  </Title>
+                  <div>
+                    <Linkify properties={linkifyProperties}>
+                      {children}
+                    </Linkify>
+                  </div>
+                </CardText>
+              </StyledCard>
+            )
+          })}
         </FieldsContainer>
       </Scrollbars>
     </Container>

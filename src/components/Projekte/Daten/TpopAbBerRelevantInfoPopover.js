@@ -52,7 +52,7 @@ export default (
         nein (kein Vorkommen):
       </LabelPopoverRowColumnLeft>
       <LabelPopoverRowColumnRight>
-        {`siehe bei Populationen "überprüft, kein Vorkommen"`}
+        {'siehe bei Populationen "überprüft, kein Vorkommen"'}
       </LabelPopoverRowColumnRight>
     </LabelPopoverContentRow>
   </Container>

@@ -53,32 +53,32 @@ const TabChildDiv = styled.div`
 `
 const tpopkontrTypWerte = [
   {
-    value: `Ausgangszustand`,
-    label: `Ausgangszustand`,
+    value: 'Ausgangszustand',
+    label: 'Ausgangszustand',
   },
   {
-    value: `Zwischenbeurteilung`,
-    label: `Zwischenbeurteilung`,
+    value: 'Zwischenbeurteilung',
+    label: 'Zwischenbeurteilung',
   },
 ]
 const styles = {
   root: {
-    flex: `1 1 100%`,
+    flex: '1 1 100%',
     minHeight: 0,
-    height: `100%`,
-    display: `flex`,
-    flexDirection: `column`,
+    height: '100%',
+    display: 'flex',
+    flexDirection: 'column',
   },
   container: {
-    height: `100%`,
+    height: '100%',
   },
 }
 
 const enhance = compose(
-  inject(`store`),
+  inject('store'),
   withHandlers({
     onChangeTab: props => value =>
-      props.store.setUrlQueryValue(`feldkontrTab`, value),
+      props.store.setUrlQueryValue('feldkontrTab', value),
   }),
   observer,
 )
@@ -102,7 +102,7 @@ const Tpopfeldkontr = ({
           style={styles.root}
           contentContainerStyle={styles.container}
           tabTemplate={TabTemplate}
-          value={store.urlQuery.feldkontrTab || `entwicklung`}
+          value={store.urlQuery.feldkontrTab || 'entwicklung'}
           onChange={onChangeTab}
         >
           <Tab label="Entwicklung" value="entwicklung">
@@ -266,34 +266,34 @@ const Tpopfeldkontr = ({
                   <AutoComplete
                     floatingLabelText="Lebensraum nach Delarze"
                     fullWidth
-                    searchText={activeDataset.row.TPopKontrLeb || ``}
+                    searchText={activeDataset.row.TPopKontrLeb || ''}
                     errorText={activeDataset.valid.TPopKontrLeb}
                     dataSource={store.dropdownList.lr}
                     filter={AutoComplete.caseInsensitiveFilter}
                     maxSearchResults={20}
                     onNewRequest={val =>
-                      store.updatePropertyInDb(tree, `TPopKontrLeb`, val)}
+                      store.updatePropertyInDb(tree, 'TPopKontrLeb', val)}
                     onBlur={e =>
                       store.updatePropertyInDb(
                         tree,
-                        `TPopKontrLeb`,
+                        'TPopKontrLeb',
                         e.target.value,
                       )}
                   />
                   <AutoComplete
                     floatingLabelText="Umgebung nach Delarze"
                     fullWidth
-                    searchText={activeDataset.row.TPopKontrLebUmg || ``}
+                    searchText={activeDataset.row.TPopKontrLebUmg || ''}
                     errorText={activeDataset.valid.TPopKontrLebUmg}
                     dataSource={store.dropdownList.lr}
                     filter={AutoComplete.caseInsensitiveFilter}
                     maxSearchResults={20}
                     onNewRequest={val =>
-                      store.updatePropertyInDb(tree, `TPopKontrLebUmg`, val)}
+                      store.updatePropertyInDb(tree, 'TPopKontrLebUmg', val)}
                     onBlur={e =>
                       store.updatePropertyInDb(
                         tree,
-                        `TPopKontrLebUmg`,
+                        'TPopKontrLebUmg',
                         e.target.value,
                       )}
                   />
