@@ -44,45 +44,37 @@ const enhance = compose(
       props.updatePropertyInDb(props.tree, props.herkunftFieldName, val)
     },
   }),
-  observer
+  observer,
 )
 
-const Status = (
-  {
-    tree,
-    apJahr,
-    herkunftFieldName,
-    herkunftValue,
-    bekanntSeitFieldName,
-    bekanntSeitValue,
-    bekanntSeitValid,
-    updateProperty,
-    updatePropertyInDb,
-    onChange,
-  }:
-  {
-    tree: Object,
-    apJahr?: number,
-    herkunftFieldName: string,
-    herkunftValue?: number,
-    bekanntSeitFieldName: string,
-    bekanntSeitValue?: number,
-    bekanntSeitValid?: string,
-    updateProperty: () => void,
-    updatePropertyInDb: () => void,
-    onChange: () => void,
-  }
-) => {
-  const valueSelected = (
-    (herkunftValue !== null && herkunftValue !== undefined) ?
-    herkunftValue :
-    ``
-  )
-  const showVorBeginnAp = (
-    bekanntSeitValue &&
-    apJahr &&
-    (apJahr > bekanntSeitValue)
-  )
+const Status = ({
+  tree,
+  apJahr,
+  herkunftFieldName,
+  herkunftValue,
+  bekanntSeitFieldName,
+  bekanntSeitValue,
+  bekanntSeitValid,
+  updateProperty,
+  updatePropertyInDb,
+  onChange,
+}: {
+  tree: Object,
+  apJahr?: number,
+  herkunftFieldName: string,
+  herkunftValue?: number,
+  bekanntSeitFieldName: string,
+  bekanntSeitValue?: number,
+  bekanntSeitValid?: string,
+  updateProperty: () => void,
+  updatePropertyInDb: () => void,
+  onChange: () => void,
+}) => {
+  const valueSelected = herkunftValue !== null && herkunftValue !== undefined
+    ? herkunftValue
+    : ``
+  const showNachBeginnAp =
+    !apJahr || !bekanntSeitValue || apJahr <= bekanntSeitValue
   const disabled = !bekanntSeitValue && bekanntSeitValue !== 0
 
   return (
@@ -136,7 +128,7 @@ const Status = (
               onChange={onChange}
             >
               <RadioButton
-                value={showVorBeginnAp ? 210 : 200}
+                value={showNachBeginnAp ? 200 : 210}
                 label="aktuell"
                 key={1}
                 disabled={disabled}
@@ -148,7 +140,7 @@ const Status = (
                 disabled={disabled}
               />
               <RadioButton
-                value={showVorBeginnAp ? 211 : 202}
+                value={showNachBeginnAp ? 202 : 211}
                 label="erloschen / nicht etabliert"
                 key={4}
                 disabled={disabled}
