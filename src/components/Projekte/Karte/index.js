@@ -65,7 +65,7 @@ const StyledMapLocalizing = styled(StyledMap)`
   cursor: crosshair !important;
 `
 
-const enhance = compose(inject(`store`), observer)
+const enhance = compose(inject('store'), observer)
 
 const Karte = ({ store }: { store: Object }) => {
   const { activeBaseLayer, activeApfloraLayers } = store.map
@@ -75,8 +75,8 @@ const Karte = ({ store }: { store: Object }) => {
   // see issue on proj4js: https://github.com/proj4js/proj4js/issues/214
   /*
   const crs = new window.L.Proj.CRS(
-    `EPSG:21781`,
-    `+proj=somerc +lat_0=46.95240555555556 +lon_0=7.439583333333333 +k_0=1 +x_0=600000 +y_0=200000 +ellps=bessel +towgs84=674.374,15.056,405.346,0,0,0,0 +units=m +no_defs`,
+    'EPSG:21781',
+    '+proj=somerc +lat_0=46.95240555555556 +lon_0=7.439583333333333 +k_0=1 +x_0=600000 +y_0=200000 +ellps=bessel +towgs84=674.374,15.056,405.346,0,0,0,0 +units=m +no_defs',
     {
       resolutions: [8192, 4096, 2048], // 3 example zoom level resolutions
       bounds,
@@ -91,25 +91,25 @@ const Karte = ({ store }: { store: Object }) => {
     MapFilter: () => null,
     Pop: () => (
       <Pop
-        visible={activeApfloraLayers.includes(`Pop`)}
+        visible={activeApfloraLayers.includes('Pop')}
         markers={store.map.pop.markers}
       />
     ),
     Tpop: () => {
       if (
         store.map.beob.assigning ||
-        activeApfloraLayers.includes(`TpopBeobAssignPolylines`)
+        activeApfloraLayers.includes('TpopBeobAssignPolylines')
       ) {
         return (
           <Tpop
-            visible={activeApfloraLayers.includes(`Tpop`)}
+            visible={activeApfloraLayers.includes('Tpop')}
             markers={store.map.tpop.markers}
           />
         )
       }
       return (
         <TpopCluster
-          visible={activeApfloraLayers.includes(`Tpop`)}
+          visible={activeApfloraLayers.includes('Tpop')}
           markers={store.map.tpop.markersClustered}
         />
       )
@@ -117,50 +117,50 @@ const Karte = ({ store }: { store: Object }) => {
     BeobNichtBeurteilt: () => {
       if (
         store.map.beob.assigning ||
-        activeApfloraLayers.includes(`TpopBeobAssignPolylines`)
+        activeApfloraLayers.includes('TpopBeobAssignPolylines')
       ) {
         return (
           <Beob
-            visible={activeApfloraLayers.includes(`BeobNichtBeurteilt`)}
+            visible={activeApfloraLayers.includes('BeobNichtBeurteilt')}
             markers={store.map.beobNichtBeurteilt.markers}
           />
         )
       }
       return (
         <BeobCluster
-          visible={activeApfloraLayers.includes(`BeobNichtBeurteilt`)}
+          visible={activeApfloraLayers.includes('BeobNichtBeurteilt')}
           markers={store.map.beobNichtBeurteilt.markersClustered}
         />
       )
     },
     BeobNichtZuzuordnen: () => (
       <BeobCluster
-        visible={activeApfloraLayers.includes(`BeobNichtZuzuordnen`)}
+        visible={activeApfloraLayers.includes('BeobNichtZuzuordnen')}
         markers={store.map.beobNichtZuzuordnen.markersClustered}
       />
     ),
     TpopBeob: () => {
       if (
         store.map.beob.assigning ||
-        activeApfloraLayers.includes(`TpopBeobAssignPolylines`)
+        activeApfloraLayers.includes('TpopBeobAssignPolylines')
       ) {
         return (
           <Beob
-            visible={activeApfloraLayers.includes(`TpopBeob`)}
+            visible={activeApfloraLayers.includes('TpopBeob')}
             markers={store.map.tpopBeob.markers}
           />
         )
       }
       return (
         <BeobCluster
-          visible={activeApfloraLayers.includes(`TpopBeob`)}
+          visible={activeApfloraLayers.includes('TpopBeob')}
           markers={store.map.tpopBeob.markersClustered}
         />
       )
     },
     TpopBeobAssignPolylines: () => (
       <TpopBeobAssignPolylines
-        visible={activeApfloraLayers.includes(`TpopBeobAssignPolylines`)}
+        visible={activeApfloraLayers.includes('TpopBeobAssignPolylines')}
         assignPolylines={store.map.tpopBeob.assignPolylines}
       />
     ),
@@ -248,7 +248,7 @@ const Karte = ({ store }: { store: Object }) => {
         }
       />
       <MeasureControl />
-      {store.map.activeApfloraLayers.includes(`MapFilter`) && <DrawControl />}
+      {store.map.activeApfloraLayers.includes('MapFilter') && <DrawControl />}
       <PrintControl />
       <PngControl />
       <CoordinatesControl />
