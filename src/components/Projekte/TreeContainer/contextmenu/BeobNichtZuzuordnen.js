@@ -2,24 +2,19 @@
 import React from 'react'
 import { ContextMenu, MenuItem } from 'react-contextmenu'
 
-const BeobNichtZuzuordnen = (
-  {
-    tree,
-    onClick,
-  }:
-  {
-    tree: Object,
-    onClick: () => void,
-  }
-) =>
-  <ContextMenu
-    id={`${tree.name}beobNichtZuzuordnen`}
-  >
+const BeobNichtZuzuordnen = ({
+  tree,
+  onClick,
+}: {
+  tree: Object,
+  onClick: () => void,
+}) => (
+  <ContextMenu id={`${tree.name}beobNichtZuzuordnen`}>
     <div className="react-contextmenu-title">Beobachtung</div>
     <MenuItem
       onClick={onClick}
       data={{
-        action: `createNewPopFromBeob`,
+        action: 'createNewPopFromBeob',
       }}
     >
       neue Population und Teil-Population gründen und Beobachtung der Teil-Population zuordnen
@@ -27,7 +22,7 @@ const BeobNichtZuzuordnen = (
     <MenuItem
       onClick={onClick}
       data={{
-        action: `showCoordOfBeobOnMapsZhCh`,
+        action: 'showCoordOfBeobOnMapsZhCh',
       }}
     >
       Zeige auf maps.zh.ch
@@ -35,11 +30,12 @@ const BeobNichtZuzuordnen = (
     <MenuItem
       onClick={onClick}
       data={{
-        action: `showCoordOfBeobOnMapGeoAdminCh`,
+        action: 'showCoordOfBeobOnMapGeoAdminCh',
       }}
     >
       Zeige auf map.geo.admin.ch
     </MenuItem>
   </ContextMenu>
+)
 
 export default BeobNichtZuzuordnen

@@ -6,43 +6,34 @@ import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
 
 const enhance = compose(
-  withState(`label`, `changeLabel`, ``),
+  withState('label', 'changeLabel', ''),
   withHandlers({
     // according to https://github.com/vkbansal/react-contextmenu/issues/65
     // this is how to pass data from ContextMenuTrigger to ContextMenu
-    onShow: props => (event) =>
-      props.changeLabel(event.detail.data.nodeLabel)
-    ,
-  })
+    onShow: props => event => props.changeLabel(event.detail.data.nodeLabel),
+  }),
 )
 
-const BerFolder = (
-  {
-    tree,
-    onClick,
-    changeLabel,
-    label,
-    onShow,
-  }:
-  {
-    tree: Object,
-    onClick: () => void,
-    changeLabel: () => void,
-    label: string|number,
-    onShow: () => void,
-  }
-) =>
-  <ContextMenu
-    id={`${tree.name}ber`}
-    collect={props => props}
-    onShow={onShow}
-  >
+const BerFolder = ({
+  tree,
+  onClick,
+  changeLabel,
+  label,
+  onShow,
+}: {
+  tree: Object,
+  onClick: () => void,
+  changeLabel: () => void,
+  label: string | number,
+  onShow: () => void,
+}) => (
+  <ContextMenu id={`${tree.name}ber`} collect={props => props} onShow={onShow}>
     <div className="react-contextmenu-title">Bericht</div>
     <MenuItem
       onClick={onClick}
       data={{
-        action: `insert`,
-        table: `ber`,
+        action: 'insert',
+        table: 'ber',
       }}
     >
       erstelle neuen
@@ -50,12 +41,13 @@ const BerFolder = (
     <MenuItem
       onClick={onClick}
       data={{
-        action: `delete`,
-        table: `ber`,
+        action: 'delete',
+        table: 'ber',
       }}
     >
       lösche
     </MenuItem>
   </ContextMenu>
+)
 
 export default enhance(BerFolder)
