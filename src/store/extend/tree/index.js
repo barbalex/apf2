@@ -96,9 +96,16 @@ export default (store: Object, tree: Object): void => {
     ),
   })
   extendObservable(tree, {
+    // empty all keys but ap when changing ap
     emptyTreeNodeLabelFilterOnChangeAp: reaction(
       () => tree.activeNodes.ap,
-      ap => tree.nodeLabelFilter.clear(),
+      ap => {
+        tree.nodeLabelFilter.keys().forEach(key => {
+          if (key !== 'ap') {
+            tree.nodeLabelFilter.delete(key)
+          }
+        })
+      },
       { name: 'emptyTreeNodeLabelFilterOnChangeAp' },
     ),
   })
