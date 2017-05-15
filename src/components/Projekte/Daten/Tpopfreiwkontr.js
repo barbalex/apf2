@@ -22,21 +22,9 @@ const FieldsContainer = styled.div`
   padding-bottom: 45px;
 `
 
-const enhance = compose(
-  inject(`store`),
-  observer
-)
+const enhance = compose(inject('store'), observer)
 
-const Tpopfreiwkontr = (
-  {
-    store,
-    tree,
-  }:
-  {
-    store: Object,
-    tree: Object,
-  }
-) => {
+const Tpopfreiwkontr = ({ store, tree }: { store: Object, tree: Object }) => {
   const { activeDataset } = tree
 
   return (

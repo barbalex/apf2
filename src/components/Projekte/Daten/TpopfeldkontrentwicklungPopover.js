@@ -38,10 +38,10 @@ export default (
     </LabelPopoverContentRow>
     <LabelPopoverContentRow>
       <LabelPopoverRowColumnLeft>
-        {`zunehmend:`}
+        {'zunehmend:'}
       </LabelPopoverRowColumnLeft>
       <LabelPopoverRowColumnRight>
-        {`> 10% Zunahme`}
+        {'> 10% Zunahme'}
       </LabelPopoverRowColumnRight>
     </LabelPopoverContentRow>
     <LabelPopoverContentRow>
@@ -49,7 +49,7 @@ export default (
         stabil:
       </LabelPopoverRowColumnLeft>
       <LabelPopoverRowColumnRight>
-        {`± 10%`}
+        {'± 10%'}
       </LabelPopoverRowColumnRight>
     </LabelPopoverContentRow>
     <LabelPopoverContentRow>
@@ -57,7 +57,7 @@ export default (
         abnehmend:
       </LabelPopoverRowColumnLeft>
       <LabelPopoverRowColumnRight>
-        {`> 10% Abnahme`}
+        {'> 10% Abnahme'}
       </LabelPopoverRowColumnRight>
     </LabelPopoverContentRow>
     <LabelPopoverContentRow>
@@ -65,7 +65,9 @@ export default (
         erloschen / nicht etabliert:
       </LabelPopoverRowColumnLeft>
       <LabelPopoverRowColumnRight>
-        {`nach 2 aufeinander folgenden Kontrollen ohne Funde oder nach Einschätzung AP-VerantwortlicheR`}
+        {
+          'nach 2 aufeinander folgenden Kontrollen ohne Funde oder nach Einschätzung AP-VerantwortlicheR'
+        }
       </LabelPopoverRowColumnRight>
     </LabelPopoverContentRow>
     <LabelPopoverContentRow>
@@ -73,7 +75,9 @@ export default (
         unsicher:
       </LabelPopoverRowColumnLeft>
       <LabelPopoverRowColumnRight>
-        {`keine Funde aber noch nicht erloschen (nach zwei Kontrollen ohne Funde kann Status erloschen/nicht etabliert gewählt werden)`}
+        {
+          'keine Funde aber noch nicht erloschen (nach zwei Kontrollen ohne Funde kann Status erloschen/nicht etabliert gewählt werden)'
+        }
       </LabelPopoverRowColumnRight>
     </LabelPopoverContentRow>
   </div>

@@ -26,18 +26,18 @@ const FieldsContainer = styled.div`
 `
 
 const enhance = compose(
-  inject(`store`),
+  inject('store'),
   withHandlers({
     onNewRequestWirtspflanze: props => val =>
       props.store.updatePropertyInDb(
         props.tree,
-        `TPopMassnAnsiedWirtspfl`,
+        'TPopMassnAnsiedWirtspfl',
         val,
       ),
     onBlurWirtspflanze: props => e =>
       props.store.updatePropertyInDb(
         props.tree,
-        `TPopMassnAnsiedWirtspfl`,
+        'TPopMassnAnsiedWirtspfl',
         e.target.value,
       ),
   }),
@@ -207,8 +207,8 @@ const Tpopmassn = ({
           <AutoComplete
             floatingLabelText="Wirtspflanze"
             fullWidth
-            value={activeDataset.row.TPopMassnAnsiedWirtspfl || ``}
-            searchText={activeDataset.row.TPopMassnAnsiedWirtspfl || ``}
+            value={activeDataset.row.TPopMassnAnsiedWirtspfl || ''}
+            searchText={activeDataset.row.TPopMassnAnsiedWirtspfl || ''}
             errorText={activeDataset.valid.TPopMassnAnsiedWirtspfl}
             filter={AutoComplete.caseInsensitiveFilter}
             dataSource={store.dropdownList.artnamen}

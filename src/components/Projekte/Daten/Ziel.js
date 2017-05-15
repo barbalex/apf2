@@ -20,21 +20,9 @@ const FieldsContainer = styled.div`
   padding-bottom: 95px;
 `
 
-const enhance = compose(
-  inject(`store`),
-  observer
-)
+const enhance = compose(inject('store'), observer)
 
-const Ziel = (
-  {
-    store,
-    tree,
-  }:
-  {
-    store: Object,
-    tree: Object,
-  }
-) => {
+const Ziel = ({ store, tree }: { store: Object, tree: Object }) => {
   const { activeDataset } = tree
 
   return (
