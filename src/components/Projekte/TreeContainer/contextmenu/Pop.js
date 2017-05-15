@@ -7,44 +7,41 @@ import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
 
 const enhance = compose(
-  inject(`store`),
-  withState(`id`, `changeId`, 0),
-  withState(`label`, `changeLabel`, ``),
+  inject('store'),
+  withState('id', 'changeId', 0),
+  withState('label', 'changeLabel', ''),
   withHandlers({
     // according to https://github.com/vkbansal/react-contextmenu/issues/65
     // this is how to pass data from ContextMenuTrigger to ContextMenu
-    onShow: props => (event) => {
+    onShow: props => event => {
       props.changeId(event.detail.data.nodeId)
       props.changeLabel(event.detail.data.nodeLabel)
     },
   }),
-  observer
+  observer,
 )
 
-const Pop = (
-  {
-    onClick,
-    store,
-    tree,
-    changeId,
-    id,
-    changeLabel,
-    label,
-    onShow,
-  }:
-  {
-    onClick: () => void,
-    store: Object,
-    tree: Object,
-    changeId: () => {},
-    id: number,
-    changeLabel: () => void,
-    label: string,
-    onShow: () => void,
-  }
-) => {
-  const moving = store.moving.table && store.moving.table === `tpop`
-  const copying = store.copying.table && store.copying.table === `tpop`
+const Pop = ({
+  onClick,
+  store,
+  tree,
+  changeId,
+  id,
+  changeLabel,
+  label,
+  onShow,
+}: {
+  onClick: () => void,
+  store: Object,
+  tree: Object,
+  changeId: () => {},
+  id: number,
+  changeLabel: () => void,
+  label: string,
+  onShow: () => void,
+}) => {
+  const moving = store.moving.table && store.moving.table === 'tpop'
+  const copying = store.copying.table && store.copying.table === 'tpop'
 
   return (
     <ContextMenu
@@ -56,8 +53,8 @@ const Pop = (
       <MenuItem
         onClick={onClick}
         data={{
-          action: `insert`,
-          table: `pop`,
+          action: 'insert',
+          table: 'pop',
         }}
       >
         erstelle neue
@@ -65,8 +62,8 @@ const Pop = (
       <MenuItem
         onClick={onClick}
         data={{
-          action: `delete`,
-          table: `pop`,
+          action: 'delete',
+          table: 'pop',
         }}
       >
         lösche
@@ -74,54 +71,48 @@ const Pop = (
       <MenuItem
         onClick={onClick}
         data={{
-          action: `markForMoving`,
-          table: `pop`,
+          action: 'markForMoving',
+          table: 'pop',
         }}
       >
         verschiebe
       </MenuItem>
-      {
-        moving &&
+      {moving &&
         <MenuItem
           onClick={onClick}
           data={{
-            action: `move`,
+            action: 'move',
           }}
         >
           {`verschiebe '${store.moving.label}' hierhin`}
-        </MenuItem>
-      }
+        </MenuItem>}
       <MenuItem
         onClick={onClick}
         data={{
-          action: `markForCopying`,
-          table: `pop`,
+          action: 'markForCopying',
+          table: 'pop',
         }}
       >
         kopiere
       </MenuItem>
-      {
-        copying &&
+      {copying &&
         <MenuItem
           onClick={onClick}
           data={{
-            action: `copy`,
+            action: 'copy',
           }}
         >
           {`kopiere '${store.copying.label}' hierhin`}
-        </MenuItem>
-      }
-      {
-        copying &&
+        </MenuItem>}
+      {copying &&
         <MenuItem
           onClick={onClick}
           data={{
-            action: `resetCopying`,
+            action: 'resetCopying',
           }}
         >
           Kopieren aufheben
-        </MenuItem>
-      }
+        </MenuItem>}
     </ContextMenu>
   )
 }

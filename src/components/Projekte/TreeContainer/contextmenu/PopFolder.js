@@ -7,38 +7,33 @@ import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
 
 const enhance = compose(
-  inject(`store`),
-  withState(`label`, `changeLabel`, ``),
+  inject('store'),
+  withState('label', 'changeLabel', ''),
   withHandlers({
     // according to https://github.com/vkbansal/react-contextmenu/issues/65
     // this is how to pass data from ContextMenuTrigger to ContextMenu
-    onShow: props => (event) =>
-      props.changeLabel(event.detail.data.nodeLabel)
-    },
-  ),
-  observer
+    onShow: props => event => props.changeLabel(event.detail.data.nodeLabel),
+  }),
+  observer,
 )
 
-const PopFolder = (
-  {
-    tree,
-    onClick,
-    store,
-    changeLabel,
-    label,
-    onShow,
-  }:
-  {
-    tree: Object,
-    onClick: () => void,
-    store: Object,
-    changeLabel: () => void,
-    label: string|number,
-    onShow: () => void,
-  }
-) => {
-  const moving = store.moving.table && store.moving.table === `pop`
-  const copying = store.copying.table && store.copying.table === `pop`
+const PopFolder = ({
+  tree,
+  onClick,
+  store,
+  changeLabel,
+  label,
+  onShow,
+}: {
+  tree: Object,
+  onClick: () => void,
+  store: Object,
+  changeLabel: () => void,
+  label: string | number,
+  onShow: () => void,
+}) => {
+  const moving = store.moving.table && store.moving.table === 'pop'
+  const copying = store.copying.table && store.copying.table === 'pop'
 
   return (
     <ContextMenu
@@ -50,45 +45,39 @@ const PopFolder = (
       <MenuItem
         onClick={onClick}
         data={{
-          action: `insert`,
-          table: `pop`,
+          action: 'insert',
+          table: 'pop',
         }}
       >
         erstelle neue
       </MenuItem>
-      {
-        moving &&
+      {moving &&
         <MenuItem
           onClick={onClick}
           data={{
-            action: `move`,
+            action: 'move',
           }}
         >
           {`verschiebe '${store.moving.label}' hierhin`}
-        </MenuItem>
-      }
-      {
-        copying &&
+        </MenuItem>}
+      {copying &&
         <MenuItem
           onClick={onClick}
           data={{
-            action: `copy`,
+            action: 'copy',
           }}
         >
           {`kopiere '${store.copying.label}' hierhin`}
-        </MenuItem>
-      }
-      {
-        copying &&
+        </MenuItem>}
+      {copying &&
         <MenuItem
           onClick={onClick}
           data={{
-            action: `resetCopying`,
+            action: 'resetCopying',
           }}
         >
           Kopieren aufheben
-        </MenuItem>
-      }
+        </MenuItem>}
     </ContextMenu>
   )
 }
