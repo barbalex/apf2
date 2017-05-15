@@ -4,5 +4,5 @@ export default (store: Object, error: Object): void => {
   setTimeout(() => {
     store.app.errors.pop()
   }, 1000 * 10)
-  console.log(`Error:`, error) // eslint-disable-line no-console
+  console.log('Error:', error) // eslint-disable-line no-console
 }

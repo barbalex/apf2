@@ -10,17 +10,17 @@ export default (
   tree: Object,
   tablePassed: string,
   parentId: number,
-  baseUrl: Array<string>
+  baseUrl: Array<string>,
 ): any => {
   let table = tablePassed
   if (!table) {
-    return store.listError(new Error(`no table passed`))
+    return store.listError(new Error('no table passed'))
   }
   // insert new dataset in db and fetch id
   const tableMetadata = tables.find(t => t.table === table)
   if (!tableMetadata) {
     return store.listError(
-      new Error(`no table meta data found for table "${table}"`)
+      new Error(`no table meta data found for table "${table}"`),
     )
   }
   // some tables need to be translated, i.e. tpopfreiwkontr
@@ -32,7 +32,7 @@ export default (
   const idField = tableMetadata.idField
   if (!idField) {
     return store.listError(
-      new Error(`new dataset not created as no idField could be found`)
+      new Error('new dataset not created as no idField could be found'),
     )
   }
   const url = `${apiBaseUrl}/apflora/${table}/${parentIdField}/${parentId}`
@@ -49,20 +49,20 @@ export default (
       tree.setActiveNodeArray(baseUrl)
       // if zieljahr, need to update ZielJahr
       if (tree.activeNodes.zieljahr) {
-        store.updateProperty(tree, `ZielJahr`, tree.activeNodes.zieljahr)
-        store.updatePropertyInDb(tree, `ZielJahr`, tree.activeNodes.zieljahr)
+        store.updateProperty(tree, 'ZielJahr', tree.activeNodes.zieljahr)
+        store.updatePropertyInDb(tree, 'ZielJahr', tree.activeNodes.zieljahr)
       }
       // if tpopfreiwkontr need to update TPopKontrTyp
-      if (tablePassed === `tpopfreiwkontr`) {
+      if (tablePassed === 'tpopfreiwkontr') {
         store.updateProperty(
           tree,
-          `TPopKontrTyp`,
-          `Freiwilligen-Erfolgskontrolle`
+          'TPopKontrTyp',
+          'Freiwilligen-Erfolgskontrolle',
         )
         store.updatePropertyInDb(
           tree,
-          `TPopKontrTyp`,
-          `Freiwilligen-Erfolgskontrolle`
+          'TPopKontrTyp',
+          'Freiwilligen-Erfolgskontrolle',
         )
       }
     })
