@@ -21,40 +21,36 @@ const enhance = compose(
       props.updatePropertyInDb(props.tree, props.fieldName, val)
     },
   }),
-  observer
+  observer,
 )
 
-const RadioButtonWithInfo = (
-  {
-    fieldName,
-    value,
-    popover,
-    onChange,
-  }:
-  {
-    fieldName: string,
-    value?: ?number|?string,
-    popover: Object,
-    onChange: () => void,
-  }
-) =>
+const RadioButtonWithInfo = ({
+  fieldName,
+  value,
+  popover,
+  onChange,
+}: {
+  fieldName: string,
+  value?: ?number | ?string,
+  popover: Object,
+  onChange: () => void,
+}) => (
   <Container>
     <RadioButtonGroup
       name={fieldName}
       valueSelected={value}
       onChange={onChange}
     >
-      <RadioButton
-        value={1}
-      />
+      <RadioButton value={1} />
     </RadioButtonGroup>
     <InfoWithPopover>
       {popover}
     </InfoWithPopover>
   </Container>
+)
 
 RadioButtonWithInfo.defaultProps = {
-  value: ``,
+  value: '',
 }
 
 export default enhance(RadioButtonWithInfo)

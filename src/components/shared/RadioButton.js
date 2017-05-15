@@ -7,40 +7,31 @@ import compose from 'recompose/compose'
 
 const enhance = compose(
   withHandlers({
-    onChange: props =>
-      (event, valuePassed) => {
-        // if clicked element is active value: set 0
-        const val = valuePassed === props.value ? 0 : valuePassed
-        props.updatePropertyInDb(props.tree, props.fieldName, val)
-      },
+    onChange: props => (event, valuePassed) => {
+      // if clicked element is active value: set 0
+      const val = valuePassed === props.value ? 0 : valuePassed
+      props.updatePropertyInDb(props.tree, props.fieldName, val)
+    },
   }),
-  observer
+  observer,
 )
 
-const MyRadioButton = (
-  {
-    fieldName,
-    value,
-    onChange,
-  }:
-  {
-    fieldName: string,
-    value?: ?number|?string,
-    onChange: () => void,
-  }
-) =>
-  <RadioButtonGroup
-    name={fieldName}
-    valueSelected={value}
-    onChange={onChange}
-  >
-    <RadioButton
-      value={1}
-    />
+const MyRadioButton = ({
+  fieldName,
+  value,
+  onChange,
+}: {
+  fieldName: string,
+  value?: ?number | ?string,
+  onChange: () => void,
+}) => (
+  <RadioButtonGroup name={fieldName} valueSelected={value} onChange={onChange}>
+    <RadioButton value={1} />
   </RadioButtonGroup>
+)
 
 MyRadioButton.defaultProps = {
-  value: ``,
+  value: '',
 }
 
 export default enhance(MyRadioButton)

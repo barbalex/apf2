@@ -13,24 +13,21 @@ const enhance = compose(
       props.updatePropertyInDb(props.tree, props.fieldName, val)
     },
   }),
-  observer
+  observer,
 )
 
-const MyRadioButtonGroup = (
-  {
-    fieldName,
-    value,
-    dataSource = [],
-    onChange,
-  }:
-  {
-    fieldName: string,
-    value?: number|string,
-    dataSource?: Array<Object>,
-    onChange: () => void,
-  }
-) => {
-  const valueSelected = (value !== null && value !== undefined) ? value : ``
+const MyRadioButtonGroup = ({
+  fieldName,
+  value,
+  dataSource = [],
+  onChange,
+}: {
+  fieldName: string,
+  value?: number | string,
+  dataSource?: Array<Object>,
+  onChange: () => void,
+}) => {
+  const valueSelected = value !== null && value !== undefined ? value : ''
 
   return (
     <RadioButtonGroup
@@ -38,15 +35,9 @@ const MyRadioButtonGroup = (
       valueSelected={valueSelected}
       onChange={onChange}
     >
-      {
-        dataSource.map((e, index) =>
-          <RadioButton
-            value={e.value}
-            label={e.label}
-            key={index}
-          />
-        )
-      }
+      {dataSource.map((e, index) => (
+        <RadioButton value={e.value} label={e.label} key={index} />
+      ))}
     </RadioButtonGroup>
   )
 }

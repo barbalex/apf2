@@ -15,24 +15,21 @@ const ButtonGroup = styled.div`
   flex-grow: 1;
 `
 
-const RadioButtonGroupWithInfo = (
-  {
-    tree,
-    fieldName,
-    value,
-    dataSource,
-    updatePropertyInDb,
-    popover,
-  }:
-  {
-    tree: Object,
-    fieldName: string,
-    value?: ?number|?string,
-    dataSource: Array<Object>,
-    updatePropertyInDb: () => void,
-    popover: Object,
-  }
-) =>
+const RadioButtonGroupWithInfo = ({
+  tree,
+  fieldName,
+  value,
+  dataSource,
+  updatePropertyInDb,
+  popover,
+}: {
+  tree: Object,
+  fieldName: string,
+  value?: ?number | ?string,
+  dataSource: Array<Object>,
+  updatePropertyInDb: () => void,
+  popover: Object,
+}) => (
   <Container>
     <ButtonGroup>
       <RadioButtonGroup
@@ -47,9 +44,10 @@ const RadioButtonGroupWithInfo = (
       {popover}
     </InfoWithPopover>
   </Container>
+)
 
 RadioButtonGroupWithInfo.defaultProps = {
-  value: ``,
+  value: '',
 }
 
 export default observer(RadioButtonGroupWithInfo)
