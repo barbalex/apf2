@@ -5,12 +5,9 @@ import 'leaflet'
 import PropTypes from 'prop-types'
 import '../../../../../node_modules/leaflet.markercluster/dist/leaflet.markercluster-src.js'
 
-const enhance = compose(
-  getContext({ map: PropTypes.object.isRequired }),
-)
+const enhance = compose(getContext({ map: PropTypes.object.isRequired }))
 
 class PopMarkerCluster extends Component {
-
   props: {
     visible: boolean,
     markers: Object,
@@ -43,9 +40,7 @@ class PopMarkerCluster extends Component {
   }
 
   render() {
-    return (
-      <div style={{ display: `none` }} />
-    )
+    return <div style={{ display: 'none' }} />
   }
 }
 

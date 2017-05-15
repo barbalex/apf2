@@ -5,12 +5,9 @@ import 'leaflet'
 import PropTypes from 'prop-types'
 import '../../../../../node_modules/leaflet.markercluster/dist/leaflet.markercluster-src.js'
 
-const enhance = compose(
-  getContext({ map: PropTypes.object.isRequired }),
-)
+const enhance = compose(getContext({ map: PropTypes.object.isRequired }))
 
 class TpopBeobAssignPolylines extends Component {
-
   props: {
     visible: boolean,
     assignPolylines: Array<Object>,
@@ -25,7 +22,10 @@ class TpopBeobAssignPolylines extends Component {
 
   componentWillReceiveProps(nextProps) {
     const { map, assignPolylines } = this.props
-    if (this.props.assignPolylines && this.props.assignPolylines !== nextProps.assignPolylines) {
+    if (
+      this.props.assignPolylines &&
+      this.props.assignPolylines !== nextProps.assignPolylines
+    ) {
       assignPolylines.forEach(p => map.removeLayer(p))
     }
   }
@@ -43,9 +43,7 @@ class TpopBeobAssignPolylines extends Component {
   }
 
   render() {
-    return (
-      <div style={{ display: `none` }} />
-    )
+    return <div style={{ display: 'none' }} />
   }
 }
 

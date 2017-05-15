@@ -4,12 +4,9 @@ import getContext from 'recompose/getContext'
 import 'leaflet'
 import PropTypes from 'prop-types'
 
-const enhance = compose(
-  getContext({ map: PropTypes.object.isRequired }),
-)
+const enhance = compose(getContext({ map: PropTypes.object.isRequired }))
 
 class TpopMarker extends Component {
-
   props: {
     visible: boolean,
     markers: Array<Object>,
@@ -42,9 +39,7 @@ class TpopMarker extends Component {
   }
 
   render() {
-    return (
-      <div style={{ display: `none` }} />
-    )
+    return <div style={{ display: 'none' }} />
   }
 }
 
