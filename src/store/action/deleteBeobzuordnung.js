@@ -15,14 +15,14 @@ export default (store: Object, tree: Object, beobId: number | string): void => {
       // remove this dataset in store.table
       table.beobzuordnung.delete(beobId)
       // remove from idb
-      deleteDatasetInIdb(store, `beobzuordnung`, beobId)
+      deleteDatasetInIdb(store, 'beobzuordnung', beobId)
       // set activeNodeArray to corresponding beob
       const newActiveNodeArray = [
-        `Projekte`,
+        'Projekte',
         activeNodes.projekt,
-        `Arten`,
+        'Arten',
         activeNodes.ap,
-        `nicht-beurteilte-Beobachtungen`,
+        'nicht-beurteilte-Beobachtungen',
         beobId,
       ]
       tree.setActiveNodeArray(newActiveNodeArray)

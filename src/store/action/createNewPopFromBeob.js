@@ -6,7 +6,7 @@ import insertDatasetInIdb from './insertDatasetInIdb'
 
 export default (store: Object, tree: Object, beobId: string): void => {
   if (!beobId) {
-    return store.listError(new Error(`keine beobId übergeben`))
+    return store.listError(new Error('keine beobId übergeben'))
   }
   const beob = store.table.beob.get(beobId)
   if (!beob) {
