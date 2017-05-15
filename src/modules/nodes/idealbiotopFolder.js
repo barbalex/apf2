@@ -5,27 +5,27 @@ export default (
   store: Object,
   tree: Object,
   projId: number,
-  apArtId: number
+  apArtId: number,
 ): Array<Object> => {
   // fetch sorting indexes of parents
   const projIndex = findIndex(tree.filteredAndSorted.projekt, {
-    ProjId: projId
+    ProjId: projId,
   })
   const apIndex = findIndex(
     tree.filteredAndSorted.ap.filter(a => a.ProjId === projId),
-    { ApArtId: apArtId }
+    { ApArtId: apArtId },
   )
 
   return [
     {
-      nodeType: `folder`,
-      menuType: `idealbiotopFolder`,
+      nodeType: 'folder',
+      menuType: 'idealbiotopFolder',
       id: apArtId,
-      urlLabel: `Idealbiotop`,
-      label: `Idealbiotop`,
-      url: [`Projekte`, projId, `Arten`, apArtId, `Idealbiotop`],
+      urlLabel: 'Idealbiotop',
+      label: 'Idealbiotop',
+      url: ['Projekte', projId, 'Arten', apArtId, 'Idealbiotop'],
       sort: [projIndex, 1, apIndex, 6],
-      hasChildren: false
-    }
+      hasChildren: false,
+    },
   ]
 }
