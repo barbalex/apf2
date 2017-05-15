@@ -12,14 +12,18 @@ export default (store: Object): Array<Object> => {
   const visible = store.map.activeApfloraLayers.includes('Tpop')
   if (visible) {
     const pops = Array.from(store.table.pop.values())
-    const tpopsWithKoord = tpops.filter(p => p.TPopKoordWgs84)
-    return tpopsWithKoord.map(p => {
-      let title = labelUsingNr ? p.TPopNr : p.TPopFlurname
+    const tpopsWithKoord = tpops.filter(tpop => tpop.TPopKoordWgs84)
+    return tpopsWithKoord.map(tpop => {
+      const pop = pops.find(pop => pop.PopId === tpop.PopId)
+      const popNr = pop && (pop.PopNr || pop.PopNr === 0) ? pop.PopNr : ''
+      const tpopNr = tpop.TPopNr || tpop.TPopNr === 0 ? tpop.TPopNr : ''
+      const nrLabel = `${popNr}.${tpopNr}`
+      let title = labelUsingNr ? tpop.TPopFlurname : nrLabel
       // beware: leaflet needs title to always be a string
       if (title && title.toString) {
         title = title.toString()
       }
-      let tooltipText = store.map.pop.labelUsingNr ? p.TPopNr : p.TPopFlurname
+      let tooltipText = labelUsingNr ? nrLabel : tpop.TPopFlurname
       if (tooltipText && tooltipText.toString) {
         tooltipText = tooltipText.toString()
       }
@@ -29,14 +33,13 @@ export default (store: Object): Array<Object> => {
         className: 'mapTooltip',
         opacity: 1,
       }
-      const isHighlighted = highlightedIds.includes(p.TPopId)
-      const latLng = new window.L.LatLng(...p.TPopKoordWgs84)
+      const isHighlighted = highlightedIds.includes(tpop.TPopId)
+      const latLng = new window.L.LatLng(...tpop.TPopKoordWgs84)
       const icon = window.L.icon({
         iconUrl: isHighlighted ? tpopIconHighlighted : tpopIcon,
         iconSize: [24, 24],
         className: isHighlighted ? 'tpopIconHighlighted' : 'tpopIcon',
       })
-      const pop = pops.find(pop => pop.PopId === p.PopId)
       return window.L
         .marker(latLng, {
           title,
@@ -47,7 +50,7 @@ export default (store: Object): Array<Object> => {
         })
         .bindPopup(
           ReactDOMServer.renderToStaticMarkup(
-            <TpopPopup store={store} pop={pop} tpop={p} />,
+            <TpopPopup store={store} pop={pop} tpop={tpop} />,
           ),
         )
         .bindTooltip(tooltipText, tooltipOptions)
