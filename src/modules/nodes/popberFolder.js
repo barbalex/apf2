@@ -5,53 +5,53 @@ export default (
   tree: Object,
   projId: number,
   apArtId: number,
-  popId: number
+  popId: number,
 ): Array<Object> => {
   const { table } = store
 
   // fetch sorting indexes of parents
   const projIndex = findIndex(tree.filteredAndSorted.projekt, {
-    ProjId: projId
+    ProjId: projId,
   })
   const apIndex = findIndex(
     tree.filteredAndSorted.ap.filter(a => a.ProjId === projId),
-    { ApArtId: apArtId }
+    { ApArtId: apArtId },
   )
   const popIndex = findIndex(
     tree.filteredAndSorted.pop.filter(p => p.ApArtId === apArtId),
-    { PopId: popId }
+    { PopId: popId },
   )
 
   const popberNodesLength = tree.filteredAndSorted.popber.filter(
-    p => p.PopId === popId
+    p => p.PopId === popId,
   ).length
 
   let message = popberNodesLength
   if (table.popberLoading) {
-    message = `...`
+    message = '...'
   }
-  if (tree.nodeLabelFilter.get(`popber`)) {
+  if (tree.nodeLabelFilter.get('popber')) {
     message = `${popberNodesLength} gefiltert`
   }
 
   return [
     {
-      nodeType: `folder`,
-      menuType: `popberFolder`,
+      nodeType: 'folder',
+      menuType: 'popberFolder',
       id: popId,
-      urlLabel: `Kontroll-Berichte`,
+      urlLabel: 'Kontroll-Berichte',
       label: `Kontroll-Berichte (${message})`,
       url: [
-        `Projekte`,
+        'Projekte',
         projId,
-        `Arten`,
+        'Arten',
         apArtId,
-        `Populationen`,
+        'Populationen',
         popId,
-        `Kontroll-Berichte`
+        'Kontroll-Berichte',
       ],
       sort: [projIndex, 1, apIndex, 1, popIndex, 2],
-      hasChildren: popberNodesLength > 0
-    }
+      hasChildren: popberNodesLength > 0,
+    },
   ]
 }

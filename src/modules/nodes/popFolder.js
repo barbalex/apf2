@@ -5,40 +5,40 @@ export default (
   store: Object,
   tree: Object,
   projId: number,
-  apArtId: number
+  apArtId: number,
 ): Array<Object> => {
   const { table } = store
 
   // fetch sorting indexes of parents
   const projIndex = findIndex(tree.filteredAndSorted.projekt, {
-    ProjId: projId
+    ProjId: projId,
   })
   const apIndex = findIndex(
     tree.filteredAndSorted.ap.filter(a => a.ProjId === projId),
-    { ApArtId: apArtId }
+    { ApArtId: apArtId },
   )
 
   const popNodesLength = tree.filteredAndSorted.pop.filter(
-    n => n.ApArtId === apArtId
+    n => n.ApArtId === apArtId,
   ).length
   let message = popNodesLength
   if (table.popLoading) {
-    message = `...`
+    message = '...'
   }
-  if (tree.nodeLabelFilter.get(`pop`)) {
+  if (tree.nodeLabelFilter.get('pop')) {
     message = `${popNodesLength} gefiltert`
   }
 
   return [
     {
-      nodeType: `folder`,
-      menuType: `popFolder`,
+      nodeType: 'folder',
+      menuType: 'popFolder',
       id: apArtId,
-      urlLabel: `Populationen`,
+      urlLabel: 'Populationen',
       label: `Populationen (${message})`,
-      url: [`Projekte`, projId, `Arten`, apArtId, `Populationen`],
+      url: ['Projekte', projId, 'Arten', apArtId, 'Populationen'],
       sort: [projIndex, 1, apIndex, 1],
-      hasChildren: popNodesLength > 0
-    }
+      hasChildren: popNodesLength > 0,
+    },
   ]
 }
