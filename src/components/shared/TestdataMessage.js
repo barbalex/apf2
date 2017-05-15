@@ -7,21 +7,9 @@ const Div = styled.div`
   padding: 10px 10px 0 10px;
 `
 
-const TestdataMessage = (
-  {
-    store,
-    tree,
-  }:
-  {
-    store: Object,
-    tree: Object,
-  }
-) => {
+const TestdataMessage = ({ store, tree }: { store: Object, tree: Object }) => {
   const { activeNodes } = tree
-  const isTestSpecies = (
-    activeNodes.ap &&
-    activeNodes.ap < 200
-  )
+  const isTestSpecies = activeNodes.ap && activeNodes.ap < 200
   if (isTestSpecies) {
     return (
       <Div>
@@ -32,4 +20,4 @@ const TestdataMessage = (
   return null
 }
 
-export default inject(`store`)(TestdataMessage)
+export default inject('store')(TestdataMessage)

@@ -8,7 +8,7 @@ import withState from 'recompose/withState'
 import compose from 'recompose/compose'
 
 const enhance = compose(
-  withState(`copied`, `updateCopied`, false),
+  withState('copied', 'updateCopied', false),
   withHandlers({
     onCopy: props => () => {
       props.updateCopied(true)
@@ -19,18 +19,15 @@ const enhance = compose(
   }),
 )
 
-const StringToCopy = (
-  {
-    text,
-    copied,
-    onCopy,
-  }:
-  {
-    text: string,
-    copied: boolean,
-    onCopy: () => void,
-  }
-) => {
+const StringToCopy = ({
+  text,
+  copied,
+  onCopy,
+}: {
+  text: string,
+  copied: boolean,
+  onCopy: () => void,
+}) => {
   const Container = styled.div`
     display: flex;
     justify-content: space-between;
@@ -48,13 +45,8 @@ const StringToCopy = (
         {text}
       </GuidContainer>
       <CopyButtonContainer>
-        <CopyToClipboard
-          text={text}
-          onCopy={onCopy}
-        >
-          <FlatButton
-            label={copied ? `kopiert` : `kopieren`}
-          />
+        <CopyToClipboard text={text} onCopy={onCopy}>
+          <FlatButton label={copied ? 'kopiert' : 'kopieren'} />
         </CopyToClipboard>
       </CopyButtonContainer>
     </Container>

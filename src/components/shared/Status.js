@@ -72,7 +72,7 @@ const Status = ({
 }) => {
   const valueSelected = herkunftValue !== null && herkunftValue !== undefined
     ? herkunftValue
-    : ``
+    : ''
   const showNachBeginnAp =
     !apJahr || !bekanntSeitValue || apJahr <= bekanntSeitValue
   const disabled = !bekanntSeitValue && bekanntSeitValue !== 0
@@ -171,8 +171,8 @@ const Status = ({
 Status.defaultProps = {
   apJahr: null,
   herkunftValue: null,
-  bekanntSeitValue: ``,
-  bekanntSeitValid: ``,
+  bekanntSeitValue: '',
+  bekanntSeitValid: '',
 }
 
 export default enhance(Status)
