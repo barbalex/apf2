@@ -23,18 +23,18 @@ export default (
       const beobId = el.BeobId
 
       return {
-        nodeType: `table`,
-        menuType: `beobNichtZuzuordnen`,
+        nodeType: 'table',
+        menuType: 'beobNichtZuzuordnen',
         id: beobId,
         parentId: apArtId,
         urlLabel: beobId,
         label: el.label,
         url: [
-          `Projekte`,
+          'Projekte',
           projId,
-          `Arten`,
+          'Arten',
           apArtId,
-          `nicht-zuzuordnende-Beobachtungen`,
+          'nicht-zuzuordnende-Beobachtungen',
           beobId,
         ],
         sort: [projIndex, 1, apIndex, 9, index],

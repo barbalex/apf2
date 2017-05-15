@@ -6,7 +6,7 @@ export default (store: Object, tree: Object, projId: number): Array<Object> => {
 
   // fetch sorting indexes of parents
   const projIndex = findIndex(filteredAndSorted.projekt, {
-    ProjId: projId
+    ProjId: projId,
   })
 
   // build label
@@ -14,22 +14,22 @@ export default (store: Object, tree: Object, projId: number): Array<Object> => {
   const apNodesLength = myApNodes.length
   let message = apNodesLength
   if (store.table.apLoading) {
-    message = `...`
+    message = '...'
   }
-  if (nodeLabelFilter.get(`ap`)) {
+  if (nodeLabelFilter.get('ap')) {
     message = `${apNodesLength} gefiltert`
   }
 
   return [
     {
-      nodeType: `folder`,
-      menuType: `apFolder`,
+      nodeType: 'folder',
+      menuType: 'apFolder',
       id: projId,
-      urlLabel: `Arten`,
+      urlLabel: 'Arten',
       label: `Arten (${message})`,
-      url: [`Projekte`, projId, `Arten`],
+      url: ['Projekte', projId, 'Arten'],
       sort: [projIndex, 1],
-      hasChildren: apNodesLength > 0
-    }
+      hasChildren: apNodesLength > 0,
+    },
   ]
 }

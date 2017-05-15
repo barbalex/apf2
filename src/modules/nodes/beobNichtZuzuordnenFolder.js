@@ -21,26 +21,26 @@ export default (
   ).length
 
   let message = beobNichtZuzuordnenNodesLength
-  if (store.loading.includes(`beobzuordnung`)) {
-    message = `...`
+  if (store.loading.includes('beobzuordnung')) {
+    message = '...'
   }
-  if (tree.nodeLabelFilter.get(`beobNichtZuzuordnen`)) {
+  if (tree.nodeLabelFilter.get('beobNichtZuzuordnen')) {
     message = `${beobNichtZuzuordnenNodesLength} gefiltert`
   }
 
   return [
     {
-      nodeType: `folder`,
-      menuType: `beobNichtZuzuordnenFolder`,
+      nodeType: 'folder',
+      menuType: 'beobNichtZuzuordnenFolder',
       id: apArtId,
-      urlLabel: `nicht-zuzuordnende-Beobachtungen`,
+      urlLabel: 'nicht-zuzuordnende-Beobachtungen',
       label: `Beobachtungen nicht zuzuordnen (${message})`,
       url: [
-        `Projekte`,
+        'Projekte',
         projId,
-        `Arten`,
+        'Arten',
         apArtId,
-        `nicht-zuzuordnende-Beobachtungen`,
+        'nicht-zuzuordnende-Beobachtungen',
       ],
       sort: [projIndex, 1, apIndex, 9],
       hasChildren: beobNichtZuzuordnenNodesLength > 0,

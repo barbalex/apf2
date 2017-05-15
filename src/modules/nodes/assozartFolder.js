@@ -5,38 +5,38 @@ export default (
   store: Object,
   tree: Object,
   projId: number,
-  apArtId: number
+  apArtId: number,
 ): Array<Object> => {
   // fetch sorting indexes of parents
   const projIndex = findIndex(tree.filteredAndSorted.projekt, {
-    ProjId: projId
+    ProjId: projId,
   })
   const apIndex = findIndex(
     tree.filteredAndSorted.ap.filter(a => a.ProjId === projId),
-    { ApArtId: apArtId }
+    { ApArtId: apArtId },
   )
 
   const assozartNodesLength = tree.filteredAndSorted.assozart.filter(
-    n => n.AaApArtId === apArtId
+    n => n.AaApArtId === apArtId,
   ).length
   let message = assozartNodesLength
   if (store.table.assozartLoading) {
-    message = `...`
+    message = '...'
   }
-  if (tree.nodeLabelFilter.get(`assozart`)) {
+  if (tree.nodeLabelFilter.get('assozart')) {
     message = `${assozartNodesLength} gefiltert`
   }
 
   return [
     {
-      nodeType: `folder`,
-      menuType: `assozartFolder`,
+      nodeType: 'folder',
+      menuType: 'assozartFolder',
       id: apArtId,
-      urlLabel: `assoziierte-Arten`,
+      urlLabel: 'assoziierte-Arten',
       label: `assoziierte Arten (${message})`,
-      url: [`Projekte`, projId, `Arten`, apArtId, `assoziierte-Arten`],
+      url: ['Projekte', projId, 'Arten', apArtId, 'assoziierte-Arten'],
       sort: [projIndex, 1, apIndex, 7],
-      hasChildren: assozartNodesLength > 0
-    }
+      hasChildren: assozartNodesLength > 0,
+    },
   ]
 }
