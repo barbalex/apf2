@@ -58,15 +58,11 @@ import CmTpopmassnber from './contextmenu/Tpopmassnber'
 import CmTpopmassnFolder from './contextmenu/TpopmassnFolder'
 import CmTpopmassn from './contextmenu/Tpopmassn'
 
-const Container = styled(({ exporte, children, ...rest }) => (
-  <div {...rest}>{children}</div>
-))`
+const Container = styled.div`
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  flex-grow: ${props => (props.exporte ? 0 : 1)};
-  flex-shrink: ${props => (props.exporte ? 0 : 1)};
-  flex-basis: ${props => (props.exporte ? '200px' : '500px')};
   border-color: #424242;
   border-width: 1px;
   border-style: solid;
@@ -89,8 +85,9 @@ const ApDivToggle = styled(Toggle)`
 `
 const apDivToggleThumbStyle = { backgroundColor: 'rgb(245, 245, 245)' }
 const strukturbaumContainerDivStyle = {
-  flexGrow: 1,
-  flexBasis: '100%',
+  // flexGrow: 1,
+  // flexBasis: '100%',
+  height: '100%',
 }
 
 const getAndValidateCoordinatesOfTpop = (store, id) => {
@@ -305,7 +302,7 @@ class TreeContainer extends Component {
     const showApDivToggle = activeDataset
 
     return (
-      <Container exporte={tree.activeNodes.exporte}>
+      <Container>
         <LabelFilterContainer>
           <LabelFilter tree={tree} />
           {showApDivToggle &&

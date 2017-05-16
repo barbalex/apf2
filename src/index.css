@@ -335,3 +335,22 @@ body {
 ::-webkit-scrollbar-corner {
   background: rgba(0,0,0,0);
 }
+
+/*
+ * seems that overflow:hidden is necessary
+ * for all relfex-elements
+ * BUT: map is not shown with it...
+ */
+.reflex-element:not(.karte) div {
+  overflow: hidden;
+}
+.reflex-splitter {
+  background-color: #494949 !important;
+  border-right: 1px solid #494949 !important;
+  border-left: 1px solid #494949 !important;
+}
+.reflex-splitter:hover {
+  background-color: #696969 !important;
+  border-right: 1px solid #696969 !important;
+  border-left: 1px solid #696969 !important;
+}
