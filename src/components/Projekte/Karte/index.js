@@ -47,6 +47,7 @@ import Beob from './layers/BeobMarker'
 import BeobCluster from './layers/BeobMarkerCluster'
 import TpopBeobAssignPolylines from './layers/TpopBeobAssignPolylines'
 import MeasureControl from './MeasureControl'
+import FullScreenControl from './FullScreenControl'
 import DrawControl from './DrawControl'
 import PrintControl from './PrintControl'
 import PngControl from './PngControl'
@@ -248,6 +249,7 @@ const Karte = ({ store }: { store: Object }) => {
         }
       />
       <MeasureControl />
+      <FullScreenControl />
       {store.map.activeApfloraLayers.includes('MapFilter') && <DrawControl />}
       <PrintControl />
       <PngControl />
