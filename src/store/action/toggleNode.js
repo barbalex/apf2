@@ -19,6 +19,10 @@ export default (store: Object, tree: Object, node: Object): any => {
   } else {
     if (!isNodeOpen(toJS(tree.openNodes), node.url)) {
       tree.openNodes.push(node.url)
+      // automatically open zaehlFolder of tpopfeldkontr or tpopfreiwkontr
+      if (['tpopfeldkontr', 'tpopfreiwkontr'].includes(node.menuType)) {
+        tree.openNodes.push([...node.url, 'Zaehlungen'])
+      }
     }
   }
   tree.setLastClickedNode(node.url)
