@@ -13,8 +13,8 @@ const updateBeobzuordnungData = (
 ): void => {
   store.updateProperty(tree, newKey, newValue)
   store.updatePropertyInDb(tree, newKey, newValue)
-  store.updateProperty(tree, 'BeobId', beob.BeobId)
-  store.updatePropertyInDb(tree, 'BeobId', beob.BeobId)
+  store.updateProperty(tree, 'BeobId', beob.id)
+  store.updatePropertyInDb(tree, 'BeobId', beob.id)
   store.updateProperty(tree, 'QuelleId', beob.QuelleId)
   store.updatePropertyInDb(tree, 'QuelleId', beob.QuelleId)
 }
