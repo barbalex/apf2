@@ -45,6 +45,14 @@ import getUrlQuery from './store/action/getUrlQuery'
 
 import './index.css'
 
+// prevent changing values in number inputs when scrolling pages!
+// see: http://stackoverflow.com/a/38589039/712005
+document.addEventListener('mousewheel', function(event) {
+  if (window.document.activeElement.type === 'number') {
+    document.activeElement.blur()
+  }
+})
+
 // initiate idb
 const tablesObject = {}
 tables.forEach(t => {
