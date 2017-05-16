@@ -81,7 +81,7 @@ const NurApDiv = styled.div`
   min-width: 40px;
 `
 const ApDivToggle = styled(Toggle)`
-  margin-left: -10px;
+  margin-left: -8px;
 `
 const apDivToggleThumbStyle = { backgroundColor: 'rgb(245, 245, 245)' }
 const strukturbaumContainerDivStyle = {
