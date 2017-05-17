@@ -5,7 +5,6 @@ import styled from 'styled-components'
 import sortBy from 'lodash/sortBy'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
-import { Scrollbars } from 'react-custom-scrollbars'
 
 import FormTitle from '../../shared/FormTitle'
 import RadioButtonGroup from '../../shared/RadioButtonGroup'
@@ -18,9 +17,22 @@ const Container = styled.div`
   height: 100%;
   overflow-x: auto;
 `
+const FormContainer = styled.div`
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: auto !important;
+`
+const DataContainer = styled.div`
+  height: 100%;
+  overflow: visible !important;
+`
 const FieldsContainer = styled.div`
   padding-left: 10px;
   padding-right: 10px;
+`
+const ZuordnenDiv = styled.div`
+  margin-bottom: -10px;
 `
 const LabelPopoverRow = styled.div`
   padding: 2px 5px 2px 5px;
@@ -154,48 +166,50 @@ const Beobzuordnung = ({
   const showTPopId = activeDataset.row.BeobNichtZuordnen !== 1
 
   return (
-    <Scrollbars>
+    <FormContainer>
       <FormTitle tree={tree} title="Beobachtung" />
-      <FieldsContainer>
-        <Label label="Nicht zuordnen" />
-        <RadioButtonWithInfo
-          tree={tree}
-          fieldName="BeobNichtZuordnen"
-          value={activeDataset.row.BeobNichtZuordnen}
-          updatePropertyInDb={updatePropertyInDb}
-          popover={nichtZuordnenPopover}
-        />
-        {showTPopId &&
-          <div>
-            <Label label="Einer Teilpopulation zuordnen" />
-            <MaxHeightDiv>
-              <RadioButtonGroup
-                tree={tree}
-                fieldName="TPopId"
-                value={activeDataset.row.TPopId}
-                dataSource={getTpopZuordnenSource(store, tree)}
-                updatePropertyInDb={updatePropertyInDb}
-              />
-            </MaxHeightDiv>
-          </div>}
-        <TextField
-          tree={tree}
-          label="Bemerkungen zur Zuordnung"
-          fieldName="BeobBemerkungen"
-          value={activeDataset.row.BeobBemerkungen}
-          errorText={activeDataset.valid.BeobBemerkungen}
-          type="text"
-          multiLine
-          fullWidth
-          updateProperty={store.updateProperty}
-          updatePropertyInDb={store.updatePropertyInDb}
-        />
-      </FieldsContainer>
-      <FormTitle tree={tree} title={beobTitle} noTestdataMessage={true} />
-      <FieldsContainer>
-        <Beob tree={tree} />
-      </FieldsContainer>
-    </Scrollbars>
+      <DataContainer>
+        <FieldsContainer>
+          <Label label="Nicht zuordnen" />
+          <RadioButtonWithInfo
+            tree={tree}
+            fieldName="BeobNichtZuordnen"
+            value={activeDataset.row.BeobNichtZuordnen}
+            updatePropertyInDb={updatePropertyInDb}
+            popover={nichtZuordnenPopover}
+          />
+          {showTPopId &&
+            <ZuordnenDiv>
+              <Label label="Einer Teilpopulation zuordnen" />
+              <MaxHeightDiv>
+                <RadioButtonGroup
+                  tree={tree}
+                  fieldName="TPopId"
+                  value={activeDataset.row.TPopId}
+                  dataSource={getTpopZuordnenSource(store, tree)}
+                  updatePropertyInDb={updatePropertyInDb}
+                />
+              </MaxHeightDiv>
+            </ZuordnenDiv>}
+          <TextField
+            tree={tree}
+            label="Bemerkungen zur Zuordnung"
+            fieldName="BeobBemerkungen"
+            value={activeDataset.row.BeobBemerkungen}
+            errorText={activeDataset.valid.BeobBemerkungen}
+            type="text"
+            multiLine
+            fullWidth
+            updateProperty={store.updateProperty}
+            updatePropertyInDb={store.updatePropertyInDb}
+          />
+        </FieldsContainer>
+        <FormTitle tree={tree} title={beobTitle} noTestdataMessage={true} />
+        <FieldsContainer>
+          <Beob tree={tree} />
+        </FieldsContainer>
+      </DataContainer>
+    </FormContainer>
   )
 }
 
