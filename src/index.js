@@ -23,12 +23,10 @@ import DevTools from 'mobx-react-devtools'
 import styled from 'styled-components'
 
 import app from 'ampersand-app'
-import Dexie from 'dexie'
-import tables from './modules/tables'
 
 // import components
 import store from './store'
-// import styles from './app.css'  // eslint-disable-line no-unused-vars
+import initializeDb from './modules/initializeDb'
 import AppBar from './components/AppBar'
 import Projekte from './components/Projekte'
 import User from './components/User'
@@ -53,24 +51,9 @@ document.addEventListener('mousewheel', function(event) {
   }
 })
 
-// initiate idb
-const tablesObject = {}
-tables.forEach(t => {
-  if (t.table && t.idField) {
-    tablesObject[t.table] = `${t.idField}`
-  }
-})
-// add fields
-tablesObject.fields = '[table_schema+table_name+column_name]'
-// create table to save user name in
-// this helps in that user can open new tab and remain logged in!
-tablesObject.currentUser = 'name'
-const db = new Dexie('apflora')
-db.version(1).stores(tablesObject)
-
 app.extend({
   init() {
-    this.db = db
+    this.db = initializeDb()
     this.store = store
   },
 })
