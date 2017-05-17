@@ -3,7 +3,6 @@ import React from 'react'
 import { observer, inject } from 'mobx-react'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
-import { Scrollbars } from 'react-custom-scrollbars'
 
 import RadioButtonGroup from '../../shared/RadioButtonGroup'
 import Label from '../../shared/Label'
@@ -16,7 +15,6 @@ const Container = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
-  align-content: stretch;
 `
 const FieldsContainer = styled.div`
   overflow: auto !important;

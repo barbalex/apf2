@@ -5,7 +5,6 @@ import sortBy from 'lodash/sortBy'
 import filter from 'lodash/filter'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
-import { Scrollbars } from 'react-custom-scrollbars'
 
 import TextField from '../../shared/TextField'
 import AutoComplete from '../../shared/Autocomplete'
@@ -13,11 +12,14 @@ import FormTitle from '../../shared/FormTitle'
 
 const Container = styled.div`
   height: 100%;
+  display: flex;
+  flex-direction: column;
 `
 const FieldsContainer = styled.div`
+  overflow: auto !important;
   padding-left: 10px;
   padding-right: 10px;
-  padding-bottom: 45px;
+  padding-bottom: 10px;
 `
 
 const enhance = compose(inject('store'), observer)
@@ -52,41 +54,39 @@ const Assozart = ({ store, tree }: { store: Object, tree: Object }) => {
   return (
     <Container>
       <FormTitle tree={tree} title="assoziierte Art" />
-      <Scrollbars>
-        <FieldsContainer>
-          <AutoComplete
-            tree={tree}
-            label="Art"
-            fieldName="AaSisfNr"
-            valueText={getArtname({
-              store,
-              tree,
-            })}
-            errorText={activeDataset.valid.ApArtId}
-            dataSource={getArtList({
-              store,
-              tree,
-            })}
-            dataSourceConfig={{
-              value: 'TaxonomieId',
-              text: 'Artname',
-            }}
-            updatePropertyInDb={store.updatePropertyInDb}
-          />
-          <TextField
-            tree={tree}
-            label="Bemerkungen zur Assoziation"
-            fieldName="AaBem"
-            value={activeDataset.row.AaBem}
-            errorText={activeDataset.valid.AaBem}
-            type="text"
-            multiLine
-            fullWidth
-            updateProperty={store.updateProperty}
-            updatePropertyInDb={store.updatePropertyInDb}
-          />
-        </FieldsContainer>
-      </Scrollbars>
+      <FieldsContainer>
+        <AutoComplete
+          tree={tree}
+          label="Art"
+          fieldName="AaSisfNr"
+          valueText={getArtname({
+            store,
+            tree,
+          })}
+          errorText={activeDataset.valid.ApArtId}
+          dataSource={getArtList({
+            store,
+            tree,
+          })}
+          dataSourceConfig={{
+            value: 'TaxonomieId',
+            text: 'Artname',
+          }}
+          updatePropertyInDb={store.updatePropertyInDb}
+        />
+        <TextField
+          tree={tree}
+          label="Bemerkungen zur Assoziation"
+          fieldName="AaBem"
+          value={activeDataset.row.AaBem}
+          errorText={activeDataset.valid.AaBem}
+          type="text"
+          multiLine
+          fullWidth
+          updateProperty={store.updateProperty}
+          updatePropertyInDb={store.updatePropertyInDb}
+        />
+      </FieldsContainer>
     </Container>
   )
 }
