@@ -7,6 +7,7 @@ import TestdataMessage from './TestdataMessage'
 const Container = styled.div`
   background-color: #424242;
   padding-bottom: 10px;
+  flex-shrink: 0;
 `
 const Title = styled.div`
   padding: 10px 10px 0 10px;
@@ -14,26 +15,21 @@ const Title = styled.div`
   font-weight: bold;
 `
 
-const FormTitle = (
-  {
-    tree,
-    title,
-    noTestdataMessage = false,
-  }:
-  {
-    tree: Object,
-    title: string,
-    noTestdataMessage?: boolean,
-  }
-) =>
+const FormTitle = ({
+  tree,
+  title,
+  noTestdataMessage = false,
+}: {
+  tree: Object,
+  title: string,
+  noTestdataMessage?: boolean,
+}) => (
   <Container>
     <Title>
       {title}
     </Title>
-    {
-      !noTestdataMessage &&
-      <TestdataMessage tree={tree} />
-    }
+    {!noTestdataMessage && <TestdataMessage tree={tree} />}
   </Container>
+)
 
 export default FormTitle
