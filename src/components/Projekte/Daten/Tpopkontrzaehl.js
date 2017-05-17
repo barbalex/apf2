@@ -30,16 +30,6 @@ const Tpopkontrzaehl = ({ store, tree }: { store: Object, tree: Object }) => {
       <FormTitle tree={tree} title="Zählung" />
       <Scrollbars>
         <FieldsContainer>
-          <TextField
-            tree={tree}
-            label="Anzahl"
-            fieldName="Anzahl"
-            value={activeDataset.row.Anzahl}
-            errorText={activeDataset.valid.Anzahl}
-            type="number"
-            updateProperty={store.updateProperty}
-            updatePropertyInDb={store.updatePropertyInDb}
-          />
           <SelectField
             tree={tree}
             label="Einheit"
@@ -49,6 +39,16 @@ const Tpopkontrzaehl = ({ store, tree }: { store: Object, tree: Object }) => {
             dataSource={store.dropdownList.zaehleinheitWerte}
             valueProp="value"
             labelProp="label"
+            updatePropertyInDb={store.updatePropertyInDb}
+          />
+          <TextField
+            tree={tree}
+            label="Anzahl"
+            fieldName="Anzahl"
+            value={activeDataset.row.Anzahl}
+            errorText={activeDataset.valid.Anzahl}
+            type="number"
+            updateProperty={store.updateProperty}
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <Label label="Methode" />

@@ -20,7 +20,7 @@ export default (store: Object, tree: Object): Array<Object> => {
     const methodeWert = methodeWerte.find(e => e.BeurteilCode === el.Methode)
     const methodeTxt = methodeWert ? methodeWert.BeurteilTxt : null
     const anzahl = el.Anzahl || el.Anzahl === 0 ? el.Anzahl : '(keine Anzahl)'
-    el.label = `${anzahl} ${zaehleinheitTxt || '(keine Einheit)'} (${methodeTxt || 'keine Methode'})`
+    el.label = `${zaehleinheitTxt || '(keine Einheit)'}: ${anzahl} ${methodeTxt || '(keine Methode)'}`
   })
   // filter by nodeLabelFilter
   const filterString = nodeLabelFilter.get('tpopkontrzaehl')
