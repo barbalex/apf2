@@ -31,9 +31,8 @@ import beobIdsFromServerInsideFeatureCollection
 
 const Container = styled.div`
   height: 100%;
-  flex-basis: 600px;
-  flex-grow: 4;
-  flex-shrink: 1;
+  display: flex;
+  flex-direction: column;
   @media print {
     display: none !important;
   }
@@ -42,7 +41,8 @@ const FieldsContainer = styled.div`
   padding: 10px;
   overflow-x: auto;
   height: 100%;
-  padding-bottom: 95px;
+  padding-bottom: 10px;
+  overflow: auto !important;
 `
 const FirstLevelCard = styled(Card)`
   margin-bottom: 10px;

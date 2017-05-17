@@ -11,13 +11,15 @@ import FormTitle from '../../shared/FormTitle'
 
 const Container = styled.div`
   height: 100%;
+  display: flex;
+  flex-direction: column;
 `
 const FieldsContainer = styled.div`
   padding-left: 10px;
   padding-right: 10px;
-  overflow-x: auto;
   height: 100%;
-  padding-bottom: 95px;
+  padding-bottom: 10px;
+  overflow: auto !important;
 `
 
 const enhance = compose(inject('store'), observer)
