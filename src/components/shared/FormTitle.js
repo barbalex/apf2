@@ -15,20 +15,12 @@ const Title = styled.div`
   font-weight: bold;
 `
 
-const FormTitle = ({
-  tree,
-  title,
-  noTestdataMessage = false,
-}: {
-  tree: Object,
-  title: string,
-  noTestdataMessage?: boolean,
-}) => (
+const FormTitle = ({ tree, title }: { tree: Object, title: string }) => (
   <Container>
     <Title>
       {title}
     </Title>
-    {!noTestdataMessage && <TestdataMessage tree={tree} />}
+    <TestdataMessage tree={tree} />
   </Container>
 )
 

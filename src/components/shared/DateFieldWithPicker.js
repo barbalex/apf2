@@ -27,6 +27,7 @@ const Container = styled.div`
   justify-content: space-between;
   align-items: center;
   margin-bottom: -15px;
+  break-inside: avoid;
 `
 const StyledFontIcon = styled(FontIcon)`
   cursor: pointer;
