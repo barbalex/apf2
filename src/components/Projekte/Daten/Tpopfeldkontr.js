@@ -23,6 +23,9 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
 `
+const FieldContainer = styled.div`
+  margin-top: 10px;
+`
 const FieldsContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -242,8 +245,10 @@ const Tpopfeldkontr = ({
                   updateProperty={store.updateProperty}
                   updatePropertyInDb={store.updatePropertyInDb}
                 />
-                <Label label="GUID" />
-                <StringToCopy text={activeDataset.row.TPopKontrGuid} />
+                <FieldContainer>
+                  <Label label="GUID" />
+                  <StringToCopy text={activeDataset.row.TPopKontrGuid} />
+                </FieldContainer>
               </FormContainer>
             </TabChildDiv>
           </Tab>

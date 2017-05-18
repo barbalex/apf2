@@ -10,10 +10,14 @@ import TextField from './TextField'
 import Label from './Label'
 import InfoWithPopover from './InfoWithPopover'
 
+const InfoWithPopoverContainer = styled.div`
+  padding-bottom: 5px;
+`
 const FieldWithInfoContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: flex-end;
+  margin-bottom: -5px;
 `
 const PopoverContentRow = styled.div`
   padding: 2px 5px 2px 5px;
@@ -90,11 +94,13 @@ const Status = ({
           updateProperty={updateProperty}
           updatePropertyInDb={updatePropertyInDb}
         />
-        <InfoWithPopover>
-          <PopoverContentRow>
-            Dieses Feld immer ausfüllen
-          </PopoverContentRow>
-        </InfoWithPopover>
+        <InfoWithPopoverContainer>
+          <InfoWithPopover>
+            <PopoverContentRow>
+              Dieses Feld immer ausfüllen
+            </PopoverContentRow>
+          </InfoWithPopover>
+        </InfoWithPopoverContainer>
       </FieldWithInfoContainer>
       <StatusContainer>
         <Label label="Status" />

@@ -17,6 +17,9 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
 `
+const FieldContainer = styled.div`
+  margin-top: 10px;
+`
 const FieldsContainer = styled.div`
   padding-left: 10px;
   padding-right: 10px;
@@ -145,8 +148,10 @@ const Tpopfreiwkontr = ({ store, tree }: { store: Object, tree: Object }) => {
           updateProperty={store.updateProperty}
           updatePropertyInDb={store.updatePropertyInDb}
         />
-        <Label label="GUID" />
-        <StringToCopy text={activeDataset.row.TPopKontrGuid} />
+        <FieldContainer>
+          <Label label="GUID" />
+          <StringToCopy text={activeDataset.row.TPopKontrGuid} />
+        </FieldContainer>
       </FieldsContainer>
     </Container>
   )
