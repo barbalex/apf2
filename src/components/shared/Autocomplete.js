@@ -4,6 +4,11 @@ import { observer } from 'mobx-react'
 import AutoComplete from 'material-ui/AutoComplete'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
+import styled from 'styled-components'
+
+const StyledAutoComplete = styled(AutoComplete)`
+  margin-bottom: -15px;
+`
 
 const enhance = compose(
   withHandlers({
@@ -34,7 +39,7 @@ const MyAutocomplete = ({
   updatePropertyInDb: () => void,
   onNewRequest: () => void,
 }) => (
-  <AutoComplete
+  <StyledAutoComplete
     hintText={dataSource.length === 0 ? 'lade Daten...' : ''}
     fullWidth
     floatingLabelText={label}
