@@ -21,34 +21,55 @@ const enhance = compose(
 
 const StringToCopy = ({
   text,
+  label,
   copied,
   onCopy,
 }: {
   text: string,
+  label: string,
   copied: boolean,
   onCopy: () => void,
 }) => {
   const Container = styled.div`
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
+    margin-top: 10px;
   `
+  const StringToCopyContainer = styled.div`
+      display: flex;
+      justify-content: space-between;
+    `
   const GuidContainer = styled.div`
     flex-grow: 1;
   `
   const CopyButtonContainer = styled.div`
     margin-top: -7px;
   `
+  const StyledLabel = styled.div`
+    margin-top: 10px;
+    cursor: text;
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.498039);
+    pointer-events: none;
+    user-select: none;
+    padding-bottom: 8px;
+  `
 
   return (
     <Container>
-      <GuidContainer>
-        {text}
-      </GuidContainer>
-      <CopyButtonContainer>
-        <CopyToClipboard text={text} onCopy={onCopy}>
-          <FlatButton label={copied ? 'kopiert' : 'kopieren'} />
-        </CopyToClipboard>
-      </CopyButtonContainer>
+      <StyledLabel>
+        {label}
+      </StyledLabel>
+      <StringToCopyContainer>
+        <GuidContainer>
+          {text}
+        </GuidContainer>
+        <CopyButtonContainer>
+          <CopyToClipboard text={text} onCopy={onCopy}>
+            <FlatButton label={copied ? 'kopiert' : 'kopieren'} />
+          </CopyToClipboard>
+        </CopyButtonContainer>
+      </StringToCopyContainer>
     </Container>
   )
 }

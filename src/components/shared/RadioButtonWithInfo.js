@@ -10,8 +10,21 @@ import InfoWithPopover from './InfoWithPopover'
 
 const Container = styled.div`
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   margin-bottom: -5px;
+`
+const RadioButtonGroupContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+`
+const StyledLabel = styled.div`
+  margin-top: 10px;
+  cursor: text;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.498039);
+  pointer-events: none;
+  user-select: none;
+  padding-bottom: 8px;
 `
 
 const enhance = compose(
@@ -28,25 +41,32 @@ const enhance = compose(
 const RadioButtonWithInfo = ({
   fieldName,
   value,
+  label,
   popover,
   onChange,
 }: {
   fieldName: string,
   value?: ?number | ?string,
+  label: string,
   popover: Object,
   onChange: () => void,
 }) => (
   <Container>
-    <RadioButtonGroup
-      name={fieldName}
-      valueSelected={value}
-      onChange={onChange}
-    >
-      <RadioButton value={1} />
-    </RadioButtonGroup>
-    <InfoWithPopover>
-      {popover}
-    </InfoWithPopover>
+    <StyledLabel>
+      {label}
+    </StyledLabel>
+    <RadioButtonGroupContainer>
+      <RadioButtonGroup
+        name={fieldName}
+        valueSelected={value}
+        onChange={onChange}
+      >
+        <RadioButton value={1} />
+      </RadioButtonGroup>
+      <InfoWithPopover>
+        {popover}
+      </InfoWithPopover>
+    </RadioButtonGroupContainer>
   </Container>
 )
 

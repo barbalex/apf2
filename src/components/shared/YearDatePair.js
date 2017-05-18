@@ -17,6 +17,9 @@ const DateFieldContainer = styled.div`
   justify-content: space-between;
   align-items: center;
 `
+const YearTextField = styled(TextField)`
+  margin-bottom: -15px;
+`
 const StyledFontIcon = styled(FontIcon)`
   cursor: pointer;
   pointer-events: auto;
@@ -188,7 +191,7 @@ class YearDatePair extends Component {
 
     return (
       <div>
-        <TextField
+        <YearTextField
           floatingLabelText={yearLabel}
           type="number"
           value={yearValue || ''}
