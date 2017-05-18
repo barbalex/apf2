@@ -10,7 +10,6 @@ import TextFieldWithInfo from '../../shared/TextFieldWithInfo'
 import Status from '../../shared/Status'
 import RadioButton from '../../shared/RadioButton'
 import RadioButtonGroupWithInfo from '../../shared/RadioButtonGroupWithInfo'
-import Label from '../../shared/Label'
 import FormTitle from '../../shared/FormTitle'
 import TpopAbBerRelevantInfoPopover from './TpopAbBerRelevantInfoPopover'
 
@@ -69,10 +68,10 @@ const Tpop = ({ store, tree }: { store: Object, tree: Object }) => {
           updateProperty={store.updateProperty}
           updatePropertyInDb={store.updatePropertyInDb}
         />
-        <Label label="Status unklar" />
         <RadioButton
           tree={tree}
           fieldName="TPopHerkunftUnklar"
+          label="Status unklar"
           value={activeDataset.row.TPopHerkunftUnklar}
           updatePropertyInDb={store.updatePropertyInDb}
         />
@@ -88,7 +87,6 @@ const Tpop = ({ store, tree }: { store: Object, tree: Object }) => {
           updateProperty={store.updateProperty}
           updatePropertyInDb={store.updatePropertyInDb}
         />
-        <Label label="Für AP-Bericht relevant" />
         <RadioButtonGroupWithInfo
           tree={tree}
           fieldName="TPopApBerichtRelevant"
@@ -96,6 +94,7 @@ const Tpop = ({ store, tree }: { store: Object, tree: Object }) => {
           dataSource={store.dropdownList.tpopApBerichtRelevantWerte}
           updatePropertyInDb={store.updatePropertyInDb}
           popover={TpopAbBerRelevantInfoPopover}
+          label="Für AP-Bericht relevant"
         />
         <TextField
           tree={tree}

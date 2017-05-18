@@ -5,7 +5,6 @@ import styled from 'styled-components'
 import compose from 'recompose/compose'
 
 import RadioButtonGroup from '../../shared/RadioButtonGroup'
-import Label from '../../shared/Label'
 import TextField from '../../shared/TextField'
 import FormTitle from '../../shared/FormTitle'
 
@@ -40,10 +39,10 @@ const Popmassnber = ({ store, tree }: { store: Object, tree: Object }) => {
           updateProperty={store.updateProperty}
           updatePropertyInDb={store.updatePropertyInDb}
         />
-        <Label label="Entwicklung" />
         <RadioButtonGroup
           tree={tree}
           fieldName="PopMassnBerErfolgsbeurteilung"
+          label="Entwicklung"
           value={activeDataset.row.PopMassnBerErfolgsbeurteilung}
           errorText={activeDataset.valid.PopMassnBerErfolgsbeurteilung}
           dataSource={store.dropdownList.tpopmassnErfbeurtWerte}

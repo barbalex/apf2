@@ -5,7 +5,6 @@ import styled from 'styled-components'
 import compose from 'recompose/compose'
 
 import RadioButtonGroup from '../../shared/RadioButtonGroup'
-import Label from '../../shared/Label'
 import TextField from '../../shared/TextField'
 import FormTitle from '../../shared/FormTitle'
 
@@ -40,10 +39,10 @@ const Tpopber = ({ store, tree }: { store: Object, tree: Object }) => {
           updateProperty={store.updateProperty}
           updatePropertyInDb={store.updatePropertyInDb}
         />
-        <Label label="Entwicklung" />
         <RadioButtonGroup
           tree={tree}
           fieldName="TPopBerEntwicklung"
+          label="Entwicklung"
           value={activeDataset.row.TPopBerEntwicklung}
           errorText={activeDataset.valid.TPopBerEntwicklung}
           dataSource={store.dropdownList.tpopEntwicklungWerte}

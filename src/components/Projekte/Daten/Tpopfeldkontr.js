@@ -8,7 +8,6 @@ import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 
 import RadioButtonGroup from '../../shared/RadioButtonGroup'
-import Label from '../../shared/Label'
 import TextField from '../../shared/TextField'
 import SelectField from '../../shared/SelectField'
 import RadioButtonGroupWithInfo from '../../shared/RadioButtonGroupWithInfo'
@@ -22,9 +21,6 @@ const Container = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
-`
-const FieldContainer = styled.div`
-  margin-top: 10px;
 `
 const FieldsContainer = styled.div`
   display: flex;
@@ -125,10 +121,10 @@ const Tpopfeldkontr = ({
                   updateProperty={store.updateProperty}
                   updatePropertyInDb={store.updatePropertyInDb}
                 />
-                <Label label="Kontrolltyp" />
                 <RadioButtonGroup
                   tree={tree}
                   fieldName="TPopKontrTyp"
+                  label="Kontrolltyp"
                   value={activeDataset.row.TPopKontrTyp}
                   errorText={activeDataset.valid.TPopKontrTyp}
                   dataSource={tpopkontrTypWerte}
@@ -175,7 +171,6 @@ const Tpopfeldkontr = ({
                   updateProperty={store.updateProperty}
                   updatePropertyInDb={store.updatePropertyInDb}
                 />
-                <Label label="Entwicklung" />
                 <RadioButtonGroupWithInfo
                   tree={tree}
                   fieldName="TPopKontrEntwicklung"
@@ -183,6 +178,7 @@ const Tpopfeldkontr = ({
                   dataSource={store.dropdownList.tpopEntwicklungWerte}
                   updatePropertyInDb={store.updatePropertyInDb}
                   popover={TpopfeldkontrentwicklungPopover}
+                  label="Entwicklung"
                 />
                 <TextField
                   tree={tree}
@@ -245,10 +241,10 @@ const Tpopfeldkontr = ({
                   updateProperty={store.updateProperty}
                   updatePropertyInDb={store.updatePropertyInDb}
                 />
-                <FieldContainer>
-                  <Label label="GUID" />
-                  <StringToCopy text={activeDataset.row.TPopKontrGuid} />
-                </FieldContainer>
+                <StringToCopy
+                  text={activeDataset.row.TPopKontrGuid}
+                  label="GUID"
+                />
               </FormContainer>
             </TabChildDiv>
           </Tab>
@@ -443,10 +439,10 @@ const Tpopfeldkontr = ({
                   updateProperty={store.updateProperty}
                   updatePropertyInDb={store.updatePropertyInDb}
                 />
-                <Label label="Übereinstimmung mit Idealbiotop" />
                 <RadioButtonGroup
                   tree={tree}
                   fieldName="TPopKontrIdealBiotopUebereinst"
+                  label="Übereinstimmung mit Idealbiotop"
                   value={activeDataset.row.TPopKontrIdealBiotopUebereinst}
                   errorText={activeDataset.valid.TPopKontrIdealBiotopUebereinst}
                   dataSource={store.dropdownList.idbiotopuebereinstWerte}
