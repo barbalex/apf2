@@ -20,15 +20,21 @@ const FormContainer = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
-  overflow: auto !important;
 `
 const DataContainer = styled.div`
   height: 100%;
-  overflow: visible !important;
+  overflow: auto !important;
 `
 const FieldsContainer = styled.div`
-  padding-left: 10px;
-  padding-right: 10px;
+  padding: 10px;
+`
+const Title = styled.div`
+  padding: 10px 10px 0 10px;
+  color: #b3b3b3;
+  font-weight: bold;
+  background-color: #424242;
+  margin-top: 10px;
+  padding-bottom: 10px;
 `
 const ZuordnenDiv = styled.div`
   margin-bottom: -10px;
@@ -203,10 +209,8 @@ const Beobzuordnung = ({
             updatePropertyInDb={store.updatePropertyInDb}
           />
         </FieldsContainer>
-        <FormTitle tree={tree} title={beobTitle} noTestdataMessage={true} />
-        <FieldsContainer>
-          <Beob tree={tree} />
-        </FieldsContainer>
+        <Title>{beobTitle}</Title>
+        <Beob tree={tree} />
       </DataContainer>
     </FormContainer>
   )
