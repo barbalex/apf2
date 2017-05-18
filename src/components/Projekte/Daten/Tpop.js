@@ -12,6 +12,7 @@ import RadioButton from '../../shared/RadioButton'
 import RadioButtonGroupWithInfo from '../../shared/RadioButtonGroupWithInfo'
 import FormTitle from '../../shared/FormTitle'
 import TpopAbBerRelevantInfoPopover from './TpopAbBerRelevantInfoPopover'
+import constants from '../../../modules/constants'
 
 const Container = styled.div`
   height: 100%;
@@ -19,10 +20,9 @@ const Container = styled.div`
   flex-direction: column;
 `
 const FieldsContainer = styled.div`
-  padding-left: 10px;
-  padding-right: 10px;
-  padding-bottom: 10px;
+  padding: 10px;
   overflow: auto !important;
+  column-width: ${constants.columnWidth}px;
 `
 
 const enhance = compose(inject('store'), observer)

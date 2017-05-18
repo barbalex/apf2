@@ -13,9 +13,7 @@ const Container = styled.div`
   flex-direction: column;
 `
 const FieldsContainer = styled.div`
-  padding-left: 10px;
-  padding-right: 10px;
-  padding-bottom: 10px;
+  padding: 10px;
   overflow: auto !important;
 `
 
