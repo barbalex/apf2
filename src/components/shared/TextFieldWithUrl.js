@@ -16,10 +16,10 @@ import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 import withState from 'recompose/withState'
 
-
 const Container = styled.div`
   display: flex;
   margin-bottom: -15px;
+  break-inside: avoid;
 `
 const StyledFontIcon = styled(FontIcon)`
   margin-top: 33px;

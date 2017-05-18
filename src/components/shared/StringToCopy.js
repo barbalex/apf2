@@ -34,6 +34,7 @@ const StringToCopy = ({
     display: flex;
     flex-direction: column;
     margin-top: 10px;
+    break-inside: avoid;
   `
   const StringToCopyContainer = styled.div`
       display: flex;

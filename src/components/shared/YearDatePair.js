@@ -16,6 +16,7 @@ const DateFieldContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  break-inside: avoid;
 `
 const YearTextField = styled(TextField)`
   margin-bottom: -15px;
