@@ -36,10 +36,8 @@ import getActiveNodeArrayFromPathname
 import getUrlQuery from './store/action/getUrlQuery'
 
 // turned off because of errors in production
-// import apiBaseUrl from './modules/apiBaseUrl'
-// import updateFromSocket from './modules/updateFromSocket'
-
-// import appBaseUrl from './modules/appBaseUrl'
+import apiBaseUrl from './modules/apiBaseUrl'
+import updateFromSocket from './modules/updateFromSocket'
 
 import './index.css'
 
@@ -77,8 +75,8 @@ store.setLoginFromIdb()
 store.fetchFieldsFromIdb()
 
 // turned off because of errors in production
-// const socket = window.io(apiBaseUrl)
-// socket.on('tabelle_update', payload => updateFromSocket(store, payload))
+const socket = window.io(apiBaseUrl)
+socket.on('tabelle_update', payload => updateFromSocket(store, payload))
 
 const AppContainer = styled.div`
   display: flex;
