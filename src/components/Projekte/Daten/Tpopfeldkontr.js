@@ -16,6 +16,7 @@ import FormTitle from '../../shared/FormTitle'
 import YearDatePair from '../../shared/YearDatePair'
 import TabTemplate from '../../shared/TabTemplate'
 import TpopfeldkontrentwicklungPopover from './TpopfeldkontrentwicklungPopover'
+import constants from '../../../modules/constants'
 
 const Container = styled.div`
   height: 100%;
@@ -42,11 +43,10 @@ const Section = styled.div`
   }
 `
 const FormContainer = styled.div`
-  padding-left: 10px;
-  padding-right: 10px;
-  padding-bottom: 10px;
+  padding: 10px;
   overflow: auto !important;
   height: 100%;
+  column-width: ${constants.columnWidth}px;
 `
 const TabChildDiv = styled.div`
   height: 100%;
