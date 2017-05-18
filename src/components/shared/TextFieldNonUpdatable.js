@@ -6,6 +6,11 @@ import { orange500 } from 'material-ui/styles/colors'
 import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
+import styled from 'styled-components'
+
+const StyledTextField = styled(TextField)`
+  margin-bottom: -15px;
+`
 
 const enhance = compose(
   withState('errorText', 'updateErrorText', ''),
@@ -29,7 +34,7 @@ const MyTextField = ({
   errorText: string,
   onChange: () => void,
 }) => (
-  <TextField
+  <StyledTextField
     floatingLabelText={label}
     errorText={errorText}
     value={value || value === 0 ? value : ''}

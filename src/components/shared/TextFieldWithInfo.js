@@ -7,8 +7,24 @@ import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import styled from 'styled-components'
 
-const StyledTextField = styled(TextField)`
-  margin-bottom: -15px;
+import InfoWithPopover from './InfoWithPopover'
+
+const FieldWithInfoContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  margin-bottom: -10px;
+`
+const InfoWithPopoverContainer = styled.div`
+  padding-bottom: 5px;
+`
+const PopoverContentRow = styled.div`
+  padding: 2px 5px 2px 5px;
+  display: flex;
+  border-color: grey;
+  border-width: thin;
+  border-style: solid;
+  border-radius: 4px;
 `
 
 const enhance = compose(
@@ -40,6 +56,7 @@ const MyTextField = ({
   onChange,
   onBlur,
   onFocus,
+  popover,
 }: {
   tree: Object,
   label: string,
@@ -57,20 +74,30 @@ const MyTextField = ({
   // no idea why but this CAN get passed as undefined...
   updateProperty: () => void,
   updatePropertyInDb: () => void,
+  popover: Object,
 }) => (
-  <StyledTextField
-    floatingLabelText={label}
-    hintText={hintText}
-    type={type}
-    multiLine={multiLine}
-    value={value || value === 0 ? value : ''}
-    errorText={errorText}
-    disabled={disabled}
-    fullWidth
-    onChange={onChange}
-    onBlur={onBlur}
-    onFocus={onFocus}
-  />
+  <FieldWithInfoContainer>
+    <TextField
+      floatingLabelText={label}
+      hintText={hintText}
+      type={type}
+      multiLine={multiLine}
+      value={value || value === 0 ? value : ''}
+      errorText={errorText}
+      disabled={disabled}
+      fullWidth
+      onChange={onChange}
+      onBlur={onBlur}
+      onFocus={onFocus}
+    />
+    <InfoWithPopoverContainer>
+      <InfoWithPopover>
+        <PopoverContentRow>
+          {popover}
+        </PopoverContentRow>
+      </InfoWithPopover>
+    </InfoWithPopoverContainer>
+  </FieldWithInfoContainer>
 )
 
 MyTextField.defaultProps = {

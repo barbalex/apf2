@@ -2,11 +2,11 @@
 import React from 'react'
 import { observer } from 'mobx-react'
 import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton'
+import TextField from 'material-ui/TextField'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 
-import TextField from './TextField'
 import Label from './Label'
 import InfoWithPopover from './InfoWithPopover'
 
@@ -17,7 +17,7 @@ const FieldWithInfoContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: flex-end;
-  margin-bottom: -5px;
+  margin-bottom: -15px;
 `
 const PopoverContentRow = styled.div`
   padding: 2px 5px 2px 5px;
@@ -36,16 +36,27 @@ const HerkunftContainer = styled.div`
 `
 const HerkunftColumnContainer = styled.div`
   padding-right: 25px;
+  overflow: visible !important;
 `
 const GroupLabelContainer = styled.div`
   padding-bottom: 2px;
 `
 const enhance = compose(
   withHandlers({
-    onChange: props => (event, valuePassed) => {
+    onChangeStatus: props => (event, valuePassed) => {
       // if clicked element is active herkunftValue: set null
       const val = valuePassed === props.herkunftValue ? null : valuePassed
       props.updatePropertyInDb(props.tree, props.herkunftFieldName, val)
+    },
+    onChangeBekanntSeit: props => (event, val) =>
+      props.updateProperty(props.tree, props.bekanntSeitFieldName, val),
+    onBlurBekanntSeit: props => event => {
+      const { value } = event.target
+      // only update if value has changed
+      // eslint-disable-next-line eqeqeq
+      if (value != props.valueOnFocus) {
+        props.updatePropertyInDb(props.tree, props.bekanntSeitFieldName, value)
+      }
     },
   }),
   observer,
@@ -61,7 +72,9 @@ const Status = ({
   bekanntSeitValid,
   updateProperty,
   updatePropertyInDb,
-  onChange,
+  onChangeStatus,
+  onChangeBekanntSeit,
+  onBlurBekanntSeit,
 }: {
   tree: Object,
   apJahr?: number,
@@ -72,7 +85,9 @@ const Status = ({
   bekanntSeitValid?: string,
   updateProperty: () => void,
   updatePropertyInDb: () => void,
-  onChange: () => void,
+  onChangeStatus: () => void,
+  onChangeBekanntSeit: () => void,
+  onBlurBekanntSeit: () => void,
 }) => {
   const valueSelected = herkunftValue !== null && herkunftValue !== undefined
     ? herkunftValue
@@ -85,14 +100,15 @@ const Status = ({
     <div>
       <FieldWithInfoContainer>
         <TextField
-          tree={tree}
-          label="bekannt seit"
-          fieldName={bekanntSeitFieldName}
-          value={bekanntSeitValue}
-          errorText={bekanntSeitValid}
+          floatingLabelText="bekannt seit"
           type="number"
-          updateProperty={updateProperty}
-          updatePropertyInDb={updatePropertyInDb}
+          value={
+            bekanntSeitValue || bekanntSeitValue === 0 ? bekanntSeitValue : ''
+          }
+          errorText={bekanntSeitValid}
+          fullWidth
+          onChange={onChangeBekanntSeit}
+          onBlur={onBlurBekanntSeit}
         />
         <InfoWithPopoverContainer>
           <InfoWithPopover>
@@ -110,7 +126,7 @@ const Status = ({
             <RadioButtonGroup
               name={herkunftFieldName}
               valueSelected={valueSelected}
-              onChange={onChange}
+              onChange={onChangeStatus}
             >
               <RadioButton
                 value={100}
@@ -131,7 +147,7 @@ const Status = ({
             <RadioButtonGroup
               name={herkunftFieldName}
               valueSelected={valueSelected}
-              onChange={onChange}
+              onChange={onChangeStatus}
             >
               <RadioButton
                 value={showNachBeginnAp ? 200 : 210}
@@ -158,7 +174,7 @@ const Status = ({
             <RadioButtonGroup
               name={herkunftFieldName}
               valueSelected={valueSelected}
-              onChange={onChange}
+              onChange={onChangeStatus}
             >
               <RadioButton
                 value={300}
