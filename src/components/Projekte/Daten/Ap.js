@@ -114,39 +114,37 @@ const Ap = ({
         }}
         updatePropertyInDb={updatePropertyInDb}
       />
-      <FieldContainer>
-        <RadioButtonGroupWithInfo
-          tree={tree}
-          fieldName="ApStatus"
-          value={activeDataset.row.ApStatus}
-          dataSource={store.dropdownList.apStati}
-          updatePropertyInDb={updatePropertyInDb}
-          popover={
-            <div>
-              <LabelPopoverTitleRow>
-                Legende
-              </LabelPopoverTitleRow>
-              <LabelPopoverContentRow>
-                <LabelPopoverRowColumnLeft>
-                  keiner:
-                </LabelPopoverRowColumnLeft>
-                <LabelPopoverRowColumnRight>
-                  kein Aktionsplan vorgesehen
-                </LabelPopoverRowColumnRight>
-              </LabelPopoverContentRow>
-              <LabelPopoverContentRow>
-                <LabelPopoverRowColumnLeft>
-                  erstellt:
-                </LabelPopoverRowColumnLeft>
-                <LabelPopoverRowColumnRight>
-                  Aktionsplan fertig, auf der Webseite der FNS
-                </LabelPopoverRowColumnRight>
-              </LabelPopoverContentRow>
-            </div>
-          }
-          label="Aktionsplan"
-        />
-      </FieldContainer>
+      <RadioButtonGroupWithInfo
+        tree={tree}
+        fieldName="ApStatus"
+        value={activeDataset.row.ApStatus}
+        dataSource={store.dropdownList.apStati}
+        updatePropertyInDb={updatePropertyInDb}
+        popover={
+          <div>
+            <LabelPopoverTitleRow>
+              Legende
+            </LabelPopoverTitleRow>
+            <LabelPopoverContentRow>
+              <LabelPopoverRowColumnLeft>
+                keiner:
+              </LabelPopoverRowColumnLeft>
+              <LabelPopoverRowColumnRight>
+                kein Aktionsplan vorgesehen
+              </LabelPopoverRowColumnRight>
+            </LabelPopoverContentRow>
+            <LabelPopoverContentRow>
+              <LabelPopoverRowColumnLeft>
+                erstellt:
+              </LabelPopoverRowColumnLeft>
+              <LabelPopoverRowColumnRight>
+                Aktionsplan fertig, auf der Webseite der FNS
+              </LabelPopoverRowColumnRight>
+            </LabelPopoverContentRow>
+          </div>
+        }
+        label="Aktionsplan"
+      />
       <TextField
         tree={tree}
         label="Start im Jahr"
