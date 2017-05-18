@@ -12,6 +12,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   margin-bottom: -5px;
+  break-inside: avoid;
 `
 const RadioButtonGroupContainer = styled.div`
   display: flex;

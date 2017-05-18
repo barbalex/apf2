@@ -9,6 +9,7 @@ import styled from 'styled-components'
 const Container = styled.div`
   margin-top: 5px;
   flex-grow: 1;
+  break-inside: avoid;
 `
 const StyledLabel = styled.div`
   margin-top: 10px;
