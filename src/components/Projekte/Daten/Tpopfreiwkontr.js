@@ -5,7 +5,6 @@ import styled from 'styled-components'
 import compose from 'recompose/compose'
 
 import RadioButton from '../../shared/RadioButton'
-import Label from '../../shared/Label'
 import TextField from '../../shared/TextField'
 import SelectField from '../../shared/SelectField'
 import StringToCopy from '../../shared/StringToCopy'
@@ -16,9 +15,6 @@ const Container = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
-`
-const FieldContainer = styled.div`
-  margin-top: 10px;
 `
 const FieldsContainer = styled.div`
   padding-left: 10px;
@@ -60,10 +56,10 @@ const Tpopfreiwkontr = ({ store, tree }: { store: Object, tree: Object }) => {
           labelProp="AdrName"
           updatePropertyInDb={store.updatePropertyInDb}
         />
-        <Label label="Auf Plan eingezeichnet" />
         <RadioButton
           tree={tree}
           fieldName="TPopKontrPlan"
+          label="Auf Plan eingezeichnet"
           value={activeDataset.row.TPopKontrPlan}
           updatePropertyInDb={store.updatePropertyInDb}
         />
@@ -97,10 +93,10 @@ const Tpopfreiwkontr = ({ store, tree }: { store: Object, tree: Object }) => {
           updateProperty={store.updateProperty}
           updatePropertyInDb={store.updatePropertyInDb}
         />
-        <Label label="Auch junge Pflanzen vorhanden" />
         <RadioButton
           tree={tree}
           fieldName="TPopKontrJungPflJN"
+          label="Auch junge Pflanzen vorhanden"
           value={activeDataset.row.TPopKontrJungPflJN}
           updatePropertyInDb={store.updatePropertyInDb}
         />
@@ -148,10 +144,7 @@ const Tpopfreiwkontr = ({ store, tree }: { store: Object, tree: Object }) => {
           updateProperty={store.updateProperty}
           updatePropertyInDb={store.updatePropertyInDb}
         />
-        <FieldContainer>
-          <Label label="GUID" />
-          <StringToCopy text={activeDataset.row.TPopKontrGuid} />
-        </FieldContainer>
+        <StringToCopy text={activeDataset.row.TPopKontrGuid} label="GUID" />
       </FieldsContainer>
     </Container>
   )

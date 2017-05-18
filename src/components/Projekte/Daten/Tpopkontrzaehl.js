@@ -5,7 +5,6 @@ import styled from 'styled-components'
 import compose from 'recompose/compose'
 
 import RadioButtonGroup from '../../shared/RadioButtonGroup'
-import Label from '../../shared/Label'
 import TextField from '../../shared/TextField'
 import FormTitle from '../../shared/FormTitle'
 import SelectField from '../../shared/SelectField'
@@ -52,10 +51,10 @@ const Tpopkontrzaehl = ({ store, tree }: { store: Object, tree: Object }) => {
           updateProperty={store.updateProperty}
           updatePropertyInDb={store.updatePropertyInDb}
         />
-        <Label label="Methode" />
         <RadioButtonGroup
           tree={tree}
           fieldName="Methode"
+          label="Methode"
           value={activeDataset.row.Methode}
           errorText={activeDataset.valid.Methode}
           dataSource={store.dropdownList.methodeWerte}

@@ -7,7 +7,6 @@ import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 
 import RadioButtonGroup from '../../shared/RadioButtonGroup'
-import Label from '../../shared/Label'
 import TextField from '../../shared/TextField'
 import SelectField from '../../shared/SelectField'
 import RadioButton from '../../shared/RadioButton'
@@ -19,9 +18,6 @@ const Container = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
-`
-const FieldContainer = styled.div`
-  margin-top: 10px;
 `
 const FieldsContainer = styled.div`
   padding-left: 10px;
@@ -79,10 +75,10 @@ const Tpopmassn = ({
           updateProperty={store.updateProperty}
           updatePropertyInDb={store.updatePropertyInDb}
         />
-        <Label label="Typ" />
         <RadioButtonGroup
           tree={tree}
           fieldName="TPopMassnTyp"
+          label="Typ"
           value={activeDataset.row.TPopMassnTyp}
           errorText={activeDataset.valid.TPopMassnTyp}
           dataSource={store.dropdownList.tpopMassnTypWerte}
@@ -121,10 +117,10 @@ const Tpopmassn = ({
           updateProperty={store.updateProperty}
           updatePropertyInDb={store.updatePropertyInDb}
         />
-        <Label label="Plan vorhanden" />
         <RadioButton
           tree={tree}
           fieldName="TPopMassnPlan"
+          label="Plan vorhanden"
           value={activeDataset.row.TPopMassnPlan}
           updatePropertyInDb={store.updatePropertyInDb}
         />
@@ -240,10 +236,7 @@ const Tpopmassn = ({
           updateProperty={store.updateProperty}
           updatePropertyInDb={store.updatePropertyInDb}
         />
-        <FieldContainer>
-          <Label label="GUID" />
-          <StringToCopy text={activeDataset.row.TPopMassnGuid} />
-        </FieldContainer>
+        <StringToCopy text={activeDataset.row.TPopMassnGuid} label="GUID" />
       </FieldsContainer>
     </Container>
   )
