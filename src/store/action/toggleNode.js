@@ -23,6 +23,10 @@ export default (store: Object, tree: Object, node: Object): any => {
       if (['tpopfeldkontr', 'tpopfreiwkontr'].includes(node.menuType)) {
         tree.openNodes.push([...node.url, 'Zaehlungen'])
       }
+      // automatically open zielberFolder of ziel
+      if (node.menuType === 'ziel') {
+        tree.openNodes.push([...node.url, 'Berichte'])
+      }
     }
   }
   tree.setLastClickedNode(node.url)
