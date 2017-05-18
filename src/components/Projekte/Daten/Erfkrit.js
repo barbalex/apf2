@@ -5,7 +5,6 @@ import styled from 'styled-components'
 import compose from 'recompose/compose'
 
 import RadioButtonGroup from '../../shared/RadioButtonGroup'
-import Label from '../../shared/Label'
 import TextField from '../../shared/TextField'
 import FormTitle from '../../shared/FormTitle'
 
@@ -29,10 +28,10 @@ const Erfkrit = ({ store, tree }: { store: Object, tree: Object }) => {
     <Container>
       <FormTitle tree={tree} title="Erfolgs-Kriterium" />
       <FieldsContainer>
-        <Label label="Beurteilung" />
         <RadioButtonGroup
           tree={tree}
           fieldName="ErfkritErreichungsgrad"
+          label="Beurteilung"
           value={activeDataset.row.ErfkritErreichungsgrad}
           errorText={activeDataset.valid.ErfkritErreichungsgrad}
           dataSource={store.dropdownList.apErfkritWerte}

@@ -5,7 +5,6 @@ import styled from 'styled-components'
 import compose from 'recompose/compose'
 
 import RadioButtonGroup from '../../shared/RadioButtonGroup'
-import Label from '../../shared/Label'
 import TextField from '../../shared/TextField'
 import DateFieldWithPicker from '../../shared/DateFieldWithPicker'
 import SelectField from '../../shared/SelectField'
@@ -58,20 +57,20 @@ const Apber = ({ store, tree }: { store: Object, tree: Object }) => {
           updateProperty={store.updateProperty}
           updatePropertyInDb={store.updatePropertyInDb}
         />
-        <Label label="Beurteilung" />
         <RadioButtonGroup
           tree={tree}
           fieldName="JBerBeurteilung"
           value={activeDataset.row.JBerBeurteilung}
+          label="Beurteilung"
           errorText={activeDataset.valid.JBerBeurteilung}
           dataSource={store.dropdownList.apErfkritWerte}
           updatePropertyInDb={store.updatePropertyInDb}
         />
-        <Label label="Veränderung zum Vorjahr" />
         <RadioButtonGroup
           tree={tree}
           fieldName="JBerVeraenGegenVorjahr"
           value={activeDataset.row.JBerVeraenGegenVorjahr}
+          label="Veränderung zum Vorjahr"
           errorText={activeDataset.valid.JBerVeraenGegenVorjahr}
           dataSource={veraenGegenVorjahrWerte}
           updatePropertyInDb={store.updatePropertyInDb}

@@ -8,7 +8,6 @@ import TextField from '../../shared/TextField'
 import TextFieldWithInfo from '../../shared/TextFieldWithInfo'
 import Status from '../../shared/Status'
 import RadioButton from '../../shared/RadioButton'
-import Label from '../../shared/Label'
 import FormTitle from '../../shared/FormTitle'
 
 const Container = styled.div`
@@ -65,10 +64,10 @@ const Pop = ({ store, tree }: { store: Object, tree: Object }) => {
           updateProperty={store.updateProperty}
           updatePropertyInDb={store.updatePropertyInDb}
         />
-        <Label label="Status unklar" />
         <RadioButton
           tree={tree}
           fieldName="PopHerkunftUnklar"
+          label="Status unklar"
           value={activeDataset.row.PopHerkunftUnklar}
           updatePropertyInDb={store.updatePropertyInDb}
         />

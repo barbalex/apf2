@@ -7,7 +7,6 @@ import withProps from 'recompose/withProps'
 
 import AutoComplete from '../../shared/Autocomplete'
 import RadioButtonGroupWithInfo from '../../shared/RadioButtonGroupWithInfo'
-import Label from '../../shared/Label'
 import TextField from '../../shared/TextField'
 import SelectField from '../../shared/SelectField'
 import FormTitle from '../../shared/FormTitle'
@@ -116,7 +115,6 @@ const Ap = ({
         updatePropertyInDb={updatePropertyInDb}
       />
       <FieldContainer>
-        <Label label="Aktionsplan" />
         <RadioButtonGroupWithInfo
           tree={tree}
           fieldName="ApStatus"
@@ -146,6 +144,7 @@ const Ap = ({
               </LabelPopoverContentRow>
             </div>
           }
+          label="Aktionsplan"
         />
       </FieldContainer>
       <TextField
@@ -159,7 +158,6 @@ const Ap = ({
         updatePropertyInDb={updatePropertyInDb}
       />
       <FieldContainer>
-        <Label label="Stand Umsetzung" />
         <RadioButtonGroupWithInfo
           tree={tree}
           fieldName="ApUmsetzung"
@@ -190,6 +188,7 @@ const Ap = ({
               </LabelPopoverContentRow>
             </div>
           }
+          label="Stand Umsetzung"
         />
       </FieldContainer>
       <SelectField

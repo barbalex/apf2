@@ -10,7 +10,6 @@ import FormTitle from '../../shared/FormTitle'
 import RadioButtonGroup from '../../shared/RadioButtonGroup'
 import TextField from '../../shared/TextField'
 import RadioButtonWithInfo from '../../shared/RadioButtonWithInfo'
-import Label from '../../shared/Label'
 import Beob from './Beob'
 
 const Container = styled.div`
@@ -170,22 +169,22 @@ const Beobzuordnung = ({
       <FormTitle tree={tree} title="Beobachtung" />
       <DataContainer>
         <FieldsContainer>
-          <Label label="Nicht zuordnen" />
           <RadioButtonWithInfo
             tree={tree}
             fieldName="BeobNichtZuordnen"
+            label="Nicht zuordnen"
             value={activeDataset.row.BeobNichtZuordnen}
             updatePropertyInDb={updatePropertyInDb}
             popover={nichtZuordnenPopover}
           />
           {showTPopId &&
             <ZuordnenDiv>
-              <Label label="Einer Teilpopulation zuordnen" />
               <MaxHeightDiv>
                 <RadioButtonGroup
                   tree={tree}
                   fieldName="TPopId"
                   value={activeDataset.row.TPopId}
+                  label="Einer Teilpopulation zuordnen"
                   dataSource={getTpopZuordnenSource(store, tree)}
                   updatePropertyInDb={updatePropertyInDb}
                 />
