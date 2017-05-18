@@ -2,8 +2,15 @@
 import React from 'react'
 import { observer, inject } from 'mobx-react'
 import compose from 'recompose/compose'
+import styled from 'styled-components'
 
 import TextFieldNonUpdatable from '../../shared/TextFieldNonUpdatable'
+import constants from '../../../modules/constants'
+
+const Container = styled.div`
+  padding: 0 10px 0 10px;
+  column-width: ${constants.columnWidth}px;
+`
 
 const enhance = compose(inject('store'), observer)
 
@@ -16,13 +23,13 @@ const Beob = ({ store, tree }: { store: Object, tree: Object }) => {
   )
 
   return (
-    <div>
+    <Container>
       {beobFields.map(([key, value]) => (
         <div key={key}>
           <TextFieldNonUpdatable label={key} value={value} />
         </div>
       ))}
-    </div>
+    </Container>
   )
 }
 

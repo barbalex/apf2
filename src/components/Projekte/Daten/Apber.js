@@ -9,6 +9,7 @@ import TextField from '../../shared/TextField'
 import DateFieldWithPicker from '../../shared/DateFieldWithPicker'
 import SelectField from '../../shared/SelectField'
 import FormTitle from '../../shared/FormTitle'
+import constants from '../../../modules/constants'
 
 const Container = styled.div`
   height: 100%;
@@ -17,9 +18,8 @@ const Container = styled.div`
 `
 const FieldsContainer = styled.div`
   overflow: auto !important;
-  padding-left: 10px;
-  padding-right: 10px;
-  padding-bottom: 10px;
+  padding: 10px;
+  column-width: ${constants.columnWidth}px;
 `
 
 const enhance = compose(inject('store'), observer)
