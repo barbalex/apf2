@@ -11,6 +11,7 @@ import InfoWithPopover from './InfoWithPopover'
 const Container = styled.div`
   display: flex;
   justify-content: space-between;
+  margin-bottom: -5px;
 `
 
 const enhance = compose(

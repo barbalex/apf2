@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import compose from 'recompose/compose'
 
 import TextField from '../../shared/TextField'
-import InfoWithPopover from '../../shared/InfoWithPopover'
+import TextFieldWithInfo from '../../shared/TextFieldWithInfo'
 import Status from '../../shared/Status'
 import RadioButton from '../../shared/RadioButton'
 import Label from '../../shared/Label'
@@ -21,28 +21,6 @@ const FieldsContainer = styled.div`
   padding-right: 10px;
   padding-bottom: 10px;
   overflow: auto !important;
-`
-const PopoverRow = styled.div`
-  padding: 2px 5px 2px 5px;
-`
-const PopoverContentRow = styled(PopoverRow)`
-  display: flex;
-  border-color: grey;
-  border-width: thin;
-  border-style: solid;
-  &:first-child {
-    border-top-right-radius: 4px;
-    border-top-left-radius: 4px;
-  }
-  &:last-child {
-    border-bottom-right-radius: 4px;
-    border-bottom-left-radius: 4px;
-  }
-`
-const FieldWithInfoContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: flex-end;
 `
 
 const enhance = compose(inject('store'), observer)
@@ -65,23 +43,17 @@ const Pop = ({ store, tree }: { store: Object, tree: Object }) => {
           updateProperty={store.updateProperty}
           updatePropertyInDb={store.updatePropertyInDb}
         />
-        <FieldWithInfoContainer>
-          <TextField
-            tree={tree}
-            label="Name"
-            fieldName="PopName"
-            value={activeDataset.row.PopName}
-            errorText={activeDataset.valid.PopName}
-            type="text"
-            updateProperty={store.updateProperty}
-            updatePropertyInDb={store.updatePropertyInDb}
-          />
-          <InfoWithPopover>
-            <PopoverContentRow>
-              Dieses Feld möglichst immer ausfüllen
-            </PopoverContentRow>
-          </InfoWithPopover>
-        </FieldWithInfoContainer>
+        <TextFieldWithInfo
+          tree={tree}
+          label="Name"
+          fieldName="PopName"
+          value={activeDataset.row.PopName}
+          errorText={activeDataset.valid.PopName}
+          type="text"
+          updateProperty={store.updateProperty}
+          updatePropertyInDb={store.updatePropertyInDb}
+          popover="Dieses Feld möglichst immer ausfüllen"
+        />
         <Status
           tree={tree}
           apJahr={apJahr}

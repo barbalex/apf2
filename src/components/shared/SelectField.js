@@ -5,6 +5,11 @@ import SelectField from 'material-ui/SelectField'
 import MenuItem from 'material-ui/MenuItem'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
+import styled from 'styled-components'
+
+const StyledSelectField = styled(SelectField)`
+  margin-bottom: -15px;
+`
 
 const enhance = compose(
   withHandlers({
@@ -29,7 +34,7 @@ const MySelectField = ({
   labelProp: string,
   onChange: () => void,
 }) => (
-  <SelectField
+  <StyledSelectField
     floatingLabelText={label}
     value={value}
     fullWidth
@@ -38,7 +43,7 @@ const MySelectField = ({
     {dataSource.map((e, index) => (
       <MenuItem value={e[valueProp]} primaryText={e[labelProp]} key={index} />
     ))}
-  </SelectField>
+  </StyledSelectField>
 )
 
 MySelectField.defaultProps = {

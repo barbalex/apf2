@@ -10,6 +10,7 @@ const Container = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: -5px;
 `
 const ButtonGroup = styled.div`
   flex-grow: 1;

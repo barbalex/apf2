@@ -6,7 +6,7 @@ import styled from 'styled-components'
 import compose from 'recompose/compose'
 
 import TextField from '../../shared/TextField'
-import InfoWithPopover from '../../shared/InfoWithPopover'
+import TextFieldWithInfo from '../../shared/TextFieldWithInfo'
 import Status from '../../shared/Status'
 import RadioButton from '../../shared/RadioButton'
 import RadioButtonGroupWithInfo from '../../shared/RadioButtonGroupWithInfo'
@@ -24,19 +24,6 @@ const FieldsContainer = styled.div`
   padding-right: 10px;
   padding-bottom: 10px;
   overflow: auto !important;
-`
-const FieldWithInfoContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: flex-end;
-`
-const PopoverContentRow = styled.div`
-  padding: 2px 5px 2px 5px;
-  display: flex;
-  border-color: grey;
-  border-width: thin;
-  border-style: solid;
-  border-radius: 4px;
 `
 
 const enhance = compose(inject('store'), observer)
@@ -60,23 +47,17 @@ const Tpop = ({ store, tree }: { store: Object, tree: Object }) => {
           updateProperty={store.updateProperty}
           updatePropertyInDb={store.updatePropertyInDb}
         />
-        <FieldWithInfoContainer>
-          <TextField
-            tree={tree}
-            label="Flurname"
-            fieldName="TPopFlurname"
-            value={activeDataset.row.TPopFlurname}
-            errorText={activeDataset.valid.TPopFlurname}
-            type="text"
-            updateProperty={store.updateProperty}
-            updatePropertyInDb={store.updatePropertyInDb}
-          />
-          <InfoWithPopover>
-            <PopoverContentRow>
-              Dieses Feld möglichst immer ausfüllen
-            </PopoverContentRow>
-          </InfoWithPopover>
-        </FieldWithInfoContainer>
+        <TextFieldWithInfo
+          tree={tree}
+          label="Flurname"
+          fieldName="TPopFlurname"
+          value={activeDataset.row.TPopFlurname}
+          errorText={activeDataset.valid.TPopFlurname}
+          type="text"
+          updateProperty={store.updateProperty}
+          updatePropertyInDb={store.updatePropertyInDb}
+          popover="Dieses Feld möglichst immer ausfüllen"
+        />
         <Status
           tree={tree}
           apJahr={apJahr}
