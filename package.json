@@ -12,8 +12,7 @@
   "devDependencies": {
     "flow-bin": "0.46.0",
     "mobx-react-devtools": "4.2.13",
-    "react-scripts": "0.9.5",
-    "sw-precache": "5.1.1"
+    "react-scripts": "0.9.5"
   },
   "dependencies": {
     "@turf/inside": "4.3.0",
@@ -65,7 +64,6 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "buildSw": "react-scripts build && sw-precache --config=sw-precache-config.js",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "flow": "flow"
