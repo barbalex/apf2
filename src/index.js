@@ -35,11 +35,16 @@ import getActiveNodeArrayFromPathname
   from './store/action/getActiveNodeArrayFromPathname'
 import getUrlQuery from './store/action/getUrlQuery'
 
+// service worker
+import registerServiceWorker from './registerServiceWorker'
+
 // turned off because of errors in production
 import apiBaseUrl from './modules/apiBaseUrl'
 import updateFromSocket from './modules/updateFromSocket'
 
 import './index.css'
+
+registerServiceWorker()
 
 // prevent changing values in number inputs when scrolling pages!
 // see: http://stackoverflow.com/a/38589039/712005
