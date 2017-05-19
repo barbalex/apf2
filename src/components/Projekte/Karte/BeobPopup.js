@@ -43,7 +43,7 @@ const BeobPopup = ({ store, beob }: { store: Object, beob: Object }) => {
       <div>
         {`Koordinaten: ${xKoord.toLocaleString('de-ch')} / ${yKoord.toLocaleString('de-ch')}`}
       </div>
-      <a href={url} target="_blank">
+      <a href={url} target="_blank" rel="noopener noreferrer">
         Formular in neuem Tab öffnen
       </a>
     </div>

@@ -87,7 +87,11 @@ const Tipps = () => (
           {
             'Um die Datei das erste Mal zu öffnen eignet sich Libre Office am besten: '
           }
-          <a href="https://de.libreoffice.org/" target="_blank">
+          <a
+            href="https://de.libreoffice.org/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             https://de.libreoffice.org
           </a>
           <p>

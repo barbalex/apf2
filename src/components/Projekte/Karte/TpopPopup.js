@@ -39,7 +39,7 @@ const TpopPopup = ({
       <div>
         {`Koordinaten: ${tpop.TPopKoordWgs84 ? `${tpop.TPopXKoord.toLocaleString('de-ch')} / ${tpop.TPopYKoord.toLocaleString('de-ch')}` : '(keine)'}`}
       </div>
-      <a href={popUrl} target="_blank">
+      <a href={popUrl} target="_blank" rel="noopener noreferrer">
         Formular in neuem Tab öffnen
       </a>
     </div>

@@ -27,7 +27,7 @@ const PopPopup = ({ store, pop }: { store: Object, pop: Object }) => {
       <div>
         {`Koordinaten: ${pop.PopKoordWgs84 ? `${pop.PopXKoord.toLocaleString('de-ch')} / ${pop.PopYKoord.toLocaleString('de-ch')}` : '(keine)'}`}
       </div>
-      <a href={popUrl} target="_blank">
+      <a href={popUrl} target="_blank" rel="noopener noreferrer">
         Formular in neuem Tab öffnen
       </a>
     </div>
