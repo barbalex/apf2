@@ -587,7 +587,32 @@ const Exporte = ({
                 })}
             >
               <div>
-                Alle Beobachtungen von Arten, die in apflora.ch enthalten sind
+                Alle Beobachtungen von Arten aus apflora.ch
+              </div>
+              <div>
+                Nutzungsbedingungen der FNS beachten
+              </div>
+            </DownloadCardButton>
+          </DownloadCardText>
+          <DownloadCardText expandable>
+            <DownloadCardButton
+              onClick={() =>
+                downloadFromView({
+                  view: 'v_beob__mit_data',
+                  fileName: 'Beobachtungen',
+                })}
+            >
+              <div>
+                Alle Beobachtungen von Arten aus apflora.ch...
+              </div>
+              <div>
+                ...inklusive Original-Beobachtungsdaten (JSON)
+              </div>
+              <div>
+                Dauert Minuten und umfasst hunderte Megabytes!
+              </div>
+              <div>
+                Nutzungsbedingungen der FNS beachten
               </div>
             </DownloadCardButton>
           </DownloadCardText>
