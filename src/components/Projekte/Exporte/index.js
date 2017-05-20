@@ -586,21 +586,9 @@ const Exporte = ({
                   fileName: 'Beobachtungen',
                 })}
             >
-              <div>Beobachtungen</div>
-              <div>zugeordnet und nicht zuzuordnen</div>
-              <div>von Infospezies und EvAB</div>
-            </DownloadCardButton>
-            <DownloadCardButton
-              onClick={() =>
-                downloadFromView({
-                  view: 'v_beob_infospezies',
-                  fileName: 'BeobachtungenInfospezies',
-                })}
-            >
-              <div>Beobachtungen</div>
-              <div>zugeordnet, nicht zuzuordnen</div>
-              <div>und nicht zugeordnet</div>
-              <div>nur von Infospezies</div>
+              <div>
+                Alle Beobachtungen von Arten, die in apflora.ch enthalten sind
+              </div>
             </DownloadCardButton>
           </DownloadCardText>
         </FirstLevelCard>
