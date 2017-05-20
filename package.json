@@ -12,7 +12,7 @@
   "devDependencies": {
     "flow-bin": "0.46.0",
     "mobx-react-devtools": "4.2.13",
-    "react-scripts": "0.9.5"
+    "react-scripts": "1.0.0"
   },
   "dependencies": {
     "@turf/inside": "4.3.0",
