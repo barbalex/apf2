@@ -93,8 +93,6 @@ export default (store: Object, tree: Object, beobId: string): void => {
       store.updatePropertyInDb(tree, `TPopId`, tpop.TPopId)
       store.updateProperty(tree, `BeobId`, beobId)
       store.updatePropertyInDb(tree, `BeobId`, beobId)
-      store.updateProperty(tree, `QuelleId`, beob.QuelleId)
-      store.updatePropertyInDb(tree, `QuelleId`, beob.QuelleId)
       tree.setOpenNodesFromActiveNodeArray()
     })
     .catch(error => store.listError(error))
