@@ -7,6 +7,7 @@ import styled from 'styled-components'
 
 const FirstLevelCard = styled(Card)`
   margin-bottom: 10px;
+  background-color: #FFF8E1 !important;
 `
 
 const enhance = compose(inject('store'), observer)

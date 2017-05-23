@@ -14,7 +14,7 @@ import ReactDOM from 'react-dom'
 import injectTapEventPlugin from 'react-tap-event-plugin'
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
-import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme'
+import uiTheme from './modules/uiTheme'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import { Provider } from 'mobx-react'
 
@@ -66,7 +66,7 @@ app.init()
 // //stackoverflow.com/a/34015469/988941
 injectTapEventPlugin()
 
-const theme = Object.assign({}, darkBaseTheme, {
+const theme = Object.assign({}, uiTheme, {
   appBar: {
     height: 51,
   },

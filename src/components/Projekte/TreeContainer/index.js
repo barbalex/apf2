@@ -83,10 +83,7 @@ const NurApDiv = styled.div`
 const ApDivToggle = styled(Toggle)`
   margin-left: -8px;
 `
-const apDivToggleThumbStyle = { backgroundColor: 'rgb(245, 245, 245)' }
 const strukturbaumContainerDivStyle = {
-  // flexGrow: 1,
-  // flexBasis: '100%',
   height: '100%',
 }
 
@@ -310,7 +307,6 @@ class TreeContainer extends Component {
               <Label label="nur AP" />
               <ApDivToggle
                 toggled={tree.apFilter}
-                thumbStyle={apDivToggleThumbStyle}
                 onToggle={tree.toggleApFilter}
               />
             </NurApDiv>}

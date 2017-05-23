@@ -4,9 +4,11 @@ import { Card, CardHeader, CardText } from 'material-ui/Card'
 
 const FirstLevelCard = styled(Card)`
   margin-bottom: 10px;
+  background-color: #FFF8E1 !important;
 `
 const SecondLevelCard = styled(Card)`
   margin-bottom: 5px;
+  background-color: #FFF8E1 !important;
 `
 
 const Tipps = () => (

@@ -33,6 +33,9 @@ const Container = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
+  border-color: #424242;
+  border-width: 1px;
+  border-style: solid;
   @media print {
     display: none !important;
   }
@@ -46,6 +49,7 @@ const FieldsContainer = styled.div`
 `
 const FirstLevelCard = styled(Card)`
   margin-bottom: 10px;
+  background-color: #FFF8E1 !important;
 `
 const DownloadCardText = styled(CardText)`
   display: flex;

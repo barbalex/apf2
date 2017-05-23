@@ -25,7 +25,7 @@ const StyledNode = styled(
   flex-direction: row;
   white-space: nowrap;
   user-select: none;
-  color: ${props => (props.nodeIsInActiveNodePath ? 'rgb(255, 90, 0)' : 'rgb(247, 247, 247)')};
+  color: ${props => (props.nodeIsInActiveNodePath ? '#D84315' : 'inherit')};
 `
 const SymbolIcon = styled(
   ({ nodeIsInActiveNodePath, node, children, ...rest }) => (
@@ -36,11 +36,11 @@ const SymbolIcon = styled(
   padding-left: ${({ nodeIsInActiveNodePath }) => (nodeIsInActiveNodePath ? '2px' : '2px')};
   font-size: ${({ nodeIsInActiveNodePath }) => (nodeIsInActiveNodePath ? '26px !important' : '22px !important')};
   font-weight: ${({ nodeIsInActiveNodePath }) => (nodeIsInActiveNodePath ? '900 !important' : 'inherit')};
-  color: ${({ nodeIsInActiveNodePath }) => (nodeIsInActiveNodePath ? 'rgb(255, 90, 0) !important' : 'rgb(247, 247, 247)')};
+  color: ${({ nodeIsInActiveNodePath }) => (nodeIsInActiveNodePath ? '#D84315 !important' : 'inherit')};
   width: 26px;
   cursor: pointer;
   &:hover {
-    color: orange !important;
+    color: #F57C00 !important;
   }
 `
 const SymbolSpan = styled(({ nodeIsInActiveNodePath, children, ...rest }) => (
@@ -63,7 +63,7 @@ const TextSpan = styled(
   font-weight: ${props => (props.nodeIsInActiveNodePath ? '900 !important' : 'inherit')};
   cursor: pointer;
   &:hover {
-    color: orange;
+    color: #F57C00;
   }
 `
 const StyledMapIcon = styled(FontIcon)`

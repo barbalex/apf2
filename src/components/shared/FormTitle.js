@@ -5,13 +5,13 @@ import styled from 'styled-components'
 import TestdataMessage from './TestdataMessage'
 
 const Container = styled.div`
-  background-color: #424242;
+  background-color: #388E3C;
   padding-bottom: 10px;
   flex-shrink: 0;
 `
 const Title = styled.div`
   padding: 10px 10px 0 10px;
-  color: #b3b3b3;
+  color: white;
   font-weight: bold;
 `
 
