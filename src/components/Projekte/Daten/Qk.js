@@ -33,7 +33,7 @@ const FilterField = styled(TextField)`
 const linkifyProperties = {
   target: '_blank',
   style: {
-    color: 'white',
+    color: 'inherit',
     fontWeight: 100,
   },
 }
@@ -49,7 +49,7 @@ const enhance = compose(
       }
     },
   }),
-  observer,
+  observer
 )
 
 const Qk = ({
