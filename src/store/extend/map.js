@@ -83,7 +83,6 @@ export default (store: Object): void => {
         o => o !== layer
       )
     }),
-    detailplaene: null,
     fetchDetailplaene: action('fetchDetailplaene', () =>
       fetchDetailplaene(store)
     ),
