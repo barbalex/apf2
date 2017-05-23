@@ -130,6 +130,7 @@ function Store(): void {
     activeApfloraLayersSorted: [],
     overlays: [],
     apfloraLayers: [],
+    detailplaene: null,
     addActiveOverlay: () => {},
     removeActiveOverlay: () => {},
     setActiveBaseLayer: () => {},

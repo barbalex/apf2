@@ -17,6 +17,7 @@ import beobNichtZuzuordnenIdsInsideFeatureCollection
   from '../../modules/beobNichtZuzuordnenIdsInsideFeatureCollection'
 import tpopBeobIdsInsideFeatureCollection
   from '../../modules/tpopBeobIdsInsideFeatureCollection'
+import fetchDetailplaene from '../action/fetchDetailplaene'
 
 export default (store: Object): void => {
   extendObservable(store.map, {
@@ -28,16 +29,16 @@ export default (store: Object): void => {
         if (store.map.mouseCoord.length > 0) {
           return epsg4326to21781(
             store.map.mouseCoord[0],
-            store.map.mouseCoord[1],
+            store.map.mouseCoord[1]
           )
         }
         return []
       },
-      { name: 'mouseCoordEpsg21781' },
+      { name: 'mouseCoordEpsg21781' }
     ),
     activeBaseLayer: 'OsmColor',
     setActiveBaseLayer: action('setActiveBaseLayer', layer =>
-      setActiveBaseLayer(store, layer),
+      setActiveBaseLayer(store, layer)
     ),
     overlays: observable([
       { label: 'ZH Übersichtsplan', value: 'ZhUep' },
@@ -55,33 +56,37 @@ export default (store: Object): void => {
     ]),
     overlaysString: computed(
       () => store.map.overlays.map(o => o.value).join(),
-      { name: 'computed' },
+      { name: 'computed' }
     ),
     moveOverlay: action('moveOverlay', ({ oldIndex, newIndex }) =>
-      moveOverlay(store, oldIndex, newIndex),
+      moveOverlay(store, oldIndex, newIndex)
     ),
     activeOverlays: [],
     activeOverlaysSorted: computed(
       () =>
         sortBy(store.map.activeOverlays, activeOverlay =>
           store.map.overlays.findIndex(
-            overlay => overlay.value === activeOverlay,
-          ),
+            overlay => overlay.value === activeOverlay
+          )
         ),
-      { name: 'activeOverlaysSorted' },
+      { name: 'activeOverlaysSorted' }
     ),
     activeOverlaysSortedString: computed(
       () => store.map.activeOverlaysSorted.join(),
-      { name: 'activeOverlaysSortedString' },
+      { name: 'activeOverlaysSortedString' }
     ),
     addActiveOverlay: action('addActiveOverlay', layer =>
-      store.map.activeOverlays.push(layer),
+      store.map.activeOverlays.push(layer)
     ),
     removeActiveOverlay: action('removeActiveOverlay', layer => {
       store.map.activeOverlays = store.map.activeOverlays.filter(
-        o => o !== layer,
+        o => o !== layer
       )
     }),
+    detailplaene: null,
+    fetchDetailplaene: action('fetchDetailplaene', () =>
+      fetchDetailplaene(store)
+    ),
     apfloraLayers: observable([
       { label: 'Populationen', value: 'Pop' },
       { label: 'Teil-Populationen', value: 'Tpop' },
@@ -96,31 +101,31 @@ export default (store: Object): void => {
     ]),
     apfloraLayersString: computed(
       () => store.map.apfloraLayers.map(o => o.value).join(),
-      { name: 'apfloraLayersString' },
+      { name: 'apfloraLayersString' }
     ),
     moveApfloraLayer: action('moveApfloraLayer', ({ oldIndex, newIndex }) =>
-      moveApfloraLayer(store, oldIndex, newIndex),
+      moveApfloraLayer(store, oldIndex, newIndex)
     ),
     activeApfloraLayers: [],
     activeApfloraLayersSorted: computed(
       () =>
         sortBy(store.map.activeApfloraLayers, activeApfloraLayer =>
           store.map.apfloraLayers.findIndex(
-            apfloraLayer => apfloraLayer.value === activeApfloraLayer,
-          ),
+            apfloraLayer => apfloraLayer.value === activeApfloraLayer
+          )
         ),
-      { name: 'activeApfloraLayersSorted' },
+      { name: 'activeApfloraLayersSorted' }
     ),
     activeApfloraLayersSortedString: computed(
       () => store.map.activeApfloraLayersSorted.join(),
-      { name: 'activeApfloraLayersSortedString' },
+      { name: 'activeApfloraLayersSortedString' }
     ),
     addActiveApfloraLayer: action('addActiveApfloraLayer', layer =>
-      store.map.activeApfloraLayers.push(layer),
+      store.map.activeApfloraLayers.push(layer)
     ),
     removeActiveApfloraLayer: action('removeActiveApfloraLayer', layer => {
       store.map.activeApfloraLayers = store.map.activeApfloraLayers.filter(
-        o => o !== layer,
+        o => o !== layer
       )
     }),
     showMapLayer: action('showMapLayer', (layer, bool) => {
@@ -150,7 +155,7 @@ export default (store: Object): void => {
     }),
     toggleMapPopLabelContent: action(
       'toggleMapPopLabelContent',
-      layer => (store.map[layer].labelUsingNr = !store.map[layer].labelUsingNr),
+      layer => (store.map[layer].labelUsingNr = !store.map[layer].labelUsingNr)
     ),
     mapFilter: {
       filter: {
@@ -158,32 +163,32 @@ export default (store: Object): void => {
       },
       pop: computed(
         () => popIdsInsideFeatureCollection(store, store.map.pop.pops),
-        { name: 'mapFilterPop' },
+        { name: 'mapFilterPop' }
       ),
       tpop: computed(
         () => tpopIdsInsideFeatureCollection(store, store.map.tpop.tpops),
-        { name: 'mapFilterTpop' },
+        { name: 'mapFilterTpop' }
       ),
       beobNichtBeurteilt: computed(
         () =>
           beobNichtBeurteiltIdsInsideFeatureCollection(
             store,
-            store.map.beobNichtBeurteilt.beobs,
+            store.map.beobNichtBeurteilt.beobs
           ),
-        { name: 'mapFilterBeobNichtBeurteilt' },
+        { name: 'mapFilterBeobNichtBeurteilt' }
       ),
       beobNichtZuzuordnen: computed(
         () =>
           beobNichtZuzuordnenIdsInsideFeatureCollection(
             store,
-            store.map.beobNichtZuzuordnen.beobs,
+            store.map.beobNichtZuzuordnen.beobs
           ),
-        { name: 'mapFilterBeobNichtZuzuordnen' },
+        { name: 'mapFilterBeobNichtZuzuordnen' }
       ),
       tpopBeob: computed(
         () =>
           tpopBeobIdsInsideFeatureCollection(store, store.map.tpopBeob.beobs),
-        { name: 'mapFilterPTpopBeob' },
+        { name: 'mapFilterPTpopBeob' }
       ),
     },
     updateMapFilter: action('updateMapFilter', mapFilterItems => {
