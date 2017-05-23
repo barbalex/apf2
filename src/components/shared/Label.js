@@ -3,8 +3,6 @@ import React from 'react'
 import { observer } from 'mobx-react'
 import styled from 'styled-components'
 
-import { darkBlack } from 'material-ui/styles/colors'
-
 const StyledLabel = styled.div`
   margin-top: 10px;
   cursor: text;

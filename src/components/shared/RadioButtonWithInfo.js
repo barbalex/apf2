@@ -5,7 +5,6 @@ import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
-import { darkBlack } from 'material-ui/styles/colors'
 
 import InfoWithPopover from './InfoWithPopover'
 

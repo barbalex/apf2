@@ -6,7 +6,6 @@ import styled from 'styled-components'
 import withHandlers from 'recompose/withHandlers'
 import withState from 'recompose/withState'
 import compose from 'recompose/compose'
-import { darkBlack } from 'material-ui/styles/colors'
 
 const enhance = compose(
   withState('copied', 'updateCopied', false),

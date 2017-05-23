@@ -5,7 +5,6 @@ import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton'
 import withHandlers from 'recompose/withHandlers'
 import compose from 'recompose/compose'
 import styled from 'styled-components'
-import { darkBlack } from 'material-ui/styles/colors'
 
 const Container = styled.div`
   display: flex;
