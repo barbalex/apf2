@@ -9,7 +9,7 @@ const StyledLabel = styled.div`
   margin-top: 10px;
   cursor: text;
   font-size: 12px;
-  color: fade(${darkBlack}, 0.4);
+  color: rgba(0,0,0,0.5);
   pointer-events: none;
   user-select: none;
   padding-bottom: 8px;

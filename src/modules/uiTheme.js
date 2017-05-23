@@ -40,7 +40,7 @@ export default {
     alternateTextColor: orange50,
     canvasColor: orange50,
     borderColor: grey300,
-    disabledColor: fade(darkBlack, 0.4),
+    disabledColor: fade(darkBlack, 0.5),
     pickerHeaderColor: cyan500,
     clockCircleColor: fade(darkBlack, 0.07),
     shadowColor: fullBlack,

@@ -6,6 +6,7 @@ import styled from 'styled-components'
 import withHandlers from 'recompose/withHandlers'
 import withState from 'recompose/withState'
 import compose from 'recompose/compose'
+import { darkBlack } from 'material-ui/styles/colors'
 
 const enhance = compose(
   withState('copied', 'updateCopied', false),
@@ -50,7 +51,7 @@ const StringToCopy = ({
     margin-top: 10px;
     cursor: text;
     font-size: 12px;
-    color: rgba(255, 255, 255, 0.498039);
+    color: rgba(0,0,0,0.5);
     pointer-events: none;
     user-select: none;
     padding-bottom: 8px;

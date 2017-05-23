@@ -5,6 +5,7 @@ import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
+import { darkBlack } from 'material-ui/styles/colors'
 
 import InfoWithPopover from './InfoWithPopover'
 
@@ -22,7 +23,7 @@ const StyledLabel = styled.div`
   margin-top: 10px;
   cursor: text;
   font-size: 12px;
-  color: rgba(255, 255, 255, 0.498039);
+  color: rgba(0,0,0,0.5);
   pointer-events: none;
   user-select: none;
   padding-bottom: 8px;
