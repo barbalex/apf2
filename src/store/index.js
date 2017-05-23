@@ -111,7 +111,9 @@ function Store(): void {
     zielTypWerte: [],
   }
   this.ui = {}
-  this.app = {}
+  this.app = {
+    ktZh: null,
+  }
   this.user = {}
   this.map = {
     bounds: [],
