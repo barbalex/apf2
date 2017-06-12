@@ -97,15 +97,8 @@ class Tpopfeldkontr extends Component {
     changeWidth: () => {},
   }
 
-  componentWillMount() {
-    this.updateWidth()
-  }
-
-  updateWidth() {
-    console.log('updating width, this.container:', this.container)
+  updateWidth = () => {
     if (this.container && this.container.offsetWidth) {
-      console.log('updating width')
-      // $FlowIssue
       this.props.changeWidth(this.container.offsetWidth)
     }
   }
