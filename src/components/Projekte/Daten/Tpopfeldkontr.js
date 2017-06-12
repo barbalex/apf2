@@ -98,6 +98,7 @@ class Tpopfeldkontr extends Component {
   }
 
   updateWidth = () => {
+    console.log('updateWidth')
     if (this.container && this.container.offsetWidth) {
       this.props.changeWidth(this.container.offsetWidth)
     }
@@ -277,7 +278,7 @@ class Tpopfeldkontr extends Component {
             </Tab>
             <Tab label="Biotop" value="biotop">
               <TabChildDiv>
-                <FormContainer>
+                <FormContainer width={width}>
                   <TextField
                     tree={tree}
                     label="Fläche"
