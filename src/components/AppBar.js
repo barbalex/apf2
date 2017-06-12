@@ -21,7 +21,10 @@ const StyledAppBar = styled(AppBar)`
   }
 `
 const Button = styled(({ visible, ...rest }) => <FlatButton {...rest} />)`
-  color: ${props => (props.visible ? 'rgb(255, 255, 255) !important' : 'rgba(255, 255, 255, 0.298039) !important')};
+  color: ${props =>
+    props.visible
+      ? 'rgb(255, 255, 255) !important'
+      : 'rgba(255, 255, 255, 0.298039) !important'};
 `
 const TreeButton = styled(Button)`
   > div > span {
@@ -39,6 +42,9 @@ const MenuDiv = styled.div`
   > button {
     padding-top: 4px !important;
   }
+`
+const StyledMoreVertIcon = styled(MoreVertIcon)`
+  color: white !important;
 `
 const iconMenuAnchorOrigin = { horizontal: 'left', vertical: 'bottom' }
 const iconMenuTargetOrigin = { horizontal: 'left', vertical: 'top' }
@@ -82,7 +88,7 @@ const enhance = compose(
     onClickButtonKarte: props => () => props.onClickButton('karte'),
     onClickButtonExporte: props => () => props.onClickButton('exporte'),
   }),
-  observer,
+  observer
 )
 
 const MyAppBar = ({
@@ -153,7 +159,7 @@ const MyAppBar = ({
           <IconMenu
             iconButtonElement={
               <IconButton>
-                <MoreVertIcon />
+                <StyledMoreVertIcon />
               </IconButton>
             }
             anchorOrigin={iconMenuAnchorOrigin}
