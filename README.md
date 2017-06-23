@@ -74,7 +74,3 @@ Die wichtigsten sind:
 ## Gemeldete Fehler und Ideen:
 
 Siehe [hier](//github.com/barbalex/apf2/issues).
-
-## Was kann man mit apflora.ch machen?
-
-[Siehe in der Dokumentation](https://github.com/FNSKtZH/apflora#was-kann-man-mit-apfloradb-machen) der alten Version der Anwendung.
