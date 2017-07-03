@@ -6,7 +6,8 @@
 
 import React, { Component } from 'react'
 import { observer, inject } from 'mobx-react'
-import { AutoSizer, List } from 'react-virtualized'
+import AutoSizer from 'react-virtualized/dist/commonjs/AutoSizer'
+import List from 'react-virtualized/dist/commonjs/List'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
 import findIndex from 'lodash/findIndex'
@@ -22,7 +23,7 @@ const Container = styled.div`
     list-style: none;
     padding: 0 0 0 1.1em;
   }
-  /* need this because react-virtualized scrolls to far down, see
+  /* need this because react-virtualized scrolls too far down, see
    * https://github.com/bvaughn/react-virtualized/issues/543
    */
   .ReactVirtualized__Grid {
@@ -93,7 +94,7 @@ class Tree extends Component {
     }
   }
 
-  rowRenderer = ({ key, index, style }) => (
+  rowRenderer = ({ key, index, style }) =>
     <Row
       key={key}
       index={index}
@@ -101,33 +102,31 @@ class Tree extends Component {
       tree={this.props.tree}
       openNodes={this.props.tree.openNodes}
     />
-  )
 
-  noRowsRenderer = () => (
+  noRowsRenderer = () =>
     <Container>
       <LoadingDiv>
         {this.props.projektLoading ? 'lade Daten...' : 'keine Daten'}
       </LoadingDiv>
     </Container>
-  )
 
   render() {
     // eslint-disable-line class-methods-use-this
     const { nodes, activeNodeArray, lastClickedNode } = this.props
     let lastClickedNodeIndex = findIndex(nodes, node =>
-      isEqual(node.url, lastClickedNode),
+      isEqual(node.url, lastClickedNode)
     )
     // if no index found, use activeNodeArray
     if (lastClickedNodeIndex === -1) {
       lastClickedNodeIndex = findIndex(nodes, node =>
-        isEqual(node.url, activeNodeArray),
+        isEqual(node.url, activeNodeArray)
       )
     }
 
     return (
       <Container>
         <AutoSizer>
-          {({ height, width }) => (
+          {({ height, width }) =>
             <ListContainer
               height={height}
               rowCount={nodes.length}
@@ -142,8 +141,7 @@ class Tree extends Component {
                 // $FlowIssue
                 this.tree = c
               }}
-            />
-          )}
+            />}
         </AutoSizer>
       </Container>
     )
