@@ -1,5 +1,9 @@
 # Neues Frontend für apflora.ch
 
+## Was kann apflora.ch?
+
+Siehe [hier](https://github.com/barbalex/ae2/blob/master/readme.md)
+
 ## Ziele:
 
 - Architektur modernisieren:
