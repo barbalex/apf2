@@ -23,6 +23,7 @@ import DevTools from 'mobx-react-devtools'
 import styled from 'styled-components'
 
 import app from 'ampersand-app'
+import 'react-reflex/styles.css'
 
 // import components
 import store from './store'
@@ -31,8 +32,7 @@ import AppBar from './components/AppBar'
 import Projekte from './components/Projekte'
 import User from './components/User'
 import Errors from './components/Errors'
-import getActiveNodeArrayFromPathname
-  from './store/action/getActiveNodeArrayFromPathname'
+import getActiveNodeArrayFromPathname from './store/action/getActiveNodeArrayFromPathname'
 import getUrlQuery from './store/action/getUrlQuery'
 
 // service worker
@@ -111,5 +111,5 @@ ReactDOM.render(
       </AppContainer>
     </MuiThemeProvider>
   </Provider>,
-  document.getElementById('root'),
+  document.getElementById('root')
 )

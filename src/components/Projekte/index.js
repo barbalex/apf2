@@ -11,9 +11,11 @@ import Daten from './Daten'
 import Karte from './Karte'
 import Exporte from './Exporte'
 
-const Container = styled(({ loading, children, ...rest }) => (
-  <div {...rest}>{children}</div>
-))`
+const Container = styled(({ loading, children, ...rest }) =>
+  <div {...rest}>
+    {children}
+  </div>
+)`
   display: flex;
   flex-direction: column;
   height: calc(100% - 49.3px);
@@ -42,7 +44,7 @@ const myChildren = (store: Object) => {
     children.push(
       <ReflexElement key="tree">
         <TreeContainer tree={store.tree} />
-      </ReflexElement>,
+      </ReflexElement>
     )
     projekteTabs.splice(projekteTabs.indexOf('tree'), 1)
     if (projekteTabs.length > 0) {
@@ -51,7 +53,9 @@ const myChildren = (store: Object) => {
   }
   if (projekteTabs.includes('daten')) {
     children.push(
-      <ReflexElement key="daten"><Daten tree={store.tree} /></ReflexElement>,
+      <ReflexElement key="daten">
+        <Daten tree={store.tree} />
+      </ReflexElement>
     )
     projekteTabs.splice(projekteTabs.indexOf('daten'), 1)
     if (projekteTabs.length > 0) {
@@ -59,7 +63,11 @@ const myChildren = (store: Object) => {
     }
   }
   if (projekteTabs.includes('exporte')) {
-    children.push(<ReflexElement key="exporte"><Exporte /></ReflexElement>)
+    children.push(
+      <ReflexElement key="exporte">
+        <Exporte />
+      </ReflexElement>
+    )
     projekteTabs.splice(projekteTabs.indexOf('exporte'), 1)
     if (projekteTabs.length > 0) {
       children.push(<ReflexSplitter key="exporteSplitter" />)
@@ -69,7 +77,7 @@ const myChildren = (store: Object) => {
     children.push(
       <ReflexElement key="tree2">
         <TreeContainer tree={store.tree2} />
-      </ReflexElement>,
+      </ReflexElement>
     )
     projekteTabs.splice(projekteTabs.indexOf('tree2'), 1)
     if (projekteTabs.length > 0) {
@@ -78,7 +86,9 @@ const myChildren = (store: Object) => {
   }
   if (projekteTabs.includes('daten2')) {
     children.push(
-      <ReflexElement key="daten2"><Daten tree={store.tree2} /></ReflexElement>,
+      <ReflexElement key="daten2">
+        <Daten tree={store.tree2} />
+      </ReflexElement>
     )
     projekteTabs.splice(projekteTabs.indexOf('daten2'), 1)
     if (projekteTabs.length > 0) {
@@ -134,7 +144,7 @@ const myChildren = (store: Object) => {
             }
           />
         </KarteContainer>
-      </ReflexElement>,
+      </ReflexElement>
     )
   }
   return children
