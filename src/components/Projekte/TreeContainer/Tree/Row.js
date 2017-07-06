@@ -11,12 +11,8 @@ import isNodeInActiveNodePath from '../../../../modules/isNodeInActiveNodePath'
 import isNodeOpen from '../../../../modules/isNodeOpen'
 
 const singleRowHeight = 23
-const StyledNode = styled(
-  ({ level, nodeIsInActiveNodePath, children, ...rest }) => (
-    <div {...rest}>{children}</div>
-  ),
-)`
-  padding-left: ${props => `${Number(props.level) * 17 - 10}px`};
+const StyledNode = styled.div`
+  padding-left: ${props => `${Number(props['data-level']) * 17 - 10}px`};
   height: ${singleRowHeight}px;
   max-height: ${singleRowHeight}px;
   box-sizing: border-box;
@@ -25,45 +21,48 @@ const StyledNode = styled(
   flex-direction: row;
   white-space: nowrap;
   user-select: none;
-  color: ${props => (props.nodeIsInActiveNodePath ? '#D84315' : 'inherit')};
+  color: ${props =>
+    props['data-nodeIsInActiveNodePath'] ? '#D84315' : 'inherit'};
 `
-const SymbolIcon = styled(
-  ({ nodeIsInActiveNodePath, node, children, ...rest }) => (
-    <FontIcon {...rest}>{children}</FontIcon>
-  ),
-)`
-  margin-top: ${({ nodeIsInActiveNodePath, node }) => (nodeIsInActiveNodePath ? '-5px !important' : '-2px !important')};
-  padding-left: ${({ nodeIsInActiveNodePath }) => (nodeIsInActiveNodePath ? '2px' : '2px')};
-  font-size: ${({ nodeIsInActiveNodePath }) => (nodeIsInActiveNodePath ? '26px !important' : '22px !important')};
-  font-weight: ${({ nodeIsInActiveNodePath }) => (nodeIsInActiveNodePath ? '900 !important' : 'inherit')};
-  color: ${({ nodeIsInActiveNodePath }) => (nodeIsInActiveNodePath ? '#D84315 !important' : 'inherit')};
+const SymbolIcon = styled(FontIcon)`
+  margin-top: ${props =>
+    props['data-nodeIsInActiveNodePath']
+      ? '-5px !important'
+      : '-2px !important'};
+  padding-left: ${props =>
+    props['data-nodeIsInActiveNodePath'] ? '2px' : '2px'};
+  font-size: ${props =>
+    props['data-nodeIsInActiveNodePath']
+      ? '26px !important'
+      : '22px !important'};
+  font-weight: ${props =>
+    props['data-nodeIsInActiveNodePath'] ? '900 !important' : 'inherit'};
+  color: ${props =>
+    props['data-nodeIsInActiveNodePath'] ? '#D84315 !important' : 'inherit'};
   width: 26px;
   cursor: pointer;
   &:hover {
     color: #F57C00 !important;
   }
 `
-const SymbolSpan = styled(({ nodeIsInActiveNodePath, children, ...rest }) => (
-  <span {...rest}>{children}</span>
-))`
+const SymbolSpan = styled.span`
   padding-right: 8px !important;
-  padding-left: ${props => (props.nodeIsInActiveNodePath ? '7px' : '9px')};
-  font-weight: ${props => (props.nodeIsInActiveNodePath ? '900 !important' : 'inherit')};
+  padding-left: ${props =>
+    props['data-nodeIsInActiveNodePath'] ? '7px' : '9px'};
+  font-weight: ${props =>
+    props['data-nodeIsInActiveNodePath'] ? '900 !important' : 'inherit'};
   margin-top: -9px !important;
   font-size: 28px !important;
   width: 26px;
 `
-const TextSpan = styled(
-  ({ nodeIsInActiveNodePath, node, children, ...rest }) => (
-    <span {...rest}>{children}</span>
-  ),
-)`
+const TextSpan = styled.span`
   margin-left: 0;
   font-size: 16px !important;
-  font-weight: ${props => (props.nodeIsInActiveNodePath ? '900 !important' : 'inherit')};
+  font-weight: ${props =>
+    props['data-nodeIsInActiveNodePath'] ? '900 !important' : 'inherit'};
   cursor: pointer;
   &:hover {
-    color: #F57C00;
+    color: #f57c00;
   }
 `
 const StyledMapIcon = styled(FontIcon)`
@@ -182,7 +181,7 @@ const Row = ({
   const myProps = { key: index }
   const nodeIsInActiveNodePath = isNodeInActiveNodePath(
     node,
-    toJS(tree.activeNodeArray),
+    toJS(tree.activeNodeArray)
   )
   // build symbols
   let useSymbolIcon = true
@@ -221,8 +220,8 @@ const Row = ({
         key={`${node.menuType}${node.id}`}
       >
         <StyledNode
-          level={level}
-          nodeIsInActiveNodePath={nodeIsInActiveNodePath}
+          data-level={level}
+          data-nodeIsInActiveNodePath={nodeIsInActiveNodePath}
           data-id={node.id}
           data-parentId={node.parentId}
           data-url={dataUrl}
@@ -232,8 +231,7 @@ const Row = ({
         >
           {useSymbolIcon &&
             <SymbolIcon
-              nodeIsInActiveNodePath={nodeIsInActiveNodePath}
-              node={node}
+              data-nodeIsInActiveNodePath={nodeIsInActiveNodePath}
               id="symbol"
               className="material-icons"
               onClick={onClickNodeSymbol}
@@ -241,7 +239,7 @@ const Row = ({
               {symbolIcon}
             </SymbolIcon>}
           {useSymbolSpan &&
-            <SymbolSpan nodeIsInActiveNodePath={nodeIsInActiveNodePath}>
+            <SymbolSpan data-nodeIsInActiveNodePath={nodeIsInActiveNodePath}>
               {'-'}
             </SymbolSpan>}
           {showPopMapIcon(store, tree, node) &&
@@ -325,7 +323,7 @@ const Row = ({
               local_florist
             </TpopBeobFilteredMapIcon>}
           <TextSpan
-            nodeIsInActiveNodePath={nodeIsInActiveNodePath}
+            data-nodeIsInActiveNodePath={nodeIsInActiveNodePath}
             node={node}
             onClick={onClickNode}
           >

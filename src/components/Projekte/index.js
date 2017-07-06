@@ -11,15 +11,11 @@ import Daten from './Daten'
 import Karte from './Karte'
 import Exporte from './Exporte'
 
-const Container = styled(({ loading, children, ...rest }) =>
-  <div {...rest}>
-    {children}
-  </div>
-)`
+const Container = styled.div`
   display: flex;
   flex-direction: column;
   height: calc(100% - 49.3px);
-  cursor: ${props => (props.loading ? 'wait' : 'inherit')}
+  cursor: ${props => (props['data-loading'] ? 'wait' : 'inherit')};
 `
 const KarteContainer = styled.div`
   border-color: #424242;
@@ -152,7 +148,7 @@ const myChildren = (store: Object) => {
 
 const Projekte = ({ store }: { store: Object }) => {
   return (
-    <Container loading={store.loading.length > 0}>
+    <Container data-loading={store.loading.length > 0}>
       <ReflexContainer orientation="vertical">
         {myChildren(store)}
       </ReflexContainer>

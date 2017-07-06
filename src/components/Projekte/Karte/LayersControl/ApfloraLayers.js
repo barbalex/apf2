@@ -55,40 +55,26 @@ const LayerDiv = styled.div`
    */
   font-size: 12px;
 `
-const IconsDiv = styled.div`
-  display: flex;
-`
+const IconsDiv = styled.div`display: flex;`
 const ZuordnenDiv = styled.div``
 const ZoomToDiv = styled.div`
   padding-left: 3px;
   min-width: 18px;
 `
-const FilterDiv = styled.div`
-  padding-left: 3px;
-`
+const FilterDiv = styled.div`padding-left: 3px;`
 const MapIcon = styled(FontIcon)`
   margin-right: -0.1em;
   font-size: 20px !important;
   -webkit-text-stroke: 1px black;
   -moz-text-stroke: 1px black;
 `
-const PopMapIcon = styled(MapIcon)`
-  color: #947500 !important;
-`
-const TpopMapIcon = styled(MapIcon)`
-  color: #016f19 !important;
-`
-const BeobNichtBeurteiltMapIcon = styled(MapIcon)`
-  color: #9a009a !important;
-`
-const BeobNichtZuzuordnenMapIcon = styled(MapIcon)`
-  color: #ffe4ff !important;
-`
-const TpopBeobMapIcon = styled(MapIcon)`
-  color: #FF00FF !important;
-`
-const TpopBeobAssignPolylinesIcon = styled(MapIcon)`
-  color: #FF00FF !important;
+const PopMapIcon = MapIcon.extend`color: #947500 !important;`
+const TpopMapIcon = MapIcon.extend`color: #016f19 !important;`
+const BeobNichtBeurteiltMapIcon = MapIcon.extend`color: #9a009a !important;`
+const BeobNichtZuzuordnenMapIcon = MapIcon.extend`color: #ffe4ff !important;`
+const TpopBeobMapIcon = MapIcon.extend`color: #ff00ff !important;`
+const TpopBeobAssignPolylinesIcon = MapIcon.extend`
+  color: #ff00ff !important;
   -webkit-text-stroke: 0 black;
   -moz-text-stroke: 0 black;
 `
@@ -99,14 +85,14 @@ const MapIconDiv = styled.div``
  * so passed in from parent
  */
 
-const DragHandle = SortableHandle(() => (
+const DragHandle = SortableHandle(() =>
   <DragHandleIcon
     className="material-icons"
     title="ziehen, um Layer höher/tiefer zu stapeln"
   >
     drag_handle
   </DragHandleIcon>
-))
+)
 const SortableItem = SortableElement(
   ({ apfloraLayer, store, activeApfloraLayers }) => {
     const assigningIsPossible =
@@ -229,12 +215,12 @@ const SortableItem = SortableElement(
                   title="mit Umriss(en) filtern"
                   style={{
                     color: store.map.activeApfloraLayers.includes(
-                      apfloraLayer.value,
+                      apfloraLayer.value
                     )
                       ? 'black'
                       : '#e2e2e2',
                     cursor: store.map.activeApfloraLayers.includes(
-                      apfloraLayer.value,
+                      apfloraLayer.value
                     )
                       ? 'pointer'
                       : 'inherit',
@@ -270,7 +256,7 @@ const SortableItem = SortableElement(
                   if (activeApfloraLayers.includes(apfloraLayer.value)) {
                     store.map.changeBounds(
                       store.map[mapNameToStoreNameObject[apfloraLayer.value]]
-                        .bounds,
+                        .bounds
                     )
                   }
                 }}
@@ -284,29 +270,30 @@ const SortableItem = SortableElement(
                 className="material-icons"
                 title={`auf aktive '${apfloraLayer.label}' zoomen`}
                 style={{
-                  color: activeApfloraLayers.includes(apfloraLayer.value) &&
+                  color:
+                    activeApfloraLayers.includes(apfloraLayer.value) &&
                     store.map[mapNameToStoreNameObject[apfloraLayer.value]]
                       .highlightedIds.length > 0
-                    ? '#fbec04'
-                    : '#e2e2e2',
-                  fontWeight: activeApfloraLayers.includes(
-                    apfloraLayer.value,
-                  ) &&
+                      ? '#fbec04'
+                      : '#e2e2e2',
+                  fontWeight:
+                    activeApfloraLayers.includes(apfloraLayer.value) &&
                     store.map[mapNameToStoreNameObject[apfloraLayer.value]]
                       .highlightedIds.length > 0
-                    ? 'bold'
-                    : 'normal',
-                  cursor: activeApfloraLayers.includes(apfloraLayer.value) &&
+                      ? 'bold'
+                      : 'normal',
+                  cursor:
+                    activeApfloraLayers.includes(apfloraLayer.value) &&
                     store.map[mapNameToStoreNameObject[apfloraLayer.value]]
                       .highlightedIds.length > 0
-                    ? 'pointer'
-                    : 'inherit',
+                      ? 'pointer'
+                      : 'inherit',
                 }}
                 onClick={() => {
                   if (activeApfloraLayers.includes(apfloraLayer.value)) {
                     store.map.changeBounds(
                       store.map[mapNameToStoreNameObject[apfloraLayer.value]]
-                        .boundsOfHighlightedIds,
+                        .boundsOfHighlightedIds
                     )
                   }
                 }}
@@ -316,18 +303,18 @@ const SortableItem = SortableElement(
           </ZoomToDiv>
           <DragHandleDiv>
             {!['TpopBeobAssignPolylines', 'MapFilter'].includes(
-              apfloraLayer.value,
+              apfloraLayer.value
             ) && <DragHandle />}
           </DragHandleDiv>
         </IconsDiv>
       </LayerDiv>
     )
-  },
+  }
 )
 const SortableList = SortableContainer(
-  ({ items, store, activeApfloraLayers }) => (
+  ({ items, store, activeApfloraLayers }) =>
     <div>
-      {items.map((apfloraLayer, index) => (
+      {items.map((apfloraLayer, index) =>
         <SortableItem
           key={index}
           index={index}
@@ -335,12 +322,11 @@ const SortableList = SortableContainer(
           store={store}
           activeApfloraLayers={activeApfloraLayers}
         />
-      ))}
+      )}
     </div>
-  ),
 )
 
-const ApfloraLayers = ({ store }: { store: Object }) => (
+const ApfloraLayers = ({ store }: { store: Object }) =>
   <CardContent>
     <SortableList
       items={store.map.apfloraLayers}
@@ -352,6 +338,5 @@ const ApfloraLayers = ({ store }: { store: Object }) => (
       activeApfloraLayers={toJS(store.map.activeApfloraLayers)}
     />
   </CardContent>
-)
 
 export default observer(ApfloraLayers)

@@ -41,7 +41,6 @@ class Apber extends Component {
   }
 
   updateWidth = () => {
-    console.log('updateWidth')
     if (this.container && this.container.offsetWidth) {
       this.props.changeWidth(this.container.offsetWidth)
     }
