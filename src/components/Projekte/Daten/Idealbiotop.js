@@ -15,11 +15,11 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
 `
-const FieldsContainer = styled(({ width, ...rest }) => <div {...rest} />)`
+const FieldsContainer = styled.div`
   padding: 10px;
   overflow: auto !important;
   column-width: ${props =>
-    props.width > 2 * constants.columnWidth
+    props['data-width'] > 2 * constants.columnWidth
       ? `${constants.columnWidth}px`
       : 'auto'};
 `
@@ -75,7 +75,7 @@ class Idealbiotop extends Component {
         }}
       >
         <FormTitle tree={tree} title="Idealbiotop" />
-        <FieldsContainer width={width}>
+        <FieldsContainer data-width={width}>
           <DateFieldWithPicker
             tree={tree}
             label="Erstelldatum"

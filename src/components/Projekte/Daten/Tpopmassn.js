@@ -21,11 +21,11 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
 `
-const FieldsContainer = styled(({ width, ...rest }) => <div {...rest} />)`
+const FieldsContainer = styled.div`
   padding: 10px;
   overflow: auto !important;
   column-width: ${props =>
-    props.width > 2 * constants.columnWidth
+    props['data-width'] > 2 * constants.columnWidth
       ? `${constants.columnWidth}px`
       : 'auto'};
 `
@@ -94,7 +94,7 @@ class Tpopmassn extends Component {
         }}
       >
         <FormTitle tree={tree} title="Massnahme" />
-        <FieldsContainer width={width}>
+        <FieldsContainer data-width={width}>
           <YearDatePair
             tree={tree}
             yearLabel="Jahr"

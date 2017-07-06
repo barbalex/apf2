@@ -8,10 +8,10 @@ import withState from 'recompose/withState'
 import TextFieldNonUpdatable from '../../shared/TextFieldNonUpdatable'
 import constants from '../../../modules/constants'
 
-const Container = styled(({ width, ...rest }) => <div {...rest} />)`
+const Container = styled.div`
   padding: 0 10px 0 10px;
   column-width: ${props =>
-    props.width > 2 * constants.columnWidth
+    props['data-width'] > 2 * constants.columnWidth
       ? `${constants.columnWidth}px`
       : 'auto'};
 `
@@ -62,7 +62,7 @@ class Beob extends Component {
           this.container = c
         }}
       >
-        <Container width={width}>
+        <Container data-width={width}>
           {beobFields.map(([key, value]) =>
             <div key={key}>
               <TextFieldNonUpdatable label={key} value={value} />

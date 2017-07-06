@@ -20,11 +20,11 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
 `
-const FieldsContainer = styled(({ width, ...rest }) => <div {...rest} />)`
+const FieldsContainer = styled.div`
   padding: 10px;
   overflow: auto !important;
   column-width: ${props =>
-    props.width > 2 * constants.columnWidth
+    props['data-width'] > 2 * constants.columnWidth
       ? `${constants.columnWidth}px`
       : 'auto'};
 `
@@ -72,7 +72,7 @@ class Tpop extends Component {
         }}
       >
         <FormTitle tree={tree} title="Teil-Population" />
-        <FieldsContainer width={width}>
+        <FieldsContainer data-width={width}>
           <TextField
             tree={tree}
             label="Nr."

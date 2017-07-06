@@ -39,10 +39,6 @@ const Container = styled.div`
   border-color: #424242;
   border-width: 1px;
   border-style: solid;
-  /*
-  flex-basis: 600px;
-  flex-grow: 4;
-  flex-shrink: 1;*/
   height: 100%;
   @media print {
     display: none !important;

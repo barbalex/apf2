@@ -43,18 +43,16 @@ const Section = styled.div`
     content: ":";
   }
 `
-const FormContainer = styled(({ width, ...rest }) => <div {...rest} />)`
+const FormContainer = styled.div`
   padding: 10px;
   overflow: auto !important;
   height: 100%;
   column-width: ${props =>
-    props.width > 2 * constants.columnWidth
+    props['data-width'] > 2 * constants.columnWidth
       ? `${constants.columnWidth}px`
       : 'auto'};
 `
-const TabChildDiv = styled.div`
-  height: 100%;
-`
+const TabChildDiv = styled.div`height: 100%;`
 const tpopkontrTypWerte = [
   {
     value: 'Ausgangszustand',
@@ -135,7 +133,7 @@ class Tpopfeldkontr extends Component {
           >
             <Tab label="Entwicklung" value="entwicklung">
               <TabChildDiv>
-                <FormContainer width={width}>
+                <FormContainer data-width={width}>
                   <YearDatePair
                     tree={tree}
                     yearLabel="Jahr"
@@ -278,7 +276,7 @@ class Tpopfeldkontr extends Component {
             </Tab>
             <Tab label="Biotop" value="biotop">
               <TabChildDiv>
-                <FormContainer width={width}>
+                <FormContainer data-width={width}>
                   <TextField
                     tree={tree}
                     label="Fläche"

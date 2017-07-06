@@ -20,18 +20,18 @@ const StyledAppBar = styled(AppBar)`
     display: none !important;
   }
 `
-const Button = styled(({ visible, ...rest }) => <FlatButton {...rest} />)`
+const Button = styled(FlatButton)`
   color: ${props =>
-    props.visible
+    props['data-visible']
       ? 'rgb(255, 255, 255) !important'
       : 'rgba(255, 255, 255, 0.298039) !important'};
 `
-const TreeButton = styled(Button)`
+const TreeButton = Button.extend`
   > div > span {
     padding-right: 6px !important;
   }
 `
-const DatenButton = styled(Button)`
+const DatenButton = Button.extend`
   > div > span {
     padding-left: 6px !important;
   }
@@ -128,32 +128,32 @@ const MyAppBar = ({
         <MenuDiv>
           <TreeButton
             label="Strukturbaum"
-            visible={treeIsVisible}
+            data-visible={treeIsVisible}
             onClick={onClickButtonStrukturbaum}
           />
           <DatenButton
             label="Daten"
-            visible={datenIsVisible}
+            data-visible={datenIsVisible}
             onClick={onClickButtonDaten}
           />
           <TreeButton
             label="Strukturbaum 2"
-            visible={tree2IsVisible}
+            data-visible={tree2IsVisible}
             onClick={onClickButtonStrukturbaum2}
           />
           <DatenButton
             label="Daten 2"
-            visible={daten2IsVisible}
+            data-visible={daten2IsVisible}
             onClick={onClickButtonDaten2}
           />
           <Button
             label="Karte"
-            visible={karteIsVisible}
+            data-visible={karteIsVisible}
             onClick={onClickButtonKarte}
           />
           <Button
             label="Exporte"
-            visible={exporteIsVisible}
+            data-visible={exporteIsVisible}
             onClick={onClickButtonExporte}
           />
           <IconMenu

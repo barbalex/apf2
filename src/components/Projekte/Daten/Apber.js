@@ -17,7 +17,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
 `
-const FieldsContainer = styled(({ width, ...rest }) => <div {...rest} />)`
+const FieldsContainer = styled.div`
   overflow: auto !important;
   padding: 10px;
   column-width: ${props =>
