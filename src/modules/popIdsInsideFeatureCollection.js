@@ -1,5 +1,6 @@
 // @flow
 import within from '@turf/within'
+import { toJS } from 'mobx'
 
 import epsg21781to4326 from './epsg21781to4326notReverse'
 
@@ -37,8 +38,24 @@ export default (store: Object, pops: Array<Object>): Array<number> => {
       },
     })),
   }
+  /**
+   * within creates error
+   * Uncaught Error: coordinates must only contain numbers
+   * checked everything and it all seems correct :-(
+   */
+  const checkCoordinates = points.features.map(x => x.geometry.coordinates)
+  console.log('coordinates:', checkCoordinates)
+  const isNumberCoordinates = checkCoordinates.map(x => [
+    x.length > 1,
+    typeof x[0] === 'number',
+    typeof x[1] === 'number',
+  ])
+  console.log('isNumberCoordinates:', isNumberCoordinates)
+  const filter = toJS(store.map.mapFilter.filter)
+  console.log('filter:', filter)
 
   // let turf check what points are within filter
-  const result = within(points, store.map.mapFilter.filter)
+  const result = within(points, filter)
+
   return result.features.map(r => r.properties.PopId)
 }
