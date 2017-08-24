@@ -43,7 +43,7 @@
     "proj4": "2.4.4",
     "proj4leaflet": "1.0.2",
     "prop-types": "15.5.10",
-    "query-string": "4.3.4",
+    "query-string": "5.0.0",
     "react": "15.6.1",
     "react-contextmenu": "2.6.5",
     "react-copy-to-clipboard": "5.0.0",
