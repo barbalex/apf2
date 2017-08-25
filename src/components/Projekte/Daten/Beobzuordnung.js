@@ -25,9 +25,7 @@ const DataContainer = styled.div`
   height: 100%;
   overflow: auto !important;
 `
-const FieldsContainer = styled.div`
-  padding: 10px;
-`
+const FieldsContainer = styled.div`padding: 10px;`
 const Title = styled.div`
   padding: 10px 10px 0 10px;
   color: #b3b3b3;
@@ -36,12 +34,8 @@ const Title = styled.div`
   margin-top: 10px;
   padding-bottom: 10px;
 `
-const ZuordnenDiv = styled.div`
-  margin-bottom: -10px;
-`
-const LabelPopoverRow = styled.div`
-  padding: 2px 5px 2px 5px;
-`
+const ZuordnenDiv = styled.div`margin-bottom: -10px;`
+const LabelPopoverRow = styled.div`padding: 2px 5px 2px 5px;`
 const LabelPopoverTitleRow = styled(LabelPopoverRow)`
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
@@ -64,12 +58,12 @@ const MaxHeightDiv = styled.div`
 `
 const nichtZuordnenPopover = (
   <Container>
-    <LabelPopoverTitleRow>
-      Legende
-    </LabelPopoverTitleRow>
+    <LabelPopoverTitleRow>Legende</LabelPopoverTitleRow>
     <LabelPopoverContentRow>
-      {'Will heissen: Die Beobachtung kann nicht zugeordnet werden.'}<br />
-      {'Mögliche Gründe: Unsichere Bestimmung, nicht lokalisierbar.'}<br />
+      {'Will heissen: Die Beobachtung kann nicht zugeordnet werden.'}
+      <br />
+      {'Mögliche Gründe: Unsichere Bestimmung, nicht lokalisierbar.'}
+      <br />
       {'Bitte im Bemerkungsfeld begründen.'}
     </LabelPopoverContentRow>
   </Container>
@@ -79,7 +73,7 @@ const getTpopZuordnenSource = (store: Object, tree: Object): Array<Object> => {
   const { activeDataset, activeNodes } = tree
   // get all popIds of active ap
   const popList = Array.from(store.table.pop.values()).filter(
-    p => p.ApArtId === activeNodes.ap,
+    p => p.ApArtId === activeNodes.ap
   )
   const popIdList = popList.map(p => p.PopId)
   // get all tpop
@@ -89,9 +83,10 @@ const getTpopZuordnenSource = (store: Object, tree: Object): Array<Object> => {
     // with coordinates
     .filter(t => t.TPopXKoord && t.TPopYKoord)
   // calculate their distance to this beobzuordnung
-  const id = activeDataset.table === 'beobzuordnung'
-    ? activeDataset.row.BeobId
-    : activeDataset.row.id
+  const id =
+    activeDataset.table === 'beobzuordnung'
+      ? activeDataset.row.BeobId
+      : activeDataset.row.id
   const beob = store.table.beob.get(id)
   // beob loads later
   // prevent an error occuring if it does not yet exist
@@ -108,12 +103,14 @@ const getTpopZuordnenSource = (store: Object, tree: Object): Array<Object> => {
     t.herkunft = t.TPopHerkunft
       ? // $FlowIssue
         Array.from(store.table.pop_status_werte.values()).find(
-          x => x.HerkunftId === t.TPopHerkunft,
+          x => x.HerkunftId === t.TPopHerkunft
         ).HerkunftTxt
       : 'ohne Status'
     const popNr = t.popNr || t.popNr === 0 ? t.popNr : '(keine Nr)'
     const tpopNr = t.TPopNr || t.TPopNr === 0 ? t.TPopNr : '(keine Nr)'
-    t.label = `${t.distance.toLocaleString('de-ch')}m: ${popNr}/${tpopNr} (${t.herkunft})`
+    t.label = `${t.distance.toLocaleString(
+      'de-ch'
+    )}m: ${popNr}/${tpopNr} (${t.herkunft})`
   })
   // order them by distance
   tpopList = sortBy(tpopList, 'distance')
@@ -130,7 +127,7 @@ const enhance = compose(
     updatePropertyInDb: props => (
       treePassedByUpdatePropertyInDb,
       fieldname,
-      val,
+      val
     ) => {
       const { store, tree } = props
       const {
@@ -151,7 +148,7 @@ const enhance = compose(
       }
     },
   }),
-  observer,
+  observer
 )
 
 const Beobzuordnung = ({
@@ -163,11 +160,12 @@ const Beobzuordnung = ({
   tree: Object,
   updatePropertyInDb: () => void,
 }) => {
+  const { table } = store
   const { activeDataset } = tree
   const beobzuordnung = activeDataset.row
-  const beobTitle = beobzuordnung.QuelleId === 1
-    ? 'Informationen aus EvAB (nicht veränderbar)'
-    : 'Informationen aus Infospezies (nicht veränderbar)'
+  const quelle = table.beob_quelle.get(beobzuordnung.QuelleId)
+  const quelleName = quelle && quelle.name ? quelle.name : '?'
+  const beobTitle = `Informationen aus ${quelleName} (nicht veränderbar)`
   const showTPopId = activeDataset.row.BeobNichtZuordnen !== 1
 
   return (
@@ -209,7 +207,9 @@ const Beobzuordnung = ({
             updatePropertyInDb={store.updatePropertyInDb}
           />
         </FieldsContainer>
-        <Title>{beobTitle}</Title>
+        <Title>
+          {beobTitle}
+        </Title>
         <Beob tree={tree} />
       </DataContainer>
     </FormContainer>
