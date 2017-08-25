@@ -167,7 +167,7 @@ const MyAppBar = ({
             style={iconMenuStyle}
           >
             <MenuItem
-              primaryText="Stammdaten aktualisieren (Arteigenschaften, Adressen, Auswahllisten)"
+              primaryText="Stammdaten aktualisieren (Arteigenschaften, Adressen, Auswahllisten etc.)"
               onTouchTap={store.fetchStammdaten}
             />
             <MenuItem
