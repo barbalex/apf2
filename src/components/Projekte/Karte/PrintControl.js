@@ -13,8 +13,9 @@ class PrintControl extends Component {
     const options = {
       title: 'drucken',
       position: 'topright',
-      exportOnly: true,
       filename: 'apfloraKarte',
+      sizeModes: ['Current', 'A4Portrait', 'A4Landscape'],
+      tileWait: 2000,
     }
     window.L.easyPrint(options).addTo(map)
   }

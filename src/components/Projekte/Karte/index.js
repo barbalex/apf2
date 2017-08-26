@@ -248,7 +248,10 @@ const Karte = ({ store }: { store: Object }) => {
       <MeasureControl />
       <FullScreenControl />
       {store.map.activeApfloraLayers.includes('MapFilter') && <DrawControl />}
-      <PrintControl />
+      {/*
+        need to get background maps to show when printing A4
+        <PrintControl />
+        */}
       <PngControl />
       <CoordinatesControl />
     </MapElement>
