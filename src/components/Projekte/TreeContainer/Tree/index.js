@@ -137,10 +137,8 @@ class Tree extends Component {
               width={width}
               // need to use innerRef
               // because ListContainer is a styled component
-              innerRef={c => {
-                // $FlowIssue
-                this.tree = c
-              }}
+              // $FlowIssue
+              innerRef={c => (this.tree = c)}
             />}
         </AutoSizer>
       </Container>

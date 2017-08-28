@@ -65,10 +65,8 @@ class Apber extends Component {
 
     return (
       <Container
-        innerRef={c => {
-          // $FlowIssue
-          this.container = c
-        }}
+        // $FlowIssue
+        innerRef={c => (this.container = c)}
       >
         <FormTitle tree={tree} title="AP-Bericht" />
         <FieldsContainer width={width}>

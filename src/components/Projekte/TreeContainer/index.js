@@ -46,8 +46,7 @@ import CmBeobnichtbeurteilt from './contextmenu/Beobnichtbeurteilt'
 import CmBeobNichtZuzuordnen from './contextmenu/BeobNichtZuzuordnen'
 import CmTpopfreiwkontrFolder from './contextmenu/TpopfreiwkontrFolder'
 import CmTpopfreiwkontr from './contextmenu/Tpopfreiwkontr'
-import CmTpopfreiwkontrzaehlFolder
-  from './contextmenu/TpopfreiwkontrzaehlFolder'
+import CmTpopfreiwkontrzaehlFolder from './contextmenu/TpopfreiwkontrzaehlFolder'
 import CmTpopfreiwkontrzaehl from './contextmenu/Tpopfreiwkontrzaehl'
 import CmTpopfeldkontrFolder from './contextmenu/TpopfeldkontrFolder'
 import CmTpopfeldkontr from './contextmenu/Tpopfeldkontr'
@@ -92,7 +91,7 @@ const getAndValidateCoordinatesOfTpop = (store, id) => {
   const tpop = store.table.tpop.get(myId)
   if (!tpop) {
     store.listError(
-      new Error(`Die Teilpopulation mit der ID ${myId} wurde nicht gefunden`),
+      new Error(`Die Teilpopulation mit der ID ${myId} wurde nicht gefunden`)
     )
     return { x: null, y: null }
   }
@@ -101,8 +100,8 @@ const getAndValidateCoordinatesOfTpop = (store, id) => {
   if (!x || !y) {
     store.listError(
       new Error(
-        `Die Teilpopulation mit der ID ${myId} kat keine (vollständigen) Koordinaten`,
-      ),
+        `Die Teilpopulation mit der ID ${myId} kat keine (vollständigen) Koordinaten`
+      )
     )
     return { x: null, y: null }
   }
@@ -114,8 +113,8 @@ const getAndValidateCoordinatesOfBeob = (store, beobId) => {
   if (!beob) {
     store.listError(
       new Error(
-        `Die bereitgestellte Beobachtung mit der ID ${beobId} wurde nicht gefunden`,
-      ),
+        `Die bereitgestellte Beobachtung mit der ID ${beobId} wurde nicht gefunden`
+      )
     )
     return { X: null, Y: null }
   }
@@ -123,8 +122,8 @@ const getAndValidateCoordinatesOfBeob = (store, beobId) => {
   if (!X || !Y) {
     store.listError(
       new Error(
-        `Die Teilpopulation mit der ID ${beobId} kat keine (vollständigen) Koordinaten`,
-      ),
+        `Die Teilpopulation mit der ID ${beobId} kat keine (vollständigen) Koordinaten`
+      )
     )
     return { X: null, Y: null }
   }
@@ -158,7 +157,7 @@ class TreeContainer extends Component {
     const { firstElementChild } = element
     if (!firstElementChild)
       return store.listError(
-        new Error('no firstElementChild passed with click'),
+        new Error('no firstElementChild passed with click')
       )
     const id = firstElementChild.getAttribute('data-id')
     const parentId = firstElementChild.getAttribute('data-parentId')
@@ -189,7 +188,7 @@ class TreeContainer extends Component {
         // 2 add layer for actionTable
         store.map.showMapLayer(
           actionTable,
-          !store.map.activeOverlays.includes(actionTable),
+          !store.map.activeOverlays.includes(actionTable)
         )
       },
       showOnMap() {
@@ -209,7 +208,7 @@ class TreeContainer extends Component {
         // 3 add layer for actionTable
         store.map.showMapLayer(
           actionTable,
-          !store.map.activeOverlays.includes(actionTable),
+          !store.map.activeOverlays.includes(actionTable)
         )
       },
       toggleTooltip() {
@@ -256,7 +255,7 @@ class TreeContainer extends Component {
       showCoordOfTpopOnMapsZhCh() {
         const { x, y } = getAndValidateCoordinatesOfTpop(
           store,
-          parseInt(id, 10),
+          parseInt(id, 10)
         )
         if (x && y) {
           store.showCoordOnMapsZhCh(x, y)
@@ -265,7 +264,7 @@ class TreeContainer extends Component {
       showCoordOfTpopOnMapGeoAdminCh() {
         const { x, y } = getAndValidateCoordinatesOfTpop(
           store,
-          parseInt(id, 10),
+          parseInt(id, 10)
         )
         if (x && y) {
           store.showCoordOnMapGeoAdminCh(x, y)
@@ -288,7 +287,7 @@ class TreeContainer extends Component {
       actions[action]()
     } else {
       store.listError(
-        new Error(`action "${action}" unknown, therefore not executed`),
+        new Error(`action "${action}" unknown, therefore not executed`)
       )
     }
   }
@@ -313,23 +312,21 @@ class TreeContainer extends Component {
         </LabelFilterContainer>
         <div
           style={strukturbaumContainerDivStyle}
-          ref={c => {
-            // $FlowIssue
-            this.tree = c
-          }}
+          // $FlowIssue
+          ref={c => (this.tree = c)}
         >
           <Tree
             tree={tree}
             projektLoading={store.table.projektLoading}
             nodes={tree.nodes}
             mapTpopBeobVisible={store.map.activeApfloraLayers.includes(
-              'TpopBeob',
+              'TpopBeob'
             )}
             mapBeobNichtBeurteiltVisible={store.map.activeApfloraLayers.includes(
-              'BeobNichtBeurteilt',
+              'BeobNichtBeurteilt'
             )}
             mapBeobNichtZuzuordnenVisible={store.map.activeApfloraLayers.includes(
-              'BeobNichtZuzuordnen',
+              'BeobNichtZuzuordnen'
             )}
             mapPopVisible={store.map.activeApfloraLayers.includes('Pop')}
             mapTpopVisible={store.map.activeApfloraLayers.includes('Tpop')}

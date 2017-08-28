@@ -68,10 +68,8 @@ class Idealbiotop extends Component {
 
     return (
       <Container
-        innerRef={c => {
-          // $FlowIssue
-          this.container = c
-        }}
+        // $FlowIssue
+        innerRef={c => (this.container = c)}
       >
         <FormTitle tree={tree} title="Idealbiotop" />
         <FieldsContainer data-width={width}>

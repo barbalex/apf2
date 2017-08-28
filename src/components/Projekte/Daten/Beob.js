@@ -56,10 +56,8 @@ class Beob extends Component {
 
     return (
       <div
-        ref={c => {
-          // $FlowIssue
-          this.container = c
-        }}
+        // $FlowIssue
+        ref={c => (this.container = c)}
       >
         <Container data-width={width}>
           {beobFields.map(([key, value]) =>

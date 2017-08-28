@@ -1,4 +1,10 @@
 // @flow
+/**
+ * When calling this component it is necessary to give it the key
+ * of the parent dataset to force remounting
+ * If not, when you create a new dataset, it will show the date of the last
+ * because component does not mount again
+ */
 import React, { Component } from 'react'
 import { observer } from 'mobx-react'
 import TextField from 'material-ui/TextField'
@@ -37,7 +43,7 @@ const enhance = compose(
   withState(
     'dateStringValue',
     'changeDateStringValue',
-    props => (props.dateValue ? format(props.dateValue, 'DD.MM.YYYY') : ''),
+    props => (props.dateValue ? format(props.dateValue, 'DD.MM.YYYY') : '')
   ),
   // on bluring the fields, changes are only written do db if value has changed
   // so when the field is focused the value is saved to state in order to know
@@ -131,7 +137,7 @@ const enhance = compose(
     onFocusYear: props => () => props.changeYearValueOnFocus(props.yearValue),
     onFocusDate: props => () => props.changeDateValueOnFocus(props.dateValue),
   }),
-  observer,
+  observer
 )
 
 class YearDatePair extends Component {
@@ -235,10 +241,8 @@ class YearDatePair extends Component {
               fullWidth
               cancelLabel="schliessen"
               onChange={onChangeDatePicker}
-              ref={c => {
-                // $FlowIssue
-                this.datePicker = c
-              }}
+              // $FlowIssue
+              ref={c => (this.datePicker = c)}
             />
           </DatePickerDiv>
         </DateFieldContainer>

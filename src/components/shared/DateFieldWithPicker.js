@@ -43,7 +43,7 @@ const DatePickerDiv = styled.div`
 const enhance = compose(
   // stringValue is shown to user
   withState('stringValue', 'changeStringValue', props =>
-    format(props.value, 'DD.MM.YYYY'),
+    format(props.value, 'DD.MM.YYYY')
   ),
   // on bluring the textfield, changes are only written do db if value has changed
   // so when the textfield is focused the value is saved to state in order to know
@@ -54,12 +54,12 @@ const enhance = compose(
       props.updateProperty(
         props.tree,
         props.fieldName,
-        format(val, 'YYYY-MM-DD'),
+        format(val, 'YYYY-MM-DD')
       )
       props.updatePropertyInDb(
         props.tree,
         props.fieldName,
-        format(val, 'YYYY-MM-DD'),
+        format(val, 'YYYY-MM-DD')
       )
       props.changeStringValue(format(val, 'DD.MM.YYYY'))
     },
@@ -79,7 +79,7 @@ const enhance = compose(
           props.updatePropertyInDb(
             props.tree,
             props.fieldName,
-            format(date, 'YYYY-MM-DD'),
+            format(date, 'YYYY-MM-DD')
           )
           props.changeStringValue(format(date, 'DD.MM.YYYY'))
         }
@@ -87,7 +87,7 @@ const enhance = compose(
     },
     onFocus: props => () => props.changeValueOnFocus(props.value),
   }),
-  observer,
+  observer
 )
 
 class MyDatePicker extends Component {
@@ -165,10 +165,8 @@ class MyDatePicker extends Component {
             fullWidth
             cancelLabel="schliessen"
             onChange={onChangeDatePicker}
-            ref={c => {
-              // $FlowIssue
-              this.datePicker = c
-            }}
+            // $FlowIssue
+            ref={c => (this.datePicker = c)}
           />
         </DatePickerDiv>
       </Container>

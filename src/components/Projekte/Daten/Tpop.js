@@ -66,10 +66,8 @@ class Tpop extends Component {
 
     return (
       <Container
-        innerRef={c => {
-          // $FlowIssue
-          this.container = c
-        }}
+        // $FlowIssue
+        innerRef={c => (this.container = c)}
       >
         <FormTitle tree={tree} title="Teil-Population" />
         <FieldsContainer data-width={width}>
