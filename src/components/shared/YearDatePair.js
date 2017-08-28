@@ -1,9 +1,11 @@
 // @flow
 /**
  * When calling this component it is necessary to give it the key
- * of the parent dataset to force remounting
+ * of the parent dataset to force remounting when that dataset is changed.
+ * 
  * If not, when you create a new dataset, it will show the date of the last
  * because component does not mount again
+ * and previous changeDateStringValue remains
  */
 import React, { Component } from 'react'
 import { observer } from 'mobx-react'

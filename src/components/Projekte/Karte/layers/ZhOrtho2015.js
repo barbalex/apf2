@@ -4,7 +4,7 @@ import { WMSTileLayer } from 'react-leaflet'
 
 const ZhOrtho2015Layer = () =>
   <WMSTileLayer
-    url="//agabriel:4zC6MgjM@wms.zh.ch/OrthoZHWMS"
+    url="//wms.zh.ch/OrthoZHWMS"
     layers="ortho_sp"
     version="1.3.0"
     format="image/png"
