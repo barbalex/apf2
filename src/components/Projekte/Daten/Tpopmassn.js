@@ -87,14 +87,13 @@ class Tpopmassn extends Component {
 
     return (
       <Container
-        innerRef={c => {
-          // $FlowIssue
-          this.container = c
-        }}
+        // $FlowIssue
+        innerRef={c => (this.container = c)}
       >
         <FormTitle tree={tree} title="Massnahme" />
         <FieldsContainer data-width={width}>
           <YearDatePair
+            key={activeDataset.row.TPopMassnId}
             tree={tree}
             yearLabel="Jahr"
             yearFieldName="TPopMassnJahr"

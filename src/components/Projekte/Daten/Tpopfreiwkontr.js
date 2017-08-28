@@ -62,14 +62,13 @@ class Tpopfreiwkontr extends Component {
 
     return (
       <Container
-        innerRef={c => {
-          // $FlowIssue
-          this.container = c
-        }}
+        // $FlowIssue
+        innerRef={c => (this.container = c)}
       >
         <FormTitle tree={tree} title="Freiwilligen-Kontrolle" />
         <FieldsContainer data-width={width}>
           <YearDatePair
+            key={activeDataset.row.TPopKontrId}
             tree={tree}
             yearLabel="Jahr"
             yearFieldName="TPopKontrJahr"

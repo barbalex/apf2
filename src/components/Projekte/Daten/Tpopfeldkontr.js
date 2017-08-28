@@ -116,10 +116,8 @@ class Tpopfeldkontr extends Component {
 
     return (
       <Container
-        innerRef={c => {
-          // $FlowIssue
-          this.container = c
-        }}
+        // $FlowIssue
+        innerRef={c => (this.container = c)}
       >
         <FormTitle tree={tree} title="Feld-Kontrolle" />
         <FieldsContainer>
@@ -134,6 +132,7 @@ class Tpopfeldkontr extends Component {
               <TabChildDiv>
                 <FormContainer data-width={width}>
                   <YearDatePair
+                    key={activeDataset.row.TPopKontrId}
                     tree={tree}
                     yearLabel="Jahr"
                     yearFieldName="TPopKontrJahr"
