@@ -1,12 +1,13 @@
 // @flow
 import sortBy from 'lodash/sortBy'
+import cloneDeep from 'lodash/cloneDeep'
 
 export default (store: Object, tree: Object): Array<Object> => {
   const { table } = store
   const { nodeLabelFilter, apFilter } = tree
   const { adb_eigenschaften } = table
   // grab ap as array and sort them by name
-  let aps = Array.from(table.ap.values())
+  let aps = cloneDeep(Array.from(table.ap.values()))
 
   // filter by apFilter
   if (apFilter) {
@@ -24,7 +25,7 @@ export default (store: Object, tree: Object): Array<Object> => {
     const filterString = nodeLabelFilter.get('ap')
     if (filterString) {
       aps = aps.filter(p =>
-        p.label.toLowerCase().includes(filterString.toLowerCase()),
+        p.label.toLowerCase().includes(filterString.toLowerCase())
       )
     }
     aps = sortBy(aps, 'label')
