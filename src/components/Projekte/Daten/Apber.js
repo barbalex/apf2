@@ -214,6 +214,7 @@ class Apber extends Component {
             valueProp="AdrId"
             labelProp="AdrName"
             updatePropertyInDb={store.updatePropertyInDb}
+            marginBottom={2}
           />
         </FieldsContainer>
       </Container>

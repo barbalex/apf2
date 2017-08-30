@@ -8,7 +8,7 @@ import withHandlers from 'recompose/withHandlers'
 import styled from 'styled-components'
 
 const StyledSelectField = styled(SelectField)`
-  margin-bottom: -15px;
+  margin-bottom: ${props => `${props.marginBottom}px` || '-15px'};
 `
 
 const enhance = compose(
@@ -16,15 +16,20 @@ const enhance = compose(
     onChange: props => (event, key, payload) =>
       props.updatePropertyInDb(props.tree, props.fieldName, payload),
   }),
-  observer,
+  observer
 )
 
+/**
+ * marginBottom: needed because list overly disappears under the form bottom
+ * when select field is last in form
+ */
 const MySelectField = ({
   label,
   value,
   dataSource,
   valueProp,
   labelProp,
+  marginBottom,
   onChange,
 }: {
   label: string,
@@ -32,19 +37,20 @@ const MySelectField = ({
   dataSource: Array<Object>,
   valueProp: string,
   labelProp: string,
+  marginBottom?: ?number,
   onChange: () => void,
-}) => (
+}) =>
   <StyledSelectField
     floatingLabelText={label}
     value={value}
     fullWidth
     onChange={onChange}
+    marginBottom={marginBottom}
   >
-    {dataSource.map((e, index) => (
+    {dataSource.map((e, index) =>
       <MenuItem value={e[valueProp]} primaryText={e[labelProp]} key={index} />
-    ))}
+    )}
   </StyledSelectField>
-)
 
 MySelectField.defaultProps = {
   value: '',
