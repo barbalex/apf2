@@ -9,7 +9,7 @@ export default [
     idField: 'ApArtId',
     parentIdField: 'ProjId',
     mutWannField: 'MutWann',
-    mutWerField: 'MutWer'
+    mutWerField: 'MutWer',
   },
   {
     database: 'apflora',
@@ -19,7 +19,7 @@ export default [
     idField: 'PopId',
     parentIdField: 'ApArtId',
     mutWannField: 'MutWann',
-    mutWerField: 'MutWer'
+    mutWerField: 'MutWer',
   },
   {
     database: 'apflora',
@@ -29,7 +29,7 @@ export default [
     idField: 'TPopId',
     parentIdField: 'PopId',
     mutWannField: 'MutWann',
-    mutWerField: 'MutWer'
+    mutWerField: 'MutWer',
   },
   {
     database: 'apflora',
@@ -39,7 +39,7 @@ export default [
     idField: 'TPopKontrId',
     parentIdField: 'TPopId',
     mutWannField: 'MutWann',
-    mutWerField: 'MutWer'
+    mutWerField: 'MutWer',
   },
   {
     database: 'apflora',
@@ -50,7 +50,7 @@ export default [
     idField: 'TPopKontrId',
     parentIdField: 'TPopId',
     mutWannField: 'MutWann',
-    mutWerField: 'MutWer'
+    mutWerField: 'MutWer',
   },
   {
     database: 'apflora',
@@ -61,7 +61,7 @@ export default [
     idField: 'TPopKontrId',
     parentIdField: 'TPopId',
     mutWannField: 'MutWann',
-    mutWerField: 'MutWer'
+    mutWerField: 'MutWer',
   },
   {
     database: 'apflora',
@@ -69,7 +69,7 @@ export default [
     idField: 'ZaehleinheitCode',
     stammdaten: true,
     mutWannField: 'MutWann',
-    mutWerField: 'MutWer'
+    mutWerField: 'MutWer',
   },
   {
     database: 'apflora',
@@ -77,7 +77,7 @@ export default [
     idField: 'BeurteilCode',
     stammdaten: true,
     mutWannField: 'MutWann',
-    mutWerField: 'MutWer'
+    mutWerField: 'MutWer',
   },
   {
     database: 'apflora',
@@ -87,7 +87,7 @@ export default [
     idField: 'TPopKontrZaehlId',
     parentIdField: 'TPopKontrId',
     mutWannField: 'MutWann',
-    mutWerField: 'MutWer'
+    mutWerField: 'MutWer',
   },
   {
     database: 'apflora',
@@ -98,7 +98,7 @@ export default [
     idField: 'TPopKontrZaehlId',
     parentIdField: 'TPopKontrId',
     mutWannField: 'MutWann',
-    mutWerField: 'MutWer'
+    mutWerField: 'MutWer',
   },
   {
     database: 'apflora',
@@ -109,7 +109,7 @@ export default [
     idField: 'TPopKontrZaehlId',
     parentIdField: 'TPopKontrId',
     mutWannField: 'MutWann',
-    mutWerField: 'MutWer'
+    mutWerField: 'MutWer',
   },
   {
     database: 'apflora',
@@ -119,7 +119,7 @@ export default [
     idField: 'TPopMassnId',
     parentIdField: 'TPopId',
     mutWannField: 'MutWann',
-    mutWerField: 'MutWer'
+    mutWerField: 'MutWer',
   },
   {
     database: 'apflora',
@@ -127,7 +127,7 @@ export default [
     idField: 'MassnTypCode',
     stammdaten: true,
     mutWannField: 'MutWann',
-    mutWerField: 'MutWer'
+    mutWerField: 'MutWer',
   },
   {
     database: 'apflora',
@@ -135,7 +135,7 @@ export default [
     idField: 'BeurteilId',
     stammdaten: true,
     mutWannField: 'MutWann',
-    mutWerField: 'MutWer'
+    mutWerField: 'MutWer',
   },
   {
     database: 'apflora',
@@ -143,7 +143,7 @@ export default [
     idField: 'BeurteilId',
     stammdaten: true,
     mutWannField: 'MutWann',
-    mutWerField: 'MutWer'
+    mutWerField: 'MutWer',
   },
   {
     database: 'apflora',
@@ -153,7 +153,7 @@ export default [
     idField: 'ZielId',
     parentIdField: 'ApArtId',
     mutWannField: 'MutWann',
-    mutWerField: 'MutWer'
+    mutWerField: 'MutWer',
   },
   {
     database: 'apflora',
@@ -161,7 +161,7 @@ export default [
     idField: 'ZieltypId',
     stammdaten: true,
     mutWannField: 'MutWann',
-    mutWerField: 'MutWer'
+    mutWerField: 'MutWer',
   },
   {
     database: 'apflora',
@@ -171,7 +171,7 @@ export default [
     idField: 'ZielBerId',
     parentIdField: 'ZielId',
     mutWannField: 'MutWann',
-    mutWerField: 'MutWer'
+    mutWerField: 'MutWer',
   },
   {
     database: 'apflora',
@@ -181,7 +181,7 @@ export default [
     idField: 'ErfkritId',
     parentIdField: 'ApArtId',
     mutWannField: 'MutWann',
-    mutWerField: 'MutWer'
+    mutWerField: 'MutWer',
   },
   {
     database: 'apflora',
@@ -191,7 +191,7 @@ export default [
     idField: 'JBerId',
     parentIdField: 'ApArtId',
     mutWannField: 'MutWann',
-    mutWerField: 'MutWer'
+    mutWerField: 'MutWer',
   },
   {
     database: 'apflora',
@@ -201,7 +201,7 @@ export default [
     idField: 'JbuJahr',
     parentIdField: 'ProjId',
     mutWannField: 'MutWann',
-    mutWerField: 'MutWer'
+    mutWerField: 'MutWer',
   },
   {
     database: 'apflora',
@@ -211,7 +211,7 @@ export default [
     idField: 'BerId',
     parentIdField: 'ApArtId',
     mutWannField: 'MutWann',
-    mutWerField: 'MutWer'
+    mutWerField: 'MutWer',
   },
   {
     database: 'apflora',
@@ -221,7 +221,7 @@ export default [
     idField: 'IbApArtId',
     parentIdField: 'IbApArtId',
     mutWannField: 'MutWann',
-    mutWerField: 'MutWer'
+    mutWerField: 'MutWer',
   },
   {
     database: 'apflora',
@@ -231,7 +231,7 @@ export default [
     idField: 'AaId',
     parentIdField: 'AaApArtId',
     mutWannField: 'MutWann',
-    mutWerField: 'MutWer'
+    mutWerField: 'MutWer',
   },
   {
     database: 'apflora',
@@ -241,7 +241,7 @@ export default [
     idField: 'PopBerId',
     parentIdField: 'PopId',
     mutWannField: 'MutWann',
-    mutWerField: 'MutWer'
+    mutWerField: 'MutWer',
   },
   {
     database: 'apflora',
@@ -251,7 +251,7 @@ export default [
     idField: 'PopMassnBerId',
     parentIdField: 'PopId',
     mutWannField: 'MutWann',
-    mutWerField: 'MutWer'
+    mutWerField: 'MutWer',
   },
   {
     database: 'apflora',
@@ -261,7 +261,7 @@ export default [
     idField: 'TPopBerId',
     parentIdField: 'TPopId',
     mutWannField: 'MutWann',
-    mutWerField: 'MutWer'
+    mutWerField: 'MutWer',
   },
   {
     database: 'apflora',
@@ -271,7 +271,7 @@ export default [
     idField: 'TPopMassnBerId',
     parentIdField: 'TPopId',
     mutWannField: 'MutWann',
-    mutWerField: 'MutWer'
+    mutWerField: 'MutWer',
   },
   {
     database: 'apflora',
@@ -279,7 +279,7 @@ export default [
     idField: 'BeobId',
     parentIdField: 'TPopId',
     mutWannField: 'BeobMutWann',
-    mutWerField: 'BeobMutWer'
+    mutWerField: 'BeobMutWer',
   },
   {
     database: 'apflora',
@@ -287,7 +287,7 @@ export default [
     idField: 'BeobId',
     parentIdField: 'ArtId',
     mutWannField: 'BeobMutWann',
-    mutWerField: 'BeobMutWer'
+    mutWerField: 'BeobMutWer',
   },
   {
     database: 'apflora',
@@ -295,7 +295,7 @@ export default [
     idField: 'BeobId',
     parentIdField: 'ArtId',
     mutWannField: 'BeobMutWann',
-    mutWerField: 'BeobMutWer'
+    mutWerField: 'BeobMutWer',
   },
   {
     database: 'apflora',
@@ -304,13 +304,13 @@ export default [
     labelSingular: 'Projekt',
     idField: 'ProjId',
     mutWannField: 'MutWann',
-    mutWerField: 'MutWer'
+    mutWerField: 'MutWer',
   },
   {
     database: 'beob',
     table: 'beob',
     idField: 'id',
-    parentIdField: 'ArtId'
+    parentIdField: 'ArtId',
   },
   {
     database: 'beob',
@@ -318,7 +318,7 @@ export default [
     idField: 'TaxonomieId',
     stammdaten: true,
     mutWannField: null,
-    mitWerField: null
+    mitWerField: null,
   },
   {
     database: 'apflora',
@@ -326,7 +326,7 @@ export default [
     idField: 'DomainCode',
     stammdaten: true,
     mutWannField: 'MutWann',
-    mitWerField: 'MutWer'
+    mitWerField: 'MutWer',
   },
   {
     database: 'apflora',
@@ -334,15 +334,14 @@ export default [
     idField: 'DomainCode',
     stammdaten: true,
     mutWannField: 'MutWann',
-    mitWerField: 'MutWer'
+    mitWerField: 'MutWer',
   },
   {
     database: 'apflora',
     table: 'adresse',
     idField: 'AdrId',
-    stammdaten: true,
     mutWannField: 'MutWann',
-    mitWerField: 'MutWer'
+    mitWerField: 'MutWer',
   },
   {
     database: 'apflora',
@@ -350,7 +349,7 @@ export default [
     idField: 'BeurteilId',
     stammdaten: true,
     mutWannField: 'MutWann',
-    mitWerField: 'MutWer'
+    mitWerField: 'MutWer',
   },
   {
     database: 'apflora',
@@ -358,7 +357,7 @@ export default [
     idField: 'EntwicklungId',
     stammdaten: true,
     mutWannField: 'MutWann',
-    mitWerField: 'MutWer'
+    mitWerField: 'MutWer',
   },
   {
     database: 'apflora',
@@ -366,7 +365,7 @@ export default [
     idField: 'HerkunftId',
     stammdaten: true,
     mutWannField: 'MutWann',
-    mitWerField: 'MutWer'
+    mitWerField: 'MutWer',
   },
   {
     database: 'apflora',
@@ -374,7 +373,7 @@ export default [
     idField: 'DomainCode',
     stammdaten: true,
     mutWannField: 'MutWann',
-    mitWerField: 'MutWer'
+    mitWerField: 'MutWer',
   },
   {
     database: 'apflora',
@@ -382,7 +381,7 @@ export default [
     idField: 'BfsNr',
     stammdaten: true,
     mutWannField: 'MutWann',
-    mitWerField: 'MutWer'
+    mitWerField: 'MutWer',
   },
   {
     database: 'apflora',
@@ -390,7 +389,7 @@ export default [
     idField: 'EntwicklungCode',
     stammdaten: true,
     mutWannField: 'MutWann',
-    mitWerField: 'MutWer'
+    mitWerField: 'MutWer',
   },
   {
     database: 'apflora',
@@ -398,18 +397,18 @@ export default [
     idField: 'DomainCode',
     stammdaten: true,
     mutWannField: 'MutWann',
-    mitWerField: 'MutWer'
+    mitWerField: 'MutWer',
   },
   {
     database: 'beob',
     table: 'beob_quelle',
     idField: 'id',
-    stammdaten: true
+    stammdaten: true,
   },
   {
     database: 'beob',
     table: 'adb_lr',
     idField: 'id',
-    stammdaten: true
-  }
+    stammdaten: true,
+  },
 ]
