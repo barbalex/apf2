@@ -8,7 +8,7 @@ import tables from '../../modules/tables'
 export default async (
   store: Object,
   schemaNamePassed: string,
-  tableName: string,
+  tableName: string
 ) => {
   const schemaName = schemaNamePassed || 'apflora'
   // only fetch if not yet fetched
@@ -16,15 +16,15 @@ export default async (
     const tableMetadata = tables.find(t => t.table === tableName)
     if (!tableMetadata) {
       return store.listError(
-        new Error(`keine Metadaten gefunden für Tabelle ${tableName}`),
+        new Error(`keine Metadaten gefunden für Tabelle ${tableName}`)
       )
     }
     const idField = tableMetadata.idField
     if (!idField) {
       return store.listError(
         new Error(
-          `in den Metadaten kein ID-Feld gefunden für Tabelle ${tableName}`,
-        ),
+          `in den Metadaten kein ID-Feld gefunden für Tabelle ${tableName}`
+        )
       )
     }
     store.loading.push(tableName)
@@ -50,7 +50,7 @@ export default async (
 
     // don't fetch any stammdaten if they already existed in idb
     if (
-      tableName !== 'projekt' &&
+      tableMetadata.stammdaten &&
       dataFromIdb &&
       dataFromIdb.length &&
       dataFromIdb.length > 0
@@ -73,7 +73,7 @@ export default async (
           data: dataFromDb,
           table: tableName,
           field: idField,
-        }),
+        })
       )
       setTimeout(() => app.db[tableName].bulkPut(dataFromDb))
     }
