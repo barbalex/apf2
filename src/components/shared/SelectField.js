@@ -8,7 +8,7 @@ import withHandlers from 'recompose/withHandlers'
 import styled from 'styled-components'
 
 const StyledSelectField = styled(SelectField)`
-  margin-bottom: ${props => `${props.marginBottom}px` || '-15px'};
+  margin-bottom: ${props => `${props['data-marginBottom']}px` || '-15px'};
 `
 
 const enhance = compose(
@@ -45,7 +45,7 @@ const MySelectField = ({
     value={value}
     fullWidth
     onChange={onChange}
-    marginBottom={marginBottom}
+    data-marginBottom={marginBottom}
   >
     {dataSource.map((e, index) =>
       <MenuItem value={e[valueProp]} primaryText={e[labelProp]} key={index} />
