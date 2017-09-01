@@ -6,6 +6,7 @@ import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 
 import RadioButton from '../../shared/RadioButton'
+import RadioButton3Values from '../../shared/RadioButton3Values'
 import TextField from '../../shared/TextField'
 import SelectField from '../../shared/SelectField'
 import StringToCopy from '../../shared/StringToCopy'
@@ -129,7 +130,7 @@ class Tpopfreiwkontr extends Component {
             updateProperty={store.updateProperty}
             updatePropertyInDb={store.updatePropertyInDb}
           />
-          <RadioButton
+          <RadioButton3Values
             tree={tree}
             fieldName="TPopKontrJungPflJN"
             label="Auch junge Pflanzen vorhanden"
