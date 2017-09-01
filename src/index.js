@@ -50,7 +50,7 @@ registerServiceWorker()
 // see: http://stackoverflow.com/a/38589039/712005
 document.addEventListener('mousewheel', function(event) {
   if (window.document.activeElement.type === 'number') {
-    document.activeElement.blur()
+    event.preventDefault()
   }
 })
 
