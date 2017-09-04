@@ -12,7 +12,7 @@
   "devDependencies": {
     "flow-bin": "0.54.0",
     "mobx-react-devtools": "4.2.15",
-    "react-scripts": "1.0.12"
+    "react-scripts": "1.0.13"
   },
   "dependencies": {
     "@turf/inside": "4.6.0",
@@ -36,7 +36,7 @@
     "leaflet.fullscreen": "1.4.3",
     "leaflet.markercluster": "1.1.0",
     "lodash": "4.17.4",
-    "material-ui": "0.19.0",
+    "material-ui": "0.19.1",
     "mobx": "3.2.2",
     "mobx-react": "4.2.2",
     "moment": "2.18.1",
