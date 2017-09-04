@@ -25,21 +25,21 @@ export default (store: Object, parentId: number): void => {
   const idField = tabelle ? tabelle.idField : undefined
   if (!idField) {
     return store.listError(
-      new Error('change was not saved because idField was not found'),
+      new Error('change was not saved because idField was not found')
     )
   }
   // $FlowIssue
   const parentIdField = tabelle.parentIdField
   if (!parentIdField) {
     return store.listError(
-      new Error('change was not saved because parentIdField was not found'),
+      new Error('change was not saved because parentIdField was not found')
     )
   }
 
   const row = store.table[table].get(id)
   if (!row) {
     return store.listError(
-      new Error('change was not saved because dataset was not found in store'),
+      new Error('change was not saved because dataset was not found in store')
     )
   }
 
@@ -47,7 +47,13 @@ export default (store: Object, parentId: number): void => {
   const newRow = clone(row)
   // need to remove empty values and guids
   Object.keys(newRow).forEach(k => {
-    if ((!newRow[k] && newRow[k] !== 0) || k.endsWith('Guid')) {
+    const val = newRow[k]
+    // check for uuid
+    // see: https://stackoverflow.com/questions/7905929/how-to-test-valid-uuid-guid
+    const valueIsGuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(
+      val
+    )
+    if ((!newRow[k] && newRow[k] !== 0) || valueIsGuid) {
       delete newRow[k]
     }
   })
@@ -58,7 +64,9 @@ export default (store: Object, parentId: number): void => {
   delete newRow.PopKoordWgs84
 
   // update db
-  const url = `${apiBaseUrl}/insertFields/apflora/tabelle=${table}/felder=${JSON.stringify(newRow)}`
+  const url = `${apiBaseUrl}/insertFields/apflora/tabelle=${table}/felder=${JSON.stringify(
+    newRow
+  )}`
   axios
     .post(url)
     .then(({ data }) => {
