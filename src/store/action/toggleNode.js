@@ -9,15 +9,20 @@ export default (store: Object, tree: Object, node: Object): any => {
   if (!node.url) return store.listError(new Error('passed node has no url'))
 
   const newActiveNodeArray = clone(node.url)
+  const nodeIsOpen = isNodeOpen(toJS(tree.openNodes), node.url)
   if (
-    isNodeOpen(toJS(tree.openNodes), node.url) &&
-    isNodeInActiveNodePath(node, tree.activeNodeArray)
+    nodeIsOpen &&
+    isNodeInActiveNodePath(node, tree.activeNodeArray) &&
+    // need to check if node is last in activeNodePath
+    node.url.length === tree.activeNodeArray.length
   ) {
     // shorten activeNodeArray
     // but don't close node
     newActiveNodeArray.pop()
+  } else if (nodeIsOpen && isNodeInActiveNodePath(node, tree.activeNodeArray)) {
+    // leave newActiveNodeArray as it is
   } else {
-    if (!isNodeOpen(toJS(tree.openNodes), node.url)) {
+    if (!nodeIsOpen) {
       tree.openNodes.push(node.url)
       // automatically open zaehlFolder of tpopfeldkontr or tpopfreiwkontr
       if (['tpopfeldkontr', 'tpopfreiwkontr'].includes(node.menuType)) {
