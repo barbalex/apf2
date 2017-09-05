@@ -16,13 +16,8 @@ import injectTapEventPlugin from 'react-tap-event-plugin'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import uiTheme from './modules/uiTheme'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
-
-import {
-  ApolloClient,
-  createNetworkInterface,
-  ApolloProvider,
-} from 'react-apollo'
 import { Provider } from 'mobx-react'
+
 import DevTools from 'mobx-react-devtools'
 
 import styled from 'styled-components'
@@ -50,14 +45,6 @@ import updateFromSocket from './modules/updateFromSocket'
 import './index.css'
 
 registerServiceWorker()
-
-// TODO: in production use other address
-const networkInterface = createNetworkInterface({
-  uri: 'http://localhost:5000/graphiql',
-})
-const client = new ApolloClient({
-  networkInterface: networkInterface,
-})
 
 // prevent changing values in number inputs when scrolling pages!
 // see: http://stackoverflow.com/a/38589039/712005
@@ -113,18 +100,16 @@ const urlQuery = getUrlQuery(window.location.search)
 store.setUrlQuery(urlQuery)
 
 ReactDOM.render(
-  <ApolloProvider client={client}>
-    <Provider store={store}>
-      <MuiThemeProvider muiTheme={getMuiTheme(theme)}>
-        <AppContainer>
-          {false && <DevTools />}
-          <AppBar />
-          <Projekte />
-          <User />
-          <Errors />
-        </AppContainer>
-      </MuiThemeProvider>
-    </Provider>
-  </ApolloProvider>,
+  <Provider store={store}>
+    <MuiThemeProvider muiTheme={getMuiTheme(theme)}>
+      <AppContainer>
+        {false && <DevTools />}
+        <AppBar />
+        <Projekte />
+        <User />
+        <Errors />
+      </AppContainer>
+    </MuiThemeProvider>
+  </Provider>,
   document.getElementById('root')
 )

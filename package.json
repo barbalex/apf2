@@ -12,7 +12,6 @@
   "devDependencies": {
     "flow-bin": "0.54.0",
     "mobx-react-devtools": "4.2.15",
-    "postgraphql": "^3.5.0",
     "react-scripts": "1.0.13"
   },
   "dependencies": {
@@ -46,7 +45,6 @@
     "prop-types": "15.5.10",
     "query-string": "5.0.0",
     "react": "15.6.1",
-    "react-apollo": "^1.4.15",
     "react-contextmenu": "2.6.5",
     "react-copy-to-clipboard": "5.0.0",
     "react-dom": "15.6.1",
