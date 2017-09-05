@@ -14,7 +14,7 @@ export default (
   store: Object,
   tree: Object,
   key: string,
-  valuePassed: string | number,
+  valuePassed: string | number
 ): any => {
   const { row, valid } = tree.activeDataset
   let value = valuePassed
@@ -49,8 +49,8 @@ export default (
         // $FlowIssue
         `change was not saved:
         field: ${key}, table: ${table}, value: ${value}
-        Reason: idField was not found`,
-      ),
+        Reason: idField was not found`
+      )
     )
   }
   const tabelleId = row[idField]
@@ -60,8 +60,8 @@ export default (
         // $FlowIssue
         `change was not saved:
         field: ${key}, table: ${table}, value: ${value}
-        Reason: tabelleId was not found`,
-      ),
+        Reason: tabelleId was not found`
+      )
     )
   }
 
@@ -92,10 +92,16 @@ export default (
       row[key] = value
     }
     const newActiveNodeArray = clone(toJS(tree.activeNodeArray))
-    // $FlowIssue
-    const url = `${apiBaseUrl}/update/apflora/tabelle=${table}/tabelleIdFeld=${idField}/tabelleId=${tabelleId}/feld=${key}/wert=${value}/user=${user}`
+    /**
+     * wert can contain characters such as /, &, %
+     * this causes problems when passed as param
+     * so pass it as payload
+     * put keep url/route signature in the time being
+     * because of old application
+     */
+    const url = `${apiBaseUrl}/update/apflora/tabelle=${table}/tabelleIdFeld=${idField}/tabelleId=${tabelleId}/feld=${key}/wert=null/user=${user}`
     axios
-      .put(url)
+      .put(url, { wert: value })
       .then(() => {
         // update in idb
         if (!artWasChanged) {
@@ -108,9 +114,10 @@ export default (
         }
         // if beobNichtBeurteilt is set to beobNichtZuordnen, url needs to change
         if (table === 'beobzuordnung' && key === 'BeobNichtZuordnen') {
-          newActiveNodeArray[4] = value === 1
-            ? 'nicht-zuzuordnende-Beobachtungen'
-            : 'nicht-beurteilte-Beobachtungen'
+          newActiveNodeArray[4] =
+            value === 1
+              ? 'nicht-zuzuordnende-Beobachtungen'
+              : 'nicht-beurteilte-Beobachtungen'
           newActiveNodeArray[5] = tree.activeDataset.row.BeobId
           tree.setActiveNodeArray(newActiveNodeArray.slice(0, 6))
         }
