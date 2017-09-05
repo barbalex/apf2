@@ -15,9 +15,11 @@ export default (store: Object, tree: Object, node: Object): any => {
   if (nodeIsOpen && isNodeInActiveNodePath(node, tree.activeNodeArray)) {
     // need to check if node is last in activeNodePath
     if (node.url.length === tree.activeNodeArray.length) {
-      // shorten activeNodeArray
-      // but don't close node
-      newActiveNodeArray.pop()
+      /**
+       * dont do anything:
+       * klicked nodo should always be / remain active
+       */
+      // newActiveNodeArray.pop()
     } else {
       // leave newActiveNodeArray as it is
     }
