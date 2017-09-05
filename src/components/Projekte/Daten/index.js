@@ -103,9 +103,6 @@ const Daten = ({ store, tree }: { store: Object, tree: Object }) => {
     key = activeDataset.table
   }
   const form = formObject[key] || standardForm
-  /**
-   * TODO: refactor
-   */
 
   return (
     <Container>
