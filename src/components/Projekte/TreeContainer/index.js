@@ -57,6 +57,7 @@ import CmTpopmassnberFolder from './contextmenu/TpopmassnberFolder'
 import CmTpopmassnber from './contextmenu/Tpopmassnber'
 import CmTpopmassnFolder from './contextmenu/TpopmassnFolder'
 import CmTpopmassn from './contextmenu/Tpopmassn'
+import DeleteDatasetModal from './DeleteDatasetModal'
 
 const Container = styled.div`
   height: 100%;
@@ -300,9 +301,11 @@ class TreeContainer extends Component {
     const { store, tree, handleClick } = this.props
     const { activeDataset } = store.tree
     const showApDivToggle = activeDataset
+    const deleteDatasetModalIsVisible = !!store.datasetToDelete.id
 
     return (
       <Container>
+        {deleteDatasetModalIsVisible && <DeleteDatasetModal tree={tree} />}
         <LabelFilterContainer>
           <LabelFilter tree={tree} />
           {showApDivToggle &&

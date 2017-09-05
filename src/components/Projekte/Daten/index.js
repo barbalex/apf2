@@ -33,7 +33,6 @@ import Tpopkontrzaehl from './Tpopkontrzaehl'
 import Exporte from '../Exporte'
 import Qk from './Qk'
 import Beobzuordnung from './Beobzuordnung'
-import DeleteDatasetModal from './DeleteDatasetModal'
 
 const Container = styled.div`
   border-color: #424242;
@@ -105,17 +104,12 @@ const Daten = ({ store, tree }: { store: Object, tree: Object }) => {
   }
   const form = formObject[key] || standardForm
   /**
-   * TODO
-   * this is at wrong place
-   * modal does not show when Daten is not visible!!!
+   * TODO: refactor
    */
-  console.log('Daten: store.datasetToDelete:', store.datasetToDelete)
-  const deleteDatasetModalIsVisible = !!store.datasetToDelete.id
 
   return (
     <Container>
       {form}
-      {deleteDatasetModalIsVisible && <DeleteDatasetModal tree={tree} />}
     </Container>
   )
 }
