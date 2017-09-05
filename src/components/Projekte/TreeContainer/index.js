@@ -7,6 +7,7 @@ import { toJS } from 'mobx'
 import { observer, inject } from 'mobx-react'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
+import withHandlers from 'recompose/withHandlers'
 import Toggle from 'material-ui/Toggle'
 import clone from 'lodash/clone'
 
@@ -130,170 +131,173 @@ const getAndValidateCoordinatesOfBeob = (store, beobId) => {
   return { X, Y }
 }
 
-const enhance = compose(inject('store'), observer)
+const showMapIfNotYetVisible = ({ store }: { store: Object }) => {
+  const projekteTabs = clone(toJS(store.urlQuery.projekteTabs))
+  const isVisible = projekteTabs.includes('karte')
+  if (!isVisible) {
+    projekteTabs.push('karte')
+    store.setUrlQueryValue('projekteTabs', projekteTabs)
+  }
+}
+
+const enhance = compose(
+  inject('store'),
+  withHandlers({
+    handleClick: props => (e, data, element) => {
+      const { store, tree } = props
+      if (!data) return store.listError(new Error('no data passed with click'))
+      if (!element)
+        return store.listError(new Error('no element passed with click'))
+      const { table, action, idTable, actionTable } = data
+      const { firstElementChild } = element
+      if (!firstElementChild)
+        return store.listError(
+          new Error('no firstElementChild passed with click')
+        )
+      const id = firstElementChild.getAttribute('data-id')
+      const parentId = firstElementChild.getAttribute('data-parentId')
+      const url = firstElementChild.getAttribute('data-url')
+      const label = firstElementChild.getAttribute('data-label')
+      const baseUrl = JSON.parse(url)
+      const nodeType = firstElementChild.getAttribute('data-nodeType')
+      const menuType = firstElementChild.getAttribute('data-menuType')
+      const actions = {
+        insert() {
+          if (nodeType === 'table') {
+            baseUrl.pop()
+          }
+          if (menuType === 'zielFolder') {
+            // db sets year 1 as standard
+            baseUrl.push(1)
+          }
+          const idToPass = parentId || id
+          store.insertDataset(tree, table, idToPass, baseUrl)
+        },
+        delete() {
+          store.deleteDatasetDemand(table, id, baseUrl, label)
+        },
+        showBeobOnMap() {
+          // 1. open map if not yet open
+          showMapIfNotYetVisible(store)
+          // 2 add layer for actionTable
+          store.map.showMapLayer(
+            actionTable,
+            !store.map.activeOverlays.includes(actionTable)
+          )
+        },
+        showOnMap() {
+          // actionTable: table to show on map
+          // idTable: table from which to filter datasets of actionTable
+          // 1. load missing data if necessary
+          if (idTable === 'ap') {
+            store.map.pop.apArtId = parseInt(id, 10)
+            store.fetchTableByParentId('apflora', 'pop', id)
+            store.fetchTpopForAp(id)
+          }
+          if (actionTable === 'tpop') {
+            store.fetchTpopForAp(id)
+          }
+          // 2. open map if not yet open
+          showMapIfNotYetVisible(store)
+          // 3 add layer for actionTable
+          store.map.showMapLayer(
+            actionTable,
+            !store.map.activeOverlays.includes(actionTable)
+          )
+        },
+        toggleTooltip() {
+          store.map.toggleMapPopLabelContent(actionTable)
+        },
+        localizeOnMap() {
+          store.map.setIdOfTpopBeingLocalized(parseInt(id, 10))
+          showMapIfNotYetVisible(store)
+          store.map.showMapApfloraLayer('Tpop', true)
+        },
+        markForMoving() {
+          store.markForMoving(table, parseInt(id, 10), label)
+        },
+        move() {
+          store.moveTo(parseInt(id, 10))
+        },
+        markForCopying() {
+          store.markForCopying(table, parseInt(id, 10), label)
+        },
+        resetCopying() {
+          store.resetCopying()
+        },
+        copy() {
+          store.copyTo(parseInt(id, 10))
+        },
+        markForCopyingBiotop() {
+          store.markForCopyingBiotop(parseInt(id, 10), label)
+        },
+        resetCopyingBiotop() {
+          store.resetCopyingBiotop()
+        },
+        copyBiotop() {
+          store.copyBiotopTo(parseInt(id, 10))
+        },
+        copyTpopKoordToPop() {
+          store.copyTpopKoordToPop(parseInt(id, 10))
+        },
+        createNewPopFromBeob() {
+          store.createNewPopFromBeob(tree, id)
+        },
+        copyTpopBeobKoordToPop() {
+          store.copyTpopBeobKoordToPop(id)
+        },
+        showCoordOfTpopOnMapsZhCh() {
+          const { x, y } = getAndValidateCoordinatesOfTpop(
+            store,
+            parseInt(id, 10)
+          )
+          if (x && y) {
+            store.showCoordOnMapsZhCh(x, y)
+          }
+        },
+        showCoordOfTpopOnMapGeoAdminCh() {
+          const { x, y } = getAndValidateCoordinatesOfTpop(
+            store,
+            parseInt(id, 10)
+          )
+          if (x && y) {
+            store.showCoordOnMapGeoAdminCh(x, y)
+          }
+        },
+        showCoordOfBeobOnMapsZhCh() {
+          const { X, Y } = getAndValidateCoordinatesOfBeob(store, id)
+          if (X && Y) {
+            store.showCoordOnMapsZhCh(X, Y)
+          }
+        },
+        showCoordOfBeobOnMapGeoAdminCh() {
+          const { X, Y } = getAndValidateCoordinatesOfBeob(store, id)
+          if (X && Y) {
+            store.showCoordOnMapGeoAdminCh(X, Y)
+          }
+        },
+      }
+      if (Object.keys(actions).includes(action)) {
+        actions[action]()
+      } else {
+        store.listError(
+          new Error(`action "${action}" unknown, therefore not executed`)
+        )
+      }
+    },
+  }),
+  observer
+)
 
 class TreeContainer extends Component {
   props: {
     store: Object,
     tree: Object,
-  }
-
-  showMapIfNotYetVisible = () => {
-    const { store } = this.props
-    const projekteTabs = clone(toJS(store.urlQuery.projekteTabs))
-    const isVisible = projekteTabs.includes('karte')
-    if (!isVisible) {
-      projekteTabs.push('karte')
-      store.setUrlQueryValue('projekteTabs', projekteTabs)
-    }
-  }
-
-  handleClick = (e, data, element) => {
-    const { store, tree } = this.props
-    if (!data) return store.listError(new Error('no data passed with click'))
-    if (!element)
-      return store.listError(new Error('no element passed with click'))
-    const { table, action, idTable, actionTable } = data
-    const { firstElementChild } = element
-    if (!firstElementChild)
-      return store.listError(
-        new Error('no firstElementChild passed with click')
-      )
-    const id = firstElementChild.getAttribute('data-id')
-    const parentId = firstElementChild.getAttribute('data-parentId')
-    const url = firstElementChild.getAttribute('data-url')
-    const label = firstElementChild.getAttribute('data-label')
-    const baseUrl = JSON.parse(url)
-    const nodeType = firstElementChild.getAttribute('data-nodeType')
-    const menuType = firstElementChild.getAttribute('data-menuType')
-    const that = this
-    const actions = {
-      insert() {
-        if (nodeType === 'table') {
-          baseUrl.pop()
-        }
-        if (menuType === 'zielFolder') {
-          // db sets year 1 as standard
-          baseUrl.push(1)
-        }
-        const idToPass = parentId || id
-        store.insertDataset(tree, table, idToPass, baseUrl)
-      },
-      delete() {
-        store.deleteDatasetDemand(table, id, baseUrl, label)
-      },
-      showBeobOnMap() {
-        // 1. open map if not yet open
-        that.showMapIfNotYetVisible()
-        // 2 add layer for actionTable
-        store.map.showMapLayer(
-          actionTable,
-          !store.map.activeOverlays.includes(actionTable)
-        )
-      },
-      showOnMap() {
-        // actionTable: table to show on map
-        // idTable: table from which to filter datasets of actionTable
-        // 1. load missing data if necessary
-        if (idTable === 'ap') {
-          store.map.pop.apArtId = parseInt(id, 10)
-          store.fetchTableByParentId('apflora', 'pop', id)
-          store.fetchTpopForAp(id)
-        }
-        if (actionTable === 'tpop') {
-          store.fetchTpopForAp(id)
-        }
-        // 2. open map if not yet open
-        that.showMapIfNotYetVisible()
-        // 3 add layer for actionTable
-        store.map.showMapLayer(
-          actionTable,
-          !store.map.activeOverlays.includes(actionTable)
-        )
-      },
-      toggleTooltip() {
-        store.map.toggleMapPopLabelContent(actionTable)
-      },
-      localizeOnMap() {
-        store.map.setIdOfTpopBeingLocalized(parseInt(id, 10))
-        that.showMapIfNotYetVisible()
-        store.map.showMapApfloraLayer('Tpop', true)
-      },
-      markForMoving() {
-        store.markForMoving(table, parseInt(id, 10), label)
-      },
-      move() {
-        store.moveTo(parseInt(id, 10))
-      },
-      markForCopying() {
-        store.markForCopying(table, parseInt(id, 10), label)
-      },
-      resetCopying() {
-        store.resetCopying()
-      },
-      copy() {
-        store.copyTo(parseInt(id, 10))
-      },
-      markForCopyingBiotop() {
-        store.markForCopyingBiotop(parseInt(id, 10), label)
-      },
-      resetCopyingBiotop() {
-        store.resetCopyingBiotop()
-      },
-      copyBiotop() {
-        store.copyBiotopTo(parseInt(id, 10))
-      },
-      copyTpopKoordToPop() {
-        store.copyTpopKoordToPop(parseInt(id, 10))
-      },
-      createNewPopFromBeob() {
-        store.createNewPopFromBeob(tree, id)
-      },
-      copyTpopBeobKoordToPop() {
-        store.copyTpopBeobKoordToPop(id)
-      },
-      showCoordOfTpopOnMapsZhCh() {
-        const { x, y } = getAndValidateCoordinatesOfTpop(
-          store,
-          parseInt(id, 10)
-        )
-        if (x && y) {
-          store.showCoordOnMapsZhCh(x, y)
-        }
-      },
-      showCoordOfTpopOnMapGeoAdminCh() {
-        const { x, y } = getAndValidateCoordinatesOfTpop(
-          store,
-          parseInt(id, 10)
-        )
-        if (x && y) {
-          store.showCoordOnMapGeoAdminCh(x, y)
-        }
-      },
-      showCoordOfBeobOnMapsZhCh() {
-        const { X, Y } = getAndValidateCoordinatesOfBeob(store, id)
-        if (X && Y) {
-          store.showCoordOnMapsZhCh(X, Y)
-        }
-      },
-      showCoordOfBeobOnMapGeoAdminCh() {
-        const { X, Y } = getAndValidateCoordinatesOfBeob(store, id)
-        if (X && Y) {
-          store.showCoordOnMapGeoAdminCh(X, Y)
-        }
-      },
-    }
-    if (Object.keys(actions).includes(action)) {
-      actions[action]()
-    } else {
-      store.listError(
-        new Error(`action "${action}" unknown, therefore not executed`)
-      )
-    }
+    handleClick: () => void,
   }
 
   render() {
-    const { store, tree } = this.props
+    const { store, tree, handleClick } = this.props
     const { activeDataset } = store.tree
     const showApDivToggle = activeDataset
 
@@ -336,49 +340,49 @@ class TreeContainer extends Component {
             openNodes={tree.openNodes}
           />
         </div>
-        <CmApFolder onClick={this.handleClick} tree={tree} />
-        <CmAp onClick={this.handleClick} tree={tree} />
-        <CmApberuebersichtFolder onClick={this.handleClick} tree={tree} />
-        <CmApberuebersicht onClick={this.handleClick} tree={tree} />
-        <CmAssozartFolder onClick={this.handleClick} tree={tree} />
-        <CmAssozart onClick={this.handleClick} tree={tree} />
-        <CmTpopbeobFolder onClick={this.handleClick} tree={tree} />
-        <CmBerFolder onClick={this.handleClick} tree={tree} />
-        <CmBer onClick={this.handleClick} tree={tree} />
-        <CmApberFolder onClick={this.handleClick} tree={tree} />
-        <CmApber onClick={this.handleClick} tree={tree} />
-        <CmErfkritFolder onClick={this.handleClick} tree={tree} />
-        <CmErfkrit onClick={this.handleClick} tree={tree} />
-        <CmZielFolder onClick={this.handleClick} tree={tree} />
-        <CmZielJahrFolder onClick={this.handleClick} tree={tree} />
-        <CmZiel onClick={this.handleClick} tree={tree} />
-        <CmZielBerFolder onClick={this.handleClick} tree={tree} />
-        <CmZielBer onClick={this.handleClick} tree={tree} />
-        <CmPopFolder onClick={this.handleClick} tree={tree} />
-        <CmPop onClick={this.handleClick} tree={tree} />
-        <CmPopmassnberFolder onClick={this.handleClick} tree={tree} />
-        <CmPopmassnber onClick={this.handleClick} tree={tree} />
-        <CmPopberFolder onClick={this.handleClick} tree={tree} />
-        <CmPopber onClick={this.handleClick} tree={tree} />
-        <CmTpopFolder onClick={this.handleClick} tree={tree} />
-        <CmTpop onClick={this.handleClick} tree={tree} />
-        <CmTpopberFolder onClick={this.handleClick} tree={tree} />
-        <CmTpopber onClick={this.handleClick} tree={tree} />
-        <CmTpopbeob onClick={this.handleClick} tree={tree} />
-        <CmBeobnichtbeurteilt onClick={this.handleClick} tree={tree} />
-        <CmBeobNichtZuzuordnen onClick={this.handleClick} tree={tree} />
-        <CmTpopfreiwkontrFolder onClick={this.handleClick} tree={tree} />
-        <CmTpopfreiwkontr onClick={this.handleClick} tree={tree} />
-        <CmTpopfreiwkontrzaehlFolder onClick={this.handleClick} tree={tree} />
-        <CmTpopfreiwkontrzaehl onClick={this.handleClick} tree={tree} />
-        <CmTpopfeldkontrFolder onClick={this.handleClick} tree={tree} />
-        <CmTpopfeldkontr onClick={this.handleClick} tree={tree} />
-        <CmTpopfeldkontrzaehlFolder onClick={this.handleClick} tree={tree} />
-        <CmTpopfeldkontrzaehl onClick={this.handleClick} tree={tree} />
-        <CmTpopmassnberFolder onClick={this.handleClick} tree={tree} />
-        <CmTpopmassnber onClick={this.handleClick} tree={tree} />
-        <CmTpopmassnFolder onClick={this.handleClick} tree={tree} />
-        <CmTpopmassn onClick={this.handleClick} tree={tree} />
+        <CmApFolder onClick={handleClick} tree={tree} />
+        <CmAp onClick={handleClick} tree={tree} />
+        <CmApberuebersichtFolder onClick={handleClick} tree={tree} />
+        <CmApberuebersicht onClick={handleClick} tree={tree} />
+        <CmAssozartFolder onClick={handleClick} tree={tree} />
+        <CmAssozart onClick={handleClick} tree={tree} />
+        <CmTpopbeobFolder onClick={handleClick} tree={tree} />
+        <CmBerFolder onClick={handleClick} tree={tree} />
+        <CmBer onClick={handleClick} tree={tree} />
+        <CmApberFolder onClick={handleClick} tree={tree} />
+        <CmApber onClick={handleClick} tree={tree} />
+        <CmErfkritFolder onClick={handleClick} tree={tree} />
+        <CmErfkrit onClick={handleClick} tree={tree} />
+        <CmZielFolder onClick={handleClick} tree={tree} />
+        <CmZielJahrFolder onClick={handleClick} tree={tree} />
+        <CmZiel onClick={handleClick} tree={tree} />
+        <CmZielBerFolder onClick={handleClick} tree={tree} />
+        <CmZielBer onClick={handleClick} tree={tree} />
+        <CmPopFolder onClick={handleClick} tree={tree} />
+        <CmPop onClick={handleClick} tree={tree} />
+        <CmPopmassnberFolder onClick={handleClick} tree={tree} />
+        <CmPopmassnber onClick={handleClick} tree={tree} />
+        <CmPopberFolder onClick={handleClick} tree={tree} />
+        <CmPopber onClick={handleClick} tree={tree} />
+        <CmTpopFolder onClick={handleClick} tree={tree} />
+        <CmTpop onClick={handleClick} tree={tree} />
+        <CmTpopberFolder onClick={handleClick} tree={tree} />
+        <CmTpopber onClick={handleClick} tree={tree} />
+        <CmTpopbeob onClick={handleClick} tree={tree} />
+        <CmBeobnichtbeurteilt onClick={handleClick} tree={tree} />
+        <CmBeobNichtZuzuordnen onClick={handleClick} tree={tree} />
+        <CmTpopfreiwkontrFolder onClick={handleClick} tree={tree} />
+        <CmTpopfreiwkontr onClick={handleClick} tree={tree} />
+        <CmTpopfreiwkontrzaehlFolder onClick={handleClick} tree={tree} />
+        <CmTpopfreiwkontrzaehl onClick={handleClick} tree={tree} />
+        <CmTpopfeldkontrFolder onClick={handleClick} tree={tree} />
+        <CmTpopfeldkontr onClick={handleClick} tree={tree} />
+        <CmTpopfeldkontrzaehlFolder onClick={handleClick} tree={tree} />
+        <CmTpopfeldkontrzaehl onClick={handleClick} tree={tree} />
+        <CmTpopmassnberFolder onClick={handleClick} tree={tree} />
+        <CmTpopmassnber onClick={handleClick} tree={tree} />
+        <CmTpopmassnFolder onClick={handleClick} tree={tree} />
+        <CmTpopmassn onClick={handleClick} tree={tree} />
       </Container>
     )
   }

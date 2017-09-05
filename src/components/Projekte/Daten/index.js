@@ -104,6 +104,12 @@ const Daten = ({ store, tree }: { store: Object, tree: Object }) => {
     key = activeDataset.table
   }
   const form = formObject[key] || standardForm
+  /**
+   * TODO
+   * this is at wrong place
+   * modal does not show when Daten is not visible!!!
+   */
+  console.log('Daten: store.datasetToDelete:', store.datasetToDelete)
   const deleteDatasetModalIsVisible = !!store.datasetToDelete.id
 
   return (
