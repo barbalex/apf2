@@ -2,7 +2,6 @@
 import axios from 'axios'
 import app from 'ampersand-app'
 
-import apiBaseUrl from '../../modules/apiBaseUrl'
 import tables from '../../modules/tables'
 
 export default async (
@@ -28,9 +27,9 @@ export default async (
       )
     }
     store.loading.push(tableName)
-    let url = `${apiBaseUrl}/schema/${schemaName}/table/${tableName}`
+    let url = `/schema/${schemaName}/table/${tableName}`
     if (tableName === 'adb_lr') {
-      url = `${apiBaseUrl}/lrDelarze`
+      url = '/lrDelarze'
     }
 
     let dataFromIdb

@@ -2,16 +2,14 @@
 import axios from 'axios'
 import app from 'ampersand-app'
 
-import apiBaseUrl from '../../modules/apiBaseUrl'
 import tables from '../../modules/tables'
-import recordValuesForWhichTableDataWasFetched
-  from '../../modules/recordValuesForWhichTableDataWasFetched'
+import recordValuesForWhichTableDataWasFetched from '../../modules/recordValuesForWhichTableDataWasFetched'
 
 export default (
   store: Object,
   schemaNamePassed: string,
   tableName: string,
-  parentId: number,
+  parentId: number
 ): void => {
   const schemaName = schemaNamePassed || 'apflora'
   // $FlowIssue
@@ -29,7 +27,7 @@ export default (
     return
   }
 
-  const url = `${apiBaseUrl}/schema/${schemaName}/table/${tableName}/field/${parentIdField}/value/${parentId}`
+  const url = `/schema/${schemaName}/table/${tableName}/field/${parentIdField}/value/${parentId}`
   store.loading.push(tableName)
 
   app.db[tableName]
@@ -48,7 +46,7 @@ export default (
       store.loading = store.loading.filter(el => el !== tableName)
       // leave ui react before this happens
       setTimeout(() =>
-        store.writeToStore({ data, table: tableName, field: idField }),
+        store.writeToStore({ data, table: tableName, field: idField })
       )
       setTimeout(() => app.db[tableName].bulkPut(data))
     })

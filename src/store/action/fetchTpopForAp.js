@@ -2,9 +2,7 @@
 import axios from 'axios'
 import app from 'ampersand-app'
 
-import apiBaseUrl from '../../modules/apiBaseUrl'
-import recordValuesForWhichTableDataWasFetched
-  from '../../modules/recordValuesForWhichTableDataWasFetched'
+import recordValuesForWhichTableDataWasFetched from '../../modules/recordValuesForWhichTableDataWasFetched'
 
 export default (store: Object, apArtId: number): any => {
   const { valuesForWhichTableDataWasFetched } = store
@@ -18,7 +16,7 @@ export default (store: Object, apArtId: number): any => {
     return
   }
 
-  const url = `${apiBaseUrl}/tpopForAp/${apArtId}`
+  const url = `/tpopForAp/${apArtId}`
   store.loading.push('tpopForAp')
   app.db.tpop
     .toArray()
@@ -36,7 +34,7 @@ export default (store: Object, apArtId: number): any => {
       store.loading = store.loading.filter(el => el !== 'tpopForAp')
       // leave ui react before this happens
       setTimeout(() =>
-        store.writeToStore({ data, table: 'tpop', field: 'TPopId' }),
+        store.writeToStore({ data, table: 'tpop', field: 'TPopId' })
       )
       setTimeout(() => app.db.tpop.bulkPut(data))
     })

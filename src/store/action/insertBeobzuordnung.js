@@ -1,7 +1,6 @@
 // @flow
 import axios from 'axios'
 
-import apiBaseUrl from '../../modules/apiBaseUrl'
 import insertDatasetInIdb from './insertDatasetInIdb'
 
 const updateBeobzuordnungData = (
@@ -9,7 +8,7 @@ const updateBeobzuordnungData = (
   tree: Object,
   beob: Object,
   newKey: string,
-  newValue: string | number,
+  newValue: string | number
 ): void => {
   store.updateProperty(tree, newKey, newValue)
   store.updatePropertyInDb(tree, newKey, newValue)
@@ -22,7 +21,7 @@ const continueWithBeob = (
   tree: Object,
   beob: Object,
   newKey: string,
-  newValue: string | number,
+  newValue: string | number
 ): void => {
   const { projekt, ap } = tree.activeNodes
   // set new activeNodeArray
@@ -62,7 +61,7 @@ export default (
   store: Object,
   tree: Object,
   newKey: string,
-  newValue: number,
+  newValue: number
 ): void => {
   /**
    * newKey is either BeobNichtZuordnen or TPopId
@@ -75,7 +74,7 @@ export default (
     return continueWithBeob(store, tree, beob, newKey, newValue)
   }
   // insert new dataset in db and fetch id
-  const url = `${apiBaseUrl}/apflora/beobzuordnung/BeobId/${beob.id}`
+  const url = `/apflora/beobzuordnung/BeobId/${beob.id}`
   axios
     .post(url)
     .then(({ data: row }) => {
