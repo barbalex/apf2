@@ -10,7 +10,8 @@ export default (store: Object, tree: Object): Array<Object> => {
     .filter(beob => {
       if (!apFilter) return true
       const ap = table.ap.get(beob.ArtId)
-      return [1, 2, 3].includes(ap.ApStatus)
+      if (ap) return [1, 2, 3].includes(ap.ApStatus)
+      return false
     })
     // fetch only those without beobzuordnung
     .filter(beob => {
@@ -28,7 +29,7 @@ export default (store: Object, tree: Object): Array<Object> => {
   const filterString = nodeLabelFilter.get('beobzuordnung')
   if (filterString) {
     beobNichtBeurteilt = beobNichtBeurteilt.filter(p =>
-      p.label.toLowerCase().includes(filterString.toLowerCase()),
+      p.label.toLowerCase().includes(filterString.toLowerCase())
     )
   }
   // sort by label and return
