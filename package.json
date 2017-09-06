@@ -49,7 +49,7 @@
     "react-copy-to-clipboard": "5.0.0",
     "react-dom": "15.6.1",
     "react-file-download": "0.3.4",
-    "react-leaflet": "1.6.5",
+    "react-leaflet": "1.6.6",
     "react-leaflet-bing": "2.0.0",
     "react-leaflet-control": "1.4.0",
     "react-linkify": "0.2.1",
