@@ -4,7 +4,6 @@ import objectValues from 'lodash/values'
 import clone from 'lodash/clone'
 import { toJS } from 'mobx'
 
-import apiBaseUrl from '../../modules/apiBaseUrl'
 import tables from '../../modules/tables'
 import updatePropertyInIdb from './updatePropertyInIdb'
 import deleteDatasetInIdb from './deleteDatasetInIdb'
@@ -99,7 +98,7 @@ export default (
      * put keep url/route signature in the time being
      * because of old application
      */
-    const url = `${apiBaseUrl}/update/apflora/tabelle=${table}/tabelleIdFeld=${idField}/tabelleId=${tabelleId}/feld=${key}/wert=null/user=${user}`
+    const url = `/update/apflora/tabelle=${table}/tabelleIdFeld=${idField}/tabelleId=${tabelleId}/feld=${key}/wert=null/user=${user}`
     axios
       .put(url, { wert: value })
       .then(() => {

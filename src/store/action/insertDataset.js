@@ -1,7 +1,6 @@
 // @flow
 import axios from 'axios'
 
-import apiBaseUrl from '../../modules/apiBaseUrl'
 import tables from '../../modules/tables'
 import insertDatasetInIdb from './insertDatasetInIdb'
 
@@ -36,7 +35,7 @@ export default async (
     )
   }
 
-  const url = `${apiBaseUrl}/apflora/${table}/${parentIdField}/${parentId}`
+  const url = `/apflora/${table}/${parentIdField}/${parentId}`
   let result
   try {
     result = await axios.post(url)

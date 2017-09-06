@@ -6,7 +6,6 @@
 
 import axios from 'axios'
 
-import apiBaseUrl from '../../modules/apiBaseUrl'
 import tables from '../../modules/tables'
 import updatePropertyInIdb from './updatePropertyInIdb'
 
@@ -47,7 +46,7 @@ export default (store: Object, newParentId: number): any => {
   // update store
   row[parentIdField] = newParentId
   // update db
-  const url = `${apiBaseUrl}/update/apflora/tabelle=${table}/tabelleIdFeld=${idField}/tabelleId=${id}/feld=${parentIdField}/wert=${newParentId}/user=${user}`
+  const url = `/update/apflora/tabelle=${table}/tabelleIdFeld=${idField}/tabelleId=${id}/feld=${parentIdField}/wert=${newParentId}/user=${user}`
   axios
     .put(url)
     .then(() => {
