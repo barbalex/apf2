@@ -4,9 +4,7 @@ import axios from 'axios'
 import app from 'ampersand-app'
 import cloneDeep from 'lodash/cloneDeep'
 
-import apiBaseUrl from '../../modules/apiBaseUrl'
-import recordValuesForWhichTableDataWasFetched
-  from '../../modules/recordValuesForWhichTableDataWasFetched'
+import recordValuesForWhichTableDataWasFetched from '../../modules/recordValuesForWhichTableDataWasFetched'
 
 const writeToStore = (store: Object, data: Array<Object>): void => {
   runInAction(() => {
@@ -33,7 +31,7 @@ export default (store: Object, apArtId: number): any => {
   const { valuesForWhichTableDataWasFetched } = store
   if (!apArtId) {
     return store.listError(
-      new Error('action fetchBeobzuordnung: apArtId must be passed'),
+      new Error('action fetchBeobzuordnung: apArtId must be passed')
     )
   }
 
@@ -46,7 +44,7 @@ export default (store: Object, apArtId: number): any => {
     return
   }
 
-  const url = `${apiBaseUrl}/beobzuordnung/${apArtId}`
+  const url = `/beobzuordnung/${apArtId}`
   store.loading.push('beobzuordnung')
   app.db.beobzuordnung
     .toArray()

@@ -2,10 +2,8 @@
 import axios from 'axios'
 import app from 'ampersand-app'
 
-import apiBaseUrl from '../../modules/apiBaseUrl'
 import tables from '../../modules/tables'
-import recordValuesForWhichTableDataWasFetched
-  from '../../modules/recordValuesForWhichTableDataWasFetched'
+import recordValuesForWhichTableDataWasFetched from '../../modules/recordValuesForWhichTableDataWasFetched'
 
 export default ({
   store,
@@ -20,12 +18,12 @@ export default ({
 }): any => {
   if (!tableName) {
     return store.listError(
-      new Error('action fetchDatasetById: tableName must be passed'),
+      new Error('action fetchDatasetById: tableName must be passed')
     )
   }
   if (!id) {
     return store.listError(
-      new Error('action fetchDatasetById: id must be passed'),
+      new Error('action fetchDatasetById: id must be passed')
     )
   }
   schemaName = schemaName || 'apflora' // eslint-disable-line no-param-reassign
@@ -43,7 +41,7 @@ export default ({
     return
   }
 
-  const url = `${apiBaseUrl}/schema/${schemaName}/table/${tableName}/field/${idField}/value/${id}`
+  const url = `/schema/${schemaName}/table/${tableName}/field/${idField}/value/${id}`
 
   store.loading.push(tableName)
   app.db[tableName]
@@ -68,7 +66,7 @@ export default ({
       store.loading = store.loading.filter(el => el !== tableName)
       // leave ui react before this happens
       setTimeout(() =>
-        store.writeToStore({ data, table: tableName, field: idField }),
+        store.writeToStore({ data, table: tableName, field: idField })
       )
       setTimeout(() => app.db[tableName].bulkPut(data))
     })

@@ -4,9 +4,7 @@ import axios from 'axios'
 import app from 'ampersand-app'
 import cloneDeep from 'lodash/cloneDeep'
 
-import apiBaseUrl from '../../modules/apiBaseUrl'
-import recordValuesForWhichTableDataWasFetched
-  from '../../modules/recordValuesForWhichTableDataWasFetched'
+import recordValuesForWhichTableDataWasFetched from '../../modules/recordValuesForWhichTableDataWasFetched'
 
 const writeToStore = (store, data) => {
   runInAction(() => {
@@ -28,7 +26,7 @@ export default (store: Object, apArtId: number): any => {
     return
   }
 
-  const url = `${apiBaseUrl}/schema/beob/table/beob/field/ArtId/value/${apArtId}`
+  const url = `/schema/beob/table/beob/field/ArtId/value/${apArtId}`
   store.loading.push('beob')
   app.db.beob
     .toArray()
