@@ -1,14 +1,13 @@
 // @flow
 import axios from 'axios'
 
-import apiBaseUrl from '../../modules/apiBaseUrl'
 import deleteDatasetInIdb from './deleteDatasetInIdb'
 
 export default (store: Object, tree: Object, beobId: number | string): void => {
   const { table } = store
   const { activeNodes } = tree
   // delete beobzuordnung
-  const deleteUrl = `${apiBaseUrl}/apflora/tabelle=beobzuordnung/tabelleIdFeld=BeobId/tabelleId=${beobId}`
+  const deleteUrl = `/apflora/tabelle=beobzuordnung/tabelleIdFeld=BeobId/tabelleId=${beobId}`
   axios
     .delete(deleteUrl)
     .then(() => {

@@ -2,11 +2,9 @@
 import axios from 'axios'
 import app from 'ampersand-app'
 
-import apiBaseUrl from '../../modules/apiBaseUrl'
-
 export default async (store: Object): Promise<any> => {
   store.loading.push('adb_eigenschaften')
-  let url = `${apiBaseUrl}/schema/beob/table/adb_eigenschaften`
+  let url = `/schema/beob/table/adb_eigenschaften`
 
   let data
   try {
@@ -22,7 +20,7 @@ export default async (store: Object): Promise<any> => {
         data,
         table: 'adb_eigenschaften',
         field: 'TaxonomieId',
-      }),
+      })
     )
     setTimeout(() => app.db.adb_eigenschaften.bulkPut(data))
   }

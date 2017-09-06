@@ -1,7 +1,6 @@
 // @flow
 import axios from 'axios'
 
-import apiBaseUrl from '../../modules/apiBaseUrl'
 import tables from '../../modules/tables'
 import deleteDatasetInIdb from './deleteDatasetInIdb'
 
@@ -21,7 +20,7 @@ export default (store: Object, tree: Object): void => {
   if (tableMetadata.dbTable) {
     table = tableMetadata.dbTable
   }
-  const deleteUrl = `${apiBaseUrl}/apflora/tabelle=${table}/tabelleIdFeld=${idField}/tabelleId=${id}`
+  const deleteUrl = `/apflora/tabelle=${table}/tabelleIdFeld=${idField}/tabelleId=${id}`
   axios
     .delete(deleteUrl)
     .then(() => {

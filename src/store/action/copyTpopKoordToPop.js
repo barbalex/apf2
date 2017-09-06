@@ -3,7 +3,6 @@ import clone from 'lodash/clone'
 import axios from 'axios'
 import { toJS } from 'mobx'
 
-import apiBaseUrl from '../../modules/apiBaseUrl'
 import insertDatasetInIdb from './insertDatasetInIdb'
 
 export default (store: Object, tpopId: number): void => {
@@ -14,28 +13,28 @@ export default (store: Object, tpopId: number): void => {
   if (!tpop) {
     return store.listError(
       new Error(
-        `Für die Teilpopulation mit tpopId ${tpopId} wurde keine Teilpopulation gefunden`,
-      ),
+        `Für die Teilpopulation mit tpopId ${tpopId} wurde keine Teilpopulation gefunden`
+      )
     )
   }
   if (!tpop.TPopXKoord || !tpop.TPopYKoord) {
     return store.listError(
       new Error(
-        `Die Teilpopulation mit tpopId ${tpopId} hat keine (vollständigen) Koordinaten. Daher wurden sie nicht in die Population kopiert`,
-      ),
+        `Die Teilpopulation mit tpopId ${tpopId} hat keine (vollständigen) Koordinaten. Daher wurden sie nicht in die Population kopiert`
+      )
     )
   }
   if (!tpop.PopId) {
     return store.listError(
-      new Error(`Die Teilpopulation mit tpopId ${tpopId} hat keine Population`),
+      new Error(`Die Teilpopulation mit tpopId ${tpopId} hat keine Population`)
     )
   }
   let popInStore = store.table.pop.get(tpop.PopId)
   if (!popInStore) {
     return store.listError(
       new Error(
-        `Für die Teilpopulation mit tpopId ${tpopId} wurde keine Population gefunden`,
-      ),
+        `Für die Teilpopulation mit tpopId ${tpopId} wurde keine Population gefunden`
+      )
     )
   }
   // keep original pop in case update fails
@@ -64,7 +63,9 @@ export default (store: Object, tpopId: number): void => {
   delete popForDb.MutWer
   delete popForDb.MutWann
   // update db
-  const url = `${apiBaseUrl}/updateMultiple/apflora/tabelle=pop/felder=${JSON.stringify(popForDb)}`
+  const url = `/updateMultiple/apflora/tabelle=pop/felder=${JSON.stringify(
+    popForDb
+  )}`
   axios
     .put(url)
     .then(() => {
