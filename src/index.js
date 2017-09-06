@@ -12,6 +12,7 @@ import 'babel-polyfill'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import injectTapEventPlugin from 'react-tap-event-plugin'
+import axios from 'axios'
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import uiTheme from './modules/uiTheme'
@@ -45,6 +46,8 @@ import updateFromSocket from './modules/updateFromSocket'
 import './index.css'
 
 registerServiceWorker()
+
+axios.defaults.baseURL = apiBaseUrl
 
 // prevent changing values in number inputs when scrolling pages!
 // see: http://stackoverflow.com/a/38589039/712005

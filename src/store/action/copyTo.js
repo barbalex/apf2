@@ -7,7 +7,6 @@
 import axios from 'axios'
 import clone from 'lodash/clone'
 
-import apiBaseUrl from '../../modules/apiBaseUrl'
 import tables from '../../modules/tables'
 import insertDatasetInIdb from './insertDatasetInIdb'
 
@@ -64,7 +63,7 @@ export default (store: Object, parentId: number): void => {
   delete newRow.PopKoordWgs84
 
   // update db
-  const url = `${apiBaseUrl}/insertFields/apflora/tabelle=${table}/felder=${JSON.stringify(
+  const url = `/insertFields/apflora/tabelle=${table}/felder=${JSON.stringify(
     newRow
   )}`
   axios

@@ -3,7 +3,6 @@ import axios from 'axios'
 import clone from 'lodash/clone'
 import { toJS } from 'mobx'
 
-import apiBaseUrl from '../../modules/apiBaseUrl'
 import biotopFields from '../../modules/biotopFields'
 import insertDatasetInIdb from './insertDatasetInIdb'
 
@@ -12,7 +11,7 @@ export default (store: Object, newId: number): void => {
   const rowToGetBiotopFrom = store.table.tpopkontr.get(id)
   if (!rowToGetBiotopFrom) {
     return store.listError(
-      new Error('change was not saved because dataset was not found in store'),
+      new Error('change was not saved because dataset was not found in store')
     )
   }
 
@@ -45,7 +44,9 @@ export default (store: Object, newId: number): void => {
   delete rowForDb.MutWann
 
   // update db
-  const url = `${apiBaseUrl}/updateMultiple/apflora/tabelle=tpopkontr/felder=${JSON.stringify(rowForDb)}`
+  const url = `/updateMultiple/apflora/tabelle=tpopkontr/felder=${JSON.stringify(
+    rowForDb
+  )}`
   axios
     .put(url)
     .then(() => {

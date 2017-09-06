@@ -19,15 +19,11 @@ import json2csv from 'json2csv'
 
 import beziehungen from '../../../etc/beziehungen.png'
 import FormTitle from '../../shared/FormTitle'
-import apiBaseUrl from '../../../modules/apiBaseUrl'
 import Tipps from './Tipps'
 import Optionen from './Optionen'
-import popIdsInsideFeatureCollection
-  from '../../../modules/popIdsInsideFeatureCollection'
-import tpopIdsInsideFeatureCollection
-  from '../../../modules/tpopIdsInsideFeatureCollection'
-import beobIdsFromServerInsideFeatureCollection
-  from '../../../modules/beobIdsFromServerInsideFeatureCollection'
+import popIdsInsideFeatureCollection from '../../../modules/popIdsInsideFeatureCollection'
+import tpopIdsInsideFeatureCollection from '../../../modules/tpopIdsInsideFeatureCollection'
+import beobIdsFromServerInsideFeatureCollection from '../../../modules/beobIdsFromServerInsideFeatureCollection'
 
 const Container = styled.div`
   height: 100%;
@@ -91,7 +87,7 @@ const enhance = compose(
   withState(
     'artFuerEierlegendeWollmilchsau',
     'changeArtFuerEierlegendeWollmilchsau',
-    '',
+    ''
   ),
   withHandlers({
     downloadFromView: props => ({ view, fileName, apArtId }) => {
@@ -100,7 +96,7 @@ const enhance = compose(
         changeArtFuerEierlegendeWollmilchsau,
         artFuerEierlegendeWollmilchsau,
       } = props
-      const url = `${apiBaseUrl}/exportView/json/view=${view}${apArtId ? `/${apArtId}` : ''}`
+      const url = `/exportView/json/view=${view}${apArtId ? `/${apArtId}` : ''}`
 
       axios
         .get(url)
@@ -122,7 +118,7 @@ const enhance = compose(
             if (keys.includes('id')) {
               const beobIds = beobIdsFromServerInsideFeatureCollection(
                 store,
-                data,
+                data
               )
               jsonData = jsonData.filter(d => beobIds.includes(d.id))
             } else if (keys.includes('TPopId')) {
@@ -137,12 +133,15 @@ const enhance = compose(
           }
           if (jsonData.length === 0) {
             throw new Error(
-              'Es gibt offenbar keine Daten, welche exportiert werden können',
+              'Es gibt offenbar keine Daten, welche exportiert werden können'
             )
           }
           try {
             const csvData = json2csv({ data: jsonData })
-            const file = `${fileName}_${format(new Date(), 'YYYY-MM-DD_HH-mm-ss')}`
+            const file = `${fileName}_${format(
+              new Date(),
+              'YYYY-MM-DD_HH-mm-ss'
+            )}`
             fileDownload(csvData, `${file}.csv`)
             if (artFuerEierlegendeWollmilchsau) {
               changeArtFuerEierlegendeWollmilchsau('')
@@ -168,7 +167,7 @@ const enhance = compose(
     artList = filter(artList, r => apIds.includes(r.TaxonomieId))
     artList = sortBy(artList, 'Artname')
     return { artList }
-  }),
+  })
 )
 
 const Exporte = ({
@@ -445,7 +444,9 @@ const Exporte = ({
                 })}
             >
               <div>Teilpopulationen von AP-Arten</div>
-              <div>{'ohne "Bekannt seit"'}</div>
+              <div>
+                {'ohne "Bekannt seit"'}
+              </div>
             </DownloadCardButton>
             <DownloadCardButton
               onClick={() =>
@@ -455,7 +456,9 @@ const Exporte = ({
                 })}
             >
               <div>Teilpopulationen ohne Eintrag</div>
-              <div>{'im Feld "Für AP-Bericht relevant"'}</div>
+              <div>
+                {'im Feld "Für AP-Bericht relevant"'}
+              </div>
             </DownloadCardButton>
             <DownloadCardButton
               onClick={() =>
@@ -479,7 +482,8 @@ const Exporte = ({
               onClick={() =>
                 downloadFromView({
                   view: 'v_tpop_anzkontrinklletzterundletztertpopber',
-                  fileName: 'TeilpopulationenAnzKontrInklusiveLetzteKontrUndLetztenTPopBericht',
+                  fileName:
+                    'TeilpopulationenAnzKontrInklusiveLetzteKontrUndLetztenTPopBericht',
                 })}
               disabled={isRemoteHost}
               title={
@@ -501,7 +505,9 @@ const Exporte = ({
                 <li>letzter Teilpopulationsbericht</li>
                 <li>letzte Zählung</li>
               </ul>
-              <div>{'= "Eier legende Wollmilchsau"'}</div>
+              <div>
+                {'= "Eier legende Wollmilchsau"'}
+              </div>
             </DownloadCardButton>
             <AutocompleteContainer>
               <StyledAutoComplete
@@ -590,12 +596,8 @@ const Exporte = ({
                   fileName: 'Beobachtungen',
                 })}
             >
-              <div>
-                Alle Beobachtungen von Arten aus apflora.ch
-              </div>
-              <div>
-                Nutzungsbedingungen der FNS beachten
-              </div>
+              <div>Alle Beobachtungen von Arten aus apflora.ch</div>
+              <div>Nutzungsbedingungen der FNS beachten</div>
             </DownloadCardButton>
           </DownloadCardText>
           <DownloadCardText expandable>
@@ -606,18 +608,10 @@ const Exporte = ({
                   fileName: 'Beobachtungen',
                 })}
             >
-              <div>
-                Alle Beobachtungen von Arten aus apflora.ch...
-              </div>
-              <div>
-                ...inklusive Original-Beobachtungsdaten (JSON)
-              </div>
-              <div>
-                Dauert Minuten und umfasst hunderte Megabytes!
-              </div>
-              <div>
-                Nutzungsbedingungen der FNS beachten
-              </div>
+              <div>Alle Beobachtungen von Arten aus apflora.ch...</div>
+              <div>...inklusive Original-Beobachtungsdaten (JSON)</div>
+              <div>Dauert Minuten und umfasst hunderte Megabytes!</div>
+              <div>Nutzungsbedingungen der FNS beachten</div>
             </DownloadCardButton>
           </DownloadCardText>
         </FirstLevelCard>
