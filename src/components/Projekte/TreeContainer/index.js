@@ -179,7 +179,7 @@ const enhance = compose(
         },
         showBeobOnMap() {
           // 1. open map if not yet open
-          showMapIfNotYetVisible(store)
+          showMapIfNotYetVisible({ store })
           // 2 add layer for actionTable
           store.map.showMapLayer(
             actionTable,
@@ -199,7 +199,7 @@ const enhance = compose(
             store.fetchTpopForAp(id)
           }
           // 2. open map if not yet open
-          showMapIfNotYetVisible(store)
+          showMapIfNotYetVisible({ store })
           // 3 add layer for actionTable
           store.map.showMapLayer(
             actionTable,
@@ -211,7 +211,7 @@ const enhance = compose(
         },
         localizeOnMap() {
           store.map.setIdOfTpopBeingLocalized(parseInt(id, 10))
-          showMapIfNotYetVisible(store)
+          showMapIfNotYetVisible({ store })
           store.map.showMapApfloraLayer('Tpop', true)
         },
         markForMoving() {
