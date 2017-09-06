@@ -2,14 +2,12 @@
 import axios from 'axios'
 import app from 'ampersand-app'
 
-import apiBaseUrl from '../../modules/apiBaseUrl'
-
 export default async (store: Object, metadata: Object): Promise<any> => {
   const { database, table, idField } = metadata
   store.loading.push(table)
-  let url = `${apiBaseUrl}/schema/${database}/table/${table}`
+  let url = `/schema/${database}/table/${table}`
   if (table === 'adb_lr') {
-    url = `${apiBaseUrl}/lrDelarze`
+    url = '/lrDelarze'
   }
 
   let dataFromDb

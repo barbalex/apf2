@@ -1,15 +1,12 @@
 // @flow
 import axios from 'axios'
 import app from 'ampersand-app'
-
-import apiBaseUrl from '../../modules/apiBaseUrl'
-import recordValuesForWhichTableDataWasFetched
-  from '../../modules/recordValuesForWhichTableDataWasFetched'
+import recordValuesForWhichTableDataWasFetched from '../../modules/recordValuesForWhichTableDataWasFetched'
 
 export default (store: Object, apArtId: number): any => {
   if (!apArtId) {
     return store.listError(
-      new Error('action fetchPopForAp: apArtId must be passed'),
+      new Error('action fetchPopForAp: apArtId must be passed')
     )
   }
   const { valuesForWhichTableDataWasFetched } = store
@@ -34,13 +31,13 @@ export default (store: Object, apArtId: number): any => {
         field: 'ApArtId',
         value: apArtId,
       })
-      return axios.get(`${apiBaseUrl}/popForAp/${apArtId}`)
+      return axios.get(`/popForAp/${apArtId}`)
     })
     .then(({ data }) => {
       store.loading = store.loading.filter(el => el !== 'popForAp')
       // leave ui react before this happens
       setTimeout(() =>
-        store.writeToStore({ data, table: 'pop', field: 'PopId' }),
+        store.writeToStore({ data, table: 'pop', field: 'PopId' })
       )
       setTimeout(() => app.db.pop.bulkPut(data))
     })

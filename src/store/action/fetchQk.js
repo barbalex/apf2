@@ -2,7 +2,6 @@
 import axios from 'axios'
 import isArray from 'lodash/isArray'
 
-import apiBaseUrl from '../../modules/apiBaseUrl'
 import isPointInsidePolygon from '../../modules/isPointInsidePolygon'
 
 const fetchQk = ({ store, tree }: { store: Object, tree: Object }) => {
@@ -149,7 +148,8 @@ const fetchQk = ({ store, tree }: { store: Object, tree: Object }) => {
   let nrOfMessages = 0
   const urls = qkTypes.map(
     t =>
-      `${apiBaseUrl}/${t.type === 'view' ? 'qkView/' : ''}${t.name}/${tree.activeNodes.ap}${t.berichtjahr ? `/${t.berichtjahr}` : ''}`
+      `/${t.type === 'view' ? 'qkView/' : ''}${t.name}/${tree.activeNodes
+        .ap}${t.berichtjahr ? `/${t.berichtjahr}` : ''}`
   )
   const dataFetchingPromises = urls.map(dataUrl =>
     axios
@@ -174,11 +174,7 @@ const fetchQk = ({ store, tree }: { store: Object, tree: Object }) => {
       .catch(e => e)
   )
   Promise.all(dataFetchingPromises)
-    .then(() =>
-      axios.get(
-        `${apiBaseUrl}/tpopKoordFuerProgramm/apId=${tree.activeNodes.ap}`
-      )
-    )
+    .then(() => axios.get(`/tpopKoordFuerProgramm/apId=${tree.activeNodes.ap}`))
     .then(res => {
       // kontrolliere die Relevanz ausserkantonaler Tpop
       const tpops = res.data.filter(

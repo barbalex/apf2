@@ -2,19 +2,17 @@
 import axios from 'axios'
 import app from 'ampersand-app'
 
-import apiBaseUrl from '../../modules/apiBaseUrl'
-
 export default (store: Object, name: string, password: string): any => {
   if (!name) {
     return store.listError(new Error('action fetchLogin: name must be passed'))
   }
   if (!password) {
     return store.listError(
-      new Error('action fetchLogin: password must be passed'),
+      new Error('action fetchLogin: password must be passed')
     )
   }
 
-  const url = `${apiBaseUrl}/anmeldung/name=${name}/pwd=${password}`
+  const url = `/anmeldung/name=${name}/pwd=${password}`
   store.loading.push('user')
   axios
     .get(url)

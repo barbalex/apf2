@@ -1,10 +1,9 @@
 // @flow
 import axios from 'axios'
-import apiBaseUrl from '../../modules/apiBaseUrl'
 
 export default (store: Object): void => {
   if (!store.app.ktZh) {
-    const url = `${apiBaseUrl}/geojson/ktZh.json`
+    const url = '/geojson/ktZh.json'
     axios
       .get(url)
       .then(({ data }) => {
