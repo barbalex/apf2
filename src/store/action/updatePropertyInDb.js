@@ -100,7 +100,7 @@ export default async (
      */
     const url = `/update/apflora/tabelle=${table}/tabelleIdFeld=${idField}/tabelleId=${tabelleId}/feld=${key}/wert=null/user=${user}`
     try {
-      axios.put(url, { wert: value })
+      await axios.put(url, { wert: value })
     } catch (error) {
       // revert change in store
       row[key] = oldValue

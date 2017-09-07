@@ -2,7 +2,7 @@
 import tables from '../../modules/tables'
 import fetchStammdatenTable from './fetchStammdatenTable'
 
-export default async (store: Object): Promise<any> => {
+export default (store: Object): void => {
   const stammdatenTablesMetadata = tables
     // $FlowIssue
     .filter(t => t.stammdaten)
