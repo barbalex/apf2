@@ -10,7 +10,7 @@ import clone from 'lodash/clone'
 import tables from '../../modules/tables'
 import insertDatasetInIdb from './insertDatasetInIdb'
 
-export default (store: Object, parentId: number): void => {
+export default async (store: Object, parentId: number): Promise<void> => {
   let { table } = store.copying
   const { id } = store.copying
 
@@ -66,13 +66,15 @@ export default (store: Object, parentId: number): void => {
   const url = `/insertFields/apflora/tabelle=${table}/felder=${JSON.stringify(
     newRow
   )}`
-  axios
-    .post(url)
-    .then(({ data }) => {
-      // can't write to store before, because db creates id and guid
-      store.writeToStore({ data: [data], table, field: idField })
-      // insert this dataset in idb
-      insertDatasetInIdb(store, table, data)
-    })
-    .catch(error => store.listError(error))
+  let response
+  try {
+    response = await axios.post(url)
+  } catch (error) {
+    store.listError(error)
+  }
+  const { data } = response
+  // can't write to store before, because db creates id and guid
+  store.writeToStore({ data: [data], table, field: idField })
+  // insert this dataset in idb
+  insertDatasetInIdb(store, table, data)
 }

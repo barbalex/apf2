@@ -6,7 +6,7 @@ import { toJS } from 'mobx'
 import biotopFields from '../../modules/biotopFields'
 import insertDatasetInIdb from './insertDatasetInIdb'
 
-export default (store: Object, newId: number): void => {
+export default async (store: Object, newId: number): Promise<void> => {
   const { id } = store.copyingBiotop
   const rowToGetBiotopFrom = store.table.tpopkontr.get(id)
   if (!rowToGetBiotopFrom) {
@@ -47,14 +47,12 @@ export default (store: Object, newId: number): void => {
   const url = `/updateMultiple/apflora/tabelle=tpopkontr/felder=${JSON.stringify(
     rowForDb
   )}`
-  axios
-    .put(url)
-    .then(() => {
-      // put this dataset in idb
-      insertDatasetInIdb(store, 'tpopkontr', rowForIdb)
-    })
-    .catch(error => {
-      rowToUpdate = rowToUpdateBeforeUpdating
-      store.listError(error)
-    })
+  try {
+    axios.put(url)
+  } catch (error) {
+    rowToUpdate = rowToUpdateBeforeUpdating
+    store.listError(error)
+  }
+  // put this dataset in idb
+  insertDatasetInIdb(store, 'tpopkontr', rowForIdb)
 }

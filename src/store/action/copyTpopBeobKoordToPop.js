@@ -5,7 +5,7 @@ import { toJS } from 'mobx'
 
 import insertDatasetInIdb from './insertDatasetInIdb'
 
-export default (store: Object, beobId: string): void => {
+export default async (store: Object, beobId: string): Promise<void> => {
   if (!beobId) {
     return store.listError(new Error('keine beobId übergeben'))
   }
@@ -62,14 +62,12 @@ export default (store: Object, beobId: string): void => {
   const url = `/updateMultiple/apflora/tabelle=tpop/felder=${JSON.stringify(
     tpopForDb
   )}`
-  axios
-    .put(url)
-    .then(() => {
-      // put this dataset in idb
-      insertDatasetInIdb(store, 'tpop', tpopForIdb)
-    })
-    .catch(error => {
-      tpopInStore = originalTpop
-      store.listError(error)
-    })
+  try {
+    await axios.put(url)
+  } catch (error) {
+    tpopInStore = originalTpop
+    store.listError(error)
+  }
+  // put this dataset in idb
+  insertDatasetInIdb(store, 'tpop', tpopForIdb)
 }
