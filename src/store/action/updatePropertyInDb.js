@@ -9,7 +9,7 @@ import updatePropertyInIdb from './updatePropertyInIdb'
 import deleteDatasetInIdb from './deleteDatasetInIdb'
 import insertDatasetInIdb from './insertDatasetInIdb'
 
-export default (
+export default async (
   store: Object,
   tree: Object,
   key: string,
@@ -99,40 +99,38 @@ export default (
      * because of old application
      */
     const url = `/update/apflora/tabelle=${table}/tabelleIdFeld=${idField}/tabelleId=${tabelleId}/feld=${key}/wert=null/user=${user}`
-    axios
-      .put(url, { wert: value })
-      .then(() => {
-        // update in idb
-        if (!artWasChanged) {
-          updatePropertyInIdb(store, table, tabelleId, key, value)
-        }
-        // if ApArtId of ap is updated, url needs to change
-        if (artWasChanged) {
-          newActiveNodeArray[3] = value
-          tree.setActiveNodeArray(newActiveNodeArray)
-        }
-        // if beobNichtBeurteilt is set to beobNichtZuordnen, url needs to change
-        if (table === 'beobzuordnung' && key === 'BeobNichtZuordnen') {
-          newActiveNodeArray[4] =
-            value === 1
-              ? 'nicht-zuzuordnende-Beobachtungen'
-              : 'nicht-beurteilte-Beobachtungen'
-          newActiveNodeArray[5] = tree.activeDataset.row.BeobId
-          tree.setActiveNodeArray(newActiveNodeArray.slice(0, 6))
-        }
-        // if for a beobZugeordnet TPopId is set, url needs to change
-        // namely: PopId and TPopId
-        if (table === 'beobzuordnung' && key === 'TPopId' && value) {
-          const tpop = store.table.tpop.get(value)
-          newActiveNodeArray[5] = tpop.PopId
-          newActiveNodeArray[7] = value
-          tree.setActiveNodeArray(newActiveNodeArray)
-        }
-      })
-      .catch(error => {
-        // revert change in store
-        row[key] = oldValue
-        store.listError(error)
-      })
+    try {
+      axios.put(url, { wert: value })
+    } catch (error) {
+      // revert change in store
+      row[key] = oldValue
+      store.listError(error)
+    }
+    // update in idb
+    if (!artWasChanged) {
+      updatePropertyInIdb(store, table, tabelleId, key, value)
+    }
+    // if ApArtId of ap is updated, url needs to change
+    if (artWasChanged) {
+      newActiveNodeArray[3] = value
+      tree.setActiveNodeArray(newActiveNodeArray)
+    }
+    // if beobNichtBeurteilt is set to beobNichtZuordnen, url needs to change
+    if (table === 'beobzuordnung' && key === 'BeobNichtZuordnen') {
+      newActiveNodeArray[4] =
+        value === 1
+          ? 'nicht-zuzuordnende-Beobachtungen'
+          : 'nicht-beurteilte-Beobachtungen'
+      newActiveNodeArray[5] = tree.activeDataset.row.BeobId
+      tree.setActiveNodeArray(newActiveNodeArray.slice(0, 6))
+    }
+    // if for a beobZugeordnet TPopId is set, url needs to change
+    // namely: PopId and TPopId
+    if (table === 'beobzuordnung' && key === 'TPopId' && value) {
+      const tpop = store.table.tpop.get(value)
+      newActiveNodeArray[5] = tpop.PopId
+      newActiveNodeArray[7] = value
+      tree.setActiveNodeArray(newActiveNodeArray)
+    }
   }
 }
