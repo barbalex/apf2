@@ -92,7 +92,7 @@ export default async (
     }
     const newActiveNodeArray = clone(toJS(tree.activeNodeArray))
     /**
-     * wert can contain characters such as /, &, %
+     * wert can contain characters such as /, &, %, ;
      * this causes problems when passed as param
      * so pass it as payload
      * put keep url/route signature in the time being
