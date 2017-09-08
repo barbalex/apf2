@@ -67,12 +67,18 @@ const enhance = compose(
       const { store } = props
       const projekteTabs = clone(toJS(store.urlQuery.projekteTabs))
       const isVisible = projekteTabs.includes(name)
+      const exporteIsVisible = projekteTabs.includes('exporte')
       if (isVisible) {
         remove(projekteTabs, el => el === name)
       } else {
         projekteTabs.push(name)
         if (name === 'tree2') {
           store.tree.cloneActiveNodeArrayToTree2()
+        }
+        if (name === 'daten' && exporteIsVisible) {
+          // need to remove exporte
+          // because exporte replaces daten
+          remove(projekteTabs, el => el === 'exporte')
         }
       }
       store.setUrlQueryValue('projekteTabs', projekteTabs)
