@@ -120,6 +120,7 @@ const MyAppBar = ({
     projekteTabs.includes('daten2') && !projekteTabs.includes('exporte')
   const karteIsVisible = projekteTabs.includes('karte')
   const exporteIsVisible = projekteTabs.includes('exporte')
+  const exporteIsActive = !!store.tree.activeNodes.projekt
 
   return (
     <StyledAppBar
@@ -151,11 +152,12 @@ const MyAppBar = ({
             data-visible={karteIsVisible}
             onClick={onClickButtonKarte}
           />
-          <Button
-            label="Exporte"
-            data-visible={exporteIsVisible}
-            onClick={onClickButtonExporte}
-          />
+          {exporteIsActive &&
+            <Button
+              label="Exporte"
+              data-visible={exporteIsVisible}
+              onClick={onClickButtonExporte}
+            />}
           <IconMenu
             iconButtonElement={
               <IconButton>
