@@ -15,6 +15,7 @@
     "react-scripts": "1.0.13"
   },
   "dependencies": {
+    "@hocs/with-lifecycle": "^0.2.0",
     "@turf/inside": "4.6.0",
     "@turf/nearest": "4.6.0",
     "@turf/within": "4.6.0",
