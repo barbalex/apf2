@@ -2,7 +2,7 @@
 /**
  * When calling this component it is necessary to give it the key
  * of the parent dataset to force remounting when that dataset is changed.
- * 
+ *
  * If not, when you create a new dataset, it will show the date of the last
  * because component does not mount again
  * and previous changeDateStringValue remains
@@ -110,7 +110,7 @@ const enhance = compose(
         dateValueOnFocus,
       } = props
       // only update if value has changed
-      // there is a weird case where dataValueOnFocus is null and value is ''
+      // there is a weird case where dateValueOnFocus is null and value is ''
       // which led to year being deleted when focus moved out of date!
       if (!dateValueOnFocus && !value) return
       // eslint-disable-next-line eqeqeq
@@ -169,11 +169,8 @@ class YearDatePair extends Component {
 
   static defaultProps = {
     yearValue: '',
-    yearValueOnFocus: '',
     yearErrorText: '',
     dateValue: '',
-    dateStringValue: '',
-    dateValueOnFocus: '',
     dateErrorText: '',
   }
 
@@ -196,7 +193,6 @@ class YearDatePair extends Component {
       onFocusYear,
       onFocusDate,
     } = this.props
-    const dateValueObject = dateValue ? new Date(dateValue) : {}
 
     return (
       <div>
@@ -234,7 +230,7 @@ class YearDatePair extends Component {
             <DatePicker
               id="dataPicker"
               floatingLabelText={''}
-              value={dateValueObject}
+              value={dateValue ? new Date(dateValue) : {}}
               errorText={dateErrorText}
               DateTimeFormat={window.Intl.DateTimeFormat}
               locale="de-CH-1996"
