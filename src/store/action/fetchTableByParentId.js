@@ -11,41 +11,59 @@ export default (
   parentId: number
 ): void => {
   const schemaName = schemaNamePassed || 'apflora'
+
+  const table = tables.find(t => t.table === tableName)
+  if (!table) {
+    return store.listError(new Error(`not table found with name: ${tableName}`))
+  }
+  const idField = table.idField
+  if (!idField) {
+    return store.listError(new Error(`not idField found in table ${tableName}`))
+  }
   // $FlowIssue
-  const idField = tables.find(t => t.table === tableName).idField
-  // $FlowIssue
-  const parentIdField = tables.find(t => t.table === tableName).parentIdField
+  const parentIdField = table.parentIdField
+  if (!parentIdField) {
+    return store.listError(
+      new Error(`not parentIdField found in table ${tableName}`)
+    )
+  }
 
   // only fetch if not yet fetched
   const { valuesForWhichTableDataWasFetched } = store
   if (
     valuesForWhichTableDataWasFetched[tableName] &&
-    valuesForWhichTableDataWasFetched[tableName][idField] &&
-    valuesForWhichTableDataWasFetched[tableName][idField].includes(parentId)
+    valuesForWhichTableDataWasFetched[tableName][parentIdField] &&
+    valuesForWhichTableDataWasFetched[tableName][parentIdField].includes(
+      parentId
+    )
   ) {
     return
   }
-
+  // set this before query runs
+  // to prevent multiple same queries from running in parallel
+  recordValuesForWhichTableDataWasFetched({
+    store,
+    table: tableName,
+    field: parentIdField,
+    value: parentId,
+  })
   const url = `/schema/${schemaName}/table/${tableName}/field/${parentIdField}/value/${parentId}`
-  store.loading.push(tableName)
 
   axios
     .get(url)
     .then(({ data }) => {
-      store.loading = store.loading.filter(el => el !== tableName)
       // leave ui react before this happens
       setTimeout(() => {
         store.writeToStore({ data, table: tableName, field: idField })
-        recordValuesForWhichTableDataWasFetched({
-          store,
-          table: tableName,
-          field: idField,
-          value: parentId,
-        })
       })
     })
     .catch(error => {
-      store.loading = store.loading.filter(el => el !== tableName)
+      // remove setting that prevents loading of this value
+      valuesForWhichTableDataWasFetched[tableName][
+        parentIdField
+      ] = valuesForWhichTableDataWasFetched[tableName][parentIdField].filter(
+        x => x !== parentId
+      )
       store.listError(error)
     })
 }

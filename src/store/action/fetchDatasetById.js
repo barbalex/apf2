@@ -27,8 +27,14 @@ export default ({
   }
   schemaName = schemaName || 'apflora' // eslint-disable-line no-param-reassign
 
-  // $FlowIssue
-  const idField = tables.find(t => t.table === tableName).idField
+  const table = tables.find(t => t.table === tableName)
+  if (!table) {
+    return store.listError(new Error(`not table found with name: ${tableName}`))
+  }
+  const idField = table.idField
+  if (!idField) {
+    return store.listError(new Error(`not idField found in table ${tableName}`))
+  }
 
   // only fetch if not yet fetched
   const { valuesForWhichTableDataWasFetched } = store
@@ -40,26 +46,32 @@ export default ({
     return
   }
 
+  // set this before query runs
+  // to prevent multiple same queries from running in parallel
+  recordValuesForWhichTableDataWasFetched({
+    store,
+    table: tableName,
+    field: idField,
+    value: id,
+  })
   const url = `/schema/${schemaName}/table/${tableName}/field/${idField}/value/${id}`
+  console.log('fetchDatasetById: fetching url:', url)
 
-  store.loading.push(tableName)
   axios
     .get(url)
     .then(({ data }) => {
-      store.loading = store.loading.filter(el => el !== tableName)
       // leave ui react before this happens
-      setTimeout(() => {
+      setTimeout(() =>
         store.writeToStore({ data, table: tableName, field: idField })
-        recordValuesForWhichTableDataWasFetched({
-          store,
-          table: tableName,
-          field: idField,
-          value: id,
-        })
-      })
+      )
     })
     .catch(error => {
-      store.loading = store.loading.filter(el => el !== tableName)
+      // remove setting that prevents loading of this value
+      valuesForWhichTableDataWasFetched[tableName][
+        idField
+      ] = valuesForWhichTableDataWasFetched[tableName][idField].filter(
+        x => x !== id
+      )
       store.listError(error)
     })
 }
