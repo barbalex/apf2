@@ -10,7 +10,7 @@ export default async (
 ) => {
   const schemaName = schemaNamePassed || 'apflora'
   // only fetch if not yet fetched
-  if (store.table[tableName].size === 0) {
+  if (!store.loading.includes(tableName) && store.table[tableName].size === 0) {
     const tableMetadata = tables.find(t => t.table === tableName)
     if (!tableMetadata) {
       return store.listError(
