@@ -51,12 +51,9 @@ export default (
 
   axios
     .get(url)
-    .then(({ data }) => {
-      // leave ui react before this happens
-      setTimeout(() => {
-        store.writeToStore({ data, table: tableName, field: idField })
-      })
-    })
+    .then(({ data }) =>
+      store.writeToStore({ data, table: tableName, field: idField })
+    )
     .catch(error => {
       // remove setting that prevents loading of this value
       valuesForWhichTableDataWasFetched[tableName][
