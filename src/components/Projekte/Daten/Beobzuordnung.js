@@ -100,12 +100,16 @@ const getTpopZuordnenSource = (store: Object, tree: Object): Array<Object> => {
     t.distance = Math.round((dX ** 2 + dY ** 2) ** 0.5)
     t.popNr = store.table.pop.get(t.PopId).PopNr
     // build label
-    t.herkunft = t.TPopHerkunft
-      ? // $FlowIssue
-        Array.from(store.table.pop_status_werte.values()).find(
-          x => x.HerkunftId === t.TPopHerkunft
-        ).HerkunftTxt
-      : 'ohne Status'
+    const popStatusWerte = Array.from(store.table.pop_status_werte.values())
+    let popStatusWert
+    if (popStatusWerte) {
+      popStatusWert = popStatusWerte.find(x => x.HerkunftId === t.TPopHerkunft)
+    }
+    if (popStatusWert && popStatusWert.HerkunftTxt) {
+      t.herkunft = popStatusWert.HerkunftTxt
+    } else {
+      t.herkunft = 'ohne Status'
+    }
     const popNr = t.popNr || t.popNr === 0 ? t.popNr : '(keine Nr)'
     const tpopNr = t.TPopNr || t.TPopNr === 0 ? t.TPopNr : '(keine Nr)'
     t.label = `${t.distance.toLocaleString(
