@@ -21,15 +21,12 @@ export default (store: Object, apArtId: number): any => {
     .get(url)
     .then(({ data }) => {
       store.loading = store.loading.filter(el => el !== 'tpopForAp')
-      // leave ui react before this happens
-      setTimeout(() => {
-        store.writeToStore({ data, table: 'tpop', field: 'TPopId' })
-        recordValuesForWhichTableDataWasFetched({
-          store,
-          table: 'tpopForAp',
-          field: 'ApArtId',
-          value: apArtId,
-        })
+      store.writeToStore({ data, table: 'tpop', field: 'TPopId' })
+      recordValuesForWhichTableDataWasFetched({
+        store,
+        table: 'tpopForAp',
+        field: 'ApArtId',
+        value: apArtId,
       })
     })
     .catch(error => {

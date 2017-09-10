@@ -26,28 +26,27 @@ export default (store: Object, apArtId: number): any => {
   }
 
   const url = `/schema/beob/table/beob/field/ArtId/value/${apArtId}`
-  store.loading.push('beob')
+  recordValuesForWhichTableDataWasFetched({
+    store,
+    table: 'beob',
+    field: 'ArtId',
+    value: apArtId,
+  })
+  console.log('fetchBeob')
   axios
     .get(url)
     .then(({ data }) => {
-      store.loading = store.loading.filter(el => el !== 'beob')
-      // leave ui react before this happens
-      // leave ui react before this happens
       // copy array without the individual objects being references
       // otherwise the computed values are passed to idb
       // and this creates errors, as they can't be cloned
-      setTimeout(() => {
-        writeToStore(store, cloneDeep(data))
-        recordValuesForWhichTableDataWasFetched({
-          store,
-          table: 'beob',
-          field: 'ArtId',
-          value: apArtId,
-        })
-      })
+      writeToStore(store, cloneDeep(data))
     })
     .catch(error => {
       store.loading = store.loading.filter(el => el !== 'beob')
+      // remove setting that prevents loading of this value
+      valuesForWhichTableDataWasFetched.beob.ArtId = valuesForWhichTableDataWasFetched.beob.ArtId.filter(
+        x => x !== apArtId
+      )
       store.listError(error)
     })
 }

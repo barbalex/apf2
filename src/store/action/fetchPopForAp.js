@@ -24,15 +24,12 @@ export default (store: Object, apArtId: number): any => {
     .get(`/popForAp/${apArtId}`)
     .then(({ data }) => {
       store.loading = store.loading.filter(el => el !== 'popForAp')
-      // leave ui react before this happens
-      setTimeout(() => {
-        store.writeToStore({ data, table: 'pop', field: 'PopId' })
-        recordValuesForWhichTableDataWasFetched({
-          store,
-          table: 'popForAp',
-          field: 'ApArtId',
-          value: apArtId,
-        })
+      store.writeToStore({ data, table: 'pop', field: 'PopId' })
+      recordValuesForWhichTableDataWasFetched({
+        store,
+        table: 'popForAp',
+        field: 'ApArtId',
+        value: apArtId,
       })
     })
     .catch(error => {

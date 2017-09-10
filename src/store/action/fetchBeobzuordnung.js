@@ -49,18 +49,15 @@ export default (store: Object, apArtId: number): any => {
     .get(url)
     .then(({ data }) => {
       store.loading = store.loading.filter(el => el !== 'beobzuordnung')
-      // leave ui react before this happens
       // copy array without the individual objects being references
       // otherwise the computed values are passed to idb
       // and this creates errors, ad they can't be cloned
-      setTimeout(() => {
-        writeToStore(store, cloneDeep(data))
-        recordValuesForWhichTableDataWasFetched({
-          store,
-          table: 'beobzuordnung',
-          field: 'ArtId',
-          value: apArtId,
-        })
+      writeToStore(store, cloneDeep(data))
+      recordValuesForWhichTableDataWasFetched({
+        store,
+        table: 'beobzuordnung',
+        field: 'ArtId',
+        value: apArtId,
       })
     })
     .catch(error => {

@@ -39,14 +39,11 @@ export default async (
       store.listError(error)
     }
     if (dataFromDb && dataFromDb.length) {
-      // leave ui react before this happens
-      setTimeout(() =>
-        store.writeToStore({
-          data: dataFromDb,
-          table: tableName,
-          field: idField,
-        })
-      )
+      store.writeToStore({
+        data: dataFromDb,
+        table: tableName,
+        field: idField,
+      })
     }
     store.loading = store.loading.filter(el => el !== tableName)
   }

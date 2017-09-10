@@ -149,7 +149,7 @@ const enhance = compose(
       if (!data) return store.listError(new Error('no data passed with click'))
       if (!element)
         return store.listError(new Error('no element passed with click'))
-      const { table, action, idTable, actionTable } = data
+      const { table, action, actionTable } = data
       const { firstElementChild } = element
       if (!firstElementChild)
         return store.listError(
@@ -181,26 +181,6 @@ const enhance = compose(
           // 1. open map if not yet open
           showMapIfNotYetVisible({ store })
           // 2 add layer for actionTable
-          store.map.showMapLayer(
-            actionTable,
-            !store.map.activeOverlays.includes(actionTable)
-          )
-        },
-        showOnMap() {
-          // actionTable: table to show on map
-          // idTable: table from which to filter datasets of actionTable
-          // 1. load missing data if necessary
-          if (idTable === 'ap') {
-            store.map.pop.apArtId = parseInt(id, 10)
-            store.fetchTableByParentId('apflora', 'pop', id)
-            store.fetchTpopForAp(id)
-          }
-          if (actionTable === 'tpop') {
-            store.fetchTpopForAp(id)
-          }
-          // 2. open map if not yet open
-          showMapIfNotYetVisible({ store })
-          // 3 add layer for actionTable
           store.map.showMapLayer(
             actionTable,
             !store.map.activeOverlays.includes(actionTable)
