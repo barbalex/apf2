@@ -7,7 +7,7 @@
  * because component does not mount again
  * and previous changeDateStringValue remains
  */
-import React, { Component } from 'react'
+import React from 'react'
 import { observer } from 'mobx-react'
 import TextField from 'material-ui/TextField'
 import DatePicker from 'material-ui/DatePicker'
@@ -16,7 +16,6 @@ import format from 'date-fns/format'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 import withState from 'recompose/withState'
-import withLifecycle from '@hocs/with-lifecycle'
 import styled from 'styled-components'
 
 import convertDateToYyyyMmDd from '../../modules/convertDateToYyyyMmDd'
@@ -140,121 +139,103 @@ const enhance = compose(
     onFocusYear: props => () => props.changeYearValueOnFocus(props.yearValue),
     onFocusDate: props => () => props.changeDateValueOnFocus(props.dateValue),
   }),
-  withLifecycle({
-    onDidMount({ dateValue }) {
-      console.log('YearDatePair did mount: dataValue:', dateValue)
-    },
-  }),
   observer
 )
 
-class YearDatePair extends Component {
-  props: {
-    tree: Object,
-    yearLabel: string,
-    yearFieldName: string,
-    yearValue?: ?number | ?string,
-    yearValueOnFocus?: ?number | ?string,
-    yearErrorText?: string,
-    dateLabel: string,
-    dateFieldName: string,
-    dateValue?: ?number | ?string,
-    dateStringValue?: ?number | ?string,
-    dateValueOnFocus?: ?number | ?string,
-    dateErrorText?: string,
-    updateProperty: () => void,
-    updatePropertyInDb: () => void,
-    onBlurYear: () => void,
-    onChangeDate: () => void,
-    onChangeDatePicker: () => void,
-    onBlurDate: () => void,
-    onFocusYear: () => void,
-    onFocusDate: () => void,
-    changeDateStringValue: () => void,
-  }
-
-  static defaultProps = {
-    yearValue: '',
-    yearErrorText: '',
-    dateValue: '',
-    dateErrorText: '',
-  }
-
-  render() {
-    const {
-      tree,
-      yearLabel,
-      yearFieldName,
-      yearValue,
-      yearErrorText,
-      dateLabel,
-      dateValue,
-      dateStringValue,
-      dateErrorText,
-      updateProperty,
-      onBlurYear,
-      onChangeDate,
-      onChangeDatePicker,
-      onBlurDate,
-      onFocusYear,
-      onFocusDate,
-    } = this.props
-    // console.log('YearDatePair rendering: dateValue:', dateValue)
-    // console.log('YearDatePair rendering: dateStringValue:', dateStringValue)
-
-    return (
-      <div>
-        <YearTextField
-          floatingLabelText={yearLabel}
-          type="number"
-          value={yearValue || ''}
-          errorText={yearErrorText}
+const YearDatePair = ({
+  tree,
+  yearLabel,
+  yearFieldName,
+  yearValue,
+  yearValueOnFocus,
+  yearErrorText,
+  dateLabel,
+  dateFieldName,
+  dateValue,
+  dateStringValue,
+  dateValueOnFocus,
+  dateErrorText,
+  updateProperty,
+  updatePropertyInDb,
+  onBlurYear,
+  onChangeDate,
+  onChangeDatePicker,
+  onBlurDate,
+  onFocusYear,
+  onFocusDate,
+  changeDateStringValue,
+}: {
+  tree: Object,
+  yearLabel: string,
+  yearFieldName: string,
+  yearValue?: ?number | ?string,
+  yearValueOnFocus?: ?number | ?string,
+  yearErrorText?: string,
+  dateLabel: string,
+  dateFieldName: string,
+  dateValue?: ?number | ?string,
+  dateStringValue?: ?number | ?string,
+  dateValueOnFocus?: ?number | ?string,
+  dateErrorText?: string,
+  updateProperty: () => void,
+  updatePropertyInDb: () => void,
+  onBlurYear: () => void,
+  onChangeDate: () => void,
+  onChangeDatePicker: () => void,
+  onBlurDate: () => void,
+  onFocusYear: () => void,
+  onFocusDate: () => void,
+  changeDateStringValue: () => void,
+}) =>
+  <div>
+    <YearTextField
+      floatingLabelText={yearLabel}
+      type="number"
+      value={yearValue || ''}
+      errorText={yearErrorText}
+      fullWidth
+      onChange={(event, val) => updateProperty(tree, yearFieldName, val)}
+      onBlur={onBlurYear}
+      onFocus={onFocusYear}
+    />
+    <DateFieldContainer>
+      <TextField
+        floatingLabelText={dateLabel}
+        type="text"
+        value={dateStringValue}
+        errorText={dateErrorText}
+        fullWidth
+        onChange={onChangeDate}
+        onBlur={onBlurDate}
+        onFocus={onFocusDate}
+      />
+      <StyledFontIcon
+        id="iconCalendar"
+        className="material-icons"
+        title="Kalender öffnen"
+        // $FlowIssue
+        onClick={() => this.datePicker.focus()}
+      >
+        event
+      </StyledFontIcon>
+      <DatePickerDiv>
+        <DatePicker
+          id="dataPicker"
+          floatingLabelText={''}
+          value={dateValue ? new Date(dateValue) : {}}
+          errorText={dateErrorText}
+          DateTimeFormat={window.Intl.DateTimeFormat}
+          locale="de-CH-1996"
+          formatDate={v => format(v, 'DD.MM.YYYY')}
+          autoOk
           fullWidth
-          onChange={(event, val) => updateProperty(tree, yearFieldName, val)}
-          onBlur={onBlurYear}
-          onFocus={onFocusYear}
+          cancelLabel="schliessen"
+          onChange={onChangeDatePicker}
+          // $FlowIssue
+          ref={c => (this.datePicker = c)}
         />
-        <DateFieldContainer>
-          <TextField
-            floatingLabelText={dateLabel}
-            type="text"
-            value={dateStringValue}
-            errorText={dateErrorText}
-            fullWidth
-            onChange={onChangeDate}
-            onBlur={onBlurDate}
-            onFocus={onFocusDate}
-          />
-          <StyledFontIcon
-            id="iconCalendar"
-            className="material-icons"
-            title="Kalender öffnen"
-            // $FlowIssue
-            onClick={() => this.datePicker.focus()}
-          >
-            event
-          </StyledFontIcon>
-          <DatePickerDiv>
-            <DatePicker
-              id="dataPicker"
-              floatingLabelText={''}
-              value={dateValue ? new Date(dateValue) : {}}
-              errorText={dateErrorText}
-              DateTimeFormat={window.Intl.DateTimeFormat}
-              locale="de-CH-1996"
-              formatDate={v => format(v, 'DD.MM.YYYY')}
-              autoOk
-              fullWidth
-              cancelLabel="schliessen"
-              onChange={onChangeDatePicker}
-              // $FlowIssue
-              ref={c => (this.datePicker = c)}
-            />
-          </DatePickerDiv>
-        </DateFieldContainer>
-      </div>
-    )
-  }
-}
+      </DatePickerDiv>
+    </DateFieldContainer>
+  </div>
 
 export default enhance(YearDatePair)
