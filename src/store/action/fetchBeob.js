@@ -1,7 +1,6 @@
 // @flow
 import { runInAction, computed } from 'mobx'
 import axios from 'axios'
-import app from 'ampersand-app'
 import cloneDeep from 'lodash/cloneDeep'
 
 import recordValuesForWhichTableDataWasFetched from '../../modules/recordValuesForWhichTableDataWasFetched'

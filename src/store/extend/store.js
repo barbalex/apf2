@@ -10,7 +10,6 @@ import fetchDatasetById from '../action/fetchDatasetById'
 import fetchBeob from '../action/fetchBeob'
 import updateProperty from '../action/updateProperty'
 import updatePropertyInDb from '../action/updatePropertyInDb'
-import fetchFields from '../action/fetchFields'
 import insertDataset from '../action/insertDataset'
 import insertBeobzuordnung from '../action/insertBeobzuordnung'
 import deleteDatasetDemand from '../action/deleteDatasetDemand'
@@ -23,7 +22,6 @@ import addMessagesToQk from '../action/addMessagesToQk'
 import fetchLogin from '../action/fetchLogin'
 import logout from '../action/logout'
 import setLoginFromIdb from '../action/setLoginFromIdb'
-import fetchStammdatenTables from '../action/fetchStammdatenTables'
 import deleteBeobzuordnung from '../action/deleteBeobzuordnung'
 import writeToStore from '../action/writeToStore'
 import moveTo from '../action/moveTo'
@@ -208,10 +206,6 @@ export default (store: Object): void => {
     fetchTable: action('fetchTable', (schemaName, tableName) =>
       fetchTable(store, schemaName, tableName)
     ),
-    fetchStammdaten: action('fetchStammdaten', () => {
-      fetchFields(store)
-      fetchStammdatenTables(store)
-    }),
     fetchBeobzuordnung: action('fetchBeobzuordnung', apArtId =>
       fetchBeobzuordnungModule(store, apArtId)
     ),

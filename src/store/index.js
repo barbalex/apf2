@@ -30,7 +30,6 @@ function Store(): void {
   this.updateProperty = () => {}
   this.updatePropertyInDb = () => {}
   this.fetchTable = () => {}
-  this.fetchStammdaten = () => {}
   this.fetchBeobzuordnung = () => {}
   this.fetchTableByParentId = () => {}
   this.fetchTpopForAp = () => {}

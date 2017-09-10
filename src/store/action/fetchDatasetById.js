@@ -1,6 +1,5 @@
 // @flow
 import axios from 'axios'
-import app from 'ampersand-app'
 
 import tables from '../../modules/tables'
 import recordValuesForWhichTableDataWasFetched from '../../modules/recordValuesForWhichTableDataWasFetched'

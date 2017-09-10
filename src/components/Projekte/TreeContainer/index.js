@@ -2,7 +2,7 @@
 /**
  * need to keep class because of ref
  */
-import React, { Component } from 'react'
+import React from 'react'
 import { toJS } from 'mobx'
 import { observer, inject } from 'mobx-react'
 import styled from 'styled-components'

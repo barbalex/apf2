@@ -175,10 +175,6 @@ const MyAppBar = ({
             style={iconMenuStyle}
           >
             <MenuItem
-              primaryText="Stammdaten aktualisieren (Arteigenschaften, Adressen, Auswahllisten etc.)"
-              onTouchTap={store.fetchStammdaten}
-            />
-            <MenuItem
               primaryText="über apflora.ch"
               onTouchTap={ueberApfloraChOnTouchTap}
             />
