@@ -55,15 +55,14 @@ export default ({
     value: id,
   })
   const url = `/schema/${schemaName}/table/${tableName}/field/${idField}/value/${id}`
-  console.log('fetchDatasetById: fetching url:', url)
 
   axios
     .get(url)
     .then(({ data }) => {
       // leave ui react before this happens
-      setTimeout(() =>
-        store.writeToStore({ data, table: tableName, field: idField })
-      )
+      //setTimeout(() =>
+      store.writeToStore({ data, table: tableName, field: idField })
+      //)
     })
     .catch(error => {
       // remove setting that prevents loading of this value
