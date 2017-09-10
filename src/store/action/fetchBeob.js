@@ -32,7 +32,6 @@ export default (store: Object, apArtId: number): any => {
     field: 'ArtId',
     value: apArtId,
   })
-  console.log('fetchBeob')
   axios
     .get(url)
     .then(({ data }) => {
