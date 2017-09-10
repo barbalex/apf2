@@ -5,9 +5,6 @@ import clone from 'lodash/clone'
 import { toJS } from 'mobx'
 
 import tables from '../../modules/tables'
-import updatePropertyInIdb from './updatePropertyInIdb'
-import deleteDatasetInIdb from './deleteDatasetInIdb'
-import insertDatasetInIdb from './insertDatasetInIdb'
 
 export default async (
   store: Object,
@@ -84,10 +81,9 @@ export default async (
       newActiveNodeArray.pop()
       newActiveNodeArray.push(value)
       tree.setActiveNodeArray(newActiveNodeArray)
-      deleteDatasetInIdb(store, 'ap', oldValue)
-      insertDatasetInIdb(store, 'ap', rowCloned)
     } else {
       // need to set row[key] for select fields, checkboxes, radios...
+      // console.log('updatePropertyInDb: setting row[key] of store to:', value)
       row[key] = value
     }
     const newActiveNodeArray = clone(toJS(tree.activeNodeArray))
@@ -105,10 +101,6 @@ export default async (
       // revert change in store
       row[key] = oldValue
       store.listError(error)
-    }
-    // update in idb
-    if (!artWasChanged) {
-      updatePropertyInIdb(store, table, tabelleId, key, value)
     }
     // if ApArtId of ap is updated, url needs to change
     if (artWasChanged) {

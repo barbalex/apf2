@@ -1,6 +1,5 @@
 // @flow
 import axios from 'axios'
-import app from 'ampersand-app'
 
 import recordValuesForWhichTableDataWasFetched from '../../modules/recordValuesForWhichTableDataWasFetched'
 
@@ -18,25 +17,20 @@ export default (store: Object, apArtId: number): any => {
 
   const url = `/tpopForAp/${apArtId}`
   store.loading.push('tpopForAp')
-  app.db.tpop
-    .toArray()
-    .then(data => {
-      store.writeToStore({ data, table: 'tpop', field: 'TPopId' })
-      recordValuesForWhichTableDataWasFetched({
-        store,
-        table: 'tpopForAp',
-        field: 'ApArtId',
-        value: apArtId,
-      })
-      return axios.get(url)
-    })
+  axios
+    .get(url)
     .then(({ data }) => {
       store.loading = store.loading.filter(el => el !== 'tpopForAp')
       // leave ui react before this happens
-      setTimeout(() =>
+      setTimeout(() => {
         store.writeToStore({ data, table: 'tpop', field: 'TPopId' })
-      )
-      setTimeout(() => app.db.tpop.bulkPut(data))
+        recordValuesForWhichTableDataWasFetched({
+          store,
+          table: 'tpopForAp',
+          field: 'ApArtId',
+          value: apArtId,
+        })
+      })
     })
     .catch(error => {
       store.loading = store.loading.filter(el => el !== 'tpopForAp')

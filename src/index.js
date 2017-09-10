@@ -79,8 +79,6 @@ const theme = Object.assign({}, uiTheme, {
 window.app = app
 
 store.setLoginFromIdb()
-// load immediately because is used to validate active dataset
-store.fetchFieldsFromIdb()
 
 // turned off because of errors in production
 const socket = window.io(apiBaseUrl)

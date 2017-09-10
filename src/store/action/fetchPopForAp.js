@@ -1,6 +1,5 @@
 // @flow
 import axios from 'axios'
-import app from 'ampersand-app'
 import recordValuesForWhichTableDataWasFetched from '../../modules/recordValuesForWhichTableDataWasFetched'
 
 export default (store: Object, apArtId: number): any => {
@@ -21,25 +20,20 @@ export default (store: Object, apArtId: number): any => {
   }
 
   store.loading.push('popForAp')
-  app.db.pop
-    .toArray()
-    .then(data => {
-      store.writeToStore({ data, table: 'pop', field: 'PopId' })
-      recordValuesForWhichTableDataWasFetched({
-        store,
-        table: 'popForAp',
-        field: 'ApArtId',
-        value: apArtId,
-      })
-      return axios.get(`/popForAp/${apArtId}`)
-    })
+  axios
+    .get(`/popForAp/${apArtId}`)
     .then(({ data }) => {
       store.loading = store.loading.filter(el => el !== 'popForAp')
       // leave ui react before this happens
-      setTimeout(() =>
+      setTimeout(() => {
         store.writeToStore({ data, table: 'pop', field: 'PopId' })
-      )
-      setTimeout(() => app.db.pop.bulkPut(data))
+        recordValuesForWhichTableDataWasFetched({
+          store,
+          table: 'popForAp',
+          field: 'ApArtId',
+          value: apArtId,
+        })
+      })
     })
     .catch(error => {
       store.loading = store.loading.filter(el => el !== 'popForAp')

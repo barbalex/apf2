@@ -1,8 +1,6 @@
 // @flow
 import axios from 'axios'
 
-import insertDatasetInIdb from './insertDatasetInIdb'
-
 export default async (
   store: Object,
   tree: Object,
@@ -50,7 +48,6 @@ export default async (
     throw new Error(`Fehler bei der Erstellung einer neuen Population`)
   }
   store.table.pop.set(pop.PopId, pop)
-  insertDatasetInIdb(store, `pop`, pop)
   // create new tpop for pop
   try {
   } catch (error) {
@@ -84,7 +81,6 @@ export default async (
     throw new Error(`Fehler bei der Erstellung einer neuen Teil-Population`)
   }
   store.table.tpop.set(tpop.TPopId, tpop)
-  insertDatasetInIdb(store, `tpop`, tpop)
   // create new beobzuordnung
   let row
   try {
@@ -92,8 +88,6 @@ export default async (
   } catch (error) {
     store.listError(error)
   }
-  // insert this dataset in idb
-  insertDatasetInIdb(store, `beobzuordnung`, row)
   // insert this dataset in store.table
   store.table.beobzuordnung.set(row.BeobId, row)
   // set new activeNodeArray

@@ -2,7 +2,6 @@
 import axios from 'axios'
 
 import tables from '../../modules/tables'
-import insertDatasetInIdb from './insertDatasetInIdb'
 
 export default async (
   store: Object,
@@ -52,8 +51,6 @@ export default async (
   const row = result.data
   // insert this dataset in store.table
   store.table[table].set(row[idField], row)
-  // insert this dataset in idb
-  insertDatasetInIdb(store, table, row)
   // set new url
   baseUrl.push(row[idField])
   tree.setActiveNodeArray(baseUrl)

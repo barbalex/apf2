@@ -4,7 +4,6 @@ import clone from 'lodash/clone'
 import { toJS } from 'mobx'
 
 import biotopFields from '../../modules/biotopFields'
-import insertDatasetInIdb from './insertDatasetInIdb'
 
 export default async (store: Object, newId: number): Promise<void> => {
   const { id } = store.copyingBiotop
@@ -34,7 +33,6 @@ export default async (store: Object, newId: number): Promise<void> => {
   })
   // remove label: field does not exist in db, is computed
   delete rowForDb.label
-  const rowForIdb = clone(rowForDb)
   // server expects TPopId to be called id
   rowForDb.id = rowForDb.TPopKontrId
   delete rowForDb.TPopKontrId
@@ -53,6 +51,4 @@ export default async (store: Object, newId: number): Promise<void> => {
     rowToUpdate = rowToUpdateBeforeUpdating
     store.listError(error)
   }
-  // put this dataset in idb
-  insertDatasetInIdb(store, 'tpopkontr', rowForIdb)
 }

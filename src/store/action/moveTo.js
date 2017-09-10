@@ -7,7 +7,6 @@
 import axios from 'axios'
 
 import tables from '../../modules/tables'
-import updatePropertyInIdb from './updatePropertyInIdb'
 
 export default (store: Object, newParentId: number): any => {
   let { table } = store.moving
@@ -47,15 +46,9 @@ export default (store: Object, newParentId: number): any => {
   row[parentIdField] = newParentId
   // update db
   const url = `/update/apflora/tabelle=${table}/tabelleIdFeld=${idField}/tabelleId=${id}/feld=${parentIdField}/wert=${newParentId}/user=${user}`
-  axios
-    .put(url)
-    .then(() => {
-      // update idb
-      updatePropertyInIdb(store, table, id, parentIdField, newParentId)
-    })
-    .catch(error => {
-      // revert change in store
-      row[parentIdField] = oldValue
-      store.listError(error)
-    })
+  axios.put(url).catch(error => {
+    // revert change in store
+    row[parentIdField] = oldValue
+    store.listError(error)
+  })
 }

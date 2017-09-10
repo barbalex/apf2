@@ -24,7 +24,8 @@ const enhance = compose(inject('store'), observer)
 
 const Pop = ({ store, tree }: { store: Object, tree: Object }) => {
   const { activeDataset } = tree
-  const apJahr = store.table.ap.get(activeDataset.row.ApArtId).ApJahr
+  const apTable = store.table.ap.get(activeDataset.row.ApArtId)
+  const apJahr = apTable ? apTable.ApJahr : null
 
   return (
     <Container>

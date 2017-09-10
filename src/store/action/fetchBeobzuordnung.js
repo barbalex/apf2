@@ -1,7 +1,6 @@
 // @flow
 import { runInAction, computed } from 'mobx'
 import axios from 'axios'
-import app from 'ampersand-app'
 import cloneDeep from 'lodash/cloneDeep'
 
 import recordValuesForWhichTableDataWasFetched from '../../modules/recordValuesForWhichTableDataWasFetched'
@@ -46,26 +45,23 @@ export default (store: Object, apArtId: number): any => {
 
   const url = `/beobzuordnung/${apArtId}`
   store.loading.push('beobzuordnung')
-  app.db.beobzuordnung
-    .toArray()
-    .then(data => {
-      writeToStore(store, data)
-      recordValuesForWhichTableDataWasFetched({
-        store,
-        table: 'beobzuordnung',
-        field: 'ArtId',
-        value: apArtId,
-      })
-    })
-    .then(() => axios.get(url))
+  axios
+    .get(url)
     .then(({ data }) => {
       store.loading = store.loading.filter(el => el !== 'beobzuordnung')
       // leave ui react before this happens
       // copy array without the individual objects being references
       // otherwise the computed values are passed to idb
       // and this creates errors, ad they can't be cloned
-      setTimeout(() => writeToStore(store, cloneDeep(data)))
-      setTimeout(() => app.db.beobzuordnung.bulkPut(data))
+      setTimeout(() => {
+        writeToStore(store, cloneDeep(data))
+        recordValuesForWhichTableDataWasFetched({
+          store,
+          table: 'beobzuordnung',
+          field: 'ArtId',
+          value: apArtId,
+        })
+      })
     })
     .catch(error => {
       store.loading = store.loading.filter(el => el !== 'beobzuordnung')

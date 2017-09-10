@@ -3,8 +3,6 @@ import clone from 'lodash/clone'
 import axios from 'axios'
 import { toJS } from 'mobx'
 
-import insertDatasetInIdb from './insertDatasetInIdb'
-
 export default async (store: Object, beobId: string): Promise<void> => {
   if (!beobId) {
     return store.listError(new Error('keine beobId übergeben'))
@@ -49,7 +47,6 @@ export default async (store: Object, beobId: string): Promise<void> => {
   delete tpopForDb.popNr
   delete tpopForDb.herkunft
   delete tpopForDb.distance
-  const tpopForIdb = clone(tpopForDb)
   // server expects TPopId to be called id
   tpopForDb.id = tpopForDb.TPopId
   delete tpopForDb.TPopId
@@ -68,6 +65,4 @@ export default async (store: Object, beobId: string): Promise<void> => {
     tpopInStore = originalTpop
     store.listError(error)
   }
-  // put this dataset in idb
-  insertDatasetInIdb(store, 'tpop', tpopForIdb)
 }

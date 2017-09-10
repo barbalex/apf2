@@ -1,8 +1,6 @@
 // @flow
 import axios from 'axios'
 
-import insertDatasetInIdb from './insertDatasetInIdb'
-
 const updateBeobzuordnungData = (
   store: Object,
   tree: Object,
@@ -78,8 +76,6 @@ export default (
   axios
     .post(url)
     .then(({ data: row }) => {
-      // insert this dataset in idb
-      insertDatasetInIdb(store, 'beobzuordnung', row)
       // insert this dataset in store.table
       store.table.beobzuordnung.set(row.BeobId, row)
       continueWithBeob(store, tree, beob, newKey, newValue)

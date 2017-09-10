@@ -1,8 +1,6 @@
 // @flow
 import axios from 'axios'
 
-import deleteDatasetInIdb from './deleteDatasetInIdb'
-
 export default async (
   store: Object,
   tree: Object,
@@ -19,8 +17,6 @@ export default async (
   }
   // remove this dataset in store.table
   table.beobzuordnung.delete(beobId)
-  // remove from idb
-  deleteDatasetInIdb(store, 'beobzuordnung', beobId)
   // set activeNodeArray to corresponding beob
   const newActiveNodeArray = [
     'Projekte',

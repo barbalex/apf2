@@ -1,6 +1,5 @@
 // @flow
 import axios from 'axios'
-import app from 'ampersand-app'
 
 import tables from '../../modules/tables'
 
@@ -32,32 +31,6 @@ export default async (
       url = '/lrDelarze'
     }
 
-    let dataFromIdb
-    try {
-      dataFromIdb = await app.db[tableName].toArray()
-    } catch (error) {
-      store.listError(error)
-    }
-    if (dataFromIdb) {
-      store.writeToStore({
-        data: dataFromIdb,
-        table: tableName,
-        field: idField,
-      })
-      store.loading = store.loading.filter(el => el !== tableName)
-    }
-
-    // don't fetch any stammdaten if they already existed in idb
-    if (
-      tableMetadata.stammdaten &&
-      dataFromIdb &&
-      dataFromIdb.length &&
-      dataFromIdb.length > 0
-    ) {
-      store.loading = store.loading.filter(el => el !== tableName)
-      return
-    }
-
     let dataFromDb
     try {
       const dataFromDbObject = await axios.get(url)
@@ -74,7 +47,6 @@ export default async (
           field: idField,
         })
       )
-      setTimeout(() => app.db[tableName].bulkPut(dataFromDb))
     }
     store.loading = store.loading.filter(el => el !== tableName)
   }

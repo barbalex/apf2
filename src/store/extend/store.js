@@ -11,7 +11,6 @@ import fetchBeob from '../action/fetchBeob'
 import updateProperty from '../action/updateProperty'
 import updatePropertyInDb from '../action/updatePropertyInDb'
 import fetchFields from '../action/fetchFields'
-import fetchFieldsFromIdb from '../action/fetchFieldsFromIdb'
 import insertDataset from '../action/insertDataset'
 import insertBeobzuordnung from '../action/insertBeobzuordnung'
 import deleteDatasetDemand from '../action/deleteDatasetDemand'
@@ -97,25 +96,25 @@ export default (store: Object): void => {
       store.copyingBiotop.label = null
     }),
     copyTpopKoordToPop: action('copyTpopKoordToPop', tpopId =>
-      copyTpopKoordToPop(store, tpopId),
+      copyTpopKoordToPop(store, tpopId)
     ),
     copyTpopBeobKoordToPop: action('copyTpopBeobKoordToPop', beobId =>
-      copyTpopBeobKoordToPop(store, beobId),
+      copyTpopBeobKoordToPop(store, beobId)
     ),
     createNewPopFromBeob: action('createNewPopFromBeob', (tree, beobId) =>
-      createNewPopFromBeob(store, tree, beobId),
+      createNewPopFromBeob(store, tree, beobId)
     ),
     showCoordOnMapsZhCh: action('showCoordOnMapsZhCh', (x, y) =>
       window.open(
         `https://maps.zh.ch/?x=${x}&y=${y}&scale=3000&markers=ring`,
-        'target="_blank"',
-      ),
+        'target="_blank"'
+      )
     ),
     showCoordOnMapGeoAdminCh: action('showCoordOnMapGeoAdminCh', (x, y) =>
       window.open(
         `https://map.geo.admin.ch/?bgLayer=ch.swisstopo.pixelkarte-farbe&Y=${x}&X=${y}&zoom=10&crosshair=circle`,
-        'target="_blank"',
-      ),
+        'target="_blank"'
+      )
     ),
     /**
      * urlQueries are used to control tabs
@@ -126,7 +125,7 @@ export default (store: Object): void => {
       feldkontrTab: 'entwicklung',
     },
     setUrlQuery: action('setUrlQuery', query =>
-      Object.keys(query).forEach(k => (store.urlQuery[k] = query[k])),
+      Object.keys(query).forEach(k => (store.urlQuery[k] = query[k]))
     ),
     setUrlQueryValue: action('setUrlQueryValue', (key, value) => {
       if (!value && value !== 0) {
@@ -137,10 +136,10 @@ export default (store: Object): void => {
     }),
     datasetToDelete: {},
     tellUserReadOnly: action('tellUserReadOnly', () =>
-      store.listError(new Error('Sie haben keine Schreibrechte')),
+      store.listError(new Error('Sie haben keine Schreibrechte'))
     ),
     fetchLogin: action('fetchLogin', (name, password) =>
-      fetchLogin(store, name, password),
+      fetchLogin(store, name, password)
     ),
     logout: action('logout', () => logout(store)),
     setLoginFromIdb: action('setLoginFromIdb', () => setLoginFromIdb(store)),
@@ -152,27 +151,24 @@ export default (store: Object): void => {
         }: {
           store: Object,
           tree: Object,
-        }),
-      ),
+        })
+      )
     ),
     setQk: action('setQk', ({ tree, berichtjahr, messages, filter }) =>
-      setQk({ store, tree, berichtjahr, messages, filter }),
+      setQk({ store, tree, berichtjahr, messages, filter })
     ),
     setQkFilter: action('setQkFilter', ({ filter, tree }) =>
-      setQkFilter({ store, tree, filter }),
+      setQkFilter({ store, tree, filter })
     ),
     addMessagesToQk: action('addMessagesToQk', ({ tree, messages }) => {
       addMessagesToQk({ store, tree, messages })
     }),
-    fetchFieldsFromIdb: action('fetchFieldsFromIdb', () =>
-      fetchFieldsFromIdb(store),
-    ),
     insertBeobzuordnung: action(
       'insertBeobzuordnung',
       (tree, newKey, newValue) => {
         if (store.user.readOnly) return store.tellUserReadOnly()
         insertBeobzuordnung(store, tree, newKey, newValue)
-      },
+      }
     ),
     insertDataset: action('insertDataset', (tree, table, parentId, baseUrl) => {
       if (store.user.readOnly) return store.tellUserReadOnly()
@@ -183,7 +179,7 @@ export default (store: Object): void => {
       (table, id, url, label) => {
         if (store.user.readOnly) return store.tellUserReadOnly()
         deleteDatasetDemand(store, table, id, url, label)
-      },
+      }
     ),
     deleteDatasetAbort: action('deleteDatasetAbort', () => {
       store.datasetToDelete = {}
@@ -193,7 +189,7 @@ export default (store: Object): void => {
       deleteDatasetExecute(store, tree)
     }),
     deleteBeobzuordnung: action('deleteBeobzuordnung', (tree, beobId) =>
-      deleteBeobzuordnung(store, tree, beobId),
+      deleteBeobzuordnung(store, tree, beobId)
     ),
     listError: action('listError', error => listError(store, error)),
     // updates data in store
@@ -210,36 +206,36 @@ export default (store: Object): void => {
     // primarily used for werte (domain) tables
     // and projekt
     fetchTable: action('fetchTable', (schemaName, tableName) =>
-      fetchTable(store, schemaName, tableName),
+      fetchTable(store, schemaName, tableName)
     ),
     fetchStammdaten: action('fetchStammdaten', () => {
       fetchFields(store)
       fetchStammdatenTables(store)
     }),
     fetchBeobzuordnung: action('fetchBeobzuordnung', apArtId =>
-      fetchBeobzuordnungModule(store, apArtId),
+      fetchBeobzuordnungModule(store, apArtId)
     ),
     // fetch data of table for id of parent table
     // used for actual apflora data (but projekt)
     fetchTableByParentId: action(
       'fetchTableByParentId',
       (schemaName, tableName, parentId) =>
-        fetchTableByParentId(store, schemaName, tableName, parentId),
+        fetchTableByParentId(store, schemaName, tableName, parentId)
     ),
     fetchTpopForAp: action('fetchTpopForAp', apArtId =>
-      fetchTpopForAp(store, apArtId),
+      fetchTpopForAp(store, apArtId)
     ),
     fetchPopForAp: action('fetchPopForAp', apArtId =>
-      fetchPopForAp(store, apArtId),
+      fetchPopForAp(store, apArtId)
     ),
     fetchDatasetById: action(
       'fetchDatasetById',
       ({ schemaName, tableName, id }) =>
-        fetchDatasetById({ store: store, schemaName, tableName, id }),
+        fetchDatasetById({ store: store, schemaName, tableName, id })
     ),
     fetchBeob: action('fetchBeob', apArtId => fetchBeob(store, apArtId)),
     writeToStore: action('writeToStore', ({ data, table, field }) =>
-      writeToStore({ store: store, data, table, field }),
+      writeToStore({ store: store, data, table, field })
     ),
   })
 }

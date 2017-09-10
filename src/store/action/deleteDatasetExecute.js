@@ -2,7 +2,6 @@
 import axios from 'axios'
 
 import tables from '../../modules/tables'
-import deleteDatasetInIdb from './deleteDatasetInIdb'
 
 export default async (store: Object, tree: Object): Promise<void> => {
   // deleteDatasetDemand checks variables
@@ -29,8 +28,6 @@ export default async (store: Object, tree: Object): Promise<void> => {
   }
   // remove this dataset in store.table
   store.table[table].delete(id)
-  // remove from idb
-  deleteDatasetInIdb(store, table, id)
   // set new url
   url.pop()
   tree.setActiveNodeArray(url)

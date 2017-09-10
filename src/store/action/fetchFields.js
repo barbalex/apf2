@@ -1,7 +1,6 @@
 // @flow
 import axios from 'axios'
 import { runInAction } from 'mobx'
-import app from 'ampersand-app'
 
 export default (store: Object): void => {
   // only fetch if not yet done
@@ -14,8 +13,6 @@ export default (store: Object): void => {
           store.app.fields = data
           store.loading = store.loading.filter(el => el !== 'fields')
         })
-        // leave ui react before this happens
-        setTimeout(() => app.db.fields.bulkPut(data))
       })
       .catch(error => store.listError(error))
   }

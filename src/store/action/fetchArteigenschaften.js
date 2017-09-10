@@ -1,6 +1,5 @@
 // @flow
 import axios from 'axios'
-import app from 'ampersand-app'
 
 export default async (store: Object): Promise<any> => {
   store.loading.push('adb_eigenschaften')
@@ -22,7 +21,6 @@ export default async (store: Object): Promise<any> => {
         field: 'TaxonomieId',
       })
     )
-    setTimeout(() => app.db.adb_eigenschaften.bulkPut(data))
   }
   store.loading = store.loading.filter(el => el !== 'adb_eigenschaften')
 }

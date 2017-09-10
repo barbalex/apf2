@@ -3,8 +3,6 @@ import clone from 'lodash/clone'
 import axios from 'axios'
 import { toJS } from 'mobx'
 
-import insertDatasetInIdb from './insertDatasetInIdb'
-
 export default async (store: Object, tpopId: number): Promise<void> => {
   if (!tpopId) {
     return store.listError(new Error('keine tpopId übergeben'))
@@ -53,7 +51,6 @@ export default async (store: Object, tpopId: number): Promise<void> => {
   // remove label and PopKoordWgs84: fields do not exist in db, are computed
   delete popForDb.label
   delete popForDb.PopKoordWgs84
-  const popForIdb = clone(popForDb)
   // server expects TPopId to be called id
   popForDb.id = popForDb.PopId
   delete popForDb.PopId
@@ -72,6 +69,4 @@ export default async (store: Object, tpopId: number): Promise<void> => {
     popInStore = originalPop
     store.listError(error)
   }
-  // put this dataset in idb
-  insertDatasetInIdb(store, 'pop', popForIdb)
 }

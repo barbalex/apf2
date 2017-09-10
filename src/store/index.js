@@ -20,7 +20,6 @@ function Store(): void {
   this.fetchQk = () => {}
   this.setQkFilter = () => {}
   this.addMessagesToQk = () => {}
-  this.fetchFieldsFromIdb = () => {}
   this.insertBeobzuordnung = () => {}
   this.insertDataset = () => {}
   this.deleteDatasetDemand = () => {}

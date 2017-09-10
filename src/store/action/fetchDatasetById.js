@@ -44,31 +44,20 @@ export default ({
   const url = `/schema/${schemaName}/table/${tableName}/field/${idField}/value/${id}`
 
   store.loading.push(tableName)
-  app.db[tableName]
-    .toArray()
-    .then(data => {
-      // dont write all data - filter for needed id first
-      const dataToWrite = data.filter(d => d[idField] === id)
-      store.writeToStore({
-        data: dataToWrite,
-        table: tableName,
-        field: idField,
-      })
-      recordValuesForWhichTableDataWasFetched({
-        store,
-        table: tableName,
-        field: idField,
-        value: id,
-      })
-    })
-    .then(() => axios.get(url))
+  axios
+    .get(url)
     .then(({ data }) => {
       store.loading = store.loading.filter(el => el !== tableName)
       // leave ui react before this happens
-      setTimeout(() =>
+      setTimeout(() => {
         store.writeToStore({ data, table: tableName, field: idField })
-      )
-      setTimeout(() => app.db[tableName].bulkPut(data))
+        recordValuesForWhichTableDataWasFetched({
+          store,
+          table: tableName,
+          field: idField,
+          value: id,
+        })
+      })
     })
     .catch(error => {
       store.loading = store.loading.filter(el => el !== tableName)

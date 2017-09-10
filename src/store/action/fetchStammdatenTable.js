@@ -1,6 +1,5 @@
 // @flow
 import axios from 'axios'
-import app from 'ampersand-app'
 
 export default async (store: Object, metadata: Object): Promise<any> => {
   const { database, table, idField } = metadata
@@ -22,7 +21,6 @@ export default async (store: Object, metadata: Object): Promise<any> => {
     setTimeout(() => {
       store.writeToStore({ data: dataFromDb, table, field: idField })
     })
-    setTimeout(() => app.db[table].bulkPut(dataFromDb))
   }
   store.loading = store.loading.filter(el => el !== table)
 }

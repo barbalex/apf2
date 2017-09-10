@@ -8,7 +8,6 @@ import axios from 'axios'
 import clone from 'lodash/clone'
 
 import tables from '../../modules/tables'
-import insertDatasetInIdb from './insertDatasetInIdb'
 
 export default async (store: Object, parentId: number): Promise<void> => {
   let { table } = store.copying
@@ -75,6 +74,4 @@ export default async (store: Object, parentId: number): Promise<void> => {
   const { data } = response
   // can't write to store before, because db creates id and guid
   store.writeToStore({ data: [data], table, field: idField })
-  // insert this dataset in idb
-  insertDatasetInIdb(store, table, data)
 }

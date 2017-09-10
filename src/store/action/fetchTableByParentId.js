@@ -1,6 +1,5 @@
 // @flow
 import axios from 'axios'
-import app from 'ampersand-app'
 
 import tables from '../../modules/tables'
 import recordValuesForWhichTableDataWasFetched from '../../modules/recordValuesForWhichTableDataWasFetched'
@@ -30,25 +29,20 @@ export default (
   const url = `/schema/${schemaName}/table/${tableName}/field/${parentIdField}/value/${parentId}`
   store.loading.push(tableName)
 
-  app.db[tableName]
-    .toArray()
-    .then(data => {
-      store.writeToStore({ data, table: tableName, field: idField })
-      recordValuesForWhichTableDataWasFetched({
-        store,
-        table: tableName,
-        field: idField,
-        value: parentId,
-      })
-    })
-    .then(() => axios.get(url))
+  axios
+    .get(url)
     .then(({ data }) => {
       store.loading = store.loading.filter(el => el !== tableName)
       // leave ui react before this happens
-      setTimeout(() =>
+      setTimeout(() => {
         store.writeToStore({ data, table: tableName, field: idField })
-      )
-      setTimeout(() => app.db[tableName].bulkPut(data))
+        recordValuesForWhichTableDataWasFetched({
+          store,
+          table: tableName,
+          field: idField,
+          value: parentId,
+        })
+      })
     })
     .catch(error => {
       store.loading = store.loading.filter(el => el !== tableName)

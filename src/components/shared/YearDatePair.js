@@ -16,6 +16,7 @@ import format from 'date-fns/format'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 import withState from 'recompose/withState'
+import withLifecycle from '@hocs/with-lifecycle'
 import styled from 'styled-components'
 
 import convertDateToYyyyMmDd from '../../modules/convertDateToYyyyMmDd'
@@ -139,6 +140,11 @@ const enhance = compose(
     onFocusYear: props => () => props.changeYearValueOnFocus(props.yearValue),
     onFocusDate: props => () => props.changeDateValueOnFocus(props.dateValue),
   }),
+  withLifecycle({
+    onDidMount({ dateValue }) {
+      console.log('YearDatePair did mount: dataValue:', dateValue)
+    },
+  }),
   observer
 )
 
@@ -193,6 +199,8 @@ class YearDatePair extends Component {
       onFocusYear,
       onFocusDate,
     } = this.props
+    // console.log('YearDatePair rendering: dateValue:', dateValue)
+    // console.log('YearDatePair rendering: dateStringValue:', dateStringValue)
 
     return (
       <div>
