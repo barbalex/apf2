@@ -98,7 +98,7 @@ const enhance = compose(
         artFuerEierlegendeWollmilchsau,
       } = props
       const url = `/exportView/json/view=${view}${apArtId ? `/${apArtId}` : ''}`
-
+      store.export.addDownload(fileName)
       axios
         .get(url)
         .then(({ data }) => {
@@ -143,6 +143,7 @@ const enhance = compose(
               new Date(),
               'YYYY-MM-DD_HH-mm-ss'
             )}`
+            store.export.removeDownload(fileName)
             fileDownload(csvData, `${file}.csv`)
             if (artFuerEierlegendeWollmilchsau) {
               changeArtFuerEierlegendeWollmilchsau('')
@@ -156,6 +157,7 @@ const enhance = compose(
             changeArtFuerEierlegendeWollmilchsau('')
           }
           store.listError(error)
+          store.export.removeDownload(fileName)
         })
     },
   }),

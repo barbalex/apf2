@@ -33,6 +33,7 @@ import AppBar from './components/AppBar'
 import Projekte from './components/Projekte'
 import User from './components/User'
 import Errors from './components/Errors'
+import DownloadMessages from './components/DownloadMessages'
 import getActiveNodeArrayFromPathname from './store/action/getActiveNodeArrayFromPathname'
 import getUrlQuery from './store/action/getUrlQuery'
 
@@ -109,6 +110,7 @@ ReactDOM.render(
         <Projekte />
         <User />
         <Errors />
+        <DownloadMessages />
       </AppContainer>
     </MuiThemeProvider>
   </Provider>,

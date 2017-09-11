@@ -88,6 +88,11 @@ function Store(): void {
     toggleApplyActiveNodeFilterToExport: () => {},
     applyMapFilterToExport: false,
     toggleApplyMapFilterToExport: () => {},
+    // array of names of downloads started
+    // when download finishes, it's name is removed
+    activeDownloads: [],
+    addDownload: () => {},
+    removeDownload: () => {},
   }
   this.dropdownList = {
     adressen: [],
