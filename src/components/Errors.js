@@ -18,20 +18,20 @@ const ErrorDiv = styled.div`
   border: 1px solid transparent;
   border-radius: 4px;
   background-color: #424242;
+  color: white;
   max-width: 300px;
   font-size: 14px;
 `
 
 const enhance = compose(inject('store'), observer)
 
-const Errors = ({ store }: { store: Object }) => (
+const Errors = ({ store }: { store: Object }) =>
   <Container>
-    {store.app.errors.map((error, index) => (
+    {store.app.errors.map((error, index) =>
       <ErrorDiv key={index}>
         {error.message}
       </ErrorDiv>
-    ))}
+    )}
   </Container>
-)
 
 export default enhance(Errors)
