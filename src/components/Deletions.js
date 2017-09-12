@@ -69,11 +69,10 @@ const Deletions = ({
     />,
     <FlatButton label="schliessen" primary={true} onTouchTap={close} />,
   ]
-  console.log('render: choosenDeletions:', choosenDeletions)
 
   return (
     <Dialog
-      title="Gelöschte Datensätze"
+      title="gelöschte Datensätze"
       open={store.showDeletedDatasets}
       actions={actions}
       contentStyle={{
@@ -88,7 +87,9 @@ const Deletions = ({
             key => dataset[key] == null && delete dataset[key]
           )
           const time = format(new Date(ds.time), 'YYYY.MM.DD HH:mm:ss')
-          const label = `${time}: ${ds.table}: ${JSON.stringify(dataset)}`
+          const label = `${time}: Tabelle "${ds.table}": ${JSON.stringify(
+            dataset
+          )}`
 
           return (
             <Checkbox
