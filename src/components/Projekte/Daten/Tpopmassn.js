@@ -61,21 +61,17 @@ class Tpopmassn extends Component {
   }
 
   updateWidth = () => {
-    console.log('Tpopmassn: updateWidth called')
     if (this.container && this.container.offsetWidth) {
-      console.log('Tpopmassn: updateWidth changing width')
       this.props.changeWidth(this.container.offsetWidth)
     }
   }
 
   componentDidMount() {
-    console.log('Tpopmassn: componentDidMount')
     this.updateWidth()
     window.addEventListener('resize', this.updateWidth)
   }
 
   componentDidUpdate() {
-    console.log('Tpopmassn: componentDidUpdate')
     // not sure if this is necessary
     this.updateWidth()
   }
