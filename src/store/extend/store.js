@@ -30,6 +30,7 @@ import copyBiotopTo from '../action/copyBiotopTo'
 import copyTpopKoordToPop from '../action/copyTpopKoordToPop'
 import copyTpopBeobKoordToPop from '../action/copyTpopBeobKoordToPop'
 import createNewPopFromBeob from '../action/createNewPopFromBeob'
+import undoDeletion from '../action/undoDeletion'
 
 export default (store: Object): void => {
   extendObservable(store, {
@@ -190,6 +191,9 @@ export default (store: Object): void => {
     showDeletedDatasets: false,
     toggleShowDeletedDatasets: action('toggleShowDeletedDatasets', () => {
       store.showDeletedDatasets = !store.showDeletedDatasets
+    }),
+    undoDeletion: action('undoDeletion', deletedDataset => {
+      undoDeletion(store, deletedDataset)
     }),
     deleteBeobzuordnung: action('deleteBeobzuordnung', (tree, beobId) =>
       deleteBeobzuordnung(store, tree, beobId)

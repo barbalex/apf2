@@ -21,10 +21,20 @@ const enhance = compose(
   withState('choosenDeletions', 'changeChoosenDeletions', []),
   withHandlers({
     undoDeletion: props => () => {
-      // TODO
+      const { undoDeletion, deletedDatasets } = props.store
+      const { choosenDeletions } = props
       // loop through all choosenDeletions
-      // insert them to db
-      // and to store
+      choosenDeletions.forEach(time => {
+        const deletedDataset = deletedDatasets.find(d => d.time === time)
+        console.log('Deletions: undoDeletion: deletedDataset:', deletedDataset)
+        console.log(
+          'Deletions: undoDeletion: choosenDeletions:',
+          choosenDeletions
+        )
+        // insert them to db
+        // and to store
+        undoDeletion(deletedDataset)
+      })
     },
     close: props => () => {
       props.store.toggleShowDeletedDatasets()
