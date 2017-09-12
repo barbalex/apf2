@@ -9,6 +9,7 @@ import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 import withState from 'recompose/withState'
 import clone from 'lodash/clone'
+import format from 'date-fns/format'
 
 const List = styled.div`
   display: flex;
@@ -35,9 +36,7 @@ const enhance = compose(
       const previousChoosenDeletions = clone(choosenDeletions)
       let newChoosenDeletions
       if (choosenDeletions.includes(time)) {
-        newChoosenDeletions = previousChoosenDeletions.filter(
-          d => d.time !== time
-        )
+        newChoosenDeletions = previousChoosenDeletions.filter(d => d !== time)
       } else {
         newChoosenDeletions = [...choosenDeletions, time]
       }
@@ -78,13 +77,18 @@ const Deletions = ({
       open={store.showDeletedDatasets}
       actions={actions}
       contentStyle={{
-        maxWidth: '400px',
+        maxWidth: window.innerWidth * 0.8,
       }}
     >
       <List>
         {store.deletedDatasets.map((ds, index) => {
-          const label = `${ds.table}: ${JSON.stringify(ds.dataset)}`
-          console.log()
+          const dataset = clone(ds.dataset)
+          // remove null values
+          Object.keys(dataset).forEach(
+            key => dataset[key] == null && delete dataset[key]
+          )
+          const time = format(new Date(ds.time), 'YYYY.MM.DD HH:mm:ss')
+          const label = `${time}: ${ds.table}: ${JSON.stringify(dataset)}`
 
           return (
             <Checkbox
