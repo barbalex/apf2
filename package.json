@@ -15,7 +15,7 @@
     "react-scripts": "1.0.13"
   },
   "dependencies": {
-    "@hocs/with-lifecycle": "^0.2.0",
+    "@hocs/with-lifecycle": "0.2.0",
     "@turf/inside": "~4.1.0",
     "@turf/nearest": "4.6.0",
     "@turf/within": "~4.1.0",
@@ -51,7 +51,7 @@
     "react-dom": "15.6.1",
     "react-file-download": "0.3.4",
     "react-leaflet": "1.6.6",
-    "react-leaflet-bing": "2.0.0",
+    "react-leaflet-bing": "3.0.0",
     "react-leaflet-control": "1.4.0",
     "react-linkify": "0.2.1",
     "react-reflex": "2.0.9",
