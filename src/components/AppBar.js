@@ -180,6 +180,7 @@ const MyAppBar = ({
             <MenuItem
               primaryText="gelöschte Datensätze wiederherstellen"
               onTouchTap={showDeletedDatasets}
+              disabled={store.deletedDatasets.length === 0}
             />
             <MenuItem
               primaryText="über apflora.ch"

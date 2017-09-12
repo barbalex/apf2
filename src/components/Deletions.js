@@ -66,6 +66,7 @@ const Deletions = ({
       label="wiederherstellen"
       primary={false}
       onTouchTap={undoDeletion}
+      disabled={choosenDeletions.length === 0}
     />,
     <FlatButton label="schliessen" primary={true} onTouchTap={close} />,
   ]
