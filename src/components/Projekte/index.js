@@ -36,9 +36,32 @@ const myChildren = (store: Object) => {
   }
 
   const children = []
+  let flex
+  switch (projekteTabs.length) {
+    case 0:
+      flex = 1
+      break
+    case 2:
+      flex = 0.33
+      break
+    case 3:
+      flex = 0.33
+      break
+    case 4:
+      flex = 0.25
+      break
+    case 5:
+      flex = 0.2
+      break
+    case 6:
+      flex = 0.1666
+      break
+    default:
+      flex = 1 / projekteTabs.length
+  }
   if (projekteTabs.includes('tree')) {
     children.push(
-      <ReflexElement key="tree">
+      <ReflexElement flex={flex} key="tree">
         <TreeContainer tree={store.tree} />
       </ReflexElement>
     )
@@ -71,7 +94,7 @@ const myChildren = (store: Object) => {
   }
   if (projekteTabs.includes('tree2')) {
     children.push(
-      <ReflexElement key="tree2">
+      <ReflexElement flex={flex} key="tree2">
         <TreeContainer tree={store.tree2} />
       </ReflexElement>
     )

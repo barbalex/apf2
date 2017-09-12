@@ -51,6 +51,11 @@ class Apber extends Component {
     window.addEventListener('resize', this.updateWidth)
   }
 
+  componentDidUpdate() {
+    // not sure if this is necessary
+    this.updateWidth()
+  }
+
   componentWillUnmount() {
     window.removeEventListener('resize', this.updateWidth)
   }
