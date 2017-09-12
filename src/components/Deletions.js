@@ -1,7 +1,6 @@
 // @flow
 import React from 'react'
 import { observer, inject } from 'mobx-react'
-import { toJS } from 'mobx'
 import Dialog from 'material-ui/Dialog'
 import FlatButton from 'material-ui/FlatButton'
 import Checkbox from 'material-ui/Checkbox'
@@ -82,7 +81,7 @@ const Deletions = ({
       }}
     >
       <List>
-        {toJS(store.deletedDatasets).map((ds, index) => {
+        {store.deletedDatasets.map((ds, index) => {
           const label = `${ds.table}: ${JSON.stringify(ds.dataset)}`
           console.log()
 
