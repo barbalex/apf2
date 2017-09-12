@@ -85,6 +85,7 @@ const enhance = compose(
     },
     ueberApfloraChOnTouchTap: props => () =>
       window.open('https://github.com/FNSKtZH/apflora/wiki'),
+    showDeletedDatasets: props => () => props.store.toggleShowDeletedDatasets(),
   }),
   withHandlers({
     onClickButtonStrukturbaum: props => () => props.onClickButton('tree'),
@@ -106,6 +107,7 @@ const MyAppBar = ({
   onClickButtonKarte,
   onClickButtonExporte,
   ueberApfloraChOnTouchTap,
+  showDeletedDatasets,
 }: {
   store: Object,
   onClickButton: () => void,
@@ -116,6 +118,7 @@ const MyAppBar = ({
   onClickButtonKarte: () => void,
   onClickButtonExporte: () => void,
   ueberApfloraChOnTouchTap: () => void,
+  showDeletedDatasets: () => void,
 }) => {
   const projekteTabs = store.urlQuery.projekteTabs
   const treeIsVisible = projekteTabs.includes('tree')
@@ -174,6 +177,10 @@ const MyAppBar = ({
             targetOrigin={iconMenuTargetOrigin}
             style={iconMenuStyle}
           >
+            <MenuItem
+              primaryText="Gelöschte Datensätze"
+              onTouchTap={showDeletedDatasets}
+            />
             <MenuItem
               primaryText="über apflora.ch"
               onTouchTap={ueberApfloraChOnTouchTap}

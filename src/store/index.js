@@ -26,6 +26,8 @@ function Store(): void {
   this.deleteDatasetAbort = () => {}
   this.deleteDatasetExecute = () => {}
   this.deletedDatasets = []
+  this.showDeletedDatasets = false
+  this.toggleShowDeletedDatasets = () => {}
   this.deleteBeobzuordnung = () => {}
   this.listError = () => {}
   this.updateProperty = () => {}

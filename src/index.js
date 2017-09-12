@@ -32,6 +32,7 @@ import initializeDb from './modules/initializeDb'
 import AppBar from './components/AppBar'
 import Projekte from './components/Projekte'
 import User from './components/User'
+import Deletions from './components/Deletions'
 import Errors from './components/Errors'
 import DownloadMessages from './components/DownloadMessages'
 import getActiveNodeArrayFromPathname from './store/action/getActiveNodeArrayFromPathname'
@@ -109,6 +110,7 @@ ReactDOM.render(
         <AppBar />
         <Projekte />
         <User />
+        <Deletions />
         <Errors />
         <DownloadMessages />
       </AppContainer>

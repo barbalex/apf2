@@ -187,6 +187,10 @@ export default (store: Object): void => {
       deleteDatasetExecute(store, tree)
     }),
     deletedDatasets: [],
+    showDeletedDatasets: false,
+    toggleShowDeletedDatasets: action('toggleShowDeletedDatasets', () => {
+      store.showDeletedDatasets = !store.showDeletedDatasets
+    }),
     deleteBeobzuordnung: action('deleteBeobzuordnung', (tree, beobId) =>
       deleteBeobzuordnung(store, tree, beobId)
     ),
