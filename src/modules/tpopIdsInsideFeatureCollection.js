@@ -47,7 +47,6 @@ export default (store: Object, tpops: Array<Object>): Array<number> => {
       coordinates: epsg21781to4326(t.TPopXKoord, t.TPopYKoord),
     },
   }))
-  console.log('tpopIdsInsideFeatureCollection: features:', features)
   const points = {
     type: 'FeatureCollection',
     features,
