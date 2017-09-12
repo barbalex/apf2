@@ -1,7 +1,7 @@
 // @flow
 import within from '@turf/within'
 import isFinite from 'lodash/isFinite'
-// import { toJS } from 'mobx'
+//import { toJS } from 'mobx'
 
 import epsg21781to4326 from './epsg21781to4326notReverse'
 /*
@@ -46,7 +46,6 @@ import epsg21781to4326 from './epsg21781to4326notReverse'
   }
 })(console)
 */
-
 export default (store: Object, tpops: Array<Object>): Array<number> => {
   /**
    * data is passed from map.pop.pops OR a view fetched from the server
@@ -95,10 +94,11 @@ export default (store: Object, tpops: Array<Object>): Array<number> => {
     features,
   }
 
-  // console.save(toJS(points), 'points')
-  // console.save(toJS(store.map.mapFilter.filter), 'filter')
+  //console.save(toJS(points), 'points.json')
+  //console.save(toJS(store.map.mapFilter.filter), 'filter.json')
 
   // let turf check what points are within filter
   const result = within(points, store.map.mapFilter.filter)
+
   return result.features.map(r => r.properties.TPopId)
 }
