@@ -1,5 +1,6 @@
 // @flow
 import within from '@turf/within'
+import isFinite from 'lodash/isFinite'
 import { toJS } from 'mobx'
 
 import epsg21781to4326 from './epsg21781to4326notReverse'
@@ -11,8 +12,20 @@ export default (store: Object, pops: Array<Object>): Array<number> => {
    */
   let popsToUse = pops.filter(p => {
     if (!p.PopId) return false
-    if (p.PopXKoord && p.PopYKoord) return true
-    if (p['Pop X-Koordinaten'] && p['Pop Y-Koordinaten']) return true
+    if (
+      p.PopXKoord &&
+      isFinite(p.PopXKoord) &&
+      p.PopYKoord &&
+      isFinite(p.PopYKoord)
+    )
+      return true
+    if (
+      p['Pop X-Koordinaten'] &&
+      isFinite(p['Pop X-Koordinaten']) &&
+      p['Pop Y-Koordinaten'] &&
+      isFinite(p['Pop Y-Koordinaten'])
+    )
+      return true
     return false
   })
   // ...and account for user friendly field names in views
