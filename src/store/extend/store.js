@@ -186,6 +186,7 @@ export default (store: Object): void => {
       if (store.user.readOnly) return store.tellUserReadOnly()
       deleteDatasetExecute(store, tree)
     }),
+    deletedDatasets: [],
     deleteBeobzuordnung: action('deleteBeobzuordnung', (tree, beobId) =>
       deleteBeobzuordnung(store, tree, beobId)
     ),
