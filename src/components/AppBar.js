@@ -178,7 +178,7 @@ const MyAppBar = ({
             style={iconMenuStyle}
           >
             <MenuItem
-              primaryText="Gelöschte Datensätze"
+              primaryText="gelöschte Datensätze wiederherstellen"
               onTouchTap={showDeletedDatasets}
             />
             <MenuItem
