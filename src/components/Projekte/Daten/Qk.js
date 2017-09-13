@@ -23,9 +23,7 @@ const FieldsContainer = styled.div`
 const StyledCard = styled(Card)`
   margin-bottom: 10px !important;
 `
-const Title = styled.div`
-  font-weight: bold;
-`
+const Title = styled.div`font-weight: bold;`
 const FilterField = styled(TextField)`
   margin-top: -15px;
   margin-bottom: 10px;
@@ -89,27 +87,24 @@ const Qk = ({
           fullWidth
           onChange={(event, val) => store.setQkFilter({ tree, filter: val })}
         />
-        {messagesFiltered.map((m, index) => {
-          const children = m.url.map((u, i) => (
-            <div key={i}>
-              {`${appBaseUrl}/${u.join('/')}`}
-            </div>
-          ))
-          return (
-            <StyledCard key={index}>
-              <CardText>
-                <Title>
-                  {m.hw}
-                </Title>
-                <div>
-                  <Linkify properties={linkifyProperties}>
-                    {children}
-                  </Linkify>
-                </div>
-              </CardText>
-            </StyledCard>
-          )
-        })}
+        {messagesFiltered.map((m, index) =>
+          <StyledCard key={index}>
+            <CardText>
+              <Title>
+                {m.hw}
+              </Title>
+              <div>
+                <Linkify properties={linkifyProperties}>
+                  {m.url.map((u, i) =>
+                    <div key={i}>
+                      {`${appBaseUrl}/${u.join('/')}`}
+                    </div>
+                  )}
+                </Linkify>
+              </div>
+            </CardText>
+          </StyledCard>
+        )}
       </FieldsContainer>
     </Container>
   )
