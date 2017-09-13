@@ -8,14 +8,20 @@ import axios from 'axios'
 
 import tables from '../../modules/tables'
 
-export default async (store: Object, deletedDataset: Object): Promise<void> => {
+export default async ({
+  store,
+  deletedDataset,
+}: {
+  store: Object,
+  deletedDataset: Object,
+}): Promise<void> => {
   // TODO: errors out here when undeleting tpopkontr
   const { time, table, dataset } = deletedDataset
   // ensure derived data exists
   const tabelle = tables.find(t => t.table === table)
   // in tpopfeldkontr and tpopfreiwkontr need to find dbTable
   const idField = tabelle ? tabelle.idField : undefined
-  if (!idField) {
+  if (!idField && idField !== 0) {
     return store.listError(
       new Error('dataset not inserted because idField was not found')
     )

@@ -20,20 +20,15 @@ const enhance = compose(
   inject('store'),
   withState('choosenDeletions', 'changeChoosenDeletions', []),
   withHandlers({
-    undoDeletion: props => () => {
+    onClickUndo: props => () => {
       const { undoDeletion, deletedDatasets } = props.store
-      const { choosenDeletions, store } = props
+      const { choosenDeletions } = props
       // loop through all choosenDeletions
       choosenDeletions.forEach(time => {
-        const deletedDataset = deletedDatasets.find(d => d.time === time)
-        console.log('Deletions: undoDeletion: deletedDataset:', deletedDataset)
-        console.log(
-          'Deletions: undoDeletion: choosenDeletions:',
-          choosenDeletions
-        )
+        let deletedDataset = deletedDatasets.find(d => d.time === time)
         // insert them to db
         // and to store
-        undoDeletion(store, deletedDataset)
+        undoDeletion(deletedDataset)
       })
     },
     close: props => () => {
@@ -58,14 +53,14 @@ const enhance = compose(
 
 const Deletions = ({
   store,
-  undoDeletion,
+  onClickUndo,
   close,
   choosenDeletions,
   changeChoosenDeletions,
   toggleChoosenDeletions,
 }: {
   store: Object,
-  undoDeletion: () => void,
+  onClickUndo: () => void,
   close: () => void,
   choosenDeletions: Array<string>,
   toggleChoosenDeletions: () => void,
@@ -74,7 +69,7 @@ const Deletions = ({
     <FlatButton
       label="wiederherstellen"
       primary={false}
-      onTouchTap={undoDeletion}
+      onTouchTap={onClickUndo}
       disabled={choosenDeletions.length === 0}
     />,
     <FlatButton label="schliessen" primary={true} onTouchTap={close} />,

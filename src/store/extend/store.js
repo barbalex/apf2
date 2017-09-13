@@ -169,7 +169,7 @@ export default (store: Object): void => {
       store.showDeletedDatasets = !store.showDeletedDatasets
     }),
     undoDeletion: action('undoDeletion', deletedDataset => {
-      undoDeletion(store, deletedDataset)
+      undoDeletion({ store, deletedDataset })
     }),
     deleteBeobzuordnung: action('deleteBeobzuordnung', (tree, beobId) =>
       deleteBeobzuordnung(store, tree, beobId)
