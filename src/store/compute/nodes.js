@@ -10,14 +10,12 @@ import allParentNodesAreOpen from '../../modules/allParentNodesAreOpen'
 import allParentNodesAreVisible from '../../modules/allParentNodesAreVisible'
 import projektNodes from '../../modules/nodes/projekt'
 import apFolderNodes from '../../modules/nodes/apFolder'
-import apberuebersichtFolderNodes
-  from '../../modules/nodes/apberuebersichtFolder'
+import apberuebersichtFolderNodes from '../../modules/nodes/apberuebersichtFolder'
 import apberuebersichtNodes from '../../modules/nodes/apberuebersicht'
 import apNodes from '../../modules/nodes/ap'
 import popFolderNodes from '../../modules/nodes/popFolder'
 import qkFolderNodes from '../../modules/nodes/qkFolder'
-import beobNichtZuzuordnenFolderNodes
-  from '../../modules/nodes/beobNichtZuzuordnenFolder'
+import beobNichtZuzuordnenFolderNodes from '../../modules/nodes/beobNichtZuzuordnenFolder'
 import beobzuordnungFolderNodes from '../../modules/nodes/beobzuordnungFolder'
 import assozartFolderNodes from '../../modules/nodes/assozartFolder'
 import idealbiotopFolderNodes from '../../modules/nodes/idealbiotopFolder'
@@ -54,10 +52,8 @@ import tpopfreiwkontrNodes from '../../modules/nodes/tpopfreiwkontr'
 import tpopfeldkontrNodes from '../../modules/nodes/tpopfeldkontr'
 import tpopmassnberNodes from '../../modules/nodes/tpopmassnber'
 import tpopmassnNodes from '../../modules/nodes/tpopmassn'
-import tpopfeldkontrzaehlFolderNodes
-  from '../../modules/nodes/tpopfeldkontrzaehlFolder'
-import tpopfreiwkontrzaehlFolderNodes
-  from '../../modules/nodes/tpopfreiwkontrzaehlFolder'
+import tpopfeldkontrzaehlFolderNodes from '../../modules/nodes/tpopfeldkontrzaehlFolder'
+import tpopfreiwkontrzaehlFolderNodes from '../../modules/nodes/tpopfreiwkontrzaehlFolder'
 import tpopfeldkontrzaehlNodes from '../../modules/nodes/tpopfeldkontrzaehl'
 import tpopfreiwkontrzaehlNodes from '../../modules/nodes/tpopfreiwkontrzaehl'
 
@@ -91,7 +87,7 @@ export default (store: Object, tree: Object): Array<Object> => {
       nodes = [
         ...nodes,
         ...apFolderNodes(store, tree, projId),
-        ...apberuebersichtFolderNodes(store, tree, projId)
+        ...apberuebersichtFolderNodes(store, tree, projId),
       ]
     }
     if (
@@ -108,9 +104,9 @@ export default (store: Object, tree: Object): Array<Object> => {
     ) {
       nodes = [...nodes, ...apNodes(store, tree, projId)]
     }
-    // if nodeUrl.length > 3, nodeUrl[2] is always 'Arten'
     if (
       nodeUrl.length === 4 &&
+      nodeUrl[2] === 'Arten' &&
       allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
     ) {
       const apArtId = nodeUrl[3]
@@ -125,9 +121,10 @@ export default (store: Object, tree: Object): Array<Object> => {
         ...assozartFolderNodes(store, tree, projId, apArtId),
         ...beobzuordnungFolderNodes(store, tree, projId, apArtId),
         ...beobNichtZuzuordnenFolderNodes(store, tree, projId, apArtId),
-        ...qkFolderNodes(store, tree, projId, apArtId)
+        ...qkFolderNodes(store, tree, projId, apArtId),
       ]
     }
+    // if nodeUrl.length > 4, nodeUrl[2] is always 'Arten'
     if (
       nodeUrl.length === 5 &&
       nodeUrl[4] === 'AP-Ziele' &&
@@ -155,7 +152,7 @@ export default (store: Object, tree: Object): Array<Object> => {
       const zielId = nodeUrl[6]
       nodes = [
         ...nodes,
-        ...zielberFolderNodes(store, tree, projId, apArtId, zieljahr, zielId)
+        ...zielberFolderNodes(store, tree, projId, apArtId, zieljahr, zielId),
       ]
     }
     if (
@@ -169,7 +166,7 @@ export default (store: Object, tree: Object): Array<Object> => {
       const zielId = nodeUrl[6]
       nodes = [
         ...nodes,
-        ...zielberNodes(store, tree, projId, apArtId, zieljahr, zielId)
+        ...zielberNodes(store, tree, projId, apArtId, zieljahr, zielId),
       ]
     }
     if (
@@ -188,7 +185,7 @@ export default (store: Object, tree: Object): Array<Object> => {
       const apArtId = nodeUrl[3]
       nodes = [
         ...nodes,
-        ...beobNichtZuzuordnenNodes(store, tree, projId, apArtId)
+        ...beobNichtZuzuordnenNodes(store, tree, projId, apArtId),
       ]
     }
     if (
@@ -242,7 +239,7 @@ export default (store: Object, tree: Object): Array<Object> => {
         ...nodes,
         ...tpopFolderNodes(store, tree, projId, apArtId, popId),
         ...popberFolderNodes(store, tree, projId, apArtId, popId),
-        ...popmassnberFolderNodes(store, tree, projId, apArtId, popId)
+        ...popmassnberFolderNodes(store, tree, projId, apArtId, popId),
       ]
     }
     if (
@@ -255,7 +252,7 @@ export default (store: Object, tree: Object): Array<Object> => {
       const popId = nodeUrl[5]
       nodes = [
         ...nodes,
-        ...popmassnberNodes(store, tree, projId, apArtId, popId)
+        ...popmassnberNodes(store, tree, projId, apArtId, popId),
       ]
     }
     if (
@@ -308,7 +305,7 @@ export default (store: Object, tree: Object): Array<Object> => {
           tpopId
         ),
         ...tpopberFolderNodes(store, tree, projId, apArtId, popId, tpopId),
-        ...tpopbeobFolderNodes(store, tree, projId, apArtId, popId, tpopId)
+        ...tpopbeobFolderNodes(store, tree, projId, apArtId, popId, tpopId),
       ]
     }
     if (
@@ -323,7 +320,7 @@ export default (store: Object, tree: Object): Array<Object> => {
       const tpopId = nodeUrl[7]
       nodes = [
         ...nodes,
-        ...tpopbeobNodes(store, tree, projId, apArtId, popId, tpopId)
+        ...tpopbeobNodes(store, tree, projId, apArtId, popId, tpopId),
       ]
     }
     if (
@@ -338,7 +335,7 @@ export default (store: Object, tree: Object): Array<Object> => {
       const tpopId = nodeUrl[7]
       nodes = [
         ...nodes,
-        ...tpopberNodes(store, tree, projId, apArtId, popId, tpopId)
+        ...tpopberNodes(store, tree, projId, apArtId, popId, tpopId),
       ]
     }
     if (
@@ -353,7 +350,7 @@ export default (store: Object, tree: Object): Array<Object> => {
       const tpopId = nodeUrl[7]
       nodes = [
         ...nodes,
-        ...tpopfreiwkontrNodes(store, tree, projId, apArtId, popId, tpopId)
+        ...tpopfreiwkontrNodes(store, tree, projId, apArtId, popId, tpopId),
       ]
     }
     if (
@@ -368,7 +365,7 @@ export default (store: Object, tree: Object): Array<Object> => {
       const tpopId = nodeUrl[7]
       nodes = [
         ...nodes,
-        ...tpopfeldkontrNodes(store, tree, projId, apArtId, popId, tpopId)
+        ...tpopfeldkontrNodes(store, tree, projId, apArtId, popId, tpopId),
       ]
     }
     if (
@@ -383,7 +380,7 @@ export default (store: Object, tree: Object): Array<Object> => {
       const tpopId = nodeUrl[7]
       nodes = [
         ...nodes,
-        ...tpopmassnberNodes(store, tree, projId, apArtId, popId, tpopId)
+        ...tpopmassnberNodes(store, tree, projId, apArtId, popId, tpopId),
       ]
     }
     if (
@@ -398,7 +395,7 @@ export default (store: Object, tree: Object): Array<Object> => {
       const tpopId = nodeUrl[7]
       nodes = [
         ...nodes,
-        ...tpopmassnNodes(store, tree, projId, apArtId, popId, tpopId)
+        ...tpopmassnNodes(store, tree, projId, apArtId, popId, tpopId),
       ]
     }
     if (
@@ -422,7 +419,7 @@ export default (store: Object, tree: Object): Array<Object> => {
           popId,
           tpopId,
           tpopkontrId
-        )
+        ),
       ]
     }
     if (
@@ -446,7 +443,7 @@ export default (store: Object, tree: Object): Array<Object> => {
           popId,
           tpopId,
           tpopkontrId
-        )
+        ),
       ]
     }
     if (
@@ -470,7 +467,7 @@ export default (store: Object, tree: Object): Array<Object> => {
           popId,
           tpopId,
           tpopkontrId
-        )
+        ),
       ]
     }
     if (
@@ -494,7 +491,7 @@ export default (store: Object, tree: Object): Array<Object> => {
           popId,
           tpopId,
           tpopkontrId
-        )
+        ),
       ]
     }
   })
