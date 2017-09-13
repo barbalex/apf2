@@ -1,6 +1,5 @@
 // @flow
 import axios from 'axios'
-import { toJS } from 'mobx'
 import isArray from 'lodash/isArray'
 import isFinite from 'lodash/isFinite'
 
@@ -222,7 +221,7 @@ const fetchQk = async ({
         ]),
       }
       store.qk.addMessages(messages)
-      nrOfMessages += 1
+      nrOfMessages += tpops.length
     }
   }
   // if no messages: tell user

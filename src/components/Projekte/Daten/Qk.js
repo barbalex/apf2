@@ -47,14 +47,13 @@ const enhance = compose(
   withHandlers({
     onChangeBerichtjahr: props => (event, val) => {
       const { berichtjahr, changeBerichtjahr, store, tree } = props
-      console.log('Qk, onChangeBerichtjahr, jahr:', val)
       changeBerichtjahr(val)
       if ((isNaN(val) && val.length === 4) || (!isNaN(val) && val > 1000)) {
         // reset messages
         store.qk.setMessages([])
         // call fetchQk and pass it berichtjahr and apArtId
         const apArtId = tree.activeNodes.ap
-        setTimeout(() => fetchQk({ store, berichtjahr, apArtId }))
+        fetchQk({ store, berichtjahr, apArtId })
       }
     },
     onChangeFilter: props => (event, val) => props.store.qk.setFilter(val),
@@ -91,7 +90,6 @@ const Qk = ({
         m.hw.toLowerCase().includes(filter.toLowerCase())
       )
     : pureMessages
-  console.log('Qk: messagesFiltered:', messagesFiltered)
 
   return (
     <Container>
