@@ -14,9 +14,8 @@ const fetchQk = async ({
   berichtjahr: number,
   apArtId: number,
 }) => {
-  const { addMessages } = store.qk
-  // TODO: show that data is loading
-
+  const { addMessages, setLoading } = store.qk
+  setLoading(true)
   const qkTypes = [
     // Population: ohne Nr/Name/Status/bekannt seit/Koordinaten/tpop
     { type: 'view', name: 'v_qk2_pop_ohnepopnr' },
@@ -184,6 +183,7 @@ const fetchQk = async ({
     resultTpopKoord = await axios.get(`/tpopKoordFuerProgramm/apId=${apArtId}`)
   } catch (error) {
     store.listError(error)
+    setLoading(false)
   }
   // $FlowIssue
   let tpops = resultTpopKoord.data
@@ -192,6 +192,7 @@ const fetchQk = async ({
     resultKtZh = await axios.get('/geojson/ktZh.json')
   } catch (error) {
     store.listError(error)
+    setLoading(false)
   }
   // $FlowIssue
   const ktZh = resultKtZh.data
@@ -229,7 +230,7 @@ const fetchQk = async ({
     const messages = { hw: 'Wow: Scheint alles i.O. zu sein!', url: [] }
     store.qk.addMessages(messages)
   }
-  // TODO: close loading indicator
+  setLoading(false)
 }
 
 export default fetchQk

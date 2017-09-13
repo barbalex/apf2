@@ -172,6 +172,8 @@ function Store(): void {
     setMessages: () => {},
     addMessages: () => {},
     messages: [],
+    loading: false,
+    setLoading: () => {},
     filter: '',
     setFilter: () => {},
   }

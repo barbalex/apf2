@@ -33,6 +33,11 @@ const FilterField = styled(TextField)`
   margin-top: -15px;
   margin-bottom: 10px;
 `
+const LoadingIndicator = styled.div`
+  margin-bottom: 15px;
+  color: ${props =>
+    props.loading ? 'rgba(0, 0, 0, 0.87)' : 'rgb(46, 125, 50)'};
+`
 const linkifyProperties = {
   target: '_blank',
   style: {
@@ -83,13 +88,16 @@ const Qk = ({
   onChangeBerichtjahr: () => void,
   onChangeFilter: () => void,
 }) => {
-  const { filter, messages } = store.qk
+  const { filter, messages, loading } = store.qk
   const pureMessages = toJS(messages)
   const messagesFiltered = filter
     ? pureMessages.filter(m =>
         m.hw.toLowerCase().includes(filter.toLowerCase())
       )
     : pureMessages
+  const loadingMessage = loading
+    ? 'Die Daten werden analysiert...'
+    : 'Analyse abgeschlossen'
 
   return (
     <Container>
@@ -109,6 +117,9 @@ const Qk = ({
           fullWidth
           onChange={onChangeFilter}
         />
+        <LoadingIndicator loading={loading}>
+          {loadingMessage}
+        </LoadingIndicator>
         {messagesFiltered.map((m, index) =>
           <StyledCard key={index}>
             <CardText>
