@@ -7,6 +7,8 @@ import styled from 'styled-components'
 import { Card, CardText } from 'material-ui/Card'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
+import withState from 'recompose/withState'
+import withLifecycle from '@hocs/with-lifecycle'
 
 import FormTitle from '../../shared/FormTitle'
 import appBaseUrl from '../../../modules/appBaseUrl'
@@ -38,13 +40,28 @@ const linkifyProperties = {
 
 const enhance = compose(
   inject('store'),
+  withState('berichtjahr', 'changeBerichtjahr', new Date().getFullYear()),
+  withState('filter', 'changeFilter', ''),
+  withState('messages', 'changeMessages', []),
   withHandlers({
     onChangeBerichtjahr: props => (event, val) => {
-      props.store.setQk({ tree: props.tree, berichtjahr: val })
+      const { changeBerichtjahr, changeMessages, store, tree } = props
+      console.log('Qk, onChangeBerichtjahr, jahr:', val)
+      changeBerichtjahr(val)
       if ((isNaN(val) && val.length === 4) || (!isNaN(val) && val > 1000)) {
-        props.store.setQk({ tree: props.tree })
-        setTimeout(() => props.store.fetchQk({ tree: props.tree }))
+        store.setQk({ tree: tree })
+        console.log('Qk, onChangeBerichtjahr, fetching qk')
+        // reset messages
+        changeMessages([])
+        // call fetchQk and pass it changeMessages
+        setTimeout(() => store.fetchQk({ tree: props.tree }))
       }
+    },
+    onChangeFilter: props => (event, val) => props.changeFilter(val),
+  }),
+  withLifecycle({
+    onDidMount({ store }) {
+      // call fetchQk and pass it changeMessages
     },
   }),
   observer
@@ -53,21 +70,25 @@ const enhance = compose(
 const Qk = ({
   store,
   tree,
+  berichtjahr,
+  messages,
+  filter,
   onChangeBerichtjahr,
+  onChangeFilter,
 }: {
   store: Object,
   tree: Object,
+  berichtjahr: number,
+  messages: Array<Object>,
+  filter: string,
   onChangeBerichtjahr: () => void,
+  onChangeFilter: () => void,
 }) => {
-  const { qk } = store
   const apArtId = tree.activeNodes.ap
-  // need to pass value for when qk does not yet exist
-  const myQk = qk.get(apArtId) || {
-    berichtjahr: '',
-    filter: '',
-    messagesFiltered: [],
-  }
-  const { berichtjahr, filter, messagesFiltered } = myQk
+
+  const messagesFiltered = filter
+    ? messages.filter(m => m.hw.toLowerCase().includes(filter.toLowerCase()))
+    : messages
 
   return (
     <Container>
@@ -85,7 +106,7 @@ const Qk = ({
           type="text"
           value={filter || ''}
           fullWidth
-          onChange={(event, val) => store.setQkFilter({ tree, filter: val })}
+          onChange={onChangeFilter}
         />
         {messagesFiltered.map((m, index) =>
           <StyledCard key={index}>

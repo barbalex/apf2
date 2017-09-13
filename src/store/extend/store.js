@@ -16,7 +16,6 @@ import deleteDatasetDemand from '../action/deleteDatasetDemand'
 import deleteDatasetExecute from '../action/deleteDatasetExecute'
 import listError from '../action/listError'
 import setQk from '../action/setQk'
-import setQkFilter from '../action/setQkFilter'
 import fetchQk from '../action/fetchQk'
 import addMessagesToQk from '../action/addMessagesToQk'
 import fetchLogin from '../action/fetchLogin'
@@ -155,9 +154,6 @@ export default (store: Object): void => {
     ),
     setQk: action('setQk', ({ tree, berichtjahr, messages, filter }) =>
       setQk({ store, tree, berichtjahr, messages, filter })
-    ),
-    setQkFilter: action('setQkFilter', ({ filter, tree }) =>
-      setQkFilter({ store, tree, filter })
     ),
     addMessagesToQk: action('addMessagesToQk', ({ tree, messages }) => {
       addMessagesToQk({ store, tree, messages })

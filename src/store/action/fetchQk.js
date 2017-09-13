@@ -1,6 +1,7 @@
 // @flow
 import axios from 'axios'
 import isArray from 'lodash/isArray'
+import isFinite from 'lodash/isFinite'
 
 import isPointInsidePolygon from '../../modules/isPointInsidePolygon'
 
@@ -14,6 +15,7 @@ const fetchQk = ({ store, tree }: { store: Object, tree: Object }) => {
   if (qk && qk.berichtjahr) {
     berichtjahr = qk.berichtjahr
   } else {
+    berichtjahr = new Date().getFullYear()
     return setTimeout(() =>
       fetchQk({
         store,
@@ -21,6 +23,7 @@ const fetchQk = ({ store, tree }: { store: Object, tree: Object }) => {
       })
     )
   }
+  console.log('action/fetchQk, berichtjahr:', berichtjahr)
   const qkTypes = [
     // Population: ohne Nr/Name/Status/bekannt seit/Koordinaten/tpop
     { type: 'view', name: 'v_qk2_pop_ohnepopnr' },
@@ -173,45 +176,56 @@ const fetchQk = ({ store, tree }: { store: Object, tree: Object }) => {
       })
       .catch(e => e)
   )
+
   Promise.all(dataFetchingPromises)
+    /*
     .then(() => axios.get(`/tpopKoordFuerProgramm/apId=${tree.activeNodes.ap}`))
     .then(res => {
-      // kontrolliere die Relevanz ausserkantonaler Tpop
-      const tpops = res.data.filter(
-        tpop =>
-          tpop.TPopApBerichtRelevant === 1 &&
-          tpop.TPopXKoord &&
-          tpop.TPopYKoord &&
-          !isPointInsidePolygon(
-            store.app.ktZh,
-            tpop.TPopXKoord,
-            tpop.TPopYKoord
-          )
-      )
-      if (tpops.length > 0) {
-        const messages = {
-          hw: `Teilpopulation ist als 'Für AP-Bericht relevant' markiert, liegt aber ausserhalb des Kt. Zürich und sollte daher nicht relevant sein:`,
-          url: tpops.map(tpop => [
-            'Projekte',
-            1,
-            'Arten',
-            tpop.ApArtId,
-            'Populationen',
-            tpop.PopId,
-            'Teil-Populationen',
-            tpop.TPopId,
-          ]),
+      if (store.app.ktZh) {
+        console.log('fetchQk: store.app.ktZh:', store.app.ktZh)
+        // kontrolliere die Relevanz ausserkantonaler Tpop
+        console.log(
+          'fetchQk: res.data[0].tpop.TPopXKoord:',
+          res.data[0].tpop.TPopXKoord
+        )
+        const tpops = res.data.filter(
+          tpop =>
+            tpop.TPopApBerichtRelevant === 1 &&
+            tpop.TPopXKoord &&
+            isFinite(tpop.TPopXKoord) &&
+            tpop.TPopYKoord &&
+            isFinite(tpop.TPopYKoord) &&
+            !isPointInsidePolygon(
+              store.app.ktZh,
+              tpop.TPopXKoord,
+              tpop.TPopYKoord
+            )
+        )
+        if (tpops.length > 0) {
+          const messages = {
+            hw: `Teilpopulation ist als 'Für AP-Bericht relevant' markiert, liegt aber ausserhalb des Kt. Zürich und sollte daher nicht relevant sein:`,
+            url: tpops.map(tpop => [
+              'Projekte',
+              1,
+              'Arten',
+              tpop.ApArtId,
+              'Populationen',
+              tpop.PopId,
+              'Teil-Populationen',
+              tpop.TPopId,
+            ]),
+          }
+          store.addMessagesToQk({ tree, messages })
+          nrOfMessages += 1
         }
-        store.addMessagesToQk({ tree, messages })
-        nrOfMessages += 1
+        // if no messages: tell user
+        if (nrOfMessages === 0) {
+          const messages = { hw: 'Wow: Scheint alles i.O. zu sein!' }
+          store.addMessagesToQk({ tree, messages })
+        }
+        store.loading = store.loading.filter(el => el !== 'qk')
       }
-      // if no messages: tell user
-      if (nrOfMessages === 0) {
-        const messages = { hw: 'Wow: Scheint alles i.O. zu sein!' }
-        store.addMessagesToQk({ tree, messages })
-      }
-      store.loading = store.loading.filter(el => el !== 'qk')
-    })
+    })*/
     .catch(error => {
       store.listError(error)
       store.loading = store.loading.filter(el => el !== 'qk')

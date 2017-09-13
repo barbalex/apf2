@@ -1,16 +1,15 @@
 // @flow
-import dateFns from 'date-fns'
 import compose from 'recompose/compose'
 import renameProps from 'recompose/renameProps'
 
-import buildQkMessages from './buildQkMessages'
+import standardQkYear from '../../modules/standardQkYear'
 
 const enhance = compose(
   renameProps({
     berichtjahr: 'berichtjahrPassed',
     messages: 'messagesPassed',
     filter: 'filterPassed',
-  }),
+  })
 )
 
 const setQk = ({
@@ -18,39 +17,33 @@ const setQk = ({
   tree,
   berichtjahrPassed,
   messagesPassed,
-  filterPassed,
 }: {
   store: Object,
   tree: Object,
   berichtjahrPassed: number,
   messagesPassed: Array<Object>,
-  filterPassed: string,
 }): void => {
+  console.log('setQk running')
   const apArtId = tree.activeNodes.ap
   let berichtjahr = berichtjahrPassed
   const messages = messagesPassed || []
-  let filter = filterPassed
   const existingQk = store.qk.get(apArtId)
+
   if (!berichtjahr && berichtjahr !== 0) {
-    const existingBerichtjahr = existingQk && existingQk.berichtjahr
-      ? existingQk.berichtjahr
-      : ''
+    const existingBerichtjahr =
+      existingQk && existingQk.berichtjahr ? existingQk.berichtjahr : ''
     if (existingBerichtjahr) {
       berichtjahr = existingBerichtjahr
     } else {
-      const refDate = new Date()
-      refDate.setMonth(refDate.getMonth() - 6)
-      berichtjahr = parseInt(dateFns.format(refDate, 'YYYY'), 10)
+      berichtjahr = standardQkYear()
     }
   }
-  if (!filter && filter !== '') {
-    filter = existingQk && existingQk.filter ? existingQk.filter : ''
-  }
-  const value = buildQkMessages({
+  const value = {
     berichtjahr,
     messages,
-    filter,
-  })
+  }
+  console.log('setQk setting apArtId:', apArtId)
+  console.log('setQk setting berichtjahr:', berichtjahr)
   store.qk.set(apArtId, value)
 }
 

@@ -18,7 +18,6 @@ function Store(): void {
   this.logout = () => {}
   this.setLoginFromIdb = () => {}
   this.fetchQk = () => {}
-  this.setQkFilter = () => {}
   this.addMessagesToQk = () => {}
   this.qk = observable.map()
   this.insertBeobzuordnung = () => {}
