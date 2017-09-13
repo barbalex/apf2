@@ -1,11 +1,9 @@
 // @flow
-import { extendObservable, action } from 'mobx'
-import fetchKtZh from '../action/fetchKtZh'
+import { extendObservable } from 'mobx'
 
 export default (store: Object): void => {
   extendObservable(store.app, {
     errors: [],
     fields: [],
-    fetchKtZh: action('fetchKtZh', () => fetchKtZh(store)),
   })
 }

@@ -1,6 +1,4 @@
 // @flow
-import { observable } from 'mobx'
-
 import TableStore from './Table'
 import ObservableHistory from './ObservableHistory'
 import extendStore from './extend'
@@ -17,9 +15,6 @@ function Store(): void {
   this.fetchLogin = () => {}
   this.logout = () => {}
   this.setLoginFromIdb = () => {}
-  this.fetchQk = () => {}
-  this.addMessagesToQk = () => {}
-  this.qk = observable.map()
   this.insertBeobzuordnung = () => {}
   this.insertDataset = () => {}
   this.deleteDatasetDemand = () => {}
@@ -172,6 +167,13 @@ function Store(): void {
   this.copyingBiotop = {
     id: null,
     label: null,
+  }
+  this.qk = {
+    setMessages: () => {},
+    addMessages: () => {},
+    messages: [],
+    filter: '',
+    setFilter: () => {},
   }
 }
 

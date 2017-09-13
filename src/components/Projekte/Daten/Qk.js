@@ -1,5 +1,6 @@
 // @flow
 import React from 'react'
+import { toJS } from 'mobx'
 import { observer, inject } from 'mobx-react'
 import TextField from 'material-ui/TextField'
 import Linkify from 'react-linkify'
@@ -12,6 +13,8 @@ import withLifecycle from '@hocs/with-lifecycle'
 
 import FormTitle from '../../shared/FormTitle'
 import appBaseUrl from '../../../modules/appBaseUrl'
+import standardQkYear from '../../../modules/standardQkYear'
+import fetchQk from '../../../modules/fetchQk'
 
 const Container = styled.div`
   height: 100%;
@@ -40,28 +43,29 @@ const linkifyProperties = {
 
 const enhance = compose(
   inject('store'),
-  withState('berichtjahr', 'changeBerichtjahr', new Date().getFullYear()),
-  withState('filter', 'changeFilter', ''),
-  withState('messages', 'changeMessages', []),
+  withState('berichtjahr', 'changeBerichtjahr', standardQkYear()),
   withHandlers({
     onChangeBerichtjahr: props => (event, val) => {
-      const { changeBerichtjahr, changeMessages, store, tree } = props
+      const { berichtjahr, changeBerichtjahr, store, tree } = props
       console.log('Qk, onChangeBerichtjahr, jahr:', val)
       changeBerichtjahr(val)
       if ((isNaN(val) && val.length === 4) || (!isNaN(val) && val > 1000)) {
-        store.setQk({ tree: tree })
-        console.log('Qk, onChangeBerichtjahr, fetching qk')
         // reset messages
-        changeMessages([])
-        // call fetchQk and pass it changeMessages
-        setTimeout(() => store.fetchQk({ tree: props.tree }))
+        store.qk.setMessages([])
+        // call fetchQk and pass it berichtjahr and apArtId
+        const apArtId = tree.activeNodes.ap
+        setTimeout(() => fetchQk({ store, berichtjahr, apArtId }))
       }
     },
-    onChangeFilter: props => (event, val) => props.changeFilter(val),
+    onChangeFilter: props => (event, val) => props.store.qk.setFilter(val),
   }),
   withLifecycle({
-    onDidMount({ store }) {
-      // call fetchQk and pass it changeMessages
+    onDidMount({ berichtjahr, changeBerichtjahr, store, tree }) {
+      // reset messages
+      store.qk.setMessages([])
+      // call fetchQk and pass it berichtjahr and apArtId
+      const apArtId = tree.activeNodes.ap
+      fetchQk({ store, berichtjahr, apArtId })
     },
   }),
   observer
@@ -71,24 +75,23 @@ const Qk = ({
   store,
   tree,
   berichtjahr,
-  messages,
-  filter,
   onChangeBerichtjahr,
   onChangeFilter,
 }: {
   store: Object,
   tree: Object,
   berichtjahr: number,
-  messages: Array<Object>,
-  filter: string,
   onChangeBerichtjahr: () => void,
   onChangeFilter: () => void,
 }) => {
-  const apArtId = tree.activeNodes.ap
-
+  const { filter, messages } = store.qk
+  const pureMessages = toJS(messages)
   const messagesFiltered = filter
-    ? messages.filter(m => m.hw.toLowerCase().includes(filter.toLowerCase()))
-    : messages
+    ? pureMessages.filter(m =>
+        m.hw.toLowerCase().includes(filter.toLowerCase())
+      )
+    : pureMessages
+  console.log('Qk: messagesFiltered:', messagesFiltered)
 
   return (
     <Container>
@@ -104,7 +107,7 @@ const Qk = ({
         <FilterField
           floatingLabelText="nach Typ filtern"
           type="text"
-          value={filter || ''}
+          value={filter}
           fullWidth
           onChange={onChangeFilter}
         />

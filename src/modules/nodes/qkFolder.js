@@ -1,12 +1,13 @@
 // @flow
 import findIndex from 'lodash/findIndex'
 import reduce from 'lodash/reduce'
+import { toJS } from 'mobx'
 
 export default (
   store: Object,
   tree: Object,
   projId: number,
-  apArtId: number,
+  apArtId: number
 ): Array<Object> => {
   // fetch sorting indexes of parents
   const projIndex = findIndex(tree.filteredAndSorted.projekt, {
@@ -14,29 +15,36 @@ export default (
   })
   const apIndex = findIndex(
     tree.filteredAndSorted.ap.filter(a => a.ProjId === projId),
-    { ApArtId: apArtId },
+    { ApArtId: apArtId }
   )
-
-  const qk = store.qk.get(apArtId)
+  const { messages, filter } = store.qk
   let nrOfQkMessages = 0
-  if (qk && qk.messagesFiltered) {
+  const pureMessages = toJS(messages)
+  if (pureMessages) {
+    let messagesFiltered = filter
+      ? pureMessages.filter(m =>
+          m.hw.toLowerCase().includes(filter.toLowerCase())
+        )
+      : pureMessages
+    messagesFiltered = messagesFiltered.filter(
+      m => m.hw !== 'Wow: Scheint alles i.O. zu sein!'
+    )
     // need to count nr of urls, not nr of messages
     const nrOfUrls = reduce(
-      qk.messagesFiltered,
-      (sum, n) => sum + n.url.length,
-      0,
+      messagesFiltered,
+      (sum, n) => sum + (n && n.url && n.url.length ? n.url.length : 0),
+      0
     )
     nrOfQkMessages = nrOfUrls
   }
-  if (qk && qk.filter) {
+
+  if (pureMessages && filter) {
     nrOfQkMessages = `${nrOfQkMessages} gefiltert`
   }
+
   if (!tree.activeNodes.qk) {
     // only show number when qk is active
     nrOfQkMessages = null
-  }
-  if (store.loading.includes('qk')) {
-    nrOfQkMessages = '...'
   }
 
   return [
@@ -45,7 +53,9 @@ export default (
       menuType: 'qkFolder',
       id: apArtId,
       urlLabel: 'Qualitaetskontrollen',
-      label: `Qualitätskontrollen${nrOfQkMessages ? ` (${nrOfQkMessages})` : ''}`,
+      label: `Qualitätskontrollen${nrOfQkMessages !== null
+        ? ` (${nrOfQkMessages})`
+        : ''}`,
       url: ['Projekte', projId, 'Arten', apArtId, 'Qualitaetskontrollen'],
       sort: [projIndex, 1, apIndex, 10],
       hasChildren: false,

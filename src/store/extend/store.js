@@ -15,9 +15,6 @@ import insertBeobzuordnung from '../action/insertBeobzuordnung'
 import deleteDatasetDemand from '../action/deleteDatasetDemand'
 import deleteDatasetExecute from '../action/deleteDatasetExecute'
 import listError from '../action/listError'
-import setQk from '../action/setQk'
-import fetchQk from '../action/fetchQk'
-import addMessagesToQk from '../action/addMessagesToQk'
 import fetchLogin from '../action/fetchLogin'
 import logout from '../action/logout'
 import setLoginFromIdb from '../action/setLoginFromIdb'
@@ -141,23 +138,6 @@ export default (store: Object): void => {
     ),
     logout: action('logout', () => logout(store)),
     setLoginFromIdb: action('setLoginFromIdb', () => setLoginFromIdb(store)),
-    fetchQk: action('fetchQk', ({ tree }) =>
-      fetchQk(
-        ({
-          store,
-          tree,
-        }: {
-          store: Object,
-          tree: Object,
-        })
-      )
-    ),
-    setQk: action('setQk', ({ tree, berichtjahr, messages, filter }) =>
-      setQk({ store, tree, berichtjahr, messages, filter })
-    ),
-    addMessagesToQk: action('addMessagesToQk', ({ tree, messages }) => {
-      addMessagesToQk({ store, tree, messages })
-    }),
     insertBeobzuordnung: action(
       'insertBeobzuordnung',
       (tree, newKey, newValue) => {

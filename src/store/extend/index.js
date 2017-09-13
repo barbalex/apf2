@@ -12,6 +12,7 @@ import extendMapBeobNichtBeurteilt from './mapBeobNichtBeurteilt'
 import extendMapBeobNichtZuzuordnen from './mapBeobNichtZuzuordnen'
 import extendMapTpopBeob from './mapTpopBeob'
 import extendExport from './export'
+import extendQk from './qk'
 
 export default (store: Object): void => {
   extendStore(store)
@@ -29,4 +30,5 @@ export default (store: Object): void => {
   extendMapTpopBeob(store)
   extendStoreAutoruns(store)
   extendExport(store)
+  extendQk(store)
 }

@@ -103,7 +103,7 @@ const fetchDataForOpenNodes = (
         }
       },
       qk() {
-        store.fetchQk({ tree })
+        // not necessary any more as form loads data on mount
       },
       assozartFolder() {},
       idealbiotopFolder() {},
@@ -115,7 +115,7 @@ const fetchDataForOpenNodes = (
         store.fetchDatasetById({
           schemaName: 'beob',
           tableName: 'beob',
-          id: activeNodes.beobNichtZuzuordnen
+          id: activeNodes.beobNichtZuzuordnen,
         })
       },
       beobzuordnungFolder() {
@@ -202,9 +202,9 @@ const fetchDataForOpenNodes = (
         store.fetchDatasetById({
           schemaName: 'beob',
           tableName: 'beob',
-          id: activeNodes.tpopbeob
+          id: activeNodes.tpopbeob,
         })
-      }
+      },
     }
 
     runInAction(() => {
