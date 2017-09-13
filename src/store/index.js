@@ -20,6 +20,7 @@ function Store(): void {
   this.fetchQk = () => {}
   this.setQkFilter = () => {}
   this.addMessagesToQk = () => {}
+  this.qk = observable.map()
   this.insertBeobzuordnung = () => {}
   this.insertDataset = () => {}
   this.deleteDatasetDemand = () => {}
@@ -159,7 +160,6 @@ function Store(): void {
   }
   this.table = TableStore
   this.valuesForWhichTableDataWasFetched = {}
-  this.qk = observable.map()
   this.moving = {
     table: null,
     id: null,
