@@ -22,7 +22,7 @@ const enhance = compose(
   withHandlers({
     undoDeletion: props => () => {
       const { undoDeletion, deletedDatasets } = props.store
-      const { choosenDeletions } = props
+      const { choosenDeletions, store } = props
       // loop through all choosenDeletions
       choosenDeletions.forEach(time => {
         const deletedDataset = deletedDatasets.find(d => d.time === time)
@@ -33,7 +33,7 @@ const enhance = compose(
         )
         // insert them to db
         // and to store
-        undoDeletion(deletedDataset)
+        undoDeletion(store, deletedDataset)
       })
     },
     close: props => () => {
