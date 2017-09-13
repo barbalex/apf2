@@ -4,48 +4,7 @@ import isFinite from 'lodash/isFinite'
 import { toJS } from 'mobx'
 
 import epsg21781to4326 from './epsg21781to4326notReverse'
-/*
-;(function(console) {
-  console.save = function(data, filename) {
-    if (!data) {
-      console.error('Console.save: No data')
-      return
-    }
 
-    if (!filename) filename = 'console.json'
-
-    if (typeof data === 'object') {
-      data = JSON.stringify(data, undefined, 4)
-    }
-
-    var blob = new Blob([data], { type: 'text/json' }),
-      e = document.createEvent('MouseEvents'),
-      a = document.createElement('a')
-
-    a.download = filename
-    a.href = window.URL.createObjectURL(blob)
-    a.dataset.downloadurl = ['text/json', a.download, a.href].join(':')
-    e.initMouseEvent(
-      'click',
-      true,
-      false,
-      window,
-      0,
-      0,
-      0,
-      0,
-      0,
-      false,
-      false,
-      false,
-      false,
-      0,
-      null
-    )
-    a.dispatchEvent(e)
-  }
-})(console)
-*/
 export default (store: Object, tpops: Array<Object>): Array<number> => {
   /**
    * data is passed from map.pop.pops OR a view fetched from the server
@@ -95,12 +54,8 @@ export default (store: Object, tpops: Array<Object>): Array<number> => {
     features,
   }
 
-  //console.save(toJS(points), 'points.json')
-  //console.save(toJS(store.map.mapFilter.filter), 'filter.json')
-  console.log('1')
   // let turf check what points are within filter
   const result = within(toJS(points), toJS(store.map.mapFilter.filter))
-  console.log('2')
 
   return result.features.map(r => r.properties.TPopId)
 }
