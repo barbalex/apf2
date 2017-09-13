@@ -43,4 +43,8 @@ export default async (store: Object, deletedDataset: Object): Promise<void> => {
   store.writeToStore({ data: [data], table, field: idField })
   // 3. remove from deletedDatasets
   store.deletedDatasets = store.deletedDatasets.filter(d => d.time !== time)
+  // do not show if no more datasets
+  if (store.deletedDatasets.length === 0) {
+    store.toggleShowDeletedDatasets()
+  }
 }
