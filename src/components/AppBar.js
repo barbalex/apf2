@@ -85,6 +85,12 @@ const enhance = compose(
     },
     ueberApfloraChOnTouchTap: props => () =>
       window.open('https://github.com/FNSKtZH/apflora/wiki'),
+    reportIssue: props => () =>
+      window.open('https://github.com/barbalex/apf2/issues'),
+    watchVideos: props => () =>
+      window.open(
+        'https://www.youtube.com/playlist?list=PLTz8Xt5SOQPS-dbvpJ_DrB4-o3k3yj09J'
+      ),
     showDeletedDatasets: props => () => props.store.toggleShowDeletedDatasets(),
   }),
   withHandlers({
@@ -108,6 +114,8 @@ const MyAppBar = ({
   onClickButtonExporte,
   ueberApfloraChOnTouchTap,
   showDeletedDatasets,
+  reportIssue,
+  watchVideos,
 }: {
   store: Object,
   onClickButton: () => void,
@@ -119,6 +127,8 @@ const MyAppBar = ({
   onClickButtonExporte: () => void,
   ueberApfloraChOnTouchTap: () => void,
   showDeletedDatasets: () => void,
+  reportIssue: () => void,
+  watchVideos: () => void,
 }) => {
   const projekteTabs = store.urlQuery.projekteTabs
   const treeIsVisible = projekteTabs.includes('tree')
@@ -185,6 +195,14 @@ const MyAppBar = ({
             <MenuItem
               primaryText="über apflora.ch"
               onTouchTap={ueberApfloraChOnTouchTap}
+            />
+            <MenuItem
+              primaryText="Video-Anleitungen"
+              onTouchTap={watchVideos}
+            />
+            <MenuItem
+              primaryText="Fehler und Wünsche melden"
+              onTouchTap={reportIssue}
             />
             <MenuItem
               primaryText={`${store.user.name} abmelden`}
