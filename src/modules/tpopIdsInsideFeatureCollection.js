@@ -1,7 +1,7 @@
 // @flow
 import within from '@turf/within'
 import isFinite from 'lodash/isFinite'
-//import { toJS } from 'mobx'
+import { toJS } from 'mobx'
 
 import epsg21781to4326 from './epsg21781to4326notReverse'
 /*
@@ -51,6 +51,7 @@ export default (store: Object, tpops: Array<Object>): Array<number> => {
    * data is passed from map.pop.pops OR a view fetched from the server
    * so need to filter to data with coordinates first...
    */
+  // make sure all tpops used have coordinates
   let tpopsToUse = tpops.filter(p => {
     if (!p.TPopId) return false
     if (
@@ -96,9 +97,10 @@ export default (store: Object, tpops: Array<Object>): Array<number> => {
 
   //console.save(toJS(points), 'points.json')
   //console.save(toJS(store.map.mapFilter.filter), 'filter.json')
-
+  console.log('1')
   // let turf check what points are within filter
-  const result = within(points, store.map.mapFilter.filter)
+  const result = within(toJS(points), toJS(store.map.mapFilter.filter))
+  console.log('2')
 
   return result.features.map(r => r.properties.TPopId)
 }

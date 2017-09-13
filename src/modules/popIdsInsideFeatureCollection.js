@@ -10,6 +10,7 @@ export default (store: Object, pops: Array<Object>): Array<number> => {
    * data is passed from map.pop.pops OR a view fetched from the server
    * so need to filter to data with coordinates first...
    */
+  // make sure all pops used have coordinates
   let popsToUse = pops.filter(p => {
     if (!p.PopId) return false
     if (
@@ -65,11 +66,10 @@ export default (store: Object, pops: Array<Object>): Array<number> => {
     typeof x[1] === 'number',
   ])*/
   //console.log('isNumberCoordinates:', isNumberCoordinates)
-  const filter = toJS(store.map.mapFilter.filter)
   //console.log('filter:', filter)
 
   // let turf check what points are within filter
-  const result = within(points, filter)
+  const result = within(toJS(points), toJS(store.map.mapFilter.filter))
 
   return result.features.map(r => r.properties.PopId)
 }
