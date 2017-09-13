@@ -33,7 +33,7 @@ export default (store: Object, newParentId: number): any => {
     )
   }
 
-  const { user } = store.user.name
+  const user = store.user.name
   const row = store.table[table].get(id)
   if (!row) {
     return store.listError(

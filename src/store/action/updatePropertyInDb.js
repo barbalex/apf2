@@ -64,7 +64,7 @@ export default async (
   // update if no validation messages exist
   const combinedValidationMessages = objectValues(valid).join('')
   if (combinedValidationMessages.length === 0) {
-    const { user } = store.user.name
+    const user = store.user.name
     const oldValue = row[key]
     const artWasChanged = table === 'ap' && key === 'ApArtId'
     if (artWasChanged) {
