@@ -24,7 +24,7 @@ export default (store: Object): void => {
               const beobzuordnung = store.table.beobzuordnung.get(b.id)
               return (
                 beobzuordnung &&
-                !beobzuordnung.BeobNichtZuzuordnen &&
+                !beobzuordnung.BeobNichtZuordnen &&
                 beobzuordnung.TPopId === activeNodes.tpop
               )
             })
@@ -35,7 +35,7 @@ export default (store: Object): void => {
               const beobzuordnung = store.table.beobzuordnung.get(b.id)
               if (
                 beobzuordnung &&
-                !beobzuordnung.BeobNichtZuzuordnen &&
+                !beobzuordnung.BeobNichtZuordnen &&
                 beobzuordnung.TPopId
               ) {
                 const tpop = store.table.tpop.get(beobzuordnung.TPopId)
@@ -68,8 +68,8 @@ export default (store: Object): void => {
           const beobzuordnung = store.table.beobzuordnung.get(b.id)
           return (
             beobzuordnung &&
-            beobzuordnung.TPopId &&
-            !beobzuordnung.BeobNichtZuzuordnen
+            !beobzuordnung.BeobNichtZuordnen &&
+            beobzuordnung.TPopId
           )
         }),
       { name: 'mapTpopBeobBeobs' }

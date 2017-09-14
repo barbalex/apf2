@@ -16,7 +16,10 @@ export default (store: Object, tree: Object): Array<Object> => {
     // fetch only those without beobzuordnung
     .filter(beob => {
       const beobzuordnung = store.table.beobzuordnung.get(beob.id)
-      return !beobzuordnung
+      return (
+        !beobzuordnung ||
+        (!beobzuordnung.BeobNichtZuordnen && !beobzuordnung.TPopId)
+      )
     })
 
   beobNichtBeurteilt.forEach(el => {

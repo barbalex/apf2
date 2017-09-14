@@ -18,7 +18,7 @@ export default (store: Object): Object => {
       const markers = cluster.getAllChildMarkers()
       const hasHighlightedTpop = some(
         markers,
-        m => m.options.icon.options.className === 'beobIconHighlighted',
+        m => m.options.icon.options.className === 'beobIconHighlighted'
       )
       const className = hasHighlightedTpop
         ? 'beobZugeordnetClusterHighlighted'
@@ -33,7 +33,7 @@ export default (store: Object): Object => {
   const markers = window.L.markerClusterGroup(mcgOptions)
   if (visible) {
     beobs.forEach(p => {
-      const isHighlighted = highlightedIds.includes(p.BeobId)
+      const isHighlighted = highlightedIds.includes(p.id)
       const latLng = new window.L.LatLng(...p.KoordWgs84)
       const icon = window.L.icon({
         iconUrl: isHighlighted ? beobIconHighlighted : beobIcon,
@@ -46,13 +46,13 @@ export default (store: Object): Object => {
           icon,
           draggable: store.map.beob.assigning,
           zIndexOffset: -store.map.apfloraLayers.findIndex(
-            apfloraLayer => apfloraLayer.value === 'TpopBeob',
+            apfloraLayer => apfloraLayer.value === 'TpopBeob'
           ),
         })
         .bindPopup(
           ReactDOMServer.renderToStaticMarkup(
-            <BeobPopup store={store} beob={p} />,
-          ),
+            <BeobPopup store={store} beob={p} />
+          )
         )
       markers.addLayer(marker)
     })
