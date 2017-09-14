@@ -53,7 +53,6 @@ const LabelPopoverContentRow = styled(LabelPopoverRow)`
   }
 `
 const MaxHeightDiv = styled.div`
-  max-height: 250px;
   div + div {
     max-height: 250px;
     overflow-y: auto !important;
