@@ -97,7 +97,7 @@ export default (store: Object): void => {
       copyTpopBeobKoordToPop(store, beobId)
     ),
     createNewPopFromBeob: action('createNewPopFromBeob', (tree, beobId) =>
-      createNewPopFromBeob(store, tree, beobId)
+      createNewPopFromBeob({ store, tree, beobId })
     ),
     showCoordOnMapsZhCh: action('showCoordOnMapsZhCh', (x, y) =>
       window.open(

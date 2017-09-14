@@ -1,11 +1,15 @@
 // @flow
 import axios from 'axios'
 
-export default async (
+export default async ({
+  store,
+  tree,
+  beobId,
+}: {
   store: Object,
   tree: Object,
-  beobId: string
-): Promise<void> => {
+  beobId: string,
+}): Promise<void> => {
   if (!beobId) {
     return store.listError(new Error('keine beobId übergeben'))
   }
@@ -19,15 +23,21 @@ export default async (
   let tpop
   const { ap, projekt } = tree.activeNodes
   const user = store.user.name
+
   // create new pop for ap
-  let popId
+  let popIdResult
   try {
-    popId = await axios.post(
+    popIdResult = await axios.post(
       `/insert/apflora/tabelle=pop/feld=ApArtId/wert=${ap}/user=${user}`
     )
   } catch (error) {
     store.listError(error)
   }
+  if (!popIdResult || !popIdResult.data) {
+    throw new Error(`Fehler bei der Erstellung einer neuen Population`)
+  }
+  const popId = popIdResult.data
+
   // give pop koords of beob
   const popFelder = {
     id: popId,
@@ -35,33 +45,34 @@ export default async (
     PopXKoord: X,
     PopYKoord: Y,
   }
-  let result
+  let popResult
   try {
-    result = await axios.put(
+    popResult = await axios.put(
       `/updateMultiple/apflora/tabelle=pop/felder=${JSON.stringify(popFelder)}`
     )
   } catch (error) {
     store.listError(error)
   }
-  // $FlowIssue
-  const pop = result.data[0]
-  if (!pop) {
+  if (!popResult || !popResult.data || !popResult.data[0]) {
     throw new Error(`Fehler bei der Erstellung einer neuen Population`)
   }
+  const pop = popResult.data[0]
   store.table.pop.set(pop.PopId, pop)
+
   // create new tpop for pop
+  let tpopIdResult
   try {
-  } catch (error) {
-    store.listError(error)
-  }
-  let tpopId
-  try {
-    tpopId = await axios.post(
+    tpopIdResult = await axios.post(
       `/insert/apflora/tabelle=tpop/feld=PopId/wert=${pop.PopId}/user=${user}`
     )
   } catch (error) {
     store.listError(error)
   }
+  if (!tpopIdResult || !tpopIdResult.data) {
+    throw new Error(`Fehler bei der Erstellung einer neuen Teilpopulation`)
+  }
+  const tpopId = tpopIdResult.data
+
   // give tpop koords of beob
   const felder = {
     id: tpopId,
@@ -69,28 +80,39 @@ export default async (
     TPopXKoord: X,
     TPopYKoord: Y,
   }
-  let tpopData
+  let tpopResult
   try {
-    tpopData = await axios.put(
+    tpopResult = await axios.put(
       `/updateMultiple/apflora/tabelle=tpop/felder=${JSON.stringify(felder)}`
     )
   } catch (error) {
     store.listError(error)
   }
-  tpop = tpopData[0]
-  if (!tpop) {
-    throw new Error(`Fehler bei der Erstellung einer neuen Teil-Population`)
+  if (!tpopResult || !tpopResult.data) {
+    throw new Error(`Fehler bei der Aktualisierung der neuen Teil-Population`)
   }
+  tpop = tpopResult.data[0]
   store.table.tpop.set(tpop.TPopId, tpop)
+
   // create new beobzuordnung
-  let row
+  let beobzuordnungResult
   try {
-    row = await axios.post(`/apflora/beobzuordnung/BeobId/${beobId}`)
+    beobzuordnungResult = await axios.post(
+      `/apflora/beobzuordnung/BeobId/${beobId}`
+    )
   } catch (error) {
     store.listError(error)
   }
+  if (!beobzuordnungResult || !beobzuordnungResult.data) {
+    throw new Error(
+      `Fehler bei der Erstellung der neuen Beobachtungs-Zuordnung`
+    )
+  }
+  const beobzuordnung = beobzuordnungResult.data
+
   // insert this dataset in store.table
-  store.table.beobzuordnung.set(row.BeobId, row)
+  store.table.beobzuordnung.set(beobzuordnung.id, beobzuordnung)
+
   // set new activeNodeArray
   const newActiveNodeArray = [
     `Projekte`,
