@@ -9,7 +9,8 @@ import withHandlers from 'recompose/withHandlers'
 import FormTitle from '../../shared/FormTitle'
 import RadioButtonGroup from '../../shared/RadioButtonGroup'
 import TextField from '../../shared/TextField'
-import RadioButtonWithInfo from '../../shared/RadioButtonWithInfo'
+//import RadioButtonWithInfo from '../../shared/RadioButtonWithInfo'
+import CheckboxWithInfo from '../../shared/CheckboxWithInfo'
 import Beob from './Beob'
 
 const Container = styled.div`
@@ -144,7 +145,7 @@ const enhance = compose(
       const { activeDataset } = tree
       if (val) {
         if (activeDataset.table === 'beob') {
-          insertBeobzuordnung(tree, fieldname, val)
+          insertBeobzuordnung(tree, activeDataset.row, fieldname, val)
         } else {
           // beobzuordnung was moved from one TPopId to another
           updatePropertyInDb(tree, fieldname, val)
@@ -179,7 +180,7 @@ const Beobzuordnung = ({
       <FormTitle tree={tree} title="Beobachtung" />
       <DataContainer>
         <FieldsContainer>
-          <RadioButtonWithInfo
+          <CheckboxWithInfo
             tree={tree}
             fieldName="BeobNichtZuordnen"
             label="Nicht zuordnen"

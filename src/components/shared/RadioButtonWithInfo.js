@@ -22,7 +22,7 @@ const StyledLabel = styled.div`
   margin-top: 10px;
   cursor: text;
   font-size: 12px;
-  color: rgba(0,0,0,0.5);
+  color: rgba(0, 0, 0, 0.5);
   pointer-events: none;
   user-select: none;
   padding-bottom: 8px;
@@ -36,7 +36,7 @@ const enhance = compose(
       props.updatePropertyInDb(props.tree, props.fieldName, val)
     },
   }),
-  observer,
+  observer
 )
 
 const RadioButtonWithInfo = ({
@@ -45,13 +45,15 @@ const RadioButtonWithInfo = ({
   label,
   popover,
   onChange,
+  updatePropertyInDb,
 }: {
   fieldName: string,
   value?: ?number | ?string,
   label: string,
   popover: Object,
   onChange: () => void,
-}) => (
+  updatePropertyInDb: () => void,
+}) =>
   <Container>
     <StyledLabel>
       {label}
@@ -69,7 +71,6 @@ const RadioButtonWithInfo = ({
       </InfoWithPopover>
     </RadioButtonGroupContainer>
   </Container>
-)
 
 RadioButtonWithInfo.defaultProps = {
   value: '',
