@@ -126,7 +126,7 @@ export default async ({
     `Beobachtungen`,
     beobId,
   ]
-  // TODO: new url is set but ui does not reflect it
+
   tree.setActiveNodeArray(newActiveNodeArray)
   store.updateProperty(tree, `TPopId`, tpop.TPopId)
   store.updatePropertyInDb(tree, `TPopId`, tpop.TPopId)
