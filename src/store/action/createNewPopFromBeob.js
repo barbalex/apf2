@@ -35,15 +35,16 @@ export default async (
     PopXKoord: X,
     PopYKoord: Y,
   }
-  let popData
+  let result
   try {
-    popData = await axios.put(
+    result = await axios.put(
       `/updateMultiple/apflora/tabelle=pop/felder=${JSON.stringify(popFelder)}`
     )
   } catch (error) {
     store.listError(error)
   }
-  const pop = popData[0]
+  // $FlowIssue
+  const pop = result.data[0]
   if (!pop) {
     throw new Error(`Fehler bei der Erstellung einer neuen Population`)
   }
