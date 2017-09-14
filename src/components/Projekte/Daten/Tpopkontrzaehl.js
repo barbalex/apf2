@@ -41,7 +41,7 @@ const Tpopkontrzaehl = ({ store, tree }: { store: Object, tree: Object }) => {
         />
         <TextField
           tree={tree}
-          label="Anzahl"
+          label="Anzahl (nur ganze Zahlen)"
           fieldName="Anzahl"
           value={activeDataset.row.Anzahl}
           errorText={activeDataset.valid.Anzahl}
