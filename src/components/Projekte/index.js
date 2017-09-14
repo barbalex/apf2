@@ -41,9 +41,14 @@ const myChildren = (store: Object) => {
     case 0:
       flex = 1
       break
-    case 2:
-      flex = 0.33
+    case 2: {
+      if (projekteTabs.includes('tree') && projekteTabs.includes('tree2')) {
+        flex = 0.5
+      } else {
+        flex = 0.33
+      }
       break
+    }
     case 3:
       flex = 0.33
       break
