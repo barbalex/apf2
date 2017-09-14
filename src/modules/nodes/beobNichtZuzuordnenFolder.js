@@ -5,7 +5,7 @@ export default (
   store: Object,
   tree: Object,
   projId: number,
-  apArtId: number,
+  apArtId: number
 ): Array<Object> => {
   // fetch sorting indexes of parents
   const projIndex = findIndex(tree.filteredAndSorted.projekt, {
@@ -13,11 +13,15 @@ export default (
   })
   const apIndex = findIndex(
     tree.filteredAndSorted.ap.filter(a => a.ProjId === projId),
-    { ApArtId: apArtId },
+    { ApArtId: apArtId }
   )
 
   const beobNichtZuzuordnenNodesLength = tree.filteredAndSorted.beobNichtZuzuordnen.filter(
-    n => n.beob && n.beob.ArtId && n.beob.ArtId === apArtId,
+    n => {
+      const beob = store.table.beob.get(n.BeobId)
+      const artId = beob ? beob.ArtId : null
+      return artId && artId === apArtId
+    }
   ).length
 
   let message = beobNichtZuzuordnenNodesLength
