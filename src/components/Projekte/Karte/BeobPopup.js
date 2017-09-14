@@ -4,9 +4,7 @@ import styled from 'styled-components'
 
 import appBaseUrl from '../../../modules/appBaseUrl'
 
-const StyledH3 = styled.h3`
-  margin: 7px 0;
-`
+const StyledH3 = styled.h3`margin: 7px 0;`
 
 /**
  * This is rendered to static markup
@@ -20,11 +18,15 @@ const BeobPopup = ({ store, beob }: { store: Object, beob: Object }) => {
 
   // build url to open beob form
   let url = `${appBaseUrl}/Projekte/${projekt}/Arten/${ap}/nicht-beurteilte-Beobachtungen/${beob.id}`
-  if (beob.beobzuordnung) {
-    if (beob.beobzuordnung.BeobNichtZuordnen) {
+  const beobzuordnung = store.table.beobzuordnung.get(beob.id)
+  if (beobzuordnung) {
+    if (
+      beobzuordnung.BeobNichtZuordnen &&
+      beobzuordnung.BeobNichtZuordnen === 1
+    ) {
       url = `${appBaseUrl}/Projekte/${projekt}/Arten/${ap}/nicht-zuzuordnende-Beobachtungen/${beob.id}`
     } else {
-      const tpopId = beob.beobzuordnung.TPopId
+      const tpopId = beobzuordnung.TPopId
       const tpop = store.table.tpop.get(tpopId)
       const popId = tpop ? tpop.PopId : ''
       url = `${appBaseUrl}/Projekte/${projekt}/Arten/${ap}/Populationen/${popId}/Teil-Populationen/${tpopId}/Beobachtungen/${beob.id}`
@@ -41,7 +43,9 @@ const BeobPopup = ({ store, beob }: { store: Object, beob: Object }) => {
         {beob.label}
       </StyledH3>
       <div>
-        {`Koordinaten: ${xKoord.toLocaleString('de-ch')} / ${yKoord.toLocaleString('de-ch')}`}
+        {`Koordinaten: ${xKoord.toLocaleString(
+          'de-ch'
+        )} / ${yKoord.toLocaleString('de-ch')}`}
       </div>
       <a href={url} target="_blank" rel="noopener noreferrer">
         Formular in neuem Tab öffnen
