@@ -43,6 +43,7 @@ const myChildren = (store: Object) => {
       break
     case 2: {
       if (projekteTabs.includes('tree') && projekteTabs.includes('tree2')) {
+        // prevent 0.33 of screen being empty
         flex = 0.5
       } else {
         flex = 0.33
