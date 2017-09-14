@@ -12,9 +12,9 @@ export default (store: Object): Array<Object> => {
   const { beobs, highlightedIds } = store.map.beobNichtBeurteilt
   const visible = store.map.activeApfloraLayers.includes('BeobNichtBeurteilt')
   if (visible) {
-    return beobs.map(p => {
-      const isHighlighted = highlightedIds.includes(p.id)
-      const latLng = new window.L.LatLng(...p.KoordWgs84)
+    return beobs.map(beob => {
+      const isHighlighted = highlightedIds.includes(beob.id)
+      const latLng = new window.L.LatLng(...beob.KoordWgs84)
       const icon = window.L.icon({
         iconUrl: isHighlighted ? beobIconHighlighted : beobIcon,
         iconSize: [24, 24],
@@ -22,17 +22,17 @@ export default (store: Object): Array<Object> => {
       })
       return window.L
         .marker(latLng, {
-          title: p.label,
+          title: beob.label,
           icon,
           draggable: store.map.beob.assigning,
           zIndexOffset: -store.map.apfloraLayers.findIndex(
-            apfloraLayer => apfloraLayer.value === 'BeobNichtBeurteilt',
+            apfloraLayer => apfloraLayer.value === 'BeobNichtBeurteilt'
           ),
         })
         .bindPopup(
           ReactDOMServer.renderToStaticMarkup(
-            <BeobPopup store={store} beob={p} />,
-          ),
+            <BeobPopup store={store} beob={beob} />
+          )
         )
         .on('moveend', event => {
           /**
@@ -49,10 +49,10 @@ export default (store: Object): Array<Object> => {
             'Arten',
             activeNodes.ap,
             'nicht-beurteilte-Beobachtungen',
-            p.BeobId,
+            beob.BeobId,
           ]
           tree.setActiveNodeArray(newActiveNodeArray)
-          insertBeobzuordnung(tree, 'TPopId', nearestTpopId)
+          insertBeobzuordnung(tree, beob, 'TPopId', nearestTpopId)
         })
     })
   }

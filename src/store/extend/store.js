@@ -140,9 +140,9 @@ export default (store: Object): void => {
     setLoginFromIdb: action('setLoginFromIdb', () => setLoginFromIdb(store)),
     insertBeobzuordnung: action(
       'insertBeobzuordnung',
-      (tree, newKey, newValue) => {
+      (tree, beob, newKey, newValue) => {
         if (store.user.readOnly) return store.tellUserReadOnly()
-        insertBeobzuordnung(store, tree, newKey, newValue)
+        insertBeobzuordnung(store, tree, beob, newKey, newValue)
       }
     ),
     insertDataset: action('insertDataset', (tree, table, parentId, baseUrl) => {

@@ -22,6 +22,7 @@ const continueWithBeob = (
   newValue: string | number
 ): void => {
   const { projekt, ap } = tree.activeNodes
+
   // set new activeNodeArray
   if (newKey === 'BeobNichtZuordnen') {
     const newActiveNodeArray = [
@@ -58,6 +59,7 @@ const continueWithBeob = (
 export default (
   store: Object,
   tree: Object,
+  beob: Object,
   newKey: string,
   newValue: number
 ): void => {
@@ -65,7 +67,6 @@ export default (
    * newKey is either BeobNichtZuordnen or TPopId
    */
   // get data from beob in activeDataset
-  const beob = tree.activeDataset.row
   // check if a corresponding beobzuordnung already exists
   const beobzuordnungExists = !!store.table.beobzuordnung.get(beob.id)
   if (beobzuordnungExists) {
