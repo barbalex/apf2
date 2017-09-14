@@ -5,6 +5,7 @@
 */
 
 import axios from 'axios'
+import { toJS } from 'mobx'
 
 import tables from '../../modules/tables'
 
@@ -13,10 +14,13 @@ export default async ({
   deletedDataset,
 }: {
   store: Object,
-  deletedDataset: Object,
+  deletedDataset: ?Object,
 }): Promise<void> => {
-  // TODO: errors out here when undeleting tpopkontr
-  const { time, table, dataset } = deletedDataset
+  // TODO: errors out here when undeleting tpopkontr???
+  // for unknown reason this is called first with deletedDataset = undifined
+  // when second dataset is deleted
+  if (!deletedDataset) return
+  const { time, table, dataset } = toJS(deletedDataset)
   // ensure derived data exists
   const tabelle = tables.find(t => t.table === table)
   // in tpopfeldkontr and tpopfreiwkontr need to find dbTable

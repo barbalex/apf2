@@ -34,7 +34,7 @@ export default async (store: Object, tree: Object): Promise<void> => {
     dataset: result.data[0],
     time: Date.now(),
   }
-  store.deletedDatasets.unshift(deletedDataset)
+  store.addDatasetToDeleted(deletedDataset)
 
   const deleteUrl = `/apflora/tabelle=${table}/tabelleIdFeld=${idField}/tabelleId=${id}`
   try {

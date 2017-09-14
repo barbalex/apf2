@@ -164,6 +164,9 @@ export default (store: Object): void => {
       deleteDatasetExecute(store, tree)
     }),
     deletedDatasets: [],
+    addDatasetToDeleted: action('addDatasetToDeleted', dataset => {
+      store.deletedDatasets = [dataset, ...store.deletedDatasets]
+    }),
     showDeletedDatasets: false,
     toggleShowDeletedDatasets: action('toggleShowDeletedDatasets', () => {
       store.showDeletedDatasets = !store.showDeletedDatasets
