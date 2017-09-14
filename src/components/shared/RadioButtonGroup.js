@@ -26,6 +26,7 @@ const enhance = compose(
     onChange: props => (event, val) => {
       // if clicked element is active value: set null
       // Problem: does not work because change event does not happen
+      // Solution: do this in click event of button
       props.updatePropertyInDb(props.tree, props.fieldName, val)
     },
     onClickButton: props => event => {
