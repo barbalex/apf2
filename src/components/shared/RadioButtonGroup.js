@@ -15,7 +15,7 @@ const StyledLabel = styled.div`
   margin-top: 10px;
   cursor: text;
   font-size: 12px;
-  color: rgba(0,0,0,0.5);
+  color: rgba(0, 0, 0, 0.5);
   pointer-events: none;
   user-select: none;
   padding-bottom: 8px;
@@ -23,13 +23,21 @@ const StyledLabel = styled.div`
 
 const enhance = compose(
   withHandlers({
-    onChange: props => (event, valuePassed) => {
+    onChange: props => (event, val) => {
       // if clicked element is active value: set null
-      const val = valuePassed === props.value ? null : valuePassed
+      // Problem: does not work because change event does not happen
       props.updatePropertyInDb(props.tree, props.fieldName, val)
     },
+    onClickButton: props => event => {
+      const tpopIdClicked = +event.target.value
+      if (tpopIdClicked === props.value) {
+        // an already active tpopId was clicked
+        // set value null
+        props.updatePropertyInDb(props.tree, props.fieldName, null)
+      }
+    },
   }),
-  observer,
+  observer
 )
 
 const MyRadioButtonGroup = ({
@@ -38,12 +46,14 @@ const MyRadioButtonGroup = ({
   label,
   dataSource = [],
   onChange,
+  onClickButton,
 }: {
   fieldName: string,
   value?: number | string,
   label: string,
   dataSource?: Array<Object>,
   onChange: () => void,
+  onClickButton: () => void,
 }) => {
   const valueSelected = value !== null && value !== undefined ? value : ''
 
@@ -57,9 +67,14 @@ const MyRadioButtonGroup = ({
         valueSelected={valueSelected}
         onChange={onChange}
       >
-        {dataSource.map((e, index) => (
-          <RadioButton value={e.value} label={e.label} key={index} />
-        ))}
+        {dataSource.map((e, index) =>
+          <RadioButton
+            value={e.value}
+            label={e.label}
+            key={index}
+            onClick={onClickButton}
+          />
+        )}
       </RadioButtonGroup>
     </Container>
   )
