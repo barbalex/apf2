@@ -169,8 +169,11 @@ const Beobzuordnung = ({
 }) => {
   const { table } = store
   const { activeDataset } = tree
-  const beobzuordnung = activeDataset.row
-  const beob = table.beob.get(beobzuordnung.BeobId)
+  let beob = activeDataset.row
+  if (activeDataset.table === 'beobzuordnung') {
+    const beobzuordnung = activeDataset.row
+    beob = table.beob.get(beobzuordnung.BeobId)
+  }
   const quelle = beob ? table.beob_quelle.get(beob.QuelleId) : null
   const quelleName = quelle && quelle.name ? quelle.name : '?'
   const beobTitle = `Informationen aus ${quelleName} (nicht veränderbar)`
