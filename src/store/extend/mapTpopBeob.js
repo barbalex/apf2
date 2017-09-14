@@ -22,16 +22,19 @@ export default (store: Object): void => {
           return store.map.tpopBeob.beobs
             .filter(
               b =>
-                b.beobzuordnung && b.beobzuordnung.TPopId === activeNodes.tpop,
+                b.beobzuordnung && b.beobzuordnung.TPopId === activeNodes.tpop
             )
             .map(b => b.BeobId)
         } else if (activeNodes.pop) {
           return store.map.tpopBeob.beobs
             .filter(b => {
-              const tpop = store.table.tpop.get(b.beobzuordnung.TPopId)
-              if (tpop) {
-                const popId = tpop.PopId
-                return popId && popId === activeNodes.pop
+              if (b.beobzuordnung && b.beobzuordnung.TPopId) {
+                const tpop = store.table.tpop.get(b.beobzuordnung.TPopId)
+                if (tpop) {
+                  const popId = tpop.PopId
+                  return popId && popId === activeNodes.pop
+                }
+                return false
               }
               return false
             })
@@ -39,7 +42,7 @@ export default (store: Object): void => {
         }
         return []
       },
-      { name: 'mapTpopBeobHighlightedIds' },
+      { name: 'mapTpopBeobHighlightedIds' }
     ),
     markersClustered: computed(() => getTpopBeobMarkersClustered(store), {
       name: 'mapTpopBeobMarkersClustered',
@@ -52,13 +55,16 @@ export default (store: Object): void => {
     }),
     beobs: computed(
       () =>
-        getBeobForMap(store).filter(
-          b =>
-            b.beobzuordnung &&
-            b.beobzuordnung.TPopId &&
-            !b.beobzuordnung.BeobNichtZuzuordnen,
-        ),
-      { name: 'mapTpopBeobBeobs' },
+        getBeobForMap(store).filter(b => {
+          // const beobzuordnung = store.table.beobzuordnung.get(b.data[b.IdField])
+          const beobzuordnung = store.table.beobzuordnung.get(b.id)
+          return (
+            beobzuordnung &&
+            beobzuordnung.TPopId &&
+            !beobzuordnung.BeobNichtZuzuordnen
+          )
+        }),
+      { name: 'mapTpopBeobBeobs' }
     ),
     bounds: computed(() => getTpopBeobBounds(store.map.tpopBeob.beobs), {
       name: 'mapTpopBeobBounds',
@@ -68,11 +74,11 @@ export default (store: Object): void => {
         getTpopBeobBounds(
           store.map.tpopBeob.beobs.filter(b =>
             store.map.tpopBeob.highlightedIds.includes(
-              isNaN(b.BeobId) ? b.BeobId : Number(b.BeobId),
-            ),
-          ),
+              isNaN(b.BeobId) ? b.BeobId : Number(b.BeobId)
+            )
+          )
         ),
-      { name: 'mapTpopBeobBoundsOfHighlightedIds' },
+      { name: 'mapTpopBeobBoundsOfHighlightedIds' }
     ),
   })
 }

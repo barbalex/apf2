@@ -2,10 +2,8 @@
 import { extendObservable, computed } from 'mobx'
 
 import getBeobNichtBeurteiltBounds from '../action/getBeobNichtBeurteiltBounds'
-import getBeobNichtBeurteiltMarkersClustered
-  from '../action/getBeobNichtBeurteiltMarkersClustered'
-import getBeobNichtBeurteiltMarkers
-  from '../action/getBeobNichtBeurteiltMarkers'
+import getBeobNichtBeurteiltMarkersClustered from '../action/getBeobNichtBeurteiltMarkersClustered'
+import getBeobNichtBeurteiltMarkers from '../action/getBeobNichtBeurteiltMarkers'
 import getBeobForMap from '../action/getBeobForMap'
 
 export default (store: Object): void => {
@@ -22,36 +20,36 @@ export default (store: Object): void => {
         }
         return []
       },
-      { name: 'mapBeobNichtBeurteiltHighlightedIds' },
+      { name: 'mapBeobNichtBeurteiltHighlightedIds' }
     ),
     markersClustered: computed(
       () => getBeobNichtBeurteiltMarkersClustered(store),
-      { name: 'mapBeobNichtBeurteiltMarkersClustered' },
+      { name: 'mapBeobNichtBeurteiltMarkersClustered' }
     ),
     markers: computed(() => getBeobNichtBeurteiltMarkers(store), {
       name: 'mapBeobNichtBeurteiltMarkers',
     }),
     beobs: computed(
       () =>
-        getBeobForMap(store).filter(
-          b =>
-            !b.beobzuordnung ||
-            (!b.beobzuordnung.BeobNichtZuordnen && !b.beobzuordnung.TPopId),
-        ),
-      { name: 'mapBeobNichtBeurteiltBeobs' },
+        getBeobForMap(store).filter(b => {
+          //const beobzuordnung = store.table.beobzuordnung.get(b.data[b.IdField])
+          const beobzuordnung = store.table.beobzuordnung.get(b.id)
+          return !beobzuordnung
+        }),
+      { name: 'mapBeobNichtBeurteiltBeobs' }
     ),
     bounds: computed(
       () => getBeobNichtBeurteiltBounds(store.map.beobNichtBeurteilt.beobs),
-      { name: 'mapBeobNichtBeurteiltBounds' },
+      { name: 'mapBeobNichtBeurteiltBounds' }
     ),
     boundsOfHighlightedIds: computed(
       () =>
         getBeobNichtBeurteiltBounds(
           store.map.beobNichtBeurteilt.beobs.filter(b =>
-            store.map.beobNichtBeurteilt.highlightedIds.includes(b.id),
-          ),
+            store.map.beobNichtBeurteilt.highlightedIds.includes(b.id)
+          )
         ),
-      { name: 'mapBeobNichtBeurteiltBoundsOfHighlightedIds' },
+      { name: 'mapBeobNichtBeurteiltBoundsOfHighlightedIds' }
     ),
     idOfBeobBeingAssigned: 0,
   })

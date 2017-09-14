@@ -6,19 +6,19 @@ import epsg21781to4326 from '../../modules/epsg21781to4326'
 export default (store: Object): Array<Object> => {
   const { table, tree } = store
   const myApArtId = tree.activeNodes.ap
-  // get beob of this ap
-  let beob = Array.from(table.beob.values()).filter(
+  // get beobs of this ap
+  let beobs = Array.from(table.beob.values()).filter(
     beob => beob.ArtId === myApArtId
   )
 
-  return beob
+  return beobs
     .map(bb => {
-      const b = clone(bb)
+      const beob = clone(bb)
       // add KoordWgs84
-      b.KoordWgs84 = epsg21781to4326(b.X, b.Y)
+      beob.KoordWgs84 = epsg21781to4326(beob.X, beob.Y)
       // add beobzuordnung
-      b.beobzuordnung = table.beobzuordnung.get(b.BeobId)
-      return b
+      beob.beobzuordnung = table.beobzuordnung.get(beob.BeobId)
+      return beob
     })
-    .filter(b => !!b.KoordWgs84)
+    .filter(beob => !!beob.KoordWgs84)
 }
