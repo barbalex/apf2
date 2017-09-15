@@ -83,8 +83,8 @@ window.app = app
 store.setLoginFromIdb()
 
 // turned off because of errors in production
-const socket = window.io(apiBaseUrl)
-socket.on('tabelle_update', payload => updateFromSocket(store, payload))
+// const socket = window.io(apiBaseUrl)
+// socket.on('tabelle_update', payload => updateFromSocket(store, payload))
 
 const AppContainer = styled.div`
   display: flex;
