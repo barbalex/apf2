@@ -41,9 +41,9 @@ import getUrlQuery from './store/action/getUrlQuery'
 // service worker
 import registerServiceWorker from './registerServiceWorker'
 
-// turned off because of errors in production
 import apiBaseUrl from './modules/apiBaseUrl'
-import updateFromSocket from './modules/updateFromSocket'
+// turned off because of errors in production
+//import updateFromSocket from './modules/updateFromSocket'
 
 import './index.css'
 
