@@ -6,6 +6,6 @@ const isLocalhost = hostnameWithoutWww === 'localhost'
 const hostname = isLocalhost ? 'localhost' : window.location.hostname
 const appHost = isLocalhost
   ? `http://${hostname}:3000/`
-  : `https://${hostname}:3000/v2`
+  : `https://${hostname}/`
 
 export default appHost
