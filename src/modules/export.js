@@ -42,14 +42,15 @@ export default async ({
   }
   // $FlowIssue
   const { data } = result
-  console.log('export: data:', data)
   const { mapFilter } = store.map
   const { applyMapFilterToExport } = store.export
+  // TODO: add this
+  /*
   const {
-    // TODO: add this
-    applyNodeLabelFilterToExport, // eslint-disable-line no-unused-vars
-    applyActiveNodeFilterToExport, // eslint-disable-line no-unused-vars
+    applyNodeLabelFilterToExport,
+    applyActiveNodeFilterToExport,
   } = store.tree
+  */
   let jsonData = clone(data)
   // now we could manipulate the data, for instance apply mapFilter
   const filterFeatures = mapFilter.filter.features
@@ -81,6 +82,7 @@ export default async ({
       jsonData,
     })
   } else {
+    // pass some data in case something goes wrong
     exportXlsx({
       store,
       changeArtFuerEierlegendeWollmilchsau,
