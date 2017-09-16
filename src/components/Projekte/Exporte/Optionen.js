@@ -18,6 +18,12 @@ const Optionen = ({ store }: { store: Object }) =>
     <CardHeader title="Optionen" actAsExpander showExpandableButton />
     <CardText expandable>
       <Checkbox
+        label="Dateien im .csv-Format exportieren (Standard ist das xlsx-Format von Excel)"
+        value={store.export.fileType}
+        checked={store.export.fileType === 'csv'}
+        onCheck={store.export.toggleFileType}
+      />
+      <Checkbox
         label={
           store.map.mapFilter.filter.features.length > 0
             ? 'Karten-Filter anwenden'

@@ -36,6 +36,12 @@ export default (store: Object): void => {
         ))
     ),
     fileType: 'xlsx',
-    setFileType: action('setFileType', type => (store.export.fileType = type)),
+    toggleFileType: action('toggleFileType', () => {
+      if (store.export.fileType === 'csv') {
+        store.export.fileType = 'xlsx'
+      } else {
+        store.export.fileType = 'csv'
+      }
+    }),
   })
 }
