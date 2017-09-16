@@ -92,6 +92,8 @@ function Store(): void {
     activeDownloads: [],
     addDownload: () => {},
     removeDownload: () => {},
+    fileType: 'xlsx',
+    setFileType: () => {},
   }
   this.dropdownList = {
     adressen: [],

@@ -3,12 +3,8 @@ import { observer, inject } from 'mobx-react'
 import styled from 'styled-components'
 import { Card, CardHeader, CardText } from 'material-ui/Card'
 import FlatButton from 'material-ui/FlatButton'
-import fileDownload from 'react-file-download'
-import format from 'date-fns/format'
-import axios from 'axios'
 import sortBy from 'lodash/sortBy'
 import filter from 'lodash/filter'
-import clone from 'lodash/clone'
 import AutoComplete from 'material-ui/AutoComplete'
 import { orange500 } from 'material-ui/styles/colors'
 import compose from 'recompose/compose'
@@ -16,18 +12,12 @@ import withState from 'recompose/withState'
 import withProps from 'recompose/withProps'
 import withHandlers from 'recompose/withHandlers'
 import withLifecycle from '@hocs/with-lifecycle'
-import json2csv from 'json2csv'
-import fileSaver from 'file-saver'
 
 import beziehungen from '../../../etc/beziehungen.png'
 import FormTitle from '../../shared/FormTitle'
 import Tipps from './Tipps'
 import Optionen from './Optionen'
-import popIdsInsideFeatureCollection from '../../../modules/popIdsInsideFeatureCollection'
-import tpopIdsInsideFeatureCollection from '../../../modules/tpopIdsInsideFeatureCollection'
-import beobIdsFromServerInsideFeatureCollection from '../../../modules/beobIdsFromServerInsideFeatureCollection'
-import getXlsxBuffer from '../../../modules/getXlsxBuffer'
-import exportXlsx from '../../../modules/exportXlsx'
+import exportModule from '../../../modules/export'
 
 const Container = styled.div`
   height: 100%;
@@ -100,7 +90,7 @@ const enhance = compose(
       artFuerEierlegendeWollmilchsau,
     }) => ({ view, fileName, apArtId }) => {
       // TODO: export csv if option is choosen
-      exportXlsx({
+      exportModule({
         store,
         changeArtFuerEierlegendeWollmilchsau,
         artFuerEierlegendeWollmilchsau,
@@ -582,7 +572,6 @@ const Exporte = ({
           <DownloadCardButton
             label="Datenstruktur grafisch dargestellt"
             onClick={() => {
-              // fileDownload(beziehungen, 'apfloraBeziehungen.png')
               window.open(beziehungen)
             }}
           />

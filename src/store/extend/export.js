@@ -35,5 +35,7 @@ export default (store: Object): void => {
           x => x !== name
         ))
     ),
+    fileType: 'xlsx',
+    setFileType: action('setFileType', type => (store.export.fileType = type)),
   })
 }
