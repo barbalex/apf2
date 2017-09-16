@@ -1,3 +1,4 @@
+// @flow
 import React from 'react'
 import styled from 'styled-components'
 import { Card, CardHeader, CardText } from 'material-ui/Card'
@@ -11,7 +12,7 @@ const SecondLevelCard = styled(Card)`
   background-color: #FFF8E1 !important;
 `
 
-const Tipps = () => (
+const Tipps = () =>
   <FirstLevelCard>
     <CardHeader title="Tipps und Tricks" actAsExpander showExpandableButton />
     <CardText expandable>
@@ -23,8 +24,10 @@ const Tipps = () => (
           showExpandableButton
         />
         <CardText expandable>
-          {'Eine reine Textdatei, deren Name mit ".csv" endet.'}<br />
-          {'"csv" steht für: "comma separated values".'}<br />
+          {'Eine reine Textdatei, deren Name mit ".csv" endet.'}
+          <br />
+          {'"csv" steht für: "comma separated values".'}
+          <br />
           {'Die Datei hat folgende Eigenschaften:'}
           <ol>
             <li>
@@ -41,7 +44,8 @@ const Tipps = () => (
               {'Die erste Zeile enthält die Feldnamen'}
             </li>
             <li>
-              {'Der Zeichenstatz ist Unicode UTF-8'}<br />
+              {'Der Zeichenstatz ist Unicode UTF-8'}
+              <br />
               {
                 'Ist ein falscher Zeichensatz gewählt, werden Sonderzeichen wie z.B. Umlaute falsch angezeigt.'
               }
@@ -59,8 +63,10 @@ const Tipps = () => (
           Es gibt zwei Möglichkeiten:
           <ol>
             <li>
-              {'Heruntergeladene Datei doppelklicken.'}<br />
-              {'Meist wählt das Betriebssystem ein geeignetes Programm.'}<br />
+              {'Heruntergeladene Datei doppelklicken.'}
+              <br />
+              {'Meist wählt das Betriebssystem ein geeignetes Programm.'}
+              <br />
               {
                 'Dieses Programm erkennt hoffentlich, dass der Importassistent verwendet werden muss.'
               }
@@ -118,7 +124,8 @@ const Tipps = () => (
                   {'"Daten" > "Externe Daten abrufen" > "Aus Text" wählen'}
                 </li>
                 <li>
-                  {'Nun erscheit der Textkonvertierungs-Assistent.'}<br />
+                  {'Nun erscheit der Textkonvertierungs-Assistent.'}
+                  <br />
                   {
                     'Im Schritt 1 als Dateiursprung statt dem vorgegebenen "Windows (ANSI)" dies hier wählen: "65001 : Unicode (UTF-8)". Excel versteht sonst partout keine Umlaute.'
                   }
@@ -154,7 +161,9 @@ const Tipps = () => (
             'Das Programm hat wohl beim Öffnen die Feld-Grenzen nicht richtig erkannt.'
           }
           <ul>
-            <li>{'Öffnen Sie die Datei nochmals'}</li>
+            <li>
+              {'Öffnen Sie die Datei nochmals'}
+            </li>
             <li>
               {
                 'Suchen Sie dabei die Option, mit der eine Trennung der Felder mittels Kommas erzwungen werden kann'
@@ -193,6 +202,5 @@ const Tipps = () => (
       </SecondLevelCard>
     </CardText>
   </FirstLevelCard>
-)
 
 export default Tipps

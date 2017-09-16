@@ -17,6 +17,7 @@ import withProps from 'recompose/withProps'
 import withHandlers from 'recompose/withHandlers'
 import withLifecycle from '@hocs/with-lifecycle'
 import json2csv from 'json2csv'
+import fileSaver from 'file-saver'
 
 import beziehungen from '../../../etc/beziehungen.png'
 import FormTitle from '../../shared/FormTitle'
@@ -25,6 +26,8 @@ import Optionen from './Optionen'
 import popIdsInsideFeatureCollection from '../../../modules/popIdsInsideFeatureCollection'
 import tpopIdsInsideFeatureCollection from '../../../modules/tpopIdsInsideFeatureCollection'
 import beobIdsFromServerInsideFeatureCollection from '../../../modules/beobIdsFromServerInsideFeatureCollection'
+import getXlsxBuffer from '../../../modules/getXlsxBuffer'
+import exportXlsx from '../../../modules/exportXlsx'
 
 const Container = styled.div`
   height: 100%;
@@ -91,74 +94,20 @@ const enhance = compose(
     ''
   ),
   withHandlers({
-    downloadFromView: props => ({ view, fileName, apArtId }) => {
-      const {
+    downloadFromView: ({
+      store,
+      changeArtFuerEierlegendeWollmilchsau,
+      artFuerEierlegendeWollmilchsau,
+    }) => ({ view, fileName, apArtId }) => {
+      // TODO: export csv if option is choosen
+      exportXlsx({
         store,
         changeArtFuerEierlegendeWollmilchsau,
         artFuerEierlegendeWollmilchsau,
-      } = props
-      const url = `/exportView/json/view=${view}${apArtId ? `/${apArtId}` : ''}`
-      store.export.addDownload(fileName)
-      axios
-        .get(url)
-        .then(({ data }) => {
-          const { mapFilter } = store.map
-          const { applyMapFilterToExport } = store.export
-          const {
-            // TODO: add this
-            applyNodeLabelFilterToExport, // eslint-disable-line no-unused-vars
-            applyActiveNodeFilterToExport, // eslint-disable-line no-unused-vars
-          } = store.tree
-          let jsonData = clone(data)
-          // now we could manipulate the data, for instance apply mapFilter
-          const filterFeatures = mapFilter.filter.features
-          if (filterFeatures.length > 0 && applyMapFilterToExport) {
-            const keys = Object.keys(data[0])
-            // filter data
-            // beob can also have PopId and TPopId, so dont filter by TPopId if you filter by beob id
-            if (keys.includes('id')) {
-              const beobIds = beobIdsFromServerInsideFeatureCollection(
-                store,
-                data
-              )
-              jsonData = jsonData.filter(d => beobIds.includes(d.id))
-            } else if (keys.includes('TPopId')) {
-              // data sets with TPopId usually also deliver PopId,
-              // so only filter by TPopid then
-              const tpopIds = tpopIdsInsideFeatureCollection(store, data)
-              jsonData = jsonData.filter(d => tpopIds.includes(d.TPopId))
-            } else if (keys.includes('PopId')) {
-              const popIds = popIdsInsideFeatureCollection(store, data)
-              jsonData = jsonData.filter(d => popIds.includes(d.PopId))
-            }
-          }
-          if (jsonData.length === 0) {
-            throw new Error(
-              'Es gibt offenbar keine Daten, welche exportiert werden können'
-            )
-          }
-          try {
-            const csvData = json2csv({ data: jsonData })
-            const file = `${fileName}_${format(
-              new Date(),
-              'YYYY-MM-DD_HH-mm-ss'
-            )}`
-            store.export.removeDownload(fileName)
-            fileDownload(csvData, `${file}.csv`)
-            if (artFuerEierlegendeWollmilchsau) {
-              changeArtFuerEierlegendeWollmilchsau('')
-            }
-          } catch (err) {
-            throw err
-          }
-        })
-        .catch(error => {
-          if (artFuerEierlegendeWollmilchsau) {
-            changeArtFuerEierlegendeWollmilchsau('')
-          }
-          store.listError(error)
-          store.export.removeDownload(fileName)
-        })
+        view,
+        fileName,
+        apArtId,
+      })
     },
   }),
   withLifecycle({

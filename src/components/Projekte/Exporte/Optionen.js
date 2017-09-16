@@ -1,3 +1,4 @@
+// @flow
 import React from 'react'
 import { Card, CardHeader, CardText } from 'material-ui/Card'
 import Checkbox from 'material-ui/Checkbox'
@@ -12,7 +13,7 @@ const FirstLevelCard = styled(Card)`
 
 const enhance = compose(inject('store'), observer)
 
-const Optionen = ({ store }: { store: Object }) => (
+const Optionen = ({ store }: { store: Object }) =>
   <FirstLevelCard initiallyExpanded>
     <CardHeader title="Optionen" actAsExpander showExpandableButton />
     <CardText expandable>
@@ -45,6 +46,5 @@ const Optionen = ({ store }: { store: Object }) => (
         />}
     </CardText>
   </FirstLevelCard>
-)
 
 export default enhance(Optionen)
