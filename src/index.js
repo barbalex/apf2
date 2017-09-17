@@ -34,6 +34,7 @@ import Projekte from './components/Projekte'
 import User from './components/User'
 import Deletions from './components/Deletions'
 import Errors from './components/Errors'
+import Messages from './components/Messages'
 import DownloadMessages from './components/DownloadMessages'
 import getActiveNodeArrayFromPathname from './store/action/getActiveNodeArrayFromPathname'
 import getUrlQuery from './store/action/getUrlQuery'
@@ -112,6 +113,7 @@ ReactDOM.render(
         <User />
         <Deletions />
         <Errors />
+        <Messages />
         <DownloadMessages />
       </AppContainer>
     </MuiThemeProvider>

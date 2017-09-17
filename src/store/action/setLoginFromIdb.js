@@ -18,6 +18,7 @@ export default (store: Object): void =>
         store.user.name = ''
         store.user.readOnly = true
       }
+      store.messages.fetch()
     })
     .catch(error => {
       store.listError(error)

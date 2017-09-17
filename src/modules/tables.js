@@ -411,4 +411,9 @@ export default [
     idField: 'id',
     stammdaten: true,
   },
+  {
+    database: 'apflora',
+    table: 'message',
+    idField: 'id',
+  },
 ]

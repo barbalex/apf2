@@ -4,6 +4,13 @@ import ObservableHistory from './ObservableHistory'
 import extendStore from './extend'
 
 function Store(): void {
+  this.messages = {
+    fetch: () => {},
+    fetched: false,
+    setFetched: () => {},
+    messages: [],
+    setRead: () => {},
+  }
   this.history = ObservableHistory
   this.loading = []
   this.urlQuery = {
