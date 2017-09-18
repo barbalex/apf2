@@ -32,7 +32,7 @@ const UserMessages = ({
 }) => {
   return (
     <Dialog
-      title="Nachrichten von apflora:"
+      title="Letzte Anpassungen:"
       open={store.messages.messages.length > 0}
       contentStyle={{
         maxWidth: window.innerWidth * 0.8,
