@@ -41,7 +41,7 @@ const UserMessages = ({
         justifyContent: 'center',
       }}
     >
-      {store.messages.messages.map((m, index) => {
+      {store.messages.messages.sort(m => m.time).map((m, index) => {
         const paddBottom = index < store.messages.messages.length - 1
         return (
           <MessageContainer key={m.id} paddBottom={paddBottom}>
