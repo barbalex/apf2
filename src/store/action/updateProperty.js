@@ -6,17 +6,18 @@ export default (
   store: Object,
   tree: Object,
   key: string,
-  valuePassed: string | number,
+  valuePassed: string | number
 ): void => {
   const { table, row } = tree.activeDataset
   let value = valuePassed
+  console.log('updateProperty: row:', row)
   // ensure primary data exists
   if (!key || !table || !row) {
     return store.listError(
       new Error(
         `change was not saved as one or more of the following values were not passed:
-        field: "${key}", table: "${table}", value: "${value}"`,
-      ),
+        field: "${key}", table: "${table}", value: "${value}"`
+      )
     )
   }
   // ensure numbers saved as numbers

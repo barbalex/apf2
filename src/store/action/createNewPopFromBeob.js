@@ -27,16 +27,14 @@ export default async ({
   // create new pop for ap
   let popIdResult
   try {
-    popIdResult = await axios.post(
-      `/insert/apflora/tabelle=pop/feld=ApArtId/wert=${ap}/user=${user}`
-    )
+    popIdResult = await axios.post(`/apflora/pop/ApArtId/${ap}`)
   } catch (error) {
     store.listError(error)
   }
   if (!popIdResult || !popIdResult.data) {
     throw new Error(`Fehler bei der Erstellung einer neuen Population`)
   }
-  const popId = popIdResult.data
+  const popId = popIdResult.data.PopId
 
   // give pop koords of beob
   const popFelder = {
@@ -62,16 +60,14 @@ export default async ({
   // create new tpop for pop
   let tpopIdResult
   try {
-    tpopIdResult = await axios.post(
-      `/insert/apflora/tabelle=tpop/feld=PopId/wert=${pop.PopId}/user=${user}`
-    )
+    tpopIdResult = await axios.post(`/apflora/tpop/PopId/${pop.PopId}`)
   } catch (error) {
     store.listError(error)
   }
-  if (!tpopIdResult || !tpopIdResult.data) {
+  if (!tpopIdResult || !tpopIdResult.data || !tpopIdResult.data.TPopId) {
     throw new Error(`Fehler bei der Erstellung einer neuen Teilpopulation`)
   }
-  const tpopId = tpopIdResult.data
+  const tpopId = tpopIdResult.data.TPopId
 
   // give tpop koords of beob
   const felder = {
