@@ -8,6 +8,8 @@ import getDataArrayFromExportObjects from './getDataArrayFromExportObjects'
 
 export default async (store: Object, jsonArray: Array<Object>) => {
   const dataArray = getDataArrayFromExportObjects(jsonArray)
+  const numberOfColumns =
+    dataArray && dataArray[0] && dataArray[0].length ? dataArray[0].length : 0
   const workbook = new ExcelJs.Workbook()
   const worksheet = workbook.addWorksheet('Daten', {
     views: [
@@ -17,6 +19,16 @@ export default async (store: Object, jsonArray: Array<Object>) => {
         ySplit: 1,
       },
     ],
+    autoFilter: {
+      from: {
+        row: 1,
+        column: 1,
+      },
+      to: {
+        row: 1,
+        column: numberOfColumns,
+      },
+    },
   })
   worksheet.addRows(dataArray)
   worksheet.getRow(1).fill = {
