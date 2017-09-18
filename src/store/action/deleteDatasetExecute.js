@@ -1,7 +1,6 @@
 // @flow
-import axios from 'axios'
-
 import tables from '../../modules/tables'
+import deleteDataset from './deleteDataset'
 
 export default async (store: Object, tree: Object): Promise<void> => {
   // deleteDatasetDemand checks variables
@@ -19,32 +18,20 @@ export default async (store: Object, tree: Object): Promise<void> => {
   if (tableMetadata.dbTable) {
     table = tableMetadata.dbTable
   }
-  // first get dataset from server (possible that does not yet exist in store)
-  // to be able to undo
-  const fetchUrl = `/schema/apflora/table/${table}/field/${idField}/value/${id}`
-  let result
-  try {
-    result = await axios.get(fetchUrl)
-  } catch (error) {
-    store.listError(error)
-  }
-  // copy to store.deletedDatasets
-  const deletedDataset = {
-    table,
-    dataset: result.data[0],
-    time: Date.now(),
-  }
-  store.addDatasetToDeleted(deletedDataset)
 
-  const deleteUrl = `/apflora/tabelle=${table}/tabelleIdFeld=${idField}/tabelleId=${id}`
+  // pass to function that can be used also for deleting
+  // without modal popping up
   try {
-    await axios.delete(deleteUrl)
+    await deleteDataset({
+      store,
+      table,
+      idField,
+      id,
+    })
   } catch (error) {
     store.listError(error)
-    store.datasetToDelete = {}
   }
-  // remove this dataset in store.table
-  store.table[table].delete(id)
+
   // set new url
   url.pop()
   tree.setActiveNodeArray(url)
