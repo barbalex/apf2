@@ -39,5 +39,16 @@ export default async ({
   }
   // remove this dataset in store.table
   store.table[table].delete(id)
-  // TODO: if tpop was deleted: set beobzuordnung free
+
+  // if tpop was deleted: set beobzuordnung free
+  if (table === 'tpop') {
+    const beobzuordnung = Array.from(store.table.beobzuordnung.values())
+    const beobzuordnungIds = beobzuordnung
+      .filter(b => b.TPopId === +id)
+      .map(b => b.BeobId)
+
+    beobzuordnungIds.forEach(id => {
+      store.table.beobzuordnung.delete(id)
+    })
+  }
 }
