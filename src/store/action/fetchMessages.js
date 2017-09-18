@@ -9,8 +9,10 @@ export default async (store: Object): Promise<void> => {
     } catch (error) {
       store.listError(error)
     }
-    // $FlowIssue
-    return result.data.map(m => m.MessageId)
+    if (result && result.data) {
+      return result.data.map(m => m.MessageId)
+    }
+    return []
   }
   const fetchMessages = async () => {
     let result

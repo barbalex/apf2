@@ -33,7 +33,7 @@ const UserMessages = ({
   return (
     <Dialog
       title="Letzte Anpassungen:"
-      open={store.messages.messages.length > 0}
+      open={store.messages.messages.length > 0 && !!store.user.name}
       contentStyle={{
         maxWidth: window.innerWidth * 0.8,
         display: 'flex',

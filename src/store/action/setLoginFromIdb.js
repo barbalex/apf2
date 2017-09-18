@@ -14,11 +14,11 @@ export default (store: Object): void =>
       if (users[0] && users[0].name) {
         store.user.name = users[0].name
         store.user.readOnly = users[0].readOnly
+        store.messages.fetch()
       } else {
         store.user.name = ''
         store.user.readOnly = true
       }
-      store.messages.fetch()
     })
     .catch(error => {
       store.listError(error)
