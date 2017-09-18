@@ -55,12 +55,19 @@ export default (store: Object): void => {
       table: null,
       id: null,
       label: null,
+      withNextLevel: false,
     },
-    markForCopying: action('markForCopying', (table, id, label) => {
-      store.copying.table = table
-      store.copying.id = id
-      store.copying.label = label
-    }),
+    markForCopying: action(
+      'markForCopying',
+      (table, id, label, withNextLevel) => {
+        store.copying.table = table
+        store.copying.id = id
+        store.copying.label = label
+        withNextLevel === true
+          ? (store.copying.withNextLevel = true)
+          : (store.copying.withNextLevel = false)
+      }
+    ),
     copyTo: action('copyTo', parentId => {
       // insert new dataset with:
       // - data of dataset with id copying.id
@@ -71,6 +78,7 @@ export default (store: Object): void => {
       store.copying.table = null
       store.copying.id = null
       store.copying.label = null
+      store.copying.withNextLevel = false
     }),
     copyingBiotop: {
       id: null,

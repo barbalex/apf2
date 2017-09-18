@@ -81,9 +81,7 @@ const NurApDiv = styled.div`
   padding-right: 5px;
   min-width: 40px;
 `
-const ApDivToggle = styled(Toggle)`
-  margin-left: -8px;
-`
+const ApDivToggle = styled(Toggle)`margin-left: -8px;`
 const strukturbaumContainerDivStyle = {
   height: '100%',
 }
@@ -203,6 +201,9 @@ const enhance = compose(
         markForCopying() {
           store.markForCopying(table, parseInt(id, 10), label)
         },
+        markForCopyingWithNextLevel() {
+          store.markForCopying(table, parseInt(id, 10), label, true)
+        },
         resetCopying() {
           store.resetCopying()
         },
@@ -288,14 +289,15 @@ const TreeContainer = ({
       {deleteDatasetModalIsVisible && <DeleteDatasetModal tree={tree} />}
       <LabelFilterContainer>
         <LabelFilter tree={tree} />
-        {showApDivToggle &&
+        {showApDivToggle && (
           <NurApDiv>
             <Label label="nur AP" />
             <ApDivToggle
               toggled={tree.apFilter}
               onToggle={tree.toggleApFilter}
             />
-          </NurApDiv>}
+          </NurApDiv>
+        )}
       </LabelFilterContainer>
       <div
         style={strukturbaumContainerDivStyle}

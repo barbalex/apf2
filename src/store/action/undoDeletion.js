@@ -37,13 +37,11 @@ export default async ({
   )
 
   // update db
-  const url = `/insertFields/apflora/tabelle=${table}/felder=${JSON.stringify(
-    dataset
-  )}`
+  const url = `/insertFields/apflora/tabelle=${table}`
   // 1. write to db
   let response
   try {
-    response = await axios.post(url)
+    response = await axios.post(url, dataset)
   } catch (error) {
     store.listError(error)
   }

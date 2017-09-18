@@ -4,7 +4,7 @@ import axios from 'axios'
 import tables from '../../modules/tables'
 import recordValuesForWhichTableDataWasFetched from '../../modules/recordValuesForWhichTableDataWasFetched'
 
-export default ({
+export default async ({
   store,
   schemaName,
   tableName,
@@ -56,18 +56,19 @@ export default ({
   })
   const url = `/schema/${schemaName}/table/${tableName}/field/${idField}/value/${id}`
 
-  axios
-    .get(url)
-    .then(({ data }) =>
-      store.writeToStore({ data, table: tableName, field: idField })
+  let result
+  try {
+    result = await axios.get(url)
+  } catch (error) {
+    // remove setting that prevents loading of this value
+    valuesForWhichTableDataWasFetched[tableName][
+      idField
+    ] = valuesForWhichTableDataWasFetched[tableName][idField].filter(
+      x => x !== id
     )
-    .catch(error => {
-      // remove setting that prevents loading of this value
-      valuesForWhichTableDataWasFetched[tableName][
-        idField
-      ] = valuesForWhichTableDataWasFetched[tableName][idField].filter(
-        x => x !== id
-      )
-      store.listError(error)
-    })
+    store.listError(error)
+  }
+  // $FlowIssue
+  const { data } = result
+  store.writeToStore({ data, table: tableName, field: idField })
 }

@@ -8,9 +8,10 @@ import axios from 'axios'
 import clone from 'lodash/clone'
 
 import tables from '../../modules/tables'
+import copyTpopsOfPop from './copyTpopsOfPop'
 
 export default async (store: Object, parentId: number): Promise<void> => {
-  let { table } = store.copying
+  let { table, withNextLevel } = store.copying
   const { id } = store.copying
 
   // ensure derived data exists
@@ -62,16 +63,19 @@ export default async (store: Object, parentId: number): Promise<void> => {
   delete newRow.PopKoordWgs84
 
   // update db
-  const url = `/insertFields/apflora/tabelle=${table}/felder=${JSON.stringify(
-    newRow
-  )}`
+  const url = `/insertFields/apflora/tabelle=${table}`
   let response
   try {
-    response = await axios.post(url)
+    response = await axios.post(url, newRow)
   } catch (error) {
     store.listError(error)
   }
+  // $FlowIssue
   const { data } = response
   // can't write to store before, because db creates id and guid
   store.writeToStore({ data: [data], table, field: idField })
+  // check if need to copy tpop
+  if (table === 'pop' && withNextLevel) {
+    copyTpopsOfPop({ store, popIdFrom: id, popIdTo: data.PopId })
+  }
 }

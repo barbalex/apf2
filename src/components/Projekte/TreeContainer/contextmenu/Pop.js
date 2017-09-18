@@ -18,7 +18,7 @@ const enhance = compose(
       props.changeLabel(event.detail.data.nodeLabel)
     },
   }),
-  observer,
+  observer
 )
 
 const Pop = ({
@@ -77,7 +77,7 @@ const Pop = ({
       >
         verschiebe
       </MenuItem>
-      {moving &&
+      {moving && (
         <MenuItem
           onClick={onClick}
           data={{
@@ -85,7 +85,8 @@ const Pop = ({
           }}
         >
           {`verschiebe '${store.moving.label}' hierhin`}
-        </MenuItem>}
+        </MenuItem>
+      )}
       <MenuItem
         onClick={onClick}
         data={{
@@ -95,7 +96,16 @@ const Pop = ({
       >
         kopiere
       </MenuItem>
-      {copying &&
+      <MenuItem
+        onClick={onClick}
+        data={{
+          action: 'markForCopyingWithNextLevel',
+          table: 'pop',
+        }}
+      >
+        kopiere inklusive Teilpopulationen
+      </MenuItem>
+      {copying && (
         <MenuItem
           onClick={onClick}
           data={{
@@ -103,8 +113,9 @@ const Pop = ({
           }}
         >
           {`kopiere '${store.copying.label}' hierhin`}
-        </MenuItem>}
-      {copying &&
+        </MenuItem>
+      )}
+      {copying && (
         <MenuItem
           onClick={onClick}
           data={{
@@ -112,7 +123,8 @@ const Pop = ({
           }}
         >
           Kopieren aufheben
-        </MenuItem>}
+        </MenuItem>
+      )}
     </ContextMenu>
   )
 }

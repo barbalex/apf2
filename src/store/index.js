@@ -172,6 +172,7 @@ function Store(): void {
     table: null,
     id: null,
     label: null,
+    withNextLevel: false,
   }
   this.copyingBiotop = {
     id: null,
