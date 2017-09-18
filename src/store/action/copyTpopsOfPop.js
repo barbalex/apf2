@@ -8,16 +8,11 @@ export default async ({
   popIdFrom: number,
   popIdTo: number,
 }) => {
-  console.log('copyTpopsOfPop: popIdFrom:', popIdFrom)
-  console.log('copyTpopsOfPop: popIdTo:', popIdTo)
   // 1. fetch all tpops
-  store.fetchDatasetById({
-    schemaName: 'apflora',
-    tableName: 'pop',
-    id: popIdFrom,
-  })
-  // 2. add copies to new pop
-
-  // 3. reset withNextLevel???
-  //store.copying.withNextLevel =
+  await store.fetchTableByParentId('apflora', 'tpop', popIdFrom)
+  // 2. add tpops to new pop
+  const tpops = Array.from(store.table.tpop.values()).filter(
+    tpop => tpop.PopId === popIdFrom
+  )
+  tpops.forEach(tpop => store.copyTo(popIdTo, 'tpop', tpop.TPopId))
 }

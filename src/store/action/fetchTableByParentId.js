@@ -4,12 +4,12 @@ import axios from 'axios'
 import tables from '../../modules/tables'
 import recordValuesForWhichTableDataWasFetched from '../../modules/recordValuesForWhichTableDataWasFetched'
 
-export default (
+export default async (
   store: Object,
   schemaNamePassed: string,
   tableName: string,
   parentId: number
-): void => {
+): Promise<void> => {
   const schemaName = schemaNamePassed || 'apflora'
 
   const table = tables.find(t => t.table === tableName)
@@ -48,19 +48,19 @@ export default (
     value: parentId,
   })
   const url = `/schema/${schemaName}/table/${tableName}/field/${parentIdField}/value/${parentId}`
-
-  axios
-    .get(url)
-    .then(({ data }) =>
-      store.writeToStore({ data, table: tableName, field: idField })
+  let result
+  try {
+    result = await axios.get(url)
+  } catch (error) {
+    // remove setting that prevents loading of this value
+    valuesForWhichTableDataWasFetched[tableName][
+      parentIdField
+    ] = valuesForWhichTableDataWasFetched[tableName][parentIdField].filter(
+      x => x !== parentId
     )
-    .catch(error => {
-      // remove setting that prevents loading of this value
-      valuesForWhichTableDataWasFetched[tableName][
-        parentIdField
-      ] = valuesForWhichTableDataWasFetched[tableName][parentIdField].filter(
-        x => x !== parentId
-      )
-      store.listError(error)
-    })
+    store.listError(error)
+  }
+  // $FlowIssue
+  const { data } = result
+  store.writeToStore({ data, table: tableName, field: idField })
 }

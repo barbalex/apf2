@@ -10,15 +10,23 @@ import clone from 'lodash/clone'
 import tables from '../../modules/tables'
 import copyTpopsOfPop from './copyTpopsOfPop'
 
-export default async (store: Object, parentId: number): Promise<void> => {
+// copyTpopsOfPop can pass table and id separately
+export default async (
+  store: Object,
+  parentId: number,
+  tablePassed: ?string,
+  idPassed: ?number
+): Promise<void> => {
   let { table, withNextLevel } = store.copying
-  const { id } = store.copying
+  if (tablePassed) table = tablePassed
+  let { id } = store.copying
+  if (idPassed) id = idPassed
 
   // ensure derived data exists
   const tabelle = tables.find(t => t.table === table)
   // in tpopfeldkontr and tpopfreiwkontr need to find dbTable
   // $FlowIssue
-  if (tabelle.dbTable) {
+  if (tabelle && tabelle.dbTable) {
     table = tabelle.dbTable
   }
   const idField = tabelle ? tabelle.idField : undefined

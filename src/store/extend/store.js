@@ -68,11 +68,16 @@ export default (store: Object): void => {
           : (store.copying.withNextLevel = false)
       }
     ),
-    copyTo: action('copyTo', parentId => {
+    copyTo: action('copyTo', (parentId, tablePassed, idPassed) => {
       // insert new dataset with:
       // - data of dataset with id copying.id
       // - parentId as passed
-      copyTo(store, parentId)
+      // if table and id were passed, pass on
+      if (tablePassed && idPassed) {
+        copyTo(store, parentId, tablePassed, idPassed)
+      } else {
+        copyTo(store, parentId)
+      }
     }),
     resetCopying: action('resetCopying', () => {
       store.copying.table = null
