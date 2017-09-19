@@ -5,7 +5,7 @@ export default async (store: Object): Promise<void> => {
   const fetchUserMessages = async () => {
     let result
     try {
-      result = await axios.get(`/usermessage/${store.user.name}`)
+      result = await axios.get(`/usermessage?UserName=eq.${store.user.name}`)
     } catch (error) {
       store.listError(error)
     }
@@ -17,7 +17,7 @@ export default async (store: Object): Promise<void> => {
   const fetchMessages = async () => {
     let result
     try {
-      result = await axios.get('/message')
+      result = await axios.get('/message?active=eq.true')
     } catch (error) {
       store.listError(error)
     }

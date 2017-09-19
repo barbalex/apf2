@@ -2,6 +2,8 @@
 import axios from 'axios'
 
 import tables from '../../modules/tables'
+import apiBaseUrl from '../../modules/apiBaseUrl'
+import apiBaseUrlBeob from '../../modules/apiBaseUrlBeob'
 
 export default async (
   store: Object,
@@ -26,14 +28,13 @@ export default async (
       )
     }
     store.loading.push(tableName)
-    let url = `/schema/${schemaName}/table/${tableName}`
-    if (tableName === 'adb_lr') {
-      url = '/lrDelarze'
-    }
+    const tableNameToUse = tableName === 'adb_lr' ? 'lrDelarze' : tableName
+    const url = `/${tableNameToUse}`
+    let baseURL = schemaName === 'apflora' ? apiBaseUrl : apiBaseUrlBeob
 
     let dataFromDb
     try {
-      const dataFromDbObject = await axios.get(url)
+      const dataFromDbObject = await axios.get({ url, baseURL })
       dataFromDb = dataFromDbObject.data
     } catch (error) {
       store.listError(error)

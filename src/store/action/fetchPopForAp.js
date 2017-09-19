@@ -21,7 +21,7 @@ export default (store: Object, apArtId: number): any => {
 
   store.loading.push('popForAp')
   axios
-    .get(`/popForAp/${apArtId}`)
+    .get(`/pop?ApArtId=eq.${apArtId}`)
     .then(({ data }) => {
       store.loading = store.loading.filter(el => el !== 'popForAp')
       store.writeToStore({ data, table: 'pop', field: 'PopId' })

@@ -3,10 +3,9 @@ import axios from 'axios'
 import app from 'ampersand-app'
 
 export default (store: Object, name: string, password: string): any => {
-  const url = `/anmeldung/name=${name}/pwd=${password}`
   store.loading.push('user')
   axios
-    .get(url)
+    .get(`/user?UserName=eq.${name}&Passwort=eq.${password}`)
     .then(({ data, status, statusText }) => {
       if (data && data.length > 0) {
         const readOnly = data[0].NurLesen === -1
