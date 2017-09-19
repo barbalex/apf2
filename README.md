@@ -1,10 +1,121 @@
-# Neues Frontend für apflora.ch
+# apflora.ch
 
-## Was kann apflora.ch?
+[![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](https://github.com/feross/standard)
+[![js-standard-style](https://img.shields.io/badge/license-ISC-brightgreen.svg)](https://github.com/FNSKtZH/apflora/blob/master/License.md)
 
-Siehe [hier](https://github.com/barbalex/ae2/blob/master/readme.md)
+Web-Applikation zur Verwaltung des [Aktionsplans Flora der Fachstelle Naturschutz des Kantons Zürich](http://www.aln.zh.ch/internet/baudirektion/aln/de/naturschutz/artenfoerderung/ap_fl.html).
 
-## Ziele:
+<a name="top"></a>
+**Inhalt**
+
+* <a href="#machen">Was kann man mit ApFloraDb machen?</a>
+* <a href="#fns">Produkte für die Fachstelle Naturschutz</a>
+* <a href="#Neuaufbau">Neu-Aufbau 2017</a>
+* <a href="#Technik">Technische Umsetzung</a>
+* <a href="#OpenSource">Open source</a>
+
+
+<a name="machen"></a>
+## Was kann man mit ApFloraDb machen?
+
+**Aktionspläne verwalten:**
+
+- Aktionspläne, Populationen und Teilpopulationen beschreiben
+- Kontrollen der Teilpopulationen und Massnahmen zur Förderung dokumentieren
+- Die Entwicklung der Teilpopulationen und den Erfolg der Massnahmen beurteilen
+- Ziele und Erfolgskriterien bestimmen
+- Jährlich über die Zielerreichung berichten
+- Ideale Umweltfaktoren ("Idealbiotop") und assoziierte Arten beschreiben
+
+**Beobachtungen den Teilpopulationen zuordnen:** ([Anleitung](https://github.com/FNSKtZH/apflora/wiki/Beobachtungen-einer-Teilpopulation-zuordnen))
+
+- Alle Beobachtungen der Info Flora innerhalb des Kantons Zürich und im nahen Umfeld
+- Alle Beobachtungen aus Projekten der Fachstelle Naturschutz des Kantons Zürich
+- Eigene Beobachtungen aus [EvAB](http://www.aln.zh.ch/internet/baudirektion/aln/de/naturschutz/naturschutzdaten/tools/evab.html#a-content) (vorgängig mit Access uploaden)
+- Grundsätzlich alle verfügbaren Beobachtungen, unabhängig von ihrer Datenstruktur
+
+
+**Auf Karten darstellen:**
+
+- Aktionspläne, Populationen, Teilpopulationen auf Luftbild, Übersichtsplan und Landeskarten anzeigen und diverse Ebenen einblenden (Bundesinventare, Kantonale Inventare, Parzellen)
+- Beobachtungen durch Ziehen mit der Maus Teilpopulationen zuordnen
+- Teilpopulationen verorten
+- Teilpopulationen und Beobachtungen im GIS-Browser des Kt. Zürich und auf geo.admin.ch anzeigen
+- Populationen und Teilpopulationen aller Arten als kml-Datei für Google Earth exportieren
+
+
+**Daten exportieren:**
+
+- Alle Daten exportieren
+- als .xlsx- oder .csv-Datei
+- Auf der Karte beliebige Umrisse zeichnen, um den Export geographisch zu filtern
+
+**Auf die Plätze, fertig, los!**
+
+- "No hassle": Keine Installation, keine Installationskosten, automatische Updates
+- Von ausserhalb (Auftragnehmer) und innerhalb der Fachstelle Naturschutz arbeiten (trotz strikter firewall)
+- Ein moderner Browser wird vorausgesetzt. Entwickelt für Google Chrome. Funktioniert auch auf auch auf Firefox und Safari für PC sowie Chrome für Android und Safari auf iOS. Auf Internet Explorer funktioniert apflora offenbar ab Version 10 (aber kaum getestet)
+
+**Sich rasch zurechtfinden:**
+
+- Über einen dynamisch aufgebauten Strukturbaum navigieren und dabei die Übersicht über die komplexe Hierarchie behalten
+- Rechts neben dem Baum die Daten der gewählten Struktur bearbeiten
+- Strukturbaum, Daten-Formular und Karte beliebig ein- und ausblenden und in der Grösse variieren
+
+**Sich anleiten lassen:**
+
+- Wichtige Felder, die in aller Regel auszufüllen sind, werden farblich hervorgehoben
+- Wo hilfreich werden Informationen angezeigt, wenn man mit der Maus über Feldnamen und Schaltflächen fährt
+- Im [Wiki](https://github.com/FNSKtZH/apflora/wiki) sind wichtige Fragen erklärt
+
+**Effizient arbeiten:**
+
+- Im Strukturbaum in jeder Ebene filtern
+- Strukturelemente wie z.B. Teilpopulationen im Baum zu anderen Strukturelementen desselben Typs verschieben oder kopieren
+- Um dies zu vereinfachen kann ein zweiter Strukturbaum eingeblendet werden
+- Beobachtungen Teilpopulationen zuordnen: In einer nach Abstand zu den Teilpopulationen geordneten Liste im Formular oder mit drag and drop auf der Karte
+- Aus einer Beobachtung eine neue Populationen und Teilpopulationen gründen und gleich die Beobachtung zuordnen. Mit einem einzigen Klick.
+- Alle Löschungen während einer Sitzung werden aufgelistet und können rückgängig gemacht werden
+
+**Projektdaten verwalten:**
+
+Die nachfolgend aufgelisteten Funktionen werden nur von Topos in einer einfachen Access-Anwendung verwendet:
+
+- pdf-Datei für den Jahresbericht erstellen
+- Adressen verwalten
+- Mit dem GIS auf die Daten zugreifen
+- Logins verwalten und Schreibrechte vergeben
+- Beobachtungen nach [EvAB](http://www.aln.zh.ch/internet/baudirektion/aln/de/naturschutz/naturschutzdaten/tools/evab.html#a-content) exportieren
+- Daten in Tabellenform bearbeiten
+- Beobachtungen aus einem [EvAB](http://www.aln.zh.ch/internet/baudirektion/aln/de/naturschutz/naturschutzdaten/tools/evab.html#a-content) importieren (um sie danach in apflora Teilpopulationen zuzuordnen)
+
+**Daten nach Verlust wiederherstellen:**
+
+- Die Daten werden täglich in der Cloud gesichert
+- In regelmässigen Abständen werden sie aus der Cloud auf mehrere unabhängige Festplatten gesichert
+- Ihre Wiederherstellung wird im Rahmen der Entwicklung bzw. des Unterhalts sporadisch getestet ([Anleitung](https://github.com/FNSKtZH/apflora/wiki/Daten-wiederherstellen))
+
+<a href="#top">&#8593; top</a>
+
+
+<a name="fns"></a>
+## Produkte für die Fachstelle Naturschutz
+Die FNS erhält aus apflora folgende Produkte:
+
+- Den Jahresbericht (pdf oder Ausdruck)
+- Artbeobachtungen<br>
+Dazu werden die Feld- und Freiwilligenkontrollen (ausser solche von soeben angesäten, noch nicht etablierten Teilpopulationen) in [EvAB](http://www.aln.zh.ch/internet/baudirektion/aln/de/naturschutz/naturschutzdaten/tools/evab.html#a-content) importiert
+- Daten für die Anzeige in GIS und [Web-GIS BUN](http://www.aln.zh.ch/internet/baudirektion/aln/de/naturschutz/naturschutzdaten/web_gis.html): Teilpopulationen, Kontrollen und Massnahmen
+
+<a href="#top">&#8593; top</a>
+
+
+<a name="Neuaufbau"></a>
+## Neu-Aufbau im Sommer 2017
+
+2017 wurde apflora von Grund auf neu aufgebaut.
+
+### Ziele:
 
 - Architektur modernisieren:
   - Unterhalt- und Erweiterbarkeit verbessern.<br/>
@@ -26,27 +137,11 @@ Siehe [hier](https://github.com/barbalex/ae2/blob/master/readme.md)
 - Grundlage schaffen, um allenfalls später netzunabhängig (im Feld) arbeiten zu können
 - Sicherheit erhöhen
 
-## Neue Technologien:
-
-Die wichtigsten sind:
-
-- [create-react-app](//github.com/facebookincubator/create-react-app): Abhängigkeiten einfach aktuell halten
-- [MobX](//github.com/mobxjs/mobx): Anwendungs-Daten managen. Reaktiv wie Excel. Simpler als redux. Genial!
-- [recompose](https://github.com/acdlite/recompose): Logik und Benutzeroberfläche sauber trennen
-- [React](//facebook.github.io/react): Deklarative Benutzer-Oberfläche. Aufgebaut aus Komponenten. Genial!
-- [styled-components](https://github.com/styled-components/styled-components): Styling modularisiert
-- [Flow](//flow.org): Static type checker. Fehler finden, bevor der Code ausgeführt wird!
-- [PostgREST](//postgrest.com): Null-Aufwand-API :-)
-
-## Fähigkeiten:
-
-### Neu:
+### Neue Fähigkeiten:
 
 - Mehrere Projekte bearbeiten
 - Der Strukturbaum ist wesentlich leistungsfähiger.<br />Es gibt keine Grenzen mehr, wieviele Elemente einen Ebene darstellen kann!
 - Karten:
-  - Standardmässig werden Open-Street-Maps statt Swisstopo Karten als Hintergrund verwendet, um Kosten zu vermeiden. Natürlich können weiterhin Swisstopo Karten eigeblendet werden
-  - Ebenen über-/untereinander stapeln
   - In der Karte verwendete Symbole werden im Ebenen-Tool und im Strukturbaum eingeblendet
   - Es werden immer alle Elemente einer Ebene angezeigt. Aktive sind gelb umrahmt
   - Bequeme(re) Messung von Flächen und Linien
@@ -55,6 +150,7 @@ Die wichtigsten sind:
   - Bequemer(re) Darstellung von nahe bzw. direkt aufeinander liegenden Elementen
   - Populationen, Teilpopulationen und Beobachtungen durch das Zeichnen von einem oder mehreren Umrissen (Recht- oder Vielecken) filtern
   - Diesen geographischen Filter auf Exporte anwenden
+- Daten in .xlsx-Dateien exportieren
 - Beobachtungen können in beliebiger Datenstruktur importiert werden
 
 ### Geplant:
@@ -62,6 +158,38 @@ Die wichtigsten sind:
 - Login steuert, welche Projekte sichtbar sind
 - API-Zugriff besser absichern
 
-## Gemeldete Fehler und Ideen:
+<a href="#top">&#8593; top</a>
 
-Siehe [hier](//github.com/barbalex/apf2/issues).
+<a name="Technik"></a>
+## Technische Umsetzung
+
+Die Anwendung wird auf einem virtuellen Server mit der jeweils aktuellen Ubuntu LTS Version gehostet.
+
+Serverseitig wird sie mit [node.js](//nodejs.org) gesteuert. Als Datenbank dient [PostgreSQL](//postgresql.org/) mit drei separaten Datenbanken:
+- apflora: die projekteigenen Daten. Sie sind vollständig von den übrigen Datenbanken getrennt, um Datensicherung und -wiederherstellung zu vereinfachen. Hier ein [Diagramm der Beziehungen](https://github.com/FNSKtZH/apflora/raw/master/etc/beziehungen.png)
+- beob: benutzte Fremddaten, v.a. Beobachtungen von Info Spezies und der FNS sowie Arteigenschaften
+
+Die Anwendung ist zweigeteilt:
+- das backend bietet die API (Daten) auf api.apflora.ch an
+- das frontend / die App bzw. die Benutzeroberfläche ist über [apflora.ch](//apflora.ch) erreichbar
+
+Die wichtigsten verwendeten Technologien sind:
+
+- [create-react-app](//github.com/facebookincubator/create-react-app): Abhängigkeiten einfach aktuell halten
+- [MobX](//github.com/mobxjs/mobx): Anwendungs-Daten managen. Reaktiv wie Excel. Simpler als redux
+- [recompose](https://github.com/acdlite/recompose): Logik und Benutzeroberfläche sauber trennen
+- [React](//facebook.github.io/react): Deklarative Benutzer-Oberfläche. Aufgebaut aus Komponenten
+- [styled-components](https://github.com/styled-components/styled-components): Styling modularisiert
+- [Flow](//flow.org): Static type checker. Fehler finden, bevor der Code ausgeführt wird
+- [PostgREST](//postgrest.com): Null-Aufwand-API
+
+<a href="#top">&#8593; top</a>
+
+
+<a name="OpenSource"></a>
+## Open source
+Die verwendete [Lizenz](https://github.com/FNSKtZH/apflora/blob/master/License.md) ist sehr freizügig. Neben dem Code steht auch die [Datenstruktur](https://github.com/FNSKtZH/apflora/blob/master/etc/apflora_struktur.sql) zur Verfügung. Die eigentlichen Daten aber, mit denen gearbeitet wird, gehören der Fachstelle Naturschutz des Kantons Zürich und stehen nicht zur freien Verfügung (die Beobachtungen werden der [Info Spezies](//www.infoflora.ch/de/allgemeines/info-species.html) geliefert).
+
+Wer will, kann selber die [Entwicklungsumgebung einrichten](https://github.com/FNSKtZH/apflora/wiki/Entwicklungsumgebung-einrichten) und die [Anwendung auf einem Webserver bereitstellen](https://github.com/FNSKtZH/apflora/wiki/Anwendung-auf-einem-Server-bereitstellen).
+
+<a href="#top">&#8593; top</a>
