@@ -1,6 +1,5 @@
 # apflora.ch
 
-[![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](https://github.com/feross/standard)
 [![js-standard-style](https://img.shields.io/badge/license-ISC-brightgreen.svg)](https://github.com/FNSKtZH/apflora/blob/master/License.md)
 
 Web-Applikation zur Verwaltung des [Aktionsplans Flora der Fachstelle Naturschutz des Kantons Zürich](http://www.aln.zh.ch/internet/baudirektion/aln/de/naturschutz/artenfoerderung/ap_fl.html).
@@ -113,7 +112,7 @@ Dazu werden die Feld- und Freiwilligenkontrollen (ausser solche von soeben anges
 <a name="Neuaufbau"></a>
 ## Neu-Aufbau im Sommer 2017
 
-2017 wurde apflora von Grund auf neu aufgebaut.
+2017 wurde apflora nach 5 Jahren von Grund auf neu aufgebaut.
 
 ### Ziele:
 
