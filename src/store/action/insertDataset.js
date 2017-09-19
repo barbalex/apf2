@@ -36,7 +36,14 @@ export default async (
 
   let result
   try {
-    result = await axios.post(`/${table}`, { [parentIdField]: parentId })
+    result = await axios({
+      method: 'POST',
+      url: `/${table}`,
+      data: { [parentIdField]: +parentId },
+      headers: {
+        Prefer: 'return=representation',
+      },
+    })
   } catch (error) {
     store.listError(error)
   }
@@ -48,7 +55,7 @@ export default async (
    * wait to do this in graphQL because new projects are not used yet
    */
   // $FlowIssue
-  const row = result.data
+  const row = result.data[0]
   // insert this dataset in store.table
   store.table[table].set(row[idField], row)
   // set new url
