@@ -94,9 +94,9 @@ export default async (
      * put keep url/route signature in the time being
      * because of old application
      */
-    const url = `/update/apflora/tabelle=${table}/tabelleIdFeld=${idField}/tabelleId=${tabelleId}/feld=${key}/wert=null/user=${user}`
+    const url = `/${table}?${idField}=eq.${tabelleId}`
     try {
-      await axios.put(url, { wert: value })
+      await axios.put(url, { [key]: value })
     } catch (error) {
       // revert change in store
       row[key] = oldValue

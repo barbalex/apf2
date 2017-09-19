@@ -74,7 +74,7 @@ export default (
     return continueWithBeob(store, tree, beob, newKey, newValue)
   }
   // insert new dataset in db and fetch id
-  const url = `/apflora/beobzuordnung/BeobId/${beob.id}`
+  const url = `/beobzuordnung?BeobId=eq.${beob.id}`
   axios
     .post(url)
     .then(({ data: row }) => {

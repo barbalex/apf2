@@ -33,7 +33,6 @@ export default (store: Object, newParentId: number): any => {
     )
   }
 
-  const user = store.user.name
   const row = store.table[table].get(id)
   if (!row) {
     return store.listError(
@@ -45,10 +44,11 @@ export default (store: Object, newParentId: number): any => {
   // update store
   row[parentIdField] = newParentId
   // update db
-  const url = `/update/apflora/tabelle=${table}/tabelleIdFeld=${idField}/tabelleId=${id}/feld=${parentIdField}/wert=${newParentId}/user=${user}`
-  axios.put(url).catch(error => {
-    // revert change in store
-    row[parentIdField] = oldValue
-    store.listError(error)
-  })
+  axios
+    .put(`/${table}?${idField}=eq.${id}`, { [parentIdField]: newParentId })
+    .catch(error => {
+      // revert change in store
+      row[parentIdField] = oldValue
+      store.listError(error)
+    })
 }

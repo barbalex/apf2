@@ -34,10 +34,9 @@ export default async (
     )
   }
 
-  const url = `/apflora/${table}/${parentIdField}/${parentId}`
   let result
   try {
-    result = await axios.post(url)
+    result = await axios.post(`/${table}`, { [parentIdField]: parentId })
   } catch (error) {
     store.listError(error)
   }
@@ -48,6 +47,7 @@ export default async (
    * meanwhile it works because project 1 is set as standard value
    * wait to do this in graphQL because new projects are not used yet
    */
+  // $FlowIssue
   const row = result.data
   // insert this dataset in store.table
   store.table[table].set(row[idField], row)

@@ -36,20 +36,18 @@ export default async ({
     key => dataset[key] == null && delete dataset[key]
   )
 
-  // update db
-  const url = `/insertFields/apflora/tabelle=${table}`
-  // 1. write to db
+  // write to db
   let response
   try {
-    response = await axios.post(url, dataset)
+    response = await axios.post(`/${table}`, dataset)
   } catch (error) {
     store.listError(error)
   }
   // $FlowIssue
   const { data } = response
-  // 2. write to store
+  // write to store
   store.writeToStore({ data: [data], table, field: idField })
-  // 3. remove from deletedDatasets
+  // remove from deletedDatasets
   store.deletedDatasets = store.deletedDatasets.filter(d => d.time !== time)
   // do not show if no more datasets
   if (store.deletedDatasets.length === 0) {

@@ -7,7 +7,10 @@ export default async (
 ): Promise<void> => {
   const { id } = message
   try {
-    await axios.post(`/usermessage/${store.user.name}/${id}`)
+    await axios.post(`/usermessage`, {
+      UserName: store.user.name,
+      MessageId: id,
+    })
   } catch (error) {
     store.listError(error)
   }
