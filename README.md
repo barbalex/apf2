@@ -36,7 +36,7 @@ Die wichtigsten sind:
 - [React](//facebook.github.io/react): Deklarative Benutzer-Oberfläche. Aufgebaut aus Komponenten. Genial!
 - [styled-components](https://github.com/styled-components/styled-components): Styling modularisiert
 - [Flow](//flow.org): Static type checker. Fehler finden, bevor der Code ausgeführt wird!
-- [PostgREST](//postgrest.com): NULL-Aufwand-API :-)
+- [PostgREST](//postgrest.com): Null-Aufwand-API :-)
 
 ## Fähigkeiten:
 
