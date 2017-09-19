@@ -4,6 +4,7 @@ import axios from 'axios'
 import cloneDeep from 'lodash/cloneDeep'
 
 import recordValuesForWhichTableDataWasFetched from '../../modules/recordValuesForWhichTableDataWasFetched'
+import apiBaseUrlBeob from '../../modules/apiBaseUrlBeob'
 
 const writeToStore = (store, data) => {
   runInAction(() => {
@@ -27,7 +28,6 @@ export default (store: Object, apArtId: number): any => {
     return
   }
 
-  const url = `/schema/beob/table/beob/field/ArtId/value/${apArtId}`
   recordValuesForWhichTableDataWasFetched({
     store,
     table: 'beob',
@@ -35,7 +35,7 @@ export default (store: Object, apArtId: number): any => {
     value: apArtId,
   })
   axios
-    .get(url)
+    .get({ url: `beob?ArtId=eq.${apArtId}`, baseURL: apiBaseUrlBeob })
     .then(({ data }) => {
       // copy array without the individual objects being references
       // otherwise the computed values are passed to idb

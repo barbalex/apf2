@@ -9,9 +9,8 @@ export default async (
   const { table } = store
   const { activeNodes } = tree
   // delete beobzuordnung
-  const deleteUrl = `/apflora/tabelle=beobzuordnung/tabelleIdFeld=BeobId/tabelleId=${beobId}`
   try {
-    await axios.delete(deleteUrl)
+    await axios.delete(`/beobzuordnung?BeobId=eq.${beobId}`)
   } catch (error) {
     store.listError(error)
   }

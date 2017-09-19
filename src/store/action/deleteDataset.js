@@ -14,10 +14,9 @@ export default async ({
 }): Promise<void> => {
   // first get dataset from server (possible that does not yet exist in store)
   // to be able to undo
-  const fetchUrl = `/schema/apflora/table/${table}/field/${idField}/value/${id}`
   let result
   try {
-    result = await axios.get(fetchUrl)
+    result = await axios.get(`/${table}?${idField}=eq.${id}`)
   } catch (error) {
     store.listError(error)
   }
@@ -30,9 +29,8 @@ export default async ({
   }
   store.addDatasetToDeleted(deletedDataset)
 
-  const deleteUrl = `/apflora/tabelle=${table}/tabelleIdFeld=${idField}/tabelleId=${id}`
   try {
-    await axios.delete(deleteUrl)
+    await axios.delete(`/${table}?${idField}=eq.${id}`)
   } catch (error) {
     store.listError(error)
     store.datasetToDelete = {}
