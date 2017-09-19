@@ -47,6 +47,7 @@ export default async (store: Object, beobId: string): Promise<void> => {
   delete tpopForDb.popNr
   delete tpopForDb.herkunft
   delete tpopForDb.distance
+  delete tpopForDb.TPopKoordWgs84
   // server expects TPopId to be called id
   tpopForDb.id = tpopForDb.TPopId
   delete tpopForDb.TPopId

@@ -28,7 +28,7 @@ export default async ({
   try {
     popResult = await axios({
       method: 'POST',
-      url: `/pop`,
+      url: '/pop',
       data: {
         ApArtId: ap,
         // give pop koords of beob

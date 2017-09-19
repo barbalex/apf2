@@ -68,6 +68,7 @@ export default async (
   // remove label: field does not exist in db, is computed
   delete newRow.label
   delete newRow.PopKoordWgs84
+  delete newRow.TPopKoordWgs84
 
   // update db
   let response

@@ -408,7 +408,7 @@ export default [
   {
     database: 'beob',
     table: 'adb_lr',
-    idField: 'id',
+    idField: 'Id',
     stammdaten: true,
   },
   {

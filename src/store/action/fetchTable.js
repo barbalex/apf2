@@ -28,8 +28,7 @@ export default async (
       )
     }
     store.loading.push(tableName)
-    const tableNameToUse = tableName === 'adb_lr' ? 'lrDelarze' : tableName
-    const url = `/${tableNameToUse}`
+    const url = `/${tableName}`
     let baseURL = schemaName === 'apflora' ? apiBaseUrl : apiBaseUrlBeob
 
     let dataFromDb
