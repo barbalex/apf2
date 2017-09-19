@@ -56,11 +56,8 @@ export default async (store: Object, beobId: string): Promise<void> => {
   delete tpopForDb.MutWer
   delete tpopForDb.MutWann
   // update db
-  const url = `/updateMultiple/apflora/tabelle=tpop/felder=${JSON.stringify(
-    tpopForDb
-  )}`
   try {
-    await axios.put(url)
+    await axios.put('/tpop', tpopForDb)
   } catch (error) {
     tpopInStore = originalTpop
     store.listError(error)

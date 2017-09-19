@@ -42,11 +42,8 @@ export default async (store: Object, newId: number): Promise<void> => {
   delete rowForDb.MutWann
 
   // update db
-  const url = `/updateMultiple/apflora/tabelle=tpopkontr/felder=${JSON.stringify(
-    rowForDb
-  )}`
   try {
-    axios.put(url)
+    axios.put('/tpopkontr', rowForDb)
   } catch (error) {
     rowToUpdate = rowToUpdateBeforeUpdating
     store.listError(error)

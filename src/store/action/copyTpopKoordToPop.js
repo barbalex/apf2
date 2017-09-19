@@ -60,11 +60,8 @@ export default async (store: Object, tpopId: number): Promise<void> => {
   delete popForDb.MutWer
   delete popForDb.MutWann
   // update db
-  const url = `/updateMultiple/apflora/tabelle=pop/felder=${JSON.stringify(
-    popForDb
-  )}`
   try {
-    await axios.put(url)
+    await axios.put('/pop', popForDb)
   } catch (error) {
     popInStore = originalPop
     store.listError(error)

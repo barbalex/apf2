@@ -180,7 +180,7 @@ const fetchQk = async ({
   }
   let resultTpopKoord
   try {
-    resultTpopKoord = await axios.get(`/tpopKoordFuerProgramm/apId=${apArtId}`)
+    resultTpopKoord = await axios.get(`/v_tpopkoord?ApArtId=eq.${apArtId}`)
   } catch (error) {
     store.listError(error)
     setLoading(false)

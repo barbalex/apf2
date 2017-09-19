@@ -71,10 +71,9 @@ export default async (
   delete newRow.PopKoordWgs84
 
   // update db
-  const url = `/insertFields/apflora/tabelle=${table}`
   let response
   try {
-    response = await axios.post(url, newRow)
+    response = await axios.post(`/${table}`, newRow)
   } catch (error) {
     store.listError(error)
   }
