@@ -3,6 +3,8 @@ import axios from 'axios'
 
 import tables from '../../modules/tables'
 import recordValuesForWhichTableDataWasFetched from '../../modules/recordValuesForWhichTableDataWasFetched'
+import apiBaseUrl from '../../modules/apiBaseUrl'
+import apiBaseUrlBeob from '../../modules/apiBaseUrlBeob'
 
 export default async (
   store: Object,
@@ -47,10 +49,11 @@ export default async (
     field: parentIdField,
     value: parentId,
   })
-  const url = `/schema/${schemaName}/table/${tableName}/field/${parentIdField}/value/${parentId}`
+  const url = `/${tableName}?${parentIdField}=eq.${parentId}`
+  let baseURL = schemaName === 'apflora' ? apiBaseUrl : apiBaseUrlBeob
   let result
   try {
-    result = await axios.get(url)
+    result = await axios.get({ url, baseURL })
   } catch (error) {
     // remove setting that prevents loading of this value
     valuesForWhichTableDataWasFetched[tableName][

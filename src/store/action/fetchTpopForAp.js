@@ -15,7 +15,7 @@ export default (store: Object, apArtId: number): any => {
     return
   }
 
-  const url = `/tpopForAp/${apArtId}`
+  const url = `/v_tpop_for_ap?ApArtId=eq.${apArtId}`
   store.loading.push('tpopForAp')
   axios
     .get(url)
