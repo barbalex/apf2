@@ -45,7 +45,7 @@ export default (store: Object, apArtId: number): any => {
 
   store.loading.push('beobzuordnung')
   axios
-    .get(`/beobzuordnung?ApArtId=eq.${apArtId}`)
+    .get(`/v_beobzuordnung?ApArtId=eq.${apArtId}`)
     .then(({ data }) => {
       store.loading = store.loading.filter(el => el !== 'beobzuordnung')
       // copy array without the individual objects being references

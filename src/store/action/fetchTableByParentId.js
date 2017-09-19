@@ -53,7 +53,7 @@ export default async (
   let baseURL = schemaName === 'apflora' ? apiBaseUrl : apiBaseUrlBeob
   let result
   try {
-    result = await axios.get({ url, baseURL })
+    result = await axios.get(url, { baseURL })
   } catch (error) {
     // remove setting that prevents loading of this value
     valuesForWhichTableDataWasFetched[tableName][

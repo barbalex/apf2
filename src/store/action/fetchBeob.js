@@ -35,7 +35,7 @@ export default (store: Object, apArtId: number): any => {
     value: apArtId,
   })
   axios
-    .get({ url: `beob?ArtId=eq.${apArtId}`, baseURL: apiBaseUrlBeob })
+    .get(`beob?ArtId=eq.${apArtId}`, { baseURL: apiBaseUrlBeob })
     .then(({ data }) => {
       // copy array without the individual objects being references
       // otherwise the computed values are passed to idb

@@ -10,7 +10,6 @@ export default (
 ): void => {
   const { table, row } = tree.activeDataset
   let value = valuePassed
-  console.log('updateProperty: row:', row)
   // ensure primary data exists
   if (!key || !table || !row) {
     return store.listError(

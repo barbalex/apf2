@@ -34,7 +34,7 @@ export default async (
 
     let dataFromDb
     try {
-      const dataFromDbObject = await axios.get({ url, baseURL })
+      const dataFromDbObject = await axios.get(url, { baseURL })
       dataFromDb = dataFromDbObject.data
     } catch (error) {
       store.listError(error)

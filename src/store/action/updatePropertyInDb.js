@@ -64,7 +64,6 @@ export default async (
   // update if no validation messages exist
   const combinedValidationMessages = objectValues(valid).join('')
   if (combinedValidationMessages.length === 0) {
-    const user = store.user.name
     const oldValue = row[key]
     const artWasChanged = table === 'ap' && key === 'ApArtId'
     if (artWasChanged) {
@@ -96,7 +95,7 @@ export default async (
      */
     const url = `/${table}?${idField}=eq.${tabelleId}`
     try {
-      await axios.put(url, { [key]: value })
+      await axios.patch(url, { [key]: value })
     } catch (error) {
       // revert change in store
       row[key] = oldValue

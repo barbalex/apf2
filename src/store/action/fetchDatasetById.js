@@ -61,7 +61,7 @@ export default async ({
 
   let result
   try {
-    result = await axios.get({ url, baseURL })
+    result = await axios.get(url, { baseURL })
   } catch (error) {
     // remove setting that prevents loading of this value
     valuesForWhichTableDataWasFetched[tableName][
