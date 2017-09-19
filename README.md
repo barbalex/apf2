@@ -20,8 +20,6 @@ Siehe [hier](https://github.com/barbalex/ae2/blob/master/readme.md)
     - Auf einen Router kann verzichtet werden
 - Mehrere Projekte verwalten.<br/>
   Andere Kantone bzw. Ökobüros können ähnliche Projekte verwalten. Damit würden Fixkosten geteilt bzw. die Weiterentwicklung finanziert
-- Arbeiten mehrere Personen gleichzeitig, werden die Daten in der Benutzeroberfläche laufend aktualisiert.<br/>
-  Somit werden benutzerseitig auch Daten aktualisiert, welche die Datenbank im Rahmen der Durchsetzung von Referenzierungsregeln verändert (z.B. Löschungen weiterleiten)
 - Grundlage schaffen, um Berichte direkt aus der Webanwendung heraus produzieren zu können.<br/>
   Artverantwortliche sollen Jahresberichte für ihre Arten selber erzeugen und kontrollieren können
 - Grundlage schaffen, um auf das Access-Admin-Tool verzichten zu können
@@ -38,7 +36,7 @@ Die wichtigsten sind:
 - [React](//facebook.github.io/react): Deklarative Benutzer-Oberfläche. Aufgebaut aus Komponenten. Genial!
 - [styled-components](https://github.com/styled-components/styled-components): Styling modularisiert
 - [Flow](//flow.org): Static type checker. Fehler finden, bevor der Code ausgeführt wird!
-- [socket.io](//socket.io/): Daten-Änderungen laufend allen Benutzern weiterleiten
+- [PostgREST](//postgrest.com): NULL-Aufwand-API :-)
 
 ## Fähigkeiten:
 
@@ -57,19 +55,12 @@ Die wichtigsten sind:
   - Bequemer(re) Darstellung von nahe bzw. direkt aufeinander liegenden Elementen
   - Populationen, Teilpopulationen und Beobachtungen durch das Zeichnen von einem oder mehreren Umrissen (Recht- oder Vielecken) filtern
   - Diesen geographischen Filter auf Exporte anwenden
+- Beobachtungen können in beliebiger Datenstruktur importiert werden
 
 ### Geplant:
 
-- Generell Funktionen von Version 1 prüfen und fehlende nachtragen
 - Login steuert, welche Projekte sichtbar sind
-- API-Zugriff besser absichern (erst nach der Pensionierung von Version 1 möglich)
-- Beobachtungen besser organisieren. Mit dem Ziel, Beobachtungen beliebiger Datenstruktur jederzeit importieren zu können
-
-### Nicht mehr vorgesehen:
-
-- Karten:
-  - eigene Ebenen hineinziehen
-  - eigene Ebenen bearbeiten
+- API-Zugriff besser absichern
 
 ## Gemeldete Fehler und Ideen:
 
