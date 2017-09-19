@@ -53,7 +53,7 @@ export default async ({
   // $FlowIssue
   const { data } = response
   // write to store
-  store.writeToStore({ data: [data], table, field: idField })
+  store.writeToStore({ data: [data[0]], table, field: idField })
   // remove from deletedDatasets
   store.deletedDatasets = store.deletedDatasets.filter(d => d.time !== time)
   // do not show if no more datasets

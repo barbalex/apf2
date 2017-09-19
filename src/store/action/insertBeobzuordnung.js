@@ -74,9 +74,8 @@ export default (
     return continueWithBeob(store, tree, beob, newKey, newValue)
   }
   // insert new dataset in db and fetch id
-  const url = `/beobzuordnung?BeobId=eq.${beob.id}`
   axios
-    .post(url)
+    .post(`/beobzuordnung?BeobId=eq.${beob.id}`)
     .then(({ data: row }) => {
       // insert this dataset in store.table
       store.table.beobzuordnung.set(row.BeobId, row)

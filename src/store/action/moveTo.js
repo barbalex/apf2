@@ -45,7 +45,7 @@ export default (store: Object, newParentId: number): any => {
   row[parentIdField] = newParentId
   // update db
   axios
-    .put(`/${table}?${idField}=eq.${id}`, { [parentIdField]: newParentId })
+    .patch(`/${table}?${idField}=eq.${id}`, { [parentIdField]: newParentId })
     .catch(error => {
       // revert change in store
       row[parentIdField] = oldValue

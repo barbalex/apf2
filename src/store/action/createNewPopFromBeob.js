@@ -22,7 +22,6 @@ export default async ({
   const { X, Y } = beob
   let tpop
   const { ap, projekt } = tree.activeNodes
-  const user = store.user.name
 
   // create new pop for ap
   let popResult
@@ -32,7 +31,6 @@ export default async ({
       url: `/pop`,
       data: {
         ApArtId: ap,
-        user: user,
         // give pop koords of beob
         PopXKoord: X,
         PopYKoord: Y,
@@ -58,7 +56,6 @@ export default async ({
       url: '/tpop',
       data: {
         PopId: pop.PopId,
-        user: user,
         // give tpop koords of beob
         TPopXKoord: X,
         TPopYKoord: Y,
@@ -70,12 +67,7 @@ export default async ({
   } catch (error) {
     store.listError(error)
   }
-  if (
-    !tpopResult ||
-    !tpopResult.data ||
-    !tpopResult.data ||
-    !tpopResult.data[0]
-  ) {
+  if (!tpopResult || !tpopResult.data || !tpopResult.data[0]) {
     throw new Error(`Fehler bei der Erstellung einer neuen Teilpopulation`)
   }
   tpop = tpopResult.data[0]
@@ -83,18 +75,43 @@ export default async ({
 
   // create new beobzuordnung
   let beobzuordnungResult
+
   try {
-    beobzuordnungResult = await axios({
-      method: 'POST',
-      url: '/beobzuordnung',
-      data: { BeobId: beobId },
-      headers: {
-        Prefer: 'return=representation',
-      },
-    })
+    // first check if beobzuordnung already exists
+    beobzuordnungResult = await axios.get(`/beobzuordnung?BeobId=eq.${beobId}`)
   } catch (error) {
     store.listError(error)
   }
+  if (
+    beobzuordnungResult &&
+    beobzuordnungResult.data &&
+    beobzuordnungResult.data[0]
+  ) {
+    try {
+      beobzuordnungResult = await axios.patch(
+        `/beobzuordnung?BeobId=eq.${beobId}`,
+        {
+          TPopId: tpop.TPopId,
+        }
+      )
+    } catch (error) {
+      store.listError(error)
+    }
+  } else {
+    try {
+      beobzuordnungResult = await axios({
+        method: 'POST',
+        url: '/beobzuordnung',
+        data: { BeobId: beobId, TPopId: tpop.TPopId },
+        headers: {
+          Prefer: 'return=representation',
+        },
+      })
+    } catch (error) {
+      store.listError(error)
+    }
+  }
+
   if (
     !beobzuordnungResult ||
     !beobzuordnungResult.data ||
@@ -107,7 +124,8 @@ export default async ({
   const beobzuordnung = beobzuordnungResult.data[0]
 
   // insert this dataset in store.table
-  store.table.beobzuordnung.set(beobzuordnung.id, beobzuordnung)
+  //store.table.beobzuordnung.set(beobzuordnung.id, beobzuordnung)
+  store.table.beobzuordnung.set(beobzuordnung.BeobId, beobzuordnung)
 
   // set new activeNodeArray
   const newActiveNodeArray = [
@@ -124,9 +142,5 @@ export default async ({
   ]
 
   tree.setActiveNodeArray(newActiveNodeArray)
-  store.updateProperty(tree, `TPopId`, tpop.TPopId)
-  store.updatePropertyInDb(tree, `TPopId`, tpop.TPopId)
-  store.updateProperty(tree, `BeobId`, beobId)
-  store.updatePropertyInDb(tree, `BeobId`, beobId)
   tree.setOpenNodesFromActiveNodeArray()
 }
