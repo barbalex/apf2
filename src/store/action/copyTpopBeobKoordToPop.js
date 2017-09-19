@@ -57,7 +57,7 @@ export default async (store: Object, beobId: string): Promise<void> => {
   delete tpopForDb.MutWann
   // update db
   try {
-    await axios.put('/tpop', tpopForDb)
+    await axios.patch('/tpop', tpopForDb)
   } catch (error) {
     tpopInStore = originalTpop
     store.listError(error)

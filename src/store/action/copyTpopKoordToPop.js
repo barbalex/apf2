@@ -61,7 +61,7 @@ export default async (store: Object, tpopId: number): Promise<void> => {
   delete popForDb.MutWann
   // update db
   try {
-    await axios.put('/pop', popForDb)
+    await axios.patch('/pop', popForDb)
   } catch (error) {
     popInStore = originalPop
     store.listError(error)

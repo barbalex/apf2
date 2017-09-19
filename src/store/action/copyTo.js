@@ -25,7 +25,6 @@ export default async (
   // ensure derived data exists
   const tabelle = tables.find(t => t.table === table)
   // in tpopfeldkontr and tpopfreiwkontr need to find dbTable
-  // $FlowIssue
   if (tabelle && tabelle.dbTable) {
     table = tabelle.dbTable
   }

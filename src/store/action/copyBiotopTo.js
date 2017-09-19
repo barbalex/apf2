@@ -43,7 +43,7 @@ export default async (store: Object, newId: number): Promise<void> => {
 
   // update db
   try {
-    axios.put('/tpopkontr', rowForDb)
+    axios.patch('/tpopkontr', rowForDb)
   } catch (error) {
     rowToUpdate = rowToUpdateBeforeUpdating
     store.listError(error)

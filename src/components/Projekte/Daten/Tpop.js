@@ -66,8 +66,10 @@ class Tpop extends Component {
   render() {
     const { store, tree, width } = this.props
     const { activeDataset } = tree
-    const apArtId = store.table.pop.get(activeDataset.row.PopId).ApArtId
-    const apJahr = store.table.ap.get(apArtId).ApJahr
+    const ads = store.table.pop.get(activeDataset.row.PopId)
+    const apArtId = ads && ads.ApArtId ? ads.ApArtId : null
+    const ap = store.table.ap.get(apArtId)
+    const apJahr = ap && ap.ApJahr ? ap.ApJahr : null
 
     return (
       <Container
