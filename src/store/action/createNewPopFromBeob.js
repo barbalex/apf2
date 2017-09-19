@@ -27,12 +27,19 @@ export default async ({
   // create new pop for ap
   let popResult
   try {
-    popResult = await axios.post(`/pop`, {
-      ApArtId: ap,
-      user: user,
-      // give pop koords of beob
-      PopXKoord: X,
-      PopYKoord: Y,
+    popResult = await axios({
+      method: 'POST',
+      url: `/pop`,
+      data: {
+        ApArtId: ap,
+        user: user,
+        // give pop koords of beob
+        PopXKoord: X,
+        PopYKoord: Y,
+      },
+      headers: {
+        Prefer: 'return=representation',
+      },
     })
   } catch (error) {
     store.listError(error)
@@ -46,12 +53,19 @@ export default async ({
   // create new tpop for pop
   let tpopResult
   try {
-    tpopResult = await axios.post('/tpop', {
-      PopId: pop.PopId,
-      user: user,
-      // give tpop koords of beob
-      TPopXKoord: X,
-      TPopYKoord: Y,
+    tpopResult = await axios({
+      method: 'POST',
+      url: '/tpop',
+      data: {
+        PopId: pop.PopId,
+        user: user,
+        // give tpop koords of beob
+        TPopXKoord: X,
+        TPopYKoord: Y,
+      },
+      headers: {
+        Prefer: 'return=representation',
+      },
     })
   } catch (error) {
     store.listError(error)
@@ -70,7 +84,14 @@ export default async ({
   // create new beobzuordnung
   let beobzuordnungResult
   try {
-    beobzuordnungResult = await axios.post('beobzuordnung', { BeobId: beobId })
+    beobzuordnungResult = await axios({
+      method: 'POST',
+      url: '/beobzuordnung',
+      data: { BeobId: beobId },
+      headers: {
+        Prefer: 'return=representation',
+      },
+    })
   } catch (error) {
     store.listError(error)
   }

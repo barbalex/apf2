@@ -39,7 +39,14 @@ export default async ({
   // write to db
   let response
   try {
-    response = await axios.post(`/${table}`, dataset)
+    response = await axios({
+      method: 'POST',
+      url: `/${table}`,
+      data: dataset,
+      headers: {
+        Prefer: 'return=representation',
+      },
+    })
   } catch (error) {
     store.listError(error)
   }

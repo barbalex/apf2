@@ -72,12 +72,19 @@ export default async (
   // update db
   let response
   try {
-    response = await axios.post(`/${table}`, newRow)
+    response = await axios({
+      method: 'POST',
+      url: `/${table}`,
+      data: newRow,
+      headers: {
+        Prefer: 'return=representation',
+      },
+    })
   } catch (error) {
     store.listError(error)
   }
   // $FlowIssue
-  const { data } = response
+  const data = response.data[0]
   // can't write to store before, because db creates id and guid
   store.writeToStore({ data: [data], table, field: idField })
   // check if need to copy tpop
