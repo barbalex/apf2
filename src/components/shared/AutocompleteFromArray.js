@@ -5,7 +5,6 @@ import AutoComplete from 'material-ui/AutoComplete'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 import withState from 'recompose/withState'
-import withLifecycle from '@hocs/with-lifecycle'
 import styled from 'styled-components'
 
 const StyledAutoComplete = styled(AutoComplete)`margin-bottom: -12px;`
@@ -38,11 +37,6 @@ const enhance = compose(
     onUpdateSearchText: props => searchText => {
       props.changeSearchText(searchText)
       props.changeSearchTextWasChanged(true)
-    },
-  }),
-  withLifecycle({
-    onDidMount({ valueText, changeSearchText }) {
-      changeSearchText(valueText)
     },
   }),
   observer

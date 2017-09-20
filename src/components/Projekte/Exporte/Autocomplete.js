@@ -12,39 +12,28 @@ const StyledAutoComplete = styled(AutoComplete)`margin-bottom: -12px;`
 const enhance = compose(
   withState('focused', 'changeFocused', false),
   withState('searchText', 'changeSearchText', ''),
-  withState('searchTextWasChanged', 'changeSearchTextWasChanged', ''),
   withHandlers({
     onNewRequest: props => val => {
-      const { updatePropertyInDb, fieldName, dataSourceConfig } = props
-      updatePropertyInDb(props.tree, fieldName, val[dataSourceConfig.value])
+      props.changeArtFuerEierlegendeWollmilchsau(val.Artname)
+      props.downloadFromView({
+        view: 'v_tpop_anzkontrinklletzterundletztertpopber',
+        fileName: 'anzkontrinklletzterundletztertpopber_2016',
+        apArtId: val.TaxonomieId,
+      })
     },
     onFocus: props => () => props.changeFocused(true),
     onBlur: props => () => {
-      const {
-        changeFocused,
-        searchText,
-        searchTextWasChanged,
-        updatePropertyInDb,
-        tree,
-        fieldName,
-      } = props
+      const { changeFocused } = props
       changeFocused(false)
-      if (!searchText && searchTextWasChanged) {
-        // onNewRequest does not happen when value was removed by deleting text
-        updatePropertyInDb(tree, fieldName, null)
-      }
     },
     onUpdateSearchText: props => searchText => {
       props.changeSearchText(searchText)
-      props.changeSearchTextWasChanged(true)
     },
   }),
   observer
 )
 
 const MyAutocomplete = ({
-  label,
-  valueText = '',
   dataSource,
   dataSourceConfig = {
     value: 'id',
@@ -58,16 +47,11 @@ const MyAutocomplete = ({
   searchText,
   changeSearchText,
   onUpdateSearchText,
-  searchTextWasChanged,
-  changeSearchTextWasChanged,
+  downloadFromView,
+  changeArtFuerEierlegendeWollmilchsau,
 }: {
-  tree: Object,
-  label: string,
-  fieldName: string,
-  valueText?: string,
   dataSource: Array<Object>,
   dataSourceConfig: Object,
-  updatePropertyInDb: () => void,
   onNewRequest: () => void,
   focused: boolean,
   changeFocused: () => void,
@@ -76,66 +60,57 @@ const MyAutocomplete = ({
   searchText: ?string,
   changeSearchText: () => void,
   onUpdateSearchText: () => void,
-  searchTextWasChanged: boolean,
-  changeSearchTextWasChanged: () => void,
+  downloadFromView: () => void,
+  changeArtFuerEierlegendeWollmilchsau: () => void,
 }) => {
-  let searchTextToUse = searchText
-  if (!searchText && valueText && !searchTextWasChanged) {
-    searchTextToUse = valueText
-  }
-  if (searchTextToUse === null) searchTextToUse = ''
   const dataSourceLength = dataSource.filter(d => {
     if (
       dataSourceConfig &&
       dataSourceConfig.text &&
       d[dataSourceConfig.text] &&
       d[dataSourceConfig.text].toLowerCase() &&
-      searchTextToUse &&
-      searchTextToUse.toLowerCase()
+      searchText &&
+      searchText.toLowerCase()
     ) {
       return d[dataSourceConfig.text]
         .toLowerCase()
-        .includes(searchTextToUse.toLowerCase())
+        .includes(searchText.toLowerCase())
     }
     return true
   }).length
-  let labelFilterHint = ''
-  if (valueText && !searchTextWasChanged) {
-    labelFilterHint = 'Zum Filtern: Eintrag löschen, dann tippen. '
-  }
-  if (searchText || searchTextWasChanged)
-    labelFilterHint = 'Zum Filtern tippen. '
+  const labelFilterHint = 'Zum Filtern tippen. '
   let labelNumberLimit = ''
   if (searchText && dataSourceLength === 0) {
     labelNumberLimit = 'Kein Eintrag entspricht dem Filter.'
-  } else if (dataSourceLength && dataSourceLength <= 200) {
-    labelNumberLimit = `Alle passenden Einträge werden angezeigt.`
-  } else if (dataSourceLength > 200) {
-    labelNumberLimit = 'Nur die ersten 200 Einträge werden angezeigt.'
+  } else if (dataSourceLength && dataSourceLength <= 20) {
+    labelNumberLimit = `Alle Einträge angezeigt.`
+  } else if (dataSourceLength > 20) {
+    labelNumberLimit = 'Erste 20 Einträge angezeigt.'
   }
   const labelText = focused
-    ? `${label}${labelFilterHint || labelNumberLimit
+    ? `Wollmilchsau${labelFilterHint || labelNumberLimit
         ? '. '
         : ''}${labelFilterHint}${labelNumberLimit}`
-    : label
+    : '"Eier legende Wollmilchsau" für eine Art'
 
   return (
     <StyledAutoComplete
-      hintText={dataSource.length === 0 ? 'lade Daten...' : ''}
+      hintText={dataSource.length === 0 ? 'lade Daten...' : 'Art wählen'}
       fullWidth
       floatingLabelText={labelText}
       dataSource={dataSource}
       dataSourceConfig={dataSourceConfig}
-      searchText={searchTextToUse}
+      searchText={searchText}
       onUpdateInput={onUpdateSearchText}
       filter={AutoComplete.caseInsensitiveFilter}
-      maxSearchResults={200}
+      maxSearchResults={20}
       onNewRequest={onNewRequest}
       openOnFocus
       onFocus={onFocus}
       onBlur={onBlur}
       menuStyle={{
-        maxHeight: `${window.innerHeight * 0.8}px`,
+        maxHeight: '500px',
+        fontSize: '6px !important',
       }}
     />
   )

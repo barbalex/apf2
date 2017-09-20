@@ -5,8 +5,7 @@ import { Card, CardHeader, CardText } from 'material-ui/Card'
 import FlatButton from 'material-ui/FlatButton'
 import sortBy from 'lodash/sortBy'
 import filter from 'lodash/filter'
-import AutoComplete from 'material-ui/AutoComplete'
-import { orange500 } from 'material-ui/styles/colors'
+import AutoComplete from './Autocomplete'
 import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import withProps from 'recompose/withProps'
@@ -39,7 +38,7 @@ const FieldsContainer = styled.div`
 `
 const FirstLevelCard = styled(Card)`
   margin-bottom: 10px;
-  background-color: #FFF8E1 !important;
+  background-color: #fff8e1 !important;
 `
 const DownloadCardText = styled(CardText)`
   display: flex;
@@ -49,7 +48,7 @@ const DownloadCardText = styled(CardText)`
   align-content: stretch;
 `
 const DownloadCardButton = styled(FlatButton)`
-  flex-basis: 410px;
+  flex-basis: 450px;
   height: 100% !important;
   text-align: left !important;
   line-height: 18px !important;
@@ -65,11 +64,13 @@ const DownloadCardButton = styled(FlatButton)`
   }
 `
 const AutocompleteContainer = styled.div`
-  flex-basis: 410px;
+  flex-basis: 450px;
   padding-left: 16px;
 `
 const StyledAutoComplete = styled(AutoComplete)`
-  > input, > div, > label {
+  > input,
+  > div,
+  > label {
     font-size: 14px !important;
     font-color: red !important;
   }
@@ -88,8 +89,7 @@ const enhance = compose(
       store,
       changeArtFuerEierlegendeWollmilchsau,
       artFuerEierlegendeWollmilchsau,
-    }) => ({ view, fileName, apArtId }) => {
-      // TODO: export csv if option is choosen
+    }) => ({ view, fileName, apArtId }) =>
       exportModule({
         store,
         changeArtFuerEierlegendeWollmilchsau,
@@ -97,8 +97,7 @@ const enhance = compose(
         view,
         fileName,
         apArtId,
-      })
-    },
+      }),
   }),
   withLifecycle({
     onDidMount({ store }) {
@@ -138,7 +137,7 @@ const Exporte = ({
   changeArtFuerEierlegendeWollmilchsau: () => void,
   artList: Array<Object>,
   downloadFromView: () => void,
-}) =>
+}) => (
   <Container>
     <FormTitle tree={store.tree} title="Exporte" />
     <FieldsContainer>
@@ -393,9 +392,7 @@ const Exporte = ({
               })}
           >
             <div>Teilpopulationen von AP-Arten</div>
-            <div>
-              {'ohne "Bekannt seit"'}
-            </div>
+            <div>{'ohne "Bekannt seit"'}</div>
           </DownloadCardButton>
           <DownloadCardButton
             onClick={() =>
@@ -405,9 +402,7 @@ const Exporte = ({
               })}
           >
             <div>Teilpopulationen ohne Eintrag</div>
-            <div>
-              {'im Feld "Für AP-Bericht relevant"'}
-            </div>
+            <div>{'im Feld "Für AP-Bericht relevant"'}</div>
           </DownloadCardButton>
           <DownloadCardButton
             onClick={() =>
@@ -454,35 +449,19 @@ const Exporte = ({
               <li>letzter Teilpopulationsbericht</li>
               <li>letzte Zählung</li>
             </ul>
-            <div>
-              {'= "Eier legende Wollmilchsau"'}
-            </div>
+            <div>{'= "Eier legende Wollmilchsau"'}</div>
           </DownloadCardButton>
           <AutocompleteContainer>
             <StyledAutoComplete
-              hintText={artList.length === 0 ? 'lade Daten...' : 'Art wählen'}
-              floatingLabelText={'"Eier legende Wollmilchsau" für eine Art'}
-              searchText={artFuerEierlegendeWollmilchsau}
-              errorText={artFuerEierlegendeWollmilchsau ? 'hole Daten...' : ''}
-              errorStyle={{ color: orange500 }}
               dataSource={artList}
               dataSourceConfig={{
                 value: 'TaxonomieId',
                 text: 'Artname',
               }}
-              filter={AutoComplete.caseInsensitiveFilter}
-              maxSearchResults={20}
-              menuStyle={{
-                fontSize: '6px !important',
-              }}
-              onNewRequest={val => {
-                changeArtFuerEierlegendeWollmilchsau(val.Artname)
-                downloadFromView({
-                  view: 'v_tpop_anzkontrinklletzterundletztertpopber',
-                  fileName: 'anzkontrinklletzterundletztertpopber_2016',
-                  apArtId: val.TaxonomieId,
-                })
-              }}
+              downloadFromView={downloadFromView}
+              changeArtFuerEierlegendeWollmilchsau={
+                changeArtFuerEierlegendeWollmilchsau
+              }
             />
           </AutocompleteContainer>
           <DownloadCardButton
@@ -579,5 +558,6 @@ const Exporte = ({
       </FirstLevelCard>
     </FieldsContainer>
   </Container>
+)
 
 export default enhance(Exporte)

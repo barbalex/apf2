@@ -31,7 +31,7 @@ export default async ({
     store.listError(error)
     store.export.removeDownload(fileName)
   }
-  const url = apArtId ? `/{view}?ApArtId=eq.${apArtId}` : `/${view}`
+  const url = apArtId ? `/${view}?ApArtId=eq.${apArtId}` : `/${view}`
 
   store.export.addDownload(fileName)
   let result

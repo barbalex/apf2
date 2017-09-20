@@ -1,10 +1,9 @@
 // @flow
 import React, { Component } from 'react'
 import { observer, inject } from 'mobx-react'
-import AutoComplete from 'material-ui/AutoComplete'
+import AutoCompleteFromArray from '../../shared/AutocompleteFromArray'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
-import withHandlers from 'recompose/withHandlers'
 import withState from 'recompose/withState'
 
 import RadioButtonGroup from '../../shared/RadioButtonGroup'
@@ -33,20 +32,6 @@ const FieldsContainer = styled.div`
 const enhance = compose(
   inject('store'),
   withState('width', 'changeWidth', 0),
-  withHandlers({
-    onNewRequestWirtspflanze: props => val =>
-      props.store.updatePropertyInDb(
-        props.tree,
-        'TPopMassnAnsiedWirtspfl',
-        val
-      ),
-    onBlurWirtspflanze: props => e =>
-      props.store.updatePropertyInDb(
-        props.tree,
-        'TPopMassnAnsiedWirtspfl',
-        e.target.value
-      ),
-  }),
   observer
 )
 
@@ -81,13 +66,7 @@ class Tpopmassn extends Component {
   }
 
   render() {
-    const {
-      store,
-      tree,
-      onNewRequestWirtspflanze,
-      onBlurWirtspflanze,
-      width,
-    } = this.props
+    const { store, tree, width } = this.props
     const { activeDataset } = tree
 
     return (
@@ -240,17 +219,15 @@ class Tpopmassn extends Component {
             updateProperty={store.updateProperty}
             updatePropertyInDb={store.updatePropertyInDb}
           />
-          <AutoComplete
-            floatingLabelText="Wirtspflanze"
-            fullWidth
-            value={activeDataset.row.TPopMassnAnsiedWirtspfl || ''}
-            searchText={activeDataset.row.TPopMassnAnsiedWirtspfl || ''}
+          <AutoCompleteFromArray
+            key={`${activeDataset.row.TPopMassnId}Wirtspflanze`}
+            tree={tree}
+            label="Wirtspflanze"
+            fieldName="TPopMassnAnsiedWirtspfl"
+            valueText={activeDataset.row.TPopMassnAnsiedWirtspfl}
             errorText={activeDataset.valid.TPopMassnAnsiedWirtspfl}
-            filter={AutoComplete.caseInsensitiveFilter}
             dataSource={store.dropdownList.artnamen}
-            maxSearchResults={20}
-            onNewRequest={onNewRequestWirtspflanze}
-            onBlur={onBlurWirtspflanze}
+            updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
             tree={tree}
