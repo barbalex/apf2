@@ -31,7 +31,7 @@ const getArtList = ({ store, tree }: { store: Object, tree: Object }) => {
   const apArtIdsNotToShow = assozartenOfAp.concat(activeNodes.ap)
   const artList = filter(
     Array.from(adb_eigenschaften.values()),
-    r => !apArtIdsNotToShow.includes(r.TaxonomieId),
+    r => !apArtIdsNotToShow.includes(r.TaxonomieId)
   )
   return sortBy(artList, 'Artname')
 }
@@ -54,6 +54,7 @@ const Assozart = ({ store, tree }: { store: Object, tree: Object }) => {
       <FormTitle tree={tree} title="assoziierte Art" />
       <FieldsContainer>
         <AutoComplete
+          key={activeDataset.row.AaId}
           tree={tree}
           label="Art"
           fieldName="AaSisfNr"

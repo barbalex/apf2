@@ -24,9 +24,7 @@ const FieldContainer = styled.div`
   display: flex;
   flex-direction: column;
 `
-const LabelPopoverRow = styled.div`
-  padding: 2px 5px 2px 5px;
-`
+const LabelPopoverRow = styled.div`padding: 2px 5px 2px 5px;`
 const LabelPopoverTitleRow = styled(LabelPopoverRow)`
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
@@ -43,12 +41,8 @@ const LabelPopoverContentRow = styled(LabelPopoverRow)`
     border-bottom-left-radius: 4px;
   }
 `
-const LabelPopoverRowColumnLeft = styled.div`
-  width: 110px;
-`
-const LabelPopoverRowColumnRight = styled.div`
-  padding-left: 5px;
-`
+const LabelPopoverRowColumnLeft = styled.div`width: 110px;`
+const LabelPopoverRowColumnRight = styled.div`padding-left: 5px;`
 
 const enhance = compose(
   inject('store'),
@@ -76,7 +70,7 @@ const enhance = compose(
       updatePropertyInDb,
     }
   }),
-  observer,
+  observer
 )
 
 const Ap = ({
@@ -100,6 +94,7 @@ const Ap = ({
     <FormTitle tree={tree} title="Art" />
     <FieldsContainer>
       <AutoComplete
+        key={activeDataset.row.ApArtId}
         tree={tree}
         label="Art"
         fieldName="ApArtId"
@@ -120,21 +115,15 @@ const Ap = ({
         updatePropertyInDb={updatePropertyInDb}
         popover={
           <div>
-            <LabelPopoverTitleRow>
-              Legende
-            </LabelPopoverTitleRow>
+            <LabelPopoverTitleRow>Legende</LabelPopoverTitleRow>
             <LabelPopoverContentRow>
-              <LabelPopoverRowColumnLeft>
-                keiner:
-              </LabelPopoverRowColumnLeft>
+              <LabelPopoverRowColumnLeft>keiner:</LabelPopoverRowColumnLeft>
               <LabelPopoverRowColumnRight>
                 kein Aktionsplan vorgesehen
               </LabelPopoverRowColumnRight>
             </LabelPopoverContentRow>
             <LabelPopoverContentRow>
-              <LabelPopoverRowColumnLeft>
-                erstellt:
-              </LabelPopoverRowColumnLeft>
+              <LabelPopoverRowColumnLeft>erstellt:</LabelPopoverRowColumnLeft>
               <LabelPopoverRowColumnRight>
                 Aktionsplan fertig, auf der Webseite der FNS
               </LabelPopoverRowColumnRight>
@@ -163,9 +152,7 @@ const Ap = ({
           updatePropertyInDb={updatePropertyInDb}
           popover={
             <div>
-              <LabelPopoverTitleRow>
-                Legende
-              </LabelPopoverTitleRow>
+              <LabelPopoverTitleRow>Legende</LabelPopoverTitleRow>
               <LabelPopoverContentRow>
                 <LabelPopoverRowColumnLeft>
                   noch keine<br />Umsetzung:
@@ -179,7 +166,8 @@ const Ap = ({
                   in Umsetzung:
                 </LabelPopoverRowColumnLeft>
                 <LabelPopoverRowColumnRight>
-                  bereits Massnahmen ausgeführt (auch wenn AP noch nicht erstellt)
+                  bereits Massnahmen ausgeführt (auch wenn AP noch nicht
+                  erstellt)
                 </LabelPopoverRowColumnRight>
               </LabelPopoverContentRow>
             </div>
