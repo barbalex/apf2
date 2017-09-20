@@ -58,28 +58,35 @@ const MyAutocomplete = ({
   changeSearchText: () => void,
   onUpdateSearchText: () => void,
 }) => {
+  const searchTextToUse = searchText || valueText
   const dataSourceLength = dataSource.filter(d => {
     if (
       dataSourceConfig &&
       dataSourceConfig.text &&
       d[dataSourceConfig.text] &&
       d[dataSourceConfig.text].toLowerCase() &&
-      searchText &&
-      searchText.toLowerCase()
+      searchTextToUse &&
+      searchTextToUse.toLowerCase()
     ) {
       return d[dataSourceConfig.text]
         .toLowerCase()
-        .includes(searchText.toLowerCase())
+        .includes(searchTextToUse.toLowerCase())
     }
     return true
   }).length
-  const labelFilterHint =
-    searchText && searchText.length ? '' : 'Zum Filtern tippen. '
-  const labelNumberLimit =
-    dataSourceLength > 200
-      ? 'Nur die ersten 200 Einträge werden angezeigt.'
-      : ''
-  console.log('dataSourceLength:', dataSourceLength)
+  let labelFilterHint = ''
+  if (valueText && !searchText) {
+    labelFilterHint = 'Zum Filtern: Artnamen löschen, dann tippen. '
+  }
+  if (searchText) labelFilterHint = 'Zum Filtern tippen. '
+  let labelNumberLimit = ''
+  if (searchText && dataSourceLength === 0) {
+    labelNumberLimit = 'Kein Eintrag entspricht dem Filter.'
+  } else if (dataSourceLength && dataSourceLength <= 200) {
+    labelNumberLimit = `Alle passenden Einträge werden angezeigt.`
+  } else if (dataSourceLength > 200) {
+    labelNumberLimit = 'Nur die ersten 200 Einträge werden angezeigt.'
+  }
   const labelText = focused
     ? `${label}${labelFilterHint || labelNumberLimit
         ? '. '
