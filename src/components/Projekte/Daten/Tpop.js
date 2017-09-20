@@ -1,7 +1,6 @@
 // @flow
 import React, { Component } from 'react'
 import { observer, inject } from 'mobx-react'
-import AutoComplete from 'material-ui/AutoComplete'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
 import withState from 'recompose/withState'
@@ -9,6 +8,7 @@ import withState from 'recompose/withState'
 import TextField from '../../shared/TextField'
 import TextFieldWithInfo from '../../shared/TextFieldWithInfo'
 import Status from '../../shared/Status'
+import AutoCompleteFromArray from '../../shared/AutocompleteFromArray'
 import RadioButton from '../../shared/RadioButton'
 import RadioButtonGroupWithInfo from '../../shared/RadioButtonGroupWithInfo'
 import FormTitle from '../../shared/FormTitle'
@@ -158,21 +158,15 @@ class Tpop extends Component {
             updateProperty={store.updateProperty}
             updatePropertyInDb={store.updatePropertyInDb}
           />
-          <AutoComplete
-            hintText={
-              store.dropdownList.gemeinden.length === 0 ? 'lade Daten...' : ''
-            }
-            fullWidth
-            floatingLabelText="Gemeinde"
+          <AutoCompleteFromArray
+            key={activeDataset.row.TPopId}
+            tree={tree}
+            label="Gemeinde"
+            fieldName="TPopGemeinde"
+            valueText={activeDataset.row.TPopGemeinde}
+            errorText={activeDataset.valid.TPopGemeinde}
             dataSource={store.dropdownList.gemeinden}
-            searchText={activeDataset.row.TPopGemeinde || ''}
-            filter={AutoComplete.caseInsensitiveFilter}
-            maxSearchResults={20}
-            onNewRequest={val =>
-              store.updatePropertyInDb(tree, 'TPopGemeinde', val)}
-            onBlur={e =>
-              store.updatePropertyInDb(tree, 'TPopGemeinde', e.target.value)}
-            value={activeDataset.row.TPopGemeinde || ''}
+            updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
             tree={tree}

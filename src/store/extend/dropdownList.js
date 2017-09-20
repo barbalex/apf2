@@ -10,7 +10,7 @@ export default (store: Object): void => {
       () => {
         const adressen = sortBy(
           Array.from(store.table.adresse.values()),
-          'AdrName',
+          'AdrName'
         )
         adressen.unshift({
           id: null,
@@ -18,7 +18,7 @@ export default (store: Object): void => {
         })
         return adressen
       },
-      { name: 'dropdownListAdressen' },
+      { name: 'dropdownListAdressen' }
     ),
     apUmsetzungen: computed(
       () => {
@@ -29,7 +29,7 @@ export default (store: Object): void => {
           label: el.DomainTxt,
         }))
       },
-      { name: 'dropdownListApUmsetzungen' },
+      { name: 'dropdownListApUmsetzungen' }
     ),
     apStati: computed(
       () => {
@@ -40,24 +40,24 @@ export default (store: Object): void => {
           label: el.DomainTxt,
         }))
       },
-      { name: 'dropdownListApStati' },
+      { name: 'dropdownListApStati' }
     ),
     artListForAp: computed(
       () => {
         const alreadyUsedApIds = Array.from(store.table.ap.keys()).map(a =>
-          Number(a),
+          Number(a)
         )
         // let user choose store ApArtId
         const apArtIdsNotToShow = alreadyUsedApIds.filter(
-          r => r !== store.tree.activeNodes.ap,
+          r => r !== store.tree.activeNodes.ap
         )
         const artList = filter(
           Array.from(store.table.adb_eigenschaften.values()),
-          r => !apArtIdsNotToShow.includes(r.TaxonomieId),
+          r => !apArtIdsNotToShow.includes(r.TaxonomieId)
         )
         return sortBy(artList, 'Artname')
       },
-      { name: 'dropdownListArtListForAp' },
+      { name: 'dropdownListArtListForAp' }
     ),
     artnamen: computed(
       () => {
@@ -66,12 +66,12 @@ export default (store: Object): void => {
         // artnamen.unshift('')
         return artnamen
       },
-      { name: 'dropdownListArtnamen' },
+      { name: 'dropdownListArtnamen' }
     ),
     popEntwicklungWerte: computed(
       () => {
         let popEntwicklungWerte = Array.from(
-          store.table.pop_entwicklung_werte.values(),
+          store.table.pop_entwicklung_werte.values()
         )
         popEntwicklungWerte = sortBy(popEntwicklungWerte, 'EntwicklungOrd')
         return popEntwicklungWerte.map(el => ({
@@ -79,12 +79,12 @@ export default (store: Object): void => {
           label: el.EntwicklungTxt,
         }))
       },
-      { name: 'dropdownListPopEntwicklungWerte' },
+      { name: 'dropdownListPopEntwicklungWerte' }
     ),
     tpopEntwicklungWerte: computed(
       () => {
         let tpopEntwicklungWerte = Array.from(
-          store.table.tpop_entwicklung_werte.values(),
+          store.table.tpop_entwicklung_werte.values()
         )
         tpopEntwicklungWerte = sortBy(tpopEntwicklungWerte, 'EntwicklungOrd')
         return tpopEntwicklungWerte.map(el => ({
@@ -92,7 +92,7 @@ export default (store: Object): void => {
           label: el.EntwicklungTxt,
         }))
       },
-      { name: 'dropdownListTpopEntwicklungWerte' },
+      { name: 'dropdownListTpopEntwicklungWerte' }
     ),
     apErfkritWerte: computed(
       () => {
@@ -103,12 +103,12 @@ export default (store: Object): void => {
           label: el.BeurteilTxt,
         }))
       },
-      { name: 'dropdownListApErfkritWerte' },
+      { name: 'dropdownListApErfkritWerte' }
     ),
     tpopmassnErfbeurtWerte: computed(
       () => {
         let tpopmassnErfbeurtWerte = Array.from(
-          store.table.tpopmassn_erfbeurt_werte.values(),
+          store.table.tpopmassn_erfbeurt_werte.values()
         )
         tpopmassnErfbeurtWerte = sortBy(tpopmassnErfbeurtWerte, 'BeurteilOrd')
         return tpopmassnErfbeurtWerte.map(el => ({
@@ -116,19 +116,19 @@ export default (store: Object): void => {
           label: el.BeurteilTxt,
         }))
       },
-      { name: 'dropdownListTpopmassnErfbeurtWerte' },
+      { name: 'dropdownListTpopmassnErfbeurtWerte' }
     ),
     tpopApBerichtRelevantWerte: computed(
       () => {
         const tpopApBerichtRelevantWerte = Array.from(
-          store.table.tpop_apberrelevant_werte.values(),
+          store.table.tpop_apberrelevant_werte.values()
         )
         return tpopApBerichtRelevantWerte.map(t => ({
           value: t.DomainCode,
           label: t.DomainTxt,
         }))
       },
-      { name: 'dropdownListTpopApBerichtRelevantWerte' },
+      { name: 'dropdownListTpopApBerichtRelevantWerte' }
     ),
     gemeinden: computed(
       () => {
@@ -136,12 +136,12 @@ export default (store: Object): void => {
         gemeinden = sortBy(gemeinden, 'GmdName')
         return gemeinden.map(el => el.GmdName)
       },
-      { name: 'dropdownListGemeinden' },
+      { name: 'dropdownListGemeinden' }
     ),
     idbiotopuebereinstWerte: computed(
       () => {
         let idbiotopuebereinstWerte = Array.from(
-          store.table.tpopkontr_idbiotuebereinst_werte.values(),
+          store.table.tpopkontr_idbiotuebereinst_werte.values()
         )
         idbiotopuebereinstWerte = sortBy(idbiotopuebereinstWerte, 'DomainOrd')
         return idbiotopuebereinstWerte.map(el => ({
@@ -149,20 +149,19 @@ export default (store: Object): void => {
           label: el.DomainTxt,
         }))
       },
-      { name: 'dropdownListIdbiotopuebereinstWerte' },
+      { name: 'dropdownListIdbiotopuebereinstWerte' }
     ),
     lr: computed(
-      () => {
-        let lr = Array.from(store.table.adb_lr.values())
-        // eslint-disable-next-line no-regex-spaces
-        return lr.map(e => e.Einheit.replace(/  +/g, ' '))
-      },
-      { name: 'dropdownListLr' },
+      () =>
+        Array.from(store.table.adb_lr.values()).map(
+          e => `${e.Label}: ${e.Einheit.replace(/  +/g, ' ')}`
+        ),
+      { name: 'dropdownListLr' }
     ),
     zaehleinheitWerte: computed(
       () => {
         let zaehleinheitWerte = Array.from(
-          store.table.tpopkontrzaehl_einheit_werte.values(),
+          store.table.tpopkontrzaehl_einheit_werte.values()
         )
         zaehleinheitWerte = sortBy(zaehleinheitWerte, 'ZaehleinheitOrd')
         zaehleinheitWerte = zaehleinheitWerte.map(el => ({
@@ -175,12 +174,12 @@ export default (store: Object): void => {
         })
         return zaehleinheitWerte
       },
-      { name: 'dropdownListZaehleinheitWerte' },
+      { name: 'dropdownListZaehleinheitWerte' }
     ),
     methodeWerte: computed(
       () => {
         let methodeWerte = Array.from(
-          store.table.tpopkontrzaehl_methode_werte.values(),
+          store.table.tpopkontrzaehl_methode_werte.values()
         )
         methodeWerte = sortBy(methodeWerte, 'BeurteilOrd')
         methodeWerte = methodeWerte.map(el => ({
@@ -189,12 +188,12 @@ export default (store: Object): void => {
         }))
         return methodeWerte
       },
-      { name: 'dropdownListMethodeWerte' },
+      { name: 'dropdownListMethodeWerte' }
     ),
     tpopMassnTypWerte: computed(
       () => {
         let tpopMassnTypWerte = Array.from(
-          store.table.tpopmassn_typ_werte.values(),
+          store.table.tpopmassn_typ_werte.values()
         )
         tpopMassnTypWerte = sortBy(tpopMassnTypWerte, 'MassnTypOrd')
         return tpopMassnTypWerte.map(el => ({
@@ -202,7 +201,7 @@ export default (store: Object): void => {
           label: el.MassnTypTxt,
         }))
       },
-      { name: 'dropdownListTpopMassnTypWerte' },
+      { name: 'dropdownListTpopMassnTypWerte' }
     ),
     zielTypWerte: computed(
       () => {
@@ -213,7 +212,7 @@ export default (store: Object): void => {
           label: el.ZieltypTxt,
         }))
       },
-      { name: 'dropdownListZielTypWerte' },
+      { name: 'dropdownListZielTypWerte' }
     ),
   })
 }

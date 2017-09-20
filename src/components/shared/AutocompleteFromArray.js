@@ -16,8 +16,8 @@ const enhance = compose(
   withState('searchTextWasChanged', 'changeSearchTextWasChanged', ''),
   withHandlers({
     onNewRequest: props => val => {
-      const { updatePropertyInDb, fieldName, dataSourceConfig } = props
-      updatePropertyInDb(props.tree, fieldName, val[dataSourceConfig.value])
+      const { updatePropertyInDb, fieldName } = props
+      updatePropertyInDb(props.tree, fieldName, val)
     },
     onFocus: props => () => props.changeFocused(true),
     onBlur: props => () => {
@@ -41,9 +41,8 @@ const enhance = compose(
     },
   }),
   withLifecycle({
-    componentWillMount({ valueText, changeSearchText }) {
-      //console.log('setting searText to:', valueText)
-      //changeSearchText(valueText)
+    onDidMount({ valueText, changeSearchText }) {
+      changeSearchText(valueText)
     },
   }),
   observer
@@ -53,10 +52,6 @@ const MyAutocomplete = ({
   label,
   valueText = '',
   dataSource,
-  dataSourceConfig = {
-    value: 'id',
-    text: 'label',
-  },
   onNewRequest,
   focused,
   changeFocused,
@@ -73,7 +68,6 @@ const MyAutocomplete = ({
   fieldName: string,
   valueText?: string,
   dataSource: Array<Object>,
-  dataSourceConfig: Object,
   updatePropertyInDb: () => void,
   onNewRequest: () => void,
   focused: boolean,
@@ -93,22 +87,18 @@ const MyAutocomplete = ({
   if (searchTextToUse === null) searchTextToUse = ''
   const dataSourceLength = dataSource.filter(d => {
     if (
-      dataSourceConfig &&
-      dataSourceConfig.text &&
-      d[dataSourceConfig.text] &&
-      d[dataSourceConfig.text].toLowerCase() &&
+      d &&
+      d.toLowerCase() &&
       searchTextToUse &&
       searchTextToUse.toLowerCase()
     ) {
-      return d[dataSourceConfig.text]
-        .toLowerCase()
-        .includes(searchTextToUse.toLowerCase())
+      return d.toLowerCase().includes(searchTextToUse.toLowerCase())
     }
     return true
   }).length
   let labelFilterHint = ''
   if (valueText && !searchTextWasChanged) {
-    labelFilterHint = 'Zum Filtern: Eintrag löschen, dann tippen. '
+    labelFilterHint = 'Zum Filtern: Aktuellen Wert löschen, dann tippen. '
   }
   if (searchText || searchTextWasChanged)
     labelFilterHint = 'Zum Filtern tippen. '
@@ -132,7 +122,6 @@ const MyAutocomplete = ({
       fullWidth
       floatingLabelText={labelText}
       dataSource={dataSource}
-      dataSourceConfig={dataSourceConfig}
       searchText={searchTextToUse}
       onUpdateInput={onUpdateSearchText}
       filter={AutoComplete.caseInsensitiveFilter}

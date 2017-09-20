@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 import { observer, inject } from 'mobx-react'
 import { Tabs, Tab } from 'material-ui/Tabs'
 import AutoComplete from 'material-ui/AutoComplete'
+import AutoCompleteFromArray from '../../shared/AutocompleteFromArray'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
@@ -40,7 +41,7 @@ const Section = styled.div`
   color: rgba(255, 255, 255, 0.298039);
   font-weight: bold;
   &:after {
-    content: ":";
+    content: ':';
   }
 `
 const FormContainer = styled.div`
@@ -291,22 +292,15 @@ class Tpopfeldkontr extends Component {
                     updatePropertyInDb={store.updatePropertyInDb}
                   />
                   <Section>Vegetation</Section>
-                  <AutoComplete
-                    floatingLabelText="Lebensraum nach Delarze"
-                    fullWidth
-                    searchText={activeDataset.row.TPopKontrLeb || ''}
+                  <AutoCompleteFromArray
+                    key={`${activeDataset.row.TPopKontrId}Lebensraum`}
+                    tree={tree}
+                    label="Lebensraum nach Delarze"
+                    fieldName="TPopKontrLeb"
+                    valueText={activeDataset.row.TPopKontrLeb}
                     errorText={activeDataset.valid.TPopKontrLeb}
                     dataSource={store.dropdownList.lr}
-                    filter={AutoComplete.caseInsensitiveFilter}
-                    maxSearchResults={20}
-                    onNewRequest={val =>
-                      store.updatePropertyInDb(tree, 'TPopKontrLeb', val)}
-                    onBlur={e =>
-                      store.updatePropertyInDb(
-                        tree,
-                        'TPopKontrLeb',
-                        e.target.value
-                      )}
+                    updatePropertyInDb={store.updatePropertyInDb}
                   />
                   <AutoComplete
                     floatingLabelText="Umgebung nach Delarze"
@@ -324,6 +318,16 @@ class Tpopfeldkontr extends Component {
                         'TPopKontrLebUmg',
                         e.target.value
                       )}
+                  />
+                  <AutoCompleteFromArray
+                    key={`${activeDataset.row.TPopKontrId}Umgebung`}
+                    tree={tree}
+                    label="Umgebung nach Delarze"
+                    fieldName="TPopKontrLebUmg"
+                    valueText={activeDataset.row.TPopKontrLebUmg}
+                    errorText={activeDataset.valid.TPopKontrLebUmg}
+                    dataSource={store.dropdownList.lr}
+                    updatePropertyInDb={store.updatePropertyInDb}
                   />
                   <TextField
                     tree={tree}
