@@ -163,7 +163,7 @@ Dazu werden die Feld- und Freiwilligenkontrollen (ausser solche von soeben anges
 Die Anwendung wird auf einem virtuellen Server mit der jeweils aktuellen Ubuntu LTS Version gehostet.
 
 Serverseitig wird sie mit [node.js](//nodejs.org) gesteuert. Als Datenbank dient [PostgreSQL](//postgresql.org/) mit drei separaten Datenbanken:
-- apflora: die projekteigenen Daten. Sie sind vollständig von den übrigen Datenbanken getrennt, um Datensicherung und -wiederherstellung zu vereinfachen. Hier ein [Diagramm der Beziehungen](https://github.com/FNSKtZH/apflora/raw/master/etc/beziehungen.png)
+- apflora: die projekteigenen Daten. Sie sind vollständig von den übrigen Datenbanken getrennt, um Datensicherung und -wiederherstellung zu vereinfachen. Hier ein [Diagramm der Beziehungen](//apflora.ch/static-files/beziehungen.png)
 - beob: benutzte Fremddaten, v.a. Beobachtungen von Info Spezies und der FNS sowie Arteigenschaften
 
 Die Anwendung ist zweigeteilt:

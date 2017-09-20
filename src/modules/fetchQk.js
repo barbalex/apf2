@@ -189,7 +189,7 @@ const fetchQk = async ({
   let tpops = resultTpopKoord.data
   let resultKtZh
   try {
-    resultKtZh = await axios.get('/geojson/ktZh.json')
+    resultKtZh = await axios.get('/static-files/ktZh.json')
   } catch (error) {
     store.listError(error)
     setLoading(false)

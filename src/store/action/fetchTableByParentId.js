@@ -3,17 +3,12 @@ import axios from 'axios'
 
 import tables from '../../modules/tables'
 import recordValuesForWhichTableDataWasFetched from '../../modules/recordValuesForWhichTableDataWasFetched'
-import apiBaseUrl from '../../modules/apiBaseUrl'
-import apiBaseUrlBeob from '../../modules/apiBaseUrlBeob'
 
 export default async (
   store: Object,
-  schemaNamePassed: string,
   tableName: string,
   parentId: number
 ): Promise<void> => {
-  const schemaName = schemaNamePassed || 'apflora'
-
   const table = tables.find(t => t.table === tableName)
   if (!table) {
     return store.listError(new Error(`not table found with name: ${tableName}`))
@@ -50,10 +45,9 @@ export default async (
     value: parentId,
   })
   const url = `/${tableName}?${parentIdField}=eq.${parentId}`
-  let baseURL = schemaName === 'apflora' ? apiBaseUrl : apiBaseUrlBeob
   let result
   try {
-    result = await axios.get(url, { baseURL })
+    result = await axios.get(url)
   } catch (error) {
     // remove setting that prevents loading of this value
     valuesForWhichTableDataWasFetched[tableName][

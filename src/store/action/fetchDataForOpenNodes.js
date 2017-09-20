@@ -51,44 +51,36 @@ const fetchDataForOpenNodes = (
     const activeNodes = getActiveNodes(node)
     const fetchingFromActiveElements = {
       exporte() {
-        store.fetchTableByParentId('apflora', 'ap', activeNodes.projekt)
-        store.fetchTable('beob', 'adb_eigenschaften')
+        store.fetchTableByParentId('ap', activeNodes.projekt)
+        store.fetchTable('adb_eigenschaften')
       },
       projektFolder() {
-        store.fetchTable('apflora', 'projekt')
+        store.fetchTable('projekt')
       },
       projekt() {
-        store.fetchTableByParentId('apflora', 'ap', activeNodes.projekt)
-        store.fetchTableByParentId(
-          'apflora',
-          'apberuebersicht',
-          activeNodes.projekt
-        )
+        store.fetchTableByParentId('ap', activeNodes.projekt)
+        store.fetchTableByParentId('apberuebersicht', activeNodes.projekt)
       },
       apberuebersichtFolder() {
-        store.fetchTableByParentId(
-          'apflora',
-          'apberuebersicht',
-          activeNodes.projekt
-        )
+        store.fetchTableByParentId('apberuebersicht', activeNodes.projekt)
       },
       apFolder() {
-        store.fetchTable('beob', 'adb_eigenschaften')
+        store.fetchTable('adb_eigenschaften')
       },
       ap() {
-        store.fetchTableByParentId('apflora', 'pop', activeNodes.ap)
-        store.fetchTableByParentId('apflora', 'ziel', activeNodes.ap)
-        store.fetchTableByParentId('apflora', 'erfkrit', activeNodes.ap)
-        store.fetchTableByParentId('apflora', 'apber', activeNodes.ap)
-        store.fetchTableByParentId('apflora', 'ber', activeNodes.ap)
-        store.fetchTableByParentId('apflora', 'assozart', activeNodes.ap)
-        store.fetchTableByParentId('apflora', 'idealbiotop', activeNodes.ap)
-        store.fetchTable('apflora', 'adresse')
-        store.fetchTable('apflora', 'ap_bearbstand_werte')
-        store.fetchTable('apflora', 'ap_umsetzung_werte')
+        store.fetchTableByParentId('pop', activeNodes.ap)
+        store.fetchTableByParentId('ziel', activeNodes.ap)
+        store.fetchTableByParentId('erfkrit', activeNodes.ap)
+        store.fetchTableByParentId('apber', activeNodes.ap)
+        store.fetchTableByParentId('ber', activeNodes.ap)
+        store.fetchTableByParentId('assozart', activeNodes.ap)
+        store.fetchTableByParentId('idealbiotop', activeNodes.ap)
+        store.fetchTable('adresse')
+        store.fetchTable('ap_bearbstand_werte')
+        store.fetchTable('ap_umsetzung_werte')
         store.fetchBeob(activeNodes.ap)
         store.fetchBeobzuordnung(activeNodes.ap)
-        store.fetchTable('apflora', 'pop_status_werte')
+        store.fetchTable('pop_status_werte')
         if (showTpop) {
           store.fetchTpopForAp(activeNodes.ap)
           store.fetchPopForAp(activeNodes.ap)
@@ -97,7 +89,7 @@ const fetchDataForOpenNodes = (
           store.fetchPopForAp(activeNodes.ap)
         }
         if (showBeobNichtBeurteilt || showBeobNichtZuzuordnen || showTpopBeob) {
-          store.fetchTable('beob', 'beob_quelle')
+          store.fetchTable('beob_quelle')
           store.fetchPopForAp(activeNodes.ap)
           store.fetchTpopForAp(activeNodes.ap)
         }
@@ -108,99 +100,89 @@ const fetchDataForOpenNodes = (
       assozartFolder() {},
       idealbiotopFolder() {},
       beobNichtZuzuordnenFolder() {
-        store.fetchTable('beob', 'beob_quelle')
+        store.fetchTable('beob_quelle')
         store.fetchTpopForAp(activeNodes.ap)
       },
       beobNichtZuzuordnen() {
         store.fetchDatasetById({
-          schemaName: 'beob',
           tableName: 'beob',
           id: activeNodes.beobNichtZuzuordnen,
         })
       },
       beobzuordnungFolder() {
-        store.fetchTable('beob', 'beob_quelle')
+        store.fetchTable('beob_quelle')
         store.fetchTpopForAp(activeNodes.ap)
       },
       beobzuordnung() {},
       berFolder() {
-        store.fetchTableByParentId('apflora', 'ber', activeNodes.ap)
+        store.fetchTableByParentId('ber', activeNodes.ap)
       },
       apberFolder() {
-        store.fetchTableByParentId('apflora', 'apber', activeNodes.ap)
-        store.fetchTable('apflora', 'ap_erfkrit_werte')
+        store.fetchTableByParentId('apber', activeNodes.ap)
+        store.fetchTable('ap_erfkrit_werte')
       },
       erfkritFolder() {
-        store.fetchTableByParentId('apflora', 'erfkrit', activeNodes.ap)
-        store.fetchTable('apflora', 'ap_erfkrit_werte')
+        store.fetchTableByParentId('erfkrit', activeNodes.ap)
+        store.fetchTable('ap_erfkrit_werte')
       },
       zielFolder() {
-        store.fetchTableByParentId('apflora', 'ziel', activeNodes.ap)
-        store.fetchTable('apflora', 'ziel_typ_werte')
+        store.fetchTableByParentId('ziel', activeNodes.ap)
+        store.fetchTable('ziel_typ_werte')
       },
       zieljahr() {
-        store.fetchTableByParentId('apflora', 'ziel', activeNodes.ap)
+        store.fetchTableByParentId('ziel', activeNodes.ap)
       },
       ziel() {
-        store.fetchTableByParentId('apflora', 'zielber', activeNodes.ziel)
+        store.fetchTableByParentId('zielber', activeNodes.ziel)
       },
       zielberFolder() {},
       zielber() {},
       popFolder() {},
       pop() {
-        store.fetchTableByParentId('apflora', 'tpop', activeNodes.pop)
-        store.fetchTableByParentId('apflora', 'popber', activeNodes.pop)
-        store.fetchTable('apflora', 'pop_entwicklung_werte')
-        store.fetchTableByParentId('apflora', 'popmassnber', activeNodes.pop)
-        store.fetchTable('apflora', 'tpopmassn_erfbeurt_werte')
-        store.fetchTable('apflora', 'tpop_apberrelevant_werte')
+        store.fetchTableByParentId('tpop', activeNodes.pop)
+        store.fetchTableByParentId('popber', activeNodes.pop)
+        store.fetchTable('pop_entwicklung_werte')
+        store.fetchTableByParentId('popmassnber', activeNodes.pop)
+        store.fetchTable('tpopmassn_erfbeurt_werte')
+        store.fetchTable('tpop_apberrelevant_werte')
       },
       popberFolder() {},
       popmassnberFolder() {},
       tpopFolder() {},
       tpop() {
-        store.fetchTable('apflora', 'gemeinde')
-        store.fetchTable('apflora', 'tpop_entwicklung_werte')
-        store.fetchTableByParentId('apflora', 'tpopber', activeNodes.tpop)
-        store.fetchTableByParentId('apflora', 'tpopmassnber', activeNodes.tpop)
-        store.fetchTableByParentId('apflora', 'tpopmassn', activeNodes.tpop)
-        store.fetchTable('apflora', 'tpopmassn_typ_werte')
-        store.fetchTableByParentId('apflora', 'tpopkontr', activeNodes.tpop)
+        store.fetchTable('gemeinde')
+        store.fetchTable('tpop_entwicklung_werte')
+        store.fetchTableByParentId('tpopber', activeNodes.tpop)
+        store.fetchTableByParentId('tpopmassnber', activeNodes.tpop)
+        store.fetchTableByParentId('tpopmassn', activeNodes.tpop)
+        store.fetchTable('tpopmassn_typ_werte')
+        store.fetchTableByParentId('tpopkontr', activeNodes.tpop)
       },
       tpopmassnFolder() {},
       tpopmassnberFolder() {},
       tpopfeldkontrFolder() {
-        store.fetchTable('apflora', 'tpopkontr_idbiotuebereinst_werte')
-        store.fetchTable('beob', 'adb_lr')
+        store.fetchTable('tpopkontr_idbiotuebereinst_werte')
+        store.fetchTable('adb_lr')
       },
       tpopfeldkontr() {
-        store.fetchTableByParentId(
-          'apflora',
-          'tpopkontrzaehl',
-          activeNodes.tpopfeldkontr
-        )
-        store.fetchTable('apflora', 'tpopkontrzaehl_einheit_werte')
-        store.fetchTable('apflora', 'tpopkontrzaehl_methode_werte')
+        store.fetchTableByParentId('tpopkontrzaehl', activeNodes.tpopfeldkontr)
+        store.fetchTable('tpopkontrzaehl_einheit_werte')
+        store.fetchTable('tpopkontrzaehl_methode_werte')
       },
       tpopfreiwkontrFolder() {},
       tpopfreiwkontr() {
-        store.fetchTableByParentId(
-          'apflora',
-          'tpopkontrzaehl',
-          activeNodes.tpopfreiwkontr
-        )
-        store.fetchTable('apflora', 'tpopkontrzaehl_einheit_werte')
-        store.fetchTable('apflora', 'tpopkontrzaehl_methode_werte')
+        store.fetchTableByParentId('tpopkontrzaehl', activeNodes.tpopfreiwkontr)
+        store.fetchTable('tpopkontrzaehl_einheit_werte')
+        store.fetchTable('tpopkontrzaehl_methode_werte')
       },
       tpopkontrzaehlFolder() {},
       tpopberFolder() {},
       tpopbeobFolder() {
-        store.fetchTable('beob', 'beob_quelle')
+        store.fetchTable('beob_quelle')
         store.fetchTpopForAp(activeNodes.ap)
       },
       tpopbeob() {
         store.fetchDatasetById({
-          schemaName: 'beob',
           tableName: 'beob',
           id: activeNodes.tpopbeob,
         })

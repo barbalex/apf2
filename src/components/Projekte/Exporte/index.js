@@ -102,14 +102,10 @@ const enhance = compose(
   withLifecycle({
     onDidMount({ store }) {
       if (store.table.adb_eigenschaften.size === 0) {
-        store.fetchTable('beob', 'adb_eigenschaften')
+        store.fetchTable('adb_eigenschaften')
       }
       if (store.table.ap.size === 0) {
-        store.fetchTableByParentId(
-          'apflora',
-          'ap',
-          store.tree.activeNodes.projekt
-        )
+        store.fetchTableByParentId('ap', store.tree.activeNodes.projekt)
       }
     },
   }),

@@ -2,15 +2,8 @@
 import axios from 'axios'
 
 import tables from '../../modules/tables'
-import apiBaseUrl from '../../modules/apiBaseUrl'
-import apiBaseUrlBeob from '../../modules/apiBaseUrlBeob'
 
-export default async (
-  store: Object,
-  schemaNamePassed: string,
-  tableName: string
-) => {
-  const schemaName = schemaNamePassed || 'apflora'
+export default async (store: Object, tableName: string) => {
   // only fetch if not yet fetched
   if (!store.loading.includes(tableName) && store.table[tableName].size === 0) {
     const tableMetadata = tables.find(t => t.table === tableName)
@@ -29,11 +22,10 @@ export default async (
     }
     store.loading.push(tableName)
     const url = `/${tableName}`
-    let baseURL = schemaName === 'apflora' ? apiBaseUrl : apiBaseUrlBeob
 
     let dataFromDb
     try {
-      const dataFromDbObject = await axios.get(url, { baseURL })
+      const dataFromDbObject = await axios.get(url)
       dataFromDb = dataFromDbObject.data
     } catch (error) {
       store.listError(error)

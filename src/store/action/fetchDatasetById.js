@@ -3,17 +3,13 @@ import axios from 'axios'
 
 import tables from '../../modules/tables'
 import recordValuesForWhichTableDataWasFetched from '../../modules/recordValuesForWhichTableDataWasFetched'
-import apiBaseUrl from '../../modules/apiBaseUrl'
-import apiBaseUrlBeob from '../../modules/apiBaseUrlBeob'
 
 export default async ({
   store,
-  schemaName,
   tableName,
   id,
 }: {
   store: Object,
-  schemaName: string,
   tableName: string,
   id: number | string,
 }): any => {
@@ -27,7 +23,6 @@ export default async ({
       new Error('action fetchDatasetById: id must be passed')
     )
   }
-  schemaName = schemaName || 'apflora' // eslint-disable-line no-param-reassign
 
   const table = tables.find(t => t.table === tableName)
   if (!table) {
@@ -57,11 +52,10 @@ export default async ({
     value: id,
   })
   const url = `/${tableName}?${idField}=eq.${id}`
-  const baseURL = schemaName === 'apflora' ? apiBaseUrl : apiBaseUrlBeob
 
   let result
   try {
-    result = await axios.get(url, { baseURL })
+    result = await axios.get(url)
   } catch (error) {
     // remove setting that prevents loading of this value
     valuesForWhichTableDataWasFetched[tableName][

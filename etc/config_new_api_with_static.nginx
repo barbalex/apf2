@@ -1,7 +1,7 @@
 # inspired by: https://gist.github.com/apollolm/23cdf72bd7db523b4e1c
 # HTTP — redirect all traffic to HTTPS
 
-upstream http_backend {
+upstream http_backend_apflora {
   server localhost:4001;
 }
 upstream http_frontend {
@@ -156,7 +156,7 @@ server {
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-NginX-Proxy true;
-        proxy_pass http://http_backend;
+        proxy_pass http://http_backend_apflora;
         proxy_ssl_session_reuse off;
         proxy_set_header Host $http_host;
         proxy_cache_bypass $http_upgrade;
