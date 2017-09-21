@@ -1,6 +1,7 @@
 CREATE OR REPLACE FUNCTION apflora.qk2_tpop_ohne_massnber(apid integer, berichtjahr integer)
   RETURNS table("ProjId" integer, "ApArtId" integer, hw text, url text[]) AS
   $$
+  -- 4. "TPop ohne verlangten Massnahmen-Bericht im Berichtjahr" ermitteln und in Qualitätskontrollen auflisten:
   SELECT DISTINCT
     1 AS "ProjId",
     apflora.pop."ApArtId",
@@ -14,6 +15,7 @@ CREATE OR REPLACE FUNCTION apflora.qk2_tpop_ohne_massnber(apid integer, berichtj
   WHERE
     apflora.tpop."TPopApBerichtRelevant" = 1
     AND apflora.tpop."TPopId" IN (
+      -- 1. "TPop mit Ansiedlungen/Ansaaten vor dem Berichtjahr" ermitteln:
       SELECT DISTINCT
         apflora.tpopmassn."TPopId"
       FROM
@@ -23,6 +25,7 @@ CREATE OR REPLACE FUNCTION apflora.qk2_tpop_ohne_massnber(apid integer, berichtj
         AND apflora.tpopmassn."TPopMassnJahr" < $2
     )
     AND apflora.tpop."TPopId" IN (
+      -- 2. "TPop mit Kontrolle im Berichtjahr" ermitteln:
       SELECT DISTINCT
         apflora.tpopkontr."TPopId"
       FROM
@@ -32,12 +35,13 @@ CREATE OR REPLACE FUNCTION apflora.qk2_tpop_ohne_massnber(apid integer, berichtj
         AND apflora.tpopkontr."TPopKontrJahr" = $2
     )
     AND apflora.tpop."TPopId" NOT IN (
+      -- 3. "TPop mit TPopMassnBer im Berichtjahr" ermitteln:
       SELECT DISTINCT
-            apflora.tpopmassnber."TPopId"
-          FROM
-            apflora.tpopmassnber
-          WHERE
-            apflora.tpopmassnber."TPopMassnBerJahr" = $2
+        apflora.tpopmassnber."TPopId"
+      FROM
+        apflora.tpopmassnber
+      WHERE
+        apflora.tpopmassnber."TPopMassnBerJahr" = $2
     )
     AND apflora.pop."ApArtId" = $1
   $$

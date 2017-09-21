@@ -32,7 +32,7 @@ const fetchQk = async ({
     // Population: ohne verlangten Pop-Bericht im Berichtjahr
     { type: 'function', name: 'qk2_pop_ohne_popber', berichtjahr },
     // Population: ohne verlangten Pop-Massn-Bericht im Berichtjahr
-    { type: 'query', name: 'qk2PopOhnePopmassnber', berichtjahr },
+    { type: 'function', name: 'qk2_pop_ohne_popmassnber', berichtjahr },
     // Population: Entsprechen Koordinaten der Pop einer der TPops?
     { type: 'view', name: 'v_qk2_pop_koordentsprechenkeinertpop' },
     // Population: Status ist ansaatversuch,

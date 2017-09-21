@@ -1,6 +1,7 @@
 CREATE OR REPLACE FUNCTION apflora.qk2_tpop_ohne_tpopber(apid integer, berichtjahr integer)
   RETURNS table("ProjId" integer, "ApArtId" integer, hw text, url text[]) AS
   $$
+  -- 3. "TPop ohne verlangten TPop-Bericht im Berichtjahr" ermitteln und in Qualitätskontrollen auflisten:
   SELECT DISTINCT
     apflora.ap."ProjId",
     apflora.pop."ApArtId",
@@ -17,6 +18,7 @@ CREATE OR REPLACE FUNCTION apflora.qk2_tpop_ohne_tpopber(apid integer, berichtja
   WHERE
     apflora.tpop."TPopApBerichtRelevant" = 1
     AND apflora.tpop."TPopId" IN (
+      -- 1. "TPop mit Kontrolle im Berichtjahr" ermitteln:
       SELECT DISTINCT
         apflora.tpopkontr."TPopId"
       FROM
@@ -26,6 +28,7 @@ CREATE OR REPLACE FUNCTION apflora.qk2_tpop_ohne_tpopber(apid integer, berichtja
         AND apflora.tpopkontr."TPopKontrJahr" = $2
     )
     AND apflora.tpop."TPopId" NOT IN (
+      -- 2. "TPop mit TPopBer im Berichtjahr" ermitteln:
       SELECT DISTINCT
         apflora.tpopber."TPopId"
       FROM
