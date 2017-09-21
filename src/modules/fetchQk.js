@@ -82,9 +82,9 @@ const fetchQk = async ({
     // tpop mit mehrdeutiger Kombination von PopNr und TPopNr
     { type: 'view', name: 'v_qk2_tpop_popnrtpopnrmehrdeutig' },
     // TPop ohne verlangten TPop-Bericht im Berichtjahr
-    { type: 'query', name: 'qk2TpopOhneTpopber', berichtjahr },
+    { type: 'function', name: 'qk2_tpop_ohne_tpopber', berichtjahr },
     // TPop ohne verlangten TPop-Massn.-Bericht im Berichtjahr
-    { type: 'query', name: 'qk2TpopOhneMassnber', berichtjahr },
+    { type: 'function', name: 'qk2_tpop_ohne_massnber', berichtjahr },
     // Teilpopulation mit Status "Ansaatversuch", bei denen in einer Kontrolle eine Anzahl festgestellt wurde:
     {
       type: 'view',
@@ -142,14 +142,16 @@ const fetchQk = async ({
     { type: 'view', name: 'v_qk2_assozart_ohneart' },
   ]
   let nrOfMessages = 0
-  const urls = qkTypes.map(t => {
+
+  const queryQkTypes = qkTypes.filter(q => q.type !== 'function')
+  const queryUrls = queryQkTypes.map(t => {
     if (t.berichtjahr) {
       return `/${t.name}?ApArtId=eq.${apArtId}&Berichtjahr=eq.${t.berichtjahr}`
     } else {
       return `/${t.name}?ApArtId=eq.${apArtId}`
     }
   })
-  const dataFetchingPromises = urls.map(dataUrl =>
+  const dataFetchingPromisesForQueries = queryUrls.map(dataUrl =>
     axios
       .get(dataUrl)
       .then(res => {
@@ -174,8 +176,38 @@ const fetchQk = async ({
       .catch(e => e)
   )
 
+  const functionQkTypes = qkTypes.filter(q => q.type === 'function')
+  const functionUrls = functionQkTypes.map(t => `/rpc/${t.name}`)
+  const dataFetchingPromisesForFunctions = functionUrls.map(dataUrl =>
+    axios
+      .post(dataUrl, { apid: apArtId, berichtjahr })
+      .then(res => {
+        if (res.data.length > 0) {
+          const hw = res.data[0].hw
+          let url = []
+          res.data.forEach(d => {
+            if (isArray(d.url[0])) {
+              url = url.concat(d.url)
+            } else {
+              url.push(d.url)
+            }
+          })
+          const newMessages = { hw, url }
+
+          // add new messages to existing
+          addMessages(newMessages)
+          nrOfMessages += 1
+        }
+        return null
+      })
+      .catch(e => e)
+  )
+
   try {
-    await Promise.all(dataFetchingPromises)
+    await Promise.all([
+      ...dataFetchingPromisesForQueries,
+      ...dataFetchingPromisesForFunctions,
+    ])
   } catch (error) {
     store.listError(error)
     // TODO: close loading indicator
