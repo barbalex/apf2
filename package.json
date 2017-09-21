@@ -10,7 +10,7 @@
   "license": "MIT",
   "private": true,
   "devDependencies": {
-    "flow-bin": "0.54.1",
+    "flow-bin": "0.55.0",
     "mobx-react-devtools": "4.2.15",
     "react-scripts": "1.0.13"
   },
