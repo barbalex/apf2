@@ -17,4 +17,3 @@ npm-debug.log
 *.db
 
 postgrest.conf
-postgrestBeob.conf
