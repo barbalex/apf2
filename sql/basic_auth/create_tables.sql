@@ -100,3 +100,13 @@ begin
   return result;
 end;
 $$;
+
+-- permissions that allow anonymous users to create accounts
+-- and attempt to log in
+create role anon;
+create role authenticator noinherit;
+grant anon to authenticator;
+
+grant usage on schema public, basic_auth to anon;
+grant select on table pg_authid, basic_auth.users to anon;
+grant execute on function login(text,text) to anon;
