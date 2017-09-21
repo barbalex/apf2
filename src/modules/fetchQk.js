@@ -4,7 +4,7 @@ import isArray from 'lodash/isArray'
 import isFinite from 'lodash/isFinite'
 
 import isPointInsidePolygon from './isPointInsidePolygon'
-import appBaseUrl from './appBaseUrl'
+import staticFilesBaseUrl from './staticFilesBaseUrl'
 
 const fetchQk = async ({
   store,
@@ -191,8 +191,8 @@ const fetchQk = async ({
   let tpops = resultTpopKoord.data
   let resultKtZh
   try {
-    const baseURL = appBaseUrl
-    resultKtZh = await axios.get('/static-files/ktZh.json', { baseURL })
+    const baseURL = staticFilesBaseUrl
+    resultKtZh = await axios.get('/ktZh.json', { baseURL })
   } catch (error) {
     store.listError(error)
     setLoading(false)

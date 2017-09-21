@@ -1,11 +1,11 @@
 // @flow
 import axios from 'axios'
-import appBaseUrl from '../../modules/appBaseUrl'
+import staticFilesBaseUrl from '../../modules/staticFilesBaseUrl'
 
 export default (store: Object): void => {
   if (!store.map.detailplaene) {
-    const baseURL = appBaseUrl
-    const url = `/static-files/detailplaeneWgs84.json`
+    const baseURL = staticFilesBaseUrl
+    const url = `/detailplaeneWgs84.json`
     axios
       .get(url, { baseURL })
       .then(({ data }) => {
