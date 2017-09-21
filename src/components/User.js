@@ -78,7 +78,7 @@ const enhance = compose(
       }
     },
   }),
-  observer,
+  observer
 )
 
 const User = ({
@@ -109,6 +109,8 @@ const User = ({
   const actions = [
     <FlatButton label="anmelden" primary={true} onTouchTap={fetchLogin} />,
   ]
+  // TODO Authorization:
+  // open depends on store.user.jwt
   return (
     <Dialog
       title="Anmeldung"

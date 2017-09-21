@@ -50,10 +50,6 @@ import './index.css'
 
 registerServiceWorker()
 
-axios.defaults.baseURL = apiBaseUrl
-// TODO: add jwt key here
-//axios.defaults.headers.common['Authorization'] = "MY-API-KEY"
-
 // prevent changing values in number inputs when scrolling pages!
 // see: http://stackoverflow.com/a/38589039/712005
 document.addEventListener('mousewheel', function(event) {
@@ -82,6 +78,8 @@ const theme = Object.assign({}, uiTheme, {
 
 // make store accessible in dev
 window.app = app
+
+axios.defaults.baseURL = apiBaseUrl
 
 store.setLoginFromIdb()
 
