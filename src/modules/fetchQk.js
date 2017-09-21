@@ -30,7 +30,7 @@ const fetchQk = async ({
     // Population: mit mehrdeutiger Nr
     { type: 'view', name: 'v_qk2_pop_popnrmehrdeutig' },
     // Population: ohne verlangten Pop-Bericht im Berichtjahr
-    { type: 'query', name: 'qk2PopOhnePopber', berichtjahr },
+    { type: 'function', name: 'qk2_pop_ohne_popber', berichtjahr },
     // Population: ohne verlangten Pop-Massn-Bericht im Berichtjahr
     { type: 'query', name: 'qk2PopOhnePopmassnber', berichtjahr },
     // Population: Entsprechen Koordinaten der Pop einer der TPops?
