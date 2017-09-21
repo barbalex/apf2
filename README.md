@@ -167,8 +167,8 @@ Serverseitig wird sie mit [node.js](//nodejs.org) gesteuert. Als Datenbank dient
 - beob: benutzte Fremddaten, v.a. Beobachtungen von Info Spezies und der FNS sowie Arteigenschaften
 
 Die Anwendung ist zweigeteilt:
-- das backend bietet die API (Daten) auf api.apflora.ch an
-- das frontend / die App bzw. die Benutzeroberfläche ist über [apflora.ch](//apflora.ch) erreichbar
+- das Backend bietet die API (Daten) auf [apflora.ch/api](//apflora.ch/api) an
+- das Frontend / die App bzw. die Benutzeroberfläche ist über [apflora.ch](//apflora.ch) erreichbar
 
 Die wichtigsten verwendeten Technologien sind:
 
