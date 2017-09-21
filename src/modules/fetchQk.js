@@ -142,12 +142,13 @@ const fetchQk = async ({
     { type: 'view', name: 'v_qk2_assozart_ohneart' },
   ]
   let nrOfMessages = 0
-  const urls = qkTypes.map(
-    t =>
-      `/${t.type === 'view' ? 'qkView/' : ''}${t.name}/${apArtId}${t.berichtjahr
-        ? `/${t.berichtjahr}`
-        : ''}`
-  )
+  const urls = qkTypes.map(t => {
+    if (t.berichtjahr) {
+      return `/${t.name}?ApArtId=eq.${apArtId}&Berichtjahr=eq.${t.berichtjahr}`
+    } else {
+      return `/${t.name}?ApArtId=eq.${apArtId}`
+    }
+  })
   const dataFetchingPromises = urls.map(dataUrl =>
     axios
       .get(dataUrl)
