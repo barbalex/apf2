@@ -35,6 +35,8 @@ create constraint trigger ensure_user_role_exists
   execute procedure basic_auth.check_role_exists();
 
 create extension if not exists pgcrypto;
+-- this does not work on windows
+-- need to run pgjwt.sql
 create extension if not exists pgjwt;
 
 create or replace function basic_auth.encrypt_pass()
@@ -83,9 +85,9 @@ CREATE TYPE basic_auth.jwt_token AS (
 
 -- Login function which takes an user name and password
 -- and returns JWT if the credentials match a user in the internal table
+--create type login_return as (token basic_auth.jwt_token, role text);
 create or replace function
 apflora.login(name text, pass text) returns basic_auth.jwt_token
-  language plpgsql
   as $$
 declare
   _role name;
@@ -97,7 +99,7 @@ begin
     raise invalid_password using message = 'invalid user or password';
   end if;
 
-  select sign(
+  select basic_auth.sign(
       row_to_json(r), current_setting('app.jwt_secret')
     ) as token
     from (
@@ -107,7 +109,7 @@ begin
     into result;
   return result;
 end;
-$$;
+$$ language plpgsql;
 
 -- permissions that allow anonymous users to create accounts
 -- and attempt to log in

@@ -11,6 +11,6 @@ export default (store: Object): void => {
       { name: 'readOnly' }
     ),
     // TODO: add freiwillig, computed from role
-    jwt: null,
+    token: null,
   })
 }

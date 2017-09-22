@@ -14,13 +14,14 @@ export default (store: Object): void =>
     .then(users => {
       // TODO Authorization
       // fetch jwt key
-      //axios.defaults.headers.common['Authorization'] = "jwt key"
       // read role
-      if (users[0] && users[0].name && users[0].role && users[0].jwt) {
+      if (users[0] && users[0].name && users[0].role && users[0].token) {
         store.user.name = users[0].name
         store.user.role = users[0].role
-        store.user.role = users[0].jwt
-        axios.defaults.headers.common['Authorization'] = users[0].jwt
+        store.user.token = users[0].token
+        axios.defaults.headers.common['Authorization'] = {
+          token: users[0].token,
+        }
         store.messages.fetch()
       } else {
         store.logout()
