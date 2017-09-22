@@ -15,11 +15,7 @@ import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 import shouldUpdate from 'recompose/shouldUpdate'
 
-const StyledAppBar = styled(AppBar)`
-  @media print {
-    display: none !important;
-  }
-`
+const StyledAppBar = styled(AppBar)`@media print {display: none !important;}`
 const Button = styled(FlatButton)`
   color: ${props =>
     props['data-visible']
@@ -43,9 +39,7 @@ const MenuDiv = styled.div`
     padding-top: 4px !important;
   }
 `
-const StyledMoreVertIcon = styled(MoreVertIcon)`
-  color: white !important;
-`
+const StyledMoreVertIcon = styled(MoreVertIcon)`color: white !important;`
 const iconMenuAnchorOrigin = { horizontal: 'left', vertical: 'bottom' }
 const iconMenuTargetOrigin = { horizontal: 'left', vertical: 'top' }
 const iconMenuStyle = { paddingLeft: 10 }
@@ -83,10 +77,6 @@ const enhance = compose(
       }
       store.setUrlQueryValue('projekteTabs', projekteTabs)
     },
-    ueberApfloraChOnTouchTap: props => () =>
-      window.open('https://github.com/FNSKtZH/apflora/wiki'),
-    reportIssue: props => () =>
-      window.open('https://github.com/barbalex/apf2/issues'),
     watchVideos: props => () =>
       window.open(
         'https://www.youtube.com/playlist?list=PLTz8Xt5SOQPS-dbvpJ_DrB4-o3k3yj09J'
@@ -112,9 +102,7 @@ const MyAppBar = ({
   onClickButtonDaten2,
   onClickButtonKarte,
   onClickButtonExporte,
-  ueberApfloraChOnTouchTap,
   showDeletedDatasets,
-  reportIssue,
   watchVideos,
 }: {
   store: Object,
@@ -125,9 +113,7 @@ const MyAppBar = ({
   onClickButtonDaten2: () => void,
   onClickButtonKarte: () => void,
   onClickButtonExporte: () => void,
-  ueberApfloraChOnTouchTap: () => void,
   showDeletedDatasets: () => void,
-  reportIssue: () => void,
   watchVideos: () => void,
 }) => {
   const projekteTabs = store.urlQuery.projekteTabs
@@ -171,12 +157,13 @@ const MyAppBar = ({
             data-visible={karteIsVisible}
             onClick={onClickButtonKarte}
           />
-          {exporteIsActive &&
+          {exporteIsActive && (
             <Button
               label="Exporte"
               data-visible={exporteIsVisible}
               onClick={onClickButtonExporte}
-            />}
+            />
+          )}
           <IconMenu
             iconButtonElement={
               <IconButton>
@@ -193,16 +180,8 @@ const MyAppBar = ({
               disabled={store.deletedDatasets.length === 0}
             />
             <MenuItem
-              primaryText="über apflora.ch"
-              onTouchTap={ueberApfloraChOnTouchTap}
-            />
-            <MenuItem
               primaryText="Video-Anleitungen"
               onTouchTap={watchVideos}
-            />
-            <MenuItem
-              primaryText="Fehler und Wünsche melden"
-              onTouchTap={reportIssue}
             />
             <MenuItem
               primaryText={`${store.user.name} abmelden`}
