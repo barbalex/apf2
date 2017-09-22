@@ -21,7 +21,9 @@ export default async (store: Object): Promise<void> => {
     } catch (error) {
       store.listError(error)
     }
-    // $FlowIssue
+    if (!result || !result.data) {
+      return []
+    }
     return result.data
   }
   const [messages, userMessages] = await Promise.all([

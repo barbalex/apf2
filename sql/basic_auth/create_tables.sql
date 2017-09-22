@@ -9,7 +9,8 @@ CREATE TABLE IF NOT EXISTS basic_auth.users (
   -- allow other attributes to be null
   -- so names and roles can be set beforehand by topos
   email text DEFAULT NULL check ( email ~* '^.+@.+\..+$' ),
-  pass text DEFAULT NULL check (length(pass) < 512)
+  pass text DEFAULT NULL check (length(pass) < 512),
+  block boolean DEFAULT 'false'
 );
 
 -- use a trigger to manually enforce the role being a foreign key to actual
@@ -37,7 +38,7 @@ create constraint trigger ensure_user_role_exists
 create extension if not exists pgcrypto;
 -- this does not work on windows
 -- need to run pgjwt.sql
-create extension if not exists pgjwt;
+--create extension if not exists pgjwt;
 
 create or replace function basic_auth.encrypt_pass()
   returns trigger
@@ -71,6 +72,8 @@ begin
   select role from basic_auth.users
    where users.name = user_role.name
      and users.pass = crypt(user_role.pass, users.pass)
+     -- block blocked users
+     and users.block = 'false'
   );
 end;
 $$;

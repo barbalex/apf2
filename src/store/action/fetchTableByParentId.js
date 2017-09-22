@@ -57,7 +57,7 @@ export default async (
     )
     store.listError(error)
   }
-  // $FlowIssue
-  const { data } = result
-  store.writeToStore({ data, table: tableName, field: idField })
+  if (result && result.data) {
+    store.writeToStore({ data: result.data, table: tableName, field: idField })
+  }
 }
