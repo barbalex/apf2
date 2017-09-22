@@ -4,6 +4,6 @@ import app from 'ampersand-app'
 export default (store: Object): void => {
   store.user.name = ''
   store.user.role = null
-  store.user.jwt = null
+  store.user.token = null
   app.db.currentUser.clear()
 }

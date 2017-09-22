@@ -12,15 +12,13 @@ export default (store: Object): void =>
   app.db.currentUser
     .toArray()
     .then(users => {
-      // TODO Authorization
-      // fetch jwt key
-      // read role
       if (users[0] && users[0].name && users[0].role && users[0].token) {
-        store.user.name = users[0].name
-        store.user.role = users[0].role
-        store.user.token = users[0].token
+        const { name, role, token } = users[0]
+        store.user.name = name
+        store.user.role = role
+        store.user.token = token
         axios.defaults.headers.common['Authorization'] = {
-          token: users[0].token,
+          token,
         }
         store.messages.fetch()
       } else {

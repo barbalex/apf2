@@ -11,6 +11,8 @@ export default (store: Object): void => {
       { name: 'readOnly' }
     ),
     // TODO: add freiwillig, computed from role
-    token: null,
+    // give token a temporary value to prevent login form from opening
+    // before login has been fetched
+    token: 'none',
   })
 }

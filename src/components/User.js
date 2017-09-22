@@ -116,7 +116,7 @@ const User = ({
   return (
     <Dialog
       title="Anmeldung"
-      open={!store.user.jwt}
+      open={!store.user.token}
       actions={actions}
       contentStyle={{
         maxWidth: '400px',
