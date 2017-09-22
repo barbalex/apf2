@@ -4,15 +4,21 @@ import app from 'ampersand-app'
 
 export default (store: Object, name: string, password: string): any => {
   store.loading.push('user')
+  // TODO Authorization:
+  // post to rpc/login
   axios
-    .get(`/user?UserName=eq.${name}&Passwort=eq.${password}`)
+    //.get(`/user?UserName=eq.${name}&Passwort=eq.${password}`)
+    .post('/rpc/login', { name, pass: password })
     .then(({ data, status, statusText }) => {
-      if (data && data.length > 0) {
-        const readOnly = data[0].NurLesen === -1
-        store.user.readOnly = readOnly
+      console.log('fetchLogin: data from posting to /rpc/login:', data)
+      console.log('fetchLogin: status from posting to /rpc/login:', status)
+      if (data) {
+        const { name, role, token } = data
         store.user.name = name
+        store.user.jwt = token
+        store.user.role = role
         app.db.currentUser.clear()
-        app.db.currentUser.put({ name, readOnly })
+        app.db.currentUser.put({ name, jwt: token, role })
         store.messages.fetch()
       } else if (status !== 200) {
         // somehow fetchLogin sometimes gets called 3 times consecutively

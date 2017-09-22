@@ -35,10 +35,12 @@ const enhance = compose(
       const name = namePassed || props.name
       const password = passwordPassed || props.password
       if (!name) {
-        return changeNameErrorText('Bitte Namen erfassen')
+        return changeNameErrorText(
+          'Geben Sie den Ihnen zugeteilten Benutzernamen ein'
+        )
       }
       if (!password) {
-        return changePasswordErrorText('Bitte Passwort erfassen')
+        return changePasswordErrorText('Bitte Passwort eingeben')
       }
       store.fetchLogin(name, password)
       setTimeout(() => {
@@ -56,7 +58,7 @@ const enhance = compose(
       const name = e.target.value
       changeName(name)
       if (!name) {
-        changeNameErrorText('Bitte Namen erfassen')
+        changeNameErrorText('Geben Sie den Ihnen zugeteilten Benutzernamen ein')
       } else if (password) {
         fetchLogin(name, password)
       }
@@ -72,7 +74,7 @@ const enhance = compose(
       const password = e.target.value
       changePassword(password)
       if (!password) {
-        changePasswordErrorText('Bitte Passwort erfassen')
+        changePasswordErrorText('Bitte Passwort eingeben')
       } else if (name) {
         fetchLogin(name, password)
       }
@@ -114,7 +116,7 @@ const User = ({
   return (
     <Dialog
       title="Anmeldung"
-      open={!store.user.name}
+      open={!store.user.jwt}
       actions={actions}
       contentStyle={{
         maxWidth: '400px',

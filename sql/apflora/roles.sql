@@ -24,4 +24,4 @@ alter default privileges in schema apflora
 -- need to enforce freiwilligen-kontrollen in ui
 create role apflora_freiwillig;
 grant apflora_reader to apflora_freiwillig;
-grant all on tpopkontr, tpopkontrzaehl to apflora_freiwillig;
+grant all on apflora.tpopkontr, apflora.tpopkontrzaehl to apflora_freiwillig;

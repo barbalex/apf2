@@ -35,11 +35,12 @@ create constraint trigger ensure_user_role_exists
   execute procedure basic_auth.check_role_exists();
 
 create extension if not exists pgcrypto;
+create extension if not exists pgjwt;
 
-create or replace function
-basic_auth.encrypt_pass() returns trigger
-  language plpgsql
-  as $$
+create or replace function basic_auth.encrypt_pass()
+  returns trigger
+  language plpgsql as
+$$
 begin
   if tg_op = 'INSERT' or new.pass <> old.pass then
     new.pass = crypt(new.pass, gen_salt('bf'));
@@ -58,43 +59,50 @@ create trigger encrypt_pass
 
 -- Helper to check a password against the encrypted column
 -- It returns the database role for a user
--- if the email and password are correct
+-- if the name and password are correct
 create or replace function
-basic_auth.user_role(email text, pass text) returns name
+basic_auth.user_role(name text, pass text) returns name
   language plpgsql
   as $$
 begin
   return (
   select role from basic_auth.users
-   where users.email = user_role.email
+   where users.name = user_role.name
      and users.pass = crypt(user_role.pass, users.pass)
   );
 end;
 $$;
 
--- Login function which takes an email address and password
+-- run this once
+ALTER DATABASE apflora SET "app.jwt_secret" TO '!!secret!!';
+
+-- stored procedure that returns the token
+CREATE TYPE basic_auth.jwt_token AS (
+  token text
+);
+
+-- Login function which takes an user name and password
 -- and returns JWT if the credentials match a user in the internal table
 create or replace function
-login(email text, pass text) returns basic_auth.jwt_token
+apflora.login(name text, pass text) returns basic_auth.jwt_token
   language plpgsql
   as $$
 declare
   _role name;
   result basic_auth.jwt_token;
 begin
-  -- check email and password
-  select basic_auth.user_role(email, pass) into _role;
+  -- check name and password
+  select basic_auth.user_role(name, pass) into _role;
   if _role is null then
     raise invalid_password using message = 'invalid user or password';
   end if;
 
-  -- TODO: REPLACE SECRET WITH BETTER OPTION
   select sign(
-      row_to_json(r), 'mysecret'
+      row_to_json(r), current_setting('app.jwt_secret')
     ) as token
     from (
-      select _role as role, login.email as email,
-         extract(epoch from now())::integer + 60*60 as exp
+      select _role as role, login.name as name,
+         extract(epoch from now())::integer + 60*60*24*30 as exp
     ) r
     into result;
   return result;
@@ -109,4 +117,4 @@ grant anon to authenticator;
 
 grant usage on schema public, basic_auth to anon;
 grant select on table pg_authid, basic_auth.users to anon;
-grant execute on function login(text,text) to anon;
+grant execute on function apflora.login(text,text) to anon;

@@ -1,15 +1,16 @@
 // @flow
-import { extendObservable } from 'mobx'
+import { extendObservable, computed } from 'mobx'
 
 export default (store: Object): void => {
   // name set to prevent Login Dialog from appearing before setLoginFromIdb has fetched from idb
   extendObservable(store.user, {
     name: 'temporaryValue',
     role: null,
-    // TODO Authorization:
-    // make this computed, depending on role
-    readOnly: true,
+    readOnly: computed(
+      () => !store.user.role || store.user.role === 'apflora_reader',
+      { name: 'readOnly' }
+    ),
     // TODO: add freiwillig, computed from role
-    // TODO: add jwt
+    jwt: null,
   })
 }
