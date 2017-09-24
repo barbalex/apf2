@@ -47,9 +47,7 @@ const MyRadioButtonGroup = ({
 
   return (
     <Container>
-      <StyledLabel>
-        {label}
-      </StyledLabel>
+      <StyledLabel>{label}</StyledLabel>
       <RadioButtonGroup
         name={fieldName}
         valueSelected={valueSelected}
