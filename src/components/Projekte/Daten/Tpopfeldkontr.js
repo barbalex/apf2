@@ -45,8 +45,8 @@ const Section = styled.div`
 `
 const FormContainer = styled.div`
   padding: 10px;
-  overflow: auto !important;
-  height: 100%;
+  overflow-y: auto !important;
+  height: calc(100% - 20px);
   column-width: ${props =>
     props['data-width'] > 2 * constants.columnWidth
       ? `${constants.columnWidth}px`
