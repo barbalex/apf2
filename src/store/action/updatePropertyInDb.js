@@ -26,8 +26,8 @@ export default async (
     value = +value
   }
 
-  // convert undefined to null
-  if (value === undefined) {
+  // convert undefined and '' to null
+  if (value === undefined || value === '') {
     value = null
   }
 
