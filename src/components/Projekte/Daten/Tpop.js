@@ -100,6 +100,7 @@ class Tpop extends Component {
             popover="Dieses Feld möglichst immer ausfüllen"
           />
           <Status
+            key={`${activeDataset.row.TPopId}status`}
             tree={tree}
             apJahr={apJahr}
             herkunftFieldName="TPopHerkunft"
