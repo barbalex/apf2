@@ -7,7 +7,7 @@ import compose from 'recompose/compose'
 import RadioButtonGroup from '../../shared/RadioButtonGroup'
 import TextField from '../../shared/TextField'
 import FormTitle from '../../shared/FormTitle'
-import SelectField from '../../shared/SelectField'
+import AutoComplete from '../../shared/Autocomplete'
 
 const Container = styled.div`
   height: 100%;
@@ -19,6 +19,25 @@ const FieldsContainer = styled.div`
   overflow: auto !important;
 `
 
+const getZaehleinheitName = ({
+  store,
+  tree,
+}: {
+  store: Object,
+  tree: Object,
+}) => {
+  const { zaehleinheitWerte } = store.dropdownList
+  const { activeDataset } = tree
+  let name = ''
+  if (activeDataset.row.Zaehleinheit && zaehleinheitWerte.length > 0) {
+    const zaehleinheit = zaehleinheitWerte.find(
+      a => a.value === activeDataset.row.Zaehleinheit
+    )
+    if (zaehleinheit && zaehleinheit.label) return zaehleinheit.label
+  }
+  return name
+}
+
 const enhance = compose(inject('store'), observer)
 
 const Tpopkontrzaehl = ({ store, tree }: { store: Object, tree: Object }) => {
@@ -28,15 +47,18 @@ const Tpopkontrzaehl = ({ store, tree }: { store: Object, tree: Object }) => {
     <Container>
       <FormTitle tree={tree} title="Zählung" />
       <FieldsContainer>
-        <SelectField
+        <AutoComplete
+          key={`${activeDataset.row.TPopKontrId}Zaehleinheit`}
           tree={tree}
           label="Einheit"
           fieldName="Zaehleinheit"
-          value={activeDataset.row.Zaehleinheit}
+          valueText={getZaehleinheitName({ store, tree })}
           errorText={activeDataset.valid.Zaehleinheit}
           dataSource={store.dropdownList.zaehleinheitWerte}
-          valueProp="value"
-          labelProp="label"
+          dataSourceConfig={{
+            value: 'value',
+            text: 'label',
+          }}
           updatePropertyInDb={store.updatePropertyInDb}
         />
         <TextField

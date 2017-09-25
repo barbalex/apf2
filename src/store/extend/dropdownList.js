@@ -158,10 +158,6 @@ export default (store: Object): void => {
           value: el.ZaehleinheitCode,
           label: el.ZaehleinheitTxt,
         }))
-        zaehleinheitWerte.unshift({
-          value: null,
-          label: '',
-        })
         return zaehleinheitWerte
       },
       { name: 'dropdownListZaehleinheitWerte' }
