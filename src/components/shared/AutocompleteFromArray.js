@@ -74,6 +74,7 @@ const MyAutocomplete = ({
   searchTextWasChanged: boolean,
   changeSearchTextWasChanged: () => void,
 }) => {
+  // console.log('AutoCompleteFromArray: dataSource:', dataSource)
   let searchTextToUse = searchText
   if (!searchText && valueText && !searchTextWasChanged) {
     searchTextToUse = valueText

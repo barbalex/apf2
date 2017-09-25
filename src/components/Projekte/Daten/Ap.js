@@ -8,7 +8,6 @@ import withProps from 'recompose/withProps'
 import AutoComplete from '../../shared/Autocomplete'
 import RadioButtonGroupWithInfo from '../../shared/RadioButtonGroupWithInfo'
 import TextField from '../../shared/TextField'
-import SelectField from '../../shared/SelectField'
 import FormTitle from '../../shared/FormTitle'
 
 const Container = styled.div`
@@ -43,6 +42,17 @@ const LabelPopoverContentRow = styled(LabelPopoverRow)`
 `
 const LabelPopoverRowColumnLeft = styled.div`width: 110px;`
 const LabelPopoverRowColumnRight = styled.div`padding-left: 5px;`
+
+const getBearbName = ({ store, tree }: { store: Object, tree: Object }) => {
+  const { adressen } = store.dropdownList
+  const { activeDataset } = tree
+  let name = ''
+  if (activeDataset.row.ApBearb && adressen.length > 0) {
+    const adresse = adressen.find(a => a.AdrId === activeDataset.row.ApBearb)
+    if (adresse && adresse.AdrName) return adresse.AdrName
+  }
+  return name
+}
 
 const enhance = compose(
   inject('store'),
@@ -175,16 +185,19 @@ const Ap = ({
           label="Stand Umsetzung"
         />
       </FieldContainer>
-      <SelectField
+      <AutoComplete
+        key={`${activeDataset.row.TPopKontrId}ApBearb`}
         tree={tree}
         label="Verantwortlich"
         fieldName="ApBearb"
-        value={activeDataset.row.ApBearb}
+        valueText={getBearbName({ store, tree })}
         errorText={activeDataset.valid.ApBearb}
         dataSource={store.dropdownList.adressen}
-        valueProp="AdrId"
-        labelProp="AdrName"
-        updatePropertyInDb={updatePropertyInDb}
+        dataSourceConfig={{
+          value: 'AdrId',
+          text: 'AdrName',
+        }}
+        updatePropertyInDb={store.updatePropertyInDb}
       />
       <FieldContainer>
         <TextField

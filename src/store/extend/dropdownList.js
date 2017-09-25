@@ -7,17 +7,7 @@ import filter from 'lodash/filter'
 export default (store: Object): void => {
   extendObservable(store.dropdownList, {
     adressen: computed(
-      () => {
-        const adressen = sortBy(
-          Array.from(store.table.adresse.values()),
-          'AdrName'
-        )
-        adressen.unshift({
-          id: null,
-          AdrName: '',
-        })
-        return adressen
-      },
+      () => sortBy(Array.from(store.table.adresse.values()), 'AdrName'),
       { name: 'dropdownListAdressen' }
     ),
     apUmsetzungen: computed(

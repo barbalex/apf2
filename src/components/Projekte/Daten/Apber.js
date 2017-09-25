@@ -7,8 +7,8 @@ import withState from 'recompose/withState'
 
 import RadioButtonGroup from '../../shared/RadioButtonGroup'
 import TextField from '../../shared/TextField'
+import AutoComplete from '../../shared/Autocomplete'
 import DateFieldWithPicker from '../../shared/DateFieldWithPicker'
-import SelectField from '../../shared/SelectField'
 import FormTitle from '../../shared/FormTitle'
 import constants from '../../../modules/constants'
 
@@ -25,6 +25,17 @@ const FieldsContainer = styled.div`
       ? `${constants.columnWidth}px`
       : 'auto'};
 `
+
+const getBearbName = ({ store, tree }: { store: Object, tree: Object }) => {
+  const { adressen } = store.dropdownList
+  const { activeDataset } = tree
+  let name = ''
+  if (activeDataset.row.JBerBearb && adressen.length > 0) {
+    const adresse = adressen.find(a => a.AdrId === activeDataset.row.JBerBearb)
+    if (adresse && adresse.AdrName) return adresse.AdrName
+  }
+  return name
+}
 
 const enhance = compose(
   inject('store'),
@@ -209,17 +220,19 @@ class Apber extends Component {
             updateProperty={store.updateProperty}
             updatePropertyInDb={store.updatePropertyInDb}
           />
-          <SelectField
+          <AutoComplete
+            key={`${activeDataset.row.TPopKontrId}JBerBearb`}
             tree={tree}
             label="BearbeiterIn"
             fieldName="JBerBearb"
-            value={activeDataset.row.JBerBearb}
+            valueText={getBearbName({ store, tree })}
             errorText={activeDataset.valid.JBerBearb}
             dataSource={store.dropdownList.adressen}
-            valueProp="AdrId"
-            labelProp="AdrName"
+            dataSourceConfig={{
+              value: 'AdrId',
+              text: 'AdrName',
+            }}
             updatePropertyInDb={store.updatePropertyInDb}
-            marginBottom={2}
           />
         </FieldsContainer>
       </Container>

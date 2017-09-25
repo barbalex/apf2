@@ -2,7 +2,6 @@
 import React, { Component } from 'react'
 import { observer, inject } from 'mobx-react'
 import { Tabs, Tab } from 'material-ui/Tabs'
-import AutoCompleteFromArray from '../../shared/AutocompleteFromArray'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
@@ -10,7 +9,8 @@ import withState from 'recompose/withState'
 
 import RadioButtonGroup from '../../shared/RadioButtonGroup'
 import TextField from '../../shared/TextField'
-import SelectField from '../../shared/SelectField'
+import AutoCompleteFromArray from '../../shared/AutocompleteFromArray'
+import AutoComplete from '../../shared/Autocomplete'
 import RadioButtonGroupWithInfo from '../../shared/RadioButtonGroupWithInfo'
 import StringToCopy from '../../shared/StringToCopy'
 import FormTitle from '../../shared/FormTitle'
@@ -74,6 +74,19 @@ const styles = {
   container: {
     height: '100%',
   },
+}
+
+const getBearbName = ({ store, tree }: { store: Object, tree: Object }) => {
+  const { adressen } = store.dropdownList
+  const { activeDataset } = tree
+  let name = ''
+  if (activeDataset.row.TPopKontrBearb && adressen.length > 0) {
+    const adresse = adressen.find(
+      a => a.AdrId === activeDataset.row.TPopKontrBearb
+    )
+    if (adresse && adresse.AdrName) return adresse.AdrName
+  }
+  return name
 }
 
 const enhance = compose(
@@ -159,15 +172,18 @@ class Tpopfeldkontr extends Component {
                     dataSource={tpopkontrTypWerte}
                     updatePropertyInDb={store.updatePropertyInDb}
                   />
-                  <SelectField
+                  <AutoComplete
+                    key={`${activeDataset.row.TPopKontrId}TPopKontrBearb`}
                     tree={tree}
                     label="BearbeiterIn"
                     fieldName="TPopKontrBearb"
-                    value={activeDataset.row.TPopKontrBearb}
+                    valueText={getBearbName({ store, tree })}
                     errorText={activeDataset.valid.TPopKontrBearb}
                     dataSource={store.dropdownList.adressen}
-                    valueProp="AdrId"
-                    labelProp="AdrName"
+                    dataSourceConfig={{
+                      value: 'AdrId',
+                      text: 'AdrName',
+                    }}
                     updatePropertyInDb={store.updatePropertyInDb}
                   />
                   <TextField

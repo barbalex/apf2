@@ -6,9 +6,8 @@ import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 
 import RadioButton from '../../shared/RadioButton'
-import RadioButton3Values from '../../shared/RadioButton3Values'
 import TextField from '../../shared/TextField'
-import SelectField from '../../shared/SelectField'
+import AutoComplete from '../../shared/Autocomplete'
 import StringToCopy from '../../shared/StringToCopy'
 import FormTitle from '../../shared/FormTitle'
 import YearDatePair from '../../shared/YearDatePair'
@@ -27,6 +26,20 @@ const FieldsContainer = styled.div`
       ? `${constants.columnWidth}px`
       : 'auto'};
 `
+const RadioButtonWithTopMargin = styled(RadioButton)`margin-top: 15px;`
+
+const getBearbName = ({ store, tree }: { store: Object, tree: Object }) => {
+  const { adressen } = store.dropdownList
+  const { activeDataset } = tree
+  let name = ''
+  if (activeDataset.row.TPopKontrBearb && adressen.length > 0) {
+    const adresse = adressen.find(
+      a => a.AdrId === activeDataset.row.TPopKontrBearb
+    )
+    if (adresse && adresse.AdrName) return adresse.AdrName
+  }
+  return name
+}
 
 const enhance = compose(
   inject('store'),
@@ -87,15 +100,18 @@ class Tpopfreiwkontr extends Component {
             updateProperty={store.updateProperty}
             updatePropertyInDb={store.updatePropertyInDb}
           />
-          <SelectField
+          <AutoComplete
+            key={`${activeDataset.row.TPopKontrId}TPopKontrBearb`}
             tree={tree}
             label="BearbeiterIn"
             fieldName="TPopKontrBearb"
-            value={activeDataset.row.TPopKontrBearb}
+            valueText={getBearbName({ store, tree })}
             errorText={activeDataset.valid.TPopKontrBearb}
             dataSource={store.dropdownList.adressen}
-            valueProp="AdrId"
-            labelProp="AdrName"
+            dataSourceConfig={{
+              value: 'AdrId',
+              text: 'AdrName',
+            }}
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <RadioButton
@@ -135,7 +151,7 @@ class Tpopfreiwkontr extends Component {
             updateProperty={store.updateProperty}
             updatePropertyInDb={store.updatePropertyInDb}
           />
-          <RadioButton3Values
+          <RadioButtonWithTopMargin
             tree={tree}
             fieldName="TPopKontrJungPflJN"
             label="Auch junge Pflanzen vorhanden"

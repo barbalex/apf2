@@ -1,5 +1,6 @@
 // @flow
 import React from 'react'
+import { toJS } from 'mobx'
 import { observer } from 'mobx-react'
 import AutoComplete from 'material-ui/AutoComplete'
 import compose from 'recompose/compose'
@@ -80,7 +81,7 @@ const MyAutocomplete = ({
   changeSearchTextWasChanged: () => void,
 }) => {
   let searchTextToUse = searchText
-  if (!searchText && valueText && !searchTextWasChanged) {
+  if (!searchText && valueText && isNaN(valueText) && !searchTextWasChanged) {
     searchTextToUse = valueText
   }
   if (searchTextToUse === null) searchTextToUse = ''
@@ -124,7 +125,7 @@ const MyAutocomplete = ({
       hintText={dataSource.length === 0 ? 'lade Daten...' : ''}
       fullWidth
       floatingLabelText={labelText}
-      dataSource={dataSource}
+      dataSource={toJS(dataSource)}
       dataSourceConfig={dataSourceConfig}
       searchText={searchTextToUse}
       onUpdateInput={onUpdateSearchText}
