@@ -23,16 +23,18 @@ alter role apflora_reader with login;
 revoke connect on database apflora from public;
 grant connect on database apflora to apflora_artverantwortlich;
 grant all on all tables in schema apflora to apflora_artverantwortlich;
+grant all on schema apflora to apflora_artverantwortlich;
+GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA apflora TO apflora_artverantwortlich;
 alter default privileges for role apflora_artverantwortlich in schema apflora
   grant all on tables to apflora_artverantwortlich;
 alter default privileges in schema apflora
   grant all on sequences to apflora_artverantwortlich;
+grant anon to apflora_artverantwortlich;
 
 create role z with login password 'z' in group apflora_artverantwortlich, anon;
 grant anon to z;
 -- alter role z with login;
-grant insert on apflora.ap to z;
--- set password: psql: \password z
+-- set password: psql: \password my_secret
 
 grant apflora_artverantwortlich to authenticator;
 grant z to authenticator;

@@ -399,6 +399,7 @@ CREATE TABLE apflora.popber (
   "PopBerTxt" text,
   "MutWann" date DEFAULT NULL,
   "MutWer" varchar(20) DEFAULT NULL
+  -- "MutWer" varchar(20) DEFAULT current_user
 );
 SELECT setval(pg_get_serial_sequence('apflora.popber', 'PopBerId'), coalesce(max("PopBerId"), 0) + 1, false) FROM apflora.popber;
 COMMENT ON COLUMN apflora.popber."PopBerId" IS 'Primärschlüssel der Tabelle "popber"';

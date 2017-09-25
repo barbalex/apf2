@@ -64,14 +64,14 @@ create trigger encrypt_pass
 -- It returns the database role for a user
 -- if the name and password are correct
 create or replace function
-basic_auth.user_role(name text, pass text) returns name
+basic_auth.user_role(username text, pass text) returns name
   language plpgsql
   as $$
 begin
   return (
   select role from basic_auth.users
-   where users.name = user_role.name
-     and users.pass = crypt(user_role.pass, users.pass)
+   where users.name = $1
+     and users.pass = crypt($2, users.pass)
      -- block blocked users
      and users.block = 'false'
   );
@@ -90,14 +90,15 @@ CREATE TYPE basic_auth.jwt_token AS (
 -- and returns JWT if the credentials match a user in the internal table
 --create type login_return as (token basic_auth.jwt_token, role text);
 create or replace function
-apflora.login(name text, pass text) returns basic_auth.jwt_token
+apflora.login(username text, pass text)
+returns basic_auth.jwt_token
   as $$
 declare
   _role name;
   result basic_auth.jwt_token;
 begin
-  -- check name and password
-  select basic_auth.user_role(name, pass) into _role;
+  -- check username and password
+  select basic_auth.user_role($1, $2) into _role;
   if _role is null then
     raise invalid_password using message = 'invalid user or password';
   end if;
@@ -106,8 +107,9 @@ begin
       row_to_json(r), current_setting('app.jwt_secret')
     ) as token
     from (
-      select _role as role, login.name as name,
-         extract(epoch from now())::integer + 60*60*24*30 as exp
+      select _role as role,
+      $1 as username,
+      extract(epoch from now())::integer + 60*60*24*30 as exp
     ) r
     into result;
   return result;
@@ -120,6 +122,10 @@ create role anon;
 create role authenticator noinherit;
 grant anon to authenticator;
 
-grant usage on schema public, basic_auth to anon;
+grant usage on schema public, basic_auth, apflora to anon;
 grant select on table pg_authid, basic_auth.users to anon;
 grant execute on function apflora.login(text,text) to anon;
+grant execute on function basic_auth.sign(json,text,text) to anon;
+grant execute on function basic_auth.user_role(text,text) to anon;
+
+-- current_setting('request.jwt.claim.username')???
