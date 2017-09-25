@@ -7,7 +7,8 @@ export default (store: Object, name: string, password: string): any => {
   store.loading.push('user')
   axios
     .post('/rpc/login', { name, pass: password })
-    .then(({ data, status, statusText }) => {
+    .then(({ data, status, statusText, message }) => {
+      if (message) console.log('fetchLogin: message:', message)
       if (data && data[0] && data[0].token) {
         const token = data[0].token
         const tokenDecoded = jwtDecode(token)
@@ -29,6 +30,16 @@ export default (store: Object, name: string, password: string): any => {
     })
     .catch(error => {
       store.loading = store.loading.filter(el => el !== 'user')
+      console.log('fetchLogin: error:', error)
+      console.log('fetchLogin: error.response:', error.response)
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.message
+      ) {
+        // make response the error
+        return store.listError(error.response.data)
+      }
       store.listError(error)
     })
 }

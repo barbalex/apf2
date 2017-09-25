@@ -34,6 +34,9 @@ grant anon to z;
 grant insert on apflora.ap to z;
 -- set password: psql: \password z
 
+grant apflora_artverantwortlich to authenticator;
+grant z to authenticator;
+
 -- apflora_freiwillig can work on kontrollen
 -- need to enforce freiwilligen-kontrollen in ui
 --drop role if exists apflora_freiwillig;

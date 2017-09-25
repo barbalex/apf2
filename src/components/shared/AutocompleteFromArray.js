@@ -91,19 +91,17 @@ const MyAutocomplete = ({
     }
     return true
   }).length
-  let labelFilterHint = ''
+  let labelFilterHint = 'Zum Filtern tippen. '
   if (valueText && !searchTextWasChanged) {
     labelFilterHint = 'Zum Filtern: Aktuellen Wert löschen, dann tippen. '
   }
-  if (searchText || searchTextWasChanged)
-    labelFilterHint = 'Zum Filtern tippen. '
   let labelNumberLimit = ''
   if (searchText && dataSourceLength === 0) {
     labelNumberLimit = 'Kein Eintrag entspricht dem Filter.'
   } else if (dataSourceLength && dataSourceLength <= 200) {
-    labelNumberLimit = `Alle passenden Einträge werden angezeigt.`
+    labelNumberLimit = `Alle passenden Einträge werden aufgelistet.`
   } else if (dataSourceLength > 200) {
-    labelNumberLimit = 'Nur die ersten 200 Einträge werden angezeigt.'
+    labelNumberLimit = 'Nur die ersten 200 Einträge werden aufgelistet.'
   }
   const labelText = focused
     ? `${label}${labelFilterHint || labelNumberLimit

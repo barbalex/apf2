@@ -25,13 +25,12 @@ const ErrorDiv = styled.div`
 
 const enhance = compose(inject('store'), observer)
 
-const Errors = ({ store }: { store: Object }) =>
+const Errors = ({ store }: { store: Object }) => (
   <Container>
-    {store.app.errors.map((error, index) =>
-      <ErrorDiv key={index}>
-        {error.message}
-      </ErrorDiv>
-    )}
+    {store.app.errors.map((error, index) => (
+      <ErrorDiv key={index}>{error.message || error}</ErrorDiv>
+    ))}
   </Container>
+)
 
 export default enhance(Errors)
