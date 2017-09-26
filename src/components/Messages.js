@@ -48,7 +48,7 @@ const UserMessages = ({
             <div>
               {m.message}
             </div>
-            <FlatButton label="o.k." onTouchTap={() => onClickRead(m)} />
+            <FlatButton label="o.k." onClick={() => onClickRead(m)} />
           </MessageContainer>
         )
       })}

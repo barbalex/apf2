@@ -176,16 +176,16 @@ const MyAppBar = ({
           >
             <MenuItem
               primaryText="gelöschte Datensätze wiederherstellen"
-              onTouchTap={showDeletedDatasets}
+              onClick={showDeletedDatasets}
               disabled={store.deletedDatasets.length === 0}
             />
             <MenuItem
               primaryText="Video-Anleitungen"
-              onTouchTap={watchVideos}
+              onClick={watchVideos}
             />
             <MenuItem
               primaryText={`${store.user.name} abmelden`}
-              onTouchTap={store.logout}
+              onClick={store.logout}
             />
           </IconMenu>
         </MenuDiv>

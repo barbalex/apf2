@@ -26,12 +26,12 @@ const DatasetDeleteModal = ({
   onClickDelete: () => void,
 }) => {
   const actions = [
-    <FlatButton label="Abbrechen" onTouchTap={onClickAbort} />,
+    <FlatButton label="Abbrechen" onClick={onClickAbort} />,
     <FlatButton
       label="Löschen"
       primary
       keyboardFocused
-      onTouchTap={onClickDelete}
+      onClick={onClickDelete}
     />,
   ]
   const table = tables.find(t => t.table === store.datasetToDelete.table)

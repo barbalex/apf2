@@ -11,7 +11,6 @@ import 'babel-polyfill'
 
 import React from 'react'
 import ReactDOM from 'react-dom'
-import injectTapEventPlugin from 'react-tap-event-plugin'
 import axios from 'axios'
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
@@ -65,10 +64,6 @@ app.extend({
   },
 })
 app.init()
-
-// Needed for onTouchTap and material-ui
-// //stackoverflow.com/a/34015469/988941
-injectTapEventPlugin()
 
 const theme = Object.assign({}, uiTheme, {
   appBar: {

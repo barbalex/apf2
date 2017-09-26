@@ -109,7 +109,7 @@ const User = ({
   fetchLogin: () => void,
 }) => {
   const actions = [
-    <FlatButton label="anmelden" primary={true} onTouchTap={fetchLogin} />,
+    <FlatButton label="anmelden" primary={true} onClick={fetchLogin} />,
   ]
   // TODO Authorization:
   // open depends on store.user.jwt

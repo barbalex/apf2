@@ -69,10 +69,10 @@ const Deletions = ({
     <FlatButton
       label="wiederherstellen"
       primary={false}
-      onTouchTap={onClickUndo}
+      onClick={onClickUndo}
       disabled={choosenDeletions.length === 0}
     />,
-    <FlatButton label="schliessen" primary={true} onTouchTap={close} />,
+    <FlatButton label="schliessen" primary={true} onClick={close} />,
   ]
 
   return (
