@@ -22,35 +22,35 @@ const StyledNode = styled.div`
   white-space: nowrap;
   user-select: none;
   color: ${props =>
-    props['data-nodeIsInActiveNodePath'] ? '#D84315' : 'inherit'};
+    props['data-nodeisinactivenodepath'] ? '#D84315' : 'inherit'};
 `
 const SymbolIcon = styled(FontIcon)`
   margin-top: ${props =>
-    props['data-nodeIsInActiveNodePath']
+    props['data-nodeisinactivenodepath']
       ? '-5px !important'
       : '-2px !important'};
   padding-left: ${props =>
-    props['data-nodeIsInActiveNodePath'] ? '2px' : '2px'};
+    props['data-nodeisinactivenodepath'] ? '2px' : '2px'};
   font-size: ${props =>
-    props['data-nodeIsInActiveNodePath']
+    props['data-nodeisinactivenodepath']
       ? '26px !important'
       : '22px !important'};
   font-weight: ${props =>
-    props['data-nodeIsInActiveNodePath'] ? '900 !important' : 'inherit'};
+    props['data-nodeisinactivenodepath'] ? '900 !important' : 'inherit'};
   color: ${props =>
-    props['data-nodeIsInActiveNodePath'] ? '#D84315 !important' : 'inherit'};
+    props['data-nodeisinactivenodepath'] ? '#D84315 !important' : 'inherit'};
   width: 26px;
   cursor: pointer;
   &:hover {
-    color: #F57C00 !important;
+    color: #f57c00 !important;
   }
 `
 const SymbolSpan = styled.span`
   padding-right: 8px !important;
   padding-left: ${props =>
-    props['data-nodeIsInActiveNodePath'] ? '7px' : '9px'};
+    props['data-nodeisinactivenodepath'] ? '7px' : '9px'};
   font-weight: ${props =>
-    props['data-nodeIsInActiveNodePath'] ? '900 !important' : 'inherit'};
+    props['data-nodeisinactivenodepath'] ? '900 !important' : 'inherit'};
   margin-top: -9px !important;
   font-size: 28px !important;
   width: 26px;
@@ -59,7 +59,7 @@ const TextSpan = styled.span`
   margin-left: 0;
   font-size: 16px !important;
   font-weight: ${props =>
-    props['data-nodeIsInActiveNodePath'] ? '900 !important' : 'inherit'};
+    props['data-nodeisinactivenodepath'] ? '900 !important' : 'inherit'};
   cursor: pointer;
   &:hover {
     color: #f57c00;
@@ -70,21 +70,15 @@ const StyledMapIcon = styled(FontIcon)`
   margin-left: -2px;
   font-size: 20px !important;
 `
-const PopMapIcon = styled(StyledMapIcon)`
-  color: #947500 !important;
-`
-const TpopMapIcon = styled(StyledMapIcon)`
-  color: #016f19 !important;
-`
+const PopMapIcon = styled(StyledMapIcon)`color: #947500 !important;`
+const TpopMapIcon = styled(StyledMapIcon)`color: #016f19 !important;`
 const BeobNichtBeurteiltMapIcon = styled(StyledMapIcon)`
   color: #9a009a !important;
 `
 const BeobNichtZuzuordnenMapIcon = styled(StyledMapIcon)`
   color: #ffe4ff !important;
 `
-const TpopBeobMapIcon = styled(StyledMapIcon)`
-  color: #FF00FF !important;
-`
+const TpopBeobMapIcon = styled(StyledMapIcon)`color: #ff00ff !important;`
 const PopFilteredMapIcon = styled(PopMapIcon)`
   -webkit-text-stroke: 1px #f5ef00;
   -moz-text-stroke: 1px #f5ef00;
@@ -106,7 +100,7 @@ const TpopBeobFilteredMapIcon = styled(TpopBeobMapIcon)`
   -moz-text-stroke: 1px #f5ef00;
 `
 const MovingIcon = styled(FontIcon)`
-  padding-left: .2em;
+  padding-left: 0.2em;
   font-size: 20px !important;
   color: rgb(255, 90, 0) !important;
 `
@@ -221,138 +215,153 @@ const Row = ({
       >
         <StyledNode
           data-level={level}
-          data-nodeIsInActiveNodePath={nodeIsInActiveNodePath}
+          data-nodeisinactivenodepath={nodeIsInActiveNodePath}
           data-id={node.id}
-          data-parentId={node.parentId}
+          data-parentid={node.parentId}
           data-url={dataUrl}
-          data-nodeType={node.nodeType}
+          data-nodetype={node.nodeType}
           data-label={node.label}
-          data-menuType={node.menuType}
+          data-menutype={node.menuType}
         >
-          {useSymbolIcon &&
+          {useSymbolIcon && (
             <SymbolIcon
-              data-nodeIsInActiveNodePath={nodeIsInActiveNodePath}
+              data-nodeisinactivenodepath={nodeIsInActiveNodePath}
               id="symbol"
               className="material-icons"
               onClick={onClickNodeSymbol}
             >
               {symbolIcon}
-            </SymbolIcon>}
-          {useSymbolSpan &&
-            <SymbolSpan data-nodeIsInActiveNodePath={nodeIsInActiveNodePath}>
+            </SymbolIcon>
+          )}
+          {useSymbolSpan && (
+            <SymbolSpan data-nodeisinactivenodepath={nodeIsInActiveNodePath}>
               {'-'}
-            </SymbolSpan>}
-          {showPopMapIcon(store, tree, node) &&
+            </SymbolSpan>
+          )}
+          {showPopMapIcon(store, tree, node) && (
             <PopMapIcon
               id="map"
               className="material-icons"
               title="in Karte sichtbar"
             >
               local_florist
-            </PopMapIcon>}
-          {showTpopMapIcon(store, tree, node) &&
+            </PopMapIcon>
+          )}
+          {showTpopMapIcon(store, tree, node) && (
             <TpopMapIcon
               id="map"
               className="material-icons"
               title="in Karte sichtbar"
             >
               local_florist
-            </TpopMapIcon>}
-          {showBeobNichtBeurteiltMapIcon(store, tree, node) &&
+            </TpopMapIcon>
+          )}
+          {showBeobNichtBeurteiltMapIcon(store, tree, node) && (
             <BeobNichtBeurteiltMapIcon
               id="map"
               className="material-icons"
               title="in Karte sichtbar"
             >
               local_florist
-            </BeobNichtBeurteiltMapIcon>}
-          {showBeobNichtZuzuordnenMapIcon(store, tree, node) &&
+            </BeobNichtBeurteiltMapIcon>
+          )}
+          {showBeobNichtZuzuordnenMapIcon(store, tree, node) && (
             <BeobNichtZuzuordnenMapIcon
               id="map"
               className="material-icons"
               title="in Karte sichtbar"
             >
               local_florist
-            </BeobNichtZuzuordnenMapIcon>}
-          {showTpopBeobMapIcon(store, tree, node) &&
+            </BeobNichtZuzuordnenMapIcon>
+          )}
+          {showTpopBeobMapIcon(store, tree, node) && (
             <TpopBeobMapIcon
               id="map"
               className="material-icons"
               title="in Karte sichtbar"
             >
               local_florist
-            </TpopBeobMapIcon>}
-          {showPopFilteredMapIcon(store, node) &&
+            </TpopBeobMapIcon>
+          )}
+          {showPopFilteredMapIcon(store, node) && (
             <PopFilteredMapIcon
               id="map"
               className="material-icons"
               title="in Karte hervorgehoben"
             >
               local_florist
-            </PopFilteredMapIcon>}
-          {showTpopFilteredMapIcon(store, node) &&
+            </PopFilteredMapIcon>
+          )}
+          {showTpopFilteredMapIcon(store, node) && (
             <TpopFilteredMapIcon
               id="map"
               className="material-icons"
               title="in Karte hervorgehoben"
             >
               local_florist
-            </TpopFilteredMapIcon>}
-          {showBeobNichtBeurteiltFilteredMapIcon(store, node) &&
+            </TpopFilteredMapIcon>
+          )}
+          {showBeobNichtBeurteiltFilteredMapIcon(store, node) && (
             <BeobNichtBeurteiltFilteredMapIcon
               id="BeobNichtBeurteiltFilteredMapIcon"
               className="material-icons"
               title="in Karte hervorgehoben"
             >
               local_florist
-            </BeobNichtBeurteiltFilteredMapIcon>}
-          {showBeobNichtZuzuordnenFilteredMapIcon(store, node) &&
+            </BeobNichtBeurteiltFilteredMapIcon>
+          )}
+          {showBeobNichtZuzuordnenFilteredMapIcon(store, node) && (
             <BeobNichtZuzuordnenFilteredMapIcon
               id="BeobNichtZuzuordnenFilteredMapIcon"
               className="material-icons"
               title="in Karte hervorgehoben"
             >
               local_florist
-            </BeobNichtZuzuordnenFilteredMapIcon>}
-          {showTpopBeobFilteredMapIcon(store, tree, node) &&
+            </BeobNichtZuzuordnenFilteredMapIcon>
+          )}
+          {showTpopBeobFilteredMapIcon(store, tree, node) && (
             <TpopBeobFilteredMapIcon
               id="TpopBeobFilteredMapIcon"
               className="material-icons"
               title="in Karte hervorgehoben"
             >
               local_florist
-            </TpopBeobFilteredMapIcon>}
+            </TpopBeobFilteredMapIcon>
+          )}
           <TextSpan
-            data-nodeIsInActiveNodePath={nodeIsInActiveNodePath}
+            data-nodeisinactivenodepath={nodeIsInActiveNodePath}
             node={node}
             onClick={onClickNode}
           >
             {node.label}
           </TextSpan>
-          {moving &&
+          {moving && (
             <MovingIcon
               id="moving"
               className="material-icons"
               title="zum Verschieben gemerkt, bereit zum Einfügen"
             >
               swap_vertical_circle
-            </MovingIcon>}
-          {copying &&
+            </MovingIcon>
+          )}
+          {copying && (
             <CopyingIcon
               id="copying"
               className="material-icons"
               title="kopiert, bereit zum Einfügen"
             >
               content_copy
-            </CopyingIcon>}
-          {copyingBiotop &&
+            </CopyingIcon>
+          )}
+          {copyingBiotop && (
             <CopyingIcon
               id="copyingBiotop"
               className="material-icons"
               title="Biotop kopiert, bereit zum Einfügen"
             >
               photo_library
-            </CopyingIcon>}
+            </CopyingIcon>
+          )}
         </StyledNode>
       </ContextMenuTrigger>
     </div>

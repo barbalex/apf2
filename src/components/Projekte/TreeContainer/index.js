@@ -154,12 +154,12 @@ const enhance = compose(
           new Error('no firstElementChild passed with click')
         )
       const id = firstElementChild.getAttribute('data-id')
-      const parentId = firstElementChild.getAttribute('data-parentId')
+      const parentId = firstElementChild.getAttribute('data-parentid')
       const url = firstElementChild.getAttribute('data-url')
       const label = firstElementChild.getAttribute('data-label')
       const baseUrl = JSON.parse(url)
-      const nodeType = firstElementChild.getAttribute('data-nodeType')
-      const menuType = firstElementChild.getAttribute('data-menuType')
+      const nodeType = firstElementChild.getAttribute('data-nodetype')
+      const menuType = firstElementChild.getAttribute('data-menutype')
       const actions = {
         insert() {
           if (nodeType === 'table') {
