@@ -58,24 +58,13 @@ CREATE INDEX ON apflora.ap USING btree ("ApBearb");
 CREATE INDEX ON apflora.ap USING btree ("ProjId");
 CREATE UNIQUE INDEX ON apflora.ap USING btree ("ApGuid");
 
--- only once
--- ALTER TABLE apflora.ap
---   ADD COLUMN "ProjId" integer Default Null;
--- CREATE INDEX ON apflora.ap USING btree ("ProjId");
--- UPDATE apflora.ap
--- SET "ProjId" = '1'
--- WHERE "ProjId" IS NULL;
 
 DROP TABLE IF EXISTS apflora.userprojekt;
 CREATE TABLE apflora.userprojekt (
-  "UserId" integer REFERENCES apflora.user ("UserId") ON DELETE CASCADE ON UPDATE CASCADE,
+  "UserName" varchar(30) REFERENCES basic_auth.users (name) ON DELETE CASCADE ON UPDATE CASCADE,
   "ProjId" integer REFERENCES apflora.projekt ("ProjId") ON DELETE CASCADE ON UPDATE CASCADE
 );
-CREATE INDEX ON apflora.userprojekt USING btree ("UserId", "ProjId");
-
-INSERT INTO apflora.userprojekt ("UserId", "ProjId")
-SELECT "UserId", '1'
-FROM apflora.user;
+CREATE INDEX ON apflora.userprojekt USING btree ("UserName", "ProjId");
 
 
 DROP TABLE IF EXISTS apflora.ap_bearbstand_werte;
@@ -852,7 +841,7 @@ COMMENT ON COLUMN apflora.message."message" IS 'Nachricht an die Benutzer';
 -- list of read messages per user
 DROP TABLE IF EXISTS apflora.usermessage;
 CREATE TABLE apflora.usermessage (
-  "UserName" varchar(30) NOT NULL REFERENCES apflora.user ("UserName") ON DELETE CASCADE ON UPDATE CASCADE,
+  "UserName" varchar(30) NOT NULL REFERENCES basic_auth.users (name) ON DELETE CASCADE ON UPDATE CASCADE,
   "MessageId" integer NOT NULL REFERENCES apflora.message ("id") ON DELETE CASCADE ON UPDATE CASCADE,
   UNIQUE ("UserName", "MessageId")
 );
