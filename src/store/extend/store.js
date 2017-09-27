@@ -227,5 +227,19 @@ export default (store: Object): void => {
     writeToStore: action('writeToStore', ({ data, table, field }) =>
       writeToStore({ store: store, data, table, field })
     ),
+    updateAvailable: false,
+    setUpdateAvailable: action(
+      'setUpdateAvailable',
+      (updateAvailable: boolean) => {
+        if (updateAvailable) {
+          store.updateAvailable = true
+          setTimeout(() => {
+            store.updateAvailable = false
+          }, 1000 * 30)
+        } else {
+          store.updateAvailable = false
+        }
+      }
+    ),
   })
 }

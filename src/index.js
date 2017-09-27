@@ -33,6 +33,7 @@ import Projekte from './components/Projekte'
 import User from './components/User'
 import Deletions from './components/Deletions'
 import Errors from './components/Errors'
+import UpdateAvailable from './components/UpdateAvailable'
 import Messages from './components/Messages'
 import DownloadMessages from './components/DownloadMessages'
 import getActiveNodeArrayFromPathname from './store/action/getActiveNodeArrayFromPathname'
@@ -47,7 +48,7 @@ import apiBaseUrl from './modules/apiBaseUrl'
 
 import './index.css'
 
-registerServiceWorker()
+registerServiceWorker(store)
 
 // prevent changing values in number inputs when scrolling pages!
 // see: http://stackoverflow.com/a/38589039/712005
@@ -108,6 +109,7 @@ ReactDOM.render(
         <User />
         <Deletions />
         <Errors />
+        <UpdateAvailable />
         <Messages />
         <DownloadMessages />
       </AppContainer>
