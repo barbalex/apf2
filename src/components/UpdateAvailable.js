@@ -44,6 +44,9 @@ const UpdateAvailable = ({
     autoHideDuration={1000 * 30}
     onActionTouchTap={onClickInstall}
     onRequestClose={onClickClose}
+    bodyStyle={{
+      backgroundColor: 'rgb(35, 98, 38)',
+    }}
   />
 )
 
