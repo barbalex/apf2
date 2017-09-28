@@ -6372,6 +6372,7 @@ GROUP BY
 HAVING
   apflora.tpopkontrzaehl."Methode" IS NULL
   AND apflora.tpopkontr."TPopKontrJahr" IS NOT NULL
+  AND apflora.tpopkontr."TPopKontrTyp" <> 'Freiwilligen-Erfolgskontrolle'
 ORDER BY
   apflora.ap."ApArtId",
   apflora.pop."PopNr",
