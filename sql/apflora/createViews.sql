@@ -5870,45 +5870,6 @@ ORDER BY
   apflora.pop."PopNr",
   apflora.tpop."TPopNr";
 
-DROP VIEW IF EXISTS apflora.v_qk_tpop_statuspotentiellfuerapberrelevant CASCADE;
-CREATE OR REPLACE VIEW apflora.v_qk_tpop_statuspotentiellfuerapberrelevant AS
-SELECT
-  apflora.ap."ApArtId",
-  'Teilpopulation mit Status "potenzieller Wuchs-/Ansiedlungsort" und "Fuer AP-Bericht relevant?" = ja:'::text AS "hw",
-  concat(
-    '<a href="http://apflora.ch/index.html?ap=',
-    apflora.ap."ApArtId",
-    '&pop=',
-    apflora.pop."PopId",
-    '&tpop=',
-    apflora.tpop."TPopId",
-    '" target="_blank">',
-    COALESCE(
-      concat('Pop: ', apflora.pop."PopNr"),
-      concat('Pop: id=', apflora.pop."PopId")
-    ),
-    COALESCE(
-      concat(' > TPop: ', apflora.tpop."TPopNr"),
-      concat(' > TPop: id=', apflora.tpop."TPopId")
-    ),
-    '</a>'
-  ) AS "link"
-FROM
-  apflora.ap
-  INNER JOIN
-    (apflora.pop
-    INNER JOIN
-      apflora.tpop
-      ON apflora.pop."PopId" = apflora.tpop."PopId")
-    ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
-WHERE
-  apflora.tpop."TPopHerkunft" = 300
-  AND apflora.tpop."TPopApBerichtRelevant" = 1
-ORDER BY
-  apflora.ap."ApArtId",
-  apflora.pop."PopNr",
-  apflora.tpop."TPopNr";
-
 DROP VIEW IF EXISTS apflora.v_qk2_tpop_statuspotentiellfuerapberrelevant CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk2_tpop_statuspotentiellfuerapberrelevant AS
 SELECT
