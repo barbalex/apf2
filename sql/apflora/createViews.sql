@@ -7236,69 +7236,6 @@ HAVING
       AND apflora.tpopkontrzaehl."Anzahl" > 0
   );
 
-DROP VIEW IF EXISTS apflora.v_qk_tpop_mitstatuspotentiellundmassnansiedlung CASCADE;
-CREATE OR REPLACE VIEW apflora.v_qk_tpop_mitstatuspotentiellundmassnansiedlung AS
-SELECT DISTINCT
-  apflora.pop."ApArtId",
-  apflora.pop."PopId",
-  apflora.tpop."TPopId",
-  'Teilpopulation mit Status "potentieller Wuchs-/Ansiedlungsort", bei der eine Massnahme des Typs "Ansiedlung" existiert:'::text AS "hw",
-  concat(
-    '<a href="http://apflora.ch/index.html?ap=',
-    apflora.pop."ApArtId",
-    '&pop=',
-    apflora.pop."PopId",
-    '&tpop=',
-    apflora.tpop."TPopId",
-    '" target="_blank">',
-    COALESCE(
-      concat('Pop: ', apflora.pop."PopNr"),
-      concat('Pop: id=', apflora.pop."PopId")
-    ),
-    COALESCE(
-      concat(' > TPop: ', apflora.tpop."TPopNr"),
-      concat(' > TPop: id=', apflora.tpop."TPopId")
-    ),
-    '</a>'
-  ) AS "link"
-FROM
-  apflora.pop
-  INNER JOIN
-    apflora.tpop
-    ON apflora.pop."PopId" = apflora.tpop."PopId"
-WHERE
-  apflora.tpop."TPopHerkunft" = 300
-  AND apflora.tpop."TPopId" IN (
-    SELECT DISTINCT
-      apflora.tpopmassn."TPopId"
-    FROM
-      apflora.tpopmassn
-    WHERE
-      apflora.tpopmassn."TPopMassnTyp" < 4
-  )
-ORDER BY
-  apflora.pop."ApArtId",
-  apflora.pop."PopId",
-  apflora.tpop."TPopId",
-  concat(
-    '<a href="http://apflora.ch/index.html?ap=',
-    apflora.pop."ApArtId",
-    '&pop=',
-    apflora.pop."PopId",
-    '&tpop=',
-    apflora.tpop."TPopId",
-    '" target="_blank">',
-    COALESCE(
-      concat('Pop: ', apflora.pop."PopNr"),
-      concat('Pop: id=', apflora.pop."PopId")
-    ),
-    COALESCE(
-      concat(' > TPop: ', apflora.tpop."TPopNr"),
-      concat(' > TPop: id=', apflora.tpop."TPopId")
-    ),
-    '</a>'
-  );
-
 DROP VIEW IF EXISTS apflora.v_qk2_tpop_mitstatuspotentiellundmassnansiedlung CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk2_tpop_mitstatuspotentiellundmassnansiedlung AS
 SELECT DISTINCT
