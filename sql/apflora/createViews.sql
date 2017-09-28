@@ -5844,44 +5844,6 @@ ORDER BY
   apflora.pop."PopNr",
   apflora.tpop."TPopNr";
 
-DROP VIEW IF EXISTS apflora.v_qk_tpop_ohneapberrelevant CASCADE;
-CREATE OR REPLACE VIEW apflora.v_qk_tpop_ohneapberrelevant AS
-SELECT
-  apflora.ap."ApArtId",
-  'Teilpopulation ohne "Fuer AP-Bericht relevant":'::text AS "hw",
-  concat(
-    '<a href="http://apflora.ch/index.html?ap=',
-    apflora.ap."ApArtId",
-    '&pop=',
-    apflora.pop."PopId",
-    '&tpop=',
-    apflora.tpop."TPopId",
-    '" target="_blank">',
-    COALESCE(
-      concat('Pop: ', apflora.pop."PopNr"),
-      concat('Pop: id=', apflora.pop."PopId")
-    ),
-    COALESCE(
-      concat(' > TPop: ', apflora.tpop."TPopNr"),
-      concat(' > TPop: id=', apflora.tpop."TPopId")
-    ),
-    '</a>'
-  ) AS "link"
-FROM
-  apflora.ap
-  INNER JOIN
-    (apflora.pop
-    INNER JOIN
-      apflora.tpop
-      ON apflora.pop."PopId" = apflora.tpop."PopId")
-    ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
-WHERE
-  apflora.tpop."TPopApBerichtRelevant" IS NULL
-ORDER BY
-  apflora.ap."ApArtId",
-  apflora.pop."PopNr",
-  apflora.tpop."TPopNr";
-
 DROP VIEW IF EXISTS apflora.v_qk2_tpop_ohneapberrelevant CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk2_tpop_ohneapberrelevant AS
 SELECT
