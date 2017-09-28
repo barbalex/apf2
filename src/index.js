@@ -52,7 +52,8 @@ registerServiceWorker(store)
 
 // prevent changing values in number inputs when scrolling pages!
 // see: http://stackoverflow.com/a/38589039/712005
-document.addEventListener('mousewheel', function(event) {
+// and: https://stackoverflow.com/a/42058469/712005
+document.addEventListener('wheel', function(event) {
   if (window.document.activeElement.type === 'number') {
     event.preventDefault()
   }
