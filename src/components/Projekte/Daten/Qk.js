@@ -25,9 +25,7 @@ const FieldsContainer = styled.div`
   padding: 10px;
   overflow: auto !important;
 `
-const StyledCard = styled(Card)`
-  margin-bottom: 10px !important;
-`
+const StyledCard = styled(Card)`margin-bottom: 10px !important;`
 const Title = styled.div`font-weight: bold;`
 const FilterField = styled(TextField)`
   margin-top: -15px;
@@ -111,33 +109,27 @@ const Qk = ({
           onChange={onChangeBerichtjahr}
         />
         <FilterField
-          floatingLabelText="nach Typ filtern"
+          floatingLabelText="nach Abschnitts-Titel filtern"
           type="text"
           value={filter}
           fullWidth
           onChange={onChangeFilter}
         />
-        <LoadingIndicator loading={loading}>
-          {loadingMessage}
-        </LoadingIndicator>
-        {messagesFiltered.map((m, index) =>
+        <LoadingIndicator loading={loading}>{loadingMessage}</LoadingIndicator>
+        {messagesFiltered.map((m, index) => (
           <StyledCard key={index}>
             <CardText>
-              <Title>
-                {m.hw}
-              </Title>
+              <Title>{m.hw}</Title>
               <div>
                 <Linkify properties={linkifyProperties}>
-                  {m.url.map((u, i) =>
-                    <div key={i}>
-                      {`${appBaseUrl}/${u.join('/')}`}
-                    </div>
-                  )}
+                  {m.url.map((u, i) => (
+                    <div key={i}>{`${appBaseUrl}/${u.join('/')}`}</div>
+                  ))}
                 </Linkify>
               </div>
             </CardText>
           </StyledCard>
-        )}
+        ))}
       </FieldsContainer>
     </Container>
   )

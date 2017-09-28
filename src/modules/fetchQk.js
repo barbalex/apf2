@@ -18,6 +18,31 @@ const fetchQk = async ({
   const { addMessages, setLoading } = store.qk
   setLoading(true)
   const qkTypes = [
+    // 1. Art
+
+    // Ziel ohne Jahr/Zieltyp/Ziel
+    { type: 'view', name: 'v_qk2_ziel_ohnejahr' },
+    { type: 'view', name: 'v_qk2_ziel_ohnetyp' },
+    { type: 'view', name: 'v_qk2_ziel_ohneziel' },
+    // Ziel-Bericht ohne Jahr/Entwicklung
+    { type: 'view', name: 'v_qk2_zielber_ohnejahr' },
+    { type: 'view', name: 'v_qk2_zielber_ohneentwicklung', berichtjahr },
+    // AP-Erfolgskriterium ohne Beurteilung/Kriterien
+    { type: 'view', name: 'v_qk2_erfkrit_ohnebeurteilung' },
+    { type: 'view', name: 'v_qk2_erfkrit_ohnekriterien' },
+    // AP-Bericht ohne Jahr/Vergleich Vorjahr-Gesamtziel/Beurteilung
+    { type: 'view', name: 'v_qk2_apber_ohnejahr' },
+    {
+      type: 'view',
+      name: 'v_qk2_apber_ohnevergleichvorjahrgesamtziel',
+      berichtjahr,
+    },
+    { type: 'view', name: 'v_qk2_apber_ohnebeurteilung', berichtjahr },
+    // assoziierte Art ohne Art
+    { type: 'view', name: 'v_qk2_assozart_ohneart' },
+
+    // 2. Population
+
     // Population: ohne Nr/Name/Status/bekannt seit/Koordinaten/tpop
     { type: 'view', name: 'v_qk2_pop_ohnepopnr' },
     { type: 'view', name: 'v_qk2_pop_ohnepopname' },
@@ -60,6 +85,14 @@ const fetchQk = async ({
     // Population: Status ist "potenzieller Wuchs-/Ansiedlungsort",
     // es gibt aber eine Teilpopulation mit Status "angesiedelt" oder "ursprünglich":
     { type: 'view', name: 'v_qk2_pop_statusaktuellletzterpopbererloschen' },
+    // Pop-Bericht/Pop-Massn.-Bericht ohne Jahr/Entwicklung
+    { type: 'view', name: 'v_qk2_popber_ohnejahr' },
+    { type: 'view', name: 'v_qk2_popber_ohneentwicklung', berichtjahr },
+    { type: 'view', name: 'v_qk2_popmassnber_ohnejahr' },
+    { type: 'view', name: 'v_qk2_popmassnber_ohneentwicklung', berichtjahr },
+
+    // 3. Teilpopulation
+
     // Teilpopulation: Status ist "aktuell", der letzte Teilpopulations-Bericht meldet aber "erloschen"
     { type: 'view', name: 'v_qk2_tpop_statusaktuellletzterpopbererloschen' },
     // Teilpopulation: Status ist "erloschen", der letzte Teilpopulations-Bericht meldet aber "aktuell"
@@ -93,12 +126,21 @@ const fetchQk = async ({
     // Teilpopulation mit Status "potentieller Wuchs-/Ansiedlungsort",
     // bei der eine Massnahme des Typs "Ansiedlung" existiert:
     { type: 'view', name: 'v_qk2_tpop_mitstatuspotentiellundmassnansiedlung' },
+    // TPop-Bericht ohne Jahr/Entwicklung
+    { type: 'view', name: 'v_qk2_tpopber_ohnejahr' },
+    { type: 'view', name: 'v_qk2_tpopber_ohneentwicklung', berichtjahr },
+
+    // 4. Massnahmen
+
     // Massn ohne Jahr/Typ
     { type: 'view', name: 'v_qk2_massn_ohnejahr' },
     { type: 'view', name: 'v_qk2_massn_ohnetyp', berichtjahr },
     // Massn.-Bericht ohne Jahr/Entwicklung
     { type: 'view', name: 'v_qk2_massnber_ohnejahr' },
     { type: 'view', name: 'v_qk2_massnber_ohneerfbeurt', berichtjahr },
+
+    // 5. Kontrollen
+
     // Kontrolle ohne Jahr/Zählung/Kontrolltyp
     { type: 'view', name: 'v_qk2_feldkontr_ohnejahr' },
     { type: 'view', name: 'v_qk2_freiwkontr_ohnejahr' },
@@ -112,34 +154,6 @@ const fetchQk = async ({
     { type: 'view', name: 'v_qk2_freiwkontrzaehlung_ohnemethode', berichtjahr },
     { type: 'view', name: 'v_qk2_feldkontrzaehlung_ohneanzahl', berichtjahr },
     { type: 'view', name: 'v_qk2_freiwkontrzaehlung_ohneanzahl', berichtjahr },
-    // TPop-Bericht ohne Jahr/Entwicklung
-    { type: 'view', name: 'v_qk2_tpopber_ohnejahr' },
-    { type: 'view', name: 'v_qk2_tpopber_ohneentwicklung', berichtjahr },
-    // Pop-Bericht/Pop-Massn.-Bericht ohne Jahr/Entwicklung
-    { type: 'view', name: 'v_qk2_popber_ohnejahr' },
-    { type: 'view', name: 'v_qk2_popber_ohneentwicklung', berichtjahr },
-    { type: 'view', name: 'v_qk2_popmassnber_ohnejahr' },
-    { type: 'view', name: 'v_qk2_popmassnber_ohneentwicklung', berichtjahr },
-    // Ziel ohne Jahr/Zieltyp/Ziel
-    { type: 'view', name: 'v_qk2_ziel_ohnejahr' },
-    { type: 'view', name: 'v_qk2_ziel_ohnetyp' },
-    { type: 'view', name: 'v_qk2_ziel_ohneziel' },
-    // Ziel-Bericht ohne Jahr/Entwicklung
-    { type: 'view', name: 'v_qk2_zielber_ohnejahr' },
-    { type: 'view', name: 'v_qk2_zielber_ohneentwicklung', berichtjahr },
-    // AP-Erfolgskriterium ohne Beurteilung/Kriterien
-    { type: 'view', name: 'v_qk2_erfkrit_ohnebeurteilung' },
-    { type: 'view', name: 'v_qk2_erfkrit_ohnekriterien' },
-    // AP-Bericht ohne Jahr/Vergleich Vorjahr-Gesamtziel/Beurteilung
-    { type: 'view', name: 'v_qk2_apber_ohnejahr' },
-    {
-      type: 'view',
-      name: 'v_qk2_apber_ohnevergleichvorjahrgesamtziel',
-      berichtjahr,
-    },
-    { type: 'view', name: 'v_qk2_apber_ohnebeurteilung', berichtjahr },
-    // assoziierte Art ohne Art
-    { type: 'view', name: 'v_qk2_assozart_ohneart' },
   ]
   let nrOfMessages = 0
 
