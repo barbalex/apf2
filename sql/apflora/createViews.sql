@@ -5567,41 +5567,6 @@ GROUP BY
 HAVING
   count(apflora.tpop."TPopId") > 1;
 
-DROP VIEW IF EXISTS apflora.v_qk_pop_popnrmehrdeutig CASCADE;
-CREATE OR REPLACE VIEW apflora.v_qk_pop_popnrmehrdeutig AS
-SELECT
-  apflora.ap."ApArtId",
-  'Population: Die Nr. ist mehrdeutig:'::text AS "hw",
-  string_agg(
-    DISTINCT
-    concat(
-      '<a href="http://apflora.ch/index.html?ap=',
-      apflora.ap."ApArtId",
-      '&pop=',
-      apflora.pop."PopId",
-      '" target="_blank">',
-      COALESCE(
-        concat('Pop: ', apflora.pop."PopNr", ' (id=', apflora.pop."PopId", ')'),
-        concat('Pop: id=', apflora.pop."PopId")
-      ),
-      '</a>'
-    ),
-    '<br> '
-  ) AS "link"
-FROM
-  apflora.ap
-  INNER JOIN
-    apflora.pop
-    ON apflora.pop."ApArtId" = apflora.ap."ApArtId"
-GROUP BY
-  apflora.ap."ApArtId",
-  apflora.pop."PopNr"
-HAVING
-  count(apflora.pop."PopId") > 1
-ORDER BY
-  apflora.ap."ApArtId",
-  apflora.pop."PopNr";
-
 DROP VIEW IF EXISTS apflora.v_qk2_pop_popnrmehrdeutig CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk2_pop_popnrmehrdeutig AS
 SELECT
