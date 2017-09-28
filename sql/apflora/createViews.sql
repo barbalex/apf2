@@ -6777,35 +6777,6 @@ ORDER BY
   apflora.ziel."ZielJahr",
   apflora.ziel."ZielId";
 
-DROP VIEW IF EXISTS apflora.v_qk_ziel_ohneziel CASCADE;
-CREATE OR REPLACE VIEW apflora.v_qk_ziel_ohneziel AS
-SELECT
-  apflora.ap."ApArtId",
-  'Ziel ohne Ziel:'::text AS "hw",
-  concat(
-    '<a href="http://apflora.ch/index.html?ap=',
-    apflora.ap."ApArtId",
-    '&apziel=',
-    apflora.ziel."ZielId",
-    '" target="_blank">',
-    COALESCE(
-      concat('"ZielJahr": ', apflora.ziel."ZielJahr", ' (id=', apflora.ziel."ZielId", ')'),
-      concat('Ziel.-ID: ', apflora.ziel."ZielId")
-    ),
-    '</a>'
-  ) AS "link"
-FROM
-  apflora.ap
-  INNER JOIN
-    apflora.ziel
-    ON apflora.ap."ApArtId" = apflora.ziel."ApArtId"
-WHERE
-  apflora.ziel."ZielBezeichnung" IS NULL
-ORDER BY
-  apflora.ap."ApArtId",
-  apflora.ziel."ZielJahr",
-  apflora.ziel."ZielId";
-
 DROP VIEW IF EXISTS apflora.v_qk2_ziel_ohneziel CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk2_ziel_ohneziel AS
 SELECT
