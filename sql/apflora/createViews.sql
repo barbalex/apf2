@@ -6705,46 +6705,6 @@ ORDER BY
   apflora.zielber."ZielBerJahr",
   apflora.zielber."ZielBerId";
 
-DROP VIEW IF EXISTS apflora.v_qk_zielber_ohnejahr CASCADE;
-CREATE OR REPLACE VIEW apflora.v_qk_zielber_ohnejahr AS
-SELECT
-  apflora.ap."ApArtId",
-  'Ziel-Bericht ohne Jahr:'::text AS "hw",
-  concat(
-    '<a href="http://apflora.ch/index.html?ap=',
-    apflora.ap."ApArtId",
-    '&apziel=',
-    apflora.ziel."ZielId",
-    '&zielber=',
-    apflora.zielber."ZielBerId",
-    '" target="_blank">',
-    COALESCE(
-      concat('"ZielJahr": ', apflora.ziel."ZielJahr", ' (id=', apflora.ziel."ZielId", ')'),
-      concat('Ziel.-ID: ', apflora.ziel."ZielId")
-    ),
-    COALESCE(
-      concat(' > "ZielBerJahr": ', apflora.zielber."ZielBerJahr"),
-      concat(' > ZielBer.-ID: ', apflora.zielber."ZielBerId")
-    ),
-    '</a>'
-  ) AS "link"
-FROM
-  apflora.ap
-  INNER JOIN
-    (apflora.ziel
-    INNER JOIN
-      apflora.zielber
-      ON apflora.ziel."ZielId" = apflora.zielber."ZielId")
-    ON apflora.ap."ApArtId" = apflora.ziel."ApArtId"
-WHERE
-  apflora.zielber."ZielBerJahr" IS NULL
-ORDER BY
-  apflora.ap."ApArtId",
-  apflora.ziel."ZielJahr",
-  apflora.ziel."ZielId",
-  apflora.zielber."ZielBerJahr",
-  apflora.zielber."ZielBerId";
-
 DROP VIEW IF EXISTS apflora.v_qk2_zielber_ohnejahr CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk2_zielber_ohnejahr AS
 SELECT
