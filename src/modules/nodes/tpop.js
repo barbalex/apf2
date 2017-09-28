@@ -5,7 +5,7 @@ export default (
   tree: Object,
   projId: number,
   apArtId: number,
-  popId: number,
+  popId: number
 ): Array<Object> => {
   // fetch sorting indexes of parents
   const projIndex = findIndex(tree.filteredAndSorted.projekt, {
@@ -13,11 +13,11 @@ export default (
   })
   const apIndex = findIndex(
     tree.filteredAndSorted.ap.filter(a => a.ProjId === projId),
-    { ApArtId: apArtId },
+    { ApArtId: apArtId }
   )
   const popIndex = findIndex(
     tree.filteredAndSorted.pop.filter(p => p.ApArtId === apArtId),
-    { PopId: popId },
+    { PopId: popId }
   )
 
   return tree.filteredAndSorted.tpop
@@ -28,7 +28,8 @@ export default (
       id: el.TPopId,
       parentId: el.PopId,
       urlLabel: el.TPopId,
-      label: el.label,
+      label: `${el.TPopNr || '(keine Nr)'}: ${el.TPopFlurname ||
+        '(kein Flurname)'}`,
       url: [
         'Projekte',
         projId,
