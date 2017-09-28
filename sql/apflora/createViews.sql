@@ -5501,50 +5501,6 @@ ORDER BY
   apflora.pop."PopNr",
   apflora.tpop."TPopNr";
 
-DROP VIEW IF EXISTS apflora.v_tpop_popnrtpopnrmehrdeutig CASCADE;
-CREATE OR REPLACE VIEW apflora.v_tpop_popnrtpopnrmehrdeutig AS
-SELECT
-  beob.adb_eigenschaften."Artname",
-  apflora.pop."PopNr",
-  apflora.tpop."TPopNr",
-  count(apflora.tpop."TPopId") AS "AnzahlvonTPopId",
-  array_to_string(array_agg(distinct apflora.tpop."TPopId" ORDER BY apflora.tpop."TPopId"), ', ') AS TPopIds,
-  string_agg(
-    distinct
-    concat(
-      'http://apflora.ch/index.html?ap=',
-      apflora.ap."ApArtId",
-      '&pop=',
-      apflora.tpop."PopId",
-      '&tpop=',
-      apflora.tpop."TPopId"
-    ),
-    ', '
-  ) AS "TPopUrls"
-FROM
-  beob.adb_eigenschaften
-  INNER JOIN
-    (apflora.ap
-    INNER JOIN
-      (apflora.pop
-      INNER JOIN
-        apflora.tpop
-        ON apflora.tpop."PopId" = apflora.pop."PopId")
-      ON apflora.pop."ApArtId" = apflora.ap."ApArtId")
-    ON beob.adb_eigenschaften."TaxonomieId" = apflora.ap."ApArtId"
-WHERE
-  apflora.ap."ApArtId" > 150
-GROUP BY
-  beob.adb_eigenschaften."Artname",
-  apflora.pop."PopNr",
-  apflora.tpop."TPopNr"
-HAVING
-  count(apflora.tpop."TPopId") > 1
-ORDER BY
-  beob.adb_eigenschaften."Artname",
-  apflora.pop."PopNr",
-  apflora.tpop."TPopNr";
-
 DROP VIEW IF EXISTS apflora.v_qk2_tpop_popnrtpopnrmehrdeutig CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk2_tpop_popnrtpopnrmehrdeutig AS
 SELECT
