@@ -5610,34 +5610,6 @@ ORDER BY
   apflora.ap."ApArtId",
   apflora.pop."PopNr";
 
-DROP VIEW IF EXISTS apflora.v_qk_pop_ohnepopnr CASCADE;
-CREATE OR REPLACE VIEW apflora.v_qk_pop_ohnepopnr AS
-SELECT
-  apflora.ap."ApArtId" AS "ApArtId",
-  'Population ohne Nr.:'::text AS "hw",
-  concat(
-    '<a href="http://apflora.ch/index.html?ap=',
-    apflora.ap."ApArtId",
-    '&pop=',
-    apflora.pop."PopId",
-    '" target="_blank">',
-    COALESCE(
-      concat('Pop: ', apflora.pop."PopName"),
-      concat('Pop: id=', apflora.pop."PopId")
-    ),
-    '</a>'
-  ) AS "link"
-FROM
-  apflora.ap
-  INNER JOIN
-    apflora.pop
-    ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
-WHERE
-  apflora.pop."PopNr" IS NULL
-ORDER BY
-  apflora.ap."ApArtId",
-  apflora.pop."PopName";
-
 DROP VIEW IF EXISTS apflora.v_qk2_pop_ohnepopnr CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk2_pop_ohnepopnr AS
 SELECT
