@@ -6911,34 +6911,6 @@ ORDER BY
   apflora.apber."JBerJahr",
   apflora.apber."JBerId";
 
-
-DROP VIEW IF EXISTS apflora.v_qk_assozart_ohneart CASCADE;
-CREATE OR REPLACE VIEW apflora.v_qk_assozart_ohneart AS
-SELECT
-  apflora.ap."ApArtId",
-  'Assoziierte Art ohne Art:'::text AS "hw",
-  concat(
-    '<a href="http://apflora.ch/index.html?ap=',
-    apflora.ap."ApArtId",
-    '&assozarten=',
-    apflora.assozart."AaId",
-    '" target="_blank">',
-    concat('Assoz.-Art-ID: ', apflora.assozart."AaId"),
-    '</a>'
-  ) AS "link"
-FROM
-  apflora.ap
-  INNER JOIN
-    apflora.assozart
-    ON apflora.ap."ApArtId" = apflora.assozart."AaApArtId"
-WHERE
-  apflora.assozart."AaSisfNr" IS NULL
-  OR apflora.assozart."AaSisfNr" = 0
-ORDER BY
-  apflora.ap."ApArtId",
-  apflora.assozart."AaId";
-
-
 DROP VIEW IF EXISTS apflora.v_qk2_assozart_ohneart CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk2_assozart_ohneart AS
 SELECT
