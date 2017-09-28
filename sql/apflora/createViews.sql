@@ -6933,54 +6933,6 @@ ORDER BY
   apflora.ap."ApArtId",
   apflora.assozart."AaId";
 
-DROP VIEW IF EXISTS apflora.v_qk_pop_koordentsprechenkeinertpop CASCADE;
-CREATE OR REPLACE VIEW apflora.v_qk_pop_koordentsprechenkeinertpop AS
-SELECT DISTINCT
-  apflora.pop."ApArtId",
-  'Population: Koordinaten entsprechen keiner Teilpopulation:'::text AS "hw",
-  concat(
-    '<a href="http://apflora.ch/index.html?ap=',
-    apflora.pop."ApArtId",
-    '&pop=',
-    apflora.pop."PopId",
-    '" target="_blank">',
-    COALESCE(
-      concat('Pop: ', apflora.pop."PopNr"),
-      concat('Pop: id=', apflora.pop."PopId")
-    ),
-    '</a>'
-  ) AS "link",
-  apflora.pop."PopXKoord" AS "XKoord",
-  apflora.pop."PopYKoord" AS "YKoord"
-FROM
-  apflora.pop
-WHERE
-  apflora.pop."PopXKoord" Is NOT Null
-  AND apflora.pop."PopYKoord" IS NOT NULL
-  AND apflora.pop."PopId" NOT IN (
-    SELECT
-      apflora.tpop."PopId"
-    FROM
-      apflora.tpop
-    WHERE
-      apflora.tpop."TPopXKoord" = "PopXKoord"
-      AND apflora.tpop."TPopYKoord" = "PopYKoord"
-  )
-ORDER BY
-  apflora.pop."ApArtId",
-  concat(
-    '<a href="http://apflora.ch/index.html?ap=',
-    apflora.pop."ApArtId",
-    '&pop=',
-    apflora.pop."PopId",
-    '" target="_blank">',
-    COALESCE(
-      concat('Pop: ', apflora.pop."PopNr"),
-      concat('Pop: id=', apflora.pop."PopId")
-    ),
-    '</a>'
-  );
-
 DROP VIEW IF EXISTS apflora.v_qk2_pop_koordentsprechenkeinertpop CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk2_pop_koordentsprechenkeinertpop AS
 SELECT DISTINCT
