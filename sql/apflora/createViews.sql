@@ -7079,50 +7079,6 @@ HAVING
       apflora.tpop."TPopHerkunft" IN (100, 200, 210)
   );
 
-DROP VIEW IF EXISTS apflora.v_qk_pop_statuserloschenmittpopansaatversuch CASCADE;
-CREATE OR REPLACE VIEW apflora.v_qk_pop_statuserloschenmittpopansaatversuch AS
-SELECT DISTINCT
-  apflora.pop."ApArtId",
-  'Population: Status ist "erloschen" (urspruenglich oder angesiedelt), es gibt aber eine Teilpopulation mit Status "angesiedelt, Ansaatversuch":'::text AS "hw",
-  concat(
-    '<a href="http://apflora.ch/index.html?ap=',
-    apflora.pop."ApArtId",
-    '&pop=',
-    apflora.pop."PopId",
-    '" target="_blank">',
-    COALESCE(
-      concat('Pop: ', apflora.pop."PopNr"),
-      concat('Pop: id=', apflora.pop."PopId")
-    ),
-    '</a>'
-  ) AS "link"
-FROM
-  apflora.pop
-WHERE
-  apflora.pop."PopHerkunft" IN (101, 202, 211)
-  AND apflora.pop."PopId" IN (
-    SELECT DISTINCT
-      apflora.tpop."PopId"
-    FROM
-      apflora.tpop
-    WHERE
-      apflora.tpop."TPopHerkunft" = 201
-  )
-ORDER BY
-  apflora.pop."ApArtId",
-  concat(
-    '<a href="http://apflora.ch/index.html?ap=',
-    apflora.pop."ApArtId",
-    '&pop=',
-    apflora.pop."PopId",
-    '" target="_blank">',
-    COALESCE(
-      concat('Pop: ', apflora.pop."PopNr"),
-      concat('Pop: id=', apflora.pop."PopId")
-    ),
-    '</a>'
-  );
-
 DROP VIEW IF EXISTS apflora.v_qk2_pop_statuserloschenmittpopansaatversuch CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk2_pop_statuserloschenmittpopansaatversuch AS
 SELECT DISTINCT
