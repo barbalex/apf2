@@ -6799,31 +6799,6 @@ ORDER BY
   apflora.ziel."ZielJahr",
   apflora.ziel."ZielId";
 
-DROP VIEW IF EXISTS apflora.v_qk_erfkrit_ohnebeurteilung CASCADE;
-CREATE OR REPLACE VIEW apflora.v_qk_erfkrit_ohnebeurteilung AS
-SELECT
-  apflora.ap."ApArtId",
-  'Erfolgskriterium ohne Beurteilung:'::text AS "hw",
-  concat(
-    '<a href="http://apflora.ch/index.html?ap=',
-    apflora.ap."ApArtId",
-    '&erfkrit=',
-    apflora.erfkrit."ErfkritId",
-    '" target="_blank">',
-    concat('Erfkrit.-ID: ', apflora.erfkrit."ErfkritId"),
-    '</a>'
-  ) AS "link"
-FROM
-  apflora.ap
-  INNER JOIN
-    apflora.erfkrit
-    ON apflora.ap."ApArtId" = apflora.erfkrit."ApArtId"
-WHERE
-  apflora.erfkrit."ErfkritErreichungsgrad" IS NULL
-ORDER BY
-  apflora.ap."ApArtId",
-  apflora.erfkrit."ErfkritId";
-
 DROP VIEW IF EXISTS apflora.v_qk2_erfkrit_ohnebeurteilung CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk2_erfkrit_ohnebeurteilung AS
 SELECT
