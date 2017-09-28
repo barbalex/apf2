@@ -1,6 +1,6 @@
 -- apflora_reader can look at all but change nothing
---drop role if exists apflora_reader;
---create role apflora_reader;
+drop role if exists apflora_reader;
+create role apflora_reader;
 revoke connect on database apflora from public;
 grant connect on database apflora to apflora_reader;
 revoke all on all tables in schema apflora from public;
@@ -18,8 +18,8 @@ alter role apflora_reader with login;
 -- apflora_artverantwortlich can do anything
 -- as far as row-level-security allows
 -- (allows only permitted projects)
---drop role if exists apflora_artverantwortlich;
---create role apflora_artverantwortlich with login in group anon, apflora_reader;
+drop role if exists apflora_artverantwortlich;
+create role apflora_artverantwortlich with login in group anon, apflora_reader;
 revoke connect on database apflora from public;
 grant connect on database apflora to apflora_artverantwortlich;
 grant all on all tables in schema apflora to apflora_artverantwortlich;
@@ -41,8 +41,8 @@ grant z to authenticator;
 
 -- apflora_freiwillig can work on kontrollen
 -- need to enforce freiwilligen-kontrollen in ui
---drop role if exists apflora_freiwillig;
---create role apflora_freiwillig;
+drop role if exists apflora_freiwillig;
+create role apflora_freiwillig;
 revoke connect on database apflora from public;
 grant apflora_reader to apflora_freiwillig;
 grant all on apflora.tpopkontr, apflora.tpopkontrzaehl to apflora_freiwillig;
