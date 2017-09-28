@@ -6841,35 +6841,6 @@ ORDER BY
   apflora.ap."ApArtId",
   apflora.erfkrit."ErfkritId";
 
-DROP VIEW IF EXISTS apflora.v_qk_apber_ohnejahr CASCADE;
-CREATE OR REPLACE VIEW apflora.v_qk_apber_ohnejahr AS
-SELECT
-  apflora.ap."ApArtId",
-  'AP-Bericht ohne Jahr:'::text AS "hw",
-  concat(
-    '<a href="http://apflora.ch/index.html?ap=',
-    apflora.ap."ApArtId",
-    '&jber=',
-    apflora.apber."JBerId",
-    '" target="_blank">',
-    COALESCE(
-      concat('Jahr: ', apflora.apber."JBerJahr", ' (id=', apflora.apber."JBerId", ')'),
-      concat('AP-Ber.-ID: ', apflora.apber."JBerId")
-    ),
-    '</a>'
-  ) AS "link"
-FROM
-  apflora.ap
-  INNER JOIN
-    apflora.apber
-    ON apflora.ap."ApArtId" = apflora.apber."ApArtId"
-WHERE
-  apflora.apber."JBerJahr" IS NULL
-ORDER BY
-  apflora.ap."ApArtId",
-  apflora.apber."JBerJahr",
-  apflora.apber."JBerId";
-
 DROP VIEW IF EXISTS apflora.v_qk2_apber_ohnejahr CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk2_apber_ohnejahr AS
 SELECT
