@@ -7770,60 +7770,6 @@ ORDER BY
   apflora.tpopkontr."TPopKontrJahr",
   apflora.tpopkontr."TPopKontrId";
 
-DROP VIEW IF EXISTS apflora.v_qk_freiwkontrzaehlung_ohneanzahl CASCADE;
-CREATE OR REPLACE VIEW apflora.v_qk_freiwkontrzaehlung_ohneanzahl AS
-SELECT
-  apflora.ap."ApArtId",
-  'Zaehlung ohne Anzahl (Freiwilligen-Kontrolle):'::text AS "hw",
-  concat(
-    '<a href="http://apflora.ch/index.html?ap=',
-    apflora.ap."ApArtId",
-    '&pop=',
-    apflora.pop."PopId",
-    '&tpop=',
-    apflora.tpop."TPopId",
-    '&tpopfreiwkontr=',
-    apflora.tpopkontr."TPopKontrId",
-    '" target="_blank">',
-    COALESCE(
-      concat('Pop: ', apflora.pop."PopNr"),
-      concat('Pop.-ID: ', apflora.pop."PopId")
-    ),
-    COALESCE(
-      concat(' > TPop: ', apflora.tpop."TPopNr"),
-      concat(' > TPop.-ID: ', apflora.tpop."TPopId")
-    ),
-    COALESCE(
-      concat(' > KontrJahr: ', apflora.tpopkontr."TPopKontrJahr"),
-      concat(' > Kontr.-ID: ', apflora.tpopkontr."TPopKontrId")
-    ),
-    '</a>'
-  ) AS "link",
-  apflora.tpopkontr."TPopKontrJahr" AS "Berichtjahr"
-FROM
-  apflora.ap
-  INNER JOIN
-    (apflora.pop
-    INNER JOIN
-      (apflora.tpop
-      INNER JOIN
-        (apflora.tpopkontr
-        INNER JOIN
-          apflora.tpopkontrzaehl
-          ON apflora.tpopkontr."TPopKontrId" = apflora.tpopkontrzaehl."TPopKontrId")
-        ON apflora.tpop."TPopId" = apflora.tpopkontr."TPopId")
-      ON apflora.pop."PopId" = apflora.tpop."PopId")
-    ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
-WHERE
-  apflora.tpopkontrzaehl."Anzahl" IS NULL
-  AND apflora.tpopkontr."TPopKontrJahr" IS NOT NULL
-ORDER BY
-  apflora.ap."ApArtId",
-  apflora.pop."PopNr",
-  apflora.tpop."TPopNr",
-  apflora.tpopkontr."TPopKontrJahr",
-  apflora.tpopkontr."TPopKontrId";
-
 DROP VIEW IF EXISTS apflora.v_qk2_freiwkontrzaehlung_ohneanzahl CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk2_freiwkontrzaehlung_ohneanzahl AS
 SELECT
