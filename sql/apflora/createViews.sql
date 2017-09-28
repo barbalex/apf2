@@ -5588,35 +5588,6 @@ ORDER BY
   apflora.ap."ApArtId",
   apflora.pop."PopNr";
 
-DROP VIEW IF EXISTS apflora.v_qk_pop_ohnekoord CASCADE;
-CREATE OR REPLACE VIEW apflora.v_qk_pop_ohnekoord AS
-SELECT
-  apflora.ap."ApArtId" AS "ApArtId",
-  'Population: Mindestens eine Koordinate fehlt:'::text AS "hw",
-  concat(
-    '<a href="http://apflora.ch/index.html?ap=',
-    apflora.ap."ApArtId",
-    '&pop=',
-    apflora.pop."PopId",
-    '" target="_blank">',
-    COALESCE(
-      concat('Pop: ', apflora.pop."PopNr"),
-      concat('Pop: id=', apflora.pop."PopId")
-    ),
-    '</a>'
-  ) AS "link"
-FROM
-  apflora.ap
-  INNER JOIN
-    apflora.pop
-    ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
-WHERE
-  apflora.pop."PopXKoord" IS NULL
-  OR apflora.pop."PopYKoord" IS NULL
-ORDER BY
-  apflora.ap."ApArtId",
-  apflora.pop."PopNr";
-
 DROP VIEW IF EXISTS apflora.v_qk2_pop_ohnekoord CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk2_pop_ohnekoord AS
 SELECT
