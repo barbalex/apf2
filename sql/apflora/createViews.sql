@@ -6497,55 +6497,6 @@ ORDER BY
   apflora.tpopkontr."TPopKontrJahr",
   apflora.tpopkontr."TPopKontrId";
 
-DROP VIEW IF EXISTS apflora.v_qk_tpopber_ohnejahr CASCADE;
-CREATE OR REPLACE VIEW apflora.v_qk_tpopber_ohnejahr AS
-SELECT
-  apflora.ap."ApArtId",
-  'Teilpopulations-Bericht ohne Jahr:'::text AS "hw",
-  concat(
-    '<a href="http://apflora.ch/index.html?ap=',
-    apflora.ap."ApArtId",
-    '&pop=',
-    apflora.pop."PopId",
-    '&tpop=',
-    apflora.tpop."TPopId",
-    '&tpopber=',
-    apflora.tpopber."TPopBerId",
-    '" target="_blank">',
-    COALESCE(
-      concat('Pop: ', apflora.pop."PopNr"),
-      concat('Pop.-ID: ', apflora.pop."PopId")
-    ),
-    COALESCE(
-      concat(' > TPop: ', apflora.tpop."TPopNr"),
-      concat(' > TPop.-ID: ', apflora.tpop."TPopId")
-    ),
-    COALESCE(
-      concat(' > "TPopBerJahr": ', apflora.tpopber."TPopBerJahr"),
-      concat(' > TPopBer.-ID: ', apflora.tpopber."TPopBerId")
-    ),
-    '</a>'
-  ) AS "link"
-FROM
-  apflora.ap
-  INNER JOIN
-    (apflora.pop
-    INNER JOIN
-      (apflora.tpop
-      INNER JOIN
-        apflora.tpopber
-        ON apflora.tpop."TPopId" = apflora.tpopber."TPopId")
-      ON apflora.pop."PopId" = apflora.tpop."PopId")
-    ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
-WHERE
-  apflora.tpopber."TPopBerJahr" IS NULL
-ORDER BY
-  apflora.ap."ApArtId",
-  apflora.pop."PopNr",
-  apflora.tpop."TPopNr",
-  apflora.tpopber."TPopBerJahr",
-  apflora.tpopber."TPopBerId";
-
 DROP VIEW IF EXISTS apflora.v_qk2_tpopber_ohnejahr CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk2_tpopber_ohnejahr AS
 SELECT
