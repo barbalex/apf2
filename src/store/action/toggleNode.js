@@ -4,6 +4,7 @@ import { toJS } from 'mobx'
 
 import isNodeOpen from '../../modules/isNodeOpen'
 import isNodeInActiveNodePath from '../../modules/isNodeInActiveNodePath'
+import openNode from './openNode'
 
 export default (store: Object, tree: Object, node: Object): any => {
   if (!node.url) {
@@ -17,22 +18,14 @@ export default (store: Object, tree: Object, node: Object): any => {
     if (node.url.length === tree.activeNodeArray.length) {
       /**
        * dont do anything:
-       * klicked nodo should always be / remain active
+       * klicked node should always be / remain active
        */
       // newActiveNodeArray.pop()
     } else {
       // leave newActiveNodeArray as it is
     }
   } else if (!nodeIsOpen) {
-    tree.openNodes.push(node.url)
-    // automatically open zaehlFolder of tpopfeldkontr or tpopfreiwkontr
-    if (['tpopfeldkontr', 'tpopfreiwkontr'].includes(node.menuType)) {
-      tree.openNodes.push([...node.url, 'Zaehlungen'])
-    }
-    // automatically open zielberFolder of ziel
-    if (node.menuType === 'ziel') {
-      tree.openNodes.push([...node.url, 'Berichte'])
-    }
+    openNode({tree, node})
   }
   tree.setLastClickedNode(node.url)
   tree.setActiveNodeArray(newActiveNodeArray)
