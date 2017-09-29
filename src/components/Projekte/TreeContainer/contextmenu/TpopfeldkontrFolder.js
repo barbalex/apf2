@@ -30,6 +30,14 @@ const TpopfeldkontrFolder = ({
       >
         erstelle neue
       </MenuItem>
+    <MenuItem
+      onClick={onClick}
+      data={{
+        action: 'openLowerNodes',
+      }}
+    >
+      alle öffnen
+    </MenuItem>
       {moving &&
         <MenuItem
           onClick={onClick}

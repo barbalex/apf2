@@ -31,7 +31,15 @@ const TpopfreiwkontrFolder = ({
       >
         erstelle neue
       </MenuItem>
-      {moving &&
+      <MenuItem
+        onClick={onClick}
+        data={{
+          action: 'openLowerNodes',
+        }}
+      >
+        alle öffnen
+      </MenuItem>
+      {moving && (
         <MenuItem
           onClick={onClick}
           data={{
@@ -39,8 +47,9 @@ const TpopfreiwkontrFolder = ({
           }}
         >
           {`verschiebe '${store.moving.label}' hierhin`}
-        </MenuItem>}
-      {copying &&
+        </MenuItem>
+      )}
+      {copying && (
         <MenuItem
           onClick={onClick}
           data={{
@@ -48,8 +57,9 @@ const TpopfreiwkontrFolder = ({
           }}
         >
           {`kopiere '${store.copying.label}' hierhin`}
-        </MenuItem>}
-      {store.copying.table &&
+        </MenuItem>
+      )}
+      {store.copying.table && (
         <MenuItem
           onClick={onClick}
           data={{
@@ -57,7 +67,8 @@ const TpopfreiwkontrFolder = ({
           }}
         >
           Kopieren aufheben
-        </MenuItem>}
+        </MenuItem>
+      )}
     </ContextMenu>
   )
 }
