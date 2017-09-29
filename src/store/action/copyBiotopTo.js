@@ -33,17 +33,10 @@ export default async (store: Object, newId: number): Promise<void> => {
   })
   // remove label: field does not exist in db, is computed
   delete rowForDb.label
-  // server expects TPopId to be called id
-  rowForDb.id = rowForDb.TPopKontrId
-  delete rowForDb.TPopKontrId
-  // server expects user to be added as user
-  rowForDb.user = store.user.name
-  delete rowForDb.MutWer
-  delete rowForDb.MutWann
 
   // update db
   try {
-    axios.patch('/tpopkontr', rowForDb)
+    axios.patch(`/tpopkontr?TPopKontrId=eq.${rowForDb.TPopKontrId}`, rowForDb)
   } catch (error) {
     rowToUpdate = rowToUpdateBeforeUpdating
     store.listError(error)
