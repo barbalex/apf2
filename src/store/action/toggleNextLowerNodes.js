@@ -6,20 +6,20 @@ import isNodeOpen from '../../modules/isNodeOpen'
 import openNode from './openNode'
 
 const openLowerNodes = ({ tree, node }: { tree: Object, node: Object }) => {
-  const nodes = tree.openNodes.filter(n => {
-    const isSameLevel = n.length === node.url.length + 1
-    if (!isSameLevel) return false
-    const activeNodeArrayPartWithEqualLength = n.slice(0, node.url.length)
+  const lowerNodes = toJS(tree.nodes).filter(n => {
+    const levelNeeded = n.url.length === node.url.length + 1
+    if (!levelNeeded) return false
+    const activeNodeArrayPartWithEqualLength = n.url.slice(0, node.url.length)
     return isEqual(activeNodeArrayPartWithEqualLength, node.url)
   })
-  nodes.forEach(n => openNode({ tree, node: n }))
+  lowerNodes.forEach(n => openNode({ tree, node: n }))
 }
 
 export default ({ tree, node }: { tree: Object, node: Object }) => {
   // if node is not open, toggle it
   if (!isNodeOpen(toJS(tree.openNodes), node.url)) {
     openNode({ tree, node })
-    // wait a while for
+    // wait a while for node to load
     setTimeout(() => openLowerNodes({ tree, node }), 1000)
   } else {
     openLowerNodes({ tree, node })

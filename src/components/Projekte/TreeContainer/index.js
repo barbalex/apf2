@@ -82,9 +82,7 @@ const NurApDiv = styled.div`
   min-width: 40px;
 `
 const ApDivToggle = styled(Toggle)`margin-left: -8px;`
-const InnerTreeContainer = styled.div`
-  height: 100%;
-`
+const InnerTreeContainer = styled.div`height: 100%;`
 
 const getAndValidateCoordinatesOfTpop = (store, id) => {
   const myId = parseInt(id, 10)
@@ -153,7 +151,8 @@ const enhance = compose(
         return store.listError(
           new Error('no firstElementChild passed with click')
         )
-      const id = firstElementChild.getAttribute('data-id')
+      let id = firstElementChild.getAttribute('data-id')
+      if (!isNaN(id)) id = +id
       const parentId = firstElementChild.getAttribute('data-parentid')
       const url = firstElementChild.getAttribute('data-url')
       const label = firstElementChild.getAttribute('data-label')
@@ -171,6 +170,12 @@ const enhance = compose(
           }
           const idToPass = parentId || id
           store.insertDataset(tree, table, idToPass, baseUrl)
+        },
+        openLowerNodes() {
+          const node = tree.nodes.find(
+            n => n.id === id && n.menuType === menuType
+          )
+          tree.toggleNextLowerNodes({ tree, node })
         },
         delete() {
           store.deleteDatasetDemand(table, id, baseUrl, label)
