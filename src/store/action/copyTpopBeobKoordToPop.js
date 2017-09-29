@@ -48,17 +48,10 @@ export default async (store: Object, beobId: string): Promise<void> => {
   delete tpopForDb.herkunft
   delete tpopForDb.distance
   delete tpopForDb.TPopKoordWgs84
-  // server expects TPopId to be called id
-  tpopForDb.id = tpopForDb.TPopId
-  delete tpopForDb.TPopId
-  // server expects user to be added as user
-  tpopForDb.user = store.user.name
-  // server adds MutWer and MutWann itself
-  delete tpopForDb.MutWer
-  delete tpopForDb.MutWann
+  delete tpopForDb.ApArtId
   // update db
   try {
-    await axios.patch('/tpop', tpopForDb)
+    await axios.patch(`/tpop?TPopId=eq.${tpopForDb.TPopId}`, tpopForDb)
   } catch (error) {
     tpopInStore = originalTpop
     store.listError(error)
