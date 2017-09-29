@@ -14,6 +14,14 @@ const Apfolder = ({ onClick, tree }: { onClick: () => void, tree: Object }) => (
     >
       erstelle neue
     </MenuItem>
+    <MenuItem
+      onClick={onClick}
+      data={{
+        action: 'openLowerNodes',
+      }}
+    >
+      alle öffnen
+    </MenuItem>
   </ContextMenu>
 )
 

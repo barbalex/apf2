@@ -141,8 +141,6 @@ const enhance = compose(
   inject('store'),
   withHandlers({
     handleClick: props => (e, data, element) => {
-      console.log('TreeContainer: data:', data)
-      console.log('TreeContainer: element:', element)
       const { store, tree } = props
       if (!data) return store.listError(new Error('no data passed with click'))
       if (!element)
@@ -161,8 +159,6 @@ const enhance = compose(
       const baseUrl = JSON.parse(url)
       const nodeType = firstElementChild.getAttribute('data-nodetype')
       const menuType = firstElementChild.getAttribute('data-menutype')
-      console.log('TreeContainer: nodeType:', nodeType)
-      console.log('TreeContainer: menuType:', menuType)
       const actions = {
         insert() {
           if (nodeType === 'table') {
@@ -176,8 +172,6 @@ const enhance = compose(
           store.insertDataset(tree, table, idToPass, baseUrl)
         },
         openLowerNodes() {
-          console.log('menuType:', menuType)
-          console.log('nodes:', tree.nodes)
           const node = tree.nodes.find(
             n => n.id === id && n.menuType === menuType
           )
