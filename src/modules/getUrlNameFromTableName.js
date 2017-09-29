@@ -20,7 +20,6 @@ export default (table: string): string => {
     tpopkontrzaehl: 'Zaehlungen',
     tpopmassn: 'Massnahmen',
     tpopmassnber: 'Massnahmen-Berichte',
-    user: 'Benutzer',
     userprojekt: 'Benutzer-Projekte',
     ziel: 'AP-Ziele',
     zielber: 'Berichte',

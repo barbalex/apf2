@@ -41,7 +41,6 @@ export default [
   'tpopmassn_erfbeurt_werte',
   'tpopmassn_typ_werte',
   'tpopmassnber',
-  'user',
   'userprojekt',
   'ziel',
   'ziel_typ_werte',
