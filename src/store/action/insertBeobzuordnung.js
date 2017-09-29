@@ -57,7 +57,7 @@ const continueWithBeob = (
   }
 }
 
-export default (
+export default async (
   store: Object,
   tree: Object,
   beob: Object,
@@ -74,12 +74,21 @@ export default (
     return continueWithBeob(store, tree, beob, newKey, newValue)
   }
   // insert new dataset in db and fetch id
-  axios
-    .post(`/beobzuordnung?BeobId=eq.${beob.id}`)
-    .then(({ data: row }) => {
-      // insert this dataset in store.table
-      store.table.beobzuordnung.set(row.BeobId, row)
-      continueWithBeob(store, tree, beob, newKey, newValue)
+  let response
+  try {
+    response = await axios({
+      method: 'POST',
+      url: '/beobzuordnung',
+      data: { BeobId: beob.id },
+      headers: {
+        Prefer: 'return=representation',
+      },
     })
-    .catch(error => store.listError(error))
+  } catch (error) {
+    return store.listError(error)
+  }
+  const row = response.data[0]
+  // insert this dataset in store.table
+  store.table.beobzuordnung.set(row.BeobId, row)
+  continueWithBeob(store, tree, beob, newKey, newValue)
 }
