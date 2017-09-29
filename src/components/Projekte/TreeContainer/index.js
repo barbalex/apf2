@@ -82,9 +82,9 @@ const NurApDiv = styled.div`
   min-width: 40px;
 `
 const ApDivToggle = styled(Toggle)`margin-left: -8px;`
-const strukturbaumContainerDivStyle = {
-  height: '100%',
-}
+const InnerTreeContainer = styled.div`
+  height: 100%;
+`
 
 const getAndValidateCoordinatesOfTpop = (store, id) => {
   const myId = parseInt(id, 10)
@@ -299,10 +299,9 @@ const TreeContainer = ({
           </NurApDiv>
         )}
       </LabelFilterContainer>
-      <div
-        style={strukturbaumContainerDivStyle}
+      <InnerTreeContainer
         // $FlowIssue
-        ref={c => (this.tree = c)}
+        innerRef={c => (this.tree = c)}
       >
         <Tree
           tree={tree}
@@ -324,7 +323,7 @@ const TreeContainer = ({
           lastClickedNode={toJS(tree.lastClickedNode)}
           openNodes={tree.openNodes}
         />
-      </div>
+      </InnerTreeContainer>
       <CmApFolder onClick={handleClick} tree={tree} />
       <CmAp onClick={handleClick} tree={tree} />
       <CmApberuebersichtFolder onClick={handleClick} tree={tree} />
