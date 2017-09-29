@@ -51,17 +51,9 @@ export default async (store: Object, tpopId: number): Promise<void> => {
   // remove label and PopKoordWgs84: fields do not exist in db, are computed
   delete popForDb.label
   delete popForDb.PopKoordWgs84
-  // server expects TPopId to be called id
-  popForDb.id = popForDb.PopId
-  delete popForDb.PopId
-  // server expects user to be added as user
-  popForDb.user = store.user.name
-  // server adds MutWer and MutWann itself
-  delete popForDb.MutWer
-  delete popForDb.MutWann
   // update db
   try {
-    await axios.patch('/pop', popForDb)
+    await axios.patch(`/pop?PopId=eq.${popForDb.PopId}`, popForDb)
   } catch (error) {
     popInStore = originalPop
     store.listError(error)
