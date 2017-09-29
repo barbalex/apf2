@@ -14,7 +14,7 @@ const enhance = compose(
     // this is how to pass data from ContextMenuTrigger to ContextMenu
     onShow: props => event => props.changeLabel(event.detail.data.nodeLabel),
   }),
-  observer,
+  observer
 )
 
 const PopFolder = ({
@@ -51,7 +51,15 @@ const PopFolder = ({
       >
         erstelle neue
       </MenuItem>
-      {moving &&
+      <MenuItem
+        onClick={onClick}
+        data={{
+          action: 'openLowerNodes',
+        }}
+      >
+        alle öffnen
+      </MenuItem>
+      {moving && (
         <MenuItem
           onClick={onClick}
           data={{
@@ -59,8 +67,9 @@ const PopFolder = ({
           }}
         >
           {`verschiebe '${store.moving.label}' hierhin`}
-        </MenuItem>}
-      {copying &&
+        </MenuItem>
+      )}
+      {copying && (
         <MenuItem
           onClick={onClick}
           data={{
@@ -68,8 +77,9 @@ const PopFolder = ({
           }}
         >
           {`kopiere '${store.copying.label}' hierhin`}
-        </MenuItem>}
-      {copying &&
+        </MenuItem>
+      )}
+      {copying && (
         <MenuItem
           onClick={onClick}
           data={{
@@ -77,7 +87,8 @@ const PopFolder = ({
           }}
         >
           Kopieren aufheben
-        </MenuItem>}
+        </MenuItem>
+      )}
     </ContextMenu>
   )
 }

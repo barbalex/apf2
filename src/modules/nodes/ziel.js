@@ -6,7 +6,7 @@ export default (
   tree: Object,
   projId: number,
   apArtId: number,
-  zieljahr: number,
+  zieljahr: number
 ): Array<Object> => {
   // fetch sorting indexes of parents
   const projIndex = findIndex(tree.filteredAndSorted.projekt, {
@@ -14,7 +14,7 @@ export default (
   })
   const apIndex = findIndex(
     tree.filteredAndSorted.ap.filter(a => a.ProjId === projId),
-    { ApArtId: apArtId },
+    { ApArtId: apArtId }
   )
   const zieljahrIndex = findIndex(tree.filteredAndSorted.zieljahr, {
     jahr: zieljahr,

@@ -22,6 +22,7 @@ export default (store: Object, tree: Object): Array<Object> => {
     const zielJahreObjects = zielJahrWerte.map(z => ({
       jahr: z,
       length: ziele.filter(zj => zj.ZielJahr === z).length,
+      menuType: 'zieljahr',
     }))
     return zielJahreObjects
   }

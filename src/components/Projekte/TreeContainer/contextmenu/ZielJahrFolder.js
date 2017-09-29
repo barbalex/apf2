@@ -9,7 +9,7 @@ const ZielJahrFolder = ({
   onClick: () => void,
   tree: Object,
 }) => (
-  <ContextMenu id={`${tree.name}zieljahrFolder`}>
+  <ContextMenu id={`${tree.name}zieljahr`}>
     <div className="react-contextmenu-title">Ziele</div>
     <MenuItem
       onClick={onClick}
@@ -19,6 +19,14 @@ const ZielJahrFolder = ({
       }}
     >
       erstelle neues
+    </MenuItem>
+    <MenuItem
+      onClick={onClick}
+      data={{
+        action: 'openLowerNodes',
+      }}
+    >
+      alle öffnen
     </MenuItem>
   </ContextMenu>
 )

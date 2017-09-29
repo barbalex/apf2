@@ -55,7 +55,6 @@ const TpopFolder = ({
         onClick={onClick}
         data={{
           action: 'openLowerNodes',
-          table: 'tpop',
         }}
       >
         alle öffnen

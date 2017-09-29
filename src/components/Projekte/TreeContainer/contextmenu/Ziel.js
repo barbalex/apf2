@@ -11,7 +11,7 @@ const enhance = compose(
     // according to https://github.com/vkbansal/react-contextmenu/issues/65
     // this is how to pass data from ContextMenuTrigger to ContextMenu
     onShow: props => event => props.changeLabel(event.detail.data.nodeLabel),
-  }),
+  })
 )
 
 const Ziel = ({
