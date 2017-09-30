@@ -5579,16 +5579,14 @@ SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
   'Population: Mindestens eine Koordinate fehlt:'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId"]::text[] AS url
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId"]::text[] AS url,
+  ARRAY[concat('Population: ', apflora.pop."PopNr")]::text[] AS text
 FROM
   apflora.ap
   INNER JOIN
     apflora.pop
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
-GROUP BY
-  apflora.ap."ApArtId",
-  apflora.pop."PopId"
-HAVING
+WHERE
   apflora.pop."PopXKoord" IS NULL
   OR apflora.pop."PopYKoord" IS NULL
 ORDER BY
@@ -5601,16 +5599,14 @@ SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
   'Population ohne Nr.:'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId"]::text[] AS url
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId"]::text[] AS url,
+  ARRAY[concat('Population: ', apflora.pop."PopName")]::text[] AS text
 FROM
   apflora.ap
   INNER JOIN
     apflora.pop
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
-GROUP BY
-  apflora.ap."ApArtId",
-  apflora.pop."PopId"
-HAVING
+WHERE
   apflora.pop."PopNr" IS NULL
 ORDER BY
   apflora.ap."ApArtId",
@@ -5622,16 +5618,14 @@ SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
   'Population ohne Name:'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId"]::text[] AS url
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId"]::text[] AS url,
+  ARRAY[concat('Population: ', apflora.pop."PopNr")]::text[] AS text
 FROM
   apflora.ap
   INNER JOIN
     apflora.pop
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
-GROUP BY
-  apflora.ap."ApArtId",
-  apflora.pop."PopId"
-HAVING
+WHERE
   apflora.pop."PopName" IS NULL
 ORDER BY
   apflora.ap."ApArtId",
@@ -5643,16 +5637,14 @@ SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
   'Population ohne Status:'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId"]::text[] AS url
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId"]::text[] AS url,
+  ARRAY[concat('Population: ', apflora.pop."PopNr")]::text[] AS text
 FROM
   apflora.ap
   INNER JOIN
     apflora.pop
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
-GROUP BY
-  apflora.ap."ApArtId",
-  apflora.pop."PopId"
-HAVING
+WHERE
   apflora.pop."PopHerkunft" IS NULL
 ORDER BY
   apflora.ap."ApArtId",
@@ -5664,16 +5656,14 @@ SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
   'Population ohne "bekannt seit":'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId"]::text[] AS url
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId"]::text[] AS url,
+  ARRAY[concat('Population: ', apflora.pop."PopNr")]::text[] AS text
 FROM
   apflora.ap
   INNER JOIN
     apflora.pop
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
-GROUP BY
-  apflora.ap."ApArtId",
-  apflora.pop."PopId"
-HAVING
+WHERE
   apflora.pop."PopBekanntSeit" IS NULL
 ORDER BY
   apflora.ap."ApArtId",
@@ -5685,16 +5675,14 @@ SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
   'Population mit "Status unklar", ohne Begruendung:'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId"]::text[] AS url
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId"]::text[] AS url,
+  ARRAY[concat('Population: ', apflora.pop."PopNr")]::text[] AS text
 FROM
   apflora.ap
   INNER JOIN
     apflora.pop
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
-GROUP BY
-  apflora.ap."ApArtId",
-  apflora.pop."PopId"
-HAVING
+WHERE
   apflora.pop."PopHerkunftUnklar" = 1
   AND apflora.pop."PopHerkunftUnklarBegruendung" IS NULL
 ORDER BY
@@ -5707,7 +5695,8 @@ SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
   'Population ohne Teilpopulation:'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId"]::text[] AS url
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId"]::text[] AS url,
+  ARRAY[concat('Population: ', apflora.pop."PopNr")]::text[] AS text
 FROM
   apflora.ap
   INNER JOIN
@@ -5716,11 +5705,7 @@ FROM
       apflora.tpop
       ON apflora.pop."PopId" = apflora.tpop."PopId")
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
-GROUP BY
-  apflora.ap."ApArtId",
-  apflora.pop."PopId",
-  apflora.tpop."TPopId"
-HAVING
+WHERE
   apflora.tpop."TPopId" IS NULL
 ORDER BY
   apflora.ap."ApArtId",
@@ -5732,20 +5717,17 @@ SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
   'Teilpopulation ohne Nr.:'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId"]::text[] AS url
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId"]::text[] AS url,
+  ARRAY[concat('Population: ', apflora.pop."PopNr"), concat('Teil-Population: ', apflora.tpop."TPopNr")]::text[] AS text
 FROM
   apflora.ap
   INNER JOIN
-    (apflora.pop
+    apflora.pop
     INNER JOIN
       apflora.tpop
-      ON apflora.pop."PopId" = apflora.tpop."PopId")
+      ON apflora.pop."PopId" = apflora.tpop."PopId"
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
-GROUP BY
-  apflora.ap."ApArtId",
-  apflora.pop."PopId",
-  apflora.tpop."TPopId"
-HAVING
+WHERE
   apflora.tpop."TPopNr" IS NULL
 ORDER BY
   apflora.ap."ApArtId",
@@ -5758,7 +5740,8 @@ SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
   'Teilpopulation ohne Flurname:'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId"]::text[] AS url
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId"]::text[] AS url,
+  ARRAY[concat('Population: ', apflora.pop."PopNr"), concat('Teil-Population: ', apflora.tpop."TPopNr")]::text[] AS text
 FROM
   apflora.ap
   INNER JOIN
@@ -5767,11 +5750,7 @@ FROM
       apflora.tpop
       ON apflora.pop."PopId" = apflora.tpop."PopId")
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
-GROUP BY
-  apflora.ap."ApArtId",
-  apflora.pop."PopId",
-  apflora.tpop."TPopId"
-HAVING
+WHERE
   apflora.tpop."TPopFlurname" IS NULL
 ORDER BY
   apflora.ap."ApArtId",
@@ -5784,7 +5763,8 @@ SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
   'Teilpopulation ohne Status:'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId"]::text[] AS url
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId"]::text[] AS url,
+  ARRAY[concat('Population: ', apflora.pop."PopNr"), concat('Teil-Population: ', apflora.tpop."TPopNr")]::text[] AS text
 FROM
   apflora.ap
   INNER JOIN
@@ -5793,11 +5773,7 @@ FROM
       apflora.tpop
       ON apflora.pop."PopId" = apflora.tpop."PopId")
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
-GROUP BY
-  apflora.ap."ApArtId",
-  apflora.pop."PopId",
-  apflora.tpop."TPopId"
-HAVING
+WHERE
   apflora.tpop."TPopHerkunft" IS NULL
 ORDER BY
   apflora.ap."ApArtId",
@@ -5809,7 +5785,8 @@ CREATE OR REPLACE VIEW apflora.v_qk2_tpop_ohnebekanntseit AS
 SELECT
   apflora.ap."ApArtId",
   'Teilpopulation ohne "bekannt seit":'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId"]::text[] AS url
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId"]::text[] AS url,
+  ARRAY[concat('Population: ', apflora.pop."PopNr"), concat('Teil-Population: ', apflora.tpop."TPopNr")]::text[] AS text
 FROM
   apflora.ap
   INNER JOIN
@@ -5818,11 +5795,7 @@ FROM
       apflora.tpop
       ON apflora.pop."PopId" = apflora.tpop."PopId")
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
-GROUP BY
-  apflora.ap."ApArtId",
-  apflora.pop."PopId",
-  apflora.tpop."TPopId"
-HAVING
+WHERE
   apflora.tpop."TPopBekanntSeit" IS NULL
 ORDER BY
   apflora.ap."ApArtId",
@@ -5835,7 +5808,8 @@ SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
   'Teilpopulation ohne "Fuer AP-Bericht relevant":'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId"]::text[] AS url
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId"]::text[] AS url,
+  ARRAY[concat('Population: ', apflora.pop."PopNr"), concat('Teil-Population: ', apflora.tpop."TPopNr")]::text[] AS text
 FROM
   apflora.ap
   INNER JOIN
@@ -5844,11 +5818,7 @@ FROM
       apflora.tpop
       ON apflora.pop."PopId" = apflora.tpop."PopId")
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
-GROUP BY
-  apflora.ap."ApArtId",
-  apflora.pop."PopId",
-  apflora.tpop."TPopId"
-HAVING
+WHERE
   apflora.tpop."TPopApBerichtRelevant" IS NULL
 ORDER BY
   apflora.ap."ApArtId",
@@ -5861,7 +5831,8 @@ SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
   'Teilpopulation mit Status "potenzieller Wuchs-/Ansiedlungsort" und "Fuer AP-Bericht relevant?" = ja:'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId"]::text[] AS url
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId"]::text[] AS url,
+  ARRAY[concat('Population: ', apflora.pop."PopNr"), concat('Teil-Population: ', apflora.tpop."TPopNr")]::text[] AS text
 FROM
   apflora.ap
   INNER JOIN
@@ -5870,11 +5841,7 @@ FROM
       apflora.tpop
       ON apflora.pop."PopId" = apflora.tpop."PopId")
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
-GROUP BY
-  apflora.ap."ApArtId",
-  apflora.pop."PopId",
-  apflora.tpop."TPopId"
-HAVING
+WHERE
   apflora.tpop."TPopHerkunft" = 300
   AND apflora.tpop."TPopApBerichtRelevant" = 1
 ORDER BY
@@ -5888,7 +5855,8 @@ SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
   'Teilpopulation mit "Status unklar", ohne Begruendung:'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId"]::text[] AS url
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId"]::text[] AS url,
+  ARRAY[concat('Population: ', apflora.pop."PopNr"), concat('Teil-Population: ', apflora.tpop."TPopNr")]::text[] AS text
 FROM
   apflora.ap
   INNER JOIN
@@ -5897,11 +5865,7 @@ FROM
       apflora.tpop
       ON apflora.pop."PopId" = apflora.tpop."PopId")
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
-GROUP BY
-  apflora.ap."ApArtId",
-  apflora.pop."PopId",
-  apflora.tpop."TPopId"
-HAVING
+WHERE
   apflora.tpop."TPopHerkunftUnklar" = 1
   AND apflora.tpop."TPopHerkunftUnklarBegruendung" IS NULL
 ORDER BY
@@ -5915,7 +5879,8 @@ SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
   'Teilpopulation: Mindestens eine Koordinate fehlt:'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId"]::text[] AS url
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId"]::text[] AS url,
+  ARRAY[concat('Population: ', apflora.pop."PopNr"), concat('Teil-Population: ', apflora.tpop."TPopNr")]::text[] AS text
 FROM
   apflora.ap
   INNER JOIN
@@ -5924,11 +5889,7 @@ FROM
       apflora.tpop
       ON apflora.pop."PopId" = apflora.tpop."PopId")
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
-GROUP BY
-  apflora.ap."ApArtId",
-  apflora.pop."PopId",
-  apflora.tpop."TPopId"
-HAVING
+WHERE
   apflora.tpop."TPopXKoord" IS NULL
   OR apflora.tpop."TPopYKoord" IS NULL
 ORDER BY
