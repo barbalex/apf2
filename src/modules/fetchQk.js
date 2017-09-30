@@ -172,18 +172,7 @@ const fetchQk = async ({
       .get(dataUrl)
       .then(res => {
         if (res.data.length > 0) {
-          const hw = res.data[0].hw
-          let url = []
-          res.data.forEach(d => {
-            if (isArray(d.url[0])) {
-              url = url.concat(d.url)
-            } else {
-              url.push(d.url)
-            }
-          })
-          const newMessages = { hw, url }
-
-          // add new messages to existing
+          const newMessages = res.data
           addMessages(newMessages)
           nrOfMessages += 1
         }
@@ -201,18 +190,7 @@ const fetchQk = async ({
       .post(dataUrl, { apid: apArtId, berichtjahr })
       .then(res => {
         if (res.data.length > 0) {
-          const hw = res.data[0].hw
-          let url = []
-          res.data.forEach(d => {
-            if (isArray(d.url[0])) {
-              url = url.concat(d.url)
-            } else {
-              url.push(d.url)
-            }
-          })
-          const newMessages = { hw, url }
-
-          // add new messages to existing
+          const newMessages = res.data
           addMessages(newMessages)
           nrOfMessages += 1
         }
