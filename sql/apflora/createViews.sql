@@ -7159,21 +7159,30 @@ HAVING
 DROP VIEW IF EXISTS apflora.v_qk2_tpop_mitstatuspotentiellundzaehlungmitanzahl CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk2_tpop_mitstatuspotentiellundzaehlungmitanzahl AS
 SELECT DISTINCT
-  apflora.ap."ProjId",
+  apflora.projekt."ProjId",
   apflora.pop."ApArtId",
   apflora.pop."PopId",
   apflora.tpop."TPopId",
   'Teilpopulation mit Status "potentieller Wuchs-/Ansiedlungsort", bei denen in einer Kontrolle eine Anzahl festgestellt wurde:'::text AS "hw",
-  array_agg(distinct ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId"]::text[]) AS "url"
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId"]::text[] AS url,
+  ARRAY[concat('Projekt: ', apflora.projekt."ProjName"), concat('Art: ', apflora.adb_eigenschaften."Artname"), concat('Population: ', apflora.pop."PopName"), concat('Teil-Population: ', apflora.tpop."TPopFlurname")]::text[] AS text
 FROM
-  apflora.ap
+  apflora.projekt
   INNER JOIN
-    apflora.pop
+    apflora.ap
     INNER JOIN
-      apflora.tpop
-      ON apflora.tpop."PopId" = apflora.pop."PopId"
-    ON apflora.pop."ApArtId" = apflora.ap."ApArtId"
+      apflora.adb_eigenschaften
+      ON apflora.ap."ApArtId" = apflora.adb_eigenschaften."TaxonomieId"
+    INNER JOIN
+      apflora.pop
+      INNER JOIN
+        apflora.tpop
+        ON apflora.tpop."PopId" = apflora.pop."PopId"
+      ON apflora.pop."ApArtId" = apflora.ap."ApArtId"
+    ON apflora.projekt."ProjId" = apflora.ap."ProjId"
 GROUP BY
+  apflora.projekt."ProjId",
+  adb_eigenschaften."Artname",
   apflora.ap."ApArtId",
   apflora.pop."PopId",
   apflora.tpop."TPopId"

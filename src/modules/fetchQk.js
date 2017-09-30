@@ -258,9 +258,9 @@ const fetchQk = async ({
         !isPointInsidePolygon(ktZh, tpop.TPopXKoord, tpop.TPopYKoord)
     )
     if (tpops.length > 0) {
-      const messages = {
+      const messages = tpops.map(tpop => ({
         hw: `Teilpopulation ist als 'Für AP-Bericht relevant' markiert, liegt aber ausserhalb des Kt. Zürich und sollte daher nicht relevant sein:`,
-        url: tpops.map(tpop => [
+        url: [
           'Projekte',
           1,
           'Arten',
@@ -269,15 +269,27 @@ const fetchQk = async ({
           tpop.PopId,
           'Teil-Populationen',
           tpop.TPopId,
-        ]),
-      }
+        ],
+        text: [
+          `Projekt: ${store.table.projekt.get(store.tree.activeNodes.projekt)
+            .ProjName}`,
+          `Art: ${store.table.adb_eigenschaften.get(store.tree.activeNodes.ap)
+            .Artname}`,
+          `Population: ${store.table.pop.get(tpop.PopId).PopName}`,
+          `Teil-Population: ${tpop.TPopFlurname}`,
+        ],
+      }))
       store.qk.addMessages(messages)
       nrOfMessages += tpops.length
     }
   }
   // if no messages: tell user
   if (nrOfMessages === 0) {
-    const messages = { hw: 'Wow: Scheint alles i.O. zu sein!', url: [] }
+    const messages = {
+      hw: 'Wow: Scheint alles i.O. zu sein!',
+      url: [],
+      text: '',
+    }
     store.qk.addMessages(messages)
   }
   setLoading(false)

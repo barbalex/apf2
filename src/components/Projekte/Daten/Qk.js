@@ -88,6 +88,7 @@ const Qk = ({
 }) => {
   const { filter, messages, loading } = store.qk
   const pureMessages = toJS(messages)
+  console.log('QK: messages:', pureMessages)
   const messagesFiltered = filter
     ? pureMessages.filter(m =>
         m.hw.toLowerCase().includes(filter.toLowerCase())
