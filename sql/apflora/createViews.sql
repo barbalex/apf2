@@ -5903,7 +5903,8 @@ SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
   'Massnahme ohne Jahr:'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId", 'Massnahmen', apflora.tpopmassn."TPopMassnId"]::text[] AS url
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId", 'Massnahmen', apflora.tpopmassn."TPopMassnId"]::text[] AS url,
+  ARRAY[concat('Population: ', apflora.pop."PopNr"), concat('Teil-Population: ', apflora.tpop."TPopNr"), concat('Massnahme: ', apflora.tpopmassn."TPopMassnJahr")]::text[] AS text
 FROM
   apflora.ap
   INNER JOIN
@@ -5915,12 +5916,7 @@ FROM
         ON apflora.tpop."TPopId" = apflora.tpopmassn."TPopId")
       ON apflora.pop."PopId" = apflora.tpop."PopId")
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
-GROUP BY
-  apflora.ap."ApArtId",
-  apflora.pop."PopId",
-  apflora.tpop."TPopId",
-  apflora.tpopmassn."TPopMassnId"
-HAVING
+WHERE
   apflora.tpopmassn."TPopMassnJahr" IS NULL
 ORDER BY
   apflora.ap."ApArtId",
@@ -5935,6 +5931,7 @@ SELECT
   apflora.ap."ApArtId",
   'Massnahmen ohne Typ:'::text AS hw,
   ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId", 'Massnahmen', apflora.tpopmassn."TPopMassnId"]::text[] AS url,
+  ARRAY[concat('Population: ', apflora.pop."PopNr"), concat('Teil-Population: ', apflora.tpop."TPopNr"), concat('Massnahme: ', apflora.tpopmassn."TPopMassnJahr")]::text[] AS text,
   apflora.tpopmassn."TPopMassnJahr" AS "Berichtjahr"
 FROM
   apflora.ap
@@ -5947,20 +5944,13 @@ FROM
         ON apflora.tpop."TPopId" = apflora.tpopmassn."TPopId")
       ON apflora.pop."PopId" = apflora.tpop."PopId")
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
-GROUP BY
-  apflora.ap."ApArtId",
-  apflora.pop."PopId",
-  apflora.tpop."TPopId",
-  apflora.tpopmassn."TPopMassnId"
-HAVING
+WHERE
   apflora.tpopmassn."TPopMassnTyp" IS NULL
   AND apflora.tpopmassn."TPopMassnJahr" IS NOT NULL
 ORDER BY
-  apflora.ap."ApArtId",
   apflora.pop."PopNr",
   apflora.tpop."TPopNr",
-  apflora.tpopmassn."TPopMassnJahr",
-  apflora.tpopmassn."TPopMassnId";
+  apflora.tpopmassn."TPopMassnJahr";
 
 DROP VIEW IF EXISTS apflora.v_qk2_massnber_ohnejahr CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk2_massnber_ohnejahr AS
@@ -5968,7 +5958,8 @@ SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
   'Massnahmen-Bericht ohne Jahr:'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId", 'Massnahmen-Berichte', apflora.tpopmassnber."TPopMassnBerId"]::text[] AS url
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId", 'Massnahmen-Berichte', apflora.tpopmassnber."TPopMassnBerId"]::text[] AS url,
+  ARRAY[concat('Population: ', apflora.pop."PopNr"), concat('Teil-Population: ', apflora.tpop."TPopNr"), concat('Massnahmen-Bericht: ', apflora.tpopmassnber."TPopMassnBerJahr")]::text[] AS text
 FROM
   apflora.ap
   INNER JOIN
@@ -5980,15 +5971,9 @@ FROM
         ON apflora.tpop."TPopId" = apflora.tpopmassnber."TPopId")
       ON apflora.pop."PopId" = apflora.tpop."PopId")
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
-GROUP BY
-  apflora.ap."ApArtId",
-  apflora.pop."PopId",
-  apflora.tpop."TPopId",
-  apflora.tpopmassnber."TPopMassnBerId"
-HAVING
+WHERE
   apflora.tpopmassnber."TPopMassnBerJahr" IS NULL
 ORDER BY
-  apflora.ap."ApArtId",
   apflora.pop."PopNr",
   apflora.tpop."TPopNr",
   apflora.tpopmassnber."TPopMassnBerJahr",
@@ -6001,6 +5986,7 @@ SELECT
   apflora.ap."ApArtId",
   'Massnahmen-Bericht ohne Entwicklung:'::text AS hw,
   ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId", 'Massnahmen-Berichte', apflora.tpopmassnber."TPopMassnBerId"]::text[] AS url,
+  ARRAY[concat('Population: ', apflora.pop."PopNr"), concat('Teil-Population: ', apflora.tpop."TPopNr"), concat('Massnahmen-Bericht: ', apflora.tpopmassnber."TPopMassnBerJahr")]::text[] AS text,
   apflora.tpopmassnber."TPopMassnBerJahr" AS "Berichtjahr"
 FROM
   apflora.ap
@@ -6013,20 +5999,13 @@ FROM
         ON apflora.tpop."TPopId" = apflora.tpopmassnber."TPopId")
       ON apflora.pop."PopId" = apflora.tpop."PopId")
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
-GROUP BY
-  apflora.ap."ApArtId",
-  apflora.pop."PopId",
-  apflora.tpop."TPopId",
-  apflora.tpopmassnber."TPopMassnBerId"
-HAVING
+WHERE
   apflora.tpopmassnber."TPopMassnBerErfolgsbeurteilung" IS NULL
   AND apflora.tpopmassnber."TPopMassnBerJahr" IS NOT NULL
 ORDER BY
-  apflora.ap."ApArtId",
   apflora.pop."PopNr",
   apflora.tpop."TPopNr",
-  apflora.tpopmassnber."TPopMassnBerJahr",
-  apflora.tpopmassnber."TPopMassnBerId";
+  apflora.tpopmassnber."TPopMassnBerJahr";
 
 DROP VIEW IF EXISTS apflora.v_qk2_feldkontr_ohnejahr CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk2_feldkontr_ohnejahr AS
@@ -6034,7 +6013,8 @@ SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
   'Feldkontrolle ohne Jahr:'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId", 'Feld-Kontrollen', apflora.tpopkontr."TPopKontrId"]::text[] AS url
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId", 'Feld-Kontrollen', apflora.tpopkontr."TPopKontrId"]::text[] AS url,
+  ARRAY[concat('Population: ', apflora.pop."PopNr"), concat('Teil-Population: ', apflora.tpop."TPopNr"), concat('Feld-Kontrolle: ', apflora.tpopkontr."TPopKontrJahr")]::text[] AS text
 FROM
   apflora.ap
   INNER JOIN
@@ -6046,20 +6026,13 @@ FROM
         ON apflora.tpop."TPopId" = apflora.tpopkontr."TPopId")
       ON apflora.pop."PopId" = apflora.tpop."PopId")
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
-GROUP BY
-  apflora.ap."ApArtId",
-  apflora.pop."PopId",
-  apflora.tpop."TPopId",
-  apflora.tpopkontr."TPopKontrId"
-HAVING
+WHERE
   apflora.tpopkontr."TPopKontrJahr" IS NULL
   AND apflora.tpopkontr."TPopKontrTyp" <> 'Freiwilligen-Erfolgskontrolle'
 ORDER BY
-  apflora.ap."ApArtId",
   apflora.pop."PopNr",
   apflora.tpop."TPopNr",
-  apflora.tpopkontr."TPopKontrJahr",
-  apflora.tpopkontr."TPopKontrId";
+  apflora.tpopkontr."TPopKontrJahr";
 
 DROP VIEW IF EXISTS apflora.v_qk2_freiwkontr_ohnejahr CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk2_freiwkontr_ohnejahr AS
