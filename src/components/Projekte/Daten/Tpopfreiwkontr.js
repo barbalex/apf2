@@ -55,6 +55,8 @@ class Tpopfreiwkontr extends Component {
     changeWidth: () => {},
   }
 
+  container: ?HTMLDivElement
+
   updateWidth = () => {
     if (this.container && this.container.offsetWidth) {
       this.props.changeWidth(this.container.offsetWidth)
@@ -80,10 +82,7 @@ class Tpopfreiwkontr extends Component {
     const { activeDataset } = tree
 
     return (
-      <Container
-        // $FlowIssue
-        innerRef={c => (this.container = c)}
-      >
+      <Container innerRef={c => (this.container = c)}>
         <FormTitle tree={tree} title="Freiwilligen-Kontrolle" />
         <FieldsContainer data-width={width}>
           <YearDatePair

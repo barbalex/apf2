@@ -32,8 +32,9 @@ const LabelFilter = ({ store, tree }: { store: Object, tree: Object }) => {
   let filterValue = ''
   if (filteredTable) {
     filterValue = tree.nodeLabelFilter.get(filteredTable) || ''
-    const table = tables.find(t => t.table === filteredTable)
-    // $FlowIssue
+    const table = tables.find(
+      (t: { label: string }) => t.table === filteredTable
+    )
     const tableLabel = table ? table.label : null
     if (tableLabel) {
       labelText = `${tableLabel} filtern`

@@ -107,6 +107,8 @@ class MyDatePicker extends Component {
     onFocus: () => void,
   }
 
+  datePicker: ?HTMLDivElement
+
   static defaultProps = {
     value: null,
     stringValue: '',
@@ -146,7 +148,6 @@ class MyDatePicker extends Component {
           id="iconCalendar"
           className="material-icons"
           title="Kalender öffnen"
-          // $FlowIssue
           onClick={() => this.datePicker.focus()}
         >
           event
@@ -165,7 +166,6 @@ class MyDatePicker extends Component {
             fullWidth
             cancelLabel="schliessen"
             onChange={onChangeDatePicker}
-            // $FlowIssue
             ref={c => (this.datePicker = c)}
           />
         </DatePickerDiv>
