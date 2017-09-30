@@ -53,7 +53,7 @@ export default async ({
   })
   const url = `/${tableName}?${idField}=eq.${id}`
 
-  let result
+  let result: { data: Array<Object> }
   try {
     result = await axios.get(url)
   } catch (error) {
@@ -65,7 +65,6 @@ export default async ({
     )
     store.listError(error)
   }
-  // $FlowIssue
   const { data } = result
   store.writeToStore({ data, table: tableName, field: idField })
 }

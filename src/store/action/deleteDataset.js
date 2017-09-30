@@ -14,7 +14,7 @@ export default async ({
 }): Promise<void> => {
   // first get dataset from server (possible that does not yet exist in store)
   // to be able to undo
-  let result
+  let result: { data: Array<Object> }
   try {
     result = await axios.get(`/${table}?${idField}=eq.${id}`)
   } catch (error) {
@@ -23,7 +23,6 @@ export default async ({
   // copy to store.deletedDatasets
   const deletedDataset = {
     table,
-    // $FlowIssue
     dataset: result.data[0],
     time: Date.now(),
   }

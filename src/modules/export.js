@@ -34,13 +34,12 @@ export default async ({
   const url = apArtId ? `/${view}?ApArtId=eq.${apArtId}` : `/${view}`
 
   store.export.addDownload(fileName)
-  let result
+  let result: { data: Array<Object> }
   try {
     result = await axios.get(url)
   } catch (error) {
     onError(error)
   }
-  // $FlowIssue
   const { data } = result
   const { mapFilter } = store.map
   const { applyMapFilterToExport } = store.export

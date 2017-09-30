@@ -224,18 +224,16 @@ const fetchQk = async ({
     ])
   } catch (error) {
     store.listError(error)
-    // TODO: close loading indicator
   }
-  let resultTpopKoord
+  let resultTpopKoord: { data: Array<Object> }
   try {
     resultTpopKoord = await axios.get(`/v_tpopkoord?ApArtId=eq.${apArtId}`)
   } catch (error) {
     store.listError(error)
     setLoading(false)
   }
-  // $FlowIssue
   let tpops = resultTpopKoord.data
-  let resultKtZh
+  let resultKtZh: { data: Object }
   try {
     const baseURL = staticFilesBaseUrl
     resultKtZh = await axios.get('/ktZh.json', { baseURL })
@@ -243,7 +241,6 @@ const fetchQk = async ({
     store.listError(error)
     setLoading(false)
   }
-  // $FlowIssue
   const ktZh = resultKtZh.data
   if (ktZh) {
     // kontrolliere die Relevanz ausserkantonaler Tpop

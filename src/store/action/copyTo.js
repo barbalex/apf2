@@ -23,7 +23,11 @@ export default async (
   if (idPassed) id = idPassed
 
   // ensure derived data exists
-  const tabelle = tables.find(t => t.table === table)
+  const tabelle: {
+    idField: string,
+    table: string,
+    parentIdField: string,
+  } = tables.find(t => t.table === table)
   // in tpopfeldkontr and tpopfreiwkontr need to find dbTable
   if (tabelle && tabelle.dbTable) {
     table = tabelle.dbTable
@@ -34,15 +38,14 @@ export default async (
       new Error('change was not saved because idField was not found')
     )
   }
-  // $FlowIssue
-  const parentIdField = tabelle.parentIdField
+  const { parentIdField } = tabelle
   if (!parentIdField) {
     return store.listError(
       new Error('change was not saved because parentIdField was not found')
     )
   }
 
-  const row = store.table[table].get(id)
+  const row: ?Object = store.table[table].get(id)
   if (!row) {
     return store.listError(
       new Error('change was not saved because dataset was not found in store')
@@ -71,7 +74,7 @@ export default async (
   delete newRow.TPopKoordWgs84
 
   // update db
-  let response
+  let response: { data: Array<Object> }
   try {
     response = await axios({
       method: 'POST',
@@ -84,7 +87,6 @@ export default async (
   } catch (error) {
     store.listError(error)
   }
-  // $FlowIssue
   const data = response.data[0]
   // can't write to store before, because db creates id and guid
   store.writeToStore({ data: [data], table, field: idField })
