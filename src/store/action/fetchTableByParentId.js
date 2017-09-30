@@ -9,7 +9,11 @@ export default async (
   tableName: string,
   parentId: number
 ): Promise<void> => {
-  const table = tables.find(t => t.table === tableName)
+  const table: {
+    table: string,
+    idField: string,
+    parentIdField: string,
+  } = tables.find(t => t.table === tableName)
   if (!table) {
     return store.listError(new Error(`not table found with name: ${tableName}`))
   }
@@ -17,7 +21,6 @@ export default async (
   if (!idField) {
     return store.listError(new Error(`not idField found in table ${tableName}`))
   }
-  // $FlowIssue
   const parentIdField = table.parentIdField
   if (!parentIdField) {
     return store.listError(

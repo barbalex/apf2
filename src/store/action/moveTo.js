@@ -13,9 +13,13 @@ export default (store: Object, newParentId: number): any => {
   const { id } = store.moving
 
   // ensure derived data exists
-  const tabelle = tables.find(t => t.table === table)
+  const tabelle: {
+    table: string,
+    dbTable: ?string,
+    idField: string,
+    parentIdField: string,
+  } = tables.find(t => t.table === table)
   // in tpopfeldkontr and tpopfreiwkontr need to find dbTable
-  // $FlowIssue
   if (tabelle.dbTable) {
     table = tabelle.dbTable
   }
@@ -25,7 +29,6 @@ export default (store: Object, newParentId: number): any => {
       new Error('change was not saved: Reason: idField was not found')
     )
   }
-  // $FlowIssue
   const parentIdField = tabelle.parentIdField
   if (!parentIdField) {
     return store.listError(

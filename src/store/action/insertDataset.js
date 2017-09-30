@@ -15,7 +15,11 @@ export default async (
     return store.listError(new Error('no table passed'))
   }
   // insert new dataset in db and fetch id
-  const tableMetadata = tables.find(t => t.table === table)
+  const tableMetadata: {
+    table: string,
+    dbTable: ?string,
+    parentIdField: string,
+  } = tables.find(t => t.table === table)
   if (!tableMetadata) {
     return store.listError(
       new Error(`no table meta data found for table "${table}"`)
@@ -25,7 +29,6 @@ export default async (
   if (tableMetadata.dbTable) {
     table = tableMetadata.dbTable
   }
-  // $FlowIssue
   const parentIdField = tableMetadata.parentIdField
   const idField = tableMetadata.idField
   if (!idField) {
@@ -34,7 +37,7 @@ export default async (
     )
   }
 
-  let result
+  let result: { data: Array<Object> }
   try {
     result = await axios({
       method: 'POST',
@@ -54,7 +57,6 @@ export default async (
    * meanwhile it works because project 1 is set as standard value
    * wait to do this in graphQL because new projects are not used yet
    */
-  // $FlowIssue
   const row = result.data[0]
   // insert this dataset in store.table
   store.table[table].set(row[idField], row)

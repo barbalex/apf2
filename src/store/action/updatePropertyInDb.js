@@ -32,9 +32,12 @@ export default async (
   }
 
   // ensure derived data exists
-  const tabelle = tables.find(t => t.table === table)
+  const tabelle: {
+    table: string,
+    dbTable: ?string,
+    idField: string,
+  } = tables.find(t => t.table === table)
   // in tpopfeldkontr and tpopfreiwkontr need to find dbTable
-  // $FlowIssue
   if (tabelle.dbTable) {
     table = tabelle.dbTable
   }
@@ -42,7 +45,6 @@ export default async (
   if (!idField) {
     return store.listError(
       new Error(
-        // $FlowIssue
         `change was not saved:
         field: ${key}, table: ${table}, value: ${value}
         Reason: idField was not found`
@@ -53,7 +55,6 @@ export default async (
   if (!tabelleId && tabelleId !== 0) {
     return store.listError(
       new Error(
-        // $FlowIssue
         `change was not saved:
         field: ${key}, table: ${table}, value: ${value}
         Reason: tabelleId was not found`

@@ -37,7 +37,7 @@ export default async ({
   )
 
   // write to db
-  let response
+  let response: { data: Array<Object> }
   try {
     response = await axios({
       method: 'POST',
@@ -50,7 +50,6 @@ export default async ({
   } catch (error) {
     store.listError(error)
   }
-  // $FlowIssue
   const { data } = response
   // write to store
   store.writeToStore({ data: [data[0]], table, field: idField })

@@ -4,7 +4,7 @@ import validateActiveDataset from '../../modules/validateActiveDataset'
 export default (store: Object, tree: Object): Object => {
   const { table } = store
   const aEl = tree.activeNodes
-  let activeDataset = {
+  let activeDataset: { table: ?string, row: ?Object, valid: ?boolean } = {
     table: null,
     row: null,
   }
@@ -208,11 +208,10 @@ export default (store: Object, tree: Object): Object => {
       }
     }
   }
-  // $FlowIssue
   activeDataset.valid = validateActiveDataset(
     activeDataset.table,
     activeDataset.row,
-    store.app.fields,
+    store.app.fields
   )
   return activeDataset
 }
