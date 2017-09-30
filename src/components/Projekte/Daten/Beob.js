@@ -30,6 +30,8 @@ class Beob extends Component {
     changeWidth: () => {},
   }
 
+  container: ?HTMLDivElement
+
   updateWidth = () => {
     if (this.container && this.container.offsetWidth) {
       this.props.changeWidth(this.container.offsetWidth)
@@ -60,16 +62,13 @@ class Beob extends Component {
     )
 
     return (
-      <div
-        // $FlowIssue
-        ref={c => (this.container = c)}
-      >
+      <div ref={c => (this.container = c)}>
         <Container data-width={width}>
-          {beobFields.map(([key, value]) =>
+          {beobFields.map(([key, value]) => (
             <div key={key}>
               <TextFieldNonUpdatable label={key} value={value} />
             </div>
-          )}
+          ))}
         </Container>
       </div>
     )

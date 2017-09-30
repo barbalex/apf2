@@ -51,6 +51,8 @@ class Apber extends Component {
     changeWidth: () => {},
   }
 
+  container: ?HTMLDivElement
+
   updateWidth = () => {
     if (this.container && this.container.offsetWidth) {
       this.props.changeWidth(this.container.offsetWidth)
@@ -80,10 +82,7 @@ class Apber extends Component {
     ]
 
     return (
-      <Container
-        // $FlowIssue
-        innerRef={c => (this.container = c)}
-      >
+      <Container innerRef={c => (this.container = c)}>
         <FormTitle tree={tree} title="AP-Bericht" />
         <FieldsContainer width={width}>
           <TextField

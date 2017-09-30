@@ -29,7 +29,7 @@ const Section = styled.div`
   color: rgba(255, 255, 255, 0.298039);
   font-weight: bold;
   &:after {
-    content: ":";
+    content: ':';
   }
 `
 
@@ -46,6 +46,8 @@ class Idealbiotop extends Component {
     width: number,
     changeWidth: () => {},
   }
+
+  container: ?HTMLDivElement
 
   updateWidth = () => {
     if (this.container && this.container.offsetWidth) {
@@ -72,10 +74,7 @@ class Idealbiotop extends Component {
     const { activeDataset } = tree
 
     return (
-      <Container
-        // $FlowIssue
-        innerRef={c => (this.container = c)}
-      >
+      <Container innerRef={c => (this.container = c)}>
         <FormTitle tree={tree} title="Idealbiotop" />
         <FieldsContainer data-width={width}>
           <DateFieldWithPicker

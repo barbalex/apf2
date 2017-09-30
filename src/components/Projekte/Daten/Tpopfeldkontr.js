@@ -108,6 +108,8 @@ class Tpopfeldkontr extends Component {
     changeWidth: () => {},
   }
 
+  container: ?HTMLDivElement
+
   updateWidth = () => {
     if (this.container && this.container.offsetWidth) {
       this.props.changeWidth(this.container.offsetWidth)
@@ -133,10 +135,7 @@ class Tpopfeldkontr extends Component {
     const { activeDataset } = tree
 
     return (
-      <Container
-        // $FlowIssue
-        innerRef={c => (this.container = c)}
-      >
+      <Container innerRef={c => (this.container = c)}>
         <FormTitle tree={tree} title="Feld-Kontrolle" />
         <FieldsContainer>
           <Tabs

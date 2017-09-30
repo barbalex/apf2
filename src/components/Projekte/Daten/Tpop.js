@@ -43,6 +43,8 @@ class Tpop extends Component {
     changeWidth: () => {},
   }
 
+  container: ?HTMLDivElement
+
   updateWidth = () => {
     if (this.container && this.container.offsetWidth) {
       this.props.changeWidth(this.container.offsetWidth)
@@ -72,10 +74,7 @@ class Tpop extends Component {
     const apJahr = ap && ap.ApJahr ? ap.ApJahr : null
 
     return (
-      <Container
-        // $FlowIssue
-        innerRef={c => (this.container = c)}
-      >
+      <Container innerRef={c => (this.container = c)}>
         <FormTitle tree={tree} title="Teil-Population" />
         <FieldsContainer data-width={width}>
           <TextField
