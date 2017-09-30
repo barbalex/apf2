@@ -5506,7 +5506,7 @@ CREATE OR REPLACE VIEW apflora.v_qk2_tpop_popnrtpopnrmehrdeutig AS
 SELECT
   apflora.projekt."ProjId",
   apflora.ap."ApArtId",
-  'Teilpopulation: Die Kombination von Pop.-Nr. und TPop.-Nr. ist mehrdeutig:'::text AS hw,
+  'Teilpopulation: Die TPop.-Nr. ist mehrdeutig:'::text AS hw,
   ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId"]::text[] AS url,
   ARRAY[concat('Population: ', apflora.pop."PopNr"), concat('Teil-Population: ', apflora.tpop."TPopNr")]::text[] AS text
 FROM
@@ -7206,12 +7206,7 @@ FROM
         ON apflora.tpop."PopId" = apflora.pop."PopId"
       ON apflora.pop."ApArtId" = apflora.ap."ApArtId"
     ON apflora.projekt."ProjId" = apflora.ap."ProjId"
-GROUP BY
-  apflora.projekt."ProjId",
-  apflora.ap."ApArtId",
-  apflora.pop."PopId",
-  apflora.tpop."TPopId"
-HAVING
+WHERE
   apflora.tpop."TPopHerkunft" = 300
   AND apflora.tpop."TPopId" IN (
     SELECT DISTINCT
@@ -7224,7 +7219,10 @@ HAVING
     WHERE
       apflora.tpopkontr."TPopKontrTyp" NOT IN ('Zwischenziel', 'Ziel')
       AND apflora.tpopkontrzaehl."Anzahl" > 0
-  );
+  )
+ORDER BY
+  apflora.pop."PopId",
+  apflora.tpop."TPopId";
 
 DROP VIEW IF EXISTS apflora.v_qk2_tpop_mitstatuspotentiellundmassnansiedlung CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk2_tpop_mitstatuspotentiellundmassnansiedlung AS
