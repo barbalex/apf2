@@ -4894,7 +4894,7 @@ SELECT
     apflora.ap."ApArtId",
     '&pop=',
     apflora.tpop."TPopId"
-  ) AS "URL"
+  ) AS url
 FROM
   (beob.adb_eigenschaften
   INNER JOIN
@@ -4971,7 +4971,7 @@ SELECT
     apflora.ap."ApArtId",
     '&pop=',
     apflora.tpop."TPopId"
-  ) AS "URL"
+  ) AS url
 FROM
   (beob.adb_eigenschaften
   INNER JOIN
@@ -5032,7 +5032,7 @@ SELECT
     apflora.ap."ApArtId",
     '&pop=',
     apflora.pop."PopId"
-  ) AS "URL"
+  ) AS url
 FROM
   beob.adb_eigenschaften
   INNER JOIN
@@ -5091,7 +5091,7 @@ SELECT
     apflora.ap."ApArtId",
     '&pop=',
     apflora.pop."PopId"
-  ) AS "URL"
+  ) AS url
 FROM
   beob.adb_eigenschaften
   INNER JOIN
@@ -5506,8 +5506,8 @@ CREATE OR REPLACE VIEW apflora.v_qk2_tpop_popnrtpopnrmehrdeutig AS
 SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
-  'Teilpopulation: Die Kombination von Pop.-Nr. und TPop.-Nr. ist mehrdeutig:'::text AS "hw",
-  array_agg(distinct ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId"]::text[]) AS "url"
+  'Teilpopulation: Die Kombination von Pop.-Nr. und TPop.-Nr. ist mehrdeutig:'::text AS hw,
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId"]::text[] AS url
 FROM
   apflora.ap
   INNER JOIN
@@ -5528,8 +5528,8 @@ CREATE OR REPLACE VIEW apflora.v_qk2_pop_popnrmehrdeutig AS
 SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
-  'Population: Die Nr. ist mehrdeutig:'::text AS "hw",
-  array_agg(distinct ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId"]::text[]) AS "url"
+  'Population: Die Nr. ist mehrdeutig:'::text AS hw,
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId"]::text[] AS url
 FROM
   apflora.ap
   INNER JOIN
@@ -5549,8 +5549,8 @@ CREATE OR REPLACE VIEW apflora.v_qk2_pop_ohnekoord AS
 SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
-  'Population: Mindestens eine Koordinate fehlt:'::text AS "hw",
-  array_agg(distinct ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId"]::text[]) AS "url"
+  'Population: Mindestens eine Koordinate fehlt:'::text AS hw,
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId"]::text[] AS url
 FROM
   apflora.ap
   INNER JOIN
@@ -5571,8 +5571,8 @@ CREATE OR REPLACE VIEW apflora.v_qk2_pop_ohnepopnr AS
 SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
-  'Population ohne Nr.:'::text AS "hw",
-  array_agg(distinct ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId"]::text[]) AS "url"
+  'Population ohne Nr.:'::text AS hw,
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId"]::text[] AS url
 FROM
   apflora.ap
   INNER JOIN
@@ -5592,8 +5592,8 @@ CREATE OR REPLACE VIEW apflora.v_qk2_pop_ohnepopname AS
 SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
-  'Population ohne Name:'::text AS "hw",
-  array_agg(distinct ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId"]::text[]) AS "url"
+  'Population ohne Name:'::text AS hw,
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId"]::text[] AS url
 FROM
   apflora.ap
   INNER JOIN
@@ -5613,8 +5613,8 @@ CREATE OR REPLACE VIEW apflora.v_qk2_pop_ohnepopstatus AS
 SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
-  'Population ohne Status:'::text AS "hw",
-  array_agg(distinct ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId"]::text[]) AS "url"
+  'Population ohne Status:'::text AS hw,
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId"]::text[] AS url
 FROM
   apflora.ap
   INNER JOIN
@@ -5634,8 +5634,8 @@ CREATE OR REPLACE VIEW apflora.v_qk2_pop_ohnebekanntseit AS
 SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
-  'Population ohne "bekannt seit":'::text AS "hw",
-  array_agg(distinct ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId"]::text[]) AS "url"
+  'Population ohne "bekannt seit":'::text AS hw,
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId"]::text[] AS url
 FROM
   apflora.ap
   INNER JOIN
@@ -5655,8 +5655,8 @@ CREATE OR REPLACE VIEW apflora.v_qk2_pop_mitstatusunklarohnebegruendung AS
 SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
-  'Population mit "Status unklar", ohne Begruendung:'::text AS "hw",
-  array_agg(distinct ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId"]::text[]) AS "url"
+  'Population mit "Status unklar", ohne Begruendung:'::text AS hw,
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId"]::text[] AS url
 FROM
   apflora.ap
   INNER JOIN
@@ -5677,8 +5677,8 @@ CREATE OR REPLACE VIEW apflora.v_qk2_pop_ohnetpop AS
 SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
-  'Population ohne Teilpopulation:'::text AS "hw",
-  array_agg(distinct ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId"]::text[]) AS "url"
+  'Population ohne Teilpopulation:'::text AS hw,
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId"]::text[] AS url
 FROM
   apflora.ap
   INNER JOIN
@@ -5702,8 +5702,8 @@ CREATE OR REPLACE VIEW apflora.v_qk2_tpop_ohnenr AS
 SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
-  'Teilpopulation ohne Nr.:'::text AS "hw",
-  array_agg(distinct ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId"]::text[]) AS "url"
+  'Teilpopulation ohne Nr.:'::text AS hw,
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId"]::text[] AS url
 FROM
   apflora.ap
   INNER JOIN
@@ -5728,8 +5728,8 @@ CREATE OR REPLACE VIEW apflora.v_qk2_tpop_ohneflurname AS
 SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
-  'Teilpopulation ohne Flurname:'::text AS "hw",
-  array_agg(distinct ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId"]::text[]) AS "url"
+  'Teilpopulation ohne Flurname:'::text AS hw,
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId"]::text[] AS url
 FROM
   apflora.ap
   INNER JOIN
@@ -5754,8 +5754,8 @@ CREATE OR REPLACE VIEW apflora.v_qk2_tpop_ohnestatus AS
 SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
-  'Teilpopulation ohne Status:'::text AS "hw",
-  array_agg(distinct ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId"]::text[]) AS "url"
+  'Teilpopulation ohne Status:'::text AS hw,
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId"]::text[] AS url
 FROM
   apflora.ap
   INNER JOIN
@@ -5779,8 +5779,8 @@ DROP VIEW IF EXISTS apflora.v_qk2_tpop_ohnebekanntseit CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk2_tpop_ohnebekanntseit AS
 SELECT
   apflora.ap."ApArtId",
-  'Teilpopulation ohne "bekannt seit":'::text AS "hw",
-  array_agg(distinct ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId"]::text[]) AS "url"
+  'Teilpopulation ohne "bekannt seit":'::text AS hw,
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId"]::text[] AS url
 FROM
   apflora.ap
   INNER JOIN
@@ -5805,8 +5805,8 @@ CREATE OR REPLACE VIEW apflora.v_qk2_tpop_ohneapberrelevant AS
 SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
-  'Teilpopulation ohne "Fuer AP-Bericht relevant":'::text AS "hw",
-  array_agg(distinct ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId"]::text[]) AS "url"
+  'Teilpopulation ohne "Fuer AP-Bericht relevant":'::text AS hw,
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId"]::text[] AS url
 FROM
   apflora.ap
   INNER JOIN
@@ -5831,8 +5831,8 @@ CREATE OR REPLACE VIEW apflora.v_qk2_tpop_statuspotentiellfuerapberrelevant AS
 SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
-  'Teilpopulation mit Status "potenzieller Wuchs-/Ansiedlungsort" und "Fuer AP-Bericht relevant?" = ja:'::text AS "hw",
-  array_agg(distinct ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId"]::text[]) AS "url"
+  'Teilpopulation mit Status "potenzieller Wuchs-/Ansiedlungsort" und "Fuer AP-Bericht relevant?" = ja:'::text AS hw,
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId"]::text[] AS url
 FROM
   apflora.ap
   INNER JOIN
@@ -5858,8 +5858,8 @@ CREATE OR REPLACE VIEW apflora.v_qk2_tpop_mitstatusunklarohnebegruendung AS
 SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
-  'Teilpopulation mit "Status unklar", ohne Begruendung:'::text AS "hw",
-  array_agg(distinct ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId"]::text[]) AS "url"
+  'Teilpopulation mit "Status unklar", ohne Begruendung:'::text AS hw,
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId"]::text[] AS url
 FROM
   apflora.ap
   INNER JOIN
@@ -5885,8 +5885,8 @@ CREATE OR REPLACE VIEW apflora.v_qk2_tpop_ohnekoordinaten AS
 SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
-  'Teilpopulation: Mindestens eine Koordinate fehlt:'::text AS "hw",
-  array_agg(distinct ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId"]::text[]) AS "url"
+  'Teilpopulation: Mindestens eine Koordinate fehlt:'::text AS hw,
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId"]::text[] AS url
 FROM
   apflora.ap
   INNER JOIN
@@ -5912,8 +5912,8 @@ CREATE OR REPLACE VIEW apflora.v_qk2_massn_ohnejahr AS
 SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
-  'Massnahme ohne Jahr:'::text AS "hw",
-  array_agg(distinct ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId", 'Massnahmen', apflora.tpopmassn."TPopMassnId"]::text[]) AS "url"
+  'Massnahme ohne Jahr:'::text AS hw,
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId", 'Massnahmen', apflora.tpopmassn."TPopMassnId"]::text[] AS url
 FROM
   apflora.ap
   INNER JOIN
@@ -5943,8 +5943,8 @@ CREATE OR REPLACE VIEW apflora.v_qk2_massn_ohnetyp AS
 SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
-  'Massnahmen ohne Typ:'::text AS "hw",
-  array_agg(distinct ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId", 'Massnahmen', apflora.tpopmassn."TPopMassnId"]::text[]) AS "url",
+  'Massnahmen ohne Typ:'::text AS hw,
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId", 'Massnahmen', apflora.tpopmassn."TPopMassnId"]::text[] AS url,
   apflora.tpopmassn."TPopMassnJahr" AS "Berichtjahr"
 FROM
   apflora.ap
@@ -5977,8 +5977,8 @@ CREATE OR REPLACE VIEW apflora.v_qk2_massnber_ohnejahr AS
 SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
-  'Massnahmen-Bericht ohne Jahr:'::text AS "hw",
-  array_agg(distinct ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId", 'Massnahmen-Berichte', apflora.tpopmassnber."TPopMassnBerId"]::text[]) AS "url"
+  'Massnahmen-Bericht ohne Jahr:'::text AS hw,
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId", 'Massnahmen-Berichte', apflora.tpopmassnber."TPopMassnBerId"]::text[] AS url
 FROM
   apflora.ap
   INNER JOIN
@@ -6009,8 +6009,8 @@ CREATE OR REPLACE VIEW apflora.v_qk2_massnber_ohneerfbeurt AS
 SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
-  'Massnahmen-Bericht ohne Entwicklung:'::text AS "hw",
-  array_agg(distinct ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId", 'Massnahmen-Berichte', apflora.tpopmassnber."TPopMassnBerId"]::text[]) AS "url",
+  'Massnahmen-Bericht ohne Entwicklung:'::text AS hw,
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId", 'Massnahmen-Berichte', apflora.tpopmassnber."TPopMassnBerId"]::text[] AS url,
   apflora.tpopmassnber."TPopMassnBerJahr" AS "Berichtjahr"
 FROM
   apflora.ap
@@ -6043,8 +6043,8 @@ CREATE OR REPLACE VIEW apflora.v_qk2_feldkontr_ohnejahr AS
 SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
-  'Feldkontrolle ohne Jahr:'::text AS "hw",
-  array_agg(distinct ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId", 'Feld-Kontrollen', apflora.tpopkontr."TPopKontrId"]::text[]) AS "url"
+  'Feldkontrolle ohne Jahr:'::text AS hw,
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId", 'Feld-Kontrollen', apflora.tpopkontr."TPopKontrId"]::text[] AS url
 FROM
   apflora.ap
   INNER JOIN
@@ -6076,8 +6076,8 @@ CREATE OR REPLACE VIEW apflora.v_qk2_freiwkontr_ohnejahr AS
 SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
-  'Freiwilligen-Kontrolle ohne Jahr:'::text AS "hw",
-  array_agg(distinct ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId", 'Freiwilligen-Kontrollen', apflora.tpopkontr."TPopKontrId"]::text[]) AS "url"
+  'Freiwilligen-Kontrolle ohne Jahr:'::text AS hw,
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId", 'Freiwilligen-Kontrollen', apflora.tpopkontr."TPopKontrId"]::text[] AS url
 FROM
   apflora.ap
   INNER JOIN
@@ -6109,8 +6109,8 @@ CREATE OR REPLACE VIEW apflora.v_qk2_feldkontr_ohnetyp AS
 SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
-  'Feldkontrolle ohne Typ:'::text AS "hw",
-  array_agg(distinct ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId", 'Feld-Kontrollen', apflora.tpopkontr."TPopKontrId"]::text[]) AS "url",
+  'Feldkontrolle ohne Typ:'::text AS hw,
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId", 'Feld-Kontrollen', apflora.tpopkontr."TPopKontrId"]::text[] AS url,
   apflora.tpopkontr."TPopKontrJahr" AS "Berichtjahr"
 FROM
   apflora.ap
@@ -6146,8 +6146,8 @@ CREATE OR REPLACE VIEW apflora.v_qk2_feldkontr_ohnezaehlung AS
 SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
-  'Feldkontrolle ohne Zaehlung:'::text AS "hw",
-  array_agg(distinct ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId", 'Feld-Kontrollen', apflora.tpopkontr."TPopKontrId"]::text[]) AS "url",
+  'Feldkontrolle ohne Zaehlung:'::text AS hw,
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId", 'Feld-Kontrollen', apflora.tpopkontr."TPopKontrId"]::text[] AS url,
   apflora.tpopkontr."TPopKontrJahr" AS "Berichtjahr"
 FROM
   apflora.ap
@@ -6185,8 +6185,8 @@ CREATE OR REPLACE VIEW apflora.v_qk2_freiwkontr_ohnezaehlung AS
 SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
-  'Freiwilligen-Kontrolle ohne Zaehlung:'::text AS "hw",
-  array_agg(distinct ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId", 'Freiwilligen-Kontrollen', apflora.tpopkontr."TPopKontrId"]::text[]) AS "url",
+  'Freiwilligen-Kontrolle ohne Zaehlung:'::text AS hw,
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId", 'Freiwilligen-Kontrollen', apflora.tpopkontr."TPopKontrId"]::text[] AS url,
   apflora.tpopkontr."TPopKontrJahr" AS "Berichtjahr"
 FROM
   apflora.ap
@@ -6224,8 +6224,8 @@ CREATE OR REPLACE VIEW apflora.v_qk2_feldkontrzaehlung_ohneeinheit AS
 SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
-  'Zaehlung ohne Zaehleinheit (Feldkontrolle):'::text AS "hw",
-  array_agg(distinct ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId", 'Feld-Kontrollen', apflora.tpopkontr."TPopKontrId", 'Zählungen', apflora.tpopkontrzaehl."TPopKontrZaehlId"]::text[]) AS "url",
+  'Zaehlung ohne Zaehleinheit (Feldkontrolle):'::text AS hw,
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId", 'Feld-Kontrollen', apflora.tpopkontr."TPopKontrId", 'Zählungen', apflora.tpopkontrzaehl."TPopKontrZaehlId"]::text[] AS url,
   apflora.tpopkontr."TPopKontrJahr" AS "Berichtjahr"
 FROM
   apflora.ap
@@ -6263,8 +6263,8 @@ CREATE OR REPLACE VIEW apflora.v_qk2_freiwkontrzaehlung_ohneeinheit AS
 SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
-  'Zaehlung ohne Zaehleinheit (Freiwilligen-Kontrolle):'::text AS "hw",
-  array_agg(distinct ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId", 'Freiwilligen-Kontrollen', apflora.tpopkontr."TPopKontrId", 'Zählungen', apflora.tpopkontrzaehl."TPopKontrZaehlId"]::text[]) AS "url",
+  'Zaehlung ohne Zaehleinheit (Freiwilligen-Kontrolle):'::text AS hw,
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId", 'Freiwilligen-Kontrollen', apflora.tpopkontr."TPopKontrId", 'Zählungen', apflora.tpopkontrzaehl."TPopKontrZaehlId"]::text[] AS url,
   apflora.tpopkontr."TPopKontrJahr" AS "Berichtjahr"
 FROM
   apflora.ap
@@ -6302,8 +6302,8 @@ CREATE OR REPLACE VIEW apflora.v_qk2_feldkontrzaehlung_ohnemethode AS
 SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
-  'Zaehlung ohne Methode (Feldkontrolle):'::text AS "hw",
-  array_agg(distinct ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId", 'Feld-Kontrollen', apflora.tpopkontr."TPopKontrId", 'Zählungen', apflora.tpopkontrzaehl."TPopKontrZaehlId"]::text[]) AS "url",
+  'Zaehlung ohne Methode (Feldkontrolle):'::text AS hw,
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId", 'Feld-Kontrollen', apflora.tpopkontr."TPopKontrId", 'Zählungen', apflora.tpopkontrzaehl."TPopKontrZaehlId"]::text[] AS url,
   apflora.tpopkontr."TPopKontrJahr" AS "Berichtjahr"
 FROM
   apflora.ap
@@ -6341,8 +6341,8 @@ CREATE OR REPLACE VIEW apflora.v_qk2_freiwkontrzaehlung_ohnemethode AS
 SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
-  'Zaehlung ohne Methode (Freiwilligen-Kontrolle):'::text AS "hw",
-  array_agg(distinct ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId", 'Freiwilligen-Kontrollen', apflora.tpopkontr."TPopKontrId", 'Zählungen', apflora.tpopkontrzaehl."TPopKontrZaehlId"]::text[]) AS "url",
+  'Zaehlung ohne Methode (Freiwilligen-Kontrolle):'::text AS hw,
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId", 'Freiwilligen-Kontrollen', apflora.tpopkontr."TPopKontrId", 'Zählungen', apflora.tpopkontrzaehl."TPopKontrZaehlId"]::text[] AS url,
   apflora.tpopkontr."TPopKontrJahr" AS "Berichtjahr"
 FROM
   apflora.ap
@@ -6380,8 +6380,8 @@ CREATE OR REPLACE VIEW apflora.v_qk2_feldkontrzaehlung_ohneanzahl AS
 SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
-  'Zaehlung ohne Anzahl (Feldkontrolle):'::text AS "hw",
-  array_agg(distinct ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId", 'Feld-Kontrollen', apflora.tpopkontr."TPopKontrId", 'Zählungen', apflora.tpopkontrzaehl."TPopKontrZaehlId"]::text[]) AS "url",
+  'Zaehlung ohne Anzahl (Feldkontrolle):'::text AS hw,
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId", 'Feld-Kontrollen', apflora.tpopkontr."TPopKontrId", 'Zählungen', apflora.tpopkontrzaehl."TPopKontrZaehlId"]::text[] AS url,
   apflora.tpopkontr."TPopKontrJahr" AS "Berichtjahr"
 FROM
   apflora.ap
@@ -6419,8 +6419,8 @@ CREATE OR REPLACE VIEW apflora.v_qk2_freiwkontrzaehlung_ohneanzahl AS
 SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
-  'Zaehlung ohne Anzahl (Freiwilligen-Kontrolle):'::text AS "hw",
-  array_agg(distinct ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId", 'Freiwilligen-Kontrollen', apflora.tpopkontr."TPopKontrId", 'Zählungen', apflora.tpopkontrzaehl."TPopKontrZaehlId"]::text[]) AS "url",
+  'Zaehlung ohne Anzahl (Freiwilligen-Kontrolle):'::text AS hw,
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId", 'Freiwilligen-Kontrollen', apflora.tpopkontr."TPopKontrId", 'Zählungen', apflora.tpopkontrzaehl."TPopKontrZaehlId"]::text[] AS url,
   apflora.tpopkontr."TPopKontrJahr" AS "Berichtjahr"
 FROM
   apflora.ap
@@ -6458,8 +6458,8 @@ CREATE OR REPLACE VIEW apflora.v_qk2_tpopber_ohnejahr AS
 SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
-  'Teilpopulations-Bericht ohne Jahr:'::text AS "hw",
-  array_agg(distinct ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId", 'Kontroll-Berichte', apflora.tpopber."TPopBerId"]::text[]) AS "url"
+  'Teilpopulations-Bericht ohne Jahr:'::text AS hw,
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId", 'Kontroll-Berichte', apflora.tpopber."TPopBerId"]::text[] AS url
 FROM
   apflora.ap
   INNER JOIN
@@ -6490,8 +6490,8 @@ CREATE OR REPLACE VIEW apflora.v_qk2_tpopber_ohneentwicklung AS
 SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
-  'Teilpopulations-Bericht ohne Entwicklung:'::text AS "hw",
-  array_agg(distinct ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId", 'Kontroll-Berichte', apflora.tpopber."TPopBerId"]::text[]) AS "url",
+  'Teilpopulations-Bericht ohne Entwicklung:'::text AS hw,
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId", 'Kontroll-Berichte', apflora.tpopber."TPopBerId"]::text[] AS url,
   apflora.tpopber."TPopBerJahr" AS "Berichtjahr"
 FROM
   apflora.ap
@@ -6524,8 +6524,8 @@ CREATE OR REPLACE VIEW apflora.v_qk2_popber_ohneentwicklung AS
 SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
-  'Populations-Bericht ohne Entwicklung:'::text AS "hw",
-  array_agg(distinct ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Kontroll-Berichte', apflora.popber."PopBerId"]::text[]) AS "url",
+  'Populations-Bericht ohne Entwicklung:'::text AS hw,
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Kontroll-Berichte', apflora.popber."PopBerId"]::text[] AS url,
   apflora.popber."PopBerJahr" AS "Berichtjahr"
 FROM
   apflora.ap
@@ -6553,8 +6553,8 @@ CREATE OR REPLACE VIEW apflora.v_qk2_popber_ohnejahr AS
 SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
-  'Populations-Bericht ohne Jahr:'::text AS "hw",
-  array_agg(distinct ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Kontroll-Berichte', apflora.popber."PopBerId"]::text[]) AS "url"
+  'Populations-Bericht ohne Jahr:'::text AS hw,
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Kontroll-Berichte', apflora.popber."PopBerId"]::text[] AS url
 FROM
   apflora.ap
   INNER JOIN
@@ -6580,8 +6580,8 @@ CREATE OR REPLACE VIEW apflora.v_qk2_popmassnber_ohnejahr AS
 SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
-  'Populations-Massnahmen-Bericht ohne Jahr:'::text AS "hw",
-  array_agg(distinct ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Massnahmen-Berichte', apflora.popmassnber."PopMassnBerId"]::text[]) AS "url"
+  'Populations-Massnahmen-Bericht ohne Jahr:'::text AS hw,
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Massnahmen-Berichte', apflora.popmassnber."PopMassnBerId"]::text[] AS url
 FROM
   apflora.ap
   INNER JOIN
@@ -6607,8 +6607,8 @@ CREATE OR REPLACE VIEW apflora.v_qk2_popmassnber_ohneentwicklung AS
 SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
-  'Populations-Massnahmen-Bericht ohne Entwicklung:'::text AS "hw",
-  array_agg(distinct ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Massnahmen-Berichte', apflora.popmassnber."PopMassnBerId"]::text[]) AS "url",
+  'Populations-Massnahmen-Bericht ohne Entwicklung:'::text AS hw,
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Massnahmen-Berichte', apflora.popmassnber."PopMassnBerId"]::text[] AS url,
   apflora.popmassnber."PopMassnBerJahr" AS "Berichtjahr"
 FROM
   apflora.ap
@@ -6636,8 +6636,8 @@ CREATE OR REPLACE VIEW apflora.v_qk2_zielber_ohneentwicklung AS
 SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
-  'Ziel-Bericht ohne Entwicklung:'::text AS "hw",
-  array_agg(distinct ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Ziele', apflora.ziel."ZielId", 'Berichte', apflora.zielber."ZielBerId"]::text[]) AS "url",
+  'Ziel-Bericht ohne Entwicklung:'::text AS hw,
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Ziele', apflora.ziel."ZielId", 'Berichte', apflora.zielber."ZielBerId"]::text[] AS url,
   apflora.zielber."ZielBerJahr" AS "Berichtjahr"
 FROM
   apflora.ap
@@ -6666,8 +6666,8 @@ CREATE OR REPLACE VIEW apflora.v_qk2_zielber_ohnejahr AS
 SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
-  'Ziel-Bericht ohne Jahr:'::text AS "hw",
-  array_agg(distinct ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Ziele', apflora.ziel."ZielId", 'Berichte', apflora.zielber."ZielBerId"]::text[]) AS "url"
+  'Ziel-Bericht ohne Jahr:'::text AS hw,
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Ziele', apflora.ziel."ZielId", 'Berichte', apflora.zielber."ZielBerId"]::text[] AS url
 FROM
   apflora.ap
   INNER JOIN
@@ -6694,8 +6694,8 @@ CREATE OR REPLACE VIEW apflora.v_qk2_ziel_ohnejahr AS
 SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
-  'Ziel ohne Jahr:'::text AS "hw",
-  array_agg(distinct ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Ziele', apflora.ziel."ZielId"]::text[]) AS "url"
+  'Ziel ohne Jahr:'::text AS hw,
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Ziele', apflora.ziel."ZielId"]::text[] AS url
 FROM
   apflora.ap
   INNER JOIN
@@ -6716,8 +6716,8 @@ CREATE OR REPLACE VIEW apflora.v_qk2_ziel_ohnetyp AS
 SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
-  'Ziel ohne Typ:'::text AS "hw",
-  array_agg(distinct ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Ziele', apflora.ziel."ZielId"]::text[]) AS "url"
+  'Ziel ohne Typ:'::text AS hw,
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Ziele', apflora.ziel."ZielId"]::text[] AS url
 FROM
   apflora.ap
   INNER JOIN
@@ -6738,8 +6738,8 @@ CREATE OR REPLACE VIEW apflora.v_qk2_ziel_ohneziel AS
 SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
-  'Ziel ohne Ziel:'::text AS "hw",
-  array_agg(distinct ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Ziele', apflora.ziel."ZielId"]::text[]) AS "url"
+  'Ziel ohne Ziel:'::text AS hw,
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Ziele', apflora.ziel."ZielId"]::text[] AS url
 FROM
   apflora.ap
   INNER JOIN
@@ -6760,8 +6760,8 @@ CREATE OR REPLACE VIEW apflora.v_qk2_erfkrit_ohnebeurteilung AS
 SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
-  'Erfolgskriterium ohne Beurteilung:'::text AS "hw",
-  array_agg(distinct ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Erfolgskriterien', apflora.erfkrit."ErfkritId"]::text[]) AS "url"
+  'Erfolgskriterium ohne Beurteilung:'::text AS hw,
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Erfolgskriterien', apflora.erfkrit."ErfkritId"]::text[] AS url
 FROM
   apflora.ap
   INNER JOIN
@@ -6781,8 +6781,8 @@ CREATE OR REPLACE VIEW apflora.v_qk2_erfkrit_ohnekriterien AS
 SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
-  'Erfolgskriterium ohne Kriterien:'::text AS "hw",
-  array_agg(distinct ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Erfolgskriterien', apflora.erfkrit."ErfkritId"]::text[]) AS "url"
+  'Erfolgskriterium ohne Kriterien:'::text AS hw,
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Erfolgskriterien', apflora.erfkrit."ErfkritId"]::text[] AS url
 FROM
   apflora.ap
   INNER JOIN
@@ -6802,8 +6802,8 @@ CREATE OR REPLACE VIEW apflora.v_qk2_apber_ohnejahr AS
 SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
-  'AP-Bericht ohne Jahr:'::text AS "hw",
-  array_agg(distinct ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'AP-Berichte', apflora.apber."JBerId"]::text[]) AS "url"
+  'AP-Bericht ohne Jahr:'::text AS hw,
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'AP-Berichte', apflora.apber."JBerId"]::text[] AS url
 FROM
   apflora.ap
   INNER JOIN
@@ -6824,8 +6824,8 @@ CREATE OR REPLACE VIEW apflora.v_qk2_apber_ohnevergleichvorjahrgesamtziel AS
 SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
-  'AP-Bericht ohne Vergleich Vorjahr - Gesamtziel:'::text AS "hw",
-  array_agg(distinct ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'AP-Berichte', apflora.apber."JBerId"]::text[]) AS "url",
+  'AP-Bericht ohne Vergleich Vorjahr - Gesamtziel:'::text AS hw,
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'AP-Berichte', apflora.apber."JBerId"]::text[] AS url,
   apflora.apber."JBerJahr" AS "Berichtjahr"
 FROM
   apflora.ap
@@ -6848,8 +6848,8 @@ CREATE OR REPLACE VIEW apflora.v_qk2_apber_ohnebeurteilung AS
 SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
-  'AP-Bericht ohne Vergleich Vorjahr - Gesamtziel:'::text AS "hw",
-  array_agg(distinct ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'AP-Berichte', apflora.apber."JBerId"]::text[]) AS "url",
+  'AP-Bericht ohne Vergleich Vorjahr - Gesamtziel:'::text AS hw,
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'AP-Berichte', apflora.apber."JBerId"]::text[] AS url,
   apflora.apber."JBerJahr" AS "Berichtjahr"
 FROM
   apflora.ap
@@ -6872,8 +6872,8 @@ CREATE OR REPLACE VIEW apflora.v_qk2_assozart_ohneart AS
 SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
-  'Assoziierte Art ohne Art:'::text AS "hw",
-  array_agg(distinct ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'assoziierte-Arten', apflora.assozart."AaId"]::text[]) AS "url"
+  'Assoziierte Art ohne Art:'::text AS hw,
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'assoziierte-Arten', apflora.assozart."AaId"]::text[] AS url
 FROM
   apflora.ap
   INNER JOIN
@@ -6894,8 +6894,8 @@ CREATE OR REPLACE VIEW apflora.v_qk2_pop_koordentsprechenkeinertpop AS
 SELECT DISTINCT
   apflora.ap."ProjId",
   apflora.pop."ApArtId",
-  'Population: Koordinaten entsprechen keiner Teilpopulation:'::text AS "hw",
-  array_agg(distinct ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId"]::text[]) AS "url",
+  'Population: Koordinaten entsprechen keiner Teilpopulation:'::text AS hw,
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId"]::text[] AS url,
   apflora.pop."PopXKoord" AS "XKoord",
   apflora.pop."PopYKoord" AS "YKoord"
 FROM
@@ -6924,8 +6924,8 @@ CREATE OR REPLACE VIEW apflora.v_qk2_pop_statusansaatversuchmitaktuellentpop AS
 SELECT DISTINCT
   apflora.ap."ProjId",
   apflora.pop."ApArtId",
-  'Population: Status ist "angesiedelt, Ansaatversuch", es gibt aber eine aktuelle Teilpopulation oder eine ursprüngliche erloschene:'::text AS "hw",
-  array_agg(distinct ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId"]::text[]) AS "url"
+  'Population: Status ist "angesiedelt, Ansaatversuch", es gibt aber eine aktuelle Teilpopulation oder eine ursprüngliche erloschene:'::text AS hw,
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId"]::text[] AS url
 FROM
   apflora.ap
   INNER JOIN
@@ -6950,8 +6950,8 @@ CREATE OR REPLACE VIEW apflora.v_qk2_pop_statusansaatversuchalletpoperloschen AS
 SELECT DISTINCT
   apflora.ap."ProjId",
   apflora.pop."ApArtId",
-  'Population: Status ist "angesiedelt, Ansaatversuch", alle Teilpopulationen sind gemäss Status erloschen:'::text AS "hw",
-  array_agg(distinct ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId"]::text[]) AS "url"
+  'Population: Status ist "angesiedelt, Ansaatversuch", alle Teilpopulationen sind gemäss Status erloschen:'::text AS hw,
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId"]::text[] AS url
 FROM
   apflora.ap
     INNER JOIN apflora.pop
@@ -6988,8 +6988,8 @@ HAVING
   SELECT DISTINCT
     apflora.ap."ProjId",
     apflora.pop."ApArtId",
-    'Population: Status ist "angesiedelt, Ansaatversuch", es gibt aber eine Teilpopulation mit Status "urspruenglich, erloschen":'::text AS "hw",
-    array_agg(distinct ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId"]::text[]) AS "url"
+    'Population: Status ist "angesiedelt, Ansaatversuch", es gibt aber eine Teilpopulation mit Status "urspruenglich, erloschen":'::text AS hw,
+    ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId"]::text[] AS url
   FROM
     apflora.ap
     INNER JOIN
@@ -7014,8 +7014,8 @@ CREATE OR REPLACE VIEW apflora.v_qk2_pop_statuserloschenmittpopaktuell AS
 SELECT DISTINCT
   apflora.ap."ProjId",
   apflora.pop."ApArtId",
-  'Population: Status ist "erloschen" (urspruenglich oder angesiedelt), es gibt aber eine Teilpopulation mit Status "aktuell" (urspruenglich oder angesiedelt):'::text AS "hw",
-    array_agg(distinct ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId"]::text[]) AS "url"
+  'Population: Status ist "erloschen" (urspruenglich oder angesiedelt), es gibt aber eine Teilpopulation mit Status "aktuell" (urspruenglich oder angesiedelt):'::text AS hw,
+    ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId"]::text[] AS url
 FROM
   apflora.ap
   INNER JOIN
@@ -7040,8 +7040,8 @@ CREATE OR REPLACE VIEW apflora.v_qk2_pop_statuserloschenmittpopansaatversuch AS
 SELECT DISTINCT
   apflora.ap."ProjId",
   apflora.pop."ApArtId",
-  'Population: Status ist "erloschen" (urspruenglich oder angesiedelt), es gibt aber eine Teilpopulation mit Status "angesiedelt, Ansaatversuch":'::text AS "hw",
-    array_agg(distinct ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId"]::text[]) AS "url"
+  'Population: Status ist "erloschen" (urspruenglich oder angesiedelt), es gibt aber eine Teilpopulation mit Status "angesiedelt, Ansaatversuch":'::text AS hw,
+    ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId"]::text[] AS url
 FROM
   apflora.ap
   INNER JOIN
@@ -7066,8 +7066,8 @@ CREATE OR REPLACE VIEW apflora.v_qk2_pop_statusangesiedeltmittpopurspruenglich A
 SELECT DISTINCT
   apflora.ap."ProjId",
   apflora.pop."ApArtId",
-  'Population: Status ist "angesiedelt", es gibt aber eine Teilpopulation mit Status "urspruenglich":'::text AS "hw",
-  array_agg(distinct ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId"]::text[]) AS "url"
+  'Population: Status ist "angesiedelt", es gibt aber eine Teilpopulation mit Status "urspruenglich":'::text AS hw,
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId"]::text[] AS url
 FROM
   apflora.ap
   INNER JOIN
@@ -7092,8 +7092,8 @@ CREATE OR REPLACE VIEW apflora.v_qk2_pop_statuspotwuchsortmittpopanders AS
 SELECT DISTINCT
   apflora.ap."ProjId",
   apflora.pop."ApArtId",
-  'Population: Status ist "potenzieller Wuchs-/Ansiedlungsort", es gibt aber eine Teilpopulation mit Status "angesiedelt" oder "urspruenglich":'::text AS "hw",
-  array_agg(distinct ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId"]::text[]) AS "url"
+  'Population: Status ist "potenzieller Wuchs-/Ansiedlungsort", es gibt aber eine Teilpopulation mit Status "angesiedelt" oder "urspruenglich":'::text AS hw,
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId"]::text[] AS url
 FROM
   apflora.ap
   INNER JOIN
@@ -7120,8 +7120,8 @@ SELECT DISTINCT
   apflora.pop."ApArtId",
   apflora.pop."PopId",
   apflora.tpop."TPopId",
-  'Teilpopulation mit Status "Ansaatversuch", bei denen in der letzten Kontrolle eine Anzahl festgestellt wurde:'::text AS "hw",
-  array_agg(distinct ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId"]::text[]) AS "url"
+  'Teilpopulation mit Status "Ansaatversuch", bei denen in der letzten Kontrolle eine Anzahl festgestellt wurde:'::text AS hw,
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId"]::text[] AS url
 FROM
   apflora.ap
   INNER JOIN
@@ -7163,7 +7163,7 @@ SELECT DISTINCT
   apflora.pop."ApArtId",
   apflora.pop."PopId",
   apflora.tpop."TPopId",
-  'Teilpopulation mit Status "potentieller Wuchs-/Ansiedlungsort", bei denen in einer Kontrolle eine Anzahl festgestellt wurde:'::text AS "hw",
+  'Teilpopulation mit Status "potentieller Wuchs-/Ansiedlungsort", bei denen in einer Kontrolle eine Anzahl festgestellt wurde:'::text AS hw,
   ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId"]::text[] AS url,
   ARRAY[concat('Projekt: ', apflora.projekt."ProjName"), concat('Art: ', apflora.adb_eigenschaften."Artname"), concat('Population: ', apflora.pop."PopName"), concat('Teil-Population: ', apflora.tpop."TPopFlurname")]::text[] AS text
 FROM
@@ -7208,8 +7208,8 @@ SELECT DISTINCT
   apflora.pop."ApArtId",
   apflora.pop."PopId",
   apflora.tpop."TPopId",
-  'Teilpopulation mit Status "potentieller Wuchs-/Ansiedlungsort", bei der eine Massnahme des Typs "Ansiedlung" existiert:'::text AS "hw",
-  array_agg(distinct ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId"]::text[]) AS "url"
+  'Teilpopulation mit Status "potentieller Wuchs-/Ansiedlungsort", bei der eine Massnahme des Typs "Ansiedlung" existiert:'::text AS hw,
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId"]::text[] AS url
 FROM
   apflora.ap
   INNER JOIN
