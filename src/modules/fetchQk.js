@@ -17,7 +17,7 @@ const fetchQk = async ({
 }) => {
   const { addMessages, setLoading } = store.qk
   setLoading(true)
-  const qkTypes = [
+  const qualityControls = [
     // 1. Art
 
     // Ziel ohne Jahr/Zieltyp/Ziel
@@ -157,8 +157,10 @@ const fetchQk = async ({
   ]
   let nrOfMessages = 0
 
-  const queryQkTypes = qkTypes.filter(q => q.type !== 'function')
-  const queryUrls = queryQkTypes.map(t => {
+  const qualityControlsUsingView = qualityControls.filter(
+    q => q.type === 'view'
+  )
+  const queryUrls = qualityControlsUsingView.map(t => {
     if (t.berichtjahr) {
       return `/${t.name}?ApArtId=eq.${apArtId}&Berichtjahr=eq.${t.berichtjahr}`
     } else {
@@ -190,8 +192,10 @@ const fetchQk = async ({
       .catch(e => e)
   )
 
-  const functionQkTypes = qkTypes.filter(q => q.type === 'function')
-  const functionUrls = functionQkTypes.map(t => `/rpc/${t.name}`)
+  const qualityControlsUsingFunction = qualityControls.filter(
+    q => q.type === 'function'
+  )
+  const functionUrls = qualityControlsUsingFunction.map(t => `/rpc/${t.name}`)
   const dataFetchingPromisesForFunctions = functionUrls.map(dataUrl =>
     axios
       .post(dataUrl, { apid: apArtId, berichtjahr })
