@@ -5504,43 +5504,72 @@ ORDER BY
 DROP VIEW IF EXISTS apflora.v_qk2_tpop_popnrtpopnrmehrdeutig CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk2_tpop_popnrtpopnrmehrdeutig AS
 SELECT
-  apflora.ap."ProjId",
+  apflora.projekt."ProjId",
   apflora.ap."ApArtId",
   'Teilpopulation: Die Kombination von Pop.-Nr. und TPop.-Nr. ist mehrdeutig:'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId"]::text[] AS url
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId"]::text[] AS url,
+  ARRAY[concat('Population: ', apflora.pop."PopNr"), concat('Teil-Population: ', apflora.tpop."TPopNr")]::text[] AS text
 FROM
-  apflora.ap
+  apflora.projekt
   INNER JOIN
-    (apflora.pop
+    apflora.ap
     INNER JOIN
-      apflora.tpop
-      ON apflora.tpop."PopId" = apflora.pop."PopId")
-    ON apflora.pop."ApArtId" = apflora.ap."ApArtId"
-GROUP BY
+      apflora.pop
+      INNER JOIN
+        apflora.tpop
+        ON apflora.tpop."PopId" = apflora.pop."PopId"
+      ON apflora.pop."ApArtId" = apflora.ap."ApArtId"
+    ON apflora.projekt."ProjId" = apflora.ap."ProjId"
+WHERE
+  apflora.tpop."PopId" IN (
+    SELECT DISTINCT "PopId"
+    FROM apflora.tpop
+    GROUP BY "PopId", "TPopNr"
+    HAVING COUNT(*) > 1
+  ) AND
+  apflora.tpop."TPopNr" IN (
+    SELECT "TPopNr"
+    FROM apflora.tpop
+    GROUP BY "PopId", "TPopNr"
+    HAVING COUNT(*) > 1
+  )
+ORDER BY
+  apflora.projekt."ProjId",
   apflora.ap."ApArtId",
   apflora.pop."PopNr",
-  apflora.tpop."TPopNr"
-HAVING
-  count(apflora.tpop."TPopId") > 1;
+  apflora.tpop."TPopNr";
 
 DROP VIEW IF EXISTS apflora.v_qk2_pop_popnrmehrdeutig CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk2_pop_popnrmehrdeutig AS
 SELECT
-  apflora.ap."ProjId",
+  apflora.projekt."ProjId",
   apflora.ap."ApArtId",
   'Population: Die Nr. ist mehrdeutig:'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId"]::text[] AS url
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId"]::text[] AS url,
+  ARRAY[concat('Population: ', apflora.pop."PopNr")]::text[] AS text
 FROM
-  apflora.ap
+  apflora.projekt
   INNER JOIN
-    apflora.pop
-    ON apflora.pop."ApArtId" = apflora.ap."ApArtId"
-GROUP BY
-  apflora.ap."ApArtId",
-  apflora.pop."PopNr"
-HAVING
-  count(apflora.pop."PopId") > 1
+    apflora.ap
+    INNER JOIN
+      apflora.pop
+      ON apflora.pop."ApArtId" = apflora.ap."ApArtId"
+    ON apflora.projekt."ProjId" = apflora.ap."ProjId"
+WHERE
+  apflora.pop."ApArtId" IN (
+    SELECT DISTINCT "ApArtId"
+    FROM apflora.pop
+    GROUP BY "ApArtId", "PopNr"
+    HAVING COUNT(*) > 1
+  ) AND
+  apflora.pop."PopNr" IN (
+    SELECT DISTINCT "PopNr"
+    FROM apflora.pop
+    GROUP BY "ApArtId", "PopNr"
+    HAVING COUNT(*) > 1
+  )
 ORDER BY
+  apflora.projekt."ProjId",
   apflora.ap."ApArtId",
   apflora.pop."PopNr";
 
@@ -7165,14 +7194,11 @@ SELECT DISTINCT
   apflora.tpop."TPopId",
   'Teilpopulation mit Status "potentieller Wuchs-/Ansiedlungsort", bei denen in einer Kontrolle eine Anzahl festgestellt wurde:'::text AS hw,
   ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId"]::text[] AS url,
-  ARRAY[concat('Projekt: ', apflora.projekt."ProjName"), concat('Art: ', apflora.adb_eigenschaften."Artname"), concat('Population: ', apflora.pop."PopName"), concat('Teil-Population: ', apflora.tpop."TPopFlurname")]::text[] AS text
+  ARRAY[concat('Population: ', apflora.pop."PopNr"), concat('Teil-Population: ', apflora.tpop."TPopNr")]::text[] AS text
 FROM
   apflora.projekt
   INNER JOIN
     apflora.ap
-    INNER JOIN
-      apflora.adb_eigenschaften
-      ON apflora.ap."ApArtId" = apflora.adb_eigenschaften."TaxonomieId"
     INNER JOIN
       apflora.pop
       INNER JOIN
@@ -7182,7 +7208,6 @@ FROM
     ON apflora.projekt."ProjId" = apflora.ap."ProjId"
 GROUP BY
   apflora.projekt."ProjId",
-  adb_eigenschaften."Artname",
   apflora.ap."ApArtId",
   apflora.pop."PopId",
   apflora.tpop."TPopId"
