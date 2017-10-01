@@ -1894,7 +1894,8 @@ SELECT DISTINCT
   apflora.ap."ProjId",
   apflora.pop."ApArtId",
   'Population: Status ist "aktuell", der letzte Populations-Bericht meldet aber "erloschen":' AS "hw",
-  array_agg(distinct ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId"]::text[]) AS "url"
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId"]::text[] AS "url",
+  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr")]::text[] AS text
 FROM
   apflora.ap
     INNER JOIN
@@ -1914,63 +1915,7 @@ FROM
 WHERE
   apflora.popber."PopBerEntwicklung" = 8
   AND apflora.pop."PopHerkunft" IN (100, 200, 210)
-  AND apflora.tpop."TPopApBerichtRelevant" = 1
-GROUP BY
-  apflora.ap."ProjId",
-  apflora.pop."ApArtId",
-  apflora.pop."PopId";
-
-DROP VIEW IF EXISTS apflora.v_qk_pop_statuserloschenletzterpopberaktuell CASCADE;
-CREATE OR REPLACE VIEW apflora.v_qk_pop_statuserloschenletzterpopberaktuell AS
-SELECT DISTINCT
-  apflora.pop."ApArtId",
-  'Population: Status ist "erloschen", der letzte Populations-Bericht meldet aber "aktuell":' AS "hw",
-  concat(
-    '<a href="http://apflora.ch/index.html?ap=',
-    apflora.pop."ApArtId",
-    '&pop=',
-    apflora.pop."PopId",
-    '" target="_blank">',
-    COALESCE(
-      concat('Pop: ', apflora.pop."PopNr"),
-      concat('Pop: id=', apflora.pop."PopId")
-    ),
-    '</a>'
-  ) AS "link"
-FROM
-  (apflora.pop
-  INNER JOIN
-    (apflora.popber
-    INNER JOIN
-      apflora.v_pop_letzterpopber0_overall
-      ON
-        (v_pop_letzterpopber0_overall."PopBerJahr" = apflora.popber."PopBerJahr")
-        AND (v_pop_letzterpopber0_overall."PopId" = apflora.popber."PopId"))
-    ON apflora.popber."PopId" = apflora.pop."PopId")
-  INNER JOIN
-    apflora.tpop
-    ON apflora.tpop."PopId" = apflora.pop."PopId"
-WHERE
-  apflora.popber."PopBerEntwicklung" < 8
-  AND apflora.pop."PopHerkunft" IN (101, 202, 211)
-  AND apflora.tpop."TPopApBerichtRelevant" = 1
-GROUP BY
-  apflora.pop."ApArtId",
-  apflora.pop."PopId"
-ORDER BY
-  apflora.pop."ApArtId",
-  concat(
-    '<a href="http://apflora.ch/index.html?ap=',
-    apflora.pop."ApArtId",
-    '&pop=',
-    apflora.pop."PopId",
-    '" target="_blank">',
-    COALESCE(
-      concat('Pop: ', apflora.pop."PopNr"),
-      concat('Pop: id=', apflora.pop."PopId")
-    ),
-    '</a>'
-  );
+  AND apflora.tpop."TPopApBerichtRelevant" = 1;
 
 DROP VIEW IF EXISTS apflora.v_qk2_pop_statuserloschenletzterpopberaktuell CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk2_pop_statuserloschenletzterpopberaktuell AS
@@ -1978,7 +1923,8 @@ SELECT DISTINCT
   apflora.ap."ProjId",
   apflora.pop."ApArtId",
   'Population: Status ist "erloschen", der letzte Populations-Bericht meldet aber "aktuell":' AS "hw",
-  array_agg(distinct ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId"]::text[]) AS "url"
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId"]::text[] AS "url",
+  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr")]::text[] AS text
 FROM
   apflora.ap
     INNER JOIN
@@ -1998,103 +1944,7 @@ FROM
 WHERE
   apflora.popber."PopBerEntwicklung" < 8
   AND apflora.pop."PopHerkunft" IN (101, 202, 211)
-  AND apflora.tpop."TPopApBerichtRelevant" = 1
-GROUP BY
-  apflora.ap."ProjId",
-  apflora.pop."ApArtId",
-  apflora.pop."PopId";
-
-DROP VIEW IF EXISTS apflora.v_qk_tpop_statusaktuellletzterpopbererloschen CASCADE;
-CREATE OR REPLACE VIEW apflora.v_qk_tpop_statusaktuellletzterpopbererloschen AS
-SELECT DISTINCT
-  apflora.pop."ApArtId",
-  'Teilpopulation: Status ist "aktuell", der letzte Teilpopulations-Bericht meldet aber "erloschen":' AS "hw",
-  concat(
-    '<a href="http://apflora.ch/index.html?ap=',
-    apflora.pop."ApArtId",
-    '&pop=',
-    apflora.pop."PopId",
-    '&tpop=',
-    apflora.tpop."TPopId",
-    '" target="_blank">',
-    COALESCE(
-      concat('Pop: ', apflora.pop."PopNr"),
-      concat('Pop: id=', apflora.pop."PopId")
-    ),
-    COALESCE(
-      concat(' > TPop: ', apflora.tpop."TPopNr"),
-      concat(' > TPop: id=', apflora.tpop."TPopId")
-    ),
-    '</a>'
-  ) AS "link"
-FROM
-  apflora.pop
-  INNER JOIN
-    (apflora.tpop
-    INNER JOIN
-      (apflora.tpopber
-      INNER JOIN
-        apflora.v_tpop_letztertpopber0_overall
-        ON
-          (v_tpop_letztertpopber0_overall."TPopBerJahr" = apflora.tpopber."TPopBerJahr")
-          AND (v_tpop_letztertpopber0_overall."TPopId" = apflora.tpopber."TPopId"))
-      ON apflora.tpopber."TPopId" = apflora.tpop."TPopId")
-    ON apflora.tpop."PopId" = apflora.pop."PopId"
-WHERE
-  apflora.tpopber."TPopBerEntwicklung" = 8
-  AND apflora.tpop."TPopHerkunft" IN (100, 200, 210)
-  AND apflora.tpop."TPopId" NOT IN (
-    -- Ansiedlungen since apflora.tpopber."TPopBerJahr"
-    SELECT
-      apflora.tpopmassn."TPopId"
-    FROM
-      apflora.tpopmassn
-    WHERE
-      apflora.tpopmassn."TPopId" = apflora.tpop."TPopId"
-      AND apflora.tpopmassn."TPopMassnTyp" BETWEEN 1 AND 3
-      AND apflora.tpopmassn."TPopMassnJahr" IS NOT NULL
-      AND apflora.tpopmassn."TPopMassnJahr" > apflora.tpopber."TPopBerJahr"
-  )
-GROUP BY
-  apflora.pop."ApArtId",
-  concat(
-    '<a href="http://apflora.ch/index.html?ap=',
-    apflora.pop."ApArtId",
-    '&pop=',
-    apflora.pop."PopId",
-    '&tpop=',
-    apflora.tpop."TPopId",
-    '" target="_blank">',
-    COALESCE(
-      concat('Pop: ', apflora.pop."PopNr"),
-      concat('Pop: id=', apflora.pop."PopId")
-    ),
-    COALESCE(
-      concat(' > TPop: ', apflora.tpop."TPopNr"),
-      concat(' > TPop: id=', apflora.tpop."TPopId")
-    ),
-    '</a>'
-  )
-ORDER BY
-  apflora.pop."ApArtId",
-  concat(
-    '<a href="http://apflora.ch/index.html?ap=',
-    apflora.pop."ApArtId",
-    '&pop=',
-    apflora.pop."PopId",
-    '&tpop=',
-    apflora.tpop."TPopId",
-    '" target="_blank">',
-    COALESCE(
-      concat('Pop: ', apflora.pop."PopNr"),
-      concat('Pop: id=', apflora.pop."PopId")
-    ),
-    COALESCE(
-      concat(' > TPop: ', apflora.tpop."TPopNr"),
-      concat(' > TPop: id=', apflora.tpop."TPopId")
-    ),
-    '</a>'
-  );
+  AND apflora.tpop."TPopApBerichtRelevant" = 1;
 
 DROP VIEW IF EXISTS apflora.v_qk2_tpop_statusaktuellletzterpopbererloschen CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk2_tpop_statusaktuellletzterpopbererloschen AS
@@ -2102,7 +1952,8 @@ SELECT DISTINCT
   apflora.ap."ProjId",
   apflora.pop."ApArtId",
   'Teilpopulation: Status ist "aktuell", der letzte Teilpopulations-Bericht meldet aber "erloschen":' AS "hw",
-  array_agg(distinct ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId"]::text[]) AS "url"
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId"]::text[] AS "url",
+  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop."TPopNr")]::text[] AS text
 FROM
   apflora.ap
     INNER JOIN
@@ -2133,12 +1984,7 @@ WHERE
       AND apflora.tpopmassn."TPopMassnTyp" BETWEEN 1 AND 3
       AND apflora.tpopmassn."TPopMassnJahr" IS NOT NULL
       AND apflora.tpopmassn."TPopMassnJahr" > apflora.tpopber."TPopBerJahr"
-  )
-GROUP BY
-  apflora.ap."ProjId",
-  apflora.pop."ApArtId",
-  apflora.pop."PopId",
-  apflora.tpop."TPopId";
+  );
 
 DROP VIEW IF EXISTS apflora.v_qk_tpop_statuserloschenletzterpopberaktuell CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk_tpop_statuserloschenletzterpopberaktuell AS
@@ -2238,7 +2084,7 @@ SELECT DISTINCT
   apflora.ap."ProjId",
   apflora.pop."ApArtId",
   'Teilpopulation: Status ist "erloschen", der letzte Teilpopulations-Bericht meldet aber "aktuell":' AS "hw",
-  array_agg(distinct ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId"]::text[]) AS "url"
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId"]::text[] AS "url"
 FROM
   apflora.ap
     INNER JOIN
