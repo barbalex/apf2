@@ -1,6 +1,5 @@
 // @flow
 import axios from 'axios'
-import isArray from 'lodash/isArray'
 import isFinite from 'lodash/isFinite'
 
 import isPointInsidePolygon from './isPointInsidePolygon'

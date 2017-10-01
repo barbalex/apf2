@@ -1,11 +1,12 @@
 CREATE OR REPLACE FUNCTION apflora.qk2_pop_ohne_popber(apid integer, berichtjahr integer)
-  RETURNS table("ProjId" integer, "ApArtId" integer, hw text, url text[]) AS
+  RETURNS table("ProjId" integer, "ApArtId" integer, hw text, url text[], text text[]) AS
   $$
   SELECT DISTINCT
     apflora.ap."ProjId",
     apflora.pop."ApArtId",
     'Population mit angesiedelten Teilpopulationen (vor dem Berichtjahr), die (im Berichtjahr) kontrolliert wurden, aber ohne Populations-Bericht (im Berichtjahr):' AS hw,
-    ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId"]::text[] AS "url"
+    ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId"]::text[] AS "url",
+    ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr")]::text[] AS text
   FROM
     apflora.ap
     INNER JOIN

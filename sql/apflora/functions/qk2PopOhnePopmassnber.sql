@@ -1,12 +1,13 @@
 CREATE OR REPLACE FUNCTION apflora.qk2_pop_ohne_popmassnber(apid integer, berichtjahr integer)
-  RETURNS table("ProjId" integer, "ApArtId" integer, hw text, url text[]) AS
+  RETURNS table("ProjId" integer, "ApArtId" integer, hw text, url text[], text text[]) AS
   $$
   -- 5. "Pop ohne verlangten Pop-Massn-Bericht im Berichtjahr" ermitteln und in Qualitätskontrollen auflisten:
   SELECT DISTINCT
     apflora.ap."ProjId",
     apflora.pop."ApArtId",
     'Population mit angesiedelten Teilpopulationen (vor dem Berichtjahr), die (im Berichtjahr) kontrolliert wurden, aber ohne Massnahmen-Bericht (im Berichtjahr):' AS hw,
-    ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId"]::text[] AS "url"
+    ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId"]::text[] AS "url",
+    ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr")]::text[] AS text
   FROM
     apflora.ap
     INNER JOIN

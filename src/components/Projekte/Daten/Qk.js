@@ -3,7 +3,6 @@ import React from 'react'
 import { toJS } from 'mobx'
 import { observer, inject } from 'mobx-react'
 import TextField from 'material-ui/TextField'
-import Linkify from 'react-linkify'
 import styled from 'styled-components'
 import { Card, CardText } from 'material-ui/Card'
 import compose from 'recompose/compose'
@@ -36,13 +35,10 @@ const LoadingIndicator = styled.div`
   color: ${props =>
     props.loading ? 'rgba(0, 0, 0, 0.87)' : 'rgb(46, 125, 50)'};
 `
-const linkifyProperties = {
-  target: '_blank',
-  style: {
-    color: 'inherit',
-    fontWeight: 100,
-  },
-}
+const StyledA = styled.a`
+  color: inherit;
+  font-weight: 100;
+`
 
 const enhance = compose(
   inject('store'),
@@ -87,13 +83,12 @@ const Qk = ({
   onChangeFilter: () => void,
 }) => {
   const { filter, messages, loading } = store.qk
-  const pureMessages = toJS(messages)
-  console.log('QK: messages:', pureMessages)
-  const messagesFiltered = filter
-    ? pureMessages.filter(m =>
-        m.hw.toLowerCase().includes(filter.toLowerCase())
+  const pureMessageArrays = toJS(messages)
+  const messageArraysFiltered = filter
+    ? pureMessageArrays.filter(messageArray =>
+        messageArray[0].hw.toLowerCase().includes(filter.toLowerCase())
       )
-    : pureMessages
+    : pureMessageArrays
   const loadingMessage = loading
     ? 'Die Daten werden analysiert...'
     : 'Analyse abgeschlossen'
@@ -117,17 +112,20 @@ const Qk = ({
           onChange={onChangeFilter}
         />
         <LoadingIndicator loading={loading}>{loadingMessage}</LoadingIndicator>
-        {messagesFiltered.map((m, index) => (
+        {messageArraysFiltered.map((messageArray, index) => (
           <StyledCard key={index}>
             <CardText>
-              <Title>{m.hw}</Title>
-              <div>
-                <Linkify properties={linkifyProperties}>
-                  {m.url.map((u, i) => (
-                    <div key={i}>{`${appBaseUrl}/${u.join('/')}`}</div>
-                  ))}
-                </Linkify>
-              </div>
+              <Title>{messageArray[0].hw}</Title>
+              {messageArray.map(m => (
+                <div key={m.url.join()}>
+                  <StyledA
+                    href={`${appBaseUrl}/${m.url.join('/')}`}
+                    target="_blank"
+                  >
+                    {m.text.join('; ')}
+                  </StyledA>
+                </div>
+              ))}
             </CardText>
           </StyledCard>
         ))}
