@@ -5508,7 +5508,7 @@ SELECT
   apflora.ap."ApArtId",
   'Teilpopulation: Die TPop.-Nr. ist mehrdeutig:'::text AS hw,
   ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId"]::text[] AS url,
-  ARRAY[concat('Population: ', apflora.pop."PopNr"), concat('Teil-Population: ', apflora.tpop."TPopNr")]::text[] AS text
+  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop."TPopNr")]::text[] AS text
 FROM
   apflora.projekt
   INNER JOIN
@@ -6765,16 +6765,14 @@ SELECT DISTINCT
   apflora.ap."ProjId",
   apflora.pop."ApArtId",
   'Population: Status ist "angesiedelt, Ansaatversuch", es gibt aber eine aktuelle Teilpopulation oder eine ursprüngliche erloschene:'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId"]::text[] AS url
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId"]::text[] AS url,
+  ARRAY[concat('Population (Nr): ', apflora.pop."PopNr")]::text[] AS text
 FROM
   apflora.ap
   INNER JOIN
     apflora.pop
     ON apflora.pop."ApArtId" = apflora.ap."ApArtId"
-GROUP BY
-  apflora.ap."ApArtId",
-  apflora.pop."PopId"
-HAVING
+WHERE
   apflora.pop."PopHerkunft" = 201
   AND apflora.pop."PopId" IN (
     SELECT DISTINCT
@@ -6791,18 +6789,15 @@ SELECT DISTINCT
   apflora.ap."ProjId",
   apflora.pop."ApArtId",
   'Population: Status ist "angesiedelt, Ansaatversuch", alle Teilpopulationen sind gemäss Status erloschen:'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId"]::text[] AS url
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId"]::text[] AS url,
+  ARRAY[concat('Population (Nr): ', apflora.pop."PopNr")]::text[] AS text
 FROM
   apflora.ap
     INNER JOIN apflora.pop
       INNER JOIN apflora.tpop
       ON apflora.tpop."PopId" = apflora.pop."PopId"
     ON apflora.pop."ApArtId" = apflora.ap."ApArtId"
-GROUP BY
-  apflora.ap."ApArtId",
-  apflora.pop."PopId",
-  apflora.tpop."TPopId"
-HAVING
+WHERE
   apflora.pop."PopHerkunft" = 201
   AND EXISTS (
     SELECT
@@ -6829,16 +6824,14 @@ HAVING
     apflora.ap."ProjId",
     apflora.pop."ApArtId",
     'Population: Status ist "angesiedelt, Ansaatversuch", es gibt aber eine Teilpopulation mit Status "urspruenglich, erloschen":'::text AS hw,
-    ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId"]::text[] AS url
+    ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId"]::text[] AS url,
+  ARRAY[concat('Population (Nr): ', apflora.pop."PopNr")]::text[] AS text
   FROM
     apflora.ap
     INNER JOIN
       apflora.pop
       ON apflora.pop."ApArtId" = apflora.ap."ApArtId"
-  GROUP BY
-    apflora.ap."ApArtId",
-    apflora.pop."PopId"
-  HAVING
+  WHERE
     apflora.pop."PopHerkunft" = 201
     AND apflora.pop."PopId" IN (
       SELECT DISTINCT
@@ -6855,16 +6848,14 @@ SELECT DISTINCT
   apflora.ap."ProjId",
   apflora.pop."ApArtId",
   'Population: Status ist "erloschen" (urspruenglich oder angesiedelt), es gibt aber eine Teilpopulation mit Status "aktuell" (urspruenglich oder angesiedelt):'::text AS hw,
-    ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId"]::text[] AS url
+    ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId"]::text[] AS url,
+  ARRAY[concat('Population (Nr): ', apflora.pop."PopNr")]::text[] AS text
 FROM
   apflora.ap
   INNER JOIN
     apflora.pop
     ON apflora.pop."ApArtId" = apflora.ap."ApArtId"
-GROUP BY
-  apflora.ap."ApArtId",
-  apflora.pop."PopId"
-HAVING
+WHERE
   apflora.pop."PopHerkunft" IN (101, 202, 211)
   AND apflora.pop."PopId" IN (
     SELECT DISTINCT
@@ -6881,16 +6872,14 @@ SELECT DISTINCT
   apflora.ap."ProjId",
   apflora.pop."ApArtId",
   'Population: Status ist "erloschen" (urspruenglich oder angesiedelt), es gibt aber eine Teilpopulation mit Status "angesiedelt, Ansaatversuch":'::text AS hw,
-    ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId"]::text[] AS url
+    ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId"]::text[] AS url,
+  ARRAY[concat('Population (Nr): ', apflora.pop."PopNr")]::text[] AS text
 FROM
   apflora.ap
   INNER JOIN
     apflora.pop
     ON apflora.pop."ApArtId" = apflora.ap."ApArtId"
-GROUP BY
-  apflora.ap."ApArtId",
-  apflora.pop."PopId"
-HAVING
+WHERE
   apflora.pop."PopHerkunft" IN (101, 202, 211)
   AND apflora.pop."PopId" IN (
     SELECT DISTINCT
@@ -6907,16 +6896,14 @@ SELECT DISTINCT
   apflora.ap."ProjId",
   apflora.pop."ApArtId",
   'Population: Status ist "angesiedelt", es gibt aber eine Teilpopulation mit Status "urspruenglich":'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId"]::text[] AS url
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId"]::text[] AS url,
+  ARRAY[concat('Population (Nr): ', apflora.pop."PopNr")]::text[] AS text
 FROM
   apflora.ap
   INNER JOIN
     apflora.pop
     ON apflora.pop."ApArtId" = apflora.ap."ApArtId"
-GROUP BY
-  apflora.ap."ApArtId",
-  apflora.pop."PopId"
-HAVING
+WHERE
   apflora.pop."PopHerkunft" IN (200, 201, 202, 210, 211)
   AND apflora.pop."PopId" IN (
     SELECT DISTINCT
@@ -6933,16 +6920,14 @@ SELECT DISTINCT
   apflora.ap."ProjId",
   apflora.pop."ApArtId",
   'Population: Status ist "potenzieller Wuchs-/Ansiedlungsort", es gibt aber eine Teilpopulation mit Status "angesiedelt" oder "urspruenglich":'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId"]::text[] AS url
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId"]::text[] AS url,
+  ARRAY[concat('Population (Nr): ', apflora.pop."PopNr")]::text[] AS text
 FROM
   apflora.ap
   INNER JOIN
     apflora.pop
     ON apflora.pop."ApArtId" = apflora.ap."ApArtId"
-GROUP BY
-  apflora.ap."ApArtId",
-  apflora.pop."PopId"
-HAVING
+WHERE
   apflora.pop."PopHerkunft" = 300
   AND apflora.pop."PopId" IN (
     SELECT DISTINCT
