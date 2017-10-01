@@ -6396,32 +6396,26 @@ SELECT
   apflora.ap."ApArtId",
   'Teilpopulations-Bericht ohne Entwicklung:'::text AS hw,
   ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId", 'Kontroll-Berichte', apflora.tpopber."TPopBerId"]::text[] AS url,
+  ARRAY[concat('Population: ', apflora.pop."PopNr"), concat('Teil-Population: ', apflora.tpop."TPopNr"), concat('Teilpopulations-Bericht: ', apflora.tpopber."TPopBerJahr")]::text[] AS text,
   apflora.tpopber."TPopBerJahr" AS "Berichtjahr"
 FROM
   apflora.ap
   INNER JOIN
-    (apflora.pop
+    apflora.pop
     INNER JOIN
-      (apflora.tpop
+      apflora.tpop
       INNER JOIN
         apflora.tpopber
-        ON apflora.tpop."TPopId" = apflora.tpopber."TPopId")
-      ON apflora.pop."PopId" = apflora.tpop."PopId")
+        ON apflora.tpop."TPopId" = apflora.tpopber."TPopId"
+      ON apflora.pop."PopId" = apflora.tpop."PopId"
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
-GROUP BY
-  apflora.ap."ApArtId",
-  apflora.pop."PopId",
-  apflora.tpop."TPopId",
-  apflora.tpopber."TPopBerId"
-HAVING
+WHERE
   apflora.tpopber."TPopBerEntwicklung" IS NULL
   AND apflora.tpopber."TPopBerJahr" IS NOT NULL
 ORDER BY
-  apflora.ap."ApArtId",
   apflora.pop."PopNr",
   apflora.tpop."TPopNr",
-  apflora.tpopber."TPopBerJahr",
-  apflora.tpopber."TPopBerId";
+  apflora.tpopber."TPopBerJahr";
 
 DROP VIEW IF EXISTS apflora.v_qk2_popber_ohneentwicklung CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk2_popber_ohneentwicklung AS
@@ -6430,27 +6424,22 @@ SELECT
   apflora.ap."ApArtId",
   'Populations-Bericht ohne Entwicklung:'::text AS hw,
   ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Kontroll-Berichte', apflora.popber."PopBerId"]::text[] AS url,
+  ARRAY[concat('Population: ', apflora.pop."PopNr"), concat('Populations-Bericht: ', apflora.popber."PopBerJahr")]::text[] AS text,
   apflora.popber."PopBerJahr" AS "Berichtjahr"
 FROM
   apflora.ap
   INNER JOIN
-    (apflora.pop
+    apflora.pop
     INNER JOIN
       apflora.popber
-      ON apflora.pop."PopId" = apflora.popber."PopId")
+      ON apflora.pop."PopId" = apflora.popber."PopId"
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
-GROUP BY
-  apflora.ap."ApArtId",
-  apflora.pop."PopId",
-  apflora.popber."PopBerId"
-HAVING
+WHERE
   apflora.popber."PopBerEntwicklung" IS NULL
   AND apflora.popber."PopBerJahr" IS NOT NULL
 ORDER BY
-  apflora.ap."ApArtId",
   apflora.pop."PopNr",
-  apflora.popber."PopBerJahr",
-  apflora.popber."PopBerId";
+  apflora.popber."PopBerJahr";
 
 DROP VIEW IF EXISTS apflora.v_qk2_popber_ohnejahr CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk2_popber_ohnejahr AS
@@ -6458,26 +6447,21 @@ SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
   'Populations-Bericht ohne Jahr:'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Kontroll-Berichte', apflora.popber."PopBerId"]::text[] AS url
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Kontroll-Berichte', apflora.popber."PopBerId"]::text[] AS url,
+  ARRAY[concat('Population: ', apflora.pop."PopNr"), concat('Populations-Bericht: ', apflora.popber."PopBerJahr")]::text[] AS text
 FROM
   apflora.ap
   INNER JOIN
-    (apflora.pop
+    apflora.pop
     INNER JOIN
       apflora.popber
-      ON apflora.pop."PopId" = apflora.popber."PopId")
+      ON apflora.pop."PopId" = apflora.popber."PopId"
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
-GROUP BY
-  apflora.ap."ApArtId",
-  apflora.pop."PopId",
-  apflora.popber."PopBerId"
-HAVING
+WHERE
   apflora.popber."PopBerJahr" IS NULL
 ORDER BY
-  apflora.ap."ApArtId",
   apflora.pop."PopNr",
-  apflora.popber."PopBerJahr",
-  apflora.popber."PopBerId";
+  apflora.popber."PopBerJahr";
 
 DROP VIEW IF EXISTS apflora.v_qk2_popmassnber_ohnejahr CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk2_popmassnber_ohnejahr AS
@@ -6485,26 +6469,21 @@ SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
   'Populations-Massnahmen-Bericht ohne Jahr:'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Massnahmen-Berichte', apflora.popmassnber."PopMassnBerId"]::text[] AS url
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Massnahmen-Berichte', apflora.popmassnber."PopMassnBerId"]::text[] AS url,
+  ARRAY[concat('Population: ', apflora.pop."PopNr"), concat('Populations-Massnahmen-Bericht: ', apflora.popmassnber."PopMassnBerJahr")]::text[] AS text
 FROM
   apflora.ap
   INNER JOIN
-    (apflora.pop
+    apflora.pop
     INNER JOIN
       apflora.popmassnber
-      ON apflora.pop."PopId" = apflora.popmassnber."PopId")
+      ON apflora.pop."PopId" = apflora.popmassnber."PopId"
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
-GROUP BY
-  apflora.ap."ApArtId",
-  apflora.pop."PopId",
-  apflora.popmassnber."PopMassnBerId"
-HAVING
+WHERE
   apflora.popmassnber."PopMassnBerJahr" IS NULL
 ORDER BY
-  apflora.ap."ApArtId",
   apflora.pop."PopNr",
-  apflora.popmassnber."PopMassnBerJahr",
-  apflora.popmassnber."PopMassnBerId";
+  apflora.popmassnber."PopMassnBerJahr";
 
 DROP VIEW IF EXISTS apflora.v_qk2_popmassnber_ohneentwicklung CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk2_popmassnber_ohneentwicklung AS
@@ -6513,27 +6492,22 @@ SELECT
   apflora.ap."ApArtId",
   'Populations-Massnahmen-Bericht ohne Entwicklung:'::text AS hw,
   ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Massnahmen-Berichte', apflora.popmassnber."PopMassnBerId"]::text[] AS url,
+  ARRAY[concat('Population: ', apflora.pop."PopNr"), concat('Populations-Massnahmen-Bericht: ', apflora.popmassnber."PopMassnBerJahr")]::text[] AS text,
   apflora.popmassnber."PopMassnBerJahr" AS "Berichtjahr"
 FROM
   apflora.ap
   INNER JOIN
-    (apflora.pop
+    apflora.pop
     INNER JOIN
       apflora.popmassnber
-      ON apflora.pop."PopId" = apflora.popmassnber."PopId")
+      ON apflora.pop."PopId" = apflora.popmassnber."PopId"
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
-GROUP BY
-  apflora.ap."ApArtId",
-  apflora.pop."PopId",
-  apflora.popmassnber."PopMassnBerId"
-HAVING
+WHERE
   apflora.popmassnber."PopMassnBerErfolgsbeurteilung" IS NULL
   AND apflora.popmassnber."PopMassnBerJahr" IS NOT NULL
 ORDER BY
-  apflora.ap."ApArtId",
   apflora.pop."PopNr",
-  apflora.popmassnber."PopMassnBerJahr",
-  apflora.popmassnber."PopMassnBerId";
+  apflora.popmassnber."PopMassnBerJahr";
 
 DROP VIEW IF EXISTS apflora.v_qk2_zielber_ohneentwicklung CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk2_zielber_ohneentwicklung AS
@@ -6542,28 +6516,23 @@ SELECT
   apflora.ap."ApArtId",
   'Ziel-Bericht ohne Entwicklung:'::text AS hw,
   ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Ziele', apflora.ziel."ZielId", 'Berichte', apflora.zielber."ZielBerId"]::text[] AS url,
+  ARRAY[concat('Ziel (Jahr): ', apflora.ziel."ZielJahr"), concat('Ziel-Bericht (Jahr): ', apflora.zielber."ZielBerJahr")]::text[] AS text,
   apflora.zielber."ZielBerJahr" AS "Berichtjahr"
 FROM
   apflora.ap
   INNER JOIN
-    (apflora.ziel
+    apflora.ziel
     INNER JOIN
       apflora.zielber
-      ON apflora.ziel."ZielId" = apflora.zielber."ZielId")
+      ON apflora.ziel."ZielId" = apflora.zielber."ZielId"
     ON apflora.ap."ApArtId" = apflora.ziel."ApArtId"
-GROUP BY
-  apflora.ap."ApArtId",
-  apflora.ziel."ZielId",
-  apflora.zielber."ZielBerId"
-HAVING
+WHERE
   apflora.zielber."ZielBerErreichung" IS NULL
   AND apflora.zielber."ZielBerJahr" IS NOT NULL
 ORDER BY
-  apflora.ap."ApArtId",
   apflora.ziel."ZielJahr",
   apflora.ziel."ZielId",
-  apflora.zielber."ZielBerJahr",
-  apflora.zielber."ZielBerId";
+  apflora.zielber."ZielBerJahr";
 
 DROP VIEW IF EXISTS apflora.v_qk2_zielber_ohnejahr CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk2_zielber_ohnejahr AS
@@ -6571,7 +6540,8 @@ SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
   'Ziel-Bericht ohne Jahr:'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Ziele', apflora.ziel."ZielId", 'Berichte', apflora.zielber."ZielBerId"]::text[] AS url
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Ziele', apflora.ziel."ZielId", 'Berichte', apflora.zielber."ZielBerId"]::text[] AS url,
+  ARRAY[concat('Ziel (Jahr): ', apflora.ziel."ZielJahr"), concat('Ziel-Bericht (Jahr): ', apflora.zielber."ZielBerJahr")]::text[] AS text
 FROM
   apflora.ap
   INNER JOIN
@@ -6580,18 +6550,12 @@ FROM
       apflora.zielber
       ON apflora.ziel."ZielId" = apflora.zielber."ZielId")
     ON apflora.ap."ApArtId" = apflora.ziel."ApArtId"
-GROUP BY
-  apflora.ap."ApArtId",
-  apflora.ziel."ZielId",
-  apflora.zielber."ZielBerId"
-HAVING
+WHERE
   apflora.zielber."ZielBerJahr" IS NULL
 ORDER BY
-  apflora.ap."ApArtId",
   apflora.ziel."ZielJahr",
   apflora.ziel."ZielId",
-  apflora.zielber."ZielBerJahr",
-  apflora.zielber."ZielBerId";
+  apflora.zielber."ZielBerJahr";
 
 DROP VIEW IF EXISTS apflora.v_qk2_ziel_ohnejahr CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk2_ziel_ohnejahr AS
@@ -6599,20 +6563,17 @@ SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
   'Ziel ohne Jahr:'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Ziele', apflora.ziel."ZielId"]::text[] AS url
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Ziele', apflora.ziel."ZielId"]::text[] AS url,
+  ARRAY[concat('Ziel (id): ', apflora.ziel."ZielId")]::text[] AS text
 FROM
   apflora.ap
   INNER JOIN
     apflora.ziel
     ON apflora.ap."ApArtId" = apflora.ziel."ApArtId"
-GROUP BY
-  apflora.ap."ApArtId",
-  apflora.ziel."ZielId"
-HAVING
+WHERE
   apflora.ziel."ZielJahr" IS NULL
+  OR apflora.ziel."ZielJahr" = 1
 ORDER BY
-  apflora.ap."ApArtId",
-  apflora.ziel."ZielJahr",
   apflora.ziel."ZielId";
 
 DROP VIEW IF EXISTS apflora.v_qk2_ziel_ohnetyp CASCADE;
