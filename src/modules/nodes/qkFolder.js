@@ -19,26 +19,35 @@ export default (
   )
   const { messages, filter } = store.qk
   let nrOfQkMessages = 0
-  const pureMessages = toJS(messages)
-  if (pureMessages) {
-    let messagesFiltered = filter
-      ? pureMessages.filter(m =>
-          m.hw.toLowerCase().includes(filter.toLowerCase())
-        )
-      : pureMessages
-    messagesFiltered = messagesFiltered.filter(
+  const pureMessageArrays = toJS(messages)
+  if (pureMessageArrays) {
+    let messageArraysFiltered = filter
+      ? pureMessageArrays.filter(messageArray => {
+          if (
+            messageArray[0] &&
+            messageArray[0].hw &&
+            messageArray[0].hw.toLowerCase
+          ) {
+            return messageArray[0].hw
+              .toLowerCase()
+              .includes(filter.toLowerCase())
+          }
+          return false
+        })
+      : pureMessageArrays
+    messageArraysFiltered = messageArraysFiltered.filter(
       m => m.hw !== 'Wow: Scheint alles i.O. zu sein!'
     )
     // need to count nr of urls, not nr of messages
-    const nrOfUrls = reduce(
-      messagesFiltered,
-      (sum, n) => sum + (n && n.url && n.url.length ? n.url.length : 0),
+    const nrOfMessages = reduce(
+      messageArraysFiltered,
+      (sum, n) => sum + (n && n.length ? n.length : 0),
       0
     )
-    nrOfQkMessages = nrOfUrls
+    nrOfQkMessages = nrOfMessages
   }
 
-  if (pureMessages && filter) {
+  if (pureMessageArrays && filter) {
     nrOfQkMessages = `${nrOfQkMessages} gefiltert`
   }
 

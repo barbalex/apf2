@@ -85,9 +85,16 @@ const Qk = ({
   const { filter, messages, loading } = store.qk
   const pureMessageArrays = toJS(messages)
   const messageArraysFiltered = filter
-    ? pureMessageArrays.filter(messageArray =>
-        messageArray[0].hw.toLowerCase().includes(filter.toLowerCase())
-      )
+    ? pureMessageArrays.filter(messageArray => {
+        if (
+          messageArray[0] &&
+          messageArray[0].hw &&
+          messageArray[0].hw.toLowerCase
+        ) {
+          return messageArray[0].hw.toLowerCase().includes(filter.toLowerCase())
+        }
+        return false
+      })
     : pureMessageArrays
   const loadingMessage = loading
     ? 'Die Daten werden analysiert...'

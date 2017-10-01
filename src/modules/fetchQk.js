@@ -235,27 +235,34 @@ const fetchQk = async ({
         !isPointInsidePolygon(ktZh, tpop.TPopXKoord, tpop.TPopYKoord)
     )
     if (tpops.length > 0) {
-      const messages = tpops.map(tpop => ({
-        hw: `Teilpopulation ist als 'Für AP-Bericht relevant' markiert, liegt aber ausserhalb des Kt. Zürich und sollte daher nicht relevant sein:`,
-        url: [
-          'Projekte',
-          1,
-          'Arten',
-          tpop.ApArtId,
-          'Populationen',
-          tpop.PopId,
-          'Teil-Populationen',
-          tpop.TPopId,
-        ],
-        text: [
-          `Projekt: ${store.table.projekt.get(store.tree.activeNodes.projekt)
-            .ProjName}`,
-          `Art: ${store.table.adb_eigenschaften.get(store.tree.activeNodes.ap)
-            .Artname}`,
-          `Population: ${store.table.pop.get(tpop.PopId).PopName}`,
-          `Teil-Population: ${tpop.TPopFlurname}`,
-        ],
-      }))
+      const messages = tpops.map(tpop => {
+        const projekt = store.table.projekt.get(store.tree.activeNodes.projekt)
+        const projName = projekt && projekt.ProjName ? projekt.ProjName : ''
+        const art = store.table.adb_eigenschaften.get(store.tree.activeNodes.ap)
+        const artName = art && art.Artname ? art.Artname : ''
+        const pop = store.table.pop.get(tpop.PopId)
+        const popName = pop && pop.PopName ? pop.PopName : ''
+
+        return {
+          hw: `Teilpopulation ist als 'Für AP-Bericht relevant' markiert, liegt aber ausserhalb des Kt. Zürich und sollte daher nicht relevant sein:`,
+          url: [
+            'Projekte',
+            1,
+            'Arten',
+            tpop.ApArtId,
+            'Populationen',
+            tpop.PopId,
+            'Teil-Populationen',
+            tpop.TPopId,
+          ],
+          text: [
+            `Projekt: ${projName}`,
+            `Art: ${artName}`,
+            `Population: ${popName}`,
+            `Teil-Population: ${tpop.TPopFlurname}`,
+          ],
+        }
+      })
       store.qk.addMessages(messages)
       nrOfMessages += tpops.length
     }
