@@ -62,26 +62,31 @@ const enhance = compose(
     onClickButton: props => name => {
       const { store } = props
       const projekteTabs = clone(toJS(store.urlQuery.projekteTabs))
-      const exporteIsVisible = projekteTabs.includes('exporte')
-      const isVisible = projekteTabs.includes(name)
-      if (isVisible) {
-        if (name === 'daten' && exporteIsVisible) {
-          remove(projekteTabs, el => el === 'exporte')
-        } else {
-          remove(projekteTabs, el => el === name)
-        }
+      if (isMobilePhone()) {
+        // show one tab only
+        store.setUrlQueryValue('projekteTabs', [name])
       } else {
-        projekteTabs.push(name)
-        if (name === 'tree2') {
-          store.tree.cloneActiveNodeArrayToTree2()
+        const exporteIsVisible = projekteTabs.includes('exporte')
+        const isVisible = projekteTabs.includes(name)
+        if (isVisible) {
+          if (name === 'daten' && exporteIsVisible) {
+            remove(projekteTabs, el => el === 'exporte')
+          } else {
+            remove(projekteTabs, el => el === name)
+          }
+        } else {
+          projekteTabs.push(name)
+          if (name === 'tree2') {
+            store.tree.cloneActiveNodeArrayToTree2()
+          }
+          if (name === 'daten' && exporteIsVisible) {
+            // need to remove exporte
+            // because exporte replaces daten
+            remove(projekteTabs, el => el === 'exporte')
+          }
         }
-        if (name === 'daten' && exporteIsVisible) {
-          // need to remove exporte
-          // because exporte replaces daten
-          remove(projekteTabs, el => el === 'exporte')
-        }
+        store.setUrlQueryValue('projekteTabs', projekteTabs)
       }
-      store.setUrlQueryValue('projekteTabs', projekteTabs)
     },
     watchVideos: props => () =>
       window.open(
