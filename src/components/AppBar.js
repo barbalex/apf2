@@ -15,6 +15,8 @@ import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 import shouldUpdate from 'recompose/shouldUpdate'
 
+import isMobilePhone from '../modules/isMobilePhone'
+
 const StyledAppBar = styled(AppBar)`@media print {display: none !important;}`
 const Button = styled(FlatButton)`
   color: ${props =>
@@ -130,10 +132,11 @@ const MyAppBar = ({
   const karteIsVisible = projekteTabs.includes('karte')
   const exporteIsVisible = projekteTabs.includes('exporte')
   const exporteIsActive = !!store.tree.activeNodes.projekt
+  const isMobile = isMobilePhone()
 
   return (
     <StyledAppBar
-      title="AP Flora"
+      title={isMobile ? '' : 'AP Flora'}
       iconElementRight={
         <MenuDiv>
           <TreeButton
@@ -146,16 +149,20 @@ const MyAppBar = ({
             data-visible={datenIsVisible}
             onClick={onClickButtonDaten}
           />
-          <TreeButton
-            label="Strukturbaum 2"
-            data-visible={tree2IsVisible}
-            onClick={onClickButtonStrukturbaum2}
-          />
-          <DatenButton
-            label="Daten 2"
-            data-visible={daten2IsVisible}
-            onClick={onClickButtonDaten2}
-          />
+          {!isMobile && (
+            <TreeButton
+              label="Strukturbaum 2"
+              data-visible={tree2IsVisible}
+              onClick={onClickButtonStrukturbaum2}
+            />
+          )}
+          {!isMobile && (
+            <DatenButton
+              label="Daten 2"
+              data-visible={daten2IsVisible}
+              onClick={onClickButtonDaten2}
+            />
+          )}
           <Button
             label="Karte"
             data-visible={karteIsVisible}
