@@ -63,6 +63,7 @@ const Ber = ({ store, tree }: { store: Object, tree: Object }) => {
           updatePropertyInDb={store.updatePropertyInDb}
         />
         <TextFieldWithUrl
+          key={`${activeDataset.row.BerId}BerURL`}
           tree={tree}
           label="URL"
           fieldName="BerURL"
