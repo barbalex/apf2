@@ -30,8 +30,11 @@ const enhance = compose(
       props.updatePropertyInDb(props.tree, props.fieldName, val)
     },
     onClickButton: props => event => {
-      const tpopIdClicked = +event.target.value
-      if (tpopIdClicked === props.value) {
+      const valueClicked =
+        event.target.value && !isNaN(event.target.value)
+          ? +event.target.value
+          : event.target.value
+      if (valueClicked === props.value) {
         // an already active tpopId was clicked
         // set value null
         props.updatePropertyInDb(props.tree, props.fieldName, null)
@@ -60,22 +63,20 @@ const MyRadioButtonGroup = ({
 
   return (
     <Container>
-      <StyledLabel>
-        {label}
-      </StyledLabel>
+      <StyledLabel>{label}</StyledLabel>
       <RadioButtonGroup
         name={fieldName}
         valueSelected={valueSelected}
         onChange={onChange}
       >
-        {dataSource.map((e, index) =>
+        {dataSource.map((e, index) => (
           <RadioButton
             value={e.value}
             label={e.label}
             key={index}
             onClick={onClickButton}
           />
-        )}
+        ))}
       </RadioButtonGroup>
     </Container>
   )

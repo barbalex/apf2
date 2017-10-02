@@ -31,9 +31,12 @@ const enhance = compose(
       props.updatePropertyInDb(props.tree, props.fieldName, val)
     },
     onClickButton: props => event => {
-      const buttonValue = +event.target.value
-      if (buttonValue === props.value) {
-        // an already active button was clicked
+      const valueClicked =
+        event.target.value && !isNaN(event.target.value)
+          ? +event.target.value
+          : event.target.value
+      if (valueClicked === props.value) {
+        // an already active tpopId was clicked
         // set value null
         props.updatePropertyInDb(props.tree, props.fieldName, null)
       }
