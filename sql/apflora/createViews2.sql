@@ -1737,7 +1737,8 @@ FROM
     apflora.pop_entwicklung_werte
     ON apflora.tpopber."TPopBerEntwicklung" = pop_entwicklung_werte."EntwicklungId";
 
--- funktioniert nicht, wenn letzeKontrolle als Unterabfrage eingebunden wird. Grund: Unterabfragen in der FROM-Klausel duerfen keine korrellierten Unterabfragen sein
+-- funktioniert nicht, wenn letzeKontrolle als Unterabfrage eingebunden wird.
+-- Grund: Unterabfragen in der FROM-Klausel duerfen keine korrellierten Unterabfragen sein
 DROP VIEW IF EXISTS apflora.v_tpop_anzkontrinklletzter CASCADE;
 CREATE OR REPLACE VIEW apflora.v_tpop_anzkontrinklletzter AS
 SELECT
