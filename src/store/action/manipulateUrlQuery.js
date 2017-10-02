@@ -1,5 +1,5 @@
 // @flow
-
+import isMobilePhone from '../../modules/isMobilePhone'
 export default (store: Object): void => {
   const { activeNodeArray } = store.tree
 
@@ -8,6 +8,10 @@ export default (store: Object): void => {
     (activeNodeArray.length === 0 || activeNodeArray[0] === 'Projekte') &&
     store.urlQuery.projekteTabs.length === 0
   ) {
-    store.urlQuery.projekteTabs = ['tree', 'daten']
+    if (isMobilePhone()) {
+      store.urlQuery.projekteTabs = ['tree']
+    } else {
+      store.urlQuery.projekteTabs = ['tree', 'daten']
+    }
   }
 }
