@@ -62,6 +62,7 @@ const Tpopkontrzaehl = ({ store, tree }: { store: Object, tree: Object }) => {
           updatePropertyInDb={store.updatePropertyInDb}
         />
         <TextField
+          key={`${activeDataset.row.TPopKontrId}Anzahl`}
           tree={tree}
           label="Anzahl (nur ganze Zahlen)"
           fieldName="Anzahl"
