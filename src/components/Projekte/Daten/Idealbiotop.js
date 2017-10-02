@@ -89,6 +89,7 @@ class Idealbiotop extends Component {
           />
           <Section>Lage</Section>
           <TextField
+            key={`${activeDataset.row.IbApArtId}IbHoehenlage`}
             tree={tree}
             label="Höhe"
             fieldName="IbHoehenlage"
@@ -101,6 +102,7 @@ class Idealbiotop extends Component {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            key={`${activeDataset.row.IbApArtId}IbRegion`}
             tree={tree}
             label="Region"
             fieldName="IbRegion"
@@ -113,6 +115,7 @@ class Idealbiotop extends Component {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            key={`${activeDataset.row.IbApArtId}IbExposition`}
             tree={tree}
             label="Exposition"
             fieldName="IbExposition"
@@ -125,6 +128,7 @@ class Idealbiotop extends Component {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            key={`${activeDataset.row.IbApArtId}IbBesonnung`}
             tree={tree}
             label="Besonnung"
             fieldName="IbBesonnung"
@@ -137,6 +141,7 @@ class Idealbiotop extends Component {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            key={`${activeDataset.row.IbApArtId}IbHangneigung`}
             tree={tree}
             label="Hangneigung"
             fieldName="IbHangneigung"
@@ -150,6 +155,7 @@ class Idealbiotop extends Component {
           />
           <Section>Boden</Section>
           <TextField
+            key={`${activeDataset.row.IbApArtId}IbBodenTyp`}
             tree={tree}
             label="Typ"
             fieldName="IbBodenTyp"
@@ -162,6 +168,7 @@ class Idealbiotop extends Component {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            key={`${activeDataset.row.IbApArtId}IbBodenKalkgehalt`}
             tree={tree}
             label="Kalkgehalt"
             fieldName="IbBodenKalkgehalt"
@@ -174,6 +181,7 @@ class Idealbiotop extends Component {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            key={`${activeDataset.row.IbApArtId}IbBodenDurchlaessigkeit`}
             tree={tree}
             label="Durchlässigkeit"
             fieldName="IbBodenDurchlaessigkeit"
@@ -186,6 +194,7 @@ class Idealbiotop extends Component {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            key={`${activeDataset.row.IbApArtId}IbBodenHumus`}
             tree={tree}
             label="Humus"
             fieldName="IbBodenHumus"
@@ -198,6 +207,7 @@ class Idealbiotop extends Component {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            key={`${activeDataset.row.IbApArtId}IbBodenNaehrstoffgehalt`}
             tree={tree}
             label="Nährstoffgehalt"
             fieldName="IbBodenNaehrstoffgehalt"
@@ -210,6 +220,7 @@ class Idealbiotop extends Component {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            key={`${activeDataset.row.IbApArtId}IbWasserhaushalt`}
             tree={tree}
             label="Wasserhaushalt"
             fieldName="IbWasserhaushalt"
@@ -223,6 +234,7 @@ class Idealbiotop extends Component {
           />
           <Section>Vegetation</Section>
           <TextField
+            key={`${activeDataset.row.IbApArtId}IbKonkurrenz`}
             tree={tree}
             label="Konkurrenz"
             fieldName="IbKonkurrenz"
@@ -235,6 +247,7 @@ class Idealbiotop extends Component {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            key={`${activeDataset.row.IbApArtId}IbMoosschicht`}
             tree={tree}
             label="Moosschicht"
             fieldName="IbMoosschicht"
@@ -247,6 +260,7 @@ class Idealbiotop extends Component {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            key={`${activeDataset.row.IbApArtId}Krautschicht`}
             tree={tree}
             label="Krautschicht"
             fieldName="IbKrautschicht"
@@ -259,6 +273,7 @@ class Idealbiotop extends Component {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            key={`${activeDataset.row.IbApArtId}Strauchschicht`}
             tree={tree}
             label="Strauchschicht"
             fieldName="IbStrauchschicht"
@@ -271,6 +286,7 @@ class Idealbiotop extends Component {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            key={`${activeDataset.row.IbApArtId}IbBaumschicht`}
             tree={tree}
             label="Baumschicht"
             fieldName="IbBaumschicht"
@@ -283,6 +299,7 @@ class Idealbiotop extends Component {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            key={`${activeDataset.row.IbApArtId}IbBemerkungen`}
             tree={tree}
             label="Bemerkungen"
             fieldName="IbBemerkungen"

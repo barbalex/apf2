@@ -32,6 +32,7 @@ const Pop = ({ store, tree }: { store: Object, tree: Object }) => {
       <FormTitle tree={tree} title="Population" />
       <FieldsContainer>
         <TextField
+          key={`${activeDataset.row.PopId}PopNr`}
           tree={tree}
           label="Nr."
           fieldName="PopNr"
@@ -42,6 +43,7 @@ const Pop = ({ store, tree }: { store: Object, tree: Object }) => {
           updatePropertyInDb={store.updatePropertyInDb}
         />
         <TextFieldWithInfo
+          key={`${activeDataset.row.PopId}PopName`}
           tree={tree}
           label="Name"
           fieldName="PopName"
@@ -71,6 +73,7 @@ const Pop = ({ store, tree }: { store: Object, tree: Object }) => {
           updatePropertyInDb={store.updatePropertyInDb}
         />
         <TextField
+          key={`${activeDataset.row.PopId}PopHerkunftUnklarBegruendung`}
           tree={tree}
           label="Begründung"
           fieldName="PopHerkunftUnklarBegruendung"
@@ -83,6 +86,7 @@ const Pop = ({ store, tree }: { store: Object, tree: Object }) => {
           updatePropertyInDb={store.updatePropertyInDb}
         />
         <TextField
+          key={`${activeDataset.row.PopId}PopXKoord`}
           tree={tree}
           label="X-Koordinaten"
           fieldName="PopXKoord"
@@ -93,6 +97,7 @@ const Pop = ({ store, tree }: { store: Object, tree: Object }) => {
           updatePropertyInDb={store.updatePropertyInDb}
         />
         <TextField
+          key={`${activeDataset.row.PopId}PopYKoord`}
           tree={tree}
           label="Y-Koordinaten"
           fieldName="PopYKoord"

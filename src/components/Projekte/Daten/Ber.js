@@ -28,6 +28,7 @@ const Ber = ({ store, tree }: { store: Object, tree: Object }) => {
       <FormTitle tree={tree} title="Bericht" />
       <FieldsContainer>
         <TextField
+          key={`${activeDataset.row.BerId}BerAutor`}
           tree={tree}
           label="AutorIn"
           fieldName="BerAutor"
@@ -38,6 +39,7 @@ const Ber = ({ store, tree }: { store: Object, tree: Object }) => {
           updatePropertyInDb={store.updatePropertyInDb}
         />
         <TextField
+          key={`${activeDataset.row.BerId}BerJahr`}
           tree={tree}
           label="Jahr"
           fieldName="BerJahr"
@@ -48,6 +50,7 @@ const Ber = ({ store, tree }: { store: Object, tree: Object }) => {
           updatePropertyInDb={store.updatePropertyInDb}
         />
         <TextField
+          key={`${activeDataset.row.BerId}BerTitel`}
           tree={tree}
           label="Titel"
           fieldName="BerTitel"

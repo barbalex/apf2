@@ -28,6 +28,7 @@ const Popber = ({ store, tree }: { store: Object, tree: Object }) => {
       <FormTitle tree={tree} title="Kontroll-Bericht Population" />
       <FieldsContainer>
         <TextField
+          key={`${activeDataset.row.PopberId}PopBerJahr`}
           tree={tree}
           label="Jahr"
           fieldName="PopBerJahr"
@@ -47,6 +48,7 @@ const Popber = ({ store, tree }: { store: Object, tree: Object }) => {
           updatePropertyInDb={store.updatePropertyInDb}
         />
         <TextField
+          key={`${activeDataset.row.PopberId}PopBerTxt`}
           tree={tree}
           label="Bemerkungen"
           fieldName="PopBerTxt"

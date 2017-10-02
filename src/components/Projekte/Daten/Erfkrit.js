@@ -36,6 +36,7 @@ const Erfkrit = ({ store, tree }: { store: Object, tree: Object }) => {
           updatePropertyInDb={store.updatePropertyInDb}
         />
         <TextField
+          key={`${activeDataset.row.ErfkritId}ErfkritTxt`}
           tree={tree}
           label="Kriterien"
           fieldName="ErfkritTxt"
