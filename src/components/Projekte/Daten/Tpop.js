@@ -78,6 +78,7 @@ class Tpop extends Component {
         <FormTitle tree={tree} title="Teil-Population" />
         <FieldsContainer data-width={width}>
           <TextField
+            key={`${activeDataset.row.TPopId}TPopNr`}
             tree={tree}
             label="Nr."
             fieldName="TPopNr"
@@ -88,6 +89,7 @@ class Tpop extends Component {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextFieldWithInfo
+            key={`${activeDataset.row.TPopId}TPopFlurname`}
             tree={tree}
             label="Flurname"
             fieldName="TPopFlurname"
@@ -118,6 +120,7 @@ class Tpop extends Component {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            key={`${activeDataset.row.TPopId}TPopHerkunftUnklarBegruendung`}
             tree={tree}
             label="Begründung"
             fieldName="TPopHerkunftUnklarBegruendung"
@@ -139,6 +142,7 @@ class Tpop extends Component {
             label="Für AP-Bericht relevant"
           />
           <TextField
+            key={`${activeDataset.row.TPopId}TPopXKoord`}
             tree={tree}
             label="X-Koordinaten"
             fieldName="TPopXKoord"
@@ -149,6 +153,7 @@ class Tpop extends Component {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            key={`${activeDataset.row.TPopId}TPopYKoord`}
             tree={tree}
             label="Y-Koordinaten"
             fieldName="TPopYKoord"
@@ -169,6 +174,7 @@ class Tpop extends Component {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            key={`${activeDataset.row.TPopId}TPopRadius`}
             tree={tree}
             label="Radius (m)"
             fieldName="TPopRadius"
@@ -179,6 +185,7 @@ class Tpop extends Component {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            key={`${activeDataset.row.TPopId}TPopHoehe`}
             tree={tree}
             label="Höhe (m.ü.M.)"
             fieldName="TPopHoehe"
@@ -189,6 +196,7 @@ class Tpop extends Component {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            key={`${activeDataset.row.TPopId}TPopExposition`}
             tree={tree}
             label="Exposition, Besonnung"
             fieldName="TPopExposition"
@@ -199,6 +207,7 @@ class Tpop extends Component {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            key={`${activeDataset.row.TPopId}TPopKlima`}
             tree={tree}
             label="Klima"
             fieldName="TPopKlima"
@@ -209,6 +218,7 @@ class Tpop extends Component {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            key={`${activeDataset.row.TPopId}TPopNeigung`}
             tree={tree}
             label="Hangneigung"
             fieldName="TPopNeigung"
@@ -219,6 +229,7 @@ class Tpop extends Component {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            key={`${activeDataset.row.TPopId}TPopBeschr`}
             tree={tree}
             label="Beschreibung"
             fieldName="TPopBeschr"
@@ -230,6 +241,7 @@ class Tpop extends Component {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            key={`${activeDataset.row.TPopId}TPopKatNr`}
             tree={tree}
             label="Kataster-Nr."
             fieldName="TPopKatNr"
@@ -240,6 +252,7 @@ class Tpop extends Component {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            key={`${activeDataset.row.TPopId}TPopEigen`}
             tree={tree}
             label="EigentümerIn"
             fieldName="TPopEigen"
@@ -250,6 +263,7 @@ class Tpop extends Component {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            key={`${activeDataset.row.TPopId}TPopKontakt`}
             tree={tree}
             label="Kontakt vor Ort"
             fieldName="TPopKontakt"
@@ -260,6 +274,7 @@ class Tpop extends Component {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            key={`${activeDataset.row.TPopId}TPopNutzungszone`}
             tree={tree}
             label="Nutzungszone"
             fieldName="TPopNutzungszone"
@@ -270,6 +285,7 @@ class Tpop extends Component {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            key={`${activeDataset.row.TPopId}TPopBewirtschafterIn`}
             tree={tree}
             label="BewirtschafterIn"
             fieldName="TPopBewirtschafterIn"
@@ -280,6 +296,7 @@ class Tpop extends Component {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            key={`${activeDataset.row.TPopId}TPopBewirtschaftung`}
             tree={tree}
             label="Bewirtschaftung"
             fieldName="TPopBewirtschaftung"
@@ -290,6 +307,7 @@ class Tpop extends Component {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            key={`${activeDataset.row.TPopId}TPopTxt`}
             tree={tree}
             label="Bemerkungen"
             fieldName="TPopTxt"

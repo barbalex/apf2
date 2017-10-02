@@ -186,6 +186,7 @@ class Tpopfeldkontr extends Component {
                     updatePropertyInDb={store.updatePropertyInDb}
                   />
                   <TextField
+                    key={`${activeDataset.row.TPopKontrId}TPopKontrJungpfl`}
                     tree={tree}
                     label="Anzahl Jungpflanzen"
                     fieldName="TPopKontrJungpfl"
@@ -196,6 +197,7 @@ class Tpopfeldkontr extends Component {
                     updatePropertyInDb={store.updatePropertyInDb}
                   />
                   <TextField
+                    key={`${activeDataset.row.TPopKontrId}TPopKontrVitalitaet`}
                     tree={tree}
                     label="Vitalität"
                     fieldName="TPopKontrVitalitaet"
@@ -206,6 +208,7 @@ class Tpopfeldkontr extends Component {
                     updatePropertyInDb={store.updatePropertyInDb}
                   />
                   <TextField
+                    key={`${activeDataset.row.TPopKontrId}TPopKontrUeberleb`}
                     tree={tree}
                     label="Überlebensrate"
                     fieldName="TPopKontrUeberleb"
@@ -225,6 +228,7 @@ class Tpopfeldkontr extends Component {
                     label="Entwicklung"
                   />
                   <TextField
+                    key={`${activeDataset.row.TPopKontrId}TPopKontrUrsach`}
                     tree={tree}
                     label="Ursachen"
                     fieldName="TPopKontrUrsach"
@@ -238,6 +242,7 @@ class Tpopfeldkontr extends Component {
                     updatePropertyInDb={store.updatePropertyInDb}
                   />
                   <TextField
+                    key={`${activeDataset.row.TPopKontrId}TPopKontrUrteil`}
                     tree={tree}
                     label="Erfolgsbeurteilung"
                     fieldName="TPopKontrUrteil"
@@ -250,6 +255,7 @@ class Tpopfeldkontr extends Component {
                     updatePropertyInDb={store.updatePropertyInDb}
                   />
                   <TextField
+                    key={`${activeDataset.row.TPopKontrId}TPopKontrAendUms`}
                     tree={tree}
                     label="Änderungs-Vorschläge Umsetzung"
                     fieldName="TPopKontrAendUms"
@@ -262,6 +268,7 @@ class Tpopfeldkontr extends Component {
                     updatePropertyInDb={store.updatePropertyInDb}
                   />
                   <TextField
+                    key={`${activeDataset.row.TPopKontrId}TPopKontrAendKontr`}
                     tree={tree}
                     label="Änderungs-Vorschläge Kontrolle"
                     fieldName="TPopKontrAendKontr"
@@ -296,6 +303,7 @@ class Tpopfeldkontr extends Component {
               <TabChildDiv>
                 <FormContainer data-width={width}>
                   <TextField
+                    key={`${activeDataset.row.TPopKontrId}TPopKontrFlaeche`}
                     tree={tree}
                     label="Fläche"
                     fieldName="TPopKontrFlaeche"
@@ -327,6 +335,7 @@ class Tpopfeldkontr extends Component {
                     updatePropertyInDb={store.updatePropertyInDb}
                   />
                   <TextField
+                    key={`${activeDataset.row.TPopKontrId}TPopKontrVegTyp`}
                     tree={tree}
                     label="Vegetationstyp"
                     fieldName="TPopKontrVegTyp"
@@ -337,6 +346,7 @@ class Tpopfeldkontr extends Component {
                     updatePropertyInDb={store.updatePropertyInDb}
                   />
                   <TextField
+                    key={`${activeDataset.row.TPopKontrId}TPopKontrKonkurrenz`}
                     tree={tree}
                     label="Konkurrenz"
                     fieldName="TPopKontrKonkurrenz"
@@ -347,6 +357,7 @@ class Tpopfeldkontr extends Component {
                     updatePropertyInDb={store.updatePropertyInDb}
                   />
                   <TextField
+                    key={`${activeDataset.row.TPopKontrId}TPopKontrMoosschicht`}
                     tree={tree}
                     label="Moosschicht"
                     fieldName="TPopKontrMoosschicht"
@@ -357,6 +368,8 @@ class Tpopfeldkontr extends Component {
                     updatePropertyInDb={store.updatePropertyInDb}
                   />
                   <TextField
+                    key={`${activeDataset.row
+                      .TPopKontrId}TPopKontrKrautschicht`}
                     tree={tree}
                     label="Krautschicht"
                     fieldName="TPopKontrKrautschicht"
@@ -367,6 +380,8 @@ class Tpopfeldkontr extends Component {
                     updatePropertyInDb={store.updatePropertyInDb}
                   />
                   <TextField
+                    key={`${activeDataset.row
+                      .TPopKontrId}TPopKontrStrauchschicht`}
                     tree={tree}
                     label="Strauchschicht"
                     fieldName="TPopKontrStrauchschicht"
@@ -377,6 +392,7 @@ class Tpopfeldkontr extends Component {
                     updatePropertyInDb={store.updatePropertyInDb}
                   />
                   <TextField
+                    key={`${activeDataset.row.TPopKontrId}TPopKontrBaumschicht`}
                     tree={tree}
                     label="Baumschicht"
                     fieldName="TPopKontrBaumschicht"
@@ -388,6 +404,7 @@ class Tpopfeldkontr extends Component {
                   />
                   <Section>Boden</Section>
                   <TextField
+                    key={`${activeDataset.row.TPopKontrId}TPopKontrBodenTyp`}
                     tree={tree}
                     label="Typ"
                     fieldName="TPopKontrBodenTyp"
@@ -398,6 +415,8 @@ class Tpopfeldkontr extends Component {
                     updatePropertyInDb={store.updatePropertyInDb}
                   />
                   <TextField
+                    key={`${activeDataset.row
+                      .TPopKontrId}TPopKontrBodenKalkgehalt`}
                     tree={tree}
                     label="Kalkgehalt"
                     fieldName="TPopKontrBodenKalkgehalt"
@@ -408,6 +427,8 @@ class Tpopfeldkontr extends Component {
                     updatePropertyInDb={store.updatePropertyInDb}
                   />
                   <TextField
+                    key={`${activeDataset.row
+                      .TPopKontrId}TPopKontrBodenDurchlaessigkeit`}
                     tree={tree}
                     label="Durchlässigkeit"
                     fieldName="TPopKontrBodenDurchlaessigkeit"
@@ -420,6 +441,7 @@ class Tpopfeldkontr extends Component {
                     updatePropertyInDb={store.updatePropertyInDb}
                   />
                   <TextField
+                    key={`${activeDataset.row.TPopKontrId}TPopKontrBodenHumus`}
                     tree={tree}
                     label="Humusgehalt"
                     fieldName="TPopKontrBodenHumus"
@@ -430,6 +452,8 @@ class Tpopfeldkontr extends Component {
                     updatePropertyInDb={store.updatePropertyInDb}
                   />
                   <TextField
+                    key={`${activeDataset.row
+                      .TPopKontrId}TPopKontrBodenNaehrstoffgehalt`}
                     tree={tree}
                     label="Nährstoffgehalt"
                     fieldName="TPopKontrBodenNaehrstoffgehalt"
@@ -442,6 +466,7 @@ class Tpopfeldkontr extends Component {
                     updatePropertyInDb={store.updatePropertyInDb}
                   />
                   <TextField
+                    key={`${activeDataset.row.TPopKontrId}TPopKontrBodenAbtrag`}
                     tree={tree}
                     label="Bodenabtrag"
                     fieldName="TPopKontrBodenAbtrag"
@@ -452,6 +477,8 @@ class Tpopfeldkontr extends Component {
                     updatePropertyInDb={store.updatePropertyInDb}
                   />
                   <TextField
+                    key={`${activeDataset.row
+                      .TPopKontrId}TPopKontrWasserhaushalt`}
                     tree={tree}
                     label="Wasserhaushalt"
                     fieldName="TPopKontrWasserhaushalt"
@@ -463,6 +490,8 @@ class Tpopfeldkontr extends Component {
                   />
                   <Section>Beurteilung</Section>
                   <TextField
+                    key={`${activeDataset.row
+                      .TPopKontrId}TPopKontrHandlungsbedarf`}
                     tree={tree}
                     label="Handlungsbedarf"
                     fieldName="TPopKontrHandlungsbedarf"
