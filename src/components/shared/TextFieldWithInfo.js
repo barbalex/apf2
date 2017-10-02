@@ -16,9 +16,7 @@ const FieldWithInfoContainer = styled.div`
   margin-bottom: -10px;
   break-inside: avoid;
 `
-const InfoWithPopoverContainer = styled.div`
-  padding-bottom: 5px;
-`
+const InfoWithPopoverContainer = styled.div`padding-bottom: 5px;`
 const PopoverContentRow = styled.div`
   padding: 2px 5px 2px 5px;
   display: flex;
@@ -29,21 +27,21 @@ const PopoverContentRow = styled.div`
 `
 
 const enhance = compose(
-  withState('valueOnFocus', 'changeValueOnFocus', ''),
+  withState('valueHasBeenChanged', 'changeValueHasBeenChanged', false),
   withHandlers({
-    onChange: props => (event, val) =>
-      props.updateProperty(props.tree, props.fieldName, val),
+    onChange: props => (event, val) => {
+      props.updateProperty(props.tree, props.fieldName, val)
+      props.changeValueHasBeenChanged(true)
+    },
     onBlur: props => event => {
       const { value } = event.target
-      // only update if value has changed
-      // eslint-disable-next-line eqeqeq
-      if (value != props.valueOnFocus) {
-        props.updatePropertyInDb(props.tree, props.fieldName, value)
+      const { valueHasBeenChanged, tree, fieldName, updatePropertyInDb } = props
+      if (valueHasBeenChanged) {
+        updatePropertyInDb(tree, fieldName, value)
       }
     },
-    onFocus: props => () => props.changeValueOnFocus(props.value),
   }),
-  observer,
+  observer
 )
 
 const MyTextField = ({
@@ -56,14 +54,12 @@ const MyTextField = ({
   hintText,
   onChange,
   onBlur,
-  onFocus,
   popover,
 }: {
   tree: Object,
   label: string,
   fieldName: string,
   value?: ?number | ?string,
-  valueOnFocus?: ?number | ?string,
   errorText?: ?string,
   type?: string,
   multiLine?: boolean,
@@ -71,7 +67,6 @@ const MyTextField = ({
   hintText?: string,
   onChange: () => void,
   onBlur: () => void,
-  onFocus: () => void,
   // no idea why but this CAN get passed as undefined...
   updateProperty: () => void,
   updatePropertyInDb: () => void,
@@ -89,13 +84,10 @@ const MyTextField = ({
       fullWidth
       onChange={onChange}
       onBlur={onBlur}
-      onFocus={onFocus}
     />
     <InfoWithPopoverContainer>
       <InfoWithPopover>
-        <PopoverContentRow>
-          {popover}
-        </PopoverContentRow>
+        <PopoverContentRow>{popover}</PopoverContentRow>
       </InfoWithPopover>
     </InfoWithPopoverContainer>
   </FieldWithInfoContainer>
@@ -103,7 +95,6 @@ const MyTextField = ({
 
 MyTextField.defaultProps = {
   value: '',
-  valueOnFocus: '',
   errorText: '',
   type: 'text',
   multiLine: false,

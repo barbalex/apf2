@@ -17,11 +17,10 @@ const enhance = compose(
       props.changeValueHasBeenChanged(true)
     },
     onBlur: props => event => {
-      let { value } = event.target
-      const { valueHasBeenChanged, tree, fieldName } = props
-      // only update if value has changed
+      const { value } = event.target
+      const { valueHasBeenChanged, tree, fieldName, updatePropertyInDb } = props
       if (valueHasBeenChanged) {
-        props.updatePropertyInDb(tree, fieldName, value)
+        updatePropertyInDb(tree, fieldName, value)
       }
     },
   }),

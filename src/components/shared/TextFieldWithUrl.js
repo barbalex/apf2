@@ -27,21 +27,21 @@ const StyledFontIcon = styled(FontIcon)`
 `
 
 const enhance = compose(
-  withState('valueOnFocus', 'changeValueOnFocus', ''),
+  withState('valueHasBeenChanged', 'changeValueHasBeenChanged', false),
   withHandlers({
-    onChange: props => (event, val) =>
-      props.updateProperty(props.tree, props.fieldName, val),
+    onChange: props => (event, val) => {
+      props.updateProperty(props.tree, props.fieldName, val)
+      props.changeValueHasBeenChanged(true)
+    },
     onBlur: props => event => {
       const { value } = event.target
-      // only update if value has changed
-      // eslint-disable-next-line eqeqeq
-      if (value != props.valueOnFocus) {
-        props.updatePropertyInDb(props.tree, props.fieldName, value)
+      const { valueHasBeenChanged, tree, fieldName, updatePropertyInDb } = props
+      if (valueHasBeenChanged) {
+        updatePropertyInDb(tree, fieldName, value)
       }
     },
-    onFocus: props => () => props.changeValueOnFocus(props.value),
   }),
-  observer,
+  observer
 )
 
 const MyTextFieldWithUrl = ({
@@ -53,7 +53,6 @@ const MyTextFieldWithUrl = ({
   disabled,
   onChange,
   onBlur,
-  onFocus,
 }: {
   label: string,
   value?: ?number | ?string,
@@ -63,7 +62,6 @@ const MyTextFieldWithUrl = ({
   disabled?: boolean,
   onChange: () => void,
   onBlur: () => void,
-  onFocus: () => void,
 }) => {
   const urls = value ? getUrls(value) : []
 
@@ -79,7 +77,6 @@ const MyTextFieldWithUrl = ({
         fullWidth
         onChange={onChange}
         onBlur={onBlur}
-        onFocus={onFocus}
       />
       {Array.from(urls).map((url, index) => (
         <StyledFontIcon
@@ -98,7 +95,6 @@ const MyTextFieldWithUrl = ({
 
 MyTextFieldWithUrl.defaultProps = {
   value: '',
-  valueOnFocus: '',
   errorText: '',
   type: 'text',
   multiLine: false,
