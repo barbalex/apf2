@@ -86,6 +86,7 @@ class Apber extends Component {
         <FormTitle tree={tree} title="AP-Bericht" />
         <FieldsContainer width={width}>
           <TextField
+            key={`${activeDataset.row.JBerId}JBerJahr`}
             tree={tree}
             label="Jahr"
             fieldName="JBerJahr"
@@ -96,6 +97,7 @@ class Apber extends Component {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            key={`${activeDataset.row.JBerId}JBerVergleichVorjahrGesamtziel`}
             tree={tree}
             label="Vergleich Vorjahr - Gesamtziel"
             fieldName="JBerVergleichVorjahrGesamtziel"
@@ -126,6 +128,7 @@ class Apber extends Component {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            key={`${activeDataset.row.JBerId}JBerAnalyse`}
             tree={tree}
             label="Analyse"
             fieldName="JBerAnalyse"
@@ -138,6 +141,7 @@ class Apber extends Component {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            key={`${activeDataset.row.JBerId}JBerUmsetzung`}
             tree={tree}
             label="Konsequenzen Umsetzung"
             fieldName="JBerUmsetzung"
@@ -150,6 +154,7 @@ class Apber extends Component {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            key={`${activeDataset.row.JBerId}JBerErfko`}
             tree={tree}
             label="Konsequenzen Erfolgskontrolle"
             fieldName="JBerErfko"
@@ -162,6 +167,7 @@ class Apber extends Component {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            key={`${activeDataset.row.JBerId}JBerATxt`}
             tree={tree}
             label="Bemerkungen zum Aussagebereich A (neue Biotope)"
             fieldName="JBerATxt"
@@ -174,6 +180,7 @@ class Apber extends Component {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            key={`${activeDataset.row.JBerId}JBerBTxt`}
             tree={tree}
             label="Bemerkungen zum Aussagebereich B (Optimierung Biotope)"
             fieldName="JBerBTxt"
@@ -186,6 +193,7 @@ class Apber extends Component {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            key={`${activeDataset.row.JBerId}JBerCTxt`}
             tree={tree}
             label="Bemerkungen zum Aussagebereich C (Optimierung Massnahmen)"
             fieldName="JBerCTxt"
@@ -198,6 +206,7 @@ class Apber extends Component {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            key={`${activeDataset.row.JBerId}JBerDTxt`}
             tree={tree}
             label="Bemerkungen zum Aussagebereich D"
             fieldName="JBerDTxt"

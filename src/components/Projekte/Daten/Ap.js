@@ -143,6 +143,7 @@ const Ap = ({
         label="Aktionsplan"
       />
       <TextField
+          key={`${activeDataset.row.ApArtId}ApJahr`}
         tree={tree}
         label="Start im Jahr"
         fieldName="ApJahr"
@@ -201,9 +202,10 @@ const Ap = ({
       />
       <FieldContainer>
         <TextField
+          key={`${activeDataset.row.ApArtId}ApArtwert`}
           tree={tree}
           label="Artwert"
-          fieldName="ApJahr"
+          fieldName="ApArtwert"
           value={artwert}
           type="text"
           disabled

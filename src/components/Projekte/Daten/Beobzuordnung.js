@@ -192,7 +192,7 @@ const Beobzuordnung = ({
             updatePropertyInDb={updatePropertyInDb}
             popover={nichtZuordnenPopover}
           />
-          {showTPopId &&
+          {showTPopId && (
             <ZuordnenDiv>
               <MaxHeightDiv>
                 <RadioButtonGroup
@@ -204,8 +204,10 @@ const Beobzuordnung = ({
                   updatePropertyInDb={updatePropertyInDb}
                 />
               </MaxHeightDiv>
-            </ZuordnenDiv>}
+            </ZuordnenDiv>
+          )}
           <TextField
+            key={`${activeDataset.row.id}BeobBemerkungen`}
             tree={tree}
             label="Bemerkungen zur Zuordnung"
             fieldName="BeobBemerkungen"
@@ -218,9 +220,7 @@ const Beobzuordnung = ({
             updatePropertyInDb={store.updatePropertyInDb}
           />
         </FieldsContainer>
-        <Title>
-          {beobTitle}
-        </Title>
+        <Title>{beobTitle}</Title>
         <Beob tree={tree} />
       </DataContainer>
     </FormContainer>

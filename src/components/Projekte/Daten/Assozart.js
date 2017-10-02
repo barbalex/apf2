@@ -74,6 +74,7 @@ const Assozart = ({ store, tree }: { store: Object, tree: Object }) => {
           updatePropertyInDb={store.updatePropertyInDb}
         />
         <TextField
+          key={`${activeDataset.row.AaId}AaBem`}
           tree={tree}
           label="Bemerkungen zur Assoziation"
           fieldName="AaBem"
