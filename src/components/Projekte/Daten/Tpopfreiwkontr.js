@@ -121,6 +121,7 @@ class Tpopfreiwkontr extends Component {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            key={`${activeDataset.row.TPopKontrId}TPopKontrUebFlaeche`}
             tree={tree}
             label="Überprüfte Fläche in m2"
             fieldName="TPopKontrUebFlaeche"
@@ -131,6 +132,7 @@ class Tpopfreiwkontr extends Component {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            key={`${activeDataset.row.TPopKontrId}TPopKontrUebPfl`}
             tree={tree}
             label="Deckung überprüfte Art (%)"
             fieldName="TPopKontrUebPfl"
@@ -141,6 +143,7 @@ class Tpopfreiwkontr extends Component {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            key={`${activeDataset.row.TPopKontrId}TPopKontrNaBo`}
             tree={tree}
             label="Deckung nackter Boden (%)"
             fieldName="TPopKontrNaBo"
@@ -158,6 +161,7 @@ class Tpopfreiwkontr extends Component {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            key={`${activeDataset.row.TPopKontrId}TPopKontrVegHoeMax`}
             tree={tree}
             label="Maximum der Vegetationshöhe in cm"
             fieldName="TPopKontrVegHoeMax"
@@ -168,6 +172,7 @@ class Tpopfreiwkontr extends Component {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            key={`${activeDataset.row.TPopKontrId}TPopKontrVegHoeMit`}
             tree={tree}
             label="Mittelwert der Vegetationshöhe in cm"
             fieldName="TPopKontrVegHoeMit"
@@ -178,6 +183,7 @@ class Tpopfreiwkontr extends Component {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            key={`${activeDataset.row.TPopKontrId}TPopKontrGefaehrdung`}
             tree={tree}
             label="Gefährdung"
             fieldName="TPopKontrGefaehrdung"
@@ -190,6 +196,7 @@ class Tpopfreiwkontr extends Component {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            key={`${activeDataset.row.TPopKontrId}TPopKontrTxt`}
             tree={tree}
             label="Bemerkungen"
             fieldName="TPopKontrTxt"

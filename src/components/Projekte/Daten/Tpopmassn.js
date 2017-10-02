@@ -112,6 +112,7 @@ class Tpopmassn extends Component {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            key={`${activeDataset.row.TPopMassnId}TPopMassnTxt`}
             tree={tree}
             label="Massnahme"
             fieldName="TPopMassnTxt"
@@ -136,6 +137,7 @@ class Tpopmassn extends Component {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            key={`${activeDataset.row.TPopMassnId}TPopMassnBemTxt`}
             tree={tree}
             label="Bemerkungen"
             fieldName="TPopMassnBemTxt"
@@ -155,6 +157,7 @@ class Tpopmassn extends Component {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            key={`${activeDataset.row.TPopMassnId}TPopMassnPlanBez`}
             tree={tree}
             label="Plan Bezeichnung"
             fieldName="TPopMassnPlanBez"
@@ -165,6 +168,7 @@ class Tpopmassn extends Component {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            key={`${activeDataset.row.TPopMassnId}TPopMassnFlaeche`}
             tree={tree}
             label="Fläche (m2)"
             fieldName="TPopMassnFlaeche"
@@ -175,6 +179,7 @@ class Tpopmassn extends Component {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            key={`${activeDataset.row.TPopMassnId}TPopMassnAnsiedForm`}
             tree={tree}
             label="Form der Ansiedlung"
             fieldName="TPopMassnAnsiedForm"
@@ -185,6 +190,8 @@ class Tpopmassn extends Component {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            key={`${activeDataset.row
+              .TPopMassnId}TPopMassnAnsiedPflanzanordnung`}
             tree={tree}
             label="Pflanzanordnung"
             fieldName="TPopMassnAnsiedPflanzanordnung"
@@ -195,6 +202,7 @@ class Tpopmassn extends Component {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            key={`${activeDataset.row.TPopMassnId}TPopMassnMarkierung`}
             tree={tree}
             label="Markierung"
             fieldName="TPopMassnMarkierung"
@@ -205,6 +213,7 @@ class Tpopmassn extends Component {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            key={`${activeDataset.row.TPopMassnId}TPopMassnAnsiedAnzTriebe`}
             tree={tree}
             label="Anzahl Triebe"
             fieldName="TPopMassnAnsiedAnzTriebe"
@@ -215,6 +224,7 @@ class Tpopmassn extends Component {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            key={`${activeDataset.row.TPopMassnId}TPopMassnAnsiedAnzPfl`}
             tree={tree}
             label="Anzahl Pflanzen"
             fieldName="TPopMassnAnsiedAnzPfl"
@@ -225,6 +235,7 @@ class Tpopmassn extends Component {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            key={`${activeDataset.row.TPopMassnId}TPopMassnAnzPflanzstellen`}
             tree={tree}
             label="Anzahl Pflanzstellen"
             fieldName="TPopMassnAnzPflanzstellen"
@@ -245,6 +256,7 @@ class Tpopmassn extends Component {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            key={`${activeDataset.row.TPopMassnId}TPopMassnAnsiedHerkunftPop`}
             tree={tree}
             label="Herkunftspopulation"
             fieldName="TPopMassnAnsiedHerkunftPop"
@@ -255,6 +267,7 @@ class Tpopmassn extends Component {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
+            key={`${activeDataset.row.TPopMassnId}TPopMassnAnsiedDatSamm`}
             tree={tree}
             label="Sammeldatum"
             fieldName="TPopMassnAnsiedDatSamm"

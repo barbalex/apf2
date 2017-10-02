@@ -29,6 +29,7 @@ const Ziel = ({ store, tree }: { store: Object, tree: Object }) => {
       <FormTitle tree={tree} title="Ziel" />
       <FieldsContainer>
         <TextField
+          key={`${activeDataset.row.ZielId}ZielJahr`}
           tree={tree}
           label="Jahr"
           fieldName="ZielJahr"
@@ -48,6 +49,7 @@ const Ziel = ({ store, tree }: { store: Object, tree: Object }) => {
           updatePropertyInDb={store.updatePropertyInDb}
         />
         <TextField
+          key={`${activeDataset.row.ZielId}ZielBezeichnung`}
           tree={tree}
           label="Ziel"
           fieldName="ZielBezeichnung"
