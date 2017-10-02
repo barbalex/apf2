@@ -7,26 +7,25 @@ import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import styled from 'styled-components'
 
-const StyledTextField = styled(TextField)`
-  margin-bottom: -15px;
-`
+const StyledTextField = styled(TextField)`margin-bottom: -15px;`
 
 const enhance = compose(
-  withState('valueOnFocus', 'changeValueOnFocus', ''),
+  withState('valueHasBeenChanged', 'changeValueHasBeenChanged', false),
   withHandlers({
-    onChange: props => (event, val) =>
-      props.updateProperty(props.tree, props.fieldName, val),
+    onChange: props => (event, val) => {
+      props.updateProperty(props.tree, props.fieldName, val)
+      props.changeValueHasBeenChanged(true)
+    },
     onBlur: props => event => {
-      const { value } = event.target
+      let { value } = event.target
+      const { valueHasBeenChanged, tree, fieldName } = props
       // only update if value has changed
-      // eslint-disable-next-line eqeqeq
-      if (value != props.valueOnFocus) {
-        props.updatePropertyInDb(props.tree, props.fieldName, value)
+      if (valueHasBeenChanged) {
+        props.updatePropertyInDb(tree, fieldName, value)
       }
     },
-    onFocus: props => () => props.changeValueOnFocus(props.value),
   }),
-  observer,
+  observer
 )
 
 const MyTextField = ({
@@ -39,13 +38,11 @@ const MyTextField = ({
   hintText,
   onChange,
   onBlur,
-  onFocus,
 }: {
   tree: Object,
   label: string,
   fieldName: string,
   value?: ?number | ?string,
-  valueOnFocus?: ?number | ?string,
   errorText?: ?string,
   type?: string,
   multiLine?: boolean,
@@ -53,7 +50,6 @@ const MyTextField = ({
   hintText?: string,
   onChange: () => void,
   onBlur: () => void,
-  onFocus: () => void,
   // no idea why but this CAN get passed as undefined...
   updateProperty: () => void,
   updatePropertyInDb: () => void,
@@ -69,13 +65,11 @@ const MyTextField = ({
     fullWidth
     onChange={onChange}
     onBlur={onBlur}
-    onFocus={onFocus}
   />
 )
 
 MyTextField.defaultProps = {
   value: '',
-  valueOnFocus: '',
   errorText: '',
   type: 'text',
   multiLine: false,
