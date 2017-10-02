@@ -60,10 +60,14 @@ const enhance = compose(
     onClickButton: props => name => {
       const { store } = props
       const projekteTabs = clone(toJS(store.urlQuery.projekteTabs))
-      const isVisible = projekteTabs.includes(name)
       const exporteIsVisible = projekteTabs.includes('exporte')
+      const isVisible = projekteTabs.includes(name)
       if (isVisible) {
-        remove(projekteTabs, el => el === name)
+        if (name === 'daten' && exporteIsVisible) {
+          remove(projekteTabs, el => el === 'exporte')
+        } else {
+          remove(projekteTabs, el => el === name)
+        }
       } else {
         projekteTabs.push(name)
         if (name === 'tree2') {
@@ -179,10 +183,7 @@ const MyAppBar = ({
               onClick={showDeletedDatasets}
               disabled={store.deletedDatasets.length === 0}
             />
-            <MenuItem
-              primaryText="Video-Anleitungen"
-              onClick={watchVideos}
-            />
+            <MenuItem primaryText="Video-Anleitungen" onClick={watchVideos} />
             <MenuItem
               primaryText={`${store.user.name} abmelden`}
               onClick={store.logout}
