@@ -5,17 +5,18 @@ export default (
   store: Object,
   tree: Object,
   projId: number,
-  apArtId: number,
+  apArtId: number
 ): Array<Object> => {
   const { filteredAndSorted } = tree
   // fetch sorting indexes of parents
   const projIndex = findIndex(filteredAndSorted.projekt, { ProjId: projId })
   const apIndex = findIndex(
     filteredAndSorted.ap.filter(a => a.ProjId === projId),
-    { ApArtId: apArtId },
+    { ApArtId: apArtId }
   )
 
   // map through all and create array of nodes
+  // TODO: filter all included in beob_art
   return filteredAndSorted.beobzuordnung
     .filter(b => b.ArtId === apArtId)
     .map((el, index) => ({
