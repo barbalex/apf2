@@ -7,6 +7,11 @@ import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 import styled from 'styled-components'
 
+const StyledDialog = styled(Dialog)`
+  > div > div > div > div {
+    overflow: auto !important;
+  }
+`
 const MessageContainer = styled.div`
   display: flex;
   justify-content: space-between;
@@ -31,7 +36,7 @@ const UserMessages = ({
   onClickRead: () => {},
 }) => {
   return (
-    <Dialog
+    <StyledDialog
       title="Letzte Anpassungen:"
       open={store.messages.messages.length > 0 && !!store.user.name}
       contentStyle={{
@@ -45,14 +50,12 @@ const UserMessages = ({
         const paddBottom = index < store.messages.messages.length - 1
         return (
           <MessageContainer key={m.id} paddBottom={paddBottom}>
-            <div>
-              {m.message}
-            </div>
+            <div>{m.message}</div>
             <FlatButton label="o.k." onClick={() => onClickRead(m)} />
           </MessageContainer>
         )
       })}
-    </Dialog>
+    </StyledDialog>
   )
 }
 
