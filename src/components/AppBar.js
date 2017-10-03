@@ -196,7 +196,7 @@ const MyAppBar = ({
                 <MenuItem
                   primaryText="Exporte"
                   onClick={onClickButtonExporte}
-                  disabled={!exporteIsVisible}
+                  disabled={exporteIsVisible}
                 />
               )}
             <MenuItem
