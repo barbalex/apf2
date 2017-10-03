@@ -12,6 +12,7 @@ export default [
   'apberuebersicht',
   'assozart',
   'beob',
+  'beob_art',
   'beob_projekt',
   'beob_quelle',
   'beobzuordnung',
@@ -44,5 +45,5 @@ export default [
   'userprojekt',
   'ziel',
   'ziel_typ_werte',
-  'zielber'
+  'zielber',
 ]
