@@ -7,9 +7,11 @@ import getActiveNodeArrayFromPathname from './getActiveNodeArrayFromPathname'
 
 export default (store: Object): void => {
   const activeNodeArrayFromUrl = getActiveNodeArrayFromPathname()
-  const activeNodeArray = toJS(store.tree.activeNodeArray)
+  const { tree } = store
+  const activeNodeArray = toJS(tree.activeNodeArray)
   const urlQueryFromUrl = queryString.parse(window.location.search)
   const urlQuery = toJS(store.urlQuery)
+  const nodes = toJS(tree.nodes)
 
   if (
     !isEqual(activeNodeArrayFromUrl, activeNodeArray) ||
@@ -18,5 +20,19 @@ export default (store: Object): void => {
     const search = queryString.stringify(urlQuery)
     const query = `${Object.keys(urlQuery).length > 0 ? `?${search}` : ''}`
     store.history.push(`/${activeNodeArray.join('/')}${query}`)
+  }
+
+  // if activeNodeArray.length === 1
+  // and there is only one projekte
+  // open it
+  const projekteFolderIsActive =
+    activeNodeArray.length === 1 && activeNodeArray[0] === 'Projekte'
+  const projekteNodes = nodes.filter(n => n.menuType === 'projekt')
+  const existsOnlyOneProjekt = projekteNodes.length === 1
+  if (projekteFolderIsActive && existsOnlyOneProjekt) {
+    const projektNode = projekteNodes[0]
+    if (projektNode) {
+      tree.toggleNode(tree, projektNode)
+    }
   }
 }
