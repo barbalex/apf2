@@ -178,12 +178,17 @@ const Beobzuordnung = ({
   const quelleName = quelle && quelle.name ? quelle.name : '?'
   const beobTitle = `Informationen aus ${quelleName} (nicht veränderbar)`
   const showTPopId = activeDataset.row.BeobNichtZuordnen !== 1
+  const adbArt =
+    beob && beob.ArtId ? store.table.adb_eigenschaften.get(beob.ArtId) : null
+  const artname = adbArt ? adbArt.Artname : ''
+  const artLabel = `Beobachtete Art: ${artname}`
 
   return (
     <FormContainer>
       <FormTitle tree={tree} title="Beobachtung" />
       <DataContainer>
         <FieldsContainer>
+          <div>{artLabel}</div>
           <CheckboxWithInfo
             tree={tree}
             fieldName="BeobNichtZuordnen"
