@@ -173,13 +173,14 @@ const MyAppBar = ({
             data-visible={karteIsVisible}
             onClick={onClickButtonKarte}
           />
-          {exporteIsActive && (
-            <Button
-              label="Exporte"
-              data-visible={exporteIsVisible}
-              onClick={onClickButtonExporte}
-            />
-          )}
+          {!isMobile &&
+            exporteIsActive && (
+              <Button
+                label="Exporte"
+                data-visible={exporteIsVisible}
+                onClick={onClickButtonExporte}
+              />
+            )}
           <IconMenu
             iconButtonElement={
               <IconButton>
@@ -190,6 +191,14 @@ const MyAppBar = ({
             targetOrigin={iconMenuTargetOrigin}
             style={iconMenuStyle}
           >
+            {isMobile &&
+              exporteIsActive && (
+                <MenuItem
+                  primaryText="Exporte"
+                  onClick={onClickButtonExporte}
+                  disabled={!exporteIsVisible}
+                />
+              )}
             <MenuItem
               primaryText="gelöschte Datensätze wiederherstellen"
               onClick={showDeletedDatasets}
