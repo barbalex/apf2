@@ -63,7 +63,7 @@ export default async ({
     ] = valuesForWhichTableDataWasFetched[tableName][idField].filter(
       x => x !== id
     )
-    store.listError(error)
+    return store.listError(error)
   }
   const { data } = result
   store.writeToStore({ data, table: tableName, field: idField })

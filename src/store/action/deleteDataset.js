@@ -18,7 +18,7 @@ export default async ({
   try {
     result = await axios.get(`/${table}?${idField}=eq.${id}`)
   } catch (error) {
-    store.listError(error)
+    return store.listError(error)
   }
   // copy to store.deletedDatasets
   const deletedDataset = {
