@@ -299,6 +299,14 @@ export default [
   },
   {
     database: 'apflora',
+    table: 'beob_art',
+    idField: 'BeobArtId',
+    parentIdField: 'ApArtId',
+    mutWannField: 'BeobMutWann',
+    mutWerField: 'BeobMutWer',
+  },
+  {
+    database: 'apflora',
     table: 'projekt',
     label: 'Projekte',
     labelSingular: 'Projekt',
