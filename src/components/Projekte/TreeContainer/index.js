@@ -20,6 +20,8 @@ import CmApberuebersichtFolder from './contextmenu/ApberuebersichtFolder'
 import CmApberuebersicht from './contextmenu/Apberuebersicht'
 import CmAssozartFolder from './contextmenu/AssozartFolder'
 import CmAssozart from './contextmenu/Assozart'
+import CmBeobartFolder from './contextmenu/BeobartFolder'
+import CmBeobart from './contextmenu/Beobart'
 import CmTpopbeobFolder from './contextmenu/TpopbeobFolder'
 import CmBerFolder from './contextmenu/BerFolder'
 import CmBer from './contextmenu/Ber'
@@ -335,6 +337,8 @@ const TreeContainer = ({
       <CmApberuebersicht onClick={handleClick} tree={tree} />
       <CmAssozartFolder onClick={handleClick} tree={tree} />
       <CmAssozart onClick={handleClick} tree={tree} />
+      <CmBeobartFolder onClick={handleClick} tree={tree} />
+      <CmBeobart onClick={handleClick} tree={tree} />
       <CmTpopbeobFolder onClick={handleClick} tree={tree} />
       <CmBerFolder onClick={handleClick} tree={tree} />
       <CmBer onClick={handleClick} tree={tree} />

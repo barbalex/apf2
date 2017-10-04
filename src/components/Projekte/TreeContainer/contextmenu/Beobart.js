@@ -9,8 +9,8 @@ const BeobartFolder = ({
   onClick: () => void,
   tree: Object,
 }) => (
-  <ContextMenu id={`${tree.name}beobArtFolder`}>
-    <div className="react-contextmenu-title">Arten für Beobachtungen</div>
+  <ContextMenu id={`${tree.name}beobart`}>
+    <div className="react-contextmenu-title">Art für Beobachtungen</div>
     <MenuItem
       onClick={onClick}
       data={{
@@ -19,6 +19,15 @@ const BeobartFolder = ({
       }}
     >
       erstelle neue
+    </MenuItem>
+    <MenuItem
+      onClick={onClick}
+      data={{
+        action: 'delete',
+        table: 'beobart',
+      }}
+    >
+      lösche
     </MenuItem>
   </ContextMenu>
 )
