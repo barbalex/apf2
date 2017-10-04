@@ -7181,3 +7181,37 @@ ORDER BY
   apflora.ap."ApArtId",
   apflora.pop."PopId",
   apflora.popber."PopBerJahr";
+
+DROP VIEW IF EXISTS apflora.v_qk2_pop_mit_ber_abnehmend_ohne_tpopber_abnehmend CASCADE;
+CREATE OR REPLACE VIEW apflora.v_qk2_pop_mit_ber_abnehmend_ohne_tpopber_abnehmend AS
+SELECT DISTINCT
+  apflora.ap."ProjId",
+  apflora.ap."ApArtId",
+  apflora.pop."PopId",
+  apflora.popber."PopBerJahr" AS "Berichtjahr",
+  'Populationen mit Bericht "abnehmend" ohne Teil-Population mit Bericht "abnehmend":'::text AS hw,
+  ARRAY['Projekte', apflora.ap."ProjId" , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId"]::text[] AS url,
+  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr")]::text[] AS text
+FROM
+  apflora.ap
+  INNER JOIN
+  apflora.pop
+    INNER JOIN apflora.popber
+    ON apflora.pop."PopId" = apflora.popber."PopId"
+  ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
+WHERE
+  apflora.popber."PopBerEntwicklung" = 1
+  AND apflora.popber."PopId" NOT IN (
+    SELECT DISTINCT apflora.tpop."PopId"
+    FROM
+      apflora.tpop
+      INNER JOIN apflora.tpopber
+      ON apflora.tpop."TPopId" = apflora.tpopber."TPopId"
+    WHERE
+      apflora.tpopber."TPopBerEntwicklung" = 1
+  )
+ORDER BY
+  apflora.ap."ProjId",
+  apflora.ap."ApArtId",
+  apflora.pop."PopId",
+  apflora.popber."PopBerJahr";
