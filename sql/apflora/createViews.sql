@@ -7175,6 +7175,7 @@ WHERE
       ON apflora.tpop."TPopId" = apflora.tpopber."TPopId"
     WHERE
       apflora.tpopber."TPopBerEntwicklung" = 3
+      AND apflora.tpopber."TPopBerJahr" = apflora.popber."PopBerJahr"
   )
 ORDER BY
   apflora.ap."ProjId",
@@ -7209,6 +7210,7 @@ WHERE
       ON apflora.tpop."TPopId" = apflora.tpopber."TPopId"
     WHERE
       apflora.tpopber."TPopBerEntwicklung" = 1
+      AND apflora.tpopber."TPopBerJahr" = apflora.popber."PopBerJahr"
   )
 ORDER BY
   apflora.ap."ProjId",
@@ -7243,6 +7245,7 @@ WHERE
       ON apflora.tpop."TPopId" = apflora.tpopber."TPopId"
     WHERE
       apflora.tpopber."TPopBerEntwicklung" = 8
+      AND apflora.tpopber."TPopBerJahr" = apflora.popber."PopBerJahr"
   )
 ORDER BY
   apflora.ap."ProjId",
@@ -7277,6 +7280,7 @@ WHERE
       ON apflora.tpop."TPopId" = apflora.tpopber."TPopId"
     WHERE
       apflora.tpopber."TPopBerEntwicklung" < 8
+      AND apflora.tpopber."TPopBerJahr" = apflora.popber."PopBerJahr"
   )
 ORDER BY
   apflora.ap."ProjId",
