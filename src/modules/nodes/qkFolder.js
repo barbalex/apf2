@@ -35,13 +35,15 @@ export default (
           return false
         })
       : pureMessageArrays
-    messageArraysFiltered = messageArraysFiltered.filter(
-      m => m.hw !== 'Wow: Scheint alles i.O. zu sein!'
-    )
-    // need to count nr of urls, not nr of messages
     const nrOfMessages = reduce(
       messageArraysFiltered,
-      (sum, n) => sum + (n && n.length ? n.length : 0),
+      (sum, n) => {
+        // do not count message that all is o.k.
+        if (n.length === 1 && n[0] && n[0].url.length === 0) {
+          return sum
+        }
+        return sum + (n && n.length ? n.length : 0)
+      },
       0
     )
     nrOfQkMessages = nrOfMessages

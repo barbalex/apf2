@@ -269,11 +269,13 @@ const fetchQk = async ({
   }
   // if no messages: tell user
   if (nrOfMessages === 0) {
-    const messages = {
-      hw: 'Wow: Scheint alles i.O. zu sein!',
-      url: [],
-      text: '',
-    }
+    const messages = [
+      {
+        hw: 'Wow: Scheint alles i.O. zu sein!',
+        url: [],
+        text: [],
+      },
+    ]
     store.qk.addMessages(messages)
   }
   setLoading(false)
