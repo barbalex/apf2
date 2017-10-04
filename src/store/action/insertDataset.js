@@ -48,7 +48,7 @@ export default async (
       },
     })
   } catch (error) {
-    store.listError(error)
+    return store.listError(error)
   }
   /**
    * TODO
@@ -76,5 +76,10 @@ export default async (
       'TPopKontrTyp',
       'Freiwilligen-Erfolgskontrolle'
     )
+  }
+
+  // if beobart need to fetch beob
+  if (tablePassed === 'beobart') {
+    store.fetchBeob(tree.activeNodes.ap)
   }
 }
