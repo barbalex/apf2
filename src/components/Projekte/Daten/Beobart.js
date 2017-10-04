@@ -22,12 +22,11 @@ const FieldsContainer = styled.div`
 const enhance = compose(inject('store'), observer)
 
 const getArtList = ({ store, tree }: { store: Object, tree: Object }) => {
-  const { activeDataset, activeNodes } = tree
   const { adb_eigenschaften } = store.table
-  const beobArtenOfAp = Array.from(store.table.beobart.values())
-    .filter(a => a.ApArtId === activeDataset.row.ApArtId)
-    .map(a => a.TaxonomieId)
-  const apArtIdsNotToShow = beobArtenOfAp.concat(activeNodes.ap)
+  // do not show any TaxonomieId's that have been used
+  const apArtIdsNotToShow = Array.from(store.table.beobart.values()).map(
+    v => v.TaxonomieId
+  )
   const artList = filter(
     Array.from(adb_eigenschaften.values()),
     r => !apArtIdsNotToShow.includes(r.TaxonomieId)
@@ -52,7 +51,10 @@ const BeobArt = ({ store, tree }: { store: Object, tree: Object }) => {
     <Container>
       <FormTitle tree={tree} title="Art für Beobachtungen" />
       <FieldsContainer>
-        <div>Beobachtungen dieser Art können zugeordnet werden.</div>
+        <div>
+          Beobachtungen dieser Art stehen im Ordner "Beobachtungen nicht
+          beurteilt" zur Verfügung und können zugeordnet werden.
+        </div>
         <AutoComplete
           key={activeDataset.row.BeobArtId}
           tree={tree}
