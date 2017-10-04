@@ -55,6 +55,12 @@ const fetchQk = async ({
     { type: 'view', name: 'v_qk2_pop_popnrmehrdeutig' },
     // Population: ohne verlangten Pop-Bericht im Berichtjahr
     { type: 'function', name: 'qk2_pop_ohne_popber', berichtjahr },
+    // Bericht-Stati kontrollieren
+    {
+      type: 'view',
+      name: 'v_qk2_pop_mit_ber_zunehmend_ohne_tpopber_zunehmend',
+      berichtjahr,
+    },
     // Population: ohne verlangten Pop-Massn-Bericht im Berichtjahr
     { type: 'function', name: 'qk2_pop_ohne_popmassnber', berichtjahr },
     // Population: Entsprechen Koordinaten der Pop einer der TPops?
