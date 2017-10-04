@@ -9,15 +9,19 @@ export default (
 ): Array<Object> => {
   // fetch sorting indexes of parents
   const projIndex = findIndex(tree.filteredAndSorted.projekt, {
-    ProjId: projId
+    ProjId: projId,
   })
   const apIndex = findIndex(
     tree.filteredAndSorted.ap.filter(a => a.ProjId === projId),
     { ApArtId: apArtId }
   )
 
+  const beobArten = Array.from(store.table.beob_art.values())
+    .filter(v => v.ApArtId === apArtId)
+    .map(ba => ba.TaxonomieId)
+
   const beobzuordnungNodesLength = tree.filteredAndSorted.beobzuordnung.filter(
-    n => n.ArtId === apArtId
+    b => beobArten.includes(b.ArtId)
   ).length
 
   let message = beobzuordnungNodesLength
@@ -40,10 +44,10 @@ export default (
         projId,
         'Arten',
         apArtId,
-        'nicht-beurteilte-Beobachtungen'
+        'nicht-beurteilte-Beobachtungen',
       ],
       sort: [projIndex, 1, apIndex, 8],
-      hasChildren: beobzuordnungNodesLength > 0
-    }
+      hasChildren: beobzuordnungNodesLength > 0,
+    },
   ]
 }

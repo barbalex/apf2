@@ -16,9 +16,12 @@ export default (
   )
 
   // map through all and create array of nodes
-  // TODO: filter all included in beob_art
+  // filter all included in beob_art
+  const beobArten = Array.from(store.table.beob_art.values())
+    .filter(v => v.ApArtId === apArtId)
+    .map(ba => ba.TaxonomieId)
   return filteredAndSorted.beobzuordnung
-    .filter(b => b.ArtId === apArtId)
+    .filter(b => beobArten.includes(b.ArtId))
     .map((el, index) => ({
       nodeType: 'table',
       menuType: 'beobzuordnung',
