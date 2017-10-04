@@ -45,14 +45,14 @@ const enhance = compose(
   withState('berichtjahr', 'changeBerichtjahr', standardQkYear()),
   withHandlers({
     onChangeBerichtjahr: props => (event, val) => {
-      const { berichtjahr, changeBerichtjahr, store, tree } = props
+      const { changeBerichtjahr, store, tree } = props
       changeBerichtjahr(val)
       if ((isNaN(val) && val.length === 4) || (!isNaN(val) && val > 1000)) {
         // reset messages
         store.qk.setMessages([])
         // call fetchQk and pass it berichtjahr and apArtId
         const apArtId = tree.activeNodes.ap
-        fetchQk({ store, berichtjahr, apArtId })
+        fetchQk({ store, berichtjahr: val, apArtId })
       }
     },
     onChangeFilter: props => (event, val) => props.store.qk.setFilter(val),
