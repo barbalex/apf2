@@ -124,5 +124,9 @@ export default async (
       newActiveNodeArray[7] = value
       tree.setActiveNodeArray(newActiveNodeArray)
     }
+    if (table === 'beobart') {
+      // refetch beob
+      store.fetchBeob(tree.activeNodes.ap)
+    }
   }
 }
