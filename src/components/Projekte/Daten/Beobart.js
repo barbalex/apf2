@@ -52,6 +52,7 @@ const BeobArt = ({ store, tree }: { store: Object, tree: Object }) => {
     <Container>
       <FormTitle tree={tree} title="Art für Beobachtungen" />
       <FieldsContainer>
+        <div>Beobachtungen dieser Art können zugeordnet werden.</div>
         <AutoComplete
           key={activeDataset.row.BeobArtId}
           tree={tree}
