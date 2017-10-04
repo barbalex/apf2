@@ -2,16 +2,13 @@
 import { extendObservable, computed } from 'mobx'
 
 import filteredAndSortedProjekt from '../../compute/filteredAndSorted/projekt'
-import filteredAndSortedApberuebersicht
-  from '../../compute/filteredAndSorted/apberuebersicht'
+import filteredAndSortedApberuebersicht from '../../compute/filteredAndSorted/apberuebersicht'
 import filteredAndSortedAp from '../../compute/filteredAndSorted/ap'
 import filteredAndSortedAssozart from '../../compute/filteredAndSorted/assozart'
-import filteredAndSortedIdealbiotop
-  from '../../compute/filteredAndSorted/idealbiotop'
-import filteredAndSortedBeobNichtZuzuordnen
-  from '../../compute/filteredAndSorted/beobNichtZuzuordnen'
-import filteredAndSortedBeobzuordnung
-  from '../../compute/filteredAndSorted/beobzuordnung'
+import filteredAndSortedBeobArt from '../../compute/filteredAndSorted/beobArt'
+import filteredAndSortedIdealbiotop from '../../compute/filteredAndSorted/idealbiotop'
+import filteredAndSortedBeobNichtZuzuordnen from '../../compute/filteredAndSorted/beobNichtZuzuordnen'
+import filteredAndSortedBeobzuordnung from '../../compute/filteredAndSorted/beobzuordnung'
 import filteredAndSortedBer from '../../compute/filteredAndSorted/ber'
 import filteredAndSortedApber from '../../compute/filteredAndSorted/apber'
 import filteredAndSortedErfkrit from '../../compute/filteredAndSorted/erfkrit'
@@ -19,24 +16,17 @@ import filteredAndSortedZieljahr from '../../compute/filteredAndSorted/zieljahr'
 import filteredAndSortedZiel from '../../compute/filteredAndSorted/ziel'
 import filteredAndSortedZielber from '../../compute/filteredAndSorted/zielber'
 import filteredAndSortedPop from '../../compute/filteredAndSorted/pop'
-import filteredAndSortedPopmassnber
-  from '../../compute/filteredAndSorted/popmassnber'
+import filteredAndSortedPopmassnber from '../../compute/filteredAndSorted/popmassnber'
 import filteredAndSortedPopber from '../../compute/filteredAndSorted/popber'
 import filteredAndSortedTpop from '../../compute/filteredAndSorted/tpop'
 import filteredAndSortedTpopbeob from '../../compute/filteredAndSorted/tpopbeob'
 import filteredAndSortedTopber from '../../compute/filteredAndSorted/tpopber'
-import filteredAndSortedTpopfreiwkontr
-  from '../../compute/filteredAndSorted/tpopfreiwkontr'
-import filteredAndSortedTpopfreiwkontrzaehl
-  from '../../compute/filteredAndSorted/tpopfreiwkontrzaehl'
-import filteredAndSortedTpopfeldkontr
-  from '../../compute/filteredAndSorted/tpopfeldkontr'
-import filteredAndSortedTpopfeldkontrzaehl
-  from '../../compute/filteredAndSorted/tpopfeldkontrzaehl'
-import filteredAndSortedTpopmassnber
-  from '../../compute/filteredAndSorted/tpopmassnber'
-import filteredAndSortedTpopmassn
-  from '../../compute/filteredAndSorted/tpopmassn'
+import filteredAndSortedTpopfreiwkontr from '../../compute/filteredAndSorted/tpopfreiwkontr'
+import filteredAndSortedTpopfreiwkontrzaehl from '../../compute/filteredAndSorted/tpopfreiwkontrzaehl'
+import filteredAndSortedTpopfeldkontr from '../../compute/filteredAndSorted/tpopfeldkontr'
+import filteredAndSortedTpopfeldkontrzaehl from '../../compute/filteredAndSorted/tpopfeldkontrzaehl'
+import filteredAndSortedTpopmassnber from '../../compute/filteredAndSorted/tpopmassnber'
+import filteredAndSortedTpopmassn from '../../compute/filteredAndSorted/tpopmassn'
 
 export default (store: Object, tree: Object): void => {
   extendObservable(tree.filteredAndSorted, {
@@ -45,7 +35,7 @@ export default (store: Object, tree: Object): void => {
     }),
     apberuebersicht: computed(
       () => filteredAndSortedApberuebersicht(store, tree),
-      { name: 'xxxFilteredAndSorted' },
+      { name: 'xxxFilteredAndSorted' }
     ),
     ap: computed(() => filteredAndSortedAp(store, tree), {
       name: 'apFilteredAndSorted',
@@ -53,12 +43,15 @@ export default (store: Object, tree: Object): void => {
     assozart: computed(() => filteredAndSortedAssozart(store, tree), {
       name: 'assozartFilteredAndSorted',
     }),
+    beobArt: computed(() => filteredAndSortedBeobArt(store, tree), {
+      name: 'beobArtFilteredAndSorted',
+    }),
     idealbiotop: computed(() => filteredAndSortedIdealbiotop(store, tree), {
       name: 'idealbiotopFilteredAndSorted',
     }),
     beobNichtZuzuordnen: computed(
       () => filteredAndSortedBeobNichtZuzuordnen(store, tree),
-      { name: 'beobNichtZuzuordnenFilteredAndSorted' },
+      { name: 'beobNichtZuzuordnenFilteredAndSorted' }
     ),
     beobzuordnung: computed(() => filteredAndSortedBeobzuordnung(store, tree), {
       name: 'beobzuordnungFilteredAndSorted',
@@ -101,18 +94,18 @@ export default (store: Object, tree: Object): void => {
     }),
     tpopfreiwkontr: computed(
       () => filteredAndSortedTpopfreiwkontr(store, tree),
-      { name: 'tpopfreiwkontrFilteredAndSorted' },
+      { name: 'tpopfreiwkontrFilteredAndSorted' }
     ),
     tpopfreiwkontrzaehl: computed(
       () => filteredAndSortedTpopfreiwkontrzaehl(store, tree),
-      { name: 'tpopfreiwkontrzaehlFilteredAndSorted' },
+      { name: 'tpopfreiwkontrzaehlFilteredAndSorted' }
     ),
     tpopfeldkontr: computed(() => filteredAndSortedTpopfeldkontr(store, tree), {
       name: 'tpopfeldkontrFilteredAndSorted',
     }),
     tpopfeldkontrzaehl: computed(
       () => filteredAndSortedTpopfeldkontrzaehl(store, tree),
-      { name: 'tpopfeldkontrzaehlFilteredAndSorted' },
+      { name: 'tpopfeldkontrzaehlFilteredAndSorted' }
     ),
     tpopmassnber: computed(() => filteredAndSortedTpopmassnber(store, tree), {
       name: 'tpopmassnberFilteredAndSorted',
