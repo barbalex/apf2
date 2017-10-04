@@ -18,6 +18,7 @@ import qkFolderNodes from '../../modules/nodes/qkFolder'
 import beobNichtZuzuordnenFolderNodes from '../../modules/nodes/beobNichtZuzuordnenFolder'
 import beobzuordnungFolderNodes from '../../modules/nodes/beobzuordnungFolder'
 import assozartFolderNodes from '../../modules/nodes/assozartFolder'
+import beobArtFolderNodes from '../../modules/nodes/beobArtFolder'
 import idealbiotopFolderNodes from '../../modules/nodes/idealbiotopFolder'
 import berFolderNodes from '../../modules/nodes/berFolder'
 import apberFolderNodes from '../../modules/nodes/apberFolder'
@@ -31,6 +32,7 @@ import popNodes from '../../modules/nodes/pop'
 import beobNichtZuzuordnenNodes from '../../modules/nodes/beobNichtZuzuordnen'
 import beobzuordnungNodes from '../../modules/nodes/beobzuordnung'
 import assozartNodes from '../../modules/nodes/assozart'
+import beobArtNodes from '../../modules/nodes/beobArt'
 import berNodes from '../../modules/nodes/ber'
 import apberNodes from '../../modules/nodes/apber'
 import erfkritNodes from '../../modules/nodes/erfkrit'
@@ -119,6 +121,7 @@ export default (store: Object, tree: Object): Array<Object> => {
         ...berFolderNodes(store, tree, projId, apArtId),
         ...idealbiotopFolderNodes(store, tree, projId, apArtId),
         ...assozartFolderNodes(store, tree, projId, apArtId),
+        ...beobArtFolderNodes(store, tree, projId, apArtId),
         ...beobzuordnungFolderNodes(store, tree, projId, apArtId),
         ...beobNichtZuzuordnenFolderNodes(store, tree, projId, apArtId),
         ...qkFolderNodes(store, tree, projId, apArtId),
@@ -203,6 +206,14 @@ export default (store: Object, tree: Object): Array<Object> => {
     ) {
       const apArtId = nodeUrl[3]
       nodes = [...nodes, ...assozartNodes(store, tree, projId, apArtId)]
+    }
+    if (
+      nodeUrl.length === 5 &&
+      nodeUrl[4] === 'arten-fuer-beobachtungen' &&
+      allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
+    ) {
+      const apArtId = nodeUrl[3]
+      nodes = [...nodes, ...beobArtNodes(store, tree, projId, apArtId)]
     }
     if (
       nodeUrl.length === 5 &&

@@ -46,7 +46,7 @@ export default (
         apArtId,
         'nicht-beurteilte-Beobachtungen',
       ],
-      sort: [projIndex, 1, apIndex, 8],
+      sort: [projIndex, 1, apIndex, 9],
       hasChildren: beobzuordnungNodesLength > 0,
     },
   ]

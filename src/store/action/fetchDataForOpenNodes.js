@@ -99,6 +99,7 @@ const fetchDataForOpenNodes = (
         // not necessary any more as form loads data on mount
       },
       assozartFolder() {},
+      beobArtFolder() {},
       idealbiotopFolder() {},
       beobNichtZuzuordnenFolder() {
         store.fetchTable('beob_quelle')

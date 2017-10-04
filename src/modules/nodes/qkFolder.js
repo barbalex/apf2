@@ -68,7 +68,7 @@ export default (
         ? ` (${nrOfQkMessages})`
         : ''}`,
       url: ['Projekte', projId, 'Arten', apArtId, 'Qualitaetskontrollen'],
-      sort: [projIndex, 1, apIndex, 10],
+      sort: [projIndex, 1, apIndex, 11],
       hasChildren: false,
     },
   ]

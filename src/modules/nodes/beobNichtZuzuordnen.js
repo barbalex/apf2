@@ -5,7 +5,7 @@ export default (
   store: Object,
   tree: Object,
   projId: number,
-  apArtId: number,
+  apArtId: number
 ): Array<Object> => {
   const { filteredAndSorted } = tree
 
@@ -13,14 +13,14 @@ export default (
   const projIndex = findIndex(filteredAndSorted.projekt, { ProjId: projId })
   const apIndex = findIndex(
     filteredAndSorted.ap.filter(a => a.ProjId === projId),
-    { ApArtId: apArtId },
+    { ApArtId: apArtId }
   )
 
   // map through all and create array of nodes
   return filteredAndSorted.beobNichtZuzuordnen
     .filter(b => {
       const beob = Array.from(store.table.beob.values()).find(
-        beo => beo.id === b.BeobId,
+        beo => beo.id === b.BeobId
       )
       const artId = beob ? beob.ArtId : null
       return artId === apArtId
@@ -43,7 +43,7 @@ export default (
           'nicht-zuzuordnende-Beobachtungen',
           beobId,
         ],
-        sort: [projIndex, 1, apIndex, 9, index],
+        sort: [projIndex, 1, apIndex, 10, index],
         hasChildren: false,
       }
     })

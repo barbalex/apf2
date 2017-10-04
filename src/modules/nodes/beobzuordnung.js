@@ -37,7 +37,7 @@ export default (
         'nicht-beurteilte-Beobachtungen',
         el.id,
       ],
-      sort: [projIndex, 1, apIndex, 8, index],
+      sort: [projIndex, 1, apIndex, 9, index],
       hasChildren: false,
     }))
 }

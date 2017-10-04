@@ -175,6 +175,7 @@ export default (store: Object, tree: Object): Object => {
         let folder = null
         if (aEl.popFolder) folder = 'pop'
         if (aEl.assozartFolder) folder = 'assozart'
+        if (aEl.beobArtFolder) folder = 'beobArt'
         if (aEl.idealbiotopFolder) folder = 'idealbiotop'
         if (aEl.beobNichtZuzuordnenFolder) folder = 'beobNichtZuzuordnen'
         if (aEl.beobzuordnungFolder) folder = 'beobzuordnung'
