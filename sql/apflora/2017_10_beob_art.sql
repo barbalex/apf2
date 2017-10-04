@@ -5,7 +5,8 @@ CREATE TABLE apflora.beobart (
   "TaxonomieId" INTEGER DEFAULT NULL REFERENCES apflora.adb_eigenschaften ("TaxonomieId") ON DELETE SET NULL ON UPDATE CASCADE,
   "ApArtId" integer DEFAULT NULL REFERENCES apflora.ap ("ApArtId") ON DELETE CASCADE ON UPDATE CASCADE,
   "MutWann" date DEFAULT NULL,
-  "MutWer" varchar(20) DEFAULT NULL
+  "MutWer" varchar(20) DEFAULT NULL,
+  UNIQUE ("TaxonomieId")
 );
 COMMENT ON COLUMN apflora.beobart."BeobArtId" IS 'Primärschlüssel der Tabelle "beobart"';
 COMMENT ON COLUMN apflora.beobart."TaxonomieId" IS 'Zugehörige Art. Fremdschlüssel aus der Tabelle "adb_eigenschaften"';
