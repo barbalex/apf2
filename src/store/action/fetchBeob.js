@@ -36,23 +36,7 @@ const onError = ({
 }
 
 export default async (store: Object, apArtId: number): any => {
-  // only fetch if not yet fetched
   const { valuesForWhichTableDataWasFetched } = store
-  if (
-    valuesForWhichTableDataWasFetched.beob &&
-    valuesForWhichTableDataWasFetched.beob.ArtId &&
-    valuesForWhichTableDataWasFetched.beob.ArtId.includes(apArtId)
-  ) {
-    return
-  }
-
-  recordValuesForWhichTableDataWasFetched({
-    store,
-    table: 'beob',
-    field: 'ArtId',
-    value: apArtId,
-  })
-
   let beobArtResult: { data: Array<Object> }
   try {
     beobArtResult = await axios.get(`beobart?ApArtId=eq.${apArtId}`)
@@ -64,7 +48,27 @@ export default async (store: Object, apArtId: number): any => {
       error,
     })
   }
-  const taxonomyIds = beobArtResult.data.map(d => d.TaxonomieId)
+  const taxonomyIds = beobArtResult.data
+    .map(d => d.TaxonomieId)
+    // if exists new beobart but art is not choosen, its value is null
+    // need to filter that out
+    .filter(v => !!v)
+
+  // only fetch if not yet fetched
+  if (
+    valuesForWhichTableDataWasFetched.beob &&
+    valuesForWhichTableDataWasFetched.beob.ArtId &&
+    valuesForWhichTableDataWasFetched.beob.ArtId.includes(taxonomyIds.join())
+  ) {
+    return
+  }
+
+  recordValuesForWhichTableDataWasFetched({
+    store,
+    table: 'beob',
+    field: 'ArtId',
+    value: taxonomyIds.join(),
+  })
 
   let beobResult: { data: Array<Object> }
   try {
