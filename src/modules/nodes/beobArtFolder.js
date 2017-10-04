@@ -16,14 +16,14 @@ export default (
     { ApArtId: apArtId }
   )
 
-  const beobArtNodesLength = tree.filteredAndSorted.beobArt.filter(
+  const beobArtNodesLength = tree.filteredAndSorted.beobart.filter(
     n => n.ApArtId === apArtId
   ).length
   let message = beobArtNodesLength
   if (store.table.beobArtLoading) {
     message = '...'
   }
-  if (tree.nodeLabelFilter.get('beobArt')) {
+  if (tree.nodeLabelFilter.get('beobart')) {
     message = `${beobArtNodesLength} gefiltert`
   }
 

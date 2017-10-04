@@ -55,7 +55,7 @@ export default async (store: Object, apArtId: number): any => {
 
   let beobArtResult: { data: Array<Object> }
   try {
-    beobArtResult = await axios.get(`beob_art?ApArtId=eq.${apArtId}`)
+    beobArtResult = await axios.get(`beobart?ApArtId=eq.${apArtId}`)
   } catch (error) {
     return onError({
       store,

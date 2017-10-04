@@ -17,6 +17,7 @@ import Erfkrit from './Erfkrit'
 import Apber from './Apber'
 import Pop from './Pop'
 import Assozart from './Assozart'
+import Beobart from './Beobart'
 import Idealbiotop from './Idealbiotop'
 import Ber from './Ber'
 import Ziel from './Ziel'
@@ -56,6 +57,7 @@ const Daten = ({ store, tree }: { store: Object, tree: Object }) => {
     apberuebersicht: <Apberuebersicht tree={tree} />,
     ap: <Ap tree={tree} />,
     assozart: <Assozart tree={tree} />,
+    beobart: <Beobart tree={tree} />,
     idealbiotop: <Idealbiotop tree={tree} />,
     erfkrit: <Erfkrit tree={tree} />,
     apber: <Apber tree={tree} />,
@@ -83,9 +85,7 @@ const Daten = ({ store, tree }: { store: Object, tree: Object }) => {
   const standardForm = (
     <div>
       <p>Daten</p>
-      <pre>
-        {JSON.stringify(activeDataset.row, null, 2)}
-      </pre>
+      <pre>{JSON.stringify(activeDataset.row, null, 2)}</pre>
     </div>
   )
   let key
@@ -104,11 +104,7 @@ const Daten = ({ store, tree }: { store: Object, tree: Object }) => {
   }
   const form = formObject[key] || standardForm
 
-  return (
-    <Container>
-      {form}
-    </Container>
-  )
+  return <Container>{form}</Container>
 }
 
 export default enhance(Daten)

@@ -78,7 +78,7 @@ const fetchDataForOpenNodes = (
         store.fetchTable('adresse')
         store.fetchTable('ap_bearbstand_werte')
         store.fetchTable('ap_umsetzung_werte')
-        store.fetchTable('beob_art')
+        store.fetchTable('beobart')
         store.fetchBeob(activeNodes.ap)
         store.fetchBeobzuordnung(activeNodes.ap)
         store.fetchTable('pop_status_werte')

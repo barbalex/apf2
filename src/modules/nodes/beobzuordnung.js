@@ -16,8 +16,8 @@ export default (
   )
 
   // map through all and create array of nodes
-  // filter all included in beob_art
-  const beobArten = Array.from(store.table.beob_art.values())
+  // filter all included in beobart
+  const beobArten = Array.from(store.table.beobart.values())
     .filter(v => v.ApArtId === apArtId)
     .map(ba => ba.TaxonomieId)
   return filteredAndSorted.beobzuordnung

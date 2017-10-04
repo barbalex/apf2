@@ -1,39 +1,39 @@
 -- create table
-DROP TABLE IF EXISTS apflora.beob_art;
-CREATE TABLE apflora.beob_art (
+DROP TABLE IF EXISTS apflora.beobart;
+CREATE TABLE apflora.beobart (
   "BeobArtId" SERIAL PRIMARY KEY,
   "TaxonomieId" INTEGER DEFAULT NULL REFERENCES apflora.adb_eigenschaften ("TaxonomieId") ON DELETE SET NULL ON UPDATE CASCADE,
   "ApArtId" integer DEFAULT NULL REFERENCES apflora.ap ("ApArtId") ON DELETE CASCADE ON UPDATE CASCADE,
   "MutWann" date DEFAULT NULL,
   "MutWer" varchar(20) DEFAULT NULL
 );
-COMMENT ON COLUMN apflora.beob_art."BeobArtId" IS 'Primärschlüssel der Tabelle "beob_art"';
-COMMENT ON COLUMN apflora.beob_art."TaxonomieId" IS 'Zugehörige Art. Fremdschlüssel aus der Tabelle "adb_eigenschaften"';
-COMMENT ON COLUMN apflora.beob_art."ApArtId" IS 'Zugehöriger Aktionsplan. Fremdschlüssel aus der Tabelle "ap"';
-COMMENT ON COLUMN apflora.beob_art."MutWann" IS 'Wann wurde der Datensatz zuletzt geändert?';
-COMMENT ON COLUMN apflora.beob_art."MutWer" IS 'Wer hat den Datensatz zuletzt geändert?';
-CREATE INDEX ON apflora.beob_art USING btree ("ApArtId", "TaxonomieId");
-SELECT setval(pg_get_serial_sequence('apflora.beob_art', 'BeobArtId'), coalesce(max("BeobArtId"), 0) + 1, false) FROM apflora.beob_art;
+COMMENT ON COLUMN apflora.beobart."BeobArtId" IS 'Primärschlüssel der Tabelle "beobart"';
+COMMENT ON COLUMN apflora.beobart."TaxonomieId" IS 'Zugehörige Art. Fremdschlüssel aus der Tabelle "adb_eigenschaften"';
+COMMENT ON COLUMN apflora.beobart."ApArtId" IS 'Zugehöriger Aktionsplan. Fremdschlüssel aus der Tabelle "ap"';
+COMMENT ON COLUMN apflora.beobart."MutWann" IS 'Wann wurde der Datensatz zuletzt geändert?';
+COMMENT ON COLUMN apflora.beobart."MutWer" IS 'Wer hat den Datensatz zuletzt geändert?';
+CREATE INDEX ON apflora.beobart USING btree ("ApArtId", "TaxonomieId");
+SELECT setval(pg_get_serial_sequence('apflora.beobart', 'BeobArtId'), coalesce(max("BeobArtId"), 0) + 1, false) FROM apflora.beobart;
 
 -- insert ap species
-insert into apflora.beob_art ("ApArtId", "TaxonomieId")
+insert into apflora.beobart ("ApArtId", "TaxonomieId")
 select
   "ApArtId",
   "ApArtId" as "TaxonomieId"
 from apflora.ap;
 
 -- when ap is inserted
--- ensure beob_art is created too
-DROP TRIGGER IF EXISTS ap_insert_add_beob_art ON apflora.ap;
-DROP FUNCTION IF EXISTS ap_insert_add_beob_art();
-CREATE FUNCTION ap_insert_add_beob_art() RETURNS trigger AS $ap_insert_add_beob_art$
+-- ensure beobart is created too
+DROP TRIGGER IF EXISTS ap_insert_add_beobart ON apflora.ap;
+DROP FUNCTION IF EXISTS ap_insert_add_beobart();
+CREATE FUNCTION ap_insert_add_beobart() RETURNS trigger AS $ap_insert_add_beobart$
 BEGIN
   INSERT INTO
-    apflora.beob_art ("ApArtId", "TaxonomieId")
+    apflora.beobart ("ApArtId", "TaxonomieId")
   VALUES (NEW."ApArtId", NEW."ApArtId");
   RETURN NEW;
 END;
-$ap_insert_add_beob_art$ LANGUAGE plpgsql;
+$ap_insert_add_beobart$ LANGUAGE plpgsql;
 
-CREATE TRIGGER ap_insert_add_beob_art AFTER INSERT ON apflora.ap
-  FOR EACH ROW EXECUTE PROCEDURE ap_insert_add_beob_art();
+CREATE TRIGGER ap_insert_add_beobart AFTER INSERT ON apflora.ap
+  FOR EACH ROW EXECUTE PROCEDURE ap_insert_add_beobart();

@@ -282,7 +282,7 @@ export default [
     mutWerField: 'BeobMutWer',
   },
   {
-    table: 'beob_art',
+    table: 'beobart',
     label: 'none',
     idField: 'BeobArtId',
     parentIdField: 'ApArtId',

@@ -2,7 +2,7 @@
 import React from 'react'
 import { ContextMenu, MenuItem } from 'react-contextmenu'
 
-const BeobArtFolder = ({
+const BeobartFolder = ({
   onClick,
   tree,
 }: {
@@ -15,7 +15,7 @@ const BeobArtFolder = ({
       onClick={onClick}
       data={{
         action: 'insert',
-        table: 'beobArt',
+        table: 'beobart',
       }}
     >
       erstelle neue
@@ -23,4 +23,4 @@ const BeobArtFolder = ({
   </ContextMenu>
 )
 
-export default BeobArtFolder
+export default BeobartFolder

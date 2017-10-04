@@ -16,7 +16,7 @@ export default (
     { ApArtId: apArtId }
   )
 
-  const beobArten = Array.from(store.table.beob_art.values())
+  const beobArten = Array.from(store.table.beobart.values())
     .filter(v => v.ApArtId === apArtId)
     .map(ba => ba.TaxonomieId)
 

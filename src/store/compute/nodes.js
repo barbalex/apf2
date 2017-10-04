@@ -32,7 +32,7 @@ import popNodes from '../../modules/nodes/pop'
 import beobNichtZuzuordnenNodes from '../../modules/nodes/beobNichtZuzuordnen'
 import beobzuordnungNodes from '../../modules/nodes/beobzuordnung'
 import assozartNodes from '../../modules/nodes/assozart'
-import beobArtNodes from '../../modules/nodes/beobArt'
+import beobartNodes from '../../modules/nodes/beobart'
 import berNodes from '../../modules/nodes/ber'
 import apberNodes from '../../modules/nodes/apber'
 import erfkritNodes from '../../modules/nodes/erfkrit'
@@ -213,7 +213,7 @@ export default (store: Object, tree: Object): Array<Object> => {
       allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
     ) {
       const apArtId = nodeUrl[3]
-      nodes = [...nodes, ...beobArtNodes(store, tree, projId, apArtId)]
+      nodes = [...nodes, ...beobartNodes(store, tree, projId, apArtId)]
     }
     if (
       nodeUrl.length === 5 &&

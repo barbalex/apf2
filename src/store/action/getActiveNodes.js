@@ -46,7 +46,7 @@ export default (activeNodeArray: Array<mixed>): Object => {
     assozartFolder && activeNodeArray.length > 5
       ? parseInt(activeNodeArray[5], 10)
       : null
-  const beobArt =
+  const beobart =
     beobArtFolder && activeNodeArray.length > 5
       ? parseInt(activeNodeArray[5], 10)
       : null
@@ -243,7 +243,7 @@ export default (activeNodeArray: Array<mixed>): Object => {
     assozartFolder,
     beobArtFolder,
     assozart,
-    beobArt,
+    beobart,
     qk,
     idealbiotopFolder,
     idealbiotop,

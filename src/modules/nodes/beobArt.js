@@ -16,11 +16,11 @@ export default (
     { ApArtId: apArtId }
   )
 
-  return tree.filteredAndSorted.beobArt
+  return tree.filteredAndSorted.beobart
     .filter(p => p.ApArtId === apArtId)
     .map((el, index) => ({
       nodeType: 'table',
-      menuType: 'beobArt',
+      menuType: 'beobart',
       id: el.BeobArtId,
       parentId: apArtId,
       urlLabel: el.BeobArtId,
