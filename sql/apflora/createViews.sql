@@ -7698,7 +7698,7 @@ WITH lasttpopber AS (
 SELECT
   apflora.projekt."ProjId",
   apflora.ap."ApArtId",
-  'Teilpopulation: Status ist "erloschen" (ursprünglich oder angesiedelt), Ansaatversuch oder potentieller Wuchsort; der letzte Teilpopulations-Bericht meldet aber "unsicher" und es gab seither keine Ansiedlung:'::text AS "hw",
+  'Teilpopulation: Status ist "erloschen" (ursprünglich oder angesiedelt) oder potentieller Wuchsort; der letzte Teilpopulations-Bericht meldet aber "unsicher" und es gab seither keine Ansiedlung:'::text AS "hw",
   ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId"]::text[] AS "url",
   ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop."TPopNr")]::text[] AS text
 FROM
@@ -7748,7 +7748,7 @@ WITH lastpopber AS (
 SELECT
   apflora.projekt."ProjId",
   apflora.ap."ApArtId",
-  'Population: Status ist "erloschen" (ursprünglich oder angesiedelt), Ansaatversuch oder potentieller Wuchsort; der letzte Populations-Bericht meldet aber "unsicher" und es gab seither keine Ansiedlung:'::text AS "hw",
+  'Population: Status ist "erloschen" (ursprünglich oder angesiedelt) oder potentieller Wuchsort; der letzte Populations-Bericht meldet aber "unsicher" und es gab seither keine Ansiedlung:'::text AS "hw",
   ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId"]::text[] AS "url",
   ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr")]::text[] AS text
 FROM
@@ -7776,4 +7776,33 @@ WHERE
     WHERE
       apflora.tpopmassn."TPopMassnTyp" BETWEEN 1 AND 3
       AND apflora.tpopmassn."TPopMassnJahr" > lastpopber."PopBerJahr"
+  );
+
+DROP VIEW IF EXISTS apflora.v_qk2_pop_statuserurspruenglichaktuellohnetpopmitstatusurspruenglichaktuell CASCADE;
+CREATE OR REPLACE VIEW apflora.v_qk2_pop_statuserurspruenglichaktuellohnetpopmitstatusurspruenglichaktuell AS
+SELECT
+  apflora.projekt."ProjId",
+  apflora.ap."ApArtId",
+  'Population: Status ist "ursptünglich aktuell". Es gibt aber keine Teil-Population mit diesem Status:'::text AS "hw",
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId"]::text[] AS "url",
+  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr")]::text[] AS text
+FROM
+  apflora.projekt
+  INNER JOIN
+    apflora.ap
+    INNER JOIN
+      apflora.pop
+    ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
+  ON apflora.projekt."ProjId" = apflora.ap."ProjId"
+WHERE
+  apflora.pop."PopHerkunft" = 100
+  AND apflora.pop."PopId" NOT IN (
+    -- Ansiedlungen since lastpopber."PopBerJahr"
+    SELECT DISTINCT
+      apflora.tpop."PopId"
+    FROM
+      apflora.tpop
+    WHERE
+      apflora.tpop."PopId" = apflora.pop."PopId"
+      AND apflora.tpop."TPopHerkunft" = 100
   );

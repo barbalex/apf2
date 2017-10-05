@@ -55,6 +55,7 @@ const fetchQk = async ({
     { type: 'view', name: 'v_qk2_pop_popnrmehrdeutig' },
     // Population: ohne verlangten Pop-Bericht im Berichtjahr
     { type: 'function', name: 'qk2_pop_ohne_popber', berichtjahr },
+
     // Bericht-Stati kontrollieren
     {
       type: 'view',
@@ -76,6 +77,15 @@ const fetchQk = async ({
       name: 'v_qk2_pop_mit_ber_erloschen_und_tpopber_nicht_erloschen',
       berichtjahr,
     },
+
+    // Stati der Population mit den Stati der Teil-Populationen vergleichen
+    // Status ist "ursptünglich aktuell". Es gibt aber keine Teil-Population mit diesem Status:
+    {
+      type: 'view',
+      name:
+        'v_qk2_pop_statuserurspruenglichaktuellohnetpopmitstatusurspruenglichaktuell',
+    },
+
     // Stati mit letztem Bericht vergleichen
     // Status ist "erloschen" (ursprünglich oder angesiedelt), Ansaatversuch oder potentieller Wuchsort; der letzte Populations-Bericht meldet aber "zunehmend" und es gab seither keine Ansiedlung:
     { type: 'view', name: 'v_qk2_pop_statuserloschenletzterpopberzunehmend' },
