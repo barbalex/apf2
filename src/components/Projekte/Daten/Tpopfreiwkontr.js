@@ -6,6 +6,7 @@ import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 
 import RadioButton from '../../shared/RadioButton'
+import RadioButton3Values from '../../shared/RadioButton3Values'
 import TextField from '../../shared/TextField'
 import AutoComplete from '../../shared/Autocomplete'
 import StringToCopy from '../../shared/StringToCopy'
@@ -26,7 +27,6 @@ const FieldsContainer = styled.div`
       ? `${constants.columnWidth}px`
       : 'auto'};
 `
-const RadioButtonWithTopMargin = styled(RadioButton)`margin-top: 15px;`
 
 const getBearbName = ({ store, tree }: { store: Object, tree: Object }) => {
   const { adressen } = store.dropdownList
@@ -153,7 +153,7 @@ class Tpopfreiwkontr extends Component {
             updateProperty={store.updateProperty}
             updatePropertyInDb={store.updatePropertyInDb}
           />
-          <RadioButtonWithTopMargin
+          <RadioButton3Values
             tree={tree}
             fieldName="TPopKontrJungPflJN"
             label="Auch junge Pflanzen vorhanden"
