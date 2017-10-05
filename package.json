@@ -50,7 +50,7 @@
     "leaflet.markercluster": "1.1.0",
     "lodash": "4.17.4",
     "material-ui": "0.19.3",
-    "mobx": "3.3.0",
+    "mobx": "3.3.1",
     "mobx-react": "4.3.3",
     "moment": "2.18.1",
     "proj4": "2.4.4",
