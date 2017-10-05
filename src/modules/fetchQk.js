@@ -79,11 +79,30 @@ const fetchQk = async ({
     },
 
     // Stati der Population mit den Stati der Teil-Populationen vergleichen
-    // Status ist "ursptünglich aktuell". Es gibt aber keine Teil-Population mit diesem Status:
+    // Keine Teil-Population hat den Status der Population:
     {
       type: 'view',
-      name:
-        'v_qk2_pop_statuserurspruenglichaktuellohnetpopmitstatusurspruenglichaktuell',
+      name: 'v_qk2_pop_ohnetpopmitgleichemstatus',
+    },
+    // Status ist "potentieller Wuchs-/Ansiedlungsort". Es gibt aber Teil-Populationen mit abweichendem Status:
+    {
+      type: 'view',
+      name: 'v_qk2_pop_status300tpopstatusanders',
+    },
+    // Status ist "Ansaatversuch". Es gibt Teil-Populationen mit nicht zulässigen Stati ("ursprünglich" oder "angesiedelt, aktuell"):
+    {
+      type: 'view',
+      name: 'v_qk2_pop_status201tpopstatusunzulaessig',
+    },
+    // Status ist "angesiedelt nach Beginn AP, erloschen/nicht etabliert". Es gibt Teil-Populationen mit abweichendem Status:
+    {
+      type: 'view',
+      name: 'v_qk2_pop_status202tpopstatusanders',
+    },
+    // Status ist "angesiedelt vor Beginn AP, erloschen/nicht etabliert". Es gibt Teil-Populationen mit nicht zulässigen Stati ("ursprünglich", "angesiedelt, aktuell", "Ansaatversuch", "potentieller Wuchsort"):
+    {
+      type: 'view',
+      name: 'v_qk2_pop_status211tpopstatusunzulaessig',
     },
 
     // Stati mit letztem Bericht vergleichen
