@@ -76,6 +76,10 @@ const fetchQk = async ({
       name: 'v_qk2_pop_mit_ber_erloschen_und_tpopber_nicht_erloschen',
       berichtjahr,
     },
+    // Stati mit letztem Bericht vergleichen
+    // Status ist "erloschen" (ursprünglich oder angesiedelt), Ansaatversuch oder potentieller Wuchsort; der letzte Populations-Bericht meldet aber "zunehmend" und es gab seither keine Ansiedlung:
+    { type: 'view', name: 'v_qk2_pop_statuserloschenletzterpopberzunehmend' },
+
     // Population: ohne verlangten Pop-Massn-Bericht im Berichtjahr
     { type: 'function', name: 'qk2_pop_ohne_popmassnber', berichtjahr },
     // Population: Entsprechen Koordinaten der Pop einer der TPops?
@@ -98,13 +102,10 @@ const fetchQk = async ({
     { type: 'view', name: 'v_qk2_pop_statuserloschenmittpopansaatversuch' },
     // Population: Status ist "angesiedelt", es gibt aber eine Teilpopulation mit Status "ursprünglich":
     { type: 'view', name: 'v_qk2_pop_statusangesiedeltmittpopurspruenglich' },
-    // Population: Status ist "aktuell", der letzte Populations-Bericht meldet aber "erloschen"
+    // Status ist "aktuell" (ursprünglich oder angesiedelt) oder potentieller Wuchsort; der letzte Populations-Bericht meldet aber "erloschen" und es gab seither keine Ansiedlung:
     { type: 'view', name: 'v_qk2_pop_statusaktuellletzterpopbererloschen' },
     // Population: Status ist "erloschen", der letzte Populations-Bericht meldet aber "aktuell"
     { type: 'view', name: 'v_qk2_pop_statuserloschenletzterpopberaktuell' },
-    // Population: Status ist "potenzieller Wuchs-/Ansiedlungsort",
-    // es gibt aber eine Teilpopulation mit Status "angesiedelt" oder "ursprünglich":
-    { type: 'view', name: 'v_qk2_pop_statusaktuellletzterpopbererloschen' },
     // Pop-Bericht/Pop-Massn.-Bericht ohne Jahr/Entwicklung
     { type: 'view', name: 'v_qk2_popber_ohnejahr' },
     { type: 'view', name: 'v_qk2_popber_ohneentwicklung', berichtjahr },
@@ -113,8 +114,11 @@ const fetchQk = async ({
 
     // 3. Teilpopulation
 
-    // Teilpopulation: Status ist "aktuell", der letzte Teilpopulations-Bericht meldet aber "erloschen"
-    { type: 'view', name: 'v_qk2_tpop_statusaktuellletzterpopbererloschen' },
+    // Stati mit letztem Bericht vergleichen
+    // Status ist "aktuell" (ursprünglich oder angesiedelt) oder potentieller Wuchsort, der letzte Teilpopulations-Bericht meldet aber "erloschen" und es gab seither keine Ansiedlung
+    { type: 'view', name: 'v_qk2_tpop_statusaktuellletztertpopbererloschen' },
+    // Status ist "erloschen" (ursprünglich oder angesiedelt), Ansaatversuch oder potentieller Wuchsort; der letzte Teilpopulations-Bericht meldet aber "zunehmend" und es gab seither keine Ansiedlung:
+    { type: 'view', name: 'v_qk2_tpop_statuserloschenletzterpopberzunehmend' },
     // Teilpopulation: Status ist "erloschen", der letzte Teilpopulations-Bericht meldet aber "aktuell"
     { type: 'view', name: 'v_qk2_tpop_statuserloschenletzterpopberaktuell' },
     // tpop ohne Nr/Flurname/Status/bekannt seit/Koordinaten

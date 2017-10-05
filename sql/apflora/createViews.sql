@@ -1629,14 +1629,14 @@ GROUP BY
 DROP VIEW IF EXISTS apflora.v_tpop_letztertpopber0_overall CASCADE;
 CREATE OR REPLACE VIEW apflora.v_tpop_letztertpopber0_overall AS
 SELECT
-  apflora.tpopber."TPopId",
-  max(apflora.tpopber."TPopBerJahr") AS "TPopBerJahr"
+  "TPopId",
+  max("TPopBerJahr") AS "TPopBerJahr"
 FROM
   apflora.tpopber
 WHERE
-  apflora.tpopber."TPopBerJahr" IS NOT NULL
+  "TPopBerJahr" IS NOT NULL
 GROUP BY
-  apflora.tpopber."TPopId";
+  "TPopId";
 
 DROP VIEW IF EXISTS apflora.v_tpop_mitapaberohnestatus CASCADE;
 CREATE OR REPLACE VIEW apflora.v_tpop_mitapaberohnestatus AS
@@ -7287,3 +7287,199 @@ ORDER BY
   apflora.ap."ApArtId",
   apflora.pop."PopId",
   apflora.popber."PopBerJahr";
+
+DROP VIEW IF EXISTS apflora.v_qk2_tpop_statusaktuellletztertpopbererloschen CASCADE;
+CREATE OR REPLACE VIEW apflora.v_qk2_tpop_statusaktuellletztertpopbererloschen AS
+WITH lasttpopber AS (
+  SELECT DISTINCT ON ("TPopId")
+    "TPopId",
+    "TPopBerJahr",
+    "TPopBerEntwicklung"
+  FROM
+    apflora.tpopber
+  WHERE
+    "TPopBerJahr" IS NOT NULL
+  ORDER BY
+    "TPopId",
+    "TPopBerJahr" DESC
+)
+SELECT
+  apflora.projekt."ProjId",
+  apflora.ap."ApArtId",
+  'Teilpopulation: Status ist "aktuell" (ursprünglich oder angesiedelt) oder potentieller Wuchsort; der letzte Teilpopulations-Bericht meldet aber "erloschen" und es gab seither keine Ansiedlung:'::text AS "hw",
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId"]::text[] AS "url",
+  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop."TPopNr")]::text[] AS text
+FROM
+  apflora.projekt
+  INNER JOIN
+    apflora.ap
+    INNER JOIN
+      apflora.pop
+      INNER JOIN
+        apflora.tpop
+        INNER JOIN lasttpopber
+        ON apflora.tpop."TPopId" = lasttpopber."TPopId"
+      ON apflora.pop."PopId" = apflora.tpop."PopId"
+    ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
+  ON apflora.projekt."ProjId" = apflora.ap."ProjId"
+WHERE
+  apflora.tpop."TPopHerkunft" IN (100, 200, 210, 300)
+  AND lasttpopber."TPopBerEntwicklung" = 8
+  AND apflora.tpop."TPopId" NOT IN (
+    -- Ansiedlungen since apflora.tpopber."TPopBerJahr"
+    SELECT
+      apflora.tpopmassn."TPopId"
+    FROM
+      apflora.tpopmassn
+    WHERE
+      apflora.tpopmassn."TPopId" = apflora.tpop."TPopId"
+      AND apflora.tpopmassn."TPopMassnTyp" BETWEEN 1 AND 3
+      AND apflora.tpopmassn."TPopMassnJahr" IS NOT NULL
+      AND apflora.tpopmassn."TPopMassnJahr" > lasttpopber."TPopBerJahr"
+  );
+
+DROP VIEW IF EXISTS apflora.v_qk2_pop_statusaktuellletzterpopbererloschen CASCADE;
+CREATE OR REPLACE VIEW apflora.v_qk2_pop_statusaktuellletzterpopbererloschen AS
+WITH lastpopber AS (
+  SELECT DISTINCT ON ("PopId")
+    "PopId",
+    "PopBerJahr",
+    "PopBerEntwicklung"
+  FROM
+    apflora.popber
+  WHERE
+    "PopBerJahr" IS NOT NULL
+  ORDER BY
+    "PopId",
+    "PopBerJahr" DESC
+)
+SELECT
+  apflora.projekt."ProjId",
+  apflora.ap."ApArtId",
+  'Population: Status ist "aktuell" (ursprünglich oder angesiedelt) oder potentieller Wuchsort; der letzte Populations-Bericht meldet aber "erloschen" und es gab seither keine Ansiedlung:'::text AS "hw",
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId"]::text[] AS "url",
+  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr")]::text[] AS text
+FROM
+  apflora.projekt
+  INNER JOIN
+    apflora.ap
+    INNER JOIN
+      apflora.pop
+      INNER JOIN lastpopber
+      ON apflora.pop."PopId" = lastpopber."PopId"
+    ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
+  ON apflora.projekt."ProjId" = apflora.ap."ProjId"
+WHERE
+  apflora.pop."PopHerkunft" IN (100, 200, 210, 300)
+  AND lastpopber."PopBerEntwicklung" = 8
+  AND apflora.pop."PopId" NOT IN (
+    -- Ansiedlungen since lastpopber."PopBerJahr"
+    SELECT DISTINCT
+      apflora.tpop."PopId"
+    FROM
+      apflora.tpop
+      INNER JOIN
+        apflora.tpopmassn
+        ON apflora.tpop."TPopId" = apflora.tpopmassn."TPopId"
+    WHERE
+      apflora.tpopmassn."TPopMassnTyp" BETWEEN 1 AND 3
+      AND apflora.tpopmassn."TPopMassnJahr" > lastpopber."PopBerJahr"
+  );
+
+DROP VIEW IF EXISTS apflora.v_qk2_tpop_statuserloschenletztertpopberzunehmend CASCADE;
+CREATE OR REPLACE VIEW apflora.v_qk2_tpop_statuserloschenletztertpopberzunehmend AS
+WITH lasttpopber AS (
+  SELECT DISTINCT ON ("TPopId")
+    "TPopId",
+    "TPopBerJahr",
+    "TPopBerEntwicklung"
+  FROM
+    apflora.tpopber
+  WHERE
+    "TPopBerJahr" IS NOT NULL
+  ORDER BY
+    "TPopId",
+    "TPopBerJahr" DESC
+)
+SELECT
+  apflora.projekt."ProjId",
+  apflora.ap."ApArtId",
+  'Teilpopulation: Status ist "erloschen" (ursprünglich oder angesiedelt), Ansaatversuch oder potentieller Wuchsort; der letzte Teilpopulations-Bericht meldet aber "zunehmend" und es gab seither keine Ansiedlung:'::text AS "hw",
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId"]::text[] AS "url",
+  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop."TPopNr")]::text[] AS text
+FROM
+  apflora.projekt
+  INNER JOIN
+    apflora.ap
+    INNER JOIN
+      apflora.pop
+      INNER JOIN
+        apflora.tpop
+        INNER JOIN lasttpopber
+        ON apflora.tpop."TPopId" = lasttpopber."TPopId"
+      ON apflora.pop."PopId" = apflora.tpop."PopId"
+    ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
+  ON apflora.projekt."ProjId" = apflora.ap."ProjId"
+WHERE
+  apflora.tpop."TPopHerkunft" IN (101, 201, 202, 211, 300)
+  AND lasttpopber."TPopBerEntwicklung" = 3
+  AND apflora.tpop."TPopId" NOT IN (
+    -- Ansiedlungen since apflora.tpopber."TPopBerJahr"
+    SELECT
+      apflora.tpopmassn."TPopId"
+    FROM
+      apflora.tpopmassn
+    WHERE
+      apflora.tpopmassn."TPopId" = apflora.tpop."TPopId"
+      AND apflora.tpopmassn."TPopMassnTyp" BETWEEN 1 AND 3
+      AND apflora.tpopmassn."TPopMassnJahr" IS NOT NULL
+      AND apflora.tpopmassn."TPopMassnJahr" > lasttpopber."TPopBerJahr"
+  );
+
+DROP VIEW IF EXISTS apflora.v_qk2_pop_statuserloschenletzterpopberzunehmend CASCADE;
+CREATE OR REPLACE VIEW apflora.v_qk2_pop_statuserloschenletzterpopberzunehmend AS
+WITH lastpopber AS (
+  SELECT DISTINCT ON ("PopId")
+    "PopId",
+    "PopBerJahr",
+    "PopBerEntwicklung"
+  FROM
+    apflora.popber
+  WHERE
+    "PopBerJahr" IS NOT NULL
+  ORDER BY
+    "PopId",
+    "PopBerJahr" DESC
+)
+SELECT
+  apflora.projekt."ProjId",
+  apflora.ap."ApArtId",
+  'Population: Status ist "erloschen" (ursprünglich oder angesiedelt), Ansaatversuch oder potentieller Wuchsort; der letzte Populations-Bericht meldet aber "zunehmend" und es gab seither keine Ansiedlung:'::text AS "hw",
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId"]::text[] AS "url",
+  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr")]::text[] AS text
+FROM
+  apflora.projekt
+  INNER JOIN
+    apflora.ap
+    INNER JOIN
+      apflora.pop
+      INNER JOIN lastpopber
+      ON apflora.pop."PopId" = lastpopber."PopId"
+    ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
+  ON apflora.projekt."ProjId" = apflora.ap."ProjId"
+WHERE
+  apflora.pop."PopHerkunft" IN (101, 201, 202, 211, 300)
+  AND lastpopber."PopBerEntwicklung" = 3
+  AND apflora.pop."PopId" NOT IN (
+    -- Ansiedlungen since lastpopber."PopBerJahr"
+    SELECT DISTINCT
+      apflora.tpop."PopId"
+    FROM
+      apflora.tpop
+      INNER JOIN
+        apflora.tpopmassn
+        ON apflora.tpop."TPopId" = apflora.tpopmassn."TPopId"
+    WHERE
+      apflora.tpopmassn."TPopMassnTyp" BETWEEN 1 AND 3
+      AND apflora.tpopmassn."TPopMassnJahr" > lastpopber."PopBerJahr"
+  );
