@@ -7922,3 +7922,90 @@ WHERE
       apflora.tpop."PopId" = apflora.pop."PopId"
       AND apflora.tpop."TPopHerkunft" IN (100, 101, 210, 200, 201, 300)
   );
+
+DROP VIEW IF EXISTS apflora.v_qk2_pop_status200tpopstatusunzulaessig CASCADE;
+CREATE OR REPLACE VIEW apflora.v_qk2_pop_status200tpopstatusunzulaessig AS
+SELECT
+  apflora.projekt."ProjId",
+  apflora.ap."ApArtId",
+  'Population: Status ist "angesiedelt nach Beginn AP, aktuell". Es gibt Teil-Populationen mit nicht zulässigen Stati ("ursprünglich", "angesiedelt vor Beginn AP, aktuell"):'::text AS "hw",
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId"]::text[] AS "url",
+  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr")]::text[] AS text
+FROM
+  apflora.projekt
+  INNER JOIN
+    apflora.ap
+    INNER JOIN
+      apflora.pop
+    ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
+  ON apflora.projekt."ProjId" = apflora.ap."ProjId"
+WHERE
+  apflora.pop."PopHerkunft" = 200
+  AND apflora.pop."PopId" IN (
+    -- Ansiedlungen since lastpopber."PopBerJahr"
+    SELECT DISTINCT
+      apflora.tpop."PopId"
+    FROM
+      apflora.tpop
+    WHERE
+      apflora.tpop."PopId" = apflora.pop."PopId"
+      AND apflora.tpop."TPopHerkunft" IN (100, 101, 210)
+  );
+
+DROP VIEW IF EXISTS apflora.v_qk2_pop_status210tpopstatusunzulaessig CASCADE;
+CREATE OR REPLACE VIEW apflora.v_qk2_pop_status210tpopstatusunzulaessig AS
+SELECT
+  apflora.projekt."ProjId",
+  apflora.ap."ApArtId",
+  'Population: Status ist "angesiedelt vor Beginn AP, aktuell". Es gibt Teil-Populationen mit nicht zulässigen Stati ("ursprünglich"):'::text AS "hw",
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId"]::text[] AS "url",
+  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr")]::text[] AS text
+FROM
+  apflora.projekt
+  INNER JOIN
+    apflora.ap
+    INNER JOIN
+      apflora.pop
+    ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
+  ON apflora.projekt."ProjId" = apflora.ap."ProjId"
+WHERE
+  apflora.pop."PopHerkunft" = 210
+  AND apflora.pop."PopId" IN (
+    -- Ansiedlungen since lastpopber."PopBerJahr"
+    SELECT DISTINCT
+      apflora.tpop."PopId"
+    FROM
+      apflora.tpop
+    WHERE
+      apflora.tpop."PopId" = apflora.pop."PopId"
+      AND apflora.tpop."TPopHerkunft" IN (100, 101)
+  );
+
+DROP VIEW IF EXISTS apflora.v_qk2_pop_status101tpopstatusanders CASCADE;
+CREATE OR REPLACE VIEW apflora.v_qk2_pop_status101tpopstatusanders AS
+SELECT
+  apflora.projekt."ProjId",
+  apflora.ap."ApArtId",
+  'Population: Status ist "ursprünglich, erloschen". Es gibt Teil-Populationen mit abweichendem Status:'::text AS "hw",
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId"]::text[] AS "url",
+  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr")]::text[] AS text
+FROM
+  apflora.projekt
+  INNER JOIN
+    apflora.ap
+    INNER JOIN
+      apflora.pop
+    ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
+  ON apflora.projekt."ProjId" = apflora.ap."ProjId"
+WHERE
+  apflora.pop."PopHerkunft" = 101
+  AND apflora.pop."PopId" IN (
+    -- Ansiedlungen since lastpopber."PopBerJahr"
+    SELECT DISTINCT
+      apflora.tpop."PopId"
+    FROM
+      apflora.tpop
+    WHERE
+      apflora.tpop."PopId" = apflora.pop."PopId"
+      AND apflora.tpop."TPopHerkunft" <> 101
+  );

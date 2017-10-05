@@ -84,29 +84,57 @@ const fetchQk = async ({
       type: 'view',
       name: 'v_qk2_pop_ohnetpopmitgleichemstatus',
     },
-    // Status ist "potentieller Wuchs-/Ansiedlungsort". Es gibt aber Teil-Populationen mit abweichendem Status:
+    // Status ist "potentieller Wuchs-/Ansiedlungsort".
+    // Es gibt aber Teil-Populationen mit abweichendem Status:
     {
       type: 'view',
       name: 'v_qk2_pop_status300tpopstatusanders',
     },
-    // Status ist "Ansaatversuch". Es gibt Teil-Populationen mit nicht zulässigen Stati ("ursprünglich" oder "angesiedelt, aktuell"):
+    // Status ist "Ansaatversuch".
+    // Es gibt Teil-Populationen mit nicht zulässigen Stati
+    // ("ursprünglich" oder "angesiedelt, aktuell"):
     {
       type: 'view',
       name: 'v_qk2_pop_status201tpopstatusunzulaessig',
     },
-    // Status ist "angesiedelt nach Beginn AP, erloschen/nicht etabliert". Es gibt Teil-Populationen mit abweichendem Status:
+    // Status ist "angesiedelt nach Beginn AP, erloschen/nicht etabliert".
+    // Es gibt Teil-Populationen mit abweichendem Status:
     {
       type: 'view',
       name: 'v_qk2_pop_status202tpopstatusanders',
     },
-    // Status ist "angesiedelt vor Beginn AP, erloschen/nicht etabliert". Es gibt Teil-Populationen mit nicht zulässigen Stati ("ursprünglich", "angesiedelt, aktuell", "Ansaatversuch", "potentieller Wuchsort"):
+    // Status ist "angesiedelt vor Beginn AP, erloschen/nicht etabliert".
+    // Es gibt Teil-Populationen mit nicht zulässigen Stati
+    // ("ursprünglich", "angesiedelt, aktuell", "Ansaatversuch", "potentieller Wuchsort"):
     {
       type: 'view',
       name: 'v_qk2_pop_status211tpopstatusunzulaessig',
     },
+    // Status ist "angesiedelt nach Beginn AP, aktuell".
+    // Es gibt Teil-Populationen mit nicht zulässigen Stati
+    // ("ursprünglich", "angesiedelt vor Beginn AP, aktuell"):
+    {
+      type: 'view',
+      name: 'v_qk2_pop_status200tpopstatusunzulaessig',
+    },
+    // Status ist "angesiedelt vor Beginn AP, aktuell".
+    // Es gibt Teil-Populationen mit nicht zulässigen Stati ("ursprünglich"):
+    {
+      type: 'view',
+      name: 'v_qk2_pop_status210tpopstatusunzulaessig',
+    },
+    // Status ist "ursprünglich, erloschen".
+    // Es gibt Teil-Populationen mit abweichendem Status:
+    {
+      type: 'view',
+      name: 'v_qk2_pop_status101tpopstatusanders',
+    },
 
     // Stati mit letztem Bericht vergleichen
-    // Status ist "erloschen" (ursprünglich oder angesiedelt), Ansaatversuch oder potentieller Wuchsort; der letzte Populations-Bericht meldet aber "zunehmend" und es gab seither keine Ansiedlung:
+    // Status ist "erloschen" (ursprünglich oder angesiedelt),
+    // Ansaatversuch oder potentieller Wuchsort;
+    // der letzte Populations-Bericht meldet aber "zunehmend"
+    // und es gab seither keine Ansiedlung:
     { type: 'view', name: 'v_qk2_pop_statuserloschenletzterpopberzunehmend' },
     // Status ist "erloschen" (ursprünglich oder angesiedelt), Ansaatversuch oder potentieller Wuchsort; der letzte Populations-Bericht meldet aber "stabil" und es gab seither keine Ansiedlung:
     { type: 'view', name: 'v_qk2_pop_statuserloschenletzterpopberstabil' },
@@ -160,9 +188,10 @@ const fetchQk = async ({
     // Status ist "erloschen" (ursprünglich oder angesiedelt), Ansaatversuch oder potentieller Wuchsort; der letzte Teilpopulations-Bericht meldet aber "unsicher" und es gab seither keine Ansiedlung:
     { type: 'view', name: 'v_qk2_tpop_statuserloschenletztertpopberunsicher' },
     // Status ist "erloschen" (ursprünglich oder angesiedelt), Ansaatversuch oder potentieller Wuchsort; der letzte Teilpopulations-Bericht meldet aber "zunehmend" und es gab seither keine Ansiedlung:
-    { type: 'view', name: 'v_qk2_tpop_statuserloschenletzterpopberzunehmend' },
+    { type: 'view', name: 'v_qk2_tpop_statuserloschenletztertpopberzunehmend' },
 
     // Teilpopulation: Status ist "erloschen", der letzte Teilpopulations-Bericht meldet aber "aktuell"
+    // ????? popber aktuell????
     { type: 'view', name: 'v_qk2_tpop_statuserloschenletzterpopberaktuell' },
     // tpop ohne Nr/Flurname/Status/bekannt seit/Koordinaten
     { type: 'view', name: 'v_qk2_tpop_ohnenr' },
