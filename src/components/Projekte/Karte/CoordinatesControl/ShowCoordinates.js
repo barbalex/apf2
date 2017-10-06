@@ -44,7 +44,14 @@ const ShowCoordinates = ({
     coord = `${x}, ${y}`
   }
 
-  return <StyledDiv onClick={onClickCoordinates}>{coord}</StyledDiv>
+  return (
+    <StyledDiv
+      onClick={onClickCoordinates}
+      title="Klicken um Koordinaten zu suchen"
+    >
+      {coord}
+    </StyledDiv>
+  )
 }
 
 export default enhance(ShowCoordinates)
