@@ -6,6 +6,14 @@ import styled from 'styled-components'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 import withState from 'recompose/withState'
+import TextField from 'material-ui/TextField'
+import FlatButton from 'material-ui/FlatButton'
+import PanIcon from 'material-ui/svg-icons/action/pan-tool'
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
+import getMuiTheme from 'material-ui/styles/getMuiTheme'
+import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme'
+
+const theme = Object.assign({}, baseTheme)
 
 /**
  * TODO:
@@ -35,15 +43,13 @@ const GotoControl = styled(Control)`
   margin-bottom: 2px !important;
   margin-right: 5px !important;
 `
+const GotoInnerContainer = styled.div`display: flex;`
 
 const enhance = compose(
   inject('store'),
   withState('controlType', 'changeControlType', 'coordinates'),
   withHandlers({
-    onClickCoordinates: props => () => {
-      console.log('coordinates clicked')
-      props.changeControlType('goto')
-    },
+    onClickCoordinates: props => () => props.changeControlType('goto'),
     onClickGoto: props => () => {
       console.log('goto clicked')
     },
@@ -76,7 +82,13 @@ const MyControl = ({
   }
   return (
     <GotoControl position="bottomright">
-      <StyledDiv>"go to"</StyledDiv>
+      <MuiThemeProvider muiTheme={getMuiTheme(theme)}>
+        <GotoInnerContainer>
+          <TextField hintText="X-Koordinate" />
+          <TextField hintText="Y-Koordinate" />
+          <FlatButton icon={<PanIcon />} />
+        </GotoInnerContainer>
+      </MuiThemeProvider>
     </GotoControl>
   )
 }
