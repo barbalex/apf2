@@ -6,12 +6,18 @@ import styled from 'styled-components'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 import withState from 'recompose/withState'
+import getContext from 'recompose/getContext'
 import TextField from 'material-ui/TextField'
 import FlatButton from 'material-ui/FlatButton'
 import PanIcon from 'material-ui/svg-icons/maps/my-location'
+import ClearIcon from 'material-ui/svg-icons/content/clear'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme'
+import PropTypes from 'prop-types'
+
+import epsg21781to4326 from '../../../modules/epsg21781to4326'
+import panCentreIcon from '../../../etc/panTo.png'
 
 const theme = Object.assign({}, baseTheme)
 
@@ -73,6 +79,8 @@ const enhance = compose(
   // https://medium.com/@jessebeach/dealing-with-focus-and-blur-in-a-composite-widget-in-react-90d3c3b49a9b
   withState('timeoutId', 'changeTimeoutId', ''),
   withState('gotoFocused', 'changeGotoFocused', false),
+  getContext({ map: PropTypes.object.isRequired }),
+  withState('panToMarker', 'changePanToMarker', null),
   withHandlers({
     onClickCoordinates: props => () => props.changeControlType('goto'),
     onFocusGotoContainer: props => () => {
@@ -80,6 +88,14 @@ const enhance = compose(
       clearTimeout(timeoutId)
       if (!gotoFocused) {
         changeGotoFocused(true)
+      }
+    },
+    onClickClear: props => () => {
+      const { panToMarker, map, changeX, changeY } = props
+      if (panToMarker) {
+        map.removeLayer(panToMarker)
+        changeX('')
+        changeY('')
       }
     },
     onBlurGotoContainer: props => () => {
@@ -97,10 +113,38 @@ const enhance = compose(
       })
       changeTimeoutId(timeoutId)
     },
+    /**
+     * for unknown reason
+     * onClickGoto happens TWICE
+     * which means marker passed first time
+     * is added to the map
+     * but marker passed second time is saved in state...
+     */
     onClickGoto: props => () => {
-      const { x, y, xError, yError } = props
+      const {
+        x,
+        y,
+        xError,
+        yError,
+        map,
+        changePanToMarker,
+        panToMarker,
+      } = props
       if (x && y && !xError && !yError) {
-        console.log('should go to')
+        const my4326 = epsg21781to4326(x, y)
+        const latLng = new window.L.LatLng(...my4326)
+        map.flyTo(latLng)
+        const marker = window.L.marker(latLng, {
+          title: `${x}/${y}`,
+          icon: window.L.icon({
+            iconUrl: panCentreIcon,
+            iconSize: [36, 36],
+          }),
+        })
+        if (!panToMarker) {
+          marker.addTo(map)
+          changePanToMarker(marker)
+        }
       }
     },
     onChangeX: props => event => {
@@ -156,6 +200,8 @@ const MyControl = ({
   onBlurY,
   onBlurGotoContainer,
   onFocusGotoContainer,
+  panToMarker,
+  onClickClear,
 }: {
   store: Object,
   controlType: string,
@@ -171,6 +217,8 @@ const MyControl = ({
   onBlurY: () => void,
   onBlurGotoContainer: () => void,
   onFocusGotoContainer: () => void,
+  panToMarker: Object,
+  onClickClear: () => void,
 }) => {
   if (controlType === 'coordinates') {
     let [x, y] = store.map.mouseCoordEpsg21781
@@ -218,6 +266,12 @@ const MyControl = ({
             icon={<PanIcon />}
             onClick={onClickGoto}
             disabled={!(x && y && xIsValid(x) && yIsValid(y))}
+          />
+          <GotoButton
+            title="Markierung und Koordinaten entfernen"
+            icon={<ClearIcon />}
+            onClick={onClickClear}
+            disabled={!panToMarker}
           />
         </GotoInnerContainer>
       </MuiThemeProvider>
