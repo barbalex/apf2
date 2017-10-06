@@ -7,16 +7,11 @@ import localizeTpop from '../action/localizeTpop'
 import setActiveBaseLayer from '../action/setActiveBaseLayer'
 import moveOverlay from '../action/moveOverlay'
 import moveApfloraLayer from '../action/moveApfloraLayer'
-import tpopIdsInsideFeatureCollection
-  from '../../modules/tpopIdsInsideFeatureCollection'
-import popIdsInsideFeatureCollection
-  from '../../modules/popIdsInsideFeatureCollection'
-import beobNichtBeurteiltIdsInsideFeatureCollection
-  from '../../modules/beobNichtBeurteiltIdsInsideFeatureCollection'
-import beobNichtZuzuordnenIdsInsideFeatureCollection
-  from '../../modules/beobNichtZuzuordnenIdsInsideFeatureCollection'
-import tpopBeobIdsInsideFeatureCollection
-  from '../../modules/tpopBeobIdsInsideFeatureCollection'
+import tpopIdsInsideFeatureCollection from '../../modules/tpopIdsInsideFeatureCollection'
+import popIdsInsideFeatureCollection from '../../modules/popIdsInsideFeatureCollection'
+import beobNichtBeurteiltIdsInsideFeatureCollection from '../../modules/beobNichtBeurteiltIdsInsideFeatureCollection'
+import beobNichtZuzuordnenIdsInsideFeatureCollection from '../../modules/beobNichtZuzuordnenIdsInsideFeatureCollection'
+import tpopBeobIdsInsideFeatureCollection from '../../modules/tpopBeobIdsInsideFeatureCollection'
 import fetchDetailplaene from '../action/fetchDetailplaene'
 
 export default (store: Object): void => {
@@ -196,6 +191,15 @@ export default (store: Object): void => {
       }
       store.map.mapFilter.filter = mapFilterItems.toGeoJSON()
     }),
+    panToX: '',
+    changePanToX: action('changePanToX', x => (store.map.panToX = x)),
+    panToY: '',
+    changePanToY: action('changePanToY', y => (store.map.panToY = y)),
+    panToMarker: null,
+    changePanToMarker: action(
+      'changePanToMarker',
+      marker => (store.map.panToMarker = marker)
+    ),
   })
   extendObservable(store.map.mapFilter.filter, {
     features: [],

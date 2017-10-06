@@ -51,7 +51,7 @@ import FullScreenControl from './FullScreenControl'
 import DrawControl from './DrawControl'
 // import PrintControl from './PrintControl'
 import PngControl from './PngControl'
-import CoordinatesControl from './CoordinatesControl'
+import CoordinatesControl from './CoordinatesControl/index.js'
 import epsg4326to21781 from '../../../modules/epsg4326to21781'
 
 const StyledMap = styled(Map)`
@@ -62,9 +62,7 @@ const StyledMap = styled(Map)`
     overflow: visible;
   }
 `
-const StyledMapLocalizing = styled(StyledMap)`
-  cursor: crosshair !important;
-`
+const StyledMapLocalizing = styled(StyledMap)`cursor: crosshair !important;`
 
 const enhance = compose(inject('store'), observer)
 
@@ -90,11 +88,12 @@ const Karte = ({ store }: { store: Object }) => {
   const ApfloraLayerComponents = {
     // MapFilter is used for filtering, need to return null
     MapFilter: () => null,
-    Pop: () =>
+    Pop: () => (
       <Pop
         visible={activeApfloraLayers.includes('Pop')}
         markers={store.map.pop.markers}
-      />,
+      />
+    ),
     Tpop: () => {
       if (
         store.map.beob.assigning ||
@@ -133,11 +132,12 @@ const Karte = ({ store }: { store: Object }) => {
         />
       )
     },
-    BeobNichtZuzuordnen: () =>
+    BeobNichtZuzuordnen: () => (
       <BeobCluster
         visible={activeApfloraLayers.includes('BeobNichtZuzuordnen')}
         markers={store.map.beobNichtZuzuordnen.markersClustered}
-      />,
+      />
+    ),
     TpopBeob: () => {
       if (
         store.map.beob.assigning ||
@@ -157,11 +157,12 @@ const Karte = ({ store }: { store: Object }) => {
         />
       )
     },
-    TpopBeobAssignPolylines: () =>
+    TpopBeobAssignPolylines: () => (
       <TpopBeobAssignPolylines
         visible={activeApfloraLayers.includes('TpopBeobAssignPolylines')}
         assignPolylines={store.map.tpopBeob.assignPolylines}
-      />,
+      />
+    ),
   }
   const OverlayComponents = {
     ZhUep: () => <ZhUepOverlay />,
