@@ -59,8 +59,8 @@ const GotoTextField = styled(TextField)`
   padding: 0 5px;
 `
 
-const xIsValid = (x: number) => !(x < 470000 || x > 850000)
-const yIsValid = (y: number) => !(y < 62000 || y > 320000)
+const xIsValid = (x: number) => !x || (x > 470000 && x < 850000)
+const yIsValid = (y: number) => !y || (y > 62000 && y < 320000)
 
 const enhance = compose(
   inject('store'),
