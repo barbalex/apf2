@@ -18,7 +18,7 @@ import qkFolderNodes from '../../modules/nodes/qkFolder'
 import beobNichtZuzuordnenFolderNodes from '../../modules/nodes/beobNichtZuzuordnenFolder'
 import beobzuordnungFolderNodes from '../../modules/nodes/beobzuordnungFolder'
 import assozartFolderNodes from '../../modules/nodes/assozartFolder'
-import beobArtFolderNodes from '../../modules/nodes/beobArtFolder'
+import beobartFolderNodes from '../../modules/nodes/beobartFolder'
 import idealbiotopFolderNodes from '../../modules/nodes/idealbiotopFolder'
 import berFolderNodes from '../../modules/nodes/berFolder'
 import apberFolderNodes from '../../modules/nodes/apberFolder'
@@ -121,7 +121,7 @@ export default (store: Object, tree: Object): Array<Object> => {
         ...berFolderNodes(store, tree, projId, apArtId),
         ...idealbiotopFolderNodes(store, tree, projId, apArtId),
         ...assozartFolderNodes(store, tree, projId, apArtId),
-        ...beobArtFolderNodes(store, tree, projId, apArtId),
+        ...beobartFolderNodes(store, tree, projId, apArtId),
         ...beobzuordnungFolderNodes(store, tree, projId, apArtId),
         ...beobNichtZuzuordnenFolderNodes(store, tree, projId, apArtId),
         ...qkFolderNodes(store, tree, projId, apArtId),
