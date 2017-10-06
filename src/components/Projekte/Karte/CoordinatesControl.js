@@ -65,8 +65,8 @@ const GotoTextField = styled(TextField)`
   padding: 0 5px;
 `
 
-const xIsValid = (x: number) => !x || (x > 470000 && x < 850000)
-const yIsValid = (y: number) => !y || (y > 62000 && y < 320000)
+const xIsValid = (x: ?number) => !x || (x >= 470000 && x <= 850000)
+const yIsValid = (y: ?number) => !y || (y >= 62000 && y <= 320000)
 
 const enhance = compose(
   inject('store'),
@@ -82,7 +82,11 @@ const enhance = compose(
   getContext({ map: PropTypes.object.isRequired }),
   withState('panToMarker', 'changePanToMarker', null),
   withHandlers({
-    onClickCoordinates: props => () => props.changeControlType('goto'),
+    onClickCoordinates: props => () => {
+      props.changeControlType('goto')
+      // console.log('xkoordField:', xkoordField)
+      // xkoordField && xkoordField.setFocus()
+    },
     onFocusGotoContainer: props => () => {
       const { timeoutId, gotoFocused, changeGotoFocused } = props
       clearTimeout(timeoutId)
@@ -92,11 +96,9 @@ const enhance = compose(
     },
     onClickClear: props => () => {
       const { panToMarker, map, changeX, changeY } = props
-      if (panToMarker) {
-        map.removeLayer(panToMarker)
-        changeX('')
-        changeY('')
-      }
+      panToMarker && map.removeLayer(panToMarker)
+      changeX('')
+      changeY('')
     },
     onBlurGotoContainer: props => () => {
       const {
@@ -250,6 +252,7 @@ const MyControl = ({
             onBlur={onBlurX}
             hintText="X-Koordinate"
             errorText={xError}
+            ref={onRef}
           />
           <GotoTextField
             type="number"
@@ -271,7 +274,7 @@ const MyControl = ({
             title="Markierung und Koordinaten entfernen"
             icon={<ClearIcon />}
             onClick={onClickClear}
-            disabled={!panToMarker}
+            disabled={!(panToMarker || x || y)}
           />
         </GotoInnerContainer>
       </MuiThemeProvider>
