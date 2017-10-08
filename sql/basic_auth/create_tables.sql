@@ -116,8 +116,10 @@ $$ language plpgsql;
 -- permissions that allow anonymous users to create accounts
 -- and attempt to log in
 create role anon;
-create role authenticator with login password 'secret' noinherit in group anon, apflora_artverantwortlich, z;
+create role authenticator with login password 'secret' noinherit;
+grant anon to authenticator;
 grant connect on database apflora to authenticator;
+grant connect on database apflora to anon;
 
 grant usage on schema public, basic_auth, apflora, request to anon;
 grant select on table pg_authid, basic_auth.users to anon;
