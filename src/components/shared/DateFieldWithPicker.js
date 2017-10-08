@@ -130,10 +130,7 @@ class MyDatePicker extends Component {
       onBlur,
       onFocus,
     } = this.props
-    console.log('DateFieldWithPicker: value:', value)
     const valueDate = value ? new Date(value) : {}
-    console.log('DateFieldWithPicker: valueDate:', valueDate)
-    console.log('DateFieldWithPicker: stringValue:', stringValue)
 
     return (
       <Container>
