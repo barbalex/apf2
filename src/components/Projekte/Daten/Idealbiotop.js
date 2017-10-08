@@ -78,6 +78,7 @@ class Idealbiotop extends Component {
         <FormTitle tree={tree} title="Idealbiotop" />
         <FieldsContainer data-width={width}>
           <DateFieldWithPicker
+            key={`${activeDataset.row.IbApArtId}IbErstelldatum`}
             tree={tree}
             label="Erstelldatum"
             fieldName="IbErstelldatum"
