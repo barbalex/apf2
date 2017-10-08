@@ -219,6 +219,7 @@ class Apber extends Component {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <DateFieldWithPicker
+            key={`${activeDataset.row.JBerId}JBerDatum`}
             tree={tree}
             label="Datum"
             fieldName="JBerDatum"

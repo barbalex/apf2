@@ -42,9 +42,11 @@ const DatePickerDiv = styled.div`
 
 const enhance = compose(
   // stringValue is shown to user
-  withState('stringValue', 'changeStringValue', props =>
-    format(props.value, 'DD.MM.YYYY')
-  ),
+  withState('stringValue', 'changeStringValue', props => {
+    const { value } = props
+    if (value) return format(props.value, 'DD.MM.YYYY')
+    return ''
+  }),
   // on bluring the textfield, changes are only written do db if value has changed
   // so when the textfield is focused the value is saved to state in order to know
   // if it has changed on blur
@@ -128,8 +130,10 @@ class MyDatePicker extends Component {
       onBlur,
       onFocus,
     } = this.props
-
+    console.log('DateFieldWithPicker: value:', value)
     const valueDate = value ? new Date(value) : {}
+    console.log('DateFieldWithPicker: valueDate:', valueDate)
+    console.log('DateFieldWithPicker: stringValue:', stringValue)
 
     return (
       <Container>
