@@ -69,7 +69,7 @@
     "react-reflex": "2.0.10",
     "react-sortable-hoc": "0.6.8",
     "react-virtualized": "9.10.1",
-    "recompose": "0.26.0",
+    "recompose": "0.25.1",
     "styled-components": "2.2.1"
   },
   "scripts": {
