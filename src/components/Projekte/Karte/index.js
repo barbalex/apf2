@@ -21,6 +21,7 @@ import OsmColor from './layers/OsmColor'
 import OsmBw from './layers/OsmBw'
 import SwissTopoPixelFarbe from './layers/SwisstopoPixelFarbe'
 import SwissTopoPixelGrau from './layers/SwisstopoPixelGrau'
+import SwisstopoSiegfriedErst from './layers/SwisstopoSiegfriedErst'
 import BingAerial from './layers/BingAerial'
 import ZhOrtho from './layers/ZhOrtho'
 import ZhOrthoIr from './layers/ZhOrthoIr'
@@ -180,6 +181,7 @@ const Karte = ({ store }: { store: Object }) => {
     OsmBw: () => <OsmBw />,
     SwissTopoPixelFarbe: () => <SwissTopoPixelFarbe />,
     SwissTopoPixelGrau: () => <SwissTopoPixelGrau />,
+    SwisstopoSiegfriedErst: () => <SwisstopoSiegfriedErst />,
     ZhUep: () => <ZhUep />,
     BingAerial: () => <BingAerial />,
     ZhOrtho: () => <ZhOrtho />,
@@ -198,7 +200,7 @@ const Karte = ({ store }: { store: Object }) => {
       // something errors
       // probably clustering function
       maxZoom={22}
-      minZoom={1}
+      minZoom={0}
       pop={store.map.pop.pops}
       onClick={event => {
         if (!!idOfTpopBeingLocalized) {

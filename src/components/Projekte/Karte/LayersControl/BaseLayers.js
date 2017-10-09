@@ -28,6 +28,10 @@ const LayersControl = ({ store }: { store: Object }) => {
     { label: 'OpenStreetMap grau', value: 'OsmBw' },
     { label: 'Swisstopo farbig', value: 'SwissTopoPixelFarbe' },
     { label: 'Swisstopo grau', value: 'SwissTopoPixelGrau' },
+    {
+      label: 'Swisstopo Siegriedkarte Erstausgabe',
+      value: 'SwisstopoSiegfriedErst',
+    },
     { label: 'ZH Übersichtsplan', value: 'ZhUep' },
     { label: 'Bing Luftbild', value: 'BingAerial' },
     { label: 'ZH Orthofoto Sommer RGB', value: 'ZhOrtho' },
