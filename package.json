@@ -17,11 +17,17 @@
   "dependenciesThatNeedToBeFixed": {
     "material-ui": {
       "version": "0.19.0",
-      "reason": "AutoComplete does not work on 0.19.1 and 0.19.2. Well: with self managed searchText it does"
+      "reason":
+        "AutoComplete does not work on 0.19.1 and 0.19.2. Well: with self managed searchText it does"
     },
     "get-urls": {
       "version": "5.0.1",
       "reason": "uses es6 but cra does not work with es6 libraries"
+    },
+    "leaflet": {
+      "version": "1.0.3",
+      "reason":
+        "tabs freeze when zooming beyond maxNativeZoom, see here: https://github.com/Leaflet/Leaflet/issues/5644"
     }
   },
   "dependencies": {
@@ -41,7 +47,7 @@
     "joi-browser": "10.6.1",
     "json2csv": "3.11.2",
     "jwt-decode": "2.2.0",
-    "leaflet": "1.2.0",
+    "leaflet": "1.0.3",
     "leaflet-draw": "0.4.12",
     "leaflet-easyprint": "2.1.8",
     "leaflet-image": "0.4.0",
