@@ -4,7 +4,7 @@ import { TileLayer } from 'react-leaflet'
 
 const OsmColorLayer = () => (
   <TileLayer
-    url="//{s}.tile.osm.org/{z}/{x}/{y}.png"
+    url="//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
     attribution="&copy; <a href=&quot;//osm.org/copyright&quot;>OpenStreetMap</a>"
     maxNativeZoom="19"
     minZoom="0"
