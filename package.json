@@ -26,6 +26,10 @@
     "leaflet": {
       "version": "1.0.3",
       "reason": "tabs freeze when zooming beyond maxNativeZoom, see here: https://github.com/Leaflet/Leaflet/issues/5644"
+    },
+    "moment": {
+      "version": "2.18.1",
+      "reason": "error on start: https://github.com/moment/moment/issues/4216"
     }
   },
   "dependencies": {
@@ -66,7 +70,7 @@
     "react-copy-to-clipboard": "5.0.1",
     "react-dom": "16.0.0",
     "react-file-download": "0.3.5",
-    "react-leaflet": "1.7.0",
+    "react-leaflet": "1.7.1",
     "react-leaflet-bing": "3.0.0",
     "react-leaflet-control": "1.4.0",
     "react-linkify": "0.2.1",
