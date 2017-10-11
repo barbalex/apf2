@@ -5,9 +5,9 @@
 import React from 'react'
 import { TileLayer } from 'react-leaflet'
 
-const SwissTopoSiegfriedErstLayer = () => (
+const SwissTopoDufourLayer = () => (
   <TileLayer
-    url="//wmts20.geo.admin.ch/1.0.0/ch.swisstopo.hiks-siegfried/default/19260101/3857/{z}/{x}/{y}.png"
+    url="//wmts20.geo.admin.ch/1.0.0/ch.swisstopo.hiks-dufour/default/18650101/3857/{z}/{x}/{y}.png"
     attribution="&copy; <a href=&quot;//swisstopo.ch&quot;>Swisstopo</a>"
     maxNativeZoom="18"
     minZoom="0"
@@ -15,4 +15,4 @@ const SwissTopoSiegfriedErstLayer = () => (
   />
 )
 
-export default SwissTopoSiegfriedErstLayer
+export default SwissTopoDufourLayer

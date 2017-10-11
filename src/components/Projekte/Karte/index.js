@@ -21,7 +21,8 @@ import OsmColor from './layers/OsmColor'
 import OsmBw from './layers/OsmBw'
 import SwissTopoPixelFarbe from './layers/SwisstopoPixelFarbe'
 import SwissTopoPixelGrau from './layers/SwisstopoPixelGrau'
-import SwisstopoSiegfriedErst from './layers/SwisstopoSiegfriedErst'
+import SwisstopoSiegfried from './layers/SwisstopoSiegfried'
+import SwisstopoDufour from './layers/SwisstopoDufour'
 import BingAerial from './layers/BingAerial'
 import ZhOrtho from './layers/ZhOrtho'
 import ZhOrthoIr from './layers/ZhOrthoIr'
@@ -181,7 +182,8 @@ const Karte = ({ store }: { store: Object }) => {
     OsmBw: () => <OsmBw />,
     SwissTopoPixelFarbe: () => <SwissTopoPixelFarbe />,
     SwissTopoPixelGrau: () => <SwissTopoPixelGrau />,
-    SwisstopoSiegfriedErst: () => <SwisstopoSiegfriedErst />,
+    SwisstopoSiegfried: () => <SwisstopoSiegfried />,
+    SwisstopoDufour: () => <SwisstopoDufour />,
     ZhUep: () => <ZhUep />,
     BingAerial: () => <BingAerial />,
     ZhOrtho: () => <ZhOrtho />,

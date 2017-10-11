@@ -29,8 +29,12 @@ const LayersControl = ({ store }: { store: Object }) => {
     { label: 'Swisstopo farbig', value: 'SwissTopoPixelFarbe' },
     { label: 'Swisstopo grau', value: 'SwissTopoPixelGrau' },
     {
-      label: 'Swisstopo Siegriedkarte Erstausgabe',
-      value: 'SwisstopoSiegfriedErst',
+      label: 'Swisstopo Siegfriedkarte (1870-1926)',
+      value: 'SwisstopoSiegfried',
+    },
+    {
+      label: 'Swisstopo Dufourkarte (1844-1864)',
+      value: 'SwisstopoDufour',
     },
     { label: 'ZH Übersichtsplan', value: 'ZhUep' },
     { label: 'Bing Luftbild', value: 'BingAerial' },
