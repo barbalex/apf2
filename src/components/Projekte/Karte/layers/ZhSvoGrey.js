@@ -10,9 +10,9 @@ const SvoGreyLayer = () => (
     transparent={true}
     version="1.3.0"
     format="image/png"
-    maxNativeZoom="18"
-    minZoom="0"
-    maxZoom="22"
+    maxNativeZoom={18}
+    minZoom={0}
+    maxZoom={22}
   />
 )
 
