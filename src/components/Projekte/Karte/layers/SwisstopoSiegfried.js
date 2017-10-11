@@ -1,7 +1,4 @@
 // @flow
-/**
- * unfortunately, this did not work, neither dufour
- */
 import React from 'react'
 import { TileLayer } from 'react-leaflet'
 
