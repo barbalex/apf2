@@ -36,9 +36,8 @@ import Errors from './components/Errors'
 import UpdateAvailable from './components/UpdateAvailable'
 import Messages from './components/Messages'
 import DownloadMessages from './components/DownloadMessages'
-import getActiveNodeArrayFromPathname from './store/action/getActiveNodeArrayFromPathname'
-import getUrlQuery from './store/action/getUrlQuery'
 import setLoginFromIdb from './store/action/setLoginFromIdb'
+import initiateDataFromUrl from './modules/initiateDataFromUrl'
 
 // service worker
 import registerServiceWorker from './registerServiceWorker'
@@ -82,6 +81,12 @@ import './index.css'
 
     await setLoginFromIdb(store)
 
+    // initiate activeNodeArray - but only if user is logged in
+    const { user } = store
+    if (user && user.name && user.role && user.token) {
+      initiateDataFromUrl(store)
+    }
+
     // turned off because of errors in production
     // const socket = window.io(apiBaseUrl)
     // socket.on('tabelle_update', payload => updateFromSocket(store, payload))
@@ -90,17 +95,6 @@ import './index.css'
       display: flex;
       flex-direction: column;
     `
-
-    // initiate activeNodeArray
-    const activeNodeArrayFromUrl = getActiveNodeArrayFromPathname()
-    store.tree.setActiveNodeArray(activeNodeArrayFromUrl)
-    store.tree.setLastClickedNode(activeNodeArrayFromUrl)
-    // need to set openNodes
-    store.tree.setOpenNodesFromActiveNodeArray()
-    // clone tree2 in case tree2 is open
-    store.tree.cloneActiveNodeArrayToTree2()
-    const urlQuery = getUrlQuery(window.location.search)
-    store.setUrlQuery(urlQuery)
 
     ReactDOM.render(
       <Provider store={store}>

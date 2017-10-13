@@ -21,7 +21,6 @@ function Store(): void {
   this.tellUserReadOnly = () => {}
   this.fetchLogin = () => {}
   this.logout = () => {}
-  this.setLoginFromIdb = () => {}
   this.insertBeobzuordnung = () => {}
   this.insertDataset = () => {}
   this.deleteDatasetDemand = () => {}

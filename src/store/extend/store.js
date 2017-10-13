@@ -17,7 +17,6 @@ import deleteDatasetExecute from '../action/deleteDatasetExecute'
 import listError from '../action/listError'
 import fetchLogin from '../action/fetchLogin'
 import logout from '../action/logout'
-import setLoginFromIdb from '../action/setLoginFromIdb'
 import deleteBeobzuordnung from '../action/deleteBeobzuordnung'
 import writeToStore from '../action/writeToStore'
 import moveTo from '../action/moveTo'
@@ -150,7 +149,6 @@ export default (store: Object): void => {
       fetchLogin(store, name, password)
     ),
     logout: action('logout', () => logout(store)),
-    setLoginFromIdb: action('setLoginFromIdb', () => setLoginFromIdb(store)),
     insertBeobzuordnung: action(
       'insertBeobzuordnung',
       (tree, beob, newKey, newValue) => {

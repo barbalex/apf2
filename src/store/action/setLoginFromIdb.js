@@ -17,8 +17,7 @@ export default (store: Object): void =>
         store.user.name = name
         store.user.role = role
         store.user.token = token
-        axios.defaults.headers.common['Authorization'] = token
-        store.messages.fetch()
+        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
       } else {
         store.logout()
       }
