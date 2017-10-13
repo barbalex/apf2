@@ -1,5 +1,4 @@
 // @flow
-/* eslint-disable no-console, jsx-a11y/no-static-element-interactions */
 
 import React from 'react'
 import { observer, inject } from 'mobx-react'
