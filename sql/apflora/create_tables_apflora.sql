@@ -814,19 +814,6 @@ CREATE INDEX ON apflora.tpopmassnber USING btree ("TPopId");
 CREATE INDEX ON apflora.tpopmassnber USING btree ("TPopMassnBerErfolgsbeurteilung");
 CREATE INDEX ON apflora.tpopmassnber USING btree ("TPopMassnBerJahr");
 
-DROP TABLE IF EXISTS apflora.user;
-CREATE TABLE apflora.user (
-  "UserId" SERIAL PRIMARY KEY,
-  "UserName" varchar(30) NOT NULL UNIQUE,
-  "Passwort" text NOT NULL,
-  "NurLesen" smallint DEFAULT '-1'
-);
-SELECT setval(pg_get_serial_sequence('apflora."user"', 'UserId'), coalesce(max("UserId"), 0) + 1, false) FROM apflora."user";
-COMMENT ON COLUMN apflora."user"."UserId" IS 'Primärschlüssel der Tabelle "user"';
-COMMENT ON COLUMN apflora."user"."UserName" IS 'Username';
-COMMENT ON COLUMN apflora."user"."Passwort" IS 'Passwort';
-COMMENT ON COLUMN apflora."user"."NurLesen" IS 'Hier -1 setzen, wenn ein User keine Daten ändern darf';
-
 DROP TABLE IF EXISTS apflora.message CASCADE;
 CREATE TABLE apflora.message (
   "id" SERIAL PRIMARY KEY,
