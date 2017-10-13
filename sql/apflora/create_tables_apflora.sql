@@ -18,7 +18,7 @@ CREATE TABLE apflora.adresse (
   "AdrEmail" text DEFAULT NULL,
   "freiwErfko" integer DEFAULT NULL,
   "EvabIdPerson" varchar(40) DEFAULT NULL,
-  "MutWann" date DEFAULT NULL,
+  "MutWann" date DEFAULT NOW(),
   "MutWer" varchar(20) DEFAULT NULL
 );
 COMMENT ON COLUMN apflora.adresse."AdrId" IS 'Primärschlüssel der Tabelle "adresse"';
@@ -41,7 +41,7 @@ CREATE TABLE apflora.ap (
   "ApBearb" integer DEFAULT NULL REFERENCES apflora.adresse ("AdrId") ON DELETE SET NULL ON UPDATE CASCADE,
   "ApArtwert" integer DEFAULT NULL,
   "ApGuid" UUID DEFAULT uuid_generate_v1mc(),
-  "MutWann" date DEFAULT NULL,
+  "MutWann" date DEFAULT NOW(),
   "MutWer" varchar(20) DEFAULT NULL
 );
 COMMENT ON COLUMN apflora.ap."ApArtId" IS 'Primärschlüssel der Tabelle "ap". = SISF-Nr';
@@ -72,7 +72,7 @@ CREATE TABLE apflora.ap_bearbstand_werte (
   "DomainCode" integer PRIMARY KEY,
   "DomainTxt" varchar(50) DEFAULT NULL,
   "DomainOrd" smallint DEFAULT NULL,
-  "MutWann" date DEFAULT NULL,
+  "MutWann" date DEFAULT NOW(),
   "MutWer" varchar(20) NOT NULL
 );
 COMMENT ON COLUMN apflora.ap_bearbstand_werte."MutWann" IS 'Wann wurde der Datensatz zuletzt geändert?';
@@ -83,7 +83,7 @@ CREATE TABLE apflora.ap_erfbeurtkrit_werte (
   "DomainCode" integer PRIMARY KEY,
   "DomainTxt" varchar(50) DEFAULT NULL,
   "DomainOrd" smallint DEFAULT NULL,
-  "MutWann" date DEFAULT NULL,
+  "MutWann" date DEFAULT NOW(),
   "MutWer" varchar(20) NOT NULL
 );
 COMMENT ON COLUMN apflora.ap_erfbeurtkrit_werte."MutWann" IS 'Wann wurde der Datensatz zuletzt geändert?';
@@ -94,7 +94,7 @@ CREATE TABLE apflora.ap_erfkrit_werte (
   "BeurteilId" integer PRIMARY KEY,
   "BeurteilTxt" varchar(50) DEFAULT NULL,
   "BeurteilOrd" smallint DEFAULT NULL,
-  "MutWann" date DEFAULT NULL,
+  "MutWann" date DEFAULT NOW(),
   "MutWer" varchar(20) NOT NULL
 );
 COMMENT ON COLUMN apflora.ap_erfkrit_werte."BeurteilTxt" IS 'Wie werden die durchgefuehrten Massnahmen beurteilt?';
@@ -106,7 +106,7 @@ CREATE TABLE apflora.ap_umsetzung_werte (
   "DomainCode" integer PRIMARY KEY,
   "DomainTxt" varchar(50) DEFAULT NULL,
   "DomainOrd" smallint DEFAULT NULL,
-  "MutWann" date DEFAULT NULL,
+  "MutWann" date DEFAULT NOW(),
   "MutWer" varchar(20) NOT NULL
 );
 COMMENT ON COLUMN apflora.ap_umsetzung_werte."MutWann" IS 'Wann wurde der Datensatz zuletzt geändert?';
@@ -130,7 +130,7 @@ CREATE TABLE apflora.apber (
   "JBerDTxt" text,
   "JBerDatum" date DEFAULT NULL,
   "JBerBearb" integer DEFAULT NULL REFERENCES apflora.adresse ("AdrId") ON DELETE SET NULL ON UPDATE CASCADE,
-  "MutWann" date DEFAULT NULL,
+  "MutWann" date DEFAULT NOW(),
   "MutWer" varchar(20) DEFAULT NULL
 );
 COMMENT ON COLUMN apflora.apber."JBerId" IS 'Primärschlüssel der Tabelle "apber"';
@@ -161,7 +161,7 @@ CREATE TABLE apflora.apberuebersicht (
   "ProjId" integer DEFAULT 1,
   "JbuJahr" smallint NOT NULL,
   "JbuBemerkungen" text,
-  "MutWann" date DEFAULT NULL,
+  "MutWann" date DEFAULT NOW(),
   "MutWer" varchar(20) DEFAULT NULL
 );
 COMMENT ON COLUMN apflora.apberuebersicht."ProjId" IS 'Zugehöriges Projekt. Zusammen mit JbuJahr Primärschlüssel der Tabelle "apberuebersicht"';
@@ -177,7 +177,7 @@ CREATE TABLE apflora.assozart (
   "AaApArtId" integer DEFAULT NULL REFERENCES apflora.ap ("ApArtId") ON DELETE CASCADE ON UPDATE CASCADE,
   "AaSisfNr" integer DEFAULT NULL REFERENCES beob.adb_eigenschaften ("TaxonomieId") ON DELETE SET NULL ON UPDATE CASCADE,
   "AaBem" text,
-  "MutWann" date DEFAULT NULL,
+  "MutWann" date DEFAULT NOW(),
   "MutWer" varchar(20) DEFAULT NULL
 );
 COMMENT ON COLUMN apflora.assozart."AaId" IS 'Primärschlüssel der Tabelle "assozart"';
@@ -196,7 +196,7 @@ CREATE TABLE apflora.beobzuordnung (
   "TPopId" integer DEFAULT NULL REFERENCES apflora.tpop ("TPopId") ON DELETE CASCADE ON UPDATE CASCADE,
   "BeobNichtZuordnen" smallint DEFAULT NULL,
   "BeobBemerkungen" text,
-  "BeobMutWann" date DEFAULT NULL,
+  "BeobMutWann" date DEFAULT NOW(),
   "BeobMutWer" varchar(20) DEFAULT NULL
 );
 COMMENT ON COLUMN apflora.beobzuordnung."BeobId" IS 'Primärschlüssel: ID aus beob.beob';
@@ -214,7 +214,7 @@ DROP TABLE IF EXISTS apflora.projekt;
 CREATE TABLE apflora.projekt (
   "ProjId" SERIAL PRIMARY KEY,
   "ProjName" varchar(150) DEFAULT NULL,
-  "MutWann" date DEFAULT NULL,
+  "MutWann" date DEFAULT NOW(),
   "MutWer" varchar(20) DEFAULT NULL
 );
 CREATE INDEX ON apflora.projekt USING btree ("ProjName");
@@ -230,7 +230,7 @@ CREATE TABLE apflora.ber (
   "BerJahr" smallint DEFAULT NULL,
   "BerTitel" text DEFAULT NULL,
   "BerURL" text DEFAULT NULL,
-  "MutWann" date DEFAULT NULL,
+  "MutWann" date DEFAULT NOW(),
   "MutWer" varchar(20) DEFAULT NULL
 );
 COMMENT ON COLUMN apflora.ber."BerId" IS 'Primärschlüssel der Tabelle "ber"';
@@ -250,7 +250,7 @@ CREATE TABLE apflora.erfkrit (
   "ApArtId" integer NOT NULL DEFAULT '0' REFERENCES apflora.ap ("ApArtId") ON DELETE CASCADE ON UPDATE CASCADE,
   "ErfkritErreichungsgrad" integer DEFAULT NULL REFERENCES apflora.ap_erfkrit_werte ("BeurteilId") ON DELETE SET NULL ON UPDATE CASCADE,
   "ErfkritTxt" text DEFAULT NULL,
-  "MutWann" date DEFAULT NULL,
+  "MutWann" date DEFAULT NOW(),
   "MutWer" varchar(20) DEFAULT NULL
 );
 COMMENT ON COLUMN apflora.erfkrit."ErfkritId" IS 'Primärschlüssel der Tabelle "erfkrit"';
@@ -291,7 +291,7 @@ CREATE TABLE apflora.idealbiotop (
   "IbStrauchschicht" text,
   "IbBaumschicht" text,
   "IbBemerkungen" text,
-  "MutWann" date DEFAULT NULL,
+  "MutWann" date DEFAULT NOW(),
   "MutWer" varchar(20) DEFAULT NULL
 );
 COMMENT ON COLUMN apflora.idealbiotop."IbApArtId" IS 'Primärschlüssel der Tabelle "idealbiotop". Gleichzeitig Fremdschlüssel aus der Tabelle "ap (1:1-Beziehung)';
@@ -329,7 +329,7 @@ CREATE TABLE apflora.pop (
   "PopXKoord" integer DEFAULT NULL,
   "PopYKoord" integer DEFAULT NULL,
   "PopGuid" UUID DEFAULT uuid_generate_v1mc(),
-  "MutWann" date DEFAULT NULL,
+  "MutWann" date DEFAULT NOW(),
   "MutWer" varchar(20) DEFAULT NULL
 );
 SELECT setval(pg_get_serial_sequence('apflora.pop', 'PopId'), coalesce(max("PopId"), 0) + 1, false) FROM apflora.pop;
@@ -360,7 +360,7 @@ CREATE TABLE apflora.pop_entwicklung_werte (
   "EntwicklungId" integer PRIMARY KEY,
   "EntwicklungTxt" varchar(60) DEFAULT NULL,
   "EntwicklungOrd" smallint DEFAULT NULL,
-  "MutWann" date DEFAULT NULL,
+  "MutWann" date DEFAULT NOW(),
   "MutWer" varchar(20) NOT NULL
 );
 COMMENT ON COLUMN apflora.pop_entwicklung_werte."MutWann" IS 'Wann wurde der Datensatz zuletzt geändert?';
@@ -372,7 +372,7 @@ CREATE TABLE apflora.pop_status_werte (
   "HerkunftId" integer PRIMARY KEY,
   "HerkunftTxt" varchar(60) DEFAULT NULL,
   "HerkunftOrd" smallint DEFAULT NULL,
-  "MutWann" date DEFAULT NULL,
+  "MutWann" date DEFAULT NOW(),
   "MutWer" varchar(20) DEFAULT NULL
 );
 COMMENT ON COLUMN apflora.pop_status_werte."HerkunftTxt" IS 'Beschreibung der Herkunft';
@@ -386,7 +386,7 @@ CREATE TABLE apflora.popber (
   "PopBerJahr" smallint DEFAULT NULL,
   "PopBerEntwicklung" integer DEFAULT NULL REFERENCES apflora.pop_entwicklung_werte ("EntwicklungId") ON DELETE SET NULL ON UPDATE CASCADE,
   "PopBerTxt" text,
-  "MutWann" date DEFAULT NULL,
+  "MutWann" date DEFAULT NOW(),
   "MutWer" varchar(20) DEFAULT NULL
   -- "MutWer" varchar(20) DEFAULT current_user
 );
@@ -409,7 +409,7 @@ CREATE TABLE apflora.popmassnber (
   "PopMassnBerJahr" smallint DEFAULT NULL,
   "PopMassnBerErfolgsbeurteilung" integer DEFAULT NULL REFERENCES apflora.tpopmassn_erfbeurt_werte ("BeurteilId") ON DELETE SET NULL ON UPDATE CASCADE,
   "PopMassnBerTxt" text,
-  "MutWann" date DEFAULT NULL,
+  "MutWann" date DEFAULT NOW(),
   "MutWer" varchar(20) DEFAULT NULL
 );
 SELECT setval(pg_get_serial_sequence('apflora.popmassnber', 'PopMassnBerId'), coalesce(max("PopMassnBerId"), 0) + 1, false) FROM apflora.popmassnber;
@@ -452,7 +452,7 @@ CREATE TABLE apflora.tpop (
   "TPopBewirtschaftung" text DEFAULT NULL,
   "TPopTxt" text,
   "TPopGuid" UUID DEFAULT uuid_generate_v1mc(),
-  "MutWann" date DEFAULT NULL,
+  "MutWann" date DEFAULT NOW(),
   "MutWer" varchar(20) DEFAULT NULL
 );
 SELECT setval(pg_get_serial_sequence('apflora.tpop', 'TPopId'), coalesce(max("TPopId"), 0) + 1, false) FROM apflora.tpop;
@@ -498,7 +498,7 @@ DROP TABLE IF EXISTS apflora.tpop_apberrelevant_werte;
 CREATE TABLE apflora.tpop_apberrelevant_werte (
   "DomainCode" integer PRIMARY KEY,
   "DomainTxt" text,
-  "MutWann" date DEFAULT NULL,
+  "MutWann" date DEFAULT NOW(),
   "MutWer" varchar(20) NOT NULL
 );
 COMMENT ON COLUMN apflora.tpop_apberrelevant_werte."MutWann" IS 'Wann wurde der Datensatz zuletzt geändert?';
@@ -509,7 +509,7 @@ CREATE TABLE apflora.tpop_entwicklung_werte (
   "EntwicklungCode" integer PRIMARY KEY,
   "EntwicklungTxt" varchar(50) DEFAULT NULL,
   "EntwicklungOrd" smallint DEFAULT NULL,
-  "MutWann" date DEFAULT NULL,
+  "MutWann" date DEFAULT NOW(),
   "MutWer" varchar(20) NOT NULL
 );
 COMMENT ON COLUMN apflora.tpop_entwicklung_werte."MutWann" IS 'Wann wurde der Datensatz zuletzt geändert?';
@@ -522,7 +522,7 @@ CREATE TABLE apflora.tpopber (
   "TPopBerJahr" smallint DEFAULT NULL,
   "TPopBerEntwicklung" integer DEFAULT NULL REFERENCES apflora.tpop_entwicklung_werte ("EntwicklungCode") ON DELETE SET NULL ON UPDATE CASCADE,
   "TPopBerTxt" text,
-  "MutWann" date DEFAULT NULL,
+  "MutWann" date DEFAULT NOW(),
   "MutWer" varchar(20) DEFAULT NULL
 );
 SELECT setval(pg_get_serial_sequence('apflora.tpopber', 'TPopBerId'), coalesce(max("TPopBerId"), 0) + 1, false) FROM apflora.tpopber;
@@ -584,7 +584,7 @@ CREATE TABLE apflora.tpopkontr (
   "TPopKontrMutDat" date DEFAULT NULL,
   "TPopKontrGuid" UUID DEFAULT uuid_generate_v1mc(),
   "ZeitGuid" UUID DEFAULT uuid_generate_v1mc(),
-  "MutWann" date DEFAULT NULL,
+  "MutWann" date DEFAULT NOW(),
   "MutWer" varchar(20) DEFAULT NULL
 );
 SELECT setval(pg_get_serial_sequence('apflora.tpopkontr', 'TPopKontrId'), coalesce(max("TPopKontrId"), 0) + 1, false) FROM apflora.tpopkontr;
@@ -650,7 +650,7 @@ CREATE TABLE apflora.tpopkontr_idbiotuebereinst_werte (
   "DomainCode" integer PRIMARY KEY,
   "DomainTxt" varchar(50) DEFAULT NULL,
   "DomainOrd" smallint DEFAULT NULL,
-  "MutWann" date DEFAULT NULL,
+  "MutWann" date DEFAULT NOW(),
   "MutWer" varchar(20) NOT NULL
 );
 COMMENT ON COLUMN apflora.tpopkontr_idbiotuebereinst_werte."MutWann" IS 'Wann wurde der Datensatz zuletzt geändert?';
@@ -661,7 +661,7 @@ CREATE TABLE apflora.tpopkontr_typ_werte (
   "DomainCode" integer PRIMARY KEY,
   "DomainTxt" varchar(50) DEFAULT NULL,
   "DomainOrd" smallint DEFAULT NULL,
-  "MutWann" date DEFAULT NULL,
+  "MutWann" date DEFAULT NOW(),
   "MutWer" varchar(20) NOT NULL
 );
 COMMENT ON COLUMN apflora.tpopkontr_typ_werte."MutWann" IS 'Wann wurde der Datensatz zuletzt geändert?';
@@ -675,7 +675,7 @@ CREATE TABLE apflora.tpopkontrzaehl (
   "Anzahl" integer DEFAULT NULL,
   "Zaehleinheit" integer DEFAULT NULL REFERENCES apflora.tpopkontrzaehl_einheit_werte ("ZaehleinheitCode") ON DELETE SET NULL ON UPDATE CASCADE,
   "Methode" integer DEFAULT NULL REFERENCES apflora.tpopkontrzaehl_methode_werte ("BeurteilCode") ON DELETE SET NULL ON UPDATE CASCADE,
-  "MutWann" date DEFAULT NULL,
+  "MutWann" date DEFAULT NOW(),
   "MutWer" varchar(20) DEFAULT NULL
 );
 SELECT setval(pg_get_serial_sequence('apflora.tpopkontrzaehl', 'TPopKontrZaehlId'), coalesce(max("TPopKontrZaehlId"), 0) + 1, false) FROM apflora.tpopkontrzaehl;
@@ -694,7 +694,7 @@ CREATE TABLE apflora.tpopkontrzaehl_einheit_werte (
   "ZaehleinheitCode" integer PRIMARY KEY,
   "ZaehleinheitTxt" varchar(50) DEFAULT NULL,
   "ZaehleinheitOrd" smallint DEFAULT NULL,
-  "MutWann" date DEFAULT NULL,
+  "MutWann" date DEFAULT NOW(),
   "MutWer" varchar(20) NOT NULL
 );
 COMMENT ON COLUMN apflora.tpopkontrzaehl_einheit_werte."MutWann" IS 'Wann wurde der Datensatz zuletzt geändert?';
@@ -705,7 +705,7 @@ CREATE TABLE apflora.tpopkontrzaehl_methode_werte (
   "BeurteilCode" integer PRIMARY KEY,
   "BeurteilTxt" varchar(50) DEFAULT NULL,
   "BeurteilOrd" smallint DEFAULT NULL,
-  "MutWann" date DEFAULT NULL,
+  "MutWann" date DEFAULT NOW(),
   "MutWer" varchar(20) NOT NULL
 );
 COMMENT ON COLUMN apflora.tpopkontrzaehl_methode_werte."MutWann" IS 'Wann wurde der Datensatz zuletzt geändert?';
@@ -734,7 +734,7 @@ CREATE TABLE apflora.tpopmassn (
   "TPopMassnAnsiedForm" text DEFAULT NULL,
   "TPopMassnAnsiedPflanzanordnung" text DEFAULT NULL,
   "TPopMassnGuid" UUID UNIQUE DEFAULT uuid_generate_v1mc(),
-  "MutWann" date DEFAULT NULL,
+  "MutWann" date DEFAULT NOW(),
   "MutWer" varchar(20) DEFAULT NULL
 );
 SELECT setval(pg_get_serial_sequence('apflora.tpopmassn', 'TPopMassnId'), coalesce(max("TPopMassnId"), 0) + 1, false) FROM apflora.tpopmassn;
@@ -772,7 +772,7 @@ CREATE TABLE apflora.tpopmassn_erfbeurt_werte (
   "BeurteilId" integer PRIMARY KEY,
   "BeurteilTxt" varchar(50) DEFAULT NULL,
   "BeurteilOrd" smallint DEFAULT NULL,
-  "MutWann" date DEFAULT NULL,
+  "MutWann" date DEFAULT NOW(),
   "MutWer" varchar(20) NOT NULL
 );
 COMMENT ON COLUMN apflora.tpopmassn_erfbeurt_werte."BeurteilTxt" IS 'Wie werden die durchgefuehrten Massnahmen beurteilt?';
@@ -785,7 +785,7 @@ CREATE TABLE apflora.tpopmassn_typ_werte (
   "MassnTypTxt" varchar(50) DEFAULT NULL,
   "MassnTypOrd" smallint DEFAULT NULL,
   "MassnAnsiedlung" smallint NOT NULL,
-  "MutWann" date DEFAULT NULL,
+  "MutWann" date DEFAULT NOW(),
   "MutWer" varchar(20) NOT NULL
 );
 COMMENT ON COLUMN apflora.tpopmassn_typ_werte."MassnAnsiedlung" IS 'Handelt es sich um eine Ansiedlung?';
@@ -799,7 +799,7 @@ CREATE TABLE apflora.tpopmassnber (
   "TPopMassnBerJahr" smallint DEFAULT NULL,
   "TPopMassnBerErfolgsbeurteilung" integer DEFAULT NULL REFERENCES apflora.tpopmassn_erfbeurt_werte ("BeurteilId") ON DELETE SET NULL ON UPDATE CASCADE,
   "TPopMassnBerTxt" text,
-  "MutWann" date DEFAULT NULL,
+  "MutWann" date DEFAULT NOW(),
   "MutWer" varchar(20) DEFAULT NULL
 );
 SELECT setval(pg_get_serial_sequence('apflora.tpopmassnber', 'TPopMassnBerId'), coalesce(max("TPopMassnBerId"), 0) + 1, false) FROM apflora.tpopmassnber;
@@ -854,7 +854,7 @@ CREATE TABLE apflora.ziel (
   "ZielTyp" integer DEFAULT NULL REFERENCES apflora.ziel_typ_werte ("ZieltypId") ON DELETE SET NULL ON UPDATE CASCADE,
   "ZielJahr" smallint DEFAULT NULL,
   "ZielBezeichnung" text,
-  "MutWann" date DEFAULT NULL,
+  "MutWann" date DEFAULT NOW(),
   "MutWer" varchar(20) DEFAULT NULL
 );
 SELECT setval(pg_get_serial_sequence('apflora.ziel', 'ZielId'), coalesce(max("ZielId"), 0) + 1, false) FROM apflora.ziel;
@@ -873,7 +873,7 @@ CREATE TABLE apflora.ziel_typ_werte (
   "ZieltypId" integer PRIMARY KEY,
   "ZieltypTxt" varchar(50) DEFAULT NULL,
   "ZieltypOrd" smallint DEFAULT NULL,
-  "MutWann" date DEFAULT NULL,
+  "MutWann" date DEFAULT NOW(),
   "MutWer" varchar(20) NOT NULL
 );
 COMMENT ON COLUMN apflora.ziel_typ_werte."ZieltypTxt" IS 'Beschreibung des Ziels';
@@ -887,7 +887,7 @@ CREATE TABLE apflora.zielber (
   "ZielBerJahr" smallint DEFAULT NULL,
   "ZielBerErreichung" text DEFAULT NULL,
   "ZielBerTxt" text DEFAULT NULL,
-  "MutWann" date DEFAULT NULL,
+  "MutWann" date DEFAULT NOW(),
   "MutWer" varchar(20) DEFAULT NULL
 );
 SELECT setval(pg_get_serial_sequence('apflora.zielber', 'ZielBerId'), coalesce(max("ZielBerId"), 0) + 1, false) FROM apflora.zielber;
