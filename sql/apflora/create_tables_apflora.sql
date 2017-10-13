@@ -19,7 +19,7 @@ CREATE TABLE apflora.adresse (
   "freiwErfko" integer DEFAULT NULL,
   "EvabIdPerson" varchar(40) DEFAULT NULL,
   "MutWann" date DEFAULT NOW(),
-  "MutWer" varchar(20) DEFAULT NULL
+  "MutWer" varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
 );
 COMMENT ON COLUMN apflora.adresse."AdrId" IS 'Primärschlüssel der Tabelle "adresse"';
 COMMENT ON COLUMN apflora.adresse."AdrName" IS 'Vor- und Nachname';
@@ -42,7 +42,7 @@ CREATE TABLE apflora.ap (
   "ApArtwert" integer DEFAULT NULL,
   "ApGuid" UUID DEFAULT uuid_generate_v1mc(),
   "MutWann" date DEFAULT NOW(),
-  "MutWer" varchar(20) DEFAULT NULL
+  "MutWer" varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
 );
 COMMENT ON COLUMN apflora.ap."ApArtId" IS 'Primärschlüssel der Tabelle "ap". = SISF-Nr';
 COMMENT ON COLUMN apflora.ap."ApStatus" IS 'In welchem Bearbeitungsstand befindet sich der AP?';
@@ -131,7 +131,7 @@ CREATE TABLE apflora.apber (
   "JBerDatum" date DEFAULT NULL,
   "JBerBearb" integer DEFAULT NULL REFERENCES apflora.adresse ("AdrId") ON DELETE SET NULL ON UPDATE CASCADE,
   "MutWann" date DEFAULT NOW(),
-  "MutWer" varchar(20) DEFAULT NULL
+  "MutWer" varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
 );
 COMMENT ON COLUMN apflora.apber."JBerId" IS 'Primärschlüssel der Tabelle "apber"';
 COMMENT ON COLUMN apflora.apber."JBerJahr" IS 'Für welches Jahr gilt der Bericht?';
@@ -162,7 +162,7 @@ CREATE TABLE apflora.apberuebersicht (
   "JbuJahr" smallint NOT NULL,
   "JbuBemerkungen" text,
   "MutWann" date DEFAULT NOW(),
-  "MutWer" varchar(20) DEFAULT NULL
+  "MutWer" varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
 );
 COMMENT ON COLUMN apflora.apberuebersicht."ProjId" IS 'Zugehöriges Projekt. Zusammen mit JbuJahr Primärschlüssel der Tabelle "apberuebersicht"';
 COMMENT ON COLUMN apflora.apberuebersicht."JbuJahr" IS 'Berichtsjahr. Zusammen mit ProjId Primärschlüssel der Tabelle "apberuebersicht"';
@@ -178,7 +178,7 @@ CREATE TABLE apflora.assozart (
   "AaSisfNr" integer DEFAULT NULL REFERENCES beob.adb_eigenschaften ("TaxonomieId") ON DELETE SET NULL ON UPDATE CASCADE,
   "AaBem" text,
   "MutWann" date DEFAULT NOW(),
-  "MutWer" varchar(20) DEFAULT NULL
+  "MutWer" varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
 );
 COMMENT ON COLUMN apflora.assozart."AaId" IS 'Primärschlüssel der Tabelle "assozart"';
 COMMENT ON COLUMN apflora.assozart."AaApArtId" IS 'Zugehöriger Aktionsplan. Fremdschlüssel aus der Tabelle "ap"';
@@ -197,7 +197,7 @@ CREATE TABLE apflora.beobzuordnung (
   "BeobNichtZuordnen" smallint DEFAULT NULL,
   "BeobBemerkungen" text,
   "BeobMutWann" date DEFAULT NOW(),
-  "BeobMutWer" varchar(20) DEFAULT NULL
+  "BeobMutWer" varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
 );
 COMMENT ON COLUMN apflora.beobzuordnung."BeobId" IS 'Primärschlüssel: ID aus beob.beob';
 COMMENT ON COLUMN apflora.beobzuordnung."TPopId" IS 'Dieser Teilpopulation wurde die Beobachtung zugeordnet. Fremdschlüssel aus der Tabelle "tpop"';
@@ -215,7 +215,7 @@ CREATE TABLE apflora.projekt (
   "ProjId" SERIAL PRIMARY KEY,
   "ProjName" varchar(150) DEFAULT NULL,
   "MutWann" date DEFAULT NOW(),
-  "MutWer" varchar(20) DEFAULT NULL
+  "MutWer" varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
 );
 CREATE INDEX ON apflora.projekt USING btree ("ProjName");
 COMMENT ON COLUMN apflora.projekt."MutWann" IS 'Wann wurde der Datensatz zuletzt geändert?';
@@ -231,7 +231,7 @@ CREATE TABLE apflora.ber (
   "BerTitel" text DEFAULT NULL,
   "BerURL" text DEFAULT NULL,
   "MutWann" date DEFAULT NOW(),
-  "MutWer" varchar(20) DEFAULT NULL
+  "MutWer" varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
 );
 COMMENT ON COLUMN apflora.ber."BerId" IS 'Primärschlüssel der Tabelle "ber"';
 COMMENT ON COLUMN apflora.ber."ApArtId" IS 'Zugehöriger Aktionsplan. Fremdschlüssel aus der Tabelle "ap"';
@@ -251,7 +251,7 @@ CREATE TABLE apflora.erfkrit (
   "ErfkritErreichungsgrad" integer DEFAULT NULL REFERENCES apflora.ap_erfkrit_werte ("BeurteilId") ON DELETE SET NULL ON UPDATE CASCADE,
   "ErfkritTxt" text DEFAULT NULL,
   "MutWann" date DEFAULT NOW(),
-  "MutWer" varchar(20) DEFAULT NULL
+  "MutWer" varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
 );
 COMMENT ON COLUMN apflora.erfkrit."ErfkritId" IS 'Primärschlüssel der Tabelle "erfkrit"';
 COMMENT ON COLUMN apflora.erfkrit."ApArtId" IS 'Zugehöriger Aktionsplan. Fremdschlüssel aus der Tabelle "ap"';
@@ -292,7 +292,7 @@ CREATE TABLE apflora.idealbiotop (
   "IbBaumschicht" text,
   "IbBemerkungen" text,
   "MutWann" date DEFAULT NOW(),
-  "MutWer" varchar(20) DEFAULT NULL
+  "MutWer" varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
 );
 COMMENT ON COLUMN apflora.idealbiotop."IbApArtId" IS 'Primärschlüssel der Tabelle "idealbiotop". Gleichzeitig Fremdschlüssel aus der Tabelle "ap (1:1-Beziehung)';
 COMMENT ON COLUMN apflora.idealbiotop."IbErstelldatum" IS 'Erstelldatum';
@@ -330,7 +330,7 @@ CREATE TABLE apflora.pop (
   "PopYKoord" integer DEFAULT NULL,
   "PopGuid" UUID DEFAULT uuid_generate_v1mc(),
   "MutWann" date DEFAULT NOW(),
-  "MutWer" varchar(20) DEFAULT NULL
+  "MutWer" varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
 );
 SELECT setval(pg_get_serial_sequence('apflora.pop', 'PopId'), coalesce(max("PopId"), 0) + 1, false) FROM apflora.pop;
 COMMENT ON COLUMN apflora.pop."PopId" IS 'Primärschlüssel der Tabelle "pop"';
@@ -373,7 +373,7 @@ CREATE TABLE apflora.pop_status_werte (
   "HerkunftTxt" varchar(60) DEFAULT NULL,
   "HerkunftOrd" smallint DEFAULT NULL,
   "MutWann" date DEFAULT NOW(),
-  "MutWer" varchar(20) DEFAULT NULL
+  "MutWer" varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
 );
 COMMENT ON COLUMN apflora.pop_status_werte."HerkunftTxt" IS 'Beschreibung der Herkunft';
 COMMENT ON COLUMN apflora.pop_status_werte."MutWann" IS 'Wann wurde der Datensatz zuletzt geändert?';
@@ -387,7 +387,7 @@ CREATE TABLE apflora.popber (
   "PopBerEntwicklung" integer DEFAULT NULL REFERENCES apflora.pop_entwicklung_werte ("EntwicklungId") ON DELETE SET NULL ON UPDATE CASCADE,
   "PopBerTxt" text,
   "MutWann" date DEFAULT NOW(),
-  "MutWer" varchar(20) DEFAULT NULL
+  "MutWer" varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
   -- "MutWer" varchar(20) DEFAULT current_user
 );
 SELECT setval(pg_get_serial_sequence('apflora.popber', 'PopBerId'), coalesce(max("PopBerId"), 0) + 1, false) FROM apflora.popber;
@@ -410,7 +410,7 @@ CREATE TABLE apflora.popmassnber (
   "PopMassnBerErfolgsbeurteilung" integer DEFAULT NULL REFERENCES apflora.tpopmassn_erfbeurt_werte ("BeurteilId") ON DELETE SET NULL ON UPDATE CASCADE,
   "PopMassnBerTxt" text,
   "MutWann" date DEFAULT NOW(),
-  "MutWer" varchar(20) DEFAULT NULL
+  "MutWer" varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
 );
 SELECT setval(pg_get_serial_sequence('apflora.popmassnber', 'PopMassnBerId'), coalesce(max("PopMassnBerId"), 0) + 1, false) FROM apflora.popmassnber;
 COMMENT ON COLUMN apflora.popmassnber."PopMassnBerId" IS 'Primärschlüssel der Tabelle "popmassnber"';
@@ -453,7 +453,7 @@ CREATE TABLE apflora.tpop (
   "TPopTxt" text,
   "TPopGuid" UUID DEFAULT uuid_generate_v1mc(),
   "MutWann" date DEFAULT NOW(),
-  "MutWer" varchar(20) DEFAULT NULL
+  "MutWer" varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
 );
 SELECT setval(pg_get_serial_sequence('apflora.tpop', 'TPopId'), coalesce(max("TPopId"), 0) + 1, false) FROM apflora.tpop;
 COMMENT ON COLUMN apflora.tpop."TPopId" IS 'Primärschlüssel der Tabelle "tpop"';
@@ -523,7 +523,7 @@ CREATE TABLE apflora.tpopber (
   "TPopBerEntwicklung" integer DEFAULT NULL REFERENCES apflora.tpop_entwicklung_werte ("EntwicklungCode") ON DELETE SET NULL ON UPDATE CASCADE,
   "TPopBerTxt" text,
   "MutWann" date DEFAULT NOW(),
-  "MutWer" varchar(20) DEFAULT NULL
+  "MutWer" varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
 );
 SELECT setval(pg_get_serial_sequence('apflora.tpopber', 'TPopBerId'), coalesce(max("TPopBerId"), 0) + 1, false) FROM apflora.tpopber;
 COMMENT ON COLUMN apflora.tpopber."TPopBerId" IS 'Primärschlüssel der Tabelle "tpopber"';
@@ -585,7 +585,7 @@ CREATE TABLE apflora.tpopkontr (
   "TPopKontrGuid" UUID DEFAULT uuid_generate_v1mc(),
   "ZeitGuid" UUID DEFAULT uuid_generate_v1mc(),
   "MutWann" date DEFAULT NOW(),
-  "MutWer" varchar(20) DEFAULT NULL
+  "MutWer" varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
 );
 SELECT setval(pg_get_serial_sequence('apflora.tpopkontr', 'TPopKontrId'), coalesce(max("TPopKontrId"), 0) + 1, false) FROM apflora.tpopkontr;
 COMMENT ON COLUMN apflora.tpopkontr."TPopKontrId" IS 'Primärschlüssel der Tabelle "tpopkontr"';
@@ -676,7 +676,7 @@ CREATE TABLE apflora.tpopkontrzaehl (
   "Zaehleinheit" integer DEFAULT NULL REFERENCES apflora.tpopkontrzaehl_einheit_werte ("ZaehleinheitCode") ON DELETE SET NULL ON UPDATE CASCADE,
   "Methode" integer DEFAULT NULL REFERENCES apflora.tpopkontrzaehl_methode_werte ("BeurteilCode") ON DELETE SET NULL ON UPDATE CASCADE,
   "MutWann" date DEFAULT NOW(),
-  "MutWer" varchar(20) DEFAULT NULL
+  "MutWer" varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
 );
 SELECT setval(pg_get_serial_sequence('apflora.tpopkontrzaehl', 'TPopKontrZaehlId'), coalesce(max("TPopKontrZaehlId"), 0) + 1, false) FROM apflora.tpopkontrzaehl;
 COMMENT ON COLUMN apflora.tpopkontrzaehl."Anzahl" IS 'Anzahl Zaehleinheiten';
@@ -735,7 +735,7 @@ CREATE TABLE apflora.tpopmassn (
   "TPopMassnAnsiedPflanzanordnung" text DEFAULT NULL,
   "TPopMassnGuid" UUID UNIQUE DEFAULT uuid_generate_v1mc(),
   "MutWann" date DEFAULT NOW(),
-  "MutWer" varchar(20) DEFAULT NULL
+  "MutWer" varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
 );
 SELECT setval(pg_get_serial_sequence('apflora.tpopmassn', 'TPopMassnId'), coalesce(max("TPopMassnId"), 0) + 1, false) FROM apflora.tpopmassn;
 COMMENT ON COLUMN apflora.tpopmassn."TPopMassnId" IS 'Primärschlüssel der Tabelle "tpopmassn"';
@@ -800,7 +800,7 @@ CREATE TABLE apflora.tpopmassnber (
   "TPopMassnBerErfolgsbeurteilung" integer DEFAULT NULL REFERENCES apflora.tpopmassn_erfbeurt_werte ("BeurteilId") ON DELETE SET NULL ON UPDATE CASCADE,
   "TPopMassnBerTxt" text,
   "MutWann" date DEFAULT NOW(),
-  "MutWer" varchar(20) DEFAULT NULL
+  "MutWer" varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
 );
 SELECT setval(pg_get_serial_sequence('apflora.tpopmassnber', 'TPopMassnBerId'), coalesce(max("TPopMassnBerId"), 0) + 1, false) FROM apflora.tpopmassnber;
 COMMENT ON COLUMN apflora.tpopmassnber."TPopMassnBerId" IS 'Primärschlüssel der Tabelle "tpopmassnber"';
@@ -855,7 +855,7 @@ CREATE TABLE apflora.ziel (
   "ZielJahr" smallint DEFAULT NULL,
   "ZielBezeichnung" text,
   "MutWann" date DEFAULT NOW(),
-  "MutWer" varchar(20) DEFAULT NULL
+  "MutWer" varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
 );
 SELECT setval(pg_get_serial_sequence('apflora.ziel', 'ZielId'), coalesce(max("ZielId"), 0) + 1, false) FROM apflora.ziel;
 COMMENT ON COLUMN apflora.ziel."ZielId" IS 'Primärschlüssel der Tabelle "ziel"';
@@ -888,7 +888,7 @@ CREATE TABLE apflora.zielber (
   "ZielBerErreichung" text DEFAULT NULL,
   "ZielBerTxt" text DEFAULT NULL,
   "MutWann" date DEFAULT NOW(),
-  "MutWer" varchar(20) DEFAULT NULL
+  "MutWer" varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
 );
 SELECT setval(pg_get_serial_sequence('apflora.zielber', 'ZielBerId'), coalesce(max("ZielBerId"), 0) + 1, false) FROM apflora.zielber;
 COMMENT ON COLUMN apflora.zielber."ZielBerId" IS 'Primärschlüssel der Tabelle "zielber"';
