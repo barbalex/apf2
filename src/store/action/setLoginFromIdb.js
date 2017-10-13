@@ -1,6 +1,7 @@
 // @flow
 import app from 'ampersand-app'
-import axios from 'axios'
+
+import processLogin from '../../modules/processLogin'
 
 // store.user.name default value is set to something random
 // because if it is empty, the login form appears for
@@ -14,10 +15,7 @@ export default (store: Object): void =>
     .then(users => {
       if (users[0] && users[0].name && users[0].role && users[0].token) {
         const { name, role, token } = users[0]
-        store.user.name = name
-        store.user.role = role
-        store.user.token = token
-        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
+        processLogin({ store, name, role, token })
       } else {
         store.logout()
       }

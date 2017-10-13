@@ -3,7 +3,7 @@ import axios from 'axios'
 import app from 'ampersand-app'
 import jwtDecode from 'jwt-decode'
 
-import initiateDataFromUrl from '../../modules/initiateDataFromUrl'
+import processLogin from '../../modules/processLogin'
 
 export default (store: Object, name: string, password: string): any => {
   store.loading.push('user')
@@ -14,13 +14,10 @@ export default (store: Object, name: string, password: string): any => {
         const token = data[0].token
         const tokenDecoded = jwtDecode(token)
         const { username, role } = tokenDecoded
-        store.user.name = username
-        store.user.token = token
-        store.user.role = role
+        processLogin({ store, name: username, role, token })
+        // refresh currentUser in idb
         app.db.currentUser.clear()
         app.db.currentUser.put({ name: username, token, role })
-        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
-        initiateDataFromUrl(store)
       } else if (status !== 200) {
         // somehow fetchLogin sometimes gets called 3 times consecutively
         // and the second time data is an empty array

@@ -37,7 +37,6 @@ import UpdateAvailable from './components/UpdateAvailable'
 import Messages from './components/Messages'
 import DownloadMessages from './components/DownloadMessages'
 import setLoginFromIdb from './store/action/setLoginFromIdb'
-import initiateDataFromUrl from './modules/initiateDataFromUrl'
 
 // service worker
 import registerServiceWorker from './registerServiceWorker'
@@ -78,14 +77,16 @@ import './index.css'
     window.app = app
 
     axios.defaults.baseURL = apiBaseUrl
+    axios.interceptors.response.use(undefined, function(error) {
+      if (error.response.status === 401) {
+        console.log('axios interceptor found status 401')
+        // need to empty user
+        //store.user.token = null
+        return store.logout()
+      }
+    })
 
     await setLoginFromIdb(store)
-
-    // initiate activeNodeArray - but only if user is logged in
-    const { user } = store
-    if (user && user.name && user.role && user.token) {
-      initiateDataFromUrl(store)
-    }
 
     // turned off because of errors in production
     // const socket = window.io(apiBaseUrl)
