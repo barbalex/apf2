@@ -33,8 +33,6 @@ export default async (store: Object, beobId: string): Promise<void> => {
   const originalTpop = clone(tpopInStore)
   tpopInStore.TPopXKoord = X
   tpopInStore.TPopYKoord = Y
-  tpopInStore.MutWer = store.user.name
-  tpopInStore.MutWann = new Date().toISOString()
   const tpopForDb = clone(toJS(tpopInStore))
   // remove empty values
   Object.keys(tpopForDb).forEach(k => {

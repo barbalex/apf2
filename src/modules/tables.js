@@ -7,8 +7,6 @@ export default [
     labelSingular: 'Art',
     idField: 'ApArtId',
     parentIdField: 'ProjId',
-    mutWannField: 'MutWann',
-    mutWerField: 'MutWer',
   },
   {
     table: 'pop',
@@ -16,8 +14,6 @@ export default [
     labelSingular: 'Population',
     idField: 'PopId',
     parentIdField: 'ApArtId',
-    mutWannField: 'MutWann',
-    mutWerField: 'MutWer',
   },
   {
     table: 'tpop',
@@ -25,8 +21,6 @@ export default [
     labelSingular: 'Teil-Population',
     idField: 'TPopId',
     parentIdField: 'PopId',
-    mutWannField: 'MutWann',
-    mutWerField: 'MutWer',
   },
   {
     table: 'tpopkontr',
@@ -34,8 +28,6 @@ export default [
     labelSingular: 'Kontrolle',
     idField: 'TPopKontrId',
     parentIdField: 'TPopId',
-    mutWannField: 'MutWann',
-    mutWerField: 'MutWer',
   },
   {
     table: 'tpopfeldkontr',
@@ -44,8 +36,6 @@ export default [
     labelSingular: 'Feld-Kontrolle',
     idField: 'TPopKontrId',
     parentIdField: 'TPopId',
-    mutWannField: 'MutWann',
-    mutWerField: 'MutWer',
   },
   {
     table: 'tpopfreiwkontr',
@@ -54,8 +44,6 @@ export default [
     labelSingular: 'Freiwilligen-Kontrolle',
     idField: 'TPopKontrId',
     parentIdField: 'TPopId',
-    mutWannField: 'MutWann',
-    mutWerField: 'MutWer',
   },
   {
     table: 'tpopkontrzaehl_einheit_werte',
@@ -63,8 +51,6 @@ export default [
     idField: 'ZaehleinheitCode',
     parentIdField: 'none',
     stammdaten: true,
-    mutWannField: 'MutWann',
-    mutWerField: 'MutWer',
   },
   {
     table: 'tpopkontrzaehl_methode_werte',
@@ -72,8 +58,6 @@ export default [
     idField: 'BeurteilCode',
     parentIdField: 'none',
     stammdaten: true,
-    mutWannField: 'MutWann',
-    mutWerField: 'MutWer',
   },
   {
     table: 'tpopkontrzaehl',
@@ -81,8 +65,6 @@ export default [
     labelSingular: 'Zählung',
     idField: 'TPopKontrZaehlId',
     parentIdField: 'TPopKontrId',
-    mutWannField: 'MutWann',
-    mutWerField: 'MutWer',
   },
   {
     table: 'tpopfreiwkontrzaehl',
@@ -91,8 +73,6 @@ export default [
     labelSingular: 'Zählung',
     idField: 'TPopKontrZaehlId',
     parentIdField: 'TPopKontrId',
-    mutWannField: 'MutWann',
-    mutWerField: 'MutWer',
   },
   {
     table: 'tpopfeldkontrzaehl',
@@ -101,8 +81,6 @@ export default [
     labelSingular: 'Zählung',
     idField: 'TPopKontrZaehlId',
     parentIdField: 'TPopKontrId',
-    mutWannField: 'MutWann',
-    mutWerField: 'MutWer',
   },
   {
     table: 'tpopmassn',
@@ -110,8 +88,6 @@ export default [
     labelSingular: 'Massnahme',
     idField: 'TPopMassnId',
     parentIdField: 'TPopId',
-    mutWannField: 'MutWann',
-    mutWerField: 'MutWer',
   },
   {
     table: 'tpopmassn_typ_werte',
@@ -119,8 +95,6 @@ export default [
     idField: 'MassnTypCode',
     parentIdField: 'none',
     stammdaten: true,
-    mutWannField: 'MutWann',
-    mutWerField: 'MutWer',
   },
   {
     table: 'popmassn_erfbeurt_werte',
@@ -128,8 +102,6 @@ export default [
     idField: 'BeurteilId',
     parentIdField: 'none',
     stammdaten: true,
-    mutWannField: 'MutWann',
-    mutWerField: 'MutWer',
   },
   {
     table: 'tpopmassn_erfbeurt_werte',
@@ -137,8 +109,6 @@ export default [
     idField: 'BeurteilId',
     parentIdField: 'none',
     stammdaten: true,
-    mutWannField: 'MutWann',
-    mutWerField: 'MutWer',
   },
   {
     table: 'ziel',
@@ -146,8 +116,6 @@ export default [
     labelSingular: 'AP-Ziel',
     idField: 'ZielId',
     parentIdField: 'ApArtId',
-    mutWannField: 'MutWann',
-    mutWerField: 'MutWer',
   },
   {
     table: 'ziel_typ_werte',
@@ -155,8 +123,6 @@ export default [
     idField: 'ZieltypId',
     parentIdField: 'none',
     stammdaten: true,
-    mutWannField: 'MutWann',
-    mutWerField: 'MutWer',
   },
   {
     table: 'zielber',
@@ -164,8 +130,6 @@ export default [
     labelSingular: 'Bericht',
     idField: 'ZielBerId',
     parentIdField: 'ZielId',
-    mutWannField: 'MutWann',
-    mutWerField: 'MutWer',
   },
   {
     table: 'erfkrit',
@@ -173,8 +137,6 @@ export default [
     labelSingular: 'AP-Erfolgskriterium',
     idField: 'ErfkritId',
     parentIdField: 'ApArtId',
-    mutWannField: 'MutWann',
-    mutWerField: 'MutWer',
   },
   {
     table: 'apber',
@@ -182,8 +144,6 @@ export default [
     labelSingular: 'AP-Bericht',
     idField: 'JBerId',
     parentIdField: 'ApArtId',
-    mutWannField: 'MutWann',
-    mutWerField: 'MutWer',
   },
   {
     table: 'apberuebersicht',
@@ -191,8 +151,6 @@ export default [
     labelSingular: 'AP-Bericht',
     idField: 'JbuJahr',
     parentIdField: 'ProjId',
-    mutWannField: 'MutWann',
-    mutWerField: 'MutWer',
   },
   {
     table: 'ber',
@@ -200,8 +158,6 @@ export default [
     labelSingular: 'Bericht',
     idField: 'BerId',
     parentIdField: 'ApArtId',
-    mutWannField: 'MutWann',
-    mutWerField: 'MutWer',
   },
   {
     table: 'idealbiotop',
@@ -209,8 +165,6 @@ export default [
     labelSingular: 'Idealbiotop',
     idField: 'IbApArtId',
     parentIdField: 'IbApArtId',
-    mutWannField: 'MutWann',
-    mutWerField: 'MutWer',
   },
   {
     table: 'assozart',
@@ -218,8 +172,6 @@ export default [
     labelSingular: 'assoziierte Art',
     idField: 'AaId',
     parentIdField: 'AaApArtId',
-    mutWannField: 'MutWann',
-    mutWerField: 'MutWer',
   },
   {
     table: 'popber',
@@ -227,8 +179,6 @@ export default [
     labelSingular: 'Kontroll-Bericht',
     idField: 'PopBerId',
     parentIdField: 'PopId',
-    mutWannField: 'MutWann',
-    mutWerField: 'MutWer',
   },
   {
     table: 'popmassnber',
@@ -236,8 +186,6 @@ export default [
     labelSingular: 'Massnahmen-Bericht',
     idField: 'PopMassnBerId',
     parentIdField: 'PopId',
-    mutWannField: 'MutWann',
-    mutWerField: 'MutWer',
   },
   {
     table: 'tpopber',
@@ -245,8 +193,6 @@ export default [
     labelSingular: 'Kontroll-Bericht',
     idField: 'TPopBerId',
     parentIdField: 'TPopId',
-    mutWannField: 'MutWann',
-    mutWerField: 'MutWer',
   },
   {
     table: 'tpopmassnber',
@@ -254,8 +200,6 @@ export default [
     labelSingular: 'Massnahmen-Bericht',
     idField: 'TPopMassnBerId',
     parentIdField: 'TPopId',
-    mutWannField: 'MutWann',
-    mutWerField: 'MutWer',
   },
   {
     table: 'beobzuordnung',
@@ -294,8 +238,6 @@ export default [
     label: 'Projekte',
     labelSingular: 'Projekt',
     idField: 'ProjId',
-    mutWannField: 'MutWann',
-    mutWerField: 'MutWer',
   },
   {
     table: 'beob',
@@ -318,7 +260,7 @@ export default [
     idField: 'DomainCode',
     parentIdField: 'none',
     stammdaten: true,
-    mutWannField: 'MutWann',
+
     mitWerField: 'MutWer',
   },
   {
@@ -327,7 +269,7 @@ export default [
     idField: 'DomainCode',
     parentIdField: 'none',
     stammdaten: true,
-    mutWannField: 'MutWann',
+
     mitWerField: 'MutWer',
   },
   {
@@ -335,7 +277,7 @@ export default [
     label: 'none',
     idField: 'AdrId',
     parentIdField: 'none',
-    mutWannField: 'MutWann',
+
     mitWerField: 'MutWer',
   },
   {
@@ -344,7 +286,7 @@ export default [
     idField: 'BeurteilId',
     parentIdField: 'none',
     stammdaten: true,
-    mutWannField: 'MutWann',
+
     mitWerField: 'MutWer',
   },
   {
@@ -353,7 +295,7 @@ export default [
     idField: 'EntwicklungId',
     parentIdField: 'none',
     stammdaten: true,
-    mutWannField: 'MutWann',
+
     mitWerField: 'MutWer',
   },
   {
@@ -362,7 +304,7 @@ export default [
     idField: 'HerkunftId',
     parentIdField: 'none',
     stammdaten: true,
-    mutWannField: 'MutWann',
+
     mitWerField: 'MutWer',
   },
   {
@@ -371,7 +313,7 @@ export default [
     idField: 'DomainCode',
     parentIdField: 'none',
     stammdaten: true,
-    mutWannField: 'MutWann',
+
     mitWerField: 'MutWer',
   },
   {
@@ -380,7 +322,7 @@ export default [
     idField: 'BfsNr',
     parentIdField: 'none',
     stammdaten: true,
-    mutWannField: 'MutWann',
+
     mitWerField: 'MutWer',
   },
   {
@@ -389,7 +331,7 @@ export default [
     idField: 'EntwicklungCode',
     parentIdField: 'none',
     stammdaten: true,
-    mutWannField: 'MutWann',
+
     mitWerField: 'MutWer',
   },
   {
@@ -398,7 +340,7 @@ export default [
     idField: 'DomainCode',
     parentIdField: 'none',
     stammdaten: true,
-    mutWannField: 'MutWann',
+
     mitWerField: 'MutWer',
   },
   {

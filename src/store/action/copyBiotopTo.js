@@ -22,8 +22,6 @@ export default async (store: Object, newId: number): Promise<void> => {
       rowToUpdate[f] = rowToGetBiotopFrom[f]
     }
   })
-  rowToUpdate.MutWer = store.user.name
-  rowToUpdate.MutWann = new Date().toISOString()
   const rowForDb = clone(toJS(rowToUpdate))
   // remove empty values
   Object.keys(rowForDb).forEach(k => {

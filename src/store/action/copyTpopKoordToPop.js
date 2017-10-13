@@ -39,8 +39,6 @@ export default async (store: Object, tpopId: number): Promise<void> => {
   const originalPop = clone(popInStore)
   popInStore.PopXKoord = tpop.TPopXKoord
   popInStore.PopYKoord = tpop.TPopYKoord
-  popInStore.MutWer = store.user.name
-  popInStore.MutWann = new Date().toISOString()
   const popForDb = clone(toJS(popInStore))
   // remove empty values
   Object.keys(popForDb).forEach(k => {
