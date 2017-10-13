@@ -10,22 +10,19 @@
   "license": "MIT",
   "private": true,
   "devDependencies": {
-    "flow-bin": "0.56.0",
+    "flow-bin": "0.57.1",
     "mobx-react-devtools": "4.2.15",
     "react-scripts": "1.0.14"
   },
   "dependenciesThatNeedToBeFixed": {
     "material-ui": {
       "version": "0.19.0",
-      "reason": "AutoComplete does not work on 0.19.1 and 0.19.2. Well: with self managed searchText it does"
+      "reason":
+        "AutoComplete does not work on 0.19.1 and 0.19.2. Well: with self managed searchText it does"
     },
     "get-urls": {
       "version": "5.0.1",
       "reason": "uses es6 but cra does not work with es6 libraries"
-    },
-    "moment": {
-      "version": "2.18.1",
-      "reason": "error on start: https://github.com/moment/moment/issues/4216"
     }
   },
   "dependencies": {
