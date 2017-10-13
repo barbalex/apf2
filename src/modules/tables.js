@@ -206,32 +206,24 @@ export default [
     label: 'none',
     idField: 'BeobId',
     parentIdField: 'TPopId',
-    mutWannField: 'BeobMutWann',
-    mutWerField: 'BeobMutWer',
   },
   {
     table: 'beobzuordnung',
     label: 'none',
     idField: 'BeobId',
     parentIdField: 'ArtId',
-    mutWannField: 'BeobMutWann',
-    mutWerField: 'BeobMutWer',
   },
   {
     table: 'beobzuordnung',
     label: 'none',
     idField: 'BeobId',
     parentIdField: 'ArtId',
-    mutWannField: 'BeobMutWann',
-    mutWerField: 'BeobMutWer',
   },
   {
     table: 'beobart',
     label: 'none',
     idField: 'BeobArtId',
     parentIdField: 'ApArtId',
-    mutWannField: 'BeobMutWann',
-    mutWerField: 'BeobMutWer',
   },
   {
     table: 'projekt',
@@ -251,8 +243,6 @@ export default [
     idField: 'TaxonomieId',
     parentIdField: 'none',
     stammdaten: true,
-    mutWannField: null,
-    mitWerField: null,
   },
   {
     table: 'ap_bearbstand_werte',
@@ -260,8 +250,6 @@ export default [
     idField: 'DomainCode',
     parentIdField: 'none',
     stammdaten: true,
-
-    mitWerField: 'MutWer',
   },
   {
     table: 'ap_umsetzung_werte',
@@ -269,16 +257,12 @@ export default [
     idField: 'DomainCode',
     parentIdField: 'none',
     stammdaten: true,
-
-    mitWerField: 'MutWer',
   },
   {
     table: 'adresse',
     label: 'none',
     idField: 'AdrId',
     parentIdField: 'none',
-
-    mitWerField: 'MutWer',
   },
   {
     table: 'ap_erfkrit_werte',
@@ -286,8 +270,6 @@ export default [
     idField: 'BeurteilId',
     parentIdField: 'none',
     stammdaten: true,
-
-    mitWerField: 'MutWer',
   },
   {
     table: 'pop_entwicklung_werte',
@@ -295,8 +277,6 @@ export default [
     idField: 'EntwicklungId',
     parentIdField: 'none',
     stammdaten: true,
-
-    mitWerField: 'MutWer',
   },
   {
     table: 'pop_status_werte',
@@ -304,8 +284,6 @@ export default [
     idField: 'HerkunftId',
     parentIdField: 'none',
     stammdaten: true,
-
-    mitWerField: 'MutWer',
   },
   {
     table: 'tpop_apberrelevant_werte',
@@ -313,8 +291,6 @@ export default [
     idField: 'DomainCode',
     parentIdField: 'none',
     stammdaten: true,
-
-    mitWerField: 'MutWer',
   },
   {
     table: 'gemeinde',
@@ -322,8 +298,6 @@ export default [
     idField: 'BfsNr',
     parentIdField: 'none',
     stammdaten: true,
-
-    mitWerField: 'MutWer',
   },
   {
     table: 'tpop_entwicklung_werte',
@@ -331,8 +305,6 @@ export default [
     idField: 'EntwicklungCode',
     parentIdField: 'none',
     stammdaten: true,
-
-    mitWerField: 'MutWer',
   },
   {
     table: 'tpopkontr_idbiotuebereinst_werte',
@@ -340,8 +312,6 @@ export default [
     idField: 'DomainCode',
     parentIdField: 'none',
     stammdaten: true,
-
-    mitWerField: 'MutWer',
   },
   {
     table: 'beob_quelle',
