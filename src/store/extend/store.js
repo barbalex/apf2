@@ -239,5 +239,6 @@ export default (store: Object): void => {
         }
       }
     ),
+    initiated: false,
   })
 }

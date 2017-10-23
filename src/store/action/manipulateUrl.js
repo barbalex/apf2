@@ -13,10 +13,16 @@ export default (store: Object): void => {
   const urlQuery = toJS(store.urlQuery)
   const nodes = toJS(tree.nodes)
 
+  // do not manipulate url if store is not yet initiated
+  if (!store.initiated) return
+
   if (
+    // when tree elements are clicked, activeNodeArray is changed
     !isEqual(activeNodeArrayFromUrl, activeNodeArray) ||
+    // when tabs are clicked, urlQuery is changed
     !isEqual(urlQueryFromUrl, urlQuery)
   ) {
+    // if above happened, need to change history
     const search = queryString.stringify(urlQuery)
     const query = `${Object.keys(urlQuery).length > 0 ? `?${search}` : ''}`
     store.history.push(`/${activeNodeArray.join('/')}${query}`)

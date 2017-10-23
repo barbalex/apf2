@@ -5,22 +5,11 @@
 import { extendObservable, autorun, autorunAsync } from 'mobx'
 
 import fetchDataForOpenNodes from '../action/fetchDataForOpenNodes'
-import manipulateActiveNodeArray from '../action/manipulateActiveNodeArray'
-import manipulateUrlQuery from '../action/manipulateUrlQuery'
 import manipulateUrl from '../action/manipulateUrl'
 
 export default (store: Object): void => {
   extendObservable(store, {
-    manipulateActiveNodeArray: autorun('manipulateActiveNodeArray', () =>
-      manipulateActiveNodeArray(store),
-    ),
-    manipulateUrlQuery: autorun('manipulateUrlQuery', () =>
-      manipulateUrlQuery(store),
-    ),
-    // manipulateUrl needs to be async so on first load
-    // index.js can change activeNodeArray based on url
-    // BEFORE autorun changes url
-    manipulateUrl: autorunAsync('manipulateUrl', () => manipulateUrl(store)),
+    manipulateUrl: autorun(() => manipulateUrl(store)),
     fetchDataWhenTreeOpenNodesChanges: autorunAsync(
       'fetchDataWhenTreeOpenNodesChanges',
       () => {
@@ -31,10 +20,10 @@ export default (store: Object): void => {
           store.map.activeApfloraLayers.includes('TpopBeob') ||
           store.map.activeApfloraLayers.includes('TpopBeobAssignPolylines')
         const showBeobNichtBeurteilt = store.map.activeApfloraLayers.includes(
-          'BeobNichtBeurteilt',
+          'BeobNichtBeurteilt'
         )
         const showBeobNichtZuzuordnen = store.map.activeApfloraLayers.includes(
-          'BeobNichtZuzuordnen',
+          'BeobNichtZuzuordnen'
         )
         fetchDataForOpenNodes(
           store,
@@ -43,9 +32,9 @@ export default (store: Object): void => {
           showTpop,
           showTpopBeob,
           showBeobNichtBeurteilt,
-          showBeobNichtZuzuordnen,
+          showBeobNichtZuzuordnen
         )
-      },
+      }
     ),
   })
   extendObservable(store.tree2, {
@@ -59,10 +48,10 @@ export default (store: Object): void => {
           store.map.activeApfloraLayers.includes('TpopBeob') ||
           store.map.activeApfloraLayers.includes('TpopBeobAssignPolylines')
         const showBeobNichtBeurteilt = store.map.activeApfloraLayers.includes(
-          'BeobNichtBeurteilt',
+          'BeobNichtBeurteilt'
         )
         const showBeobNichtZuzuordnen = store.map.activeApfloraLayers.includes(
-          'BeobNichtZuzuordnen',
+          'BeobNichtZuzuordnen'
         )
         fetchDataForOpenNodes(
           store,
@@ -71,9 +60,9 @@ export default (store: Object): void => {
           showTpop,
           showTpopBeob,
           showBeobNichtBeurteilt,
-          showBeobNichtZuzuordnen,
+          showBeobNichtZuzuordnen
         )
-      },
+      }
     ),
   })
 }
