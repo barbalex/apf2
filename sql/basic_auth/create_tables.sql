@@ -77,7 +77,7 @@ end;
 $$;
 
 -- run this once
-ALTER DATABASE apflora SET "app.jwt_secret" TO '!!secret!!';
+ALTER DATABASE apflora SET "app.jwt_secret" TO 'secret';
 
 -- stored procedure that returns the token
 CREATE TYPE basic_auth.jwt_token AS (
