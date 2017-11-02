@@ -3,7 +3,7 @@
  * gets a latLng wgs 84
  * returns tpopId of nearest tpop
  */
-import nearest from '@turf/nearest'
+import nearest from '@turf/nearest-point'
 
 export default (store: Object, latLng: Object): number => {
   const { table, tree } = store
@@ -14,8 +14,8 @@ export default (store: Object, latLng: Object): number => {
     properties: {},
     geometry: {
       type: 'Point',
-      coordinates: [lat, lng]
-    }
+      coordinates: [lat, lng],
+    },
   }
   const popIds = Array.from(table.pop.values())
     .filter(p => p.ApArtId === activeNodes.ap)
@@ -26,16 +26,16 @@ export default (store: Object, latLng: Object): number => {
     .map(t => ({
       type: 'Feature',
       properties: {
-        TPopId: t.TPopId
+        TPopId: t.TPopId,
       },
       geometry: {
         type: 'Point',
-        coordinates: t.TPopKoordWgs84
-      }
+        coordinates: t.TPopKoordWgs84,
+      },
     }))
   const against = {
     type: 'FeatureCollection',
-    features: tpopFeatures
+    features: tpopFeatures,
   }
   const nearestTpopFeature = nearest(point, against)
   return nearestTpopFeature.properties.TPopId

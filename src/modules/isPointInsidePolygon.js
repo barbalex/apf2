@@ -4,7 +4,7 @@
  * 'coordinates must only contain numbers'
  * see: https://github.com/Turfjs/turf/issues/940
  */
-import inside from '@turf/inside'
+import inside from '@turf/boolean-point-in-polygon'
 
 import epsg21781to4326 from './epsg21781to4326notReverse'
 

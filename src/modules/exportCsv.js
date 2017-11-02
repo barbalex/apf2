@@ -1,6 +1,6 @@
 // @flow
 import json2csv from 'json2csv'
-import fileDownload from 'react-file-download'
+import fileDownload from 'js-file-download'
 import format from 'date-fns/format'
 
 export default ({
