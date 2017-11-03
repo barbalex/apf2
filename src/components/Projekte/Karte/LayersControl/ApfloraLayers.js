@@ -27,15 +27,9 @@ const DragHandleDiv = styled.div`
   padding-left: 3px;
   min-width: 18px;
 `
-const ZuordnenIcon = styled(FontIcon)`
-  font-size: 20px !important;
-`
-const ZoomToIcon = styled(FontIcon)`
-  font-size: 20px !important;
-`
-const FilterIcon = styled(FontIcon)`
-  font-size: 20px !important;
-`
+const ZuordnenIcon = styled(FontIcon)`font-size: 20px !important;`
+const ZoomToIcon = styled(FontIcon)`font-size: 20px !important;`
+const FilterIcon = styled(FontIcon)`font-size: 20px !important;`
 const LayerDiv = styled.div`
   display: flex;
   min-height: 24px;
@@ -85,14 +79,14 @@ const MapIconDiv = styled.div``
  * so passed in from parent
  */
 
-const DragHandle = SortableHandle(() =>
+const DragHandle = SortableHandle(() => (
   <DragHandleIcon
     className="material-icons"
     title="ziehen, um Layer höher/tiefer zu stapeln"
   >
     drag_handle
   </DragHandleIcon>
-)
+))
 const SortableItem = SortableElement(
   ({ apfloraLayer, store, activeApfloraLayers }) => {
     const assigningIsPossible =
@@ -130,7 +124,7 @@ const SortableItem = SortableElement(
           }}
         />
         <IconsDiv>
-          {['BeobNichtBeurteilt', 'TpopBeob'].includes(apfloraLayer.value) &&
+          {['BeobNichtBeurteilt', 'TpopBeob'].includes(apfloraLayer.value) && (
             <ZuordnenDiv>
               <ZuordnenIcon
                 className="material-icons"
@@ -149,59 +143,69 @@ const SortableItem = SortableElement(
                   ? 'pause_circle_outline'
                   : 'play_circle_outline'}
               </ZuordnenIcon>
-            </ZuordnenDiv>}
+            </ZuordnenDiv>
+          )}
           {apfloraLayer.value === 'Pop' &&
-            activeApfloraLayers.includes('Pop') &&
-            <MapIconDiv>
-              <PopMapIcon id="PopMapIcon" className="material-icons">
-                local_florist
-              </PopMapIcon>
-            </MapIconDiv>}
+            activeApfloraLayers.includes('Pop') && (
+              <MapIconDiv>
+                <PopMapIcon id="PopMapIcon" className="material-icons">
+                  local_florist
+                </PopMapIcon>
+              </MapIconDiv>
+            )}
           {apfloraLayer.value === 'Tpop' &&
-            activeApfloraLayers.includes('Tpop') &&
-            <MapIconDiv>
-              <TpopMapIcon id="TpopMapIcon" className="material-icons">
-                local_florist
-              </TpopMapIcon>
-            </MapIconDiv>}
+            activeApfloraLayers.includes('Tpop') && (
+              <MapIconDiv>
+                <TpopMapIcon id="TpopMapIcon" className="material-icons">
+                  local_florist
+                </TpopMapIcon>
+              </MapIconDiv>
+            )}
           {apfloraLayer.value === 'BeobNichtBeurteilt' &&
-            activeApfloraLayers.includes('BeobNichtBeurteilt') &&
-            <MapIconDiv>
-              <BeobNichtBeurteiltMapIcon
-                id="BeobNichtBeurteiltMapIcon"
-                className="material-icons"
-              >
-                local_florist
-              </BeobNichtBeurteiltMapIcon>
-            </MapIconDiv>}
+            activeApfloraLayers.includes('BeobNichtBeurteilt') && (
+              <MapIconDiv>
+                <BeobNichtBeurteiltMapIcon
+                  id="BeobNichtBeurteiltMapIcon"
+                  className="material-icons"
+                >
+                  local_florist
+                </BeobNichtBeurteiltMapIcon>
+              </MapIconDiv>
+            )}
           {apfloraLayer.value === 'BeobNichtZuzuordnen' &&
-            activeApfloraLayers.includes('BeobNichtZuzuordnen') &&
-            <MapIconDiv>
-              <BeobNichtZuzuordnenMapIcon
-                id="BeobNichtZuzuordnenMapIcon"
-                className="material-icons"
-              >
-                local_florist
-              </BeobNichtZuzuordnenMapIcon>
-            </MapIconDiv>}
+            activeApfloraLayers.includes('BeobNichtZuzuordnen') && (
+              <MapIconDiv>
+                <BeobNichtZuzuordnenMapIcon
+                  id="BeobNichtZuzuordnenMapIcon"
+                  className="material-icons"
+                >
+                  local_florist
+                </BeobNichtZuzuordnenMapIcon>
+              </MapIconDiv>
+            )}
           {apfloraLayer.value === 'TpopBeob' &&
-            activeApfloraLayers.includes('TpopBeob') &&
-            <MapIconDiv>
-              <TpopBeobMapIcon id="TpopBeobMapIcon" className="material-icons">
-                local_florist
-              </TpopBeobMapIcon>
-            </MapIconDiv>}
+            activeApfloraLayers.includes('TpopBeob') && (
+              <MapIconDiv>
+                <TpopBeobMapIcon
+                  id="TpopBeobMapIcon"
+                  className="material-icons"
+                >
+                  local_florist
+                </TpopBeobMapIcon>
+              </MapIconDiv>
+            )}
           {apfloraLayer.value === 'TpopBeobAssignPolylines' &&
-            activeApfloraLayers.includes('TpopBeobAssignPolylines') &&
-            <MapIconDiv>
-              <TpopBeobAssignPolylinesIcon
-                id="TpopBeobAssignPolylinesMapIcon"
-                className="material-icons"
-              >
-                remove
-              </TpopBeobAssignPolylinesIcon>
-            </MapIconDiv>}
-          {false &&
+            activeApfloraLayers.includes('TpopBeobAssignPolylines') && (
+              <MapIconDiv>
+                <TpopBeobAssignPolylinesIcon
+                  id="TpopBeobAssignPolylinesMapIcon"
+                  className="material-icons"
+                >
+                  remove
+                </TpopBeobAssignPolylinesIcon>
+              </MapIconDiv>
+            )}
+          {false && (
             <FilterDiv>
               {[
                 'Pop',
@@ -209,7 +213,7 @@ const SortableItem = SortableElement(
                 'BeobNichtBeurteilt',
                 'BeobNichtZuzuordnen',
                 'TpopBeob',
-              ].includes(apfloraLayer.value) &&
+              ].includes(apfloraLayer.value) && (
                 <FilterIcon
                   className="material-icons"
                   title="mit Umriss(en) filtern"
@@ -237,10 +241,12 @@ const SortableItem = SortableElement(
                   }}
                 >
                   photo_filter
-                </FilterIcon>}
-            </FilterDiv>}
+                </FilterIcon>
+              )}
+            </FilterDiv>
+          )}
           <ZoomToDiv>
-            {apfloraLayer.value !== 'MapFilter' &&
+            {apfloraLayer.value !== 'MapFilter' && (
               <ZoomToIcon
                 className="material-icons"
                 title={`auf alle '${apfloraLayer.label}' zoomen`}
@@ -262,10 +268,11 @@ const SortableItem = SortableElement(
                 }}
               >
                 filter_center_focus
-              </ZoomToIcon>}
+              </ZoomToIcon>
+            )}
           </ZoomToDiv>
           <ZoomToDiv>
-            {apfloraLayer.value !== 'MapFilter' &&
+            {apfloraLayer.value !== 'MapFilter' && (
               <ZoomToIcon
                 className="material-icons"
                 title={`auf aktive '${apfloraLayer.label}' zoomen`}
@@ -290,16 +297,20 @@ const SortableItem = SortableElement(
                       : 'inherit',
                 }}
                 onClick={() => {
+                  // TODO: if set min bounds
+                  // that accords to 50m
                   if (activeApfloraLayers.includes(apfloraLayer.value)) {
-                    store.map.changeBounds(
+                    const bounds =
                       store.map[mapNameToStoreNameObject[apfloraLayer.value]]
                         .boundsOfHighlightedIds
-                    )
+                    console.log('ApfloraLayers: bounds:', bounds)
+                    store.map.changeBounds(bounds)
                   }
                 }}
               >
                 filter_center_focus
-              </ZoomToIcon>}
+              </ZoomToIcon>
+            )}
           </ZoomToDiv>
           <DragHandleDiv>
             {!['TpopBeobAssignPolylines', 'MapFilter'].includes(
@@ -312,9 +323,9 @@ const SortableItem = SortableElement(
   }
 )
 const SortableList = SortableContainer(
-  ({ items, store, activeApfloraLayers }) =>
+  ({ items, store, activeApfloraLayers }) => (
     <div>
-      {items.map((apfloraLayer, index) =>
+      {items.map((apfloraLayer, index) => (
         <SortableItem
           key={index}
           index={index}
@@ -322,11 +333,12 @@ const SortableList = SortableContainer(
           store={store}
           activeApfloraLayers={activeApfloraLayers}
         />
-      )}
+      ))}
     </div>
+  )
 )
 
-const ApfloraLayers = ({ store }: { store: Object }) =>
+const ApfloraLayers = ({ store }: { store: Object }) => (
   <CardContent>
     <SortableList
       items={store.map.apfloraLayers}
@@ -338,5 +350,6 @@ const ApfloraLayers = ({ store }: { store: Object }) =>
       activeApfloraLayers={toJS(store.map.activeApfloraLayers)}
     />
   </CardContent>
+)
 
 export default observer(ApfloraLayers)
