@@ -7795,16 +7795,25 @@ FROM
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
   ON apflora.projekt."ProjId" = apflora.ap."ProjId"
 WHERE
-  apflora.pop."PopHerkunft" = 210
-  AND apflora.pop."PopId" NOT IN (
-    -- Ansiedlungen since lastpopber."PopBerJahr"
+  --why was this here? deactivated 2017-11-03
+  --apflora.pop."PopHerkunft" = 210
+  apflora.pop."PopId" NOT IN (
     SELECT DISTINCT
       apflora.tpop."PopId"
     FROM
       apflora.tpop
     WHERE
       apflora.tpop."PopId" = apflora.pop."PopId"
-      AND apflora.tpop."TPopHerkunft" = apflora.pop."PopHerkunft"
+      AND (
+          apflora.tpop."TPopHerkunft" = apflora.pop."PopHerkunft"
+          -- problem: the values for erloschen and aktuell can vary
+          -- depending on bekannt seit
+          -- even though they are same value in status field of form
+          OR (apflora.tpop."TPopHerkunft" = 200 AND apflora.pop."PopHerkunft" = 210)
+          OR (apflora.tpop."TPopHerkunft" = 210 AND apflora.pop."PopHerkunft" = 200)
+          OR (apflora.tpop."TPopHerkunft" = 202 AND apflora.pop."PopHerkunft" = 211)
+          OR (apflora.tpop."TPopHerkunft" = 211 AND apflora.pop."PopHerkunft" = 202)
+      )
   );
 
 DROP VIEW IF EXISTS apflora.v_qk2_pop_status300tpopstatusanders CASCADE;
