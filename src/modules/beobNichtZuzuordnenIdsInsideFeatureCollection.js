@@ -1,5 +1,5 @@
 // @flow
-import within from '@turf/points-within-polygon'
+import within from '@turf/within'
 import isFinite from 'lodash/isFinite'
 import { toJS } from 'mobx'
 

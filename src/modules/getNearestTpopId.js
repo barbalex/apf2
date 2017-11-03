@@ -3,7 +3,7 @@
  * gets a latLng wgs 84
  * returns tpopId of nearest tpop
  */
-import nearest from '@turf/nearest-point'
+import nearest from '@turf/nearest'
 
 export default (store: Object, latLng: Object): number => {
   const { table, tree } = store

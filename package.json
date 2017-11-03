@@ -27,9 +27,9 @@
   },
   "dependencies": {
     "@hocs/with-lifecycle": "0.3.0",
-    "@turf/boolean-point-in-polygon": "5.0.0",
-    "@turf/nearest-point": "5.0.0",
-    "@turf/points-within-polygon": "5.0.0",
+    "@turf/inside": "4.7.3",
+    "@turf/nearest": "4.7.3",
+    "@turf/within": "4.7.3",
     "ampersand-app": "2.0.0",
     "axios": "0.17.0",
     "babel-polyfill": "6.26.0",
