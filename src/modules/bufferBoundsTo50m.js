@@ -1,5 +1,5 @@
 // @flow
-export default (bounds: Array) => {
+export default (bounds: Array<Array<number>>) => {
   // only buffer if two points are identical
   if (bounds.length === 2) {
     const b1 = bounds[0]
