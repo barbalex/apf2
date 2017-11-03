@@ -40,6 +40,7 @@ export default async ({
   } catch (error) {
     onError(error)
   }
+  // $FlowIssue
   const { data } = result
   const { mapFilter } = store.map
   const { applyMapFilterToExport } = store.export
@@ -71,7 +72,7 @@ export default async ({
     }
   }
   if (jsonData.length === 0) {
-    throw new Error(
+    return onError(
       'Es gibt offenbar keine Daten, welche exportiert werden können'
     )
   }

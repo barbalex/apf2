@@ -428,7 +428,7 @@ const Exporte = ({
             disabled={isRemoteHost}
             title={
               isRemoteHost
-                ? 'Funktioniert nur, wenn apflora lokal installiert wird'
+                ? 'nur aktiv, wenn apflora lokal installiert wird'
                 : ''
             }
           >
