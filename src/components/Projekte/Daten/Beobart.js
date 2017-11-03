@@ -24,9 +24,13 @@ const enhance = compose(inject('store'), observer)
 const getArtList = ({ store, tree }: { store: Object, tree: Object }) => {
   const { adb_eigenschaften } = store.table
   // do not show any TaxonomieId's that have been used
+  // turned off because some species have already been worked as separate ap
+  // because beobart did not exist...
+  /*
   const apArtIdsNotToShow = Array.from(store.table.beobart.values()).map(
     v => v.TaxonomieId
-  )
+  )*/
+  const apArtIdsNotToShow = []
   const artList = filter(
     Array.from(adb_eigenschaften.values()),
     r => !apArtIdsNotToShow.includes(r.TaxonomieId)
