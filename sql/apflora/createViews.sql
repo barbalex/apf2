@@ -7995,7 +7995,7 @@ CREATE OR REPLACE VIEW apflora.v_qk2_pop_status101tpopstatusanders AS
 SELECT
   apflora.projekt."ProjId",
   apflora.ap."ApArtId",
-  'Population: Status ist "ursprünglich, erloschen". Es gibt Teil-Populationen mit abweichendem Status:'::text AS "hw",
+  'Population: Status ist "ursprünglich, erloschen". Es gibt Teil-Populationen (ausser potentiellen Wuchs-/Ansiedlungsorten) mit abweichendem Status:'::text AS "hw",
   ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId"]::text[] AS "url",
   ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr")]::text[] AS text
 FROM
@@ -8016,5 +8016,5 @@ WHERE
       apflora.tpop
     WHERE
       apflora.tpop."PopId" = apflora.pop."PopId"
-      AND apflora.tpop."TPopHerkunft" <> 101
+      AND apflora.tpop."TPopHerkunft" NOT IN (101, 300)
   );
