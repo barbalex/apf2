@@ -1,6 +1,6 @@
 // @flow
 export default (bounds: Array) => {
-  // only buffer if points are very close
+  // only buffer if two points are identical
   if (bounds.length === 2) {
     const b1 = bounds[0]
     const b2 = bounds[1]
@@ -12,9 +12,12 @@ export default (bounds: Array) => {
       b2[1] &&
       b1[1] === b2[1]
     ) {
-      // TODO: buffer
+      const buffer = 0.003
+      bounds = [
+        [b1[0] - buffer, b1[1] - buffer],
+        [b2[0] + buffer, b2[1] + buffer],
+      ]
     }
-    return bounds
   }
   return bounds
 }

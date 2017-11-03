@@ -12,6 +12,7 @@ import 'leaflet'
 import 'leaflet-draw'
 
 import Checkbox from './shared/Checkbox'
+import bufferBoundsTo50m from '../../../../modules/bufferBoundsTo50m'
 
 const CardContent = styled.div`
   color: rgb(48, 48, 48);
@@ -84,7 +85,7 @@ const DragHandle = SortableHandle(() => (
     className="material-icons"
     title="ziehen, um Layer höher/tiefer zu stapeln"
   >
-    drag_handle
+    drag_handle{' '}
   </DragHandleIcon>
 ))
 const SortableItem = SortableElement(
@@ -122,8 +123,9 @@ const SortableItem = SortableElement(
             }
             return store.map.addActiveApfloraLayer(apfloraLayer.value)
           }}
-        />
+        />{' '}
         <IconsDiv>
+          {' '}
           {['BeobNichtBeurteilt', 'TpopBeob'].includes(apfloraLayer.value) && (
             <ZuordnenDiv>
               <ZuordnenIcon
@@ -139,28 +141,29 @@ const SortableItem = SortableElement(
                   }
                 }}
               >
+                {' '}
                 {store.map.beob.assigning
                   ? 'pause_circle_outline'
-                  : 'play_circle_outline'}
-              </ZuordnenIcon>
+                  : 'play_circle_outline'}{' '}
+              </ZuordnenIcon>{' '}
             </ZuordnenDiv>
-          )}
+          )}{' '}
           {apfloraLayer.value === 'Pop' &&
             activeApfloraLayers.includes('Pop') && (
               <MapIconDiv>
                 <PopMapIcon id="PopMapIcon" className="material-icons">
-                  local_florist
-                </PopMapIcon>
+                  local_florist{' '}
+                </PopMapIcon>{' '}
               </MapIconDiv>
-            )}
+            )}{' '}
           {apfloraLayer.value === 'Tpop' &&
             activeApfloraLayers.includes('Tpop') && (
               <MapIconDiv>
                 <TpopMapIcon id="TpopMapIcon" className="material-icons">
-                  local_florist
-                </TpopMapIcon>
+                  local_florist{' '}
+                </TpopMapIcon>{' '}
               </MapIconDiv>
-            )}
+            )}{' '}
           {apfloraLayer.value === 'BeobNichtBeurteilt' &&
             activeApfloraLayers.includes('BeobNichtBeurteilt') && (
               <MapIconDiv>
@@ -168,10 +171,10 @@ const SortableItem = SortableElement(
                   id="BeobNichtBeurteiltMapIcon"
                   className="material-icons"
                 >
-                  local_florist
-                </BeobNichtBeurteiltMapIcon>
+                  local_florist{' '}
+                </BeobNichtBeurteiltMapIcon>{' '}
               </MapIconDiv>
-            )}
+            )}{' '}
           {apfloraLayer.value === 'BeobNichtZuzuordnen' &&
             activeApfloraLayers.includes('BeobNichtZuzuordnen') && (
               <MapIconDiv>
@@ -179,10 +182,10 @@ const SortableItem = SortableElement(
                   id="BeobNichtZuzuordnenMapIcon"
                   className="material-icons"
                 >
-                  local_florist
-                </BeobNichtZuzuordnenMapIcon>
+                  local_florist{' '}
+                </BeobNichtZuzuordnenMapIcon>{' '}
               </MapIconDiv>
-            )}
+            )}{' '}
           {apfloraLayer.value === 'TpopBeob' &&
             activeApfloraLayers.includes('TpopBeob') && (
               <MapIconDiv>
@@ -190,10 +193,10 @@ const SortableItem = SortableElement(
                   id="TpopBeobMapIcon"
                   className="material-icons"
                 >
-                  local_florist
-                </TpopBeobMapIcon>
+                  local_florist{' '}
+                </TpopBeobMapIcon>{' '}
               </MapIconDiv>
-            )}
+            )}{' '}
           {apfloraLayer.value === 'TpopBeobAssignPolylines' &&
             activeApfloraLayers.includes('TpopBeobAssignPolylines') && (
               <MapIconDiv>
@@ -201,12 +204,13 @@ const SortableItem = SortableElement(
                   id="TpopBeobAssignPolylinesMapIcon"
                   className="material-icons"
                 >
-                  remove
-                </TpopBeobAssignPolylinesIcon>
+                  remove{' '}
+                </TpopBeobAssignPolylinesIcon>{' '}
               </MapIconDiv>
-            )}
+            )}{' '}
           {false && (
             <FilterDiv>
+              {' '}
               {[
                 'Pop',
                 'Tpop',
@@ -240,12 +244,13 @@ const SortableItem = SortableElement(
                     //window.L.Draw.Rectangle.initialize()
                   }}
                 >
-                  photo_filter
+                  photo_filter{' '}
                 </FilterIcon>
-              )}
+              )}{' '}
             </FilterDiv>
-          )}
+          )}{' '}
           <ZoomToDiv>
+            {' '}
             {apfloraLayer.value !== 'MapFilter' && (
               <ZoomToIcon
                 className="material-icons"
@@ -267,11 +272,12 @@ const SortableItem = SortableElement(
                   }
                 }}
               >
-                filter_center_focus
+                filter_center_focus{' '}
               </ZoomToIcon>
-            )}
-          </ZoomToDiv>
+            )}{' '}
+          </ZoomToDiv>{' '}
           <ZoomToDiv>
+            {' '}
             {apfloraLayer.value !== 'MapFilter' && (
               <ZoomToIcon
                 className="material-icons"
@@ -303,21 +309,22 @@ const SortableItem = SortableElement(
                     const bounds =
                       store.map[mapNameToStoreNameObject[apfloraLayer.value]]
                         .boundsOfHighlightedIds
-                    console.log('ApfloraLayers: bounds:', bounds)
-                    store.map.changeBounds(bounds)
+                    const boundsBuffered = bufferBoundsTo50m(bounds)
+                    store.map.changeBounds(boundsBuffered)
                   }
                 }}
               >
-                filter_center_focus
+                filter_center_focus{' '}
               </ZoomToIcon>
-            )}
-          </ZoomToDiv>
+            )}{' '}
+          </ZoomToDiv>{' '}
           <DragHandleDiv>
+            {' '}
             {!['TpopBeobAssignPolylines', 'MapFilter'].includes(
               apfloraLayer.value
-            ) && <DragHandle />}
-          </DragHandleDiv>
-        </IconsDiv>
+            ) && <DragHandle />}{' '}
+          </DragHandleDiv>{' '}
+        </IconsDiv>{' '}
       </LayerDiv>
     )
   }
@@ -325,6 +332,7 @@ const SortableItem = SortableElement(
 const SortableList = SortableContainer(
   ({ items, store, activeApfloraLayers }) => (
     <div>
+      {' '}
       {items.map((apfloraLayer, index) => (
         <SortableItem
           key={index}
@@ -333,7 +341,7 @@ const SortableList = SortableContainer(
           store={store}
           activeApfloraLayers={activeApfloraLayers}
         />
-      ))}
+      ))}{' '}
     </div>
   )
 )
@@ -343,12 +351,15 @@ const ApfloraLayers = ({ store }: { store: Object }) => (
     <SortableList
       items={store.map.apfloraLayers}
       onSortEnd={({ oldIndex, newIndex }) =>
-        store.map.moveApfloraLayer({ oldIndex, newIndex })}
+        store.map.moveApfloraLayer({
+          oldIndex,
+          newIndex,
+        })}
       useDragHandle
       lockAxis="y"
       store={store}
       activeApfloraLayers={toJS(store.map.activeApfloraLayers)}
-    />
+    />{' '}
   </CardContent>
 )
 
