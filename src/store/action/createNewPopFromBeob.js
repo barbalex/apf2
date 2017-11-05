@@ -10,9 +10,6 @@ export default async ({
   tree: Object,
   beobId: string,
 }): Promise<void> => {
-  if (!beobId) {
-    return store.listError(new Error('keine beobId übergeben'))
-  }
   const beob = store.table.beob.get(beobId)
   if (!beob) {
     return store.listError(
