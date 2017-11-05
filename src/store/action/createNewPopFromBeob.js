@@ -1,5 +1,6 @@
 // @flow
 import axios from 'axios'
+import format from 'date-fns/format'
 
 export default async ({
   store,
@@ -16,7 +17,7 @@ export default async ({
       new Error(`Die Beobachtung mit beobId ${beobId} wurde nicht gefunden`)
     )
   }
-  const { X, Y } = beob
+  const { X, Y, Datum } = beob
   let tpop
   const { ap, projekt } = tree.activeNodes
 
@@ -28,9 +29,10 @@ export default async ({
       url: '/pop',
       data: {
         ApArtId: ap,
-        // give pop koords of beob
+        // give pop some data of beob
         PopXKoord: X,
         PopYKoord: Y,
+        PopBekanntSeit: format(new Date(Datum), 'YYYY'),
       },
       headers: {
         Prefer: 'return=representation',
@@ -53,9 +55,10 @@ export default async ({
       url: '/tpop',
       data: {
         PopId: pop.PopId,
-        // give tpop koords of beob
+        // give tpop some data of beob
         TPopXKoord: X,
         TPopYKoord: Y,
+        TPopBekanntSeit: format(new Date(Datum), 'YYYY'),
       },
       headers: {
         Prefer: 'return=representation',
