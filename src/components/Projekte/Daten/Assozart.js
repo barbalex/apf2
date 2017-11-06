@@ -18,6 +18,7 @@ const Container = styled.div`
 const FieldsContainer = styled.div`
   overflow: auto !important;
   padding: 10px;
+  height: 100%;
 `
 
 const enhance = compose(inject('store'), observer)

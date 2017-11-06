@@ -15,6 +15,7 @@ const Container = styled.div`
 const FieldsContainer = styled.div`
   padding: 10px;
   overflow: auto !important;
+  height: 100%;
 `
 
 const enhance = compose(inject('store'), observer)
@@ -32,20 +33,14 @@ const Projekt = ({ store, tree }: { store: Object, tree: Object }) => {
           label="Name"
           fieldName="ProjName"
           value={
-            activeDataset && activeDataset.row && activeDataset.row.ProjName ? (
-              activeDataset.row.ProjName
-            ) : (
-              ''
-            )
+            activeDataset && activeDataset.row && activeDataset.row.ProjName
+              ? activeDataset.row.ProjName
+              : ''
           }
           errorText={
-            activeDataset &&
-            activeDataset.valid &&
-            activeDataset.valid.ProjName ? (
-              activeDataset.valid.ProjName
-            ) : (
-              ''
-            )
+            activeDataset && activeDataset.valid && activeDataset.valid.ProjName
+              ? activeDataset.valid.ProjName
+              : ''
           }
           type="text"
           updateProperty={store.updateProperty}

@@ -15,6 +15,7 @@ const Container = styled.div`
 const FieldsContainer = styled.div`
   overflow: auto !important;
   padding: 10px;
+  height: 100%;
 `
 
 const enhance = compose(inject('store'), observer)
@@ -39,8 +40,8 @@ const Apberuebersicht = ({ store, tree }: { store: Object, tree: Object }) => {
           updatePropertyInDb={store.updatePropertyInDb}
         />
         <TextField
-          key={`${activeDataset.row
-            .ProjId}${activeDataset.row.JbuJahr}JbuBemerkungen`}
+          key={`${activeDataset.row.ProjId}${activeDataset.row
+            .JbuJahr}JbuBemerkungen`}
           tree={tree}
           label="Bemerkungen"
           fieldName="JbuBemerkungen"
