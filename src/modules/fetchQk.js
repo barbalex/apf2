@@ -376,15 +376,13 @@ const fetchQk = async ({
     store.qk.addMessages(messages)
   }
   setLoading(false)
-  let result
   try {
-    result = await axios.post('/rpc/correct_vornach_beginnap_stati', {
+    await axios.post('/rpc/correct_vornach_beginnap_stati', {
       apid: apArtId,
     })
   } catch (error) {
     store.listError(error)
   }
-  console.log('correctVorNachBeginnApStati: result:', result)
 }
 
 export default fetchQk
