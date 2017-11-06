@@ -22,6 +22,7 @@ export default (
 
   // map through all and create array of nodes
   return tree.filteredAndSorted.ziel
+    .filter(z => z.ApArtId === apArtId)
     .filter(z => z.ZielJahr === zieljahr)
     .map((el, index) => ({
       nodeType: 'table',
