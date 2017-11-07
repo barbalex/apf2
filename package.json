@@ -48,7 +48,7 @@
     "leaflet-image": "0.4.0",
     "leaflet-measure": "2.1.7",
     "leaflet.fullscreen": "1.4.3",
-    "leaflet.markercluster": "1.1.0",
+    "leaflet.markercluster": "1.2.0",
     "lodash": "4.17.4",
     "material-ui": "0.19.4",
     "mobx": "3.3.1",
