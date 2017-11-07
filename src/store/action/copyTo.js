@@ -9,6 +9,7 @@ import clone from 'lodash/clone'
 
 import tables from '../../modules/tables'
 import copyTpopsOfPop from './copyTpopsOfPop'
+import copyZaehlOfTpopKontr from './copyZaehlOfTpopKontr'
 
 // copyTpopsOfPop can pass table and id separately
 export default async (
@@ -68,7 +69,7 @@ export default async (
   })
   newRow[parentIdField] = parentId
   delete newRow[idField]
-  // remove label: field does not exist in db, is computed
+  // remove computed fields
   delete newRow.label
   delete newRow.PopKoordWgs84
   delete newRow.TPopKoordWgs84
@@ -93,5 +94,13 @@ export default async (
   // check if need to copy tpop
   if (table === 'pop' && withNextLevel) {
     copyTpopsOfPop({ store, popIdFrom: id, popIdTo: data.PopId })
+  }
+  if (table === 'tpopkontr') {
+    // always copy Zaehlungen
+    copyZaehlOfTpopKontr({
+      store,
+      tpopkontrIdFrom: id,
+      tpopkontrIdTo: data.TPopKontrId,
+    })
   }
 }
