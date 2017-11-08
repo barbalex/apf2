@@ -5234,7 +5234,7 @@ FROM
           LEFT JOIN
             apflora.pop_entwicklung_werte
             ON apflora.tpopkontr."TPopKontrEntwicklung" = apflora.pop_entwicklung_werte."EntwicklungId")
-          INNER JOIN
+          LEFT JOIN
             ((apflora.tpopkontrzaehl
             LEFT JOIN
               apflora.tpopkontrzaehl_einheit_werte
