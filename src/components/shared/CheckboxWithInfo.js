@@ -12,6 +12,11 @@ import Label from './Label'
 const Container = styled.div`
   display: flex;
   justify-content: space-between;
+  div:nth-of-type(2) {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+  }
 `
 
 const enhance = compose(
@@ -39,16 +44,15 @@ const CheckboxWithInfo = ({
   onCheck: () => void,
   popover: Object,
   updatePropertyInDb: () => void,
-}) =>
+}) => (
   <Container>
     <div>
       <Label label={label} />
       <Checkbox checked={value === 1} onCheck={onCheck} />
     </div>
-    <InfoWithPopover>
-      {popover}
-    </InfoWithPopover>
+    <InfoWithPopover>{popover}</InfoWithPopover>
   </Container>
+)
 
 CheckboxWithInfo.defaultProps = {
   value: null,

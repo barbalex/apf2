@@ -7,7 +7,7 @@ import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 
 import FormTitle from '../../shared/FormTitle'
-import RadioButtonGroup from '../../shared/RadioButtonGroup'
+import RadioButtonGroupWithInfo from '../../shared/RadioButtonGroupWithInfo'
 import TextField from '../../shared/TextField'
 //import RadioButtonWithInfo from '../../shared/RadioButtonWithInfo'
 import CheckboxWithInfo from '../../shared/CheckboxWithInfo'
@@ -200,13 +200,22 @@ const Beobzuordnung = ({
           {showTPopId && (
             <ZuordnenDiv>
               <MaxHeightDiv>
-                <RadioButtonGroup
+                <RadioButtonGroupWithInfo
                   tree={tree}
                   fieldName="TPopId"
                   value={activeDataset.row.TPopId}
                   label="Einer Teilpopulation zuordnen"
                   dataSource={getTpopZuordnenSource(store, tree)}
                   updatePropertyInDb={updatePropertyInDb}
+                  popover={
+                    <div>
+                      <LabelPopoverTitleRow>Legende</LabelPopoverTitleRow>
+                      <LabelPopoverContentRow>
+                        Um eine Zuordnung zu entfernen: Nochmals auf die bereits
+                        Markierte Teil-Population klicken
+                      </LabelPopoverContentRow>
+                    </div>
+                  }
                 />
               </MaxHeightDiv>
             </ZuordnenDiv>
