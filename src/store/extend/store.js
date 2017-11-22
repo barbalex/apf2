@@ -119,7 +119,9 @@ export default (store: Object): void => {
     ),
     showCoordOnMapGeoAdminCh: action('showCoordOnMapGeoAdminCh', (x, y) =>
       window.open(
-        `https://map.geo.admin.ch/?bgLayer=ch.swisstopo.pixelkarte-farbe&Y=${x}&X=${y}&zoom=10&crosshair=circle`,
+        `https://map.geo.admin.ch/?bgLayer=ch.swisstopo.pixelkarte-farbe&Y=${
+          x
+        }&X=${y}&zoom=10&crosshair=circle`,
         'target="_blank"'
       )
     ),
@@ -240,5 +242,29 @@ export default (store: Object): void => {
       }
     ),
     initiated: false,
+    showNewApModal: false,
+    setShowNewApModal: action((show: boolean) => {
+      store.showNewApModal = show
+    }),
+    newApData: {
+      apArtId: null,
+      tree: {},
+      baseUrl: [],
+    },
+    setNewApData: action(
+      ({
+        apArtId,
+        tree,
+        baseUrl,
+      }: {
+        apArtId: number,
+        tree: Object,
+        baseUrl: Array<string>,
+      }) => {
+        store.newApData.apArtId = apArtId
+        store.newApData.tree = tree
+        store.newApData.baseUrl = baseUrl
+      }
+    ),
   })
 }

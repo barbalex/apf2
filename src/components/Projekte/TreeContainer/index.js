@@ -83,8 +83,12 @@ const NurApDiv = styled.div`
   padding-right: 5px;
   min-width: 40px;
 `
-const ApDivToggle = styled(Toggle)`margin-left: -8px;`
-const InnerTreeContainer = styled.div`height: 100%;`
+const ApDivToggle = styled(Toggle)`
+  margin-left: -8px;
+`
+const InnerTreeContainer = styled.div`
+  height: 100%;
+`
 
 const getAndValidateCoordinatesOfTpop = (store, id) => {
   const myId = parseInt(id, 10)
@@ -100,7 +104,9 @@ const getAndValidateCoordinatesOfTpop = (store, id) => {
   if (!x || !y) {
     store.listError(
       new Error(
-        `Die Teilpopulation mit der ID ${myId} kat keine (vollständigen) Koordinaten`
+        `Die Teilpopulation mit der ID ${
+          myId
+        } kat keine (vollständigen) Koordinaten`
       )
     )
     return { x: null, y: null }
@@ -113,7 +119,9 @@ const getAndValidateCoordinatesOfBeob = (store, beobId) => {
   if (!beob) {
     store.listError(
       new Error(
-        `Die bereitgestellte Beobachtung mit der ID ${beobId} wurde nicht gefunden`
+        `Die bereitgestellte Beobachtung mit der ID ${
+          beobId
+        } wurde nicht gefunden`
       )
     )
     return { X: null, Y: null }
@@ -122,7 +130,9 @@ const getAndValidateCoordinatesOfBeob = (store, beobId) => {
   if (!X || !Y) {
     store.listError(
       new Error(
-        `Die Teilpopulation mit der ID ${beobId} kat keine (vollständigen) Koordinaten`
+        `Die Teilpopulation mit der ID ${
+          beobId
+        } kat keine (vollständigen) Koordinaten`
       )
     )
     return { X: null, Y: null }
@@ -171,7 +181,16 @@ const enhance = compose(
             baseUrl.push(1)
           }
           const idToPass = parentId || id
-          store.insertDataset(tree, table, idToPass, baseUrl)
+          if (table === 'ap') {
+            // TODO
+            // open popup to select ApArtId
+            // then insertDataset
+            console.log('todo')
+            store.setShowNewApModal(true)
+            store.setNewApData({ apArtId: idToPass, baseUrl, tree })
+          } else {
+            store.insertDataset(tree, table, idToPass, baseUrl)
+          }
         },
         openLowerNodes() {
           const node = tree.nodes.find(

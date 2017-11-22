@@ -186,6 +186,14 @@ function Store(): void {
     filter: '',
     setFilter: () => {},
   }
+  this.showNewApModal = false
+  this.setShowNewApModal = () => {}
+  this.newApData = {
+    apArtId: null,
+    tree: {},
+    baseUrl: [],
+  }
+  this.setNewApData = () => {}
 }
 
 const MyStore = new Store()
