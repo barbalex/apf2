@@ -15,11 +15,17 @@ export default (store: Object): void => {
           return mapFilterTpop
         }
         if (store.tree.activeNodes.tpop) {
-          return [store.tree.activeNodes.tpop]
+          // fetch tpop and make sure it has coordinates
+          const tpop = store.table.tpop.get(store.tree.activeNodes.tpop)
+          // ...but only once tpop exists
+          if (tpop && tpop.TPopXKoord && tpop.TPopYKoord) {
+            return [store.tree.activeNodes.tpop]
+          }
+          return []
         }
         return []
       },
-      { name: 'mapTpopHighlightedIds' },
+      { name: 'mapTpopHighlightedIds' }
     ),
     highlightedPopIds: [],
     tpops: computed(() => getTpopsForMap(store), { name: 'mapTpopTpops' }),
@@ -30,10 +36,10 @@ export default (store: Object): void => {
       () =>
         getTpopBounds(
           store.map.tpop.tpops.filter(t =>
-            store.map.tpop.highlightedIds.includes(t.TPopId),
-          ),
+            store.map.tpop.highlightedIds.includes(t.TPopId)
+          )
         ),
-      { name: 'mapTpopBoundsOfHighlightedIds' },
+      { name: 'mapTpopBoundsOfHighlightedIds' }
     ),
     // alternative is using names
     labelUsingNr: true,

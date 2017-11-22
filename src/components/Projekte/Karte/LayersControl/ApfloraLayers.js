@@ -28,9 +28,15 @@ const DragHandleDiv = styled.div`
   padding-left: 3px;
   min-width: 18px;
 `
-const ZuordnenIcon = styled(FontIcon)`font-size: 20px !important;`
-const ZoomToIcon = styled(FontIcon)`font-size: 20px !important;`
-const FilterIcon = styled(FontIcon)`font-size: 20px !important;`
+const ZuordnenIcon = styled(FontIcon)`
+  font-size: 20px !important;
+`
+const ZoomToIcon = styled(FontIcon)`
+  font-size: 20px !important;
+`
+const FilterIcon = styled(FontIcon)`
+  font-size: 20px !important;
+`
 const LayerDiv = styled.div`
   display: flex;
   min-height: 24px;
@@ -50,24 +56,38 @@ const LayerDiv = styled.div`
    */
   font-size: 12px;
 `
-const IconsDiv = styled.div`display: flex;`
+const IconsDiv = styled.div`
+  display: flex;
+`
 const ZuordnenDiv = styled.div``
 const ZoomToDiv = styled.div`
   padding-left: 3px;
   min-width: 18px;
 `
-const FilterDiv = styled.div`padding-left: 3px;`
+const FilterDiv = styled.div`
+  padding-left: 3px;
+`
 const MapIcon = styled(FontIcon)`
   margin-right: -0.1em;
   font-size: 20px !important;
   -webkit-text-stroke: 1px black;
   -moz-text-stroke: 1px black;
 `
-const PopMapIcon = MapIcon.extend`color: #947500 !important;`
-const TpopMapIcon = MapIcon.extend`color: #016f19 !important;`
-const BeobNichtBeurteiltMapIcon = MapIcon.extend`color: #9a009a !important;`
-const BeobNichtZuzuordnenMapIcon = MapIcon.extend`color: #ffe4ff !important;`
-const TpopBeobMapIcon = MapIcon.extend`color: #ff00ff !important;`
+const PopMapIcon = MapIcon.extend`
+  color: #947500 !important;
+`
+const TpopMapIcon = MapIcon.extend`
+  color: #016f19 !important;
+`
+const BeobNichtBeurteiltMapIcon = MapIcon.extend`
+  color: #9a009a !important;
+`
+const BeobNichtZuzuordnenMapIcon = MapIcon.extend`
+  color: #ffe4ff !important;
+`
+const TpopBeobMapIcon = MapIcon.extend`
+  color: #ff00ff !important;
+`
 const TpopBeobAssignPolylinesIcon = MapIcon.extend`
   color: #ff00ff !important;
   -webkit-text-stroke: 0 black;
@@ -309,8 +329,11 @@ const SortableItem = SortableElement(
                     const bounds =
                       store.map[mapNameToStoreNameObject[apfloraLayer.value]]
                         .boundsOfHighlightedIds
-                    const boundsBuffered = bufferBoundsTo50m(bounds)
-                    store.map.changeBounds(boundsBuffered)
+                    // ensure bounds exist
+                    if (bounds && bounds.length && bounds.length > 0) {
+                      const boundsBuffered = bufferBoundsTo50m(bounds)
+                      store.map.changeBounds(boundsBuffered)
+                    }
                   }
                 }}
               >
@@ -354,7 +377,8 @@ const ApfloraLayers = ({ store }: { store: Object }) => (
         store.map.moveApfloraLayer({
           oldIndex,
           newIndex,
-        })}
+        })
+      }
       useDragHandle
       lockAxis="y"
       store={store}

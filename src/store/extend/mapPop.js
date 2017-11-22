@@ -18,11 +18,17 @@ export default (store: Object): void => {
           return mapFilterPop
         }
         if (store.tree.activeNodes.pop) {
-          return [store.tree.activeNodes.pop]
+          // fetch pop and make sure it has coordinates
+          const pop = store.table.pop.get(store.tree.activeNodes.pop)
+          // ...but only once pop exists
+          if (pop && pop.PopXKoord && pop.PopYKoord) {
+            return [store.tree.activeNodes.pop]
+          }
+          return []
         }
         return []
       },
-      { name: 'highlightedIds' },
+      { name: 'highlightedIds' }
     ),
     pops: computed(() => getPopsForMap(store), { name: 'mapPops' }),
     bounds: computed(() => getPopBounds(store.map.pop.pops), {
@@ -32,10 +38,10 @@ export default (store: Object): void => {
       () =>
         getPopBounds(
           store.map.pop.pops.filter(p =>
-            store.map.pop.highlightedIds.includes(p.PopId),
-          ),
+            store.map.pop.highlightedIds.includes(p.PopId)
+          )
         ),
-      { name: 'mapPopBoundsOfHighlightedIds' },
+      { name: 'mapPopBoundsOfHighlightedIds' }
     ),
     // alternative is using names
     labelUsingNr: true,
