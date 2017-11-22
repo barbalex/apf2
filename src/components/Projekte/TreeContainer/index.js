@@ -182,6 +182,10 @@ const enhance = compose(
           }
           const idToPass = parentId || id
           if (table === 'ap') {
+            /**
+             * need to fetch new ApArtId before creating new ap
+             * because of all the dependencies
+             */
             // TODO
             // open popup to select ApArtId
             // then insertDataset
