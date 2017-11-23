@@ -8,6 +8,7 @@ export default (
   key: string,
   valuePassed: string | number
 ): void => {
+  console.log('updateProperty: valuePassed:', valuePassed)
   const { table, row } = tree.activeDataset
   let value = valuePassed
   // ensure primary data exists
@@ -20,7 +21,8 @@ export default (
     )
   }
   // ensure numbers saved as numbers
-  if (value && !isNaN(value)) {
+  // but enable adding dates in tpopmassn.TPopMassnAnsiedDatSamm
+  if (value && !isNaN(value) && value.includes && !value.includes('.')) {
     value = +value
   }
   // edge cases:
