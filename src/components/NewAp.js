@@ -26,23 +26,21 @@ const enhance = compose(
   withState('searchTextWasChanged', 'changeSearchTextWasChanged', ''),
   withHandlers({
     onNewRequest: ({ store }) => val => {
-      const { apArtId, tree, baseUrl } = store.newApData
-      // TODO: add id and project?
+      const { tree } = store.newApData
       axios({
         method: 'POST',
         url: '/ap',
-        data: { ApArtId: apArtId, ProjId: 1 },
+        data: { ApArtId: val.TaxonomieId, ProjId: 1 },
         headers: {
           Prefer: 'return=representation',
         },
       })
         .then(result => {
-          console.log('NewAp: result:', result)
           const row = result.data[0]
           // insert this dataset in store.table
-          store.table.ap.set(apArtId, row)
+          store.table.ap.set(val.TaxonomieId, row)
           // set new url
-          tree.setActiveNodeArray(['Projekte', 1, 'Arten', apArtId])
+          tree.setActiveNodeArray(['Projekte', 1, 'Arten', val.TaxonomieId])
           store.setShowNewApModal(false)
         })
         .catch(error => store.listError(error))
@@ -138,11 +136,7 @@ const NewAp = ({
   } else if (dataSourceLength > 200) {
     labelNumberLimit = 'Nur die ersten 200 Einträge werden aufgelistet.'
   }
-  const labelText = focused
-    ? `${labelFilterHint || labelNumberLimit ? '. ' : ''}${labelFilterHint}${
-        labelNumberLimit
-      }`
-    : ''
+  const labelText = focused ? `${labelFilterHint}${labelNumberLimit}` : ''
   const actions = [
     <FlatButton
       label="abbrechen"
@@ -155,6 +149,7 @@ const NewAp = ({
     <Dialog title="Neue Art" open={store.showNewApModal} actions={actions}>
       <StyledDiv>
         <StyledAutoComplete
+          id="newAp"
           hintText={dataSource.length === 0 ? 'lade Daten...' : ''}
           fullWidth
           floatingLabelText={labelText}

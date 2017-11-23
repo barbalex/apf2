@@ -186,10 +186,6 @@ const enhance = compose(
              * need to fetch new ApArtId before creating new ap
              * because of all the dependencies
              */
-            // TODO
-            // open popup to select ApArtId
-            // then insertDataset
-            console.log('todo')
             store.setShowNewApModal(true)
             store.setNewApData({ tree })
           } else {
