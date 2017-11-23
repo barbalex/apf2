@@ -1,11 +1,10 @@
 // @flow
-import React, { Component } from 'react'
+import React from 'react'
 import { observer, inject } from 'mobx-react'
 import { Tabs, Tab } from 'material-ui/Tabs'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
-import withState from 'recompose/withState'
 
 import RadioButtonGroup from '../../shared/RadioButtonGroup'
 import TextField from '../../shared/TextField'
@@ -93,7 +92,6 @@ const getBearbName = ({ store, tree }: { store: Object, tree: Object }) => {
 
 const enhance = compose(
   inject('store'),
-  withState('width', 'changeWidth', 0),
   withHandlers({
     onChangeTab: props => value =>
       props.store.setUrlQueryValue('feldkontrTab', value),
@@ -101,435 +99,405 @@ const enhance = compose(
   observer
 )
 
-class Tpopfeldkontr extends Component {
-  props: {
-    store: Object,
-    tree: Object,
-    onChangeTab: () => void,
-    width: number,
-    changeWidth: () => {},
-  }
+const Tpopfeldkontr = ({
+  store,
+  tree,
+  onChangeTab,
+  dimensions,
+}: {
+  store: Object,
+  tree: Object,
+  onChangeTab: () => void,
+  dimensions: Object,
+}) => {
+  const { activeDataset } = tree
+  const width = isNaN(dimensions.width) ? 380 : dimensions.width
 
-  container: ?HTMLDivElement
-
-  updateWidth = () => {
-    if (this.container && this.container.offsetWidth) {
-      this.props.changeWidth(this.container.offsetWidth)
-    }
-  }
-
-  componentDidMount() {
-    this.updateWidth()
-    window.addEventListener('resize', this.updateWidth)
-  }
-
-  componentDidUpdate() {
-    // not sure if this is necessary
-    this.updateWidth()
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('resize', this.updateWidth)
-  }
-
-  render() {
-    const { store, tree, onChangeTab, width } = this.props
-    const { activeDataset } = tree
-
-    return (
-      <Container innerRef={c => (this.container = c)}>
-        <FormTitle tree={tree} title="Feld-Kontrolle" />
-        <FieldsContainer>
-          <Tabs
-            style={styles.root}
-            contentContainerStyle={styles.container}
-            tabTemplate={TabTemplate}
-            value={store.urlQuery.feldkontrTab || 'entwicklung'}
-            onChange={onChangeTab}
-          >
-            <Tab label="Entwicklung" value="entwicklung">
-              <TabChildDiv>
-                <FormContainer data-width={width}>
-                  <YearDatePair
-                    key={activeDataset.row.TPopKontrId}
-                    tree={tree}
-                    yearLabel="Jahr"
-                    yearFieldName="TPopKontrJahr"
-                    yearValue={activeDataset.row.TPopKontrJahr}
-                    yearErrorText={activeDataset.valid.TPopKontrJahr}
-                    dateLabel="Datum"
-                    dateFieldName="TPopKontrDatum"
-                    dateValue={activeDataset.row.TPopKontrDatum}
-                    dateErrorText={activeDataset.valid.TPopKontrDatum}
-                    updateProperty={store.updateProperty}
-                    updatePropertyInDb={store.updatePropertyInDb}
-                  />
-                  <RadioButtonGroup
-                    tree={tree}
-                    fieldName="TPopKontrTyp"
-                    label="Kontrolltyp"
-                    value={activeDataset.row.TPopKontrTyp}
-                    errorText={activeDataset.valid.TPopKontrTyp}
-                    dataSource={tpopkontrTypWerte}
-                    updatePropertyInDb={store.updatePropertyInDb}
-                  />
-                  <AutoComplete
-                    key={`${activeDataset.row.TPopKontrId}TPopKontrBearb`}
-                    tree={tree}
-                    label="BearbeiterIn"
-                    fieldName="TPopKontrBearb"
-                    valueText={getBearbName({ store, tree })}
-                    errorText={activeDataset.valid.TPopKontrBearb}
-                    dataSource={store.dropdownList.adressen}
-                    dataSourceConfig={{
-                      value: 'AdrId',
-                      text: 'AdrName',
-                    }}
-                    updatePropertyInDb={store.updatePropertyInDb}
-                  />
-                  <TextField
-                    key={`${activeDataset.row.TPopKontrId}TPopKontrJungpfl`}
-                    tree={tree}
-                    label="Anzahl Jungpflanzen"
-                    fieldName="TPopKontrJungpfl"
-                    value={activeDataset.row.TPopKontrJungpfl}
-                    errorText={activeDataset.valid.TPopKontrJungpfl}
-                    type="number"
-                    updateProperty={store.updateProperty}
-                    updatePropertyInDb={store.updatePropertyInDb}
-                  />
-                  <TextField
-                    key={`${activeDataset.row.TPopKontrId}TPopKontrVitalitaet`}
-                    tree={tree}
-                    label="Vitalität"
-                    fieldName="TPopKontrVitalitaet"
-                    value={activeDataset.row.TPopKontrVitalitaet}
-                    errorText={activeDataset.valid.TPopKontrVitalitaet}
-                    type="text"
-                    updateProperty={store.updateProperty}
-                    updatePropertyInDb={store.updatePropertyInDb}
-                  />
-                  <TextField
-                    key={`${activeDataset.row.TPopKontrId}TPopKontrUeberleb`}
-                    tree={tree}
-                    label="Überlebensrate"
-                    fieldName="TPopKontrUeberleb"
-                    value={activeDataset.row.TPopKontrUeberleb}
-                    errorText={activeDataset.valid.TPopKontrUeberleb}
-                    type="number"
-                    updateProperty={store.updateProperty}
-                    updatePropertyInDb={store.updatePropertyInDb}
-                  />
-                  <RadioButtonGroupWithInfo
-                    tree={tree}
-                    fieldName="TPopKontrEntwicklung"
-                    value={activeDataset.row.TPopKontrEntwicklung}
-                    dataSource={store.dropdownList.tpopEntwicklungWerte}
-                    updatePropertyInDb={store.updatePropertyInDb}
-                    popover={TpopfeldkontrentwicklungPopover}
-                    label="Entwicklung"
-                  />
-                  <TextField
-                    key={`${activeDataset.row.TPopKontrId}TPopKontrUrsach`}
-                    tree={tree}
-                    label="Ursachen"
-                    fieldName="TPopKontrUrsach"
-                    value={activeDataset.row.TPopKontrUrsach}
-                    errorText={activeDataset.valid.TPopKontrUrsach}
-                    hintText="Standort: ..., Klima: ..., anderes: ..."
-                    type="text"
-                    multiLine
-                    fullWidth
-                    updateProperty={store.updateProperty}
-                    updatePropertyInDb={store.updatePropertyInDb}
-                  />
-                  <TextField
-                    key={`${activeDataset.row.TPopKontrId}TPopKontrUrteil`}
-                    tree={tree}
-                    label="Erfolgsbeurteilung"
-                    fieldName="TPopKontrUrteil"
-                    value={activeDataset.row.TPopKontrUrteil}
-                    errorText={activeDataset.valid.TPopKontrUrteil}
-                    type="text"
-                    multiLine
-                    fullWidth
-                    updateProperty={store.updateProperty}
-                    updatePropertyInDb={store.updatePropertyInDb}
-                  />
-                  <TextField
-                    key={`${activeDataset.row.TPopKontrId}TPopKontrAendUms`}
-                    tree={tree}
-                    label="Änderungs-Vorschläge Umsetzung"
-                    fieldName="TPopKontrAendUms"
-                    value={activeDataset.row.TPopKontrAendUms}
-                    errorText={activeDataset.valid.TPopKontrAendUms}
-                    type="text"
-                    multiLine
-                    fullWidth
-                    updateProperty={store.updateProperty}
-                    updatePropertyInDb={store.updatePropertyInDb}
-                  />
-                  <TextField
-                    key={`${activeDataset.row.TPopKontrId}TPopKontrAendKontr`}
-                    tree={tree}
-                    label="Änderungs-Vorschläge Kontrolle"
-                    fieldName="TPopKontrAendKontr"
-                    value={activeDataset.row.TPopKontrAendKontr}
-                    errorText={activeDataset.valid.TPopKontrAendKontr}
-                    type="text"
-                    multiLine
-                    fullWidth
-                    updateProperty={store.updateProperty}
-                    updatePropertyInDb={store.updatePropertyInDb}
-                  />
-                  <TextField
-                    tree={tree}
-                    label="Bemerkungen"
-                    fieldName="TPopKontrTxt"
-                    value={activeDataset.row.TPopKontrTxt}
-                    errorText={activeDataset.valid.TPopKontrTxt}
-                    type="text"
-                    multiLine
-                    fullWidth
-                    updateProperty={store.updateProperty}
-                    updatePropertyInDb={store.updatePropertyInDb}
-                  />
-                  <StringToCopy
-                    text={activeDataset.row.TPopKontrGuid}
-                    label="GUID"
-                  />
-                </FormContainer>
-              </TabChildDiv>
-            </Tab>
-            <Tab label="Biotop" value="biotop">
-              <TabChildDiv>
-                <FormContainer data-width={width}>
-                  <TextField
-                    key={`${activeDataset.row.TPopKontrId}TPopKontrFlaeche`}
-                    tree={tree}
-                    label="Fläche"
-                    fieldName="TPopKontrFlaeche"
-                    value={activeDataset.row.TPopKontrFlaeche}
-                    errorText={activeDataset.valid.TPopKontrFlaeche}
-                    type="number"
-                    updateProperty={store.updateProperty}
-                    updatePropertyInDb={store.updatePropertyInDb}
-                  />
-                  <Section>Vegetation</Section>
-                  <AutoCompleteFromArray
-                    key={`${activeDataset.row.TPopKontrId}Lebensraum`}
-                    tree={tree}
-                    label="Lebensraum nach Delarze"
-                    fieldName="TPopKontrLeb"
-                    valueText={activeDataset.row.TPopKontrLeb}
-                    errorText={activeDataset.valid.TPopKontrLeb}
-                    dataSource={store.dropdownList.lr}
-                    updatePropertyInDb={store.updatePropertyInDb}
-                  />
-                  <AutoCompleteFromArray
-                    key={`${activeDataset.row.TPopKontrId}Umgebung`}
-                    tree={tree}
-                    label="Umgebung nach Delarze"
-                    fieldName="TPopKontrLebUmg"
-                    valueText={activeDataset.row.TPopKontrLebUmg}
-                    errorText={activeDataset.valid.TPopKontrLebUmg}
-                    dataSource={store.dropdownList.lr}
-                    updatePropertyInDb={store.updatePropertyInDb}
-                  />
-                  <TextField
-                    key={`${activeDataset.row.TPopKontrId}TPopKontrVegTyp`}
-                    tree={tree}
-                    label="Vegetationstyp"
-                    fieldName="TPopKontrVegTyp"
-                    value={activeDataset.row.TPopKontrVegTyp}
-                    errorText={activeDataset.valid.TPopKontrVegTyp}
-                    type="text"
-                    updateProperty={store.updateProperty}
-                    updatePropertyInDb={store.updatePropertyInDb}
-                  />
-                  <TextField
-                    key={`${activeDataset.row.TPopKontrId}TPopKontrKonkurrenz`}
-                    tree={tree}
-                    label="Konkurrenz"
-                    fieldName="TPopKontrKonkurrenz"
-                    value={activeDataset.row.TPopKontrKonkurrenz}
-                    errorText={activeDataset.valid.TPopKontrKonkurrenz}
-                    type="text"
-                    updateProperty={store.updateProperty}
-                    updatePropertyInDb={store.updatePropertyInDb}
-                  />
-                  <TextField
-                    key={`${activeDataset.row.TPopKontrId}TPopKontrMoosschicht`}
-                    tree={tree}
-                    label="Moosschicht"
-                    fieldName="TPopKontrMoosschicht"
-                    value={activeDataset.row.TPopKontrMoosschicht}
-                    errorText={activeDataset.valid.TPopKontrMoosschicht}
-                    type="text"
-                    updateProperty={store.updateProperty}
-                    updatePropertyInDb={store.updatePropertyInDb}
-                  />
-                  <TextField
-                    key={`${
-                      activeDataset.row.TPopKontrId
-                    }TPopKontrKrautschicht`}
-                    tree={tree}
-                    label="Krautschicht"
-                    fieldName="TPopKontrKrautschicht"
-                    value={activeDataset.row.TPopKontrKrautschicht}
-                    errorText={activeDataset.valid.TPopKontrKrautschicht}
-                    type="text"
-                    updateProperty={store.updateProperty}
-                    updatePropertyInDb={store.updatePropertyInDb}
-                  />
-                  <TextField
-                    key={`${
-                      activeDataset.row.TPopKontrId
-                    }TPopKontrStrauchschicht`}
-                    tree={tree}
-                    label="Strauchschicht"
-                    fieldName="TPopKontrStrauchschicht"
-                    value={activeDataset.row.TPopKontrStrauchschicht}
-                    errorText={activeDataset.valid.TPopKontrStrauchschicht}
-                    type="text"
-                    updateProperty={store.updateProperty}
-                    updatePropertyInDb={store.updatePropertyInDb}
-                  />
-                  <TextField
-                    key={`${activeDataset.row.TPopKontrId}TPopKontrBaumschicht`}
-                    tree={tree}
-                    label="Baumschicht"
-                    fieldName="TPopKontrBaumschicht"
-                    value={activeDataset.row.TPopKontrBaumschicht}
-                    errorText={activeDataset.valid.TPopKontrBaumschicht}
-                    type="text"
-                    updateProperty={store.updateProperty}
-                    updatePropertyInDb={store.updatePropertyInDb}
-                  />
-                  <Section>Boden</Section>
-                  <TextField
-                    key={`${activeDataset.row.TPopKontrId}TPopKontrBodenTyp`}
-                    tree={tree}
-                    label="Typ"
-                    fieldName="TPopKontrBodenTyp"
-                    value={activeDataset.row.TPopKontrBodenTyp}
-                    errorText={activeDataset.valid.TPopKontrBodenTyp}
-                    type="text"
-                    updateProperty={store.updateProperty}
-                    updatePropertyInDb={store.updatePropertyInDb}
-                  />
-                  <TextField
-                    key={`${
-                      activeDataset.row.TPopKontrId
-                    }TPopKontrBodenKalkgehalt`}
-                    tree={tree}
-                    label="Kalkgehalt"
-                    fieldName="TPopKontrBodenKalkgehalt"
-                    value={activeDataset.row.TPopKontrBodenKalkgehalt}
-                    errorText={activeDataset.valid.TPopKontrBodenKalkgehalt}
-                    type="text"
-                    updateProperty={store.updateProperty}
-                    updatePropertyInDb={store.updatePropertyInDb}
-                  />
-                  <TextField
-                    key={`${
-                      activeDataset.row.TPopKontrId
-                    }TPopKontrBodenDurchlaessigkeit`}
-                    tree={tree}
-                    label="Durchlässigkeit"
-                    fieldName="TPopKontrBodenDurchlaessigkeit"
-                    value={activeDataset.row.TPopKontrBodenDurchlaessigkeit}
-                    errorText={
-                      activeDataset.valid.TPopKontrBodenDurchlaessigkeit
-                    }
-                    type="text"
-                    updateProperty={store.updateProperty}
-                    updatePropertyInDb={store.updatePropertyInDb}
-                  />
-                  <TextField
-                    key={`${activeDataset.row.TPopKontrId}TPopKontrBodenHumus`}
-                    tree={tree}
-                    label="Humusgehalt"
-                    fieldName="TPopKontrBodenHumus"
-                    value={activeDataset.row.TPopKontrBodenHumus}
-                    errorText={activeDataset.valid.TPopKontrBodenHumus}
-                    type="text"
-                    updateProperty={store.updateProperty}
-                    updatePropertyInDb={store.updatePropertyInDb}
-                  />
-                  <TextField
-                    key={`${
-                      activeDataset.row.TPopKontrId
-                    }TPopKontrBodenNaehrstoffgehalt`}
-                    tree={tree}
-                    label="Nährstoffgehalt"
-                    fieldName="TPopKontrBodenNaehrstoffgehalt"
-                    value={activeDataset.row.TPopKontrBodenNaehrstoffgehalt}
-                    errorText={
-                      activeDataset.valid.TPopKontrBodenNaehrstoffgehalt
-                    }
-                    type="text"
-                    updateProperty={store.updateProperty}
-                    updatePropertyInDb={store.updatePropertyInDb}
-                  />
-                  <TextField
-                    key={`${activeDataset.row.TPopKontrId}TPopKontrBodenAbtrag`}
-                    tree={tree}
-                    label="Bodenabtrag"
-                    fieldName="TPopKontrBodenAbtrag"
-                    value={activeDataset.row.TPopKontrBodenAbtrag}
-                    errorText={activeDataset.valid.TPopKontrBodenAbtrag}
-                    type="text"
-                    updateProperty={store.updateProperty}
-                    updatePropertyInDb={store.updatePropertyInDb}
-                  />
-                  <TextField
-                    key={`${
-                      activeDataset.row.TPopKontrId
-                    }TPopKontrWasserhaushalt`}
-                    tree={tree}
-                    label="Wasserhaushalt"
-                    fieldName="TPopKontrWasserhaushalt"
-                    value={activeDataset.row.TPopKontrWasserhaushalt}
-                    errorText={activeDataset.valid.TPopKontrWasserhaushalt}
-                    type="text"
-                    updateProperty={store.updateProperty}
-                    updatePropertyInDb={store.updatePropertyInDb}
-                  />
-                  <Section>Beurteilung</Section>
-                  <TextField
-                    key={`${
-                      activeDataset.row.TPopKontrId
-                    }TPopKontrHandlungsbedarf`}
-                    tree={tree}
-                    label="Handlungsbedarf"
-                    fieldName="TPopKontrHandlungsbedarf"
-                    value={activeDataset.row.TPopKontrHandlungsbedarf}
-                    errorText={activeDataset.valid.TPopKontrHandlungsbedarf}
-                    type="text"
-                    multiline
-                    updateProperty={store.updateProperty}
-                    updatePropertyInDb={store.updatePropertyInDb}
-                  />
-                  <RadioButtonGroup
-                    tree={tree}
-                    fieldName="TPopKontrIdealBiotopUebereinst"
-                    label="Übereinstimmung mit Idealbiotop"
-                    value={activeDataset.row.TPopKontrIdealBiotopUebereinst}
-                    errorText={
-                      activeDataset.valid.TPopKontrIdealBiotopUebereinst
-                    }
-                    dataSource={store.dropdownList.idbiotopuebereinstWerte}
-                    updatePropertyInDb={store.updatePropertyInDb}
-                  />
-                </FormContainer>
-              </TabChildDiv>
-            </Tab>
-          </Tabs>
-        </FieldsContainer>
-      </Container>
-    )
-  }
+  return (
+    <Container innerRef={c => (this.container = c)}>
+      <FormTitle tree={tree} title="Feld-Kontrolle" />
+      <FieldsContainer>
+        <Tabs
+          style={styles.root}
+          contentContainerStyle={styles.container}
+          tabTemplate={TabTemplate}
+          value={store.urlQuery.feldkontrTab || 'entwicklung'}
+          onChange={onChangeTab}
+        >
+          <Tab label="Entwicklung" value="entwicklung">
+            <TabChildDiv>
+              <FormContainer data-width={width}>
+                <YearDatePair
+                  key={activeDataset.row.TPopKontrId}
+                  tree={tree}
+                  yearLabel="Jahr"
+                  yearFieldName="TPopKontrJahr"
+                  yearValue={activeDataset.row.TPopKontrJahr}
+                  yearErrorText={activeDataset.valid.TPopKontrJahr}
+                  dateLabel="Datum"
+                  dateFieldName="TPopKontrDatum"
+                  dateValue={activeDataset.row.TPopKontrDatum}
+                  dateErrorText={activeDataset.valid.TPopKontrDatum}
+                  updateProperty={store.updateProperty}
+                  updatePropertyInDb={store.updatePropertyInDb}
+                />
+                <RadioButtonGroup
+                  tree={tree}
+                  fieldName="TPopKontrTyp"
+                  label="Kontrolltyp"
+                  value={activeDataset.row.TPopKontrTyp}
+                  errorText={activeDataset.valid.TPopKontrTyp}
+                  dataSource={tpopkontrTypWerte}
+                  updatePropertyInDb={store.updatePropertyInDb}
+                />
+                <AutoComplete
+                  key={`${activeDataset.row.TPopKontrId}TPopKontrBearb`}
+                  tree={tree}
+                  label="BearbeiterIn"
+                  fieldName="TPopKontrBearb"
+                  valueText={getBearbName({ store, tree })}
+                  errorText={activeDataset.valid.TPopKontrBearb}
+                  dataSource={store.dropdownList.adressen}
+                  dataSourceConfig={{
+                    value: 'AdrId',
+                    text: 'AdrName',
+                  }}
+                  updatePropertyInDb={store.updatePropertyInDb}
+                />
+                <TextField
+                  key={`${activeDataset.row.TPopKontrId}TPopKontrJungpfl`}
+                  tree={tree}
+                  label="Anzahl Jungpflanzen"
+                  fieldName="TPopKontrJungpfl"
+                  value={activeDataset.row.TPopKontrJungpfl}
+                  errorText={activeDataset.valid.TPopKontrJungpfl}
+                  type="number"
+                  updateProperty={store.updateProperty}
+                  updatePropertyInDb={store.updatePropertyInDb}
+                />
+                <TextField
+                  key={`${activeDataset.row.TPopKontrId}TPopKontrVitalitaet`}
+                  tree={tree}
+                  label="Vitalität"
+                  fieldName="TPopKontrVitalitaet"
+                  value={activeDataset.row.TPopKontrVitalitaet}
+                  errorText={activeDataset.valid.TPopKontrVitalitaet}
+                  type="text"
+                  updateProperty={store.updateProperty}
+                  updatePropertyInDb={store.updatePropertyInDb}
+                />
+                <TextField
+                  key={`${activeDataset.row.TPopKontrId}TPopKontrUeberleb`}
+                  tree={tree}
+                  label="Überlebensrate"
+                  fieldName="TPopKontrUeberleb"
+                  value={activeDataset.row.TPopKontrUeberleb}
+                  errorText={activeDataset.valid.TPopKontrUeberleb}
+                  type="number"
+                  updateProperty={store.updateProperty}
+                  updatePropertyInDb={store.updatePropertyInDb}
+                />
+                <RadioButtonGroupWithInfo
+                  tree={tree}
+                  fieldName="TPopKontrEntwicklung"
+                  value={activeDataset.row.TPopKontrEntwicklung}
+                  dataSource={store.dropdownList.tpopEntwicklungWerte}
+                  updatePropertyInDb={store.updatePropertyInDb}
+                  popover={TpopfeldkontrentwicklungPopover}
+                  label="Entwicklung"
+                />
+                <TextField
+                  key={`${activeDataset.row.TPopKontrId}TPopKontrUrsach`}
+                  tree={tree}
+                  label="Ursachen"
+                  fieldName="TPopKontrUrsach"
+                  value={activeDataset.row.TPopKontrUrsach}
+                  errorText={activeDataset.valid.TPopKontrUrsach}
+                  hintText="Standort: ..., Klima: ..., anderes: ..."
+                  type="text"
+                  multiLine
+                  fullWidth
+                  updateProperty={store.updateProperty}
+                  updatePropertyInDb={store.updatePropertyInDb}
+                />
+                <TextField
+                  key={`${activeDataset.row.TPopKontrId}TPopKontrUrteil`}
+                  tree={tree}
+                  label="Erfolgsbeurteilung"
+                  fieldName="TPopKontrUrteil"
+                  value={activeDataset.row.TPopKontrUrteil}
+                  errorText={activeDataset.valid.TPopKontrUrteil}
+                  type="text"
+                  multiLine
+                  fullWidth
+                  updateProperty={store.updateProperty}
+                  updatePropertyInDb={store.updatePropertyInDb}
+                />
+                <TextField
+                  key={`${activeDataset.row.TPopKontrId}TPopKontrAendUms`}
+                  tree={tree}
+                  label="Änderungs-Vorschläge Umsetzung"
+                  fieldName="TPopKontrAendUms"
+                  value={activeDataset.row.TPopKontrAendUms}
+                  errorText={activeDataset.valid.TPopKontrAendUms}
+                  type="text"
+                  multiLine
+                  fullWidth
+                  updateProperty={store.updateProperty}
+                  updatePropertyInDb={store.updatePropertyInDb}
+                />
+                <TextField
+                  key={`${activeDataset.row.TPopKontrId}TPopKontrAendKontr`}
+                  tree={tree}
+                  label="Änderungs-Vorschläge Kontrolle"
+                  fieldName="TPopKontrAendKontr"
+                  value={activeDataset.row.TPopKontrAendKontr}
+                  errorText={activeDataset.valid.TPopKontrAendKontr}
+                  type="text"
+                  multiLine
+                  fullWidth
+                  updateProperty={store.updateProperty}
+                  updatePropertyInDb={store.updatePropertyInDb}
+                />
+                <TextField
+                  tree={tree}
+                  label="Bemerkungen"
+                  fieldName="TPopKontrTxt"
+                  value={activeDataset.row.TPopKontrTxt}
+                  errorText={activeDataset.valid.TPopKontrTxt}
+                  type="text"
+                  multiLine
+                  fullWidth
+                  updateProperty={store.updateProperty}
+                  updatePropertyInDb={store.updatePropertyInDb}
+                />
+                <StringToCopy
+                  text={activeDataset.row.TPopKontrGuid}
+                  label="GUID"
+                />
+              </FormContainer>
+            </TabChildDiv>
+          </Tab>
+          <Tab label="Biotop" value="biotop">
+            <TabChildDiv>
+              <FormContainer data-width={width}>
+                <TextField
+                  key={`${activeDataset.row.TPopKontrId}TPopKontrFlaeche`}
+                  tree={tree}
+                  label="Fläche"
+                  fieldName="TPopKontrFlaeche"
+                  value={activeDataset.row.TPopKontrFlaeche}
+                  errorText={activeDataset.valid.TPopKontrFlaeche}
+                  type="number"
+                  updateProperty={store.updateProperty}
+                  updatePropertyInDb={store.updatePropertyInDb}
+                />
+                <Section>Vegetation</Section>
+                <AutoCompleteFromArray
+                  key={`${activeDataset.row.TPopKontrId}Lebensraum`}
+                  tree={tree}
+                  label="Lebensraum nach Delarze"
+                  fieldName="TPopKontrLeb"
+                  valueText={activeDataset.row.TPopKontrLeb}
+                  errorText={activeDataset.valid.TPopKontrLeb}
+                  dataSource={store.dropdownList.lr}
+                  updatePropertyInDb={store.updatePropertyInDb}
+                />
+                <AutoCompleteFromArray
+                  key={`${activeDataset.row.TPopKontrId}Umgebung`}
+                  tree={tree}
+                  label="Umgebung nach Delarze"
+                  fieldName="TPopKontrLebUmg"
+                  valueText={activeDataset.row.TPopKontrLebUmg}
+                  errorText={activeDataset.valid.TPopKontrLebUmg}
+                  dataSource={store.dropdownList.lr}
+                  updatePropertyInDb={store.updatePropertyInDb}
+                />
+                <TextField
+                  key={`${activeDataset.row.TPopKontrId}TPopKontrVegTyp`}
+                  tree={tree}
+                  label="Vegetationstyp"
+                  fieldName="TPopKontrVegTyp"
+                  value={activeDataset.row.TPopKontrVegTyp}
+                  errorText={activeDataset.valid.TPopKontrVegTyp}
+                  type="text"
+                  updateProperty={store.updateProperty}
+                  updatePropertyInDb={store.updatePropertyInDb}
+                />
+                <TextField
+                  key={`${activeDataset.row.TPopKontrId}TPopKontrKonkurrenz`}
+                  tree={tree}
+                  label="Konkurrenz"
+                  fieldName="TPopKontrKonkurrenz"
+                  value={activeDataset.row.TPopKontrKonkurrenz}
+                  errorText={activeDataset.valid.TPopKontrKonkurrenz}
+                  type="text"
+                  updateProperty={store.updateProperty}
+                  updatePropertyInDb={store.updatePropertyInDb}
+                />
+                <TextField
+                  key={`${activeDataset.row.TPopKontrId}TPopKontrMoosschicht`}
+                  tree={tree}
+                  label="Moosschicht"
+                  fieldName="TPopKontrMoosschicht"
+                  value={activeDataset.row.TPopKontrMoosschicht}
+                  errorText={activeDataset.valid.TPopKontrMoosschicht}
+                  type="text"
+                  updateProperty={store.updateProperty}
+                  updatePropertyInDb={store.updatePropertyInDb}
+                />
+                <TextField
+                  key={`${activeDataset.row.TPopKontrId}TPopKontrKrautschicht`}
+                  tree={tree}
+                  label="Krautschicht"
+                  fieldName="TPopKontrKrautschicht"
+                  value={activeDataset.row.TPopKontrKrautschicht}
+                  errorText={activeDataset.valid.TPopKontrKrautschicht}
+                  type="text"
+                  updateProperty={store.updateProperty}
+                  updatePropertyInDb={store.updatePropertyInDb}
+                />
+                <TextField
+                  key={`${
+                    activeDataset.row.TPopKontrId
+                  }TPopKontrStrauchschicht`}
+                  tree={tree}
+                  label="Strauchschicht"
+                  fieldName="TPopKontrStrauchschicht"
+                  value={activeDataset.row.TPopKontrStrauchschicht}
+                  errorText={activeDataset.valid.TPopKontrStrauchschicht}
+                  type="text"
+                  updateProperty={store.updateProperty}
+                  updatePropertyInDb={store.updatePropertyInDb}
+                />
+                <TextField
+                  key={`${activeDataset.row.TPopKontrId}TPopKontrBaumschicht`}
+                  tree={tree}
+                  label="Baumschicht"
+                  fieldName="TPopKontrBaumschicht"
+                  value={activeDataset.row.TPopKontrBaumschicht}
+                  errorText={activeDataset.valid.TPopKontrBaumschicht}
+                  type="text"
+                  updateProperty={store.updateProperty}
+                  updatePropertyInDb={store.updatePropertyInDb}
+                />
+                <Section>Boden</Section>
+                <TextField
+                  key={`${activeDataset.row.TPopKontrId}TPopKontrBodenTyp`}
+                  tree={tree}
+                  label="Typ"
+                  fieldName="TPopKontrBodenTyp"
+                  value={activeDataset.row.TPopKontrBodenTyp}
+                  errorText={activeDataset.valid.TPopKontrBodenTyp}
+                  type="text"
+                  updateProperty={store.updateProperty}
+                  updatePropertyInDb={store.updatePropertyInDb}
+                />
+                <TextField
+                  key={`${
+                    activeDataset.row.TPopKontrId
+                  }TPopKontrBodenKalkgehalt`}
+                  tree={tree}
+                  label="Kalkgehalt"
+                  fieldName="TPopKontrBodenKalkgehalt"
+                  value={activeDataset.row.TPopKontrBodenKalkgehalt}
+                  errorText={activeDataset.valid.TPopKontrBodenKalkgehalt}
+                  type="text"
+                  updateProperty={store.updateProperty}
+                  updatePropertyInDb={store.updatePropertyInDb}
+                />
+                <TextField
+                  key={`${
+                    activeDataset.row.TPopKontrId
+                  }TPopKontrBodenDurchlaessigkeit`}
+                  tree={tree}
+                  label="Durchlässigkeit"
+                  fieldName="TPopKontrBodenDurchlaessigkeit"
+                  value={activeDataset.row.TPopKontrBodenDurchlaessigkeit}
+                  errorText={activeDataset.valid.TPopKontrBodenDurchlaessigkeit}
+                  type="text"
+                  updateProperty={store.updateProperty}
+                  updatePropertyInDb={store.updatePropertyInDb}
+                />
+                <TextField
+                  key={`${activeDataset.row.TPopKontrId}TPopKontrBodenHumus`}
+                  tree={tree}
+                  label="Humusgehalt"
+                  fieldName="TPopKontrBodenHumus"
+                  value={activeDataset.row.TPopKontrBodenHumus}
+                  errorText={activeDataset.valid.TPopKontrBodenHumus}
+                  type="text"
+                  updateProperty={store.updateProperty}
+                  updatePropertyInDb={store.updatePropertyInDb}
+                />
+                <TextField
+                  key={`${
+                    activeDataset.row.TPopKontrId
+                  }TPopKontrBodenNaehrstoffgehalt`}
+                  tree={tree}
+                  label="Nährstoffgehalt"
+                  fieldName="TPopKontrBodenNaehrstoffgehalt"
+                  value={activeDataset.row.TPopKontrBodenNaehrstoffgehalt}
+                  errorText={activeDataset.valid.TPopKontrBodenNaehrstoffgehalt}
+                  type="text"
+                  updateProperty={store.updateProperty}
+                  updatePropertyInDb={store.updatePropertyInDb}
+                />
+                <TextField
+                  key={`${activeDataset.row.TPopKontrId}TPopKontrBodenAbtrag`}
+                  tree={tree}
+                  label="Bodenabtrag"
+                  fieldName="TPopKontrBodenAbtrag"
+                  value={activeDataset.row.TPopKontrBodenAbtrag}
+                  errorText={activeDataset.valid.TPopKontrBodenAbtrag}
+                  type="text"
+                  updateProperty={store.updateProperty}
+                  updatePropertyInDb={store.updatePropertyInDb}
+                />
+                <TextField
+                  key={`${
+                    activeDataset.row.TPopKontrId
+                  }TPopKontrWasserhaushalt`}
+                  tree={tree}
+                  label="Wasserhaushalt"
+                  fieldName="TPopKontrWasserhaushalt"
+                  value={activeDataset.row.TPopKontrWasserhaushalt}
+                  errorText={activeDataset.valid.TPopKontrWasserhaushalt}
+                  type="text"
+                  updateProperty={store.updateProperty}
+                  updatePropertyInDb={store.updatePropertyInDb}
+                />
+                <Section>Beurteilung</Section>
+                <TextField
+                  key={`${
+                    activeDataset.row.TPopKontrId
+                  }TPopKontrHandlungsbedarf`}
+                  tree={tree}
+                  label="Handlungsbedarf"
+                  fieldName="TPopKontrHandlungsbedarf"
+                  value={activeDataset.row.TPopKontrHandlungsbedarf}
+                  errorText={activeDataset.valid.TPopKontrHandlungsbedarf}
+                  type="text"
+                  multiline
+                  updateProperty={store.updateProperty}
+                  updatePropertyInDb={store.updatePropertyInDb}
+                />
+                <RadioButtonGroup
+                  tree={tree}
+                  fieldName="TPopKontrIdealBiotopUebereinst"
+                  label="Übereinstimmung mit Idealbiotop"
+                  value={activeDataset.row.TPopKontrIdealBiotopUebereinst}
+                  errorText={activeDataset.valid.TPopKontrIdealBiotopUebereinst}
+                  dataSource={store.dropdownList.idbiotopuebereinstWerte}
+                  updatePropertyInDb={store.updatePropertyInDb}
+                />
+              </FormContainer>
+            </TabChildDiv>
+          </Tab>
+        </Tabs>
+      </FieldsContainer>
+    </Container>
+  )
 }
 
 export default enhance(Tpopfeldkontr)
