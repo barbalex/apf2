@@ -8,7 +8,6 @@ export default (
   key: string,
   valuePassed: string | number
 ): void => {
-  console.log('updateProperty: valuePassed:', valuePassed)
   const { table, row } = tree.activeDataset
   let value = valuePassed
   // ensure primary data exists
