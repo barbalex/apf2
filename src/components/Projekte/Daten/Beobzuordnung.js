@@ -26,7 +26,9 @@ const DataContainer = styled.div`
   height: 100%;
   overflow: auto !important;
 `
-const FieldsContainer = styled.div`padding: 10px;`
+const FieldsContainer = styled.div`
+  padding: 10px;
+`
 const Title = styled.div`
   padding: 10px 10px 0 10px;
   color: #b3b3b3;
@@ -35,8 +37,12 @@ const Title = styled.div`
   margin-top: 10px;
   padding-bottom: 10px;
 `
-const ZuordnenDiv = styled.div`margin-bottom: -10px;`
-const LabelPopoverRow = styled.div`padding: 2px 5px 2px 5px;`
+const ZuordnenDiv = styled.div`
+  margin-bottom: -10px;
+`
+const LabelPopoverRow = styled.div`
+  padding: 2px 5px 2px 5px;
+`
 const LabelPopoverTitleRow = styled(LabelPopoverRow)`
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
@@ -115,9 +121,9 @@ const getTpopZuordnenSource = (store: Object, tree: Object): Array<Object> => {
     }
     const popNr = t.popNr || t.popNr === 0 ? t.popNr : '(keine Nr)'
     const tpopNr = t.TPopNr || t.TPopNr === 0 ? t.TPopNr : '(keine Nr)'
-    t.label = `${t.distance.toLocaleString(
-      'de-ch'
-    )}m: ${popNr}/${tpopNr} (${t.herkunft})`
+    t.label = `${t.distance.toLocaleString('de-ch')}m: ${popNr}/${tpopNr} (${
+      t.herkunft
+    })`
   })
   // order them by distance
   tpopList = sortBy(tpopList, 'distance')
@@ -162,10 +168,12 @@ const Beobzuordnung = ({
   store,
   tree,
   updatePropertyInDb,
+  dimensions,
 }: {
   store: Object,
   tree: Object,
   updatePropertyInDb: () => void,
+  dimensions: Object,
 }) => {
   const { table } = store
   const { activeDataset } = tree
@@ -235,7 +243,7 @@ const Beobzuordnung = ({
           />
         </FieldsContainer>
         <Title>{beobTitle}</Title>
-        <Beob tree={tree} />
+        <Beob tree={tree} dimensions={dimensions} />
       </DataContainer>
     </FormContainer>
   )
