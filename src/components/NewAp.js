@@ -25,7 +25,7 @@ const enhance = compose(
   withState('searchText', 'changeSearchText', ''),
   withState('searchTextWasChanged', 'changeSearchTextWasChanged', ''),
   withHandlers({
-    onNewRequest: ({ store }) => val => {
+    onNewRequest: ({ store, changeSearchText }) => val => {
       const { tree } = store.newApData
       axios({
         method: 'POST',
@@ -42,24 +42,14 @@ const enhance = compose(
           // set new url
           tree.setActiveNodeArray(['Projekte', 1, 'Arten', val.TaxonomieId])
           store.setShowNewApModal(false)
+          changeSearchText('')
         })
         .catch(error => store.listError(error))
     },
     onFocus: props => () => props.changeFocused(true),
     onBlur: props => () => {
-      const {
-        changeFocused,
-        searchText,
-        searchTextWasChanged,
-        updatePropertyInDb,
-        tree,
-        fieldName,
-      } = props
+      const { changeFocused } = props
       changeFocused(false)
-      if (!searchText && searchTextWasChanged) {
-        // onNewRequest does not happen when value was removed by deleting text
-        updatePropertyInDb(tree, fieldName, null)
-      }
     },
     onUpdateSearchText: props => searchText => {
       props.changeSearchText(searchText)
@@ -136,12 +126,15 @@ const NewAp = ({
   } else if (dataSourceLength > 200) {
     labelNumberLimit = 'Nur die ersten 200 Einträge werden aufgelistet.'
   }
-  const labelText = focused ? `${labelFilterHint}${labelNumberLimit}` : ''
+  const labelText = focused ? `${labelFilterHint}${labelNumberLimit}` : ' '
   const actions = [
     <FlatButton
       label="abbrechen"
       primary={true}
-      onClick={() => store.setShowNewApModal(false)}
+      onClick={() => {
+        store.setShowNewApModal(false)
+        changeSearchText('')
+      }}
     />,
   ]
 
@@ -164,7 +157,7 @@ const NewAp = ({
           onFocus={onFocus}
           onBlur={onBlur}
           menuStyle={{
-            maxHeight: `${window.innerHeight * 0.8}px`,
+            maxHeight: `${window.innerHeight * 0.4}px`,
           }}
         />
       </StyledDiv>
