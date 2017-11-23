@@ -247,24 +247,10 @@ export default (store: Object): void => {
       store.showNewApModal = show
     }),
     newApData: {
-      apArtId: null,
       tree: {},
-      baseUrl: [],
     },
-    setNewApData: action(
-      ({
-        apArtId,
-        tree,
-        baseUrl,
-      }: {
-        apArtId: number,
-        tree: Object,
-        baseUrl: Array<string>,
-      }) => {
-        store.newApData.apArtId = apArtId
-        store.newApData.tree = tree
-        store.newApData.baseUrl = baseUrl
-      }
-    ),
+    setNewApData: action(({ tree }: { tree: Object }) => {
+      store.newApData.tree = tree
+    }),
   })
 }

@@ -191,7 +191,7 @@ const enhance = compose(
             // then insertDataset
             console.log('todo')
             store.setShowNewApModal(true)
-            store.setNewApData({ apArtId: idToPass, baseUrl, tree })
+            store.setNewApData({ tree })
           } else {
             store.insertDataset(tree, table, idToPass, baseUrl)
           }

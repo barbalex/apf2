@@ -189,9 +189,7 @@ function Store(): void {
   this.showNewApModal = false
   this.setShowNewApModal = () => {}
   this.newApData = {
-    apArtId: null,
     tree: {},
-    baseUrl: [],
   }
   this.setNewApData = () => {}
 }

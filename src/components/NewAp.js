@@ -9,6 +9,7 @@ import styled from 'styled-components'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 import withState from 'recompose/withState'
+import axios from 'axios'
 
 const StyledDiv = styled.div`
   display: flex;
@@ -24,9 +25,27 @@ const enhance = compose(
   withState('searchText', 'changeSearchText', ''),
   withState('searchTextWasChanged', 'changeSearchTextWasChanged', ''),
   withHandlers({
-    onNewRequest: props => val => {
-      const { updatePropertyInDb, fieldName, dataSourceConfig } = props
-      updatePropertyInDb(props.tree, fieldName, val[dataSourceConfig.value])
+    onNewRequest: ({ store }) => val => {
+      const { apArtId, tree, baseUrl } = store.newApData
+      // TODO: add id and project?
+      axios({
+        method: 'POST',
+        url: '/ap',
+        data: { ApArtId: apArtId, ProjId: 1 },
+        headers: {
+          Prefer: 'return=representation',
+        },
+      })
+        .then(result => {
+          console.log('NewAp: result:', result)
+          const row = result.data[0]
+          // insert this dataset in store.table
+          store.table.ap.set(apArtId, row)
+          // set new url
+          tree.setActiveNodeArray(['Projekte', 1, 'Arten', apArtId])
+          store.setShowNewApModal(false)
+        })
+        .catch(error => store.listError(error))
     },
     onFocus: props => () => props.changeFocused(true),
     onBlur: props => () => {
@@ -82,7 +101,6 @@ const NewAp = ({
   searchTextWasChanged: boolean,
   changeSearchTextWasChanged: () => void,
 }) => {
-  const label = 'Art'
   let searchTextToUse = searchText
   if (!searchText && valueText && isNaN(valueText) && !searchTextWasChanged) {
     searchTextToUse = valueText
@@ -121,29 +139,20 @@ const NewAp = ({
     labelNumberLimit = 'Nur die ersten 200 Einträge werden aufgelistet.'
   }
   const labelText = focused
-    ? `${label}${labelFilterHint || labelNumberLimit ? '. ' : ''}${
-        labelFilterHint
-      }${labelNumberLimit}`
-    : label
+    ? `${labelFilterHint || labelNumberLimit ? '. ' : ''}${labelFilterHint}${
+        labelNumberLimit
+      }`
+    : ''
   const actions = [
     <FlatButton
       label="abbrechen"
       primary={true}
-      onClick={() => 
-        store.setShowNewApModal(false)
-      }
+      onClick={() => store.setShowNewApModal(false)}
     />,
   ]
 
   return (
-    <Dialog
-      title="Neue Art"
-      open={store.showNewApModal}
-      actions={actions}
-      contentStyle={{
-        maxWidth: '400px',
-      }}
-    >
+    <Dialog title="Neue Art" open={store.showNewApModal} actions={actions}>
       <StyledDiv>
         <StyledAutoComplete
           hintText={dataSource.length === 0 ? 'lade Daten...' : ''}
