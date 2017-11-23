@@ -123,7 +123,7 @@ class Tpopmassn extends Component {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <AutoComplete
-            key={`${activeDataset.row.TPopKontrId}TPopMassnBearb`}
+            key={`${activeDataset.row.TPopMassnId}TPopMassnBearb`}
             tree={tree}
             label="BearbeiterIn"
             fieldName="TPopMassnBearb"
@@ -190,8 +190,9 @@ class Tpopmassn extends Component {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
-            key={`${activeDataset.row
-              .TPopMassnId}TPopMassnAnsiedPflanzanordnung`}
+            key={`${
+              activeDataset.row.TPopMassnId
+            }TPopMassnAnsiedPflanzanordnung`}
             tree={tree}
             label="Pflanzanordnung"
             fieldName="TPopMassnAnsiedPflanzanordnung"
