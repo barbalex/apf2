@@ -31,6 +31,7 @@ import initializeDb from './modules/initializeDb'
 import AppBar from './components/AppBar'
 import Projekte from './components/Projekte'
 import User from './components/User'
+import NewAp from './components/NewAp'
 import Deletions from './components/Deletions'
 import Errors from './components/Errors'
 import UpdateAvailable from './components/UpdateAvailable'
@@ -105,6 +106,7 @@ import './index.css'
             <AppBar />
             <Projekte />
             <User />
+            <NewAp />
             <Deletions />
             <Errors />
             <UpdateAvailable />
