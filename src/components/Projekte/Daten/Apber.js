@@ -53,7 +53,6 @@ const Apber = ({
     { value: '-', label: '-' },
   ]
   const width = isNaN(dimensions.width) ? 380 : dimensions.width
-  console.log('Apber: rendering, dimensions:', dimensions)
 
   return (
     <Container innerRef={c => (this.container = c)}>
