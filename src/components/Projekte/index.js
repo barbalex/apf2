@@ -78,7 +78,12 @@ const myChildren = (store: Object) => {
   }
   if (projekteTabs.includes('daten')) {
     children.push(
-      <ReflexElement key="daten">
+      <ReflexElement
+        key="daten"
+        propagateDimensions={true}
+        renderOnResizeRate={100}
+        renderOnResize={true}
+      >
         <Daten tree={store.tree} />
       </ReflexElement>
     )
@@ -130,11 +135,11 @@ const myChildren = (store: Object) => {
         <KarteContainer>
           <Karte
             /**
-           * key of tabs is added to force mounting
-           * when tabs change
-           * without remounting grey space remains
-           * when daten or tree tab is removed :-(
-           */
+             * key of tabs is added to force mounting
+             * when tabs change
+             * without remounting grey space remains
+             * when daten or tree tab is removed :-(
+             */
             key={store.urlQuery.projekteTabs.toString()}
             popMarkers={store.map.pop.markers}
             popHighlighted={store.map.pop.highlightedIds.join()}
