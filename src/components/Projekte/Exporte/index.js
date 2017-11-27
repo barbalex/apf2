@@ -393,6 +393,7 @@ const Exporte = ({
               downloadFromView({
                 view: 'v_tpop_kml',
                 fileName: 'Teilpopulationen',
+                kml: true,
               })
             }
           >
@@ -416,7 +417,6 @@ const Exporte = ({
               downloadFromView({
                 view: 'v_tpop_ohnebekanntseit',
                 fileName: 'TeilpopulationenVonApArtenOhneBekanntSeit',
-                kml: true,
               })
             }
           >

@@ -4890,9 +4890,11 @@ SELECT
     )::numeric, 10
   ) AS "Breitengrad",
   concat(
-    'http://apflora.ch/index.html?ap=',
+    'http://www.apflora.ch/Projekte/1/Arten/',
     apflora.ap."ApArtId",
-    '&pop=',
+    '/Populationen/',
+    apflora.pop."PopId",
+    '/Teil-Populationen/',
     apflora.tpop."TPopId"
   ) AS url
 FROM
@@ -4907,8 +4909,10 @@ FROM
       ON apflora.pop."PopId" = apflora.tpop."PopId")
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
 WHERE
-  apflora.tpop."TPopYKoord" > 0
-  AND apflora.tpop."TPopXKoord" > 0
+  apflora.tpop."TPopYKoord" > 40000
+  AND apflora.tpop."TPopYKoord" < 350000
+  AND apflora.tpop."TPopXKoord" > 400000
+  AND apflora.tpop."TPopXKoord" < 900000
 ORDER BY
   apflora.adb_eigenschaften."Artname",
   apflora.pop."PopNr",
@@ -4967,9 +4971,11 @@ SELECT
     )::numeric, 10
   ) AS "Breitengrad",
   concat(
-    'http://www.apflora.ch/index.html?ap=',
+    'http://www.apflora.ch/Projekte/1/Arten/',
     apflora.ap."ApArtId",
-    '&pop=',
+    '/Populationen/',
+    apflora.pop."PopId",
+    '/Teil-Populationen/',
     apflora.tpop."TPopId"
   ) AS url
 FROM
@@ -4984,8 +4990,10 @@ FROM
       ON apflora.pop."PopId" = apflora.tpop."PopId")
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
 WHERE
-  apflora.tpop."TPopYKoord" > 0
-  AND apflora.tpop."TPopXKoord" > 0
+  apflora.tpop."TPopYKoord" > 40000
+  AND apflora.tpop."TPopYKoord" < 350000
+  AND apflora.tpop."TPopXKoord" > 400000
+  AND apflora.tpop."TPopXKoord" < 900000
 ORDER BY
   apflora.adb_eigenschaften."Artname",
   apflora.pop."PopNr",
@@ -5028,9 +5036,9 @@ SELECT
     )::numeric, 10
   ) AS "Breitengrad",
   concat(
-    'http://www.apflora.ch/index.html?ap=',
+    'http://www.apflora.ch/Projekte/1/Arten/',
     apflora.ap."ApArtId",
-    '&pop=',
+    '/Populationen/',
     apflora.pop."PopId"
   ) AS url
 FROM
@@ -5042,8 +5050,10 @@ FROM
       ON apflora.ap."ApArtId" = apflora.pop."ApArtId")
     ON apflora.adb_eigenschaften."TaxonomieId" = apflora.ap."ApArtId"
 WHERE
-  apflora.pop."PopYKoord" > 0
-  AND apflora.pop."PopXKoord" > 0
+  apflora.pop."PopYKoord" > 40000
+  AND apflora.pop."PopYKoord" < 350000
+  AND apflora.pop."PopXKoord" > 400000
+  AND apflora.pop."PopXKoord" < 900000
 ORDER BY
   apflora.adb_eigenschaften."Artname",
   apflora.pop."PopNr",
@@ -5087,9 +5097,9 @@ SELECT
     )::numeric, 10
   ) AS "Breitengrad",
   concat(
-    'http://www.apflora.ch/index.html?ap=',
+    'http://www.apflora.ch/Projekte/1/Arten/',
     apflora.ap."ApArtId",
-    '&pop=',
+    '/Populationen/',
     apflora.pop."PopId"
   ) AS url
 FROM
@@ -5101,8 +5111,10 @@ FROM
       ON apflora.ap."ApArtId" = apflora.pop."ApArtId")
     ON apflora.adb_eigenschaften."TaxonomieId" = apflora.ap."ApArtId"
 WHERE
-  apflora.pop."PopYKoord" > 0
-  AND apflora.pop."PopXKoord" > 0
+  apflora.pop."PopYKoord" > 40000
+  AND apflora.pop."PopYKoord" < 350000
+  AND apflora.pop."PopXKoord" > 400000
+  AND apflora.pop."PopXKoord" < 900000
 ORDER BY
   apflora.adb_eigenschaften."Artname",
   apflora.pop."PopNr",
