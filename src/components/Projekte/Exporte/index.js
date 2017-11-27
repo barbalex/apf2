@@ -89,7 +89,7 @@ const enhance = compose(
       store,
       changeArtFuerEierlegendeWollmilchsau,
       artFuerEierlegendeWollmilchsau,
-    }) => ({ view, fileName, apArtId }) =>
+    }) => ({ view, fileName, apArtId, kml }) =>
       exportModule({
         store,
         changeArtFuerEierlegendeWollmilchsau,
@@ -97,6 +97,7 @@ const enhance = compose(
         view,
         fileName,
         apArtId,
+        kml,
       }),
   }),
   withLifecycle({
@@ -148,7 +149,8 @@ const Exporte = ({
               downloadFromView({
                 view: 'v_ap',
                 fileName: 'Arten',
-              })}
+              })
+            }
           />
           <DownloadCardButton
             label="Arten ohne Populationen"
@@ -156,7 +158,8 @@ const Exporte = ({
               downloadFromView({
                 view: 'v_ap_ohnepop',
                 fileName: 'ArtenOhnePopulationen',
-              })}
+              })
+            }
           />
           <DownloadCardButton
             label="Anzahl Massnahmen pro Art"
@@ -164,7 +167,8 @@ const Exporte = ({
               downloadFromView({
                 view: 'v_ap_anzmassn',
                 fileName: 'ArtenAnzahlMassnahmen',
-              })}
+              })
+            }
           />
           <DownloadCardButton
             label="Anzahl Kontrollen pro Art"
@@ -172,7 +176,8 @@ const Exporte = ({
               downloadFromView({
                 view: 'v_ap_anzkontr',
                 fileName: 'ArtenAnzahlKontrollen',
-              })}
+              })
+            }
           />
           <DownloadCardButton
             label="AP-Berichte (Jahresberichte)"
@@ -180,7 +185,8 @@ const Exporte = ({
               downloadFromView({
                 view: 'v_apber',
                 fileName: 'Jahresberichte',
-              })}
+              })
+            }
           />
           <DownloadCardButton
             label="AP-Berichte und Massnahmen"
@@ -188,7 +194,8 @@ const Exporte = ({
               downloadFromView({
                 view: 'v_ap_apberundmassn',
                 fileName: 'ApJahresberichteUndMassnahmen',
-              })}
+              })
+            }
           />
           <DownloadCardButton
             label="Ziele"
@@ -196,7 +203,8 @@ const Exporte = ({
               downloadFromView({
                 view: 'v_ziel',
                 fileName: 'ApZiele',
-              })}
+              })
+            }
           />
           <DownloadCardButton
             label="Ziel-Berichte"
@@ -204,7 +212,8 @@ const Exporte = ({
               downloadFromView({
                 view: 'v_zielber',
                 fileName: 'Zielberichte',
-              })}
+              })
+            }
           />
           <DownloadCardButton
             label="Berichte"
@@ -212,7 +221,8 @@ const Exporte = ({
               downloadFromView({
                 view: 'v_ber',
                 fileName: 'Berichte',
-              })}
+              })
+            }
           />
           <DownloadCardButton
             label="Erfolgskriterien"
@@ -220,7 +230,8 @@ const Exporte = ({
               downloadFromView({
                 view: 'v_erfkrit',
                 fileName: 'Erfolgskriterien',
-              })}
+              })
+            }
           />
           <DownloadCardButton
             label="Idealbiotope"
@@ -228,7 +239,8 @@ const Exporte = ({
               downloadFromView({
                 view: 'v_idealbiotop',
                 fileName: 'Idealbiotope',
-              })}
+              })
+            }
           />
           <DownloadCardButton
             label="Assoziierte Arten"
@@ -236,7 +248,8 @@ const Exporte = ({
               downloadFromView({
                 view: 'v_assozart',
                 fileName: 'AssoziierteArten',
-              })}
+              })
+            }
           />
         </DownloadCardText>
       </FirstLevelCard>
@@ -249,14 +262,17 @@ const Exporte = ({
               downloadFromView({
                 view: 'v_pop',
                 fileName: 'Populationen',
-              })}
+              })
+            }
           />
           <DownloadCardButton
             onClick={() =>
               downloadFromView({
                 view: 'v_pop_kml',
                 fileName: 'Populationen',
-              })}
+                kml: true,
+              })
+            }
           >
             <div>Populationen für Google Earth</div>
             <div>(beschriftet mit PopNr)</div>
@@ -266,7 +282,9 @@ const Exporte = ({
               downloadFromView({
                 view: 'v_pop_kmlnamen',
                 fileName: 'PopulationenNachNamen',
-              })}
+                kml: true,
+              })
+            }
           >
             <div>Populationen für Google Earth</div>
             <div>(beschriftet mit Artname, PopNr)</div>
@@ -277,7 +295,8 @@ const Exporte = ({
               downloadFromView({
                 view: 'v_pop_ohnetpop',
                 fileName: 'PopulationenOhneTeilpopulationen',
-              })}
+              })
+            }
           />
           <DownloadCardButton
             label="Populationen von AP-Arten ohne Status"
@@ -285,7 +304,8 @@ const Exporte = ({
               downloadFromView({
                 view: 'v_pop_vonapohnestatus',
                 fileName: 'PopulationenVonApArtenOhneStatus',
-              })}
+              })
+            }
           />
           <DownloadCardButton
             label="Populationen ohne Koordinaten"
@@ -293,7 +313,8 @@ const Exporte = ({
               downloadFromView({
                 view: 'v_pop_ohnekoord',
                 fileName: 'PopulationenOhneKoordinaten',
-              })}
+              })
+            }
           />
           <DownloadCardButton
             label="Populationen mit Massnahmen-Berichten: Anzahl Massnahmen im Berichtsjahr"
@@ -301,7 +322,8 @@ const Exporte = ({
               downloadFromView({
                 view: 'v_popmassnber_anzmassn',
                 fileName: 'PopulationenAnzMassnProMassnber',
-              })}
+              })
+            }
           />
           <DownloadCardButton
             label="Anzahl Massnahmen pro Population"
@@ -309,7 +331,8 @@ const Exporte = ({
               downloadFromView({
                 view: 'v_pop_anzmassn',
                 fileName: 'PopulationenAnzahlMassnahmen',
-              })}
+              })
+            }
           />
           <DownloadCardButton
             label="Anzahl Kontrollen pro Population"
@@ -317,7 +340,8 @@ const Exporte = ({
               downloadFromView({
                 view: 'v_pop_anzkontr',
                 fileName: 'PopulationenAnzahlKontrollen',
-              })}
+              })
+            }
           />
           <DownloadCardButton
             label="Populationen inkl. Populations- und Massnahmen-Berichte"
@@ -325,7 +349,8 @@ const Exporte = ({
               downloadFromView({
                 view: 'v_pop_popberundmassnber',
                 fileName: 'PopulationenPopUndMassnBerichte',
-              })}
+              })
+            }
           />
           <DownloadCardButton
             label="Populationen mit dem letzten Populations-Bericht"
@@ -333,7 +358,8 @@ const Exporte = ({
               downloadFromView({
                 view: 'v_pop_mit_letzter_popber',
                 fileName: 'PopulationenMitLetzemPopBericht',
-              })}
+              })
+            }
           />
           <DownloadCardButton
             label="Populationen mit dem letzten Massnahmen-Bericht"
@@ -341,7 +367,8 @@ const Exporte = ({
               downloadFromView({
                 view: 'v_pop_mit_letzter_popmassnber',
                 fileName: 'PopulationenMitLetztemMassnBericht',
-              })}
+              })
+            }
           />
         </DownloadCardText>
       </FirstLevelCard>
@@ -358,14 +385,16 @@ const Exporte = ({
               downloadFromView({
                 view: 'v_tpop',
                 fileName: 'Teilpopulationen',
-              })}
+              })
+            }
           />
           <DownloadCardButton
             onClick={() =>
               downloadFromView({
                 view: 'v_tpop_kml',
                 fileName: 'Teilpopulationen',
-              })}
+              })
+            }
           >
             <div>Teilpopulationen für Google Earth</div>
             <div>(beschriftet mit PopNr/TPopNr)</div>
@@ -375,7 +404,9 @@ const Exporte = ({
               downloadFromView({
                 view: 'v_tpop_kmlnamen',
                 fileName: 'TeilpopulationenNachNamen',
-              })}
+                kml: true,
+              })
+            }
           >
             <div>Teilpopulationen für Google Earth</div>
             <div>(beschriftet mit Artname, PopNr/TPopNr)</div>
@@ -385,7 +416,9 @@ const Exporte = ({
               downloadFromView({
                 view: 'v_tpop_ohnebekanntseit',
                 fileName: 'TeilpopulationenVonApArtenOhneBekanntSeit',
-              })}
+                kml: true,
+              })
+            }
           >
             <div>Teilpopulationen von AP-Arten</div>
             <div>{'ohne "Bekannt seit"'}</div>
@@ -395,7 +428,8 @@ const Exporte = ({
               downloadFromView({
                 view: 'v_tpop_ohneapberichtrelevant',
                 fileName: 'TeilpopulationenOhneApBerichtRelevant',
-              })}
+              })
+            }
           >
             <div>Teilpopulationen ohne Eintrag</div>
             <div>{'im Feld "Für AP-Bericht relevant"'}</div>
@@ -405,7 +439,8 @@ const Exporte = ({
               downloadFromView({
                 view: 'v_tpop_popnrtpopnrmehrdeutig',
                 fileName: 'TeilpopulationenPopnrTpopnrMehrdeutig',
-              })}
+              })
+            }
           >
             <div>Teilpopulationen mit mehrdeutiger</div>
             <div>Kombination von PopNr und TPopNr</div>
@@ -416,7 +451,8 @@ const Exporte = ({
               downloadFromView({
                 view: 'v_tpop_anzmassn',
                 fileName: 'TeilpopulationenAnzahlMassnahmen',
-              })}
+              })
+            }
           />
           <DownloadCardButton
             onClick={() =>
@@ -424,7 +460,8 @@ const Exporte = ({
                 view: 'v_tpop_anzkontrinklletzterundletztertpopber',
                 fileName:
                   'TeilpopulationenAnzKontrInklusiveLetzteKontrUndLetztenTPopBericht',
-              })}
+              })
+            }
             disabled={isRemoteHost}
             title={
               isRemoteHost
@@ -466,7 +503,8 @@ const Exporte = ({
               downloadFromView({
                 view: 'v_tpop_popberundmassnber',
                 fileName: 'TeilpopulationenTPopUndMassnBerichte',
-              })}
+              })
+            }
           />
         </DownloadCardText>
       </FirstLevelCard>
@@ -479,7 +517,8 @@ const Exporte = ({
               downloadFromView({
                 view: 'v_tpopkontr',
                 fileName: 'Kontrollen',
-              })}
+              })
+            }
           />
           <DownloadCardButton
             label="Kontrollen: Anzahl pro Zähleinheit"
@@ -487,7 +526,8 @@ const Exporte = ({
               downloadFromView({
                 view: 'v_kontrzaehl_anzproeinheit',
                 fileName: 'KontrollenAnzahlProZaehleinheit',
-              })}
+              })
+            }
           />
         </DownloadCardText>
       </FirstLevelCard>
@@ -500,7 +540,8 @@ const Exporte = ({
               downloadFromView({
                 view: 'v_massn',
                 fileName: 'Massnahmen',
-              })}
+              })
+            }
           />
         </DownloadCardText>
       </FirstLevelCard>
@@ -512,7 +553,8 @@ const Exporte = ({
               downloadFromView({
                 view: 'v_beob',
                 fileName: 'Beobachtungen',
-              })}
+              })
+            }
           >
             <div>Alle Beobachtungen von Arten aus apflora.ch</div>
             <div>Nutzungsbedingungen der FNS beachten</div>
@@ -524,7 +566,8 @@ const Exporte = ({
               downloadFromView({
                 view: 'v_beob__mit_data',
                 fileName: 'Beobachtungen',
-              })}
+              })
+            }
           >
             <div>Alle Beobachtungen von Arten aus apflora.ch...</div>
             <div>...inklusive Original-Beobachtungsdaten (JSON)</div>
@@ -542,7 +585,8 @@ const Exporte = ({
               downloadFromView({
                 view: 'v_datenstruktur',
                 fileName: 'Datenstruktur',
-              })}
+              })
+            }
           />
           <DownloadCardButton
             label="Datenstruktur grafisch dargestellt"

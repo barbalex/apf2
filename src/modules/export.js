@@ -8,6 +8,7 @@ import tpopIdsInsideFeatureCollection from './tpopIdsInsideFeatureCollection'
 import popIdsInsideFeatureCollection from './popIdsInsideFeatureCollection'
 import exportXlsx from './exportXlsx'
 import exportCsv from './exportCsv'
+import exportKml from './exportKml'
 
 export default async ({
   store,
@@ -16,6 +17,7 @@ export default async ({
   view,
   fileName,
   apArtId,
+  kml,
 }: {
   store: Object,
   changeArtFuerEierlegendeWollmilchsau: () => {},
@@ -23,6 +25,7 @@ export default async ({
   view: string,
   fileName: string,
   apArtId: number,
+  kml: Boolean,
 }) => {
   const onError = error => {
     if (artFuerEierlegendeWollmilchsau) {
@@ -76,7 +79,12 @@ export default async ({
       'Es gibt offenbar keine Daten, welche exportiert werden können'
     )
   }
-  if (store.export.fileType === 'csv') {
+  if (kml) {
+    exportKml({
+      fileName,
+      jsonData,
+    })
+  } else if (store.export.fileType === 'csv') {
     exportCsv({
       fileName,
       jsonData,
