@@ -1428,6 +1428,8 @@ SELECT
   apflora.apber."JBerUmsetzung",
   apflora.apber."JBerErfko",
   apflora.apber."JBerATxt",
+  apflora.apber."JBerCAktivApbearb",
+  apflora.apber."JBerCVerglAusfPl",
   apflora.apber."JBerBTxt",
   apflora.apber."JBerCTxt",
   apflora.apber."JBerDTxt",
