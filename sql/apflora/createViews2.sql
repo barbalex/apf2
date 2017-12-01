@@ -837,6 +837,8 @@ SELECT
   apflora.apber."JBerATxt",
   apflora.apber."JBerBTxt",
   apflora.apber."JBerCTxt",
+  apflora.apber."JBerCAktivApbearb",
+  apflora.apber."JBerCVerglAusfPl",
   apflora.apber."JBerDTxt",
   apflora.apber."JBerDatum",
   apflora.apber."JBerBearb",
