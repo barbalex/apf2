@@ -17,7 +17,11 @@ import shouldUpdate from 'recompose/shouldUpdate'
 
 import isMobilePhone from '../modules/isMobilePhone'
 
-const StyledAppBar = styled(AppBar)`@media print {display: none !important;}`
+const StyledAppBar = styled(AppBar)`
+  @media print {
+    display: none !important;
+  }
+`
 const Button = styled(FlatButton)`
   color: ${props =>
     props['data-visible']
@@ -41,7 +45,9 @@ const MenuDiv = styled.div`
     padding-top: 4px !important;
   }
 `
-const StyledMoreVertIcon = styled(MoreVertIcon)`color: white !important;`
+const StyledMoreVertIcon = styled(MoreVertIcon)`
+  color: white !important;
+`
 const iconMenuAnchorOrigin = { horizontal: 'left', vertical: 'bottom' }
 const iconMenuTargetOrigin = { horizontal: 'left', vertical: 'top' }
 const iconMenuStyle = { paddingLeft: 10 }
@@ -95,12 +101,14 @@ const enhance = compose(
     showDeletedDatasets: props => () => props.store.toggleShowDeletedDatasets(),
   }),
   withHandlers({
-    onClickButtonStrukturbaum: props => () => props.onClickButton('tree'),
-    onClickButtonStrukturbaum2: props => () => props.onClickButton('tree2'),
-    onClickButtonDaten: props => () => props.onClickButton('daten'),
-    onClickButtonDaten2: props => () => props.onClickButton('daten2'),
-    onClickButtonKarte: props => () => props.onClickButton('karte'),
-    onClickButtonExporte: props => () => props.onClickButton('exporte'),
+    onClickButtonStrukturbaum: ({ onClickButton }) => () =>
+      onClickButton('tree'),
+    onClickButtonStrukturbaum2: ({ onClickButton }) => () =>
+      onClickButton('tree2'),
+    onClickButtonDaten: ({ onClickButton }) => () => onClickButton('daten'),
+    onClickButtonDaten2: ({ onClickButton }) => () => onClickButton('daten2'),
+    onClickButtonKarte: ({ onClickButton }) => () => onClickButton('karte'),
+    onClickButtonExporte: ({ onClickButton }) => () => onClickButton('exporte'),
   }),
   observer
 )
