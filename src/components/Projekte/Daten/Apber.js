@@ -142,7 +142,7 @@ const Apber = ({
         <TextField
           key={`${activeDataset.row.JBerId}JBerATxt`}
           tree={tree}
-          label="Bemerkungen zum Aussagebereich A (neue Biotope)"
+          label="A. Grundmengen: Bemerkungen/Folgerungen für nächstes Jahr: neue Biotope"
           fieldName="JBerATxt"
           value={activeDataset.row.JBerATxt}
           errorText={activeDataset.valid.JBerATxt}
@@ -155,7 +155,7 @@ const Apber = ({
         <TextField
           key={`${activeDataset.row.JBerId}JBerBTxt`}
           tree={tree}
-          label="Bemerkungen zum Aussagebereich B (Optimierung Biotope)"
+          label="B. Bestandesentwicklung: Bemerkungen/Folgerungen für nächstes Jahr: Optimierung Biotope"
           fieldName="JBerBTxt"
           value={activeDataset.row.JBerBTxt}
           errorText={activeDataset.valid.JBerBTxt}
@@ -166,9 +166,35 @@ const Apber = ({
           updatePropertyInDb={store.updatePropertyInDb}
         />
         <TextField
+          key={`${activeDataset.row.JBerId}JBerCAktivApbearb`}
+          tree={tree}
+          label="C. Zwischenbilanz zur Wirkung von Massnahmen: Weitere Aktivitäten der Aktionsplan-Verantwortlichen"
+          fieldName="JBerCAktivApbearb"
+          value={activeDataset.row.JBerCAktivApbearb}
+          errorText={activeDataset.valid.JBerCAktivApbearb}
+          type="text"
+          multiLine
+          fullWidth
+          updateProperty={store.updateProperty}
+          updatePropertyInDb={store.updatePropertyInDb}
+        />
+        <TextField
+          key={`${activeDataset.row.JBerId}JBerCVerglAusfPl`}
+          tree={tree}
+          label="C. Zwischenbilanz zur Wirkung von Massnahmen: Vergleich Ausführung/Planung"
+          fieldName="JBerCVerglAusfPl"
+          value={activeDataset.row.JBerCVerglAusfPl}
+          errorText={activeDataset.valid.JBerCVerglAusfPl}
+          type="text"
+          multiLine
+          fullWidth
+          updateProperty={store.updateProperty}
+          updatePropertyInDb={store.updatePropertyInDb}
+        />
+        <TextField
           key={`${activeDataset.row.JBerId}JBerCTxt`}
           tree={tree}
-          label="Bemerkungen zum Aussagebereich C (Optimierung Massnahmen)"
+          label="C. Zwischenbilanz zur Wirkung von Massnahmen: Bemerkungen/Folgerungen für nächstes Jahr: Optimierung Massnahmen"
           fieldName="JBerCTxt"
           value={activeDataset.row.JBerCTxt}
           errorText={activeDataset.valid.JBerCTxt}
@@ -181,7 +207,7 @@ const Apber = ({
         <TextField
           key={`${activeDataset.row.JBerId}JBerDTxt`}
           tree={tree}
-          label="Bemerkungen zum Aussagebereich D (Einschätzung der Wirkung des AP insgesamt auf die Art)"
+          label="D. Einschätzung der Wirkung des AP insgesamt auf die Art: Bemerkungen"
           fieldName="JBerDTxt"
           value={activeDataset.row.JBerDTxt}
           errorText={activeDataset.valid.JBerDTxt}

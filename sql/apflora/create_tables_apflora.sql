@@ -127,6 +127,8 @@ CREATE TABLE apflora.apber (
   "JBerATxt" text,
   "JBerBTxt" text,
   "JBerCTxt" text,
+  "JBerCAktivApbearb" text,
+  "JBerCVerglAusfPl" text,
   "JBerDTxt" text,
   "JBerDatum" date DEFAULT NULL,
   "JBerBearb" integer DEFAULT NULL REFERENCES apflora.adresse ("AdrId") ON DELETE SET NULL ON UPDATE CASCADE,
@@ -145,6 +147,8 @@ COMMENT ON COLUMN apflora.apber."JBerErfko" IS 'Konsequenzen für die Erfolgskon
 COMMENT ON COLUMN apflora.apber."JBerATxt" IS 'Bemerkungen zum Aussagebereich A: Grundmengen und getroffene Massnahmen';
 COMMENT ON COLUMN apflora.apber."JBerBTxt" IS 'Bemerkungen zum Aussagebereich B: Bestandeskontrolle';
 COMMENT ON COLUMN apflora.apber."JBerCTxt" IS 'Bemerkungen zum Aussagebereich C: Zwischenbilanz zur Wirkung von Massnahmen';
+COMMENT ON COLUMN apflora.apber."JBerCAktivApbearb" IS 'Bemerkungen zum Aussagebereich C: Weitere Aktivitäten der Aktionsplan-Verantwortlichen';
+COMMENT ON COLUMN apflora.apber."JBerCVerglAusfPl" IS 'Bemerkungen zum Aussagebereich C: Vergleich Ausführung/Planung';
 COMMENT ON COLUMN apflora.apber."JBerDTxt" IS 'Bemerkungen zum Aussagebereich D: Einschätzung der Wirkung des AP insgesamt pro Art';
 COMMENT ON COLUMN apflora.apber."JBerDatum" IS 'Datum der Nachführung';
 COMMENT ON COLUMN apflora.apber."JBerBearb" IS 'BerichtsverfasserIn: Auswahl aus der Tabelle "adresse"';

@@ -1428,6 +1428,8 @@ SELECT
   apflora.apber."JBerUmsetzung",
   apflora.apber."JBerErfko",
   apflora.apber."JBerATxt",
+  apflora.apber."JBerCAktivApbearb",
+  apflora.apber."JBerCVerglAusfPl",
   apflora.apber."JBerBTxt",
   apflora.apber."JBerCTxt",
   apflora.apber."JBerDTxt",
@@ -1488,6 +1490,8 @@ SELECT
   apflora.apber."JBerErfko" AS "JBerErfko",
   apflora.apber."JBerATxt" AS "JBerATxt",
   apflora.apber."JBerBTxt" AS "JBerBTxt",
+  apflora.apber."JBerCAktivApbearb" AS "JBerCAktivApbearb",
+  apflora.apber."JBerCVerglAusfPl" AS "JBerCVerglAusfPl",
   apflora.apber."JBerCTxt" AS "JBerCTxt",
   apflora.apber."JBerDTxt" AS "JBerDTxt",
   apflora.apber."JBerDatum" AS "JBerDatum",apflora.adresse."AdrName" AS "JBerBearb"
