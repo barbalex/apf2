@@ -42,7 +42,6 @@ const enhance = compose(inject('store'), observer)
 
 const Tpopkontrzaehl = ({ store, tree }: { store: Object, tree: Object }) => {
   const { activeDataset } = tree
-  console.log('Tpopkontrzaehl: activeDataset:', activeDataset)
 
   return (
     <Container>
