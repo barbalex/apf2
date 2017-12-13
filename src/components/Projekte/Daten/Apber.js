@@ -229,7 +229,7 @@ const Apber = ({
           updatePropertyInDb={store.updatePropertyInDb}
         />
         <AutoComplete
-          key={`${activeDataset.row.TPopKontrId}JBerBearb`}
+          key={`${activeDataset.row.JBerId}JBerBearb`}
           tree={tree}
           label="BearbeiterIn"
           fieldName="JBerBearb"

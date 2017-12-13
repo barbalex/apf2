@@ -60,7 +60,7 @@ const BeobArt = ({ store, tree }: { store: Object, tree: Object }) => {
           beurteilt" zur Verfügung und können zugeordnet werden.
         </div>
         <AutoComplete
-          key={activeDataset.row.BeobArtId}
+          key={`${activeDataset.row.BeobArtId}TaxonomieId`}
           tree={tree}
           label="Art"
           fieldName="TaxonomieId"

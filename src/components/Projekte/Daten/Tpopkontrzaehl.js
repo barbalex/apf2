@@ -42,13 +42,14 @@ const enhance = compose(inject('store'), observer)
 
 const Tpopkontrzaehl = ({ store, tree }: { store: Object, tree: Object }) => {
   const { activeDataset } = tree
+  console.log('Tpopkontrzaehl: activeDataset:', activeDataset)
 
   return (
     <Container>
       <FormTitle tree={tree} title="Zählung" />
       <FieldsContainer>
         <AutoComplete
-          key={`${activeDataset.row.TPopKontrId}Zaehleinheit`}
+          key={`${activeDataset.row.TPopKontrZaehlId}Zaehleinheit`}
           tree={tree}
           label="Einheit"
           fieldName="Zaehleinheit"
@@ -62,7 +63,7 @@ const Tpopkontrzaehl = ({ store, tree }: { store: Object, tree: Object }) => {
           updatePropertyInDb={store.updatePropertyInDb}
         />
         <TextField
-          key={`${activeDataset.row.TPopKontrId}Anzahl`}
+          key={`${activeDataset.row.TPopKontrZaehlId}Anzahl`}
           tree={tree}
           label="Anzahl (nur ganze Zahlen)"
           fieldName="Anzahl"
@@ -73,6 +74,7 @@ const Tpopkontrzaehl = ({ store, tree }: { store: Object, tree: Object }) => {
           updatePropertyInDb={store.updatePropertyInDb}
         />
         <RadioButtonGroup
+          key={`${activeDataset.row.TPopKontrZaehlId}Methode`}
           tree={tree}
           fieldName="Methode"
           label="Methode"

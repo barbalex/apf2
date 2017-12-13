@@ -142,6 +142,7 @@ const Tpopfeldkontr = ({
                   updatePropertyInDb={store.updatePropertyInDb}
                 />
                 <RadioButtonGroup
+                  key={`${activeDataset.row.TPopKontrId}TPopKontrTyp`}
                   tree={tree}
                   fieldName="TPopKontrTyp"
                   label="Kontrolltyp"

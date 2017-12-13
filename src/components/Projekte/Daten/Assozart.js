@@ -55,7 +55,7 @@ const Assozart = ({ store, tree }: { store: Object, tree: Object }) => {
       <FormTitle tree={tree} title="assoziierte Art" />
       <FieldsContainer>
         <AutoComplete
-          key={activeDataset.row.AaId}
+          key={`${activeDataset.row.AaId}AaSisfNr`}
           tree={tree}
           label="Art"
           fieldName="AaSisfNr"

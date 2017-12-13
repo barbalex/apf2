@@ -23,7 +23,9 @@ const FieldContainer = styled.div`
   display: flex;
   flex-direction: column;
 `
-const LabelPopoverRow = styled.div`padding: 2px 5px 2px 5px;`
+const LabelPopoverRow = styled.div`
+  padding: 2px 5px 2px 5px;
+`
 const LabelPopoverTitleRow = styled(LabelPopoverRow)`
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
@@ -40,8 +42,12 @@ const LabelPopoverContentRow = styled(LabelPopoverRow)`
     border-bottom-left-radius: 4px;
   }
 `
-const LabelPopoverRowColumnLeft = styled.div`width: 110px;`
-const LabelPopoverRowColumnRight = styled.div`padding-left: 5px;`
+const LabelPopoverRowColumnLeft = styled.div`
+  width: 110px;
+`
+const LabelPopoverRowColumnRight = styled.div`
+  padding-left: 5px;
+`
 
 const getBearbName = ({ store, tree }: { store: Object, tree: Object }) => {
   const { adressen } = store.dropdownList
@@ -104,7 +110,7 @@ const Ap = ({
     <FormTitle tree={tree} title="Art" />
     <FieldsContainer>
       <AutoComplete
-        key={activeDataset.row.ApArtId}
+        key={`${activeDataset.row.ApArtId}ApArtId`}
         tree={tree}
         label="Art"
         fieldName="ApArtId"
@@ -143,7 +149,7 @@ const Ap = ({
         label="Aktionsplan"
       />
       <TextField
-          key={`${activeDataset.row.ApArtId}ApJahr`}
+        key={`${activeDataset.row.ApArtId}ApJahr`}
         tree={tree}
         label="Start im Jahr"
         fieldName="ApJahr"
@@ -187,7 +193,7 @@ const Ap = ({
         />
       </FieldContainer>
       <AutoComplete
-        key={`${activeDataset.row.TPopKontrId}ApBearb`}
+        key={`${activeDataset.row.ApArtId}ApBearb`}
         tree={tree}
         label="Verantwortlich"
         fieldName="ApBearb"

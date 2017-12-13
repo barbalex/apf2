@@ -73,7 +73,7 @@ const Tpopfreiwkontr = ({
           updatePropertyInDb={store.updatePropertyInDb}
         />
         <AutoComplete
-          key={`${activeDataset.row.TPopKontrId}TPopKontrBearb`}
+          key={`${activeDataset.row.TPopKontrId}TPopKontrBearbFreiw`}
           tree={tree}
           label="BearbeiterIn"
           fieldName="TPopKontrBearb"
