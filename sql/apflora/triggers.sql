@@ -2,7 +2,6 @@
  * Sicherstellen, das pro Pop/TPop jährlich maximal ein Bericht erstellt wird (massnber, popber, tpopber)
  */
 
-DROP TRIGGER IF EXISTS tpop_max_one_massnber_per_year ON apflora.tpopmassnber;
 DROP FUNCTION IF EXISTS tpop_max_one_massnber_per_year();
 CREATE FUNCTION tpop_max_one_massnber_per_year() RETURNS trigger AS $tpop_max_one_massnber_per_year$
   BEGIN
@@ -27,7 +26,7 @@ CREATE FUNCTION tpop_max_one_massnber_per_year() RETURNS trigger AS $tpop_max_on
     RETURN NEW;
   END;
 $tpop_max_one_massnber_per_year$ LANGUAGE plpgsql;
-
+DROP TRIGGER IF EXISTS tpop_max_one_massnber_per_year ON apflora.tpopmassnber;
 CREATE TRIGGER tpop_max_one_massnber_per_year BEFORE UPDATE OR INSERT ON apflora.tpopmassnber
   FOR EACH ROW EXECUTE PROCEDURE tpop_max_one_massnber_per_year();
 
