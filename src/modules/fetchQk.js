@@ -170,6 +170,11 @@ const fetchQk = async ({
     { type: 'view', name: 'v_qk2_pop_statusaktuellletzterpopbererloschen' },
     // Population: Status ist "erloschen", der letzte Populations-Bericht meldet aber "aktuell"
     { type: 'view', name: 'v_qk2_pop_statuserloschenletzterpopberaktuell' },
+    // Status ist "erloschen" (ursprünglich oder angesiedelt); der letzte Populations-Bericht meldet "erloschen". Seither gab es aber eine Ansiedlung
+    {
+      type: 'view',
+      name: 'v_qk2_pop_statuserloschenletzterpopbererloschenmitansiedlung',
+    },
     // Pop-Bericht/Pop-Massn.-Bericht ohne Jahr/Entwicklung
     { type: 'view', name: 'v_qk2_popber_ohnejahr' },
     { type: 'view', name: 'v_qk2_popber_ohneentwicklung', berichtjahr },
@@ -189,10 +194,14 @@ const fetchQk = async ({
     { type: 'view', name: 'v_qk2_tpop_statuserloschenletztertpopberunsicher' },
     // Status ist "erloschen" (ursprünglich oder angesiedelt), Ansaatversuch oder potentieller Wuchsort; der letzte Teilpopulations-Bericht meldet aber "zunehmend" und es gab seither keine Ansiedlung:
     { type: 'view', name: 'v_qk2_tpop_statuserloschenletztertpopberzunehmend' },
-
     // Teilpopulation: Status ist "erloschen", der letzte Teilpopulations-Bericht meldet aber "aktuell"
     // ????? popber aktuell????
     { type: 'view', name: 'v_qk2_tpop_statuserloschenletzterpopberaktuell' },
+    // Status ist "erloschen" (ursprünglich oder angesiedelt); der letzte Teilpopulations-Bericht meldet "erloschen". Seither gab es aber eine Ansiedlung:
+    {
+      type: 'view',
+      name: 'v_qk2_tpop_statuserloschenletztertpopbererloschenmitansiedlung',
+    },
     // tpop ohne Nr/Flurname/Status/bekannt seit/Koordinaten
     { type: 'view', name: 'v_qk2_tpop_ohnenr' },
     { type: 'view', name: 'v_qk2_tpop_ohneflurname' },
