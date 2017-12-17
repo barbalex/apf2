@@ -1,3 +1,6 @@
+-- run this once
+ALTER DATABASE apflora SET "app.jwt_secret" TO 'secret';
+
 -- We put things inside the basic_auth schema to hide
 -- them from public view. Certain public procs/views will
 -- refer to helpers and tables inside.
@@ -75,9 +78,6 @@ begin
   );
 end;
 $$;
-
--- run this once
-ALTER DATABASE apflora SET "app.jwt_secret" TO 'secret';
 
 -- stored procedure that returns the token
 CREATE TYPE basic_auth.jwt_token AS (
