@@ -868,7 +868,7 @@ FROM
     ON apflora.ap."ApArtId" = apflora.apber."ApArtId"
 WHERE
   apflora.ap."ApStatus" < 4
-  AND apflora.ap."ApArtId" > 150
+  --AND apflora.ap."ApArtId" > 150
 ORDER BY
   apflora.adb_eigenschaften."Artname";
 
