@@ -42,7 +42,7 @@ const UpdateAvailable = ({
     message="Ein Update steht zur Verfügung"
     action="installieren"
     autoHideDuration={1000 * 30}
-    onActionTouchTap={onClickInstall}
+    onActionClick={onClickInstall}
     onRequestClose={onClickClose}
     bodyStyle={{
       backgroundColor: 'rgb(35, 98, 38)',
