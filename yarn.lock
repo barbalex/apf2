@@ -3759,10 +3759,6 @@ is-fullwidth-code-point@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/is-fullwidth-code-point/-/is-fullwidth-code-point-2.0.0.tgz#a3b30a5c4f199183167aaab93beefae3ddfb654f"
 
-is-function@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/is-function/-/is-function-1.0.1.tgz#12cfb98b65b57dd3d193a3121f5f6e2f437602b5"
-
 is-glob@^2.0.0, is-glob@^2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/is-glob/-/is-glob-2.0.1.tgz#d096f926a3ded5600f3fdfd91198cb0888c2d863"
@@ -4835,9 +4831,9 @@ moment@2.19.3:
   version "2.19.3"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.19.3.tgz#bdb99d270d6d7fda78cc0fbace855e27fe7da69f"
 
-moment@2.19.4:
-  version "2.19.4"
-  resolved "https://registry.yarnpkg.com/moment/-/moment-2.19.4.tgz#17e5e2c6ead8819c8ecfad83a0acccb312e94682"
+moment@2.20.1:
+  version "2.20.1"
+  resolved "https://registry.yarnpkg.com/moment/-/moment-2.20.1.tgz#d6eb1a46cbcc14a2b2f9434112c1ff8907f313fd"
 
 ms@2.0.0:
   version "2.0.0"
@@ -5863,9 +5859,9 @@ rc@^1.0.1, rc@^1.1.6, rc@^1.1.7:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
-react-contextmenu@2.9.1:
-  version "2.9.1"
-  resolved "https://registry.yarnpkg.com/react-contextmenu/-/react-contextmenu-2.9.1.tgz#391c7001f73e49772e37e98d154736d50dac11de"
+react-contextmenu@2.9.2:
+  version "2.9.2"
+  resolved "https://registry.yarnpkg.com/react-contextmenu/-/react-contextmenu-2.9.2.tgz#7076075f09e4cad023a1252da347d9e6782d003a"
   dependencies:
     classnames "^2.2.5"
     object-assign "^4.1.0"
@@ -6027,9 +6023,9 @@ react-transition-group@^1.2.1:
     prop-types "^15.5.6"
     warning "^3.0.0"
 
-react-virtualized@9.13.0:
-  version "9.13.0"
-  resolved "https://registry.yarnpkg.com/react-virtualized/-/react-virtualized-9.13.0.tgz#83e4d984271a37631225e5fe6faeaeada6e59f53"
+react-virtualized@9.14.1:
+  version "9.14.1"
+  resolved "https://registry.yarnpkg.com/react-virtualized/-/react-virtualized-9.14.1.tgz#4d08385728e33e43205789b42c14e7a85b1cf2bd"
   dependencies:
     babel-runtime "^6.23.0"
     classnames "^2.2.3"
@@ -6858,15 +6854,14 @@ style-loader@0.19.0:
     loader-utils "^1.0.2"
     schema-utils "^0.3.0"
 
-styled-components@2.2.4:
-  version "2.2.4"
-  resolved "https://registry.yarnpkg.com/styled-components/-/styled-components-2.2.4.tgz#dd87fd3dafd359e7a0d570aec1bd07d691c0b5a2"
+styled-components@2.4.0:
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/styled-components/-/styled-components-2.4.0.tgz#086d0fd483d54638837fca3ea546a030b94adf75"
   dependencies:
     buffer "^5.0.3"
     css-to-react-native "^2.0.3"
     fbjs "^0.8.9"
     hoist-non-react-statics "^1.2.0"
-    is-function "^1.0.1"
     is-plain-object "^2.0.1"
     prop-types "^15.5.4"
     stylis "^3.4.0"
