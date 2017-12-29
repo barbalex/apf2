@@ -72,6 +72,8 @@ const Assozart = ({ store, tree }: { store: Object, tree: Object }) => {
             value: 'TaxonomieId',
             text: 'Artname',
           }}
+          anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
+          targetOrigin={{ vertical: 'bottom', horizontal: 'left' }}
           updatePropertyInDb={store.updatePropertyInDb}
         />
         <TextField
