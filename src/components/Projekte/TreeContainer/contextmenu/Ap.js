@@ -3,41 +3,22 @@ import React from 'react'
 import { ContextMenu, MenuItem } from 'react-contextmenu'
 import { inject, observer } from 'mobx-react'
 import compose from 'recompose/compose'
-import withState from 'recompose/withState'
-import withHandlers from 'recompose/withHandlers'
 
-const enhance = compose(
-  inject('store'),
-  withState('label', 'changeLabel', ''),
-  withHandlers({
-    // according to https://github.com/vkbansal/react-contextmenu/issues/65
-    // this is how to pass data from ContextMenuTrigger to ContextMenu
-    onShow: props => event => {
-      // props.changeLabel(event.detail.data.nodeLabel)
-    },
-  }),
-  observer
-)
+const enhance = compose(inject('store'), observer)
 
 const Ap = ({
   onClick,
   store,
   tree,
-  changeLabel,
-  label,
-  onShow,
 }: {
   onClick: () => void,
   store: Object,
   tree: Object,
-  changeLabel: () => void,
-  label: string,
-  onShow: () => {},
 }) => {
   const moving = store.moving.table && store.moving.table === 'pop'
 
   return (
-    <ContextMenu id={`${tree.name}ap`} collect={props => props} onShow={onShow}>
+    <ContextMenu id={`${tree.name}ap`}>
       <div className="react-contextmenu-title">Art</div>
       <MenuItem
         onClick={onClick}
