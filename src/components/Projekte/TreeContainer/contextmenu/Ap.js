@@ -16,7 +16,7 @@ const enhance = compose(
       // props.changeLabel(event.detail.data.nodeLabel)
     },
   }),
-  observer,
+  observer
 )
 
 const Ap = ({
@@ -40,9 +40,7 @@ const Ap = ({
     <ContextMenu id={`${tree.name}ap`} collect={props => props} onShow={onShow}>
       <div className="react-contextmenu-title">Art</div>
       <MenuItem
-        onClick={(e, data, element) => {
-          onClick(e, data, element)
-        }}
+        onClick={onClick}
         data={{
           action: 'insert',
           table: 'ap',
@@ -59,7 +57,7 @@ const Ap = ({
       >
         lösche
       </MenuItem>
-      {moving &&
+      {moving && (
         <MenuItem
           onClick={onClick}
           data={{
@@ -67,14 +65,16 @@ const Ap = ({
           }}
         >
           {`verschiebe '${store.moving.label}' hierhin`}
-        </MenuItem>}
+        </MenuItem>
+      )}
       {(store.map.activeApfloraLayers.includes('Pop') ||
-        store.map.activeApfloraLayers.includes('Tpop')) &&
+        store.map.activeApfloraLayers.includes('Tpop')) && (
         <div>
           <div className="react-contextmenu-divider" />
           <div className="react-contextmenu-title">Karte</div>
-        </div>}
-      {store.map.activeApfloraLayers.includes('Pop') &&
+        </div>
+      )}
+      {store.map.activeApfloraLayers.includes('Pop') && (
         <MenuItem
           onClick={onClick}
           data={{
@@ -85,8 +85,9 @@ const Ap = ({
           {store.map.pop.labelUsingNr
             ? 'beschrifte Populationen mit Namen'
             : 'beschrifte Populationen mit Nummer'}
-        </MenuItem>}
-      {store.map.activeApfloraLayers.includes('Tpop') &&
+        </MenuItem>
+      )}
+      {store.map.activeApfloraLayers.includes('Tpop') && (
         <MenuItem
           onClick={onClick}
           data={{
@@ -97,7 +98,8 @@ const Ap = ({
           {store.map.tpop.labelUsingNr
             ? 'beschrifte Teil-Populationen mit Namen'
             : 'beschrifte Teil-Populationen mit Nummer'}
-        </MenuItem>}
+        </MenuItem>
+      )}
     </ContextMenu>
   )
 }
