@@ -8,7 +8,9 @@ import withHandlers from 'recompose/withHandlers'
 import withState from 'recompose/withState'
 import styled from 'styled-components'
 
-const StyledAutoComplete = styled(AutoComplete)`margin-bottom: -12px;`
+const StyledAutoComplete = styled(AutoComplete)`
+  margin-bottom: -12px;
+`
 
 const enhance = compose(
   withState('focused', 'changeFocused', false),
@@ -51,6 +53,8 @@ const MyAutocomplete = ({
     value: 'id',
     text: 'label',
   },
+  anchorOrigin,
+  targetOrigin,
   onNewRequest,
   focused,
   changeFocused,
@@ -68,6 +72,8 @@ const MyAutocomplete = ({
   valueText?: string,
   dataSource: Array<Object>,
   dataSourceConfig: Object,
+  anchorOrigin: Object,
+  targetOrigin: Object,
   updatePropertyInDb: () => void,
   onNewRequest: () => void,
   focused: boolean,
@@ -113,10 +119,16 @@ const MyAutocomplete = ({
     labelNumberLimit = 'Nur die ersten 200 Einträge werden aufgelistet.'
   }
   const labelText = focused
-    ? `${label}${labelFilterHint || labelNumberLimit
-        ? '. '
-        : ''}${labelFilterHint}${labelNumberLimit}`
+    ? `${label}${
+        labelFilterHint || labelNumberLimit ? '. ' : ''
+      }${labelFilterHint}${labelNumberLimit}`
     : label
+  const myAnchorOrigin = anchorOrigin
+    ? anchorOrigin
+    : { vertical: 'bottom', horizontal: 'left' }
+  const myTargetOrigin = targetOrigin
+    ? targetOrigin
+    : { vertical: 'top', horizontal: 'left' }
 
   return (
     <StyledAutoComplete
@@ -136,6 +148,8 @@ const MyAutocomplete = ({
       menuStyle={{
         maxHeight: `${window.innerHeight * 0.8}px`,
       }}
+      anchorOrigin={myAnchorOrigin}
+      targetOrigin={myTargetOrigin}
     />
   )
 }

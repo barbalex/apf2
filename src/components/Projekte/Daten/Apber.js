@@ -240,6 +240,8 @@ const Apber = ({
             value: 'AdrId',
             text: 'AdrName',
           }}
+          anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
+          targetOrigin={{ vertical: 'bottom', horizontal: 'left' }}
           updatePropertyInDb={store.updatePropertyInDb}
         />
       </FieldsContainer>
