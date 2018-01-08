@@ -208,3 +208,19 @@ $ap_insert_add_beobart$ LANGUAGE plpgsql;
 
 CREATE TRIGGER ap_insert_add_beobart AFTER INSERT ON apflora.ap
   FOR EACH ROW EXECUTE PROCEDURE ap_insert_add_beobart();
+
+-- when ap is inserted
+-- ensure beobart is created too
+DROP TRIGGER IF EXISTS ap_insert_add_beobart ON apflora.ap;
+DROP FUNCTION IF EXISTS ap_insert_add_beobart();
+CREATE FUNCTION ap_insert_add_beobart() RETURNS trigger AS $ap_insert_add_beobart$
+BEGIN
+  INSERT INTO
+    apflora.beobart ("ApArtId", "TaxonomieId")
+  VALUES (NEW."ApArtId", NEW."ApArtId");
+  RETURN NEW;
+END;
+$ap_insert_add_beobart$ LANGUAGE plpgsql;
+
+CREATE TRIGGER ap_insert_add_beobart AFTER INSERT ON apflora.ap
+  FOR EACH ROW EXECUTE PROCEDURE ap_insert_add_beobart();
