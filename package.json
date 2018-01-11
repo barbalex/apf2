@@ -10,7 +10,7 @@
   "license": "MIT",
   "private": true,
   "devDependencies": {
-    "flow-bin": "0.62.0",
+    "flow-bin": "0.63.1",
     "mobx-react-devtools": "4.2.15",
     "react-scripts": "1.0.17"
   },
@@ -65,10 +65,10 @@
     "react-leaflet": "1.7.8",
     "react-leaflet-bing": "3.0.0",
     "react-leaflet-control": "1.4.0",
-    "react-linkify": "0.2.1",
+    "react-linkify": "0.2.2",
     "react-reflex": "2.0.11",
     "react-sortable-hoc": "0.6.8",
-    "react-virtualized": "9.15.0",
+    "react-virtualized": "9.16.1",
     "recompose": "0.26.0",
     "styled-components": "2.4.0"
   },
