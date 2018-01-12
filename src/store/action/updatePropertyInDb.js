@@ -21,11 +21,6 @@ export default async (
     return
   }
 
-  // ensure numbers saved as numbers
-  if (value && !isNaN(value)) {
-    value = +value
-  }
-
   // convert undefined and '' to null
   if (value === undefined || value === '') {
     value = null

@@ -15,6 +15,10 @@ const enhance = compose(
   withState('valueHasBeenChanged', 'changeValueHasBeenChanged', false),
   withHandlers({
     onChange: props => (event, val) => {
+      // ensure numbers saved as numbers
+      if (event.target.type === 'number') {
+        val = +val
+      }
       props.updateProperty(props.tree, props.fieldName, val)
       props.changeValueHasBeenChanged(true)
     },

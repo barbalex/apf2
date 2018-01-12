@@ -19,11 +19,6 @@ export default (
       )
     )
   }
-  // ensure numbers saved as numbers
-  // but enable adding dates in tpopmassn.TPopMassnAnsiedDatSamm
-  if (value && !isNaN(value) && value.includes && !value.includes('.')) {
-    value = +value
-  }
   // edge cases:
   // if jahr of ziel is updated, url needs to change
   if (table === 'ziel' && key === 'ZielJahr') {
