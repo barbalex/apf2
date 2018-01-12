@@ -119,9 +119,7 @@ export default (store: Object): void => {
     ),
     showCoordOnMapGeoAdminCh: action('showCoordOnMapGeoAdminCh', (x, y) =>
       window.open(
-        `https://map.geo.admin.ch/?bgLayer=ch.swisstopo.pixelkarte-farbe&Y=${
-          x
-        }&X=${y}&zoom=10&crosshair=circle`,
+        `https://map.geo.admin.ch/?bgLayer=ch.swisstopo.pixelkarte-farbe&Y=${x}&X=${y}&zoom=10&crosshair=circle`,
         'target="_blank"'
       )
     ),
