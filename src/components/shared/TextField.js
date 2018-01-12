@@ -7,7 +7,9 @@ import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import styled from 'styled-components'
 
-const StyledTextField = styled(TextField)`margin-bottom: -15px;`
+const StyledTextField = styled(TextField)`
+  margin-bottom: -15px;
+`
 
 const enhance = compose(
   withState('valueHasBeenChanged', 'changeValueHasBeenChanged', false),
@@ -17,7 +19,12 @@ const enhance = compose(
       props.changeValueHasBeenChanged(true)
     },
     onBlur: props => event => {
-      const { value } = event.target
+      const { type } = event.target
+      let { value } = event.target
+      // ensure numbers saved as numbers
+      if (type === 'number') {
+        value = +value
+      }
       const { valueHasBeenChanged, tree, fieldName, updatePropertyInDb } = props
       if (valueHasBeenChanged) {
         updatePropertyInDb(tree, fieldName, value)
