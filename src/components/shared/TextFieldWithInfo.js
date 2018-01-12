@@ -16,7 +16,9 @@ const FieldWithInfoContainer = styled.div`
   margin-bottom: -10px;
   break-inside: avoid;
 `
-const InfoWithPopoverContainer = styled.div`padding-bottom: 5px;`
+const InfoWithPopoverContainer = styled.div`
+  padding-bottom: 5px;
+`
 const PopoverContentRow = styled.div`
   padding: 2px 5px 2px 5px;
   display: flex;
@@ -34,7 +36,12 @@ const enhance = compose(
       props.changeValueHasBeenChanged(true)
     },
     onBlur: props => event => {
-      const { value } = event.target
+      const { type } = event.target
+      let { value } = event.target
+      // ensure numbers saved as numbers
+      if (type === 'number') {
+        value = +value
+      }
       const { valueHasBeenChanged, tree, fieldName, updatePropertyInDb } = props
       if (valueHasBeenChanged) {
         updatePropertyInDb(tree, fieldName, value)
