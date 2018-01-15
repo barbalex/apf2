@@ -12,7 +12,7 @@
   "devDependencies": {
     "flow-bin": "0.63.1",
     "mobx-react-devtools": "4.2.15",
-    "react-scripts": "1.0.17"
+    "react-scripts": "1.1.0"
   },
   "dependenciesThatNeedToBeFixed": {
     "material-ui": {
@@ -64,11 +64,11 @@
     "react-dom": "16.2.0",
     "react-leaflet": "1.7.8",
     "react-leaflet-bing": "3.0.0",
-    "react-leaflet-control": "1.4.0",
+    "react-leaflet-control": "1.4.1",
     "react-linkify": "0.2.2",
     "react-reflex": "2.0.11",
     "react-sortable-hoc": "0.6.8",
-    "react-virtualized": "9.16.1",
+    "react-virtualized": "9.17.1",
     "recompose": "0.26.0",
     "styled-components": "2.4.0"
   },
