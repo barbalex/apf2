@@ -162,11 +162,13 @@ SELECT setval(pg_get_serial_sequence('apflora.apber', 'JBerId'), coalesce(max("J
 
 DROP TABLE IF EXISTS apflora.apberuebersicht;
 CREATE TABLE apflora.apberuebersicht (
+  id SERIAL PRIMARY KEY,
   "ProjId" integer DEFAULT 1,
-  "JbuJahr" smallint NOT NULL,
+  "JbuJahr" smallint,
   "JbuBemerkungen" text,
   "MutWann" date DEFAULT NOW(),
-  "MutWer" varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
+  "MutWer" varchar(20) DEFAULT current_setting('request.jwt.claim.username', true),
+  unique ("ProjId", "JbuJahr")
 );
 COMMENT ON COLUMN apflora.apberuebersicht."ProjId" IS 'Zugehöriges Projekt. Zusammen mit JbuJahr Primärschlüssel der Tabelle "apberuebersicht"';
 COMMENT ON COLUMN apflora.apberuebersicht."JbuJahr" IS 'Berichtsjahr. Zusammen mit ProjId Primärschlüssel der Tabelle "apberuebersicht"';
@@ -174,6 +176,14 @@ COMMENT ON COLUMN apflora.apberuebersicht."JbuBemerkungen" IS 'Bemerkungen zur A
 COMMENT ON COLUMN apflora.apberuebersicht."MutWann" IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.apberuebersicht."MutWer" IS 'Von wem wurde der Datensatz zuletzt geändert?';
 ALTER TABLE apflora.apberuebersicht ADD CONSTRAINT apberuebersicht_proj_jahr_pk PRIMARY KEY ("ProjId", "JbuJahr");
+
+-- once:
+DROP FUNCTION IF EXISTS apberuebersicht_insert_set_year();
+DROP TRIGGER IF EXISTS apberuebersicht_insert_set_year ON apflora.apberuebersicht;
+ALTER TABLE apflora.apberuebersicht drop CONSTRAINT if exists apberuebersicht_proj_jahr_pk;
+ALTER TABLE apflora.apberuebersicht add unique ("ProjId", "JbuJahr");
+ALTER TABLE apflora.apberuebersicht add column id SERIAL PRIMARY KEY;
+ALTER TABLE apflora.apberuebersicht ALTER COLUMN "JbuJahr" DROP NOT NULL;
 
 DROP TABLE IF EXISTS apflora.assozart;
 CREATE TABLE apflora.assozart (

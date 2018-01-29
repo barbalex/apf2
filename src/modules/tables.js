@@ -149,7 +149,7 @@ export default [
     table: 'apberuebersicht',
     label: 'AP-Berichte',
     labelSingular: 'AP-Bericht',
-    idField: 'JbuJahr',
+    idField: 'id',
     parentIdField: 'ProjId',
   },
   {

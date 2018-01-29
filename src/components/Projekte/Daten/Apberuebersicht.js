@@ -28,7 +28,7 @@ const Apberuebersicht = ({ store, tree }: { store: Object, tree: Object }) => {
       <FormTitle tree={tree} title="AP-Bericht Jahresübersicht" />
       <FieldsContainer>
         <TextField
-          key={`${activeDataset.row.ProjId}${activeDataset.row.JbuJahr}JbuJahr`}
+          key={`${activeDataset.row.ProjId}${activeDataset.row.id}JbuJahr`}
           tree={tree}
           label="Jahr"
           fieldName="JbuJahr"
@@ -40,8 +40,9 @@ const Apberuebersicht = ({ store, tree }: { store: Object, tree: Object }) => {
           updatePropertyInDb={store.updatePropertyInDb}
         />
         <TextField
-          key={`${activeDataset.row.ProjId}${activeDataset.row
-            .JbuJahr}JbuBemerkungen`}
+          key={`${activeDataset.row.ProjId}${
+            activeDataset.row.id
+          }JbuBemerkungen`}
           tree={tree}
           label="Bemerkungen"
           fieldName="JbuBemerkungen"
