@@ -1,17 +1,18 @@
 // @flow
 import axios from 'axios'
+import { toJS } from 'mobx'
+
 import staticFilesBaseUrl from '../../modules/staticFilesBaseUrl'
 
 export default (store: Object): void => {
-  if (!store.map.detailplaene) {
+  const detailplaene = toJS(store.map.detailplaene)
+
+  if (!detailplaene) {
     const baseURL = staticFilesBaseUrl
     const url = `/detailplaeneWgs84neu.json`
     axios
       .get(url, { baseURL })
-      .then(result => {
-        const { data } = result
-        store.map.detailplaene = data
-      })
+      .then(({ data }) => store.map.setDetailplaene(data))
       .catch(error => store.listError(error))
   }
 }

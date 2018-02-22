@@ -16,6 +16,8 @@ import fetchDetailplaene from '../action/fetchDetailplaene'
 
 export default (store: Object): void => {
   extendObservable(store.map, {
+    detailplaene: null,
+    setDetailplaene: action(data => (store.map.detailplaene = data)),
     bounds: [[47.159, 8.354], [47.696, 8.984]],
     changeBounds: action('changeBounds', bounds => (store.map.bounds = bounds)),
     mouseCoord: [],
