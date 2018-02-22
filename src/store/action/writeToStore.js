@@ -5,13 +5,16 @@ export default ({
   store,
   data,
   table,
-  field
+  field,
 }: {
   store: Object,
   data: Array<Object>,
   table: string,
-  field: string
-}): void =>
-  runInAction(() => {
-    data.forEach(d => store.table[table].set(d[field], d))
-  })
+  field: string,
+}): void => {
+  if (!!table && !!field) {
+    runInAction(() => {
+      data.forEach(d => store.table[table].set(d[field], d))
+    })
+  }
+}
