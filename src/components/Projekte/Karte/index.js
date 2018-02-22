@@ -64,7 +64,9 @@ const StyledMap = styled(Map)`
     overflow: visible;
   }
 `
-const StyledMapLocalizing = styled(StyledMap)`cursor: crosshair !important;`
+const StyledMapLocalizing = styled(StyledMap)`
+  cursor: crosshair !important;
+`
 
 const enhance = compose(inject('store'), observer)
 
