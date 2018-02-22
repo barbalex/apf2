@@ -13,11 +13,14 @@ import beobNichtBeurteiltIdsInsideFeatureCollection from '../../modules/beobNich
 import beobNichtZuzuordnenIdsInsideFeatureCollection from '../../modules/beobNichtZuzuordnenIdsInsideFeatureCollection'
 import tpopBeobIdsInsideFeatureCollection from '../../modules/tpopBeobIdsInsideFeatureCollection'
 import fetchDetailplaene from '../action/fetchDetailplaene'
+import fetchMarkierungen from '../action/fetchMarkierungen'
 
 export default (store: Object): void => {
   extendObservable(store.map, {
     detailplaene: null,
     setDetailplaene: action(data => (store.map.detailplaene = data)),
+    markierungen: null,
+    setMarkierungen: action(data => (store.map.markierungen = data)),
     bounds: [[47.159, 8.354], [47.696, 8.984]],
     changeBounds: action('changeBounds', bounds => (store.map.bounds = bounds)),
     mouseCoord: [],
@@ -38,8 +41,9 @@ export default (store: Object): void => {
       setActiveBaseLayer(store, layer)
     ),
     overlays: observable([
+      { label: 'Markierungen', value: 'Markierungen' },
+      { label: 'Detailpläne', value: 'Detailplaene' },
       { label: 'ZH Übersichtsplan', value: 'ZhUep' },
-      { label: 'Detailplaene', value: 'Detailplaene' },
       { label: 'ZH Gemeindegrenzen', value: 'ZhGemeindegrenzen' },
       { label: 'SVO grau', value: 'ZhSvoGrey' },
       { label: 'SVO farbig', value: 'ZhSvoColor' },
@@ -82,6 +86,9 @@ export default (store: Object): void => {
     }),
     fetchDetailplaene: action('fetchDetailplaene', () =>
       fetchDetailplaene(store)
+    ),
+    fetchMarkierungen: action('fetchMarkierungen', () =>
+      fetchMarkierungen(store)
     ),
     apfloraLayers: observable([
       { label: 'Populationen', value: 'Pop' },

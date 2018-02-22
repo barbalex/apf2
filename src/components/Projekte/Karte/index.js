@@ -30,6 +30,7 @@ import ZhOrtho2015 from './layers/ZhOrtho2015'
 import ZhOrtho2015Ir from './layers/ZhOrtho2015Ir'
 import ZhUep from './layers/ZhUep'
 import Detailplaene from './layers/Detailplaene'
+import Markierungen from './layers/Markierungen'
 import ZhSvoColor from './layers/ZhSvoColor'
 import ZhPflegeplan from './layers/ZhPflegeplan'
 import ZhSvoGrey from './layers/ZhSvoGrey'
@@ -171,6 +172,7 @@ const Karte = ({ store }: { store: Object }) => {
   const OverlayComponents = {
     ZhUep: () => <ZhUepOverlay />,
     Detailplaene: () => <Detailplaene />,
+    Markierungen: () => <Markierungen />,
     ZhGemeindegrenzen: () => <ZhGemeindegrenzen />,
     ZhSvoColor: () => <ZhSvoColor />,
     ZhSvoGrey: () => <ZhSvoGrey />,

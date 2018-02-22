@@ -4,19 +4,8 @@ import { GeoJSON } from 'react-leaflet'
 import { inject } from 'mobx-react'
 import { toJS } from 'mobx'
 
-const popupFromProperties = p =>
-  `<div>
-    ${Object.entries(p)
-      .filter(e => !!e[1])
-      .sort()
-      .map(
-        entry =>
-          `<div style="display:flex;justify-content:space-between;">
-        <div>${entry[0]}:</div><div>${entry[1]}</div>
-      </div>`
-      )
-      .join('')}
-  </div>`
+import popupFromProperties from './popupFromProperties'
+
 const style = () => ({ fill: false, color: 'red', weight: 1 })
 const onEachFeature = (feature, layer) => {
   if (feature.properties) {

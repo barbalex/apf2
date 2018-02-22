@@ -173,6 +173,7 @@ const myChildren = (store: Object) => {
               store.map.activeApfloraLayersSortedString
             }
             detailplaene={toJS(store.map.detailplaene)}
+            markierungen={toJS(store.map.markierungen)}
           />
         </KarteContainer>
       </ReflexElement>
