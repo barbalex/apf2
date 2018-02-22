@@ -20,8 +20,6 @@ const popupFromProperties = p =>
 const style = () => ({ fill: false, color: 'red', weight: 1 })
 const onEachFeature = (feature, layer) => {
   if (feature.properties) {
-    //console.log('feature.properties:', feature.properties)
-    //layer.bindPopup(JSON.stringify(feature.properties, 5))
     layer.bindPopup(popupFromProperties(feature.properties))
   }
 }
