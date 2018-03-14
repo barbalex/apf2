@@ -5,7 +5,7 @@ import Joi from 'joi-browser'
 export default (
   table: ?string,
   row: ?Object,
-  allFields: Array<Object>,
+  allFields: Array<Object>
 ): Object => {
   const valid = {}
   if (!table || !row || !allFields || !allFields.length) {
@@ -17,7 +17,7 @@ export default (
     .replace('tpopfeldkontr', 'tpopkontr')
     .replace('tpopfreiwkontr', 'tpopkontr')
   const fields = allFields.filter(
-    f => f.table_schema === 'apflora' && f.table_name === tableName,
+    f => f.table_schema === 'apflora' && f.table_name === tableName
   )
   if (fields.length === 0) {
     // eslint-disable-next-line no-console
@@ -39,7 +39,7 @@ export default (
               .min(-2147483648)
               .max(+2147483647)
               .allow('')
-              .allow(null),
+              .allow(null)
           )
           break
         }
@@ -52,7 +52,7 @@ export default (
               .min(-32768)
               .max(+32767)
               .allow('')
-              .allow(null),
+              .allow(null)
           )
           break
         }
@@ -60,7 +60,10 @@ export default (
         case 'double precision': {
           validDataType = Joi.validate(
             value,
-            Joi.number().precision(15).allow('').allow(null),
+            Joi.number()
+              .precision(15)
+              .allow('')
+              .allow(null)
           )
           break
         }
@@ -71,7 +74,7 @@ export default (
             Joi.alternatives()
               .try(Joi.number(), Joi.string())
               .allow('')
-              .allow(null),
+              .allow(null)
           )
           // - if field type is varchar: check if value length complies to character_maximum_length
           const maxLen = field.character_maximum_length
@@ -81,14 +84,19 @@ export default (
               Joi.alternatives()
                 .try(Joi.string().max(maxLen), Joi.number())
                 .allow('')
-                .allow(null),
+                .allow(null)
             )
           }
           break
         }
 
         case 'uuid': {
-          validDataType = Joi.validate(value, Joi.string().guid().allow(null))
+          validDataType = Joi.validate(
+            value,
+            Joi.string()
+              .guid()
+              .allow(null)
+          )
           break
         }
 
@@ -103,7 +111,7 @@ export default (
             Joi.alternatives()
               .try(Joi.number(), Joi.string())
               .allow('')
-              .allow(null),
+              .allow(null)
           )
           break
         }

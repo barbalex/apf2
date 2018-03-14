@@ -13,5 +13,5 @@ export default (store: Object, error: Object): void => {
   }
   store.app.errors.unshift(error)
   setTimeout(() => store.app.errors.pop(), 1000 * 10)
-  console.log('Error:', error) // eslint-disable-line no-console
+  console.log('listError: Error:', error) // eslint-disable-line no-console
 }
