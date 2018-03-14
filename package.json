@@ -17,7 +17,8 @@
   "dependenciesThatNeedToBeFixed": {
     "material-ui": {
       "version": "0.19.0",
-      "reason": "AutoComplete does not work on 0.19.1 and 0.19.2. Well: with self managed searchText it does"
+      "reason":
+        "AutoComplete does not work on 0.19.1 and 0.19.2. Well: with self managed searchText it does"
     },
     "get-urls": {
       "version": "5.0.1",
@@ -33,8 +34,8 @@
     "axios": "0.18.0",
     "babel-polyfill": "6.26.0",
     "date-fns": "1.29.0",
-    "dexie": "2.0.1",
-    "exceljs": "0.8.3",
+    "dexie": "2.0.2",
+    "exceljs": "0.9.1",
     "file-saver": "1.3.3",
     "get-urls": "7.2.0",
     "history": "4.7.2",
@@ -51,8 +52,8 @@
     "leaflet.markercluster": "1.3.0",
     "lodash": "4.17.5",
     "material-ui": "0.20.0",
-    "mobx": "3.5.1",
-    "mobx-react": "4.4.2",
+    "mobx": "4.0.2",
+    "mobx-react": "5.0.0",
     "moment": "2.20.1",
     "proj4": "2.4.4",
     "proj4leaflet": "1.0.2",
