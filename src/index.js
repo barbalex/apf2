@@ -85,6 +85,7 @@ import './index.css'
         //store.user.token = null
         return store.logout()
       }
+      return Promise.reject(error)
     })
 
     await setLoginFromIdb(store)
