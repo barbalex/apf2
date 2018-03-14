@@ -17,3 +17,4 @@ npm-debug.log
 *.db
 
 postgrest.conf
+yarn-error.log
