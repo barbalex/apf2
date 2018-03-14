@@ -6,7 +6,7 @@
  */
 import inside from '@turf/inside'
 
-import epsg21781to4326 from './epsg21781to4326notReverse'
+import epsg2056to4326 from './epsg2056to4326notReverse'
 
 export default (
   polygon: {
@@ -18,7 +18,7 @@ export default (
   y: number
 ): boolean => {
   // convert koordinates to wgs84
-  const koordWgs84 = epsg21781to4326(x, y)
+  const koordWgs84 = epsg2056to4326(x, y)
 
   // build a geoJson point
   const koordPt = {

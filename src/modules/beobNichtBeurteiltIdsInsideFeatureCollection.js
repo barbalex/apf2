@@ -3,7 +3,7 @@ import within from '@turf/within'
 import isFinite from 'lodash/isFinite'
 import { toJS } from 'mobx'
 
-import epsg21781to4326 from './epsg21781to4326notReverse'
+import epsg2056to4326 from './epsg2056to4326notReverse'
 
 export default (
   store: Object,
@@ -24,7 +24,7 @@ export default (
       },
       geometry: {
         type: 'Point',
-        coordinates: epsg21781to4326(b.X, b.Y),
+        coordinates: epsg2056to4326(b.X, b.Y),
       },
     })),
   }

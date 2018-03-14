@@ -2,7 +2,7 @@
 import { extendObservable, action, computed, observable } from 'mobx'
 import sortBy from 'lodash/sortBy'
 
-import epsg4326to21781 from '../../modules/epsg4326to21781'
+import epsg4326to2056 from '../../modules/epsg4326to2056'
 import localizeTpop from '../action/localizeTpop'
 import setActiveBaseLayer from '../action/setActiveBaseLayer'
 import moveOverlay from '../action/moveOverlay'
@@ -24,17 +24,17 @@ export default (store: Object): void => {
     bounds: [[47.159, 8.354], [47.696, 8.984]],
     changeBounds: action('changeBounds', bounds => (store.map.bounds = bounds)),
     mouseCoord: [],
-    mouseCoordEpsg21781: computed(
+    mouseCoordEpsg2056: computed(
       () => {
         if (store.map.mouseCoord.length > 0) {
-          return epsg4326to21781(
+          return epsg4326to2056(
             store.map.mouseCoord[0],
             store.map.mouseCoord[1]
           )
         }
         return []
       },
-      { name: 'mouseCoordEpsg21781' }
+      { name: 'mouseCoordEpsg2056' }
     ),
     activeBaseLayer: 'OsmColor',
     setActiveBaseLayer: action('setActiveBaseLayer', layer =>

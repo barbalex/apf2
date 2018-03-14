@@ -128,7 +128,7 @@ function Store(): void {
   this.map = {
     bounds: [],
     mouseCoord: [],
-    mouseCoordEpsg21781: [],
+    mouseCoordEpsg2056: [],
     pop: {},
     tpop: {},
     beob: {},

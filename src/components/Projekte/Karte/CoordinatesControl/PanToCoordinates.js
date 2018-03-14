@@ -11,7 +11,7 @@ import FlatButton from 'material-ui/FlatButton'
 import PanIcon from 'material-ui/svg-icons/maps/my-location'
 import ClearIcon from 'material-ui/svg-icons/content/clear'
 
-import epsg21781to4326 from '../../../../modules/epsg21781to4326'
+import epsg2056to4326 from '../../../../modules/epsg2056to4326'
 import panCentreIcon from '../../../../etc/panTo.png'
 
 const Container = styled.div`
@@ -91,7 +91,7 @@ const enhance = compose(
       const { panToMarker, changePanToMarker } = store.map
       const { panToX: x, panToY: y } = store.map
       if (x && y && !xError && !yError) {
-        const my4326 = epsg21781to4326(x, y)
+        const my4326 = epsg2056to4326(x, y)
         const latLng = new window.L.LatLng(...my4326)
         map.flyTo(latLng)
         const marker = window.L.marker(latLng, {

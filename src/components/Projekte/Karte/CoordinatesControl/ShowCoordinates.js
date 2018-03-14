@@ -36,7 +36,7 @@ const ShowCoordinates = ({
   store: Object,
   onClickCoordinates: () => void,
 }) => {
-  let [x, y] = store.map.mouseCoordEpsg21781
+  let [x, y] = store.map.mouseCoordEpsg2056
   let coord = ''
   if (x && y) {
     x = parseInt(x, 10).toLocaleString('de-ch')

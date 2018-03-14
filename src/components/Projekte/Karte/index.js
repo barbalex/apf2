@@ -55,7 +55,7 @@ import DrawControl from './DrawControl'
 // import PrintControl from './PrintControl'
 import PngControl from './PngControl'
 import CoordinatesControl from './CoordinatesControl/index.js'
-import epsg4326to21781 from '../../../modules/epsg4326to21781'
+import epsg4326to2056 from '../../../modules/epsg4326to2056'
 
 const StyledMap = styled(Map)`
   height: 100%;
@@ -79,7 +79,7 @@ const Karte = ({ store }: { store: Object }) => {
   // see issue on proj4js: https://github.com/proj4js/proj4js/issues/214
   /*
   const crs = new window.L.Proj.CRS(
-    'EPSG:21781',
+    'EPSG:2056',
     '+proj=somerc +lat_0=46.95240555555556 +lon_0=7.439583333333333 +k_0=1 +x_0=600000 +y_0=200000 +ellps=bessel +towgs84=674.374,15.056,405.346,0,0,0,0 +units=m +no_defs',
     {
       resolutions: [8192, 4096, 2048], // 3 example zoom level resolutions
@@ -211,7 +211,7 @@ const Karte = ({ store }: { store: Object }) => {
       onClick={event => {
         if (!!idOfTpopBeingLocalized) {
           const { lat, lng } = event.latlng
-          const [x, y] = epsg4326to21781(lng, lat)
+          const [x, y] = epsg4326to2056(lng, lat)
           // TODO: cannot localize from map2!!!
           store.map.localizeTpop(store.tree, x, y)
         }

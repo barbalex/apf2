@@ -3,7 +3,7 @@ import within from '@turf/within'
 import isFinite from 'lodash/isFinite'
 import { toJS } from 'mobx'
 
-import epsg21781to4326 from './epsg21781to4326notReverse'
+import epsg2056to4326 from './epsg2056to4326notReverse'
 
 export default (store: Object, pops: Array<Object>): Array<number> => {
   /**
@@ -48,7 +48,7 @@ export default (store: Object, pops: Array<Object>): Array<number> => {
       geometry: {
         type: 'Point',
         // convert koordinates to wgs84
-        coordinates: epsg21781to4326(p.PopXKoord, p.PopYKoord),
+        coordinates: epsg2056to4326(p.PopXKoord, p.PopYKoord),
       },
     })),
   }

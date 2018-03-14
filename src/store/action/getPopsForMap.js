@@ -1,5 +1,5 @@
 // @flow
-import epsg21781to4326 from '../../modules/epsg21781to4326'
+import epsg2056to4326 from '../../modules/epsg2056to4326'
 
 export default (store: Object): Array<Object> => {
   const { table, tree } = store
@@ -19,7 +19,7 @@ export default (store: Object): Array<Object> => {
   }
 
   pops = pops.map(p => {
-    p.PopKoordWgs84 = epsg21781to4326(p.PopXKoord, p.PopYKoord)
+    p.PopKoordWgs84 = epsg2056to4326(p.PopXKoord, p.PopYKoord)
     return p
   })
   return pops

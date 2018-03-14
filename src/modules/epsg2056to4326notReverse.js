@@ -7,6 +7,4 @@ proj4.defs(
 proj4.defs('EPSG:4326', '+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs')
 
 export default (x: number, y: number) =>
-  // no idea why but values have to be reversed
-  // also: make sure to pass in numbers, not strings
-  proj4('EPSG:2056', 'EPSG:4326', [+x, +y]).reverse()
+  proj4('EPSG:2056', 'EPSG:4326', [+x, +y])
