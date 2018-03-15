@@ -32,8 +32,8 @@ const GotoTextField = styled(TextField)`
   padding: 0 5px;
 `
 
-const xIsValid = (x: ?number) => !x || (x >= 470000 && x <= 850000)
-const yIsValid = (y: ?number) => !y || (y >= 62000 && y <= 320000)
+const xIsValid = (x: ?number) => !x || (x >= 2485071 && x < 2828516)
+const yIsValid = (y: ?number) => !y || (y >= 1075346 && y < 1299942)
 
 const enhance = compose(
   withState('xError', 'changeXError', ''),
@@ -130,7 +130,7 @@ const enhance = compose(
       if (xIsValid(store.map.panToX)) {
         changeXError('')
       } else {
-        changeXError(`x muss zwischen 470'000 und 850'000 liegen`)
+        changeXError(`x muss zwischen 2'485'071 und 2'828'515 liegen`)
       }
     },
     onBlurY: props => () => {
@@ -138,7 +138,7 @@ const enhance = compose(
       if (yIsValid(store.map.panToY)) {
         changeYError('')
       } else {
-        changeYError(`y muss zwischen 62'000 und 320'000 liegen`)
+        changeYError(`y muss zwischen 1'075'346 und 1'299'941 liegen`)
       }
     },
   }),
