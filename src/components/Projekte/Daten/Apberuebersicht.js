@@ -6,6 +6,7 @@ import compose from 'recompose/compose'
 
 import TextField from '../../shared/TextField'
 import FormTitle from '../../shared/FormTitle'
+import ErrorBoundary from '../../shared/ErrorBoundary'
 
 const Container = styled.div`
   height: 100%;
@@ -24,38 +25,40 @@ const Apberuebersicht = ({ store, tree }: { store: Object, tree: Object }) => {
   const { activeDataset } = tree
 
   return (
-    <Container>
-      <FormTitle tree={tree} title="AP-Bericht Jahresübersicht" />
-      <FieldsContainer>
-        <TextField
-          key={`${activeDataset.row.ProjId}${activeDataset.row.id}JbuJahr`}
-          tree={tree}
-          label="Jahr"
-          fieldName="JbuJahr"
-          value={activeDataset.row.JbuJahr}
-          errorText={activeDataset.valid.JbuJahr}
-          type="number"
-          fullWidth={false}
-          updateProperty={store.updateProperty}
-          updatePropertyInDb={store.updatePropertyInDb}
-        />
-        <TextField
-          key={`${activeDataset.row.ProjId}${
-            activeDataset.row.id
-          }JbuBemerkungen`}
-          tree={tree}
-          label="Bemerkungen"
-          fieldName="JbuBemerkungen"
-          value={activeDataset.row.JbuBemerkungen}
-          errorText={activeDataset.valid.JbuBemerkungen}
-          type="text"
-          multiLine
-          fullWidth
-          updateProperty={store.updateProperty}
-          updatePropertyInDb={store.updatePropertyInDb}
-        />
-      </FieldsContainer>
-    </Container>
+    <ErrorBoundary>
+      <Container>
+        <FormTitle tree={tree} title="AP-Bericht Jahresübersicht" />
+        <FieldsContainer>
+          <TextField
+            key={`${activeDataset.row.ProjId}${activeDataset.row.id}JbuJahr`}
+            tree={tree}
+            label="Jahr"
+            fieldName="JbuJahr"
+            value={activeDataset.row.JbuJahr}
+            errorText={activeDataset.valid.JbuJahr}
+            type="number"
+            fullWidth={false}
+            updateProperty={store.updateProperty}
+            updatePropertyInDb={store.updatePropertyInDb}
+          />
+          <TextField
+            key={`${activeDataset.row.ProjId}${
+              activeDataset.row.id
+            }JbuBemerkungen`}
+            tree={tree}
+            label="Bemerkungen"
+            fieldName="JbuBemerkungen"
+            value={activeDataset.row.JbuBemerkungen}
+            errorText={activeDataset.valid.JbuBemerkungen}
+            type="text"
+            multiLine
+            fullWidth
+            updateProperty={store.updateProperty}
+            updatePropertyInDb={store.updatePropertyInDb}
+          />
+        </FieldsContainer>
+      </Container>
+    </ErrorBoundary>
   )
 }
 
