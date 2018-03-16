@@ -4,6 +4,8 @@ import { ContextMenu, MenuItem } from 'react-contextmenu'
 import { inject, observer } from 'mobx-react'
 import compose from 'recompose/compose'
 
+import ErrorBoundary from '../../../shared/ErrorBoundary'
+
 const enhance = compose(inject('store'), observer)
 
 const TpopfeldkontrFolder = ({
@@ -19,53 +21,58 @@ const TpopfeldkontrFolder = ({
   const copying = store.copying.table && store.copying.table === 'tpopfeldkontr'
 
   return (
-    <ContextMenu id={`${tree.name}tpopfeldkontrFolder`}>
-      <div className="react-contextmenu-title">Feld-Kontrollen</div>
-      <MenuItem
-        onClick={onClick}
-        data={{
-          action: 'insert',
-          table: 'tpopfeldkontr',
-        }}
-      >
-        erstelle neue
-      </MenuItem>
-    <MenuItem
-      onClick={onClick}
-      data={{
-        action: 'openLowerNodes',
-      }}
-    >
-      alle öffnen
-    </MenuItem>
-      {moving &&
+    <ErrorBoundary>
+      <ContextMenu id={`${tree.name}tpopfeldkontrFolder`}>
+        <div className="react-contextmenu-title">Feld-Kontrollen</div>
         <MenuItem
           onClick={onClick}
           data={{
-            action: 'move',
+            action: 'insert',
+            table: 'tpopfeldkontr',
           }}
         >
-          {`verschiebe '${store.moving.label}' hierhin`}
-        </MenuItem>}
-      {copying &&
+          erstelle neue
+        </MenuItem>
         <MenuItem
           onClick={onClick}
           data={{
-            action: 'copy',
+            action: 'openLowerNodes',
           }}
         >
-          {`kopiere '${store.copying.label}' hierhin`}
-        </MenuItem>}
-      {store.copying.table &&
-        <MenuItem
-          onClick={onClick}
-          data={{
-            action: 'resetCopying',
-          }}
-        >
-          Kopieren aufheben
-        </MenuItem>}
-    </ContextMenu>
+          alle öffnen
+        </MenuItem>
+        {moving && (
+          <MenuItem
+            onClick={onClick}
+            data={{
+              action: 'move',
+            }}
+          >
+            {`verschiebe '${store.moving.label}' hierhin`}
+          </MenuItem>
+        )}
+        {copying && (
+          <MenuItem
+            onClick={onClick}
+            data={{
+              action: 'copy',
+            }}
+          >
+            {`kopiere '${store.copying.label}' hierhin`}
+          </MenuItem>
+        )}
+        {store.copying.table && (
+          <MenuItem
+            onClick={onClick}
+            data={{
+              action: 'resetCopying',
+            }}
+          >
+            Kopieren aufheben
+          </MenuItem>
+        )}
+      </ContextMenu>
+    </ErrorBoundary>
   )
 }
 
