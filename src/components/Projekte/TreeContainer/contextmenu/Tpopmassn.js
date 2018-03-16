@@ -6,6 +6,8 @@ import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
 
+import ErrorBoundary from '../../../shared/ErrorBoundary'
+
 const enhance = compose(
   inject('store'),
   withState('label', 'changeLabel', ''),
@@ -13,7 +15,7 @@ const enhance = compose(
     // according to https://github.com/vkbansal/react-contextmenu/issues/65
     // this is how to pass data from ContextMenuTrigger to ContextMenu
     onShow: props => event => props.changeLabel(event.detail.data.nodeLabel),
-  }),
+  })
 )
 
 const Tpopmassn = ({
@@ -31,58 +33,61 @@ const Tpopmassn = ({
   label: string | number,
   onShow: () => void,
 }) => (
-  <ContextMenu
-    id={`${tree.name}tpopmassn`}
-    collect={props => props}
-    onShow={onShow}
-  >
-    <div className="react-contextmenu-title">Massnahme</div>
-    <MenuItem
-      onClick={onClick}
-      data={{
-        action: 'insert',
-        table: 'tpopmassn',
-      }}
+  <ErrorBoundary>
+    <ContextMenu
+      id={`${tree.name}tpopmassn`}
+      collect={props => props}
+      onShow={onShow}
     >
-      erstelle neue
-    </MenuItem>
-    <MenuItem
-      onClick={onClick}
-      data={{
-        action: 'delete',
-        table: 'tpopmassn',
-      }}
-    >
-      lösche
-    </MenuItem>
-    <MenuItem
-      onClick={onClick}
-      data={{
-        action: 'markForMoving',
-        table: 'tpopmassn',
-      }}
-    >
-      verschiebe
-    </MenuItem>
-    <MenuItem
-      onClick={onClick}
-      data={{
-        action: 'markForCopying',
-        table: 'tpopmassn',
-      }}
-    >
-      kopiere
-    </MenuItem>
-    {store.copying.table &&
+      <div className="react-contextmenu-title">Massnahme</div>
       <MenuItem
         onClick={onClick}
         data={{
-          action: 'resetCopying',
+          action: 'insert',
+          table: 'tpopmassn',
         }}
       >
-        Kopieren aufheben
-      </MenuItem>}
-  </ContextMenu>
+        erstelle neue
+      </MenuItem>
+      <MenuItem
+        onClick={onClick}
+        data={{
+          action: 'delete',
+          table: 'tpopmassn',
+        }}
+      >
+        lösche
+      </MenuItem>
+      <MenuItem
+        onClick={onClick}
+        data={{
+          action: 'markForMoving',
+          table: 'tpopmassn',
+        }}
+      >
+        verschiebe
+      </MenuItem>
+      <MenuItem
+        onClick={onClick}
+        data={{
+          action: 'markForCopying',
+          table: 'tpopmassn',
+        }}
+      >
+        kopiere
+      </MenuItem>
+      {store.copying.table && (
+        <MenuItem
+          onClick={onClick}
+          data={{
+            action: 'resetCopying',
+          }}
+        >
+          Kopieren aufheben
+        </MenuItem>
+      )}
+    </ContextMenu>
+  </ErrorBoundary>
 )
 
 export default enhance(Tpopmassn)
