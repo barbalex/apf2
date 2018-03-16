@@ -7,6 +7,7 @@ import compose from 'recompose/compose'
 import RadioButtonGroup from '../../shared/RadioButtonGroup'
 import TextField from '../../shared/TextField'
 import FormTitle from '../../shared/FormTitle'
+import ErrorBoundary from '../../shared/ErrorBoundary'
 
 const Container = styled.div`
   height: 100%;
@@ -25,44 +26,46 @@ const Popmassnber = ({ store, tree }: { store: Object, tree: Object }) => {
   const { activeDataset } = tree
 
   return (
-    <Container>
-      <FormTitle tree={tree} title="Massnahmen-Bericht Population" />
-      <FieldsContainer>
-        <TextField
-          key={`${activeDataset.row.PopmassnberId}PopMassnBerJahr`}
-          tree={tree}
-          label="Jahr"
-          fieldName="PopMassnBerJahr"
-          value={activeDataset.row.PopMassnBerJahr}
-          errorText={activeDataset.valid.PopMassnBerJahr}
-          type="number"
-          updateProperty={store.updateProperty}
-          updatePropertyInDb={store.updatePropertyInDb}
-        />
-        <RadioButtonGroup
-          tree={tree}
-          fieldName="PopMassnBerErfolgsbeurteilung"
-          label="Entwicklung"
-          value={activeDataset.row.PopMassnBerErfolgsbeurteilung}
-          errorText={activeDataset.valid.PopMassnBerErfolgsbeurteilung}
-          dataSource={store.dropdownList.tpopmassnErfbeurtWerte}
-          updatePropertyInDb={store.updatePropertyInDb}
-        />
-        <TextField
-          key={`${activeDataset.row.PopmassnberId}PopMassnBerTxt`}
-          tree={tree}
-          label="Interpretation"
-          fieldName="PopMassnBerTxt"
-          value={activeDataset.row.PopMassnBerTxt}
-          errorText={activeDataset.valid.PopMassnBerTxt}
-          type="text"
-          multiLine
-          fullWidth
-          updateProperty={store.updateProperty}
-          updatePropertyInDb={store.updatePropertyInDb}
-        />
-      </FieldsContainer>
-    </Container>
+    <ErrorBoundary>
+      <Container>
+        <FormTitle tree={tree} title="Massnahmen-Bericht Population" />
+        <FieldsContainer>
+          <TextField
+            key={`${activeDataset.row.PopmassnberId}PopMassnBerJahr`}
+            tree={tree}
+            label="Jahr"
+            fieldName="PopMassnBerJahr"
+            value={activeDataset.row.PopMassnBerJahr}
+            errorText={activeDataset.valid.PopMassnBerJahr}
+            type="number"
+            updateProperty={store.updateProperty}
+            updatePropertyInDb={store.updatePropertyInDb}
+          />
+          <RadioButtonGroup
+            tree={tree}
+            fieldName="PopMassnBerErfolgsbeurteilung"
+            label="Entwicklung"
+            value={activeDataset.row.PopMassnBerErfolgsbeurteilung}
+            errorText={activeDataset.valid.PopMassnBerErfolgsbeurteilung}
+            dataSource={store.dropdownList.tpopmassnErfbeurtWerte}
+            updatePropertyInDb={store.updatePropertyInDb}
+          />
+          <TextField
+            key={`${activeDataset.row.PopmassnberId}PopMassnBerTxt`}
+            tree={tree}
+            label="Interpretation"
+            fieldName="PopMassnBerTxt"
+            value={activeDataset.row.PopMassnBerTxt}
+            errorText={activeDataset.valid.PopMassnBerTxt}
+            type="text"
+            multiLine
+            fullWidth
+            updateProperty={store.updateProperty}
+            updatePropertyInDb={store.updatePropertyInDb}
+          />
+        </FieldsContainer>
+      </Container>
+    </ErrorBoundary>
   )
 }
 
