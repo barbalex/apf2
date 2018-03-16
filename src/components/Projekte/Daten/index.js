@@ -34,6 +34,7 @@ import Tpopkontrzaehl from './Tpopkontrzaehl'
 import Exporte from '../Exporte'
 import Qk from './Qk'
 import Beobzuordnung from './Beobzuordnung'
+import ErrorBoundary from '../../shared/ErrorBoundary'
 
 const Container = styled.div`
   border-color: #424242;
@@ -120,7 +121,11 @@ const Daten = ({
   }
   const form = formObject[key] || standardForm
 
-  return <Container>{form}</Container>
+  return (
+    <ErrorBoundary>
+      <Container>{form}</Container>
+    </ErrorBoundary>
+  )
 }
 
 export default enhance(Daten)
