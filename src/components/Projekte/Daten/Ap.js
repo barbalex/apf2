@@ -9,6 +9,7 @@ import AutoComplete from '../../shared/Autocomplete'
 import RadioButtonGroupWithInfo from '../../shared/RadioButtonGroupWithInfo'
 import TextField from '../../shared/TextField'
 import FormTitle from '../../shared/FormTitle'
+import ErrorBoundary from '../../shared/ErrorBoundary'
 
 const Container = styled.div`
   height: 100%;
@@ -106,121 +107,123 @@ const Ap = ({
   artwert?: number,
   artname?: string,
 }) => (
-  <Container>
-    <FormTitle tree={tree} title="Art" />
-    <FieldsContainer>
-      <AutoComplete
-        key={`${activeDataset.row.ApArtId}ApArtId`}
-        tree={tree}
-        label="Art"
-        fieldName="ApArtId"
-        valueText={artname}
-        errorText={activeDataset.valid.ApArtId}
-        dataSource={store.dropdownList.artListForAp}
-        dataSourceConfig={{
-          value: 'TaxonomieId',
-          text: 'Artname',
-        }}
-        updatePropertyInDb={updatePropertyInDb}
-      />
-      <RadioButtonGroupWithInfo
-        tree={tree}
-        fieldName="ApStatus"
-        value={activeDataset.row.ApStatus}
-        dataSource={store.dropdownList.apStati}
-        updatePropertyInDb={updatePropertyInDb}
-        popover={
-          <div>
-            <LabelPopoverTitleRow>Legende</LabelPopoverTitleRow>
-            <LabelPopoverContentRow>
-              <LabelPopoverRowColumnLeft>keiner:</LabelPopoverRowColumnLeft>
-              <LabelPopoverRowColumnRight>
-                kein Aktionsplan vorgesehen
-              </LabelPopoverRowColumnRight>
-            </LabelPopoverContentRow>
-            <LabelPopoverContentRow>
-              <LabelPopoverRowColumnLeft>erstellt:</LabelPopoverRowColumnLeft>
-              <LabelPopoverRowColumnRight>
-                Aktionsplan fertig, auf der Webseite der FNS
-              </LabelPopoverRowColumnRight>
-            </LabelPopoverContentRow>
-          </div>
-        }
-        label="Aktionsplan"
-      />
-      <TextField
-        key={`${activeDataset.row.ApArtId}ApJahr`}
-        tree={tree}
-        label="Start im Jahr"
-        fieldName="ApJahr"
-        value={activeDataset.row.ApJahr}
-        errorText={activeDataset.valid.ApJahr}
-        type="number"
-        updateProperty={updateProperty}
-        updatePropertyInDb={updatePropertyInDb}
-      />
-      <FieldContainer>
+  <ErrorBoundary>
+    <Container>
+      <FormTitle tree={tree} title="Art" />
+      <FieldsContainer>
+        <AutoComplete
+          key={`${activeDataset.row.ApArtId}ApArtId`}
+          tree={tree}
+          label="Art"
+          fieldName="ApArtId"
+          valueText={artname}
+          errorText={activeDataset.valid.ApArtId}
+          dataSource={store.dropdownList.artListForAp}
+          dataSourceConfig={{
+            value: 'TaxonomieId',
+            text: 'Artname',
+          }}
+          updatePropertyInDb={updatePropertyInDb}
+        />
         <RadioButtonGroupWithInfo
           tree={tree}
-          fieldName="ApUmsetzung"
-          value={activeDataset.row.ApUmsetzung}
-          errorText={activeDataset.valid.ApUmsetzung}
-          dataSource={store.dropdownList.apUmsetzungen}
+          fieldName="ApStatus"
+          value={activeDataset.row.ApStatus}
+          dataSource={store.dropdownList.apStati}
           updatePropertyInDb={updatePropertyInDb}
           popover={
             <div>
               <LabelPopoverTitleRow>Legende</LabelPopoverTitleRow>
               <LabelPopoverContentRow>
-                <LabelPopoverRowColumnLeft>
-                  noch keine<br />Umsetzung:
-                </LabelPopoverRowColumnLeft>
+                <LabelPopoverRowColumnLeft>keiner:</LabelPopoverRowColumnLeft>
                 <LabelPopoverRowColumnRight>
-                  noch keine Massnahmen ausgeführt
+                  kein Aktionsplan vorgesehen
                 </LabelPopoverRowColumnRight>
               </LabelPopoverContentRow>
               <LabelPopoverContentRow>
-                <LabelPopoverRowColumnLeft>
-                  in Umsetzung:
-                </LabelPopoverRowColumnLeft>
+                <LabelPopoverRowColumnLeft>erstellt:</LabelPopoverRowColumnLeft>
                 <LabelPopoverRowColumnRight>
-                  bereits Massnahmen ausgeführt (auch wenn AP noch nicht
-                  erstellt)
+                  Aktionsplan fertig, auf der Webseite der FNS
                 </LabelPopoverRowColumnRight>
               </LabelPopoverContentRow>
             </div>
           }
-          label="Stand Umsetzung"
+          label="Aktionsplan"
         />
-      </FieldContainer>
-      <AutoComplete
-        key={`${activeDataset.row.ApArtId}ApBearb`}
-        tree={tree}
-        label="Verantwortlich"
-        fieldName="ApBearb"
-        valueText={getBearbName({ store, tree })}
-        errorText={activeDataset.valid.ApBearb}
-        dataSource={store.dropdownList.adressen}
-        dataSourceConfig={{
-          value: 'AdrId',
-          text: 'AdrName',
-        }}
-        anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
-        targetOrigin={{ vertical: 'bottom', horizontal: 'left' }}
-        updatePropertyInDb={store.updatePropertyInDb}
-      />
-      <FieldContainer>
         <TextField
-          key={`${activeDataset.row.ApArtId}ApArtwert`}
+          key={`${activeDataset.row.ApArtId}ApJahr`}
           tree={tree}
-          label="Artwert"
-          fieldName="ApArtwert"
-          value={artwert}
-          type="text"
-          disabled
+          label="Start im Jahr"
+          fieldName="ApJahr"
+          value={activeDataset.row.ApJahr}
+          errorText={activeDataset.valid.ApJahr}
+          type="number"
+          updateProperty={updateProperty}
+          updatePropertyInDb={updatePropertyInDb}
         />
-      </FieldContainer>
-    </FieldsContainer>
-  </Container>
+        <FieldContainer>
+          <RadioButtonGroupWithInfo
+            tree={tree}
+            fieldName="ApUmsetzung"
+            value={activeDataset.row.ApUmsetzung}
+            errorText={activeDataset.valid.ApUmsetzung}
+            dataSource={store.dropdownList.apUmsetzungen}
+            updatePropertyInDb={updatePropertyInDb}
+            popover={
+              <div>
+                <LabelPopoverTitleRow>Legende</LabelPopoverTitleRow>
+                <LabelPopoverContentRow>
+                  <LabelPopoverRowColumnLeft>
+                    noch keine<br />Umsetzung:
+                  </LabelPopoverRowColumnLeft>
+                  <LabelPopoverRowColumnRight>
+                    noch keine Massnahmen ausgeführt
+                  </LabelPopoverRowColumnRight>
+                </LabelPopoverContentRow>
+                <LabelPopoverContentRow>
+                  <LabelPopoverRowColumnLeft>
+                    in Umsetzung:
+                  </LabelPopoverRowColumnLeft>
+                  <LabelPopoverRowColumnRight>
+                    bereits Massnahmen ausgeführt (auch wenn AP noch nicht
+                    erstellt)
+                  </LabelPopoverRowColumnRight>
+                </LabelPopoverContentRow>
+              </div>
+            }
+            label="Stand Umsetzung"
+          />
+        </FieldContainer>
+        <AutoComplete
+          key={`${activeDataset.row.ApArtId}ApBearb`}
+          tree={tree}
+          label="Verantwortlich"
+          fieldName="ApBearb"
+          valueText={getBearbName({ store, tree })}
+          errorText={activeDataset.valid.ApBearb}
+          dataSource={store.dropdownList.adressen}
+          dataSourceConfig={{
+            value: 'AdrId',
+            text: 'AdrName',
+          }}
+          anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
+          targetOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+          updatePropertyInDb={store.updatePropertyInDb}
+        />
+        <FieldContainer>
+          <TextField
+            key={`${activeDataset.row.ApArtId}ApArtwert`}
+            tree={tree}
+            label="Artwert"
+            fieldName="ApArtwert"
+            value={artwert}
+            type="text"
+            disabled
+          />
+        </FieldContainer>
+      </FieldsContainer>
+    </Container>
+  </ErrorBoundary>
 )
 
 export default enhance(Ap)

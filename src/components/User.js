@@ -9,6 +9,8 @@ import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 import withState from 'recompose/withState'
 
+import ErrorBoundary from './shared/ErrorBoundary'
+
 const StyledDiv = styled.div`
   display: flex;
   flex-direction: column;
@@ -114,43 +116,45 @@ const User = ({
   // TODO Authorization:
   // open depends on store.user.jwt
   return (
-    <Dialog
-      title="Anmeldung"
-      open={!store.user.token}
-      actions={actions}
-      contentStyle={{
-        maxWidth: '400px',
-      }}
-    >
-      <StyledDiv>
-        <TextField
-          floatingLabelText="Name"
-          defaultValue={name}
-          onBlur={onBlurName}
-          errorText={nameErrorText}
-          fullWidth
-          autoFocus
-          onKeyPress={e => {
-            if (e.key === 'Enter') {
-              onBlurName(e)
-            }
-          }}
-        />
-        <TextField
-          floatingLabelText="Passwort"
-          type="password"
-          defaultValue={password}
-          onBlur={onBlurPassword}
-          errorText={passwordErrorText}
-          fullWidth
-          onKeyPress={e => {
-            if (e.key === 'Enter') {
-              onBlurPassword(e)
-            }
-          }}
-        />
-      </StyledDiv>
-    </Dialog>
+    <ErrorBoundary>
+      <Dialog
+        title="Anmeldung"
+        open={!store.user.token}
+        actions={actions}
+        contentStyle={{
+          maxWidth: '400px',
+        }}
+      >
+        <StyledDiv>
+          <TextField
+            floatingLabelText="Name"
+            defaultValue={name}
+            onBlur={onBlurName}
+            errorText={nameErrorText}
+            fullWidth
+            autoFocus
+            onKeyPress={e => {
+              if (e.key === 'Enter') {
+                onBlurName(e)
+              }
+            }}
+          />
+          <TextField
+            floatingLabelText="Passwort"
+            type="password"
+            defaultValue={password}
+            onBlur={onBlurPassword}
+            errorText={passwordErrorText}
+            fullWidth
+            onKeyPress={e => {
+              if (e.key === 'Enter') {
+                onBlurPassword(e)
+              }
+            }}
+          />
+        </StyledDiv>
+      </Dialog>
+    </ErrorBoundary>
   )
 }
 
