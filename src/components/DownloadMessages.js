@@ -4,6 +4,8 @@ import { observer, inject } from 'mobx-react'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
 
+import ErrorBoundary from './shared/ErrorBoundary'
+
 const Container = styled.div`
   position: absolute;
   right: 5px;
@@ -25,13 +27,16 @@ const ErrorDiv = styled.div`
 
 const enhance = compose(inject('store'), observer)
 
-const DownloadMessage = ({ store }: { store: Object }) =>
-  <Container>
-    {store.export.activeDownloads.map((name, index) =>
-      <ErrorDiv key={`${index}${name}`}>
-        {`Download '${name}' wird vorbereitet...`}
-      </ErrorDiv>
-    )}
-  </Container>
+const DownloadMessage = ({ store }: { store: Object }) => (
+  <ErrorBoundary>
+    <Container>
+      {store.export.activeDownloads.map((name, index) => (
+        <ErrorDiv key={`${index}${name}`}>
+          {`Download '${name}' wird vorbereitet...`}
+        </ErrorDiv>
+      ))}
+    </Container>
+  </ErrorBoundary>
+)
 
 export default enhance(DownloadMessage)
