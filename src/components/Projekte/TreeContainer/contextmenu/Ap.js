@@ -4,6 +4,8 @@ import { ContextMenu, MenuItem } from 'react-contextmenu'
 import { inject, observer } from 'mobx-react'
 import compose from 'recompose/compose'
 
+import ErrorBoundary from '../../../shared/ErrorBoundary'
+
 const enhance = compose(inject('store'), observer)
 
 const Ap = ({
@@ -18,70 +20,72 @@ const Ap = ({
   const moving = store.moving.table && store.moving.table === 'pop'
 
   return (
-    <ContextMenu id={`${tree.name}ap`}>
-      <div className="react-contextmenu-title">Art</div>
-      <MenuItem
-        onClick={onClick}
-        data={{
-          action: 'insert',
-          table: 'ap',
-        }}
-      >
-        erstelle neue
-      </MenuItem>
-      <MenuItem
-        onClick={onClick}
-        data={{
-          action: 'delete',
-          table: 'ap',
-        }}
-      >
-        lösche
-      </MenuItem>
-      {moving && (
+    <ErrorBoundary>
+      <ContextMenu id={`${tree.name}ap`}>
+        <div className="react-contextmenu-title">Art</div>
         <MenuItem
           onClick={onClick}
           data={{
-            action: 'move',
+            action: 'insert',
+            table: 'ap',
           }}
         >
-          {`verschiebe '${store.moving.label}' hierhin`}
+          erstelle neue
         </MenuItem>
-      )}
-      {(store.map.activeApfloraLayers.includes('Pop') ||
-        store.map.activeApfloraLayers.includes('Tpop')) && (
-        <div>
-          <div className="react-contextmenu-divider" />
-          <div className="react-contextmenu-title">Karte</div>
-        </div>
-      )}
-      {store.map.activeApfloraLayers.includes('Pop') && (
         <MenuItem
           onClick={onClick}
           data={{
-            action: 'toggleTooltip',
-            actionTable: 'pop',
+            action: 'delete',
+            table: 'ap',
           }}
         >
-          {store.map.pop.labelUsingNr
-            ? 'beschrifte Populationen mit Namen'
-            : 'beschrifte Populationen mit Nummer'}
+          lösche
         </MenuItem>
-      )}
-      {store.map.activeApfloraLayers.includes('Tpop') && (
-        <MenuItem
-          onClick={onClick}
-          data={{
-            action: 'toggleTooltip',
-            actionTable: 'tpop',
-          }}
-        >
-          {store.map.tpop.labelUsingNr
-            ? 'beschrifte Teil-Populationen mit Namen'
-            : 'beschrifte Teil-Populationen mit Nummer'}
-        </MenuItem>
-      )}
-    </ContextMenu>
+        {moving && (
+          <MenuItem
+            onClick={onClick}
+            data={{
+              action: 'move',
+            }}
+          >
+            {`verschiebe '${store.moving.label}' hierhin`}
+          </MenuItem>
+        )}
+        {(store.map.activeApfloraLayers.includes('Pop') ||
+          store.map.activeApfloraLayers.includes('Tpop')) && (
+          <div>
+            <div className="react-contextmenu-divider" />
+            <div className="react-contextmenu-title">Karte</div>
+          </div>
+        )}
+        {store.map.activeApfloraLayers.includes('Pop') && (
+          <MenuItem
+            onClick={onClick}
+            data={{
+              action: 'toggleTooltip',
+              actionTable: 'pop',
+            }}
+          >
+            {store.map.pop.labelUsingNr
+              ? 'beschrifte Populationen mit Namen'
+              : 'beschrifte Populationen mit Nummer'}
+          </MenuItem>
+        )}
+        {store.map.activeApfloraLayers.includes('Tpop') && (
+          <MenuItem
+            onClick={onClick}
+            data={{
+              action: 'toggleTooltip',
+              actionTable: 'tpop',
+            }}
+          >
+            {store.map.tpop.labelUsingNr
+              ? 'beschrifte Teil-Populationen mit Namen'
+              : 'beschrifte Teil-Populationen mit Nummer'}
+          </MenuItem>
+        )}
+      </ContextMenu>
+    </ErrorBoundary>
   )
 }
 
