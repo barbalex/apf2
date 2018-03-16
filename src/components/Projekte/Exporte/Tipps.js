@@ -5,14 +5,14 @@ import { Card, CardHeader, CardText } from 'material-ui/Card'
 
 const FirstLevelCard = styled(Card)`
   margin-bottom: 10px;
-  background-color: #FFF8E1 !important;
+  background-color: #fff8e1 !important;
 `
 const SecondLevelCard = styled(Card)`
   margin-bottom: 5px;
-  background-color: #FFF8E1 !important;
+  background-color: #fff8e1 !important;
 `
 
-const Tipps = () =>
+const Tipps = () => (
   <FirstLevelCard>
     <CardHeader title="Tipps und Tricks" actAsExpander showExpandableButton />
     <CardText expandable>
@@ -40,9 +40,7 @@ const Tipps = () =>
                 'Text in Feldern wird in Hochzeichen (") eingefasst ("Texttrenner")'
               }
             </li>
-            <li>
-              {'Die erste Zeile enthält die Feldnamen'}
-            </li>
+            <li>{'Die erste Zeile enthält die Feldnamen'}</li>
             <li>
               {'Der Zeichenstatz ist Unicode UTF-8'}
               <br />
@@ -161,9 +159,7 @@ const Tipps = () =>
             'Das Programm hat wohl beim Öffnen die Feld-Grenzen nicht richtig erkannt.'
           }
           <ul>
-            <li>
-              {'Öffnen Sie die Datei nochmals'}
-            </li>
+            <li>{'Öffnen Sie die Datei nochmals'}</li>
             <li>
               {
                 'Suchen Sie dabei die Option, mit der eine Trennung der Felder mittels Kommas erzwungen werden kann'
@@ -202,5 +198,6 @@ const Tipps = () =>
       </SecondLevelCard>
     </CardText>
   </FirstLevelCard>
+)
 
 export default Tipps

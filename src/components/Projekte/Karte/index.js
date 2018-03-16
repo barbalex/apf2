@@ -56,6 +56,7 @@ import DrawControl from './DrawControl'
 import PngControl from './PngControl'
 import CoordinatesControl from './CoordinatesControl/index.js'
 import epsg4326to2056 from '../../../modules/epsg4326to2056'
+import ErrorBoundary from '../../shared/ErrorBoundary'
 
 const StyledMap = styled(Map)`
   height: 100%;
@@ -198,72 +199,75 @@ const Karte = ({ store }: { store: Object }) => {
   const BaseLayerComponent = BaseLayerComponents[activeBaseLayer]
 
   return (
-    <MapElement
-      bounds={toJS(store.map.bounds)}
-      preferCanvas
-      onMouseMove={store.map.setMapMouseCoord}
-      // need max and min zoom because otherwise
-      // something errors
-      // probably clustering function
-      maxZoom={22}
-      minZoom={0}
-      pop={store.map.pop.pops}
-      onClick={event => {
-        if (!!idOfTpopBeingLocalized) {
-          const { lat, lng } = event.latlng
-          const [x, y] = epsg4326to2056(lng, lat)
-          // TODO: cannot localize from map2!!!
-          store.map.localizeTpop(store.tree, x, y)
-        }
-      }}
-      onZoomlevelschange={event => {
-        // need to update bounds, otherwise map jumps back
-        // when adding new tpop
-        const bounds = event.target.getBounds()
-        store.map.changeBounds([bounds._southWest, bounds._northEast])
-      }}
-      onZoomend={event => {
-        // need to update bounds, otherwise map jumps back
-        const bounds = event.target.getBounds()
-        store.map.changeBounds([bounds._southWest, bounds._northEast])
-      }}
-      onMoveend={event => {
-        // need to update bounds, otherwise map jumps back
-        const bounds = event.target.getBounds()
-        store.map.changeBounds([bounds._southWest, bounds._northEast])
-      }}
-    >
-      {activeBaseLayer && <BaseLayerComponent />}
-      {store.map.activeOverlaysSorted
-        .map((overlayName, index) => {
-          const OverlayComponent = OverlayComponents[overlayName]
-          return <OverlayComponent key={index} />
-        })
-        .reverse()}
-      {store.map.activeApfloraLayersSorted
-        .map((apfloraLayerName, index) => {
-          const ApfloraLayerComponent = ApfloraLayerComponents[apfloraLayerName]
-          return <ApfloraLayerComponent key={index} />
-        })
-        .reverse()}
-      <ScaleControl imperial={false} />
-      <LayersControl
-        // this enforces rerendering when sorting changes
-        activeOverlaysSortedString={store.map.activeOverlaysSortedString}
-        activeApfloraLayersSortedString={
-          store.map.activeApfloraLayersSortedString
-        }
-      />
-      <MeasureControl />
-      <FullScreenControl />
-      {store.map.activeApfloraLayers.includes('MapFilter') && <DrawControl />}
-      {/*
+    <ErrorBoundary>
+      <MapElement
+        bounds={toJS(store.map.bounds)}
+        preferCanvas
+        onMouseMove={store.map.setMapMouseCoord}
+        // need max and min zoom because otherwise
+        // something errors
+        // probably clustering function
+        maxZoom={22}
+        minZoom={0}
+        pop={store.map.pop.pops}
+        onClick={event => {
+          if (!!idOfTpopBeingLocalized) {
+            const { lat, lng } = event.latlng
+            const [x, y] = epsg4326to2056(lng, lat)
+            // TODO: cannot localize from map2!!!
+            store.map.localizeTpop(store.tree, x, y)
+          }
+        }}
+        onZoomlevelschange={event => {
+          // need to update bounds, otherwise map jumps back
+          // when adding new tpop
+          const bounds = event.target.getBounds()
+          store.map.changeBounds([bounds._southWest, bounds._northEast])
+        }}
+        onZoomend={event => {
+          // need to update bounds, otherwise map jumps back
+          const bounds = event.target.getBounds()
+          store.map.changeBounds([bounds._southWest, bounds._northEast])
+        }}
+        onMoveend={event => {
+          // need to update bounds, otherwise map jumps back
+          const bounds = event.target.getBounds()
+          store.map.changeBounds([bounds._southWest, bounds._northEast])
+        }}
+      >
+        {activeBaseLayer && <BaseLayerComponent />}
+        {store.map.activeOverlaysSorted
+          .map((overlayName, index) => {
+            const OverlayComponent = OverlayComponents[overlayName]
+            return <OverlayComponent key={index} />
+          })
+          .reverse()}
+        {store.map.activeApfloraLayersSorted
+          .map((apfloraLayerName, index) => {
+            const ApfloraLayerComponent =
+              ApfloraLayerComponents[apfloraLayerName]
+            return <ApfloraLayerComponent key={index} />
+          })
+          .reverse()}
+        <ScaleControl imperial={false} />
+        <LayersControl
+          // this enforces rerendering when sorting changes
+          activeOverlaysSortedString={store.map.activeOverlaysSortedString}
+          activeApfloraLayersSortedString={
+            store.map.activeApfloraLayersSortedString
+          }
+        />
+        <MeasureControl />
+        <FullScreenControl />
+        {store.map.activeApfloraLayers.includes('MapFilter') && <DrawControl />}
+        {/*
         need to get background maps to show when printing A4
         <PrintControl />
         */}
-      <PngControl />
-      <CoordinatesControl />
-    </MapElement>
+        <PngControl />
+        <CoordinatesControl />
+      </MapElement>
+    </ErrorBoundary>
   )
 }
 
