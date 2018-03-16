@@ -5,13 +5,15 @@ import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
 
+import ErrorBoundary from '../../../shared/ErrorBoundary'
+
 const enhance = compose(
   withState('label', 'changeLabel', ''),
   withHandlers({
     // according to https://github.com/vkbansal/react-contextmenu/issues/65
     // this is how to pass data from ContextMenuTrigger to ContextMenu
     onShow: props => event => props.changeLabel(event.detail.data.nodeLabel),
-  }),
+  })
 )
 
 const Erfkrit = ({
@@ -27,31 +29,33 @@ const Erfkrit = ({
   label: string | number,
   onShow: () => void,
 }) => (
-  <ContextMenu
-    id={`${tree.name}erfkrit`}
-    collect={props => props}
-    onShow={onShow}
-  >
-    <div className="react-contextmenu-title">AP-Erfolgskriterium</div>
-    <MenuItem
-      onClick={onClick}
-      data={{
-        action: 'insert',
-        table: 'erfkrit',
-      }}
+  <ErrorBoundary>
+    <ContextMenu
+      id={`${tree.name}erfkrit`}
+      collect={props => props}
+      onShow={onShow}
     >
-      erstelle neues
-    </MenuItem>
-    <MenuItem
-      onClick={onClick}
-      data={{
-        action: 'delete',
-        table: 'erfkrit',
-      }}
-    >
-      lösche
-    </MenuItem>
-  </ContextMenu>
+      <div className="react-contextmenu-title">AP-Erfolgskriterium</div>
+      <MenuItem
+        onClick={onClick}
+        data={{
+          action: 'insert',
+          table: 'erfkrit',
+        }}
+      >
+        erstelle neues
+      </MenuItem>
+      <MenuItem
+        onClick={onClick}
+        data={{
+          action: 'delete',
+          table: 'erfkrit',
+        }}
+      >
+        lösche
+      </MenuItem>
+    </ContextMenu>
+  </ErrorBoundary>
 )
 
 export default enhance(Erfkrit)
