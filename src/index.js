@@ -12,6 +12,7 @@ import 'babel-polyfill'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import axios from 'axios'
+import Loadable from 'react-loadable'
 
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import uiTheme from './modules/uiTheme'
@@ -28,16 +29,8 @@ import 'react-reflex/styles.css'
 // import components
 import store from './store'
 import initializeDb from './modules/initializeDb'
-import AppBar from './components/AppBar'
-import Projekte from './components/Projekte'
-import User from './components/User'
-import NewAp from './components/NewAp'
-import Deletions from './components/Deletions'
-import Errors from './components/Errors'
-import UpdateAvailable from './components/UpdateAvailable'
-import Messages from './components/Messages'
-import DownloadMessages from './components/DownloadMessages'
 import setLoginFromIdb from './store/action/setLoginFromIdb'
+import Loading from './components/shared/Loading'
 
 // service worker
 import registerServiceWorker from './registerServiceWorker'
@@ -47,6 +40,43 @@ import apiBaseUrl from './modules/apiBaseUrl'
 //import updateFromSocket from './modules/updateFromSocket'
 
 import './index.css'
+
+const AppBarAsync = Loadable({
+  loader: () => import('./components/AppBar'),
+  loading: Loading,
+})
+const ProjekteAsync = Loadable({
+  loader: () => import('./components/Projekte'),
+  loading: Loading,
+})
+const UserAsync = Loadable({
+  loader: () => import('./components/User'),
+  loading: Loading,
+})
+const NewApAsync = Loadable({
+  loader: () => import('./components/NewAp'),
+  loading: Loading,
+})
+const DeletionsAsync = Loadable({
+  loader: () => import('./components/Deletions'),
+  loading: Loading,
+})
+const ErrorsAsync = Loadable({
+  loader: () => import('./components/Errors'),
+  loading: Loading,
+})
+const UpdateAvailableAsync = Loadable({
+  loader: () => import('./components/UpdateAvailable'),
+  loading: Loading,
+})
+const MessagesAsync = Loadable({
+  loader: () => import('./components/Messages'),
+  loading: Loading,
+})
+const DownloadMessagesAsync = Loadable({
+  loader: () => import('./components/DownloadMessages'),
+  loading: Loading,
+})
 ;(async () => {
   try {
     registerServiceWorker(store)
@@ -104,15 +134,15 @@ import './index.css'
         <MuiThemeProvider muiTheme={getMuiTheme(theme)}>
           <AppContainer>
             {false && <DevTools />}
-            <AppBar />
-            <Projekte />
-            <User />
-            <NewAp />
-            <Deletions />
-            <Errors />
-            <UpdateAvailable />
-            <Messages />
-            <DownloadMessages />
+            <AppBarAsync />
+            <ProjekteAsync />
+            <UserAsync />
+            <NewApAsync />
+            <DeletionsAsync />
+            <ErrorsAsync />
+            <UpdateAvailableAsync />
+            <MessagesAsync />
+            <DownloadMessagesAsync />
           </AppContainer>
         </MuiThemeProvider>
       </Provider>,
