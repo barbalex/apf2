@@ -6,6 +6,8 @@ import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
 
+import ErrorBoundary from '../../../shared/ErrorBoundary'
+
 const enhance = compose(
   inject('store'),
   withState('id', 'changeId', 0),
@@ -16,7 +18,7 @@ const enhance = compose(
       props.changeId(event.detail.data.nodeId)
     },
   }),
-  observer,
+  observer
 )
 
 const TpopbeobFolder = ({
@@ -34,23 +36,27 @@ const TpopbeobFolder = ({
   id: number,
   onShow: () => {},
 }) => (
-  <ContextMenu
-    id={`${tree.name}tpopBeobFolder`}
-    collect={props => props}
-    onShow={onShow}
-  >
-    <div className="react-contextmenu-title">Beobachtungen</div>
-    <MenuItem
-      onClick={onClick}
-      data={{
-        action: 'showBeobOnMap',
-        actionTable: 'tpopBeob',
-        idTable: 'ap',
-      }}
+  <ErrorBoundary>
+    <ContextMenu
+      id={`${tree.name}tpopBeobFolder`}
+      collect={props => props}
+      onShow={onShow}
     >
-      {`blende auf Karte ${store.map.activeApfloraLayers.includes('TpopBeob') ? 'aus' : 'ein'}`}
-    </MenuItem>
-  </ContextMenu>
+      <div className="react-contextmenu-title">Beobachtungen</div>
+      <MenuItem
+        onClick={onClick}
+        data={{
+          action: 'showBeobOnMap',
+          actionTable: 'tpopBeob',
+          idTable: 'ap',
+        }}
+      >
+        {`blende auf Karte ${
+          store.map.activeApfloraLayers.includes('TpopBeob') ? 'aus' : 'ein'
+        }`}
+      </MenuItem>
+    </ContextMenu>
+  </ErrorBoundary>
 )
 
 export default enhance(TpopbeobFolder)
