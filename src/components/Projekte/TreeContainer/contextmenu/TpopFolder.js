@@ -6,6 +6,8 @@ import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
 
+import ErrorBoundary from '../../../shared/ErrorBoundary'
+
 const enhance = compose(
   inject('store'),
   withState('id', 'changeId', 0),
@@ -36,60 +38,62 @@ const TpopFolder = ({
   const copying = store.copying.table && store.copying.table === 'tpop'
 
   return (
-    <ContextMenu
-      id={`${tree.name}tpopFolder`}
-      collect={props => props}
-      onShow={onShow}
-    >
-      <div className="react-contextmenu-title">Teil-Populationen</div>
-      <MenuItem
-        onClick={onClick}
-        data={{
-          action: 'insert',
-          table: 'tpop',
-        }}
+    <ErrorBoundary>
+      <ContextMenu
+        id={`${tree.name}tpopFolder`}
+        collect={props => props}
+        onShow={onShow}
       >
-        erstelle neue
-      </MenuItem>
-      <MenuItem
-        onClick={onClick}
-        data={{
-          action: 'openLowerNodes',
-        }}
-      >
-        alle öffnen
-      </MenuItem>
-      {moving && (
+        <div className="react-contextmenu-title">Teil-Populationen</div>
         <MenuItem
           onClick={onClick}
           data={{
-            action: 'move',
+            action: 'insert',
+            table: 'tpop',
           }}
         >
-          {`verschiebe '${store.moving.label}' hierhin`}
+          erstelle neue
         </MenuItem>
-      )}
-      {copying && (
         <MenuItem
           onClick={onClick}
           data={{
-            action: 'copy',
+            action: 'openLowerNodes',
           }}
         >
-          {`kopiere '${store.copying.label}' hierhin`}
+          alle öffnen
         </MenuItem>
-      )}
-      {copying && (
-        <MenuItem
-          onClick={onClick}
-          data={{
-            action: 'resetCopying',
-          }}
-        >
-          Kopieren aufheben
-        </MenuItem>
-      )}
-    </ContextMenu>
+        {moving && (
+          <MenuItem
+            onClick={onClick}
+            data={{
+              action: 'move',
+            }}
+          >
+            {`verschiebe '${store.moving.label}' hierhin`}
+          </MenuItem>
+        )}
+        {copying && (
+          <MenuItem
+            onClick={onClick}
+            data={{
+              action: 'copy',
+            }}
+          >
+            {`kopiere '${store.copying.label}' hierhin`}
+          </MenuItem>
+        )}
+        {copying && (
+          <MenuItem
+            onClick={onClick}
+            data={{
+              action: 'resetCopying',
+            }}
+          >
+            Kopieren aufheben
+          </MenuItem>
+        )}
+      </ContextMenu>
+    </ErrorBoundary>
   )
 }
 
