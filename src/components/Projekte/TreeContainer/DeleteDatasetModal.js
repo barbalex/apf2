@@ -7,13 +7,14 @@ import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 
 import tables from '../../../modules/tables'
+import ErrorBoundary from '../../shared/ErrorBoundary'
 
 const enhance = compose(
   inject('store'),
   withHandlers({
     onClickAbort: props => () => props.store.deleteDatasetAbort(),
     onClickDelete: props => () => props.store.deleteDatasetExecute(props.tree),
-  }),
+  })
 )
 
 const DatasetDeleteModal = ({
@@ -41,9 +42,13 @@ const DatasetDeleteModal = ({
   }
 
   return (
-    <Dialog actions={actions} modal open={!!store.datasetToDelete.id}>
-      {`${tableName ? `${tableName} "` : ''}${store.datasetToDelete.label}${tableName ? '"' : ''} löschen?`}
-    </Dialog>
+    <ErrorBoundary>
+      <Dialog actions={actions} modal open={!!store.datasetToDelete.id}>
+        {`${tableName ? `${tableName} "` : ''}${store.datasetToDelete.label}${
+          tableName ? '"' : ''
+        } löschen?`}
+      </Dialog>
+    </ErrorBoundary>
   )
 }
 
