@@ -5,11 +5,26 @@ import { toJS } from 'mobx'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
 import { ReflexContainer, ReflexSplitter, ReflexElement } from 'react-reflex'
+import Loadable from 'react-loadable'
 
-import TreeContainer from './TreeContainer'
-import Daten from './Daten'
-import Karte from './Karte'
-import Exporte from './Exporte'
+import Loading from '../shared/Loading'
+
+const TreeContainerAsync = Loadable({
+  loader: () => import('./TreeContainer'),
+  loading: Loading,
+})
+const DatenAsync = Loadable({
+  loader: () => import('./Daten'),
+  loading: Loading,
+})
+const KarteAsync = Loadable({
+  loader: () => import('./Karte'),
+  loading: Loading,
+})
+const ExporteAsync = Loadable({
+  loader: () => import('./Exporte'),
+  loading: Loading,
+})
 
 const Container = styled.div`
   display: flex;
@@ -68,7 +83,7 @@ const myChildren = (store: Object) => {
   if (projekteTabs.includes('tree')) {
     children.push(
       <ReflexElement flex={flex} key="tree">
-        <TreeContainer tree={store.tree} />
+        <TreeContainerAsync tree={store.tree} />
       </ReflexElement>
     )
     projekteTabs.splice(projekteTabs.indexOf('tree'), 1)
@@ -84,7 +99,7 @@ const myChildren = (store: Object) => {
         renderOnResizeRate={100}
         renderOnResize={true}
       >
-        <Daten tree={store.tree} />
+        <DatenAsync tree={store.tree} />
       </ReflexElement>
     )
     projekteTabs.splice(projekteTabs.indexOf('daten'), 1)
@@ -95,7 +110,7 @@ const myChildren = (store: Object) => {
   if (projekteTabs.includes('exporte')) {
     children.push(
       <ReflexElement key="exporte">
-        <Exporte />
+        <ExporteAsync />
       </ReflexElement>
     )
     projekteTabs.splice(projekteTabs.indexOf('exporte'), 1)
@@ -106,7 +121,7 @@ const myChildren = (store: Object) => {
   if (projekteTabs.includes('tree2')) {
     children.push(
       <ReflexElement flex={flex} key="tree2">
-        <TreeContainer tree={store.tree2} />
+        <TreeContainerAsync tree={store.tree2} />
       </ReflexElement>
     )
     projekteTabs.splice(projekteTabs.indexOf('tree2'), 1)
@@ -117,7 +132,7 @@ const myChildren = (store: Object) => {
   if (projekteTabs.includes('daten2')) {
     children.push(
       <ReflexElement key="daten2">
-        <Daten tree={store.tree2} />
+        <DatenAsync tree={store.tree2} />
       </ReflexElement>
     )
     projekteTabs.splice(projekteTabs.indexOf('daten2'), 1)
@@ -133,7 +148,7 @@ const myChildren = (store: Object) => {
         style={{ overflow: 'hidden' }}
       >
         <KarteContainer>
-          <Karte
+          <KarteAsync
             /**
              * key of tabs is added to force mounting
              * when tabs change
