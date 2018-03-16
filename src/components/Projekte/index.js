@@ -200,13 +200,13 @@ const myChildren = (store: Object) => {
 
 const Projekte = ({ store }: { store: Object }) => {
   return (
-    <ErrorBoundary>
-      <Container data-loading={store.loading.length > 0}>
+    <Container data-loading={store.loading.length > 0}>
+      <ErrorBoundary>
         <ReflexContainer orientation="vertical">
           {myChildren(store)}
         </ReflexContainer>
-      </Container>
-    </ErrorBoundary>
+      </ErrorBoundary>
+    </Container>
   )
 }
 

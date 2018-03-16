@@ -7,6 +7,8 @@ import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 import styled from 'styled-components'
 
+import ErrorBoundary from './shared/ErrorBoundary'
+
 const StyledDialog = styled(Dialog)`
   > div > div > div > div {
     overflow: auto !important;
@@ -47,29 +49,31 @@ const UserMessages = ({
   onClickReadAll: () => {},
 }) => {
   return (
-    <StyledDialog
-      title="Letzte Anpassungen:"
-      open={store.messages.messages.length > 0 && !!store.user.name}
-      contentStyle={{
-        maxWidth: window.innerWidth * 0.8,
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-      }}
-    >
-      <div>
-        <AllOkButton label="alle o.k." onClick={onClickReadAll} />
-        {store.messages.messages.sort(m => m.time).map((m, index) => {
-          const paddBottom = index < store.messages.messages.length - 1
-          return (
-            <MessageContainer key={m.id} paddBottom={paddBottom}>
-              <div>{m.message}</div>
-              <FlatButton label="o.k." onClick={() => onClickRead(m)} />
-            </MessageContainer>
-          )
-        })}
-      </div>
-    </StyledDialog>
+    <ErrorBoundary>
+      <StyledDialog
+        title="Letzte Anpassungen:"
+        open={store.messages.messages.length > 0 && !!store.user.name}
+        contentStyle={{
+          maxWidth: window.innerWidth * 0.8,
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+        }}
+      >
+        <div>
+          <AllOkButton label="alle o.k." onClick={onClickReadAll} />
+          {store.messages.messages.sort(m => m.time).map((m, index) => {
+            const paddBottom = index < store.messages.messages.length - 1
+            return (
+              <MessageContainer key={m.id} paddBottom={paddBottom}>
+                <div>{m.message}</div>
+                <FlatButton label="o.k." onClick={() => onClickRead(m)} />
+              </MessageContainer>
+            )
+          })}
+        </div>
+      </StyledDialog>
+    </ErrorBoundary>
   )
 }
 

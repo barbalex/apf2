@@ -4,6 +4,8 @@ import { observer, inject } from 'mobx-react'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
 
+import ErrorBoundary from './shared/ErrorBoundary'
+
 const Container = styled.div`
   position: absolute;
   left: 5px;
@@ -26,11 +28,13 @@ const ErrorDiv = styled.div`
 const enhance = compose(inject('store'), observer)
 
 const Errors = ({ store }: { store: Object }) => (
-  <Container>
-    {store.app.errors.map((error, index) => (
-      <ErrorDiv key={index}>{error.message || error}</ErrorDiv>
-    ))}
-  </Container>
+  <ErrorBoundary>
+    <Container>
+      {store.app.errors.map((error, index) => (
+        <ErrorDiv key={index}>{error.message || error}</ErrorDiv>
+      ))}
+    </Container>
+  </ErrorBoundary>
 )
 
 export default enhance(Errors)
