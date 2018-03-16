@@ -15,6 +15,8 @@ import isEqual from 'lodash/isEqual'
 
 import Row from './Row'
 
+import ErrorBoundary from '../../../shared/ErrorBoundary'
+
 const singleRowHeight = 23
 const Container = styled.div`
   height: 100%;
@@ -127,22 +129,24 @@ class Tree extends Component {
     }
 
     return (
-      <Container>
-        <AutoSizer>
-          {({ height, width }) => (
-            <ListContainer
-              height={height}
-              rowCount={nodes.length}
-              rowHeight={singleRowHeight}
-              rowRenderer={this.rowRenderer}
-              noRowsRenderer={this.noRowsRenderer}
-              scrollToIndex={lastClickedNodeIndex}
-              width={width}
-              innerRef={c => (this.tree = c)}
-            />
-          )}
-        </AutoSizer>
-      </Container>
+      <ErrorBoundary>
+        <Container>
+          <AutoSizer>
+            {({ height, width }) => (
+              <ListContainer
+                height={height}
+                rowCount={nodes.length}
+                rowHeight={singleRowHeight}
+                rowRenderer={this.rowRenderer}
+                noRowsRenderer={this.noRowsRenderer}
+                scrollToIndex={lastClickedNodeIndex}
+                width={width}
+                innerRef={c => (this.tree = c)}
+              />
+            )}
+          </AutoSizer>
+        </Container>
+      </ErrorBoundary>
     )
   }
 }

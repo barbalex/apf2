@@ -5,6 +5,8 @@ import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
 
+import ErrorBoundary from '../../../shared/ErrorBoundary'
+
 const enhance = compose(
   withState('label', 'changeLabel', ''),
   withHandlers({
@@ -27,27 +29,33 @@ const Ziel = ({
   label: string | number,
   onShow: () => void,
 }) => (
-  <ContextMenu id={`${tree.name}ziel`} collect={props => props} onShow={onShow}>
-    <div className="react-contextmenu-title">Ziel</div>
-    <MenuItem
-      onClick={onClick}
-      data={{
-        action: 'insert',
-        table: 'ziel',
-      }}
+  <ErrorBoundary>
+    <ContextMenu
+      id={`${tree.name}ziel`}
+      collect={props => props}
+      onShow={onShow}
     >
-      erstelle neues
-    </MenuItem>
-    <MenuItem
-      onClick={onClick}
-      data={{
-        action: 'delete',
-        table: 'ziel',
-      }}
-    >
-      lösche
-    </MenuItem>
-  </ContextMenu>
+      <div className="react-contextmenu-title">Ziel</div>
+      <MenuItem
+        onClick={onClick}
+        data={{
+          action: 'insert',
+          table: 'ziel',
+        }}
+      >
+        erstelle neues
+      </MenuItem>
+      <MenuItem
+        onClick={onClick}
+        data={{
+          action: 'delete',
+          table: 'ziel',
+        }}
+      >
+        lösche
+      </MenuItem>
+    </ContextMenu>
+  </ErrorBoundary>
 )
 
 export default enhance(Ziel)
