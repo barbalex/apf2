@@ -2,6 +2,8 @@
 import React from 'react'
 import styled from 'styled-components'
 
+import ErrorBoundary from '../../shared/ErrorBoundary'
+
 const LabelPopoverRow = styled.div`
   padding: 2px 5px 2px 5px;
 `
@@ -32,28 +34,28 @@ const Container = styled.div`
 `
 
 export default (
-  <Container>
-    <LabelPopoverTitleRow>
-      Legende
-    </LabelPopoverTitleRow>
-    <LabelPopoverContentRow>
-      Dieses Feld möglichst immer ausfüllen.
-    </LabelPopoverContentRow>
-    <LabelPopoverContentRow>
-      <LabelPopoverRowColumnLeft>
-        nein (historisch):
-      </LabelPopoverRowColumnLeft>
-      <LabelPopoverRowColumnRight>
-        erloschen, vor 1950 ohne Kontrolle
-      </LabelPopoverRowColumnRight>
-    </LabelPopoverContentRow>
-    <LabelPopoverContentRow>
-      <LabelPopoverRowColumnLeft>
-        nein (kein Vorkommen):
-      </LabelPopoverRowColumnLeft>
-      <LabelPopoverRowColumnRight>
-        {'siehe bei Populationen "überprüft, kein Vorkommen"'}
-      </LabelPopoverRowColumnRight>
-    </LabelPopoverContentRow>
-  </Container>
+  <ErrorBoundary>
+    <Container>
+      <LabelPopoverTitleRow>Legende</LabelPopoverTitleRow>
+      <LabelPopoverContentRow>
+        Dieses Feld möglichst immer ausfüllen.
+      </LabelPopoverContentRow>
+      <LabelPopoverContentRow>
+        <LabelPopoverRowColumnLeft>
+          nein (historisch):
+        </LabelPopoverRowColumnLeft>
+        <LabelPopoverRowColumnRight>
+          erloschen, vor 1950 ohne Kontrolle
+        </LabelPopoverRowColumnRight>
+      </LabelPopoverContentRow>
+      <LabelPopoverContentRow>
+        <LabelPopoverRowColumnLeft>
+          nein (kein Vorkommen):
+        </LabelPopoverRowColumnLeft>
+        <LabelPopoverRowColumnRight>
+          {'siehe bei Populationen "überprüft, kein Vorkommen"'}
+        </LabelPopoverRowColumnRight>
+      </LabelPopoverContentRow>
+    </Container>
+  </ErrorBoundary>
 )
