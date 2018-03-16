@@ -6,6 +6,8 @@ import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
 
+import ErrorBoundary from '../../../shared/ErrorBoundary'
+
 const enhance = compose(
   inject('store'),
   withState('id', 'changeId', 0),
@@ -44,88 +46,90 @@ const Pop = ({
   const copying = store.copying.table && store.copying.table === 'tpop'
 
   return (
-    <ContextMenu
-      id={`${tree.name}pop`}
-      collect={props => props}
-      onShow={onShow}
-    >
-      <div className="react-contextmenu-title">Population</div>
-      <MenuItem
-        onClick={onClick}
-        data={{
-          action: 'insert',
-          table: 'pop',
-        }}
+    <ErrorBoundary>
+      <ContextMenu
+        id={`${tree.name}pop`}
+        collect={props => props}
+        onShow={onShow}
       >
-        erstelle neue
-      </MenuItem>
-      <MenuItem
-        onClick={onClick}
-        data={{
-          action: 'delete',
-          table: 'pop',
-        }}
-      >
-        lösche
-      </MenuItem>
-      <MenuItem
-        onClick={onClick}
-        data={{
-          action: 'markForMoving',
-          table: 'pop',
-        }}
-      >
-        verschiebe
-      </MenuItem>
-      {moving && (
+        <div className="react-contextmenu-title">Population</div>
         <MenuItem
           onClick={onClick}
           data={{
-            action: 'move',
+            action: 'insert',
+            table: 'pop',
           }}
         >
-          {`verschiebe '${store.moving.label}' hierhin`}
+          erstelle neue
         </MenuItem>
-      )}
-      <MenuItem
-        onClick={onClick}
-        data={{
-          action: 'markForCopying',
-          table: 'pop',
-        }}
-      >
-        kopiere
-      </MenuItem>
-      <MenuItem
-        onClick={onClick}
-        data={{
-          action: 'markForCopyingWithNextLevel',
-          table: 'pop',
-        }}
-      >
-        kopiere inklusive Teilpopulationen
-      </MenuItem>
-      {copying && (
         <MenuItem
           onClick={onClick}
           data={{
-            action: 'copy',
+            action: 'delete',
+            table: 'pop',
           }}
         >
-          {`kopiere '${store.copying.label}' hierhin`}
+          lösche
         </MenuItem>
-      )}
-      {copying && (
         <MenuItem
           onClick={onClick}
           data={{
-            action: 'resetCopying',
+            action: 'markForMoving',
+            table: 'pop',
           }}
         >
-          Kopieren aufheben
+          verschiebe
         </MenuItem>
-      )}
-    </ContextMenu>
+        {moving && (
+          <MenuItem
+            onClick={onClick}
+            data={{
+              action: 'move',
+            }}
+          >
+            {`verschiebe '${store.moving.label}' hierhin`}
+          </MenuItem>
+        )}
+        <MenuItem
+          onClick={onClick}
+          data={{
+            action: 'markForCopying',
+            table: 'pop',
+          }}
+        >
+          kopiere
+        </MenuItem>
+        <MenuItem
+          onClick={onClick}
+          data={{
+            action: 'markForCopyingWithNextLevel',
+            table: 'pop',
+          }}
+        >
+          kopiere inklusive Teilpopulationen
+        </MenuItem>
+        {copying && (
+          <MenuItem
+            onClick={onClick}
+            data={{
+              action: 'copy',
+            }}
+          >
+            {`kopiere '${store.copying.label}' hierhin`}
+          </MenuItem>
+        )}
+        {copying && (
+          <MenuItem
+            onClick={onClick}
+            data={{
+              action: 'resetCopying',
+            }}
+          >
+            Kopieren aufheben
+          </MenuItem>
+        )}
+      </ContextMenu>
+    </ErrorBoundary>
   )
 }
 
