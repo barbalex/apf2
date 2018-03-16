@@ -8,6 +8,7 @@ import RadioButtonGroup from '../../shared/RadioButtonGroup'
 import TextField from '../../shared/TextField'
 import FormTitle from '../../shared/FormTitle'
 import AutoComplete from '../../shared/Autocomplete'
+import ErrorBoundary from '../../shared/ErrorBoundary'
 
 const Container = styled.div`
   height: 100%;
@@ -44,46 +45,48 @@ const Tpopkontrzaehl = ({ store, tree }: { store: Object, tree: Object }) => {
   const { activeDataset } = tree
 
   return (
-    <Container>
-      <FormTitle tree={tree} title="Zählung" />
-      <FieldsContainer>
-        <AutoComplete
-          key={`${activeDataset.row.TPopKontrZaehlId}Zaehleinheit`}
-          tree={tree}
-          label="Einheit"
-          fieldName="Zaehleinheit"
-          valueText={getZaehleinheitName({ store, tree })}
-          errorText={activeDataset.valid.Zaehleinheit}
-          dataSource={store.dropdownList.zaehleinheitWerte}
-          dataSourceConfig={{
-            value: 'value',
-            text: 'label',
-          }}
-          updatePropertyInDb={store.updatePropertyInDb}
-        />
-        <TextField
-          key={`${activeDataset.row.TPopKontrZaehlId}Anzahl`}
-          tree={tree}
-          label="Anzahl (nur ganze Zahlen)"
-          fieldName="Anzahl"
-          value={activeDataset.row.Anzahl}
-          errorText={activeDataset.valid.Anzahl}
-          type="number"
-          updateProperty={store.updateProperty}
-          updatePropertyInDb={store.updatePropertyInDb}
-        />
-        <RadioButtonGroup
-          key={`${activeDataset.row.TPopKontrZaehlId}Methode`}
-          tree={tree}
-          fieldName="Methode"
-          label="Methode"
-          value={activeDataset.row.Methode}
-          errorText={activeDataset.valid.Methode}
-          dataSource={store.dropdownList.methodeWerte}
-          updatePropertyInDb={store.updatePropertyInDb}
-        />
-      </FieldsContainer>
-    </Container>
+    <ErrorBoundary>
+      <Container>
+        <FormTitle tree={tree} title="Zählung" />
+        <FieldsContainer>
+          <AutoComplete
+            key={`${activeDataset.row.TPopKontrZaehlId}Zaehleinheit`}
+            tree={tree}
+            label="Einheit"
+            fieldName="Zaehleinheit"
+            valueText={getZaehleinheitName({ store, tree })}
+            errorText={activeDataset.valid.Zaehleinheit}
+            dataSource={store.dropdownList.zaehleinheitWerte}
+            dataSourceConfig={{
+              value: 'value',
+              text: 'label',
+            }}
+            updatePropertyInDb={store.updatePropertyInDb}
+          />
+          <TextField
+            key={`${activeDataset.row.TPopKontrZaehlId}Anzahl`}
+            tree={tree}
+            label="Anzahl (nur ganze Zahlen)"
+            fieldName="Anzahl"
+            value={activeDataset.row.Anzahl}
+            errorText={activeDataset.valid.Anzahl}
+            type="number"
+            updateProperty={store.updateProperty}
+            updatePropertyInDb={store.updatePropertyInDb}
+          />
+          <RadioButtonGroup
+            key={`${activeDataset.row.TPopKontrZaehlId}Methode`}
+            tree={tree}
+            fieldName="Methode"
+            label="Methode"
+            value={activeDataset.row.Methode}
+            errorText={activeDataset.valid.Methode}
+            dataSource={store.dropdownList.methodeWerte}
+            updatePropertyInDb={store.updatePropertyInDb}
+          />
+        </FieldsContainer>
+      </Container>
+    </ErrorBoundary>
   )
 }
 
