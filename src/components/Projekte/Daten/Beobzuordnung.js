@@ -12,6 +12,7 @@ import TextField from '../../shared/TextField'
 //import RadioButtonWithInfo from '../../shared/RadioButtonWithInfo'
 import CheckboxWithInfo from '../../shared/CheckboxWithInfo'
 import Beob from './Beob'
+import ErrorBoundary from '../../shared/ErrorBoundary'
 
 const Container = styled.div`
   height: 100%;
@@ -192,60 +193,62 @@ const Beobzuordnung = ({
   const artLabel = `Beobachtete Art: ${artname}`
 
   return (
-    <FormContainer>
-      <FormTitle tree={tree} title="Beobachtung" />
-      <DataContainer>
-        <FieldsContainer>
-          <div>{artLabel}</div>
-          <CheckboxWithInfo
-            tree={tree}
-            fieldName="BeobNichtZuordnen"
-            label="Nicht zuordnen"
-            value={activeDataset.row.BeobNichtZuordnen}
-            updatePropertyInDb={updatePropertyInDb}
-            popover={nichtZuordnenPopover}
-          />
-          {showTPopId && (
-            <ZuordnenDiv>
-              <MaxHeightDiv>
-                <RadioButtonGroupWithInfo
-                  tree={tree}
-                  fieldName="TPopId"
-                  value={activeDataset.row.TPopId}
-                  label="Einer Teilpopulation zuordnen"
-                  dataSource={getTpopZuordnenSource(store, tree)}
-                  updatePropertyInDb={updatePropertyInDb}
-                  popover={
-                    <div>
-                      <LabelPopoverTitleRow>Legende</LabelPopoverTitleRow>
-                      <LabelPopoverContentRow>
-                        Um eine Zuordnung zu entfernen: Nochmals auf die bereits
-                        Markierte Teil-Population klicken
-                      </LabelPopoverContentRow>
-                    </div>
-                  }
-                />
-              </MaxHeightDiv>
-            </ZuordnenDiv>
-          )}
-          <TextField
-            key={`${activeDataset.row.id}BeobBemerkungen`}
-            tree={tree}
-            label="Bemerkungen zur Zuordnung"
-            fieldName="BeobBemerkungen"
-            value={activeDataset.row.BeobBemerkungen}
-            errorText={activeDataset.valid.BeobBemerkungen}
-            type="text"
-            multiLine
-            fullWidth
-            updateProperty={store.updateProperty}
-            updatePropertyInDb={store.updatePropertyInDb}
-          />
-        </FieldsContainer>
-        <Title>{beobTitle}</Title>
-        <Beob tree={tree} dimensions={dimensions} />
-      </DataContainer>
-    </FormContainer>
+    <ErrorBoundary>
+      <FormContainer>
+        <FormTitle tree={tree} title="Beobachtung" />
+        <DataContainer>
+          <FieldsContainer>
+            <div>{artLabel}</div>
+            <CheckboxWithInfo
+              tree={tree}
+              fieldName="BeobNichtZuordnen"
+              label="Nicht zuordnen"
+              value={activeDataset.row.BeobNichtZuordnen}
+              updatePropertyInDb={updatePropertyInDb}
+              popover={nichtZuordnenPopover}
+            />
+            {showTPopId && (
+              <ZuordnenDiv>
+                <MaxHeightDiv>
+                  <RadioButtonGroupWithInfo
+                    tree={tree}
+                    fieldName="TPopId"
+                    value={activeDataset.row.TPopId}
+                    label="Einer Teilpopulation zuordnen"
+                    dataSource={getTpopZuordnenSource(store, tree)}
+                    updatePropertyInDb={updatePropertyInDb}
+                    popover={
+                      <div>
+                        <LabelPopoverTitleRow>Legende</LabelPopoverTitleRow>
+                        <LabelPopoverContentRow>
+                          Um eine Zuordnung zu entfernen: Nochmals auf die
+                          bereits Markierte Teil-Population klicken
+                        </LabelPopoverContentRow>
+                      </div>
+                    }
+                  />
+                </MaxHeightDiv>
+              </ZuordnenDiv>
+            )}
+            <TextField
+              key={`${activeDataset.row.id}BeobBemerkungen`}
+              tree={tree}
+              label="Bemerkungen zur Zuordnung"
+              fieldName="BeobBemerkungen"
+              value={activeDataset.row.BeobBemerkungen}
+              errorText={activeDataset.valid.BeobBemerkungen}
+              type="text"
+              multiLine
+              fullWidth
+              updateProperty={store.updateProperty}
+              updatePropertyInDb={store.updatePropertyInDb}
+            />
+          </FieldsContainer>
+          <Title>{beobTitle}</Title>
+          <Beob tree={tree} dimensions={dimensions} />
+        </DataContainer>
+      </FormContainer>
+    </ErrorBoundary>
   )
 }
 

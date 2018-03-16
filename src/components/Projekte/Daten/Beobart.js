@@ -8,6 +8,7 @@ import compose from 'recompose/compose'
 
 import AutoComplete from '../../shared/Autocomplete'
 import FormTitle from '../../shared/FormTitle'
+import ErrorBoundary from '../../shared/ErrorBoundary'
 
 const Container = styled.div`
   height: 100%;
@@ -52,35 +53,37 @@ const BeobArt = ({ store, tree }: { store: Object, tree: Object }) => {
   const { activeDataset } = tree
 
   return (
-    <Container>
-      <FormTitle tree={tree} title="Art für Beobachtungen" />
-      <FieldsContainer>
-        <div>
-          Beobachtungen dieser Art stehen im Ordner "Beobachtungen nicht
-          beurteilt" zur Verfügung und können zugeordnet werden.
-        </div>
-        <AutoComplete
-          key={`${activeDataset.row.BeobArtId}TaxonomieId`}
-          tree={tree}
-          label="Art"
-          fieldName="TaxonomieId"
-          valueText={getArtname({
-            store,
-            tree,
-          })}
-          errorText={activeDataset.valid.TaxonomieId}
-          dataSource={getArtList({
-            store,
-            tree,
-          })}
-          dataSourceConfig={{
-            value: 'TaxonomieId',
-            text: 'Artname',
-          }}
-          updatePropertyInDb={store.updatePropertyInDb}
-        />
-      </FieldsContainer>
-    </Container>
+    <ErrorBoundary>
+      <Container>
+        <FormTitle tree={tree} title="Art für Beobachtungen" />
+        <FieldsContainer>
+          <div>
+            Beobachtungen dieser Art stehen im Ordner "Beobachtungen nicht
+            beurteilt" zur Verfügung und können zugeordnet werden.
+          </div>
+          <AutoComplete
+            key={`${activeDataset.row.BeobArtId}TaxonomieId`}
+            tree={tree}
+            label="Art"
+            fieldName="TaxonomieId"
+            valueText={getArtname({
+              store,
+              tree,
+            })}
+            errorText={activeDataset.valid.TaxonomieId}
+            dataSource={getArtList({
+              store,
+              tree,
+            })}
+            dataSourceConfig={{
+              value: 'TaxonomieId',
+              text: 'Artname',
+            }}
+            updatePropertyInDb={store.updatePropertyInDb}
+          />
+        </FieldsContainer>
+      </Container>
+    </ErrorBoundary>
   )
 }
 
