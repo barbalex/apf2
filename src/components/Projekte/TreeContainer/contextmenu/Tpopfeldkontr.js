@@ -6,6 +6,8 @@ import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
 
+import ErrorBoundary from '../../../shared/ErrorBoundary'
+
 const enhance = compose(
   inject('store'),
   withState('label', 'changeLabel', ''),
@@ -13,7 +15,7 @@ const enhance = compose(
     // according to https://github.com/vkbansal/react-contextmenu/issues/65
     // this is how to pass data from ContextMenuTrigger to ContextMenu
     onShow: props => event => props.changeLabel(event.detail.data.nodeLabel),
-  }),
+  })
 )
 
 const Tpopfeldkontr = ({
@@ -34,85 +36,90 @@ const Tpopfeldkontr = ({
   const copyingBiotop = store.copyingBiotop.id
 
   return (
-    <ContextMenu
-      id={`${tree.name}tpopfeldkontr`}
-      collect={props => props}
-      onShow={onShow}
-    >
-      <div className="react-contextmenu-title">Feld-Kontrolle</div>
-      <MenuItem
-        onClick={onClick}
-        data={{
-          action: 'insert',
-          table: 'tpopfeldkontr',
-        }}
+    <ErrorBoundary>
+      <ContextMenu
+        id={`${tree.name}tpopfeldkontr`}
+        collect={props => props}
+        onShow={onShow}
       >
-        erstelle neue
-      </MenuItem>
-      <MenuItem
-        onClick={onClick}
-        data={{
-          action: 'delete',
-          table: 'tpopfeldkontr',
-        }}
-      >
-        lösche
-      </MenuItem>
-      <MenuItem
-        onClick={onClick}
-        data={{
-          action: 'markForMoving',
-          table: 'tpopfeldkontr',
-        }}
-      >
-        verschiebe
-      </MenuItem>
-      <MenuItem
-        onClick={onClick}
-        data={{
-          action: 'markForCopying',
-          table: 'tpopfeldkontr',
-        }}
-      >
-        kopiere
-      </MenuItem>
-      {store.copying.table &&
+        <div className="react-contextmenu-title">Feld-Kontrolle</div>
         <MenuItem
           onClick={onClick}
           data={{
-            action: 'resetCopying',
+            action: 'insert',
+            table: 'tpopfeldkontr',
           }}
         >
-          Kopieren aufheben
-        </MenuItem>}
-      <MenuItem
-        onClick={onClick}
-        data={{
-          action: 'markForCopyingBiotop',
-          table: 'tpopfeldkontr',
-        }}
-      >
-        kopiere Biotop
-      </MenuItem>
-      {copyingBiotop &&
+          erstelle neue
+        </MenuItem>
         <MenuItem
           onClick={onClick}
           data={{
-            action: 'copyBiotop',
+            action: 'delete',
+            table: 'tpopfeldkontr',
           }}
         >
-          {`kopiere Biotop von '${store.copyingBiotop.label}' hierhin`}
-        </MenuItem>}
-      {store.copyingBiotop.id &&
+          lösche
+        </MenuItem>
         <MenuItem
           onClick={onClick}
           data={{
-            action: 'resetCopyingBiotop',
+            action: 'markForMoving',
+            table: 'tpopfeldkontr',
           }}
         >
-          Biotop Kopieren aufheben
-        </MenuItem>}
-    </ContextMenu>
+          verschiebe
+        </MenuItem>
+        <MenuItem
+          onClick={onClick}
+          data={{
+            action: 'markForCopying',
+            table: 'tpopfeldkontr',
+          }}
+        >
+          kopiere
+        </MenuItem>
+        {store.copying.table && (
+          <MenuItem
+            onClick={onClick}
+            data={{
+              action: 'resetCopying',
+            }}
+          >
+            Kopieren aufheben
+          </MenuItem>
+        )}
+        <MenuItem
+          onClick={onClick}
+          data={{
+            action: 'markForCopyingBiotop',
+            table: 'tpopfeldkontr',
+          }}
+        >
+          kopiere Biotop
+        </MenuItem>
+        {copyingBiotop && (
+          <MenuItem
+            onClick={onClick}
+            data={{
+              action: 'copyBiotop',
+            }}
+          >
+            {`kopiere Biotop von '${store.copyingBiotop.label}' hierhin`}
+          </MenuItem>
+        )}
+        {store.copyingBiotop.id && (
+          <MenuItem
+            onClick={onClick}
+            data={{
+              action: 'resetCopyingBiotop',
+            }}
+          >
+            Biotop Kopieren aufheben
+          </MenuItem>
+        )}
+      </ContextMenu>
+    </ErrorBoundary>
   )
 }
 
