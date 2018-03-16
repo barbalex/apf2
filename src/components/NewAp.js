@@ -11,6 +11,8 @@ import withHandlers from 'recompose/withHandlers'
 import withState from 'recompose/withState'
 import axios from 'axios'
 
+import ErrorBoundary from './shared/ErrorBoundary'
+
 const StyledDiv = styled.div`
   display: flex;
   flex-direction: column;
@@ -139,29 +141,31 @@ const NewAp = ({
   ]
 
   return (
-    <Dialog title="Neue Art" open={store.showNewApModal} actions={actions}>
-      <StyledDiv>
-        <StyledAutoComplete
-          id="newAp"
-          hintText={dataSource.length === 0 ? 'lade Daten...' : ''}
-          fullWidth
-          floatingLabelText={labelText}
-          dataSource={toJS(dataSource)}
-          dataSourceConfig={dataSourceConfig}
-          searchText={searchTextToUse}
-          onUpdateInput={onUpdateSearchText}
-          filter={AutoComplete.caseInsensitiveFilter}
-          maxSearchResults={200}
-          onNewRequest={onNewRequest}
-          openOnFocus
-          onFocus={onFocus}
-          onBlur={onBlur}
-          menuStyle={{
-            maxHeight: `${window.innerHeight * 0.4}px`,
-          }}
-        />
-      </StyledDiv>
-    </Dialog>
+    <ErrorBoundary>
+      <Dialog title="Neue Art" open={store.showNewApModal} actions={actions}>
+        <StyledDiv>
+          <StyledAutoComplete
+            id="newAp"
+            hintText={dataSource.length === 0 ? 'lade Daten...' : ''}
+            fullWidth
+            floatingLabelText={labelText}
+            dataSource={toJS(dataSource)}
+            dataSourceConfig={dataSourceConfig}
+            searchText={searchTextToUse}
+            onUpdateInput={onUpdateSearchText}
+            filter={AutoComplete.caseInsensitiveFilter}
+            maxSearchResults={200}
+            onNewRequest={onNewRequest}
+            openOnFocus
+            onFocus={onFocus}
+            onBlur={onBlur}
+            menuStyle={{
+              maxHeight: `${window.innerHeight * 0.4}px`,
+            }}
+          />
+        </StyledDiv>
+      </Dialog>
+    </ErrorBoundary>
   )
 }
 
