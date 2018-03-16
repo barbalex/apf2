@@ -16,7 +16,11 @@ import withHandlers from 'recompose/withHandlers'
 import shouldUpdate from 'recompose/shouldUpdate'
 
 import isMobilePhone from '../modules/isMobilePhone'
+import ErrorBoundary from './shared/ErrorBoundary'
 
+const Container = styled.div`
+  display: block;
+`
 const StyledAppBar = styled(AppBar)`
   @media print {
     display: none !important;
@@ -148,80 +152,87 @@ const MyAppBar = ({
   const isMobile = isMobilePhone()
 
   return (
-    <StyledAppBar
-      title={isMobile ? '' : 'AP Flora'}
-      iconElementRight={
-        <MenuDiv>
-          <TreeButton
-            label="Strukturbaum"
-            data-visible={treeIsVisible}
-            onClick={onClickButtonStrukturbaum}
-          />
-          <DatenButton
-            label="Daten"
-            data-visible={datenIsVisible}
-            onClick={onClickButtonDaten}
-          />
-          {!isMobile && (
-            <TreeButton
-              label="Strukturbaum 2"
-              data-visible={tree2IsVisible}
-              onClick={onClickButtonStrukturbaum2}
-            />
-          )}
-          {!isMobile && (
-            <DatenButton
-              label="Daten 2"
-              data-visible={daten2IsVisible}
-              onClick={onClickButtonDaten2}
-            />
-          )}
-          <Button
-            label="Karte"
-            data-visible={karteIsVisible}
-            onClick={onClickButtonKarte}
-          />
-          {!isMobile &&
-            exporteIsActive && (
-              <Button
-                label="Exporte"
-                data-visible={exporteIsVisible}
-                onClick={onClickButtonExporte}
+    <ErrorBoundary>
+      <Container>
+        <StyledAppBar
+          title={isMobile ? '' : 'AP Flora'}
+          iconElementRight={
+            <MenuDiv>
+              <TreeButton
+                label="Strukturbaum"
+                data-visible={treeIsVisible}
+                onClick={onClickButtonStrukturbaum}
               />
-            )}
-          <IconMenu
-            iconButtonElement={
-              <IconButton>
-                <StyledMoreVertIcon />
-              </IconButton>
-            }
-            anchorOrigin={iconMenuAnchorOrigin}
-            targetOrigin={iconMenuTargetOrigin}
-            style={iconMenuStyle}
-          >
-            {isMobile &&
-              exporteIsActive && (
-                <MenuItem
-                  primaryText="Exporte"
-                  onClick={onClickButtonExporte}
-                  disabled={exporteIsVisible}
+              <DatenButton
+                label="Daten"
+                data-visible={datenIsVisible}
+                onClick={onClickButtonDaten}
+              />
+              {!isMobile && (
+                <TreeButton
+                  label="Strukturbaum 2"
+                  data-visible={tree2IsVisible}
+                  onClick={onClickButtonStrukturbaum2}
                 />
               )}
-            <MenuItem
-              primaryText="gelöschte Datensätze wiederherstellen"
-              onClick={showDeletedDatasets}
-              disabled={store.deletedDatasets.length === 0}
-            />
-            <MenuItem primaryText="Video-Anleitungen" onClick={watchVideos} />
-            <MenuItem
-              primaryText={`${store.user.name} abmelden`}
-              onClick={store.logout}
-            />
-          </IconMenu>
-        </MenuDiv>
-      }
-      showMenuIconButton={false}
-    />
+              {!isMobile && (
+                <DatenButton
+                  label="Daten 2"
+                  data-visible={daten2IsVisible}
+                  onClick={onClickButtonDaten2}
+                />
+              )}
+              <Button
+                label="Karte"
+                data-visible={karteIsVisible}
+                onClick={onClickButtonKarte}
+              />
+              {!isMobile &&
+                exporteIsActive && (
+                  <Button
+                    label="Exporte"
+                    data-visible={exporteIsVisible}
+                    onClick={onClickButtonExporte}
+                  />
+                )}
+              <IconMenu
+                iconButtonElement={
+                  <IconButton>
+                    <StyledMoreVertIcon />
+                  </IconButton>
+                }
+                anchorOrigin={iconMenuAnchorOrigin}
+                targetOrigin={iconMenuTargetOrigin}
+                style={iconMenuStyle}
+              >
+                {isMobile &&
+                  exporteIsActive && (
+                    <MenuItem
+                      primaryText="Exporte"
+                      onClick={onClickButtonExporte}
+                      disabled={exporteIsVisible}
+                    />
+                  )}
+                <MenuItem
+                  primaryText="gelöschte Datensätze wiederherstellen"
+                  onClick={showDeletedDatasets}
+                  disabled={store.deletedDatasets.length === 0}
+                />
+                <MenuItem
+                  primaryText="Video-Anleitungen"
+                  onClick={watchVideos}
+                />
+                <MenuItem
+                  primaryText={`${store.user.name} abmelden`}
+                  onClick={store.logout}
+                />
+              </IconMenu>
+            </MenuDiv>
+          }
+          showMenuIconButton={false}
+        />
+      </Container>
+    </ErrorBoundary>
   )
 }
 
