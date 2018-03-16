@@ -6,6 +6,7 @@ import compose from 'recompose/compose'
 
 import TextField from '../../shared/TextField'
 import FormTitle from '../../shared/FormTitle'
+import ErrorBoundary from '../../shared/ErrorBoundary'
 
 const Container = styled.div`
   height: 100%;
@@ -24,30 +25,34 @@ const Projekt = ({ store, tree }: { store: Object, tree: Object }) => {
   const { activeDataset } = tree
 
   return (
-    <Container>
-      <FormTitle tree={tree} title="Projekt" />
-      <FieldsContainer>
-        <TextField
-          key={`${activeDataset.row.ProjId}ProjName`}
-          tree={tree}
-          label="Name"
-          fieldName="ProjName"
-          value={
-            activeDataset && activeDataset.row && activeDataset.row.ProjName
-              ? activeDataset.row.ProjName
-              : ''
-          }
-          errorText={
-            activeDataset && activeDataset.valid && activeDataset.valid.ProjName
-              ? activeDataset.valid.ProjName
-              : ''
-          }
-          type="text"
-          updateProperty={store.updateProperty}
-          updatePropertyInDb={store.updatePropertyInDb}
-        />
-      </FieldsContainer>
-    </Container>
+    <ErrorBoundary>
+      <Container>
+        <FormTitle tree={tree} title="Projekt" />
+        <FieldsContainer>
+          <TextField
+            key={`${activeDataset.row.ProjId}ProjName`}
+            tree={tree}
+            label="Name"
+            fieldName="ProjName"
+            value={
+              activeDataset && activeDataset.row && activeDataset.row.ProjName
+                ? activeDataset.row.ProjName
+                : ''
+            }
+            errorText={
+              activeDataset &&
+              activeDataset.valid &&
+              activeDataset.valid.ProjName
+                ? activeDataset.valid.ProjName
+                : ''
+            }
+            type="text"
+            updateProperty={store.updateProperty}
+            updatePropertyInDb={store.updatePropertyInDb}
+          />
+        </FieldsContainer>
+      </Container>
+    </ErrorBoundary>
   )
 }
 
