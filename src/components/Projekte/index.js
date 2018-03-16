@@ -8,6 +8,7 @@ import { ReflexContainer, ReflexSplitter, ReflexElement } from 'react-reflex'
 import Loadable from 'react-loadable'
 
 import Loading from '../shared/Loading'
+import ErrorBoundary from '../shared/ErrorBoundary'
 
 const TreeContainerAsync = Loadable({
   loader: () => import('./TreeContainer'),
@@ -199,11 +200,13 @@ const myChildren = (store: Object) => {
 
 const Projekte = ({ store }: { store: Object }) => {
   return (
-    <Container data-loading={store.loading.length > 0}>
-      <ReflexContainer orientation="vertical">
-        {myChildren(store)}
-      </ReflexContainer>
-    </Container>
+    <ErrorBoundary>
+      <Container data-loading={store.loading.length > 0}>
+        <ReflexContainer orientation="vertical">
+          {myChildren(store)}
+        </ReflexContainer>
+      </Container>
+    </ErrorBoundary>
   )
 }
 

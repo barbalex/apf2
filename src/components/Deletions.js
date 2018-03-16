@@ -11,6 +11,8 @@ import withState from 'recompose/withState'
 import clone from 'lodash/clone'
 import format from 'date-fns/format'
 
+import ErrorBoundary from './shared/ErrorBoundary'
+
 const List = styled.div`
   display: flex;
   flex-direction: column;
@@ -76,38 +78,40 @@ const Deletions = ({
   ]
 
   return (
-    <Dialog
-      title="gelöschte Datensätze"
-      open={store.showDeletedDatasets}
-      actions={actions}
-      contentStyle={{
-        maxWidth: window.innerWidth * 0.8,
-      }}
-    >
-      <List>
-        {store.deletedDatasets.map((ds, index) => {
-          const dataset = clone(ds.dataset)
-          // remove null values
-          Object.keys(dataset).forEach(
-            key => dataset[key] == null && delete dataset[key]
-          )
-          const time = format(new Date(ds.time), 'YYYY.MM.DD HH:mm:ss')
-          const label = `${time}: Tabelle "${ds.table}": ${JSON.stringify(
-            dataset
-          )}`
+    <ErrorBoundary>
+      <Dialog
+        title="gelöschte Datensätze"
+        open={store.showDeletedDatasets}
+        actions={actions}
+        contentStyle={{
+          maxWidth: window.innerWidth * 0.8,
+        }}
+      >
+        <List>
+          {store.deletedDatasets.map((ds, index) => {
+            const dataset = clone(ds.dataset)
+            // remove null values
+            Object.keys(dataset).forEach(
+              key => dataset[key] == null && delete dataset[key]
+            )
+            const time = format(new Date(ds.time), 'YYYY.MM.DD HH:mm:ss')
+            const label = `${time}: Tabelle "${ds.table}": ${JSON.stringify(
+              dataset
+            )}`
 
-          return (
-            <Checkbox
-              key={`${ds.time}`}
-              label={label}
-              value={ds.time}
-              checked={choosenDeletions.includes(ds.time)}
-              onCheck={toggleChoosenDeletions}
-            />
-          )
-        })}
-      </List>
-    </Dialog>
+            return (
+              <Checkbox
+                key={`${ds.time}`}
+                label={label}
+                value={ds.time}
+                checked={choosenDeletions.includes(ds.time)}
+                onCheck={toggleChoosenDeletions}
+              />
+            )
+          })}
+        </List>
+      </Dialog>
+    </ErrorBoundary>
   )
 }
 
