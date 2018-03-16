@@ -1,6 +1,8 @@
 // @flow
 import React from 'react'
 import { ContextMenu, MenuItem } from 'react-contextmenu'
+
+import ErrorBoundary from '../../../shared/ErrorBoundary'
 import { inject } from 'mobx-react'
 import compose from 'recompose/compose'
 import withState from 'recompose/withState'
@@ -13,7 +15,7 @@ const enhance = compose(
     // according to https://github.com/vkbansal/react-contextmenu/issues/65
     // this is how to pass data from ContextMenuTrigger to ContextMenu
     onShow: props => event => props.changeLabel(event.detail.data.nodeLabel),
-  }),
+  })
 )
 
 const Tpopfreiwkontr = ({
@@ -31,58 +33,61 @@ const Tpopfreiwkontr = ({
   label: string | number,
   onShow: () => void,
 }) => (
-  <ContextMenu
-    id={`${tree.name}tpopfreiwkontr`}
-    collect={props => props}
-    onShow={onShow}
-  >
-    <div className="react-contextmenu-title">Freiwilligen-Kontrolle</div>
-    <MenuItem
-      onClick={onClick}
-      data={{
-        action: 'insert',
-        table: 'tpopfreiwkontr',
-      }}
+  <ErrorBoundary>
+    <ContextMenu
+      id={`${tree.name}tpopfreiwkontr`}
+      collect={props => props}
+      onShow={onShow}
     >
-      erstelle neue
-    </MenuItem>
-    <MenuItem
-      onClick={onClick}
-      data={{
-        action: 'delete',
-        table: 'tpopfreiwkontr',
-      }}
-    >
-      lösche
-    </MenuItem>
-    <MenuItem
-      onClick={onClick}
-      data={{
-        action: 'markForMoving',
-        table: 'tpopfreiwkontr',
-      }}
-    >
-      verschiebe
-    </MenuItem>
-    <MenuItem
-      onClick={onClick}
-      data={{
-        action: 'markForCopying',
-        table: 'tpopfreiwkontr',
-      }}
-    >
-      kopiere
-    </MenuItem>
-    {store.copying.table &&
+      <div className="react-contextmenu-title">Freiwilligen-Kontrolle</div>
       <MenuItem
         onClick={onClick}
         data={{
-          action: 'resetCopying',
+          action: 'insert',
+          table: 'tpopfreiwkontr',
         }}
       >
-        Kopieren aufheben
-      </MenuItem>}
-  </ContextMenu>
+        erstelle neue
+      </MenuItem>
+      <MenuItem
+        onClick={onClick}
+        data={{
+          action: 'delete',
+          table: 'tpopfreiwkontr',
+        }}
+      >
+        lösche
+      </MenuItem>
+      <MenuItem
+        onClick={onClick}
+        data={{
+          action: 'markForMoving',
+          table: 'tpopfreiwkontr',
+        }}
+      >
+        verschiebe
+      </MenuItem>
+      <MenuItem
+        onClick={onClick}
+        data={{
+          action: 'markForCopying',
+          table: 'tpopfreiwkontr',
+        }}
+      >
+        kopiere
+      </MenuItem>
+      {store.copying.table && (
+        <MenuItem
+          onClick={onClick}
+          data={{
+            action: 'resetCopying',
+          }}
+        >
+          Kopieren aufheben
+        </MenuItem>
+      )}
+    </ContextMenu>
+  </ErrorBoundary>
 )
 
 export default enhance(Tpopfreiwkontr)
