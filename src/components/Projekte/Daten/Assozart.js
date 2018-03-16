@@ -9,6 +9,7 @@ import compose from 'recompose/compose'
 import TextField from '../../shared/TextField'
 import AutoComplete from '../../shared/Autocomplete'
 import FormTitle from '../../shared/FormTitle'
+import ErrorBoundary from '../../shared/ErrorBoundary'
 
 const Container = styled.div`
   height: 100%;
@@ -51,46 +52,48 @@ const Assozart = ({ store, tree }: { store: Object, tree: Object }) => {
   const { activeDataset } = tree
 
   return (
-    <Container>
-      <FormTitle tree={tree} title="assoziierte Art" />
-      <FieldsContainer>
-        <AutoComplete
-          key={`${activeDataset.row.AaId}AaSisfNr`}
-          tree={tree}
-          label="Art"
-          fieldName="AaSisfNr"
-          valueText={getArtname({
-            store,
-            tree,
-          })}
-          errorText={activeDataset.valid.ApArtId}
-          dataSource={getArtList({
-            store,
-            tree,
-          })}
-          dataSourceConfig={{
-            value: 'TaxonomieId',
-            text: 'Artname',
-          }}
-          anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
-          targetOrigin={{ vertical: 'bottom', horizontal: 'left' }}
-          updatePropertyInDb={store.updatePropertyInDb}
-        />
-        <TextField
-          key={`${activeDataset.row.AaId}AaBem`}
-          tree={tree}
-          label="Bemerkungen zur Assoziation"
-          fieldName="AaBem"
-          value={activeDataset.row.AaBem}
-          errorText={activeDataset.valid.AaBem}
-          type="text"
-          multiLine
-          fullWidth
-          updateProperty={store.updateProperty}
-          updatePropertyInDb={store.updatePropertyInDb}
-        />
-      </FieldsContainer>
-    </Container>
+    <ErrorBoundary>
+      <Container>
+        <FormTitle tree={tree} title="assoziierte Art" />
+        <FieldsContainer>
+          <AutoComplete
+            key={`${activeDataset.row.AaId}AaSisfNr`}
+            tree={tree}
+            label="Art"
+            fieldName="AaSisfNr"
+            valueText={getArtname({
+              store,
+              tree,
+            })}
+            errorText={activeDataset.valid.ApArtId}
+            dataSource={getArtList({
+              store,
+              tree,
+            })}
+            dataSourceConfig={{
+              value: 'TaxonomieId',
+              text: 'Artname',
+            }}
+            anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
+            targetOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+            updatePropertyInDb={store.updatePropertyInDb}
+          />
+          <TextField
+            key={`${activeDataset.row.AaId}AaBem`}
+            tree={tree}
+            label="Bemerkungen zur Assoziation"
+            fieldName="AaBem"
+            value={activeDataset.row.AaBem}
+            errorText={activeDataset.valid.AaBem}
+            type="text"
+            multiLine
+            fullWidth
+            updateProperty={store.updateProperty}
+            updatePropertyInDb={store.updatePropertyInDb}
+          />
+        </FieldsContainer>
+      </Container>
+    </ErrorBoundary>
   )
 }
 

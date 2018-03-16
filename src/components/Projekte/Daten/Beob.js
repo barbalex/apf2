@@ -6,6 +6,7 @@ import styled from 'styled-components'
 
 import TextFieldNonUpdatable from '../../shared/TextFieldNonUpdatable'
 import constants from '../../../modules/constants'
+import ErrorBoundary from '../../shared/ErrorBoundary'
 
 const Container = styled.div`
   padding: 0 10px 0 10px;
@@ -35,15 +36,17 @@ const Beob = ({
   )
 
   return (
-    <div ref={c => (this.container = c)}>
-      <Container data-width={width}>
-        {beobFields.map(([key, value]) => (
-          <div key={key}>
-            <TextFieldNonUpdatable label={key} value={value} />
-          </div>
-        ))}
-      </Container>
-    </div>
+    <ErrorBoundary>
+      <div ref={c => (this.container = c)}>
+        <Container data-width={width}>
+          {beobFields.map(([key, value]) => (
+            <div key={key}>
+              <TextFieldNonUpdatable label={key} value={value} />
+            </div>
+          ))}
+        </Container>
+      </div>
+    </ErrorBoundary>
   )
 }
 
