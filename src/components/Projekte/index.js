@@ -7,6 +7,9 @@ import compose from 'recompose/compose'
 import { ReflexContainer, ReflexSplitter, ReflexElement } from 'react-reflex'
 import Loadable from 'react-loadable'
 
+// when Karte was loaded async, it did not load,
+// but only in production!
+import Karte from './Karte'
 import Loading from '../shared/Loading'
 import ErrorBoundary from '../shared/ErrorBoundary'
 
@@ -16,10 +19,6 @@ const TreeContainerAsync = Loadable({
 })
 const DatenAsync = Loadable({
   loader: () => import('./Daten'),
-  loading: Loading,
-})
-const KarteAsync = Loadable({
-  loader: () => import('./Karte'),
   loading: Loading,
 })
 const ExporteAsync = Loadable({
@@ -149,7 +148,7 @@ const myChildren = (store: Object) => {
         style={{ overflow: 'hidden' }}
       >
         <KarteContainer>
-          <KarteAsync
+          <Karte
             /**
              * key of tabs is added to force mounting
              * when tabs change
