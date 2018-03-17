@@ -23,9 +23,9 @@ const Container = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
-  border-color: #424242;
-  border-width: 1px;
-  border-style: solid;
+  border-left-color: rgb(46, 125, 50);
+  border-left-width: 1px;
+  border-left-style: solid;
   @media print {
     display: none !important;
   }

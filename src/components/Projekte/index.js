@@ -33,9 +33,10 @@ const Container = styled.div`
   cursor: ${props => (props['data-loading'] ? 'wait' : 'inherit')};
 `
 const KarteContainer = styled.div`
-  border-color: #424242;
+  /*border-color: rgb(46, 125, 50);
   border-width: 1px;
-  border-style: solid;
+  border-style: solid;*/
+  border: none;
   height: 100%;
   overflow: hidden;
 `

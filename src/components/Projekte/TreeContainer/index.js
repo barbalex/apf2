@@ -67,9 +67,9 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  border-color: #424242;
-  border-width: 1px;
-  border-style: solid;
+  border-right-color: rgb(46, 125, 50);
+  border-right-width: 1px;
+  border-right-style: solid;
   @media print {
     display: none !important;
   }

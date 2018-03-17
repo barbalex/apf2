@@ -37,9 +37,9 @@ import Beobzuordnung from './Beobzuordnung'
 import ErrorBoundary from '../../shared/ErrorBoundarySingleChild'
 
 const Container = styled.div`
-  border-color: #424242;
-  border-width: 1px;
-  border-style: solid;
+  border-left-color: rgb(46, 125, 50);
+  border-left-width: 1px;
+  border-left-style: solid;
   height: 100%;
   @media print {
     display: none !important;
