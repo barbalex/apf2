@@ -5,7 +5,7 @@
  *
  */
 
-import React, { Fragment } from 'react'
+import React from 'react'
 import { observer, inject } from 'mobx-react'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
@@ -34,7 +34,7 @@ import Tpopkontrzaehl from './Tpopkontrzaehl'
 import Exporte from '../Exporte'
 import Qk from './Qk'
 import Beobzuordnung from './Beobzuordnung'
-import ErrorBoundary from '../../shared/ErrorBoundary'
+import ErrorBoundary from '../../shared/ErrorBoundarySingleChild'
 
 const Container = styled.div`
   border-color: #424242;
@@ -123,9 +123,7 @@ const Daten = ({
 
   return (
     <ErrorBoundary>
-      <Fragment>
-        <Container>{form}</Container>
-      </Fragment>
+      <Container>{form}</Container>
     </ErrorBoundary>
   )
 }

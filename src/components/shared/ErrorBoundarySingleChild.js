@@ -37,13 +37,10 @@ class ErrorBoundary extends Component {
       )
     }
     const { children } = this.props
-    var childrenWithProps = React.Children.map(children, child =>
-      React.cloneElement(child, { ...this.props })
-    )
 
     // Normally, just render children
     // and pass all props
-    return childrenWithProps
+    return children
   }
 }
 
