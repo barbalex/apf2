@@ -17,8 +17,7 @@
   "dependenciesThatNeedToBeFixed": {
     "material-ui": {
       "version": "0.19.0",
-      "reason":
-        "AutoComplete does not work on 0.19.1 and 0.19.2. Well: with self managed searchText it does"
+      "reason": "AutoComplete does not work on 0.19.1 and 0.19.2. Well: with self managed searchText it does"
     },
     "get-urls": {
       "version": "5.0.1",
@@ -30,8 +29,7 @@
     },
     "json2csv": {
       "version": "^4.0.0-alpha.0",
-      "reason":
-        "Failed to minify the code from this file: ./node_modules/json2csv/lib/JSON2CSVBase.js:9"
+      "reason": "Failed to minify the code from this file: ./node_modules/json2csv/lib/JSON2CSVBase.js:9"
     },
     "mobx": {
       "version": "^3.5.1",

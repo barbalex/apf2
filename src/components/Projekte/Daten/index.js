@@ -5,7 +5,7 @@
  *
  */
 
-import React from 'react'
+import React, { Fragment } from 'react'
 import { observer, inject } from 'mobx-react'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
@@ -123,7 +123,9 @@ const Daten = ({
 
   return (
     <ErrorBoundary>
-      <Container>{form}</Container>
+      <Fragment>
+        <Container>{form}</Container>
+      </Fragment>
     </ErrorBoundary>
   )
 }
