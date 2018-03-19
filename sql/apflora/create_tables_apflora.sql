@@ -30,6 +30,8 @@ COMMENT ON COLUMN apflora.adresse."freiwErfko" IS '-1 = freiwillige(r) Kontrolle
 COMMENT ON COLUMN apflora.adresse."MutWann" IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.adresse."MutWer" IS 'Von wem wurde der Datensatz zuletzt geändert?';
 SELECT setval(pg_get_serial_sequence('apflora.adresse', 'AdrId'), coalesce(max("AdrId"), 0) + 1, false) FROM apflora.adresse;
+CREATE INDEX ON apflora.adresse USING btree ("AdrId");
+CREATE INDEX ON apflora.adresse USING btree ("AdrName");
 
 DROP TABLE IF EXISTS apflora.ap;
 CREATE TABLE apflora.ap (
@@ -52,10 +54,11 @@ COMMENT ON COLUMN apflora.ap."ApBearb" IS 'Verantwortliche(r) für die Art';
 COMMENT ON COLUMN apflora.ap."ApArtwert" IS 'redundant aber erspart viele Abfragen. Wird aktualisiert, wenn alexande_beob.ArtenDb_Arteigenschaften aktualisiert wird';
 COMMENT ON COLUMN apflora.ap."MutWann" IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.ap."MutWer" IS 'Von wem wurde der Datensatz zuletzt geändert?';
+CREATE INDEX ON apflora.ap USING btree ("ApArtId");
+CREATE INDEX ON apflora.ap USING btree ("ProjId");
 CREATE INDEX ON apflora.ap USING btree ("ApStatus");
 CREATE INDEX ON apflora.ap USING btree ("ApUmsetzung");
 CREATE INDEX ON apflora.ap USING btree ("ApBearb");
-CREATE INDEX ON apflora.ap USING btree ("ProjId");
 CREATE UNIQUE INDEX ON apflora.ap USING btree ("ApGuid");
 
 
@@ -65,7 +68,6 @@ CREATE TABLE apflora.userprojekt (
   "ProjId" integer REFERENCES apflora.projekt ("ProjId") ON DELETE CASCADE ON UPDATE CASCADE
 );
 CREATE INDEX ON apflora.userprojekt USING btree ("UserName", "ProjId");
-
 
 DROP TABLE IF EXISTS apflora.ap_bearbstand_werte;
 CREATE TABLE apflora.ap_bearbstand_werte (
@@ -77,6 +79,8 @@ CREATE TABLE apflora.ap_bearbstand_werte (
 );
 COMMENT ON COLUMN apflora.ap_bearbstand_werte."MutWann" IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.ap_bearbstand_werte."MutWer" IS 'Von wem wurde der Datensatz zuletzt geändert?';
+CREATE INDEX ON apflora.ap_bearbstand_werte USING btree ("DomainCode");
+CREATE INDEX ON apflora.ap_bearbstand_werte USING btree ("DomainOrd");
 
 DROP TABLE IF EXISTS apflora.ap_erfbeurtkrit_werte;
 CREATE TABLE apflora.ap_erfbeurtkrit_werte (
@@ -88,6 +92,8 @@ CREATE TABLE apflora.ap_erfbeurtkrit_werte (
 );
 COMMENT ON COLUMN apflora.ap_erfbeurtkrit_werte."MutWann" IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.ap_erfbeurtkrit_werte."MutWer" IS 'Von wem wurde der Datensatz zuletzt geändert?';
+CREATE INDEX ON apflora.ap_erfbeurtkrit_werte USING btree ("DomainCode");
+CREATE INDEX ON apflora.ap_erfbeurtkrit_werte USING btree ("DomainOrd");
 
 DROP TABLE IF EXISTS apflora.ap_erfkrit_werte;
 CREATE TABLE apflora.ap_erfkrit_werte (
@@ -100,6 +106,8 @@ CREATE TABLE apflora.ap_erfkrit_werte (
 COMMENT ON COLUMN apflora.ap_erfkrit_werte."BeurteilTxt" IS 'Wie werden die durchgefuehrten Massnahmen beurteilt?';
 COMMENT ON COLUMN apflora.ap_erfkrit_werte."MutWann" IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.ap_erfkrit_werte."MutWer" IS 'Von wem wurde der Datensatz zuletzt geändert?';
+CREATE INDEX ON apflora.ap_erfkrit_werte USING btree ("BeurteilId");
+CREATE INDEX ON apflora.ap_erfkrit_werte USING btree ("BeurteilOrd");
 
 DROP TABLE IF EXISTS apflora.ap_umsetzung_werte;
 CREATE TABLE apflora.ap_umsetzung_werte (
@@ -111,6 +119,8 @@ CREATE TABLE apflora.ap_umsetzung_werte (
 );
 COMMENT ON COLUMN apflora.ap_umsetzung_werte."MutWann" IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.ap_umsetzung_werte."MutWer" IS 'Von wem wurde der Datensatz zuletzt geändert?';
+CREATE INDEX ON apflora.ap_umsetzung_werte USING btree ("DomainCode");
+CREATE INDEX ON apflora.ap_umsetzung_werte USING btree ("DomainOrd");
 
 DROP TABLE IF EXISTS apflora.apber;
 CREATE TABLE apflora.apber (
@@ -154,6 +164,7 @@ COMMENT ON COLUMN apflora.apber."JBerDatum" IS 'Datum der Nachführung';
 COMMENT ON COLUMN apflora.apber."JBerBearb" IS 'BerichtsverfasserIn: Auswahl aus der Tabelle "adresse"';
 COMMENT ON COLUMN apflora.apber."MutWann" IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.apber."MutWer" IS 'Von wem wurde der Datensatz zuletzt geändert?';
+CREATE INDEX ON apflora.apber USING btree ("JBerId");
 CREATE INDEX ON apflora.apber USING btree ("ApArtId");
 CREATE INDEX ON apflora.apber USING btree ("JBerBeurteilung");
 CREATE INDEX ON apflora.apber USING btree ("JBerBearb");
@@ -176,6 +187,8 @@ COMMENT ON COLUMN apflora.apberuebersicht."JbuBemerkungen" IS 'Bemerkungen zur A
 COMMENT ON COLUMN apflora.apberuebersicht."MutWann" IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.apberuebersicht."MutWer" IS 'Von wem wurde der Datensatz zuletzt geändert?';
 ALTER TABLE apflora.apberuebersicht ADD CONSTRAINT apberuebersicht_proj_jahr_pk PRIMARY KEY ("ProjId", "JbuJahr");
+CREATE INDEX ON apflora.apberuebersicht USING btree ("id");
+CREATE INDEX ON apflora.apberuebersicht USING btree ("JbuJahr");
 
 -- once:
 DROP FUNCTION IF EXISTS apberuebersicht_insert_set_year();
@@ -200,7 +213,9 @@ COMMENT ON COLUMN apflora.assozart."AaSisfNr" IS 'SisfNr der assoziierten Art';
 COMMENT ON COLUMN apflora.assozart."AaBem" IS 'Bemerkungen zur Assoziation';
 COMMENT ON COLUMN apflora.assozart."MutWann" IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.assozart."MutWer" IS 'Wer hat den Datensatz zuletzt geändert?';
+CREATE INDEX ON apflora.assozart USING btree ("AaId");
 CREATE INDEX ON apflora.assozart USING btree ("AaApArtId");
+CREATE INDEX ON apflora.assozart USING btree ("AaSisfNr");
 SELECT setval(pg_get_serial_sequence('apflora.assozart', 'AaId'), coalesce(max("AaId"), 0) + 1, false) FROM apflora.assozart;
 
 DROP TABLE IF EXISTS apflora.beobzuordnung;
@@ -255,7 +270,9 @@ COMMENT ON COLUMN apflora.ber."BerTitel" IS 'Titel des Berichts';
 COMMENT ON COLUMN apflora.ber."BerURL" IS 'Link zum Bericht';
 COMMENT ON COLUMN apflora.ber."MutWann" IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.ber."MutWer" IS 'Von wem wurde der Datensatz zuletzt geändert?';
+CREATE INDEX ON apflora.ber USING btree ("BerId");
 CREATE INDEX ON apflora.ber USING btree ("ApArtId");
+CREATE INDEX ON apflora.ber USING btree ("BerJahr");
 SELECT setval(pg_get_serial_sequence('apflora.ber', 'BerId'), coalesce(max("BerId"), 0) + 1, false) FROM apflora.ber;
 
 DROP TABLE IF EXISTS apflora.erfkrit;
@@ -273,6 +290,7 @@ COMMENT ON COLUMN apflora.erfkrit."ErfkritErreichungsgrad" IS 'Wie gut wurden di
 COMMENT ON COLUMN apflora.erfkrit."ErfkritTxt" IS 'Beschreibung der Kriterien für den Erreichungsgrad';
 COMMENT ON COLUMN apflora.erfkrit."MutWann" IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.erfkrit."MutWer" IS 'Von wem wurde der Datensatz zuletzt geändert?';
+CREATE INDEX ON apflora.erfkrit USING btree ("ErfkritId");
 CREATE INDEX ON apflora.erfkrit USING btree ("ApArtId");
 CREATE INDEX ON apflora.erfkrit USING btree ("ErfkritErreichungsgrad");
 SELECT setval(pg_get_serial_sequence('apflora.erfkrit', 'ErfkritId'), coalesce(max("ErfkritId"), 0) + 1, false) FROM apflora.erfkrit;
@@ -282,6 +300,7 @@ CREATE TABLE apflora.gemeinde (
   "BfsNr" integer PRIMARY KEY,
   "GmdName" varchar(50) DEFAULT NULL
 );
+CREATE INDEX ON apflora.gemeinde USING btree ("BfsNr");
 CREATE INDEX ON apflora.gemeinde USING btree ("GmdName");
 
 DROP TABLE IF EXISTS apflora.idealbiotop;
@@ -308,6 +327,7 @@ CREATE TABLE apflora.idealbiotop (
   "MutWann" date DEFAULT NOW(),
   "MutWer" varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
 );
+CREATE INDEX ON apflora.idealbiotop USING btree ("IbApArtId");
 COMMENT ON COLUMN apflora.idealbiotop."IbApArtId" IS 'Primärschlüssel der Tabelle "idealbiotop". Gleichzeitig Fremdschlüssel aus der Tabelle "ap (1:1-Beziehung)';
 COMMENT ON COLUMN apflora.idealbiotop."IbErstelldatum" IS 'Erstelldatum';
 COMMENT ON COLUMN apflora.idealbiotop."IbHoehenlage" IS 'Höhenlage';
@@ -360,6 +380,7 @@ COMMENT ON COLUMN apflora.pop."PopYKoord" IS 'Wird in der Regel von einer Teilpo
 COMMENT ON COLUMN apflora.pop."PopGuid" IS 'GUID der Population';
 COMMENT ON COLUMN apflora.pop."MutWann" IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.pop."MutWer" IS 'Von wem wurde der Datensatz zuletzt geändert?';
+CREATE INDEX ON apflora.pop USING btree ("PopId");
 CREATE INDEX ON apflora.pop USING btree ("ApArtId");
 CREATE UNIQUE INDEX ON apflora.pop USING btree ("PopGuid");
 CREATE INDEX ON apflora.pop USING btree ("PopHerkunft");
@@ -379,7 +400,9 @@ CREATE TABLE apflora.pop_entwicklung_werte (
 );
 COMMENT ON COLUMN apflora.pop_entwicklung_werte."MutWann" IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.pop_entwicklung_werte."MutWer" IS 'Von wem wurde der Datensatz zuletzt geändert?';
+CREATE INDEX ON apflora.pop_entwicklung_werte USING btree ("EntwicklungId");
 CREATE INDEX ON apflora.pop_entwicklung_werte USING btree ("EntwicklungTxt");
+CREATE INDEX ON apflora.pop_entwicklung_werte USING btree ("EntwicklungOrd");
 
 DROP TABLE IF EXISTS apflora.pop_status_werte;
 CREATE TABLE apflora.pop_status_werte (
@@ -389,6 +412,9 @@ CREATE TABLE apflora.pop_status_werte (
   "MutWann" date DEFAULT NOW(),
   "MutWer" varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
 );
+CREATE INDEX ON apflora.pop_status_werte USING btree ("HerkunftId");
+CREATE INDEX ON apflora.pop_status_werte USING btree ("HerkunftTxt");
+CREATE INDEX ON apflora.pop_status_werte USING btree ("HerkunftOrd");
 COMMENT ON COLUMN apflora.pop_status_werte."HerkunftTxt" IS 'Beschreibung der Herkunft';
 COMMENT ON COLUMN apflora.pop_status_werte."MutWann" IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.pop_status_werte."MutWer" IS 'Von wem wurde der Datensatz zuletzt geändert?';
@@ -412,6 +438,7 @@ COMMENT ON COLUMN apflora.popber."PopBerEntwicklung" IS 'Beurteilung der Populat
 COMMENT ON COLUMN apflora.popber."PopBerTxt" IS 'Bemerkungen zur Beurteilung';
 COMMENT ON COLUMN apflora.popber."MutWann" IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.popber."MutWer" IS 'Von wem wurde der Datensatz zuletzt geändert?';
+CREATE INDEX ON apflora.popber USING btree ("PopBerId");
 CREATE INDEX ON apflora.popber USING btree ("PopId");
 CREATE INDEX ON apflora.popber USING btree ("PopBerEntwicklung");
 CREATE INDEX ON apflora.popber USING btree ("PopBerJahr");
@@ -434,6 +461,7 @@ COMMENT ON COLUMN apflora.popmassnber."PopMassnBerErfolgsbeurteilung" IS 'Wie wi
 COMMENT ON COLUMN apflora.popmassnber."PopMassnBerTxt" IS 'Bemerkungen zur Beurteilung';
 COMMENT ON COLUMN apflora.popmassnber."MutWann" IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.popmassnber."MutWer" IS 'Von wem wurde der Datensatz zuletzt geändert?';
+CREATE INDEX ON apflora.popmassnber USING btree ("PopMassnBerId");
 CREATE INDEX ON apflora.popmassnber USING btree ("PopId");
 CREATE INDEX ON apflora.popmassnber USING btree ("PopMassnBerErfolgsbeurteilung");
 CREATE INDEX ON apflora.popmassnber USING btree ("PopMassnBerJahr");
@@ -469,6 +497,16 @@ CREATE TABLE apflora.tpop (
   "MutWann" date DEFAULT NOW(),
   "MutWer" varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
 );
+CREATE INDEX ON apflora.tpop USING btree ("TPopId");
+CREATE INDEX ON apflora.tpop USING btree ("PopId");
+CREATE UNIQUE INDEX ON apflora.tpop USING btree ("TPopGuid");
+CREATE INDEX ON apflora.tpop USING btree ("TPopHerkunft");
+CREATE INDEX ON apflora.tpop USING btree ("TPopApBerichtRelevant");
+CREATE INDEX ON apflora.tpop USING btree ("TPopXKoord");
+CREATE INDEX ON apflora.tpop USING btree ("TPopYKoord");
+CREATE INDEX ON apflora.tpop USING btree ("TPopNr");
+CREATE INDEX ON apflora.tpop USING btree ("TPopGemeinde");
+CREATE INDEX ON apflora.tpop USING btree ("TPopFlurname");
 SELECT setval(pg_get_serial_sequence('apflora.tpop', 'TPopId'), coalesce(max("TPopId"), 0) + 1, false) FROM apflora.tpop;
 COMMENT ON COLUMN apflora.tpop."TPopId" IS 'Primärschlüssel der Tabelle "tpop"';
 COMMENT ON COLUMN apflora.tpop."PopId" IS 'Zugehörige Population. Fremdschlüssel aus der Tabelle "pop"';
@@ -498,15 +536,6 @@ COMMENT ON COLUMN apflora.tpop."TPopTxt" IS 'Bemerkungen zur Teilpopulation';
 COMMENT ON COLUMN apflora.tpop."TPopGuid" IS 'GUID der Tabelle "tpop"';
 COMMENT ON COLUMN apflora.tpop."MutWann" IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.tpop."MutWer" IS 'Von wem wurde der Datensatz zuletzt geändert?';
-CREATE INDEX ON apflora.tpop USING btree ("PopId");
-CREATE UNIQUE INDEX ON apflora.tpop USING btree ("TPopGuid");
-CREATE INDEX ON apflora.tpop USING btree ("TPopHerkunft");
-CREATE INDEX ON apflora.tpop USING btree ("TPopApBerichtRelevant");
-CREATE INDEX ON apflora.tpop USING btree ("TPopXKoord");
-CREATE INDEX ON apflora.tpop USING btree ("TPopYKoord");
-CREATE INDEX ON apflora.tpop USING btree ("TPopNr");
-CREATE INDEX ON apflora.tpop USING btree ("TPopGemeinde");
-CREATE INDEX ON apflora.tpop USING btree ("TPopFlurname");
 
 DROP TABLE IF EXISTS apflora.tpop_apberrelevant_werte;
 CREATE TABLE apflora.tpop_apberrelevant_werte (
@@ -515,6 +544,8 @@ CREATE TABLE apflora.tpop_apberrelevant_werte (
   "MutWann" date DEFAULT NOW(),
   "MutWer" varchar(20) NOT NULL
 );
+CREATE INDEX ON apflora.tpop_apberrelevant_werte USING btree ("DomainCode");
+CREATE INDEX ON apflora.tpop_apberrelevant_werte USING btree ("DomainTxt");
 COMMENT ON COLUMN apflora.tpop_apberrelevant_werte."MutWann" IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.tpop_apberrelevant_werte."MutWer" IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
@@ -526,6 +557,8 @@ CREATE TABLE apflora.tpop_entwicklung_werte (
   "MutWann" date DEFAULT NOW(),
   "MutWer" varchar(20) NOT NULL
 );
+CREATE INDEX ON apflora.tpop_entwicklung_werte USING btree ("EntwicklungCode");
+CREATE INDEX ON apflora.tpop_entwicklung_werte USING btree ("EntwicklungOrd");
 COMMENT ON COLUMN apflora.tpop_entwicklung_werte."MutWann" IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.tpop_entwicklung_werte."MutWer" IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
@@ -547,6 +580,7 @@ COMMENT ON COLUMN apflora.tpopber."TPopBerEntwicklung" IS 'Beurteilung der Popul
 COMMENT ON COLUMN apflora.tpopber."TPopBerTxt" IS 'Bemerkungen zur Beurteilung';
 COMMENT ON COLUMN apflora.tpopber."MutWann" IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.tpopber."MutWer" IS 'Von wem wurde der Datensatz zuletzt geändert?';
+CREATE INDEX ON apflora.tpopber USING btree ("TPopBerId");
 CREATE INDEX ON apflora.tpopber USING btree ("TPopId");
 CREATE INDEX ON apflora.tpopber USING btree ("TPopBerEntwicklung");
 CREATE INDEX ON apflora.tpopber USING btree ("TPopBerJahr");
@@ -601,6 +635,16 @@ CREATE TABLE apflora.tpopkontr (
   "MutWann" date DEFAULT NOW(),
   "MutWer" varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
 );
+CREATE INDEX ON apflora.tpopkontr USING btree ("TPopKontrId");
+CREATE INDEX ON apflora.tpopkontr USING btree ("TPopId");
+CREATE INDEX ON apflora.tpopkontr USING btree ("TPopKontrBearb");
+CREATE INDEX ON apflora.tpopkontr USING btree ("TPopKontrEntwicklung");
+CREATE INDEX ON apflora.tpopkontr USING btree ("TPopKontrIdealBiotopUebereinst");
+CREATE INDEX ON apflora.tpopkontr USING btree ("TPopKontrJahr");
+CREATE INDEX ON apflora.tpopkontr USING btree ("TPopKontrTyp");
+CREATE INDEX ON apflora.tpopkontr USING btree ("TPopKontrDatum");
+CREATE UNIQUE INDEX ON apflora.tpopkontr USING btree ("ZeitGuid");
+CREATE UNIQUE INDEX ON apflora.tpopkontr USING btree ("TPopKontrGuid");
 SELECT setval(pg_get_serial_sequence('apflora.tpopkontr', 'TPopKontrId'), coalesce(max("TPopKontrId"), 0) + 1, false) FROM apflora.tpopkontr;
 COMMENT ON COLUMN apflora.tpopkontr."TPopKontrId" IS 'Primärschlüssel der Tabelle "tpopkontr"';
 COMMENT ON COLUMN apflora.tpopkontr."TPopId" IS 'Zugehörige Teilpopulation. Fremdschlüssel aus der Tabelle "tpop"';
@@ -649,15 +693,6 @@ COMMENT ON COLUMN apflora.tpopkontr."TPopKontrGuid" IS 'GUID. Wird u.a. verwende
 COMMENT ON COLUMN apflora.tpopkontr."ZeitGuid" IS 'GUID für den Export von Zeiten in EvAB';
 COMMENT ON COLUMN apflora.tpopkontr."MutWann" IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.tpopkontr."MutWer" IS 'Von wem wurde der Datensatz zuletzt geändert?';
-CREATE INDEX ON apflora.tpopkontr USING btree ("TPopId");
-CREATE INDEX ON apflora.tpopkontr USING btree ("TPopKontrBearb");
-CREATE INDEX ON apflora.tpopkontr USING btree ("TPopKontrEntwicklung");
-CREATE INDEX ON apflora.tpopkontr USING btree ("TPopKontrIdealBiotopUebereinst");
-CREATE INDEX ON apflora.tpopkontr USING btree ("TPopKontrJahr");
-CREATE INDEX ON apflora.tpopkontr USING btree ("TPopKontrTyp");
-CREATE INDEX ON apflora.tpopkontr USING btree ("TPopKontrDatum");
-CREATE UNIQUE INDEX ON apflora.tpopkontr USING btree ("ZeitGuid");
-CREATE UNIQUE INDEX ON apflora.tpopkontr USING btree ("TPopKontrGuid");
 
 DROP TABLE IF EXISTS apflora.tpopkontr_idbiotuebereinst_werte;
 CREATE TABLE apflora.tpopkontr_idbiotuebereinst_werte (
@@ -680,7 +715,9 @@ CREATE TABLE apflora.tpopkontr_typ_werte (
 );
 COMMENT ON COLUMN apflora.tpopkontr_typ_werte."MutWann" IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.tpopkontr_typ_werte."MutWer" IS 'Von wem wurde der Datensatz zuletzt geändert?';
+CREATE INDEX ON apflora.tpopkontr_typ_werte USING btree ("DomainCode");
 CREATE INDEX ON apflora.tpopkontr_typ_werte USING btree ("DomainTxt");
+CREATE INDEX ON apflora.tpopkontr_typ_werte USING btree ("DomainOrd");
 
 DROP TABLE IF EXISTS apflora.tpopkontrzaehl;
 CREATE TABLE apflora.tpopkontrzaehl (
@@ -698,6 +735,7 @@ COMMENT ON COLUMN apflora.tpopkontrzaehl."Zaehleinheit" IS 'Verwendete Zaehleinh
 COMMENT ON COLUMN apflora.tpopkontrzaehl."Methode" IS 'Verwendete Methodik. Auswahl aus Tabelle "tpopkontrzaehl_methode_werte"';
 COMMENT ON COLUMN apflora.tpopkontrzaehl."MutWann" IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.tpopkontrzaehl."MutWer" IS 'Von wem wurde der Datensatz zuletzt geändert?';
+CREATE INDEX ON apflora.tpopkontrzaehl USING btree ("TPopKontrZaehlId");
 CREATE INDEX ON apflora.tpopkontrzaehl USING btree ("TPopKontrId");
 CREATE INDEX ON apflora.tpopkontrzaehl USING btree ("Anzahl");
 CREATE INDEX ON apflora.tpopkontrzaehl USING btree ("Zaehleinheit");
@@ -711,6 +749,8 @@ CREATE TABLE apflora.tpopkontrzaehl_einheit_werte (
   "MutWann" date DEFAULT NOW(),
   "MutWer" varchar(20) NOT NULL
 );
+CREATE INDEX ON apflora.tpopkontrzaehl_einheit_werte USING btree ("ZaehleinheitCode");
+CREATE INDEX ON apflora.tpopkontrzaehl_einheit_werte USING btree ("ZaehleinheitOrd");
 COMMENT ON COLUMN apflora.tpopkontrzaehl_einheit_werte."MutWann" IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.tpopkontrzaehl_einheit_werte."MutWer" IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
@@ -722,6 +762,8 @@ CREATE TABLE apflora.tpopkontrzaehl_methode_werte (
   "MutWann" date DEFAULT NOW(),
   "MutWer" varchar(20) NOT NULL
 );
+CREATE INDEX ON apflora.tpopkontrzaehl_methode_werte USING btree ("BeurteilCode");
+CREATE INDEX ON apflora.tpopkontrzaehl_methode_werte USING btree ("BeurteilOrd");
 COMMENT ON COLUMN apflora.tpopkontrzaehl_methode_werte."MutWann" IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.tpopkontrzaehl_methode_werte."MutWer" IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
@@ -751,6 +793,12 @@ CREATE TABLE apflora.tpopmassn (
   "MutWann" date DEFAULT NOW(),
   "MutWer" varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
 );
+CREATE INDEX ON apflora.tpopmassn USING btree ("TPopMassnId");
+CREATE INDEX ON apflora.tpopmassn USING btree ("TPopId");
+CREATE INDEX ON apflora.tpopmassn USING btree ("TPopMassnBearb");
+CREATE INDEX ON apflora.tpopmassn USING btree ("TPopMassnTyp");
+CREATE INDEX ON apflora.tpopmassn USING btree ("TPopMassnJahr");
+CREATE UNIQUE INDEX ON apflora.tpopmassn USING btree ("TPopMassnGuid");
 SELECT setval(pg_get_serial_sequence('apflora.tpopmassn', 'TPopMassnId'), coalesce(max("TPopMassnId"), 0) + 1, false) FROM apflora.tpopmassn;
 COMMENT ON COLUMN apflora.tpopmassn."TPopMassnId" IS 'Primärschlüssel der Tabelle "tpopmassn"';
 COMMENT ON COLUMN apflora.tpopmassn."TPopId" IS 'Zugehörige Teilpopulation. Fremdschlüssel aus der Tabelle "tpop"';
@@ -775,11 +823,6 @@ COMMENT ON COLUMN apflora.tpopmassn."TPopMassnAnsiedPflanzanordnung" IS 'Anordnu
 COMMENT ON COLUMN apflora.tpopmassn."TPopMassnGuid" IS 'GUID der Tabelle "tpopmassn"';
 COMMENT ON COLUMN apflora.tpopmassn."MutWann" IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.tpopmassn."MutWer" IS 'Von wem wurde der Datensatz zuletzt geändert?';
-CREATE INDEX ON apflora.tpopmassn USING btree ("TPopId");
-CREATE INDEX ON apflora.tpopmassn USING btree ("TPopMassnBearb");
-CREATE INDEX ON apflora.tpopmassn USING btree ("TPopMassnTyp");
-CREATE INDEX ON apflora.tpopmassn USING btree ("TPopMassnJahr");
-CREATE UNIQUE INDEX ON apflora.tpopmassn USING btree ("TPopMassnGuid");
 
 DROP TABLE IF EXISTS apflora.tpopmassn_erfbeurt_werte;
 CREATE TABLE apflora.tpopmassn_erfbeurt_werte (
@@ -789,6 +832,8 @@ CREATE TABLE apflora.tpopmassn_erfbeurt_werte (
   "MutWann" date DEFAULT NOW(),
   "MutWer" varchar(20) NOT NULL
 );
+CREATE INDEX ON apflora.tpopmassn_erfbeurt_werte USING btree ("BeurteilId");
+CREATE INDEX ON apflora.tpopmassn_erfbeurt_werte USING btree ("BeurteilOrd");
 COMMENT ON COLUMN apflora.tpopmassn_erfbeurt_werte."BeurteilTxt" IS 'Wie werden die durchgefuehrten Massnahmen beurteilt?';
 COMMENT ON COLUMN apflora.tpopmassn_erfbeurt_werte."MutWann" IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.tpopmassn_erfbeurt_werte."MutWer" IS 'Von wem wurde der Datensatz zuletzt geändert?';
@@ -802,6 +847,8 @@ CREATE TABLE apflora.tpopmassn_typ_werte (
   "MutWann" date DEFAULT NOW(),
   "MutWer" varchar(20) NOT NULL
 );
+CREATE INDEX ON apflora.tpopmassn_typ_werte USING btree ("MassnTypCode");
+CREATE INDEX ON apflora.tpopmassn_typ_werte USING btree ("MassnTypOrd");
 COMMENT ON COLUMN apflora.tpopmassn_typ_werte."MassnAnsiedlung" IS 'Handelt es sich um eine Ansiedlung?';
 COMMENT ON COLUMN apflora.tpopmassn_typ_werte."MutWann" IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.tpopmassn_typ_werte."MutWer" IS 'Von wem wurde der Datensatz zuletzt geändert?';
@@ -824,6 +871,7 @@ COMMENT ON COLUMN apflora.tpopmassnber."TPopMassnBerErfolgsbeurteilung" IS 'Beur
 COMMENT ON COLUMN apflora.tpopmassnber."TPopMassnBerTxt" IS 'Bemerkungen zur Beurteilung';
 COMMENT ON COLUMN apflora.tpopmassnber."MutWann" IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.tpopmassnber."MutWer" IS 'Von wem wurde der Datensatz zuletzt geändert?';
+CREATE INDEX ON apflora.tpopmassnber USING btree ("TPopMassnBerId");
 CREATE INDEX ON apflora.tpopmassnber USING btree ("TPopId");
 CREATE INDEX ON apflora.tpopmassnber USING btree ("TPopMassnBerErfolgsbeurteilung");
 CREATE INDEX ON apflora.tpopmassnber USING btree ("TPopMassnBerJahr");
@@ -837,6 +885,8 @@ CREATE TABLE apflora.message (
   -- old messages can be set inactive, expecially if read by all
   "active" boolean NOT NULL DEFAULT 'true'
 );
+CREATE INDEX ON apflora.message USING btree ("id");
+CREATE INDEX ON apflora.message USING btree ("time");
 COMMENT ON COLUMN apflora.message."message" IS 'Nachricht an die Benutzer';
 
 -- list of read messages per user
@@ -866,8 +916,10 @@ COMMENT ON COLUMN apflora.ziel."ZielJahr" IS 'In welchem Jahr soll das Ziel erre
 COMMENT ON COLUMN apflora.ziel."ZielBezeichnung" IS 'Textliche Beschreibung des Ziels';
 COMMENT ON COLUMN apflora.ziel."MutWann" IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.ziel."MutWer" IS 'Von wem wurde der Datensatz zuletzt geändert?';
+CREATE INDEX ON apflora.ziel USING btree ("ZielId");
 CREATE INDEX ON apflora.ziel USING btree ("ApArtId");
 CREATE INDEX ON apflora.ziel USING btree ("ZielTyp");
+CREATE INDEX ON apflora.ziel USING btree ("ZielJahr");
 
 DROP TABLE IF EXISTS apflora.ziel_typ_werte;
 CREATE TABLE apflora.ziel_typ_werte (
@@ -877,6 +929,8 @@ CREATE TABLE apflora.ziel_typ_werte (
   "MutWann" date DEFAULT NOW(),
   "MutWer" varchar(20) NOT NULL
 );
+CREATE INDEX ON apflora.ziel_typ_werte USING btree ("ZieltypId");
+CREATE INDEX ON apflora.ziel_typ_werte USING btree ("ZieltypOrd");
 COMMENT ON COLUMN apflora.ziel_typ_werte."ZieltypTxt" IS 'Beschreibung des Ziels';
 COMMENT ON COLUMN apflora.ziel_typ_werte."MutWann" IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.ziel_typ_werte."MutWer" IS 'Von wem wurde der Datensatz zuletzt geändert?';
@@ -899,7 +953,9 @@ COMMENT ON COLUMN apflora.zielber."ZielBerErreichung" IS 'Beurteilung der Zieler
 COMMENT ON COLUMN apflora.zielber."ZielBerTxt" IS 'Bemerkungen zur Zielerreichung';
 COMMENT ON COLUMN apflora.zielber."MutWann" IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.zielber."MutWer" IS 'Von wem wurde der Datensatz zuletzt geändert?';
+CREATE INDEX ON apflora.zielber USING btree ("ZielBerId");
 CREATE INDEX ON apflora.zielber USING btree ("ZielId");
+CREATE INDEX ON apflora.zielber USING btree ("ZielBerJahr");
 
 -- create table
 DROP TABLE IF EXISTS apflora.beobart;
@@ -916,5 +972,6 @@ COMMENT ON COLUMN apflora.beobart."TaxonomieId" IS 'Zugehörige Art. Fremdschlü
 COMMENT ON COLUMN apflora.beobart."ApArtId" IS 'Zugehöriger Aktionsplan. Fremdschlüssel aus der Tabelle "ap"';
 COMMENT ON COLUMN apflora.beobart."MutWann" IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.beobart."MutWer" IS 'Wer hat den Datensatz zuletzt geändert?';
+CREATE INDEX ON apflora.beobart USING btree ("BeobArtId");
 CREATE INDEX ON apflora.beobart USING btree ("ApArtId", "TaxonomieId");
 SELECT setval(pg_get_serial_sequence('apflora.beobart', 'BeobArtId'), coalesce(max("BeobArtId"), 0) + 1, false) FROM apflora.beobart;
