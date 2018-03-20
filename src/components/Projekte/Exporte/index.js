@@ -23,12 +23,6 @@ const Container = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
-  border-left-color: rgb(46, 125, 50);
-  border-left-width: 1px;
-  border-left-style: solid;
-  border-right-color: rgb(46, 125, 50);
-  border-right-width: 1px;
-  border-right-style: solid;
   @media print {
     display: none !important;
   }
