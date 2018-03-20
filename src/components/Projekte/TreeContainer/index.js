@@ -70,6 +70,9 @@ const Container = styled.div`
   border-right-color: rgb(46, 125, 50);
   border-right-width: 1px;
   border-right-style: solid;
+  border-left-color: rgb(46, 125, 50);
+  border-left-width: 1px;
+  border-left-style: solid;
   @media print {
     display: none !important;
   }
