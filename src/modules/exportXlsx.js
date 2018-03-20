@@ -29,7 +29,7 @@ export default async ({
     store.export.removeDownload(fileName)
   }
   const file = `${fileName}_${format(new Date(), 'YYYY-MM-DD_HH-mm-ss')}`
-  fileSaver.saveAs(
+  fileSaver(
     new Blob([buffer], { type: 'application/octet-stream' }),
     `${file}.xlsx`
   )
