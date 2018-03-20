@@ -10,8 +10,8 @@
   "license": "MIT",
   "private": true,
   "devDependencies": {
-    "flow-bin": "0.67.1",
-    "mobx-react-devtools": "4.2.15",
+    "flow-bin": "0.68.0",
+    "mobx-react-devtools": "^4.2.15",
     "react-scripts": "1.1.1"
   },
   "dependenciesThatNeedToBeFixed": {
@@ -66,7 +66,7 @@
     "lodash": "4.17.5",
     "material-ui": "0.20.0",
     "mobx": "^3.6.2",
-    "mobx-react": "4.4.2",
+    "mobx-react": "^4.4.2",
     "moment": "2.21.0",
     "proj4": "2.4.4",
     "proj4leaflet": "1.0.2",
