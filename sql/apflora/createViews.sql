@@ -4417,12 +4417,12 @@ CREATE OR REPLACE VIEW apflora.v_exportevab_zeit AS
 SELECT
   concat(
     '{',
-    apflora.tpop."TPopGuid",
+    upper(apflora.tpop."TPopGuid"::TEXT),
     '}'
   ) AS "fkOrt",
   concat(
     '{',
-    apflora.tpopkontr."ZeitGuid",
+    upper(apflora.tpopkontr."ZeitGuid"::TEXT),
     '}'
   ) AS "idZeitpunkt",
   CASE
@@ -4493,8 +4493,8 @@ WHERE
 DROP VIEW IF EXISTS apflora.v_exportevab_ort CASCADE;
 CREATE OR REPLACE VIEW apflora.v_exportevab_ort AS
 SELECT
-  concat('{', apflora.pop."PopGuid", '}') AS "fkRaum",
-  concat('{', apflora.tpop."TPopGuid", '}') AS "idOrt",
+  concat('{', upper(apflora.pop."PopGuid"::TEXT), '}') AS "fkRaum",
+  concat('{', upper(apflora.tpop."TPopGuid"::TEXT), '}') AS "idOrt",
   substring(
     concat(
       apflora.tpop."TPopFlurname",
@@ -4506,7 +4506,7 @@ SELECT
     ) from 1 for 40
   ) AS "Name",
   to_char(current_date, 'DD.MM.YYYY') AS "Erfassungsdatum",
-  '{7C71B8AF-DF3E-4844-A83B-55735F80B993}' AS "fkAutor",
+  '{7C71B8AF-DF3E-4844-A83B-55735F80B993}'::TEXT AS "fkAutor",
   substring(max(apflora.tpopkontr."TPopKontrLeb") from 1 for 9) AS "fkLebensraumtyp",
   1 AS "fkGenauigkeitLage",
   1 AS "fkGeometryType",
@@ -4597,8 +4597,8 @@ GROUP BY
 DROP VIEW IF EXISTS apflora.v_exportevab_raum CASCADE;
 CREATE OR REPLACE VIEW apflora.v_exportevab_raum AS
 SELECT
-  concat('{', apflora.ap."ApGuid", '}') AS "fkProjekt",
-  concat('{', apflora.pop."PopGuid", '}') AS "idRaum",
+  concat('{', upper(apflora.ap."ApGuid"::TEXT), '}') AS "fkProjekt",
+  concat('{', upper(apflora.pop."PopGuid"::TEXT), '}') AS "idRaum",
   concat(
     apflora.pop."PopName",
     CASE
@@ -4608,7 +4608,7 @@ SELECT
     END
   ) AS "Name",
   to_char(current_date, 'DD.MM.YYYY') AS "Erfassungsdatum",
-  '{7C71B8AF-DF3E-4844-A83B-55735F80B993}' AS "fkAutor",
+  '{7C71B8AF-DF3E-4844-A83B-55735F80B993}'::TEXT AS "fkAutor",
   CASE
     WHEN apflora.pop."PopHerkunft" IS NOT NULL
     THEN
@@ -4680,14 +4680,14 @@ GROUP BY
 DROP VIEW IF EXISTS apflora.v_exportevab_projekt CASCADE;
 CREATE OR REPLACE VIEW apflora.v_exportevab_projekt AS
 SELECT
-  concat('{', apflora.ap."ApGuid", '}') AS "idProjekt",
+  concat('{', upper(apflora.ap."ApGuid"::TEXT), '}') AS "idProjekt",
   concat('AP Flora ZH: ', apflora.adb_eigenschaften."Artname") AS "Name",
   CASE
     WHEN apflora.ap."ApJahr" IS NOT NULL
     THEN concat('01.01.', apflora.ap."ApJahr")
     ELSE to_char(current_date, 'DD.MM.YYYY')
   END AS "Eroeffnung",
-  '{7C71B8AF-DF3E-4844-A83B-55735F80B993}' AS "fkAutor",
+  '{7C71B8AF-DF3E-4844-A83B-55735F80B993}'::TEXT AS "fkAutor",
   concat(
     'Aktionsplan: ',
     apflora.ap_bearbstand_werte."DomainTxt",

@@ -1963,8 +1963,8 @@ WHERE
 DROP VIEW IF EXISTS apflora.v_exportevab_beob CASCADE;
 CREATE OR REPLACE VIEW apflora.v_exportevab_beob AS
 SELECT
-  concat('{', apflora.tpopkontr."ZeitGuid", '}') AS "fkZeitpunkt",
-  concat('{', apflora.tpopkontr."TPopKontrGuid", '}') AS "idBeobachtung",
+  concat('{', upper(apflora.tpopkontr."ZeitGuid"::TEXT), '}') AS "fkZeitpunkt",
+  concat('{', upper(apflora.tpopkontr."TPopKontrGuid"::TEXT), '}') AS "idBeobachtung",
   COALESCE(apflora.adresse."EvabIdPerson", '{A1146AE4-4E03-4032-8AA8-BC46BA02F468}') AS fkAutor,
   apflora.ap."ApArtId" AS fkArt,
   18 AS fkArtgruppe,
@@ -2039,7 +2039,7 @@ SELECT
       )
     from 1 for 160
   ) AS "ABONDANCE",
-  'C' AS "EXPERTISE_INTRODUIT",
+  'C'::TEXT AS "EXPERTISE_INTRODUIT",
   /*
    * AP-Verantwortliche oder topos als EXPERTISE_INTRODUITE_NOM setzen
    */
