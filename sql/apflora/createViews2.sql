@@ -2098,6 +2098,7 @@ WHERE
     -- oder bei Ansiedlungen: die Art war mindestens 5 Jahre vorhanden
     OR (apflora.tpopkontr."TPopKontrJahr" - apflora.tpop."TPopBekanntSeit") > 5
   )
+  AND apflora.tpopkontr."ZeitGuid" IN (SELECT "ZeitGuid" FROM apflora.v_exportevab_zeit)
 GROUP BY
   apflora.tpopkontr."ZeitGuid",
   apflora.tpopkontr."TPopId",

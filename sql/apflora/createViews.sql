@@ -4415,6 +4415,8 @@ ORDER BY
 DROP VIEW IF EXISTS apflora.v_exportevab_zeit CASCADE;
 CREATE OR REPLACE VIEW apflora.v_exportevab_zeit AS
 SELECT
+  -- include ZeitGuid to enable later views to only include rows contained here
+  apflora.tpopkontr."ZeitGuid",
   concat(
     '{',
     upper(apflora.tpop."TPopGuid"::TEXT),
@@ -4488,11 +4490,14 @@ WHERE
     apflora.tpop."TPopHerkunft" IN (100, 101)
     -- oder bei Ansiedlungen: die Art war mindestens 5 Jahre vorhanden
     OR (apflora.tpopkontr."TPopKontrJahr" - apflora.tpop."TPopBekanntSeit") > 5
-  );
+  )
+  AND apflora.tpop."TPopGuid" IN (SELECT "TPopGuid" FROM apflora.v_exportevab_ort);
 
 DROP VIEW IF EXISTS apflora.v_exportevab_ort CASCADE;
 CREATE OR REPLACE VIEW apflora.v_exportevab_ort AS
 SELECT
+  -- include TPopGuid to enable later views to include only tpop included here
+  apflora.tpop."TPopGuid",
   concat('{', upper(apflora.pop."PopGuid"::TEXT), '}') AS "fkRaum",
   concat('{', upper(apflora.tpop."TPopGuid"::TEXT), '}') AS "idOrt",
   substring(
@@ -4580,6 +4585,7 @@ WHERE
     -- oder bei Ansiedlungen: die Art war mindestens 5 Jahre vorhanden
     OR (apflora.tpopkontr."TPopKontrJahr" - apflora.tpop."TPopBekanntSeit") > 5
   )
+  AND apflora.pop."PopGuid" IN (SELECT "PopGuid" FROM apflora.v_exportevab_raum)
 GROUP BY
   apflora.pop."PopGuid",
   apflora.tpop."TPopGuid",
@@ -4597,6 +4603,8 @@ GROUP BY
 DROP VIEW IF EXISTS apflora.v_exportevab_raum CASCADE;
 CREATE OR REPLACE VIEW apflora.v_exportevab_raum AS
 SELECT
+  -- include PopGuid to enable later views to only include pops contained here
+  apflora.pop."PopGuid",
   concat('{', upper(apflora.ap."ApGuid"::TEXT), '}') AS "fkProjekt",
   concat('{', upper(apflora.pop."PopGuid"::TEXT), '}') AS "idRaum",
   concat(
@@ -4668,6 +4676,8 @@ WHERE
     -- oder bei Ansiedlungen: die Art war mindestens 5 Jahre vorhanden
     OR (apflora.tpopkontr."TPopKontrJahr" - apflora.tpop."TPopBekanntSeit") > 5
   )
+  -- ensure all idProjekt are contained in higher level
+  AND apflora.ap."ApGuid" IN (Select "ApGuid" FROM apflora.v_exportevab_projekt)
 GROUP BY
   apflora.ap."ApGuid",
   apflora.pop."PopGuid",
@@ -4680,6 +4690,8 @@ GROUP BY
 DROP VIEW IF EXISTS apflora.v_exportevab_projekt CASCADE;
 CREATE OR REPLACE VIEW apflora.v_exportevab_projekt AS
 SELECT
+  -- include ApGuid to enable later views to include only ap included here
+  apflora.ap."ApGuid",
   concat('{', upper(apflora.ap."ApGuid"::TEXT), '}') AS "idProjekt",
   concat('AP Flora ZH: ', apflora.adb_eigenschaften."Artname") AS "Name",
   CASE
