@@ -109,14 +109,6 @@ COMMENT ON COLUMN apflora.beobart."MutWer" IS 'Wer hat den Datensatz zuletzt ge√
 CREATE INDEX ON apflora.beobart USING btree ("ApArtId", "TaxonomieId");
 SELECT setval(pg_get_serial_sequence('apflora.beobart', 'BeobArtId'), coalesce(max("BeobArtId"), 0) + 1, false) FROM apflora.beobart;
 
-DROP TABLE IF EXISTS apflora.evab_tbl_personen;
-CREATE TABLE apflora.evab_tbl_personen (
-  "idPerson" varchar(40) PRIMARY KEY,
-  "Name" varchar(50) NOT NULL,
-  "Vorname" varchar(50) NOT NULL,
-  "Ort" varchar(50) NOT NULL
-);
-
 DROP TABLE IF EXISTS apflora.flora_status_werte;
 CREATE TABLE apflora.flora_status_werte (
   "StatusWert" varchar(2) PRIMARY KEY,

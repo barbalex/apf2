@@ -18,7 +18,6 @@ export default [
   'beobzuordnung',
   'ber',
   'erfkrit',
-  'evab_tbl_personen',
   'flora_status_werte',
   'gemeinde',
   'idealbiotop',
