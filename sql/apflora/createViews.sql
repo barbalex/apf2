@@ -4504,7 +4504,7 @@ SELECT
     ) from 1 for 40
   ) AS "Name",
   to_char(current_date, 'DD.MM.YYYY') AS "Erfassungsdatum",
-  '{7C71B8AF-DF3E-4844-A83B-55735F80B993}'::TEXT AS "fkAutor",
+  '{7C71B8AF-DF3E-4844-A83B-55735F80B993}'::UUID AS "fkAutor",
   substring(max(apflora.tpopkontr."TPopKontrLeb") from 1 for 9) AS "fkLebensraumtyp",
   1 AS "fkGenauigkeitLage",
   1 AS "fkGeometryType",
@@ -4609,7 +4609,7 @@ SELECT
     END
   ) AS "Name",
   to_char(current_date, 'DD.MM.YYYY') AS "Erfassungsdatum",
-  '{7C71B8AF-DF3E-4844-A83B-55735F80B993}'::TEXT AS "fkAutor",
+  '{7C71B8AF-DF3E-4844-A83B-55735F80B993}'::UUID AS "fkAutor",
   CASE
     WHEN apflora.pop."PopHerkunft" IS NOT NULL
     THEN
@@ -4691,7 +4691,7 @@ SELECT
     THEN concat('01.01.', apflora.ap."ApJahr")
     ELSE to_char(current_date, 'DD.MM.YYYY')
   END AS "Eroeffnung",
-  '{7C71B8AF-DF3E-4844-A83B-55735F80B993}'::TEXT AS "fkAutor",
+  '{7C71B8AF-DF3E-4844-A83B-55735F80B993}'::UUID AS "fkAutor",
   concat(
     'Aktionsplan: ',
     apflora.ap_bearbstand_werte."DomainTxt",
