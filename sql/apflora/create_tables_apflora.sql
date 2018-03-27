@@ -17,7 +17,7 @@ CREATE TABLE apflora.adresse (
   "AdrTel" text DEFAULT NULL,
   "AdrEmail" text DEFAULT NULL,
   "freiwErfko" integer DEFAULT NULL,
-  "EvabIdPerson" varchar(40) DEFAULT NULL,
+  "EvabIdPerson" UUID DEFAULT NULL,
   "MutWann" date DEFAULT NOW(),
   "MutWer" varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
 );

@@ -1966,7 +1966,7 @@ SELECT
   apflora.tpopkontr."ZeitGuid" AS "fkZeitpunkt",
   apflora.tpopkontr."TPopKontrGuid" AS "idBeobachtung",
   -- TODO: should EvabIdPerson be real uuid?
-  COALESCE(apflora.adresse."EvabIdPerson", '{7C71B8AF-DF3E-4844-A83B-55735F80B993}') AS fkAutor,
+  COALESCE(apflora.adresse."EvabIdPerson", '{7C71B8AF-DF3E-4844-A83B-55735F80B993}'::uuid) AS fkAutor,
   apflora.ap."ApArtId" AS fkArt,
   18 AS fkArtgruppe,
   1 AS fkAA1,
