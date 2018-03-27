@@ -1963,8 +1963,9 @@ WHERE
 DROP VIEW IF EXISTS apflora.v_exportevab_beob CASCADE;
 CREATE OR REPLACE VIEW apflora.v_exportevab_beob AS
 SELECT
-  concat('{', upper(apflora.tpopkontr."ZeitGuid"::TEXT), '}') AS "fkZeitpunkt",
-  concat('{', upper(apflora.tpopkontr."TPopKontrGuid"::TEXT), '}') AS "idBeobachtung",
+  apflora.tpopkontr."ZeitGuid" AS "fkZeitpunkt",
+  apflora.tpopkontr."TPopKontrGuid" AS "idBeobachtung",
+  -- TODO: should EvabIdPerson be real uuid?
   COALESCE(apflora.adresse."EvabIdPerson", '{7C71B8AF-DF3E-4844-A83B-55735F80B993}') AS fkAutor,
   apflora.ap."ApArtId" AS fkArt,
   18 AS fkArtgruppe,
@@ -2099,10 +2100,10 @@ WHERE
     OR (apflora.tpopkontr."TPopKontrJahr" - apflora.tpop."TPopBekanntSeit") > 5
   )
   AND apflora.tpop."TPopFlurname" IS NOT NULL
-  AND apflora.ap."ApGuid" IN (Select "ApGuid" FROM apflora.v_exportevab_projekt)
-  AND apflora.pop."PopGuid" IN (SELECT "PopGuid" FROM apflora.v_exportevab_raum)
-  AND apflora.tpop."TPopGuid" IN (SELECT "TPopGuid" FROM apflora.v_exportevab_ort)
-  AND apflora.tpopkontr."ZeitGuid" IN (SELECT "ZeitGuid" FROM apflora.v_exportevab_zeit)
+  AND apflora.ap."ApGuid" IN (Select "idProjekt" FROM apflora.v_exportevab_projekt)
+  AND apflora.pop."PopGuid" IN (SELECT "idRaum" FROM apflora.v_exportevab_raum)
+  AND apflora.tpop."TPopGuid" IN (SELECT "idOrt" FROM apflora.v_exportevab_ort)
+  AND apflora.tpopkontr."ZeitGuid" IN (SELECT "idZeitpunkt" FROM apflora.v_exportevab_zeit)
 GROUP BY
   apflora.tpopkontr."ZeitGuid",
   apflora.tpopkontr."TPopId",
