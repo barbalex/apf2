@@ -1965,7 +1965,7 @@ CREATE OR REPLACE VIEW apflora.v_exportevab_beob AS
 SELECT
   concat('{', upper(apflora.tpopkontr."ZeitGuid"::TEXT), '}') AS "fkZeitpunkt",
   concat('{', upper(apflora.tpopkontr."TPopKontrGuid"::TEXT), '}') AS "idBeobachtung",
-  COALESCE(apflora.adresse."EvabIdPerson", '{A1146AE4-4E03-4032-8AA8-BC46BA02F468}') AS fkAutor,
+  COALESCE(apflora.adresse."EvabIdPerson", '{7C71B8AF-DF3E-4844-A83B-55735F80B993}') AS fkAutor,
   apflora.ap."ApArtId" AS fkArt,
   18 AS fkArtgruppe,
   1 AS fkAA1,
