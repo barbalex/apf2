@@ -2098,6 +2098,10 @@ WHERE
     -- oder bei Ansiedlungen: die Art war mindestens 5 Jahre vorhanden
     OR (apflora.tpopkontr."TPopKontrJahr" - apflora.tpop."TPopBekanntSeit") > 5
   )
+  AND apflora.tpop."TPopFlurname" IS NOT NULL
+  AND apflora.ap."ApGuid" IN (Select "ApGuid" FROM apflora.v_exportevab_projekt)
+  AND apflora.pop."PopGuid" IN (SELECT "PopGuid" FROM apflora.v_exportevab_raum)
+  AND apflora.tpop."TPopGuid" IN (SELECT "TPopGuid" FROM apflora.v_exportevab_ort)
   AND apflora.tpopkontr."ZeitGuid" IN (SELECT "ZeitGuid" FROM apflora.v_exportevab_zeit)
 GROUP BY
   apflora.tpopkontr."ZeitGuid",

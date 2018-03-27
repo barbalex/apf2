@@ -4491,6 +4491,9 @@ WHERE
     -- oder bei Ansiedlungen: die Art war mindestens 5 Jahre vorhanden
     OR (apflora.tpopkontr."TPopKontrJahr" - apflora.tpop."TPopBekanntSeit") > 5
   )
+  AND apflora.tpop."TPopFlurname" IS NOT NULL
+  AND apflora.ap."ApGuid" IN (Select "ApGuid" FROM apflora.v_exportevab_projekt)
+  AND apflora.pop."PopGuid" IN (SELECT "PopGuid" FROM apflora.v_exportevab_raum)
   AND apflora.tpop."TPopGuid" IN (SELECT "TPopGuid" FROM apflora.v_exportevab_ort);
 
 DROP VIEW IF EXISTS apflora.v_exportevab_ort CASCADE;
@@ -4585,6 +4588,8 @@ WHERE
     -- oder bei Ansiedlungen: die Art war mindestens 5 Jahre vorhanden
     OR (apflora.tpopkontr."TPopKontrJahr" - apflora.tpop."TPopBekanntSeit") > 5
   )
+  AND apflora.tpop."TPopFlurname" IS NOT NULL
+  AND apflora.ap."ApGuid" IN (Select "ApGuid" FROM apflora.v_exportevab_projekt)
   AND apflora.pop."PopGuid" IN (SELECT "PopGuid" FROM apflora.v_exportevab_raum)
 GROUP BY
   apflora.pop."PopGuid",
@@ -4676,6 +4681,7 @@ WHERE
     -- oder bei Ansiedlungen: die Art war mindestens 5 Jahre vorhanden
     OR (apflora.tpopkontr."TPopKontrJahr" - apflora.tpop."TPopBekanntSeit") > 5
   )
+  AND apflora.tpop."TPopFlurname" IS NOT NULL
   -- ensure all idProjekt are contained in higher level
   AND apflora.ap."ApGuid" IN (Select "ApGuid" FROM apflora.v_exportevab_projekt)
 GROUP BY
@@ -4765,6 +4771,8 @@ WHERE
     -- oder bei Ansiedlungen: die Art war mindestens 5 Jahre vorhanden
     OR (apflora.tpopkontr."TPopKontrJahr" - apflora.tpop."TPopBekanntSeit") > 5
   )
+  AND apflora.tpop."TPopFlurname" IS NOT NULL
+  
 GROUP BY
   apflora.adb_eigenschaften."Artname",
   apflora.ap."ApGuid",
