@@ -2081,6 +2081,7 @@ FROM
 WHERE
   -- keine Testarten
   apflora.ap."ApArtId" > 150
+  AND apflora.ap."ApArtId" < 1000000
   -- nur Kontrollen, deren Teilpopulationen Koordinaten besitzen
   AND apflora.tpop."TPopXKoord" IS NOT NULL
   AND apflora.tpop."TPopYKoord" IS NOT NULL

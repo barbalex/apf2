@@ -4428,13 +4428,13 @@ SELECT
   END AS "Datum",
   CASE
     WHEN apflora.tpopkontr."TPopKontrDatum" IS NOT NULL
-    THEN 'T'
-    ELSE 'J'
+    THEN 'T'::varchar(10)
+    ELSE 'J'::varchar(10)
   END AS "fkGenauigkeitDatum",
   CASE
     WHEN apflora.tpopkontr."TPopKontrDatum" IS NOT NULL
-    THEN 'P'
-    ELSE 'X'
+    THEN 'P'::varchar(10)
+    ELSE 'X'::varchar(10)
   END AS "fkGenauigkeitDatumZDSF",
   substring(apflora.tpopkontr."TPopKontrMoosschicht" from 1 for 10) AS "COUV_MOUSSES",
   substring(apflora.tpopkontr."TPopKontrKrautschicht" from 1 for 10) AS "COUV_HERBACEES",
@@ -4463,6 +4463,7 @@ FROM
 WHERE
   -- keine Testarten
   apflora.ap."ApArtId" > 150
+  AND apflora.ap."ApArtId" < 1000000
   -- nur Kontrollen, deren Teilpopulationen Koordinaten besitzen
   AND apflora.tpop."TPopXKoord" IS NOT NULL
   AND apflora.tpop."TPopYKoord" IS NOT NULL
@@ -4505,7 +4506,7 @@ SELECT
   ) AS "Name",
   to_char(current_date, 'DD.MM.YYYY') AS "Erfassungsdatum",
   '{7C71B8AF-DF3E-4844-A83B-55735F80B993}'::UUID AS "fkAutor",
-  substring(max(apflora.tpopkontr."TPopKontrLeb") from 1 for 9) AS "fkLebensraumtyp",
+  substring(max(apflora.evab_typologie."TYPO") from 1 for 9)::varchar(10) AS "fkLebensraumtyp",
   1 AS "fkGenauigkeitLage",
   1 AS "fkGeometryType",
   CASE
@@ -4547,19 +4548,22 @@ FROM
         apflora.pop_status_werte
         AS "tpopHerkunft" ON apflora.tpop."TPopHerkunft" = "tpopHerkunft"."HerkunftId")
       INNER JOIN
-        ((apflora.tpopkontr
+        (((apflora.tpopkontr
         INNER JOIN
           apflora.v_tpopkontr_maxanzahl
           ON apflora.v_tpopkontr_maxanzahl."TPopKontrId" = apflora.tpopkontr."TPopKontrId")
         LEFT JOIN
           apflora.adresse
           ON apflora.tpopkontr."TPopKontrBearb" = apflora.adresse."AdrId")
+        LEFT JOIN apflora.evab_typologie
+          ON apflora.tpopkontr."TPopKontrLeb" = apflora.evab_typologie."TYPO")
         ON apflora.tpop."TPopId" = apflora.tpopkontr."TPopId")
       ON apflora.pop."PopId" = apflora.tpop."PopId")
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
 WHERE
   -- keine Testarten
   apflora.ap."ApArtId" > 150
+  AND apflora.ap."ApArtId" < 1000000
   -- nur Kontrollen, deren Teilpopulationen Koordinaten besitzen
   AND apflora.tpop."TPopXKoord" IS NOT NULL
   AND apflora.tpop."TPopYKoord" IS NOT NULL
@@ -4651,6 +4655,7 @@ FROM
 WHERE
   -- keine Testarten
   apflora.ap."ApArtId" > 150
+  AND apflora.ap."ApArtId" < 1000000
   -- nur Kontrollen, deren Teilpopulationen Koordinaten besitzen
   AND apflora.tpop."TPopXKoord" IS NOT NULL
   AND apflora.tpop."TPopYKoord" IS NOT NULL
@@ -4739,6 +4744,7 @@ FROM
 WHERE
   -- keine Testarten
   apflora.ap."ApArtId" > 150
+  AND apflora.ap."ApArtId" < 1000000
   -- nur Kontrollen, deren Teilpopulationen Koordinaten besitzen
   AND apflora.tpop."TPopXKoord" IS NOT NULL
   AND apflora.tpop."TPopYKoord" IS NOT NULL
@@ -5427,7 +5433,7 @@ FROM
     apflora.beobzuordnung
     ON apflora.beob.id = apflora.beobzuordnung."BeobId"
 WHERE
-  apflora.ap."ApArtId" > 150
+  
 GROUP BY
   apflora.adb_eigenschaften."Artname",
   apflora.beobzuordnung."BeobMutWer",
@@ -5516,7 +5522,7 @@ FROM
     ON apflora.adb_eigenschaften."TaxonomieId" = apflora.ap."ApArtId"
 WHERE
   apflora.tpop."TPopApBerichtRelevant" IS NULL
-  AND apflora.ap."ApArtId" > 150
+  AND 
 ORDER BY
   apflora.adb_eigenschaften."Artname",
   apflora.pop."PopNr",

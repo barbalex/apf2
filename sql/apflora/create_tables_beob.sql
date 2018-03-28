@@ -114,3 +114,10 @@ CREATE TABLE apflora.flora_status_werte (
   "StatusWert" varchar(2) PRIMARY KEY,
   "StatusText" text NOT NULL
 );
+
+DROP TABLE IF EXISTS apflora.evab_typologie;
+CREATE TABLE apflora.evab_typologie (
+  "TYPO" varchar(9) PRIMARY KEY,
+  "LEBENSRAUM" varchar(100),
+  "Alliance" varchar(100)
+);
