@@ -59,7 +59,6 @@ server {
     listen 443 ssl http2;
     listen [::]:443 ssl http2;
     server_name apflora.ch;
-    root    /var/www/apflora/;
 
     gzip on;
     gzip_comp_level    5;
@@ -107,9 +106,6 @@ server {
     include snippets/ssl-params.conf;
 
     location / {
-        if (-f $document_root/maintenance.html) {
-          return 503;
-        }
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-NginX-Proxy true;
@@ -144,11 +140,6 @@ server {
           add_header 'Access-Control-Allow-Methods' 'GET, POST, PUT, DELETE, OPTIONS';
           add_header 'Access-Control-Allow-Headers' 'Authorization,DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type';
        }
-    }
-
-    error_page 503 @maintenance;
-    location @maintenance {
-      rewrite ^(.*)$ /maintenance.html break;
     }
 
     location /static-files/ {
