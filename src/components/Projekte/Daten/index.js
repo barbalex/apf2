@@ -9,32 +9,107 @@ import React from 'react'
 import { observer, inject } from 'mobx-react'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
+import Loadable from 'react-loadable'
 
-import Projekt from './Projekt'
-import Ap from './Ap'
-import Apberuebersicht from './Apberuebersicht'
-import Erfkrit from './Erfkrit'
-import Apber from './Apber'
-import Pop from './Pop'
-import Assozart from './Assozart'
-import Beobart from './Beobart'
-import Idealbiotop from './Idealbiotop'
-import Ber from './Ber'
-import Ziel from './Ziel'
-import Zielber from './Zielber'
-import Popmassnber from './Popmassnber'
-import Popber from './Popber'
-import Tpop from './Tpop'
-import Tpopber from './Tpopber'
-import Tpopmassn from './Tpopmassn'
-import Tpopmassnber from './Tpopmassnber'
-import Tpopfeldkontr from './Tpopfeldkontr'
-import Tpopfreiwkontr from './Tpopfreiwkontr'
-import Tpopkontrzaehl from './Tpopkontrzaehl'
-import Exporte from '../Exporte'
-import Qk from './Qk'
-import Beobzuordnung from './Beobzuordnung'
 import ErrorBoundary from '../../shared/ErrorBoundarySingleChild'
+import Loading from '../../shared/Loading'
+
+const Projekt = Loadable({
+  loader: () => import('./Projekt'),
+  loading: Loading,
+})
+const Ap = Loadable({
+  loader: () => import('./Ap'),
+  loading: Loading,
+})
+const Apberuebersicht = Loadable({
+  loader: () => import('./Apberuebersicht'),
+  loading: Loading,
+})
+const Erfkrit = Loadable({
+  loader: () => import('./Erfkrit'),
+  loading: Loading,
+})
+const Apber = Loadable({
+  loader: () => import('./Apber'),
+  loading: Loading,
+})
+const Pop = Loadable({
+  loader: () => import('./Pop'),
+  loading: Loading,
+})
+const Assozart = Loadable({
+  loader: () => import('./Assozart'),
+  loading: Loading,
+})
+const Beobart = Loadable({
+  loader: () => import('./Beobart'),
+  loading: Loading,
+})
+const Idealbiotop = Loadable({
+  loader: () => import('./Idealbiotop'),
+  loading: Loading,
+})
+const Ber = Loadable({
+  loader: () => import('./Ber'),
+  loading: Loading,
+})
+const Ziel = Loadable({
+  loader: () => import('./Ziel'),
+  loading: Loading,
+})
+const Zielber = Loadable({
+  loader: () => import('./Zielber'),
+  loading: Loading,
+})
+const Popmassnber = Loadable({
+  loader: () => import('./Popmassnber'),
+  loading: Loading,
+})
+const Popber = Loadable({
+  loader: () => import('./Popber'),
+  loading: Loading,
+})
+const Tpop = Loadable({
+  loader: () => import('./Tpop'),
+  loading: Loading,
+})
+const Tpopber = Loadable({
+  loader: () => import('./Tpopber'),
+  loading: Loading,
+})
+const Tpopmassn = Loadable({
+  loader: () => import('./Tpopmassn'),
+  loading: Loading,
+})
+const Tpopmassnber = Loadable({
+  loader: () => import('./Tpopmassnber'),
+  loading: Loading,
+})
+const Tpopfeldkontr = Loadable({
+  loader: () => import('./Tpopfeldkontr'),
+  loading: Loading,
+})
+const Tpopfreiwkontr = Loadable({
+  loader: () => import('./Tpopfreiwkontr'),
+  loading: Loading,
+})
+const Tpopkontrzaehl = Loadable({
+  loader: () => import('./Tpopkontrzaehl'),
+  loading: Loading,
+})
+const Exporte = Loadable({
+  loader: () => import('../Exporte'),
+  loading: Loading,
+})
+const Qk = Loadable({
+  loader: () => import('./Qk'),
+  loading: Loading,
+})
+const Beobzuordnung = Loadable({
+  loader: () => import('./Beobzuordnung'),
+  loading: Loading,
+})
 
 const Container = styled.div`
   border-left-color: rgb(46, 125, 50);
