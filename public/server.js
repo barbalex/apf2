@@ -38,6 +38,14 @@ server.register(Inert, function() {
 
   server.route({
     method: 'GET',
+    path: '/service-worker.js',
+    handler: {
+      file: 'service-worker.js',
+    },
+  })
+
+  server.route({
+    method: 'GET',
     path: '/static/css/{param*}',
     handler: {
       directory: {
