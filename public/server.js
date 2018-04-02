@@ -46,6 +46,14 @@ server.register(Inert, function() {
 
   server.route({
     method: 'GET',
+    path: '/manifest.json',
+    handler: {
+      file: 'manifest.json',
+    },
+  })
+
+  server.route({
+    method: 'GET',
     path: '/static/css/{param*}',
     handler: {
       directory: {
