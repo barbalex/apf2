@@ -13,15 +13,15 @@ import Karte from './Karte'
 import Loading from '../shared/Loading'
 import ErrorBoundary from '../shared/ErrorBoundary'
 
-const TreeContainerAsync = Loadable({
+const TreeContainer = Loadable({
   loader: () => import('./TreeContainer'),
   loading: Loading,
 })
-const DatenAsync = Loadable({
+const Daten = Loadable({
   loader: () => import('./Daten'),
   loading: Loading,
 })
-const ExporteAsync = Loadable({
+const Exporte = Loadable({
   loader: () => import('./Exporte'),
   loading: Loading,
 })
@@ -95,7 +95,7 @@ const myChildren = (store: Object) => {
   if (projekteTabs.includes('tree')) {
     children.push(
       <ReflexElement flex={flex} key="tree">
-        <TreeContainerAsync tree={store.tree} />
+        <TreeContainer tree={store.tree} />
       </ReflexElement>
     )
     projekteTabs.splice(projekteTabs.indexOf('tree'), 1)
@@ -111,7 +111,7 @@ const myChildren = (store: Object) => {
         renderOnResizeRate={100}
         renderOnResize={true}
       >
-        <DatenAsync tree={store.tree} />
+        <Daten tree={store.tree} />
       </ReflexElement>
     )
     projekteTabs.splice(projekteTabs.indexOf('daten'), 1)
@@ -123,7 +123,7 @@ const myChildren = (store: Object) => {
     children.push(
       <ReflexElement key="exporte">
         <ExporteContainer>
-          <ExporteAsync />
+          <Exporte />
         </ExporteContainer>
       </ReflexElement>
     )
@@ -135,7 +135,7 @@ const myChildren = (store: Object) => {
   if (projekteTabs.includes('tree2')) {
     children.push(
       <ReflexElement flex={flex} key="tree2">
-        <TreeContainerAsync tree={store.tree2} />
+        <TreeContainer tree={store.tree2} />
       </ReflexElement>
     )
     projekteTabs.splice(projekteTabs.indexOf('tree2'), 1)
@@ -146,7 +146,7 @@ const myChildren = (store: Object) => {
   if (projekteTabs.includes('daten2')) {
     children.push(
       <ReflexElement key="daten2">
-        <DatenAsync tree={store.tree2} />
+        <Daten tree={store.tree2} />
       </ReflexElement>
     )
     projekteTabs.splice(projekteTabs.indexOf('daten2'), 1)
