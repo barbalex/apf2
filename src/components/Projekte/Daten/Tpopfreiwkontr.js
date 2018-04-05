@@ -46,7 +46,7 @@ const enhance = compose(inject('store'), observer)
 const Tpopfreiwkontr = ({
   store,
   tree,
-  dimensions,
+  dimensions = { width: 380 },
 }: {
   store: Object,
   tree: Object,

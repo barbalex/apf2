@@ -169,7 +169,7 @@ const Beobzuordnung = ({
   store,
   tree,
   updatePropertyInDb,
-  dimensions,
+  dimensions = { width: 380 },
 }: {
   store: Object,
   tree: Object,

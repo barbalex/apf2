@@ -104,7 +104,7 @@ const Tpopfeldkontr = ({
   store,
   tree,
   onChangeTab,
-  dimensions,
+  dimensions = { width: 380 },
 }: {
   store: Object,
   tree: Object,
