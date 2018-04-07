@@ -1292,6 +1292,84 @@ ORDER BY
   apflora.pop."PopNr",
   apflora.tpop."TPopNr";
 
+DROP VIEW IF EXISTS apflora.v_tpop_webgisbun CASCADE;
+CREATE OR REPLACE VIEW apflora.v_tpop_webgisbun AS
+SELECT
+  apflora.adb_eigenschaften."TaxonomieId" AS "APARTID",
+  apflora.adb_eigenschaften."Artname" AS "APART",
+  apflora.ap_bearbstand_werte."DomainTxt" AS "APSTATUS",
+  apflora.ap."ApJahr" AS "APSTARTJAHR",
+  apflora.ap_umsetzung_werte."DomainTxt" AS "APSTANDUMSETZUNG",
+  apflora.pop."PopGuid" AS "POPGUID",
+  apflora.pop."PopNr" AS "POPNR",
+  apflora.pop."PopName" AS "POPNAME",
+  pop_status_werte."HerkunftTxt" AS "POPSTATUS",
+  apflora.pop."PopHerkunftUnklar" AS "POPSTATUSUNKLAR",
+  apflora.pop."PopHerkunftUnklarBegruendung" AS "POPUNKLARGRUND",
+  apflora.pop."PopBekanntSeit" AS "POPBEKANNTSEIT",
+  apflora.pop."PopXKoord" AS "POP_X",
+  apflora.pop."PopYKoord" AS "POP_Y",
+  apflora.tpop."TPopId" AS "TPOPID",
+  apflora.tpop."TPopGuid" AS "TPOPGUID",
+  apflora.tpop."TPopNr" AS "TPOPNR",
+  apflora.tpop."TPopGemeinde" AS "TPOPGEMEINDE",
+  apflora.tpop."TPopFlurname" AS "TPOPFLURNAME",
+  "domPopHerkunft_1"."HerkunftTxt" AS "TPOPSTATUS",
+  apflora.tpop."TPopHerkunftUnklar" AS "TPOPSTATUSUNKLAR",
+  apflora.tpop."TPopHerkunftUnklarBegruendung" AS "TPOPUNKLARGRUND",
+  apflora.tpop."TPopXKoord" AS "TPOP_X",
+  apflora.tpop."TPopYKoord" AS "TPOP_Y",
+  apflora.tpop."TPopRadius" AS "TPOPRADIUS",
+  apflora.tpop."TPopHoehe" AS "TPOPHOEHE",
+  apflora.tpop."TPopExposition" AS "TPOPEXPOSITION",
+  apflora.tpop."TPopKlima" AS "TPOPKLIMA",
+  apflora.tpop."TPopNeigung" AS "TPOPHANGNEIGUNG",
+  apflora.tpop."TPopBeschr" AS "TPOPBESCHREIBUNG",
+  apflora.tpop."TPopKatNr" AS "TPOPKATASTERNR",
+  apflora.adresse."AdrName" AS "TPOPVERANTWORTLICH",
+  apflora.tpop."TPopApBerichtRelevant" AS "TPOPBERICHTSRELEVANZ",
+  apflora.tpop."TPopBekanntSeit" AS "TPOPBEKANNTSEIT",
+  apflora.tpop."TPopEigen" AS "TPOPEIGENTUEMERIN",
+  apflora.tpop."TPopKontakt" AS "TPOPKONTAKT_VO",
+  apflora.tpop."TPopNutzungszone" AS "TPOP_NUTZUNGSZONE",
+  apflora.tpop."TPopBewirtschafterIn" AS "TPOPBEWIRTSCHAFTER",
+  apflora.tpop."TPopBewirtschaftung" AS "TPOPBEWIRTSCHAFTUNG",
+  -- TODO: convert
+  apflora.tpop."MutWann" AS "TPOPCHANGEDAT",
+  apflora.tpop."MutWer" AS "TPOPCHANGEBY"
+FROM
+  ((((((apflora.adb_eigenschaften
+  INNER JOIN
+    apflora.ap
+    ON apflora.adb_eigenschaften."TaxonomieId" = apflora.ap."ApArtId")
+  INNER JOIN
+    (apflora.pop
+    INNER JOIN
+      apflora.tpop
+      ON apflora.pop."PopId" = apflora.tpop."PopId")
+    ON apflora.ap."ApArtId" = apflora.pop."ApArtId")
+  LEFT JOIN
+    apflora.ap_bearbstand_werte
+    ON apflora.ap."ApStatus" = apflora.ap_bearbstand_werte."DomainCode")
+  LEFT JOIN
+    apflora.ap_umsetzung_werte
+    ON apflora.ap."ApUmsetzung" = apflora.ap_umsetzung_werte."DomainCode")
+  LEFT JOIN
+    apflora.pop_status_werte
+    ON apflora.pop."PopHerkunft" = pop_status_werte."HerkunftId")
+  LEFT JOIN
+    apflora.pop_status_werte AS "domPopHerkunft_1"
+    ON apflora.tpop."TPopHerkunft" = "domPopHerkunft_1"."HerkunftId")
+  LEFT JOIN
+    apflora.adresse
+    ON apflora.ap."ApBearb" = apflora.adresse."AdrId"
+WHERE
+  apflora.adb_eigenschaften."TaxonomieId" > 150
+ORDER BY
+  apflora.adb_eigenschaften."Artname",
+  apflora.pop."PopNr",
+  apflora.tpop."TPopNr";
+
 DROP VIEW IF EXISTS apflora.v_tpop_fuergis_write CASCADE;
 CREATE OR REPLACE VIEW apflora.v_tpop_fuergis_write AS
 SELECT

@@ -388,6 +388,15 @@ const Exporte = ({
               }
             />
             <DownloadCardButton
+              label="Teilpopulationen für WebGIS BUN"
+              onClick={() =>
+                downloadFromView({
+                  view: 'v_tpop_webgisbun',
+                  fileName: 'TeilpopulationenWebGisBun',
+                })
+              }
+            />
+            <DownloadCardButton
               onClick={() =>
                 downloadFromView({
                   view: 'v_tpop_kml',
