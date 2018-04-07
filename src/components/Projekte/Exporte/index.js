@@ -520,6 +520,15 @@ const Exporte = ({
               }
             />
             <DownloadCardButton
+              label="Kontrollen für WebGIS BUN"
+              onClick={() =>
+                downloadFromView({
+                  view: 'v_tpopkontr_webgisbun',
+                  fileName: 'KontrollenWebGisBun',
+                })
+              }
+            />
+            <DownloadCardButton
               label="Kontrollen: Anzahl pro Zähleinheit"
               onClick={() =>
                 downloadFromView({

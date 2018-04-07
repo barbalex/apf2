@@ -4040,6 +4040,176 @@ ORDER BY
   apflora.pop."PopNr",
   apflora.tpop."TPopNr";
 
+DROP VIEW IF EXISTS apflora.v_tpopkontr_webgisbun CASCADE;
+CREATE OR REPLACE VIEW apflora.v_tpopkontr_webgisbun AS
+SELECT
+  apflora.adb_eigenschaften."TaxonomieId" AS "APARTID",
+  apflora.adb_eigenschaften."Artname" AS "APART",
+  apflora.pop."PopGuid" AS "POPGUID",
+  apflora.pop."PopNr" AS "POPNR",
+  apflora.tpop."TPopGuid" AS "TPOPGUID",
+  apflora.tpop."TPopNr" AS "TPOPNR",
+  apflora.tpopkontr."TPopKontrId" AS "TPOPKONTRID",
+  apflora.tpopkontr."TPopKontrGuid" AS "KONTRGUID",
+  apflora.tpopkontr."TPopKontrJahr" AS "KONTRJAHR",
+  --TODO: convert?
+  apflora.tpopkontr."TPopKontrDatum" AS "KONTRDAT",
+  apflora.tpopkontr_typ_werte."DomainTxt" AS "KONTRTYP",
+  apflora.adresse."AdrName" AS "KONTRBEARBEITER",
+  apflora.tpopkontr."TPopKontrUeberleb" AS "KONTRUEBERLEBENSRATE",
+  apflora.tpopkontr."TPopKontrVitalitaet" AS "KONTRVITALITAET",
+  apflora.pop_entwicklung_werte."EntwicklungTxt" AS "KONTRENTWICKLUNG",
+  apflora.tpopkontr."TPopKontrUrsach" AS "KONTRURSACHEN",
+  apflora.tpopkontr."TPopKontrUrteil" AS "KONTRERFOLGBEURTEIL",
+  apflora.tpopkontr."TPopKontrAendUms" AS "KONTRAENDUMSETZUNG",
+  apflora.tpopkontr."TPopKontrAendKontr" AS "KONTRAENDKONTROLLE",
+  apflora.tpop."TPopXKoord" AS "KONTR_X",
+  apflora.tpop."TPopYKoord" AS "KONTR_Y",
+  apflora.tpopkontr."TPopKontrTxt" AS "KONTRBEMERKUNGEN",
+  apflora.tpopkontr."TPopKontrLeb" AS "KONTRLRMDELARZE",
+  apflora.tpopkontr."TPopKontrLebUmg" AS "KONTRDELARZEANGRENZ",
+  apflora.tpopkontr."TPopKontrVegTyp" AS "KONTRVEGTYP",
+  apflora.tpopkontr."TPopKontrKonkurrenz" AS "KONTRKONKURRENZ",
+  apflora.tpopkontr."TPopKontrMoosschicht" AS "KONTRMOOSE",
+  apflora.tpopkontr."TPopKontrKrautschicht" AS "KONTRKRAUTSCHICHT",
+  apflora.tpopkontr."TPopKontrStrauchschicht" AS "KONTRSTRAUCHSCHICHT",
+  apflora.tpopkontr."TPopKontrBaumschicht" AS "KONTRBAUMSCHICHT",
+  apflora.tpopkontr."TPopKontrBodenTyp" AS "KONTRBODENTYP",
+  apflora.tpopkontr."TPopKontrBodenKalkgehalt" AS "KONTRBODENKALK",
+  apflora.tpopkontr."TPopKontrBodenDurchlaessigkeit" AS "KONTRBODENDURCHLAESSIGK",
+  apflora.tpopkontr."TPopKontrBodenHumus" AS "KONTRBODENHUMUS",
+  apflora.tpopkontr."TPopKontrBodenNaehrstoffgehalt" AS "KONTRBODENNAEHRSTOFF",
+  apflora.tpopkontr."TPopKontrBodenAbtrag" AS "KONTROBERBODENABTRAG",
+  apflora.tpopkontr."TPopKontrWasserhaushalt" AS "KONTROBODENWASSERHAUSHALT",
+  apflora.tpopkontr_idbiotuebereinst_werte."DomainTxt" AS "KONTRUEBEREINSTIMMUNIDEAL",
+  apflora.tpopkontr."TPopKontrHandlungsbedarf" AS "KONTRHANDLUNGSBEDARF",
+  apflora.tpopkontr."TPopKontrUebFlaeche" AS "KONTRUEBERPRUFTFLAECHE",
+  apflora.tpopkontr."TPopKontrFlaeche" AS "KONTRFLAECHETPOP",
+  apflora.tpopkontr."TPopKontrPlan" AS "KONTRAUFPLAN",
+  apflora.tpopkontr."TPopKontrVeg" AS "KONTRDECKUNGVEG",
+  apflora.tpopkontr."TPopKontrNaBo" AS "KONTRDECKUNGBODEN",
+  apflora.tpopkontr."TPopKontrUebPfl" AS "KONTRDECKUNGART",
+  apflora.tpopkontr."TPopKontrJungPflJN" AS "KONTRJUNGEPLANZEN",
+  apflora.tpopkontr."TPopKontrVegHoeMax" AS "KONTRMAXHOEHEVEG",
+  apflora.tpopkontr."TPopKontrVegHoeMit" AS "KONTRMITTELHOEHEVEG",
+  apflora.tpopkontr."TPopKontrGefaehrdung" AS "KONTRGEFAEHRDUNG",
+  -- TODO: convert
+  apflora.tpopkontr."MutWann" AS "KONTRCHANGEDAT",
+  apflora.tpopkontr."MutWer" AS "KONTRCHANGEBY",
+  string_agg(apflora.tpopkontrzaehl_einheit_werte."ZaehleinheitTxt", ', ') AS "ZAEHLEINHEITEN",
+  array_to_string(array_agg(apflora.tpopkontrzaehl."Anzahl"), ', ') AS "ANZAHLEN",
+  string_agg(apflora.tpopkontrzaehl_methode_werte."BeurteilTxt", ', ') AS "METHODEN"
+FROM
+  apflora.pop_status_werte AS "domPopHerkunft_1"
+  RIGHT JOIN
+    (((((((apflora.adb_eigenschaften
+    INNER JOIN
+      apflora.ap
+      ON apflora.adb_eigenschaften."TaxonomieId" = apflora.ap."ApArtId")
+    INNER JOIN
+      (apflora.pop
+      INNER JOIN
+        (apflora.tpop
+        INNER JOIN
+          ((((((apflora.tpopkontr
+          LEFT JOIN
+            apflora.tpopkontr_typ_werte
+            ON apflora.tpopkontr."TPopKontrTyp" = apflora.tpopkontr_typ_werte."DomainTxt")
+          LEFT JOIN
+            apflora.adresse
+            ON apflora.tpopkontr."TPopKontrBearb" = apflora.adresse."AdrId")
+          LEFT JOIN
+            apflora.pop_entwicklung_werte
+            ON apflora.tpopkontr."TPopKontrEntwicklung" = apflora.pop_entwicklung_werte."EntwicklungId")
+          LEFT JOIN
+            apflora.tpopkontrzaehl
+            ON apflora.tpopkontr."TPopKontrId" = apflora.tpopkontrzaehl."TPopKontrId")
+          LEFT JOIN
+            apflora.tpopkontrzaehl_einheit_werte
+            ON apflora.tpopkontrzaehl."Zaehleinheit" = apflora.tpopkontrzaehl_einheit_werte."ZaehleinheitCode")
+          LEFT JOIN
+            apflora.tpopkontrzaehl_methode_werte
+            ON apflora.tpopkontrzaehl."Methode" = apflora.tpopkontrzaehl_methode_werte."BeurteilCode")
+          ON apflora.tpop."TPopId" = apflora.tpopkontr."TPopId")
+        ON apflora.pop."PopId" = apflora.tpop."PopId")
+      ON apflora.ap."ApArtId" = apflora.pop."ApArtId")
+    LEFT JOIN
+      apflora.ap_bearbstand_werte
+      ON apflora.ap."ApStatus" = apflora.ap_bearbstand_werte."DomainCode")
+    LEFT JOIN
+      apflora.ap_umsetzung_werte
+      ON apflora.ap."ApUmsetzung" = apflora.ap_umsetzung_werte."DomainCode")
+    LEFT JOIN
+      apflora.pop_status_werte
+      ON apflora.pop."PopHerkunft" = apflora.pop_status_werte."HerkunftId")
+    LEFT JOIN
+      apflora.tpopkontr_idbiotuebereinst_werte
+      ON apflora.tpopkontr."TPopKontrIdealBiotopUebereinst" = apflora.tpopkontr_idbiotuebereinst_werte."DomainCode")
+  LEFT JOIN
+    apflora.adresse AS "tblAdresse_1"
+    ON apflora.ap."ApBearb" = "tblAdresse_1"."AdrId")
+  ON "domPopHerkunft_1"."HerkunftId" = apflora.tpop."TPopHerkunft"
+WHERE
+  apflora.adb_eigenschaften."TaxonomieId" > 150
+GROUP BY
+  apflora.adb_eigenschaften."TaxonomieId",
+  apflora.adb_eigenschaften."Artname",
+  apflora.pop."PopGuid",
+  apflora.pop."PopNr",
+  apflora.tpop."TPopId",
+  apflora.tpop."TPopGuid",
+  apflora.tpop."TPopNr",
+  apflora.tpopkontr."TPopKontrId",
+  apflora.tpopkontr."TPopId",
+  apflora.tpopkontr."TPopKontrGuid",
+  apflora.tpopkontr."TPopKontrJahr",
+  apflora.tpopkontr."TPopKontrDatum",
+  apflora.tpopkontr_typ_werte."DomainTxt",
+  apflora.adresse."AdrName",
+  apflora.tpopkontr."TPopKontrUeberleb",
+  apflora.tpopkontr."TPopKontrVitalitaet",
+  apflora.pop_entwicklung_werte."EntwicklungTxt",
+  apflora.tpopkontr."TPopKontrUrsach",
+  apflora.tpopkontr."TPopKontrUrteil",
+  apflora.tpopkontr."TPopKontrAendUms",
+  apflora.tpopkontr."TPopKontrAendKontr",
+  apflora.tpop."TPopXKoord",
+  apflora.tpop."TPopYKoord",
+  apflora.tpopkontr."TPopKontrTxt",
+  apflora.tpopkontr."TPopKontrLeb",
+  apflora.tpopkontr."TPopKontrLebUmg",
+  apflora.tpopkontr."TPopKontrVegTyp",
+  apflora.tpopkontr."TPopKontrKonkurrenz",
+  apflora.tpopkontr."TPopKontrMoosschicht",
+  apflora.tpopkontr."TPopKontrKrautschicht",
+  apflora.tpopkontr."TPopKontrStrauchschicht",
+  apflora.tpopkontr."TPopKontrBaumschicht",
+  apflora.tpopkontr."TPopKontrBodenTyp",
+  apflora.tpopkontr."TPopKontrBodenKalkgehalt",
+  apflora.tpopkontr."TPopKontrBodenDurchlaessigkeit",
+  apflora.tpopkontr."TPopKontrBodenHumus",
+  apflora.tpopkontr."TPopKontrBodenNaehrstoffgehalt",
+  apflora.tpopkontr."TPopKontrBodenAbtrag",
+  apflora.tpopkontr."TPopKontrWasserhaushalt",
+  apflora.tpopkontr_idbiotuebereinst_werte."DomainTxt",
+  apflora.tpopkontr."TPopKontrHandlungsbedarf",
+  apflora.tpopkontr."TPopKontrUebFlaeche",
+  apflora.tpopkontr."TPopKontrFlaeche",
+  apflora.tpopkontr."TPopKontrPlan",
+  apflora.tpopkontr."TPopKontrVeg",
+  apflora.tpopkontr."TPopKontrNaBo",
+  apflora.tpopkontr."TPopKontrUebPfl",
+  apflora.tpopkontr."TPopKontrJungPflJN",
+  apflora.tpopkontr."TPopKontrVegHoeMax",
+  apflora.tpopkontr."TPopKontrVegHoeMit",
+  apflora.tpopkontr."TPopKontrGefaehrdung",
+  apflora.tpopkontr."MutWann",
+  apflora.tpopkontr."MutWer"
+ORDER BY
+  apflora.adb_eigenschaften."Artname",
+  apflora.pop."PopNr",
+  apflora.tpop."TPopNr";
+
 DROP VIEW IF EXISTS apflora.v_tpopkontr_letztesjahr CASCADE;
 CREATE OR REPLACE VIEW apflora.v_tpopkontr_letztesjahr AS
 SELECT
