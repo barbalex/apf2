@@ -1872,10 +1872,10 @@ WHERE
       apflora.tpopkontr
       INNER JOIN
         apflora.tpopkontrzaehl
-        ON apflora.tpopkontr."TPopKontrId" = apflora.tpopkontrzaehl."TPopKontrId"
+        ON apflora.tpopkontr."TPopKontrId" = apflora.tpopkontrzaehl.tpopkontr_id
     WHERE
       apflora.tpopkontr."TPopKontrTyp" NOT IN ('Zwischenziel', 'Ziel')
-      AND apflora.tpopkontrzaehl."Anzahl" > 0
+      AND apflora.tpopkontrzaehl.anzahl > 0
   )
   AND apflora.tpop."TPopId" IN (
     SELECT apflora.beobzuordnung."TPopId"
@@ -2032,7 +2032,7 @@ SELECT
   substring(
     concat(
       'Anzahlen: ',
-      array_to_string(array_agg(apflora.tpopkontrzaehl."Anzahl"), ', '),
+      array_to_string(array_agg(apflora.tpopkontrzaehl.anzahl), ', '),
       ', Zaehleinheiten: ',
       string_agg(apflora.tpopkontrzaehl_einheit_werte."ZaehleinheitTxt", ', '),
       ', Methoden: ',
@@ -2070,11 +2070,11 @@ FROM
           ((apflora.tpopkontrzaehl
           LEFT JOIN
             apflora.tpopkontrzaehl_einheit_werte
-            ON apflora.tpopkontrzaehl."Zaehleinheit" = apflora.tpopkontrzaehl_einheit_werte."ZaehleinheitCode")
+            ON apflora.tpopkontrzaehl.einheit = apflora.tpopkontrzaehl_einheit_werte."ZaehleinheitCode")
           LEFT JOIN
             apflora.tpopkontrzaehl_methode_werte
-            ON apflora.tpopkontrzaehl."Methode" = apflora.tpopkontrzaehl_methode_werte."BeurteilCode")
-          ON apflora.tpopkontr."TPopKontrId" = apflora.tpopkontrzaehl."TPopKontrId")
+            ON apflora.tpopkontrzaehl.methode = apflora.tpopkontrzaehl_methode_werte."BeurteilCode")
+          ON apflora.tpopkontr."TPopKontrId" = apflora.tpopkontrzaehl.tpopkontr_id)
         ON apflora.tpop."TPopId" = apflora.tpopkontr."TPopId")
       ON apflora.pop."PopId" = apflora.tpop."PopId")
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId"

@@ -2766,11 +2766,11 @@ SELECT
   apflora.tpopkontr."TPopKontrVegHoeMax",
   apflora.tpopkontr."TPopKontrVegHoeMit",
   apflora.tpopkontr."TPopKontrGefaehrdung",
-  apflora.tpopkontrzaehl."TPopKontrZaehlId",
-  apflora.tpopkontrzaehl."TPopKontrId",
-  apflora.tpopkontrzaehl."Anzahl",
-  apflora.tpopkontrzaehl_einheit_werte."ZaehleinheitTxt" AS "Zaehleinheit",
-  apflora.tpopkontrzaehl_methode_werte."BeurteilTxt" AS "Methode"
+  apflora.tpopkontrzaehl.id,
+  apflora.tpopkontrzaehl.tpopkontr_id,
+  apflora.tpopkontrzaehl.anzahl,
+  apflora.tpopkontrzaehl_einheit_werte."ZaehleinheitTxt" AS einheit,
+  apflora.tpopkontrzaehl_methode_werte."BeurteilTxt" AS methode
 FROM
   ((((((apflora.adb_eigenschaften
   INNER JOIN
@@ -2793,13 +2793,13 @@ FROM
     ON apflora.tpopkontr."TPopKontrBearb" = apflora.adresse."AdrId")
   LEFT JOIN
     apflora.tpopkontrzaehl
-    ON apflora.tpopkontr."TPopKontrId" = apflora.tpopkontrzaehl."TPopKontrId")
+    ON apflora.tpopkontr."TPopKontrId" = apflora.tpopkontrzaehl.tpopkontr_id)
   LEFT JOIN
     apflora.tpopkontrzaehl_einheit_werte
-    ON apflora.tpopkontrzaehl."Zaehleinheit" = apflora.tpopkontrzaehl_einheit_werte."ZaehleinheitCode")
+    ON apflora.tpopkontrzaehl.einheit = apflora.tpopkontrzaehl_einheit_werte."ZaehleinheitCode")
   LEFT JOIN
     apflora.tpopkontrzaehl_methode_werte
-    ON apflora.tpopkontrzaehl."Methode" = apflora.tpopkontrzaehl_methode_werte."BeurteilCode"
+    ON apflora.tpopkontrzaehl.methode = apflora.tpopkontrzaehl_methode_werte."BeurteilCode"
 WHERE
   apflora.tpopkontr."TPopKontrTyp" NOT IN ('Ziel', 'Zwischenziel')
 ORDER BY
@@ -3576,7 +3576,7 @@ SELECT
   apflora.tpopkontr."TPopKontrJahr",
   apflora.tpopkontr."TPopKontrDatum",
   apflora.adresse."AdrName" AS "TPopKontrBearb",
-  apflora.tpopkontrzaehl."Anzahl",
+  apflora.tpopkontrzaehl.anzahl,
   apflora.tpopkontrzaehl_einheit_werte."ZaehleinheitTxt" AS "Zaehleinheit",
   apflora.tpopkontrzaehl_methode_werte."BeurteilTxt" AS "Methode",
   apflora.tpopkontr."TPopKontrJungpfl",
@@ -3634,13 +3634,13 @@ FROM
     ON apflora.tpopkontr."TPopKontrEntwicklung" = apflora.tpop_entwicklung_werte."EntwicklungCode")
   INNER JOIN
     apflora.tpopkontrzaehl
-    ON apflora.tpopkontr."TPopKontrId" = apflora.tpopkontrzaehl."TPopKontrId")
+    ON apflora.tpopkontr."TPopKontrId" = apflora.tpopkontrzaehl.tpopkontr_id)
   INNER JOIN
     apflora.tpopkontrzaehl_methode_werte
-    ON apflora.tpopkontrzaehl."Methode" = apflora.tpopkontrzaehl_methode_werte."BeurteilCode")
+    ON apflora.tpopkontrzaehl.methode = apflora.tpopkontrzaehl_methode_werte."BeurteilCode")
   LEFT JOIN
     apflora.tpopkontrzaehl_einheit_werte
-    ON apflora.tpopkontrzaehl."Zaehleinheit" = apflora.tpopkontrzaehl_einheit_werte."ZaehleinheitCode";
+    ON apflora.tpopkontrzaehl.einheit = apflora.tpopkontrzaehl_einheit_werte."ZaehleinheitCode";
 
 DROP VIEW IF EXISTS apflora.v_popber_angezapbestjahr0 CASCADE;
 CREATE OR REPLACE VIEW apflora.v_popber_angezapbestjahr0 AS
@@ -3974,7 +3974,7 @@ SELECT
   apflora.tpopkontr."TPopKontrGefaehrdung" AS "Kontr Gefaehrdung",
   apflora.tpopkontr."MutWann" AS "Kontrolle zuletzt geaendert",
   apflora.tpopkontr."MutWer" AS "Kontrolle zuletzt geaendert von",
-  array_to_string(array_agg(apflora.tpopkontrzaehl."Anzahl"), ', ') AS "Anzahlen",
+  array_to_string(array_agg(apflora.tpopkontrzaehl.anzahl), ', ') AS "Anzahlen",
   string_agg(apflora.tpopkontrzaehl_einheit_werte."ZaehleinheitTxt", ', ') AS "Zaehleinheiten",
   string_agg(apflora.tpopkontrzaehl_methode_werte."BeurteilTxt", ', ') AS "Methoden"
 FROM
@@ -4001,13 +4001,13 @@ FROM
             ON apflora.tpopkontr."TPopKontrEntwicklung" = apflora.pop_entwicklung_werte."EntwicklungId")
           LEFT JOIN
             apflora.tpopkontrzaehl
-            ON apflora.tpopkontr."TPopKontrId" = apflora.tpopkontrzaehl."TPopKontrId")
+            ON apflora.tpopkontr."TPopKontrId" = apflora.tpopkontrzaehl.tpopkontr_id)
           LEFT JOIN
             apflora.tpopkontrzaehl_einheit_werte
-            ON apflora.tpopkontrzaehl."Zaehleinheit" = apflora.tpopkontrzaehl_einheit_werte."ZaehleinheitCode")
+            ON apflora.tpopkontrzaehl.einheit = apflora.tpopkontrzaehl_einheit_werte."ZaehleinheitCode")
           LEFT JOIN
             apflora.tpopkontrzaehl_methode_werte
-            ON apflora.tpopkontrzaehl."Methode" = apflora.tpopkontrzaehl_methode_werte."BeurteilCode")
+            ON apflora.tpopkontrzaehl.methode = apflora.tpopkontrzaehl_methode_werte."BeurteilCode")
           ON apflora.tpop."TPopId" = apflora.tpopkontr."TPopId")
         ON apflora.pop."PopId" = apflora.tpop."PopId")
       ON apflora.ap."ApArtId" = apflora.pop."ApArtId")
@@ -4175,7 +4175,7 @@ SELECT
   apflora.tpopkontr."MutWann" AS "KONTRCHANGEDAT",
   apflora.tpopkontr."MutWer" AS "KONTRCHANGEBY",
   string_agg(apflora.tpopkontrzaehl_einheit_werte."ZaehleinheitTxt", ', ') AS "ZAEHLEINHEITEN",
-  array_to_string(array_agg(apflora.tpopkontrzaehl."Anzahl"), ', ') AS "ANZAHLEN",
+  array_to_string(array_agg(apflora.tpopkontrzaehl.anzahl), ', ') AS "ANZAHLEN",
   string_agg(apflora.tpopkontrzaehl_methode_werte."BeurteilTxt", ', ') AS "METHODEN"
 FROM
   apflora.pop_status_werte AS "domPopHerkunft_1"
@@ -4201,13 +4201,13 @@ FROM
             ON apflora.tpopkontr."TPopKontrEntwicklung" = apflora.pop_entwicklung_werte."EntwicklungId")
           LEFT JOIN
             apflora.tpopkontrzaehl
-            ON apflora.tpopkontr."TPopKontrId" = apflora.tpopkontrzaehl."TPopKontrId")
+            ON apflora.tpopkontr."TPopKontrId" = apflora.tpopkontrzaehl.tpopkontr_id)
           LEFT JOIN
             apflora.tpopkontrzaehl_einheit_werte
-            ON apflora.tpopkontrzaehl."Zaehleinheit" = apflora.tpopkontrzaehl_einheit_werte."ZaehleinheitCode")
+            ON apflora.tpopkontrzaehl.einheit = apflora.tpopkontrzaehl_einheit_werte."ZaehleinheitCode")
           LEFT JOIN
             apflora.tpopkontrzaehl_methode_werte
-            ON apflora.tpopkontrzaehl."Methode" = apflora.tpopkontrzaehl_methode_werte."BeurteilCode")
+            ON apflora.tpopkontrzaehl.methode = apflora.tpopkontrzaehl_methode_werte."BeurteilCode")
           ON apflora.tpop."TPopId" = apflora.tpopkontr."TPopId")
         ON apflora.pop."PopId" = apflora.tpop."PopId")
       ON apflora.ap."ApArtId" = apflora.pop."ApArtId")
@@ -4722,12 +4722,12 @@ DROP VIEW IF EXISTS apflora.v_tpopkontr_maxanzahl CASCADE;
 CREATE OR REPLACE VIEW apflora.v_tpopkontr_maxanzahl AS
 SELECT
   apflora.tpopkontr."TPopKontrId",
-  max(apflora.tpopkontrzaehl."Anzahl") AS "Anzahl"
+  max(apflora.tpopkontrzaehl.anzahl) AS "Anzahl"
 FROM
   apflora.tpopkontr
   INNER JOIN
     apflora.tpopkontrzaehl
-    ON apflora.tpopkontr."TPopKontrId" = apflora.tpopkontrzaehl."TPopKontrId"
+    ON apflora.tpopkontr."TPopKontrId" = apflora.tpopkontrzaehl.tpopkontr_id
 GROUP BY
   apflora.tpopkontr."TPopKontrId"
 ORDER BY
@@ -5543,10 +5543,10 @@ SELECT
   apflora.tpopkontr."TPopKontrGefaehrdung" AS "Kontr Gefaehrdung",
   apflora.tpopkontr."MutWann" AS "Kontrolle zuletzt geaendert",
   apflora.tpopkontr."MutWer" AS "Kontrolle zuletzt geaendert von",
-  apflora.tpopkontrzaehl."TPopKontrZaehlId",
+  apflora.tpopkontrzaehl.id,
   apflora.tpopkontrzaehl_einheit_werte."ZaehleinheitTxt" AS "Zaehleinheit",
   apflora.tpopkontrzaehl_methode_werte."BeurteilTxt" AS "Methode",
-  apflora.tpopkontrzaehl."Anzahl"
+  apflora.tpopkontrzaehl.anzahl
 FROM
   apflora.adb_eigenschaften
   INNER JOIN
@@ -5588,11 +5588,11 @@ FROM
             ((apflora.tpopkontrzaehl
             LEFT JOIN
               apflora.tpopkontrzaehl_einheit_werte
-              ON apflora.tpopkontrzaehl."Zaehleinheit" = apflora.tpopkontrzaehl_einheit_werte."ZaehleinheitCode")
+              ON apflora.tpopkontrzaehl.einheit = apflora.tpopkontrzaehl_einheit_werte."ZaehleinheitCode")
             LEFT JOIN
               apflora.tpopkontrzaehl_methode_werte
-              ON apflora.tpopkontrzaehl."Methode" = apflora.tpopkontrzaehl_methode_werte."BeurteilCode")
-            ON apflora.tpopkontr."TPopKontrId" = apflora.tpopkontrzaehl."TPopKontrId")
+              ON apflora.tpopkontrzaehl.methode = apflora.tpopkontrzaehl_methode_werte."BeurteilCode")
+            ON apflora.tpopkontr."TPopKontrId" = apflora.tpopkontrzaehl.tpopkontr_id)
           ON apflora.tpop."TPopId" = apflora.tpopkontr."TPopId")
         ON apflora.pop."PopId" = apflora.tpop."PopId")
       ON apflora.ap."ApArtId" = apflora.pop."ApArtId")
@@ -6544,7 +6544,7 @@ FROM
         (apflora.tpopkontr
         LEFT JOIN
           apflora.tpopkontrzaehl
-          ON apflora.tpopkontr."TPopKontrId" = apflora.tpopkontrzaehl."TPopKontrId")
+          ON apflora.tpopkontr."TPopKontrId" = apflora.tpopkontrzaehl.tpopkontr_id)
         ON apflora.tpop."TPopId" = apflora.tpopkontr."TPopId")
       ON apflora.pop."PopId" = apflora.tpop."PopId")
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
@@ -6553,9 +6553,9 @@ GROUP BY
   apflora.pop."PopId",
   apflora.tpop."TPopId",
   apflora.tpopkontr."TPopKontrId",
-  apflora.tpopkontrzaehl."TPopKontrZaehlId"
+  apflora.tpopkontrzaehl.id
 HAVING
-  apflora.tpopkontrzaehl."TPopKontrZaehlId" IS NULL
+  apflora.tpopkontrzaehl.id IS NULL
   AND apflora.tpopkontr."TPopKontrJahr" IS NOT NULL
   AND apflora.tpopkontr."TPopKontrTyp" <> 'Freiwilligen-Erfolgskontrolle'
 ORDER BY
@@ -6583,7 +6583,7 @@ FROM
         (apflora.tpopkontr
         LEFT JOIN
           apflora.tpopkontrzaehl
-          ON apflora.tpopkontr."TPopKontrId" = apflora.tpopkontrzaehl."TPopKontrId")
+          ON apflora.tpopkontr."TPopKontrId" = apflora.tpopkontrzaehl.tpopkontr_id)
         ON apflora.tpop."TPopId" = apflora.tpopkontr."TPopId")
       ON apflora.pop."PopId" = apflora.tpop."PopId")
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
@@ -6592,9 +6592,9 @@ GROUP BY
   apflora.pop."PopId",
   apflora.tpop."TPopId",
   apflora.tpopkontr."TPopKontrId",
-  apflora.tpopkontrzaehl."TPopKontrZaehlId"
+  apflora.tpopkontrzaehl.id
 HAVING
-  apflora.tpopkontrzaehl."TPopKontrZaehlId" IS NULL
+  apflora.tpopkontrzaehl.id IS NULL
   AND apflora.tpopkontr."TPopKontrJahr" IS NOT NULL
   AND apflora.tpopkontr."TPopKontrTyp" = 'Freiwilligen-Erfolgskontrolle'
 ORDER BY
@@ -6609,8 +6609,8 @@ SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
   'Zaehlung ohne Zaehleinheit (Feldkontrolle):'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId", 'Feld-Kontrollen', apflora.tpopkontr."TPopKontrId", 'Zählungen', apflora.tpopkontrzaehl."TPopKontrZaehlId"]::text[] AS url,
-  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop."TPopNr"), concat('Feld-Kontrolle (Jahr): ', apflora.tpopkontr."TPopKontrJahr"), concat('Zählung (id): ', apflora.tpopkontrzaehl."TPopKontrZaehlId")]::text[] AS text,
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId", 'Feld-Kontrollen', apflora.tpopkontr."TPopKontrId", 'Zählungen', apflora.tpopkontrzaehl.id]::text[] AS url,
+  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop."TPopNr"), concat('Feld-Kontrolle (Jahr): ', apflora.tpopkontr."TPopKontrJahr"), concat('Zählung (id): ', apflora.tpopkontrzaehl.id)]::text[] AS text,
   apflora.tpopkontr."TPopKontrJahr" AS "Berichtjahr"
 FROM
   apflora.ap
@@ -6622,12 +6622,12 @@ FROM
         (apflora.tpopkontr
         INNER JOIN
           apflora.tpopkontrzaehl
-          ON apflora.tpopkontr."TPopKontrId" = apflora.tpopkontrzaehl."TPopKontrId")
+          ON apflora.tpopkontr."TPopKontrId" = apflora.tpopkontrzaehl.tpopkontr_id)
         ON apflora.tpop."TPopId" = apflora.tpopkontr."TPopId")
       ON apflora.pop."PopId" = apflora.tpop."PopId")
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
 WHERE
-  apflora.tpopkontrzaehl."Zaehleinheit" IS NULL
+  apflora.tpopkontrzaehl.einheit IS NULL
   AND apflora.tpopkontr."TPopKontrJahr" IS NOT NULL
   AND apflora.tpopkontr."TPopKontrTyp" <> 'Freiwilligen-Erfolgskontrolle'
 ORDER BY
@@ -6641,8 +6641,8 @@ SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
   'Zaehlung ohne Zaehleinheit (Freiwilligen-Kontrolle):'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId", 'Freiwilligen-Kontrollen', apflora.tpopkontr."TPopKontrId", 'Zählungen', apflora.tpopkontrzaehl."TPopKontrZaehlId"]::text[] AS url,
-  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop."TPopNr"), concat('Feld-Kontrolle (Jahr): ', apflora.tpopkontr."TPopKontrJahr"), concat('Zählung (id): ', apflora.tpopkontrzaehl."TPopKontrZaehlId")]::text[] AS text,
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId", 'Freiwilligen-Kontrollen', apflora.tpopkontr."TPopKontrId", 'Zählungen', apflora.tpopkontrzaehl.id]::text[] AS url,
+  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop."TPopNr"), concat('Feld-Kontrolle (Jahr): ', apflora.tpopkontr."TPopKontrJahr"), concat('Zählung (id): ', apflora.tpopkontrzaehl.id)]::text[] AS text,
   apflora.tpopkontr."TPopKontrJahr" AS "Berichtjahr"
 FROM
   apflora.ap
@@ -6654,12 +6654,12 @@ FROM
         (apflora.tpopkontr
         INNER JOIN
           apflora.tpopkontrzaehl
-          ON apflora.tpopkontr."TPopKontrId" = apflora.tpopkontrzaehl."TPopKontrId")
+          ON apflora.tpopkontr."TPopKontrId" = apflora.tpopkontrzaehl.tpopkontr_id)
         ON apflora.tpop."TPopId" = apflora.tpopkontr."TPopId")
       ON apflora.pop."PopId" = apflora.tpop."PopId")
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
 WHERE
-  apflora.tpopkontrzaehl."Zaehleinheit" IS NULL
+  apflora.tpopkontrzaehl.einheit IS NULL
   AND apflora.tpopkontr."TPopKontrJahr" IS NOT NULL
   AND apflora.tpopkontr."TPopKontrTyp" = 'Freiwilligen-Erfolgskontrolle'
 ORDER BY
@@ -6673,8 +6673,8 @@ SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
   'Zaehlung ohne Methode (Feldkontrolle):'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId", 'Feld-Kontrollen', apflora.tpopkontr."TPopKontrId", 'Zählungen', apflora.tpopkontrzaehl."TPopKontrZaehlId"]::text[] AS url,
-  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop."TPopNr"), concat('Feld-Kontrolle (Jahr): ', apflora.tpopkontr."TPopKontrJahr"), concat('Zählung (id): ', apflora.tpopkontrzaehl."TPopKontrZaehlId")]::text[] AS text,
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId", 'Feld-Kontrollen', apflora.tpopkontr."TPopKontrId", 'Zählungen', apflora.tpopkontrzaehl.id]::text[] AS url,
+  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop."TPopNr"), concat('Feld-Kontrolle (Jahr): ', apflora.tpopkontr."TPopKontrJahr"), concat('Zählung (id): ', apflora.tpopkontrzaehl.id)]::text[] AS text,
   apflora.tpopkontr."TPopKontrJahr" AS "Berichtjahr"
 FROM
   apflora.ap
@@ -6686,12 +6686,12 @@ FROM
         (apflora.tpopkontr
         INNER JOIN
           apflora.tpopkontrzaehl
-          ON apflora.tpopkontr."TPopKontrId" = apflora.tpopkontrzaehl."TPopKontrId")
+          ON apflora.tpopkontr."TPopKontrId" = apflora.tpopkontrzaehl.tpopkontr_id)
         ON apflora.tpop."TPopId" = apflora.tpopkontr."TPopId")
       ON apflora.pop."PopId" = apflora.tpop."PopId")
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
 WHERE
-  apflora.tpopkontrzaehl."Methode" IS NULL
+  apflora.tpopkontrzaehl.methode IS NULL
   AND apflora.tpopkontr."TPopKontrJahr" IS NOT NULL
   AND apflora.tpopkontr."TPopKontrTyp" <> 'Freiwilligen-Erfolgskontrolle'
 ORDER BY
@@ -6705,8 +6705,8 @@ SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
   'Zaehlung ohne Methode (Freiwilligen-Kontrolle):'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId", 'Freiwilligen-Kontrollen', apflora.tpopkontr."TPopKontrId", 'Zählungen', apflora.tpopkontrzaehl."TPopKontrZaehlId"]::text[] AS url,
-  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop."TPopNr"), concat('Feld-Kontrolle (Jahr): ', apflora.tpopkontr."TPopKontrJahr"), concat('Zählung (id): ', apflora.tpopkontrzaehl."TPopKontrZaehlId")]::text[] AS text,
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId", 'Freiwilligen-Kontrollen', apflora.tpopkontr."TPopKontrId", 'Zählungen', apflora.tpopkontrzaehl.id]::text[] AS url,
+  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop."TPopNr"), concat('Feld-Kontrolle (Jahr): ', apflora.tpopkontr."TPopKontrJahr"), concat('Zählung (id): ', apflora.tpopkontrzaehl.id)]::text[] AS text,
   apflora.tpopkontr."TPopKontrJahr" AS "Berichtjahr"
 FROM
   apflora.ap
@@ -6718,12 +6718,12 @@ FROM
         (apflora.tpopkontr
         INNER JOIN
           apflora.tpopkontrzaehl
-          ON apflora.tpopkontr."TPopKontrId" = apflora.tpopkontrzaehl."TPopKontrId")
+          ON apflora.tpopkontr."TPopKontrId" = apflora.tpopkontrzaehl.tpopkontr_id)
         ON apflora.tpop."TPopId" = apflora.tpopkontr."TPopId")
       ON apflora.pop."PopId" = apflora.tpop."PopId")
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
 WHERE
-  apflora.tpopkontrzaehl."Methode" IS NULL
+  apflora.tpopkontrzaehl.methode IS NULL
   AND apflora.tpopkontr."TPopKontrJahr" IS NOT NULL
   AND apflora.tpopkontr."TPopKontrTyp" = 'Freiwilligen-Erfolgskontrolle'
 ORDER BY
@@ -6737,8 +6737,8 @@ SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
   'Zaehlung ohne Anzahl (Feldkontrolle):'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId", 'Feld-Kontrollen', apflora.tpopkontr."TPopKontrId", 'Zählungen', apflora.tpopkontrzaehl."TPopKontrZaehlId"]::text[] AS url,
-  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop."TPopNr"), concat('Feld-Kontrolle (Jahr): ', apflora.tpopkontr."TPopKontrJahr"), concat('Zählung (id): ', apflora.tpopkontrzaehl."TPopKontrZaehlId")]::text[] AS text,
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId", 'Feld-Kontrollen', apflora.tpopkontr."TPopKontrId", 'Zählungen', apflora.tpopkontrzaehl.id]::text[] AS url,
+  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop."TPopNr"), concat('Feld-Kontrolle (Jahr): ', apflora.tpopkontr."TPopKontrJahr"), concat('Zählung (id): ', apflora.tpopkontrzaehl.id)]::text[] AS text,
   apflora.tpopkontr."TPopKontrJahr" AS "Berichtjahr"
 FROM
   apflora.ap
@@ -6750,12 +6750,12 @@ FROM
         (apflora.tpopkontr
         INNER JOIN
           apflora.tpopkontrzaehl
-          ON apflora.tpopkontr."TPopKontrId" = apflora.tpopkontrzaehl."TPopKontrId")
+          ON apflora.tpopkontr."TPopKontrId" = apflora.tpopkontrzaehl.tpopkontr_id)
         ON apflora.tpop."TPopId" = apflora.tpopkontr."TPopId")
       ON apflora.pop."PopId" = apflora.tpop."PopId")
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
 WHERE
-  apflora.tpopkontrzaehl."Anzahl" IS NULL
+  apflora.tpopkontrzaehl.anzahl IS NULL
   AND apflora.tpopkontr."TPopKontrJahr" IS NOT NULL
   AND apflora.tpopkontr."TPopKontrTyp" <> 'Freiwilligen-Erfolgskontrolle'
 ORDER BY
@@ -6769,8 +6769,8 @@ SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
   'Zaehlung ohne Anzahl (Freiwilligen-Kontrolle):'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId", 'Freiwilligen-Kontrollen', apflora.tpopkontr."TPopKontrId", 'Zählungen', apflora.tpopkontrzaehl."TPopKontrZaehlId"]::text[] AS url,
-  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop."TPopNr"), concat('Feld-Kontrolle (Jahr): ', apflora.tpopkontr."TPopKontrJahr"), concat('Zählung (id): ', apflora.tpopkontrzaehl."TPopKontrZaehlId")]::text[] AS text,
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId", 'Freiwilligen-Kontrollen', apflora.tpopkontr."TPopKontrId", 'Zählungen', apflora.tpopkontrzaehl.id]::text[] AS url,
+  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop."TPopNr"), concat('Feld-Kontrolle (Jahr): ', apflora.tpopkontr."TPopKontrJahr"), concat('Zählung (id): ', apflora.tpopkontrzaehl.id)]::text[] AS text,
   apflora.tpopkontr."TPopKontrJahr" AS "Berichtjahr"
 FROM
   apflora.ap
@@ -6782,12 +6782,12 @@ FROM
         (apflora.tpopkontr
         INNER JOIN
           apflora.tpopkontrzaehl
-          ON apflora.tpopkontr."TPopKontrId" = apflora.tpopkontrzaehl."TPopKontrId")
+          ON apflora.tpopkontr."TPopKontrId" = apflora.tpopkontrzaehl.tpopkontr_id)
         ON apflora.tpop."TPopId" = apflora.tpopkontr."TPopId")
       ON apflora.pop."PopId" = apflora.tpop."PopId")
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
 WHERE
-  apflora.tpopkontrzaehl."Anzahl" IS NULL
+  apflora.tpopkontrzaehl.anzahl IS NULL
   AND apflora.tpopkontr."TPopKontrJahr" IS NOT NULL
   AND apflora.tpopkontr."TPopKontrTyp" = 'Freiwilligen-Erfolgskontrolle'
 ORDER BY
@@ -7397,7 +7397,7 @@ WHERE
       (apflora.tpopkontr
       INNER JOIN
         apflora.tpopkontrzaehl
-        ON apflora.tpopkontr."TPopKontrId" = apflora.tpopkontrzaehl."TPopKontrId")
+        ON apflora.tpopkontr."TPopKontrId" = apflora.tpopkontrzaehl.tpopkontr_id)
       INNER JOIN
         apflora.v_tpopkontr_letzteid
         ON
@@ -7407,7 +7407,7 @@ WHERE
           )
     WHERE
       apflora.tpopkontr."TPopKontrTyp" NOT IN ('Zwischenziel', 'Ziel')
-      AND apflora.tpopkontrzaehl."Anzahl" > 0
+      AND apflora.tpopkontrzaehl.anzahl > 0
   );
 
 DROP VIEW IF EXISTS apflora.v_qk2_tpop_mitstatuspotentiellundzaehlungmitanzahl CASCADE;
@@ -7440,10 +7440,10 @@ WHERE
       apflora.tpopkontr
       INNER JOIN
         apflora.tpopkontrzaehl
-        ON apflora.tpopkontr."TPopKontrId" = apflora.tpopkontrzaehl."TPopKontrId"
+        ON apflora.tpopkontr."TPopKontrId" = apflora.tpopkontrzaehl.tpopkontr_id
     WHERE
       apflora.tpopkontr."TPopKontrTyp" NOT IN ('Zwischenziel', 'Ziel')
-      AND apflora.tpopkontrzaehl."Anzahl" > 0
+      AND apflora.tpopkontrzaehl.anzahl > 0
   )
 ORDER BY
   apflora.pop."PopId",

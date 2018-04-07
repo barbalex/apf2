@@ -730,11 +730,11 @@ CREATE TABLE apflora.tpopkontrzaehl (
   "MutWer" varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
 );
 SELECT setval(pg_get_serial_sequence('apflora.tpopkontrzaehl', 'TPopKontrZaehlId'), coalesce(max("TPopKontrZaehlId"), 0) + 1, false) FROM apflora.tpopkontrzaehl;
-COMMENT ON COLUMN apflora.tpopkontrzaehl."Anzahl" IS 'Anzahl Zaehleinheiten';
-COMMENT ON COLUMN apflora.tpopkontrzaehl."Zaehleinheit" IS 'Verwendete Zaehleinheit. Auswahl aus Tabelle "tpopkontrzaehl_einheit_werte"';
-COMMENT ON COLUMN apflora.tpopkontrzaehl."Methode" IS 'Verwendete Methodik. Auswahl aus Tabelle "tpopkontrzaehl_methode_werte"';
-COMMENT ON COLUMN apflora.tpopkontrzaehl."MutWann" IS 'Wann wurde der Datensatz zuletzt geändert?';
-COMMENT ON COLUMN apflora.tpopkontrzaehl."MutWer" IS 'Von wem wurde der Datensatz zuletzt geändert?';
+COMMENT ON COLUMN apflora.tpopkontrzaehl.anzahl IS 'Anzahl Zaehleinheiten';
+COMMENT ON COLUMN apflora.tpopkontrzaehl.einheit IS 'Verwendete Zaehleinheit. Auswahl aus Tabelle "tpopkontrzaehl_einheit_werte"';
+COMMENT ON COLUMN apflora.tpopkontrzaehl.methode IS 'Verwendete Methodik. Auswahl aus Tabelle "tpopkontrzaehl_methode_werte"';
+COMMENT ON COLUMN apflora.tpopkontrzaehl.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
+COMMENT ON COLUMN apflora.tpopkontrzaehl.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 CREATE INDEX ON apflora.tpopkontrzaehl USING btree ("TPopKontrZaehlId");
 CREATE INDEX ON apflora.tpopkontrzaehl USING btree ("TPopKontrId");
 CREATE INDEX ON apflora.tpopkontrzaehl USING btree ("Anzahl");
