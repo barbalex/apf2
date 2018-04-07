@@ -239,6 +239,7 @@ const fetchQk = async ({
 
     // Massn ohne Jahr/Typ
     { type: 'view', name: 'v_qk2_massn_ohnejahr' },
+    { type: 'view', name: 'v_qk2_massn_ohnebearb' },
     { type: 'view', name: 'v_qk2_massn_ohnetyp', berichtjahr },
     // Massn.-Bericht ohne Jahr/Entwicklung
     { type: 'view', name: 'v_qk2_massnber_ohnejahr' },
@@ -249,6 +250,8 @@ const fetchQk = async ({
     // Kontrolle ohne Jahr/Zählung/Kontrolltyp
     { type: 'view', name: 'v_qk2_feldkontr_ohnejahr' },
     { type: 'view', name: 'v_qk2_freiwkontr_ohnejahr' },
+    { type: 'view', name: 'v_qk2_feldkontr_ohnebearb' },
+    { type: 'view', name: 'v_qk2_freiwkontr_ohnebearb' },
     { type: 'view', name: 'v_qk2_feldkontr_ohnezaehlung', berichtjahr },
     { type: 'view', name: 'v_qk2_freiwkontr_ohnezaehlung', berichtjahr },
     { type: 'view', name: 'v_qk2_feldkontr_ohnetyp', berichtjahr },
