@@ -542,6 +542,15 @@ const Exporte = ({
                 })
               }
             />
+            <DownloadCardButton
+              label="Massnahmen für WebGIS BUN"
+              onClick={() =>
+                downloadFromView({
+                  view: 'v_massn_webgisbun',
+                  fileName: 'MassnahmenWebGisBun',
+                })
+              }
+            />
           </DownloadCardText>
         </FirstLevelCard>
         <FirstLevelCard>
