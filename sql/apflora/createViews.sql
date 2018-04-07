@@ -6274,6 +6274,33 @@ ORDER BY
   apflora.tpop."TPopNr",
   apflora.tpopmassn."TPopMassnId";
 
+DROP VIEW IF EXISTS apflora.v_qk2_massn_ohnebearb CASCADE;
+CREATE OR REPLACE VIEW apflora.v_qk2_massn_ohnebearb AS
+SELECT
+  apflora.ap."ProjId",
+  apflora.ap."ApArtId",
+  'Massnahme ohne BearbeiterIn:'::text AS hw,
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId", 'Massnahmen', apflora.tpopmassn."TPopMassnId"]::text[] AS url,
+  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop."TPopNr"), concat('Massnahme (id): ', apflora.tpopmassn."TPopMassnId")]::text[] AS text
+FROM
+  apflora.ap
+  INNER JOIN
+    (apflora.pop
+    INNER JOIN
+      (apflora.tpop
+      INNER JOIN
+        apflora.tpopmassn
+        ON apflora.tpop."TPopId" = apflora.tpopmassn."TPopId")
+      ON apflora.pop."PopId" = apflora.tpop."PopId")
+    ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
+WHERE
+  apflora.tpopmassn."TPopMassnBearb" IS NULL
+ORDER BY
+  apflora.ap."ApArtId",
+  apflora.pop."PopNr",
+  apflora.tpop."TPopNr",
+  apflora.tpopmassn."TPopMassnId";
+
 DROP VIEW IF EXISTS apflora.v_qk2_massn_ohnetyp CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk2_massn_ohnetyp AS
 SELECT
@@ -6384,6 +6411,33 @@ ORDER BY
   apflora.tpop."TPopNr",
   apflora.tpopkontr."TPopKontrJahr";
 
+DROP VIEW IF EXISTS apflora.v_qk2_feldkontr_ohnebearb CASCADE;
+CREATE OR REPLACE VIEW apflora.v_qk2_feldkontr_ohnebearb AS
+SELECT
+  apflora.ap."ProjId",
+  apflora.ap."ApArtId",
+  'Feldkontrolle ohne BearbeiterIn:'::text AS hw,
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId", 'Feld-Kontrollen', apflora.tpopkontr."TPopKontrId"]::text[] AS url,
+  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop."TPopNr"), concat('Kontrolle (id): ', apflora.tpopkontr."TPopKontrId")]::text[] AS text
+FROM
+  apflora.ap
+  INNER JOIN
+    (apflora.pop
+    INNER JOIN
+      (apflora.tpop
+      INNER JOIN
+        apflora.tpopkontr
+        ON apflora.tpop."TPopId" = apflora.tpopkontr."TPopId")
+      ON apflora.pop."PopId" = apflora.tpop."PopId")
+    ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
+WHERE
+  apflora.tpopkontr."TPopKontrBearb" IS NULL
+  AND apflora.tpopkontr."TPopKontrTyp" <> 'Freiwilligen-Erfolgskontrolle'
+ORDER BY
+  apflora.pop."PopNr",
+  apflora.tpop."TPopNr",
+  apflora.tpopkontr."TPopKontrId";
+
 DROP VIEW IF EXISTS apflora.v_qk2_freiwkontr_ohnejahr CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk2_freiwkontr_ohnejahr AS
 SELECT
@@ -6411,6 +6465,34 @@ ORDER BY
   apflora.pop."PopNr",
   apflora.tpop."TPopNr",
   apflora.tpopkontr."TPopKontrJahr";
+
+DROP VIEW IF EXISTS apflora.v_qk2_freiwkontr_ohnebearb CASCADE;
+CREATE OR REPLACE VIEW apflora.v_qk2_freiwkontr_ohnebearb AS
+SELECT
+  apflora.ap."ProjId",
+  apflora.ap."ApArtId",
+  'Freiwilligen-Kontrolle ohne BearbeiterIn:'::text AS hw,
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId", 'Freiwilligen-Kontrollen', apflora.tpopkontr."TPopKontrId"]::text[] AS url,
+  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop."TPopNr"), concat('Feld-Kontrolle (id): ', apflora.tpopkontr."TPopKontrId")]::text[] AS text
+FROM
+  apflora.ap
+  INNER JOIN
+    (apflora.pop
+    INNER JOIN
+      (apflora.tpop
+      INNER JOIN
+        apflora.tpopkontr
+        ON apflora.tpop."TPopId" = apflora.tpopkontr."TPopId")
+      ON apflora.pop."PopId" = apflora.tpop."PopId")
+    ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
+WHERE
+  apflora.tpopkontr."TPopKontrBearb" IS NULL
+  AND apflora.tpopkontr."TPopKontrTyp" = 'Freiwilligen-Erfolgskontrolle'
+ORDER BY
+  apflora.ap."ApArtId",
+  apflora.pop."PopNr",
+  apflora.tpop."TPopNr",
+  apflora.tpopkontr."TPopKontrBearb";
 
 DROP VIEW IF EXISTS apflora.v_qk2_feldkontr_ohnetyp CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk2_feldkontr_ohnetyp AS
