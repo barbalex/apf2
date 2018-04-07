@@ -319,6 +319,81 @@ ORDER BY
   apflora.tpopmassn."TPopMassnDatum",
   tpopmassn_typ_werte."MassnTypTxt";
 
+DROP VIEW IF EXISTS apflora.v_massn_webgisbun CASCADE;
+CREATE OR REPLACE VIEW apflora.v_massn_webgisbun AS
+SELECT
+  apflora.adb_eigenschaften."TaxonomieId" AS "APARTID",
+  apflora.adb_eigenschaften."Artname" AS "APART",
+  apflora.pop."PopGuid" AS "POPGUID",
+  apflora.pop."PopNr" AS "POPNR",
+  apflora.tpop."TPopGuid" AS "TPOPGUID",
+  apflora.tpop."TPopNr" AS "TPOPNR",
+  apflora.tpop."TPopXKoord" AS "TPOP_X",
+  apflora.tpop."TPopYKoord" AS "TPOP_Y",
+  apflora.tpopmassn."TPopMassnGuid" AS "MASSNGUID",
+  apflora.tpopmassn."TPopMassnJahr" AS "MASSNJAHR",
+  -- need to convert date
+  apflora.tpopmassn."TPopMassnDatum" AS "MASSNDAT",
+  tpopmassn_typ_werte."MassnTypTxt" AS "MASSTYP",
+  apflora.tpopmassn."TPopMassnTxt" AS "MASSNMASSNAHME",
+  apflora.adresse."AdrName" AS "MASSNBEARBEITER",
+  CAST(apflora.tpopmassn."TPopMassnBemTxt" AS CHAR) AS "MASSNBEMERKUNG",
+  apflora.tpopmassn."TPopMassnPlan" AS "MASSNPLAN",
+  apflora.tpopmassn."TPopMassnPlanBez" AS "MASSPLANBEZ",
+  apflora.tpopmassn."TPopMassnFlaeche" AS "MASSNFLAECHE",
+  apflora.tpopmassn."TPopMassnAnsiedForm" AS "MASSNFORMANSIEDL",
+  apflora.tpopmassn."TPopMassnAnsiedPflanzanordnung" AS "MASSNPFLANZANORDNUNG",
+  apflora.tpopmassn."TPopMassnMarkierung" AS "MASSNMARKIERUNG",
+  apflora.tpopmassn."TPopMassnAnsiedAnzTriebe" AS "MASSNANZTRIEBE",
+  apflora.tpopmassn."TPopMassnAnsiedAnzPfl" AS "MASSNANZPFLANZEN",
+  apflora.tpopmassn."TPopMassnAnzPflanzstellen" AS "MASSNANZPFLANZSTELLEN",
+  apflora.tpopmassn."TPopMassnAnsiedWirtspfl" AS "MASSNWIRTSPFLANZEN",
+  apflora.tpopmassn."TPopMassnAnsiedHerkunftPop" AS "MASSNHERKUNFTSPOP",
+  apflora.tpopmassn."TPopMassnAnsiedDatSamm" AS "MASSNSAMMELDAT",
+  -- need to convert date
+  apflora.tpopmassn."MutWann" AS "MASSNCHANGEDAT",
+  apflora.tpopmassn."MutWer" AS "MASSNCHANGEBY"
+FROM
+  ((((((apflora.adb_eigenschaften
+  INNER JOIN
+    apflora.ap ON apflora.adb_eigenschaften."TaxonomieId" = apflora.ap."ApArtId")
+    INNER JOIN
+      ((apflora.pop
+      INNER JOIN
+        apflora.tpop
+        ON apflora.pop."PopId" = apflora.tpop."PopId")
+      INNER JOIN
+        (apflora.tpopmassn
+        LEFT JOIN
+          apflora.tpopmassn_typ_werte
+          ON apflora.tpopmassn."TPopMassnTyp" = tpopmassn_typ_werte."MassnTypCode")
+        ON apflora.tpop."TPopId" = apflora.tpopmassn."TPopId")
+    ON apflora.ap."ApArtId" = apflora.pop."ApArtId")
+  LEFT JOIN
+    apflora.ap_bearbstand_werte
+    ON apflora.ap."ApStatus" = apflora.ap_bearbstand_werte."DomainCode")
+  LEFT JOIN
+    apflora.ap_umsetzung_werte
+    ON apflora.ap."ApUmsetzung" = apflora.ap_umsetzung_werte."DomainCode")
+  LEFT JOIN
+    apflora.pop_status_werte
+    ON apflora.pop."PopHerkunft" = pop_status_werte."HerkunftId")
+  LEFT JOIN
+    apflora.pop_status_werte AS "domPopHerkunft_1"
+    ON apflora.tpop."TPopHerkunft" = "domPopHerkunft_1"."HerkunftId")
+  LEFT JOIN
+    apflora.adresse
+    ON apflora.tpopmassn."TPopMassnBearb" = apflora.adresse."AdrId"
+WHERE
+  apflora.adb_eigenschaften."TaxonomieId" > 150
+ORDER BY
+  apflora.adb_eigenschaften."Artname",
+  apflora.pop."PopNr",
+  apflora.tpop."TPopNr",
+  apflora.tpopmassn."TPopMassnJahr",
+  apflora.tpopmassn."TPopMassnDatum",
+  tpopmassn_typ_werte."MassnTypTxt";
+
 DROP VIEW IF EXISTS apflora.v_massn_fuergis_write CASCADE;
 CREATE OR REPLACE VIEW apflora.v_massn_fuergis_write AS
 SELECT
