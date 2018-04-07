@@ -970,6 +970,9 @@ CREATE TABLE apflora.evab_typologie (
   "Alliance" varchar(100)
 );
 
+-- TODO:
+-- replace with direct GraphQL call to ae
+-- when graphql installed
 DROP TABLE IF EXISTS apflora.adb_eigenschaften;
 CREATE TABLE apflora.adb_eigenschaften (
   "GUID" UUID PRIMARY KEY,
@@ -986,6 +989,9 @@ CREATE TABLE apflora.adb_eigenschaften (
 CREATE INDEX ON apflora.adb_eigenschaften USING btree ("TaxonomieId");
 CREATE INDEX ON apflora.adb_eigenschaften USING btree ("Artname");
 
+-- TODO:
+-- replace with direct GraphQL call to ae
+-- when graphql installed
 DROP TABLE IF EXISTS apflora.adb_lr;
 CREATE TABLE apflora.adb_lr (
   "Id" integer PRIMARY KEY,
