@@ -9,7 +9,7 @@ ALTER TABLE apflora.tpopkontrzaehl RENAME "MutWer" TO changed_by;
 
 COMMENT ON COLUMN apflora.tpopkontrzaehl.id_old IS 'frühere id';
 
--- done: renamed in sql
+-- TODO: renamed in sql
 -- TODO: check if old id was used somewhere. If so: rename that field, add new one and update that
 -- TODO: add all views, functions, triggers with tpopkontrzaehl to this file
 -- TODO: rename in js
