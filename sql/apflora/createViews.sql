@@ -6203,7 +6203,7 @@ SELECT
   apflora.ap."ApArtId",
   'Massnahme ohne BearbeiterIn:'::text AS hw,
   ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId", 'Massnahmen', apflora.tpopmassn."TPopMassnId"]::text[] AS url,
-  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop."TPopNr"), concat('Massnahme: ', apflora.tpopmassn."TPopMassnBearb")]::text[] AS text
+  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop."TPopNr"), concat('Massnahme (id): ', apflora.tpopmassn."TPopMassnId")]::text[] AS text
 FROM
   apflora.ap
   INNER JOIN
@@ -6340,7 +6340,7 @@ SELECT
   apflora.ap."ApArtId",
   'Feldkontrolle ohne BearbeiterIn:'::text AS hw,
   ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId", 'Feld-Kontrollen', apflora.tpopkontr."TPopKontrId"]::text[] AS url,
-  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop."TPopNr"), concat('Feld-Kontrolle (BearbeiterIn): ', apflora.tpopkontr."TPopKontrBearb")]::text[] AS text
+  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop."TPopNr"), concat('Kontrolle (id): ', apflora.tpopkontr."TPopKontrId")]::text[] AS text
 FROM
   apflora.ap
   INNER JOIN
@@ -6358,7 +6358,7 @@ WHERE
 ORDER BY
   apflora.pop."PopNr",
   apflora.tpop."TPopNr",
-  apflora.tpopkontr."TPopKontrBearb";
+  apflora.tpopkontr."TPopKontrId";
 
 DROP VIEW IF EXISTS apflora.v_qk2_freiwkontr_ohnejahr CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk2_freiwkontr_ohnejahr AS
