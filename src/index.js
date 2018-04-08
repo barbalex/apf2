@@ -41,39 +41,39 @@ import apiBaseUrl from './modules/apiBaseUrl'
 
 import './index.css'
 
-const AppBarAsync = Loadable({
+const AppBar = Loadable({
   loader: () => import('./components/AppBar'),
   loading: Loading,
 })
-const ProjekteAsync = Loadable({
+const Projekte = Loadable({
   loader: () => import('./components/Projekte'),
   loading: Loading,
 })
-const UserAsync = Loadable({
+const User = Loadable({
   loader: () => import('./components/User'),
   loading: Loading,
 })
-const NewApAsync = Loadable({
+const NewAp = Loadable({
   loader: () => import('./components/NewAp'),
   loading: Loading,
 })
-const DeletionsAsync = Loadable({
+const Deletions = Loadable({
   loader: () => import('./components/Deletions'),
   loading: Loading,
 })
-const ErrorsAsync = Loadable({
+const Errors = Loadable({
   loader: () => import('./components/Errors'),
   loading: Loading,
 })
-const UpdateAvailableAsync = Loadable({
+const UpdateAvailable = Loadable({
   loader: () => import('./components/UpdateAvailable'),
   loading: Loading,
 })
-const MessagesAsync = Loadable({
+const Messages = Loadable({
   loader: () => import('./components/Messages'),
   loading: Loading,
 })
-const DownloadMessagesAsync = Loadable({
+const DownloadMessages = Loadable({
   loader: () => import('./components/DownloadMessages'),
   loading: Loading,
 })
@@ -134,15 +134,15 @@ const DownloadMessagesAsync = Loadable({
         <MuiThemeProvider muiTheme={getMuiTheme(theme)}>
           <AppContainer>
             {false && <DevTools />}
-            <AppBarAsync />
-            <ProjekteAsync />
-            <UserAsync />
-            <NewApAsync />
-            <DeletionsAsync />
-            <ErrorsAsync />
-            <UpdateAvailableAsync />
-            <MessagesAsync />
-            <DownloadMessagesAsync />
+            <AppBar />
+            <Projekte />
+            <User />
+            <NewAp />
+            <Deletions />
+            <Errors />
+            <UpdateAvailable />
+            <Messages />
+            <DownloadMessages />
           </AppContainer>
         </MuiThemeProvider>
       </Provider>,
