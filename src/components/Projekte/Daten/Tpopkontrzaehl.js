@@ -30,9 +30,9 @@ const getZaehleinheitName = ({
   const { zaehleinheitWerte } = store.dropdownList
   const { activeDataset } = tree
   let name = ''
-  if (activeDataset.row.Zaehleinheit && zaehleinheitWerte.length > 0) {
+  if (activeDataset.row.einheit && zaehleinheitWerte.length > 0) {
     const zaehleinheit = zaehleinheitWerte.find(
-      a => a.value === activeDataset.row.Zaehleinheit
+      a => a.value === activeDataset.row.einheit
     )
     if (zaehleinheit && zaehleinheit.label) return zaehleinheit.label
   }
@@ -50,12 +50,12 @@ const Tpopkontrzaehl = ({ store, tree }: { store: Object, tree: Object }) => {
         <FormTitle tree={tree} title="Zählung" />
         <FieldsContainer>
           <AutoComplete
-            key={`${activeDataset.row.id}Zaehleinheit`}
+            key={`${activeDataset.row.id}einheit`}
             tree={tree}
             label="Einheit"
-            fieldName="Zaehleinheit"
+            fieldName="einheit"
             valueText={getZaehleinheitName({ store, tree })}
-            errorText={activeDataset.valid.Zaehleinheit}
+            errorText={activeDataset.valid.einheit}
             dataSource={store.dropdownList.zaehleinheitWerte}
             dataSourceConfig={{
               value: 'value',
@@ -64,23 +64,23 @@ const Tpopkontrzaehl = ({ store, tree }: { store: Object, tree: Object }) => {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
-            key={`${activeDataset.row.id}Anzahl`}
+            key={`${activeDataset.row.id}anzahl`}
             tree={tree}
             label="Anzahl (nur ganze Zahlen)"
-            fieldName="Anzahl"
-            value={activeDataset.row.Anzahl}
-            errorText={activeDataset.valid.Anzahl}
+            fieldName="anzahl"
+            value={activeDataset.row.anzahl}
+            errorText={activeDataset.valid.anzahl}
             type="number"
             updateProperty={store.updateProperty}
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <RadioButtonGroup
-            key={`${activeDataset.row.id}Methode`}
+            key={`${activeDataset.row.id}methode`}
             tree={tree}
-            fieldName="Methode"
+            fieldName="methode"
             label="Methode"
-            value={activeDataset.row.Methode}
-            errorText={activeDataset.valid.Methode}
+            value={activeDataset.row.methode}
+            errorText={activeDataset.valid.methode}
             dataSource={store.dropdownList.methodeWerte}
             updatePropertyInDb={store.updatePropertyInDb}
           />

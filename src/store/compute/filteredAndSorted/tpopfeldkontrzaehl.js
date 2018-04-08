@@ -17,9 +17,9 @@ export default (store: Object, tree: Object): Array<Object> => {
     const zaehleinheitTxt = zaehleinheitWert
       ? zaehleinheitWert.ZaehleinheitTxt
       : null
-    const methodeWert = methodeWerte.find(e => e.BeurteilCode === el.Methode)
+    const methodeWert = methodeWerte.find(e => e.BeurteilCode === el.methode)
     const methodeTxt = methodeWert ? methodeWert.BeurteilTxt : null
-    const anzahl = el.Anzahl || el.Anzahl === 0 ? el.Anzahl : '(keine Anzahl)'
+    const anzahl = el.anzahl || el.anzahl === 0 ? el.anzahl : '(keine Anzahl)'
     el.label = `${zaehleinheitTxt ||
       '(keine Einheit)'}: ${anzahl} ${methodeTxt || '(keine Methode)'}`
   })
