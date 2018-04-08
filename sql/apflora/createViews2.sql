@@ -1834,9 +1834,9 @@ SELECT
   apflora.v_tpopkontr."Kontr Gefaehrdung",
   apflora.v_tpopkontr."Kontrolle zuletzt geaendert",
   apflora.v_tpopkontr."Kontrolle zuletzt geaendert von",
-  apflora.v_tpopkontr."Anzahlen",
-  apflora.v_tpopkontr."Zaehleinheiten",
-  apflora.v_tpopkontr."Methoden"
+  apflora.v_tpopkontr."Zaehlungen Anzahlen",
+  apflora.v_tpopkontr."Zaehlungen Einheiten",
+  apflora.v_tpopkontr."Zaehlungen Methoden"
 FROM
   (apflora.v_tpop_letzteKontrId
   LEFT JOIN

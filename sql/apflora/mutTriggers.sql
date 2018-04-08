@@ -340,8 +340,8 @@ DROP TRIGGER IF EXISTS tpopkontrzaehl_on_update_set_mut ON apflora.tpopkontrzaeh
 DROP FUNCTION IF EXISTS tpopkontrzaehl_on_update_set_mut();
 CREATE FUNCTION tpopkontrzaehl_on_update_set_mut() RETURNS trigger AS $tpopkontrzaehl_on_update_set_mut$
   BEGIN
-    NEW."MutWer" = current_setting('request.jwt.claim.username', true);
-    NEW."MutWann" = NOW();
+    NEW.changed_by = current_setting('request.jwt.claim.username', true);
+    NEW.changed = NOW();
     RETURN NEW;
   END;
 $tpopkontrzaehl_on_update_set_mut$ LANGUAGE plpgsql;

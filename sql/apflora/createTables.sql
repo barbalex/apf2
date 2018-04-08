@@ -721,25 +721,25 @@ CREATE INDEX ON apflora.tpopkontr_typ_werte USING btree ("DomainOrd");
 
 DROP TABLE IF EXISTS apflora.tpopkontrzaehl;
 CREATE TABLE apflora.tpopkontrzaehl (
-  id SERIAL PRIMARY KEY,
-  "TPopKontrId" integer DEFAULT NULL REFERENCES apflora.tpopkontr ("TPopKontrId") ON DELETE CASCADE ON UPDATE CASCADE,
-  "Anzahl" integer DEFAULT NULL,
-  "Zaehleinheit" integer DEFAULT NULL REFERENCES apflora.tpopkontrzaehl_einheit_werte ("ZaehleinheitCode") ON DELETE SET NULL ON UPDATE CASCADE,
-  "Methode" integer DEFAULT NULL REFERENCES apflora.tpopkontrzaehl_methode_werte ("BeurteilCode") ON DELETE SET NULL ON UPDATE CASCADE,
-  "MutWann" date DEFAULT NOW(),
-  "MutWer" varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
+  -- old_id still exist...
+  tpopkontr_id integer DEFAULT NULL REFERENCES apflora.tpopkontr ("TPopKontrId") ON DELETE CASCADE ON UPDATE CASCADE,
+  anzahl integer DEFAULT NULL,
+  einheit integer DEFAULT NULL REFERENCES apflora.tpopkontrzaehl_einheit_werte ("ZaehleinheitCode") ON DELETE SET NULL ON UPDATE CASCADE,
+  methode integer DEFAULT NULL REFERENCES apflora.tpopkontrzaehl_methode_werte ("BeurteilCode") ON DELETE SET NULL ON UPDATE CASCADE,
+  changed date DEFAULT NOW(),
+  changed_by varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
 );
-SELECT setval(pg_get_serial_sequence('apflora.tpopkontrzaehl', 'id'), coalesce(max(id), 0) + 1, false) FROM apflora.tpopkontrzaehl;
 COMMENT ON COLUMN apflora.tpopkontrzaehl.anzahl IS 'Anzahl Zaehleinheiten';
 COMMENT ON COLUMN apflora.tpopkontrzaehl.einheit IS 'Verwendete Zaehleinheit. Auswahl aus Tabelle "tpopkontrzaehl_einheit_werte"';
 COMMENT ON COLUMN apflora.tpopkontrzaehl.methode IS 'Verwendete Methodik. Auswahl aus Tabelle "tpopkontrzaehl_methode_werte"';
 COMMENT ON COLUMN apflora.tpopkontrzaehl.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.tpopkontrzaehl.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 CREATE INDEX ON apflora.tpopkontrzaehl USING btree (id);
-CREATE INDEX ON apflora.tpopkontrzaehl USING btree ("TPopKontrId");
-CREATE INDEX ON apflora.tpopkontrzaehl USING btree ("Anzahl");
-CREATE INDEX ON apflora.tpopkontrzaehl USING btree ("Zaehleinheit");
-CREATE INDEX ON apflora.tpopkontrzaehl USING btree ("Methode");
+CREATE INDEX ON apflora.tpopkontrzaehl USING btree (tpopkontr_id);
+CREATE INDEX ON apflora.tpopkontrzaehl USING btree (anzahl);
+CREATE INDEX ON apflora.tpopkontrzaehl USING btree (einheit);
+CREATE INDEX ON apflora.tpopkontrzaehl USING btree (methode);
 
 DROP TABLE IF EXISTS apflora.tpopkontrzaehl_einheit_werte;
 CREATE TABLE apflora.tpopkontrzaehl_einheit_werte (
