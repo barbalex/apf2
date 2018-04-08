@@ -25,4 +25,8 @@ ALTER TABLE apflora.tpopmassn RENAME "MutWer" TO changed_by;
 
 COMMENT ON COLUMN apflora.tpopmassn.id_old IS 'frühere id';
 
+-- change primary key
+ALTER TABLE apflora.tpopmassn DROP CONSTRAINT tpopmassn_pkey;
+ALTER TABLE apflora.tpopmassn ADD PRIMARY KEY (id);
+
 -- need to remove TPopMassnGuid_alt from apflora.v_massn before dropping

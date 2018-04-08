@@ -8,3 +8,7 @@ ALTER TABLE apflora.tpopmassnber RENAME "MutWann" TO changed;
 ALTER TABLE apflora.tpopmassnber RENAME "MutWer" TO changed_by;
 
 COMMENT ON COLUMN apflora.tpopmassnber.id_old IS 'frühere id';
+
+-- change primary key
+ALTER TABLE apflora.tpopmassnber DROP CONSTRAINT tpopmassnber_pkey;
+ALTER TABLE apflora.tpopmassnber ADD PRIMARY KEY (id);

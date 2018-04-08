@@ -31,6 +31,10 @@ ALTER TABLE apflora.tpop RENAME "MutWer" TO changed_by;
 
 COMMENT ON COLUMN apflora.tpop.id_old IS 'frühere id';
 
+-- change primary key
+ALTER TABLE apflora.tpop DROP CONSTRAINT tpop_pkey;
+ALTER TABLE apflora.tpop ADD PRIMARY KEY (id);
+
 -- TODO: update id in dependent tables
 -- dependent tables:
 -- - tpopbeob

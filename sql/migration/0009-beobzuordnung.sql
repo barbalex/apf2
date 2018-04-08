@@ -9,3 +9,7 @@ ALTER TABLE apflora.beobzuordnung RENAME "BeobMutWer" TO changed_by;
 
 COMMENT ON COLUMN apflora.beobzuordnung.id_old IS 'frühere id';
 ALTER TABLE apflora.beobzuordnung RENAME TO tpopbeob;
+
+-- change primary key
+ALTER TABLE apflora.beobzuordnung DROP CONSTRAINT beobzuordnung_pkey;
+ALTER TABLE apflora.beobzuordnung ADD PRIMARY KEY (id);
