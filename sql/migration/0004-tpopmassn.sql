@@ -19,7 +19,6 @@ ALTER TABLE apflora.tpopmassn RENAME "TPopMassnAnsiedHerkunftPop" TO herkunft_po
 ALTER TABLE apflora.tpopmassn RENAME "TPopMassnAnsiedDatSamm" TO sammeldatum;
 ALTER TABLE apflora.tpopmassn RENAME "TPopMassnAnsiedForm" TO form;
 ALTER TABLE apflora.tpopmassn RENAME "TPopMassnAnsiedPflanzanordnung" TO pflanzanordnung;
-ALTER TABLE apflora.tpopmassn DROP COLUMN "TPopMassnGuid_alt";
 ALTER TABLE apflora.tpopmassn RENAME "MutWann" TO changed;
 ALTER TABLE apflora.tpopmassn RENAME "MutWer" TO changed_by;
 
@@ -29,4 +28,15 @@ COMMENT ON COLUMN apflora.tpopmassn.id_old IS 'frühere id';
 ALTER TABLE apflora.tpopmassn DROP CONSTRAINT tpopmassn_pkey;
 ALTER TABLE apflora.tpopmassn ADD PRIMARY KEY (id);
 
+-- TODO: rename in sql
+-- TODO: check if old id was used somewhere. If so: rename that field, add new one and update that
+-- TODO: add all views, functions, triggers with tpopkontrzaehl to this file
+-- TODO: make sure createTable is correct
+-- TODO: rename in js
+-- TODO: test app
+-- TODO: update js and run this file on server
+
+
+
 -- need to remove TPopMassnGuid_alt from apflora.v_massn before dropping
+ALTER TABLE apflora.tpopmassn DROP COLUMN "TPopMassnGuid_alt";
