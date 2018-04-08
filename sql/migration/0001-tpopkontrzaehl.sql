@@ -13,7 +13,7 @@ COMMENT ON COLUMN apflora.tpopkontrzaehl.id_old IS 'frühere id';
 ALTER TABLE apflora.tpopkontrzaehl DROP CONSTRAINT tpopkontrzaehl_pkey;
 ALTER TABLE apflora.tpopkontrzaehl ADD PRIMARY KEY (id);
 
--- TODO: renamed in sql
+-- TODO: rename in sql
 -- TODO: check if old id was used somewhere. If so: rename that field, add new one and update that
 -- TODO: add all views, functions, triggers with tpopkontrzaehl to this file
 -- TODO: make sure createTable is correct

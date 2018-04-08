@@ -15,6 +15,6 @@ export default async ({
     zaehl => zaehl.TPopKontrId === tpopkontrIdFrom
   )
   tpopkontrzaehl.forEach(zaehl =>
-    store.copyTo(tpopkontrIdTo, 'tpopkontrzaehl', zaehl.TPopKontrZaehlId)
+    store.copyTo(tpopkontrIdTo, 'tpopkontrzaehl', zaehl.id)
   )
 }

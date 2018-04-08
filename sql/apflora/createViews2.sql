@@ -2008,7 +2008,7 @@ SELECT
   */
   CASE
     WHEN (
-      apflora.v_tpopkontr_maxanzahl."Anzahl" = 0
+      apflora.v_tpopkontr_maxanzahl.anzahl = 0
       AND EXISTS (
         SELECT
           "TPopId"
@@ -2020,7 +2020,7 @@ SELECT
           AND apflora.tpopber."TPopBerJahr" = apflora.tpopkontr."TPopKontrJahr"
       )
     ) THEN 2
-    WHEN apflora.v_tpopkontr_maxanzahl."Anzahl" = 0 THEN 3
+    WHEN apflora.v_tpopkontr_maxanzahl.anzahl = 0 THEN 3
     ELSE 1
   END AS "fkAAPRESENCE",
   apflora.tpopkontr."TPopKontrGefaehrdung" AS "MENACES",
@@ -2113,7 +2113,7 @@ GROUP BY
   apflora.adresse."EvabIdPerson",
   apflora.ap."ApArtId",
   "fkAAINTRODUIT",
-  apflora.v_tpopkontr_maxanzahl."Anzahl",
+  apflora.v_tpopkontr_maxanzahl.anzahl,
   apflora.tpopkontr."TPopKontrGefaehrdung",
   apflora.tpopkontr."TPopKontrVitalitaet",
   apflora.tpop."TPopBeschr",

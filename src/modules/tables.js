@@ -63,7 +63,7 @@ export default [
     table: 'tpopkontrzaehl',
     label: 'Zählungen',
     labelSingular: 'Zählung',
-    idField: 'TPopKontrZaehlId',
+    idField: 'id',
     parentIdField: 'TPopKontrId',
   },
   {
@@ -71,7 +71,7 @@ export default [
     dbTable: 'tpopkontrzaehl',
     label: 'Zählungen',
     labelSingular: 'Zählung',
-    idField: 'TPopKontrZaehlId',
+    idField: 'id',
     parentIdField: 'TPopKontrId',
   },
   {
@@ -79,7 +79,7 @@ export default [
     dbTable: 'tpopkontrzaehl',
     label: 'Zählungen',
     labelSingular: 'Zählung',
-    idField: 'TPopKontrZaehlId',
+    idField: 'id',
     parentIdField: 'TPopKontrId',
   },
   {

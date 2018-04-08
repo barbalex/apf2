@@ -187,7 +187,7 @@ COMMENT ON COLUMN apflora.apberuebersicht."JbuBemerkungen" IS 'Bemerkungen zur A
 COMMENT ON COLUMN apflora.apberuebersicht."MutWann" IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.apberuebersicht."MutWer" IS 'Von wem wurde der Datensatz zuletzt geändert?';
 ALTER TABLE apflora.apberuebersicht ADD CONSTRAINT apberuebersicht_proj_jahr_pk PRIMARY KEY ("ProjId", "JbuJahr");
-CREATE INDEX ON apflora.apberuebersicht USING btree ("id");
+CREATE INDEX ON apflora.apberuebersicht USING btree (id);
 CREATE INDEX ON apflora.apberuebersicht USING btree ("JbuJahr");
 
 -- once:
@@ -221,7 +221,7 @@ SELECT setval(pg_get_serial_sequence('apflora.assozart', 'AaId'), coalesce(max("
 DROP TABLE IF EXISTS apflora.beobzuordnung;
 CREATE TABLE apflora.beobzuordnung (
   "BeobId" integer PRIMARY KEY,
-  "QuelleId" integer Default Null REFERENCES beob.beob_quelle ("id") ON DELETE SET NULL ON UPDATE CASCADE,
+  "QuelleId" integer Default Null REFERENCES beob.beob_quelle (id) ON DELETE SET NULL ON UPDATE CASCADE,
   "TPopId" integer DEFAULT NULL REFERENCES apflora.tpop ("TPopId") ON DELETE CASCADE ON UPDATE CASCADE,
   "BeobNichtZuordnen" smallint DEFAULT NULL,
   "BeobBemerkungen" text,
@@ -721,7 +721,7 @@ CREATE INDEX ON apflora.tpopkontr_typ_werte USING btree ("DomainOrd");
 
 DROP TABLE IF EXISTS apflora.tpopkontrzaehl;
 CREATE TABLE apflora.tpopkontrzaehl (
-  "TPopKontrZaehlId" SERIAL PRIMARY KEY,
+  id SERIAL PRIMARY KEY,
   "TPopKontrId" integer DEFAULT NULL REFERENCES apflora.tpopkontr ("TPopKontrId") ON DELETE CASCADE ON UPDATE CASCADE,
   "Anzahl" integer DEFAULT NULL,
   "Zaehleinheit" integer DEFAULT NULL REFERENCES apflora.tpopkontrzaehl_einheit_werte ("ZaehleinheitCode") ON DELETE SET NULL ON UPDATE CASCADE,
@@ -729,13 +729,13 @@ CREATE TABLE apflora.tpopkontrzaehl (
   "MutWann" date DEFAULT NOW(),
   "MutWer" varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
 );
-SELECT setval(pg_get_serial_sequence('apflora.tpopkontrzaehl', 'TPopKontrZaehlId'), coalesce(max("TPopKontrZaehlId"), 0) + 1, false) FROM apflora.tpopkontrzaehl;
+SELECT setval(pg_get_serial_sequence('apflora.tpopkontrzaehl', 'id'), coalesce(max(id), 0) + 1, false) FROM apflora.tpopkontrzaehl;
 COMMENT ON COLUMN apflora.tpopkontrzaehl.anzahl IS 'Anzahl Zaehleinheiten';
 COMMENT ON COLUMN apflora.tpopkontrzaehl.einheit IS 'Verwendete Zaehleinheit. Auswahl aus Tabelle "tpopkontrzaehl_einheit_werte"';
 COMMENT ON COLUMN apflora.tpopkontrzaehl.methode IS 'Verwendete Methodik. Auswahl aus Tabelle "tpopkontrzaehl_methode_werte"';
 COMMENT ON COLUMN apflora.tpopkontrzaehl.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.tpopkontrzaehl.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
-CREATE INDEX ON apflora.tpopkontrzaehl USING btree ("TPopKontrZaehlId");
+CREATE INDEX ON apflora.tpopkontrzaehl USING btree (id);
 CREATE INDEX ON apflora.tpopkontrzaehl USING btree ("TPopKontrId");
 CREATE INDEX ON apflora.tpopkontrzaehl USING btree ("Anzahl");
 CREATE INDEX ON apflora.tpopkontrzaehl USING btree ("Zaehleinheit");
@@ -878,14 +878,14 @@ CREATE INDEX ON apflora.tpopmassnber USING btree ("TPopMassnBerJahr");
 
 DROP TABLE IF EXISTS apflora.message CASCADE;
 CREATE TABLE apflora.message (
-  "id" SERIAL PRIMARY KEY,
+  id SERIAL PRIMARY KEY,
   "message" text NOT NULL,
   "time" timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   -- active is used to prevent to many datasets fro being fetched
   -- old messages can be set inactive, expecially if read by all
   "active" boolean NOT NULL DEFAULT 'true'
 );
-CREATE INDEX ON apflora.message USING btree ("id");
+CREATE INDEX ON apflora.message USING btree (id);
 CREATE INDEX ON apflora.message USING btree ("time");
 COMMENT ON COLUMN apflora.message."message" IS 'Nachricht an die Benutzer';
 
@@ -893,7 +893,7 @@ COMMENT ON COLUMN apflora.message."message" IS 'Nachricht an die Benutzer';
 DROP TABLE IF EXISTS apflora.usermessage;
 CREATE TABLE apflora.usermessage (
   "UserName" varchar(30) NOT NULL REFERENCES basic_auth.users (name) ON DELETE CASCADE ON UPDATE CASCADE,
-  "MessageId" integer NOT NULL REFERENCES apflora.message ("id") ON DELETE CASCADE ON UPDATE CASCADE,
+  "MessageId" integer NOT NULL REFERENCES apflora.message (id) ON DELETE CASCADE ON UPDATE CASCADE,
   UNIQUE ("UserName", "MessageId")
 );
 CREATE INDEX ON apflora.usermessage USING btree ("UserName", "MessageId");
@@ -1064,7 +1064,7 @@ CREATE TABLE apflora.beob_projekt (
 DROP TABLE IF EXISTS apflora.beob_quelle;
 CREATE TABLE apflora.beob_quelle
 (
-   "id" integer PRIMARY KEY,
+   id integer PRIMARY KEY,
    "name" varchar(255) DEFAULT NULL
 );
 INSERT INTO apflora.beob_quelle VALUES (1, 'evab');

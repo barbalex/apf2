@@ -7,7 +7,7 @@ export default (
   apArtId: number,
   popId: number,
   tpopId: number,
-  tpopkontrId: number,
+  tpopkontrId: number
 ): Array<Object> => {
   // fetch sorting indexes of parents
   const projIndex = findIndex(tree.filteredAndSorted.projekt, {
@@ -15,21 +15,21 @@ export default (
   })
   const apIndex = findIndex(
     tree.filteredAndSorted.ap.filter(a => a.ProjId === projId),
-    { ApArtId: apArtId },
+    { ApArtId: apArtId }
   )
   const popIndex = findIndex(
     tree.filteredAndSorted.pop.filter(p => p.ApArtId === apArtId),
-    { PopId: popId },
+    { PopId: popId }
   )
   const tpopIndex = findIndex(
     tree.filteredAndSorted.tpop.filter(t => t.PopId === popId),
-    { TPopId: tpopId },
+    { TPopId: tpopId }
   )
   const tpopfreiwkontrIndex = findIndex(
     tree.filteredAndSorted.tpopfreiwkontr.filter(t => t.TPopId === tpopId),
     {
       TPopKontrId: tpopkontrId,
-    },
+    }
   )
 
   return tree.filteredAndSorted.tpopfreiwkontrzaehl
@@ -37,9 +37,9 @@ export default (
     .map((el, index) => ({
       nodeType: 'table',
       menuType: 'tpopfreiwkontrzaehl',
-      id: el.TPopKontrZaehlId,
+      id: el.id,
       parentId: tpopkontrId,
-      urlLabel: el.TPopKontrZaehlId,
+      urlLabel: el.id,
       label: el.label,
       url: [
         'Projekte',
@@ -53,7 +53,7 @@ export default (
         'Freiwilligen-Kontrollen',
         tpopkontrId,
         'Zaehlungen',
-        el.TPopKontrZaehlId,
+        el.id,
       ],
       sort: [
         projIndex,
