@@ -19,7 +19,7 @@ ALTER TABLE apflora.tpopmassn RENAME "TPopMassnAnsiedHerkunftPop" TO herkunft_po
 ALTER TABLE apflora.tpopmassn RENAME "TPopMassnAnsiedDatSamm" TO sammeldatum;
 ALTER TABLE apflora.tpopmassn RENAME "TPopMassnAnsiedForm" TO form;
 ALTER TABLE apflora.tpopmassn RENAME "TPopMassnAnsiedPflanzanordnung" TO pflanzanordnung;
-ALTER TABLE apflora.tpopmassn RENAME "TPopMassnGuid_alt" TO uuid_alt;
+ALTER TABLE apflora.tpopmassn DROP COLUMN "TPopMassnGuid_alt";
 ALTER TABLE apflora.tpopmassn RENAME "MutWann" TO changed;
 ALTER TABLE apflora.tpopmassn RENAME "MutWer" TO changed_by;
 
