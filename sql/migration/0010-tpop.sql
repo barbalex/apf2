@@ -39,6 +39,7 @@ COMMENT ON COLUMN apflora.tpop.id_old IS 'frühere id';
 -- - tpopmassnber
 -- - tpopkontr
 
+-- 1. Example: tpopber
 -- need to update triggers first
 DROP TRIGGER IF EXISTS tpopber_on_update_set_mut ON apflora.tpopber;
 DROP FUNCTION IF EXISTS tpopber_on_update_set_mut();
@@ -88,4 +89,5 @@ UPDATE apflora.tpopber SET tpop_id = (
   SELECT id FROM apflora.tpop WHERE id_old = apflora.tpopber.tpop_id_old
 ) WHERE tpop_id_old IS NOT NULL;
 -- need to update many views to do this:
+-- so first replace it by new id
 ALTER TABLE apflora.tpopber DROP COLUMN tpop_id_old;
