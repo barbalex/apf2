@@ -8,8 +8,8 @@ ALTER TABLE apflora.tpopkontrzaehl_methode_werte RENAME "MutWer" TO changed_by;
 -- done: add all views, functions, triggers with tpopkontrzaehl to this file
 -- done: make sure createTable is correct
 -- done: rename in js
--- TODO: test app
--- TODO: update js and run this file on server
+-- done: test app
+-- done: update js and run this file on server
 
 -- views:
 CREATE OR REPLACE VIEW apflora.v_tpopkontr_nachflurname AS

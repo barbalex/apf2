@@ -8,5 +8,5 @@ ALTER TABLE apflora.tpopkontrzaehl_einheit_werte RENAME "MutWer" TO changed_by;
 -- done: add all views, functions, triggers with tpopkontrzaehl_einheit_werte to next file
 -- done: make sure createTable is correct
 -- done: rename in js
--- TODO: test app
--- TODO: update js and run this file on server
+-- done: test app
+-- done: update js and run this file on server
