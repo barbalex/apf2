@@ -2768,8 +2768,8 @@ SELECT
   apflora.tpopkontr."TPopKontrGefaehrdung",
   apflora.tpopkontrzaehl.id,
   apflora.tpopkontrzaehl.anzahl,
-  apflora.tpopkontrzaehl_einheit_werte."ZaehleinheitTxt" AS einheit,
-  apflora.tpopkontrzaehl_methode_werte."BeurteilTxt" AS methode
+  apflora.tpopkontrzaehl_einheit_werte.text AS einheit,
+  apflora.tpopkontrzaehl_methode_werte.text AS methode
 FROM
   ((((((apflora.adb_eigenschaften
   INNER JOIN
@@ -2795,10 +2795,10 @@ FROM
     ON apflora.tpopkontr."TPopKontrId" = apflora.tpopkontrzaehl.tpopkontr_id)
   LEFT JOIN
     apflora.tpopkontrzaehl_einheit_werte
-    ON apflora.tpopkontrzaehl.einheit = apflora.tpopkontrzaehl_einheit_werte."ZaehleinheitCode")
+    ON apflora.tpopkontrzaehl.einheit = apflora.tpopkontrzaehl_einheit_werte.code)
   LEFT JOIN
     apflora.tpopkontrzaehl_methode_werte
-    ON apflora.tpopkontrzaehl.methode = apflora.tpopkontrzaehl_methode_werte."BeurteilCode"
+    ON apflora.tpopkontrzaehl.methode = apflora.tpopkontrzaehl_methode_werte.code
 WHERE
   apflora.tpopkontr."TPopKontrTyp" NOT IN ('Ziel', 'Zwischenziel')
 ORDER BY
@@ -3577,8 +3577,8 @@ SELECT
   apflora.tpopkontr."TPopKontrDatum",
   apflora.adresse."AdrName" AS "TPopKontrBearb",
   apflora.tpopkontrzaehl.anzahl,
-  apflora.tpopkontrzaehl_einheit_werte."ZaehleinheitTxt" AS einheit,
-  apflora.tpopkontrzaehl_methode_werte."BeurteilTxt" AS methode,
+  apflora.tpopkontrzaehl_einheit_werte.text AS einheit,
+  apflora.tpopkontrzaehl_methode_werte.text AS methode,
   apflora.tpopkontr."TPopKontrJungpfl",
   apflora.tpopkontr."TPopKontrVitalitaet",
   apflora.tpopkontr."TPopKontrUeberleb",
@@ -3637,10 +3637,10 @@ FROM
     ON apflora.tpopkontr."TPopKontrId" = apflora.tpopkontrzaehl.tpopkontr_id)
   INNER JOIN
     apflora.tpopkontrzaehl_methode_werte
-    ON apflora.tpopkontrzaehl.methode = apflora.tpopkontrzaehl_methode_werte."BeurteilCode")
+    ON apflora.tpopkontrzaehl.methode = apflora.tpopkontrzaehl_methode_werte.code)
   LEFT JOIN
     apflora.tpopkontrzaehl_einheit_werte
-    ON apflora.tpopkontrzaehl.einheit = apflora.tpopkontrzaehl_einheit_werte."ZaehleinheitCode";
+    ON apflora.tpopkontrzaehl.einheit = apflora.tpopkontrzaehl_einheit_werte.code;
 
 DROP VIEW IF EXISTS apflora.v_popber_angezapbestjahr0 CASCADE;
 CREATE OR REPLACE VIEW apflora.v_popber_angezapbestjahr0 AS
@@ -3975,8 +3975,8 @@ SELECT
   apflora.tpopkontr."MutWann" AS "Kontrolle zuletzt geaendert",
   apflora.tpopkontr."MutWer" AS "Kontrolle zuletzt geaendert von",
   array_to_string(array_agg(apflora.tpopkontrzaehl.anzahl), ', ') AS "Zaehlungen Anzahlen",
-  string_agg(apflora.tpopkontrzaehl_einheit_werte."ZaehleinheitTxt", ', ') AS "Zaehlungen Einheiten",
-  string_agg(apflora.tpopkontrzaehl_methode_werte."BeurteilTxt", ', ') AS "Zaehlungen Methoden"
+  string_agg(apflora.tpopkontrzaehl_einheit_werte.text, ', ') AS "Zaehlungen Einheiten",
+  string_agg(apflora.tpopkontrzaehl_methode_werte.text, ', ') AS "Zaehlungen Methoden"
 FROM
   apflora.pop_status_werte AS "domPopHerkunft_1"
   RIGHT JOIN
@@ -4004,10 +4004,10 @@ FROM
             ON apflora.tpopkontr."TPopKontrId" = apflora.tpopkontrzaehl.tpopkontr_id)
           LEFT JOIN
             apflora.tpopkontrzaehl_einheit_werte
-            ON apflora.tpopkontrzaehl.einheit = apflora.tpopkontrzaehl_einheit_werte."ZaehleinheitCode")
+            ON apflora.tpopkontrzaehl.einheit = apflora.tpopkontrzaehl_einheit_werte.code)
           LEFT JOIN
             apflora.tpopkontrzaehl_methode_werte
-            ON apflora.tpopkontrzaehl.methode = apflora.tpopkontrzaehl_methode_werte."BeurteilCode")
+            ON apflora.tpopkontrzaehl.methode = apflora.tpopkontrzaehl_methode_werte.code)
           ON apflora.tpop."TPopId" = apflora.tpopkontr."TPopId")
         ON apflora.pop."PopId" = apflora.tpop."PopId")
       ON apflora.ap."ApArtId" = apflora.pop."ApArtId")
@@ -4174,9 +4174,9 @@ SELECT
   -- TODO: convert
   apflora.tpopkontr."MutWann" AS "KONTRCHANGEDAT",
   apflora.tpopkontr."MutWer" AS "KONTRCHANGEBY",
-  string_agg(apflora.tpopkontrzaehl_einheit_werte."ZaehleinheitTxt", ', ') AS "ZAEHLEINHEITEN",
+  string_agg(apflora.tpopkontrzaehl_einheit_werte.text, ', ') AS "ZAEHLEINHEITEN",
   array_to_string(array_agg(apflora.tpopkontrzaehl.anzahl), ', ') AS "ANZAHLEN",
-  string_agg(apflora.tpopkontrzaehl_methode_werte."BeurteilTxt", ', ') AS "METHODEN"
+  string_agg(apflora.tpopkontrzaehl_methode_werte.text, ', ') AS "METHODEN"
 FROM
   apflora.pop_status_werte AS "domPopHerkunft_1"
   RIGHT JOIN
@@ -4204,10 +4204,10 @@ FROM
             ON apflora.tpopkontr."TPopKontrId" = apflora.tpopkontrzaehl.tpopkontr_id)
           LEFT JOIN
             apflora.tpopkontrzaehl_einheit_werte
-            ON apflora.tpopkontrzaehl.einheit = apflora.tpopkontrzaehl_einheit_werte."ZaehleinheitCode")
+            ON apflora.tpopkontrzaehl.einheit = apflora.tpopkontrzaehl_einheit_werte.code)
           LEFT JOIN
             apflora.tpopkontrzaehl_methode_werte
-            ON apflora.tpopkontrzaehl.methode = apflora.tpopkontrzaehl_methode_werte."BeurteilCode")
+            ON apflora.tpopkontrzaehl.methode = apflora.tpopkontrzaehl_methode_werte.code)
           ON apflora.tpop."TPopId" = apflora.tpopkontr."TPopId")
         ON apflora.pop."PopId" = apflora.tpop."PopId")
       ON apflora.ap."ApArtId" = apflora.pop."ApArtId")
@@ -5544,8 +5544,8 @@ SELECT
   apflora.tpopkontr."MutWann" AS "Kontrolle zuletzt geaendert",
   apflora.tpopkontr."MutWer" AS "Kontrolle zuletzt geaendert von",
   apflora.tpopkontrzaehl.id AS "Zaehlung id",
-  apflora.tpopkontrzaehl_einheit_werte."ZaehleinheitTxt" AS "Zaehlung einheit",
-  apflora.tpopkontrzaehl_methode_werte."BeurteilTxt" AS "Zaehlung Methode",
+  apflora.tpopkontrzaehl_einheit_werte.text AS "Zaehlung einheit",
+  apflora.tpopkontrzaehl_methode_werte.text AS "Zaehlung Methode",
   apflora.tpopkontrzaehl.anzahl AS "Zaehlung Anzahl"
 FROM
   apflora.adb_eigenschaften
@@ -5588,10 +5588,10 @@ FROM
             ((apflora.tpopkontrzaehl
             LEFT JOIN
               apflora.tpopkontrzaehl_einheit_werte
-              ON apflora.tpopkontrzaehl.einheit = apflora.tpopkontrzaehl_einheit_werte."ZaehleinheitCode")
+              ON apflora.tpopkontrzaehl.einheit = apflora.tpopkontrzaehl_einheit_werte.code)
             LEFT JOIN
               apflora.tpopkontrzaehl_methode_werte
-              ON apflora.tpopkontrzaehl.methode = apflora.tpopkontrzaehl_methode_werte."BeurteilCode")
+              ON apflora.tpopkontrzaehl.methode = apflora.tpopkontrzaehl_methode_werte.code)
             ON apflora.tpopkontr."TPopKontrId" = apflora.tpopkontrzaehl.tpopkontr_id)
           ON apflora.tpop."TPopId" = apflora.tpopkontr."TPopId")
         ON apflora.pop."PopId" = apflora.tpop."PopId")

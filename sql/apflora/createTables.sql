@@ -725,8 +725,8 @@ CREATE TABLE apflora.tpopkontrzaehl (
   -- old_id still exist...
   tpopkontr_id integer DEFAULT NULL REFERENCES apflora.tpopkontr ("TPopKontrId") ON DELETE CASCADE ON UPDATE CASCADE,
   anzahl integer DEFAULT NULL,
-  einheit integer DEFAULT NULL REFERENCES apflora.tpopkontrzaehl_einheit_werte ("ZaehleinheitCode") ON DELETE SET NULL ON UPDATE CASCADE,
-  methode integer DEFAULT NULL REFERENCES apflora.tpopkontrzaehl_methode_werte ("BeurteilCode") ON DELETE SET NULL ON UPDATE CASCADE,
+  einheit integer DEFAULT NULL REFERENCES apflora.tpopkontrzaehl_einheit_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
+  methode integer DEFAULT NULL REFERENCES apflora.tpopkontrzaehl_methode_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
 );
@@ -743,29 +743,29 @@ CREATE INDEX ON apflora.tpopkontrzaehl USING btree (methode);
 
 DROP TABLE IF EXISTS apflora.tpopkontrzaehl_einheit_werte;
 CREATE TABLE apflora.tpopkontrzaehl_einheit_werte (
-  "ZaehleinheitCode" integer PRIMARY KEY,
-  "ZaehleinheitTxt" varchar(50) DEFAULT NULL,
-  "ZaehleinheitOrd" smallint DEFAULT NULL,
-  "MutWann" date DEFAULT NOW(),
-  "MutWer" varchar(20) NOT NULL
+  code integer PRIMARY KEY,
+  text varchar(50) DEFAULT NULL,
+  sort smallint DEFAULT NULL,
+  changed date DEFAULT NOW(),
+  changed_by varchar(20) NOT NULL
 );
-CREATE INDEX ON apflora.tpopkontrzaehl_einheit_werte USING btree ("ZaehleinheitCode");
-CREATE INDEX ON apflora.tpopkontrzaehl_einheit_werte USING btree ("ZaehleinheitOrd");
-COMMENT ON COLUMN apflora.tpopkontrzaehl_einheit_werte."MutWann" IS 'Wann wurde der Datensatz zuletzt geändert?';
-COMMENT ON COLUMN apflora.tpopkontrzaehl_einheit_werte."MutWer" IS 'Von wem wurde der Datensatz zuletzt geändert?';
+CREATE INDEX ON apflora.tpopkontrzaehl_einheit_werte USING btree (code);
+CREATE INDEX ON apflora.tpopkontrzaehl_einheit_werte USING btree (sort);
+COMMENT ON COLUMN apflora.tpopkontrzaehl_einheit_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
+COMMENT ON COLUMN apflora.tpopkontrzaehl_einheit_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
 DROP TABLE IF EXISTS apflora.tpopkontrzaehl_methode_werte;
 CREATE TABLE apflora.tpopkontrzaehl_methode_werte (
-  "BeurteilCode" integer PRIMARY KEY,
-  "BeurteilTxt" varchar(50) DEFAULT NULL,
-  "BeurteilOrd" smallint DEFAULT NULL,
-  "MutWann" date DEFAULT NOW(),
-  "MutWer" varchar(20) NOT NULL
+  code integer PRIMARY KEY,
+  text varchar(50) DEFAULT NULL,
+  sort smallint DEFAULT NULL,
+  changed date DEFAULT NOW(),
+  changed_by varchar(20) NOT NULL
 );
-CREATE INDEX ON apflora.tpopkontrzaehl_methode_werte USING btree ("BeurteilCode");
-CREATE INDEX ON apflora.tpopkontrzaehl_methode_werte USING btree ("BeurteilOrd");
-COMMENT ON COLUMN apflora.tpopkontrzaehl_methode_werte."MutWann" IS 'Wann wurde der Datensatz zuletzt geändert?';
-COMMENT ON COLUMN apflora.tpopkontrzaehl_methode_werte."MutWer" IS 'Von wem wurde der Datensatz zuletzt geändert?';
+CREATE INDEX ON apflora.tpopkontrzaehl_methode_werte USING btree (code);
+CREATE INDEX ON apflora.tpopkontrzaehl_methode_werte USING btree (sort);
+COMMENT ON COLUMN apflora.tpopkontrzaehl_methode_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
+COMMENT ON COLUMN apflora.tpopkontrzaehl_methode_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
 DROP TABLE IF EXISTS apflora.tpopmassn;
 CREATE TABLE apflora.tpopmassn (

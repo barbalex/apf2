@@ -2034,9 +2034,9 @@ SELECT
       'Anzahlen: ',
       array_to_string(array_agg(apflora.tpopkontrzaehl.anzahl), ', '),
       ', Zaehleinheiten: ',
-      string_agg(apflora.tpopkontrzaehl_einheit_werte."ZaehleinheitTxt", ', '),
+      string_agg(apflora.tpopkontrzaehl_einheit_werte.text, ', '),
       ', Methoden: ',
-      string_agg(apflora.tpopkontrzaehl_methode_werte."BeurteilTxt", ', ')
+      string_agg(apflora.tpopkontrzaehl_methode_werte.text, ', ')
       )
     from 1 for 160
   ) AS "ABONDANCE",
@@ -2070,10 +2070,10 @@ FROM
           ((apflora.tpopkontrzaehl
           LEFT JOIN
             apflora.tpopkontrzaehl_einheit_werte
-            ON apflora.tpopkontrzaehl.einheit = apflora.tpopkontrzaehl_einheit_werte."ZaehleinheitCode")
+            ON apflora.tpopkontrzaehl.einheit = apflora.tpopkontrzaehl_einheit_werte.code)
           LEFT JOIN
             apflora.tpopkontrzaehl_methode_werte
-            ON apflora.tpopkontrzaehl.methode = apflora.tpopkontrzaehl_methode_werte."BeurteilCode")
+            ON apflora.tpopkontrzaehl.methode = apflora.tpopkontrzaehl_methode_werte.code)
           ON apflora.tpopkontr."TPopKontrId" = apflora.tpopkontrzaehl.tpopkontr_id)
         ON apflora.tpop."TPopId" = apflora.tpopkontr."TPopId")
       ON apflora.pop."PopId" = apflora.tpop."PopId")

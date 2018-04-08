@@ -11,14 +11,10 @@ export default (store: Object, tree: Object): Array<Object> => {
   const methodeWerte = Array.from(table.tpopkontrzaehl_methode_werte.values())
 
   tpopkontrzaehl.forEach(el => {
-    const zaehleinheitWert = zaehleinheitWerte.find(
-      e => e.ZaehleinheitCode === el.einheit
-    )
-    const zaehleinheitTxt = zaehleinheitWert
-      ? zaehleinheitWert.ZaehleinheitTxt
-      : null
-    const methodeWert = methodeWerte.find(e => e.BeurteilCode === el.methode)
-    const methodeTxt = methodeWert ? methodeWert.BeurteilTxt : null
+    const zaehleinheitWert = zaehleinheitWerte.find(e => e.code === el.einheit)
+    const zaehleinheitTxt = zaehleinheitWert ? zaehleinheitWert.text : null
+    const methodeWert = methodeWerte.find(e => e.code === el.methode)
+    const methodeTxt = methodeWert ? methodeWert.text : null
     const anzahl = el.anzahl || el.anzahl === 0 ? el.anzahl : '(keine Anzahl)'
     el.label = `${zaehleinheitTxt ||
       '(keine Einheit)'}: ${anzahl} ${methodeTxt || '(keine Methode)'}`

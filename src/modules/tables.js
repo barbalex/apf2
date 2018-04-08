@@ -48,14 +48,14 @@ export default [
   {
     table: 'tpopkontrzaehl_einheit_werte',
     label: 'none',
-    idField: 'ZaehleinheitCode',
+    idField: 'code',
     parentIdField: 'none',
     stammdaten: true,
   },
   {
     table: 'tpopkontrzaehl_methode_werte',
     label: 'none',
-    idField: 'BeurteilCode',
+    idField: 'code',
     parentIdField: 'none',
     stammdaten: true,
   },

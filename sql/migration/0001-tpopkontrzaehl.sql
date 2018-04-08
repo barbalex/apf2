@@ -19,7 +19,7 @@ ALTER TABLE apflora.tpopkontrzaehl ADD PRIMARY KEY (id);
 -- done: make sure createTable is correct
 -- done: rename in js
 -- done: test app
--- TODO: update js and run this file on server
+-- done: update js and run this file on server
 
 -- views
 DROP VIEW IF EXISTS apflora.v_tpopkontr_nachflurname;

@@ -153,10 +153,10 @@ export default (store: Object): void => {
         let zaehleinheitWerte = Array.from(
           store.table.tpopkontrzaehl_einheit_werte.values()
         )
-        zaehleinheitWerte = sortBy(zaehleinheitWerte, 'ZaehleinheitOrd')
+        zaehleinheitWerte = sortBy(zaehleinheitWerte, 'sort')
         zaehleinheitWerte = zaehleinheitWerte.map(el => ({
-          value: el.ZaehleinheitCode,
-          label: el.ZaehleinheitTxt,
+          value: el.code,
+          label: el.text,
         }))
         return zaehleinheitWerte
       },
@@ -167,10 +167,10 @@ export default (store: Object): void => {
         let methodeWerte = Array.from(
           store.table.tpopkontrzaehl_methode_werte.values()
         )
-        methodeWerte = sortBy(methodeWerte, 'BeurteilOrd')
+        methodeWerte = sortBy(methodeWerte, 'sort')
         methodeWerte = methodeWerte.map(el => ({
-          value: el.BeurteilCode,
-          label: el.BeurteilTxt,
+          value: el.code,
+          label: el.text,
         }))
         return methodeWerte
       },
