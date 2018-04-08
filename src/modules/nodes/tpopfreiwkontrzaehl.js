@@ -33,7 +33,7 @@ export default (
   )
 
   return tree.filteredAndSorted.tpopfreiwkontrzaehl
-    .filter(z => z.TPopKontrId === tpopkontrId)
+    .filter(z => z.tpopkontr_id === tpopkontrId)
     .map((el, index) => ({
       nodeType: 'table',
       menuType: 'tpopfreiwkontrzaehl',

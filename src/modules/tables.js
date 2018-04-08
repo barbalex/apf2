@@ -64,7 +64,7 @@ export default [
     label: 'Zählungen',
     labelSingular: 'Zählung',
     idField: 'id',
-    parentIdField: 'TPopKontrId',
+    parentIdField: 'tpopkontr_id',
   },
   {
     table: 'tpopfreiwkontrzaehl',
@@ -72,7 +72,7 @@ export default [
     label: 'Zählungen',
     labelSingular: 'Zählung',
     idField: 'id',
-    parentIdField: 'TPopKontrId',
+    parentIdField: 'tpopkontr_id',
   },
   {
     table: 'tpopfeldkontrzaehl',
@@ -80,7 +80,7 @@ export default [
     label: 'Zählungen',
     labelSingular: 'Zählung',
     idField: 'id',
-    parentIdField: 'TPopKontrId',
+    parentIdField: 'tpopkontr_id',
   },
   {
     table: 'tpopmassn',
