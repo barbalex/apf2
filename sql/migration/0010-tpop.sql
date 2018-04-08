@@ -25,7 +25,7 @@ ALTER TABLE apflora.tpop RENAME "TPopNutzungszone" TO nutzungszone;
 ALTER TABLE apflora.tpop RENAME "TPopBewirtschafterIn" TO bewirtschafter;
 ALTER TABLE apflora.tpop RENAME "TPopBewirtschaftung" TO bewirtschaftung;
 ALTER TABLE apflora.tpop RENAME "TPopTxt" TO bemerkungen;
-ALTER TABLE apflora.tpop DROP COLUMN "TPopGuid_alt";
+-- ALTER TABLE apflora.tpop DROP COLUMN "TPopGuid_alt";
 ALTER TABLE apflora.tpop RENAME "MutWann" TO changed;
 ALTER TABLE apflora.tpop RENAME "MutWer" TO changed_by;
 
@@ -38,3 +38,54 @@ COMMENT ON COLUMN apflora.tpop.id_old IS 'frühere id';
 -- - tpopmassn
 -- - tpopmassnber
 -- - tpopkontr
+
+-- need to update triggers first
+DROP TRIGGER IF EXISTS tpopber_on_update_set_mut ON apflora.tpopber;
+DROP FUNCTION IF EXISTS tpopber_on_update_set_mut();
+CREATE FUNCTION tpopber_on_update_set_mut() RETURNS trigger AS $tpopber_on_update_set_mut$
+  BEGIN
+    NEW.changed_by = current_setting('request.jwt.claim.username', true);
+    NEW.changed = NOW();
+    RETURN NEW;
+  END;
+$tpopber_on_update_set_mut$ LANGUAGE plpgsql;
+
+CREATE TRIGGER tpopber_on_update_set_mut BEFORE UPDATE OR INSERT ON apflora.tpopber
+  FOR EACH ROW EXECUTE PROCEDURE tpopber_on_update_set_mut();
+
+DROP TRIGGER IF EXISTS tpop_max_one_tpopber_per_year ON apflora.tpopber;
+DROP FUNCTION IF EXISTS apflora.tpop_max_one_tpopber_per_year();
+CREATE FUNCTION apflora.tpop_max_one_tpopber_per_year() RETURNS trigger AS $tpop_max_one_tpopber_per_year$
+  BEGIN
+    -- check if a tpopber already exists for this year
+    IF
+      (
+        NEW.jahr > 0
+        AND NEW.jahr IN
+        (
+          SELECT
+            jahr
+          FROM
+            apflora.tpopber
+          WHERE
+            tpop_id = NEW.tpop_id
+            AND id <> NEW.id
+        )
+      )
+    THEN
+      RAISE EXCEPTION 'Pro Teilpopulation und Jahr darf maximal ein Teilpopulationsbericht erfasst werden';
+    END IF;
+    RETURN NEW;
+  END;
+$tpop_max_one_tpopber_per_year$ LANGUAGE plpgsql;
+
+CREATE TRIGGER tpop_max_one_tpopber_per_year BEFORE UPDATE OR INSERT ON apflora.tpopber
+  FOR EACH ROW EXECUTE PROCEDURE apflora.tpop_max_one_tpopber_per_year();
+
+ALTER TABLE apflora.tpopber RENAME tpop_id TO tpop_id_old;
+ALTER TABLE apflora.tpopber ADD COLUMN tpop_id UUID DEFAULT NULL REFERENCES apflora.tpop (id) ON DELETE CASCADE ON UPDATE CASCADE;
+UPDATE apflora.tpopber SET tpop_id = (
+  SELECT id FROM apflora.tpop WHERE id_old = apflora.tpopber.tpop_id_old
+) WHERE tpop_id_old IS NOT NULL;
+-- need to update many views to do this:
+ALTER TABLE apflora.tpopber DROP COLUMN tpop_id_old;

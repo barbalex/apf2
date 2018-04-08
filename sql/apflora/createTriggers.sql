@@ -98,16 +98,16 @@ CREATE FUNCTION apflora.tpop_max_one_tpopber_per_year() RETURNS trigger AS $tpop
     -- check if a tpopber already exists for this year
     IF
       (
-        NEW."TPopBerJahr" > 0
-        AND NEW."TPopBerJahr" IN
+        NEW.jahr > 0
+        AND NEW.jahr IN
         (
           SELECT
-            "TPopBerJahr"
+            jahr
           FROM
             apflora.tpopber
           WHERE
-            "TPopId" = NEW."TPopId"
-            AND "TPopBerId" <> NEW."TPopBerId"
+            tpop_id = NEW.tpop_id
+            AND id <> NEW.id
         )
       )
     THEN

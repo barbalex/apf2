@@ -24,3 +24,5 @@ ALTER TABLE apflora.tpopmassn RENAME "MutWann" TO changed;
 ALTER TABLE apflora.tpopmassn RENAME "MutWer" TO changed_by;
 
 COMMENT ON COLUMN apflora.tpopmassn.id_old IS 'frühere id';
+
+-- need to remove TPopMassnGuid_alt from apflora.v_massn before dropping
