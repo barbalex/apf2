@@ -18,7 +18,7 @@ ALTER TABLE apflora.tpopkontrzaehl ADD PRIMARY KEY (id);
 -- done: add all views, functions, triggers with tpopkontrzaehl to this file
 -- done: make sure createTable is correct
 -- done: rename in js
--- TODO: test app
+-- done: test app
 -- TODO: update js and run this file on server
 
 -- views
