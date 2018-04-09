@@ -18,7 +18,7 @@ CREATE FUNCTION apflora.tpop_max_one_massnber_per_year() RETURNS trigger AS $tpo
               apflora.tpopmassnber
             WHERE
               "TPopId" = NEW."TPopId"
-              AND "TPopMassnBerId" <> NEW."TPopMassnBerId"
+              AND id <> NEW.id
           )
       )
     THEN
