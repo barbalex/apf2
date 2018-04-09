@@ -18,7 +18,7 @@ ALTER TABLE apflora.tpopber ADD PRIMARY KEY (id);
 -- done: check if old id was used somewhere. If so: rename that field, add new one and update that
 -- done: add all views, functions, triggers with tpopmassnber to this file
 -- done: rename in js
--- TODO: run migration sql in dev
+-- done: run migration sql in dev
 -- TODO: test app
 -- TODO: update js and run this file on server
 
