@@ -24,7 +24,7 @@ const BeobPopup = ({ store, beob }: { store: Object, beob: Object }) => {
   }`
   const tpopbeob = store.table.tpopbeob.get(beob.id)
   if (tpopbeob) {
-    if (tpopbeob.BeobNichtZuordnen && tpopbeob.BeobNichtZuordnen === 1) {
+    if (tpopbeob.nicht_zuordnen && tpopbeob.nicht_zuordnen === 1) {
       url = `${appBaseUrl}/Projekte/${projekt}/Arten/${ap}/nicht-zuzuordnende-Beobachtungen/${
         beob.id
       }`

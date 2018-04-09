@@ -16,7 +16,7 @@ export default (store: Object, tree: Object): Array<Object> => {
     // fetch only those without tpopbeob
     .filter(beob => {
       const tpopbeob = store.table.tpopbeob.get(beob.id)
-      return !tpopbeob || (!tpopbeob.BeobNichtZuordnen && !tpopbeob.TPopId)
+      return !tpopbeob || (!tpopbeob.nicht_zuordnen && !tpopbeob.beob_id)
     })
 
   beobNichtBeurteilt.forEach(el => {

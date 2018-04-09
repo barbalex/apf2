@@ -30,9 +30,7 @@ export default (store: Object): void => {
         getBeobForMap(store).filter(b => {
           const tpopbeob = store.table.tpopbeob.get(b.id)
           return (
-            tpopbeob &&
-            tpopbeob.BeobNichtZuordnen &&
-            tpopbeob.BeobNichtZuordnen === 1
+            tpopbeob && tpopbeob.nicht_zuordnen && tpopbeob.nicht_zuordnen === 1
           )
         }),
       { name: 'mapBeobNichtZuzuordnenBeobs' }

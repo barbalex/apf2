@@ -186,7 +186,7 @@ const Beobzuordnung = ({
   const quelle = beob ? table.beob_quelle.get(beob.QuelleId) : null
   const quelleName = quelle && quelle.name ? quelle.name : '?'
   const beobTitle = `Informationen aus ${quelleName} (nicht veränderbar)`
-  const showTPopId = activeDataset.row.BeobNichtZuordnen !== 1
+  const showTPopId = activeDataset.row.nicht_zuordnen !== 1
   const adbArt =
     beob && beob.ArtId ? store.table.adb_eigenschaften.get(beob.ArtId) : null
   const artname = adbArt ? adbArt.Artname : ''
@@ -201,9 +201,9 @@ const Beobzuordnung = ({
             <div>{artLabel}</div>
             <CheckboxWithInfo
               tree={tree}
-              fieldName="BeobNichtZuordnen"
+              fieldName="nicht_zuordnen"
               label="Nicht zuordnen"
-              value={activeDataset.row.BeobNichtZuordnen}
+              value={activeDataset.row.nicht_zuordnen}
               updatePropertyInDb={updatePropertyInDb}
               popover={nichtZuordnenPopover}
             />
@@ -231,12 +231,12 @@ const Beobzuordnung = ({
               </ZuordnenDiv>
             )}
             <TextField
-              key={`${activeDataset.row.id}BeobBemerkungen`}
+              key={`${activeDataset.row.id}bemerkungen`}
               tree={tree}
               label="Bemerkungen zur Zuordnung"
-              fieldName="BeobBemerkungen"
-              value={activeDataset.row.BeobBemerkungen}
-              errorText={activeDataset.valid.BeobBemerkungen}
+              fieldName="bemerkungen"
+              value={activeDataset.row.bemerkungen}
+              errorText={activeDataset.valid.bemerkungen}
               type="text"
               multiLine
               fullWidth

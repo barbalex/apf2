@@ -25,7 +25,7 @@ const continueWithBeob = (
   const { projekt, ap } = tree.activeNodes
 
   // set new activeNodeArray
-  if (newKey === 'BeobNichtZuordnen') {
+  if (newKey === 'nicht_zuordnen') {
     const newActiveNodeArray = [
       'Projekte',
       projekt,
@@ -36,7 +36,7 @@ const continueWithBeob = (
     ]
     tree.setActiveNodeArray(newActiveNodeArray)
     updateBeobzuordnungData(store, tree, beob, newKey, newValue)
-  } else if (newKey === 'TPopId') {
+  } else if (newKey === 'tpop_id') {
     // ouch. Need to get activeNodeArray for this tpop
     // Nice: tpop was already loaded for building tpop list
     const tpop = store.table.tpop.get(newValue)
@@ -65,7 +65,7 @@ export default async (
   newValue: number
 ): void => {
   /**
-   * newKey is either BeobNichtZuordnen or TPopId
+   * newKey is either nicht_zuordnen or TPopId
    */
   // get data from beob in activeDataset
   // check if a corresponding tpopbeob already exists

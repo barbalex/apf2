@@ -12,7 +12,7 @@ const writeToStore = (store: Object, data: Array<Object>): void => {
       zuordnung.beob = computed(() => store.table.beob.get(zuordnung.beob_id))
       // set computed value "type"
       zuordnung.type = computed(() => {
-        if (zuordnung.BeobNichtZuordnen && zuordnung.BeobNichtZuordnen === 1) {
+        if (zuordnung.nicht_zuordnen && zuordnung.nicht_zuordnen === 1) {
           return 'nichtZuzuordnen'
         }
         if (zuordnung.TPopId) {

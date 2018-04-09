@@ -119,8 +119,8 @@ DROP TRIGGER IF EXISTS beobzuordnung_on_update_set_mut ON apflora.tpopbeob;
 DROP FUNCTION IF EXISTS beobzuordnung_on_update_set_mut();
 CREATE FUNCTION beobzuordnung_on_update_set_mut() RETURNS trigger AS $beobzuordnung_on_update_set_mut$
   BEGIN
-    NEW."BeobMutWer" = current_setting('request.jwt.claim.username', true);
-    NEW."BeobMutWann" = NOW();
+    NEW.changed_by = current_setting('request.jwt.claim.username', true);
+    NEW.changed = NOW();
     RETURN NEW;
   END;
 $beobzuordnung_on_update_set_mut$ LANGUAGE plpgsql;
