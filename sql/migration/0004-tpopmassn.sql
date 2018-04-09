@@ -30,9 +30,9 @@ ALTER TABLE apflora.tpopmassn ADD PRIMARY KEY (id);
 
 -- done: rename in sql
 -- done: check if old id was used somewhere. If so: rename that field, add new one and update that
--- TODO: add all views, functions, triggers with tpopmassn to this file
--- TODO: make sure createTable is correct
--- TODO: rename in js
+-- done: add all views, functions, triggers with tpopmassn to this file
+-- done: make sure createTable is correct
+-- done: rename in js
 -- TODO: test app
 -- TODO: update js and run this file on server
 
@@ -238,7 +238,6 @@ CREATE OR REPLACE FUNCTION apflora.qk2_pop_ohne_popber(apid integer, berichtjahr
 ALTER FUNCTION apflora.qk2_pop_ohne_popber(apid integer, berichtjahr integer)
   OWNER TO postgres;
 
-DROP VIEW IF EXISTS apflora.v_apber_c1rpop CASCADE;
 CREATE OR REPLACE VIEW apflora.v_apber_c1rpop AS
 SELECT
   apflora.pop."ApArtId",
@@ -260,7 +259,6 @@ GROUP BY
   apflora.pop."ApArtId",
   apflora.pop."PopId";
 
-DROP VIEW IF EXISTS apflora.v_qk2_tpop_statuserloschenletzterpopberaktuell CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk2_tpop_statuserloschenletzterpopberaktuell AS
 SELECT DISTINCT
   apflora.ap."ProjId",
@@ -300,7 +298,6 @@ WHERE
       AND apflora.tpopmassn.jahr > apflora.tpopber."TPopBerJahr"
   );
 
-DROP VIEW IF EXISTS apflora.v_exportevab_beob CASCADE;
 CREATE OR REPLACE VIEW apflora.v_exportevab_beob AS
 SELECT
   apflora.tpopkontr."ZeitGuid" AS "fkZeitpunkt",
@@ -460,7 +457,6 @@ GROUP BY
   "tblAdresse_2"."EvabIdPerson",
   "tblAdresse_2"."AdrName";
 
-DROP VIEW IF EXISTS apflora.v_popmassnber_anzmassn0 CASCADE;
 CREATE OR REPLACE VIEW apflora.v_popmassnber_anzmassn0 AS
 SELECT
   apflora.popmassnber."PopId",
@@ -497,7 +493,7 @@ HAVING
 ORDER BY
   apflora.tpopmassn.jahr;
 
-DROP VIEW IF EXISTS apflora.v_ap_anzmassnprojahr0 CASCADE;
+DROP VIEW IF EXISTS apflora.v_ap_anzmassnprojahr0;
 CREATE OR REPLACE VIEW apflora.v_ap_anzmassnprojahr0 AS
 SELECT
   apflora.ap."ApArtId",
@@ -526,7 +522,7 @@ HAVING
 ORDER BY
   apflora.ap."ApArtId",
   apflora.tpopmassn.jahr;
-DROP VIEW IF EXISTS apflora.v_erstemassnproap CASCADE;
+
 CREATE OR REPLACE VIEW apflora.v_erstemassnproap AS
 SELECT
   apflora.ap."ApArtId",
@@ -545,7 +541,7 @@ FROM
 GROUP BY
   apflora.ap."ApArtId";
 
-DROP VIEW IF EXISTS apflora.v_massn CASCADE;
+DROP VIEW IF EXISTS apflora.v_massn;
 CREATE OR REPLACE VIEW apflora.v_massn AS
 SELECT
   apflora.adb_eigenschaften."TaxonomieId" AS "ApArtId",
@@ -650,7 +646,6 @@ ORDER BY
   apflora.tpopmassn.datum,
   tpopmassn_typ_werte."MassnTypTxt";
 
-DROP VIEW IF EXISTS apflora.v_massn_webgisbun CASCADE;
 CREATE OR REPLACE VIEW apflora.v_massn_webgisbun AS
 SELECT
   apflora.adb_eigenschaften."TaxonomieId" AS "APARTID",
@@ -725,7 +720,7 @@ ORDER BY
   apflora.tpopmassn.datum,
   tpopmassn_typ_werte."MassnTypTxt";
 
-DROP VIEW IF EXISTS apflora.v_massn_fuergis_write CASCADE;
+DROP VIEW IF EXISTS apflora.v_massn_fuergis_write;
 CREATE OR REPLACE VIEW apflora.v_massn_fuergis_write AS
 SELECT
   apflora.tpopmassn.id AS "tpopmassnid",
@@ -754,7 +749,6 @@ SELECT
 FROM
   apflora.tpopmassn;
 
-DROP VIEW IF EXISTS apflora.v_massn_fuergis_read CASCADE;
 CREATE OR REPLACE VIEW apflora.v_massn_fuergis_read AS
 SELECT
   apflora.adb_eigenschaften."TaxonomieId" AS "apartid",
@@ -852,7 +846,7 @@ ORDER BY
   apflora.tpopmassn.datum,
   tpopmassn_typ_werte."MassnTypTxt";
 
-DROP VIEW IF EXISTS apflora.v_tpop_anzmassn CASCADE;
+DROP VIEW IF EXISTS apflora.v_tpop_anzmassn;
 CREATE OR REPLACE VIEW apflora.v_tpop_anzmassn AS
 SELECT
   apflora.adb_eigenschaften."TaxonomieId" AS "ApArtId",
@@ -968,7 +962,7 @@ ORDER BY
   apflora.pop."PopNr",
   apflora.tpop."TPopNr";
 
-DROP VIEW IF EXISTS apflora.v_pop_anzmassn CASCADE;
+DROP VIEW IF EXISTS apflora.v_pop_anzmassn;
 CREATE OR REPLACE VIEW apflora.v_pop_anzmassn AS
 SELECT
   apflora.adb_eigenschaften."TaxonomieId" AS "ApArtId",
@@ -1028,7 +1022,7 @@ ORDER BY
   apflora.adb_eigenschaften."Artname",
   apflora.pop."PopNr";
 
-DROP VIEW IF EXISTS apflora.v_ap_anzmassn CASCADE;
+DROP VIEW IF EXISTS apflora.v_ap_anzmassn;
 CREATE OR REPLACE VIEW apflora.v_ap_anzmassn AS
 SELECT
   apflora.adb_eigenschaften."TaxonomieId" AS "ApArtId",
@@ -1066,7 +1060,7 @@ GROUP BY
 ORDER BY
   apflora.adb_eigenschaften."Artname";
 
-DROP VIEW IF EXISTS apflora.v_pop_massnseitbeginnap CASCADE;
+DROP VIEW IF EXISTS apflora.v_pop_massnseitbeginnap;
 CREATE OR REPLACE VIEW apflora.v_pop_massnseitbeginnap AS
 SELECT
   apflora.tpopmassn.tpop_id
@@ -1111,6 +1105,17 @@ WHERE
   AND apflora.pop."PopHerkunft" <> 300
   AND apflora.tpopmassnber."TPopMassnBerErfolgsbeurteilung" BETWEEN 1 AND 5;
 
+CREATE OR REPLACE VIEW apflora.v_tpop_letztermassnber AS
+SELECT
+  apflora.v_tpop_letztermassnber0."ApArtId",
+  apflora.v_tpop_letztermassnber0."TPopId",
+  max(apflora.v_tpop_letztermassnber0."TPopMassnBerJahr") AS "MaxvonTPopMassnBerJahr"
+FROM
+  apflora.v_tpop_letztermassnber0
+GROUP BY
+  apflora.v_tpop_letztermassnber0."ApArtId",
+  apflora.v_tpop_letztermassnber0."TPopId";
+
 DROP VIEW IF EXISTS apflora.v_pop_letztermassnber0 CASCADE;
 CREATE OR REPLACE VIEW apflora.v_pop_letztermassnber0 AS
 SELECT
@@ -1135,7 +1140,18 @@ WHERE
   AND apflora.tpopmassn.jahr <= apflora._variable."JBerJahr"
   AND apflora.pop."PopHerkunft" <> 300;
 
-DROP VIEW IF EXISTS apflora.v_ap_tpopmassnjahr0 CASCADE;
+CREATE OR REPLACE VIEW apflora.v_pop_letztermassnber AS
+SELECT
+  apflora.v_pop_letztermassnber0."ApArtId",
+  apflora.v_pop_letztermassnber0."PopId",
+  max(apflora.v_pop_letztermassnber0."PopMassnBerJahr") AS "MaxvonPopMassnBerJahr"
+FROM
+  apflora.v_pop_letztermassnber0
+GROUP BY
+  apflora.v_pop_letztermassnber0."ApArtId",
+  apflora.v_pop_letztermassnber0."PopId";
+
+DROP VIEW IF EXISTS apflora.v_ap_tpopmassnjahr0;
 CREATE OR REPLACE VIEW apflora.v_ap_tpopmassnjahr0 AS
 SELECT
   apflora.ap."ApArtId",
@@ -1164,7 +1180,7 @@ GROUP BY
   apflora.tpopmassn.id,
   apflora.tpopmassn.jahr;
 
-DROP VIEW IF EXISTS apflora.v_auswapbearbmassninjahr0 CASCADE;
+DROP VIEW IF EXISTS apflora.v_auswapbearbmassninjahr0;
 CREATE OR REPLACE VIEW apflora.v_auswapbearbmassninjahr0 AS
 SELECT
   apflora.adresse."AdrName",
@@ -1222,7 +1238,7 @@ ORDER BY
   apflora.tpop."TPopGemeinde",
   apflora.tpop."TPopFlurname";
 
-DROP VIEW IF EXISTS apflora.v_ap_mitmassninjahr0 CASCADE;
+DROP VIEW IF EXISTS apflora.v_ap_mitmassninjahr0;
 CREATE OR REPLACE VIEW apflora.v_ap_mitmassninjahr0 AS
 SELECT
   apflora.adb_eigenschaften."Artname" AS "Art",
@@ -1279,7 +1295,7 @@ ORDER BY
   apflora.tpop."TPopGemeinde",
   apflora.tpop."TPopFlurname";
 
-DROP VIEW IF EXISTS apflora.v_tpopmassn_0 CASCADE;
+DROP VIEW IF EXISTS apflora.v_tpopmassn_0;
 CREATE OR REPLACE VIEW apflora.v_tpopmassn_0 AS
 SELECT
   apflora.ap."ApArtId",
@@ -1340,7 +1356,7 @@ ORDER BY
   apflora.tpopmassn.jahr,
   tpopmassn_typ_werte."MassnTypTxt";
 
-DROP VIEW IF EXISTS apflora.v_tpopmassn_fueraktap0 CASCADE;
+DROP VIEW IF EXISTS apflora.v_tpopmassn_fueraktap0;
 CREATE OR REPLACE VIEW apflora.v_tpopmassn_fueraktap0 AS
 SELECT
   apflora.ap."ApArtId",
@@ -1503,7 +1519,7 @@ GROUP BY
   apflora.pop."ApArtId",
   apflora.tpop."TPopId";
 
-DROP VIEW IF EXISTS apflora.v_qk2_massn_ohnejahr CASCADE;
+DROP VIEW IF EXISTS apflora.v_qk2_massn_ohnejahr;
 CREATE OR REPLACE VIEW apflora.v_qk2_massn_ohnejahr AS
 SELECT
   apflora.ap."ProjId",
@@ -2202,9 +2218,106 @@ WHERE
       AND apflora.tpopmassn.jahr > lasttpopber."TPopBerJahr"
   );
 
+DROP VIEW IF EXISTS apflora.v_ap_massnjahre CASCADE;
+CREATE OR REPLACE VIEW apflora.v_ap_massnjahre AS
+SELECT
+  apflora.ap."ApArtId",
+  apflora.v_massn_jahre.jahr
+FROM
+  apflora.ap,
+  apflora.v_massn_jahre
+WHERE
+  apflora.ap."ApArtId" > 0
+  AND apflora.ap."ApStatus" < 4
+ORDER BY
+  apflora.ap."ApArtId",
+  apflora.v_massn_jahre.jahr;
 
+DROP VIEW IF EXISTS apflora.v_ap_anzmassnprojahr CASCADE;
+CREATE OR REPLACE VIEW apflora.v_ap_anzmassnprojahr AS
+SELECT
+  apflora.v_ap_massnjahre."ApArtId",
+  apflora.v_ap_massnjahre.jahr,
+  COALESCE(apflora.v_ap_anzmassnprojahr0."AnzahlvonTPopMassnId", 0) AS "AnzahlMassnahmen"
+FROM
+  apflora.v_ap_massnjahre
+  LEFT JOIN
+    apflora.v_ap_anzmassnprojahr0
+    ON
+      (apflora.v_ap_massnjahre.jahr = apflora.v_ap_anzmassnprojahr0.jahr)
+      AND (apflora.v_ap_massnjahre."ApArtId" = apflora.v_ap_anzmassnprojahr0."ApArtId")
+ORDER BY
+  apflora.v_ap_massnjahre."ApArtId",
+  apflora.v_ap_massnjahre.jahr;
+
+DROP VIEW IF EXISTS apflora.v_ap_anzmassnbisjahr CASCADE;
+CREATE OR REPLACE VIEW apflora.v_ap_anzmassnbisjahr AS
+SELECT
+  apflora.v_ap_massnjahre."ApArtId",
+  apflora.v_ap_massnjahre.jahr,
+  sum(apflora.v_ap_anzmassnprojahr."AnzahlMassnahmen") AS "AnzahlMassnahmen"
+FROM
+  apflora.v_ap_massnjahre
+  INNER JOIN
+    apflora.v_ap_anzmassnprojahr
+    ON apflora.v_ap_massnjahre."ApArtId" = apflora.v_ap_anzmassnprojahr."ApArtId"
+WHERE
+  apflora.v_ap_anzmassnprojahr.jahr <= apflora.v_ap_massnjahre.jahr
+GROUP BY
+  apflora.v_ap_massnjahre."ApArtId",
+  apflora.v_ap_massnjahre.jahr
+ORDER BY
+  apflora.v_ap_massnjahre."ApArtId",
+  apflora.v_ap_massnjahre.jahr;
+
+DROP VIEW IF EXISTS apflora.v_ap_apberundmassn CASCADE;
+CREATE OR REPLACE VIEW apflora.v_ap_apberundmassn AS
+SELECT
+  apflora.ap."ApArtId",
+  apflora.adb_eigenschaften."Artname" AS "Art",
+  apflora.ap_bearbstand_werte."DomainTxt" AS "AP Status",
+  apflora.ap."ApJahr" AS "AP Start im Jahr",
+  apflora.ap_umsetzung_werte."DomainTxt" AS "AP Stand Umsetzung",
+  apflora.adresse."AdrName" AS "AP Verantwortlich",
+  apflora.ap."ApArtwert" AS "Artwert",
+  apflora.v_ap_anzmassnprojahr.jahr AS "Jahr",
+  apflora.v_ap_anzmassnprojahr."AnzahlMassnahmen" AS "Anzahl Massnahmen",
+  apflora.v_ap_anzmassnbisjahr."AnzahlMassnahmen" AS "Anzahl Massnahmen bisher",
+  CASE
+    WHEN apflora.apber."JBerJahr" > 0
+    THEN 'Ja'
+    ELSE 'Nein'
+  END AS "Bericht erstellt"
+FROM
+  apflora.adb_eigenschaften
+    INNER JOIN
+      ((((apflora.ap
+      LEFT JOIN
+        apflora.ap_bearbstand_werte
+        ON apflora.ap."ApStatus" = apflora.ap_bearbstand_werte."DomainCode")
+      LEFT JOIN
+        apflora.ap_umsetzung_werte
+        ON apflora.ap."ApUmsetzung" = apflora.ap_umsetzung_werte."DomainCode")
+      LEFT JOIN
+        apflora.adresse
+        ON apflora.ap."ApBearb" = apflora.adresse."AdrId")
+      INNER JOIN
+        (apflora.v_ap_anzmassnprojahr
+        INNER JOIN
+          (apflora.v_ap_anzmassnbisjahr
+          LEFT JOIN
+            apflora.apber
+            ON
+              (apflora.v_ap_anzmassnbisjahr.jahr = apflora.apber."JBerJahr")
+              AND (apflora.v_ap_anzmassnbisjahr."ApArtId" = apflora.apber."ApArtId"))
+          ON
+            (apflora.v_ap_anzmassnprojahr.jahr = apflora.v_ap_anzmassnbisjahr.jahr)
+            AND (apflora.v_ap_anzmassnprojahr."ApArtId" = apflora.v_ap_anzmassnbisjahr."ApArtId"))
+        ON apflora.ap."ApArtId" = apflora.v_ap_anzmassnprojahr."ApArtId")
+      ON apflora.adb_eigenschaften."TaxonomieId" = apflora.ap."ApArtId"
+ORDER BY
+  apflora.adb_eigenschaften."Artname",
+  apflora.v_ap_anzmassnprojahr.jahr;
 
 -- need to remove TPopMassnGuid_alt from apflora.v_massn before dropping
 ALTER TABLE apflora.tpopmassn DROP COLUMN "TPopMassnGuid_alt";
-
--- views: many from createViews2 (counting massn)
