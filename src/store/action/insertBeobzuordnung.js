@@ -68,8 +68,8 @@ export default async (
    * newKey is either BeobNichtZuordnen or TPopId
    */
   // get data from beob in activeDataset
-  // check if a corresponding beobzuordnung already exists
-  const beobzuordnungExists = !!store.table.beobzuordnung.get(beob.id)
+  // check if a corresponding tpopbeob already exists
+  const beobzuordnungExists = !!store.table.tpopbeob.get(beob.id)
   if (beobzuordnungExists) {
     return continueWithBeob(store, tree, beob, newKey, newValue)
   }
@@ -78,7 +78,7 @@ export default async (
   try {
     response = await axios({
       method: 'POST',
-      url: '/beobzuordnung',
+      url: '/tpopbeob',
       data: { BeobId: beob.id },
       headers: {
         Prefer: 'return=representation',
@@ -89,6 +89,6 @@ export default async (
   }
   const row = response.data[0]
   // insert this dataset in store.table
-  store.table.beobzuordnung.set(row.BeobId, row)
+  store.table.tpopbeob.set(row.BeobId, row)
   continueWithBeob(store, tree, beob, newKey, newValue)
 }

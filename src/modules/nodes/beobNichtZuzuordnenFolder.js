@@ -25,7 +25,7 @@ export default (
   ).length
 
   let message = beobNichtZuzuordnenNodesLength
-  if (store.loading.includes('beobzuordnung')) {
+  if (store.loading.includes('tpopbeob')) {
     message = '...'
   }
   if (tree.nodeLabelFilter.get('beobNichtZuzuordnen')) {

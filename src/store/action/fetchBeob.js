@@ -8,9 +8,7 @@ import recordValuesForWhichTableDataWasFetched from '../../modules/recordValuesF
 const writeToStore = (store, data) => {
   runInAction(() => {
     data.forEach(beob => {
-      beob.beobzuordnung = computed(() =>
-        store.table.beobzuordnung.get(beob.id)
-      )
+      beob.tpopbeob = computed(() => store.table.tpopbeob.get(beob.id))
       store.table.beob.set(beob.id, beob)
     })
   })

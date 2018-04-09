@@ -8,14 +8,14 @@ export default async (
 ): Promise<void> => {
   const { table } = store
   const { activeNodes } = tree
-  // delete beobzuordnung
+  // delete tpopbeob
   try {
-    await axios.delete(`/beobzuordnung?BeobId=eq.${beobId}`)
+    await axios.delete(`/tpopbeob?BeobId=eq.${beobId}`)
   } catch (error) {
     store.listError(error)
   }
   // remove this dataset in store.table
-  table.beobzuordnung.delete(beobId)
+  table.tpopbeob.delete(beobId)
   // set activeNodeArray to corresponding beob
   const newActiveNodeArray = [
     'Projekte',

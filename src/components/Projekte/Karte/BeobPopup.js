@@ -4,7 +4,9 @@ import styled from 'styled-components'
 
 import appBaseUrl from '../../../modules/appBaseUrl'
 
-const StyledH3 = styled.h3`margin: 7px 0;`
+const StyledH3 = styled.h3`
+  margin: 7px 0;
+`
 
 /**
  * This is rendered to static markup
@@ -17,19 +19,22 @@ const BeobPopup = ({ store, beob }: { store: Object, beob: Object }) => {
   const { ap, projekt } = activeNodes
 
   // build url to open beob form
-  let url = `${appBaseUrl}/Projekte/${projekt}/Arten/${ap}/nicht-beurteilte-Beobachtungen/${beob.id}`
-  const beobzuordnung = store.table.beobzuordnung.get(beob.id)
-  if (beobzuordnung) {
-    if (
-      beobzuordnung.BeobNichtZuordnen &&
-      beobzuordnung.BeobNichtZuordnen === 1
-    ) {
-      url = `${appBaseUrl}/Projekte/${projekt}/Arten/${ap}/nicht-zuzuordnende-Beobachtungen/${beob.id}`
+  let url = `${appBaseUrl}/Projekte/${projekt}/Arten/${ap}/nicht-beurteilte-Beobachtungen/${
+    beob.id
+  }`
+  const tpopbeob = store.table.tpopbeob.get(beob.id)
+  if (tpopbeob) {
+    if (tpopbeob.BeobNichtZuordnen && tpopbeob.BeobNichtZuordnen === 1) {
+      url = `${appBaseUrl}/Projekte/${projekt}/Arten/${ap}/nicht-zuzuordnende-Beobachtungen/${
+        beob.id
+      }`
     } else {
-      const tpopId = beobzuordnung.TPopId
+      const tpopId = tpopbeob.TPopId
       const tpop = store.table.tpop.get(tpopId)
       const popId = tpop ? tpop.PopId : ''
-      url = `${appBaseUrl}/Projekte/${projekt}/Arten/${ap}/Populationen/${popId}/Teil-Populationen/${tpopId}/Beobachtungen/${beob.id}`
+      url = `${appBaseUrl}/Projekte/${projekt}/Arten/${ap}/Populationen/${popId}/Teil-Populationen/${tpopId}/Beobachtungen/${
+        beob.id
+      }`
     }
   }
 
@@ -39,9 +44,7 @@ const BeobPopup = ({ store, beob }: { store: Object, beob: Object }) => {
   return (
     <div>
       <div>Beobachtung</div>
-      <StyledH3>
-        {beob.label}
-      </StyledH3>
+      <StyledH3>{beob.label}</StyledH3>
       <div>
         {`Koordinaten: ${xKoord.toLocaleString(
           'de-ch'

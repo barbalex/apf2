@@ -15,7 +15,7 @@ export default [
   'beobart',
   'beob_projekt',
   'beob_quelle',
-  'beobzuordnung',
+  'tpopbeob',
   'ber',
   'erfkrit',
   'flora_status_werte',

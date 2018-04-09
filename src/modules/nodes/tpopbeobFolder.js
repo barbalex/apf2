@@ -6,7 +6,7 @@ export default (
   projId: number,
   apArtId: number,
   popId: number,
-  tpopId: number,
+  tpopId: number
 ): Array<Object> => {
   // fetch sorting indexes of parents
   const projIndex = findIndex(tree.filteredAndSorted.projekt, {
@@ -14,22 +14,22 @@ export default (
   })
   const apIndex = findIndex(
     tree.filteredAndSorted.ap.filter(a => a.ProjId === projId),
-    { ApArtId: apArtId },
+    { ApArtId: apArtId }
   )
   const popIndex = findIndex(
     tree.filteredAndSorted.pop.filter(p => p.ApArtId === apArtId),
-    { PopId: popId },
+    { PopId: popId }
   )
   const tpopIndex = findIndex(
     tree.filteredAndSorted.tpop.filter(t => t.PopId === popId),
-    { TPopId: tpopId },
+    { TPopId: tpopId }
   )
 
   const childrenLength = tree.filteredAndSorted.tpopbeob.filter(
-    t => t.TPopId === tpopId,
+    t => t.TPopId === tpopId
   ).length
   let message = childrenLength
-  if (store.loading.includes('beobzuordnung')) {
+  if (store.loading.includes('tpopbeob')) {
     message = '...'
   }
   if (tree.nodeLabelFilter.get('tpopbeob')) {

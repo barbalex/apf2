@@ -5,7 +5,7 @@ export default (store: Object, tree: Object): Array<Object> => {
   const { table } = store
   const { nodeLabelFilter } = tree
   // grab tpopbeob as array and sort them by year
-  let tpopbeob = Array.from(table.beobzuordnung.values()).filter(
+  let tpopbeob = Array.from(table.tpopbeob.values()).filter(
     b => !b.BeobNichtZuordnen && b.TPopId
   )
   // map through all and create array of nodes

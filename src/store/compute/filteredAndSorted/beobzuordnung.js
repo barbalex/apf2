@@ -13,13 +13,10 @@ export default (store: Object, tree: Object): Array<Object> => {
       if (ap) return [1, 2, 3].includes(ap.ApStatus)
       return false
     })
-    // fetch only those without beobzuordnung
+    // fetch only those without tpopbeob
     .filter(beob => {
-      const beobzuordnung = store.table.beobzuordnung.get(beob.id)
-      return (
-        !beobzuordnung ||
-        (!beobzuordnung.BeobNichtZuordnen && !beobzuordnung.TPopId)
-      )
+      const tpopbeob = store.table.tpopbeob.get(beob.id)
+      return !tpopbeob || (!tpopbeob.BeobNichtZuordnen && !tpopbeob.TPopId)
     })
 
   beobNichtBeurteilt.forEach(el => {

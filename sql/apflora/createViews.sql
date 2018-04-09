@@ -1,5 +1,5 @@
-DROP VIEW IF EXISTS apflora.v_beobzuordnung CASCADE;
-CREATE OR REPLACE VIEW apflora.v_beobzuordnung AS
+DROP VIEW IF EXISTS apflora.v_tpopbeob CASCADE;
+CREATE OR REPLACE VIEW apflora.v_tpopbeob AS
 SELECT
   apflora.tpopbeob.*,
   apflora.beob."ArtId" AS "ApArtId"

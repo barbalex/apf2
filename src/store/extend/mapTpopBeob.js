@@ -21,24 +21,20 @@ export default (store: Object): void => {
         } else if (activeNodes.tpop) {
           return store.map.tpopBeob.beobs
             .filter(b => {
-              const beobzuordnung = store.table.beobzuordnung.get(b.id)
+              const tpopbeob = store.table.tpopbeob.get(b.id)
               return (
-                beobzuordnung &&
-                !beobzuordnung.BeobNichtZuordnen &&
-                beobzuordnung.TPopId === activeNodes.tpop
+                tpopbeob &&
+                !tpopbeob.BeobNichtZuordnen &&
+                tpopbeob.TPopId === activeNodes.tpop
               )
             })
             .map(b => b.BeobId)
         } else if (activeNodes.pop) {
           return store.map.tpopBeob.beobs
             .filter(b => {
-              const beobzuordnung = store.table.beobzuordnung.get(b.id)
-              if (
-                beobzuordnung &&
-                !beobzuordnung.BeobNichtZuordnen &&
-                beobzuordnung.TPopId
-              ) {
-                const tpop = store.table.tpop.get(beobzuordnung.TPopId)
+              const tpopbeob = store.table.tpopbeob.get(b.id)
+              if (tpopbeob && !tpopbeob.BeobNichtZuordnen && tpopbeob.TPopId) {
+                const tpop = store.table.tpop.get(tpopbeob.TPopId)
                 if (tpop) {
                   const popId = tpop.PopId
                   return popId && popId === activeNodes.pop
@@ -65,12 +61,8 @@ export default (store: Object): void => {
     beobs: computed(
       () =>
         getBeobForMap(store).filter(b => {
-          const beobzuordnung = store.table.beobzuordnung.get(b.id)
-          return (
-            beobzuordnung &&
-            !beobzuordnung.BeobNichtZuordnen &&
-            beobzuordnung.TPopId
-          )
+          const tpopbeob = store.table.tpopbeob.get(b.id)
+          return tpopbeob && !tpopbeob.BeobNichtZuordnen && tpopbeob.TPopId
         }),
       { name: 'mapTpopBeobBeobs' }
     ),

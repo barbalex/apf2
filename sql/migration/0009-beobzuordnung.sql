@@ -14,9 +14,9 @@ CREATE INDEX ON apflora.tpopbeob USING btree (id);
 
 -- done: make sure createTable is correct
 -- TODO: rename in sql
+-- TODO: rename in js
 -- TODO: check if old id was used somewhere. If so: rename that field, add new one and update that
 -- TODO: add all views, functions, triggers with tpopber to this file
--- TODO: rename in js
 -- TODO: run migration sql in dev
 -- TODO: test app
 -- TODO: update js and run this file on server

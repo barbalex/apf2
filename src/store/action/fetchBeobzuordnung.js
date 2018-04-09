@@ -20,7 +20,7 @@ const writeToStore = (store: Object, data: Array<Object>): void => {
         }
         return 'nichtBeurteilt'
       })
-      store.table.beobzuordnung.set(zuordnung.BeobId, zuordnung)
+      store.table.tpopbeob.set(zuordnung.BeobId, zuordnung)
     })
   })
 }
@@ -36,31 +36,31 @@ export default (store: Object, apArtId: number): any => {
 
   // only fetch if not yet fetched
   if (
-    valuesForWhichTableDataWasFetched.beobzuordnung &&
-    valuesForWhichTableDataWasFetched.beobzuordnung.ArtId &&
-    valuesForWhichTableDataWasFetched.beobzuordnung.ArtId.includes(apArtId)
+    valuesForWhichTableDataWasFetched.tpopbeob &&
+    valuesForWhichTableDataWasFetched.tpopbeob.ArtId &&
+    valuesForWhichTableDataWasFetched.tpopbeob.ArtId.includes(apArtId)
   ) {
     return
   }
 
-  store.loading.push('beobzuordnung')
+  store.loading.push('tpopbeob')
   axios
-    .get(`/v_beobzuordnung?ApArtId=eq.${apArtId}`)
+    .get(`/v_tpopbeob?ApArtId=eq.${apArtId}`)
     .then(({ data }) => {
-      store.loading = store.loading.filter(el => el !== 'beobzuordnung')
+      store.loading = store.loading.filter(el => el !== 'tpopbeob')
       // copy array without the individual objects being references
       // otherwise the computed values are passed to idb
       // and this creates errors, ad they can't be cloned
       writeToStore(store, cloneDeep(data))
       recordValuesForWhichTableDataWasFetched({
         store,
-        table: 'beobzuordnung',
+        table: 'tpopbeob',
         field: 'ArtId',
         value: apArtId,
       })
     })
     .catch(error => {
-      store.loading = store.loading.filter(el => el !== 'beobzuordnung')
+      store.loading = store.loading.filter(el => el !== 'tpopbeob')
       store.listError(error)
     })
 }

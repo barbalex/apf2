@@ -75,12 +75,12 @@ export default async ({
   tpop = tpopResult.data[0]
   store.table.tpop.set(tpop.TPopId, tpop)
 
-  // create new beobzuordnung
+  // create new tpopbeob
   let beobzuordnungResult
 
   try {
-    // first check if beobzuordnung already exists
-    beobzuordnungResult = await axios.get(`/beobzuordnung?BeobId=eq.${beobId}`)
+    // first check if tpopbeob already exists
+    beobzuordnungResult = await axios.get(`/tpopbeob?BeobId=eq.${beobId}`)
   } catch (error) {
     store.listError(error)
   }
@@ -90,12 +90,9 @@ export default async ({
     beobzuordnungResult.data[0]
   ) {
     try {
-      beobzuordnungResult = await axios.patch(
-        `/beobzuordnung?BeobId=eq.${beobId}`,
-        {
-          TPopId: tpop.TPopId,
-        }
-      )
+      beobzuordnungResult = await axios.patch(`/tpopbeob?BeobId=eq.${beobId}`, {
+        TPopId: tpop.TPopId,
+      })
     } catch (error) {
       store.listError(error)
     }
@@ -103,7 +100,7 @@ export default async ({
     try {
       beobzuordnungResult = await axios({
         method: 'POST',
-        url: '/beobzuordnung',
+        url: '/tpopbeob',
         data: { BeobId: beobId, TPopId: tpop.TPopId },
         headers: {
           Prefer: 'return=representation',
@@ -123,11 +120,11 @@ export default async ({
       `Fehler bei der Erstellung der neuen Beobachtungs-Zuordnung`
     )
   }
-  const beobzuordnung = beobzuordnungResult.data[0]
+  const tpopbeob = beobzuordnungResult.data[0]
 
   // insert this dataset in store.table
-  //store.table.beobzuordnung.set(beobzuordnung.id, beobzuordnung)
-  store.table.beobzuordnung.set(beobzuordnung.BeobId, beobzuordnung)
+  //store.table.tpopbeob.set(tpopbeob.id, tpopbeob)
+  store.table.tpopbeob.set(tpopbeob.BeobId, tpopbeob)
 
   // set new activeNodeArray
   const newActiveNodeArray = [

@@ -103,7 +103,7 @@ export default async (
       tree.setActiveNodeArray(newActiveNodeArray)
     }
     // if beobNichtBeurteilt is set to beobNichtZuordnen, url needs to change
-    if (table === 'beobzuordnung' && key === 'BeobNichtZuordnen') {
+    if (table === 'tpopbeob' && key === 'BeobNichtZuordnen') {
       newActiveNodeArray[4] =
         value === 1
           ? 'nicht-zuzuordnende-Beobachtungen'
@@ -113,7 +113,7 @@ export default async (
     }
     // if for a beobZugeordnet TPopId is set, url needs to change
     // namely: PopId and TPopId
-    if (table === 'beobzuordnung' && key === 'TPopId' && value) {
+    if (table === 'tpopbeob' && key === 'TPopId' && value) {
       const tpop = store.table.tpop.get(value)
       newActiveNodeArray[5] = tpop.PopId
       newActiveNodeArray[7] = value
