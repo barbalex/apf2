@@ -191,8 +191,8 @@ export default [
     table: 'tpopber',
     label: 'Kontroll-Berichte',
     labelSingular: 'Kontroll-Bericht',
-    idField: 'TPopBerId',
-    parentIdField: 'TPopId',
+    idField: 'id',
+    parentIdField: 'tpop_id',
   },
   {
     table: 'tpopmassnber',

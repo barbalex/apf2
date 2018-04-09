@@ -13,11 +13,12 @@ COMMENT ON COLUMN apflora.tpopmassnber.id_old IS 'frühere id';
 ALTER TABLE apflora.tpopmassnber DROP CONSTRAINT tpopmassnber_pkey;
 ALTER TABLE apflora.tpopmassnber ADD PRIMARY KEY (id);
 
+-- done: make sure createTable is correct
 -- done: rename in sql
 -- done: check if old id was used somewhere. If so: rename that field, add new one and update that
 -- done: add all views, functions, triggers with tpopmassnber to this file
--- done: make sure createTable is correct
 -- done: rename in js
+-- done: run migration sql in dev
 -- done: test app
 -- TODO: update js and run this file on server
 

@@ -217,9 +217,7 @@ export default (activeNodeArray: Array<mixed>): Object => {
       activeNodeArray[8] === 'Kontroll-Berichte') ||
     false
   const tpopber =
-    tpopberFolder && activeNodeArray.length > 9
-      ? parseInt(activeNodeArray[9], 10)
-      : null
+    tpopberFolder && activeNodeArray.length > 9 ? activeNodeArray[9] : null
   const tpopbeobFolder =
     (tpop &&
       activeNodeArray.length > 8 &&

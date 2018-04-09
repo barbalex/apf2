@@ -94,7 +94,7 @@ SELECT
 	apflora.v_tpop_anzkontrinklletzter."Zaehlungen Einheiten",
 	apflora.v_tpop_anzkontrinklletzter."Zaehlungen Methoden",
 	apflora.v_tpopber_mitletzterid."AnzTPopBer",
-	apflora.v_tpopber_mitletzterid."TPopBerId",
+	apflora.v_tpopber_mitletzterid.id AS "TPopBer id",
 	apflora.v_tpopber_mitletzterid."TPopBer Jahr",
 	apflora.v_tpopber_mitletzterid."TPopBer Entwicklung",
 	apflora.v_tpopber_mitletzterid."TPopBer Bemerkungen",

@@ -90,7 +90,6 @@ CREATE TRIGGER pop_max_one_popber_per_year BEFORE INSERT OR UPDATE ON apflora.po
   FOR EACH ROW EXECUTE PROCEDURE apflora.pop_max_one_popber_per_year();
 
 
-
 DROP TRIGGER IF EXISTS tpop_max_one_tpopber_per_year ON apflora.tpopber;
 DROP FUNCTION IF EXISTS apflora.tpop_max_one_tpopber_per_year();
 CREATE FUNCTION apflora.tpop_max_one_tpopber_per_year() RETURNS trigger AS $tpop_max_one_tpopber_per_year$

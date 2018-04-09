@@ -564,26 +564,27 @@ COMMENT ON COLUMN apflora.tpop_entwicklung_werte."MutWer" IS 'Von wem wurde der 
 
 DROP TABLE IF EXISTS apflora.tpopber;
 CREATE TABLE apflora.tpopber (
-  "TPopBerId" SERIAL PRIMARY KEY,
-  "TPopId" integer DEFAULT NULL REFERENCES apflora.tpop ("TPopId") ON DELETE CASCADE ON UPDATE CASCADE,
-  "TPopBerJahr" smallint DEFAULT NULL,
-  "TPopBerEntwicklung" integer DEFAULT NULL REFERENCES apflora.tpop_entwicklung_werte ("EntwicklungCode") ON DELETE SET NULL ON UPDATE CASCADE,
-  "TPopBerTxt" text,
-  "MutWann" date DEFAULT NOW(),
-  "MutWer" varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
+  id_old integer,
+  tpop_id integer DEFAULT NULL REFERENCES apflora.tpop ("TPopId") ON DELETE CASCADE ON UPDATE CASCADE,
+  jahr smallint DEFAULT NULL,
+  entwicklung integer DEFAULT NULL REFERENCES apflora.tpop_entwicklung_werte ("EntwicklungCode") ON DELETE SET NULL ON UPDATE CASCADE,
+  entwicklung text,
+  changed date DEFAULT NOW(),
+  changed_by varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
 );
-SELECT setval(pg_get_serial_sequence('apflora.tpopber', 'TPopBerId'), coalesce(max("TPopBerId"), 0) + 1, false) FROM apflora.tpopber;
-COMMENT ON COLUMN apflora.tpopber."TPopBerId" IS 'Primärschlüssel der Tabelle "tpopber"';
-COMMENT ON COLUMN apflora.tpopber."TPopId" IS 'Zugehörige Teilpopulation. Fremdschlüssel der Tabelle "tpop"';
-COMMENT ON COLUMN apflora.tpopber."TPopBerJahr" IS 'Für welches Jahr gilt der Bericht?';
-COMMENT ON COLUMN apflora.tpopber."TPopBerEntwicklung" IS 'Beurteilung der Populationsentwicklung: Auswahl aus Tabelle "pop_entwicklung_werte"';
-COMMENT ON COLUMN apflora.tpopber."TPopBerTxt" IS 'Bemerkungen zur Beurteilung';
-COMMENT ON COLUMN apflora.tpopber."MutWann" IS 'Wann wurde der Datensatz zuletzt geändert?';
-COMMENT ON COLUMN apflora.tpopber."MutWer" IS 'Von wem wurde der Datensatz zuletzt geändert?';
-CREATE INDEX ON apflora.tpopber USING btree ("TPopBerId");
-CREATE INDEX ON apflora.tpopber USING btree ("TPopId");
-CREATE INDEX ON apflora.tpopber USING btree ("TPopBerEntwicklung");
-CREATE INDEX ON apflora.tpopber USING btree ("TPopBerJahr");
+COMMENT ON COLUMN apflora.tpopber.id IS 'Primärschlüssel der Tabelle "tpopber"';
+COMMENT ON COLUMN apflora.tpopber.id_old IS 'frühere id';
+COMMENT ON COLUMN apflora.tpopber.tpop_id IS 'Zugehörige Teilpopulation. Fremdschlüssel der Tabelle "tpop"';
+COMMENT ON COLUMN apflora.tpopber.jahr IS 'Für welches Jahr gilt der Bericht?';
+COMMENT ON COLUMN apflora.tpopber.entwicklung IS 'Beurteilung der Populationsentwicklung: Auswahl aus Tabelle "pop_entwicklung_werte"';
+COMMENT ON COLUMN apflora.tpopber.entwicklung IS 'Bemerkungen zur Beurteilung';
+COMMENT ON COLUMN apflora.tpopber.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
+COMMENT ON COLUMN apflora.tpopber.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
+CREATE INDEX ON apflora.tpopber USING btree (id);
+CREATE INDEX ON apflora.tpopber USING btree (tpop_id);
+CREATE INDEX ON apflora.tpopber USING btree (entwicklung);
+CREATE INDEX ON apflora.tpopber USING btree (jahr);
 
 DROP TABLE IF EXISTS apflora.tpopkontr;
 CREATE TABLE apflora.tpopkontr (
