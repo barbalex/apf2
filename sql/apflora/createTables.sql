@@ -730,6 +730,7 @@ CREATE TABLE apflora.tpopkontrzaehl (
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
 );
+COMMENT ON COLUMN apflora.tpopkontrzaehl.id_old IS 'frühere id';
 COMMENT ON COLUMN apflora.tpopkontrzaehl.anzahl IS 'Anzahl Zaehleinheiten';
 COMMENT ON COLUMN apflora.tpopkontrzaehl.einheit IS 'Verwendete Zaehleinheit. Auswahl aus Tabelle "tpopkontrzaehl_einheit_werte"';
 COMMENT ON COLUMN apflora.tpopkontrzaehl.methode IS 'Verwendete Methodik. Auswahl aus Tabelle "tpopkontrzaehl_methode_werte"';
@@ -769,60 +770,60 @@ COMMENT ON COLUMN apflora.tpopkontrzaehl_methode_werte.changed_by IS 'Von wem wu
 
 DROP TABLE IF EXISTS apflora.tpopmassn;
 CREATE TABLE apflora.tpopmassn (
-  "TPopMassnId" SERIAL PRIMARY KEY,
-  "TPopId" integer DEFAULT NULL REFERENCES apflora.tpop ("TPopId") ON DELETE CASCADE ON UPDATE CASCADE,
-  "TPopMassnTyp" integer DEFAULT NULL REFERENCES apflora.tpopmassn_typ_werte ("MassnTypCode") ON DELETE SET NULL ON UPDATE CASCADE,
-  "TPopMassnTxt" text DEFAULT NULL,
-  "TPopMassnJahr" smallint DEFAULT NULL,
-  "TPopMassnDatum" date DEFAULT NULL,
-  "TPopMassnBearb" integer DEFAULT NULL REFERENCES apflora.adresse ("AdrId") ON DELETE SET NULL ON UPDATE CASCADE,
-  "TPopMassnBemTxt" text,
-  "TPopMassnPlan" smallint DEFAULT NULL,
-  "TPopMassnPlanBez" text DEFAULT NULL,
-  "TPopMassnFlaeche" integer DEFAULT NULL,
-  "TPopMassnMarkierung" text DEFAULT NULL,
-  "TPopMassnAnsiedAnzTriebe" integer DEFAULT NULL,
-  "TPopMassnAnsiedAnzPfl" integer DEFAULT NULL,
-  "TPopMassnAnzPflanzstellen" integer DEFAULT NULL,
-  "TPopMassnAnsiedWirtspfl" text DEFAULT NULL,
-  "TPopMassnAnsiedHerkunftPop" text DEFAULT NULL,
-  "TPopMassnAnsiedDatSamm" varchar(50) DEFAULT NULL,
-  "TPopMassnAnsiedForm" text DEFAULT NULL,
-  "TPopMassnAnsiedPflanzanordnung" text DEFAULT NULL,
-  "TPopMassnGuid" UUID UNIQUE DEFAULT uuid_generate_v1mc(),
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
+  id_old integer DEFAULT NULL,
+  tpop_id integer DEFAULT NULL REFERENCES apflora.tpop ("TPopId") ON DELETE CASCADE ON UPDATE CASCADE,
+  typ integer DEFAULT NULL REFERENCES apflora.tpopmassn_typ_werte ("MassnTypCode") ON DELETE SET NULL ON UPDATE CASCADE,
+  beschreibung text DEFAULT NULL,
+  jahr smallint DEFAULT NULL,
+  datum date DEFAULT NULL,
+  bearbeiter integer DEFAULT NULL REFERENCES apflora.adresse ("AdrId") ON DELETE SET NULL ON UPDATE CASCADE,
+  bemerkungen text,
+  plan_vorhanden smallint DEFAULT NULL,
+  plan_bezeichnung text DEFAULT NULL,
+  flaeche integer DEFAULT NULL,
+  markierung text DEFAULT NULL,
+  anz_triebe integer DEFAULT NULL,
+  anz_pflanzen integer DEFAULT NULL,
+  anz_pflanzstellen integer DEFAULT NULL,
+  wirtspflanze text DEFAULT NULL,
+  herkunft_pop text DEFAULT NULL,
+  sammeldatum varchar(50) DEFAULT NULL,
+  form text DEFAULT NULL,
+  pflanzanordnung text DEFAULT NULL,
   "MutWann" date DEFAULT NOW(),
   "MutWer" varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
 );
-CREATE INDEX ON apflora.tpopmassn USING btree ("TPopMassnId");
-CREATE INDEX ON apflora.tpopmassn USING btree ("TPopId");
-CREATE INDEX ON apflora.tpopmassn USING btree ("TPopMassnBearb");
-CREATE INDEX ON apflora.tpopmassn USING btree ("TPopMassnTyp");
-CREATE INDEX ON apflora.tpopmassn USING btree ("TPopMassnJahr");
-CREATE UNIQUE INDEX ON apflora.tpopmassn USING btree ("TPopMassnGuid");
-SELECT setval(pg_get_serial_sequence('apflora.tpopmassn', 'TPopMassnId'), coalesce(max("TPopMassnId"), 0) + 1, false) FROM apflora.tpopmassn;
-COMMENT ON COLUMN apflora.tpopmassn."TPopMassnId" IS 'Primärschlüssel der Tabelle "tpopmassn"';
-COMMENT ON COLUMN apflora.tpopmassn."TPopId" IS 'Zugehörige Teilpopulation. Fremdschlüssel aus der Tabelle "tpop"';
-COMMENT ON COLUMN apflora.tpopmassn."TPopMassnTyp" IS 'Typ der Massnahme. Auswahl aus Tabelle "tpopmassn_typ_werte"';
-COMMENT ON COLUMN apflora.tpopmassn."TPopMassnTxt" IS 'Was wurde gemacht? V.a. für Typ "Spezial"';
-COMMENT ON COLUMN apflora.tpopmassn."TPopMassnJahr" IS 'Jahr, in dem die Massnahme durchgeführt wurde';
-COMMENT ON COLUMN apflora.tpopmassn."TPopMassnDatum" IS 'Datum, an dem die Massnahme durchgeführt wurde';
-COMMENT ON COLUMN apflora.tpopmassn."TPopMassnBearb" IS 'Verantwortliche BearbeiterIn. Auswahl aus Tabelle "adresse"';
-COMMENT ON COLUMN apflora.tpopmassn."TPopMassnBemTxt" IS 'Bemerkungen zur Massnahme';
-COMMENT ON COLUMN apflora.tpopmassn."TPopMassnPlan" IS 'Existiert ein Plan?';
-COMMENT ON COLUMN apflora.tpopmassn."TPopMassnPlanBez" IS 'Bezeichnung auf dem Plan';
-COMMENT ON COLUMN apflora.tpopmassn."TPopMassnFlaeche" IS 'Fläche der Massnahme bzw. Teilpopulation (m2)';
-COMMENT ON COLUMN apflora.tpopmassn."TPopMassnMarkierung" IS 'Markierung der Massnahme bzw. Teilpopulation';
-COMMENT ON COLUMN apflora.tpopmassn."TPopMassnAnsiedAnzTriebe" IS 'Anzahl angesiedelte Triebe';
-COMMENT ON COLUMN apflora.tpopmassn."TPopMassnAnsiedAnzPfl" IS 'Anzahl angesiedelte Pflanzen';
-COMMENT ON COLUMN apflora.tpopmassn."TPopMassnAnzPflanzstellen" IS 'Anzahl Töpfe/Pflanzstellen';
-COMMENT ON COLUMN apflora.tpopmassn."TPopMassnAnsiedWirtspfl" IS 'Wirtspflanze';
-COMMENT ON COLUMN apflora.tpopmassn."TPopMassnAnsiedHerkunftPop" IS 'Aus welcher Population stammt das Pflanzenmaterial?';
-COMMENT ON COLUMN apflora.tpopmassn."TPopMassnAnsiedDatSamm" IS 'Datum, an dem die angesiedelten Pflanzen gesammelt wurden';
-COMMENT ON COLUMN apflora.tpopmassn."TPopMassnAnsiedForm" IS 'Form, Grösse der Ansiedlung';
-COMMENT ON COLUMN apflora.tpopmassn."TPopMassnAnsiedPflanzanordnung" IS 'Anordnung der Pflanzung';
-COMMENT ON COLUMN apflora.tpopmassn."TPopMassnGuid" IS 'GUID der Tabelle "tpopmassn"';
-COMMENT ON COLUMN apflora.tpopmassn."MutWann" IS 'Wann wurde der Datensatz zuletzt geändert?';
-COMMENT ON COLUMN apflora.tpopmassn."MutWer" IS 'Von wem wurde der Datensatz zuletzt geändert?';
+CREATE INDEX ON apflora.tpopmassn USING btree (id);
+CREATE INDEX ON apflora.tpopmassn USING btree (tpop_id);
+CREATE INDEX ON apflora.tpopmassn USING btree (bearbeiter);
+CREATE INDEX ON apflora.tpopmassn USING btree (typ);
+CREATE INDEX ON apflora.tpopmassn USING btree (jahr);
+CREATE UNIQUE INDEX ON apflora.tpopmassn USING btree (id);
+COMMENT ON COLUMN apflora.tpopmassn.id IS 'Primärschlüssel der Tabelle "tpopmassn"';
+COMMENT ON COLUMN apflora.tpopmassn.id_old IS 'frühere id';
+COMMENT ON COLUMN apflora.tpopmassn.tpop_id IS 'Zugehörige Teilpopulation. Fremdschlüssel aus der Tabelle "tpop"';
+COMMENT ON COLUMN apflora.tpopmassn.typ IS 'Typ der Massnahme. Auswahl aus Tabelle "tpopmassn_typ_werte"';
+COMMENT ON COLUMN apflora.tpopmassn.beschreibung IS 'Was wurde gemacht? V.a. für Typ "Spezial"';
+COMMENT ON COLUMN apflora.tpopmassn.jahr IS 'Jahr, in dem die Massnahme durchgeführt wurde';
+COMMENT ON COLUMN apflora.tpopmassn.datum IS 'Datum, an dem die Massnahme durchgeführt wurde';
+COMMENT ON COLUMN apflora.tpopmassn.bearbeiter IS 'Verantwortliche BearbeiterIn. Auswahl aus Tabelle "adresse"';
+COMMENT ON COLUMN apflora.tpopmassn.bemerkungen IS 'Bemerkungen zur Massnahme';
+COMMENT ON COLUMN apflora.tpopmassn.plan_vorhanden IS 'Existiert ein Plan?';
+COMMENT ON COLUMN apflora.tpopmassn.plan_bezeichnung IS 'Bezeichnung auf dem Plan';
+COMMENT ON COLUMN apflora.tpopmassn.flaeche IS 'Fläche der Massnahme bzw. Teilpopulation (m2)';
+COMMENT ON COLUMN apflora.tpopmassn.markierung IS 'Markierung der Massnahme bzw. Teilpopulation';
+COMMENT ON COLUMN apflora.tpopmassn.anz_triebe IS 'Anzahl angesiedelte Triebe';
+COMMENT ON COLUMN apflora.tpopmassn.anz_pflanzen IS 'Anzahl angesiedelte Pflanzen';
+COMMENT ON COLUMN apflora.tpopmassn.anz_pflanzstellen IS 'Anzahl Töpfe/Pflanzstellen';
+COMMENT ON COLUMN apflora.tpopmassn.wirtspflanze IS 'Wirtspflanze';
+COMMENT ON COLUMN apflora.tpopmassn.herkunft_pop IS 'Aus welcher Population stammt das Pflanzenmaterial?';
+COMMENT ON COLUMN apflora.tpopmassn.sammeldatum IS 'Datum, an dem die angesiedelten Pflanzen gesammelt wurden';
+COMMENT ON COLUMN apflora.tpopmassn.form IS 'Form, Grösse der Ansiedlung';
+COMMENT ON COLUMN apflora.tpopmassn.pflanzanordnung IS 'Anordnung der Pflanzung';
+COMMENT ON COLUMN apflora.tpopmassn.id IS 'GUID der Tabelle "tpopmassn"';
+COMMENT ON COLUMN apflora.tpopmassn.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
+COMMENT ON COLUMN apflora.tpopmassn.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
 DROP TABLE IF EXISTS apflora.tpopmassn_erfbeurt_werte;
 CREATE TABLE apflora.tpopmassn_erfbeurt_werte (

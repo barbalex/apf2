@@ -33,12 +33,12 @@ CREATE OR REPLACE FUNCTION apflora.qk2_pop_ohne_popber(apid integer, berichtjahr
         apflora.tpop."TPopId" IN (
           -- 1. "TPop mit Ansiedlungen/Ansaaten vor dem Berichtjahr" ermitteln:
           SELECT DISTINCT
-          apflora.tpopmassn."TPopId"
+          apflora.tpopmassn.tpop_id
           FROM
             apflora.tpopmassn
           WHERE
-            apflora.tpopmassn."TPopMassnTyp" in (1, 2, 3)
-            AND apflora.tpopmassn."TPopMassnJahr" < $2
+            apflora.tpopmassn.typ in (1, 2, 3)
+            AND apflora.tpopmassn.jahr < $2
         )
         AND apflora.tpop."TPopId" IN (
           -- 2. "TPop mit Kontrolle im Berichtjahr" ermitteln:

@@ -10,16 +10,16 @@ export default (store: Object, tree: Object): Array<Object> => {
   // map through all projekt and create array of nodes
   tpopmassn.forEach(el => {
     const tpopmassntypWert = tpopmassntypWerte.find(
-      e => e.MassnTypCode === el.TPopMassnTyp,
+      e => e.MassnTypCode === el.typ
     )
     const massnTypTxt = tpopmassntypWert ? tpopmassntypWert.MassnTypTxt : null
-    el.label = `${el.TPopMassnJahr || '(kein Jahr)'}: ${massnTypTxt || '(kein Typ)'}`
+    el.label = `${el.jahr || '(kein Jahr)'}: ${massnTypTxt || '(kein Typ)'}`
   })
   // filter by nodeLabelFilter
   const filterString = nodeLabelFilter.get('tpopmassn')
   if (filterString) {
     tpopmassn = tpopmassn.filter(p =>
-      p.label.toLowerCase().includes(filterString.toLowerCase()),
+      p.label.toLowerCase().includes(filterString.toLowerCase())
     )
   }
   // sort by label and return

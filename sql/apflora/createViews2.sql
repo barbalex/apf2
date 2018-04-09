@@ -7,7 +7,7 @@ DROP VIEW IF EXISTS apflora.v_ap_massnjahre CASCADE;
 CREATE OR REPLACE VIEW apflora.v_ap_massnjahre AS
 SELECT
   apflora.ap."ApArtId",
-  apflora.v_massn_jahre."TPopMassnJahr"
+  apflora.v_massn_jahre.jahr
 FROM
   apflora.ap,
   apflora.v_massn_jahre
@@ -16,30 +16,30 @@ WHERE
   AND apflora.ap."ApStatus" < 4
 ORDER BY
   apflora.ap."ApArtId",
-  apflora.v_massn_jahre."TPopMassnJahr";
+  apflora.v_massn_jahre.jahr;
 
 DROP VIEW IF EXISTS apflora.v_ap_anzmassnprojahr CASCADE;
 CREATE OR REPLACE VIEW apflora.v_ap_anzmassnprojahr AS
 SELECT
   apflora.v_ap_massnjahre."ApArtId",
-  apflora.v_ap_massnjahre."TPopMassnJahr",
+  apflora.v_ap_massnjahre.jahr,
   COALESCE(apflora.v_ap_anzmassnprojahr0."AnzahlvonTPopMassnId", 0) AS "AnzahlMassnahmen"
 FROM
   apflora.v_ap_massnjahre
   LEFT JOIN
     apflora.v_ap_anzmassnprojahr0
     ON
-      (apflora.v_ap_massnjahre."TPopMassnJahr" = apflora.v_ap_anzmassnprojahr0."TPopMassnJahr")
+      (apflora.v_ap_massnjahre.jahr = apflora.v_ap_anzmassnprojahr0.jahr)
       AND (apflora.v_ap_massnjahre."ApArtId" = apflora.v_ap_anzmassnprojahr0."ApArtId")
 ORDER BY
   apflora.v_ap_massnjahre."ApArtId",
-  apflora.v_ap_massnjahre."TPopMassnJahr";
+  apflora.v_ap_massnjahre.jahr;
 
 DROP VIEW IF EXISTS apflora.v_ap_anzmassnbisjahr CASCADE;
 CREATE OR REPLACE VIEW apflora.v_ap_anzmassnbisjahr AS
 SELECT
   apflora.v_ap_massnjahre."ApArtId",
-  apflora.v_ap_massnjahre."TPopMassnJahr",
+  apflora.v_ap_massnjahre.jahr,
   sum(apflora.v_ap_anzmassnprojahr."AnzahlMassnahmen") AS "AnzahlMassnahmen"
 FROM
   apflora.v_ap_massnjahre
@@ -47,13 +47,13 @@ FROM
     apflora.v_ap_anzmassnprojahr
     ON apflora.v_ap_massnjahre."ApArtId" = apflora.v_ap_anzmassnprojahr."ApArtId"
 WHERE
-  apflora.v_ap_anzmassnprojahr."TPopMassnJahr" <= apflora.v_ap_massnjahre."TPopMassnJahr"
+  apflora.v_ap_anzmassnprojahr.jahr <= apflora.v_ap_massnjahre.jahr
 GROUP BY
   apflora.v_ap_massnjahre."ApArtId",
-  apflora.v_ap_massnjahre."TPopMassnJahr"
+  apflora.v_ap_massnjahre.jahr
 ORDER BY
   apflora.v_ap_massnjahre."ApArtId",
-  apflora.v_ap_massnjahre."TPopMassnJahr";
+  apflora.v_ap_massnjahre.jahr;
 
 DROP VIEW IF EXISTS apflora.v_ap_apberundmassn CASCADE;
 CREATE OR REPLACE VIEW apflora.v_ap_apberundmassn AS
@@ -65,7 +65,7 @@ SELECT
   apflora.ap_umsetzung_werte."DomainTxt" AS "AP Stand Umsetzung",
   apflora.adresse."AdrName" AS "AP Verantwortlich",
   apflora.ap."ApArtwert" AS "Artwert",
-  apflora.v_ap_anzmassnprojahr."TPopMassnJahr" AS "Jahr",
+  apflora.v_ap_anzmassnprojahr.jahr AS "Jahr",
   apflora.v_ap_anzmassnprojahr."AnzahlMassnahmen" AS "Anzahl Massnahmen",
   apflora.v_ap_anzmassnbisjahr."AnzahlMassnahmen" AS "Anzahl Massnahmen bisher",
   CASE
@@ -93,16 +93,16 @@ FROM
           LEFT JOIN
             apflora.apber
             ON
-              (apflora.v_ap_anzmassnbisjahr."TPopMassnJahr" = apflora.apber."JBerJahr")
+              (apflora.v_ap_anzmassnbisjahr.jahr = apflora.apber."JBerJahr")
               AND (apflora.v_ap_anzmassnbisjahr."ApArtId" = apflora.apber."ApArtId"))
           ON
-            (apflora.v_ap_anzmassnprojahr."TPopMassnJahr" = apflora.v_ap_anzmassnbisjahr."TPopMassnJahr")
+            (apflora.v_ap_anzmassnprojahr.jahr = apflora.v_ap_anzmassnbisjahr.jahr)
             AND (apflora.v_ap_anzmassnprojahr."ApArtId" = apflora.v_ap_anzmassnbisjahr."ApArtId"))
         ON apflora.ap."ApArtId" = apflora.v_ap_anzmassnprojahr."ApArtId")
       ON apflora.adb_eigenschaften."TaxonomieId" = apflora.ap."ApArtId"
 ORDER BY
   apflora.adb_eigenschaften."Artname",
-  apflora.v_ap_anzmassnprojahr."TPopMassnJahr";
+  apflora.v_ap_anzmassnprojahr.jahr;
 
 DROP VIEW IF EXISTS apflora.v_tpop_letztermassnber CASCADE;
 CREATE OR REPLACE VIEW apflora.v_tpop_letztermassnber AS
@@ -201,7 +201,7 @@ FROM
           ON apflora.apber."ApArtId" = apflora.v_ap_anzmassnbisjahr."ApArtId")
         ON apflora._variable."JBerJahr" = apflora.apber."JBerJahr")
       ON apflora.ap."ApArtId" = apflora.apber."ApArtId")
-    ON "tblKonstanten_1"."JBerJahr" = apflora.v_ap_anzmassnbisjahr."TPopMassnJahr"
+    ON "tblKonstanten_1"."JBerJahr" = apflora.v_ap_anzmassnbisjahr.jahr
 WHERE
   apflora.v_ap_anzmassnbisjahr."AnzahlMassnahmen" > 0
   AND apflora.apber."JBerBeurteilung" = 1
@@ -232,7 +232,7 @@ FROM
           ON apflora.apber."ApArtId" = apflora.v_ap_anzmassnbisjahr."ApArtId")
         ON apflora._variable."JBerJahr" = apflora.apber."JBerJahr")
       ON apflora.ap."ApArtId" = apflora.apber."ApArtId")
-    ON "tblKonstanten_1"."JBerJahr" = apflora.v_ap_anzmassnbisjahr."TPopMassnJahr"
+    ON "tblKonstanten_1"."JBerJahr" = apflora.v_ap_anzmassnbisjahr.jahr
 WHERE
   apflora.v_ap_anzmassnbisjahr."AnzahlMassnahmen" > 0
   AND apflora.apber."JBerBeurteilung" = 1
@@ -269,7 +269,7 @@ FROM
         apflora._variable
         ON apflora.apber."JBerJahr" = apflora._variable."JBerJahr")
       ON
-        (apflora._variable."JBerJahr" = "vApAnzMassnBisJahr_1"."TPopMassnJahr")
+        (apflora._variable."JBerJahr" = "vApAnzMassnBisJahr_1".jahr)
         AND (apflora.ap."ApArtId" = apflora.apber."ApArtId")
 WHERE
   apflora.ap."ApStatus" BETWEEN 1 AND 3
@@ -295,7 +295,7 @@ FROM
     INNER JOIN
       apflora.v_ap_anzmassnbisjahr
       ON apflora.ap."ApArtId" = apflora.v_ap_anzmassnbisjahr."ApArtId")
-    ON apflora._variable."JBerJahr" = apflora.v_ap_anzmassnbisjahr."TPopMassnJahr"
+    ON apflora._variable."JBerJahr" = apflora.v_ap_anzmassnbisjahr.jahr
 WHERE
   apflora.v_ap_anzmassnbisjahr."AnzahlMassnahmen" > 0
   AND apflora.ap."ApStatus" BETWEEN 1 AND 3
@@ -319,7 +319,7 @@ FROM
     INNER JOIN
       apflora.v_ap_anzmassnbisjahr
       ON apflora.ap."ApArtId" = apflora.v_ap_anzmassnbisjahr."ApArtId")
-    ON apflora._variable."JBerJahr" = apflora.v_ap_anzmassnbisjahr."TPopMassnJahr"
+    ON apflora._variable."JBerJahr" = apflora.v_ap_anzmassnbisjahr.jahr
 WHERE
   apflora.v_ap_anzmassnbisjahr."AnzahlMassnahmen" > 0
   AND apflora.ap."ApStatus" BETWEEN 1 AND 3;
@@ -348,7 +348,7 @@ FROM
         apflora._variable
         ON apflora.apber."JBerJahr" = apflora._variable."JBerJahr")
       ON apflora.ap."ApArtId" = apflora.apber."ApArtId")
-    ON "tblKonstanten_1"."JBerJahr" = apflora.v_ap_anzmassnbisjahr."TPopMassnJahr"
+    ON "tblKonstanten_1"."JBerJahr" = apflora.v_ap_anzmassnbisjahr.jahr
 WHERE
   apflora.apber."JBerBeurteilung" = 5
   AND apflora.v_ap_anzmassnbisjahr."AnzahlMassnahmen" > 0
@@ -379,7 +379,7 @@ FROM
         apflora._variable
         ON apflora.apber."JBerJahr" = apflora._variable."JBerJahr")
       ON apflora.ap."ApArtId" = apflora.apber."ApArtId")
-    ON "tblKonstanten_1"."JBerJahr" = apflora.v_ap_anzmassnbisjahr."TPopMassnJahr"
+    ON "tblKonstanten_1"."JBerJahr" = apflora.v_ap_anzmassnbisjahr.jahr
 WHERE
   apflora.apber."JBerBeurteilung" = 5
   AND apflora.v_ap_anzmassnbisjahr."AnzahlMassnahmen" > 0
@@ -409,7 +409,7 @@ FROM
         apflora._variable
         ON apflora.apber."JBerJahr" = apflora._variable."JBerJahr")
       ON apflora.ap."ApArtId" = apflora.apber."ApArtId")
-    ON "tblKonstanten_1"."JBerJahr" = apflora.v_ap_anzmassnbisjahr."TPopMassnJahr"
+    ON "tblKonstanten_1"."JBerJahr" = apflora.v_ap_anzmassnbisjahr.jahr
 WHERE
   apflora.apber."JBerBeurteilung" = 3
   AND apflora.ap."ApStatus" BETWEEN 1 AND 3
@@ -440,7 +440,7 @@ FROM
         apflora._variable
         ON apflora.apber."JBerJahr" = apflora._variable."JBerJahr")
       ON apflora.ap."ApArtId" = apflora.apber."ApArtId")
-    ON "tblKonstanten_1"."JBerJahr" = apflora.v_ap_anzmassnbisjahr."TPopMassnJahr"
+    ON "tblKonstanten_1"."JBerJahr" = apflora.v_ap_anzmassnbisjahr.jahr
 WHERE
   apflora.apber."JBerBeurteilung" = 3
   AND apflora.ap."ApStatus" BETWEEN 1 AND 3
@@ -470,7 +470,7 @@ FROM
         apflora._variable
         ON apflora.apber."JBerJahr" = apflora._variable."JBerJahr")
     ON apflora.ap."ApArtId" = apflora.apber."ApArtId")
-  ON "tblKonstanten_1"."JBerJahr" = apflora.v_ap_anzmassnbisjahr."TPopMassnJahr"
+  ON "tblKonstanten_1"."JBerJahr" = apflora.v_ap_anzmassnbisjahr.jahr
 WHERE
   apflora.apber."JBerBeurteilung" = 4
   AND apflora.v_ap_anzmassnbisjahr."AnzahlMassnahmen" > 0
@@ -501,7 +501,7 @@ FROM
         apflora._variable
         ON apflora.apber."JBerJahr" = apflora._variable."JBerJahr")
     ON apflora.ap."ApArtId" = apflora.apber."ApArtId")
-  ON "tblKonstanten_1"."JBerJahr" = apflora.v_ap_anzmassnbisjahr."TPopMassnJahr"
+  ON "tblKonstanten_1"."JBerJahr" = apflora.v_ap_anzmassnbisjahr.jahr
 WHERE
   apflora.apber."JBerBeurteilung" = 4
   AND apflora.v_ap_anzmassnbisjahr."AnzahlMassnahmen" > 0
@@ -528,7 +528,7 @@ FROM
         apflora._variable
         ON apflora.apber."JBerJahr" = apflora._variable."JBerJahr")
     ON apflora.ap."ApArtId" = apflora.apber."ApArtId")
-  ON "tblKonstanten_1"."JBerJahr" = apflora.v_ap_anzmassnbisjahr."TPopMassnJahr"
+  ON "tblKonstanten_1"."JBerJahr" = apflora.v_ap_anzmassnbisjahr.jahr
 WHERE
   apflora.apber."JBerBeurteilung" = 1168274204
   AND apflora.v_ap_anzmassnbisjahr."AnzahlMassnahmen" > 0
@@ -556,7 +556,7 @@ FROM
         apflora._variable
         ON apflora.apber."JBerJahr" = apflora._variable."JBerJahr")
     ON apflora.ap."ApArtId" = apflora.apber."ApArtId")
-  ON "tblKonstanten_1"."JBerJahr" = apflora.v_ap_anzmassnbisjahr."TPopMassnJahr"
+  ON "tblKonstanten_1"."JBerJahr" = apflora.v_ap_anzmassnbisjahr.jahr
 WHERE
   apflora.apber."JBerBeurteilung" = 1168274204
   AND apflora.v_ap_anzmassnbisjahr."AnzahlMassnahmen" > 0
@@ -586,7 +586,7 @@ FROM
         apflora._variable
         ON apflora.apber."JBerJahr" = apflora._variable."JBerJahr")
       ON apflora.ap."ApArtId" = apflora.apber."ApArtId")
-    ON "tblKonstanten_1"."JBerJahr" = apflora.v_ap_anzmassnbisjahr."TPopMassnJahr"
+    ON "tblKonstanten_1"."JBerJahr" = apflora.v_ap_anzmassnbisjahr.jahr
 WHERE
   apflora.apber."JBerBeurteilung" = 6
   AND apflora.v_ap_anzmassnbisjahr."AnzahlMassnahmen" > 0
@@ -617,7 +617,7 @@ FROM
         apflora._variable
         ON apflora.apber."JBerJahr" = apflora._variable."JBerJahr")
       ON apflora.ap."ApArtId" = apflora.apber."ApArtId")
-    ON "tblKonstanten_1"."JBerJahr" = apflora.v_ap_anzmassnbisjahr."TPopMassnJahr"
+    ON "tblKonstanten_1"."JBerJahr" = apflora.v_ap_anzmassnbisjahr.jahr
 WHERE
   apflora.apber."JBerBeurteilung" = 6
   AND apflora.v_ap_anzmassnbisjahr."AnzahlMassnahmen" > 0
@@ -641,7 +641,7 @@ FROM
     ON apflora.ap."ApArtId" = apflora.apber."ApArtId")
   INNER JOIN
     apflora._variable
-    ON apflora.v_ap_anzmassnbisjahr."TPopMassnJahr" = apflora._variable."JBerJahr"
+    ON apflora.v_ap_anzmassnbisjahr.jahr = apflora._variable."JBerJahr"
 WHERE
   apflora.apber."ApArtId" IS NULL
   AND apflora.ap."ApStatus" BETWEEN 1 AND 3;
@@ -667,7 +667,7 @@ FROM
         apflora._variable
         ON apflora.apber."JBerJahr" = apflora._variable."JBerJahr")
       ON apflora.ap."ApArtId" = apflora.apber."ApArtId")
-    ON "tblKonstanten_1"."JBerJahr" = apflora.v_ap_anzmassnbisjahr."TPopMassnJahr"
+    ON "tblKonstanten_1"."JBerJahr" = apflora.v_ap_anzmassnbisjahr.jahr
 WHERE
   apflora.ap."ApStatus" BETWEEN 1 AND 3
   AND apflora.apber."JBerBeurteilung" IS NULL;
@@ -735,7 +735,7 @@ FROM
       (apflora.v_ap_anzmassnbisjahr
       INNER JOIN
         apflora._variable
-        ON apflora.v_ap_anzmassnbisjahr."TPopMassnJahr" = apflora._variable."JBerJahr")
+        ON apflora.v_ap_anzmassnbisjahr.jahr = apflora._variable."JBerJahr")
       ON apflora.ap."ApArtId" = apflora.v_ap_anzmassnbisjahr."ApArtId")
     INNER JOIN
       apflora.v_ap_apberrelevant
@@ -1163,9 +1163,9 @@ FROM
     ON apflora.pop."PopId" = apflora.tpop."PopId")
   INNER JOIN
     apflora.tpopmassn
-    ON apflora.tpop."TPopId" = apflora.tpopmassn."TPopId"
+    ON apflora.tpop."TPopId" = apflora.tpopmassn.tpop_id
 WHERE
-  apflora.tpopmassn."TPopMassnJahr" <= apflora._variable."JBerJahr"
+  apflora.tpopmassn.jahr <= apflora._variable."JBerJahr"
   AND apflora.tpop."TPopApBerichtRelevant" = 1
   AND apflora.pop."PopHerkunft" <> 300
 GROUP BY
@@ -1950,14 +1950,14 @@ WHERE
   AND apflora.tpop."TPopId" NOT IN (
     -- Ansiedlungen since apflora.tpopber."TPopBerJahr"
     SELECT
-      apflora.tpopmassn."TPopId"
+      apflora.tpopmassn.tpop_id
     FROM
       apflora.tpopmassn
     WHERE
-      apflora.tpopmassn."TPopId" = apflora.tpop."TPopId"
-      AND apflora.tpopmassn."TPopMassnTyp" BETWEEN 1 AND 3
-      AND apflora.tpopmassn."TPopMassnJahr" IS NOT NULL
-      AND apflora.tpopmassn."TPopMassnJahr" > apflora.tpopber."TPopBerJahr"
+      apflora.tpopmassn.tpop_id = apflora.tpop."TPopId"
+      AND apflora.tpopmassn.typ BETWEEN 1 AND 3
+      AND apflora.tpopmassn.jahr IS NOT NULL
+      AND apflora.tpopmassn.jahr > apflora.tpopber."TPopBerJahr"
   );
 
 DROP VIEW IF EXISTS apflora.v_exportevab_beob CASCADE;
@@ -1986,13 +1986,13 @@ SELECT
     WHEN apflora.tpop."TPopHerkunft" < 200 THEN 4
     WHEN EXISTS(
       SELECT
-        apflora.tpopmassn."TPopId"
+        apflora.tpopmassn.tpop_id
       FROM
         apflora.tpopmassn
       WHERE
-        apflora.tpopmassn."TPopId" = apflora.tpopkontr."TPopId"
-        AND apflora.tpopmassn."TPopMassnTyp" BETWEEN 1 AND 3
-        AND apflora.tpopmassn."TPopMassnJahr" <= apflora.tpopkontr."TPopKontrJahr"
+        apflora.tpopmassn.tpop_id = apflora.tpopkontr."TPopId"
+        AND apflora.tpopmassn.typ BETWEEN 1 AND 3
+        AND apflora.tpopmassn.jahr <= apflora.tpopkontr."TPopKontrJahr"
     ) THEN 6
     WHEN apflora.tpop."TPopHerkunftUnklar" = 1 THEN 3
     ELSE 5

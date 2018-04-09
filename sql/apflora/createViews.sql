@@ -69,18 +69,18 @@ CREATE OR REPLACE VIEW apflora.v_popmassnber_anzmassn0 AS
 SELECT
   apflora.popmassnber."PopId",
   apflora.popmassnber."PopMassnBerJahr",
-  count(apflora.tpopmassn."TPopMassnId") AS "AnzahlvonTPopMassnId"
+  count(apflora.tpopmassn.id) AS "AnzahlvonTPopMassnId"
 FROM
   apflora.popmassnber
   INNER JOIN
     (apflora.tpop
     LEFT JOIN
       apflora.tpopmassn
-      ON apflora.tpop."TPopId" = apflora.tpopmassn."TPopId")
+      ON apflora.tpop."TPopId" = apflora.tpopmassn.tpop_id)
     ON apflora.popmassnber."PopId" = apflora.tpop."PopId"
 WHERE
-  apflora.tpopmassn."TPopMassnJahr" = apflora.popmassnber."PopMassnBerJahr"
-  Or apflora.tpopmassn."TPopMassnJahr" IS NULL
+  apflora.tpopmassn.jahr = apflora.popmassnber."PopMassnBerJahr"
+  Or apflora.tpopmassn.jahr IS NULL
 GROUP BY
   apflora.popmassnber."PopId",
   apflora.popmassnber."PopMassnBerJahr"
@@ -91,22 +91,22 @@ ORDER BY
 DROP VIEW IF EXISTS apflora.v_massn_jahre CASCADE;
 CREATE OR REPLACE VIEW apflora.v_massn_jahre AS
 SELECT
-  apflora.tpopmassn."TPopMassnJahr"
+  apflora.tpopmassn.jahr
 FROM
   apflora.tpopmassn
 GROUP BY
-  apflora.tpopmassn."TPopMassnJahr"
+  apflora.tpopmassn.jahr
 HAVING
-  apflora.tpopmassn."TPopMassnJahr" BETWEEN 1900 AND 2100
+  apflora.tpopmassn.jahr BETWEEN 1900 AND 2100
 ORDER BY
-  apflora.tpopmassn."TPopMassnJahr";
+  apflora.tpopmassn.jahr;
 
 DROP VIEW IF EXISTS apflora.v_ap_anzmassnprojahr0 CASCADE;
 CREATE OR REPLACE VIEW apflora.v_ap_anzmassnprojahr0 AS
 SELECT
   apflora.ap."ApArtId",
-  apflora.tpopmassn."TPopMassnJahr",
-  count(apflora.tpopmassn."TPopMassnId") AS "AnzahlvonTPopMassnId"
+  apflora.tpopmassn.jahr,
+  count(apflora.tpopmassn.id) AS "AnzahlvonTPopMassnId"
 FROM
   apflora.ap
   INNER JOIN
@@ -116,7 +116,7 @@ FROM
       ON apflora.pop."PopId" = apflora.tpop."PopId")
     INNER JOIN
       apflora.tpopmassn
-      ON apflora.tpop."TPopId" = apflora.tpopmassn."TPopId")
+      ON apflora.tpop."TPopId" = apflora.tpopmassn.tpop_id)
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
 WHERE
   apflora.ap."ApStatus" BETWEEN 1 AND 3
@@ -124,12 +124,12 @@ WHERE
   AND apflora.pop."PopHerkunft" <> 300
 GROUP BY
   apflora.ap."ApArtId",
-  apflora.tpopmassn."TPopMassnJahr"
+  apflora.tpopmassn.jahr
 HAVING
-  apflora.tpopmassn."TPopMassnJahr" IS NOT NULL
+  apflora.tpopmassn.jahr IS NOT NULL
 ORDER BY
   apflora.ap."ApArtId",
-  apflora.tpopmassn."TPopMassnJahr";
+  apflora.tpopmassn.jahr;
 
 DROP VIEW IF EXISTS apflora.v_ap_apberrelevant CASCADE;
 CREATE OR REPLACE VIEW apflora.v_ap_apberrelevant AS
@@ -154,7 +154,7 @@ DROP VIEW IF EXISTS apflora.v_erstemassnproap CASCADE;
 CREATE OR REPLACE VIEW apflora.v_erstemassnproap AS
 SELECT
   apflora.ap."ApArtId",
-  min(apflora.tpopmassn."TPopMassnJahr") AS "MinvonTPopMassnJahr"
+  min(apflora.tpopmassn.jahr) AS "MinvonTPopMassnJahr"
 FROM
   ((apflora.ap
   INNER JOIN
@@ -165,7 +165,7 @@ FROM
     ON apflora.pop."PopId" = apflora.tpop."PopId")
   INNER JOIN
     apflora.tpopmassn
-    ON apflora.tpop."TPopId" = apflora.tpopmassn."TPopId"
+    ON apflora.tpop."TPopId" = apflora.tpopmassn.tpop_id
 GROUP BY
   apflora.ap."ApArtId";
 
@@ -255,29 +255,28 @@ SELECT
   apflora.tpop."TPopNutzungszone" AS "TPop Nutzungszone",
   apflora.tpop."TPopBewirtschafterIn" AS "TPop BewirtschafterIn",
   apflora.tpop."TPopBewirtschaftung" AS "TPop Bewirtschaftung",
-  apflora.tpopmassn."TPopMassnId",
-  apflora.tpopmassn."TPopMassnGuid" AS "Massn Guid",
+  apflora.tpopmassn.id,
   apflora.tpopmassn."TPopMassnGuid_alt" AS "Massn GUID alt",
-  apflora.tpopmassn."TPopMassnJahr" AS "Massn Jahr",
-  apflora.tpopmassn."TPopMassnDatum" AS "Massn Datum",
+  apflora.tpopmassn.jahr AS "Massn Jahr",
+  apflora.tpopmassn.datum AS "Massn Datum",
   tpopmassn_typ_werte."MassnTypTxt" AS "Massn Typ",
-  apflora.tpopmassn."TPopMassnTxt" AS "Massn Massnahme",
+  apflora.tpopmassn.beschreibung AS "Massn Massnahme",
   apflora.adresse."AdrName" AS "Massn BearbeiterIn",
-  CAST(apflora.tpopmassn."TPopMassnBemTxt" AS CHAR) AS "Massn Bemerkungen",
-  apflora.tpopmassn."TPopMassnPlan" AS "Massn Plan vorhanden",
-  apflora.tpopmassn."TPopMassnPlanBez" AS "Massn Plan Bezeichnung",
-  apflora.tpopmassn."TPopMassnFlaeche" AS "Massn Flaeche m2",
-  apflora.tpopmassn."TPopMassnAnsiedForm" AS "Massn Form der Ansiedlung",
-  apflora.tpopmassn."TPopMassnAnsiedPflanzanordnung" AS "Massn Pflanzanordnung",
-  apflora.tpopmassn."TPopMassnMarkierung" AS "Massn Markierung",
-  apflora.tpopmassn."TPopMassnAnsiedAnzTriebe" AS "Massn Anz Triebe",
-  apflora.tpopmassn."TPopMassnAnsiedAnzPfl" AS "Massn Pflanzen",
-  apflora.tpopmassn."TPopMassnAnzPflanzstellen" AS "Massn Anz Pflanzstellen",
-  apflora.tpopmassn."TPopMassnAnsiedWirtspfl" AS "Massn Wirtspflanze",
-  apflora.tpopmassn."TPopMassnAnsiedHerkunftPop" AS "Massn Herkunftspopulation",
-  apflora.tpopmassn."TPopMassnAnsiedDatSamm" AS "Massn Sammeldatum",
-  apflora.tpopmassn."MutWann" AS "Datensatz zuletzt geaendert",
-  apflora.tpopmassn."MutWer" AS "Datensatz zuletzt geaendert von"
+  apflora.tpopmassn.bemerkungen::char AS "Massn Bemerkungen",
+  apflora.tpopmassn.plan_vorhanden AS "Massn Plan vorhanden",
+  apflora.tpopmassn.plan_bezeichnung AS "Massn Plan Bezeichnung",
+  apflora.tpopmassn.flaeche AS "Massn Flaeche m2",
+  apflora.tpopmassn.form AS "Massn Form der Ansiedlung",
+  apflora.tpopmassn.pflanzanordnung AS "Massn Pflanzanordnung",
+  apflora.tpopmassn.markierung AS "Massn Markierung",
+  apflora.tpopmassn.anz_triebe AS "Massn Anz Triebe",
+  apflora.tpopmassn.anz_pflanzen AS "Massn Pflanzen",
+  apflora.tpopmassn.anz_pflanzstellen AS "Massn Anz Pflanzstellen",
+  apflora.tpopmassn.wirtspflanze AS "Massn Wirtspflanze",
+  apflora.tpopmassn.herkunft_pop AS "Massn Herkunftspopulation",
+  apflora.tpopmassn.sammeldatum AS "Massn Sammeldatum",
+  apflora.tpopmassn.changed AS "Datensatz zuletzt geaendert",
+  apflora.tpopmassn.changed_by AS "Datensatz zuletzt geaendert von"
 FROM
   ((((((apflora.adb_eigenschaften
   INNER JOIN
@@ -291,8 +290,8 @@ FROM
         (apflora.tpopmassn
         LEFT JOIN
           apflora.tpopmassn_typ_werte
-          ON apflora.tpopmassn."TPopMassnTyp" = tpopmassn_typ_werte."MassnTypCode")
-        ON apflora.tpop."TPopId" = apflora.tpopmassn."TPopId")
+          ON apflora.tpopmassn.typ = tpopmassn_typ_werte."MassnTypCode")
+        ON apflora.tpop."TPopId" = apflora.tpopmassn.tpop_id)
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId")
   LEFT JOIN
     apflora.ap_bearbstand_werte
@@ -308,15 +307,15 @@ FROM
     ON apflora.tpop."TPopHerkunft" = "domPopHerkunft_1"."HerkunftId")
   LEFT JOIN
     apflora.adresse
-    ON apflora.tpopmassn."TPopMassnBearb" = apflora.adresse."AdrId"
+    ON apflora.tpopmassn.bearbeiter = apflora.adresse."AdrId"
 WHERE
   apflora.adb_eigenschaften."TaxonomieId" > 150
 ORDER BY
   apflora.adb_eigenschaften."Artname",
   apflora.pop."PopNr",
   apflora.tpop."TPopNr",
-  apflora.tpopmassn."TPopMassnJahr",
-  apflora.tpopmassn."TPopMassnDatum",
+  apflora.tpopmassn.jahr,
+  apflora.tpopmassn.datum,
   tpopmassn_typ_werte."MassnTypTxt";
 
 DROP VIEW IF EXISTS apflora.v_massn_webgisbun CASCADE;
@@ -330,29 +329,29 @@ SELECT
   apflora.tpop."TPopNr" AS "TPOPNR",
   apflora.tpop."TPopXKoord" AS "TPOP_X",
   apflora.tpop."TPopYKoord" AS "TPOP_Y",
-  apflora.tpopmassn."TPopMassnGuid" AS "MASSNGUID",
-  apflora.tpopmassn."TPopMassnJahr" AS "MASSNJAHR",
+  apflora.tpopmassn.id AS "MASSNGUID",
+  apflora.tpopmassn.jahr AS "MASSNJAHR",
   -- need to convert date
-  apflora.tpopmassn."TPopMassnDatum" AS "MASSNDAT",
+  apflora.tpopmassn.datum AS "MASSNDAT",
   tpopmassn_typ_werte."MassnTypTxt" AS "MASSTYP",
-  apflora.tpopmassn."TPopMassnTxt" AS "MASSNMASSNAHME",
+  apflora.tpopmassn.beschreibung AS "MASSNMASSNAHME",
   apflora.adresse."AdrName" AS "MASSNBEARBEITER",
-  CAST(apflora.tpopmassn."TPopMassnBemTxt" AS CHAR) AS "MASSNBEMERKUNG",
-  apflora.tpopmassn."TPopMassnPlan" AS "MASSNPLAN",
-  apflora.tpopmassn."TPopMassnPlanBez" AS "MASSPLANBEZ",
-  apflora.tpopmassn."TPopMassnFlaeche" AS "MASSNFLAECHE",
-  apflora.tpopmassn."TPopMassnAnsiedForm" AS "MASSNFORMANSIEDL",
-  apflora.tpopmassn."TPopMassnAnsiedPflanzanordnung" AS "MASSNPFLANZANORDNUNG",
-  apflora.tpopmassn."TPopMassnMarkierung" AS "MASSNMARKIERUNG",
-  apflora.tpopmassn."TPopMassnAnsiedAnzTriebe" AS "MASSNANZTRIEBE",
-  apflora.tpopmassn."TPopMassnAnsiedAnzPfl" AS "MASSNANZPFLANZEN",
-  apflora.tpopmassn."TPopMassnAnzPflanzstellen" AS "MASSNANZPFLANZSTELLEN",
-  apflora.tpopmassn."TPopMassnAnsiedWirtspfl" AS "MASSNWIRTSPFLANZEN",
-  apflora.tpopmassn."TPopMassnAnsiedHerkunftPop" AS "MASSNHERKUNFTSPOP",
-  apflora.tpopmassn."TPopMassnAnsiedDatSamm" AS "MASSNSAMMELDAT",
+  apflora.tpopmassn.bemerkungen::char AS "MASSNBEMERKUNG",
+  apflora.tpopmassn.plan_vorhanden AS "MASSNPLAN",
+  apflora.tpopmassn.plan_bezeichnung AS "MASSPLANBEZ",
+  apflora.tpopmassn.flaeche AS "MASSNFLAECHE",
+  apflora.tpopmassn.form AS "MASSNFORMANSIEDL",
+  apflora.tpopmassn.pflanzanordnung AS "MASSNPFLANZANORDNUNG",
+  apflora.tpopmassn.markierung AS "MASSNMARKIERUNG",
+  apflora.tpopmassn.anz_triebe AS "MASSNANZTRIEBE",
+  apflora.tpopmassn.anz_pflanzen AS "MASSNANZPFLANZEN",
+  apflora.tpopmassn.anz_pflanzstellen AS "MASSNANZPFLANZSTELLEN",
+  apflora.tpopmassn.wirtspflanze AS "MASSNWIRTSPFLANZEN",
+  apflora.tpopmassn.herkunft_pop AS "MASSNHERKUNFTSPOP",
+  apflora.tpopmassn.sammeldatum AS "MASSNSAMMELDAT",
   -- need to convert date
-  apflora.tpopmassn."MutWann" AS "MASSNCHANGEDAT",
-  apflora.tpopmassn."MutWer" AS "MASSNCHANGEBY"
+  apflora.tpopmassn.changed AS "MASSNCHANGEDAT",
+  apflora.tpopmassn.changed_by AS "MASSNCHANGEBY"
 FROM
   ((((((apflora.adb_eigenschaften
   INNER JOIN
@@ -366,8 +365,8 @@ FROM
         (apflora.tpopmassn
         LEFT JOIN
           apflora.tpopmassn_typ_werte
-          ON apflora.tpopmassn."TPopMassnTyp" = tpopmassn_typ_werte."MassnTypCode")
-        ON apflora.tpop."TPopId" = apflora.tpopmassn."TPopId")
+          ON apflora.tpopmassn.typ = tpopmassn_typ_werte."MassnTypCode")
+        ON apflora.tpop."TPopId" = apflora.tpopmassn.tpop_id)
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId")
   LEFT JOIN
     apflora.ap_bearbstand_werte
@@ -383,43 +382,43 @@ FROM
     ON apflora.tpop."TPopHerkunft" = "domPopHerkunft_1"."HerkunftId")
   LEFT JOIN
     apflora.adresse
-    ON apflora.tpopmassn."TPopMassnBearb" = apflora.adresse."AdrId"
+    ON apflora.tpopmassn.bearbeiter = apflora.adresse."AdrId"
 WHERE
   apflora.adb_eigenschaften."TaxonomieId" > 150
 ORDER BY
   apflora.adb_eigenschaften."Artname",
   apflora.pop."PopNr",
   apflora.tpop."TPopNr",
-  apflora.tpopmassn."TPopMassnJahr",
-  apflora.tpopmassn."TPopMassnDatum",
+  apflora.tpopmassn.jahr,
+  apflora.tpopmassn.datum,
   tpopmassn_typ_werte."MassnTypTxt";
 
 DROP VIEW IF EXISTS apflora.v_massn_fuergis_write CASCADE;
 CREATE OR REPLACE VIEW apflora.v_massn_fuergis_write AS
 SELECT
-  apflora.tpopmassn."TPopMassnId" AS "tpopmassnid",
-  CAST(apflora.tpopmassn."TPopMassnGuid" AS varchar(50)) AS "massnguid",
-  apflora.tpopmassn."TPopId" AS "tpopid",
-  apflora.tpopmassn."TPopMassnTyp" AS "tpopmassntyp",
-  apflora.tpopmassn."TPopMassnJahr" AS "massnjahr",
-  apflora.tpopmassn."TPopMassnDatum"::timestamp AS "massndatum",
-  apflora.tpopmassn."TPopMassnBearb" AS "tpopmassnbearb",
-  apflora.tpopmassn."TPopMassnTxt" AS "massnmassnahme",
-  apflora.tpopmassn."TPopMassnPlan" AS "massnplanvorhanden",
-  apflora.tpopmassn."TPopMassnPlanBez" AS "massnplanbezeichnung",
-  apflora.tpopmassn."TPopMassnFlaeche" AS "massnflaeche",
-  apflora.tpopmassn."TPopMassnAnsiedForm" AS "massnformderansiedlung",
-  apflora.tpopmassn."TPopMassnAnsiedPflanzanordnung" AS "massnpflanzanordnung",
-  apflora.tpopmassn."TPopMassnMarkierung" AS "massnmarkierung",
-  apflora.tpopmassn."TPopMassnAnsiedAnzTriebe" AS "massnanztriebe",
-  apflora.tpopmassn."TPopMassnAnsiedAnzPfl" AS "massnpflanzen",
-  apflora.tpopmassn."TPopMassnAnzPflanzstellen" AS "massnanzpflanzstellen",
-  apflora.tpopmassn."TPopMassnAnsiedWirtspfl" AS "massnwirtspflanze",
-  apflora.tpopmassn."TPopMassnAnsiedHerkunftPop" AS "massnherkunftspopulation",
-  apflora.tpopmassn."TPopMassnAnsiedDatSamm" AS "massnsammeldatum",
-  apflora.tpopmassn."TPopMassnBemTxt" AS "tpopmassnbemtxt",
-  apflora.tpopmassn."MutWann"::timestamp AS "massnmutwann",
-  apflora.tpopmassn."MutWer" AS "massnmutwer"
+  apflora.tpopmassn.id AS "tpopmassnid",
+  CAST(apflora.tpopmassn.id AS varchar(50)) AS "massnguid",
+  apflora.tpopmassn.tpop_id AS "tpopid",
+  apflora.tpopmassn.typ AS "tpopmassntyp",
+  apflora.tpopmassn.jahr AS "massnjahr",
+  apflora.tpopmassn.datum::timestamp AS "massndatum",
+  apflora.tpopmassn.bearbeiter AS "tpopmassnbearb",
+  apflora.tpopmassn.beschreibung AS "massnmassnahme",
+  apflora.tpopmassn.plan_vorhanden AS "massnplanvorhanden",
+  apflora.tpopmassn.plan_bezeichnung AS "massnplanbezeichnung",
+  apflora.tpopmassn.flaeche AS "massnflaeche",
+  apflora.tpopmassn.form AS "massnformderansiedlung",
+  apflora.tpopmassn.pflanzanordnung AS "massnpflanzanordnung",
+  apflora.tpopmassn.markierung AS "massnmarkierung",
+  apflora.tpopmassn.anz_triebe AS "massnanztriebe",
+  apflora.tpopmassn.anz_pflanzen AS "massnpflanzen",
+  apflora.tpopmassn.anz_pflanzstellen AS "massnanzpflanzstellen",
+  apflora.tpopmassn.wirtspflanze AS "massnwirtspflanze",
+  apflora.tpopmassn.herkunft_pop AS "massnherkunftspopulation",
+  apflora.tpopmassn.sammeldatum AS "massnsammeldatum",
+  apflora.tpopmassn.bemerkungen AS "tpopmassnbemtxt",
+  apflora.tpopmassn.changed::timestamp AS "massnmutwann",
+  apflora.tpopmassn.changed_by AS "massnmutwer"
 FROM
   apflora.tpopmassn;
 
@@ -462,26 +461,26 @@ SELECT
   apflora.tpop."TPopNutzungszone" AS "tpopnutzungszone",
   apflora.tpop."TPopBewirtschafterIn" AS "tpopbewirtschafterin",
   apflora.tpop."TPopBewirtschaftung" AS "tpopbewirtschaftung",
-  CAST(apflora.tpopmassn."TPopMassnGuid" AS varchar(50)) AS "massnguid",
-  apflora.tpopmassn."TPopMassnJahr" AS "massnjahr",
-  apflora.tpopmassn."TPopMassnDatum"::timestamp AS "massndatum",
+  CAST(apflora.tpopmassn.id AS varchar(50)) AS "massnguid",
+  apflora.tpopmassn.jahr AS "massnjahr",
+  apflora.tpopmassn.datum::timestamp AS "massndatum",
   tpopmassn_typ_werte."MassnTypTxt" AS "massntyp",
-  apflora.tpopmassn."TPopMassnTxt" AS "massnmassnahme",
+  apflora.tpopmassn.beschreibung AS "massnmassnahme",
   apflora.adresse."AdrName" AS "massnbearbeiterin",
-  apflora.tpopmassn."TPopMassnPlan" AS "massnplanvorhanden",
-  apflora.tpopmassn."TPopMassnPlanBez" AS "massnplanbezeichnung",
-  apflora.tpopmassn."TPopMassnFlaeche" AS "massnflaeche",
-  apflora.tpopmassn."TPopMassnAnsiedForm" AS "massnformderansiedlung",
-  apflora.tpopmassn."TPopMassnAnsiedPflanzanordnung" AS "massnpflanzanordnung",
-  apflora.tpopmassn."TPopMassnMarkierung" AS "massnmarkierung",
-  apflora.tpopmassn."TPopMassnAnsiedAnzTriebe" AS "massnanztriebe",
-  apflora.tpopmassn."TPopMassnAnsiedAnzPfl" AS "massnpflanzen",
-  apflora.tpopmassn."TPopMassnAnzPflanzstellen" AS "massnanzpflanzstellen",
-  apflora.tpopmassn."TPopMassnAnsiedWirtspfl" AS "massnwirtspflanze",
-  apflora.tpopmassn."TPopMassnAnsiedHerkunftPop" AS "massnherkunftspopulation",
-  apflora.tpopmassn."TPopMassnAnsiedDatSamm" AS "massnsammeldatum",
-  apflora.tpopmassn."MutWann"::timestamp AS "massnmutwann",
-  apflora.tpopmassn."MutWer" AS "massnmutwer"
+  apflora.tpopmassn.plan_vorhanden AS "massnplanvorhanden",
+  apflora.tpopmassn.plan_bezeichnung AS "massnplanbezeichnung",
+  apflora.tpopmassn.flaeche AS "massnflaeche",
+  apflora.tpopmassn.form AS "massnformderansiedlung",
+  apflora.tpopmassn.pflanzanordnung AS "massnpflanzanordnung",
+  apflora.tpopmassn.markierung AS "massnmarkierung",
+  apflora.tpopmassn.anz_triebe AS "massnanztriebe",
+  apflora.tpopmassn.anz_pflanzen AS "massnpflanzen",
+  apflora.tpopmassn.anz_pflanzstellen AS "massnanzpflanzstellen",
+  apflora.tpopmassn.wirtspflanze AS "massnwirtspflanze",
+  apflora.tpopmassn.herkunft_pop AS "massnherkunftspopulation",
+  apflora.tpopmassn.sammeldatum AS "massnsammeldatum",
+  apflora.tpopmassn.changed::timestamp AS "massnmutwann",
+  apflora.tpopmassn.changed_by AS "massnmutwer"
 FROM
   ((((((apflora.adb_eigenschaften
   INNER JOIN
@@ -495,8 +494,8 @@ FROM
         (apflora.tpopmassn
         LEFT JOIN
           apflora.tpopmassn_typ_werte
-          ON apflora.tpopmassn."TPopMassnTyp" = tpopmassn_typ_werte."MassnTypCode")
-        ON apflora.tpop."TPopId" = apflora.tpopmassn."TPopId")
+          ON apflora.tpopmassn.typ = tpopmassn_typ_werte."MassnTypCode")
+        ON apflora.tpop."TPopId" = apflora.tpopmassn.tpop_id)
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId")
   LEFT JOIN
     apflora.ap_bearbstand_werte
@@ -512,13 +511,13 @@ FROM
     ON apflora.tpop."TPopHerkunft" = "domPopHerkunft_1"."HerkunftId")
   LEFT JOIN
     apflora.adresse
-    ON apflora.tpopmassn."TPopMassnBearb" = apflora.adresse."AdrId"
+    ON apflora.tpopmassn.bearbeiter = apflora.adresse."AdrId"
 ORDER BY
   apflora.adb_eigenschaften."Artname",
   apflora.pop."PopNr",
   apflora.tpop."TPopNr",
-  apflora.tpopmassn."TPopMassnJahr",
-  apflora.tpopmassn."TPopMassnDatum",
+  apflora.tpopmassn.jahr,
+  apflora.tpopmassn.datum,
   tpopmassn_typ_werte."MassnTypTxt";
 
 DROP VIEW IF EXISTS apflora.v_tpop_anzmassn CASCADE;
@@ -564,7 +563,7 @@ SELECT
   apflora.tpop."TPopNutzungszone" AS "TPop Nutzungszone",
   apflora.tpop."TPopBewirtschafterIn" AS "TPop BewirtschafterIn",
   apflora.tpop."TPopBewirtschaftung" AS "TPop Bewirtschaftung",
-  count(apflora.tpopmassn."TPopMassnId") AS "Anzahl Massnahmen"
+  count(apflora.tpopmassn.id) AS "Anzahl Massnahmen"
 FROM
   apflora.adb_eigenschaften
   INNER JOIN
@@ -578,7 +577,7 @@ FROM
         ((apflora.tpop
         LEFT JOIN
           apflora.tpopmassn
-          ON apflora.tpop."TPopId" = apflora.tpopmassn."TPopId")
+          ON apflora.tpop."TPopId" = apflora.tpopmassn.tpop_id)
         LEFT JOIN
           apflora.pop_status_werte AS "domPopHerkunft_1"
           ON apflora.tpop."TPopHerkunft" = "domPopHerkunft_1"."HerkunftId")
@@ -654,7 +653,7 @@ SELECT
   apflora.pop."PopHerkunftUnklarBegruendung" AS "Pop Begruendung fuer unklaren Status",
   apflora.pop."PopXKoord" AS "Pop X-Koordinaten",
   apflora.pop."PopYKoord" AS "Pop Y-Koordinaten",
-  count(apflora.tpopmassn."TPopMassnId") AS "Anzahl Massnahmen"
+  count(apflora.tpopmassn.id) AS "Anzahl Massnahmen"
 FROM
   ((((apflora.adb_eigenschaften
   INNER JOIN
@@ -667,7 +666,7 @@ FROM
       ON apflora.pop."PopId" = apflora.tpop."PopId")
     LEFT JOIN
       apflora.tpopmassn
-      ON apflora.tpop."TPopId" = apflora.tpopmassn."TPopId")
+      ON apflora.tpop."TPopId" = apflora.tpopmassn.tpop_id)
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId")
   LEFT JOIN
     apflora.ap_bearbstand_werte
@@ -767,7 +766,7 @@ SELECT
   apflora.ap_bearbstand_werte."DomainTxt" AS "AP Status",
   apflora.ap."ApJahr" AS "AP Start im Jahr",
   apflora.ap_umsetzung_werte."DomainTxt" AS "AP Stand Umsetzung",
-  count(apflora.tpopmassn."TPopMassnId") AS "Anzahl Massnahmen"
+  count(apflora.tpopmassn.id) AS "Anzahl Massnahmen"
 FROM
   (((apflora.adb_eigenschaften
   INNER JOIN
@@ -780,7 +779,7 @@ FROM
       ON apflora.pop."PopId" = apflora.tpop."PopId")
     LEFT JOIN
       apflora.tpopmassn
-      ON apflora.tpop."TPopId" = apflora.tpopmassn."TPopId")
+      ON apflora.tpop."TPopId" = apflora.tpopmassn.tpop_id)
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId")
   LEFT JOIN
     apflora.ap_bearbstand_werte
@@ -1611,7 +1610,7 @@ FROM
 DROP VIEW IF EXISTS apflora.v_pop_massnseitbeginnap CASCADE;
 CREATE OR REPLACE VIEW apflora.v_pop_massnseitbeginnap AS
 SELECT
-  apflora.tpopmassn."TPopId"
+  apflora.tpopmassn.tpop_id
 FROM
   apflora.ap
   INNER JOIN
@@ -1621,12 +1620,12 @@ FROM
       ON apflora.pop."PopId" = apflora.tpop."PopId")
     INNER JOIN
       apflora.tpopmassn
-      ON apflora.tpop."TPopId" = apflora.tpopmassn."TPopId")
+      ON apflora.tpop."TPopId" = apflora.tpopmassn.tpop_id)
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
 WHERE
-  apflora.tpopmassn."TPopMassnJahr" >= apflora.ap."ApJahr"
+  apflora.tpopmassn.jahr >= apflora.ap."ApJahr"
 GROUP BY
-  apflora.tpopmassn."TPopId";
+  apflora.tpopmassn.tpop_id;
 
 DROP VIEW IF EXISTS apflora.v_apber CASCADE;
 CREATE OR REPLACE VIEW apflora.v_apber AS
@@ -1682,11 +1681,11 @@ FROM
     ON apflora.tpop."TPopId" = apflora.tpopmassnber."TPopId")
   INNER JOIN
     apflora.tpopmassn
-    ON apflora.tpop."TPopId" = apflora.tpopmassn."TPopId"
+    ON apflora.tpop."TPopId" = apflora.tpopmassn.tpop_id
 WHERE
   apflora.tpopmassnber."TPopMassnBerJahr" <= apflora._variable."JBerJahr"
   AND apflora.tpop."TPopApBerichtRelevant" = 1
-  AND apflora.tpopmassn."TPopMassnJahr" <= apflora._variable."JBerJahr"
+  AND apflora.tpopmassn.jahr <= apflora._variable."JBerJahr"
   AND apflora.pop."PopHerkunft" <> 300
   AND apflora.tpopmassnber."TPopMassnBerErfolgsbeurteilung" BETWEEN 1 AND 5;
 
@@ -1729,11 +1728,11 @@ FROM
     ON apflora.pop."PopId" = apflora.tpop."PopId")
   INNER JOIN
     apflora.tpopmassn
-    ON apflora.tpop."TPopId" = apflora.tpopmassn."TPopId"
+    ON apflora.tpop."TPopId" = apflora.tpopmassn.tpop_id
 WHERE
   apflora.popmassnber."PopMassnBerJahr" <= apflora._variable."JBerJahr"
   AND apflora.tpop."TPopApBerichtRelevant" = 1
-  AND apflora.tpopmassn."TPopMassnJahr" <= apflora._variable."JBerJahr"
+  AND apflora.tpopmassn.jahr <= apflora._variable."JBerJahr"
   AND apflora.pop."PopHerkunft" <> 300;
 
 -- dieser view ist für den Bericht gedacht - daher letzter popber vor jBerJahr
@@ -2358,8 +2357,8 @@ CREATE OR REPLACE VIEW apflora.v_ap_tpopmassnjahr0 AS
 SELECT
   apflora.ap."ApArtId",
   apflora.adb_eigenschaften."Artname",
-  apflora.tpopmassn."TPopMassnId",
-  apflora.tpopmassn."TPopMassnJahr"
+  apflora.tpopmassn.id,
+  apflora.tpopmassn.jahr
 FROM
   (apflora.ap
   INNER JOIN
@@ -2372,15 +2371,15 @@ FROM
       ON apflora.pop."PopId" = apflora.tpop."PopId")
     INNER JOIN
       apflora.tpopmassn
-      ON apflora.tpop."TPopId" = apflora.tpopmassn."TPopId")
+      ON apflora.tpop."TPopId" = apflora.tpopmassn.tpop_id)
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
 WHERE
   apflora.ap."ApStatus" BETWEEN 1 AND 3
 GROUP BY
   apflora.ap."ApArtId",
   apflora.adb_eigenschaften."Artname",
-  apflora.tpopmassn."TPopMassnId",
-  apflora.tpopmassn."TPopMassnJahr";
+  apflora.tpopmassn.id,
+  apflora.tpopmassn.jahr;
 
 DROP VIEW IF EXISTS apflora.v_auswapbearbmassninjahr0 CASCADE;
 CREATE OR REPLACE VIEW apflora.v_auswapbearbmassninjahr0 AS
@@ -2392,23 +2391,23 @@ SELECT
   apflora.tpop."TPopNr",
   apflora.tpop."TPopGemeinde",
   apflora.tpop."TPopFlurname",
-  apflora.tpopmassn."TPopMassnJahr",
-  tpopmassn_typ_werte."MassnTypTxt" AS "TPopMassnTyp",
-  apflora.tpopmassn."TPopMassnTxt",
-  apflora.tpopmassn."TPopMassnDatum",
-  apflora.tpopmassn."TPopMassnBemTxt",
-  apflora.tpopmassn."TPopMassnPlan",
-  apflora.tpopmassn."TPopMassnPlanBez",
-  apflora.tpopmassn."TPopMassnFlaeche",
-  apflora.tpopmassn."TPopMassnMarkierung",
-  apflora.tpopmassn."TPopMassnAnsiedAnzTriebe",
-  apflora.tpopmassn."TPopMassnAnsiedAnzPfl",
-  apflora.tpopmassn."TPopMassnAnzPflanzstellen",
-  apflora.tpopmassn."TPopMassnAnsiedWirtspfl",
-  apflora.tpopmassn."TPopMassnAnsiedHerkunftPop",
-  apflora.tpopmassn."TPopMassnAnsiedDatSamm",
-  apflora.tpopmassn."TPopMassnAnsiedForm",
-  apflora.tpopmassn."TPopMassnAnsiedPflanzanordnung"
+  apflora.tpopmassn.jahr,
+  tpopmassn_typ_werte."MassnTypTxt" AS typ,
+  apflora.tpopmassn.beschreibung,
+  apflora.tpopmassn.datum,
+  apflora.tpopmassn.bemerkungen,
+  apflora.tpopmassn.plan_vorhanden,
+  apflora.tpopmassn.plan_bezeichnung,
+  apflora.tpopmassn.flaeche,
+  apflora.tpopmassn.markierung,
+  apflora.tpopmassn.anz_triebe,
+  apflora.tpopmassn.anz_pflanzen,
+  apflora.tpopmassn.anz_pflanzstellen,
+  apflora.tpopmassn.wirtspflanze,
+  apflora.tpopmassn.herkunft_pop,
+  apflora.tpopmassn.sammeldatum,
+  apflora.tpopmassn.form,
+  apflora.tpopmassn.pflanzanordnung
 FROM
   (apflora.adb_eigenschaften
   INNER JOIN
@@ -2423,11 +2422,11 @@ FROM
       ((apflora.tpopmassn
       LEFT JOIN
         apflora.adresse
-        ON apflora.tpopmassn."TPopMassnBearb" = apflora.adresse."AdrId")
+        ON apflora.tpopmassn.bearbeiter = apflora.adresse."AdrId")
       INNER JOIN
         apflora.tpopmassn_typ_werte
-        ON apflora.tpopmassn."TPopMassnTyp" = tpopmassn_typ_werte."MassnTypCode")
-      ON apflora.tpop."TPopId" = apflora.tpopmassn."TPopId")
+        ON apflora.tpopmassn.typ = tpopmassn_typ_werte."MassnTypCode")
+      ON apflora.tpop."TPopId" = apflora.tpopmassn.tpop_id)
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
 WHERE
   apflora.ap."ApStatus" BETWEEN 1 AND 3
@@ -2449,24 +2448,24 @@ SELECT
   apflora.tpop."TPopNr",
   apflora.tpop."TPopGemeinde",
   apflora.tpop."TPopFlurname",
-  apflora.tpopmassn."TPopMassnJahr",
-  tpopmassn_typ_werte."MassnTypTxt" AS "TPopMassnTyp",
-  apflora.tpopmassn."TPopMassnTxt",
-  apflora.tpopmassn."TPopMassnDatum",
-  apflora.adresse."AdrName" AS "TPopMassnBearb",
-  apflora.tpopmassn."TPopMassnBemTxt",
-  apflora.tpopmassn."TPopMassnPlan",
-  apflora.tpopmassn."TPopMassnPlanBez",
-  apflora.tpopmassn."TPopMassnFlaeche",
-  apflora.tpopmassn."TPopMassnMarkierung",
-  apflora.tpopmassn."TPopMassnAnsiedAnzTriebe",
-  apflora.tpopmassn."TPopMassnAnsiedAnzPfl",
-  apflora.tpopmassn."TPopMassnAnzPflanzstellen",
-  apflora.tpopmassn."TPopMassnAnsiedWirtspfl",
-  apflora.tpopmassn."TPopMassnAnsiedHerkunftPop",
-  apflora.tpopmassn."TPopMassnAnsiedDatSamm",
-  apflora.tpopmassn."TPopMassnAnsiedForm",
-  apflora.tpopmassn."TPopMassnAnsiedPflanzanordnung"
+  apflora.tpopmassn.jahr,
+  tpopmassn_typ_werte."MassnTypTxt" AS typ,
+  apflora.tpopmassn.beschreibung,
+  apflora.tpopmassn.datum,
+  apflora.adresse."AdrName" AS bearbeiter,
+  apflora.tpopmassn.bemerkungen,
+  apflora.tpopmassn.plan_vorhanden,
+  apflora.tpopmassn.plan_bezeichnung,
+  apflora.tpopmassn.flaeche,
+  apflora.tpopmassn.markierung,
+  apflora.tpopmassn.anz_triebe,
+  apflora.tpopmassn.anz_pflanzen,
+  apflora.tpopmassn.anz_pflanzstellen,
+  apflora.tpopmassn.wirtspflanze,
+  apflora.tpopmassn.herkunft_pop,
+  apflora.tpopmassn.sammeldatum,
+  apflora.tpopmassn.form,
+  apflora.tpopmassn.pflanzanordnung
 FROM
   (apflora.adb_eigenschaften
   INNER JOIN
@@ -2481,11 +2480,11 @@ FROM
       ((apflora.tpopmassn
       INNER JOIN
         apflora.tpopmassn_typ_werte
-        ON apflora.tpopmassn."TPopMassnTyp" = tpopmassn_typ_werte."MassnTypCode")
+        ON apflora.tpopmassn.typ = tpopmassn_typ_werte."MassnTypCode")
       LEFT JOIN
         apflora.adresse
-        ON apflora.tpopmassn."TPopMassnBearb" = apflora.adresse."AdrId")
-      ON apflora.tpop."TPopId" = apflora.tpopmassn."TPopId")
+        ON apflora.tpopmassn.bearbeiter = apflora.adresse."AdrId")
+      ON apflora.tpop."TPopId" = apflora.tpopmassn.tpop_id)
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
 WHERE
   apflora.ap."ApStatus" BETWEEN 1 AND 3
@@ -2582,25 +2581,25 @@ SELECT
   apflora.tpop."TPopId",
   apflora.tpop."TPopNr",
   apflora.tpop."TPopFlurname",
-  apflora.tpopmassn."TPopMassnId",
-  apflora.tpopmassn."TPopMassnJahr" AS "Jahr",
+  apflora.tpopmassn.id,
+  apflora.tpopmassn.jahr AS "Jahr",
   tpopmassn_typ_werte."MassnTypTxt" AS "Massnahme",
-  apflora.tpopmassn."TPopMassnTxt",
-  apflora.tpopmassn."TPopMassnDatum",
-  apflora.adresse."AdrName" AS "TPopMassnBearb",
-  apflora.tpopmassn."TPopMassnBemTxt",
-  apflora.tpopmassn."TPopMassnPlan",
-  apflora.tpopmassn."TPopMassnPlanBez",
-  apflora.tpopmassn."TPopMassnFlaeche",
-  apflora.tpopmassn."TPopMassnMarkierung",
-  apflora.tpopmassn."TPopMassnAnsiedAnzTriebe",
-  apflora.tpopmassn."TPopMassnAnsiedAnzPfl",
-  apflora.tpopmassn."TPopMassnAnzPflanzstellen",
-  apflora.tpopmassn."TPopMassnAnsiedWirtspfl",
-  apflora.tpopmassn."TPopMassnAnsiedHerkunftPop",
-  apflora.tpopmassn."TPopMassnAnsiedDatSamm",
-  apflora.tpopmassn."TPopMassnAnsiedForm",
-  apflora.tpopmassn."TPopMassnAnsiedPflanzanordnung"
+  apflora.tpopmassn.beschreibung,
+  apflora.tpopmassn.datum,
+  apflora.adresse."AdrName" AS bearbeiter,
+  apflora.tpopmassn.bemerkungen,
+  apflora.tpopmassn.plan_vorhanden,
+  apflora.tpopmassn.plan_bezeichnung,
+  apflora.tpopmassn.flaeche,
+  apflora.tpopmassn.markierung,
+  apflora.tpopmassn.anz_triebe,
+  apflora.tpopmassn.anz_pflanzen,
+  apflora.tpopmassn.anz_pflanzstellen,
+  apflora.tpopmassn.wirtspflanze,
+  apflora.tpopmassn.herkunft_pop,
+  apflora.tpopmassn.sammeldatum,
+  apflora.tpopmassn.form,
+  apflora.tpopmassn.pflanzanordnung
 FROM
   ((apflora.adb_eigenschaften
   INNER JOIN
@@ -2618,17 +2617,17 @@ FROM
       ((apflora.tpopmassn
       LEFT JOIN
         apflora.tpopmassn_typ_werte
-        ON apflora.tpopmassn."TPopMassnTyp" = tpopmassn_typ_werte."MassnTypCode")
+        ON apflora.tpopmassn.typ = tpopmassn_typ_werte."MassnTypCode")
       LEFT JOIN
         apflora.adresse
-        ON apflora.tpopmassn."TPopMassnBearb" = apflora.adresse."AdrId")
-      ON apflora.tpop."TPopId" = apflora.tpopmassn."TPopId")
+        ON apflora.tpopmassn.bearbeiter = apflora.adresse."AdrId")
+      ON apflora.tpop."TPopId" = apflora.tpopmassn.tpop_id)
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
 ORDER BY
   apflora.adb_eigenschaften."Artname",
   apflora.pop."PopNr",
   apflora.tpop."TPopNr",
-  apflora.tpopmassn."TPopMassnJahr",
+  apflora.tpopmassn.jahr,
   tpopmassn_typ_werte."MassnTypTxt";
 
 DROP VIEW IF EXISTS apflora.v_tpopmassn_fueraktap0 CASCADE;
@@ -2665,24 +2664,24 @@ SELECT
   apflora.tpop."TPopBewirtschafterIn" AS "Teilpopulation-Bewirtschafter",
   apflora.tpop."TPopBewirtschaftung" AS "Teilpopulation-Bewirtschaftung",
   apflora.tpop."TPopTxt" AS "Teilpopulation-Bemerkungen",
-  apflora.tpopmassn."TPopMassnId",
+  apflora.tpopmassn.id,
   tpopmassn_typ_werte."MassnTypTxt" AS "Massnahme-Typ",
-  apflora.tpopmassn."TPopMassnTxt" AS "Massnahme-Beschreibung",
-  apflora.tpopmassn."TPopMassnDatum" AS "Massnahme-Datum",
+  apflora.tpopmassn.beschreibung AS "Massnahme-Beschreibung",
+  apflora.tpopmassn.datum AS "Massnahme-Datum",
   apflora.adresse."AdrName" AS "Massnahme-BearbeiterIn",
-  apflora.tpopmassn."TPopMassnBemTxt" AS "Massnahme-Bemerkungen",
-  apflora.tpopmassn."TPopMassnPlan" AS "Massnahme-Plan",
-  apflora.tpopmassn."TPopMassnPlanBez" AS "Massnahme-Planbezeichnung",
-  apflora.tpopmassn."TPopMassnFlaeche" AS "Massnahme-Flaeche",
-  apflora.tpopmassn."TPopMassnMarkierung" AS "Massnahme-Markierung",
-  apflora.tpopmassn."TPopMassnAnsiedAnzTriebe" AS "Massnahme - Ansiedlung Anzahl Triebe",
-  apflora.tpopmassn."TPopMassnAnsiedAnzPfl" AS "Massnahme - Ansiedlung Anzahl Pflanzen",
-  apflora.tpopmassn."TPopMassnAnzPflanzstellen" AS "Massnahme - Ansiedlung Anzahl Pflanzstellen",
-  apflora.tpopmassn."TPopMassnAnsiedWirtspfl" AS "Massnahme - Ansiedlung Wirtspflanzen",
-  apflora.tpopmassn."TPopMassnAnsiedHerkunftPop" AS "Massnahme - Ansiedlung Herkunftspopulation",
-  apflora.tpopmassn."TPopMassnAnsiedDatSamm" AS "Massnahme - Ansiedlung Sammeldatum",
-  apflora.tpopmassn."TPopMassnAnsiedForm" AS "Massnahme - Ansiedlung Form",
-  apflora.tpopmassn."TPopMassnAnsiedPflanzanordnung" AS "Massnahme - Ansiedlung Pflanzordnung"
+  apflora.tpopmassn.bemerkungen AS "Massnahme-Bemerkungen",
+  apflora.tpopmassn.plan_vorhanden AS "Massnahme-Plan",
+  apflora.tpopmassn.plan_bezeichnung AS "Massnahme-Planbezeichnung",
+  apflora.tpopmassn.flaeche AS "Massnahme-Flaeche",
+  apflora.tpopmassn.markierung AS "Massnahme-Markierung",
+  apflora.tpopmassn.anz_triebe AS "Massnahme - Ansiedlung Anzahl Triebe",
+  apflora.tpopmassn.anz_pflanzen AS "Massnahme - Ansiedlung Anzahl Pflanzen",
+  apflora.tpopmassn.anz_pflanzstellen AS "Massnahme - Ansiedlung Anzahl Pflanzstellen",
+  apflora.tpopmassn.wirtspflanze AS "Massnahme - Ansiedlung Wirtspflanzen",
+  apflora.tpopmassn.herkunft_pop AS "Massnahme - Ansiedlung Herkunftspopulation",
+  apflora.tpopmassn.sammeldatum AS "Massnahme - Ansiedlung Sammeldatum",
+  apflora.tpopmassn.form AS "Massnahme - Ansiedlung Form",
+  apflora.tpopmassn.pflanzanordnung AS "Massnahme - Ansiedlung Pflanzordnung"
 FROM
   (apflora.adb_eigenschaften
   INNER JOIN
@@ -2712,11 +2711,11 @@ FROM
       ((apflora.tpopmassn
       LEFT JOIN
         apflora.tpopmassn_typ_werte
-        ON apflora.tpopmassn."TPopMassnTyp" = tpopmassn_typ_werte."MassnTypCode")
+        ON apflora.tpopmassn.typ = tpopmassn_typ_werte."MassnTypCode")
       LEFT JOIN
         apflora.adresse
-        ON apflora.tpopmassn."TPopMassnBearb" = apflora.adresse."AdrId")
-      ON apflora.tpop."TPopId" = apflora.tpopmassn."TPopId")
+        ON apflora.tpopmassn.bearbeiter = apflora.adresse."AdrId")
+      ON apflora.tpop."TPopId" = apflora.tpopmassn.tpop_id)
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
 ORDER BY
   apflora.adb_eigenschaften."Artname",
@@ -2870,9 +2869,9 @@ FROM
     ON apflora.pop."PopId" = apflora.tpop."PopId")
   INNER JOIN
     apflora.tpopmassn
-    ON apflora.tpop."TPopId" = apflora.tpopmassn."TPopId"
+    ON apflora.tpop."TPopId" = apflora.tpopmassn.tpop_id
 WHERE
-  apflora.tpopmassn."TPopMassnJahr" <= apflora._variable."JBerJahr"
+  apflora.tpopmassn.jahr <= apflora._variable."JBerJahr"
   AND apflora.tpop."TPopApBerichtRelevant" = 1
   AND apflora.pop."PopHerkunft" <> 300
   AND apflora.tpop."TPopHerkunft" <> 300
@@ -3523,8 +3522,8 @@ FROM
     (apflora.tpopmassn
     INNER JOIN
       apflora._variable
-      ON apflora.tpopmassn."TPopMassnJahr" = apflora._variable."JBerJahr")
-    ON apflora.tpop."TPopId" = apflora.tpopmassn."TPopId"
+      ON apflora.tpopmassn.jahr = apflora._variable."JBerJahr")
+    ON apflora.tpop."TPopId" = apflora.tpopmassn.tpop_id
 WHERE
   apflora.tpop."TPopApBerichtRelevant" = 1
   AND apflora.pop."PopHerkunft" <> 300
@@ -3544,10 +3543,10 @@ FROM
     ON apflora.pop."PopId" = apflora.tpop."PopId")
   INNER JOIN
     apflora.tpopmassn
-    ON apflora.tpop."TPopId" = apflora.tpopmassn."TPopId")
+    ON apflora.tpop."TPopId" = apflora.tpopmassn.tpop_id)
   INNER JOIN
     apflora._variable
-    ON apflora.tpopmassn."TPopMassnJahr" = apflora._variable."JBerJahr"
+    ON apflora.tpopmassn.jahr = apflora._variable."JBerJahr"
 WHERE
   apflora.tpop."TPopApBerichtRelevant" = 1
   AND apflora.pop."PopHerkunft" <> 300
@@ -6253,8 +6252,8 @@ SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
   'Massnahme ohne Jahr:'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId", 'Massnahmen', apflora.tpopmassn."TPopMassnId"]::text[] AS url,
-  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop."TPopNr"), concat('Massnahme: ', apflora.tpopmassn."TPopMassnJahr")]::text[] AS text
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId", 'Massnahmen', apflora.tpopmassn.id]::text[] AS url,
+  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop."TPopNr"), concat('Massnahme: ', apflora.tpopmassn.jahr)]::text[] AS text
 FROM
   apflora.ap
   INNER JOIN
@@ -6263,16 +6262,16 @@ FROM
       (apflora.tpop
       INNER JOIN
         apflora.tpopmassn
-        ON apflora.tpop."TPopId" = apflora.tpopmassn."TPopId")
+        ON apflora.tpop."TPopId" = apflora.tpopmassn.tpop_id)
       ON apflora.pop."PopId" = apflora.tpop."PopId")
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
 WHERE
-  apflora.tpopmassn."TPopMassnJahr" IS NULL
+  apflora.tpopmassn.jahr IS NULL
 ORDER BY
   apflora.ap."ApArtId",
   apflora.pop."PopNr",
   apflora.tpop."TPopNr",
-  apflora.tpopmassn."TPopMassnId";
+  apflora.tpopmassn.id;
 
 DROP VIEW IF EXISTS apflora.v_qk2_massn_ohnebearb CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk2_massn_ohnebearb AS
@@ -6280,8 +6279,8 @@ SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
   'Massnahme ohne BearbeiterIn:'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId", 'Massnahmen', apflora.tpopmassn."TPopMassnId"]::text[] AS url,
-  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop."TPopNr"), concat('Massnahme (id): ', apflora.tpopmassn."TPopMassnId")]::text[] AS text
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId", 'Massnahmen', apflora.tpopmassn.id]::text[] AS url,
+  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop."TPopNr"), concat('Massnahme (id): ', apflora.tpopmassn.id)]::text[] AS text
 FROM
   apflora.ap
   INNER JOIN
@@ -6290,16 +6289,16 @@ FROM
       (apflora.tpop
       INNER JOIN
         apflora.tpopmassn
-        ON apflora.tpop."TPopId" = apflora.tpopmassn."TPopId")
+        ON apflora.tpop."TPopId" = apflora.tpopmassn.tpop_id)
       ON apflora.pop."PopId" = apflora.tpop."PopId")
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
 WHERE
-  apflora.tpopmassn."TPopMassnBearb" IS NULL
+  apflora.tpopmassn.bearbeiter IS NULL
 ORDER BY
   apflora.ap."ApArtId",
   apflora.pop."PopNr",
   apflora.tpop."TPopNr",
-  apflora.tpopmassn."TPopMassnId";
+  apflora.tpopmassn.id;
 
 DROP VIEW IF EXISTS apflora.v_qk2_massn_ohnetyp CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk2_massn_ohnetyp AS
@@ -6307,9 +6306,9 @@ SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
   'Massnahmen ohne Typ:'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId", 'Massnahmen', apflora.tpopmassn."TPopMassnId"]::text[] AS url,
-  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop."TPopNr"), concat('Massnahme (Jahr): ', apflora.tpopmassn."TPopMassnJahr")]::text[] AS text,
-  apflora.tpopmassn."TPopMassnJahr" AS "Berichtjahr"
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId", 'Massnahmen', apflora.tpopmassn.id]::text[] AS url,
+  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop."TPopNr"), concat('Massnahme (Jahr): ', apflora.tpopmassn.jahr)]::text[] AS text,
+  apflora.tpopmassn.jahr AS "Berichtjahr"
 FROM
   apflora.ap
   INNER JOIN
@@ -6318,16 +6317,16 @@ FROM
       (apflora.tpop
       INNER JOIN
         apflora.tpopmassn
-        ON apflora.tpop."TPopId" = apflora.tpopmassn."TPopId")
+        ON apflora.tpop."TPopId" = apflora.tpopmassn.tpop_id)
       ON apflora.pop."PopId" = apflora.tpop."PopId")
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
 WHERE
-  apflora.tpopmassn."TPopMassnTyp" IS NULL
-  AND apflora.tpopmassn."TPopMassnJahr" IS NOT NULL
+  apflora.tpopmassn.typ IS NULL
+  AND apflora.tpopmassn.jahr IS NOT NULL
 ORDER BY
   apflora.pop."PopNr",
   apflora.tpop."TPopNr",
-  apflora.tpopmassn."TPopMassnJahr";
+  apflora.tpopmassn.jahr;
 
 DROP VIEW IF EXISTS apflora.v_qk2_massnber_ohnejahr CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk2_massnber_ohnejahr AS
@@ -7471,11 +7470,11 @@ WHERE
   apflora.tpop."TPopHerkunft" = 300
   AND apflora.tpop."TPopId" IN (
     SELECT DISTINCT
-      apflora.tpopmassn."TPopId"
+      apflora.tpopmassn.tpop_id
     FROM
       apflora.tpopmassn
     WHERE
-      apflora.tpopmassn."TPopMassnTyp" < 4
+      apflora.tpopmassn.typ < 4
   );
 
 -- wozu wird das benutzt?
@@ -7760,14 +7759,14 @@ WHERE
   AND apflora.tpop."TPopId" NOT IN (
     -- Ansiedlungen since apflora.tpopber."TPopBerJahr"
     SELECT
-      apflora.tpopmassn."TPopId"
+      apflora.tpopmassn.tpop_id
     FROM
       apflora.tpopmassn
     WHERE
-      apflora.tpopmassn."TPopId" = apflora.tpop."TPopId"
-      AND apflora.tpopmassn."TPopMassnTyp" BETWEEN 1 AND 3
-      AND apflora.tpopmassn."TPopMassnJahr" IS NOT NULL
-      AND apflora.tpopmassn."TPopMassnJahr" > lasttpopber."TPopBerJahr"
+      apflora.tpopmassn.tpop_id = apflora.tpop."TPopId"
+      AND apflora.tpopmassn.typ BETWEEN 1 AND 3
+      AND apflora.tpopmassn.jahr IS NOT NULL
+      AND apflora.tpopmassn.jahr > lasttpopber."TPopBerJahr"
   );
 
 DROP VIEW IF EXISTS apflora.v_qk2_pop_statusaktuellletzterpopbererloschen CASCADE;
@@ -7812,10 +7811,10 @@ WHERE
       apflora.tpop
       INNER JOIN
         apflora.tpopmassn
-        ON apflora.tpop."TPopId" = apflora.tpopmassn."TPopId"
+        ON apflora.tpop."TPopId" = apflora.tpopmassn.tpop_id
     WHERE
-      apflora.tpopmassn."TPopMassnTyp" BETWEEN 1 AND 3
-      AND apflora.tpopmassn."TPopMassnJahr" > lastpopber."PopBerJahr"
+      apflora.tpopmassn.typ BETWEEN 1 AND 3
+      AND apflora.tpopmassn.jahr > lastpopber."PopBerJahr"
   );
 
 DROP VIEW IF EXISTS apflora.v_qk2_tpop_statuserloschenletztertpopberzunehmend CASCADE;
@@ -7858,14 +7857,14 @@ WHERE
   AND apflora.tpop."TPopId" NOT IN (
     -- Ansiedlungen since apflora.tpopber."TPopBerJahr"
     SELECT
-      apflora.tpopmassn."TPopId"
+      apflora.tpopmassn.tpop_id
     FROM
       apflora.tpopmassn
     WHERE
-      apflora.tpopmassn."TPopId" = apflora.tpop."TPopId"
-      AND apflora.tpopmassn."TPopMassnTyp" BETWEEN 1 AND 3
-      AND apflora.tpopmassn."TPopMassnJahr" IS NOT NULL
-      AND apflora.tpopmassn."TPopMassnJahr" > lasttpopber."TPopBerJahr"
+      apflora.tpopmassn.tpop_id = apflora.tpop."TPopId"
+      AND apflora.tpopmassn.typ BETWEEN 1 AND 3
+      AND apflora.tpopmassn.jahr IS NOT NULL
+      AND apflora.tpopmassn.jahr > lasttpopber."TPopBerJahr"
   );
 
 DROP VIEW IF EXISTS apflora.v_qk2_pop_statuserloschenletzterpopberzunehmend CASCADE;
@@ -7910,10 +7909,10 @@ WHERE
       apflora.tpop
       INNER JOIN
         apflora.tpopmassn
-        ON apflora.tpop."TPopId" = apflora.tpopmassn."TPopId"
+        ON apflora.tpop."TPopId" = apflora.tpopmassn.tpop_id
     WHERE
-      apflora.tpopmassn."TPopMassnTyp" BETWEEN 1 AND 3
-      AND apflora.tpopmassn."TPopMassnJahr" > lastpopber."PopBerJahr"
+      apflora.tpopmassn.typ BETWEEN 1 AND 3
+      AND apflora.tpopmassn.jahr > lastpopber."PopBerJahr"
   );
 
 DROP VIEW IF EXISTS apflora.v_qk2_tpop_statuserloschenletztertpopberstabil CASCADE;
@@ -7956,14 +7955,14 @@ WHERE
   AND apflora.tpop."TPopId" NOT IN (
     -- Ansiedlungen since apflora.tpopber."TPopBerJahr"
     SELECT
-      apflora.tpopmassn."TPopId"
+      apflora.tpopmassn.tpop_id
     FROM
       apflora.tpopmassn
     WHERE
-      apflora.tpopmassn."TPopId" = apflora.tpop."TPopId"
-      AND apflora.tpopmassn."TPopMassnTyp" BETWEEN 1 AND 3
-      AND apflora.tpopmassn."TPopMassnJahr" IS NOT NULL
-      AND apflora.tpopmassn."TPopMassnJahr" > lasttpopber."TPopBerJahr"
+      apflora.tpopmassn.tpop_id = apflora.tpop."TPopId"
+      AND apflora.tpopmassn.typ BETWEEN 1 AND 3
+      AND apflora.tpopmassn.jahr IS NOT NULL
+      AND apflora.tpopmassn.jahr > lasttpopber."TPopBerJahr"
   );
 
 DROP VIEW IF EXISTS apflora.v_qk2_pop_statuserloschenletzterpopberstabil CASCADE;
@@ -8008,10 +8007,10 @@ WHERE
       apflora.tpop
       INNER JOIN
         apflora.tpopmassn
-        ON apflora.tpop."TPopId" = apflora.tpopmassn."TPopId"
+        ON apflora.tpop."TPopId" = apflora.tpopmassn.tpop_id
     WHERE
-      apflora.tpopmassn."TPopMassnTyp" BETWEEN 1 AND 3
-      AND apflora.tpopmassn."TPopMassnJahr" > lastpopber."PopBerJahr"
+      apflora.tpopmassn.typ BETWEEN 1 AND 3
+      AND apflora.tpopmassn.jahr > lastpopber."PopBerJahr"
   );
 
 DROP VIEW IF EXISTS apflora.v_qk2_tpop_statuserloschenletztertpopberabnehmend CASCADE;
@@ -8054,14 +8053,14 @@ WHERE
   AND apflora.tpop."TPopId" NOT IN (
     -- Ansiedlungen since apflora.tpopber."TPopBerJahr"
     SELECT
-      apflora.tpopmassn."TPopId"
+      apflora.tpopmassn.tpop_id
     FROM
       apflora.tpopmassn
     WHERE
-      apflora.tpopmassn."TPopId" = apflora.tpop."TPopId"
-      AND apflora.tpopmassn."TPopMassnTyp" BETWEEN 1 AND 3
-      AND apflora.tpopmassn."TPopMassnJahr" IS NOT NULL
-      AND apflora.tpopmassn."TPopMassnJahr" > lasttpopber."TPopBerJahr"
+      apflora.tpopmassn.tpop_id = apflora.tpop."TPopId"
+      AND apflora.tpopmassn.typ BETWEEN 1 AND 3
+      AND apflora.tpopmassn.jahr IS NOT NULL
+      AND apflora.tpopmassn.jahr > lasttpopber."TPopBerJahr"
   );
 
 DROP VIEW IF EXISTS apflora.v_qk2_pop_statuserloschenletzterpopberabnehmend CASCADE;
@@ -8106,10 +8105,10 @@ WHERE
       apflora.tpop
       INNER JOIN
         apflora.tpopmassn
-        ON apflora.tpop."TPopId" = apflora.tpopmassn."TPopId"
+        ON apflora.tpop."TPopId" = apflora.tpopmassn.tpop_id
     WHERE
-      apflora.tpopmassn."TPopMassnTyp" BETWEEN 1 AND 3
-      AND apflora.tpopmassn."TPopMassnJahr" > lastpopber."PopBerJahr"
+      apflora.tpopmassn.typ BETWEEN 1 AND 3
+      AND apflora.tpopmassn.jahr > lastpopber."PopBerJahr"
   );
 
 DROP VIEW IF EXISTS apflora.v_qk2_tpop_statuserloschenletztertpopberunsicher CASCADE;
@@ -8152,14 +8151,14 @@ WHERE
   AND apflora.tpop."TPopId" NOT IN (
     -- Ansiedlungen since "TPopBerJahr"
     SELECT
-      apflora.tpopmassn."TPopId"
+      apflora.tpopmassn.tpop_id
     FROM
       apflora.tpopmassn
     WHERE
-      apflora.tpopmassn."TPopId" = apflora.tpop."TPopId"
-      AND apflora.tpopmassn."TPopMassnTyp" BETWEEN 1 AND 3
-      AND apflora.tpopmassn."TPopMassnJahr" IS NOT NULL
-      AND apflora.tpopmassn."TPopMassnJahr" > lasttpopber."TPopBerJahr"
+      apflora.tpopmassn.tpop_id = apflora.tpop."TPopId"
+      AND apflora.tpopmassn.typ BETWEEN 1 AND 3
+      AND apflora.tpopmassn.jahr IS NOT NULL
+      AND apflora.tpopmassn.jahr > lasttpopber."TPopBerJahr"
   );
 
 DROP VIEW IF EXISTS apflora.v_qk2_pop_statuserloschenletzterpopberunsicher CASCADE;
@@ -8204,10 +8203,10 @@ WHERE
       apflora.tpop
       INNER JOIN
         apflora.tpopmassn
-        ON apflora.tpop."TPopId" = apflora.tpopmassn."TPopId"
+        ON apflora.tpop."TPopId" = apflora.tpopmassn.tpop_id
     WHERE
-      apflora.tpopmassn."TPopMassnTyp" BETWEEN 1 AND 3
-      AND apflora.tpopmassn."TPopMassnJahr" > lastpopber."PopBerJahr"
+      apflora.tpopmassn.typ BETWEEN 1 AND 3
+      AND apflora.tpopmassn.jahr > lastpopber."PopBerJahr"
   );
 
 DROP VIEW IF EXISTS apflora.v_qk2_pop_ohnetpopmitgleichemstatus CASCADE;
@@ -8493,10 +8492,10 @@ WHERE
       apflora.tpop
       INNER JOIN
         apflora.tpopmassn
-        ON apflora.tpop."TPopId" = apflora.tpopmassn."TPopId"
+        ON apflora.tpop."TPopId" = apflora.tpopmassn.tpop_id
     WHERE
-      apflora.tpopmassn."TPopMassnTyp" BETWEEN 1 AND 3
-      AND apflora.tpopmassn."TPopMassnJahr" > lastpopber."PopBerJahr"
+      apflora.tpopmassn.typ BETWEEN 1 AND 3
+      AND apflora.tpopmassn.jahr > lastpopber."PopBerJahr"
   );
 
 DROP VIEW IF EXISTS apflora.v_qk2_tpop_statuserloschenletztertpopbererloschenmitansiedlung CASCADE;
@@ -8539,12 +8538,12 @@ WHERE
   AND apflora.tpop."TPopId" IN (
     -- Ansiedlungen since apflora.tpopber."TPopBerJahr"
     SELECT
-      apflora.tpopmassn."TPopId"
+      apflora.tpopmassn.tpop_id
     FROM
       apflora.tpopmassn
     WHERE
-      apflora.tpopmassn."TPopId" = apflora.tpop."TPopId"
-      AND apflora.tpopmassn."TPopMassnTyp" BETWEEN 1 AND 3
-      AND apflora.tpopmassn."TPopMassnJahr" IS NOT NULL
-      AND apflora.tpopmassn."TPopMassnJahr" > lasttpopber."TPopBerJahr"
+      apflora.tpopmassn.tpop_id = apflora.tpop."TPopId"
+      AND apflora.tpopmassn.typ BETWEEN 1 AND 3
+      AND apflora.tpopmassn.jahr IS NOT NULL
+      AND apflora.tpopmassn.jahr > lasttpopber."TPopBerJahr"
   );

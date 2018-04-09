@@ -33,10 +33,8 @@ const getBearbName = ({ store, tree }: { store: Object, tree: Object }) => {
   const { adressen } = store.dropdownList
   const { activeDataset } = tree
   let name = ''
-  if (activeDataset.row.TPopMassnBearb && adressen.length > 0) {
-    const adresse = adressen.find(
-      a => a.AdrId === activeDataset.row.TPopMassnBearb
-    )
+  if (activeDataset.row.bearbeiter && adressen.length > 0) {
+    const adresse = adressen.find(a => a.AdrId === activeDataset.row.bearbeiter)
     if (adresse && adresse.AdrName) return adresse.AdrName
   }
   return name
@@ -66,46 +64,46 @@ const Tpopmassn = ({
         <FormTitle tree={tree} title="Massnahme" />
         <FieldsContainer data-width={width}>
           <YearDatePair
-            key={activeDataset.row.TPopMassnId}
+            key={activeDataset.row.id}
             tree={tree}
             yearLabel="Jahr"
-            yearFieldName="TPopMassnJahr"
-            yearValue={activeDataset.row.TPopMassnJahr}
-            yearErrorText={activeDataset.valid.TPopMassnJahr}
+            yearFieldName="jahr"
+            yearValue={activeDataset.row.jahr}
+            yearErrorText={activeDataset.valid.jahr}
             dateLabel="Datum"
-            dateFieldName="TPopMassnDatum"
-            dateValue={activeDataset.row.TPopMassnDatum}
-            dateErrorText={activeDataset.valid.TPopMassnDatum}
+            dateFieldName="datum"
+            dateValue={activeDataset.row.datum}
+            dateErrorText={activeDataset.valid.datum}
             updateProperty={store.updateProperty}
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <RadioButtonGroup
             tree={tree}
-            fieldName="TPopMassnTyp"
+            fieldName="typ"
             label="Typ"
-            value={activeDataset.row.TPopMassnTyp}
-            errorText={activeDataset.valid.TPopMassnTyp}
+            value={activeDataset.row.typ}
+            errorText={activeDataset.valid.typ}
             dataSource={store.dropdownList.tpopMassnTypWerte}
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
-            key={`${activeDataset.row.TPopMassnId}TPopMassnTxt`}
+            key={`${activeDataset.row.id}beschreibung`}
             tree={tree}
             label="Massnahme"
-            fieldName="TPopMassnTxt"
-            value={activeDataset.row.TPopMassnTxt}
-            errorText={activeDataset.valid.TPopMassnTxt}
+            fieldName="beschreibung"
+            value={activeDataset.row.beschreibung}
+            errorText={activeDataset.valid.beschreibung}
             type="text"
             updateProperty={store.updateProperty}
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <AutoComplete
-            key={`${activeDataset.row.TPopMassnId}TPopMassnBearb`}
+            key={`${activeDataset.row.id}bearbeiter`}
             tree={tree}
             label="BearbeiterIn"
-            fieldName="TPopMassnBearb"
+            fieldName="bearbeiter"
             valueText={getBearbName({ store, tree })}
-            errorText={activeDataset.valid.TPopMassnBearb}
+            errorText={activeDataset.valid.bearbeiter}
             dataSource={store.dropdownList.adressen}
             dataSourceConfig={{
               value: 'AdrId',
@@ -114,12 +112,12 @@ const Tpopmassn = ({
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
-            key={`${activeDataset.row.TPopMassnId}TPopMassnBemTxt`}
+            key={`${activeDataset.row.id}bemerkungen`}
             tree={tree}
             label="Bemerkungen"
-            fieldName="TPopMassnBemTxt"
-            value={activeDataset.row.TPopMassnBemTxt}
-            errorText={activeDataset.valid.TPopMassnBemTxt}
+            fieldName="bemerkungen"
+            value={activeDataset.row.bemerkungen}
+            errorText={activeDataset.valid.bemerkungen}
             type="text"
             multiLine
             fullWidth
@@ -128,134 +126,132 @@ const Tpopmassn = ({
           />
           <RadioButton
             tree={tree}
-            fieldName="TPopMassnPlan"
+            fieldName="plan_vorhanden"
             label="Plan vorhanden"
-            value={activeDataset.row.TPopMassnPlan}
+            value={activeDataset.row.plan_vorhanden}
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
-            key={`${activeDataset.row.TPopMassnId}TPopMassnPlanBez`}
+            key={`${activeDataset.row.id}plan_bezeichnung`}
             tree={tree}
             label="Plan Bezeichnung"
-            fieldName="TPopMassnPlanBez"
-            value={activeDataset.row.TPopMassnPlanBez}
-            errorText={activeDataset.valid.TPopMassnPlanBez}
+            fieldName="plan_bezeichnung"
+            value={activeDataset.row.plan_bezeichnung}
+            errorText={activeDataset.valid.plan_bezeichnung}
             type="text"
             updateProperty={store.updateProperty}
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
-            key={`${activeDataset.row.TPopMassnId}TPopMassnFlaeche`}
+            key={`${activeDataset.row.id}flaeche`}
             tree={tree}
             label="Fläche (m2)"
-            fieldName="TPopMassnFlaeche"
-            value={activeDataset.row.TPopMassnFlaeche}
-            errorText={activeDataset.valid.TPopMassnFlaeche}
+            fieldName="flaeche"
+            value={activeDataset.row.flaeche}
+            errorText={activeDataset.valid.flaeche}
             type="number"
             updateProperty={store.updateProperty}
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
-            key={`${activeDataset.row.TPopMassnId}TPopMassnAnsiedForm`}
+            key={`${activeDataset.row.id}form`}
             tree={tree}
             label="Form der Ansiedlung"
-            fieldName="TPopMassnAnsiedForm"
-            value={activeDataset.row.TPopMassnAnsiedForm}
-            errorText={activeDataset.valid.TPopMassnAnsiedForm}
+            fieldName="form"
+            value={activeDataset.row.form}
+            errorText={activeDataset.valid.form}
             type="text"
             updateProperty={store.updateProperty}
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
-            key={`${
-              activeDataset.row.TPopMassnId
-            }TPopMassnAnsiedPflanzanordnung`}
+            key={`${activeDataset.row.id}pflanzanordnung`}
             tree={tree}
             label="Pflanzanordnung"
-            fieldName="TPopMassnAnsiedPflanzanordnung"
-            value={activeDataset.row.TPopMassnAnsiedPflanzanordnung}
-            errorText={activeDataset.valid.TPopMassnAnsiedPflanzanordnung}
+            fieldName="pflanzanordnung"
+            value={activeDataset.row.pflanzanordnung}
+            errorText={activeDataset.valid.pflanzanordnung}
             type="text"
             updateProperty={store.updateProperty}
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
-            key={`${activeDataset.row.TPopMassnId}TPopMassnMarkierung`}
+            key={`${activeDataset.row.id}markierung`}
             tree={tree}
             label="Markierung"
-            fieldName="TPopMassnMarkierung"
-            value={activeDataset.row.TPopMassnMarkierung}
-            errorText={activeDataset.valid.TPopMassnMarkierung}
+            fieldName="markierung"
+            value={activeDataset.row.markierung}
+            errorText={activeDataset.valid.markierung}
             type="text"
             updateProperty={store.updateProperty}
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
-            key={`${activeDataset.row.TPopMassnId}TPopMassnAnsiedAnzTriebe`}
+            key={`${activeDataset.row.id}anz_triebe`}
             tree={tree}
             label="Anzahl Triebe"
-            fieldName="TPopMassnAnsiedAnzTriebe"
-            value={activeDataset.row.TPopMassnAnsiedAnzTriebe}
-            errorText={activeDataset.valid.TPopMassnAnsiedAnzTriebe}
+            fieldName="anz_triebe"
+            value={activeDataset.row.anz_triebe}
+            errorText={activeDataset.valid.anz_triebe}
             type="number"
             updateProperty={store.updateProperty}
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
-            key={`${activeDataset.row.TPopMassnId}TPopMassnAnsiedAnzPfl`}
+            key={`${activeDataset.row.id}anz_pflanzen`}
             tree={tree}
             label="Anzahl Pflanzen"
-            fieldName="TPopMassnAnsiedAnzPfl"
-            value={activeDataset.row.TPopMassnAnsiedAnzPfl}
-            errorText={activeDataset.valid.TPopMassnAnsiedAnzPfl}
+            fieldName="anz_pflanzen"
+            value={activeDataset.row.anz_pflanzen}
+            errorText={activeDataset.valid.anz_pflanzen}
             type="number"
             updateProperty={store.updateProperty}
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
-            key={`${activeDataset.row.TPopMassnId}TPopMassnAnzPflanzstellen`}
+            key={`${activeDataset.row.id}anz_pflanzstellen`}
             tree={tree}
             label="Anzahl Pflanzstellen"
-            fieldName="TPopMassnAnzPflanzstellen"
-            value={activeDataset.row.TPopMassnAnzPflanzstellen}
-            errorText={activeDataset.valid.TPopMassnAnzPflanzstellen}
+            fieldName="anz_pflanzstellen"
+            value={activeDataset.row.anz_pflanzstellen}
+            errorText={activeDataset.valid.anz_pflanzstellen}
             type="number"
             updateProperty={store.updateProperty}
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <AutoCompleteFromArray
-            key={`${activeDataset.row.TPopMassnId}Wirtspflanze`}
+            key={`${activeDataset.row.id}wirtspflanze`}
             tree={tree}
             label="Wirtspflanze"
-            fieldName="TPopMassnAnsiedWirtspfl"
-            valueText={activeDataset.row.TPopMassnAnsiedWirtspfl}
-            errorText={activeDataset.valid.TPopMassnAnsiedWirtspfl}
+            fieldName="wirtspflanze"
+            valueText={activeDataset.row.wirtspflanze}
+            errorText={activeDataset.valid.wirtspflanze}
             dataSource={store.dropdownList.artnamen}
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
-            key={`${activeDataset.row.TPopMassnId}TPopMassnAnsiedHerkunftPop`}
+            key={`${activeDataset.row.id}herkunft_pop`}
             tree={tree}
             label="Herkunftspopulation"
-            fieldName="TPopMassnAnsiedHerkunftPop"
-            value={activeDataset.row.TPopMassnAnsiedHerkunftPop}
-            errorText={activeDataset.valid.TPopMassnAnsiedHerkunftPop}
+            fieldName="herkunft_pop"
+            value={activeDataset.row.herkunft_pop}
+            errorText={activeDataset.valid.herkunft_pop}
             type="text"
             updateProperty={store.updateProperty}
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
-            key={`${activeDataset.row.TPopMassnId}TPopMassnAnsiedDatSamm`}
+            key={`${activeDataset.row.id}sammeldatum`}
             tree={tree}
             label="Sammeldatum"
-            fieldName="TPopMassnAnsiedDatSamm"
-            value={activeDataset.row.TPopMassnAnsiedDatSamm}
-            errorText={activeDataset.valid.TPopMassnAnsiedDatSamm}
+            fieldName="sammeldatum"
+            value={activeDataset.row.sammeldatum}
+            errorText={activeDataset.valid.sammeldatum}
             type="text"
             updateProperty={store.updateProperty}
             updatePropertyInDb={store.updatePropertyInDb}
           />
-          <StringToCopy text={activeDataset.row.TPopMassnGuid} label="GUID" />
+          <StringToCopy text={activeDataset.row.id} label="id" />
         </FieldsContainer>
       </Container>
     </ErrorBoundary>

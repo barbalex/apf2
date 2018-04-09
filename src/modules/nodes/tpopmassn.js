@@ -6,7 +6,7 @@ export default (
   projId: number,
   apArtId: number,
   popId: number,
-  tpopId: number,
+  tpopId: number
 ): Array<Object> => {
   // fetch sorting indexes of parents
   const projIndex = findIndex(tree.filteredAndSorted.projekt, {
@@ -14,15 +14,15 @@ export default (
   })
   const apIndex = findIndex(
     tree.filteredAndSorted.ap.filter(a => a.ProjId === projId),
-    { ApArtId: apArtId },
+    { ApArtId: apArtId }
   )
   const popIndex = findIndex(
     tree.filteredAndSorted.pop.filter(p => p.ApArtId === apArtId),
-    { PopId: popId },
+    { PopId: popId }
   )
   const tpopIndex = findIndex(
     tree.filteredAndSorted.tpop.filter(t => t.PopId === popId),
-    { TPopId: tpopId },
+    { TPopId: tpopId }
   )
 
   return tree.filteredAndSorted.tpopmassn
@@ -30,9 +30,9 @@ export default (
     .map((el, index) => ({
       nodeType: 'table',
       menuType: 'tpopmassn',
-      id: el.TPopMassnId,
+      id: el.id,
       parentId: tpopId,
-      urlLabel: el.TPopMassnId,
+      urlLabel: el.id,
       label: el.label,
       url: [
         'Projekte',
@@ -44,7 +44,7 @@ export default (
         'Teil-Populationen',
         tpopId,
         'Massnahmen',
-        el.TPopMassnId,
+        el.id,
       ],
       sort: [projIndex, 1, apIndex, 1, popIndex, 1, tpopIndex, 1, index],
       hasChildren: false,
