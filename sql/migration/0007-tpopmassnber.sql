@@ -18,7 +18,7 @@ ALTER TABLE apflora.tpopmassnber ADD PRIMARY KEY (id);
 -- done: add all views, functions, triggers with tpopmassnber to this file
 -- done: make sure createTable is correct
 -- done: rename in js
--- TODO: test app
+-- done: test app
 -- TODO: update js and run this file on server
 
 -- views:
@@ -29,15 +29,15 @@ CREATE FUNCTION apflora.tpop_max_one_massnber_per_year() RETURNS trigger AS $tpo
     -- check if a tpopmassnber already exists for this year
     IF
       (
-        NEW."jahr" > 0
-        AND NEW."jahr" IN
+        NEW.jahr > 0
+        AND NEW.jahr IN
           (
             SELECT
-              "jahr"
+              jahr
             FROM
               apflora.tpopmassnber
             WHERE
-              "TPopId" = NEW."TPopId"
+              tpop_id = NEW.tpop_id
               AND id <> NEW.id
           )
       )

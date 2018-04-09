@@ -174,9 +174,7 @@ export default (activeNodeArray: Array<mixed>): Object => {
       activeNodeArray[8] === 'Massnahmen-Berichte') ||
     false
   const tpopmassnber =
-    tpopmassnberFolder && activeNodeArray.length > 9
-      ? parseInt(activeNodeArray[9], 10)
-      : null
+    tpopmassnberFolder && activeNodeArray.length > 9 ? activeNodeArray[9] : null
   const tpopfeldkontrFolder =
     (tpop &&
       activeNodeArray.length > 8 &&
