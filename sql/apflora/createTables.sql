@@ -249,6 +249,7 @@ CREATE TABLE apflora.projekt (
   "MutWann" date DEFAULT NOW(),
   "MutWer" varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
 );
+CREATE INDEX ON apflora.projekt USING btree ("ProjId");
 CREATE INDEX ON apflora.projekt USING btree ("ProjName");
 COMMENT ON COLUMN apflora.projekt."MutWann" IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.projekt."MutWer" IS 'Von wem wurde der Datensatz zuletzt geändert?';
