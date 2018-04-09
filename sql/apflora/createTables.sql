@@ -856,26 +856,27 @@ COMMENT ON COLUMN apflora.tpopmassn_typ_werte.changed_by IS 'Von wem wurde der D
 
 DROP TABLE IF EXISTS apflora.tpopmassnber;
 CREATE TABLE apflora.tpopmassnber (
-  "TPopMassnBerId" SERIAL PRIMARY KEY,
-  "TPopId" integer DEFAULT NULL REFERENCES apflora.tpop ("TPopId") ON DELETE CASCADE ON UPDATE CASCADE,
-  "TPopMassnBerJahr" smallint DEFAULT NULL,
-  "TPopMassnBerErfolgsbeurteilung" integer DEFAULT NULL REFERENCES apflora.tpopmassn_erfbeurt_werte ("BeurteilId") ON DELETE SET NULL ON UPDATE CASCADE,
-  "TPopMassnBerTxt" text,
-  "MutWann" date DEFAULT NOW(),
-  "MutWer" varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
+  id_old integer,
+  tpop_id integer DEFAULT NULL REFERENCES apflora.tpop ("TPopId") ON DELETE CASCADE ON UPDATE CASCADE,
+  jahr smallint DEFAULT NULL,
+  beurteilung integer DEFAULT NULL REFERENCES apflora.tpopmassn_erfbeurt_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
+  bemerkungen text,
+  changed date DEFAULT NOW(),
+  changed_by varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
 );
-SELECT setval(pg_get_serial_sequence('apflora.tpopmassnber', 'TPopMassnBerId'), coalesce(max("TPopMassnBerId"), 0) + 1, false) FROM apflora.tpopmassnber;
-COMMENT ON COLUMN apflora.tpopmassnber."TPopMassnBerId" IS 'Primärschlüssel der Tabelle "tpopmassnber"';
-COMMENT ON COLUMN apflora.tpopmassnber."TPopId" IS 'Zugehörige Teilpopulation. Fremdschlüssel aus Tabelle "tpop"';
-COMMENT ON COLUMN apflora.tpopmassnber."TPopMassnBerJahr" IS 'Jahr, für den der Bericht gilt';
-COMMENT ON COLUMN apflora.tpopmassnber."TPopMassnBerErfolgsbeurteilung" IS 'Beurteilung des Erfolgs. Auswahl aus Tabelle "tpopmassn_erfbeurt_werte"';
-COMMENT ON COLUMN apflora.tpopmassnber."TPopMassnBerTxt" IS 'Bemerkungen zur Beurteilung';
-COMMENT ON COLUMN apflora.tpopmassnber."MutWann" IS 'Wann wurde der Datensatz zuletzt geändert?';
-COMMENT ON COLUMN apflora.tpopmassnber."MutWer" IS 'Von wem wurde der Datensatz zuletzt geändert?';
-CREATE INDEX ON apflora.tpopmassnber USING btree ("TPopMassnBerId");
-CREATE INDEX ON apflora.tpopmassnber USING btree ("TPopId");
-CREATE INDEX ON apflora.tpopmassnber USING btree ("TPopMassnBerErfolgsbeurteilung");
-CREATE INDEX ON apflora.tpopmassnber USING btree ("TPopMassnBerJahr");
+COMMENT ON COLUMN apflora.tpopmassnber.id_old IS 'Primärschlüssel der Tabelle "tpopmassnber"';
+COMMENT ON COLUMN apflora.tpopmassnber.id_old IS 'frühere id';
+COMMENT ON COLUMN apflora.tpopmassnber.tpop_id IS 'Zugehörige Teilpopulation. Fremdschlüssel aus Tabelle "tpop"';
+COMMENT ON COLUMN apflora.tpopmassnber.jahr IS 'Jahr, für den der Bericht gilt';
+COMMENT ON COLUMN apflora.tpopmassnber.beurteilung IS 'Beurteilung des Erfolgs. Auswahl aus Tabelle "tpopmassn_erfbeurt_werte"';
+COMMENT ON COLUMN apflora.tpopmassnber.bemerkungen IS 'Bemerkungen zur Beurteilung';
+COMMENT ON COLUMN apflora.tpopmassnber.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
+COMMENT ON COLUMN apflora.tpopmassnber.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
+CREATE INDEX ON apflora.tpopmassnber USING btree (id);
+CREATE INDEX ON apflora.tpopmassnber USING btree (tpop_id);
+CREATE INDEX ON apflora.tpopmassnber USING btree (beurteilung);
+CREATE INDEX ON apflora.tpopmassnber USING btree (jahr);
 
 DROP TABLE IF EXISTS apflora.message CASCADE;
 CREATE TABLE apflora.message (
