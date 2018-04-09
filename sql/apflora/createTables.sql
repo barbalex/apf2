@@ -573,7 +573,6 @@ CREATE TABLE apflora.tpopber (
   tpop_id integer DEFAULT NULL REFERENCES apflora.tpop ("TPopId") ON DELETE CASCADE ON UPDATE CASCADE,
   jahr smallint DEFAULT NULL,
   entwicklung integer DEFAULT NULL REFERENCES apflora.tpop_entwicklung_werte ("EntwicklungCode") ON DELETE SET NULL ON UPDATE CASCADE,
-  entwicklung text,
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
 );
@@ -707,6 +706,8 @@ CREATE TABLE apflora.tpopkontr_idbiotuebereinst_werte (
   "MutWann" date DEFAULT NOW(),
   "MutWer" varchar(20) NOT NULL
 );
+CREATE INDEX ON apflora.tpopkontr_idbiotuebereinst_werte USING btree ("DomainCode");
+CREATE INDEX ON apflora.tpopkontr_idbiotuebereinst_werte USING btree ("DomainOrd");
 COMMENT ON COLUMN apflora.tpopkontr_idbiotuebereinst_werte."MutWann" IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.tpopkontr_idbiotuebereinst_werte."MutWer" IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
@@ -799,12 +800,11 @@ CREATE TABLE apflora.tpopmassn (
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
 );
-CREATE INDEX ON apflora.tpopmassn USING btree (id);
+CREATE UNIQUE INDEX ON apflora.tpopmassn USING btree (id);
 CREATE INDEX ON apflora.tpopmassn USING btree (tpop_id);
 CREATE INDEX ON apflora.tpopmassn USING btree (bearbeiter);
 CREATE INDEX ON apflora.tpopmassn USING btree (typ);
 CREATE INDEX ON apflora.tpopmassn USING btree (jahr);
-CREATE UNIQUE INDEX ON apflora.tpopmassn USING btree (id);
 COMMENT ON COLUMN apflora.tpopmassn.id IS 'Primärschlüssel der Tabelle "tpopmassn"';
 COMMENT ON COLUMN apflora.tpopmassn.id_old IS 'frühere id';
 COMMENT ON COLUMN apflora.tpopmassn.tpop_id IS 'Zugehörige Teilpopulation. Fremdschlüssel aus der Tabelle "tpop"';
