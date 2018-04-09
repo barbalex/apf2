@@ -34,7 +34,7 @@ ALTER TABLE apflora.tpopmassn ADD PRIMARY KEY (id);
 -- done: make sure createTable is correct
 -- done: rename in js
 -- done: test app
--- TODO: update js and run this file on server
+-- done: update js and run this file on server
 
 DROP TRIGGER IF EXISTS tpopmassn_on_update_set_mut ON apflora.tpopmassn;
 DROP FUNCTION IF EXISTS tpopmassn_on_update_set_mut();
@@ -89,11 +89,11 @@ CREATE OR REPLACE FUNCTION apflora.qk2_tpop_ohne_massnber(apid integer, berichtj
     AND apflora.tpop."TPopId" NOT IN (
       -- 3. "TPop mit TPopMassnBer im Berichtjahr" ermitteln:
       SELECT DISTINCT
-        apflora.tpopmassnber."TPopId"
+        apflora.tpop_id
       FROM
         apflora.tpopmassnber
       WHERE
-        apflora.tpopmassnber."TPopMassnBerJahr" = $2
+        apflora.tpopmassnber.jahr = $2
     )
     AND apflora.pop."ApArtId" = $1
   $$
@@ -1094,7 +1094,7 @@ FROM
     ON apflora.pop."PopId" = apflora.tpop."PopId")
   INNER JOIN
     apflora.tpopmassnber
-    ON apflora.tpop."TPopId" = apflora.tpopmassnber."TPopId")
+    ON apflora.tpop."TPopId" = apflora.tpop_id)
   INNER JOIN
     apflora.tpopmassn
     ON apflora.tpop."TPopId" = apflora.tpopmassn.tpop_id
