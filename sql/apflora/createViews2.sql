@@ -1294,11 +1294,11 @@ FROM
     INNER JOIN
       apflora.tpopmassnber
       ON
-        (apflora.v_tpop_letztermassnber."TPopId" = apflora.tpopmassnber."TPopId")
+        (apflora.v_tpop_letztermassnber."TPopId" = apflora.tpopmassnber.tpop_id)
         AND (apflora.v_tpop_letztermassnber."MaxvonTPopMassnBerJahr" = apflora.tpopmassnber."TPopMassnBerJahr"))
     INNER JOIN
       apflora.tpop
-      ON apflora.tpopmassnber."TPopId" = apflora.tpop."TPopId")
+      ON apflora.tpopmassnber.tpop_id = apflora.tpop."TPopId")
     ON apflora.pop."PopId" = apflora.tpop."PopId"
 WHERE
   apflora.tpopmassnber."TPopMassnBerErfolgsbeurteilung" = 1
@@ -1318,11 +1318,11 @@ FROM
     INNER JOIN
       apflora.tpopmassnber
       ON
-        (apflora.v_tpop_letztermassnber."TPopId" = apflora.tpopmassnber."TPopId")
+        (apflora.v_tpop_letztermassnber."TPopId" = apflora.tpopmassnber.tpop_id)
         AND (apflora.v_tpop_letztermassnber."MaxvonTPopMassnBerJahr" = apflora.tpopmassnber."TPopMassnBerJahr"))
     INNER JOIN
       apflora.tpop
-      ON apflora.tpopmassnber."TPopId" = apflora.tpop."TPopId")
+      ON apflora.tpopmassnber.tpop_id = apflora.tpop."TPopId")
     ON apflora.pop."PopId" = apflora.tpop."PopId"
 WHERE
   (apflora.tpopmassnber."TPopMassnBerErfolgsbeurteilung" = 2)
@@ -1342,11 +1342,11 @@ FROM
     INNER JOIN
       apflora.tpopmassnber
       ON
-        (apflora.v_tpop_letztermassnber."TPopId" = apflora.tpopmassnber."TPopId")
+        (apflora.v_tpop_letztermassnber."TPopId" = apflora.tpopmassnber.tpop_id)
         AND (apflora.v_tpop_letztermassnber."MaxvonTPopMassnBerJahr" = apflora.tpopmassnber."TPopMassnBerJahr"))
     INNER JOIN
       apflora.tpop
-      ON apflora.tpopmassnber."TPopId" = apflora.tpop."TPopId")
+      ON apflora.tpopmassnber.tpop_id = apflora.tpop."TPopId")
     ON apflora.pop."PopId" = apflora.tpop."PopId"
 WHERE
   apflora.tpopmassnber."TPopMassnBerErfolgsbeurteilung" = 3
@@ -1366,11 +1366,11 @@ FROM
     INNER JOIN
       apflora.tpopmassnber
       ON
-        (apflora.v_tpop_letztermassnber."TPopId" = apflora.tpopmassnber."TPopId")
+        (apflora.v_tpop_letztermassnber."TPopId" = apflora.tpopmassnber.tpop_id)
         AND (apflora.v_tpop_letztermassnber."MaxvonTPopMassnBerJahr" = apflora.tpopmassnber."TPopMassnBerJahr"))
     INNER JOIN
       apflora.tpop
-      ON apflora.tpopmassnber."TPopId" = apflora.tpop."TPopId")
+      ON apflora.tpopmassnber.tpop_id = apflora.tpop."TPopId")
     ON apflora.pop."PopId" = apflora.tpop."PopId"
 WHERE
   apflora.tpopmassnber."TPopMassnBerErfolgsbeurteilung" = 4
@@ -1390,11 +1390,11 @@ FROM
     INNER JOIN
       apflora.tpopmassnber
       ON
-        (apflora.v_tpop_letztermassnber."TPopId" = apflora.tpopmassnber."TPopId")
+        (apflora.v_tpop_letztermassnber."TPopId" = apflora.tpopmassnber.tpop_id)
         AND (apflora.v_tpop_letztermassnber."MaxvonTPopMassnBerJahr" = apflora.tpopmassnber."TPopMassnBerJahr"))
     INNER JOIN
       apflora.tpop
-      ON apflora.tpopmassnber."TPopId" = apflora.tpop."TPopId")
+      ON apflora.tpopmassnber.tpop_id = apflora.tpop."TPopId")
     ON apflora.pop."PopId" = apflora.tpop."PopId"
 WHERE
   apflora.tpopmassnber."TPopMassnBerErfolgsbeurteilung" = 5
@@ -1684,7 +1684,7 @@ FROM
   LEFT JOIN
     apflora.tpopmassnber
     ON
-      (apflora.v_tpop_berjahrundmassnjahr."TPopId" = apflora.tpopmassnber."TPopId")
+      (apflora.v_tpop_berjahrundmassnjahr."TPopId" = apflora.tpopmassnber.tpop_id)
       AND (apflora.v_tpop_berjahrundmassnjahr."Jahr" = apflora.tpopmassnber."TPopMassnBerJahr"))
   LEFT JOIN
     apflora.tpopmassn_erfbeurt_werte
