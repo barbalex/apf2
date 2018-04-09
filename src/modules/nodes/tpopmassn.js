@@ -26,7 +26,7 @@ export default (
   )
 
   return tree.filteredAndSorted.tpopmassn
-    .filter(t => t.TPopId === tpopId)
+    .filter(t => t.tpop_id === tpopId)
     .map((el, index) => ({
       nodeType: 'table',
       menuType: 'tpopmassn',

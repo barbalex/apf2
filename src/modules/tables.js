@@ -87,7 +87,7 @@ export default [
     label: 'Massnahmen',
     labelSingular: 'Massnahme',
     idField: 'id',
-    parentIdField: 'TPopId',
+    parentIdField: 'tpop_id',
   },
   {
     table: 'tpopmassn_typ_werte',

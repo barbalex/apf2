@@ -167,9 +167,7 @@ export default (activeNodeArray: Array<mixed>): Object => {
       activeNodeArray[8] === 'Massnahmen') ||
     false
   const tpopmassn =
-    tpopmassnFolder && activeNodeArray.length > 9
-      ? parseInt(activeNodeArray[9], 10)
-      : null
+    tpopmassnFolder && activeNodeArray.length > 9 ? activeNodeArray[9] : null
   const tpopmassnberFolder =
     (tpop &&
       activeNodeArray.length > 8 &&

@@ -33,7 +33,7 @@ ALTER TABLE apflora.tpopmassn ADD PRIMARY KEY (id);
 -- done: add all views, functions, triggers with tpopmassn to this file
 -- done: make sure createTable is correct
 -- done: rename in js
--- TODO: test app
+-- done: test app
 -- TODO: update js and run this file on server
 
 DROP TRIGGER IF EXISTS tpopmassn_on_update_set_mut ON apflora.tpopmassn;
