@@ -31,32 +31,32 @@ const Tpopmassnber = ({ store, tree }: { store: Object, tree: Object }) => {
         <FormTitle tree={tree} title="Massnahmen-Bericht Teil-Population" />
         <FieldsContainer>
           <TextField
-            key={`${activeDataset.row.id}TPopMassnBerJahr`}
+            key={`${activeDataset.row.id}jahr`}
             tree={tree}
             label="Jahr"
-            fieldName="TPopMassnBerJahr"
-            value={activeDataset.row.TPopMassnBerJahr}
-            errorText={activeDataset.valid.TPopMassnBerJahr}
+            fieldName="jahr"
+            value={activeDataset.row.jahr}
+            errorText={activeDataset.valid.jahr}
             type="number"
             updateProperty={store.updateProperty}
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <RadioButtonGroup
             tree={tree}
-            fieldName="TPopMassnBerErfolgsbeurteilung"
+            fieldName="beurteilung"
             label="Entwicklung"
-            value={activeDataset.row.TPopMassnBerErfolgsbeurteilung}
-            errorText={activeDataset.valid.TPopMassnBerErfolgsbeurteilung}
+            value={activeDataset.row.beurteilung}
+            errorText={activeDataset.valid.beurteilung}
             dataSource={store.dropdownList.tpopmassnErfbeurtWerte}
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
-            key={`${activeDataset.row.id}TPopMassnBerTxt`}
+            key={`${activeDataset.row.id}bemerkungen`}
             tree={tree}
             label="Interpretation"
-            fieldName="TPopMassnBerTxt"
-            value={activeDataset.row.TPopMassnBerTxt}
-            errorText={activeDataset.valid.TPopMassnBerTxt}
+            fieldName="bemerkungen"
+            value={activeDataset.row.bemerkungen}
+            errorText={activeDataset.valid.bemerkungen}
             type="text"
             multiLine
             fullWidth

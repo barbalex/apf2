@@ -9,11 +9,11 @@ CREATE FUNCTION apflora.tpop_max_one_massnber_per_year() RETURNS trigger AS $tpo
     -- check if a tpopmassnber already exists for this year
     IF
       (
-        NEW."TPopMassnBerJahr" > 0
-        AND NEW."TPopMassnBerJahr" IN
+        NEW."jahr" > 0
+        AND NEW."jahr" IN
           (
             SELECT
-              "TPopMassnBerJahr"
+              "jahr"
             FROM
               apflora.tpopmassnber
             WHERE
