@@ -218,26 +218,29 @@ CREATE INDEX ON apflora.assozart USING btree ("AaApArtId");
 CREATE INDEX ON apflora.assozart USING btree ("AaSisfNr");
 SELECT setval(pg_get_serial_sequence('apflora.assozart', 'AaId'), coalesce(max("AaId"), 0) + 1, false) FROM apflora.assozart;
 
-DROP TABLE IF EXISTS apflora.beobzuordnung;
-CREATE TABLE apflora.beobzuordnung (
-  "BeobId" integer PRIMARY KEY,
+DROP TABLE IF EXISTS apflora.tpopbeob;
+CREATE TABLE apflora.tpopbeob (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
+  id_old integer,
+  beob_id integer PRIMARY KEY,
   "QuelleId" integer Default Null REFERENCES beob.beob_quelle (id) ON DELETE SET NULL ON UPDATE CASCADE,
-  "TPopId" integer DEFAULT NULL REFERENCES apflora.tpop ("TPopId") ON DELETE CASCADE ON UPDATE CASCADE,
-  "BeobNichtZuordnen" smallint DEFAULT NULL,
-  "BeobBemerkungen" text,
-  "BeobMutWann" date DEFAULT NOW(),
-  "BeobMutWer" varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
+  tpop_id integer DEFAULT NULL REFERENCES apflora.tpop ("TPopId") ON DELETE CASCADE ON UPDATE CASCADE,
+  nicht_zuordnen smallint DEFAULT NULL,
+  bemerkungen text,
+  changed date DEFAULT NOW(),
+  changed_by varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
 );
-COMMENT ON COLUMN apflora.beobzuordnung."BeobId" IS 'Primärschlüssel: ID aus beob.beob';
-COMMENT ON COLUMN apflora.beobzuordnung."TPopId" IS 'Dieser Teilpopulation wurde die Beobachtung zugeordnet. Fremdschlüssel aus der Tabelle "tpop"';
-COMMENT ON COLUMN apflora.beobzuordnung."BeobNichtZuordnen" IS 'Ja oder nein. Wird ja gesetzt, wenn eine Beobachtung keiner Teilpopulation zugeordnet werden kann. Sollte im Bemerkungsfeld begründet werden. In der Regel ist die Artbestimmung zweifelhaft. Oder die Beobachtung ist nicht (genau genug) lokalisierbar';
-COMMENT ON COLUMN apflora.beobzuordnung."BeobBemerkungen" IS 'Bemerkungen zur Zuordnung';
-COMMENT ON COLUMN apflora.beobzuordnung."BeobMutWann" IS 'Wann wurde der Datensatz zuletzt geändert?';
-COMMENT ON COLUMN apflora.beobzuordnung."BeobMutWer" IS 'Von wem wurde der Datensatz zuletzt geändert?';
-CREATE INDEX ON apflora.beobzuordnung USING btree ("BeobId");
-CREATE INDEX ON apflora.beobzuordnung USING btree ("QuelleId");
-CREATE INDEX ON apflora.beobzuordnung USING btree ("TPopId");
-CREATE INDEX ON apflora.beobzuordnung USING btree ("BeobNichtZuordnen");
+COMMENT ON COLUMN apflora.tpopbeob.beob_id IS 'Primärschlüssel: ID aus beob.beob';
+COMMENT ON COLUMN apflora.tpopbeob.tpop_id IS 'Dieser Teilpopulation wurde die Beobachtung zugeordnet. Fremdschlüssel aus der Tabelle "tpop"';
+COMMENT ON COLUMN apflora.tpopbeob.nicht_zuordnen IS 'Ja oder nein. Wird ja gesetzt, wenn eine Beobachtung keiner Teilpopulation zugeordnet werden kann. Sollte im Bemerkungsfeld begründet werden. In der Regel ist die Artbestimmung zweifelhaft. Oder die Beobachtung ist nicht (genau genug) lokalisierbar';
+COMMENT ON COLUMN apflora.tpopbeob.bemerkungen IS 'Bemerkungen zur Zuordnung';
+COMMENT ON COLUMN apflora.tpopbeob.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
+COMMENT ON COLUMN apflora.tpopbeob.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
+CREATE INDEX ON apflora.tpopbeob USING btree (id);
+CREATE INDEX ON apflora.tpopbeob USING btree (beob_id);
+CREATE INDEX ON apflora.tpopbeob USING btree ("QuelleId");
+CREATE INDEX ON apflora.tpopbeob USING btree (tpop_id);
+CREATE INDEX ON apflora.tpopbeob USING btree (nicht_zuordnen);
 
 DROP TABLE IF EXISTS apflora.projekt;
 CREATE TABLE apflora.projekt (

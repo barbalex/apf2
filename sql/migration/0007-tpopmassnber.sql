@@ -12,6 +12,7 @@ COMMENT ON COLUMN apflora.tpopmassnber.id_old IS 'frühere id';
 -- change primary key
 ALTER TABLE apflora.tpopmassnber DROP CONSTRAINT tpopmassnber_pkey;
 ALTER TABLE apflora.tpopmassnber ADD PRIMARY KEY (id);
+CREATE INDEX ON apflora.tpopmassnber USING btree (id);
 
 -- done: make sure createTable is correct
 -- done: rename in sql

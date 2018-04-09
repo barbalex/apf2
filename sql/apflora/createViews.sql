@@ -1,13 +1,13 @@
 DROP VIEW IF EXISTS apflora.v_beobzuordnung CASCADE;
 CREATE OR REPLACE VIEW apflora.v_beobzuordnung AS
 SELECT
-  apflora.beobzuordnung.*,
+  apflora.tpopbeob.*,
   apflora.beob."ArtId" AS "ApArtId"
 FROM
-  apflora.beobzuordnung
+  apflora.tpopbeob
   INNER JOIN
     apflora.beob
-    ON apflora.beob.id = apflora.beobzuordnung."BeobId";
+    ON apflora.beob.id = apflora.tpopbeob."BeobId";
 
 DROP VIEW IF EXISTS apflora.v_tpop_for_ap CASCADE;
 CREATE OR REPLACE VIEW apflora.v_tpop_for_ap AS
@@ -4616,10 +4616,10 @@ SELECT
   END AS "Distanz zur Teilpopulation (m)",
   apflora.beob."Datum",
   apflora.beob."Autor",
-  apflora.beobzuordnung."BeobNichtZuordnen",
-  apflora.beobzuordnung."BeobBemerkungen",
-  apflora.beobzuordnung."BeobMutWann",
-  apflora.beobzuordnung."BeobMutWer"
+  apflora.tpopbeob."BeobNichtZuordnen",
+  apflora.tpopbeob."BeobBemerkungen",
+  apflora.tpopbeob."BeobMutWann",
+  apflora.tpopbeob."BeobMutWer"
 FROM
   ((((apflora.beob
   INNER JOIN
@@ -4635,14 +4635,14 @@ FROM
     apflora.beob_quelle
     ON beob."QuelleId" = beob_quelle.id)
   LEFT JOIN
-    apflora.beobzuordnung
+    apflora.tpopbeob
     LEFT JOIN
       apflora.tpop
-      ON apflora.tpop."TPopId" = apflora.beobzuordnung."TPopId"
+      ON apflora.tpop."TPopId" = apflora.tpopbeob."TPopId"
       LEFT JOIN
         apflora.pop
         ON apflora.pop."PopId" = apflora.tpop."PopId"
-    ON apflora.beobzuordnung."BeobId" = apflora.beob.id
+    ON apflora.tpopbeob."BeobId" = apflora.beob.id
 WHERE
   apflora.beob."ArtId" > 150
 ORDER BY
@@ -4686,10 +4686,10 @@ SELECT
   END AS "Distanz zur Teilpopulation (m)",
   apflora.beob."Datum",
   apflora.beob."Autor",
-  apflora.beobzuordnung."BeobNichtZuordnen",
-  apflora.beobzuordnung."BeobBemerkungen",
-  apflora.beobzuordnung."BeobMutWann",
-  apflora.beobzuordnung."BeobMutWer",
+  apflora.tpopbeob."BeobNichtZuordnen",
+  apflora.tpopbeob."BeobBemerkungen",
+  apflora.tpopbeob."BeobMutWann",
+  apflora.tpopbeob."BeobMutWer",
   apflora.beob.data AS "Originaldaten"
 FROM
   ((((apflora.beob
@@ -4706,14 +4706,14 @@ FROM
     apflora.beob_quelle
     ON beob."QuelleId" = beob_quelle.id)
   LEFT JOIN
-    apflora.beobzuordnung
+    apflora.tpopbeob
     LEFT JOIN
       apflora.tpop
-      ON apflora.tpop."TPopId" = apflora.beobzuordnung."TPopId"
+      ON apflora.tpop."TPopId" = apflora.tpopbeob."TPopId"
       LEFT JOIN
         apflora.pop
         ON apflora.pop."PopId" = apflora.tpop."PopId"
-    ON apflora.beobzuordnung."BeobId" = apflora.beob.id
+    ON apflora.tpopbeob."BeobId" = apflora.beob.id
 WHERE
   apflora.beob."ArtId" > 150
 ORDER BY
@@ -5744,9 +5744,9 @@ DROP VIEW IF EXISTS apflora.v_beobzuordnung_infospeziesapanzmut CASCADE;
 CREATE OR REPLACE VIEW apflora.v_beobzuordnung_infospeziesapanzmut AS
 SELECT
   apflora.adb_eigenschaften."Artname" AS "Art",
-  apflora.beobzuordnung."BeobMutWer",
-  apflora.beobzuordnung."BeobMutWann",
-  count(apflora.beobzuordnung."BeobId") AS "AnzMut",
+  apflora.tpopbeob."BeobMutWer",
+  apflora.tpopbeob."BeobMutWann",
+  count(apflora.tpopbeob."BeobId") AS "AnzMut",
   'tblBeobZuordnung_Infospezies' AS "Tabelle"
 FROM
   ((apflora.ap
@@ -5757,14 +5757,14 @@ FROM
     apflora.beob
     ON apflora.ap."ApArtId" = apflora.beob."ArtId")
   INNER JOIN
-    apflora.beobzuordnung
-    ON apflora.beob.id = apflora.beobzuordnung."BeobId"
+    apflora.tpopbeob
+    ON apflora.beob.id = apflora.tpopbeob."BeobId"
 WHERE
   
 GROUP BY
   apflora.adb_eigenschaften."Artname",
-  apflora.beobzuordnung."BeobMutWer",
-  apflora.beobzuordnung."BeobMutWann";
+  apflora.tpopbeob."BeobMutWer",
+  apflora.tpopbeob."BeobMutWann";
 
 DROP VIEW IF EXISTS apflora.v_datenstruktur CASCADE;
 CREATE OR REPLACE VIEW apflora.v_datenstruktur AS
@@ -7496,20 +7496,20 @@ GROUP BY
 DROP VIEW IF EXISTS apflora.v_qk_tpop_erloschenundrelevantaberletztebeobvor1950_maxbeobjahr CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk_tpop_erloschenundrelevantaberletztebeobvor1950_maxbeobjahr AS
 SELECT
- apflora.beobzuordnung."TPopId",
+ apflora.tpopbeob."TPopId",
   max(
     date_part('year', apflora.beob."Datum")
   ) AS "MaxJahr"
 FROM
-  apflora.beobzuordnung
+  apflora.tpopbeob
 INNER JOIN
   apflora.beob
-  ON apflora.beobzuordnung."BeobId" = apflora.beob.id
+  ON apflora.tpopbeob."BeobId" = apflora.beob.id
 WHERE
   apflora.beob."Datum" IS NOT NULL AND
-  apflora.beobzuordnung."TPopId" IS NOT NULL
+  apflora.tpopbeob."TPopId" IS NOT NULL
 GROUP BY
-  apflora.beobzuordnung."TPopId";
+  apflora.tpopbeob."TPopId";
 
 DROP VIEW IF EXISTS apflora.v_apber_pop_uebersicht CASCADE;
 CREATE OR REPLACE VIEW apflora.v_apber_pop_uebersicht AS

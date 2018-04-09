@@ -12,15 +12,16 @@ COMMENT ON COLUMN apflora.tpopber.id_old IS 'frühere id';
 -- change primary key
 ALTER TABLE apflora.tpopber DROP CONSTRAINT tpopber_pkey;
 ALTER TABLE apflora.tpopber ADD PRIMARY KEY (id);
+CREATE INDEX ON apflora.tpopber USING btree (id);
 
 -- done: make sure createTable is correct
 -- done: rename in sql
 -- done: check if old id was used somewhere. If so: rename that field, add new one and update that
--- done: add all views, functions, triggers with tpopmassnber to this file
+-- done: add all views, functions, triggers with tpopber to this file
 -- done: rename in js
 -- done: run migration sql in dev
--- TODO: test app
--- TODO: update js and run this file on server
+-- done: test app
+-- done: update js and run this file on server
 
 DROP TRIGGER IF EXISTS tpop_max_one_tpopber_per_year ON apflora.tpopber;
 DROP FUNCTION IF EXISTS apflora.tpop_max_one_tpopber_per_year();
