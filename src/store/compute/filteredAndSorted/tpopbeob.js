@@ -12,6 +12,8 @@ export default (store: Object, tree: Object): Array<Object> => {
   tpopbeob.forEach(el => {
     let datum = ''
     let autor = ''
+    let quelle = ''
+    let quelleName = ''
     const beob = table.beob.get(el.beob_id)
     if (beob) {
       if (beob.Datum) {
@@ -20,9 +22,11 @@ export default (store: Object, tree: Object): Array<Object> => {
       if (beob.Autor) {
         autor = beob.Autor
       }
+      if (beob.QuelleId) {
+        quelle = table.beob_quelle.get(beob.QuelleId)
+        quelleName = quelle && quelle.name ? quelle.name : ''
+      }
     }
-    const quelle = table.beob_quelle.get(el.QuelleId)
-    const quelleName = quelle && quelle.name ? quelle.name : ''
     el.label = `${datum || '(kein Datum)'}: ${autor ||
       '(kein Autor)'} (${quelleName})`
   })
