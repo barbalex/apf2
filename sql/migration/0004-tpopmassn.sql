@@ -89,7 +89,7 @@ CREATE OR REPLACE FUNCTION apflora.qk2_tpop_ohne_massnber(apid integer, berichtj
     AND apflora.tpop."TPopId" NOT IN (
       -- 3. "TPop mit TPopMassnBer im Berichtjahr" ermitteln:
       SELECT DISTINCT
-        apflora.tpop_id
+        apflora.tpopber.tpop_id
       FROM
         apflora.tpopmassnber
       WHERE
@@ -1094,7 +1094,7 @@ FROM
     ON apflora.pop."PopId" = apflora.tpop."PopId")
   INNER JOIN
     apflora.tpopmassnber
-    ON apflora.tpop."TPopId" = apflora.tpop_id)
+    ON apflora.tpop."TPopId" = apflora.tpopber.tpop_id)
   INNER JOIN
     apflora.tpopmassn
     ON apflora.tpop."TPopId" = apflora.tpopmassn.tpop_id

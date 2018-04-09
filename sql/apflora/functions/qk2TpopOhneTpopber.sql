@@ -31,7 +31,7 @@ CREATE OR REPLACE FUNCTION apflora.qk2_tpop_ohne_tpopber(apid integer, berichtja
     AND apflora.tpop."TPopId" NOT IN (
       -- 2. "TPop mit TPopBer im Berichtjahr" ermitteln:
       SELECT DISTINCT
-        apflora.tpop_id
+        apflora.tpopber.tpop_id
       FROM
         apflora.tpopber
       WHERE
