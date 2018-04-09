@@ -28,7 +28,7 @@ export default (store: Object): void => {
                 tpopbeob.TPopId === activeNodes.tpop
               )
             })
-            .map(b => b.BeobId)
+            .map(b => b.beob_id)
         } else if (activeNodes.pop) {
           return store.map.tpopBeob.beobs
             .filter(b => {
@@ -43,7 +43,7 @@ export default (store: Object): void => {
               }
               return false
             })
-            .map(b => b.BeobId)
+            .map(b => b.beob_id)
         }
         return []
       },
@@ -74,7 +74,7 @@ export default (store: Object): void => {
         getTpopBeobBounds(
           store.map.tpopBeob.beobs.filter(b =>
             store.map.tpopBeob.highlightedIds.includes(
-              isNaN(b.BeobId) ? b.BeobId : Number(b.BeobId)
+              isNaN(b.beob_id) ? b.beob_id : Number(b.beob_id)
             )
           )
         ),

@@ -12,7 +12,7 @@ export default (store: Object, tree: Object): Array<Object> => {
   tpopbeob.forEach(el => {
     let datum = ''
     let autor = ''
-    const beob = table.beob.get(el.BeobId)
+    const beob = table.beob.get(el.beob_id)
     if (beob) {
       if (beob.Datum) {
         datum = format(beob.Datum, 'YYYY.MM.DD')

@@ -17,7 +17,7 @@ export default (store: Object): Array<Object> => {
       // add KoordWgs84
       beob.KoordWgs84 = epsg2056to4326(beob.X, beob.Y)
       // add tpopbeob
-      beob.tpopbeob = table.tpopbeob.get(beob.BeobId)
+      beob.tpopbeob = table.tpopbeob.get(beob.id)
       return beob
     })
     .filter(beob => !!beob.KoordWgs84)

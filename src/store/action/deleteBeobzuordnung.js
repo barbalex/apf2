@@ -10,7 +10,7 @@ export default async (
   const { activeNodes } = tree
   // delete tpopbeob
   try {
-    await axios.delete(`/tpopbeob?BeobId=eq.${beobId}`)
+    await axios.delete(`/tpopbeob?beob_id=eq.${beobId}`)
   } catch (error) {
     store.listError(error)
   }

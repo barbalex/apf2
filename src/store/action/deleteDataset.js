@@ -41,8 +41,8 @@ export default async ({
   if (table === 'tpop') {
     const tpopbeob = Array.from(store.table.tpopbeob.values())
     const beobzuordnungIds = tpopbeob
-      .filter(b => b.TPopId === +id)
-      .map(b => b.BeobId)
+      .filter(b => b.tpop_id === +id)
+      .map(b => b.beob_id)
 
     beobzuordnungIds.forEach(id => {
       store.table.tpopbeob.delete(id)

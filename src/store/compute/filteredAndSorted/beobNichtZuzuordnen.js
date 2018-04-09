@@ -13,7 +13,7 @@ export default (store: Object, tree: Object): Array<Object> => {
         return true
       }
       let ap
-      const beob = table.beob.get(b.BeobId)
+      const beob = table.beob.get(b.beob_id)
       if (beob) {
         ap = table.ap.get(beob.ArtId)
       }
@@ -27,7 +27,7 @@ export default (store: Object, tree: Object): Array<Object> => {
   beobNichtZuzuordnen.forEach(el => {
     let datum = ''
     let autor = ''
-    const beob = table.beob.get(el.BeobId)
+    const beob = table.beob.get(el.beob_id)
     if (beob) {
       if (beob.Datum) {
         datum = format(beob.Datum, 'YYYY.MM.DD')

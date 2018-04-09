@@ -22,19 +22,18 @@ export default (store: Object): Array<Object> => {
         iconSize: [24, 24],
         className: isHighlighted ? 'beobIconHighlighted' : 'beobIcon',
       })
-      return window.L
-        .marker(latLng, {
-          title,
-          icon,
-          draggable: store.map.beob.assigning,
-          zIndexOffset: -store.map.apfloraLayers.findIndex(
-            apfloraLayer => apfloraLayer.value === 'TpopBeob',
-          ),
-        })
+      return window.L.marker(latLng, {
+        title,
+        icon,
+        draggable: store.map.beob.assigning,
+        zIndexOffset: -store.map.apfloraLayers.findIndex(
+          apfloraLayer => apfloraLayer.value === 'TpopBeob'
+        ),
+      })
         .bindPopup(
           ReactDOMServer.renderToStaticMarkup(
-            <BeobPopup store={store} beob={p} />,
-          ),
+            <BeobPopup store={store} beob={p} />
+          )
         )
         .on('moveend', event => {
           /**
@@ -56,7 +55,7 @@ export default (store: Object): Array<Object> => {
             'Teil-Populationen',
             nearestTpopId,
             'Beobachtungen',
-            p.BeobId,
+            p.beob_id,
           ]
           store.tree.setActiveNodeArray(newActiveNodeArray)
           updatePropertyInDb(tree, 'TPopId', nearestTpopId)

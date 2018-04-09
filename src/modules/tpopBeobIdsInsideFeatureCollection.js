@@ -7,10 +7,10 @@ import epsg2056to4326 from './epsg2056to4326notReverse'
 
 export default (
   store: Object,
-  beobs: Array<Object>
+  tpopbeobs: Array<Object>
 ): Array<number | string> => {
-  // make sure all beobs have coordinates
-  const beobsToUse = beobs.filter(
+  // make sure all tpopbeobs have coordinates
+  const beobsToUse = tpopbeobs.filter(
     b => b.X && isFinite(b.X) && b.Y && isFinite(b.Y)
   )
   const points = {
@@ -19,7 +19,7 @@ export default (
     features: beobsToUse.map(b => ({
       type: 'Feature',
       properties: {
-        BeobId: b.BeobId,
+        BeobId: b.beob_id,
       },
       geometry: {
         type: 'Point',

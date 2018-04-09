@@ -95,7 +95,7 @@ const getTpopZuordnenSource = (store: Object, tree: Object): Array<Object> => {
   // calculate their distance to this tpopbeob
   const id =
     activeDataset.table === 'tpopbeob'
-      ? activeDataset.row.BeobId
+      ? activeDataset.row.beob_id
       : activeDataset.row.id
   const beob = store.table.beob.get(id)
   // beob loads later
@@ -158,7 +158,7 @@ const enhance = compose(
           updatePropertyInDb(tree, fieldname, val)
         }
       } else {
-        deleteBeobzuordnung(tree, activeDataset.row.BeobId)
+        deleteBeobzuordnung(tree, activeDataset.row.beob_id)
       }
     },
   }),
@@ -181,7 +181,7 @@ const Beobzuordnung = ({
   let beob = activeDataset.row
   if (activeDataset.table === 'tpopbeob') {
     const tpopbeob = activeDataset.row
-    beob = table.beob.get(tpopbeob.BeobId)
+    beob = table.beob.get(tpopbeob.beob_id)
   }
   const quelle = beob ? table.beob_quelle.get(beob.QuelleId) : null
   const quelleName = quelle && quelle.name ? quelle.name : '?'

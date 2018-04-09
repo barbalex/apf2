@@ -80,7 +80,7 @@ export default async ({
 
   try {
     // first check if tpopbeob already exists
-    beobzuordnungResult = await axios.get(`/tpopbeob?BeobId=eq.${beobId}`)
+    beobzuordnungResult = await axios.get(`/tpopbeob?beob_id=eq.${beobId}`)
   } catch (error) {
     store.listError(error)
   }
@@ -90,9 +90,12 @@ export default async ({
     beobzuordnungResult.data[0]
   ) {
     try {
-      beobzuordnungResult = await axios.patch(`/tpopbeob?BeobId=eq.${beobId}`, {
-        TPopId: tpop.TPopId,
-      })
+      beobzuordnungResult = await axios.patch(
+        `/tpopbeob?beob_id=eq.${beobId}`,
+        {
+          TPopId: tpop.TPopId,
+        }
+      )
     } catch (error) {
       store.listError(error)
     }
@@ -101,7 +104,7 @@ export default async ({
       beobzuordnungResult = await axios({
         method: 'POST',
         url: '/tpopbeob',
-        data: { BeobId: beobId, TPopId: tpop.TPopId },
+        data: { beob_id: beobId, TPopId: tpop.TPopId },
         headers: {
           Prefer: 'return=representation',
         },
@@ -124,7 +127,7 @@ export default async ({
 
   // insert this dataset in store.table
   //store.table.tpopbeob.set(tpopbeob.id, tpopbeob)
-  store.table.tpopbeob.set(tpopbeob.BeobId, tpopbeob)
+  store.table.tpopbeob.set(tpopbeob.beob_id, tpopbeob)
 
   // set new activeNodeArray
   const newActiveNodeArray = [

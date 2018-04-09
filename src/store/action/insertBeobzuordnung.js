@@ -79,7 +79,7 @@ export default async (
     response = await axios({
       method: 'POST',
       url: '/tpopbeob',
-      data: { BeobId: beob.id },
+      data: { beob_id: beob.id },
       headers: {
         Prefer: 'return=representation',
       },
@@ -89,6 +89,6 @@ export default async (
   }
   const row = response.data[0]
   // insert this dataset in store.table
-  store.table.tpopbeob.set(row.BeobId, row)
+  store.table.tpopbeob.set(row.beob_id, row)
   continueWithBeob(store, tree, beob, newKey, newValue)
 }

@@ -204,19 +204,19 @@ export default [
   {
     table: 'tpopbeob',
     label: 'none',
-    idField: 'BeobId',
+    idField: 'id',
     parentIdField: 'TPopId',
   },
   {
     table: 'tpopbeob',
     label: 'none',
-    idField: 'BeobId',
+    idField: 'id',
     parentIdField: 'ArtId',
   },
   {
     table: 'tpopbeob',
     label: 'none',
-    idField: 'BeobId',
+    idField: 'id',
     parentIdField: 'ArtId',
   },
   {

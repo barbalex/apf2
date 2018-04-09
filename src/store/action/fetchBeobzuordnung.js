@@ -9,7 +9,7 @@ const writeToStore = (store: Object, data: Array<Object>): void => {
   runInAction(() => {
     data.forEach(zuordnung => {
       // set computed value "beob"
-      zuordnung.beob = computed(() => store.table.beob.get(zuordnung.BeobId))
+      zuordnung.beob = computed(() => store.table.beob.get(zuordnung.beob_id))
       // set computed value "type"
       zuordnung.type = computed(() => {
         if (zuordnung.BeobNichtZuordnen && zuordnung.BeobNichtZuordnen === 1) {
@@ -20,7 +20,7 @@ const writeToStore = (store: Object, data: Array<Object>): void => {
         }
         return 'nichtBeurteilt'
       })
-      store.table.tpopbeob.set(zuordnung.BeobId, zuordnung)
+      store.table.tpopbeob.set(zuordnung.beob_id, zuordnung)
     })
   })
 }

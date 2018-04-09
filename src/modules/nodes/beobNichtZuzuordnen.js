@@ -20,13 +20,13 @@ export default (
   return filteredAndSorted.beobNichtZuzuordnen
     .filter(b => {
       const beob = Array.from(store.table.beob.values()).find(
-        beo => beo.id === b.BeobId
+        beo => beo.id === b.beob_id
       )
       const artId = beob ? beob.ArtId : null
       return artId === apArtId
     })
     .map((el, index) => {
-      const beobId = el.BeobId
+      const beobId = el.beob_id
 
       return {
         nodeType: 'table',
