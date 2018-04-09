@@ -791,8 +791,8 @@ CREATE TABLE apflora.tpopmassn (
   sammeldatum varchar(50) DEFAULT NULL,
   form text DEFAULT NULL,
   pflanzanordnung text DEFAULT NULL,
-  "MutWann" date DEFAULT NOW(),
-  "MutWer" varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
+  changed date DEFAULT NOW(),
+  changed_by varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
 );
 CREATE INDEX ON apflora.tpopmassn USING btree (id);
 CREATE INDEX ON apflora.tpopmassn USING btree (tpop_id);

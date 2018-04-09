@@ -256,7 +256,6 @@ SELECT
   apflora.tpop."TPopBewirtschafterIn" AS "TPop BewirtschafterIn",
   apflora.tpop."TPopBewirtschaftung" AS "TPop Bewirtschaftung",
   apflora.tpopmassn.id,
-  apflora.tpopmassn."TPopMassnGuid_alt" AS "Massn GUID alt",
   apflora.tpopmassn.jahr AS "Massn Jahr",
   apflora.tpopmassn.datum AS "Massn Datum",
   tpopmassn_typ_werte."MassnTypTxt" AS "Massn Typ",
