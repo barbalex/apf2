@@ -773,7 +773,7 @@ CREATE TABLE apflora.tpopmassn (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
   id_old integer DEFAULT NULL,
   tpop_id integer DEFAULT NULL REFERENCES apflora.tpop ("TPopId") ON DELETE CASCADE ON UPDATE CASCADE,
-  typ integer DEFAULT NULL REFERENCES apflora.tpopmassn_typ_werte ("MassnTypCode") ON DELETE SET NULL ON UPDATE CASCADE,
+  typ integer DEFAULT NULL REFERENCES apflora.tpopmassn_typ_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
   beschreibung text DEFAULT NULL,
   jahr smallint DEFAULT NULL,
   datum date DEFAULT NULL,
@@ -827,32 +827,32 @@ COMMENT ON COLUMN apflora.tpopmassn.changed_by IS 'Von wem wurde der Datensatz z
 
 DROP TABLE IF EXISTS apflora.tpopmassn_erfbeurt_werte;
 CREATE TABLE apflora.tpopmassn_erfbeurt_werte (
-  "BeurteilId" integer PRIMARY KEY,
-  "BeurteilTxt" varchar(50) DEFAULT NULL,
-  "BeurteilOrd" smallint DEFAULT NULL,
-  "MutWann" date DEFAULT NOW(),
-  "MutWer" varchar(20) NOT NULL
+  code integer PRIMARY KEY,
+  text varchar(50) DEFAULT NULL,
+  sort smallint DEFAULT NULL,
+  changed date DEFAULT NOW(),
+  changed_by varchar(20) NOT NULL
 );
-CREATE INDEX ON apflora.tpopmassn_erfbeurt_werte USING btree ("BeurteilId");
-CREATE INDEX ON apflora.tpopmassn_erfbeurt_werte USING btree ("BeurteilOrd");
-COMMENT ON COLUMN apflora.tpopmassn_erfbeurt_werte."BeurteilTxt" IS 'Wie werden die durchgefuehrten Massnahmen beurteilt?';
-COMMENT ON COLUMN apflora.tpopmassn_erfbeurt_werte."MutWann" IS 'Wann wurde der Datensatz zuletzt geändert?';
-COMMENT ON COLUMN apflora.tpopmassn_erfbeurt_werte."MutWer" IS 'Von wem wurde der Datensatz zuletzt geändert?';
+CREATE INDEX ON apflora.tpopmassn_erfbeurt_werte USING btree (code);
+CREATE INDEX ON apflora.tpopmassn_erfbeurt_werte USING btree (sort);
+COMMENT ON COLUMN apflora.tpopmassn_erfbeurt_werte.text IS 'Wie werden die durchgefuehrten Massnahmen beurteilt?';
+COMMENT ON COLUMN apflora.tpopmassn_erfbeurt_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
+COMMENT ON COLUMN apflora.tpopmassn_erfbeurt_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
 DROP TABLE IF EXISTS apflora.tpopmassn_typ_werte;
 CREATE TABLE apflora.tpopmassn_typ_werte (
-  "MassnTypCode" integer PRIMARY KEY,
-  "MassnTypTxt" varchar(50) DEFAULT NULL,
-  "MassnTypOrd" smallint DEFAULT NULL,
-  "MassnAnsiedlung" smallint NOT NULL,
-  "MutWann" date DEFAULT NOW(),
-  "MutWer" varchar(20) NOT NULL
+  code integer PRIMARY KEY,
+  text varchar(50) DEFAULT NULL,
+  sort smallint DEFAULT NULL,
+  ansiedlung smallint NOT NULL,
+  changed date DEFAULT NOW(),
+  changed_by varchar(20) NOT NULL
 );
-CREATE INDEX ON apflora.tpopmassn_typ_werte USING btree ("MassnTypCode");
-CREATE INDEX ON apflora.tpopmassn_typ_werte USING btree ("MassnTypOrd");
-COMMENT ON COLUMN apflora.tpopmassn_typ_werte."MassnAnsiedlung" IS 'Handelt es sich um eine Ansiedlung?';
-COMMENT ON COLUMN apflora.tpopmassn_typ_werte."MutWann" IS 'Wann wurde der Datensatz zuletzt geändert?';
-COMMENT ON COLUMN apflora.tpopmassn_typ_werte."MutWer" IS 'Von wem wurde der Datensatz zuletzt geändert?';
+CREATE INDEX ON apflora.tpopmassn_typ_werte USING btree (code);
+CREATE INDEX ON apflora.tpopmassn_typ_werte USING btree (sort);
+COMMENT ON COLUMN apflora.tpopmassn_typ_werte.ansiedlung IS 'Handelt es sich um eine Ansiedlung?';
+COMMENT ON COLUMN apflora.tpopmassn_typ_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
+COMMENT ON COLUMN apflora.tpopmassn_typ_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
 DROP TABLE IF EXISTS apflora.tpopmassnber;
 CREATE TABLE apflora.tpopmassnber (

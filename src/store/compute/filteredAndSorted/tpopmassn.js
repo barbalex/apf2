@@ -9,10 +9,8 @@ export default (store: Object, tree: Object): Array<Object> => {
   const tpopmassntypWerte = Array.from(table.tpopmassn_typ_werte.values())
   // map through all projekt and create array of nodes
   tpopmassn.forEach(el => {
-    const tpopmassntypWert = tpopmassntypWerte.find(
-      e => e.MassnTypCode === el.typ
-    )
-    const massnTypTxt = tpopmassntypWert ? tpopmassntypWert.MassnTypTxt : null
+    const tpopmassntypWert = tpopmassntypWerte.find(e => e.code === el.typ)
+    const massnTypTxt = tpopmassntypWert ? tpopmassntypWert.text : null
     el.label = `${el.jahr || '(kein Jahr)'}: ${massnTypTxt || '(kein Typ)'}`
   })
   // filter by nodeLabelFilter

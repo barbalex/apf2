@@ -258,7 +258,7 @@ SELECT
   apflora.tpopmassn.id,
   apflora.tpopmassn.jahr AS "Massn Jahr",
   apflora.tpopmassn.datum AS "Massn Datum",
-  tpopmassn_typ_werte."MassnTypTxt" AS "Massn Typ",
+  tpopmassn_typ_werte.text AS "Massn Typ",
   apflora.tpopmassn.beschreibung AS "Massn Massnahme",
   apflora.adresse."AdrName" AS "Massn BearbeiterIn",
   apflora.tpopmassn.bemerkungen::char AS "Massn Bemerkungen",
@@ -289,7 +289,7 @@ FROM
         (apflora.tpopmassn
         LEFT JOIN
           apflora.tpopmassn_typ_werte
-          ON apflora.tpopmassn.typ = tpopmassn_typ_werte."MassnTypCode")
+          ON apflora.tpopmassn.typ = tpopmassn_typ_werte.code)
         ON apflora.tpop."TPopId" = apflora.tpopmassn.tpop_id)
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId")
   LEFT JOIN
@@ -315,7 +315,7 @@ ORDER BY
   apflora.tpop."TPopNr",
   apflora.tpopmassn.jahr,
   apflora.tpopmassn.datum,
-  tpopmassn_typ_werte."MassnTypTxt";
+  tpopmassn_typ_werte.text;
 
 DROP VIEW IF EXISTS apflora.v_massn_webgisbun CASCADE;
 CREATE OR REPLACE VIEW apflora.v_massn_webgisbun AS
@@ -332,7 +332,7 @@ SELECT
   apflora.tpopmassn.jahr AS "MASSNJAHR",
   -- need to convert date
   apflora.tpopmassn.datum AS "MASSNDAT",
-  tpopmassn_typ_werte."MassnTypTxt" AS "MASSTYP",
+  tpopmassn_typ_werte.text AS "MASSTYP",
   apflora.tpopmassn.beschreibung AS "MASSNMASSNAHME",
   apflora.adresse."AdrName" AS "MASSNBEARBEITER",
   apflora.tpopmassn.bemerkungen::char AS "MASSNBEMERKUNG",
@@ -364,7 +364,7 @@ FROM
         (apflora.tpopmassn
         LEFT JOIN
           apflora.tpopmassn_typ_werte
-          ON apflora.tpopmassn.typ = tpopmassn_typ_werte."MassnTypCode")
+          ON apflora.tpopmassn.typ = tpopmassn_typ_werte.code)
         ON apflora.tpop."TPopId" = apflora.tpopmassn.tpop_id)
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId")
   LEFT JOIN
@@ -390,7 +390,7 @@ ORDER BY
   apflora.tpop."TPopNr",
   apflora.tpopmassn.jahr,
   apflora.tpopmassn.datum,
-  tpopmassn_typ_werte."MassnTypTxt";
+  tpopmassn_typ_werte.text;
 
 DROP VIEW IF EXISTS apflora.v_massn_fuergis_write CASCADE;
 CREATE OR REPLACE VIEW apflora.v_massn_fuergis_write AS
@@ -463,7 +463,7 @@ SELECT
   CAST(apflora.tpopmassn.id AS varchar(50)) AS "massnguid",
   apflora.tpopmassn.jahr AS "massnjahr",
   apflora.tpopmassn.datum::timestamp AS "massndatum",
-  tpopmassn_typ_werte."MassnTypTxt" AS "massntyp",
+  tpopmassn_typ_werte.text AS "massntyp",
   apflora.tpopmassn.beschreibung AS "massnmassnahme",
   apflora.adresse."AdrName" AS "massnbearbeiterin",
   apflora.tpopmassn.plan_vorhanden AS "massnplanvorhanden",
@@ -493,7 +493,7 @@ FROM
         (apflora.tpopmassn
         LEFT JOIN
           apflora.tpopmassn_typ_werte
-          ON apflora.tpopmassn.typ = tpopmassn_typ_werte."MassnTypCode")
+          ON apflora.tpopmassn.typ = tpopmassn_typ_werte.code)
         ON apflora.tpop."TPopId" = apflora.tpopmassn.tpop_id)
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId")
   LEFT JOIN
@@ -517,7 +517,7 @@ ORDER BY
   apflora.tpop."TPopNr",
   apflora.tpopmassn.jahr,
   apflora.tpopmassn.datum,
-  tpopmassn_typ_werte."MassnTypTxt";
+  tpopmassn_typ_werte.text;
 
 DROP VIEW IF EXISTS apflora.v_tpop_anzmassn CASCADE;
 CREATE OR REPLACE VIEW apflora.v_tpop_anzmassn AS
@@ -1154,7 +1154,7 @@ SELECT
   apflora.pop."MutWer" AS "Datensatz zuletzt geaendert von",
   apflora.popmassnber."PopMassnBerId" AS "PopMassnBer Id",
   apflora.popmassnber."PopMassnBerJahr" AS "PopMassnBer Jahr",
-  tpopmassn_erfbeurt_werte."BeurteilTxt" AS "PopMassnBer Entwicklung",
+  tpopmassn_erfbeurt_werte.text AS "PopMassnBer Entwicklung",
   apflora.popmassnber."PopMassnBerTxt" AS "PopMassnBer Interpretation",
   apflora.popmassnber."MutWann" AS "PopMassnBer MutWann",
   apflora.popmassnber."MutWer" AS "PopMassnBer MutWer"
@@ -1180,7 +1180,7 @@ FROM
     ON apflora.pop."PopId" = apflora.popmassnber."PopId")
   LEFT JOIN
     apflora.tpopmassn_erfbeurt_werte
-    ON apflora.popmassnber."PopMassnBerErfolgsbeurteilung" = tpopmassn_erfbeurt_werte."BeurteilId"
+    ON apflora.popmassnber."PopMassnBerErfolgsbeurteilung" = tpopmassn_erfbeurt_werte.code
 ORDER BY
   apflora.adb_eigenschaften."Artname",
   apflora.pop."PopNr";
@@ -1192,7 +1192,7 @@ SELECT
   apflora.popmassnber."PopMassnBerId" AS "PopMassnBer Id",
   apflora.popmassnber."PopId" AS "PopMassnBer PopId",
   apflora.popmassnber."PopMassnBerJahr" AS "PopMassnBer Jahr",
-  tpopmassn_erfbeurt_werte."BeurteilTxt" AS "PopMassnBer Entwicklung",
+  tpopmassn_erfbeurt_werte.text AS "PopMassnBer Entwicklung",
   apflora.popmassnber."PopMassnBerTxt" AS "PopMassnBer Interpretation",
   apflora.popmassnber."MutWann" AS "PopMassnBer MutWann",
   apflora.popmassnber."MutWer" AS "PopMassnBer MutWer"
@@ -1203,12 +1203,12 @@ FROM
     ON apflora.pop."PopId" = apflora.popmassnber."PopId")
   LEFT JOIN
     apflora.tpopmassn_erfbeurt_werte
-    ON apflora.popmassnber."PopMassnBerErfolgsbeurteilung" = tpopmassn_erfbeurt_werte."BeurteilId"
+    ON apflora.popmassnber."PopMassnBerErfolgsbeurteilung" = tpopmassn_erfbeurt_werte.code
 WHERE
   apflora.pop."PopId" IS NULL
 ORDER BY
   apflora.popmassnber."PopMassnBerJahr",
-  tpopmassn_erfbeurt_werte."BeurteilTxt";
+  tpopmassn_erfbeurt_werte.text;
 
 DROP VIEW IF EXISTS apflora.v_tpop CASCADE;
 CREATE OR REPLACE VIEW apflora.v_tpop AS
@@ -2391,7 +2391,7 @@ SELECT
   apflora.tpop."TPopGemeinde",
   apflora.tpop."TPopFlurname",
   apflora.tpopmassn.jahr,
-  tpopmassn_typ_werte."MassnTypTxt" AS typ,
+  tpopmassn_typ_werte.text AS typ,
   apflora.tpopmassn.beschreibung,
   apflora.tpopmassn.datum,
   apflora.tpopmassn.bemerkungen,
@@ -2424,7 +2424,7 @@ FROM
         ON apflora.tpopmassn.bearbeiter = apflora.adresse."AdrId")
       INNER JOIN
         apflora.tpopmassn_typ_werte
-        ON apflora.tpopmassn.typ = tpopmassn_typ_werte."MassnTypCode")
+        ON apflora.tpopmassn.typ = tpopmassn_typ_werte.code)
       ON apflora.tpop."TPopId" = apflora.tpopmassn.tpop_id)
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
 WHERE
@@ -2448,7 +2448,7 @@ SELECT
   apflora.tpop."TPopGemeinde",
   apflora.tpop."TPopFlurname",
   apflora.tpopmassn.jahr,
-  tpopmassn_typ_werte."MassnTypTxt" AS typ,
+  tpopmassn_typ_werte.text AS typ,
   apflora.tpopmassn.beschreibung,
   apflora.tpopmassn.datum,
   apflora.adresse."AdrName" AS bearbeiter,
@@ -2479,7 +2479,7 @@ FROM
       ((apflora.tpopmassn
       INNER JOIN
         apflora.tpopmassn_typ_werte
-        ON apflora.tpopmassn.typ = tpopmassn_typ_werte."MassnTypCode")
+        ON apflora.tpopmassn.typ = tpopmassn_typ_werte.code)
       LEFT JOIN
         apflora.adresse
         ON apflora.tpopmassn.bearbeiter = apflora.adresse."AdrId")
@@ -2528,7 +2528,7 @@ SELECT
   apflora.tpop."TPopBewirtschaftung" AS "Teilpopulation-Bewirtschaftung",
   apflora.tpop."TPopTxt" AS "Teilpopulation-Bemerkungen",
   apflora.tpopmassnber."TPopMassnBerJahr" AS "Massnahmenbericht-Jahr",
-  tpopmassn_erfbeurt_werte."BeurteilTxt" AS "Massnahmenbericht-Erfolgsberuteilung",
+  tpopmassn_erfbeurt_werte.text AS "Massnahmenbericht-Erfolgsberuteilung",
   apflora.tpopmassnber."TPopMassnBerTxt" AS "Massnahmenbericht-Interpretation"
 FROM
   (((apflora.adb_eigenschaften
@@ -2559,7 +2559,7 @@ FROM
       (apflora.tpopmassnber
       INNER JOIN
         apflora.tpopmassn_erfbeurt_werte
-        ON apflora.tpopmassnber."TPopMassnBerErfolgsbeurteilung" = tpopmassn_erfbeurt_werte."BeurteilId")
+        ON apflora.tpopmassnber."TPopMassnBerErfolgsbeurteilung" = tpopmassn_erfbeurt_werte.code)
       ON apflora.tpop."TPopId" = apflora.tpopmassnber."TPopId")
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
 ORDER BY
@@ -2582,7 +2582,7 @@ SELECT
   apflora.tpop."TPopFlurname",
   apflora.tpopmassn.id,
   apflora.tpopmassn.jahr AS "Jahr",
-  tpopmassn_typ_werte."MassnTypTxt" AS "Massnahme",
+  tpopmassn_typ_werte.text AS "Massnahme",
   apflora.tpopmassn.beschreibung,
   apflora.tpopmassn.datum,
   apflora.adresse."AdrName" AS bearbeiter,
@@ -2616,7 +2616,7 @@ FROM
       ((apflora.tpopmassn
       LEFT JOIN
         apflora.tpopmassn_typ_werte
-        ON apflora.tpopmassn.typ = tpopmassn_typ_werte."MassnTypCode")
+        ON apflora.tpopmassn.typ = tpopmassn_typ_werte.code)
       LEFT JOIN
         apflora.adresse
         ON apflora.tpopmassn.bearbeiter = apflora.adresse."AdrId")
@@ -2627,7 +2627,7 @@ ORDER BY
   apflora.pop."PopNr",
   apflora.tpop."TPopNr",
   apflora.tpopmassn.jahr,
-  tpopmassn_typ_werte."MassnTypTxt";
+  tpopmassn_typ_werte.text;
 
 DROP VIEW IF EXISTS apflora.v_tpopmassn_fueraktap0 CASCADE;
 CREATE OR REPLACE VIEW apflora.v_tpopmassn_fueraktap0 AS
@@ -2664,7 +2664,7 @@ SELECT
   apflora.tpop."TPopBewirtschaftung" AS "Teilpopulation-Bewirtschaftung",
   apflora.tpop."TPopTxt" AS "Teilpopulation-Bemerkungen",
   apflora.tpopmassn.id,
-  tpopmassn_typ_werte."MassnTypTxt" AS "Massnahme-Typ",
+  tpopmassn_typ_werte.text AS "Massnahme-Typ",
   apflora.tpopmassn.beschreibung AS "Massnahme-Beschreibung",
   apflora.tpopmassn.datum AS "Massnahme-Datum",
   apflora.adresse."AdrName" AS "Massnahme-BearbeiterIn",
@@ -2710,7 +2710,7 @@ FROM
       ((apflora.tpopmassn
       LEFT JOIN
         apflora.tpopmassn_typ_werte
-        ON apflora.tpopmassn.typ = tpopmassn_typ_werte."MassnTypCode")
+        ON apflora.tpopmassn.typ = tpopmassn_typ_werte.code)
       LEFT JOIN
         apflora.adresse
         ON apflora.tpopmassn.bearbeiter = apflora.adresse."AdrId")
@@ -2720,7 +2720,7 @@ ORDER BY
   apflora.adb_eigenschaften."Artname",
   apflora.pop."PopNr",
   apflora.tpop."TPopNr",
-  tpopmassn_typ_werte."MassnTypTxt";
+  tpopmassn_typ_werte.text;
 
 DROP VIEW IF EXISTS apflora.v_tpopkontr_nachflurname CASCADE;
 CREATE OR REPLACE VIEW apflora.v_tpopkontr_nachflurname AS
@@ -5138,7 +5138,7 @@ SELECT
   apflora.tpop."TPopBewirtschaftung" AS "TPop Bewirtschaftung",
   apflora.tpopmassnber."TPopMassnBerId" AS "TPopMassnBer Id",
   apflora.tpopmassnber."TPopMassnBerJahr" AS "TPopMassnBer Jahr",
-  tpopmassn_erfbeurt_werte."BeurteilTxt" AS "TPopMassnBer Entwicklung",
+  tpopmassn_erfbeurt_werte.text AS "TPopMassnBer Entwicklung",
   apflora.tpopmassnber."TPopMassnBerTxt" AS "TPopMassnBer Interpretation",
   apflora.tpopmassnber."MutWann" AS "TPopMassnBer MutWann",
   apflora.tpopmassnber."MutWer" AS "TPopMassnBer MutWer"
@@ -5166,7 +5166,7 @@ FROM
           (apflora.tpopmassnber
           LEFT JOIN
             apflora.tpopmassn_erfbeurt_werte
-            ON apflora.tpopmassnber."TPopMassnBerErfolgsbeurteilung" = tpopmassn_erfbeurt_werte."BeurteilId")
+            ON apflora.tpopmassnber."TPopMassnBerErfolgsbeurteilung" = tpopmassn_erfbeurt_werte.code)
           ON apflora.tpop."TPopId" = apflora.tpopmassnber."TPopId")
         ON apflora.pop."PopId" = apflora.tpop."PopId")
       ON apflora.ap."ApArtId" = apflora.pop."ApArtId")

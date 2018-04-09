@@ -92,7 +92,7 @@ export default [
   {
     table: 'tpopmassn_typ_werte',
     label: 'none',
-    idField: 'MassnTypCode',
+    idField: 'code',
     parentIdField: 'none',
     stammdaten: true,
   },
@@ -106,7 +106,7 @@ export default [
   {
     table: 'tpopmassn_erfbeurt_werte',
     label: 'none',
-    idField: 'BeurteilId',
+    idField: 'code',
     parentIdField: 'none',
     stammdaten: true,
   },

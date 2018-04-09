@@ -100,10 +100,10 @@ export default (store: Object): void => {
         let tpopmassnErfbeurtWerte = Array.from(
           store.table.tpopmassn_erfbeurt_werte.values()
         )
-        tpopmassnErfbeurtWerte = sortBy(tpopmassnErfbeurtWerte, 'BeurteilOrd')
+        tpopmassnErfbeurtWerte = sortBy(tpopmassnErfbeurtWerte, 'sort')
         return tpopmassnErfbeurtWerte.map(el => ({
-          value: el.BeurteilId,
-          label: el.BeurteilTxt,
+          value: el.code,
+          label: el.text,
         }))
       },
       { name: 'dropdownListTpopmassnErfbeurtWerte' }
@@ -181,10 +181,10 @@ export default (store: Object): void => {
         let tpopMassnTypWerte = Array.from(
           store.table.tpopmassn_typ_werte.values()
         )
-        tpopMassnTypWerte = sortBy(tpopMassnTypWerte, 'MassnTypOrd')
+        tpopMassnTypWerte = sortBy(tpopMassnTypWerte, 'sort')
         return tpopMassnTypWerte.map(el => ({
-          value: el.MassnTypCode,
-          label: el.MassnTypTxt,
+          value: el.code,
+          label: el.text,
         }))
       },
       { name: 'dropdownListTpopMassnTypWerte' }

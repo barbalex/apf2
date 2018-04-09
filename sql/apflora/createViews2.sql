@@ -1433,7 +1433,7 @@ SELECT
   apflora.popmassnber."PopMassnBerId",
   apflora.popmassnber."PopMassnBerId" AS "PopMassnBer Id",
   apflora.popmassnber."PopMassnBerJahr" AS "PopMassnBer Jahr",
-  tpopmassn_erfbeurt_werte."BeurteilTxt" AS "PopMassnBer Entwicklung",
+  tpopmassn_erfbeurt_werte.text AS "PopMassnBer Entwicklung",
   apflora.popmassnber."PopMassnBerTxt" AS "PopMassnBer Interpretation",
   apflora.popmassnber."MutWann" AS "PopMassnBer MutWann",
   apflora.popmassnber."MutWer" AS "PopMassnBer MutWer"
@@ -1455,7 +1455,7 @@ FROM
           (apflora.popmassnber
           LEFT JOIN
             apflora.tpopmassn_erfbeurt_werte
-            ON apflora.popmassnber."PopMassnBerErfolgsbeurteilung" = tpopmassn_erfbeurt_werte."BeurteilId")
+            ON apflora.popmassnber."PopMassnBerErfolgsbeurteilung" = tpopmassn_erfbeurt_werte.code)
           ON
             (apflora.v_pop_berundmassnjahre."Jahr" = apflora.popmassnber."PopMassnBerJahr")
             AND (apflora.v_pop_berundmassnjahre."PopId" = apflora.popmassnber."PopId"))
@@ -1563,7 +1563,7 @@ SELECT
   apflora.pop."MutWer" AS "Datensatz zuletzt geaendert von",
   apflora.popmassnber."PopMassnBerId" AS "PopMassnBer Id",
   apflora.popmassnber."PopMassnBerJahr" AS "PopMassnBer Jahr",
-  tpopmassn_erfbeurt_werte."BeurteilTxt" AS "PopMassnBer Entwicklung",
+  tpopmassn_erfbeurt_werte.text AS "PopMassnBer Entwicklung",
   apflora.popmassnber."PopMassnBerTxt" AS "PopMassnBer Interpretation",
   apflora.popmassnber."MutWann" AS "PopMassnBer MutWann",
   apflora.popmassnber."MutWer" AS "PopMassnBer MutWer"
@@ -1585,7 +1585,7 @@ FROM
           (apflora.popmassnber
           LEFT JOIN
             apflora.tpopmassn_erfbeurt_werte
-            ON apflora.popmassnber."PopMassnBerErfolgsbeurteilung" = tpopmassn_erfbeurt_werte."BeurteilId")
+            ON apflora.popmassnber."PopMassnBerErfolgsbeurteilung" = tpopmassn_erfbeurt_werte.code)
           ON
             (apflora.v_pop_letzterpopbermassn."PopMassnBerJahr" = apflora.popmassnber."PopMassnBerJahr")
             AND (apflora.v_pop_letzterpopbermassn."PopId" = apflora.popmassnber."PopId"))
@@ -1652,7 +1652,7 @@ SELECT
   apflora.tpopber."MutWann" AS "TPopBer MutWann",
   apflora.tpopber."MutWer" AS "TPopBer MutWer",
   apflora.tpopmassnber."TPopMassnBerJahr" AS "TPopMassnBer Jahr",
-  tpopmassn_erfbeurt_werte."BeurteilTxt" AS "TPopMassnBer Entwicklung",
+  tpopmassn_erfbeurt_werte.text AS "TPopMassnBer Entwicklung",
   apflora.tpopmassnber."TPopMassnBerTxt" AS "TPopMassnBer Interpretation",
   apflora.tpopmassnber."MutWann" AS "TPopMassnBer MutWann",
   apflora.tpopmassnber."MutWer" AS "TPopMassnBer MutWer"
@@ -1688,7 +1688,7 @@ FROM
       AND (apflora.v_tpop_berjahrundmassnjahr."Jahr" = apflora.tpopmassnber."TPopMassnBerJahr"))
   LEFT JOIN
     apflora.tpopmassn_erfbeurt_werte
-    ON apflora.tpopmassnber."TPopMassnBerErfolgsbeurteilung" = tpopmassn_erfbeurt_werte."BeurteilId")
+    ON apflora.tpopmassnber."TPopMassnBerErfolgsbeurteilung" = tpopmassn_erfbeurt_werte.code)
   LEFT JOIN
     apflora.tpopber
     ON
