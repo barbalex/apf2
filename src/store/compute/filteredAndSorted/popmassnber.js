@@ -14,7 +14,9 @@ export default (store: Object, tree: Object): Array<Object> => {
     const tpopmassnErfbeurtWert = tpopmassnErfbeurtWerte.find(
       e => e.code === el.PopMassnBerErfolgsbeurteilung
     )
-    const beurteilTxt = tpopmassnErfbeurtWert ? tpopmassnErfbeurtWert.ext : null
+    const beurteilTxt = tpopmassnErfbeurtWert
+      ? tpopmassnErfbeurtWert.text
+      : null
     el.label = `${el.PopMassnBerJahr || '(kein Jahr)'}: ${beurteilTxt ||
       '(nicht beurteilt)'}`
   })
