@@ -198,8 +198,8 @@ export default [
     table: 'tpopmassnber',
     label: 'Massnahmen-Berichte',
     labelSingular: 'Massnahmen-Bericht',
-    idField: 'TPopMassnBerId',
-    parentIdField: 'TPopId',
+    idField: 'id',
+    parentIdField: 'tpop_id',
   },
   {
     table: 'beobzuordnung',

@@ -31,7 +31,7 @@ const Tpopmassnber = ({ store, tree }: { store: Object, tree: Object }) => {
         <FormTitle tree={tree} title="Massnahmen-Bericht Teil-Population" />
         <FieldsContainer>
           <TextField
-            key={`${activeDataset.row.TPopMassnBerId}TPopMassnBerJahr`}
+            key={`${activeDataset.row.id}TPopMassnBerJahr`}
             tree={tree}
             label="Jahr"
             fieldName="TPopMassnBerJahr"
@@ -51,7 +51,7 @@ const Tpopmassnber = ({ store, tree }: { store: Object, tree: Object }) => {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
-            key={`${activeDataset.row.TPopMassnBerId}TPopMassnBerTxt`}
+            key={`${activeDataset.row.id}TPopMassnBerTxt`}
             tree={tree}
             label="Interpretation"
             fieldName="TPopMassnBerTxt"
