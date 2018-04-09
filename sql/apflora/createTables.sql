@@ -1075,6 +1075,7 @@ CREATE TABLE apflora.beob_quelle
 );
 INSERT INTO apflora.beob_quelle VALUES (1, 'evab');
 INSERT INTO apflora.beob_quelle VALUES (2, 'infospezies');
+CREATE INDEX ON apflora.beob_quelle USING btree (id);
 
 -- create table
 DROP TABLE IF EXISTS apflora.beobart;
