@@ -205,7 +205,7 @@ export default [
     table: 'tpopbeob',
     label: 'none',
     idField: 'id',
-    parentIdField: 'TPopId',
+    parentIdField: 'tpop_id',
   },
   {
     table: 'tpopbeob',

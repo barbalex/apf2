@@ -93,7 +93,7 @@ export default async ({
       beobzuordnungResult = await axios.patch(
         `/tpopbeob?beob_id=eq.${beobId}`,
         {
-          TPopId: tpop.TPopId,
+          tpop_id: tpop.TPopId,
         }
       )
     } catch (error) {
@@ -104,7 +104,7 @@ export default async ({
       beobzuordnungResult = await axios({
         method: 'POST',
         url: '/tpopbeob',
-        data: { beob_id: beobId, TPopId: tpop.TPopId },
+        data: { beob_id: beobId, tpop_id: tpop.TPopId },
         headers: {
           Prefer: 'return=representation',
         },

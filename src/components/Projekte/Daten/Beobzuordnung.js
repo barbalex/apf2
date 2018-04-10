@@ -212,8 +212,8 @@ const Beobzuordnung = ({
                 <MaxHeightDiv>
                   <RadioButtonGroupWithInfo
                     tree={tree}
-                    fieldName="TPopId"
-                    value={activeDataset.row.TPopId}
+                    fieldName="tpop_id"
+                    value={activeDataset.row.tpop_id}
                     label="Einer Teilpopulation zuordnen"
                     dataSource={getTpopZuordnenSource(store, tree)}
                     updatePropertyInDb={updatePropertyInDb}
