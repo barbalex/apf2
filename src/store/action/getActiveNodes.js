@@ -116,9 +116,7 @@ export default (activeNodeArray: Array<mixed>): Object => {
     (ziel && activeNodeArray.length > 7 && activeNodeArray[7] === 'Berichte') ||
     false
   const zielber =
-    zielberFolder && activeNodeArray.length > 8
-      ? parseInt(activeNodeArray[8], 10)
-      : null
+    zielberFolder && activeNodeArray.length > 8 ? activeNodeArray[8] : null
   const popFolder =
     (ap &&
       activeNodeArray.length > 4 &&
