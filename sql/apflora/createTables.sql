@@ -906,6 +906,8 @@ CREATE INDEX ON apflora.usermessage USING btree ("UserName", "MessageId");
 
 DROP TABLE IF EXISTS apflora.ziel;
 CREATE TABLE apflora.ziel (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
+  id_old integer,
   "ZielId" SERIAL PRIMARY KEY,
   "ApArtId" integer NOT NULL REFERENCES apflora.ap ("ApArtId") ON DELETE CASCADE ON UPDATE CASCADE,
   "ZielTyp" integer DEFAULT NULL REFERENCES apflora.ziel_typ_werte ("ZieltypId") ON DELETE SET NULL ON UPDATE CASCADE,
@@ -914,8 +916,8 @@ CREATE TABLE apflora.ziel (
   "MutWann" date DEFAULT NOW(),
   "MutWer" varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
 );
-SELECT setval(pg_get_serial_sequence('apflora.ziel', 'ZielId'), coalesce(max("ZielId"), 0) + 1, false) FROM apflora.ziel;
-COMMENT ON COLUMN apflora.ziel."ZielId" IS 'Primärschlüssel der Tabelle "ziel"';
+COMMENT ON COLUMN apflora.ziel."ZielId" IS 'Primärschlüssel';
+COMMENT ON COLUMN apflora.ziel.id_old IS 'frühere id';
 COMMENT ON COLUMN apflora.ziel."ApArtId" IS 'Zugehöriger Aktionsplan. Fremdschluessel aus der Tabelle "ap"';
 COMMENT ON COLUMN apflora.ziel."ZielTyp" IS 'Typ des Ziels. Z.B. Zwischenziel, Gesamtziel. Auswahl aus Tabelle "ziel_typ_werte"';
 COMMENT ON COLUMN apflora.ziel."ZielJahr" IS 'In welchem Jahr soll das Ziel erreicht werden?';

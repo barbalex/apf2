@@ -1,6 +1,11 @@
-ALTER TABLE apflora.ziel RENAME "ZielBerId" TO id_old;
+ALTER TABLE apflora.ziel RENAME "ZielId" TO id_old;
 ALTER TABLE apflora.ziel ADD COLUMN id UUID DEFAULT uuid_generate_v1mc();
-ALTER TABLE apflora.ziel RENAME "ZielId" TO ziel_id;
+ALTER TABLE apflora.ziel RENAME "xxx" TO xxx;
+ALTER TABLE apflora.ziel RENAME "xxx" TO xxx;
+ALTER TABLE apflora.ziel RENAME "xxx" TO xxx;
+ALTER TABLE apflora.ziel RENAME "xxx" TO xxx;
+ALTER TABLE apflora.ziel RENAME "xxx" TO xxx;
+ALTER TABLE apflora.ziel RENAME "xxx" TO xxx;
 
 -- change primary key
 ALTER TABLE apflora.ziel DROP CONSTRAINT ziel_pkey;
