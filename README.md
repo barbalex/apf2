@@ -18,11 +18,12 @@ Web-Applikation zur Verwaltung des [Aktionsplans Flora der Fachstelle Naturschut
 **Aktionspläne verwalten:**
 
 - Aktionspläne, Populationen und Teilpopulationen beschreiben
-- Kontrollen der Teilpopulationen und Massnahmen zur Förderung dokumentieren
-- Die Entwicklung der Teilpopulationen und den Erfolg der Massnahmen beurteilen
-- Ziele und Erfolgskriterien bestimmen
-- Jährlich über die Zielerreichung berichten
 - Ideale Umweltfaktoren ("Idealbiotop") und assoziierte Arten beschreiben
+- Ziele und Erfolgskriterien bestimmen
+- Kontrollen der Teilpopulationen und...
+- ...Massnahmen zur Förderung dokumentieren
+- Die Entwicklung der Teilpopulationen und den Erfolg der Massnahmen beurteilen
+- Über die Zielerreichung berichten
 
 **Beobachtungen den Teilpopulationen zuordnen:** ([Anleitung](https://github.com/FNSKtZH/apflora/wiki/Beobachtungen-einer-Teilpopulation-zuordnen))
 
@@ -183,7 +184,7 @@ Die wichtigsten verwendeten Technologien sind:
 <a name="OpenSource"></a>
 ## Open source [![js-standard-style](https://img.shields.io/badge/license-ISC-brightgreen.svg)](https://github.com/FNSKtZH/apflora/blob/master/License.md)
 
-Die verwendete [Lizenz](https://github.com/FNSKtZH/apflora/blob/master/License.md) ist sehr freizügig. Neben dem Code steht auch die [Datenstruktur](https://github.com/FNSKtZH/apflora/blob/master/etc/apflora_struktur.sql) zur Verfügung. Die eigentlichen Daten aber, mit denen gearbeitet wird, gehören der Fachstelle Naturschutz des Kantons Zürich und stehen nicht zur freien Verfügung. Die Beobachtungen werden der [Info Spezies](//www.infoflora.ch/de/allgemeines/info-species.html) geliefert.
+Die verwendete [Lizenz](https://github.com/FNSKtZH/apflora/blob/master/License.md) ist sehr freizügig. Neben dem Code steht auch die [Datenstruktur](https://github.com/FNSKtZH/apflora/blob/master/etc/apflora_struktur.sql) zur Verfügung. Die eigentlichen Daten aber, mit denen gearbeitet wird, gehören der Fachstelle Naturschutz des Kantons Zürich und stehen nicht zur freien Verfügung. Die Beobachtungen werden an [Info Spezies](//www.infoflora.ch/de/allgemeines/info-species.html) geliefert.
 
 Wer will, kann selber die [Entwicklungsumgebung einrichten](https://github.com/FNSKtZH/apflora/wiki/Entwicklungsumgebung-einrichten) und die [Anwendung auf einem Webserver bereitstellen](https://github.com/FNSKtZH/apflora/wiki/Anwendung-auf-einem-Server-bereitstellen).
 
