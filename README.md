@@ -89,7 +89,7 @@ Die nachfolgend aufgelisteten Funktionen werden nur von Topos in einer einfachen
 
 - Die Daten werden täglich in der Cloud gesichert
 - In regelmässigen Abständen werden sie aus der Cloud auf mehrere unabhängige Festplatten gesichert
-- Ihre Wiederherstellung wird im Rahmen der Entwicklung bzw. des Unterhalts sporadisch getestet ([Anleitung](https://github.com/FNSKtZH/apflora/wiki/Daten-wiederherstellen))
+- Ihre Wiederherstellung wird im Rahmen der Entwicklung bzw. des Unterhalts regelmässig getestet ([Anleitung](https://github.com/FNSKtZH/apflora/wiki/Daten-wiederherstellen))
 
 <a href="#top">&#8593; top</a>
 
@@ -101,7 +101,7 @@ Die FNS erhält aus apflora folgende Produkte:
 - Den Jahresbericht (pdf oder Ausdruck)
 - Artbeobachtungen<br>
 Dazu werden die Feld- und Freiwilligenkontrollen (ausser solche von soeben angesäten, noch nicht etablierten Teilpopulationen) in [EvAB](http://www.aln.zh.ch/internet/baudirektion/aln/de/naturschutz/naturschutzdaten/tools/evab.html#a-content) importiert
-- Daten für die Anzeige in GIS und [Web-GIS BUN](http://www.aln.zh.ch/internet/baudirektion/aln/de/naturschutz/naturschutzdaten/web_gis.html): Teilpopulationen, Kontrollen und Massnahmen
+- Teilpopulationen, Kontrollen und Massnahmen für die Anzeige in GIS und [Web-GIS BUN](http://www.aln.zh.ch/internet/baudirektion/aln/de/naturschutz/naturschutzdaten/web_gis.html)
 
 <a href="#top">&#8593; top</a>
 
@@ -115,7 +115,7 @@ Dazu werden die Feld- und Freiwilligenkontrollen (ausser solche von soeben anges
 
 - Architektur modernisieren:
   - Unterhalt- und Erweiterbarkeit verbessern.<br/>
-    Es soll künftig einfacher und mit weniger Risiko verbunden sein, neue Features einzuführen.<br/>
+    Es ist nun einfacher und mit weniger Risiko verbunden, neue Features einzuführen.<br/>
     Das war der Auslöser für die Modernisierung
   - Anzahl Karten-Werkzeuge von zwei auf eines reduzieren
   - Einige in der alten Architektur schwierig zu lösende Fehler beheben
@@ -146,13 +146,13 @@ Dazu werden die Feld- und Freiwilligenkontrollen (ausser solche von soeben anges
   - Bequemer(re) Darstellung von nahe bzw. direkt aufeinander liegenden Elementen
   - Populationen, Teilpopulationen und Beobachtungen durch das Zeichnen von einem oder mehreren Umrissen (Recht- oder Vielecken) filtern
   - Diesen geographischen Filter auf Exporte anwenden
-- Daten in .xlsx-Dateien exportieren
+- Daten auch in .xlsx-Dateien exportieren
 - Beobachtungen können in beliebiger Datenstruktur importiert werden
+- API-Zugriff ist durch Anmeldung geschützt
 
 ### Geplant:
 
 - Login steuert, welche Projekte sichtbar sind
-- API-Zugriff besser absichern
 
 <a href="#top">&#8593; top</a>
 
