@@ -27,7 +27,7 @@ export default (
 
   // map through all and create array of nodes
   return tree.filteredAndSorted.zielber
-    .filter(z => z.ZielId === zielId)
+    .filter(z => z.ziel_id === zielId)
     .map((el, index) => ({
       nodeType: 'table',
       menuType: 'zielber',

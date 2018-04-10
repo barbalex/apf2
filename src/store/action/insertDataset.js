@@ -65,8 +65,13 @@ export default async (
   tree.setActiveNodeArray(baseUrl)
   // if zieljahr, need to update ZielJahr
   if (tree.activeNodes.zieljahr) {
-    store.updateProperty(tree, 'ZielJahr', tree.activeNodes.zieljahr)
-    store.updatePropertyInDb(tree, 'ZielJahr', tree.activeNodes.zieljahr)
+    if (tablePassed === 'zielber') {
+      store.updateProperty(tree, 'jahr', tree.activeNodes.zieljahr)
+      store.updatePropertyInDb(tree, 'jahr', tree.activeNodes.zieljahr)
+    } else {
+      store.updateProperty(tree, 'ZielJahr', tree.activeNodes.zieljahr)
+      store.updatePropertyInDb(tree, 'ZielJahr', tree.activeNodes.zieljahr)
+    }
   }
   // if tpopfreiwkontr need to update TPopKontrTyp
   if (tablePassed === 'tpopfreiwkontr') {

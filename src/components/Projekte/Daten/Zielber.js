@@ -30,35 +30,35 @@ const Zielber = ({ store, tree }: { store: Object, tree: Object }) => {
         <FormTitle tree={tree} title="Ziel-Bericht" />
         <FieldsContainer>
           <TextField
-            key={`${activeDataset.row.ZielBerId}ZielBerJahr`}
+            key={`${activeDataset.row.id}jahr`}
             tree={tree}
             label="Jahr"
-            fieldName="ZielBerJahr"
-            value={activeDataset.row.ZielBerJahr}
-            errorText={activeDataset.valid.ZielBerJahr}
+            fieldName="jahr"
+            value={activeDataset.row.jahr}
+            errorText={activeDataset.valid.jahr}
             type="number"
             updateProperty={store.updateProperty}
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
-            key={`${activeDataset.row.ZielBerId}ZielBerErreichung`}
+            key={`${activeDataset.row.id}erreichung`}
             tree={tree}
             label="Entwicklung"
-            fieldName="ZielBerErreichung"
-            value={activeDataset.row.ZielBerErreichung}
-            errorText={activeDataset.valid.ZielBerErreichung}
+            fieldName="erreichung"
+            value={activeDataset.row.erreichung}
+            errorText={activeDataset.valid.erreichung}
             type="text"
             fullWidth
             updateProperty={store.updateProperty}
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
-            key={`${activeDataset.row.ZielBerId}ZielBerTxt`}
+            key={`${activeDataset.row.id}bemerkungen`}
             tree={tree}
             label="Bemerkungen"
-            fieldName="ZielBerTxt"
-            value={activeDataset.row.ZielBerTxt}
-            errorText={activeDataset.valid.ZielBerTxt}
+            fieldName="bemerkungen"
+            value={activeDataset.row.bemerkungen}
+            errorText={activeDataset.valid.bemerkungen}
             type="text"
             multiLine
             fullWidth

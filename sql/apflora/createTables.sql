@@ -940,25 +940,26 @@ COMMENT ON COLUMN apflora.ziel_typ_werte."MutWer" IS 'Von wem wurde der Datensat
 
 DROP TABLE IF EXISTS apflora.zielber;
 CREATE TABLE apflora.zielber (
-  "ZielBerId" SERIAL PRIMARY KEY,
-  "ZielId" integer DEFAULT NULL REFERENCES apflora.ziel ("ZielId") ON DELETE CASCADE ON UPDATE CASCADE,
-  "ZielBerJahr" smallint DEFAULT NULL,
-  "ZielBerErreichung" text DEFAULT NULL,
-  "ZielBerTxt" text DEFAULT NULL,
-  "MutWann" date DEFAULT NOW(),
-  "MutWer" varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
+  id_old integer,
+  ziel_id integer DEFAULT NULL REFERENCES apflora.ziel ("ZielId") ON DELETE CASCADE ON UPDATE CASCADE,
+  jahr smallint DEFAULT NULL,
+  erreichung text DEFAULT NULL,
+  bemerkungen text DEFAULT NULL,
+  changed date DEFAULT NOW(),
+  changed_by varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
 );
-SELECT setval(pg_get_serial_sequence('apflora.zielber', 'ZielBerId'), coalesce(max("ZielBerId"), 0) + 1, false) FROM apflora.zielber;
-COMMENT ON COLUMN apflora.zielber."ZielBerId" IS 'Primärschlüssel der Tabelle "zielber"';
-COMMENT ON COLUMN apflora.zielber."ZielId" IS 'Zugehöriges Ziel. Fremdschlüssel aus der Tabelle "ziel"';
-COMMENT ON COLUMN apflora.zielber."ZielBerJahr" IS 'Für welches Jahr gilt der Bericht?';
-COMMENT ON COLUMN apflora.zielber."ZielBerErreichung" IS 'Beurteilung der Zielerreichung';
-COMMENT ON COLUMN apflora.zielber."ZielBerTxt" IS 'Bemerkungen zur Zielerreichung';
-COMMENT ON COLUMN apflora.zielber."MutWann" IS 'Wann wurde der Datensatz zuletzt geändert?';
-COMMENT ON COLUMN apflora.zielber."MutWer" IS 'Von wem wurde der Datensatz zuletzt geändert?';
-CREATE INDEX ON apflora.zielber USING btree ("ZielBerId");
-CREATE INDEX ON apflora.zielber USING btree ("ZielId");
-CREATE INDEX ON apflora.zielber USING btree ("ZielBerJahr");
+CREATE INDEX ON apflora.zielber USING btree (id);
+CREATE INDEX ON apflora.zielber USING btree (ziel_id);
+CREATE INDEX ON apflora.zielber USING btree (jahr);
+COMMENT ON COLUMN apflora.zielber.id IS 'Primärschlüssel';
+COMMENT ON COLUMN apflora.zielber.id_old IS 'frühere id';
+COMMENT ON COLUMN apflora.zielber.ziel_id IS 'Zugehöriges Ziel. Fremdschlüssel aus der Tabelle "ziel"';
+COMMENT ON COLUMN apflora.zielber.jahr IS 'Für welches Jahr gilt der Bericht?';
+COMMENT ON COLUMN apflora.zielber.erreichung IS 'Beurteilung der Zielerreichung';
+COMMENT ON COLUMN apflora.zielber.bemerkungen IS 'Bemerkungen zur Zielerreichung';
+COMMENT ON COLUMN apflora.zielber.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
+COMMENT ON COLUMN apflora.zielber.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
 DROP TABLE IF EXISTS apflora.flora_status_werte;
 CREATE TABLE apflora.flora_status_werte (
