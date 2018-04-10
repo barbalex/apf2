@@ -1,7 +1,7 @@
 ALTER TABLE apflora.ziel RENAME "ZielId" TO id_old;
 ALTER TABLE apflora.ziel ADD COLUMN id UUID DEFAULT uuid_generate_v1mc();
 ALTER TABLE apflora.ziel RENAME "ApArtId" TO ap_id;
-ALTER TABLE apflora.ziel RENAME typ TO typ;
+ALTER TABLE apflora.ziel RENAME "ZielTyp" TO typ;
 ALTER TABLE apflora.ziel RENAME "ZielJahr" TO jahr;
 ALTER TABLE apflora.ziel RENAME "ZielBezeichnung" TO bezeichnung;
 ALTER TABLE apflora.ziel RENAME "MutWann" TO changed;

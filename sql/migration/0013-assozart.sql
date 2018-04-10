@@ -7,13 +7,6 @@ ALTER TABLE apflora.assozart RENAME "AaBem" TO bemerkungen;
 ALTER TABLE apflora.assozart RENAME "MutWann" TO changed;
 ALTER TABLE apflora.assozart RENAME "MutWer" TO changed_by;
 
--- special: update ae_id
-update apflora.assozart set ae_id = (
-  select "GUID" from apflora.adb_eigenschaften
-  where "TaxonomieId" = apflora.assozart.ae_taxid
-)
-where ae_taxid is not null;
-
 -- change primary key
 ALTER TABLE apflora.assozart DROP CONSTRAINT assozart_pkey;
 ALTER TABLE apflora.assozart ADD PRIMARY KEY (id);
@@ -59,6 +52,13 @@ $assozart_on_update_set_mut$ LANGUAGE plpgsql;
 
 CREATE TRIGGER assozart_on_update_set_mut BEFORE UPDATE OR INSERT ON apflora.assozart
   FOR EACH ROW EXECUTE PROCEDURE assozart_on_update_set_mut();
+
+-- special: update ae_id
+update apflora.assozart set ae_id = (
+  select "GUID" from apflora.adb_eigenschaften
+  where "TaxonomieId" = apflora.assozart.ae_taxid
+)
+where ae_taxid is not null;
 
 DROP VIEW IF EXISTS apflora.v_assozart;
 CREATE OR REPLACE VIEW apflora.v_assozart AS
