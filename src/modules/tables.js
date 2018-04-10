@@ -128,8 +128,8 @@ export default [
     table: 'zielber',
     label: 'Berichte',
     labelSingular: 'Bericht',
-    idField: 'ZielBerId',
-    parentIdField: 'ZielId',
+    idField: 'id',
+    parentIdField: 'ziel_id',
   },
   {
     table: 'erfkrit',
