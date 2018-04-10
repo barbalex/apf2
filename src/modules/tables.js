@@ -135,8 +135,8 @@ export default [
     table: 'erfkrit',
     label: 'AP-Erfolgskriterien',
     labelSingular: 'AP-Erfolgskriterium',
-    idField: 'ErfkritId',
-    parentIdField: 'ApArtId',
+    idField: 'id',
+    parentIdField: 'ap_id',
   },
   {
     table: 'apber',
@@ -170,8 +170,8 @@ export default [
     table: 'assozart',
     label: 'assoziierte Arten',
     labelSingular: 'assoziierte Art',
-    idField: 'AaId',
-    parentIdField: 'AaApArtId',
+    idField: 'id',
+    parentIdField: 'ap_id',
   },
   {
     table: 'popber',

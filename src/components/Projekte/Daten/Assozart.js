@@ -28,12 +28,12 @@ const getArtList = ({ store, tree }: { store: Object, tree: Object }) => {
   const { activeDataset, activeNodes } = tree
   const { adb_eigenschaften } = store.table
   const assozartenOfAp = Array.from(store.table.assozart.values())
-    .filter(a => a.AaApArtId === activeDataset.row.AaApArtId)
-    .map(a => a.AaSisfNr)
+    .filter(a => a.ap_id === activeDataset.row.ap_id)
+    .map(a => a.ae_id)
   const apArtIdsNotToShow = assozartenOfAp.concat(activeNodes.ap)
   const artList = filter(
     Array.from(adb_eigenschaften.values()),
-    r => !apArtIdsNotToShow.includes(r.TaxonomieId)
+    r => !apArtIdsNotToShow.includes(r.GUID)
   )
   return sortBy(artList, 'Artname')
 }
@@ -42,8 +42,10 @@ const getArtname = ({ store, tree }: { store: Object, tree: Object }) => {
   const { adb_eigenschaften } = store.table
   const { activeDataset } = tree
   let name = ''
-  if (activeDataset.row.AaSisfNr && adb_eigenschaften.size > 0) {
-    name = adb_eigenschaften.get(activeDataset.row.AaSisfNr).Artname
+  if (activeDataset.row.ae_id && adb_eigenschaften.size > 0) {
+    name = Array.from(adb_eigenschaften.values()).find(
+      v => v.GUID === activeDataset.row.ae_id
+    ).Artname
   }
   return name
 }
@@ -57,34 +59,32 @@ const Assozart = ({ store, tree }: { store: Object, tree: Object }) => {
         <FormTitle tree={tree} title="assoziierte Art" />
         <FieldsContainer>
           <AutoComplete
-            key={`${activeDataset.row.AaId}AaSisfNr`}
+            key={`${activeDataset.row.id}ae_id`}
             tree={tree}
             label="Art"
-            fieldName="AaSisfNr"
+            fieldName="ae_id"
             valueText={getArtname({
               store,
               tree,
             })}
-            errorText={activeDataset.valid.ApArtId}
+            errorText={activeDataset.valid.ae_id}
             dataSource={getArtList({
               store,
               tree,
             })}
             dataSourceConfig={{
-              value: 'TaxonomieId',
+              value: 'GUID',
               text: 'Artname',
             }}
-            anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
-            targetOrigin={{ vertical: 'bottom', horizontal: 'left' }}
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
-            key={`${activeDataset.row.AaId}AaBem`}
+            key={`${activeDataset.row.id}bemerkungen`}
             tree={tree}
             label="Bemerkungen zur Assoziation"
-            fieldName="AaBem"
-            value={activeDataset.row.AaBem}
-            errorText={activeDataset.valid.AaBem}
+            fieldName="bemerkungen"
+            value={activeDataset.row.bemerkungen}
+            errorText={activeDataset.valid.bemerkungen}
             type="text"
             multiLine
             fullWidth

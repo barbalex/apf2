@@ -1,5 +1,5 @@
 ALTER TABLE apflora.ber RENAME "BerId" TO id_old;
-ALTER TABLE apflora.ber ADD COLUMN id UUID UNIQUE DEFAULT uuid_generate_v1mc();
+ALTER TABLE apflora.ber ADD COLUMN id UUID DEFAULT uuid_generate_v1mc();
 ALTER TABLE apflora.ber RENAME "ApArtId" TO ap_id;
 ALTER TABLE apflora.ber RENAME "BerAutor" TO autor;
 ALTER TABLE apflora.ber RENAME "BerJahr" TO jahr;
@@ -8,6 +8,27 @@ ALTER TABLE apflora.ber RENAME "BerURL" TO url;
 ALTER TABLE apflora.ber RENAME "MutWann" TO changed;
 ALTER TABLE apflora.ber RENAME "MutWer" TO changed_by;
 
+-- change primary key
+ALTER TABLE apflora.ber DROP CONSTRAINT ber_pkey;
+ALTER TABLE apflora.ber ADD PRIMARY KEY (id);
+
+-- do this for all other already migrated tables:
+ALTER TABLE apflora.ber ALTER COLUMN id_old DROP NOT NULL;
+ALTER TABLE apflora.tpopkontrzaehl ALTER COLUMN id_old DROP NOT NULL;
+ALTER TABLE apflora.tpopmassn ALTER COLUMN id_old DROP NOT NULL;
+ALTER TABLE apflora.tpopmassnber ALTER COLUMN id_old DROP NOT NULL;
+ALTER TABLE apflora.tpopber ALTER COLUMN id_old DROP NOT NULL;
+ALTER TABLE apflora.tpopbeob ALTER COLUMN id_old DROP NOT NULL;
+ALTER TABLE apflora.apberuebersicht ALTER COLUMN id_old DROP NOT NULL;
+ALTER TABLE apflora.ber ALTER COLUMN id_old SET DEFAULT null;
+ALTER TABLE apflora.tpopkontrzaehl ALTER COLUMN id_old SET DEFAULT null;
+ALTER TABLE apflora.tpopmassn ALTER COLUMN id_old SET DEFAULT null;
+ALTER TABLE apflora.tpopmassnber ALTER COLUMN id_old SET DEFAULT null;
+ALTER TABLE apflora.tpopber ALTER COLUMN id_old SET DEFAULT null;
+ALTER TABLE apflora.tpopbeob ALTER COLUMN id_old SET DEFAULT null;
+ALTER TABLE apflora.apberuebersicht ALTER COLUMN id_old SET DEFAULT null;
+
+-- comments
 COMMENT ON COLUMN apflora.ber.id IS 'Primärschlüssel';
 COMMENT ON COLUMN apflora.ber.ap_id IS 'Zugehöriger Aktionsplan. Fremdschlüssel aus der Tabelle "ap"';
 COMMENT ON COLUMN apflora.ber.autor IS 'Autor des Berichts';
@@ -26,14 +47,20 @@ CREATE INDEX ON apflora.ber USING btree (id);
 CREATE INDEX ON apflora.ber USING btree (ap_id);
 CREATE INDEX ON apflora.ber USING btree (jahr);
 
+-- drop some unnecessary indexes:
+ALTER TABLE apflora.tpopkontrzaehl drop CONSTRAINT tpopkontrzaehl_id_key;
+ALTER TABLE apflora.tpopmassnber drop CONSTRAINT tpopmassnber_id_key;
+ALTER TABLE apflora.tpopber drop CONSTRAINT tpopber_id_key;
+ALTER TABLE apflora.apberuebersicht drop CONSTRAINT apberuebersicht_id_key;
+
 -- done: make sure createTable is correct
 -- done: rename in sql
 -- done: rename in js
 -- done: check if old id was used somewhere. If so: rename that field, add new one and update that
 -- done: add all views, functions, triggers containing this table to this file
--- TODO: run migration sql in dev
--- TODO: test app
--- TODO: update js and run this file on server
+-- done: run migration sql in dev
+-- done: test app
+-- done: update js and run this file on server
 
 DROP TRIGGER IF EXISTS ber_on_update_set_mut ON apflora.ber;
 DROP FUNCTION IF EXISTS ber_on_update_set_mut();

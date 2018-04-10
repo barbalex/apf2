@@ -9,18 +9,17 @@ export default (store: Object, tree: Object): Array<Object> => {
   // get erfkritWerte
   const apErfkritWerte = Array.from(table.ap_erfkrit_werte.values())
   erfkrit.forEach((el, index) => {
-    const erfkritWert = apErfkritWerte.find(
-      e => e.BeurteilId === el.ErfkritErreichungsgrad,
-    )
+    const erfkritWert = apErfkritWerte.find(e => e.BeurteilId === el.erfolg)
     const beurteilTxt = erfkritWert ? erfkritWert.BeurteilTxt : null
     el.sort = erfkritWert ? erfkritWert.BeurteilOrd : null
-    el.label = `${beurteilTxt || '(nicht beurteilt)'}: ${el.ErfkritTxt || '(keine Kriterien erfasst)'}`
+    el.label = `${beurteilTxt || '(nicht beurteilt)'}: ${el.kriterien ||
+      '(keine Kriterien erfasst)'}`
   })
   // filter by nodeLabelFilter
   const filterString = nodeLabelFilter.get('erfkrit')
   if (filterString) {
     erfkrit = erfkrit.filter(p =>
-      p.label.toLowerCase().includes(filterString.toLowerCase()),
+      p.label.toLowerCase().includes(filterString.toLowerCase())
     )
   }
   // sort by label and return

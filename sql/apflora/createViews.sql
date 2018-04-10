@@ -2153,11 +2153,11 @@ SELECT
   apflora.ap."ApJahr" AS "AP Start im Jahr",
   apflora.ap_umsetzung_werte."DomainTxt" AS "AP Stand Umsetzung",
   apflora.adresse."AdrName" AS "AP verantwortlich",
-  apflora.assozart."AaId" AS "AA Id",
+  apflora.assozart.id AS "AA Id",
   "ArtenDb_Arteigenschaften_1"."Artname" AS "AA Art",
-  apflora.assozart."AaBem" AS "AA Bemerkungen",
-  apflora.assozart."MutWann" AS "AA MutWann",
-  apflora.assozart."MutWer" AS "AA MutWer"
+  apflora.assozart.bemerkungen AS "AA Bemerkungen",
+  apflora.assozart.changed AS "AA MutWann",
+  apflora.assozart.changed_by AS "AA MutWer"
 FROM
   apflora.adb_eigenschaften AS "ArtenDb_Arteigenschaften_1"
   RIGHT JOIN
@@ -2176,8 +2176,8 @@ FROM
       ON apflora.ap."ApBearb" = apflora.adresse."AdrId")
     RIGHT JOIN
       apflora.assozart
-      ON apflora.ap."ApArtId" = apflora.assozart."AaApArtId")
-    ON "ArtenDb_Arteigenschaften_1"."TaxonomieId" = apflora.assozart."AaSisfNr"
+      ON apflora.ap."ApArtId" = apflora.assozart.ap_id)
+    ON "ArtenDb_Arteigenschaften_1"."GUID" = apflora.assozart.ae_id
 ORDER BY
   apflora.adb_eigenschaften."Artname";
 
@@ -2185,12 +2185,12 @@ DROP VIEW IF EXISTS apflora.v_assozart_verwaist CASCADE;
 CREATE OR REPLACE VIEW apflora.v_assozart_verwaist AS
 SELECT
   apflora.ap."ApArtId" AS "AP ApArtId",
-  apflora.assozart."AaId" AS "AA Id",
-  apflora.assozart."AaApArtId" AS "AA ApArtId",
+  apflora.assozart.id AS "AA Id",
+  apflora.assozart.ap_id AS "AA ApArtId",
   "ArtenDb_Arteigenschaften_1"."Artname" AS "AA Art",
-  apflora.assozart."AaBem" AS "AA Bemerkungen",
-  apflora.assozart."MutWann" AS "AA MutWann",
-  apflora.assozart."MutWer" AS "AA MutWer"
+  apflora.assozart.bemerkungen AS "AA Bemerkungen",
+  apflora.assozart.changed AS "AA MutWann",
+  apflora.assozart.changed_by AS "AA MutWer"
 FROM
   apflora.adb_eigenschaften AS "ArtenDb_Arteigenschaften_1"
   RIGHT JOIN
@@ -2209,8 +2209,8 @@ FROM
       ON apflora.ap."ApBearb" = apflora.adresse."AdrId")
     RIGHT JOIN
       apflora.assozart
-      ON apflora.ap."ApArtId" = apflora.assozart."AaApArtId")
-    ON "ArtenDb_Arteigenschaften_1"."TaxonomieId" = apflora.assozart."AaSisfNr"
+      ON apflora.ap."ApArtId" = apflora.assozart.ap_id)
+    ON "ArtenDb_Arteigenschaften_1"."GUID" = apflora.assozart.ae_id
 WHERE
   apflora.ap."ApArtId" IS NULL
 ORDER BY
@@ -2286,12 +2286,12 @@ SELECT
   apflora.ap."ApJahr" AS "AP Start im Jahr",
   apflora.ap_umsetzung_werte."DomainTxt" AS "AP Stand Umsetzung",
   apflora.adresse."AdrName" AS "AP verantwortlich",
-  apflora.erfkrit."ErfkritId" AS "ErfKrit Id",
-  apflora.erfkrit."ApArtId" AS "ErfKrit ApId",
+  apflora.erfkrit.id AS "ErfKrit Id",
+  apflora.erfkrit.id AS "ErfKrit ApId",
   ap_erfkrit_werte."BeurteilTxt" AS "ErfKrit Beurteilung",
-  apflora.erfkrit."ErfkritTxt" AS "ErfKrit Kriterien",
-  apflora.erfkrit."MutWann" AS "ErfKrit MutWann",
-  apflora.erfkrit."MutWer" AS "ErfKrit MutWer"
+  apflora.erfkrit.kriterien AS "ErfKrit Kriterien",
+  apflora.erfkrit.changed AS "ErfKrit MutWann",
+  apflora.erfkrit.changed_by AS "ErfKrit MutWer"
 FROM
   (((((apflora.adb_eigenschaften
   RIGHT JOIN
@@ -2308,10 +2308,10 @@ FROM
     ON apflora.ap."ApBearb" = apflora.adresse."AdrId")
   RIGHT JOIN
     apflora.erfkrit
-    ON apflora.ap."ApArtId" = apflora.erfkrit."ApArtId")
+    ON apflora.ap."ApArtId" = apflora.erfkrit.ap_id)
   LEFT JOIN
     apflora.ap_erfkrit_werte
-    ON apflora.erfkrit."ErfkritErreichungsgrad" = ap_erfkrit_werte."BeurteilId"
+    ON apflora.erfkrit.erfolg = ap_erfkrit_werte."BeurteilId"
 ORDER BY
   apflora.adb_eigenschaften."Artname";
 
@@ -2319,12 +2319,12 @@ DROP VIEW IF EXISTS apflora.v_erfktit_verwaist CASCADE;
 CREATE OR REPLACE VIEW apflora.v_erfktit_verwaist AS
 SELECT
   apflora.ap."ApArtId" AS "AP Id",
-  apflora.erfkrit."ErfkritId" AS "ErfKrit Id",
-  apflora.erfkrit."ApArtId" AS "ErfKrit ApId",
+  apflora.erfkrit.id AS "ErfKrit Id",
+  apflora.erfkrit.id AS "ErfKrit ApId",
   ap_erfkrit_werte."BeurteilTxt" AS "ErfKrit Beurteilung",
-  apflora.erfkrit."ErfkritTxt" AS "ErfKrit Kriterien",
-  apflora.erfkrit."MutWann" AS "ErfKrit MutWann",
-  apflora.erfkrit."MutWer" AS "ErfKrit MutWer"
+  apflora.erfkrit.kriterien AS "ErfKrit Kriterien",
+  apflora.erfkrit.changed AS "ErfKrit MutWann",
+  apflora.erfkrit.changed_by AS "ErfKrit MutWer"
 FROM
   (((((apflora.adb_eigenschaften
   RIGHT JOIN
@@ -2341,15 +2341,15 @@ FROM
     ON apflora.ap."ApBearb" = apflora.adresse."AdrId")
   RIGHT JOIN
     apflora.erfkrit
-    ON apflora.ap."ApArtId" = apflora.erfkrit."ApArtId")
+    ON apflora.ap."ApArtId" = apflora.erfkrit.ap_id)
   LEFT JOIN
     apflora.ap_erfkrit_werte
-    ON apflora.erfkrit."ErfkritErreichungsgrad" = ap_erfkrit_werte."BeurteilId"
+    ON apflora.erfkrit.erfolg = ap_erfkrit_werte."BeurteilId"
 WHERE
   apflora.ap."ApArtId" IS NULL
 ORDER BY
   apflora.ap_erfkrit_werte."BeurteilTxt",
-  apflora.erfkrit."ErfkritTxt";
+  apflora.erfkrit.kriterien;
 
 DROP VIEW IF EXISTS apflora.v_ap_tpopmassnjahr0 CASCADE;
 CREATE OR REPLACE VIEW apflora.v_ap_tpopmassnjahr0 AS
@@ -7054,17 +7054,17 @@ SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
   'Erfolgskriterium ohne Beurteilung:'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Erfolgskriterien', apflora.erfkrit."ErfkritId"]::text[] AS url,
-  ARRAY[concat('Erfolgskriterium (id): ', apflora.erfkrit."ErfkritId")]::text[] AS text
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Erfolgskriterien', apflora.erfkrit.id]::text[] AS url,
+  ARRAY[concat('Erfolgskriterium (id): ', apflora.erfkrit.id)]::text[] AS text
 FROM
   apflora.ap
   INNER JOIN
     apflora.erfkrit
-    ON apflora.ap."ApArtId" = apflora.erfkrit."ApArtId"
+    ON apflora.ap."ApArtId" = apflora.erfkrit.ap_id
 WHERE
-  apflora.erfkrit."ErfkritErreichungsgrad" IS NULL
+  apflora.erfkrit.erfolg IS NULL
 ORDER BY
-  apflora.erfkrit."ErfkritId";
+  apflora.erfkrit.id;
 
 DROP VIEW IF EXISTS apflora.v_qk2_erfkrit_ohnekriterien CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk2_erfkrit_ohnekriterien AS
@@ -7072,17 +7072,17 @@ SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
   'Erfolgskriterium ohne Kriterien:'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Erfolgskriterien', apflora.erfkrit."ErfkritId"]::text[] AS url,
-  ARRAY[concat('Erfolgskriterium (id): ', apflora.erfkrit."ErfkritId")]::text[] AS text
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Erfolgskriterien', apflora.erfkrit.id]::text[] AS url,
+  ARRAY[concat('Erfolgskriterium (id): ', apflora.erfkrit.id)]::text[] AS text
 FROM
   apflora.ap
   INNER JOIN
     apflora.erfkrit
-    ON apflora.ap."ApArtId" = apflora.erfkrit."ApArtId"
+    ON apflora.ap."ApArtId" = apflora.erfkrit.ap_id
 WHERE
-  apflora.erfkrit."ErfkritTxt" IS NULL
+  apflora.erfkrit.kriterien IS NULL
 ORDER BY
-  apflora.erfkrit."ErfkritId";
+  apflora.erfkrit.id;
 
 DROP VIEW IF EXISTS apflora.v_qk2_apber_ohnejahr CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk2_apber_ohnejahr AS
@@ -7151,18 +7151,17 @@ SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
   'Assoziierte Art ohne Art:'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'assoziierte-Arten', apflora.assozart."AaId"]::text[] AS url,
-  ARRAY[concat('Assoziierte Art (id): ', apflora.assozart."AaId")]::text[] AS text
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'assoziierte-Arten', apflora.assozart.id]::text[] AS url,
+  ARRAY[concat('Assoziierte Art (id): ', apflora.assozart.id)]::text[] AS text
 FROM
   apflora.ap
   INNER JOIN
     apflora.assozart
-    ON apflora.ap."ApArtId" = apflora.assozart."AaApArtId"
+    ON apflora.ap."ApArtId" = apflora.assozart.ap_id
 WHERE
-  apflora.assozart."AaSisfNr" IS NULL
-  OR apflora.assozart."AaSisfNr" = 0
+  apflora.assozart.ae_id IS NULL
 ORDER BY
-  apflora.assozart."AaId";
+  apflora.assozart.id;
 
 DROP VIEW IF EXISTS apflora.v_qk2_pop_koordentsprechenkeinertpop CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk2_pop_koordentsprechenkeinertpop AS

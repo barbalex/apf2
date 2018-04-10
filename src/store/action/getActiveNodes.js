@@ -43,9 +43,7 @@ export default (activeNodeArray: Array<mixed>): Object => {
       activeNodeArray[4] === 'Qualitaetskontrollen') ||
     false
   const assozart =
-    assozartFolder && activeNodeArray.length > 5
-      ? parseInt(activeNodeArray[5], 10)
-      : null
+    assozartFolder && activeNodeArray.length > 5 ? activeNodeArray[5] : null
   const beobart =
     beobArtFolder && activeNodeArray.length > 5
       ? parseInt(activeNodeArray[5], 10)
@@ -86,9 +84,7 @@ export default (activeNodeArray: Array<mixed>): Object => {
     (ap && activeNodeArray.length > 4 && activeNodeArray[4] === 'Berichte') ||
     false
   const ber =
-    berFolder && activeNodeArray.length > 5
-      ? parseInt(activeNodeArray[5], 10)
-      : null
+    berFolder && activeNodeArray.length > 5 ? activeNodeArray[5] : null
   const apberFolder =
     (ap &&
       activeNodeArray.length > 4 &&
@@ -104,9 +100,7 @@ export default (activeNodeArray: Array<mixed>): Object => {
       activeNodeArray[4] === 'AP-Erfolgskriterien') ||
     false
   const erfkrit =
-    erfkritFolder && activeNodeArray.length > 5
-      ? parseInt(activeNodeArray[5], 10)
-      : null
+    erfkritFolder && activeNodeArray.length > 5 ? activeNodeArray[5] : null
   const zielFolder =
     (ap && activeNodeArray.length > 4 && activeNodeArray[4] === 'AP-Ziele') ||
     false

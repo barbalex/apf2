@@ -195,23 +195,23 @@ COMMENT ON COLUMN apflora.apberuebersicht.changed_by IS 'Von wem wurde der Daten
 
 DROP TABLE IF EXISTS apflora.assozart;
 CREATE TABLE apflora.assozart (
-  "AaId" SERIAL PRIMARY KEY,
-  "AaApArtId" integer DEFAULT NULL REFERENCES apflora.ap ("ApArtId") ON DELETE CASCADE ON UPDATE CASCADE,
-  "AaSisfNr" integer DEFAULT NULL REFERENCES beob.adb_eigenschaften ("TaxonomieId") ON DELETE SET NULL ON UPDATE CASCADE,
-  "AaBem" text,
-  "MutWann" date DEFAULT NOW(),
-  "MutWer" varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
+  id_old integer DEFAULT NULL,
+  ap_id integer DEFAULT NULL REFERENCES apflora.ap ("ApArtId") ON DELETE CASCADE ON UPDATE CASCADE,
+  ae_id UUID DEFAULT NULL REFERENCES apflora.adb_eigenschaften ("GUID") ON DELETE SET NULL ON UPDATE CASCADE,
+  bemerkungen text,
+  changed date DEFAULT NOW(),
+  changed_by varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
 );
-COMMENT ON COLUMN apflora.assozart."AaId" IS 'Primärschlüssel der Tabelle "assozart"';
-COMMENT ON COLUMN apflora.assozart."AaApArtId" IS 'Zugehöriger Aktionsplan. Fremdschlüssel aus der Tabelle "ap"';
-COMMENT ON COLUMN apflora.assozart."AaSisfNr" IS 'SisfNr der assoziierten Art';
-COMMENT ON COLUMN apflora.assozart."AaBem" IS 'Bemerkungen zur Assoziation';
-COMMENT ON COLUMN apflora.assozart."MutWann" IS 'Wann wurde der Datensatz zuletzt geändert?';
-COMMENT ON COLUMN apflora.assozart."MutWer" IS 'Wer hat den Datensatz zuletzt geändert?';
-CREATE INDEX ON apflora.assozart USING btree ("AaId");
-CREATE INDEX ON apflora.assozart USING btree ("AaApArtId");
-CREATE INDEX ON apflora.assozart USING btree ("AaSisfNr");
-SELECT setval(pg_get_serial_sequence('apflora.assozart', 'AaId'), coalesce(max("AaId"), 0) + 1, false) FROM apflora.assozart;
+CREATE INDEX ON apflora.assozart USING btree (id);
+CREATE INDEX ON apflora.assozart USING btree (ap_id);
+CREATE INDEX ON apflora.assozart USING btree (ae_id);
+COMMENT ON COLUMN apflora.assozart.id IS 'Primärschlüssel';
+COMMENT ON COLUMN apflora.assozart.id_old IS 'frühere id';
+COMMENT ON COLUMN apflora.assozart.ap_id IS 'Zugehöriger Aktionsplan. Fremdschlüssel aus der Tabelle "ap"';
+COMMENT ON COLUMN apflora.assozart.bemerkungen IS 'Bemerkungen zur Assoziation';
+COMMENT ON COLUMN apflora.assozart.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
+COMMENT ON COLUMN apflora.assozart.changed_by IS 'Wer hat den Datensatz zuletzt geändert?';
 
 DROP TABLE IF EXISTS apflora.tpopbeob;
 CREATE TABLE apflora.tpopbeob (
@@ -253,7 +253,7 @@ INSERT INTO apflora.projekt VALUES (1, 'AP Flora Kt. ZH');
 DROP TABLE IF EXISTS apflora.ber;
 CREATE TABLE apflora.ber (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
-  id_old integer,
+  id_old integer DEFAULT NULL,
   ap_id integer DEFAULT NULL REFERENCES apflora.ap ("ApArtId") ON DELETE CASCADE ON UPDATE CASCADE,
   autor varchar(150) DEFAULT NULL,
   jahr smallint DEFAULT NULL,
@@ -276,23 +276,24 @@ COMMENT ON COLUMN apflora.ber.changed_by IS 'Von wem wurde der Datensatz zuletzt
 
 DROP TABLE IF EXISTS apflora.erfkrit;
 CREATE TABLE apflora.erfkrit (
-  "ErfkritId" SERIAL PRIMARY KEY,
-  "ApArtId" integer NOT NULL DEFAULT '0' REFERENCES apflora.ap ("ApArtId") ON DELETE CASCADE ON UPDATE CASCADE,
-  "ErfkritErreichungsgrad" integer DEFAULT NULL REFERENCES apflora.ap_erfkrit_werte ("BeurteilId") ON DELETE SET NULL ON UPDATE CASCADE,
-  "ErfkritTxt" text DEFAULT NULL,
-  "MutWann" date DEFAULT NOW(),
-  "MutWer" varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
+  id_old integer DEFAULT NULL,
+  ap_id integer NOT NULL DEFAULT '0' REFERENCES apflora.ap ("ApArtId") ON DELETE CASCADE ON UPDATE CASCADE,
+  erfolg integer DEFAULT NULL REFERENCES apflora.ap_erfkrit_werte ("BeurteilId") ON DELETE SET NULL ON UPDATE CASCADE,
+  kriterien text DEFAULT NULL,
+  changed date DEFAULT NOW(),
+  changed_by varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
 );
-COMMENT ON COLUMN apflora.erfkrit."ErfkritId" IS 'Primärschlüssel der Tabelle "erfkrit"';
-COMMENT ON COLUMN apflora.erfkrit."ApArtId" IS 'Zugehöriger Aktionsplan. Fremdschlüssel aus der Tabelle "ap"';
-COMMENT ON COLUMN apflora.erfkrit."ErfkritErreichungsgrad" IS 'Wie gut wurden die Ziele erreicht? Auswahl aus der Tabelle "ap_erfbeurtkrit_werte"';
-COMMENT ON COLUMN apflora.erfkrit."ErfkritTxt" IS 'Beschreibung der Kriterien für den Erreichungsgrad';
-COMMENT ON COLUMN apflora.erfkrit."MutWann" IS 'Wann wurde der Datensatz zuletzt geändert?';
-COMMENT ON COLUMN apflora.erfkrit."MutWer" IS 'Von wem wurde der Datensatz zuletzt geändert?';
-CREATE INDEX ON apflora.erfkrit USING btree ("ErfkritId");
-CREATE INDEX ON apflora.erfkrit USING btree ("ApArtId");
-CREATE INDEX ON apflora.erfkrit USING btree ("ErfkritErreichungsgrad");
-SELECT setval(pg_get_serial_sequence('apflora.erfkrit', 'ErfkritId'), coalesce(max("ErfkritId"), 0) + 1, false) FROM apflora.erfkrit;
+COMMENT ON COLUMN apflora.erfkrit.id IS 'Primärschlüssel';
+COMMENT ON COLUMN apflora.erfkrit.id_old IS 'frühere id';
+COMMENT ON COLUMN apflora.erfkrit.ap_id IS 'Zugehöriger Aktionsplan. Fremdschlüssel aus der Tabelle "ap"';
+COMMENT ON COLUMN apflora.erfkrit.erfolg IS 'Wie gut werden die Ziele erreicht? Auswahl aus der Tabelle "ap_erfbeurtkrit_werte"';
+COMMENT ON COLUMN apflora.erfkrit.kriterien IS 'Beschreibung der Kriterien für den Erfolg';
+COMMENT ON COLUMN apflora.erfkrit.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
+COMMENT ON COLUMN apflora.erfkrit.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
+CREATE INDEX ON apflora.erfkrit USING btree (id);
+CREATE INDEX ON apflora.erfkrit USING btree (ap_id);
+CREATE INDEX ON apflora.erfkrit USING btree (erfolg);
 
 DROP TABLE IF EXISTS apflora.gemeinde;
 CREATE TABLE apflora.gemeinde (

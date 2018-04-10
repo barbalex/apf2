@@ -20,6 +20,10 @@ CREATE INDEX ON apflora.apberuebersicht USING btree (jahr);
 CREATE INDEX ON apflora.apberuebersicht USING btree (proj_id);
 ALTER TABLE apflora.apberuebersicht ADD UNIQUE (proj_id, jahr);
 
+-- change primary key
+ALTER TABLE apflora.apberuebersicht DROP CONSTRAINT apberuebersicht_pkey;
+ALTER TABLE apflora.apberuebersicht ADD PRIMARY KEY (id);
+
 -- done: make sure createTable is correct
 -- done: rename in sql
 -- done: rename in js

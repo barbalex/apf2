@@ -31,20 +31,20 @@ const Erfkrit = ({ store, tree }: { store: Object, tree: Object }) => {
         <FieldsContainer>
           <RadioButtonGroup
             tree={tree}
-            fieldName="ErfkritErreichungsgrad"
+            fieldName="erfolg"
             label="Beurteilung"
-            value={activeDataset.row.ErfkritErreichungsgrad}
-            errorText={activeDataset.valid.ErfkritErreichungsgrad}
+            value={activeDataset.row.erfolg}
+            errorText={activeDataset.valid.erfolg}
             dataSource={store.dropdownList.apErfkritWerte}
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
-            key={`${activeDataset.row.ErfkritId}ErfkritTxt`}
+            key={`${activeDataset.row.id}kriterien`}
             tree={tree}
             label="Kriterien"
-            fieldName="ErfkritTxt"
-            value={activeDataset.row.ErfkritTxt}
-            errorText={activeDataset.valid.ErfkritTxt}
+            fieldName="kriterien"
+            value={activeDataset.row.kriterien}
+            errorText={activeDataset.valid.kriterien}
             type="text"
             multiLine
             fullWidth
