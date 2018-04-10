@@ -74,6 +74,7 @@ Web-Applikation zur Verwaltung des [Aktionsplans Flora der Fachstelle Naturschut
 - Beobachtungen Teilpopulationen zuordnen: In einer nach Abstand zu den Teilpopulationen geordneten Liste im Formular. Oder mit drag and drop auf der Karte
 - Aus einer Beobachtung eine neue Populationen und Teilpopulationen gründen und gleich die Beobachtung zuordnen. Mit einem einzigen Klick.
 - Alle Löschungen während einer Sitzung können aufgelistet und rückgängig gemacht werden
+- Mit hilfe von Dutzenden von Qualitätskontrollen die Qualität der Daten gewährleisten
 
 **Projektdaten verwalten:**
 
