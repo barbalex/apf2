@@ -30,34 +30,34 @@ const Ber = ({ store, tree }: { store: Object, tree: Object }) => {
         <FormTitle tree={tree} title="Bericht" />
         <FieldsContainer>
           <TextField
-            key={`${activeDataset.row.BerId}BerAutor`}
+            key={`${activeDataset.row.id}autor`}
             tree={tree}
             label="AutorIn"
-            fieldName="BerAutor"
-            value={activeDataset.row.BerAutor}
-            errorText={activeDataset.valid.BerAutor}
+            fieldName="autor"
+            value={activeDataset.row.autor}
+            errorText={activeDataset.valid.autor}
             type="text"
             updateProperty={store.updateProperty}
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
-            key={`${activeDataset.row.BerId}BerJahr`}
+            key={`${activeDataset.row.id}jahr`}
             tree={tree}
             label="Jahr"
-            fieldName="BerJahr"
-            value={activeDataset.row.BerJahr}
-            errorText={activeDataset.valid.BerJahr}
+            fieldName="jahr"
+            value={activeDataset.row.jahr}
+            errorText={activeDataset.valid.jahr}
             type="number"
             updateProperty={store.updateProperty}
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
-            key={`${activeDataset.row.BerId}BerTitel`}
+            key={`${activeDataset.row.id}titel`}
             tree={tree}
             label="Titel"
-            fieldName="BerTitel"
-            value={activeDataset.row.BerTitel}
-            errorText={activeDataset.valid.BerTitel}
+            fieldName="titel"
+            value={activeDataset.row.titel}
+            errorText={activeDataset.valid.titel}
             type="text"
             multiLine
             fullWidth
@@ -65,12 +65,12 @@ const Ber = ({ store, tree }: { store: Object, tree: Object }) => {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextFieldWithUrl
-            key={`${activeDataset.row.BerId}BerURL`}
+            key={`${activeDataset.row.id}url`}
             tree={tree}
             label="URL"
-            fieldName="BerURL"
-            value={activeDataset.row.BerURL}
-            errorText={activeDataset.valid.BerURL}
+            fieldName="url"
+            value={activeDataset.row.url}
+            errorText={activeDataset.valid.url}
             type="text"
             multiLine
             fullWidth

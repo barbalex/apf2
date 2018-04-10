@@ -2082,14 +2082,14 @@ SELECT
   apflora.ap."ApJahr" AS "AP Start im Jahr",
   apflora.ap_umsetzung_werte."DomainTxt" AS "AP Stand Umsetzung",
   apflora.adresse."AdrName" AS "AP verantwortlich",
-  apflora.ber."BerId" AS "Ber Id",
-  apflora.ber."ApArtId" AS "Ber ApId",
-  apflora.ber."BerAutor" AS "Ber Autor",
-  apflora.ber."BerJahr" AS "Ber Jahr",
-  apflora.ber."BerTitel" AS "Ber Titel",
-  apflora.ber."BerURL" AS "Ber URL",
-  apflora.ber."MutWann" AS "Ber MutWann",
-  apflora.ber."MutWer" AS "Ber MutWer"
+  apflora.ber.id AS "Ber Id",
+  apflora.ber.ap_id AS "Ber ApId",
+  apflora.ber.autor AS "Ber Autor",
+  apflora.ber.jahr AS "Ber Jahr",
+  apflora.ber.titel AS "Ber Titel",
+  apflora.ber.url AS "Ber URL",
+  apflora.ber.changed AS "Ber MutWann",
+  apflora.ber.changed_by AS "Ber MutWer"
 FROM
   ((((apflora.adb_eigenschaften
   RIGHT JOIN
@@ -2106,7 +2106,7 @@ FROM
     ON apflora.ap."ApBearb" = apflora.adresse."AdrId")
   RIGHT JOIN
     apflora.ber
-    ON apflora.ap."ApArtId" = apflora.ber."ApArtId"
+    ON apflora.ap."ApArtId" = apflora.ber.ap_id
 ORDER BY
   apflora.adb_eigenschaften."Artname";
 
@@ -2114,14 +2114,14 @@ DROP VIEW IF EXISTS apflora.v_ber_verwaist CASCADE;
 CREATE OR REPLACE VIEW apflora.v_ber_verwaist AS
 SELECT
   apflora.ap."ApArtId" AS "AP Id",
-  apflora.ber."BerId" AS "Ber Id",
-  apflora.ber."ApArtId" AS "Ber ApId",
-  apflora.ber."BerAutor" AS "Ber Autor",
-  apflora.ber."BerJahr" AS "Ber Jahr",
-  apflora.ber."BerTitel" AS "Ber Titel",
-  apflora.ber."BerURL" AS "Ber URL",
-  apflora.ber."MutWann" AS "Ber MutWann",
-  apflora.ber."MutWer" AS "Ber MutWer"
+  apflora.ber.id AS "Ber Id",
+  apflora.ber.ap_id AS "Ber ApId",
+  apflora.ber.autor AS "Ber Autor",
+  apflora.ber.jahr AS "Ber Jahr",
+  apflora.ber.titel AS "Ber Titel",
+  apflora.ber.url AS "Ber URL",
+  apflora.ber.changed AS "Ber MutWann",
+  apflora.ber.changed_by AS "Ber MutWer"
 FROM
   ((((apflora.adb_eigenschaften
   RIGHT JOIN
@@ -2138,7 +2138,7 @@ FROM
     ON apflora.ap."ApBearb" = apflora.adresse."AdrId")
   RIGHT JOIN
     apflora.ber
-    ON apflora.ap."ApArtId" = apflora.ber."ApArtId"
+    ON apflora.ap."ApArtId" = apflora.ber.ap_id
 WHERE
   apflora.ap."ApArtId" IS NULL
 ORDER BY

@@ -252,27 +252,27 @@ INSERT INTO apflora.projekt VALUES (1, 'AP Flora Kt. ZH');
 
 DROP TABLE IF EXISTS apflora.ber;
 CREATE TABLE apflora.ber (
-  "BerId" SERIAL PRIMARY KEY,
-  "ApArtId" integer DEFAULT NULL REFERENCES apflora.ap ("ApArtId") ON DELETE CASCADE ON UPDATE CASCADE,
-  "BerAutor" varchar(150) DEFAULT NULL,
-  "BerJahr" smallint DEFAULT NULL,
-  "BerTitel" text DEFAULT NULL,
-  "BerURL" text DEFAULT NULL,
-  "MutWann" date DEFAULT NOW(),
-  "MutWer" varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
+  id_old integer,
+  ap_id integer DEFAULT NULL REFERENCES apflora.ap ("ApArtId") ON DELETE CASCADE ON UPDATE CASCADE,
+  autor varchar(150) DEFAULT NULL,
+  jahr smallint DEFAULT NULL,
+  titel text DEFAULT NULL,
+  url text DEFAULT NULL,
+  changed date DEFAULT NOW(),
+  changed_by varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
 );
-COMMENT ON COLUMN apflora.ber."BerId" IS 'Primärschlüssel der Tabelle "ber"';
-COMMENT ON COLUMN apflora.ber."ApArtId" IS 'Zugehöriger Aktionsplan. Fremdschlüssel aus der Tabelle "ap"';
-COMMENT ON COLUMN apflora.ber."BerAutor" IS 'Autor des Berichts';
-COMMENT ON COLUMN apflora.ber."BerJahr" IS 'Jahr der Publikation';
-COMMENT ON COLUMN apflora.ber."BerTitel" IS 'Titel des Berichts';
-COMMENT ON COLUMN apflora.ber."BerURL" IS 'Link zum Bericht';
-COMMENT ON COLUMN apflora.ber."MutWann" IS 'Wann wurde der Datensatz zuletzt geändert?';
-COMMENT ON COLUMN apflora.ber."MutWer" IS 'Von wem wurde der Datensatz zuletzt geändert?';
-CREATE INDEX ON apflora.ber USING btree ("BerId");
-CREATE INDEX ON apflora.ber USING btree ("ApArtId");
-CREATE INDEX ON apflora.ber USING btree ("BerJahr");
-SELECT setval(pg_get_serial_sequence('apflora.ber', 'BerId'), coalesce(max("BerId"), 0) + 1, false) FROM apflora.ber;
+CREATE INDEX ON apflora.ber USING btree (id);
+CREATE INDEX ON apflora.ber USING btree (ap_id);
+CREATE INDEX ON apflora.ber USING btree (jahr);
+COMMENT ON COLUMN apflora.ber.id IS 'Primärschlüssel';
+COMMENT ON COLUMN apflora.ber.ap_id IS 'Zugehöriger Aktionsplan. Fremdschlüssel aus der Tabelle "ap"';
+COMMENT ON COLUMN apflora.ber.autor IS 'Autor des Berichts';
+COMMENT ON COLUMN apflora.ber.jahr IS 'Jahr der Publikation';
+COMMENT ON COLUMN apflora.ber.titel IS 'Titel des Berichts';
+COMMENT ON COLUMN apflora.ber.url IS 'Link zum Bericht';
+COMMENT ON COLUMN apflora.ber.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
+COMMENT ON COLUMN apflora.ber.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
 DROP TABLE IF EXISTS apflora.erfkrit;
 CREATE TABLE apflora.erfkrit (

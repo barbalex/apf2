@@ -156,8 +156,8 @@ export default [
     table: 'ber',
     label: 'Berichte',
     labelSingular: 'Bericht',
-    idField: 'BerId',
-    parentIdField: 'ApArtId',
+    idField: 'id',
+    parentIdField: 'ap_id',
   },
   {
     table: 'idealbiotop',

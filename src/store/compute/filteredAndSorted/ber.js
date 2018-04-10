@@ -8,7 +8,7 @@ export default (store: Object, tree: Object): Array<Object> => {
 
   // add label
   ber.forEach(el => {
-    el.label = `${el.BerJahr || '(kein Jahr)'}: ${el.BerTitel || '(kein Titel)'}`
+    el.label = `${el.jahr || '(kein Jahr)'}: ${el.titel || '(kein Titel)'}`
   })
   // filter by nodeLabelFilter
   const filterString = nodeLabelFilter.get('ber')
