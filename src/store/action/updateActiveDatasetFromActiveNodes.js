@@ -77,7 +77,9 @@ export default (store: Object, tree: Object): Object => {
       } else if (aEl.idealbiotopFolder) {
         activeDataset = {
           table: 'idealbiotop',
-          row: table.idealbiotop.get(aEl.ap),
+          row: Array.from(table.idealbiotop.values()).find(
+            o => o.ap_id === aEl.ap
+          ),
           folder: null,
         }
       } else if (aEl.pop) {

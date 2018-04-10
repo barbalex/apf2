@@ -163,8 +163,8 @@ export default [
     table: 'idealbiotop',
     label: 'Idealbiotop',
     labelSingular: 'Idealbiotop',
-    idField: 'IbApArtId',
-    parentIdField: 'IbApArtId',
+    idField: 'id',
+    parentIdField: 'ap_id',
   },
   {
     table: 'assozart',

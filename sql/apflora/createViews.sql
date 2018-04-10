@@ -1984,27 +1984,27 @@ SELECT
   apflora.adresse."AdrName" AS "AP verantwortlich",
   apflora.ap."MutWann" AS "AP Letzte Aenderung",
   apflora.ap."MutWer" AS "AP Letzte(r) Bearbeiter(in)",
-  apflora.idealbiotop."IbApArtId" AS "Ib ApArtId",
-  apflora.idealbiotop."IbErstelldatum" AS "Ib Erstelldatum",
-  apflora.idealbiotop."IbHoehenlage" AS "Ib Hoehenlage",
-  apflora.idealbiotop."IbRegion" AS "Ib Region",
-  apflora.idealbiotop."IbExposition" AS "Ib Exposition",
-  apflora.idealbiotop."IbBesonnung" AS "Ib Besonnung",
-  apflora.idealbiotop."IbHangneigung" AS "Ib Hangneigung",
-  apflora.idealbiotop."IbBodenTyp" AS "Ib Bodentyp",
-  apflora.idealbiotop."IbBodenKalkgehalt" AS "Ib Boden Kalkgehalt",
-  apflora.idealbiotop."IbBodenDurchlaessigkeit" AS "Ib Boden Durchlaessigkeit",
-  apflora.idealbiotop."IbBodenHumus" AS "Ib Boden Humus",
-  apflora.idealbiotop."IbBodenNaehrstoffgehalt" AS "Ib Boden Naehrstoffgehalt",
-  apflora.idealbiotop."IbWasserhaushalt" AS "Ib Wasserhaushalt",
-  apflora.idealbiotop."IbKonkurrenz" AS "Ib Konkurrenz",
-  apflora.idealbiotop."IbMoosschicht" AS "Ib Moosschicht",
-  apflora.idealbiotop."IbKrautschicht" AS "Ib Krautschicht",
-  apflora.idealbiotop."IbStrauchschicht" AS "Ib Strauchschicht",
-  apflora.idealbiotop."IbBaumschicht" AS "Ib Baumschicht",
-  apflora.idealbiotop."IbBemerkungen" AS "Ib Bemerkungen",
-  apflora.idealbiotop."MutWann" AS "Ib MutWann",
-  apflora.idealbiotop."MutWer" AS "Ib MutWer"
+  apflora.idealbiotop.ap_id AS "Ib ApArtId",
+  apflora.idealbiotop.erstelldatum AS "Ib Erstelldatum",
+  apflora.idealbiotop.hoehenlage AS "Ib Hoehenlage",
+  apflora.idealbiotop.region AS "Ib Region",
+  apflora.idealbiotop.exposition AS "Ib Exposition",
+  apflora.idealbiotop.besonnung AS "Ib Besonnung",
+  apflora.idealbiotop.hangneigung AS "Ib Hangneigung",
+  apflora.idealbiotop.boden_typ AS "Ib Bodentyp",
+  apflora.idealbiotop.boden_kalkgehalt AS "Ib Boden Kalkgehalt",
+  apflora.idealbiotop.boden_durchlaessigkeit AS "Ib Boden Durchlaessigkeit",
+  apflora.idealbiotop.boden_humus AS "Ib Boden Humus",
+  apflora.idealbiotop.boden_naehrstoffgehalt AS "Ib Boden Naehrstoffgehalt",
+  apflora.idealbiotop.wasserhaushalt AS "Ib Wasserhaushalt",
+  apflora.idealbiotop.konkurrenz AS "Ib Konkurrenz",
+  apflora.idealbiotop.moosschicht AS "Ib Moosschicht",
+  apflora.idealbiotop.krautschicht AS "Ib Krautschicht",
+  apflora.idealbiotop.strauchschicht AS "Ib Strauchschicht",
+  apflora.idealbiotop.baumschicht AS "Ib Baumschicht",
+  apflora.idealbiotop.bemerkungen AS "Ib Bemerkungen",
+  apflora.idealbiotop.changed AS "Ib MutWann",
+  apflora.idealbiotop.changed_by AS "Ib MutWer"
 FROM
   apflora.idealbiotop
   LEFT JOIN
@@ -2021,36 +2021,36 @@ FROM
     LEFT JOIN
       apflora.adresse
       ON apflora.ap."ApBearb" = apflora.adresse."AdrId")
-    ON apflora.idealbiotop."IbApArtId" = apflora.ap."ApArtId"
+    ON apflora.idealbiotop.ap_id = apflora.ap."ApArtId"
 ORDER BY
   apflora.adb_eigenschaften."Artname",
-  apflora.idealbiotop."IbErstelldatum";
+  apflora.idealbiotop.erstelldatum;
 
 DROP VIEW IF EXISTS apflora.v_idealbiotop_verwaist CASCADE;
 CREATE OR REPLACE VIEW apflora.v_idealbiotop_verwaist AS
 SELECT
   apflora.ap."ApArtId" AS "AP ApArtId",
-  apflora.idealbiotop."IbApArtId" AS "Ib ApArtId",
-  apflora.idealbiotop."IbErstelldatum" AS "Ib Erstelldatum",
-  apflora.idealbiotop."IbHoehenlage" AS "Ib Hoehenlage",
-  apflora.idealbiotop."IbRegion" AS "Ib Region",
-  apflora.idealbiotop."IbExposition" AS "Ib Exposition",
-  apflora.idealbiotop."IbBesonnung" AS "Ib Besonnung",
-  apflora.idealbiotop."IbHangneigung" AS "Ib Hangneigung",
-  apflora.idealbiotop."IbBodenTyp" AS "Ib Bodentyp",
-  apflora.idealbiotop."IbBodenKalkgehalt" AS "Ib Boden Kalkgehalt",
-  apflora.idealbiotop."IbBodenDurchlaessigkeit" AS "Ib Boden Durchlaessigkeit",
-  apflora.idealbiotop."IbBodenHumus" AS "Ib Boden Humus",
-  apflora.idealbiotop."IbBodenNaehrstoffgehalt" AS "Ib Boden Naehrstoffgehalt",
-  apflora.idealbiotop."IbWasserhaushalt" AS "Ib Wasserhaushalt",
-  apflora.idealbiotop."IbKonkurrenz" AS "Ib Konkurrenz",
-  apflora.idealbiotop."IbMoosschicht" AS "Ib Moosschicht",
-  apflora.idealbiotop."IbKrautschicht" AS "Ib Krautschicht",
-  apflora.idealbiotop."IbStrauchschicht" AS "Ib Strauchschicht",
-  apflora.idealbiotop."IbBaumschicht" AS "Ib Baumschicht",
-  apflora.idealbiotop."IbBemerkungen" AS "Ib Bemerkungen",
-  apflora.idealbiotop."MutWann" AS "Ib MutWann",
-  apflora.idealbiotop."MutWer" AS "Ib MutWer"
+  apflora.idealbiotop.ap_id AS "Ib ApArtId",
+  apflora.idealbiotop.erstelldatum AS "Ib Erstelldatum",
+  apflora.idealbiotop.hoehenlage AS "Ib Hoehenlage",
+  apflora.idealbiotop.region AS "Ib Region",
+  apflora.idealbiotop.exposition AS "Ib Exposition",
+  apflora.idealbiotop.besonnung AS "Ib Besonnung",
+  apflora.idealbiotop.hangneigung AS "Ib Hangneigung",
+  apflora.idealbiotop.boden_typ AS "Ib Bodentyp",
+  apflora.idealbiotop.boden_kalkgehalt AS "Ib Boden Kalkgehalt",
+  apflora.idealbiotop.boden_durchlaessigkeit AS "Ib Boden Durchlaessigkeit",
+  apflora.idealbiotop.boden_humus AS "Ib Boden Humus",
+  apflora.idealbiotop.boden_naehrstoffgehalt AS "Ib Boden Naehrstoffgehalt",
+  apflora.idealbiotop.wasserhaushalt AS "Ib Wasserhaushalt",
+  apflora.idealbiotop.konkurrenz AS "Ib Konkurrenz",
+  apflora.idealbiotop.moosschicht AS "Ib Moosschicht",
+  apflora.idealbiotop.krautschicht AS "Ib Krautschicht",
+  apflora.idealbiotop.strauchschicht AS "Ib Strauchschicht",
+  apflora.idealbiotop.baumschicht AS "Ib Baumschicht",
+  apflora.idealbiotop.bemerkungen AS "Ib Bemerkungen",
+  apflora.idealbiotop.changed AS "Ib MutWann",
+  apflora.idealbiotop.changed_by AS "Ib MutWer"
 FROM
   apflora.idealbiotop
   LEFT JOIN
@@ -2067,11 +2067,11 @@ FROM
     LEFT JOIN
       apflora.adresse
       ON apflora.ap."ApBearb" = apflora.adresse."AdrId")
-    ON apflora.idealbiotop."IbApArtId" = apflora.ap."ApArtId"
+    ON apflora.idealbiotop.ap_id = apflora.ap."ApArtId"
 WHERE
   apflora.ap."ApArtId" IS NULL
 ORDER BY
-  apflora.idealbiotop."IbErstelldatum";
+  apflora.idealbiotop.erstelldatum;
 
 DROP VIEW IF EXISTS apflora.v_ber CASCADE;
 CREATE OR REPLACE VIEW apflora.v_ber AS

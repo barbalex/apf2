@@ -48,7 +48,7 @@ const fetchDataForOpenNodes = (
   const openNodesToUse = difference(openNodes, uniqNodesToRemove)
 
   openNodesToUse.forEach(node => {
-    const activeNodes = getActiveNodes(node)
+    const activeNodes = getActiveNodes(node, store)
     const fetchingFromActiveElements = {
       exporte() {
         store.fetchTableByParentId('ap', activeNodes.projekt)

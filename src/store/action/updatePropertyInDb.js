@@ -46,7 +46,6 @@ export default async (
       )
     )
   }
-  console.log('updatePropertyInDb: values:', { key, valuePassed })
   const tabelleId = row[idField]
   if (!tabelleId && tabelleId !== 0) {
     return store.listError(

@@ -53,24 +53,24 @@ const Idealbiotop = ({
         <FormTitle tree={tree} title="Idealbiotop" />
         <FieldsContainer data-width={width}>
           <DateFieldWithPicker
-            key={`${activeDataset.row.IbApArtId}IbErstelldatum`}
+            key={`${activeDataset.row.id}erstelldatum`}
             tree={tree}
             label="Erstelldatum"
-            fieldName="IbErstelldatum"
-            value={activeDataset.row.IbErstelldatum}
-            errorText={activeDataset.valid.IbErstelldatum}
+            fieldName="erstelldatum"
+            value={activeDataset.row.erstelldatum}
+            errorText={activeDataset.valid.erstelldatum}
             fullWidth
             updateProperty={store.updateProperty}
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <Section>Lage</Section>
           <TextField
-            key={`${activeDataset.row.IbApArtId}IbHoehenlage`}
+            key={`${activeDataset.row.id}hoehenlage`}
             tree={tree}
             label="Höhe"
-            fieldName="IbHoehenlage"
-            value={activeDataset.row.IbHoehenlage}
-            errorText={activeDataset.valid.IbHoehenlage}
+            fieldName="hoehenlage"
+            value={activeDataset.row.hoehenlage}
+            errorText={activeDataset.valid.hoehenlage}
             type="text"
             multiLine
             fullWidth
@@ -78,12 +78,12 @@ const Idealbiotop = ({
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
-            key={`${activeDataset.row.IbApArtId}IbRegion`}
+            key={`${activeDataset.row.id}region`}
             tree={tree}
             label="Region"
-            fieldName="IbRegion"
-            value={activeDataset.row.IbRegion}
-            errorText={activeDataset.valid.IbRegion}
+            fieldName="region"
+            value={activeDataset.row.region}
+            errorText={activeDataset.valid.region}
             type="text"
             multiLine
             fullWidth
@@ -91,12 +91,12 @@ const Idealbiotop = ({
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
-            key={`${activeDataset.row.IbApArtId}IbExposition`}
+            key={`${activeDataset.row.id}exposition`}
             tree={tree}
             label="Exposition"
-            fieldName="IbExposition"
-            value={activeDataset.row.IbExposition}
-            errorText={activeDataset.valid.IbExposition}
+            fieldName="exposition"
+            value={activeDataset.row.exposition}
+            errorText={activeDataset.valid.exposition}
             type="text"
             multiLine
             fullWidth
@@ -104,12 +104,12 @@ const Idealbiotop = ({
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
-            key={`${activeDataset.row.IbApArtId}IbBesonnung`}
+            key={`${activeDataset.row.id}besonnung`}
             tree={tree}
             label="Besonnung"
-            fieldName="IbBesonnung"
-            value={activeDataset.row.IbBesonnung}
-            errorText={activeDataset.valid.IbBesonnung}
+            fieldName="besonnung"
+            value={activeDataset.row.besonnung}
+            errorText={activeDataset.valid.besonnung}
             type="text"
             multiLine
             fullWidth
@@ -117,12 +117,12 @@ const Idealbiotop = ({
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
-            key={`${activeDataset.row.IbApArtId}IbHangneigung`}
+            key={`${activeDataset.row.id}hangneigung`}
             tree={tree}
             label="Hangneigung"
-            fieldName="IbHangneigung"
-            value={activeDataset.row.IbHangneigung}
-            errorText={activeDataset.valid.IbHangneigung}
+            fieldName="hangneigung"
+            value={activeDataset.row.hangneigung}
+            errorText={activeDataset.valid.hangneigung}
             type="text"
             multiLine
             fullWidth
@@ -131,12 +131,12 @@ const Idealbiotop = ({
           />
           <Section>Boden</Section>
           <TextField
-            key={`${activeDataset.row.IbApArtId}IbBodenTyp`}
+            key={`${activeDataset.row.id}boden_typ`}
             tree={tree}
             label="Typ"
-            fieldName="IbBodenTyp"
-            value={activeDataset.row.IbBodenTyp}
-            errorText={activeDataset.valid.IbBodenTyp}
+            fieldName="boden_typ"
+            value={activeDataset.row.boden_typ}
+            errorText={activeDataset.valid.boden_typ}
             type="text"
             multiLine
             fullWidth
@@ -144,12 +144,12 @@ const Idealbiotop = ({
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
-            key={`${activeDataset.row.IbApArtId}IbBodenKalkgehalt`}
+            key={`${activeDataset.row.id}boden_kalkgehalt`}
             tree={tree}
             label="Kalkgehalt"
-            fieldName="IbBodenKalkgehalt"
-            value={activeDataset.row.IbBodenKalkgehalt}
-            errorText={activeDataset.valid.IbBodenKalkgehalt}
+            fieldName="boden_kalkgehalt"
+            value={activeDataset.row.boden_kalkgehalt}
+            errorText={activeDataset.valid.boden_kalkgehalt}
             type="text"
             multiLine
             fullWidth
@@ -157,12 +157,12 @@ const Idealbiotop = ({
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
-            key={`${activeDataset.row.IbApArtId}IbBodenDurchlaessigkeit`}
+            key={`${activeDataset.row.id}boden_durchlaessigkeit`}
             tree={tree}
             label="Durchlässigkeit"
-            fieldName="IbBodenDurchlaessigkeit"
-            value={activeDataset.row.IbBodenDurchlaessigkeit}
-            errorText={activeDataset.valid.IbBodenDurchlaessigkeit}
+            fieldName="boden_durchlaessigkeit"
+            value={activeDataset.row.boden_durchlaessigkeit}
+            errorText={activeDataset.valid.boden_durchlaessigkeit}
             type="text"
             multiLine
             fullWidth
@@ -170,12 +170,12 @@ const Idealbiotop = ({
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
-            key={`${activeDataset.row.IbApArtId}IbBodenHumus`}
+            key={`${activeDataset.row.id}boden_humus`}
             tree={tree}
             label="Humus"
-            fieldName="IbBodenHumus"
-            value={activeDataset.row.IbBodenHumus}
-            errorText={activeDataset.valid.IbBodenHumus}
+            fieldName="boden_humus"
+            value={activeDataset.row.boden_humus}
+            errorText={activeDataset.valid.boden_humus}
             type="text"
             multiLine
             fullWidth
@@ -183,12 +183,12 @@ const Idealbiotop = ({
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
-            key={`${activeDataset.row.IbApArtId}IbBodenNaehrstoffgehalt`}
+            key={`${activeDataset.row.id}boden_naehrstoffgehalt`}
             tree={tree}
             label="Nährstoffgehalt"
-            fieldName="IbBodenNaehrstoffgehalt"
-            value={activeDataset.row.IbBodenNaehrstoffgehalt}
-            errorText={activeDataset.valid.IbBodenNaehrstoffgehalt}
+            fieldName="boden_naehrstoffgehalt"
+            value={activeDataset.row.boden_naehrstoffgehalt}
+            errorText={activeDataset.valid.boden_naehrstoffgehalt}
             type="text"
             multiLine
             fullWidth
@@ -196,12 +196,12 @@ const Idealbiotop = ({
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
-            key={`${activeDataset.row.IbApArtId}IbWasserhaushalt`}
+            key={`${activeDataset.row.id}wasserhaushalt`}
             tree={tree}
             label="Wasserhaushalt"
-            fieldName="IbWasserhaushalt"
-            value={activeDataset.row.IbWasserhaushalt}
-            errorText={activeDataset.valid.IbWasserhaushalt}
+            fieldName="wasserhaushalt"
+            value={activeDataset.row.wasserhaushalt}
+            errorText={activeDataset.valid.wasserhaushalt}
             type="text"
             multiLine
             fullWidth
@@ -210,12 +210,12 @@ const Idealbiotop = ({
           />
           <Section>Vegetation</Section>
           <TextField
-            key={`${activeDataset.row.IbApArtId}IbKonkurrenz`}
+            key={`${activeDataset.row.id}konkurrenz`}
             tree={tree}
             label="Konkurrenz"
-            fieldName="IbKonkurrenz"
-            value={activeDataset.row.IbKonkurrenz}
-            errorText={activeDataset.valid.IbKonkurrenz}
+            fieldName="konkurrenz"
+            value={activeDataset.row.konkurrenz}
+            errorText={activeDataset.valid.konkurrenz}
             type="text"
             multiLine
             fullWidth
@@ -223,12 +223,12 @@ const Idealbiotop = ({
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
-            key={`${activeDataset.row.IbApArtId}IbMoosschicht`}
+            key={`${activeDataset.row.id}moosschicht`}
             tree={tree}
             label="Moosschicht"
-            fieldName="IbMoosschicht"
-            value={activeDataset.row.IbMoosschicht}
-            errorText={activeDataset.valid.IbMoosschicht}
+            fieldName="moosschicht"
+            value={activeDataset.row.moosschicht}
+            errorText={activeDataset.valid.moosschicht}
             type="text"
             multiLine
             fullWidth
@@ -236,12 +236,12 @@ const Idealbiotop = ({
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
-            key={`${activeDataset.row.IbApArtId}Krautschicht`}
+            key={`${activeDataset.row.id}Krautschicht`}
             tree={tree}
             label="Krautschicht"
-            fieldName="IbKrautschicht"
-            value={activeDataset.row.IbKrautschicht}
-            errorText={activeDataset.valid.IbKrautschicht}
+            fieldName="krautschicht"
+            value={activeDataset.row.krautschicht}
+            errorText={activeDataset.valid.krautschicht}
             type="text"
             multiLine
             fullWidth
@@ -249,12 +249,12 @@ const Idealbiotop = ({
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
-            key={`${activeDataset.row.IbApArtId}Strauchschicht`}
+            key={`${activeDataset.row.id}Strauchschicht`}
             tree={tree}
             label="Strauchschicht"
-            fieldName="IbStrauchschicht"
-            value={activeDataset.row.IbStrauchschicht}
-            errorText={activeDataset.valid.IbStrauchschicht}
+            fieldName="strauchschicht"
+            value={activeDataset.row.strauchschicht}
+            errorText={activeDataset.valid.strauchschicht}
             type="text"
             multiLine
             fullWidth
@@ -262,12 +262,12 @@ const Idealbiotop = ({
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
-            key={`${activeDataset.row.IbApArtId}IbBaumschicht`}
+            key={`${activeDataset.row.id}baumschicht`}
             tree={tree}
             label="Baumschicht"
-            fieldName="IbBaumschicht"
-            value={activeDataset.row.IbBaumschicht}
-            errorText={activeDataset.valid.IbBaumschicht}
+            fieldName="baumschicht"
+            value={activeDataset.row.baumschicht}
+            errorText={activeDataset.valid.baumschicht}
             type="text"
             multiLine
             fullWidth
@@ -275,12 +275,12 @@ const Idealbiotop = ({
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
-            key={`${activeDataset.row.IbApArtId}IbBemerkungen`}
+            key={`${activeDataset.row.id}bemerkungen`}
             tree={tree}
             label="Bemerkungen"
-            fieldName="IbBemerkungen"
-            value={activeDataset.row.IbBemerkungen}
-            errorText={activeDataset.valid.IbBemerkungen}
+            fieldName="bemerkungen"
+            value={activeDataset.row.bemerkungen}
+            errorText={activeDataset.valid.bemerkungen}
             type="text"
             multiLine
             fullWidth

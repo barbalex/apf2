@@ -30,7 +30,7 @@ export default (store: Object, tree: Object): void => {
       'setActiveNodeArray',
       nodeArray => (tree.activeNodeArray = nodeArray)
     ),
-    activeNodes: computed(() => getActiveNodes(tree.activeNodeArray), {
+    activeNodes: computed(() => getActiveNodes(tree.activeNodeArray, store), {
       name: 'activeNodes',
     }),
     activeNode: computed(

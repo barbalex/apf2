@@ -171,8 +171,8 @@ DROP TRIGGER IF EXISTS idealbiotop_on_update_set_mut ON apflora.idealbiotop;
 DROP FUNCTION IF EXISTS idealbiotop_on_update_set_mut();
 CREATE FUNCTION idealbiotop_on_update_set_mut() RETURNS trigger AS $idealbiotop_on_update_set_mut$
   BEGIN
-    NEW."MutWer" = current_setting('request.jwt.claim.username', true);
-    NEW."MutWann" = NOW();
+    NEW.changed_by = current_setting('request.jwt.claim.username', true);
+    NEW.changed = NOW();
     RETURN NEW;
   END;
 $idealbiotop_on_update_set_mut$ LANGUAGE plpgsql;

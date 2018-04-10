@@ -305,50 +305,53 @@ CREATE INDEX ON apflora.gemeinde USING btree ("GmdName");
 
 DROP TABLE IF EXISTS apflora.idealbiotop;
 CREATE TABLE apflora.idealbiotop (
-  "IbApArtId" integer UNIQUE DEFAULT '0' REFERENCES apflora.ap ("IbApArtId") ON DELETE CASCADE ON UPDATE CASCADE,
-  "IbErstelldatum" date DEFAULT NULL,
-  "IbHoehenlage" text,
-  "IbRegion" text,
-  "IbExposition" text,
-  "IbBesonnung" text,
-  "IbHangneigung" text,
-  "IbBodenTyp" text,
-  "IbBodenKalkgehalt" text,
-  "IbBodenDurchlaessigkeit" text,
-  "IbBodenHumus" text,
-  "IbBodenNaehrstoffgehalt" text,
-  "IbWasserhaushalt" text,
-  "IbKonkurrenz" text,
-  "IbMoosschicht" text,
-  "IbKrautschicht" text,
-  "IbStrauchschicht" text,
-  "IbBaumschicht" text,
-  "IbBemerkungen" text,
-  "MutWann" date DEFAULT NOW(),
-  "MutWer" varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
+  ap_id integer UNIQUE DEFAULT NULL REFERENCES apflora.ap ("ApArtId") ON DELETE CASCADE ON UPDATE CASCADE,
+  erstelldatum date DEFAULT NULL,
+  hoehenlage text,
+  region text,
+  exposition text,
+  besonnung text,
+  hangneigung text,
+  boden_typ text,
+  boden_kalkgehalt text,
+  boden_durchlaessigkeit text,
+  boden_humus text,
+  boden_naehrstoffgehalt text,
+  wasserhaushalt text,
+  konkurrenz text,
+  moosschicht text,
+  krautschicht text,
+  strauchschicht text,
+  baumschicht text,
+  bemerkungen text,
+  changed date DEFAULT NOW(),
+  changed_by varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
 );
-CREATE INDEX ON apflora.idealbiotop USING btree ("IbApArtId");
-COMMENT ON COLUMN apflora.idealbiotop."IbApArtId" IS 'Primärschlüssel der Tabelle "idealbiotop". Gleichzeitig Fremdschlüssel aus der Tabelle "ap (1:1-Beziehung)';
-COMMENT ON COLUMN apflora.idealbiotop."IbErstelldatum" IS 'Erstelldatum';
-COMMENT ON COLUMN apflora.idealbiotop."IbHoehenlage" IS 'Höhenlage';
-COMMENT ON COLUMN apflora.idealbiotop."IbRegion" IS 'Region';
-COMMENT ON COLUMN apflora.idealbiotop."IbExposition" IS 'Exposition';
-COMMENT ON COLUMN apflora.idealbiotop."IbBesonnung" IS 'Besonnung';
-COMMENT ON COLUMN apflora.idealbiotop."IbHangneigung" IS 'Hangneigung';
-COMMENT ON COLUMN apflora.idealbiotop."IbBodenTyp" IS 'Bodentyp';
-COMMENT ON COLUMN apflora.idealbiotop."IbBodenKalkgehalt" IS 'Kalkgehalt im Boden';
-COMMENT ON COLUMN apflora.idealbiotop."IbBodenDurchlaessigkeit" IS 'Bodendurchlässigkeit';
-COMMENT ON COLUMN apflora.idealbiotop."IbBodenHumus" IS 'Bodenhumusgehalt';
-COMMENT ON COLUMN apflora.idealbiotop."IbBodenNaehrstoffgehalt" IS 'Bodennährstoffgehalt';
-COMMENT ON COLUMN apflora.idealbiotop."IbWasserhaushalt" IS 'Wasserhaushalt';
-COMMENT ON COLUMN apflora.idealbiotop."IbKonkurrenz" IS 'Konkurrenz';
-COMMENT ON COLUMN apflora.idealbiotop."IbMoosschicht" IS 'Moosschicht';
-COMMENT ON COLUMN apflora.idealbiotop."IbKrautschicht" IS 'Krautschicht';
-COMMENT ON COLUMN apflora.idealbiotop."IbStrauchschicht" IS 'Strauchschicht';
-COMMENT ON COLUMN apflora.idealbiotop."IbBaumschicht" IS 'Baumschicht';
-COMMENT ON COLUMN apflora.idealbiotop."IbBemerkungen" IS 'Bemerkungen';
-COMMENT ON COLUMN apflora.idealbiotop."MutWann" IS 'Wann wurde der Datensatz zuletzt verändert?';
-COMMENT ON COLUMN apflora.idealbiotop."MutWer" IS 'Wer hat den Datensatz zuletzt verändert?';
+CREATE INDEX ON apflora.idealbiotop USING btree (id);
+CREATE INDEX ON apflora.idealbiotop USING btree (ap_id);
+COMMENT ON COLUMN apflora.idealbiotop.id IS 'Primärschlüssel';
+COMMENT ON COLUMN apflora.idealbiotop.ap_id IS 'Fremdschlüssel aus der Tabelle "ap (1:1-Beziehung)';
+COMMENT ON COLUMN apflora.idealbiotop.erstelldatum IS 'Erstelldatum';
+COMMENT ON COLUMN apflora.idealbiotop.hoehenlage IS 'Höhenlage';
+COMMENT ON COLUMN apflora.idealbiotop.region IS 'Region';
+COMMENT ON COLUMN apflora.idealbiotop.exposition IS 'Exposition';
+COMMENT ON COLUMN apflora.idealbiotop.besonnung IS 'Besonnung';
+COMMENT ON COLUMN apflora.idealbiotop.hangneigung IS 'Hangneigung';
+COMMENT ON COLUMN apflora.idealbiotop.boden_typ IS 'Bodentyp';
+COMMENT ON COLUMN apflora.idealbiotop.boden_kalkgehalt IS 'Kalkgehalt im Boden';
+COMMENT ON COLUMN apflora.idealbiotop.boden_durchlaessigkeit IS 'Bodendurchlässigkeit';
+COMMENT ON COLUMN apflora.idealbiotop.boden_humus IS 'Bodenhumusgehalt';
+COMMENT ON COLUMN apflora.idealbiotop.boden_naehrstoffgehalt IS 'Bodennährstoffgehalt';
+COMMENT ON COLUMN apflora.idealbiotop.wasserhaushalt IS 'Wasserhaushalt';
+COMMENT ON COLUMN apflora.idealbiotop.konkurrenz IS 'Konkurrenz';
+COMMENT ON COLUMN apflora.idealbiotop.moosschicht IS 'Moosschicht';
+COMMENT ON COLUMN apflora.idealbiotop.krautschicht IS 'Krautschicht';
+COMMENT ON COLUMN apflora.idealbiotop.strauchschicht IS 'Strauchschicht';
+COMMENT ON COLUMN apflora.idealbiotop.baumschicht IS 'Baumschicht';
+COMMENT ON COLUMN apflora.idealbiotop.bemerkungen IS 'Bemerkungen';
+COMMENT ON COLUMN apflora.idealbiotop.changed IS 'Wann wurde der Datensatz zuletzt verändert?';
+COMMENT ON COLUMN apflora.idealbiotop.changed_by IS 'Wer hat den Datensatz zuletzt verändert?';
 
 DROP TABLE IF EXISTS apflora.pop;
 CREATE TABLE apflora.pop (

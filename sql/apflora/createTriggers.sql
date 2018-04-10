@@ -126,7 +126,7 @@ DROP FUNCTION IF EXISTS apflora.ap_insert_add_idealbiotop();
 CREATE FUNCTION apflora.ap_insert_add_idealbiotop() RETURNS trigger AS $ap_insert_add_idealbiotop$
 BEGIN
   INSERT INTO
-    apflora.idealbiotop ("IbApArtId")
+    apflora.idealbiotop (ap_id)
   VALUES (NEW."ApArtId");
   RETURN NEW;
 END;
@@ -137,11 +137,11 @@ CREATE TRIGGER ap_insert_add_idealbiotop AFTER INSERT ON apflora.ap
 
 -- in case this trigger was not working
 -- add idealbiotop where they are missing
-insert into apflora.idealbiotop ("IbApArtId")
+insert into apflora.idealbiotop (ap_id)
 select apflora.ap."ApArtId" from apflora.ap
 left join apflora.idealbiotop
-on apflora.idealbiotop."IbApArtId" = apflora.ap."ApArtId"
-where apflora.idealbiotop."IbApArtId" is null;
+on apflora.idealbiotop.ap_id = apflora.ap."ApArtId"
+where apflora.idealbiotop.ap_id is null;
 
 -- when ap is inserted
 -- ensure beobart is created too
