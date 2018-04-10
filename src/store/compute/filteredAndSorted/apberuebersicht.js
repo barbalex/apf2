@@ -11,12 +11,12 @@ export default (store: Object, tree: Object): Array<Object> => {
   const filterString = nodeLabelFilter.get('apberuebersicht')
   if (filterString) {
     apberuebersicht = apberuebersicht.filter(p =>
-      p.JbuJahr.toString().includes(filterString),
+      p.jahr.toString().includes(filterString)
     )
   }
 
   // sort
-  apberuebersicht = sortBy(apberuebersicht, 'JbuJahr')
+  apberuebersicht = sortBy(apberuebersicht, 'jahr')
 
   return apberuebersicht
 }

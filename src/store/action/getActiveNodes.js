@@ -18,7 +18,7 @@ export default (activeNodeArray: Array<mixed>): Object => {
     false
   const apberuebersicht =
     apberuebersichtFolder && activeNodeArray.length > 3
-      ? parseInt(activeNodeArray[3], 10)
+      ? activeNodeArray[3]
       : null
   const apFolder =
     (projekt && activeNodeArray.length > 2 && activeNodeArray[2] === 'Arten') ||

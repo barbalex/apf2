@@ -9,7 +9,7 @@ export default (store: Object, tree: Object, projId: number): Array<Object> => {
 
   // build label
   const apberuebersichtLength = tree.filteredAndSorted.apberuebersicht.filter(
-    n => n.ProjId === projId,
+    n => n.proj_id === projId
   ).length
   let message = apberuebersichtLength
   if (store.table.apberuebersichtLoading) {

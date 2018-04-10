@@ -843,8 +843,8 @@ SELECT
   apflora.apber."JBerDatum",
   apflora.apber."JBerBearb",
   concat(apflora.adresse."AdrName", ', ', apflora.adresse."AdrAdresse") AS "Bearbeiter",
-  apflora.apberuebersicht."JbuJahr",
-  apflora.apberuebersicht."JbuBemerkungen",
+  apflora.apberuebersicht.jahr,
+  apflora.apberuebersicht.bemerkungen,
   apflora.v_erstemassnproap."MinvonTPopMassnJahr" AS "ErsteMassnahmeImJahr"
 FROM
   (apflora.adb_eigenschaften
@@ -861,7 +861,7 @@ FROM
       ON apflora.apber."JBerBearb" = apflora.adresse."AdrId")
     LEFT JOIN
       apflora.apberuebersicht
-      ON apflora.apber."JBerJahr" = apflora.apberuebersicht."JbuJahr")
+      ON apflora.apber."JBerJahr" = apflora.apberuebersicht.jahr)
     INNER JOIN
       apflora._variable
       ON apflora.apber."JBerJahr" = apflora._variable."JBerJahr")

@@ -173,30 +173,25 @@ SELECT setval(pg_get_serial_sequence('apflora.apber', 'JBerId'), coalesce(max("J
 
 DROP TABLE IF EXISTS apflora.apberuebersicht;
 CREATE TABLE apflora.apberuebersicht (
-  id SERIAL PRIMARY KEY,
-  "ProjId" integer DEFAULT 1,
-  "JbuJahr" smallint,
-  "JbuBemerkungen" text,
-  "MutWann" date DEFAULT NOW(),
-  "MutWer" varchar(20) DEFAULT current_setting('request.jwt.claim.username', true),
-  unique ("ProjId", "JbuJahr")
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
+  id_old integer,
+  proj_id integer DEFAULT 1,
+  jahr smallint,
+  bemerkungen text,
+  changed date DEFAULT NOW(),
+  changed_by varchar(20) DEFAULT current_setting('request.jwt.claim.username', true),
+  unique (proj_id, jahr)
 );
-COMMENT ON COLUMN apflora.apberuebersicht."ProjId" IS 'Zugehöriges Projekt. Zusammen mit JbuJahr Primärschlüssel der Tabelle "apberuebersicht"';
-COMMENT ON COLUMN apflora.apberuebersicht."JbuJahr" IS 'Berichtsjahr. Zusammen mit ProjId Primärschlüssel der Tabelle "apberuebersicht"';
-COMMENT ON COLUMN apflora.apberuebersicht."JbuBemerkungen" IS 'Bemerkungen zur Artübersicht';
-COMMENT ON COLUMN apflora.apberuebersicht."MutWann" IS 'Wann wurde der Datensatz zuletzt geändert?';
-COMMENT ON COLUMN apflora.apberuebersicht."MutWer" IS 'Von wem wurde der Datensatz zuletzt geändert?';
-ALTER TABLE apflora.apberuebersicht ADD CONSTRAINT apberuebersicht_proj_jahr_pk PRIMARY KEY ("ProjId", "JbuJahr");
 CREATE INDEX ON apflora.apberuebersicht USING btree (id);
-CREATE INDEX ON apflora.apberuebersicht USING btree ("JbuJahr");
-
--- once:
-DROP FUNCTION IF EXISTS apberuebersicht_insert_set_year();
-DROP TRIGGER IF EXISTS apberuebersicht_insert_set_year ON apflora.apberuebersicht;
-ALTER TABLE apflora.apberuebersicht drop CONSTRAINT if exists apberuebersicht_proj_jahr_pk;
-ALTER TABLE apflora.apberuebersicht add unique ("ProjId", "JbuJahr");
-ALTER TABLE apflora.apberuebersicht add column id SERIAL PRIMARY KEY;
-ALTER TABLE apflora.apberuebersicht ALTER COLUMN "JbuJahr" DROP NOT NULL;
+CREATE INDEX ON apflora.apberuebersicht USING btree (jahr);
+CREATE INDEX ON apflora.apberuebersicht USING btree (proj_id);
+COMMENT ON COLUMN apflora.apberuebersicht.id IS 'Primärschlüssel';
+COMMENT ON COLUMN apflora.apberuebersicht.id_old IS 'frühere id';
+COMMENT ON COLUMN apflora.apberuebersicht.proj_id IS 'Zugehöriges Projekt. Zusammen mit jahr eindeutig';
+COMMENT ON COLUMN apflora.apberuebersicht.jahr IS 'Berichtsjahr. Zusammen mit proj_id eindeutig';
+COMMENT ON COLUMN apflora.apberuebersicht.bemerkungen IS 'Bemerkungen zur Artübersicht';
+COMMENT ON COLUMN apflora.apberuebersicht.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
+COMMENT ON COLUMN apflora.apberuebersicht.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
 DROP TABLE IF EXISTS apflora.assozart;
 CREATE TABLE apflora.assozart (

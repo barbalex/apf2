@@ -9,16 +9,16 @@ export default (store: Object, tree: Object, projId: number): Array<Object> => {
 
   // map through all projekt and create array of nodes
   return tree.filteredAndSorted.apberuebersicht
-    .filter(n => n.ProjId === projId)
+    .filter(n => n.proj_id === projId)
     .map((el, index) => ({
       nodeType: 'table',
       menuType: 'apberuebersicht',
-      id: el.JbuJahr,
-      parentId: el.ProjId,
-      urlLabel: el.JbuJahr,
-      label: el.JbuJahr,
-      url: ['Projekte', el.ProjId, 'AP-Berichte', el.id],
-      sort: [projIndex, 2, el.JbuJahr],
+      id: el.id,
+      parentId: el.proj_id,
+      urlLabel: el.jahr,
+      label: el.jahr,
+      url: ['Projekte', el.proj_id, 'AP-Berichte', el.id],
+      sort: [projIndex, 2, el.jahr],
       hasChildren: false,
     }))
 }

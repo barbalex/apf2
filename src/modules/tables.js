@@ -150,7 +150,7 @@ export default [
     label: 'AP-Berichte',
     labelSingular: 'AP-Bericht',
     idField: 'id',
-    parentIdField: 'ProjId',
+    parentIdField: 'proj_id',
   },
   {
     table: 'ber',
