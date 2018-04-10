@@ -18,7 +18,7 @@ Web-Applikation zur Verwaltung des [Aktionsplans Flora der Fachstelle Naturschut
 **Aktionspläne verwalten:**
 
 - Aktionspläne, Populationen und Teilpopulationen beschreiben
-- Ideale Umweltfaktoren ("Idealbiotop") und assoziierte Arten beschreiben
+- Ideale Umweltfaktoren und assoziierte Arten beschreiben
 - Ziele und Erfolgskriterien bestimmen
 - Kontrollen der Teilpopulationen und...
 - ...Massnahmen zur Förderung dokumentieren
@@ -58,6 +58,7 @@ Web-Applikation zur Verwaltung des [Aktionsplans Flora der Fachstelle Naturschut
 - Über einen dynamisch aufgebauten Strukturbaum navigieren und dabei die Übersicht über die komplexe Hierarchie behalten
 - Rechts neben dem Baum die Daten der gewählten Struktur bearbeiten
 - Strukturbaum, Daten-Formular und Karte beliebig ein- und ausblenden und in der Grösse variieren
+- Sich mit [Videos](https://www.youtube.com/playlist?list=PLTz8Xt5SOQPS-dbvpJ_DrB4-o3k3yj09J) anleiten lassen
 
 **Sich anleiten lassen:**
 
