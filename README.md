@@ -31,15 +31,14 @@ Web-Applikation zur Verwaltung des [Aktionsplans Flora der Fachstelle Naturschut
 - Eigene Beobachtungen aus [EvAB](http://www.aln.zh.ch/internet/baudirektion/aln/de/naturschutz/naturschutzdaten/tools/evab.html#a-content) (vorgängig mit Access uploaden)
 - Grundsätzlich alle verfügbaren Beobachtungen, unabhängig von ihrer Datenstruktur
 
-
 **Auf Karten darstellen:**
 
-- Aktionspläne, Populationen, Teilpopulationen auf Luftbild, Übersichtsplan und Landeskarten anzeigen und diverse Ebenen einblenden (Bundesinventare, Kantonale Inventare, Parzellen)
+- Aktionspläne, Populationen, Teilpopulationen und Beobachtungen auf Luftbild, Übersichtsplan und Landeskarten anzeigen
+- Diverse Ebenen einblenden (z.B. Bundesinventare, Kantonale Inventare, Parzellen)
 - Beobachtungen durch Ziehen mit der Maus Teilpopulationen zuordnen
 - Teilpopulationen verorten
 - Teilpopulationen und Beobachtungen im GIS-Browser des Kt. Zürich und auf geo.admin.ch anzeigen
-- Populationen und Teilpopulationen aller Arten als kml-Datei für Google Earth exportieren
-
+- Populationen und Teilpopulationen als kml-Datei für Google Earth exportieren
 
 **Daten exportieren:**
 
@@ -49,9 +48,9 @@ Web-Applikation zur Verwaltung des [Aktionsplans Flora der Fachstelle Naturschut
 
 **Auf die Plätze, fertig, los!**
 
-- "No hassle": Keine Installation, keine Installationskosten, automatische Updates
-- Von ausserhalb (Auftragnehmer) und innerhalb der Fachstelle Naturschutz arbeiten (trotz strikter firewall)
-- Ein moderner Browser wird vorausgesetzt. Entwickelt für Google Chrome. Funktioniert auch auf auch auf Firefox und Safari für PC sowie Chrome für Android und Safari auf iOS. Auf Internet Explorer funktioniert apflora offenbar ab Version 10 (aber kaum getestet)
+- "No hassle": Keine Installation, automatische Updates
+- Von ausserhalb (Auftragnehmer) und innerhalb der Fachstelle Naturschutz arbeiten
+- Ein moderner Browser wird vorausgesetzt. Entwickelt für Google Chrome. Funktioniert auch auf Firefox und Safari für PC sowie Chrome für Android und Safari auf iOS
 
 **Sich rasch zurechtfinden:**
 
@@ -69,10 +68,10 @@ Web-Applikation zur Verwaltung des [Aktionsplans Flora der Fachstelle Naturschut
 
 - Im Strukturbaum in jeder Ebene filtern
 - Strukturelemente wie z.B. Teilpopulationen im Baum zu anderen Strukturelementen desselben Typs verschieben oder kopieren
-- Um dies zu vereinfachen kann ein zweiter Strukturbaum eingeblendet werden
-- Beobachtungen Teilpopulationen zuordnen: In einer nach Abstand zu den Teilpopulationen geordneten Liste im Formular oder mit drag and drop auf der Karte
+- Für einfaches Kopieren/Verschieben zweites Strukturbaum-Formular-Paar einblenden
+- Beobachtungen Teilpopulationen zuordnen: In einer nach Abstand zu den Teilpopulationen geordneten Liste im Formular. Oder mit drag and drop auf der Karte
 - Aus einer Beobachtung eine neue Populationen und Teilpopulationen gründen und gleich die Beobachtung zuordnen. Mit einem einzigen Klick.
-- Alle Löschungen während einer Sitzung werden aufgelistet und können rückgängig gemacht werden
+- Alle Löschungen während einer Sitzung können aufgelistet und rückgängig gemacht werden
 
 **Projektdaten verwalten:**
 
