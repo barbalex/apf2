@@ -20,10 +20,11 @@ Web-Applikation zur Verwaltung des [Aktionsplans Flora der Fachstelle Naturschut
 - Aktionspläne, Populationen und Teilpopulationen beschreiben
 - Ideale Umweltfaktoren und assoziierte Arten beschreiben
 - Ziele und Erfolgskriterien bestimmen
+- Assoziierte Arten auflisten
 - Kontrollen der Teilpopulationen und...
 - ...Massnahmen zur Förderung dokumentieren
-- Die Entwicklung der Teilpopulationen und den Erfolg der Massnahmen beurteilen
-- Über die Zielerreichung berichten
+- Die Entwicklung der Teilpopulationen, den Erfolg der Massnahmen und die Erreichung der Ziele beurteilen...
+- ...und darüber berichten
 
 **Beobachtungen den Teilpopulationen zuordnen:** ([Anleitung](https://github.com/FNSKtZH/apflora/wiki/Beobachtungen-einer-Teilpopulation-zuordnen))
 
@@ -31,6 +32,7 @@ Web-Applikation zur Verwaltung des [Aktionsplans Flora der Fachstelle Naturschut
 - Alle Beobachtungen aus Projekten der Fachstelle Naturschutz des Kantons Zürich
 - Eigene Beobachtungen aus [EvAB](http://www.aln.zh.ch/internet/baudirektion/aln/de/naturschutz/naturschutzdaten/tools/evab.html#a-content) (vorgängig mit Access uploaden)
 - Grundsätzlich alle verfügbaren Beobachtungen, unabhängig von ihrer Datenstruktur
+- Beobachtungen von beliebigen (synonymen) Arten im selben Aktionsplan zuordnen
 
 **Auf Karten darstellen:**
 
