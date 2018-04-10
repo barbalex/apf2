@@ -17,8 +17,8 @@ CREATE INDEX ON apflora.tpopbeob USING btree (id);
 -- done: rename in js
 -- done: check if old id was used somewhere. If so: rename that field, add new one and update that
 -- done: add all views, functions, triggers with tpopber to this file
--- TODO: run migration sql in dev
--- TODO: test app
+-- done: run migration sql in dev
+-- done: test app
 -- TODO: update js and run this file on server
 
 DROP TRIGGER IF EXISTS beobzuordnung_on_update_set_mut ON apflora.tpopbeob;
