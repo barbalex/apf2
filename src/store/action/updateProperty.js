@@ -21,7 +21,7 @@ export default (
   }
   // edge cases:
   // if jahr of ziel is updated, url needs to change
-  if (table === 'ziel' && key === 'ZielJahr') {
+  if (table === 'ziel' && key === 'jahr') {
     const newActiveNodeArray = clone(toJS(tree.activeNodeArray))
     newActiveNodeArray[5] = value
     tree.setActiveNodeArray(newActiveNodeArray)

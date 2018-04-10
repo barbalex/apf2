@@ -42,7 +42,7 @@ export default async (
     result = await axios({
       method: 'POST',
       url: `/${table}`,
-      data: { [parentIdField]: +parentId },
+      data: { [parentIdField]: isNaN(parentId) ? parentId : +parentId },
       headers: {
         Prefer: 'return=representation',
       },
@@ -63,15 +63,10 @@ export default async (
   // set new url
   baseUrl.push(row[idField])
   tree.setActiveNodeArray(baseUrl)
-  // if zieljahr, need to update ZielJahr
+  // if zieljahr, need to update jahr
   if (tree.activeNodes.zieljahr) {
-    if (tablePassed === 'zielber') {
-      store.updateProperty(tree, 'jahr', tree.activeNodes.zieljahr)
-      store.updatePropertyInDb(tree, 'jahr', tree.activeNodes.zieljahr)
-    } else {
-      store.updateProperty(tree, 'ZielJahr', tree.activeNodes.zieljahr)
-      store.updatePropertyInDb(tree, 'ZielJahr', tree.activeNodes.zieljahr)
-    }
+    store.updateProperty(tree, 'jahr', tree.activeNodes.zieljahr)
+    store.updatePropertyInDb(tree, 'jahr', tree.activeNodes.zieljahr)
   }
   // if tpopfreiwkontr need to update TPopKontrTyp
   if (tablePassed === 'tpopfreiwkontr') {

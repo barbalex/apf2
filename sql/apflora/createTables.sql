@@ -908,26 +908,25 @@ DROP TABLE IF EXISTS apflora.ziel;
 CREATE TABLE apflora.ziel (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
   id_old integer,
-  "ZielId" SERIAL PRIMARY KEY,
-  "ApArtId" integer NOT NULL REFERENCES apflora.ap ("ApArtId") ON DELETE CASCADE ON UPDATE CASCADE,
-  "ZielTyp" integer DEFAULT NULL REFERENCES apflora.ziel_typ_werte ("ZieltypId") ON DELETE SET NULL ON UPDATE CASCADE,
-  "ZielJahr" smallint DEFAULT NULL,
-  "ZielBezeichnung" text,
-  "MutWann" date DEFAULT NOW(),
-  "MutWer" varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
+  ap_id integer NOT NULL REFERENCES apflora.ap ("ApArtId") ON DELETE CASCADE ON UPDATE CASCADE,
+  typ integer DEFAULT NULL REFERENCES apflora.ziel_typ_werte ("ZieltypId") ON DELETE SET NULL ON UPDATE CASCADE,
+  jahr smallint DEFAULT NULL,
+  bezeichnung text,
+  changed date DEFAULT NOW(),
+  changed_by varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
 );
-COMMENT ON COLUMN apflora.ziel."ZielId" IS 'Primärschlüssel';
+CREATE INDEX ON apflora.ziel USING btree (id);
+CREATE INDEX ON apflora.ziel USING btree (ap_id);
+CREATE INDEX ON apflora.ziel USING btree (typ);
+CREATE INDEX ON apflora.ziel USING btree (jahr);
+COMMENT ON COLUMN apflora.ziel.id IS 'Primärschlüssel';
 COMMENT ON COLUMN apflora.ziel.id_old IS 'frühere id';
-COMMENT ON COLUMN apflora.ziel."ApArtId" IS 'Zugehöriger Aktionsplan. Fremdschluessel aus der Tabelle "ap"';
-COMMENT ON COLUMN apflora.ziel."ZielTyp" IS 'Typ des Ziels. Z.B. Zwischenziel, Gesamtziel. Auswahl aus Tabelle "ziel_typ_werte"';
-COMMENT ON COLUMN apflora.ziel."ZielJahr" IS 'In welchem Jahr soll das Ziel erreicht werden?';
-COMMENT ON COLUMN apflora.ziel."ZielBezeichnung" IS 'Textliche Beschreibung des Ziels';
-COMMENT ON COLUMN apflora.ziel."MutWann" IS 'Wann wurde der Datensatz zuletzt geändert?';
-COMMENT ON COLUMN apflora.ziel."MutWer" IS 'Von wem wurde der Datensatz zuletzt geändert?';
-CREATE INDEX ON apflora.ziel USING btree ("ZielId");
-CREATE INDEX ON apflora.ziel USING btree ("ApArtId");
-CREATE INDEX ON apflora.ziel USING btree ("ZielTyp");
-CREATE INDEX ON apflora.ziel USING btree ("ZielJahr");
+COMMENT ON COLUMN apflora.ziel.ap_id IS 'Zugehöriger Aktionsplan. Fremdschluessel aus der Tabelle "ap"';
+COMMENT ON COLUMN apflora.ziel.typ IS 'Typ des Ziels. Z.B. Zwischenziel, Gesamtziel. Auswahl aus Tabelle "ziel_typ_werte"';
+COMMENT ON COLUMN apflora.ziel.jahr IS 'In welchem Jahr soll das Ziel erreicht werden?';
+COMMENT ON COLUMN apflora.ziel.bezeichnung IS 'Textliche Beschreibung des Ziels';
+COMMENT ON COLUMN apflora.ziel.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
+COMMENT ON COLUMN apflora.ziel.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
 DROP TABLE IF EXISTS apflora.ziel_typ_werte;
 CREATE TABLE apflora.ziel_typ_werte (
@@ -947,7 +946,7 @@ DROP TABLE IF EXISTS apflora.zielber;
 CREATE TABLE apflora.zielber (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
   id_old integer,
-  ziel_id integer DEFAULT NULL REFERENCES apflora.ziel ("ZielId") ON DELETE CASCADE ON UPDATE CASCADE,
+  ziel_id integer DEFAULT NULL REFERENCES apflora.ziel (id_old) ON DELETE CASCADE ON UPDATE CASCADE,
   jahr smallint DEFAULT NULL,
   erreichung text DEFAULT NULL,
   bemerkungen text DEFAULT NULL,

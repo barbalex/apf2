@@ -431,8 +431,8 @@ DROP TRIGGER IF EXISTS ziel_on_update_set_mut ON apflora.ziel;
 DROP FUNCTION IF EXISTS ziel_on_update_set_mut();
 CREATE FUNCTION ziel_on_update_set_mut() RETURNS trigger AS $ziel_on_update_set_mut$
   BEGIN
-    NEW."MutWer" = current_setting('request.jwt.claim.username', true);
-    NEW."MutWann" = NOW();
+    NEW.changed_by = current_setting('request.jwt.claim.username', true);
+    NEW.changed = NOW();
     RETURN NEW;
   END;
 $ziel_on_update_set_mut$ LANGUAGE plpgsql;

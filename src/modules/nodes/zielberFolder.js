@@ -21,11 +21,11 @@ export default (
     jahr: zieljahr,
   })
   const zielIndex = findIndex(
-    tree.filteredAndSorted.ziel.filter(z => z.ZielJahr === zieljahr),
-    { ZielId: zielId }
+    tree.filteredAndSorted.ziel.filter(z => z.jahr === zieljahr),
+    { id: zielId }
   )
   const zielIsVisible = !!tree.filteredAndSorted.ziel.filter(
-    z => z.ZielJahr === zieljahr && z.ZielId === zielId
+    z => z.jahr === zieljahr && z.id === zielId
   )
 
   // prevent folder from showing when nodeFilter is set

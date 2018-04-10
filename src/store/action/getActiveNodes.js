@@ -112,9 +112,7 @@ export default (activeNodeArray: Array<mixed>, store: Object): Object => {
       ? parseInt(activeNodeArray[5], 10)
       : null
   const ziel =
-    zielFolder && activeNodeArray.length > 6
-      ? parseInt(activeNodeArray[6], 10)
-      : null
+    zielFolder && activeNodeArray.length > 6 ? activeNodeArray[6] : null
   const zielberFolder =
     (ziel && activeNodeArray.length > 7 && activeNodeArray[7] === 'Berichte') ||
     false

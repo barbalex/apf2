@@ -1520,13 +1520,13 @@ FROM
     (apflora.ziel
     INNER JOIN
       apflora.ziel_typ_werte
-      ON apflora.ziel."ZielTyp" = ziel_typ_werte."ZieltypId")
-    ON apflora._variable."JBerJahr" = apflora.ziel."ZielJahr"
+      ON apflora.ziel.typ = ziel_typ_werte."ZieltypId")
+    ON apflora._variable."JBerJahr" = apflora.ziel.jahr
 WHERE
-  apflora.ziel."ZielTyp" IN(1, 2, 1170775556)
+  apflora.ziel.typ IN(1, 2, 1170775556)
 ORDER BY
   apflora.ziel_typ_werte."ZieltypOrd",
-  apflora.ziel."ZielBezeichnung";
+  apflora.ziel.bezeichnung;
 
 DROP VIEW IF EXISTS apflora.v_apber_verwaist CASCADE;
 CREATE OR REPLACE VIEW apflora.v_apber_verwaist AS
@@ -3680,11 +3680,11 @@ SELECT
   apflora.ap."ApJahr" AS "AP Start im Jahr",
   apflora.ap_umsetzung_werte."DomainTxt" AS "AP Stand Umsetzung",
   apflora.adresse."AdrName" AS "AP verantwortlich",
-  apflora.ziel."ZielId" AS "Ziel Id",
-  apflora.ziel."ApArtId" AS "Ziel ApId",
-  apflora.ziel."ZielJahr" AS "Ziel Jahr",
+  apflora.ziel.id AS "Ziel Id",
+  apflora.ziel.ap_id AS "Ziel ApId",
+  apflora.ziel.jahr AS "Ziel Jahr",
   ziel_typ_werte."ZieltypTxt" AS "Ziel Typ",
-  apflora.ziel."ZielBezeichnung" AS "Ziel Beschreibung"
+  apflora.ziel.bezeichnung AS "Ziel Beschreibung"
 FROM
   (((((apflora.adb_eigenschaften
   RIGHT JOIN
@@ -3701,27 +3701,27 @@ FROM
     ON apflora.ap."ApBearb" = apflora.adresse."AdrId")
   RIGHT JOIN
     apflora.ziel
-    ON apflora.ap."ApArtId" = apflora.ziel."ApArtId")
+    ON apflora.ap."ApArtId" = apflora.ziel.ap_id)
   LEFT JOIN
     apflora.ziel_typ_werte
-    ON apflora.ziel."ZielTyp" = ziel_typ_werte."ZieltypId"
+    ON apflora.ziel.typ = ziel_typ_werte."ZieltypId"
 WHERE
-  apflora.ziel."ZielTyp" IN (1, 2, 1170775556)
+  apflora.ziel.typ IN (1, 2, 1170775556)
 ORDER BY
   apflora.adb_eigenschaften."Artname",
-  apflora.ziel."ZielJahr",
+  apflora.ziel.jahr,
   ziel_typ_werte."ZieltypTxt",
-  apflora.ziel."ZielTyp";
+  apflora.ziel.typ;
 
 DROP VIEW IF EXISTS apflora.v_ziel_verwaist CASCADE;
 CREATE OR REPLACE VIEW apflora.v_ziel_verwaist AS
 SELECT
   apflora.ap."ApArtId" AS "AP Id",
-  apflora.ziel."ZielId" AS "Ziel Id",
-  apflora.ziel."ApArtId" AS "Ziel ApId",
-  apflora.ziel."ZielJahr" AS "Ziel Jahr",
+  apflora.ziel.id AS "Ziel Id",
+  apflora.ziel.ap_id AS "Ziel ApId",
+  apflora.ziel.jahr AS "Ziel Jahr",
   ziel_typ_werte."ZieltypTxt" AS "Ziel Typ",
-  apflora.ziel."ZielBezeichnung" AS "Ziel Beschreibung"
+  apflora.ziel.bezeichnung AS "Ziel Beschreibung"
 FROM
   (((((apflora.adb_eigenschaften
   RIGHT JOIN
@@ -3738,16 +3738,16 @@ FROM
     ON apflora.ap."ApBearb" = apflora.adresse."AdrId")
   RIGHT JOIN
     apflora.ziel
-    ON apflora.ap."ApArtId" = apflora.ziel."ApArtId")
+    ON apflora.ap."ApArtId" = apflora.ziel.ap_id)
   LEFT JOIN
     apflora.ziel_typ_werte
-    ON apflora.ziel."ZielTyp" = ziel_typ_werte."ZieltypId"
+    ON apflora.ziel.typ = ziel_typ_werte."ZieltypId"
 WHERE
   apflora.ap."ApArtId" IS NULL
 ORDER BY
-  apflora.ziel."ZielJahr",
+  apflora.ziel.jahr,
   ziel_typ_werte."ZieltypTxt",
-  apflora.ziel."ZielTyp";
+  apflora.ziel.typ;
 
 DROP VIEW IF EXISTS apflora.v_zielber CASCADE;
 CREATE OR REPLACE VIEW apflora.v_zielber AS
@@ -3758,10 +3758,10 @@ SELECT
   apflora.ap."ApJahr" AS "AP Start im Jahr",
   apflora.ap_umsetzung_werte."DomainTxt" AS "AP Stand Umsetzung",
   apflora.adresse."AdrName" AS "AP verantwortlich",
-  apflora.ziel."ZielId" AS "Ziel Id",
-  apflora.ziel."ZielJahr" AS "Ziel Jahr",
+  apflora.ziel.id AS "Ziel Id",
+  apflora.ziel.jahr AS "Ziel Jahr",
   ziel_typ_werte."ZieltypTxt" AS "Ziel Typ",
-  apflora.ziel."ZielBezeichnung" AS "Ziel Beschreibung",
+  apflora.ziel.bezeichnung AS "Ziel Beschreibung",
   apflora.zielber.id AS "ZielBer Id",
   apflora.zielber.id AS "ZielBer ZielId",
   apflora.zielber.jahr AS "ZielBer Jahr",
@@ -3785,25 +3785,25 @@ FROM
     ON apflora.ap."ApBearb" = apflora.adresse."AdrId")
   RIGHT JOIN
     apflora.ziel
-    ON apflora.ap."ApArtId" = apflora.ziel."ApArtId")
+    ON apflora.ap."ApArtId" = apflora.ziel.ap_id)
   LEFT JOIN
     apflora.ziel_typ_werte
-    ON apflora.ziel."ZielTyp" = ziel_typ_werte."ZieltypId")
+    ON apflora.ziel.typ = ziel_typ_werte."ZieltypId")
   RIGHT JOIN
     apflora.zielber
-    ON apflora.ziel."ZielId" = apflora.zielber.ziel_id
+    ON apflora.ziel.id = apflora.zielber.ziel_id
 ORDER BY
   apflora.adb_eigenschaften."Artname",
-  apflora.ziel."ZielJahr",
+  apflora.ziel.jahr,
   ziel_typ_werte."ZieltypTxt",
-  apflora.ziel."ZielTyp",
+  apflora.ziel.typ,
   apflora.zielber.jahr;
 
 DROP VIEW IF EXISTS apflora.v_zielber_verwaist CASCADE;
 CREATE OR REPLACE VIEW apflora.v_zielber_verwaist AS
 SELECT
   apflora.ap."ApArtId" AS "AP Id",
-  apflora.ziel."ZielId" AS "Ziel Id",
+  apflora.ziel.id AS "Ziel Id",
   apflora.zielber.id AS "ZielBer Id",
   apflora.zielber.id AS "ZielBer ZielId",
   apflora.zielber.jahr AS "ZielBer Jahr",
@@ -3827,17 +3827,17 @@ FROM
     ON apflora.ap."ApBearb" = apflora.adresse."AdrId")
   RIGHT JOIN
     apflora.ziel
-    ON apflora.ap."ApArtId" = apflora.ziel."ApArtId")
+    ON apflora.ap."ApArtId" = apflora.ziel.ap_id)
   LEFT JOIN
     apflora.ziel_typ_werte
-    ON apflora.ziel."ZielTyp" = ziel_typ_werte."ZieltypId")
+    ON apflora.ziel.typ = ziel_typ_werte."ZieltypId")
   RIGHT JOIN
     apflora.zielber
-    ON apflora.ziel."ZielId" = apflora.zielber.ziel_id
+    ON apflora.ziel.id = apflora.zielber.ziel_id
 WHERE
-  apflora.ziel."ZielId" IS NULL
+  apflora.ziel.id IS NULL
 ORDER BY
-  apflora.ziel."ZielTyp",
+  apflora.ziel.typ,
   apflora.zielber.jahr;
 
 DROP VIEW IF EXISTS apflora.v_bertpopfuerangezeigteap0 CASCADE;
@@ -6951,8 +6951,8 @@ SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
   'Ziel-Bericht ohne Entwicklung:'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Ziele', apflora.ziel."ZielId", 'Berichte', apflora.zielber.id]::text[] AS url,
-  ARRAY[concat('Ziel (Jahr): ', apflora.ziel."ZielJahr"), concat('Ziel-Bericht (Jahr): ', apflora.zielber.jahr)]::text[] AS text,
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Ziele', apflora.ziel.id, 'Berichte', apflora.zielber.id]::text[] AS url,
+  ARRAY[concat('Ziel (Jahr): ', apflora.ziel.jahr), concat('Ziel-Bericht (Jahr): ', apflora.zielber.jahr)]::text[] AS text,
   apflora.zielber.jahr AS "Berichtjahr"
 FROM
   apflora.ap
@@ -6960,14 +6960,14 @@ FROM
     apflora.ziel
     INNER JOIN
       apflora.zielber
-      ON apflora.ziel."ZielId" = apflora.zielber.ziel_id
-    ON apflora.ap."ApArtId" = apflora.ziel."ApArtId"
+      ON apflora.ziel.id = apflora.zielber.ziel_id
+    ON apflora.ap."ApArtId" = apflora.ziel.ap_id
 WHERE
   apflora.zielber.erreichung IS NULL
   AND apflora.zielber.jahr IS NOT NULL
 ORDER BY
-  apflora.ziel."ZielJahr",
-  apflora.ziel."ZielId",
+  apflora.ziel.jahr,
+  apflora.ziel.id,
   apflora.zielber.jahr;
 
 DROP VIEW IF EXISTS apflora.v_qk2_zielber_ohnejahr CASCADE;
@@ -6976,21 +6976,21 @@ SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
   'Ziel-Bericht ohne Jahr:'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Ziele', apflora.ziel."ZielId", 'Berichte', apflora.zielber.id]::text[] AS url,
-  ARRAY[concat('Ziel (Jahr): ', apflora.ziel."ZielJahr"), concat('Ziel-Bericht (Jahr): ', apflora.zielber.jahr)]::text[] AS text
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Ziele', apflora.ziel.id, 'Berichte', apflora.zielber.id]::text[] AS url,
+  ARRAY[concat('Ziel (Jahr): ', apflora.ziel.jahr), concat('Ziel-Bericht (Jahr): ', apflora.zielber.jahr)]::text[] AS text
 FROM
   apflora.ap
   INNER JOIN
     (apflora.ziel
     INNER JOIN
       apflora.zielber
-      ON apflora.ziel."ZielId" = apflora.zielber.ziel_id)
-    ON apflora.ap."ApArtId" = apflora.ziel."ApArtId"
+      ON apflora.ziel.id = apflora.zielber.ziel_id)
+    ON apflora.ap."ApArtId" = apflora.ziel.ap_id
 WHERE
   apflora.zielber.jahr IS NULL
 ORDER BY
-  apflora.ziel."ZielJahr",
-  apflora.ziel."ZielId",
+  apflora.ziel.jahr,
+  apflora.ziel.id,
   apflora.zielber.jahr;
 
 DROP VIEW IF EXISTS apflora.v_qk2_ziel_ohnejahr CASCADE;
@@ -6999,18 +6999,18 @@ SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
   'Ziel ohne Jahr:'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Ziele', apflora.ziel."ZielId"]::text[] AS url,
-  ARRAY[concat('Ziel (id): ', apflora.ziel."ZielId")]::text[] AS text
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Ziele', apflora.ziel.id]::text[] AS url,
+  ARRAY[concat('Ziel (id): ', apflora.ziel.id)]::text[] AS text
 FROM
   apflora.ap
   INNER JOIN
     apflora.ziel
-    ON apflora.ap."ApArtId" = apflora.ziel."ApArtId"
+    ON apflora.ap."ApArtId" = apflora.ziel.ap_id
 WHERE
-  apflora.ziel."ZielJahr" IS NULL
-  OR apflora.ziel."ZielJahr" = 1
+  apflora.ziel.jahr IS NULL
+  OR apflora.ziel.jahr = 1
 ORDER BY
-  apflora.ziel."ZielId";
+  apflora.ziel.id;
 
 DROP VIEW IF EXISTS apflora.v_qk2_ziel_ohnetyp CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk2_ziel_ohnetyp AS
@@ -7018,17 +7018,17 @@ SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
   'Ziel ohne Typ:'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Ziele', apflora.ziel."ZielId"]::text[] AS url,
-  ARRAY[concat('Ziel (Jahr): ', apflora.ziel."ZielJahr")]::text[] AS text
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Ziele', apflora.ziel.id]::text[] AS url,
+  ARRAY[concat('Ziel (Jahr): ', apflora.ziel.jahr)]::text[] AS text
 FROM
   apflora.ap
   INNER JOIN
     apflora.ziel
-    ON apflora.ap."ApArtId" = apflora.ziel."ApArtId"
+    ON apflora.ap."ApArtId" = apflora.ziel.ap_id
 WHERE
-  apflora.ziel."ZielTyp" IS NULL
+  apflora.ziel.typ IS NULL
 ORDER BY
-  apflora.ziel."ZielJahr";
+  apflora.ziel.jahr;
 
 DROP VIEW IF EXISTS apflora.v_qk2_ziel_ohneziel CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk2_ziel_ohneziel AS
@@ -7036,17 +7036,17 @@ SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
   'Ziel ohne Ziel:'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Ziele', apflora.ziel."ZielId"]::text[] AS url,
-  ARRAY[concat('Ziel (Jahr): ', apflora.ziel."ZielJahr")]::text[] AS text
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Ziele', apflora.ziel.id]::text[] AS url,
+  ARRAY[concat('Ziel (Jahr): ', apflora.ziel.jahr)]::text[] AS text
 FROM
   apflora.ap
   INNER JOIN
     apflora.ziel
-    ON apflora.ap."ApArtId" = apflora.ziel."ApArtId"
+    ON apflora.ap."ApArtId" = apflora.ziel.ap_id
 WHERE
-  apflora.ziel."ZielBezeichnung" IS NULL
+  apflora.ziel.bezeichnung IS NULL
 ORDER BY
-  apflora.ziel."ZielJahr";
+  apflora.ziel.jahr;
 
 DROP VIEW IF EXISTS apflora.v_qk2_erfkrit_ohnebeurteilung CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk2_erfkrit_ohnebeurteilung AS

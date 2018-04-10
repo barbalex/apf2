@@ -114,8 +114,8 @@ export default [
     table: 'ziel',
     label: 'AP-Ziele',
     labelSingular: 'AP-Ziel',
-    idField: 'ZielId',
-    parentIdField: 'ApArtId',
+    idField: 'id',
+    parentIdField: 'ap_id',
   },
   {
     table: 'ziel_typ_werte',

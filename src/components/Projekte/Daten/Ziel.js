@@ -31,32 +31,32 @@ const Ziel = ({ store, tree }: { store: Object, tree: Object }) => {
         <FormTitle tree={tree} title="Ziel" />
         <FieldsContainer>
           <TextField
-            key={`${activeDataset.row.ZielId}ZielJahr`}
+            key={`${activeDataset.row.id}jahr`}
             tree={tree}
             label="Jahr"
-            fieldName="ZielJahr"
-            value={activeDataset.row.ZielJahr}
-            errorText={activeDataset.valid.ZielJahr}
+            fieldName="jahr"
+            value={activeDataset.row.jahr}
+            errorText={activeDataset.valid.jahr}
             type="number"
             updateProperty={store.updateProperty}
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <RadioButtonGroup
             tree={tree}
-            fieldName="ZielTyp"
+            fieldName="typ"
             label="Zieltyp"
-            value={activeDataset.row.ZielTyp}
-            errorText={activeDataset.valid.ZielTyp}
+            value={activeDataset.row.typ}
+            errorText={activeDataset.valid.typ}
             dataSource={store.dropdownList.zielTypWerte}
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
-            key={`${activeDataset.row.ZielId}ZielBezeichnung`}
+            key={`${activeDataset.row.id}bezeichnung`}
             tree={tree}
             label="Ziel"
-            fieldName="ZielBezeichnung"
-            value={activeDataset.row.ZielBezeichnung}
-            errorText={activeDataset.valid.ZielBezeichnung}
+            fieldName="bezeichnung"
+            value={activeDataset.row.bezeichnung}
+            errorText={activeDataset.valid.bezeichnung}
             type="text"
             multiLine
             fullWidth

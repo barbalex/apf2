@@ -22,24 +22,16 @@ export default (
 
   // map through all and create array of nodes
   return tree.filteredAndSorted.ziel
-    .filter(z => z.ApArtId === apArtId)
-    .filter(z => z.ZielJahr === zieljahr)
+    .filter(z => z.ap_id === apArtId)
+    .filter(z => z.jahr === zieljahr)
     .map((el, index) => ({
       nodeType: 'table',
       menuType: 'ziel',
-      id: el.ZielId,
-      parentId: el.ApArtId,
-      urlLabel: el.ZielId,
+      id: el.id,
+      parentId: el.ap_id,
+      urlLabel: el.id,
       label: el.label,
-      url: [
-        'Projekte',
-        projId,
-        'Arten',
-        el.ApArtId,
-        'AP-Ziele',
-        el.ZielJahr,
-        el.ZielId,
-      ],
+      url: ['Projekte', projId, 'Arten', el.ap_id, 'AP-Ziele', el.jahr, el.id],
       sort: [projIndex, 1, apIndex, 2, zieljahrIndex, index],
       hasChildren: true,
     }))

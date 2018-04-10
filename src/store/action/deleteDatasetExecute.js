@@ -43,8 +43,8 @@ export default async (store: Object, tree: Object): Promise<void> => {
       store.table.ziel.values()
     ).filter(
       ziel =>
-        ziel.ApArtId === tree.activeNodes.ap &&
-        ziel.ZielJahr === tree.activeNodes.zieljahr
+        ziel.ap_id === tree.activeNodes.ap &&
+        ziel.jahr === tree.activeNodes.zieljahr
     )
     if (zieleWithActiveZieljahr.length === 0) {
       url.pop()

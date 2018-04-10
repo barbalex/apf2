@@ -21,8 +21,8 @@ export default (
     jahr: zieljahr,
   })
   const zielIndex = findIndex(
-    tree.filteredAndSorted.ziel.filter(z => z.ZielJahr === zieljahr),
-    { ZielId: zielId }
+    tree.filteredAndSorted.ziel.filter(z => z.jahr === zieljahr),
+    { id: zielId }
   )
 
   // map through all and create array of nodes

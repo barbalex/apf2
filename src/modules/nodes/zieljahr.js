@@ -18,7 +18,7 @@ export default (
 
   const nodes = tree.filteredAndSorted.zieljahr.map((z, index) => {
     // get nr of ziele for year
-    // const nrOfZieleThisYear = ziele.filter(z => z.ZielJahr === jahr).length
+    // const nrOfZieleThisYear = ziele.filter(z => z.jahr === jahr).length
     const childrenLength = tree.filteredAndSorted.ziel.length
 
     return {
