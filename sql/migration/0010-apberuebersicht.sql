@@ -26,8 +26,8 @@ ALTER TABLE apflora.apberuebersicht ADD UNIQUE (proj_id, jahr);
 -- done: check if old id was used somewhere. If so: rename that field, add new one and update that
 -- done: add all views, functions, triggers containing this table to this file
 -- done: run migration sql in dev
--- TODO: test app
--- TODO: update js and run this file on server
+-- done: test app
+-- done: update js and run this file on server
 
 DROP TRIGGER IF EXISTS apberuebersicht_on_update_set_mut ON apflora.apberuebersicht;
 DROP FUNCTION IF EXISTS apberuebersicht_on_update_set_mut();
