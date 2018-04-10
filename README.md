@@ -36,7 +36,8 @@ Web-Applikation zur Verwaltung des [Aktionsplans Flora der Fachstelle Naturschut
 
 **Auf Karten darstellen:**
 
-- Aktionspläne, Populationen, Teilpopulationen und Beobachtungen auf Luftbild, Übersichtsplan und Landeskarten anzeigen
+- Aktionspläne, Populationen, Teilpopulationen und Beobachtungen...
+- ...auf Luftbild, Übersichtsplan und Landeskarten anzeigen
 - Diverse Ebenen einblenden (z.B. Bundesinventare, Kantonale Inventare, Parzellen)
 - Beobachtungen durch Ziehen mit der Maus Teilpopulationen zuordnen
 - Teilpopulationen verorten
@@ -47,7 +48,7 @@ Web-Applikation zur Verwaltung des [Aktionsplans Flora der Fachstelle Naturschut
 
 - Alle Daten exportieren
 - als .xlsx- oder .csv-Datei
-- Auf der Karte beliebige Umrisse zeichnen, um den Export geographisch zu filtern
+- Auf der Karte beliebige Umrisse zeichnen, um Exporte geographisch zu filtern
 
 **Auf die Plätze, fertig, los!**
 
@@ -58,25 +59,24 @@ Web-Applikation zur Verwaltung des [Aktionsplans Flora der Fachstelle Naturschut
 **Sich rasch zurechtfinden:**
 
 - Über einen dynamisch aufgebauten Strukturbaum navigieren und dabei die Übersicht über die komplexe Hierarchie behalten
-- Rechts neben dem Baum die Daten der gewählten Struktur bearbeiten
-- Strukturbaum, Daten-Formular und Karte beliebig ein- und ausblenden und in der Grösse variieren
+- Im Formular rechts des Baums die gewählten Daten bearbeiten
+- Strukturbaum, Formular und Karte beliebig ein- und ausblenden und in der Grösse variieren
 - Sich mit [Videos](https://www.youtube.com/playlist?list=PLTz8Xt5SOQPS-dbvpJ_DrB4-o3k3yj09J) anleiten lassen
 
 **Sich anleiten lassen:**
 
-- Wichtige Felder, die in aller Regel auszufüllen sind, werden farblich hervorgehoben
-- Wo hilfreich werden Informationen angezeigt, wenn man mit der Maus über Feldnamen und Schaltflächen fährt
+- Informations-Symbole informieren über Felder und Anforderungen an die Datenerfassung
 - Im [Wiki](https://github.com/FNSKtZH/apflora/wiki) sind wichtige Fragen erklärt
 
 **Effizient arbeiten:**
 
 - Im Strukturbaum in jeder Ebene filtern
 - Strukturelemente wie z.B. Teilpopulationen im Baum zu anderen Strukturelementen desselben Typs verschieben oder kopieren
-- Für einfaches Kopieren/Verschieben zweites Strukturbaum-Formular-Paar einblenden
+- Für übersichtliches Kopieren/Verschieben zweites Strukturbaum-Formular-Paar einblenden
 - Beobachtungen Teilpopulationen zuordnen: In einer nach Abstand zu den Teilpopulationen geordneten Liste im Formular. Oder mit drag and drop auf der Karte
 - Aus einer Beobachtung eine neue Populationen und Teilpopulationen gründen und gleich die Beobachtung zuordnen. Mit einem einzigen Klick.
 - Alle Löschungen während einer Sitzung können aufgelistet und rückgängig gemacht werden
-- Mit hilfe von Dutzenden von Qualitätskontrollen die Qualität der Daten gewährleisten
+- Mit Dutzenden von Kontroll-Listen die Qualität der Daten gewährleisten
 
 **Projektdaten verwalten:**
 
