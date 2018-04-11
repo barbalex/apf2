@@ -19,9 +19,9 @@ COMMENT ON COLUMN apflora.ap_erfkrit_werte.id IS 'Primärschlüssel';
 -- done: check if old id was used somewhere. If so: rename that field, add new one and update that
 -- done: add all views, functions, triggers containing this table to this file
 -- done: run migration sql in dev
--- TODO: restart postgrest and test app
--- TODO: update js and run this file on server
--- TODO: restart postgrest
+-- done: restart postgrest and test app
+-- done: update js and run this file on server
+-- done: restart postgrest
 
 DROP TRIGGER IF EXISTS ap_erfkrit_werte_on_update_set_mut ON apflora.ap_erfkrit_werte;
 DROP FUNCTION IF EXISTS ap_erfkrit_werte_on_update_set_mut();

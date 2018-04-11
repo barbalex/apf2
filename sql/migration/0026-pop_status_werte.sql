@@ -20,8 +20,8 @@ COMMENT ON COLUMN apflora.pop_status_werte.id IS 'Primärschlüssel';
 -- done: add all views, functions, triggers containing this table to this file
 -- done: run migration sql in dev
 -- done: restart postgrest and test app
--- TODO: update js and run this file on server
--- TODO: restart postgrest
+-- done: update js and run this file on server
+-- done: restart postgrest
 
 DROP TRIGGER IF EXISTS pop_status_werte_on_update_set_mut ON apflora.pop_status_werte;
 DROP FUNCTION IF EXISTS pop_status_werte_on_update_set_mut();

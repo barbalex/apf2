@@ -25,5 +25,5 @@ ALTER TABLE apflora.adb_lr RENAME TO ae_lrdelarze;
 -- done: add all views, functions, triggers containing this table to this file
 -- done: run migration sql in dev
 -- done: restart postgrest and test app
--- TODO: update js and run this file on server
--- TODO: restart postgrest
+-- done: update js and run this file on server
+-- done: restart postgrest
