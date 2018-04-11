@@ -164,7 +164,7 @@ const fetchDataForOpenNodes = (
       tpopmassnberFolder() {},
       tpopfeldkontrFolder() {
         store.fetchTable('tpopkontr_idbiotuebereinst_werte')
-        store.fetchTable('adb_lr')
+        store.fetchTable('ae_lrdelarze')
       },
       tpopfeldkontr() {
         store.fetchTableByParentId('tpopkontrzaehl', activeNodes.tpopfeldkontr)

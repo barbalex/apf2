@@ -247,7 +247,7 @@ export default [
   {
     table: 'ap_bearbstand_werte',
     label: 'none',
-    idField: 'DomainCode',
+    idField: 'id',
     parentIdField: 'none',
     stammdaten: true,
   },
@@ -314,9 +314,9 @@ export default [
     stammdaten: true,
   },
   {
-    table: 'adb_lr',
+    table: 'ae_lrdelarze',
     label: 'none',
-    idField: 'Id',
+    idField: 'id',
     parentIdField: 'none',
     stammdaten: true,
   },

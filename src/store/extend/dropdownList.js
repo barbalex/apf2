@@ -24,10 +24,10 @@ export default (store: Object): void => {
     apStati: computed(
       () => {
         let apStati = Array.from(store.table.ap_bearbstand_werte.values())
-        apStati = sortBy(apStati, 'DomainOrd')
+        apStati = sortBy(apStati, 'sort')
         return apStati.map(el => ({
-          value: el.DomainCode,
-          label: el.DomainTxt,
+          value: el.code,
+          label: el.text,
         }))
       },
       { name: 'dropdownListApStati' }
@@ -130,8 +130,11 @@ export default (store: Object): void => {
     ),
     lr: computed(
       () =>
-        Array.from(store.table.adb_lr.values()).map(
-          e => `${e.Label}: ${e.Einheit.replace(/  +/g, ' ')}`
+        sortBy(
+          Array.from(store.table.ae_lrdelarze.values()).map(
+            e => `${e.label}: ${e.einheit.replace(/  +/g, ' ')}`
+          ),
+          'sort'
         ),
       { name: 'dropdownListLr' }
     ),

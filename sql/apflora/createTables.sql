@@ -37,9 +37,9 @@ DROP TABLE IF EXISTS apflora.ap;
 CREATE TABLE apflora.ap (
   "ApArtId" integer PRIMARY KEY DEFAULT '0',
   "ProjId" integer DEFAULT NULL REFERENCES apflora.projekt ("ProjId") ON DELETE CASCADE ON UPDATE CASCADE,
-  "ApStatus" integer DEFAULT NULL REFERENCES apflora.ap_bearbstand_werte ("DomainCode") ON DELETE SET NULL ON UPDATE CASCADE,
+  "ApStatus" integer DEFAULT NULL REFERENCES apflora.ap_bearbstand_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
   "ApJahr" smallint DEFAULT NULL,
-  "ApUmsetzung" integer DEFAULT NULL REFERENCES apflora.ap_umsetzung_werte ("DomainCode") ON DELETE SET NULL ON UPDATE CASCADE,
+  "ApUmsetzung" integer DEFAULT NULL REFERENCES apflora.ap_umsetzung_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
   "ApBearb" integer DEFAULT NULL REFERENCES apflora.adresse ("AdrId") ON DELETE SET NULL ON UPDATE CASCADE,
   "ApArtwert" integer DEFAULT NULL,
   "ApGuid" UUID DEFAULT uuid_generate_v1mc(),
@@ -71,16 +71,19 @@ CREATE INDEX ON apflora.userprojekt USING btree ("UserName", "ProjId");
 
 DROP TABLE IF EXISTS apflora.ap_bearbstand_werte;
 CREATE TABLE apflora.ap_bearbstand_werte (
-  "DomainCode" integer PRIMARY KEY,
-  "DomainTxt" varchar(50) DEFAULT NULL,
-  "DomainOrd" smallint DEFAULT NULL,
-  "MutWann" date DEFAULT NOW(),
-  "MutWer" varchar(20) NOT NULL
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
+  code integer UNIQUE DEFAULT NULL,
+  text varchar(50) DEFAULT NULL,
+  sort smallint DEFAULT NULL,
+  changed date DEFAULT NOW(),
+  changed_by varchar(20) NOT NULL
 );
-COMMENT ON COLUMN apflora.ap_bearbstand_werte."MutWann" IS 'Wann wurde der Datensatz zuletzt geändert?';
-COMMENT ON COLUMN apflora.ap_bearbstand_werte."MutWer" IS 'Von wem wurde der Datensatz zuletzt geändert?';
-CREATE INDEX ON apflora.ap_bearbstand_werte USING btree ("DomainCode");
-CREATE INDEX ON apflora.ap_bearbstand_werte USING btree ("DomainOrd");
+CREATE INDEX ON apflora.ap_bearbstand_werte USING btree (id);
+CREATE INDEX ON apflora.ap_bearbstand_werte USING btree (code);
+CREATE INDEX ON apflora.ap_bearbstand_werte USING btree (sort);
+COMMENT ON COLUMN apflora.ap_bearbstand_werte.id IS 'Primärschlüssel';
+COMMENT ON COLUMN apflora.ap_bearbstand_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
+COMMENT ON COLUMN apflora.ap_bearbstand_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
 -- this table is listed in apber print in D. Einschätzung der Wirkung des AP insgesamt auf die Art
 -- as Beurteilungsskala
@@ -1020,24 +1023,16 @@ CREATE INDEX ON apflora.adb_eigenschaften USING btree ("Artname");
 -- TODO:
 -- replace with direct GraphQL call to ae
 -- when graphql installed
-DROP TABLE IF EXISTS apflora.adb_lr;
-CREATE TABLE apflora.adb_lr (
-  "Id" integer PRIMARY KEY,
-  "LrMethodId" integer DEFAULT NULL,
-  "ENr" integer UNIQUE DEFAULT NULL,
-  "Label" varchar(50) DEFAULT NULL,
-  "Einheit" varchar(255) DEFAULT NULL,
-  "ELat" varchar(255) DEFAULT NULL,
-  "EEngl" varchar(50) DEFAULT NULL,
-  "EFranz" varchar(50) DEFAULT NULL,
-  "EItal" varchar(50) DEFAULT NULL,
-  "Bemerkungen" text
+DROP TABLE IF EXISTS apflora.ae_lrdelarze;
+CREATE TABLE apflora.ae_lrdelarze (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
+  label varchar(50) DEFAULT NULL,
+  einheit varchar(255) DEFAULT NULL,
+  sort integer DEFAULT NULL
 );
-COMMENT ON COLUMN apflora.adb_lr."Id" IS 'Primärschlüssel der Tabelle ArtenDb_LR';
-CREATE INDEX ON apflora.adb_lr USING btree ("LrMethodId");
-CREATE INDEX ON apflora.adb_lr USING btree ("Id");
-CREATE INDEX ON apflora.adb_lr USING btree ("Label");
-CREATE INDEX ON apflora.adb_lr USING btree ("LrMethodId");
+CREATE INDEX ON apflora.ae_lrdelarze USING btree (id);
+CREATE INDEX ON apflora.ae_lrdelarze USING btree (sort);
+COMMENT ON COLUMN apflora.ae_lrdelarze.id IS 'Primärschlüssel';
 
 --
 -- beob can collect beob of any provenience by following this convention:

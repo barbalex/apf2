@@ -1,7 +1,7 @@
 // @flow
 export default [
   'adb_eigenschaften',
-  'adb_lr',
+  'ae_lrdelarze',
   'adresse',
   'ap',
   'ap_bearbstand_werte',
