@@ -82,45 +82,57 @@ COMMENT ON COLUMN apflora.ap_bearbstand_werte."MutWer" IS 'Von wem wurde der Dat
 CREATE INDEX ON apflora.ap_bearbstand_werte USING btree ("DomainCode");
 CREATE INDEX ON apflora.ap_bearbstand_werte USING btree ("DomainOrd");
 
+-- this table is listed in apber print in D. Einschätzung der Wirkung des AP insgesamt auf die Art
+-- as Beurteilungsskala
 DROP TABLE IF EXISTS apflora.ap_erfbeurtkrit_werte;
 CREATE TABLE apflora.ap_erfbeurtkrit_werte (
-  "DomainCode" integer PRIMARY KEY,
-  "DomainTxt" varchar(50) DEFAULT NULL,
-  "DomainOrd" smallint DEFAULT NULL,
-  "MutWann" date DEFAULT NOW(),
-  "MutWer" varchar(20) NOT NULL
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
+  code integer UNIQUE DEFAULT NULL,
+  text varchar(50) DEFAULT NULL,
+  sort smallint DEFAULT NULL,
+  changed date DEFAULT NOW(),
+  changed_by varchar(20) NOT NULL
 );
-COMMENT ON COLUMN apflora.ap_erfbeurtkrit_werte."MutWann" IS 'Wann wurde der Datensatz zuletzt geändert?';
-COMMENT ON COLUMN apflora.ap_erfbeurtkrit_werte."MutWer" IS 'Von wem wurde der Datensatz zuletzt geändert?';
-CREATE INDEX ON apflora.ap_erfbeurtkrit_werte USING btree ("DomainCode");
-CREATE INDEX ON apflora.ap_erfbeurtkrit_werte USING btree ("DomainOrd");
+CREATE INDEX ON apflora.ap_erfbeurtkrit_werte USING btree (id);
+CREATE INDEX ON apflora.ap_erfbeurtkrit_werte USING btree (code);
+CREATE INDEX ON apflora.ap_erfbeurtkrit_werte USING btree (sort);
+COMMENT ON COLUMN apflora.ap_erfbeurtkrit_werte.id IS 'Primärschlüssel';
+COMMENT ON COLUMN apflora.ap_erfbeurtkrit_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
+COMMENT ON COLUMN apflora.ap_erfbeurtkrit_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
 DROP TABLE IF EXISTS apflora.ap_erfkrit_werte;
 CREATE TABLE apflora.ap_erfkrit_werte (
-  "BeurteilId" integer PRIMARY KEY,
-  "BeurteilTxt" varchar(50) DEFAULT NULL,
-  "BeurteilOrd" smallint DEFAULT NULL,
-  "MutWann" date DEFAULT NOW(),
-  "MutWer" varchar(20) NOT NULL
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
+  code integer UNIQUE DEFAULT NULL,
+  code integer PRIMARY KEY,
+  text varchar(50) DEFAULT NULL,
+  sort smallint DEFAULT NULL,
+  changed date DEFAULT NOW(),
+  changed_by varchar(20) NOT NULL
 );
-COMMENT ON COLUMN apflora.ap_erfkrit_werte."BeurteilTxt" IS 'Wie werden die durchgefuehrten Massnahmen beurteilt?';
-COMMENT ON COLUMN apflora.ap_erfkrit_werte."MutWann" IS 'Wann wurde der Datensatz zuletzt geändert?';
-COMMENT ON COLUMN apflora.ap_erfkrit_werte."MutWer" IS 'Von wem wurde der Datensatz zuletzt geändert?';
-CREATE INDEX ON apflora.ap_erfkrit_werte USING btree ("BeurteilId");
-CREATE INDEX ON apflora.ap_erfkrit_werte USING btree ("BeurteilOrd");
+CREATE INDEX ON apflora.ap_erfkrit_werte USING btree (id);
+CREATE INDEX ON apflora.ap_erfkrit_werte USING btree (code);
+CREATE INDEX ON apflora.ap_erfkrit_werte USING btree (sort);
+COMMENT ON COLUMN apflora.ap_erfkrit_werte.id IS 'Primärschlüssel';
+COMMENT ON COLUMN apflora.ap_erfkrit_werte.text IS 'Wie werden die durchgefuehrten Massnahmen beurteilt?';
+COMMENT ON COLUMN apflora.ap_erfkrit_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
+COMMENT ON COLUMN apflora.ap_erfkrit_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
 DROP TABLE IF EXISTS apflora.ap_umsetzung_werte;
 CREATE TABLE apflora.ap_umsetzung_werte (
-  "DomainCode" integer PRIMARY KEY,
-  "DomainTxt" varchar(50) DEFAULT NULL,
-  "DomainOrd" smallint DEFAULT NULL,
-  "MutWann" date DEFAULT NOW(),
-  "MutWer" varchar(20) NOT NULL
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
+  code integer UNIQUE DEFAULT NULL,
+  text varchar(50) DEFAULT NULL,
+  sort smallint DEFAULT NULL,
+  changed date DEFAULT NOW(),
+  changed_by varchar(20) NOT NULL
 );
-COMMENT ON COLUMN apflora.ap_umsetzung_werte."MutWann" IS 'Wann wurde der Datensatz zuletzt geändert?';
-COMMENT ON COLUMN apflora.ap_umsetzung_werte."MutWer" IS 'Von wem wurde der Datensatz zuletzt geändert?';
-CREATE INDEX ON apflora.ap_umsetzung_werte USING btree ("DomainCode");
-CREATE INDEX ON apflora.ap_umsetzung_werte USING btree ("DomainOrd");
+CREATE INDEX ON apflora.ap_umsetzung_werte USING btree (id);
+CREATE INDEX ON apflora.ap_umsetzung_werte USING btree (code);
+CREATE INDEX ON apflora.ap_umsetzung_werte USING btree (sort);
+COMMENT ON COLUMN apflora.ap_umsetzung_werte.id IS 'Primärschlüssel';
+COMMENT ON COLUMN apflora.ap_umsetzung_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
+COMMENT ON COLUMN apflora.ap_umsetzung_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
 DROP TABLE IF EXISTS apflora.apber;
 CREATE TABLE apflora.apber (
@@ -129,7 +141,7 @@ CREATE TABLE apflora.apber (
   "JBerJahr" smallint DEFAULT NULL,
   "JBerSituation" text,
   "JBerVergleichVorjahrGesamtziel" text,
-  "JBerBeurteilung" integer DEFAULT NULL REFERENCES apflora.ap_erfkrit_werte ("BeurteilId") ON DELETE SET NULL ON UPDATE CASCADE,
+  "JBerBeurteilung" integer DEFAULT NULL REFERENCES apflora.ap_erfkrit_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
   "JBerVeraenGegenVorjahr" varchar(2) DEFAULT NULL,
   "JBerAnalyse" text DEFAULT NULL,
   "JBerUmsetzung" text,
@@ -279,7 +291,7 @@ CREATE TABLE apflora.erfkrit (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
   id_old integer DEFAULT NULL,
   ap_id integer NOT NULL DEFAULT '0' REFERENCES apflora.ap ("ApArtId") ON DELETE CASCADE ON UPDATE CASCADE,
-  erfolg integer DEFAULT NULL REFERENCES apflora.ap_erfkrit_werte ("BeurteilId") ON DELETE SET NULL ON UPDATE CASCADE,
+  erfolg integer DEFAULT NULL REFERENCES apflora.ap_erfkrit_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
   kriterien text DEFAULT NULL,
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
@@ -287,7 +299,7 @@ CREATE TABLE apflora.erfkrit (
 COMMENT ON COLUMN apflora.erfkrit.id IS 'Primärschlüssel';
 COMMENT ON COLUMN apflora.erfkrit.id_old IS 'frühere id';
 COMMENT ON COLUMN apflora.erfkrit.ap_id IS 'Zugehöriger Aktionsplan. Fremdschlüssel aus der Tabelle "ap"';
-COMMENT ON COLUMN apflora.erfkrit.erfolg IS 'Wie gut werden die Ziele erreicht? Auswahl aus der Tabelle "ap_erfbeurtkrit_werte"';
+COMMENT ON COLUMN apflora.erfkrit.erfolg IS 'Wie gut werden die Ziele erreicht? Auswahl aus der Tabelle "ap_erfkrit_werte"';
 COMMENT ON COLUMN apflora.erfkrit.kriterien IS 'Beschreibung der Kriterien für den Erfolg';
 COMMENT ON COLUMN apflora.erfkrit.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.erfkrit.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';

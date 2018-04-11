@@ -13,10 +13,10 @@ export default (store: Object): void => {
     apUmsetzungen: computed(
       () => {
         let apUmsetzungen = Array.from(store.table.ap_umsetzung_werte.values())
-        apUmsetzungen = sortBy(apUmsetzungen, 'DomainOrd')
+        apUmsetzungen = sortBy(apUmsetzungen, 'sort')
         return apUmsetzungen.map(el => ({
-          value: el.DomainCode,
-          label: el.DomainTxt,
+          value: el.code,
+          label: el.text,
         }))
       },
       { name: 'dropdownListApUmsetzungen' }
@@ -74,10 +74,10 @@ export default (store: Object): void => {
     apErfkritWerte: computed(
       () => {
         let apErfkritWerte = Array.from(store.table.ap_erfkrit_werte.values())
-        apErfkritWerte = sortBy(apErfkritWerte, 'BeurteilOrd')
+        apErfkritWerte = sortBy(apErfkritWerte, 'sort')
         return apErfkritWerte.map(el => ({
-          value: el.BeurteilId,
-          label: el.BeurteilTxt,
+          value: el.code,
+          label: el.text,
         }))
       },
       { name: 'dropdownListApErfkritWerte' }

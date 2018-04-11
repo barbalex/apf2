@@ -9,9 +9,9 @@ export default (store: Object, tree: Object): Array<Object> => {
   // get erfkritWerte
   const apErfkritWerte = Array.from(table.ap_erfkrit_werte.values())
   erfkrit.forEach((el, index) => {
-    const erfkritWert = apErfkritWerte.find(e => e.BeurteilId === el.erfolg)
-    const beurteilTxt = erfkritWert ? erfkritWert.BeurteilTxt : null
-    el.sort = erfkritWert ? erfkritWert.BeurteilOrd : null
+    const erfkritWert = apErfkritWerte.find(e => e.code === el.erfolg)
+    const beurteilTxt = erfkritWert ? erfkritWert.text : null
+    el.sort = erfkritWert ? erfkritWert.sort : null
     el.label = `${beurteilTxt || '(nicht beurteilt)'}: ${el.kriterien ||
       '(keine Kriterien erfasst)'}`
   })

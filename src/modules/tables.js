@@ -254,7 +254,7 @@ export default [
   {
     table: 'ap_umsetzung_werte',
     label: 'none',
-    idField: 'DomainCode',
+    idField: 'id',
     parentIdField: 'none',
     stammdaten: true,
   },
@@ -267,7 +267,7 @@ export default [
   {
     table: 'ap_erfkrit_werte',
     label: 'none',
-    idField: 'BeurteilId',
+    idField: 'id',
     parentIdField: 'none',
     stammdaten: true,
   },

@@ -62,7 +62,7 @@ SELECT
   apflora.adb_eigenschaften."Artname" AS "Art",
   apflora.ap_bearbstand_werte."DomainTxt" AS "AP Status",
   apflora.ap."ApJahr" AS "AP Start im Jahr",
-  apflora.ap_umsetzung_werte."DomainTxt" AS "AP Stand Umsetzung",
+  apflora.ap_umsetzung_werte.text AS "AP Stand Umsetzung",
   apflora.adresse."AdrName" AS "AP Verantwortlich",
   apflora.ap."ApArtwert" AS "Artwert",
   apflora.v_ap_anzmassnprojahr.jahr AS "Jahr",
@@ -82,7 +82,7 @@ FROM
         ON apflora.ap."ApStatus" = apflora.ap_bearbstand_werte."DomainCode")
       LEFT JOIN
         apflora.ap_umsetzung_werte
-        ON apflora.ap."ApUmsetzung" = apflora.ap_umsetzung_werte."DomainCode")
+        ON apflora.ap."ApUmsetzung" = apflora.ap_umsetzung_werte.code)
       LEFT JOIN
         apflora.adresse
         ON apflora.ap."ApBearb" = apflora.adresse."AdrId")
@@ -1409,7 +1409,7 @@ SELECT
   apflora.adb_eigenschaften."Artname" AS "AP Art",
   apflora.ap_bearbstand_werte."DomainTxt" AS "AP Status",
   apflora.ap."ApJahr" AS "AP Start im Jahr",
-  apflora.ap_umsetzung_werte."DomainTxt" AS "AP Stand Umsetzung",
+  apflora.ap_umsetzung_werte.text AS "AP Stand Umsetzung",
   apflora.pop."PopId",
   apflora.pop."PopGuid" AS "Pop Guid",
   apflora.pop."PopNr" AS "Pop Nr",
@@ -1446,7 +1446,7 @@ FROM
       ON apflora.ap."ApStatus" = apflora.ap_bearbstand_werte."DomainCode")
     LEFT JOIN
       apflora.ap_umsetzung_werte
-      ON apflora.ap."ApUmsetzung" = apflora.ap_umsetzung_werte."DomainCode")
+      ON apflora.ap."ApUmsetzung" = apflora.ap_umsetzung_werte.code)
     INNER JOIN
       (((apflora.pop
       LEFT JOIN
@@ -1487,7 +1487,7 @@ SELECT
   apflora.adb_eigenschaften."Artname" AS "AP Art",
   apflora.ap_bearbstand_werte."DomainTxt" AS "AP Status",
   apflora.ap."ApJahr" AS "AP Start im Jahr",
-  apflora.ap_umsetzung_werte."DomainTxt" AS "AP Stand Umsetzung",
+  apflora.ap_umsetzung_werte.text AS "AP Stand Umsetzung",
   apflora.pop."PopId",
   apflora.pop."PopGuid" AS "Pop Guid",
   apflora.pop."PopNr" AS "Pop Nr",
@@ -1515,7 +1515,7 @@ FROM
       ON apflora.ap."ApStatus" = apflora.ap_bearbstand_werte."DomainCode")
     LEFT JOIN
       apflora.ap_umsetzung_werte
-      ON apflora.ap."ApUmsetzung" = apflora.ap_umsetzung_werte."DomainCode")
+      ON apflora.ap."ApUmsetzung" = apflora.ap_umsetzung_werte.code)
     INNER JOIN
       ((apflora.pop
       LEFT JOIN
@@ -1548,7 +1548,7 @@ SELECT
   apflora.adb_eigenschaften."Artname" AS "AP Art",
   apflora.ap_bearbstand_werte."DomainTxt" AS "AP Status",
   apflora.ap."ApJahr" AS "AP Start im Jahr",
-  apflora.ap_umsetzung_werte."DomainTxt" AS "AP Stand Umsetzung",
+  apflora.ap_umsetzung_werte.text AS "AP Stand Umsetzung",
   apflora.pop."PopId",
   apflora.pop."PopGuid" AS "Pop Guid",
   apflora.pop."PopNr" AS "Pop Nr",
@@ -1576,7 +1576,7 @@ FROM
       ON apflora.ap."ApStatus" = apflora.ap_bearbstand_werte."DomainCode")
     LEFT JOIN
       apflora.ap_umsetzung_werte
-      ON apflora.ap."ApUmsetzung" = apflora.ap_umsetzung_werte."DomainCode")
+      ON apflora.ap."ApUmsetzung" = apflora.ap_umsetzung_werte.code)
     INNER JOIN
       ((apflora.pop
       LEFT JOIN
@@ -1609,7 +1609,7 @@ SELECT
   apflora.adb_eigenschaften."Artname" AS "AP Art",
   apflora.ap_bearbstand_werte."DomainTxt" AS "AP Status",
   apflora.ap."ApJahr" AS "AP Start im Jahr",
-  apflora.ap_umsetzung_werte."DomainTxt" AS "AP Stand Umsetzung",
+  apflora.ap_umsetzung_werte.text AS "AP Stand Umsetzung",
   apflora.pop."PopId",
   apflora.pop."PopGuid" AS "Pop Guid",
   apflora.pop."PopNr" AS "Pop Nr",
@@ -1672,7 +1672,7 @@ FROM
     ON apflora.ap."ApStatus" = apflora.ap_bearbstand_werte."DomainCode")
   LEFT JOIN
     apflora.ap_umsetzung_werte
-    ON apflora.ap."ApUmsetzung" = apflora.ap_umsetzung_werte."DomainCode")
+    ON apflora.ap."ApUmsetzung" = apflora.ap_umsetzung_werte.code)
   LEFT JOIN
     apflora.pop_status_werte ON apflora.pop."PopHerkunft" = pop_status_werte.code)
   LEFT JOIN

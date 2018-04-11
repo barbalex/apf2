@@ -54,8 +54,8 @@ DROP TRIGGER IF EXISTS ap_erfkrit_werte_on_update_set_mut ON apflora.ap_erfkrit_
 DROP FUNCTION IF EXISTS ap_erfkrit_werte_on_update_set_mut();
 CREATE FUNCTION ap_erfkrit_werte_on_update_set_mut() RETURNS trigger AS $ap_erfkrit_werte_on_update_set_mut$
   BEGIN
-    NEW."MutWer" = current_setting('request.jwt.claim.username', true);
-    NEW."MutWann" = NOW();
+    NEW.changed_by = current_setting('request.jwt.claim.username', true);
+    NEW.changed = NOW();
     RETURN NEW;
   END;
 $ap_erfkrit_werte_on_update_set_mut$ LANGUAGE plpgsql;
@@ -67,8 +67,8 @@ DROP TRIGGER IF EXISTS ap_umsetzung_werte_on_update_set_mut ON apflora.ap_umsetz
 DROP FUNCTION IF EXISTS ap_umsetzung_werte_on_update_set_mut();
 CREATE FUNCTION ap_umsetzung_werte_on_update_set_mut() RETURNS trigger AS $ap_umsetzung_werte_on_update_set_mut$
   BEGIN
-    NEW."MutWer" = current_setting('request.jwt.claim.username', true);
-    NEW."MutWann" = NOW();
+    NEW.changed_by = current_setting('request.jwt.claim.username', true);
+    NEW.changed = NOW();
     RETURN NEW;
   END;
 $ap_umsetzung_werte_on_update_set_mut$ LANGUAGE plpgsql;
