@@ -101,8 +101,8 @@ export default (store: Object): void => {
           store.table.tpop_apberrelevant_werte.values()
         )
         return tpopApBerichtRelevantWerte.map(t => ({
-          value: t.DomainCode,
-          label: t.DomainTxt,
+          value: t.code,
+          label: t.text,
         }))
       },
       { name: 'dropdownListTpopApBerichtRelevantWerte' }

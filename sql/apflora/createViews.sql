@@ -2519,7 +2519,7 @@ SELECT
   "domPopHerkunft_1"."HerkunftTxt" AS "Teilpopulation-Herkunft",
   apflora.tpop."TPopHerkunftUnklar" AS "Teilpopulation - Herkunft unklar",
   apflora.tpop."TPopHerkunftUnklarBegruendung" AS "Teilpopulation - Herkunft unklar Begruendung",
-  apflora.tpop_apberrelevant_werte."DomainTxt" AS "Teilpopulation - Fuer Bericht relevant",
+  apflora.tpop_apberrelevant_werte.text AS "Teilpopulation - Fuer Bericht relevant",
   apflora.tpop."TPopBekanntSeit" AS "Teilpopulation - bekannt seit",
   apflora.tpop."TPopEigen" AS "Teilpopulation-Eigentuemer",
   apflora.tpop."TPopKontakt" AS "Teilpopulation-Kontakt",
@@ -2553,7 +2553,7 @@ FROM
         AS "domPopHerkunft_1" ON apflora.tpop."TPopHerkunft" = "domPopHerkunft_1"."HerkunftId")
       LEFT JOIN
         apflora.tpop_apberrelevant_werte
-        ON apflora.tpop."TPopApBerichtRelevant"  = apflora.tpop_apberrelevant_werte."DomainCode")
+        ON apflora.tpop."TPopApBerichtRelevant"  = apflora.tpop_apberrelevant_werte.code)
       ON apflora.pop."PopId" = apflora.tpop."PopId")
     INNER JOIN
       (apflora.tpopmassnber
@@ -2655,7 +2655,7 @@ SELECT
   "domPopHerkunft_1"."HerkunftTxt" AS "Teilpopulation-Herkunft",
   apflora.tpop."TPopHerkunftUnklar" AS "Teilpopulation - Herkunft unklar",
   apflora.tpop."TPopHerkunftUnklarBegruendung" AS "Teilpopulation - Herkunft unklar Begruendung",
-  apflora.tpop_apberrelevant_werte."DomainTxt" AS "Teilpopulation - Fuer Bericht relevant",
+  apflora.tpop_apberrelevant_werte.text AS "Teilpopulation - Fuer Bericht relevant",
   apflora.tpop."TPopBekanntSeit" AS "Teilpopulation - bekannt seit",
   apflora.tpop."TPopEigen" AS "Teilpopulation-Eigentuemer",
   apflora.tpop."TPopKontakt" AS "Teilpopulation-Kontakt",
@@ -2704,7 +2704,7 @@ FROM
         ON apflora.tpop."TPopHerkunft" = "domPopHerkunft_1"."HerkunftId")
       LEFT JOIN
         apflora.tpop_apberrelevant_werte
-        ON apflora.tpop."TPopApBerichtRelevant"  = apflora.tpop_apberrelevant_werte."DomainCode")
+        ON apflora.tpop."TPopApBerichtRelevant"  = apflora.tpop_apberrelevant_werte.code)
       ON apflora.pop."PopId" = apflora.tpop."PopId")
     INNER JOIN
       ((apflora.tpopmassn

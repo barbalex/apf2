@@ -106,7 +106,7 @@ export default [
   {
     table: 'tpopmassn_erfbeurt_werte',
     label: 'none',
-    idField: 'id',
+    idField: 'code',
     parentIdField: 'none',
     stammdaten: true,
   },
@@ -281,7 +281,7 @@ export default [
   {
     table: 'tpop_apberrelevant_werte',
     label: 'none',
-    idField: 'DomainCode',
+    idField: 'code',
     parentIdField: 'none',
     stammdaten: true,
   },
@@ -295,7 +295,7 @@ export default [
   {
     table: 'tpop_entwicklung_werte',
     label: 'none',
-    idField: 'id',
+    idField: 'code',
     parentIdField: 'none',
     stammdaten: true,
   },

@@ -2,7 +2,7 @@ ALTER TABLE apflora.popber DROP CONSTRAINT popber_fk_pop_entwicklung_werte;
 ALTER TABLE apflora.popber 
    ADD CONSTRAINT popber_fk_tpop_entwicklung_werte
    FOREIGN KEY ("PopBerEntwicklung") 
-   REFERENCES apflora.pop_entwicklung_werte (code) ON DELETE SET NULL ON UPDATE CASCADE;
+   REFERENCES apflora.pop_entwicklung_werte ("EntwicklungId") ON DELETE SET NULL ON UPDATE CASCADE;
 COMMENT ON COLUMN apflora.popber."PopBerEntwicklung" IS 'Beurteilung der Populationsentwicklung: Auswahl aus Tabelle "tpop_entwicklung_werte"';
 COMMENT ON COLUMN apflora.tpopber.entwicklung IS 'Beurteilung der Populationsentwicklung: Auswahl aus Tabelle "tpop_entwicklung_werte"';
 COMMENT ON COLUMN apflora.tpopkontr."TPopKontrEntwicklung" IS 'Entwicklung des Bestandes. Auswahl aus Tabelle "tpop_entwicklung_werte"';
@@ -118,7 +118,7 @@ FROM
     apflora.tpop_entwicklung_werte
     ON apflora.popber."PopBerEntwicklung" = tpop_entwicklung_werte.code;
 
-DROP VIEW IF EXISTS apflora.v_tpopkontr;
+DROP VIEW IF EXISTS apflora.v_tpopkontr cascade;
 CREATE OR REPLACE VIEW apflora.v_tpopkontr AS
 SELECT
   apflora.adb_eigenschaften."TaxonomieId" AS "ApArtId",
@@ -347,6 +347,339 @@ ORDER BY
   apflora.adb_eigenschaften."Artname",
   apflora.pop."PopNr",
   apflora.tpop."TPopNr";
+
+-- funktioniert nicht, wenn letzeKontrolle als Unterabfrage eingebunden wird.
+-- Grund: Unterabfragen in der FROM-Klausel duerfen keine korrellierten Unterabfragen sein
+DROP VIEW IF EXISTS apflora.v_tpop_anzkontrinklletzter;
+CREATE OR REPLACE VIEW apflora.v_tpop_anzkontrinklletzter AS
+SELECT
+  apflora.v_tpop_letzteKontrId."TPopId",
+  apflora.v_tpop."ApArtId",
+  apflora.v_tpop."Familie",
+  apflora.v_tpop."AP Art",
+  apflora.v_tpop."AP Status",
+  apflora.v_tpop."AP Start im Jahr",
+  apflora.v_tpop."AP Stand Umsetzung",
+  apflora.v_tpop."AP verantwortlich",
+  apflora.v_tpop."PopId",
+  apflora.v_tpop."Pop Guid",
+  apflora.v_tpop."Pop Nr",
+  apflora.v_tpop."Pop Name",
+  apflora.v_tpop."Pop Status",
+  apflora.v_tpop."Pop bekannt seit",
+  apflora.v_tpop."Pop Status unklar",
+  apflora.v_tpop."Pop Begruendung fuer unklaren Status",
+  apflora.v_tpop."Pop X-Koordinaten",
+  apflora.v_tpop."Pop Y-Koordinaten",
+  apflora.v_tpop."TPop ID",
+  apflora.v_tpop."TPop Guid",
+  apflora.v_tpop."TPop Nr",
+  apflora.v_tpop."TPop Gemeinde",
+  apflora.v_tpop."TPop Flurname",
+  apflora.v_tpop."TPop Status",
+  apflora.v_tpop."TPop bekannt seit",
+  apflora.v_tpop."TPop Status unklar",
+  apflora.v_tpop."TPop Begruendung fuer unklaren Status",
+  apflora.v_tpop."TPop X-Koordinaten",
+  apflora.v_tpop."TPop Y-Koordinaten",
+  apflora.v_tpop."TPop Radius (m)",
+  apflora.v_tpop."TPop Hoehe",
+  apflora.v_tpop."TPop Exposition",
+  apflora.v_tpop."TPop Klima",
+  apflora.v_tpop."TPop Hangneigung",
+  apflora.v_tpop."TPop Beschreibung",
+  apflora.v_tpop."TPop Kataster-Nr",
+  apflora.v_tpop."TPop fuer AP-Bericht relevant",
+  apflora.v_tpop."TPop EigentuemerIn",
+  apflora.v_tpop."TPop Kontakt vor Ort",
+  apflora.v_tpop."TPop Nutzungszone",
+  apflora.v_tpop."TPop BewirtschafterIn",
+  apflora.v_tpop."TPop Bewirtschaftung",
+  apflora.v_tpop."Teilpopulation zuletzt geaendert",
+  apflora.v_tpop."Teilpopulation zuletzt geaendert von",
+  apflora.v_tpop_letzteKontrId."AnzTPopKontr" AS "TPop Anzahl Kontrollen",
+  apflora.v_tpopkontr."TPopKontrId",
+  apflora.v_tpopkontr."Kontr Guid",
+  apflora.v_tpopkontr."Kontr Jahr",
+  apflora.v_tpopkontr."Kontr Datum",
+  apflora.v_tpopkontr."Kontr Typ",
+  apflora.v_tpopkontr."Kontr BearbeiterIn",
+  apflora.v_tpopkontr."Kontr Ueberlebensrate",
+  apflora.v_tpopkontr."Kontr Vitalitaet",
+  apflora.v_tpopkontr."Kontr Entwicklung",
+  apflora.v_tpopkontr."Kontr Ursachen",
+  apflora.v_tpopkontr."Kontr Erfolgsbeurteilung",
+  apflora.v_tpopkontr."Kontr Aenderungs-Vorschlaege Umsetzung",
+  apflora.v_tpopkontr."Kontr Aenderungs-Vorschlaege Kontrolle",
+  apflora.v_tpopkontr."Kontr X-Koord",
+  apflora.v_tpopkontr."Kontr Y-Koord",
+  apflora.v_tpopkontr."Kontr Bemerkungen",
+  apflora.v_tpopkontr."Kontr Lebensraum Delarze",
+  apflora.v_tpopkontr."Kontr angrenzender Lebensraum Delarze",
+  apflora.v_tpopkontr."Kontr Vegetationstyp",
+  apflora.v_tpopkontr."Kontr Konkurrenz",
+  apflora.v_tpopkontr."Kontr Moosschicht",
+  apflora.v_tpopkontr."Kontr Krautschicht",
+  apflora.v_tpopkontr."Kontr Strauchschicht",
+  apflora.v_tpopkontr."Kontr Baumschicht",
+  apflora.v_tpopkontr."Kontr Bodentyp",
+  apflora.v_tpopkontr."Kontr Boden Kalkgehalt",
+  apflora.v_tpopkontr."Kontr Boden Durchlaessigkeit",
+  apflora.v_tpopkontr."Kontr Boden Humusgehalt",
+  apflora.v_tpopkontr."Kontr Boden Naehrstoffgehalt",
+  apflora.v_tpopkontr."Kontr Oberbodenabtrag",
+  apflora.v_tpopkontr."Kontr Wasserhaushalt",
+  apflora.v_tpopkontr."Kontr Uebereinstimmung mit Idealbiotop",
+  apflora.v_tpopkontr."Kontr Handlungsbedarf",
+  apflora.v_tpopkontr."Kontr Ueberpruefte Flaeche",
+  apflora.v_tpopkontr."Kontr Flaeche der Teilpopulation m2",
+  apflora.v_tpopkontr."Kontr auf Plan eingezeichnet",
+  apflora.v_tpopkontr."Kontr Deckung durch Vegetation",
+  apflora.v_tpopkontr."Kontr Deckung nackter Boden",
+  apflora.v_tpopkontr."Kontr Deckung durch ueberpruefte Art",
+  apflora.v_tpopkontr."Kontr auch junge Pflanzen",
+  apflora.v_tpopkontr."Kontr maximale Veg-hoehe cm",
+  apflora.v_tpopkontr."Kontr mittlere Veg-hoehe cm",
+  apflora.v_tpopkontr."Kontr Gefaehrdung",
+  apflora.v_tpopkontr."Kontrolle zuletzt geaendert",
+  apflora.v_tpopkontr."Kontrolle zuletzt geaendert von",
+  apflora.v_tpopkontr."Zaehlungen Anzahlen",
+  apflora.v_tpopkontr."Zaehlungen Einheiten",
+  apflora.v_tpopkontr."Zaehlungen Methoden"
+FROM
+  (apflora.v_tpop_letzteKontrId
+  LEFT JOIN
+    apflora.v_tpopkontr
+    ON apflora.v_tpop_letzteKontrId."MaxTPopKontrId" = apflora.v_tpopkontr."TPopKontrId")
+  INNER JOIN
+    apflora.v_tpop
+    ON apflora.v_tpop_letzteKontrId."TPopId" = apflora.v_tpop."TPopId";
+
+DROP VIEW IF EXISTS apflora.v_tpopber_mitletzterid cascade;
+CREATE OR REPLACE VIEW apflora.v_tpopber_mitletzterid AS
+SELECT
+  apflora.tpopber.tpop_id AS "TPopId",
+  apflora.v_tpopber_letzteid."AnzTPopBer",
+  apflora.tpopber.id,
+  apflora.tpopber.jahr AS "TPopBer Jahr",
+  apflora.tpop_entwicklung_werte.text AS "TPopBer Entwicklung",
+  apflora.tpopber.bemerkungen AS "TPopBer Bemerkungen",
+  apflora.tpopber.changed AS "TPopBer MutWann",
+  apflora.tpopber.changed_by AS "TPopBer MutWer"
+FROM
+  apflora.v_tpopber_letzteid
+  INNER JOIN
+    apflora.tpopber
+    ON
+      (apflora.v_tpopber_letzteid."MaxTPopBerId" = apflora.tpopber.id)
+      AND (apflora.v_tpopber_letzteid."TPopId" = apflora.tpopber.tpop_id)
+  LEFT JOIN
+    apflora.tpop_entwicklung_werte
+    ON apflora.tpopber.entwicklung = tpop_entwicklung_werte.code;
+
+DROP VIEW IF EXISTS apflora.v_tpop_anzkontrinklletzterundletztertpopber CASCADE;
+CREATE OR REPLACE VIEW apflora.v_tpop_anzkontrinklletzterundletztertpopber AS
+SELECT
+	apflora.v_tpop_anzkontrinklletzter."ApArtId" AS "ApArtId",
+	apflora.v_tpop_anzkontrinklletzter."Familie",
+	apflora.v_tpop_anzkontrinklletzter."AP Art",
+	apflora.v_tpop_anzkontrinklletzter."AP Status",
+	apflora.v_tpop_anzkontrinklletzter."AP Start im Jahr",
+	apflora.v_tpop_anzkontrinklletzter."AP Stand Umsetzung",
+	apflora.v_tpop_anzkontrinklletzter."AP verantwortlich",
+	apflora.v_tpop_anzkontrinklletzter."PopId",
+	apflora.v_tpop_anzkontrinklletzter."Pop Guid",
+	apflora.v_tpop_anzkontrinklletzter."Pop Nr",
+	apflora.v_tpop_anzkontrinklletzter."Pop Name",
+	apflora.v_tpop_anzkontrinklletzter."Pop Status",
+	apflora.v_tpop_anzkontrinklletzter."Pop bekannt seit",
+	apflora.v_tpop_anzkontrinklletzter."TPop ID",
+	apflora.v_tpop_anzkontrinklletzter."TPop Guid",
+	apflora.v_tpop_anzkontrinklletzter."TPop Nr",
+	apflora.v_tpop_anzkontrinklletzter."TPop Gemeinde",
+	apflora.v_tpop_anzkontrinklletzter."TPop Flurname",
+	apflora.v_tpop_anzkontrinklletzter."TPop Status",
+	apflora.v_tpop_anzkontrinklletzter."TPop bekannt seit",
+	apflora.v_tpop_anzkontrinklletzter."TPop Status unklar",
+	apflora.v_tpop_anzkontrinklletzter."TPop Begruendung fuer unklaren Status",
+	apflora.v_tpop_anzkontrinklletzter."TPop X-Koordinaten",
+	apflora.v_tpop_anzkontrinklletzter."TPop Y-Koordinaten",
+	apflora.v_tpop_anzkontrinklletzter."TPop Radius (m)",
+	apflora.v_tpop_anzkontrinklletzter."TPop Hoehe",
+	apflora.v_tpop_anzkontrinklletzter."TPop Exposition",
+	apflora.v_tpop_anzkontrinklletzter."TPop Klima",
+	apflora.v_tpop_anzkontrinklletzter."TPop Hangneigung",
+	apflora.v_tpop_anzkontrinklletzter."TPop Beschreibung",
+	apflora.v_tpop_anzkontrinklletzter."TPop Kataster-Nr",
+	apflora.v_tpop_anzkontrinklletzter."TPop fuer AP-Bericht relevant",
+	apflora.v_tpop_anzkontrinklletzter."TPop EigentuemerIn",
+	apflora.v_tpop_anzkontrinklletzter."TPop Kontakt vor Ort",
+	apflora.v_tpop_anzkontrinklletzter."TPop Nutzungszone",
+	apflora.v_tpop_anzkontrinklletzter."TPop BewirtschafterIn",
+	apflora.v_tpop_anzkontrinklletzter."TPop Bewirtschaftung",
+	apflora.v_tpop_anzkontrinklletzter."TPop Anzahl Kontrollen",
+	apflora.v_tpop_anzkontrinklletzter."TPopKontrId",
+	apflora.v_tpop_anzkontrinklletzter."TPopId",
+	apflora.v_tpop_anzkontrinklletzter."Kontr Guid",
+	apflora.v_tpop_anzkontrinklletzter."Kontr Jahr",
+	apflora.v_tpop_anzkontrinklletzter."Kontr Datum",
+	apflora.v_tpop_anzkontrinklletzter."Kontr Typ",
+	apflora.v_tpop_anzkontrinklletzter."Kontr BearbeiterIn",
+	apflora.v_tpop_anzkontrinklletzter."Kontr Ueberlebensrate",
+	apflora.v_tpop_anzkontrinklletzter."Kontr Vitalitaet",
+	apflora.v_tpop_anzkontrinklletzter."Kontr Entwicklung",
+	apflora.v_tpop_anzkontrinklletzter."Kontr Ursachen",
+	apflora.v_tpop_anzkontrinklletzter."Kontr Erfolgsbeurteilung",
+	apflora.v_tpop_anzkontrinklletzter."Kontr Aenderungs-Vorschlaege Umsetzung",
+	apflora.v_tpop_anzkontrinklletzter."Kontr Aenderungs-Vorschlaege Kontrolle",
+	apflora.v_tpop_anzkontrinklletzter."Kontr X-Koord",
+	apflora.v_tpop_anzkontrinklletzter."Kontr Y-Koord",
+	apflora.v_tpop_anzkontrinklletzter."Kontr Bemerkungen",
+	apflora.v_tpop_anzkontrinklletzter."Kontr Lebensraum Delarze",
+	apflora.v_tpop_anzkontrinklletzter."Kontr angrenzender Lebensraum Delarze",
+	apflora.v_tpop_anzkontrinklletzter."Kontr Vegetationstyp",
+	apflora.v_tpop_anzkontrinklletzter."Kontr Konkurrenz",
+	apflora.v_tpop_anzkontrinklletzter."Kontr Moosschicht",
+	apflora.v_tpop_anzkontrinklletzter."Kontr Krautschicht",
+	apflora.v_tpop_anzkontrinklletzter."Kontr Strauchschicht",
+	apflora.v_tpop_anzkontrinklletzter."Kontr Baumschicht",
+	apflora.v_tpop_anzkontrinklletzter."Kontr Bodentyp",
+	apflora.v_tpop_anzkontrinklletzter."Kontr Boden Kalkgehalt",
+	apflora.v_tpop_anzkontrinklletzter."Kontr Boden Durchlaessigkeit",
+	apflora.v_tpop_anzkontrinklletzter."Kontr Boden Humusgehalt",
+	apflora.v_tpop_anzkontrinklletzter."Kontr Boden Naehrstoffgehalt",
+	apflora.v_tpop_anzkontrinklletzter."Kontr Oberbodenabtrag",
+	apflora.v_tpop_anzkontrinklletzter."Kontr Wasserhaushalt",
+	apflora.v_tpop_anzkontrinklletzter."Kontr Uebereinstimmung mit Idealbiotop",
+	apflora.v_tpop_anzkontrinklletzter."Kontr Handlungsbedarf",
+	apflora.v_tpop_anzkontrinklletzter."Kontr Ueberpruefte Flaeche",
+	apflora.v_tpop_anzkontrinklletzter."Kontr Flaeche der Teilpopulation m2",
+	apflora.v_tpop_anzkontrinklletzter."Kontr auf Plan eingezeichnet",
+	apflora.v_tpop_anzkontrinklletzter."Kontr Deckung durch Vegetation",
+	apflora.v_tpop_anzkontrinklletzter."Kontr Deckung nackter Boden",
+	apflora.v_tpop_anzkontrinklletzter."Kontr Deckung durch ueberpruefte Art",
+	apflora.v_tpop_anzkontrinklletzter."Kontr auch junge Pflanzen",
+	apflora.v_tpop_anzkontrinklletzter."Kontr maximale Veg-hoehe cm",
+	apflora.v_tpop_anzkontrinklletzter."Kontr mittlere Veg-hoehe cm",
+	apflora.v_tpop_anzkontrinklletzter."Kontr Gefaehrdung",
+	apflora.v_tpop_anzkontrinklletzter."Kontrolle zuletzt geaendert",
+	apflora.v_tpop_anzkontrinklletzter."Kontrolle zuletzt geaendert von",
+	apflora.v_tpop_anzkontrinklletzter."Zaehlungen Anzahlen",
+	apflora.v_tpop_anzkontrinklletzter."Zaehlungen Einheiten",
+	apflora.v_tpop_anzkontrinklletzter."Zaehlungen Methoden",
+	apflora.v_tpopber_mitletzterid."AnzTPopBer",
+	apflora.v_tpopber_mitletzterid.id AS "TPopBer id",
+	apflora.v_tpopber_mitletzterid."TPopBer Jahr",
+	apflora.v_tpopber_mitletzterid."TPopBer Entwicklung",
+	apflora.v_tpopber_mitletzterid."TPopBer Bemerkungen",
+	apflora.v_tpopber_mitletzterid."TPopBer MutWann",
+	apflora.v_tpopber_mitletzterid."TPopBer MutWer"
+FROM
+	apflora.v_tpop_anzkontrinklletzter
+  LEFT JOIN
+    apflora.v_tpopber_mitletzterid
+    ON apflora.v_tpop_anzkontrinklletzter."TPop ID" = apflora.v_tpopber_mitletzterid."TPopId";
+
+DROP VIEW IF EXISTS apflora.v_tpop_popberundmassnber;
+CREATE OR REPLACE VIEW apflora.v_tpop_popberundmassnber AS
+SELECT
+  apflora.adb_eigenschaften."TaxonomieId" AS "ApArtId",
+  apflora.adb_eigenschaften."Artname" AS "AP Art",
+  apflora.ap_bearbstand_werte."DomainTxt" AS "AP Status",
+  apflora.ap."ApJahr" AS "AP Start im Jahr",
+  apflora.ap_umsetzung_werte."DomainTxt" AS "AP Stand Umsetzung",
+  apflora.pop."PopId",
+  apflora.pop."PopGuid" AS "Pop Guid",
+  apflora.pop."PopNr" AS "Pop Nr",
+  apflora.pop."PopName" AS "Pop Name",
+  pop_status_werte."HerkunftTxt" AS "Pop Status",
+  apflora.pop."PopBekanntSeit" AS "Pop bekannt seit",
+  apflora.pop."PopHerkunftUnklar" AS "Pop Status unklar",
+  apflora.pop."PopHerkunftUnklarBegruendung" AS "Pop Begruendung fuer unklaren Status",
+  apflora.pop."PopXKoord" AS "Pop X-Koordinaten",
+  apflora.pop."PopYKoord" AS "Pop Y-Koordinaten",
+  apflora.tpop."TPopId",
+  apflora.tpop."TPopGuid" AS "TPop Guid",
+  apflora.tpop."TPopNr" AS "TPop Nr",
+  apflora.tpop."TPopGemeinde" AS "TPop Gemeinde",
+  apflora.tpop."TPopFlurname" AS "TPop Flurname",
+  "domPopHerkunft_1"."HerkunftTxt" AS "TPop Status",
+  apflora.tpop."TPopBekanntSeit" AS "TPop bekannt seit",
+  apflora.tpop."TPopHerkunftUnklar" AS "TPop Status unklar",
+  apflora.tpop."TPopHerkunftUnklarBegruendung" AS "TPop Begruendung fuer unklaren Status",
+  apflora.tpop."TPopXKoord" AS "TPop X-Koordinaten",
+  apflora.tpop."TPopYKoord" AS "TPop Y-Koordinaten",
+  apflora.tpop."TPopRadius" AS "TPop Radius (m)",
+  apflora.tpop."TPopHoehe" AS "TPop Hoehe",
+  apflora.tpop."TPopExposition" AS "TPop Exposition",
+  apflora.tpop."TPopKlima" AS "TPop Klima",
+  apflora.tpop."TPopNeigung" AS "TPop Hangneigung",
+  apflora.tpop."TPopBeschr" AS "TPop Beschreibung",
+  apflora.tpop."TPopKatNr" AS "TPop Kataster-Nr",
+  apflora.tpop."TPopApBerichtRelevant" AS "TPop fuer AP-Bericht relevant",
+  apflora.tpop."TPopEigen" AS "TPop EigentuemerIn",
+  apflora.tpop."TPopKontakt" AS "TPop Kontakt vor Ort",
+  apflora.tpop."TPopNutzungszone" AS "TPop Nutzungszone",
+  apflora.tpop."TPopBewirtschafterIn" AS "TPop BewirtschafterIn",
+  apflora.tpop."TPopBewirtschaftung" AS "TPop Bewirtschaftung",
+  apflora.v_tpop_berjahrundmassnjahr."Jahr",
+  apflora.tpopber.id AS "TPopBer Id",
+  apflora.tpopber.jahr AS "TPopBer Jahr",
+  tpop_entwicklung_werte.text AS "TPopBer Entwicklung",
+  apflora.tpopber.bemerkungen AS "TPopBer Bemerkungen",
+  apflora.tpopber.changed AS "TPopBer MutWann",
+  apflora.tpopber.changed_by AS "TPopBer MutWer",
+  apflora.tpopmassnber.jahr AS "TPopMassnBer Jahr",
+  tpopmassn_erfbeurt_werte.text AS "TPopMassnBer Entwicklung",
+  apflora.tpopmassnber.bemerkungen AS "TPopMassnBer Interpretation",
+  apflora.tpopmassnber.changed AS "TPopMassnBer MutWann",
+  apflora.tpopmassnber.changed_by AS "TPopMassnBer MutWer"
+FROM
+  ((((((((((apflora.adb_eigenschaften
+  RIGHT JOIN
+    apflora.ap
+    ON apflora.adb_eigenschaften."TaxonomieId" = apflora.ap."ApArtId")
+  RIGHT JOIN
+    (apflora.pop
+    RIGHT JOIN
+      apflora.tpop
+      ON apflora.pop."PopId" = apflora.tpop."PopId")
+    ON apflora.ap."ApArtId" = apflora.pop."ApArtId")
+  LEFT JOIN
+    apflora.ap_bearbstand_werte
+    ON apflora.ap."ApStatus" = apflora.ap_bearbstand_werte."DomainCode")
+  LEFT JOIN
+    apflora.ap_umsetzung_werte
+    ON apflora.ap."ApUmsetzung" = apflora.ap_umsetzung_werte."DomainCode")
+  LEFT JOIN
+    apflora.pop_status_werte ON apflora.pop."PopHerkunft" = pop_status_werte."HerkunftId")
+  LEFT JOIN
+    apflora.pop_status_werte AS "domPopHerkunft_1"
+    ON apflora.tpop."TPopHerkunft" = "domPopHerkunft_1"."HerkunftId")
+  LEFT JOIN
+    apflora.v_tpop_berjahrundmassnjahr
+    ON apflora.tpop."TPopId" = apflora.v_tpop_berjahrundmassnjahr."TPopId")
+  LEFT JOIN
+    apflora.tpopmassnber
+    ON
+      (apflora.v_tpop_berjahrundmassnjahr."TPopId" = apflora.tpopmassnber.tpop_id)
+      AND (apflora.v_tpop_berjahrundmassnjahr."Jahr" = apflora.tpopmassnber.jahr))
+  LEFT JOIN
+    apflora.tpopmassn_erfbeurt_werte
+    ON apflora.tpopmassnber.beurteilung = tpopmassn_erfbeurt_werte.code)
+  LEFT JOIN
+    apflora.tpopber
+    ON
+      (apflora.v_tpop_berjahrundmassnjahr."Jahr" = apflora.tpopber.jahr)
+      AND (apflora.v_tpop_berjahrundmassnjahr."TPopId" = apflora.tpopber.tpop_id))
+  LEFT JOIN
+    apflora.tpop_entwicklung_werte
+    ON apflora.tpopber.entwicklung = tpop_entwicklung_werte.code
+ORDER BY
+  apflora.adb_eigenschaften."Artname",
+  apflora.pop."PopNr",
+  apflora.tpop."TPopNr",
+  apflora.v_tpop_berjahrundmassnjahr."Jahr";
 
 DROP VIEW IF EXISTS apflora.v_tpopkontr_webgisbun;
 CREATE OR REPLACE VIEW apflora.v_tpopkontr_webgisbun AS
@@ -920,8 +1253,145 @@ ORDER BY
   apflora.tpopber.jahr,
   tpop_entwicklung_werte.text;
 
+DROP VIEW IF EXISTS apflora.v_pop_mit_letzter_popber CASCADE;
+CREATE OR REPLACE VIEW apflora.v_pop_mit_letzter_popber AS
+SELECT
+  apflora.adb_eigenschaften."TaxonomieId" AS "AP ApArtId",
+  apflora.adb_eigenschaften."Artname" AS "AP Art",
+  apflora.ap_bearbstand_werte."DomainTxt" AS "AP Status",
+  apflora.ap."ApJahr" AS "AP Start im Jahr",
+  apflora.ap_umsetzung_werte."DomainTxt" AS "AP Stand Umsetzung",
+  apflora.pop."PopId",
+  apflora.pop."PopGuid" AS "Pop Guid",
+  apflora.pop."PopNr" AS "Pop Nr",
+  apflora.pop."PopName" AS "Pop Name",
+  pop_status_werte."HerkunftTxt" AS "Pop Status",
+  apflora.pop."PopBekanntSeit" AS "Pop bekannt seit",
+  apflora.pop."PopHerkunftUnklar" AS "Pop Status unklar",
+  apflora.pop."PopHerkunftUnklarBegruendung" AS "Pop Begruendung fuer unklaren Status",
+  apflora.pop."PopXKoord" AS "Pop X-Koordinaten",
+  apflora.pop."PopYKoord" AS "Pop Y-Koordinaten",
+  apflora.pop."MutWann" AS "Datensatz zuletzt geaendert",
+  apflora.pop."MutWer" AS "Datensatz zuletzt geaendert von",
+  apflora.popber."PopBerId" AS "PopBer Id",
+  apflora.popber."PopBerJahr" AS "PopBer Jahr",
+  tpop_entwicklung_werte.text AS "PopBer Entwicklung",
+  apflora.popber."PopBerTxt" AS "PopBer Bemerkungen",
+  apflora.popber."MutWann" AS "PopBer MutWann",
+  apflora.popber."MutWer" AS "PopBer MutWer"
+FROM
+  apflora.adb_eigenschaften
+  INNER JOIN
+    (((apflora.ap
+    LEFT JOIN
+      apflora.ap_bearbstand_werte
+      ON apflora.ap."ApStatus" = apflora.ap_bearbstand_werte."DomainCode")
+    LEFT JOIN
+      apflora.ap_umsetzung_werte
+      ON apflora.ap."ApUmsetzung" = apflora.ap_umsetzung_werte."DomainCode")
+    INNER JOIN
+      ((apflora.pop
+      LEFT JOIN
+        (apflora.v_pop_letzterpopber0_overall
+        LEFT JOIN
+          (apflora.popber
+          LEFT JOIN
+            apflora.tpop_entwicklung_werte
+            ON apflora.popber."PopBerEntwicklung" = tpop_entwicklung_werte.code)
+          ON
+            (apflora.v_pop_letzterpopber0_overall."PopBerJahr" = apflora.popber."PopBerJahr")
+            AND (apflora.v_pop_letzterpopber0_overall."PopId" = apflora.popber."PopId"))
+        ON apflora.pop."PopId" = apflora.v_pop_letzterpopber0_overall."PopId")
+      LEFT JOIN
+        apflora.pop_status_werte
+        ON apflora.pop."PopHerkunft" = pop_status_werte."HerkunftId")
+      ON apflora.ap."ApArtId" = apflora.pop."ApArtId")
+    ON apflora.adb_eigenschaften."TaxonomieId" = apflora.ap."ApArtId"
+WHERE
+  apflora.adb_eigenschaften."TaxonomieId" > 150
+ORDER BY
+  apflora.adb_eigenschaften."Artname",
+  apflora.pop."PopNr",
+  apflora.v_pop_letzterpopber0_overall."PopBerJahr";
 
+DROP VIEW IF EXISTS apflora.v_pop_popberundmassnber;
+CREATE OR REPLACE VIEW apflora.v_pop_popberundmassnber AS
+SELECT
+  apflora.adb_eigenschaften."TaxonomieId" AS "AP ApArtId",
+  apflora.adb_eigenschaften."Artname" AS "AP Art",
+  apflora.ap_bearbstand_werte."DomainTxt" AS "AP Status",
+  apflora.ap."ApJahr" AS "AP Start im Jahr",
+  apflora.ap_umsetzung_werte."DomainTxt" AS "AP Stand Umsetzung",
+  apflora.pop."PopId",
+  apflora.pop."PopGuid" AS "Pop Guid",
+  apflora.pop."PopNr" AS "Pop Nr",
+  apflora.pop."PopName" AS "Pop Name",
+  pop_status_werte."HerkunftTxt" AS "Pop Status",
+  apflora.pop."PopBekanntSeit" AS "Pop bekannt seit",
+  apflora.pop."PopHerkunftUnklar" AS "Pop Status unklar",
+  apflora.pop."PopHerkunftUnklarBegruendung" AS "Pop Begruendung fuer unklaren Status",
+  apflora.pop."PopXKoord" AS "Pop X-Koordinaten",
+  apflora.pop."PopYKoord" AS "Pop Y-Koordinaten",
+  apflora.pop."MutWann" AS "Datensatz zuletzt geaendert",
+  apflora.pop."MutWer" AS "Datensatz zuletzt geaendert von",
+  apflora.v_pop_berundmassnjahre."Jahr",
+  apflora.popber."PopBerId",
+  apflora.popber."PopBerId" AS "PopBer Id",
+  apflora.popber."PopBerJahr" AS "PopBer Jahr",
+  tpop_entwicklung_werte.text AS "PopBer Entwicklung",
+  apflora.popber."PopBerTxt" AS "PopBer Bemerkungen",
+  apflora.popber."MutWann" AS "PopBer MutWann",
+  apflora.popber."MutWer" AS "PopBer MutWer",
+  apflora.popmassnber."PopMassnBerId",
+  apflora.popmassnber."PopMassnBerId" AS "PopMassnBer Id",
+  apflora.popmassnber."PopMassnBerJahr" AS "PopMassnBer Jahr",
+  tpopmassn_erfbeurt_werte.text AS "PopMassnBer Entwicklung",
+  apflora.popmassnber."PopMassnBerTxt" AS "PopMassnBer Interpretation",
+  apflora.popmassnber."MutWann" AS "PopMassnBer MutWann",
+  apflora.popmassnber."MutWer" AS "PopMassnBer MutWer"
+FROM
+  apflora.adb_eigenschaften
+  INNER JOIN
+    (((apflora.ap
+    LEFT JOIN
+      apflora.ap_bearbstand_werte
+      ON apflora.ap."ApStatus" = apflora.ap_bearbstand_werte."DomainCode")
+    LEFT JOIN
+      apflora.ap_umsetzung_werte
+      ON apflora.ap."ApUmsetzung" = apflora.ap_umsetzung_werte."DomainCode")
+    INNER JOIN
+      (((apflora.pop
+      LEFT JOIN
+        (apflora.v_pop_berundmassnjahre
+        LEFT JOIN
+          (apflora.popmassnber
+          LEFT JOIN
+            apflora.tpopmassn_erfbeurt_werte
+            ON apflora.popmassnber."PopMassnBerErfolgsbeurteilung" = tpopmassn_erfbeurt_werte.code)
+          ON
+            (apflora.v_pop_berundmassnjahre."Jahr" = apflora.popmassnber."PopMassnBerJahr")
+            AND (apflora.v_pop_berundmassnjahre."PopId" = apflora.popmassnber."PopId"))
+        ON apflora.pop."PopId" = apflora.v_pop_berundmassnjahre."PopId")
+      LEFT JOIN
+        apflora.pop_status_werte
+        ON apflora.pop."PopHerkunft" = pop_status_werte."HerkunftId")
+      LEFT JOIN
+        (apflora.popber
+        LEFT JOIN
+          apflora.tpop_entwicklung_werte
+          ON apflora.popber."PopBerEntwicklung" = tpop_entwicklung_werte.code)
+        ON
+          (apflora.v_pop_berundmassnjahre."Jahr" = apflora.popber."PopBerJahr")
+          AND (apflora.v_pop_berundmassnjahre."PopId" = apflora.popber."PopId"))
+      ON apflora.ap."ApArtId" = apflora.pop."ApArtId")
+    ON apflora.adb_eigenschaften."TaxonomieId" = apflora.ap."ApArtId"
+WHERE
+  apflora.adb_eigenschaften."TaxonomieId" > 150
+ORDER BY
+  apflora.adb_eigenschaften."Artname",
+  apflora.pop."PopNr",
+  apflora.v_pop_berundmassnjahre."Jahr";
 
 
 DROP TRIGGER IF EXISTS pop_entwicklung_werte_on_update_set_mut ON apflora.pop_entwicklung_werte;
-DROP TABLE IF EXISTS apflora.pop_entwicklung_werte;
+DROP TABLE IF EXISTS apflora.pop_entwicklung_werte cascade;
