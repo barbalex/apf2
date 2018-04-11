@@ -359,7 +359,7 @@ CREATE TABLE apflora.pop (
   "ApArtId" integer DEFAULT NULL REFERENCES apflora.ap ("ApArtId") ON DELETE CASCADE ON UPDATE CASCADE,
   "PopNr" integer DEFAULT NULL,
   "PopName" varchar(150) DEFAULT NULL,
-  "PopHerkunft" integer DEFAULT NULL REFERENCES apflora.pop_status_werte ("HerkunftId") ON DELETE SET NULL ON UPDATE CASCADE,
+  "PopHerkunft" integer DEFAULT NULL REFERENCES apflora.pop_status_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
   "PopHerkunftUnklar" smallint DEFAULT NULL,
   "PopHerkunftUnklarBegruendung" text DEFAULT NULL,
   "PopBekanntSeit" smallint DEFAULT NULL,
@@ -395,18 +395,21 @@ CREATE INDEX ON apflora.pop USING btree ("PopBekanntSeit");
 
 DROP TABLE IF EXISTS apflora.pop_status_werte;
 CREATE TABLE apflora.pop_status_werte (
-  "HerkunftId" integer PRIMARY KEY,
-  "HerkunftTxt" varchar(60) DEFAULT NULL,
-  "HerkunftOrd" smallint DEFAULT NULL,
-  "MutWann" date DEFAULT NOW(),
-  "MutWer" varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
+  code integer UNIQUE DEFAULT NULL,
+  text varchar(60) DEFAULT NULL,
+  sort smallint DEFAULT NULL,
+  changed date DEFAULT NOW(),
+  changed_by varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
 );
-CREATE INDEX ON apflora.pop_status_werte USING btree ("HerkunftId");
-CREATE INDEX ON apflora.pop_status_werte USING btree ("HerkunftTxt");
-CREATE INDEX ON apflora.pop_status_werte USING btree ("HerkunftOrd");
-COMMENT ON COLUMN apflora.pop_status_werte."HerkunftTxt" IS 'Beschreibung der Herkunft';
-COMMENT ON COLUMN apflora.pop_status_werte."MutWann" IS 'Wann wurde der Datensatz zuletzt geändert?';
-COMMENT ON COLUMN apflora.pop_status_werte."MutWer" IS 'Von wem wurde der Datensatz zuletzt geändert?';
+CREATE INDEX ON apflora.pop_status_werte USING btree (id);
+CREATE INDEX ON apflora.pop_status_werte USING btree (code);
+CREATE INDEX ON apflora.pop_status_werte USING btree (text);
+CREATE INDEX ON apflora.pop_status_werte USING btree (sort);
+COMMENT ON COLUMN apflora.pop_status_werte.id IS 'Primärschlüssel';
+COMMENT ON COLUMN apflora.pop_status_werte.text IS 'Beschreibung der Herkunft';
+COMMENT ON COLUMN apflora.pop_status_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
+COMMENT ON COLUMN apflora.pop_status_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
 DROP TABLE IF EXISTS apflora.popber;
 CREATE TABLE apflora.popber (
@@ -471,7 +474,7 @@ CREATE TABLE apflora.tpop (
   "TPopNeigung" varchar(50) DEFAULT NULL,
   "TPopBeschr" text DEFAULT NULL,
   "TPopKatNr" text DEFAULT NULL,
-  "TPopHerkunft" integer DEFAULT NULL REFERENCES apflora.pop_status_werte ("HerkunftId") ON DELETE SET NULL ON UPDATE CASCADE,
+  "TPopHerkunft" integer DEFAULT NULL REFERENCES apflora.pop_status_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
   "TPopHerkunftUnklar" smallint DEFAULT NULL,
   "TPopHerkunftUnklarBegruendung" text DEFAULT NULL,
   "TPopApBerichtRelevant" integer DEFAULT NULL REFERENCES apflora.tpop_apberrelevant_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,

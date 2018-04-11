@@ -176,7 +176,7 @@ SELECT
   apflora.tpop."TPopNr" AS "TPop Nr",
   apflora.tpop."TPopGemeinde" AS "TPop Gemeinde",
   apflora.tpop."TPopFlurname" AS "TPop Flurname",
-  "domPopHerkunft_1"."HerkunftTxt" AS "TPop Status",
+  "domPopHerkunft_1".text AS "TPop Status",
   apflora.tpop."TPopBekanntSeit" AS "TPop bekannt seit",
   apflora.tpop."TPopHerkunftUnklar" AS "TPop Status unklar",
   apflora.tpop."TPopHerkunftUnklarBegruendung" AS "TPop Begruendung fuer unklaren Status",
@@ -204,7 +204,7 @@ FROM
     ON apflora.pop."PopId" = apflora.tpop."PopId")
   LEFT JOIN
     apflora.pop_status_werte AS "domPopHerkunft_1"
-    ON apflora.tpop."TPopHerkunft" = "domPopHerkunft_1"."HerkunftId"
+    ON apflora.tpop."TPopHerkunft" = "domPopHerkunft_1".code
 WHERE
   apflora.pop."PopId" IS NULL
 ORDER BY
@@ -225,7 +225,7 @@ SELECT
   apflora.pop."PopGuid" AS "Pop Guid",
   apflora.pop."PopNr" AS "Pop Nr",
   apflora.pop."PopName" AS "Pop Name",
-  pop_status_werte."HerkunftTxt" AS "Pop Status",
+  pop_status_werte.text AS "Pop Status",
   apflora.pop."PopBekanntSeit" AS "Pop bekannt seit",
   apflora.pop."PopHerkunftUnklar" AS "Pop Status unklar",
   apflora.pop."PopHerkunftUnklarBegruendung" AS "Pop Begruendung fuer unklaren Status",
@@ -236,7 +236,7 @@ SELECT
   apflora.tpop."TPopNr" AS "TPop Nr",
   apflora.tpop."TPopGemeinde" AS "TPop Gemeinde",
   apflora.tpop."TPopFlurname" AS "TPop Flurname",
-  "domPopHerkunft_1"."HerkunftTxt" AS "TPop Status",
+  "domPopHerkunft_1".text AS "TPop Status",
   apflora.tpop."TPopBekanntSeit" AS "TPop bekannt seit",
   apflora.tpop."TPopHerkunftUnklar" AS "TPop Status unklar",
   apflora.tpop."TPopHerkunftUnklarBegruendung" AS "TPop Begruendung fuer unklaren Status",
@@ -300,10 +300,10 @@ FROM
     ON apflora.ap."ApUmsetzung" = apflora.ap_umsetzung_werte."DomainCode")
   LEFT JOIN
     apflora.pop_status_werte
-    ON apflora.pop."PopHerkunft" = pop_status_werte."HerkunftId")
+    ON apflora.pop."PopHerkunft" = pop_status_werte.code)
   LEFT JOIN
     apflora.pop_status_werte AS "domPopHerkunft_1"
-    ON apflora.tpop."TPopHerkunft" = "domPopHerkunft_1"."HerkunftId")
+    ON apflora.tpop."TPopHerkunft" = "domPopHerkunft_1".code)
   LEFT JOIN
     apflora.adresse
     ON apflora.tpopmassn.bearbeiter = apflora.adresse."AdrId"
@@ -375,10 +375,10 @@ FROM
     ON apflora.ap."ApUmsetzung" = apflora.ap_umsetzung_werte."DomainCode")
   LEFT JOIN
     apflora.pop_status_werte
-    ON apflora.pop."PopHerkunft" = pop_status_werte."HerkunftId")
+    ON apflora.pop."PopHerkunft" = pop_status_werte.code)
   LEFT JOIN
     apflora.pop_status_werte AS "domPopHerkunft_1"
-    ON apflora.tpop."TPopHerkunft" = "domPopHerkunft_1"."HerkunftId")
+    ON apflora.tpop."TPopHerkunft" = "domPopHerkunft_1".code)
   LEFT JOIN
     apflora.adresse
     ON apflora.tpopmassn.bearbeiter = apflora.adresse."AdrId"
@@ -432,7 +432,7 @@ SELECT
   CAST(apflora.pop."PopGuid" AS varchar(50)) AS "popguid",
   apflora.pop."PopNr" AS "popnr",
   apflora.pop."PopName" AS "popname",
-  pop_status_werte."HerkunftTxt" AS "popstatus",
+  pop_status_werte.text AS "popstatus",
   apflora.pop."PopBekanntSeit" AS "popbekanntseit",
   apflora.pop."PopXKoord" AS "popxkoordinaten",
   apflora.pop."PopYKoord" AS "popykoordinaten",
@@ -440,7 +440,7 @@ SELECT
   apflora.tpop."TPopNr" AS "tpopnr",
   apflora.tpop."TPopGemeinde" AS "tpopgemeinde",
   apflora.tpop."TPopFlurname" AS "tpopflurname",
-  "domPopHerkunft_1"."HerkunftTxt" AS "tpopstatus",
+  "domPopHerkunft_1".text AS "tpopstatus",
   apflora.tpop."TPopHerkunftUnklar" AS "tpopstatusunklar",
   apflora.tpop."TPopHerkunftUnklarBegruendung" AS "tpopbegruendungfuerunklarenstatus",
   apflora.tpop."TPopXKoord" AS "tpopxkoordinaten",
@@ -504,10 +504,10 @@ FROM
     ON apflora.ap."ApUmsetzung" = apflora.ap_umsetzung_werte."DomainCode")
   LEFT JOIN
     apflora.pop_status_werte
-    ON apflora.pop."PopHerkunft" = pop_status_werte."HerkunftId")
+    ON apflora.pop."PopHerkunft" = pop_status_werte.code)
   LEFT JOIN
     apflora.pop_status_werte AS "domPopHerkunft_1"
-    ON apflora.tpop."TPopHerkunft" = "domPopHerkunft_1"."HerkunftId")
+    ON apflora.tpop."TPopHerkunft" = "domPopHerkunft_1".code)
   LEFT JOIN
     apflora.adresse
     ON apflora.tpopmassn.bearbeiter = apflora.adresse."AdrId"
@@ -532,7 +532,7 @@ SELECT
   apflora.pop."PopGuid" AS "Pop Guid",
   apflora.pop."PopNr" AS "Pop Nr",
   apflora.pop."PopName" AS "Pop Name",
-  pop_status_werte."HerkunftTxt" AS "Pop Status",
+  pop_status_werte.text AS "Pop Status",
   apflora.pop."PopBekanntSeit" AS "Pop bekannt seit",
   apflora.pop."PopHerkunftUnklar" AS "Pop Status unklar",
   apflora.pop."PopHerkunftUnklarBegruendung" AS "Pop Begruendung fuer unklaren Status",
@@ -543,7 +543,7 @@ SELECT
   apflora.tpop."TPopNr" AS "TPop Nr",
   apflora.tpop."TPopGemeinde" AS "TPop Gemeinde",
   apflora.tpop."TPopFlurname" AS "TPop Flurname",
-  "domPopHerkunft_1"."HerkunftTxt" AS "TPop Status",
+  "domPopHerkunft_1".text AS "TPop Status",
   apflora.tpop."TPopBekanntSeit" AS "TPop bekannt seit",
   apflora.tpop."TPopHerkunftUnklar" AS "TPop Status unklar",
   apflora.tpop."TPopHerkunftUnklarBegruendung" AS "TPop Begruendung fuer unklaren Status",
@@ -571,7 +571,7 @@ FROM
       ((apflora.pop
       LEFT JOIN
         apflora.pop_status_werte
-        ON apflora.pop."PopHerkunft" = pop_status_werte."HerkunftId")
+        ON apflora.pop."PopHerkunft" = pop_status_werte.code)
       INNER JOIN
         ((apflora.tpop
         LEFT JOIN
@@ -579,7 +579,7 @@ FROM
           ON apflora.tpop."TPopId" = apflora.tpopmassn.tpop_id)
         LEFT JOIN
           apflora.pop_status_werte AS "domPopHerkunft_1"
-          ON apflora.tpop."TPopHerkunft" = "domPopHerkunft_1"."HerkunftId")
+          ON apflora.tpop."TPopHerkunft" = "domPopHerkunft_1".code)
         ON apflora.pop."PopId" = apflora.tpop."PopId")
       ON apflora.ap."ApArtId" = apflora.pop."ApArtId")
     LEFT JOIN
@@ -600,7 +600,7 @@ GROUP BY
   apflora.pop."PopGuid",
   apflora.pop."PopNr",
   apflora.pop."PopName",
-  pop_status_werte."HerkunftTxt",
+  pop_status_werte.text,
   apflora.pop."PopBekanntSeit",
   apflora.pop."PopHerkunftUnklar",
   apflora.pop."PopHerkunftUnklarBegruendung",
@@ -611,7 +611,7 @@ GROUP BY
   apflora.tpop."TPopNr",
   apflora.tpop."TPopGemeinde",
   apflora.tpop."TPopFlurname",
-  "domPopHerkunft_1"."HerkunftTxt",
+  "domPopHerkunft_1".text,
   apflora.tpop."TPopBekanntSeit",
   apflora.tpop."TPopHerkunftUnklar",
   apflora.tpop."TPopHerkunftUnklarBegruendung",
@@ -646,7 +646,7 @@ SELECT
   apflora.pop."PopGuid" AS "Pop Guid",
   apflora.pop."PopNr" AS "Pop Nr",
   apflora.pop."PopName" AS "Pop Name",
-  pop_status_werte."HerkunftTxt" AS "Pop Status",
+  pop_status_werte.text AS "Pop Status",
   apflora.pop."PopBekanntSeit" AS "Pop bekannt seit",
   apflora.pop."PopHerkunftUnklar" AS "Pop Status unklar",
   apflora.pop."PopHerkunftUnklarBegruendung" AS "Pop Begruendung fuer unklaren Status",
@@ -675,7 +675,7 @@ FROM
     ON apflora.ap."ApUmsetzung" = apflora.ap_umsetzung_werte."DomainCode")
   LEFT JOIN
     apflora.pop_status_werte
-    ON apflora.pop."PopHerkunft" = pop_status_werte."HerkunftId"
+    ON apflora.pop."PopHerkunft" = pop_status_werte.code
 GROUP BY
   apflora.adb_eigenschaften."TaxonomieId",
   apflora.adb_eigenschaften."Artname",
@@ -685,7 +685,7 @@ GROUP BY
   apflora.pop."PopGuid",
   apflora.pop."PopNr",
   apflora.pop."PopName",
-  pop_status_werte."HerkunftTxt",
+  pop_status_werte.text,
   apflora.pop."PopHerkunftUnklar",
   apflora.pop."PopHerkunftUnklarBegruendung",
   apflora.pop."PopBekanntSeit",
@@ -707,7 +707,7 @@ SELECT
   apflora.pop."PopGuid" AS "Pop Guid",
   apflora.pop."PopNr" AS "Pop Nr",
   apflora.pop."PopName" AS "Pop Name",
-  pop_status_werte."HerkunftTxt" AS "Pop Status",
+  pop_status_werte.text AS "Pop Status",
   apflora.pop."PopBekanntSeit" AS "Pop bekannt seit",
   apflora.pop."PopHerkunftUnklar" AS "Pop Status unklar",
   apflora.pop."PopHerkunftUnklarBegruendung" AS "Pop Begruendung fuer unklaren Status",
@@ -736,7 +736,7 @@ FROM
     ON apflora.ap."ApUmsetzung" = apflora.ap_umsetzung_werte."DomainCode")
   LEFT JOIN
     apflora.pop_status_werte
-    ON apflora.pop."PopHerkunft" = pop_status_werte."HerkunftId"
+    ON apflora.pop."PopHerkunft" = pop_status_werte.code
 GROUP BY
   apflora.adb_eigenschaften."TaxonomieId",
   apflora.adb_eigenschaften."Artname",
@@ -747,7 +747,7 @@ GROUP BY
   apflora.pop."PopGuid",
   apflora.pop."PopNr",
   apflora.pop."PopName",
-  pop_status_werte."HerkunftTxt",
+  pop_status_werte.text,
   apflora.pop."PopHerkunftUnklar",
   apflora.pop."PopHerkunftUnklarBegruendung",
   apflora.pop."PopBekanntSeit",
@@ -845,7 +845,7 @@ SELECT
   apflora.pop."PopGuid" AS "Pop Guid",
   apflora.pop."PopNr" AS "Pop Nr",
   apflora.pop."PopName" AS "Pop Name",
-  pop_status_werte."HerkunftTxt" AS "Pop Status",
+  pop_status_werte.text AS "Pop Status",
   apflora.pop."PopBekanntSeit" AS "Pop bekannt seit",
   apflora.pop."PopHerkunftUnklar" AS "Pop Status unklar",
   apflora.pop."PopHerkunftUnklarBegruendung" AS "Pop Begruendung fuer unklaren Status",
@@ -867,7 +867,7 @@ FROM
       (apflora.pop
       LEFT JOIN
         apflora.pop_status_werte
-        ON apflora.pop."PopHerkunft" = pop_status_werte."HerkunftId")
+        ON apflora.pop."PopHerkunft" = pop_status_werte.code)
       ON apflora.ap."ApArtId" = apflora.pop."ApArtId")
     ON apflora.adb_eigenschaften."TaxonomieId" = apflora.ap."ApArtId"
 ORDER BY
@@ -886,7 +886,7 @@ SELECT
   apflora.pop."PopGuid" AS "Pop Guid",
   apflora.pop."PopNr" AS "Pop Nr",
   apflora.pop."PopName" AS "Pop Name",
-  pop_status_werte."HerkunftTxt" AS "Pop Status",
+  pop_status_werte.text AS "Pop Status",
   apflora.pop."PopBekanntSeit" AS "Pop bekannt seit",
   apflora.pop."PopHerkunftUnklar" AS "Pop Status unklar",
   apflora.pop."PopHerkunftUnklarBegruendung" AS "Pop Begruendung fuer unklaren Status",
@@ -910,7 +910,7 @@ FROM
     ON apflora.ap."ApUmsetzung" = apflora.ap_umsetzung_werte."DomainCode")
   LEFT JOIN
     apflora.pop_status_werte
-    ON apflora.pop."PopHerkunft" = pop_status_werte."HerkunftId"
+    ON apflora.pop."PopHerkunft" = pop_status_werte.code
 WHERE
   apflora.pop."PopXKoord" IS NULL
   OR apflora.pop."PopYKoord" IS NULL
@@ -948,7 +948,7 @@ SELECT
   CAST(apflora.pop."PopGuid" AS varchar(50)) AS "popguid",
   apflora.pop."PopNr" AS "popnr",
   apflora.pop."PopName" AS "popname",
-  pop_status_werte."HerkunftTxt" AS "popherkunft",
+  pop_status_werte.text AS "popherkunft",
   apflora.pop."PopBekanntSeit" AS "popbekanntseit",
   apflora.pop."PopHerkunftUnklar" AS "popherkunftunklar",
   apflora.pop."PopHerkunftUnklarBegruendung" AS "popherkunftunklarbegruendung",
@@ -972,7 +972,7 @@ FROM
     ON apflora.ap."ApUmsetzung" = apflora.ap_umsetzung_werte."DomainCode")
   LEFT JOIN
     apflora.pop_status_werte
-    ON apflora.pop."PopHerkunft" = pop_status_werte."HerkunftId"
+    ON apflora.pop."PopHerkunft" = pop_status_werte.code
 WHERE
   apflora.pop."PopXKoord" > 0
   AND apflora.pop."PopYKoord" > 0
@@ -987,7 +987,7 @@ SELECT
   apflora.pop."PopGuid" AS "Pop Guid",
   apflora.pop."PopNr" AS "Pop Nr",
   apflora.pop."PopName" AS "Pop Name",
-  pop_status_werte."HerkunftTxt" AS "Pop Status",
+  pop_status_werte.text AS "Pop Status",
   apflora.pop."PopBekanntSeit" AS "Pop bekannt seit",
   apflora.pop."PopHerkunftUnklar" AS "Pop Status unklar",
   apflora.pop."PopHerkunftUnklarBegruendung" AS "Pop Begruendung fuer unklaren Status",
@@ -1003,7 +1003,7 @@ FROM
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId")
   LEFT JOIN
     apflora.pop_status_werte
-    ON apflora.pop."PopHerkunft" = pop_status_werte."HerkunftId"
+    ON apflora.pop."PopHerkunft" = pop_status_werte.code
 WHERE
   apflora.ap."ApArtId" IS NULL
 ORDER BY
@@ -1022,7 +1022,7 @@ SELECT
   apflora.pop."PopGuid" AS "Pop Guid",
   apflora.pop."PopNr" AS "Pop Nr",
   apflora.pop."PopName" AS "Pop Name",
-  pop_status_werte."HerkunftTxt" AS "Pop Status",
+  pop_status_werte.text AS "Pop Status",
   apflora.pop."PopBekanntSeit" AS "Pop bekannt seit",
   apflora.pop."PopHerkunftUnklar" AS "Pop Status unklar",
   apflora.pop."PopHerkunftUnklarBegruendung" AS "Pop Begruendung fuer unklaren Status",
@@ -1046,7 +1046,7 @@ FROM
     ON apflora.ap."ApUmsetzung" = apflora.ap_umsetzung_werte."DomainCode")
   LEFT JOIN
     apflora.pop_status_werte
-    ON apflora.pop."PopHerkunft" = pop_status_werte."HerkunftId")
+    ON apflora.pop."PopHerkunft" = pop_status_werte.code)
   LEFT JOIN
     apflora.tpop
     ON apflora.pop."PopId" = apflora.tpop."PopId"
@@ -1067,7 +1067,7 @@ SELECT
   apflora.pop."PopGuid" AS "Pop Guid",
   apflora.pop."PopNr" AS "Pop Nr",
   apflora.pop."PopName" AS "Pop Name",
-  pop_status_werte."HerkunftTxt" AS "Pop Status",
+  pop_status_werte.text AS "Pop Status",
   apflora.pop."PopBekanntSeit" AS "Pop bekannt seit",
   apflora.pop."PopHerkunftUnklar" AS "Pop Status unklar",
   apflora.pop."PopHerkunftUnklarBegruendung" AS "Pop Begruendung fuer unklaren Status",
@@ -1095,7 +1095,7 @@ FROM
     ON apflora.ap."ApUmsetzung" = apflora.ap_umsetzung_werte."DomainCode")
   LEFT JOIN
     apflora.pop_status_werte
-    ON apflora.pop."PopHerkunft" = pop_status_werte."HerkunftId")
+    ON apflora.pop."PopHerkunft" = pop_status_werte.code)
   INNER JOIN
     apflora.popber
     ON apflora.pop."PopId" = apflora.popber."PopId")
@@ -1144,7 +1144,7 @@ SELECT
   apflora.pop."PopGuid" AS "Pop Guid",
   apflora.pop."PopNr" AS "Pop Nr",
   apflora.pop."PopName" AS "Pop Name",
-  pop_status_werte."HerkunftTxt" AS "Pop Status",
+  pop_status_werte.text AS "Pop Status",
   apflora.pop."PopBekanntSeit" AS "Pop bekannt seit",
   apflora.pop."PopHerkunftUnklar" AS "Pop Status unklar",
   apflora.pop."PopHerkunftUnklarBegruendung" AS "Pop Begruendung fuer unklaren Status",
@@ -1174,7 +1174,7 @@ FROM
     ON apflora.ap."ApUmsetzung" = apflora.ap_umsetzung_werte."DomainCode")
   LEFT JOIN
     apflora.pop_status_werte
-    ON apflora.pop."PopHerkunft" = pop_status_werte."HerkunftId")
+    ON apflora.pop."PopHerkunft" = pop_status_werte.code)
   INNER JOIN
     apflora.popmassnber
     ON apflora.pop."PopId" = apflora.popmassnber."PopId")
@@ -1224,7 +1224,7 @@ SELECT
   apflora.pop."PopGuid" AS "Pop Guid",
   apflora.pop."PopNr" AS "Pop Nr",
   apflora.pop."PopName" AS "Pop Name",
-  pop_status_werte."HerkunftTxt" AS "Pop Status",
+  pop_status_werte.text AS "Pop Status",
   apflora.pop."PopBekanntSeit" AS "Pop bekannt seit",
   apflora.pop."PopHerkunftUnklar" AS "Pop Status unklar",
   apflora.pop."PopHerkunftUnklarBegruendung" AS "Pop Begruendung fuer unklaren Status",
@@ -1236,7 +1236,7 @@ SELECT
   apflora.tpop."TPopNr" AS "TPop Nr",
   apflora.tpop."TPopGemeinde" AS "TPop Gemeinde",
   apflora.tpop."TPopFlurname" AS "TPop Flurname",
-  "domPopHerkunft_1"."HerkunftTxt" AS "TPop Status",
+  "domPopHerkunft_1".text AS "TPop Status",
   apflora.tpop."TPopBekanntSeit" AS "TPop bekannt seit",
   apflora.tpop."TPopHerkunftUnklar" AS "TPop Status unklar",
   apflora.tpop."TPopHerkunftUnklarBegruendung" AS "TPop Begruendung fuer unklaren Status",
@@ -1276,10 +1276,10 @@ FROM
     ON apflora.ap."ApUmsetzung" = apflora.ap_umsetzung_werte."DomainCode")
   LEFT JOIN
     apflora.pop_status_werte
-    ON apflora.pop."PopHerkunft" = pop_status_werte."HerkunftId")
+    ON apflora.pop."PopHerkunft" = pop_status_werte.code)
   LEFT JOIN
     apflora.pop_status_werte AS "domPopHerkunft_1"
-    ON apflora.tpop."TPopHerkunft" = "domPopHerkunft_1"."HerkunftId")
+    ON apflora.tpop."TPopHerkunft" = "domPopHerkunft_1".code)
   LEFT JOIN
     apflora.adresse
     ON apflora.ap."ApBearb" = apflora.adresse."AdrId"
@@ -1301,7 +1301,7 @@ SELECT
   apflora.pop."PopGuid" AS "POPGUID",
   apflora.pop."PopNr" AS "POPNR",
   apflora.pop."PopName" AS "POPNAME",
-  pop_status_werte."HerkunftTxt" AS "POPSTATUS",
+  pop_status_werte.text AS "POPSTATUS",
   apflora.pop."PopHerkunftUnklar" AS "POPSTATUSUNKLAR",
   apflora.pop."PopHerkunftUnklarBegruendung" AS "POPUNKLARGRUND",
   apflora.pop."PopBekanntSeit" AS "POPBEKANNTSEIT",
@@ -1312,7 +1312,7 @@ SELECT
   apflora.tpop."TPopNr" AS "TPOPNR",
   apflora.tpop."TPopGemeinde" AS "TPOPGEMEINDE",
   apflora.tpop."TPopFlurname" AS "TPOPFLURNAME",
-  "domPopHerkunft_1"."HerkunftTxt" AS "TPOPSTATUS",
+  "domPopHerkunft_1".text AS "TPOPSTATUS",
   apflora.tpop."TPopHerkunftUnklar" AS "TPOPSTATUSUNKLAR",
   apflora.tpop."TPopHerkunftUnklarBegruendung" AS "TPOPUNKLARGRUND",
   apflora.tpop."TPopXKoord" AS "TPOP_X",
@@ -1354,10 +1354,10 @@ FROM
     ON apflora.ap."ApUmsetzung" = apflora.ap_umsetzung_werte."DomainCode")
   LEFT JOIN
     apflora.pop_status_werte
-    ON apflora.pop."PopHerkunft" = pop_status_werte."HerkunftId")
+    ON apflora.pop."PopHerkunft" = pop_status_werte.code)
   LEFT JOIN
     apflora.pop_status_werte AS "domPopHerkunft_1"
-    ON apflora.tpop."TPopHerkunft" = "domPopHerkunft_1"."HerkunftId")
+    ON apflora.tpop."TPopHerkunft" = "domPopHerkunft_1".code)
   LEFT JOIN
     apflora.adresse
     ON apflora.ap."ApBearb" = apflora.adresse."AdrId"
@@ -1413,7 +1413,7 @@ SELECT
   CAST(apflora.pop."PopGuid" AS varchar(50)) AS "popguid",
   apflora.pop."PopNr" AS "popnr",
   apflora.pop."PopName" AS "popname",
-  pop_status_werte."HerkunftTxt" AS "popherkunft",
+  pop_status_werte.text AS "popherkunft",
   apflora.pop."PopBekanntSeit" AS "popbekanntseit",
   apflora.pop."PopHerkunftUnklar" AS "popherkunftunklar",
   apflora.pop."PopHerkunftUnklarBegruendung" AS "popherkunftunklarbegruendung",
@@ -1421,7 +1421,7 @@ SELECT
   apflora.tpop."TPopNr" AS "tpopnr",
   apflora.tpop."TPopGemeinde" AS "tpopgemeinde",
   apflora.tpop."TPopFlurname" AS "tpopflurname",
-  "domPopHerkunft_1"."HerkunftTxt" AS "tpopherkunft",
+  "domPopHerkunft_1".text AS "tpopherkunft",
   apflora.tpop."TPopBekanntSeit" AS "tpopbekanntseit",
   apflora.tpop."TPopHerkunftUnklar" AS "tpopherkunftunklar",
   apflora.tpop."TPopHerkunftUnklarBegruendung" AS "tpopherkunftunklarbegruendung",
@@ -1461,10 +1461,10 @@ FROM
     ON apflora.ap."ApUmsetzung" = apflora.ap_umsetzung_werte."DomainCode")
   LEFT JOIN
     apflora.pop_status_werte
-    ON apflora.pop."PopHerkunft" = pop_status_werte."HerkunftId")
+    ON apflora.pop."PopHerkunft" = pop_status_werte.code)
   LEFT JOIN
     apflora.pop_status_werte AS "domPopHerkunft_1"
-    ON apflora.tpop."TPopHerkunft" = "domPopHerkunft_1"."HerkunftId"
+    ON apflora.tpop."TPopHerkunft" = "domPopHerkunft_1".code
 WHERE
   apflora.tpop."TPopYKoord" > 0
   AND apflora.tpop."TPopXKoord" > 0
@@ -1800,7 +1800,7 @@ SELECT
   apflora.ap_bearbstand_werte."DomainTxt" AS "Bearbeitungsstand AP",
   apflora.pop."PopNr",
   apflora.pop."PopName",
-  pop_status_werte."HerkunftTxt" AS "Status Population",
+  pop_status_werte.text AS "Status Population",
   apflora.tpop."TPopNr",
   apflora.tpop."TPopFlurname",
   apflora.tpop."TPopHerkunft" AS "Status Teilpopulation"
@@ -1816,7 +1816,7 @@ FROM
     ((apflora.pop
     INNER JOIN
       apflora.pop_status_werte
-      ON apflora.pop."PopHerkunft" = pop_status_werte."HerkunftId")
+      ON apflora.pop."PopHerkunft" = pop_status_werte.code)
     INNER JOIN
       apflora.tpop
       ON apflora.pop."PopId" = apflora.tpop."PopId")
@@ -2505,7 +2505,7 @@ SELECT
   apflora.ap_umsetzung_werte."DomainTxt" AS "Aktionsplan-Umsetzung",
   apflora.pop."PopNr" AS "Population-Nr",
   apflora.pop."PopName" AS "Population-Name",
-  pop_status_werte."HerkunftTxt" AS "Population-Herkunft",
+  pop_status_werte.text AS "Population-Herkunft",
   apflora.pop."PopBekanntSeit" AS "Population - bekannt seit",
   apflora.tpop."TPopNr" AS "Teilpopulation-Nr",
   apflora.tpop."TPopGemeinde" AS "Teilpopulation-Gemeinde",
@@ -2516,7 +2516,7 @@ SELECT
   apflora.tpop."TPopHoehe" AS "Teilpopulation-Hoehe",
   apflora.tpop."TPopBeschr" AS "Teilpopulation-Beschreibung",
   apflora.tpop."TPopKatNr" AS "Teilpopulation-Kataster-Nr",
-  "domPopHerkunft_1"."HerkunftTxt" AS "Teilpopulation-Herkunft",
+  "domPopHerkunft_1".text AS "Teilpopulation-Herkunft",
   apflora.tpop."TPopHerkunftUnklar" AS "Teilpopulation - Herkunft unklar",
   apflora.tpop."TPopHerkunftUnklarBegruendung" AS "Teilpopulation - Herkunft unklar Begruendung",
   apflora.tpop_apberrelevant_werte.text AS "Teilpopulation - Fuer Bericht relevant",
@@ -2545,12 +2545,12 @@ FROM
     (((apflora.pop
     LEFT JOIN
       apflora.pop_status_werte
-      ON apflora.pop."PopHerkunft" = pop_status_werte."HerkunftId")
+      ON apflora.pop."PopHerkunft" = pop_status_werte.code)
     INNER JOIN
       ((apflora.tpop
       LEFT JOIN
         apflora.pop_status_werte
-        AS "domPopHerkunft_1" ON apflora.tpop."TPopHerkunft" = "domPopHerkunft_1"."HerkunftId")
+        AS "domPopHerkunft_1" ON apflora.tpop."TPopHerkunft" = "domPopHerkunft_1".code)
       LEFT JOIN
         apflora.tpop_apberrelevant_werte
         ON apflora.tpop."TPopApBerichtRelevant"  = apflora.tpop_apberrelevant_werte.code)
@@ -2640,7 +2640,7 @@ SELECT
   apflora.pop."PopId",
   apflora.pop."PopNr" AS "Population-Nr",
   apflora.pop."PopName" AS "Population-Name",
-  pop_status_werte."HerkunftTxt" AS "Population-Herkunft",
+  pop_status_werte.text AS "Population-Herkunft",
   apflora.pop."PopBekanntSeit" AS "Population - bekannt seit",
   apflora.tpop."TPopId",
   apflora.tpop."TPopNr" AS "Teilpopulation-Nr",
@@ -2652,7 +2652,7 @@ SELECT
   apflora.tpop."TPopHoehe" AS "Teilpopulation-Höhe",
   apflora.tpop."TPopBeschr" AS "Teilpopulation-Beschreibung",
   apflora.tpop."TPopKatNr" AS "Teilpopulation-Kataster-Nr",
-  "domPopHerkunft_1"."HerkunftTxt" AS "Teilpopulation-Herkunft",
+  "domPopHerkunft_1".text AS "Teilpopulation-Herkunft",
   apflora.tpop."TPopHerkunftUnklar" AS "Teilpopulation - Herkunft unklar",
   apflora.tpop."TPopHerkunftUnklarBegruendung" AS "Teilpopulation - Herkunft unklar Begruendung",
   apflora.tpop_apberrelevant_werte.text AS "Teilpopulation - Fuer Bericht relevant",
@@ -2696,12 +2696,12 @@ FROM
     (((apflora.pop
     LEFT JOIN
       apflora.pop_status_werte
-      ON apflora.pop."PopHerkunft" = pop_status_werte."HerkunftId")
+      ON apflora.pop."PopHerkunft" = pop_status_werte.code)
     INNER JOIN
       ((apflora.tpop
       LEFT JOIN
         apflora.pop_status_werte AS "domPopHerkunft_1"
-        ON apflora.tpop."TPopHerkunft" = "domPopHerkunft_1"."HerkunftId")
+        ON apflora.tpop."TPopHerkunft" = "domPopHerkunft_1".code)
       LEFT JOIN
         apflora.tpop_apberrelevant_werte
         ON apflora.tpop."TPopApBerichtRelevant"  = apflora.tpop_apberrelevant_werte.code)
@@ -3563,7 +3563,7 @@ SELECT
   apflora.adb_eigenschaften."Artname",
   apflora.pop."PopNr",
   apflora.pop."PopName",
-  pop_status_werte."HerkunftTxt" AS "PopHerkunft",
+  pop_status_werte.text AS "PopHerkunft",
   apflora.popber."PopBerJahr",
   tpop_entwicklung_werte.text AS "PopBerEntwicklung",
   apflora.popber."PopBerTxt"
@@ -3580,7 +3580,7 @@ FROM
     ON apflora.adb_eigenschaften."TaxonomieId" = apflora.ap."ApArtId")
   LEFT JOIN
     apflora.pop_status_werte
-    ON apflora.pop."PopHerkunft" = pop_status_werte."HerkunftId")
+    ON apflora.pop."PopHerkunft" = pop_status_werte.code)
   LEFT JOIN
     apflora.tpop_entwicklung_werte
     ON apflora.popber."PopBerEntwicklung" = tpop_entwicklung_werte.code;
@@ -3766,7 +3766,7 @@ SELECT
   apflora.ap_umsetzung_werte."DomainTxt" AS "ApUmsetzung",
   apflora.pop."PopNr",
   apflora.pop."PopName",
-  pop_status_werte."HerkunftTxt" AS "PopHerkunft",
+  pop_status_werte.text AS "PopHerkunft",
   apflora.pop."PopBekanntSeit",
   apflora.tpop."TPopNr",
   apflora.tpop."TPopGemeinde",
@@ -3774,7 +3774,7 @@ SELECT
   apflora.tpop."TPopXKoord",
   apflora.tpop."TPopYKoord",
   apflora.tpop."TPopBekanntSeit",
-  "domPopHerkunft_1"."HerkunftTxt" AS "TPopHerkunft",
+  "domPopHerkunft_1".text AS "TPopHerkunft",
   apflora.tpop."TPopApBerichtRelevant"
 FROM
   ((((apflora.adb_eigenschaften
@@ -3795,10 +3795,10 @@ FROM
     ON apflora.ap."ApUmsetzung" = apflora.ap_umsetzung_werte."DomainCode")
   LEFT JOIN
     apflora.pop_status_werte
-    ON apflora.pop."PopHerkunft" = pop_status_werte."HerkunftId")
+    ON apflora.pop."PopHerkunft" = pop_status_werte.code)
   LEFT JOIN
     apflora.pop_status_werte
-    AS "domPopHerkunft_1" ON apflora.tpop."TPopHerkunft" = "domPopHerkunft_1"."HerkunftId";
+    AS "domPopHerkunft_1" ON apflora.tpop."TPopHerkunft" = "domPopHerkunft_1".code;
 
 DROP VIEW IF EXISTS apflora.v_tpopkontr CASCADE;
 CREATE OR REPLACE VIEW apflora.v_tpopkontr AS
@@ -3814,14 +3814,14 @@ SELECT
   apflora.pop."PopGuid" AS "Pop Guid",
   apflora.pop."PopNr" AS "Pop Nr",
   apflora.pop."PopName" AS "Pop Name",
-  apflora.pop_status_werte."HerkunftTxt" AS "Pop Herkunft",
+  apflora.pop_status_werte.text AS "Pop Herkunft",
   apflora.pop."PopBekanntSeit" AS "Pop bekannt seit",
   apflora.tpop."TPopId" AS "TPop ID",
   apflora.tpop."TPopGuid" AS "TPop Guid",
   apflora.tpop."TPopNr" AS "TPop Nr",
   apflora.tpop."TPopGemeinde" AS "TPop Gemeinde",
   apflora.tpop."TPopFlurname" AS "TPop Flurname",
-  "domPopHerkunft_1"."HerkunftTxt" AS "TPop Status",
+  "domPopHerkunft_1".text AS "TPop Status",
   apflora.tpop."TPopBekanntSeit" AS "TPop bekannt seit",
   apflora.tpop."TPopHerkunftUnklar" AS "TPop Status unklar",
   apflora.tpop."TPopHerkunftUnklarBegruendung" AS "TPop Begruendung fuer unklaren Status",
@@ -3931,14 +3931,14 @@ FROM
       ON apflora.ap."ApUmsetzung" = apflora.ap_umsetzung_werte."DomainCode")
     LEFT JOIN
       apflora.pop_status_werte
-      ON apflora.pop."PopHerkunft" = apflora.pop_status_werte."HerkunftId")
+      ON apflora.pop."PopHerkunft" = apflora.pop_status_werte.code)
     LEFT JOIN
       apflora.tpopkontr_idbiotuebereinst_werte
       ON apflora.tpopkontr."TPopKontrIdealBiotopUebereinst" = apflora.tpopkontr_idbiotuebereinst_werte.code)
   LEFT JOIN
     apflora.adresse AS "tblAdresse_1"
     ON apflora.ap."ApBearb" = "tblAdresse_1"."AdrId")
-  ON "domPopHerkunft_1"."HerkunftId" = apflora.tpop."TPopHerkunft"
+  ON "domPopHerkunft_1".code = apflora.tpop."TPopHerkunft"
 WHERE
   apflora.adb_eigenschaften."TaxonomieId" > 150
 GROUP BY
@@ -3953,14 +3953,14 @@ GROUP BY
   apflora.pop."PopGuid",
   apflora.pop."PopNr",
   apflora.pop."PopName",
-  apflora.pop_status_werte."HerkunftTxt",
+  apflora.pop_status_werte.text,
   apflora.pop."PopBekanntSeit",
   apflora.tpop."TPopId",
   apflora.tpop."TPopGuid",
   apflora.tpop."TPopNr",
   apflora.tpop."TPopGemeinde",
   apflora.tpop."TPopFlurname",
-  "domPopHerkunft_1"."HerkunftTxt",
+  "domPopHerkunft_1".text,
   apflora.tpop."TPopBekanntSeit",
   apflora.tpop."TPopHerkunftUnklar",
   apflora.tpop."TPopHerkunftUnklarBegruendung",
@@ -4131,14 +4131,14 @@ FROM
       ON apflora.ap."ApUmsetzung" = apflora.ap_umsetzung_werte."DomainCode")
     LEFT JOIN
       apflora.pop_status_werte
-      ON apflora.pop."PopHerkunft" = apflora.pop_status_werte."HerkunftId")
+      ON apflora.pop."PopHerkunft" = apflora.pop_status_werte.code)
     LEFT JOIN
       apflora.tpopkontr_idbiotuebereinst_werte
       ON apflora.tpopkontr."TPopKontrIdealBiotopUebereinst" = apflora.tpopkontr_idbiotuebereinst_werte.code)
   LEFT JOIN
     apflora.adresse AS "tblAdresse_1"
     ON apflora.ap."ApBearb" = "tblAdresse_1"."AdrId")
-  ON "domPopHerkunft_1"."HerkunftId" = apflora.tpop."TPopHerkunft"
+  ON "domPopHerkunft_1".code = apflora.tpop."TPopHerkunft"
 WHERE
   apflora.adb_eigenschaften."TaxonomieId" > 150
 GROUP BY
@@ -4336,7 +4336,7 @@ SELECT
   CAST(apflora.pop."PopGuid" AS varchar(50)) AS popguid,
   apflora.pop."PopNr" AS popnr,
   apflora.pop."PopName" AS popname,
-  apflora.pop_status_werte."HerkunftTxt" AS popherkunft,
+  apflora.pop_status_werte.text AS popherkunft,
   apflora.pop."PopBekanntSeit" AS popbekanntseit,
   CAST(apflora.tpop."TPopGuid" AS varchar(50)) AS tpopguid,
   apflora.tpop."TPopNr" AS tpopnr,
@@ -4416,7 +4416,7 @@ FROM
     ON apflora.ap."ApUmsetzung" = apflora.ap_umsetzung_werte."DomainCode")
   LEFT JOIN
     apflora.pop_status_werte
-    ON apflora.pop."PopHerkunft" = apflora.pop_status_werte."HerkunftId")
+    ON apflora.pop."PopHerkunft" = apflora.pop_status_werte.code)
   LEFT JOIN
     apflora.tpopkontr_idbiotuebereinst_werte
     ON apflora.tpopkontr."TPopKontrIdealBiotopUebereinst" = apflora.tpopkontr_idbiotuebereinst_werte.code
@@ -5024,7 +5024,7 @@ SELECT
   apflora.pop."PopGuid" AS "Pop Guid",
   apflora.pop."PopNr" AS "Pop Nr",
   apflora.pop."PopName" AS "Pop Name",
-  pop_status_werte."HerkunftTxt" AS "Pop Status",
+  pop_status_werte.text AS "Pop Status",
   apflora.pop."PopBekanntSeit" AS "Pop bekannt seit",
   apflora.pop."PopHerkunftUnklar" AS "Pop Status unklar",
   apflora.pop."PopHerkunftUnklarBegruendung" AS "Pop Begruendung fuer unklaren Status",
@@ -5075,7 +5075,7 @@ FROM
       ((apflora.pop
       LEFT JOIN
         apflora.pop_status_werte
-        ON apflora.pop."PopHerkunft" = pop_status_werte."HerkunftId")
+        ON apflora.pop."PopHerkunft" = pop_status_werte.code)
       INNER JOIN
         ((apflora.tpop
         LEFT JOIN
@@ -5388,7 +5388,7 @@ SELECT
   apflora.pop."PopGuid" AS "Pop Guid",
   apflora.pop."PopNr" AS "Pop Nr",
   apflora.pop."PopName" AS "Pop Name",
-  apflora.pop_status_werte."HerkunftTxt" AS "Pop Herkunft",
+  apflora.pop_status_werte.text AS "Pop Herkunft",
   apflora.pop."PopBekanntSeit" AS "Pop bekannt seit",
   apflora.tpop."TPopId" AS "TPop ID",
   apflora.tpop."TPopGuid" AS "TPop Guid",
@@ -5481,7 +5481,7 @@ FROM
       ((apflora.pop
       LEFT JOIN
         apflora.pop_status_werte
-        ON apflora.pop."PopHerkunft" = apflora.pop_status_werte."HerkunftId")
+        ON apflora.pop."PopHerkunft" = apflora.pop_status_werte.code)
       INNER JOIN
         ((apflora.tpop
         LEFT JOIN
@@ -5535,7 +5535,7 @@ SELECT
   apflora.pop."PopGuid" AS "Pop Guid",
   apflora.pop."PopNr" AS "Pop Nr",
   apflora.pop."PopName" AS "Pop Name",
-  pop_status_werte."HerkunftTxt" AS "Pop Status",
+  pop_status_werte.text AS "Pop Status",
   apflora.pop."PopBekanntSeit" AS "Pop bekannt seit",
   apflora.pop."PopHerkunftUnklar" AS "Pop Status unklar",
   apflora.pop."PopHerkunftUnklarBegruendung" AS "Pop Begruendung fuer unklaren Status",
@@ -5586,7 +5586,7 @@ FROM
       ((apflora.pop
       LEFT JOIN
         apflora.pop_status_werte
-        ON apflora.pop."PopHerkunft" = pop_status_werte."HerkunftId")
+        ON apflora.pop."PopHerkunft" = pop_status_werte.code)
       INNER JOIN
         ((apflora.tpop
         LEFT JOIN

@@ -16,9 +16,9 @@ COMMENT ON COLUMN apflora.tpop_apberrelevant_werte.id IS 'Primärschlüssel';
 -- done: rename in sql
 -- done: rename in js
 -- done: check if old id was used somewhere. If so: rename that field, add new one and update that
--- TODO: add all views, functions, triggers containing this table to this file
--- TODO: run migration sql in dev
--- TODO: restart postgrest and test app
+-- done: add all views, functions, triggers containing this table to this file
+-- done: run migration sql in dev
+-- done: restart postgrest and test app
 -- TODO: update js and run this file on server
 -- TODO: restart postgrest
 

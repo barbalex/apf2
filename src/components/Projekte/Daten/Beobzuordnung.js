@@ -113,10 +113,10 @@ const getTpopZuordnenSource = (store: Object, tree: Object): Array<Object> => {
     const popStatusWerte = Array.from(store.table.pop_status_werte.values())
     let popStatusWert
     if (popStatusWerte) {
-      popStatusWert = popStatusWerte.find(x => x.HerkunftId === t.TPopHerkunft)
+      popStatusWert = popStatusWerte.find(x => x.code === t.TPopHerkunft)
     }
-    if (popStatusWert && popStatusWert.HerkunftTxt) {
-      t.herkunft = popStatusWert.HerkunftTxt
+    if (popStatusWert && popStatusWert.text) {
+      t.herkunft = popStatusWert.text
     } else {
       t.herkunft = 'ohne Status'
     }
