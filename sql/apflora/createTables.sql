@@ -979,12 +979,6 @@ COMMENT ON COLUMN apflora.zielber.bemerkungen IS 'Bemerkungen zur Zielerreichung
 COMMENT ON COLUMN apflora.zielber.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.zielber.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
-DROP TABLE IF EXISTS apflora.flora_status_werte;
-CREATE TABLE apflora.flora_status_werte (
-  "StatusWert" varchar(2) PRIMARY KEY,
-  "StatusText" text NOT NULL
-);
-
 DROP TABLE IF EXISTS apflora.evab_typologie;
 CREATE TABLE apflora.evab_typologie (
   "TYPO" varchar(9) PRIMARY KEY,

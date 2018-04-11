@@ -18,7 +18,6 @@ export default [
   'tpopbeob',
   'ber',
   'erfkrit',
-  'flora_status_werte',
   'gemeinde',
   'idealbiotop',
   'pop',
