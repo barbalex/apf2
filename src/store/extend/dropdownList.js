@@ -58,19 +58,6 @@ export default (store: Object): void => {
       },
       { name: 'dropdownListArtnamen' }
     ),
-    popEntwicklungWerte: computed(
-      () => {
-        let popEntwicklungWerte = Array.from(
-          store.table.pop_entwicklung_werte.values()
-        )
-        popEntwicklungWerte = sortBy(popEntwicklungWerte, 'EntwicklungOrd')
-        return popEntwicklungWerte.map(el => ({
-          value: el.EntwicklungId,
-          label: el.EntwicklungTxt,
-        }))
-      },
-      { name: 'dropdownListPopEntwicklungWerte' }
-    ),
     tpopEntwicklungWerte: computed(
       () => {
         let tpopEntwicklungWerte = Array.from(

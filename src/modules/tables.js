@@ -272,13 +272,6 @@ export default [
     stammdaten: true,
   },
   {
-    table: 'pop_entwicklung_werte',
-    label: 'none',
-    idField: 'EntwicklungId',
-    parentIdField: 'none',
-    stammdaten: true,
-  },
-  {
     table: 'pop_status_werte',
     label: 'none',
     idField: 'HerkunftId',

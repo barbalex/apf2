@@ -1426,7 +1426,7 @@ SELECT
   apflora.popber."PopBerId",
   apflora.popber."PopBerId" AS "PopBer Id",
   apflora.popber."PopBerJahr" AS "PopBer Jahr",
-  pop_entwicklung_werte."EntwicklungTxt" AS "PopBer Entwicklung",
+  tpop_entwicklung_werte.text AS "PopBer Entwicklung",
   apflora.popber."PopBerTxt" AS "PopBer Bemerkungen",
   apflora.popber."MutWann" AS "PopBer MutWann",
   apflora.popber."MutWer" AS "PopBer MutWer",
@@ -1466,8 +1466,8 @@ FROM
       LEFT JOIN
         (apflora.popber
         LEFT JOIN
-          apflora.pop_entwicklung_werte
-          ON apflora.popber."PopBerEntwicklung" = pop_entwicklung_werte."EntwicklungId")
+          apflora.tpop_entwicklung_werte
+          ON apflora.popber."PopBerEntwicklung" = tpop_entwicklung_werte.code)
         ON
           (apflora.v_pop_berundmassnjahre."Jahr" = apflora.popber."PopBerJahr")
           AND (apflora.v_pop_berundmassnjahre."PopId" = apflora.popber."PopId"))
@@ -1502,7 +1502,7 @@ SELECT
   apflora.pop."MutWer" AS "Datensatz zuletzt geaendert von",
   apflora.popber."PopBerId" AS "PopBer Id",
   apflora.popber."PopBerJahr" AS "PopBer Jahr",
-  pop_entwicklung_werte."EntwicklungTxt" AS "PopBer Entwicklung",
+  tpop_entwicklung_werte.text AS "PopBer Entwicklung",
   apflora.popber."PopBerTxt" AS "PopBer Bemerkungen",
   apflora.popber."MutWann" AS "PopBer MutWann",
   apflora.popber."MutWer" AS "PopBer MutWer"
@@ -1523,8 +1523,8 @@ FROM
         LEFT JOIN
           (apflora.popber
           LEFT JOIN
-            apflora.pop_entwicklung_werte
-            ON apflora.popber."PopBerEntwicklung" = pop_entwicklung_werte."EntwicklungId")
+            apflora.tpop_entwicklung_werte
+            ON apflora.popber."PopBerEntwicklung" = tpop_entwicklung_werte.code)
           ON
             (apflora.v_pop_letzterpopber0_overall."PopBerJahr" = apflora.popber."PopBerJahr")
             AND (apflora.v_pop_letzterpopber0_overall."PopId" = apflora.popber."PopId"))
@@ -1647,7 +1647,7 @@ SELECT
   apflora.v_tpop_berjahrundmassnjahr."Jahr",
   apflora.tpopber.id AS "TPopBer Id",
   apflora.tpopber.jahr AS "TPopBer Jahr",
-  pop_entwicklung_werte."EntwicklungTxt" AS "TPopBer Entwicklung",
+  tpop_entwicklung_werte.text AS "TPopBer Entwicklung",
   apflora.tpopber.bemerkungen AS "TPopBer Bemerkungen",
   apflora.tpopber.changed AS "TPopBer MutWann",
   apflora.tpopber.changed_by AS "TPopBer MutWer",
@@ -1695,8 +1695,8 @@ FROM
       (apflora.v_tpop_berjahrundmassnjahr."Jahr" = apflora.tpopber.jahr)
       AND (apflora.v_tpop_berjahrundmassnjahr."TPopId" = apflora.tpopber.tpop_id))
   LEFT JOIN
-    apflora.pop_entwicklung_werte
-    ON apflora.tpopber.entwicklung = pop_entwicklung_werte."EntwicklungId"
+    apflora.tpop_entwicklung_werte
+    ON apflora.tpopber.entwicklung = tpop_entwicklung_werte.code
 ORDER BY
   apflora.adb_eigenschaften."Artname",
   apflora.pop."PopNr",
@@ -1724,7 +1724,7 @@ SELECT
   apflora.v_tpopber_letzteid."AnzTPopBer",
   apflora.tpopber.id,
   apflora.tpopber.jahr AS "TPopBer Jahr",
-  apflora.pop_entwicklung_werte."EntwicklungTxt" AS "TPopBer Entwicklung",
+  apflora.tpop_entwicklung_werte.text AS "TPopBer Entwicklung",
   apflora.tpopber.bemerkungen AS "TPopBer Bemerkungen",
   apflora.tpopber.changed AS "TPopBer MutWann",
   apflora.tpopber.changed_by AS "TPopBer MutWer"
@@ -1736,8 +1736,8 @@ FROM
       (apflora.v_tpopber_letzteid."MaxTPopBerId" = apflora.tpopber.id)
       AND (apflora.v_tpopber_letzteid."TPopId" = apflora.tpopber.tpop_id)
   LEFT JOIN
-    apflora.pop_entwicklung_werte
-    ON apflora.tpopber.entwicklung = pop_entwicklung_werte."EntwicklungId";
+    apflora.tpop_entwicklung_werte
+    ON apflora.tpopber.entwicklung = tpop_entwicklung_werte.code;
 
 -- funktioniert nicht, wenn letzeKontrolle als Unterabfrage eingebunden wird.
 -- Grund: Unterabfragen in der FROM-Klausel duerfen keine korrellierten Unterabfragen sein

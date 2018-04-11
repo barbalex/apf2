@@ -143,7 +143,7 @@ const fetchDataForOpenNodes = (
       pop() {
         store.fetchTableByParentId('tpop', activeNodes.pop)
         store.fetchTableByParentId('popber', activeNodes.pop)
-        store.fetchTable('pop_entwicklung_werte')
+        store.fetchTable('tpop_entwicklung_werte')
         store.fetchTableByParentId('popmassnber', activeNodes.pop)
         store.fetchTable('tpopmassn_erfbeurt_werte')
         store.fetchTable('tpop_apberrelevant_werte')
@@ -153,7 +153,7 @@ const fetchDataForOpenNodes = (
       tpopFolder() {},
       tpop() {
         store.fetchTable('gemeinde')
-        store.fetchTable('tpop_entwicklung_werte')
+        //store.fetchTable('tpop_entwicklung_werte')
         store.fetchTableByParentId('tpopber', activeNodes.tpop)
         store.fetchTableByParentId('tpopmassnber', activeNodes.tpop)
         store.fetchTableByParentId('tpopmassn', activeNodes.tpop)

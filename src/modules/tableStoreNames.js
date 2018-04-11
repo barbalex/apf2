@@ -22,7 +22,6 @@ export default [
   'gemeinde',
   'idealbiotop',
   'pop',
-  'pop_entwicklung_werte',
   'pop_status_werte',
   'popber',
   'popmassnber',

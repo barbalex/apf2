@@ -193,19 +193,6 @@ $pop_on_update_set_mut$ LANGUAGE plpgsql;
 CREATE TRIGGER pop_on_update_set_mut BEFORE UPDATE OR INSERT ON apflora.pop
   FOR EACH ROW EXECUTE PROCEDURE pop_on_update_set_mut();
 
-DROP TRIGGER IF EXISTS pop_entwicklung_werte_on_update_set_mut ON apflora.pop_entwicklung_werte;
-DROP FUNCTION IF EXISTS pop_entwicklung_werte_on_update_set_mut();
-CREATE FUNCTION pop_entwicklung_werte_on_update_set_mut() RETURNS trigger AS $pop_entwicklung_werte_on_update_set_mut$
-  BEGIN
-    NEW."MutWer" = current_setting('request.jwt.claim.username', true);
-    NEW."MutWann" = NOW();
-    RETURN NEW;
-  END;
-$pop_entwicklung_werte_on_update_set_mut$ LANGUAGE plpgsql;
-
-CREATE TRIGGER pop_entwicklung_werte_on_update_set_mut BEFORE UPDATE OR INSERT ON apflora.pop_entwicklung_werte
-  FOR EACH ROW EXECUTE PROCEDURE pop_entwicklung_werte_on_update_set_mut();
-
 DROP TRIGGER IF EXISTS pop_status_werte_on_update_set_mut ON apflora.pop_status_werte;
 DROP FUNCTION IF EXISTS pop_status_werte_on_update_set_mut();
 CREATE FUNCTION pop_status_werte_on_update_set_mut() RETURNS trigger AS $pop_status_werte_on_update_set_mut$

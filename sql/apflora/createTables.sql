@@ -393,20 +393,6 @@ CREATE INDEX ON apflora.pop USING btree ("PopNr");
 CREATE INDEX ON apflora.pop USING btree ("PopName");
 CREATE INDEX ON apflora.pop USING btree ("PopBekanntSeit");
 
-DROP TABLE IF EXISTS apflora.pop_entwicklung_werte;
-CREATE TABLE apflora.pop_entwicklung_werte (
-  "EntwicklungId" integer PRIMARY KEY,
-  "EntwicklungTxt" varchar(60) DEFAULT NULL,
-  "EntwicklungOrd" smallint DEFAULT NULL,
-  "MutWann" date DEFAULT NOW(),
-  "MutWer" varchar(20) NOT NULL
-);
-COMMENT ON COLUMN apflora.pop_entwicklung_werte."MutWann" IS 'Wann wurde der Datensatz zuletzt geändert?';
-COMMENT ON COLUMN apflora.pop_entwicklung_werte."MutWer" IS 'Von wem wurde der Datensatz zuletzt geändert?';
-CREATE INDEX ON apflora.pop_entwicklung_werte USING btree ("EntwicklungId");
-CREATE INDEX ON apflora.pop_entwicklung_werte USING btree ("EntwicklungTxt");
-CREATE INDEX ON apflora.pop_entwicklung_werte USING btree ("EntwicklungOrd");
-
 DROP TABLE IF EXISTS apflora.pop_status_werte;
 CREATE TABLE apflora.pop_status_werte (
   "HerkunftId" integer PRIMARY KEY,
@@ -427,7 +413,7 @@ CREATE TABLE apflora.popber (
   "PopBerId" SERIAL PRIMARY KEY,
   "PopId" integer DEFAULT NULL REFERENCES apflora.pop ("PopId") ON DELETE CASCADE ON UPDATE CASCADE,
   "PopBerJahr" smallint DEFAULT NULL,
-  "PopBerEntwicklung" integer DEFAULT NULL REFERENCES apflora.pop_entwicklung_werte ("EntwicklungId") ON DELETE SET NULL ON UPDATE CASCADE,
+  "PopBerEntwicklung" integer DEFAULT NULL REFERENCES apflora.tpop_entwicklung_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
   "PopBerTxt" text,
   "MutWann" date DEFAULT NOW(),
   "MutWer" varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
@@ -437,7 +423,7 @@ SELECT setval(pg_get_serial_sequence('apflora.popber', 'PopBerId'), coalesce(max
 COMMENT ON COLUMN apflora.popber."PopBerId" IS 'Primärschlüssel der Tabelle "popber"';
 COMMENT ON COLUMN apflora.popber."PopId" IS 'Zugehörige Population. Fremdschlüssel aus der Tabelle "pop"';
 COMMENT ON COLUMN apflora.popber."PopBerJahr" IS 'Für welches Jahr gilt der Bericht?';
-COMMENT ON COLUMN apflora.popber."PopBerEntwicklung" IS 'Beurteilung der Populationsentwicklung: Auswahl aus Tabelle "pop_entwicklung_werte"';
+COMMENT ON COLUMN apflora.popber."PopBerEntwicklung" IS 'Beurteilung der Populationsentwicklung: Auswahl aus Tabelle "tpop_entwicklung_werte"';
 COMMENT ON COLUMN apflora.popber."PopBerTxt" IS 'Bemerkungen zur Beurteilung';
 COMMENT ON COLUMN apflora.popber."MutWann" IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.popber."MutWer" IS 'Von wem wurde der Datensatz zuletzt geändert?';
@@ -583,7 +569,7 @@ COMMENT ON COLUMN apflora.tpopber.id IS 'Primärschlüssel der Tabelle "tpopber"
 COMMENT ON COLUMN apflora.tpopber.id_old IS 'frühere id';
 COMMENT ON COLUMN apflora.tpopber.tpop_id IS 'Zugehörige Teilpopulation. Fremdschlüssel der Tabelle "tpop"';
 COMMENT ON COLUMN apflora.tpopber.jahr IS 'Für welches Jahr gilt der Bericht?';
-COMMENT ON COLUMN apflora.tpopber.entwicklung IS 'Beurteilung der Populationsentwicklung: Auswahl aus Tabelle "pop_entwicklung_werte"';
+COMMENT ON COLUMN apflora.tpopber.entwicklung IS 'Beurteilung der Populationsentwicklung: Auswahl aus Tabelle "tpop_entwicklung_werte"';
 COMMENT ON COLUMN apflora.tpopber.entwicklung IS 'Bemerkungen zur Beurteilung';
 COMMENT ON COLUMN apflora.tpopber.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.tpopber.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
@@ -662,7 +648,7 @@ COMMENT ON COLUMN apflora.tpopkontr."TPopKontrBearb" IS 'Wer hat kontrolliert? A
 COMMENT ON COLUMN apflora.tpopkontr."TPopKontrJungpfl" IS 'Anzahl Jungpflanzen';
 COMMENT ON COLUMN apflora.tpopkontr."TPopKontrVitalitaet" IS 'Vitalität der Pflanzen';
 COMMENT ON COLUMN apflora.tpopkontr."TPopKontrUeberleb" IS 'Überlebensrate in Prozent';
-COMMENT ON COLUMN apflora.tpopkontr."TPopKontrEntwicklung" IS 'Entwicklung des Bestandes. Auswahl aus Tabelle "pop_entwicklung_werte"';
+COMMENT ON COLUMN apflora.tpopkontr."TPopKontrEntwicklung" IS 'Entwicklung des Bestandes. Auswahl aus Tabelle "tpop_entwicklung_werte"';
 COMMENT ON COLUMN apflora.tpopkontr."TPopKontrUrsach" IS 'Ursachen der Entwicklung';
 COMMENT ON COLUMN apflora.tpopkontr."TPopKontrUrteil" IS 'Erfolgsbeurteilung';
 COMMENT ON COLUMN apflora.tpopkontr."TPopKontrAendUms" IS 'Vorschlag für Änderung der Umsetzung';

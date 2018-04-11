@@ -47,7 +47,7 @@ const Popber = ({ store, tree }: { store: Object, tree: Object }) => {
             label="Entwicklung"
             value={activeDataset.row.PopBerEntwicklung}
             errorText={activeDataset.valid.PopBerEntwicklung}
-            dataSource={store.dropdownList.popEntwicklungWerte}
+            dataSource={store.dropdownList.tpopEntwicklungWerte}
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField

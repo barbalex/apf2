@@ -1075,7 +1075,7 @@ SELECT
   apflora.pop."PopYKoord" AS "Pop Y-Koordinaten",
   apflora.popber."PopBerId" AS "PopBer Id",
   apflora.popber."PopBerJahr" AS "PopBer Jahr",
-  pop_entwicklung_werte."EntwicklungTxt" AS "PopBer Entwicklung",
+  tpop_entwicklung_werte.text AS "PopBer Entwicklung",
   apflora.popber."PopBerTxt" AS "PopBer Bemerkungen",
   apflora.popber."MutWann" AS "PopBer MutWann",
   apflora.popber."MutWer" AS "PopBer MutWer"
@@ -1100,13 +1100,13 @@ FROM
     apflora.popber
     ON apflora.pop."PopId" = apflora.popber."PopId")
   LEFT JOIN
-    apflora.pop_entwicklung_werte
-    ON apflora.popber."PopBerEntwicklung" = pop_entwicklung_werte."EntwicklungId"
+    apflora.tpop_entwicklung_werte
+    ON apflora.popber."PopBerEntwicklung" = tpop_entwicklung_werte.code
 ORDER BY
   apflora.adb_eigenschaften."Artname",
   apflora.pop."PopNr",
   apflora.popber."PopBerJahr",
-  pop_entwicklung_werte."EntwicklungTxt";
+  tpop_entwicklung_werte.text;
 
 -- im Gebrauch (Access):
 DROP VIEW IF EXISTS apflora.v_popber_verwaist CASCADE;
@@ -1115,7 +1115,7 @@ SELECT
   apflora.popber."PopBerId" AS "PopBer Id",
   apflora.popber."PopId" AS "PopBer PopId",
   apflora.popber."PopBerJahr" AS "PopBer Jahr",
-  pop_entwicklung_werte."EntwicklungTxt" AS "PopBer Entwicklung",
+  tpop_entwicklung_werte.text AS "PopBer Entwicklung",
   apflora.popber."PopBerTxt" AS "PopBer Bemerkungen",
   apflora.popber."MutWann" AS "PopBer MutWann",
   apflora.popber."MutWer" AS "PopBer MutWer"
@@ -1125,13 +1125,13 @@ FROM
     apflora.popber
     ON apflora.pop."PopId" = apflora.popber."PopId")
   LEFT JOIN
-    apflora.pop_entwicklung_werte
-    ON apflora.popber."PopBerEntwicklung" = pop_entwicklung_werte."EntwicklungId"
+    apflora.tpop_entwicklung_werte
+    ON apflora.popber."PopBerEntwicklung" = tpop_entwicklung_werte.code
 WHERE
   apflora.pop."PopId" IS NULL
 ORDER BY
   apflora.popber."PopBerJahr",
-  pop_entwicklung_werte."EntwicklungTxt";
+  tpop_entwicklung_werte.text;
 
 DROP VIEW IF EXISTS apflora.v_popmassnber CASCADE;
 CREATE OR REPLACE VIEW apflora.v_popmassnber AS
@@ -3565,7 +3565,7 @@ SELECT
   apflora.pop."PopName",
   pop_status_werte."HerkunftTxt" AS "PopHerkunft",
   apflora.popber."PopBerJahr",
-  pop_entwicklung_werte."EntwicklungTxt" AS "PopBerEntwicklung",
+  tpop_entwicklung_werte.text AS "PopBerEntwicklung",
   apflora.popber."PopBerTxt"
 FROM
   ((apflora.adb_eigenschaften
@@ -3582,8 +3582,8 @@ FROM
     apflora.pop_status_werte
     ON apflora.pop."PopHerkunft" = pop_status_werte."HerkunftId")
   LEFT JOIN
-    apflora.pop_entwicklung_werte
-    ON apflora.popber."PopBerEntwicklung" = pop_entwicklung_werte."EntwicklungId";
+    apflora.tpop_entwicklung_werte
+    ON apflora.popber."PopBerEntwicklung" = tpop_entwicklung_werte.code;
 
 DROP VIEW IF EXISTS apflora.v_ziel CASCADE;
 CREATE OR REPLACE VIEW apflora.v_ziel AS
@@ -3849,7 +3849,7 @@ SELECT
   apflora.adresse."AdrName" AS "Kontr BearbeiterIn",
   apflora.tpopkontr."TPopKontrUeberleb" AS "Kontr Ueberlebensrate",
   apflora.tpopkontr."TPopKontrVitalitaet" AS "Kontr Vitalitaet",
-  apflora.pop_entwicklung_werte."EntwicklungTxt" AS "Kontr Entwicklung",
+  apflora.tpop_entwicklung_werte.text AS "Kontr Entwicklung",
   apflora.tpopkontr."TPopKontrUrsach" AS "Kontr Ursachen",
   apflora.tpopkontr."TPopKontrUrteil" AS "Kontr Erfolgsbeurteilung",
   apflora.tpopkontr."TPopKontrAendUms" AS "Kontr Aenderungs-Vorschlaege Umsetzung",
@@ -3909,8 +3909,8 @@ FROM
             apflora.adresse
             ON apflora.tpopkontr."TPopKontrBearb" = apflora.adresse."AdrId")
           LEFT JOIN
-            apflora.pop_entwicklung_werte
-            ON apflora.tpopkontr."TPopKontrEntwicklung" = apflora.pop_entwicklung_werte."EntwicklungId")
+            apflora.tpop_entwicklung_werte
+            ON apflora.tpopkontr."TPopKontrEntwicklung" = apflora.tpop_entwicklung_werte.code)
           LEFT JOIN
             apflora.tpopkontrzaehl
             ON apflora.tpopkontr."TPopKontrId" = apflora.tpopkontrzaehl.tpopkontr_id)
@@ -3988,7 +3988,7 @@ GROUP BY
   apflora.adresse."AdrName",
   apflora.tpopkontr."TPopKontrUeberleb",
   apflora.tpopkontr."TPopKontrVitalitaet",
-  apflora.pop_entwicklung_werte."EntwicklungTxt",
+  apflora.tpop_entwicklung_werte.text,
   apflora.tpopkontr."TPopKontrUrsach",
   apflora.tpopkontr."TPopKontrUrteil",
   apflora.tpopkontr."TPopKontrAendUms",
@@ -4048,7 +4048,7 @@ SELECT
   apflora.adresse."AdrName" AS "KONTRBEARBEITER",
   apflora.tpopkontr."TPopKontrUeberleb" AS "KONTRUEBERLEBENSRATE",
   apflora.tpopkontr."TPopKontrVitalitaet" AS "KONTRVITALITAET",
-  apflora.pop_entwicklung_werte."EntwicklungTxt" AS "KONTRENTWICKLUNG",
+  apflora.tpop_entwicklung_werte.text AS "KONTRENTWICKLUNG",
   apflora.tpopkontr."TPopKontrUrsach" AS "KONTRURSACHEN",
   apflora.tpopkontr."TPopKontrUrteil" AS "KONTRERFOLGBEURTEIL",
   apflora.tpopkontr."TPopKontrAendUms" AS "KONTRAENDUMSETZUNG",
@@ -4109,8 +4109,8 @@ FROM
             apflora.adresse
             ON apflora.tpopkontr."TPopKontrBearb" = apflora.adresse."AdrId")
           LEFT JOIN
-            apflora.pop_entwicklung_werte
-            ON apflora.tpopkontr."TPopKontrEntwicklung" = apflora.pop_entwicklung_werte."EntwicklungId")
+            apflora.tpop_entwicklung_werte
+            ON apflora.tpopkontr."TPopKontrEntwicklung" = apflora.tpop_entwicklung_werte.code)
           LEFT JOIN
             apflora.tpopkontrzaehl
             ON apflora.tpopkontr."TPopKontrId" = apflora.tpopkontrzaehl.tpopkontr_id)
@@ -4158,7 +4158,7 @@ GROUP BY
   apflora.adresse."AdrName",
   apflora.tpopkontr."TPopKontrUeberleb",
   apflora.tpopkontr."TPopKontrVitalitaet",
-  apflora.pop_entwicklung_werte."EntwicklungTxt",
+  apflora.tpop_entwicklung_werte.text,
   apflora.tpopkontr."TPopKontrUrsach",
   apflora.tpopkontr."TPopKontrUrteil",
   apflora.tpopkontr."TPopKontrAendUms",
@@ -4352,7 +4352,7 @@ SELECT
   apflora.adresse."AdrName" AS tpopkontrbearb,
   apflora.tpopkontr."TPopKontrUeberleb" AS tpopkontrueberleb,
   apflora.tpopkontr."TPopKontrVitalitaet" AS tpopkontrvitalitaet,
-  apflora.pop_entwicklung_werte."EntwicklungTxt" AS tpopkontrentwicklung,
+  apflora.tpop_entwicklung_werte.text AS tpopkontrentwicklung,
   apflora.tpopkontr."TPopKontrUrsach" AS tpopkontrursach,
   apflora.tpopkontr."TPopKontrUrteil" AS tpopkontrurteil,
   apflora.tpopkontr."TPopKontrAendUms" AS tpopkontraendums,
@@ -4403,8 +4403,8 @@ FROM
           apflora.adresse
           ON apflora.tpopkontr."TPopKontrBearb" = apflora.adresse."AdrId")
         LEFT JOIN
-          apflora.pop_entwicklung_werte
-          ON apflora.tpopkontr."TPopKontrEntwicklung" = apflora.pop_entwicklung_werte."EntwicklungId")
+          apflora.tpop_entwicklung_werte
+          ON apflora.tpopkontr."TPopKontrEntwicklung" = apflora.tpop_entwicklung_werte.code)
         ON apflora.tpop."TPopId" = apflora.tpopkontr."TPopId")
       ON apflora.pop."PopId" = apflora.tpop."PopId")
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId")
@@ -4437,7 +4437,7 @@ SELECT
   apflora.adresse."AdrName" AS "Kontr BearbeiterIn",
   apflora.tpopkontr."TPopKontrUeberleb" AS "Kontr Ueberlebensrate",
   apflora.tpopkontr."TPopKontrVitalitaet" AS "Kontr Vitalitaet",
-  apflora.pop_entwicklung_werte."EntwicklungTxt" AS "Kontr Entwicklung",
+  apflora.tpop_entwicklung_werte.text AS "Kontr Entwicklung",
   apflora.tpopkontr."TPopKontrUrsach" AS "Kontr Ursachen",
   apflora.tpopkontr."TPopKontrUrteil" AS "Kontr Erfolgsbeurteilung",
   apflora.tpopkontr."TPopKontrAendUms" AS "Kontr Aenderungs-Vorschlaege Umsetzung",
@@ -4485,8 +4485,8 @@ FROM
       apflora.adresse
       ON apflora.tpopkontr."TPopKontrBearb" = apflora.adresse."AdrId")
     LEFT JOIN
-      apflora.pop_entwicklung_werte
-      ON apflora.tpopkontr."TPopKontrEntwicklung" = apflora.pop_entwicklung_werte."EntwicklungId")
+      apflora.tpop_entwicklung_werte
+      ON apflora.tpopkontr."TPopKontrEntwicklung" = apflora.tpop_entwicklung_werte.code)
     ON apflora.tpop."TPopId" = apflora.tpopkontr."TPopId")
   LEFT JOIN
     apflora.tpopkontr_idbiotuebereinst_werte
@@ -5423,7 +5423,7 @@ SELECT
   apflora.adresse."AdrName" AS "Kontr BearbeiterIn",
   apflora.tpopkontr."TPopKontrUeberleb" AS "Kontr Ueberlebensrate",
   apflora.tpopkontr."TPopKontrVitalitaet" AS "Kontr Vitalitaet",
-  apflora.pop_entwicklung_werte."EntwicklungTxt" AS "Kontr Entwicklung",
+  apflora.tpop_entwicklung_werte.text AS "Kontr Entwicklung",
   apflora.tpopkontr."TPopKontrUrsach" AS "Kontr Ursachen",
   apflora.tpopkontr."TPopKontrUrteil" AS "Kontr Erfolgsbeurteilung",
   apflora.tpopkontr."TPopKontrAendUms" AS "Kontr Aenderungs-Vorschlaege Umsetzung",
@@ -5499,8 +5499,8 @@ FROM
             apflora.adresse
             ON apflora.tpopkontr."TPopKontrBearb" = apflora.adresse."AdrId")
           LEFT JOIN
-            apflora.pop_entwicklung_werte
-            ON apflora.tpopkontr."TPopKontrEntwicklung" = apflora.pop_entwicklung_werte."EntwicklungId")
+            apflora.tpop_entwicklung_werte
+            ON apflora.tpopkontr."TPopKontrEntwicklung" = apflora.tpop_entwicklung_werte.code)
           LEFT JOIN
             ((apflora.tpopkontrzaehl
             LEFT JOIN
@@ -5568,7 +5568,7 @@ SELECT
   apflora.tpop."TPopBewirtschaftung" AS "TPop Bewirtschaftung",
   apflora.tpopber.id AS "TPopBer Id",
   apflora.tpopber.jahr AS "TPopBer Jahr",
-  pop_entwicklung_werte."EntwicklungTxt" AS "TPopBer Entwicklung",
+  tpop_entwicklung_werte.text AS "TPopBer Entwicklung",
   apflora.tpopber.bemerkungen AS "TPopBer Bemerkungen",
   apflora.tpopber.changed AS "TPopBer MutWann",
   apflora.tpopber.changed_by AS "TPopBer MutWer"
@@ -5595,8 +5595,8 @@ FROM
         RIGHT JOIN
           (apflora.tpopber
           LEFT JOIN
-            apflora.pop_entwicklung_werte
-            ON apflora.tpopber.entwicklung = pop_entwicklung_werte."EntwicklungId")
+            apflora.tpop_entwicklung_werte
+            ON apflora.tpopber.entwicklung = tpop_entwicklung_werte.code)
           ON apflora.tpop."TPopId" = apflora.tpopber.tpop_id)
         ON apflora.pop."PopId" = apflora.tpop."PopId")
       ON apflora.ap."ApArtId" = apflora.pop."ApArtId")
@@ -5606,7 +5606,7 @@ ORDER BY
   apflora.pop."PopNr",
   apflora.tpop."TPopNr",
   apflora.tpopber.jahr,
-  pop_entwicklung_werte."EntwicklungTxt";
+  tpop_entwicklung_werte.text;
 
 DROP VIEW IF EXISTS apflora.v_tpop_berjahrundmassnjahr CASCADE;
 CREATE OR REPLACE VIEW apflora.v_tpop_berjahrundmassnjahr AS

@@ -107,7 +107,6 @@ function Store(): void {
     apStati: [],
     artListForAp: [],
     artnamen: [],
-    popEntwicklungWerte: [],
     tpopEntwicklungWerte: [],
     apErfkritWerte: [],
     tpopmassnErfbeurtWerte: [],
