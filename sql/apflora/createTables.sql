@@ -554,16 +554,20 @@ COMMENT ON COLUMN apflora.tpop_apberrelevant_werte."MutWer" IS 'Von wem wurde de
 
 DROP TABLE IF EXISTS apflora.tpop_entwicklung_werte;
 CREATE TABLE apflora.tpop_entwicklung_werte (
-  "EntwicklungCode" integer PRIMARY KEY,
-  "EntwicklungTxt" varchar(50) DEFAULT NULL,
-  "EntwicklungOrd" smallint DEFAULT NULL,
-  "MutWann" date DEFAULT NOW(),
-  "MutWer" varchar(20) NOT NULL
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
+  code integer UNIQUE DEFAULT NULL,
+  code integer PRIMARY KEY,
+  text varchar(50) DEFAULT NULL,
+  sort smallint DEFAULT NULL,
+  changed date DEFAULT NOW(),
+  changed_by varchar(20) NOT NULL
 );
-CREATE INDEX ON apflora.tpop_entwicklung_werte USING btree ("EntwicklungCode");
-CREATE INDEX ON apflora.tpop_entwicklung_werte USING btree ("EntwicklungOrd");
-COMMENT ON COLUMN apflora.tpop_entwicklung_werte."MutWann" IS 'Wann wurde der Datensatz zuletzt geändert?';
-COMMENT ON COLUMN apflora.tpop_entwicklung_werte."MutWer" IS 'Von wem wurde der Datensatz zuletzt geändert?';
+CREATE INDEX ON apflora.tpop_entwicklung_werte USING btree (id);
+CREATE INDEX ON apflora.tpop_entwicklung_werte USING btree (code);
+CREATE INDEX ON apflora.tpop_entwicklung_werte USING btree (sort);
+COMMENT ON COLUMN apflora.tpop_entwicklung_werte.id IS 'Primärschlüssel';
+COMMENT ON COLUMN apflora.tpop_entwicklung_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
+COMMENT ON COLUMN apflora.tpop_entwicklung_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
 DROP TABLE IF EXISTS apflora.tpopber;
 CREATE TABLE apflora.tpopber (
@@ -571,7 +575,7 @@ CREATE TABLE apflora.tpopber (
   id_old integer,
   tpop_id integer DEFAULT NULL REFERENCES apflora.tpop ("TPopId") ON DELETE CASCADE ON UPDATE CASCADE,
   jahr smallint DEFAULT NULL,
-  entwicklung integer DEFAULT NULL REFERENCES apflora.tpop_entwicklung_werte ("EntwicklungCode") ON DELETE SET NULL ON UPDATE CASCADE,
+  entwicklung integer DEFAULT NULL REFERENCES apflora.tpop_entwicklung_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
 );
@@ -599,7 +603,7 @@ CREATE TABLE apflora.tpopkontr (
   "TPopKontrJungpfl" integer DEFAULT NULL,
   "TPopKontrVitalitaet" text DEFAULT NULL,
   "TPopKontrUeberleb" smallint DEFAULT NULL,
-  "TPopKontrEntwicklung" integer DEFAULT NULL REFERENCES apflora.tpop_entwicklung_werte ("EntwicklungCode") ON DELETE SET NULL ON UPDATE CASCADE,
+  "TPopKontrEntwicklung" integer DEFAULT NULL REFERENCES apflora.tpop_entwicklung_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
   "TPopKontrUrsach" text DEFAULT NULL,
   "TPopKontrUrteil" text DEFAULT NULL,
   "TPopKontrAendUms" text DEFAULT NULL,
@@ -621,7 +625,7 @@ CREATE TABLE apflora.tpopkontr (
   "TPopKontrBodenNaehrstoffgehalt" varchar(100) DEFAULT NULL,
   "TPopKontrBodenAbtrag" text DEFAULT NULL,
   "TPopKontrWasserhaushalt" text DEFAULT NULL,
-  "TPopKontrIdealBiotopUebereinst" integer DEFAULT NULL REFERENCES apflora.tpopkontr_idbiotuebereinst_werte ("DomainCode") ON DELETE SET NULL ON UPDATE CASCADE,
+  "TPopKontrIdealBiotopUebereinst" integer DEFAULT NULL REFERENCES apflora.tpopkontr_idbiotuebereinst_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
   "TPopKontrHandlungsbedarf" text,
   "TPopKontrUebFlaeche" integer DEFAULT NULL,
   "TPopKontrPlan" smallint DEFAULT NULL,
@@ -699,16 +703,19 @@ COMMENT ON COLUMN apflora.tpopkontr."MutWer" IS 'Von wem wurde der Datensatz zul
 
 DROP TABLE IF EXISTS apflora.tpopkontr_idbiotuebereinst_werte;
 CREATE TABLE apflora.tpopkontr_idbiotuebereinst_werte (
-  "DomainCode" integer PRIMARY KEY,
-  "DomainTxt" varchar(50) DEFAULT NULL,
-  "DomainOrd" smallint DEFAULT NULL,
-  "MutWann" date DEFAULT NOW(),
-  "MutWer" varchar(20) NOT NULL
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
+  code integer UNIQUE DEFAULT NULL,
+  text varchar(50) DEFAULT NULL,
+  sort smallint DEFAULT NULL,
+  changed date DEFAULT NOW(),
+  changed_by varchar(20) NOT NULL
 );
-CREATE INDEX ON apflora.tpopkontr_idbiotuebereinst_werte USING btree ("DomainCode");
-CREATE INDEX ON apflora.tpopkontr_idbiotuebereinst_werte USING btree ("DomainOrd");
-COMMENT ON COLUMN apflora.tpopkontr_idbiotuebereinst_werte."MutWann" IS 'Wann wurde der Datensatz zuletzt geändert?';
-COMMENT ON COLUMN apflora.tpopkontr_idbiotuebereinst_werte."MutWer" IS 'Von wem wurde der Datensatz zuletzt geändert?';
+CREATE INDEX ON apflora.tpopkontr_idbiotuebereinst_werte USING btree (id);
+CREATE INDEX ON apflora.tpopkontr_idbiotuebereinst_werte USING btree (code);
+CREATE INDEX ON apflora.tpopkontr_idbiotuebereinst_werte USING btree (sort);
+COMMENT ON COLUMN apflora.tpopkontr_idbiotuebereinst_werte.id IS 'Primärschlüssel';
+COMMENT ON COLUMN apflora.tpopkontr_idbiotuebereinst_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
+COMMENT ON COLUMN apflora.tpopkontr_idbiotuebereinst_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
 DROP TABLE IF EXISTS apflora.tpopkontr_typ_werte;
 CREATE TABLE apflora.tpopkontr_typ_werte (

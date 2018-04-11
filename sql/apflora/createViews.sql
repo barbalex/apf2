@@ -3554,92 +3554,6 @@ GROUP BY
   apflora.pop."ApArtId",
   apflora.tpop."TPopId";
 
--- wird das benutz??
-DROP VIEW IF EXISTS apflora.v_auswanzprotpopangezartbestjahr0 CASCADE;
-CREATE OR REPLACE VIEW apflora.v_auswanzprotpopangezartbestjahr0 AS
-SELECT
-  apflora.ap."ApArtId",
-  apflora.pop."PopId",
-  apflora.tpop."TPopId",
-  apflora.tpopkontr."TPopKontrId",
-  apflora.adb_eigenschaften."Artname",
-  apflora.pop."PopNr",
-  apflora.pop."PopName",
-  apflora.pop_status_werte."HerkunftTxt" AS "PopHerkunft",
-  apflora.tpop."TPopNr",
-  apflora.tpop."TPopGemeinde",
-  apflora.tpop."TPopFlurname",
-  "domPopHerkunft_1"."HerkunftTxt" AS "TPopHerkunft",
-  apflora.tpopkontr."TPopKontrTyp",
-  apflora.tpopkontr."TPopKontrJahr",
-  apflora.tpopkontr."TPopKontrDatum",
-  apflora.adresse."AdrName" AS "TPopKontrBearb",
-  apflora.tpopkontrzaehl.anzahl,
-  apflora.tpopkontrzaehl_einheit_werte.text AS einheit,
-  apflora.tpopkontrzaehl_methode_werte.text AS methode,
-  apflora.tpopkontr."TPopKontrJungpfl",
-  apflora.tpopkontr."TPopKontrVitalitaet",
-  apflora.tpopkontr."TPopKontrUeberleb",
-  apflora.tpop_entwicklung_werte."EntwicklungTxt" AS "TPopKontrEntwicklung",
-  apflora.tpopkontr."TPopKontrUrsach",
-  apflora.tpopkontr."TPopKontrUrteil",
-  apflora.tpopkontr."TPopKontrAendUms",
-  apflora.tpopkontr."TPopKontrAendKontr",
-  apflora.tpopkontr."TPopKontrTxt",
-  apflora.tpopkontr."TPopKontrLeb",
-  apflora.tpopkontr."TPopKontrFlaeche",
-  apflora.tpopkontr."TPopKontrLebUmg",
-  apflora.tpopkontr."TPopKontrStrauchschicht",
-  apflora.tpopkontr."TPopKontrBodenTyp",
-  apflora.tpopkontr."TPopKontrBodenAbtrag",
-  apflora.tpopkontr."TPopKontrWasserhaushalt",
-  apflora.tpopkontr."TPopKontrHandlungsbedarf",
-  apflora.tpopkontr."TPopKontrUebFlaeche",
-  apflora.tpopkontr."TPopKontrPlan",
-  apflora.tpopkontr."TPopKontrVeg",
-  apflora.tpopkontr."TPopKontrNaBo",
-  apflora.tpopkontr."TPopKontrUebPfl",
-  apflora.tpopkontr."TPopKontrJungPflJN",
-  apflora.tpopkontr."TPopKontrVegHoeMax",
-  apflora.tpopkontr."TPopKontrVegHoeMit",
-  apflora.tpopkontr."TPopKontrGefaehrdung",
-  apflora.tpopkontr."TPopKontrMutDat"
-FROM
-  (((((((apflora.adb_eigenschaften
-  INNER JOIN
-    (((apflora.ap
-    INNER JOIN
-      apflora.pop
-      ON apflora.ap."ApArtId" = apflora.pop."ApArtId")
-    INNER JOIN
-      apflora.tpop
-      ON apflora.pop."PopId" = apflora.tpop."PopId")
-    INNER JOIN
-      apflora.tpopkontr
-      ON apflora.tpop."TPopId" = apflora.tpopkontr."TPopId")
-    ON apflora.adb_eigenschaften."TaxonomieId" = apflora.ap."ApArtId")
-  LEFT JOIN
-    apflora.pop_status_werte
-    ON apflora.pop."PopHerkunft" = apflora.pop_status_werte."HerkunftId")
-  LEFT JOIN
-    apflora.pop_status_werte AS "domPopHerkunft_1"
-    ON apflora.tpop."TPopHerkunft" = "domPopHerkunft_1"."HerkunftId")
-  LEFT JOIN
-    apflora.adresse
-    ON apflora.tpopkontr."TPopKontrBearb" = apflora.adresse."AdrId")
-  LEFT JOIN
-    apflora.tpop_entwicklung_werte
-    ON apflora.tpopkontr."TPopKontrEntwicklung" = apflora.tpop_entwicklung_werte."EntwicklungCode")
-  INNER JOIN
-    apflora.tpopkontrzaehl
-    ON apflora.tpopkontr."TPopKontrId" = apflora.tpopkontrzaehl.tpopkontr_id)
-  INNER JOIN
-    apflora.tpopkontrzaehl_methode_werte
-    ON apflora.tpopkontrzaehl.methode = apflora.tpopkontrzaehl_methode_werte.code)
-  LEFT JOIN
-    apflora.tpopkontrzaehl_einheit_werte
-    ON apflora.tpopkontrzaehl.einheit = apflora.tpopkontrzaehl_einheit_werte.code;
-
 DROP VIEW IF EXISTS apflora.v_popber_angezapbestjahr0 CASCADE;
 CREATE OR REPLACE VIEW apflora.v_popber_angezapbestjahr0 AS
 SELECT
@@ -3958,7 +3872,7 @@ SELECT
   apflora.tpopkontr."TPopKontrBodenNaehrstoffgehalt" AS "Kontr Boden Naehrstoffgehalt",
   apflora.tpopkontr."TPopKontrBodenAbtrag" AS "Kontr Oberbodenabtrag",
   apflora.tpopkontr."TPopKontrWasserhaushalt" AS "Kontr Wasserhaushalt",
-  apflora.tpopkontr_idbiotuebereinst_werte."DomainTxt" AS "Kontr Uebereinstimmung mit Idealbiotop",
+  apflora.tpopkontr_idbiotuebereinst_werte.text AS "Kontr Uebereinstimmung mit Idealbiotop",
   apflora.tpopkontr."TPopKontrHandlungsbedarf" AS "Kontr Handlungsbedarf",
   apflora.tpopkontr."TPopKontrUebFlaeche" AS "Kontr Ueberpruefte Flaeche",
   apflora.tpopkontr."TPopKontrFlaeche" AS "Kontr Flaeche der Teilpopulation m2",
@@ -4020,7 +3934,7 @@ FROM
       ON apflora.pop."PopHerkunft" = apflora.pop_status_werte."HerkunftId")
     LEFT JOIN
       apflora.tpopkontr_idbiotuebereinst_werte
-      ON apflora.tpopkontr."TPopKontrIdealBiotopUebereinst" = apflora.tpopkontr_idbiotuebereinst_werte."DomainCode")
+      ON apflora.tpopkontr."TPopKontrIdealBiotopUebereinst" = apflora.tpopkontr_idbiotuebereinst_werte.code)
   LEFT JOIN
     apflora.adresse AS "tblAdresse_1"
     ON apflora.ap."ApBearb" = "tblAdresse_1"."AdrId")
@@ -4097,7 +4011,7 @@ GROUP BY
   apflora.tpopkontr."TPopKontrBodenNaehrstoffgehalt",
   apflora.tpopkontr."TPopKontrBodenAbtrag",
   apflora.tpopkontr."TPopKontrWasserhaushalt",
-  apflora.tpopkontr_idbiotuebereinst_werte."DomainTxt",
+  apflora.tpopkontr_idbiotuebereinst_werte.text,
   apflora.tpopkontr."TPopKontrHandlungsbedarf",
   apflora.tpopkontr."TPopKontrUebFlaeche",
   apflora.tpopkontr."TPopKontrFlaeche",
@@ -4157,7 +4071,7 @@ SELECT
   apflora.tpopkontr."TPopKontrBodenNaehrstoffgehalt" AS "KONTRBODENNAEHRSTOFF",
   apflora.tpopkontr."TPopKontrBodenAbtrag" AS "KONTROBERBODENABTRAG",
   apflora.tpopkontr."TPopKontrWasserhaushalt" AS "KONTROBODENWASSERHAUSHALT",
-  apflora.tpopkontr_idbiotuebereinst_werte."DomainTxt" AS "KONTRUEBEREINSTIMMUNIDEAL",
+  apflora.tpopkontr_idbiotuebereinst_werte.text AS "KONTRUEBEREINSTIMMUNIDEAL",
   apflora.tpopkontr."TPopKontrHandlungsbedarf" AS "KONTRHANDLUNGSBEDARF",
   apflora.tpopkontr."TPopKontrUebFlaeche" AS "KONTRUEBERPRUFTFLAECHE",
   apflora.tpopkontr."TPopKontrFlaeche" AS "KONTRFLAECHETPOP",
@@ -4220,7 +4134,7 @@ FROM
       ON apflora.pop."PopHerkunft" = apflora.pop_status_werte."HerkunftId")
     LEFT JOIN
       apflora.tpopkontr_idbiotuebereinst_werte
-      ON apflora.tpopkontr."TPopKontrIdealBiotopUebereinst" = apflora.tpopkontr_idbiotuebereinst_werte."DomainCode")
+      ON apflora.tpopkontr."TPopKontrIdealBiotopUebereinst" = apflora.tpopkontr_idbiotuebereinst_werte.code)
   LEFT JOIN
     apflora.adresse AS "tblAdresse_1"
     ON apflora.ap."ApBearb" = "tblAdresse_1"."AdrId")
@@ -4267,7 +4181,7 @@ GROUP BY
   apflora.tpopkontr."TPopKontrBodenNaehrstoffgehalt",
   apflora.tpopkontr."TPopKontrBodenAbtrag",
   apflora.tpopkontr."TPopKontrWasserhaushalt",
-  apflora.tpopkontr_idbiotuebereinst_werte."DomainTxt",
+  apflora.tpopkontr_idbiotuebereinst_werte.text,
   apflora.tpopkontr."TPopKontrHandlungsbedarf",
   apflora.tpopkontr."TPopKontrUebFlaeche",
   apflora.tpopkontr."TPopKontrFlaeche",
@@ -4459,7 +4373,7 @@ SELECT
   apflora.tpopkontr."TPopKontrBodenNaehrstoffgehalt" AS tpopkontrbodennaehrstoffgehalt,
   apflora.tpopkontr."TPopKontrBodenAbtrag" AS tpopkontrbodenabtrag,
   apflora.tpopkontr."TPopKontrWasserhaushalt" AS tpopkontrwasserhaushalt,
-  apflora.tpopkontr_idbiotuebereinst_werte."DomainTxt" AS tpopkontridealbiotopuebereinst,
+  apflora.tpopkontr_idbiotuebereinst_werte.text AS tpopkontridealbiotopuebereinst,
   apflora.tpopkontr."TPopKontrUebFlaeche" AS tpopkontruebflaeche,
   apflora.tpopkontr."TPopKontrPlan" AS tpopkontrplan,
   apflora.tpopkontr."TPopKontrVeg" AS tpopkontrveg,
@@ -4505,14 +4419,13 @@ FROM
     ON apflora.pop."PopHerkunft" = apflora.pop_status_werte."HerkunftId")
   LEFT JOIN
     apflora.tpopkontr_idbiotuebereinst_werte
-    ON apflora.tpopkontr."TPopKontrIdealBiotopUebereinst" = apflora.tpopkontr_idbiotuebereinst_werte."DomainCode"
+    ON apflora.tpopkontr."TPopKontrIdealBiotopUebereinst" = apflora.tpopkontr_idbiotuebereinst_werte.code
 ORDER BY
   apflora.adb_eigenschaften."Artname",
   apflora.pop."PopNr",
   apflora.tpop."TPopNr",
   apflora.tpopkontr."TPopKontrJahr",
   apflora.tpopkontr."TPopKontrDatum";
-
 
 DROP VIEW IF EXISTS apflora.v_tpopkontr_verwaist CASCADE;
 CREATE OR REPLACE VIEW apflora.v_tpopkontr_verwaist AS
@@ -4547,7 +4460,7 @@ SELECT
   apflora.tpopkontr."TPopKontrBodenNaehrstoffgehalt" AS "Kontr Boden Naehrstoffgehalt",
   apflora.tpopkontr."TPopKontrBodenAbtrag" AS "Kontr Oberbodenabtrag",
   apflora.tpopkontr."TPopKontrWasserhaushalt" AS "Kontr Wasserhaushalt",
-  apflora.tpopkontr_idbiotuebereinst_werte."DomainTxt" AS "Kontr Uebereinstimmung mit Idealbiotop",
+  apflora.tpopkontr_idbiotuebereinst_werte.text AS "Kontr Uebereinstimmung mit Idealbiotop",
   apflora.tpopkontr."TPopKontrHandlungsbedarf" AS "Kontr Handlungsbedarf",
   apflora.tpopkontr."TPopKontrUebFlaeche" AS "Kontr Ueberpruefte Flaeche",
   apflora.tpopkontr."TPopKontrFlaeche" AS "Kontr Flaeche der Teilpopulation m2",
@@ -4577,7 +4490,7 @@ FROM
     ON apflora.tpop."TPopId" = apflora.tpopkontr."TPopId")
   LEFT JOIN
     apflora.tpopkontr_idbiotuebereinst_werte
-    ON apflora.tpopkontr."TPopKontrIdealBiotopUebereinst" = apflora.tpopkontr_idbiotuebereinst_werte."DomainCode"
+    ON apflora.tpopkontr."TPopKontrIdealBiotopUebereinst" = apflora.tpopkontr_idbiotuebereinst_werte.code
 WHERE
   apflora.tpop."TPopId" IS NULL;
 
@@ -5533,7 +5446,7 @@ SELECT
   apflora.tpopkontr."TPopKontrBodenNaehrstoffgehalt" AS "Kontr Boden Naehrstoffgehalt",
   apflora.tpopkontr."TPopKontrBodenAbtrag" AS "Kontr Oberbodenabtrag",
   apflora.tpopkontr."TPopKontrWasserhaushalt" AS "Kontr Wasserhaushalt",
-  apflora.tpopkontr_idbiotuebereinst_werte."DomainTxt" AS "Kontr Uebereinstimmung mit Idealbiotop",
+  apflora.tpopkontr_idbiotuebereinst_werte.text AS "Kontr Uebereinstimmung mit Idealbiotop",
   apflora.tpopkontr."TPopKontrHandlungsbedarf" AS "Kontr Handlungsbedarf",
   apflora.tpopkontr."TPopKontrUebFlaeche" AS "Kontr Ueberpruefte Flaeche",
   apflora.tpopkontr."TPopKontrFlaeche" AS "Kontr Flaeche der Teilpopulation m2",
@@ -5578,7 +5491,7 @@ FROM
           (((((apflora.tpopkontr
           LEFT JOIN
             apflora.tpopkontr_idbiotuebereinst_werte
-            ON apflora.tpopkontr."TPopKontrIdealBiotopUebereinst" = apflora.tpopkontr_idbiotuebereinst_werte."DomainCode")
+            ON apflora.tpopkontr."TPopKontrIdealBiotopUebereinst" = apflora.tpopkontr_idbiotuebereinst_werte.code)
           LEFT JOIN
             apflora.tpopkontr_typ_werte
             ON apflora.tpopkontr."TPopKontrTyp" = apflora.tpopkontr_typ_werte."DomainTxt")

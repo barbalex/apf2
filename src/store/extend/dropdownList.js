@@ -76,10 +76,10 @@ export default (store: Object): void => {
         let tpopEntwicklungWerte = Array.from(
           store.table.tpop_entwicklung_werte.values()
         )
-        tpopEntwicklungWerte = sortBy(tpopEntwicklungWerte, 'EntwicklungOrd')
+        tpopEntwicklungWerte = sortBy(tpopEntwicklungWerte, 'sort')
         return tpopEntwicklungWerte.map(el => ({
-          value: el.EntwicklungCode,
-          label: el.EntwicklungTxt,
+          value: el.code,
+          label: el.text,
         }))
       },
       { name: 'dropdownListTpopEntwicklungWerte' }
@@ -133,10 +133,10 @@ export default (store: Object): void => {
         let idbiotopuebereinstWerte = Array.from(
           store.table.tpopkontr_idbiotuebereinst_werte.values()
         )
-        idbiotopuebereinstWerte = sortBy(idbiotopuebereinstWerte, 'DomainOrd')
+        idbiotopuebereinstWerte = sortBy(idbiotopuebereinstWerte, 'sort')
         return idbiotopuebereinstWerte.map(el => ({
-          value: el.DomainCode,
-          label: el.DomainTxt,
+          value: el.code,
+          label: el.text,
         }))
       },
       { name: 'dropdownListIdbiotopuebereinstWerte' }

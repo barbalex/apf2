@@ -275,8 +275,8 @@ DROP TRIGGER IF EXISTS tpop_entwicklung_werte_on_update_set_mut ON apflora.tpop_
 DROP FUNCTION IF EXISTS tpop_entwicklung_werte_on_update_set_mut();
 CREATE FUNCTION tpop_entwicklung_werte_on_update_set_mut() RETURNS trigger AS $tpop_entwicklung_werte_on_update_set_mut$
   BEGIN
-    NEW."MutWer" = current_setting('request.jwt.claim.username', true);
-    NEW."MutWann" = NOW();
+    NEW.changed_by = current_setting('request.jwt.claim.username', true);
+    NEW.changed = NOW();
     RETURN NEW;
   END;
 $tpop_entwicklung_werte_on_update_set_mut$ LANGUAGE plpgsql;
@@ -314,8 +314,8 @@ DROP TRIGGER IF EXISTS tpopkontr_idbiotuebereinst_werte_on_update_set_mut ON apf
 DROP FUNCTION IF EXISTS tpopkontr_idbiotuebereinst_werte_on_update_set_mut();
 CREATE FUNCTION tpopkontr_idbiotuebereinst_werte_on_update_set_mut() RETURNS trigger AS $tpopkontr_idbiotuebereinst_werte_on_update_set_mut$
   BEGIN
-    NEW."MutWer" = current_setting('request.jwt.claim.username', true);
-    NEW."MutWann" = NOW();
+    NEW.changed_by = current_setting('request.jwt.claim.username', true);
+    NEW.changed = NOW();
     RETURN NEW;
   END;
 $tpopkontr_idbiotuebereinst_werte_on_update_set_mut$ LANGUAGE plpgsql;

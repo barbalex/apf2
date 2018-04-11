@@ -10,11 +10,9 @@ export default (store: Object, tree: Object): Array<Object> => {
   // map through all projekt and create array of nodes
   tpopber.forEach(el => {
     const tpopEntwicklungWert = tpopEntwicklungWerte.find(
-      e => e.EntwicklungCode === el.entwicklung
+      e => e.code === el.entwicklung
     )
-    const entwicklungTxt = tpopEntwicklungWert
-      ? tpopEntwicklungWert.EntwicklungTxt
-      : null
+    const entwicklungTxt = tpopEntwicklungWert ? tpopEntwicklungWert.text : null
     el.label = `${el.jahr || '(kein Jahr)'}: ${entwicklungTxt ||
       '(nicht beurteilt)'}`
   })

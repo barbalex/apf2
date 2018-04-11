@@ -302,14 +302,14 @@ export default [
   {
     table: 'tpop_entwicklung_werte',
     label: 'none',
-    idField: 'EntwicklungCode',
+    idField: 'id',
     parentIdField: 'none',
     stammdaten: true,
   },
   {
     table: 'tpopkontr_idbiotuebereinst_werte',
     label: 'none',
-    idField: 'DomainCode',
+    idField: 'id',
     parentIdField: 'none',
     stammdaten: true,
   },
