@@ -749,27 +749,33 @@ CREATE INDEX ON apflora.tpopkontrzaehl USING btree (methode);
 
 DROP TABLE IF EXISTS apflora.tpopkontrzaehl_einheit_werte;
 CREATE TABLE apflora.tpopkontrzaehl_einheit_werte (
-  code integer PRIMARY KEY,
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
+  code integer UNIQUE DEFAULT NULL,
   text varchar(50) DEFAULT NULL,
   sort smallint DEFAULT NULL,
   changed date DEFAULT NOW(),
   changed_by varchar(20) NOT NULL
 );
+CREATE INDEX ON apflora.tpopkontrzaehl_einheit_werte USING btree (id);
 CREATE INDEX ON apflora.tpopkontrzaehl_einheit_werte USING btree (code);
 CREATE INDEX ON apflora.tpopkontrzaehl_einheit_werte USING btree (sort);
+COMMENT ON COLUMN apflora.tpopkontrzaehl_einheit_werte.id IS 'Primärschlüssel';
 COMMENT ON COLUMN apflora.tpopkontrzaehl_einheit_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.tpopkontrzaehl_einheit_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
 DROP TABLE IF EXISTS apflora.tpopkontrzaehl_methode_werte;
 CREATE TABLE apflora.tpopkontrzaehl_methode_werte (
-  code integer PRIMARY KEY,
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
+  code integer UNIQUE DEFAULT NULL,
   text varchar(50) DEFAULT NULL,
   sort smallint DEFAULT NULL,
   changed date DEFAULT NOW(),
   changed_by varchar(20) NOT NULL
 );
+CREATE INDEX ON apflora.tpopkontrzaehl_methode_werte USING btree (id);
 CREATE INDEX ON apflora.tpopkontrzaehl_methode_werte USING btree (code);
 CREATE INDEX ON apflora.tpopkontrzaehl_methode_werte USING btree (sort);
+COMMENT ON COLUMN apflora.tpopkontrzaehl_methode_werte.id IS 'Primärschlüssel';
 COMMENT ON COLUMN apflora.tpopkontrzaehl_methode_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.tpopkontrzaehl_methode_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
@@ -831,29 +837,35 @@ COMMENT ON COLUMN apflora.tpopmassn.changed_by IS 'Von wem wurde der Datensatz z
 
 DROP TABLE IF EXISTS apflora.tpopmassn_erfbeurt_werte;
 CREATE TABLE apflora.tpopmassn_erfbeurt_werte (
-  code integer PRIMARY KEY,
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
+  code integer UNIQUE DEFAULT NULL,
   text varchar(50) DEFAULT NULL,
   sort smallint DEFAULT NULL,
   changed date DEFAULT NOW(),
   changed_by varchar(20) NOT NULL
 );
+CREATE INDEX ON apflora.tpopmassn_erfbeurt_werte USING btree (id);
 CREATE INDEX ON apflora.tpopmassn_erfbeurt_werte USING btree (code);
 CREATE INDEX ON apflora.tpopmassn_erfbeurt_werte USING btree (sort);
+COMMENT ON COLUMN apflora.tpopmassn_erfbeurt_werte.id IS 'Primärschlüssel';
 COMMENT ON COLUMN apflora.tpopmassn_erfbeurt_werte.text IS 'Wie werden die durchgefuehrten Massnahmen beurteilt?';
 COMMENT ON COLUMN apflora.tpopmassn_erfbeurt_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.tpopmassn_erfbeurt_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
 DROP TABLE IF EXISTS apflora.tpopmassn_typ_werte;
 CREATE TABLE apflora.tpopmassn_typ_werte (
-  code integer PRIMARY KEY,
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
+  code integer UNIQUE DEFAULT NULL,
   text varchar(50) DEFAULT NULL,
   sort smallint DEFAULT NULL,
   ansiedlung smallint NOT NULL,
   changed date DEFAULT NOW(),
   changed_by varchar(20) NOT NULL
 );
+CREATE INDEX ON apflora.tpopmassn_typ_werte USING btree (id);
 CREATE INDEX ON apflora.tpopmassn_typ_werte USING btree (code);
 CREATE INDEX ON apflora.tpopmassn_typ_werte USING btree (sort);
+COMMENT ON COLUMN apflora.tpopmassn_typ_werte.id IS 'Primärschlüssel';
 COMMENT ON COLUMN apflora.tpopmassn_typ_werte.ansiedlung IS 'Handelt es sich um eine Ansiedlung?';
 COMMENT ON COLUMN apflora.tpopmassn_typ_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.tpopmassn_typ_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';

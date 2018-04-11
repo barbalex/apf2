@@ -63,8 +63,8 @@ CREATE INDEX ON apflora.idealbiotop USING btree (ap_id);
 -- done: add all views, functions, triggers containing this table to this file
 -- done: run migration sql in dev
 -- done: restart postgrest and test app
--- TODO: update js and run this file on server
--- TODO: restart postgrest
+-- done: update js and run this file on server
+-- done: restart postgrest
 
 DROP TRIGGER IF EXISTS idealbiotop_on_update_set_mut ON apflora.idealbiotop;
 DROP FUNCTION IF EXISTS idealbiotop_on_update_set_mut();

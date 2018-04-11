@@ -48,14 +48,14 @@ export default [
   {
     table: 'tpopkontrzaehl_einheit_werte',
     label: 'none',
-    idField: 'code',
+    idField: 'id',
     parentIdField: 'none',
     stammdaten: true,
   },
   {
     table: 'tpopkontrzaehl_methode_werte',
     label: 'none',
-    idField: 'code',
+    idField: 'id',
     parentIdField: 'none',
     stammdaten: true,
   },
@@ -92,7 +92,7 @@ export default [
   {
     table: 'tpopmassn_typ_werte',
     label: 'none',
-    idField: 'code',
+    idField: 'id',
     parentIdField: 'none',
     stammdaten: true,
   },
@@ -106,7 +106,7 @@ export default [
   {
     table: 'tpopmassn_erfbeurt_werte',
     label: 'none',
-    idField: 'code',
+    idField: 'id',
     parentIdField: 'none',
     stammdaten: true,
   },
