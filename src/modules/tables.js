@@ -120,7 +120,7 @@ export default [
   {
     table: 'ziel_typ_werte',
     label: 'none',
-    idField: 'ZieltypId',
+    idField: 'id',
     parentIdField: 'none',
     stammdaten: true,
   },

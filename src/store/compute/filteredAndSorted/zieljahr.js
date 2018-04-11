@@ -13,8 +13,8 @@ export default (store: Object, tree: Object): Array<Object> => {
   const zieltypWerte = Array.from(table.ziel_typ_werte.values())
   if (filterString) {
     ziele = ziele.filter(p => {
-      const zielWert = zieltypWerte.find(e => e.ZieltypId === p.typ)
-      const zieltypTxt = zielWert ? zielWert.ZieltypTxt : 'kein Zieltyp'
+      const zielWert = zieltypWerte.find(e => e.code === p.typ)
+      const zieltypTxt = zielWert ? zielWert.text : 'kein Zieltyp'
       const label = `${p.bezeichnung || '(kein Ziel)'} (${zieltypTxt})`
       return label.toLowerCase().includes(filterString.toLowerCase())
     })

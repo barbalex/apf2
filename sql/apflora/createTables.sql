@@ -921,7 +921,7 @@ CREATE TABLE apflora.ziel (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
   id_old integer,
   ap_id integer NOT NULL REFERENCES apflora.ap ("ApArtId") ON DELETE CASCADE ON UPDATE CASCADE,
-  typ integer DEFAULT NULL REFERENCES apflora.ziel_typ_werte ("ZieltypId") ON DELETE SET NULL ON UPDATE CASCADE,
+  typ integer DEFAULT NULL REFERENCES apflora.ziel_typ_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
   jahr smallint DEFAULT NULL,
   bezeichnung text,
   changed date DEFAULT NOW(),
@@ -942,17 +942,20 @@ COMMENT ON COLUMN apflora.ziel.changed_by IS 'Von wem wurde der Datensatz zuletz
 
 DROP TABLE IF EXISTS apflora.ziel_typ_werte;
 CREATE TABLE apflora.ziel_typ_werte (
-  "ZieltypId" integer PRIMARY KEY,
-  "ZieltypTxt" varchar(50) DEFAULT NULL,
-  "ZieltypOrd" smallint DEFAULT NULL,
-  "MutWann" date DEFAULT NOW(),
-  "MutWer" varchar(20) NOT NULL
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
+  code integer UNIQUE DEFAULT NULL,
+  text varchar(50) DEFAULT NULL,
+  sort smallint DEFAULT NULL,
+  changed date DEFAULT NOW(),
+  changed_by varchar(20) NOT NULL
 );
-CREATE INDEX ON apflora.ziel_typ_werte USING btree ("ZieltypId");
-CREATE INDEX ON apflora.ziel_typ_werte USING btree ("ZieltypOrd");
-COMMENT ON COLUMN apflora.ziel_typ_werte."ZieltypTxt" IS 'Beschreibung des Ziels';
-COMMENT ON COLUMN apflora.ziel_typ_werte."MutWann" IS 'Wann wurde der Datensatz zuletzt geändert?';
-COMMENT ON COLUMN apflora.ziel_typ_werte."MutWer" IS 'Von wem wurde der Datensatz zuletzt geändert?';
+CREATE INDEX ON apflora.ziel_typ_werte USING btree (id);
+CREATE INDEX ON apflora.ziel_typ_werte USING btree (code);
+CREATE INDEX ON apflora.ziel_typ_werte USING btree (sort);
+COMMENT ON COLUMN apflora.ziel_typ_werte.id IS 'Primärschlüssel';
+COMMENT ON COLUMN apflora.ziel_typ_werte.text IS 'Beschreibung des Ziels';
+COMMENT ON COLUMN apflora.ziel_typ_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
+COMMENT ON COLUMN apflora.ziel_typ_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
 DROP TABLE IF EXISTS apflora.zielber;
 CREATE TABLE apflora.zielber (

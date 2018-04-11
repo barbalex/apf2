@@ -11,8 +11,8 @@ export default (store: Object, tree: Object): Array<Object> => {
   const zieltypWerte = Array.from(table.ziel_typ_werte.values())
   // map through all and create array of nodes
   ziele.forEach(el => {
-    const zielWert = zieltypWerte.find(e => e.ZieltypId === el.typ)
-    const zieltypTxt = zielWert ? zielWert.ZieltypTxt : 'kein Zieltyp'
+    const zielWert = zieltypWerte.find(e => e.code === el.typ)
+    const zieltypTxt = zielWert ? zielWert.text : 'kein Zieltyp'
     el.label = `${el.bezeichnung || '(kein Ziel)'} (${zieltypTxt})`
   })
 

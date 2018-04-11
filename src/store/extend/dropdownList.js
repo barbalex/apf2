@@ -192,10 +192,10 @@ export default (store: Object): void => {
     zielTypWerte: computed(
       () => {
         let zielTypWerte = Array.from(store.table.ziel_typ_werte.values())
-        zielTypWerte = sortBy(zielTypWerte, 'ZieltypOrd')
+        zielTypWerte = sortBy(zielTypWerte, 'sort')
         return zielTypWerte.map(el => ({
-          value: el.ZieltypId,
-          label: el.ZieltypTxt,
+          value: el.code,
+          label: el.text,
         }))
       },
       { name: 'dropdownListZielTypWerte' }

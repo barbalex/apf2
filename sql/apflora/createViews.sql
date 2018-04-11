@@ -1513,19 +1513,19 @@ DROP VIEW IF EXISTS apflora.v_abper_ziel CASCADE;
 CREATE OR REPLACE VIEW apflora.v_abper_ziel AS
 SELECT
   apflora.ziel.*,
-  ziel_typ_werte."ZieltypTxt"
+  ziel_typ_werte.text
 FROM
   apflora._variable
   INNER JOIN
     (apflora.ziel
     INNER JOIN
       apflora.ziel_typ_werte
-      ON apflora.ziel.typ = ziel_typ_werte."ZieltypId")
+      ON apflora.ziel.typ = ziel_typ_werte.code)
     ON apflora._variable."JBerJahr" = apflora.ziel.jahr
 WHERE
   apflora.ziel.typ IN(1, 2, 1170775556)
 ORDER BY
-  apflora.ziel_typ_werte."ZieltypOrd",
+  apflora.ziel_typ_werte.sort,
   apflora.ziel.bezeichnung;
 
 DROP VIEW IF EXISTS apflora.v_apber_verwaist CASCADE;
@@ -3683,7 +3683,7 @@ SELECT
   apflora.ziel.id AS "Ziel Id",
   apflora.ziel.ap_id AS "Ziel ApId",
   apflora.ziel.jahr AS "Ziel Jahr",
-  ziel_typ_werte."ZieltypTxt" AS "Ziel Typ",
+  ziel_typ_werte.text AS "Ziel Typ",
   apflora.ziel.bezeichnung AS "Ziel Beschreibung"
 FROM
   (((((apflora.adb_eigenschaften
@@ -3704,13 +3704,13 @@ FROM
     ON apflora.ap."ApArtId" = apflora.ziel.ap_id)
   LEFT JOIN
     apflora.ziel_typ_werte
-    ON apflora.ziel.typ = ziel_typ_werte."ZieltypId"
+    ON apflora.ziel.typ = ziel_typ_werte.code
 WHERE
   apflora.ziel.typ IN (1, 2, 1170775556)
 ORDER BY
   apflora.adb_eigenschaften."Artname",
   apflora.ziel.jahr,
-  ziel_typ_werte."ZieltypTxt",
+  ziel_typ_werte.text,
   apflora.ziel.typ;
 
 DROP VIEW IF EXISTS apflora.v_ziel_verwaist CASCADE;
@@ -3720,7 +3720,7 @@ SELECT
   apflora.ziel.id AS "Ziel Id",
   apflora.ziel.ap_id AS "Ziel ApId",
   apflora.ziel.jahr AS "Ziel Jahr",
-  ziel_typ_werte."ZieltypTxt" AS "Ziel Typ",
+  ziel_typ_werte.text AS "Ziel Typ",
   apflora.ziel.bezeichnung AS "Ziel Beschreibung"
 FROM
   (((((apflora.adb_eigenschaften
@@ -3741,12 +3741,12 @@ FROM
     ON apflora.ap."ApArtId" = apflora.ziel.ap_id)
   LEFT JOIN
     apflora.ziel_typ_werte
-    ON apflora.ziel.typ = ziel_typ_werte."ZieltypId"
+    ON apflora.ziel.typ = ziel_typ_werte.code
 WHERE
   apflora.ap."ApArtId" IS NULL
 ORDER BY
   apflora.ziel.jahr,
-  ziel_typ_werte."ZieltypTxt",
+  ziel_typ_werte.text,
   apflora.ziel.typ;
 
 DROP VIEW IF EXISTS apflora.v_zielber CASCADE;
@@ -3760,7 +3760,7 @@ SELECT
   apflora.adresse."AdrName" AS "AP verantwortlich",
   apflora.ziel.id AS "Ziel Id",
   apflora.ziel.jahr AS "Ziel Jahr",
-  ziel_typ_werte."ZieltypTxt" AS "Ziel Typ",
+  ziel_typ_werte.text AS "Ziel Typ",
   apflora.ziel.bezeichnung AS "Ziel Beschreibung",
   apflora.zielber.id AS "ZielBer Id",
   apflora.zielber.id AS "ZielBer ZielId",
@@ -3788,14 +3788,14 @@ FROM
     ON apflora.ap."ApArtId" = apflora.ziel.ap_id)
   LEFT JOIN
     apflora.ziel_typ_werte
-    ON apflora.ziel.typ = ziel_typ_werte."ZieltypId")
+    ON apflora.ziel.typ = ziel_typ_werte.code)
   RIGHT JOIN
     apflora.zielber
     ON apflora.ziel.id = apflora.zielber.ziel_id
 ORDER BY
   apflora.adb_eigenschaften."Artname",
   apflora.ziel.jahr,
-  ziel_typ_werte."ZieltypTxt",
+  ziel_typ_werte.text,
   apflora.ziel.typ,
   apflora.zielber.jahr;
 
@@ -3830,7 +3830,7 @@ FROM
     ON apflora.ap."ApArtId" = apflora.ziel.ap_id)
   LEFT JOIN
     apflora.ziel_typ_werte
-    ON apflora.ziel.typ = ziel_typ_werte."ZieltypId")
+    ON apflora.ziel.typ = ziel_typ_werte.code)
   RIGHT JOIN
     apflora.zielber
     ON apflora.ziel.id = apflora.zielber.ziel_id

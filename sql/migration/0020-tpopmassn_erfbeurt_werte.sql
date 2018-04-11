@@ -12,7 +12,7 @@ COMMENT ON COLUMN apflora.tpopmassn_erfbeurt_werte.id IS 'Primärschlüssel';
 -- done: rename in js
 -- done: check if old id was used somewhere. If so: rename that field, add new one and update that
 -- done: add all views, functions, triggers containing this table to this file
--- TODO: run migration sql in dev
--- TODO: restart postgrest and test app
+-- done: run migration sql in dev
+-- done: restart postgrest and test app
 -- TODO: update js and run this file on server
 -- TODO: restart postgrest
