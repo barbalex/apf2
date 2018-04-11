@@ -213,7 +213,7 @@ CREATE TABLE apflora.assozart (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
   id_old integer DEFAULT NULL,
   ap_id integer DEFAULT NULL REFERENCES apflora.ap ("ApArtId") ON DELETE CASCADE ON UPDATE CASCADE,
-  ae_id UUID DEFAULT NULL REFERENCES apflora.adb_eigenschaften ("GUID") ON DELETE SET NULL ON UPDATE CASCADE,
+  ae_id UUID DEFAULT NULL REFERENCES apflora.ae_eigenschaften (id) ON DELETE SET NULL ON UPDATE CASCADE,
   bemerkungen text,
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
@@ -1004,21 +1004,23 @@ CREATE TABLE apflora.evab_typologie (
 -- TODO:
 -- replace with direct GraphQL call to ae
 -- when graphql installed
-DROP TABLE IF EXISTS apflora.adb_eigenschaften;
-CREATE TABLE apflora.adb_eigenschaften (
-  "GUID" UUID PRIMARY KEY,
-  "TaxonomieId" integer DEFAULT NULL,
-  "Familie" varchar(100) DEFAULT NULL,
-  "Artname" varchar(100) DEFAULT NULL,
-  "NameDeutsch" varchar(100) DEFAULT NULL,
-  "Status" varchar(47) DEFAULT NULL,
-  "Artwert" smallint DEFAULT NULL,
-  "KefArt" smallint DEFAULT NULL,
-  "KefKontrolljahr" smallint DEFAULT NULL,
-  "FnsJahresartJahr" smallint DEFAULT NULL
+DROP TABLE IF EXISTS apflora.ae_eigenschaften;
+CREATE TABLE apflora.ae_eigenschaften (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
+  taxid integer DEFAULT NULL,
+  familie varchar(100) DEFAULT NULL,
+  artname varchar(100) DEFAULT NULL,
+  namedeutsch varchar(100) DEFAULT NULL,
+  status varchar(47) DEFAULT NULL,
+  artwert smallint DEFAULT NULL,
+  kefart smallint DEFAULT NULL,
+  kefkontrolljahr smallint DEFAULT NULL,
+  fnsjahresartjahr smallint DEFAULT NULL
 );
-CREATE INDEX ON apflora.adb_eigenschaften USING btree ("TaxonomieId");
-CREATE INDEX ON apflora.adb_eigenschaften USING btree ("Artname");
+CREATE INDEX ON apflora.ae_eigenschaften USING btree (id);
+CREATE INDEX ON apflora.ae_eigenschaften USING btree (taxid);
+CREATE INDEX ON apflora.ae_eigenschaften USING btree (artname);
+COMMENT ON COLUMN apflora.ae_eigenschaften.id IS 'Primärschlüssel';
 
 -- TODO:
 -- replace with direct GraphQL call to ae
@@ -1098,7 +1100,7 @@ CREATE INDEX ON apflora.beob_quelle USING btree (id);
 DROP TABLE IF EXISTS apflora.beobart;
 CREATE TABLE apflora.beobart (
   "BeobArtId" SERIAL PRIMARY KEY,
-  "TaxonomieId" INTEGER DEFAULT NULL REFERENCES apflora.adb_eigenschaften ("TaxonomieId") ON DELETE SET NULL ON UPDATE CASCADE,
+  "TaxonomieId" INTEGER DEFAULT NULL REFERENCES apflora.ae_eigenschaften (taxid) ON DELETE SET NULL ON UPDATE CASCADE,
   "ApArtId" integer DEFAULT NULL REFERENCES apflora.ap ("ApArtId") ON DELETE CASCADE ON UPDATE CASCADE,
   "MutWann" date DEFAULT NULL,
   "MutWer" varchar(20) DEFAULT NULL

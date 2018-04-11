@@ -188,8 +188,8 @@ const Beobzuordnung = ({
   const beobTitle = `Informationen aus ${quelleName} (nicht veränderbar)`
   const showTPopId = activeDataset.row.nicht_zuordnen !== 1
   const adbArt =
-    beob && beob.ArtId ? store.table.adb_eigenschaften.get(beob.ArtId) : null
-  const artname = adbArt ? adbArt.Artname : ''
+    beob && beob.ArtId ? store.table.ae_eigenschaften.get(beob.ArtId) : null
+  const artname = adbArt ? adbArt.artname : ''
   const artLabel = `Beobachtete Art: ${artname}`
 
   return (

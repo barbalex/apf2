@@ -100,8 +100,8 @@ const enhance = compose(
   }),
   withLifecycle({
     onDidMount({ store }) {
-      if (store.table.adb_eigenschaften.size === 0) {
-        store.fetchTable('adb_eigenschaften')
+      if (store.table.ae_eigenschaften.size === 0) {
+        store.fetchTable('ae_eigenschaften')
       }
       if (store.table.ap.size === 0) {
         store.fetchTableByParentId('ap', store.tree.activeNodes.projekt)
@@ -111,11 +111,11 @@ const enhance = compose(
   observer,
   withProps(props => {
     const { store } = props
-    const { adb_eigenschaften } = store.table
+    const { ae_eigenschaften } = store.table
     const apIds = Array.from(store.table.ap.keys()).map(n => Number(n))
-    let artList = Array.from(adb_eigenschaften.values())
-    artList = filter(artList, r => apIds.includes(r.TaxonomieId))
-    artList = sortBy(artList, 'Artname')
+    let artList = Array.from(ae_eigenschaften.values())
+    artList = filter(artList, r => apIds.includes(r.taxid))
+    artList = sortBy(artList, 'artname')
     return { artList }
   })
 )
@@ -496,8 +496,8 @@ const Exporte = ({
               <StyledAutoComplete
                 dataSource={artList}
                 dataSourceConfig={{
-                  value: 'TaxonomieId',
-                  text: 'Artname',
+                  value: 'taxid',
+                  text: 'artname',
                 }}
                 downloadFromView={downloadFromView}
                 changeArtFuerEierlegendeWollmilchsau={

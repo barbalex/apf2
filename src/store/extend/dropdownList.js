@@ -42,17 +42,17 @@ export default (store: Object): void => {
           r => r !== store.tree.activeNodes.ap
         )
         const artList = filter(
-          Array.from(store.table.adb_eigenschaften.values()),
-          r => !apArtIdsNotToShow.includes(r.TaxonomieId)
+          Array.from(store.table.ae_eigenschaften.values()),
+          r => !apArtIdsNotToShow.includes(r.taxid)
         )
-        return sortBy(artList, 'Artname')
+        return sortBy(artList, 'artname')
       },
       { name: 'dropdownListArtListForAp' }
     ),
     artnamen: computed(
       () => {
-        let artnamen = Array.from(store.table.adb_eigenschaften.values())
-        artnamen = artnamen.map(a => a.Artname).sort()
+        let artnamen = Array.from(store.table.ae_eigenschaften.values())
+        artnamen = artnamen.map(a => a.artname).sort()
         // artnamen.unshift('')
         return artnamen
       },

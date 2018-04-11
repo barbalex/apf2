@@ -238,9 +238,9 @@ export default [
     parentIdField: 'ArtId',
   },
   {
-    table: 'adb_eigenschaften',
+    table: 'ae_eigenschaften',
     label: 'none',
-    idField: 'TaxonomieId',
+    idField: 'taxid',
     parentIdField: 'none',
     stammdaten: true,
   },

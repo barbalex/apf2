@@ -26,26 +26,26 @@ const enhance = compose(inject('store'), observer)
 
 const getArtList = ({ store, tree }: { store: Object, tree: Object }) => {
   const { activeDataset, activeNodes } = tree
-  const { adb_eigenschaften } = store.table
+  const { ae_eigenschaften } = store.table
   const assozartenOfAp = Array.from(store.table.assozart.values())
     .filter(a => a.ap_id === activeDataset.row.ap_id)
     .map(a => a.ae_id)
   const apArtIdsNotToShow = assozartenOfAp.concat(activeNodes.ap)
   const artList = filter(
-    Array.from(adb_eigenschaften.values()),
-    r => !apArtIdsNotToShow.includes(r.GUID)
+    Array.from(ae_eigenschaften.values()),
+    r => !apArtIdsNotToShow.includes(r.taxid)
   )
-  return sortBy(artList, 'Artname')
+  return sortBy(artList, 'artname')
 }
 
 const getArtname = ({ store, tree }: { store: Object, tree: Object }) => {
-  const { adb_eigenschaften } = store.table
+  const { ae_eigenschaften } = store.table
   const { activeDataset } = tree
   let name = ''
-  if (activeDataset.row.ae_id && adb_eigenschaften.size > 0) {
-    name = Array.from(adb_eigenschaften.values()).find(
-      v => v.GUID === activeDataset.row.ae_id
-    ).Artname
+  if (activeDataset.row.ae_id && ae_eigenschaften.size > 0) {
+    name = Array.from(ae_eigenschaften.values()).find(
+      v => v.id === activeDataset.row.ae_id
+    ).artname
   }
   return name
 }
@@ -73,8 +73,8 @@ const Assozart = ({ store, tree }: { store: Object, tree: Object }) => {
               tree,
             })}
             dataSourceConfig={{
-              value: 'GUID',
-              text: 'Artname',
+              value: 'id',
+              text: 'artname',
             }}
             updatePropertyInDb={store.updatePropertyInDb}
           />

@@ -215,9 +215,9 @@ ORDER BY
 DROP VIEW IF EXISTS apflora.v_massn CASCADE;
 CREATE OR REPLACE VIEW apflora.v_massn AS
 SELECT
-  apflora.adb_eigenschaften."TaxonomieId" AS "ApArtId",
-  apflora.adb_eigenschaften."Familie",
-  apflora.adb_eigenschaften."Artname" AS "AP Art",
+  apflora.ae_eigenschaften.taxid AS "ApArtId",
+  apflora.ae_eigenschaften.familie AS "Familie",
+  apflora.ae_eigenschaften.artname AS "AP Art",
   apflora.ap_bearbstand_werte.text AS "AP Status",
   apflora.ap."ApJahr" AS "AP Start im Jahr",
   apflora.ap_umsetzung_werte.text AS "AP Stand Umsetzung",
@@ -277,9 +277,9 @@ SELECT
   apflora.tpopmassn.changed AS "Datensatz zuletzt geaendert",
   apflora.tpopmassn.changed_by AS "Datensatz zuletzt geaendert von"
 FROM
-  ((((((apflora.adb_eigenschaften
+  ((((((apflora.ae_eigenschaften
   INNER JOIN
-    apflora.ap ON apflora.adb_eigenschaften."TaxonomieId" = apflora.ap."ApArtId")
+    apflora.ap ON apflora.ae_eigenschaften.taxid = apflora.ap."ApArtId")
     INNER JOIN
       ((apflora.pop
       INNER JOIN
@@ -308,9 +308,9 @@ FROM
     apflora.adresse
     ON apflora.tpopmassn.bearbeiter = apflora.adresse."AdrId"
 WHERE
-  apflora.adb_eigenschaften."TaxonomieId" > 150
+  apflora.ae_eigenschaften.taxid > 150
 ORDER BY
-  apflora.adb_eigenschaften."Artname",
+  apflora.ae_eigenschaften.artname,
   apflora.pop."PopNr",
   apflora.tpop."TPopNr",
   apflora.tpopmassn.jahr,
@@ -320,8 +320,8 @@ ORDER BY
 DROP VIEW IF EXISTS apflora.v_massn_webgisbun CASCADE;
 CREATE OR REPLACE VIEW apflora.v_massn_webgisbun AS
 SELECT
-  apflora.adb_eigenschaften."TaxonomieId" AS "APARTID",
-  apflora.adb_eigenschaften."Artname" AS "APART",
+  apflora.ae_eigenschaften.taxid AS "APARTID",
+  apflora.ae_eigenschaften.artname AS "APART",
   apflora.pop."PopGuid" AS "POPGUID",
   apflora.pop."PopNr" AS "POPNR",
   apflora.tpop."TPopGuid" AS "TPOPGUID",
@@ -352,9 +352,9 @@ SELECT
   apflora.tpopmassn.changed AS "MASSNCHANGEDAT",
   apflora.tpopmassn.changed_by AS "MASSNCHANGEBY"
 FROM
-  ((((((apflora.adb_eigenschaften
+  ((((((apflora.ae_eigenschaften
   INNER JOIN
-    apflora.ap ON apflora.adb_eigenschaften."TaxonomieId" = apflora.ap."ApArtId")
+    apflora.ap ON apflora.ae_eigenschaften.taxid = apflora.ap."ApArtId")
     INNER JOIN
       ((apflora.pop
       INNER JOIN
@@ -383,9 +383,9 @@ FROM
     apflora.adresse
     ON apflora.tpopmassn.bearbeiter = apflora.adresse."AdrId"
 WHERE
-  apflora.adb_eigenschaften."TaxonomieId" > 150
+  apflora.ae_eigenschaften.taxid > 150
 ORDER BY
-  apflora.adb_eigenschaften."Artname",
+  apflora.ae_eigenschaften.artname,
   apflora.pop."PopNr",
   apflora.tpop."TPopNr",
   apflora.tpopmassn.jahr,
@@ -424,8 +424,8 @@ FROM
 DROP VIEW IF EXISTS apflora.v_massn_fuergis_read CASCADE;
 CREATE OR REPLACE VIEW apflora.v_massn_fuergis_read AS
 SELECT
-  apflora.adb_eigenschaften."TaxonomieId" AS "apartid",
-  apflora.adb_eigenschaften."Artname" AS "apart",
+  apflora.ae_eigenschaften.taxid AS "apartid",
+  apflora.ae_eigenschaften.artname AS "apart",
   apflora.ap_bearbstand_werte.text AS "apstatus",
   apflora.ap."ApJahr" AS "apstartimjahr",
   apflora.ap_umsetzung_werte.text AS "apstandumsetzung",
@@ -481,9 +481,9 @@ SELECT
   apflora.tpopmassn.changed::timestamp AS "massnmutwann",
   apflora.tpopmassn.changed_by AS "massnmutwer"
 FROM
-  ((((((apflora.adb_eigenschaften
+  ((((((apflora.ae_eigenschaften
   INNER JOIN
-    apflora.ap ON apflora.adb_eigenschaften."TaxonomieId" = apflora.ap."ApArtId")
+    apflora.ap ON apflora.ae_eigenschaften.taxid = apflora.ap."ApArtId")
     INNER JOIN
       ((apflora.pop
       INNER JOIN
@@ -512,7 +512,7 @@ FROM
     apflora.adresse
     ON apflora.tpopmassn.bearbeiter = apflora.adresse."AdrId"
 ORDER BY
-  apflora.adb_eigenschaften."Artname",
+  apflora.ae_eigenschaften.artname,
   apflora.pop."PopNr",
   apflora.tpop."TPopNr",
   apflora.tpopmassn.jahr,
@@ -522,9 +522,9 @@ ORDER BY
 DROP VIEW IF EXISTS apflora.v_tpop_anzmassn CASCADE;
 CREATE OR REPLACE VIEW apflora.v_tpop_anzmassn AS
 SELECT
-  apflora.adb_eigenschaften."TaxonomieId" AS "ApArtId",
-  apflora.adb_eigenschaften."Familie",
-  apflora.adb_eigenschaften."Artname" AS "AP Art",
+  apflora.ae_eigenschaften.taxid AS "ApArtId",
+  apflora.ae_eigenschaften.familie AS "Familie",
+  apflora.ae_eigenschaften.artname AS "AP Art",
   apflora.ap_bearbstand_werte.text AS "AP Status",
   apflora.ap."ApJahr" AS "AP Start im Jahr",
   apflora.ap_umsetzung_werte.text AS "AP Stand Umsetzung",
@@ -564,7 +564,7 @@ SELECT
   apflora.tpop."TPopBewirtschaftung" AS "TPop Bewirtschaftung",
   count(apflora.tpopmassn.id) AS "Anzahl Massnahmen"
 FROM
-  apflora.adb_eigenschaften
+  apflora.ae_eigenschaften
   INNER JOIN
     (((apflora.ap
     INNER JOIN
@@ -588,11 +588,11 @@ FROM
     LEFT JOIN
       apflora.ap_umsetzung_werte
       ON apflora.ap."ApUmsetzung" = apflora.ap_umsetzung_werte.code)
-  ON apflora.adb_eigenschaften."TaxonomieId" = apflora.ap."ApArtId"
+  ON apflora.ae_eigenschaften.taxid = apflora.ap."ApArtId"
 GROUP BY
-  apflora.adb_eigenschaften."TaxonomieId",
-  apflora.adb_eigenschaften."Familie",
-  apflora.adb_eigenschaften."Artname",
+  apflora.ae_eigenschaften.taxid,
+  apflora.ae_eigenschaften.familie,
+  apflora.ae_eigenschaften.artname,
   apflora.ap_bearbstand_werte.text,
   apflora.ap."ApJahr",
   apflora.ap_umsetzung_werte.text,
@@ -631,15 +631,15 @@ GROUP BY
   apflora.tpop."TPopBewirtschafterIn",
   apflora.tpop."TPopBewirtschaftung"
 ORDER BY
-  apflora.adb_eigenschaften."Artname",
+  apflora.ae_eigenschaften.artname,
   apflora.pop."PopNr",
   apflora.tpop."TPopNr";
 
 DROP VIEW IF EXISTS apflora.v_pop_anzmassn CASCADE;
 CREATE OR REPLACE VIEW apflora.v_pop_anzmassn AS
 SELECT
-  apflora.adb_eigenschaften."TaxonomieId" AS "ApArtId",
-  apflora.adb_eigenschaften."Artname" AS "AP Art",
+  apflora.ae_eigenschaften.taxid AS "ApArtId",
+  apflora.ae_eigenschaften.artname AS "AP Art",
   apflora.ap_bearbstand_werte.text AS "AP Status",
   apflora.ap."ApJahr" AS "AP Start im Jahr",
   apflora.ap_umsetzung_werte.text AS "AP Stand Umsetzung",
@@ -654,10 +654,10 @@ SELECT
   apflora.pop."PopYKoord" AS "Pop Y-Koordinaten",
   count(apflora.tpopmassn.id) AS "Anzahl Massnahmen"
 FROM
-  ((((apflora.adb_eigenschaften
+  ((((apflora.ae_eigenschaften
   INNER JOIN
     apflora.ap
-    ON apflora.adb_eigenschaften."TaxonomieId" = apflora.ap."ApArtId")
+    ON apflora.ae_eigenschaften.taxid = apflora.ap."ApArtId")
   INNER JOIN
     ((apflora.pop
     LEFT JOIN
@@ -677,8 +677,8 @@ FROM
     apflora.pop_status_werte
     ON apflora.pop."PopHerkunft" = pop_status_werte.code
 GROUP BY
-  apflora.adb_eigenschaften."TaxonomieId",
-  apflora.adb_eigenschaften."Artname",
+  apflora.ae_eigenschaften.taxid,
+  apflora.ae_eigenschaften.artname,
   apflora.ap_bearbstand_werte.text,
   apflora.ap."ApJahr",
   apflora.ap_umsetzung_werte.text,
@@ -692,14 +692,14 @@ GROUP BY
   apflora.pop."PopXKoord",
   apflora.pop."PopYKoord"
 ORDER BY
-  apflora.adb_eigenschaften."Artname",
+  apflora.ae_eigenschaften.artname,
   apflora.pop."PopNr";
 
 DROP VIEW IF EXISTS apflora.v_pop_anzkontr CASCADE;
 CREATE OR REPLACE VIEW apflora.v_pop_anzkontr AS
 SELECT
-  apflora.adb_eigenschaften."TaxonomieId" AS "ApArtId",
-  apflora.adb_eigenschaften."Artname" AS "AP Art",
+  apflora.ae_eigenschaften.taxid AS "ApArtId",
+  apflora.ae_eigenschaften.artname AS "AP Art",
   apflora.ap_bearbstand_werte.text AS "AP Status",
   apflora.ap."ApJahr" AS "AP Start im Jahr",
   apflora.ap_umsetzung_werte.text AS "AP Stand Umsetzung",
@@ -715,10 +715,10 @@ SELECT
   apflora.pop."PopYKoord" AS "Pop Y-Koordinaten",
   count(apflora.tpopkontr."TPopKontrId") AS "Anzahl Kontrollen"
 FROM
-  ((((apflora.adb_eigenschaften
+  ((((apflora.ae_eigenschaften
   INNER JOIN
     apflora.ap
-    ON apflora.adb_eigenschaften."TaxonomieId" = apflora.ap."ApArtId")
+    ON apflora.ae_eigenschaften.taxid = apflora.ap."ApArtId")
   INNER JOIN
     ((apflora.pop
     LEFT JOIN
@@ -738,8 +738,8 @@ FROM
     apflora.pop_status_werte
     ON apflora.pop."PopHerkunft" = pop_status_werte.code
 GROUP BY
-  apflora.adb_eigenschaften."TaxonomieId",
-  apflora.adb_eigenschaften."Artname",
+  apflora.ae_eigenschaften.taxid,
+  apflora.ae_eigenschaften.artname,
   apflora.ap_bearbstand_werte.text,
   apflora.ap."ApJahr",
   apflora.ap_umsetzung_werte.text,
@@ -754,23 +754,23 @@ GROUP BY
   apflora.pop."PopXKoord",
   apflora.pop."PopYKoord"
 ORDER BY
-  apflora.adb_eigenschaften."Artname",
+  apflora.ae_eigenschaften.artname,
   apflora.pop."PopNr";
 
 DROP VIEW IF EXISTS apflora.v_ap_anzmassn CASCADE;
 CREATE OR REPLACE VIEW apflora.v_ap_anzmassn AS
 SELECT
-  apflora.adb_eigenschaften."TaxonomieId" AS "ApArtId",
-  apflora.adb_eigenschaften."Artname" AS "AP Art",
+  apflora.ae_eigenschaften.taxid AS "ApArtId",
+  apflora.ae_eigenschaften.artname AS "AP Art",
   apflora.ap_bearbstand_werte.text AS "AP Status",
   apflora.ap."ApJahr" AS "AP Start im Jahr",
   apflora.ap_umsetzung_werte.text AS "AP Stand Umsetzung",
   count(apflora.tpopmassn.id) AS "Anzahl Massnahmen"
 FROM
-  (((apflora.adb_eigenschaften
+  (((apflora.ae_eigenschaften
   INNER JOIN
     apflora.ap
-    ON apflora.adb_eigenschaften."TaxonomieId" = apflora.ap."ApArtId")
+    ON apflora.ae_eigenschaften.taxid = apflora.ap."ApArtId")
   LEFT JOIN
     ((apflora.pop
     LEFT JOIN
@@ -787,28 +787,28 @@ FROM
     apflora.ap_umsetzung_werte
     ON apflora.ap."ApUmsetzung" = apflora.ap_umsetzung_werte.code
 GROUP BY
-  apflora.adb_eigenschaften."TaxonomieId",
-  apflora.adb_eigenschaften."Artname",
+  apflora.ae_eigenschaften.taxid,
+  apflora.ae_eigenschaften.artname,
   apflora.ap_bearbstand_werte.text,
   apflora.ap."ApJahr",
   apflora.ap_umsetzung_werte.text
 ORDER BY
-  apflora.adb_eigenschaften."Artname";
+  apflora.ae_eigenschaften.artname;
 
 DROP VIEW IF EXISTS apflora.v_ap_anzkontr CASCADE;
 CREATE OR REPLACE VIEW apflora.v_ap_anzkontr AS
 SELECT
-  apflora.adb_eigenschaften."TaxonomieId" AS "ApArtId",
-  apflora.adb_eigenschaften."Artname" AS "AP Art",
+  apflora.ae_eigenschaften.taxid AS "ApArtId",
+  apflora.ae_eigenschaften.artname AS "AP Art",
   apflora.ap_bearbstand_werte.text AS "AP Status",
   apflora.ap."ApJahr" AS "AP Start im Jahr",
   apflora.ap_umsetzung_werte.text AS "AP Stand Umsetzung",
   count(apflora.tpopkontr."TPopKontrId") AS "Anzahl Kontrollen"
 FROM
-  (((apflora.adb_eigenschaften
+  (((apflora.ae_eigenschaften
   INNER JOIN
     apflora.ap
-    ON apflora.adb_eigenschaften."TaxonomieId" = apflora.ap."ApArtId")
+    ON apflora.ae_eigenschaften.taxid = apflora.ap."ApArtId")
   LEFT JOIN
     ((apflora.pop
     LEFT JOIN
@@ -825,19 +825,19 @@ FROM
     apflora.ap_umsetzung_werte
     ON apflora.ap."ApUmsetzung" = apflora.ap_umsetzung_werte.code
 GROUP BY
-  apflora.adb_eigenschaften."TaxonomieId",
-  apflora.adb_eigenschaften."Artname",
+  apflora.ae_eigenschaften.taxid,
+  apflora.ae_eigenschaften.artname,
   apflora.ap_bearbstand_werte.text,
   apflora.ap."ApJahr",
   apflora.ap_umsetzung_werte.text
 ORDER BY
-  apflora.adb_eigenschaften."Artname";
+  apflora.ae_eigenschaften.artname;
 
 DROP VIEW IF EXISTS apflora.v_pop CASCADE;
 CREATE OR REPLACE VIEW apflora.v_pop AS
 SELECT
-  apflora.adb_eigenschaften."TaxonomieId" AS "ApArtId",
-  apflora.adb_eigenschaften."Artname" AS "AP Art",
+  apflora.ae_eigenschaften.taxid AS "ApArtId",
+  apflora.ae_eigenschaften.artname AS "AP Art",
   apflora.ap_bearbstand_werte.text AS "AP Status",
   apflora.ap."ApJahr" AS "AP Start im Jahr",
   apflora.ap_umsetzung_werte.text AS "AP Stand Umsetzung",
@@ -854,7 +854,7 @@ SELECT
   apflora.pop."MutWann" AS "Datensatz zuletzt geaendert",
   apflora.pop."MutWer" AS "Datensatz zuletzt geaendert von"
 FROM
-  apflora.adb_eigenschaften
+  apflora.ae_eigenschaften
   INNER JOIN
     (((apflora.ap
     LEFT JOIN
@@ -869,16 +869,16 @@ FROM
         apflora.pop_status_werte
         ON apflora.pop."PopHerkunft" = pop_status_werte.code)
       ON apflora.ap."ApArtId" = apflora.pop."ApArtId")
-    ON apflora.adb_eigenschaften."TaxonomieId" = apflora.ap."ApArtId"
+    ON apflora.ae_eigenschaften.taxid = apflora.ap."ApArtId"
 ORDER BY
-  apflora.adb_eigenschaften."Artname",
+  apflora.ae_eigenschaften.artname,
   apflora.pop."PopNr";
 
 DROP VIEW IF EXISTS apflora.v_pop_ohnekoord CASCADE;
 CREATE OR REPLACE VIEW apflora.v_pop_ohnekoord AS
 SELECT
-  apflora.adb_eigenschaften."TaxonomieId" AS "ApArtId",
-  apflora.adb_eigenschaften."Artname" AS "AP Art",
+  apflora.ae_eigenschaften.taxid AS "ApArtId",
+  apflora.ae_eigenschaften.artname AS "AP Art",
   apflora.ap_bearbstand_werte.text AS "AP Status",
   apflora.ap."ApJahr" AS "AP Start im Jahr",
   apflora.ap_umsetzung_werte.text AS "AP Stand Umsetzung",
@@ -895,10 +895,10 @@ SELECT
   apflora.pop."MutWann" AS "Datensatz zuletzt geaendert",
   apflora.pop."MutWer" AS "Datensatz zuletzt geaendert von"
 FROM
-  ((((apflora.adb_eigenschaften
+  ((((apflora.ae_eigenschaften
   INNER JOIN
     apflora.ap
-    ON apflora.adb_eigenschaften."TaxonomieId" = apflora.ap."ApArtId")
+    ON apflora.ae_eigenschaften.taxid = apflora.ap."ApArtId")
   INNER JOIN
     apflora.pop
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId")
@@ -915,7 +915,7 @@ WHERE
   apflora.pop."PopXKoord" IS NULL
   OR apflora.pop."PopYKoord" IS NULL
 ORDER BY
-  apflora.adb_eigenschaften."Artname",
+  apflora.ae_eigenschaften.artname,
   apflora.pop."PopNr";
 
 DROP VIEW IF EXISTS apflora.v_pop_fuergis_write CASCADE;
@@ -940,8 +940,8 @@ FROM
 DROP VIEW IF EXISTS apflora.v_pop_fuergis_read CASCADE;
 CREATE OR REPLACE VIEW apflora.v_pop_fuergis_read AS
 SELECT
-  apflora.adb_eigenschaften."TaxonomieId" AS "apartid",
-  apflora.adb_eigenschaften."Artname" AS "artname",
+  apflora.ae_eigenschaften.taxid AS "apartid",
+  apflora.ae_eigenschaften.artname AS "artname",
   apflora.ap_bearbstand_werte.text AS "apstatus",
   apflora.ap."ApJahr" AS "apjahr",
   apflora.ap_umsetzung_werte.text AS "apumsetzung",
@@ -957,10 +957,10 @@ SELECT
   apflora.pop."MutWann"::timestamp AS "mutwann",
   apflora.pop."MutWer" AS "mutwer"
 FROM
-  ((((apflora.adb_eigenschaften
+  ((((apflora.ae_eigenschaften
   INNER JOIN
     apflora.ap
-    ON apflora.adb_eigenschaften."TaxonomieId" = apflora.ap."ApArtId")
+    ON apflora.ae_eigenschaften.taxid = apflora.ap."ApArtId")
   INNER JOIN
     apflora.pop
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId")
@@ -977,7 +977,7 @@ WHERE
   apflora.pop."PopXKoord" > 0
   AND apflora.pop."PopYKoord" > 0
 ORDER BY
-  apflora.adb_eigenschaften."Artname",
+  apflora.ae_eigenschaften.artname,
   apflora.pop."PopNr";
 
 -- im Gebrauch (Access):
@@ -1013,8 +1013,8 @@ ORDER BY
 DROP VIEW IF EXISTS apflora.v_pop_ohnetpop CASCADE;
 CREATE OR REPLACE VIEW apflora.v_pop_ohnetpop AS
 SELECT
-  apflora.adb_eigenschaften."TaxonomieId" AS "ApArtId",
-  apflora.adb_eigenschaften."Artname" AS "AP Art",
+  apflora.ae_eigenschaften.taxid AS "ApArtId",
+  apflora.ae_eigenschaften.artname AS "AP Art",
   apflora.ap_bearbstand_werte.text AS "AP Status",
   apflora.ap."ApJahr" AS "AP Start im Jahr",
   apflora.ap_umsetzung_werte.text AS "AP Stand Umsetzung",
@@ -1031,10 +1031,10 @@ SELECT
   apflora.pop."MutWann" AS "Datensatz zuletzt geaendert",
   apflora.pop."MutWer" AS "Datensatz zuletzt geaendert von"
 FROM
-  (((((apflora.adb_eigenschaften
+  (((((apflora.ae_eigenschaften
   INNER JOIN
     apflora.ap
-    ON apflora.adb_eigenschaften."TaxonomieId" = apflora.ap."ApArtId")
+    ON apflora.ae_eigenschaften.taxid = apflora.ap."ApArtId")
   INNER JOIN
     apflora.pop
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId")
@@ -1053,14 +1053,14 @@ FROM
 WHERE
   apflora.tpop."TPopId" IS NULL
 ORDER BY
-  apflora.adb_eigenschaften."Artname",
+  apflora.ae_eigenschaften.artname,
   apflora.pop."PopNr";
 
 DROP VIEW IF EXISTS apflora.v_popber CASCADE;
 CREATE OR REPLACE VIEW apflora.v_popber AS
 SELECT
-  apflora.adb_eigenschaften."TaxonomieId" AS "ApArtId",
-  apflora.adb_eigenschaften."Artname" AS "AP Art",
+  apflora.ae_eigenschaften.taxid AS "ApArtId",
+  apflora.ae_eigenschaften.artname AS "AP Art",
   apflora.ap_bearbstand_werte.text AS "AP Status",
   apflora.ap."ApJahr" AS "AP Start im Jahr",
   apflora.ap_umsetzung_werte.text AS "AP Stand Umsetzung",
@@ -1080,10 +1080,10 @@ SELECT
   apflora.popber."MutWann" AS "PopBer MutWann",
   apflora.popber."MutWer" AS "PopBer MutWer"
 FROM
-  ((((((apflora.adb_eigenschaften
+  ((((((apflora.ae_eigenschaften
   INNER JOIN
     apflora.ap
-    ON apflora.adb_eigenschaften."TaxonomieId" = apflora.ap."ApArtId")
+    ON apflora.ae_eigenschaften.taxid = apflora.ap."ApArtId")
   INNER JOIN
     apflora.pop
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId")
@@ -1103,7 +1103,7 @@ FROM
     apflora.tpop_entwicklung_werte
     ON apflora.popber."PopBerEntwicklung" = tpop_entwicklung_werte.code
 ORDER BY
-  apflora.adb_eigenschaften."Artname",
+  apflora.ae_eigenschaften.artname,
   apflora.pop."PopNr",
   apflora.popber."PopBerJahr",
   tpop_entwicklung_werte.text;
@@ -1136,8 +1136,8 @@ ORDER BY
 DROP VIEW IF EXISTS apflora.v_popmassnber CASCADE;
 CREATE OR REPLACE VIEW apflora.v_popmassnber AS
 SELECT
-  apflora.adb_eigenschaften."TaxonomieId" AS "AP ApArtId",
-  apflora.adb_eigenschaften."Artname" AS "AP Art",
+  apflora.ae_eigenschaften.taxid AS "AP ApArtId",
+  apflora.ae_eigenschaften.artname AS "AP Art",
   apflora.ap_bearbstand_werte.text AS "AP Status",
   apflora.ap."ApJahr" AS "AP Start im Jahr",
   apflora.ap_umsetzung_werte.text AS "AP Stand Umsetzung",
@@ -1159,10 +1159,10 @@ SELECT
   apflora.popmassnber."MutWann" AS "PopMassnBer MutWann",
   apflora.popmassnber."MutWer" AS "PopMassnBer MutWer"
 FROM
-  ((((((apflora.adb_eigenschaften
+  ((((((apflora.ae_eigenschaften
   INNER JOIN
     apflora.ap
-    ON apflora.adb_eigenschaften."TaxonomieId" = apflora.ap."ApArtId")
+    ON apflora.ae_eigenschaften.taxid = apflora.ap."ApArtId")
   INNER JOIN
     apflora.pop
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId")
@@ -1182,7 +1182,7 @@ FROM
     apflora.tpopmassn_erfbeurt_werte
     ON apflora.popmassnber."PopMassnBerErfolgsbeurteilung" = tpopmassn_erfbeurt_werte.code
 ORDER BY
-  apflora.adb_eigenschaften."Artname",
+  apflora.ae_eigenschaften.artname,
   apflora.pop."PopNr";
 
 -- im Gebrauch (Access):
@@ -1213,9 +1213,9 @@ ORDER BY
 DROP VIEW IF EXISTS apflora.v_tpop CASCADE;
 CREATE OR REPLACE VIEW apflora.v_tpop AS
 SELECT
-  apflora.adb_eigenschaften."TaxonomieId" AS "ApArtId",
-  apflora.adb_eigenschaften."Familie",
-  apflora.adb_eigenschaften."Artname" AS "AP Art",
+  apflora.ae_eigenschaften.taxid AS "ApArtId",
+  apflora.ae_eigenschaften.familie AS "Familie",
+  apflora.ae_eigenschaften.artname AS "AP Art",
   apflora.ap_bearbstand_werte.text AS "AP Status",
   apflora.ap."ApJahr" AS "AP Start im Jahr",
   apflora.ap_umsetzung_werte.text AS "AP Stand Umsetzung",
@@ -1258,10 +1258,10 @@ SELECT
   apflora.tpop."MutWann" AS "Teilpopulation zuletzt geaendert",
   apflora.tpop."MutWer" AS "Teilpopulation zuletzt geaendert von"
 FROM
-  ((((((apflora.adb_eigenschaften
+  ((((((apflora.ae_eigenschaften
   INNER JOIN
     apflora.ap
-    ON apflora.adb_eigenschaften."TaxonomieId" = apflora.ap."ApArtId")
+    ON apflora.ae_eigenschaften.taxid = apflora.ap."ApArtId")
   INNER JOIN
     (apflora.pop
     INNER JOIN
@@ -1284,17 +1284,17 @@ FROM
     apflora.adresse
     ON apflora.ap."ApBearb" = apflora.adresse."AdrId"
 WHERE
-  apflora.adb_eigenschaften."TaxonomieId" > 150
+  apflora.ae_eigenschaften.taxid > 150
 ORDER BY
-  apflora.adb_eigenschaften."Artname",
+  apflora.ae_eigenschaften.artname,
   apflora.pop."PopNr",
   apflora.tpop."TPopNr";
 
 DROP VIEW IF EXISTS apflora.v_tpop_webgisbun CASCADE;
 CREATE OR REPLACE VIEW apflora.v_tpop_webgisbun AS
 SELECT
-  apflora.adb_eigenschaften."TaxonomieId" AS "APARTID",
-  apflora.adb_eigenschaften."Artname" AS "APART",
+  apflora.ae_eigenschaften.taxid AS "APARTID",
+  apflora.ae_eigenschaften.artname AS "APART",
   apflora.ap_bearbstand_werte.text AS "APSTATUS",
   apflora.ap."ApJahr" AS "APSTARTJAHR",
   apflora.ap_umsetzung_werte.text AS "APSTANDUMSETZUNG",
@@ -1336,10 +1336,10 @@ SELECT
   apflora.tpop."MutWann" AS "TPOPCHANGEDAT",
   apflora.tpop."MutWer" AS "TPOPCHANGEBY"
 FROM
-  ((((((apflora.adb_eigenschaften
+  ((((((apflora.ae_eigenschaften
   INNER JOIN
     apflora.ap
-    ON apflora.adb_eigenschaften."TaxonomieId" = apflora.ap."ApArtId")
+    ON apflora.ae_eigenschaften.taxid = apflora.ap."ApArtId")
   INNER JOIN
     (apflora.pop
     INNER JOIN
@@ -1362,9 +1362,9 @@ FROM
     apflora.adresse
     ON apflora.ap."ApBearb" = apflora.adresse."AdrId"
 WHERE
-  apflora.adb_eigenschaften."TaxonomieId" > 150
+  apflora.ae_eigenschaften.taxid > 150
 ORDER BY
-  apflora.adb_eigenschaften."Artname",
+  apflora.ae_eigenschaften.artname,
   apflora.pop."PopNr",
   apflora.tpop."TPopNr";
 
@@ -1406,7 +1406,7 @@ DROP VIEW IF EXISTS apflora.v_tpop_fuergis_read CASCADE;
 CREATE OR REPLACE VIEW apflora.v_tpop_fuergis_read AS
 SELECT
   apflora.ap."ApArtId" AS "apartid",
-  apflora.adb_eigenschaften."Artname" AS "artname",
+  apflora.ae_eigenschaften.artname AS "artname",
   apflora.ap_bearbstand_werte.text AS "apherkunft",
   apflora.ap."ApJahr" AS "apjahr",
   apflora.ap_umsetzung_werte.text AS "apumsetzung",
@@ -1443,10 +1443,10 @@ SELECT
   apflora.tpop."MutWann"::timestamp AS "mutwann",
   apflora.tpop."MutWer" AS "mutwer"
 FROM
-  (((((apflora.adb_eigenschaften
+  (((((apflora.ae_eigenschaften
   INNER JOIN
     apflora.ap
-    ON apflora.adb_eigenschaften."TaxonomieId" = apflora.ap."ApArtId")
+    ON apflora.ae_eigenschaften.taxid = apflora.ap."ApArtId")
   INNER JOIN
     (apflora.pop
     INNER JOIN
@@ -1469,7 +1469,7 @@ WHERE
   apflora.tpop."TPopYKoord" > 0
   AND apflora.tpop."TPopXKoord" > 0
 ORDER BY
-  apflora.adb_eigenschaften."Artname",
+  apflora.ae_eigenschaften.artname,
   apflora.pop."PopNr",
   apflora.tpop."TPopNr";
 
@@ -1478,25 +1478,25 @@ DROP VIEW IF EXISTS apflora.v_pop_vonapohnestatus CASCADE;
 CREATE OR REPLACE VIEW apflora.v_pop_vonapohnestatus AS
 SELECT
   apflora.ap."ApArtId",
-  apflora.adb_eigenschaften."Artname" AS "Art",
+  apflora.ae_eigenschaften.artname AS "Art",
   apflora.ap."ApStatus" AS "Bearbeitungsstand AP",
   apflora.pop."PopId",
   apflora.pop."PopNr",
   apflora.pop."PopName",
   apflora.pop."PopHerkunft" AS "Status"
 FROM
-  apflora.adb_eigenschaften
+  apflora.ae_eigenschaften
   INNER JOIN
     (apflora.ap
     INNER JOIN
       apflora.pop
       ON apflora.ap."ApArtId" = apflora.pop."ApArtId")
-    ON apflora.adb_eigenschaften."TaxonomieId" = apflora.ap."ApArtId"
+    ON apflora.ae_eigenschaften.taxid = apflora.ap."ApArtId"
 WHERE
   apflora.ap."ApStatus" = 3
   AND apflora.pop."PopHerkunft" IS NULL
 ORDER BY
-  apflora.adb_eigenschaften."Artname",
+  apflora.ae_eigenschaften.artname,
   apflora.pop."PopNr";
 
 DROP VIEW IF EXISTS apflora.v_apber_zielber CASCADE;
@@ -1570,7 +1570,7 @@ DROP VIEW IF EXISTS apflora.v_apber_artd CASCADE;
 CREATE OR REPLACE VIEW apflora.v_apber_artd AS
 SELECT
   apflora.ap.*,
-  apflora.adb_eigenschaften."Artname" AS "Art",
+  apflora.ae_eigenschaften.artname AS "Art",
   apflora.apber."JBerId",
   apflora.apber."JBerJahr",
   apflora.apber."JBerVergleichVorjahrGesamtziel",
@@ -1589,10 +1589,10 @@ SELECT
   apflora.adresse."AdrName" AS "Bearbeiter",
   ap_erfkrit_werte.text
 FROM
-  (apflora.adb_eigenschaften
+  (apflora.ae_eigenschaften
   INNER JOIN
     apflora.ap
-    ON apflora.adb_eigenschaften."TaxonomieId" = apflora.ap."ApArtId")
+    ON apflora.ae_eigenschaften.taxid = apflora.ap."ApArtId")
   INNER JOIN
     (((apflora.apber
     LEFT JOIN
@@ -1631,7 +1631,7 @@ CREATE OR REPLACE VIEW apflora.v_apber AS
 SELECT
   apflora.ap."ApArtId" AS "ApArtId",
   apflora.apber."JBerId" AS "JBerId",
-  apflora.adb_eigenschaften."Artname" AS "Name",
+  apflora.ae_eigenschaften.artname AS "Name",
   apflora.apber."JBerJahr" AS "JBerJahr",
   apflora.apber."JBerVergleichVorjahrGesamtziel" AS "JBerVergleichVorjahrGesamtziel",
   ap_erfkrit_werte.text AS "JBerBeurteilung",
@@ -1649,8 +1649,8 @@ SELECT
 FROM
   apflora.ap
   INNER JOIN
-    apflora.adb_eigenschaften
-    ON (apflora.ap."ApArtId" = apflora.adb_eigenschaften."TaxonomieId")
+    apflora.ae_eigenschaften
+    ON (apflora.ap."ApArtId" = apflora.ae_eigenschaften.taxid)
   INNER JOIN
     ((apflora.apber
     LEFT JOIN
@@ -1661,7 +1661,7 @@ FROM
       ON (apflora.apber."JBerBearb" = apflora.adresse."AdrId"))
     ON apflora.ap."ApArtId" = apflora.apber."ApArtId"
 ORDER BY
-  apflora.adb_eigenschaften."Artname";
+  apflora.ae_eigenschaften.artname;
 
 DROP VIEW IF EXISTS apflora.v_tpop_letztermassnber0 CASCADE;
 CREATE OR REPLACE VIEW apflora.v_tpop_letztermassnber0 AS
@@ -1796,7 +1796,7 @@ GROUP BY
 DROP VIEW IF EXISTS apflora.v_tpop_mitapaberohnestatus CASCADE;
 CREATE OR REPLACE VIEW apflora.v_tpop_mitapaberohnestatus AS
 SELECT
-  apflora.adb_eigenschaften."Artname" AS "Art",
+  apflora.ae_eigenschaften.artname AS "Art",
   apflora.ap_bearbstand_werte.text AS "Bearbeitungsstand AP",
   apflora.pop."PopNr",
   apflora.pop."PopName",
@@ -1807,10 +1807,10 @@ SELECT
 FROM
   (apflora.ap_bearbstand_werte
   INNER JOIN
-    (apflora.adb_eigenschaften
+    (apflora.ae_eigenschaften
     INNER JOIN
       apflora.ap
-      ON apflora.adb_eigenschaften."TaxonomieId" = apflora.ap."ApArtId")
+      ON apflora.ae_eigenschaften.taxid = apflora.ap."ApArtId")
     ON apflora.ap_bearbstand_werte.code = apflora.ap."ApStatus")
   INNER JOIN
     ((apflora.pop
@@ -1825,13 +1825,13 @@ WHERE
   apflora.tpop."TPopHerkunft" IS NULL
   AND apflora.ap."ApStatus" = 3
 ORDER BY
-  apflora.adb_eigenschaften."Artname",
+  apflora.ae_eigenschaften.artname,
   apflora.pop."PopNr";
 
 DROP VIEW IF EXISTS apflora.v_tpop_ohnebekanntseit CASCADE;
 CREATE OR REPLACE VIEW apflora.v_tpop_ohnebekanntseit AS
 SELECT
-  apflora.adb_eigenschaften."Artname" AS "Art",
+  apflora.ae_eigenschaften.artname AS "Art",
   apflora.ap_bearbstand_werte.text AS "ApStatus_",
   apflora.pop."PopNr",
   apflora.pop."PopName",
@@ -1840,10 +1840,10 @@ SELECT
   apflora.tpop."TPopFlurname",
   apflora.tpop."TPopBekanntSeit"
 FROM
-  ((apflora.adb_eigenschaften
+  ((apflora.ae_eigenschaften
   INNER JOIN
     apflora.ap
-    ON apflora.adb_eigenschaften."TaxonomieId" = apflora.ap."ApArtId")
+    ON apflora.ae_eigenschaften.taxid = apflora.ap."ApArtId")
   INNER JOIN
     apflora.ap_bearbstand_werte
     ON apflora.ap."ApStatus" = apflora.ap_bearbstand_werte.code)
@@ -1857,7 +1857,7 @@ WHERE
   apflora.tpop."TPopBekanntSeit" IS NULL
   AND apflora.ap."ApStatus" BETWEEN 1 AND 3
 ORDER BY
-  apflora.adb_eigenschaften."Artname",
+  apflora.ae_eigenschaften.artname,
   apflora.pop."PopNr",
   apflora.pop."PopName",
   apflora.tpop."TPopNr",
@@ -1867,7 +1867,7 @@ ORDER BY
 DROP VIEW IF EXISTS apflora.v_tpop_ohnekoord CASCADE;
 CREATE OR REPLACE VIEW apflora.v_tpop_ohnekoord AS
 SELECT
-  apflora.adb_eigenschaften."Artname" AS "Art",
+  apflora.ae_eigenschaften.artname AS "Art",
   apflora.ap_bearbstand_werte.text AS "ApStatus_",
   apflora.pop."PopNr",
   apflora.pop."PopName",
@@ -1877,10 +1877,10 @@ SELECT
   apflora.tpop."TPopXKoord",
   apflora.tpop."TPopYKoord"
 FROM
-  ((apflora.adb_eigenschaften
+  ((apflora.ae_eigenschaften
   INNER JOIN
     apflora.ap
-    ON apflora.adb_eigenschaften."TaxonomieId" = apflora.ap."ApArtId")
+    ON apflora.ae_eigenschaften.taxid = apflora.ap."ApArtId")
   INNER JOIN
     apflora.ap_bearbstand_werte
     ON apflora.ap."ApStatus" = apflora.ap_bearbstand_werte.code)
@@ -1898,7 +1898,7 @@ WHERE
     AND apflora.ap."ApStatus" BETWEEN 1 AND 3
   )
 ORDER BY
-  apflora.adb_eigenschaften."Artname",
+  apflora.ae_eigenschaften.artname,
   apflora.pop."PopNr",
   apflora.pop."PopName",
   apflora.tpop."TPopNr",
@@ -1919,7 +1919,7 @@ DROP VIEW IF EXISTS apflora.v_ap_ausw CASCADE;
 CREATE OR REPLACE VIEW apflora.v_ap_ausw AS
 SELECT
   apflora.ap."ApArtId",
-  apflora.adb_eigenschaften."Artname" AS "Art",
+  apflora.ae_eigenschaften.artname AS "Art",
   apflora.ap_bearbstand_werte.text AS "Bearbeitungsstand AP",
   apflora.ap."ApJahr" AS "Start AP im Jahr",
   apflora.ap_umsetzung_werte.text AS "Stand Umsetzung AP",
@@ -1927,10 +1927,10 @@ SELECT
   apflora.ap."MutWann" AS "Letzte Aenderung",
   apflora.ap."MutWer" AS "Letzte(r) Bearbeiter(in)"
 FROM
-  (((apflora.adb_eigenschaften
+  (((apflora.ae_eigenschaften
   INNER JOIN
     apflora.ap
-    ON apflora.adb_eigenschaften."TaxonomieId" = apflora.ap."ApArtId")
+    ON apflora.ae_eigenschaften.taxid = apflora.ap."ApArtId")
   INNER JOIN
     apflora.ap_bearbstand_werte
     ON apflora.ap."ApStatus" = apflora.ap_bearbstand_werte.code)
@@ -1943,13 +1943,13 @@ FROM
 WHERE
   apflora.ap."ApStatus" BETWEEN 1 AND 3
 ORDER BY
-  apflora.adb_eigenschaften."Artname";
+  apflora.ae_eigenschaften.artname;
 
 DROP VIEW IF EXISTS apflora.v_ap CASCADE;
 CREATE OR REPLACE VIEW apflora.v_ap AS
 SELECT
   apflora.ap."ApArtId",
-  apflora.adb_eigenschaften."Artname" AS "AP Art",
+  apflora.ae_eigenschaften.artname AS "AP Art",
   apflora.ap_bearbstand_werte.text AS "AP Bearbeitungsstand",
   apflora.ap."ApJahr" AS "AP Start im Jahr",
   apflora.ap_umsetzung_werte.text AS "AP Stand Umsetzung",
@@ -1957,10 +1957,10 @@ SELECT
   apflora.ap."MutWann" AS "AP Letzte Aenderung",
   apflora.ap."MutWer" AS "AP Letzte(r) Bearbeiter(in)"
 FROM
-  (((apflora.adb_eigenschaften
+  (((apflora.ae_eigenschaften
   INNER JOIN
     apflora.ap
-    ON apflora.adb_eigenschaften."TaxonomieId" = apflora.ap."ApArtId")
+    ON apflora.ae_eigenschaften.taxid = apflora.ap."ApArtId")
   LEFT JOIN
     apflora.ap_bearbstand_werte
     ON apflora.ap."ApStatus" = apflora.ap_bearbstand_werte.code)
@@ -1971,13 +1971,13 @@ FROM
     apflora.adresse
     ON apflora.ap."ApBearb" = apflora.adresse."AdrId"
 ORDER BY
-  apflora.adb_eigenschaften."Artname";
+  apflora.ae_eigenschaften.artname;
 
 DROP VIEW IF EXISTS apflora.v_idealbiotop CASCADE;
 CREATE OR REPLACE VIEW apflora.v_idealbiotop AS
 SELECT
   apflora.ap."ApArtId" AS "AP ApArtId",
-  apflora.adb_eigenschaften."Artname" AS "AP Art",
+  apflora.ae_eigenschaften.artname AS "AP Art",
   apflora.ap_bearbstand_werte.text AS "AP Bearbeitungsstand",
   apflora.ap."ApJahr" AS "AP Start im Jahr",
   apflora.ap_umsetzung_werte.text AS "AP Stand Umsetzung",
@@ -2008,10 +2008,10 @@ SELECT
 FROM
   apflora.idealbiotop
   LEFT JOIN
-    ((((apflora.adb_eigenschaften
+    ((((apflora.ae_eigenschaften
     RIGHT JOIN
       apflora.ap
-      ON apflora.adb_eigenschaften."TaxonomieId" = apflora.ap."ApArtId")
+      ON apflora.ae_eigenschaften.taxid = apflora.ap."ApArtId")
     LEFT JOIN
       apflora.ap_bearbstand_werte
       ON apflora.ap."ApStatus" = apflora.ap_bearbstand_werte.code)
@@ -2023,7 +2023,7 @@ FROM
       ON apflora.ap."ApBearb" = apflora.adresse."AdrId")
     ON apflora.idealbiotop.ap_id = apflora.ap."ApArtId"
 ORDER BY
-  apflora.adb_eigenschaften."Artname",
+  apflora.ae_eigenschaften.artname,
   apflora.idealbiotop.erstelldatum;
 
 DROP VIEW IF EXISTS apflora.v_idealbiotop_verwaist CASCADE;
@@ -2054,10 +2054,10 @@ SELECT
 FROM
   apflora.idealbiotop
   LEFT JOIN
-    ((((apflora.adb_eigenschaften
+    ((((apflora.ae_eigenschaften
     RIGHT JOIN
       apflora.ap
-      ON apflora.adb_eigenschaften."TaxonomieId" = apflora.ap."ApArtId")
+      ON apflora.ae_eigenschaften.taxid = apflora.ap."ApArtId")
     LEFT JOIN
       apflora.ap_bearbstand_werte
       ON apflora.ap."ApStatus" = apflora.ap_bearbstand_werte.code)
@@ -2077,7 +2077,7 @@ DROP VIEW IF EXISTS apflora.v_ber CASCADE;
 CREATE OR REPLACE VIEW apflora.v_ber AS
 SELECT
   apflora.ap."ApArtId" AS "AP Id",
-  apflora.adb_eigenschaften."Artname" AS "AP Art",
+  apflora.ae_eigenschaften.artname AS "AP Art",
   apflora.ap_bearbstand_werte.text AS "AP Bearbeitungsstand",
   apflora.ap."ApJahr" AS "AP Start im Jahr",
   apflora.ap_umsetzung_werte.text AS "AP Stand Umsetzung",
@@ -2091,10 +2091,10 @@ SELECT
   apflora.ber.changed AS "Ber MutWann",
   apflora.ber.changed_by AS "Ber MutWer"
 FROM
-  ((((apflora.adb_eigenschaften
+  ((((apflora.ae_eigenschaften
   RIGHT JOIN
     apflora.ap
-    ON apflora.adb_eigenschaften."TaxonomieId" = apflora.ap."ApArtId")
+    ON apflora.ae_eigenschaften.taxid = apflora.ap."ApArtId")
   LEFT JOIN
     apflora.ap_bearbstand_werte
     ON apflora.ap."ApStatus" = apflora.ap_bearbstand_werte.code)
@@ -2108,7 +2108,7 @@ FROM
     apflora.ber
     ON apflora.ap."ApArtId" = apflora.ber.ap_id
 ORDER BY
-  apflora.adb_eigenschaften."Artname";
+  apflora.ae_eigenschaften.artname;
 
 DROP VIEW IF EXISTS apflora.v_ber_verwaist CASCADE;
 CREATE OR REPLACE VIEW apflora.v_ber_verwaist AS
@@ -2123,10 +2123,10 @@ SELECT
   apflora.ber.changed AS "Ber MutWann",
   apflora.ber.changed_by AS "Ber MutWer"
 FROM
-  ((((apflora.adb_eigenschaften
+  ((((apflora.ae_eigenschaften
   RIGHT JOIN
     apflora.ap
-    ON apflora.adb_eigenschaften."TaxonomieId" = apflora.ap."ApArtId")
+    ON apflora.ae_eigenschaften.taxid = apflora.ap."ApArtId")
   LEFT JOIN
     apflora.ap_bearbstand_werte
     ON apflora.ap."ApStatus" = apflora.ap_bearbstand_werte.code)
@@ -2142,13 +2142,13 @@ FROM
 WHERE
   apflora.ap."ApArtId" IS NULL
 ORDER BY
-  apflora.adb_eigenschaften."Artname";
+  apflora.ae_eigenschaften.artname;
 
 DROP VIEW IF EXISTS apflora.v_assozart CASCADE;
 CREATE OR REPLACE VIEW apflora.v_assozart AS
 SELECT
   apflora.ap."ApArtId",
-  apflora.adb_eigenschaften."Artname" AS "AP Art",
+  apflora.ae_eigenschaften.artname AS "AP Art",
   apflora.ap_bearbstand_werte.text AS "AP Bearbeitungsstand",
   apflora.ap."ApJahr" AS "AP Start im Jahr",
   apflora.ap_umsetzung_werte.text AS "AP Stand Umsetzung",
@@ -2159,12 +2159,12 @@ SELECT
   apflora.assozart.changed AS "AA MutWann",
   apflora.assozart.changed_by AS "AA MutWer"
 FROM
-  apflora.adb_eigenschaften AS "ArtenDb_Arteigenschaften_1"
+  apflora.ae_eigenschaften AS "ArtenDb_Arteigenschaften_1"
   RIGHT JOIN
-    (((((apflora.adb_eigenschaften
+    (((((apflora.ae_eigenschaften
     RIGHT JOIN
       apflora.ap
-      ON apflora.adb_eigenschaften."TaxonomieId" = apflora.ap."ApArtId")
+      ON apflora.ae_eigenschaften.taxid = apflora.ap."ApArtId")
     LEFT JOIN
       apflora.ap_bearbstand_werte
       ON apflora.ap."ApStatus" = apflora.ap_bearbstand_werte.code)
@@ -2179,7 +2179,7 @@ FROM
       ON apflora.ap."ApArtId" = apflora.assozart.ap_id)
     ON "ArtenDb_Arteigenschaften_1"."GUID" = apflora.assozart.ae_id
 ORDER BY
-  apflora.adb_eigenschaften."Artname";
+  apflora.ae_eigenschaften.artname;
 
 DROP VIEW IF EXISTS apflora.v_assozart_verwaist CASCADE;
 CREATE OR REPLACE VIEW apflora.v_assozart_verwaist AS
@@ -2192,12 +2192,12 @@ SELECT
   apflora.assozart.changed AS "AA MutWann",
   apflora.assozart.changed_by AS "AA MutWer"
 FROM
-  apflora.adb_eigenschaften AS "ArtenDb_Arteigenschaften_1"
+  apflora.ae_eigenschaften AS "ArtenDb_Arteigenschaften_1"
   RIGHT JOIN
-    (((((apflora.adb_eigenschaften
+    (((((apflora.ae_eigenschaften
     RIGHT JOIN
       apflora.ap
-      ON apflora.adb_eigenschaften."TaxonomieId" = apflora.ap."ApArtId")
+      ON apflora.ae_eigenschaften.taxid = apflora.ap."ApArtId")
     LEFT JOIN
       apflora.ap_bearbstand_werte
       ON apflora.ap."ApStatus" = apflora.ap_bearbstand_werte.code)
@@ -2214,23 +2214,23 @@ FROM
 WHERE
   apflora.ap."ApArtId" IS NULL
 ORDER BY
-  apflora.adb_eigenschaften."Artname";
+  apflora.ae_eigenschaften.artname;
 
 DROP VIEW IF EXISTS apflora.v_ap_ohnepop CASCADE;
 CREATE OR REPLACE VIEW apflora.v_ap_ohnepop AS
 SELECT
   apflora.ap."ApArtId",
-  apflora.adb_eigenschaften."Artname" AS "Art",
+  apflora.ae_eigenschaften.artname AS "Art",
   apflora.ap_bearbstand_werte.text AS "Bearbeitungsstand AP",
   apflora.ap."ApJahr" AS "Start AP im Jahr",
   apflora.ap_umsetzung_werte.text AS "Stand Umsetzung AP",
   apflora.adresse."AdrName" AS "Verantwortlich",
   apflora.pop."ApArtId" AS "Population"
 FROM
-  ((((apflora.adb_eigenschaften
+  ((((apflora.ae_eigenschaften
   INNER JOIN
     apflora.ap
-    ON apflora.adb_eigenschaften."TaxonomieId" = apflora.ap."ApArtId")
+    ON apflora.ae_eigenschaften.taxid = apflora.ap."ApArtId")
   INNER JOIN
     apflora.ap_bearbstand_werte
     ON apflora.ap."ApStatus" = apflora.ap_bearbstand_werte.code)
@@ -2246,20 +2246,20 @@ FROM
 WHERE
   apflora.pop."ApArtId" IS NULL
 ORDER BY
-  apflora.adb_eigenschaften."Artname";
+  apflora.ae_eigenschaften.artname;
 
 DROP VIEW IF EXISTS apflora.v_ap_anzkontrinjahr CASCADE;
 CREATE OR REPLACE VIEW apflora.v_ap_anzkontrinjahr AS
 SELECT
   apflora.ap."ApArtId",
-  apflora.adb_eigenschaften."Artname",
+  apflora.ae_eigenschaften.artname,
   apflora.tpopkontr."TPopKontrId",
   apflora.tpopkontr."TPopKontrJahr"
 FROM
   (apflora.ap
   INNER JOIN
-    apflora.adb_eigenschaften
-    ON apflora.ap."ApArtId" = apflora.adb_eigenschaften."TaxonomieId")
+    apflora.ae_eigenschaften
+    ON apflora.ap."ApArtId" = apflora.ae_eigenschaften.taxid)
   INNER JOIN
     (apflora.pop
     INNER JOIN
@@ -2273,7 +2273,7 @@ WHERE
   apflora.ap."ApStatus" BETWEEN 1 AND 3
 GROUP BY
   apflora.ap."ApArtId",
-  apflora.adb_eigenschaften."Artname",
+  apflora.ae_eigenschaften.artname,
   apflora.tpopkontr."TPopKontrId",
   apflora.tpopkontr."TPopKontrJahr";
 
@@ -2281,7 +2281,7 @@ DROP VIEW IF EXISTS apflora.v_erfkrit CASCADE;
 CREATE OR REPLACE VIEW apflora.v_erfkrit AS
 SELECT
   apflora.ap."ApArtId" AS "AP Id",
-  apflora.adb_eigenschaften."Artname" AS "AP Art",
+  apflora.ae_eigenschaften.artname AS "AP Art",
   apflora.ap_bearbstand_werte.text AS "AP Status",
   apflora.ap."ApJahr" AS "AP Start im Jahr",
   apflora.ap_umsetzung_werte.text AS "AP Stand Umsetzung",
@@ -2293,10 +2293,10 @@ SELECT
   apflora.erfkrit.changed AS "ErfKrit MutWann",
   apflora.erfkrit.changed_by AS "ErfKrit MutWer"
 FROM
-  (((((apflora.adb_eigenschaften
+  (((((apflora.ae_eigenschaften
   RIGHT JOIN
     apflora.ap
-    ON apflora.adb_eigenschaften."TaxonomieId" = apflora.ap."ApArtId")
+    ON apflora.ae_eigenschaften.taxid = apflora.ap."ApArtId")
   LEFT JOIN
     apflora.ap_bearbstand_werte
     ON apflora.ap."ApStatus" = apflora.ap_bearbstand_werte.code)
@@ -2313,7 +2313,7 @@ FROM
     apflora.ap_erfkrit_werte
     ON apflora.erfkrit.erfolg = ap_erfkrit_werte.code
 ORDER BY
-  apflora.adb_eigenschaften."Artname";
+  apflora.ae_eigenschaften.artname;
 
 DROP VIEW IF EXISTS apflora.v_erfktit_verwaist CASCADE;
 CREATE OR REPLACE VIEW apflora.v_erfktit_verwaist AS
@@ -2326,10 +2326,10 @@ SELECT
   apflora.erfkrit.changed AS "ErfKrit MutWann",
   apflora.erfkrit.changed_by AS "ErfKrit MutWer"
 FROM
-  (((((apflora.adb_eigenschaften
+  (((((apflora.ae_eigenschaften
   RIGHT JOIN
     apflora.ap
-    ON apflora.adb_eigenschaften."TaxonomieId" = apflora.ap."ApArtId")
+    ON apflora.ae_eigenschaften.taxid = apflora.ap."ApArtId")
   LEFT JOIN
     apflora.ap_bearbstand_werte
     ON apflora.ap."ApStatus" = apflora.ap_bearbstand_werte.code)
@@ -2355,14 +2355,14 @@ DROP VIEW IF EXISTS apflora.v_ap_tpopmassnjahr0 CASCADE;
 CREATE OR REPLACE VIEW apflora.v_ap_tpopmassnjahr0 AS
 SELECT
   apflora.ap."ApArtId",
-  apflora.adb_eigenschaften."Artname",
+  apflora.ae_eigenschaften.artname,
   apflora.tpopmassn.id,
   apflora.tpopmassn.jahr
 FROM
   (apflora.ap
   INNER JOIN
-    apflora.adb_eigenschaften
-    ON apflora.ap."ApArtId" = apflora.adb_eigenschaften."TaxonomieId")
+    apflora.ae_eigenschaften
+    ON apflora.ap."ApArtId" = apflora.ae_eigenschaften.taxid)
   INNER JOIN
     ((apflora.pop
     INNER JOIN
@@ -2376,7 +2376,7 @@ WHERE
   apflora.ap."ApStatus" BETWEEN 1 AND 3
 GROUP BY
   apflora.ap."ApArtId",
-  apflora.adb_eigenschaften."Artname",
+  apflora.ae_eigenschaften.artname,
   apflora.tpopmassn.id,
   apflora.tpopmassn.jahr;
 
@@ -2384,7 +2384,7 @@ DROP VIEW IF EXISTS apflora.v_auswapbearbmassninjahr0 CASCADE;
 CREATE OR REPLACE VIEW apflora.v_auswapbearbmassninjahr0 AS
 SELECT
   apflora.adresse."AdrName",
-  apflora.adb_eigenschaften."Artname" AS "Art",
+  apflora.ae_eigenschaften.artname AS "Art",
   apflora.pop."PopNr",
   apflora.pop."PopName",
   apflora.tpop."TPopNr",
@@ -2408,10 +2408,10 @@ SELECT
   apflora.tpopmassn.form,
   apflora.tpopmassn.pflanzanordnung
 FROM
-  (apflora.adb_eigenschaften
+  (apflora.ae_eigenschaften
   INNER JOIN
     apflora.ap
-    ON apflora.adb_eigenschaften."TaxonomieId" = apflora.ap."ApArtId")
+    ON apflora.ae_eigenschaften.taxid = apflora.ap."ApArtId")
   INNER JOIN
     ((apflora.pop
     INNER JOIN
@@ -2431,7 +2431,7 @@ WHERE
   apflora.ap."ApStatus" BETWEEN 1 AND 3
 ORDER BY
   apflora.adresse."AdrName",
-  apflora.adb_eigenschaften."Artname",
+  apflora.ae_eigenschaften.artname,
   apflora.pop."PopNr",
   apflora.pop."PopName",
   apflora.tpop."TPopNr",
@@ -2441,7 +2441,7 @@ ORDER BY
 DROP VIEW IF EXISTS apflora.v_ap_mitmassninjahr0 CASCADE;
 CREATE OR REPLACE VIEW apflora.v_ap_mitmassninjahr0 AS
 SELECT
-  apflora.adb_eigenschaften."Artname" AS "Art",
+  apflora.ae_eigenschaften.artname AS "Art",
   apflora.pop."PopNr",
   apflora.pop."PopName",
   apflora.tpop."TPopNr",
@@ -2466,10 +2466,10 @@ SELECT
   apflora.tpopmassn.form,
   apflora.tpopmassn.pflanzanordnung
 FROM
-  (apflora.adb_eigenschaften
+  (apflora.ae_eigenschaften
   INNER JOIN
     apflora.ap
-    ON apflora.adb_eigenschaften."TaxonomieId" = apflora.ap."ApArtId")
+    ON apflora.ae_eigenschaften.taxid = apflora.ap."ApArtId")
   INNER JOIN
     ((apflora.pop
     INNER JOIN
@@ -2488,7 +2488,7 @@ FROM
 WHERE
   apflora.ap."ApStatus" BETWEEN 1 AND 3
 ORDER BY
-  apflora.adb_eigenschaften."Artname",
+  apflora.ae_eigenschaften.artname,
   apflora.pop."PopNr",
   apflora.pop."PopName",
   apflora.tpop."TPopNr",
@@ -2499,7 +2499,7 @@ DROP VIEW IF EXISTS apflora.v_tpopmassnber_fueraktap0 CASCADE;
 CREATE OR REPLACE VIEW apflora.v_tpopmassnber_fueraktap0 AS
 SELECT
   apflora.ap."ApArtId",
-  apflora.adb_eigenschaften."Artname" AS "Art",
+  apflora.ae_eigenschaften.artname AS "Art",
   apflora.ap_bearbstand_werte.text AS "Aktionsplan-Status",
   apflora.ap."ApJahr" AS "Aktionsplan-Jahr",
   apflora.ap_umsetzung_werte.text AS "Aktionsplan-Umsetzung",
@@ -2531,10 +2531,10 @@ SELECT
   tpopmassn_erfbeurt_werte.text AS "Massnahmenbericht-Erfolgsberuteilung",
   apflora.tpopmassnber.bemerkungen AS "Massnahmenbericht-Interpretation"
 FROM
-  (((apflora.adb_eigenschaften
+  (((apflora.ae_eigenschaften
   INNER JOIN
     apflora.ap
-    ON apflora.adb_eigenschaften."TaxonomieId" = apflora.ap."ApArtId")
+    ON apflora.ae_eigenschaften.taxid = apflora.ap."ApArtId")
   LEFT JOIN
     apflora.ap_bearbstand_werte
     ON apflora.ap."ApStatus" = apflora.ap_bearbstand_werte.code)
@@ -2563,7 +2563,7 @@ FROM
       ON apflora.tpop."TPopId" = apflora.tpopmassnber.tpop_id)
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
 ORDER BY
-  apflora.adb_eigenschaften."Artname",
+  apflora.ae_eigenschaften.artname,
   apflora.pop."PopNr",
   apflora.tpop."TPopNr",
   apflora.tpopmassnber.jahr;
@@ -2572,7 +2572,7 @@ DROP VIEW IF EXISTS apflora.v_tpopmassn_0 CASCADE;
 CREATE OR REPLACE VIEW apflora.v_tpopmassn_0 AS
 SELECT
   apflora.ap."ApArtId",
-  apflora.adb_eigenschaften."Artname" AS "Art",
+  apflora.ae_eigenschaften.artname AS "Art",
   apflora.ap_bearbstand_werte.text AS "Aktionsplan Bearbeitungsstand",
   apflora.pop."PopId",
   apflora.pop."PopNr",
@@ -2600,10 +2600,10 @@ SELECT
   apflora.tpopmassn.form,
   apflora.tpopmassn.pflanzanordnung
 FROM
-  ((apflora.adb_eigenschaften
+  ((apflora.ae_eigenschaften
   INNER JOIN
     apflora.ap
-    ON apflora.adb_eigenschaften."TaxonomieId" = apflora.ap."ApArtId")
+    ON apflora.ae_eigenschaften.taxid = apflora.ap."ApArtId")
   LEFT JOIN
     apflora.ap_bearbstand_werte
     ON apflora.ap."ApStatus" = apflora.ap_bearbstand_werte.code)
@@ -2623,7 +2623,7 @@ FROM
       ON apflora.tpop."TPopId" = apflora.tpopmassn.tpop_id)
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
 ORDER BY
-  apflora.adb_eigenschaften."Artname",
+  apflora.ae_eigenschaften.artname,
   apflora.pop."PopNr",
   apflora.tpop."TPopNr",
   apflora.tpopmassn.jahr,
@@ -2633,7 +2633,7 @@ DROP VIEW IF EXISTS apflora.v_tpopmassn_fueraktap0 CASCADE;
 CREATE OR REPLACE VIEW apflora.v_tpopmassn_fueraktap0 AS
 SELECT
   apflora.ap."ApArtId",
-  apflora.adb_eigenschaften."Artname" AS "Art",
+  apflora.ae_eigenschaften.artname AS "Art",
   apflora.ap_bearbstand_werte.text AS "Aktionsplan-Status",
   apflora.ap."ApJahr" AS "Aktionsplan-Jahr",
   apflora.ap_umsetzung_werte.text AS "Aktionsplan-Umsetzung",
@@ -2682,7 +2682,7 @@ SELECT
   apflora.tpopmassn.form AS "Massnahme - Ansiedlung Form",
   apflora.tpopmassn.pflanzanordnung AS "Massnahme - Ansiedlung Pflanzordnung"
 FROM
-  (apflora.adb_eigenschaften
+  (apflora.ae_eigenschaften
   INNER JOIN
     ((apflora.ap
     LEFT JOIN
@@ -2691,7 +2691,7 @@ FROM
     LEFT JOIN
       apflora.ap_umsetzung_werte
       ON apflora.ap."ApUmsetzung" = apflora.ap_umsetzung_werte.code)
-    ON apflora.adb_eigenschaften."TaxonomieId" = apflora.ap."ApArtId")
+    ON apflora.ae_eigenschaften.taxid = apflora.ap."ApArtId")
   INNER JOIN
     (((apflora.pop
     LEFT JOIN
@@ -2717,7 +2717,7 @@ FROM
       ON apflora.tpop."TPopId" = apflora.tpopmassn.tpop_id)
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
 ORDER BY
-  apflora.adb_eigenschaften."Artname",
+  apflora.ae_eigenschaften.artname,
   apflora.pop."PopNr",
   apflora.tpop."TPopNr",
   tpopmassn_typ_werte.text;
@@ -2731,7 +2731,7 @@ SELECT
   apflora.tpop."TPopGemeinde" AS "Gemeinde",
   apflora.tpop."TPopFlurname" AS "Flurname aus Teilpopulation",
   apflora.ap_bearbstand_werte.text AS "Bearbeitungsstand AP",
-  apflora.adb_eigenschaften."Artname" AS "Art",
+  apflora.ae_eigenschaften.artname AS "Art",
   apflora.pop."PopNr",
   apflora.tpop."TPopNr",
   apflora.tpopkontr."TPopKontrJahr" AS "Jahr",
@@ -2769,10 +2769,10 @@ SELECT
   apflora.tpopkontrzaehl_einheit_werte.text AS einheit,
   apflora.tpopkontrzaehl_methode_werte.text AS methode
 FROM
-  ((((((apflora.adb_eigenschaften
+  ((((((apflora.ae_eigenschaften
   INNER JOIN
     apflora.ap
-    ON apflora.adb_eigenschaften."TaxonomieId" = apflora.ap."ApArtId")
+    ON apflora.ae_eigenschaften.taxid = apflora.ap."ApArtId")
   INNER JOIN
     (apflora.pop
     INNER JOIN
@@ -2802,7 +2802,7 @@ WHERE
 ORDER BY
   apflora.tpop."TPopGemeinde",
   apflora.tpop."TPopFlurname",
-  apflora.adb_eigenschaften."Artname",
+  apflora.ae_eigenschaften.artname,
   apflora.pop."PopNr",
   apflora.tpop."TPopNr",
   apflora.tpopkontr."TPopKontrJahr",
@@ -3560,7 +3560,7 @@ SELECT
   apflora.ap."ApArtId",
   apflora.pop."PopId",
   apflora.popber."PopBerId",
-  apflora.adb_eigenschaften."Artname",
+  apflora.ae_eigenschaften.artname AS "Artname",
   apflora.pop."PopNr",
   apflora.pop."PopName",
   pop_status_werte.text AS "PopHerkunft",
@@ -3568,7 +3568,7 @@ SELECT
   tpop_entwicklung_werte.text AS "PopBerEntwicklung",
   apflora.popber."PopBerTxt"
 FROM
-  ((apflora.adb_eigenschaften
+  ((apflora.ae_eigenschaften
   INNER JOIN
     ((apflora.ap
     INNER JOIN
@@ -3577,7 +3577,7 @@ FROM
     INNER JOIN
       apflora.popber
       ON apflora.pop."PopId" = apflora.popber."PopId")
-    ON apflora.adb_eigenschaften."TaxonomieId" = apflora.ap."ApArtId")
+    ON apflora.ae_eigenschaften.taxid = apflora.ap."ApArtId")
   LEFT JOIN
     apflora.pop_status_werte
     ON apflora.pop."PopHerkunft" = pop_status_werte.code)
@@ -3589,7 +3589,7 @@ DROP VIEW IF EXISTS apflora.v_ziel CASCADE;
 CREATE OR REPLACE VIEW apflora.v_ziel AS
 SELECT
   apflora.ap."ApArtId" AS "AP Id",
-  apflora.adb_eigenschaften."Artname" AS "AP Art",
+  apflora.ae_eigenschaften.artname AS "AP Art",
   apflora.ap_bearbstand_werte.text AS "AP Status",
   apflora.ap."ApJahr" AS "AP Start im Jahr",
   apflora.ap_umsetzung_werte.text AS "AP Stand Umsetzung",
@@ -3600,10 +3600,10 @@ SELECT
   ziel_typ_werte.text AS "Ziel Typ",
   apflora.ziel.bezeichnung AS "Ziel Beschreibung"
 FROM
-  (((((apflora.adb_eigenschaften
+  (((((apflora.ae_eigenschaften
   RIGHT JOIN
     apflora.ap
-    ON apflora.adb_eigenschaften."TaxonomieId" = apflora.ap."ApArtId")
+    ON apflora.ae_eigenschaften.taxid = apflora.ap."ApArtId")
   LEFT JOIN
     apflora.ap_bearbstand_werte
     ON apflora.ap."ApStatus" = apflora.ap_bearbstand_werte.code)
@@ -3622,7 +3622,7 @@ FROM
 WHERE
   apflora.ziel.typ IN (1, 2, 1170775556)
 ORDER BY
-  apflora.adb_eigenschaften."Artname",
+  apflora.ae_eigenschaften.artname,
   apflora.ziel.jahr,
   ziel_typ_werte.text,
   apflora.ziel.typ;
@@ -3637,10 +3637,10 @@ SELECT
   ziel_typ_werte.text AS "Ziel Typ",
   apflora.ziel.bezeichnung AS "Ziel Beschreibung"
 FROM
-  (((((apflora.adb_eigenschaften
+  (((((apflora.ae_eigenschaften
   RIGHT JOIN
     apflora.ap
-    ON apflora.adb_eigenschaften."TaxonomieId" = apflora.ap."ApArtId")
+    ON apflora.ae_eigenschaften.taxid = apflora.ap."ApArtId")
   LEFT JOIN
     apflora.ap_bearbstand_werte
     ON apflora.ap."ApStatus" = apflora.ap_bearbstand_werte.code)
@@ -3667,7 +3667,7 @@ DROP VIEW IF EXISTS apflora.v_zielber CASCADE;
 CREATE OR REPLACE VIEW apflora.v_zielber AS
 SELECT
   apflora.ap."ApArtId" AS "AP Id",
-  apflora.adb_eigenschaften."Artname" AS "AP Art",
+  apflora.ae_eigenschaften.artname AS "AP Art",
   apflora.ap_bearbstand_werte.text AS "AP Status",
   apflora.ap."ApJahr" AS "AP Start im Jahr",
   apflora.ap_umsetzung_werte.text AS "AP Stand Umsetzung",
@@ -3684,10 +3684,10 @@ SELECT
   apflora.zielber.changed AS "ZielBer MutWann",
   apflora.zielber.changed_by AS "ZielBer MutWer"
 FROM
-  ((((((apflora.adb_eigenschaften
+  ((((((apflora.ae_eigenschaften
   RIGHT JOIN
     apflora.ap
-    ON apflora.adb_eigenschaften."TaxonomieId" = apflora.ap."ApArtId")
+    ON apflora.ae_eigenschaften.taxid = apflora.ap."ApArtId")
   LEFT JOIN
     apflora.ap_bearbstand_werte
     ON apflora.ap."ApStatus" = apflora.ap_bearbstand_werte.code)
@@ -3707,7 +3707,7 @@ FROM
     apflora.zielber
     ON apflora.ziel.id = apflora.zielber.ziel_id
 ORDER BY
-  apflora.adb_eigenschaften."Artname",
+  apflora.ae_eigenschaften.artname,
   apflora.ziel.jahr,
   ziel_typ_werte.text,
   apflora.ziel.typ,
@@ -3726,10 +3726,10 @@ SELECT
   apflora.zielber.changed AS "ZielBer MutWann",
   apflora.zielber.changed_by AS "ZielBer MutWer"
 FROM
-  ((((((apflora.adb_eigenschaften
+  ((((((apflora.ae_eigenschaften
   RIGHT JOIN
     apflora.ap
-    ON apflora.adb_eigenschaften."TaxonomieId" = apflora.ap."ApArtId")
+    ON apflora.ae_eigenschaften.taxid = apflora.ap."ApArtId")
   LEFT JOIN
     apflora.ap_bearbstand_werte
     ON apflora.ap."ApStatus" = apflora.ap_bearbstand_werte.code)
@@ -3760,7 +3760,7 @@ SELECT
   apflora.ap."ApArtId",
   apflora.pop."PopId",
   apflora.tpop."TPopId",
-  apflora.adb_eigenschaften."Artname",
+  apflora.ae_eigenschaften.artname AS "Artname",
   apflora.ap_bearbstand_werte.text AS "ApStatus",
   apflora.ap."ApJahr",
   apflora.ap_umsetzung_werte.text AS "ApUmsetzung",
@@ -3777,7 +3777,7 @@ SELECT
   "domPopHerkunft_1".text AS "TPopHerkunft",
   apflora.tpop."TPopApBerichtRelevant"
 FROM
-  ((((apflora.adb_eigenschaften
+  ((((apflora.ae_eigenschaften
   INNER JOIN
     ((apflora.ap
     INNER JOIN
@@ -3786,7 +3786,7 @@ FROM
     INNER JOIN
       apflora.tpop
       ON apflora.pop."PopId" = apflora.tpop."PopId")
-    ON apflora.adb_eigenschaften."TaxonomieId" = apflora.ap."ApArtId")
+    ON apflora.ae_eigenschaften.taxid = apflora.ap."ApArtId")
   LEFT JOIN
     apflora.ap_bearbstand_werte
     ON apflora.ap."ApStatus" = apflora.ap_bearbstand_werte.code)
@@ -3803,9 +3803,9 @@ FROM
 DROP VIEW IF EXISTS apflora.v_tpopkontr CASCADE;
 CREATE OR REPLACE VIEW apflora.v_tpopkontr AS
 SELECT
-  apflora.adb_eigenschaften."TaxonomieId" AS "ApArtId",
-  apflora.adb_eigenschaften."Familie",
-  apflora.adb_eigenschaften."Artname" AS "AP Art",
+  apflora.ae_eigenschaften.taxid AS "ApArtId",
+  apflora.ae_eigenschaften.familie AS "Familie",
+  apflora.ae_eigenschaften.artname AS "AP Art",
   apflora.ap_bearbstand_werte.text AS "AP Status",
   apflora.ap."ApJahr" AS "AP Start im Jahr",
   apflora.ap_umsetzung_werte.text AS "AP Stand Umsetzung",
@@ -3892,10 +3892,10 @@ SELECT
 FROM
   apflora.pop_status_werte AS "domPopHerkunft_1"
   RIGHT JOIN
-    (((((((apflora.adb_eigenschaften
+    (((((((apflora.ae_eigenschaften
     INNER JOIN
       apflora.ap
-      ON apflora.adb_eigenschaften."TaxonomieId" = apflora.ap."ApArtId")
+      ON apflora.ae_eigenschaften.taxid = apflora.ap."ApArtId")
     INNER JOIN
       (apflora.pop
       INNER JOIN
@@ -3940,11 +3940,11 @@ FROM
     ON apflora.ap."ApBearb" = "tblAdresse_1"."AdrId")
   ON "domPopHerkunft_1".code = apflora.tpop."TPopHerkunft"
 WHERE
-  apflora.adb_eigenschaften."TaxonomieId" > 150
+  apflora.ae_eigenschaften.taxid > 150
 GROUP BY
-  apflora.adb_eigenschaften."TaxonomieId",
-  apflora.adb_eigenschaften."Familie",
-  apflora.adb_eigenschaften."Artname",
+  apflora.ae_eigenschaften.taxid,
+  apflora.ae_eigenschaften.familie,
+  apflora.ae_eigenschaften.artname,
   apflora.ap_bearbstand_werte.text,
   apflora.ap."ApJahr",
   apflora.ap_umsetzung_werte.text,
@@ -4026,15 +4026,15 @@ GROUP BY
   apflora.tpopkontr."MutWann",
   apflora.tpopkontr."MutWer"
 ORDER BY
-  apflora.adb_eigenschaften."Artname",
+  apflora.ae_eigenschaften.artname,
   apflora.pop."PopNr",
   apflora.tpop."TPopNr";
 
 DROP VIEW IF EXISTS apflora.v_tpopkontr_webgisbun CASCADE;
 CREATE OR REPLACE VIEW apflora.v_tpopkontr_webgisbun AS
 SELECT
-  apflora.adb_eigenschaften."TaxonomieId" AS "APARTID",
-  apflora.adb_eigenschaften."Artname" AS "APART",
+  apflora.ae_eigenschaften.taxid AS "APARTID",
+  apflora.ae_eigenschaften.artname AS "APART",
   apflora.pop."PopGuid" AS "POPGUID",
   apflora.pop."PopNr" AS "POPNR",
   apflora.tpop."TPopGuid" AS "TPOPGUID",
@@ -4092,10 +4092,10 @@ SELECT
 FROM
   apflora.pop_status_werte AS "domPopHerkunft_1"
   RIGHT JOIN
-    (((((((apflora.adb_eigenschaften
+    (((((((apflora.ae_eigenschaften
     INNER JOIN
       apflora.ap
-      ON apflora.adb_eigenschaften."TaxonomieId" = apflora.ap."ApArtId")
+      ON apflora.ae_eigenschaften.taxid = apflora.ap."ApArtId")
     INNER JOIN
       (apflora.pop
       INNER JOIN
@@ -4140,10 +4140,10 @@ FROM
     ON apflora.ap."ApBearb" = "tblAdresse_1"."AdrId")
   ON "domPopHerkunft_1".code = apflora.tpop."TPopHerkunft"
 WHERE
-  apflora.adb_eigenschaften."TaxonomieId" > 150
+  apflora.ae_eigenschaften.taxid > 150
 GROUP BY
-  apflora.adb_eigenschaften."TaxonomieId",
-  apflora.adb_eigenschaften."Artname",
+  apflora.ae_eigenschaften.taxid,
+  apflora.ae_eigenschaften.artname,
   apflora.pop."PopGuid",
   apflora.pop."PopNr",
   apflora.tpop."TPopId",
@@ -4196,7 +4196,7 @@ GROUP BY
   apflora.tpopkontr."MutWann",
   apflora.tpopkontr."MutWer"
 ORDER BY
-  apflora.adb_eigenschaften."Artname",
+  apflora.ae_eigenschaften.artname,
   apflora.pop."PopNr",
   apflora.tpop."TPopNr";
 
@@ -4329,7 +4329,7 @@ DROP VIEW IF EXISTS apflora.v_tpopkontr_fuergis_read CASCADE;
 CREATE OR REPLACE VIEW apflora.v_tpopkontr_fuergis_read AS
 SELECT
   apflora.ap."ApArtId" AS apartid,
-  apflora.adb_eigenschaften."Artname" AS artname,
+  apflora.ae_eigenschaften.artname AS artname,
   apflora.ap_bearbstand_werte.text AS apherkunft,
   apflora.ap."ApJahr" AS apjahr,
   apflora.ap_umsetzung_werte.text AS apumsetzung,
@@ -4386,10 +4386,10 @@ SELECT
   apflora.tpopkontr."MutWann"::timestamp AS mutwann,
   apflora.tpopkontr."MutWer" AS mutwer
 FROM
-  (((((apflora.adb_eigenschaften
+  (((((apflora.ae_eigenschaften
   INNER JOIN
     apflora.ap
-    ON apflora.adb_eigenschaften."TaxonomieId" = apflora.ap."ApArtId")
+    ON apflora.ae_eigenschaften.taxid = apflora.ap."ApArtId")
   INNER JOIN
     (apflora.pop
     INNER JOIN
@@ -4421,7 +4421,7 @@ FROM
     apflora.tpopkontr_idbiotuebereinst_werte
     ON apflora.tpopkontr."TPopKontrIdealBiotopUebereinst" = apflora.tpopkontr_idbiotuebereinst_werte.code
 ORDER BY
-  apflora.adb_eigenschaften."Artname",
+  apflora.ae_eigenschaften.artname,
   apflora.pop."PopNr",
   apflora.tpop."TPopNr",
   apflora.tpopkontr."TPopKontrJahr",
@@ -4502,7 +4502,7 @@ SELECT
   beob."IdField",
   beob.data->>(SELECT "IdField" FROM apflora.beob WHERE id = beob2.id) AS "OriginalId",
   apflora.beob."ArtId",
-  apflora.adb_eigenschaften."Artname",
+  apflora.ae_eigenschaften.artname AS "Artname",
   apflora.pop."PopId",
   apflora.pop."PopGuid",
   apflora.pop."PopNr",
@@ -4542,8 +4542,8 @@ FROM
     apflora.ap
     ON apflora.ap."ApArtId" = apflora.beob."ArtId")
   INNER JOIN
-    apflora.adb_eigenschaften
-    ON apflora.beob."ArtId" = apflora.adb_eigenschaften."TaxonomieId")
+    apflora.ae_eigenschaften
+    ON apflora.beob."ArtId" = apflora.ae_eigenschaften.taxid)
   INNER JOIN
     apflora.beob_quelle
     ON beob."QuelleId" = beob_quelle.id)
@@ -4559,7 +4559,7 @@ FROM
 WHERE
   apflora.beob."ArtId" > 150
 ORDER BY
-  apflora.adb_eigenschaften."Artname" ASC,
+  apflora.ae_eigenschaften.artname ASC,
   apflora.pop."PopNr" ASC,
   apflora.tpop."TPopNr" ASC,
   apflora.beob."Datum" DESC;
@@ -4572,7 +4572,7 @@ SELECT
   beob."IdField",
   beob.data->>(SELECT "IdField" FROM apflora.beob WHERE id = beob2.id) AS "OriginalId",
   apflora.beob."ArtId",
-  apflora.adb_eigenschaften."Artname",
+  apflora.ae_eigenschaften.artname AS "Artname",
   apflora.pop."PopId",
   apflora.pop."PopGuid",
   apflora.pop."PopNr",
@@ -4613,8 +4613,8 @@ FROM
     apflora.ap
     ON apflora.ap."ApArtId" = apflora.beob."ArtId")
   INNER JOIN
-    apflora.adb_eigenschaften
-    ON apflora.beob."ArtId" = apflora.adb_eigenschaften."TaxonomieId")
+    apflora.ae_eigenschaften
+    ON apflora.beob."ArtId" = apflora.ae_eigenschaften.taxid)
   INNER JOIN
     apflora.beob_quelle
     ON beob."QuelleId" = beob_quelle.id)
@@ -4630,7 +4630,7 @@ FROM
 WHERE
   apflora.beob."ArtId" > 150
 ORDER BY
-  apflora.adb_eigenschaften."Artname" ASC,
+  apflora.ae_eigenschaften.artname ASC,
   apflora.pop."PopNr" ASC,
   apflora.tpop."TPopNr" ASC,
   apflora.beob."Datum" DESC;
@@ -4930,7 +4930,7 @@ DROP VIEW IF EXISTS apflora.v_exportevab_projekt CASCADE;
 CREATE OR REPLACE VIEW apflora.v_exportevab_projekt AS
 SELECT
   apflora.ap."ApGuid" AS "idProjekt",
-  concat('AP Flora ZH: ', apflora.adb_eigenschaften."Artname") AS "Name",
+  concat('AP Flora ZH: ', apflora.ae_eigenschaften.artname) AS "Name",
   CASE
     WHEN apflora.ap."ApJahr" IS NOT NULL
     THEN concat('01.01.', apflora.ap."ApJahr")
@@ -4961,8 +4961,8 @@ FROM
     apflora.ap_umsetzung_werte
     ON apflora.ap."ApUmsetzung" = apflora.ap_umsetzung_werte.code)
   INNER JOIN
-    apflora.adb_eigenschaften
-    ON apflora.ap."ApArtId" = apflora.adb_eigenschaften."TaxonomieId")
+    apflora.ae_eigenschaften
+    ON apflora.ap."ApArtId" = apflora.ae_eigenschaften.taxid)
   INNER JOIN
     ((apflora.pop
     LEFT JOIN
@@ -5005,7 +5005,7 @@ WHERE
   )
   AND apflora.tpop."TPopFlurname" IS NOT NULL
 GROUP BY
-  apflora.adb_eigenschaften."Artname",
+  apflora.ae_eigenschaften.artname,
   apflora.ap."ApGuid",
   apflora.ap."ApJahr",
   apflora.ap."ApUmsetzung",
@@ -5015,8 +5015,8 @@ GROUP BY
 DROP VIEW IF EXISTS apflora.v_tpopmassnber CASCADE;
 CREATE OR REPLACE VIEW apflora.v_tpopmassnber AS
 SELECT
-  apflora.adb_eigenschaften."TaxonomieId" AS "ApArtId",
-  apflora.adb_eigenschaften."Artname" AS "AP Art",
+  apflora.ae_eigenschaften.taxid AS "ApArtId",
+  apflora.ae_eigenschaften.artname AS "AP Art",
   apflora.ap_bearbstand_werte.text AS "AP Status",
   apflora.ap."ApJahr" AS "AP Start im Jahr",
   apflora.ap_umsetzung_werte.text AS "AP Stand Umsetzung",
@@ -5062,7 +5062,7 @@ SELECT
   apflora.tpopmassnber.changed AS "TPopMassnBer MutWann",
   apflora.tpopmassnber.changed_by AS "TPopMassnBer MutWer"
 FROM
-  apflora.adb_eigenschaften
+  apflora.ae_eigenschaften
   INNER JOIN
     (((apflora.ap
     LEFT JOIN
@@ -5089,9 +5089,9 @@ FROM
           ON apflora.tpop."TPopId" = apflora.tpopmassnber.tpop_id)
         ON apflora.pop."PopId" = apflora.tpop."PopId")
       ON apflora.ap."ApArtId" = apflora.pop."ApArtId")
-    ON apflora.adb_eigenschaften."TaxonomieId" = apflora.ap."ApArtId"
+    ON apflora.ae_eigenschaften.taxid = apflora.ap."ApArtId"
 ORDER BY
-  apflora.adb_eigenschaften."Artname",
+  apflora.ae_eigenschaften.artname,
   apflora.pop."PopNr",
   apflora.tpop."TPopNr",
   apflora.tpopmassnber.jahr;
@@ -5100,7 +5100,7 @@ ORDER BY
 DROP VIEW IF EXISTS apflora.v_tpop_kml CASCADE;
 CREATE OR REPLACE VIEW apflora.v_tpop_kml AS
 SELECT
-  apflora.adb_eigenschaften."Artname" AS "Art",
+  apflora.ae_eigenschaften.artname AS "Art",
   concat(
     apflora.pop."PopNr",
     '/',
@@ -5153,10 +5153,10 @@ SELECT
     apflora.tpop."TPopId"
   ) AS url
 FROM
-  (apflora.adb_eigenschaften
+  (apflora.ae_eigenschaften
   INNER JOIN
     apflora.ap
-    ON apflora.adb_eigenschaften."TaxonomieId" = apflora.ap."ApArtId")
+    ON apflora.ae_eigenschaften.taxid = apflora.ap."ApArtId")
   INNER JOIN
     (apflora.pop
     INNER JOIN
@@ -5169,7 +5169,7 @@ WHERE
   AND apflora.tpop."TPopXKoord" > 400000
   AND apflora.tpop."TPopXKoord" < 900000
 ORDER BY
-  apflora.adb_eigenschaften."Artname",
+  apflora.ae_eigenschaften.artname,
   apflora.pop."PopNr",
   apflora.pop."PopName",
   apflora.tpop."TPopNr",
@@ -5180,9 +5180,9 @@ ORDER BY
 DROP VIEW IF EXISTS apflora.v_tpop_kmlnamen CASCADE;
 CREATE OR REPLACE VIEW apflora.v_tpop_kmlnamen AS
 SELECT
-  apflora.adb_eigenschaften."Artname" AS "Art",
+  apflora.ae_eigenschaften.artname AS "Art",
   concat(
-    apflora.adb_eigenschaften."Artname",
+    apflora.ae_eigenschaften.artname,
     ' ',
     apflora.pop."PopNr",
     '/',
@@ -5234,10 +5234,10 @@ SELECT
     apflora.tpop."TPopId"
   ) AS url
 FROM
-  (apflora.adb_eigenschaften
+  (apflora.ae_eigenschaften
   INNER JOIN
     apflora.ap
-    ON apflora.adb_eigenschaften."TaxonomieId" = apflora.ap."ApArtId")
+    ON apflora.ae_eigenschaften.taxid = apflora.ap."ApArtId")
   INNER JOIN
     (apflora.pop
     INNER JOIN
@@ -5250,7 +5250,7 @@ WHERE
   AND apflora.tpop."TPopXKoord" > 400000
   AND apflora.tpop."TPopXKoord" < 900000
 ORDER BY
-  apflora.adb_eigenschaften."Artname",
+  apflora.ae_eigenschaften.artname,
   apflora.pop."PopNr",
   apflora.pop."PopName",
   apflora.tpop."TPopNr",
@@ -5261,7 +5261,7 @@ ORDER BY
 DROP VIEW IF EXISTS apflora.v_pop_kml CASCADE;
 CREATE OR REPLACE VIEW apflora.v_pop_kml AS
 SELECT
-  apflora.adb_eigenschaften."Artname" AS "Art",
+  apflora.ae_eigenschaften.artname AS "Art",
   apflora.pop."PopNr" AS "Label",
   substring(
     concat('Population: ', apflora.pop."PopNr", ' ', apflora.pop."PopName")
@@ -5297,20 +5297,20 @@ SELECT
     apflora.pop."PopId"
   ) AS url
 FROM
-  apflora.adb_eigenschaften
+  apflora.ae_eigenschaften
   INNER JOIN
     (apflora.ap
     INNER JOIN
       apflora.pop
       ON apflora.ap."ApArtId" = apflora.pop."ApArtId")
-    ON apflora.adb_eigenschaften."TaxonomieId" = apflora.ap."ApArtId"
+    ON apflora.ae_eigenschaften.taxid = apflora.ap."ApArtId"
 WHERE
   apflora.pop."PopYKoord" > 40000
   AND apflora.pop."PopYKoord" < 350000
   AND apflora.pop."PopXKoord" > 400000
   AND apflora.pop."PopXKoord" < 900000
 ORDER BY
-  apflora.adb_eigenschaften."Artname",
+  apflora.ae_eigenschaften.artname,
   apflora.pop."PopNr",
   apflora.pop."PopName";
 
@@ -5318,9 +5318,9 @@ ORDER BY
 DROP VIEW IF EXISTS apflora.v_pop_kmlnamen CASCADE;
 CREATE OR REPLACE VIEW apflora.v_pop_kmlnamen AS
 SELECT
-  apflora.adb_eigenschaften."Artname" AS "Art",
+  apflora.ae_eigenschaften.artname AS "Art",
   concat(
-    apflora.adb_eigenschaften."Artname",
+    apflora.ae_eigenschaften.artname,
     ' ',
     apflora.pop."PopNr"
   ) AS "Label",
@@ -5358,28 +5358,28 @@ SELECT
     apflora.pop."PopId"
   ) AS url
 FROM
-  apflora.adb_eigenschaften
+  apflora.ae_eigenschaften
   INNER JOIN
     (apflora.ap
     INNER JOIN
       apflora.pop
       ON apflora.ap."ApArtId" = apflora.pop."ApArtId")
-    ON apflora.adb_eigenschaften."TaxonomieId" = apflora.ap."ApArtId"
+    ON apflora.ae_eigenschaften.taxid = apflora.ap."ApArtId"
 WHERE
   apflora.pop."PopYKoord" > 40000
   AND apflora.pop."PopYKoord" < 350000
   AND apflora.pop."PopXKoord" > 400000
   AND apflora.pop."PopXKoord" < 900000
 ORDER BY
-  apflora.adb_eigenschaften."Artname",
+  apflora.ae_eigenschaften.artname,
   apflora.pop."PopNr",
   apflora.pop."PopName";
 
 DROP VIEW IF EXISTS apflora.v_kontrzaehl_anzproeinheit CASCADE;
 CREATE OR REPLACE VIEW apflora.v_kontrzaehl_anzproeinheit AS
 SELECT
-  apflora.adb_eigenschaften."TaxonomieId" AS "ApArtId",
-  apflora.adb_eigenschaften."Artname" AS "AP Art",
+  apflora.ae_eigenschaften.taxid AS "ApArtId",
+  apflora.ae_eigenschaften.artname AS "AP Art",
   apflora.ap_bearbstand_werte.text AS "AP Status",
   apflora.ap."ApJahr" AS "AP Start im Jahr",
   apflora.ap_umsetzung_werte.text AS "AP Stand Umsetzung",
@@ -5465,7 +5465,7 @@ SELECT
   apflora.tpopkontrzaehl_methode_werte.text AS "Zaehlung Methode",
   apflora.tpopkontrzaehl.anzahl AS "Zaehlung Anzahl"
 FROM
-  apflora.adb_eigenschaften
+  apflora.ae_eigenschaften
   INNER JOIN
     ((((apflora.ap
     LEFT JOIN
@@ -5513,11 +5513,11 @@ FROM
           ON apflora.tpop."TPopId" = apflora.tpopkontr."TPopId")
         ON apflora.pop."PopId" = apflora.tpop."PopId")
       ON apflora.ap."ApArtId" = apflora.pop."ApArtId")
-    ON apflora.adb_eigenschaften."TaxonomieId" = apflora.ap."ApArtId"
+    ON apflora.ae_eigenschaften.taxid = apflora.ap."ApArtId"
 WHERE
-  apflora.adb_eigenschaften."TaxonomieId" > 150
+  apflora.ae_eigenschaften.taxid > 150
 ORDER BY
-  apflora.adb_eigenschaften."Artname",
+  apflora.ae_eigenschaften.artname,
   apflora.pop."PopNr",
   apflora.tpop."TPopNr",
   apflora.tpopkontr."TPopKontrJahr",
@@ -5526,8 +5526,8 @@ ORDER BY
 DROP VIEW IF EXISTS apflora.v_tpopber CASCADE;
 CREATE OR REPLACE VIEW apflora.v_tpopber AS
 SELECT
-  apflora.adb_eigenschaften."TaxonomieId" AS "ApArtId",
-  apflora.adb_eigenschaften."Artname" AS "AP Art",
+  apflora.ae_eigenschaften.taxid AS "ApArtId",
+  apflora.ae_eigenschaften.artname AS "AP Art",
   apflora.ap_bearbstand_werte.text AS "AP Status",
   apflora.ap."ApJahr" AS "AP Start im Jahr",
   apflora.ap_umsetzung_werte.text AS "AP Stand Umsetzung",
@@ -5573,7 +5573,7 @@ SELECT
   apflora.tpopber.changed AS "TPopBer MutWann",
   apflora.tpopber.changed_by AS "TPopBer MutWer"
 FROM
-  apflora.adb_eigenschaften
+  apflora.ae_eigenschaften
   INNER JOIN
     (((apflora.ap
     LEFT JOIN
@@ -5600,9 +5600,9 @@ FROM
           ON apflora.tpop."TPopId" = apflora.tpopber.tpop_id)
         ON apflora.pop."PopId" = apflora.tpop."PopId")
       ON apflora.ap."ApArtId" = apflora.pop."ApArtId")
-    ON apflora.adb_eigenschaften."TaxonomieId" = apflora.ap."ApArtId"
+    ON apflora.ae_eigenschaften.taxid = apflora.ap."ApArtId"
 ORDER BY
-  apflora.adb_eigenschaften."Artname",
+  apflora.ae_eigenschaften.artname,
   apflora.pop."PopNr",
   apflora.tpop."TPopNr",
   apflora.tpopber.jahr,
@@ -5656,7 +5656,7 @@ ORDER BY
 DROP VIEW IF EXISTS apflora.v_beobzuordnung_infospeziesapanzmut CASCADE;
 CREATE OR REPLACE VIEW apflora.v_beobzuordnung_infospeziesapanzmut AS
 SELECT
-  apflora.adb_eigenschaften."Artname" AS "Art",
+  apflora.ae_eigenschaften.artname AS "Art",
   apflora.tpopbeob.changed_by,
   apflora.tpopbeob.changed,
   count(apflora.tpopbeob.beob_id) AS "AnzMut",
@@ -5664,8 +5664,8 @@ SELECT
 FROM
   ((apflora.ap
   INNER JOIN
-    apflora.adb_eigenschaften
-    ON apflora.ap."ApArtId" = apflora.adb_eigenschaften."TaxonomieId")
+    apflora.ae_eigenschaften
+    ON apflora.ap."ApArtId" = apflora.ae_eigenschaften.taxid)
   INNER JOIN
     apflora.beob
     ON apflora.ap."ApArtId" = apflora.beob."ArtId")
@@ -5675,7 +5675,7 @@ FROM
 WHERE
   
 GROUP BY
-  apflora.adb_eigenschaften."Artname",
+  apflora.ae_eigenschaften.artname,
   apflora.tpopbeob.changed_by,
   apflora.tpopbeob.changed;
 
@@ -5741,7 +5741,7 @@ GROUP BY
 DROP VIEW IF EXISTS apflora.v_tpop_ohneapberichtrelevant CASCADE;
 CREATE OR REPLACE VIEW apflora.v_tpop_ohneapberichtrelevant AS
 SELECT
-  apflora.adb_eigenschaften."Artname",
+  apflora.ae_eigenschaften.artname AS "Artname",
   apflora.pop."PopNr",
   apflora.pop."PopName",
   apflora.tpop."TPopId",
@@ -5750,7 +5750,7 @@ SELECT
   apflora.tpop."TPopFlurname",
   apflora.tpop."TPopApBerichtRelevant"
 FROM
-  apflora.adb_eigenschaften
+  apflora.ae_eigenschaften
   INNER JOIN
     (apflora.ap
     INNER JOIN
@@ -5759,12 +5759,12 @@ FROM
         apflora.tpop
         ON apflora.tpop."PopId" = apflora.pop."PopId")
       ON apflora.pop."ApArtId" = apflora.ap."ApArtId")
-    ON apflora.adb_eigenschaften."TaxonomieId" = apflora.ap."ApArtId"
+    ON apflora.ae_eigenschaften.taxid = apflora.ap."ApArtId"
 WHERE
   apflora.tpop."TPopApBerichtRelevant" IS NULL
   AND 
 ORDER BY
-  apflora.adb_eigenschaften."Artname",
+  apflora.ae_eigenschaften.artname,
   apflora.pop."PopNr",
   apflora.tpop."TPopNr";
 
@@ -7426,15 +7426,15 @@ GROUP BY
 DROP VIEW IF EXISTS apflora.v_apber_pop_uebersicht CASCADE;
 CREATE OR REPLACE VIEW apflora.v_apber_pop_uebersicht AS
 SELECT
-  apflora.adb_eigenschaften."TaxonomieId" AS "ApArtId",
-  apflora.adb_eigenschaften."Artname" AS "Art",
+  apflora.ae_eigenschaften.taxid AS "ApArtId",
+  apflora.ae_eigenschaften.artname AS "Art",
   (
     SELECT
       COUNT(*)
     FROM
       apflora.pop
     WHERE
-      apflora.pop."ApArtId" = apflora.adb_eigenschaften."TaxonomieId"
+      apflora.pop."ApArtId" = apflora.ae_eigenschaften.taxid
       AND apflora.pop."PopHerkunft" IN (100)
       AND apflora.pop."PopId" IN(
         SELECT
@@ -7451,7 +7451,7 @@ SELECT
     FROM
       apflora.pop
     WHERE
-      apflora.pop."ApArtId" = apflora.adb_eigenschaften."TaxonomieId"
+      apflora.pop."ApArtId" = apflora.ae_eigenschaften.taxid
       AND apflora.pop."PopHerkunft" IN (200, 210)
       AND apflora.pop."PopId" IN(
         SELECT
@@ -7468,7 +7468,7 @@ SELECT
     FROM
       apflora.pop
     WHERE
-      apflora.pop."ApArtId" = apflora.adb_eigenschaften."TaxonomieId"
+      apflora.pop."ApArtId" = apflora.ae_eigenschaften.taxid
       AND apflora.pop."PopHerkunft" IN (100, 200, 210)
       AND apflora.pop."PopId" IN(
         SELECT
@@ -7480,20 +7480,20 @@ SELECT
       )
   ) AS "aktuell"
 FROM
-  apflora.adb_eigenschaften
+  apflora.ae_eigenschaften
   INNER JOIN
     (apflora.ap
     INNER JOIN
       apflora.pop
       ON apflora.ap."ApArtId" = apflora.pop."ApArtId")
-    ON apflora.adb_eigenschaften."TaxonomieId" = apflora.ap."ApArtId"
+    ON apflora.ae_eigenschaften.taxid = apflora.ap."ApArtId"
 WHERE
   apflora.ap."ApStatus" BETWEEN 1 AND 3
 GROUP BY
-  apflora.adb_eigenschaften."TaxonomieId",
-  apflora.adb_eigenschaften."Artname"
+  apflora.ae_eigenschaften.taxid,
+  apflora.ae_eigenschaften.artname
 ORDER BY
-  apflora.adb_eigenschaften."Artname";
+  apflora.ae_eigenschaften.artname;
 
 -- new views beginning 2017.10.04
 DROP VIEW IF EXISTS apflora.v_qk2_pop_mit_ber_zunehmend_ohne_tpopber_zunehmend CASCADE;

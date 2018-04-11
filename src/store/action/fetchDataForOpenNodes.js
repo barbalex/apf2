@@ -52,7 +52,7 @@ const fetchDataForOpenNodes = (
     const fetchingFromActiveElements = {
       exporte() {
         store.fetchTableByParentId('ap', activeNodes.projekt)
-        store.fetchTable('adb_eigenschaften')
+        store.fetchTable('ae_eigenschaften')
       },
       projektFolder() {
         store.fetchTable('projekt')
@@ -65,7 +65,7 @@ const fetchDataForOpenNodes = (
         store.fetchTableByParentId('apberuebersicht', activeNodes.projekt)
       },
       apFolder() {
-        store.fetchTable('adb_eigenschaften')
+        store.fetchTable('ae_eigenschaften')
       },
       ap() {
         store.fetchTableByParentId('pop', activeNodes.ap)

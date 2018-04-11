@@ -67,16 +67,16 @@ const enhance = compose(
     const { store } = props
     const { updateProperty, updatePropertyInDb, table, tree } = store
     const { activeDataset, activeNodes } = tree
-    const { adb_eigenschaften } = table
+    const { ae_eigenschaften } = table
     let artwert = 'Diese Art hat keinen Artwert'
     let artname = ''
-    if (activeNodes.ap && adb_eigenschaften.size > 0) {
-      const ae = adb_eigenschaften.get(activeNodes.ap)
-      if (ae && ae.Artwert) {
-        artwert = ae.Artwert
+    if (activeNodes.ap && ae_eigenschaften.size > 0) {
+      const ae = ae_eigenschaften.get(activeNodes.ap)
+      if (ae && ae.artwert) {
+        artwert = ae.artwert
       }
-      if (ae && ae.Artname) {
-        artname = ae.Artname
+      if (ae && ae.artname) {
+        artname = ae.artname
       }
     }
     return {
@@ -120,8 +120,8 @@ const Ap = ({
           errorText={activeDataset.valid.ApArtId}
           dataSource={store.dropdownList.artListForAp}
           dataSourceConfig={{
-            value: 'TaxonomieId',
-            text: 'Artname',
+            value: 'taxid',
+            text: 'artname',
           }}
           updatePropertyInDb={updatePropertyInDb}
         />

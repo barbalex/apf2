@@ -3,7 +3,7 @@ import sortBy from 'lodash/sortBy'
 export default (store: Object, tree: Object): Array<Object> => {
   const { table } = store
   const { nodeLabelFilter, apFilter } = tree
-  const { adb_eigenschaften } = table
+  const { ae_eigenschaften } = table
   // grab assozart as array and sort them by year
   let assozart = Array.from(table.assozart.values())
 
@@ -17,12 +17,12 @@ export default (store: Object, tree: Object): Array<Object> => {
   }
   // sort
   // need to add artnameVollständig to sort and filter by nodeLabelFilter
-  if (adb_eigenschaften.size > 0) {
+  if (ae_eigenschaften.size > 0) {
     assozart.forEach(x => {
-      const ae = Array.from(adb_eigenschaften.values()).find(
-        v => v.GUID === x.ae_id
+      const ae = Array.from(ae_eigenschaften.values()).find(
+        v => v.id === x.ae_id
       )
-      return (x.label = ae ? ae.Artname : '(keine Art gewählt)')
+      return (x.label = ae ? ae.artname : '(keine Art gewählt)')
     })
     // filter by nodeLabelFilter
     const filterString = nodeLabelFilter.get('assozart')

@@ -98,8 +98,8 @@ const NewAp = ({
   if (searchTextToUse === null) searchTextToUse = ''
   const dataSource = store.dropdownList.artListForAp
   const dataSourceConfig = {
-    value: 'TaxonomieId',
-    text: 'Artname',
+    value: 'taxid',
+    text: 'artname',
   }
   const dataSourceLength = dataSource.filter(d => {
     if (

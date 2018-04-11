@@ -24,6 +24,6 @@ ALTER TABLE apflora.adb_lr RENAME TO ae_lrdelarze;
 -- done: check if old id was used somewhere. If so: rename that field, add new one and update that
 -- done: add all views, functions, triggers containing this table to this file
 -- done: run migration sql in dev
--- TODO: restart postgrest and test app
+-- done: restart postgrest and test app
 -- TODO: update js and run this file on server
 -- TODO: restart postgrest

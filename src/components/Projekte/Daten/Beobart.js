@@ -23,7 +23,7 @@ const FieldsContainer = styled.div`
 const enhance = compose(inject('store'), observer)
 
 const getArtList = ({ store, tree }: { store: Object, tree: Object }) => {
-  const { adb_eigenschaften } = store.table
+  const { ae_eigenschaften } = store.table
   // do not show any TaxonomieId's that have been used
   // turned off because some species have already been worked as separate ap
   // because beobart did not exist...
@@ -33,18 +33,18 @@ const getArtList = ({ store, tree }: { store: Object, tree: Object }) => {
   )*/
   const apArtIdsNotToShow = []
   const artList = filter(
-    Array.from(adb_eigenschaften.values()),
-    r => !apArtIdsNotToShow.includes(r.TaxonomieId)
+    Array.from(ae_eigenschaften.values()),
+    r => !apArtIdsNotToShow.includes(r.taxid)
   )
-  return sortBy(artList, 'Artname')
+  return sortBy(artList, 'artname')
 }
 
 const getArtname = ({ store, tree }: { store: Object, tree: Object }) => {
-  const { adb_eigenschaften } = store.table
+  const { ae_eigenschaften } = store.table
   const { activeDataset } = tree
   let name = ''
-  if (activeDataset.row.TaxonomieId && adb_eigenschaften.size > 0) {
-    name = adb_eigenschaften.get(activeDataset.row.TaxonomieId).Artname
+  if (activeDataset.row.TaxonomieId && ae_eigenschaften.size > 0) {
+    name = ae_eigenschaften.get(activeDataset.row.TaxonomieId).artname
   }
   return name
 }
@@ -76,8 +76,8 @@ const BeobArt = ({ store, tree }: { store: Object, tree: Object }) => {
               tree,
             })}
             dataSourceConfig={{
-              value: 'TaxonomieId',
-              text: 'Artname',
+              value: 'taxid',
+              text: 'artname',
             }}
             updatePropertyInDb={store.updatePropertyInDb}
           />
