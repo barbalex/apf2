@@ -184,8 +184,8 @@ export default [
     table: 'popmassnber',
     label: 'Massnahmen-Berichte',
     labelSingular: 'Massnahmen-Bericht',
-    idField: 'PopMassnBerId',
-    parentIdField: 'PopId',
+    idField: 'id',
+    parentIdField: 'pop_id',
   },
   {
     table: 'tpopber',

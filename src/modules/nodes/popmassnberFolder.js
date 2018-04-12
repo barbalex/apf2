@@ -5,7 +5,7 @@ export default (
   tree: Object,
   projId: number,
   apArtId: number,
-  popId: number,
+  popId: number
 ): Array<Object> => {
   // fetch sorting indexes of parents
   const projIndex = findIndex(tree.filteredAndSorted.projekt, {
@@ -13,15 +13,15 @@ export default (
   })
   const apIndex = findIndex(
     tree.filteredAndSorted.ap.filter(a => a.ProjId === projId),
-    { ApArtId: apArtId },
+    { ApArtId: apArtId }
   )
   const popIndex = findIndex(
     tree.filteredAndSorted.pop.filter(p => p.ApArtId === apArtId),
-    { PopId: popId },
+    { PopId: popId }
   )
 
   const popmassnberNodesLength = tree.filteredAndSorted.popmassnber.filter(
-    p => p.PopId === popId,
+    p => p.pop_id === popId
   ).length
 
   let message = popmassnberNodesLength

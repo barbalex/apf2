@@ -454,26 +454,27 @@ CREATE INDEX ON apflora.popber USING btree (jahr);
 
 DROP TABLE IF EXISTS apflora.popmassnber;
 CREATE TABLE apflora.popmassnber (
-  "PopMassnBerId" SERIAL PRIMARY KEY,
-  "PopId" integer DEFAULT NULL REFERENCES apflora.pop ("PopId") ON DELETE CASCADE ON UPDATE CASCADE,
-  "PopMassnBerJahr" smallint DEFAULT NULL,
-  "PopMassnBerErfolgsbeurteilung" integer DEFAULT NULL REFERENCES apflora.tpopmassn_erfbeurt_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
-  "PopMassnBerTxt" text,
-  "MutWann" date DEFAULT NOW(),
-  "MutWer" varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
+  id_old integer,
+  pop_id integer DEFAULT NULL REFERENCES apflora.pop ("PopId") ON DELETE CASCADE ON UPDATE CASCADE,
+  jahr smallint DEFAULT NULL,
+  beurteilung integer DEFAULT NULL REFERENCES apflora.tpopmassn_erfbeurt_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
+  bemerkungen text,
+  changed date DEFAULT NOW(),
+  changed_by varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
 );
-SELECT setval(pg_get_serial_sequence('apflora.popmassnber', 'PopMassnBerId'), coalesce(max("PopMassnBerId"), 0) + 1, false) FROM apflora.popmassnber;
-COMMENT ON COLUMN apflora.popmassnber."PopMassnBerId" IS 'Primärschlüssel der Tabelle "popmassnber"';
-COMMENT ON COLUMN apflora.popmassnber."PopId" IS 'Zugehörige Population. Fremdschlüssel aus der Tabelle "pop"';
-COMMENT ON COLUMN apflora.popmassnber."PopMassnBerJahr" IS 'Für welches Jahr gilt der Bericht?';
-COMMENT ON COLUMN apflora.popmassnber."PopMassnBerErfolgsbeurteilung" IS 'Wie wird die Wirkung aller im Rahmen des AP durchgeführten Massnahmen beurteilt?';
-COMMENT ON COLUMN apflora.popmassnber."PopMassnBerTxt" IS 'Bemerkungen zur Beurteilung';
-COMMENT ON COLUMN apflora.popmassnber."MutWann" IS 'Wann wurde der Datensatz zuletzt geändert?';
-COMMENT ON COLUMN apflora.popmassnber."MutWer" IS 'Von wem wurde der Datensatz zuletzt geändert?';
-CREATE INDEX ON apflora.popmassnber USING btree ("PopMassnBerId");
-CREATE INDEX ON apflora.popmassnber USING btree ("PopId");
-CREATE INDEX ON apflora.popmassnber USING btree ("PopMassnBerErfolgsbeurteilung");
-CREATE INDEX ON apflora.popmassnber USING btree ("PopMassnBerJahr");
+CREATE INDEX ON apflora.popmassnber USING btree (id);
+CREATE INDEX ON apflora.popmassnber USING btree (pop_id);
+CREATE INDEX ON apflora.popmassnber USING btree (beurteilung);
+CREATE INDEX ON apflora.popmassnber USING btree (jahr);
+COMMENT ON COLUMN apflora.popmassnber.id IS 'Primärschlüssel';
+COMMENT ON COLUMN apflora.popmassnber.id_old IS 'frühere id';
+COMMENT ON COLUMN apflora.popmassnber.pop_id IS 'Zugehörige Population. Fremdschlüssel aus der Tabelle "pop"';
+COMMENT ON COLUMN apflora.popmassnber.jahr IS 'Für welches Jahr gilt der Bericht?';
+COMMENT ON COLUMN apflora.popmassnber.beurteilung IS 'Wie wird die Wirkung aller im Rahmen des AP durchgeführten Massnahmen beurteilt?';
+COMMENT ON COLUMN apflora.popmassnber.bemerkungen IS 'Bemerkungen zur Beurteilung';
+COMMENT ON COLUMN apflora.popmassnber.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
+COMMENT ON COLUMN apflora.popmassnber.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
 DROP TABLE IF EXISTS apflora.tpop;
 CREATE TABLE apflora.tpop (
