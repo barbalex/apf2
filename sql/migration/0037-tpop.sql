@@ -30,11 +30,35 @@ ALTER TABLE apflora.tpop RENAME "MutWer" TO changed_by;
 
 ALTER TABLE apflora.tpop DROP COLUMN "TPopGuid_alt";
 
-COMMENT ON COLUMN apflora.tpop.id_old IS 'frühere id';
 
 -- change primary key
 ALTER TABLE apflora.tpop DROP CONSTRAINT tpop_pkey;
 ALTER TABLE apflora.tpop ADD PRIMARY KEY (id);
+ALTER TABLE apflora.tpop ALTER COLUMN id_old DROP NOT NULL;
+ALTER TABLE apflora.tpop ALTER COLUMN id_old SET DEFAULT null;
+CREATE INDEX ON apflora.tpopber USING btree (tpop_id);
+CREATE INDEX ON apflora.tpopmassn USING btree (tpop_id);
+CREATE INDEX ON apflora.tpopmassnber USING btree (tpop_id);
+CREATE INDEX ON apflora.tpopbeob USING btree (tpop_id);
+CREATE INDEX ON apflora.tpopkontr USING btree (tpop_id);
+
+-- comments
+COMMENT ON COLUMN apflora.tpop.id IS 'Primärschlüssel';
+COMMENT ON COLUMN apflora.tpop.id_old IS 'frühere id';
+
+-- drop existing indexes
+DROP index apflora.apflora."pop_ApArtId_idx";
+DROP index apflora.apflora."pop_PopBekanntSeit_idx";
+DROP index apflora.apflora."pop_PopGuid_idx";
+DROP index apflora.apflora."pop_PopHerkunft_idx";
+DROP index apflora.apflora."pop_PopId_idx";
+DROP index apflora.apflora."pop_PopName_idx";
+DROP index apflora.apflora."pop_PopNr_idx";
+DROP index apflora.apflora."pop_PopXKoord_idx";
+DROP index apflora.apflora."pop_PopYKoord_idx";
+-- add new
+CREATE INDEX ON apflora.pop USING btree (id);
+TODO
 
 -- TODO: update id in dependent tables
 -- dependent tables:
@@ -44,55 +68,68 @@ ALTER TABLE apflora.tpop ADD PRIMARY KEY (id);
 -- - tpopmassnber
 -- - tpopkontr
 
--- 1. Example: tpopber
--- need to update triggers first
-DROP TRIGGER IF EXISTS tpopber_on_update_set_mut ON apflora.tpopber;
-DROP FUNCTION IF EXISTS tpopber_on_update_set_mut();
-CREATE FUNCTION tpopber_on_update_set_mut() RETURNS trigger AS $tpopber_on_update_set_mut$
-  BEGIN
-    NEW.changed_by = current_setting('request.jwt.claim.username', true);
-    NEW.changed = NOW();
-    RETURN NEW;
-  END;
-$tpopber_on_update_set_mut$ LANGUAGE plpgsql;
-
-CREATE TRIGGER tpopber_on_update_set_mut BEFORE UPDATE OR INSERT ON apflora.tpopber
-  FOR EACH ROW EXECUTE PROCEDURE tpopber_on_update_set_mut();
-
-DROP TRIGGER IF EXISTS tpop_max_one_tpopber_per_year ON apflora.tpopber;
-DROP FUNCTION IF EXISTS apflora.tpop_max_one_tpopber_per_year();
-CREATE FUNCTION apflora.tpop_max_one_tpopber_per_year() RETURNS trigger AS $tpop_max_one_tpopber_per_year$
-  BEGIN
-    -- check if a tpopber already exists for this year
-    IF
-      (
-        NEW.jahr > 0
-        AND NEW.jahr IN
-        (
-          SELECT
-            jahr
-          FROM
-            apflora.tpopber
-          WHERE
-            tpop_id = NEW.tpop_id
-            AND id <> NEW.id
-        )
-      )
-    THEN
-      RAISE EXCEPTION 'Pro Teilpopulation und Jahr darf maximal ein Teilpopulationsbericht erfasst werden';
-    END IF;
-    RETURN NEW;
-  END;
-$tpop_max_one_tpopber_per_year$ LANGUAGE plpgsql;
-
-CREATE TRIGGER tpop_max_one_tpopber_per_year BEFORE UPDATE OR INSERT ON apflora.tpopber
-  FOR EACH ROW EXECUTE PROCEDURE apflora.tpop_max_one_tpopber_per_year();
-
+-- change tpopber
 ALTER TABLE apflora.tpopber RENAME tpop_id TO tpop_id_old;
+DROP index apflora.apflora."tpopber_tpop_id_idx";
 ALTER TABLE apflora.tpopber ADD COLUMN tpop_id UUID DEFAULT NULL REFERENCES apflora.tpop (id) ON DELETE CASCADE ON UPDATE CASCADE;
+CREATE INDEX ON apflora.tpopber USING btree (tpop_id);
 UPDATE apflora.tpopber SET tpop_id = (
   SELECT id FROM apflora.tpop WHERE id_old = apflora.tpopber.tpop_id_old
 ) WHERE tpop_id_old IS NOT NULL;
--- need to update many views to do this:
--- so first replace it by new id
-ALTER TABLE apflora.tpopber DROP COLUMN tpop_id_old;
+ALTER TABLE apflora.tpopber DROP COLUMN tpop_id_old cascade;
+COMMENT ON COLUMN apflora.tpopber.tpop_id IS 'Zugehörige Teilpopulation. Fremdschlüssel der Tabelle "tpop"';
+
+-- change tpopmassn
+ALTER TABLE apflora.tpopmassn RENAME tpop_id TO tpop_id_old;
+DROP index apflora.apflora."tpopmassn_tpop_id_idx";
+ALTER TABLE apflora.tpopmassn ADD COLUMN tpop_id UUID DEFAULT NULL REFERENCES apflora.tpop (id) ON DELETE CASCADE ON UPDATE CASCADE;
+CREATE INDEX ON apflora.tpopmassn USING btree (tpop_id);
+UPDATE apflora.tpopmassn SET tpop_id = (
+  SELECT id FROM apflora.tpop WHERE id_old = apflora.tpopmassn.tpop_id_old
+) WHERE tpop_id_old IS NOT NULL;
+ALTER TABLE apflora.tpopmassn DROP COLUMN tpop_id_old cascade;
+COMMENT ON COLUMN apflora.tpopmassn.tpop_id IS 'Zugehörige Teilpopulation. Fremdschlüssel der Tabelle "tpop"';
+
+-- change tpopmassnber
+ALTER TABLE apflora.tpopmassnber RENAME tpop_id TO tpop_id_old;
+DROP index apflora.apflora."tpopmassnber_tpop_id_idx";
+ALTER TABLE apflora.tpopmassnber ADD COLUMN tpop_id UUID DEFAULT NULL REFERENCES apflora.tpop (id) ON DELETE CASCADE ON UPDATE CASCADE;
+CREATE INDEX ON apflora.tpopmassnber USING btree (tpop_id);
+UPDATE apflora.tpopmassnber SET tpop_id = (
+  SELECT id FROM apflora.tpop WHERE id_old = apflora.tpopmassnber.tpop_id_old
+) WHERE tpop_id_old IS NOT NULL;
+ALTER TABLE apflora.tpopmassnber DROP COLUMN tpop_id_old cascade;
+COMMENT ON COLUMN apflora.tpopmassnber.tpop_id IS 'Zugehörige Teilpopulation. Fremdschlüssel der Tabelle "tpop"';
+
+-- change tpopbeob
+ALTER TABLE apflora.tpopbeob RENAME tpop_id TO tpop_id_old;
+DROP index apflora.apflora."tpopbeob_tpop_id_idx";
+ALTER TABLE apflora.tpopbeob ADD COLUMN tpop_id UUID DEFAULT NULL REFERENCES apflora.tpop (id) ON DELETE CASCADE ON UPDATE CASCADE;
+CREATE INDEX ON apflora.tpopbeob USING btree (tpop_id);
+UPDATE apflora.tpopbeob SET tpop_id = (
+  SELECT id FROM apflora.tpop WHERE id_old = apflora.tpopbeob.tpop_id_old
+) WHERE tpop_id_old IS NOT NULL;
+ALTER TABLE apflora.tpopbeob DROP COLUMN tpop_id_old cascade;
+COMMENT ON COLUMN apflora.tpopbeob.tpop_id IS 'Zugehörige Teilpopulation. Fremdschlüssel der Tabelle "tpop"';
+
+-- change tpopkontr
+ALTER TABLE apflora.tpopkontr RENAME tpop_id TO tpop_id_old;
+DROP index apflora.apflora."tpopkontr_tpop_id_idx";
+ALTER TABLE apflora.tpopkontr ADD COLUMN tpop_id UUID DEFAULT NULL REFERENCES apflora.tpop (id) ON DELETE CASCADE ON UPDATE CASCADE;
+CREATE INDEX ON apflora.tpopkontr USING btree (tpop_id);
+UPDATE apflora.tpopkontr SET tpop_id = (
+  SELECT id FROM apflora.tpop WHERE id_old = apflora.tpopkontr.tpop_id_old
+) WHERE tpop_id_old IS NOT NULL;
+ALTER TABLE apflora.tpopkontr DROP COLUMN tpop_id_old cascade;
+COMMENT ON COLUMN apflora.tpopkontr.tpop_id IS 'Zugehörige Teilpopulation. Fremdschlüssel der Tabelle "tpop"';
+
+-- TODO: make sure createTable is correct
+-- TODO: rename in sql
+-- TODO: rename in js
+-- TODO: check if old id was used somewhere. If so: rename that field, add new one and update that
+-- TODO: add all views, functions, triggers containing this table to this file
+-- TODO: run migration sql in dev
+-- TODO: restart postgrest and test app
+-- TODO: CHECK zaehl: are they correct
+-- TODO: update js and run this file on server
+-- TODO: restart postgrest

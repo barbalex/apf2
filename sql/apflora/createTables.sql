@@ -236,7 +236,7 @@ CREATE TABLE apflora.tpopbeob (
   id_old integer,
   beob_id integer PRIMARY KEY,
   "QuelleId" integer Default Null REFERENCES beob.beob_quelle (id) ON DELETE SET NULL ON UPDATE CASCADE,
-  tpop_id integer DEFAULT NULL REFERENCES apflora.tpop ("TPopId") ON DELETE CASCADE ON UPDATE CASCADE,
+  tpop_id integer DEFAULT NULL REFERENCES apflora.tpop (id) ON DELETE CASCADE ON UPDATE CASCADE,
   nicht_zuordnen smallint DEFAULT NULL,
   bemerkungen text,
   changed date DEFAULT NOW(),
@@ -478,8 +478,9 @@ COMMENT ON COLUMN apflora.popmassnber.changed_by IS 'Von wem wurde der Datensatz
 
 DROP TABLE IF EXISTS apflora.tpop;
 CREATE TABLE apflora.tpop (
-  "TPopId" SERIAL PRIMARY KEY,
-  "PopId" integer DEFAULT NULL REFERENCES apflora.pop ("PopId") ON DELETE CASCADE ON UPDATE CASCADE,
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
+  id_old integer,
+  pop_id integer DEFAULT NULL REFERENCES apflora.pop ("PopId") ON DELETE CASCADE ON UPDATE CASCADE,
   "TPopNr" integer DEFAULT NULL,
   "TPopGemeinde" text DEFAULT NULL,
   "TPopFlurname" text DEFAULT NULL,
@@ -507,8 +508,8 @@ CREATE TABLE apflora.tpop (
   "MutWann" date DEFAULT NOW(),
   "MutWer" varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
 );
-CREATE INDEX ON apflora.tpop USING btree ("TPopId");
-CREATE INDEX ON apflora.tpop USING btree ("PopId");
+CREATE INDEX ON apflora.tpop USING btree (id);
+CREATE INDEX ON apflora.tpop USING btree (pop_id);
 CREATE UNIQUE INDEX ON apflora.tpop USING btree ("TPopGuid");
 CREATE INDEX ON apflora.tpop USING btree ("TPopHerkunft");
 CREATE INDEX ON apflora.tpop USING btree ("TPopApBerichtRelevant");
@@ -517,9 +518,8 @@ CREATE INDEX ON apflora.tpop USING btree ("TPopYKoord");
 CREATE INDEX ON apflora.tpop USING btree ("TPopNr");
 CREATE INDEX ON apflora.tpop USING btree ("TPopGemeinde");
 CREATE INDEX ON apflora.tpop USING btree ("TPopFlurname");
-SELECT setval(pg_get_serial_sequence('apflora.tpop', 'TPopId'), coalesce(max("TPopId"), 0) + 1, false) FROM apflora.tpop;
-COMMENT ON COLUMN apflora.tpop."TPopId" IS 'Primärschlüssel der Tabelle "tpop"';
-COMMENT ON COLUMN apflora.tpop."PopId" IS 'Zugehörige Population. Fremdschlüssel aus der Tabelle "pop"';
+COMMENT ON COLUMN apflora.tpop.id IS 'Primärschlüssel';
+COMMENT ON COLUMN apflora.tpop.pop_id IS 'Zugehörige Population. Fremdschlüssel aus der Tabelle "pop"';
 COMMENT ON COLUMN apflora.tpop."TPopNr" IS 'Nummer der Teilpopulation';
 COMMENT ON COLUMN apflora.tpop."TPopGemeinde" IS 'Gemeinde';
 COMMENT ON COLUMN apflora.tpop."TPopFlurname" IS 'Flurname';
@@ -583,7 +583,7 @@ DROP TABLE IF EXISTS apflora.tpopber;
 CREATE TABLE apflora.tpopber (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
   id_old integer,
-  tpop_id integer DEFAULT NULL REFERENCES apflora.tpop ("TPopId") ON DELETE CASCADE ON UPDATE CASCADE,
+  tpop_id integer DEFAULT NULL REFERENCES apflora.tpop (id) ON DELETE CASCADE ON UPDATE CASCADE,
   jahr smallint DEFAULT NULL,
   entwicklung integer DEFAULT NULL REFERENCES apflora.tpop_entwicklung_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
   changed date DEFAULT NOW(),
@@ -606,7 +606,7 @@ DROP TABLE IF EXISTS apflora.tpopkontr;
 CREATE TABLE apflora.tpopkontr (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
   id_old integer,
-  tpop_id integer DEFAULT NULL REFERENCES apflora.tpop ("TPopId") ON DELETE CASCADE ON UPDATE CASCADE,
+  tpop_id integer DEFAULT NULL REFERENCES apflora.tpop (id) ON DELETE CASCADE ON UPDATE CASCADE,
   typ varchar(50) DEFAULT NULL,
   datum date DEFAULT NULL,
   jahr smallint DEFAULT NULL,
@@ -797,7 +797,7 @@ DROP TABLE IF EXISTS apflora.tpopmassn;
 CREATE TABLE apflora.tpopmassn (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
   id_old integer DEFAULT NULL,
-  tpop_id integer DEFAULT NULL REFERENCES apflora.tpop ("TPopId") ON DELETE CASCADE ON UPDATE CASCADE,
+  tpop_id integer DEFAULT NULL REFERENCES apflora.tpop (id) ON DELETE CASCADE ON UPDATE CASCADE,
   typ integer DEFAULT NULL REFERENCES apflora.tpopmassn_typ_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
   beschreibung text DEFAULT NULL,
   jahr smallint DEFAULT NULL,
@@ -888,7 +888,7 @@ DROP TABLE IF EXISTS apflora.tpopmassnber;
 CREATE TABLE apflora.tpopmassnber (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
   id_old integer,
-  tpop_id integer DEFAULT NULL REFERENCES apflora.tpop ("TPopId") ON DELETE CASCADE ON UPDATE CASCADE,
+  tpop_id integer DEFAULT NULL REFERENCES apflora.tpop (id) ON DELETE CASCADE ON UPDATE CASCADE,
   jahr smallint DEFAULT NULL,
   beurteilung integer DEFAULT NULL REFERENCES apflora.tpopmassn_erfbeurt_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
   bemerkungen text,
