@@ -25,9 +25,10 @@ ALTER TABLE apflora.tpop RENAME "TPopNutzungszone" TO nutzungszone;
 ALTER TABLE apflora.tpop RENAME "TPopBewirtschafterIn" TO bewirtschafter;
 ALTER TABLE apflora.tpop RENAME "TPopBewirtschaftung" TO bewirtschaftung;
 ALTER TABLE apflora.tpop RENAME "TPopTxt" TO bemerkungen;
--- ALTER TABLE apflora.tpop DROP COLUMN "TPopGuid_alt";
 ALTER TABLE apflora.tpop RENAME "MutWann" TO changed;
 ALTER TABLE apflora.tpop RENAME "MutWer" TO changed_by;
+
+ALTER TABLE apflora.tpop DROP COLUMN "TPopGuid_alt";
 
 COMMENT ON COLUMN apflora.tpop.id_old IS 'frühere id';
 

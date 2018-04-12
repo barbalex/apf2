@@ -140,9 +140,8 @@ ALTER TABLE apflora.tpopkontrzaehl DROP COLUMN tpopkontr_id_old CASCADE;
 -- done: run migration sql in dev
 -- done: restart postgrest and test app
 -- done: CHECK zaehl: are they correct
--- TODO: update js and run this file on server
--- TODO: restart postgrest
--- DO add views because old id was often removed?
+-- done: update js and run this file on server
+-- done: restart postgrest
 
 CREATE OR REPLACE FUNCTION apflora.qk2_tpop_ohne_massnber(apid integer, berichtjahr integer)
   RETURNS table("ProjId" integer, "ApArtId" integer, hw text, url text[], text text[]) AS
