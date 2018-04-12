@@ -51,7 +51,7 @@ export default (store: Object): Array<Object> => {
             beob.id,
           ]
           tree.setActiveNodeArray(newActiveNodeArray)
-          insertBeobzuordnung(tree, beob, 'TPopId', nearestTpopId)
+          insertBeobzuordnung(tree, beob, 'tpop_id', nearestTpopId)
         })
     })
   }

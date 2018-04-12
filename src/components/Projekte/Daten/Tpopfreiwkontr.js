@@ -32,10 +32,8 @@ const getBearbName = ({ store, tree }: { store: Object, tree: Object }) => {
   const { adressen } = store.dropdownList
   const { activeDataset } = tree
   let name = ''
-  if (activeDataset.row.TPopKontrBearb && adressen.length > 0) {
-    const adresse = adressen.find(
-      a => a.AdrId === activeDataset.row.TPopKontrBearb
-    )
+  if (activeDataset.row.bearbeiter && adressen.length > 0) {
+    const adresse = adressen.find(a => a.AdrId === activeDataset.row.bearbeiter)
     if (adresse && adresse.AdrName) return adresse.AdrName
   }
   return name
@@ -61,26 +59,26 @@ const Tpopfreiwkontr = ({
         <FormTitle tree={tree} title="Freiwilligen-Kontrolle" />
         <FieldsContainer data-width={width}>
           <YearDatePair
-            key={activeDataset.row.TPopKontrId}
+            key={activeDataset.row.id}
             tree={tree}
             yearLabel="Jahr"
-            yearFieldName="TPopKontrJahr"
-            yearValue={activeDataset.row.TPopKontrJahr}
-            yearErrorText={activeDataset.valid.TPopKontrJahr}
+            yearFieldName="jahr"
+            yearValue={activeDataset.row.jahr}
+            yearErrorText={activeDataset.valid.jahr}
             dateLabel="Datum"
-            dateFieldName="TPopKontrDatum"
-            dateValue={activeDataset.row.TPopKontrDatum}
-            dateErrorText={activeDataset.valid.TPopKontrDatum}
+            dateFieldName="datum"
+            dateValue={activeDataset.row.datum}
+            dateErrorText={activeDataset.valid.datum}
             updateProperty={store.updateProperty}
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <AutoComplete
-            key={`${activeDataset.row.TPopKontrId}TPopKontrBearbFreiw`}
+            key={`${activeDataset.row.id}TPopKontrBearbFreiw`}
             tree={tree}
             label="BearbeiterIn"
-            fieldName="TPopKontrBearb"
+            fieldName="bearbeiter"
             valueText={getBearbName({ store, tree })}
-            errorText={activeDataset.valid.TPopKontrBearb}
+            errorText={activeDataset.valid.bearbeiter}
             dataSource={store.dropdownList.adressen}
             dataSourceConfig={{
               value: 'AdrId',
@@ -90,80 +88,80 @@ const Tpopfreiwkontr = ({
           />
           <RadioButton
             tree={tree}
-            fieldName="TPopKontrPlan"
+            fieldName="plan_vorhanden"
             label="Auf Plan eingezeichnet"
-            value={activeDataset.row.TPopKontrPlan}
+            value={activeDataset.row.plan_vorhanden}
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
-            key={`${activeDataset.row.TPopKontrId}TPopKontrUebFlaeche`}
+            key={`${activeDataset.row.id}flaeche_ueberprueft`}
             tree={tree}
             label="Überprüfte Fläche in m2"
-            fieldName="TPopKontrUebFlaeche"
-            value={activeDataset.row.TPopKontrUebFlaeche}
-            errorText={activeDataset.valid.TPopKontrUebFlaeche}
+            fieldName="flaeche_ueberprueft"
+            value={activeDataset.row.flaeche_ueberprueft}
+            errorText={activeDataset.valid.flaeche_ueberprueft}
             type="number"
             updateProperty={store.updateProperty}
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
-            key={`${activeDataset.row.TPopKontrId}TPopKontrUebPfl`}
+            key={`${activeDataset.row.id}deckung_ap_art`}
             tree={tree}
             label="Deckung überprüfte Art (%)"
-            fieldName="TPopKontrUebPfl"
-            value={activeDataset.row.TPopKontrUebPfl}
-            errorText={activeDataset.valid.TPopKontrUebPfl}
+            fieldName="deckung_ap_art"
+            value={activeDataset.row.deckung_ap_art}
+            errorText={activeDataset.valid.deckung_ap_art}
             type="number"
             updateProperty={store.updateProperty}
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
-            key={`${activeDataset.row.TPopKontrId}TPopKontrNaBo`}
+            key={`${activeDataset.row.id}deckung_nackter_boden`}
             tree={tree}
             label="Deckung nackter Boden (%)"
-            fieldName="TPopKontrNaBo"
-            value={activeDataset.row.TPopKontrNaBo}
-            errorText={activeDataset.valid.TPopKontrNaBo}
+            fieldName="deckung_nackter_boden"
+            value={activeDataset.row.deckung_nackter_boden}
+            errorText={activeDataset.valid.deckung_nackter_boden}
             type="number"
             updateProperty={store.updateProperty}
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <RadioButton3Values
             tree={tree}
-            fieldName="TPopKontrJungPflJN"
+            fieldName="jungpflanzen_vorhanden"
             label="Auch junge Pflanzen vorhanden"
-            value={activeDataset.row.TPopKontrJungPflJN}
+            value={activeDataset.row.jungpflanzen_vorhanden}
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
-            key={`${activeDataset.row.TPopKontrId}TPopKontrVegHoeMax`}
+            key={`${activeDataset.row.id}vegetationshoehe_maximum`}
             tree={tree}
             label="Maximum der Vegetationshöhe in cm"
-            fieldName="TPopKontrVegHoeMax"
-            value={activeDataset.row.TPopKontrVegHoeMax}
-            errorText={activeDataset.valid.TPopKontrVegHoeMax}
+            fieldName="vegetationshoehe_maximum"
+            value={activeDataset.row.vegetationshoehe_maximum}
+            errorText={activeDataset.valid.vegetationshoehe_maximum}
             type="number"
             updateProperty={store.updateProperty}
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
-            key={`${activeDataset.row.TPopKontrId}TPopKontrVegHoeMit`}
+            key={`${activeDataset.row.id}vegetationshoehe_mittel`}
             tree={tree}
             label="Mittelwert der Vegetationshöhe in cm"
-            fieldName="TPopKontrVegHoeMit"
-            value={activeDataset.row.TPopKontrVegHoeMit}
-            errorText={activeDataset.valid.TPopKontrVegHoeMit}
+            fieldName="vegetationshoehe_mittel"
+            value={activeDataset.row.vegetationshoehe_mittel}
+            errorText={activeDataset.valid.vegetationshoehe_mittel}
             type="number"
             updateProperty={store.updateProperty}
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
-            key={`${activeDataset.row.TPopKontrId}TPopKontrGefaehrdung`}
+            key={`${activeDataset.row.id}gefaehrdung`}
             tree={tree}
             label="Gefährdung"
-            fieldName="TPopKontrGefaehrdung"
-            value={activeDataset.row.TPopKontrGefaehrdung}
-            errorText={activeDataset.valid.TPopKontrGefaehrdung}
+            fieldName="gefaehrdung"
+            value={activeDataset.row.gefaehrdung}
+            errorText={activeDataset.valid.gefaehrdung}
             type="text"
             multiLine
             fullWidth
@@ -171,19 +169,19 @@ const Tpopfreiwkontr = ({
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
-            key={`${activeDataset.row.TPopKontrId}TPopKontrTxt`}
+            key={`${activeDataset.row.id}bemerkungen`}
             tree={tree}
             label="Bemerkungen"
-            fieldName="TPopKontrTxt"
-            value={activeDataset.row.TPopKontrTxt}
-            errorText={activeDataset.valid.TPopKontrTxt}
+            fieldName="bemerkungen"
+            value={activeDataset.row.bemerkungen}
+            errorText={activeDataset.valid.bemerkungen}
             type="text"
             multiLine
             fullWidth
             updateProperty={store.updateProperty}
             updatePropertyInDb={store.updatePropertyInDb}
           />
-          <StringToCopy text={activeDataset.row.TPopKontrGuid} label="GUID" />
+          <StringToCopy text={activeDataset.row.id} label="GUID" />
         </FieldsContainer>
       </Container>
     </ErrorBoundary>

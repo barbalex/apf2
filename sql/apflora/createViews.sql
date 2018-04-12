@@ -713,7 +713,7 @@ SELECT
   apflora.pop."PopHerkunftUnklarBegruendung" AS "Pop Begruendung fuer unklaren Status",
   apflora.pop."PopXKoord" AS "Pop X-Koordinaten",
   apflora.pop."PopYKoord" AS "Pop Y-Koordinaten",
-  count(apflora.tpopkontr."TPopKontrId") AS "Anzahl Kontrollen"
+  count(apflora.tpopkontr.id) AS "Anzahl Kontrollen"
 FROM
   ((((apflora.ae_eigenschaften
   INNER JOIN
@@ -726,7 +726,7 @@ FROM
       ON apflora.pop."PopId" = apflora.tpop."PopId")
     LEFT JOIN
       apflora.tpopkontr
-      ON apflora.tpop."TPopId" = apflora.tpopkontr."TPopId")
+      ON apflora.tpop."TPopId" = apflora.tpopkontr.tpop_id)
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId")
   LEFT JOIN
     apflora.ap_bearbstand_werte
@@ -803,7 +803,7 @@ SELECT
   apflora.ap_bearbstand_werte.text AS "AP Status",
   apflora.ap."ApJahr" AS "AP Start im Jahr",
   apflora.ap_umsetzung_werte.text AS "AP Stand Umsetzung",
-  count(apflora.tpopkontr."TPopKontrId") AS "Anzahl Kontrollen"
+  count(apflora.tpopkontr.id) AS "Anzahl Kontrollen"
 FROM
   (((apflora.ae_eigenschaften
   INNER JOIN
@@ -816,7 +816,7 @@ FROM
       ON apflora.pop."PopId" = apflora.tpop."PopId")
     LEFT JOIN
       apflora.tpopkontr
-      ON apflora.tpop."TPopId" = apflora.tpopkontr."TPopId")
+      ON apflora.tpop."TPopId" = apflora.tpopkontr.tpop_id)
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId")
   LEFT JOIN
     apflora.ap_bearbstand_werte
@@ -2189,8 +2189,8 @@ CREATE OR REPLACE VIEW apflora.v_ap_anzkontrinjahr AS
 SELECT
   apflora.ap."ApArtId",
   apflora.ae_eigenschaften.artname,
-  apflora.tpopkontr."TPopKontrId",
-  apflora.tpopkontr."TPopKontrJahr"
+  apflora.tpopkontr.id,
+  apflora.tpopkontr.jahr
 FROM
   (apflora.ap
   INNER JOIN
@@ -2202,7 +2202,7 @@ FROM
       (apflora.tpop
       INNER JOIN
         apflora.tpopkontr
-        ON apflora.tpop."TPopId" = apflora.tpopkontr."TPopId")
+        ON apflora.tpop."TPopId" = apflora.tpopkontr.tpop_id)
       ON apflora.pop."PopId" = apflora.tpop."PopId")
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
 WHERE
@@ -2210,8 +2210,8 @@ WHERE
 GROUP BY
   apflora.ap."ApArtId",
   apflora.ae_eigenschaften.artname,
-  apflora.tpopkontr."TPopKontrId",
-  apflora.tpopkontr."TPopKontrJahr";
+  apflora.tpopkontr.id,
+  apflora.tpopkontr.jahr;
 
 DROP VIEW IF EXISTS apflora.v_erfkrit CASCADE;
 CREATE OR REPLACE VIEW apflora.v_erfkrit AS
@@ -2657,92 +2657,6 @@ ORDER BY
   apflora.pop."PopNr",
   apflora.tpop."TPopNr",
   tpopmassn_typ_werte.text;
-
-DROP VIEW IF EXISTS apflora.v_tpopkontr_nachflurname CASCADE;
-CREATE OR REPLACE VIEW apflora.v_tpopkontr_nachflurname AS
-SELECT
-  apflora.ap."ApArtId",
-  apflora.pop."PopId",
-  apflora.tpop."TPopId",
-  apflora.tpop."TPopGemeinde" AS "Gemeinde",
-  apflora.tpop."TPopFlurname" AS "Flurname aus Teilpopulation",
-  apflora.ap_bearbstand_werte.text AS "Bearbeitungsstand AP",
-  apflora.ae_eigenschaften.artname AS "Art",
-  apflora.pop."PopNr",
-  apflora.tpop."TPopNr",
-  apflora.tpopkontr."TPopKontrJahr" AS "Jahr",
-  apflora.tpopkontr."TPopKontrTyp" AS "Kontrolltyp",
-  apflora.tpopkontr."TPopKontrDatum",
-  apflora.adresse."AdrName" AS "TPopKontrBearb",
-  apflora.tpopkontr."TPopKontrJungpfl",
-  apflora.tpopkontr."TPopKontrVitalitaet",
-  apflora.tpopkontr."TPopKontrUeberleb",
-  apflora.tpopkontr."TPopKontrEntwicklung",
-  apflora.tpopkontr."TPopKontrUrsach",
-  apflora.tpopkontr."TPopKontrUrteil",
-  apflora.tpopkontr."TPopKontrAendUms",
-  apflora.tpopkontr."TPopKontrAendKontr",
-  apflora.tpopkontr."TPopKontrTxt",
-  apflora.tpopkontr."TPopKontrLeb",
-  apflora.tpopkontr."TPopKontrFlaeche",
-  apflora.tpopkontr."TPopKontrLebUmg",
-  apflora.tpopkontr."TPopKontrStrauchschicht",
-  apflora.tpopkontr."TPopKontrBodenTyp",
-  apflora.tpopkontr."TPopKontrBodenAbtrag",
-  apflora.tpopkontr."TPopKontrWasserhaushalt",
-  apflora.tpopkontr."TPopKontrHandlungsbedarf",
-  apflora.tpopkontr."TPopKontrUebFlaeche",
-  apflora.tpopkontr."TPopKontrPlan",
-  apflora.tpopkontr."TPopKontrVeg",
-  apflora.tpopkontr."TPopKontrNaBo",
-  apflora.tpopkontr."TPopKontrUebPfl",
-  apflora.tpopkontr."TPopKontrJungPflJN",
-  apflora.tpopkontr."TPopKontrVegHoeMax",
-  apflora.tpopkontr."TPopKontrVegHoeMit",
-  apflora.tpopkontr."TPopKontrGefaehrdung",
-  apflora.tpopkontrzaehl.id,
-  apflora.tpopkontrzaehl.anzahl,
-  apflora.tpopkontrzaehl_einheit_werte.text AS einheit,
-  apflora.tpopkontrzaehl_methode_werte.text AS methode
-FROM
-  ((((((apflora.ae_eigenschaften
-  INNER JOIN
-    apflora.ap
-    ON apflora.ae_eigenschaften.taxid = apflora.ap."ApArtId")
-  INNER JOIN
-    (apflora.pop
-    INNER JOIN
-      (apflora.tpop
-      INNER JOIN
-        apflora.tpopkontr
-        ON apflora.tpop."TPopId" = apflora.tpopkontr."TPopId")
-      ON apflora.pop."PopId" = apflora.tpop."PopId")
-    ON apflora.ap."ApArtId" = apflora.pop."ApArtId")
-  LEFT JOIN
-    apflora.ap_bearbstand_werte
-    ON apflora.ap."ApStatus" = apflora.ap_bearbstand_werte.code)
-  LEFT JOIN
-    apflora.adresse
-    ON apflora.tpopkontr."TPopKontrBearb" = apflora.adresse."AdrId")
-  LEFT JOIN
-    apflora.tpopkontrzaehl
-    ON apflora.tpopkontr."TPopKontrId" = apflora.tpopkontrzaehl.tpopkontr_id)
-  LEFT JOIN
-    apflora.tpopkontrzaehl_einheit_werte
-    ON apflora.tpopkontrzaehl.einheit = apflora.tpopkontrzaehl_einheit_werte.code)
-  LEFT JOIN
-    apflora.tpopkontrzaehl_methode_werte
-    ON apflora.tpopkontrzaehl.methode = apflora.tpopkontrzaehl_methode_werte.code
-WHERE
-  apflora.tpopkontr."TPopKontrTyp" NOT IN ('Ziel', 'Zwischenziel')
-ORDER BY
-  apflora.tpop."TPopGemeinde",
-  apflora.tpop."TPopFlurname",
-  apflora.ae_eigenschaften.artname,
-  apflora.pop."PopNr",
-  apflora.tpop."TPopNr",
-  apflora.tpopkontr."TPopKontrJahr",
-  apflora.tpopkontr."TPopKontrTyp";
 
 DROP VIEW IF EXISTS apflora.v_apber_b1rpop CASCADE;
 CREATE OR REPLACE VIEW apflora.v_apber_b1rpop AS
@@ -3776,52 +3690,52 @@ SELECT
   apflora.tpop."TPopNutzungszone" AS "TPop Nutzungszone",
   apflora.tpop."TPopBewirtschafterIn" AS "TPop BewirtschafterIn",
   apflora.tpop."TPopBewirtschaftung" AS "TPop Bewirtschaftung",
-  apflora.tpopkontr."TPopKontrId",
-  apflora.tpopkontr."TPopId",
-  apflora.tpopkontr."TPopKontrGuid" AS "Kontr Guid",
-  apflora.tpopkontr."TPopKontrJahr" AS "Kontr Jahr",
-  apflora.tpopkontr."TPopKontrDatum" AS "Kontr Datum",
+  apflora.tpopkontr.id,
+  apflora.tpopkontr.tpop_id,
+  apflora.tpopkontr.id AS "Kontr id",
+  apflora.tpopkontr.jahr AS "Kontr Jahr",
+  apflora.tpopkontr.datum AS "Kontr Datum",
   apflora.tpopkontr_typ_werte."DomainTxt" AS "Kontr Typ",
   apflora.adresse."AdrName" AS "Kontr BearbeiterIn",
-  apflora.tpopkontr."TPopKontrUeberleb" AS "Kontr Ueberlebensrate",
-  apflora.tpopkontr."TPopKontrVitalitaet" AS "Kontr Vitalitaet",
+  apflora.tpopkontr.ueberlebensrate AS "Kontr Ueberlebensrate",
+  apflora.tpopkontr.vitalitaet AS "Kontr Vitalitaet",
   apflora.tpop_entwicklung_werte.text AS "Kontr Entwicklung",
-  apflora.tpopkontr."TPopKontrUrsach" AS "Kontr Ursachen",
-  apflora.tpopkontr."TPopKontrUrteil" AS "Kontr Erfolgsbeurteilung",
-  apflora.tpopkontr."TPopKontrAendUms" AS "Kontr Aenderungs-Vorschlaege Umsetzung",
-  apflora.tpopkontr."TPopKontrAendKontr" AS "Kontr Aenderungs-Vorschlaege Kontrolle",
+  apflora.tpopkontr.ursachen AS "Kontr Ursachen",
+  apflora.tpopkontr.erfolgsbeurteilung AS "Kontr Erfolgsbeurteilung",
+  apflora.tpopkontr.umsetzung_aendern AS "Kontr Aenderungs-Vorschlaege Umsetzung",
+  apflora.tpopkontr.kontrolle_aendern AS "Kontr Aenderungs-Vorschlaege Kontrolle",
   apflora.tpop."TPopXKoord" AS "Kontr X-Koord",
   apflora.tpop."TPopYKoord" AS "Kontr Y-Koord",
-  apflora.tpopkontr."TPopKontrTxt" AS "Kontr Bemerkungen",
-  apflora.tpopkontr."TPopKontrLeb" AS "Kontr Lebensraum Delarze",
-  apflora.tpopkontr."TPopKontrLebUmg" AS "Kontr angrenzender Lebensraum Delarze",
-  apflora.tpopkontr."TPopKontrVegTyp" AS "Kontr Vegetationstyp",
-  apflora.tpopkontr."TPopKontrKonkurrenz" AS "Kontr Konkurrenz",
-  apflora.tpopkontr."TPopKontrMoosschicht" AS "Kontr Moosschicht",
-  apflora.tpopkontr."TPopKontrKrautschicht" AS "Kontr Krautschicht",
-  apflora.tpopkontr."TPopKontrStrauchschicht" AS "Kontr Strauchschicht",
-  apflora.tpopkontr."TPopKontrBaumschicht" AS "Kontr Baumschicht",
-  apflora.tpopkontr."TPopKontrBodenTyp" AS "Kontr Bodentyp",
-  apflora.tpopkontr."TPopKontrBodenKalkgehalt" AS "Kontr Boden Kalkgehalt",
-  apflora.tpopkontr."TPopKontrBodenDurchlaessigkeit" AS "Kontr Boden Durchlaessigkeit",
-  apflora.tpopkontr."TPopKontrBodenHumus" AS "Kontr Boden Humusgehalt",
-  apflora.tpopkontr."TPopKontrBodenNaehrstoffgehalt" AS "Kontr Boden Naehrstoffgehalt",
-  apflora.tpopkontr."TPopKontrBodenAbtrag" AS "Kontr Oberbodenabtrag",
-  apflora.tpopkontr."TPopKontrWasserhaushalt" AS "Kontr Wasserhaushalt",
+  apflora.tpopkontr.bemerkungen AS "Kontr Bemerkungen",
+  apflora.tpopkontr.lr_delarze AS "Kontr Lebensraum Delarze",
+  apflora.tpopkontr.lr_umgebung_delarze AS "Kontr angrenzender Lebensraum Delarze",
+  apflora.tpopkontr.vegetationstyp AS "Kontr Vegetationstyp",
+  apflora.tpopkontr.konkurrenz AS "Kontr Konkurrenz",
+  apflora.tpopkontr.moosschicht AS "Kontr Moosschicht",
+  apflora.tpopkontr.krautschicht AS "Kontr Krautschicht",
+  apflora.tpopkontr.strauchschicht AS "Kontr Strauchschicht",
+  apflora.tpopkontr.baumschicht AS "Kontr Baumschicht",
+  apflora.tpopkontr.boden_typ AS "Kontr Bodentyp",
+  apflora.tpopkontr.boden_kalkgehalt AS "Kontr Boden Kalkgehalt",
+  apflora.tpopkontr.boden_durchlaessigkeit AS "Kontr Boden Durchlaessigkeit",
+  apflora.tpopkontr.boden_humus AS "Kontr Boden Humusgehalt",
+  apflora.tpopkontr.boden_naehrstoffgehalt AS "Kontr Boden Naehrstoffgehalt",
+  apflora.tpopkontr.boden_abtrag AS "Kontr Oberbodenabtrag",
+  apflora.tpopkontr.wasserhaushalt AS "Kontr Wasserhaushalt",
   apflora.tpopkontr_idbiotuebereinst_werte.text AS "Kontr Uebereinstimmung mit Idealbiotop",
-  apflora.tpopkontr."TPopKontrHandlungsbedarf" AS "Kontr Handlungsbedarf",
-  apflora.tpopkontr."TPopKontrUebFlaeche" AS "Kontr Ueberpruefte Flaeche",
-  apflora.tpopkontr."TPopKontrFlaeche" AS "Kontr Flaeche der Teilpopulation m2",
-  apflora.tpopkontr."TPopKontrPlan" AS "Kontr auf Plan eingezeichnet",
-  apflora.tpopkontr."TPopKontrVeg" AS "Kontr Deckung durch Vegetation",
-  apflora.tpopkontr."TPopKontrNaBo" AS "Kontr Deckung nackter Boden",
-  apflora.tpopkontr."TPopKontrUebPfl" AS "Kontr Deckung durch ueberpruefte Art",
-  apflora.tpopkontr."TPopKontrJungPflJN" AS "Kontr auch junge Pflanzen",
-  apflora.tpopkontr."TPopKontrVegHoeMax" AS "Kontr maximale Veg-hoehe cm",
-  apflora.tpopkontr."TPopKontrVegHoeMit" AS "Kontr mittlere Veg-hoehe cm",
-  apflora.tpopkontr."TPopKontrGefaehrdung" AS "Kontr Gefaehrdung",
-  apflora.tpopkontr."MutWann" AS "Kontrolle zuletzt geaendert",
-  apflora.tpopkontr."MutWer" AS "Kontrolle zuletzt geaendert von",
+  apflora.tpopkontr.handlungsbedarf AS "Kontr Handlungsbedarf",
+  apflora.tpopkontr.flaeche_ueberprueft AS "Kontr Ueberpruefte Flaeche",
+  apflora.tpopkontr.flaeche AS "Kontr Flaeche der Teilpopulation m2",
+  apflora.tpopkontr.plan_vorhanden AS "Kontr auf Plan eingezeichnet",
+  apflora.tpopkontr.deckung_vegetation AS "Kontr Deckung durch Vegetation",
+  apflora.tpopkontr.deckung_nackter_boden AS "Kontr Deckung nackter Boden",
+  apflora.tpopkontr.deckung_ap_art AS "Kontr Deckung durch ueberpruefte Art",
+  apflora.tpopkontr.jungpflanzen_vorhanden AS "Kontr auch junge Pflanzen",
+  apflora.tpopkontr.vegetationshoehe_maximum AS "Kontr maximale Veg-hoehe cm",
+  apflora.tpopkontr.vegetationshoehe_mittel AS "Kontr mittlere Veg-hoehe cm",
+  apflora.tpopkontr.gefaehrdung AS "Kontr Gefaehrdung",
+  apflora.tpopkontr.changed AS "Kontrolle zuletzt geaendert",
+  apflora.tpopkontr.changed_by AS "Kontrolle zuletzt geaendert von",
   array_to_string(array_agg(apflora.tpopkontrzaehl.anzahl), ', ') AS "Zaehlungen Anzahlen",
   string_agg(apflora.tpopkontrzaehl_einheit_werte.text, ', ') AS "Zaehlungen Einheiten",
   string_agg(apflora.tpopkontrzaehl_methode_werte.text, ', ') AS "Zaehlungen Methoden"
@@ -3840,23 +3754,23 @@ FROM
           ((((((apflora.tpopkontr
           LEFT JOIN
             apflora.tpopkontr_typ_werte
-            ON apflora.tpopkontr."TPopKontrTyp" = apflora.tpopkontr_typ_werte."DomainTxt")
+            ON apflora.tpopkontr.typ = apflora.tpopkontr_typ_werte."DomainTxt")
           LEFT JOIN
             apflora.adresse
-            ON apflora.tpopkontr."TPopKontrBearb" = apflora.adresse."AdrId")
+            ON apflora.tpopkontr.bearbeiter = apflora.adresse."AdrId")
           LEFT JOIN
             apflora.tpop_entwicklung_werte
-            ON apflora.tpopkontr."TPopKontrEntwicklung" = apflora.tpop_entwicklung_werte.code)
+            ON apflora.tpopkontr.entwicklung = apflora.tpop_entwicklung_werte.code)
           LEFT JOIN
             apflora.tpopkontrzaehl
-            ON apflora.tpopkontr."TPopKontrId" = apflora.tpopkontrzaehl.tpopkontr_id)
+            ON apflora.tpopkontr.id = apflora.tpopkontrzaehl.tpopkontr_id)
           LEFT JOIN
             apflora.tpopkontrzaehl_einheit_werte
             ON apflora.tpopkontrzaehl.einheit = apflora.tpopkontrzaehl_einheit_werte.code)
           LEFT JOIN
             apflora.tpopkontrzaehl_methode_werte
             ON apflora.tpopkontrzaehl.methode = apflora.tpopkontrzaehl_methode_werte.code)
-          ON apflora.tpop."TPopId" = apflora.tpopkontr."TPopId")
+          ON apflora.tpop."TPopId" = apflora.tpopkontr.tpop_id)
         ON apflora.pop."PopId" = apflora.tpop."PopId")
       ON apflora.ap."ApArtId" = apflora.pop."ApArtId")
     LEFT JOIN
@@ -3870,7 +3784,7 @@ FROM
       ON apflora.pop."PopHerkunft" = apflora.pop_status_werte.code)
     LEFT JOIN
       apflora.tpopkontr_idbiotuebereinst_werte
-      ON apflora.tpopkontr."TPopKontrIdealBiotopUebereinst" = apflora.tpopkontr_idbiotuebereinst_werte.code)
+      ON apflora.tpopkontr.idealbiotop_uebereinstimmung = apflora.tpopkontr_idbiotuebereinst_werte.code)
   LEFT JOIN
     apflora.adresse AS "tblAdresse_1"
     ON apflora.ap."ApBearb" = "tblAdresse_1"."AdrId")
@@ -3915,52 +3829,52 @@ GROUP BY
   apflora.tpop."TPopNutzungszone",
   apflora.tpop."TPopBewirtschafterIn",
   apflora.tpop."TPopBewirtschaftung",
-  apflora.tpopkontr."TPopKontrId",
-  apflora.tpopkontr."TPopId",
-  apflora.tpopkontr."TPopKontrGuid",
-  apflora.tpopkontr."TPopKontrJahr",
-  apflora.tpopkontr."TPopKontrDatum",
+  apflora.tpopkontr.id,
+  apflora.tpopkontr.tpop_id,
+  apflora.tpopkontr.id,
+  apflora.tpopkontr.jahr,
+  apflora.tpopkontr.datum,
   apflora.tpopkontr_typ_werte."DomainTxt",
   apflora.adresse."AdrName",
-  apflora.tpopkontr."TPopKontrUeberleb",
-  apflora.tpopkontr."TPopKontrVitalitaet",
-  apflora.tpop_entwicklung_werte.text,
-  apflora.tpopkontr."TPopKontrUrsach",
-  apflora.tpopkontr."TPopKontrUrteil",
-  apflora.tpopkontr."TPopKontrAendUms",
-  apflora.tpopkontr."TPopKontrAendKontr",
+  apflora.tpopkontr.ueberlebensrate,
+  apflora.tpopkontr.vitalitaet,
+  apflora.tpop_entwicklung_werte.text AS entwicklung,
+  apflora.tpopkontr.ursachen,
+  apflora.tpopkontr.erfolgsbeurteilung,
+  apflora.tpopkontr.umsetzung_aendern,
+  apflora.tpopkontr.kontrolle_aendern,
   apflora.tpop."TPopXKoord",
   apflora.tpop."TPopYKoord",
-  apflora.tpopkontr."TPopKontrTxt",
-  apflora.tpopkontr."TPopKontrLeb",
-  apflora.tpopkontr."TPopKontrLebUmg",
-  apflora.tpopkontr."TPopKontrVegTyp",
-  apflora.tpopkontr."TPopKontrKonkurrenz",
-  apflora.tpopkontr."TPopKontrMoosschicht",
-  apflora.tpopkontr."TPopKontrKrautschicht",
-  apflora.tpopkontr."TPopKontrStrauchschicht",
-  apflora.tpopkontr."TPopKontrBaumschicht",
-  apflora.tpopkontr."TPopKontrBodenTyp",
-  apflora.tpopkontr."TPopKontrBodenKalkgehalt",
-  apflora.tpopkontr."TPopKontrBodenDurchlaessigkeit",
-  apflora.tpopkontr."TPopKontrBodenHumus",
-  apflora.tpopkontr."TPopKontrBodenNaehrstoffgehalt",
-  apflora.tpopkontr."TPopKontrBodenAbtrag",
-  apflora.tpopkontr."TPopKontrWasserhaushalt",
+  apflora.tpopkontr.bemerkungen,
+  apflora.tpopkontr.lr_delarze,
+  apflora.tpopkontr.lr_umgebung_delarze,
+  apflora.tpopkontr.vegetationstyp,
+  apflora.tpopkontr.konkurrenz,
+  apflora.tpopkontr.moosschicht,
+  apflora.tpopkontr.krautschicht,
+  apflora.tpopkontr.strauchschicht,
+  apflora.tpopkontr.baumschicht,
+  apflora.tpopkontr.boden_typ,
+  apflora.tpopkontr.boden_kalkgehalt,
+  apflora.tpopkontr.boden_durchlaessigkeit,
+  apflora.tpopkontr.boden_humus,
+  apflora.tpopkontr.boden_naehrstoffgehalt,
+  apflora.tpopkontr.boden_abtrag,
+  apflora.tpopkontr.wasserhaushalt,
   apflora.tpopkontr_idbiotuebereinst_werte.text,
-  apflora.tpopkontr."TPopKontrHandlungsbedarf",
-  apflora.tpopkontr."TPopKontrUebFlaeche",
-  apflora.tpopkontr."TPopKontrFlaeche",
-  apflora.tpopkontr."TPopKontrPlan",
-  apflora.tpopkontr."TPopKontrVeg",
-  apflora.tpopkontr."TPopKontrNaBo",
-  apflora.tpopkontr."TPopKontrUebPfl",
-  apflora.tpopkontr."TPopKontrJungPflJN",
-  apflora.tpopkontr."TPopKontrVegHoeMax",
-  apflora.tpopkontr."TPopKontrVegHoeMit",
-  apflora.tpopkontr."TPopKontrGefaehrdung",
-  apflora.tpopkontr."MutWann",
-  apflora.tpopkontr."MutWer"
+  apflora.tpopkontr.handlungsbedarf,
+  apflora.tpopkontr.flaeche_ueberprueft,
+  apflora.tpopkontr.flaeche,
+  apflora.tpopkontr.plan_vorhanden,
+  apflora.tpopkontr.deckung_vegetation,
+  apflora.tpopkontr.deckung_nackter_boden,
+  apflora.tpopkontr.deckung_ap_art,
+  apflora.tpopkontr.jungpflanzen_vorhanden,
+  apflora.tpopkontr.vegetationshoehe_maximum,
+  apflora.tpopkontr.vegetationshoehe_mittel,
+  apflora.tpopkontr.gefaehrdung,
+  apflora.tpopkontr.changed,
+  apflora.tpopkontr.changed_by
 ORDER BY
   apflora.ae_eigenschaften.artname,
   apflora.pop."PopNr",
@@ -3975,53 +3889,52 @@ SELECT
   apflora.pop."PopNr" AS "POPNR",
   apflora.tpop."TPopGuid" AS "TPOPGUID",
   apflora.tpop."TPopNr" AS "TPOPNR",
-  apflora.tpopkontr."TPopKontrId" AS "TPOPKONTRID",
-  apflora.tpopkontr."TPopKontrGuid" AS "KONTRGUID",
-  apflora.tpopkontr."TPopKontrJahr" AS "KONTRJAHR",
+  apflora.tpopkontr.id AS "KONTRGUID",
+  apflora.tpopkontr.jahr AS "KONTRJAHR",
   --TODO: convert?
-  apflora.tpopkontr."TPopKontrDatum" AS "KONTRDAT",
+  apflora.tpopkontr.datum AS "KONTRDAT",
   apflora.tpopkontr_typ_werte."DomainTxt" AS "KONTRTYP",
   apflora.adresse."AdrName" AS "KONTRBEARBEITER",
-  apflora.tpopkontr."TPopKontrUeberleb" AS "KONTRUEBERLEBENSRATE",
-  apflora.tpopkontr."TPopKontrVitalitaet" AS "KONTRVITALITAET",
+  apflora.tpopkontr.ueberlebensrate AS "KONTRUEBERLEBENSRATE",
+  apflora.tpopkontr.vitalitaet AS "KONTRVITALITAET",
   apflora.tpop_entwicklung_werte.text AS "KONTRENTWICKLUNG",
-  apflora.tpopkontr."TPopKontrUrsach" AS "KONTRURSACHEN",
-  apflora.tpopkontr."TPopKontrUrteil" AS "KONTRERFOLGBEURTEIL",
-  apflora.tpopkontr."TPopKontrAendUms" AS "KONTRAENDUMSETZUNG",
-  apflora.tpopkontr."TPopKontrAendKontr" AS "KONTRAENDKONTROLLE",
+  apflora.tpopkontr.ursachen AS "KONTRURSACHEN",
+  apflora.tpopkontr.erfolgsbeurteilung AS "KONTRERFOLGBEURTEIL",
+  apflora.tpopkontr.umsetzung_aendern AS "KONTRAENDUMSETZUNG",
+  apflora.tpopkontr.kontrolle_aendern AS "KONTRAENDKONTROLLE",
   apflora.tpop."TPopXKoord" AS "KONTR_X",
   apflora.tpop."TPopYKoord" AS "KONTR_Y",
-  apflora.tpopkontr."TPopKontrTxt" AS "KONTRBEMERKUNGEN",
-  apflora.tpopkontr."TPopKontrLeb" AS "KONTRLRMDELARZE",
-  apflora.tpopkontr."TPopKontrLebUmg" AS "KONTRDELARZEANGRENZ",
-  apflora.tpopkontr."TPopKontrVegTyp" AS "KONTRVEGTYP",
-  apflora.tpopkontr."TPopKontrKonkurrenz" AS "KONTRKONKURRENZ",
-  apflora.tpopkontr."TPopKontrMoosschicht" AS "KONTRMOOSE",
-  apflora.tpopkontr."TPopKontrKrautschicht" AS "KONTRKRAUTSCHICHT",
-  apflora.tpopkontr."TPopKontrStrauchschicht" AS "KONTRSTRAUCHSCHICHT",
-  apflora.tpopkontr."TPopKontrBaumschicht" AS "KONTRBAUMSCHICHT",
-  apflora.tpopkontr."TPopKontrBodenTyp" AS "KONTRBODENTYP",
-  apflora.tpopkontr."TPopKontrBodenKalkgehalt" AS "KONTRBODENKALK",
-  apflora.tpopkontr."TPopKontrBodenDurchlaessigkeit" AS "KONTRBODENDURCHLAESSIGK",
-  apflora.tpopkontr."TPopKontrBodenHumus" AS "KONTRBODENHUMUS",
-  apflora.tpopkontr."TPopKontrBodenNaehrstoffgehalt" AS "KONTRBODENNAEHRSTOFF",
-  apflora.tpopkontr."TPopKontrBodenAbtrag" AS "KONTROBERBODENABTRAG",
-  apflora.tpopkontr."TPopKontrWasserhaushalt" AS "KONTROBODENWASSERHAUSHALT",
+  apflora.tpopkontr.bemerkungen AS "KONTRBEMERKUNGEN",
+  apflora.tpopkontr.lr_delarze AS "KONTRLRMDELARZE",
+  apflora.tpopkontr.lr_umgebung_delarze AS "KONTRDELARZEANGRENZ",
+  apflora.tpopkontr.vegetationstyp AS "KONTRVEGTYP",
+  apflora.tpopkontr.konkurrenz AS "KONTRKONKURRENZ",
+  apflora.tpopkontr.moosschicht AS "KONTRMOOSE",
+  apflora.tpopkontr.krautschicht AS "KONTRKRAUTSCHICHT",
+  apflora.tpopkontr.strauchschicht AS "KONTRSTRAUCHSCHICHT",
+  apflora.tpopkontr.baumschicht AS "KONTRBAUMSCHICHT",
+  apflora.tpopkontr.boden_typ AS "KONTRBODENTYP",
+  apflora.tpopkontr.boden_kalkgehalt AS "KONTRBODENKALK",
+  apflora.tpopkontr.boden_durchlaessigkeit AS "KONTRBODENDURCHLAESSIGK",
+  apflora.tpopkontr.boden_humus AS "KONTRBODENHUMUS",
+  apflora.tpopkontr.boden_naehrstoffgehalt AS "KONTRBODENNAEHRSTOFF",
+  apflora.tpopkontr.boden_abtrag AS "KONTROBERBODENABTRAG",
+  apflora.tpopkontr.wasserhaushalt AS "KONTROBODENWASSERHAUSHALT",
   apflora.tpopkontr_idbiotuebereinst_werte.text AS "KONTRUEBEREINSTIMMUNIDEAL",
-  apflora.tpopkontr."TPopKontrHandlungsbedarf" AS "KONTRHANDLUNGSBEDARF",
-  apflora.tpopkontr."TPopKontrUebFlaeche" AS "KONTRUEBERPRUFTFLAECHE",
-  apflora.tpopkontr."TPopKontrFlaeche" AS "KONTRFLAECHETPOP",
-  apflora.tpopkontr."TPopKontrPlan" AS "KONTRAUFPLAN",
-  apflora.tpopkontr."TPopKontrVeg" AS "KONTRDECKUNGVEG",
-  apflora.tpopkontr."TPopKontrNaBo" AS "KONTRDECKUNGBODEN",
-  apflora.tpopkontr."TPopKontrUebPfl" AS "KONTRDECKUNGART",
-  apflora.tpopkontr."TPopKontrJungPflJN" AS "KONTRJUNGEPLANZEN",
-  apflora.tpopkontr."TPopKontrVegHoeMax" AS "KONTRMAXHOEHEVEG",
-  apflora.tpopkontr."TPopKontrVegHoeMit" AS "KONTRMITTELHOEHEVEG",
-  apflora.tpopkontr."TPopKontrGefaehrdung" AS "KONTRGEFAEHRDUNG",
+  apflora.tpopkontr.handlungsbedarf AS "KONTRHANDLUNGSBEDARF",
+  apflora.tpopkontr.flaeche_ueberprueft AS "KONTRUEBERPRUFTFLAECHE",
+  apflora.tpopkontr.flaeche AS "KONTRFLAECHETPOP",
+  apflora.tpopkontr.plan_vorhanden AS "KONTRAUFPLAN",
+  apflora.tpopkontr.deckung_vegetation AS "KONTRDECKUNGVEG",
+  apflora.tpopkontr.deckung_nackter_boden AS "KONTRDECKUNGBODEN",
+  apflora.tpopkontr.deckung_ap_art AS "KONTRDECKUNGART",
+  apflora.tpopkontr.jungpflanzen_vorhanden AS "KONTRJUNGEPLANZEN",
+  apflora.tpopkontr.vegetationshoehe_maximum AS "KONTRMAXHOEHEVEG",
+  apflora.tpopkontr.vegetationshoehe_mittel AS "KONTRMITTELHOEHEVEG",
+  apflora.tpopkontr.gefaehrdung AS "KONTRGEFAEHRDUNG",
   -- TODO: convert
-  apflora.tpopkontr."MutWann" AS "KONTRCHANGEDAT",
-  apflora.tpopkontr."MutWer" AS "KONTRCHANGEBY",
+  apflora.tpopkontr.changed AS "KONTRCHANGEDAT",
+  apflora.tpopkontr.changed_by AS "KONTRCHANGEBY",
   string_agg(apflora.tpopkontrzaehl_einheit_werte.text, ', ') AS "ZAEHLEINHEITEN",
   array_to_string(array_agg(apflora.tpopkontrzaehl.anzahl), ', ') AS "ANZAHLEN",
   string_agg(apflora.tpopkontrzaehl_methode_werte.text, ', ') AS "METHODEN"
@@ -4040,23 +3953,23 @@ FROM
           ((((((apflora.tpopkontr
           LEFT JOIN
             apflora.tpopkontr_typ_werte
-            ON apflora.tpopkontr."TPopKontrTyp" = apflora.tpopkontr_typ_werte."DomainTxt")
+            ON apflora.tpopkontr.typ = apflora.tpopkontr_typ_werte."DomainTxt")
           LEFT JOIN
             apflora.adresse
-            ON apflora.tpopkontr."TPopKontrBearb" = apflora.adresse."AdrId")
+            ON apflora.tpopkontr.bearbeiter = apflora.adresse."AdrId")
           LEFT JOIN
             apflora.tpop_entwicklung_werte
-            ON apflora.tpopkontr."TPopKontrEntwicklung" = apflora.tpop_entwicklung_werte.code)
+            ON apflora.tpopkontr.entwicklung = apflora.tpop_entwicklung_werte.code)
           LEFT JOIN
             apflora.tpopkontrzaehl
-            ON apflora.tpopkontr."TPopKontrId" = apflora.tpopkontrzaehl.tpopkontr_id)
+            ON apflora.tpopkontr.id = apflora.tpopkontrzaehl.tpopkontr_id)
           LEFT JOIN
             apflora.tpopkontrzaehl_einheit_werte
             ON apflora.tpopkontrzaehl.einheit = apflora.tpopkontrzaehl_einheit_werte.code)
           LEFT JOIN
             apflora.tpopkontrzaehl_methode_werte
             ON apflora.tpopkontrzaehl.methode = apflora.tpopkontrzaehl_methode_werte.code)
-          ON apflora.tpop."TPopId" = apflora.tpopkontr."TPopId")
+          ON apflora.tpop."TPopId" = apflora.tpopkontr.tpop_id)
         ON apflora.pop."PopId" = apflora.tpop."PopId")
       ON apflora.ap."ApArtId" = apflora.pop."ApArtId")
     LEFT JOIN
@@ -4070,7 +3983,7 @@ FROM
       ON apflora.pop."PopHerkunft" = apflora.pop_status_werte.code)
     LEFT JOIN
       apflora.tpopkontr_idbiotuebereinst_werte
-      ON apflora.tpopkontr."TPopKontrIdealBiotopUebereinst" = apflora.tpopkontr_idbiotuebereinst_werte.code)
+      ON apflora.tpopkontr.idealbiotop_uebereinstimmung = apflora.tpopkontr_idbiotuebereinst_werte.code)
   LEFT JOIN
     apflora.adresse AS "tblAdresse_1"
     ON apflora.ap."ApBearb" = "tblAdresse_1"."AdrId")
@@ -4085,52 +3998,51 @@ GROUP BY
   apflora.tpop."TPopId",
   apflora.tpop."TPopGuid",
   apflora.tpop."TPopNr",
-  apflora.tpopkontr."TPopKontrId",
-  apflora.tpopkontr."TPopId",
-  apflora.tpopkontr."TPopKontrGuid",
-  apflora.tpopkontr."TPopKontrJahr",
-  apflora.tpopkontr."TPopKontrDatum",
+  apflora.tpopkontr.tpop_id,
+  apflora.tpopkontr.id,
+  apflora.tpopkontr.jahr,
+  apflora.tpopkontr.datum,
   apflora.tpopkontr_typ_werte."DomainTxt",
   apflora.adresse."AdrName",
-  apflora.tpopkontr."TPopKontrUeberleb",
-  apflora.tpopkontr."TPopKontrVitalitaet",
-  apflora.tpop_entwicklung_werte.text,
-  apflora.tpopkontr."TPopKontrUrsach",
-  apflora.tpopkontr."TPopKontrUrteil",
-  apflora.tpopkontr."TPopKontrAendUms",
-  apflora.tpopkontr."TPopKontrAendKontr",
+  apflora.tpopkontr.ueberlebensrate,
+  apflora.tpopkontr.vitalitaet,
+  apflora.tpop_entwicklung_werte.text AS entwicklung,
+  apflora.tpopkontr.ursachen,
+  apflora.tpopkontr.erfolgsbeurteilung,
+  apflora.tpopkontr.umsetzung_aendern,
+  apflora.tpopkontr.kontrolle_aendern,
   apflora.tpop."TPopXKoord",
   apflora.tpop."TPopYKoord",
-  apflora.tpopkontr."TPopKontrTxt",
-  apflora.tpopkontr."TPopKontrLeb",
-  apflora.tpopkontr."TPopKontrLebUmg",
-  apflora.tpopkontr."TPopKontrVegTyp",
-  apflora.tpopkontr."TPopKontrKonkurrenz",
-  apflora.tpopkontr."TPopKontrMoosschicht",
-  apflora.tpopkontr."TPopKontrKrautschicht",
-  apflora.tpopkontr."TPopKontrStrauchschicht",
-  apflora.tpopkontr."TPopKontrBaumschicht",
-  apflora.tpopkontr."TPopKontrBodenTyp",
-  apflora.tpopkontr."TPopKontrBodenKalkgehalt",
-  apflora.tpopkontr."TPopKontrBodenDurchlaessigkeit",
-  apflora.tpopkontr."TPopKontrBodenHumus",
-  apflora.tpopkontr."TPopKontrBodenNaehrstoffgehalt",
-  apflora.tpopkontr."TPopKontrBodenAbtrag",
-  apflora.tpopkontr."TPopKontrWasserhaushalt",
+  apflora.tpopkontr.bemerkungen,
+  apflora.tpopkontr.lr_delarze,
+  apflora.tpopkontr.lr_umgebung_delarze,
+  apflora.tpopkontr.vegetationstyp,
+  apflora.tpopkontr.konkurrenz,
+  apflora.tpopkontr.moosschicht,
+  apflora.tpopkontr.krautschicht,
+  apflora.tpopkontr.strauchschicht,
+  apflora.tpopkontr.baumschicht,
+  apflora.tpopkontr.boden_typ,
+  apflora.tpopkontr.boden_kalkgehalt,
+  apflora.tpopkontr.boden_durchlaessigkeit,
+  apflora.tpopkontr.boden_humus,
+  apflora.tpopkontr.boden_naehrstoffgehalt,
+  apflora.tpopkontr.boden_abtrag,
+  apflora.tpopkontr.wasserhaushalt,
   apflora.tpopkontr_idbiotuebereinst_werte.text,
-  apflora.tpopkontr."TPopKontrHandlungsbedarf",
-  apflora.tpopkontr."TPopKontrUebFlaeche",
-  apflora.tpopkontr."TPopKontrFlaeche",
-  apflora.tpopkontr."TPopKontrPlan",
-  apflora.tpopkontr."TPopKontrVeg",
-  apflora.tpopkontr."TPopKontrNaBo",
-  apflora.tpopkontr."TPopKontrUebPfl",
-  apflora.tpopkontr."TPopKontrJungPflJN",
-  apflora.tpopkontr."TPopKontrVegHoeMax",
-  apflora.tpopkontr."TPopKontrVegHoeMit",
-  apflora.tpopkontr."TPopKontrGefaehrdung",
-  apflora.tpopkontr."MutWann",
-  apflora.tpopkontr."MutWer"
+  apflora.tpopkontr.handlungsbedarf,
+  apflora.tpopkontr.flaeche_ueberprueft,
+  apflora.tpopkontr.flaeche,
+  apflora.tpopkontr.plan_vorhanden,
+  apflora.tpopkontr.deckung_vegetation,
+  apflora.tpopkontr.deckung_nackter_boden,
+  apflora.tpopkontr.deckung_ap_art,
+  apflora.tpopkontr.jungpflanzen_vorhanden,
+  apflora.tpopkontr.vegetationshoehe_maximum,
+  apflora.tpopkontr.vegetationshoehe_mittel,
+  apflora.tpopkontr.gefaehrdung,
+  apflora.tpopkontr.changed,
+  apflora.tpopkontr.changed_by
 ORDER BY
   apflora.ae_eigenschaften.artname,
   apflora.pop."PopNr",
@@ -4140,21 +4052,21 @@ DROP VIEW IF EXISTS apflora.v_tpopkontr_letztesjahr CASCADE;
 CREATE OR REPLACE VIEW apflora.v_tpopkontr_letztesjahr AS
 SELECT
   apflora.tpop."TPopId",
-  max(apflora.tpopkontr."TPopKontrJahr") AS "MaxTPopKontrJahr",
-  count(apflora.tpopkontr."TPopKontrId") AS "AnzTPopKontr"
+  max(apflora.tpopkontr.jahr) AS "MaxTPopKontrJahr",
+  count(apflora.tpopkontr.id) AS "AnzTPopKontr"
 FROM
   apflora.tpop
   LEFT JOIN
     apflora.tpopkontr
-    ON apflora.tpop."TPopId" = apflora.tpopkontr."TPopId"
+    ON apflora.tpop."TPopId" = apflora.tpopkontr.tpop_id
 WHERE
   (
-    apflora.tpopkontr."TPopKontrTyp" NOT IN ('Ziel', 'Zwischenziel')
-    AND apflora.tpopkontr."TPopKontrJahr" IS NOT NULL
+    apflora.tpopkontr.typ NOT IN ('Ziel', 'Zwischenziel')
+    AND apflora.tpopkontr.jahr IS NOT NULL
   )
   OR (
-    apflora.tpopkontr."TPopKontrTyp" IS NULL
-    AND apflora.tpopkontr."TPopKontrJahr" IS NULL
+    apflora.tpopkontr.typ IS NULL
+    AND apflora.tpopkontr.jahr IS NULL
   )
 GROUP BY
   apflora.tpop."TPopId";
@@ -4163,15 +4075,15 @@ DROP VIEW IF EXISTS apflora.v_tpopkontr_letzteid CASCADE;
 CREATE OR REPLACE VIEW apflora.v_tpopkontr_letzteid AS
 SELECT
   apflora.v_tpopkontr_letztesjahr."TPopId",
-  max(apflora.tpopkontr."TPopKontrId") AS "MaxTPopKontrId",
+  max(apflora.tpopkontr.id) AS "MaxTPopKontrId",
   max(apflora.v_tpopkontr_letztesjahr."AnzTPopKontr") AS "AnzTPopKontr"
 FROM
   apflora.tpopkontr
   INNER JOIN
     apflora.v_tpopkontr_letztesjahr
     ON
-      (apflora.v_tpopkontr_letztesjahr."MaxTPopKontrJahr" = apflora.tpopkontr."TPopKontrJahr")
-      AND (apflora.tpopkontr."TPopId" = apflora.v_tpopkontr_letztesjahr."TPopId")
+      (apflora.v_tpopkontr_letztesjahr."MaxTPopKontrJahr" = apflora.tpopkontr.jahr)
+      AND (apflora.tpopkontr.tpop_id = apflora.v_tpopkontr_letztesjahr."TPopId")
 GROUP BY
   apflora.v_tpopkontr_letztesjahr."TPopId";
 
@@ -4190,11 +4102,11 @@ FROM
 DROP VIEW IF EXISTS apflora.v_tpopber_letzteid CASCADE;
 CREATE OR REPLACE VIEW apflora.v_tpopber_letzteid AS
 SELECT
-  apflora.tpopkontr."TPopId",
+  apflora.tpopkontr.tpop_id,
   (
     select id
     from apflora.tpopber
-    where tpop_id = apflora.tpopkontr."TPopId"
+    where tpop_id = apflora.tpopkontr.tpop_id
     order by changed desc
     limit 1
   ) AS "MaxTPopBerId",
@@ -4204,60 +4116,58 @@ FROM
   apflora.tpopkontr
   INNER JOIN
     apflora.tpopber
-    ON apflora.tpopkontr."TPopId" = apflora.tpopber.tpop_id
+    ON apflora.tpopkontr.tpop_id = apflora.tpopber.tpop_id
 WHERE
-  apflora.tpopkontr."TPopKontrTyp" NOT IN ('Ziel', 'Zwischenziel')
+  apflora.tpopkontr.typ NOT IN ('Ziel', 'Zwischenziel')
   AND apflora.tpopber.jahr IS NOT NULL
 GROUP BY
-  apflora.tpopkontr."TPopId";
+  apflora.tpopkontr.tpop_id;
 
 DROP VIEW IF EXISTS apflora.v_tpopkontr_fuergis_write CASCADE;
 CREATE OR REPLACE VIEW apflora.v_tpopkontr_fuergis_write AS
 SELECT
-  apflora.tpopkontr."TPopKontrId" AS tpopkontrid,
-  apflora.tpopkontr."TPopId" AS tpopid,
-  CAST(apflora.tpopkontr."TPopKontrGuid" AS varchar(50)) AS tpopkontrguid,
-  apflora.tpopkontr."TPopKontrTyp" AS tpopkontrtyp,
-  apflora.tpopkontr."TPopKontrJahr" AS tpopkontrjahr,
-  apflora.tpopkontr."TPopKontrDatum"::timestamp AS tpopkontrdatum,
-  apflora.tpopkontr."TPopKontrBearb" AS tpopkontrbearb,
-  apflora.tpopkontr."TPopKontrJungpfl" AS tpopkontrjungpfl,
-  apflora.tpopkontr."TPopKontrUeberleb" AS tpopkontrueberleb,
-  apflora.tpopkontr."TPopKontrEntwicklung" AS tpopkontrentwicklung,
-  apflora.tpopkontr."TPopKontrVitalitaet" AS tpopkontrvitalitaet,
-  apflora.tpopkontr."TPopKontrUrsach" AS tpopkontrursach,
-  apflora.tpopkontr."TPopKontrUrteil" AS tpopkontrurteil,
-  apflora.tpopkontr."TPopKontrAendUms" AS tpopkontraendums,
-  apflora.tpopkontr."TPopKontrAendKontr" AS tpopkontraendkontr,
-  apflora.tpopkontr."TPopKontrLeb" AS tpopkontrleb,
-  apflora.tpopkontr."TPopKontrFlaeche" AS tpopkontrflaeche,
-  apflora.tpopkontr."TPopKontrLebUmg" AS tpopkontrlebumg,
-  apflora.tpopkontr."TPopKontrVegTyp" AS tpopkontrvegtyp,
-  apflora.tpopkontr."TPopKontrKonkurrenz" AS tpopkontrkonkurrenz,
-  apflora.tpopkontr."TPopKontrMoosschicht" AS tpopkontrmoosschicht,
-  apflora.tpopkontr."TPopKontrKrautschicht" AS tpopkontrkrautschicht,
-  apflora.tpopkontr."TPopKontrStrauchschicht" AS tpopkontrstrauchschicht,
-  apflora.tpopkontr."TPopKontrBaumschicht" AS tpopkontrbaumschicht,
-  apflora.tpopkontr."TPopKontrBodenTyp" AS tpopkontrbodentyp,
-  apflora.tpopkontr."TPopKontrBodenKalkgehalt" AS tpopkontrbodenkalkgehalt,
-  apflora.tpopkontr."TPopKontrBodenDurchlaessigkeit" AS tpopkontrbodendurchlaessigkeit,
-  apflora.tpopkontr."TPopKontrBodenHumus" AS tpopkontrbodenhumus,
-  apflora.tpopkontr."TPopKontrBodenNaehrstoffgehalt" AS tpopkontrbodennaehrstoffgehalt,
-  apflora.tpopkontr."TPopKontrBodenAbtrag" AS tpopkontrbodenabtrag,
-  apflora.tpopkontr."TPopKontrWasserhaushalt" AS tpopkontrwasserhaushalt,
-  apflora.tpopkontr."TPopKontrIdealBiotopUebereinst" AS tpopkontridealbiotopuebereinst,
-  apflora.tpopkontr."TPopKontrUebFlaeche" AS tpopkontruebflaeche,
-  apflora.tpopkontr."TPopKontrPlan" AS tpopkontrplan,
-  apflora.tpopkontr."TPopKontrVeg" AS tpopkontrveg,
-  apflora.tpopkontr."TPopKontrNaBo" AS tpopkontrnabo,
-  apflora.tpopkontr."TPopKontrUebPfl" AS tpopkontruebpfl,
-  apflora.tpopkontr."TPopKontrJungPflJN" AS tpopkontrjungpfljn,
-  apflora.tpopkontr."TPopKontrVegHoeMax" AS tpopkontrveghoemax,
-  apflora.tpopkontr."TPopKontrVegHoeMit" AS tpopkontrveghoemit,
-  apflora.tpopkontr."TPopKontrGefaehrdung" AS tpopkontrgefaehrdung,
-  apflora.tpopkontr."TPopKontrTxt" AS tpopkontrtxt,
-  apflora.tpopkontr."MutWann"::timestamp AS mutwann,
-  apflora.tpopkontr."MutWer" AS mutwer
+  CAST(apflora.tpopkontr.id AS varchar(50)) AS tpopkontrid,
+  apflora.tpopkontr.typ,
+  apflora.tpopkontr.jahr,
+  apflora.tpopkontr.datum::timestamp,
+  apflora.tpopkontr.bearbeiter,
+  apflora.tpopkontr.jungpflanzen_anzahl,
+  apflora.tpopkontr.ueberlebensrate,
+  apflora.tpopkontr.entwicklung,
+  apflora.tpopkontr.vitalitaet,
+  apflora.tpopkontr.ursachen,
+  apflora.tpopkontr.erfolgsbeurteilung,
+  apflora.tpopkontr.umsetzung_aendern,
+  apflora.tpopkontr.kontrolle_aendern,
+  apflora.tpopkontr.lr_delarze,
+  apflora.tpopkontr.flaeche,
+  apflora.tpopkontr.lr_umgebung_delarze,
+  apflora.tpopkontr.vegetationstyp,
+  apflora.tpopkontr.konkurrenz,
+  apflora.tpopkontr.moosschicht,
+  apflora.tpopkontr.krautschicht,
+  apflora.tpopkontr.strauchschicht,
+  apflora.tpopkontr.baumschicht,
+  apflora.tpopkontr.boden_typ,
+  apflora.tpopkontr.boden_kalkgehalt,
+  apflora.tpopkontr.boden_durchlaessigkeit,
+  apflora.tpopkontr.boden_humus,
+  apflora.tpopkontr.boden_naehrstoffgehalt,
+  apflora.tpopkontr.boden_abtrag,
+  apflora.tpopkontr.wasserhaushalt,
+  apflora.tpopkontr.idealbiotop_uebereinstimmung,
+  apflora.tpopkontr.flaeche_ueberprueft,
+  apflora.tpopkontr.plan_vorhanden,
+  apflora.tpopkontr.deckung_vegetation,
+  apflora.tpopkontr.deckung_nackter_boden,
+  apflora.tpopkontr.deckung_ap_art,
+  apflora.tpopkontr.jungpflanzen_vorhanden,
+  apflora.tpopkontr.vegetationshoehe_maximum,
+  apflora.tpopkontr.vegetationshoehe_mittel,
+  apflora.tpopkontr.gefaehrdung,
+  apflora.tpopkontr.bemerkungen,
+  apflora.tpopkontr.changed::timestamp,
+  apflora.tpopkontr.changed_by
 FROM
   apflora.tpopkontr;
 
@@ -4281,46 +4191,46 @@ SELECT
   apflora.tpop."TPopXKoord" AS tpopxkoord,
   apflora.tpop."TPopYKoord" AS tpopykoord,
   apflora.tpop."TPopBekanntSeit" AS tpopbekanntseit,
-  CAST(apflora.tpopkontr."TPopKontrGuid" AS varchar(50)) AS tpopkontrguid,
-  apflora.tpopkontr."TPopKontrJahr" AS tpopkontrjahr,
-  apflora.tpopkontr."TPopKontrDatum"::timestamp AS tpopkontrdatum,
+  CAST(apflora.tpopkontr.id AS varchar(50)) AS tpopkontrid,
+  apflora.tpopkontr.jahr AS tpopkontrjahr,
+  apflora.tpopkontr.datum::timestamp AS tpopkontrdatum,
   apflora.tpopkontr_typ_werte."DomainTxt" AS tpopkontrtyp,
   apflora.adresse."AdrName" AS tpopkontrbearb,
-  apflora.tpopkontr."TPopKontrUeberleb" AS tpopkontrueberleb,
-  apflora.tpopkontr."TPopKontrVitalitaet" AS tpopkontrvitalitaet,
+  apflora.tpopkontr.ueberlebensrate AS tpopkontrueberleb,
+  apflora.tpopkontr.vitalitaet AS tpopkontrvitalitaet,
   apflora.tpop_entwicklung_werte.text AS tpopkontrentwicklung,
-  apflora.tpopkontr."TPopKontrUrsach" AS tpopkontrursach,
-  apflora.tpopkontr."TPopKontrUrteil" AS tpopkontrurteil,
-  apflora.tpopkontr."TPopKontrAendUms" AS tpopkontraendums,
-  apflora.tpopkontr."TPopKontrAendKontr" AS tpopkontraendkontr,
-  apflora.tpopkontr."TPopKontrLeb" AS tpopkontrleb,
-  apflora.tpopkontr."TPopKontrFlaeche" AS tpopkontrflaeche,
-  apflora.tpopkontr."TPopKontrLebUmg" AS tpopkontrlebumg,
-  apflora.tpopkontr."TPopKontrVegTyp" AS tpopkontrvegtyp,
-  apflora.tpopkontr."TPopKontrKonkurrenz" AS tpopkontrkonkurrenz,
-  apflora.tpopkontr."TPopKontrMoosschicht" AS tpopkontrmoosschicht,
-  apflora.tpopkontr."TPopKontrKrautschicht" AS tpopkontrkrautschicht,
-  apflora.tpopkontr."TPopKontrStrauchschicht" AS tpopkontrstrauchschicht,
-  apflora.tpopkontr."TPopKontrBaumschicht" AS tpopkontrbaumschicht,
-  apflora.tpopkontr."TPopKontrBodenTyp" AS tpopkontrbodentyp,
-  apflora.tpopkontr."TPopKontrBodenKalkgehalt" AS tpopkontrbodenkalkgehalt,
-  apflora.tpopkontr."TPopKontrBodenDurchlaessigkeit" AS tpopkontrbodendurchlaessigkeit,
-  apflora.tpopkontr."TPopKontrBodenHumus" AS tpopkontrbodenhumus,
-  apflora.tpopkontr."TPopKontrBodenNaehrstoffgehalt" AS tpopkontrbodennaehrstoffgehalt,
-  apflora.tpopkontr."TPopKontrBodenAbtrag" AS tpopkontrbodenabtrag,
-  apflora.tpopkontr."TPopKontrWasserhaushalt" AS tpopkontrwasserhaushalt,
+  apflora.tpopkontr.ursachen AS tpopkontrursach,
+  apflora.tpopkontr.erfolgsbeurteilung AS tpopkontrurteil,
+  apflora.tpopkontr.umsetzung_aendern AS tpopkontraendums,
+  apflora.tpopkontr.kontrolle_aendern AS tpopkontraendkontr,
+  apflora.tpopkontr.lr_delarze AS tpopkontrleb,
+  apflora.tpopkontr.flaeche AS tpopkontrflaeche,
+  apflora.tpopkontr.lr_umgebung_delarze AS tpopkontrlebumg,
+  apflora.tpopkontr.vegetationstyp AS tpopkontrvegtyp,
+  apflora.tpopkontr.konkurrenz AS tpopkontrkonkurrenz,
+  apflora.tpopkontr.moosschicht AS tpopkontrmoosschicht,
+  apflora.tpopkontr.krautschicht AS tpopkontrkrautschicht,
+  apflora.tpopkontr.strauchschicht AS tpopkontrstrauchschicht,
+  apflora.tpopkontr.baumschicht AS tpopkontrbaumschicht,
+  apflora.tpopkontr.boden_typ AS tpopkontrbodentyp,
+  apflora.tpopkontr.boden_kalkgehalt AS tpopkontrbodenkalkgehalt,
+  apflora.tpopkontr.boden_durchlaessigkeit AS tpopkontrbodendurchlaessigkeit,
+  apflora.tpopkontr.boden_humus AS tpopkontrbodenhumus,
+  apflora.tpopkontr.boden_naehrstoffgehalt AS tpopkontrbodennaehrstoffgehalt,
+  apflora.tpopkontr.boden_abtrag AS tpopkontrbodenabtrag,
+  apflora.tpopkontr.wasserhaushalt AS tpopkontrwasserhaushalt,
   apflora.tpopkontr_idbiotuebereinst_werte.text AS tpopkontridealbiotopuebereinst,
-  apflora.tpopkontr."TPopKontrUebFlaeche" AS tpopkontruebflaeche,
-  apflora.tpopkontr."TPopKontrPlan" AS tpopkontrplan,
-  apflora.tpopkontr."TPopKontrVeg" AS tpopkontrveg,
-  apflora.tpopkontr."TPopKontrNaBo" AS tpopkontrnabo,
-  apflora.tpopkontr."TPopKontrUebPfl" AS tpopkontruebpfl,
-  apflora.tpopkontr."TPopKontrJungPflJN" AS tpopkontrjungpfljn,
-  apflora.tpopkontr."TPopKontrVegHoeMax" AS tpopkontrveghoemax,
-  apflora.tpopkontr."TPopKontrVegHoeMit" AS tpopkontrveghoemit,
-  apflora.tpopkontr."TPopKontrGefaehrdung" AS tpopkontrgefaehrdung,
-  apflora.tpopkontr."MutWann"::timestamp AS mutwann,
-  apflora.tpopkontr."MutWer" AS mutwer
+  apflora.tpopkontr.flaeche_ueberprueft AS tpopkontruebflaeche,
+  apflora.tpopkontr.plan_vorhanden AS tpopkontrplan,
+  apflora.tpopkontr.deckung_vegetation AS tpopkontrveg,
+  apflora.tpopkontr.deckung_nackter_boden AS tpopkontrnabo,
+  apflora.tpopkontr.deckung_ap_art AS tpopkontruebpfl,
+  apflora.tpopkontr.jungpflanzen_vorhanden AS tpopkontrjungpfljn,
+  apflora.tpopkontr.vegetationshoehe_maximum AS tpopkontrveghoemax,
+  apflora.tpopkontr.vegetationshoehe_mittel AS tpopkontrveghoemit,
+  apflora.tpopkontr.gefaehrdung AS tpopkontrgefaehrdung,
+  apflora.tpopkontr.changed::timestamp AS mutwann,
+  apflora.tpopkontr.changed_by AS mutwer
 FROM
   (((((apflora.ae_eigenschaften
   INNER JOIN
@@ -4334,14 +4244,14 @@ FROM
         (((apflora.tpopkontr
         LEFT JOIN
           apflora.tpopkontr_typ_werte
-          ON apflora.tpopkontr."TPopKontrTyp" = apflora.tpopkontr_typ_werte."DomainTxt")
+          ON apflora.tpopkontr.typ = apflora.tpopkontr_typ_werte."DomainTxt")
         LEFT JOIN
           apflora.adresse
-          ON apflora.tpopkontr."TPopKontrBearb" = apflora.adresse."AdrId")
+          ON apflora.tpopkontr.bearbeiter = apflora.adresse."AdrId")
         LEFT JOIN
           apflora.tpop_entwicklung_werte
-          ON apflora.tpopkontr."TPopKontrEntwicklung" = apflora.tpop_entwicklung_werte.code)
-        ON apflora.tpop."TPopId" = apflora.tpopkontr."TPopId")
+          ON apflora.tpopkontr.entwicklung = apflora.tpop_entwicklung_werte.code)
+        ON apflora.tpop."TPopId" = apflora.tpopkontr.tpop_id)
       ON apflora.pop."PopId" = apflora.tpop."PopId")
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId")
   LEFT JOIN
@@ -4355,80 +4265,13 @@ FROM
     ON apflora.pop."PopHerkunft" = apflora.pop_status_werte.code)
   LEFT JOIN
     apflora.tpopkontr_idbiotuebereinst_werte
-    ON apflora.tpopkontr."TPopKontrIdealBiotopUebereinst" = apflora.tpopkontr_idbiotuebereinst_werte.code
+    ON apflora.tpopkontr.idealbiotop_uebereinstimmung = apflora.tpopkontr_idbiotuebereinst_werte.code
 ORDER BY
   apflora.ae_eigenschaften.artname,
   apflora.pop."PopNr",
   apflora.tpop."TPopNr",
-  apflora.tpopkontr."TPopKontrJahr",
-  apflora.tpopkontr."TPopKontrDatum";
-
-DROP VIEW IF EXISTS apflora.v_tpopkontr_verwaist CASCADE;
-CREATE OR REPLACE VIEW apflora.v_tpopkontr_verwaist AS
-SELECT
-  apflora.tpopkontr."TPopKontrGuid" AS "Kontr Guid",
-  apflora.tpopkontr."TPopKontrJahr" AS "Kontr Jahr",
-  apflora.tpopkontr."TPopKontrDatum" AS "Kontr Datum",
-  apflora.tpopkontr_typ_werte."DomainTxt" AS "Kontr Typ",
-  apflora.adresse."AdrName" AS "Kontr BearbeiterIn",
-  apflora.tpopkontr."TPopKontrUeberleb" AS "Kontr Ueberlebensrate",
-  apflora.tpopkontr."TPopKontrVitalitaet" AS "Kontr Vitalitaet",
-  apflora.tpop_entwicklung_werte.text AS "Kontr Entwicklung",
-  apflora.tpopkontr."TPopKontrUrsach" AS "Kontr Ursachen",
-  apflora.tpopkontr."TPopKontrUrteil" AS "Kontr Erfolgsbeurteilung",
-  apflora.tpopkontr."TPopKontrAendUms" AS "Kontr Aenderungs-Vorschlaege Umsetzung",
-  apflora.tpopkontr."TPopKontrAendKontr" AS "Kontr Aenderungs-Vorschlaege Kontrolle",
-  apflora.tpop."TPopXKoord" AS "Kontr X-Koord",
-  apflora.tpop."TPopYKoord" AS "Kontr Y-Koord",
-  apflora.tpopkontr."TPopKontrTxt" AS "Kontr Bemerkungen",
-  apflora.tpopkontr."TPopKontrLeb" AS "Kontr Lebensraum Delarze",
-  apflora.tpopkontr."TPopKontrLebUmg" AS "Kontr angrenzender Lebensraum Delarze",
-  apflora.tpopkontr."TPopKontrVegTyp" AS "Kontr Vegetationstyp",
-  apflora.tpopkontr."TPopKontrKonkurrenz" AS "Kontr Konkurrenz",
-  apflora.tpopkontr."TPopKontrMoosschicht" AS "Kontr Moosschicht",
-  apflora.tpopkontr."TPopKontrKrautschicht" AS "Kontr Krautschicht",
-  apflora.tpopkontr."TPopKontrStrauchschicht" AS "Kontr Strauchschicht",
-  apflora.tpopkontr."TPopKontrBaumschicht" AS "Kontr Baumschicht",
-  apflora.tpopkontr."TPopKontrBodenTyp" AS "Kontr Bodentyp",
-  apflora.tpopkontr."TPopKontrBodenKalkgehalt" AS "Kontr Boden Kalkgehalt",
-  apflora.tpopkontr."TPopKontrBodenDurchlaessigkeit" AS "Kontr Boden Durchlaessigkeit",
-  apflora.tpopkontr."TPopKontrBodenHumus" AS "Kontr Boden Humusgehalt",
-  apflora.tpopkontr."TPopKontrBodenNaehrstoffgehalt" AS "Kontr Boden Naehrstoffgehalt",
-  apflora.tpopkontr."TPopKontrBodenAbtrag" AS "Kontr Oberbodenabtrag",
-  apflora.tpopkontr."TPopKontrWasserhaushalt" AS "Kontr Wasserhaushalt",
-  apflora.tpopkontr_idbiotuebereinst_werte.text AS "Kontr Uebereinstimmung mit Idealbiotop",
-  apflora.tpopkontr."TPopKontrHandlungsbedarf" AS "Kontr Handlungsbedarf",
-  apflora.tpopkontr."TPopKontrUebFlaeche" AS "Kontr Ueberpruefte Flaeche",
-  apflora.tpopkontr."TPopKontrFlaeche" AS "Kontr Flaeche der Teilpopulation m2",
-  apflora.tpopkontr."TPopKontrPlan" AS "Kontr auf Plan eingezeichnet",
-  apflora.tpopkontr."TPopKontrVeg" AS "Kontr Deckung durch Vegetation",
-  apflora.tpopkontr."TPopKontrNaBo" AS "Kontr Deckung nackter Boden",
-  apflora.tpopkontr."TPopKontrUebPfl" AS "Kontr Deckung durch ueberpruefte Art",
-  apflora.tpopkontr."TPopKontrJungPflJN" AS "Kontr auch junge Pflanzen",
-  apflora.tpopkontr."TPopKontrVegHoeMax" AS "Kontr maximale Veg-hoehe cm",
-  apflora.tpopkontr."TPopKontrVegHoeMit" AS "Kontr mittlere Veg-hoehe cm",
-  apflora.tpopkontr."TPopKontrGefaehrdung" AS "Kontr Gefaehrdung",
-  apflora.tpopkontr."MutWann" AS "Datensatz zuletzt geaendert",
-  apflora.tpopkontr."MutWer" AS "Datensatz zuletzt geaendert von"
-FROM
-  (apflora.tpop
-  RIGHT JOIN
-    (((apflora.tpopkontr
-    LEFT JOIN
-      apflora.tpopkontr_typ_werte
-      ON apflora.tpopkontr."TPopKontrTyp" = apflora.tpopkontr_typ_werte."DomainTxt")
-    LEFT JOIN
-      apflora.adresse
-      ON apflora.tpopkontr."TPopKontrBearb" = apflora.adresse."AdrId")
-    LEFT JOIN
-      apflora.tpop_entwicklung_werte
-      ON apflora.tpopkontr."TPopKontrEntwicklung" = apflora.tpop_entwicklung_werte.code)
-    ON apflora.tpop."TPopId" = apflora.tpopkontr."TPopId")
-  LEFT JOIN
-    apflora.tpopkontr_idbiotuebereinst_werte
-    ON apflora.tpopkontr."TPopKontrIdealBiotopUebereinst" = apflora.tpopkontr_idbiotuebereinst_werte.code
-WHERE
-  apflora.tpop."TPopId" IS NULL;
+  apflora.tpopkontr.jahr,
+  apflora.tpopkontr.datum;
 
 DROP VIEW IF EXISTS apflora.v_beob CASCADE;
 CREATE OR REPLACE VIEW apflora.v_beob AS
@@ -4574,17 +4417,17 @@ ORDER BY
 DROP VIEW IF EXISTS apflora.v_tpopkontr_maxanzahl CASCADE;
 CREATE OR REPLACE VIEW apflora.v_tpopkontr_maxanzahl AS
 SELECT
-  apflora.tpopkontr."TPopKontrId",
+  apflora.tpopkontr.id,
   max(apflora.tpopkontrzaehl.anzahl) AS anzahl
 FROM
   apflora.tpopkontr
   INNER JOIN
     apflora.tpopkontrzaehl
-    ON apflora.tpopkontr."TPopKontrId" = apflora.tpopkontrzaehl.tpopkontr_id
+    ON apflora.tpopkontr.id = apflora.tpopkontrzaehl.tpopkontr_id
 GROUP BY
-  apflora.tpopkontr."TPopKontrId"
+  apflora.tpopkontr.id
 ORDER BY
-  apflora.tpopkontr."TPopKontrId";
+  apflora.tpopkontr.id;
 
 -- v_exportevab_beob is in viewsGenerieren2 because dependant on v_tpopkontr_maxanzahl
 
@@ -4592,30 +4435,30 @@ DROP VIEW IF EXISTS apflora.v_exportevab_zeit CASCADE;
 CREATE OR REPLACE VIEW apflora.v_exportevab_zeit AS
 SELECT
   apflora.tpop."TPopGuid" AS "fkOrt",
-  apflora.tpopkontr."ZeitGuid" AS "idZeitpunkt",
+  apflora.tpopkontr.zeit_id AS "idZeitpunkt",
   CASE
-    WHEN apflora.tpopkontr."TPopKontrDatum" IS NOT NULL
-    THEN to_char(apflora.tpopkontr."TPopKontrDatum", 'DD.MM.YYYY')
+    WHEN apflora.tpopkontr.datum IS NOT NULL
+    THEN to_char(apflora.tpopkontr.datum, 'DD.MM.YYYY')
     ELSE
       concat(
         '01.01.',
-        apflora.tpopkontr."TPopKontrJahr"
+        apflora.tpopkontr.jahr
       )
   END AS "Datum",
   CASE
-    WHEN apflora.tpopkontr."TPopKontrDatum" IS NOT NULL
+    WHEN apflora.tpopkontr.datum IS NOT NULL
     THEN 'T'::varchar(10)
     ELSE 'J'::varchar(10)
   END AS "fkGenauigkeitDatum",
   CASE
-    WHEN apflora.tpopkontr."TPopKontrDatum" IS NOT NULL
+    WHEN apflora.tpopkontr.datum IS NOT NULL
     THEN 'P'::varchar(10)
     ELSE 'X'::varchar(10)
   END AS "fkGenauigkeitDatumZDSF",
-  substring(apflora.tpopkontr."TPopKontrMoosschicht" from 1 for 10) AS "COUV_MOUSSES",
-  substring(apflora.tpopkontr."TPopKontrKrautschicht" from 1 for 10) AS "COUV_HERBACEES",
-  substring(apflora.tpopkontr."TPopKontrStrauchschicht" from 1 for 10) AS "COUV_BUISSONS",
-  substring(apflora.tpopkontr."TPopKontrBaumschicht" from 1 for 10) AS "COUV_ARBRES"
+  substring(apflora.tpopkontr.moosschicht from 1 for 10) AS "COUV_MOUSSES",
+  substring(apflora.tpopkontr.krautschicht from 1 for 10) AS "COUV_HERBACEES",
+  substring(apflora.tpopkontr.strauchschicht from 1 for 10) AS "COUV_BUISSONS",
+  substring(apflora.tpopkontr.baumschicht from 1 for 10) AS "COUV_ARBRES"
 FROM
   apflora.ap
   INNER JOIN
@@ -4629,11 +4472,11 @@ FROM
         ((apflora.tpopkontr
         INNER JOIN
           apflora.v_tpopkontr_maxanzahl
-          ON apflora.v_tpopkontr_maxanzahl."TPopKontrId" = apflora.tpopkontr."TPopKontrId")
+          ON apflora.v_tpopkontr_maxanzahl.id = apflora.tpopkontr.id)
         LEFT JOIN
           apflora.adresse
-          ON apflora.tpopkontr."TPopKontrBearb" = apflora.adresse."AdrId")
-        ON apflora.tpop."TPopId" = apflora.tpopkontr."TPopId")
+          ON apflora.tpopkontr.bearbeiter = apflora.adresse."AdrId")
+        ON apflora.tpop."TPopId" = apflora.tpopkontr.tpop_id)
       ON apflora.pop."PopId" = apflora.tpop."PopId")
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
 WHERE
@@ -4643,20 +4486,20 @@ WHERE
   -- nur Kontrollen, deren Teilpopulationen Koordinaten besitzen
   AND apflora.tpop."TPopXKoord" IS NOT NULL
   AND apflora.tpop."TPopYKoord" IS NOT NULL
-  AND apflora.tpopkontr."TPopKontrTyp" IN ('Ausgangszustand', 'Zwischenbeurteilung', 'Freiwilligen-Erfolgskontrolle')
+  AND apflora.tpopkontr.typ IN ('Ausgangszustand', 'Zwischenbeurteilung', 'Freiwilligen-Erfolgskontrolle')
   -- keine Ansaatversuche
   AND apflora.tpop."TPopHerkunft" <> 201
   -- nur wenn Kontrolljahr existiert
-  AND apflora.tpopkontr."TPopKontrJahr" IS NOT NULL
+  AND apflora.tpopkontr.jahr IS NOT NULL
   -- keine Kontrollen aus dem aktuellen Jahr - die wurden ev. noch nicht verifiziert
-  AND apflora.tpopkontr."TPopKontrJahr" <> date_part('year', CURRENT_DATE)
+  AND apflora.tpopkontr.jahr <> date_part('year', CURRENT_DATE)
   -- nur wenn erfasst ist, seit wann die TPop bekannt ist
   AND apflora.tpop."TPopBekanntSeit" IS NOT NULL
   AND (
     -- die Teilpopulation ist ursprünglich
     apflora.tpop."TPopHerkunft" IN (100, 101)
     -- oder bei Ansiedlungen: die Art war mindestens 5 Jahre vorhanden
-    OR (apflora.tpopkontr."TPopKontrJahr" - apflora.tpop."TPopBekanntSeit") > 5
+    OR (apflora.tpopkontr.jahr - apflora.tpop."TPopBekanntSeit") > 5
   )
   AND apflora.tpop."TPopFlurname" IS NOT NULL
   AND apflora.ap."ApGuid" IN (Select "idProjekt" FROM apflora.v_exportevab_projekt)
@@ -4695,7 +4538,7 @@ SELECT
   apflora.tpop."TPopYKoord" AS "Y",
   substring(apflora.tpop."TPopGemeinde" from 1 for 25) AS "NOM_COMMUNE",
   substring(apflora.tpop."TPopFlurname" from 1 for 255) AS "DESC_LOCALITE",
-  max(apflora.tpopkontr."TPopKontrLebUmg") AS "ENV",
+  max(apflora.tpopkontr.lr_umgebung_delarze) AS "ENV",
   CASE
     WHEN apflora.tpop."TPopHerkunft" IS NOT NULL
     THEN
@@ -4727,13 +4570,13 @@ FROM
         (((apflora.tpopkontr
         INNER JOIN
           apflora.v_tpopkontr_maxanzahl
-          ON apflora.v_tpopkontr_maxanzahl."TPopKontrId" = apflora.tpopkontr."TPopKontrId")
+          ON apflora.v_tpopkontr_maxanzahl.id = apflora.tpopkontr.id)
         LEFT JOIN
           apflora.adresse
-          ON apflora.tpopkontr."TPopKontrBearb" = apflora.adresse."AdrId")
+          ON apflora.tpopkontr.bearbeiter = apflora.adresse."AdrId")
         LEFT JOIN apflora.evab_typologie
-          ON apflora.tpopkontr."TPopKontrLeb" = apflora.evab_typologie."TYPO")
-        ON apflora.tpop."TPopId" = apflora.tpopkontr."TPopId")
+          ON apflora.tpopkontr.lr_delarze = apflora.evab_typologie."TYPO")
+        ON apflora.tpop."TPopId" = apflora.tpopkontr.tpop_id)
       ON apflora.pop."PopId" = apflora.tpop."PopId")
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
 WHERE
@@ -4743,20 +4586,20 @@ WHERE
   -- nur Kontrollen, deren Teilpopulationen Koordinaten besitzen
   AND apflora.tpop."TPopXKoord" IS NOT NULL
   AND apflora.tpop."TPopYKoord" IS NOT NULL
-  AND apflora.tpopkontr."TPopKontrTyp" IN ('Ausgangszustand', 'Zwischenbeurteilung', 'Freiwilligen-Erfolgskontrolle')
+  AND apflora.tpopkontr.typ IN ('Ausgangszustand', 'Zwischenbeurteilung', 'Freiwilligen-Erfolgskontrolle')
   -- keine Ansaatversuche
   AND apflora.tpop."TPopHerkunft" <> 201
   -- nur wenn Kontrolljahr existiert
-  AND apflora.tpopkontr."TPopKontrJahr" IS NOT NULL
+  AND apflora.tpopkontr.jahr IS NOT NULL
   -- keine Kontrollen aus dem aktuellen Jahr - die wurden ev. noch nicht verifiziert
-  AND apflora.tpopkontr."TPopKontrJahr" <> date_part('year', CURRENT_DATE)
+  AND apflora.tpopkontr.jahr <> date_part('year', CURRENT_DATE)
   -- nur wenn erfasst ist, seit wann die TPop bekannt ist
   AND apflora.tpop."TPopBekanntSeit" IS NOT NULL
   AND (
     -- die Teilpopulation ist ursprünglich
     apflora.tpop."TPopHerkunft" IN (100, 101)
     -- oder bei Ansiedlungen: die Art war mindestens 5 Jahre vorhanden
-    OR (apflora.tpopkontr."TPopKontrJahr" - apflora.tpop."TPopBekanntSeit") > 5
+    OR (apflora.tpopkontr.jahr - apflora.tpop."TPopBekanntSeit") > 5
   )
   AND apflora.tpop."TPopFlurname" IS NOT NULL
   AND apflora.ap."ApGuid" IN (Select "idProjekt" FROM apflora.v_exportevab_projekt)
@@ -4821,11 +4664,11 @@ FROM
         ((apflora.tpopkontr
         INNER JOIN
           apflora.v_tpopkontr_maxanzahl
-          ON apflora.v_tpopkontr_maxanzahl."TPopKontrId" = apflora.tpopkontr."TPopKontrId")
+          ON apflora.v_tpopkontr_maxanzahl.id = apflora.tpopkontr.id)
         LEFT JOIN
           apflora.adresse
-          ON apflora.tpopkontr."TPopKontrBearb" = apflora.adresse."AdrId")
-        ON apflora.tpop."TPopId" = apflora.tpopkontr."TPopId")
+          ON apflora.tpopkontr.bearbeiter = apflora.adresse."AdrId")
+        ON apflora.tpop."TPopId" = apflora.tpopkontr.tpop_id)
       ON apflora.pop."PopId" = apflora.tpop."PopId")
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
 WHERE
@@ -4835,20 +4678,20 @@ WHERE
   -- nur Kontrollen, deren Teilpopulationen Koordinaten besitzen
   AND apflora.tpop."TPopXKoord" IS NOT NULL
   AND apflora.tpop."TPopYKoord" IS NOT NULL
-  AND apflora.tpopkontr."TPopKontrTyp" IN ('Ausgangszustand', 'Zwischenbeurteilung', 'Freiwilligen-Erfolgskontrolle')
+  AND apflora.tpopkontr.typ IN ('Ausgangszustand', 'Zwischenbeurteilung', 'Freiwilligen-Erfolgskontrolle')
   -- keine Ansaatversuche
   AND apflora.tpop."TPopHerkunft" <> 201
   -- nur wenn Kontrolljahr existiert
-  AND apflora.tpopkontr."TPopKontrJahr" IS NOT NULL
+  AND apflora.tpopkontr.jahr IS NOT NULL
   -- keine Kontrollen aus dem aktuellen Jahr - die wurden ev. noch nicht verifiziert
-  AND apflora.tpopkontr."TPopKontrJahr" <> date_part('year', CURRENT_DATE)
+  AND apflora.tpopkontr.jahr <> date_part('year', CURRENT_DATE)
   -- nur wenn erfasst ist, seit wann die TPop bekannt ist
   AND apflora.tpop."TPopBekanntSeit" IS NOT NULL
   AND (
     -- die Teilpopulation ist ursprünglich
     apflora.tpop."TPopHerkunft" IN (100, 101)
     -- oder bei Ansiedlungen: die Art war mindestens 5 Jahre vorhanden
-    OR (apflora.tpopkontr."TPopKontrJahr" - apflora.tpop."TPopBekanntSeit") > 5
+    OR (apflora.tpopkontr.jahr - apflora.tpop."TPopBekanntSeit") > 5
   )
   AND apflora.tpop."TPopFlurname" IS NOT NULL
   -- ensure all idProjekt are contained in higher level
@@ -4910,11 +4753,11 @@ FROM
         ((apflora.tpopkontr
         INNER JOIN
           apflora.v_tpopkontr_maxanzahl
-          ON apflora.v_tpopkontr_maxanzahl."TPopKontrId" = apflora.tpopkontr."TPopKontrId")
+          ON apflora.v_tpopkontr_maxanzahl.id = apflora.tpopkontr.id)
         LEFT JOIN
           apflora.adresse
-          ON apflora.tpopkontr."TPopKontrBearb" = apflora.adresse."AdrId")
-        ON apflora.tpop."TPopId" = apflora.tpopkontr."TPopId")
+          ON apflora.tpopkontr.bearbeiter = apflora.adresse."AdrId")
+        ON apflora.tpop."TPopId" = apflora.tpopkontr.tpop_id)
       ON apflora.pop."PopId" = apflora.tpop."PopId")
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
 WHERE
@@ -4924,20 +4767,20 @@ WHERE
   -- nur Kontrollen, deren Teilpopulationen Koordinaten besitzen
   AND apflora.tpop."TPopXKoord" IS NOT NULL
   AND apflora.tpop."TPopYKoord" IS NOT NULL
-  AND apflora.tpopkontr."TPopKontrTyp" IN ('Ausgangszustand', 'Zwischenbeurteilung', 'Freiwilligen-Erfolgskontrolle')
+  AND apflora.tpopkontr.typ IN ('Ausgangszustand', 'Zwischenbeurteilung', 'Freiwilligen-Erfolgskontrolle')
   -- keine Ansaatversuche
   AND apflora.tpop."TPopHerkunft" <> 201
   -- nur wenn Kontrolljahr existiert
-  AND apflora.tpopkontr."TPopKontrJahr" IS NOT NULL
+  AND apflora.tpopkontr.jahr IS NOT NULL
   -- keine Kontrollen aus dem aktuellen Jahr - die wurden ev. noch nicht verifiziert
-  AND apflora.tpopkontr."TPopKontrJahr" <> date_part('year', CURRENT_DATE)
+  AND apflora.tpopkontr.jahr <> date_part('year', CURRENT_DATE)
   -- nur wenn erfasst ist, seit wann die TPop bekannt ist
   AND apflora.tpop."TPopBekanntSeit" IS NOT NULL
   AND (
     -- die Teilpopulation ist ursprünglich
     apflora.tpop."TPopHerkunft" IN (100, 101)
     -- oder bei Ansiedlungen: die Art war mindestens 5 Jahre vorhanden
-    OR (apflora.tpopkontr."TPopKontrJahr" - apflora.tpop."TPopBekanntSeit") > 5
+    OR (apflora.tpopkontr.jahr - apflora.tpop."TPopBekanntSeit") > 5
   )
   AND apflora.tpop."TPopFlurname" IS NOT NULL
 GROUP BY
@@ -5350,52 +5193,51 @@ SELECT
   apflora.tpop."TPopNutzungszone" AS "TPop Nutzungszone",
   apflora.tpop."TPopBewirtschafterIn" AS "TPop BewirtschafterIn",
   apflora.tpop."TPopBewirtschaftung" AS "TPop Bewirtschaftung",
-  apflora.tpopkontr."TPopKontrId",
-  apflora.tpopkontr."TPopId",
-  apflora.tpopkontr."TPopKontrGuid" AS "Kontr Guid",
-  apflora.tpopkontr."TPopKontrJahr" AS "Kontr Jahr",
-  apflora.tpopkontr."TPopKontrDatum" AS "Kontr Datum",
+  apflora.tpopkontr.tpop_id,
+  apflora.tpopkontr.id AS "Kontr id",
+  apflora.tpopkontr.jahr AS "Kontr Jahr",
+  apflora.tpopkontr.datum AS "Kontr Datum",
   apflora.tpopkontr_typ_werte."DomainTxt" AS "Kontr Typ",
   apflora.adresse."AdrName" AS "Kontr BearbeiterIn",
-  apflora.tpopkontr."TPopKontrUeberleb" AS "Kontr Ueberlebensrate",
-  apflora.tpopkontr."TPopKontrVitalitaet" AS "Kontr Vitalitaet",
+  apflora.tpopkontr.ueberlebensrate AS "Kontr Ueberlebensrate",
+  apflora.tpopkontr.vitalitaet AS "Kontr Vitalitaet",
   apflora.tpop_entwicklung_werte.text AS "Kontr Entwicklung",
-  apflora.tpopkontr."TPopKontrUrsach" AS "Kontr Ursachen",
-  apflora.tpopkontr."TPopKontrUrteil" AS "Kontr Erfolgsbeurteilung",
-  apflora.tpopkontr."TPopKontrAendUms" AS "Kontr Aenderungs-Vorschlaege Umsetzung",
-  apflora.tpopkontr."TPopKontrAendKontr" AS "Kontr Aenderungs-Vorschlaege Kontrolle",
+  apflora.tpopkontr.ursachen AS "Kontr Ursachen",
+  apflora.tpopkontr.erfolgsbeurteilung AS "Kontr Erfolgsbeurteilung",
+  apflora.tpopkontr.umsetzung_aendern AS "Kontr Aenderungs-Vorschlaege Umsetzung",
+  apflora.tpopkontr.kontrolle_aendern AS "Kontr Aenderungs-Vorschlaege Kontrolle",
   apflora.tpop."TPopXKoord" AS "Kontr X-Koord",
   apflora.tpop."TPopYKoord" AS "Kontr Y-Koord",
-  apflora.tpopkontr."TPopKontrTxt" AS "Kontr Bemerkungen",
-  apflora.tpopkontr."TPopKontrLeb" AS "Kontr Lebensraum Delarze",
-  apflora.tpopkontr."TPopKontrLebUmg" AS "Kontr angrenzender Lebensraum Delarze",
-  apflora.tpopkontr."TPopKontrVegTyp" AS "Kontr Vegetationstyp",
-  apflora.tpopkontr."TPopKontrKonkurrenz" AS "Kontr Konkurrenz",
-  apflora.tpopkontr."TPopKontrMoosschicht" AS "Kontr Moosschicht",
-  apflora.tpopkontr."TPopKontrKrautschicht" AS "Kontr Krautschicht",
-  apflora.tpopkontr."TPopKontrStrauchschicht" AS "Kontr Strauchschicht",
-  apflora.tpopkontr."TPopKontrBaumschicht" AS "Kontr Baumschicht",
-  apflora.tpopkontr."TPopKontrBodenTyp" AS "Kontr Bodentyp",
-  apflora.tpopkontr."TPopKontrBodenKalkgehalt" AS "Kontr Boden Kalkgehalt",
-  apflora.tpopkontr."TPopKontrBodenDurchlaessigkeit" AS "Kontr Boden Durchlaessigkeit",
-  apflora.tpopkontr."TPopKontrBodenHumus" AS "Kontr Boden Humusgehalt",
-  apflora.tpopkontr."TPopKontrBodenNaehrstoffgehalt" AS "Kontr Boden Naehrstoffgehalt",
-  apflora.tpopkontr."TPopKontrBodenAbtrag" AS "Kontr Oberbodenabtrag",
-  apflora.tpopkontr."TPopKontrWasserhaushalt" AS "Kontr Wasserhaushalt",
+  apflora.tpopkontr.bemerkungen AS "Kontr Bemerkungen",
+  apflora.tpopkontr.lr_delarze AS "Kontr Lebensraum Delarze",
+  apflora.tpopkontr.lr_umgebung_delarze AS "Kontr angrenzender Lebensraum Delarze",
+  apflora.tpopkontr.vegetationstyp AS "Kontr Vegetationstyp",
+  apflora.tpopkontr.konkurrenz AS "Kontr Konkurrenz",
+  apflora.tpopkontr.moosschicht AS "Kontr Moosschicht",
+  apflora.tpopkontr.krautschicht AS "Kontr Krautschicht",
+  apflora.tpopkontr.strauchschicht AS "Kontr Strauchschicht",
+  apflora.tpopkontr.baumschicht AS "Kontr Baumschicht",
+  apflora.tpopkontr.boden_typ AS "Kontr Bodentyp",
+  apflora.tpopkontr.boden_kalkgehalt AS "Kontr Boden Kalkgehalt",
+  apflora.tpopkontr.boden_durchlaessigkeit AS "Kontr Boden Durchlaessigkeit",
+  apflora.tpopkontr.boden_humus AS "Kontr Boden Humusgehalt",
+  apflora.tpopkontr.boden_naehrstoffgehalt AS "Kontr Boden Naehrstoffgehalt",
+  apflora.tpopkontr.boden_abtrag AS "Kontr Oberbodenabtrag",
+  apflora.tpopkontr.wasserhaushalt AS "Kontr Wasserhaushalt",
   apflora.tpopkontr_idbiotuebereinst_werte.text AS "Kontr Uebereinstimmung mit Idealbiotop",
-  apflora.tpopkontr."TPopKontrHandlungsbedarf" AS "Kontr Handlungsbedarf",
-  apflora.tpopkontr."TPopKontrUebFlaeche" AS "Kontr Ueberpruefte Flaeche",
-  apflora.tpopkontr."TPopKontrFlaeche" AS "Kontr Flaeche der Teilpopulation m2",
-  apflora.tpopkontr."TPopKontrPlan" AS "Kontr auf Plan eingezeichnet",
-  apflora.tpopkontr."TPopKontrVeg" AS "Kontr Deckung durch Vegetation",
-  apflora.tpopkontr."TPopKontrNaBo" AS "Kontr Deckung nackter Boden",
-  apflora.tpopkontr."TPopKontrUebPfl" AS "Kontr Deckung durch ueberpruefte Art",
-  apflora.tpopkontr."TPopKontrJungPflJN" AS "Kontr auch junge Pflanzen",
-  apflora.tpopkontr."TPopKontrVegHoeMax" AS "Kontr maximale Veg-hoehe cm",
-  apflora.tpopkontr."TPopKontrVegHoeMit" AS "Kontr mittlere Veg-hoehe cm",
-  apflora.tpopkontr."TPopKontrGefaehrdung" AS "Kontr Gefaehrdung",
-  apflora.tpopkontr."MutWann" AS "Kontrolle zuletzt geaendert",
-  apflora.tpopkontr."MutWer" AS "Kontrolle zuletzt geaendert von",
+  apflora.tpopkontr.handlungsbedarf AS "Kontr Handlungsbedarf",
+  apflora.tpopkontr.flaeche_ueberprueft AS "Kontr Ueberpruefte Flaeche",
+  apflora.tpopkontr.flaeche AS "Kontr Flaeche der Teilpopulation m2",
+  apflora.tpopkontr.plan_vorhanden AS "Kontr auf Plan eingezeichnet",
+  apflora.tpopkontr.deckung_vegetation AS "Kontr Deckung durch Vegetation",
+  apflora.tpopkontr.deckung_nackter_boden AS "Kontr Deckung nackter Boden",
+  apflora.tpopkontr.deckung_ap_art AS "Kontr Deckung durch ueberpruefte Art",
+  apflora.tpopkontr.jungpflanzen_vorhanden AS "Kontr auch junge Pflanzen",
+  apflora.tpopkontr.vegetationshoehe_maximum AS "Kontr maximale Veg-hoehe cm",
+  apflora.tpopkontr.vegetationshoehe_mittel AS "Kontr mittlere Veg-hoehe cm",
+  apflora.tpopkontr.gefaehrdung AS "Kontr Gefaehrdung",
+  apflora.tpopkontr.changed AS "Kontrolle zuletzt geaendert",
+  apflora.tpopkontr.changed_by AS "Kontrolle zuletzt geaendert von",
   apflora.tpopkontrzaehl.id AS "Zaehlung id",
   apflora.tpopkontrzaehl_einheit_werte.text AS "Zaehlung einheit",
   apflora.tpopkontrzaehl_methode_werte.text AS "Zaehlung Methode",
@@ -5427,16 +5269,16 @@ FROM
           (((((apflora.tpopkontr
           LEFT JOIN
             apflora.tpopkontr_idbiotuebereinst_werte
-            ON apflora.tpopkontr."TPopKontrIdealBiotopUebereinst" = apflora.tpopkontr_idbiotuebereinst_werte.code)
+            ON apflora.tpopkontr.idealbiotop_uebereinstimmung = apflora.tpopkontr_idbiotuebereinst_werte.code)
           LEFT JOIN
             apflora.tpopkontr_typ_werte
-            ON apflora.tpopkontr."TPopKontrTyp" = apflora.tpopkontr_typ_werte."DomainTxt")
+            ON apflora.tpopkontr.typ = apflora.tpopkontr_typ_werte."DomainTxt")
           LEFT JOIN
             apflora.adresse
-            ON apflora.tpopkontr."TPopKontrBearb" = apflora.adresse."AdrId")
+            ON apflora.tpopkontr.bearbeiter = apflora.adresse."AdrId")
           LEFT JOIN
             apflora.tpop_entwicklung_werte
-            ON apflora.tpopkontr."TPopKontrEntwicklung" = apflora.tpop_entwicklung_werte.code)
+            ON apflora.tpopkontr.entwicklung = apflora.tpop_entwicklung_werte.code)
           LEFT JOIN
             ((apflora.tpopkontrzaehl
             LEFT JOIN
@@ -5445,8 +5287,8 @@ FROM
             LEFT JOIN
               apflora.tpopkontrzaehl_methode_werte
               ON apflora.tpopkontrzaehl.methode = apflora.tpopkontrzaehl_methode_werte.code)
-            ON apflora.tpopkontr."TPopKontrId" = apflora.tpopkontrzaehl.tpopkontr_id)
-          ON apflora.tpop."TPopId" = apflora.tpopkontr."TPopId")
+            ON apflora.tpopkontr.id = apflora.tpopkontrzaehl.tpopkontr_id)
+          ON apflora.tpop."TPopId" = apflora.tpopkontr.tpop_id)
         ON apflora.pop."PopId" = apflora.tpop."PopId")
       ON apflora.ap."ApArtId" = apflora.pop."ApArtId")
     ON apflora.ae_eigenschaften.taxid = apflora.ap."ApArtId"
@@ -5456,8 +5298,8 @@ ORDER BY
   apflora.ae_eigenschaften.artname,
   apflora.pop."PopNr",
   apflora.tpop."TPopNr",
-  apflora.tpopkontr."TPopKontrJahr",
-  apflora.tpopkontr."TPopKontrDatum";
+  apflora.tpopkontr.jahr,
+  apflora.tpopkontr.datum;
 
 DROP VIEW IF EXISTS apflora.v_tpopber CASCADE;
 CREATE OR REPLACE VIEW apflora.v_tpopber AS
@@ -5581,10 +5423,10 @@ FROM
     ON apflora.tpop."TPopId" = apflora.tpopmassnber.tpop_id
 UNION DISTINCT SELECT
   apflora.tpop."TPopId",
-  apflora.tpopkontr."TPopKontrJahr" AS "Jahr"
+  apflora.tpopkontr.jahr AS "Jahr"
 FROM
   apflora.tpop
-  INNER JOIN apflora.tpopkontr ON apflora.tpop."TPopId" = apflora.tpopkontr."TPopId"
+  INNER JOIN apflora.tpopkontr ON apflora.tpop."TPopId" = apflora.tpopkontr.tpop_id
 ORDER BY
   "Jahr";
 
@@ -6243,8 +6085,8 @@ SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
   'Feldkontrolle ohne Jahr:'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId", 'Feld-Kontrollen', apflora.tpopkontr."TPopKontrId"]::text[] AS url,
-  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop."TPopNr"), concat('Feld-Kontrolle (Jahr): ', apflora.tpopkontr."TPopKontrJahr")]::text[] AS text
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId", 'Feld-Kontrollen', apflora.tpopkontr.id]::text[] AS url,
+  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop."TPopNr"), concat('Feld-Kontrolle (Jahr): ', apflora.tpopkontr.jahr)]::text[] AS text
 FROM
   apflora.ap
   INNER JOIN
@@ -6253,16 +6095,16 @@ FROM
       (apflora.tpop
       INNER JOIN
         apflora.tpopkontr
-        ON apflora.tpop."TPopId" = apflora.tpopkontr."TPopId")
+        ON apflora.tpop."TPopId" = apflora.tpopkontr.tpop_id)
       ON apflora.pop."PopId" = apflora.tpop."PopId")
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
 WHERE
-  apflora.tpopkontr."TPopKontrJahr" IS NULL
-  AND apflora.tpopkontr."TPopKontrTyp" <> 'Freiwilligen-Erfolgskontrolle'
+  apflora.tpopkontr.jahr IS NULL
+  AND apflora.tpopkontr.typ <> 'Freiwilligen-Erfolgskontrolle'
 ORDER BY
   apflora.pop."PopNr",
   apflora.tpop."TPopNr",
-  apflora.tpopkontr."TPopKontrJahr";
+  apflora.tpopkontr.jahr;
 
 DROP VIEW IF EXISTS apflora.v_qk2_feldkontr_ohnebearb CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk2_feldkontr_ohnebearb AS
@@ -6270,8 +6112,8 @@ SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
   'Feldkontrolle ohne BearbeiterIn:'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId", 'Feld-Kontrollen', apflora.tpopkontr."TPopKontrId"]::text[] AS url,
-  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop."TPopNr"), concat('Kontrolle (id): ', apflora.tpopkontr."TPopKontrId")]::text[] AS text
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId", 'Feld-Kontrollen', apflora.tpopkontr.id]::text[] AS url,
+  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop."TPopNr"), concat('Kontrolle (id): ', apflora.tpopkontr.id)]::text[] AS text
 FROM
   apflora.ap
   INNER JOIN
@@ -6280,16 +6122,16 @@ FROM
       (apflora.tpop
       INNER JOIN
         apflora.tpopkontr
-        ON apflora.tpop."TPopId" = apflora.tpopkontr."TPopId")
+        ON apflora.tpop."TPopId" = apflora.tpopkontr.tpop_id)
       ON apflora.pop."PopId" = apflora.tpop."PopId")
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
 WHERE
-  apflora.tpopkontr."TPopKontrBearb" IS NULL
-  AND apflora.tpopkontr."TPopKontrTyp" <> 'Freiwilligen-Erfolgskontrolle'
+  apflora.tpopkontr.bearbeiter IS NULL
+  AND apflora.tpopkontr.typ <> 'Freiwilligen-Erfolgskontrolle'
 ORDER BY
   apflora.pop."PopNr",
   apflora.tpop."TPopNr",
-  apflora.tpopkontr."TPopKontrId";
+  apflora.tpopkontr.id;
 
 DROP VIEW IF EXISTS apflora.v_qk2_freiwkontr_ohnejahr CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk2_freiwkontr_ohnejahr AS
@@ -6297,8 +6139,8 @@ SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
   'Freiwilligen-Kontrolle ohne Jahr:'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId", 'Freiwilligen-Kontrollen', apflora.tpopkontr."TPopKontrId"]::text[] AS url,
-  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop."TPopNr"), concat('Feld-Kontrolle (id): ', apflora.tpopkontr."TPopKontrId")]::text[] AS text
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId", 'Freiwilligen-Kontrollen', apflora.tpopkontr.id]::text[] AS url,
+  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop."TPopNr"), concat('Feld-Kontrolle (id): ', apflora.tpopkontr.id)]::text[] AS text
 FROM
   apflora.ap
   INNER JOIN
@@ -6307,17 +6149,17 @@ FROM
       (apflora.tpop
       INNER JOIN
         apflora.tpopkontr
-        ON apflora.tpop."TPopId" = apflora.tpopkontr."TPopId")
+        ON apflora.tpop."TPopId" = apflora.tpopkontr.tpop_id)
       ON apflora.pop."PopId" = apflora.tpop."PopId")
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
 WHERE
-  apflora.tpopkontr."TPopKontrJahr" IS NULL
-  AND apflora.tpopkontr."TPopKontrTyp" = 'Freiwilligen-Erfolgskontrolle'
+  apflora.tpopkontr.jahr IS NULL
+  AND apflora.tpopkontr.typ = 'Freiwilligen-Erfolgskontrolle'
 ORDER BY
   apflora.ap."ApArtId",
   apflora.pop."PopNr",
   apflora.tpop."TPopNr",
-  apflora.tpopkontr."TPopKontrJahr";
+  apflora.tpopkontr.jahr;
 
 DROP VIEW IF EXISTS apflora.v_qk2_freiwkontr_ohnebearb CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk2_freiwkontr_ohnebearb AS
@@ -6325,8 +6167,8 @@ SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
   'Freiwilligen-Kontrolle ohne BearbeiterIn:'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId", 'Freiwilligen-Kontrollen', apflora.tpopkontr."TPopKontrId"]::text[] AS url,
-  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop."TPopNr"), concat('Feld-Kontrolle (id): ', apflora.tpopkontr."TPopKontrId")]::text[] AS text
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId", 'Freiwilligen-Kontrollen', apflora.tpopkontr.id]::text[] AS url,
+  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop."TPopNr"), concat('Feld-Kontrolle (id): ', apflora.tpopkontr.id)]::text[] AS text
 FROM
   apflora.ap
   INNER JOIN
@@ -6335,17 +6177,17 @@ FROM
       (apflora.tpop
       INNER JOIN
         apflora.tpopkontr
-        ON apflora.tpop."TPopId" = apflora.tpopkontr."TPopId")
+        ON apflora.tpop."TPopId" = apflora.tpopkontr.tpop_id)
       ON apflora.pop."PopId" = apflora.tpop."PopId")
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
 WHERE
-  apflora.tpopkontr."TPopKontrBearb" IS NULL
-  AND apflora.tpopkontr."TPopKontrTyp" = 'Freiwilligen-Erfolgskontrolle'
+  apflora.tpopkontr.bearbeiter IS NULL
+  AND apflora.tpopkontr.typ = 'Freiwilligen-Erfolgskontrolle'
 ORDER BY
   apflora.ap."ApArtId",
   apflora.pop."PopNr",
   apflora.tpop."TPopNr",
-  apflora.tpopkontr."TPopKontrBearb";
+  apflora.tpopkontr.bearbeiter;
 
 DROP VIEW IF EXISTS apflora.v_qk2_feldkontr_ohnetyp CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk2_feldkontr_ohnetyp AS
@@ -6353,9 +6195,9 @@ SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
   'Feldkontrolle ohne Typ:'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId", 'Feld-Kontrollen', apflora.tpopkontr."TPopKontrId"]::text[] AS url,
-  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop."TPopNr"), concat('Feld-Kontrolle (Jahr): ', apflora.tpopkontr."TPopKontrJahr")]::text[] AS text,
-  apflora.tpopkontr."TPopKontrJahr" AS "Berichtjahr"
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId", 'Feld-Kontrollen', apflora.tpopkontr.id]::text[] AS url,
+  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop."TPopNr"), concat('Feld-Kontrolle (Jahr): ', apflora.tpopkontr.jahr)]::text[] AS text,
+  apflora.tpopkontr.jahr AS "Berichtjahr"
 FROM
   apflora.ap
   INNER JOIN
@@ -6364,19 +6206,19 @@ FROM
       (apflora.tpop
       INNER JOIN
         apflora.tpopkontr
-        ON apflora.tpop."TPopId" = apflora.tpopkontr."TPopId")
+        ON apflora.tpop."TPopId" = apflora.tpopkontr.tpop_id)
       ON apflora.pop."PopId" = apflora.tpop."PopId")
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
 WHERE
   (
-    apflora.tpopkontr."TPopKontrTyp" IS NULL
-    OR apflora.tpopkontr."TPopKontrTyp" = 'Erfolgskontrolle'
+    apflora.tpopkontr.typ IS NULL
+    OR apflora.tpopkontr.typ = 'Erfolgskontrolle'
   )
-  AND apflora.tpopkontr."TPopKontrJahr" IS NOT NULL
+  AND apflora.tpopkontr.jahr IS NOT NULL
 ORDER BY
   apflora.pop."PopNr",
   apflora.tpop."TPopNr",
-  apflora.tpopkontr."TPopKontrJahr";
+  apflora.tpopkontr.jahr;
 
 DROP VIEW IF EXISTS apflora.v_qk2_feldkontr_ohnezaehlung CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk2_feldkontr_ohnezaehlung AS
@@ -6384,9 +6226,9 @@ SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
   'Feldkontrolle ohne Zaehlung:'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId", 'Feld-Kontrollen', apflora.tpopkontr."TPopKontrId"]::text[] AS url,
-  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop."TPopNr"), concat('Feld-Kontrolle (Jahr): ', apflora.tpopkontr."TPopKontrJahr")]::text[] AS text,
-  apflora.tpopkontr."TPopKontrJahr" AS "Berichtjahr"
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId", 'Feld-Kontrollen', apflora.tpopkontr.id]::text[] AS url,
+  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop."TPopNr"), concat('Feld-Kontrolle (Jahr): ', apflora.tpopkontr.jahr)]::text[] AS text,
+  apflora.tpopkontr.jahr AS "Berichtjahr"
 FROM
   apflora.ap
   INNER JOIN
@@ -6397,25 +6239,25 @@ FROM
         (apflora.tpopkontr
         LEFT JOIN
           apflora.tpopkontrzaehl
-          ON apflora.tpopkontr."TPopKontrId" = apflora.tpopkontrzaehl.tpopkontr_id)
-        ON apflora.tpop."TPopId" = apflora.tpopkontr."TPopId")
+          ON apflora.tpopkontr.id = apflora.tpopkontrzaehl.tpopkontr_id)
+        ON apflora.tpop."TPopId" = apflora.tpopkontr.tpop_id)
       ON apflora.pop."PopId" = apflora.tpop."PopId")
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
 GROUP BY
   apflora.ap."ApArtId",
   apflora.pop."PopId",
   apflora.tpop."TPopId",
-  apflora.tpopkontr."TPopKontrId",
+  apflora.tpopkontr.id,
   apflora.tpopkontrzaehl.id
 HAVING
   apflora.tpopkontrzaehl.id IS NULL
-  AND apflora.tpopkontr."TPopKontrJahr" IS NOT NULL
-  AND apflora.tpopkontr."TPopKontrTyp" <> 'Freiwilligen-Erfolgskontrolle'
+  AND apflora.tpopkontr.jahr IS NOT NULL
+  AND apflora.tpopkontr.typ <> 'Freiwilligen-Erfolgskontrolle'
 ORDER BY
   apflora.ap."ApArtId",
   apflora.pop."PopNr",
   apflora.tpop."TPopNr",
-  apflora.tpopkontr."TPopKontrJahr";
+  apflora.tpopkontr.jahr;
 
 DROP VIEW IF EXISTS apflora.v_qk2_freiwkontr_ohnezaehlung CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk2_freiwkontr_ohnezaehlung AS
@@ -6423,9 +6265,9 @@ SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
   'Freiwilligen-Kontrolle ohne Zaehlung:'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId", 'Freiwilligen-Kontrollen', apflora.tpopkontr."TPopKontrId"]::text[] AS url,
-  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop."TPopNr"), concat('Feld-Kontrolle (Jahr): ', apflora.tpopkontr."TPopKontrJahr")]::text[] AS text,
-  apflora.tpopkontr."TPopKontrJahr" AS "Berichtjahr"
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId", 'Freiwilligen-Kontrollen', apflora.tpopkontr.id]::text[] AS url,
+  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop."TPopNr"), concat('Feld-Kontrolle (Jahr): ', apflora.tpopkontr.jahr)]::text[] AS text,
+  apflora.tpopkontr.jahr AS "Berichtjahr"
 FROM
   apflora.ap
   INNER JOIN
@@ -6436,25 +6278,25 @@ FROM
         (apflora.tpopkontr
         LEFT JOIN
           apflora.tpopkontrzaehl
-          ON apflora.tpopkontr."TPopKontrId" = apflora.tpopkontrzaehl.tpopkontr_id)
-        ON apflora.tpop."TPopId" = apflora.tpopkontr."TPopId")
+          ON apflora.tpopkontr.id = apflora.tpopkontrzaehl.tpopkontr_id)
+        ON apflora.tpop."TPopId" = apflora.tpopkontr.tpop_id)
       ON apflora.pop."PopId" = apflora.tpop."PopId")
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
 GROUP BY
   apflora.ap."ApArtId",
   apflora.pop."PopId",
   apflora.tpop."TPopId",
-  apflora.tpopkontr."TPopKontrId",
+  apflora.tpopkontr.id,
   apflora.tpopkontrzaehl.id
 HAVING
   apflora.tpopkontrzaehl.id IS NULL
-  AND apflora.tpopkontr."TPopKontrJahr" IS NOT NULL
-  AND apflora.tpopkontr."TPopKontrTyp" = 'Freiwilligen-Erfolgskontrolle'
+  AND apflora.tpopkontr.jahr IS NOT NULL
+  AND apflora.tpopkontr.typ = 'Freiwilligen-Erfolgskontrolle'
 ORDER BY
   apflora.ap."ApArtId",
   apflora.pop."PopNr",
   apflora.tpop."TPopNr",
-  apflora.tpopkontr."TPopKontrJahr";
+  apflora.tpopkontr.jahr;
 
 DROP VIEW IF EXISTS apflora.v_qk2_feldkontrzaehlung_ohneeinheit CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk2_feldkontrzaehlung_ohneeinheit AS
@@ -6462,9 +6304,9 @@ SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
   'Zaehlung ohne Zaehleinheit (Feldkontrolle):'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId", 'Feld-Kontrollen', apflora.tpopkontr."TPopKontrId", 'Zählungen', apflora.tpopkontrzaehl.id]::text[] AS url,
-  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop."TPopNr"), concat('Feld-Kontrolle (Jahr): ', apflora.tpopkontr."TPopKontrJahr"), concat('Zählung (id): ', apflora.tpopkontrzaehl.id)]::text[] AS text,
-  apflora.tpopkontr."TPopKontrJahr" AS "Berichtjahr"
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId", 'Feld-Kontrollen', apflora.tpopkontr.id, 'Zählungen', apflora.tpopkontrzaehl.id]::text[] AS url,
+  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop."TPopNr"), concat('Feld-Kontrolle (Jahr): ', apflora.tpopkontr.jahr), concat('Zählung (id): ', apflora.tpopkontrzaehl.id)]::text[] AS text,
+  apflora.tpopkontr.jahr AS "Berichtjahr"
 FROM
   apflora.ap
   INNER JOIN
@@ -6475,18 +6317,18 @@ FROM
         (apflora.tpopkontr
         INNER JOIN
           apflora.tpopkontrzaehl
-          ON apflora.tpopkontr."TPopKontrId" = apflora.tpopkontrzaehl.tpopkontr_id)
-        ON apflora.tpop."TPopId" = apflora.tpopkontr."TPopId")
+          ON apflora.tpopkontr.id = apflora.tpopkontrzaehl.tpopkontr_id)
+        ON apflora.tpop."TPopId" = apflora.tpopkontr.tpop_id)
       ON apflora.pop."PopId" = apflora.tpop."PopId")
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
 WHERE
   apflora.tpopkontrzaehl.einheit IS NULL
-  AND apflora.tpopkontr."TPopKontrJahr" IS NOT NULL
-  AND apflora.tpopkontr."TPopKontrTyp" <> 'Freiwilligen-Erfolgskontrolle'
+  AND apflora.tpopkontr.jahr IS NOT NULL
+  AND apflora.tpopkontr.typ <> 'Freiwilligen-Erfolgskontrolle'
 ORDER BY
   apflora.pop."PopNr",
   apflora.tpop."TPopNr",
-  apflora.tpopkontr."TPopKontrJahr";
+  apflora.tpopkontr.jahr;
 
 DROP VIEW IF EXISTS apflora.v_qk2_freiwkontrzaehlung_ohneeinheit CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk2_freiwkontrzaehlung_ohneeinheit AS
@@ -6494,9 +6336,9 @@ SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
   'Zaehlung ohne Zaehleinheit (Freiwilligen-Kontrolle):'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId", 'Freiwilligen-Kontrollen', apflora.tpopkontr."TPopKontrId", 'Zählungen', apflora.tpopkontrzaehl.id]::text[] AS url,
-  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop."TPopNr"), concat('Feld-Kontrolle (Jahr): ', apflora.tpopkontr."TPopKontrJahr"), concat('Zählung (id): ', apflora.tpopkontrzaehl.id)]::text[] AS text,
-  apflora.tpopkontr."TPopKontrJahr" AS "Berichtjahr"
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId", 'Freiwilligen-Kontrollen', apflora.tpopkontr.id, 'Zählungen', apflora.tpopkontrzaehl.id]::text[] AS url,
+  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop."TPopNr"), concat('Feld-Kontrolle (Jahr): ', apflora.tpopkontr.jahr), concat('Zählung (id): ', apflora.tpopkontrzaehl.id)]::text[] AS text,
+  apflora.tpopkontr.jahr AS "Berichtjahr"
 FROM
   apflora.ap
   INNER JOIN
@@ -6507,18 +6349,18 @@ FROM
         (apflora.tpopkontr
         INNER JOIN
           apflora.tpopkontrzaehl
-          ON apflora.tpopkontr."TPopKontrId" = apflora.tpopkontrzaehl.tpopkontr_id)
-        ON apflora.tpop."TPopId" = apflora.tpopkontr."TPopId")
+          ON apflora.tpopkontr.id = apflora.tpopkontrzaehl.tpopkontr_id)
+        ON apflora.tpop."TPopId" = apflora.tpopkontr.tpop_id)
       ON apflora.pop."PopId" = apflora.tpop."PopId")
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
 WHERE
   apflora.tpopkontrzaehl.einheit IS NULL
-  AND apflora.tpopkontr."TPopKontrJahr" IS NOT NULL
-  AND apflora.tpopkontr."TPopKontrTyp" = 'Freiwilligen-Erfolgskontrolle'
+  AND apflora.tpopkontr.jahr IS NOT NULL
+  AND apflora.tpopkontr.typ = 'Freiwilligen-Erfolgskontrolle'
 ORDER BY
   apflora.pop."PopNr",
   apflora.tpop."TPopNr",
-  apflora.tpopkontr."TPopKontrJahr";
+  apflora.tpopkontr.jahr;
 
 DROP VIEW IF EXISTS apflora.v_qk2_feldkontrzaehlung_ohnemethode CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk2_feldkontrzaehlung_ohnemethode AS
@@ -6526,9 +6368,9 @@ SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
   'Zaehlung ohne Methode (Feldkontrolle):'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId", 'Feld-Kontrollen', apflora.tpopkontr."TPopKontrId", 'Zählungen', apflora.tpopkontrzaehl.id]::text[] AS url,
-  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop."TPopNr"), concat('Feld-Kontrolle (Jahr): ', apflora.tpopkontr."TPopKontrJahr"), concat('Zählung (id): ', apflora.tpopkontrzaehl.id)]::text[] AS text,
-  apflora.tpopkontr."TPopKontrJahr" AS "Berichtjahr"
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId", 'Feld-Kontrollen', apflora.tpopkontr.id, 'Zählungen', apflora.tpopkontrzaehl.id]::text[] AS url,
+  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop."TPopNr"), concat('Feld-Kontrolle (Jahr): ', apflora.tpopkontr.jahr), concat('Zählung (id): ', apflora.tpopkontrzaehl.id)]::text[] AS text,
+  apflora.tpopkontr.jahr AS "Berichtjahr"
 FROM
   apflora.ap
   INNER JOIN
@@ -6539,18 +6381,18 @@ FROM
         (apflora.tpopkontr
         INNER JOIN
           apflora.tpopkontrzaehl
-          ON apflora.tpopkontr."TPopKontrId" = apflora.tpopkontrzaehl.tpopkontr_id)
-        ON apflora.tpop."TPopId" = apflora.tpopkontr."TPopId")
+          ON apflora.tpopkontr.id = apflora.tpopkontrzaehl.tpopkontr_id)
+        ON apflora.tpop."TPopId" = apflora.tpopkontr.tpop_id)
       ON apflora.pop."PopId" = apflora.tpop."PopId")
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
 WHERE
   apflora.tpopkontrzaehl.methode IS NULL
-  AND apflora.tpopkontr."TPopKontrJahr" IS NOT NULL
-  AND apflora.tpopkontr."TPopKontrTyp" <> 'Freiwilligen-Erfolgskontrolle'
+  AND apflora.tpopkontr.jahr IS NOT NULL
+  AND apflora.tpopkontr.typ <> 'Freiwilligen-Erfolgskontrolle'
 ORDER BY
   apflora.pop."PopNr",
   apflora.tpop."TPopNr",
-  apflora.tpopkontr."TPopKontrJahr";
+  apflora.tpopkontr.jahr;
 
 DROP VIEW IF EXISTS apflora.v_qk2_freiwkontrzaehlung_ohnemethode CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk2_freiwkontrzaehlung_ohnemethode AS
@@ -6558,9 +6400,9 @@ SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
   'Zaehlung ohne Methode (Freiwilligen-Kontrolle):'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId", 'Freiwilligen-Kontrollen', apflora.tpopkontr."TPopKontrId", 'Zählungen', apflora.tpopkontrzaehl.id]::text[] AS url,
-  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop."TPopNr"), concat('Feld-Kontrolle (Jahr): ', apflora.tpopkontr."TPopKontrJahr"), concat('Zählung (id): ', apflora.tpopkontrzaehl.id)]::text[] AS text,
-  apflora.tpopkontr."TPopKontrJahr" AS "Berichtjahr"
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId", 'Freiwilligen-Kontrollen', apflora.tpopkontr.id, 'Zählungen', apflora.tpopkontrzaehl.id]::text[] AS url,
+  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop."TPopNr"), concat('Feld-Kontrolle (Jahr): ', apflora.tpopkontr.jahr), concat('Zählung (id): ', apflora.tpopkontrzaehl.id)]::text[] AS text,
+  apflora.tpopkontr.jahr AS "Berichtjahr"
 FROM
   apflora.ap
   INNER JOIN
@@ -6571,18 +6413,18 @@ FROM
         (apflora.tpopkontr
         INNER JOIN
           apflora.tpopkontrzaehl
-          ON apflora.tpopkontr."TPopKontrId" = apflora.tpopkontrzaehl.tpopkontr_id)
-        ON apflora.tpop."TPopId" = apflora.tpopkontr."TPopId")
+          ON apflora.tpopkontr.id = apflora.tpopkontrzaehl.tpopkontr_id)
+        ON apflora.tpop."TPopId" = apflora.tpopkontr.tpop_id)
       ON apflora.pop."PopId" = apflora.tpop."PopId")
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
 WHERE
   apflora.tpopkontrzaehl.methode IS NULL
-  AND apflora.tpopkontr."TPopKontrJahr" IS NOT NULL
-  AND apflora.tpopkontr."TPopKontrTyp" = 'Freiwilligen-Erfolgskontrolle'
+  AND apflora.tpopkontr.jahr IS NOT NULL
+  AND apflora.tpopkontr.typ = 'Freiwilligen-Erfolgskontrolle'
 ORDER BY
   apflora.pop."PopNr",
   apflora.tpop."TPopNr",
-  apflora.tpopkontr."TPopKontrJahr";
+  apflora.tpopkontr.jahr;
 
 DROP VIEW IF EXISTS apflora.v_qk2_feldkontrzaehlung_ohneanzahl CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk2_feldkontrzaehlung_ohneanzahl AS
@@ -6590,9 +6432,9 @@ SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
   'Zaehlung ohne Anzahl (Feldkontrolle):'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId", 'Feld-Kontrollen', apflora.tpopkontr."TPopKontrId", 'Zählungen', apflora.tpopkontrzaehl.id]::text[] AS url,
-  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop."TPopNr"), concat('Feld-Kontrolle (Jahr): ', apflora.tpopkontr."TPopKontrJahr"), concat('Zählung (id): ', apflora.tpopkontrzaehl.id)]::text[] AS text,
-  apflora.tpopkontr."TPopKontrJahr" AS "Berichtjahr"
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId", 'Feld-Kontrollen', apflora.tpopkontr.id, 'Zählungen', apflora.tpopkontrzaehl.id]::text[] AS url,
+  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop."TPopNr"), concat('Feld-Kontrolle (Jahr): ', apflora.tpopkontr.jahr), concat('Zählung (id): ', apflora.tpopkontrzaehl.id)]::text[] AS text,
+  apflora.tpopkontr.jahr AS "Berichtjahr"
 FROM
   apflora.ap
   INNER JOIN
@@ -6603,18 +6445,18 @@ FROM
         (apflora.tpopkontr
         INNER JOIN
           apflora.tpopkontrzaehl
-          ON apflora.tpopkontr."TPopKontrId" = apflora.tpopkontrzaehl.tpopkontr_id)
-        ON apflora.tpop."TPopId" = apflora.tpopkontr."TPopId")
+          ON apflora.tpopkontr.id = apflora.tpopkontrzaehl.tpopkontr_id)
+        ON apflora.tpop."TPopId" = apflora.tpopkontr.tpop_id)
       ON apflora.pop."PopId" = apflora.tpop."PopId")
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
 WHERE
   apflora.tpopkontrzaehl.anzahl IS NULL
-  AND apflora.tpopkontr."TPopKontrJahr" IS NOT NULL
-  AND apflora.tpopkontr."TPopKontrTyp" <> 'Freiwilligen-Erfolgskontrolle'
+  AND apflora.tpopkontr.jahr IS NOT NULL
+  AND apflora.tpopkontr.typ <> 'Freiwilligen-Erfolgskontrolle'
 ORDER BY
   apflora.pop."PopNr",
   apflora.tpop."TPopNr",
-  apflora.tpopkontr."TPopKontrJahr";
+  apflora.tpopkontr.jahr;
 
 DROP VIEW IF EXISTS apflora.v_qk2_freiwkontrzaehlung_ohneanzahl CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk2_freiwkontrzaehlung_ohneanzahl AS
@@ -6622,9 +6464,9 @@ SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
   'Zaehlung ohne Anzahl (Freiwilligen-Kontrolle):'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId", 'Freiwilligen-Kontrollen', apflora.tpopkontr."TPopKontrId", 'Zählungen', apflora.tpopkontrzaehl.id]::text[] AS url,
-  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop."TPopNr"), concat('Feld-Kontrolle (Jahr): ', apflora.tpopkontr."TPopKontrJahr"), concat('Zählung (id): ', apflora.tpopkontrzaehl.id)]::text[] AS text,
-  apflora.tpopkontr."TPopKontrJahr" AS "Berichtjahr"
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId", 'Freiwilligen-Kontrollen', apflora.tpopkontr.id, 'Zählungen', apflora.tpopkontrzaehl.id]::text[] AS url,
+  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop."TPopNr"), concat('Feld-Kontrolle (Jahr): ', apflora.tpopkontr.jahr), concat('Zählung (id): ', apflora.tpopkontrzaehl.id)]::text[] AS text,
+  apflora.tpopkontr.jahr AS "Berichtjahr"
 FROM
   apflora.ap
   INNER JOIN
@@ -6635,18 +6477,18 @@ FROM
         (apflora.tpopkontr
         INNER JOIN
           apflora.tpopkontrzaehl
-          ON apflora.tpopkontr."TPopKontrId" = apflora.tpopkontrzaehl.tpopkontr_id)
-        ON apflora.tpop."TPopId" = apflora.tpopkontr."TPopId")
+          ON apflora.tpopkontr.id = apflora.tpopkontrzaehl.tpopkontr_id)
+        ON apflora.tpop."TPopId" = apflora.tpopkontr.tpop_id)
       ON apflora.pop."PopId" = apflora.tpop."PopId")
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
 WHERE
   apflora.tpopkontrzaehl.anzahl IS NULL
-  AND apflora.tpopkontr."TPopKontrJahr" IS NOT NULL
-  AND apflora.tpopkontr."TPopKontrTyp" = 'Freiwilligen-Erfolgskontrolle'
+  AND apflora.tpopkontr.jahr IS NOT NULL
+  AND apflora.tpopkontr.typ = 'Freiwilligen-Erfolgskontrolle'
 ORDER BY
   apflora.pop."PopNr",
   apflora.tpop."TPopNr",
-  apflora.tpopkontr."TPopKontrJahr";
+  apflora.tpopkontr.jahr;
 
 DROP VIEW IF EXISTS apflora.v_qk2_tpopber_ohnejahr CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk2_tpopber_ohnejahr AS
@@ -7244,21 +7086,21 @@ WHERE
   apflora.tpop."TPopHerkunft" = 201
   AND apflora.tpop."TPopId" IN (
     SELECT DISTINCT
-      apflora.tpopkontr."TPopId"
+      apflora.tpopkontr.tpop_id
     FROM
       (apflora.tpopkontr
       INNER JOIN
         apflora.tpopkontrzaehl
-        ON apflora.tpopkontr."TPopKontrId" = apflora.tpopkontrzaehl.tpopkontr_id)
+        ON apflora.tpopkontr.id = apflora.tpopkontrzaehl.tpopkontr_id)
       INNER JOIN
         apflora.v_tpopkontr_letzteid
         ON
           (
-            apflora.v_tpopkontr_letzteid."TPopId" = apflora.tpopkontr."TPopId"
-            AND apflora.v_tpopkontr_letzteid."MaxTPopKontrId" = apflora.tpopkontr."TPopKontrId"
+            apflora.v_tpopkontr_letzteid."TPopId" = apflora.tpopkontr.tpop_id
+            AND apflora.v_tpopkontr_letzteid."MaxTPopKontrId" = apflora.tpopkontr.id
           )
     WHERE
-      apflora.tpopkontr."TPopKontrTyp" NOT IN ('Zwischenziel', 'Ziel')
+      apflora.tpopkontr.typ NOT IN ('Zwischenziel', 'Ziel')
       AND apflora.tpopkontrzaehl.anzahl > 0
   );
 
@@ -7287,14 +7129,14 @@ WHERE
   apflora.tpop."TPopHerkunft" = 300
   AND apflora.tpop."TPopId" IN (
     SELECT DISTINCT
-      apflora.tpopkontr."TPopId"
+      apflora.tpopkontr.tpop_id
     FROM
       apflora.tpopkontr
       INNER JOIN
         apflora.tpopkontrzaehl
-        ON apflora.tpopkontr."TPopKontrId" = apflora.tpopkontrzaehl.tpopkontr_id
+        ON apflora.tpopkontr.id = apflora.tpopkontrzaehl.tpopkontr_id
     WHERE
-      apflora.tpopkontr."TPopKontrTyp" NOT IN ('Zwischenziel', 'Ziel')
+      apflora.tpopkontr.typ NOT IN ('Zwischenziel', 'Ziel')
       AND apflora.tpopkontrzaehl.anzahl > 0
   )
 ORDER BY

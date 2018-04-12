@@ -29,7 +29,7 @@ const BeobPopup = ({ store, beob }: { store: Object, beob: Object }) => {
         beob.id
       }`
     } else {
-      const tpopId = tpopbeob.TPopId
+      const tpopId = tpopbeob.tpop_id
       const tpop = store.table.tpop.get(tpopId)
       const popId = tpop ? tpop.PopId : ''
       url = `${appBaseUrl}/Projekte/${projekt}/Arten/${ap}/Populationen/${popId}/Teil-Populationen/${tpopId}/Beobachtungen/${

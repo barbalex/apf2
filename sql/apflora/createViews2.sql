@@ -1775,8 +1775,7 @@ SELECT
   apflora.v_tpop."Teilpopulation zuletzt geaendert",
   apflora.v_tpop."Teilpopulation zuletzt geaendert von",
   apflora.v_tpop_letzteKontrId."AnzTPopKontr" AS "TPop Anzahl Kontrollen",
-  apflora.v_tpopkontr."TPopKontrId",
-  apflora.v_tpopkontr."Kontr Guid",
+  apflora.v_tpopkontr.id,
   apflora.v_tpopkontr."Kontr Jahr",
   apflora.v_tpopkontr."Kontr Datum",
   apflora.v_tpopkontr."Kontr Typ",
@@ -1827,7 +1826,7 @@ FROM
   (apflora.v_tpop_letzteKontrId
   LEFT JOIN
     apflora.v_tpopkontr
-    ON apflora.v_tpop_letzteKontrId."MaxTPopKontrId" = apflora.v_tpopkontr."TPopKontrId")
+    ON apflora.v_tpop_letzteKontrId."MaxTPopKontrId" = apflora.v_tpopkontr.id)
   INNER JOIN
     apflora.v_tpop
     ON apflora.v_tpop_letzteKontrId."TPopId" = apflora.v_tpop."TPopId";
@@ -1853,14 +1852,14 @@ WHERE
   AND apflora.tpop."TPopApBerichtRelevant" = 1
   AND apflora.tpop."TPopId" NOT IN (
     SELECT DISTINCT
-      apflora.tpopkontr."TPopId"
+      apflora.tpopkontr.tpop_id
     FROM
       apflora.tpopkontr
       INNER JOIN
         apflora.tpopkontrzaehl
-        ON apflora.tpopkontr."TPopKontrId" = apflora.tpopkontrzaehl.tpopkontr_id
+        ON apflora.tpopkontr.id = apflora.tpopkontrzaehl.tpopkontr_id
     WHERE
-      apflora.tpopkontr."TPopKontrTyp" NOT IN ('Zwischenziel', 'Ziel')
+      apflora.tpopkontr.typ NOT IN ('Zwischenziel', 'Ziel')
       AND apflora.tpopkontrzaehl.anzahl > 0
   )
   AND apflora.tpop."TPopId" IN (
@@ -1949,8 +1948,8 @@ WHERE
 DROP VIEW IF EXISTS apflora.v_exportevab_beob CASCADE;
 CREATE OR REPLACE VIEW apflora.v_exportevab_beob AS
 SELECT
-  apflora.tpopkontr."ZeitGuid" AS "fkZeitpunkt",
-  apflora.tpopkontr."TPopKontrGuid" AS "idBeobachtung",
+  apflora.tpopkontr.zeit_id AS "fkZeitpunkt",
+  apflora.tpopkontr.id AS "idBeobachtung",
   -- TODO: should EvabIdPerson be real uuid?
   COALESCE(apflora.adresse."EvabIdPerson", '{7C71B8AF-DF3E-4844-A83B-55735F80B993}'::uuid) AS fkAutor,
   apflora.ap."ApArtId" AS fkArt,
@@ -1976,9 +1975,9 @@ SELECT
       FROM
         apflora.tpopmassn
       WHERE
-        apflora.tpopmassn.tpop_id = apflora.tpopkontr."TPopId"
+        apflora.tpopmassn.tpop_id = apflora.tpopkontr.tpop_id
         AND apflora.tpopmassn.typ BETWEEN 1 AND 3
-        AND apflora.tpopmassn.jahr <= apflora.tpopkontr."TPopKontrJahr"
+        AND apflora.tpopmassn.jahr <= apflora.tpopkontr.jahr
     ) THEN 6
     WHEN apflora.tpop."TPopHerkunftUnklar" = 1 THEN 3
     ELSE 5
@@ -2001,16 +2000,16 @@ SELECT
         FROM
           apflora.tpopber
         WHERE
-          apflora.tpopber.tpop_id = apflora.tpopkontr."TPopId"
+          apflora.tpopber.tpop_id = apflora.tpopkontr.tpop_id
           AND apflora.tpopber.entwicklung = 8
-          AND apflora.tpopber.jahr = apflora.tpopkontr."TPopKontrJahr"
+          AND apflora.tpopber.jahr = apflora.tpopkontr.jahr
       )
     ) THEN 2
     WHEN apflora.v_tpopkontr_maxanzahl.anzahl = 0 THEN 3
     ELSE 1
   END AS "fkAAPRESENCE",
-  apflora.tpopkontr."TPopKontrGefaehrdung" AS "MENACES",
-  substring(apflora.tpopkontr."TPopKontrVitalitaet" from 1 for 200) AS "VITALITE_PLANTE",
+  apflora.tpopkontr.gefaehrdung AS "MENACES",
+  substring(apflora.tpopkontr.vitalitaet from 1 for 200) AS "VITALITE_PLANTE",
   substring(apflora.tpop."TPopBeschr" from 1 for 244) AS "STATION",
   /*
    * Zählungen auswerten für ABONDANCE
@@ -2048,10 +2047,10 @@ FROM
         (((apflora.tpopkontr
         LEFT JOIN
           apflora.adresse
-          ON apflora.tpopkontr."TPopKontrBearb" = apflora.adresse."AdrId")
+          ON apflora.tpopkontr.bearbeiter = apflora.adresse."AdrId")
         INNER JOIN
           apflora.v_tpopkontr_maxanzahl
-          ON apflora.v_tpopkontr_maxanzahl."TPopKontrId" = apflora.tpopkontr."TPopKontrId")
+          ON apflora.v_tpopkontr_maxanzahl.id = apflora.tpopkontr.id)
         LEFT JOIN
           ((apflora.tpopkontrzaehl
           LEFT JOIN
@@ -2060,8 +2059,8 @@ FROM
           LEFT JOIN
             apflora.tpopkontrzaehl_methode_werte
             ON apflora.tpopkontrzaehl.methode = apflora.tpopkontrzaehl_methode_werte.code)
-          ON apflora.tpopkontr."TPopKontrId" = apflora.tpopkontrzaehl.tpopkontr_id)
-        ON apflora.tpop."TPopId" = apflora.tpopkontr."TPopId")
+          ON apflora.tpopkontr.id = apflora.tpopkontrzaehl.tpopkontr_id)
+        ON apflora.tpop."TPopId" = apflora.tpopkontr.tpop_id)
       ON apflora.pop."PopId" = apflora.tpop."PopId")
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
 WHERE
@@ -2071,37 +2070,37 @@ WHERE
   -- nur Kontrollen, deren Teilpopulationen Koordinaten besitzen
   AND apflora.tpop."TPopXKoord" IS NOT NULL
   AND apflora.tpop."TPopYKoord" IS NOT NULL
-  AND apflora.tpopkontr."TPopKontrTyp" IN ('Ausgangszustand', 'Zwischenbeurteilung', 'Freiwilligen-Erfolgskontrolle')
+  AND apflora.tpopkontr.typ IN ('Ausgangszustand', 'Zwischenbeurteilung', 'Freiwilligen-Erfolgskontrolle')
   -- keine Ansaatversuche
   AND apflora.tpop."TPopHerkunft" <> 201
   -- nur wenn Kontrolljahr existiert
-  AND apflora.tpopkontr."TPopKontrJahr" IS NOT NULL
+  AND apflora.tpopkontr.jahr IS NOT NULL
   -- keine Kontrollen aus dem aktuellen Jahr - die wurden ev. noch nicht verifiziert
-  AND apflora.tpopkontr."TPopKontrJahr" <> date_part('year', CURRENT_DATE)
+  AND apflora.tpopkontr.jahr <> date_part('year', CURRENT_DATE)
   -- nur wenn erfasst ist, seit wann die TPop bekannt ist
   AND apflora.tpop."TPopBekanntSeit" IS NOT NULL
   AND (
     -- die Teilpopulation ist ursprünglich
     apflora.tpop."TPopHerkunft" IN (100, 101)
     -- oder bei Ansiedlungen: die Art war mindestens 5 Jahre vorhanden
-    OR (apflora.tpopkontr."TPopKontrJahr" - apflora.tpop."TPopBekanntSeit") > 5
+    OR (apflora.tpopkontr.jahr - apflora.tpop."TPopBekanntSeit") > 5
   )
   AND apflora.tpop."TPopFlurname" IS NOT NULL
   AND apflora.ap."ApGuid" IN (Select "idProjekt" FROM apflora.v_exportevab_projekt)
   AND apflora.pop."PopGuid" IN (SELECT "idRaum" FROM apflora.v_exportevab_raum)
   AND apflora.tpop."TPopGuid" IN (SELECT "idOrt" FROM apflora.v_exportevab_ort)
-  AND apflora.tpopkontr."ZeitGuid" IN (SELECT "idZeitpunkt" FROM apflora.v_exportevab_zeit)
+  AND apflora.tpopkontr.zeit_id IN (SELECT "idZeitpunkt" FROM apflora.v_exportevab_zeit)
 GROUP BY
-  apflora.tpopkontr."ZeitGuid",
-  apflora.tpopkontr."TPopId",
-  apflora.tpopkontr."TPopKontrGuid",
-  apflora.tpopkontr."TPopKontrJahr",
+  apflora.tpopkontr.zeit_id,
+  apflora.tpopkontr.tpop_id,
+  apflora.tpopkontr.id,
+  apflora.tpopkontr.jahr,
   apflora.adresse."EvabIdPerson",
   apflora.ap."ApArtId",
   "fkAAINTRODUIT",
   apflora.v_tpopkontr_maxanzahl.anzahl,
-  apflora.tpopkontr."TPopKontrGefaehrdung",
-  apflora.tpopkontr."TPopKontrVitalitaet",
+  apflora.tpopkontr.gefaehrdung,
+  apflora.tpopkontr.vitalitaet,
   apflora.tpop."TPopBeschr",
   "tblAdresse_2"."EvabIdPerson",
   "tblAdresse_2"."AdrName";

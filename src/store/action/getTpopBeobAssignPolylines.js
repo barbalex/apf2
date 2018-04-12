@@ -10,7 +10,7 @@ export default (store: Object): Array<Object> => {
     return beobs.map(p => {
       const isHighlighted = highlightedIds.includes(p.id)
       const tpopbeob = store.table.tpopbeob.get(p.id)
-      const tpop = store.table.tpop.get(tpopbeob.TPopId)
+      const tpop = store.table.tpop.get(tpopbeob.tpop_id)
       const tpopKoord =
         tpop && tpop.TPopKoordWgs84 ? tpop.TPopKoordWgs84 : p.KoordWgs84
       const latlngs = [p.KoordWgs84, tpopKoord]

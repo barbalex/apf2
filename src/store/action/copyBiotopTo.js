@@ -34,7 +34,7 @@ export default async (store: Object, newId: number): Promise<void> => {
 
   // update db
   try {
-    axios.patch(`/tpopkontr?TPopKontrId=eq.${rowForDb.TPopKontrId}`, rowForDb)
+    axios.patch(`/tpopkontr?id=eq.${rowForDb.id}`, rowForDb)
   } catch (error) {
     rowToUpdate = rowToUpdateBeforeUpdating
     store.listError(error)

@@ -58,7 +58,7 @@ export default (store: Object): Array<Object> => {
             p.beob_id,
           ]
           store.tree.setActiveNodeArray(newActiveNodeArray)
-          updatePropertyInDb(tree, 'TPopId', nearestTpopId)
+          updatePropertyInDb(tree, 'tpop_id', nearestTpopId)
         })
     })
   }

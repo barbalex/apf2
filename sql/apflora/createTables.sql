@@ -606,110 +606,107 @@ DROP TABLE IF EXISTS apflora.tpopkontr;
 CREATE TABLE apflora.tpopkontr (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
   id_old integer,
-  "TPopKontrId" SERIAL PRIMARY KEY,
-  "TPopId" integer DEFAULT NULL REFERENCES apflora.tpop ("TPopId") ON DELETE CASCADE ON UPDATE CASCADE,
-  "TPopKontrTyp" varchar(50) DEFAULT NULL,
-  "TPopKontrDatum" date DEFAULT NULL,
-  "TPopKontrJahr" smallint DEFAULT NULL,
-  "TPopKontrBearb" integer DEFAULT NULL REFERENCES apflora.adresse ("AdrId") ON DELETE SET NULL ON UPDATE CASCADE,
-  "TPopKontrJungpfl" integer DEFAULT NULL,
-  "TPopKontrVitalitaet" text DEFAULT NULL,
-  "TPopKontrUeberleb" smallint DEFAULT NULL,
-  "TPopKontrEntwicklung" integer DEFAULT NULL REFERENCES apflora.tpop_entwicklung_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
-  "TPopKontrUrsach" text DEFAULT NULL,
-  "TPopKontrUrteil" text DEFAULT NULL,
-  "TPopKontrAendUms" text DEFAULT NULL,
-  "TPopKontrAendKontr" text DEFAULT NULL,
-  "TPopKontrTxt" text,
-  "TPopKontrLeb" text DEFAULT NULL,
-  "TPopKontrFlaeche" integer DEFAULT NULL,
-  "TPopKontrLebUmg" text DEFAULT NULL,
-  "TPopKontrVegTyp" varchar(100) DEFAULT NULL,
-  "TPopKontrKonkurrenz" varchar(100) DEFAULT NULL,
-  "TPopKontrMoosschicht" varchar(100) DEFAULT NULL,
-  "TPopKontrKrautschicht" varchar(100) DEFAULT NULL,
-  "TPopKontrStrauchschicht" text DEFAULT NULL,
-  "TPopKontrBaumschicht" varchar(100) DEFAULT NULL,
-  "TPopKontrBodenTyp" text DEFAULT NULL,
-  "TPopKontrBodenKalkgehalt" varchar(100) DEFAULT NULL,
-  "TPopKontrBodenDurchlaessigkeit" varchar(100) DEFAULT NULL,
-  "TPopKontrBodenHumus" varchar(100) DEFAULT NULL,
-  "TPopKontrBodenNaehrstoffgehalt" varchar(100) DEFAULT NULL,
-  "TPopKontrBodenAbtrag" text DEFAULT NULL,
-  "TPopKontrWasserhaushalt" text DEFAULT NULL,
-  "TPopKontrIdealBiotopUebereinst" integer DEFAULT NULL REFERENCES apflora.tpopkontr_idbiotuebereinst_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
-  "TPopKontrHandlungsbedarf" text,
-  "TPopKontrUebFlaeche" integer DEFAULT NULL,
-  "TPopKontrPlan" smallint DEFAULT NULL,
-  "TPopKontrVeg" smallint DEFAULT NULL,
-  "TPopKontrNaBo" smallint DEFAULT NULL,
-  "TPopKontrUebPfl" smallint DEFAULT NULL,
-  "TPopKontrJungPflJN" smallint DEFAULT NULL,
-  "TPopKontrVegHoeMax" smallint DEFAULT NULL,
-  "TPopKontrVegHoeMit" smallint DEFAULT NULL,
-  "TPopKontrGefaehrdung" text DEFAULT NULL,
-  "TPopKontrMutDat" date DEFAULT NULL,
-  "ZeitGuid" UUID DEFAULT uuid_generate_v1mc(),
-  "MutWann" date DEFAULT NOW(),
-  "MutWer" varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
+  tpop_id integer DEFAULT NULL REFERENCES apflora.tpop ("TPopId") ON DELETE CASCADE ON UPDATE CASCADE,
+  typ varchar(50) DEFAULT NULL,
+  datum date DEFAULT NULL,
+  jahr smallint DEFAULT NULL,
+  bearbeiter integer DEFAULT NULL REFERENCES apflora.adresse ("AdrId") ON DELETE SET NULL ON UPDATE CASCADE,
+  -- should be tpopkontrzaehl:
+  jungpflanzen_anzahl integer DEFAULT NULL,
+  vitalitaet text DEFAULT NULL,
+  ueberlebensrate smallint DEFAULT NULL,
+  entwicklung integer DEFAULT NULL REFERENCES apflora.tpop_entwicklung_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
+  ursachen text DEFAULT NULL,
+  erfolgsbeurteilung text DEFAULT NULL,
+  umsetzung_aendern text DEFAULT NULL,
+  kontrolle_aendern text DEFAULT NULL,
+  bemerkungen text,
+  lr_delarze text DEFAULT NULL,
+  flaeche integer DEFAULT NULL,
+  lr_umgebung_delarze text DEFAULT NULL,
+  vegetationstyp varchar(100) DEFAULT NULL,
+  konkurrenz varchar(100) DEFAULT NULL,
+  moosschicht varchar(100) DEFAULT NULL,
+  krautschicht varchar(100) DEFAULT NULL,
+  strauchschicht text DEFAULT NULL,
+  baumschicht varchar(100) DEFAULT NULL,
+  boden_typ text DEFAULT NULL,
+  boden_kalkgehalt varchar(100) DEFAULT NULL,
+  boden_durchlaessigkeit varchar(100) DEFAULT NULL,
+  boden_humus varchar(100) DEFAULT NULL,
+  boden_naehrstoffgehalt varchar(100) DEFAULT NULL,
+  boden_abtrag text DEFAULT NULL,
+  wasserhaushalt text DEFAULT NULL,
+  idealbiotop_uebereinstimmung integer DEFAULT NULL REFERENCES apflora.tpopkontr_idbiotuebereinst_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
+  handlungsbedarf text,
+  flaeche_ueberprueft integer DEFAULT NULL,
+  plan_vorhanden smallint DEFAULT NULL,
+  deckung_vegetation smallint DEFAULT NULL,
+  deckung_nackter_boden smallint DEFAULT NULL,
+  deckung_ap_art smallint DEFAULT NULL,
+  jungpflanzen_vorhanden smallint DEFAULT NULL,
+  vegetationshoehe_maximum smallint DEFAULT NULL,
+  vegetationshoehe_mittel smallint DEFAULT NULL,
+  gefaehrdung text DEFAULT NULL,
+  zeit_id UUID DEFAULT uuid_generate_v1mc(),
+  changed date DEFAULT NOW(),
+  changed_by varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
 );
-CREATE INDEX ON apflora.tpopkontr USING btree ("TPopKontrId");
-CREATE INDEX ON apflora.tpopkontr USING btree ("TPopId");
-CREATE INDEX ON apflora.tpopkontr USING btree ("TPopKontrBearb");
-CREATE INDEX ON apflora.tpopkontr USING btree ("TPopKontrEntwicklung");
-CREATE INDEX ON apflora.tpopkontr USING btree ("TPopKontrIdealBiotopUebereinst");
-CREATE INDEX ON apflora.tpopkontr USING btree ("TPopKontrJahr");
-CREATE INDEX ON apflora.tpopkontr USING btree ("TPopKontrTyp");
-CREATE INDEX ON apflora.tpopkontr USING btree ("TPopKontrDatum");
-CREATE UNIQUE INDEX ON apflora.tpopkontr USING btree ("ZeitGuid");
+CREATE INDEX ON apflora.tpopkontr USING btree (id);
+CREATE INDEX ON apflora.tpopkontr USING btree (tpop_id);
+CREATE INDEX ON apflora.tpopkontr USING btree (bearbeiter);
+CREATE INDEX ON apflora.tpopkontr USING btree (entwicklung);
+CREATE INDEX ON apflora.tpopkontr USING btree (idealbiotop_uebereinstimmung);
+CREATE INDEX ON apflora.tpopkontr USING btree (jahr);
+CREATE INDEX ON apflora.tpopkontr USING btree (typ);
+CREATE INDEX ON apflora.tpopkontr USING btree (datum);
+CREATE UNIQUE INDEX ON apflora.tpopkontr USING btree (zeit_id);
 COMMENT ON COLUMN apflora.tpopkontr.id IS 'Primärschlüssel. Wird u.a. verwendet für die Identifikation der Beobachtung im nationalen Beobachtungs-Daten-Kreislauf';
 COMMENT ON COLUMN apflora.tpopkontr.id_old IS 'frühere id';
-COMMENT ON COLUMN apflora.tpopkontr."TPopKontrId" IS 'Primärschlüssel der Tabelle "tpopkontr"';
-COMMENT ON COLUMN apflora.tpopkontr."TPopId" IS 'Zugehörige Teilpopulation. Fremdschlüssel aus der Tabelle "tpop"';
-COMMENT ON COLUMN apflora.tpopkontr."TPopKontrTyp" IS 'Typ der Kontrolle. Auswahl aus Tabelle "tpopkontr_typ_werte"';
-COMMENT ON COLUMN apflora.tpopkontr."TPopKontrDatum" IS 'Wann wurde kontrolliert?';
-COMMENT ON COLUMN apflora.tpopkontr."TPopKontrJahr" IS 'In welchem Jahr wurde kontrolliert? Für welches Jahr gilt die Beschreibung?';
-COMMENT ON COLUMN apflora.tpopkontr."TPopKontrBearb" IS 'Wer hat kontrolliert? Auswahl aus Tabelle "adresse"';
-COMMENT ON COLUMN apflora.tpopkontr."TPopKontrJungpfl" IS 'Anzahl Jungpflanzen';
-COMMENT ON COLUMN apflora.tpopkontr."TPopKontrVitalitaet" IS 'Vitalität der Pflanzen';
-COMMENT ON COLUMN apflora.tpopkontr."TPopKontrUeberleb" IS 'Überlebensrate in Prozent';
-COMMENT ON COLUMN apflora.tpopkontr."TPopKontrEntwicklung" IS 'Entwicklung des Bestandes. Auswahl aus Tabelle "tpop_entwicklung_werte"';
-COMMENT ON COLUMN apflora.tpopkontr."TPopKontrUrsach" IS 'Ursachen der Entwicklung';
-COMMENT ON COLUMN apflora.tpopkontr."TPopKontrUrteil" IS 'Erfolgsbeurteilung';
-COMMENT ON COLUMN apflora.tpopkontr."TPopKontrAendUms" IS 'Vorschlag für Änderung der Umsetzung';
-COMMENT ON COLUMN apflora.tpopkontr."TPopKontrAendKontr" IS 'Vorschlag für Änderung der Erfolgskontrolle';
-COMMENT ON COLUMN apflora.tpopkontr."TPopKontrTxt" IS 'Bemerkungen zur Erfolgskontrolle';
-COMMENT ON COLUMN apflora.tpopkontr."TPopKontrLeb" IS 'Lebensraumtyp nach Delarze';
-COMMENT ON COLUMN apflora.tpopkontr."TPopKontrFlaeche" IS 'Fläche der Teilpopulation';
-COMMENT ON COLUMN apflora.tpopkontr."TPopKontrLebUmg" IS 'Lebensraumtyp der direkt angrenzenden Umgebung (nach Delarze)';
-COMMENT ON COLUMN apflora.tpopkontr."TPopKontrVegTyp" IS 'Vegetationstyp';
-COMMENT ON COLUMN apflora.tpopkontr."TPopKontrKonkurrenz" IS 'Konkurrenz';
-COMMENT ON COLUMN apflora.tpopkontr."TPopKontrMoosschicht" IS 'Moosschicht';
-COMMENT ON COLUMN apflora.tpopkontr."TPopKontrKrautschicht" IS 'Krautschicht';
-COMMENT ON COLUMN apflora.tpopkontr."TPopKontrStrauchschicht" IS 'Strauchschicht, ehemals Verbuschung (%)';
-COMMENT ON COLUMN apflora.tpopkontr."TPopKontrBaumschicht" IS 'Baumschicht';
-COMMENT ON COLUMN apflora.tpopkontr."TPopKontrBodenTyp" IS 'Bodentyp';
-COMMENT ON COLUMN apflora.tpopkontr."TPopKontrBodenKalkgehalt" IS 'Kalkgehalt des Bodens';
-COMMENT ON COLUMN apflora.tpopkontr."TPopKontrBodenDurchlaessigkeit" IS 'Durchlässigkeit des Bodens';
-COMMENT ON COLUMN apflora.tpopkontr."TPopKontrBodenHumus" IS 'Humusgehalt des Bodens';
-COMMENT ON COLUMN apflora.tpopkontr."TPopKontrBodenNaehrstoffgehalt" IS 'Nährstoffgehalt des Bodens';
-COMMENT ON COLUMN apflora.tpopkontr."TPopKontrBodenAbtrag" IS 'Oberbodenabtrag';
-COMMENT ON COLUMN apflora.tpopkontr."TPopKontrWasserhaushalt" IS 'Wasserhaushalt';
-COMMENT ON COLUMN apflora.tpopkontr."TPopKontrIdealBiotopUebereinst" IS 'Übereinstimmung mit dem Idealbiotop';
-COMMENT ON COLUMN apflora.tpopkontr."TPopKontrHandlungsbedarf" IS 'Handlungsbedarf bezüglich Biotop';
-COMMENT ON COLUMN apflora.tpopkontr."TPopKontrUebFlaeche" IS 'Überprüfte Fläche in m2. Nur für Freiwilligen-Erfolgskontrolle';
-COMMENT ON COLUMN apflora.tpopkontr."TPopKontrPlan" IS 'Fläche / Wuchsort auf Plan eingezeichnet? Nur für Freiwilligen-Erfolgskontrolle';
-COMMENT ON COLUMN apflora.tpopkontr."TPopKontrVeg" IS 'Von Pflanzen, Streu oder Moos bedeckter Boden (%). Nur für Freiwilligen-Erfolgskontrolle';
-COMMENT ON COLUMN apflora.tpopkontr."TPopKontrNaBo" IS 'Flächenanteil nackter Boden (%). Nur für Freiwilligen-Erfolgskontrolle';
-COMMENT ON COLUMN apflora.tpopkontr."TPopKontrUebPfl" IS 'Flächenanteil der überprüften Pflanzenart (%). Nur für Freiwilligen-Erfolgskontrolle';
-COMMENT ON COLUMN apflora.tpopkontr."TPopKontrJungPflJN" IS 'Gibt es neben alten Pflanzen auch junge? Nur für Freiwilligen-Erfolgskontrolle';
-COMMENT ON COLUMN apflora.tpopkontr."TPopKontrVegHoeMax" IS 'Maximale Vegetationshöhe in cm. Nur für Freiwilligen-Erfolgskontrolle';
-COMMENT ON COLUMN apflora.tpopkontr."TPopKontrVegHoeMit" IS 'Mittlere Vegetationshöhe in cm. Nur für Freiwilligen-Erfolgskontrolle';
-COMMENT ON COLUMN apflora.tpopkontr."TPopKontrGefaehrdung" IS 'Gefährdung. Nur für Freiwilligen-Erfolgskontrolle';
-COMMENT ON COLUMN apflora.tpopkontr."TPopKontrMutDat" IS 'Letzte Mutation. Wird benötigt, um zu klären, welche Daten in den nationalen Kreislauf exportiert werden sollen';
-COMMENT ON COLUMN apflora.tpopkontr."ZeitGuid" IS 'GUID für den Export von Zeiten in EvAB';
-COMMENT ON COLUMN apflora.tpopkontr."MutWann" IS 'Wann wurde der Datensatz zuletzt geändert?';
-COMMENT ON COLUMN apflora.tpopkontr."MutWer" IS 'Von wem wurde der Datensatz zuletzt geändert?';
+COMMENT ON COLUMN apflora.tpopkontr.tpop_id IS 'Zugehörige Teilpopulation. Fremdschlüssel aus der Tabelle "tpop"';
+COMMENT ON COLUMN apflora.tpopkontr.typ IS 'Typ der Kontrolle. Auswahl aus Tabelle "tpopkontr_typ_werte"';
+COMMENT ON COLUMN apflora.tpopkontr.datum IS 'Wann wurde kontrolliert?';
+COMMENT ON COLUMN apflora.tpopkontr.jahr IS 'In welchem Jahr wurde kontrolliert? Für welches Jahr gilt die Beschreibung?';
+COMMENT ON COLUMN apflora.tpopkontr.bearbeiter IS 'Wer hat kontrolliert? Auswahl aus Tabelle "adresse"';
+COMMENT ON COLUMN apflora.tpopkontr.jungpflanzen_anzahl IS 'Anzahl Jungpflanzen';
+COMMENT ON COLUMN apflora.tpopkontr.vitalitaet IS 'Vitalität der Pflanzen';
+COMMENT ON COLUMN apflora.tpopkontr.ueberlebensrate IS 'Überlebensrate in Prozent';
+COMMENT ON COLUMN apflora.tpopkontr.entwicklung IS 'Entwicklung des Bestandes. Auswahl aus Tabelle "tpop_entwicklung_werte"';
+COMMENT ON COLUMN apflora.tpopkontr.ursachen IS 'Ursachen der Entwicklung';
+COMMENT ON COLUMN apflora.tpopkontr.erfolgsbeurteilung IS 'Erfolgsbeurteilung';
+COMMENT ON COLUMN apflora.tpopkontr.umsetzung_aendern IS 'Vorschlag für Änderung der Umsetzung';
+COMMENT ON COLUMN apflora.tpopkontr.kontrolle_aendern IS 'Vorschlag für Änderung der Erfolgskontrolle';
+COMMENT ON COLUMN apflora.tpopkontr.bemerkungen IS 'Bemerkungen zur Erfolgskontrolle';
+COMMENT ON COLUMN apflora.tpopkontr.lr_delarze IS 'Lebensraumtyp nach Delarze';
+COMMENT ON COLUMN apflora.tpopkontr.flaeche IS 'Fläche der Teilpopulation';
+COMMENT ON COLUMN apflora.tpopkontr.lr_umgebung_delarze IS 'Lebensraumtyp der direkt angrenzenden Umgebung (nach Delarze)';
+COMMENT ON COLUMN apflora.tpopkontr.vegetationstyp IS 'Vegetationstyp';
+COMMENT ON COLUMN apflora.tpopkontr.konkurrenz IS 'Konkurrenz';
+COMMENT ON COLUMN apflora.tpopkontr.moosschicht IS 'Moosschicht';
+COMMENT ON COLUMN apflora.tpopkontr.krautschicht IS 'Krautschicht';
+COMMENT ON COLUMN apflora.tpopkontr.strauchschicht IS 'Strauchschicht, ehemals Verbuschung (%)';
+COMMENT ON COLUMN apflora.tpopkontr.baumschicht IS 'Baumschicht';
+COMMENT ON COLUMN apflora.tpopkontr.boden_typ IS 'Bodentyp';
+COMMENT ON COLUMN apflora.tpopkontr.boden_kalkgehalt IS 'Kalkgehalt des Bodens';
+COMMENT ON COLUMN apflora.tpopkontr.boden_durchlaessigkeit IS 'Durchlässigkeit des Bodens';
+COMMENT ON COLUMN apflora.tpopkontr.boden_humus IS 'Humusgehalt des Bodens';
+COMMENT ON COLUMN apflora.tpopkontr.boden_naehrstoffgehalt IS 'Nährstoffgehalt des Bodens';
+COMMENT ON COLUMN apflora.tpopkontr.boden_abtrag IS 'Oberbodenabtrag';
+COMMENT ON COLUMN apflora.tpopkontr.wasserhaushalt IS 'Wasserhaushalt';
+COMMENT ON COLUMN apflora.tpopkontr.idealbiotop_uebereinstimmung IS 'Übereinstimmung mit dem Idealbiotop';
+COMMENT ON COLUMN apflora.tpopkontr.handlungsbedarf IS 'Handlungsbedarf bezüglich Biotop';
+COMMENT ON COLUMN apflora.tpopkontr.flaeche_ueberprueft IS 'Überprüfte Fläche in m2. Nur für Freiwilligen-Erfolgskontrolle';
+COMMENT ON COLUMN apflora.tpopkontr.plan_vorhanden IS 'Fläche / Wuchsort auf Plan eingezeichnet? Nur für Freiwilligen-Erfolgskontrolle';
+COMMENT ON COLUMN apflora.tpopkontr.deckung_vegetation IS 'Von Pflanzen, Streu oder Moos bedeckter Boden (%). Nur für Freiwilligen-Erfolgskontrolle. Nur bis 2012 erfasst.';
+COMMENT ON COLUMN apflora.tpopkontr.deckung_nackter_boden IS 'Flächenanteil nackter Boden (%). Nur für Freiwilligen-Erfolgskontrolle';
+COMMENT ON COLUMN apflora.tpopkontr.deckung_ap_art IS 'Flächenanteil der überprüften Pflanzenart (%). Nur für Freiwilligen-Erfolgskontrolle';
+COMMENT ON COLUMN apflora.tpopkontr.jungpflanzen_vorhanden IS 'Gibt es neben alten Pflanzen auch junge? Nur für Freiwilligen-Erfolgskontrolle';
+COMMENT ON COLUMN apflora.tpopkontr.vegetationshoehe_maximum IS 'Maximale Vegetationshöhe in cm. Nur für Freiwilligen-Erfolgskontrolle';
+COMMENT ON COLUMN apflora.tpopkontr.vegetationshoehe_mittel IS 'Mittlere Vegetationshöhe in cm. Nur für Freiwilligen-Erfolgskontrolle';
+COMMENT ON COLUMN apflora.tpopkontr.gefaehrdung IS 'Gefährdung. Nur für Freiwilligen-Erfolgskontrolle';
+COMMENT ON COLUMN apflora.tpopkontr.zeit_id IS 'GUID für den Export von Zeiten in EvAB';
+COMMENT ON COLUMN apflora.tpopkontr.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
+COMMENT ON COLUMN apflora.tpopkontr.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
 DROP TABLE IF EXISTS apflora.tpopkontr_idbiotuebereinst_werte;
 CREATE TABLE apflora.tpopkontr_idbiotuebereinst_werte (
@@ -745,7 +742,7 @@ DROP TABLE IF EXISTS apflora.tpopkontrzaehl;
 CREATE TABLE apflora.tpopkontrzaehl (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
   -- old_id still exist...
-  tpopkontr_id integer DEFAULT NULL REFERENCES apflora.tpopkontr ("TPopKontrId") ON DELETE CASCADE ON UPDATE CASCADE,
+  tpopkontr_id integer DEFAULT NULL REFERENCES apflora.tpopkontr (id) ON DELETE CASCADE ON UPDATE CASCADE,
   anzahl integer DEFAULT NULL,
   einheit integer DEFAULT NULL REFERENCES apflora.tpopkontrzaehl_einheit_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
   methode integer DEFAULT NULL REFERENCES apflora.tpopkontrzaehl_methode_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,

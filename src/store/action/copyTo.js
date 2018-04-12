@@ -1,8 +1,8 @@
 // @flow
 /**
-* moves a dataset to a different parent
-* used when copying for instance tpop to other pop in tree
-*/
+ * moves a dataset to a different parent
+ * used when copying for instance tpop to other pop in tree
+ */
 
 import axios from 'axios'
 import clone from 'lodash/clone'
@@ -100,7 +100,7 @@ export default async (
     copyZaehlOfTpopKontr({
       store,
       tpopkontrIdFrom: id,
-      tpopkontrIdTo: data.TPopKontrId,
+      tpopkontrIdTo: data.id,
     })
   }
 }

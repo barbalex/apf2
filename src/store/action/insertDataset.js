@@ -68,14 +68,10 @@ export default async (
     store.updateProperty(tree, 'jahr', tree.activeNodes.zieljahr)
     store.updatePropertyInDb(tree, 'jahr', tree.activeNodes.zieljahr)
   }
-  // if tpopfreiwkontr need to update TPopKontrTyp
+  // if tpopfreiwkontr need to update typ
   if (tablePassed === 'tpopfreiwkontr') {
-    store.updateProperty(tree, 'TPopKontrTyp', 'Freiwilligen-Erfolgskontrolle')
-    store.updatePropertyInDb(
-      tree,
-      'TPopKontrTyp',
-      'Freiwilligen-Erfolgskontrolle'
-    )
+    store.updateProperty(tree, 'typ', 'Freiwilligen-Erfolgskontrolle')
+    store.updatePropertyInDb(tree, 'typ', 'Freiwilligen-Erfolgskontrolle')
   }
 
   // if beobart need to fetch beob

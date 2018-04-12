@@ -169,7 +169,7 @@ export default (activeNodeArray: Array<mixed>, store: Object): Object => {
     false
   const tpopfeldkontr =
     tpopfeldkontrFolder && activeNodeArray.length > 9
-      ? parseInt(activeNodeArray[9], 10)
+      ? activeNodeArray[9]
       : null
   const tpopfeldkontrzaehlFolder =
     (tpopfeldkontr &&
@@ -187,7 +187,7 @@ export default (activeNodeArray: Array<mixed>, store: Object): Object => {
     false
   const tpopfreiwkontr =
     tpopfreiwkontrFolder && activeNodeArray.length > 9
-      ? parseInt(activeNodeArray[9], 10)
+      ? activeNodeArray[9]
       : null
   const tpopfreiwkontrzaehlFolder =
     (tpopfreiwkontr &&

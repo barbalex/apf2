@@ -43,12 +43,12 @@ CREATE OR REPLACE FUNCTION apflora.qk2_pop_ohne_popber(apid integer, berichtjahr
         AND apflora.tpop."TPopId" IN (
           -- 2. "TPop mit Kontrolle im Berichtjahr" ermitteln:
           SELECT DISTINCT
-            apflora.tpopkontr."TPopId"
+            apflora.tpopkontr.tpop_id
           FROM
             apflora.tpopkontr
           WHERE
-            apflora.tpopkontr."TPopKontrTyp" NOT IN ('Zwischenziel', 'Ziel')
-            AND apflora.tpopkontr."TPopKontrJahr" = $2
+            apflora.tpopkontr.typ NOT IN ('Zwischenziel', 'Ziel')
+            AND apflora.tpopkontr.jahr = $2
         )
     )
     AND apflora.pop."PopId" NOT IN (

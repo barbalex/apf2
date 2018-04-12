@@ -15,7 +15,7 @@ const writeToStore = (store: Object, data: Array<Object>): void => {
         if (zuordnung.nicht_zuordnen && zuordnung.nicht_zuordnen === 1) {
           return 'nichtZuzuordnen'
         }
-        if (zuordnung.TPopId) {
+        if (zuordnung.tpop_id) {
           return 'zugeordnet'
         }
         return 'nichtBeurteilt'

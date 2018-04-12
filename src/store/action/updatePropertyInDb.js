@@ -111,8 +111,8 @@ export default async (
       newActiveNodeArray[5] = tree.activeDataset.row.beob_id
       tree.setActiveNodeArray(newActiveNodeArray.slice(0, 6))
     }
-    // if for a beobZugeordnet TPopId is set, url needs to change
-    // namely: PopId and TPopId
+    // if for a beobZugeordnet tpop_id is set, url needs to change
+    // namely: PopId and tpop_id
     if (table === 'tpopbeob' && key === 'tpop_id' && value) {
       const tpop = store.table.tpop.get(value)
       newActiveNodeArray[5] = tpop.PopId
