@@ -5,7 +5,7 @@ export default (
   store: Object,
   tree: Object,
   projId: number,
-  apArtId: number,
+  apArtId: number
 ): Array<Object> => {
   const { table } = store
 
@@ -15,11 +15,11 @@ export default (
   })
   const apIndex = findIndex(
     tree.filteredAndSorted.ap.filter(a => a.ProjId === projId),
-    { ApArtId: apArtId },
+    { ApArtId: apArtId }
   )
 
   const apberNodesLength = tree.filteredAndSorted.apber.filter(
-    n => n.ApArtId === apArtId,
+    n => n.ap_id === apArtId
   ).length
 
   let message = apberNodesLength

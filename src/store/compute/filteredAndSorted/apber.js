@@ -10,7 +10,7 @@ export default (store: Object, tree: Object): Array<Object> => {
   if (apFilter) {
     // ApStatus between 3 and 5
     apber = apber.filter(a => {
-      const ap = table.ap.get(a.ApArtId)
+      const ap = table.ap.get(a.ap_id)
       return [1, 2, 3].includes(ap.ApStatus)
     })
   }
@@ -18,17 +18,17 @@ export default (store: Object, tree: Object): Array<Object> => {
   const filterString = nodeLabelFilter.get('apber')
   if (filterString) {
     apber = apber.filter(p => {
-      if (p.JBerJahr !== undefined && p.JBerJahr !== null) {
-        return p.JBerJahr.toString().includes(filterString)
+      if (p.jahr !== undefined && p.jahr !== null) {
+        return p.jahr.toString().includes(filterString)
       }
       return false
     })
   }
   // add label
   apber.forEach(el => {
-    el.label = el.JBerJahr || '(kein Jahr)'
+    el.label = el.jahr || '(kein Jahr)'
   })
   // sort
-  apber = sortBy(apber, 'JBerJahr')
+  apber = sortBy(apber, 'jahr')
   return apber
 }

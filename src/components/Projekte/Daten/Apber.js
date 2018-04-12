@@ -30,8 +30,8 @@ const getBearbName = ({ store, tree }: { store: Object, tree: Object }) => {
   const { adressen } = store.dropdownList
   const { activeDataset } = tree
   let name = ''
-  if (activeDataset.row.JBerBearb && adressen.length > 0) {
-    const adresse = adressen.find(a => a.AdrId === activeDataset.row.JBerBearb)
+  if (activeDataset.row.bearbeiter && adressen.length > 0) {
+    const adresse = adressen.find(a => a.AdrId === activeDataset.row.bearbeiter)
     if (adresse && adresse.AdrName) return adresse.AdrName
   }
   return name
@@ -61,23 +61,23 @@ const Apber = ({
         <FormTitle tree={tree} title="AP-Bericht" />
         <FieldsContainer width={width}>
           <TextField
-            key={`${activeDataset.row.JBerId}JBerJahr`}
+            key={`${activeDataset.row.id}jahr`}
             tree={tree}
             label="Jahr"
-            fieldName="JBerJahr"
-            value={activeDataset.row.JBerJahr}
-            errorText={activeDataset.valid.JBerJahr}
+            fieldName="jahr"
+            value={activeDataset.row.jahr}
+            errorText={activeDataset.valid.jahr}
             type="number"
             updateProperty={store.updateProperty}
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
-            key={`${activeDataset.row.JBerId}JBerVergleichVorjahrGesamtziel`}
+            key={`${activeDataset.row.id}vergleich_vorjahr_gesamtziel`}
             tree={tree}
             label="Vergleich Vorjahr - Gesamtziel"
-            fieldName="JBerVergleichVorjahrGesamtziel"
-            value={activeDataset.row.JBerVergleichVorjahrGesamtziel}
-            errorText={activeDataset.valid.JBerVergleichVorjahrGesamtziel}
+            fieldName="vergleich_vorjahr_gesamtziel"
+            value={activeDataset.row.vergleich_vorjahr_gesamtziel}
+            errorText={activeDataset.valid.vergleich_vorjahr_gesamtziel}
             type="text"
             multiLine
             fullWidth
@@ -86,29 +86,29 @@ const Apber = ({
           />
           <RadioButtonGroup
             tree={tree}
-            fieldName="JBerBeurteilung"
-            value={activeDataset.row.JBerBeurteilung}
+            fieldName="beurteilung"
+            value={activeDataset.row.beurteilung}
             label="Beurteilung"
-            errorText={activeDataset.valid.JBerBeurteilung}
+            errorText={activeDataset.valid.beurteilung}
             dataSource={store.dropdownList.apErfkritWerte}
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <RadioButtonGroup
             tree={tree}
-            fieldName="JBerVeraenGegenVorjahr"
-            value={activeDataset.row.JBerVeraenGegenVorjahr}
+            fieldName="veraenderung_zum_vorjahr"
+            value={activeDataset.row.veraenderung_zum_vorjahr}
             label="Veränderung zum Vorjahr"
-            errorText={activeDataset.valid.JBerVeraenGegenVorjahr}
+            errorText={activeDataset.valid.veraenderung_zum_vorjahr}
             dataSource={veraenGegenVorjahrWerte}
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
-            key={`${activeDataset.row.JBerId}JBerAnalyse`}
+            key={`${activeDataset.row.id}apber_analyse`}
             tree={tree}
             label="Analyse"
-            fieldName="JBerAnalyse"
-            value={activeDataset.row.JBerAnalyse}
-            errorText={activeDataset.valid.JBerAnalyse}
+            fieldName="apber_analyse"
+            value={activeDataset.row.apber_analyse}
+            errorText={activeDataset.valid.apber_analyse}
             type="text"
             multiLine
             fullWidth
@@ -116,12 +116,12 @@ const Apber = ({
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
-            key={`${activeDataset.row.JBerId}JBerUmsetzung`}
+            key={`${activeDataset.row.id}konsequenzen_umsetzung`}
             tree={tree}
             label="Konsequenzen für die Umsetzung"
-            fieldName="JBerUmsetzung"
-            value={activeDataset.row.JBerUmsetzung}
-            errorText={activeDataset.valid.JBerUmsetzung}
+            fieldName="konsequenzen_umsetzung"
+            value={activeDataset.row.konsequenzen_umsetzung}
+            errorText={activeDataset.valid.konsequenzen_umsetzung}
             type="text"
             multiLine
             fullWidth
@@ -129,12 +129,12 @@ const Apber = ({
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
-            key={`${activeDataset.row.JBerId}JBerErfko`}
+            key={`${activeDataset.row.id}konsequenzen_erfolgskontrolle`}
             tree={tree}
             label="Konsequenzen für die Erfolgskontrolle"
-            fieldName="JBerErfko"
-            value={activeDataset.row.JBerErfko}
-            errorText={activeDataset.valid.JBerErfko}
+            fieldName="konsequenzen_erfolgskontrolle"
+            value={activeDataset.row.konsequenzen_erfolgskontrolle}
+            errorText={activeDataset.valid.konsequenzen_erfolgskontrolle}
             type="text"
             multiLine
             fullWidth
@@ -142,12 +142,12 @@ const Apber = ({
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
-            key={`${activeDataset.row.JBerId}JBerATxt`}
+            key={`${activeDataset.row.id}biotope_neue`}
             tree={tree}
             label="A. Grundmengen: Bemerkungen/Folgerungen für nächstes Jahr: neue Biotope"
-            fieldName="JBerATxt"
-            value={activeDataset.row.JBerATxt}
-            errorText={activeDataset.valid.JBerATxt}
+            fieldName="biotope_neue"
+            value={activeDataset.row.biotope_neue}
+            errorText={activeDataset.valid.biotope_neue}
             type="text"
             multiLine
             fullWidth
@@ -155,12 +155,12 @@ const Apber = ({
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
-            key={`${activeDataset.row.JBerId}JBerBTxt`}
+            key={`${activeDataset.row.id}biotope_optimieren`}
             tree={tree}
             label="B. Bestandesentwicklung: Bemerkungen/Folgerungen für nächstes Jahr: Optimierung Biotope"
-            fieldName="JBerBTxt"
-            value={activeDataset.row.JBerBTxt}
-            errorText={activeDataset.valid.JBerBTxt}
+            fieldName="biotope_optimieren"
+            value={activeDataset.row.biotope_optimieren}
+            errorText={activeDataset.valid.biotope_optimieren}
             type="text"
             multiLine
             fullWidth
@@ -168,12 +168,12 @@ const Apber = ({
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
-            key={`${activeDataset.row.JBerId}JBerCAktivApbearb`}
+            key={`${activeDataset.row.id}massnahmen_ap_bearb`}
             tree={tree}
             label="C. Zwischenbilanz zur Wirkung von Massnahmen: Weitere Aktivitäten der Aktionsplan-Verantwortlichen"
-            fieldName="JBerCAktivApbearb"
-            value={activeDataset.row.JBerCAktivApbearb}
-            errorText={activeDataset.valid.JBerCAktivApbearb}
+            fieldName="massnahmen_ap_bearb"
+            value={activeDataset.row.massnahmen_ap_bearb}
+            errorText={activeDataset.valid.massnahmen_ap_bearb}
             type="text"
             multiLine
             fullWidth
@@ -181,12 +181,12 @@ const Apber = ({
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
-            key={`${activeDataset.row.JBerId}JBerCVerglAusfPl`}
+            key={`${activeDataset.row.id}massnahmen_planung_vs_ausfuehrung`}
             tree={tree}
             label="C. Zwischenbilanz zur Wirkung von Massnahmen: Vergleich Ausführung/Planung"
-            fieldName="JBerCVerglAusfPl"
-            value={activeDataset.row.JBerCVerglAusfPl}
-            errorText={activeDataset.valid.JBerCVerglAusfPl}
+            fieldName="massnahmen_planung_vs_ausfuehrung"
+            value={activeDataset.row.massnahmen_planung_vs_ausfuehrung}
+            errorText={activeDataset.valid.massnahmen_planung_vs_ausfuehrung}
             type="text"
             multiLine
             fullWidth
@@ -194,12 +194,12 @@ const Apber = ({
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
-            key={`${activeDataset.row.JBerId}JBerCTxt`}
+            key={`${activeDataset.row.id}massnahmen_optimieren`}
             tree={tree}
             label="C. Zwischenbilanz zur Wirkung von Massnahmen: Bemerkungen/Folgerungen für nächstes Jahr: Optimierung Massnahmen"
-            fieldName="JBerCTxt"
-            value={activeDataset.row.JBerCTxt}
-            errorText={activeDataset.valid.JBerCTxt}
+            fieldName="massnahmen_optimieren"
+            value={activeDataset.row.massnahmen_optimieren}
+            errorText={activeDataset.valid.massnahmen_optimieren}
             type="text"
             multiLine
             fullWidth
@@ -207,12 +207,12 @@ const Apber = ({
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
-            key={`${activeDataset.row.JBerId}JBerDTxt`}
+            key={`${activeDataset.row.id}wirkung_auf_art`}
             tree={tree}
             label="D. Einschätzung der Wirkung des AP insgesamt auf die Art: Bemerkungen"
-            fieldName="JBerDTxt"
-            value={activeDataset.row.JBerDTxt}
-            errorText={activeDataset.valid.JBerDTxt}
+            fieldName="wirkung_auf_art"
+            value={activeDataset.row.wirkung_auf_art}
+            errorText={activeDataset.valid.wirkung_auf_art}
             type="text"
             multiLine
             fullWidth
@@ -220,23 +220,23 @@ const Apber = ({
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <DateFieldWithPicker
-            key={`${activeDataset.row.JBerId}JBerDatum`}
+            key={`${activeDataset.row.id}datum`}
             tree={tree}
             label="Datum"
-            fieldName="JBerDatum"
-            value={activeDataset.row.JBerDatum}
-            errorText={activeDataset.valid.JBerDatum}
+            fieldName="datum"
+            value={activeDataset.row.datum}
+            errorText={activeDataset.valid.datum}
             fullWidth
             updateProperty={store.updateProperty}
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <AutoComplete
-            key={`${activeDataset.row.JBerId}JBerBearb`}
+            key={`${activeDataset.row.id}bearbeiter`}
             tree={tree}
             label="BearbeiterIn"
-            fieldName="JBerBearb"
+            fieldName="bearbeiter"
             valueText={getBearbName({ store, tree })}
-            errorText={activeDataset.valid.JBerBearb}
+            errorText={activeDataset.valid.bearbeiter}
             dataSource={store.dropdownList.adressen}
             dataSourceConfig={{
               value: 'AdrId',

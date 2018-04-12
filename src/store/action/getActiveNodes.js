@@ -94,9 +94,7 @@ export default (activeNodeArray: Array<mixed>, store: Object): Object => {
       activeNodeArray[4] === 'AP-Berichte') ||
     false
   const apber =
-    apberFolder && activeNodeArray.length > 5
-      ? parseInt(activeNodeArray[5], 10)
-      : null
+    apberFolder && activeNodeArray.length > 5 ? activeNodeArray[5] : null
   const erfkritFolder =
     (ap &&
       activeNodeArray.length > 4 &&

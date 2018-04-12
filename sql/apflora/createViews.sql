@@ -1507,7 +1507,7 @@ FROM
   apflora.zielber
   INNER JOIN
     apflora._variable
-    ON apflora.zielber.jahr = apflora._variable."JBerJahr";
+    ON apflora.zielber.jahr = apflora._variable.apber_jahr;
 
 DROP VIEW IF EXISTS apflora.v_abper_ziel CASCADE;
 CREATE OR REPLACE VIEW apflora.v_abper_ziel AS
@@ -1521,72 +1521,20 @@ FROM
     INNER JOIN
       apflora.ziel_typ_werte
       ON apflora.ziel.typ = ziel_typ_werte.code)
-    ON apflora._variable."JBerJahr" = apflora.ziel.jahr
+    ON apflora._variable.apber_jahr = apflora.ziel.jahr
 WHERE
   apflora.ziel.typ IN(1, 2, 1170775556)
 ORDER BY
   apflora.ziel_typ_werte.sort,
   apflora.ziel.bezeichnung;
 
-DROP VIEW IF EXISTS apflora.v_apber_verwaist CASCADE;
-CREATE OR REPLACE VIEW apflora.v_apber_verwaist AS
-SELECT
-  apflora.apber."JBerId" AS "JBer Id",
-  apflora.apber."ApArtId" AS "JBer ApArtId",
-  apflora.apber."JBerJahr" AS "JBer Jahr",
-  apflora.apber."JBerVergleichVorjahrGesamtziel" AS "JBer Vergleich Vorjahr-Gesamtziel",
-  ap_erfkrit_werte.text AS "JBer Beurteilung",
-  apflora.apber."JBerVeraenGegenVorjahr" AS "JBer Veraend zum Vorjahr",
-  apflora.apber."JBerAnalyse" AS "JBer Analyse",
-  apflora.apber."JBerUmsetzung" AS "JBer Konsequenzen Umsetzung",
-  apflora.apber."JBerErfko" AS "JBer Konsequenzen Erfolgskontrolle",
-  apflora.apber."JBerATxt" AS "JBer Bemerkungen zu A",
-  apflora.apber."JBerBTxt" AS "JBer Bemerkungen zu B",
-  apflora.apber."JBerCTxt" AS "JBer Bemerkungen zu C",
-  apflora.apber."JBerDTxt" AS "JBer Bemerkungen zu D",
-  apflora.apber."JBerDatum" AS "JBer Datum",
-  apflora.adresse."AdrName" AS "JBer BearbeiterIn",
-  apflora.apber."MutWann" AS "JBer MutWann",
-  apflora.apber."MutWer" AS "JBer MutWer"
-FROM
-  ((apflora.ap
-  RIGHT JOIN
-    apflora.apber
-    ON apflora.ap."ApArtId" = apflora.apber."ApArtId")
-  LEFT JOIN
-    apflora.adresse
-    ON apflora.apber."JBerBearb" = apflora.adresse."AdrId")
-  LEFT JOIN
-    apflora.ap_erfkrit_werte
-    ON apflora.apber."JBerBeurteilung" = ap_erfkrit_werte.code
-WHERE
-  apflora.ap."ApArtId" IS NULL
-ORDER BY
-  apflora.apber."ApArtId",
-  apflora.apber."JBerJahr",
-  apflora.apber."JBerDatum";
-
 DROP VIEW IF EXISTS apflora.v_apber_artd CASCADE;
 CREATE OR REPLACE VIEW apflora.v_apber_artd AS
 SELECT
   apflora.ap.*,
-  apflora.ae_eigenschaften.artname AS "Art",
-  apflora.apber."JBerId",
-  apflora.apber."JBerJahr",
-  apflora.apber."JBerVergleichVorjahrGesamtziel",
-  apflora.apber."JBerBeurteilung",
-  apflora.apber."JBerAnalyse",
-  apflora.apber."JBerUmsetzung",
-  apflora.apber."JBerErfko",
-  apflora.apber."JBerATxt",
-  apflora.apber."JBerCAktivApbearb",
-  apflora.apber."JBerCVerglAusfPl",
-  apflora.apber."JBerBTxt",
-  apflora.apber."JBerCTxt",
-  apflora.apber."JBerDTxt",
-  apflora.apber."JBerDatum",
-  apflora.apber."JBerBearb",
-  apflora.adresse."AdrName" AS "Bearbeiter",
+  apflora.ae_eigenschaften.artname,
+  apflora.apber.*,
+  apflora.adresse."AdrName" AS bearbeiter_decodiert,
   ap_erfkrit_werte.text
 FROM
   (apflora.ae_eigenschaften
@@ -1597,14 +1545,14 @@ FROM
     (((apflora.apber
     LEFT JOIN
       apflora.adresse
-      ON apflora.apber."JBerBearb" = apflora.adresse."AdrId")
+      ON apflora.apber.bearbeiter = apflora.adresse."AdrId")
     LEFT JOIN
       apflora.ap_erfkrit_werte
-      ON apflora.apber."JBerBeurteilung" = apflora.ap_erfkrit_werte.code)
+      ON apflora.apber.beurteilung = apflora.ap_erfkrit_werte.code)
     INNER JOIN
       apflora._variable
-      ON apflora.apber."JBerJahr" = apflora._variable."JBerJahr")
-    ON apflora.ap."ApArtId" = apflora.apber."ApArtId";
+      ON apflora.apber.jahr = apflora._variable.apber_jahr)
+    ON apflora.ap."ApArtId" = apflora.apber.ap_id;
 
 DROP VIEW IF EXISTS apflora.v_pop_massnseitbeginnap CASCADE;
 CREATE OR REPLACE VIEW apflora.v_pop_massnseitbeginnap AS
@@ -1629,23 +1577,11 @@ GROUP BY
 DROP VIEW IF EXISTS apflora.v_apber CASCADE;
 CREATE OR REPLACE VIEW apflora.v_apber AS
 SELECT
-  apflora.ap."ApArtId" AS "ApArtId",
-  apflora.apber."JBerId" AS "JBerId",
-  apflora.ae_eigenschaften.artname AS "Name",
-  apflora.apber."JBerJahr" AS "JBerJahr",
-  apflora.apber."JBerVergleichVorjahrGesamtziel" AS "JBerVergleichVorjahrGesamtziel",
-  ap_erfkrit_werte.text AS "JBerBeurteilung",
-  apflora.apber."JBerVeraenGegenVorjahr" AS "JBerVeraenGegenVorjahr",
-  apflora.apber."JBerAnalyse" AS "JBerAnalyse",
-  apflora.apber."JBerUmsetzung" AS "JBerUmsetzung",
-  apflora.apber."JBerErfko" AS "JBerErfko",
-  apflora.apber."JBerATxt" AS "JBerATxt",
-  apflora.apber."JBerBTxt" AS "JBerBTxt",
-  apflora.apber."JBerCAktivApbearb" AS "JBerCAktivApbearb",
-  apflora.apber."JBerCVerglAusfPl" AS "JBerCVerglAusfPl",
-  apflora.apber."JBerCTxt" AS "JBerCTxt",
-  apflora.apber."JBerDTxt" AS "JBerDTxt",
-  apflora.apber."JBerDatum" AS "JBerDatum",apflora.adresse."AdrName" AS "JBerBearb"
+  apflora.ap."ApArtId",
+  apflora.ae_eigenschaften.artname,
+  apflora.apber.*,
+  apflora.ap_erfkrit_werte.text AS beurteilung_decodiert,
+  apflora.adresse."AdrName" AS bearbeiter_decodiert
 FROM
   apflora.ap
   INNER JOIN
@@ -1655,11 +1591,11 @@ FROM
     ((apflora.apber
     LEFT JOIN
       apflora.ap_erfkrit_werte
-      ON (apflora.apber."JBerBeurteilung" = ap_erfkrit_werte.code))
+      ON (apflora.apber.beurteilung = apflora.ap_erfkrit_werte.code))
     LEFT JOIN
       apflora.adresse
-      ON (apflora.apber."JBerBearb" = apflora.adresse."AdrId"))
-    ON apflora.ap."ApArtId" = apflora.apber."ApArtId"
+      ON (apflora.apber.bearbeiter = apflora.adresse."AdrId"))
+    ON apflora.ap."ApArtId" = apflora.apber.ap_id
 ORDER BY
   apflora.ae_eigenschaften.artname;
 
@@ -1682,9 +1618,9 @@ FROM
     apflora.tpopmassn
     ON apflora.tpop."TPopId" = apflora.tpopmassn.tpop_id
 WHERE
-  apflora.tpopmassnber.jahr <= apflora._variable."JBerJahr"
+  apflora.tpopmassnber.jahr <= apflora._variable.apber_jahr
   AND apflora.tpop."TPopApBerichtRelevant" = 1
-  AND apflora.tpopmassn.jahr <= apflora._variable."JBerJahr"
+  AND apflora.tpopmassn.jahr <= apflora._variable.apber_jahr
   AND apflora.pop."PopHerkunft" <> 300
   AND apflora.tpopmassnber.beurteilung BETWEEN 1 AND 5;
 
@@ -1706,7 +1642,7 @@ FROM
       ON apflora.pop."PopId" = apflora.tpop."PopId")
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
 WHERE
-  apflora.tpopber.jahr <= apflora._variable."JBerJahr"
+  apflora.tpopber.jahr <= apflora._variable.apber_jahr
   AND apflora.tpop."TPopApBerichtRelevant" = 1
   AND apflora.pop."PopHerkunft" <> 300;
 
@@ -1729,9 +1665,9 @@ FROM
     apflora.tpopmassn
     ON apflora.tpop."TPopId" = apflora.tpopmassn.tpop_id
 WHERE
-  apflora.popmassnber."PopMassnBerJahr" <= apflora._variable."JBerJahr"
+  apflora.popmassnber."PopMassnBerJahr" <= apflora._variable.apber_jahr
   AND apflora.tpop."TPopApBerichtRelevant" = 1
-  AND apflora.tpopmassn.jahr <= apflora._variable."JBerJahr"
+  AND apflora.tpopmassn.jahr <= apflora._variable.apber_jahr
   AND apflora.pop."PopHerkunft" <> 300;
 
 -- dieser view ist für den Bericht gedacht - daher letzter popber vor jBerJahr
@@ -1751,7 +1687,7 @@ FROM
     apflora.tpop
     ON apflora.pop."PopId" = apflora.tpop."PopId"
 WHERE
-  apflora.popber."PopBerJahr" <= apflora._variable."JBerJahr"
+  apflora.popber."PopBerJahr" <= apflora._variable.apber_jahr
   AND apflora.tpop."TPopApBerichtRelevant" = 1
   AND apflora.pop."PopHerkunft" <> 300;
 
@@ -2825,7 +2761,7 @@ FROM
 WHERE
   apflora.tpop."TPopApBerichtRelevant" = 1
   AND apflora.pop."PopHerkunft" <> 300
-  AND apflora.popber."PopBerJahr" <= apflora._variable."JBerJahr"
+  AND apflora.popber."PopBerJahr" <= apflora._variable.apber_jahr
   AND apflora.popber."PopBerEntwicklung" in (1, 2, 3, 4, 8)
 GROUP BY
   apflora.pop."ApArtId",
@@ -2849,7 +2785,7 @@ WHERE
   apflora.tpop."TPopApBerichtRelevant" = 1
   AND apflora.pop."PopHerkunft" <> 300
   AND apflora.tpop."TPopHerkunft" <> 300
-  AND apflora.tpopber.jahr <= apflora._variable."JBerJahr"
+  AND apflora.tpopber.jahr <= apflora._variable.apber_jahr
   AND apflora.tpopber.entwicklung in (1, 2, 3, 4, 8)
 GROUP BY
   apflora.pop."ApArtId",
@@ -2870,7 +2806,7 @@ FROM
     apflora.tpopmassn
     ON apflora.tpop."TPopId" = apflora.tpopmassn.tpop_id
 WHERE
-  apflora.tpopmassn.jahr <= apflora._variable."JBerJahr"
+  apflora.tpopmassn.jahr <= apflora._variable.apber_jahr
   AND apflora.tpop."TPopApBerichtRelevant" = 1
   AND apflora.pop."PopHerkunft" <> 300
   AND apflora.tpop."TPopHerkunft" <> 300
@@ -3191,7 +3127,7 @@ FROM
     (apflora.popber
     INNER JOIN
       apflora._variable
-      ON apflora.popber."PopBerJahr" = apflora._variable."JBerJahr")
+      ON apflora.popber."PopBerJahr" = apflora._variable.apber_jahr)
     ON apflora.pop."PopId" = apflora.popber."PopId")
   INNER JOIN
     apflora.tpop
@@ -3214,7 +3150,7 @@ FROM
     (apflora.popber
     INNER JOIN
       apflora._variable
-      ON apflora.popber."PopBerJahr" = apflora._variable."JBerJahr")
+      ON apflora.popber."PopBerJahr" = apflora._variable.apber_jahr)
     ON apflora.pop."PopId" = apflora.popber."PopId")
   INNER JOIN
     apflora.tpop
@@ -3238,7 +3174,7 @@ FROM
     (apflora.popber
     INNER JOIN
       apflora._variable
-      ON apflora.popber."PopBerJahr" = apflora._variable."JBerJahr")
+      ON apflora.popber."PopBerJahr" = apflora._variable.apber_jahr)
     ON apflora.pop."PopId" = apflora.popber."PopId")
   INNER JOIN
     apflora.tpop
@@ -3262,7 +3198,7 @@ FROM
     (apflora.popber
     INNER JOIN
       apflora._variable
-      ON apflora.popber."PopBerJahr" = apflora._variable."JBerJahr")
+      ON apflora.popber."PopBerJahr" = apflora._variable.apber_jahr)
     ON apflora.pop."PopId" = apflora.popber."PopId")
   INNER JOIN
     apflora.tpop
@@ -3286,7 +3222,7 @@ FROM
     (apflora.popber
     INNER JOIN
       apflora._variable
-      ON apflora.popber."PopBerJahr" = apflora._variable."JBerJahr")
+      ON apflora.popber."PopBerJahr" = apflora._variable.apber_jahr)
     ON apflora.pop."PopId" = apflora.popber."PopId")
   INNER JOIN
     apflora.tpop
@@ -3310,7 +3246,7 @@ FROM
     (apflora.popber
     INNER JOIN
       apflora._variable
-      ON apflora.popber."PopBerJahr" = apflora._variable."JBerJahr")
+      ON apflora.popber."PopBerJahr" = apflora._variable.apber_jahr)
     ON apflora.pop."PopId" = apflora.popber."PopId")
   INNER JOIN
     apflora.tpop
@@ -3353,7 +3289,7 @@ FROM
       (apflora.tpopber
       INNER JOIN
         apflora._variable
-        ON apflora.tpopber.jahr = apflora._variable."JBerJahr")
+        ON apflora.tpopber.jahr = apflora._variable.apber_jahr)
       ON apflora.tpop."TPopId" = apflora.tpopber.tpop_id)
     ON apflora.pop."PopId" = apflora.tpop."PopId"
 WHERE
@@ -3377,7 +3313,7 @@ FROM
       (apflora.tpopber
       INNER JOIN
         apflora._variable
-        ON apflora.tpopber.jahr = apflora._variable."JBerJahr")
+        ON apflora.tpopber.jahr = apflora._variable.apber_jahr)
       ON apflora.tpop."TPopId" = apflora.tpopber.tpop_id)
     ON apflora.pop."PopId" = apflora.tpop."PopId"
 WHERE
@@ -3402,7 +3338,7 @@ FROM
       (apflora.tpopber
       INNER JOIN
         apflora._variable
-        ON apflora.tpopber.jahr = apflora._variable."JBerJahr")
+        ON apflora.tpopber.jahr = apflora._variable.apber_jahr)
       ON apflora.tpop."TPopId" = apflora.tpopber.tpop_id)
     ON apflora.pop."PopId" = apflora.tpop."PopId"
 WHERE
@@ -3427,7 +3363,7 @@ FROM
       (apflora.tpopber
       INNER JOIN
         apflora._variable
-        ON apflora.tpopber.jahr = apflora._variable."JBerJahr")
+        ON apflora.tpopber.jahr = apflora._variable.apber_jahr)
       ON apflora.tpop."TPopId" = apflora.tpopber.tpop_id)
     ON apflora.pop."PopId" = apflora.tpop."PopId"
 WHERE
@@ -3452,7 +3388,7 @@ FROM
       (apflora.tpopber
       INNER JOIN
         apflora._variable
-        ON apflora.tpopber.jahr = apflora._variable."JBerJahr")
+        ON apflora.tpopber.jahr = apflora._variable.apber_jahr)
       ON apflora.tpop."TPopId" = apflora.tpopber.tpop_id)
     ON apflora.pop."PopId" = apflora.tpop."PopId"
 WHERE
@@ -3477,7 +3413,7 @@ FROM
       (apflora.tpopber
       INNER JOIN
         apflora._variable
-        ON apflora.tpopber.jahr = apflora._variable."JBerJahr")
+        ON apflora.tpopber.jahr = apflora._variable.apber_jahr)
       ON apflora.tpop."TPopId" = apflora.tpopber.tpop_id)
     ON apflora.pop."PopId" = apflora.tpop."PopId"
 WHERE
@@ -3521,7 +3457,7 @@ FROM
     (apflora.tpopmassn
     INNER JOIN
       apflora._variable
-      ON apflora.tpopmassn.jahr = apflora._variable."JBerJahr")
+      ON apflora.tpopmassn.jahr = apflora._variable.apber_jahr)
     ON apflora.tpop."TPopId" = apflora.tpopmassn.tpop_id
 WHERE
   apflora.tpop."TPopApBerichtRelevant" = 1
@@ -3545,7 +3481,7 @@ FROM
     ON apflora.tpop."TPopId" = apflora.tpopmassn.tpop_id)
   INNER JOIN
     apflora._variable
-    ON apflora.tpopmassn.jahr = apflora._variable."JBerJahr"
+    ON apflora.tpopmassn.jahr = apflora._variable.apber_jahr
 WHERE
   apflora.tpop."TPopApBerichtRelevant" = 1
   AND apflora.pop."PopHerkunft" <> 300
@@ -7003,20 +6939,20 @@ SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
   'AP-Bericht ohne Jahr:'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'AP-Berichte', apflora.apber."JBerId"]::text[] AS url,
-  ARRAY[concat('AP-Bericht (id): ', apflora.apber."JBerId")]::text[] AS text
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'AP-Berichte', apflora.apber.id]::text[] AS url,
+  ARRAY[concat('AP-Bericht (id): ', apflora.apber.id)]::text[] AS text
 FROM
   apflora.ap
   INNER JOIN
     apflora.apber
-    ON apflora.ap."ApArtId" = apflora.apber."ApArtId"
+    ON apflora.ap."ApArtId" = apflora.apber.ap_id
 GROUP BY
   apflora.ap."ApArtId",
-  apflora.apber."JBerId"
+  apflora.apber.id
 HAVING
-  apflora.apber."JBerJahr" IS NULL
+  apflora.apber.jahr IS NULL
 ORDER BY
-  apflora.apber."JBerId";
+  apflora.apber.id;
 
 DROP VIEW IF EXISTS apflora.v_qk2_apber_ohnevergleichvorjahrgesamtziel CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk2_apber_ohnevergleichvorjahrgesamtziel AS
@@ -7024,19 +6960,19 @@ SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
   'AP-Bericht ohne Vergleich Vorjahr - Gesamtziel:'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'AP-Berichte', apflora.apber."JBerId"]::text[] AS url,
-  ARRAY[concat('AP-Bericht (Jahr): ', apflora.apber."JBerJahr")]::text[] AS text,
-  apflora.apber."JBerJahr" AS "Berichtjahr"
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'AP-Berichte', apflora.apber.id]::text[] AS url,
+  ARRAY[concat('AP-Bericht (Jahr): ', apflora.apber.jahr)]::text[] AS text,
+  apflora.apber.jahr AS "Berichtjahr"
 FROM
   apflora.ap
   INNER JOIN
     apflora.apber
-    ON apflora.ap."ApArtId" = apflora.apber."ApArtId"
+    ON apflora.ap."ApArtId" = apflora.apber.ap_id
 WHERE
-  apflora.apber."JBerVergleichVorjahrGesamtziel" IS NULL
-  AND apflora.apber."JBerJahr" IS NOT NULL
+  apflora.apber.vergleich_vorjahr_gesamtziel IS NULL
+  AND apflora.apber.jahr IS NOT NULL
 ORDER BY
-  apflora.apber."JBerJahr";
+  apflora.apber.jahr;
 
 DROP VIEW IF EXISTS apflora.v_qk2_apber_ohnebeurteilung CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk2_apber_ohnebeurteilung AS
@@ -7044,19 +6980,19 @@ SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
   'AP-Bericht ohne Beurteilung:'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'AP-Berichte', apflora.apber."JBerId"]::text[] AS url,
-  ARRAY[concat('AP-Bericht (Jahr): ', apflora.apber."JBerJahr")]::text[] AS text,
-  apflora.apber."JBerJahr" AS "Berichtjahr"
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'AP-Berichte', apflora.apber.id]::text[] AS url,
+  ARRAY[concat('AP-Bericht (Jahr): ', apflora.apber.jahr)]::text[] AS text,
+  apflora.apber.jahr AS "Berichtjahr"
 FROM
   apflora.ap
   INNER JOIN
     apflora.apber
-    ON apflora.ap."ApArtId" = apflora.apber."ApArtId"
+    ON apflora.ap."ApArtId" = apflora.apber.ap_id
 WHERE
-  apflora.apber."JBerBeurteilung" IS NULL
-  AND apflora.apber."JBerJahr" IS NOT NULL
+  apflora.apber.beurteilung IS NULL
+  AND apflora.apber.jahr IS NOT NULL
 ORDER BY
-  apflora.apber."JBerJahr";
+  apflora.apber.jahr;
 
 DROP VIEW IF EXISTS apflora.v_qk2_assozart_ohneart CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk2_assozart_ohneart AS

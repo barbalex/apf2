@@ -80,8 +80,8 @@ DROP TRIGGER IF EXISTS apber_on_update_set_mut ON apflora.apber;
 DROP FUNCTION IF EXISTS apber_on_update_set_mut();
 CREATE FUNCTION apber_on_update_set_mut() RETURNS trigger AS $apber_on_update_set_mut$
   BEGIN
-    NEW."MutWer" = current_setting('request.jwt.claim.username', true);
-    NEW."MutWann" = NOW();
+    NEW.changed_by = current_setting('request.jwt.claim.username', true);
+    NEW.changed = NOW();
     RETURN NEW;
   END;
 $apber_on_update_set_mut$ LANGUAGE plpgsql;

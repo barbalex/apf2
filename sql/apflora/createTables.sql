@@ -139,52 +139,54 @@ COMMENT ON COLUMN apflora.ap_umsetzung_werte.changed_by IS 'Von wem wurde der Da
 
 DROP TABLE IF EXISTS apflora.apber;
 CREATE TABLE apflora.apber (
-  "JBerId" SERIAL PRIMARY KEY,
-  "ApArtId" integer NOT NULL REFERENCES apflora.ap ("ApArtId") ON DELETE CASCADE ON UPDATE CASCADE,
-  "JBerJahr" smallint DEFAULT NULL,
-  "JBerSituation" text,
-  "JBerVergleichVorjahrGesamtziel" text,
-  "JBerBeurteilung" integer DEFAULT NULL REFERENCES apflora.ap_erfkrit_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
-  "JBerVeraenGegenVorjahr" varchar(2) DEFAULT NULL,
-  "JBerAnalyse" text DEFAULT NULL,
-  "JBerUmsetzung" text,
-  "JBerErfko" text,
-  "JBerATxt" text,
-  "JBerBTxt" text,
-  "JBerCTxt" text,
-  "JBerCAktivApbearb" text,
-  "JBerCVerglAusfPl" text,
-  "JBerDTxt" text,
-  "JBerDatum" date DEFAULT NULL,
-  "JBerBearb" integer DEFAULT NULL REFERENCES apflora.adresse ("AdrId") ON DELETE SET NULL ON UPDATE CASCADE,
-  "MutWann" date DEFAULT NOW(),
-  "MutWer" varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
+  id_old integer,
+  ap_id integer NOT NULL REFERENCES apflora.ap ("ApArtId") ON DELETE CASCADE ON UPDATE CASCADE,
+  jahr smallint DEFAULT NULL,
+  situation text,
+  vergleich_vorjahr_gesamtziel text,
+  beurteilung integer DEFAULT NULL REFERENCES apflora.ap_erfkrit_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
+  veraenderung_zum_vorjahr varchar(2) DEFAULT NULL,
+  -- analyse is a reserved word!!!
+  apber_analyse text DEFAULT NULL,
+  konsequenzen_umsetzung text,
+  konsequenzen_erfolgskontrolle text,
+  biotope_neue text,
+  biotope_optimieren text,
+  massnahmen_optimieren text,
+  massnahmen_ap_bearb text,
+  massnahmen_planung_vs_ausfuehrung text,
+  wirkung_auf_art text,
+  datum date DEFAULT NULL,
+  bearbeiter integer DEFAULT NULL REFERENCES apflora.adresse ("AdrId") ON DELETE SET NULL ON UPDATE CASCADE,
+  changed date DEFAULT NOW(),
+  changed_by varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
 );
-COMMENT ON COLUMN apflora.apber."JBerId" IS 'Primärschlüssel der Tabelle "apber"';
-COMMENT ON COLUMN apflora.apber."JBerJahr" IS 'Für welches Jahr gilt der Bericht?';
-COMMENT ON COLUMN apflora.apber."JBerSituation" IS 'Beschreibung der Situation im Berichtjahr. Nicht mehr verwendet: Früher wurden hier die Massnahmen aufgelistet';
-COMMENT ON COLUMN apflora.apber."JBerVergleichVorjahrGesamtziel" IS 'Vergleich zu Vorjahr und Ausblick auf das Gesamtziel';
-COMMENT ON COLUMN apflora.apber."JBerBeurteilung" IS 'Beurteilung des Erfolgs des Aktionsplans bisher';
-COMMENT ON COLUMN apflora.apber."JBerVeraenGegenVorjahr" IS 'Veränderung gegenüber dem Vorjahr: plus heisst aufgestiegen, minus heisst abgestiegen';
-COMMENT ON COLUMN apflora.apber."JBerAnalyse" IS 'Was sind die Ursachen fuer die beobachtete Entwicklung?';
-COMMENT ON COLUMN apflora.apber."JBerUmsetzung" IS 'Konsequenzen für die Umsetzung';
-COMMENT ON COLUMN apflora.apber."JBerErfko" IS 'Konsequenzen für die Erfolgskontrolle';
-COMMENT ON COLUMN apflora.apber."JBerATxt" IS 'Bemerkungen zum Aussagebereich A: Grundmengen und getroffene Massnahmen';
-COMMENT ON COLUMN apflora.apber."JBerBTxt" IS 'Bemerkungen zum Aussagebereich B: Bestandeskontrolle';
-COMMENT ON COLUMN apflora.apber."JBerCTxt" IS 'Bemerkungen zum Aussagebereich C: Zwischenbilanz zur Wirkung von Massnahmen';
-COMMENT ON COLUMN apflora.apber."JBerCAktivApbearb" IS 'Bemerkungen zum Aussagebereich C: Weitere Aktivitäten der Aktionsplan-Verantwortlichen';
-COMMENT ON COLUMN apflora.apber."JBerCVerglAusfPl" IS 'Bemerkungen zum Aussagebereich C: Vergleich Ausführung/Planung';
-COMMENT ON COLUMN apflora.apber."JBerDTxt" IS 'Bemerkungen zum Aussagebereich D: Einschätzung der Wirkung des AP insgesamt pro Art';
-COMMENT ON COLUMN apflora.apber."JBerDatum" IS 'Datum der Nachführung';
-COMMENT ON COLUMN apflora.apber."JBerBearb" IS 'BerichtsverfasserIn: Auswahl aus der Tabelle "adresse"';
-COMMENT ON COLUMN apflora.apber."MutWann" IS 'Wann wurde der Datensatz zuletzt geändert?';
-COMMENT ON COLUMN apflora.apber."MutWer" IS 'Von wem wurde der Datensatz zuletzt geändert?';
-CREATE INDEX ON apflora.apber USING btree ("JBerId");
-CREATE INDEX ON apflora.apber USING btree ("ApArtId");
-CREATE INDEX ON apflora.apber USING btree ("JBerBeurteilung");
-CREATE INDEX ON apflora.apber USING btree ("JBerBearb");
-CREATE INDEX ON apflora.apber USING btree ("JBerJahr");
-SELECT setval(pg_get_serial_sequence('apflora.apber', 'JBerId'), coalesce(max("JBerId"), 0) + 1, false) FROM apflora.apber;
+CREATE INDEX ON apflora.apber USING btree (id);
+CREATE INDEX ON apflora.apber USING btree (ap_id);
+CREATE INDEX ON apflora.apber USING btree (beurteilung);
+CREATE INDEX ON apflora.apber USING btree (bearbeiter);
+CREATE INDEX ON apflora.apber USING btree (jahr);
+COMMENT ON COLUMN apflora.apber.id IS 'Primärschlüssel';
+COMMENT ON COLUMN apflora.apber.id_old IS 'frühere id';
+COMMENT ON COLUMN apflora.apber.jahr IS 'Für welches Jahr gilt der Bericht?';
+COMMENT ON COLUMN apflora.apber.situation IS 'Beschreibung der Situation im Berichtjahr. Seit 2017 nicht mehr verwendet: Früher wurden hier die Massnahmen aufgelistet';
+COMMENT ON COLUMN apflora.apber.vergleich_vorjahr_gesamtziel IS 'Vergleich zu Vorjahr und Ausblick auf das Gesamtziel';
+COMMENT ON COLUMN apflora.apber.beurteilung IS 'Beurteilung des Erfolgs des Aktionsplans bisher';
+COMMENT ON COLUMN apflora.apber.veraenderung_zum_vorjahr IS 'Veränderung gegenüber dem Vorjahr: plus heisst aufgestiegen, minus heisst abgestiegen';
+COMMENT ON COLUMN apflora.apber.apber_analyse IS 'Was sind die Ursachen fuer die beobachtete Entwicklung?';
+COMMENT ON COLUMN apflora.apber.konsequenzen_umsetzung IS 'Konsequenzen für die Umsetzung';
+COMMENT ON COLUMN apflora.apber.konsequenzen_erfolgskontrolle IS 'Konsequenzen für die Erfolgskontrolle';
+COMMENT ON COLUMN apflora.apber.biotope_neue IS 'Bemerkungen zum Aussagebereich A: Grundmengen und getroffene Massnahmen';
+COMMENT ON COLUMN apflora.apber.biotope_optimieren IS 'Bemerkungen zum Aussagebereich B: Bestandeskontrolle';
+COMMENT ON COLUMN apflora.apber.massnahmen_optimieren IS 'Bemerkungen zum Aussagebereich C: Zwischenbilanz zur Wirkung von Massnahmen';
+COMMENT ON COLUMN apflora.apber.massnahmen_ap_bearb IS 'Bemerkungen zum Aussagebereich C: Weitere Aktivitäten der Aktionsplan-Verantwortlichen';
+COMMENT ON COLUMN apflora.apber.massnahmen_planung_vs_ausfuehrung IS 'Bemerkungen zum Aussagebereich C: Vergleich Ausführung/Planung';
+COMMENT ON COLUMN apflora.apber.wirkung_auf_art IS 'Bemerkungen zum Aussagebereich D: Einschätzung der Wirkung des AP insgesamt pro Art';
+COMMENT ON COLUMN apflora.apber.datum IS 'Datum der Nachführung';
+COMMENT ON COLUMN apflora.apber.bearbeiter IS 'BerichtsverfasserIn: Auswahl aus der Tabelle "adresse"';
+COMMENT ON COLUMN apflora.apber.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
+COMMENT ON COLUMN apflora.apber.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
 DROP TABLE IF EXISTS apflora.apberuebersicht;
 CREATE TABLE apflora.apberuebersicht (

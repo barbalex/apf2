@@ -142,8 +142,8 @@ export default [
     table: 'apber',
     label: 'AP-Berichte',
     labelSingular: 'AP-Bericht',
-    idField: 'JBerId',
-    parentIdField: 'ApArtId',
+    idField: 'id',
+    parentIdField: 'ap_id',
   },
   {
     table: 'apberuebersicht',
