@@ -95,7 +95,7 @@ const InnerTreeContainer = styled.div`
 `
 
 const getAndValidateCoordinatesOfTpop = (store, id) => {
-  const myId = parseInt(id, 10)
+  const myId = isNaN(id) ? id : +id
   const tpop = store.table.tpop.get(myId)
   if (!tpop) {
     store.listError(
@@ -212,39 +212,39 @@ const enhance = compose(
           store.map.toggleMapPopLabelContent(actionTable)
         },
         localizeOnMap() {
-          store.map.setIdOfTpopBeingLocalized(parseInt(id, 10))
+          store.map.setIdOfTpopBeingLocalized(id)
           showMapIfNotYetVisible({ store })
           store.map.showMapApfloraLayer('Tpop', true)
         },
         markForMoving() {
-          store.markForMoving(table, parseInt(id, 10), label)
+          store.markForMoving(table, id, label)
         },
         move() {
-          store.moveTo(parseInt(id, 10))
+          store.moveTo(id)
         },
         markForCopying() {
-          store.markForCopying(table, parseInt(id, 10), label)
+          store.markForCopying(table, id, label)
         },
         markForCopyingWithNextLevel() {
-          store.markForCopying(table, parseInt(id, 10), label, true)
+          store.markForCopying(table, id, label, true)
         },
         resetCopying() {
           store.resetCopying()
         },
         copy() {
-          store.copyTo(parseInt(id, 10))
+          store.copyTo(id)
         },
         markForCopyingBiotop() {
-          store.markForCopyingBiotop(parseInt(id, 10), label)
+          store.markForCopyingBiotop(id, label)
         },
         resetCopyingBiotop() {
           store.resetCopyingBiotop()
         },
         copyBiotop() {
-          store.copyBiotopTo(parseInt(id, 10))
+          store.copyBiotopTo(id)
         },
         copyTpopKoordToPop() {
-          store.copyTpopKoordToPop(parseInt(id, 10))
+          store.copyTpopKoordToPop(id)
         },
         createNewPopFromBeob() {
           store.createNewPopFromBeob(tree, id)
@@ -253,19 +253,13 @@ const enhance = compose(
           store.copyTpopBeobKoordToPop(id)
         },
         showCoordOfTpopOnMapsZhCh() {
-          const { x, y } = getAndValidateCoordinatesOfTpop(
-            store,
-            parseInt(id, 10)
-          )
+          const { x, y } = getAndValidateCoordinatesOfTpop(store, id)
           if (x && y) {
             store.showCoordOnMapsZhCh(x, y)
           }
         },
         showCoordOfTpopOnMapGeoAdminCh() {
-          const { x, y } = getAndValidateCoordinatesOfTpop(
-            store,
-            parseInt(id, 10)
-          )
+          const { x, y } = getAndValidateCoordinatesOfTpop(store, id)
           if (x && y) {
             store.showCoordOnMapGeoAdminCh(x, y)
           }

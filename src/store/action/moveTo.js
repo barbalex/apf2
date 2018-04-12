@@ -38,6 +38,14 @@ export default (store: Object, newParentId: number): any => {
 
   const row = store.table[table].get(id)
   if (!row) {
+    console.log('moveTo, data:', {
+      newParentId,
+      table,
+      id,
+      tabelle,
+      idField,
+      parentIdField,
+    })
     return store.listError(
       new Error('change was not saved: Reason: dataset was not found in store')
     )
