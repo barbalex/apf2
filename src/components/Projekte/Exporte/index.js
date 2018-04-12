@@ -289,15 +289,6 @@ const Exporte = ({
               <div>(beschriftet mit Artname, PopNr)</div>
             </DownloadCardButton>
             <DownloadCardButton
-              label="Populationen ohne Teilpopulationen"
-              onClick={() =>
-                downloadFromView({
-                  view: 'v_pop_ohnetpop',
-                  fileName: 'PopulationenOhneTeilpopulationen',
-                })
-              }
-            />
-            <DownloadCardButton
               label="Populationen von AP-Arten ohne Status"
               onClick={() =>
                 downloadFromView({

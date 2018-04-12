@@ -69,7 +69,7 @@ CREATE OR REPLACE VIEW apflora.v_popmassnber_anzmassn0 AS
 SELECT
   apflora.popmassnber.pop_id,
   apflora.popmassnber.jahr,
-  count(apflora.tpopmassn.id) AS "AnzahlvonTPopMassnId"
+  count(apflora.tpopmassn.id) AS "AnzahlMassnahmen"
 FROM
   apflora.popmassnber
   INNER JOIN
@@ -1008,52 +1008,6 @@ WHERE
   apflora.ap."ApArtId" IS NULL
 ORDER BY
   apflora.pop."PopName",
-  apflora.pop."PopNr";
-
-DROP VIEW IF EXISTS apflora.v_pop_ohnetpop CASCADE;
-CREATE OR REPLACE VIEW apflora.v_pop_ohnetpop AS
-SELECT
-  apflora.ae_eigenschaften.taxid AS "ApArtId",
-  apflora.ae_eigenschaften.artname AS "AP Art",
-  apflora.ap_bearbstand_werte.text AS "AP Status",
-  apflora.ap."ApJahr" AS "AP Start im Jahr",
-  apflora.ap_umsetzung_werte.text AS "AP Stand Umsetzung",
-  apflora.pop."PopId",
-  apflora.pop."PopGuid" AS "Pop Guid",
-  apflora.pop."PopNr" AS "Pop Nr",
-  apflora.pop."PopName" AS "Pop Name",
-  pop_status_werte.text AS "Pop Status",
-  apflora.pop."PopBekanntSeit" AS "Pop bekannt seit",
-  apflora.pop."PopHerkunftUnklar" AS "Pop Status unklar",
-  apflora.pop."PopHerkunftUnklarBegruendung" AS "Pop Begruendung fuer unklaren Status",
-  apflora.pop."PopXKoord" AS "Pop X-Koordinaten",
-  apflora.pop."PopYKoord" AS "Pop Y-Koordinaten",
-  apflora.pop."MutWann" AS "Datensatz zuletzt geaendert",
-  apflora.pop."MutWer" AS "Datensatz zuletzt geaendert von"
-FROM
-  (((((apflora.ae_eigenschaften
-  INNER JOIN
-    apflora.ap
-    ON apflora.ae_eigenschaften.taxid = apflora.ap."ApArtId")
-  INNER JOIN
-    apflora.pop
-    ON apflora.ap."ApArtId" = apflora.pop."ApArtId")
-  LEFT JOIN
-    apflora.ap_bearbstand_werte
-    ON apflora.ap."ApStatus" = apflora.ap_bearbstand_werte.code)
-  LEFT JOIN
-    apflora.ap_umsetzung_werte
-    ON apflora.ap."ApUmsetzung" = apflora.ap_umsetzung_werte.code)
-  LEFT JOIN
-    apflora.pop_status_werte
-    ON apflora.pop."PopHerkunft" = pop_status_werte.code)
-  LEFT JOIN
-    apflora.tpop
-    ON apflora.pop."PopId" = apflora.tpop."PopId"
-WHERE
-  apflora.tpop."TPopId" IS NULL
-ORDER BY
-  apflora.ae_eigenschaften.artname,
   apflora.pop."PopNr";
 
 DROP VIEW IF EXISTS apflora.v_popber CASCADE;
@@ -4943,10 +4897,8 @@ FROM
       ON apflora.pop."PopId" = apflora.tpop."PopId")
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
 WHERE
-  apflora.tpop."TPopYKoord" > 40000
-  AND apflora.tpop."TPopYKoord" < 350000
-  AND apflora.tpop."TPopXKoord" > 400000
-  AND apflora.tpop."TPopXKoord" < 900000
+  apflora.tpop."TPopYKoord" is not null
+  AND apflora.tpop."TPopYKoord" is not null
 ORDER BY
   apflora.ae_eigenschaften.artname,
   apflora.pop."PopNr",
@@ -5024,10 +4976,8 @@ FROM
       ON apflora.pop."PopId" = apflora.tpop."PopId")
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
 WHERE
-  apflora.tpop."TPopYKoord" > 40000
-  AND apflora.tpop."TPopYKoord" < 350000
-  AND apflora.tpop."TPopXKoord" > 400000
-  AND apflora.tpop."TPopXKoord" < 900000
+  apflora.tpop."TPopYKoord" is not null
+  AND apflora.tpop."TPopYKoord" is not null
 ORDER BY
   apflora.ae_eigenschaften.artname,
   apflora.pop."PopNr",
@@ -5084,10 +5034,8 @@ FROM
       ON apflora.ap."ApArtId" = apflora.pop."ApArtId")
     ON apflora.ae_eigenschaften.taxid = apflora.ap."ApArtId"
 WHERE
-  apflora.pop."PopYKoord" > 40000
-  AND apflora.pop."PopYKoord" < 350000
-  AND apflora.pop."PopXKoord" > 400000
-  AND apflora.pop."PopXKoord" < 900000
+  apflora.pop."PopYKoord" is not null
+  AND apflora.pop."PopYKoord" is not null
 ORDER BY
   apflora.ae_eigenschaften.artname,
   apflora.pop."PopNr",
@@ -5145,10 +5093,8 @@ FROM
       ON apflora.ap."ApArtId" = apflora.pop."ApArtId")
     ON apflora.ae_eigenschaften.taxid = apflora.ap."ApArtId"
 WHERE
-  apflora.pop."PopYKoord" > 40000
-  AND apflora.pop."PopYKoord" < 350000
-  AND apflora.pop."PopXKoord" > 400000
-  AND apflora.pop."PopXKoord" < 900000
+  apflora.pop."PopYKoord" is not null
+  AND apflora.pop."PopYKoord" is not null
 ORDER BY
   apflora.ae_eigenschaften.artname,
   apflora.pop."PopNr",

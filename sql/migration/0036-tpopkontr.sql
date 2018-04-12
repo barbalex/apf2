@@ -476,6 +476,7 @@ ALTER TABLE apflora.tpopkontr DROP COLUMN "ZeitGuid_alt";
 ALTER TABLE apflora.tpopkontr DROP COLUMN "TPopKontrMutDat";
 DROP VIEW IF EXISTS apflora.v_tpopkontr_verwaist;
 DROP VIEW IF EXISTS apflora.v_tpopkontr_nachflurname;
+DROP VIEW IF EXISTS apflora.v_pop_ohnetpop CASCADE;
 
 -- add views
 -- all

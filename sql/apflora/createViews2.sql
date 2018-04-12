@@ -2102,3 +2102,59 @@ GROUP BY
   apflora.tpop."TPopBeschr",
   "tblAdresse_2"."EvabIdPerson",
   "tblAdresse_2"."AdrName";
+
+DROP VIEW IF EXISTS apflora.v_popmassnber_anzmassn CASCADE;
+CREATE OR REPLACE VIEW apflora.v_popmassnber_anzmassn AS
+SELECT
+  apflora.ae_eigenschaften.taxid AS "AP ApArtId",
+  apflora.ae_eigenschaften.artname AS "AP Art",
+  apflora.ap_bearbstand_werte.text AS "AP Status",
+  apflora.ap."ApJahr" AS "AP Start im Jahr",
+  apflora.ap_umsetzung_werte.text AS "AP Stand Umsetzung",
+  apflora.pop."PopGuid" AS "Pop Guid",
+  apflora.pop."PopNr" AS "Pop Nr",
+  apflora.pop."PopName" AS "Pop Name",
+  pop_status_werte.text AS "Pop Status",
+  apflora.pop."PopBekanntSeit" AS "Pop bekannt seit",
+  apflora.pop."PopHerkunftUnklar" AS "Pop Status unklar",
+  apflora.pop."PopHerkunftUnklarBegruendung" AS "Pop Begruendung fuer unklaren Status",
+  apflora.pop."PopXKoord" AS "Pop X-Koordinaten",
+  apflora.pop."PopYKoord" AS "Pop Y-Koordinaten",
+  apflora.pop."MutWann" AS "Datensatz zuletzt geaendert",
+  apflora.pop."MutWer" AS "Datensatz zuletzt geaendert von",
+  apflora.popmassnber.id AS "PopMassnBer Id",
+  apflora.popmassnber.jahr AS "PopMassnBer Jahr",
+  tpopmassn_erfbeurt_werte.text AS "PopMassnBer Entwicklung",
+  apflora.popmassnber.bemerkungen AS "PopMassnBer Interpretation",
+  apflora.popmassnber.changed AS "PopMassnBer MutWann",
+  apflora.popmassnber.changed_by AS "PopMassnBer MutWer",
+  apflora.v_popmassnber_anzmassn0."AnzahlMassnahmen"
+FROM
+  ((((((apflora.ae_eigenschaften
+  INNER JOIN
+    apflora.ap
+    ON apflora.ae_eigenschaften.taxid = apflora.ap."ApArtId")
+  INNER JOIN
+    apflora.pop
+    ON apflora.ap."ApArtId" = apflora.pop."ApArtId")
+  LEFT JOIN
+    apflora.ap_bearbstand_werte
+    ON apflora.ap."ApStatus" = apflora.ap_bearbstand_werte.code)
+  LEFT JOIN
+    apflora.ap_umsetzung_werte
+    ON apflora.ap."ApUmsetzung" = apflora.ap_umsetzung_werte.code)
+  LEFT JOIN
+    apflora.pop_status_werte
+    ON apflora.pop."PopHerkunft" = pop_status_werte.code)
+  INNER JOIN
+    apflora.popmassnber
+      LEFT JOIN
+      apflora.v_popmassnber_anzmassn0
+      on apflora.v_popmassnber_anzmassn0.pop_id = apflora.popmassnber.pop_id and apflora.v_popmassnber_anzmassn0.jahr = apflora.popmassnber.jahr
+    ON apflora.pop."PopId" = apflora.popmassnber.pop_id)
+  LEFT JOIN
+    apflora.tpopmassn_erfbeurt_werte
+    ON apflora.popmassnber.beurteilung = tpopmassn_erfbeurt_werte.code
+ORDER BY
+  apflora.ae_eigenschaften.artname,
+  apflora.pop."PopNr";
