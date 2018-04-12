@@ -475,8 +475,18 @@ ALTER TABLE apflora.tpopkontr DROP COLUMN "TPopKontrGuid_alt";
 ALTER TABLE apflora.tpopkontr DROP COLUMN "ZeitGuid_alt";
 ALTER TABLE apflora.tpopkontr DROP COLUMN "TPopKontrMutDat";
 DROP VIEW IF EXISTS apflora.v_tpopkontr_verwaist;
+DROP VIEW IF EXISTS apflora.v_tpop_verwaist;
+DROP VIEW IF EXISTS apflora.v_pop_verwaist;
+DROP VIEW IF EXISTS apflora.v_popber_verwaist;
+DROP VIEW IF EXISTS apflora.v_popmassnber_verwaist;
+DROP VIEW IF EXISTS apflora.v_idealbiotop_verwaist;
+DROP VIEW IF EXISTS apflora.v_ber_verwaist;
+DROP VIEW IF EXISTS apflora.v_assozart_verwaist;
+DROP VIEW IF EXISTS apflora.v_erfktit_verwaist;
+DROP VIEW IF EXISTS apflora.v_ziel_verwaist;
+DROP VIEW IF EXISTS apflora.v_zielber_verwaist;
 DROP VIEW IF EXISTS apflora.v_tpopkontr_nachflurname;
-DROP VIEW IF EXISTS apflora.v_pop_ohnetpop CASCADE;
+DROP VIEW IF EXISTS apflora.v_pop_ohnetpop;
 
 -- add views
 -- all

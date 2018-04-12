@@ -169,49 +169,6 @@ FROM
 GROUP BY
   apflora.ap."ApArtId";
 
-DROP VIEW IF EXISTS apflora.v_tpop_verwaist CASCADE;
-CREATE OR REPLACE VIEW apflora.v_tpop_verwaist AS
-SELECT
-  apflora.tpop."TPopGuid" AS "TPop Guid",
-  apflora.tpop."TPopNr" AS "TPop Nr",
-  apflora.tpop."TPopGemeinde" AS "TPop Gemeinde",
-  apflora.tpop."TPopFlurname" AS "TPop Flurname",
-  "domPopHerkunft_1".text AS "TPop Status",
-  apflora.tpop."TPopBekanntSeit" AS "TPop bekannt seit",
-  apflora.tpop."TPopHerkunftUnklar" AS "TPop Status unklar",
-  apflora.tpop."TPopHerkunftUnklarBegruendung" AS "TPop Begruendung fuer unklaren Status",
-  apflora.tpop."TPopXKoord" AS "TPop X-Koordinaten",
-  apflora.tpop."TPopYKoord" AS "TPop Y-Koordinaten",
-  apflora.tpop."TPopRadius" AS "TPop Radius (m)",
-  apflora.tpop."TPopHoehe" AS "TPop Hoehe ueM",
-  apflora.tpop."TPopExposition" AS "TPop Exposition",
-  apflora.tpop."TPopKlima" AS "TPop Klima",
-  apflora.tpop."TPopNeigung" AS "TPop Hangneigung",
-  apflora.tpop."TPopBeschr" AS "TPop Beschreibung",
-  apflora.tpop."TPopKatNr" AS "TPop Kataster-Nr",
-  apflora.tpop."TPopApBerichtRelevant" AS "TPop fuer AP-Bericht relevant",
-  apflora.tpop."TPopEigen" AS "TPop EigentuemerIn",
-  apflora.tpop."TPopKontakt" AS "TPop Kontakt vor Ort",
-  apflora.tpop."TPopNutzungszone" AS "TPop Nutzungszone",
-  apflora.tpop."TPopBewirtschafterIn" AS "TPop BewirtschafterIn",
-  apflora.tpop."TPopBewirtschaftung" AS "TPop Bewirtschaftung",
-  apflora.tpop."MutWann" AS "Datensatz zuletzt geaendert",
-  apflora.tpop."MutWer" AS "Datensatz zuletzt geaendert von"
-FROM
-  (apflora.pop
-  RIGHT JOIN
-    apflora.tpop
-    ON apflora.pop."PopId" = apflora.tpop."PopId")
-  LEFT JOIN
-    apflora.pop_status_werte AS "domPopHerkunft_1"
-    ON apflora.tpop."TPopHerkunft" = "domPopHerkunft_1".code
-WHERE
-  apflora.pop."PopId" IS NULL
-ORDER BY
-  apflora.tpop."TPopGemeinde",
-  apflora.tpop."TPopFlurname",
-  apflora.tpop."TPopNr";
-
 DROP VIEW IF EXISTS apflora.v_massn CASCADE;
 CREATE OR REPLACE VIEW apflora.v_massn AS
 SELECT
@@ -980,36 +937,6 @@ ORDER BY
   apflora.ae_eigenschaften.artname,
   apflora.pop."PopNr";
 
--- im Gebrauch (Access):
-DROP VIEW IF EXISTS apflora.v_pop_verwaist CASCADE;
-CREATE OR REPLACE VIEW apflora.v_pop_verwaist AS
-SELECT
-  apflora.pop."PopGuid" AS "Pop Guid",
-  apflora.pop."PopNr" AS "Pop Nr",
-  apflora.pop."PopName" AS "Pop Name",
-  pop_status_werte.text AS "Pop Status",
-  apflora.pop."PopBekanntSeit" AS "Pop bekannt seit",
-  apflora.pop."PopHerkunftUnklar" AS "Pop Status unklar",
-  apflora.pop."PopHerkunftUnklarBegruendung" AS "Pop Begruendung fuer unklaren Status",
-  apflora.pop."PopXKoord" AS "Pop X-Koordinaten",
-  apflora.pop."PopYKoord" AS "Pop Y-Koordinaten",
-  apflora.pop."MutWann" AS "Datensatz zuletzt geaendert",
-  apflora.pop."MutWer" AS "Datensatz zuletzt geaendert von",
-  apflora.ap."ApArtId"
-FROM
-  (apflora.ap
-  RIGHT JOIN
-    apflora.pop
-    ON apflora.ap."ApArtId" = apflora.pop."ApArtId")
-  LEFT JOIN
-    apflora.pop_status_werte
-    ON apflora.pop."PopHerkunft" = pop_status_werte.code
-WHERE
-  apflora.ap."ApArtId" IS NULL
-ORDER BY
-  apflora.pop."PopName",
-  apflora.pop."PopNr";
-
 DROP VIEW IF EXISTS apflora.v_popber CASCADE;
 CREATE OR REPLACE VIEW apflora.v_popber AS
 SELECT
@@ -1059,31 +986,6 @@ FROM
 ORDER BY
   apflora.ae_eigenschaften.artname,
   apflora.pop."PopNr",
-  apflora.popber.jahr,
-  tpop_entwicklung_werte.text;
-
--- im Gebrauch (Access):
-DROP VIEW IF EXISTS apflora.v_popber_verwaist CASCADE;
-CREATE OR REPLACE VIEW apflora.v_popber_verwaist AS
-SELECT
-  apflora.popber.id AS "PopBer Id",
-  apflora.popber.pop_id AS "PopBer PopId",
-  apflora.popber.jahr AS "PopBer Jahr",
-  tpop_entwicklung_werte.text AS "PopBer Entwicklung",
-  apflora.popber.bemerkungen AS "PopBer Bemerkungen",
-  apflora.popber.changed AS "PopBer MutWann",
-  apflora.popber.changed_by AS "PopBer MutWer"
-FROM
-  (apflora.pop
-  RIGHT JOIN
-    apflora.popber
-    ON apflora.pop."PopId" = apflora.popber.pop_id)
-  LEFT JOIN
-    apflora.tpop_entwicklung_werte
-    ON apflora.popber.entwicklung = tpop_entwicklung_werte.code
-WHERE
-  apflora.pop."PopId" IS NULL
-ORDER BY
   apflora.popber.jahr,
   tpop_entwicklung_werte.text;
 
@@ -1138,31 +1040,6 @@ FROM
 ORDER BY
   apflora.ae_eigenschaften.artname,
   apflora.pop."PopNr";
-
--- im Gebrauch (Access):
-DROP VIEW IF EXISTS apflora.v_popmassnber_verwaist CASCADE;
-CREATE OR REPLACE VIEW apflora.v_popmassnber_verwaist AS
-SELECT
-  apflora.popmassnber.id AS "PopMassnBer Id",
-  apflora.popmassnber.pop_id AS "PopMassnBer PopId",
-  apflora.popmassnber.jahr AS "PopMassnBer Jahr",
-  tpopmassn_erfbeurt_werte.text AS "PopMassnBer Entwicklung",
-  apflora.popmassnber.bemerkungen AS "PopMassnBer Interpretation",
-  apflora.popmassnber.changed AS "PopMassnBer MutWann",
-  apflora.popmassnber.changed_by AS "PopMassnBer MutWer"
-FROM
-  (apflora.pop
-  RIGHT JOIN
-    apflora.popmassnber
-    ON apflora.pop."PopId" = apflora.popmassnber.pop_id)
-  LEFT JOIN
-    apflora.tpopmassn_erfbeurt_werte
-    ON apflora.popmassnber.beurteilung = tpopmassn_erfbeurt_werte.code
-WHERE
-  apflora.pop."PopId" IS NULL
-ORDER BY
-  apflora.popmassnber.jahr,
-  tpopmassn_erfbeurt_werte.text;
 
 DROP VIEW IF EXISTS apflora.v_tpop CASCADE;
 CREATE OR REPLACE VIEW apflora.v_tpop AS
@@ -1916,53 +1793,6 @@ ORDER BY
   apflora.ae_eigenschaften.artname,
   apflora.idealbiotop.erstelldatum;
 
-DROP VIEW IF EXISTS apflora.v_idealbiotop_verwaist CASCADE;
-CREATE OR REPLACE VIEW apflora.v_idealbiotop_verwaist AS
-SELECT
-  apflora.ap."ApArtId" AS "AP ApArtId",
-  apflora.idealbiotop.ap_id AS "Ib ApArtId",
-  apflora.idealbiotop.erstelldatum AS "Ib Erstelldatum",
-  apflora.idealbiotop.hoehenlage AS "Ib Hoehenlage",
-  apflora.idealbiotop.region AS "Ib Region",
-  apflora.idealbiotop.exposition AS "Ib Exposition",
-  apflora.idealbiotop.besonnung AS "Ib Besonnung",
-  apflora.idealbiotop.hangneigung AS "Ib Hangneigung",
-  apflora.idealbiotop.boden_typ AS "Ib Bodentyp",
-  apflora.idealbiotop.boden_kalkgehalt AS "Ib Boden Kalkgehalt",
-  apflora.idealbiotop.boden_durchlaessigkeit AS "Ib Boden Durchlaessigkeit",
-  apflora.idealbiotop.boden_humus AS "Ib Boden Humus",
-  apflora.idealbiotop.boden_naehrstoffgehalt AS "Ib Boden Naehrstoffgehalt",
-  apflora.idealbiotop.wasserhaushalt AS "Ib Wasserhaushalt",
-  apflora.idealbiotop.konkurrenz AS "Ib Konkurrenz",
-  apflora.idealbiotop.moosschicht AS "Ib Moosschicht",
-  apflora.idealbiotop.krautschicht AS "Ib Krautschicht",
-  apflora.idealbiotop.strauchschicht AS "Ib Strauchschicht",
-  apflora.idealbiotop.baumschicht AS "Ib Baumschicht",
-  apflora.idealbiotop.bemerkungen AS "Ib Bemerkungen",
-  apflora.idealbiotop.changed AS "Ib MutWann",
-  apflora.idealbiotop.changed_by AS "Ib MutWer"
-FROM
-  apflora.idealbiotop
-  LEFT JOIN
-    ((((apflora.ae_eigenschaften
-    RIGHT JOIN
-      apflora.ap
-      ON apflora.ae_eigenschaften.taxid = apflora.ap."ApArtId")
-    LEFT JOIN
-      apflora.ap_bearbstand_werte
-      ON apflora.ap."ApStatus" = apflora.ap_bearbstand_werte.code)
-    LEFT JOIN
-      apflora.ap_umsetzung_werte
-      ON apflora.ap."ApUmsetzung" = apflora.ap_umsetzung_werte.code)
-    LEFT JOIN
-      apflora.adresse
-      ON apflora.ap."ApBearb" = apflora.adresse."AdrId")
-    ON apflora.idealbiotop.ap_id = apflora.ap."ApArtId"
-WHERE
-  apflora.ap."ApArtId" IS NULL
-ORDER BY
-  apflora.idealbiotop.erstelldatum;
-
 DROP VIEW IF EXISTS apflora.v_ber CASCADE;
 CREATE OR REPLACE VIEW apflora.v_ber AS
 SELECT
@@ -2000,40 +1830,6 @@ FROM
 ORDER BY
   apflora.ae_eigenschaften.artname;
 
-DROP VIEW IF EXISTS apflora.v_ber_verwaist CASCADE;
-CREATE OR REPLACE VIEW apflora.v_ber_verwaist AS
-SELECT
-  apflora.ap."ApArtId" AS "AP Id",
-  apflora.ber.id AS "Ber Id",
-  apflora.ber.ap_id AS "Ber ApId",
-  apflora.ber.autor AS "Ber Autor",
-  apflora.ber.jahr AS "Ber Jahr",
-  apflora.ber.titel AS "Ber Titel",
-  apflora.ber.url AS "Ber URL",
-  apflora.ber.changed AS "Ber MutWann",
-  apflora.ber.changed_by AS "Ber MutWer"
-FROM
-  ((((apflora.ae_eigenschaften
-  RIGHT JOIN
-    apflora.ap
-    ON apflora.ae_eigenschaften.taxid = apflora.ap."ApArtId")
-  LEFT JOIN
-    apflora.ap_bearbstand_werte
-    ON apflora.ap."ApStatus" = apflora.ap_bearbstand_werte.code)
-  LEFT JOIN
-    apflora.ap_umsetzung_werte
-    ON apflora.ap."ApUmsetzung" = apflora.ap_umsetzung_werte.code)
-  LEFT JOIN
-    apflora.adresse
-    ON apflora.ap."ApBearb" = apflora.adresse."AdrId")
-  RIGHT JOIN
-    apflora.ber
-    ON apflora.ap."ApArtId" = apflora.ber.ap_id
-WHERE
-  apflora.ap."ApArtId" IS NULL
-ORDER BY
-  apflora.ae_eigenschaften.artname;
-
 DROP VIEW IF EXISTS apflora.v_assozart CASCADE;
 CREATE OR REPLACE VIEW apflora.v_assozart AS
 SELECT
@@ -2068,41 +1864,6 @@ FROM
       apflora.assozart
       ON apflora.ap."ApArtId" = apflora.assozart.ap_id)
     ON "ArtenDb_Arteigenschaften_1".id = apflora.assozart.ae_id
-ORDER BY
-  apflora.ae_eigenschaften.artname;
-
-DROP VIEW IF EXISTS apflora.v_assozart_verwaist CASCADE;
-CREATE OR REPLACE VIEW apflora.v_assozart_verwaist AS
-SELECT
-  apflora.ap."ApArtId" AS "AP ApArtId",
-  apflora.assozart.id AS "AA Id",
-  apflora.assozart.ap_id AS "AA ApArtId",
-  "ArtenDb_Arteigenschaften_1".artname AS "AA Art",
-  apflora.assozart.bemerkungen AS "AA Bemerkungen",
-  apflora.assozart.changed AS "AA MutWann",
-  apflora.assozart.changed_by AS "AA MutWer"
-FROM
-  apflora.ae_eigenschaften AS "ArtenDb_Arteigenschaften_1"
-  RIGHT JOIN
-    (((((apflora.ae_eigenschaften
-    RIGHT JOIN
-      apflora.ap
-      ON apflora.ae_eigenschaften.taxid = apflora.ap."ApArtId")
-    LEFT JOIN
-      apflora.ap_bearbstand_werte
-      ON apflora.ap."ApStatus" = apflora.ap_bearbstand_werte.code)
-    LEFT JOIN
-      apflora.ap_umsetzung_werte
-      ON apflora.ap."ApUmsetzung" = apflora.ap_umsetzung_werte.code)
-    LEFT JOIN
-      apflora.adresse
-      ON apflora.ap."ApBearb" = apflora.adresse."AdrId")
-    RIGHT JOIN
-      apflora.assozart
-      ON apflora.ap."ApArtId" = apflora.assozart.ap_id)
-    ON "ArtenDb_Arteigenschaften_1".id = apflora.assozart.ae_id
-WHERE
-  apflora.ap."ApArtId" IS NULL
 ORDER BY
   apflora.ae_eigenschaften.artname;
 
@@ -2204,42 +1965,6 @@ FROM
     ON apflora.erfkrit.erfolg = ap_erfkrit_werte.code
 ORDER BY
   apflora.ae_eigenschaften.artname;
-
-DROP VIEW IF EXISTS apflora.v_erfktit_verwaist CASCADE;
-CREATE OR REPLACE VIEW apflora.v_erfktit_verwaist AS
-SELECT
-  apflora.ap."ApArtId" AS "AP Id",
-  apflora.erfkrit.id AS "ErfKrit Id",
-  apflora.erfkrit.id AS "ErfKrit ApId",
-  ap_erfkrit_werte.text AS "ErfKrit Beurteilung",
-  apflora.erfkrit.kriterien AS "ErfKrit Kriterien",
-  apflora.erfkrit.changed AS "ErfKrit MutWann",
-  apflora.erfkrit.changed_by AS "ErfKrit MutWer"
-FROM
-  (((((apflora.ae_eigenschaften
-  RIGHT JOIN
-    apflora.ap
-    ON apflora.ae_eigenschaften.taxid = apflora.ap."ApArtId")
-  LEFT JOIN
-    apflora.ap_bearbstand_werte
-    ON apflora.ap."ApStatus" = apflora.ap_bearbstand_werte.code)
-  LEFT JOIN
-    apflora.ap_umsetzung_werte
-    ON apflora.ap."ApUmsetzung" = apflora.ap_umsetzung_werte.code)
-  LEFT JOIN
-    apflora.adresse
-    ON apflora.ap."ApBearb" = apflora.adresse."AdrId")
-  RIGHT JOIN
-    apflora.erfkrit
-    ON apflora.ap."ApArtId" = apflora.erfkrit.ap_id)
-  LEFT JOIN
-    apflora.ap_erfkrit_werte
-    ON apflora.erfkrit.erfolg = ap_erfkrit_werte.code
-WHERE
-  apflora.ap."ApArtId" IS NULL
-ORDER BY
-  apflora.ap_erfkrit_werte.text,
-  apflora.erfkrit.kriterien;
 
 DROP VIEW IF EXISTS apflora.v_ap_tpopmassnjahr0 CASCADE;
 CREATE OR REPLACE VIEW apflora.v_ap_tpopmassnjahr0 AS
@@ -3431,42 +3156,6 @@ ORDER BY
   ziel_typ_werte.text,
   apflora.ziel.typ;
 
-DROP VIEW IF EXISTS apflora.v_ziel_verwaist CASCADE;
-CREATE OR REPLACE VIEW apflora.v_ziel_verwaist AS
-SELECT
-  apflora.ap."ApArtId" AS "AP Id",
-  apflora.ziel.id AS "Ziel Id",
-  apflora.ziel.ap_id AS "Ziel ApId",
-  apflora.ziel.jahr AS "Ziel Jahr",
-  ziel_typ_werte.text AS "Ziel Typ",
-  apflora.ziel.bezeichnung AS "Ziel Beschreibung"
-FROM
-  (((((apflora.ae_eigenschaften
-  RIGHT JOIN
-    apflora.ap
-    ON apflora.ae_eigenschaften.taxid = apflora.ap."ApArtId")
-  LEFT JOIN
-    apflora.ap_bearbstand_werte
-    ON apflora.ap."ApStatus" = apflora.ap_bearbstand_werte.code)
-  LEFT JOIN
-    apflora.ap_umsetzung_werte
-    ON apflora.ap."ApUmsetzung" = apflora.ap_umsetzung_werte.code)
-  LEFT JOIN
-    apflora.adresse
-    ON apflora.ap."ApBearb" = apflora.adresse."AdrId")
-  RIGHT JOIN
-    apflora.ziel
-    ON apflora.ap."ApArtId" = apflora.ziel.ap_id)
-  LEFT JOIN
-    apflora.ziel_typ_werte
-    ON apflora.ziel.typ = ziel_typ_werte.code
-WHERE
-  apflora.ap."ApArtId" IS NULL
-ORDER BY
-  apflora.ziel.jahr,
-  ziel_typ_werte.text,
-  apflora.ziel.typ;
-
 DROP VIEW IF EXISTS apflora.v_zielber CASCADE;
 CREATE OR REPLACE VIEW apflora.v_zielber AS
 SELECT
@@ -3514,47 +3203,6 @@ ORDER BY
   apflora.ae_eigenschaften.artname,
   apflora.ziel.jahr,
   ziel_typ_werte.text,
-  apflora.ziel.typ,
-  apflora.zielber.jahr;
-
-DROP VIEW IF EXISTS apflora.v_zielber_verwaist CASCADE;
-CREATE OR REPLACE VIEW apflora.v_zielber_verwaist AS
-SELECT
-  apflora.ap."ApArtId" AS "AP Id",
-  apflora.ziel.id AS "Ziel Id",
-  apflora.zielber.id AS "ZielBer Id",
-  apflora.zielber.id AS "ZielBer ZielId",
-  apflora.zielber.jahr AS "ZielBer Jahr",
-  apflora.zielber.erreichung AS "ZielBer Erreichung",
-  apflora.zielber.bemerkungen AS "ZielBer Bemerkungen",
-  apflora.zielber.changed AS "ZielBer MutWann",
-  apflora.zielber.changed_by AS "ZielBer MutWer"
-FROM
-  ((((((apflora.ae_eigenschaften
-  RIGHT JOIN
-    apflora.ap
-    ON apflora.ae_eigenschaften.taxid = apflora.ap."ApArtId")
-  LEFT JOIN
-    apflora.ap_bearbstand_werte
-    ON apflora.ap."ApStatus" = apflora.ap_bearbstand_werte.code)
-  LEFT JOIN
-    apflora.ap_umsetzung_werte
-    ON apflora.ap."ApUmsetzung" = apflora.ap_umsetzung_werte.code)
-  LEFT JOIN
-    apflora.adresse
-    ON apflora.ap."ApBearb" = apflora.adresse."AdrId")
-  RIGHT JOIN
-    apflora.ziel
-    ON apflora.ap."ApArtId" = apflora.ziel.ap_id)
-  LEFT JOIN
-    apflora.ziel_typ_werte
-    ON apflora.ziel.typ = ziel_typ_werte.code)
-  RIGHT JOIN
-    apflora.zielber
-    ON apflora.ziel.id = apflora.zielber.ziel_id
-WHERE
-  apflora.ziel.id IS NULL
-ORDER BY
   apflora.ziel.typ,
   apflora.zielber.jahr;
 
