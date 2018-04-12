@@ -604,6 +604,8 @@ CREATE INDEX ON apflora.tpopber USING btree (jahr);
 
 DROP TABLE IF EXISTS apflora.tpopkontr;
 CREATE TABLE apflora.tpopkontr (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
+  id_old integer,
   "TPopKontrId" SERIAL PRIMARY KEY,
   "TPopId" integer DEFAULT NULL REFERENCES apflora.tpop ("TPopId") ON DELETE CASCADE ON UPDATE CASCADE,
   "TPopKontrTyp" varchar(50) DEFAULT NULL,
@@ -647,7 +649,6 @@ CREATE TABLE apflora.tpopkontr (
   "TPopKontrVegHoeMit" smallint DEFAULT NULL,
   "TPopKontrGefaehrdung" text DEFAULT NULL,
   "TPopKontrMutDat" date DEFAULT NULL,
-  "TPopKontrGuid" UUID DEFAULT uuid_generate_v1mc(),
   "ZeitGuid" UUID DEFAULT uuid_generate_v1mc(),
   "MutWann" date DEFAULT NOW(),
   "MutWer" varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
@@ -661,8 +662,8 @@ CREATE INDEX ON apflora.tpopkontr USING btree ("TPopKontrJahr");
 CREATE INDEX ON apflora.tpopkontr USING btree ("TPopKontrTyp");
 CREATE INDEX ON apflora.tpopkontr USING btree ("TPopKontrDatum");
 CREATE UNIQUE INDEX ON apflora.tpopkontr USING btree ("ZeitGuid");
-CREATE UNIQUE INDEX ON apflora.tpopkontr USING btree ("TPopKontrGuid");
-SELECT setval(pg_get_serial_sequence('apflora.tpopkontr', 'TPopKontrId'), coalesce(max("TPopKontrId"), 0) + 1, false) FROM apflora.tpopkontr;
+COMMENT ON COLUMN apflora.tpopkontr.id IS 'Primärschlüssel. Wird u.a. verwendet für die Identifikation der Beobachtung im nationalen Beobachtungs-Daten-Kreislauf';
+COMMENT ON COLUMN apflora.tpopkontr.id_old IS 'frühere id';
 COMMENT ON COLUMN apflora.tpopkontr."TPopKontrId" IS 'Primärschlüssel der Tabelle "tpopkontr"';
 COMMENT ON COLUMN apflora.tpopkontr."TPopId" IS 'Zugehörige Teilpopulation. Fremdschlüssel aus der Tabelle "tpop"';
 COMMENT ON COLUMN apflora.tpopkontr."TPopKontrTyp" IS 'Typ der Kontrolle. Auswahl aus Tabelle "tpopkontr_typ_werte"';
@@ -706,7 +707,6 @@ COMMENT ON COLUMN apflora.tpopkontr."TPopKontrVegHoeMax" IS 'Maximale Vegetation
 COMMENT ON COLUMN apflora.tpopkontr."TPopKontrVegHoeMit" IS 'Mittlere Vegetationshöhe in cm. Nur für Freiwilligen-Erfolgskontrolle';
 COMMENT ON COLUMN apflora.tpopkontr."TPopKontrGefaehrdung" IS 'Gefährdung. Nur für Freiwilligen-Erfolgskontrolle';
 COMMENT ON COLUMN apflora.tpopkontr."TPopKontrMutDat" IS 'Letzte Mutation. Wird benötigt, um zu klären, welche Daten in den nationalen Kreislauf exportiert werden sollen';
-COMMENT ON COLUMN apflora.tpopkontr."TPopKontrGuid" IS 'GUID. Wird u.a. verwendet für die Identifikation der Beobachtung im nationalen Beobachtungs-Daten-Kreislauf';
 COMMENT ON COLUMN apflora.tpopkontr."ZeitGuid" IS 'GUID für den Export von Zeiten in EvAB';
 COMMENT ON COLUMN apflora.tpopkontr."MutWann" IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.tpopkontr."MutWer" IS 'Von wem wurde der Datensatz zuletzt geändert?';
