@@ -10,10 +10,10 @@ export default (store: Object, tree: Object): Array<Object> => {
   // map through all projekt and create array of nodes
   popber.forEach(el => {
     const popEntwicklungWert = popEntwicklungWerte.find(
-      e => e.code === el.PopBerEntwicklung
+      e => e.code === el.entwicklung
     )
     const entwicklungTxt = popEntwicklungWert ? popEntwicklungWert.text : null
-    el.label = `${el.PopBerJahr || '(kein Jahr)'}: ${entwicklungTxt ||
+    el.label = `${el.jahr || '(kein Jahr)'}: ${entwicklungTxt ||
       '(nicht beurteilt)'}`
   })
   // filter by nodeLabelFilter

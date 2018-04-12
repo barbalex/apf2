@@ -54,11 +54,11 @@ CREATE OR REPLACE FUNCTION apflora.qk2_pop_ohne_popber(apid integer, berichtjahr
     AND apflora.pop."PopId" NOT IN (
       -- 4. "Pop mit PopBer im Berichtjahr" ermitteln:
       SELECT DISTINCT
-        apflora.popber."PopId"
+        apflora.popber.pop_id
       FROM
         apflora.popber
       WHERE
-        apflora.popber."PopBerJahr" = $2
+        apflora.popber.jahr = $2
     )
     AND apflora.pop."ApArtId" = $1
   $$

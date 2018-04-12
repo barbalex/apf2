@@ -177,8 +177,8 @@ export default [
     table: 'popber',
     label: 'Kontroll-Berichte',
     labelSingular: 'Kontroll-Bericht',
-    idField: 'PopBerId',
-    parentIdField: 'PopId',
+    idField: 'id',
+    parentIdField: 'pop_id',
   },
   {
     table: 'popmassnber',

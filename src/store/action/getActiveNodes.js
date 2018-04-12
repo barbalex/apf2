@@ -131,9 +131,7 @@ export default (activeNodeArray: Array<mixed>, store: Object): Object => {
       activeNodeArray[6] === 'Kontroll-Berichte') ||
     false
   const popber =
-    popberFolder && activeNodeArray.length > 7
-      ? parseInt(activeNodeArray[7], 10)
-      : null
+    popberFolder && activeNodeArray.length > 7 ? activeNodeArray[7] : null
   const popmassnberFolder =
     (pop &&
       activeNodeArray.length > 6 &&

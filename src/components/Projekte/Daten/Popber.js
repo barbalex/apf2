@@ -31,32 +31,32 @@ const Popber = ({ store, tree }: { store: Object, tree: Object }) => {
         <FormTitle tree={tree} title="Kontroll-Bericht Population" />
         <FieldsContainer>
           <TextField
-            key={`${activeDataset.row.PopberId}PopBerJahr`}
+            key={`${activeDataset.row.id}jahr`}
             tree={tree}
             label="Jahr"
-            fieldName="PopBerJahr"
-            value={activeDataset.row.PopBerJahr}
-            errorText={activeDataset.valid.PopBerJahr}
+            fieldName="jahr"
+            value={activeDataset.row.jahr}
+            errorText={activeDataset.valid.jahr}
             type="number"
             updateProperty={store.updateProperty}
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <RadioButtonGroup
             tree={tree}
-            fieldName="PopBerEntwicklung"
+            fieldName="entwicklung"
             label="Entwicklung"
-            value={activeDataset.row.PopBerEntwicklung}
-            errorText={activeDataset.valid.PopBerEntwicklung}
+            value={activeDataset.row.entwicklung}
+            errorText={activeDataset.valid.entwicklung}
             dataSource={store.dropdownList.tpopEntwicklungWerte}
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
-            key={`${activeDataset.row.PopberId}PopBerTxt`}
+            key={`${activeDataset.row.id}bemerkungen`}
             tree={tree}
             label="Bemerkungen"
-            fieldName="PopBerTxt"
-            value={activeDataset.row.PopBerTxt}
-            errorText={activeDataset.valid.PopBerTxt}
+            fieldName="bemerkungen"
+            value={activeDataset.row.bemerkungen}
+            errorText={activeDataset.valid.bemerkungen}
             type="text"
             multiLine
             fullWidth

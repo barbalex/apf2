@@ -59,24 +59,22 @@ $pop_max_one_massnber_per_year$ LANGUAGE plpgsql;
 CREATE TRIGGER pop_max_one_massnber_per_year BEFORE INSERT OR UPDATE ON apflora.popmassnber
   FOR EACH ROW EXECUTE PROCEDURE apflora.pop_max_one_massnber_per_year();
 
-
-
 DROP TRIGGER IF EXISTS pop_max_one_popber_per_year ON apflora.popber;
 DROP FUNCTION IF EXISTS apflora.pop_max_one_popber_per_year();
 CREATE FUNCTION apflora.pop_max_one_popber_per_year() RETURNS trigger AS $pop_max_one_popber_per_year$
   BEGIN
     IF
       (
-        NEW."PopBerJahr" > 0
-        AND NEW."PopBerJahr" IN
+        NEW.jahr > 0
+        AND NEW.jahr IN
           (
             SELECT
-              "PopBerJahr"
+              jahr
             FROM
               apflora.popber
             WHERE
-              "PopId" = NEW."PopId"
-              AND "PopBerId" <> NEW."PopBerId"
+              pop_id = NEW.pop_id
+              AND id <> NEW.id
           )
       )
     THEN

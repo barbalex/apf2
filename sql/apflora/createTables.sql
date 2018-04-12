@@ -1,12 +1,12 @@
 DROP TABLE IF EXISTS _variable;
 CREATE TABLE apflora._variable (
   "KonstId" SERIAL PRIMARY KEY,
-  "JBerJahr" smallint DEFAULT NULL,
+  apber_jahr smallint DEFAULT NULL,
   "ApArtId" integer DEFAULT NULL
 );
-COMMENT ON COLUMN apflora._variable."JBerJahr" IS 'Von Access aus ein Berichtsjahr wählen, um die Erstellung des Jahresberichts zu beschleunigen';
+COMMENT ON COLUMN apflora._variable.apber_jahr IS 'Von Access aus ein Berichtsjahr wählen, um die Erstellung des Jahresberichts zu beschleunigen';
 COMMENT ON COLUMN apflora._variable."ApArtId" IS 'Von Access aus eine Art wählen, um views zu beschleunigen';
-CREATE INDEX ON apflora._variable USING btree ("JBerJahr");
+CREATE INDEX ON apflora._variable USING btree (apber_jahr);
 CREATE INDEX ON apflora._variable USING btree ("ApArtId");
 
 DROP TABLE IF EXISTS adresse;
@@ -430,27 +430,27 @@ COMMENT ON COLUMN apflora.pop_status_werte.changed_by IS 'Von wem wurde der Date
 
 DROP TABLE IF EXISTS apflora.popber;
 CREATE TABLE apflora.popber (
-  "PopBerId" SERIAL PRIMARY KEY,
-  "PopId" integer DEFAULT NULL REFERENCES apflora.pop ("PopId") ON DELETE CASCADE ON UPDATE CASCADE,
-  "PopBerJahr" smallint DEFAULT NULL,
-  "PopBerEntwicklung" integer DEFAULT NULL REFERENCES apflora.tpop_entwicklung_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
-  "PopBerTxt" text,
-  "MutWann" date DEFAULT NOW(),
-  "MutWer" varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
-  -- "MutWer" varchar(20) DEFAULT current_user
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
+  id_old integer,
+  pop_id integer DEFAULT NULL REFERENCES apflora.pop ("PopId") ON DELETE CASCADE ON UPDATE CASCADE,
+  jahr smallint DEFAULT NULL,
+  entwicklung integer DEFAULT NULL REFERENCES apflora.tpop_entwicklung_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
+  bemerkungen text,
+  changed date DEFAULT NOW(),
+  changed_by varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
 );
-SELECT setval(pg_get_serial_sequence('apflora.popber', 'PopBerId'), coalesce(max("PopBerId"), 0) + 1, false) FROM apflora.popber;
-COMMENT ON COLUMN apflora.popber."PopBerId" IS 'Primärschlüssel der Tabelle "popber"';
-COMMENT ON COLUMN apflora.popber."PopId" IS 'Zugehörige Population. Fremdschlüssel aus der Tabelle "pop"';
-COMMENT ON COLUMN apflora.popber."PopBerJahr" IS 'Für welches Jahr gilt der Bericht?';
-COMMENT ON COLUMN apflora.popber."PopBerEntwicklung" IS 'Beurteilung der Populationsentwicklung: Auswahl aus Tabelle "tpop_entwicklung_werte"';
-COMMENT ON COLUMN apflora.popber."PopBerTxt" IS 'Bemerkungen zur Beurteilung';
-COMMENT ON COLUMN apflora.popber."MutWann" IS 'Wann wurde der Datensatz zuletzt geändert?';
-COMMENT ON COLUMN apflora.popber."MutWer" IS 'Von wem wurde der Datensatz zuletzt geändert?';
-CREATE INDEX ON apflora.popber USING btree ("PopBerId");
-CREATE INDEX ON apflora.popber USING btree ("PopId");
-CREATE INDEX ON apflora.popber USING btree ("PopBerEntwicklung");
-CREATE INDEX ON apflora.popber USING btree ("PopBerJahr");
+COMMENT ON COLUMN apflora.popber.id IS 'Primärschlüssel';
+COMMENT ON COLUMN apflora.popber.id_old IS 'frühere id';
+COMMENT ON COLUMN apflora.popber.pop_id IS 'Zugehörige Population. Fremdschlüssel aus der Tabelle "pop"';
+COMMENT ON COLUMN apflora.popber.jahr IS 'Für welches Jahr gilt der Bericht?';
+COMMENT ON COLUMN apflora.popber.entwicklung IS 'Beurteilung der Populationsentwicklung: Auswahl aus Tabelle "tpop_entwicklung_werte"';
+COMMENT ON COLUMN apflora.popber.bemerkungen IS 'Bemerkungen zur Beurteilung';
+COMMENT ON COLUMN apflora.popber.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
+COMMENT ON COLUMN apflora.popber.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
+CREATE INDEX ON apflora.popber USING btree (id);
+CREATE INDEX ON apflora.popber USING btree (pop_id);
+CREATE INDEX ON apflora.popber USING btree (entwicklung);
+CREATE INDEX ON apflora.popber USING btree (jahr);
 
 DROP TABLE IF EXISTS apflora.popmassnber;
 CREATE TABLE apflora.popmassnber (
