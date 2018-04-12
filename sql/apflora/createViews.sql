@@ -1696,7 +1696,7 @@ DROP VIEW IF EXISTS apflora.v_pop_letzterpopber0_overall CASCADE;
 CREATE OR REPLACE VIEW apflora.v_pop_letzterpopber0_overall AS
 SELECT
   apflora.popber.pop_id,
-  max(apflora.popber.jahr) AS "PopBerJahr"
+  max(apflora.popber.jahr) AS jahr
 FROM
   apflora.popber
 WHERE

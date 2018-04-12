@@ -46,7 +46,6 @@ SELECT
 	apflora.v_tpop_anzkontrinklletzter."TPop Anzahl Kontrollen",
 	apflora.v_tpop_anzkontrinklletzter.id,
 	apflora.v_tpop_anzkontrinklletzter."TPopId",
-	apflora.v_tpop_anzkontrinklletzter."Kontr Guid",
 	apflora.v_tpop_anzkontrinklletzter."Kontr Jahr",
 	apflora.v_tpop_anzkontrinklletzter."Kontr Datum",
 	apflora.v_tpop_anzkontrinklletzter."Kontr Typ",
