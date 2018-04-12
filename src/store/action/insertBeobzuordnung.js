@@ -65,7 +65,7 @@ export default async (
   newValue: number
 ): void => {
   /**
-   * newKey is either nicht_zuordnen or TPopId
+   * newKey is either nicht_zuordnen or id
    */
   // get data from beob in activeDataset
   // check if a corresponding tpopbeob already exists

@@ -44,8 +44,6 @@ SELECT
 	apflora.v_tpop_anzkontrinklletzter."TPop BewirtschafterIn",
 	apflora.v_tpop_anzkontrinklletzter."TPop Bewirtschaftung",
 	apflora.v_tpop_anzkontrinklletzter."TPop Anzahl Kontrollen",
-	apflora.v_tpop_anzkontrinklletzter.id,
-	apflora.v_tpop_anzkontrinklletzter."TPopId",
 	apflora.v_tpop_anzkontrinklletzter."Kontr Jahr",
 	apflora.v_tpop_anzkontrinklletzter."Kontr Datum",
 	apflora.v_tpop_anzkontrinklletzter."Kontr Typ",
@@ -103,4 +101,4 @@ FROM
 	apflora.v_tpop_anzkontrinklletzter
   LEFT JOIN
     apflora.v_tpopber_mitletzterid
-    ON apflora.v_tpop_anzkontrinklletzter."TPop ID" = apflora.v_tpopber_mitletzterid."TPopId";
+    ON apflora.v_tpop_anzkontrinklletzter."TPop ID" = apflora.v_tpopber_mitletzterid.tpop_id;

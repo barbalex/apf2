@@ -15,7 +15,7 @@ export default async (store: Object, beobId: string): Promise<void> => {
   }
   const beob = store.table.beob.get(beobId)
   const { X, Y } = beob
-  const tpopId = tpopbeob.TPopId
+  const tpopId = tpopbeob.tpop_id
   let tpopInStore = store.table.tpop.get(tpopId)
   if (!tpopInStore) {
     return store.listError(
@@ -49,7 +49,7 @@ export default async (store: Object, beobId: string): Promise<void> => {
   delete tpopForDb.ApArtId
   // update db
   try {
-    await axios.patch(`/tpop?TPopId=eq.${tpopForDb.TPopId}`, tpopForDb)
+    await axios.patch(`/tpop?id=eq.${tpopForDb.id}`, tpopForDb)
   } catch (error) {
     tpopInStore = originalTpop
     store.listError(error)

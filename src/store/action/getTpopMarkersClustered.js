@@ -18,7 +18,7 @@ export default (store: Object): Object => {
       const markers = cluster.getAllChildMarkers()
       const hasHighlightedTpop = some(
         markers,
-        m => m.options.icon.options.className === 'tpopIconHighlighted',
+        m => m.options.icon.options.className === 'tpopIconHighlighted'
       )
       const className = hasHighlightedTpop
         ? 'tpopClusterHighlighted'
@@ -35,7 +35,7 @@ export default (store: Object): Object => {
     const pops = Array.from(store.table.pop.values())
     const tpopsWithKoord = tpops.filter(tpop => tpop.TPopKoordWgs84)
     tpopsWithKoord.forEach(tpop => {
-      const pop = pops.find(pop => pop.PopId === tpop.PopId)
+      const pop = pops.find(pop => pop.PopId === tpop.pop_id)
       const popNr = pop && (pop.PopNr || pop.PopNr === 0) ? pop.PopNr : ''
       const tpopNr = tpop.TPopNr || tpop.TPopNr === 0 ? tpop.TPopNr : ''
       const nrLabel = `${popNr}.${tpopNr}`
@@ -54,25 +54,24 @@ export default (store: Object): Object => {
         className: 'mapTooltip',
         opacity: 1,
       }
-      const isHighlighted = highlightedIds.includes(tpop.TPopId)
+      const isHighlighted = highlightedIds.includes(tpop.id)
       const latLng = new window.L.LatLng(...tpop.TPopKoordWgs84)
       const icon = window.L.icon({
         iconUrl: isHighlighted ? tpopIconHighlighted : tpopIcon,
         iconSize: [24, 24],
         className: isHighlighted ? 'tpopIconHighlighted' : 'tpopIcon',
       })
-      const marker = window.L
-        .marker(latLng, {
-          title,
-          icon,
-          zIndexOffset: -store.map.apfloraLayers.findIndex(
-            apfloraLayer => apfloraLayer.value === 'Tpop',
-          ),
-        })
+      const marker = window.L.marker(latLng, {
+        title,
+        icon,
+        zIndexOffset: -store.map.apfloraLayers.findIndex(
+          apfloraLayer => apfloraLayer.value === 'Tpop'
+        ),
+      })
         .bindPopup(
           ReactDOMServer.renderToStaticMarkup(
-            <TpopPopup store={store} pop={pop} tpop={tpop} />,
-          ),
+            <TpopPopup store={store} pop={pop} tpop={tpop} />
+          )
         )
         .bindTooltip(tooltipText, tooltipOptions)
       markers.addLayer(marker)

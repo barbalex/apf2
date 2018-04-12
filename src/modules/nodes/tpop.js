@@ -21,13 +21,13 @@ export default (
   )
 
   return tree.filteredAndSorted.tpop
-    .filter(p => p.PopId === popId)
+    .filter(p => p.pop_id === popId)
     .map((el, index) => ({
       nodeType: 'table',
       menuType: 'tpop',
-      id: el.TPopId,
-      parentId: el.PopId,
-      urlLabel: el.TPopId,
+      id: el.id,
+      parentId: el.pop_id,
+      urlLabel: el.id,
       label: `${el.TPopNr || '(keine Nr)'}: ${el.TPopFlurname ||
         '(kein Flurname)'}`,
       url: [
@@ -36,9 +36,9 @@ export default (
         'Arten',
         apArtId,
         'Populationen',
-        el.PopId,
+        el.pop_id,
         'Teil-Populationen',
-        el.TPopId,
+        el.id,
       ],
       sort: [projIndex, 1, apIndex, 1, popIndex, 1, index],
       hasChildren: true,

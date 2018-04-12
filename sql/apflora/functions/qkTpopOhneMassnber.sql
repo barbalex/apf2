@@ -6,16 +6,16 @@ CREATE OR REPLACE FUNCTION apflora.qk2_tpop_ohne_massnber(apid integer, berichtj
     1 AS "ProjId",
     apflora.pop."ApArtId",
     'Teilpopulation mit Ansiedlung (vor dem Berichtjahr) und Kontrolle (im Berichtjahr) aber ohne Massnahmen-Bericht (im Berichtjahr):' AS hw,
-    ARRAY['Projekte', 1 , 'Arten', apflora.pop."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop."TPopId"]::text[] AS "url",
+    ARRAY['Projekte', 1 , 'Arten', apflora.pop."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop.id]::text[] AS "url",
     ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop."TPopNr")]::text[] AS text
   FROM
     apflora.pop
     INNER JOIN
       apflora.tpop
-      ON apflora.pop."PopId" = apflora.tpop."PopId"
+      ON apflora.pop."PopId" = apflora.tpop.pop_id
   WHERE
     apflora.tpop."TPopApBerichtRelevant" = 1
-    AND apflora.tpop."TPopId" IN (
+    AND apflora.tpop.id IN (
       -- 1. "TPop mit Ansiedlungen/Ansaaten vor dem Berichtjahr" ermitteln:
       SELECT DISTINCT
         apflora.tpopmassn.tpop_id
@@ -25,7 +25,7 @@ CREATE OR REPLACE FUNCTION apflora.qk2_tpop_ohne_massnber(apid integer, berichtj
         apflora.tpopmassn.typ IN (1, 2, 3)
         AND apflora.tpopmassn.jahr < $2
     )
-    AND apflora.tpop."TPopId" IN (
+    AND apflora.tpop.id IN (
       -- 2. "TPop mit Kontrolle im Berichtjahr" ermitteln:
       SELECT DISTINCT
         apflora.tpopkontr.tpop_id
@@ -35,7 +35,7 @@ CREATE OR REPLACE FUNCTION apflora.qk2_tpop_ohne_massnber(apid integer, berichtj
         apflora.tpopkontr.typ NOT IN ('Zwischenziel', 'Ziel')
         AND apflora.tpopkontr.jahr = $2
     )
-    AND apflora.tpop."TPopId" NOT IN (
+    AND apflora.tpop.id NOT IN (
       -- 3. "TPop mit TPopMassnBer im Berichtjahr" ermitteln:
       SELECT DISTINCT
         apflora.tpopmassnber.tpop_id

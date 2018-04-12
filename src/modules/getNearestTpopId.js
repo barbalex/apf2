@@ -21,12 +21,12 @@ export default (store: Object, latLng: Object): number => {
     .filter(p => p.ApArtId === activeNodes.ap)
     .map(p => p.PopId)
   const tpopFeatures = Array.from(table.tpop.values())
-    .filter(t => popIds.includes(t.PopId))
+    .filter(t => popIds.includes(t.pop_id))
     .filter(t => t.TPopKoordWgs84)
     .map(t => ({
       type: 'Feature',
       properties: {
-        TPopId: t.TPopId,
+        id: t.id,
       },
       geometry: {
         type: 'Point',
@@ -38,5 +38,5 @@ export default (store: Object, latLng: Object): number => {
     features: tpopFeatures,
   }
   const nearestTpopFeature = nearest(point, against)
-  return nearestTpopFeature.properties.TPopId
+  return nearestTpopFeature.properties.id
 }

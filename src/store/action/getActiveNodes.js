@@ -145,9 +145,7 @@ export default (activeNodeArray: Array<mixed>, store: Object): Object => {
       activeNodeArray[6] === 'Teil-Populationen') ||
     false
   const tpop =
-    tpopFolder && activeNodeArray.length > 7
-      ? parseInt(activeNodeArray[7], 10)
-      : null
+    tpopFolder && activeNodeArray.length > 7 ? activeNodeArray[7] : null
   const tpopmassnFolder =
     (tpop &&
       activeNodeArray.length > 8 &&

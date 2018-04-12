@@ -73,7 +73,7 @@ export default async ({
     throw new Error(`Fehler bei der Erstellung einer neuen Teilpopulation`)
   }
   tpop = tpopResult.data[0]
-  store.table.tpop.set(tpop.TPopId, tpop)
+  store.table.tpop.set(tpop.id, tpop)
 
   // create new tpopbeob
   let beobzuordnungResult
@@ -93,7 +93,7 @@ export default async ({
       beobzuordnungResult = await axios.patch(
         `/tpopbeob?beob_id=eq.${beobId}`,
         {
-          tpop_id: tpop.TPopId,
+          tpop_id: tpop.id,
         }
       )
     } catch (error) {
@@ -104,7 +104,7 @@ export default async ({
       beobzuordnungResult = await axios({
         method: 'POST',
         url: '/tpopbeob',
-        data: { beob_id: beobId, tpop_id: tpop.TPopId },
+        data: { beob_id: beobId, tpop_id: tpop.id },
         headers: {
           Prefer: 'return=representation',
         },
@@ -136,9 +136,9 @@ export default async ({
     `Arten`,
     ap,
     `Populationen`,
-    tpop.PopId,
+    tpop.pop_id,
     `Teil-Populationen`,
-    tpop.TPopId,
+    tpop.id,
     `Beobachtungen`,
     beobId,
   ]

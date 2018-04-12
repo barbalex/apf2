@@ -19,8 +19,8 @@ export default [
     table: 'tpop',
     label: 'Teil-Populationen',
     labelSingular: 'Teil-Population',
-    idField: 'TPopId',
-    parentIdField: 'PopId',
+    idField: 'id',
+    parentIdField: 'pop_id',
   },
   {
     table: 'tpopkontr',

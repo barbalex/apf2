@@ -14,7 +14,7 @@ export default (store: Object): Array<Object> => {
     const pops = Array.from(store.table.pop.values())
     const tpopsWithKoord = tpops.filter(tpop => tpop.TPopKoordWgs84)
     return tpopsWithKoord.map(tpop => {
-      const pop = pops.find(pop => pop.PopId === tpop.PopId)
+      const pop = pops.find(pop => pop.PopId === tpop.pop_id)
       const popNr = pop && (pop.PopNr || pop.PopNr === 0) ? pop.PopNr : ''
       const tpopNr = tpop.TPopNr || tpop.TPopNr === 0 ? tpop.TPopNr : ''
       const nrLabel = `${popNr}.${tpopNr}`
@@ -33,25 +33,24 @@ export default (store: Object): Array<Object> => {
         className: 'mapTooltip',
         opacity: 1,
       }
-      const isHighlighted = highlightedIds.includes(tpop.TPopId)
+      const isHighlighted = highlightedIds.includes(tpop.id)
       const latLng = new window.L.LatLng(...tpop.TPopKoordWgs84)
       const icon = window.L.icon({
         iconUrl: isHighlighted ? tpopIconHighlighted : tpopIcon,
         iconSize: [24, 24],
         className: isHighlighted ? 'tpopIconHighlighted' : 'tpopIcon',
       })
-      return window.L
-        .marker(latLng, {
-          title,
-          icon,
-          zIndexOffset: -store.map.apfloraLayers.findIndex(
-            apfloraLayer => apfloraLayer.value === 'Tpop',
-          ),
-        })
+      return window.L.marker(latLng, {
+        title,
+        icon,
+        zIndexOffset: -store.map.apfloraLayers.findIndex(
+          apfloraLayer => apfloraLayer.value === 'Tpop'
+        ),
+      })
         .bindPopup(
           ReactDOMServer.renderToStaticMarkup(
-            <TpopPopup store={store} pop={pop} tpop={tpop} />,
-          ),
+            <TpopPopup store={store} pop={pop} tpop={tpop} />
+          )
         )
         .bindTooltip(tooltipText, tooltipOptions)
     })

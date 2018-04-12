@@ -128,9 +128,9 @@ const getTpopZuordnenSource = (store: Object, tree: Object): Array<Object> => {
   })
   // order them by distance
   tpopList = sortBy(tpopList, 'distance')
-  // return array of TPopId, label
+  // return array of id, label
   return tpopList.map(t => ({
-    value: t.TPopId,
+    value: t.id,
     label: t.label,
   }))
 }
@@ -154,7 +154,7 @@ const enhance = compose(
         if (activeDataset.table === 'beob') {
           insertBeobzuordnung(tree, activeDataset.row, fieldname, val)
         } else {
-          // tpopbeob was moved from one TPopId to another
+          // tpopbeob was moved from one tpop-id to another
           updatePropertyInDb(tree, fieldname, val)
         }
       } else {

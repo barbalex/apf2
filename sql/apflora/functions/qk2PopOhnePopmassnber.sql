@@ -16,22 +16,22 @@ CREATE OR REPLACE FUNCTION apflora.qk2_pop_ohne_popmassnber(apid integer, berich
   WHERE
     apflora.pop."PopId" IN (
       SELECT
-        apflora.tpop."PopId"
+        apflora.tpop.pop_id
       FROM
         apflora.tpop
       WHERE
         apflora.tpop."TPopApBerichtRelevant" = 1
       GROUP BY
-        apflora.tpop."PopId"
+        apflora.tpop.pop_id
     )
     AND apflora.pop."PopId" IN (
       -- 3. "Pop mit TPop mit verlangten TPopMassnBer im Berichtjahr" ermitteln:
       SELECT DISTINCT
-        apflora.tpop."PopId"
+        apflora.tpop.pop_id
       FROM
         apflora.tpop
       WHERE
-        apflora.tpop."TPopId" IN (
+        apflora.tpop.id IN (
           -- 1. "TPop mit Ansiedlungen/Ansaaten vor dem Berichtjahr" ermitteln:
           SELECT DISTINCT
             apflora.tpopmassn.tpop_id
@@ -41,7 +41,7 @@ CREATE OR REPLACE FUNCTION apflora.qk2_pop_ohne_popmassnber(apid integer, berich
             apflora.tpopmassn.typ IN (1, 2, 3)
             AND apflora.tpopmassn.jahr < $2
         )
-        AND apflora.tpop."TPopId" IN (
+        AND apflora.tpop.id IN (
           -- 2. "TPop mit Kontrolle im Berichtjahr" ermitteln:
           SELECT DISTINCT
             apflora.tpopkontr.tpop_id

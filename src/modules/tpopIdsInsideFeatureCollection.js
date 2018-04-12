@@ -12,7 +12,7 @@ export default (store: Object, tpops: Array<Object>): Array<number> => {
    */
   // make sure all tpops used have coordinates
   let tpopsToUse = tpops.filter(p => {
-    if (!p.TPopId) return false
+    if (!p.id) return false
     if (
       p.TPopXKoord &&
       isFinite(p.TPopXKoord) &&
@@ -41,7 +41,7 @@ export default (store: Object, tpops: Array<Object>): Array<number> => {
   const features = tpopsToUse.map(t => ({
     type: 'Feature',
     properties: {
-      TPopId: t.TPopId,
+      id: t.id,
     },
     geometry: {
       type: 'Point',
@@ -57,5 +57,5 @@ export default (store: Object, tpops: Array<Object>): Array<number> => {
   // let turf check what points are within filter
   const result = within(toJS(points), toJS(store.map.mapFilter.filter))
 
-  return result.features.map(r => r.properties.TPopId)
+  return result.features.map(r => r.properties.id)
 }

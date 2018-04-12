@@ -36,7 +36,7 @@ export default (store: Object): void => {
       () =>
         getTpopBounds(
           store.map.tpop.tpops.filter(t =>
-            store.map.tpop.highlightedIds.includes(t.TPopId)
+            store.map.tpop.highlightedIds.includes(t.id)
           )
         ),
       { name: 'mapTpopBoundsOfHighlightedIds' }

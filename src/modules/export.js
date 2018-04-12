@@ -60,7 +60,7 @@ export default async ({
   if (filterFeatures.length > 0 && applyMapFilterToExport) {
     const keys = Object.keys(data[0])
     // filter data
-    // beob can also have PopId and TPopId, so dont filter by TPopId if you filter by beob id
+    // beob can also have PopId and tpop-id, so dont filter by TPopId if you filter by beob id
     if (keys.includes('id')) {
       const beobIds = beobIdsFromServerInsideFeatureCollection(store, data)
       jsonData = jsonData.filter(d => beobIds.includes(d.id))
@@ -68,7 +68,7 @@ export default async ({
       // data sets with TPopId usually also deliver PopId,
       // so only filter by TPopid then
       const tpopIds = tpopIdsInsideFeatureCollection(store, data)
-      jsonData = jsonData.filter(d => tpopIds.includes(d.TPopId))
+      jsonData = jsonData.filter(d => tpopIds.includes(d.id))
     } else if (keys.includes('PopId')) {
       const popIds = popIdsInsideFeatureCollection(store, data)
       jsonData = jsonData.filter(d => popIds.includes(d.PopId))

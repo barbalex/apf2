@@ -22,8 +22,8 @@ export default (
     { PopId: popId }
   )
   const tpopIndex = findIndex(
-    tree.filteredAndSorted.tpop.filter(t => t.PopId === popId),
-    { TPopId: tpopId }
+    tree.filteredAndSorted.tpop.filter(t => t.pop_id === popId),
+    { id: tpopId }
   )
   const tpopfreiwkontrIndex = findIndex(
     tree.filteredAndSorted.tpopfreiwkontr.filter(t => t.tpop_id === tpopId),

@@ -22,7 +22,7 @@ export default (
   )
   const tpopIndex = findIndex(
     tree.filteredAndSorted.tpop.filter(t => t.PopId === popId),
-    { TPopId: tpopId }
+    { id: tpopId }
   )
 
   return tree.filteredAndSorted.tpopbeob

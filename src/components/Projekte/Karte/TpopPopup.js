@@ -25,19 +25,31 @@ const TpopPopup = ({
 }) => {
   const { activeNodes } = store.tree
   const { ap, projekt } = activeNodes
-  const popUrl = `${appBaseUrl}/Projekte/${projekt}/Arten/${ap}/Populationen/${tpop.PopId}/Teil-Populationen/${tpop.TPopId}`
+  const popUrl = `${appBaseUrl}/Projekte/${projekt}/Arten/${ap}/Populationen/${
+    tpop.pop_id
+  }/Teil-Populationen/${tpop.id}`
 
   return (
     <div>
       <div>Teil-Population</div>
       <StyledH3>
-        {`${tpop && tpop.TPopNr ? `${tpop.TPopNr}: ` : '(keine Nummer): '}${tpop && tpop.TPopFlurname ? tpop.TPopFlurname : '(kein Name)'}`}
+        {`${tpop && tpop.TPopNr ? `${tpop.TPopNr}: ` : '(keine Nummer): '}${
+          tpop && tpop.TPopFlurname ? tpop.TPopFlurname : '(kein Name)'
+        }`}
       </StyledH3>
       <div>
-        {`Population: ${pop && pop.PopNr ? `${pop.PopNr}: ` : '(keine Nummer): '}${pop && pop.PopName ? pop.PopName : '(kein Name)'}`}
+        {`Population: ${
+          pop && pop.PopNr ? `${pop.PopNr}: ` : '(keine Nummer): '
+        }${pop && pop.PopName ? pop.PopName : '(kein Name)'}`}
       </div>
       <div>
-        {`Koordinaten: ${tpop.TPopKoordWgs84 ? `${tpop.TPopXKoord.toLocaleString('de-ch')} / ${tpop.TPopYKoord.toLocaleString('de-ch')}` : '(keine)'}`}
+        {`Koordinaten: ${
+          tpop.TPopKoordWgs84
+            ? `${tpop.TPopXKoord.toLocaleString(
+                'de-ch'
+              )} / ${tpop.TPopYKoord.toLocaleString('de-ch')}`
+            : '(keine)'
+        }`}
       </div>
       <a href={popUrl} target="_blank" rel="noopener noreferrer">
         Formular in neuem Tab öffnen

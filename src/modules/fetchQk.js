@@ -349,7 +349,7 @@ const fetchQk = async ({
         const projName = projekt && projekt.ProjName ? projekt.ProjName : ''
         const art = store.table.ae_eigenschaften.get(store.tree.activeNodes.ap)
         const artName = art && art.artname ? art.artname : ''
-        const pop = store.table.pop.get(tpop.PopId)
+        const pop = store.table.pop.get(tpop.pop_id)
         const popName = pop && pop.PopName ? pop.PopName : ''
 
         return {
@@ -360,9 +360,9 @@ const fetchQk = async ({
             'Arten',
             tpop.ApArtId,
             'Populationen',
-            tpop.PopId,
+            tpop.pop_id,
             'Teil-Populationen',
-            tpop.TPopId,
+            tpop.id,
           ],
           text: [
             `Projekt: ${projName}`,

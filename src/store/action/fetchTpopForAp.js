@@ -21,7 +21,7 @@ export default (store: Object, apArtId: number): any => {
     .get(url)
     .then(({ data }) => {
       store.loading = store.loading.filter(el => el !== 'tpopForAp')
-      store.writeToStore({ data, table: 'tpop', field: 'TPopId' })
+      store.writeToStore({ data, table: 'tpop', field: 'id' })
       recordValuesForWhichTableDataWasFetched({
         store,
         table: 'tpopForAp',

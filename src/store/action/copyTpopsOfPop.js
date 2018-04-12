@@ -12,7 +12,7 @@ export default async ({
   await store.fetchTableByParentId('tpop', popIdFrom)
   // 2. add tpops to new pop
   const tpops = Array.from(store.table.tpop.values()).filter(
-    tpop => tpop.PopId === popIdFrom
+    tpop => tpop.pop_id === popIdFrom
   )
-  tpops.forEach(tpop => store.copyTo(popIdTo, 'tpop', tpop.TPopId))
+  tpops.forEach(tpop => store.copyTo(popIdTo, 'tpop', tpop.id))
 }

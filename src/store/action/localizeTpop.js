@@ -2,10 +2,10 @@
 export default (store: Object, tree: Object, x: number, y: number): any => {
   let { idOfTpopBeingLocalized } = store.map.tpop
   const tpops = Array.from(store.table.tpop.values())
-  const tpop = tpops.find(t => t.TPopId === idOfTpopBeingLocalized)
+  const tpop = tpops.find(t => t.id === idOfTpopBeingLocalized)
   if (!tpop)
     return store.listError(
-      new Error(`no tpop found with id "${idOfTpopBeingLocalized}"`),
+      new Error(`no tpop found with id "${idOfTpopBeingLocalized}"`)
     )
   const xRounded = Number(x).toFixed(0)
   const yRounded = Number(y).toFixed(0)

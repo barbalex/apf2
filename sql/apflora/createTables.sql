@@ -505,12 +505,11 @@ CREATE TABLE apflora.tpop (
   "TPopBewirtschaftung" text DEFAULT NULL,
   "TPopTxt" text,
   "TPopGuid" UUID DEFAULT uuid_generate_v1mc(),
-  "MutWann" date DEFAULT NOW(),
-  "MutWer" varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
+  changed date DEFAULT NOW(),
+  changed_by varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
 );
 CREATE INDEX ON apflora.tpop USING btree (id);
 CREATE INDEX ON apflora.tpop USING btree (pop_id);
-CREATE UNIQUE INDEX ON apflora.tpop USING btree ("TPopGuid");
 CREATE INDEX ON apflora.tpop USING btree ("TPopHerkunft");
 CREATE INDEX ON apflora.tpop USING btree ("TPopApBerichtRelevant");
 CREATE INDEX ON apflora.tpop USING btree ("TPopXKoord");
@@ -519,6 +518,7 @@ CREATE INDEX ON apflora.tpop USING btree ("TPopNr");
 CREATE INDEX ON apflora.tpop USING btree ("TPopGemeinde");
 CREATE INDEX ON apflora.tpop USING btree ("TPopFlurname");
 COMMENT ON COLUMN apflora.tpop.id IS 'Primärschlüssel';
+COMMENT ON COLUMN apflora.tpop.id_old IS 'frühere id';
 COMMENT ON COLUMN apflora.tpop.pop_id IS 'Zugehörige Population. Fremdschlüssel aus der Tabelle "pop"';
 COMMENT ON COLUMN apflora.tpop."TPopNr" IS 'Nummer der Teilpopulation';
 COMMENT ON COLUMN apflora.tpop."TPopGemeinde" IS 'Gemeinde';
@@ -543,9 +543,8 @@ COMMENT ON COLUMN apflora.tpop."TPopNutzungszone" IS 'Nutzungszone';
 COMMENT ON COLUMN apflora.tpop."TPopBewirtschafterIn" IS 'Wer bewirtschaftet die Fläche?';
 COMMENT ON COLUMN apflora.tpop."TPopBewirtschaftung" IS 'Wie wird die Fläche bewirtschaftet?';
 COMMENT ON COLUMN apflora.tpop."TPopTxt" IS 'Bemerkungen zur Teilpopulation';
-COMMENT ON COLUMN apflora.tpop."TPopGuid" IS 'GUID der Tabelle "tpop"';
-COMMENT ON COLUMN apflora.tpop."MutWann" IS 'Wann wurde der Datensatz zuletzt geändert?';
-COMMENT ON COLUMN apflora.tpop."MutWer" IS 'Von wem wurde der Datensatz zuletzt geändert?';
+COMMENT ON COLUMN apflora.tpop.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
+COMMENT ON COLUMN apflora.tpop.changed IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
 DROP TABLE IF EXISTS apflora.tpop_apberrelevant_werte;
 CREATE TABLE apflora.tpop_apberrelevant_werte (
