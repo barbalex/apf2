@@ -46,7 +46,7 @@ export default async (store: Object, beobId: string): Promise<void> => {
   delete tpopForDb.herkunft
   delete tpopForDb.distance
   delete tpopForDb.TPopKoordWgs84
-  delete tpopForDb.ApArtId
+  delete tpopForDb.ap_id
   // update db
   try {
     await axios.patch(`/tpop?id=eq.${tpopForDb.id}`, tpopForDb)

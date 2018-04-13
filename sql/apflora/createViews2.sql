@@ -132,48 +132,48 @@ DROP VIEW IF EXISTS apflora.v_pop_letztermassnber CASCADE;
 CREATE OR REPLACE VIEW apflora.v_pop_letztermassnber AS
 SELECT
   apflora.v_pop_letztermassnber0."ApArtId",
-  apflora.v_pop_letztermassnber0."PopId",
+  apflora.v_pop_letztermassnber0.id,
   max(apflora.v_pop_letztermassnber0.jahr) AS "MaxvonPopMassnBerJahr"
 FROM
   apflora.v_pop_letztermassnber0
 GROUP BY
   apflora.v_pop_letztermassnber0."ApArtId",
-  apflora.v_pop_letztermassnber0."PopId";
+  apflora.v_pop_letztermassnber0.id;
 
 -- dieser view ist für den Bericht gedacht - daher letzter popber vor jBerJahr
 DROP VIEW IF EXISTS apflora.v_pop_letzterpopber CASCADE;
 CREATE OR REPLACE VIEW apflora.v_pop_letzterpopber AS
 SELECT
   apflora.v_pop_letzterpopber0."ApArtId",
-  apflora.v_pop_letzterpopber0."PopId",
+  apflora.v_pop_letzterpopber0.id,
   max(apflora.v_pop_letzterpopber0.jahr) AS "MaxvonPopBerJahr"
 FROM
   apflora.v_pop_letzterpopber0
 GROUP BY
   apflora.v_pop_letzterpopber0."ApArtId",
-  apflora.v_pop_letzterpopber0."PopId";
+  apflora.v_pop_letzterpopber0.id;
 
 -- dieser view ist für die Qualitätskontrolle gedacht - daher letzter popber überhaupt
 DROP VIEW IF EXISTS apflora.v_pop_letzterpopber_overall CASCADE;
 CREATE OR REPLACE VIEW apflora.v_pop_letzterpopber_overall AS
 SELECT
-  apflora.pop."ApArtId",
-  apflora.pop."PopId",
+  apflora.pop.ap_id,
+  apflora.pop.id,
   apflora.v_pop_letzterpopber0_overall.jahr
 FROM
   (apflora.pop
   INNER JOIN
     apflora.v_pop_letzterpopber0_overall
-    ON apflora.pop."PopId" = apflora.v_pop_letzterpopber0_overall.pop_id)
+    ON apflora.pop.id = apflora.v_pop_letzterpopber0_overall.pop_id)
   INNER JOIN
     apflora.tpop
-    ON apflora.pop."PopId" = apflora.tpop.pop_id
+    ON apflora.pop.id = apflora.tpop.pop_id
 WHERE
   apflora.tpop.apber_relevant = 1
   AND apflora.pop."PopHerkunft" <> 300
 GROUP BY
-  apflora.pop."ApArtId",
-  apflora.pop."PopId",
+  apflora.pop.ap_id,
+  apflora.pop.id,
   apflora.v_pop_letzterpopber0_overall.jahr;
 
 DROP VIEW IF EXISTS apflora.v_apber_uebe CASCADE;
@@ -794,8 +794,8 @@ FROM
             (apflora.tpopber.tpop_id = apflora.v_tpopber_letzterber.tpop_id)
             AND (apflora.tpopber.jahr = apflora.v_tpopber_letzterber.jahr))
         ON apflora.tpop.id = apflora.tpopber.tpop_id)
-      ON apflora.pop."PopId" = apflora.tpop.pop_id)
-    ON apflora.ap."ApArtId" = apflora.pop."ApArtId")
+      ON apflora.pop.id = apflora.tpop.pop_id)
+    ON apflora.ap."ApArtId" = apflora.pop.ap_id)
   INNER JOIN
     apflora.ap_bearbstand_werte
     ON apflora.ap."ApStatus" = apflora.ap_bearbstand_werte.code
@@ -861,103 +861,103 @@ ORDER BY
 DROP VIEW IF EXISTS apflora.v_apber_b2rpop CASCADE;
 CREATE OR REPLACE VIEW apflora.v_apber_b2rpop AS
 SELECT
-  apflora.pop."ApArtId",
-  apflora.pop."PopId"
+  apflora.pop.ap_id,
+  apflora.pop.id
 FROM
   ((apflora.v_pop_letzterpopber
   INNER JOIN
     apflora.pop
-    ON apflora.v_pop_letzterpopber."ApArtId" = apflora.pop."ApArtId")
+    ON apflora.v_pop_letzterpopber."ApArtId" = apflora.pop.ap_id)
   INNER JOIN
     apflora.popber
     ON
-      (apflora.pop."PopId" = apflora.popber.pop_id)
-      AND (apflora.v_pop_letzterpopber."PopId" = apflora.popber.pop_id)
+      (apflora.pop.id = apflora.popber.pop_id)
+      AND (apflora.v_pop_letzterpopber.id = apflora.popber.pop_id)
       AND (apflora.v_pop_letzterpopber."MaxvonPopBerJahr" = apflora.popber.jahr))
   INNER JOIN
     apflora.tpop
-    ON apflora.pop."PopId" = apflora.tpop.pop_id
+    ON apflora.pop.id = apflora.tpop.pop_id
 WHERE
   apflora.popber.entwicklung = 3
   AND apflora.tpop.apber_relevant = 1
   AND apflora.pop."PopHerkunft" <> 300
 GROUP BY
-  apflora.pop."ApArtId",
-  apflora.pop."PopId";
+  apflora.pop.ap_id,
+  apflora.pop.id;
 
 DROP VIEW IF EXISTS apflora.v_apber_b3rpop CASCADE;
 CREATE OR REPLACE VIEW apflora.v_apber_b3rpop AS
 SELECT
-  apflora.pop."ApArtId",
-  apflora.pop."PopId"
+  apflora.pop.ap_id,
+  apflora.pop.id
 FROM
   ((apflora.v_pop_letzterpopber
   INNER JOIN
     apflora.pop
-    ON apflora.v_pop_letzterpopber."ApArtId" = apflora.pop."ApArtId")
+    ON apflora.v_pop_letzterpopber."ApArtId" = apflora.pop.ap_id)
   INNER JOIN
     apflora.popber
     ON
-      (apflora.pop."PopId" = apflora.popber.pop_id)
-      AND (apflora.v_pop_letzterpopber."PopId" = apflora.popber.pop_id)
+      (apflora.pop.id = apflora.popber.pop_id)
+      AND (apflora.v_pop_letzterpopber.id = apflora.popber.pop_id)
       AND (apflora.v_pop_letzterpopber."MaxvonPopBerJahr" = apflora.popber.jahr))
   INNER JOIN
     apflora.tpop
-    ON apflora.pop."PopId" = apflora.tpop.pop_id
+    ON apflora.pop.id = apflora.tpop.pop_id
 WHERE
   apflora.popber.entwicklung = 2
   AND apflora.tpop.apber_relevant = 1
   AND apflora.pop."PopHerkunft" <> 300
 GROUP BY
-  apflora.pop."ApArtId",
-  apflora.pop."PopId";
+  apflora.pop.ap_id,
+  apflora.pop.id;
 
 DROP VIEW IF EXISTS apflora.v_apber_b4rpop CASCADE;
 CREATE OR REPLACE VIEW apflora.v_apber_b4rpop AS
 SELECT
-  apflora.pop."ApArtId",
-  apflora.pop."PopId"
+  apflora.pop.ap_id,
+  apflora.pop.id
 FROM
   ((apflora.v_pop_letzterpopber
   INNER JOIN
     apflora.pop
-    ON apflora.v_pop_letzterpopber."ApArtId" = apflora.pop."ApArtId")
+    ON apflora.v_pop_letzterpopber."ApArtId" = apflora.pop.ap_id)
   INNER JOIN
     apflora.popber
     ON
-      (apflora.pop."PopId" = apflora.popber.pop_id)
-      AND (apflora.v_pop_letzterpopber."PopId" = apflora.popber.pop_id)
+      (apflora.pop.id = apflora.popber.pop_id)
+      AND (apflora.v_pop_letzterpopber.id = apflora.popber.pop_id)
       AND (apflora.v_pop_letzterpopber."MaxvonPopBerJahr" = apflora.popber.jahr))
   INNER JOIN
     apflora.tpop
-    ON apflora.pop."PopId" = apflora.tpop.pop_id
+    ON apflora.pop.id = apflora.tpop.pop_id
 WHERE
   apflora.popber.entwicklung = 1
   AND apflora.tpop.apber_relevant = 1
   AND apflora.pop."PopHerkunft" <> 300
 GROUP BY
-  apflora.pop."ApArtId",
-  apflora.pop."PopId";
+  apflora.pop.ap_id,
+  apflora.pop.id;
 
 DROP VIEW IF EXISTS apflora.v_apber_b5rpop CASCADE;
 CREATE OR REPLACE VIEW apflora.v_apber_b5rpop AS
 SELECT
-  apflora.pop."ApArtId",
-  apflora.pop."PopId"
+  apflora.pop.ap_id,
+  apflora.pop.id
 FROM
   ((apflora.v_pop_letzterpopber
   INNER JOIN
     apflora.pop
-    ON apflora.v_pop_letzterpopber."ApArtId" = apflora.pop."ApArtId")
+    ON apflora.v_pop_letzterpopber."ApArtId" = apflora.pop.ap_id)
   INNER JOIN
     apflora.popber
     ON
-      (apflora.pop."PopId" = apflora.popber.pop_id)
-      AND (apflora.v_pop_letzterpopber."PopId" = apflora.popber.pop_id)
+      (apflora.pop.id = apflora.popber.pop_id)
+      AND (apflora.v_pop_letzterpopber.id = apflora.popber.pop_id)
       AND (apflora.v_pop_letzterpopber."MaxvonPopBerJahr" = apflora.popber.jahr))
   INNER JOIN
     apflora.tpop
-    ON apflora.pop."PopId" = apflora.tpop.pop_id
+    ON apflora.pop.id = apflora.tpop.pop_id
 WHERE
   (
     apflora.popber.entwicklung = 4
@@ -966,40 +966,40 @@ WHERE
   AND apflora.tpop.apber_relevant = 1
   AND apflora.pop."PopHerkunft" <> 300
 GROUP BY
-  apflora.pop."ApArtId",
-  apflora.pop."PopId";
+  apflora.pop.ap_id,
+  apflora.pop.id;
 
 DROP VIEW IF EXISTS apflora.v_apber_b6rpop CASCADE;
 CREATE OR REPLACE VIEW apflora.v_apber_b6rpop AS
 SELECT
-  apflora.pop."ApArtId",
-  apflora.pop."PopId"
+  apflora.pop.ap_id,
+  apflora.pop.id
 FROM
   ((apflora.v_pop_letzterpopber
   INNER JOIN
     apflora.pop
-    ON apflora.v_pop_letzterpopber."ApArtId" = apflora.pop."ApArtId")
+    ON apflora.v_pop_letzterpopber."ApArtId" = apflora.pop.ap_id)
   INNER JOIN
     apflora.popber
     ON
-      (apflora.pop."PopId" = apflora.popber.pop_id)
-      AND (apflora.v_pop_letzterpopber."PopId" = apflora.popber.pop_id)
+      (apflora.pop.id = apflora.popber.pop_id)
+      AND (apflora.v_pop_letzterpopber.id = apflora.popber.pop_id)
       AND (apflora.v_pop_letzterpopber."MaxvonPopBerJahr" = apflora.popber.jahr))
   INNER JOIN
     apflora.tpop
-    ON apflora.pop."PopId" = apflora.tpop.pop_id
+    ON apflora.pop.id = apflora.tpop.pop_id
 WHERE
   apflora.popber.entwicklung = 8
   AND apflora.tpop.apber_relevant = 1
   AND apflora.pop."PopHerkunft" <> 300
 GROUP BY
-  apflora.pop."ApArtId",
-  apflora.pop."PopId";
+  apflora.pop.ap_id,
+  apflora.pop.id;
 
 DROP VIEW IF EXISTS apflora.v_apber_b2rtpop CASCADE;
 CREATE OR REPLACE VIEW apflora.v_apber_b2rtpop AS
 SELECT
-  apflora.pop."ApArtId",
+  apflora.pop.ap_id,
   apflora.tpop.id
 FROM
   apflora.tpop
@@ -1009,25 +1009,25 @@ FROM
       (apflora.pop
       INNER JOIN
         apflora.v_tpop_letztertpopber
-        ON apflora.pop."ApArtId" = apflora.v_tpop_letztertpopber."ApArtId")
+        ON apflora.pop.ap_id = apflora.v_tpop_letztertpopber."ApArtId")
       ON
         (apflora.tpopber.tpop_id = apflora.v_tpop_letztertpopber.id)
         AND (apflora.tpopber.jahr = apflora.v_tpop_letztertpopber."MaxvonTPopBerJahr"))
     ON
-      (apflora.tpop.pop_id = apflora.pop."PopId")
+      (apflora.tpop.pop_id = apflora.pop.id)
       AND (apflora.tpop.id = apflora.tpopber.tpop_id)
 WHERE
   apflora.tpopber.entwicklung = 3
   AND apflora.tpop.apber_relevant = 1
   AND apflora.pop."PopHerkunft" <> 300
 GROUP BY
-  apflora.pop."ApArtId",
+  apflora.pop.ap_id,
   apflora.tpop.id;
 
 DROP VIEW IF EXISTS apflora.v_apber_b3rtpop CASCADE;
 CREATE OR REPLACE VIEW apflora.v_apber_b3rtpop AS
 SELECT
-  apflora.pop."ApArtId",
+  apflora.pop.ap_id,
   apflora.tpop.id
 FROM
   apflora.tpop
@@ -1037,25 +1037,25 @@ FROM
       (apflora.pop
       INNER JOIN
         apflora.v_tpop_letztertpopber
-        ON apflora.pop."ApArtId" = apflora.v_tpop_letztertpopber."ApArtId")
+        ON apflora.pop.ap_id = apflora.v_tpop_letztertpopber."ApArtId")
       ON
         (apflora.tpopber.tpop_id = apflora.v_tpop_letztertpopber.id)
         AND (apflora.tpopber.jahr = apflora.v_tpop_letztertpopber."MaxvonTPopBerJahr"))
     ON
-      (apflora.tpop.pop_id = apflora.pop."PopId")
+      (apflora.tpop.pop_id = apflora.pop.id)
       AND (apflora.tpop.id = apflora.tpopber.tpop_id)
 WHERE
   apflora.tpopber.entwicklung = 2
   AND apflora.tpop.apber_relevant = 1
   AND apflora.pop."PopHerkunft" <> 300
 GROUP BY
-  apflora.pop."ApArtId",
+  apflora.pop.ap_id,
   apflora.tpop.id;
 
 DROP VIEW IF EXISTS apflora.v_apber_b4rtpop CASCADE;
 CREATE OR REPLACE VIEW apflora.v_apber_b4rtpop AS
 SELECT
-  apflora.pop."ApArtId",
+  apflora.pop.ap_id,
   apflora.tpop.id
 FROM
   apflora.tpop
@@ -1065,25 +1065,25 @@ FROM
       (apflora.pop
       INNER JOIN
         apflora.v_tpop_letztertpopber
-        ON apflora.pop."ApArtId" = apflora.v_tpop_letztertpopber."ApArtId")
+        ON apflora.pop.ap_id = apflora.v_tpop_letztertpopber."ApArtId")
       ON
         (apflora.tpopber.tpop_id = apflora.v_tpop_letztertpopber.id)
         AND (apflora.tpopber.jahr = apflora.v_tpop_letztertpopber."MaxvonTPopBerJahr"))
     ON
-      (apflora.tpop.pop_id = apflora.pop."PopId")
+      (apflora.tpop.pop_id = apflora.pop.id)
       AND (apflora.tpop.id = apflora.tpopber.tpop_id)
 WHERE
   apflora.tpopber.entwicklung = 1
   AND apflora.tpop.apber_relevant = 1
   AND apflora.pop."PopHerkunft" <> 300
 GROUP BY
-  apflora.pop."ApArtId",
+  apflora.pop.ap_id,
   apflora.tpop.id;
 
 DROP VIEW IF EXISTS apflora.v_apber_b5rtpop CASCADE;
 CREATE OR REPLACE VIEW apflora.v_apber_b5rtpop AS
 SELECT
-  apflora.pop."ApArtId",
+  apflora.pop.ap_id,
   apflora.tpop.id
 FROM
   apflora.tpop
@@ -1093,25 +1093,25 @@ FROM
       (apflora.pop
       INNER JOIN
         apflora.v_tpop_letztertpopber
-        ON apflora.pop."ApArtId" = apflora.v_tpop_letztertpopber."ApArtId")
+        ON apflora.pop.ap_id = apflora.v_tpop_letztertpopber."ApArtId")
       ON
         (apflora.tpopber.tpop_id = apflora.v_tpop_letztertpopber.id)
         AND (apflora.tpopber.jahr = apflora.v_tpop_letztertpopber."MaxvonTPopBerJahr"))
     ON
-      (apflora.tpop.pop_id = apflora.pop."PopId")
+      (apflora.tpop.pop_id = apflora.pop.id)
       AND (apflora.tpop.id = apflora.tpopber.tpop_id)
 WHERE
   apflora.tpopber.entwicklung = 4
   AND apflora.tpop.apber_relevant = 1
   AND apflora.pop."PopHerkunft" <> 300
 GROUP BY
-  apflora.pop."ApArtId",
+  apflora.pop.ap_id,
   apflora.tpop.id;
 
 DROP VIEW IF EXISTS apflora.v_apber_b6rtpop CASCADE;
 CREATE OR REPLACE VIEW apflora.v_apber_b6rtpop AS
 SELECT
-  apflora.pop."ApArtId",
+  apflora.pop.ap_id,
   apflora.tpop.id
 FROM
   apflora.tpop
@@ -1121,32 +1121,32 @@ FROM
       (apflora.pop
       INNER JOIN
         apflora.v_tpop_letztertpopber
-        ON apflora.pop."ApArtId" = apflora.v_tpop_letztertpopber."ApArtId")
+        ON apflora.pop.ap_id = apflora.v_tpop_letztertpopber."ApArtId")
       ON
         (apflora.tpopber.tpop_id = apflora.v_tpop_letztertpopber.id)
         AND (apflora.tpopber.jahr = apflora.v_tpop_letztertpopber."MaxvonTPopBerJahr"))
     ON
-      (apflora.tpop.pop_id = apflora.pop."PopId")
+      (apflora.tpop.pop_id = apflora.pop.id)
       AND (apflora.tpop.id = apflora.tpopber.tpop_id)
 WHERE
   apflora.tpopber.entwicklung = 8
   AND apflora.tpop.apber_relevant = 1
   AND apflora.pop."PopHerkunft" <> 300
 GROUP BY
-  apflora.pop."ApArtId",
+  apflora.pop.ap_id,
   apflora.tpop.id;
 
 DROP VIEW IF EXISTS apflora.v_apber_c1rpop CASCADE;
 CREATE OR REPLACE VIEW apflora.v_apber_c1rpop AS
 SELECT
-  apflora.pop."ApArtId",
-  apflora.pop."PopId"
+  apflora.pop.ap_id,
+  apflora.pop.id
 FROM
   apflora._variable,
   (apflora.pop
   INNER JOIN
     apflora.tpop
-    ON apflora.pop."PopId" = apflora.tpop.pop_id)
+    ON apflora.pop.id = apflora.tpop.pop_id)
   INNER JOIN
     apflora.tpopmassn
     ON apflora.tpop.id = apflora.tpopmassn.tpop_id
@@ -1155,123 +1155,123 @@ WHERE
   AND apflora.tpop.apber_relevant = 1
   AND apflora.pop."PopHerkunft" <> 300
 GROUP BY
-  apflora.pop."ApArtId",
-  apflora.pop."PopId";
+  apflora.pop.ap_id,
+  apflora.pop.id;
 
 DROP VIEW IF EXISTS apflora.v_apber_c3rpop CASCADE;
 CREATE OR REPLACE VIEW apflora.v_apber_c3rpop AS
 SELECT
-  apflora.pop."ApArtId",
-  apflora.pop."PopId"
+  apflora.pop.ap_id,
+  apflora.pop.id
 FROM
   (apflora.v_pop_letztermassnber
   INNER JOIN
     apflora.pop
-    ON apflora.v_pop_letztermassnber."ApArtId" = apflora.pop."ApArtId")
+    ON apflora.v_pop_letztermassnber."ApArtId" = apflora.pop.ap_id)
   INNER JOIN
     apflora.popmassnber
     ON
-      (apflora.pop."PopId" = apflora.popmassnber.pop_id)
+      (apflora.pop.id = apflora.popmassnber.pop_id)
       AND (apflora.v_pop_letztermassnber."MaxvonPopMassnBerJahr" = apflora.popmassnber.jahr)
-      AND (apflora.v_pop_letztermassnber."PopId" = apflora.popmassnber.pop_id)
+      AND (apflora.v_pop_letztermassnber.id = apflora.popmassnber.pop_id)
 WHERE
   apflora.popmassnber.beurteilung = 1
 GROUP BY
-  apflora.pop."ApArtId",
-  apflora.pop."PopId";
+  apflora.pop.ap_id,
+  apflora.pop.id;
 
 DROP VIEW IF EXISTS apflora.v_apber_c4rpop CASCADE;
 CREATE OR REPLACE VIEW apflora.v_apber_c4rpop AS
 SELECT
-  apflora.pop."ApArtId",
-  apflora.pop."PopId"
+  apflora.pop.ap_id,
+  apflora.pop.id
 FROM
   (apflora.v_pop_letztermassnber
   INNER JOIN
     apflora.pop
-    ON apflora.v_pop_letztermassnber."ApArtId" = apflora.pop."ApArtId")
+    ON apflora.v_pop_letztermassnber."ApArtId" = apflora.pop.ap_id)
   INNER JOIN
     apflora.popmassnber
     ON
-      (apflora.pop."PopId" = apflora.popmassnber.pop_id)
+      (apflora.pop.id = apflora.popmassnber.pop_id)
       AND (apflora.v_pop_letztermassnber."MaxvonPopMassnBerJahr" = apflora.popmassnber.jahr)
-      AND (apflora.v_pop_letztermassnber."PopId" = apflora.popmassnber.pop_id)
+      AND (apflora.v_pop_letztermassnber.id = apflora.popmassnber.pop_id)
 WHERE
   apflora.popmassnber.beurteilung = 2
 GROUP BY
-  apflora.pop."ApArtId",
-  apflora.pop."PopId";
+  apflora.pop.ap_id,
+  apflora.pop.id;
 
 DROP VIEW IF EXISTS apflora.v_apber_c5rpop CASCADE;
 CREATE OR REPLACE VIEW apflora.v_apber_c5rpop AS
 SELECT
-  apflora.pop."ApArtId",
-  apflora.pop."PopId"
+  apflora.pop.ap_id,
+  apflora.pop.id
 FROM
   (apflora.v_pop_letztermassnber
   INNER JOIN
     apflora.pop
-    ON apflora.v_pop_letztermassnber."ApArtId" = apflora.pop."ApArtId")
+    ON apflora.v_pop_letztermassnber."ApArtId" = apflora.pop.ap_id)
   INNER JOIN
     apflora.popmassnber
     ON
-      (apflora.pop."PopId" = apflora.popmassnber.pop_id)
+      (apflora.pop.id = apflora.popmassnber.pop_id)
       AND (apflora.v_pop_letztermassnber."MaxvonPopMassnBerJahr" = apflora.popmassnber.jahr)
-      AND (apflora.v_pop_letztermassnber."PopId" = apflora.popmassnber.pop_id)
+      AND (apflora.v_pop_letztermassnber.id = apflora.popmassnber.pop_id)
 WHERE
   apflora.popmassnber.beurteilung = 3
 GROUP BY
-  apflora.pop."ApArtId",
-  apflora.pop."PopId";
+  apflora.pop.ap_id,
+  apflora.pop.id;
 
 DROP VIEW IF EXISTS apflora.v_apber_c6rpop CASCADE;
 CREATE OR REPLACE VIEW apflora.v_apber_c6rpop AS
 SELECT
-  apflora.pop."ApArtId",
-  apflora.pop."PopId"
+  apflora.pop.ap_id,
+  apflora.pop.id
 FROM
   (apflora.v_pop_letztermassnber
   INNER JOIN
     apflora.pop
-    ON apflora.v_pop_letztermassnber."ApArtId" = apflora.pop."ApArtId")
+    ON apflora.v_pop_letztermassnber."ApArtId" = apflora.pop.ap_id)
   INNER JOIN
     apflora.popmassnber
     ON
-      (apflora.pop."PopId" = apflora.popmassnber.pop_id)
-      AND (apflora.v_pop_letztermassnber."PopId" = apflora.popmassnber.pop_id)
+      (apflora.pop.id = apflora.popmassnber.pop_id)
+      AND (apflora.v_pop_letztermassnber.id = apflora.popmassnber.pop_id)
       AND (apflora.v_pop_letztermassnber."MaxvonPopMassnBerJahr" = apflora.popmassnber.jahr)
 WHERE
   apflora.popmassnber.beurteilung = 4
 GROUP BY
-  apflora.pop."ApArtId",
-  apflora.pop."PopId";
+  apflora.pop.ap_id,
+  apflora.pop.id;
 
 DROP VIEW IF EXISTS apflora.v_apber_c7rpop CASCADE;
 CREATE OR REPLACE VIEW apflora.v_apber_c7rpop AS
 SELECT
-  apflora.pop."ApArtId",
-  apflora.pop."PopId"
+  apflora.pop.ap_id,
+  apflora.pop.id
 FROM
   (apflora.v_pop_letztermassnber
   INNER JOIN
     apflora.pop
-    ON apflora.v_pop_letztermassnber."ApArtId" = apflora.pop."ApArtId")
+    ON apflora.v_pop_letztermassnber."ApArtId" = apflora.pop.ap_id)
   INNER JOIN
     apflora.popmassnber
     ON
-      (apflora.pop."PopId" = apflora.popmassnber.pop_id)
-      AND (apflora.v_pop_letztermassnber."PopId" = apflora.popmassnber.pop_id)
+      (apflora.pop.id = apflora.popmassnber.pop_id)
+      AND (apflora.v_pop_letztermassnber.id = apflora.popmassnber.pop_id)
       AND (apflora.v_pop_letztermassnber."MaxvonPopMassnBerJahr" = apflora.popmassnber.jahr)
 WHERE
   apflora.popmassnber.beurteilung = 5
 GROUP BY
-  apflora.pop."ApArtId",
-  apflora.pop."PopId";
+  apflora.pop.ap_id,
+  apflora.pop.id;
 
 DROP VIEW IF EXISTS apflora.v_apber_c3rtpop CASCADE;
 CREATE OR REPLACE VIEW apflora.v_apber_c3rtpop AS
 SELECT
-  apflora.pop."ApArtId",
+  apflora.pop.ap_id,
   apflora.tpop.id
 FROM
   apflora.pop
@@ -1285,17 +1285,17 @@ FROM
     INNER JOIN
       apflora.tpop
       ON apflora.tpopmassnber.tpop_id = apflora.tpop.id)
-    ON apflora.pop."PopId" = apflora.tpop.pop_id
+    ON apflora.pop.id = apflora.tpop.pop_id
 WHERE
   apflora.tpopmassnber.beurteilung = 1
 GROUP BY
-  apflora.pop."ApArtId",
+  apflora.pop.ap_id,
   apflora.tpop.id;
 
 DROP VIEW IF EXISTS apflora.v_apber_c4rtpop CASCADE;
 CREATE OR REPLACE VIEW apflora.v_apber_c4rtpop AS
 SELECT
-  apflora.pop."ApArtId",
+  apflora.pop.ap_id,
   apflora.tpop.id
 FROM
   apflora.pop
@@ -1309,17 +1309,17 @@ FROM
     INNER JOIN
       apflora.tpop
       ON apflora.tpopmassnber.tpop_id = apflora.tpop.id)
-    ON apflora.pop."PopId" = apflora.tpop.pop_id
+    ON apflora.pop.id = apflora.tpop.pop_id
 WHERE
   (apflora.tpopmassnber.beurteilung = 2)
 GROUP BY
-  apflora.pop."ApArtId",
+  apflora.pop.ap_id,
   apflora.tpop.id;
 
 DROP VIEW IF EXISTS apflora.v_apber_c5rtpop CASCADE;
 CREATE OR REPLACE VIEW apflora.v_apber_c5rtpop AS
 SELECT
-  apflora.pop."ApArtId",
+  apflora.pop.ap_id,
   apflora.tpop.id
 FROM
   apflora.pop
@@ -1333,17 +1333,17 @@ FROM
     INNER JOIN
       apflora.tpop
       ON apflora.tpopmassnber.tpop_id = apflora.tpop.id)
-    ON apflora.pop."PopId" = apflora.tpop.pop_id
+    ON apflora.pop.id = apflora.tpop.pop_id
 WHERE
   apflora.tpopmassnber.beurteilung = 3
 GROUP BY
-  apflora.pop."ApArtId",
+  apflora.pop.ap_id,
   apflora.tpop.id;
 
 DROP VIEW IF EXISTS apflora.v_apber_c6rtpop CASCADE;
 CREATE OR REPLACE VIEW apflora.v_apber_c6rtpop AS
 SELECT
-  apflora.pop."ApArtId",
+  apflora.pop.ap_id,
   apflora.tpop.id
 FROM
   apflora.pop
@@ -1357,17 +1357,17 @@ FROM
     INNER JOIN
       apflora.tpop
       ON apflora.tpopmassnber.tpop_id = apflora.tpop.id)
-    ON apflora.pop."PopId" = apflora.tpop.pop_id
+    ON apflora.pop.id = apflora.tpop.pop_id
 WHERE
   apflora.tpopmassnber.beurteilung = 4
 GROUP BY
-  apflora.pop."ApArtId",
+  apflora.pop.ap_id,
   apflora.tpop.id;
 
 DROP VIEW IF EXISTS apflora.v_apber_c7rtpop CASCADE;
 CREATE OR REPLACE VIEW apflora.v_apber_c7rtpop AS
 SELECT
-  apflora.pop."ApArtId",
+  apflora.pop.ap_id,
   apflora.tpop.id
 FROM
   apflora.pop
@@ -1381,11 +1381,11 @@ FROM
     INNER JOIN
       apflora.tpop
       ON apflora.tpopmassnber.tpop_id = apflora.tpop.id)
-    ON apflora.pop."PopId" = apflora.tpop.pop_id
+    ON apflora.pop.id = apflora.tpop.pop_id
 WHERE
   apflora.tpopmassnber.beurteilung = 5
 GROUP BY
-  apflora.pop."ApArtId",
+  apflora.pop.ap_id,
   apflora.tpop.id;
 
 DROP VIEW IF EXISTS apflora.v_pop_popberundmassnber CASCADE;
@@ -1396,8 +1396,7 @@ SELECT
   apflora.ap_bearbstand_werte.text AS "AP Status",
   apflora.ap."ApJahr" AS "AP Start im Jahr",
   apflora.ap_umsetzung_werte.text AS "AP Stand Umsetzung",
-  apflora.pop."PopId",
-  apflora.pop."PopGuid" AS "Pop Guid",
+  apflora.pop.id,
   apflora.pop."PopNr" AS "Pop Nr",
   apflora.pop."PopName" AS "Pop Name",
   pop_status_werte.text AS "Pop Status",
@@ -1408,7 +1407,7 @@ SELECT
   apflora.pop."PopYKoord" AS "Pop Y-Koordinaten",
   apflora.pop."MutWann" AS "Datensatz zuletzt geaendert",
   apflora.pop."MutWer" AS "Datensatz zuletzt geaendert von",
-  apflora.v_pop_berundmassnjahre."Jahr",
+  apflora.v_pop_berundmassnjahre.jahr,
   apflora.popber.id AS "PopBer Id",
   apflora.popber.jahr AS "PopBer Jahr",
   tpop_entwicklung_werte.text AS "PopBer Entwicklung",
@@ -1441,9 +1440,9 @@ FROM
             apflora.tpopmassn_erfbeurt_werte
             ON apflora.popmassnber.beurteilung = tpopmassn_erfbeurt_werte.code)
           ON
-            (apflora.v_pop_berundmassnjahre."Jahr" = apflora.popmassnber.jahr)
-            AND (apflora.v_pop_berundmassnjahre."PopId" = apflora.popmassnber.pop_id))
-        ON apflora.pop."PopId" = apflora.v_pop_berundmassnjahre."PopId")
+            (apflora.v_pop_berundmassnjahre.jahr = apflora.popmassnber.jahr)
+            AND (apflora.v_pop_berundmassnjahre.id = apflora.popmassnber.pop_id))
+        ON apflora.pop.id = apflora.v_pop_berundmassnjahre.id)
       LEFT JOIN
         apflora.pop_status_werte
         ON apflora.pop."PopHerkunft" = pop_status_werte.code)
@@ -1453,16 +1452,16 @@ FROM
           apflora.tpop_entwicklung_werte
           ON apflora.popber.entwicklung = tpop_entwicklung_werte.code)
         ON
-          (apflora.v_pop_berundmassnjahre."Jahr" = apflora.popber.jahr)
-          AND (apflora.v_pop_berundmassnjahre."PopId" = apflora.popber.pop_id))
-      ON apflora.ap."ApArtId" = apflora.pop."ApArtId")
+          (apflora.v_pop_berundmassnjahre.jahr = apflora.popber.jahr)
+          AND (apflora.v_pop_berundmassnjahre.id = apflora.popber.pop_id))
+      ON apflora.ap."ApArtId" = apflora.pop.ap_id)
     ON apflora.ae_eigenschaften.taxid = apflora.ap."ApArtId"
 WHERE
   apflora.ae_eigenschaften.taxid > 150
 ORDER BY
   apflora.ae_eigenschaften.artname,
   apflora.pop."PopNr",
-  apflora.v_pop_berundmassnjahre."Jahr";
+  apflora.v_pop_berundmassnjahre.jahr;
 
 DROP VIEW IF EXISTS apflora.v_pop_mit_letzter_popber CASCADE;
 CREATE OR REPLACE VIEW apflora.v_pop_mit_letzter_popber AS
@@ -1472,8 +1471,7 @@ SELECT
   apflora.ap_bearbstand_werte.text AS "AP Status",
   apflora.ap."ApJahr" AS "AP Start im Jahr",
   apflora.ap_umsetzung_werte.text AS "AP Stand Umsetzung",
-  apflora.pop."PopId",
-  apflora.pop."PopGuid" AS "Pop Guid",
+  apflora.pop.id,
   apflora.pop."PopNr" AS "Pop Nr",
   apflora.pop."PopName" AS "Pop Name",
   pop_status_werte.text AS "Pop Status",
@@ -1512,11 +1510,11 @@ FROM
           ON
             (apflora.v_pop_letzterpopber0_overall.jahr = apflora.popber.jahr)
             AND (apflora.v_pop_letzterpopber0_overall.pop_id = apflora.popber.pop_id))
-        ON apflora.pop."PopId" = apflora.v_pop_letzterpopber0_overall.pop_id)
+        ON apflora.pop.id = apflora.v_pop_letzterpopber0_overall.pop_id)
       LEFT JOIN
         apflora.pop_status_werte
         ON apflora.pop."PopHerkunft" = pop_status_werte.code)
-      ON apflora.ap."ApArtId" = apflora.pop."ApArtId")
+      ON apflora.ap."ApArtId" = apflora.pop.ap_id)
     ON apflora.ae_eigenschaften.taxid = apflora.ap."ApArtId"
 WHERE
   apflora.ae_eigenschaften.taxid > 150
@@ -1533,7 +1531,7 @@ SELECT
   apflora.ap_bearbstand_werte.text AS "AP Status",
   apflora.ap."ApJahr" AS "AP Start im Jahr",
   apflora.ap_umsetzung_werte.text AS "AP Stand Umsetzung",
-  apflora.pop."PopId",
+  apflora.pop.id,
   apflora.pop."PopGuid" AS "Pop Guid",
   apflora.pop."PopNr" AS "Pop Nr",
   apflora.pop."PopName" AS "Pop Name",
@@ -1572,12 +1570,12 @@ FROM
             ON apflora.popmassnber.beurteilung = tpopmassn_erfbeurt_werte.code)
           ON
             (apflora.v_pop_letzterpopbermassn.jahr = apflora.popmassnber.jahr)
-            AND (apflora.v_pop_letzterpopbermassn."PopId" = apflora.popmassnber.pop_id))
-        ON apflora.pop."PopId" = apflora.v_pop_letzterpopbermassn."PopId")
+            AND (apflora.v_pop_letzterpopbermassn.id = apflora.popmassnber.pop_id))
+        ON apflora.pop.id = apflora.v_pop_letzterpopbermassn.id)
       LEFT JOIN
         apflora.pop_status_werte
         ON apflora.pop."PopHerkunft" = pop_status_werte.code)
-      ON apflora.ap."ApArtId" = apflora.pop."ApArtId")
+      ON apflora.ap."ApArtId" = apflora.pop.ap_id)
     ON apflora.ae_eigenschaften.taxid = apflora.ap."ApArtId"
 WHERE
   apflora.ae_eigenschaften.taxid > 150
@@ -1594,7 +1592,7 @@ SELECT
   apflora.ap_bearbstand_werte.text AS "AP Status",
   apflora.ap."ApJahr" AS "AP Start im Jahr",
   apflora.ap_umsetzung_werte.text AS "AP Stand Umsetzung",
-  apflora.pop."PopId",
+  apflora.pop.id as pop_id,
   apflora.pop."PopGuid" AS "Pop Guid",
   apflora.pop."PopNr" AS "Pop Nr",
   apflora.pop."PopName" AS "Pop Name",
@@ -1648,8 +1646,8 @@ FROM
     (apflora.pop
     RIGHT JOIN
       apflora.tpop
-      ON apflora.pop."PopId" = apflora.tpop.pop_id)
-    ON apflora.ap."ApArtId" = apflora.pop."ApArtId")
+      ON apflora.pop.id = apflora.tpop.pop_id)
+    ON apflora.ap."ApArtId" = apflora.pop.ap_id)
   LEFT JOIN
     apflora.ap_bearbstand_werte
     ON apflora.ap."ApStatus" = apflora.ap_bearbstand_werte.code)
@@ -1728,15 +1726,14 @@ DROP VIEW IF EXISTS apflora.v_tpop_anzkontrinklletzter CASCADE;
 CREATE OR REPLACE VIEW apflora.v_tpop_anzkontrinklletzter AS
 SELECT
   apflora.v_tpop_letzteKontrId.id,
-  apflora.v_tpop."ApArtId",
+  apflora.v_tpop.ap_id,
   apflora.v_tpop."Familie",
   apflora.v_tpop."AP Art",
   apflora.v_tpop."AP Status",
   apflora.v_tpop."AP Start im Jahr",
   apflora.v_tpop."AP Stand Umsetzung",
   apflora.v_tpop."AP verantwortlich",
-  apflora.v_tpop."PopId",
-  apflora.v_tpop."Pop Guid",
+  apflora.v_tpop.pop_id,
   apflora.v_tpop."Pop Nr",
   apflora.v_tpop."Pop Name",
   apflora.v_tpop."Pop Status",
@@ -1745,7 +1742,7 @@ SELECT
   apflora.v_tpop."Pop Begruendung fuer unklaren Status",
   apflora.v_tpop."Pop X-Koordinaten",
   apflora.v_tpop."Pop Y-Koordinaten",
-  apflora.v_tpop."TPop ID",
+  apflora.v_tpop.id,
   apflora.v_tpop."TPop Nr",
   apflora.v_tpop."TPop Gemeinde",
   apflora.v_tpop."TPop Flurname",
@@ -1833,7 +1830,7 @@ SELECT
   apflora.ap."ProjId",
   apflora.ap."ApArtId",
   'erloschene Teilpopulation "Fuer AP-Bericht relevant" aber letzte Beobachtung vor 1950:' AS "hw",
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop.id]::text[] AS "url",
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id]::text[] AS "url",
   ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop.nr)]::text[] AS text
 FROM
   apflora.ap
@@ -1841,8 +1838,8 @@ FROM
     (apflora.pop
     INNER JOIN
       apflora.tpop
-      ON apflora.pop."PopId" = apflora.tpop.pop_id)
-    ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
+      ON apflora.pop.id = apflora.tpop.pop_id)
+    ON apflora.ap."ApArtId" = apflora.pop.ap_id
 WHERE
   apflora.tpop.status IN (101, 202, 211)
   AND apflora.tpop.apber_relevant = 1
@@ -1876,9 +1873,9 @@ DROP VIEW IF EXISTS apflora.v_qk2_pop_statuserloschenletzterpopberaktuell CASCAD
 CREATE OR REPLACE VIEW apflora.v_qk2_pop_statuserloschenletzterpopberaktuell AS
 SELECT DISTINCT
   apflora.ap."ProjId",
-  apflora.pop."ApArtId",
+  apflora.pop.ap_id,
   'Population: Status ist "erloschen", der letzte Populations-Bericht meldet aber "aktuell":' AS "hw",
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId"]::text[] AS "url",
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop.id]::text[] AS "url",
   ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr")]::text[] AS text
 FROM
   apflora.ap
@@ -1891,11 +1888,11 @@ FROM
         ON
           (v_pop_letzterpopber0_overall.jahr = apflora.popber.jahr)
           AND (v_pop_letzterpopber0_overall.pop_id = apflora.popber.pop_id))
-      ON apflora.popber.pop_id = apflora.pop."PopId")
+      ON apflora.popber.pop_id = apflora.pop.id)
     INNER JOIN
       apflora.tpop
-      ON apflora.tpop.pop_id = apflora.pop."PopId"
-    ON apflora.pop."ApArtId" = apflora.ap."ApArtId"
+      ON apflora.tpop.pop_id = apflora.pop.id
+    ON apflora.pop.ap_id = apflora.ap."ApArtId"
 WHERE
   apflora.popber.entwicklung < 8
   AND apflora.pop."PopHerkunft" IN (101, 202, 211)
@@ -1905,9 +1902,9 @@ DROP VIEW IF EXISTS apflora.v_qk2_tpop_statuserloschenletzterpopberaktuell CASCA
 CREATE OR REPLACE VIEW apflora.v_qk2_tpop_statuserloschenletzterpopberaktuell AS
 SELECT DISTINCT
   apflora.ap."ProjId",
-  apflora.pop."ApArtId",
+  apflora.pop.ap_id,
   'Teilpopulation: Status ist "erloschen", der letzte Teilpopulations-Bericht meldet aber "aktuell":' AS "hw",
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop.id]::text[] AS "url",
+  ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id]::text[] AS "url",
   ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop.nr)]::text[] AS text
 FROM
   apflora.ap
@@ -1923,8 +1920,8 @@ FROM
             (v_tpop_letztertpopber0_overall.tpopber_jahr = apflora.tpopber.jahr)
             AND (v_tpop_letztertpopber0_overall.tpop_id = apflora.tpopber.tpop_id))
         ON apflora.tpopber.tpop_id = apflora.tpop.id)
-      ON apflora.tpop.pop_id = apflora.pop."PopId"
-    ON apflora.pop."ApArtId" = apflora.ap."ApArtId"
+      ON apflora.tpop.pop_id = apflora.pop.id
+    ON apflora.pop.ap_id = apflora.ap."ApArtId"
 WHERE
   apflora.tpopber.entwicklung < 8
   AND apflora.tpop.status IN (101, 202, 211)
@@ -2057,8 +2054,8 @@ FROM
             ON apflora.tpopkontrzaehl.methode = apflora.tpopkontrzaehl_methode_werte.code)
           ON apflora.tpopkontr.id = apflora.tpopkontrzaehl.tpopkontr_id)
         ON apflora.tpop.id = apflora.tpopkontr.tpop_id)
-      ON apflora.pop."PopId" = apflora.tpop.pop_id)
-    ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
+      ON apflora.pop.id = apflora.tpop.pop_id)
+    ON apflora.ap."ApArtId" = apflora.pop.ap_id
 WHERE
   -- keine Testarten
   apflora.ap."ApArtId" > 150
@@ -2134,7 +2131,7 @@ FROM
     ON apflora.ae_eigenschaften.taxid = apflora.ap."ApArtId")
   INNER JOIN
     apflora.pop
-    ON apflora.ap."ApArtId" = apflora.pop."ApArtId")
+    ON apflora.ap."ApArtId" = apflora.pop.ap_id)
   LEFT JOIN
     apflora.ap_bearbstand_werte
     ON apflora.ap."ApStatus" = apflora.ap_bearbstand_werte.code)
@@ -2149,7 +2146,7 @@ FROM
       LEFT JOIN
       apflora.v_popmassnber_anzmassn0
       on apflora.v_popmassnber_anzmassn0.pop_id = apflora.popmassnber.pop_id and apflora.v_popmassnber_anzmassn0.jahr = apflora.popmassnber.jahr
-    ON apflora.pop."PopId" = apflora.popmassnber.pop_id)
+    ON apflora.pop.id = apflora.popmassnber.pop_id)
   LEFT JOIN
     apflora.tpopmassn_erfbeurt_werte
     ON apflora.popmassnber.beurteilung = tpopmassn_erfbeurt_werte.code

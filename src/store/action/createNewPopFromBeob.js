@@ -28,7 +28,7 @@ export default async ({
       method: 'POST',
       url: '/pop',
       data: {
-        ApArtId: ap,
+        ap_id: ap,
         // give pop some data of beob
         PopXKoord: X,
         PopYKoord: Y,
@@ -45,7 +45,7 @@ export default async ({
     throw new Error(`Fehler bei der Erstellung einer neuen Population`)
   }
   const pop = popResult.data[0]
-  store.table.pop.set(pop.PopId, pop)
+  store.table.pop.set(pop.id, pop)
 
   // create new tpop for pop
   let tpopResult
@@ -54,7 +54,7 @@ export default async ({
       method: 'POST',
       url: '/tpop',
       data: {
-        PopId: pop.PopId,
+        pop_id: pop.id,
         // give tpop some data of beob
         x: X,
         y: Y,

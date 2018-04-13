@@ -14,8 +14,8 @@ export default (store: Object): Array<Object> => {
     const pops = Array.from(store.table.pop.values())
     const tpopsWithKoord = tpops.filter(tpop => tpop.TPopKoordWgs84)
     return tpopsWithKoord.map(tpop => {
-      const pop = pops.find(pop => pop.PopId === tpop.pop_id)
-      const popNr = pop && (pop.PopNr || pop.PopNr === 0) ? pop.PopNr : ''
+      const pop = pops.find(pop => pop.id === tpop.pop_id)
+      const popNr = pop && (pop.nr || pop.nr === 0) ? pop.nr : ''
       const tpopNr = tpop.nr || tpop.nr === 0 ? tpop.nr : ''
       const nrLabel = `${popNr}.${tpopNr}`
       let title = labelUsingNr ? tpop.flurname : nrLabel

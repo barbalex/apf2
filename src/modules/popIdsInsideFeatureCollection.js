@@ -12,7 +12,7 @@ export default (store: Object, pops: Array<Object>): Array<number> => {
    */
   // make sure all pops used have coordinates
   let popsToUse = pops.filter(p => {
-    if (!p.PopId) return false
+    if (!p.id) return false
     if (
       p.PopXKoord &&
       isFinite(p.PopXKoord) &&
@@ -43,7 +43,7 @@ export default (store: Object, pops: Array<Object>): Array<number> => {
     features: popsToUse.map(p => ({
       type: 'Feature',
       properties: {
-        PopId: p.PopId,
+        id: p.id,
       },
       geometry: {
         type: 'Point',
@@ -71,5 +71,5 @@ export default (store: Object, pops: Array<Object>): Array<number> => {
   // let turf check what points are within filter
   const result = within(toJS(points), toJS(store.map.mapFilter.filter))
 
-  return result.features.map(r => r.properties.PopId)
+  return result.features.map(r => r.properties.id)
 }

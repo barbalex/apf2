@@ -83,9 +83,9 @@ const getTpopZuordnenSource = (store: Object, tree: Object): Array<Object> => {
   const { activeDataset, activeNodes } = tree
   // get all popIds of active ap
   const popList = Array.from(store.table.pop.values()).filter(
-    p => p.ApArtId === activeNodes.ap
+    p => p.ap_id === activeNodes.ap
   )
-  const popIdList = popList.map(p => p.PopId)
+  const popIdList = popList.map(p => p.id)
   // get all tpop
   let tpopList = Array.from(store.table.tpop.values())
     // of active ap
@@ -108,7 +108,7 @@ const getTpopZuordnenSource = (store: Object, tree: Object): Array<Object> => {
     const dX = Math.abs(beob.X - t.x)
     const dY = Math.abs(beob.Y - t.y)
     t.distance = Math.round((dX ** 2 + dY ** 2) ** 0.5)
-    t.popNr = store.table.pop.get(t.pop_id).PopNr
+    t.popNr = store.table.pop.get(t.pop_id).nr
     // build label
     const popStatusWerte = Array.from(store.table.pop_status_werte.values())
     let popStatusWert

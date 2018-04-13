@@ -9,9 +9,9 @@ WHERE id IN (
   FROM
     apflora.tpop
     INNER JOIN apflora.pop
-    ON apflora.tpop.pop_id = apflora.pop."PopId"
+    ON apflora.tpop.pop_id = apflora.pop.id
       INNER JOIN apflora.ap
-      ON apflora.pop."ApArtId" = apflora.ap."ApArtId"
+      ON apflora.pop.ap_id = apflora.ap."ApArtId"
   WHERE
     status = 211 -- angesiedelt vor Beginn AP, erloschen/nicht etabliert
     AND "ApJahr" IS NULL
@@ -19,13 +19,13 @@ WHERE id IN (
 
 UPDATE apflora.pop
 SET "PopHerkunft" = 202  -- angesiedelt nach Beginn AP, erloschen/nicht etabliert
-WHERE "PopId" IN (
+WHERE id IN (
   SELECT
-    pop."PopId"
+    pop.id
   FROM
     apflora.pop
       INNER JOIN apflora.ap
-      ON apflora.pop."ApArtId" = apflora.ap."ApArtId"
+      ON apflora.pop.ap_id = apflora.ap."ApArtId"
   WHERE
     "PopHerkunft" = 211 -- angesiedelt vor Beginn AP, erloschen/nicht etabliert
     AND "ApJahr" IS NULL
@@ -39,9 +39,9 @@ WHERE id IN (
   FROM
     apflora.tpop
     INNER JOIN apflora.pop
-    ON apflora.tpop.pop_id = apflora.pop."PopId"
+    ON apflora.tpop.pop_id = apflora.pop.id
       INNER JOIN apflora.ap
-      ON apflora.pop."ApArtId" = apflora.ap."ApArtId"
+      ON apflora.pop.ap_id = apflora.ap."ApArtId"
   WHERE
     status = 211 -- angesiedelt vor Beginn AP, erloschen/nicht etabliert
     AND "ApJahr" <= apflora.tpop.bekannt_seit
@@ -49,13 +49,13 @@ WHERE id IN (
 
 UPDATE apflora.pop
 SET "PopHerkunft" = 202  -- angesiedelt nach Beginn AP, erloschen/nicht etabliert
-WHERE "PopId" IN (
+WHERE id IN (
   SELECT
-    pop."PopId"
+    pop.id
   FROM
     apflora.pop
       INNER JOIN apflora.ap
-      ON apflora.pop."ApArtId" = apflora.ap."ApArtId"
+      ON apflora.pop.ap_id = apflora.ap."ApArtId"
   WHERE
     "PopHerkunft" = 211 -- angesiedelt vor Beginn AP, erloschen/nicht etabliert
     AND "ApJahr" <= "PopBekanntSeit"
@@ -69,9 +69,9 @@ WHERE id IN (
   FROM
     apflora.tpop
     INNER JOIN apflora.pop
-    ON apflora.tpop.pop_id = apflora.pop."PopId"
+    ON apflora.tpop.pop_id = apflora.pop.id
       INNER JOIN apflora.ap
-      ON apflora.pop."ApArtId" = apflora.ap."ApArtId"
+      ON apflora.pop.ap_id = apflora.ap."ApArtId"
   WHERE
     status = 202  -- angesiedelt nach Beginn AP, erloschen/nicht etabliert
     AND "ApJahr" > apflora.tpop.bekannt_seit
@@ -79,13 +79,13 @@ WHERE id IN (
 
 UPDATE apflora.pop
 SET "PopHerkunft" = 211 -- angesiedelt vor Beginn AP, erloschen/nicht etabliert
-WHERE "PopId" IN (
+WHERE id IN (
   SELECT
-    pop."PopId"
+    pop.id
   FROM
     apflora.pop
       INNER JOIN apflora.ap
-      ON apflora.pop."ApArtId" = apflora.ap."ApArtId"
+      ON apflora.pop.ap_id = apflora.ap."ApArtId"
   WHERE
     "PopHerkunft" = 202  -- angesiedelt nach Beginn AP, erloschen/nicht etabliert
     AND "ApJahr" > "PopBekanntSeit"
@@ -100,9 +100,9 @@ WHERE id IN (
   FROM
     apflora.tpop
     INNER JOIN apflora.pop
-    ON apflora.tpop.pop_id = apflora.pop."PopId"
+    ON apflora.tpop.pop_id = apflora.pop.id
       INNER JOIN apflora.ap
-      ON apflora.pop."ApArtId" = apflora.ap."ApArtId"
+      ON apflora.pop.ap_id = apflora.ap."ApArtId"
   WHERE
     status = 210 -- angesiedelt vor Beginn AP, aktuell
     AND "ApJahr" IS NULL
@@ -110,13 +110,13 @@ WHERE id IN (
 
 UPDATE apflora.pop
 SET "PopHerkunft" = 200  -- angesiedelt nach Beginn AP, aktuell
-WHERE "PopId" IN (
+WHERE id IN (
   SELECT
-    pop."PopId"
+    pop.id
   FROM
     apflora.pop
       INNER JOIN apflora.ap
-      ON apflora.pop."ApArtId" = apflora.ap."ApArtId"
+      ON apflora.pop.ap_id = apflora.ap."ApArtId"
   WHERE
     "PopHerkunft" = 210 -- angesiedelt vor Beginn AP, aktuell
     AND "ApJahr" IS NULL
@@ -130,9 +130,9 @@ WHERE id IN (
   FROM
     apflora.tpop
     INNER JOIN apflora.pop
-    ON apflora.tpop.pop_id = apflora.pop."PopId"
+    ON apflora.tpop.pop_id = apflora.pop.id
       INNER JOIN apflora.ap
-      ON apflora.pop."ApArtId" = apflora.ap."ApArtId"
+      ON apflora.pop.ap_id = apflora.ap."ApArtId"
   WHERE
     status = 210 -- angesiedelt vor Beginn AP, aktuell
     AND "ApJahr" <= apflora.tpop.bekannt_seit
@@ -140,13 +140,13 @@ WHERE id IN (
 
 UPDATE apflora.pop
 SET "PopHerkunft" = 200  -- angesiedelt nach Beginn AP, aktuell
-WHERE "PopId" IN (
+WHERE id IN (
   SELECT
-    pop."PopId"
+    pop.id
   FROM
     apflora.pop
       INNER JOIN apflora.ap
-      ON apflora.pop."ApArtId" = apflora.ap."ApArtId"
+      ON apflora.pop.ap_id = apflora.ap."ApArtId"
   WHERE
     "PopHerkunft" = 210 -- angesiedelt vor Beginn AP, aktuell
     AND "ApJahr" <= "PopBekanntSeit"
@@ -160,9 +160,9 @@ WHERE id IN (
   FROM
     apflora.tpop
     INNER JOIN apflora.pop
-    ON apflora.tpop.pop_id = apflora.pop."PopId"
+    ON apflora.tpop.pop_id = apflora.pop.id
       INNER JOIN apflora.ap
-      ON apflora.pop."ApArtId" = apflora.ap."ApArtId"
+      ON apflora.pop.ap_id = apflora.ap."ApArtId"
   WHERE
     status = 200  -- angesiedelt nach Beginn AP, aktuell
     AND "ApJahr" > apflora.tpop.bekannt_seit
@@ -170,13 +170,13 @@ WHERE id IN (
 
 UPDATE apflora.pop
 SET "PopHerkunft" = 210 -- angesiedelt vor Beginn AP, aktuell
-WHERE "PopId" IN (
+WHERE id IN (
   SELECT
-    pop."PopId"
+    pop.id
   FROM
     apflora.pop
       INNER JOIN apflora.ap
-      ON apflora.pop."ApArtId" = apflora.ap."ApArtId"
+      ON apflora.pop.ap_id = apflora.ap."ApArtId"
   WHERE
     "PopHerkunft" = 200  -- angesiedelt nach Beginn AP, aktuell
     AND "ApJahr" > "PopBekanntSeit"

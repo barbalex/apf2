@@ -3,10 +3,10 @@ import uniq from 'lodash/uniq'
 export default (store: Object, tree: Object): Array<Object> => {
   const { table } = store
   const { nodeLabelFilter, activeNodes } = tree
-  const apArtId = activeNodes.ap
+  const apId = activeNodes.ap
   // grab ziele as array
   let ziele = Array.from(table.ziel.values())
-  ziele = ziele.filter(z => z.ap_id === apArtId)
+  ziele = ziele.filter(z => z.ap_id === apId)
 
   // filter by nodeLabelFilter
   const filterString = nodeLabelFilter.get('ziel')

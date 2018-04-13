@@ -111,20 +111,20 @@ export default (store: Object, tree: Object): Array<Object> => {
       nodeUrl[2] === 'Arten' &&
       allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
     ) {
-      const apArtId = nodeUrl[3]
+      const apId = nodeUrl[3]
       nodes = [
         ...nodes,
-        ...popFolderNodes(store, tree, projId, apArtId),
-        ...zieljahrFolderNodes(store, tree, projId, apArtId),
-        ...erfkritFolderNodes(store, tree, projId, apArtId),
-        ...apberFolderNodes(store, tree, projId, apArtId),
-        ...berFolderNodes(store, tree, projId, apArtId),
-        ...idealbiotopFolderNodes(store, tree, projId, apArtId),
-        ...assozartFolderNodes(store, tree, projId, apArtId),
-        ...beobartFolderNodes(store, tree, projId, apArtId),
-        ...beobzuordnungFolderNodes(store, tree, projId, apArtId),
-        ...beobNichtZuzuordnenFolderNodes(store, tree, projId, apArtId),
-        ...qkFolderNodes(store, tree, projId, apArtId),
+        ...popFolderNodes(store, tree, projId, apId),
+        ...zieljahrFolderNodes(store, tree, projId, apId),
+        ...erfkritFolderNodes(store, tree, projId, apId),
+        ...apberFolderNodes(store, tree, projId, apId),
+        ...berFolderNodes(store, tree, projId, apId),
+        ...idealbiotopFolderNodes(store, tree, projId, apId),
+        ...assozartFolderNodes(store, tree, projId, apId),
+        ...beobartFolderNodes(store, tree, projId, apId),
+        ...beobzuordnungFolderNodes(store, tree, projId, apId),
+        ...beobNichtZuzuordnenFolderNodes(store, tree, projId, apId),
+        ...qkFolderNodes(store, tree, projId, apId),
       ]
     }
     // if nodeUrl.length > 4, nodeUrl[2] is always 'Arten'
@@ -133,29 +133,29 @@ export default (store: Object, tree: Object): Array<Object> => {
       nodeUrl[4] === 'AP-Ziele' &&
       allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
     ) {
-      const apArtId = nodeUrl[3]
-      nodes = [...nodes, ...zieljahrNodes(store, tree, projId, apArtId)]
+      const apId = nodeUrl[3]
+      nodes = [...nodes, ...zieljahrNodes(store, tree, projId, apId)]
     }
     if (
       nodeUrl.length === 6 &&
       nodeUrl[4] === 'AP-Ziele' &&
       allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
     ) {
-      const apArtId = nodeUrl[3]
+      const apId = nodeUrl[3]
       const zieljahr = nodeUrl[5]
-      nodes = [...nodes, ...zielNodes(store, tree, projId, apArtId, zieljahr)]
+      nodes = [...nodes, ...zielNodes(store, tree, projId, apId, zieljahr)]
     }
     if (
       nodeUrl.length === 7 &&
       nodeUrl[4] === 'AP-Ziele' &&
       allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
     ) {
-      const apArtId = nodeUrl[3]
+      const apId = nodeUrl[3]
       const zieljahr = nodeUrl[5]
       const zielId = nodeUrl[6]
       nodes = [
         ...nodes,
-        ...zielberFolderNodes(store, tree, projId, apArtId, zieljahr, zielId),
+        ...zielberFolderNodes(store, tree, projId, apId, zieljahr, zielId),
       ]
     }
     if (
@@ -164,12 +164,12 @@ export default (store: Object, tree: Object): Array<Object> => {
       nodeUrl[7] === 'Berichte' &&
       allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
     ) {
-      const apArtId = nodeUrl[3]
+      const apId = nodeUrl[3]
       const zieljahr = nodeUrl[5]
       const zielId = nodeUrl[6]
       nodes = [
         ...nodes,
-        ...zielberNodes(store, tree, projId, apArtId, zieljahr, zielId),
+        ...zielberNodes(store, tree, projId, apId, zieljahr, zielId),
       ]
     }
     if (
@@ -177,80 +177,77 @@ export default (store: Object, tree: Object): Array<Object> => {
       nodeUrl[4] === 'Populationen' &&
       allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
     ) {
-      const apArtId = nodeUrl[3]
-      nodes = [...nodes, ...popNodes(store, tree, projId, apArtId)]
+      const apId = nodeUrl[3]
+      nodes = [...nodes, ...popNodes(store, tree, projId, apId)]
     }
     if (
       nodeUrl.length === 5 &&
       nodeUrl[4] === 'nicht-zuzuordnende-Beobachtungen' &&
       allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
     ) {
-      const apArtId = nodeUrl[3]
-      nodes = [
-        ...nodes,
-        ...beobNichtZuzuordnenNodes(store, tree, projId, apArtId),
-      ]
+      const apId = nodeUrl[3]
+      nodes = [...nodes, ...beobNichtZuzuordnenNodes(store, tree, projId, apId)]
     }
     if (
       nodeUrl.length === 5 &&
       nodeUrl[4] === 'nicht-beurteilte-Beobachtungen' &&
       allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
     ) {
-      const apArtId = nodeUrl[3]
-      nodes = [...nodes, ...beobzuordnungNodes(store, tree, projId, apArtId)]
+      const apId = nodeUrl[3]
+      nodes = [...nodes, ...beobzuordnungNodes(store, tree, projId, apId)]
     }
     if (
       nodeUrl.length === 5 &&
       nodeUrl[4] === 'assoziierte-Arten' &&
       allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
     ) {
-      const apArtId = nodeUrl[3]
-      nodes = [...nodes, ...assozartNodes(store, tree, projId, apArtId)]
+      const apId = nodeUrl[3]
+      nodes = [...nodes, ...assozartNodes(store, tree, projId, apId)]
     }
     if (
       nodeUrl.length === 5 &&
       nodeUrl[4] === 'arten-fuer-beobachtungen' &&
       allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
     ) {
-      const apArtId = nodeUrl[3]
-      nodes = [...nodes, ...beobartNodes(store, tree, projId, apArtId)]
+      const apId = nodeUrl[3]
+      nodes = [...nodes, ...beobartNodes(store, tree, projId, apId)]
     }
     if (
       nodeUrl.length === 5 &&
       nodeUrl[4] === 'Berichte' &&
       allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
     ) {
-      const apArtId = nodeUrl[3]
-      nodes = [...nodes, ...berNodes(store, tree, projId, apArtId)]
+      const apId = nodeUrl[3]
+      nodes = [...nodes, ...berNodes(store, tree, projId, apId)]
     }
     if (
       nodeUrl.length === 5 &&
       nodeUrl[4] === 'AP-Berichte' &&
       allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
     ) {
-      const apArtId = nodeUrl[3]
-      nodes = [...nodes, ...apberNodes(store, tree, projId, apArtId)]
+      const apId = nodeUrl[3]
+      nodes = [...nodes, ...apberNodes(store, tree, projId, apId)]
     }
     if (
       nodeUrl.length === 5 &&
       nodeUrl[4] === 'AP-Erfolgskriterien' &&
       allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
     ) {
-      const apArtId = nodeUrl[3]
-      nodes = [...nodes, ...erfkritNodes(store, tree, projId, apArtId)]
+      const apId = nodeUrl[3]
+      nodes = [...nodes, ...erfkritNodes(store, tree, projId, apId)]
     }
     if (
       nodeUrl.length === 6 &&
       nodeUrl[4] === 'Populationen' &&
       allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
     ) {
-      const apArtId = nodeUrl[3]
+      const apId = nodeUrl[3]
       const popId = nodeUrl[5]
       nodes = [
         ...nodes,
-        ...tpopFolderNodes(store, tree, projId, apArtId, popId),
-        ...popberFolderNodes(store, tree, projId, apArtId, popId),
-        ...popmassnberFolderNodes(store, tree, projId, apArtId, popId),
+        ...tpopFolderNodes(store, tree, projId, apId, popId),
+        ...popberFolderNodes(store, tree, projId, apId, popId),
+        ...popmassnberFolderNodes(store, tree, projId, apId, popId),
       ]
     }
     if (
@@ -259,12 +256,9 @@ export default (store: Object, tree: Object): Array<Object> => {
       nodeUrl[6] === 'Massnahmen-Berichte' &&
       allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
     ) {
-      const apArtId = nodeUrl[3]
+      const apId = nodeUrl[3]
       const popId = nodeUrl[5]
-      nodes = [
-        ...nodes,
-        ...popmassnberNodes(store, tree, projId, apArtId, popId),
-      ]
+      nodes = [...nodes, ...popmassnberNodes(store, tree, projId, apId, popId)]
     }
     if (
       nodeUrl.length === 7 &&
@@ -272,9 +266,9 @@ export default (store: Object, tree: Object): Array<Object> => {
       nodeUrl[6] === 'Kontroll-Berichte' &&
       allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
     ) {
-      const apArtId = nodeUrl[3]
+      const apId = nodeUrl[3]
       const popId = nodeUrl[5]
-      nodes = [...nodes, ...popberNodes(store, tree, projId, apArtId, popId)]
+      nodes = [...nodes, ...popberNodes(store, tree, projId, apId, popId)]
     }
     if (
       nodeUrl.length === 7 &&
@@ -282,9 +276,9 @@ export default (store: Object, tree: Object): Array<Object> => {
       nodeUrl[6] === 'Teil-Populationen' &&
       allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
     ) {
-      const apArtId = nodeUrl[3]
+      const apId = nodeUrl[3]
       const popId = nodeUrl[5]
-      nodes = [...nodes, ...tpopNodes(store, tree, projId, apArtId, popId)]
+      nodes = [...nodes, ...tpopNodes(store, tree, projId, apId, popId)]
     }
     if (
       nodeUrl.length === 8 &&
@@ -292,31 +286,17 @@ export default (store: Object, tree: Object): Array<Object> => {
       nodeUrl[6] === 'Teil-Populationen' &&
       allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
     ) {
-      const apArtId = nodeUrl[3]
+      const apId = nodeUrl[3]
       const popId = nodeUrl[5]
       const tpopId = nodeUrl[7]
       nodes = [
         ...nodes,
-        ...tpopmassnFolderNodes(store, tree, projId, apArtId, popId, tpopId),
-        ...tpopmassnberFolderNodes(store, tree, projId, apArtId, popId, tpopId),
-        ...tpopfeldkontrFolderNodes(
-          store,
-          tree,
-          projId,
-          apArtId,
-          popId,
-          tpopId
-        ),
-        ...tpopfreiwkontrFolderNodes(
-          store,
-          tree,
-          projId,
-          apArtId,
-          popId,
-          tpopId
-        ),
-        ...tpopberFolderNodes(store, tree, projId, apArtId, popId, tpopId),
-        ...tpopbeobFolderNodes(store, tree, projId, apArtId, popId, tpopId),
+        ...tpopmassnFolderNodes(store, tree, projId, apId, popId, tpopId),
+        ...tpopmassnberFolderNodes(store, tree, projId, apId, popId, tpopId),
+        ...tpopfeldkontrFolderNodes(store, tree, projId, apId, popId, tpopId),
+        ...tpopfreiwkontrFolderNodes(store, tree, projId, apId, popId, tpopId),
+        ...tpopberFolderNodes(store, tree, projId, apId, popId, tpopId),
+        ...tpopbeobFolderNodes(store, tree, projId, apId, popId, tpopId),
       ]
     }
     if (
@@ -326,12 +306,12 @@ export default (store: Object, tree: Object): Array<Object> => {
       nodeUrl[8] === 'Beobachtungen' &&
       allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
     ) {
-      const apArtId = nodeUrl[3]
+      const apId = nodeUrl[3]
       const popId = nodeUrl[5]
       const tpopId = nodeUrl[7]
       nodes = [
         ...nodes,
-        ...tpopbeobNodes(store, tree, projId, apArtId, popId, tpopId),
+        ...tpopbeobNodes(store, tree, projId, apId, popId, tpopId),
       ]
     }
     if (
@@ -341,12 +321,12 @@ export default (store: Object, tree: Object): Array<Object> => {
       nodeUrl[8] === 'Kontroll-Berichte' &&
       allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
     ) {
-      const apArtId = nodeUrl[3]
+      const apId = nodeUrl[3]
       const popId = nodeUrl[5]
       const tpopId = nodeUrl[7]
       nodes = [
         ...nodes,
-        ...tpopberNodes(store, tree, projId, apArtId, popId, tpopId),
+        ...tpopberNodes(store, tree, projId, apId, popId, tpopId),
       ]
     }
     if (
@@ -356,12 +336,12 @@ export default (store: Object, tree: Object): Array<Object> => {
       nodeUrl[8] === 'Freiwilligen-Kontrollen' &&
       allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
     ) {
-      const apArtId = nodeUrl[3]
+      const apId = nodeUrl[3]
       const popId = nodeUrl[5]
       const tpopId = nodeUrl[7]
       nodes = [
         ...nodes,
-        ...tpopfreiwkontrNodes(store, tree, projId, apArtId, popId, tpopId),
+        ...tpopfreiwkontrNodes(store, tree, projId, apId, popId, tpopId),
       ]
     }
     if (
@@ -371,12 +351,12 @@ export default (store: Object, tree: Object): Array<Object> => {
       nodeUrl[8] === 'Feld-Kontrollen' &&
       allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
     ) {
-      const apArtId = nodeUrl[3]
+      const apId = nodeUrl[3]
       const popId = nodeUrl[5]
       const tpopId = nodeUrl[7]
       nodes = [
         ...nodes,
-        ...tpopfeldkontrNodes(store, tree, projId, apArtId, popId, tpopId),
+        ...tpopfeldkontrNodes(store, tree, projId, apId, popId, tpopId),
       ]
     }
     if (
@@ -386,12 +366,12 @@ export default (store: Object, tree: Object): Array<Object> => {
       nodeUrl[8] === 'Massnahmen-Berichte' &&
       allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
     ) {
-      const apArtId = nodeUrl[3]
+      const apId = nodeUrl[3]
       const popId = nodeUrl[5]
       const tpopId = nodeUrl[7]
       nodes = [
         ...nodes,
-        ...tpopmassnberNodes(store, tree, projId, apArtId, popId, tpopId),
+        ...tpopmassnberNodes(store, tree, projId, apId, popId, tpopId),
       ]
     }
     if (
@@ -401,12 +381,12 @@ export default (store: Object, tree: Object): Array<Object> => {
       nodeUrl[8] === 'Massnahmen' &&
       allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
     ) {
-      const apArtId = nodeUrl[3]
+      const apId = nodeUrl[3]
       const popId = nodeUrl[5]
       const tpopId = nodeUrl[7]
       nodes = [
         ...nodes,
-        ...tpopmassnNodes(store, tree, projId, apArtId, popId, tpopId),
+        ...tpopmassnNodes(store, tree, projId, apId, popId, tpopId),
       ]
     }
     if (
@@ -416,7 +396,7 @@ export default (store: Object, tree: Object): Array<Object> => {
       nodeUrl[8] === 'Freiwilligen-Kontrollen' &&
       allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
     ) {
-      const apArtId = nodeUrl[3]
+      const apId = nodeUrl[3]
       const popId = nodeUrl[5]
       const tpopId = nodeUrl[7]
       const tpopkontrId = nodeUrl[9]
@@ -426,7 +406,7 @@ export default (store: Object, tree: Object): Array<Object> => {
           store,
           tree,
           projId,
-          apArtId,
+          apId,
           popId,
           tpopId,
           tpopkontrId
@@ -440,7 +420,7 @@ export default (store: Object, tree: Object): Array<Object> => {
       nodeUrl[8] === 'Feld-Kontrollen' &&
       allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
     ) {
-      const apArtId = nodeUrl[3]
+      const apId = nodeUrl[3]
       const popId = nodeUrl[5]
       const tpopId = nodeUrl[7]
       const tpopkontrId = nodeUrl[9]
@@ -450,7 +430,7 @@ export default (store: Object, tree: Object): Array<Object> => {
           store,
           tree,
           projId,
-          apArtId,
+          apId,
           popId,
           tpopId,
           tpopkontrId
@@ -464,7 +444,7 @@ export default (store: Object, tree: Object): Array<Object> => {
       nodeUrl[8] === 'Feld-Kontrollen' &&
       allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
     ) {
-      const apArtId = nodeUrl[3]
+      const apId = nodeUrl[3]
       const popId = nodeUrl[5]
       const tpopId = nodeUrl[7]
       const tpopkontrId = nodeUrl[9]
@@ -474,7 +454,7 @@ export default (store: Object, tree: Object): Array<Object> => {
           store,
           tree,
           projId,
-          apArtId,
+          apId,
           popId,
           tpopId,
           tpopkontrId
@@ -488,7 +468,7 @@ export default (store: Object, tree: Object): Array<Object> => {
       nodeUrl[8] === 'Freiwilligen-Kontrollen' &&
       allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
     ) {
-      const apArtId = nodeUrl[3]
+      const apId = nodeUrl[3]
       const popId = nodeUrl[5]
       const tpopId = nodeUrl[7]
       const tpopkontrId = nodeUrl[9]
@@ -498,7 +478,7 @@ export default (store: Object, tree: Object): Array<Object> => {
           store,
           tree,
           projId,
-          apArtId,
+          apId,
           popId,
           tpopId,
           tpopkontrId

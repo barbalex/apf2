@@ -18,8 +18,8 @@ export default (store: Object, latLng: Object): number => {
     },
   }
   const popIds = Array.from(table.pop.values())
-    .filter(p => p.ApArtId === activeNodes.ap)
-    .map(p => p.PopId)
+    .filter(p => p.ap_id === activeNodes.ap)
+    .map(p => p.id)
   const tpopFeatures = Array.from(table.tpop.values())
     .filter(t => popIds.includes(t.pop_id))
     .filter(t => t.TPopKoordWgs84)

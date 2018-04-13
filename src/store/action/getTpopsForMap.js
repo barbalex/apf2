@@ -3,12 +3,12 @@ import epsg2056to4326 from '../../modules/epsg2056to4326'
 
 export default (store: Object): Array<Object> => {
   const { table, tree } = store
-  const myApArtId = tree.activeNodes.ap || store.map.pop.apArtId
+  const myApArtId = tree.activeNodes.ap || store.map.pop.apId
   // get pops of this ap
   const popsOfActiveAp = Array.from(table.pop.values()).filter(
-    p => p.ApArtId === myApArtId
+    p => p.ap_id === myApArtId
   )
-  const popIdsOfActiveAp = popsOfActiveAp.map(p => p.PopId)
+  const popIdsOfActiveAp = popsOfActiveAp.map(p => p.id)
   // get tpops of this ap
   let tpops = Array.from(table.tpop.values())
     .filter(p => popIdsOfActiveAp.includes(p.pop_id))

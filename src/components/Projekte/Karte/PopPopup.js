@@ -16,16 +16,26 @@ const StyledH3 = styled.h3`
 const PopPopup = ({ store, pop }: { store: Object, pop: Object }) => {
   const { activeNodes } = store.tree
   const { ap, projekt } = activeNodes
-  const popUrl = `${appBaseUrl}/Projekte/${projekt}/Arten/${ap}/Populationen/${pop.PopId}`
+  const popUrl = `${appBaseUrl}/Projekte/${projekt}/Arten/${ap}/Populationen/${
+    pop.id
+  }`
 
   return (
     <div>
       <div>Population</div>
       <StyledH3>
-        {`${pop.PopNr ? `${pop.PopNr}: ` : '(keine Nummer): '}${pop.PopName ? pop.PopName : '(kein Name)'}`}
+        {`${pop.nr ? `${pop.nr}: ` : '(keine Nummer): '}${
+          pop.PopName ? pop.PopName : '(kein Name)'
+        }`}
       </StyledH3>
       <div>
-        {`Koordinaten: ${pop.PopKoordWgs84 ? `${pop.PopXKoord.toLocaleString('de-ch')} / ${pop.PopYKoord.toLocaleString('de-ch')}` : '(keine)'}`}
+        {`Koordinaten: ${
+          pop.PopKoordWgs84
+            ? `${pop.PopXKoord.toLocaleString(
+                'de-ch'
+              )} / ${pop.PopYKoord.toLocaleString('de-ch')}`
+            : '(keine)'
+        }`}
       </div>
       <a href={popUrl} target="_blank" rel="noopener noreferrer">
         Formular in neuem Tab öffnen

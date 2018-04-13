@@ -51,7 +51,7 @@ export default async (store: Object, tpopId: number): Promise<void> => {
   delete popForDb.PopKoordWgs84
   // update db
   try {
-    await axios.patch(`/pop?PopId=eq.${popForDb.PopId}`, popForDb)
+    await axios.patch(`/pop?id=eq.${popForDb.id}`, popForDb)
   } catch (error) {
     popInStore = originalPop
     store.listError(error)

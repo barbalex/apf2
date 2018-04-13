@@ -93,7 +93,7 @@ export default async (
   store.writeToStore({ data: [data], table, field: idField })
   // check if need to copy tpop
   if (table === 'pop' && withNextLevel) {
-    copyTpopsOfPop({ store, popIdFrom: id, popIdTo: data.PopId })
+    copyTpopsOfPop({ store, popIdFrom: id, popIdTo: data.id })
   }
   if (table === 'tpopkontr') {
     // always copy Zaehlungen

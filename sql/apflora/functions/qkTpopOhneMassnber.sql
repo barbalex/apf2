@@ -1,18 +1,18 @@
 CREATE OR REPLACE FUNCTION apflora.qk2_tpop_ohne_massnber(apid integer, berichtjahr integer)
-  RETURNS table("ProjId" integer, "ApArtId" integer, hw text, url text[], text text[]) AS
+  RETURNS table("ProjId" integer, ap_id integer, hw text, url text[], text text[]) AS
   $$
   -- 4. "TPop ohne verlangten Massnahmen-Bericht im Berichtjahr" ermitteln und in Qualitätskontrollen auflisten:
   SELECT DISTINCT
     1 AS "ProjId",
-    apflora.pop."ApArtId",
+    apflora.pop.ap_id,
     'Teilpopulation mit Ansiedlung (vor dem Berichtjahr) und Kontrolle (im Berichtjahr) aber ohne Massnahmen-Bericht (im Berichtjahr):' AS hw,
-    ARRAY['Projekte', 1 , 'Arten', apflora.pop."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop.id]::text[] AS "url",
-    ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop.nr)]::text[] AS text
+    ARRAY['Projekte', 1 , 'Arten', apflora.pop.ap_id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id]::text[] AS "url",
+    ARRAY[concat('Population (Nr.): ', apflora.pop.nr), concat('Teil-Population (Nr.): ', apflora.tpop.nr)]::text[] AS text
   FROM
     apflora.pop
     INNER JOIN
       apflora.tpop
-      ON apflora.pop."PopId" = apflora.tpop.pop_id
+      ON apflora.pop.id = apflora.tpop.pop_id
   WHERE
     apflora.tpop.apber_relevant = 1
     AND apflora.tpop.id IN (
@@ -44,7 +44,7 @@ CREATE OR REPLACE FUNCTION apflora.qk2_tpop_ohne_massnber(apid integer, berichtj
       WHERE
         apflora.tpopmassnber.jahr = $2
     )
-    AND apflora.pop."ApArtId" = $1
+    AND apflora.pop.ap_id = $1
   $$
   LANGUAGE sql STABLE;
 ALTER FUNCTION apflora.qk2_tpop_ohne_massnber(apid integer, berichtjahr integer)

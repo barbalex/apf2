@@ -5,7 +5,7 @@ export default (
   store: Object,
   tree: Object,
   projId: number,
-  apArtId: number
+  apId: number
 ): Array<Object> => {
   // fetch sorting indexes of parents
   const projIndex = findIndex(tree.filteredAndSorted.projekt, {
@@ -13,11 +13,11 @@ export default (
   })
   const apIndex = findIndex(
     tree.filteredAndSorted.ap.filter(a => a.ProjId === projId),
-    { ApArtId: apArtId }
+    { ApArtId: apId }
   )
 
   const assozartNodesLength = tree.filteredAndSorted.assozart.filter(
-    n => n.ap_id === apArtId
+    n => n.ap_id === apId
   ).length
   let message = assozartNodesLength
   if (store.table.assozartLoading) {
@@ -31,10 +31,10 @@ export default (
     {
       nodeType: 'folder',
       menuType: 'assozartFolder',
-      id: apArtId,
+      id: apId,
       urlLabel: 'assoziierte-Arten',
       label: `assoziierte Arten (${message})`,
-      url: ['Projekte', projId, 'Arten', apArtId, 'assoziierte-Arten'],
+      url: ['Projekte', projId, 'Arten', apId, 'assoziierte-Arten'],
       sort: [projIndex, 1, apIndex, 7],
       hasChildren: assozartNodesLength > 0,
     },

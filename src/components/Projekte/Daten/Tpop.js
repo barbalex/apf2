@@ -41,9 +41,9 @@ const Tpop = ({
   dimensions: Object,
 }) => {
   const { activeDataset } = tree
-  const ads = store.table.pop.get(activeDataset.row.PopId)
-  const apArtId = ads && ads.ApArtId ? ads.ApArtId : null
-  const ap = store.table.ap.get(apArtId)
+  const ads = store.table.pop.get(activeDataset.row.id)
+  const apId = ads && ads.ap_id ? ads.ap_id : null
+  const ap = store.table.ap.get(apId)
   const apJahr = ap && ap.ApJahr ? ap.ApJahr : null
   const width = isNaN(dimensions.width) ? 380 : dimensions.width
 

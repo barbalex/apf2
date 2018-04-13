@@ -4,7 +4,7 @@ export default (
   store: Object,
   tree: Object,
   projId: number,
-  apArtId: number,
+  apId: number,
   popId: number,
   tpopId: number,
   tpopkontrId: number
@@ -15,11 +15,11 @@ export default (
   })
   const apIndex = findIndex(
     tree.filteredAndSorted.ap.filter(a => a.ProjId === projId),
-    { ApArtId: apArtId }
+    { ApArtId: apId }
   )
   const popIndex = findIndex(
-    tree.filteredAndSorted.pop.filter(p => p.ApArtId === apArtId),
-    { PopId: popId }
+    tree.filteredAndSorted.pop.filter(p => p.ap_id === apId),
+    { id: popId }
   )
   const tpopIndex = findIndex(
     tree.filteredAndSorted.tpop.filter(t => t.pop_id === popId),
@@ -45,7 +45,7 @@ export default (
         'Projekte',
         projId,
         'Arten',
-        apArtId,
+        apId,
         'Populationen',
         popId,
         'Teil-Populationen',

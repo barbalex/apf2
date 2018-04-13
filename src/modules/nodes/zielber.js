@@ -5,7 +5,7 @@ export default (
   store: Object,
   tree: Object,
   projId: number,
-  apArtId: number,
+  apId: number,
   zieljahr: number,
   zielId: number
 ): Array<Object> => {
@@ -15,7 +15,7 @@ export default (
   })
   const apIndex = findIndex(
     tree.filteredAndSorted.ap.filter(a => a.ProjId === projId),
-    { ApArtId: apArtId }
+    { ApArtId: apId }
   )
   const zieljahrIndex = findIndex(tree.filteredAndSorted.zieljahr, {
     jahr: zieljahr,
@@ -39,7 +39,7 @@ export default (
         'Projekte',
         projId,
         'Arten',
-        apArtId,
+        apId,
         'AP-Ziele',
         zieljahr,
         el.ziel_id,

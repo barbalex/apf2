@@ -7,7 +7,9 @@ import withHandlers from 'recompose/withHandlers'
 import withState from 'recompose/withState'
 import styled from 'styled-components'
 
-const StyledAutoComplete = styled(AutoComplete)`margin-bottom: -12px;`
+const StyledAutoComplete = styled(AutoComplete)`
+  margin-bottom: -12px;
+`
 
 const enhance = compose(
   withState('focused', 'changeFocused', false),
@@ -18,7 +20,7 @@ const enhance = compose(
       props.downloadFromView({
         view: 'v_tpop_anzkontrinklletzterundletztertpopber',
         fileName: 'anzkontrinklletzterundletztertpopber_2016',
-        apArtId: val.TaxonomieId,
+        apId: val.TaxonomieId,
       })
     },
     onFocus: props => () => props.changeFocused(true),
@@ -88,9 +90,9 @@ const MyAutocomplete = ({
     labelNumberLimit = 'Erste 20 Einträge angezeigt.'
   }
   const labelText = focused
-    ? `Wollmilchsau${labelFilterHint || labelNumberLimit
-        ? '. '
-        : ''}${labelFilterHint}${labelNumberLimit}`
+    ? `Wollmilchsau${
+        labelFilterHint || labelNumberLimit ? '. ' : ''
+      }${labelFilterHint}${labelNumberLimit}`
     : '"Eier legende Wollmilchsau" für eine Art'
 
   return (

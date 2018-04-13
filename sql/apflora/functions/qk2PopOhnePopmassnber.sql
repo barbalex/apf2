@@ -1,20 +1,20 @@
 CREATE OR REPLACE FUNCTION apflora.qk2_pop_ohne_popmassnber(apid integer, berichtjahr integer)
-  RETURNS table("ProjId" integer, "ApArtId" integer, hw text, url text[], text text[]) AS
+  RETURNS table("ProjId" integer, ap_id integer, hw text, url text[], text text[]) AS
   $$
   -- 5. "Pop ohne verlangten Pop-Massn-Bericht im Berichtjahr" ermitteln und in Qualitätskontrollen auflisten:
   SELECT DISTINCT
     apflora.ap."ProjId",
-    apflora.pop."ApArtId",
+    apflora.pop.ap_id,
     'Population mit angesiedelten Teilpopulationen (vor dem Berichtjahr), die (im Berichtjahr) kontrolliert wurden, aber ohne Massnahmen-Bericht (im Berichtjahr):' AS hw,
-    ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId"]::text[] AS "url",
-    ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr")]::text[] AS text
+    ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop.id]::text[] AS "url",
+    ARRAY[concat('Population (Nr.): ', apflora.pop.nr)]::text[] AS text
   FROM
     apflora.ap
     INNER JOIN
       apflora.pop
-      ON apflora.pop."ApArtId" = apflora.ap."ApArtId"
+      ON apflora.pop.ap_id = apflora.ap."ApArtId"
   WHERE
-    apflora.pop."PopId" IN (
+    apflora.pop.id IN (
       SELECT
         apflora.tpop.pop_id
       FROM
@@ -24,7 +24,7 @@ CREATE OR REPLACE FUNCTION apflora.qk2_pop_ohne_popmassnber(apid integer, berich
       GROUP BY
         apflora.tpop.pop_id
     )
-    AND apflora.pop."PopId" IN (
+    AND apflora.pop.id IN (
       -- 3. "Pop mit TPop mit verlangten TPopMassnBer im Berichtjahr" ermitteln:
       SELECT DISTINCT
         apflora.tpop.pop_id
@@ -52,7 +52,7 @@ CREATE OR REPLACE FUNCTION apflora.qk2_pop_ohne_popmassnber(apid integer, berich
             AND apflora.tpopkontr.jahr = $2
         )
     )
-    AND apflora.pop."PopId" NOT IN (
+    AND apflora.pop.id NOT IN (
       -- 4. "Pop mit PopMassnBer im Berichtjahr" ermitteln:
       SELECT DISTINCT
         apflora.popmassnber.pop_id
@@ -61,7 +61,7 @@ CREATE OR REPLACE FUNCTION apflora.qk2_pop_ohne_popmassnber(apid integer, berich
       WHERE
         apflora.popmassnber.jahr = $2
     )
-    AND apflora.pop."ApArtId" = $1
+    AND apflora.pop.ap_id = $1
   $$
   LANGUAGE sql STABLE;
 ALTER FUNCTION apflora.qk2_pop_ohne_popmassnber(apid integer, berichtjahr integer)

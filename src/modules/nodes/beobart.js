@@ -5,7 +5,7 @@ export default (
   store: Object,
   tree: Object,
   projId: number,
-  apArtId: number
+  apId: number
 ): Array<Object> => {
   // fetch sorting indexes of parents
   const projIndex = findIndex(tree.filteredAndSorted.projekt, {
@@ -13,23 +13,23 @@ export default (
   })
   const apIndex = findIndex(
     tree.filteredAndSorted.ap.filter(a => a.ProjId === projId),
-    { ApArtId: apArtId }
+    { ApArtId: apId }
   )
 
   return tree.filteredAndSorted.beobart
-    .filter(p => p.ApArtId === apArtId)
+    .filter(p => p.ApArtId === apId)
     .map((el, index) => ({
       nodeType: 'table',
       menuType: 'beobart',
       id: el.BeobArtId,
-      parentId: apArtId,
+      parentId: apId,
       urlLabel: el.BeobArtId,
       label: el.label,
       url: [
         'Projekte',
         projId,
         'Arten',
-        apArtId,
+        apId,
         'arten-fuer-beobachtungen',
         el.BeobArtId,
       ],

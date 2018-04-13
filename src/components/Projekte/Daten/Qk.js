@@ -55,9 +55,9 @@ const enhance = compose(
       if ((isNaN(val) && val.length === 4) || (!isNaN(val) && val > 1000)) {
         // reset messages
         store.qk.setMessages([])
-        // call fetchQk and pass it berichtjahr and apArtId
-        const apArtId = tree.activeNodes.ap
-        fetchQk({ store, berichtjahr: val, apArtId })
+        // call fetchQk and pass it berichtjahr and apId
+        const apId = tree.activeNodes.ap
+        fetchQk({ store, berichtjahr: val, apId })
       }
     },
     onChangeFilter: props => (event, val) => props.store.qk.setFilter(val),
@@ -66,9 +66,9 @@ const enhance = compose(
     onDidMount({ berichtjahr, changeBerichtjahr, store, tree }) {
       // reset messages
       store.qk.setMessages([])
-      // call fetchQk and pass it berichtjahr and apArtId
-      const apArtId = tree.activeNodes.ap
-      fetchQk({ store, berichtjahr, apArtId })
+      // call fetchQk and pass it berichtjahr and apId
+      const apId = tree.activeNodes.ap
+      fetchQk({ store, berichtjahr, apId })
     },
   }),
   observer

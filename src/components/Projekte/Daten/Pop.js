@@ -35,18 +35,18 @@ const Pop = ({ store, tree }: { store: Object, tree: Object }) => {
         <FormTitle tree={tree} title="Population" />
         <FieldsContainer>
           <TextField
-            key={`${activeDataset.row.PopId}PopNr`}
+            key={`${activeDataset.row.id}nr`}
             tree={tree}
             label="Nr."
-            fieldName="PopNr"
-            value={activeDataset.row.PopNr}
-            errorText={activeDataset.valid.PopNr}
+            fieldName="nr"
+            value={activeDataset.row.nr}
+            errorText={activeDataset.valid.nr}
             type="number"
             updateProperty={store.updateProperty}
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextFieldWithInfo
-            key={`${activeDataset.row.PopId}PopName`}
+            key={`${activeDataset.row.id}PopName`}
             tree={tree}
             label="Name"
             fieldName="PopName"
@@ -76,7 +76,7 @@ const Pop = ({ store, tree }: { store: Object, tree: Object }) => {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
-            key={`${activeDataset.row.PopId}PopHerkunftUnklarBegruendung`}
+            key={`${activeDataset.row.id}PopHerkunftUnklarBegruendung`}
             tree={tree}
             label="Begründung"
             fieldName="PopHerkunftUnklarBegruendung"
@@ -89,7 +89,7 @@ const Pop = ({ store, tree }: { store: Object, tree: Object }) => {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
-            key={`${activeDataset.row.PopId}PopXKoord`}
+            key={`${activeDataset.row.id}PopXKoord`}
             tree={tree}
             label="X-Koordinaten"
             fieldName="PopXKoord"
@@ -100,7 +100,7 @@ const Pop = ({ store, tree }: { store: Object, tree: Object }) => {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
-            key={`${activeDataset.row.PopId}PopYKoord`}
+            key={`${activeDataset.row.id}PopYKoord`}
             tree={tree}
             label="Y-Koordinaten"
             fieldName="PopYKoord"

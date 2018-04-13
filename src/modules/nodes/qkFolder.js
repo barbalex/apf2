@@ -7,7 +7,7 @@ export default (
   store: Object,
   tree: Object,
   projId: number,
-  apArtId: number
+  apId: number
 ): Array<Object> => {
   // fetch sorting indexes of parents
   const projIndex = findIndex(tree.filteredAndSorted.projekt, {
@@ -15,7 +15,7 @@ export default (
   })
   const apIndex = findIndex(
     tree.filteredAndSorted.ap.filter(a => a.ProjId === projId),
-    { ApArtId: apArtId }
+    { ApArtId: apId }
   )
   const { messages, filter } = store.qk
   let nrOfQkMessages = 0
@@ -62,12 +62,12 @@ export default (
     {
       nodeType: 'folder',
       menuType: 'qkFolder',
-      id: apArtId,
+      id: apId,
       urlLabel: 'Qualitaetskontrollen',
-      label: `Qualitätskontrollen${nrOfQkMessages !== null
-        ? ` (${nrOfQkMessages})`
-        : ''}`,
-      url: ['Projekte', projId, 'Arten', apArtId, 'Qualitaetskontrollen'],
+      label: `Qualitätskontrollen${
+        nrOfQkMessages !== null ? ` (${nrOfQkMessages})` : ''
+      }`,
+      url: ['Projekte', projId, 'Arten', apId, 'Qualitaetskontrollen'],
       sort: [projIndex, 1, apIndex, 11],
       hasChildren: false,
     },

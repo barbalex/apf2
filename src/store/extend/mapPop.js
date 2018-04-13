@@ -7,10 +7,10 @@ import getPopMarkers from '../action/getPopMarkers'
 
 export default (store: Object): void => {
   extendObservable(store.map.pop, {
-    // apArtId is needed because
-    // need to pass apArtId when activeNodes.ap
+    // apId is needed because
+    // need to pass apId when activeNodes.ap
     // is not yet set...
-    apArtId: null,
+    apId: null,
     highlightedIds: computed(
       () => {
         const mapFilterPop = store.map.mapFilter.pop
@@ -38,7 +38,7 @@ export default (store: Object): void => {
       () =>
         getPopBounds(
           store.map.pop.pops.filter(p =>
-            store.map.pop.highlightedIds.includes(p.PopId)
+            store.map.pop.highlightedIds.includes(p.id)
           )
         ),
       { name: 'mapPopBoundsOfHighlightedIds' }

@@ -22,7 +22,7 @@ export default (store: Object): Object => {
       const markers = cluster.getAllChildMarkers()
       const hasHighlightedPop = some(
         markers,
-        m => m.options.icon.options.className === 'popIconHighlighted',
+        m => m.options.icon.options.className === 'popIconHighlighted'
       )
       const className = hasHighlightedPop
         ? 'popClusterHighlighted'
@@ -38,7 +38,7 @@ export default (store: Object): Object => {
   if (visible) {
     pops.forEach(p => {
       if (p.PopKoordWgs84) {
-        let title = labelUsingNr ? p.PopNr : p.PopName
+        let title = labelUsingNr ? p.nr : p.PopName
         // beware: leaflet needs title to always be a string
         if (title && title.toString) {
           title = title.toString()
@@ -49,25 +49,24 @@ export default (store: Object): Object => {
           className: 'mapTooltip',
           opacity: 1,
         }
-        const isHighlighted = highlightedIds.includes(p.PopId)
+        const isHighlighted = highlightedIds.includes(p.id)
         const latLng = new window.L.LatLng(...p.PopKoordWgs84)
         const icon = window.L.icon({
           iconUrl: isHighlighted ? popIconHighlighted : popIcon,
           iconSize: [24, 24],
           className: isHighlighted ? 'popIconHighlighted' : 'popIcon',
         })
-        const marker = window.L
-          .marker(latLng, {
-            title,
-            icon,
-            zIndexOffset: -store.map.apfloraLayers.findIndex(
-              apfloraLayer => apfloraLayer.value === 'Pop',
-            ),
-          })
+        const marker = window.L.marker(latLng, {
+          title,
+          icon,
+          zIndexOffset: -store.map.apfloraLayers.findIndex(
+            apfloraLayer => apfloraLayer.value === 'Pop'
+          ),
+        })
           .bindPopup(
             ReactDOMServer.renderToStaticMarkup(
-              <PopPopup store={store} pop={p} />,
-            ),
+              <PopPopup store={store} pop={p} />
+            )
           )
           .bindTooltip(title, tooltipOptions)
         markers.addLayer(marker)

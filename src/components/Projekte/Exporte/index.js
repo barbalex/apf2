@@ -87,14 +87,14 @@ const enhance = compose(
       store,
       changeArtFuerEierlegendeWollmilchsau,
       artFuerEierlegendeWollmilchsau,
-    }) => ({ view, fileName, apArtId, kml }) =>
+    }) => ({ view, fileName, apId, kml }) =>
       exportModule({
         store,
         changeArtFuerEierlegendeWollmilchsau,
         artFuerEierlegendeWollmilchsau,
         view,
         fileName,
-        apArtId,
+        apId,
         kml,
       }),
   }),

@@ -3,19 +3,19 @@ import axios from 'axios'
 
 import recordValuesForWhichTableDataWasFetched from '../../modules/recordValuesForWhichTableDataWasFetched'
 
-export default (store: Object, apArtId: number): any => {
+export default (store: Object, apId: number): any => {
   const { valuesForWhichTableDataWasFetched } = store
 
   // only fetch if not yet fetched
   if (
     valuesForWhichTableDataWasFetched.tpopForAp &&
-    valuesForWhichTableDataWasFetched.tpopForAp.ApArtId &&
-    valuesForWhichTableDataWasFetched.tpopForAp.ApArtId.includes(apArtId)
+    valuesForWhichTableDataWasFetched.tpopForAp.ap_id &&
+    valuesForWhichTableDataWasFetched.tpopForAp.ap_id.includes(apId)
   ) {
     return
   }
 
-  const url = `/v_tpop_for_ap?ApArtId=eq.${apArtId}`
+  const url = `/v_tpop_for_ap?ap_id=eq.${apId}`
   store.loading.push('tpopForAp')
   axios
     .get(url)
@@ -25,8 +25,8 @@ export default (store: Object, apArtId: number): any => {
       recordValuesForWhichTableDataWasFetched({
         store,
         table: 'tpopForAp',
-        field: 'ApArtId',
-        value: apArtId,
+        field: 'ap_id',
+        value: apId,
       })
     })
     .catch(error => {

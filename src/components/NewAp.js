@@ -32,7 +32,7 @@ const enhance = compose(
       axios({
         method: 'POST',
         url: '/ap',
-        data: { ApArtId: val.TaxonomieId, ProjId: 1 },
+        data: { ApArtId: val.taxid, ProjId: 1 },
         headers: {
           Prefer: 'return=representation',
         },
@@ -40,9 +40,9 @@ const enhance = compose(
         .then(result => {
           const row = result.data[0]
           // insert this dataset in store.table
-          store.table.ap.set(val.TaxonomieId, row)
+          store.table.ap.set(val.taxid, row)
           // set new url
-          tree.setActiveNodeArray(['Projekte', 1, 'Arten', val.TaxonomieId])
+          tree.setActiveNodeArray(['Projekte', 1, 'Arten', val.taxid])
           store.setShowNewApModal(false)
           changeSearchText('')
         })

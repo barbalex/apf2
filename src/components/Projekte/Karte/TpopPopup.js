@@ -38,9 +38,9 @@ const TpopPopup = ({
         }`}
       </StyledH3>
       <div>
-        {`Population: ${
-          pop && pop.PopNr ? `${pop.PopNr}: ` : '(keine Nummer): '
-        }${pop && pop.PopName ? pop.PopName : '(kein Name)'}`}
+        {`Population: ${pop && pop.nr ? `${pop.nr}: ` : '(keine Nummer): '}${
+          pop && pop.PopName ? pop.PopName : '(kein Name)'
+        }`}
       </div>
       <div>
         {`Koordinaten: ${

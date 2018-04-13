@@ -203,8 +203,8 @@ export default (store: Object): void => {
     // primarily used for werte (domain) tables
     // and projekt
     fetchTable: action('fetchTable', tableName => fetchTable(store, tableName)),
-    fetchBeobzuordnung: action('fetchBeobzuordnung', apArtId =>
-      fetchBeobzuordnungModule(store, apArtId)
+    fetchBeobzuordnung: action('fetchBeobzuordnung', apId =>
+      fetchBeobzuordnungModule(store, apId)
     ),
     // fetch data of table for id of parent table
     // used for actual apflora data (but projekt)
@@ -212,16 +212,14 @@ export default (store: Object): void => {
       'fetchTableByParentId',
       (tableName, parentId) => fetchTableByParentId(store, tableName, parentId)
     ),
-    fetchTpopForAp: action('fetchTpopForAp', apArtId =>
-      fetchTpopForAp(store, apArtId)
+    fetchTpopForAp: action('fetchTpopForAp', apId =>
+      fetchTpopForAp(store, apId)
     ),
-    fetchPopForAp: action('fetchPopForAp', apArtId =>
-      fetchPopForAp(store, apArtId)
-    ),
+    fetchPopForAp: action('fetchPopForAp', apId => fetchPopForAp(store, apId)),
     fetchDatasetById: action('fetchDatasetById', ({ tableName, id }) =>
       fetchDatasetById({ store: store, tableName, id })
     ),
-    fetchBeob: action('fetchBeob', apArtId => fetchBeob(store, apArtId)),
+    fetchBeob: action('fetchBeob', apId => fetchBeob(store, apId)),
     writeToStore: action('writeToStore', ({ data, table, field }) =>
       writeToStore({ store: store, data, table, field })
     ),

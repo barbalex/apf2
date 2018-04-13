@@ -8,11 +8,11 @@ import staticFilesBaseUrl from './staticFilesBaseUrl'
 const fetchQk = async ({
   store,
   berichtjahr,
-  apArtId,
+  apId,
 }: {
   store: Object,
   berichtjahr: number,
-  apArtId: number,
+  apId: number,
 }) => {
   const { addMessages, setLoading } = store.qk
   setLoading(true)
@@ -217,7 +217,7 @@ const fetchQk = async ({
     },
     // tpop mit Status unklar ohne Begründung
     { type: 'view', name: 'v_qk2_tpop_mitstatusunklarohnebegruendung' },
-    // tpop mit mehrdeutiger Kombination von PopNr und TPopNr
+    // tpop mit mehrdeutiger Kombination von pop_nr und tpop_nr
     { type: 'view', name: 'v_qk2_tpop_popnrtpopnrmehrdeutig' },
     // TPop ohne verlangten TPop-Bericht im Berichtjahr
     { type: 'function', name: 'qk2_tpop_ohne_tpopber', berichtjahr },
@@ -270,9 +270,9 @@ const fetchQk = async ({
   )
   const queryUrls = qualityControlsUsingView.map(t => {
     if (t.berichtjahr) {
-      return `/${t.name}?ApArtId=eq.${apArtId}&Berichtjahr=eq.${t.berichtjahr}`
+      return `/${t.name}?ApArtId=eq.${apId}&Berichtjahr=eq.${t.berichtjahr}`
     } else {
-      return `/${t.name}?ApArtId=eq.${apArtId}`
+      return `/${t.name}?ApArtId=eq.${apId}`
     }
   })
   const dataFetchingPromisesForQueries = queryUrls.map(dataUrl =>
@@ -295,7 +295,7 @@ const fetchQk = async ({
   const functionUrls = qualityControlsUsingFunction.map(t => `/rpc/${t.name}`)
   const dataFetchingPromisesForFunctions = functionUrls.map(dataUrl =>
     axios
-      .post(dataUrl, { apid: apArtId, berichtjahr })
+      .post(dataUrl, { apid: apId, berichtjahr })
       .then(res => {
         if (res.data.length > 0) {
           const newMessages = res.data
@@ -317,7 +317,7 @@ const fetchQk = async ({
   }
   let resultTpopKoord: { data: Array<Object> }
   try {
-    resultTpopKoord = await axios.get(`/v_tpopkoord?ApArtId=eq.${apArtId}`)
+    resultTpopKoord = await axios.get(`/v_tpopkoord?ApArtId=eq.${apId}`)
   } catch (error) {
     store.listError(error)
     setLoading(false)
@@ -390,7 +390,7 @@ const fetchQk = async ({
   setLoading(false)
   try {
     await axios.post('/rpc/correct_vornach_beginnap_stati', {
-      apid: apArtId,
+      apid: apId,
     })
   } catch (error) {
     store.listError(error)

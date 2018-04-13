@@ -5,7 +5,7 @@ export default (
   store: Object,
   tree: Object,
   projId: number,
-  apArtId: number,
+  apId: number,
   zieljahr: number
 ): Array<Object> => {
   // fetch sorting indexes of parents
@@ -14,7 +14,7 @@ export default (
   })
   const apIndex = findIndex(
     tree.filteredAndSorted.ap.filter(a => a.ProjId === projId),
-    { ApArtId: apArtId }
+    { ApArtId: apId }
   )
   const zieljahrIndex = findIndex(tree.filteredAndSorted.zieljahr, {
     jahr: zieljahr,
@@ -22,7 +22,7 @@ export default (
 
   // map through all and create array of nodes
   return tree.filteredAndSorted.ziel
-    .filter(z => z.ap_id === apArtId)
+    .filter(z => z.ap_id === apId)
     .filter(z => z.jahr === zieljahr)
     .map((el, index) => ({
       nodeType: 'table',

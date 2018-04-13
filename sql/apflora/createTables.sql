@@ -372,9 +372,10 @@ COMMENT ON COLUMN apflora.idealbiotop.changed_by IS 'Wer hat den Datensatz zulet
 
 DROP TABLE IF EXISTS apflora.pop;
 CREATE TABLE apflora.pop (
-  "PopId" SERIAL PRIMARY KEY,
-  "ApArtId" integer DEFAULT NULL REFERENCES apflora.ap ("ApArtId") ON DELETE CASCADE ON UPDATE CASCADE,
-  "PopNr" integer DEFAULT NULL,
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
+  id_old integer,
+  ap_id integer DEFAULT NULL REFERENCES apflora.ap ("ApArtId") ON DELETE CASCADE ON UPDATE CASCADE,
+  nr integer DEFAULT NULL,
   "PopName" varchar(150) DEFAULT NULL,
   "PopHerkunft" integer DEFAULT NULL REFERENCES apflora.pop_status_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
   "PopHerkunftUnklar" smallint DEFAULT NULL,
@@ -382,14 +383,21 @@ CREATE TABLE apflora.pop (
   "PopBekanntSeit" smallint DEFAULT NULL,
   "PopXKoord" integer DEFAULT NULL CONSTRAINT zulaessige_x_koordinate CHECK ("PopXKoord" IS NULL OR ("PopXKoord" > 2485071 AND "PopXKoord" < 2828516)),
   "PopYKoord" integer DEFAULT NULL CONSTRAINT zulaessige_y_koordinate CHECK ("PopYKoord" IS NULL OR ("PopYKoord" > 1075346 AND "PopYKoord" < 1299942)),
-  "PopGuid" UUID DEFAULT uuid_generate_v1mc(),
   "MutWann" date DEFAULT NOW(),
   "MutWer" varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
 );
-SELECT setval(pg_get_serial_sequence('apflora.pop', 'PopId'), coalesce(max("PopId"), 0) + 1, false) FROM apflora.pop;
-COMMENT ON COLUMN apflora.pop."PopId" IS 'Primärschlüssel der Tabelle "pop"';
-COMMENT ON COLUMN apflora.pop."ApArtId" IS 'Zugehöriger Aktionsplan. Fremdschlüssel aus der Tabelle "ap"';
-COMMENT ON COLUMN apflora.pop."PopNr" IS 'Nummer der Population';
+CREATE INDEX ON apflora.pop USING btree (id);
+CREATE INDEX ON apflora.pop USING btree (ap_id);
+CREATE INDEX ON apflora.pop USING btree ("PopHerkunft");
+CREATE INDEX ON apflora.pop USING btree ("PopXKoord");
+CREATE INDEX ON apflora.pop USING btree ("PopYKoord");
+CREATE INDEX ON apflora.pop USING btree (nr);
+CREATE INDEX ON apflora.pop USING btree ("PopName");
+CREATE INDEX ON apflora.pop USING btree ("PopBekanntSeit");
+COMMENT ON COLUMN apflora.pop.id IS 'Primärschlüssel der Tabelle "pop"';
+COMMENT ON COLUMN apflora.pop.id_old IS 'frühere id';
+COMMENT ON COLUMN apflora.pop.ap_id IS 'Zugehöriger Aktionsplan. Fremdschlüssel aus der Tabelle "ap"';
+COMMENT ON COLUMN apflora.pop.nr IS 'Nummer der Population';
 COMMENT ON COLUMN apflora.pop."PopName" IS 'Bezeichnung der Population';
 COMMENT ON COLUMN apflora.pop."PopHerkunft" IS 'Herkunft der Population: autochthon oder angesiedelt? Auswahl aus der Tabelle "pop_status_werte"';
 COMMENT ON COLUMN apflora.pop."PopHerkunftUnklar" IS '1 = die Herkunft der Population ist unklar';
@@ -397,18 +405,8 @@ COMMENT ON COLUMN apflora.pop."PopHerkunftUnklarBegruendung" IS 'Begründung, wi
 COMMENT ON COLUMN apflora.pop."PopBekanntSeit" IS 'Seit wann ist die Population bekannt?';
 COMMENT ON COLUMN apflora.pop."PopXKoord" IS 'Wird in der Regel von einer Teilpopulation übernommen';
 COMMENT ON COLUMN apflora.pop."PopYKoord" IS 'Wird in der Regel von einer Teilpopulation übernommen';
-COMMENT ON COLUMN apflora.pop."PopGuid" IS 'GUID der Population';
 COMMENT ON COLUMN apflora.pop."MutWann" IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.pop."MutWer" IS 'Von wem wurde der Datensatz zuletzt geändert?';
-CREATE INDEX ON apflora.pop USING btree ("PopId");
-CREATE INDEX ON apflora.pop USING btree ("ApArtId");
-CREATE UNIQUE INDEX ON apflora.pop USING btree ("PopGuid");
-CREATE INDEX ON apflora.pop USING btree ("PopHerkunft");
-CREATE INDEX ON apflora.pop USING btree ("PopXKoord");
-CREATE INDEX ON apflora.pop USING btree ("PopYKoord");
-CREATE INDEX ON apflora.pop USING btree ("PopNr");
-CREATE INDEX ON apflora.pop USING btree ("PopName");
-CREATE INDEX ON apflora.pop USING btree ("PopBekanntSeit");
 
 DROP TABLE IF EXISTS apflora.pop_status_werte;
 CREATE TABLE apflora.pop_status_werte (
@@ -432,7 +430,7 @@ DROP TABLE IF EXISTS apflora.popber;
 CREATE TABLE apflora.popber (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
   id_old integer,
-  pop_id integer DEFAULT NULL REFERENCES apflora.pop ("PopId") ON DELETE CASCADE ON UPDATE CASCADE,
+  pop_id integer DEFAULT NULL REFERENCES apflora.pop (id) ON DELETE CASCADE ON UPDATE CASCADE,
   jahr smallint DEFAULT NULL,
   entwicklung integer DEFAULT NULL REFERENCES apflora.tpop_entwicklung_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
   bemerkungen text,
@@ -456,7 +454,7 @@ DROP TABLE IF EXISTS apflora.popmassnber;
 CREATE TABLE apflora.popmassnber (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
   id_old integer,
-  pop_id integer DEFAULT NULL REFERENCES apflora.pop ("PopId") ON DELETE CASCADE ON UPDATE CASCADE,
+  pop_id integer DEFAULT NULL REFERENCES apflora.pop (id) ON DELETE CASCADE ON UPDATE CASCADE,
   jahr smallint DEFAULT NULL,
   beurteilung integer DEFAULT NULL REFERENCES apflora.tpopmassn_erfbeurt_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
   bemerkungen text,
@@ -480,7 +478,7 @@ DROP TABLE IF EXISTS apflora.tpop;
 CREATE TABLE apflora.tpop (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
   id_old integer,
-  pop_id integer DEFAULT NULL REFERENCES apflora.pop ("PopId") ON DELETE CASCADE ON UPDATE CASCADE,
+  pop_id integer DEFAULT NULL REFERENCES apflora.pop (id) ON DELETE CASCADE ON UPDATE CASCADE,
   nr integer DEFAULT NULL,
   gemeinde text DEFAULT NULL,
   flurname text DEFAULT NULL,

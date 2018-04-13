@@ -17,32 +17,32 @@ const writeToStore = (store, data) => {
 const onError = ({
   store,
   valuesForWhichTableDataWasFetched,
-  apArtId,
+  apId,
   error,
 }: {
   store: Object,
   valuesForWhichTableDataWasFetched: Object,
-  apArtId: number,
+  apId: number,
   error: Object,
 }) => {
   store.loading = store.loading.filter(el => el !== 'beob')
   // remove setting that prevents loading of this value
   valuesForWhichTableDataWasFetched.beob.ArtId = valuesForWhichTableDataWasFetched.beob.ArtId.filter(
-    x => x !== apArtId
+    x => x !== apId
   )
   store.listError(error)
 }
 
-export default async (store: Object, apArtId: number): any => {
+export default async (store: Object, apId: number): any => {
   const { valuesForWhichTableDataWasFetched } = store
   let beobArtResult: { data: Array<Object> }
   try {
-    beobArtResult = await axios.get(`beobart?ApArtId=eq.${apArtId}`)
+    beobArtResult = await axios.get(`beobart?ApArtId=eq.${apId}`)
   } catch (error) {
     return onError({
       store,
       valuesForWhichTableDataWasFetched,
-      apArtId,
+      apId,
       error,
     })
   }
@@ -75,7 +75,7 @@ export default async (store: Object, apArtId: number): any => {
     return onError({
       store,
       valuesForWhichTableDataWasFetched,
-      apArtId,
+      apId,
       error,
     })
   }

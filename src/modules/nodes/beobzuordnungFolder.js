@@ -5,7 +5,7 @@ export default (
   store: Object,
   tree: Object,
   projId: number,
-  apArtId: number
+  apId: number
 ): Array<Object> => {
   // fetch sorting indexes of parents
   const projIndex = findIndex(tree.filteredAndSorted.projekt, {
@@ -13,11 +13,11 @@ export default (
   })
   const apIndex = findIndex(
     tree.filteredAndSorted.ap.filter(a => a.ProjId === projId),
-    { ApArtId: apArtId }
+    { ApArtId: apId }
   )
 
   const beobArten = Array.from(store.table.beobart.values())
-    .filter(v => v.ApArtId === apArtId)
+    .filter(v => v.ApArtId === apId)
     .map(ba => ba.TaxonomieId)
 
   const beobzuordnungNodesLength = tree.filteredAndSorted.beobzuordnung.filter(
@@ -36,14 +36,14 @@ export default (
     {
       nodeType: 'folder',
       menuType: 'beobzuordnungFolder',
-      id: apArtId,
+      id: apId,
       urlLabel: 'nicht-beurteilte-Beobachtungen',
       label: `Beobachtungen nicht beurteilt (${message})`,
       url: [
         'Projekte',
         projId,
         'Arten',
-        apArtId,
+        apId,
         'nicht-beurteilte-Beobachtungen',
       ],
       sort: [projIndex, 1, apIndex, 9],

@@ -5,7 +5,7 @@ export default (
   store: Object,
   tree: Object,
   projId: number,
-  apArtId: number,
+  apId: number
 ): Array<Object> => {
   const { table } = store
 
@@ -15,11 +15,11 @@ export default (
   })
   const apIndex = findIndex(
     tree.filteredAndSorted.ap.filter(a => a.ProjId === projId),
-    { ApArtId: apArtId },
+    { ApArtId: apId }
   )
 
   const popNodesLength = tree.filteredAndSorted.pop.filter(
-    n => n.ApArtId === apArtId,
+    n => n.ap_id === apId
   ).length
   let message = popNodesLength
   if (table.popLoading) {
@@ -33,10 +33,10 @@ export default (
     {
       nodeType: 'folder',
       menuType: 'popFolder',
-      id: apArtId,
+      id: apId,
       urlLabel: 'Populationen',
       label: `Populationen (${message})`,
-      url: ['Projekte', projId, 'Arten', apArtId, 'Populationen'],
+      url: ['Projekte', projId, 'Arten', apId, 'Populationen'],
       sort: [projIndex, 1, apIndex, 1],
       hasChildren: popNodesLength > 0,
     },

@@ -25,8 +25,7 @@ CREATE INDEX ON apflora.popber USING btree (pop_id);
 CREATE INDEX ON apflora.popmassnber USING btree (pop_id);
 
 -- comments
-COMMENT ON COLUMN apflora.pop.id IS 'Primärschlüssel';
-COMMENT ON COLUMN apflora.pop.id_old IS 'frühere id';
+TODO
 
 -- drop existing indexes
 DROP index apflora.apflora."pop_ApArtId_idx";
@@ -39,7 +38,7 @@ DROP index apflora.apflora."pop_PopNr_idx";
 DROP index apflora.apflora."pop_PopXKoord_idx";
 DROP index apflora.apflora."pop_PopYKoord_idx";
 -- add new
-CREATE INDEX ON apflora.pop USING btree (id);
+TODO
 
 -- change tpop
 ALTER TABLE apflora.tpop RENAME pop_id TO pop_id_old;
@@ -81,6 +80,7 @@ COMMENT ON COLUMN apflora.popmassnber.pop_id IS 'Zugehörige Population. Fremdsc
 -- TODO: add all views, functions, triggers containing this table to this file
 -- TODO: run migration sql in dev
 -- TODO: restart postgrest and test app
--- TODO: CHECK zaehl: are they correct
+-- done: special pop functions work?
+-- done: CHECK child tables: are they correct?
 -- TODO: update js and run this file on server
 -- TODO: restart postgrest

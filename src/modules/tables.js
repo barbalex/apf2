@@ -12,8 +12,8 @@ export default [
     table: 'pop',
     label: 'Populationen',
     labelSingular: 'Population',
-    idField: 'PopId',
-    parentIdField: 'ApArtId',
+    idField: 'id',
+    parentIdField: 'ap_id',
   },
   {
     table: 'tpop',

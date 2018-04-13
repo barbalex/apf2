@@ -70,15 +70,21 @@ const StyledMapIcon = styled(FontIcon)`
   margin-left: -2px;
   font-size: 20px !important;
 `
-const PopMapIcon = styled(StyledMapIcon)`color: #947500 !important;`
-const TpopMapIcon = styled(StyledMapIcon)`color: #016f19 !important;`
+const PopMapIcon = styled(StyledMapIcon)`
+  color: #947500 !important;
+`
+const TpopMapIcon = styled(StyledMapIcon)`
+  color: #016f19 !important;
+`
 const BeobNichtBeurteiltMapIcon = styled(StyledMapIcon)`
   color: #9a009a !important;
 `
 const BeobNichtZuzuordnenMapIcon = styled(StyledMapIcon)`
   color: #ffe4ff !important;
 `
-const TpopBeobMapIcon = styled(StyledMapIcon)`color: #ff00ff !important;`
+const TpopBeobMapIcon = styled(StyledMapIcon)`
+  color: #ff00ff !important;
+`
 const PopFilteredMapIcon = styled(PopMapIcon)`
   -webkit-text-stroke: 1px #f5ef00;
   -moz-text-stroke: 1px #f5ef00;
@@ -107,7 +113,7 @@ const MovingIcon = styled(FontIcon)`
 const CopyingIcon = styled(MovingIcon)``
 const showPopMapIcon = (store, tree, node) =>
   node.menuType === 'ap' &&
-  node.id === (tree.activeNodes.ap || store.map.pop.apArtId) &&
+  node.id === (tree.activeNodes.ap || store.map.pop.apId) &&
   store.map.activeApfloraLayers.includes('Pop')
 const showPopFilteredMapIcon = (store, node) =>
   node.menuType === 'pop' &&
@@ -115,7 +121,7 @@ const showPopFilteredMapIcon = (store, node) =>
   store.map.pop.highlightedIds.includes(node.id)
 const showTpopMapIcon = (store, tree, node) =>
   node.menuType === 'ap' &&
-  node.id === (tree.activeNodes.ap || store.map.pop.apArtId) &&
+  node.id === (tree.activeNodes.ap || store.map.pop.apId) &&
   store.map.activeApfloraLayers.includes('Tpop')
 const showTpopFilteredMapIcon = (store, node) =>
   node.menuType === 'tpop' &&

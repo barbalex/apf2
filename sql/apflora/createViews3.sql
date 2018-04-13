@@ -6,20 +6,20 @@
 DROP VIEW IF EXISTS apflora.v_tpop_anzkontrinklletzterundletztertpopber CASCADE;
 CREATE OR REPLACE VIEW apflora.v_tpop_anzkontrinklletzterundletztertpopber AS
 SELECT
-	apflora.v_tpop_anzkontrinklletzter."ApArtId" AS "ApArtId",
+	apflora.v_tpop_anzkontrinklletzter.ap_id,
 	apflora.v_tpop_anzkontrinklletzter."Familie",
 	apflora.v_tpop_anzkontrinklletzter."AP Art",
 	apflora.v_tpop_anzkontrinklletzter."AP Status",
 	apflora.v_tpop_anzkontrinklletzter."AP Start im Jahr",
 	apflora.v_tpop_anzkontrinklletzter."AP Stand Umsetzung",
 	apflora.v_tpop_anzkontrinklletzter."AP verantwortlich",
-	apflora.v_tpop_anzkontrinklletzter."PopId",
+	apflora.v_tpop_anzkontrinklletzter.pop_id,
 	apflora.v_tpop_anzkontrinklletzter."Pop Guid",
 	apflora.v_tpop_anzkontrinklletzter."Pop Nr",
 	apflora.v_tpop_anzkontrinklletzter."Pop Name",
 	apflora.v_tpop_anzkontrinklletzter."Pop Status",
 	apflora.v_tpop_anzkontrinklletzter."Pop bekannt seit",
-	apflora.v_tpop_anzkontrinklletzter."TPop ID",
+	apflora.v_tpop_anzkontrinklletzter.id,
 	apflora.v_tpop_anzkontrinklletzter."TPop Nr",
 	apflora.v_tpop_anzkontrinklletzter."TPop Gemeinde",
 	apflora.v_tpop_anzkontrinklletzter."TPop Flurname",

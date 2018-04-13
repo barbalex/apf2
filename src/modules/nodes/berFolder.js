@@ -5,7 +5,7 @@ export default (
   store: Object,
   tree: Object,
   projId: number,
-  apArtId: number
+  apId: number
 ): Array<Object> => {
   const { table } = store
 
@@ -15,11 +15,11 @@ export default (
   })
   const apIndex = findIndex(
     tree.filteredAndSorted.ap.filter(a => a.ProjId === projId),
-    { ApArtId: apArtId }
+    { ApArtId: apId }
   )
 
   const berNodesLength = tree.filteredAndSorted.ber.filter(
-    n => n.ap_id === apArtId
+    n => n.ap_id === apId
   ).length
 
   let message = berNodesLength
@@ -34,10 +34,10 @@ export default (
     {
       nodeType: 'folder',
       menuType: 'berFolder',
-      id: apArtId,
+      id: apId,
       urlLabel: 'Berichte',
       label: `Berichte (${message})`,
-      url: ['Projekte', projId, 'Arten', apArtId, 'Berichte'],
+      url: ['Projekte', projId, 'Arten', apId, 'Berichte'],
       sort: [projIndex, 1, apIndex, 5],
       hasChildren: berNodesLength > 0,
     },

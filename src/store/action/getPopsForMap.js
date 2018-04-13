@@ -3,17 +3,17 @@ import epsg2056to4326 from '../../modules/epsg2056to4326'
 
 export default (store: Object): Array<Object> => {
   const { table, tree } = store
-  const myApArtId = tree.activeNodes.ap || store.map.pop.apArtId
+  const myApArtId = tree.activeNodes.ap || store.map.pop.apId
   // get pops of this ap
   let pops = Array.from(table.pop.values())
-    .filter(p => p.ApArtId === myApArtId)
+    .filter(p => p.ap_id === myApArtId)
     // omit pops without coordinates
     .filter(p => p.PopXKoord && p.PopYKoord)
   // filter them by nodeLabelFilter
   const popFilterString = tree.nodeLabelFilter.get('pop')
   if (popFilterString) {
     pops = pops.filter(p => {
-      const label = `${p.PopNr || '(keine Nr)'}: ${p.PopName || '(kein Name)'}`
+      const label = `${p.nr || '(keine Nr)'}: ${p.PopName || '(kein Name)'}`
       return label.toLowerCase().includes(popFilterString.toLowerCase())
     })
   }

@@ -25,12 +25,12 @@ const writeToStore = (store: Object, data: Array<Object>): void => {
   })
 }
 
-export default (store: Object, apArtId: number): any => {
-  // console.log('module fetchBeobzuordnung: apArtId:', apArtId)
+export default (store: Object, apId: number): any => {
+  // console.log('module fetchBeobzuordnung: apId:', apId)
   const { valuesForWhichTableDataWasFetched } = store
-  if (!apArtId) {
+  if (!apId) {
     return store.listError(
-      new Error('action fetchBeobzuordnung: apArtId must be passed')
+      new Error('action fetchBeobzuordnung: apId must be passed')
     )
   }
 
@@ -38,14 +38,14 @@ export default (store: Object, apArtId: number): any => {
   if (
     valuesForWhichTableDataWasFetched.tpopbeob &&
     valuesForWhichTableDataWasFetched.tpopbeob.ArtId &&
-    valuesForWhichTableDataWasFetched.tpopbeob.ArtId.includes(apArtId)
+    valuesForWhichTableDataWasFetched.tpopbeob.ArtId.includes(apId)
   ) {
     return
   }
 
   store.loading.push('tpopbeob')
   axios
-    .get(`/v_tpopbeob?ApArtId=eq.${apArtId}`)
+    .get(`/v_tpopbeob?ap_id=eq.${apId}`)
     .then(({ data }) => {
       store.loading = store.loading.filter(el => el !== 'tpopbeob')
       // copy array without the individual objects being references
@@ -56,7 +56,7 @@ export default (store: Object, apArtId: number): any => {
         store,
         table: 'tpopbeob',
         field: 'ArtId',
-        value: apArtId,
+        value: apId,
       })
     })
     .catch(error => {

@@ -16,7 +16,7 @@ export default async ({
   artFuerEierlegendeWollmilchsau,
   view,
   fileName,
-  apArtId,
+  apId,
   kml,
 }: {
   store: Object,
@@ -24,7 +24,7 @@ export default async ({
   artFuerEierlegendeWollmilchsau: string,
   view: string,
   fileName: string,
-  apArtId: number,
+  apId: number,
   kml: Boolean,
 }) => {
   const onError = error => {
@@ -34,7 +34,7 @@ export default async ({
     store.listError(error)
     store.export.removeDownload(fileName)
   }
-  const url = apArtId ? `/${view}?ApArtId=eq.${apArtId}` : `/${view}`
+  const url = apId ? `/${view}?ApArtId=eq.${apId}` : `/${view}`
 
   store.export.addDownload(fileName)
   let result: { data: Array<Object> }
@@ -59,6 +59,7 @@ export default async ({
   const filterFeatures = mapFilter.filter.features
   if (filterFeatures.length > 0 && applyMapFilterToExport) {
     const keys = Object.keys(data[0])
+    console.log('export: data', { keys, jsonData })
     // filter data
     // beob can also have PopId and tpop-id, so dont filter by TPopId if you filter by beob id
     if (keys.includes('id')) {
