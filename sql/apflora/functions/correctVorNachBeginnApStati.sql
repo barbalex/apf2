@@ -6,7 +6,7 @@ CREATE OR REPLACE FUNCTION apflora.correct_vornach_beginnap_stati(apid integer)
 
    -- angesiedelt, erloschen/nicht etabliert
    UPDATE apflora.tpop
-   SET "TPopHerkunft" = 202  -- angesiedelt nach Beginn AP, erloschen/nicht etabliert
+   SET apflora.tpop.status = 202  -- angesiedelt nach Beginn AP, erloschen/nicht etabliert
    WHERE id IN (
      SELECT
        tpop.id
@@ -17,7 +17,7 @@ CREATE OR REPLACE FUNCTION apflora.correct_vornach_beginnap_stati(apid integer)
          INNER JOIN apflora.ap
          ON apflora.pop."ApArtId" = apflora.ap."ApArtId"
      WHERE
-       "TPopHerkunft" = 211 -- angesiedelt vor Beginn AP, erloschen/nicht etabliert
+       apflora.tpop.status = 211 -- angesiedelt vor Beginn AP, erloschen/nicht etabliert
        AND "ApJahr" IS NULL
        AND apflora.ap."ApArtId" = $1
    );
@@ -38,7 +38,7 @@ CREATE OR REPLACE FUNCTION apflora.correct_vornach_beginnap_stati(apid integer)
    );
 
    UPDATE apflora.tpop
-   SET "TPopHerkunft" = 202  -- angesiedelt nach Beginn AP, erloschen/nicht etabliert
+   SET apflora.tpop.status = 202  -- angesiedelt nach Beginn AP, erloschen/nicht etabliert
    WHERE id IN (
      SELECT
        tpop.id
@@ -49,7 +49,7 @@ CREATE OR REPLACE FUNCTION apflora.correct_vornach_beginnap_stati(apid integer)
          INNER JOIN apflora.ap
          ON apflora.pop."ApArtId" = apflora.ap."ApArtId"
      WHERE
-       "TPopHerkunft" = 211 -- angesiedelt vor Beginn AP, erloschen/nicht etabliert
+       apflora.tpop.status = 211 -- angesiedelt vor Beginn AP, erloschen/nicht etabliert
        AND "ApJahr" <= "TPopBekanntSeit"
        AND apflora.ap."ApArtId" = $1
    );
@@ -70,7 +70,7 @@ CREATE OR REPLACE FUNCTION apflora.correct_vornach_beginnap_stati(apid integer)
    );
 
    UPDATE apflora.tpop
-   SET "TPopHerkunft" = 211 -- angesiedelt vor Beginn AP, erloschen/nicht etabliert
+   SET apflora.tpop.status = 211 -- angesiedelt vor Beginn AP, erloschen/nicht etabliert
    WHERE id IN (
      SELECT
        tpop.id
@@ -81,7 +81,7 @@ CREATE OR REPLACE FUNCTION apflora.correct_vornach_beginnap_stati(apid integer)
          INNER JOIN apflora.ap
          ON apflora.pop."ApArtId" = apflora.ap."ApArtId"
      WHERE
-       "TPopHerkunft" = 202  -- angesiedelt nach Beginn AP, erloschen/nicht etabliert
+       apflora.tpop.status = 202  -- angesiedelt nach Beginn AP, erloschen/nicht etabliert
        AND "ApJahr" > "TPopBekanntSeit"
        AND apflora.ap."ApArtId" = $1
    );
@@ -103,7 +103,7 @@ CREATE OR REPLACE FUNCTION apflora.correct_vornach_beginnap_stati(apid integer)
 
    -- angesiedelt, aktuell
    UPDATE apflora.tpop
-   SET "TPopHerkunft" = 200  -- angesiedelt nach Beginn AP, aktuell
+   SET apflora.tpop.status = 200  -- angesiedelt nach Beginn AP, aktuell
    WHERE id IN (
      SELECT
        tpop.id
@@ -114,7 +114,7 @@ CREATE OR REPLACE FUNCTION apflora.correct_vornach_beginnap_stati(apid integer)
          INNER JOIN apflora.ap
          ON apflora.pop."ApArtId" = apflora.ap."ApArtId"
      WHERE
-       "TPopHerkunft" = 210 -- angesiedelt vor Beginn AP, aktuell
+       apflora.tpop.status = 210 -- angesiedelt vor Beginn AP, aktuell
        AND "ApJahr" IS NULL
        AND apflora.ap."ApArtId" = $1
    );
@@ -135,7 +135,7 @@ CREATE OR REPLACE FUNCTION apflora.correct_vornach_beginnap_stati(apid integer)
    );
 
    UPDATE apflora.tpop
-   SET "TPopHerkunft" = 200  -- angesiedelt nach Beginn AP, aktuell
+   SET apflora.tpop.status = 200  -- angesiedelt nach Beginn AP, aktuell
    WHERE id IN (
      SELECT
        tpop.id
@@ -146,7 +146,7 @@ CREATE OR REPLACE FUNCTION apflora.correct_vornach_beginnap_stati(apid integer)
          INNER JOIN apflora.ap
          ON apflora.pop."ApArtId" = apflora.ap."ApArtId"
      WHERE
-       "TPopHerkunft" = 210 -- angesiedelt vor Beginn AP, aktuell
+       apflora.tpop.status = 210 -- angesiedelt vor Beginn AP, aktuell
        AND "ApJahr" <= "TPopBekanntSeit"
        AND apflora.ap."ApArtId" = $1
    );
@@ -167,7 +167,7 @@ CREATE OR REPLACE FUNCTION apflora.correct_vornach_beginnap_stati(apid integer)
    );
 
    UPDATE apflora.tpop
-   SET "TPopHerkunft" = 210 -- angesiedelt vor Beginn AP, aktuell
+   SET apflora.tpop.status = 210 -- angesiedelt vor Beginn AP, aktuell
    WHERE id IN (
      SELECT
        tpop.id
@@ -178,7 +178,7 @@ CREATE OR REPLACE FUNCTION apflora.correct_vornach_beginnap_stati(apid integer)
          INNER JOIN apflora.ap
          ON apflora.pop."ApArtId" = apflora.ap."ApArtId"
      WHERE
-       "TPopHerkunft" = 200  -- angesiedelt nach Beginn AP, aktuell
+       apflora.tpop.status = 200  -- angesiedelt nach Beginn AP, aktuell
        AND "ApJahr" > "TPopBekanntSeit"
        AND apflora.ap."ApArtId" = $1
    );

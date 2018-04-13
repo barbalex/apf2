@@ -493,10 +493,10 @@ CREATE TABLE apflora.tpop (
   neigung varchar(50) DEFAULT NULL,
   beschreibung text DEFAULT NULL,
   kataster_nr text DEFAULT NULL,
-  "TPopHerkunft" integer DEFAULT NULL REFERENCES apflora.pop_status_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
-  "TPopHerkunftUnklar" smallint DEFAULT NULL,
-  "TPopHerkunftUnklarBegruendung" text DEFAULT NULL,
-  "TPopApBerichtRelevant" integer DEFAULT NULL REFERENCES apflora.tpop_apberrelevant_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
+  status integer DEFAULT NULL REFERENCES apflora.pop_status_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
+  status_unklar smallint DEFAULT NULL,
+  status_unklar_grund text DEFAULT NULL,
+  apber_relevant integer DEFAULT NULL REFERENCES apflora.tpop_apberrelevant_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
   "TPopBekanntSeit" smallint DEFAULT NULL,
   "TPopEigen" text DEFAULT NULL,
   "TPopKontakt" text DEFAULT NULL,
@@ -510,8 +510,8 @@ CREATE TABLE apflora.tpop (
 );
 CREATE INDEX ON apflora.tpop USING btree (id);
 CREATE INDEX ON apflora.tpop USING btree (pop_id);
-CREATE INDEX ON apflora.tpop USING btree ("TPopHerkunft");
-CREATE INDEX ON apflora.tpop USING btree ("TPopApBerichtRelevant");
+CREATE INDEX ON apflora.tpop USING btree (status);
+CREATE INDEX ON apflora.tpop USING btree (apber_relevant);
 CREATE INDEX ON apflora.tpop USING btree (x);
 CREATE INDEX ON apflora.tpop USING btree (y);
 CREATE INDEX ON apflora.tpop USING btree (nr);
@@ -532,10 +532,10 @@ COMMENT ON COLUMN apflora.tpop.klima IS 'Klima des Standorts';
 COMMENT ON COLUMN apflora.tpop.neigung IS 'Hangneigung des Standorts';
 COMMENT ON COLUMN apflora.tpop.beschreibung IS 'Beschreibung der Fläche';
 COMMENT ON COLUMN apflora.tpop.kataster_nr IS 'Kataster-Nummer';
-COMMENT ON COLUMN apflora.tpop."TPopHerkunft" IS 'Herkunft der Teilpopulation. Auswahl aus Tabelle "pop_status_werte"';
-COMMENT ON COLUMN apflora.tpop."TPopHerkunftUnklar" IS 'Ist der Status der Teilpopulation unklar? (es bestehen keine glaubwuerdigen Beboachtungen)';
-COMMENT ON COLUMN apflora.tpop."TPopHerkunftUnklarBegruendung" IS 'Wieso ist der Status unklar?';
-COMMENT ON COLUMN apflora.tpop."TPopApBerichtRelevant" IS 'Ist die Teilpopulation für den AP-Bericht relevant? Auswahl aus der Tabelle "tpop_apberrelevant_werte"';
+COMMENT ON COLUMN apflora.tpop.status IS 'Herkunft der Teilpopulation. Auswahl aus Tabelle "pop_status_werte"';
+COMMENT ON COLUMN apflora.tpop.status_unklar IS 'Ist der Status der Teilpopulation unklar? (es bestehen keine glaubwuerdigen Beboachtungen)';
+COMMENT ON COLUMN apflora.tpop.status_unklar_grund IS 'Wieso ist der Status unklar?';
+COMMENT ON COLUMN apflora.tpop.apber_relevant IS 'Ist die Teilpopulation für den AP-Bericht relevant? Auswahl aus der Tabelle "tpop_apberrelevant_werte"';
 COMMENT ON COLUMN apflora.tpop."TPopBekanntSeit" IS 'Seit wann ist die Teilpopulation bekannt?';
 COMMENT ON COLUMN apflora.tpop."TPopEigen" IS 'EigentümerIn';
 COMMENT ON COLUMN apflora.tpop."TPopKontakt" IS 'Kontaktperson vor Ort';

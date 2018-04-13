@@ -79,8 +79,8 @@ const Tpop = ({
             key={`${activeDataset.row.id}status`}
             tree={tree}
             apJahr={apJahr}
-            herkunftFieldName="TPopHerkunft"
-            herkunftValue={activeDataset.row.TPopHerkunft}
+            herkunftFieldName="status"
+            herkunftValue={activeDataset.row.status}
             bekanntSeitFieldName="TPopBekanntSeit"
             bekanntSeitValue={activeDataset.row.TPopBekanntSeit}
             bekanntSeitValid={activeDataset.valid.TPopBekanntSeit}
@@ -89,18 +89,18 @@ const Tpop = ({
           />
           <RadioButton
             tree={tree}
-            fieldName="TPopHerkunftUnklar"
+            fieldName="status_unklar"
             label="Status unklar"
-            value={activeDataset.row.TPopHerkunftUnklar}
+            value={activeDataset.row.status_unklar}
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
-            key={`${activeDataset.row.id}TPopHerkunftUnklarBegruendung`}
+            key={`${activeDataset.row.id}status_unklar_grund`}
             tree={tree}
             label="Begründung"
-            fieldName="TPopHerkunftUnklarBegruendung"
-            value={activeDataset.row.TPopHerkunftUnklarBegruendung}
-            errorText={activeDataset.valid.TPopHerkunftUnklarBegruendung}
+            fieldName="status_unklar_grund"
+            value={activeDataset.row.status_unklar_grund}
+            errorText={activeDataset.valid.status_unklar_grund}
             type="text"
             multiLine
             fullWidth
@@ -109,8 +109,8 @@ const Tpop = ({
           />
           <RadioButtonGroupWithInfo
             tree={tree}
-            fieldName="TPopApBerichtRelevant"
-            value={activeDataset.row.TPopApBerichtRelevant}
+            fieldName="apber_relevant"
+            value={activeDataset.row.apber_relevant}
             dataSource={store.dropdownList.tpopApBerichtRelevantWerte}
             updatePropertyInDb={store.updatePropertyInDb}
             popover={TpopAbBerRelevantInfoPopover}

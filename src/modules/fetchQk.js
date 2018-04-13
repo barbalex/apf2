@@ -336,7 +336,7 @@ const fetchQk = async ({
     // kontrolliere die Relevanz ausserkantonaler Tpop
     tpops = tpops.filter(
       tpop =>
-        tpop.TPopApBerichtRelevant === 1 &&
+        tpop.apber_relevant === 1 &&
         tpop.x &&
         isFinite(tpop.x) &&
         tpop.y &&

@@ -20,7 +20,7 @@ CREATE OR REPLACE FUNCTION apflora.qk2_pop_ohne_popmassnber(apid integer, berich
       FROM
         apflora.tpop
       WHERE
-        apflora.tpop."TPopApBerichtRelevant" = 1
+        apflora.tpop.apber_relevant = 1
       GROUP BY
         apflora.tpop.pop_id
     )

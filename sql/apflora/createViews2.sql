@@ -169,7 +169,7 @@ FROM
     apflora.tpop
     ON apflora.pop."PopId" = apflora.tpop.pop_id
 WHERE
-  apflora.tpop."TPopApBerichtRelevant" = 1
+  apflora.tpop.apber_relevant = 1
   AND apflora.pop."PopHerkunft" <> 300
 GROUP BY
   apflora.pop."ApArtId",
@@ -774,7 +774,7 @@ SELECT
   apflora.tpop.nr,
   apflora.tpop.gemeinde,
   apflora.tpop.flurname,
-  apflora.tpop."TPopHerkunft",
+  apflora.tpop.status,
   apflora.tpopber.entwicklung AS "TPopBerEntwicklung",
   apflora.tpopber.jahr AS tpopber_jahr
 FROM
@@ -803,14 +803,14 @@ WHERE
   (
     apflora.ap."ApStatus" < 4
     AND (
-      apflora.tpop."TPopHerkunft" = 101
-      OR apflora.tpop."TPopHerkunft" = 202
+      apflora.tpop.status = 101
+      OR apflora.tpop.status = 202
     )
     AND apflora.tpopber.entwicklung <> 8
   )
   OR (
     apflora.ap."ApStatus" < 4
-    AND apflora.tpop."TPopHerkunft" NOT IN (101, 202)
+    AND apflora.tpop.status NOT IN (101, 202)
     AND apflora.tpopber.entwicklung = 8
   )
 ORDER BY
@@ -879,7 +879,7 @@ FROM
     ON apflora.pop."PopId" = apflora.tpop.pop_id
 WHERE
   apflora.popber.entwicklung = 3
-  AND apflora.tpop."TPopApBerichtRelevant" = 1
+  AND apflora.tpop.apber_relevant = 1
   AND apflora.pop."PopHerkunft" <> 300
 GROUP BY
   apflora.pop."ApArtId",
@@ -906,7 +906,7 @@ FROM
     ON apflora.pop."PopId" = apflora.tpop.pop_id
 WHERE
   apflora.popber.entwicklung = 2
-  AND apflora.tpop."TPopApBerichtRelevant" = 1
+  AND apflora.tpop.apber_relevant = 1
   AND apflora.pop."PopHerkunft" <> 300
 GROUP BY
   apflora.pop."ApArtId",
@@ -933,7 +933,7 @@ FROM
     ON apflora.pop."PopId" = apflora.tpop.pop_id
 WHERE
   apflora.popber.entwicklung = 1
-  AND apflora.tpop."TPopApBerichtRelevant" = 1
+  AND apflora.tpop.apber_relevant = 1
   AND apflora.pop."PopHerkunft" <> 300
 GROUP BY
   apflora.pop."ApArtId",
@@ -963,7 +963,7 @@ WHERE
     apflora.popber.entwicklung = 4
     OR apflora.popber.entwicklung = 9
   )
-  AND apflora.tpop."TPopApBerichtRelevant" = 1
+  AND apflora.tpop.apber_relevant = 1
   AND apflora.pop."PopHerkunft" <> 300
 GROUP BY
   apflora.pop."ApArtId",
@@ -990,7 +990,7 @@ FROM
     ON apflora.pop."PopId" = apflora.tpop.pop_id
 WHERE
   apflora.popber.entwicklung = 8
-  AND apflora.tpop."TPopApBerichtRelevant" = 1
+  AND apflora.tpop.apber_relevant = 1
   AND apflora.pop."PopHerkunft" <> 300
 GROUP BY
   apflora.pop."ApArtId",
@@ -1018,7 +1018,7 @@ FROM
       AND (apflora.tpop.id = apflora.tpopber.tpop_id)
 WHERE
   apflora.tpopber.entwicklung = 3
-  AND apflora.tpop."TPopApBerichtRelevant" = 1
+  AND apflora.tpop.apber_relevant = 1
   AND apflora.pop."PopHerkunft" <> 300
 GROUP BY
   apflora.pop."ApArtId",
@@ -1046,7 +1046,7 @@ FROM
       AND (apflora.tpop.id = apflora.tpopber.tpop_id)
 WHERE
   apflora.tpopber.entwicklung = 2
-  AND apflora.tpop."TPopApBerichtRelevant" = 1
+  AND apflora.tpop.apber_relevant = 1
   AND apflora.pop."PopHerkunft" <> 300
 GROUP BY
   apflora.pop."ApArtId",
@@ -1074,7 +1074,7 @@ FROM
       AND (apflora.tpop.id = apflora.tpopber.tpop_id)
 WHERE
   apflora.tpopber.entwicklung = 1
-  AND apflora.tpop."TPopApBerichtRelevant" = 1
+  AND apflora.tpop.apber_relevant = 1
   AND apflora.pop."PopHerkunft" <> 300
 GROUP BY
   apflora.pop."ApArtId",
@@ -1102,7 +1102,7 @@ FROM
       AND (apflora.tpop.id = apflora.tpopber.tpop_id)
 WHERE
   apflora.tpopber.entwicklung = 4
-  AND apflora.tpop."TPopApBerichtRelevant" = 1
+  AND apflora.tpop.apber_relevant = 1
   AND apflora.pop."PopHerkunft" <> 300
 GROUP BY
   apflora.pop."ApArtId",
@@ -1130,7 +1130,7 @@ FROM
       AND (apflora.tpop.id = apflora.tpopber.tpop_id)
 WHERE
   apflora.tpopber.entwicklung = 8
-  AND apflora.tpop."TPopApBerichtRelevant" = 1
+  AND apflora.tpop.apber_relevant = 1
   AND apflora.pop."PopHerkunft" <> 300
 GROUP BY
   apflora.pop."ApArtId",
@@ -1152,7 +1152,7 @@ FROM
     ON apflora.tpop.id = apflora.tpopmassn.tpop_id
 WHERE
   apflora.tpopmassn.jahr <= apflora._variable.apber_jahr
-  AND apflora.tpop."TPopApBerichtRelevant" = 1
+  AND apflora.tpop.apber_relevant = 1
   AND apflora.pop."PopHerkunft" <> 300
 GROUP BY
   apflora.pop."ApArtId",
@@ -1610,8 +1610,8 @@ SELECT
   apflora.tpop.flurname AS "TPop Flurname",
   "domPopHerkunft_1".text AS "TPop Status",
   apflora.tpop."TPopBekanntSeit" AS "TPop bekannt seit",
-  apflora.tpop."TPopHerkunftUnklar" AS "TPop Status unklar",
-  apflora.tpop."TPopHerkunftUnklarBegruendung" AS "TPop Begruendung fuer unklaren Status",
+  apflora.tpop.status_unklar AS "TPop Status unklar",
+  apflora.tpop.status_unklar_grund AS "TPop Begruendung fuer unklaren Status",
   apflora.tpop.x AS "TPop X-Koordinaten",
   apflora.tpop.y AS "TPop Y-Koordinaten",
   apflora.tpop.radius AS "TPop Radius (m)",
@@ -1621,7 +1621,7 @@ SELECT
   apflora.tpop.neigung AS "TPop Hangneigung",
   apflora.tpop.beschreibung AS "TPop Beschreibung",
   apflora.tpop.kataster_nr AS "TPop Kataster-Nr",
-  apflora.tpop."TPopApBerichtRelevant" AS "TPop fuer AP-Bericht relevant",
+  apflora.tpop.apber_relevant AS "TPop fuer AP-Bericht relevant",
   apflora.tpop."TPopEigen" AS "TPop EigentuemerIn",
   apflora.tpop."TPopKontakt" AS "TPop Kontakt vor Ort",
   apflora.tpop."TPopNutzungszone" AS "TPop Nutzungszone",
@@ -1660,7 +1660,7 @@ FROM
     apflora.pop_status_werte ON apflora.pop."PopHerkunft" = pop_status_werte.code)
   LEFT JOIN
     apflora.pop_status_werte AS "domPopHerkunft_1"
-    ON apflora.tpop."TPopHerkunft" = "domPopHerkunft_1".code)
+    ON apflora.tpop.status = "domPopHerkunft_1".code)
   LEFT JOIN
     apflora.v_tpop_berjahrundmassnjahr
     ON apflora.tpop.id = apflora.v_tpop_berjahrundmassnjahr.id)
@@ -1845,8 +1845,8 @@ FROM
       ON apflora.pop."PopId" = apflora.tpop.pop_id)
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
 WHERE
-  apflora.tpop."TPopHerkunft" IN (101, 202, 211)
-  AND apflora.tpop."TPopApBerichtRelevant" = 1
+  apflora.tpop.status IN (101, 202, 211)
+  AND apflora.tpop.apber_relevant = 1
   AND apflora.tpop.id NOT IN (
     SELECT DISTINCT
       apflora.tpopkontr.tpop_id
@@ -1900,7 +1900,7 @@ FROM
 WHERE
   apflora.popber.entwicklung < 8
   AND apflora.pop."PopHerkunft" IN (101, 202, 211)
-  AND apflora.tpop."TPopApBerichtRelevant" = 1;
+  AND apflora.tpop.apber_relevant = 1;
 
 DROP VIEW IF EXISTS apflora.v_qk2_tpop_statuserloschenletzterpopberaktuell CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk2_tpop_statuserloschenletzterpopberaktuell AS
@@ -1928,7 +1928,7 @@ FROM
     ON apflora.pop."ApArtId" = apflora.ap."ApArtId"
 WHERE
   apflora.tpopber.entwicklung < 8
-  AND apflora.tpop."TPopHerkunft" IN (101, 202, 211)
+  AND apflora.tpop.status IN (101, 202, 211)
   AND apflora.tpop.id NOT IN (
     -- Ansiedlungen since apflora.tpopber.jahr
     SELECT
@@ -1965,7 +1965,7 @@ SELECT
     5 (O) (Inoffizielle Ansiedlung (offensichtlich gepflanzt/angesalbt oder eingesät, Herkunft unbekannt))
   */
    CASE
-    WHEN apflora.tpop."TPopHerkunft" < 200 THEN 4
+    WHEN apflora.tpop.status < 200 THEN 4
     WHEN EXISTS(
       SELECT
         apflora.tpopmassn.tpop_id
@@ -1976,7 +1976,7 @@ SELECT
         AND apflora.tpopmassn.typ BETWEEN 1 AND 3
         AND apflora.tpopmassn.jahr <= apflora.tpopkontr.jahr
     ) THEN 6
-    WHEN apflora.tpop."TPopHerkunftUnklar" = 1 THEN 3
+    WHEN apflora.tpop.status_unklar = 1 THEN 3
     ELSE 5
   END AS "fkAAINTRODUIT",
   /*
@@ -2069,7 +2069,7 @@ WHERE
   AND apflora.tpop.y IS NOT NULL
   AND apflora.tpopkontr.typ IN ('Ausgangszustand', 'Zwischenbeurteilung', 'Freiwilligen-Erfolgskontrolle')
   -- keine Ansaatversuche
-  AND apflora.tpop."TPopHerkunft" <> 201
+  AND apflora.tpop.status <> 201
   -- nur wenn Kontrolljahr existiert
   AND apflora.tpopkontr.jahr IS NOT NULL
   -- keine Kontrollen aus dem aktuellen Jahr - die wurden ev. noch nicht verifiziert
@@ -2078,7 +2078,7 @@ WHERE
   AND apflora.tpop."TPopBekanntSeit" IS NOT NULL
   AND (
     -- die Teilpopulation ist ursprünglich
-    apflora.tpop."TPopHerkunft" IN (100, 101)
+    apflora.tpop.status IN (100, 101)
     -- oder bei Ansiedlungen: die Art war mindestens 5 Jahre vorhanden
     OR (apflora.tpopkontr.jahr - apflora.tpop."TPopBekanntSeit") > 5
   )

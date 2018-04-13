@@ -16,7 +16,7 @@ ALTER TABLE apflora.tpop RENAME "TPopBeschr" TO beschreibung;
 ALTER TABLE apflora.tpop RENAME "TPopKatNr" TO kataster_nr;
 ALTER TABLE apflora.tpop RENAME "TPopHerkunft" TO status;
 ALTER TABLE apflora.tpop RENAME "TPopHerkunftUnklar" TO status_unklar;
-ALTER TABLE apflora.tpop RENAME "TPopHerkunftUnklarBegruendung" TO status_unklar_begruendung;
+ALTER TABLE apflora.tpop RENAME "TPopHerkunftUnklarBegruendung" TO status_unklar_grund;
 ALTER TABLE apflora.tpop RENAME "TPopApBerichtRelevant" TO apber_relevant;
 ALTER TABLE apflora.tpop RENAME "TPopBekanntSeit" TO bekannt_seit;
 ALTER TABLE apflora.tpop RENAME "TPopEigen" TO eigentuemer;

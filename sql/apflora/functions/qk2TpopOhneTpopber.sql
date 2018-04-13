@@ -17,7 +17,7 @@ CREATE OR REPLACE FUNCTION apflora.qk2_tpop_ohne_tpopber(apid integer, berichtja
         ON apflora.pop."PopId" = apflora.tpop.pop_id
     ON apflora.pop."ApArtId" = apflora.ap."ApArtId"
   WHERE
-    apflora.tpop."TPopApBerichtRelevant" = 1
+    apflora.tpop.apber_relevant = 1
     AND apflora.tpop.id IN (
       -- 1. "TPop mit Kontrolle im Berichtjahr" ermitteln:
       SELECT DISTINCT
