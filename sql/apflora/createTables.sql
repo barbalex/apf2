@@ -481,8 +481,8 @@ CREATE TABLE apflora.tpop (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
   id_old integer,
   pop_id integer DEFAULT NULL REFERENCES apflora.pop ("PopId") ON DELETE CASCADE ON UPDATE CASCADE,
-  "TPopNr" integer DEFAULT NULL,
-  "TPopGemeinde" text DEFAULT NULL,
+  nr integer DEFAULT NULL,
+  gemeinde text DEFAULT NULL,
   "TPopFlurname" text DEFAULT NULL,
   "TPopXKoord" integer DEFAULT NULL CONSTRAINT zulaessige_x_koordinate CHECK ("TPopXKoord" IS NULL OR ("TPopXKoord" > 2485071 AND "TPopXKoord" < 2828516)),
   "TPopYKoord" integer DEFAULT NULL CONSTRAINT zulaessige_y_koordinate CHECK ("TPopYKoord" IS NULL OR ("TPopYKoord" > 1075346 AND "TPopYKoord" < 1299942)),
@@ -514,14 +514,14 @@ CREATE INDEX ON apflora.tpop USING btree ("TPopHerkunft");
 CREATE INDEX ON apflora.tpop USING btree ("TPopApBerichtRelevant");
 CREATE INDEX ON apflora.tpop USING btree ("TPopXKoord");
 CREATE INDEX ON apflora.tpop USING btree ("TPopYKoord");
-CREATE INDEX ON apflora.tpop USING btree ("TPopNr");
-CREATE INDEX ON apflora.tpop USING btree ("TPopGemeinde");
+CREATE INDEX ON apflora.tpop USING btree (nr);
+CREATE INDEX ON apflora.tpop USING btree (gemeinde);
 CREATE INDEX ON apflora.tpop USING btree ("TPopFlurname");
 COMMENT ON COLUMN apflora.tpop.id IS 'Primärschlüssel';
 COMMENT ON COLUMN apflora.tpop.id_old IS 'frühere id';
 COMMENT ON COLUMN apflora.tpop.pop_id IS 'Zugehörige Population. Fremdschlüssel aus der Tabelle "pop"';
-COMMENT ON COLUMN apflora.tpop."TPopNr" IS 'Nummer der Teilpopulation';
-COMMENT ON COLUMN apflora.tpop."TPopGemeinde" IS 'Gemeinde';
+COMMENT ON COLUMN apflora.tpop.nr IS 'Nummer der Teilpopulation';
+COMMENT ON COLUMN apflora.tpop.gemeinde IS 'Gemeinde';
 COMMENT ON COLUMN apflora.tpop."TPopFlurname" IS 'Flurname';
 COMMENT ON COLUMN apflora.tpop."TPopXKoord" IS 'X-Koordinate';
 COMMENT ON COLUMN apflora.tpop."TPopYKoord" IS 'Y-Koordinate';

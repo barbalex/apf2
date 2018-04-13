@@ -53,12 +53,12 @@ const Tpop = ({
         <FormTitle tree={tree} title="Teil-Population" />
         <FieldsContainer data-width={width}>
           <TextField
-            key={`${activeDataset.row.id}TPopNr`}
+            key={`${activeDataset.row.id}nr`}
             tree={tree}
             label="Nr."
-            fieldName="TPopNr"
-            value={activeDataset.row.TPopNr}
-            errorText={activeDataset.valid.TPopNr}
+            fieldName="nr"
+            value={activeDataset.row.nr}
+            errorText={activeDataset.valid.nr}
             type="number"
             updateProperty={store.updateProperty}
             updatePropertyInDb={store.updatePropertyInDb}
@@ -142,9 +142,9 @@ const Tpop = ({
             key={activeDataset.row.id}
             tree={tree}
             label="Gemeinde"
-            fieldName="TPopGemeinde"
-            valueText={activeDataset.row.TPopGemeinde}
-            errorText={activeDataset.valid.TPopGemeinde}
+            fieldName="gemeinde"
+            valueText={activeDataset.row.gemeinde}
+            errorText={activeDataset.valid.gemeinde}
             dataSource={store.dropdownList.gemeinden}
             updatePropertyInDb={store.updatePropertyInDb}
           />

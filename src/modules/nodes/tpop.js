@@ -28,7 +28,7 @@ export default (
       id: el.id,
       parentId: el.pop_id,
       urlLabel: el.id,
-      label: `${el.TPopNr || '(keine Nr)'}: ${el.TPopFlurname ||
+      label: `${el.nr || '(keine Nr)'}: ${el.TPopFlurname ||
         '(kein Flurname)'}`,
       url: [
         'Projekte',

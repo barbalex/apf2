@@ -771,8 +771,8 @@ SELECT
   apflora.ap_bearbstand_werte.text AS "Bearbeitungsstand AP",
   apflora.pop."PopNr",
   apflora.pop."PopName",
-  apflora.tpop."TPopNr",
-  apflora.tpop."TPopGemeinde",
+  apflora.tpop.nr,
+  apflora.tpop.gemeinde,
   apflora.tpop."TPopFlurname",
   apflora.tpop."TPopHerkunft",
   apflora.tpopber.entwicklung AS "TPopBerEntwicklung",
@@ -817,8 +817,8 @@ ORDER BY
   apflora.ae_eigenschaften.artname,
   apflora.pop."PopNr",
   apflora.pop."PopName",
-  apflora.tpop."TPopNr",
-  apflora.tpop."TPopGemeinde",
+  apflora.tpop.nr,
+  apflora.tpop.gemeinde,
   apflora.tpop."TPopFlurname";
 
 -- im Gebrauch (Access):
@@ -1605,8 +1605,8 @@ SELECT
   apflora.pop."PopXKoord" AS "Pop X-Koordinaten",
   apflora.pop."PopYKoord" AS "Pop Y-Koordinaten",
   apflora.tpop.id AS tpop_id,
-  apflora.tpop."TPopNr" AS "TPop Nr",
-  apflora.tpop."TPopGemeinde" AS "TPop Gemeinde",
+  apflora.tpop.nr AS "TPop Nr",
+  apflora.tpop.gemeinde AS "TPop Gemeinde",
   apflora.tpop."TPopFlurname" AS "TPop Flurname",
   "domPopHerkunft_1".text AS "TPop Status",
   apflora.tpop."TPopBekanntSeit" AS "TPop bekannt seit",
@@ -1683,7 +1683,7 @@ FROM
 ORDER BY
   apflora.ae_eigenschaften.artname,
   apflora.pop."PopNr",
-  apflora.tpop."TPopNr",
+  apflora.tpop.nr,
   apflora.v_tpop_berjahrundmassnjahr."Jahr";
 
 DROP VIEW IF EXISTS apflora.v_pop_berjahrundmassnjahrvontpop CASCADE;
@@ -1835,7 +1835,7 @@ SELECT
   apflora.ap."ApArtId",
   'erloschene Teilpopulation "Fuer AP-Bericht relevant" aber letzte Beobachtung vor 1950:' AS "hw",
   ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop.id]::text[] AS "url",
-  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop."TPopNr")]::text[] AS text
+  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop.nr)]::text[] AS text
 FROM
   apflora.ap
   INNER JOIN
@@ -1871,7 +1871,7 @@ WHERE
   )
 ORDER BY
   apflora.pop."PopNr",
-  apflora.tpop."TPopNr";
+  apflora.tpop.nr;
 
 DROP VIEW IF EXISTS apflora.v_qk2_pop_statuserloschenletzterpopberaktuell CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk2_pop_statuserloschenletzterpopberaktuell AS
@@ -1909,7 +1909,7 @@ SELECT DISTINCT
   apflora.pop."ApArtId",
   'Teilpopulation: Status ist "erloschen", der letzte Teilpopulations-Bericht meldet aber "aktuell":' AS "hw",
   ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop."PopId", 'Teil-Populationen', apflora.tpop.id]::text[] AS "url",
-  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop."TPopNr")]::text[] AS text
+  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop.nr)]::text[] AS text
 FROM
   apflora.ap
     INNER JOIN

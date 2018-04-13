@@ -33,7 +33,7 @@ const TpopPopup = ({
     <div>
       <div>Teil-Population</div>
       <StyledH3>
-        {`${tpop && tpop.TPopNr ? `${tpop.TPopNr}: ` : '(keine Nummer): '}${
+        {`${tpop && tpop.nr ? `${tpop.nr}: ` : '(keine Nummer): '}${
           tpop && tpop.TPopFlurname ? tpop.TPopFlurname : '(kein Name)'
         }`}
       </StyledH3>

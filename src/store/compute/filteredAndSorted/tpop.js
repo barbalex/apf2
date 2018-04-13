@@ -5,9 +5,9 @@ export default (store: Object, tree: Object): Array<Object> => {
   const { nodeLabelFilter } = tree
   // grab tpop as array and sort them by year
   let tpop = Array.from(table.tpop.values())
-  tpop = sortBy(tpop, 'TPopNr')
+  tpop = sortBy(tpop, 'nr')
   tpop.forEach(el => {
-    el.label = `${el.TPopNr || '(keine Nr)'}: ${el.TPopFlurname ||
+    el.label = `${el.nr || '(keine Nr)'}: ${el.TPopFlurname ||
       '(kein Flurname)'}`
   })
   // filter by nodeLabelFilter

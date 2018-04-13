@@ -37,7 +37,7 @@ export default (store: Object): Object => {
     tpopsWithKoord.forEach(tpop => {
       const pop = pops.find(pop => pop.PopId === tpop.pop_id)
       const popNr = pop && (pop.PopNr || pop.PopNr === 0) ? pop.PopNr : ''
-      const tpopNr = tpop.TPopNr || tpop.TPopNr === 0 ? tpop.TPopNr : ''
+      const tpopNr = tpop.nr || tpop.nr === 0 ? tpop.nr : ''
       const nrLabel = `${popNr}.${tpopNr}`
       let title = labelUsingNr ? tpop.TPopFlurname : nrLabel
       // beware: leaflet needs title to always be a string

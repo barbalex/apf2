@@ -59,7 +59,7 @@ export default async ({
         TPopXKoord: X,
         TPopYKoord: Y,
         TPopBekanntSeit: format(new Date(Datum), 'YYYY'),
-        TPopGemeinde: data.NOM_COMMUNE ? data.NOM_COMMUNE : null,
+        gemeinde: data.NOM_COMMUNE ? data.NOM_COMMUNE : null,
         TPopFlurname: data.DESC_LOCALITE_ ? data.DESC_LOCALITE_ : null,
       },
       headers: {

@@ -121,7 +121,7 @@ const getTpopZuordnenSource = (store: Object, tree: Object): Array<Object> => {
       t.herkunft = 'ohne Status'
     }
     const popNr = t.popNr || t.popNr === 0 ? t.popNr : '(keine Nr)'
-    const tpopNr = t.TPopNr || t.TPopNr === 0 ? t.TPopNr : '(keine Nr)'
+    const tpopNr = t.nr || t.nr === 0 ? t.nr : '(keine Nr)'
     t.label = `${t.distance.toLocaleString('de-ch')}m: ${popNr}/${tpopNr} (${
       t.herkunft
     })`
