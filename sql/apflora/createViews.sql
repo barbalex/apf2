@@ -194,7 +194,7 @@ SELECT
   apflora.tpop.gemeinde AS "TPop Gemeinde",
   apflora.tpop.flurname AS "TPop Flurname",
   "domPopHerkunft_1".text AS "TPop Status",
-  apflora.tpop."TPopBekanntSeit" AS "TPop bekannt seit",
+  apflora.tpop.bekannt_seit AS "TPop bekannt seit",
   apflora.tpop.status_unklar AS "TPop Status unklar",
   apflora.tpop.status_unklar_grund AS "TPop Begruendung fuer unklaren Status",
   apflora.tpop.x AS "TPop X-Koordinaten",
@@ -207,10 +207,10 @@ SELECT
   apflora.tpop.beschreibung AS "TPop Beschreibung",
   apflora.tpop.kataster_nr AS "TPop Kataster-Nr",
   apflora.tpop.apber_relevant AS "TPop fuer AP-Bericht relevant",
-  apflora.tpop."TPopEigen" AS "TPop EigentuemerIn",
-  apflora.tpop."TPopKontakt" AS "TPop Kontakt vor Ort",
-  apflora.tpop."TPopNutzungszone" AS "TPop Nutzungszone",
-  apflora.tpop."TPopBewirtschafterIn" AS "TPop BewirtschafterIn",
+  apflora.tpop.eigentuemer AS "TPop EigentuemerIn",
+  apflora.tpop.kontakt AS "TPop Kontakt vor Ort",
+  apflora.tpop.nutzungszone AS "TPop Nutzungszone",
+  apflora.tpop.bewirtschafter AS "TPop BewirtschafterIn",
   apflora.tpop."TPopBewirtschaftung" AS "TPop Bewirtschaftung",
   apflora.tpopmassn.id,
   apflora.tpopmassn.jahr AS "Massn Jahr",
@@ -411,11 +411,11 @@ SELECT
   apflora.tpop.kataster_nr AS "tpopkatasternr",
   apflora.adresse."AdrName" AS "tpopverantwortlich",
   apflora.tpop.apber_relevant AS "tpopfuerapberichtrelevant",
-  apflora.tpop."TPopBekanntSeit" AS "tpopbekanntseit",
-  apflora.tpop."TPopEigen" AS "tpopeigentuemerin",
-  apflora.tpop."TPopKontakt" AS "tpopkontaktvorort",
-  apflora.tpop."TPopNutzungszone" AS "tpopnutzungszone",
-  apflora.tpop."TPopBewirtschafterIn" AS "tpopbewirtschafterin",
+  apflora.tpop.bekannt_seit AS "tpopbekanntseit",
+  apflora.tpop.eigentuemer AS "tpopeigentuemerin",
+  apflora.tpop.kontakt AS "tpopkontaktvorort",
+  apflora.tpop.nutzungszone AS "tpopnutzungszone",
+  apflora.tpop.bewirtschafter AS "tpopbewirtschafterin",
   apflora.tpop."TPopBewirtschaftung" AS "tpopbewirtschaftung",
   CAST(apflora.tpopmassn.id AS varchar(50)) AS "massnguid",
   apflora.tpopmassn.jahr AS "massnjahr",
@@ -500,7 +500,7 @@ SELECT
   apflora.tpop.gemeinde AS "TPop Gemeinde",
   apflora.tpop.flurname AS "TPop Flurname",
   "domPopHerkunft_1".text AS "TPop Status",
-  apflora.tpop."TPopBekanntSeit" AS "TPop bekannt seit",
+  apflora.tpop.bekannt_seit AS "TPop bekannt seit",
   apflora.tpop.status_unklar AS "TPop Status unklar",
   apflora.tpop.status_unklar_grund AS "TPop Begruendung fuer unklaren Status",
   apflora.tpop.x AS "TPop X-Koordinaten",
@@ -513,10 +513,10 @@ SELECT
   apflora.tpop.beschreibung AS "TPop Beschreibung",
   apflora.tpop.kataster_nr AS "TPop Kataster-Nr",
   apflora.tpop.apber_relevant AS "TPop fuer AP-Bericht relevant",
-  apflora.tpop."TPopEigen" AS "TPop EigentuemerIn",
-  apflora.tpop."TPopKontakt" AS "TPop Kontakt vor Ort",
-  apflora.tpop."TPopNutzungszone" AS "TPop Nutzungszone",
-  apflora.tpop."TPopBewirtschafterIn" AS "TPop BewirtschafterIn",
+  apflora.tpop.eigentuemer AS "TPop EigentuemerIn",
+  apflora.tpop.kontakt AS "TPop Kontakt vor Ort",
+  apflora.tpop.nutzungszone AS "TPop Nutzungszone",
+  apflora.tpop.bewirtschafter AS "TPop BewirtschafterIn",
   apflora.tpop."TPopBewirtschaftung" AS "TPop Bewirtschaftung",
   count(apflora.tpopmassn.id) AS "Anzahl Massnahmen"
 FROM
@@ -567,7 +567,7 @@ GROUP BY
   apflora.tpop.gemeinde,
   apflora.tpop.flurname,
   "domPopHerkunft_1".text,
-  apflora.tpop."TPopBekanntSeit",
+  apflora.tpop.bekannt_seit,
   apflora.tpop.status_unklar,
   apflora.tpop.status_unklar_grund,
   apflora.tpop.x,
@@ -580,10 +580,10 @@ GROUP BY
   apflora.tpop.beschreibung,
   apflora.tpop.kataster_nr,
   apflora.tpop.apber_relevant,
-  apflora.tpop."TPopEigen",
-  apflora.tpop."TPopKontakt",
-  apflora.tpop."TPopNutzungszone",
-  apflora.tpop."TPopBewirtschafterIn",
+  apflora.tpop.eigentuemer,
+  apflora.tpop.kontakt,
+  apflora.tpop.nutzungszone,
+  apflora.tpop.bewirtschafter,
   apflora.tpop."TPopBewirtschaftung"
 ORDER BY
   apflora.ae_eigenschaften.artname,
@@ -1064,7 +1064,7 @@ SELECT
   apflora.tpop.gemeinde AS "TPop Gemeinde",
   apflora.tpop.flurname AS "TPop Flurname",
   "domPopHerkunft_1".text AS "TPop Status",
-  apflora.tpop."TPopBekanntSeit" AS "TPop bekannt seit",
+  apflora.tpop.bekannt_seit AS "TPop bekannt seit",
   apflora.tpop.status_unklar AS "TPop Status unklar",
   apflora.tpop.status_unklar_grund AS "TPop Begruendung fuer unklaren Status",
   apflora.tpop.x AS "TPop X-Koordinaten",
@@ -1077,10 +1077,10 @@ SELECT
   apflora.tpop.beschreibung AS "TPop Beschreibung",
   apflora.tpop.kataster_nr AS "TPop Kataster-Nr",
   apflora.tpop.apber_relevant AS "TPop fuer AP-Bericht relevant",
-  apflora.tpop."TPopEigen" AS "TPop EigentuemerIn",
-  apflora.tpop."TPopKontakt" AS "TPop Kontakt vor Ort",
-  apflora.tpop."TPopNutzungszone" AS "TPop Nutzungszone",
-  apflora.tpop."TPopBewirtschafterIn" AS "TPop BewirtschafterIn",
+  apflora.tpop.eigentuemer AS "TPop EigentuemerIn",
+  apflora.tpop.kontakt AS "TPop Kontakt vor Ort",
+  apflora.tpop.nutzungszone AS "TPop Nutzungszone",
+  apflora.tpop.bewirtschafter AS "TPop BewirtschafterIn",
   apflora.tpop."TPopBewirtschaftung" AS "TPop Bewirtschaftung",
   apflora.tpop.changed AS "Teilpopulation zuletzt geaendert",
   apflora.tpop.changed AS "Teilpopulation zuletzt geaendert von"
@@ -1152,11 +1152,11 @@ SELECT
   apflora.tpop.kataster_nr AS "TPOPKATASTERNR",
   apflora.adresse."AdrName" AS "TPOPVERANTWORTLICH",
   apflora.tpop.apber_relevant AS "TPOPBERICHTSRELEVANZ",
-  apflora.tpop."TPopBekanntSeit" AS "TPOPBEKANNTSEIT",
-  apflora.tpop."TPopEigen" AS "TPOPEIGENTUEMERIN",
-  apflora.tpop."TPopKontakt" AS "TPOPKONTAKT_VO",
-  apflora.tpop."TPopNutzungszone" AS "TPOP_NUTZUNGSZONE",
-  apflora.tpop."TPopBewirtschafterIn" AS "TPOPBEWIRTSCHAFTER",
+  apflora.tpop.bekannt_seit AS "TPOPBEKANNTSEIT",
+  apflora.tpop.eigentuemer AS "TPOPEIGENTUEMERIN",
+  apflora.tpop.kontakt AS "TPOPKONTAKT_VO",
+  apflora.tpop.nutzungszone AS "TPOP_NUTZUNGSZONE",
+  apflora.tpop.bewirtschafter AS "TPOPBEWIRTSCHAFTER",
   apflora.tpop."TPopBewirtschaftung" AS "TPOPBEWIRTSCHAFTUNG",
   -- TODO: convert
   apflora.tpop.changed AS "TPOPCHANGEDAT",
@@ -1215,11 +1215,11 @@ SELECT
   apflora.tpop.beschreibung AS "tpopbeschr",
   apflora.tpop.kataster_nr AS "tpopkatnr",
   apflora.tpop.apber_relevant AS "tpopapberichtrelevant",
-  apflora.tpop."TPopBekanntSeit" AS "tpopbekanntseit",
-  apflora.tpop."TPopEigen" AS "tpopeigen",
-  apflora.tpop."TPopKontakt" AS "tpopkontakt",
-  apflora.tpop."TPopNutzungszone" AS "tpopnutzungszone",
-  apflora.tpop."TPopBewirtschafterIn" AS "tpopbewirtschafterin",
+  apflora.tpop.bekannt_seit AS "tpopbekanntseit",
+  apflora.tpop.eigentuemer AS "tpopeigen",
+  apflora.tpop.kontakt AS "tpopkontakt",
+  apflora.tpop.nutzungszone AS "tpopnutzungszone",
+  apflora.tpop.bewirtschafter AS "tpopbewirtschafterin",
   apflora.tpop."TPopBewirtschaftung" AS "tpopbewirtschaftung",
   apflora.tpop."TPopTxt" AS "tpoptxt",
   apflora.tpop.changed::timestamp AS "mutwann",
@@ -1247,7 +1247,7 @@ SELECT
   apflora.tpop.gemeinde AS "tpopgemeinde",
   apflora.tpop.flurname AS "tpopflurname",
   "domPopHerkunft_1".text AS "tpopherkunft",
-  apflora.tpop."TPopBekanntSeit" AS "tpopbekanntseit",
+  apflora.tpop.bekannt_seit AS "tpopbekanntseit",
   apflora.tpop.status_unklar AS "tpopherkunftunklar",
   apflora.tpop.status_unklar_grund AS "tpopherkunftunklarbegruendung",
   apflora.tpop.x AS "tpopxkoord",
@@ -1260,10 +1260,10 @@ SELECT
   apflora.tpop.beschreibung AS "tpopbeschr",
   apflora.tpop.kataster_nr AS "tpopkatnr",
   apflora.tpop.apber_relevant AS "tpopapberichtrelevant",
-  apflora.tpop."TPopEigen" AS "tpopeigen",
-  apflora.tpop."TPopKontakt" AS "tpopkontakt",
-  apflora.tpop."TPopNutzungszone" AS "tpopnutzungszone",
-  apflora.tpop."TPopBewirtschafterIn" AS "tpopbewirtschafterin",
+  apflora.tpop.eigentuemer AS "tpopeigen",
+  apflora.tpop.kontakt AS "tpopkontakt",
+  apflora.tpop.nutzungszone AS "tpopnutzungszone",
+  apflora.tpop.bewirtschafter AS "tpopbewirtschafterin",
   apflora.tpop."TPopBewirtschaftung" AS "tpopbewirtschaftung",
   apflora.tpop.changed::timestamp AS "mutwann",
   apflora.tpop.changed AS "mutwer"
@@ -1599,7 +1599,7 @@ SELECT
   apflora.tpop.nr,
   apflora.tpop.gemeinde,
   apflora.tpop.flurname,
-  apflora.tpop."TPopBekanntSeit"
+  apflora.tpop.bekannt_seit
 FROM
   ((apflora.ae_eigenschaften
   INNER JOIN
@@ -1615,7 +1615,7 @@ FROM
       ON apflora.pop."PopId" = apflora.tpop.pop_id)
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
 WHERE
-  apflora.tpop."TPopBekanntSeit" IS NULL
+  apflora.tpop.bekannt_seit IS NULL
   AND apflora.ap."ApStatus" BETWEEN 1 AND 3
 ORDER BY
   apflora.ae_eigenschaften.artname,
@@ -2129,11 +2129,11 @@ SELECT
   apflora.tpop.status_unklar AS "Teilpopulation - Herkunft unklar",
   apflora.tpop.status_unklar_grund AS "Teilpopulation - Herkunft unklar Begruendung",
   apflora.tpop_apberrelevant_werte.text AS "Teilpopulation - Fuer Bericht relevant",
-  apflora.tpop."TPopBekanntSeit" AS "Teilpopulation - bekannt seit",
-  apflora.tpop."TPopEigen" AS "Teilpopulation-Eigentuemer",
-  apflora.tpop."TPopKontakt" AS "Teilpopulation-Kontakt",
-  apflora.tpop."TPopNutzungszone" AS "Teilpopulation-Nutzungszone",
-  apflora.tpop."TPopBewirtschafterIn" AS "Teilpopulation-Bewirtschafter",
+  apflora.tpop.bekannt_seit AS "Teilpopulation - bekannt seit",
+  apflora.tpop.eigentuemer AS "Teilpopulation-Eigentuemer",
+  apflora.tpop.kontakt AS "Teilpopulation-Kontakt",
+  apflora.tpop.nutzungszone AS "Teilpopulation-Nutzungszone",
+  apflora.tpop.bewirtschafter AS "Teilpopulation-Bewirtschafter",
   apflora.tpop."TPopBewirtschaftung" AS "Teilpopulation-Bewirtschaftung",
   apflora.tpop."TPopTxt" AS "Teilpopulation-Bemerkungen",
   apflora.tpopmassnber.jahr AS "Massnahmenbericht-Jahr",
@@ -2265,11 +2265,11 @@ SELECT
   apflora.tpop.status_unklar AS "Teilpopulation - Herkunft unklar",
   apflora.tpop.status_unklar_grund AS "Teilpopulation - Herkunft unklar Begruendung",
   apflora.tpop_apberrelevant_werte.text AS "Teilpopulation - Fuer Bericht relevant",
-  apflora.tpop."TPopBekanntSeit" AS "Teilpopulation - bekannt seit",
-  apflora.tpop."TPopEigen" AS "Teilpopulation-Eigentuemer",
-  apflora.tpop."TPopKontakt" AS "Teilpopulation-Kontakt",
-  apflora.tpop."TPopNutzungszone" AS "Teilpopulation-Nutzungszone",
-  apflora.tpop."TPopBewirtschafterIn" AS "Teilpopulation-Bewirtschafter",
+  apflora.tpop.bekannt_seit AS "Teilpopulation - bekannt seit",
+  apflora.tpop.eigentuemer AS "Teilpopulation-Eigentuemer",
+  apflora.tpop.kontakt AS "Teilpopulation-Kontakt",
+  apflora.tpop.nutzungszone AS "Teilpopulation-Nutzungszone",
+  apflora.tpop.bewirtschafter AS "Teilpopulation-Bewirtschafter",
   apflora.tpop."TPopBewirtschaftung" AS "Teilpopulation-Bewirtschaftung",
   apflora.tpop."TPopTxt" AS "Teilpopulation-Bemerkungen",
   apflora.tpopmassn.id,
@@ -2587,8 +2587,8 @@ WHERE
   AND apflora.tpop.status IN (200, 210)
   AND apflora.tpop.apber_relevant = 1
   AND (
-    apflora.tpop."TPopBekanntSeit" < apflora.ap."ApJahr"
-    OR apflora.tpop."TPopBekanntSeit" IS NULL
+    apflora.tpop.bekannt_seit < apflora.ap."ApJahr"
+    OR apflora.tpop.bekannt_seit IS NULL
     OR apflora.ap."ApJahr" IS NULL
   )
 GROUP BY
@@ -2612,7 +2612,7 @@ WHERE
   apflora.pop."PopHerkunft" NOT IN (300)
   AND apflora.tpop.status IN (200, 210)
   AND apflora.tpop.apber_relevant = 1
-  AND apflora.tpop."TPopBekanntSeit" >= apflora.ap."ApJahr"
+  AND apflora.tpop.bekannt_seit >= apflora.ap."ApJahr"
 GROUP BY
   apflora.pop."ApArtId",
   apflora.tpop.id;
@@ -2670,8 +2670,8 @@ WHERE
     OR (
       apflora.tpop.status = 211
       AND (
-        apflora.tpop."TPopBekanntSeit" < apflora.ap."ApJahr"
-        OR apflora.tpop."TPopBekanntSeit" IS NULL
+        apflora.tpop.bekannt_seit < apflora.ap."ApJahr"
+        OR apflora.tpop.bekannt_seit IS NULL
         OR apflora.ap."ApJahr" IS NULL
       )
     )
@@ -2698,7 +2698,7 @@ WHERE
   apflora.pop."PopHerkunft" NOT IN (300)
   AND apflora.tpop.status IN (202, 211)
   AND apflora.tpop.apber_relevant = 1
-  AND apflora.tpop."TPopBekanntSeit" >= apflora.ap."ApJahr"
+  AND apflora.tpop.bekannt_seit >= apflora.ap."ApJahr"
 GROUP BY
   apflora.pop."ApArtId",
   apflora.tpop.id;
@@ -3219,7 +3219,7 @@ SELECT
   apflora.tpop.flurname as tpop_flurname,
   apflora.tpop.x as tpop_x,
   apflora.tpop.y as tpop_y,
-  apflora.tpop."TPopBekanntSeit",
+  apflora.tpop.bekannt_seit as tpop_bekannt_seit,
   "domPopHerkunft_1".text AS status,
   apflora.tpop.apber_relevant
 FROM
@@ -3267,7 +3267,7 @@ SELECT
   apflora.tpop.gemeinde AS "TPop Gemeinde",
   apflora.tpop.flurname AS "TPop Flurname",
   "domPopHerkunft_1".text AS "TPop Status",
-  apflora.tpop."TPopBekanntSeit" AS "TPop bekannt seit",
+  apflora.tpop.bekannt_seit AS "TPop bekannt seit",
   apflora.tpop.status_unklar AS "TPop Status unklar",
   apflora.tpop.status_unklar_grund AS "TPop Begruendung fuer unklaren Status",
   apflora.tpop.x AS "TPop X-Koordinaten",
@@ -3280,10 +3280,10 @@ SELECT
   apflora.tpop.beschreibung AS "TPop Beschreibung",
   apflora.tpop.kataster_nr AS "TPop Kataster-Nr",
   apflora.tpop.apber_relevant AS "TPop fuer AP-Bericht relevant",
-  apflora.tpop."TPopEigen" AS "TPop EigentuemerIn",
-  apflora.tpop."TPopKontakt" AS "TPop Kontakt vor Ort",
-  apflora.tpop."TPopNutzungszone" AS "TPop Nutzungszone",
-  apflora.tpop."TPopBewirtschafterIn" AS "TPop BewirtschafterIn",
+  apflora.tpop.eigentuemer AS "TPop EigentuemerIn",
+  apflora.tpop.kontakt AS "TPop Kontakt vor Ort",
+  apflora.tpop.nutzungszone AS "TPop Nutzungszone",
+  apflora.tpop.bewirtschafter AS "TPop BewirtschafterIn",
   apflora.tpop."TPopBewirtschaftung" AS "TPop Bewirtschaftung",
   apflora.tpopkontr.id,
   apflora.tpopkontr.tpop_id,
@@ -3405,7 +3405,7 @@ GROUP BY
   apflora.tpop.gemeinde,
   apflora.tpop.flurname,
   "domPopHerkunft_1".text,
-  apflora.tpop."TPopBekanntSeit",
+  apflora.tpop.bekannt_seit,
   apflora.tpop.status_unklar,
   apflora.tpop.status_unklar_grund,
   apflora.tpop.x,
@@ -3418,10 +3418,10 @@ GROUP BY
   apflora.tpop.beschreibung,
   apflora.tpop.kataster_nr,
   apflora.tpop.apber_relevant,
-  apflora.tpop."TPopEigen",
-  apflora.tpop."TPopKontakt",
-  apflora.tpop."TPopNutzungszone",
-  apflora.tpop."TPopBewirtschafterIn",
+  apflora.tpop.eigentuemer,
+  apflora.tpop.kontakt,
+  apflora.tpop.nutzungszone,
+  apflora.tpop.bewirtschafter,
   apflora.tpop."TPopBewirtschaftung",
   apflora.tpopkontr.id,
   apflora.tpopkontr.tpop_id,
@@ -3783,7 +3783,7 @@ SELECT
   apflora.tpop.flurname AS tpopflurname,
   apflora.tpop.x AS tpopxkoord,
   apflora.tpop.y AS tpopykoord,
-  apflora.tpop."TPopBekanntSeit" AS tpopbekanntseit,
+  apflora.tpop.bekannt_seit AS tpopbekanntseit,
   CAST(apflora.tpopkontr.id AS varchar(50)) AS tpopkontrid,
   apflora.tpopkontr.jahr AS tpopkontrjahr,
   apflora.tpopkontr.datum::timestamp AS tpopkontrdatum,
@@ -4092,12 +4092,12 @@ WHERE
   -- keine Kontrollen aus dem aktuellen Jahr - die wurden ev. noch nicht verifiziert
   AND apflora.tpopkontr.jahr <> date_part('year', CURRENT_DATE)
   -- nur wenn erfasst ist, seit wann die TPop bekannt ist
-  AND apflora.tpop."TPopBekanntSeit" IS NOT NULL
+  AND apflora.tpop.bekannt_seit IS NOT NULL
   AND (
     -- die Teilpopulation ist ursprünglich
     apflora.tpop.status IN (100, 101)
     -- oder bei Ansiedlungen: die Art war mindestens 5 Jahre vorhanden
-    OR (apflora.tpopkontr.jahr - apflora.tpop."TPopBekanntSeit") > 5
+    OR (apflora.tpopkontr.jahr - apflora.tpop.bekannt_seit) > 5
   )
   AND apflora.tpop.flurname IS NOT NULL
 GROUP BY
@@ -4176,12 +4176,12 @@ WHERE
   -- keine Kontrollen aus dem aktuellen Jahr - die wurden ev. noch nicht verifiziert
   AND apflora.tpopkontr.jahr <> date_part('year', CURRENT_DATE)
   -- nur wenn erfasst ist, seit wann die TPop bekannt ist
-  AND apflora.tpop."TPopBekanntSeit" IS NOT NULL
+  AND apflora.tpop.bekannt_seit IS NOT NULL
   AND (
     -- die Teilpopulation ist ursprünglich
     apflora.tpop.status IN (100, 101)
     -- oder bei Ansiedlungen: die Art war mindestens 5 Jahre vorhanden
-    OR (apflora.tpopkontr.jahr - apflora.tpop."TPopBekanntSeit") > 5
+    OR (apflora.tpopkontr.jahr - apflora.tpop.bekannt_seit) > 5
   )
   AND apflora.tpop.flurname IS NOT NULL
   -- ensure all idProjekt are contained in higher level
@@ -4235,11 +4235,11 @@ SELECT
         'Status: ',
         apflora.pop_status_werte.text,
         CASE
-          WHEN apflora.tpop."TPopBekanntSeit" IS NOT NULL
+          WHEN apflora.tpop.bekannt_seit IS NOT NULL
           THEN
             concat(
               '; Bekannt seit: ',
-              apflora.tpop."TPopBekanntSeit"
+              apflora.tpop.bekannt_seit
             )
           ELSE ''
         END
@@ -4283,12 +4283,12 @@ WHERE
   -- keine Kontrollen aus dem aktuellen Jahr - die wurden ev. noch nicht verifiziert
   AND apflora.tpopkontr.jahr <> date_part('year', CURRENT_DATE)
   -- nur wenn erfasst ist, seit wann die TPop bekannt ist
-  AND apflora.tpop."TPopBekanntSeit" IS NOT NULL
+  AND apflora.tpop.bekannt_seit IS NOT NULL
   AND (
     -- die Teilpopulation ist ursprünglich
     apflora.tpop.status IN (100, 101)
     -- oder bei Ansiedlungen: die Art war mindestens 5 Jahre vorhanden
-    OR (apflora.tpopkontr.jahr - apflora.tpop."TPopBekanntSeit") > 5
+    OR (apflora.tpopkontr.jahr - apflora.tpop.bekannt_seit) > 5
   )
   AND apflora.tpop.flurname IS NOT NULL
   AND apflora.ap."ApGuid" IN (Select "idProjekt" FROM apflora.v_exportevab_projekt)
@@ -4297,7 +4297,7 @@ GROUP BY
   apflora.pop."PopGuid",
   apflora.tpop.id,
   apflora.tpop.nr,
-  apflora.tpop."TPopBekanntSeit",
+  apflora.tpop.bekannt_seit,
   apflora.tpop.flurname,
   apflora.tpop.status,
   apflora.pop_status_werte.text,
@@ -4369,12 +4369,12 @@ WHERE
   -- keine Kontrollen aus dem aktuellen Jahr - die wurden ev. noch nicht verifiziert
   AND apflora.tpopkontr.jahr <> date_part('year', CURRENT_DATE)
   -- nur wenn erfasst ist, seit wann die TPop bekannt ist
-  AND apflora.tpop."TPopBekanntSeit" IS NOT NULL
+  AND apflora.tpop.bekannt_seit IS NOT NULL
   AND (
     -- die Teilpopulation ist ursprünglich
     apflora.tpop.status IN (100, 101)
     -- oder bei Ansiedlungen: die Art war mindestens 5 Jahre vorhanden
-    OR (apflora.tpopkontr.jahr - apflora.tpop."TPopBekanntSeit") > 5
+    OR (apflora.tpopkontr.jahr - apflora.tpop.bekannt_seit) > 5
   )
   AND apflora.tpop.flurname IS NOT NULL
   AND apflora.ap."ApGuid" IN (Select "idProjekt" FROM apflora.v_exportevab_projekt)
@@ -4404,7 +4404,7 @@ SELECT
   apflora.tpop.gemeinde AS "TPop Gemeinde",
   apflora.tpop.flurname AS "TPop Flurname",
   "tpopHerkunft".text AS "TPop Status",
-  apflora.tpop."TPopBekanntSeit" AS "TPop bekannt seit",
+  apflora.tpop.bekannt_seit AS "TPop bekannt seit",
   apflora.tpop.status_unklar AS "TPop Status unklar",
   apflora.tpop.status_unklar_grund AS "TPop Begruendung fuer unklaren Status",
   apflora.tpop.x AS "TPop X-Koordinaten",
@@ -4417,10 +4417,10 @@ SELECT
   apflora.tpop.beschreibung AS "TPop Beschreibung",
   apflora.tpop.kataster_nr AS "TPop Kataster-Nr",
   apflora.tpop.apber_relevant AS "TPop fuer AP-Bericht relevant",
-  apflora.tpop."TPopEigen" AS "TPop EigentuemerIn",
-  apflora.tpop."TPopKontakt" AS "TPop Kontakt vor Ort",
-  apflora.tpop."TPopNutzungszone" AS "TPop Nutzungszone",
-  apflora.tpop."TPopBewirtschafterIn" AS "TPop BewirtschafterIn",
+  apflora.tpop.eigentuemer AS "TPop EigentuemerIn",
+  apflora.tpop.kontakt AS "TPop Kontakt vor Ort",
+  apflora.tpop.nutzungszone AS "TPop Nutzungszone",
+  apflora.tpop.bewirtschafter AS "TPop BewirtschafterIn",
   apflora.tpop."TPopBewirtschaftung" AS "TPop Bewirtschaftung",
   apflora.tpopmassnber.id AS "TPopMassnBer Id",
   apflora.tpopmassnber.jahr AS "TPopMassnBer Jahr",
@@ -4754,7 +4754,7 @@ SELECT
   apflora.tpop.gemeinde AS "TPop Gemeinde",
   apflora.tpop.flurname AS "TPop Flurname",
   "tpopHerkunft".text AS "TPop Status",
-  apflora.tpop."TPopBekanntSeit" AS "TPop bekannt seit",
+  apflora.tpop.bekannt_seit AS "TPop bekannt seit",
   apflora.tpop.status_unklar AS "TPop Status unklar",
   apflora.tpop.status_unklar_grund AS "TPop Begruendung fuer unklaren Status",
   apflora.tpop.x AS "TPop X-Koordinaten",
@@ -4767,10 +4767,10 @@ SELECT
   apflora.tpop.beschreibung AS "TPop Beschreibung",
   apflora.tpop.kataster_nr AS "TPop Kataster-Nr",
   apflora.tpop.apber_relevant AS "TPop fuer AP-Bericht relevant",
-  apflora.tpop."TPopEigen" AS "TPop EigentuemerIn",
-  apflora.tpop."TPopKontakt" AS "TPop Kontakt vor Ort",
-  apflora.tpop."TPopNutzungszone" AS "TPop Nutzungszone",
-  apflora.tpop."TPopBewirtschafterIn" AS "TPop BewirtschafterIn",
+  apflora.tpop.eigentuemer AS "TPop EigentuemerIn",
+  apflora.tpop.kontakt AS "TPop Kontakt vor Ort",
+  apflora.tpop.nutzungszone AS "TPop Nutzungszone",
+  apflora.tpop.bewirtschafter AS "TPop BewirtschafterIn",
   apflora.tpop."TPopBewirtschaftung" AS "TPop Bewirtschaftung",
   apflora.tpopkontr.tpop_id,
   apflora.tpopkontr.id AS "Kontr id",
@@ -4903,7 +4903,7 @@ SELECT
   apflora.tpop.gemeinde AS "TPop Gemeinde",
   apflora.tpop.flurname AS "TPop Flurname",
   "tpopHerkunft".text AS "TPop Status",
-  apflora.tpop."TPopBekanntSeit" AS "TPop bekannt seit",
+  apflora.tpop.bekannt_seit AS "TPop bekannt seit",
   apflora.tpop.status_unklar AS "TPop Status unklar",
   apflora.tpop.status_unklar_grund AS "TPop Begruendung fuer unklaren Status",
   apflora.tpop.x AS "TPop X-Koordinaten",
@@ -4916,10 +4916,10 @@ SELECT
   apflora.tpop.beschreibung AS "TPop Beschreibung",
   apflora.tpop.kataster_nr AS "TPop Kataster-Nr",
   apflora.tpop.apber_relevant AS "TPop fuer AP-Bericht relevant",
-  apflora.tpop."TPopEigen" AS "TPop EigentuemerIn",
-  apflora.tpop."TPopKontakt" AS "TPop Kontakt vor Ort",
-  apflora.tpop."TPopNutzungszone" AS "TPop Nutzungszone",
-  apflora.tpop."TPopBewirtschafterIn" AS "TPop BewirtschafterIn",
+  apflora.tpop.eigentuemer AS "TPop EigentuemerIn",
+  apflora.tpop.kontakt AS "TPop Kontakt vor Ort",
+  apflora.tpop.nutzungszone AS "TPop Nutzungszone",
+  apflora.tpop.bewirtschafter AS "TPop BewirtschafterIn",
   apflora.tpop."TPopBewirtschaftung" AS "TPop Bewirtschaftung",
   apflora.tpopber.id AS "TPopBer Id",
   apflora.tpopber.jahr AS "TPopBer Jahr",
@@ -5390,7 +5390,7 @@ FROM
       ON apflora.pop."PopId" = apflora.tpop.pop_id)
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
 WHERE
-  apflora.tpop."TPopBekanntSeit" IS NULL
+  apflora.tpop.bekannt_seit IS NULL
 ORDER BY
   apflora.ap."ApArtId",
   apflora.pop."PopNr",

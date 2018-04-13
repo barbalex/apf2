@@ -497,11 +497,11 @@ CREATE TABLE apflora.tpop (
   status_unklar smallint DEFAULT NULL,
   status_unklar_grund text DEFAULT NULL,
   apber_relevant integer DEFAULT NULL REFERENCES apflora.tpop_apberrelevant_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
-  "TPopBekanntSeit" smallint DEFAULT NULL,
-  "TPopEigen" text DEFAULT NULL,
-  "TPopKontakt" text DEFAULT NULL,
-  "TPopNutzungszone" text DEFAULT NULL,
-  "TPopBewirtschafterIn" text DEFAULT NULL,
+  bekannt_seit smallint DEFAULT NULL,
+  eigentuemer text DEFAULT NULL,
+  kontakt text DEFAULT NULL,
+  nutzungszone text DEFAULT NULL,
+  bewirtschafter text DEFAULT NULL,
   "TPopBewirtschaftung" text DEFAULT NULL,
   "TPopTxt" text,
   "TPopGuid" UUID DEFAULT uuid_generate_v1mc(),
@@ -536,11 +536,11 @@ COMMENT ON COLUMN apflora.tpop.status IS 'Herkunft der Teilpopulation. Auswahl a
 COMMENT ON COLUMN apflora.tpop.status_unklar IS 'Ist der Status der Teilpopulation unklar? (es bestehen keine glaubwuerdigen Beboachtungen)';
 COMMENT ON COLUMN apflora.tpop.status_unklar_grund IS 'Wieso ist der Status unklar?';
 COMMENT ON COLUMN apflora.tpop.apber_relevant IS 'Ist die Teilpopulation für den AP-Bericht relevant? Auswahl aus der Tabelle "tpop_apberrelevant_werte"';
-COMMENT ON COLUMN apflora.tpop."TPopBekanntSeit" IS 'Seit wann ist die Teilpopulation bekannt?';
-COMMENT ON COLUMN apflora.tpop."TPopEigen" IS 'EigentümerIn';
-COMMENT ON COLUMN apflora.tpop."TPopKontakt" IS 'Kontaktperson vor Ort';
-COMMENT ON COLUMN apflora.tpop."TPopNutzungszone" IS 'Nutzungszone';
-COMMENT ON COLUMN apflora.tpop."TPopBewirtschafterIn" IS 'Wer bewirtschaftet die Fläche?';
+COMMENT ON COLUMN apflora.tpop.bekannt_seit IS 'Seit wann ist die Teilpopulation bekannt?';
+COMMENT ON COLUMN apflora.tpop.eigentuemer IS 'EigentümerIn';
+COMMENT ON COLUMN apflora.tpop.kontakt IS 'Kontaktperson vor Ort';
+COMMENT ON COLUMN apflora.tpop.nutzungszone IS 'Nutzungszone';
+COMMENT ON COLUMN apflora.tpop.bewirtschafter IS 'Wer bewirtschaftet die Fläche?';
 COMMENT ON COLUMN apflora.tpop."TPopBewirtschaftung" IS 'Wie wird die Fläche bewirtschaftet?';
 COMMENT ON COLUMN apflora.tpop."TPopTxt" IS 'Bemerkungen zur Teilpopulation';
 COMMENT ON COLUMN apflora.tpop.changed IS 'Wann wurde der Datensatz zuletzt geändert?';

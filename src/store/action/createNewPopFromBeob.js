@@ -58,7 +58,7 @@ export default async ({
         // give tpop some data of beob
         x: X,
         y: Y,
-        TPopBekanntSeit: format(new Date(Datum), 'YYYY'),
+        bekannt_seit: format(new Date(Datum), 'YYYY'),
         gemeinde: data.NOM_COMMUNE ? data.NOM_COMMUNE : null,
         flurname: data.DESC_LOCALITE_ ? data.DESC_LOCALITE_ : null,
       },

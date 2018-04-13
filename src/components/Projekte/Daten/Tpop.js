@@ -81,9 +81,9 @@ const Tpop = ({
             apJahr={apJahr}
             herkunftFieldName="status"
             herkunftValue={activeDataset.row.status}
-            bekanntSeitFieldName="TPopBekanntSeit"
-            bekanntSeitValue={activeDataset.row.TPopBekanntSeit}
-            bekanntSeitValid={activeDataset.valid.TPopBekanntSeit}
+            bekanntSeitFieldName="bekannt_seit"
+            bekanntSeitValue={activeDataset.row.bekannt_seit}
+            bekanntSeitValid={activeDataset.valid.bekannt_seit}
             updateProperty={store.updateProperty}
             updatePropertyInDb={store.updatePropertyInDb}
           />
@@ -227,45 +227,45 @@ const Tpop = ({
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
-            key={`${activeDataset.row.id}TPopEigen`}
+            key={`${activeDataset.row.id}eigentuemer`}
             tree={tree}
             label="EigentümerIn"
-            fieldName="TPopEigen"
-            value={activeDataset.row.TPopEigen}
-            errorText={activeDataset.valid.TPopEigen}
+            fieldName="eigentuemer"
+            value={activeDataset.row.eigentuemer}
+            errorText={activeDataset.valid.eigentuemer}
             type="text"
             updateProperty={store.updateProperty}
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
-            key={`${activeDataset.row.id}TPopKontakt`}
+            key={`${activeDataset.row.id}kontakt`}
             tree={tree}
             label="Kontakt vor Ort"
-            fieldName="TPopKontakt"
-            value={activeDataset.row.TPopKontakt}
-            errorText={activeDataset.valid.TPopKontakt}
+            fieldName="kontakt"
+            value={activeDataset.row.kontakt}
+            errorText={activeDataset.valid.kontakt}
             type="text"
             updateProperty={store.updateProperty}
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
-            key={`${activeDataset.row.id}TPopNutzungszone`}
+            key={`${activeDataset.row.id}nutzungszone`}
             tree={tree}
             label="Nutzungszone"
-            fieldName="TPopNutzungszone"
-            value={activeDataset.row.TPopNutzungszone}
-            errorText={activeDataset.valid.TPopNutzungszone}
+            fieldName="nutzungszone"
+            value={activeDataset.row.nutzungszone}
+            errorText={activeDataset.valid.nutzungszone}
             type="text"
             updateProperty={store.updateProperty}
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
-            key={`${activeDataset.row.id}TPopBewirtschafterIn`}
+            key={`${activeDataset.row.id}bewirtschafter`}
             tree={tree}
             label="BewirtschafterIn"
-            fieldName="TPopBewirtschafterIn"
-            value={activeDataset.row.TPopBewirtschafterIn}
-            errorText={activeDataset.valid.TPopBewirtschafterIn}
+            fieldName="bewirtschafter"
+            value={activeDataset.row.bewirtschafter}
+            errorText={activeDataset.valid.bewirtschafter}
             type="text"
             updateProperty={store.updateProperty}
             updatePropertyInDb={store.updatePropertyInDb}

@@ -1609,7 +1609,7 @@ SELECT
   apflora.tpop.gemeinde AS "TPop Gemeinde",
   apflora.tpop.flurname AS "TPop Flurname",
   "domPopHerkunft_1".text AS "TPop Status",
-  apflora.tpop."TPopBekanntSeit" AS "TPop bekannt seit",
+  apflora.tpop.bekannt_seit AS "TPop bekannt seit",
   apflora.tpop.status_unklar AS "TPop Status unklar",
   apflora.tpop.status_unklar_grund AS "TPop Begruendung fuer unklaren Status",
   apflora.tpop.x AS "TPop X-Koordinaten",
@@ -1622,10 +1622,10 @@ SELECT
   apflora.tpop.beschreibung AS "TPop Beschreibung",
   apflora.tpop.kataster_nr AS "TPop Kataster-Nr",
   apflora.tpop.apber_relevant AS "TPop fuer AP-Bericht relevant",
-  apflora.tpop."TPopEigen" AS "TPop EigentuemerIn",
-  apflora.tpop."TPopKontakt" AS "TPop Kontakt vor Ort",
-  apflora.tpop."TPopNutzungszone" AS "TPop Nutzungszone",
-  apflora.tpop."TPopBewirtschafterIn" AS "TPop BewirtschafterIn",
+  apflora.tpop.eigentuemer AS "TPop EigentuemerIn",
+  apflora.tpop.kontakt AS "TPop Kontakt vor Ort",
+  apflora.tpop.nutzungszone AS "TPop Nutzungszone",
+  apflora.tpop.bewirtschafter AS "TPop BewirtschafterIn",
   apflora.tpop."TPopBewirtschaftung" AS "TPop Bewirtschaftung",
   apflora.v_tpop_berjahrundmassnjahr."Jahr",
   apflora.tpopber.id AS "TPopBer Id",
@@ -2075,12 +2075,12 @@ WHERE
   -- keine Kontrollen aus dem aktuellen Jahr - die wurden ev. noch nicht verifiziert
   AND apflora.tpopkontr.jahr <> date_part('year', CURRENT_DATE)
   -- nur wenn erfasst ist, seit wann die TPop bekannt ist
-  AND apflora.tpop."TPopBekanntSeit" IS NOT NULL
+  AND apflora.tpop.bekannt_seit IS NOT NULL
   AND (
     -- die Teilpopulation ist ursprünglich
     apflora.tpop.status IN (100, 101)
     -- oder bei Ansiedlungen: die Art war mindestens 5 Jahre vorhanden
-    OR (apflora.tpopkontr.jahr - apflora.tpop."TPopBekanntSeit") > 5
+    OR (apflora.tpopkontr.jahr - apflora.tpop.bekannt_seit) > 5
   )
   AND apflora.tpop.flurname IS NOT NULL
   AND apflora.ap."ApGuid" IN (Select "idProjekt" FROM apflora.v_exportevab_projekt)
