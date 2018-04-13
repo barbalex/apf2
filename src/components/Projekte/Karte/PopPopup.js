@@ -31,9 +31,9 @@ const PopPopup = ({ store, pop }: { store: Object, pop: Object }) => {
       <div>
         {`Koordinaten: ${
           pop.PopKoordWgs84
-            ? `${pop.PopXKoord.toLocaleString(
+            ? `${pop.x.toLocaleString(
                 'de-ch'
-              )} / ${pop.PopYKoord.toLocaleString('de-ch')}`
+              )} / ${pop.y.toLocaleString('de-ch')}`
             : '(keine)'
         }`}
       </div>

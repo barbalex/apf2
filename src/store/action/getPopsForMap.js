@@ -8,7 +8,7 @@ export default (store: Object): Array<Object> => {
   let pops = Array.from(table.pop.values())
     .filter(p => p.ap_id === myApArtId)
     // omit pops without coordinates
-    .filter(p => p.PopXKoord && p.PopYKoord)
+    .filter(p => p.x && p.y)
   // filter them by nodeLabelFilter
   const popFilterString = tree.nodeLabelFilter.get('pop')
   if (popFilterString) {
@@ -19,7 +19,7 @@ export default (store: Object): Array<Object> => {
   }
 
   pops = pops.map(p => {
-    p.PopKoordWgs84 = epsg2056to4326(p.PopXKoord, p.PopYKoord)
+    p.PopKoordWgs84 = epsg2056to4326(p.x, p.y)
     return p
   })
   return pops

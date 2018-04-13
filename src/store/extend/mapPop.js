@@ -21,7 +21,7 @@ export default (store: Object): void => {
           // fetch pop and make sure it has coordinates
           const pop = store.table.pop.get(store.tree.activeNodes.pop)
           // ...but only once pop exists
-          if (pop && pop.PopXKoord && pop.PopYKoord) {
+          if (pop && pop.x && pop.y) {
             return [store.tree.activeNodes.pop]
           }
           return []

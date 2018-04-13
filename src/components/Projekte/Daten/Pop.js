@@ -62,9 +62,9 @@ const Pop = ({ store, tree }: { store: Object, tree: Object }) => {
             apJahr={apJahr}
             herkunftFieldName="status"
             herkunftValue={activeDataset.row.status}
-            bekanntSeitFieldName="PopBekanntSeit"
-            bekanntSeitValue={activeDataset.row.PopBekanntSeit}
-            bekanntSeitValid={activeDataset.valid.PopBekanntSeit}
+            bekanntSeitFieldName="bekannt_seit"
+            bekanntSeitValue={activeDataset.row.bekannt_seit}
+            bekanntSeitValid={activeDataset.valid.bekannt_seit}
             updateProperty={store.updateProperty}
             updatePropertyInDb={store.updatePropertyInDb}
           />
@@ -89,23 +89,23 @@ const Pop = ({ store, tree }: { store: Object, tree: Object }) => {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
-            key={`${activeDataset.row.id}PopXKoord`}
+            key={`${activeDataset.row.id}x`}
             tree={tree}
             label="X-Koordinaten"
-            fieldName="PopXKoord"
-            value={activeDataset.row.PopXKoord}
-            errorText={activeDataset.valid.PopXKoord}
+            fieldName="x"
+            value={activeDataset.row.x}
+            errorText={activeDataset.valid.x}
             type="number"
             updateProperty={store.updateProperty}
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
-            key={`${activeDataset.row.id}PopYKoord`}
+            key={`${activeDataset.row.id}y`}
             tree={tree}
             label="Y-Koordinaten"
-            fieldName="PopYKoord"
-            value={activeDataset.row.PopYKoord}
-            errorText={activeDataset.valid.PopYKoord}
+            fieldName="y"
+            value={activeDataset.row.y}
+            errorText={activeDataset.valid.y}
             type="number"
             updateProperty={store.updateProperty}
             updatePropertyInDb={store.updatePropertyInDb}

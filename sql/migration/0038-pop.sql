@@ -25,7 +25,19 @@ CREATE INDEX ON apflora.popber USING btree (pop_id);
 CREATE INDEX ON apflora.popmassnber USING btree (pop_id);
 
 -- comments
-TODO
+COMMENT ON COLUMN apflora.pop.id IS 'Primärschlüssel der Tabelle "pop"';
+COMMENT ON COLUMN apflora.pop.id_old IS 'frühere id';
+COMMENT ON COLUMN apflora.pop.ap_id IS 'Zugehöriger Aktionsplan. Fremdschlüssel aus der Tabelle "ap"';
+COMMENT ON COLUMN apflora.pop.nr IS 'Nummer der Population';
+COMMENT ON COLUMN apflora.pop.name IS 'Bezeichnung der Population';
+COMMENT ON COLUMN apflora.pop.status IS 'Herkunft der Population: autochthon oder angesiedelt? Auswahl aus der Tabelle "pop_status_werte"';
+COMMENT ON COLUMN apflora.pop.status_unklar IS '1 = die Herkunft der Population ist unklar';
+COMMENT ON COLUMN apflora.pop.status_unklar_begruendung IS 'Begründung, wieso die Herkunft unklar ist';
+COMMENT ON COLUMN apflora.pop.bekannt_seit IS 'Seit wann ist die Population bekannt?';
+COMMENT ON COLUMN apflora.pop.x IS 'Wird in der Regel von einer Teilpopulation übernommen';
+COMMENT ON COLUMN apflora.pop.y IS 'Wird in der Regel von einer Teilpopulation übernommen';
+COMMENT ON COLUMN apflora.pop.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
+COMMENT ON COLUMN apflora.pop.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
 -- drop existing indexes
 DROP index apflora.apflora."pop_ApArtId_idx";
@@ -38,7 +50,14 @@ DROP index apflora.apflora."pop_PopNr_idx";
 DROP index apflora.apflora."pop_PopXKoord_idx";
 DROP index apflora.apflora."pop_PopYKoord_idx";
 -- add new
-TODO
+CREATE INDEX ON apflora.pop USING btree (id);
+CREATE INDEX ON apflora.pop USING btree (ap_id);
+CREATE INDEX ON apflora.pop USING btree (status);
+CREATE INDEX ON apflora.pop USING btree (x);
+CREATE INDEX ON apflora.pop USING btree (y);
+CREATE INDEX ON apflora.pop USING btree (nr);
+CREATE INDEX ON apflora.pop USING btree (name);
+CREATE INDEX ON apflora.pop USING btree (bekannt_seit);
 
 -- change tpop
 ALTER TABLE apflora.tpop RENAME pop_id TO pop_id_old;
@@ -73,14 +92,14 @@ UPDATE apflora.popmassnber SET pop_id = (
 ALTER TABLE apflora.popmassnber DROP COLUMN pop_id_old CASCADE;
 COMMENT ON COLUMN apflora.popmassnber.pop_id IS 'Zugehörige Population. Fremdschlüssel aus der Tabelle "pop"';
 
--- TODO: make sure createTable is correct
--- TODO: rename in sql
--- TODO: rename in js
--- TODO: check if old id was used somewhere. If so: rename that field, add new one and update that
+-- done: make sure createTable is correct
+-- done: rename in sql
+-- done: rename in js
+-- done: check if old id was used somewhere. If so: rename that field, add new one and update that
 -- TODO: add all views, functions, triggers containing this table to this file
 -- TODO: run migration sql in dev
 -- TODO: restart postgrest and test app
--- done: special pop functions work?
--- done: CHECK child tables: are they correct?
+-- TODO: special pop functions work?
+-- TODO: CHECK child tables: are they correct?
 -- TODO: update js and run this file on server
 -- TODO: restart postgrest

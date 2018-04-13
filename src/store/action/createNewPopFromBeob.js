@@ -30,9 +30,9 @@ export default async ({
       data: {
         ap_id: ap,
         // give pop some data of beob
-        PopXKoord: X,
-        PopYKoord: Y,
-        PopBekanntSeit: format(new Date(Datum), 'YYYY'),
+        x: X,
+        y: Y,
+        bekannt_seit: format(new Date(Datum), 'YYYY'),
       },
       headers: {
         Prefer: 'return=representation',

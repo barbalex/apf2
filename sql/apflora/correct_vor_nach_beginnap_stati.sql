@@ -58,7 +58,7 @@ WHERE id IN (
       ON apflora.pop.ap_id = apflora.ap."ApArtId"
   WHERE
     status = 211 -- angesiedelt vor Beginn AP, erloschen/nicht etabliert
-    AND "ApJahr" <= "PopBekanntSeit"
+    AND "ApJahr" <= apflora.pop.bekannt_seit
 );
 
 UPDATE apflora.tpop
@@ -88,7 +88,7 @@ WHERE id IN (
       ON apflora.pop.ap_id = apflora.ap."ApArtId"
   WHERE
     status = 202  -- angesiedelt nach Beginn AP, erloschen/nicht etabliert
-    AND "ApJahr" > "PopBekanntSeit"
+    AND "ApJahr" > apflora.pop.bekannt_seit
 );
 
 -- angesiedelt, aktuell
@@ -149,7 +149,7 @@ WHERE id IN (
       ON apflora.pop.ap_id = apflora.ap."ApArtId"
   WHERE
     status = 210 -- angesiedelt vor Beginn AP, aktuell
-    AND "ApJahr" <= "PopBekanntSeit"
+    AND "ApJahr" <= apflora.pop.bekannt_seit
 );
 
 UPDATE apflora.tpop
@@ -179,5 +179,5 @@ WHERE id IN (
       ON apflora.pop.ap_id = apflora.ap."ApArtId"
   WHERE
     status = 200  -- angesiedelt nach Beginn AP, aktuell
-    AND "ApJahr" > "PopBekanntSeit"
+    AND "ApJahr" > apflora.pop.bekannt_seit
 );

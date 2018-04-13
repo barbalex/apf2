@@ -184,11 +184,11 @@ SELECT
   apflora.pop.nr AS "Pop Nr",
   apflora.pop.name AS "Pop Name",
   pop_status_werte.text AS "Pop Status",
-  apflora.pop."PopBekanntSeit" AS "Pop bekannt seit",
+  apflora.pop.bekannt_seit AS "Pop bekannt seit",
   apflora.pop.status_unklar AS "Pop Status unklar",
   apflora.pop.status_unklar_begruendung AS "Pop Begruendung fuer unklaren Status",
-  apflora.pop."PopXKoord" AS "Pop X-Koordinaten",
-  apflora.pop."PopYKoord" AS "Pop Y-Koordinaten",
+  apflora.pop.x AS "Pop X-Koordinaten",
+  apflora.pop.y AS "Pop Y-Koordinaten",
   apflora.tpop.id AS tpop_id,
   apflora.tpop.nr AS "TPop Nr",
   apflora.tpop.gemeinde AS "TPop Gemeinde",
@@ -390,9 +390,9 @@ SELECT
   apflora.pop.nr AS "popnr",
   apflora.pop.name AS "popname",
   pop_status_werte.text AS "popstatus",
-  apflora.pop."PopBekanntSeit" AS "popbekanntseit",
-  apflora.pop."PopXKoord" AS "popxkoordinaten",
-  apflora.pop."PopYKoord" AS "popykoordinaten",
+  apflora.pop.bekannt_seit AS "popbekanntseit",
+  apflora.pop.x AS "popxkoordinaten",
+  apflora.pop.y AS "popykoordinaten",
   CAST(apflora.tpop.id AS varchar(50)) AS "tpopid",
   apflora.tpop.nr AS "tpopnr",
   apflora.tpop.gemeinde AS "tpopgemeinde",
@@ -490,11 +490,11 @@ SELECT
   apflora.pop.nr AS "Pop Nr",
   apflora.pop.name AS "Pop Name",
   pop_status_werte.text AS "Pop Status",
-  apflora.pop."PopBekanntSeit" AS "Pop bekannt seit",
+  apflora.pop.bekannt_seit AS "Pop bekannt seit",
   apflora.pop.status_unklar AS "Pop Status unklar",
   apflora.pop.status_unklar_begruendung AS "Pop Begruendung fuer unklaren Status",
-  apflora.pop."PopXKoord" AS "Pop X-Koordinaten",
-  apflora.pop."PopYKoord" AS "Pop Y-Koordinaten",
+  apflora.pop.x AS "Pop X-Koordinaten",
+  apflora.pop.y AS "Pop Y-Koordinaten",
   apflora.tpop.id AS "TPop id",
   apflora.tpop.nr AS "TPop Nr",
   apflora.tpop.gemeinde AS "TPop Gemeinde",
@@ -557,11 +557,11 @@ GROUP BY
   apflora.pop.nr,
   apflora.pop.name,
   pop_status_werte.text,
-  apflora.pop."PopBekanntSeit",
+  apflora.pop.bekannt_seit,
   apflora.pop.status_unklar,
   apflora.pop.status_unklar_begruendung,
-  apflora.pop."PopXKoord",
-  apflora.pop."PopYKoord",
+  apflora.pop.x,
+  apflora.pop.y,
   apflora.tpop.id,
   apflora.tpop.nr,
   apflora.tpop.gemeinde,
@@ -602,11 +602,11 @@ SELECT
   apflora.pop.nr AS "Pop Nr",
   apflora.pop.name AS "Pop Name",
   pop_status_werte.text AS "Pop Status",
-  apflora.pop."PopBekanntSeit" AS "Pop bekannt seit",
+  apflora.pop.bekannt_seit AS "Pop bekannt seit",
   apflora.pop.status_unklar AS "Pop Status unklar",
   apflora.pop.status_unklar_begruendung AS "Pop Begruendung fuer unklaren Status",
-  apflora.pop."PopXKoord" AS "Pop X-Koordinaten",
-  apflora.pop."PopYKoord" AS "Pop Y-Koordinaten",
+  apflora.pop.x AS "Pop X-Koordinaten",
+  apflora.pop.y AS "Pop Y-Koordinaten",
   count(apflora.tpopmassn.id) AS "Anzahl Massnahmen"
 FROM
   ((((apflora.ae_eigenschaften
@@ -643,9 +643,9 @@ GROUP BY
   pop_status_werte.text,
   apflora.pop.status_unklar,
   apflora.pop.status_unklar_begruendung,
-  apflora.pop."PopBekanntSeit",
-  apflora.pop."PopXKoord",
-  apflora.pop."PopYKoord"
+  apflora.pop.bekannt_seit,
+  apflora.pop.x,
+  apflora.pop.y
 ORDER BY
   apflora.ae_eigenschaften.artname,
   apflora.pop.nr;
@@ -663,11 +663,11 @@ SELECT
   apflora.pop.nr AS "Pop Nr",
   apflora.pop.name AS "Pop Name",
   pop_status_werte.text AS "Pop Status",
-  apflora.pop."PopBekanntSeit" AS "Pop bekannt seit",
+  apflora.pop.bekannt_seit AS "Pop bekannt seit",
   apflora.pop.status_unklar AS "Pop Status unklar",
   apflora.pop.status_unklar_begruendung AS "Pop Begruendung fuer unklaren Status",
-  apflora.pop."PopXKoord" AS "Pop X-Koordinaten",
-  apflora.pop."PopYKoord" AS "Pop Y-Koordinaten",
+  apflora.pop.x AS "Pop X-Koordinaten",
+  apflora.pop.y AS "Pop Y-Koordinaten",
   count(apflora.tpopkontr.id) AS "Anzahl Kontrollen"
 FROM
   ((((apflora.ae_eigenschaften
@@ -705,9 +705,9 @@ GROUP BY
   pop_status_werte.text,
   apflora.pop.status_unklar,
   apflora.pop.status_unklar_begruendung,
-  apflora.pop."PopBekanntSeit",
-  apflora.pop."PopXKoord",
-  apflora.pop."PopYKoord"
+  apflora.pop.bekannt_seit,
+  apflora.pop.x,
+  apflora.pop.y
 ORDER BY
   apflora.ae_eigenschaften.artname,
   apflora.pop.nr;
@@ -801,13 +801,13 @@ SELECT
   apflora.pop.nr AS "Pop Nr",
   apflora.pop.name AS "Pop Name",
   pop_status_werte.text AS "Pop Status",
-  apflora.pop."PopBekanntSeit" AS "Pop bekannt seit",
+  apflora.pop.bekannt_seit AS "Pop bekannt seit",
   apflora.pop.status_unklar AS "Pop Status unklar",
   apflora.pop.status_unklar_begruendung AS "Pop Begruendung fuer unklaren Status",
-  apflora.pop."PopXKoord" AS "Pop X-Koordinaten",
-  apflora.pop."PopYKoord" AS "Pop Y-Koordinaten",
-  apflora.pop."MutWann" AS "Datensatz zuletzt geaendert",
-  apflora.pop."MutWer" AS "Datensatz zuletzt geaendert von"
+  apflora.pop.x AS "Pop X-Koordinaten",
+  apflora.pop.y AS "Pop Y-Koordinaten",
+  apflora.pop.changed AS "Datensatz zuletzt geaendert",
+  apflora.pop.changed_by AS "Datensatz zuletzt geaendert von"
 FROM
   apflora.ae_eigenschaften
   INNER JOIN
@@ -842,13 +842,13 @@ SELECT
   apflora.pop.nr AS "Pop Nr",
   apflora.pop.name AS "Pop Name",
   pop_status_werte.text AS "Pop Status",
-  apflora.pop."PopBekanntSeit" AS "Pop bekannt seit",
+  apflora.pop.bekannt_seit AS "Pop bekannt seit",
   apflora.pop.status_unklar AS "Pop Status unklar",
   apflora.pop.status_unklar_begruendung AS "Pop Begruendung fuer unklaren Status",
-  apflora.pop."PopXKoord" AS "Pop X-Koordinaten",
-  apflora.pop."PopYKoord" AS "Pop Y-Koordinaten",
-  apflora.pop."MutWann" AS "Datensatz zuletzt geaendert",
-  apflora.pop."MutWer" AS "Datensatz zuletzt geaendert von"
+  apflora.pop.x AS "Pop X-Koordinaten",
+  apflora.pop.y AS "Pop Y-Koordinaten",
+  apflora.pop.changed AS "Datensatz zuletzt geaendert",
+  apflora.pop.changed_by AS "Datensatz zuletzt geaendert von"
 FROM
   ((((apflora.ae_eigenschaften
   INNER JOIN
@@ -867,8 +867,8 @@ FROM
     apflora.pop_status_werte
     ON apflora.pop.status  = pop_status_werte.code
 WHERE
-  apflora.pop."PopXKoord" IS NULL
-  OR apflora.pop."PopYKoord" IS NULL
+  apflora.pop.x IS NULL
+  OR apflora.pop.y IS NULL
 ORDER BY
   apflora.ae_eigenschaften.artname,
   apflora.pop.nr;
@@ -884,11 +884,11 @@ SELECT
   apflora.pop.status  AS "popherkunft",
   apflora.pop.status_unklar AS "popherkunftunklar",
   apflora.pop.status_unklar_begruendung AS "popherkunftunklarbegruendung",
-  apflora.pop."PopBekanntSeit" AS "popbekanntseit",
-  apflora.pop."PopXKoord" AS "popxkoord",
-  apflora.pop."PopYKoord" AS "popykoord",
-  apflora.pop."MutWann"::timestamp AS "mutwann",
-  apflora.pop."MutWer" AS "mutwer"
+  apflora.pop.bekannt_seit AS "popbekanntseit",
+  apflora.pop.x AS "popxkoord",
+  apflora.pop.y AS "popykoord",
+  apflora.pop.changed::timestamp AS "mutwann",
+  apflora.pop.changed_by AS "mutwer"
 FROM
   apflora.pop;
 
@@ -904,13 +904,13 @@ SELECT
   apflora.pop.nr AS "popnr",
   apflora.pop.name AS "popname",
   pop_status_werte.text AS "popherkunft",
-  apflora.pop."PopBekanntSeit" AS "popbekanntseit",
+  apflora.pop.bekannt_seit AS "popbekanntseit",
   apflora.pop.status_unklar AS "popherkunftunklar",
   apflora.pop.status_unklar_begruendung AS "popherkunftunklarbegruendung",
-  apflora.pop."PopXKoord" AS "popxkoord",
-  apflora.pop."PopYKoord" AS "popykoord",
-  apflora.pop."MutWann"::timestamp AS "mutwann",
-  apflora.pop."MutWer" AS "mutwer"
+  apflora.pop.x AS "popxkoord",
+  apflora.pop.y AS "popykoord",
+  apflora.pop.changed::timestamp AS "mutwann",
+  apflora.pop.changed_by AS "mutwer"
 FROM
   ((((apflora.ae_eigenschaften
   INNER JOIN
@@ -929,8 +929,8 @@ FROM
     apflora.pop_status_werte
     ON apflora.pop.status  = pop_status_werte.code
 WHERE
-  apflora.pop."PopXKoord" > 0
-  AND apflora.pop."PopYKoord" > 0
+  apflora.pop.x > 0
+  AND apflora.pop.y > 0
 ORDER BY
   apflora.ae_eigenschaften.artname,
   apflora.pop.nr;
@@ -947,11 +947,11 @@ SELECT
   apflora.pop.nr AS "Pop Nr",
   apflora.pop.name AS "Pop Name",
   pop_status_werte.text AS "Pop Status",
-  apflora.pop."PopBekanntSeit" AS "Pop bekannt seit",
+  apflora.pop.bekannt_seit AS "Pop bekannt seit",
   apflora.pop.status_unklar AS "Pop Status unklar",
   apflora.pop.status_unklar_begruendung AS "Pop Begruendung fuer unklaren Status",
-  apflora.pop."PopXKoord" AS "Pop X-Koordinaten",
-  apflora.pop."PopYKoord" AS "Pop Y-Koordinaten",
+  apflora.pop.x AS "Pop X-Koordinaten",
+  apflora.pop.y AS "Pop Y-Koordinaten",
   apflora.popber.id AS "PopBer Id",
   apflora.popber.jahr AS "PopBer Jahr",
   tpop_entwicklung_werte.text AS "PopBer Entwicklung",
@@ -999,13 +999,13 @@ SELECT
   apflora.pop.nr AS "Pop Nr",
   apflora.pop.name AS "Pop Name",
   pop_status_werte.text AS "Pop Status",
-  apflora.pop."PopBekanntSeit" AS "Pop bekannt seit",
+  apflora.pop.bekannt_seit AS "Pop bekannt seit",
   apflora.pop.status_unklar AS "Pop Status unklar",
   apflora.pop.status_unklar_begruendung AS "Pop Begruendung fuer unklaren Status",
-  apflora.pop."PopXKoord" AS "Pop X-Koordinaten",
-  apflora.pop."PopYKoord" AS "Pop Y-Koordinaten",
-  apflora.pop."MutWann" AS "Datensatz zuletzt geaendert",
-  apflora.pop."MutWer" AS "Datensatz zuletzt geaendert von",
+  apflora.pop.x AS "Pop X-Koordinaten",
+  apflora.pop.y AS "Pop Y-Koordinaten",
+  apflora.pop.changed AS "Datensatz zuletzt geaendert",
+  apflora.pop.changed_by AS "Datensatz zuletzt geaendert von",
   apflora.popmassnber.id AS "PopMassnBer Id",
   apflora.popmassnber.jahr AS "PopMassnBer Jahr",
   tpopmassn_erfbeurt_werte.text AS "PopMassnBer Entwicklung",
@@ -1054,11 +1054,11 @@ SELECT
   apflora.pop.nr AS "Pop Nr",
   apflora.pop.name AS "Pop Name",
   pop_status_werte.text AS "Pop Status",
-  apflora.pop."PopBekanntSeit" AS "Pop bekannt seit",
+  apflora.pop.bekannt_seit AS "Pop bekannt seit",
   apflora.pop.status_unklar AS "Pop Status unklar",
   apflora.pop.status_unklar_begruendung AS "Pop Begruendung fuer unklaren Status",
-  apflora.pop."PopXKoord" AS "Pop X-Koordinaten",
-  apflora.pop."PopYKoord" AS "Pop Y-Koordinaten",
+  apflora.pop.x AS "Pop X-Koordinaten",
+  apflora.pop.y AS "Pop Y-Koordinaten",
   apflora.tpop.id,
   apflora.tpop.nr AS "TPop Nr",
   apflora.tpop.gemeinde AS "TPop Gemeinde",
@@ -1131,9 +1131,9 @@ SELECT
   pop_status_werte.text AS "POPSTATUS",
   apflora.pop.status_unklar AS "POPSTATUSUNKLAR",
   apflora.pop.status_unklar_begruendung AS "POPUNKLARGRUND",
-  apflora.pop."PopBekanntSeit" AS "POPBEKANNTSEIT",
-  apflora.pop."PopXKoord" AS "POP_X",
-  apflora.pop."PopYKoord" AS "POP_Y",
+  apflora.pop.bekannt_seit AS "POPBEKANNTSEIT",
+  apflora.pop.x AS "POP_X",
+  apflora.pop.y AS "POP_Y",
   apflora.tpop.id AS "TPOPID",
   apflora.tpop.nr AS "TPOPNR",
   apflora.tpop.gemeinde AS "TPOPGEMEINDE",
@@ -1239,7 +1239,7 @@ SELECT
   apflora.pop.nr AS "popnr",
   apflora.pop.name AS "popname",
   pop_status_werte.text AS "popherkunft",
-  apflora.pop."PopBekanntSeit" AS "popbekanntseit",
+  apflora.pop.bekannt_seit AS "popbekanntseit",
   apflora.pop.status_unklar AS "popherkunftunklar",
   apflora.pop.status_unklar_begruendung AS "popherkunftunklarbegruendung",
   CAST(apflora.tpop.id AS varchar(50)) AS "tpopid",
@@ -2115,7 +2115,7 @@ SELECT
   apflora.pop.nr AS "Population-Nr",
   apflora.pop.name AS "Population-Name",
   pop_status_werte.text AS "Population-Herkunft",
-  apflora.pop."PopBekanntSeit" AS "Population - bekannt seit",
+  apflora.pop.bekannt_seit AS "Population - bekannt seit",
   apflora.tpop.nr AS "Teilpopulation-Nr",
   apflora.tpop.gemeinde AS "Teilpopulation-Gemeinde",
   apflora.tpop.flurname AS "Teilpopulation-Flurname",
@@ -2250,7 +2250,7 @@ SELECT
   apflora.pop.nr AS "Population-Nr",
   apflora.pop.name AS "Population-Name",
   pop_status_werte.text AS "Population-Herkunft",
-  apflora.pop."PopBekanntSeit" AS "Population - bekannt seit",
+  apflora.pop.bekannt_seit AS "Population - bekannt seit",
   apflora.tpop.id AS tpop_id,
   apflora.tpop.nr AS "Teilpopulation-Nr",
   apflora.tpop.gemeinde AS "Teilpopulation-Gemeinde",
@@ -2418,8 +2418,8 @@ WHERE
   apflora.pop.status  IN (200, 210)
   AND apflora.tpop.apber_relevant = 1
   AND (
-    apflora.pop."PopBekanntSeit" < apflora.ap."ApJahr"
-    OR apflora.pop."PopBekanntSeit" IS Null
+    apflora.pop.bekannt_seit < apflora.ap."ApJahr"
+    OR apflora.pop.bekannt_seit IS Null
     OR apflora.ap."ApJahr" IS NULL
   )
 GROUP BY
@@ -2442,7 +2442,7 @@ FROM
 WHERE
   apflora.pop.status  IN (200, 210)
   AND apflora.tpop.apber_relevant = 1
-  AND apflora.pop."PopBekanntSeit" >= apflora.ap."ApJahr"
+  AND apflora.pop.bekannt_seit >= apflora.ap."ApJahr"
 GROUP BY
   apflora.pop.ap_id,
   apflora.pop.id;
@@ -2499,8 +2499,8 @@ WHERE
     OR (
       apflora.pop.status  = 211
       AND (
-        apflora.pop."PopBekanntSeit" < apflora.ap."ApJahr"
-        OR apflora.pop."PopBekanntSeit" IS NULL
+        apflora.pop.bekannt_seit < apflora.ap."ApJahr"
+        OR apflora.pop.bekannt_seit IS NULL
         OR apflora.ap."ApJahr" IS NULL
       )
     )
@@ -2526,7 +2526,7 @@ FROM
 WHERE
   apflora.pop.status  IN (202, 211)
   AND apflora.tpop.apber_relevant = 1
-  AND apflora.pop."PopBekanntSeit" >= apflora.ap."ApJahr"
+  AND apflora.pop.bekannt_seit >= apflora.ap."ApJahr"
 GROUP BY
   apflora.pop.ap_id,
   apflora.pop.id;
@@ -3213,7 +3213,7 @@ SELECT
   apflora.pop.nr as pop_nr,
   apflora.pop.name as pop_name,
   pop_status_werte.text AS status ,
-  apflora.pop."PopBekanntSeit",
+  apflora.pop.bekannt_seit,
   apflora.tpop.nr AS tpop_nr,
   apflora.tpop.gemeinde as tpop_gemeinde,
   apflora.tpop.flurname as tpop_flurname,
@@ -3261,7 +3261,7 @@ SELECT
   apflora.pop.nr AS "Pop Nr",
   apflora.pop.name AS "Pop Name",
   apflora.pop_status_werte.text AS "Pop Herkunft",
-  apflora.pop."PopBekanntSeit" AS "Pop bekannt seit",
+  apflora.pop.bekannt_seit AS "Pop bekannt seit",
   apflora.tpop.id AS "TPop ID",
   apflora.tpop.nr AS "TPop Nr",
   apflora.tpop.gemeinde AS "TPop Gemeinde",
@@ -3399,7 +3399,7 @@ GROUP BY
   apflora.pop.nr,
   apflora.pop.name,
   apflora.pop_status_werte.text,
-  apflora.pop."PopBekanntSeit",
+  apflora.pop.bekannt_seit,
   apflora.tpop.id,
   apflora.tpop.nr,
   apflora.tpop.gemeinde,
@@ -3776,7 +3776,7 @@ SELECT
   apflora.pop.nr AS popnr,
   apflora.pop.name AS popname,
   apflora.pop_status_werte.text AS popherkunft,
-  apflora.pop."PopBekanntSeit" AS popbekanntseit,
+  apflora.pop.bekannt_seit AS popbekanntseit,
   CAST(apflora.tpop.id AS varchar(50)) AS tpopid,
   apflora.tpop.nr AS tpopnr,
   apflora.tpop.gemeinde AS tpopgemeinde,
@@ -4128,11 +4128,11 @@ SELECT
         'Status: ',
         "popHerkunft".text,
         CASE
-          WHEN apflora.pop."PopBekanntSeit" IS NOT NULL
+          WHEN apflora.pop.bekannt_seit IS NOT NULL
           THEN
             concat(
               '; Bekannt seit: ',
-              apflora.pop."PopBekanntSeit"
+              apflora.pop.bekannt_seit
             )
           ELSE ''
         END
@@ -4191,7 +4191,7 @@ GROUP BY
   apflora.pop.nr,
   apflora.pop.status ,
   "popHerkunft".text,
-  apflora.pop."PopBekanntSeit";
+  apflora.pop.bekannt_seit;
 
 DROP VIEW IF EXISTS apflora.v_exportevab_ort CASCADE;
 CREATE OR REPLACE VIEW apflora.v_exportevab_ort AS
@@ -4392,11 +4392,11 @@ SELECT
   apflora.pop.nr AS "Pop Nr",
   apflora.pop.name AS "Pop Name",
   pop_status_werte.text AS "Pop Status",
-  apflora.pop."PopBekanntSeit" AS "Pop bekannt seit",
+  apflora.pop.bekannt_seit AS "Pop bekannt seit",
   apflora.pop.status_unklar AS "Pop Status unklar",
   apflora.pop.status_unklar_begruendung AS "Pop Begruendung fuer unklaren Status",
-  apflora.pop."PopXKoord" AS "Pop X-Koordinaten",
-  apflora.pop."PopYKoord" AS "Pop Y-Koordinaten",
+  apflora.pop.x AS "Pop X-Koordinaten",
+  apflora.pop.y AS "Pop Y-Koordinaten",
   apflora.tpop.id AS "TPop ID",
   apflora.tpop.nr AS "TPop Nr",
   apflora.tpop.gemeinde AS "TPop Gemeinde",
@@ -4632,10 +4632,10 @@ SELECT
     (
       (
         2.6779094
-        + (4.728982 * ((apflora.pop."PopXKoord" - 600000)::numeric / 1000000))
-        + (0.791484 * ((apflora.pop."PopXKoord" - 600000)::numeric / 1000000) * ((apflora.pop."PopYKoord" - 200000)::numeric / 1000000))
-        + (0.1306 * ((apflora.pop."PopXKoord" - 600000)::numeric / 1000000) * ((apflora.pop."PopYKoord" - 200000)::numeric / 1000000) * ((apflora.pop."PopYKoord" - 200000)::numeric / 1000000))
-        - (0.0436 * ((apflora.pop."PopXKoord" - 600000)::numeric / 1000000) * ((apflora.pop."PopXKoord" - 600000)::numeric / 1000000) * ((apflora.pop."PopXKoord" - 600000)::numeric / 1000000))
+        + (4.728982 * ((apflora.pop.x - 600000)::numeric / 1000000))
+        + (0.791484 * ((apflora.pop.x - 600000)::numeric / 1000000) * ((apflora.pop.y - 200000)::numeric / 1000000))
+        + (0.1306 * ((apflora.pop.x - 600000)::numeric / 1000000) * ((apflora.pop.y - 200000)::numeric / 1000000) * ((apflora.pop.y - 200000)::numeric / 1000000))
+        - (0.0436 * ((apflora.pop.x - 600000)::numeric / 1000000) * ((apflora.pop.x - 600000)::numeric / 1000000) * ((apflora.pop.x - 600000)::numeric / 1000000))
       ) * 100 / 36
     )::numeric, 10
   ) AS "Laengengrad",
@@ -4643,11 +4643,11 @@ SELECT
     (
       (
         16.9023892
-        + (3.238272 * ((apflora.pop."PopYKoord" - 200000)::numeric / 1000000))
-        - (0.270978 * ((apflora.pop."PopXKoord" - 600000)::numeric / 1000000) * ((apflora.pop."PopXKoord" - 600000)::numeric / 1000000))
-        - (0.002528 * ((apflora.pop."PopYKoord" - 200000)::numeric / 1000000) * ((apflora.pop."PopYKoord" - 200000)::numeric / 1000000))
-        - (0.0447 * ((apflora.pop."PopXKoord" - 600000)::numeric / 1000000) * ((apflora.pop."PopXKoord" - 600000)::numeric / 1000000) * ((apflora.pop."PopYKoord" - 200000)::numeric / 1000000))
-        - (0.014 * ((apflora.pop."PopYKoord" - 200000)::numeric / 1000000) * ((apflora.pop."PopYKoord" - 200000)::numeric / 1000000) * ((apflora.pop."PopYKoord" - 200000)::numeric / 1000000))
+        + (3.238272 * ((apflora.pop.y - 200000)::numeric / 1000000))
+        - (0.270978 * ((apflora.pop.x - 600000)::numeric / 1000000) * ((apflora.pop.x - 600000)::numeric / 1000000))
+        - (0.002528 * ((apflora.pop.y - 200000)::numeric / 1000000) * ((apflora.pop.y - 200000)::numeric / 1000000))
+        - (0.0447 * ((apflora.pop.x - 600000)::numeric / 1000000) * ((apflora.pop.x - 600000)::numeric / 1000000) * ((apflora.pop.y - 200000)::numeric / 1000000))
+        - (0.014 * ((apflora.pop.y - 200000)::numeric / 1000000) * ((apflora.pop.y - 200000)::numeric / 1000000) * ((apflora.pop.y - 200000)::numeric / 1000000))
       ) * 100 / 36
     )::numeric, 10
   ) AS "Breitengrad",
@@ -4666,8 +4666,8 @@ FROM
       ON apflora.ap."ApArtId" = apflora.pop.ap_id)
     ON apflora.ae_eigenschaften.taxid = apflora.ap."ApArtId"
 WHERE
-  apflora.pop."PopYKoord" is not null
-  AND apflora.pop."PopYKoord" is not null
+  apflora.pop.y is not null
+  AND apflora.pop.y is not null
 ORDER BY
   apflora.ae_eigenschaften.artname,
   apflora.pop.nr,
@@ -4691,10 +4691,10 @@ SELECT
     (
       (
         2.6779094
-        + (4.728982 * ((apflora.pop."PopXKoord" - 600000)::numeric / 1000000))
-        + (0.791484 * ((apflora.pop."PopXKoord" - 600000)::numeric / 1000000) * ((apflora.pop."PopYKoord" - 200000)::numeric / 1000000))
-        + (0.1306 * ((apflora.pop."PopXKoord" - 600000)::numeric / 1000000) * ((apflora.pop."PopYKoord" - 200000)::numeric / 1000000) * ((apflora.pop."PopYKoord" - 200000)::numeric / 1000000))
-        - (0.0436 * ((apflora.pop."PopXKoord" - 600000)::numeric / 1000000) * ((apflora.pop."PopXKoord" - 600000)::numeric / 1000000) * ((apflora.pop."PopXKoord" - 600000)::numeric / 1000000))
+        + (4.728982 * ((apflora.pop.x - 600000)::numeric / 1000000))
+        + (0.791484 * ((apflora.pop.x - 600000)::numeric / 1000000) * ((apflora.pop.y - 200000)::numeric / 1000000))
+        + (0.1306 * ((apflora.pop.x - 600000)::numeric / 1000000) * ((apflora.pop.y - 200000)::numeric / 1000000) * ((apflora.pop.y - 200000)::numeric / 1000000))
+        - (0.0436 * ((apflora.pop.x - 600000)::numeric / 1000000) * ((apflora.pop.x - 600000)::numeric / 1000000) * ((apflora.pop.x - 600000)::numeric / 1000000))
       ) * 100 / 36
     )::numeric, 10
   ) AS "Laengengrad",
@@ -4702,11 +4702,11 @@ SELECT
     (
       (
         16.9023892
-        + (3.238272 * ((apflora.pop."PopYKoord" - 200000)::numeric / 1000000))
-        - (0.270978 * ((apflora.pop."PopXKoord" - 600000)::numeric / 1000000) * ((apflora.pop."PopXKoord" - 600000)::numeric / 1000000))
-        - (0.002528 * ((apflora.pop."PopYKoord" - 200000)::numeric / 1000000) * ((apflora.pop."PopYKoord" - 200000)::numeric / 1000000))
-        - (0.0447 * ((apflora.pop."PopXKoord" - 600000)::numeric / 1000000) * ((apflora.pop."PopXKoord" - 600000)::numeric / 1000000) * ((apflora.pop."PopYKoord" - 200000)::numeric / 1000000))
-        - (0.014 * ((apflora.pop."PopYKoord" - 200000)::numeric / 1000000) * ((apflora.pop."PopYKoord" - 200000)::numeric / 1000000) * ((apflora.pop."PopYKoord" - 200000)::numeric / 1000000))
+        + (3.238272 * ((apflora.pop.y - 200000)::numeric / 1000000))
+        - (0.270978 * ((apflora.pop.x - 600000)::numeric / 1000000) * ((apflora.pop.x - 600000)::numeric / 1000000))
+        - (0.002528 * ((apflora.pop.y - 200000)::numeric / 1000000) * ((apflora.pop.y - 200000)::numeric / 1000000))
+        - (0.0447 * ((apflora.pop.x - 600000)::numeric / 1000000) * ((apflora.pop.x - 600000)::numeric / 1000000) * ((apflora.pop.y - 200000)::numeric / 1000000))
+        - (0.014 * ((apflora.pop.y - 200000)::numeric / 1000000) * ((apflora.pop.y - 200000)::numeric / 1000000) * ((apflora.pop.y - 200000)::numeric / 1000000))
       ) * 100 / 36
     )::numeric, 10
   ) AS "Breitengrad",
@@ -4725,8 +4725,8 @@ FROM
       ON apflora.ap."ApArtId" = apflora.pop.ap_id)
     ON apflora.ae_eigenschaften.taxid = apflora.ap."ApArtId"
 WHERE
-  apflora.pop."PopYKoord" is not null
-  AND apflora.pop."PopYKoord" is not null
+  apflora.pop.y is not null
+  AND apflora.pop.y is not null
 ORDER BY
   apflora.ae_eigenschaften.artname,
   apflora.pop.nr,
@@ -4745,7 +4745,7 @@ SELECT
   apflora.pop.nr AS "Pop Nr",
   apflora.pop.name AS "Pop Name",
   apflora.pop_status_werte.text AS "Pop Herkunft",
-  apflora.pop."PopBekanntSeit" AS "Pop bekannt seit",
+  apflora.pop.bekannt_seit AS "Pop bekannt seit",
   apflora.tpop.id AS "TPop ID",
   apflora.tpop.nr AS "TPop Nr",
   apflora.tpop.gemeinde AS "TPop Gemeinde",
@@ -4889,11 +4889,11 @@ SELECT
   apflora.pop.nr AS "Pop Nr",
   apflora.pop.name AS "Pop Name",
   pop_status_werte.text AS "Pop Status",
-  apflora.pop."PopBekanntSeit" AS "Pop bekannt seit",
+  apflora.pop.bekannt_seit AS "Pop bekannt seit",
   apflora.pop.status_unklar AS "Pop Status unklar",
   apflora.pop.status_unklar_begruendung AS "Pop Begruendung fuer unklaren Status",
-  apflora.pop."PopXKoord" AS "Pop X-Koordinaten",
-  apflora.pop."PopYKoord" AS "Pop Y-Koordinaten",
+  apflora.pop.x AS "Pop X-Koordinaten",
+  apflora.pop.y AS "Pop Y-Koordinaten",
   apflora.tpop.id AS "TPop ID",
   apflora.tpop.nr AS "TPop Nr",
   apflora.tpop.gemeinde AS "TPop Gemeinde",
@@ -5177,8 +5177,8 @@ FROM
     apflora.pop
     ON apflora.ap."ApArtId" = apflora.pop.ap_id
 WHERE
-  apflora.pop."PopXKoord" IS NULL
-  OR apflora.pop."PopYKoord" IS NULL
+  apflora.pop.x IS NULL
+  OR apflora.pop.y IS NULL
 ORDER BY
   apflora.ap."ApArtId",
   apflora.pop.nr;
@@ -5254,7 +5254,7 @@ FROM
     apflora.pop
     ON apflora.ap."ApArtId" = apflora.pop.ap_id
 WHERE
-  apflora.pop."PopBekanntSeit" IS NULL
+  apflora.pop.bekannt_seit IS NULL
 ORDER BY
   apflora.ap."ApArtId",
   apflora.pop.nr;
@@ -6409,24 +6409,24 @@ SELECT DISTINCT
   'Population: Koordinaten entsprechen keiner Teilpopulation:'::text AS hw,
   ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop.id]::text[] AS url,
   ARRAY[concat('Population (Nr): ', apflora.pop.nr)]::text[] AS text,
-  apflora.pop."PopXKoord" AS "XKoord",
-  apflora.pop."PopYKoord" AS "YKoord"
+  apflora.pop.x AS "XKoord",
+  apflora.pop.y AS "YKoord"
 FROM
   apflora.ap
   INNER JOIN
     apflora.pop
     ON apflora.pop.ap_id = apflora.ap."ApArtId"
 WHERE
-  apflora.pop."PopXKoord" Is NOT Null
-  AND apflora.pop."PopYKoord" IS NOT NULL
+  apflora.pop.x Is NOT Null
+  AND apflora.pop.y IS NOT NULL
   AND apflora.pop.id NOT IN (
     SELECT
       apflora.tpop.pop_id
     FROM
       apflora.tpop
     WHERE
-      apflora.tpop.x = "PopXKoord"
-      AND apflora.tpop.y = "PopYKoord"
+      apflora.tpop.x = x
+      AND apflora.tpop.y = y
   )
   ORDER BY
     apflora.ap."ProjId",

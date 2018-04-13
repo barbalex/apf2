@@ -122,9 +122,7 @@ export default (activeNodeArray: Array<mixed>, store: Object): Object => {
       activeNodeArray[4] === 'Populationen') ||
     false
   const pop =
-    popFolder && activeNodeArray.length > 5
-      ? parseInt(activeNodeArray[5], 10)
-      : null
+    popFolder && activeNodeArray.length > 5 ? activeNodeArray[5] : null
   const popberFolder =
     (pop &&
       activeNodeArray.length > 6 &&

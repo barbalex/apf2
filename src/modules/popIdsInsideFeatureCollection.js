@@ -13,13 +13,7 @@ export default (store: Object, pops: Array<Object>): Array<number> => {
   // make sure all pops used have coordinates
   let popsToUse = pops.filter(p => {
     if (!p.id) return false
-    if (
-      p.PopXKoord &&
-      isFinite(p.PopXKoord) &&
-      p.PopYKoord &&
-      isFinite(p.PopYKoord)
-    )
-      return true
+    if (p.x && isFinite(p.x) && p.y && isFinite(p.y)) return true
     if (
       p['Pop X-Koordinaten'] &&
       isFinite(p['Pop X-Koordinaten']) &&
@@ -32,8 +26,8 @@ export default (store: Object, pops: Array<Object>): Array<number> => {
   // ...and account for user friendly field names in views
   popsToUse = popsToUse.map(p => {
     if (p['Pop X-Koordinaten'] && p['Pop Y-Koordinaten']) {
-      p.PopXKoord = p['Pop X-Koordinaten']
-      p.PopYKoord = p['Pop Y-Koordinaten']
+      p.x = p['Pop X-Koordinaten']
+      p.y = p['Pop Y-Koordinaten']
     }
     return p
   })
@@ -48,7 +42,7 @@ export default (store: Object, pops: Array<Object>): Array<number> => {
       geometry: {
         type: 'Point',
         // convert koordinates to wgs84
-        coordinates: epsg2056to4326(p.PopXKoord, p.PopYKoord),
+        coordinates: epsg2056to4326(p.x, p.y),
       },
     })),
   }
