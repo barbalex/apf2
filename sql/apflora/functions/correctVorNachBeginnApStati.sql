@@ -6,7 +6,7 @@ CREATE OR REPLACE FUNCTION apflora.correct_vornach_beginnap_stati(apid integer)
 
    -- angesiedelt, erloschen/nicht etabliert
    UPDATE apflora.tpop
-   SET apflora.tpop.status = 202  -- angesiedelt nach Beginn AP, erloschen/nicht etabliert
+   SET status = 202  -- angesiedelt nach Beginn AP, erloschen/nicht etabliert
    WHERE id IN (
      SELECT
        tpop.id
@@ -23,7 +23,7 @@ CREATE OR REPLACE FUNCTION apflora.correct_vornach_beginnap_stati(apid integer)
    );
 
    UPDATE apflora.pop
-   SET apflora.pop.status = 202  -- angesiedelt nach Beginn AP, erloschen/nicht etabliert
+   SET status = 202  -- angesiedelt nach Beginn AP, erloschen/nicht etabliert
    WHERE id IN (
      SELECT
        pop.id
@@ -38,7 +38,7 @@ CREATE OR REPLACE FUNCTION apflora.correct_vornach_beginnap_stati(apid integer)
    );
 
    UPDATE apflora.tpop
-   SET apflora.tpop.status = 202  -- angesiedelt nach Beginn AP, erloschen/nicht etabliert
+   SET status = 202  -- angesiedelt nach Beginn AP, erloschen/nicht etabliert
    WHERE id IN (
      SELECT
        tpop.id
@@ -55,7 +55,7 @@ CREATE OR REPLACE FUNCTION apflora.correct_vornach_beginnap_stati(apid integer)
    );
 
    UPDATE apflora.pop
-   SET apflora.pop.status = 202  -- angesiedelt nach Beginn AP, erloschen/nicht etabliert
+   SET status = 202  -- angesiedelt nach Beginn AP, erloschen/nicht etabliert
    WHERE id IN (
      SELECT
        pop.id
@@ -70,7 +70,7 @@ CREATE OR REPLACE FUNCTION apflora.correct_vornach_beginnap_stati(apid integer)
    );
 
    UPDATE apflora.tpop
-   SET apflora.tpop.status = 211 -- angesiedelt vor Beginn AP, erloschen/nicht etabliert
+   SET status = 211 -- angesiedelt vor Beginn AP, erloschen/nicht etabliert
    WHERE id IN (
      SELECT
        tpop.id
@@ -87,7 +87,7 @@ CREATE OR REPLACE FUNCTION apflora.correct_vornach_beginnap_stati(apid integer)
    );
 
    UPDATE apflora.pop
-   SET apflora.pop.status = 211 -- angesiedelt vor Beginn AP, erloschen/nicht etabliert
+   SET status = 211 -- angesiedelt vor Beginn AP, erloschen/nicht etabliert
    WHERE id IN (
      SELECT
        pop.id
@@ -103,7 +103,7 @@ CREATE OR REPLACE FUNCTION apflora.correct_vornach_beginnap_stati(apid integer)
 
    -- angesiedelt, aktuell
    UPDATE apflora.tpop
-   SET apflora.tpop.status = 200  -- angesiedelt nach Beginn AP, aktuell
+   SET status = 200  -- angesiedelt nach Beginn AP, aktuell
    WHERE id IN (
      SELECT
        tpop.id
@@ -120,7 +120,7 @@ CREATE OR REPLACE FUNCTION apflora.correct_vornach_beginnap_stati(apid integer)
    );
 
    UPDATE apflora.pop
-   SET apflora.pop.status = 200  -- angesiedelt nach Beginn AP, aktuell
+   SET status = 200  -- angesiedelt nach Beginn AP, aktuell
    WHERE id IN (
      SELECT
        pop.id
@@ -135,7 +135,7 @@ CREATE OR REPLACE FUNCTION apflora.correct_vornach_beginnap_stati(apid integer)
    );
 
    UPDATE apflora.tpop
-   SET apflora.tpop.status = 200  -- angesiedelt nach Beginn AP, aktuell
+   SET status = 200  -- angesiedelt nach Beginn AP, aktuell
    WHERE id IN (
      SELECT
        tpop.id
@@ -152,7 +152,7 @@ CREATE OR REPLACE FUNCTION apflora.correct_vornach_beginnap_stati(apid integer)
    );
 
    UPDATE apflora.pop
-   SET apflora.pop.status = 200  -- angesiedelt nach Beginn AP, aktuell
+   SET status = 200  -- angesiedelt nach Beginn AP, aktuell
    WHERE id IN (
      SELECT
        pop.id
@@ -167,7 +167,7 @@ CREATE OR REPLACE FUNCTION apflora.correct_vornach_beginnap_stati(apid integer)
    );
 
    UPDATE apflora.tpop
-   SET apflora.tpop.status = 210 -- angesiedelt vor Beginn AP, aktuell
+   SET status = 210 -- angesiedelt vor Beginn AP, aktuell
    WHERE id IN (
      SELECT
        tpop.id
@@ -184,7 +184,7 @@ CREATE OR REPLACE FUNCTION apflora.correct_vornach_beginnap_stati(apid integer)
    );
 
    UPDATE apflora.pop
-   SET apflora.pop.status = 210 -- angesiedelt vor Beginn AP, aktuell
+   SET status = 210 -- angesiedelt vor Beginn AP, aktuell
    WHERE id IN (
      SELECT
        pop.id

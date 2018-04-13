@@ -270,9 +270,9 @@ const fetchQk = async ({
   )
   const queryUrls = qualityControlsUsingView.map(t => {
     if (t.berichtjahr) {
-      return `/${t.name}?ApArtId=eq.${apId}&Berichtjahr=eq.${t.berichtjahr}`
+      return `/${t.name}?ap_id=eq.${apId}&Berichtjahr=eq.${t.berichtjahr}`
     } else {
-      return `/${t.name}?ApArtId=eq.${apId}`
+      return `/${t.name}?ap_id=eq.${apId}`
     }
   })
   const dataFetchingPromisesForQueries = queryUrls.map(dataUrl =>
@@ -317,7 +317,7 @@ const fetchQk = async ({
   }
   let resultTpopKoord: { data: Array<Object> }
   try {
-    resultTpopKoord = await axios.get(`/v_tpopkoord?ApArtId=eq.${apId}`)
+    resultTpopKoord = await axios.get(`/v_tpopkoord?ap_id=eq.${apId}`)
   } catch (error) {
     store.listError(error)
     setLoading(false)

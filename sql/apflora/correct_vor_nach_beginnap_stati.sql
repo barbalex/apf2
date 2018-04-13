@@ -2,7 +2,7 @@
 
 -- angesiedelt, erloschen/nicht etabliert
 UPDATE apflora.tpop
-SET status = 202  -- angesiedelt nach Beginn AP, erloschen/nicht etabliert
+SET apflora.tpop.status = 202  -- angesiedelt nach Beginn AP, erloschen/nicht etabliert
 WHERE id IN (
   SELECT
     tpop.id
@@ -13,7 +13,7 @@ WHERE id IN (
       INNER JOIN apflora.ap
       ON apflora.pop.ap_id = apflora.ap."ApArtId"
   WHERE
-    status = 211 -- angesiedelt vor Beginn AP, erloschen/nicht etabliert
+    apflora.tpop.status = 211 -- angesiedelt vor Beginn AP, erloschen/nicht etabliert
     AND "ApJahr" IS NULL
 );
 
@@ -32,7 +32,7 @@ WHERE id IN (
 );
 
 UPDATE apflora.tpop
-SET status = 202  -- angesiedelt nach Beginn AP, erloschen/nicht etabliert
+SET apflora.tpop.status = 202  -- angesiedelt nach Beginn AP, erloschen/nicht etabliert
 WHERE id IN (
   SELECT
     tpop.id
@@ -43,7 +43,7 @@ WHERE id IN (
       INNER JOIN apflora.ap
       ON apflora.pop.ap_id = apflora.ap."ApArtId"
   WHERE
-    status = 211 -- angesiedelt vor Beginn AP, erloschen/nicht etabliert
+    apflora.tpop.status = 211 -- angesiedelt vor Beginn AP, erloschen/nicht etabliert
     AND "ApJahr" <= apflora.tpop.bekannt_seit
 );
 
@@ -62,7 +62,7 @@ WHERE id IN (
 );
 
 UPDATE apflora.tpop
-SET status = 211 -- angesiedelt vor Beginn AP, erloschen/nicht etabliert
+SET apflora.tpop.status = 211 -- angesiedelt vor Beginn AP, erloschen/nicht etabliert
 WHERE id IN (
   SELECT
     tpop.id
@@ -73,7 +73,7 @@ WHERE id IN (
       INNER JOIN apflora.ap
       ON apflora.pop.ap_id = apflora.ap."ApArtId"
   WHERE
-    status = 202  -- angesiedelt nach Beginn AP, erloschen/nicht etabliert
+    apflora.tpop.status = 202  -- angesiedelt nach Beginn AP, erloschen/nicht etabliert
     AND "ApJahr" > apflora.tpop.bekannt_seit
 );
 
