@@ -7,8 +7,7 @@ export default (store: Object, tree: Object): Array<Object> => {
   let tpop = Array.from(table.tpop.values())
   tpop = sortBy(tpop, 'nr')
   tpop.forEach(el => {
-    el.label = `${el.nr || '(keine Nr)'}: ${el.TPopFlurname ||
-      '(kein Flurname)'}`
+    el.label = `${el.nr || '(keine Nr)'}: ${el.flurname || '(kein Flurname)'}`
   })
   // filter by nodeLabelFilter
   const filterString = nodeLabelFilter.get('tpop')

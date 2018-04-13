@@ -64,12 +64,12 @@ const Tpop = ({
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextFieldWithInfo
-            key={`${activeDataset.row.id}TPopFlurname`}
+            key={`${activeDataset.row.id}flurname`}
             tree={tree}
             label="Flurname"
-            fieldName="TPopFlurname"
-            value={activeDataset.row.TPopFlurname}
-            errorText={activeDataset.valid.TPopFlurname}
+            fieldName="flurname"
+            value={activeDataset.row.flurname}
+            errorText={activeDataset.valid.flurname}
             type="text"
             updateProperty={store.updateProperty}
             updatePropertyInDb={store.updatePropertyInDb}
@@ -117,23 +117,23 @@ const Tpop = ({
             label="Für AP-Bericht relevant"
           />
           <TextField
-            key={`${activeDataset.row.id}TPopXKoord`}
+            key={`${activeDataset.row.id}x`}
             tree={tree}
             label="X-Koordinaten"
-            fieldName="TPopXKoord"
-            value={activeDataset.row.TPopXKoord}
-            errorText={activeDataset.valid.TPopXKoord}
+            fieldName="x"
+            value={activeDataset.row.x}
+            errorText={activeDataset.valid.x}
             type="number"
             updateProperty={store.updateProperty}
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
-            key={`${activeDataset.row.id}TPopYKoord`}
+            key={`${activeDataset.row.id}y`}
             tree={tree}
             label="Y-Koordinaten"
-            fieldName="TPopYKoord"
-            value={activeDataset.row.TPopYKoord}
-            errorText={activeDataset.valid.TPopYKoord}
+            fieldName="y"
+            value={activeDataset.row.y}
+            errorText={activeDataset.valid.y}
             type="number"
             updateProperty={store.updateProperty}
             updatePropertyInDb={store.updatePropertyInDb}

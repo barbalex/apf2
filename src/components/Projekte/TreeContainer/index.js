@@ -103,8 +103,8 @@ const getAndValidateCoordinatesOfTpop = (store, id) => {
     )
     return { x: null, y: null }
   }
-  const x = tpop.TPopXKoord
-  const y = tpop.TPopYKoord
+  const x = tpop.x
+  const y = tpop.y
   if (!x || !y) {
     store.listError(
       new Error(

@@ -773,7 +773,7 @@ SELECT
   apflora.pop."PopName",
   apflora.tpop.nr,
   apflora.tpop.gemeinde,
-  apflora.tpop."TPopFlurname",
+  apflora.tpop.flurname,
   apflora.tpop."TPopHerkunft",
   apflora.tpopber.entwicklung AS "TPopBerEntwicklung",
   apflora.tpopber.jahr AS tpopber_jahr
@@ -819,7 +819,7 @@ ORDER BY
   apflora.pop."PopName",
   apflora.tpop.nr,
   apflora.tpop.gemeinde,
-  apflora.tpop."TPopFlurname";
+  apflora.tpop.flurname;
 
 -- im Gebrauch (Access):
 DROP VIEW IF EXISTS apflora.v_apber_injahr CASCADE;
@@ -1607,13 +1607,13 @@ SELECT
   apflora.tpop.id AS tpop_id,
   apflora.tpop.nr AS "TPop Nr",
   apflora.tpop.gemeinde AS "TPop Gemeinde",
-  apflora.tpop."TPopFlurname" AS "TPop Flurname",
+  apflora.tpop.flurname AS "TPop Flurname",
   "domPopHerkunft_1".text AS "TPop Status",
   apflora.tpop."TPopBekanntSeit" AS "TPop bekannt seit",
   apflora.tpop."TPopHerkunftUnklar" AS "TPop Status unklar",
   apflora.tpop."TPopHerkunftUnklarBegruendung" AS "TPop Begruendung fuer unklaren Status",
-  apflora.tpop."TPopXKoord" AS "TPop X-Koordinaten",
-  apflora.tpop."TPopYKoord" AS "TPop Y-Koordinaten",
+  apflora.tpop.x AS "TPop X-Koordinaten",
+  apflora.tpop.y AS "TPop Y-Koordinaten",
   apflora.tpop."TPopRadius" AS "TPop Radius (m)",
   apflora.tpop."TPopHoehe" AS "TPop Hoehe",
   apflora.tpop."TPopExposition" AS "TPop Exposition",
@@ -2065,8 +2065,8 @@ WHERE
   apflora.ap."ApArtId" > 150
   AND apflora.ap."ApArtId" < 1000000
   -- nur Kontrollen, deren Teilpopulationen Koordinaten besitzen
-  AND apflora.tpop."TPopXKoord" IS NOT NULL
-  AND apflora.tpop."TPopYKoord" IS NOT NULL
+  AND apflora.tpop.x IS NOT NULL
+  AND apflora.tpop.y IS NOT NULL
   AND apflora.tpopkontr.typ IN ('Ausgangszustand', 'Zwischenbeurteilung', 'Freiwilligen-Erfolgskontrolle')
   -- keine Ansaatversuche
   AND apflora.tpop."TPopHerkunft" <> 201
@@ -2082,7 +2082,7 @@ WHERE
     -- oder bei Ansiedlungen: die Art war mindestens 5 Jahre vorhanden
     OR (apflora.tpopkontr.jahr - apflora.tpop."TPopBekanntSeit") > 5
   )
-  AND apflora.tpop."TPopFlurname" IS NOT NULL
+  AND apflora.tpop.flurname IS NOT NULL
   AND apflora.ap."ApGuid" IN (Select "idProjekt" FROM apflora.v_exportevab_projekt)
   AND apflora.pop."PopGuid" IN (SELECT "idRaum" FROM apflora.v_exportevab_raum)
   AND apflora.tpop.id IN (SELECT "idOrt" FROM apflora.v_exportevab_ort)

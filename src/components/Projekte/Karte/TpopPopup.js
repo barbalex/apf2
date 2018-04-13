@@ -34,7 +34,7 @@ const TpopPopup = ({
       <div>Teil-Population</div>
       <StyledH3>
         {`${tpop && tpop.nr ? `${tpop.nr}: ` : '(keine Nummer): '}${
-          tpop && tpop.TPopFlurname ? tpop.TPopFlurname : '(kein Name)'
+          tpop && tpop.flurname ? tpop.flurname : '(kein Name)'
         }`}
       </StyledH3>
       <div>
@@ -45,9 +45,9 @@ const TpopPopup = ({
       <div>
         {`Koordinaten: ${
           tpop.TPopKoordWgs84
-            ? `${tpop.TPopXKoord.toLocaleString(
+            ? `${tpop.x.toLocaleString('de-ch')} / ${tpop.y.toLocaleString(
                 'de-ch'
-              )} / ${tpop.TPopYKoord.toLocaleString('de-ch')}`
+              )}`
             : '(keine)'
         }`}
       </div>

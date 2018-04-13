@@ -18,12 +18,12 @@ export default (store: Object): Array<Object> => {
       const popNr = pop && (pop.PopNr || pop.PopNr === 0) ? pop.PopNr : ''
       const tpopNr = tpop.nr || tpop.nr === 0 ? tpop.nr : ''
       const nrLabel = `${popNr}.${tpopNr}`
-      let title = labelUsingNr ? tpop.TPopFlurname : nrLabel
+      let title = labelUsingNr ? tpop.flurname : nrLabel
       // beware: leaflet needs title to always be a string
       if (title && title.toString) {
         title = title.toString()
       }
-      let tooltipText = labelUsingNr ? nrLabel : tpop.TPopFlurname
+      let tooltipText = labelUsingNr ? nrLabel : tpop.flurname
       if (tooltipText && tooltipText.toString) {
         tooltipText = tooltipText.toString()
       }

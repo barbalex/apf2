@@ -31,8 +31,8 @@ export default async (store: Object, beobId: string): Promise<void> => {
   }
   // keep original pop in case update fails
   const originalTpop = clone(tpopInStore)
-  tpopInStore.TPopXKoord = X
-  tpopInStore.TPopYKoord = Y
+  tpopInStore.x = X
+  tpopInStore.y = Y
   const tpopForDb = clone(toJS(tpopInStore))
   // remove empty values
   Object.keys(tpopForDb).forEach(k => {

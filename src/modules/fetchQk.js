@@ -337,11 +337,11 @@ const fetchQk = async ({
     tpops = tpops.filter(
       tpop =>
         tpop.TPopApBerichtRelevant === 1 &&
-        tpop.TPopXKoord &&
-        isFinite(tpop.TPopXKoord) &&
-        tpop.TPopYKoord &&
-        isFinite(tpop.TPopYKoord) &&
-        !isPointInsidePolygon(ktZh, tpop.TPopXKoord, tpop.TPopYKoord)
+        tpop.x &&
+        isFinite(tpop.x) &&
+        tpop.y &&
+        isFinite(tpop.y) &&
+        !isPointInsidePolygon(ktZh, tpop.x, tpop.y)
     )
     if (tpops.length > 0) {
       const messages = tpops.map(tpop => {
@@ -368,7 +368,7 @@ const fetchQk = async ({
             `Projekt: ${projName}`,
             `Art: ${artName}`,
             `Population: ${popName}`,
-            `Teil-Population: ${tpop.TPopFlurname}`,
+            `Teil-Population: ${tpop.flurname}`,
           ],
         }
       })

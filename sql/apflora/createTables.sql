@@ -483,9 +483,9 @@ CREATE TABLE apflora.tpop (
   pop_id integer DEFAULT NULL REFERENCES apflora.pop ("PopId") ON DELETE CASCADE ON UPDATE CASCADE,
   nr integer DEFAULT NULL,
   gemeinde text DEFAULT NULL,
-  "TPopFlurname" text DEFAULT NULL,
-  "TPopXKoord" integer DEFAULT NULL CONSTRAINT zulaessige_x_koordinate CHECK ("TPopXKoord" IS NULL OR ("TPopXKoord" > 2485071 AND "TPopXKoord" < 2828516)),
-  "TPopYKoord" integer DEFAULT NULL CONSTRAINT zulaessige_y_koordinate CHECK ("TPopYKoord" IS NULL OR ("TPopYKoord" > 1075346 AND "TPopYKoord" < 1299942)),
+  flurname text DEFAULT NULL,
+  x integer DEFAULT NULL CONSTRAINT zulaessige_x_koordinate CHECK (x IS NULL OR (x > 2485071 AND x < 2828516)),
+  y integer DEFAULT NULL CONSTRAINT zulaessige_y_koordinate CHECK (y IS NULL OR (y > 1075346 AND y < 1299942)),
   "TPopRadius" smallint DEFAULT NULL,
   "TPopHoehe" smallint DEFAULT NULL,
   "TPopExposition" varchar(50) DEFAULT NULL,
@@ -512,19 +512,19 @@ CREATE INDEX ON apflora.tpop USING btree (id);
 CREATE INDEX ON apflora.tpop USING btree (pop_id);
 CREATE INDEX ON apflora.tpop USING btree ("TPopHerkunft");
 CREATE INDEX ON apflora.tpop USING btree ("TPopApBerichtRelevant");
-CREATE INDEX ON apflora.tpop USING btree ("TPopXKoord");
-CREATE INDEX ON apflora.tpop USING btree ("TPopYKoord");
+CREATE INDEX ON apflora.tpop USING btree (x);
+CREATE INDEX ON apflora.tpop USING btree (y);
 CREATE INDEX ON apflora.tpop USING btree (nr);
 CREATE INDEX ON apflora.tpop USING btree (gemeinde);
-CREATE INDEX ON apflora.tpop USING btree ("TPopFlurname");
+CREATE INDEX ON apflora.tpop USING btree (flurname);
 COMMENT ON COLUMN apflora.tpop.id IS 'Primärschlüssel';
 COMMENT ON COLUMN apflora.tpop.id_old IS 'frühere id';
 COMMENT ON COLUMN apflora.tpop.pop_id IS 'Zugehörige Population. Fremdschlüssel aus der Tabelle "pop"';
 COMMENT ON COLUMN apflora.tpop.nr IS 'Nummer der Teilpopulation';
 COMMENT ON COLUMN apflora.tpop.gemeinde IS 'Gemeinde';
-COMMENT ON COLUMN apflora.tpop."TPopFlurname" IS 'Flurname';
-COMMENT ON COLUMN apflora.tpop."TPopXKoord" IS 'X-Koordinate';
-COMMENT ON COLUMN apflora.tpop."TPopYKoord" IS 'Y-Koordinate';
+COMMENT ON COLUMN apflora.tpop.flurname IS 'Flurname';
+COMMENT ON COLUMN apflora.tpop.x IS 'X-Koordinate';
+COMMENT ON COLUMN apflora.tpop.y IS 'Y-Koordinate';
 COMMENT ON COLUMN apflora.tpop."TPopRadius" IS 'Radius der Teilpopulation (m)';
 COMMENT ON COLUMN apflora.tpop."TPopHoehe" IS 'Höhe über Meer (m)';
 COMMENT ON COLUMN apflora.tpop."TPopExposition" IS 'Exposition / Besonnung des Standorts';

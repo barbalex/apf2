@@ -9,10 +9,10 @@ export default (store: Object, tree: Object, x: number, y: number): any => {
     )
   const xRounded = Number(x).toFixed(0)
   const yRounded = Number(y).toFixed(0)
-  store.updateProperty(tree, 'TPopXKoord', xRounded)
-  store.updatePropertyInDb(tree, 'TPopXKoord', xRounded)
-  store.updateProperty(tree, 'TPopYKoord', yRounded)
-  store.updatePropertyInDb(tree, 'TPopYKoord', yRounded)
+  store.updateProperty(tree, 'x', xRounded)
+  store.updatePropertyInDb(tree, 'x', xRounded)
+  store.updateProperty(tree, 'y', yRounded)
+  store.updatePropertyInDb(tree, 'y', yRounded)
   // reset localizing
   store.map.tpop.idOfTpopBeingLocalized = 0
 }

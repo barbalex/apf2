@@ -18,7 +18,7 @@ export default (store: Object): void => {
           // fetch tpop and make sure it has coordinates
           const tpop = store.table.tpop.get(store.tree.activeNodes.tpop)
           // ...but only once tpop exists
-          if (tpop && tpop.TPopXKoord && tpop.TPopYKoord) {
+          if (tpop && tpop.x && tpop.y) {
             return [store.tree.activeNodes.tpop]
           }
           return []

@@ -13,13 +13,7 @@ export default (store: Object, tpops: Array<Object>): Array<number> => {
   // make sure all tpops used have coordinates
   let tpopsToUse = tpops.filter(p => {
     if (!p.id) return false
-    if (
-      p.TPopXKoord &&
-      isFinite(p.TPopXKoord) &&
-      p.TPopYKoord &&
-      isFinite(p.TPopYKoord)
-    )
-      return true
+    if (p.x && isFinite(p.x) && p.y && isFinite(p.y)) return true
     if (
       p['TPop X-Koordinaten'] &&
       isFinite(p['TPop X-Koordinaten']) &&
@@ -32,8 +26,8 @@ export default (store: Object, tpops: Array<Object>): Array<number> => {
   // ...and account for user friendly field names in views
   tpopsToUse = tpopsToUse.map(p => {
     if (p['TPop X-Koordinaten'] && p['TPop Y-Koordinaten']) {
-      p.TPopXKoord = p['TPop X-Koordinaten']
-      p.TPopYKoord = p['TPop Y-Koordinaten']
+      p.x = p['TPop X-Koordinaten']
+      p.y = p['TPop Y-Koordinaten']
     }
     return p
   })
@@ -46,7 +40,7 @@ export default (store: Object, tpops: Array<Object>): Array<number> => {
     geometry: {
       type: 'Point',
       // convert koordinates to wgs84
-      coordinates: epsg2056to4326(t.TPopXKoord, t.TPopYKoord),
+      coordinates: epsg2056to4326(t.x, t.y),
     },
   }))
   const points = {

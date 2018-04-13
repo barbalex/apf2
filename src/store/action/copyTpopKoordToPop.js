@@ -15,19 +15,19 @@ export default async (store: Object, tpopId: number): Promise<void> => {
       )
     )
   }
-  if (!tpop.TPopXKoord || !tpop.TPopYKoord) {
+  if (!tpop.x || !tpop.y) {
     return store.listError(
       new Error(
         `Die Teilpopulation mit tpopId ${tpopId} hat keine (vollständigen) Koordinaten. Daher wurden sie nicht in die Population kopiert`
       )
     )
   }
-  if (!tpop.PopId) {
+  if (!tpop.pop_id) {
     return store.listError(
       new Error(`Die Teilpopulation mit tpopId ${tpopId} hat keine Population`)
     )
   }
-  let popInStore = store.table.pop.get(tpop.PopId)
+  let popInStore = store.table.pop.get(tpop.pop_id)
   if (!popInStore) {
     return store.listError(
       new Error(
@@ -37,8 +37,8 @@ export default async (store: Object, tpopId: number): Promise<void> => {
   }
   // keep original pop in case update fails
   const originalPop = clone(popInStore)
-  popInStore.PopXKoord = tpop.TPopXKoord
-  popInStore.PopYKoord = tpop.TPopYKoord
+  popInStore.PopXKoord = tpop.x
+  popInStore.PopYKoord = tpop.y
   const popForDb = clone(toJS(popInStore))
   // remove empty values
   Object.keys(popForDb).forEach(k => {

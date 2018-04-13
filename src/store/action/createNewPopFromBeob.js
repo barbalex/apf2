@@ -56,11 +56,11 @@ export default async ({
       data: {
         PopId: pop.PopId,
         // give tpop some data of beob
-        TPopXKoord: X,
-        TPopYKoord: Y,
+        x: X,
+        y: Y,
         TPopBekanntSeit: format(new Date(Datum), 'YYYY'),
         gemeinde: data.NOM_COMMUNE ? data.NOM_COMMUNE : null,
-        TPopFlurname: data.DESC_LOCALITE_ ? data.DESC_LOCALITE_ : null,
+        flurname: data.DESC_LOCALITE_ ? data.DESC_LOCALITE_ : null,
       },
       headers: {
         Prefer: 'return=representation',

@@ -13,18 +13,18 @@ export default (store: Object): Array<Object> => {
   let tpops = Array.from(table.tpop.values())
     .filter(p => popIdsOfActiveAp.includes(p.pop_id))
     // omit tpops without coordinates
-    .filter(p => p.TPopXKoord && p.TPopYKoord)
+    .filter(p => p.x && p.y)
   // filter them by nodeLabelFilter
   const tpopFilterString = tree.nodeLabelFilter.get('tpop')
   if (tpopFilterString) {
     tpops = tpops.filter(p => {
-      const label = `${p.nr || '(keine Nr)'}: ${p.TPopFlurname ||
+      const label = `${p.nr || '(keine Nr)'}: ${p.flurname ||
         '(kein Flurname)'}`
       return label.toLowerCase().includes(tpopFilterString.toLowerCase())
     })
   }
   tpops = tpops.map(p => {
-    p.TPopKoordWgs84 = epsg2056to4326(p.TPopXKoord, p.TPopYKoord)
+    p.TPopKoordWgs84 = epsg2056to4326(p.x, p.y)
     return p
   })
   return tpops

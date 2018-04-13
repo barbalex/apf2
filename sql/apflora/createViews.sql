@@ -30,10 +30,10 @@ SELECT DISTINCT
   apflora.pop."ApArtId",
   apflora.pop."PopId",
   apflora.pop."PopNr",
-  apflora.tpop.id AS tpop_id,
+  apflora.tpop.id,
   apflora.tpop.nr,
-  apflora.tpop."TPopXKoord",
-  apflora.tpop."TPopYKoord",
+  apflora.tpop.x,
+  apflora.tpop.y,
   apflora.tpop."TPopApBerichtRelevant"
 FROM
   apflora.pop
@@ -41,8 +41,8 @@ FROM
     apflora.tpop
     ON apflora.pop."PopId" = apflora.tpop.pop_id
 WHERE
-  apflora.tpop."TPopXKoord" Is Not Null
-  AND apflora.tpop."TPopYKoord" Is Not Null;
+  apflora.tpop.x Is Not Null
+  AND apflora.tpop.y Is Not Null;
 
 DROP VIEW IF EXISTS apflora.v_pop_berundmassnjahre CASCADE;
 CREATE OR REPLACE VIEW apflora.v_pop_berundmassnjahre AS
@@ -192,13 +192,13 @@ SELECT
   apflora.tpop.id AS tpop_id,
   apflora.tpop.nr AS "TPop Nr",
   apflora.tpop.gemeinde AS "TPop Gemeinde",
-  apflora.tpop."TPopFlurname" AS "TPop Flurname",
+  apflora.tpop.flurname AS "TPop Flurname",
   "domPopHerkunft_1".text AS "TPop Status",
   apflora.tpop."TPopBekanntSeit" AS "TPop bekannt seit",
   apflora.tpop."TPopHerkunftUnklar" AS "TPop Status unklar",
   apflora.tpop."TPopHerkunftUnklarBegruendung" AS "TPop Begruendung fuer unklaren Status",
-  apflora.tpop."TPopXKoord" AS "TPop X-Koordinaten",
-  apflora.tpop."TPopYKoord" AS "TPop Y-Koordinaten",
+  apflora.tpop.x AS "TPop X-Koordinaten",
+  apflora.tpop.y AS "TPop Y-Koordinaten",
   apflora.tpop."TPopRadius" AS "TPop Radius (m)",
   apflora.tpop."TPopHoehe" AS "TPop Hoehe",
   apflora.tpop."TPopExposition" AS "TPop Exposition",
@@ -283,8 +283,8 @@ SELECT
   apflora.pop."PopNr" AS "POPNR",
   apflora.tpop.id AS "TPOPGUID",
   apflora.tpop.nr AS "TPOPNR",
-  apflora.tpop."TPopXKoord" AS "TPOP_X",
-  apflora.tpop."TPopYKoord" AS "TPOP_Y",
+  apflora.tpop.x AS "TPOP_X",
+  apflora.tpop.y AS "TPOP_Y",
   apflora.tpopmassn.id AS "MASSNGUID",
   apflora.tpopmassn.jahr AS "MASSNJAHR",
   -- need to convert date
@@ -396,12 +396,12 @@ SELECT
   CAST(apflora.tpop.id AS varchar(50)) AS "tpopid",
   apflora.tpop.nr AS "tpopnr",
   apflora.tpop.gemeinde AS "tpopgemeinde",
-  apflora.tpop."TPopFlurname" AS "tpopflurname",
+  apflora.tpop.flurname AS "tpopflurname",
   "domPopHerkunft_1".text AS "tpopstatus",
   apflora.tpop."TPopHerkunftUnklar" AS "tpopstatusunklar",
   apflora.tpop."TPopHerkunftUnklarBegruendung" AS "tpopbegruendungfuerunklarenstatus",
-  apflora.tpop."TPopXKoord" AS "tpopxkoordinaten",
-  apflora.tpop."TPopYKoord" AS "tpopykoordinaten",
+  apflora.tpop.x AS "tpopxkoordinaten",
+  apflora.tpop.y AS "tpopykoordinaten",
   apflora.tpop."TPopRadius" AS "tpopradius",
   apflora.tpop."TPopHoehe" AS "tpophoehe",
   apflora.tpop."TPopExposition" AS "tpopexposition",
@@ -498,13 +498,13 @@ SELECT
   apflora.tpop.id AS "TPop id",
   apflora.tpop.nr AS "TPop Nr",
   apflora.tpop.gemeinde AS "TPop Gemeinde",
-  apflora.tpop."TPopFlurname" AS "TPop Flurname",
+  apflora.tpop.flurname AS "TPop Flurname",
   "domPopHerkunft_1".text AS "TPop Status",
   apflora.tpop."TPopBekanntSeit" AS "TPop bekannt seit",
   apflora.tpop."TPopHerkunftUnklar" AS "TPop Status unklar",
   apflora.tpop."TPopHerkunftUnklarBegruendung" AS "TPop Begruendung fuer unklaren Status",
-  apflora.tpop."TPopXKoord" AS "TPop X-Koordinaten",
-  apflora.tpop."TPopYKoord" AS "TPop Y-Koordinaten",
+  apflora.tpop.x AS "TPop X-Koordinaten",
+  apflora.tpop.y AS "TPop Y-Koordinaten",
   apflora.tpop."TPopRadius" AS "TPop Radius (m)",
   apflora.tpop."TPopHoehe" AS "TPop Hoehe",
   apflora.tpop."TPopExposition" AS "TPop Exposition",
@@ -565,13 +565,13 @@ GROUP BY
   apflora.tpop.id,
   apflora.tpop.nr,
   apflora.tpop.gemeinde,
-  apflora.tpop."TPopFlurname",
+  apflora.tpop.flurname,
   "domPopHerkunft_1".text,
   apflora.tpop."TPopBekanntSeit",
   apflora.tpop."TPopHerkunftUnklar",
   apflora.tpop."TPopHerkunftUnklarBegruendung",
-  apflora.tpop."TPopXKoord",
-  apflora.tpop."TPopYKoord",
+  apflora.tpop.x,
+  apflora.tpop.y,
   apflora.tpop."TPopRadius",
   apflora.tpop."TPopHoehe",
   apflora.tpop."TPopExposition",
@@ -1062,13 +1062,13 @@ SELECT
   apflora.tpop.id AS "TPop ID",
   apflora.tpop.nr AS "TPop Nr",
   apflora.tpop.gemeinde AS "TPop Gemeinde",
-  apflora.tpop."TPopFlurname" AS "TPop Flurname",
+  apflora.tpop.flurname AS "TPop Flurname",
   "domPopHerkunft_1".text AS "TPop Status",
   apflora.tpop."TPopBekanntSeit" AS "TPop bekannt seit",
   apflora.tpop."TPopHerkunftUnklar" AS "TPop Status unklar",
   apflora.tpop."TPopHerkunftUnklarBegruendung" AS "TPop Begruendung fuer unklaren Status",
-  apflora.tpop."TPopXKoord" AS "TPop X-Koordinaten",
-  apflora.tpop."TPopYKoord" AS "TPop Y-Koordinaten",
+  apflora.tpop.x AS "TPop X-Koordinaten",
+  apflora.tpop.y AS "TPop Y-Koordinaten",
   apflora.tpop."TPopRadius" AS "TPop Radius (m)",
   apflora.tpop."TPopHoehe" AS "TPop Hoehe",
   apflora.tpop."TPopExposition" AS "TPop Exposition",
@@ -1137,12 +1137,12 @@ SELECT
   apflora.tpop.id AS "TPOPID",
   apflora.tpop.nr AS "TPOPNR",
   apflora.tpop.gemeinde AS "TPOPGEMEINDE",
-  apflora.tpop."TPopFlurname" AS "TPOPFLURNAME",
+  apflora.tpop.flurname AS "TPOPFLURNAME",
   "domPopHerkunft_1".text AS "TPOPSTATUS",
   apflora.tpop."TPopHerkunftUnklar" AS "TPOPSTATUSUNKLAR",
   apflora.tpop."TPopHerkunftUnklarBegruendung" AS "TPOPUNKLARGRUND",
-  apflora.tpop."TPopXKoord" AS "TPOP_X",
-  apflora.tpop."TPopYKoord" AS "TPOP_Y",
+  apflora.tpop.x AS "TPOP_X",
+  apflora.tpop.y AS "TPOP_Y",
   apflora.tpop."TPopRadius" AS "TPOPRADIUS",
   apflora.tpop."TPopHoehe" AS "TPOPHOEHE",
   apflora.tpop."TPopExposition" AS "TPOPEXPOSITION",
@@ -1201,12 +1201,12 @@ SELECT
   CAST(apflora.tpop.id AS varchar(50)) AS "tpopid",
   apflora.tpop.nr AS "tpopnr",
   apflora.tpop.gemeinde AS "tpopgemeinde",
-  apflora.tpop."TPopFlurname" AS "tpopflurname",
+  apflora.tpop.flurname AS "tpopflurname",
   apflora.tpop."TPopHerkunft" AS "tpopherkunft",
   apflora.tpop."TPopHerkunftUnklar" AS "tpopherkunftunklar",
   apflora.tpop."TPopHerkunftUnklarBegruendung" AS "tpopherkunftunklarbegruendung",
-  apflora.tpop."TPopXKoord" AS "tpopxkoord",
-  apflora.tpop."TPopYKoord" AS "tpopykoord",
+  apflora.tpop.x AS "tpopxkoord",
+  apflora.tpop.y AS "tpopykoord",
   apflora.tpop."TPopRadius" AS "tpopradius",
   apflora.tpop."TPopHoehe" AS "tpophoehe",
   apflora.tpop."TPopExposition" AS "tpopexposition",
@@ -1245,13 +1245,13 @@ SELECT
   CAST(apflora.tpop.id AS varchar(50)) AS "tpopid",
   apflora.tpop.nr AS "tpopnr",
   apflora.tpop.gemeinde AS "tpopgemeinde",
-  apflora.tpop."TPopFlurname" AS "tpopflurname",
+  apflora.tpop.flurname AS "tpopflurname",
   "domPopHerkunft_1".text AS "tpopherkunft",
   apflora.tpop."TPopBekanntSeit" AS "tpopbekanntseit",
   apflora.tpop."TPopHerkunftUnklar" AS "tpopherkunftunklar",
   apflora.tpop."TPopHerkunftUnklarBegruendung" AS "tpopherkunftunklarbegruendung",
-  apflora.tpop."TPopXKoord" AS "tpopxkoord",
-  apflora.tpop."TPopYKoord" AS "tpopykoord",
+  apflora.tpop.x AS "tpopxkoord",
+  apflora.tpop.y AS "tpopykoord",
   apflora.tpop."TPopRadius" AS "tpopradius",
   apflora.tpop."TPopHoehe" AS "tpophoehe",
   apflora.tpop."TPopExposition" AS "tpopexposition",
@@ -1291,8 +1291,8 @@ FROM
     apflora.pop_status_werte AS "domPopHerkunft_1"
     ON apflora.tpop."TPopHerkunft" = "domPopHerkunft_1".code
 WHERE
-  apflora.tpop."TPopYKoord" > 0
-  AND apflora.tpop."TPopXKoord" > 0
+  apflora.tpop.y > 0
+  AND apflora.tpop.x > 0
 ORDER BY
   apflora.ae_eigenschaften.artname,
   apflora.pop."PopNr",
@@ -1563,7 +1563,7 @@ SELECT
   apflora.pop."PopName",
   pop_status_werte.text AS "Status Population",
   apflora.tpop.nr,
-  apflora.tpop."TPopFlurname",
+  apflora.tpop.flurname,
   apflora.tpop."TPopHerkunft" AS "Status Teilpopulation"
 FROM
   (apflora.ap_bearbstand_werte
@@ -1598,7 +1598,7 @@ SELECT
   apflora.pop."PopName",
   apflora.tpop.nr,
   apflora.tpop.gemeinde,
-  apflora.tpop."TPopFlurname",
+  apflora.tpop.flurname,
   apflora.tpop."TPopBekanntSeit"
 FROM
   ((apflora.ae_eigenschaften
@@ -1623,7 +1623,7 @@ ORDER BY
   apflora.pop."PopName",
   apflora.tpop.nr,
   apflora.tpop.gemeinde,
-  apflora.tpop."TPopFlurname";
+  apflora.tpop.flurname;
 
 DROP VIEW IF EXISTS apflora.v_tpop_ohnekoord CASCADE;
 CREATE OR REPLACE VIEW apflora.v_tpop_ohnekoord AS
@@ -1634,9 +1634,9 @@ SELECT
   apflora.pop."PopName",
   apflora.tpop.nr,
   apflora.tpop.gemeinde,
-  apflora.tpop."TPopFlurname",
-  apflora.tpop."TPopXKoord",
-  apflora.tpop."TPopYKoord"
+  apflora.tpop.flurname,
+  apflora.tpop.x,
+  apflora.tpop.y
 FROM
   ((apflora.ae_eigenschaften
   INNER JOIN
@@ -1652,10 +1652,10 @@ FROM
       ON apflora.pop."PopId" = apflora.tpop.pop_id)
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
 WHERE
-  (apflora.tpop."TPopXKoord" IS NULL
+  (apflora.tpop.x IS NULL
   AND apflora.ap."ApStatus" BETWEEN 1 AND 3)
   OR (
-    apflora.tpop."TPopYKoord" IS NULL
+    apflora.tpop.y IS NULL
     AND apflora.ap."ApStatus" BETWEEN 1 AND 3
   )
 ORDER BY
@@ -1664,7 +1664,7 @@ ORDER BY
   apflora.pop."PopName",
   apflora.tpop.nr,
   apflora.tpop.gemeinde,
-  apflora.tpop."TPopFlurname";
+  apflora.tpop.flurname;
 
 DROP VIEW IF EXISTS apflora.v_tpopber_letzterber CASCADE;
 CREATE OR REPLACE VIEW apflora.v_tpopber_letzterber AS
@@ -1998,7 +1998,7 @@ SELECT
   apflora.pop."PopName",
   apflora.tpop.nr AS tpop_nr,
   apflora.tpop.gemeinde as tpop_gemeinde,
-  apflora.tpop."TPopFlurname",
+  apflora.tpop.flurname as tpop_flurname,
   apflora.tpopmassn.jahr,
   tpopmassn_typ_werte.text AS typ,
   apflora.tpopmassn.beschreibung,
@@ -2045,7 +2045,7 @@ ORDER BY
   apflora.pop."PopName",
   apflora.tpop.nr,
   apflora.tpop.gemeinde,
-  apflora.tpop."TPopFlurname";
+  apflora.tpop.flurname;
 
 DROP VIEW IF EXISTS apflora.v_ap_mitmassninjahr0 CASCADE;
 CREATE OR REPLACE VIEW apflora.v_ap_mitmassninjahr0 AS
@@ -2055,7 +2055,7 @@ SELECT
   apflora.pop."PopName",
   apflora.tpop.nr AS tpop_nr,
   apflora.tpop.gemeinde tpop_gemeinde,
-  apflora.tpop."TPopFlurname",
+  apflora.tpop.flurname as tpop_flurname,
   apflora.tpopmassn.jahr,
   tpopmassn_typ_werte.text AS typ,
   apflora.tpopmassn.beschreibung,
@@ -2102,7 +2102,7 @@ ORDER BY
   apflora.pop."PopName",
   apflora.tpop.nr,
   apflora.tpop.gemeinde,
-  apflora.tpop."TPopFlurname";
+  apflora.tpop.flurname;
 
 DROP VIEW IF EXISTS apflora.v_tpopmassnber_fueraktap0 CASCADE;
 CREATE OR REPLACE VIEW apflora.v_tpopmassnber_fueraktap0 AS
@@ -2118,9 +2118,9 @@ SELECT
   apflora.pop."PopBekanntSeit" AS "Population - bekannt seit",
   apflora.tpop.nr AS "Teilpopulation-Nr",
   apflora.tpop.gemeinde AS "Teilpopulation-Gemeinde",
-  apflora.tpop."TPopFlurname" AS "Teilpopulation-Flurname",
-  apflora.tpop."TPopXKoord" AS "Teilpopulation-X-Koodinate",
-  apflora.tpop."TPopYKoord" AS "Teilpopulation-Y-Koordinate",
+  apflora.tpop.flurname AS "Teilpopulation-Flurname",
+  apflora.tpop.x AS "Teilpopulation-X-Koodinate",
+  apflora.tpop.y AS "Teilpopulation-Y-Koordinate",
   apflora.tpop."TPopRadius" AS "Teilpopulation-Radius",
   apflora.tpop."TPopHoehe" AS "Teilpopulation-Hoehe",
   apflora.tpop."TPopBeschr" AS "Teilpopulation-Beschreibung",
@@ -2188,7 +2188,7 @@ SELECT
   apflora.pop."PopName",
   apflora.tpop.id AS tpop_id,
   apflora.tpop.nr AS tpop_nr,
-  apflora.tpop."TPopFlurname",
+  apflora.tpop.flurname as tpop_flurname,
   apflora.tpopmassn.id,
   apflora.tpopmassn.jahr AS "Jahr",
   tpopmassn_typ_werte.text AS "Massnahme",
@@ -2254,9 +2254,9 @@ SELECT
   apflora.tpop.id AS tpop_id,
   apflora.tpop.nr AS "Teilpopulation-Nr",
   apflora.tpop.gemeinde AS "Teilpopulation-Gemeinde",
-  apflora.tpop."TPopFlurname" AS "Teilpopulation-Flurname",
-  apflora.tpop."TPopXKoord" AS "Teilpopulation-X-Koodinate",
-  apflora.tpop."TPopYKoord" AS "Teilpopulation-Y-Koordinate",
+  apflora.tpop.flurname AS "Teilpopulation-Flurname",
+  apflora.tpop.x AS "Teilpopulation-X-Koodinate",
+  apflora.tpop.y AS "Teilpopulation-Y-Koordinate",
   apflora.tpop."TPopRadius" AS "Teilpopulation-Radius",
   apflora.tpop."TPopHoehe" AS "Teilpopulation-Höhe",
   apflora.tpop."TPopBeschr" AS "Teilpopulation-Beschreibung",
@@ -3216,9 +3216,9 @@ SELECT
   apflora.pop."PopBekanntSeit",
   apflora.tpop.nr AS tpop_nr,
   apflora.tpop.gemeinde as tpop_gemeinde,
-  apflora.tpop."TPopFlurname",
-  apflora.tpop."TPopXKoord",
-  apflora.tpop."TPopYKoord",
+  apflora.tpop.flurname as tpop_flurname,
+  apflora.tpop.x as tpop_x,
+  apflora.tpop.y as tpop_y,
   apflora.tpop."TPopBekanntSeit",
   "domPopHerkunft_1".text AS "TPopHerkunft",
   apflora.tpop."TPopApBerichtRelevant"
@@ -3265,13 +3265,13 @@ SELECT
   apflora.tpop.id AS "TPop ID",
   apflora.tpop.nr AS "TPop Nr",
   apflora.tpop.gemeinde AS "TPop Gemeinde",
-  apflora.tpop."TPopFlurname" AS "TPop Flurname",
+  apflora.tpop.flurname AS "TPop Flurname",
   "domPopHerkunft_1".text AS "TPop Status",
   apflora.tpop."TPopBekanntSeit" AS "TPop bekannt seit",
   apflora.tpop."TPopHerkunftUnklar" AS "TPop Status unklar",
   apflora.tpop."TPopHerkunftUnklarBegruendung" AS "TPop Begruendung fuer unklaren Status",
-  apflora.tpop."TPopXKoord" AS "TPop X-Koordinaten",
-  apflora.tpop."TPopYKoord" AS "TPop Y-Koordinaten",
+  apflora.tpop.x AS "TPop X-Koordinaten",
+  apflora.tpop.y AS "TPop Y-Koordinaten",
   apflora.tpop."TPopRadius" AS "TPop Radius m",
   apflora.tpop."TPopHoehe" AS "TPop Hoehe",
   apflora.tpop."TPopExposition" AS "TPop Exposition",
@@ -3299,8 +3299,8 @@ SELECT
   apflora.tpopkontr.erfolgsbeurteilung AS "Kontr Erfolgsbeurteilung",
   apflora.tpopkontr.umsetzung_aendern AS "Kontr Aenderungs-Vorschlaege Umsetzung",
   apflora.tpopkontr.kontrolle_aendern AS "Kontr Aenderungs-Vorschlaege Kontrolle",
-  apflora.tpop."TPopXKoord" AS "Kontr X-Koord",
-  apflora.tpop."TPopYKoord" AS "Kontr Y-Koord",
+  apflora.tpop.x AS "Kontr X-Koord",
+  apflora.tpop.y AS "Kontr Y-Koord",
   apflora.tpopkontr.bemerkungen AS "Kontr Bemerkungen",
   apflora.tpopkontr.lr_delarze AS "Kontr Lebensraum Delarze",
   apflora.tpopkontr.lr_umgebung_delarze AS "Kontr angrenzender Lebensraum Delarze",
@@ -3403,13 +3403,13 @@ GROUP BY
   apflora.tpop.id,
   apflora.tpop.nr,
   apflora.tpop.gemeinde,
-  apflora.tpop."TPopFlurname",
+  apflora.tpop.flurname,
   "domPopHerkunft_1".text,
   apflora.tpop."TPopBekanntSeit",
   apflora.tpop."TPopHerkunftUnklar",
   apflora.tpop."TPopHerkunftUnklarBegruendung",
-  apflora.tpop."TPopXKoord",
-  apflora.tpop."TPopYKoord",
+  apflora.tpop.x,
+  apflora.tpop.y,
   apflora.tpop."TPopRadius",
   apflora.tpop."TPopHoehe",
   apflora.tpop."TPopExposition",
@@ -3437,8 +3437,8 @@ GROUP BY
   apflora.tpopkontr.erfolgsbeurteilung,
   apflora.tpopkontr.umsetzung_aendern,
   apflora.tpopkontr.kontrolle_aendern,
-  apflora.tpop."TPopXKoord",
-  apflora.tpop."TPopYKoord",
+  apflora.tpop.x,
+  apflora.tpop.y,
   apflora.tpopkontr.bemerkungen,
   apflora.tpopkontr.lr_delarze,
   apflora.tpopkontr.lr_umgebung_delarze,
@@ -3496,8 +3496,8 @@ SELECT
   apflora.tpopkontr.erfolgsbeurteilung AS "KONTRERFOLGBEURTEIL",
   apflora.tpopkontr.umsetzung_aendern AS "KONTRAENDUMSETZUNG",
   apflora.tpopkontr.kontrolle_aendern AS "KONTRAENDKONTROLLE",
-  apflora.tpop."TPopXKoord" AS "KONTR_X",
-  apflora.tpop."TPopYKoord" AS "KONTR_Y",
+  apflora.tpop.x AS "KONTR_X",
+  apflora.tpop.y AS "KONTR_Y",
   apflora.tpopkontr.bemerkungen AS "KONTRBEMERKUNGEN",
   apflora.tpopkontr.lr_delarze AS "KONTRLRMDELARZE",
   apflora.tpopkontr.lr_umgebung_delarze AS "KONTRDELARZEANGRENZ",
@@ -3604,8 +3604,8 @@ GROUP BY
   apflora.tpopkontr.erfolgsbeurteilung,
   apflora.tpopkontr.umsetzung_aendern,
   apflora.tpopkontr.kontrolle_aendern,
-  apflora.tpop."TPopXKoord",
-  apflora.tpop."TPopYKoord",
+  apflora.tpop.x,
+  apflora.tpop.y,
   apflora.tpopkontr.bemerkungen,
   apflora.tpopkontr.lr_delarze,
   apflora.tpopkontr.lr_umgebung_delarze,
@@ -3780,9 +3780,9 @@ SELECT
   CAST(apflora.tpop.id AS varchar(50)) AS tpopid,
   apflora.tpop.nr AS tpopnr,
   apflora.tpop.gemeinde AS tpopgemeinde,
-  apflora.tpop."TPopFlurname" AS tpopflurname,
-  apflora.tpop."TPopXKoord" AS tpopxkoord,
-  apflora.tpop."TPopYKoord" AS tpopykoord,
+  apflora.tpop.flurname AS tpopflurname,
+  apflora.tpop.x AS tpopxkoord,
+  apflora.tpop.y AS tpopykoord,
   apflora.tpop."TPopBekanntSeit" AS tpopbekanntseit,
   CAST(apflora.tpopkontr.id AS varchar(50)) AS tpopkontrid,
   apflora.tpopkontr.jahr AS tpopkontrjahr,
@@ -3885,14 +3885,14 @@ SELECT
   CASE
     WHEN
       apflora.beob."X" > 0
-      AND apflora.tpop."TPopXKoord" > 0
+      AND apflora.tpop.x > 0
       AND apflora.beob."Y" > 0
-      AND apflora.tpop."TPopYKoord" > 0
+      AND apflora.tpop.y > 0
     THEN
       round(
         sqrt(
-          power((apflora.beob."X" - apflora.tpop."TPopXKoord"), 2) +
-          power((apflora.beob."Y" - apflora.tpop."TPopYKoord"), 2)
+          power((apflora.beob."X" - apflora.tpop.x), 2) +
+          power((apflora.beob."Y" - apflora.tpop.y), 2)
         )
       )
     ELSE
@@ -3954,14 +3954,14 @@ SELECT
   CASE
     WHEN
       apflora.beob."X" > 0
-      AND apflora.tpop."TPopXKoord" > 0
+      AND apflora.tpop.x > 0
       AND apflora.beob."Y" > 0
-      AND apflora.tpop."TPopYKoord" > 0
+      AND apflora.tpop.y > 0
     THEN
       round(
         sqrt(
-          power((apflora.beob."X" - apflora.tpop."TPopXKoord"), 2) +
-          power((apflora.beob."Y" - apflora.tpop."TPopYKoord"), 2)
+          power((apflora.beob."X" - apflora.tpop.x), 2) +
+          power((apflora.beob."Y" - apflora.tpop.y), 2)
         )
       )
     ELSE
@@ -4082,8 +4082,8 @@ WHERE
   apflora.ap."ApArtId" > 150
   AND apflora.ap."ApArtId" < 1000000
   -- nur Kontrollen, deren Teilpopulationen Koordinaten besitzen
-  AND apflora.tpop."TPopXKoord" IS NOT NULL
-  AND apflora.tpop."TPopYKoord" IS NOT NULL
+  AND apflora.tpop.x IS NOT NULL
+  AND apflora.tpop.y IS NOT NULL
   AND apflora.tpopkontr.typ IN ('Ausgangszustand', 'Zwischenbeurteilung', 'Freiwilligen-Erfolgskontrolle')
   -- keine Ansaatversuche
   AND apflora.tpop."TPopHerkunft" <> 201
@@ -4099,7 +4099,7 @@ WHERE
     -- oder bei Ansiedlungen: die Art war mindestens 5 Jahre vorhanden
     OR (apflora.tpopkontr.jahr - apflora.tpop."TPopBekanntSeit") > 5
   )
-  AND apflora.tpop."TPopFlurname" IS NOT NULL
+  AND apflora.tpop.flurname IS NOT NULL
 GROUP BY
   apflora.ae_eigenschaften.artname,
   apflora.ap."ApGuid",
@@ -4166,8 +4166,8 @@ WHERE
   apflora.ap."ApArtId" > 150
   AND apflora.ap."ApArtId" < 1000000
   -- nur Kontrollen, deren Teilpopulationen Koordinaten besitzen
-  AND apflora.tpop."TPopXKoord" IS NOT NULL
-  AND apflora.tpop."TPopYKoord" IS NOT NULL
+  AND apflora.tpop.x IS NOT NULL
+  AND apflora.tpop.y IS NOT NULL
   AND apflora.tpopkontr.typ IN ('Ausgangszustand', 'Zwischenbeurteilung', 'Freiwilligen-Erfolgskontrolle')
   -- keine Ansaatversuche
   AND apflora.tpop."TPopHerkunft" <> 201
@@ -4183,7 +4183,7 @@ WHERE
     -- oder bei Ansiedlungen: die Art war mindestens 5 Jahre vorhanden
     OR (apflora.tpopkontr.jahr - apflora.tpop."TPopBekanntSeit") > 5
   )
-  AND apflora.tpop."TPopFlurname" IS NOT NULL
+  AND apflora.tpop.flurname IS NOT NULL
   -- ensure all idProjekt are contained in higher level
   AND apflora.ap."ApGuid" IN (Select "idProjekt" FROM apflora.v_exportevab_projekt)
 GROUP BY
@@ -4204,7 +4204,7 @@ SELECT
   apflora.tpop.id AS "idOrt",
   substring(
     concat(
-      apflora.tpop."TPopFlurname",
+      apflora.tpop.flurname,
       CASE
         WHEN apflora.tpop.nr IS NOT NULL
         THEN concat(' (Nr. ', apflora.tpop.nr, ')')
@@ -4223,10 +4223,10 @@ SELECT
     ELSE 0
   END AS "obergrenzeHoehe",
   4 AS "fkGenauigkeitHoehe",
-  apflora.tpop."TPopXKoord" AS "X",
-  apflora.tpop."TPopYKoord" AS "Y",
+  apflora.tpop.x AS "X",
+  apflora.tpop.y AS "Y",
   substring(apflora.tpop.gemeinde from 1 for 25) AS "NOM_COMMUNE",
-  substring(apflora.tpop."TPopFlurname" from 1 for 255) AS "DESC_LOCALITE",
+  substring(apflora.tpop.flurname from 1 for 255) AS "DESC_LOCALITE",
   max(apflora.tpopkontr.lr_umgebung_delarze) AS "ENV",
   CASE
     WHEN apflora.tpop."TPopHerkunft" IS NOT NULL
@@ -4273,8 +4273,8 @@ WHERE
   apflora.ap."ApArtId" > 150
   AND apflora.ap."ApArtId" < 1000000
   -- nur Kontrollen, deren Teilpopulationen Koordinaten besitzen
-  AND apflora.tpop."TPopXKoord" IS NOT NULL
-  AND apflora.tpop."TPopYKoord" IS NOT NULL
+  AND apflora.tpop.x IS NOT NULL
+  AND apflora.tpop.y IS NOT NULL
   AND apflora.tpopkontr.typ IN ('Ausgangszustand', 'Zwischenbeurteilung', 'Freiwilligen-Erfolgskontrolle')
   -- keine Ansaatversuche
   AND apflora.tpop."TPopHerkunft" <> 201
@@ -4290,7 +4290,7 @@ WHERE
     -- oder bei Ansiedlungen: die Art war mindestens 5 Jahre vorhanden
     OR (apflora.tpopkontr.jahr - apflora.tpop."TPopBekanntSeit") > 5
   )
-  AND apflora.tpop."TPopFlurname" IS NOT NULL
+  AND apflora.tpop.flurname IS NOT NULL
   AND apflora.ap."ApGuid" IN (Select "idProjekt" FROM apflora.v_exportevab_projekt)
   AND apflora.pop."PopGuid" IN (SELECT "idRaum" FROM apflora.v_exportevab_raum)
 GROUP BY
@@ -4298,14 +4298,13 @@ GROUP BY
   apflora.tpop.id,
   apflora.tpop.nr,
   apflora.tpop."TPopBekanntSeit",
-  apflora.tpop."TPopFlurname",
+  apflora.tpop.flurname,
   apflora.tpop."TPopHerkunft",
   apflora.pop_status_werte.text,
   apflora.tpop."TPopHoehe",
-  apflora.tpop."TPopXKoord",
-  apflora.tpop."TPopYKoord",
-  apflora.tpop.gemeinde,
-  apflora.tpop."TPopFlurname";
+  apflora.tpop.x,
+  apflora.tpop.y,
+  apflora.tpop.gemeinde;
 
 DROP VIEW IF EXISTS apflora.v_exportevab_zeit CASCADE;
 CREATE OR REPLACE VIEW apflora.v_exportevab_zeit AS
@@ -4360,8 +4359,8 @@ WHERE
   apflora.ap."ApArtId" > 150
   AND apflora.ap."ApArtId" < 1000000
   -- nur Kontrollen, deren Teilpopulationen Koordinaten besitzen
-  AND apflora.tpop."TPopXKoord" IS NOT NULL
-  AND apflora.tpop."TPopYKoord" IS NOT NULL
+  AND apflora.tpop.x IS NOT NULL
+  AND apflora.tpop.y IS NOT NULL
   AND apflora.tpopkontr.typ IN ('Ausgangszustand', 'Zwischenbeurteilung', 'Freiwilligen-Erfolgskontrolle')
   -- keine Ansaatversuche
   AND apflora.tpop."TPopHerkunft" <> 201
@@ -4377,7 +4376,7 @@ WHERE
     -- oder bei Ansiedlungen: die Art war mindestens 5 Jahre vorhanden
     OR (apflora.tpopkontr.jahr - apflora.tpop."TPopBekanntSeit") > 5
   )
-  AND apflora.tpop."TPopFlurname" IS NOT NULL
+  AND apflora.tpop.flurname IS NOT NULL
   AND apflora.ap."ApGuid" IN (Select "idProjekt" FROM apflora.v_exportevab_projekt)
   AND apflora.pop."PopGuid" IN (SELECT "idRaum" FROM apflora.v_exportevab_raum)
   AND apflora.tpop.id IN (SELECT "idOrt" FROM apflora.v_exportevab_ort);
@@ -4403,13 +4402,13 @@ SELECT
   apflora.tpop.id AS "TPop ID",
   apflora.tpop.nr AS "TPop Nr",
   apflora.tpop.gemeinde AS "TPop Gemeinde",
-  apflora.tpop."TPopFlurname" AS "TPop Flurname",
+  apflora.tpop.flurname AS "TPop Flurname",
   "tpopHerkunft".text AS "TPop Status",
   apflora.tpop."TPopBekanntSeit" AS "TPop bekannt seit",
   apflora.tpop."TPopHerkunftUnklar" AS "TPop Status unklar",
   apflora.tpop."TPopHerkunftUnklarBegruendung" AS "TPop Begruendung fuer unklaren Status",
-  apflora.tpop."TPopXKoord" AS "TPop X-Koordinaten",
-  apflora.tpop."TPopYKoord" AS "TPop Y-Koordinaten",
+  apflora.tpop.x AS "TPop X-Koordinaten",
+  apflora.tpop.y AS "TPop Y-Koordinaten",
   apflora.tpop."TPopRadius" AS "TPop Radius (m)",
   apflora.tpop."TPopHoehe" AS "TPop Hoehe",
   apflora.tpop."TPopExposition" AS "TPop Exposition",
@@ -4485,7 +4484,7 @@ SELECT
       ' ',
       apflora.tpop.gemeinde,
       ' ',
-      apflora.tpop."TPopFlurname"
+      apflora.tpop.flurname
     )
     from 1 for 225
   ) AS "Inhalte",
@@ -4493,10 +4492,10 @@ SELECT
     (
       (
         2.6779094
-        + (4.728982 * ((apflora.tpop."TPopXKoord" - 600000)::numeric / 1000000))
-        + (0.791484 * ((apflora.tpop."TPopXKoord" - 600000)::numeric / 1000000) * ((apflora.tpop."TPopYKoord" - 200000)::numeric / 1000000))
-        + (0.1306 * ((apflora.tpop."TPopXKoord" - 600000)::numeric / 1000000) * ((apflora.tpop."TPopYKoord" - 200000)::numeric / 1000000) * ((apflora.tpop."TPopYKoord" - 200000)::numeric / 1000000))
-        - (0.0436 * ((apflora.tpop."TPopXKoord" - 600000)::numeric / 1000000) * ((apflora.tpop."TPopXKoord" - 600000)::numeric / 1000000) * ((apflora.tpop."TPopXKoord" - 600000)::numeric / 1000000))
+        + (4.728982 * ((apflora.tpop.x - 600000)::numeric / 1000000))
+        + (0.791484 * ((apflora.tpop.x - 600000)::numeric / 1000000) * ((apflora.tpop.y - 200000)::numeric / 1000000))
+        + (0.1306 * ((apflora.tpop.x - 600000)::numeric / 1000000) * ((apflora.tpop.y - 200000)::numeric / 1000000) * ((apflora.tpop.y - 200000)::numeric / 1000000))
+        - (0.0436 * ((apflora.tpop.x - 600000)::numeric / 1000000) * ((apflora.tpop.x - 600000)::numeric / 1000000) * ((apflora.tpop.x - 600000)::numeric / 1000000))
       ) * 100 / 36
     )::numeric, 10
   ) AS "Laengengrad",
@@ -4504,11 +4503,11 @@ SELECT
     (
       (
         16.9023892
-        + (3.238272 * ((apflora.tpop."TPopYKoord" - 200000)::numeric / 1000000))
-        - (0.270978 * ((apflora.tpop."TPopXKoord" - 600000)::numeric / 1000000) * ((apflora.tpop."TPopXKoord" - 600000)::numeric / 1000000))
-        - (0.002528 * ((apflora.tpop."TPopYKoord" - 200000)::numeric / 1000000) * ((apflora.tpop."TPopYKoord" - 200000)::numeric / 1000000))
-        - (0.0447 * ((apflora.tpop."TPopXKoord" - 600000)::numeric / 1000000) * ((apflora.tpop."TPopXKoord" - 600000)::numeric / 1000000) * ((apflora.tpop."TPopYKoord" - 200000)::numeric / 1000000))
-        - (0.014 * ((apflora.tpop."TPopYKoord" - 200000)::numeric / 1000000) * ((apflora.tpop."TPopYKoord" - 200000)::numeric / 1000000) * ((apflora.tpop."TPopYKoord" - 200000)::numeric / 1000000))
+        + (3.238272 * ((apflora.tpop.y - 200000)::numeric / 1000000))
+        - (0.270978 * ((apflora.tpop.x - 600000)::numeric / 1000000) * ((apflora.tpop.x - 600000)::numeric / 1000000))
+        - (0.002528 * ((apflora.tpop.y - 200000)::numeric / 1000000) * ((apflora.tpop.y - 200000)::numeric / 1000000))
+        - (0.0447 * ((apflora.tpop.x - 600000)::numeric / 1000000) * ((apflora.tpop.x - 600000)::numeric / 1000000) * ((apflora.tpop.y - 200000)::numeric / 1000000))
+        - (0.014 * ((apflora.tpop.y - 200000)::numeric / 1000000) * ((apflora.tpop.y - 200000)::numeric / 1000000) * ((apflora.tpop.y - 200000)::numeric / 1000000))
       ) * 100 / 36
     )::numeric, 10
   ) AS "Breitengrad",
@@ -4532,15 +4531,15 @@ FROM
       ON apflora.pop."PopId" = apflora.tpop.pop_id)
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
 WHERE
-  apflora.tpop."TPopYKoord" is not null
-  AND apflora.tpop."TPopYKoord" is not null
+  apflora.tpop.y is not null
+  AND apflora.tpop.y is not null
 ORDER BY
   apflora.ae_eigenschaften.artname,
   apflora.pop."PopNr",
   apflora.pop."PopName",
   apflora.tpop.nr,
   apflora.tpop.gemeinde,
-  apflora.tpop."TPopFlurname";
+  apflora.tpop.flurname;
 
 -- ::numeric is needed or else all koordinates are same value!!!
 DROP VIEW IF EXISTS apflora.v_tpop_kmlnamen CASCADE;
@@ -4565,17 +4564,17 @@ SELECT
       ' ',
       apflora.tpop.gemeinde,
       ' ',
-      apflora.tpop."TPopFlurname")
+      apflora.tpop.flurname)
     from 1 for 225
   ) AS "Inhalte",
   round(
     (
       (
         2.6779094
-        + (4.728982 * ((apflora.tpop."TPopXKoord" - 600000)::numeric / 1000000))
-        + (0.791484 * ((apflora.tpop."TPopXKoord" - 600000)::numeric / 1000000) * ((apflora.tpop."TPopYKoord" - 200000)::numeric / 1000000))
-        + (0.1306 * ((apflora.tpop."TPopXKoord" - 600000)::numeric / 1000000) * ((apflora.tpop."TPopYKoord" - 200000)::numeric / 1000000) * ((apflora.tpop."TPopYKoord" - 200000)::numeric / 1000000))
-        - (0.0436 * ((apflora.tpop."TPopXKoord" - 600000)::numeric / 1000000) * ((apflora.tpop."TPopXKoord" - 600000)::numeric / 1000000) * ((apflora.tpop."TPopXKoord" - 600000)::numeric / 1000000))
+        + (4.728982 * ((apflora.tpop.x - 600000)::numeric / 1000000))
+        + (0.791484 * ((apflora.tpop.x - 600000)::numeric / 1000000) * ((apflora.tpop.y - 200000)::numeric / 1000000))
+        + (0.1306 * ((apflora.tpop.x - 600000)::numeric / 1000000) * ((apflora.tpop.y - 200000)::numeric / 1000000) * ((apflora.tpop.y - 200000)::numeric / 1000000))
+        - (0.0436 * ((apflora.tpop.x - 600000)::numeric / 1000000) * ((apflora.tpop.x - 600000)::numeric / 1000000) * ((apflora.tpop.x - 600000)::numeric / 1000000))
        ) * 100 / 36
     )::numeric, 10
   ) AS "Laengengrad",
@@ -4583,11 +4582,11 @@ SELECT
     (
       (
         16.9023892
-        + (3.238272 * ((apflora.tpop."TPopYKoord" - 200000)::numeric / 1000000))
-        - (0.270978 * ((apflora.tpop."TPopXKoord" - 600000)::numeric / 1000000) * ((apflora.tpop."TPopXKoord" - 600000)::numeric / 1000000))
-        - (0.002528 * ((apflora.tpop."TPopYKoord" - 200000)::numeric / 1000000) * ((apflora.tpop."TPopYKoord" - 200000)::numeric / 1000000))
-        - (0.0447 * ((apflora.tpop."TPopXKoord" - 600000)::numeric / 1000000) * ((apflora.tpop."TPopXKoord" - 600000)::numeric / 1000000) * ((apflora.tpop."TPopYKoord" - 200000)::numeric / 1000000))
-        - (0.014 * ((apflora.tpop."TPopYKoord" - 200000)::numeric / 1000000) * ((apflora.tpop."TPopYKoord" - 200000)::numeric / 1000000) * ((apflora.tpop."TPopYKoord" - 200000)::numeric / 1000000))
+        + (3.238272 * ((apflora.tpop.y - 200000)::numeric / 1000000))
+        - (0.270978 * ((apflora.tpop.x - 600000)::numeric / 1000000) * ((apflora.tpop.x - 600000)::numeric / 1000000))
+        - (0.002528 * ((apflora.tpop.y - 200000)::numeric / 1000000) * ((apflora.tpop.y - 200000)::numeric / 1000000))
+        - (0.0447 * ((apflora.tpop.x - 600000)::numeric / 1000000) * ((apflora.tpop.x - 600000)::numeric / 1000000) * ((apflora.tpop.y - 200000)::numeric / 1000000))
+        - (0.014 * ((apflora.tpop.y - 200000)::numeric / 1000000) * ((apflora.tpop.y - 200000)::numeric / 1000000) * ((apflora.tpop.y - 200000)::numeric / 1000000))
        ) * 100 / 36
     )::numeric, 10
   ) AS "Breitengrad",
@@ -4611,15 +4610,15 @@ FROM
       ON apflora.pop."PopId" = apflora.tpop.pop_id)
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
 WHERE
-  apflora.tpop."TPopYKoord" is not null
-  AND apflora.tpop."TPopYKoord" is not null
+  apflora.tpop.y is not null
+  AND apflora.tpop.y is not null
 ORDER BY
   apflora.ae_eigenschaften.artname,
   apflora.pop."PopNr",
   apflora.pop."PopName",
   apflora.tpop.nr,
   apflora.tpop.gemeinde,
-  apflora.tpop."TPopFlurname";
+  apflora.tpop.flurname;
 
 -- ::numeric is needed or else all koordinates are same value!!!
 DROP VIEW IF EXISTS apflora.v_pop_kml CASCADE;
@@ -4753,13 +4752,13 @@ SELECT
   apflora.tpop.id AS "TPop ID",
   apflora.tpop.nr AS "TPop Nr",
   apflora.tpop.gemeinde AS "TPop Gemeinde",
-  apflora.tpop."TPopFlurname" AS "TPop Flurname",
+  apflora.tpop.flurname AS "TPop Flurname",
   "tpopHerkunft".text AS "TPop Status",
   apflora.tpop."TPopBekanntSeit" AS "TPop bekannt seit",
   apflora.tpop."TPopHerkunftUnklar" AS "TPop Status unklar",
   apflora.tpop."TPopHerkunftUnklarBegruendung" AS "TPop Begruendung fuer unklaren Status",
-  apflora.tpop."TPopXKoord" AS "TPop X-Koordinaten",
-  apflora.tpop."TPopYKoord" AS "TPop Y-Koordinaten",
+  apflora.tpop.x AS "TPop X-Koordinaten",
+  apflora.tpop.y AS "TPop Y-Koordinaten",
   apflora.tpop."TPopRadius" AS "TPop Radius m",
   apflora.tpop."TPopHoehe" AS "TPop Hoehe",
   apflora.tpop."TPopExposition" AS "TPop Exposition",
@@ -4786,8 +4785,8 @@ SELECT
   apflora.tpopkontr.erfolgsbeurteilung AS "Kontr Erfolgsbeurteilung",
   apflora.tpopkontr.umsetzung_aendern AS "Kontr Aenderungs-Vorschlaege Umsetzung",
   apflora.tpopkontr.kontrolle_aendern AS "Kontr Aenderungs-Vorschlaege Kontrolle",
-  apflora.tpop."TPopXKoord" AS "Kontr X-Koord",
-  apflora.tpop."TPopYKoord" AS "Kontr Y-Koord",
+  apflora.tpop.x AS "Kontr X-Koord",
+  apflora.tpop.y AS "Kontr Y-Koord",
   apflora.tpopkontr.bemerkungen AS "Kontr Bemerkungen",
   apflora.tpopkontr.lr_delarze AS "Kontr Lebensraum Delarze",
   apflora.tpopkontr.lr_umgebung_delarze AS "Kontr angrenzender Lebensraum Delarze",
@@ -4902,13 +4901,13 @@ SELECT
   apflora.tpop.id AS "TPop ID",
   apflora.tpop.nr AS "TPop Nr",
   apflora.tpop.gemeinde AS "TPop Gemeinde",
-  apflora.tpop."TPopFlurname" AS "TPop Flurname",
+  apflora.tpop.flurname AS "TPop Flurname",
   "tpopHerkunft".text AS "TPop Status",
   apflora.tpop."TPopBekanntSeit" AS "TPop bekannt seit",
   apflora.tpop."TPopHerkunftUnklar" AS "TPop Status unklar",
   apflora.tpop."TPopHerkunftUnklarBegruendung" AS "TPop Begruendung fuer unklaren Status",
-  apflora.tpop."TPopXKoord" AS "TPop X-Koordinaten",
-  apflora.tpop."TPopYKoord" AS "TPop Y-Koordinaten",
+  apflora.tpop.x AS "TPop X-Koordinaten",
+  apflora.tpop.y AS "TPop Y-Koordinaten",
   apflora.tpop."TPopRadius" AS "TPop Radius (m)",
   apflora.tpop."TPopHoehe" AS "TPop Hoehe",
   apflora.tpop."TPopExposition" AS "TPop Exposition",
@@ -5076,7 +5075,7 @@ SELECT
   apflora.tpop.id,
   apflora.tpop.nr,
   apflora.tpop.gemeinde,
-  apflora.tpop."TPopFlurname",
+  apflora.tpop.flurname,
   apflora.tpop."TPopApBerichtRelevant"
 FROM
   apflora.ae_eigenschaften
@@ -5346,7 +5345,7 @@ FROM
       ON apflora.pop."PopId" = apflora.tpop.pop_id)
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
 WHERE
-  apflora.tpop."TPopFlurname" IS NULL
+  apflora.tpop.flurname IS NULL
 ORDER BY
   apflora.ap."ApArtId",
   apflora.pop."PopNr",
@@ -5485,8 +5484,8 @@ FROM
       ON apflora.pop."PopId" = apflora.tpop.pop_id)
     ON apflora.ap."ApArtId" = apflora.pop."ApArtId"
 WHERE
-  apflora.tpop."TPopXKoord" IS NULL
-  OR apflora.tpop."TPopYKoord" IS NULL
+  apflora.tpop.x IS NULL
+  OR apflora.tpop.y IS NULL
 ORDER BY
   apflora.ap."ApArtId",
   apflora.pop."PopNr",
@@ -6428,8 +6427,8 @@ WHERE
     FROM
       apflora.tpop
     WHERE
-      apflora.tpop."TPopXKoord" = "PopXKoord"
-      AND apflora.tpop."TPopYKoord" = "PopYKoord"
+      apflora.tpop.x = "PopXKoord"
+      AND apflora.tpop.y = "PopYKoord"
   )
   ORDER BY
     apflora.ap."ProjId",
