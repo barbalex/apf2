@@ -1614,13 +1614,13 @@ SELECT
   apflora.tpop."TPopHerkunftUnklarBegruendung" AS "TPop Begruendung fuer unklaren Status",
   apflora.tpop.x AS "TPop X-Koordinaten",
   apflora.tpop.y AS "TPop Y-Koordinaten",
-  apflora.tpop."TPopRadius" AS "TPop Radius (m)",
-  apflora.tpop."TPopHoehe" AS "TPop Hoehe",
-  apflora.tpop."TPopExposition" AS "TPop Exposition",
-  apflora.tpop."TPopKlima" AS "TPop Klima",
-  apflora.tpop."TPopNeigung" AS "TPop Hangneigung",
-  apflora.tpop."TPopBeschr" AS "TPop Beschreibung",
-  apflora.tpop."TPopKatNr" AS "TPop Kataster-Nr",
+  apflora.tpop.radius AS "TPop Radius (m)",
+  apflora.tpop.hoehe AS "TPop Hoehe",
+  apflora.tpop.exposition AS "TPop Exposition",
+  apflora.tpop.klima AS "TPop Klima",
+  apflora.tpop.neigung AS "TPop Hangneigung",
+  apflora.tpop.beschreibung AS "TPop Beschreibung",
+  apflora.tpop.kataster_nr AS "TPop Kataster-Nr",
   apflora.tpop."TPopApBerichtRelevant" AS "TPop fuer AP-Bericht relevant",
   apflora.tpop."TPopEigen" AS "TPop EigentuemerIn",
   apflora.tpop."TPopKontakt" AS "TPop Kontakt vor Ort",
@@ -2007,7 +2007,7 @@ SELECT
   END AS "fkAAPRESENCE",
   apflora.tpopkontr.gefaehrdung AS "MENACES",
   substring(apflora.tpopkontr.vitalitaet from 1 for 200) AS "VITALITE_PLANTE",
-  substring(apflora.tpop."TPopBeschr" from 1 for 244) AS "STATION",
+  substring(apflora.tpop.beschreibung from 1 for 244) AS "STATION",
   /*
    * Zählungen auswerten für ABONDANCE
    */
@@ -2098,7 +2098,7 @@ GROUP BY
   apflora.v_tpopkontr_maxanzahl.anzahl,
   apflora.tpopkontr.gefaehrdung,
   apflora.tpopkontr.vitalitaet,
-  apflora.tpop."TPopBeschr",
+  apflora.tpop.beschreibung,
   "tblAdresse_2"."EvabIdPerson",
   "tblAdresse_2"."AdrName";
 

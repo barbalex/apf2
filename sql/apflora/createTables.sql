@@ -486,13 +486,13 @@ CREATE TABLE apflora.tpop (
   flurname text DEFAULT NULL,
   x integer DEFAULT NULL CONSTRAINT zulaessige_x_koordinate CHECK (x IS NULL OR (x > 2485071 AND x < 2828516)),
   y integer DEFAULT NULL CONSTRAINT zulaessige_y_koordinate CHECK (y IS NULL OR (y > 1075346 AND y < 1299942)),
-  "TPopRadius" smallint DEFAULT NULL,
-  "TPopHoehe" smallint DEFAULT NULL,
-  "TPopExposition" varchar(50) DEFAULT NULL,
-  "TPopKlima" varchar(50) DEFAULT NULL,
-  "TPopNeigung" varchar(50) DEFAULT NULL,
-  "TPopBeschr" text DEFAULT NULL,
-  "TPopKatNr" text DEFAULT NULL,
+  radius smallint DEFAULT NULL,
+  hoehe smallint DEFAULT NULL,
+  exposition varchar(50) DEFAULT NULL,
+  klima varchar(50) DEFAULT NULL,
+  neigung varchar(50) DEFAULT NULL,
+  beschreibung text DEFAULT NULL,
+  kataster_nr text DEFAULT NULL,
   "TPopHerkunft" integer DEFAULT NULL REFERENCES apflora.pop_status_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
   "TPopHerkunftUnklar" smallint DEFAULT NULL,
   "TPopHerkunftUnklarBegruendung" text DEFAULT NULL,
@@ -525,13 +525,13 @@ COMMENT ON COLUMN apflora.tpop.gemeinde IS 'Gemeinde';
 COMMENT ON COLUMN apflora.tpop.flurname IS 'Flurname';
 COMMENT ON COLUMN apflora.tpop.x IS 'X-Koordinate';
 COMMENT ON COLUMN apflora.tpop.y IS 'Y-Koordinate';
-COMMENT ON COLUMN apflora.tpop."TPopRadius" IS 'Radius der Teilpopulation (m)';
-COMMENT ON COLUMN apflora.tpop."TPopHoehe" IS 'Höhe über Meer (m)';
-COMMENT ON COLUMN apflora.tpop."TPopExposition" IS 'Exposition / Besonnung des Standorts';
-COMMENT ON COLUMN apflora.tpop."TPopKlima" IS 'Klima des Standorts';
-COMMENT ON COLUMN apflora.tpop."TPopNeigung" IS 'Hangneigung des Standorts';
-COMMENT ON COLUMN apflora.tpop."TPopBeschr" IS 'Beschreibung der Fläche';
-COMMENT ON COLUMN apflora.tpop."TPopKatNr" IS 'Kataster-Nummer';
+COMMENT ON COLUMN apflora.tpop.radius IS 'Radius der Teilpopulation (m)';
+COMMENT ON COLUMN apflora.tpop.hoehe IS 'Höhe über Meer (m)';
+COMMENT ON COLUMN apflora.tpop.exposition IS 'Exposition / Besonnung des Standorts';
+COMMENT ON COLUMN apflora.tpop.klima IS 'Klima des Standorts';
+COMMENT ON COLUMN apflora.tpop.neigung IS 'Hangneigung des Standorts';
+COMMENT ON COLUMN apflora.tpop.beschreibung IS 'Beschreibung der Fläche';
+COMMENT ON COLUMN apflora.tpop.kataster_nr IS 'Kataster-Nummer';
 COMMENT ON COLUMN apflora.tpop."TPopHerkunft" IS 'Herkunft der Teilpopulation. Auswahl aus Tabelle "pop_status_werte"';
 COMMENT ON COLUMN apflora.tpop."TPopHerkunftUnklar" IS 'Ist der Status der Teilpopulation unklar? (es bestehen keine glaubwuerdigen Beboachtungen)';
 COMMENT ON COLUMN apflora.tpop."TPopHerkunftUnklarBegruendung" IS 'Wieso ist der Status unklar?';

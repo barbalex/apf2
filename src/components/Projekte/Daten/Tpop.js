@@ -149,79 +149,79 @@ const Tpop = ({
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
-            key={`${activeDataset.row.id}TPopRadius`}
+            key={`${activeDataset.row.id}radius`}
             tree={tree}
             label="Radius (m)"
-            fieldName="TPopRadius"
-            value={activeDataset.row.TPopRadius}
-            errorText={activeDataset.valid.TPopRadius}
+            fieldName="radius"
+            value={activeDataset.row.radius}
+            errorText={activeDataset.valid.radius}
             type="number"
             updateProperty={store.updateProperty}
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
-            key={`${activeDataset.row.id}TPopHoehe`}
+            key={`${activeDataset.row.id}hoehe`}
             tree={tree}
             label="Höhe (m.ü.M.)"
-            fieldName="TPopHoehe"
-            value={activeDataset.row.TPopHoehe}
-            errorText={activeDataset.valid.TPopHoehe}
+            fieldName="hoehe"
+            value={activeDataset.row.hoehe}
+            errorText={activeDataset.valid.hoehe}
             type="number"
             updateProperty={store.updateProperty}
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
-            key={`${activeDataset.row.id}TPopExposition`}
+            key={`${activeDataset.row.id}exposition`}
             tree={tree}
             label="Exposition, Besonnung"
-            fieldName="TPopExposition"
-            value={activeDataset.row.TPopExposition}
-            errorText={activeDataset.valid.TPopExposition}
+            fieldName="exposition"
+            value={activeDataset.row.exposition}
+            errorText={activeDataset.valid.exposition}
             type="text"
             updateProperty={store.updateProperty}
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
-            key={`${activeDataset.row.id}TPopKlima`}
+            key={`${activeDataset.row.id}klima`}
             tree={tree}
             label="Klima"
-            fieldName="TPopKlima"
-            value={activeDataset.row.TPopKlima}
-            errorText={activeDataset.valid.TPopKlima}
+            fieldName="klima"
+            value={activeDataset.row.klima}
+            errorText={activeDataset.valid.klima}
             type="text"
             updateProperty={store.updateProperty}
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
-            key={`${activeDataset.row.id}TPopNeigung`}
+            key={`${activeDataset.row.id}neigung`}
             tree={tree}
             label="Hangneigung"
-            fieldName="TPopNeigung"
-            value={activeDataset.row.TPopNeigung}
-            errorText={activeDataset.valid.TPopNeigung}
+            fieldName="neigung"
+            value={activeDataset.row.neigung}
+            errorText={activeDataset.valid.neigung}
             type="text"
             updateProperty={store.updateProperty}
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
-            key={`${activeDataset.row.id}TPopBeschr`}
+            key={`${activeDataset.row.id}beschreibung`}
             tree={tree}
             label="Beschreibung"
-            fieldName="TPopBeschr"
-            value={activeDataset.row.TPopBeschr}
-            errorText={activeDataset.valid.TPopBeschr}
+            fieldName="beschreibung"
+            value={activeDataset.row.beschreibung}
+            errorText={activeDataset.valid.beschreibung}
             type="text"
             multiline
             updateProperty={store.updateProperty}
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
-            key={`${activeDataset.row.id}TPopKatNr`}
+            key={`${activeDataset.row.id}kataster_nr`}
             tree={tree}
             label="Kataster-Nr."
-            fieldName="TPopKatNr"
-            value={activeDataset.row.TPopKatNr}
-            errorText={activeDataset.valid.TPopKatNr}
+            fieldName="kataster_nr"
+            value={activeDataset.row.kataster_nr}
+            errorText={activeDataset.valid.kataster_nr}
             type="text"
             updateProperty={store.updateProperty}
             updatePropertyInDb={store.updatePropertyInDb}
