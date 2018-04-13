@@ -63,7 +63,7 @@ FROM
     apflora.popmassnber
     ON apflora.pop.id = apflora.popmassnber.pop_id
 ORDER BY
-  "Jahr";
+  jahr;
 
 DROP VIEW IF EXISTS apflora.v_popmassnber_anzmassn0 CASCADE;
 CREATE OR REPLACE VIEW apflora.v_popmassnber_anzmassn0 AS
@@ -180,7 +180,6 @@ SELECT
   apflora.ap."ApJahr" AS "AP Start im Jahr",
   apflora.ap_umsetzung_werte.text AS "AP Stand Umsetzung",
   apflora.pop.id as pop_id,
-  apflora.pop."PopGuid" AS "Pop Guid",
   apflora.pop.nr AS "Pop Nr",
   apflora.pop.name AS "Pop Name",
   pop_status_werte.text AS "Pop Status",
@@ -279,7 +278,7 @@ CREATE OR REPLACE VIEW apflora.v_massn_webgisbun AS
 SELECT
   apflora.ae_eigenschaften.taxid AS "APARTID",
   apflora.ae_eigenschaften.artname AS "APART",
-  apflora.pop."PopGuid" AS "POPGUID",
+  apflora.pop.id AS "POPGUID",
   apflora.pop.nr AS "POPNR",
   apflora.tpop.id AS "TPOPGUID",
   apflora.tpop.nr AS "TPOPNR",
@@ -386,7 +385,7 @@ SELECT
   apflora.ap_bearbstand_werte.text AS "apstatus",
   apflora.ap."ApJahr" AS "apstartimjahr",
   apflora.ap_umsetzung_werte.text AS "apstandumsetzung",
-  CAST(apflora.pop."PopGuid" AS varchar(50)) AS "popguid",
+  CAST(apflora.pop.id AS varchar(50)) AS "popid",
   apflora.pop.nr AS "popnr",
   apflora.pop.name AS "popname",
   pop_status_werte.text AS "popstatus",
@@ -486,7 +485,6 @@ SELECT
   apflora.ap."ApJahr" AS "AP Start im Jahr",
   apflora.ap_umsetzung_werte.text AS "AP Stand Umsetzung",
   apflora.pop.id as pop_id,
-  apflora.pop."PopGuid" AS "Pop Guid",
   apflora.pop.nr AS "Pop Nr",
   apflora.pop.name AS "Pop Name",
   pop_status_werte.text AS "Pop Status",
@@ -552,8 +550,7 @@ GROUP BY
   apflora.ap_bearbstand_werte.text,
   apflora.ap."ApJahr",
   apflora.ap_umsetzung_werte.text,
-  apflora.pop.id as pop_id,
-  apflora.pop."PopGuid",
+  apflora.pop.id,
   apflora.pop.nr,
   apflora.pop.name,
   pop_status_werte.text,
@@ -598,7 +595,7 @@ SELECT
   apflora.ap_bearbstand_werte.text AS "AP Status",
   apflora.ap."ApJahr" AS "AP Start im Jahr",
   apflora.ap_umsetzung_werte.text AS "AP Stand Umsetzung",
-  apflora.pop."PopGuid" AS "Pop Guid",
+  apflora.pop.id AS "Pop id",
   apflora.pop.nr AS "Pop Nr",
   apflora.pop.name AS "Pop Name",
   pop_status_werte.text AS "Pop Status",
@@ -637,7 +634,7 @@ GROUP BY
   apflora.ap_bearbstand_werte.text,
   apflora.ap."ApJahr",
   apflora.ap_umsetzung_werte.text,
-  apflora.pop."PopGuid",
+  apflora.pop.id,
   apflora.pop.nr,
   apflora.pop.name,
   pop_status_werte.text,
@@ -659,16 +656,15 @@ SELECT
   apflora.ap."ApJahr" AS "AP Start im Jahr",
   apflora.ap_umsetzung_werte.text AS "AP Stand Umsetzung",
   apflora.pop.id,
-  apflora.pop."PopGuid" AS "Pop Guid",
-  apflora.pop.nr AS "Pop Nr",
-  apflora.pop.name AS "Pop Name",
-  pop_status_werte.text AS "Pop Status",
-  apflora.pop.bekannt_seit AS "Pop bekannt seit",
-  apflora.pop.status_unklar AS "Pop Status unklar",
-  apflora.pop.status_unklar_begruendung AS "Pop Begruendung fuer unklaren Status",
-  apflora.pop.x AS "Pop X-Koordinaten",
-  apflora.pop.y AS "Pop Y-Koordinaten",
-  count(apflora.tpopkontr.id) AS "Anzahl Kontrollen"
+  apflora.pop.nr,
+  apflora.pop.name,
+  pop_status_werte.text AS sttus,
+  apflora.pop.bekannt_seit,
+  apflora.pop.status_unklar,
+  apflora.pop.status_unklar_begruendung,
+  apflora.pop.x,
+  apflora.pop.y,
+  count(apflora.tpopkontr.id) AS anzahl_kontrollen
 FROM
   ((((apflora.ae_eigenschaften
   INNER JOIN
@@ -699,7 +695,6 @@ GROUP BY
   apflora.ap."ApJahr",
   apflora.ap_umsetzung_werte.text,
   apflora.pop.id,
-  apflora.pop."PopGuid",
   apflora.pop.nr,
   apflora.pop.name,
   pop_status_werte.text,
@@ -794,20 +789,19 @@ SELECT
   apflora.ae_eigenschaften.taxid AS "ApArtId",
   apflora.ae_eigenschaften.artname AS "AP Art",
   apflora.ap_bearbstand_werte.text AS "AP Status",
-  apflora.ap."ApJahr" AS "AP Start im Jahr",
-  apflora.ap_umsetzung_werte.text AS "AP Stand Umsetzung",
+  apflora.ap."ApJahr" AS ap_jahr,
+  apflora.ap_umsetzung_werte.text AS ap_umsetzung,
   apflora.pop.id,
-  apflora.pop."PopGuid" AS "Pop Guid",
-  apflora.pop.nr AS "Pop Nr",
-  apflora.pop.name AS "Pop Name",
-  pop_status_werte.text AS "Pop Status",
-  apflora.pop.bekannt_seit AS "Pop bekannt seit",
-  apflora.pop.status_unklar AS "Pop Status unklar",
-  apflora.pop.status_unklar_begruendung AS "Pop Begruendung fuer unklaren Status",
-  apflora.pop.x AS "Pop X-Koordinaten",
-  apflora.pop.y AS "Pop Y-Koordinaten",
-  apflora.pop.changed AS "Datensatz zuletzt geaendert",
-  apflora.pop.changed_by AS "Datensatz zuletzt geaendert von"
+  apflora.pop.nr,
+  apflora.pop.name,
+  pop_status_werte.text AS status,
+  apflora.pop.bekannt_seit,
+  apflora.pop.status_unklar,
+  apflora.pop.status_unklar_begruendung,
+  apflora.pop.x,
+  apflora.pop.y,
+  apflora.pop.changed,
+  apflora.pop.changed_by
 FROM
   apflora.ae_eigenschaften
   INNER JOIN
@@ -838,17 +832,16 @@ SELECT
   apflora.ap."ApJahr" AS "AP Start im Jahr",
   apflora.ap_umsetzung_werte.text AS "AP Stand Umsetzung",
   apflora.pop.id,
-  apflora.pop."PopGuid" AS "Pop Guid",
-  apflora.pop.nr AS "Pop Nr",
-  apflora.pop.name AS "Pop Name",
-  pop_status_werte.text AS "Pop Status",
-  apflora.pop.bekannt_seit AS "Pop bekannt seit",
-  apflora.pop.status_unklar AS "Pop Status unklar",
-  apflora.pop.status_unklar_begruendung AS "Pop Begruendung fuer unklaren Status",
-  apflora.pop.x AS "Pop X-Koordinaten",
-  apflora.pop.y AS "Pop Y-Koordinaten",
-  apflora.pop.changed AS "Datensatz zuletzt geaendert",
-  apflora.pop.changed_by AS "Datensatz zuletzt geaendert von"
+  apflora.pop.nr,
+  apflora.pop.name,
+  pop_status_werte.text AS status,
+  apflora.pop.bekannt_seit,
+  apflora.pop.status_unklar,
+  apflora.pop.status_unklar_begruendung,
+  apflora.pop.x,
+  apflora.pop.y,
+  apflora.pop.changed,
+  apflora.pop.changed_by
 FROM
   ((((apflora.ae_eigenschaften
   INNER JOIN
@@ -876,19 +869,18 @@ ORDER BY
 DROP VIEW IF EXISTS apflora.v_pop_fuergis_write CASCADE;
 CREATE OR REPLACE VIEW apflora.v_pop_fuergis_write AS
 SELECT
-  apflora.pop.id AS "popid",
-  apflora.pop.ap_id AS "apartid",
-  CAST(apflora.pop."PopGuid" AS varchar(50)) AS "popguid",
-  apflora.pop.nr AS "popnr",
-  apflora.pop.name AS "popname",
-  apflora.pop.status  AS "popherkunft",
-  apflora.pop.status_unklar AS "popherkunftunklar",
-  apflora.pop.status_unklar_begruendung AS "popherkunftunklarbegruendung",
-  apflora.pop.bekannt_seit AS "popbekanntseit",
-  apflora.pop.x AS "popxkoord",
-  apflora.pop.y AS "popykoord",
-  apflora.pop.changed::timestamp AS "mutwann",
-  apflora.pop.changed_by AS "mutwer"
+  apflora.pop.ap_id AS ap_id,
+  CAST(apflora.pop.id AS varchar(50)) AS id,
+  apflora.pop.nr,
+  apflora.pop.name,
+  apflora.pop.status,
+  apflora.pop.status_unklar,
+  apflora.pop.status_unklar_begruendung,
+  apflora.pop.bekannt_seit,
+  apflora.pop.x,
+  apflora.pop.y,
+  apflora.pop.changed::timestamp,
+  apflora.pop.changed_by
 FROM
   apflora.pop;
 
@@ -900,17 +892,17 @@ SELECT
   apflora.ap_bearbstand_werte.text AS "apstatus",
   apflora.ap."ApJahr" AS "apjahr",
   apflora.ap_umsetzung_werte.text AS "apumsetzung",
-  CAST(apflora.pop."PopGuid" AS varchar(50)) AS "popguid",
-  apflora.pop.nr AS "popnr",
-  apflora.pop.name AS "popname",
-  pop_status_werte.text AS "popherkunft",
-  apflora.pop.bekannt_seit AS "popbekanntseit",
-  apflora.pop.status_unklar AS "popherkunftunklar",
-  apflora.pop.status_unklar_begruendung AS "popherkunftunklarbegruendung",
-  apflora.pop.x AS "popxkoord",
-  apflora.pop.y AS "popykoord",
-  apflora.pop.changed::timestamp AS "mutwann",
-  apflora.pop.changed_by AS "mutwer"
+  CAST(apflora.pop.id AS varchar(50)) AS id,
+  apflora.pop.nr,
+  apflora.pop.name,
+  pop_status_werte.text AS status,
+  apflora.pop.bekannt_seit,
+  apflora.pop.status_unklar,
+  apflora.pop.status_unklar_begruendung,
+  apflora.pop.x,
+  apflora.pop.y,
+  apflora.pop.changed::timestamp,
+  apflora.pop.changed_by
 FROM
   ((((apflora.ae_eigenschaften
   INNER JOIN
@@ -943,7 +935,7 @@ SELECT
   apflora.ap_bearbstand_werte.text AS "AP Status",
   apflora.ap."ApJahr" AS "AP Start im Jahr",
   apflora.ap_umsetzung_werte.text AS "AP Stand Umsetzung",
-  apflora.pop."PopGuid" AS "Pop Guid",
+  apflora.pop.id AS "Pop id",
   apflora.pop.nr AS "Pop Nr",
   apflora.pop.name AS "Pop Name",
   pop_status_werte.text AS "Pop Status",
@@ -995,7 +987,7 @@ SELECT
   apflora.ap_bearbstand_werte.text AS "AP Status",
   apflora.ap."ApJahr" AS "AP Start im Jahr",
   apflora.ap_umsetzung_werte.text AS "AP Stand Umsetzung",
-  apflora.pop."PopGuid" AS "Pop Guid",
+  apflora.pop.id AS "Pop id",
   apflora.pop.nr AS "Pop Nr",
   apflora.pop.name AS "Pop Name",
   pop_status_werte.text AS "Pop Status",
@@ -1050,7 +1042,6 @@ SELECT
   apflora.ap_umsetzung_werte.text AS "AP Stand Umsetzung",
   apflora.adresse."AdrName" AS "AP verantwortlich",
   apflora.pop.id as pop_id,
-  apflora.pop."PopGuid" AS "Pop Guid",
   apflora.pop.nr AS "Pop Nr",
   apflora.pop.name AS "Pop Name",
   pop_status_werte.text AS "Pop Status",
@@ -1125,7 +1116,7 @@ SELECT
   apflora.ap_bearbstand_werte.text AS "APSTATUS",
   apflora.ap."ApJahr" AS "APSTARTJAHR",
   apflora.ap_umsetzung_werte.text AS "APSTANDUMSETZUNG",
-  apflora.pop."PopGuid" AS "POPGUID",
+  apflora.pop.id AS "POPGUID",
   apflora.pop.nr AS "POPNR",
   apflora.pop.name AS "POPNAME",
   pop_status_werte.text AS "POPSTATUS",
@@ -1235,7 +1226,7 @@ SELECT
   apflora.ap_bearbstand_werte.text AS "apherkunft",
   apflora.ap."ApJahr" AS "apjahr",
   apflora.ap_umsetzung_werte.text AS "apumsetzung",
-  CAST(apflora.pop."PopGuid" AS varchar(50)) AS "popguid",
+  CAST(apflora.pop.id AS varchar(50)) AS "popid",
   apflora.pop.nr AS "popnr",
   apflora.pop.name AS "popname",
   pop_status_werte.text AS "popherkunft",
@@ -1561,10 +1552,10 @@ SELECT
   apflora.ap_bearbstand_werte.text AS "Bearbeitungsstand AP",
   apflora.pop.nr as pop_nr,
   apflora.pop.name as pop_name,
-  pop_status_werte.text AS "Status Population",
+  pop_status_werte.text AS pop_status,
   apflora.tpop.nr,
   apflora.tpop.flurname,
-  apflora.tpop.status AS "Status Teilpopulation"
+  apflora.tpop.status AS tpop_status
 FROM
   (apflora.ap_bearbstand_werte
   INNER JOIN
@@ -3212,7 +3203,7 @@ SELECT
   apflora.ap_umsetzung_werte.text AS "ApUmsetzung",
   apflora.pop.nr as pop_nr,
   apflora.pop.name as pop_name,
-  pop_status_werte.text AS status ,
+  pop_status_werte.text AS pop_status ,
   apflora.pop.bekannt_seit,
   apflora.tpop.nr AS tpop_nr,
   apflora.tpop.gemeinde as tpop_gemeinde,
@@ -3220,7 +3211,7 @@ SELECT
   apflora.tpop.x as tpop_x,
   apflora.tpop.y as tpop_y,
   apflora.tpop.bekannt_seit as tpop_bekannt_seit,
-  "domPopHerkunft_1".text AS status,
+  "domPopHerkunft_1".text AS tpop_status,
   apflora.tpop.apber_relevant
 FROM
   ((((apflora.ae_eigenschaften
@@ -3257,7 +3248,6 @@ SELECT
   apflora.ap_umsetzung_werte.text AS "AP Stand Umsetzung",
   "tblAdresse_1"."AdrName" AS "AP verantwortlich",
   apflora.pop.id as pop_id,
-  apflora.pop."PopGuid" AS "Pop Guid",
   apflora.pop.nr AS "Pop Nr",
   apflora.pop.name AS "Pop Name",
   apflora.pop_status_werte.text AS "Pop Herkunft",
@@ -3395,7 +3385,6 @@ GROUP BY
   apflora.ap_umsetzung_werte.text,
   "tblAdresse_1"."AdrName",
   apflora.pop.id,
-  apflora.pop."PopGuid",
   apflora.pop.nr,
   apflora.pop.name,
   apflora.pop_status_werte.text,
@@ -3479,7 +3468,7 @@ CREATE OR REPLACE VIEW apflora.v_tpopkontr_webgisbun AS
 SELECT
   apflora.ae_eigenschaften.taxid AS "APARTID",
   apflora.ae_eigenschaften.artname AS "APART",
-  apflora.pop."PopGuid" AS "POPGUID",
+  apflora.pop.id AS "POPGUID",
   apflora.pop.nr AS "POPNR",
   apflora.tpop.id AS "TPOPID",
   apflora.tpop.nr AS "TPOPNR",
@@ -3587,7 +3576,7 @@ WHERE
 GROUP BY
   apflora.ae_eigenschaften.taxid,
   apflora.ae_eigenschaften.artname,
-  apflora.pop."PopGuid",
+  apflora.pop.id,
   apflora.pop.nr,
   apflora.tpop.id,
   apflora.tpop.nr,
@@ -3772,7 +3761,7 @@ SELECT
   apflora.ap_bearbstand_werte.text AS apherkunft,
   apflora.ap."ApJahr" AS apjahr,
   apflora.ap_umsetzung_werte.text AS apumsetzung,
-  CAST(apflora.pop."PopGuid" AS varchar(50)) AS popguid,
+  CAST(apflora.pop.id AS varchar(50)) AS popid,
   apflora.pop.nr AS popnr,
   apflora.pop.name AS popname,
   apflora.pop_status_werte.text AS popherkunft,
@@ -4110,7 +4099,7 @@ DROP VIEW IF EXISTS apflora.v_exportevab_raum CASCADE;
 CREATE OR REPLACE VIEW apflora.v_exportevab_raum AS
 SELECT
   apflora.ap."ApGuid" AS "fkProjekt",
-  apflora.pop."PopGuid" AS "idRaum",
+  apflora.pop.id AS "idRaum",
   concat(
     apflora.pop.name,
     CASE
@@ -4186,7 +4175,7 @@ WHERE
   AND apflora.ap."ApGuid" IN (Select "idProjekt" FROM apflora.v_exportevab_projekt)
 GROUP BY
   apflora.ap."ApGuid",
-  apflora.pop."PopGuid",
+  apflora.pop.id,
   apflora.pop.name,
   apflora.pop.nr,
   apflora.pop.status ,
@@ -4198,7 +4187,7 @@ CREATE OR REPLACE VIEW apflora.v_exportevab_ort AS
 SELECT
   -- include TPopGuid to enable later views to include only tpop included here
   apflora.tpop.id AS "TPopGuid",
-  apflora.pop."PopGuid" AS "fkRaum",
+  apflora.pop.id AS "fkRaum",
   apflora.tpop.id AS "idOrt",
   substring(
     concat(
@@ -4290,9 +4279,9 @@ WHERE
   )
   AND apflora.tpop.flurname IS NOT NULL
   AND apflora.ap."ApGuid" IN (Select "idProjekt" FROM apflora.v_exportevab_projekt)
-  AND apflora.pop."PopGuid" IN (SELECT "idRaum" FROM apflora.v_exportevab_raum)
+  AND apflora.pop.id IN (SELECT "idRaum" FROM apflora.v_exportevab_raum)
 GROUP BY
-  apflora.pop."PopGuid",
+  apflora.pop.id,
   apflora.tpop.id,
   apflora.tpop.nr,
   apflora.tpop.bekannt_seit,
@@ -4376,7 +4365,7 @@ WHERE
   )
   AND apflora.tpop.flurname IS NOT NULL
   AND apflora.ap."ApGuid" IN (Select "idProjekt" FROM apflora.v_exportevab_projekt)
-  AND apflora.pop."PopGuid" IN (SELECT "idRaum" FROM apflora.v_exportevab_raum)
+  AND apflora.pop.id IN (SELECT "idRaum" FROM apflora.v_exportevab_raum)
   AND apflora.tpop.id IN (SELECT "idOrt" FROM apflora.v_exportevab_ort);
 
 DROP VIEW IF EXISTS apflora.v_tpopmassnber CASCADE;
@@ -4388,7 +4377,6 @@ SELECT
   apflora.ap."ApJahr" AS "AP Start im Jahr",
   apflora.ap_umsetzung_werte.text AS "AP Stand Umsetzung",
   apflora.pop.id as pop_id,
-  apflora.pop."PopGuid" AS "Pop Guid",
   apflora.pop.nr AS "Pop Nr",
   apflora.pop.name AS "Pop Name",
   pop_status_werte.text AS "Pop Status",
