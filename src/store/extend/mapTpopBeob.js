@@ -36,7 +36,7 @@ export default (store: Object): void => {
               if (tpopbeob && !tpopbeob.nicht_zuordnen && tpopbeob.tpop_id) {
                 const tpop = store.table.tpop.get(tpopbeob.tpop_id)
                 if (tpop) {
-                  const popId = tpop.PopId
+                  const popId = tpop.pop_id
                   return popId && popId === activeNodes.pop
                 }
                 return false

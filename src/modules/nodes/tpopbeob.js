@@ -21,7 +21,7 @@ export default (
     { PopId: popId }
   )
   const tpopIndex = findIndex(
-    tree.filteredAndSorted.tpop.filter(t => t.PopId === popId),
+    tree.filteredAndSorted.tpop.filter(t => t.pop_id === popId),
     { id: tpopId }
   )
 

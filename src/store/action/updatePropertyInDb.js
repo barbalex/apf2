@@ -90,6 +90,13 @@ export default async (
      * because of old application
      */
     const url = `/${table}?${idField}=eq.${tabelleId}`
+    console.log('updatePropertyInDb: data:', {
+      table,
+      idField,
+      tabelleId,
+      key,
+      valuePassed,
+    })
     try {
       await axios.patch(url, { [key]: value })
     } catch (error) {
@@ -112,10 +119,10 @@ export default async (
       tree.setActiveNodeArray(newActiveNodeArray.slice(0, 6))
     }
     // if for a beobZugeordnet tpop_id is set, url needs to change
-    // namely: PopId and tpop_id
+    // namely: pop_id and tpop_id
     if (table === 'tpopbeob' && key === 'tpop_id' && value) {
       const tpop = store.table.tpop.get(value)
-      newActiveNodeArray[5] = tpop.PopId
+      newActiveNodeArray[5] = tpop.pop_id
       newActiveNodeArray[7] = value
       tree.setActiveNodeArray(newActiveNodeArray)
     }

@@ -46,7 +46,7 @@ const continueWithBeob = (
       'Arten',
       ap,
       'Populationen',
-      tpop.PopId,
+      tpop.pop_id,
       'Teil-Populationen',
       newValue,
       'Beobachtungen',

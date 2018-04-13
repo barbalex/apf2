@@ -156,8 +156,9 @@ COMMENT ON COLUMN apflora.tpopkontr.tpop_id IS 'Zugehörige Teilpopulation. Frem
 -- done: check if old id was used somewhere. If so: rename that field, add new one and update that
 -- done: add all views, functions, triggers containing this table to this file
 -- done: run migration sql in dev
--- TODO: restart postgrest and test app
--- TODO: CHECK zaehl: are they correct
+-- done: restart postgrest and test app
+-- TODO: special tpop functions work?
+-- done: CHECK child tables: are they correct?
 -- TODO: update js and run this file on server
 -- TODO: restart postgrest
 
@@ -616,3 +617,6 @@ CREATE TRIGGER tpop_on_update_set_mut BEFORE UPDATE OR INSERT ON apflora.tpop
   FOR EACH ROW EXECUTE PROCEDURE tpop_on_update_set_mut();
 
 -- update all views!
+-- repeat tpop_key because it did not work on testing:
+ALTER TABLE apflora.tpop DROP CONSTRAINT tpop_pkey;
+ALTER TABLE apflora.tpop ADD PRIMARY KEY (id);
