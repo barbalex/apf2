@@ -60,8 +60,8 @@ const Pop = ({ store, tree }: { store: Object, tree: Object }) => {
           <Status
             tree={tree}
             apJahr={apJahr}
-            herkunftFieldName="PopHerkunft"
-            herkunftValue={activeDataset.row.PopHerkunft}
+            herkunftFieldName="status"
+            herkunftValue={activeDataset.row.status}
             bekanntSeitFieldName="PopBekanntSeit"
             bekanntSeitValue={activeDataset.row.PopBekanntSeit}
             bekanntSeitValid={activeDataset.valid.PopBekanntSeit}
@@ -70,18 +70,18 @@ const Pop = ({ store, tree }: { store: Object, tree: Object }) => {
           />
           <RadioButton
             tree={tree}
-            fieldName="PopHerkunftUnklar"
+            fieldName="status_unklar"
             label="Status unklar"
-            value={activeDataset.row.PopHerkunftUnklar}
+            value={activeDataset.row.status_unklar}
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
-            key={`${activeDataset.row.id}PopHerkunftUnklarBegruendung`}
+            key={`${activeDataset.row.id}status_unklar_begruendung`}
             tree={tree}
             label="Begründung"
-            fieldName="PopHerkunftUnklarBegruendung"
-            value={activeDataset.row.PopHerkunftUnklarBegruendung}
-            errorText={activeDataset.valid.PopHerkunftUnklarBegruendung}
+            fieldName="status_unklar_begruendung"
+            value={activeDataset.row.status_unklar_begruendung}
+            errorText={activeDataset.valid.status_unklar_begruendung}
             type="text"
             multiLine
             fullWidth

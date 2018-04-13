@@ -23,7 +23,7 @@ CREATE OR REPLACE FUNCTION apflora.correct_vornach_beginnap_stati(apid integer)
    );
 
    UPDATE apflora.pop
-   SET "PopHerkunft" = 202  -- angesiedelt nach Beginn AP, erloschen/nicht etabliert
+   SET apflora.pop.status = 202  -- angesiedelt nach Beginn AP, erloschen/nicht etabliert
    WHERE id IN (
      SELECT
        pop.id
@@ -32,7 +32,7 @@ CREATE OR REPLACE FUNCTION apflora.correct_vornach_beginnap_stati(apid integer)
          INNER JOIN apflora.ap
          ON apflora.pop.ap_id = apflora.ap."ApArtId"
      WHERE
-       "PopHerkunft" = 211 -- angesiedelt vor Beginn AP, erloschen/nicht etabliert
+       apflora.pop.status = 211 -- angesiedelt vor Beginn AP, erloschen/nicht etabliert
        AND "ApJahr" IS NULL
        AND apflora.ap."ApArtId" = $1
    );
@@ -55,7 +55,7 @@ CREATE OR REPLACE FUNCTION apflora.correct_vornach_beginnap_stati(apid integer)
    );
 
    UPDATE apflora.pop
-   SET "PopHerkunft" = 202  -- angesiedelt nach Beginn AP, erloschen/nicht etabliert
+   SET apflora.pop.status = 202  -- angesiedelt nach Beginn AP, erloschen/nicht etabliert
    WHERE id IN (
      SELECT
        pop.id
@@ -64,7 +64,7 @@ CREATE OR REPLACE FUNCTION apflora.correct_vornach_beginnap_stati(apid integer)
          INNER JOIN apflora.ap
          ON apflora.pop.ap_id = apflora.ap."ApArtId"
      WHERE
-       "PopHerkunft" = 211 -- angesiedelt vor Beginn AP, erloschen/nicht etabliert
+       apflora.pop.status = 211 -- angesiedelt vor Beginn AP, erloschen/nicht etabliert
        AND "ApJahr" <= "PopBekanntSeit"
        AND apflora.ap."ApArtId" = $1
    );
@@ -87,7 +87,7 @@ CREATE OR REPLACE FUNCTION apflora.correct_vornach_beginnap_stati(apid integer)
    );
 
    UPDATE apflora.pop
-   SET "PopHerkunft" = 211 -- angesiedelt vor Beginn AP, erloschen/nicht etabliert
+   SET apflora.pop.status = 211 -- angesiedelt vor Beginn AP, erloschen/nicht etabliert
    WHERE id IN (
      SELECT
        pop.id
@@ -96,7 +96,7 @@ CREATE OR REPLACE FUNCTION apflora.correct_vornach_beginnap_stati(apid integer)
          INNER JOIN apflora.ap
          ON apflora.pop.ap_id = apflora.ap."ApArtId"
      WHERE
-       "PopHerkunft" = 202  -- angesiedelt nach Beginn AP, erloschen/nicht etabliert
+       apflora.pop.status = 202  -- angesiedelt nach Beginn AP, erloschen/nicht etabliert
        AND "ApJahr" > "PopBekanntSeit"
        AND apflora.ap."ApArtId" = $1
    );
@@ -120,7 +120,7 @@ CREATE OR REPLACE FUNCTION apflora.correct_vornach_beginnap_stati(apid integer)
    );
 
    UPDATE apflora.pop
-   SET "PopHerkunft" = 200  -- angesiedelt nach Beginn AP, aktuell
+   SET apflora.pop.status = 200  -- angesiedelt nach Beginn AP, aktuell
    WHERE id IN (
      SELECT
        pop.id
@@ -129,7 +129,7 @@ CREATE OR REPLACE FUNCTION apflora.correct_vornach_beginnap_stati(apid integer)
          INNER JOIN apflora.ap
          ON apflora.pop.ap_id = apflora.ap."ApArtId"
      WHERE
-       "PopHerkunft" = 210 -- angesiedelt vor Beginn AP, aktuell
+       apflora.pop.status = 210 -- angesiedelt vor Beginn AP, aktuell
        AND "ApJahr" IS NULL
        AND apflora.ap."ApArtId" = $1
    );
@@ -152,7 +152,7 @@ CREATE OR REPLACE FUNCTION apflora.correct_vornach_beginnap_stati(apid integer)
    );
 
    UPDATE apflora.pop
-   SET "PopHerkunft" = 200  -- angesiedelt nach Beginn AP, aktuell
+   SET apflora.pop.status = 200  -- angesiedelt nach Beginn AP, aktuell
    WHERE id IN (
      SELECT
        pop.id
@@ -161,7 +161,7 @@ CREATE OR REPLACE FUNCTION apflora.correct_vornach_beginnap_stati(apid integer)
          INNER JOIN apflora.ap
          ON apflora.pop.ap_id = apflora.ap."ApArtId"
      WHERE
-       "PopHerkunft" = 210 -- angesiedelt vor Beginn AP, aktuell
+       apflora.pop.status = 210 -- angesiedelt vor Beginn AP, aktuell
        AND "ApJahr" <= "PopBekanntSeit"
        AND apflora.ap."ApArtId" = $1
    );
@@ -184,7 +184,7 @@ CREATE OR REPLACE FUNCTION apflora.correct_vornach_beginnap_stati(apid integer)
    );
 
    UPDATE apflora.pop
-   SET "PopHerkunft" = 210 -- angesiedelt vor Beginn AP, aktuell
+   SET apflora.pop.status = 210 -- angesiedelt vor Beginn AP, aktuell
    WHERE id IN (
      SELECT
        pop.id
@@ -193,7 +193,7 @@ CREATE OR REPLACE FUNCTION apflora.correct_vornach_beginnap_stati(apid integer)
          INNER JOIN apflora.ap
          ON apflora.pop.ap_id = apflora.ap."ApArtId"
      WHERE
-       "PopHerkunft" = 200  -- angesiedelt nach Beginn AP, aktuell
+       apflora.pop.status = 200  -- angesiedelt nach Beginn AP, aktuell
        AND "ApJahr" > "PopBekanntSeit"
        AND apflora.ap."ApArtId" = $1
    );

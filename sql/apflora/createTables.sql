@@ -377,9 +377,9 @@ CREATE TABLE apflora.pop (
   ap_id integer DEFAULT NULL REFERENCES apflora.ap ("ApArtId") ON DELETE CASCADE ON UPDATE CASCADE,
   nr integer DEFAULT NULL,
   name varchar(150) DEFAULT NULL,
-  "PopHerkunft" integer DEFAULT NULL REFERENCES apflora.pop_status_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
-  "PopHerkunftUnklar" smallint DEFAULT NULL,
-  "PopHerkunftUnklarBegruendung" text DEFAULT NULL,
+  status integer DEFAULT NULL REFERENCES apflora.pop_status_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
+  status_unklar smallint DEFAULT NULL,
+  status_unklar_begruendung text DEFAULT NULL,
   "PopBekanntSeit" smallint DEFAULT NULL,
   "PopXKoord" integer DEFAULT NULL CONSTRAINT zulaessige_x_koordinate CHECK ("PopXKoord" IS NULL OR ("PopXKoord" > 2485071 AND "PopXKoord" < 2828516)),
   "PopYKoord" integer DEFAULT NULL CONSTRAINT zulaessige_y_koordinate CHECK ("PopYKoord" IS NULL OR ("PopYKoord" > 1075346 AND "PopYKoord" < 1299942)),
@@ -388,7 +388,7 @@ CREATE TABLE apflora.pop (
 );
 CREATE INDEX ON apflora.pop USING btree (id);
 CREATE INDEX ON apflora.pop USING btree (ap_id);
-CREATE INDEX ON apflora.pop USING btree ("PopHerkunft");
+CREATE INDEX ON apflora.pop USING btree (status);
 CREATE INDEX ON apflora.pop USING btree ("PopXKoord");
 CREATE INDEX ON apflora.pop USING btree ("PopYKoord");
 CREATE INDEX ON apflora.pop USING btree (nr);
@@ -399,9 +399,9 @@ COMMENT ON COLUMN apflora.pop.id_old IS 'frühere id';
 COMMENT ON COLUMN apflora.pop.ap_id IS 'Zugehöriger Aktionsplan. Fremdschlüssel aus der Tabelle "ap"';
 COMMENT ON COLUMN apflora.pop.nr IS 'Nummer der Population';
 COMMENT ON COLUMN apflora.pop.name IS 'Bezeichnung der Population';
-COMMENT ON COLUMN apflora.pop."PopHerkunft" IS 'Herkunft der Population: autochthon oder angesiedelt? Auswahl aus der Tabelle "pop_status_werte"';
-COMMENT ON COLUMN apflora.pop."PopHerkunftUnklar" IS '1 = die Herkunft der Population ist unklar';
-COMMENT ON COLUMN apflora.pop."PopHerkunftUnklarBegruendung" IS 'Begründung, wieso die Herkunft unklar ist';
+COMMENT ON COLUMN apflora.pop.status IS 'Herkunft der Population: autochthon oder angesiedelt? Auswahl aus der Tabelle "pop_status_werte"';
+COMMENT ON COLUMN apflora.pop.status_unklar IS '1 = die Herkunft der Population ist unklar';
+COMMENT ON COLUMN apflora.pop.status_unklar_begruendung IS 'Begründung, wieso die Herkunft unklar ist';
 COMMENT ON COLUMN apflora.pop."PopBekanntSeit" IS 'Seit wann ist die Population bekannt?';
 COMMENT ON COLUMN apflora.pop."PopXKoord" IS 'Wird in der Regel von einer Teilpopulation übernommen';
 COMMENT ON COLUMN apflora.pop."PopYKoord" IS 'Wird in der Regel von einer Teilpopulation übernommen';
