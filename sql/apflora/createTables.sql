@@ -376,7 +376,7 @@ CREATE TABLE apflora.pop (
   id_old integer,
   ap_id integer DEFAULT NULL REFERENCES apflora.ap ("ApArtId") ON DELETE CASCADE ON UPDATE CASCADE,
   nr integer DEFAULT NULL,
-  "PopName" varchar(150) DEFAULT NULL,
+  name varchar(150) DEFAULT NULL,
   "PopHerkunft" integer DEFAULT NULL REFERENCES apflora.pop_status_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
   "PopHerkunftUnklar" smallint DEFAULT NULL,
   "PopHerkunftUnklarBegruendung" text DEFAULT NULL,
@@ -392,13 +392,13 @@ CREATE INDEX ON apflora.pop USING btree ("PopHerkunft");
 CREATE INDEX ON apflora.pop USING btree ("PopXKoord");
 CREATE INDEX ON apflora.pop USING btree ("PopYKoord");
 CREATE INDEX ON apflora.pop USING btree (nr);
-CREATE INDEX ON apflora.pop USING btree ("PopName");
+CREATE INDEX ON apflora.pop USING btree (name);
 CREATE INDEX ON apflora.pop USING btree ("PopBekanntSeit");
 COMMENT ON COLUMN apflora.pop.id IS 'Primärschlüssel der Tabelle "pop"';
 COMMENT ON COLUMN apflora.pop.id_old IS 'frühere id';
 COMMENT ON COLUMN apflora.pop.ap_id IS 'Zugehöriger Aktionsplan. Fremdschlüssel aus der Tabelle "ap"';
 COMMENT ON COLUMN apflora.pop.nr IS 'Nummer der Population';
-COMMENT ON COLUMN apflora.pop."PopName" IS 'Bezeichnung der Population';
+COMMENT ON COLUMN apflora.pop.name IS 'Bezeichnung der Population';
 COMMENT ON COLUMN apflora.pop."PopHerkunft" IS 'Herkunft der Population: autochthon oder angesiedelt? Auswahl aus der Tabelle "pop_status_werte"';
 COMMENT ON COLUMN apflora.pop."PopHerkunftUnklar" IS '1 = die Herkunft der Population ist unklar';
 COMMENT ON COLUMN apflora.pop."PopHerkunftUnklarBegruendung" IS 'Begründung, wieso die Herkunft unklar ist';

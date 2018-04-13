@@ -46,12 +46,12 @@ const Pop = ({ store, tree }: { store: Object, tree: Object }) => {
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextFieldWithInfo
-            key={`${activeDataset.row.id}PopName`}
+            key={`${activeDataset.row.id}name`}
             tree={tree}
             label="Name"
-            fieldName="PopName"
-            value={activeDataset.row.PopName}
-            errorText={activeDataset.valid.PopName}
+            fieldName="name"
+            value={activeDataset.row.name}
+            errorText={activeDataset.valid.name}
             type="text"
             updateProperty={store.updateProperty}
             updatePropertyInDb={store.updatePropertyInDb}

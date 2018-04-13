@@ -38,7 +38,7 @@ export default (store: Object): Object => {
   if (visible) {
     pops.forEach(p => {
       if (p.PopKoordWgs84) {
-        let title = labelUsingNr ? p.nr : p.PopName
+        let title = labelUsingNr ? p.nr : p.name
         // beware: leaflet needs title to always be a string
         if (title && title.toString) {
           title = title.toString()

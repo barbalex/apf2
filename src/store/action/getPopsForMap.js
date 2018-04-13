@@ -13,7 +13,7 @@ export default (store: Object): Array<Object> => {
   const popFilterString = tree.nodeLabelFilter.get('pop')
   if (popFilterString) {
     pops = pops.filter(p => {
-      const label = `${p.nr || '(keine Nr)'}: ${p.PopName || '(kein Name)'}`
+      const label = `${p.nr || '(keine Nr)'}: ${p.name || '(kein Name)'}`
       return label.toLowerCase().includes(popFilterString.toLowerCase())
     })
   }

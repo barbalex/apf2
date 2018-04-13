@@ -350,7 +350,7 @@ const fetchQk = async ({
         const art = store.table.ae_eigenschaften.get(store.tree.activeNodes.ap)
         const artName = art && art.artname ? art.artname : ''
         const pop = store.table.pop.get(tpop.pop_id)
-        const popName = pop && pop.PopName ? pop.PopName : ''
+        const popName = pop && pop.name ? pop.name : ''
 
         return {
           hw: `Teilpopulation ist als 'Für AP-Bericht relevant' markiert, liegt aber ausserhalb des Kt. Zürich und sollte daher nicht relevant sein:`,

@@ -9,7 +9,7 @@ export default (store: Object, tree: Object): Array<Object> => {
   pop = sortBy(pop, 'nr')
   // map through all projekt and create array of nodes
   pop.forEach(el => {
-    el.label = `${el.nr || '(keine Nr)'}: ${el.PopName || '(kein Name)'}`
+    el.label = `${el.nr || '(keine Nr)'}: ${el.name || '(kein Name)'}`
   })
   // filter by nodeLabelFilter
   const filterString = nodeLabelFilter.get('pop')

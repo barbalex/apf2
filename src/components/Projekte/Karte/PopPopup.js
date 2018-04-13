@@ -25,7 +25,7 @@ const PopPopup = ({ store, pop }: { store: Object, pop: Object }) => {
       <div>Population</div>
       <StyledH3>
         {`${pop.nr ? `${pop.nr}: ` : '(keine Nummer): '}${
-          pop.PopName ? pop.PopName : '(kein Name)'
+          pop.name ? pop.name : '(kein Name)'
         }`}
       </StyledH3>
       <div>

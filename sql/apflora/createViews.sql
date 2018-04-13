@@ -182,7 +182,7 @@ SELECT
   apflora.pop.id as pop_id,
   apflora.pop."PopGuid" AS "Pop Guid",
   apflora.pop.nr AS "Pop Nr",
-  apflora.pop."PopName" AS "Pop Name",
+  apflora.pop.name AS "Pop Name",
   pop_status_werte.text AS "Pop Status",
   apflora.pop."PopBekanntSeit" AS "Pop bekannt seit",
   apflora.pop."PopHerkunftUnklar" AS "Pop Status unklar",
@@ -388,7 +388,7 @@ SELECT
   apflora.ap_umsetzung_werte.text AS "apstandumsetzung",
   CAST(apflora.pop."PopGuid" AS varchar(50)) AS "popguid",
   apflora.pop.nr AS "popnr",
-  apflora.pop."PopName" AS "popname",
+  apflora.pop.name AS "popname",
   pop_status_werte.text AS "popstatus",
   apflora.pop."PopBekanntSeit" AS "popbekanntseit",
   apflora.pop."PopXKoord" AS "popxkoordinaten",
@@ -488,7 +488,7 @@ SELECT
   apflora.pop.id as pop_id,
   apflora.pop."PopGuid" AS "Pop Guid",
   apflora.pop.nr AS "Pop Nr",
-  apflora.pop."PopName" AS "Pop Name",
+  apflora.pop.name AS "Pop Name",
   pop_status_werte.text AS "Pop Status",
   apflora.pop."PopBekanntSeit" AS "Pop bekannt seit",
   apflora.pop."PopHerkunftUnklar" AS "Pop Status unklar",
@@ -555,7 +555,7 @@ GROUP BY
   apflora.pop.id as pop_id,
   apflora.pop."PopGuid",
   apflora.pop.nr,
-  apflora.pop."PopName",
+  apflora.pop.name,
   pop_status_werte.text,
   apflora.pop."PopBekanntSeit",
   apflora.pop."PopHerkunftUnklar",
@@ -600,7 +600,7 @@ SELECT
   apflora.ap_umsetzung_werte.text AS "AP Stand Umsetzung",
   apflora.pop."PopGuid" AS "Pop Guid",
   apflora.pop.nr AS "Pop Nr",
-  apflora.pop."PopName" AS "Pop Name",
+  apflora.pop.name AS "Pop Name",
   pop_status_werte.text AS "Pop Status",
   apflora.pop."PopBekanntSeit" AS "Pop bekannt seit",
   apflora.pop."PopHerkunftUnklar" AS "Pop Status unklar",
@@ -639,7 +639,7 @@ GROUP BY
   apflora.ap_umsetzung_werte.text,
   apflora.pop."PopGuid",
   apflora.pop.nr,
-  apflora.pop."PopName",
+  apflora.pop.name,
   pop_status_werte.text,
   apflora.pop."PopHerkunftUnklar",
   apflora.pop."PopHerkunftUnklarBegruendung",
@@ -661,7 +661,7 @@ SELECT
   apflora.pop.id,
   apflora.pop."PopGuid" AS "Pop Guid",
   apflora.pop.nr AS "Pop Nr",
-  apflora.pop."PopName" AS "Pop Name",
+  apflora.pop.name AS "Pop Name",
   pop_status_werte.text AS "Pop Status",
   apflora.pop."PopBekanntSeit" AS "Pop bekannt seit",
   apflora.pop."PopHerkunftUnklar" AS "Pop Status unklar",
@@ -701,7 +701,7 @@ GROUP BY
   apflora.pop.id,
   apflora.pop."PopGuid",
   apflora.pop.nr,
-  apflora.pop."PopName",
+  apflora.pop.name,
   pop_status_werte.text,
   apflora.pop."PopHerkunftUnklar",
   apflora.pop."PopHerkunftUnklarBegruendung",
@@ -799,7 +799,7 @@ SELECT
   apflora.pop.id,
   apflora.pop."PopGuid" AS "Pop Guid",
   apflora.pop.nr AS "Pop Nr",
-  apflora.pop."PopName" AS "Pop Name",
+  apflora.pop.name AS "Pop Name",
   pop_status_werte.text AS "Pop Status",
   apflora.pop."PopBekanntSeit" AS "Pop bekannt seit",
   apflora.pop."PopHerkunftUnklar" AS "Pop Status unklar",
@@ -840,7 +840,7 @@ SELECT
   apflora.pop.id,
   apflora.pop."PopGuid" AS "Pop Guid",
   apflora.pop.nr AS "Pop Nr",
-  apflora.pop."PopName" AS "Pop Name",
+  apflora.pop.name AS "Pop Name",
   pop_status_werte.text AS "Pop Status",
   apflora.pop."PopBekanntSeit" AS "Pop bekannt seit",
   apflora.pop."PopHerkunftUnklar" AS "Pop Status unklar",
@@ -880,7 +880,7 @@ SELECT
   apflora.pop.ap_id AS "apartid",
   CAST(apflora.pop."PopGuid" AS varchar(50)) AS "popguid",
   apflora.pop.nr AS "popnr",
-  apflora.pop."PopName" AS "popname",
+  apflora.pop.name AS "popname",
   apflora.pop."PopHerkunft" AS "popherkunft",
   apflora.pop."PopHerkunftUnklar" AS "popherkunftunklar",
   apflora.pop."PopHerkunftUnklarBegruendung" AS "popherkunftunklarbegruendung",
@@ -902,7 +902,7 @@ SELECT
   apflora.ap_umsetzung_werte.text AS "apumsetzung",
   CAST(apflora.pop."PopGuid" AS varchar(50)) AS "popguid",
   apflora.pop.nr AS "popnr",
-  apflora.pop."PopName" AS "popname",
+  apflora.pop.name AS "popname",
   pop_status_werte.text AS "popherkunft",
   apflora.pop."PopBekanntSeit" AS "popbekanntseit",
   apflora.pop."PopHerkunftUnklar" AS "popherkunftunklar",
@@ -945,7 +945,7 @@ SELECT
   apflora.ap_umsetzung_werte.text AS "AP Stand Umsetzung",
   apflora.pop."PopGuid" AS "Pop Guid",
   apflora.pop.nr AS "Pop Nr",
-  apflora.pop."PopName" AS "Pop Name",
+  apflora.pop.name AS "Pop Name",
   pop_status_werte.text AS "Pop Status",
   apflora.pop."PopBekanntSeit" AS "Pop bekannt seit",
   apflora.pop."PopHerkunftUnklar" AS "Pop Status unklar",
@@ -997,7 +997,7 @@ SELECT
   apflora.ap_umsetzung_werte.text AS "AP Stand Umsetzung",
   apflora.pop."PopGuid" AS "Pop Guid",
   apflora.pop.nr AS "Pop Nr",
-  apflora.pop."PopName" AS "Pop Name",
+  apflora.pop.name AS "Pop Name",
   pop_status_werte.text AS "Pop Status",
   apflora.pop."PopBekanntSeit" AS "Pop bekannt seit",
   apflora.pop."PopHerkunftUnklar" AS "Pop Status unklar",
@@ -1052,7 +1052,7 @@ SELECT
   apflora.pop.id as pop_id,
   apflora.pop."PopGuid" AS "Pop Guid",
   apflora.pop.nr AS "Pop Nr",
-  apflora.pop."PopName" AS "Pop Name",
+  apflora.pop.name AS "Pop Name",
   pop_status_werte.text AS "Pop Status",
   apflora.pop."PopBekanntSeit" AS "Pop bekannt seit",
   apflora.pop."PopHerkunftUnklar" AS "Pop Status unklar",
@@ -1127,7 +1127,7 @@ SELECT
   apflora.ap_umsetzung_werte.text AS "APSTANDUMSETZUNG",
   apflora.pop."PopGuid" AS "POPGUID",
   apflora.pop.nr AS "POPNR",
-  apflora.pop."PopName" AS "POPNAME",
+  apflora.pop.name AS "POPNAME",
   pop_status_werte.text AS "POPSTATUS",
   apflora.pop."PopHerkunftUnklar" AS "POPSTATUSUNKLAR",
   apflora.pop."PopHerkunftUnklarBegruendung" AS "POPUNKLARGRUND",
@@ -1237,7 +1237,7 @@ SELECT
   apflora.ap_umsetzung_werte.text AS "apumsetzung",
   CAST(apflora.pop."PopGuid" AS varchar(50)) AS "popguid",
   apflora.pop.nr AS "popnr",
-  apflora.pop."PopName" AS "popname",
+  apflora.pop.name AS "popname",
   pop_status_werte.text AS "popherkunft",
   apflora.pop."PopBekanntSeit" AS "popbekanntseit",
   apflora.pop."PopHerkunftUnklar" AS "popherkunftunklar",
@@ -1307,7 +1307,7 @@ SELECT
   apflora.ap."ApStatus" AS "Bearbeitungsstand AP",
   apflora.pop.id,
   apflora.pop.nr,
-  apflora.pop."PopName",
+  apflora.pop.name,
   apflora.pop."PopHerkunft" AS "Status"
 FROM
   apflora.ae_eigenschaften
@@ -1560,7 +1560,7 @@ SELECT
   apflora.ae_eigenschaften.artname AS "Art",
   apflora.ap_bearbstand_werte.text AS "Bearbeitungsstand AP",
   apflora.pop.nr as pop_nr,
-  apflora.pop."PopName" as pop_name,
+  apflora.pop.name as pop_name,
   pop_status_werte.text AS "Status Population",
   apflora.tpop.nr,
   apflora.tpop.flurname,
@@ -1595,7 +1595,7 @@ SELECT
   apflora.ae_eigenschaften.artname AS "Art",
   apflora.ap_bearbstand_werte.text AS "ApStatus_",
   apflora.pop.nr as pop_nr,
-  apflora.pop."PopName" as pop_name,
+  apflora.pop.name as pop_name,
   apflora.tpop.nr,
   apflora.tpop.gemeinde,
   apflora.tpop.flurname,
@@ -1620,7 +1620,7 @@ WHERE
 ORDER BY
   apflora.ae_eigenschaften.artname,
   apflora.pop.nr,
-  apflora.pop."PopName",
+  apflora.pop.name,
   apflora.tpop.nr,
   apflora.tpop.gemeinde,
   apflora.tpop.flurname;
@@ -1631,7 +1631,7 @@ SELECT
   apflora.ae_eigenschaften.artname AS "Art",
   apflora.ap_bearbstand_werte.text AS "ApStatus_",
   apflora.pop.nr as pop_nr,
-  apflora.pop."PopName" as pop_name,
+  apflora.pop.name as pop_name,
   apflora.tpop.nr,
   apflora.tpop.gemeinde,
   apflora.tpop.flurname,
@@ -1661,7 +1661,7 @@ WHERE
 ORDER BY
   apflora.ae_eigenschaften.artname,
   apflora.pop.nr,
-  apflora.pop."PopName",
+  apflora.pop.name,
   apflora.tpop.nr,
   apflora.tpop.gemeinde,
   apflora.tpop.flurname;
@@ -1995,7 +1995,7 @@ SELECT
   apflora.adresse."AdrName",
   apflora.ae_eigenschaften.artname AS "Art",
   apflora.pop.nr as pop_nr,
-  apflora.pop."PopName" as pop_name,
+  apflora.pop.name as pop_name,
   apflora.tpop.nr AS tpop_nr,
   apflora.tpop.gemeinde as tpop_gemeinde,
   apflora.tpop.flurname as tpop_flurname,
@@ -2042,7 +2042,7 @@ ORDER BY
   apflora.adresse."AdrName",
   apflora.ae_eigenschaften.artname,
   apflora.pop.nr,
-  apflora.pop."PopName",
+  apflora.pop.name,
   apflora.tpop.nr,
   apflora.tpop.gemeinde,
   apflora.tpop.flurname;
@@ -2052,7 +2052,7 @@ CREATE OR REPLACE VIEW apflora.v_ap_mitmassninjahr0 AS
 SELECT
   apflora.ae_eigenschaften.artname AS "Art",
   apflora.pop.nr as pop_nr,
-  apflora.pop."PopName" as pop_name,
+  apflora.pop.name as pop_name,
   apflora.tpop.nr AS tpop_nr,
   apflora.tpop.gemeinde tpop_gemeinde,
   apflora.tpop.flurname as tpop_flurname,
@@ -2099,7 +2099,7 @@ WHERE
 ORDER BY
   apflora.ae_eigenschaften.artname,
   apflora.pop.nr,
-  apflora.pop."PopName",
+  apflora.pop.name,
   apflora.tpop.nr,
   apflora.tpop.gemeinde,
   apflora.tpop.flurname;
@@ -2113,7 +2113,7 @@ SELECT
   apflora.ap."ApJahr" AS "Aktionsplan-Jahr",
   apflora.ap_umsetzung_werte.text AS "Aktionsplan-Umsetzung",
   apflora.pop.nr AS "Population-Nr",
-  apflora.pop."PopName" AS "Population-Name",
+  apflora.pop.name AS "Population-Name",
   pop_status_werte.text AS "Population-Herkunft",
   apflora.pop."PopBekanntSeit" AS "Population - bekannt seit",
   apflora.tpop.nr AS "Teilpopulation-Nr",
@@ -2185,7 +2185,7 @@ SELECT
   apflora.ap_bearbstand_werte.text AS "Aktionsplan Bearbeitungsstand",
   apflora.pop.id as pop_id,
   apflora.pop.nr as pop_nr,
-  apflora.pop."PopName" as pop_name,
+  apflora.pop.name as pop_name,
   apflora.tpop.id AS tpop_id,
   apflora.tpop.nr AS tpop_nr,
   apflora.tpop.flurname as tpop_flurname,
@@ -2248,7 +2248,7 @@ SELECT
   apflora.ap_umsetzung_werte.text AS "Aktionsplan-Umsetzung",
   apflora.pop.id as pop_id,
   apflora.pop.nr AS "Population-Nr",
-  apflora.pop."PopName" AS "Population-Name",
+  apflora.pop.name AS "Population-Name",
   pop_status_werte.text AS "Population-Herkunft",
   apflora.pop."PopBekanntSeit" AS "Population - bekannt seit",
   apflora.tpop.id AS tpop_id,
@@ -3085,7 +3085,7 @@ SELECT
   apflora.popber.id,
   apflora.ae_eigenschaften.artname AS "Artname",
   apflora.pop.nr as pop_nr,
-  apflora.pop."PopName" as pop_name,
+  apflora.pop.name as pop_name,
   pop_status_werte.text AS "PopHerkunft",
   apflora.popber.jahr AS "PopBerJahr",
   tpop_entwicklung_werte.text AS "PopBerEntwicklung",
@@ -3211,7 +3211,7 @@ SELECT
   apflora.ap."ApJahr",
   apflora.ap_umsetzung_werte.text AS "ApUmsetzung",
   apflora.pop.nr as pop_nr,
-  apflora.pop."PopName" as pop_name,
+  apflora.pop.name as pop_name,
   pop_status_werte.text AS "PopHerkunft",
   apflora.pop."PopBekanntSeit",
   apflora.tpop.nr AS tpop_nr,
@@ -3259,7 +3259,7 @@ SELECT
   apflora.pop.id as pop_id,
   apflora.pop."PopGuid" AS "Pop Guid",
   apflora.pop.nr AS "Pop Nr",
-  apflora.pop."PopName" AS "Pop Name",
+  apflora.pop.name AS "Pop Name",
   apflora.pop_status_werte.text AS "Pop Herkunft",
   apflora.pop."PopBekanntSeit" AS "Pop bekannt seit",
   apflora.tpop.id AS "TPop ID",
@@ -3397,7 +3397,7 @@ GROUP BY
   apflora.pop.id,
   apflora.pop."PopGuid",
   apflora.pop.nr,
-  apflora.pop."PopName",
+  apflora.pop.name,
   apflora.pop_status_werte.text,
   apflora.pop."PopBekanntSeit",
   apflora.tpop.id,
@@ -3774,7 +3774,7 @@ SELECT
   apflora.ap_umsetzung_werte.text AS apumsetzung,
   CAST(apflora.pop."PopGuid" AS varchar(50)) AS popguid,
   apflora.pop.nr AS popnr,
-  apflora.pop."PopName" AS popname,
+  apflora.pop.name AS popname,
   apflora.pop_status_werte.text AS popherkunft,
   apflora.pop."PopBekanntSeit" AS popbekanntseit,
   CAST(apflora.tpop.id AS varchar(50)) AS tpopid,
@@ -4112,7 +4112,7 @@ SELECT
   apflora.ap."ApGuid" AS "fkProjekt",
   apflora.pop."PopGuid" AS "idRaum",
   concat(
-    apflora.pop."PopName",
+    apflora.pop.name,
     CASE
       WHEN apflora.pop.nr IS NOT NULL
       THEN concat(' (Nr. ', apflora.pop.nr, ')')
@@ -4187,7 +4187,7 @@ WHERE
 GROUP BY
   apflora.ap."ApGuid",
   apflora.pop."PopGuid",
-  apflora.pop."PopName",
+  apflora.pop.name,
   apflora.pop.nr,
   apflora.pop."PopHerkunft",
   "popHerkunft".text,
@@ -4390,7 +4390,7 @@ SELECT
   apflora.pop.id as pop_id,
   apflora.pop."PopGuid" AS "Pop Guid",
   apflora.pop.nr AS "Pop Nr",
-  apflora.pop."PopName" AS "Pop Name",
+  apflora.pop.name AS "Pop Name",
   pop_status_werte.text AS "Pop Status",
   apflora.pop."PopBekanntSeit" AS "Pop bekannt seit",
   apflora.pop."PopHerkunftUnklar" AS "Pop Status unklar",
@@ -4476,7 +4476,7 @@ SELECT
       'Population: ',
       apflora.pop.nr,
       ' ',
-      apflora.pop."PopName",
+      apflora.pop.name,
       '<br /> Teilpopulation: ',
       apflora.tpop.nr,
       ' ',
@@ -4534,7 +4534,7 @@ WHERE
 ORDER BY
   apflora.ae_eigenschaften.artname,
   apflora.pop.nr,
-  apflora.pop."PopName",
+  apflora.pop.name,
   apflora.tpop.nr,
   apflora.tpop.gemeinde,
   apflora.tpop.flurname;
@@ -4556,7 +4556,7 @@ SELECT
       'Population: ',
       apflora.pop.nr,
       ' ',
-      apflora.pop."PopName",
+      apflora.pop.name,
       '<br /> Teilpopulation: ',
       apflora.tpop.nr,
       ' ',
@@ -4613,7 +4613,7 @@ WHERE
 ORDER BY
   apflora.ae_eigenschaften.artname,
   apflora.pop.nr,
-  apflora.pop."PopName",
+  apflora.pop.name,
   apflora.tpop.nr,
   apflora.tpop.gemeinde,
   apflora.tpop.flurname;
@@ -4625,7 +4625,7 @@ SELECT
   apflora.ae_eigenschaften.artname AS "Art",
   apflora.pop.nr AS "Label",
   substring(
-    concat('Population: ', apflora.pop.nr, ' ', apflora.pop."PopName")
+    concat('Population: ', apflora.pop.nr, ' ', apflora.pop.name)
     from 1 for 225
   ) AS "Inhalte",
   round(
@@ -4671,7 +4671,7 @@ WHERE
 ORDER BY
   apflora.ae_eigenschaften.artname,
   apflora.pop.nr,
-  apflora.pop."PopName";
+  apflora.pop.name;
 
 -- -- ::numeric is needed or else all koordinates are same value!!!
 DROP VIEW IF EXISTS apflora.v_pop_kmlnamen CASCADE;
@@ -4684,7 +4684,7 @@ SELECT
     apflora.pop.nr
   ) AS "Label",
   substring(
-    concat('Population: ', apflora.pop.nr, ' ', apflora.pop."PopName")
+    concat('Population: ', apflora.pop.nr, ' ', apflora.pop.name)
     from 1 for 225
   ) AS "Inhalte",
   round(
@@ -4730,7 +4730,7 @@ WHERE
 ORDER BY
   apflora.ae_eigenschaften.artname,
   apflora.pop.nr,
-  apflora.pop."PopName";
+  apflora.pop.name;
 
 DROP VIEW IF EXISTS apflora.v_kontrzaehl_anzproeinheit CASCADE;
 CREATE OR REPLACE VIEW apflora.v_kontrzaehl_anzproeinheit AS
@@ -4743,7 +4743,7 @@ SELECT
   "tblAdresse_1"."AdrName" AS "AP verantwortlich",
   apflora.pop.id as pop_id,
   apflora.pop.nr AS "Pop Nr",
-  apflora.pop."PopName" AS "Pop Name",
+  apflora.pop.name AS "Pop Name",
   apflora.pop_status_werte.text AS "Pop Herkunft",
   apflora.pop."PopBekanntSeit" AS "Pop bekannt seit",
   apflora.tpop.id AS "TPop ID",
@@ -4887,7 +4887,7 @@ SELECT
   apflora.ap_umsetzung_werte.text AS "AP Stand Umsetzung",
   apflora.pop.id as pop_id,
   apflora.pop.nr AS "Pop Nr",
-  apflora.pop."PopName" AS "Pop Name",
+  apflora.pop.name AS "Pop Name",
   pop_status_werte.text AS "Pop Status",
   apflora.pop."PopBekanntSeit" AS "Pop bekannt seit",
   apflora.pop."PopHerkunftUnklar" AS "Pop Status unklar",
@@ -5067,7 +5067,7 @@ CREATE OR REPLACE VIEW apflora.v_tpop_ohneapberichtrelevant AS
 SELECT
   apflora.ae_eigenschaften.artname AS "Artname",
   apflora.pop.nr as pop_nr,
-  apflora.pop."PopName" as pop_name,
+  apflora.pop.name as pop_name,
   apflora.tpop.id,
   apflora.tpop.nr,
   apflora.tpop.gemeinde,
@@ -5147,21 +5147,21 @@ FROM
     ON apflora.projekt."ProjId" = apflora.ap."ProjId"
 WHERE
   apflora.pop.ap_id IN (
-    SELECT DISTINCT "ApArtId"
+    SELECT DISTINCT ap_id
     FROM apflora.pop
-    GROUP BY "ApArtId", "PopNr"
+    GROUP BY ap_id, nr
     HAVING COUNT(*) > 1
   ) AND
-  apflora.pop."PopNr" IN (
-    SELECT DISTINCT "PopNr"
+  apflora.pop.nr IN (
+    SELECT DISTINCT nr
     FROM apflora.pop
-    GROUP BY "ApArtId", "PopNr"
+    GROUP BY "ApArtId", nr
     HAVING COUNT(*) > 1
   )
 ORDER BY
   apflora.projekt."ProjId",
   apflora.ap."ApArtId",
-  apflora.pop."PopNr";
+  apflora.pop.nr;
 
 DROP VIEW IF EXISTS apflora.v_qk2_pop_ohnekoord CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk2_pop_ohnekoord AS
@@ -5170,7 +5170,7 @@ SELECT
   apflora.ap."ApArtId",
   'Population: Mindestens eine Koordinate fehlt:'::text AS hw,
   ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop.id]::text[] AS url,
-  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr")]::text[] AS text
+  ARRAY[concat('Population (Nr.): ', apflora.pop.nr)]::text[] AS text
 FROM
   apflora.ap
   INNER JOIN
@@ -5181,7 +5181,7 @@ WHERE
   OR apflora.pop."PopYKoord" IS NULL
 ORDER BY
   apflora.ap."ApArtId",
-  apflora.pop."PopNr";
+  apflora.pop.nr;
 
 DROP VIEW IF EXISTS apflora.v_qk2_pop_ohnepopnr CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk2_pop_ohnepopnr AS
@@ -5190,17 +5190,17 @@ SELECT
   apflora.ap."ApArtId",
   'Population ohne Nr.:'::text AS hw,
   ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop.id]::text[] AS url,
-  ARRAY[concat('Population (Name): ', apflora.pop."PopName")]::text[] AS text
+  ARRAY[concat('Population (Name): ', apflora.pop.name)]::text[] AS text
 FROM
   apflora.ap
   INNER JOIN
     apflora.pop
     ON apflora.ap."ApArtId" = apflora.pop.ap_id
 WHERE
-  apflora.pop."PopNr" IS NULL
+  apflora.pop.nr IS NULL
 ORDER BY
   apflora.ap."ApArtId",
-  apflora.pop."PopName";
+  apflora.pop.name;
 
 DROP VIEW IF EXISTS apflora.v_qk2_pop_ohnepopname CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk2_pop_ohnepopname AS
@@ -5209,17 +5209,17 @@ SELECT
   apflora.ap."ApArtId",
   'Population ohne Name:'::text AS hw,
   ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop.id]::text[] AS url,
-  ARRAY[concat('Population: ', apflora.pop."PopNr")]::text[] AS text
+  ARRAY[concat('Population: ', apflora.pop.nr)]::text[] AS text
 FROM
   apflora.ap
   INNER JOIN
     apflora.pop
     ON apflora.ap."ApArtId" = apflora.pop.ap_id
 WHERE
-  apflora.pop."PopName" IS NULL
+  apflora.pop.name IS NULL
 ORDER BY
   apflora.ap."ApArtId",
-  apflora.pop."PopNr";
+  apflora.pop.nr;
 
 DROP VIEW IF EXISTS apflora.v_qk2_pop_ohnepopstatus CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk2_pop_ohnepopstatus AS
@@ -5228,7 +5228,7 @@ SELECT
   apflora.ap."ApArtId",
   'Population ohne Status:'::text AS hw,
   ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop.id]::text[] AS url,
-  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr")]::text[] AS text
+  ARRAY[concat('Population (Nr.): ', apflora.pop.nr)]::text[] AS text
 FROM
   apflora.ap
   INNER JOIN
@@ -5238,7 +5238,7 @@ WHERE
   apflora.pop."PopHerkunft" IS NULL
 ORDER BY
   apflora.ap."ApArtId",
-  apflora.pop."PopNr";
+  apflora.pop.nr;
 
 DROP VIEW IF EXISTS apflora.v_qk2_pop_ohnebekanntseit CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk2_pop_ohnebekanntseit AS
@@ -5247,7 +5247,7 @@ SELECT
   apflora.ap."ApArtId",
   'Population ohne "bekannt seit":'::text AS hw,
   ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop.id]::text[] AS url,
-  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr")]::text[] AS text
+  ARRAY[concat('Population (Nr.): ', apflora.pop.nr)]::text[] AS text
 FROM
   apflora.ap
   INNER JOIN
@@ -5257,7 +5257,7 @@ WHERE
   apflora.pop."PopBekanntSeit" IS NULL
 ORDER BY
   apflora.ap."ApArtId",
-  apflora.pop."PopNr";
+  apflora.pop.nr;
 
 DROP VIEW IF EXISTS apflora.v_qk2_pop_mitstatusunklarohnebegruendung CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk2_pop_mitstatusunklarohnebegruendung AS
@@ -5266,7 +5266,7 @@ SELECT
   apflora.ap."ApArtId",
   'Population mit "Status unklar", ohne Begruendung:'::text AS hw,
   ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop.id]::text[] AS url,
-  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr")]::text[] AS text
+  ARRAY[concat('Population (Nr.): ', apflora.pop.nr)]::text[] AS text
 FROM
   apflora.ap
   INNER JOIN
@@ -5277,7 +5277,7 @@ WHERE
   AND apflora.pop."PopHerkunftUnklarBegruendung" IS NULL
 ORDER BY
   apflora.ap."ApArtId",
-  apflora.pop."PopNr";
+  apflora.pop.nr;
 
 DROP VIEW IF EXISTS apflora.v_qk2_pop_ohnetpop CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk2_pop_ohnetpop AS
@@ -5286,7 +5286,7 @@ SELECT
   apflora.ap."ApArtId",
   'Population ohne Teilpopulation:'::text AS hw,
   ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop.id]::text[] AS url,
-  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr")]::text[] AS text
+  ARRAY[concat('Population (Nr.): ', apflora.pop.nr)]::text[] AS text
 FROM
   apflora.ap
   INNER JOIN
@@ -5299,7 +5299,7 @@ WHERE
   apflora.tpop.id IS NULL
 ORDER BY
   apflora.ap."ApArtId",
-  apflora.pop."PopNr";
+  apflora.pop.nr;
 
 DROP VIEW IF EXISTS apflora.v_qk2_tpop_ohnenr CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk2_tpop_ohnenr AS
@@ -5308,7 +5308,7 @@ SELECT
   apflora.ap."ApArtId",
   'Teilpopulation ohne Nr.:'::text AS hw,
   ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id]::text[] AS url,
-  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop.nr)]::text[] AS text
+  ARRAY[concat('Population (Nr.): ', apflora.pop.nr), concat('Teil-Population (Nr.): ', apflora.tpop.nr)]::text[] AS text
 FROM
   apflora.ap
   INNER JOIN
@@ -5321,7 +5321,7 @@ WHERE
   apflora.tpop.nr IS NULL
 ORDER BY
   apflora.ap."ApArtId",
-  apflora.pop."PopNr",
+  apflora.pop.nr,
   apflora.tpop.nr;
 
 DROP VIEW IF EXISTS apflora.v_qk2_tpop_ohneflurname CASCADE;
@@ -5331,7 +5331,7 @@ SELECT
   apflora.ap."ApArtId",
   'Teilpopulation ohne Flurname:'::text AS hw,
   ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id]::text[] AS url,
-  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop.nr)]::text[] AS text
+  ARRAY[concat('Population (Nr.): ', apflora.pop.nr), concat('Teil-Population (Nr.): ', apflora.tpop.nr)]::text[] AS text
 FROM
   apflora.ap
   INNER JOIN
@@ -5344,7 +5344,7 @@ WHERE
   apflora.tpop.flurname IS NULL
 ORDER BY
   apflora.ap."ApArtId",
-  apflora.pop."PopNr",
+  apflora.pop.nr,
   apflora.tpop.nr;
 
 DROP VIEW IF EXISTS apflora.v_qk2_tpop_ohnestatus CASCADE;
@@ -5354,7 +5354,7 @@ SELECT
   apflora.ap."ApArtId",
   'Teilpopulation ohne Status:'::text AS hw,
   ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id]::text[] AS url,
-  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop.nr)]::text[] AS text
+  ARRAY[concat('Population (Nr.): ', apflora.pop.nr), concat('Teil-Population (Nr.): ', apflora.tpop.nr)]::text[] AS text
 FROM
   apflora.ap
   INNER JOIN
@@ -5367,7 +5367,7 @@ WHERE
   apflora.tpop.status IS NULL
 ORDER BY
   apflora.ap."ApArtId",
-  apflora.pop."PopNr",
+  apflora.pop.nr,
   apflora.tpop.nr;
 
 DROP VIEW IF EXISTS apflora.v_qk2_tpop_ohnebekanntseit CASCADE;
@@ -5376,7 +5376,7 @@ SELECT
   apflora.ap."ApArtId",
   'Teilpopulation ohne "bekannt seit":'::text AS hw,
   ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id]::text[] AS url,
-  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop.nr)]::text[] AS text
+  ARRAY[concat('Population (Nr.): ', apflora.pop.nr), concat('Teil-Population (Nr.): ', apflora.tpop.nr)]::text[] AS text
 FROM
   apflora.ap
   INNER JOIN
@@ -5389,7 +5389,7 @@ WHERE
   apflora.tpop.bekannt_seit IS NULL
 ORDER BY
   apflora.ap."ApArtId",
-  apflora.pop."PopNr",
+  apflora.pop.nr,
   apflora.tpop.nr;
 
 DROP VIEW IF EXISTS apflora.v_qk2_tpop_ohneapberrelevant CASCADE;
@@ -5399,7 +5399,7 @@ SELECT
   apflora.ap."ApArtId",
   'Teilpopulation ohne "Fuer AP-Bericht relevant":'::text AS hw,
   ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id]::text[] AS url,
-  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop.nr)]::text[] AS text
+  ARRAY[concat('Population (Nr.): ', apflora.pop.nr), concat('Teil-Population (Nr.): ', apflora.tpop.nr)]::text[] AS text
 FROM
   apflora.ap
   INNER JOIN
@@ -5412,7 +5412,7 @@ WHERE
   apflora.tpop.apber_relevant IS NULL
 ORDER BY
   apflora.ap."ApArtId",
-  apflora.pop."PopNr",
+  apflora.pop.nr,
   apflora.tpop.nr;
 
 DROP VIEW IF EXISTS apflora.v_qk2_tpop_statuspotentiellfuerapberrelevant CASCADE;
@@ -5422,7 +5422,7 @@ SELECT
   apflora.ap."ApArtId",
   'Teilpopulation mit Status "potenzieller Wuchs-/Ansiedlungsort" und "Fuer AP-Bericht relevant?" = ja:'::text AS hw,
   ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id]::text[] AS url,
-  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop.nr)]::text[] AS text
+  ARRAY[concat('Population (Nr.): ', apflora.pop.nr), concat('Teil-Population (Nr.): ', apflora.tpop.nr)]::text[] AS text
 FROM
   apflora.ap
   INNER JOIN
@@ -5436,7 +5436,7 @@ WHERE
   AND apflora.tpop.apber_relevant = 1
 ORDER BY
   apflora.ap."ApArtId",
-  apflora.pop."PopNr",
+  apflora.pop.nr,
   apflora.tpop.nr;
 
 DROP VIEW IF EXISTS apflora.v_qk2_tpop_mitstatusunklarohnebegruendung CASCADE;
@@ -5446,7 +5446,7 @@ SELECT
   apflora.ap."ApArtId",
   'Teilpopulation mit "Status unklar", ohne Begruendung:'::text AS hw,
   ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id]::text[] AS url,
-  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop.nr)]::text[] AS text
+  ARRAY[concat('Population (Nr.): ', apflora.pop.nr), concat('Teil-Population (Nr.): ', apflora.tpop.nr)]::text[] AS text
 FROM
   apflora.ap
   INNER JOIN
@@ -5460,7 +5460,7 @@ WHERE
   AND apflora.tpop.status_unklar_grund IS NULL
 ORDER BY
   apflora.ap."ApArtId",
-  apflora.pop."PopNr",
+  apflora.pop.nr,
   apflora.tpop.nr;
 
 DROP VIEW IF EXISTS apflora.v_qk2_tpop_ohnekoordinaten CASCADE;
@@ -5470,7 +5470,7 @@ SELECT
   apflora.ap."ApArtId",
   'Teilpopulation: Mindestens eine Koordinate fehlt:'::text AS hw,
   ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id]::text[] AS url,
-  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop.nr)]::text[] AS text
+  ARRAY[concat('Population (Nr.): ', apflora.pop.nr), concat('Teil-Population (Nr.): ', apflora.tpop.nr)]::text[] AS text
 FROM
   apflora.ap
   INNER JOIN
@@ -5484,7 +5484,7 @@ WHERE
   OR apflora.tpop.y IS NULL
 ORDER BY
   apflora.ap."ApArtId",
-  apflora.pop."PopNr",
+  apflora.pop.nr,
   apflora.tpop.nr;
 
 DROP VIEW IF EXISTS apflora.v_qk2_massn_ohnejahr CASCADE;
@@ -5494,7 +5494,7 @@ SELECT
   apflora.ap."ApArtId",
   'Massnahme ohne Jahr:'::text AS hw,
   ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id, 'Massnahmen', apflora.tpopmassn.id]::text[] AS url,
-  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop.nr), concat('Massnahme: ', apflora.tpopmassn.jahr)]::text[] AS text
+  ARRAY[concat('Population (Nr.): ', apflora.pop.nr), concat('Teil-Population (Nr.): ', apflora.tpop.nr), concat('Massnahme: ', apflora.tpopmassn.jahr)]::text[] AS text
 FROM
   apflora.ap
   INNER JOIN
@@ -5510,7 +5510,7 @@ WHERE
   apflora.tpopmassn.jahr IS NULL
 ORDER BY
   apflora.ap."ApArtId",
-  apflora.pop."PopNr",
+  apflora.pop.nr,
   apflora.tpop.nr,
   apflora.tpopmassn.id;
 
@@ -5521,7 +5521,7 @@ SELECT
   apflora.ap."ApArtId",
   'Massnahme ohne BearbeiterIn:'::text AS hw,
   ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id, 'Massnahmen', apflora.tpopmassn.id]::text[] AS url,
-  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop.nr), concat('Massnahme (id): ', apflora.tpopmassn.id)]::text[] AS text
+  ARRAY[concat('Population (Nr.): ', apflora.pop.nr), concat('Teil-Population (Nr.): ', apflora.tpop.nr), concat('Massnahme (id): ', apflora.tpopmassn.id)]::text[] AS text
 FROM
   apflora.ap
   INNER JOIN
@@ -5537,7 +5537,7 @@ WHERE
   apflora.tpopmassn.bearbeiter IS NULL
 ORDER BY
   apflora.ap."ApArtId",
-  apflora.pop."PopNr",
+  apflora.pop.nr,
   apflora.tpop.nr,
   apflora.tpopmassn.id;
 
@@ -5548,7 +5548,7 @@ SELECT
   apflora.ap."ApArtId",
   'Massnahmen ohne Typ:'::text AS hw,
   ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id, 'Massnahmen', apflora.tpopmassn.id]::text[] AS url,
-  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop.nr), concat('Massnahme (Jahr): ', apflora.tpopmassn.jahr)]::text[] AS text,
+  ARRAY[concat('Population (Nr.): ', apflora.pop.nr), concat('Teil-Population (Nr.): ', apflora.tpop.nr), concat('Massnahme (Jahr): ', apflora.tpopmassn.jahr)]::text[] AS text,
   apflora.tpopmassn.jahr AS "Berichtjahr"
 FROM
   apflora.ap
@@ -5565,7 +5565,7 @@ WHERE
   apflora.tpopmassn.typ IS NULL
   AND apflora.tpopmassn.jahr IS NOT NULL
 ORDER BY
-  apflora.pop."PopNr",
+  apflora.pop.nr,
   apflora.tpop.nr,
   apflora.tpopmassn.jahr;
 
@@ -5576,7 +5576,7 @@ SELECT
   apflora.ap."ApArtId",
   'Massnahmen-Bericht ohne Jahr:'::text AS hw,
   ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id, 'Massnahmen-Berichte', apflora.tpopmassnber.id]::text[] AS url,
-  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop.nr), concat('Massnahmen-Bericht (Jahr): ', apflora.tpopmassnber.jahr)]::text[] AS text
+  ARRAY[concat('Population (Nr.): ', apflora.pop.nr), concat('Teil-Population (Nr.): ', apflora.tpop.nr), concat('Massnahmen-Bericht (Jahr): ', apflora.tpopmassnber.jahr)]::text[] AS text
 FROM
   apflora.ap
   INNER JOIN
@@ -5591,7 +5591,7 @@ FROM
 WHERE
   apflora.tpopmassnber.jahr IS NULL
 ORDER BY
-  apflora.pop."PopNr",
+  apflora.pop.nr,
   apflora.tpop.nr,
   apflora.tpopmassnber.jahr,
   apflora.tpopmassnber.id;
@@ -5603,7 +5603,7 @@ SELECT
   apflora.ap."ApArtId",
   'Massnahmen-Bericht ohne Entwicklung:'::text AS hw,
   ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id, 'Massnahmen-Berichte', apflora.tpopmassnber.id]::text[] AS url,
-  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop.nr), concat('Massnahmen-Bericht (Jahr): ', apflora.tpopmassnber.jahr)]::text[] AS text,
+  ARRAY[concat('Population (Nr.): ', apflora.pop.nr), concat('Teil-Population (Nr.): ', apflora.tpop.nr), concat('Massnahmen-Bericht (Jahr): ', apflora.tpopmassnber.jahr)]::text[] AS text,
   apflora.tpopmassnber.jahr AS "Berichtjahr"
 FROM
   apflora.ap
@@ -5620,7 +5620,7 @@ WHERE
   apflora.tpopmassnber.beurteilung IS NULL
   AND apflora.tpopmassnber.jahr IS NOT NULL
 ORDER BY
-  apflora.pop."PopNr",
+  apflora.pop.nr,
   apflora.tpop.nr,
   apflora.tpopmassnber.jahr;
 
@@ -5631,7 +5631,7 @@ SELECT
   apflora.ap."ApArtId",
   'Feldkontrolle ohne Jahr:'::text AS hw,
   ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id, 'Feld-Kontrollen', apflora.tpopkontr.id]::text[] AS url,
-  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop.nr), concat('Feld-Kontrolle (Jahr): ', apflora.tpopkontr.jahr)]::text[] AS text
+  ARRAY[concat('Population (Nr.): ', apflora.pop.nr), concat('Teil-Population (Nr.): ', apflora.tpop.nr), concat('Feld-Kontrolle (Jahr): ', apflora.tpopkontr.jahr)]::text[] AS text
 FROM
   apflora.ap
   INNER JOIN
@@ -5647,7 +5647,7 @@ WHERE
   apflora.tpopkontr.jahr IS NULL
   AND apflora.tpopkontr.typ <> 'Freiwilligen-Erfolgskontrolle'
 ORDER BY
-  apflora.pop."PopNr",
+  apflora.pop.nr,
   apflora.tpop.nr,
   apflora.tpopkontr.jahr;
 
@@ -5658,7 +5658,7 @@ SELECT
   apflora.ap."ApArtId",
   'Feldkontrolle ohne BearbeiterIn:'::text AS hw,
   ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id, 'Feld-Kontrollen', apflora.tpopkontr.id]::text[] AS url,
-  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop.nr), concat('Kontrolle (id): ', apflora.tpopkontr.id)]::text[] AS text
+  ARRAY[concat('Population (Nr.): ', apflora.pop.nr), concat('Teil-Population (Nr.): ', apflora.tpop.nr), concat('Kontrolle (id): ', apflora.tpopkontr.id)]::text[] AS text
 FROM
   apflora.ap
   INNER JOIN
@@ -5674,7 +5674,7 @@ WHERE
   apflora.tpopkontr.bearbeiter IS NULL
   AND apflora.tpopkontr.typ <> 'Freiwilligen-Erfolgskontrolle'
 ORDER BY
-  apflora.pop."PopNr",
+  apflora.pop.nr,
   apflora.tpop.nr,
   apflora.tpopkontr.id;
 
@@ -5685,7 +5685,7 @@ SELECT
   apflora.ap."ApArtId",
   'Freiwilligen-Kontrolle ohne Jahr:'::text AS hw,
   ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id, 'Freiwilligen-Kontrollen', apflora.tpopkontr.id]::text[] AS url,
-  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop.nr), concat('Feld-Kontrolle (id): ', apflora.tpopkontr.id)]::text[] AS text
+  ARRAY[concat('Population (Nr.): ', apflora.pop.nr), concat('Teil-Population (Nr.): ', apflora.tpop.nr), concat('Feld-Kontrolle (id): ', apflora.tpopkontr.id)]::text[] AS text
 FROM
   apflora.ap
   INNER JOIN
@@ -5702,7 +5702,7 @@ WHERE
   AND apflora.tpopkontr.typ = 'Freiwilligen-Erfolgskontrolle'
 ORDER BY
   apflora.ap."ApArtId",
-  apflora.pop."PopNr",
+  apflora.pop.nr,
   apflora.tpop.nr,
   apflora.tpopkontr.jahr;
 
@@ -5713,7 +5713,7 @@ SELECT
   apflora.ap."ApArtId",
   'Freiwilligen-Kontrolle ohne BearbeiterIn:'::text AS hw,
   ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id, 'Freiwilligen-Kontrollen', apflora.tpopkontr.id]::text[] AS url,
-  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop.nr), concat('Feld-Kontrolle (id): ', apflora.tpopkontr.id)]::text[] AS text
+  ARRAY[concat('Population (Nr.): ', apflora.pop.nr), concat('Teil-Population (Nr.): ', apflora.tpop.nr), concat('Feld-Kontrolle (id): ', apflora.tpopkontr.id)]::text[] AS text
 FROM
   apflora.ap
   INNER JOIN
@@ -5730,7 +5730,7 @@ WHERE
   AND apflora.tpopkontr.typ = 'Freiwilligen-Erfolgskontrolle'
 ORDER BY
   apflora.ap."ApArtId",
-  apflora.pop."PopNr",
+  apflora.pop.nr,
   apflora.tpop.nr,
   apflora.tpopkontr.bearbeiter;
 
@@ -5741,7 +5741,7 @@ SELECT
   apflora.ap."ApArtId",
   'Feldkontrolle ohne Typ:'::text AS hw,
   ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id, 'Feld-Kontrollen', apflora.tpopkontr.id]::text[] AS url,
-  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop.nr), concat('Feld-Kontrolle (Jahr): ', apflora.tpopkontr.jahr)]::text[] AS text,
+  ARRAY[concat('Population (Nr.): ', apflora.pop.nr), concat('Teil-Population (Nr.): ', apflora.tpop.nr), concat('Feld-Kontrolle (Jahr): ', apflora.tpopkontr.jahr)]::text[] AS text,
   apflora.tpopkontr.jahr AS "Berichtjahr"
 FROM
   apflora.ap
@@ -5761,7 +5761,7 @@ WHERE
   )
   AND apflora.tpopkontr.jahr IS NOT NULL
 ORDER BY
-  apflora.pop."PopNr",
+  apflora.pop.nr,
   apflora.tpop.nr,
   apflora.tpopkontr.jahr;
 
@@ -5772,7 +5772,7 @@ SELECT
   apflora.ap."ApArtId",
   'Feldkontrolle ohne Zaehlung:'::text AS hw,
   ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id, 'Feld-Kontrollen', apflora.tpopkontr.id]::text[] AS url,
-  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop.nr), concat('Feld-Kontrolle (Jahr): ', apflora.tpopkontr.jahr)]::text[] AS text,
+  ARRAY[concat('Population (Nr.): ', apflora.pop.nr), concat('Teil-Population (Nr.): ', apflora.tpop.nr), concat('Feld-Kontrolle (Jahr): ', apflora.tpopkontr.jahr)]::text[] AS text,
   apflora.tpopkontr.jahr AS "Berichtjahr"
 FROM
   apflora.ap
@@ -5801,7 +5801,7 @@ HAVING
   AND apflora.tpopkontr.typ <> 'Freiwilligen-Erfolgskontrolle'
 ORDER BY
   apflora.ap."ApArtId",
-  apflora.pop."PopNr",
+  apflora.pop.nr,
   apflora.tpop.nr,
   apflora.tpopkontr.jahr;
 
@@ -5812,7 +5812,7 @@ SELECT
   apflora.ap."ApArtId",
   'Freiwilligen-Kontrolle ohne Zaehlung:'::text AS hw,
   ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id, 'Freiwilligen-Kontrollen', apflora.tpopkontr.id]::text[] AS url,
-  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop.nr), concat('Feld-Kontrolle (Jahr): ', apflora.tpopkontr.jahr)]::text[] AS text,
+  ARRAY[concat('Population (Nr.): ', apflora.pop.nr), concat('Teil-Population (Nr.): ', apflora.tpop.nr), concat('Feld-Kontrolle (Jahr): ', apflora.tpopkontr.jahr)]::text[] AS text,
   apflora.tpopkontr.jahr AS "Berichtjahr"
 FROM
   apflora.ap
@@ -5841,7 +5841,7 @@ HAVING
   AND apflora.tpopkontr.typ = 'Freiwilligen-Erfolgskontrolle'
 ORDER BY
   apflora.ap."ApArtId",
-  apflora.pop."PopNr",
+  apflora.pop.nr,
   apflora.tpop.nr,
   apflora.tpopkontr.jahr;
 
@@ -5852,7 +5852,7 @@ SELECT
   apflora.ap."ApArtId",
   'Zaehlung ohne Zaehleinheit (Feldkontrolle):'::text AS hw,
   ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id, 'Feld-Kontrollen', apflora.tpopkontr.id, 'Zählungen', apflora.tpopkontrzaehl.id]::text[] AS url,
-  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop.nr), concat('Feld-Kontrolle (Jahr): ', apflora.tpopkontr.jahr), concat('Zählung (id): ', apflora.tpopkontrzaehl.id)]::text[] AS text,
+  ARRAY[concat('Population (Nr.): ', apflora.pop.nr), concat('Teil-Population (Nr.): ', apflora.tpop.nr), concat('Feld-Kontrolle (Jahr): ', apflora.tpopkontr.jahr), concat('Zählung (id): ', apflora.tpopkontrzaehl.id)]::text[] AS text,
   apflora.tpopkontr.jahr AS "Berichtjahr"
 FROM
   apflora.ap
@@ -5873,7 +5873,7 @@ WHERE
   AND apflora.tpopkontr.jahr IS NOT NULL
   AND apflora.tpopkontr.typ <> 'Freiwilligen-Erfolgskontrolle'
 ORDER BY
-  apflora.pop."PopNr",
+  apflora.pop.nr,
   apflora.tpop.nr,
   apflora.tpopkontr.jahr;
 
@@ -5884,7 +5884,7 @@ SELECT
   apflora.ap."ApArtId",
   'Zaehlung ohne Zaehleinheit (Freiwilligen-Kontrolle):'::text AS hw,
   ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id, 'Freiwilligen-Kontrollen', apflora.tpopkontr.id, 'Zählungen', apflora.tpopkontrzaehl.id]::text[] AS url,
-  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop.nr), concat('Feld-Kontrolle (Jahr): ', apflora.tpopkontr.jahr), concat('Zählung (id): ', apflora.tpopkontrzaehl.id)]::text[] AS text,
+  ARRAY[concat('Population (Nr.): ', apflora.pop.nr), concat('Teil-Population (Nr.): ', apflora.tpop.nr), concat('Feld-Kontrolle (Jahr): ', apflora.tpopkontr.jahr), concat('Zählung (id): ', apflora.tpopkontrzaehl.id)]::text[] AS text,
   apflora.tpopkontr.jahr AS "Berichtjahr"
 FROM
   apflora.ap
@@ -5905,7 +5905,7 @@ WHERE
   AND apflora.tpopkontr.jahr IS NOT NULL
   AND apflora.tpopkontr.typ = 'Freiwilligen-Erfolgskontrolle'
 ORDER BY
-  apflora.pop."PopNr",
+  apflora.pop.nr,
   apflora.tpop.nr,
   apflora.tpopkontr.jahr;
 
@@ -5916,7 +5916,7 @@ SELECT
   apflora.ap."ApArtId",
   'Zaehlung ohne Methode (Feldkontrolle):'::text AS hw,
   ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id, 'Feld-Kontrollen', apflora.tpopkontr.id, 'Zählungen', apflora.tpopkontrzaehl.id]::text[] AS url,
-  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop.nr), concat('Feld-Kontrolle (Jahr): ', apflora.tpopkontr.jahr), concat('Zählung (id): ', apflora.tpopkontrzaehl.id)]::text[] AS text,
+  ARRAY[concat('Population (Nr.): ', apflora.pop.nr), concat('Teil-Population (Nr.): ', apflora.tpop.nr), concat('Feld-Kontrolle (Jahr): ', apflora.tpopkontr.jahr), concat('Zählung (id): ', apflora.tpopkontrzaehl.id)]::text[] AS text,
   apflora.tpopkontr.jahr AS "Berichtjahr"
 FROM
   apflora.ap
@@ -5937,7 +5937,7 @@ WHERE
   AND apflora.tpopkontr.jahr IS NOT NULL
   AND apflora.tpopkontr.typ <> 'Freiwilligen-Erfolgskontrolle'
 ORDER BY
-  apflora.pop."PopNr",
+  apflora.pop.nr,
   apflora.tpop.nr,
   apflora.tpopkontr.jahr;
 
@@ -5948,7 +5948,7 @@ SELECT
   apflora.ap."ApArtId",
   'Zaehlung ohne Methode (Freiwilligen-Kontrolle):'::text AS hw,
   ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id, 'Freiwilligen-Kontrollen', apflora.tpopkontr.id, 'Zählungen', apflora.tpopkontrzaehl.id]::text[] AS url,
-  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop.nr), concat('Feld-Kontrolle (Jahr): ', apflora.tpopkontr.jahr), concat('Zählung (id): ', apflora.tpopkontrzaehl.id)]::text[] AS text,
+  ARRAY[concat('Population (Nr.): ', apflora.pop.nr), concat('Teil-Population (Nr.): ', apflora.tpop.nr), concat('Feld-Kontrolle (Jahr): ', apflora.tpopkontr.jahr), concat('Zählung (id): ', apflora.tpopkontrzaehl.id)]::text[] AS text,
   apflora.tpopkontr.jahr AS "Berichtjahr"
 FROM
   apflora.ap
@@ -5969,7 +5969,7 @@ WHERE
   AND apflora.tpopkontr.jahr IS NOT NULL
   AND apflora.tpopkontr.typ = 'Freiwilligen-Erfolgskontrolle'
 ORDER BY
-  apflora.pop."PopNr",
+  apflora.pop.nr,
   apflora.tpop.nr,
   apflora.tpopkontr.jahr;
 
@@ -5980,7 +5980,7 @@ SELECT
   apflora.ap."ApArtId",
   'Zaehlung ohne Anzahl (Feldkontrolle):'::text AS hw,
   ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id, 'Feld-Kontrollen', apflora.tpopkontr.id, 'Zählungen', apflora.tpopkontrzaehl.id]::text[] AS url,
-  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop.nr), concat('Feld-Kontrolle (Jahr): ', apflora.tpopkontr.jahr), concat('Zählung (id): ', apflora.tpopkontrzaehl.id)]::text[] AS text,
+  ARRAY[concat('Population (Nr.): ', apflora.pop.nr), concat('Teil-Population (Nr.): ', apflora.tpop.nr), concat('Feld-Kontrolle (Jahr): ', apflora.tpopkontr.jahr), concat('Zählung (id): ', apflora.tpopkontrzaehl.id)]::text[] AS text,
   apflora.tpopkontr.jahr AS "Berichtjahr"
 FROM
   apflora.ap
@@ -6001,7 +6001,7 @@ WHERE
   AND apflora.tpopkontr.jahr IS NOT NULL
   AND apflora.tpopkontr.typ <> 'Freiwilligen-Erfolgskontrolle'
 ORDER BY
-  apflora.pop."PopNr",
+  apflora.pop.nr,
   apflora.tpop.nr,
   apflora.tpopkontr.jahr;
 
@@ -6012,7 +6012,7 @@ SELECT
   apflora.ap."ApArtId",
   'Zaehlung ohne Anzahl (Freiwilligen-Kontrolle):'::text AS hw,
   ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id, 'Freiwilligen-Kontrollen', apflora.tpopkontr.id, 'Zählungen', apflora.tpopkontrzaehl.id]::text[] AS url,
-  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop.nr), concat('Feld-Kontrolle (Jahr): ', apflora.tpopkontr.jahr), concat('Zählung (id): ', apflora.tpopkontrzaehl.id)]::text[] AS text,
+  ARRAY[concat('Population (Nr.): ', apflora.pop.nr), concat('Teil-Population (Nr.): ', apflora.tpop.nr), concat('Feld-Kontrolle (Jahr): ', apflora.tpopkontr.jahr), concat('Zählung (id): ', apflora.tpopkontrzaehl.id)]::text[] AS text,
   apflora.tpopkontr.jahr AS "Berichtjahr"
 FROM
   apflora.ap
@@ -6033,7 +6033,7 @@ WHERE
   AND apflora.tpopkontr.jahr IS NOT NULL
   AND apflora.tpopkontr.typ = 'Freiwilligen-Erfolgskontrolle'
 ORDER BY
-  apflora.pop."PopNr",
+  apflora.pop.nr,
   apflora.tpop.nr,
   apflora.tpopkontr.jahr;
 
@@ -6044,7 +6044,7 @@ SELECT
   apflora.ap."ApArtId",
   'Teilpopulations-Bericht ohne Jahr:'::text AS hw,
   ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id, 'Kontroll-Berichte', apflora.tpopber.id]::text[] AS url,
-  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop.nr), concat('Teilpopulations-Bericht (id): ', apflora.tpopber.id)]::text[] AS text
+  ARRAY[concat('Population (Nr.): ', apflora.pop.nr), concat('Teil-Population (Nr.): ', apflora.tpop.nr), concat('Teilpopulations-Bericht (id): ', apflora.tpopber.id)]::text[] AS text
 FROM
   apflora.ap
   INNER JOIN
@@ -6059,7 +6059,7 @@ FROM
 WHERE
   apflora.tpopber.jahr IS NULL
 ORDER BY
-  apflora.pop."PopNr",
+  apflora.pop.nr,
   apflora.tpop.nr,
   apflora.tpopber.jahr;
 
@@ -6070,7 +6070,7 @@ SELECT
   apflora.ap."ApArtId",
   'Teilpopulations-Bericht ohne Entwicklung:'::text AS hw,
   ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id, 'Kontroll-Berichte', apflora.tpopber.id]::text[] AS url,
-  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop.nr), concat('Teilpopulations-Bericht (Jahr): ', apflora.tpopber.jahr)]::text[] AS text,
+  ARRAY[concat('Population (Nr.): ', apflora.pop.nr), concat('Teil-Population (Nr.): ', apflora.tpop.nr), concat('Teilpopulations-Bericht (Jahr): ', apflora.tpopber.jahr)]::text[] AS text,
   apflora.tpopber.jahr AS "Berichtjahr"
 FROM
   apflora.ap
@@ -6087,7 +6087,7 @@ WHERE
   apflora.tpopber.entwicklung IS NULL
   AND apflora.tpopber.jahr IS NOT NULL
 ORDER BY
-  apflora.pop."PopNr",
+  apflora.pop.nr,
   apflora.tpop.nr,
   apflora.tpopber.jahr;
 
@@ -6098,7 +6098,7 @@ SELECT
   apflora.ap."ApArtId",
   'Populations-Bericht ohne Entwicklung:'::text AS hw,
   ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop.id, 'Kontroll-Berichte', apflora.popber.id]::text[] AS url,
-  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Populations-Bericht (Jahr): ', apflora.popber.jahr)]::text[] AS text,
+  ARRAY[concat('Population (Nr.): ', apflora.pop.nr), concat('Populations-Bericht (Jahr): ', apflora.popber.jahr)]::text[] AS text,
   apflora.popber.jahr AS "Berichtjahr"
 FROM
   apflora.ap
@@ -6112,7 +6112,7 @@ WHERE
   apflora.popber.entwicklung IS NULL
   AND apflora.popber.jahr IS NOT NULL
 ORDER BY
-  apflora.pop."PopNr",
+  apflora.pop.nr,
   apflora.popber.jahr;
 
 DROP VIEW IF EXISTS apflora.v_qk2_popber_ohnejahr CASCADE;
@@ -6122,7 +6122,7 @@ SELECT
   apflora.ap."ApArtId",
   'Populations-Bericht ohne Jahr:'::text AS hw,
   ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop.id, 'Kontroll-Berichte', apflora.popber.id]::text[] AS url,
-  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Populations-Bericht (Jahr): ', apflora.popber.jahr)]::text[] AS text
+  ARRAY[concat('Population (Nr.): ', apflora.pop.nr), concat('Populations-Bericht (Jahr): ', apflora.popber.jahr)]::text[] AS text
 FROM
   apflora.ap
   INNER JOIN
@@ -6134,7 +6134,7 @@ FROM
 WHERE
   apflora.popber.jahr IS NULL
 ORDER BY
-  apflora.pop."PopNr",
+  apflora.pop.nr,
   apflora.popber.jahr;
 
 DROP VIEW IF EXISTS apflora.v_qk2_popmassnber_ohnejahr CASCADE;
@@ -6144,7 +6144,7 @@ SELECT
   apflora.ap."ApArtId",
   'Populations-Massnahmen-Bericht ohne Jahr:'::text AS hw,
   ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop.id, 'Massnahmen-Berichte', apflora.popmassnber.id]::text[] AS url,
-  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Populations-Massnahmen-Bericht (Jahr): ', apflora.popmassnber.jahr)]::text[] AS text
+  ARRAY[concat('Population (Nr.): ', apflora.pop.nr), concat('Populations-Massnahmen-Bericht (Jahr): ', apflora.popmassnber.jahr)]::text[] AS text
 FROM
   apflora.ap
   INNER JOIN
@@ -6156,7 +6156,7 @@ FROM
 WHERE
   apflora.popmassnber.jahr IS NULL
 ORDER BY
-  apflora.pop."PopNr",
+  apflora.pop.nr,
   apflora.popmassnber.jahr;
 
 DROP VIEW IF EXISTS apflora.v_qk2_popmassnber_ohneentwicklung CASCADE;
@@ -6166,7 +6166,7 @@ SELECT
   apflora.ap."ApArtId",
   'Populations-Massnahmen-Bericht ohne Entwicklung:'::text AS hw,
   ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop.id, 'Massnahmen-Berichte', apflora.popmassnber.id]::text[] AS url,
-  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Populations-Massnahmen-Bericht (Jahr): ', apflora.popmassnber.jahr)]::text[] AS text,
+  ARRAY[concat('Population (Nr.): ', apflora.pop.nr), concat('Populations-Massnahmen-Bericht (Jahr): ', apflora.popmassnber.jahr)]::text[] AS text,
   apflora.popmassnber.jahr AS "Berichtjahr"
 FROM
   apflora.ap
@@ -6180,7 +6180,7 @@ WHERE
   apflora.popmassnber.beurteilung IS NULL
   AND apflora.popmassnber.jahr IS NOT NULL
 ORDER BY
-  apflora.pop."PopNr",
+  apflora.pop.nr,
   apflora.popmassnber.jahr;
 
 DROP VIEW IF EXISTS apflora.v_qk2_zielber_ohneentwicklung CASCADE;
@@ -6408,7 +6408,7 @@ SELECT DISTINCT
   apflora.pop.ap_id,
   'Population: Koordinaten entsprechen keiner Teilpopulation:'::text AS hw,
   ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop.id]::text[] AS url,
-  ARRAY[concat('Population (Nr): ', apflora.pop."PopNr")]::text[] AS text,
+  ARRAY[concat('Population (Nr): ', apflora.pop.nr)]::text[] AS text,
   apflora.pop."PopXKoord" AS "XKoord",
   apflora.pop."PopYKoord" AS "YKoord"
 FROM
@@ -6439,7 +6439,7 @@ SELECT DISTINCT
   apflora.pop.ap_id,
   'Population: Status ist "angesiedelt, Ansaatversuch", es gibt aber eine aktuelle Teilpopulation oder eine ursprüngliche erloschene:'::text AS hw,
   ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop.id]::text[] AS url,
-  ARRAY[concat('Population (Nr): ', apflora.pop."PopNr")]::text[] AS text
+  ARRAY[concat('Population (Nr): ', apflora.pop.nr)]::text[] AS text
 FROM
   apflora.ap
   INNER JOIN
@@ -6463,7 +6463,7 @@ SELECT DISTINCT
   apflora.pop.ap_id,
   'Population: Status ist "angesiedelt, Ansaatversuch", alle Teilpopulationen sind gemäss Status erloschen:'::text AS hw,
   ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop.id]::text[] AS url,
-  ARRAY[concat('Population (Nr): ', apflora.pop."PopNr")]::text[] AS text
+  ARRAY[concat('Population (Nr): ', apflora.pop.nr)]::text[] AS text
 FROM
   apflora.ap
     INNER JOIN apflora.pop
@@ -6498,7 +6498,7 @@ WHERE
     apflora.pop.ap_id,
     'Population: Status ist "angesiedelt, Ansaatversuch", es gibt aber eine Teilpopulation mit Status "urspruenglich, erloschen":'::text AS hw,
     ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop.id]::text[] AS url,
-  ARRAY[concat('Population (Nr): ', apflora.pop."PopNr")]::text[] AS text
+  ARRAY[concat('Population (Nr): ', apflora.pop.nr)]::text[] AS text
   FROM
     apflora.ap
     INNER JOIN
@@ -6522,7 +6522,7 @@ SELECT DISTINCT
   apflora.pop.ap_id,
   'Population: Status ist "erloschen" (urspruenglich oder angesiedelt), es gibt aber eine Teilpopulation mit Status "aktuell" (urspruenglich oder angesiedelt):'::text AS hw,
     ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop.id]::text[] AS url,
-  ARRAY[concat('Population (Nr): ', apflora.pop."PopNr")]::text[] AS text
+  ARRAY[concat('Population (Nr): ', apflora.pop.nr)]::text[] AS text
 FROM
   apflora.ap
   INNER JOIN
@@ -6546,7 +6546,7 @@ SELECT DISTINCT
   apflora.pop.ap_id,
   'Population: Status ist "erloschen" (urspruenglich oder angesiedelt), es gibt aber eine Teilpopulation mit Status "angesiedelt, Ansaatversuch":'::text AS hw,
     ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop.id]::text[] AS url,
-  ARRAY[concat('Population (Nr): ', apflora.pop."PopNr")]::text[] AS text
+  ARRAY[concat('Population (Nr): ', apflora.pop.nr)]::text[] AS text
 FROM
   apflora.ap
   INNER JOIN
@@ -6570,7 +6570,7 @@ SELECT DISTINCT
   apflora.pop.ap_id,
   'Population: Status ist "angesiedelt", es gibt aber eine Teilpopulation mit Status "urspruenglich":'::text AS hw,
   ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop.id]::text[] AS url,
-  ARRAY[concat('Population (Nr): ', apflora.pop."PopNr")]::text[] AS text
+  ARRAY[concat('Population (Nr): ', apflora.pop.nr)]::text[] AS text
 FROM
   apflora.ap
   INNER JOIN
@@ -6594,7 +6594,7 @@ SELECT DISTINCT
   apflora.pop.ap_id,
   'Population: Status ist "potenzieller Wuchs-/Ansiedlungsort", es gibt aber eine Teilpopulation mit Status "angesiedelt" oder "urspruenglich":'::text AS hw,
   ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop.id]::text[] AS url,
-  ARRAY[concat('Population (Nr): ', apflora.pop."PopNr")]::text[] AS text
+  ARRAY[concat('Population (Nr): ', apflora.pop.nr)]::text[] AS text
 FROM
   apflora.ap
   INNER JOIN
@@ -6620,7 +6620,7 @@ SELECT DISTINCT
   apflora.tpop.id,
   'Teilpopulation mit Status "Ansaatversuch", bei denen in der letzten Kontrolle eine Anzahl festgestellt wurde:'::text AS hw,
   ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id]::text[] AS url,
-  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop.nr)]::text[] AS text
+  ARRAY[concat('Population (Nr.): ', apflora.pop.nr), concat('Teil-Population (Nr.): ', apflora.tpop.nr)]::text[] AS text
 FROM
   apflora.ap
   INNER JOIN
@@ -6660,7 +6660,7 @@ SELECT DISTINCT
   apflora.tpop.id,
   'Teilpopulation mit Status "potentieller Wuchs-/Ansiedlungsort", bei denen in einer Kontrolle eine Anzahl festgestellt wurde:'::text AS hw,
   ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id]::text[] AS url,
-  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop.nr)]::text[] AS text
+  ARRAY[concat('Population (Nr.): ', apflora.pop.nr), concat('Teil-Population (Nr.): ', apflora.tpop.nr)]::text[] AS text
 FROM
   apflora.projekt
   INNER JOIN
@@ -6699,7 +6699,7 @@ SELECT DISTINCT
   apflora.tpop.id,
   'Teilpopulation mit Status "potentieller Wuchs-/Ansiedlungsort", bei der eine Massnahme des Typs "Ansiedlung" existiert:'::text AS hw,
   ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id]::text[] AS url,
-  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop.nr)]::text[] AS text
+  ARRAY[concat('Population (Nr.): ', apflora.pop.nr), concat('Teil-Population (Nr.): ', apflora.tpop.nr)]::text[] AS text
 FROM
   apflora.ap
   INNER JOIN
@@ -6830,7 +6830,7 @@ SELECT DISTINCT
   apflora.popber.jahr AS "Berichtjahr",
   'Populationen mit Bericht "zunehmend" ohne Teil-Population mit Bericht "zunehmend":'::text AS hw,
   ARRAY['Projekte', apflora.ap."ProjId" , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop.id]::text[] AS url,
-  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr")]::text[] AS text
+  ARRAY[concat('Population (Nr.): ', apflora.pop.nr)]::text[] AS text
 FROM
   apflora.ap
   INNER JOIN
@@ -6865,7 +6865,7 @@ SELECT DISTINCT
   apflora.popber.jahr AS "Berichtjahr",
   'Populationen mit Bericht "abnehmend" ohne Teil-Population mit Bericht "abnehmend":'::text AS hw,
   ARRAY['Projekte', apflora.ap."ProjId" , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop.id]::text[] AS url,
-  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr")]::text[] AS text
+  ARRAY[concat('Population (Nr.): ', apflora.pop.nr)]::text[] AS text
 FROM
   apflora.ap
   INNER JOIN
@@ -6900,7 +6900,7 @@ SELECT DISTINCT
   apflora.popber.jahr AS "Berichtjahr",
   'Populationen mit Bericht "erloschen" ohne Teil-Population mit Bericht "erloschen":'::text AS hw,
   ARRAY['Projekte', apflora.ap."ProjId" , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop.id]::text[] AS url,
-  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr")]::text[] AS text
+  ARRAY[concat('Population (Nr.): ', apflora.pop.nr)]::text[] AS text
 FROM
   apflora.ap
   INNER JOIN
@@ -6935,7 +6935,7 @@ SELECT DISTINCT
   apflora.popber.jahr AS "Berichtjahr",
   'Populationen mit Bericht "erloschen" und mindestens einer gemäss Bericht nicht erloschenen Teil-Population:'::text AS hw,
   ARRAY['Projekte', apflora.ap."ProjId" , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop.id]::text[] AS url,
-  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr")]::text[] AS text
+  ARRAY[concat('Population (Nr.): ', apflora.pop.nr)]::text[] AS text
 FROM
   apflora.ap
   INNER JOIN
@@ -6981,7 +6981,7 @@ SELECT
   apflora.ap."ApArtId",
   'Teilpopulation: Status ist "aktuell" (ursprünglich oder angesiedelt) oder potentieller Wuchsort; der letzte Teilpopulations-Bericht meldet aber "erloschen" und es gab seither keine Ansiedlung:'::text AS "hw",
   ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id]::text[] AS "url",
-  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop.nr)]::text[] AS text
+  ARRAY[concat('Population (Nr.): ', apflora.pop.nr), concat('Teil-Population (Nr.): ', apflora.tpop.nr)]::text[] AS text
 FROM
   apflora.projekt
   INNER JOIN
@@ -7031,7 +7031,7 @@ SELECT
   apflora.ap."ApArtId",
   'Population: Status ist "aktuell" (ursprünglich oder angesiedelt) oder potentieller Wuchsort; der letzte Populations-Bericht meldet aber "erloschen" und es gab seither keine Ansiedlung:'::text AS "hw",
   ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop.id]::text[] AS "url",
-  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr")]::text[] AS text
+  ARRAY[concat('Population (Nr.): ', apflora.pop.nr)]::text[] AS text
 FROM
   apflora.projekt
   INNER JOIN
@@ -7079,7 +7079,7 @@ SELECT
   apflora.ap."ApArtId",
   'Teilpopulation: Status ist "erloschen" (ursprünglich oder angesiedelt), Ansaatversuch oder potentieller Wuchsort; der letzte Teilpopulations-Bericht meldet aber "zunehmend" und es gab seither keine Ansiedlung:'::text AS "hw",
   ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id]::text[] AS "url",
-  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop.nr)]::text[] AS text
+  ARRAY[concat('Population (Nr.): ', apflora.pop.nr), concat('Teil-Population (Nr.): ', apflora.tpop.nr)]::text[] AS text
 FROM
   apflora.projekt
   INNER JOIN
@@ -7129,7 +7129,7 @@ SELECT
   apflora.ap."ApArtId",
   'Population: Status ist "erloschen" (ursprünglich oder angesiedelt), Ansaatversuch oder potentieller Wuchsort; der letzte Populations-Bericht meldet aber "zunehmend" und es gab seither keine Ansiedlung:'::text AS "hw",
   ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop.id]::text[] AS "url",
-  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr")]::text[] AS text
+  ARRAY[concat('Population (Nr.): ', apflora.pop.nr)]::text[] AS text
 FROM
   apflora.projekt
   INNER JOIN
@@ -7177,7 +7177,7 @@ SELECT
   apflora.ap."ApArtId",
   'Teilpopulation: Status ist "erloschen" (ursprünglich oder angesiedelt), Ansaatversuch oder potentieller Wuchsort; der letzte Teilpopulations-Bericht meldet aber "stabil" und es gab seither keine Ansiedlung:'::text AS "hw",
   ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id]::text[] AS "url",
-  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop.nr)]::text[] AS text
+  ARRAY[concat('Population (Nr.): ', apflora.pop.nr), concat('Teil-Population (Nr.): ', apflora.tpop.nr)]::text[] AS text
 FROM
   apflora.projekt
   INNER JOIN
@@ -7227,7 +7227,7 @@ SELECT
   apflora.ap."ApArtId",
   'Population: Status ist "erloschen" (ursprünglich oder angesiedelt), Ansaatversuch oder potentieller Wuchsort; der letzte Populations-Bericht meldet aber "stabil" und es gab seither keine Ansiedlung:'::text AS "hw",
   ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop.id]::text[] AS "url",
-  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr")]::text[] AS text
+  ARRAY[concat('Population (Nr.): ', apflora.pop.nr)]::text[] AS text
 FROM
   apflora.projekt
   INNER JOIN
@@ -7275,7 +7275,7 @@ SELECT
   apflora.ap."ApArtId",
   'Teilpopulation: Status ist "erloschen" (ursprünglich oder angesiedelt), Ansaatversuch oder potentieller Wuchsort; der letzte Teilpopulations-Bericht meldet aber "abnehmend" und es gab seither keine Ansiedlung:'::text AS "hw",
   ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id]::text[] AS "url",
-  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop.nr)]::text[] AS text
+  ARRAY[concat('Population (Nr.): ', apflora.pop.nr), concat('Teil-Population (Nr.): ', apflora.tpop.nr)]::text[] AS text
 FROM
   apflora.projekt
   INNER JOIN
@@ -7325,7 +7325,7 @@ SELECT
   apflora.ap."ApArtId",
   'Population: Status ist "erloschen" (ursprünglich oder angesiedelt), Ansaatversuch oder potentieller Wuchsort; der letzte Populations-Bericht meldet aber "abnehmend" und es gab seither keine Ansiedlung:'::text AS "hw",
   ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop.id]::text[] AS "url",
-  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr")]::text[] AS text
+  ARRAY[concat('Population (Nr.): ', apflora.pop.nr)]::text[] AS text
 FROM
   apflora.projekt
   INNER JOIN
@@ -7373,7 +7373,7 @@ SELECT
   apflora.ap."ApArtId",
   'Teilpopulation: Status ist "erloschen" (ursprünglich oder angesiedelt) oder potentieller Wuchsort; der letzte Teilpopulations-Bericht meldet aber "unsicher" und es gab seither keine Ansiedlung:'::text AS "hw",
   ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id]::text[] AS "url",
-  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop.nr)]::text[] AS text
+  ARRAY[concat('Population (Nr.): ', apflora.pop.nr), concat('Teil-Population (Nr.): ', apflora.tpop.nr)]::text[] AS text
 FROM
   apflora.projekt
   INNER JOIN
@@ -7423,7 +7423,7 @@ SELECT
   apflora.ap."ApArtId",
   'Population: Status ist "erloschen" (ursprünglich oder angesiedelt) oder potentieller Wuchsort; der letzte Populations-Bericht meldet aber "unsicher" und es gab seither keine Ansiedlung:'::text AS "hw",
   ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop.id]::text[] AS "url",
-  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr")]::text[] AS text
+  ARRAY[concat('Population (Nr.): ', apflora.pop.nr)]::text[] AS text
 FROM
   apflora.projekt
   INNER JOIN
@@ -7458,7 +7458,7 @@ SELECT
   apflora.ap."ApArtId",
   'Population: Keine Teil-Population hat den Status der Population:'::text AS "hw",
   ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop.id]::text[] AS "url",
-  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr")]::text[] AS text
+  ARRAY[concat('Population (Nr.): ', apflora.pop.nr)]::text[] AS text
 FROM
   apflora.projekt
   INNER JOIN
@@ -7496,7 +7496,7 @@ SELECT
   apflora.ap."ApArtId",
   'Population: Status ist "potentieller Wuchs-/Ansiedlungsort". Es gibt aber Teil-Populationen mit abweichendem Status:'::text AS "hw",
   ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop.id]::text[] AS "url",
-  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr")]::text[] AS text
+  ARRAY[concat('Population (Nr.): ', apflora.pop.nr)]::text[] AS text
 FROM
   apflora.projekt
   INNER JOIN
@@ -7524,7 +7524,7 @@ SELECT
   apflora.ap."ApArtId",
   'Population: Status ist "Ansaatversuch". Es gibt Teil-Populationen mit nicht zulässigen Stati ("ursprünglich" oder "angesiedelt, aktuell"):'::text AS "hw",
   ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop.id]::text[] AS "url",
-  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr")]::text[] AS text
+  ARRAY[concat('Population (Nr.): ', apflora.pop.nr)]::text[] AS text
 FROM
   apflora.projekt
   INNER JOIN
@@ -7552,7 +7552,7 @@ SELECT
   apflora.ap."ApArtId",
   'Population: Status ist "angesiedelt nach Beginn AP, erloschen/nicht etabliert". Es gibt Teil-Populationen mit abweichendem Status:'::text AS "hw",
   ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop.id]::text[] AS "url",
-  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr")]::text[] AS text
+  ARRAY[concat('Population (Nr.): ', apflora.pop.nr)]::text[] AS text
 FROM
   apflora.projekt
   INNER JOIN
@@ -7580,7 +7580,7 @@ SELECT
   apflora.ap."ApArtId",
   'Population: Status ist "angesiedelt vor Beginn AP, erloschen/nicht etabliert". Es gibt Teil-Populationen mit nicht zulässigen Stati ("ursprünglich", "angesiedelt, aktuell", "Ansaatversuch", "potentieller Wuchsort"):'::text AS "hw",
   ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop.id]::text[] AS "url",
-  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr")]::text[] AS text
+  ARRAY[concat('Population (Nr.): ', apflora.pop.nr)]::text[] AS text
 FROM
   apflora.projekt
   INNER JOIN
@@ -7608,7 +7608,7 @@ SELECT
   apflora.ap."ApArtId",
   'Population: Status ist "angesiedelt nach Beginn AP, aktuell". Es gibt Teil-Populationen mit nicht zulässigen Stati ("ursprünglich", "angesiedelt vor Beginn AP, aktuell"):'::text AS "hw",
   ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop.id]::text[] AS "url",
-  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr")]::text[] AS text
+  ARRAY[concat('Population (Nr.): ', apflora.pop.nr)]::text[] AS text
 FROM
   apflora.projekt
   INNER JOIN
@@ -7636,7 +7636,7 @@ SELECT
   apflora.ap."ApArtId",
   'Population: Status ist "angesiedelt vor Beginn AP, aktuell". Es gibt Teil-Populationen mit nicht zulässigen Stati ("ursprünglich"):'::text AS "hw",
   ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop.id]::text[] AS "url",
-  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr")]::text[] AS text
+  ARRAY[concat('Population (Nr.): ', apflora.pop.nr)]::text[] AS text
 FROM
   apflora.projekt
   INNER JOIN
@@ -7664,7 +7664,7 @@ SELECT
   apflora.ap."ApArtId",
   'Population: Status ist "ursprünglich, erloschen". Es gibt Teil-Populationen (ausser potentiellen Wuchs-/Ansiedlungsorten) mit abweichendem Status:'::text AS "hw",
   ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop.id]::text[] AS "url",
-  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr")]::text[] AS text
+  ARRAY[concat('Population (Nr.): ', apflora.pop.nr)]::text[] AS text
 FROM
   apflora.projekt
   INNER JOIN
@@ -7705,7 +7705,7 @@ SELECT
   apflora.ap."ApArtId",
   'Population: Status ist "erloschen" (ursprünglich oder angesiedelt); der letzte Populations-Bericht meldet "erloschen". Seither gab es aber eine Ansiedlung:'::text AS "hw",
   ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop.id]::text[] AS "url",
-  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr")]::text[] AS text
+  ARRAY[concat('Population (Nr.): ', apflora.pop.nr)]::text[] AS text
 FROM
   apflora.projekt
   INNER JOIN
@@ -7753,7 +7753,7 @@ SELECT
   apflora.ap."ApArtId",
   'Teilpopulation: Status ist "erloschen" (ursprünglich oder angesiedelt); der letzte Teilpopulations-Bericht meldet "erloschen". Seither gab es aber eine Ansiedlung:'::text AS "hw",
   ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id]::text[] AS "url",
-  ARRAY[concat('Population (Nr.): ', apflora.pop."PopNr"), concat('Teil-Population (Nr.): ', apflora.tpop.nr)]::text[] AS text
+  ARRAY[concat('Population (Nr.): ', apflora.pop.nr), concat('Teil-Population (Nr.): ', apflora.tpop.nr)]::text[] AS text
 FROM
   apflora.projekt
   INNER JOIN
