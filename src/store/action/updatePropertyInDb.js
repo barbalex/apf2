@@ -90,13 +90,6 @@ export default async (
      * because of old application
      */
     const url = `/${table}?${idField}=eq.${tabelleId}`
-    console.log('updatePropertyInDb: data:', {
-      table,
-      idField,
-      tabelleId,
-      key,
-      valuePassed,
-    })
     try {
       await axios.patch(url, { [key]: value })
     } catch (error) {
