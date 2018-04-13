@@ -1626,7 +1626,7 @@ SELECT
   apflora.tpop.kontakt AS "TPop Kontakt vor Ort",
   apflora.tpop.nutzungszone AS "TPop Nutzungszone",
   apflora.tpop.bewirtschafter AS "TPop BewirtschafterIn",
-  apflora.tpop."TPopBewirtschaftung" AS "TPop Bewirtschaftung",
+  apflora.tpop.bewirtschaftung AS "TPop Bewirtschaftung",
   apflora.v_tpop_berjahrundmassnjahr."Jahr",
   apflora.tpopber.id AS "TPopBer Id",
   apflora.tpopber.jahr AS "TPopBer Jahr",
@@ -1746,7 +1746,6 @@ SELECT
   apflora.v_tpop."Pop X-Koordinaten",
   apflora.v_tpop."Pop Y-Koordinaten",
   apflora.v_tpop."TPop ID",
-  apflora.v_tpop."TPop Guid",
   apflora.v_tpop."TPop Nr",
   apflora.v_tpop."TPop Gemeinde",
   apflora.v_tpop."TPop Flurname",
@@ -1772,7 +1771,7 @@ SELECT
   apflora.v_tpop."Teilpopulation zuletzt geaendert",
   apflora.v_tpop."Teilpopulation zuletzt geaendert von",
   apflora.v_tpop_letzteKontrId."AnzTPopKontr" AS "TPop Anzahl Kontrollen",
-  apflora.v_tpopkontr.id,
+  apflora.v_tpopkontr.id as "Kontr id",
   apflora.v_tpopkontr."Kontr Jahr",
   apflora.v_tpopkontr."Kontr Datum",
   apflora.v_tpopkontr."Kontr Typ",
@@ -1826,7 +1825,7 @@ FROM
     ON apflora.v_tpop_letzteKontrId."MaxTPopKontrId" = apflora.v_tpopkontr.id::text)
   INNER JOIN
     apflora.v_tpop
-    ON apflora.v_tpop_letzteKontrId.id = apflora.v_tpop.id;
+    ON apflora.v_tpop_letzteKontrId.id = apflora.v_tpop."TPop ID";
 
 DROP VIEW IF EXISTS apflora.v_qk2_tpop_erloschenundrelevantaberletztebeobvor1950 CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk2_tpop_erloschenundrelevantaberletztebeobvor1950 AS

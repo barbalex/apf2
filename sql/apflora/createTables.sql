@@ -502,9 +502,8 @@ CREATE TABLE apflora.tpop (
   kontakt text DEFAULT NULL,
   nutzungszone text DEFAULT NULL,
   bewirtschafter text DEFAULT NULL,
-  "TPopBewirtschaftung" text DEFAULT NULL,
-  "TPopTxt" text,
-  "TPopGuid" UUID DEFAULT uuid_generate_v1mc(),
+  bewirtschaftung text DEFAULT NULL,
+  bemerkungen text,
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
 );
@@ -541,8 +540,8 @@ COMMENT ON COLUMN apflora.tpop.eigentuemer IS 'EigentümerIn';
 COMMENT ON COLUMN apflora.tpop.kontakt IS 'Kontaktperson vor Ort';
 COMMENT ON COLUMN apflora.tpop.nutzungszone IS 'Nutzungszone';
 COMMENT ON COLUMN apflora.tpop.bewirtschafter IS 'Wer bewirtschaftet die Fläche?';
-COMMENT ON COLUMN apflora.tpop."TPopBewirtschaftung" IS 'Wie wird die Fläche bewirtschaftet?';
-COMMENT ON COLUMN apflora.tpop."TPopTxt" IS 'Bemerkungen zur Teilpopulation';
+COMMENT ON COLUMN apflora.tpop.bewirtschaftung IS 'Wie wird die Fläche bewirtschaftet?';
+COMMENT ON COLUMN apflora.tpop.bemerkungen IS 'Bemerkungen zur Teilpopulation';
 COMMENT ON COLUMN apflora.tpop.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.tpop.changed IS 'Von wem wurde der Datensatz zuletzt geändert?';
 

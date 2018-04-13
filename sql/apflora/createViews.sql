@@ -211,7 +211,7 @@ SELECT
   apflora.tpop.kontakt AS "TPop Kontakt vor Ort",
   apflora.tpop.nutzungszone AS "TPop Nutzungszone",
   apflora.tpop.bewirtschafter AS "TPop BewirtschafterIn",
-  apflora.tpop."TPopBewirtschaftung" AS "TPop Bewirtschaftung",
+  apflora.tpop.bewirtschaftung AS "TPop Bewirtschaftung",
   apflora.tpopmassn.id,
   apflora.tpopmassn.jahr AS "Massn Jahr",
   apflora.tpopmassn.datum AS "Massn Datum",
@@ -416,7 +416,7 @@ SELECT
   apflora.tpop.kontakt AS "tpopkontaktvorort",
   apflora.tpop.nutzungszone AS "tpopnutzungszone",
   apflora.tpop.bewirtschafter AS "tpopbewirtschafterin",
-  apflora.tpop."TPopBewirtschaftung" AS "tpopbewirtschaftung",
+  apflora.tpop.bewirtschaftung AS "tpopbewirtschaftung",
   CAST(apflora.tpopmassn.id AS varchar(50)) AS "massnguid",
   apflora.tpopmassn.jahr AS "massnjahr",
   apflora.tpopmassn.datum::timestamp AS "massndatum",
@@ -517,7 +517,7 @@ SELECT
   apflora.tpop.kontakt AS "TPop Kontakt vor Ort",
   apflora.tpop.nutzungszone AS "TPop Nutzungszone",
   apflora.tpop.bewirtschafter AS "TPop BewirtschafterIn",
-  apflora.tpop."TPopBewirtschaftung" AS "TPop Bewirtschaftung",
+  apflora.tpop.bewirtschaftung AS "TPop Bewirtschaftung",
   count(apflora.tpopmassn.id) AS "Anzahl Massnahmen"
 FROM
   apflora.ae_eigenschaften
@@ -584,7 +584,7 @@ GROUP BY
   apflora.tpop.kontakt,
   apflora.tpop.nutzungszone,
   apflora.tpop.bewirtschafter,
-  apflora.tpop."TPopBewirtschaftung"
+  apflora.tpop.bewirtschaftung
 ORDER BY
   apflora.ae_eigenschaften.artname,
   apflora.pop."PopNr",
@@ -1081,7 +1081,7 @@ SELECT
   apflora.tpop.kontakt AS "TPop Kontakt vor Ort",
   apflora.tpop.nutzungszone AS "TPop Nutzungszone",
   apflora.tpop.bewirtschafter AS "TPop BewirtschafterIn",
-  apflora.tpop."TPopBewirtschaftung" AS "TPop Bewirtschaftung",
+  apflora.tpop.bewirtschaftung AS "TPop Bewirtschaftung",
   apflora.tpop.changed AS "Teilpopulation zuletzt geaendert",
   apflora.tpop.changed AS "Teilpopulation zuletzt geaendert von"
 FROM
@@ -1157,7 +1157,7 @@ SELECT
   apflora.tpop.kontakt AS "TPOPKONTAKT_VO",
   apflora.tpop.nutzungszone AS "TPOP_NUTZUNGSZONE",
   apflora.tpop.bewirtschafter AS "TPOPBEWIRTSCHAFTER",
-  apflora.tpop."TPopBewirtschaftung" AS "TPOPBEWIRTSCHAFTUNG",
+  apflora.tpop.bewirtschaftung AS "TPOPBEWIRTSCHAFTUNG",
   -- TODO: convert
   apflora.tpop.changed AS "TPOPCHANGEDAT",
   apflora.tpop.changed AS "TPOPCHANGEBY"
@@ -1220,8 +1220,8 @@ SELECT
   apflora.tpop.kontakt AS "tpopkontakt",
   apflora.tpop.nutzungszone AS "tpopnutzungszone",
   apflora.tpop.bewirtschafter AS "tpopbewirtschafterin",
-  apflora.tpop."TPopBewirtschaftung" AS "tpopbewirtschaftung",
-  apflora.tpop."TPopTxt" AS "tpoptxt",
+  apflora.tpop.bewirtschaftung AS "tpopbewirtschaftung",
+  apflora.tpop.bemerkungen AS "tpoptxt",
   apflora.tpop.changed::timestamp AS "mutwann",
   apflora.tpop.changed AS "mutwer"
 FROM
@@ -1264,7 +1264,7 @@ SELECT
   apflora.tpop.kontakt AS "tpopkontakt",
   apflora.tpop.nutzungszone AS "tpopnutzungszone",
   apflora.tpop.bewirtschafter AS "tpopbewirtschafterin",
-  apflora.tpop."TPopBewirtschaftung" AS "tpopbewirtschaftung",
+  apflora.tpop.bewirtschaftung AS "tpopbewirtschaftung",
   apflora.tpop.changed::timestamp AS "mutwann",
   apflora.tpop.changed AS "mutwer"
 FROM
@@ -2134,8 +2134,8 @@ SELECT
   apflora.tpop.kontakt AS "Teilpopulation-Kontakt",
   apflora.tpop.nutzungszone AS "Teilpopulation-Nutzungszone",
   apflora.tpop.bewirtschafter AS "Teilpopulation-Bewirtschafter",
-  apflora.tpop."TPopBewirtschaftung" AS "Teilpopulation-Bewirtschaftung",
-  apflora.tpop."TPopTxt" AS "Teilpopulation-Bemerkungen",
+  apflora.tpop.bewirtschaftung AS "Teilpopulation-Bewirtschaftung",
+  apflora.tpop.bemerkungen AS "Teilpopulation-Bemerkungen",
   apflora.tpopmassnber.jahr AS "Massnahmenbericht-Jahr",
   tpopmassn_erfbeurt_werte.text AS "Massnahmenbericht-Erfolgsberuteilung",
   apflora.tpopmassnber.bemerkungen AS "Massnahmenbericht-Interpretation"
@@ -2270,8 +2270,8 @@ SELECT
   apflora.tpop.kontakt AS "Teilpopulation-Kontakt",
   apflora.tpop.nutzungszone AS "Teilpopulation-Nutzungszone",
   apflora.tpop.bewirtschafter AS "Teilpopulation-Bewirtschafter",
-  apflora.tpop."TPopBewirtschaftung" AS "Teilpopulation-Bewirtschaftung",
-  apflora.tpop."TPopTxt" AS "Teilpopulation-Bemerkungen",
+  apflora.tpop.bewirtschaftung AS "Teilpopulation-Bewirtschaftung",
+  apflora.tpop.bemerkungen AS "Teilpopulation-Bemerkungen",
   apflora.tpopmassn.id,
   tpopmassn_typ_werte.text AS "Massnahme-Typ",
   apflora.tpopmassn.beschreibung AS "Massnahme-Beschreibung",
@@ -3284,7 +3284,7 @@ SELECT
   apflora.tpop.kontakt AS "TPop Kontakt vor Ort",
   apflora.tpop.nutzungszone AS "TPop Nutzungszone",
   apflora.tpop.bewirtschafter AS "TPop BewirtschafterIn",
-  apflora.tpop."TPopBewirtschaftung" AS "TPop Bewirtschaftung",
+  apflora.tpop.bewirtschaftung AS "TPop Bewirtschaftung",
   apflora.tpopkontr.id,
   apflora.tpopkontr.tpop_id,
   apflora.tpopkontr.id AS "Kontr id",
@@ -3422,7 +3422,7 @@ GROUP BY
   apflora.tpop.kontakt,
   apflora.tpop.nutzungszone,
   apflora.tpop.bewirtschafter,
-  apflora.tpop."TPopBewirtschaftung",
+  apflora.tpop.bewirtschaftung,
   apflora.tpopkontr.id,
   apflora.tpopkontr.tpop_id,
   apflora.tpopkontr.id,
@@ -4421,7 +4421,7 @@ SELECT
   apflora.tpop.kontakt AS "TPop Kontakt vor Ort",
   apflora.tpop.nutzungszone AS "TPop Nutzungszone",
   apflora.tpop.bewirtschafter AS "TPop BewirtschafterIn",
-  apflora.tpop."TPopBewirtschaftung" AS "TPop Bewirtschaftung",
+  apflora.tpop.bewirtschaftung AS "TPop Bewirtschaftung",
   apflora.tpopmassnber.id AS "TPopMassnBer Id",
   apflora.tpopmassnber.jahr AS "TPopMassnBer Jahr",
   tpopmassn_erfbeurt_werte.text AS "TPopMassnBer Entwicklung",
@@ -4771,7 +4771,7 @@ SELECT
   apflora.tpop.kontakt AS "TPop Kontakt vor Ort",
   apflora.tpop.nutzungszone AS "TPop Nutzungszone",
   apflora.tpop.bewirtschafter AS "TPop BewirtschafterIn",
-  apflora.tpop."TPopBewirtschaftung" AS "TPop Bewirtschaftung",
+  apflora.tpop.bewirtschaftung AS "TPop Bewirtschaftung",
   apflora.tpopkontr.tpop_id,
   apflora.tpopkontr.id AS "Kontr id",
   apflora.tpopkontr.jahr AS "Kontr Jahr",
@@ -4920,7 +4920,7 @@ SELECT
   apflora.tpop.kontakt AS "TPop Kontakt vor Ort",
   apflora.tpop.nutzungszone AS "TPop Nutzungszone",
   apflora.tpop.bewirtschafter AS "TPop BewirtschafterIn",
-  apflora.tpop."TPopBewirtschaftung" AS "TPop Bewirtschaftung",
+  apflora.tpop.bewirtschaftung AS "TPop Bewirtschaftung",
   apflora.tpopber.id AS "TPopBer Id",
   apflora.tpopber.jahr AS "TPopBer Jahr",
   tpop_entwicklung_werte.text AS "TPopBer Entwicklung",
@@ -5118,13 +5118,13 @@ WHERE
   apflora.tpop.pop_id IN (
     SELECT DISTINCT pop_id
     FROM apflora.tpop
-    GROUP BY "PopId", nr
+    GROUP BY pop_id, nr
     HAVING COUNT(*) > 1
   ) AND
   apflora.tpop.nr IN (
     SELECT nr
     FROM apflora.tpop
-    GROUP BY pop_id, nr
+    GROUP BY apflora.tpop.pop_id, apflora.tpop.nr
     HAVING COUNT(*) > 1
   )
 ORDER BY
@@ -5796,6 +5796,7 @@ GROUP BY
   apflora.ap."ApArtId",
   apflora.pop."PopId",
   apflora.tpop.id,
+  apflora.tpop.nr,
   apflora.tpopkontr.id,
   apflora.tpopkontrzaehl.id
 HAVING
@@ -5835,6 +5836,7 @@ GROUP BY
   apflora.ap."ApArtId",
   apflora.pop."PopId",
   apflora.tpop.id,
+  apflora.tpop.nr,
   apflora.tpopkontr.id,
   apflora.tpopkontrzaehl.id
 HAVING

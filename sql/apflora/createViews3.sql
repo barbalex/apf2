@@ -20,7 +20,6 @@ SELECT
 	apflora.v_tpop_anzkontrinklletzter."Pop Status",
 	apflora.v_tpop_anzkontrinklletzter."Pop bekannt seit",
 	apflora.v_tpop_anzkontrinklletzter."TPop ID",
-	apflora.v_tpop_anzkontrinklletzter."TPop Guid",
 	apflora.v_tpop_anzkontrinklletzter."TPop Nr",
 	apflora.v_tpop_anzkontrinklletzter."TPop Gemeinde",
 	apflora.v_tpop_anzkontrinklletzter."TPop Flurname",

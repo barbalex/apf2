@@ -271,23 +271,23 @@ const Tpop = ({
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
-            key={`${activeDataset.row.id}TPopBewirtschaftung`}
+            key={`${activeDataset.row.id}bewirtschaftung`}
             tree={tree}
             label="Bewirtschaftung"
-            fieldName="TPopBewirtschaftung"
-            value={activeDataset.row.TPopBewirtschaftung}
-            errorText={activeDataset.valid.TPopBewirtschaftung}
+            fieldName="bewirtschaftung"
+            value={activeDataset.row.bewirtschaftung}
+            errorText={activeDataset.valid.bewirtschaftung}
             type="text"
             updateProperty={store.updateProperty}
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
-            key={`${activeDataset.row.id}TPopTxt`}
+            key={`${activeDataset.row.id}bemerkungen`}
             tree={tree}
             label="Bemerkungen"
-            fieldName="TPopTxt"
-            value={activeDataset.row.TPopTxt}
-            errorText={activeDataset.valid.TPopTxt}
+            fieldName="bemerkungen"
+            value={activeDataset.row.bemerkungen}
+            errorText={activeDataset.valid.bemerkungen}
             type="text"
             multiline
             updateProperty={store.updateProperty}
