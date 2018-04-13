@@ -157,7 +157,7 @@ COMMENT ON COLUMN apflora.tpopkontr.tpop_id IS 'Zugehörige Teilpopulation. Frem
 -- done: add all views, functions, triggers containing this table to this file
 -- done: run migration sql in dev
 -- done: restart postgrest and test app
--- TODO: special tpop functions work?
+-- done: special tpop functions work?
 -- done: CHECK child tables: are they correct?
 -- TODO: update js and run this file on server
 -- TODO: restart postgrest
