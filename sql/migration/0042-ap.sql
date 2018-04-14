@@ -14,6 +14,7 @@ ALTER TABLE apflora.ap DROP COLUMN "ApArtwert" cascade;
 ALTER TABLE apflora.ap DROP COLUMN "ApGuid_alt" cascade;
 
 -- add data from ApArtId to art
+DROP TRIGGER IF EXISTS ap_on_update_set_mut ON apflora.ap;
 UPDATE apflora.ap SET art = (
   SELECT id FROM apflora.ae_eigenschaften WHERE taxid = apflora.ap.id_old
 ) WHERE id_old IS NOT NULL;
@@ -50,11 +51,6 @@ CREATE INDEX ON apflora.ap USING btree (bearbeitung);
 CREATE INDEX ON apflora.ap USING btree (start_jahr);
 CREATE INDEX ON apflora.ap USING btree (umsetzung);
 CREATE INDEX ON apflora.ap USING btree (bearbeiter);
-
--- add indexes on dependant tables
-CREATE INDEX ON apflora.pop USING btree (ap_id);
-CREATE INDEX ON apflora.popber USING btree (pop_id);
-CREATE INDEX ON apflora.popmassnber USING btree (pop_id);
 
 -- change pop
 ALTER TABLE apflora.pop RENAME ap_id TO ap_id_old;
@@ -157,6 +153,19 @@ COMMENT ON COLUMN apflora.apart.ap_id IS 'Zugehöriger Aktionsplan. Fremdschlüs
 -- TODO: update js and run this file on server
 -- TODO: restart postgrest
 
+DROP TRIGGER IF EXISTS ap_on_update_set_mut ON apflora.ap;
+DROP FUNCTION IF EXISTS ap_on_update_set_mut();
+CREATE FUNCTION ap_on_update_set_mut() RETURNS trigger AS $ap_on_update_set_mut$
+  BEGIN
+    NEW.changed_by = current_setting('request.jwt.claim.username', true);
+    NEW.changed = NOW();
+    RETURN NEW;
+  END;
+$ap_on_update_set_mut$ LANGUAGE plpgsql;
+
+CREATE TRIGGER ap_on_update_set_mut BEFORE UPDATE OR INSERT ON apflora.ap
+  FOR EACH ROW EXECUTE PROCEDURE ap_on_update_set_mut();
+
 /*
  * Sicherstellen, das pro Pop/TPop jährlich maximal ein Bericht erstellt wird (massnber, popber, tpopber)
  */
@@ -471,14 +480,6 @@ $ap_insert_add_idealbiotop$ LANGUAGE plpgsql;
 CREATE TRIGGER ap_insert_add_idealbiotop AFTER INSERT ON apflora.ap
   FOR EACH ROW EXECUTE PROCEDURE apflora.ap_insert_add_idealbiotop();
 
--- in case this trigger was not working
--- add idealbiotop where they are missing
-insert into apflora.idealbiotop (ap_id)
-select apflora.ap.id from apflora.ap
-left join apflora.idealbiotop
-on apflora.idealbiotop.ap_id = apflora.ap.id
-where apflora.idealbiotop.ap_id is null;
-
 -- when ap is inserted
 -- ensure apart is created too
 DROP TRIGGER IF EXISTS ap_insert_add_beobart ON apflora.ap;
@@ -522,10 +523,9 @@ CREATE TRIGGER ap_insert_add_apart AFTER INSERT ON apflora.ap
 
 
 
-
-
-CREATE OR REPLACE FUNCTION apflora.qk2_tpop_ohne_tpopber(apid integer, berichtjahr integer)
-  RETURNS table("ProjId" integer, ap_id integer, hw text, url text[], text text[]) AS
+drop FUNCTION apflora.qk2_tpop_ohne_tpopber(apid integer, berichtjahr integer);
+CREATE OR REPLACE FUNCTION apflora.qk2_tpop_ohne_tpopber(apid uuid, berichtjahr integer)
+  RETURNS table("ProjId" integer, ap_id uuid, hw text, url text[], text text[]) AS
   $$
   -- 3. "TPop ohne verlangten TPop-Bericht im Berichtjahr" ermitteln und in Qualitätskontrollen auflisten:
   SELECT DISTINCT
@@ -566,11 +566,12 @@ CREATE OR REPLACE FUNCTION apflora.qk2_tpop_ohne_tpopber(apid integer, berichtja
     AND apflora.pop.ap_id = $1
   $$
   LANGUAGE sql STABLE;
-ALTER FUNCTION apflora.qk2_tpop_ohne_tpopber(apid integer, berichtjahr integer)
+ALTER FUNCTION apflora.qk2_tpop_ohne_tpopber(apid uuid, berichtjahr integer)
   OWNER TO postgres;
 
-CREATE OR REPLACE FUNCTION apflora.qk2_pop_ohne_popmassnber(apid integer, berichtjahr integer)
-  RETURNS table("ProjId" integer, ap_id integer, hw text, url text[], text text[]) AS
+drop FUNCTION apflora.qk2_pop_ohne_popmassnber(apid integer, berichtjahr integer);
+CREATE OR REPLACE FUNCTION apflora.qk2_pop_ohne_popmassnber(apid uuid, berichtjahr integer)
+  RETURNS table("ProjId" integer, ap_id uuid, hw text, url text[], text text[]) AS
   $$
   -- 5. "Pop ohne verlangten Pop-Massn-Bericht im Berichtjahr" ermitteln und in Qualitätskontrollen auflisten:
   SELECT DISTINCT
@@ -635,10 +636,12 @@ CREATE OR REPLACE FUNCTION apflora.qk2_pop_ohne_popmassnber(apid integer, berich
     AND apflora.pop.ap_id = $1
   $$
   LANGUAGE sql STABLE;
-ALTER FUNCTION apflora.qk2_pop_ohne_popmassnber(apid integer, berichtjahr integer)
+ALTER FUNCTION apflora.qk2_pop_ohne_popmassnber(apid uuid, berichtjahr integer)
   OWNER TO postgres;
-CREATE OR REPLACE FUNCTION apflora.qk2_pop_ohne_popber(apid integer, berichtjahr integer)
-  RETURNS table("ProjId" integer, ap_id integer, hw text, url text[], text text[]) AS
+
+drop FUNCTION if exists apflora.qk2_pop_ohne_popber(apid integer, berichtjahr integer);
+CREATE OR REPLACE FUNCTION apflora.qk2_pop_ohne_popber(apid uuid, berichtjahr integer)
+  RETURNS table("ProjId" integer, ap_id uuid, hw text, url text[], text text[]) AS
   $$
   SELECT DISTINCT
     apflora.ap.proj_id,
@@ -702,7 +705,6 @@ CREATE OR REPLACE FUNCTION apflora.qk2_pop_ohne_popber(apid integer, berichtjahr
     AND apflora.pop.ap_id = $1
   $$
   LANGUAGE sql STABLE;
-ALTER FUNCTION apflora.qk2_pop_ohne_popber(apid integer, berichtjahr integer)
+ALTER FUNCTION apflora.qk2_pop_ohne_popber(apid uuid, berichtjahr integer)
   OWNER TO postgres;
-
 
