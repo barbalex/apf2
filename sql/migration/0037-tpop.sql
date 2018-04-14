@@ -159,8 +159,8 @@ COMMENT ON COLUMN apflora.tpopkontr.tpop_id IS 'Zugehörige Teilpopulation. Frem
 -- done: restart postgrest and test app
 -- done: special tpop functions work?
 -- done: CHECK child tables: are they correct?
--- TODO: update js and run this file on server
--- TODO: restart postgrest
+-- done: update js and run this file on server
+-- done: restart postgrest
 
 CREATE OR REPLACE FUNCTION apflora.correct_vornach_beginnap_stati(apid integer)
  RETURNS VOID LANGUAGE plpgsql SECURITY DEFINER AS $$

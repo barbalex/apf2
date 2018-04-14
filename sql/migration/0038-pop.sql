@@ -101,9 +101,9 @@ CREATE TRIGGER pop_max_one_massnber_per_year BEFORE INSERT OR UPDATE ON apflora.
 -- done: run migration sql in dev
 -- done: restart postgrest and test app
 -- done: special pop functions work?
--- TODO: CHECK child tables: are they correct?
--- TODO: update js and run this file on server
--- TODO: restart postgrest
+-- done: CHECK child tables: are they correct?
+-- done: update js and run this file on server
+-- done: restart postgrest
 
 DROP TRIGGER IF EXISTS pop_on_update_set_mut ON apflora.pop;
 DROP FUNCTION IF EXISTS pop_on_update_set_mut();
