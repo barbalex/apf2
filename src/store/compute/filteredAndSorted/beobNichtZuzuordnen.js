@@ -17,8 +17,8 @@ export default (store: Object, tree: Object): Array<Object> => {
       if (beob) {
         ap = table.ap.get(beob.ArtId)
       }
-      if (ap && ap.ApStatus) {
-        return [1, 2, 3].includes(ap.ApStatus)
+      if (ap && ap.bearbeitung) {
+        return [1, 2, 3].includes(ap.bearbeitung)
       }
       return true
     })

@@ -10,7 +10,7 @@ export default (store: Object, tree: Object): Array<Object> => {
     .filter(beob => {
       if (!apFilter) return true
       const ap = table.ap.get(beob.ArtId)
-      if (ap) return [1, 2, 3].includes(ap.ApStatus)
+      if (ap) return [1, 2, 3].includes(ap.bearbeitung)
       return false
     })
     // fetch only those without tpopbeob

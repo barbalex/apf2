@@ -11,8 +11,8 @@ export default (store: Object, tree: Object): Array<Object> => {
 
   // filter by apFilter
   if (apFilter) {
-    // ApStatus between 3 and 5
-    aps = aps.filter(a => [1, 2, 3].includes(a.ApStatus))
+    // bearbeitung between 3 and 5
+    aps = aps.filter(a => [1, 2, 3].includes(a.bearbeitung))
   }
   // sort
   // need to add artnameVollständig to sort and filter by nodeLabelFilter

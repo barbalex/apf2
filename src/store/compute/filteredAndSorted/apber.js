@@ -8,10 +8,10 @@ export default (store: Object, tree: Object): Array<Object> => {
 
   // filter by apFilter
   if (apFilter) {
-    // ApStatus between 3 and 5
+    // bearbeitung between 3 and 5
     apber = apber.filter(a => {
       const ap = table.ap.get(a.ap_id)
-      return [1, 2, 3].includes(ap.ApStatus)
+      return [1, 2, 3].includes(ap.bearbeitung)
     })
   }
   // filter by nodeLabelFilter

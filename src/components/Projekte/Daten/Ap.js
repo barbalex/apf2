@@ -112,23 +112,23 @@ const Ap = ({
       <FormTitle tree={tree} title="Art" />
       <FieldsContainer>
         <AutoComplete
-          key={`${activeDataset.row.id}id`}
+          key={`${activeDataset.row.id}art`}
           tree={tree}
           label="Art (gibt dem Aktionsplan den Namen)"
-          fieldName="id"
+          fieldName="art"
           valueText={artname}
-          errorText={activeDataset.valid.id}
+          errorText={activeDataset.valid.art}
           dataSource={store.dropdownList.artListForAp}
           dataSourceConfig={{
-            value: 'taxid',
+            value: 'id',
             text: 'artname',
           }}
           updatePropertyInDb={updatePropertyInDb}
         />
         <RadioButtonGroupWithInfo
           tree={tree}
-          fieldName="ApStatus"
-          value={activeDataset.row.ApStatus}
+          fieldName="bearbeitung"
+          value={activeDataset.row.bearbeitung}
           dataSource={store.dropdownList.apStati}
           updatePropertyInDb={updatePropertyInDb}
           popover={
