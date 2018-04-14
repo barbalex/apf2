@@ -12,13 +12,20 @@ ALTER TABLE apflora.beobart ALTER COLUMN id_old DROP NOT NULL;
 ALTER TABLE apflora.beobart ALTER COLUMN id_old SET DEFAULT null;
 
 -- comments
-TODO
+COMMENT ON COLUMN apflora.beobart.id IS 'Primärschlüssel';
+COMMENT ON COLUMN apflora.beobart.id_old IS 'frühere id';
+COMMENT ON COLUMN apflora.beobart.taxid IS 'Zugehörige Art. Fremdschlüssel aus der Tabelle "ae_eigenschaften"';
+COMMENT ON COLUMN apflora.beobart.ap_id IS 'Zugehöriger Aktionsplan. Fremdschlüssel aus der Tabelle "ap"';
+COMMENT ON COLUMN apflora.beobart.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
+COMMENT ON COLUMN apflora.beobart.changed_by IS 'Wer hat den Datensatz zuletzt geändert?';
 
 -- drop existing indexes
 DROP index apflora.apflora."beobart_ApArtId_TaxonomieId_idx";
 DROP index apflora.apflora."beobart_BeobArtId_idx";
 -- add new
-TODO
+CREATE INDEX ON apflora.beobart USING btree (id);
+CREATE INDEX ON apflora.beobart USING btree (ap_id);
+CREATE INDEX ON apflora.beobart USING btree (taxid);
 
 -- TODO: make sure createTable is correct
 -- TODO: rename in sql

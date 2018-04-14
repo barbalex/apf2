@@ -222,8 +222,8 @@ export default [
   {
     table: 'beobart',
     label: 'none',
-    idField: 'BeobArtId',
-    parentIdField: 'ApArtId',
+    idField: 'id',
+    parentIdField: 'ap_id',
   },
   {
     table: 'projekt',

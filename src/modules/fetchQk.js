@@ -358,7 +358,7 @@ const fetchQk = async ({
             'Projekte',
             1,
             'Arten',
-            tpop.ApArtId,
+            tpop.ap_id,
             'Populationen',
             tpop.pop_id,
             'Teil-Populationen',

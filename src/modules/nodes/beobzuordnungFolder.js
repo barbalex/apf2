@@ -17,8 +17,8 @@ export default (
   )
 
   const beobArten = Array.from(store.table.beobart.values())
-    .filter(v => v.ApArtId === apId)
-    .map(ba => ba.TaxonomieId)
+    .filter(v => v.ap_id === apId)
+    .map(ba => ba.taxid)
 
   const beobzuordnungNodesLength = tree.filteredAndSorted.beobzuordnung.filter(
     b => beobArten.includes(b.ArtId)

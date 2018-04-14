@@ -17,13 +17,13 @@ export default (
   )
 
   return tree.filteredAndSorted.beobart
-    .filter(p => p.ApArtId === apId)
+    .filter(p => p.ap_id === apId)
     .map((el, index) => ({
       nodeType: 'table',
       menuType: 'beobart',
-      id: el.BeobArtId,
+      id: el.id,
       parentId: apId,
-      urlLabel: el.BeobArtId,
+      urlLabel: el.id,
       label: el.label,
       url: [
         'Projekte',
@@ -31,7 +31,7 @@ export default (
         'Arten',
         apId,
         'arten-fuer-beobachtungen',
-        el.BeobArtId,
+        el.id,
       ],
       sort: [projIndex, 1, apIndex, 8, index],
       hasChildren: false,

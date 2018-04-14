@@ -37,7 +37,7 @@ export default async (store: Object, apId: number): any => {
   const { valuesForWhichTableDataWasFetched } = store
   let beobArtResult: { data: Array<Object> }
   try {
-    beobArtResult = await axios.get(`beobart?ApArtId=eq.${apId}`)
+    beobArtResult = await axios.get(`beobart?ap_id=eq.${apId}`)
   } catch (error) {
     return onError({
       store,
@@ -47,7 +47,7 @@ export default async (store: Object, apId: number): any => {
     })
   }
   const taxonomyIds = beobArtResult.data
-    .map(d => d.TaxonomieId)
+    .map(d => d.taxid)
     // if exists new beobart but art is not choosen, its value is null
     // need to filter that out
     .filter(v => !!v)

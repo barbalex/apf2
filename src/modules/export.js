@@ -34,7 +34,7 @@ export default async ({
     store.listError(error)
     store.export.removeDownload(fileName)
   }
-  const url = apId ? `/${view}?ApArtId=eq.${apId}` : `/${view}`
+  const url = apId ? `/${view}?ap_id=eq.${apId}` : `/${view}`
 
   store.export.addDownload(fileName)
   let result: { data: Array<Object> }

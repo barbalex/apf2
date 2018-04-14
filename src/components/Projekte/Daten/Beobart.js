@@ -24,12 +24,12 @@ const enhance = compose(inject('store'), observer)
 
 const getArtList = ({ store, tree }: { store: Object, tree: Object }) => {
   const { ae_eigenschaften } = store.table
-  // do not show any TaxonomieId's that have been used
+  // do not show any taxid's that have been used
   // turned off because some species have already been worked as separate ap
   // because beobart did not exist...
   /*
   const apArtIdsNotToShow = Array.from(store.table.beobart.values()).map(
-    v => v.TaxonomieId
+    v => v.taxid
   )*/
   const apArtIdsNotToShow = []
   const artList = filter(
@@ -43,8 +43,8 @@ const getArtname = ({ store, tree }: { store: Object, tree: Object }) => {
   const { ae_eigenschaften } = store.table
   const { activeDataset } = tree
   let name = ''
-  if (activeDataset.row.TaxonomieId && ae_eigenschaften.size > 0) {
-    name = ae_eigenschaften.get(activeDataset.row.TaxonomieId).artname
+  if (activeDataset.row.taxid && ae_eigenschaften.size > 0) {
+    name = ae_eigenschaften.get(activeDataset.row.taxid).artname
   }
   return name
 }
@@ -62,15 +62,15 @@ const BeobArt = ({ store, tree }: { store: Object, tree: Object }) => {
             beurteilt" zur Verfügung und können zugeordnet werden.
           </div>
           <AutoComplete
-            key={`${activeDataset.row.BeobArtId}TaxonomieId`}
+            key={`${activeDataset.row.id}taxid`}
             tree={tree}
             label="Art"
-            fieldName="TaxonomieId"
+            fieldName="taxid"
             valueText={getArtname({
               store,
               tree,
             })}
-            errorText={activeDataset.valid.TaxonomieId}
+            errorText={activeDataset.valid.taxid}
             dataSource={getArtList({
               store,
               tree,

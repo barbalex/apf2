@@ -16,11 +16,11 @@ const enhance = compose(
   withState('searchText', 'changeSearchText', ''),
   withHandlers({
     onNewRequest: props => val => {
-      props.changeArtFuerEierlegendeWollmilchsau(val.Artname)
+      props.changeArtFuerEierlegendeWollmilchsau(val.artname)
       props.downloadFromView({
         view: 'v_tpop_anzkontrinklletzterundletztertpopber',
         fileName: 'anzkontrinklletzterundletztertpopber_2016',
-        apId: val.TaxonomieId,
+        apId: val.taxid,
       })
     },
     onFocus: props => () => props.changeFocused(true),

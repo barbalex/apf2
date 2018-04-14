@@ -147,7 +147,7 @@ DROP FUNCTION IF EXISTS apflora.ap_insert_add_beobart();
 CREATE FUNCTION apflora.ap_insert_add_beobart() RETURNS trigger AS $ap_insert_add_beobart$
 BEGIN
   INSERT INTO
-    apflora.beobart ("ApArtId", "TaxonomieId")
+    apflora.beobart (ap_id, taxid)
   VALUES (NEW."ApArtId", NEW."ApArtId");
   RETURN NEW;
 END;
@@ -163,7 +163,7 @@ DROP FUNCTION IF EXISTS apflora.ap_insert_add_beobart();
 CREATE FUNCTION apflora.ap_insert_add_beobart() RETURNS trigger AS $ap_insert_add_beobart$
 BEGIN
   INSERT INTO
-    apflora.beobart ("ApArtId", "TaxonomieId")
+    apflora.beobart (ap_id, taxid)
   VALUES (NEW."ApArtId", NEW."ApArtId");
   RETURN NEW;
 END;

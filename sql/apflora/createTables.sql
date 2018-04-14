@@ -1097,18 +1097,18 @@ DROP TABLE IF EXISTS apflora.beobart;
 CREATE TABLE apflora.beobart (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
   id_old integer,
-  "TaxonomieId" INTEGER DEFAULT NULL REFERENCES apflora.ae_eigenschaften (taxid) ON DELETE SET NULL ON UPDATE CASCADE,
-  "ApArtId" integer DEFAULT NULL REFERENCES apflora.ap ("ApArtId") ON DELETE CASCADE ON UPDATE CASCADE,
-  "MutWann" date DEFAULT NULL,
-  "MutWer" varchar(20) DEFAULT NULL
-  --UNIQUE ("TaxonomieId") --no, maybe after beob were rearranged
+  taxid INTEGER DEFAULT NULL REFERENCES apflora.ae_eigenschaften (taxid) ON DELETE SET NULL ON UPDATE CASCADE,
+  ap_id integer DEFAULT NULL REFERENCES apflora.ap ("ApArtId") ON DELETE CASCADE ON UPDATE CASCADE,
+  changed date DEFAULT NULL,
+  changed_by varchar(20) DEFAULT NULL
+  --UNIQUE (taxid) --no, maybe after beob were rearranged
 );
 CREATE INDEX ON apflora.beobart USING btree (id);
-CREATE INDEX ON apflora.beobart USING btree ("ApArtId");
-CREATE INDEX ON apflora.beobart USING btree ("TaxonomieId");
+CREATE INDEX ON apflora.beobart USING btree (ap_id);
+CREATE INDEX ON apflora.beobart USING btree (taxid);
 COMMENT ON COLUMN apflora.beobart.id IS 'Primärschlüssel';
 COMMENT ON COLUMN apflora.beobart.id_old IS 'frühere id';
-COMMENT ON COLUMN apflora.beobart."TaxonomieId" IS 'Zugehörige Art. Fremdschlüssel aus der Tabelle "adb_eigenschaften"';
-COMMENT ON COLUMN apflora.beobart."ApArtId" IS 'Zugehöriger Aktionsplan. Fremdschlüssel aus der Tabelle "ap"';
-COMMENT ON COLUMN apflora.beobart."MutWann" IS 'Wann wurde der Datensatz zuletzt geändert?';
-COMMENT ON COLUMN apflora.beobart."MutWer" IS 'Wer hat den Datensatz zuletzt geändert?';
+COMMENT ON COLUMN apflora.beobart.taxid IS 'Zugehörige Art. Fremdschlüssel aus der Tabelle "ae_eigenschaften"';
+COMMENT ON COLUMN apflora.beobart.ap_id IS 'Zugehöriger Aktionsplan. Fremdschlüssel aus der Tabelle "ap"';
+COMMENT ON COLUMN apflora.beobart.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
+COMMENT ON COLUMN apflora.beobart.changed_by IS 'Wer hat den Datensatz zuletzt geändert?';

@@ -17,7 +17,7 @@ export default (
   )
 
   const beobArtNodesLength = tree.filteredAndSorted.beobart.filter(
-    n => n.ApArtId === apId
+    n => n.ap_id === apId
   ).length
   let message = beobArtNodesLength
   if (store.table.beobArtLoading) {
