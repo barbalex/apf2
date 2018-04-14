@@ -30,12 +30,13 @@ CREATE INDEX ON apflora.beobart USING btree (taxid);
 ALTER TABLE apflora.beobart RENAME TO apflora.apart;
 
 -- done: make sure createTable is correct
--- TODO: rename in sql
--- TODO: rename in js
--- TODO: check if old id was used somewhere. If so: rename that field, add new one and update that
--- TODO: add all views, functions, triggers containing this table to this file
+-- done: rename in sql
+-- done: rename in js
+-- done: check if old id was used somewhere. If so: rename that field, add new one and update that
+-- done: add all views, functions, triggers containing this table to this file
 -- TODO: run migration sql in dev
 -- TODO: restart postgrest and test app
+-- TODO: rebuild creating new ap
 -- TODO: update js and run this file on server
 -- TODO: restart postgrest
 
