@@ -650,10 +650,10 @@ DROP VIEW IF EXISTS apflora.v_pop_anzkontr CASCADE;
 CREATE OR REPLACE VIEW apflora.v_pop_anzkontr AS
 SELECT
   apflora.ap.id AS ap_id,
-  apflora.ae_eigenschaften.artname AS "AP Art",
-  apflora.ap_bearbstand_werte.text AS "AP Status",
-  apflora.ap.start_jahr AS "AP Start im Jahr",
-  apflora.ap_umsetzung_werte.text AS "AP Stand Umsetzung",
+  apflora.ae_eigenschaften.artname,
+  apflora.ap_bearbstand_werte.text AS ap_bearbeitung,
+  apflora.ap.start_jahr AS ap_start_jahr,
+  apflora.ap_umsetzung_werte.text AS ap_umsetzung,
   apflora.pop.id,
   apflora.pop.nr,
   apflora.pop.name,
@@ -748,11 +748,11 @@ DROP VIEW IF EXISTS apflora.v_ap_anzkontr CASCADE;
 CREATE OR REPLACE VIEW apflora.v_ap_anzkontr AS
 SELECT
   apflora.ap.id,
-  apflora.ae_eigenschaften.artname AS "AP Art",
-  apflora.ap_bearbstand_werte.text AS "AP Status",
-  apflora.ap.start_jahr AS "AP Start im Jahr",
-  apflora.ap_umsetzung_werte.text AS "AP Stand Umsetzung",
-  count(apflora.tpopkontr.id) AS "Anzahl Kontrollen"
+  apflora.ae_eigenschaften.artname,
+  apflora.ap_bearbstand_werte.text AS bearbeitung,
+  apflora.ap.start_jahr,
+  apflora.ap_umsetzung_werte.text AS umsetzung,
+  count(apflora.tpopkontr.id) AS anzahl_kontrollen
 FROM
   (((apflora.ae_eigenschaften
   INNER JOIN
@@ -825,11 +825,11 @@ ORDER BY
 DROP VIEW IF EXISTS apflora.v_pop_ohnekoord CASCADE;
 CREATE OR REPLACE VIEW apflora.v_pop_ohnekoord AS
 SELECT
-  apflora.ap.id,
-  apflora.ae_eigenschaften.artname AS "AP Art",
-  apflora.ap_bearbstand_werte.text AS "AP Status",
-  apflora.ap.start_jahr AS "AP Start im Jahr",
-  apflora.ap_umsetzung_werte.text AS "AP Stand Umsetzung",
+  apflora.ap.id as ap_id,
+  apflora.ae_eigenschaften.artname,
+  apflora.ap_bearbstand_werte.text AS ap_bearbeitung,
+  apflora.ap.start_jahr AS ap_start_jahr,
+  apflora.ap_umsetzung_werte.text AS ap_umsetzung,
   apflora.pop.id,
   apflora.pop.nr,
   apflora.pop.name,
@@ -929,26 +929,26 @@ ORDER BY
 DROP VIEW IF EXISTS apflora.v_popber CASCADE;
 CREATE OR REPLACE VIEW apflora.v_popber AS
 SELECT
-  apflora.ap.id,
-  apflora.ae_eigenschaften.artname AS "AP Art",
-  apflora.ap_bearbstand_werte.text AS "AP Status",
-  apflora.ap.start_jahr AS "AP Start im Jahr",
-  apflora.ap_umsetzung_werte.text AS "AP Stand Umsetzung",
-  apflora.pop.id AS "Pop id",
-  apflora.pop.nr AS "Pop Nr",
-  apflora.pop.name AS "Pop Name",
-  pop_status_werte.text AS "Pop Status",
-  apflora.pop.bekannt_seit AS "Pop bekannt seit",
-  apflora.pop.status_unklar AS "Pop Status unklar",
-  apflora.pop.status_unklar_begruendung AS "Pop Begruendung fuer unklaren Status",
-  apflora.pop.x AS "Pop X-Koordinaten",
-  apflora.pop.y AS "Pop Y-Koordinaten",
-  apflora.popber.id AS "PopBer Id",
-  apflora.popber.jahr AS "PopBer Jahr",
-  tpop_entwicklung_werte.text AS "PopBer Entwicklung",
-  apflora.popber.bemerkungen AS "PopBer Bemerkungen",
-  apflora.popber.changed AS "PopBer MutWann",
-  apflora.popber.changed_by AS "PopBer MutWer"
+  apflora.ap.id as ap_id,
+  apflora.ae_eigenschaften.artname,
+  apflora.ap_bearbstand_werte.text AS ap_bearbeitung,
+  apflora.ap.start_jahr AS ap_start_jahr,
+  apflora.ap_umsetzung_werte.text AS ap_umsetzung,
+  apflora.pop.id AS pop_id,
+  apflora.pop.nr AS pop_nr,
+  apflora.pop.name AS pop_name,
+  pop_status_werte.text AS pop_status,
+  apflora.pop.bekannt_seit AS pop_bekannt_seit,
+  apflora.pop.status_unklar AS pop_status_unklar,
+  apflora.pop.status_unklar_begruendung AS pop_status_unklar_begruendung,
+  apflora.pop.x AS pop_x,
+  apflora.pop.y AS pop_y,
+  apflora.popber.id,
+  apflora.popber.jahr,
+  tpop_entwicklung_werte.text AS entwicklung,
+  apflora.popber.bemerkungen,
+  apflora.popber.changed,
+  apflora.popber.changed_by
 FROM
   ((((((apflora.ae_eigenschaften
   INNER JOIN

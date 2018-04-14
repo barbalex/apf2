@@ -891,7 +891,7 @@ CREATE TABLE apflora.tpopmassnber (
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
 );
-COMMENT ON COLUMN apflora.tpopmassnber.id_old IS 'Primärschlüssel der Tabelle "tpopmassnber"';
+COMMENT ON COLUMN apflora.tpopmassnber.id IS 'Primärschlüssel der Tabelle "tpopmassnber"';
 COMMENT ON COLUMN apflora.tpopmassnber.id_old IS 'frühere id';
 COMMENT ON COLUMN apflora.tpopmassnber.tpop_id IS 'Zugehörige Teilpopulation. Fremdschlüssel aus Tabelle "tpop"';
 COMMENT ON COLUMN apflora.tpopmassnber.jahr IS 'Jahr, für den der Bericht gilt';
@@ -971,7 +971,7 @@ DROP TABLE IF EXISTS apflora.zielber;
 CREATE TABLE apflora.zielber (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
   id_old integer,
-  ziel_id integer DEFAULT NULL REFERENCES apflora.ziel (id_old) ON DELETE CASCADE ON UPDATE CASCADE,
+  ziel_id integer DEFAULT NULL REFERENCES apflora.ziel (id) ON DELETE CASCADE ON UPDATE CASCADE,
   jahr smallint DEFAULT NULL,
   erreichung text DEFAULT NULL,
   bemerkungen text DEFAULT NULL,
