@@ -13,7 +13,7 @@ FROM
   apflora.v_massn_jahre
 WHERE
   apflora.ap.id > 0
-  AND apflora.ap."ApStatus" < 4
+  AND apflora.ap.bearbeitung < 4
 ORDER BY
   apflora.ap.id,
   apflora.v_massn_jahre.jahr;
@@ -79,7 +79,7 @@ FROM
       ((((apflora.ap
       LEFT JOIN
         apflora.ap_bearbstand_werte
-        ON apflora.ap."ApStatus" = apflora.ap_bearbstand_werte.code)
+        ON apflora.ap.bearbeitung = apflora.ap_bearbstand_werte.code)
       LEFT JOIN
         apflora.ap_umsetzung_werte
         ON apflora.ap.umsetzung = apflora.ap_umsetzung_werte.code)
@@ -205,7 +205,7 @@ FROM
 WHERE
   apflora.v_ap_anzmassnbisjahr."AnzahlMassnahmen" > 0
   AND apflora.apber.beurteilung = 1
-  AND apflora.ap."ApStatus" BETWEEN 1 AND 3
+  AND apflora.ap.bearbeitung BETWEEN 1 AND 3
 ORDER BY
   apflora.ae_eigenschaften.artname;
 
@@ -236,7 +236,7 @@ FROM
 WHERE
   apflora.v_ap_anzmassnbisjahr."AnzahlMassnahmen" > 0
   AND apflora.apber.beurteilung = 1
-  AND apflora.ap."ApStatus" BETWEEN 1 AND 3;
+  AND apflora.ap.bearbeitung BETWEEN 1 AND 3;
 
 DROP VIEW IF EXISTS apflora.v_apber_uebkm CASCADE;
 CREATE OR REPLACE VIEW apflora.v_apber_uebkm AS
@@ -272,7 +272,7 @@ FROM
         (apflora._variable.apber_jahr = "vApAnzMassnBisJahr_1".jahr)
         AND (apflora.ap.id = apflora.apber.ap_id)
 WHERE
-  apflora.ap."ApStatus" BETWEEN 1 AND 3
+  apflora.ap.bearbeitung BETWEEN 1 AND 3
   AND "vApAnzMassnBisJahr_1"."AnzahlMassnahmen" = '0'
 ORDER BY
   apflora.ae_eigenschaften.artname;
@@ -298,7 +298,7 @@ FROM
     ON apflora._variable.apber_jahr = apflora.v_ap_anzmassnbisjahr.jahr
 WHERE
   apflora.v_ap_anzmassnbisjahr."AnzahlMassnahmen" > 0
-  AND apflora.ap."ApStatus" BETWEEN 1 AND 3
+  AND apflora.ap.bearbeitung BETWEEN 1 AND 3
 ORDER BY
   apflora.ae_eigenschaften.artname;
 
@@ -322,7 +322,7 @@ FROM
     ON apflora._variable.apber_jahr = apflora.v_ap_anzmassnbisjahr.jahr
 WHERE
   apflora.v_ap_anzmassnbisjahr."AnzahlMassnahmen" > 0
-  AND apflora.ap."ApStatus" BETWEEN 1 AND 3;
+  AND apflora.ap.bearbeitung BETWEEN 1 AND 3;
 
 DROP VIEW IF EXISTS apflora.v_apber_uebme CASCADE;
 CREATE OR REPLACE VIEW apflora.v_apber_uebme AS
@@ -352,7 +352,7 @@ FROM
 WHERE
   apflora.apber.beurteilung = 5
   AND apflora.v_ap_anzmassnbisjahr."AnzahlMassnahmen" > 0
-  AND apflora.ap."ApStatus" BETWEEN 1 AND 3
+  AND apflora.ap.bearbeitung BETWEEN 1 AND 3
 ORDER BY
   apflora.ae_eigenschaften.artname;
 
@@ -383,7 +383,7 @@ FROM
 WHERE
   apflora.apber.beurteilung = 5
   AND apflora.v_ap_anzmassnbisjahr."AnzahlMassnahmen" > 0
-  AND apflora.ap."ApStatus" BETWEEN 1 AND 3;
+  AND apflora.ap.bearbeitung BETWEEN 1 AND 3;
 
 DROP VIEW IF EXISTS apflora.v_apber_uebne CASCADE;
 CREATE OR REPLACE VIEW apflora.v_apber_uebne AS
@@ -412,7 +412,7 @@ FROM
     ON "tblKonstanten_1".apber_jahr = apflora.v_ap_anzmassnbisjahr.jahr
 WHERE
   apflora.apber.beurteilung = 3
-  AND apflora.ap."ApStatus" BETWEEN 1 AND 3
+  AND apflora.ap.bearbeitung BETWEEN 1 AND 3
   AND apflora.v_ap_anzmassnbisjahr."AnzahlMassnahmen" > 0
 ORDER BY
   apflora.ae_eigenschaften.artname;
@@ -443,7 +443,7 @@ FROM
     ON "tblKonstanten_1".apber_jahr = apflora.v_ap_anzmassnbisjahr.jahr
 WHERE
   apflora.apber.beurteilung = 3
-  AND apflora.ap."ApStatus" BETWEEN 1 AND 3
+  AND apflora.ap.bearbeitung BETWEEN 1 AND 3
   AND apflora.v_ap_anzmassnbisjahr."AnzahlMassnahmen" > 0;
 
 DROP VIEW IF EXISTS apflora.v_apber_uebse CASCADE;
@@ -474,7 +474,7 @@ FROM
 WHERE
   apflora.apber.beurteilung = 4
   AND apflora.v_ap_anzmassnbisjahr."AnzahlMassnahmen" > 0
-  AND apflora.ap."ApStatus" BETWEEN 1 AND 3
+  AND apflora.ap.bearbeitung BETWEEN 1 AND 3
 ORDER BY
   apflora.ae_eigenschaften.artname;
 
@@ -505,7 +505,7 @@ FROM
 WHERE
   apflora.apber.beurteilung = 4
   AND apflora.v_ap_anzmassnbisjahr."AnzahlMassnahmen" > 0
-  AND apflora.ap."ApStatus" BETWEEN 1 AND 3;
+  AND apflora.ap.bearbeitung BETWEEN 1 AND 3;
 
 DROP VIEW IF EXISTS apflora.v_apber_uebun CASCADE;
 CREATE OR REPLACE VIEW apflora.v_apber_uebun AS
@@ -532,7 +532,7 @@ FROM
 WHERE
   apflora.apber.beurteilung = 1168274204
   AND apflora.v_ap_anzmassnbisjahr."AnzahlMassnahmen" > 0
-  AND apflora.ap."ApStatus" BETWEEN 1 AND 3
+  AND apflora.ap.bearbeitung BETWEEN 1 AND 3
 ORDER BY
   apflora.ae_eigenschaften.artname;
 
@@ -560,7 +560,7 @@ FROM
 WHERE
   apflora.apber.beurteilung = 1168274204
   AND apflora.v_ap_anzmassnbisjahr."AnzahlMassnahmen" > 0
-  AND apflora.ap."ApStatus" BETWEEN 1 AND 3;
+  AND apflora.ap.bearbeitung BETWEEN 1 AND 3;
 
 DROP VIEW IF EXISTS apflora.v_apber_uebwe CASCADE;
 CREATE OR REPLACE VIEW apflora.v_apber_uebwe AS
@@ -590,7 +590,7 @@ FROM
 WHERE
   apflora.apber.beurteilung = 6
   AND apflora.v_ap_anzmassnbisjahr."AnzahlMassnahmen" > 0
-  AND apflora.ap."ApStatus" BETWEEN 1 AND 3
+  AND apflora.ap.bearbeitung BETWEEN 1 AND 3
 ORDER BY
   apflora.ae_eigenschaften.artname;
 
@@ -621,7 +621,7 @@ FROM
 WHERE
   apflora.apber.beurteilung = 6
   AND apflora.v_ap_anzmassnbisjahr."AnzahlMassnahmen" > 0
-  AND apflora.ap."ApStatus" BETWEEN 1 AND 3;
+  AND apflora.ap.bearbeitung BETWEEN 1 AND 3;
 
 DROP VIEW IF EXISTS apflora.v_apber_uebnb000 CASCADE;
 CREATE OR REPLACE VIEW apflora.v_apber_uebnb000 AS
@@ -644,7 +644,7 @@ FROM
     ON apflora.v_ap_anzmassnbisjahr.jahr = apflora._variable.apber_jahr
 WHERE
   apflora.apber.ap_id IS NULL
-  AND apflora.ap."ApStatus" BETWEEN 1 AND 3;
+  AND apflora.ap.bearbeitung BETWEEN 1 AND 3;
 
 DROP VIEW IF EXISTS apflora.v_apber_uebnb00 CASCADE;
 CREATE OR REPLACE VIEW apflora.v_apber_uebnb00 AS
@@ -669,7 +669,7 @@ FROM
       ON apflora.ap.id = apflora.apber.ap_id)
     ON "tblKonstanten_1".apber_jahr = apflora.v_ap_anzmassnbisjahr.jahr
 WHERE
-  apflora.ap."ApStatus" BETWEEN 1 AND 3
+  apflora.ap.bearbeitung BETWEEN 1 AND 3
   AND apflora.apber.beurteilung IS NULL;
 
 DROP VIEW IF EXISTS apflora.v_apber_uebnb0 CASCADE;
@@ -696,7 +696,7 @@ FROM
     apflora.ap
     ON apflora.ae_eigenschaften.id = apflora.ap.id
 WHERE
-  apflora.ap."ApStatus" BETWEEN 1 AND 3
+  apflora.ap.bearbeitung BETWEEN 1 AND 3
   AND apflora.ap.id NOT IN (SELECT * FROM apflora.v_apber_uebse_apid)
   AND apflora.ap.id NOT IN (SELECT * FROM apflora.v_apber_uebe_apid)
   AND apflora.ap.id NOT IN (SELECT * FROM apflora.v_apber_uebme_apid)
@@ -742,7 +742,7 @@ FROM
       ON apflora.ap.id = apflora.v_ap_apberrelevant.id)
     ON apflora.ae_eigenschaften.id = apflora.ap.id
 WHERE
-  apflora.ap."ApStatus" BETWEEN 1 AND 3
+  apflora.ap.bearbeitung BETWEEN 1 AND 3
 ORDER BY
   apflora.ae_eigenschaften.artname;
 
@@ -758,7 +758,7 @@ FROM
     apflora.apber
     ON apflora.ap.id = apflora.apber.ap_id
 WHERE
-  apflora.ap."ApStatus" BETWEEN 1 AND 3
+  apflora.ap.bearbeitung BETWEEN 1 AND 3
   AND (
     apflora.apber.jahr IN (SELECT apflora._variable.apber_jahr FROM apflora._variable)
     Or apflora.apber.jahr IS NULL
@@ -798,10 +798,10 @@ FROM
     ON apflora.ap.id = apflora.pop.ap_id)
   INNER JOIN
     apflora.ap_bearbstand_werte
-    ON apflora.ap."ApStatus" = apflora.ap_bearbstand_werte.code
+    ON apflora.ap.bearbeitung = apflora.ap_bearbstand_werte.code
 WHERE
   (
-    apflora.ap."ApStatus" < 4
+    apflora.ap.bearbeitung < 4
     AND (
       apflora.tpop.status = 101
       OR apflora.tpop.status = 202
@@ -809,7 +809,7 @@ WHERE
     AND apflora.tpopber.entwicklung <> 8
   )
   OR (
-    apflora.ap."ApStatus" < 4
+    apflora.ap.bearbeitung < 4
     AND apflora.tpop.status NOT IN (101, 202)
     AND apflora.tpopber.entwicklung = 8
   )
@@ -853,8 +853,8 @@ FROM
       ON apflora.apber.jahr = apflora._variable.apber_jahr)
     ON apflora.ap.id = apflora.apber.ap_id
 WHERE
-  apflora.ap."ApStatus" < 4
-  --AND apflora.ap.id > 150
+  apflora.ap.bearbeitung < 4
+  --AND apflora.ae_eigenschaften.taxid > 150
 ORDER BY
   apflora.ae_eigenschaften.artname;
 
@@ -1426,7 +1426,7 @@ FROM
     (((apflora.ap
     LEFT JOIN
       apflora.ap_bearbstand_werte
-      ON apflora.ap."ApStatus" = apflora.ap_bearbstand_werte.code)
+      ON apflora.ap.bearbeitung = apflora.ap_bearbstand_werte.code)
     LEFT JOIN
       apflora.ap_umsetzung_werte
       ON apflora.ap.umsetzung = apflora.ap_umsetzung_werte.code)
@@ -1494,7 +1494,7 @@ FROM
     (((apflora.ap
     LEFT JOIN
       apflora.ap_bearbstand_werte
-      ON apflora.ap."ApStatus" = apflora.ap_bearbstand_werte.code)
+      ON apflora.ap.bearbeitung = apflora.ap_bearbstand_werte.code)
     LEFT JOIN
       apflora.ap_umsetzung_werte
       ON apflora.ap.umsetzung = apflora.ap_umsetzung_werte.code)
@@ -1554,7 +1554,7 @@ FROM
     (((apflora.ap
     LEFT JOIN
       apflora.ap_bearbstand_werte
-      ON apflora.ap."ApStatus" = apflora.ap_bearbstand_werte.code)
+      ON apflora.ap.bearbeitung = apflora.ap_bearbstand_werte.code)
     LEFT JOIN
       apflora.ap_umsetzung_werte
       ON apflora.ap.umsetzung = apflora.ap_umsetzung_werte.code)
@@ -1648,7 +1648,7 @@ FROM
     ON apflora.ap.id = apflora.pop.ap_id)
   LEFT JOIN
     apflora.ap_bearbstand_werte
-    ON apflora.ap."ApStatus" = apflora.ap_bearbstand_werte.code)
+    ON apflora.ap.bearbeitung = apflora.ap_bearbstand_werte.code)
   LEFT JOIN
     apflora.ap_umsetzung_werte
     ON apflora.ap.umsetzung = apflora.ap_umsetzung_werte.code)
@@ -2051,10 +2051,12 @@ FROM
         ON apflora.tpop.id = apflora.tpopkontr.tpop_id)
       ON apflora.pop.id = apflora.tpop.pop_id)
     ON apflora.ap.id = apflora.pop.ap_id
+  INNER JOIN apflora.ae_eigenschaften
+  ON apflora.ae_eigenschaften.id = apflora.ap.id
 WHERE
   -- keine Testarten
-  apflora.ap.id > 150
-  AND apflora.ap.id < 1000000
+  apflora.ae_eigenschaften.taxid > 150
+  AND apflora.ae_eigenschaften.taxid < 1000000
   -- nur Kontrollen, deren Teilpopulationen Koordinaten besitzen
   AND apflora.tpop.x IS NOT NULL
   AND apflora.tpop.y IS NOT NULL
@@ -2129,7 +2131,7 @@ FROM
     ON apflora.ap.id = apflora.pop.ap_id)
   LEFT JOIN
     apflora.ap_bearbstand_werte
-    ON apflora.ap."ApStatus" = apflora.ap_bearbstand_werte.code)
+    ON apflora.ap.bearbeitung = apflora.ap_bearbstand_werte.code)
   LEFT JOIN
     apflora.ap_umsetzung_werte
     ON apflora.ap.umsetzung = apflora.ap_umsetzung_werte.code)

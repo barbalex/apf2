@@ -1861,8 +1861,8 @@ CREATE OR REPLACE VIEW apflora.v_ap_anzkontrinjahr AS
 SELECT
   apflora.ap.id,
   apflora.ae_eigenschaften.artname,
-  apflora.tpopkontr.id,
-  apflora.tpopkontr.jahr
+  apflora.tpopkontr.id as tpopkontr_id,
+  apflora.tpopkontr.jahr as tpopkontr_jahr
 FROM
   (apflora.ap
   INNER JOIN
@@ -1928,8 +1928,8 @@ CREATE OR REPLACE VIEW apflora.v_ap_tpopmassnjahr0 AS
 SELECT
   apflora.ap.id,
   apflora.ae_eigenschaften.artname,
-  apflora.tpopmassn.id,
-  apflora.tpopmassn.jahr
+  apflora.tpopmassn.id as tpopmassn_id,
+  apflora.tpopmassn.jahr as tpopmassn_jahr
 FROM
   (apflora.ap
   INNER JOIN
@@ -3860,15 +3860,15 @@ SELECT
   apflora.tpopbeob.changed,
   apflora.tpopbeob.changed_by
 FROM
-  ((((apflora.beob
+  (((apflora.beob
   INNER JOIN
     apflora.beob AS beob2
     ON beob2.id = beob.id)
   INNER JOIN
-    apflora.ap
-    ON apflora.ap.id = apflora.beob."ArtId")
-  INNER JOIN
     apflora.ae_eigenschaften
+    INNER JOIN
+      apflora.ap
+      ON apflora.ap.id = apflora.ae_eigenschaften.id
     ON apflora.beob."ArtId" = apflora.ae_eigenschaften.taxid)
   INNER JOIN
     apflora.beob_quelle
@@ -3929,15 +3929,15 @@ SELECT
   apflora.tpopbeob.changed_by,
   apflora.beob.data AS "Originaldaten"
 FROM
-  ((((apflora.beob
+  (((apflora.beob
   INNER JOIN
     apflora.beob AS beob2
     ON beob2.id = beob.id)
   INNER JOIN
-    apflora.ap
-    ON apflora.ap.id = apflora.beob."ArtId")
-  INNER JOIN
     apflora.ae_eigenschaften
+    INNER JOIN
+      apflora.ap
+      ON apflora.ap.id = apflora.ae_eigenschaften.id
     ON apflora.beob."ArtId" = apflora.ae_eigenschaften.taxid)
   INNER JOIN
     apflora.beob_quelle
@@ -4033,8 +4033,8 @@ FROM
     ON apflora.ap.id = apflora.pop.ap_id
 WHERE
   -- keine Testarten
-  apflora.ap.id > 150
-  AND apflora.ap.id < 1000000
+  apflora.ae_eigenschaften.taxid > 150
+  AND apflora.ae_eigenschaften.taxid < 1000000
   -- nur Kontrollen, deren Teilpopulationen Koordinaten besitzen
   AND apflora.tpop.x IS NOT NULL
   AND apflora.tpop.y IS NOT NULL
@@ -4115,10 +4115,12 @@ FROM
         ON apflora.tpop.id = apflora.tpopkontr.tpop_id)
       ON apflora.pop.id = apflora.tpop.pop_id)
     ON apflora.ap.id = apflora.pop.ap_id
+  INNER JOIN apflora.ae_eigenschaften
+  ON apflora.ae_eigenschaften.id = apflora.ap.id
 WHERE
   -- keine Testarten
-  apflora.ap.id > 150
-  AND apflora.ap.id < 1000000
+  apflora.ae_eigenschaften.taxid > 150
+  AND apflora.ae_eigenschaften.taxid < 1000000
   -- nur Kontrollen, deren Teilpopulationen Koordinaten besitzen
   AND apflora.tpop.x IS NOT NULL
   AND apflora.tpop.y IS NOT NULL
@@ -4222,10 +4224,12 @@ FROM
         ON apflora.tpop.id = apflora.tpopkontr.tpop_id)
       ON apflora.pop.id = apflora.tpop.pop_id)
     ON apflora.ap.id = apflora.pop.ap_id
+  INNER JOIN apflora.ae_eigenschaften
+  ON apflora.ae_eigenschaften.id = apflora.ap.id
 WHERE
   -- keine Testarten
-  apflora.ap.id > 150
-  AND apflora.ap.id < 1000000
+  apflora.ae_eigenschaften.taxid > 150
+  AND apflora.ae_eigenschaften.taxid < 1000000
   -- nur Kontrollen, deren Teilpopulationen Koordinaten besitzen
   AND apflora.tpop.x IS NOT NULL
   AND apflora.tpop.y IS NOT NULL
@@ -4308,10 +4312,12 @@ FROM
         ON apflora.tpop.id = apflora.tpopkontr.tpop_id)
       ON apflora.pop.id = apflora.tpop.pop_id)
     ON apflora.ap.id = apflora.pop.ap_id
+  INNER JOIN apflora.ae_eigenschaften
+  ON apflora.ae_eigenschaften.id = apflora.ap.id
 WHERE
   -- keine Testarten
-  apflora.ap.id > 150
-  AND apflora.ap.id < 1000000
+  apflora.ae_eigenschaften.taxid > 150
+  AND apflora.ae_eigenschaften.taxid < 1000000
   -- nur Kontrollen, deren Teilpopulationen Koordinaten besitzen
   AND apflora.tpop.x IS NOT NULL
   AND apflora.tpop.y IS NOT NULL
@@ -6715,9 +6721,9 @@ SELECT
       apflora.pop
     WHERE
       apflora.pop.ap_id = apflora.ae_eigenschaften.id
-      AND apflora.pop.status  IN (100)
-      AND apflora.pop.id IN(
-        SELECT
+      AND apflora.pop.status IN (100)
+      AND apflora.pop.id IN (
+        SELECT DISTINCT
           apflora.tpop.pop_id
         FROM
           apflora.tpop
@@ -6732,9 +6738,9 @@ SELECT
       apflora.pop
     WHERE
       apflora.pop.ap_id = apflora.ae_eigenschaften.id
-      AND apflora.pop.status  IN (200, 210)
-      AND apflora.pop.id IN(
-        SELECT
+      AND apflora.pop.status IN (200, 210)
+      AND apflora.pop.id IN (
+        SELECT DISTINCT
           apflora.tpop.pop_id
         FROM
           apflora.tpop
@@ -6749,9 +6755,9 @@ SELECT
       apflora.pop
     WHERE
       apflora.pop.ap_id = apflora.ae_eigenschaften.id
-      AND apflora.pop.status  IN (100, 200, 210)
-      AND apflora.pop.id IN(
-        SELECT
+      AND apflora.pop.status IN (100, 200, 210)
+      AND apflora.pop.id IN (
+        SELECT DISTINCT
           apflora.tpop.pop_id
         FROM
           apflora.tpop
@@ -6771,6 +6777,7 @@ WHERE
   apflora.ap.bearbeitung BETWEEN 1 AND 3
 GROUP BY
   apflora.ap.id,
+  apflora.ae_eigenschaften.id,
   apflora.ae_eigenschaften.artname
 ORDER BY
   apflora.ae_eigenschaften.artname;
