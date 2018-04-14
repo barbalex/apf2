@@ -12,8 +12,7 @@ FROM
   apflora.ap,
   apflora.v_massn_jahre
 WHERE
-  apflora.ap.id > 0
-  AND apflora.ap.bearbeitung < 4
+  apflora.ap.bearbeitung < 4
 ORDER BY
   apflora.ap.id,
   apflora.v_massn_jahre.jahr;
