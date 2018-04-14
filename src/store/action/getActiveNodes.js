@@ -45,9 +45,7 @@ export default (activeNodeArray: Array<mixed>, store: Object): Object => {
   const assozart =
     assozartFolder && activeNodeArray.length > 5 ? activeNodeArray[5] : null
   const beobart =
-    beobArtFolder && activeNodeArray.length > 5
-      ? parseInt(activeNodeArray[5], 10)
-      : null
+    beobArtFolder && activeNodeArray.length > 5 ? activeNodeArray[5] : null
   const idealbiotopFolder =
     (ap &&
       activeNodeArray.length > 4 &&
