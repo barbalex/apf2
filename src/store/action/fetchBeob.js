@@ -35,9 +35,9 @@ const onError = ({
 
 export default async (store: Object, apId: number): any => {
   const { valuesForWhichTableDataWasFetched } = store
-  let beobArtResult: { data: Array<Object> }
+  let apArtResult: { data: Array<Object> }
   try {
-    beobArtResult = await axios.get(`beobart?ap_id=eq.${apId}`)
+    apArtResult = await axios.get(`apart?ap_id=eq.${apId}`)
   } catch (error) {
     return onError({
       store,
@@ -46,9 +46,9 @@ export default async (store: Object, apId: number): any => {
       error,
     })
   }
-  const taxonomyIds = beobArtResult.data
+  const taxonomyIds = apArtResult.data
     .map(d => d.taxid)
-    // if exists new beobart but art is not choosen, its value is null
+    // if exists new apart but art is not choosen, its value is null
     // need to filter that out
     .filter(v => !!v)
 

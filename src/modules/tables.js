@@ -220,7 +220,7 @@ export default [
     parentIdField: 'ArtId',
   },
   {
-    table: 'beobart',
+    table: 'apart',
     label: 'none',
     idField: 'id',
     parentIdField: 'ap_id',

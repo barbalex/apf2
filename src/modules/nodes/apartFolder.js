@@ -16,27 +16,27 @@ export default (
     { ApArtId: apId }
   )
 
-  const beobArtNodesLength = tree.filteredAndSorted.beobart.filter(
+  const apArtNodesLength = tree.filteredAndSorted.apart.filter(
     n => n.ap_id === apId
   ).length
-  let message = beobArtNodesLength
-  if (store.table.beobArtLoading) {
+  let message = apArtNodesLength
+  if (store.table.apArtLoading) {
     message = '...'
   }
-  if (tree.nodeLabelFilter.get('beobart')) {
-    message = `${beobArtNodesLength} gefiltert`
+  if (tree.nodeLabelFilter.get('apart')) {
+    message = `${apArtNodesLength} gefiltert`
   }
 
   return [
     {
       nodeType: 'folder',
-      menuType: 'beobArtFolder',
+      menuType: 'apArtFolder',
       id: apId,
-      urlLabel: 'arten-fuer-beobachtungen',
-      label: `Arten für Beobachtungen (${message})`,
-      url: ['Projekte', projId, 'Arten', apId, 'arten-fuer-beobachtungen'],
+      urlLabel: 'ap-arten',
+      label: `AP-Arten (${message})`,
+      url: ['Projekte', projId, 'Arten', apId, 'ap-arten'],
       sort: [projIndex, 1, apIndex, 8],
-      hasChildren: beobArtNodesLength > 0,
+      hasChildren: apArtNodesLength > 0,
     },
   ]
 }

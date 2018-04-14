@@ -141,33 +141,37 @@ on apflora.idealbiotop.ap_id = apflora.ap."ApArtId"
 where apflora.idealbiotop.ap_id is null;
 
 -- when ap is inserted
--- ensure beobart is created too
+-- ensure apart is created too
 DROP TRIGGER IF EXISTS ap_insert_add_beobart ON apflora.ap;
+DROP TRIGGER IF EXISTS ap_insert_add_apart ON apflora.ap;
 DROP FUNCTION IF EXISTS apflora.ap_insert_add_beobart();
-CREATE FUNCTION apflora.ap_insert_add_beobart() RETURNS trigger AS $ap_insert_add_beobart$
+DROP FUNCTION IF EXISTS apflora.ap_insert_add_apart();
+CREATE FUNCTION apflora.ap_insert_add_apart() RETURNS trigger AS $ap_insert_add_apart$
 BEGIN
   INSERT INTO
-    apflora.beobart (ap_id, taxid)
+    apflora.apart (ap_id, taxid)
   VALUES (NEW."ApArtId", NEW."ApArtId");
   RETURN NEW;
 END;
-$ap_insert_add_beobart$ LANGUAGE plpgsql;
+$ap_insert_add_apart$ LANGUAGE plpgsql;
 
-CREATE TRIGGER ap_insert_add_beobart AFTER INSERT ON apflora.ap
-  FOR EACH ROW EXECUTE PROCEDURE apflora.ap_insert_add_beobart();
+CREATE TRIGGER ap_insert_add_apart AFTER INSERT ON apflora.ap
+  FOR EACH ROW EXECUTE PROCEDURE apflora.ap_insert_add_apart();
 
 -- when ap is inserted
--- ensure beobart is created too
+-- ensure apart is created too
 DROP TRIGGER IF EXISTS ap_insert_add_beobart ON apflora.ap;
+DROP TRIGGER IF EXISTS ap_insert_add_apart ON apflora.ap;
 DROP FUNCTION IF EXISTS apflora.ap_insert_add_beobart();
-CREATE FUNCTION apflora.ap_insert_add_beobart() RETURNS trigger AS $ap_insert_add_beobart$
+DROP FUNCTION IF EXISTS apflora.ap_insert_add_apart();
+CREATE FUNCTION apflora.ap_insert_add_apart() RETURNS trigger AS $ap_insert_add_apart$
 BEGIN
   INSERT INTO
-    apflora.beobart (ap_id, taxid)
+    apflora.apart (ap_id, taxid)
   VALUES (NEW."ApArtId", NEW."ApArtId");
   RETURN NEW;
 END;
-$ap_insert_add_beobart$ LANGUAGE plpgsql;
+$ap_insert_add_apart$ LANGUAGE plpgsql;
 
-CREATE TRIGGER ap_insert_add_beobart AFTER INSERT ON apflora.ap
-  FOR EACH ROW EXECUTE PROCEDURE apflora.ap_insert_add_beobart();
+CREATE TRIGGER ap_insert_add_apart AFTER INSERT ON apflora.ap
+  FOR EACH ROW EXECUTE PROCEDURE apflora.ap_insert_add_apart();

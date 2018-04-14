@@ -78,7 +78,7 @@ const fetchDataForOpenNodes = (
         store.fetchTable('adresse')
         store.fetchTable('ap_bearbstand_werte')
         store.fetchTable('ap_umsetzung_werte')
-        store.fetchTable('beobart')
+        store.fetchTable('apart')
         store.fetchBeob(activeNodes.ap)
         store.fetchBeobzuordnung(activeNodes.ap)
         store.fetchTable('pop_status_werte')
@@ -99,7 +99,7 @@ const fetchDataForOpenNodes = (
         // not necessary any more as form loads data on mount
       },
       assozartFolder() {},
-      beobArtFolder() {},
+      apArtFolder() {},
       idealbiotopFolder() {},
       beobNichtZuzuordnenFolder() {
         store.fetchTable('beob_quelle')

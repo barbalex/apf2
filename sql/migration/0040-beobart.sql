@@ -27,6 +27,8 @@ CREATE INDEX ON apflora.beobart USING btree (id);
 CREATE INDEX ON apflora.beobart USING btree (ap_id);
 CREATE INDEX ON apflora.beobart USING btree (taxid);
 
+ALTER TABLE apflora.beobart RENAME TO apflora.apart;
+
 -- done: make sure createTable is correct
 -- TODO: rename in sql
 -- TODO: rename in js
@@ -37,4 +39,38 @@ CREATE INDEX ON apflora.beobart USING btree (taxid);
 -- TODO: update js and run this file on server
 -- TODO: restart postgrest
 
-ALTER TABLE apflora.beobart RENAME TO apflora.apart;
+-- when ap is inserted
+-- ensure apart is created too
+DROP TRIGGER IF EXISTS ap_insert_add_beobart ON apflora.ap;
+DROP TRIGGER IF EXISTS ap_insert_add_apart ON apflora.ap;
+DROP FUNCTION IF EXISTS apflora.ap_insert_add_beobart();
+DROP FUNCTION IF EXISTS apflora.ap_insert_add_apart();
+CREATE FUNCTION apflora.ap_insert_add_apart() RETURNS trigger AS $ap_insert_add_apart$
+BEGIN
+  INSERT INTO
+    apflora.apart (ap_id, taxid)
+  VALUES (NEW."ApArtId", NEW."ApArtId");
+  RETURN NEW;
+END;
+$ap_insert_add_apart$ LANGUAGE plpgsql;
+
+CREATE TRIGGER ap_insert_add_apart AFTER INSERT ON apflora.ap
+  FOR EACH ROW EXECUTE PROCEDURE apflora.ap_insert_add_apart();
+
+-- when ap is inserted
+-- ensure apart is created too
+DROP TRIGGER IF EXISTS ap_insert_add_beobart ON apflora.ap;
+DROP TRIGGER IF EXISTS ap_insert_add_apart ON apflora.ap;
+DROP FUNCTION IF EXISTS apflora.ap_insert_add_beobart();
+DROP FUNCTION IF EXISTS apflora.ap_insert_add_apart();
+CREATE FUNCTION apflora.ap_insert_add_apart() RETURNS trigger AS $ap_insert_add_apart$
+BEGIN
+  INSERT INTO
+    apflora.apart (ap_id, taxid)
+  VALUES (NEW."ApArtId", NEW."ApArtId");
+  RETURN NEW;
+END;
+$ap_insert_add_apart$ LANGUAGE plpgsql;
+
+CREATE TRIGGER ap_insert_add_apart AFTER INSERT ON apflora.ap
+  FOR EACH ROW EXECUTE PROCEDURE apflora.ap_insert_add_apart();

@@ -68,10 +68,10 @@ export default (store: Object, tree: Object): Object => {
           row: table.assozart.get(aEl.assozart),
           folder: null,
         }
-      } else if (aEl.beobart) {
+      } else if (aEl.apart) {
         activeDataset = {
-          table: 'beobart',
-          row: table.beobart.get(aEl.beobart),
+          table: 'apart',
+          row: table.apart.get(aEl.apart),
           folder: null,
         }
       } else if (aEl.idealbiotopFolder) {
@@ -183,7 +183,7 @@ export default (store: Object, tree: Object): Object => {
         let folder = null
         if (aEl.popFolder) folder = 'pop'
         if (aEl.assozartFolder) folder = 'assozart'
-        if (aEl.beobartFolder) folder = 'beobart'
+        if (aEl.apartFolder) folder = 'apart'
         if (aEl.idealbiotopFolder) folder = 'idealbiotop'
         if (aEl.beobNichtZuzuordnenFolder) folder = 'beobNichtZuzuordnen'
         if (aEl.beobzuordnungFolder) folder = 'beobzuordnung'

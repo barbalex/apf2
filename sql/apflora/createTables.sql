@@ -1093,8 +1093,8 @@ INSERT INTO apflora.beob_quelle VALUES (2, 'infospezies');
 CREATE INDEX ON apflora.beob_quelle USING btree (id);
 
 -- create table
-DROP TABLE IF EXISTS apflora.beobart;
-CREATE TABLE apflora.beobart (
+DROP TABLE IF EXISTS apflora.apart;
+CREATE TABLE apflora.apart (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
   id_old integer,
   taxid INTEGER DEFAULT NULL REFERENCES apflora.ae_eigenschaften (taxid) ON DELETE SET NULL ON UPDATE CASCADE,
@@ -1103,12 +1103,12 @@ CREATE TABLE apflora.beobart (
   changed_by varchar(20) DEFAULT NULL
   --UNIQUE (taxid) --no, maybe after beob were rearranged
 );
-CREATE INDEX ON apflora.beobart USING btree (id);
-CREATE INDEX ON apflora.beobart USING btree (ap_id);
-CREATE INDEX ON apflora.beobart USING btree (taxid);
-COMMENT ON COLUMN apflora.beobart.id IS 'Primärschlüssel';
-COMMENT ON COLUMN apflora.beobart.id_old IS 'frühere id';
-COMMENT ON COLUMN apflora.beobart.taxid IS 'Zugehörige Art. Fremdschlüssel aus der Tabelle "ae_eigenschaften"';
-COMMENT ON COLUMN apflora.beobart.ap_id IS 'Zugehöriger Aktionsplan. Fremdschlüssel aus der Tabelle "ap"';
-COMMENT ON COLUMN apflora.beobart.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
-COMMENT ON COLUMN apflora.beobart.changed_by IS 'Wer hat den Datensatz zuletzt geändert?';
+CREATE INDEX ON apflora.apart USING btree (id);
+CREATE INDEX ON apflora.apart USING btree (ap_id);
+CREATE INDEX ON apflora.apart USING btree (taxid);
+COMMENT ON COLUMN apflora.apart.id IS 'Primärschlüssel';
+COMMENT ON COLUMN apflora.apart.id_old IS 'frühere id';
+COMMENT ON COLUMN apflora.apart.taxid IS 'Zugehörige Art. Fremdschlüssel aus der Tabelle "ae_eigenschaften"';
+COMMENT ON COLUMN apflora.apart.ap_id IS 'Zugehöriger Aktionsplan. Fremdschlüssel aus der Tabelle "ap"';
+COMMENT ON COLUMN apflora.apart.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
+COMMENT ON COLUMN apflora.apart.changed_by IS 'Wer hat den Datensatz zuletzt geändert?';

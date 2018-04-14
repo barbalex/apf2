@@ -5,7 +5,7 @@ import filteredAndSortedProjekt from '../../compute/filteredAndSorted/projekt'
 import filteredAndSortedApberuebersicht from '../../compute/filteredAndSorted/apberuebersicht'
 import filteredAndSortedAp from '../../compute/filteredAndSorted/ap'
 import filteredAndSortedAssozart from '../../compute/filteredAndSorted/assozart'
-import filteredAndSortedBeobArt from '../../compute/filteredAndSorted/beobart'
+import filteredAndSortedApart from '../../compute/filteredAndSorted/apart'
 import filteredAndSortedIdealbiotop from '../../compute/filteredAndSorted/idealbiotop'
 import filteredAndSortedBeobNichtZuzuordnen from '../../compute/filteredAndSorted/beobNichtZuzuordnen'
 import filteredAndSortedBeobzuordnung from '../../compute/filteredAndSorted/beobzuordnung'
@@ -38,7 +38,7 @@ export default (store: Object, tree: Object): void => {
     ),
     ap: computed(() => filteredAndSortedAp(store, tree)),
     assozart: computed(() => filteredAndSortedAssozart(store, tree)),
-    beobart: computed(() => filteredAndSortedBeobArt(store, tree)),
+    apart: computed(() => filteredAndSortedApart(store, tree)),
     idealbiotop: computed(() => filteredAndSortedIdealbiotop(store, tree)),
     beobNichtZuzuordnen: computed(() =>
       filteredAndSortedBeobNichtZuzuordnen(store, tree)

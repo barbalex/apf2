@@ -74,8 +74,8 @@ export default async (
     store.updatePropertyInDb(tree, 'typ', 'Freiwilligen-Erfolgskontrolle')
   }
 
-  // if beobart need to fetch beob
-  if (tablePassed === 'beobart') {
+  // if apart need to fetch beob
+  if (tablePassed === 'apart') {
     store.fetchBeob(tree.activeNodes.ap)
   }
 }

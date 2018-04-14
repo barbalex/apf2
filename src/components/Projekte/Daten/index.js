@@ -42,8 +42,8 @@ const Assozart = Loadable({
   loader: () => import('./Assozart'),
   loading: Loading,
 })
-const Beobart = Loadable({
-  loader: () => import('./Beobart'),
+const Apart = Loadable({
+  loader: () => import('./Apart'),
   loading: Loading,
 })
 const Idealbiotop = Loadable({
@@ -144,7 +144,7 @@ const Daten = ({
     apberuebersicht: <Apberuebersicht tree={tree} dimensions={dimensions} />,
     ap: <Ap tree={tree} dimensions={dimensions} />,
     assozart: <Assozart tree={tree} dimensions={dimensions} />,
-    beobart: <Beobart tree={tree} dimensions={dimensions} />,
+    apart: <Apart tree={tree} dimensions={dimensions} />,
     idealbiotop: <Idealbiotop tree={tree} dimensions={dimensions} />,
     erfkrit: <Erfkrit tree={tree} dimensions={dimensions} />,
     apber: <Apber tree={tree} dimensions={dimensions} />,

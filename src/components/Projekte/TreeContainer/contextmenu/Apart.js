@@ -4,21 +4,15 @@ import { ContextMenu, MenuItem } from 'react-contextmenu'
 
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 
-const BeobartFolder = ({
-  onClick,
-  tree,
-}: {
-  onClick: () => void,
-  tree: Object,
-}) => (
+const Apart = ({ onClick, tree }: { onClick: () => void, tree: Object }) => (
   <ErrorBoundary>
-    <ContextMenu id={`${tree.name}beobart`}>
-      <div className="react-contextmenu-title">Art für Beobachtungen</div>
+    <ContextMenu id={`${tree.name}apart`}>
+      <div className="react-contextmenu-title">Aktionsplan-Art</div>
       <MenuItem
         onClick={onClick}
         data={{
           action: 'insert',
-          table: 'beobart',
+          table: 'apart',
         }}
       >
         erstelle neue
@@ -27,7 +21,7 @@ const BeobartFolder = ({
         onClick={onClick}
         data={{
           action: 'delete',
-          table: 'beobart',
+          table: 'apart',
         }}
       >
         lösche
@@ -36,4 +30,4 @@ const BeobartFolder = ({
   </ErrorBoundary>
 )
 
-export default BeobartFolder
+export default Apart

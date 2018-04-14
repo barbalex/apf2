@@ -12,7 +12,7 @@ export default [
   'apberuebersicht',
   'assozart',
   'beob',
-  'beobart',
+  'apart',
   'beob_projekt',
   'beob_quelle',
   'tpopbeob',

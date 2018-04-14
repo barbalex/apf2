@@ -32,10 +32,8 @@ export default (activeNodeArray: Array<mixed>, store: Object): Object => {
       activeNodeArray.length > 4 &&
       activeNodeArray[4] === 'assoziierte-Arten') ||
     false
-  const beobArtFolder =
-    (ap &&
-      activeNodeArray.length > 4 &&
-      activeNodeArray[4] === 'arten-fuer-beobachtungen') ||
+  const apArtFolder =
+    (ap && activeNodeArray.length > 4 && activeNodeArray[4] === 'ap-arten') ||
     false
   const qk =
     (ap &&
@@ -44,8 +42,8 @@ export default (activeNodeArray: Array<mixed>, store: Object): Object => {
     false
   const assozart =
     assozartFolder && activeNodeArray.length > 5 ? activeNodeArray[5] : null
-  const beobart =
-    beobArtFolder && activeNodeArray.length > 5 ? activeNodeArray[5] : null
+  const apart =
+    apArtFolder && activeNodeArray.length > 5 ? activeNodeArray[5] : null
   const idealbiotopFolder =
     (ap &&
       activeNodeArray.length > 4 &&
@@ -216,9 +214,9 @@ export default (activeNodeArray: Array<mixed>, store: Object): Object => {
     apFolder,
     ap,
     assozartFolder,
-    beobArtFolder,
+    apArtFolder,
     assozart,
-    beobart,
+    apart,
     qk,
     idealbiotopFolder,
     idealbiotop,

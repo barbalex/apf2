@@ -16,12 +16,12 @@ export default (
     { ApArtId: apId }
   )
 
-  const beobArten = Array.from(store.table.beobart.values())
+  const apArten = Array.from(store.table.apart.values())
     .filter(v => v.ap_id === apId)
     .map(ba => ba.taxid)
 
   const beobzuordnungNodesLength = tree.filteredAndSorted.beobzuordnung.filter(
-    b => beobArten.includes(b.ArtId)
+    b => apArten.includes(b.ArtId)
   ).length
 
   let message = beobzuordnungNodesLength

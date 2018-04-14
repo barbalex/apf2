@@ -26,9 +26,9 @@ const getArtList = ({ store, tree }: { store: Object, tree: Object }) => {
   const { ae_eigenschaften } = store.table
   // do not show any taxid's that have been used
   // turned off because some species have already been worked as separate ap
-  // because beobart did not exist...
+  // because apart did not exist...
   /*
-  const apArtIdsNotToShow = Array.from(store.table.beobart.values()).map(
+  const apArtIdsNotToShow = Array.from(store.table.apart.values()).map(
     v => v.taxid
   )*/
   const apArtIdsNotToShow = []
@@ -49,13 +49,13 @@ const getArtname = ({ store, tree }: { store: Object, tree: Object }) => {
   return name
 }
 
-const BeobArt = ({ store, tree }: { store: Object, tree: Object }) => {
+const ApArt = ({ store, tree }: { store: Object, tree: Object }) => {
   const { activeDataset } = tree
 
   return (
     <ErrorBoundary>
       <Container>
-        <FormTitle tree={tree} title="Art für Beobachtungen" />
+        <FormTitle tree={tree} title="Aktionsplan-Art" />
         <FieldsContainer>
           <div>
             Beobachtungen dieser Art stehen im Ordner "Beobachtungen nicht
@@ -87,4 +87,4 @@ const BeobArt = ({ store, tree }: { store: Object, tree: Object }) => {
   )
 }
 
-export default enhance(BeobArt)
+export default enhance(ApArt)

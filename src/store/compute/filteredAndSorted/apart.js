@@ -4,25 +4,25 @@ export default (store: Object, tree: Object): Array<Object> => {
   const { table } = store
   const { nodeLabelFilter } = tree
   const { ae_eigenschaften } = table
-  // grab beobart as array and sort them by year
-  let beobart = Array.from(table.beobart.values())
+  // grab apart as array and sort them by year
+  let apart = Array.from(table.apart.values())
 
   // sort
   // need to add artnameVollständig to sort and filter by nodeLabelFilter
   if (ae_eigenschaften.size > 0) {
-    beobart.forEach(x => {
+    apart.forEach(x => {
       const ae = ae_eigenschaften.get(x.taxid)
       return (x.label = ae ? ae.artname : '(keine Art gewählt)')
     })
     // filter by nodeLabelFilter
-    const filterString = nodeLabelFilter.get('beobart')
+    const filterString = nodeLabelFilter.get('apart')
     if (filterString) {
-      beobart = beobart.filter(p =>
+      apart = apart.filter(p =>
         p.label.toLowerCase().includes(filterString.toLowerCase())
       )
     }
     // sort by label
-    beobart = sortBy(beobart, 'label')
+    apart = sortBy(apart, 'label')
   }
-  return beobart
+  return apart
 }

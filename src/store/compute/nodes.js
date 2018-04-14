@@ -18,7 +18,7 @@ import qkFolderNodes from '../../modules/nodes/qkFolder'
 import beobNichtZuzuordnenFolderNodes from '../../modules/nodes/beobNichtZuzuordnenFolder'
 import beobzuordnungFolderNodes from '../../modules/nodes/beobzuordnungFolder'
 import assozartFolderNodes from '../../modules/nodes/assozartFolder'
-import beobartFolderNodes from '../../modules/nodes/beobartFolder'
+import apartFolderNodes from '../../modules/nodes/apartFolder'
 import idealbiotopFolderNodes from '../../modules/nodes/idealbiotopFolder'
 import berFolderNodes from '../../modules/nodes/berFolder'
 import apberFolderNodes from '../../modules/nodes/apberFolder'
@@ -32,7 +32,7 @@ import popNodes from '../../modules/nodes/pop'
 import beobNichtZuzuordnenNodes from '../../modules/nodes/beobNichtZuzuordnen'
 import beobzuordnungNodes from '../../modules/nodes/beobzuordnung'
 import assozartNodes from '../../modules/nodes/assozart'
-import beobartNodes from '../../modules/nodes/beobart'
+import apartNodes from '../../modules/nodes/apart'
 import berNodes from '../../modules/nodes/ber'
 import apberNodes from '../../modules/nodes/apber'
 import erfkritNodes from '../../modules/nodes/erfkrit'
@@ -121,7 +121,7 @@ export default (store: Object, tree: Object): Array<Object> => {
         ...berFolderNodes(store, tree, projId, apId),
         ...idealbiotopFolderNodes(store, tree, projId, apId),
         ...assozartFolderNodes(store, tree, projId, apId),
-        ...beobartFolderNodes(store, tree, projId, apId),
+        ...apartFolderNodes(store, tree, projId, apId),
         ...beobzuordnungFolderNodes(store, tree, projId, apId),
         ...beobNichtZuzuordnenFolderNodes(store, tree, projId, apId),
         ...qkFolderNodes(store, tree, projId, apId),
@@ -206,11 +206,11 @@ export default (store: Object, tree: Object): Array<Object> => {
     }
     if (
       nodeUrl.length === 5 &&
-      nodeUrl[4] === 'arten-fuer-beobachtungen' &&
+      nodeUrl[4] === 'ap-arten' &&
       allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
     ) {
       const apId = nodeUrl[3]
-      nodes = [...nodes, ...beobartNodes(store, tree, projId, apId)]
+      nodes = [...nodes, ...apartNodes(store, tree, projId, apId)]
     }
     if (
       nodeUrl.length === 5 &&
