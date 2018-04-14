@@ -34,9 +34,9 @@ ALTER TABLE apflora.beobart RENAME TO apart;
 -- done: rename in js
 -- done: check if old id was used somewhere. If so: rename that field, add new one and update that
 -- done: add all views, functions, triggers containing this table to this file
--- TODO: run migration sql in dev
--- TODO: restart postgrest and test app
--- TODO: rebuild creating new ap
+-- done: run migration sql in dev
+-- done: restart postgrest and test app
+-- done: rebuild creating new ap
 -- TODO: update js and run this file on server
 -- TODO: restart postgrest
 
