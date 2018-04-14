@@ -58,8 +58,29 @@ const ApArt = ({ store, tree }: { store: Object, tree: Object }) => {
         <FormTitle tree={tree} title="Aktionsplan-Art" />
         <FieldsContainer>
           <div>
-            Beobachtungen dieser Art stehen im Ordner "Beobachtungen nicht
-            beurteilt" zur Verfügung und können zugeordnet werden.
+            "Aktionsplan-Arten" sind alle Arten, welche der Aktionsplan
+            behandelt. Häufig dürfte das bloss eine einzige Art sein. Folgende
+            Gründe können dazu führen, dass hier mehrere aufgelistet werden:
+            <ul>
+              <li>Die AP-Art hat Synonyme</li>
+              <li>
+                Wenn eine Art im Rahmen des Aktionsplans inklusive nicht
+                synonymer aber eng verwandter Arten gefasst wid (z.B.
+                Unterarten)
+              </li>
+            </ul>
+          </div>
+          <div>
+            Beobachtungen aller AP-Arten stehen im Ordner "Beobachtungen nicht
+            beurteilt" zur Verfügung und können Teilpopulationen zugeordnet
+            werden.<br />
+            <br />
+          </div>
+          <div>
+            Die im Aktionsplan gewählte namensgebende Art gibt dem Aktionsplan
+            nicht nur den Namen. Unter ihrer id werden auch die Kontrollen an
+            InfoFlora geliefert.<br />
+            <br />
           </div>
           <AutoComplete
             key={`${activeDataset.row.id}taxid`}
