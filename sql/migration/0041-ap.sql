@@ -145,10 +145,10 @@ ALTER TABLE apflora.apart DROP COLUMN ap_id_old CASCADE;
 COMMENT ON COLUMN apflora.apart.ap_id IS 'Zugehöriger Aktionsplan. Fremdschlüssel aus der Tabelle "ap"';
 
 -- done: make sure createTable is correct
--- TODO: rename in sql
--- TODO: rename in js
--- TODO: check if old id was used somewhere. If so: rename that field, add new one and update that
--- TODO: add all views, functions, triggers containing this table to this file
+-- done: rename in sql
+-- done: rename in js
+-- done: check if old id was used somewhere. If so: rename that field, add new one and update that
+-- done: add all views, functions, triggers containing this table to this file
 -- TODO: run migration sql in dev
 -- TODO: restart postgrest and test app
 -- TODO: special ap functions work?
