@@ -2,12 +2,12 @@ DROP TABLE IF EXISTS _variable;
 CREATE TABLE apflora._variable (
   "KonstId" SERIAL PRIMARY KEY,
   apber_jahr smallint DEFAULT NULL,
-  "ApArtId" integer DEFAULT NULL
+  ap_id integer DEFAULT NULL
 );
 COMMENT ON COLUMN apflora._variable.apber_jahr IS 'Von Access aus ein Berichtsjahr wählen, um die Erstellung des Jahresberichts zu beschleunigen';
-COMMENT ON COLUMN apflora._variable."ApArtId" IS 'Von Access aus eine Art wählen, um views zu beschleunigen';
+COMMENT ON COLUMN apflora._variable.ap_id IS 'Von Access aus eine Art wählen, um views zu beschleunigen';
 CREATE INDEX ON apflora._variable USING btree (apber_jahr);
-CREATE INDEX ON apflora._variable USING btree ("ApArtId");
+CREATE INDEX ON apflora._variable USING btree (ap_id);
 
 DROP TABLE IF EXISTS adresse;
 CREATE TABLE apflora.adresse (

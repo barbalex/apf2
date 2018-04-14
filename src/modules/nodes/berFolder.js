@@ -14,8 +14,8 @@ export default (
     ProjId: projId,
   })
   const apIndex = findIndex(
-    tree.filteredAndSorted.ap.filter(a => a.ProjId === projId),
-    { ApArtId: apId }
+    tree.filteredAndSorted.ap.filter(a => a.proj_id === projId),
+    { id: apId }
   )
 
   const berNodesLength = tree.filteredAndSorted.ber.filter(

@@ -5,8 +5,8 @@ export default [
     table: 'ap',
     label: 'Arten',
     labelSingular: 'Art',
-    idField: 'ApArtId',
-    parentIdField: 'ProjId',
+    idField: 'id',
+    parentIdField: 'proj_id',
   },
   {
     table: 'pop',

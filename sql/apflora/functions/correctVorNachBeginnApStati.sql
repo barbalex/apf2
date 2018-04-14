@@ -15,11 +15,11 @@ CREATE OR REPLACE FUNCTION apflora.correct_vornach_beginnap_stati(apid integer)
        INNER JOIN apflora.pop
        ON apflora.tpop.pop_id = apflora.pop.id
          INNER JOIN apflora.ap
-         ON apflora.pop.ap_id = apflora.ap."ApArtId"
+         ON apflora.pop.ap_id = apflora.ap.id
      WHERE
        apflora.tpop.status = 211 -- angesiedelt vor Beginn AP, erloschen/nicht etabliert
        AND "ApJahr" IS NULL
-       AND apflora.ap."ApArtId" = $1
+       AND apflora.ap.id = $1
    );
 
    UPDATE apflora.pop
@@ -30,11 +30,11 @@ CREATE OR REPLACE FUNCTION apflora.correct_vornach_beginnap_stati(apid integer)
      FROM
        apflora.pop
          INNER JOIN apflora.ap
-         ON apflora.pop.ap_id = apflora.ap."ApArtId"
+         ON apflora.pop.ap_id = apflora.ap.id
      WHERE
        apflora.pop.status = 211 -- angesiedelt vor Beginn AP, erloschen/nicht etabliert
        AND "ApJahr" IS NULL
-       AND apflora.ap."ApArtId" = $1
+       AND apflora.ap.id = $1
    );
 
    UPDATE apflora.tpop
@@ -47,11 +47,11 @@ CREATE OR REPLACE FUNCTION apflora.correct_vornach_beginnap_stati(apid integer)
        INNER JOIN apflora.pop
        ON apflora.tpop.pop_id = apflora.pop.id
          INNER JOIN apflora.ap
-         ON apflora.pop.ap_id = apflora.ap."ApArtId"
+         ON apflora.pop.ap_id = apflora.ap.id
      WHERE
        apflora.tpop.status = 211 -- angesiedelt vor Beginn AP, erloschen/nicht etabliert
        AND "ApJahr" <= apflora.tpop.bekannt_seit
-       AND apflora.ap."ApArtId" = $1
+       AND apflora.ap.id = $1
    );
 
    UPDATE apflora.pop
@@ -62,11 +62,11 @@ CREATE OR REPLACE FUNCTION apflora.correct_vornach_beginnap_stati(apid integer)
      FROM
        apflora.pop
          INNER JOIN apflora.ap
-         ON apflora.pop.ap_id = apflora.ap."ApArtId"
+         ON apflora.pop.ap_id = apflora.ap.id
      WHERE
        apflora.pop.status = 211 -- angesiedelt vor Beginn AP, erloschen/nicht etabliert
        AND "ApJahr" <= apflora.pop.bekannt_seit
-       AND apflora.ap."ApArtId" = $1
+       AND apflora.ap.id = $1
    );
 
    UPDATE apflora.tpop
@@ -79,11 +79,11 @@ CREATE OR REPLACE FUNCTION apflora.correct_vornach_beginnap_stati(apid integer)
        INNER JOIN apflora.pop
        ON apflora.tpop.pop_id = apflora.pop.id
          INNER JOIN apflora.ap
-         ON apflora.pop.ap_id = apflora.ap."ApArtId"
+         ON apflora.pop.ap_id = apflora.ap.id
      WHERE
        apflora.tpop.status = 202  -- angesiedelt nach Beginn AP, erloschen/nicht etabliert
        AND "ApJahr" > apflora.tpop.bekannt_seit
-       AND apflora.ap."ApArtId" = $1
+       AND apflora.ap.id = $1
    );
 
    UPDATE apflora.pop
@@ -94,11 +94,11 @@ CREATE OR REPLACE FUNCTION apflora.correct_vornach_beginnap_stati(apid integer)
      FROM
        apflora.pop
          INNER JOIN apflora.ap
-         ON apflora.pop.ap_id = apflora.ap."ApArtId"
+         ON apflora.pop.ap_id = apflora.ap.id
      WHERE
        apflora.pop.status = 202  -- angesiedelt nach Beginn AP, erloschen/nicht etabliert
        AND "ApJahr" > apflora.pop.bekannt_seit
-       AND apflora.ap."ApArtId" = $1
+       AND apflora.ap.id = $1
    );
 
    -- angesiedelt, aktuell
@@ -112,11 +112,11 @@ CREATE OR REPLACE FUNCTION apflora.correct_vornach_beginnap_stati(apid integer)
        INNER JOIN apflora.pop
        ON apflora.tpop.pop_id = apflora.pop.id
          INNER JOIN apflora.ap
-         ON apflora.pop.ap_id = apflora.ap."ApArtId"
+         ON apflora.pop.ap_id = apflora.ap.id
      WHERE
        apflora.tpop.status = 210 -- angesiedelt vor Beginn AP, aktuell
        AND "ApJahr" IS NULL
-       AND apflora.ap."ApArtId" = $1
+       AND apflora.ap.id = $1
    );
 
    UPDATE apflora.pop
@@ -127,11 +127,11 @@ CREATE OR REPLACE FUNCTION apflora.correct_vornach_beginnap_stati(apid integer)
      FROM
        apflora.pop
          INNER JOIN apflora.ap
-         ON apflora.pop.ap_id = apflora.ap."ApArtId"
+         ON apflora.pop.ap_id = apflora.ap.id
      WHERE
        apflora.pop.status = 210 -- angesiedelt vor Beginn AP, aktuell
        AND "ApJahr" IS NULL
-       AND apflora.ap."ApArtId" = $1
+       AND apflora.ap.id = $1
    );
 
    UPDATE apflora.tpop
@@ -144,11 +144,11 @@ CREATE OR REPLACE FUNCTION apflora.correct_vornach_beginnap_stati(apid integer)
        INNER JOIN apflora.pop
        ON apflora.tpop.pop_id = apflora.pop.id
          INNER JOIN apflora.ap
-         ON apflora.pop.ap_id = apflora.ap."ApArtId"
+         ON apflora.pop.ap_id = apflora.ap.id
      WHERE
        apflora.tpop.status = 210 -- angesiedelt vor Beginn AP, aktuell
        AND "ApJahr" <= apflora.tpop.bekannt_seit
-       AND apflora.ap."ApArtId" = $1
+       AND apflora.ap.id = $1
    );
 
    UPDATE apflora.pop
@@ -159,11 +159,11 @@ CREATE OR REPLACE FUNCTION apflora.correct_vornach_beginnap_stati(apid integer)
      FROM
        apflora.pop
          INNER JOIN apflora.ap
-         ON apflora.pop.ap_id = apflora.ap."ApArtId"
+         ON apflora.pop.ap_id = apflora.ap.id
      WHERE
        apflora.pop.status = 210 -- angesiedelt vor Beginn AP, aktuell
        AND "ApJahr" <= apflora.pop.bekannt_seit
-       AND apflora.ap."ApArtId" = $1
+       AND apflora.ap.id = $1
    );
 
    UPDATE apflora.tpop
@@ -176,11 +176,11 @@ CREATE OR REPLACE FUNCTION apflora.correct_vornach_beginnap_stati(apid integer)
        INNER JOIN apflora.pop
        ON apflora.tpop.pop_id = apflora.pop.id
          INNER JOIN apflora.ap
-         ON apflora.pop.ap_id = apflora.ap."ApArtId"
+         ON apflora.pop.ap_id = apflora.ap.id
      WHERE
        apflora.tpop.status = 200  -- angesiedelt nach Beginn AP, aktuell
        AND "ApJahr" > apflora.tpop.bekannt_seit
-       AND apflora.ap."ApArtId" = $1
+       AND apflora.ap.id = $1
    );
 
    UPDATE apflora.pop
@@ -191,11 +191,11 @@ CREATE OR REPLACE FUNCTION apflora.correct_vornach_beginnap_stati(apid integer)
      FROM
        apflora.pop
          INNER JOIN apflora.ap
-         ON apflora.pop.ap_id = apflora.ap."ApArtId"
+         ON apflora.pop.ap_id = apflora.ap.id
      WHERE
        apflora.pop.status = 200  -- angesiedelt nach Beginn AP, aktuell
        AND "ApJahr" > apflora.pop.bekannt_seit
-       AND apflora.ap."ApArtId" = $1
+       AND apflora.ap.id = $1
    );
 
  END;

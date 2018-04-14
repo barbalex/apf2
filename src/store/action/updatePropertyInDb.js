@@ -61,7 +61,7 @@ export default async (
   const combinedValidationMessages = objectValues(valid).join('')
   if (combinedValidationMessages.length === 0) {
     const oldValue = row[key]
-    const artWasChanged = table === 'ap' && key === 'ApArtId'
+    const artWasChanged = table === 'ap' && key === 'id'
     if (artWasChanged) {
       // if this was ap, then the map key has changed!
       // need to delete map value and create new one

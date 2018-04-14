@@ -124,7 +124,7 @@ CREATE FUNCTION apflora.ap_insert_add_idealbiotop() RETURNS trigger AS $ap_inser
 BEGIN
   INSERT INTO
     apflora.idealbiotop (ap_id)
-  VALUES (NEW."ApArtId");
+  VALUES (NEW.id);
   RETURN NEW;
 END;
 $ap_insert_add_idealbiotop$ LANGUAGE plpgsql;
@@ -135,9 +135,9 @@ CREATE TRIGGER ap_insert_add_idealbiotop AFTER INSERT ON apflora.ap
 -- in case this trigger was not working
 -- add idealbiotop where they are missing
 insert into apflora.idealbiotop (ap_id)
-select apflora.ap."ApArtId" from apflora.ap
+select apflora.ap.id from apflora.ap
 left join apflora.idealbiotop
-on apflora.idealbiotop.ap_id = apflora.ap."ApArtId"
+on apflora.idealbiotop.ap_id = apflora.ap.id
 where apflora.idealbiotop.ap_id is null;
 
 -- when ap is inserted
@@ -150,7 +150,7 @@ CREATE FUNCTION apflora.ap_insert_add_apart() RETURNS trigger AS $ap_insert_add_
 BEGIN
   INSERT INTO
     apflora.apart (ap_id, taxid)
-  VALUES (NEW."ApArtId", NEW."ApArtId");
+  VALUES (NEW.id, NEW.id);
   RETURN NEW;
 END;
 $ap_insert_add_apart$ LANGUAGE plpgsql;
@@ -168,7 +168,7 @@ CREATE FUNCTION apflora.ap_insert_add_apart() RETURNS trigger AS $ap_insert_add_
 BEGIN
   INSERT INTO
     apflora.apart (ap_id, taxid)
-  VALUES (NEW."ApArtId", NEW."ApArtId");
+  VALUES (NEW.id, NEW.id);
   RETURN NEW;
 END;
 $ap_insert_add_apart$ LANGUAGE plpgsql;

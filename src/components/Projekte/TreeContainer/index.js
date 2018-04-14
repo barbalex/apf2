@@ -181,7 +181,7 @@ const enhance = compose(
           const idToPass = parentId || id
           if (table === 'ap') {
             /**
-             * need to fetch new ApArtId before creating new ap
+             * need to fetch new ap_id before creating new ap
              * because of all the dependencies
              */
             store.setShowNewApModal(true)

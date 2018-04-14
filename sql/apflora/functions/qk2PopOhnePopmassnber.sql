@@ -6,13 +6,13 @@ CREATE OR REPLACE FUNCTION apflora.qk2_pop_ohne_popmassnber(apid integer, berich
     apflora.ap."ProjId",
     apflora.pop.ap_id,
     'Population mit angesiedelten Teilpopulationen (vor dem Berichtjahr), die (im Berichtjahr) kontrolliert wurden, aber ohne Massnahmen-Bericht (im Berichtjahr):' AS hw,
-    ARRAY['Projekte', 1 , 'Arten', apflora.ap."ApArtId", 'Populationen', apflora.pop.id]::text[] AS "url",
+    ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS "url",
     ARRAY[concat('Population (Nr.): ', apflora.pop.nr)]::text[] AS text
   FROM
     apflora.ap
     INNER JOIN
       apflora.pop
-      ON apflora.pop.ap_id = apflora.ap."ApArtId"
+      ON apflora.pop.ap_id = apflora.ap.id
   WHERE
     apflora.pop.id IN (
       SELECT

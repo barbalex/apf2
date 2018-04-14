@@ -32,7 +32,7 @@ const enhance = compose(
       axios({
         method: 'POST',
         url: '/ap',
-        data: { ApArtId: val.taxid, ProjId: 1 },
+        data: { id: val.taxid, proj_id: 1 },
         headers: {
           Prefer: 'return=representation',
         },

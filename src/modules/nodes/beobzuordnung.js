@@ -11,8 +11,8 @@ export default (
   // fetch sorting indexes of parents
   const projIndex = findIndex(filteredAndSorted.projekt, { ProjId: projId })
   const apIndex = findIndex(
-    filteredAndSorted.ap.filter(a => a.ProjId === projId),
-    { ApArtId: apId }
+    filteredAndSorted.ap.filter(a => a.proj_id === projId),
+    { id: apId }
   )
 
   // map through all and create array of nodes

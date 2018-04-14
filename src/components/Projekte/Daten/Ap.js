@@ -112,12 +112,12 @@ const Ap = ({
       <FormTitle tree={tree} title="Art" />
       <FieldsContainer>
         <AutoComplete
-          key={`${activeDataset.row.ApArtId}ApArtId`}
+          key={`${activeDataset.row.id}id`}
           tree={tree}
           label="Art (gibt dem Aktionsplan den Namen)"
-          fieldName="ApArtId"
+          fieldName="id"
           valueText={artname}
-          errorText={activeDataset.valid.ApArtId}
+          errorText={activeDataset.valid.id}
           dataSource={store.dropdownList.artListForAp}
           dataSourceConfig={{
             value: 'taxid',
@@ -151,7 +151,7 @@ const Ap = ({
           label="Aktionsplan"
         />
         <TextField
-          key={`${activeDataset.row.ApArtId}ApJahr`}
+          key={`${activeDataset.row.id}ApJahr`}
           tree={tree}
           label="Start im Jahr"
           fieldName="ApJahr"
@@ -195,7 +195,7 @@ const Ap = ({
           />
         </FieldContainer>
         <AutoComplete
-          key={`${activeDataset.row.ApArtId}ApBearb`}
+          key={`${activeDataset.row.id}ApBearb`}
           tree={tree}
           label="Verantwortlich"
           fieldName="ApBearb"
