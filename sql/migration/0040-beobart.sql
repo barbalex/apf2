@@ -27,7 +27,7 @@ CREATE INDEX ON apflora.beobart USING btree (id);
 CREATE INDEX ON apflora.beobart USING btree (ap_id);
 CREATE INDEX ON apflora.beobart USING btree (taxid);
 
-ALTER TABLE apflora.beobart RENAME TO apflora.apart;
+ALTER TABLE apflora.beobart RENAME TO apart;
 
 -- done: make sure createTable is correct
 -- done: rename in sql
