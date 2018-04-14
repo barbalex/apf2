@@ -18,7 +18,7 @@ CREATE OR REPLACE FUNCTION apflora.correct_vornach_beginnap_stati(apid integer)
          ON apflora.pop.ap_id = apflora.ap.id
      WHERE
        apflora.tpop.status = 211 -- angesiedelt vor Beginn AP, erloschen/nicht etabliert
-       AND "ApJahr" IS NULL
+       AND apflora.ap.start_jahr IS NULL
        AND apflora.ap.id = $1
    );
 
@@ -33,7 +33,7 @@ CREATE OR REPLACE FUNCTION apflora.correct_vornach_beginnap_stati(apid integer)
          ON apflora.pop.ap_id = apflora.ap.id
      WHERE
        apflora.pop.status = 211 -- angesiedelt vor Beginn AP, erloschen/nicht etabliert
-       AND "ApJahr" IS NULL
+       AND apflora.ap.start_jahr IS NULL
        AND apflora.ap.id = $1
    );
 
@@ -50,7 +50,7 @@ CREATE OR REPLACE FUNCTION apflora.correct_vornach_beginnap_stati(apid integer)
          ON apflora.pop.ap_id = apflora.ap.id
      WHERE
        apflora.tpop.status = 211 -- angesiedelt vor Beginn AP, erloschen/nicht etabliert
-       AND "ApJahr" <= apflora.tpop.bekannt_seit
+       AND apflora.ap.start_jahr <= apflora.tpop.bekannt_seit
        AND apflora.ap.id = $1
    );
 
@@ -65,7 +65,7 @@ CREATE OR REPLACE FUNCTION apflora.correct_vornach_beginnap_stati(apid integer)
          ON apflora.pop.ap_id = apflora.ap.id
      WHERE
        apflora.pop.status = 211 -- angesiedelt vor Beginn AP, erloschen/nicht etabliert
-       AND "ApJahr" <= apflora.pop.bekannt_seit
+       AND apflora.ap.start_jahr <= apflora.pop.bekannt_seit
        AND apflora.ap.id = $1
    );
 
@@ -82,7 +82,7 @@ CREATE OR REPLACE FUNCTION apflora.correct_vornach_beginnap_stati(apid integer)
          ON apflora.pop.ap_id = apflora.ap.id
      WHERE
        apflora.tpop.status = 202  -- angesiedelt nach Beginn AP, erloschen/nicht etabliert
-       AND "ApJahr" > apflora.tpop.bekannt_seit
+       AND apflora.ap.start_jahr > apflora.tpop.bekannt_seit
        AND apflora.ap.id = $1
    );
 
@@ -97,7 +97,7 @@ CREATE OR REPLACE FUNCTION apflora.correct_vornach_beginnap_stati(apid integer)
          ON apflora.pop.ap_id = apflora.ap.id
      WHERE
        apflora.pop.status = 202  -- angesiedelt nach Beginn AP, erloschen/nicht etabliert
-       AND "ApJahr" > apflora.pop.bekannt_seit
+       AND apflora.ap.start_jahr > apflora.pop.bekannt_seit
        AND apflora.ap.id = $1
    );
 
@@ -115,7 +115,7 @@ CREATE OR REPLACE FUNCTION apflora.correct_vornach_beginnap_stati(apid integer)
          ON apflora.pop.ap_id = apflora.ap.id
      WHERE
        apflora.tpop.status = 210 -- angesiedelt vor Beginn AP, aktuell
-       AND "ApJahr" IS NULL
+       AND apflora.ap.start_jahr IS NULL
        AND apflora.ap.id = $1
    );
 
@@ -130,7 +130,7 @@ CREATE OR REPLACE FUNCTION apflora.correct_vornach_beginnap_stati(apid integer)
          ON apflora.pop.ap_id = apflora.ap.id
      WHERE
        apflora.pop.status = 210 -- angesiedelt vor Beginn AP, aktuell
-       AND "ApJahr" IS NULL
+       AND apflora.ap.start_jahr IS NULL
        AND apflora.ap.id = $1
    );
 
@@ -147,7 +147,7 @@ CREATE OR REPLACE FUNCTION apflora.correct_vornach_beginnap_stati(apid integer)
          ON apflora.pop.ap_id = apflora.ap.id
      WHERE
        apflora.tpop.status = 210 -- angesiedelt vor Beginn AP, aktuell
-       AND "ApJahr" <= apflora.tpop.bekannt_seit
+       AND apflora.ap.start_jahr <= apflora.tpop.bekannt_seit
        AND apflora.ap.id = $1
    );
 
@@ -162,7 +162,7 @@ CREATE OR REPLACE FUNCTION apflora.correct_vornach_beginnap_stati(apid integer)
          ON apflora.pop.ap_id = apflora.ap.id
      WHERE
        apflora.pop.status = 210 -- angesiedelt vor Beginn AP, aktuell
-       AND "ApJahr" <= apflora.pop.bekannt_seit
+       AND apflora.ap.start_jahr <= apflora.pop.bekannt_seit
        AND apflora.ap.id = $1
    );
 
@@ -179,7 +179,7 @@ CREATE OR REPLACE FUNCTION apflora.correct_vornach_beginnap_stati(apid integer)
          ON apflora.pop.ap_id = apflora.ap.id
      WHERE
        apflora.tpop.status = 200  -- angesiedelt nach Beginn AP, aktuell
-       AND "ApJahr" > apflora.tpop.bekannt_seit
+       AND apflora.ap.start_jahr > apflora.tpop.bekannt_seit
        AND apflora.ap.id = $1
    );
 
@@ -194,7 +194,7 @@ CREATE OR REPLACE FUNCTION apflora.correct_vornach_beginnap_stati(apid integer)
          ON apflora.pop.ap_id = apflora.ap.id
      WHERE
        apflora.pop.status = 200  -- angesiedelt nach Beginn AP, aktuell
-       AND "ApJahr" > apflora.pop.bekannt_seit
+       AND apflora.ap.start_jahr > apflora.pop.bekannt_seit
        AND apflora.ap.id = $1
    );
 

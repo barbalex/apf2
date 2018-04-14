@@ -44,7 +44,7 @@ const Tpop = ({
   const ads = store.table.pop.get(activeDataset.row.id)
   const apId = ads && ads.ap_id ? ads.ap_id : null
   const ap = store.table.ap.get(apId)
-  const apJahr = ap && ap.ApJahr ? ap.ApJahr : null
+  const apJahr = ap && ap.start_jahr ? ap.start_jahr : null
   const width = isNaN(dimensions.width) ? 380 : dimensions.width
 
   return (

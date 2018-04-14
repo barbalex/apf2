@@ -61,7 +61,7 @@ SELECT
   apflora.ap.id,
   apflora.ae_eigenschaften.artname AS "Art",
   apflora.ap_bearbstand_werte.text AS "AP Status",
-  apflora.ap."ApJahr" AS "AP Start im Jahr",
+  apflora.ap.start_jahr AS "AP Start im Jahr",
   apflora.ap_umsetzung_werte.text AS "AP Stand Umsetzung",
   apflora.adresse."AdrName" AS "AP Verantwortlich",
   apflora.ae_eigenschaften.artwert AS "Artwert",
@@ -82,10 +82,10 @@ FROM
         ON apflora.ap."ApStatus" = apflora.ap_bearbstand_werte.code)
       LEFT JOIN
         apflora.ap_umsetzung_werte
-        ON apflora.ap."ApUmsetzung" = apflora.ap_umsetzung_werte.code)
+        ON apflora.ap.umsetzung = apflora.ap_umsetzung_werte.code)
       LEFT JOIN
         apflora.adresse
-        ON apflora.ap."ApBearb" = apflora.adresse."AdrId")
+        ON apflora.ap.bearbeiter = apflora.adresse."AdrId")
       INNER JOIN
         (apflora.v_ap_anzmassnprojahr
         INNER JOIN
@@ -1394,7 +1394,7 @@ SELECT
   apflora.ap.id AS "AP ApArtId",
   apflora.ae_eigenschaften.artname AS "AP Art",
   apflora.ap_bearbstand_werte.text AS "AP Status",
-  apflora.ap."ApJahr" AS "AP Start im Jahr",
+  apflora.ap.start_jahr AS "AP Start im Jahr",
   apflora.ap_umsetzung_werte.text AS "AP Stand Umsetzung",
   apflora.pop.id,
   apflora.pop.nr AS "Pop Nr",
@@ -1429,7 +1429,7 @@ FROM
       ON apflora.ap."ApStatus" = apflora.ap_bearbstand_werte.code)
     LEFT JOIN
       apflora.ap_umsetzung_werte
-      ON apflora.ap."ApUmsetzung" = apflora.ap_umsetzung_werte.code)
+      ON apflora.ap.umsetzung = apflora.ap_umsetzung_werte.code)
     INNER JOIN
       (((apflora.pop
       LEFT JOIN
@@ -1469,7 +1469,7 @@ SELECT
   apflora.ap.id AS "AP ApArtId",
   apflora.ae_eigenschaften.artname AS "AP Art",
   apflora.ap_bearbstand_werte.text AS "AP Status",
-  apflora.ap."ApJahr" AS "AP Start im Jahr",
+  apflora.ap.start_jahr AS "AP Start im Jahr",
   apflora.ap_umsetzung_werte.text AS "AP Stand Umsetzung",
   apflora.pop.id,
   apflora.pop.nr AS "Pop Nr",
@@ -1497,7 +1497,7 @@ FROM
       ON apflora.ap."ApStatus" = apflora.ap_bearbstand_werte.code)
     LEFT JOIN
       apflora.ap_umsetzung_werte
-      ON apflora.ap."ApUmsetzung" = apflora.ap_umsetzung_werte.code)
+      ON apflora.ap.umsetzung = apflora.ap_umsetzung_werte.code)
     INNER JOIN
       ((apflora.pop
       LEFT JOIN
@@ -1529,7 +1529,7 @@ SELECT
   apflora.ap.id AS "AP ApArtId",
   apflora.ae_eigenschaften.artname AS "AP Art",
   apflora.ap_bearbstand_werte.text AS "AP Status",
-  apflora.ap."ApJahr" AS "AP Start im Jahr",
+  apflora.ap.start_jahr AS "AP Start im Jahr",
   apflora.ap_umsetzung_werte.text AS "AP Stand Umsetzung",
   apflora.pop.id,
   apflora.pop.nr,
@@ -1557,7 +1557,7 @@ FROM
       ON apflora.ap."ApStatus" = apflora.ap_bearbstand_werte.code)
     LEFT JOIN
       apflora.ap_umsetzung_werte
-      ON apflora.ap."ApUmsetzung" = apflora.ap_umsetzung_werte.code)
+      ON apflora.ap.umsetzung = apflora.ap_umsetzung_werte.code)
     INNER JOIN
       ((apflora.pop
       LEFT JOIN
@@ -1589,7 +1589,7 @@ SELECT
   apflora.ap.id AS ap_id,
   apflora.ae_eigenschaften.artname AS "AP Art",
   apflora.ap_bearbstand_werte.text AS "AP Status",
-  apflora.ap."ApJahr" AS "AP Start im Jahr",
+  apflora.ap.start_jahr AS "AP Start im Jahr",
   apflora.ap_umsetzung_werte.text AS "AP Stand Umsetzung",
   apflora.pop.id as pop_id,
   apflora.pop.nr AS "Pop Nr",
@@ -1651,7 +1651,7 @@ FROM
     ON apflora.ap."ApStatus" = apflora.ap_bearbstand_werte.code)
   LEFT JOIN
     apflora.ap_umsetzung_werte
-    ON apflora.ap."ApUmsetzung" = apflora.ap_umsetzung_werte.code)
+    ON apflora.ap.umsetzung = apflora.ap_umsetzung_werte.code)
   LEFT JOIN
     apflora.pop_status_werte ON apflora.pop.status  = pop_status_werte.code)
   LEFT JOIN
@@ -1727,7 +1727,7 @@ SELECT
   apflora.v_tpop.familie,
   apflora.v_tpop.artname,
   apflora.v_tpop.ap_bearb_stand,
-  apflora.v_tpop.ap_jahr,
+  apflora.v_tpop.ap_start_jahr,
   apflora.v_tpop.ab_umsetzung_stand,
   apflora.v_tpop.ap_verantwortlich,
   apflora.v_tpop.pop_id,
@@ -1822,7 +1822,7 @@ FROM
 DROP VIEW IF EXISTS apflora.v_qk2_tpop_erloschenundrelevantaberletztebeobvor1950 CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk2_tpop_erloschenundrelevantaberletztebeobvor1950 AS
 SELECT
-  apflora.ap."ProjId",
+  apflora.ap.proj_id,
   apflora.ap.id as ap_id,
   'erloschene Teilpopulation "Fuer AP-Bericht relevant" aber letzte Beobachtung vor 1950:' AS "hw",
   ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id]::text[] AS "url",
@@ -1867,7 +1867,7 @@ ORDER BY
 DROP VIEW IF EXISTS apflora.v_qk2_pop_statuserloschenletzterpopberaktuell CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk2_pop_statuserloschenletzterpopberaktuell AS
 SELECT DISTINCT
-  apflora.ap."ProjId",
+  apflora.ap.proj_id,
   apflora.pop.ap_id,
   'Population: Status ist "erloschen", der letzte Populations-Bericht meldet aber "aktuell":' AS "hw",
   ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS "url",
@@ -1896,7 +1896,7 @@ WHERE
 DROP VIEW IF EXISTS apflora.v_qk2_tpop_statuserloschenletzterpopberaktuell CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk2_tpop_statuserloschenletzterpopberaktuell AS
 SELECT DISTINCT
-  apflora.ap."ProjId",
+  apflora.ap.proj_id,
   apflora.pop.ap_id,
   'Teilpopulation: Status ist "erloschen", der letzte Teilpopulations-Bericht meldet aber "aktuell":' AS "hw",
   ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id]::text[] AS "url",
@@ -2026,7 +2026,7 @@ FROM
   (apflora.ap
   LEFT JOIN
     apflora.adresse AS "tblAdresse_2"
-    ON apflora.ap."ApBearb" = "tblAdresse_2"."AdrId")
+    ON apflora.ap.bearbeiter = "tblAdresse_2"."AdrId")
   INNER JOIN
     (apflora.pop
     INNER JOIN
@@ -2074,7 +2074,7 @@ WHERE
     OR (apflora.tpopkontr.jahr - apflora.tpop.bekannt_seit) > 5
   )
   AND apflora.tpop.flurname IS NOT NULL
-  AND apflora.ap."ApGuid" IN (Select "idProjekt" FROM apflora.v_exportevab_projekt)
+  AND apflora.ap.id IN (Select "idProjekt" FROM apflora.v_exportevab_projekt)
   AND apflora.pop.id IN (SELECT "idRaum" FROM apflora.v_exportevab_raum)
   AND apflora.tpop.id IN (SELECT "idOrt" FROM apflora.v_exportevab_ort)
   AND apflora.tpopkontr.zeit_id IN (SELECT "idZeitpunkt" FROM apflora.v_exportevab_zeit)
@@ -2099,7 +2099,7 @@ SELECT
   apflora.ap.id AS "AP ApArtId",
   apflora.ae_eigenschaften.artname AS "AP Art",
   apflora.ap_bearbstand_werte.text AS "AP Status",
-  apflora.ap."ApJahr" AS "AP Start im Jahr",
+  apflora.ap.start_jahr AS "AP Start im Jahr",
   apflora.ap_umsetzung_werte.text AS "AP Stand Umsetzung",
   apflora.pop.id AS "Pop id",
   apflora.pop.nr AS "Pop Nr",
@@ -2132,7 +2132,7 @@ FROM
     ON apflora.ap."ApStatus" = apflora.ap_bearbstand_werte.code)
   LEFT JOIN
     apflora.ap_umsetzung_werte
-    ON apflora.ap."ApUmsetzung" = apflora.ap_umsetzung_werte.code)
+    ON apflora.ap.umsetzung = apflora.ap_umsetzung_werte.code)
   LEFT JOIN
     apflora.pop_status_werte
     ON apflora.pop.status  = pop_status_werte.code)

@@ -54,8 +54,8 @@ const getBearbName = ({ store, tree }: { store: Object, tree: Object }) => {
   const { adressen } = store.dropdownList
   const { activeDataset } = tree
   let name = ''
-  if (activeDataset.row.ApBearb && adressen.length > 0) {
-    const adresse = adressen.find(a => a.AdrId === activeDataset.row.ApBearb)
+  if (activeDataset.row.bearbeiter && adressen.length > 0) {
+    const adresse = adressen.find(a => a.AdrId === activeDataset.row.bearbeiter)
     if (adresse && adresse.AdrName) return adresse.AdrName
   }
   return name
@@ -151,12 +151,12 @@ const Ap = ({
           label="Aktionsplan"
         />
         <TextField
-          key={`${activeDataset.row.id}ApJahr`}
+          key={`${activeDataset.row.id}start_jahr`}
           tree={tree}
           label="Start im Jahr"
-          fieldName="ApJahr"
-          value={activeDataset.row.ApJahr}
-          errorText={activeDataset.valid.ApJahr}
+          fieldName="start_jahr"
+          value={activeDataset.row.start_jahr}
+          errorText={activeDataset.valid.start_jahr}
           type="number"
           updateProperty={updateProperty}
           updatePropertyInDb={updatePropertyInDb}
@@ -164,9 +164,9 @@ const Ap = ({
         <FieldContainer>
           <RadioButtonGroupWithInfo
             tree={tree}
-            fieldName="ApUmsetzung"
-            value={activeDataset.row.ApUmsetzung}
-            errorText={activeDataset.valid.ApUmsetzung}
+            fieldName="umsetzung"
+            value={activeDataset.row.umsetzung}
+            errorText={activeDataset.valid.umsetzung}
             dataSource={store.dropdownList.apUmsetzungen}
             updatePropertyInDb={updatePropertyInDb}
             popover={
@@ -195,12 +195,12 @@ const Ap = ({
           />
         </FieldContainer>
         <AutoComplete
-          key={`${activeDataset.row.id}ApBearb`}
+          key={`${activeDataset.row.id}bearbeiter`}
           tree={tree}
           label="Verantwortlich"
-          fieldName="ApBearb"
+          fieldName="bearbeiter"
           valueText={getBearbName({ store, tree })}
-          errorText={activeDataset.valid.ApBearb}
+          errorText={activeDataset.valid.bearbeiter}
           dataSource={store.dropdownList.adressen}
           dataSourceConfig={{
             value: 'AdrId',

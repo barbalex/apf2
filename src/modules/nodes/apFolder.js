@@ -10,7 +10,7 @@ export default (store: Object, tree: Object, projId: number): Array<Object> => {
   })
 
   // build label
-  const myApNodes = filteredAndSorted.ap.filter(n => n.ProjId === projId)
+  const myApNodes = filteredAndSorted.ap.filter(n => n.proj_id === projId)
   const apNodesLength = myApNodes.length
   let message = apNodesLength
   if (store.table.apLoading) {

@@ -39,7 +39,7 @@ CREATE TABLE apflora.ap (
   id_old integer DEFAULT NULL,
   proj_id integer DEFAULT NULL REFERENCES apflora.projekt ("ProjId") ON DELETE CASCADE ON UPDATE CASCADE,
   bearbeitung integer DEFAULT NULL REFERENCES apflora.ap_bearbstand_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
-  jahr smallint DEFAULT NULL,
+  start_jahr smallint DEFAULT NULL,
   umsetzung integer DEFAULT NULL REFERENCES apflora.ap_umsetzung_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
   bearbeiter integer DEFAULT NULL REFERENCES apflora.adresse ("AdrId") ON DELETE SET NULL ON UPDATE CASCADE,
   changed date DEFAULT NOW(),
@@ -48,7 +48,7 @@ CREATE TABLE apflora.ap (
 CREATE INDEX ON apflora.ap USING btree (id);
 CREATE INDEX ON apflora.ap USING btree (proj_id);
 CREATE INDEX ON apflora.ap USING btree (bearbeitung);
-CREATE INDEX ON apflora.ap USING btree (jahr);
+CREATE INDEX ON apflora.ap USING btree (start_jahr);
 CREATE INDEX ON apflora.ap USING btree (umsetzung);
 CREATE INDEX ON apflora.ap USING btree (bearbeiter);
 COMMENT ON COLUMN apflora.ap.id IS 'Primärschlüssel';
@@ -56,7 +56,7 @@ COMMENT ON COLUMN apflora.ap.id_old IS 'Frühere id. = SISF2-Nr';
 COMMENT ON COLUMN apflora.ap.proj_id IS 'Zugehöriges Projekt. Fremdschlüssel aus der Tabelle "proj"';
 COMMENT ON COLUMN apflora.ap.art IS 'Namensgebende Art. Unter ihrem Namen bzw. Nummer werden Kontrollen an InfoFlora geliefert';
 COMMENT ON COLUMN apflora.ap.bearbeitung IS 'In welchem Bearbeitungsstand befindet sich der AP?';
-COMMENT ON COLUMN apflora.ap.jahr IS 'Wann wurde mit der Umsetzung des Aktionsplans begonnen?';
+COMMENT ON COLUMN apflora.ap.start_jahr IS 'Wann wurde mit der Umsetzung des Aktionsplans begonnen?';
 COMMENT ON COLUMN apflora.ap.umsetzung IS 'In welchem Umsetzungsstand befindet sich der AP?';
 COMMENT ON COLUMN apflora.ap.bearbeiter IS 'Verantwortliche(r) für die Art';
 COMMENT ON COLUMN apflora.ap.changed IS 'Wann wurde der Datensatz zuletzt geändert?';

@@ -27,7 +27,7 @@ const enhance = compose(inject('store'), observer)
 const Pop = ({ store, tree }: { store: Object, tree: Object }) => {
   const { activeDataset } = tree
   const apTable = store.table.ap.get(activeDataset.row.id)
-  const apJahr = apTable ? apTable.jahr : null
+  const apJahr = apTable ? apTable.start_jahr : null
 
   return (
     <ErrorBoundary>

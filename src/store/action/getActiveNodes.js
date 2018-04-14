@@ -23,10 +23,7 @@ export default (activeNodeArray: Array<mixed>, store: Object): Object => {
   const apFolder =
     (projekt && activeNodeArray.length > 2 && activeNodeArray[2] === 'Arten') ||
     false
-  const ap =
-    apFolder && activeNodeArray.length > 3
-      ? parseInt(activeNodeArray[3], 10)
-      : null
+  const ap = apFolder && activeNodeArray.length > 3 ? activeNodeArray[3] : null
   const assozartFolder =
     (ap &&
       activeNodeArray.length > 4 &&
