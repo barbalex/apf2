@@ -26,7 +26,7 @@ export default (
       urlLabel: el.id,
       label: el.label,
       url: ['Projekte', projId, 'Arten', apId, 'ap-arten', el.id],
-      sort: [projIndex, 1, apIndex, 8, index],
+      sort: [projIndex, 1, apIndex, 7, index],
       hasChildren: false,
     }))
 }

@@ -35,7 +35,7 @@ export default (
       urlLabel: 'assoziierte-Arten',
       label: `assoziierte Arten (${message})`,
       url: ['Projekte', projId, 'Arten', apId, 'assoziierte-Arten'],
-      sort: [projIndex, 1, apIndex, 7],
+      sort: [projIndex, 1, apIndex, 8],
       hasChildren: assozartNodesLength > 0,
     },
   ]

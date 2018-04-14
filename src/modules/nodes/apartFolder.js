@@ -35,7 +35,7 @@ export default (
       urlLabel: 'ap-arten',
       label: `AP-Arten (${message})`,
       url: ['Projekte', projId, 'Arten', apId, 'ap-arten'],
-      sort: [projIndex, 1, apIndex, 8],
+      sort: [projIndex, 1, apIndex, 7],
       hasChildren: apArtNodesLength > 0,
     },
   ]
