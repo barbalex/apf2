@@ -786,8 +786,8 @@ DROP VIEW IF EXISTS apflora.v_pop CASCADE;
 CREATE OR REPLACE VIEW apflora.v_pop AS
 SELECT
   apflora.ap.id AS ap_id,
-  apflora.ae_eigenschaften.artname AS "AP Art",
-  apflora.ap_bearbstand_werte.text AS "AP Status",
+  apflora.ae_eigenschaften.artname,
+  apflora.ap_bearbstand_werte.text AS ap_bearbeitung,
   apflora.ap.start_jahr AS ap_start_jahr,
   apflora.ap_umsetzung_werte.text AS ap_umsetzung,
   apflora.pop.id,
@@ -868,8 +868,8 @@ ORDER BY
 DROP VIEW IF EXISTS apflora.v_pop_fuergis_write CASCADE;
 CREATE OR REPLACE VIEW apflora.v_pop_fuergis_write AS
 SELECT
-  apflora.pop.ap_id::text AS ap_id,
-  apflora.pop.id::text AS id,
+  apflora.pop.ap_id::text,
+  apflora.pop.id::text,
   apflora.pop.nr,
   apflora.pop.name,
   apflora.pop.status,
@@ -1343,32 +1343,6 @@ ORDER BY
   apflora.ziel_typ_werte.sort,
   apflora.ziel.bezeichnung;
 
-DROP VIEW IF EXISTS apflora.v_apber_artd CASCADE;
-CREATE OR REPLACE VIEW apflora.v_apber_artd AS
-SELECT
-  apflora.ap.*,
-  apflora.ae_eigenschaften.artname,
-  apflora.apber.*,
-  apflora.adresse."AdrName" AS bearbeiter_decodiert,
-  ap_erfkrit_werte.text
-FROM
-  (apflora.ae_eigenschaften
-  INNER JOIN
-    apflora.ap
-    ON apflora.ae_eigenschaften.id = apflora.ap.id)
-  INNER JOIN
-    (((apflora.apber
-    LEFT JOIN
-      apflora.adresse
-      ON apflora.apber.bearbeiter = apflora.adresse."AdrId")
-    LEFT JOIN
-      apflora.ap_erfkrit_werte
-      ON apflora.apber.beurteilung = apflora.ap_erfkrit_werte.code)
-    INNER JOIN
-      apflora._variable
-      ON apflora.apber.jahr = apflora._variable.apber_jahr)
-    ON apflora.ap.id = apflora.apber.ap_id;
-
 DROP VIEW IF EXISTS apflora.v_pop_massnseitbeginnap CASCADE;
 CREATE OR REPLACE VIEW apflora.v_pop_massnseitbeginnap AS
 SELECT
@@ -1392,7 +1366,6 @@ GROUP BY
 DROP VIEW IF EXISTS apflora.v_apber CASCADE;
 CREATE OR REPLACE VIEW apflora.v_apber AS
 SELECT
-  apflora.ap.id as ap_id,
   apflora.ae_eigenschaften.artname,
   apflora.apber.*,
   apflora.ap_erfkrit_werte.text AS beurteilung_decodiert,
@@ -3143,7 +3116,7 @@ DROP VIEW IF EXISTS apflora.v_zielber CASCADE;
 CREATE OR REPLACE VIEW apflora.v_zielber AS
 SELECT
   apflora.ap.id as ap_id,
-  apflora.ae_eigenschaften.artname AS "AP Art",
+  apflora.ae_eigenschaften.artname,
   apflora.ap_bearbstand_werte.text AS "AP Status",
   apflora.ap.start_jahr AS "AP Start im Jahr",
   apflora.ap_umsetzung_werte.text AS "AP Stand Umsetzung",
