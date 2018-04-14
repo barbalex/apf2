@@ -31,7 +31,7 @@ ALTER TABLE apflora.tpop RENAME "MutWer" TO changed_by;
 ALTER TABLE apflora.tpop DROP COLUMN "TPopGuid_alt" cascade;
 
 -- change primary key
-ALTER TABLE apflora.tpop DROP CONSTRAINT tpop_pkey;
+ALTER TABLE apflora.tpop DROP CONSTRAINT tpop_pkey cascade;
 ALTER TABLE apflora.tpop ADD PRIMARY KEY (id);
 ALTER TABLE apflora.tpop ALTER COLUMN id_old DROP NOT NULL;
 ALTER TABLE apflora.tpop ALTER COLUMN id_old SET DEFAULT null;

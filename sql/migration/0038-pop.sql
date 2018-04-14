@@ -38,15 +38,15 @@ COMMENT ON COLUMN apflora.pop.changed IS 'Wann wurde der Datensatz zuletzt geän
 COMMENT ON COLUMN apflora.pop.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
 -- drop existing indexes
-DROP index apflora.apflora."pop_ApArtId_idx";
-DROP index apflora.apflora."pop_PopBekanntSeit_idx";
-DROP index apflora.apflora."pop_PopGuid_idx";
-DROP index apflora.apflora."pop_PopHerkunft_idx";
-DROP index apflora.apflora."pop_PopId_idx";
-DROP index apflora.apflora."pop_PopName_idx";
-DROP index apflora.apflora."pop_PopNr_idx";
-DROP index apflora.apflora."pop_PopXKoord_idx";
-DROP index apflora.apflora."pop_PopYKoord_idx";
+DROP index IF EXISTS apflora.apflora."pop_ApArtId_idx";
+DROP index IF EXISTS apflora.apflora."pop_PopBekanntSeit_idx";
+DROP index IF EXISTS apflora.apflora."pop_PopGuid_idx";
+DROP index IF EXISTS apflora.apflora."pop_PopHerkunft_idx";
+DROP index IF EXISTS apflora.apflora."pop_PopId_idx";
+DROP index IF EXISTS apflora.apflora."pop_PopName_idx";
+DROP index IF EXISTS apflora.apflora."pop_PopNr_idx";
+DROP index IF EXISTS apflora.apflora."pop_PopXKoord_idx";
+DROP index IF EXISTS apflora.apflora."pop_PopYKoord_idx";
 -- add new
 CREATE INDEX ON apflora.pop USING btree (id);
 CREATE INDEX ON apflora.pop USING btree (ap_id);
@@ -99,8 +99,8 @@ CREATE TRIGGER pop_max_one_massnber_per_year BEFORE INSERT OR UPDATE ON apflora.
 -- done: check if old id was used somewhere. If so: rename that field, add new one and update that
 -- done: add all views, functions, triggers containing this table to this file
 -- done: run migration sql in dev
--- TODO: restart postgrest and test app
--- TODO: special pop functions work?
+-- done: restart postgrest and test app
+-- done: special pop functions work?
 -- TODO: CHECK child tables: are they correct?
 -- TODO: update js and run this file on server
 -- TODO: restart postgrest
