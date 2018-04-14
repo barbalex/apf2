@@ -35,32 +35,32 @@ CREATE INDEX ON apflora.adresse USING btree ("AdrName");
 
 DROP TABLE IF EXISTS apflora.ap;
 CREATE TABLE apflora.ap (
-  "ApArtId" integer PRIMARY KEY DEFAULT '0',
-  "ProjId" integer DEFAULT NULL REFERENCES apflora.projekt ("ProjId") ON DELETE CASCADE ON UPDATE CASCADE,
-  "ApStatus" integer DEFAULT NULL REFERENCES apflora.ap_bearbstand_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
-  "ApJahr" smallint DEFAULT NULL,
-  "ApUmsetzung" integer DEFAULT NULL REFERENCES apflora.ap_umsetzung_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
-  "ApBearb" integer DEFAULT NULL REFERENCES apflora.adresse ("AdrId") ON DELETE SET NULL ON UPDATE CASCADE,
-  "ApArtwert" integer DEFAULT NULL,
-  "ApGuid" UUID DEFAULT uuid_generate_v1mc(),
-  "MutWann" date DEFAULT NOW(),
-  "MutWer" varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
+  id_old integer DEFAULT NULL,
+  proj_id integer DEFAULT NULL REFERENCES apflora.projekt ("ProjId") ON DELETE CASCADE ON UPDATE CASCADE,
+  bearbeitung integer DEFAULT NULL REFERENCES apflora.ap_bearbstand_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
+  jahr smallint DEFAULT NULL,
+  umsetzung integer DEFAULT NULL REFERENCES apflora.ap_umsetzung_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
+  bearbeiter integer DEFAULT NULL REFERENCES apflora.adresse ("AdrId") ON DELETE SET NULL ON UPDATE CASCADE,
+  changed date DEFAULT NOW(),
+  changed_by varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
 );
-COMMENT ON COLUMN apflora.ap."ApArtId" IS 'Primärschlüssel der Tabelle "ap". = SISF-Nr';
-COMMENT ON COLUMN apflora.ap."ApStatus" IS 'In welchem Bearbeitungsstand befindet sich der AP?';
-COMMENT ON COLUMN apflora.ap."ApJahr" IS 'Wann wurde mit der Umsetzung des Aktionsplans begonnen?';
-COMMENT ON COLUMN apflora.ap."ApUmsetzung" IS 'In welchem Umsetzungsstand befindet sich der AP?';
-COMMENT ON COLUMN apflora.ap."ApBearb" IS 'Verantwortliche(r) für die Art';
-COMMENT ON COLUMN apflora.ap."ApArtwert" IS 'redundant aber erspart viele Abfragen. Wird aktualisiert, wenn alexande_beob.ArtenDb_Arteigenschaften aktualisiert wird';
-COMMENT ON COLUMN apflora.ap."MutWann" IS 'Wann wurde der Datensatz zuletzt geändert?';
-COMMENT ON COLUMN apflora.ap."MutWer" IS 'Von wem wurde der Datensatz zuletzt geändert?';
-CREATE INDEX ON apflora.ap USING btree ("ApArtId");
-CREATE INDEX ON apflora.ap USING btree ("ProjId");
-CREATE INDEX ON apflora.ap USING btree ("ApStatus");
-CREATE INDEX ON apflora.ap USING btree ("ApUmsetzung");
-CREATE INDEX ON apflora.ap USING btree ("ApBearb");
-CREATE UNIQUE INDEX ON apflora.ap USING btree ("ApGuid");
-
+CREATE INDEX ON apflora.ap USING btree (id);
+CREATE INDEX ON apflora.ap USING btree (proj_id);
+CREATE INDEX ON apflora.ap USING btree (bearbeitung);
+CREATE INDEX ON apflora.ap USING btree (jahr);
+CREATE INDEX ON apflora.ap USING btree (umsetzung);
+CREATE INDEX ON apflora.ap USING btree (bearbeiter);
+COMMENT ON COLUMN apflora.ap.id IS 'Primärschlüssel';
+COMMENT ON COLUMN apflora.ap.id_old IS 'Frühere id. = SISF2-Nr';
+COMMENT ON COLUMN apflora.ap.proj_id IS 'Zugehöriges Projekt. Fremdschlüssel aus der Tabelle "proj"';
+COMMENT ON COLUMN apflora.ap.art IS 'Namensgebende Art. Unter ihrem Namen bzw. Nummer werden Kontrollen an InfoFlora geliefert';
+COMMENT ON COLUMN apflora.ap.bearbeitung IS 'In welchem Bearbeitungsstand befindet sich der AP?';
+COMMENT ON COLUMN apflora.ap.jahr IS 'Wann wurde mit der Umsetzung des Aktionsplans begonnen?';
+COMMENT ON COLUMN apflora.ap.umsetzung IS 'In welchem Umsetzungsstand befindet sich der AP?';
+COMMENT ON COLUMN apflora.ap.bearbeiter IS 'Verantwortliche(r) für die Art';
+COMMENT ON COLUMN apflora.ap.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
+COMMENT ON COLUMN apflora.ap.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
 DROP TABLE IF EXISTS apflora.userprojekt;
 CREATE TABLE apflora.userprojekt (
@@ -141,7 +141,7 @@ DROP TABLE IF EXISTS apflora.apber;
 CREATE TABLE apflora.apber (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
   id_old integer,
-  ap_id integer NOT NULL REFERENCES apflora.ap ("ApArtId") ON DELETE CASCADE ON UPDATE CASCADE,
+  ap_id integer NOT NULL REFERENCES apflora.ap (id) ON DELETE CASCADE ON UPDATE CASCADE,
   jahr smallint DEFAULT NULL,
   situation text,
   vergleich_vorjahr_gesamtziel text,
@@ -214,7 +214,7 @@ DROP TABLE IF EXISTS apflora.assozart;
 CREATE TABLE apflora.assozart (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
   id_old integer DEFAULT NULL,
-  ap_id integer DEFAULT NULL REFERENCES apflora.ap ("ApArtId") ON DELETE CASCADE ON UPDATE CASCADE,
+  ap_id integer DEFAULT NULL REFERENCES apflora.ap (id) ON DELETE CASCADE ON UPDATE CASCADE,
   ae_id UUID DEFAULT NULL REFERENCES apflora.ae_eigenschaften (id) ON DELETE SET NULL ON UPDATE CASCADE,
   bemerkungen text,
   changed date DEFAULT NOW(),
@@ -271,7 +271,7 @@ DROP TABLE IF EXISTS apflora.ber;
 CREATE TABLE apflora.ber (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
   id_old integer DEFAULT NULL,
-  ap_id integer DEFAULT NULL REFERENCES apflora.ap ("ApArtId") ON DELETE CASCADE ON UPDATE CASCADE,
+  ap_id integer DEFAULT NULL REFERENCES apflora.ap (id) ON DELETE CASCADE ON UPDATE CASCADE,
   autor varchar(150) DEFAULT NULL,
   jahr smallint DEFAULT NULL,
   titel text DEFAULT NULL,
@@ -295,7 +295,7 @@ DROP TABLE IF EXISTS apflora.erfkrit;
 CREATE TABLE apflora.erfkrit (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
   id_old integer DEFAULT NULL,
-  ap_id integer NOT NULL DEFAULT '0' REFERENCES apflora.ap ("ApArtId") ON DELETE CASCADE ON UPDATE CASCADE,
+  ap_id integer NOT NULL DEFAULT '0' REFERENCES apflora.ap (id) ON DELETE CASCADE ON UPDATE CASCADE,
   erfolg integer DEFAULT NULL REFERENCES apflora.ap_erfkrit_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
   kriterien text DEFAULT NULL,
   changed date DEFAULT NOW(),
@@ -323,7 +323,7 @@ CREATE INDEX ON apflora.gemeinde USING btree ("GmdName");
 DROP TABLE IF EXISTS apflora.idealbiotop;
 CREATE TABLE apflora.idealbiotop (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
-  ap_id integer UNIQUE DEFAULT NULL REFERENCES apflora.ap ("ApArtId") ON DELETE CASCADE ON UPDATE CASCADE,
+  ap_id integer UNIQUE DEFAULT NULL REFERENCES apflora.ap (id) ON DELETE CASCADE ON UPDATE CASCADE,
   erstelldatum date DEFAULT NULL,
   hoehenlage text,
   region text,
@@ -374,7 +374,7 @@ DROP TABLE IF EXISTS apflora.pop;
 CREATE TABLE apflora.pop (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
   id_old integer,
-  ap_id integer DEFAULT NULL REFERENCES apflora.ap ("ApArtId") ON DELETE CASCADE ON UPDATE CASCADE,
+  ap_id integer DEFAULT NULL REFERENCES apflora.ap (id) ON DELETE CASCADE ON UPDATE CASCADE,
   nr integer DEFAULT NULL,
   name varchar(150) DEFAULT NULL,
   status integer DEFAULT NULL REFERENCES apflora.pop_status_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
@@ -930,7 +930,7 @@ DROP TABLE IF EXISTS apflora.ziel;
 CREATE TABLE apflora.ziel (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
   id_old integer,
-  ap_id integer NOT NULL REFERENCES apflora.ap ("ApArtId") ON DELETE CASCADE ON UPDATE CASCADE,
+  ap_id integer NOT NULL REFERENCES apflora.ap (id) ON DELETE CASCADE ON UPDATE CASCADE,
   typ integer DEFAULT NULL REFERENCES apflora.ziel_typ_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
   jahr smallint DEFAULT NULL,
   bezeichnung text,
@@ -1098,7 +1098,7 @@ CREATE TABLE apflora.apart (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
   id_old integer,
   taxid INTEGER DEFAULT NULL REFERENCES apflora.ae_eigenschaften (taxid) ON DELETE SET NULL ON UPDATE CASCADE,
-  ap_id integer DEFAULT NULL REFERENCES apflora.ap ("ApArtId") ON DELETE CASCADE ON UPDATE CASCADE,
+  ap_id integer DEFAULT NULL REFERENCES apflora.ap (id) ON DELETE CASCADE ON UPDATE CASCADE,
   changed date DEFAULT NULL,
   changed_by varchar(20) DEFAULT NULL
   --UNIQUE (taxid) --no, maybe after beob were rearranged

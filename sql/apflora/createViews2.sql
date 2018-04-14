@@ -64,7 +64,7 @@ SELECT
   apflora.ap."ApJahr" AS "AP Start im Jahr",
   apflora.ap_umsetzung_werte.text AS "AP Stand Umsetzung",
   apflora.adresse."AdrName" AS "AP Verantwortlich",
-  apflora.ap."ApArtwert" AS "Artwert",
+  apflora.ae_eigenschaften.artwert AS "Artwert",
   apflora.v_ap_anzmassnprojahr.jahr AS "Jahr",
   apflora.v_ap_anzmassnprojahr."AnzahlMassnahmen" AS "Anzahl Massnahmen",
   apflora.v_ap_anzmassnbisjahr."AnzahlMassnahmen" AS "Anzahl Massnahmen bisher",

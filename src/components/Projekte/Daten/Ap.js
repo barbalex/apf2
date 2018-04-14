@@ -210,18 +210,6 @@ const Ap = ({
           targetOrigin={{ vertical: 'bottom', horizontal: 'left' }}
           updatePropertyInDb={store.updatePropertyInDb}
         />
-        <FieldContainer>
-          <TextField
-            key={`${activeDataset.row.ApArtId}ApArtwert`}
-            tree={tree}
-            label="Artwert"
-            fieldName="ApArtwert"
-            value={artwert}
-            type="text"
-            disabled
-          />
-        </FieldContainer>
-      </FieldsContainer>
     </Container>
   </ErrorBoundary>
 )
