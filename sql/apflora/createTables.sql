@@ -1095,18 +1095,20 @@ CREATE INDEX ON apflora.beob_quelle USING btree (id);
 -- create table
 DROP TABLE IF EXISTS apflora.beobart;
 CREATE TABLE apflora.beobart (
-  "BeobArtId" SERIAL PRIMARY KEY,
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
+  id_old integer,
   "TaxonomieId" INTEGER DEFAULT NULL REFERENCES apflora.ae_eigenschaften (taxid) ON DELETE SET NULL ON UPDATE CASCADE,
   "ApArtId" integer DEFAULT NULL REFERENCES apflora.ap ("ApArtId") ON DELETE CASCADE ON UPDATE CASCADE,
   "MutWann" date DEFAULT NULL,
   "MutWer" varchar(20) DEFAULT NULL
-  --UNIQUE ("TaxonomieId") --no, maybe after beo were rearranged
+  --UNIQUE ("TaxonomieId") --no, maybe after beob were rearranged
 );
-COMMENT ON COLUMN apflora.beobart."BeobArtId" IS 'Primärschlüssel der Tabelle "beobart"';
+CREATE INDEX ON apflora.beobart USING btree (id);
+CREATE INDEX ON apflora.beobart USING btree ("ApArtId");
+CREATE INDEX ON apflora.beobart USING btree ("TaxonomieId");
+COMMENT ON COLUMN apflora.beobart.id IS 'Primärschlüssel';
+COMMENT ON COLUMN apflora.beobart.id_old IS 'frühere id';
 COMMENT ON COLUMN apflora.beobart."TaxonomieId" IS 'Zugehörige Art. Fremdschlüssel aus der Tabelle "adb_eigenschaften"';
 COMMENT ON COLUMN apflora.beobart."ApArtId" IS 'Zugehöriger Aktionsplan. Fremdschlüssel aus der Tabelle "ap"';
 COMMENT ON COLUMN apflora.beobart."MutWann" IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.beobart."MutWer" IS 'Wer hat den Datensatz zuletzt geändert?';
-CREATE INDEX ON apflora.beobart USING btree ("BeobArtId");
-CREATE INDEX ON apflora.beobart USING btree ("ApArtId", "TaxonomieId");
-SELECT setval(pg_get_serial_sequence('apflora.beobart', 'BeobArtId'), coalesce(max("BeobArtId"), 0) + 1, false) FROM apflora.beobart;
