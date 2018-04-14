@@ -114,7 +114,7 @@ const Ap = ({
         <AutoComplete
           key={`${activeDataset.row.ApArtId}ApArtId`}
           tree={tree}
-          label="Art"
+          label="Art (gibt dem Aktionsplan den Namen)"
           fieldName="ApArtId"
           valueText={artname}
           errorText={activeDataset.valid.ApArtId}
