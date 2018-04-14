@@ -12,7 +12,7 @@ const TestdataMessage = ({ store, tree }: { store: Object, tree: Object }) => {
   const isTestSpecies = activeNodes.ap && activeNodes.ap < 200
   if (isTestSpecies) {
     return (
-      <Div>Das ist eine Test-Aktionsplan. Sie können alles ausprobieren!</Div>
+      <Div>Das ist ein Test-Aktionsplan. Sie können alles ausprobieren!</Div>
     )
   }
   return null
