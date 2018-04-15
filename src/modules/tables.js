@@ -240,7 +240,7 @@ export default [
   {
     table: 'ae_eigenschaften',
     label: 'none',
-    idField: 'taxid',
+    idField: 'id',
     parentIdField: 'none',
     stammdaten: true,
   },
