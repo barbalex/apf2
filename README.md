@@ -74,13 +74,13 @@ Web-Applikation zur Verwaltung des [Aktionsplans Flora der Fachstelle Naturschut
 - Strukturelemente wie z.B. Teilpopulationen im Baum zu anderen Strukturelementen desselben Typs verschieben oder kopieren
 - Für übersichtliches Kopieren/Verschieben zweites Strukturbaum-Formular-Paar einblenden
 - Beobachtungen Teilpopulationen zuordnen: In einer nach Abstand zu den Teilpopulationen geordneten Liste im Formular. Oder mit drag and drop auf der Karte
-- Aus einer Beobachtung eine neue Populationen und Teilpopulationen gründen und gleich die Beobachtung zuordnen. Mit einem einzigen Klick.
-- Alle Löschungen während einer Sitzung können aufgelistet und rückgängig gemacht werden
+- Aus einer Beobachtung eine neue Populationen und Teilpopulationen gründen und gleich die Beobachtung zuordnen. Mit einem einzigen Klick
+- Alle Löschungen während einer Sitzung werden aufgelistet und können rückgängig gemacht werden
 - Mit Dutzenden von Kontroll-Listen die Qualität der Daten gewährleisten
 
 **Projektdaten verwalten:**
 
-Die nachfolgend aufgelisteten Funktionen werden nur von Topos in einer einfachen Access-Anwendung verwendet:
+Die nachfolgend aufgelisteten Funktionen werden nur von Topos verwendet:
 
 - pdf-Datei für den Jahresbericht erstellen
 - Adressen verwalten
@@ -120,16 +120,11 @@ Dazu werden die Feld- und Freiwilligenkontrollen (ausser solche von soeben anges
 
 - Architektur modernisieren:
   - Unterhalt- und Erweiterbarkeit verbessern.<br/>
-    Es ist nun einfacher und mit weniger Risiko verbunden, neue Features einzuführen.<br/>
+    Neue Features einzuführen ist nun einfacher und mit weniger Risiko verbunden.<br/>
     Das war der Auslöser für die Modernisierung
   - Anzahl Karten-Werkzeuge von zwei auf eines reduzieren
-  - Einige in der alten Architektur schwierig zu lösende Fehler beheben
   - Veraltete Abhängikeiten loswerden
-  - (Infra-)Struktur für Tests bereitstellen
-  - Nach und nach Tests einführen
-  - URL ist Teil des Flux-Stores, steuert die Benutzeroberfläche und das Laden von Daten. Vorteile:
-    - Vieles ist verlinkbar
-    - Auf einen Router kann verzichtet werden
+  - (Infra-)Struktur für Tests bereitstellen (und später nach und nach einführen)
 - Mehrere Projekte verwalten.<br/>
   Andere Kantone bzw. Ökobüros können ähnliche Projekte verwalten. Damit würden Fixkosten geteilt bzw. die Weiterentwicklung finanziert
 - Grundlage schaffen, um Berichte direkt aus der Webanwendung heraus produzieren zu können.<br/>
@@ -178,9 +173,9 @@ Die wichtigsten verwendeten Technologien sind:
 - [MobX](//github.com/mobxjs/mobx): Anwendungs-Daten managen. Reaktiv wie Excel. Simpler als redux
 - [recompose](https://github.com/acdlite/recompose): Logik und Benutzeroberfläche sauber trennen
 - [React](//facebook.github.io/react): Deklarative Benutzer-Oberfläche. Aufgebaut aus Komponenten
-- [styled-components](https://github.com/styled-components/styled-components): Styling modularisiert
+- [styled-components](https://github.com/styled-components/styled-components): modular stylen
 - [Flow](//flow.org): Static type checker. Fehler finden, bevor der Code ausgeführt wird
-- [PostgREST](//postgrest.com): Null-Aufwand-API
+- [PostgREST](//postgrest.com): Null-Aufwand-API. Dank dessen Benutzug soll 2018 die gesammte Datenstruktur modernisiert und für den Nachfolger von PostgREST ([GraphQL](https://graphql.org/)) optimiert werden 
 
 <a href="#top">&#8593; top</a>
 
