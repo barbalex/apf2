@@ -19,7 +19,7 @@ export default (
   const beobNichtZuzuordnenNodesLength = tree.filteredAndSorted.beobNichtZuzuordnen.filter(
     n => {
       const beob = store.table.beob.get(n.beob_id)
-      const artId = beob ? beob.ArtId : null
+      const artId = beob ? beob.art_id : null
       return artId && artId === apId
     }
   ).length

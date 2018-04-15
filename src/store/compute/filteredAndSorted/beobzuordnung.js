@@ -9,7 +9,7 @@ export default (store: Object, tree: Object): Array<Object> => {
     // filter by apFilter
     .filter(beob => {
       if (!apFilter) return true
-      const ap = table.ap.get(beob.ArtId)
+      const ap = table.ap.get(beob.art_id)
       if (ap) return [1, 2, 3].includes(ap.bearbeitung)
       return false
     })
@@ -20,9 +20,9 @@ export default (store: Object, tree: Object): Array<Object> => {
     })
 
   beobNichtBeurteilt.forEach(el => {
-    const quelle = table.beob_quelle.get(el.QuelleId)
+    const quelle = table.beob_quelle.get(el.quelle_id)
     const quelleName = quelle && quelle.name ? quelle.name : ''
-    const datum = el.Datum ? format(el.Datum, 'YYYY.MM.DD') : '(kein Datum)'
+    const datum = el.datum ? format(el.datum, 'YYYY.MM.DD') : '(kein Datum)'
     el.label = `${datum}: ${el.Autor || '(kein Autor)'} (${quelleName})`
   })
   // filter by nodeLabelFilter

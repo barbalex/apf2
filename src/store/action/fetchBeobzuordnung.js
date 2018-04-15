@@ -37,8 +37,8 @@ export default (store: Object, apId: number): any => {
   // only fetch if not yet fetched
   if (
     valuesForWhichTableDataWasFetched.tpopbeob &&
-    valuesForWhichTableDataWasFetched.tpopbeob.ArtId &&
-    valuesForWhichTableDataWasFetched.tpopbeob.ArtId.includes(apId)
+    valuesForWhichTableDataWasFetched.tpopbeob.art_id &&
+    valuesForWhichTableDataWasFetched.tpopbeob.art_id.includes(apId)
   ) {
     return
   }
@@ -55,7 +55,7 @@ export default (store: Object, apId: number): any => {
       recordValuesForWhichTableDataWasFetched({
         store,
         table: 'tpopbeob',
-        field: 'ArtId',
+        field: 'art_id',
         value: apId,
       })
     })

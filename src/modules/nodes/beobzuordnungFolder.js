@@ -21,7 +21,7 @@ export default (
     .map(ba => ba.taxid)
 
   const beobzuordnungNodesLength = tree.filteredAndSorted.beobzuordnung.filter(
-    b => apArten.includes(b.ArtId)
+    b => apArten.includes(b.art_id)
   ).length
 
   let message = beobzuordnungNodesLength

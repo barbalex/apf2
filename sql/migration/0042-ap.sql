@@ -145,7 +145,7 @@ COMMENT ON COLUMN apflora.apart.ap_id IS 'Zugehöriger Aktionsplan. Fremdschlüs
 -- done: rename in js
 -- done: check if old id was used somewhere. If so: rename that field, add new one and update that
 -- done: add all views, functions, triggers containing this table to this file
--- TODO: run migration sql in dev
+-- done: run migration sql in dev
 -- TODO: restart postgrest and test app
 -- TODO: special ap functions work?
 -- TODO: CHECK child tables: are they correct?

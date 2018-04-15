@@ -211,13 +211,13 @@ export default [
     table: 'tpopbeob',
     label: 'none',
     idField: 'id',
-    parentIdField: 'ArtId',
+    parentIdField: 'art_id',
   },
   {
     table: 'tpopbeob',
     label: 'none',
     idField: 'id',
-    parentIdField: 'ArtId',
+    parentIdField: 'art_id',
   },
   {
     table: 'apart',
@@ -235,7 +235,7 @@ export default [
     table: 'beob',
     label: 'none',
     idField: 'id',
-    parentIdField: 'ArtId',
+    parentIdField: 'art_id',
   },
   {
     table: 'ae_eigenschaften',

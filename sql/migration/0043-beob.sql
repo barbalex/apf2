@@ -62,3 +62,15 @@ UPDATE apflora.tpopbeob SET beob_id = (
 CREATE INDEX ON apflora.tpopbeob USING btree (beob_id);
 ALTER TABLE apflora.tpopbeob DROP COLUMN beob_id_old CASCADE;
 COMMENT ON COLUMN apflora.tpopbeob.beob_id IS 'Zugehörige Beobachtung. Fremdschlüssel aus der Tabelle "beob"';
+
+-- TODO: make sure createTable is correct
+-- TODO: rename in sql
+-- TODO: rename in js
+-- TODO: check if old id was used somewhere. If so: rename that field, add new one and update that
+-- TODO: add all views, functions, triggers containing this table to this file
+-- TODO: run migration sql in dev
+-- TODO: restart postgrest and test app
+-- TODO: special ap functions work?
+-- TODO: CHECK child tables: are they correct?
+-- TODO: update js and run this file on server
+-- TODO: restart postgrest

@@ -27,7 +27,7 @@ const onError = ({
 }) => {
   store.loading = store.loading.filter(el => el !== 'beob')
   // remove setting that prevents loading of this value
-  valuesForWhichTableDataWasFetched.beob.ArtId = valuesForWhichTableDataWasFetched.beob.ArtId.filter(
+  valuesForWhichTableDataWasFetched.beob.art_id = valuesForWhichTableDataWasFetched.beob.art_id.filter(
     x => x !== apId
   )
   store.listError(error)
@@ -55,8 +55,8 @@ export default async (store: Object, apId: number): any => {
   // only fetch if not yet fetched
   if (
     valuesForWhichTableDataWasFetched.beob &&
-    valuesForWhichTableDataWasFetched.beob.ArtId &&
-    valuesForWhichTableDataWasFetched.beob.ArtId.includes(taxonomyIds.join())
+    valuesForWhichTableDataWasFetched.beob.art_id &&
+    valuesForWhichTableDataWasFetched.beob.art_id.includes(taxonomyIds.join())
   ) {
     return
   }
@@ -64,13 +64,13 @@ export default async (store: Object, apId: number): any => {
   recordValuesForWhichTableDataWasFetched({
     store,
     table: 'beob',
-    field: 'ArtId',
+    field: 'art_id',
     value: taxonomyIds.join(),
   })
 
   let beobResult: { data: Array<Object> }
   try {
-    beobResult = await axios.get(`beob?ArtId=in.${taxonomyIds.join()}`)
+    beobResult = await axios.get(`beob?art_id=in.${taxonomyIds.join()}`)
   } catch (error) {
     return onError({
       store,

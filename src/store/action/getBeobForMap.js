@@ -8,14 +8,14 @@ export default (store: Object): Array<Object> => {
   const myApArtId = tree.activeNodes.ap
   // get beobs of this ap
   let beobs = Array.from(table.beob.values()).filter(
-    beob => beob.ArtId === myApArtId
+    beob => beob.art_id === myApArtId
   )
 
   return beobs
     .map(bb => {
       const beob = clone(bb)
       // add KoordWgs84
-      beob.KoordWgs84 = epsg2056to4326(beob.X, beob.Y)
+      beob.KoordWgs84 = epsg2056to4326(beob.x, beob.y)
       // add tpopbeob
       beob.tpopbeob = table.tpopbeob.get(beob.id)
       return beob

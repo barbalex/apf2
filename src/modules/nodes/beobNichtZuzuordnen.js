@@ -22,7 +22,7 @@ export default (
       const beob = Array.from(store.table.beob.values()).find(
         beo => beo.id === b.beob_id
       )
-      const artId = beob ? beob.ArtId : null
+      const artId = beob ? beob.art_id : null
       return artId === apId
     })
     .map((el, index) => {

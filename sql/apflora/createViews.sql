@@ -2,7 +2,7 @@ DROP VIEW IF EXISTS apflora.v_tpopbeob CASCADE;
 CREATE OR REPLACE VIEW apflora.v_tpopbeob AS
 SELECT
   apflora.tpopbeob.*,
-  apflora.beob."ArtId" AS ap_id
+  apflora.beob.art_id
 FROM
   apflora.tpopbeob
   INNER JOIN
@@ -3829,7 +3829,7 @@ SELECT
   apflora.beob_quelle.name AS "Quelle",
   beob."IdField",
   beob.data->>(SELECT "IdField" FROM apflora.beob WHERE id = beob2.id) AS "OriginalId",
-  apflora.beob."ArtId",
+  apflora.beob.art_id,
   apflora.ae_eigenschaften.artname AS "Artname",
   apflora.pop.id as pop_id,
   apflora.pop.nr as pop_nr,
@@ -3869,7 +3869,7 @@ FROM
     INNER JOIN
       apflora.ap
       ON apflora.ap.id = apflora.ae_eigenschaften.id
-    ON apflora.beob."ArtId" = apflora.ae_eigenschaften.taxid)
+    ON apflora.beob.art_id = apflora.ae_eigenschaften.id)
   INNER JOIN
     apflora.beob_quelle
     ON beob."QuelleId" = beob_quelle.id)
@@ -3883,7 +3883,7 @@ FROM
         ON apflora.pop.id = apflora.tpop.pop_id
     ON apflora.tpopbeob.beob_id = apflora.beob.id
 WHERE
-  apflora.beob."ArtId" > 150
+  apflora.ae_eigenschaften.taxid > 150
 ORDER BY
   apflora.ae_eigenschaften.artname ASC,
   apflora.pop.nr ASC,
@@ -3897,7 +3897,7 @@ SELECT
   apflora.beob_quelle.name AS "Quelle",
   beob."IdField",
   beob.data->>(SELECT "IdField" FROM apflora.beob WHERE id = beob2.id) AS "OriginalId",
-  apflora.beob."ArtId",
+  apflora.beob.art_id,
   apflora.ae_eigenschaften.artname AS "Artname",
   apflora.pop.id as pop_id,
   apflora.pop.nr as pop_nr,
@@ -3937,8 +3937,8 @@ FROM
     apflora.ae_eigenschaften
     INNER JOIN
       apflora.ap
-      ON apflora.ap.id = apflora.ae_eigenschaften.id
-    ON apflora.beob."ArtId" = apflora.ae_eigenschaften.taxid)
+      ON apflora.ap.art = apflora.ae_eigenschaften.id
+    ON apflora.beob.art_id = apflora.ae_eigenschaften.id)
   INNER JOIN
     apflora.beob_quelle
     ON beob."QuelleId" = beob_quelle.id)
@@ -3952,7 +3952,7 @@ FROM
         ON apflora.pop.id = apflora.tpop.pop_id
     ON apflora.tpopbeob.beob_id = apflora.beob.id
 WHERE
-  apflora.beob."ArtId" > 150
+  apflora.ae_eigenschaften.taxid > 150
 ORDER BY
   apflora.ae_eigenschaften.artname ASC,
   apflora.pop.nr ASC,

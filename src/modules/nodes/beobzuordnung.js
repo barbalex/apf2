@@ -21,7 +21,7 @@ export default (
     .filter(v => v.ap_id === apId)
     .map(ba => ba.taxid)
   return filteredAndSorted.beobzuordnung
-    .filter(b => apArten.includes(b.ArtId))
+    .filter(b => apArten.includes(b.art_id))
     .map((el, index) => ({
       nodeType: 'table',
       menuType: 'beobzuordnung',

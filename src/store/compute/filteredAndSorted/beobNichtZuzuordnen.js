@@ -15,7 +15,7 @@ export default (store: Object, tree: Object): Array<Object> => {
       let ap
       const beob = table.beob.get(b.beob_id)
       if (beob) {
-        ap = table.ap.get(beob.ArtId)
+        ap = table.ap.get(beob.art_id)
       }
       if (ap && ap.bearbeitung) {
         return [1, 2, 3].includes(ap.bearbeitung)
@@ -29,11 +29,11 @@ export default (store: Object, tree: Object): Array<Object> => {
     let autor = ''
     const beob = table.beob.get(el.beob_id)
     if (beob) {
-      if (beob.Datum) {
+      if (beob.datum) {
         datum = format(beob.Datum, 'YYYY.MM.DD')
       }
-      if (beob.Autor) {
-        autor = beob.Autor
+      if (beob.autor) {
+        autor = beob.autor
       }
     }
     const quelle = table.beob_quelle.get(el.QuelleId)
