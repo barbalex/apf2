@@ -158,6 +158,10 @@ Dazu werden die Feld- und Freiwilligenkontrollen (ausser solche von soeben anges
 - Korrekturen an von InfoFlora bezogenen Beobachtungen können durchgeführt und per mail an InfoFlora gemeldet werden
 - Filter-Funktionen ausbauen
 
+### Langfristige Vision
+
+Heute wird apflora.ch für die Förderung von Flora-Arten verwendet. Ihre Grundstruktur eignet sich aber genau so gut für alle anderen Arten, z.B. Fauna und Moose...
+
 
 <a href="#top">&#8593; top</a>
 
