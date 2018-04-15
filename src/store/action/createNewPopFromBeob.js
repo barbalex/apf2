@@ -17,7 +17,7 @@ export default async ({
       new Error(`Die Beobachtung mit beobId ${beobId} wurde nicht gefunden`)
     )
   }
-  const { X, Y, Datum, data } = beob
+  const { x, y, datum, data } = beob
   let tpop
   const { ap, projekt } = tree.activeNodes
 
@@ -30,9 +30,9 @@ export default async ({
       data: {
         ap_id: ap,
         // give pop some data of beob
-        x: X,
-        y: Y,
-        bekannt_seit: format(new Date(Datum), 'YYYY'),
+        x,
+        y,
+        bekannt_seit: format(new Date(datum), 'YYYY'),
       },
       headers: {
         Prefer: 'return=representation',
@@ -56,9 +56,9 @@ export default async ({
       data: {
         pop_id: pop.id,
         // give tpop some data of beob
-        x: X,
-        y: Y,
-        bekannt_seit: format(new Date(Datum), 'YYYY'),
+        x,
+        y,
+        bekannt_seit: format(new Date(datum), 'YYYY'),
         gemeinde: data.NOM_COMMUNE ? data.NOM_COMMUNE : null,
         flurname: data.DESC_LOCALITE_ ? data.DESC_LOCALITE_ : null,
       },

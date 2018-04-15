@@ -11,7 +11,7 @@ export default (
 ): Array<number | string> => {
   // make sure all tpopbeobs have coordinates
   const beobsToUse = tpopbeobs.filter(
-    b => b.X && isFinite(b.X) && b.Y && isFinite(b.Y)
+    b => b.x && isFinite(b.x) && b.y && isFinite(b.y)
   )
   const points = {
     type: 'FeatureCollection',
@@ -23,7 +23,7 @@ export default (
       },
       geometry: {
         type: 'Point',
-        coordinates: epsg2056to4326(b.X, b.Y),
+        coordinates: epsg2056to4326(b.x, b.y),
       },
     })),
   }

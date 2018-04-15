@@ -15,7 +15,7 @@ export default (
    */
   // make sure all beobs used have id and coordinates
   const beobsToUse = beobs.filter(
-    b => b.id && b.X && isFinite(b.X) && b.Y && isFinite(b.Y)
+    b => b.id && b.x && isFinite(b.x) && b.y && isFinite(b.y)
   )
   const points = {
     type: 'FeatureCollection',
@@ -27,7 +27,7 @@ export default (
       },
       geometry: {
         type: 'Point',
-        coordinates: epsg2056to4326(b.X, b.Y),
+        coordinates: epsg2056to4326(b.x, b.y),
       },
     })),
   }

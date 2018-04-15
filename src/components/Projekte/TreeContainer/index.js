@@ -124,18 +124,18 @@ const getAndValidateCoordinatesOfBeob = (store, beobId) => {
         `Die bereitgestellte Beobachtung mit der ID ${beobId} wurde nicht gefunden`
       )
     )
-    return { X: null, Y: null }
+    return { x: null, y: null }
   }
-  const { X, Y } = beob
-  if (!X || !Y) {
+  const { x, y } = beob
+  if (!x || !y) {
     store.listError(
       new Error(
         `Die Teilpopulation mit der ID ${beobId} kat keine (vollständigen) Koordinaten`
       )
     )
-    return { X: null, Y: null }
+    return { x: null, y: null }
   }
-  return { X, Y }
+  return { x, y }
 }
 
 const showMapIfNotYetVisible = ({ store }: { store: Object }) => {
@@ -265,15 +265,15 @@ const enhance = compose(
           }
         },
         showCoordOfBeobOnMapsZhCh() {
-          const { X, Y } = getAndValidateCoordinatesOfBeob(store, id)
-          if (X && Y) {
-            store.showCoordOnMapsZhCh(X, Y)
+          const { x, y } = getAndValidateCoordinatesOfBeob(store, id)
+          if (x && y) {
+            store.showCoordOnMapsZhCh(x, y)
           }
         },
         showCoordOfBeobOnMapGeoAdminCh() {
-          const { X, Y } = getAndValidateCoordinatesOfBeob(store, id)
-          if (X && Y) {
-            store.showCoordOnMapGeoAdminCh(X, Y)
+          const { x, y } = getAndValidateCoordinatesOfBeob(store, id)
+          if (x && y) {
+            store.showCoordOnMapGeoAdminCh(x, y)
           }
         },
       }

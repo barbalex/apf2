@@ -38,8 +38,8 @@ const BeobPopup = ({ store, beob }: { store: Object, beob: Object }) => {
     }
   }
 
-  const xKoord = beob.X
-  const yKoord = beob.Y
+  const xKoord = beob.x
+  const yKoord = beob.y
 
   return (
     <div>

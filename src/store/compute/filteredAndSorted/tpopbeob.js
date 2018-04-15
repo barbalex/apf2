@@ -16,14 +16,14 @@ export default (store: Object, tree: Object): Array<Object> => {
     let quelleName = ''
     const beob = table.beob.get(el.beob_id)
     if (beob) {
-      if (beob.Datum) {
-        datum = format(beob.Datum, 'YYYY.MM.DD')
+      if (beob.datum) {
+        datum = format(beob.datum, 'YYYY.MM.DD')
       }
-      if (beob.Autor) {
-        autor = beob.Autor
+      if (beob.autor) {
+        autor = beob.autor
       }
-      if (beob.QuelleId) {
-        quelle = table.beob_quelle.get(beob.QuelleId)
+      if (beob.quelle_id) {
+        quelle = table.beob_quelle.get(beob.quelle_id)
         quelleName = quelle && quelle.name ? quelle.name : ''
       }
     }

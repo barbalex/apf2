@@ -105,8 +105,8 @@ const getTpopZuordnenSource = (store: Object, tree: Object): Array<Object> => {
     return []
   }
   tpopList.forEach(t => {
-    const dX = Math.abs(beob.X - t.x)
-    const dY = Math.abs(beob.Y - t.y)
+    const dX = Math.abs(beob.x - t.x)
+    const dY = Math.abs(beob.y - t.y)
     t.distance = Math.round((dX ** 2 + dY ** 2) ** 0.5)
     t.popNr = store.table.pop.get(t.pop_id).nr
     // build label
@@ -183,7 +183,7 @@ const Beobzuordnung = ({
     const tpopbeob = activeDataset.row
     beob = table.beob.get(tpopbeob.beob_id)
   }
-  const quelle = beob ? table.beob_quelle.get(beob.QuelleId) : null
+  const quelle = beob ? table.beob_quelle.get(beob.quelle_id) : null
   const quelleName = quelle && quelle.name ? quelle.name : '?'
   const beobTitle = `Informationen aus ${quelleName} (nicht veränderbar)`
   const showTPopId = activeDataset.row.nicht_zuordnen !== 1

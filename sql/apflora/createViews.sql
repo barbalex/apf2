@@ -3826,35 +3826,35 @@ DROP VIEW IF EXISTS apflora.v_beob CASCADE;
 CREATE OR REPLACE VIEW apflora.v_beob AS
 SELECT
   apflora.beob.id,
-  apflora.beob_quelle.name AS "Quelle",
-  beob."IdField",
-  beob.data->>(SELECT "IdField" FROM apflora.beob WHERE id = beob2.id) AS "OriginalId",
+  apflora.beob_quelle.name AS quelle,
+  beob.id_field,
+  beob.data->>(SELECT id_field FROM apflora.beob WHERE id = beob2.id) AS "OriginalId",
   apflora.beob.art_id,
   apflora.ae_eigenschaften.artname AS "Artname",
   apflora.pop.id as pop_id,
   apflora.pop.nr as pop_nr,
   apflora.tpop.id AS tpop_id,
   apflora.tpop.nr AS tpop_nr,
-  apflora.beob."X",
-  apflora.beob."Y",
+  apflora.beob.x,
+  apflora.beob.y,
   CASE
     WHEN
-      apflora.beob."X" > 0
+      apflora.beob.x > 0
       AND apflora.tpop.x > 0
-      AND apflora.beob."Y" > 0
+      AND apflora.beob.y > 0
       AND apflora.tpop.y > 0
     THEN
       round(
         sqrt(
-          power((apflora.beob."X" - apflora.tpop.x), 2) +
-          power((apflora.beob."Y" - apflora.tpop.y), 2)
+          power((apflora.beob.x - apflora.tpop.x), 2) +
+          power((apflora.beob.y - apflora.tpop.y), 2)
         )
       )
     ELSE
       NULL
   END AS "Distanz zur Teilpopulation (m)",
-  apflora.beob."Datum",
-  apflora.beob."Autor",
+  apflora.beob.datum,
+  apflora.beob.autor,
   apflora.tpopbeob.nicht_zuordnen,
   apflora.tpopbeob.bemerkungen,
   apflora.tpopbeob.changed,
@@ -3872,7 +3872,7 @@ FROM
     ON apflora.beob.art_id = apflora.ae_eigenschaften.id)
   INNER JOIN
     apflora.beob_quelle
-    ON beob."QuelleId" = beob_quelle.id)
+    ON beob.quelle_id = beob_quelle.id)
   LEFT JOIN
     apflora.tpopbeob
     LEFT JOIN
@@ -3888,41 +3888,41 @@ ORDER BY
   apflora.ae_eigenschaften.artname ASC,
   apflora.pop.nr ASC,
   apflora.tpop.nr ASC,
-  apflora.beob."Datum" DESC;
+  apflora.beob.datum DESC;
 
 DROP VIEW IF EXISTS apflora.v_beob__mit_data CASCADE;
 CREATE OR REPLACE VIEW apflora.v_beob__mit_data AS
 SELECT
   apflora.beob.id,
-  apflora.beob_quelle.name AS "Quelle",
-  beob."IdField",
-  beob.data->>(SELECT "IdField" FROM apflora.beob WHERE id = beob2.id) AS "OriginalId",
+  apflora.beob_quelle.name AS quelle,
+  beob.id_field,
+  beob.data->>(SELECT id_field FROM apflora.beob WHERE id = beob2.id) AS "OriginalId",
   apflora.beob.art_id,
   apflora.ae_eigenschaften.artname AS "Artname",
   apflora.pop.id as pop_id,
   apflora.pop.nr as pop_nr,
   apflora.tpop.id AS tpop_id,
   apflora.tpop.nr AS tpop_nr,
-  apflora.beob."X",
-  apflora.beob."Y",
+  apflora.beob.x,
+  apflora.beob.y,
   CASE
     WHEN
-      apflora.beob."X" > 0
+      apflora.beob.x > 0
       AND apflora.tpop.x > 0
-      AND apflora.beob."Y" > 0
+      AND apflora.beob.y > 0
       AND apflora.tpop.y > 0
     THEN
       round(
         sqrt(
-          power((apflora.beob."X" - apflora.tpop.x), 2) +
-          power((apflora.beob."Y" - apflora.tpop.y), 2)
+          power((apflora.beob.x - apflora.tpop.x), 2) +
+          power((apflora.beob.y - apflora.tpop.y), 2)
         )
       )
     ELSE
       NULL
   END AS "Distanz zur Teilpopulation (m)",
-  apflora.beob."Datum",
-  apflora.beob."Autor",
+  apflora.beob.datum,
+  apflora.beob.autor,
   apflora.tpopbeob.nicht_zuordnen,
   apflora.tpopbeob.bemerkungen,
   apflora.tpopbeob.changed,
@@ -3941,7 +3941,7 @@ FROM
     ON apflora.beob.art_id = apflora.ae_eigenschaften.id)
   INNER JOIN
     apflora.beob_quelle
-    ON beob."QuelleId" = beob_quelle.id)
+    ON beob.quelle_id = beob_quelle.id)
   LEFT JOIN
     apflora.tpopbeob
     LEFT JOIN
@@ -3957,7 +3957,7 @@ ORDER BY
   apflora.ae_eigenschaften.artname ASC,
   apflora.pop.nr ASC,
   apflora.tpop.nr ASC,
-  apflora.beob."Datum" DESC;
+  apflora.beob.datum DESC;
 
 DROP VIEW IF EXISTS apflora.v_tpopkontr_maxanzahl CASCADE;
 CREATE OR REPLACE VIEW apflora.v_tpopkontr_maxanzahl AS
@@ -6696,7 +6696,7 @@ CREATE OR REPLACE VIEW apflora.v_qk_tpop_erloschenundrelevantaberletztebeobvor19
 SELECT
  apflora.tpopbeob.tpop_id as id,
   max(
-    date_part('year', apflora.beob."Datum")
+    date_part('year', apflora.beob.datum)
   ) AS "MaxJahr"
 FROM
   apflora.tpopbeob
@@ -6704,7 +6704,7 @@ INNER JOIN
   apflora.beob
   ON apflora.tpopbeob.beob_id = apflora.beob.id
 WHERE
-  apflora.beob."Datum" IS NOT NULL AND
+  apflora.beob.datum IS NOT NULL AND
   apflora.tpopbeob.tpop_id IS NOT NULL
 GROUP BY
   apflora.tpopbeob.tpop_id;

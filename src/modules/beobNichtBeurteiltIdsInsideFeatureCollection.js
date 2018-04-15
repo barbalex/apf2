@@ -11,7 +11,7 @@ export default (
 ): Array<number | string> => {
   // make sure all beobs used have coordinates
   const beobsToUse = beobs.filter(
-    b => b.X && isFinite(b.X) && b.Y && isFinite(b.Y)
+    b => b.x && isFinite(b.x) && b.y && isFinite(b.y)
   )
 
   const points = {
@@ -24,7 +24,7 @@ export default (
       },
       geometry: {
         type: 'Point',
-        coordinates: epsg2056to4326(b.X, b.Y),
+        coordinates: epsg2056to4326(b.x, b.y),
       },
     })),
   }

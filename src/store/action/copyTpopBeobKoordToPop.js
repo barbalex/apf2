@@ -14,7 +14,7 @@ export default async (store: Object, beobId: string): Promise<void> => {
     )
   }
   const beob = store.table.beob.get(beobId)
-  const { X, Y } = beob
+  const { x, y } = beob
   const tpopId = tpopbeob.tpop_id
   let tpopInStore = store.table.tpop.get(tpopId)
   if (!tpopInStore) {
@@ -22,7 +22,7 @@ export default async (store: Object, beobId: string): Promise<void> => {
       new Error(`Die Teilpopulation mit tpopId ${tpopId} wurde nicht gefunden`)
     )
   }
-  if (!X || !Y) {
+  if (!x || !y) {
     return store.listError(
       new Error(
         'Es wurden keine Koordinaten gefunden. Daher wurden sie nicht in die Teilpopulation kopiert'
@@ -31,8 +31,8 @@ export default async (store: Object, beobId: string): Promise<void> => {
   }
   // keep original pop in case update fails
   const originalTpop = clone(tpopInStore)
-  tpopInStore.x = X
-  tpopInStore.y = Y
+  tpopInStore.x = x
+  tpopInStore.y = y
   const tpopForDb = clone(toJS(tpopInStore))
   // remove empty values
   Object.keys(tpopForDb).forEach(k => {

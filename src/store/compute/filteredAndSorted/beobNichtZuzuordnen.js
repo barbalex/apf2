@@ -30,13 +30,13 @@ export default (store: Object, tree: Object): Array<Object> => {
     const beob = table.beob.get(el.beob_id)
     if (beob) {
       if (beob.datum) {
-        datum = format(beob.Datum, 'YYYY.MM.DD')
+        datum = format(beob.datum, 'YYYY.MM.DD')
       }
       if (beob.autor) {
         autor = beob.autor
       }
     }
-    const quelle = table.beob_quelle.get(el.QuelleId)
+    const quelle = table.beob_quelle.get(el.quelle_id)
     const quelleName = quelle && quelle.name ? quelle.name : ''
     el.label = `${datum || '(kein Datum)'}: ${autor ||
       '(kein Autor)'} (${quelleName})`

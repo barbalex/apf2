@@ -235,7 +235,7 @@ CREATE TABLE apflora.tpopbeob (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
   id_old integer,
   beob_id integer PRIMARY KEY,
-  "QuelleId" integer Default Null REFERENCES beob.beob_quelle (id) ON DELETE SET NULL ON UPDATE CASCADE,
+  quelle_id integer Default Null REFERENCES beob.beob_quelle (id) ON DELETE SET NULL ON UPDATE CASCADE,
   tpop_id integer DEFAULT NULL REFERENCES apflora.tpop (id) ON DELETE CASCADE ON UPDATE CASCADE,
   nicht_zuordnen smallint DEFAULT NULL,
   bemerkungen text,
@@ -250,7 +250,7 @@ COMMENT ON COLUMN apflora.tpopbeob.changed IS 'Wann wurde der Datensatz zuletzt 
 COMMENT ON COLUMN apflora.tpopbeob.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 CREATE INDEX ON apflora.tpopbeob USING btree (id);
 CREATE INDEX ON apflora.tpopbeob USING btree (beob_id);
-CREATE INDEX ON apflora.tpopbeob USING btree ("QuelleId");
+CREATE INDEX ON apflora.tpopbeob USING btree (quelle_id);
 CREATE INDEX ON apflora.tpopbeob USING btree (tpop_id);
 CREATE INDEX ON apflora.tpopbeob USING btree (nicht_zuordnen);
 
