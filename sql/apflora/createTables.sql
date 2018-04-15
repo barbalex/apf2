@@ -1069,11 +1069,8 @@ CREATE TABLE apflora.beob (
 );
 CREATE INDEX ON apflora.beob USING btree (quelle_id);
 CREATE INDEX ON apflora.beob USING btree (art_id);
-CREATE INDEX ON apflora.beob USING btree (datum);
 CREATE INDEX ON apflora.beob USING btree (x);
 CREATE INDEX ON apflora.beob USING btree (y);
-CREATE INDEX ON apflora.beob((data->>'NO_NOTE'));
-CREATE INDEX ON apflora.beob((data->>'NO_NOTE_PROJET'));
 
 -- beob_projekt is used to control
 -- what beob are seen in what projekt
