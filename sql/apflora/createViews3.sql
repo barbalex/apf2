@@ -10,7 +10,7 @@ SELECT
   apflora.v_tpop_anzkontrinklletzter.familie,
   apflora.v_tpop_anzkontrinklletzter.artname,
   apflora.v_tpop_anzkontrinklletzter.ap_bearb_stand,
-  apflora.v_tpop_anzkontrinklletzter.ap_jahr,
+  apflora.v_tpop_anzkontrinklletzter.ap_start_jahr,
   apflora.v_tpop_anzkontrinklletzter.ab_umsetzung_stand,
   apflora.v_tpop_anzkontrinklletzter.ap_verantwortlich,
   apflora.v_tpop_anzkontrinklletzter.pop_id,

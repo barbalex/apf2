@@ -824,9 +824,9 @@ ORDER BY
 DROP VIEW IF EXISTS apflora.v_apber_injahr CASCADE;
 CREATE OR REPLACE VIEW apflora.v_apber_injahr AS
 SELECT
-  apflora.ap.*,
+  apflora.ap.id as ap_id,
   apflora.ae_eigenschaften.artname,
-  apflora.apber.*,
+  apflora.apber.id,
   concat(apflora.adresse."AdrName", ', ', apflora.adresse."AdrAdresse") AS bearbeiter_decodiert,
   apflora.apberuebersicht.jahr AS apberuebersicht_jahr,
   apflora.apberuebersicht.bemerkungen,
@@ -837,7 +837,7 @@ FROM
     (apflora.ap
     LEFT JOIN
       apflora.v_erstemassnproap
-      ON apflora.ap.id = apflora.v_erstemassnproap.id)
+      ON apflora.ap.id = apflora.v_erstemassnproap.ap_id)
     ON apflora.ae_eigenschaften.id = apflora.ap.id)
   INNER JOIN
     (((apflora.apber
