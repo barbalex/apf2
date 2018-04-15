@@ -1071,6 +1071,9 @@ CREATE INDEX ON apflora.beob USING btree (quelle_id);
 CREATE INDEX ON apflora.beob USING btree (art_id);
 CREATE INDEX ON apflora.beob USING btree (x);
 CREATE INDEX ON apflora.beob USING btree (y);
+COMMENT ON COLUMN apflora.beob.id IS 'Primärschlüssel';
+COMMENT ON COLUMN apflora.beob.id_old IS 'Frühere id';
+COMMENT ON COLUMN apflora.beob.art_id_old IS 'Frühere Art id (=SISF2-Nr)';
 
 -- beob_projekt is used to control
 -- what beob are seen in what projekt
