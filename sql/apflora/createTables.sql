@@ -1035,7 +1035,7 @@ COMMENT ON COLUMN apflora.ae_lrdelarze.id IS 'Primärschlüssel';
 --
 -- beob can collect beob of any provenience by following this convention:
 -- - fields that are used in apflora.ch are appended as regular fields, that is:
---   QuelleId, ArtId, Datum, Autor, X, Y
+--   quelle_id, art_id, datum, autor, x, y
 --   These fields are extracted from the original beob at import
 -- - all fields of the original beob are put in jsonb field "data"
 --   and shown in the form that lists beob
@@ -1044,32 +1044,34 @@ COMMENT ON COLUMN apflora.ae_lrdelarze.id IS 'Primärschlüssel';
 --   sometimes as GUIDS, so neither in a defined type nor unique
 --   Worse: sometimes the id is not absolutely clear because no field contains
 --   strictly unique values... !!
--- - "IdField" points to the original id in "data"
+-- - "id_field" points to the original id in "data"
 DROP TABLE IF EXISTS apflora.beob;
 CREATE TABLE apflora.beob (
-  id serial PRIMARY KEY,
-  "QuelleId" integer Default Null,
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
+  id_old integer DEFAULT NULL,
+  quelle_id integer Default Null,
   -- this field in data contains this datasets id
-  "IdField" varchar(38) DEFAULT NULL,
+  id_field varchar(38) DEFAULT NULL,
   -- SISF Nr.
-  "ArtId" integer DEFAULT NULL,
+  art_id_old integer DEFAULT NULL,
+  art_id UUID DEFAULT NULL,
   -- data without year is not imported
   -- when no month exists: month = 01
   -- when no day exists: day = 01
-  "Datum" date DEFAULT NULL,
+  datum date DEFAULT NULL,
   -- Nachname Vorname
-  "Autor" varchar(100) DEFAULT NULL,
+  autor varchar(100) DEFAULT NULL,
   -- data without coordinates is not imported
-  "X" integer DEFAULT NULL,
-  "Y" integer DEFAULT NULL,
+  x integer DEFAULT NULL,
+  y integer DEFAULT NULL,
   -- maybe later add a geojson field for polygons?
   data jsonb
 );
-CREATE INDEX ON apflora.beob USING btree ("QuelleId");
-CREATE INDEX ON apflora.beob USING btree ("ArtId");
-CREATE INDEX ON apflora.beob USING btree ("Datum");
-CREATE INDEX ON apflora.beob USING btree ("X");
-CREATE INDEX ON apflora.beob USING btree ("Y");
+CREATE INDEX ON apflora.beob USING btree (quelle_id);
+CREATE INDEX ON apflora.beob USING btree (art_id);
+CREATE INDEX ON apflora.beob USING btree (datum);
+CREATE INDEX ON apflora.beob USING btree (x);
+CREATE INDEX ON apflora.beob USING btree (y);
 CREATE INDEX ON apflora.beob((data->>'NO_NOTE'));
 CREATE INDEX ON apflora.beob((data->>'NO_NOTE_PROJET'));
 
