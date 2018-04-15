@@ -210,6 +210,7 @@ const Ap = ({
           targetOrigin={{ vertical: 'bottom', horizontal: 'left' }}
           updatePropertyInDb={store.updatePropertyInDb}
         />
+      </FieldsContainer>
     </Container>
   </ErrorBoundary>
 )
