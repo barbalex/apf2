@@ -46,7 +46,7 @@ ALTER TABLE apflora.beob_projekt RENAME "BeobId" TO beob_id_old;
 DROP index IF EXISTS apflora.apflora."beob_projekt_BeobId_idx";
 ALTER TABLE apflora.beob_projekt ADD COLUMN "BeobId" UUID DEFAULT NULL REFERENCES apflora.beob (id) ON DELETE CASCADE ON UPDATE CASCADE;
 UPDATE apflora.beob_projekt SET "BeobId" = (
-  SELECT id FROM apflora.beob WHERE id_old = apflora.beob_projekt.beob_id_old
+  SELECT id FROM apflora.beob WHERE id_old::text = apflora.beob_projekt.beob_id_old::text
 ) WHERE beob_id_old IS NOT NULL;
 CREATE INDEX ON apflora.beob_projekt USING btree ("BeobId");
 ALTER TABLE apflora.beob_projekt DROP COLUMN beob_id_old CASCADE;
@@ -57,7 +57,7 @@ ALTER TABLE apflora.tpopbeob RENAME beob_id TO beob_id_old;
 DROP index IF EXISTS apflora.apflora."tpopbeob_beob_id_idx";
 ALTER TABLE apflora.tpopbeob ADD COLUMN beob_id UUID DEFAULT NULL REFERENCES apflora.beob (id) ON DELETE CASCADE ON UPDATE CASCADE;
 UPDATE apflora.tpopbeob SET beob_id = (
-  SELECT id FROM apflora.beob WHERE art_id_old = apflora.tpopbeob.beob_id_old
+  SELECT id FROM apflora.beob WHERE id_old::text = apflora.tpopbeob.beob_id_old::text
 ) WHERE beob_id_old IS NOT NULL;
 CREATE INDEX ON apflora.tpopbeob USING btree (beob_id);
 ALTER TABLE apflora.tpopbeob DROP COLUMN beob_id_old CASCADE;
