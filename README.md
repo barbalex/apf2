@@ -52,7 +52,7 @@ Web-Applikation zur Verwaltung des [Aktionsplans Flora der Fachstelle Naturschut
 
 **Auf die Plätze, fertig, los!**
 
-- "No hassle": Keine Installation, automatische Updates
+- Keine Installation, automatische Updates
 - Von ausserhalb (Auftragnehmer) und innerhalb der Fachstelle Naturschutz arbeiten
 - Ein moderner Browser wird vorausgesetzt. Entwickelt für Google Chrome. Funktioniert auch auf Firefox und Safari für PC sowie Chrome für Android und Safari auf iOS
 
@@ -61,11 +61,11 @@ Web-Applikation zur Verwaltung des [Aktionsplans Flora der Fachstelle Naturschut
 - Über einen dynamisch aufgebauten Strukturbaum navigieren und dabei die Übersicht über die komplexe Hierarchie behalten
 - Im Formular rechts des Baums die gewählten Daten bearbeiten
 - Strukturbaum, Formular und Karte beliebig ein- und ausblenden und in der Grösse variieren
-- Sich mit [Videos](https://www.youtube.com/playlist?list=PLTz8Xt5SOQPS-dbvpJ_DrB4-o3k3yj09J) anleiten lassen
 
 **Sich anleiten lassen:**
 
 - Informations-Symbole informieren über Felder und Anforderungen an die Datenerfassung
+- Mehrere [Videos](https://www.youtube.com/playlist?list=PLTz8Xt5SOQPS-dbvpJ_DrB4-o3k3yj09J) demonstrieren das Arbeiten mit verschiedenen Teilen der Anwendung
 - Im [Wiki](https://github.com/FNSKtZH/apflora/wiki) sind wichtige Fragen erklärt
 
 **Effizient arbeiten:**
