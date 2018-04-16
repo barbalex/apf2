@@ -61,9 +61,6 @@ export default (activeNodeArray: Array<mixed>, store: Object): Object => {
     beobNichtZuzuordnenFolder && activeNodeArray.length > 5
       ? activeNodeArray[5]
       : null
-  if (beobNichtZuzuordnen && !isNaN(beobNichtZuzuordnen)) {
-    beobNichtZuzuordnen = parseInt(beobNichtZuzuordnen, 10)
-  }
   const beobzuordnungFolder =
     (ap &&
       activeNodeArray.length > 4 &&
@@ -73,9 +70,6 @@ export default (activeNodeArray: Array<mixed>, store: Object): Object => {
     beobzuordnungFolder && activeNodeArray.length > 5
       ? activeNodeArray[5]
       : null
-  if (beobzuordnung && !isNaN(beobzuordnung)) {
-    beobzuordnung = parseInt(beobzuordnung, 10)
-  }
   const berFolder =
     (ap && activeNodeArray.length > 4 && activeNodeArray[4] === 'Berichte') ||
     false

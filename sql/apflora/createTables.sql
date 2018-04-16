@@ -1067,21 +1067,24 @@ CREATE TABLE apflora.beob (
   -- maybe later add a geojson field for polygons?
   data jsonb
 );
+CREATE INDEX ON apflora.beob USING btree (id);
 CREATE INDEX ON apflora.beob USING btree (quelle_id);
 CREATE INDEX ON apflora.beob USING btree (art_id);
 CREATE INDEX ON apflora.beob USING btree (x);
 CREATE INDEX ON apflora.beob USING btree (y);
 COMMENT ON COLUMN apflora.beob.id IS 'Primärschlüssel';
 COMMENT ON COLUMN apflora.beob.id_old IS 'Frühere id';
-COMMENT ON COLUMN apflora.beob.art_id_old IS 'Frühere Art id (=SISF2-Nr)';
+COMMENT ON COLUMN apflora.beob.art_id_old IS 'Frühere Art id (= SISF2-Nr)';
 
--- beob_projekt is used to control
+-- beobprojekt is used to control
 -- what beob are seen in what projekt
-DROP TABLE IF EXISTS apflora.beob_projekt;
-CREATE TABLE apflora.beob_projekt (
-  "ProjektId" integer,
-  "BeobId" integer,
-  PRIMARY KEY ("ProjektId", "BeobId")
+-- IT IS NOT YET USED!
+DROP TABLE IF EXISTS apflora.beobprojekt;
+CREATE TABLE apflora.beobprojekt (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
+  proj_id UUID NOT NULL,
+  beob_id UUID NOT NULL,
+  UNIQUE (proj_id, beob_id)
 );
 
 DROP TABLE IF EXISTS apflora.beob_quelle;

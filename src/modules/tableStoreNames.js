@@ -13,7 +13,7 @@ export default [
   'assozart',
   'beob',
   'apart',
-  'beob_projekt',
+  'beobprojekt',
   'beob_quelle',
   'tpopbeob',
   'ber',

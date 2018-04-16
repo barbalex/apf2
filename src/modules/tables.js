@@ -238,6 +238,12 @@ export default [
     parentIdField: 'art_id',
   },
   {
+    table: 'beobprojekt',
+    label: 'none',
+    idField: 'id',
+    parentIdField: 'proj_id',
+  },
+  {
     table: 'ae_eigenschaften',
     label: 'none',
     idField: 'id',
