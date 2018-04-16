@@ -479,10 +479,10 @@ CREATE OR REPLACE VIEW apflora.v_tpop_anzmassn AS
 SELECT
   apflora.ap.id AS ap_id,
   apflora.ae_eigenschaften.familie AS "Familie",
-  apflora.ae_eigenschaften.artname AS "AP Art",
-  apflora.ap_bearbstand_werte.text AS "AP Status",
-  apflora.ap.start_jahr AS "AP Start im Jahr",
-  apflora.ap_umsetzung_werte.text AS "AP Stand Umsetzung",
+  apflora.ae_eigenschaften.artname,
+  apflora.ap_bearbstand_werte.text AS ap_bearbeitung,
+  apflora.ap.start_jahr AS ap_start_jahr,
+  apflora.ap_umsetzung_werte.text AS ap_umsetzung,
   apflora.pop.id as pop_id,
   apflora.pop.nr AS "Pop Nr",
   apflora.pop.name AS "Pop Name",
@@ -590,10 +590,10 @@ DROP VIEW IF EXISTS apflora.v_pop_anzmassn CASCADE;
 CREATE OR REPLACE VIEW apflora.v_pop_anzmassn AS
 SELECT
   apflora.ap.id AS ap_id,
-  apflora.ae_eigenschaften.artname AS "AP Art",
-  apflora.ap_bearbstand_werte.text AS "AP Status",
-  apflora.ap.start_jahr AS "AP Start im Jahr",
-  apflora.ap_umsetzung_werte.text AS "AP Stand Umsetzung",
+  apflora.ae_eigenschaften.artname,
+  apflora.ap_bearbstand_werte.text AS ap_bearbeitung,
+  apflora.ap.start_jahr AS ap_start_jahr,
+  apflora.ap_umsetzung_werte.text AS ap_umsetzung,
   apflora.pop.id AS "Pop id",
   apflora.pop.nr AS "Pop Nr",
   apflora.pop.name AS "Pop Name",
@@ -709,12 +709,12 @@ ORDER BY
 DROP VIEW IF EXISTS apflora.v_ap_anzmassn CASCADE;
 CREATE OR REPLACE VIEW apflora.v_ap_anzmassn AS
 SELECT
-  apflora.ap.id AS id,
-  apflora.ae_eigenschaften.artname AS "AP Art",
-  apflora.ap_bearbstand_werte.text AS "AP Status",
-  apflora.ap.start_jahr AS "AP Start im Jahr",
-  apflora.ap_umsetzung_werte.text AS "AP Stand Umsetzung",
-  count(apflora.tpopmassn.id) AS "Anzahl Massnahmen"
+  apflora.ap.id,
+  apflora.ae_eigenschaften.artname,
+  apflora.ap_bearbstand_werte.text AS abearbeitung,
+  apflora.ap.start_jahr AS astart_jahr,
+  apflora.ap_umsetzung_werte.text AS umsetzung,
+  count(apflora.tpopmassn.id) AS anzahl_massnahmen
 FROM
   (((apflora.ae_eigenschaften
   INNER JOIN
@@ -981,11 +981,11 @@ ORDER BY
 DROP VIEW IF EXISTS apflora.v_popmassnber CASCADE;
 CREATE OR REPLACE VIEW apflora.v_popmassnber AS
 SELECT
-  apflora.ap.id AS "AP ApArtId",
-  apflora.ae_eigenschaften.artname AS "AP Art",
-  apflora.ap_bearbstand_werte.text AS "AP Status",
-  apflora.ap.start_jahr AS "AP Start im Jahr",
-  apflora.ap_umsetzung_werte.text AS "AP Stand Umsetzung",
+  apflora.ap.id AS ap_id,
+  apflora.ae_eigenschaften.artname,
+  apflora.ap_bearbstand_werte.text AS ap_bearbeitung,
+  apflora.ap.start_jahr AS ap_start_jahr,
+  apflora.ap_umsetzung_werte.text AS ap_umsetzung,
   apflora.pop.id AS "Pop id",
   apflora.pop.nr AS "Pop Nr",
   apflora.pop.name AS "Pop Name",
@@ -1673,13 +1673,13 @@ DROP VIEW IF EXISTS apflora.v_ap CASCADE;
 CREATE OR REPLACE VIEW apflora.v_ap AS
 SELECT
   apflora.ap.id,
-  apflora.ae_eigenschaften.artname AS "AP Art",
-  apflora.ap_bearbstand_werte.text AS "AP Bearbeitungsstand",
-  apflora.ap.start_jahr AS "AP Start im Jahr",
-  apflora.ap_umsetzung_werte.text AS "AP Stand Umsetzung",
-  apflora.adresse."AdrName" AS "AP verantwortlich",
-  apflora.ap.changed AS "AP Letzte Aenderung",
-  apflora.ap.changed_by AS "AP Letzte(r) Bearbeiter(in)"
+  apflora.ae_eigenschaften.artname,
+  apflora.ap_bearbstand_werte.text AS bearbeitung,
+  apflora.ap.start_jahr,
+  apflora.ap_umsetzung_werte.text AS umsetzung,
+  apflora.adresse."AdrName" AS bearbeiter,
+  apflora.ap.changed,
+  apflora.ap.changed_by
 FROM
   (((apflora.ae_eigenschaften
   INNER JOIN
@@ -1701,34 +1701,33 @@ DROP VIEW IF EXISTS apflora.v_idealbiotop CASCADE;
 CREATE OR REPLACE VIEW apflora.v_idealbiotop AS
 SELECT
   apflora.ap.id AS ap_id,
-  apflora.ae_eigenschaften.artname AS "AP Art",
-  apflora.ap_bearbstand_werte.text AS "AP Bearbeitungsstand",
-  apflora.ap.start_jahr AS "AP Start im Jahr",
-  apflora.ap_umsetzung_werte.text AS "AP Stand Umsetzung",
-  apflora.adresse."AdrName" AS "AP verantwortlich",
-  apflora.ap.changed AS "AP Letzte Aenderung",
-  apflora.ap.changed_by AS "AP Letzte(r) Bearbeiter(in)",
-  apflora.idealbiotop.ap_id AS "Ib ApArtId",
-  apflora.idealbiotop.erstelldatum AS "Ib Erstelldatum",
-  apflora.idealbiotop.hoehenlage AS "Ib Hoehenlage",
-  apflora.idealbiotop.region AS "Ib Region",
-  apflora.idealbiotop.exposition AS "Ib Exposition",
-  apflora.idealbiotop.besonnung AS "Ib Besonnung",
-  apflora.idealbiotop.hangneigung AS "Ib Hangneigung",
-  apflora.idealbiotop.boden_typ AS "Ib Bodentyp",
-  apflora.idealbiotop.boden_kalkgehalt AS "Ib Boden Kalkgehalt",
-  apflora.idealbiotop.boden_durchlaessigkeit AS "Ib Boden Durchlaessigkeit",
-  apflora.idealbiotop.boden_humus AS "Ib Boden Humus",
-  apflora.idealbiotop.boden_naehrstoffgehalt AS "Ib Boden Naehrstoffgehalt",
-  apflora.idealbiotop.wasserhaushalt AS "Ib Wasserhaushalt",
-  apflora.idealbiotop.konkurrenz AS "Ib Konkurrenz",
-  apflora.idealbiotop.moosschicht AS "Ib Moosschicht",
-  apflora.idealbiotop.krautschicht AS "Ib Krautschicht",
-  apflora.idealbiotop.strauchschicht AS "Ib Strauchschicht",
-  apflora.idealbiotop.baumschicht AS "Ib Baumschicht",
-  apflora.idealbiotop.bemerkungen AS "Ib Bemerkungen",
-  apflora.idealbiotop.changed AS "Ib MutWann",
-  apflora.idealbiotop.changed_by AS "Ib MutWer"
+  apflora.ae_eigenschaften.artname,
+  apflora.ap_bearbstand_werte.text AS ap_umsetzung,
+  apflora.ap.start_jahr AS ap_start_jahr,
+  apflora.ap_umsetzung_werte.text AS ap_umsetzung,
+  apflora.adresse."AdrName" AS ap_bearbeiter,
+  apflora.ap.changed AS ap_changed,
+  apflora.ap.changed_by AS ap_changed_by,
+  apflora.idealbiotop.erstelldatum,
+  apflora.idealbiotop.hoehenlage,
+  apflora.idealbiotop.region,
+  apflora.idealbiotop.exposition,
+  apflora.idealbiotop.besonnung,
+  apflora.idealbiotop.hangneigung,
+  apflora.idealbiotop.boden_typ,
+  apflora.idealbiotop.boden_kalkgehalt,
+  apflora.idealbiotop.boden_durchlaessigkeit,
+  apflora.idealbiotop.boden_humus,
+  apflora.idealbiotop.boden_naehrstoffgehalt,
+  apflora.idealbiotop.wasserhaushalt,
+  apflora.idealbiotop.konkurrenz,
+  apflora.idealbiotop.moosschicht,
+  apflora.idealbiotop.krautschicht,
+  apflora.idealbiotop.strauchschicht,
+  apflora.idealbiotop.baumschicht,
+  apflora.idealbiotop.bemerkungen,
+  apflora.idealbiotop.changed,
+  apflora.idealbiotop.changed_by
 FROM
   apflora.idealbiotop
   LEFT JOIN
@@ -1754,10 +1753,10 @@ DROP VIEW IF EXISTS apflora.v_ber CASCADE;
 CREATE OR REPLACE VIEW apflora.v_ber AS
 SELECT
   apflora.ap.id AS ap_id,
-  apflora.ae_eigenschaften.artname AS "AP Art",
-  apflora.ap_bearbstand_werte.text AS "AP Bearbeitungsstand",
-  apflora.ap.start_jahr AS "AP Start im Jahr",
-  apflora.ap_umsetzung_werte.text AS "AP Stand Umsetzung",
+  apflora.ae_eigenschaften.artname,
+  apflora.ap_bearbstand_werte.text as ap_bearbeitung,
+  apflora.ap.start_jahr AS ap_start_jahr,
+  apflora.ap_umsetzung_werte.text AS ap_umsetzung,
   apflora.adresse."AdrName" AS "AP verantwortlich",
   apflora.ber.id AS "Ber Id",
   apflora.ber.ap_id AS "Ber ApId",
@@ -1791,10 +1790,10 @@ DROP VIEW IF EXISTS apflora.v_assozart CASCADE;
 CREATE OR REPLACE VIEW apflora.v_assozart AS
 SELECT
   apflora.ap.id as ap_id,
-  apflora.ae_eigenschaften.artname AS "AP Art",
-  apflora.ap_bearbstand_werte.text AS "AP Bearbeitungsstand",
-  apflora.ap.start_jahr AS "AP Start im Jahr",
-  apflora.ap_umsetzung_werte.text AS "AP Stand Umsetzung",
+  apflora.ae_eigenschaften.artname,
+  apflora.ap_bearbstand_werte.text as ap_bearbeitung,
+  apflora.ap.start_jahr AS ap_start_jahr,
+  apflora.ap_umsetzung_werte.text AS ap_umsetzung,
   apflora.adresse."AdrName" AS "AP verantwortlich",
   apflora.assozart.id AS "AA Id",
   "ArtenDb_Arteigenschaften_1".artname AS "AA Art",
@@ -1889,10 +1888,10 @@ DROP VIEW IF EXISTS apflora.v_erfkrit CASCADE;
 CREATE OR REPLACE VIEW apflora.v_erfkrit AS
 SELECT
   apflora.ap.id AS ap_id,
-  apflora.ae_eigenschaften.artname AS "AP Art",
-  apflora.ap_bearbstand_werte.text AS "AP Status",
-  apflora.ap.start_jahr AS "AP Start im Jahr",
-  apflora.ap_umsetzung_werte.text AS "AP Stand Umsetzung",
+  apflora.ae_eigenschaften.artname,
+  apflora.ap_bearbstand_werte.text AS ap_bearbeitung,
+  apflora.ap.start_jahr AS ap_start_jahr,
+  apflora.ap_umsetzung_werte.text AS ap_umsetzung,
   apflora.adresse."AdrName" AS "AP verantwortlich",
   apflora.erfkrit.id AS "ErfKrit Id",
   apflora.erfkrit.id AS "ErfKrit ApId",
@@ -3075,10 +3074,10 @@ DROP VIEW IF EXISTS apflora.v_ziel CASCADE;
 CREATE OR REPLACE VIEW apflora.v_ziel AS
 SELECT
   apflora.ap.id as ap_id,
-  apflora.ae_eigenschaften.artname AS "AP Art",
-  apflora.ap_bearbstand_werte.text AS "AP Status",
-  apflora.ap.start_jahr AS "AP Start im Jahr",
-  apflora.ap_umsetzung_werte.text AS "AP Stand Umsetzung",
+  apflora.ae_eigenschaften.artname,
+  apflora.ap_bearbstand_werte.text AS ap_bearbeitung,
+  apflora.ap.start_jahr AS ap_start_jahr,
+  apflora.ap_umsetzung_werte.text AS ap_umsetzung,
   apflora.adresse."AdrName" AS "AP verantwortlich",
   apflora.ziel.id AS "Ziel Id",
   apflora.ziel.jahr AS "Ziel Jahr",
@@ -3117,9 +3116,9 @@ CREATE OR REPLACE VIEW apflora.v_zielber AS
 SELECT
   apflora.ap.id as ap_id,
   apflora.ae_eigenschaften.artname,
-  apflora.ap_bearbstand_werte.text AS "AP Status",
-  apflora.ap.start_jahr AS "AP Start im Jahr",
-  apflora.ap_umsetzung_werte.text AS "AP Stand Umsetzung",
+  apflora.ap_bearbstand_werte.text AS ap_bearbeitung,
+  apflora.ap.start_jahr AS ap_start_jahr,
+  apflora.ap_umsetzung_werte.text AS ap_umsetzung,
   apflora.adresse."AdrName" AS "AP verantwortlich",
   apflora.ziel.id AS "Ziel Id",
   apflora.ziel.jahr AS "Ziel Jahr",
@@ -4345,10 +4344,10 @@ DROP VIEW IF EXISTS apflora.v_tpopmassnber CASCADE;
 CREATE OR REPLACE VIEW apflora.v_tpopmassnber AS
 SELECT
   apflora.ap.id,
-  apflora.ae_eigenschaften.artname AS "AP Art",
-  apflora.ap_bearbstand_werte.text AS "AP Status",
-  apflora.ap.start_jahr AS "AP Start im Jahr",
-  apflora.ap_umsetzung_werte.text AS "AP Stand Umsetzung",
+  apflora.ae_eigenschaften.artname,
+  apflora.ap_bearbstand_werte.text AS ap_bearbeitung,
+  apflora.ap.start_jahr AS ap_start_jahr,
+  apflora.ap_umsetzung_werte.text AS ap_umsetzung,
   apflora.pop.id as pop_id,
   apflora.pop.nr AS "Pop Nr",
   apflora.pop.name AS "Pop Name",
@@ -4697,10 +4696,10 @@ DROP VIEW IF EXISTS apflora.v_kontrzaehl_anzproeinheit CASCADE;
 CREATE OR REPLACE VIEW apflora.v_kontrzaehl_anzproeinheit AS
 SELECT
   apflora.ap.id,
-  apflora.ae_eigenschaften.artname AS "AP Art",
-  apflora.ap_bearbstand_werte.text AS "AP Status",
-  apflora.ap.start_jahr AS "AP Start im Jahr",
-  apflora.ap_umsetzung_werte.text AS "AP Stand Umsetzung",
+  apflora.ae_eigenschaften.artname,
+  apflora.ap_bearbstand_werte.text AS ap_bearbeitung,
+  apflora.ap.start_jahr AS ap_start_jahr,
+  apflora.ap_umsetzung_werte.text AS ap_umsetzung,
   "tblAdresse_1"."AdrName" AS "AP verantwortlich",
   apflora.pop.id as pop_id,
   apflora.pop.nr AS "Pop Nr",
@@ -4842,10 +4841,10 @@ DROP VIEW IF EXISTS apflora.v_tpopber CASCADE;
 CREATE OR REPLACE VIEW apflora.v_tpopber AS
 SELECT
   apflora.ap.id,
-  apflora.ae_eigenschaften.artname AS "AP Art",
-  apflora.ap_bearbstand_werte.text AS "AP Status",
-  apflora.ap.start_jahr AS "AP Start im Jahr",
-  apflora.ap_umsetzung_werte.text AS "AP Stand Umsetzung",
+  apflora.ae_eigenschaften.artname,
+  apflora.ap_bearbstand_werte.text AS ap_bearbeitung,
+  apflora.ap.start_jahr AS ap_start_jahr,
+  apflora.ap_umsetzung_werte.text AS ap_umsetzung,
   apflora.pop.id as pop_id,
   apflora.pop.nr AS "Pop Nr",
   apflora.pop.name AS "Pop Name",
