@@ -11,9 +11,11 @@ ALTER TABLE apflora.beob RENAME "X" TO x;
 ALTER TABLE apflora.beob RENAME "Y" TO y;
 
 -- add data for art_id
+CREATE INDEX ON apflora.beob USING btree (art_id_old);
 UPDATE apflora.beob SET art_id = (
   SELECT id FROM apflora.ae_eigenschaften WHERE taxid = apflora.beob.art_id_old
 ) WHERE art_id_old IS NOT NULL;
+DROP index IF EXISTS apflora.apflora."beob_art_id_old_idx";
 
 -- change primary key
 ALTER TABLE apflora.beob DROP CONSTRAINT beob_pkey cascade;
