@@ -49,12 +49,16 @@ DROP TABLE apflora.beob_projekt;
 ALTER TABLE apflora.tpopbeob RENAME beob_id TO beob_id_old;
 DROP index IF EXISTS apflora.apflora."tpopbeob_beob_id_idx";
 ALTER TABLE apflora.tpopbeob ADD COLUMN beob_id UUID DEFAULT NULL REFERENCES apflora.beob (id) ON DELETE CASCADE ON UPDATE CASCADE;
+CREATE INDEX ON apflora.beob USING btree (id_old);
+CREATE INDEX ON apflora.tpopbeob USING btree (id_old);
 UPDATE apflora.tpopbeob SET beob_id = (
   SELECT id FROM apflora.beob WHERE id_old = apflora.tpopbeob.beob_id_old
 ) WHERE beob_id_old IS NOT NULL;
 CREATE INDEX ON apflora.tpopbeob USING btree (beob_id);
 ALTER TABLE apflora.tpopbeob DROP COLUMN beob_id_old CASCADE;
 COMMENT ON COLUMN apflora.tpopbeob.beob_id IS 'Zugehörige Beobachtung. Fremdschlüssel aus der Tabelle "beob"';
+DROP index IF EXISTS apflora.apflora."beob_id_old_idx";
+DROP index IF EXISTS apflora.apflora."tpopbeob_id_old_idx";
 
 -- done: make sure createTable is correct
 -- done: rename in sql
