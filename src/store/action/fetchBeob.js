@@ -47,7 +47,7 @@ export default async (store: Object, apId: number): any => {
     })
   }
   const artIds = apArtResult.data
-    .map(d => d.id)
+    .map(d => d.art_id)
     // if exists new apart but art is not choosen, its value is null
     // need to filter that out
     .filter(v => !!v)

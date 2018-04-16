@@ -16,12 +16,12 @@ export default (
     { id: apId }
   )
 
+  const apArten = Array.from(store.table.apart.values())
+    .filter(v => v.ap_id === apId)
+    .map(v => v.art_id)
+
   const beobNichtZuzuordnenNodesLength = tree.filteredAndSorted.beobNichtZuzuordnen.filter(
-    n => {
-      const beob = store.table.beob.get(n.beob_id)
-      const artId = beob ? beob.art_id : null
-      return artId && artId === apId
-    }
+    b => apArten.includes(b.art_id)
   ).length
 
   let message = beobNichtZuzuordnenNodesLength
