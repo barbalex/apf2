@@ -112,9 +112,9 @@ const enhance = compose(
   withProps(props => {
     const { store } = props
     const { ae_eigenschaften } = store.table
-    const apIds = Array.from(store.table.ap.keys()).map(n => Number(n))
+    const apArten = Array.from(store.table.ap.values()).map(n => n.art)
     let artList = Array.from(ae_eigenschaften.values())
-    artList = filter(artList, r => apIds.includes(r.taxid))
+    artList = filter(artList, r => apArten.includes(r.id))
     artList = sortBy(artList, 'artname')
     return { artList }
   })
@@ -487,7 +487,7 @@ const Exporte = ({
               <StyledAutoComplete
                 dataSource={artList}
                 dataSourceConfig={{
-                  value: 'taxid',
+                  value: 'id',
                   text: 'artname',
                 }}
                 downloadFromView={downloadFromView}

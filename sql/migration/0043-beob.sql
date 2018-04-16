@@ -62,6 +62,12 @@ COMMENT ON COLUMN apflora.tpopbeob.beob_id IS 'Zugehörige Beobachtung. Fremdsch
 DROP index IF EXISTS apflora.apflora."beob_id_old_idx";
 DROP index IF EXISTS apflora.apflora."tpopbeob_id_old_idx";
 
+ALTER TABLE apflora.apart ADD COLUMN art_id UUID DEFAULT NULL;
+UPDATE apflora.apart SET art_id = (
+  SELECT id FROM apflora.ae_eigenschaften WHERE taxid = apflora.apart.taxid
+) WHERE taxid IS NOT NULL;
+alter table apflora.apart drop column taxid;
+
 -- done: make sure createTable is correct
 -- done: rename in sql
 -- done: rename in js
@@ -73,3 +79,40 @@ DROP index IF EXISTS apflora.apflora."tpopbeob_id_old_idx";
 -- TODO: CHECK child tables: are they correct?
 -- TODO: update js and run this file on server
 -- TODO: restart postgrest
+
+
+-- when ap is inserted
+-- ensure apart is created too
+DROP TRIGGER IF EXISTS ap_insert_add_beobart ON apflora.ap;
+DROP TRIGGER IF EXISTS ap_insert_add_apart ON apflora.ap;
+DROP FUNCTION IF EXISTS apflora.ap_insert_add_beobart();
+DROP FUNCTION IF EXISTS apflora.ap_insert_add_apart();
+CREATE FUNCTION apflora.ap_insert_add_apart() RETURNS trigger AS $ap_insert_add_apart$
+BEGIN
+  INSERT INTO
+    apflora.apart (ap_id, art_id)
+  VALUES (NEW.id, NEW.art);
+  RETURN NEW;
+END;
+$ap_insert_add_apart$ LANGUAGE plpgsql;
+
+CREATE TRIGGER ap_insert_add_apart AFTER INSERT ON apflora.ap
+  FOR EACH ROW EXECUTE PROCEDURE apflora.ap_insert_add_apart();
+
+-- when ap is inserted
+-- ensure apart is created too
+DROP TRIGGER IF EXISTS ap_insert_add_beobart ON apflora.ap;
+DROP TRIGGER IF EXISTS ap_insert_add_apart ON apflora.ap;
+DROP FUNCTION IF EXISTS apflora.ap_insert_add_beobart();
+DROP FUNCTION IF EXISTS apflora.ap_insert_add_apart();
+CREATE FUNCTION apflora.ap_insert_add_apart() RETURNS trigger AS $ap_insert_add_apart$
+BEGIN
+  INSERT INTO
+    apflora.apart (ap_id, art_id)
+  VALUES (NEW.id, NEW.art);
+  RETURN NEW;
+END;
+$ap_insert_add_apart$ LANGUAGE plpgsql;
+
+CREATE TRIGGER ap_insert_add_apart AFTER INSERT ON apflora.ap
+  FOR EACH ROW EXECUTE PROCEDURE apflora.ap_insert_add_apart();

@@ -33,7 +33,7 @@ const getArtList = ({ store, tree }: { store: Object, tree: Object }) => {
   const apArtIdsNotToShow = assozartenOfAp.concat(activeNodes.ap)
   const artList = filter(
     Array.from(ae_eigenschaften.values()),
-    r => !apArtIdsNotToShow.includes(r.taxid)
+    r => !apArtIdsNotToShow.includes(r.art)
   )
   return sortBy(artList, 'artname')
 }

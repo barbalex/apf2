@@ -18,7 +18,7 @@ export default (
 
   const apArten = Array.from(store.table.apart.values())
     .filter(v => v.ap_id === apId)
-    .map(ba => ba.taxid)
+    .map(ba => ba.art_id)
 
   const beobzuordnungNodesLength = tree.filteredAndSorted.beobzuordnung.filter(
     b => apArten.includes(b.art_id)

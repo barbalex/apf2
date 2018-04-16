@@ -1101,8 +1101,8 @@ CREATE INDEX ON apflora.beob_quelle USING btree (id);
 DROP TABLE IF EXISTS apflora.apart;
 CREATE TABLE apflora.apart (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
-  id_old integer,
-  taxid INTEGER DEFAULT NULL REFERENCES apflora.ae_eigenschaften (taxid) ON DELETE SET NULL ON UPDATE CASCADE,
+  id_old integer,,
+  art_id UUID DEFAULT NULL,
   ap_id integer DEFAULT NULL REFERENCES apflora.ap (id) ON DELETE CASCADE ON UPDATE CASCADE,
   changed date DEFAULT NULL,
   changed_by varchar(20) DEFAULT NULL
@@ -1110,10 +1110,10 @@ CREATE TABLE apflora.apart (
 );
 CREATE INDEX ON apflora.apart USING btree (id);
 CREATE INDEX ON apflora.apart USING btree (ap_id);
-CREATE INDEX ON apflora.apart USING btree (taxid);
+CREATE INDEX ON apflora.apart USING btree (art_id);
 COMMENT ON COLUMN apflora.apart.id IS 'Primärschlüssel';
 COMMENT ON COLUMN apflora.apart.id_old IS 'frühere id';
-COMMENT ON COLUMN apflora.apart.taxid IS 'Zugehörige Art. Fremdschlüssel aus der Tabelle "ae_eigenschaften"';
+COMMENT ON COLUMN apflora.apart.art_id IS 'Zugehörige Art. Aus der Tabelle "ae_eigenschaften"';
 COMMENT ON COLUMN apflora.apart.ap_id IS 'Zugehöriger Aktionsplan. Fremdschlüssel aus der Tabelle "ap"';
 COMMENT ON COLUMN apflora.apart.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.apart.changed_by IS 'Wer hat den Datensatz zuletzt geändert?';

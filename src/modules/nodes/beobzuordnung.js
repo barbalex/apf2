@@ -19,7 +19,7 @@ export default (
   // filter all included in apart
   const apArten = Array.from(store.table.apart.values())
     .filter(v => v.ap_id === apId)
-    .map(ba => ba.taxid)
+    .map(ba => ba.art_id)
   return filteredAndSorted.beobzuordnung
     .filter(b => apArten.includes(b.art_id))
     .map((el, index) => ({

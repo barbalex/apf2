@@ -20,7 +20,7 @@ const enhance = compose(
       props.downloadFromView({
         view: 'v_tpop_anzkontrinklletzterundletztertpopber',
         fileName: 'anzkontrinklletzterundletztertpopber_2016',
-        apId: val.taxid,
+        apId: val.id,
       })
     },
     onFocus: props => () => props.changeFocused(true),

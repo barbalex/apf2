@@ -24,17 +24,17 @@ const enhance = compose(inject('store'), observer)
 
 const getArtList = ({ store, tree }: { store: Object, tree: Object }) => {
   const { ae_eigenschaften } = store.table
-  // do not show any taxid's that have been used
+  // do not show any art_id's that have been used
   // turned off because some species have already been worked as separate ap
   // because apart did not exist...
   /*
   const apArtIdsNotToShow = Array.from(store.table.apart.values()).map(
-    v => v.taxid
+    v => v.art_id
   )*/
   const apArtIdsNotToShow = []
   const artList = filter(
     Array.from(ae_eigenschaften.values()),
-    r => !apArtIdsNotToShow.includes(r.taxid)
+    r => !apArtIdsNotToShow.includes(r.art)
   )
   return sortBy(artList, 'artname')
 }
@@ -43,8 +43,8 @@ const getArtname = ({ store, tree }: { store: Object, tree: Object }) => {
   const { ae_eigenschaften } = store.table
   const { activeDataset } = tree
   let name = ''
-  if (activeDataset.row.taxid && ae_eigenschaften.size > 0) {
-    name = ae_eigenschaften.get(activeDataset.row.taxid).artname
+  if (activeDataset.row.art_id && ae_eigenschaften.size > 0) {
+    name = ae_eigenschaften.get(activeDataset.row.art_id).artname
   }
   return name
 }
@@ -83,21 +83,21 @@ const ApArt = ({ store, tree }: { store: Object, tree: Object }) => {
             <br />
           </div>
           <AutoComplete
-            key={`${activeDataset.row.id}taxid`}
+            key={`${activeDataset.row.id}art_id`}
             tree={tree}
             label="Art"
-            fieldName="taxid"
+            fieldName="art_id"
             valueText={getArtname({
               store,
               tree,
             })}
-            errorText={activeDataset.valid.taxid}
+            errorText={activeDataset.valid.art_id}
             dataSource={getArtList({
               store,
               tree,
             })}
             dataSourceConfig={{
-              value: 'taxid',
+              value: 'id',
               text: 'artname',
             }}
             updatePropertyInDb={store.updatePropertyInDb}
