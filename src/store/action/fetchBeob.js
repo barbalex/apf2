@@ -46,8 +46,8 @@ export default async (store: Object, apId: number): any => {
       error,
     })
   }
-  const taxonomyIds = apArtResult.data
-    .map(d => d.taxid)
+  const artIds = apArtResult.data
+    .map(d => d.id)
     // if exists new apart but art is not choosen, its value is null
     // need to filter that out
     .filter(v => !!v)
@@ -56,7 +56,7 @@ export default async (store: Object, apId: number): any => {
   if (
     valuesForWhichTableDataWasFetched.beob &&
     valuesForWhichTableDataWasFetched.beob.art_id &&
-    valuesForWhichTableDataWasFetched.beob.art_id.includes(taxonomyIds.join())
+    valuesForWhichTableDataWasFetched.beob.art_id.includes(artIds.join())
   ) {
     return
   }
@@ -65,12 +65,12 @@ export default async (store: Object, apId: number): any => {
     store,
     table: 'beob',
     field: 'art_id',
-    value: taxonomyIds.join(),
+    value: artIds.join(),
   })
 
   let beobResult: { data: Array<Object> }
   try {
-    beobResult = await axios.get(`beob?art_id=in.${taxonomyIds.join()}`)
+    beobResult = await axios.get(`beob?art_id=in.${artIds.join()}`)
   } catch (error) {
     return onError({
       store,

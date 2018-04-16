@@ -2,12 +2,17 @@ DROP VIEW IF EXISTS apflora.v_tpopbeob CASCADE;
 CREATE OR REPLACE VIEW apflora.v_tpopbeob AS
 SELECT
   apflora.tpopbeob.*,
-  apflora.beob.art_id
+  apflora.beob.art_id,
+  apflora.pop.ap_id
 FROM
   apflora.tpopbeob
   INNER JOIN
     apflora.beob
-    ON apflora.beob.id = apflora.tpopbeob.beob_id;
+    ON apflora.beob.id = apflora.tpopbeob.beob_id
+  INNER JOIN apflora.tpop
+    INNER JOIN apflora.pop
+    ON apflora.tpop.pop_id = apflora.pop.id
+  ON apflora.tpopbeob.tpop_id = apflora.pop.id;
 
 DROP VIEW IF EXISTS apflora.v_tpop_for_ap CASCADE;
 CREATE OR REPLACE VIEW apflora.v_tpop_for_ap AS
