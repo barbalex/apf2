@@ -63,21 +63,25 @@ DROP TABLE apflora.beob_projekt;
 
 -- TODO
 -- tpopbeob
-ALTER TABLE apflora.tpopbeob RENAME beob_id TO beob_id_old;
-DROP index IF EXISTS apflora.apflora."tpopbeob_beob_id_idx";
-ALTER TABLE apflora.tpopbeob ADD COLUMN beob_id UUID DEFAULT NULL REFERENCES apflora.beob (id) ON DELETE CASCADE ON UPDATE CASCADE;
-CREATE INDEX ON apflora.beob USING btree (id_old);
-CREATE INDEX ON apflora.tpopbeob USING btree (id_old);
 
-UPDATE apflora.tpopbeob SET beob_id = (
-  SELECT id FROM apflora.beob WHERE id_old = apflora.tpopbeob.beob_id_old
-) WHERE beob_id_old IS NOT NULL;
-
-CREATE INDEX ON apflora.tpopbeob USING btree (beob_id);
-ALTER TABLE apflora.tpopbeob DROP COLUMN beob_id_old CASCADE;
-COMMENT ON COLUMN apflora.tpopbeob.beob_id IS 'Zugehörige Beobachtung. Fremdschlüssel aus der Tabelle "beob"';
-DROP index IF EXISTS apflora.apflora."beob_id_old_idx";
-DROP index IF EXISTS apflora.apflora."tpopbeob_id_old_idx";
+UPDATE apflora.beob SET quelle_id = (
+  SELECT quelle_id FROM apflora.tpopbeob WHERE beob_id = apflora.beob.id
+);
+UPDATE apflora.beob SET tpop_id = (
+  SELECT tpop_id FROM apflora.tpopbeob WHERE beob_id = apflora.beob.id
+);
+UPDATE apflora.beob SET nicht_zuordnen = (
+  SELECT nicht_zuordnen FROM apflora.tpopbeob WHERE beob_id = apflora.beob.id AND nicht_zuordnen === 1
+);
+UPDATE apflora.beob SET bemerkungen = (
+  SELECT bemerkungen FROM apflora.tpopbeob WHERE beob_id = apflora.beob.id
+);
+UPDATE apflora.beob SET changed = (
+  SELECT changed FROM apflora.tpopbeob WHERE beob_id = apflora.beob.id
+);
+UPDATE apflora.beob SET changed_by = (
+  SELECT changed_by FROM apflora.tpopbeob WHERE beob_id = apflora.beob.id
+);
 
 ALTER TABLE apflora.apart ADD COLUMN art_id UUID DEFAULT NULL;
 UPDATE apflora.apart SET art_id = (
@@ -85,7 +89,6 @@ UPDATE apflora.apart SET art_id = (
 ) WHERE taxid IS NOT NULL;
 alter table apflora.apart drop column taxid;
 
--- change n-sides of tpopbeob?
 DROP TRIGGER IF EXISTS beobzuordnung_on_update_set_mut ON apflora.tpopbeob;
 DROP TRIGGER IF EXISTS beob_on_update_set_mut ON apflora.beob;
 DROP FUNCTION IF EXISTS beob_on_update_set_mut();
@@ -148,3 +151,6 @@ $ap_insert_add_apart$ LANGUAGE plpgsql;
 
 CREATE TRIGGER ap_insert_add_apart AFTER INSERT ON apflora.ap
   FOR EACH ROW EXECUTE PROCEDURE apflora.ap_insert_add_apart();
+
+-- TODO: when everything is tested:
+--DROP TABLE apflora.tpopbeob;
