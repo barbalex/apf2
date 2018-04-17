@@ -9,8 +9,7 @@ ALTER TABLE apflora.beob RENAME "Datum" TO datum;
 ALTER TABLE apflora.beob RENAME "Autor" TO autor;
 ALTER TABLE apflora.beob RENAME "X" TO x;
 ALTER TABLE apflora.beob RENAME "Y" TO y;
-ALTER TABLE apflora.beob ADD COLUMN quelle_id integer Default Null REFERENCES beob.beob_quelle (id) ON DELETE SET NULL ON UPDATE CASCADE;
-ALTER TABLE apflora.beob ADD COLUMN tpop_id integer DEFAULT NULL REFERENCES apflora.tpop (id) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE apflora.beob ADD COLUMN tpop_id uuid DEFAULT NULL REFERENCES apflora.tpop (id) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE apflora.beob ADD COLUMN nicht_zuordnen boolean default false;
 ALTER TABLE apflora.beob ADD COLUMN bemerkungen text;
 ALTER TABLE apflora.beob ADD COLUMN changed date DEFAULT NOW();
@@ -52,7 +51,6 @@ CREATE INDEX ON apflora.beob USING btree (quelle_id);
 CREATE INDEX ON apflora.beob USING btree (art_id);
 CREATE INDEX ON apflora.beob USING btree (x);
 CREATE INDEX ON apflora.beob USING btree (y);
-CREATE INDEX ON apflora.beob USING btree (quelle_id);
 CREATE INDEX ON apflora.beob USING btree (tpop_id);
 CREATE INDEX ON apflora.beob USING btree (nicht_zuordnen);
 
@@ -63,24 +61,20 @@ DROP TABLE apflora.beob_projekt;
 
 -- TODO
 -- tpopbeob
-
-UPDATE apflora.beob SET quelle_id = (
-  SELECT quelle_id FROM apflora.tpopbeob WHERE beob_id = apflora.beob.id
-);
 UPDATE apflora.beob SET tpop_id = (
-  SELECT tpop_id FROM apflora.tpopbeob WHERE beob_id = apflora.beob.id
+  SELECT tpop_id FROM apflora.tpopbeob WHERE beob_id = apflora.beob.id LIMIT 1
 );
 UPDATE apflora.beob SET nicht_zuordnen = (
-  SELECT nicht_zuordnen FROM apflora.tpopbeob WHERE beob_id = apflora.beob.id AND nicht_zuordnen === 1
+  SELECT nicht_zuordnen FROM apflora.tpopbeob WHERE beob_id = apflora.beob.id AND nicht_zuordnen === 1 LIMIT 1
 );
 UPDATE apflora.beob SET bemerkungen = (
-  SELECT bemerkungen FROM apflora.tpopbeob WHERE beob_id = apflora.beob.id
+  SELECT bemerkungen FROM apflora.tpopbeob WHERE beob_id = apflora.beob.id LIMIT 1
 );
 UPDATE apflora.beob SET changed = (
-  SELECT changed FROM apflora.tpopbeob WHERE beob_id = apflora.beob.id
+  SELECT changed FROM apflora.tpopbeob WHERE beob_id = apflora.beob.id LIMIT 1
 );
 UPDATE apflora.beob SET changed_by = (
-  SELECT changed_by FROM apflora.tpopbeob WHERE beob_id = apflora.beob.id
+  SELECT changed_by FROM apflora.tpopbeob WHERE beob_id = apflora.beob.id LIMIT 1
 );
 
 ALTER TABLE apflora.apart ADD COLUMN art_id UUID DEFAULT NULL;
