@@ -104,10 +104,9 @@ export default async (
     }
     // if beobNichtBeurteilt is set to beobNichtZuordnen, url needs to change
     if (table === 'beob' && key === 'nicht_zuordnen') {
-      newActiveNodeArray[4] =
-        value === 1
-          ? 'nicht-zuzuordnende-Beobachtungen'
-          : 'nicht-beurteilte-Beobachtungen'
+      newActiveNodeArray[4] = value
+        ? 'nicht-zuzuordnende-Beobachtungen'
+        : 'nicht-beurteilte-Beobachtungen'
       newActiveNodeArray[5] = tree.activeDataset.row.id
       tree.setActiveNodeArray(newActiveNodeArray.slice(0, 6))
     }

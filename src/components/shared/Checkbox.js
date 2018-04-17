@@ -18,25 +18,20 @@ const enhance = compose(
   observer
 )
 
-const MyCheckbox = (
-  {
-    value,
-    label,
-    onCheck,
-  }:
-  {
-    value?: number|string,
-    label: string,
-    onCheck: () => void,
-  }
-) =>
+const MyCheckbox = ({
+  value,
+  label,
+  onCheck,
+}: {
+  value?: number | string,
+  label: string,
+  onCheck: () => void,
+}) => (
   <div>
     <Label label={label} />
-    <Checkbox
-      checked={value === 1}
-      onCheck={onCheck}
-    />
+    <Checkbox checked={value === 1} onCheck={onCheck} />
   </div>
+)
 
 MyCheckbox.defaultProps = {
   value: null,
