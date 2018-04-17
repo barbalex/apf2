@@ -5,7 +5,7 @@ import clone from 'lodash/clone'
 export default async (
   store: Object,
   tree: Object,
-  beobId: number | string
+  beobId: String
 ): Promise<void> => {
   const { table } = store
   const { activeNodes } = tree

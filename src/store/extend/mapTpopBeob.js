@@ -53,8 +53,8 @@ export default (store: Object): void => {
     beobs: computed(
       () =>
         getBeobForMap(store).filter(b => {
-          const tpopbeob = store.table.tpopbeob.get(b.id)
-          return tpopbeob && !tpopbeob.nicht_zuordnen && tpopbeob.tpop_id
+          const beob = store.table.beob.get(b.id)
+          return beob && !beob.nicht_zuordnen && beob.tpop_id
         }),
       { name: 'mapTpopBeobBeobs' }
     ),

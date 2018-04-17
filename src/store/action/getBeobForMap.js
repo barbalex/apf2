@@ -6,9 +6,11 @@ import epsg2056to4326 from '../../modules/epsg2056to4326'
 export default (store: Object): Array<Object> => {
   const { table, tree } = store
   const myApArtId = tree.activeNodes.ap
+  const aps = Array.from(table.ap.values()).find(v => v.id === myApArtId)
+  const apArt = aps ? aps.art : null
   // get beobs of this ap
   let beobs = Array.from(table.beob.values()).filter(
-    beob => beob.art_id === myApArtId
+    beob => beob.art_id === apArt
   )
 
   return beobs
