@@ -11,9 +11,7 @@ export default (store: Object, tree: Object): Array<Object> => {
     .filter(b => b.nicht_zuordnen === 1)
     // filter by apFilter
     .filter(b => {
-      if (!apFilter) {
-        return true
-      }
+      if (!apFilter) return true
       let ap
       const beob = table.beob.get(b.beob_id)
       if (beob) {
