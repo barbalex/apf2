@@ -147,4 +147,4 @@ CREATE TRIGGER ap_insert_add_apart AFTER INSERT ON apflora.ap
   FOR EACH ROW EXECUTE PROCEDURE apflora.ap_insert_add_apart();
 
 -- TODO: when everything is tested:
---DROP TABLE apflora.tpopbeob;
+DROP TABLE apflora.tpopbeob cascade;
