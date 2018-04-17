@@ -132,7 +132,7 @@ function Store(): void {
     beob: {},
     beobNichtBeurteilt: {},
     beobNichtZuzuordnen: {},
-    tpopBeob: {},
+    beobZugeordnet: {},
     activeBaseLayer: 'OsmColor',
     activeOverlays: [],
     activeApfloraLayers: [],
@@ -154,7 +154,7 @@ function Store(): void {
       tpop: [],
       beobNichtZuzuordnen: [],
       beobNichtBeurteilt: [],
-      tpopBeob: [],
+      beobZugeordnet: [],
     },
     updateMapFilter: () => {},
   }

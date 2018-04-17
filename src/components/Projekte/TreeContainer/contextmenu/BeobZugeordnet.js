@@ -4,14 +4,20 @@ import { ContextMenu, MenuItem } from 'react-contextmenu'
 
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 
-const Tpopbeob = ({ tree, onClick }: { tree: Object, onClick: () => void }) => (
+const BeobZugeordnet = ({
+  tree,
+  onClick,
+}: {
+  tree: Object,
+  onClick: () => void,
+}) => (
   <ErrorBoundary>
-    <ContextMenu id={`${tree.name}tpopbeob`}>
+    <ContextMenu id={`${tree.name}beobZugeordnet`}>
       <div className="react-contextmenu-title">Beobachtung</div>
       <MenuItem
         onClick={onClick}
         data={{
-          action: 'copyTpopBeobKoordToPop',
+          action: 'copyBeobZugeordnetKoordToPop',
         }}
       >
         Koordinaten auf die Teilpopulation übertragen
@@ -36,4 +42,4 @@ const Tpopbeob = ({ tree, onClick }: { tree: Object, onClick: () => void }) => (
   </ErrorBoundary>
 )
 
-export default Tpopbeob
+export default BeobZugeordnet

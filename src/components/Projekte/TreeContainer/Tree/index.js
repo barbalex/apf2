@@ -56,7 +56,7 @@ class Tree extends Component {
     tree: Object,
     projektLoading: boolean,
     nodes: Array<Object>,
-    mapTpopBeobVisible: boolean,
+    mapBeobZugeordnetVisible: boolean,
     mapBeobNichtBeurteiltVisible: boolean,
     mapBeobNichtZuzuordnenVisible: boolean,
     mapPopVisible: boolean,
@@ -73,21 +73,21 @@ class Tree extends Component {
 
   componentDidUpdate(prevProps) {
     const {
-      mapTpopBeobVisible,
+      mapBeobZugeordnetVisible,
       mapBeobNichtBeurteiltVisible,
       mapBeobNichtZuzuordnenVisible,
       mapPopVisible,
       mapTpopVisible,
     } = this.props
     const {
-      mapTpopBeobVisible: prevMapTpopBeobVisible,
+      mapBeobZugeordnetVisible: prevMapBeobZugeordnetVisible,
       mapBeobNichtBeurteiltVisible: prevMapBeobNichtBeurteiltVisible,
       mapBeobNichtZuzuordnenVisible: prevMapBeobNichtZuzuordnenVisible,
       mapPopVisible: prevMapPopVisible,
       mapTpopVisible: prevMapTpopVisible,
     } = prevProps
     const somethingHasChanged =
-      mapTpopBeobVisible !== prevMapTpopBeobVisible ||
+      mapBeobZugeordnetVisible !== prevMapBeobZugeordnetVisible ||
       mapBeobNichtBeurteiltVisible !== prevMapBeobNichtBeurteiltVisible ||
       mapBeobNichtZuzuordnenVisible !== prevMapBeobNichtZuzuordnenVisible ||
       mapPopVisible !== prevMapPopVisible ||

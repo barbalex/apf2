@@ -7,7 +7,7 @@ import '../../../../../node_modules/leaflet.markercluster/dist/leaflet.markerclu
 
 const enhance = compose(getContext({ map: PropTypes.object.isRequired }))
 
-class TpopBeobAssignPolylines extends Component {
+class BeobZugeordnetAssignPolylines extends Component {
   props: {
     visible: boolean,
     assignPolylines: Array<Object>,
@@ -47,4 +47,4 @@ class TpopBeobAssignPolylines extends Component {
   }
 }
 
-export default enhance(TpopBeobAssignPolylines)
+export default enhance(BeobZugeordnetAssignPolylines)

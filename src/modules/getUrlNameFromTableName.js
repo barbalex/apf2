@@ -6,7 +6,6 @@ export default (table: string): string => {
     apberuebersicht: 'AP-Berichte',
     assozart: 'assoziierte-Arten',
     beob: 'Beobachtung',
-    //tpopbeob: 'zugeordnete-Beobachtungen',
     ber: 'Berichte',
     erfkrit: 'AP-Erfolgskriterien',
     idealbiotop: 'Idealbiotop',

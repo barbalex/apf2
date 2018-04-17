@@ -22,7 +22,7 @@ import moveTo from '../action/moveTo'
 import copyTo from '../action/copyTo'
 import copyBiotopTo from '../action/copyBiotopTo'
 import copyTpopKoordToPop from '../action/copyTpopKoordToPop'
-import copyTpopBeobKoordToPop from '../action/copyTpopBeobKoordToPop'
+import copyBeobZugeordnetKoordToPop from '../action/copyBeobZugeordnetKoordToPop'
 import createNewPopFromBeob from '../action/createNewPopFromBeob'
 import undoDeletion from '../action/undoDeletion'
 
@@ -104,8 +104,9 @@ export default (store: Object): void => {
     copyTpopKoordToPop: action('copyTpopKoordToPop', tpopId =>
       copyTpopKoordToPop(store, tpopId)
     ),
-    copyTpopBeobKoordToPop: action('copyTpopBeobKoordToPop', beobId =>
-      copyTpopBeobKoordToPop(store, beobId)
+    copyBeobZugeordnetKoordToPop: action(
+      'copyBeobZugeordnetKoordToPop',
+      beobId => copyBeobZugeordnetKoordToPop(store, beobId)
     ),
     createNewPopFromBeob: action('createNewPopFromBeob', (tree, beobId) =>
       createNewPopFromBeob({ store, tree, beobId })

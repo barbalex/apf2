@@ -16,9 +16,11 @@ export default (store: Object): void => {
         // need to pass visibility of layers to make data fetched on changing layers
         const showTpop = store.map.activeApfloraLayers.includes('Tpop')
         const showPop = store.map.activeApfloraLayers.includes('Pop')
-        const showTpopBeob =
-          store.map.activeApfloraLayers.includes('TpopBeob') ||
-          store.map.activeApfloraLayers.includes('TpopBeobAssignPolylines')
+        const showBeobZugeordnet =
+          store.map.activeApfloraLayers.includes('BeobZugeordnet') ||
+          store.map.activeApfloraLayers.includes(
+            'BeobZugeordnetAssignPolylines'
+          )
         const showBeobNichtBeurteilt = store.map.activeApfloraLayers.includes(
           'BeobNichtBeurteilt'
         )
@@ -30,7 +32,7 @@ export default (store: Object): void => {
           store.tree,
           showPop,
           showTpop,
-          showTpopBeob,
+          showBeobZugeordnet,
           showBeobNichtBeurteilt,
           showBeobNichtZuzuordnen
         )
@@ -44,9 +46,11 @@ export default (store: Object): void => {
         // need to pass visibility of layers to make data fetched on changing layers
         const showTpop = store.map.activeApfloraLayers.includes('Tpop')
         const showPop = store.map.activeApfloraLayers.includes('Pop')
-        const showTpopBeob =
-          store.map.activeApfloraLayers.includes('TpopBeob') ||
-          store.map.activeApfloraLayers.includes('TpopBeobAssignPolylines')
+        const showBeobZugeordnet =
+          store.map.activeApfloraLayers.includes('BeobZugeordnet') ||
+          store.map.activeApfloraLayers.includes(
+            'BeobZugeordnetAssignPolylines'
+          )
         const showBeobNichtBeurteilt = store.map.activeApfloraLayers.includes(
           'BeobNichtBeurteilt'
         )
@@ -58,7 +62,7 @@ export default (store: Object): void => {
           store.tree2,
           showPop,
           showTpop,
-          showTpopBeob,
+          showBeobZugeordnet,
           showBeobNichtBeurteilt,
           showBeobNichtZuzuordnen
         )

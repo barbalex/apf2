@@ -184,13 +184,17 @@ const myChildren = (store: Object) => {
               store.map.beobNichtZuzuordnen.markersClustered
             }
             beobNichtZuzuordnenHighlighted={store.map.beobNichtZuzuordnen.highlightedIds.join()}
-            tpopBeobMarkers={store.map.tpopBeob.markers}
-            tpopBeobHighlighted={store.map.tpopBeob.highlightedIds.join()}
-            tpopBeobMarkersClustered={store.map.tpopBeob.markersClustered}
-            tpopBeobAssigning={store.map.beob.assigning}
-            tpopBeobAssignPolylines={store.map.tpopBeob.assignPolylines}
-            tpopBeobAssignPolylinesLength={
-              store.map.tpopBeob.assignPolylines.length
+            beobZugeordnetMarkers={store.map.beobZugeordnet.markers}
+            beobZugeordnetHighlighted={store.map.beobZugeordnet.highlightedIds.join()}
+            beobZugeordnetMarkersClustered={
+              store.map.beobZugeordnet.markersClustered
+            }
+            beobZugeordnetAssigning={store.map.beob.assigning}
+            beobZugeordnetAssignPolylines={
+              store.map.beobZugeordnet.assignPolylines
+            }
+            beobZugeordnetAssignPolylinesLength={
+              store.map.beobZugeordnet.assignPolylines.length
             }
             idOfTpopBeingLocalized={store.map.tpop.idOfTpopBeingLocalized}
             activeBaseLayer={store.map.activeBaseLayer}

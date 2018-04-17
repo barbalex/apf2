@@ -42,13 +42,13 @@ import popmassnberFolderNodes from '../../modules/nodes/popmassnberFolder'
 import popmassnberNodes from '../../modules/nodes/popmassnber'
 import popberNodes from '../../modules/nodes/popber'
 import tpopNodes from '../../modules/nodes/tpop'
-import tpopbeobFolderNodes from '../../modules/nodes/tpopbeobFolder'
+import beobZugeordnetFolderNodes from '../../modules/nodes/beobZugeordnetFolder'
 import tpopberFolderNodes from '../../modules/nodes/tpopberFolder'
 import tpopfreiwkontrFolderNodes from '../../modules/nodes/tpopfreiwkontrFolder'
 import tpopfeldkontrFolderNodes from '../../modules/nodes/tpopfeldkontrFolder'
 import tpopmassnberFolderNodes from '../../modules/nodes/tpopmassnberFolder'
 import tpopmassnFolderNodes from '../../modules/nodes/tpopmassnFolder'
-import tpopbeobNodes from '../../modules/nodes/tpopbeob'
+import beobZugeordnetNodes from '../../modules/nodes/beobZugeordnet'
 import tpopberNodes from '../../modules/nodes/tpopber'
 import tpopfreiwkontrNodes from '../../modules/nodes/tpopfreiwkontr'
 import tpopfeldkontrNodes from '../../modules/nodes/tpopfeldkontr'
@@ -296,7 +296,7 @@ export default (store: Object, tree: Object): Array<Object> => {
         ...tpopfeldkontrFolderNodes(store, tree, projId, apId, popId, tpopId),
         ...tpopfreiwkontrFolderNodes(store, tree, projId, apId, popId, tpopId),
         ...tpopberFolderNodes(store, tree, projId, apId, popId, tpopId),
-        ...tpopbeobFolderNodes(store, tree, projId, apId, popId, tpopId),
+        ...beobZugeordnetFolderNodes(store, tree, projId, apId, popId, tpopId),
       ]
     }
     if (
@@ -311,7 +311,7 @@ export default (store: Object, tree: Object): Array<Object> => {
       const tpopId = nodeUrl[7]
       nodes = [
         ...nodes,
-        ...tpopbeobNodes(store, tree, projId, apId, popId, tpopId),
+        ...beobZugeordnetNodes(store, tree, projId, apId, popId, tpopId),
       ]
     }
     if (

@@ -188,13 +188,15 @@ export default (activeNodeArray: Array<mixed>, store: Object): Object => {
     false
   const tpopber =
     tpopberFolder && activeNodeArray.length > 9 ? activeNodeArray[9] : null
-  const tpopbeobFolder =
+  const beobZugeordnetFolder =
     (tpop &&
       activeNodeArray.length > 8 &&
       activeNodeArray[8] === 'Beobachtungen') ||
     false
-  const tpopbeob =
-    tpopbeobFolder && activeNodeArray.length > 9 ? activeNodeArray[9] : null
+  const beobZugeordnet =
+    beobZugeordnetFolder && activeNodeArray.length > 9
+      ? activeNodeArray[9]
+      : null
 
   return {
     exporte,
@@ -248,7 +250,7 @@ export default (activeNodeArray: Array<mixed>, store: Object): Object => {
     tpopfreiwkontrzaehl,
     tpopberFolder,
     tpopber,
-    tpopbeobFolder,
-    tpopbeob,
+    beobZugeordnetFolder,
+    beobZugeordnet,
   }
 }

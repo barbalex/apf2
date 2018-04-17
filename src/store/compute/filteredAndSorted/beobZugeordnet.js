@@ -28,7 +28,7 @@ export default (store: Object, tree: Object): Array<Object> => {
       '(kein Autor)'} (${quelleName})`
   })
   // filter by nodeLabelFilter
-  const filterString = nodeLabelFilter.get('tpopbeob')
+  const filterString = nodeLabelFilter.get('beobZugeordnet')
   if (filterString) {
     beob = beob.filter(p =>
       p.label.toLowerCase().includes(filterString.toLowerCase())

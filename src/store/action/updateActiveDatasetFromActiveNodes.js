@@ -96,10 +96,10 @@ export default (store: Object, tree: Object): Object => {
             folder: null,
           }
         } else if (aEl.tpop) {
-          if (aEl.tpopbeob) {
+          if (aEl.beobZugeordnet) {
             activeDataset = {
               table: 'beob',
-              row: table.beob.get(aEl.tpopbeob),
+              row: table.beob.get(aEl.beobZugeordnet),
               folder: null,
             }
           } else if (aEl.tpopber) {
@@ -159,7 +159,7 @@ export default (store: Object, tree: Object): Object => {
             if (aEl.tpopfeldkontrFolder) folder = 'tpopfeldkontr'
             if (aEl.tpopfreiwkontrFolder) folder = 'tpopfreiwkontr'
             if (aEl.tpopberFolder) folder = 'tpopber'
-            if (aEl.tpopbeobFolder) folder = 'tpopbeob'
+            if (aEl.beobZugeordnetFolder) folder = 'beobZugeordnet'
             activeDataset = {
               table: 'tpop',
               row: table.tpop.get(aEl.tpop),

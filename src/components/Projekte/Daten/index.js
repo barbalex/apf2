@@ -165,7 +165,7 @@ const Daten = ({
     qk: <Qk tree={tree} />,
     beobNichtZuzuordnen: <Beobzuordnung tree={tree} dimensions={dimensions} />,
     beobzuordnung: <Beobzuordnung tree={tree} dimensions={dimensions} />,
-    tpopbeob: <Beobzuordnung tree={tree} dimensions={dimensions} />,
+    beobZugeordnet: <Beobzuordnung tree={tree} dimensions={dimensions} />,
   }
   const standardForm = (
     <div>
@@ -182,8 +182,8 @@ const Daten = ({
     key = 'beobNichtZuzuordnen'
   } else if (activeNodes.beobzuordnung) {
     key = 'beobzuordnung'
-  } else if (activeNodes.tpopbeob) {
-    key = 'tpopbeob'
+  } else if (activeNodes.beobZugeordnet) {
+    key = 'beobZugeordnet'
   } else {
     key = activeDataset.table
   }

@@ -19,7 +19,7 @@ const fetchDataForOpenNodes = (
   tree: Object,
   showPop: boolean,
   showTpop: boolean,
-  showTpopBeob: boolean,
+  showBeobZugeordnet: boolean,
   showBeobNichtBeurteilt: boolean,
   showBeobNichtZuzuordnen: boolean
 ): void => {
@@ -88,7 +88,11 @@ const fetchDataForOpenNodes = (
         if (showPop) {
           store.fetchPopForAp(activeNodes.ap)
         }
-        if (showBeobNichtBeurteilt || showBeobNichtZuzuordnen || showTpopBeob) {
+        if (
+          showBeobNichtBeurteilt ||
+          showBeobNichtZuzuordnen ||
+          showBeobZugeordnet
+        ) {
           store.fetchTable('beob_quelle')
           store.fetchPopForAp(activeNodes.ap)
           store.fetchTpopForAp(activeNodes.ap)
@@ -178,14 +182,14 @@ const fetchDataForOpenNodes = (
       },
       tpopkontrzaehlFolder() {},
       tpopberFolder() {},
-      tpopbeobFolder() {
+      beobZugeordnetFolder() {
         store.fetchTable('beob_quelle')
         store.fetchTpopForAp(activeNodes.ap)
       },
-      tpopbeob() {
+      beobZugeordnet() {
         store.fetchDatasetById({
           tableName: 'beob',
-          id: activeNodes.tpopbeob,
+          id: activeNodes.beobZugeordnet,
         })
       },
     }

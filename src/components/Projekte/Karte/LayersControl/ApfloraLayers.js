@@ -85,10 +85,10 @@ const BeobNichtBeurteiltMapIcon = MapIcon.extend`
 const BeobNichtZuzuordnenMapIcon = MapIcon.extend`
   color: #ffe4ff !important;
 `
-const TpopBeobMapIcon = MapIcon.extend`
+const BeobZugeordnetMapIcon = MapIcon.extend`
   color: #ff00ff !important;
 `
-const TpopBeobAssignPolylinesIcon = MapIcon.extend`
+const BeobZugeordnetAssignPolylinesIcon = MapIcon.extend`
   color: #ff00ff !important;
   -webkit-text-stroke: 0 black;
   -moz-text-stroke: 0 black;
@@ -114,8 +114,8 @@ const SortableItem = SortableElement(
       store.map.activeApfloraLayers.includes('Tpop') &&
       ((store.map.activeApfloraLayers.includes('BeobNichtBeurteilt') &&
         apfloraLayer.value === 'BeobNichtBeurteilt') ||
-        (store.map.activeApfloraLayers.includes('TpopBeob') &&
-          apfloraLayer.value === 'TpopBeob'))
+        (store.map.activeApfloraLayers.includes('BeobZugeordnet') &&
+          apfloraLayer.value === 'BeobZugeordnet'))
     const getZuordnenIconTitle = () => {
       if (store.map.beob.assigning) return 'Zuordnung beenden'
       if (assigningIsPossible) return 'Teil-Populationen zuordnen'
@@ -126,8 +126,8 @@ const SortableItem = SortableElement(
       Tpop: 'tpop',
       BeobNichtBeurteilt: 'beobNichtBeurteilt',
       BeobNichtZuzuordnen: 'beobNichtZuzuordnen',
-      TpopBeob: 'tpopBeob',
-      TpopBeobAssignPolylines: 'tpopBeob',
+      BeobZugeordnet: 'beobZugeordnet',
+      BeobZugeordnetAssignPolylines: 'beobZugeordnet',
     }
 
     return (
@@ -146,7 +146,9 @@ const SortableItem = SortableElement(
         />{' '}
         <IconsDiv>
           {' '}
-          {['BeobNichtBeurteilt', 'TpopBeob'].includes(apfloraLayer.value) && (
+          {['BeobNichtBeurteilt', 'BeobZugeordnet'].includes(
+            apfloraLayer.value
+          ) && (
             <ZuordnenDiv>
               <ZuordnenIcon
                 className="material-icons"
@@ -206,26 +208,26 @@ const SortableItem = SortableElement(
                 </BeobNichtZuzuordnenMapIcon>{' '}
               </MapIconDiv>
             )}{' '}
-          {apfloraLayer.value === 'TpopBeob' &&
-            activeApfloraLayers.includes('TpopBeob') && (
+          {apfloraLayer.value === 'BeobZugeordnet' &&
+            activeApfloraLayers.includes('BeobZugeordnet') && (
               <MapIconDiv>
-                <TpopBeobMapIcon
-                  id="TpopBeobMapIcon"
+                <BeobZugeordnetMapIcon
+                  id="BeobZugeordnetMapIcon"
                   className="material-icons"
                 >
                   local_florist{' '}
-                </TpopBeobMapIcon>{' '}
+                </BeobZugeordnetMapIcon>{' '}
               </MapIconDiv>
             )}{' '}
-          {apfloraLayer.value === 'TpopBeobAssignPolylines' &&
-            activeApfloraLayers.includes('TpopBeobAssignPolylines') && (
+          {apfloraLayer.value === 'BeobZugeordnetAssignPolylines' &&
+            activeApfloraLayers.includes('BeobZugeordnetAssignPolylines') && (
               <MapIconDiv>
-                <TpopBeobAssignPolylinesIcon
-                  id="TpopBeobAssignPolylinesMapIcon"
+                <BeobZugeordnetAssignPolylinesIcon
+                  id="BeobZugeordnetAssignPolylinesMapIcon"
                   className="material-icons"
                 >
                   remove{' '}
-                </TpopBeobAssignPolylinesIcon>{' '}
+                </BeobZugeordnetAssignPolylinesIcon>{' '}
               </MapIconDiv>
             )}{' '}
           {false && (
@@ -236,7 +238,7 @@ const SortableItem = SortableElement(
                 'Tpop',
                 'BeobNichtBeurteilt',
                 'BeobNichtZuzuordnen',
-                'TpopBeob',
+                'BeobZugeordnet',
               ].includes(apfloraLayer.value) && (
                 <FilterIcon
                   className="material-icons"
@@ -343,7 +345,7 @@ const SortableItem = SortableElement(
           </ZoomToDiv>{' '}
           <DragHandleDiv>
             {' '}
-            {!['TpopBeobAssignPolylines', 'MapFilter'].includes(
+            {!['BeobZugeordnetAssignPolylines', 'MapFilter'].includes(
               apfloraLayer.value
             ) && <DragHandle />}{' '}
           </DragHandleDiv>{' '}

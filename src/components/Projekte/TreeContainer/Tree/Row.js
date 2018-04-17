@@ -82,7 +82,7 @@ const BeobNichtBeurteiltMapIcon = styled(StyledMapIcon)`
 const BeobNichtZuzuordnenMapIcon = styled(StyledMapIcon)`
   color: #ffe4ff !important;
 `
-const TpopBeobMapIcon = styled(StyledMapIcon)`
+const BeobZugeordnetMapIcon = styled(StyledMapIcon)`
   color: #ff00ff !important;
 `
 const PopFilteredMapIcon = styled(PopMapIcon)`
@@ -101,7 +101,7 @@ const BeobNichtZuzuordnenFilteredMapIcon = styled(BeobNichtZuzuordnenMapIcon)`
   -webkit-text-stroke: 1px #f5ef00;
   -moz-text-stroke: 1px #f5ef00;
 `
-const TpopBeobFilteredMapIcon = styled(TpopBeobMapIcon)`
+const BeobZugeordnetFilteredMapIcon = styled(BeobZugeordnetMapIcon)`
   -webkit-text-stroke: 1px #f5ef00;
   -moz-text-stroke: 1px #f5ef00;
 `
@@ -135,10 +135,10 @@ const showBeobNichtZuzuordnenMapIcon = (store, tree, node) =>
   node.menuType === 'beobNichtZuzuordnenFolder' &&
   node.id === tree.activeNodes.ap &&
   store.map.activeApfloraLayers.includes('BeobNichtZuzuordnen')
-const showTpopBeobMapIcon = (store, tree, node) =>
-  node.menuType === 'tpopbeobFolder' &&
+const showBeobZugeordnetMapIcon = (store, tree, node) =>
+  node.menuType === 'beobZugeordnetFolder' &&
   node.id === tree.activeNodes.tpop &&
-  store.map.activeApfloraLayers.includes('TpopBeob')
+  store.map.activeApfloraLayers.includes('BeobZugeordnet')
 const showBeobNichtBeurteiltFilteredMapIcon = (store, node) =>
   node.menuType === 'beobzuordnung' &&
   store.map.activeApfloraLayers.includes('BeobNichtBeurteilt') &&
@@ -147,17 +147,17 @@ const showBeobNichtZuzuordnenFilteredMapIcon = (store, node) =>
   node.menuType === 'beobNichtZuzuordnen' &&
   store.map.activeApfloraLayers.includes('BeobNichtZuzuordnen') &&
   store.map.beobNichtZuzuordnen.highlightedIds.includes(node.id)
-const showTpopBeobFilteredMapIcon = (store, tree, node) =>
-  (node.menuType === 'tpopbeob' &&
-    store.map.activeApfloraLayers.includes('TpopBeob') &&
-    store.map.tpopBeob.highlightedIds.includes(node.id)) ||
+const showBeobZugeordnetFilteredMapIcon = (store, tree, node) =>
+  (node.menuType === 'beobZugeordnet' &&
+    store.map.activeApfloraLayers.includes('BeobZugeordnet') &&
+    store.map.beobZugeordnet.highlightedIds.includes(node.id)) ||
   (node.menuType === 'tpop' &&
-    !tree.activeNodes.tpopbeob &&
-    store.map.activeApfloraLayers.includes('TpopBeob') &&
+    !tree.activeNodes.beobZugeordnet &&
+    store.map.activeApfloraLayers.includes('BeobZugeordnet') &&
     node.id === tree.activeNodes.tpop) ||
   (node.menuType === 'pop' &&
     !tree.activeNodes.tpop &&
-    store.map.activeApfloraLayers.includes('TpopBeob') &&
+    store.map.activeApfloraLayers.includes('BeobZugeordnet') &&
     node.id === tree.activeNodes.pop)
 
 const enhance = compose(inject('store'), observer)
@@ -280,14 +280,14 @@ const Row = ({
               local_florist
             </BeobNichtZuzuordnenMapIcon>
           )}
-          {showTpopBeobMapIcon(store, tree, node) && (
-            <TpopBeobMapIcon
+          {showBeobZugeordnetMapIcon(store, tree, node) && (
+            <BeobZugeordnetMapIcon
               id="map"
               className="material-icons"
               title="in Karte sichtbar"
             >
               local_florist
-            </TpopBeobMapIcon>
+            </BeobZugeordnetMapIcon>
           )}
           {showPopFilteredMapIcon(store, node) && (
             <PopFilteredMapIcon
@@ -325,14 +325,14 @@ const Row = ({
               local_florist
             </BeobNichtZuzuordnenFilteredMapIcon>
           )}
-          {showTpopBeobFilteredMapIcon(store, tree, node) && (
-            <TpopBeobFilteredMapIcon
-              id="TpopBeobFilteredMapIcon"
+          {showBeobZugeordnetFilteredMapIcon(store, tree, node) && (
+            <BeobZugeordnetFilteredMapIcon
+              id="BeobZugeordnetFilteredMapIcon"
               className="material-icons"
               title="in Karte hervorgehoben"
             >
               local_florist
-            </TpopBeobFilteredMapIcon>
+            </BeobZugeordnetFilteredMapIcon>
           )}
           <TextSpan
             data-nodeisinactivenodepath={nodeIsInActiveNodePath}

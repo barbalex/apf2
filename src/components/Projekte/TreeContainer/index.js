@@ -22,7 +22,7 @@ import CmAssozartFolder from './contextmenu/AssozartFolder'
 import CmAssozart from './contextmenu/Assozart'
 import CmApartFolder from './contextmenu/ApartFolder'
 import CmApart from './contextmenu/Apart'
-import CmTpopbeobFolder from './contextmenu/TpopbeobFolder'
+import CmBeobZugeordnetFolder from './contextmenu/BeobZugeordnetFolder'
 import CmBerFolder from './contextmenu/BerFolder'
 import CmBer from './contextmenu/Ber'
 import CmApberFolder from './contextmenu/ApberFolder'
@@ -44,7 +44,7 @@ import CmTpopFolder from './contextmenu/TpopFolder'
 import CmTpop from './contextmenu/Tpop'
 import CmTpopberFolder from './contextmenu/TpopberFolder'
 import CmTpopber from './contextmenu/Tpopber'
-import CmTpopbeob from './contextmenu/Tpopbeob'
+import CmBeobZugeordnet from './contextmenu/BeobZugeordnet'
 import CmBeobnichtbeurteilt from './contextmenu/Beobnichtbeurteilt'
 import CmBeobNichtZuzuordnen from './contextmenu/BeobNichtZuzuordnen'
 import CmTpopfreiwkontrFolder from './contextmenu/TpopfreiwkontrFolder'
@@ -249,8 +249,8 @@ const enhance = compose(
         createNewPopFromBeob() {
           store.createNewPopFromBeob(tree, id)
         },
-        copyTpopBeobKoordToPop() {
-          store.copyTpopBeobKoordToPop(id)
+        copyBeobZugeordnetKoordToPop() {
+          store.copyBeobZugeordnetKoordToPop(id)
         },
         showCoordOfTpopOnMapsZhCh() {
           const { x, y } = getAndValidateCoordinatesOfTpop(store, id)
@@ -326,8 +326,8 @@ const TreeContainer = ({
             tree={tree}
             projektLoading={store.table.projektLoading}
             nodes={tree.nodes}
-            mapTpopBeobVisible={store.map.activeApfloraLayers.includes(
-              'TpopBeob'
+            mapBeobZugeordnetVisible={store.map.activeApfloraLayers.includes(
+              'BeobZugeordnet'
             )}
             mapBeobNichtBeurteiltVisible={store.map.activeApfloraLayers.includes(
               'BeobNichtBeurteilt'
@@ -351,7 +351,7 @@ const TreeContainer = ({
         <CmAssozart onClick={handleClick} tree={tree} />
         <CmApartFolder onClick={handleClick} tree={tree} />
         <CmApart onClick={handleClick} tree={tree} />
-        <CmTpopbeobFolder onClick={handleClick} tree={tree} />
+        <CmBeobZugeordnetFolder onClick={handleClick} tree={tree} />
         <CmBerFolder onClick={handleClick} tree={tree} />
         <CmBer onClick={handleClick} tree={tree} />
         <CmApberFolder onClick={handleClick} tree={tree} />
@@ -373,7 +373,7 @@ const TreeContainer = ({
         <CmTpop onClick={handleClick} tree={tree} />
         <CmTpopberFolder onClick={handleClick} tree={tree} />
         <CmTpopber onClick={handleClick} tree={tree} />
-        <CmTpopbeob onClick={handleClick} tree={tree} />
+        <CmBeobZugeordnet onClick={handleClick} tree={tree} />
         <CmBeobnichtbeurteilt onClick={handleClick} tree={tree} />
         <CmBeobNichtZuzuordnen onClick={handleClick} tree={tree} />
         <CmTpopfreiwkontrFolder onClick={handleClick} tree={tree} />

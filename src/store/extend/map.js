@@ -11,7 +11,7 @@ import tpopIdsInsideFeatureCollection from '../../modules/tpopIdsInsideFeatureCo
 import popIdsInsideFeatureCollection from '../../modules/popIdsInsideFeatureCollection'
 import beobNichtBeurteiltIdsInsideFeatureCollection from '../../modules/beobNichtBeurteiltIdsInsideFeatureCollection'
 import beobNichtZuzuordnenIdsInsideFeatureCollection from '../../modules/beobNichtZuzuordnenIdsInsideFeatureCollection'
-import tpopBeobIdsInsideFeatureCollection from '../../modules/tpopBeobIdsInsideFeatureCollection'
+import beobZugeordnetIdsInsideFeatureCollection from '../../modules/beobZugeordnetIdsInsideFeatureCollection'
 import fetchDetailplaene from '../action/fetchDetailplaene'
 import fetchMarkierungen from '../action/fetchMarkierungen'
 
@@ -93,13 +93,13 @@ export default (store: Object): void => {
     apfloraLayers: observable([
       { label: 'Populationen', value: 'Pop' },
       { label: 'Teil-Populationen', value: 'Tpop' },
-      { label: 'Beobachtungen: zugeordnet', value: 'TpopBeob' },
+      { label: 'Beobachtungen: zugeordnet', value: 'BeobZugeordnet' },
       { label: 'Beobachtungen: nicht beurteilt', value: 'BeobNichtBeurteilt' },
       {
         label: 'Beobachtungen: nicht zuzuordnen',
         value: 'BeobNichtZuzuordnen',
       },
-      { label: 'Zuordnungs-Linien', value: 'TpopBeobAssignPolylines' },
+      { label: 'Zuordnungs-Linien', value: 'BeobZugeordnetAssignPolylines' },
       { label: 'Karten-Filter', value: 'MapFilter' },
     ]),
     apfloraLayersString: computed(
@@ -188,10 +188,13 @@ export default (store: Object): void => {
           ),
         { name: 'mapFilterBeobNichtZuzuordnen' }
       ),
-      tpopBeob: computed(
+      beobZugeordnet: computed(
         () =>
-          tpopBeobIdsInsideFeatureCollection(store, store.map.tpopBeob.beobs),
-        { name: 'mapFilterPTpopBeob' }
+          beobZugeordnetIdsInsideFeatureCollection(
+            store,
+            store.map.beobZugeordnet.beobs
+          ),
+        { name: 'mapFilterPBeobZugeordnet' }
       ),
     },
     updateMapFilter: action('updateMapFilter', mapFilterItems => {

@@ -19,7 +19,7 @@ import filteredAndSortedPop from '../../compute/filteredAndSorted/pop'
 import filteredAndSortedPopmassnber from '../../compute/filteredAndSorted/popmassnber'
 import filteredAndSortedPopber from '../../compute/filteredAndSorted/popber'
 import filteredAndSortedTpop from '../../compute/filteredAndSorted/tpop'
-import filteredAndSortedTpopbeob from '../../compute/filteredAndSorted/tpopbeob'
+import filteredAndSortedBeobZugeordnet from '../../compute/filteredAndSorted/beobZugeordnet'
 import filteredAndSortedTopber from '../../compute/filteredAndSorted/tpopber'
 import filteredAndSortedTpopfreiwkontr from '../../compute/filteredAndSorted/tpopfreiwkontr'
 import filteredAndSortedTpopfreiwkontrzaehl from '../../compute/filteredAndSorted/tpopfreiwkontrzaehl'
@@ -54,7 +54,9 @@ export default (store: Object, tree: Object): void => {
     popmassnber: computed(() => filteredAndSortedPopmassnber(store, tree)),
     popber: computed(() => filteredAndSortedPopber(store, tree)),
     tpop: computed(() => filteredAndSortedTpop(store, tree)),
-    tpopbeob: computed(() => filteredAndSortedTpopbeob(store, tree)),
+    beobZugeordnet: computed(() =>
+      filteredAndSortedBeobZugeordnet(store, tree)
+    ),
     tpopber: computed(() => filteredAndSortedTopber(store, tree)),
     tpopfreiwkontr: computed(() =>
       filteredAndSortedTpopfreiwkontr(store, tree)

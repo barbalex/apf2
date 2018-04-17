@@ -9,8 +9,8 @@ import BeobPopup from '../../components/Projekte/Karte/BeobPopup'
 import getNearestTpopId from '../../modules/getNearestTpopId'
 
 export default (store: Object): Array<Object> => {
-  const { beobs, highlightedIds } = store.map.tpopBeob
-  const visible = store.map.activeApfloraLayers.includes('TpopBeob')
+  const { beobs, highlightedIds } = store.map.beobZugeordnet
+  const visible = store.map.activeApfloraLayers.includes('BeobZugeordnet')
 
   if (visible) {
     return beobs.map(p => {
@@ -27,7 +27,7 @@ export default (store: Object): Array<Object> => {
         icon,
         draggable: store.map.beob.assigning,
         zIndexOffset: -store.map.apfloraLayers.findIndex(
-          apfloraLayer => apfloraLayer.value === 'TpopBeob'
+          apfloraLayer => apfloraLayer.value === 'BeobZugeordnet'
         ),
       })
         .bindPopup(

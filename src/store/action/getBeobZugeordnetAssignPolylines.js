@@ -2,9 +2,9 @@
 import 'leaflet'
 
 export default (store: Object): Array<Object> => {
-  const { beobs, highlightedIds } = store.map.tpopBeob
+  const { beobs, highlightedIds } = store.map.beobZugeordnet
   const visible = store.map.activeApfloraLayers.includes(
-    'TpopBeobAssignPolylines'
+    'BeobZugeordnetAssignPolylines'
   )
   if (visible) {
     return beobs.map(p => {

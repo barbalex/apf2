@@ -25,15 +25,24 @@ export default (
     { id: tpopId }
   )
 
-  return tree.filteredAndSorted.tpopbeob
-    .filter(t => t.tpop_id === tpopId)
-    .map((el, index) => ({
-      nodeType: 'table',
-      menuType: 'tpopbeob',
-      id: el.id,
-      parentId: tpopId,
-      urlLabel: el.id,
-      label: el.label,
+  const childrenLength = tree.filteredAndSorted.beobZugeordnet.filter(
+    t => t.tpop_id === tpopId
+  ).length
+  let message = childrenLength
+  if (store.loading.includes('beob')) {
+    message = '...'
+  }
+  if (tree.nodeLabelFilter.get('beobZugeordnet')) {
+    message = `${childrenLength} gefiltert`
+  }
+
+  return [
+    {
+      nodeType: 'folder',
+      menuType: 'beobZugeordnetFolder',
+      id: tpopId,
+      urlLabel: 'Beobachtungen',
+      label: `Beobachtungen zugeordnet (${message})`,
       url: [
         'Projekte',
         projId,
@@ -44,9 +53,9 @@ export default (
         'Teil-Populationen',
         tpopId,
         'Beobachtungen',
-        el.id,
       ],
-      sort: [projIndex, 1, apIndex, 1, popIndex, 1, tpopIndex, 6, index],
-      hasChildren: false,
-    }))
+      sort: [projIndex, 1, apIndex, 1, popIndex, 1, tpopIndex, 6],
+      hasChildren: childrenLength > 0,
+    },
+  ]
 }

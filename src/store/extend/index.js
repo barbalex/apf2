@@ -10,7 +10,7 @@ import extendMapTpop from './mapTpop'
 import extendMapBeob from './mapBeob'
 import extendMapBeobNichtBeurteilt from './mapBeobNichtBeurteilt'
 import extendMapBeobNichtZuzuordnen from './mapBeobNichtZuzuordnen'
-import extendMapTpopBeob from './mapTpopBeob'
+import extendMapBeobZugeordnet from './mapBeobZugeordnet'
 import extendExport from './export'
 import extendQk from './qk'
 import extendMessages from './messages'
@@ -28,7 +28,7 @@ export default (store: Object): void => {
   extendMapBeob(store)
   extendMapBeobNichtBeurteilt(store)
   extendMapBeobNichtZuzuordnen(store)
-  extendMapTpopBeob(store)
+  extendMapBeobZugeordnet(store)
   extendStoreAutoruns(store)
   extendExport(store)
   extendQk(store)

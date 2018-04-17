@@ -21,7 +21,7 @@ const enhance = compose(
   observer
 )
 
-const TpopbeobFolder = ({
+const BeobZugeordnetFolder = ({
   store,
   tree,
   onClick,
@@ -38,7 +38,7 @@ const TpopbeobFolder = ({
 }) => (
   <ErrorBoundary>
     <ContextMenu
-      id={`${tree.name}tpopBeobFolder`}
+      id={`${tree.name}beobZugeordnetFolder`}
       collect={props => props}
       onShow={onShow}
     >
@@ -47,16 +47,18 @@ const TpopbeobFolder = ({
         onClick={onClick}
         data={{
           action: 'showBeobOnMap',
-          actionTable: 'tpopBeob',
+          actionTable: 'beobZugeordnet',
           idTable: 'ap',
         }}
       >
         {`blende auf Karte ${
-          store.map.activeApfloraLayers.includes('TpopBeob') ? 'aus' : 'ein'
+          store.map.activeApfloraLayers.includes('BeobZugeordnet')
+            ? 'aus'
+            : 'ein'
         }`}
       </MenuItem>
     </ContextMenu>
   </ErrorBoundary>
 )
 
-export default enhance(TpopbeobFolder)
+export default enhance(BeobZugeordnetFolder)

@@ -48,7 +48,7 @@ import Tpop from './layers/TpopMarker'
 import TpopCluster from './layers/TpopMarkerCluster'
 import Beob from './layers/BeobMarker'
 import BeobCluster from './layers/BeobMarkerCluster'
-import TpopBeobAssignPolylines from './layers/TpopBeobAssignPolylines'
+import BeobZugeordnetAssignPolylines from './layers/BeobZugeordnetAssignPolylines'
 import MeasureControl from './MeasureControl'
 import FullScreenControl from './FullScreenControl'
 import DrawControl from './DrawControl'
@@ -103,7 +103,7 @@ const Karte = ({ store }: { store: Object }) => {
     Tpop: () => {
       if (
         store.map.beob.assigning ||
-        activeApfloraLayers.includes('TpopBeobAssignPolylines')
+        activeApfloraLayers.includes('BeobZugeordnetAssignPolylines')
       ) {
         return (
           <Tpop
@@ -122,7 +122,7 @@ const Karte = ({ store }: { store: Object }) => {
     BeobNichtBeurteilt: () => {
       if (
         store.map.beob.assigning ||
-        activeApfloraLayers.includes('TpopBeobAssignPolylines')
+        activeApfloraLayers.includes('BeobZugeordnetAssignPolylines')
       ) {
         return (
           <Beob
@@ -144,29 +144,29 @@ const Karte = ({ store }: { store: Object }) => {
         markers={store.map.beobNichtZuzuordnen.markersClustered}
       />
     ),
-    TpopBeob: () => {
+    BeobZugeordnet: () => {
       if (
         store.map.beob.assigning ||
-        activeApfloraLayers.includes('TpopBeobAssignPolylines')
+        activeApfloraLayers.includes('BeobZugeordnetAssignPolylines')
       ) {
         return (
           <Beob
-            visible={activeApfloraLayers.includes('TpopBeob')}
-            markers={store.map.tpopBeob.markers}
+            visible={activeApfloraLayers.includes('BeobZugeordnet')}
+            markers={store.map.beobZugeordnet.markers}
           />
         )
       }
       return (
         <BeobCluster
-          visible={activeApfloraLayers.includes('TpopBeob')}
-          markers={store.map.tpopBeob.markersClustered}
+          visible={activeApfloraLayers.includes('BeobZugeordnet')}
+          markers={store.map.beobZugeordnet.markersClustered}
         />
       )
     },
-    TpopBeobAssignPolylines: () => (
-      <TpopBeobAssignPolylines
-        visible={activeApfloraLayers.includes('TpopBeobAssignPolylines')}
-        assignPolylines={store.map.tpopBeob.assignPolylines}
+    BeobZugeordnetAssignPolylines: () => (
+      <BeobZugeordnetAssignPolylines
+        visible={activeApfloraLayers.includes('BeobZugeordnetAssignPolylines')}
+        assignPolylines={store.map.beobZugeordnet.assignPolylines}
       />
     ),
   }

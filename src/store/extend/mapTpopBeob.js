@@ -2,28 +2,28 @@
 import { extendObservable, computed } from 'mobx'
 
 import getBeobForMap from '../action/getBeobForMap'
-import getTpopBeobBounds from '../action/getTpopBeobBounds'
-import getTpopBeobMarkersClustered from '../action/getTpopBeobMarkersClustered'
-import getTpopBeobMarkers from '../action/getTpopBeobMarkers'
-import getTpopBeobAssignPolylines from '../action/getTpopBeobAssignPolylines'
+import getBeobZugeordnetBounds from '../action/getBeobZugeordnetBounds'
+import getBeobZugeordnetMarkersClustered from '../action/getBeobZugeordnetMarkersClustered'
+import getBeobZugeordnetMarkers from '../action/getBeobZugeordnetMarkers'
+import getBeobZugeordnetAssignPolylines from '../action/getBeobZugeordnetAssignPolylines'
 
 export default (store: Object): void => {
-  extendObservable(store.map.tpopBeob, {
+  extendObservable(store.map.beobZugeordnet, {
     highlightedIds: computed(
       () => {
         const { activeNodes } = store.tree
-        const mapFilterTpopBeob = store.map.mapFilter.tpopBeob
-        if (mapFilterTpopBeob.length > 0) {
-          return mapFilterTpopBeob
+        const mapFilterBeobZugeordnet = store.map.mapFilter.beobZugeordnet
+        if (mapFilterBeobZugeordnet.length > 0) {
+          return mapFilterBeobZugeordnet
         }
-        if (activeNodes.tpopbeob) {
-          return [activeNodes.tpopbeob]
+        if (activeNodes.beobZugeordnet) {
+          return [activeNodes.beobZugeordnet]
         } else if (activeNodes.tpop) {
-          return store.map.tpopBeob.beobs
+          return store.map.beobZugeordnet.beobs
             .filter(b => !b.nicht_zuordnen && b.tpop_id === activeNodes.tpop)
             .map(b => b.id)
         } else if (activeNodes.pop) {
-          return store.map.tpopBeob.beobs
+          return store.map.beobZugeordnet.beobs
             .filter(b => {
               if (!b.nicht_zuordnen && b.tpop_id) {
                 const tpop = store.table.tpop.get(b.tpop_id)
@@ -39,16 +39,16 @@ export default (store: Object): void => {
         }
         return []
       },
-      { name: 'mapTpopBeobHighlightedIds' }
+      { name: 'mapBeobZugeordnetHighlightedIds' }
     ),
-    markersClustered: computed(() => getTpopBeobMarkersClustered(store), {
-      name: 'mapTpopBeobMarkersClustered',
+    markersClustered: computed(() => getBeobZugeordnetMarkersClustered(store), {
+      name: 'mapBeobZugeordnetMarkersClustered',
     }),
-    markers: computed(() => getTpopBeobMarkers(store), {
-      name: 'mapTpopBeobMarkers',
+    markers: computed(() => getBeobZugeordnetMarkers(store), {
+      name: 'mapBeobZugeordnetMarkers',
     }),
-    assignPolylines: computed(() => getTpopBeobAssignPolylines(store), {
-      name: 'mapTpopBeobAssignPolylines',
+    assignPolylines: computed(() => getBeobZugeordnetAssignPolylines(store), {
+      name: 'mapBeobZugeordnetAssignPolylines',
     }),
     beobs: computed(
       () =>
@@ -56,19 +56,22 @@ export default (store: Object): void => {
           const beob = store.table.beob.get(b.id)
           return beob && !beob.nicht_zuordnen && beob.tpop_id
         }),
-      { name: 'mapTpopBeobBeobs' }
+      { name: 'mapBeobZugeordnetBeobs' }
     ),
-    bounds: computed(() => getTpopBeobBounds(store.map.tpopBeob.beobs), {
-      name: 'mapTpopBeobBounds',
-    }),
+    bounds: computed(
+      () => getBeobZugeordnetBounds(store.map.beobZugeordnet.beobs),
+      {
+        name: 'mapBeobZugeordnetBounds',
+      }
+    ),
     boundsOfHighlightedIds: computed(
       () =>
-        getTpopBeobBounds(
-          store.map.tpopBeob.beobs.filter(b =>
-            store.map.tpopBeob.highlightedIds.includes(b.id)
+        getBeobZugeordnetBounds(
+          store.map.beobZugeordnet.beobs.filter(b =>
+            store.map.beobZugeordnet.highlightedIds.includes(b.id)
           )
         ),
-      { name: 'mapTpopBeobBoundsOfHighlightedIds' }
+      { name: 'mapBeobZugeordnetBoundsOfHighlightedIds' }
     ),
   })
 }
