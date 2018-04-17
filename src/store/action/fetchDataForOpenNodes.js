@@ -80,7 +80,6 @@ const fetchDataForOpenNodes = (
         store.fetchTable('ap_umsetzung_werte')
         store.fetchTable('apart')
         store.fetchBeob(activeNodes.ap)
-        store.fetchBeobzuordnung(activeNodes.ap)
         store.fetchTable('pop_status_werte')
         if (showTpop) {
           store.fetchTpopForAp(activeNodes.ap)

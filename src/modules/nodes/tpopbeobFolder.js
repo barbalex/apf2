@@ -29,7 +29,7 @@ export default (
     t => t.tpop_id === tpopId
   ).length
   let message = childrenLength
-  if (store.loading.includes('tpopbeob')) {
+  if (store.loading.includes('beob')) {
     message = '...'
   }
   if (tree.nodeLabelFilter.get('tpopbeob')) {

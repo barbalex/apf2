@@ -9,6 +9,12 @@ ALTER TABLE apflora.beob RENAME "Datum" TO datum;
 ALTER TABLE apflora.beob RENAME "Autor" TO autor;
 ALTER TABLE apflora.beob RENAME "X" TO x;
 ALTER TABLE apflora.beob RENAME "Y" TO y;
+ALTER TABLE apflora.beob ADD COLUMN quelle_id integer Default Null REFERENCES beob.beob_quelle (id) ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE apflora.beob ADD COLUMN tpop_id integer DEFAULT NULL REFERENCES apflora.tpop (id) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE apflora.beob ADD COLUMN nicht_zuordnen boolean default false;
+ALTER TABLE apflora.beob ADD COLUMN bemerkungen text;
+ALTER TABLE apflora.beob ADD COLUMN changed date DEFAULT NOW();
+ALTER TABLE apflora.beob ADD COLUMN changed_by varchar(20) DEFAULT current_setting('request.jwt.claim.username', true);
 
 -- add data for art_id
 CREATE INDEX ON apflora.beob USING btree (art_id_old);
@@ -27,6 +33,11 @@ ALTER TABLE apflora.beob ALTER COLUMN id_old SET DEFAULT null;
 COMMENT ON COLUMN apflora.beob.id IS 'Primärschlüssel';
 COMMENT ON COLUMN apflora.beob.id_old IS 'Frühere id';
 COMMENT ON COLUMN apflora.beob.art_id_old IS 'Frühere Art id (=SISF2-Nr)';
+COMMENT ON COLUMN apflora.beob.tpop_id IS 'Dieser Teilpopulation wurde die Beobachtung zugeordnet. Fremdschlüssel aus der Tabelle "tpop"';
+COMMENT ON COLUMN apflora.beob.nicht_zuordnen IS 'Wird ja gesetzt, wenn eine Beobachtung keiner Teilpopulation zugeordnet werden kann. Sollte im Bemerkungsfeld begründet werden. In der Regel ist die Artbestimmung zweifelhaft. Oder die Beobachtung ist nicht (genau genug) lokalisierbar';
+COMMENT ON COLUMN apflora.beob.bemerkungen IS 'Bemerkungen zur Zuordnung';
+COMMENT ON COLUMN apflora.beob.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
+COMMENT ON COLUMN apflora.beob.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
 -- drop existing indexes
 DROP index IF EXISTS apflora.apflora."beob_ArtId_idx";
@@ -41,21 +52,27 @@ CREATE INDEX ON apflora.beob USING btree (quelle_id);
 CREATE INDEX ON apflora.beob USING btree (art_id);
 CREATE INDEX ON apflora.beob USING btree (x);
 CREATE INDEX ON apflora.beob USING btree (y);
+CREATE INDEX ON apflora.beob USING btree (quelle_id);
+CREATE INDEX ON apflora.beob USING btree (tpop_id);
+CREATE INDEX ON apflora.beob USING btree (nicht_zuordnen);
 
 -- change n-sides:
 
 -- beob_projekt
 DROP TABLE apflora.beob_projekt;
 
+-- TODO
 -- tpopbeob
 ALTER TABLE apflora.tpopbeob RENAME beob_id TO beob_id_old;
 DROP index IF EXISTS apflora.apflora."tpopbeob_beob_id_idx";
 ALTER TABLE apflora.tpopbeob ADD COLUMN beob_id UUID DEFAULT NULL REFERENCES apflora.beob (id) ON DELETE CASCADE ON UPDATE CASCADE;
 CREATE INDEX ON apflora.beob USING btree (id_old);
 CREATE INDEX ON apflora.tpopbeob USING btree (id_old);
+
 UPDATE apflora.tpopbeob SET beob_id = (
   SELECT id FROM apflora.beob WHERE id_old = apflora.tpopbeob.beob_id_old
 ) WHERE beob_id_old IS NOT NULL;
+
 CREATE INDEX ON apflora.tpopbeob USING btree (beob_id);
 ALTER TABLE apflora.tpopbeob DROP COLUMN beob_id_old CASCADE;
 COMMENT ON COLUMN apflora.tpopbeob.beob_id IS 'Zugehörige Beobachtung. Fremdschlüssel aus der Tabelle "beob"';
@@ -68,14 +85,29 @@ UPDATE apflora.apart SET art_id = (
 ) WHERE taxid IS NOT NULL;
 alter table apflora.apart drop column taxid;
 
+-- change n-sides of tpopbeob?
+DROP TRIGGER IF EXISTS beobzuordnung_on_update_set_mut ON apflora.tpopbeob;
+DROP TRIGGER IF EXISTS beob_on_update_set_mut ON apflora.beob;
+DROP FUNCTION IF EXISTS beob_on_update_set_mut();
+CREATE FUNCTION beob_on_update_set_mut() RETURNS trigger AS $beob_on_update_set_mut$
+  BEGIN
+    NEW.changed_by = current_setting('request.jwt.claim.username', true);
+    NEW.changed = NOW();
+    RETURN NEW;
+  END;
+$beob_on_update_set_mut$ LANGUAGE plpgsql;
+
+CREATE TRIGGER beob_on_update_set_mut BEFORE UPDATE OR INSERT ON apflora.beob
+  FOR EACH ROW EXECUTE PROCEDURE beob_on_update_set_mut();
+
 -- done: make sure createTable is correct
--- done: rename in sql
--- done: rename in js
+-- TODO: rename in sql
+-- TODO: rename in js
 -- TODO: check if old id was used somewhere. If so: rename that field, add new one and update that
 -- TODO: add all views, functions, triggers containing this table to this file
+-- TODO: replace all callst to tpopbeob in views etc.
 -- TODO: run migration sql in dev
 -- TODO: restart postgrest and test app
--- TODO: special ap functions work?
 -- TODO: CHECK child tables: are they correct?
 -- TODO: update js and run this file on server
 -- TODO: restart postgrest

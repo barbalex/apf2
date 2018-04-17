@@ -1,5 +1,5 @@
 // @flow
-import { runInAction, computed } from 'mobx'
+import { runInAction } from 'mobx'
 import axios from 'axios'
 import cloneDeep from 'lodash/cloneDeep'
 
@@ -8,7 +8,6 @@ import recordValuesForWhichTableDataWasFetched from '../../modules/recordValuesF
 const writeToStore = (store, data) => {
   runInAction(() => {
     data.forEach(beob => {
-      beob.tpopbeob = computed(() => store.table.tpopbeob.get(beob.id))
       store.table.beob.set(beob.id, beob)
     })
   })

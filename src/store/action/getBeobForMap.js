@@ -16,8 +16,6 @@ export default (store: Object): Array<Object> => {
       const beob = clone(bb)
       // add KoordWgs84
       beob.KoordWgs84 = epsg2056to4326(beob.x, beob.y)
-      // add tpopbeob
-      beob.tpopbeob = table.tpopbeob.get(beob.id)
       return beob
     })
     .filter(beob => !!beob.KoordWgs84)

@@ -1,20 +1,4 @@
--- this view is used to fetch tpopbeob for ap
 DROP VIEW IF EXISTS apflora.v_tpopbeob CASCADE;
-DROP VIEW IF EXISTS apflora.v_tpopbeob_for_ap CASCADE;
-CREATE OR REPLACE VIEW apflora.v_tpopbeob_for_ap AS
-SELECT
-  apflora.tpopbeob.*,
-  apflora.beob.art_id,
-  apflora.pop.ap_id
-FROM
-  apflora.tpopbeob
-  INNER JOIN
-    apflora.beob
-    ON apflora.beob.id = apflora.tpopbeob.beob_id
-  INNER JOIN apflora.tpop
-    INNER JOIN apflora.pop
-    ON apflora.tpop.pop_id = apflora.pop.id
-  ON apflora.tpopbeob.tpop_id = apflora.tpop.id;
 
 DROP VIEW IF EXISTS apflora.v_tpop_for_ap CASCADE;
 CREATE OR REPLACE VIEW apflora.v_tpop_for_ap AS
@@ -3861,10 +3845,10 @@ SELECT
   END AS "Distanz zur Teilpopulation (m)",
   apflora.beob.datum,
   apflora.beob.autor,
-  apflora.tpopbeob.nicht_zuordnen,
-  apflora.tpopbeob.bemerkungen,
-  apflora.tpopbeob.changed,
-  apflora.tpopbeob.changed_by
+  apflora.beob.nicht_zuordnen,
+  apflora.beob.bemerkungen,
+  apflora.beob.changed,
+  apflora.beob.changed_by
 FROM
   (((apflora.beob
   INNER JOIN
@@ -3880,14 +3864,11 @@ FROM
     apflora.beob_quelle
     ON beob.quelle_id = beob_quelle.id)
   LEFT JOIN
-    apflora.tpopbeob
+    apflora.tpop
+    ON apflora.tpop.id = apflora.beob.tpop_id
     LEFT JOIN
-      apflora.tpop
-      ON apflora.tpop.id = apflora.tpopbeob.tpop_id
-      LEFT JOIN
-        apflora.pop
-        ON apflora.pop.id = apflora.tpop.pop_id
-    ON apflora.tpopbeob.beob_id = apflora.beob.id
+      apflora.pop
+      ON apflora.pop.id = apflora.tpop.pop_id
 WHERE
   apflora.ae_eigenschaften.taxid > 150
 ORDER BY
@@ -3929,10 +3910,10 @@ SELECT
   END AS "Distanz zur Teilpopulation (m)",
   apflora.beob.datum,
   apflora.beob.autor,
-  apflora.tpopbeob.nicht_zuordnen,
-  apflora.tpopbeob.bemerkungen,
-  apflora.tpopbeob.changed,
-  apflora.tpopbeob.changed_by,
+  apflora.beob.nicht_zuordnen,
+  apflora.beob.bemerkungen,
+  apflora.beob.changed,
+  apflora.beob.changed_by,
   apflora.beob.data AS "Originaldaten"
 FROM
   (((apflora.beob
@@ -3949,14 +3930,11 @@ FROM
     apflora.beob_quelle
     ON beob.quelle_id = beob_quelle.id)
   LEFT JOIN
-    apflora.tpopbeob
+    apflora.tpop
+    ON apflora.tpop.id = apflora.beob.tpop_id
     LEFT JOIN
-      apflora.tpop
-      ON apflora.tpop.id = apflora.tpopbeob.tpop_id
-      LEFT JOIN
-        apflora.pop
-        ON apflora.pop.id = apflora.tpop.pop_id
-    ON apflora.tpopbeob.beob_id = apflora.beob.id
+      apflora.pop
+      ON apflora.pop.id = apflora.tpop.pop_id
 WHERE
   apflora.ae_eigenschaften.taxid > 150
 ORDER BY
@@ -6700,20 +6678,17 @@ GROUP BY
 DROP VIEW IF EXISTS apflora.v_qk_tpop_erloschenundrelevantaberletztebeobvor1950_maxbeobjahr CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk_tpop_erloschenundrelevantaberletztebeobvor1950_maxbeobjahr AS
 SELECT
- apflora.tpopbeob.tpop_id as id,
+ apflora.beob.tpop_id as id,
   max(
     date_part('year', apflora.beob.datum)
   ) AS "MaxJahr"
 FROM
-  apflora.tpopbeob
-INNER JOIN
   apflora.beob
-  ON apflora.tpopbeob.beob_id = apflora.beob.id
 WHERE
   apflora.beob.datum IS NOT NULL AND
-  apflora.tpopbeob.tpop_id IS NOT NULL
+  apflora.beob.tpop_id IS NOT NULL
 GROUP BY
-  apflora.tpopbeob.tpop_id;
+  apflora.beob.tpop_id;
 
 DROP VIEW IF EXISTS apflora.v_apber_pop_uebersicht CASCADE;
 CREATE OR REPLACE VIEW apflora.v_apber_pop_uebersicht AS

@@ -35,7 +35,6 @@ function Store(): void {
   this.updateProperty = () => {}
   this.updatePropertyInDb = () => {}
   this.fetchTable = () => {}
-  this.fetchBeobzuordnung = () => {}
   this.fetchTableByParentId = () => {}
   this.fetchTpopForAp = () => {}
   this.fetchPopForAp = () => {}

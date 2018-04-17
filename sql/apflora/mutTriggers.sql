@@ -115,18 +115,18 @@ $assozart_on_update_set_mut$ LANGUAGE plpgsql;
 CREATE TRIGGER assozart_on_update_set_mut BEFORE UPDATE OR INSERT ON apflora.assozart
   FOR EACH ROW EXECUTE PROCEDURE assozart_on_update_set_mut();
 
-DROP TRIGGER IF EXISTS beobzuordnung_on_update_set_mut ON apflora.tpopbeob;
-DROP FUNCTION IF EXISTS beobzuordnung_on_update_set_mut();
-CREATE FUNCTION beobzuordnung_on_update_set_mut() RETURNS trigger AS $beobzuordnung_on_update_set_mut$
+DROP TRIGGER IF EXISTS beob_on_update_set_mut ON apflora.beob;
+DROP FUNCTION IF EXISTS beob_on_update_set_mut();
+CREATE FUNCTION beob_on_update_set_mut() RETURNS trigger AS $beob_on_update_set_mut$
   BEGIN
     NEW.changed_by = current_setting('request.jwt.claim.username', true);
     NEW.changed = NOW();
     RETURN NEW;
   END;
-$beobzuordnung_on_update_set_mut$ LANGUAGE plpgsql;
+$beob_on_update_set_mut$ LANGUAGE plpgsql;
 
-CREATE TRIGGER beobzuordnung_on_update_set_mut BEFORE UPDATE OR INSERT ON apflora.tpopbeob
-  FOR EACH ROW EXECUTE PROCEDURE beobzuordnung_on_update_set_mut();
+CREATE TRIGGER beob_on_update_set_mut BEFORE UPDATE OR INSERT ON apflora.beob
+  FOR EACH ROW EXECUTE PROCEDURE beob_on_update_set_mut();
 
 DROP TRIGGER IF EXISTS projekt_on_update_set_mut ON apflora.projekt;
 DROP FUNCTION IF EXISTS projekt_on_update_set_mut();

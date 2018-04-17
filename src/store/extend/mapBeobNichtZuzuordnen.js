@@ -25,16 +25,9 @@ export default (store: Object): void => {
       () => getBeobNichtZuzuordnenMarkersClustered(store),
       { name: 'mapBeobNichtZuzuordnenMarkersClustered' }
     ),
-    beobs: computed(
-      () =>
-        getBeobForMap(store).filter(b => {
-          const tpopbeob = store.table.tpopbeob.get(b.id)
-          return (
-            tpopbeob && tpopbeob.nicht_zuordnen && tpopbeob.nicht_zuordnen === 1
-          )
-        }),
-      { name: 'mapBeobNichtZuzuordnenBeobs' }
-    ),
+    beobs: computed(() => getBeobForMap(store).filter(b => b.nicht_zuordnen), {
+      name: 'mapBeobNichtZuzuordnenBeobs',
+    }),
     bounds: computed(
       () => getBeobNichtZuzuordnenBounds(store.map.beobNichtZuzuordnen.beobs),
       { name: 'mapBeobNichtZuzuordnenBounds' }

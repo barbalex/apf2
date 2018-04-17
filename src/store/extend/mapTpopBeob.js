@@ -20,21 +20,13 @@ export default (store: Object): void => {
           return [activeNodes.tpopbeob]
         } else if (activeNodes.tpop) {
           return store.map.tpopBeob.beobs
-            .filter(b => {
-              const tpopbeob = store.table.tpopbeob.get(b.id)
-              return (
-                tpopbeob &&
-                !tpopbeob.nicht_zuordnen &&
-                tpopbeob.tpop_id === activeNodes.tpop
-              )
-            })
+            .filter(b => !b.nicht_zuordnen && b.tpop_id === activeNodes.tpop)
             .map(b => b.beob_id)
         } else if (activeNodes.pop) {
           return store.map.tpopBeob.beobs
             .filter(b => {
-              const tpopbeob = store.table.tpopbeob.get(b.id)
-              if (tpopbeob && !tpopbeob.nicht_zuordnen && tpopbeob.tpop_id) {
-                const tpop = store.table.tpop.get(tpopbeob.tpop_id)
+              if (!b.nicht_zuordnen && b.tpop_id) {
+                const tpop = store.table.tpop.get(b.tpop_id)
                 if (tpop) {
                   const popId = tpop.pop_id
                   return popId && popId === activeNodes.pop

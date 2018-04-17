@@ -24,7 +24,7 @@ export default (
     .filter(b => {
       const beob = store.table.beob.get(b.beob_id)
       const artId = beob ? beob.art_id : null
-      return artId && apArten.includes(artId)
+      return !!artId && apArten.includes(artId)
     })
     .map((el, index) => {
       const beobId = el.beob_id

@@ -1850,12 +1850,12 @@ WHERE
       AND apflora.tpopkontrzaehl.anzahl > 0
   )
   AND apflora.tpop.id IN (
-    SELECT apflora.tpopbeob.tpop_id
+    SELECT apflora.beob.tpop_id
     FROM
-      apflora.tpopbeob
+      apflora.beob
       INNER JOIN
         apflora.v_qk_tpop_erloschenundrelevantaberletztebeobvor1950_maxbeobjahr
-        ON apflora.tpopbeob.tpop_id = apflora.v_qk_tpop_erloschenundrelevantaberletztebeobvor1950_maxbeobjahr.id
+        ON apflora.beob.tpop_id = apflora.v_qk_tpop_erloschenundrelevantaberletztebeobvor1950_maxbeobjahr.id
     WHERE
       apflora.v_qk_tpop_erloschenundrelevantaberletztebeobvor1950_maxbeobjahr."MaxJahr" < 1950
   )

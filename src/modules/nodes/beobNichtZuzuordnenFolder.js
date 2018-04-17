@@ -7,12 +7,13 @@ export default (
   projId: number,
   apId: number
 ): Array<Object> => {
+  const { filteredAndSorted } = tree
   // fetch sorting indexes of parents
-  const projIndex = findIndex(tree.filteredAndSorted.projekt, {
+  const projIndex = findIndex(filteredAndSorted.projekt, {
     ProjId: projId,
   })
   const apIndex = findIndex(
-    tree.filteredAndSorted.ap.filter(a => a.proj_id === projId),
+    filteredAndSorted.ap.filter(a => a.proj_id === projId),
     { id: apId }
   )
 
@@ -20,12 +21,18 @@ export default (
     .filter(v => v.ap_id === apId)
     .map(v => v.art_id)
 
-  const beobNichtZuzuordnenNodesLength = tree.filteredAndSorted.beobNichtZuzuordnen.filter(
-    b => apArten.includes(b.art_id)
+  const beobNichtZuzuordnenNodesLength = filteredAndSorted.beobNichtZuzuordnen.filter(
+    b => {
+      const beob = store.table.beob.get(b.beob_id)
+      console.log('beob:', beob)
+      const artId = beob ? beob.art_id : null
+      console.log('artId:', artId)
+      return !!artId && apArten.includes(artId)
+    }
   ).length
 
   let message = beobNichtZuzuordnenNodesLength
-  if (store.loading.includes('tpopbeob')) {
+  if (store.loading.includes('beob')) {
     message = '...'
   }
   if (tree.nodeLabelFilter.get('beobNichtZuzuordnen')) {

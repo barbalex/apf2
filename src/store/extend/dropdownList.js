@@ -2,7 +2,6 @@
 import { extendObservable, computed } from 'mobx'
 
 import sortBy from 'lodash/sortBy'
-import filter from 'lodash/filter'
 
 export default (store: Object): void => {
   extendObservable(store.dropdownList, {
@@ -34,26 +33,24 @@ export default (store: Object): void => {
     ),
     artListForAp: computed(
       () => {
-        const alreadyUsedApIds = Array.from(store.table.ap.keys()).map(a => a)
-        // let user choose store ApArtId
-        const apArtIdsNotToShow = alreadyUsedApIds.filter(
-          r => r !== store.tree.activeNodes.ap
-        )
-        const artList = filter(
-          Array.from(store.table.ae_eigenschaften.values()),
-          r => !apArtIdsNotToShow.includes(r.id)
-        )
+        const aps = Array.from(store.table.ap.values())
+        const alreadyUsedArtIds = aps.map(a => a.art)
+        // let user choose active ap's art
+        const activeAp = store.table.ap.get(store.tree.activeNodes.ap)
+        const activeArtId = activeAp ? activeAp.art : null
+        const artIdsNotToShow = alreadyUsedArtIds.filter(r => r !== activeArtId)
+        const artList = Array.from(
+          store.table.ae_eigenschaften.values()
+        ).filter(r => !artIdsNotToShow.includes(r.id))
         return sortBy(artList, 'artname')
       },
       { name: 'dropdownListArtListForAp' }
     ),
     artnamen: computed(
-      () => {
-        let artnamen = Array.from(store.table.ae_eigenschaften.values())
-        artnamen = artnamen.map(a => a.artname).sort()
-        // artnamen.unshift('')
-        return artnamen
-      },
+      () =>
+        Array.from(store.table.ae_eigenschaften.values())
+          .map(a => a.artname)
+          .sort(),
       { name: 'dropdownListArtnamen' }
     ),
     tpopEntwicklungWerte: computed(

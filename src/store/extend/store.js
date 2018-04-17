@@ -2,7 +2,6 @@
 import { extendObservable, action } from 'mobx'
 
 import fetchTable from '../action/fetchTable'
-import fetchBeobzuordnungModule from '../action/fetchBeobzuordnung'
 import fetchTableByParentId from '../action/fetchTableByParentId'
 import fetchTpopForAp from '../action/fetchTpopForAp'
 import fetchPopForAp from '../action/fetchPopForAp'
@@ -203,9 +202,6 @@ export default (store: Object): void => {
     // primarily used for werte (domain) tables
     // and projekt
     fetchTable: action('fetchTable', tableName => fetchTable(store, tableName)),
-    fetchBeobzuordnung: action('fetchBeobzuordnung', apId =>
-      fetchBeobzuordnungModule(store, apId)
-    ),
     // fetch data of table for id of parent table
     // used for actual apflora data (but projekt)
     fetchTableByParentId: action(

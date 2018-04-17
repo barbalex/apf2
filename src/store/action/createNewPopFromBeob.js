@@ -67,7 +67,7 @@ export default async ({
       },
     })
   } catch (error) {
-    store.listError(error)
+    return store.listError(error)
   }
   if (!tpopResult || !tpopResult.data || !tpopResult.data[0]) {
     throw new Error(`Fehler bei der Erstellung einer neuen Teilpopulation`)
@@ -75,59 +75,16 @@ export default async ({
   tpop = tpopResult.data[0]
   store.table.tpop.set(tpop.id, tpop)
 
-  // create new tpopbeob
-  let beobzuordnungResult
-
   try {
-    // first check if tpopbeob already exists
-    beobzuordnungResult = await axios.get(`/tpopbeob?beob_id=eq.${beobId}`)
+    await axios.patch(`/beob?beob_id=eq.${beobId}`, {
+      tpop_id: tpop.id,
+    })
   } catch (error) {
-    store.listError(error)
+    return store.listError(error)
   }
-  if (
-    beobzuordnungResult &&
-    beobzuordnungResult.data &&
-    beobzuordnungResult.data[0]
-  ) {
-    try {
-      beobzuordnungResult = await axios.patch(
-        `/tpopbeob?beob_id=eq.${beobId}`,
-        {
-          tpop_id: tpop.id,
-        }
-      )
-    } catch (error) {
-      store.listError(error)
-    }
-  } else {
-    try {
-      beobzuordnungResult = await axios({
-        method: 'POST',
-        url: '/tpopbeob',
-        data: { beob_id: beobId, tpop_id: tpop.id },
-        headers: {
-          Prefer: 'return=representation',
-        },
-      })
-    } catch (error) {
-      store.listError(error)
-    }
-  }
-
-  if (
-    !beobzuordnungResult ||
-    !beobzuordnungResult.data ||
-    !beobzuordnungResult.data[0]
-  ) {
-    throw new Error(
-      `Fehler bei der Erstellung der neuen Beobachtungs-Zuordnung`
-    )
-  }
-  const tpopbeob = beobzuordnungResult.data[0]
 
   // insert this dataset in store.table
-  //store.table.tpopbeob.set(tpopbeob.id, tpopbeob)
-  store.table.tpopbeob.set(tpopbeob.beob_id, tpopbeob)
+  store.table.beob.set(beob.beob_id, beob)
 
   // set new activeNodeArray
   const newActiveNodeArray = [

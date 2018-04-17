@@ -4,7 +4,6 @@ import format from 'date-fns/format'
 export default (store: Object, tree: Object): Array<Object> => {
   const { table } = store
   const { nodeLabelFilter, apFilter } = tree
-  const tpopbeobs = Array.from(store.table.tpopbeob.values())
   const beobs = Array.from(table.beob.values())
   const aps = Array.from(table.ap.values())
   // grab beob as array and sort them by year
@@ -12,18 +11,15 @@ export default (store: Object, tree: Object): Array<Object> => {
     // filter by apFilter if exists
     .filter(beob => {
       if (!apFilter) return true
-      const ap = aps.filter(ap => ap.art === beob.art_id)
+      const ap = aps.find(ap => ap.art === beob.art_id)
       if (ap) return [1, 2, 3].includes(ap.bearbeitung)
       return false
     })
-    // fetch only those without tpopbeob
+    // fetch only those without beob
     .filter(beob => {
-      // we dont want beob that have tpopbeob that are
+      // we dont want beob that have beob that are
       // nicht_zuordnen or zugeordnet
-      const tpopbeob = tpopbeobs.filter(
-        v => v.beob_id === beob.id && (v.nicht_zuordnen || v.tpop_id)
-      )
-      return tpopbeob.length === 0
+      return !beob.nicht_zuordnen && !beob.tpop_id
     })
 
   beobNichtBeurteilt.forEach(el => {

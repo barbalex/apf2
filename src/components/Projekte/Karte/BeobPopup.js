@@ -22,20 +22,17 @@ const BeobPopup = ({ store, beob }: { store: Object, beob: Object }) => {
   let url = `${appBaseUrl}/Projekte/${projekt}/Arten/${ap}/nicht-beurteilte-Beobachtungen/${
     beob.id
   }`
-  const tpopbeob = store.table.tpopbeob.get(beob.id)
-  if (tpopbeob) {
-    if (tpopbeob.nicht_zuordnen && tpopbeob.nicht_zuordnen === 1) {
-      url = `${appBaseUrl}/Projekte/${projekt}/Arten/${ap}/nicht-zuzuordnende-Beobachtungen/${
-        beob.id
-      }`
-    } else {
-      const tpopId = tpopbeob.tpop_id
-      const tpop = store.table.tpop.get(tpopId)
-      const popId = tpop ? tpop.pop_id : ''
-      url = `${appBaseUrl}/Projekte/${projekt}/Arten/${ap}/Populationen/${popId}/Teil-Populationen/${tpopId}/Beobachtungen/${
-        beob.id
-      }`
-    }
+  if (beob.nicht_zuordnen && beob.nicht_zuordnen === 1) {
+    url = `${appBaseUrl}/Projekte/${projekt}/Arten/${ap}/nicht-zuzuordnende-Beobachtungen/${
+      beob.id
+    }`
+  } else {
+    const tpopId = beob.tpop_id
+    const tpop = store.table.tpop.get(tpopId)
+    const popId = tpop ? tpop.pop_id : ''
+    url = `${appBaseUrl}/Projekte/${projekt}/Arten/${ap}/Populationen/${popId}/Teil-Populationen/${tpopId}/Beobachtungen/${
+      beob.id
+    }`
   }
 
   const xKoord = beob.x

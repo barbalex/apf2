@@ -4,12 +4,12 @@ import format from 'date-fns/format'
 export default (store: Object, tree: Object): Array<Object> => {
   const { table } = store
   const { nodeLabelFilter } = tree
-  // grab tpopbeob as array and sort them by year
-  let tpopbeob = Array.from(table.tpopbeob.values()).filter(
+  // grab beob as array and sort them by year
+  let beob = Array.from(table.beob.values()).filter(
     b => !b.nicht_zuordnen && b.tpop_id
   )
   // map through all and create array of nodes
-  tpopbeob.forEach(el => {
+  beob.forEach(el => {
     let datum = ''
     let autor = ''
     let quelle = ''
@@ -33,10 +33,10 @@ export default (store: Object, tree: Object): Array<Object> => {
   // filter by nodeLabelFilter
   const filterString = nodeLabelFilter.get('tpopbeob')
   if (filterString) {
-    tpopbeob = tpopbeob.filter(p =>
+    beob = beob.filter(p =>
       p.label.toLowerCase().includes(filterString.toLowerCase())
     )
   }
   // sort by label and return
-  return sortBy(tpopbeob, 'label').reverse()
+  return sortBy(beob, 'label').reverse()
 }

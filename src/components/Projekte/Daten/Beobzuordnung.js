@@ -92,12 +92,8 @@ const getTpopZuordnenSource = (store: Object, tree: Object): Array<Object> => {
     .filter(t => popIdList.includes(t.pop_id))
     // with coordinates
     .filter(t => t.x && t.y)
-  // calculate their distance to this tpopbeob
-  const id =
-    activeDataset.table === 'tpopbeob'
-      ? activeDataset.row.beob_id
-      : activeDataset.row.id
-  const beob = store.table.beob.get(id)
+  // calculate their distance to this beob
+  const beob = store.table.beob.get(activeDataset.row.id)
   // beob loads later
   // prevent an error occuring if it does not yet exist
   // by passing back an empty array
@@ -154,7 +150,7 @@ const enhance = compose(
         if (activeDataset.table === 'beob') {
           insertBeobzuordnung(tree, activeDataset.row, fieldname, val)
         } else {
-          // tpopbeob was moved from one tpop-id to another
+          // beob was moved from one tpop-id to another
           updatePropertyInDb(tree, fieldname, val)
         }
       } else {
@@ -178,11 +174,7 @@ const Beobzuordnung = ({
 }) => {
   const { table } = store
   const { activeDataset } = tree
-  let beob = activeDataset.row
-  if (activeDataset.table === 'tpopbeob') {
-    const tpopbeob = activeDataset.row
-    beob = table.beob.get(tpopbeob.beob_id)
-  }
+  const beob = activeDataset.row
   const quelle = beob ? table.beob_quelle.get(beob.quelle_id) : null
   const quelleName = quelle && quelle.name ? quelle.name : '?'
   const beobTitle = `Informationen aus ${quelleName} (nicht veränderbar)`

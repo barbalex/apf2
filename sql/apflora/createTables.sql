@@ -231,28 +231,6 @@ COMMENT ON COLUMN apflora.assozart.changed IS 'Wann wurde der Datensatz zuletzt 
 COMMENT ON COLUMN apflora.assozart.changed_by IS 'Wer hat den Datensatz zuletzt geändert?';
 
 DROP TABLE IF EXISTS apflora.tpopbeob;
-CREATE TABLE apflora.tpopbeob (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
-  id_old integer,
-  beob_id integer PRIMARY KEY,
-  quelle_id integer Default Null REFERENCES beob.beob_quelle (id) ON DELETE SET NULL ON UPDATE CASCADE,
-  tpop_id integer DEFAULT NULL REFERENCES apflora.tpop (id) ON DELETE CASCADE ON UPDATE CASCADE,
-  nicht_zuordnen smallint DEFAULT NULL,
-  bemerkungen text,
-  changed date DEFAULT NOW(),
-  changed_by varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
-);
-COMMENT ON COLUMN apflora.tpopbeob.beob_id IS 'Primärschlüssel: ID aus beob.beob';
-COMMENT ON COLUMN apflora.tpopbeob.tpop_id IS 'Dieser Teilpopulation wurde die Beobachtung zugeordnet. Fremdschlüssel aus der Tabelle "tpop"';
-COMMENT ON COLUMN apflora.tpopbeob.nicht_zuordnen IS 'Ja oder nein. Wird ja gesetzt, wenn eine Beobachtung keiner Teilpopulation zugeordnet werden kann. Sollte im Bemerkungsfeld begründet werden. In der Regel ist die Artbestimmung zweifelhaft. Oder die Beobachtung ist nicht (genau genug) lokalisierbar';
-COMMENT ON COLUMN apflora.tpopbeob.bemerkungen IS 'Bemerkungen zur Zuordnung';
-COMMENT ON COLUMN apflora.tpopbeob.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
-COMMENT ON COLUMN apflora.tpopbeob.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
-CREATE INDEX ON apflora.tpopbeob USING btree (id);
-CREATE INDEX ON apflora.tpopbeob USING btree (beob_id);
-CREATE INDEX ON apflora.tpopbeob USING btree (quelle_id);
-CREATE INDEX ON apflora.tpopbeob USING btree (tpop_id);
-CREATE INDEX ON apflora.tpopbeob USING btree (nicht_zuordnen);
 
 DROP TABLE IF EXISTS apflora.projekt;
 CREATE TABLE apflora.projekt (
@@ -1065,16 +1043,30 @@ CREATE TABLE apflora.beob (
   x integer DEFAULT NULL,
   y integer DEFAULT NULL,
   -- maybe later add a geojson field for polygons?
-  data jsonb
+  data jsonb,
+  quelle_id integer Default Null REFERENCES beob.beob_quelle (id) ON DELETE SET NULL ON UPDATE CASCADE,
+  tpop_id integer DEFAULT NULL REFERENCES apflora.tpop (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  nicht_zuordnen boolean default false,
+  bemerkungen text,
+  changed date DEFAULT NOW(),
+  changed_by varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
 );
 CREATE INDEX ON apflora.beob USING btree (id);
 CREATE INDEX ON apflora.beob USING btree (quelle_id);
 CREATE INDEX ON apflora.beob USING btree (art_id);
 CREATE INDEX ON apflora.beob USING btree (x);
 CREATE INDEX ON apflora.beob USING btree (y);
+CREATE INDEX ON apflora.beob USING btree (quelle_id);
+CREATE INDEX ON apflora.beob USING btree (tpop_id);
+CREATE INDEX ON apflora.beob USING btree (nicht_zuordnen);
 COMMENT ON COLUMN apflora.beob.id IS 'Primärschlüssel';
 COMMENT ON COLUMN apflora.beob.id_old IS 'Frühere id';
 COMMENT ON COLUMN apflora.beob.art_id_old IS 'Frühere Art id (= SISF2-Nr)';
+COMMENT ON COLUMN apflora.beob.tpop_id IS 'Dieser Teilpopulation wurde die Beobachtung zugeordnet. Fremdschlüssel aus der Tabelle "tpop"';
+COMMENT ON COLUMN apflora.beob.nicht_zuordnen IS 'Wird ja gesetzt, wenn eine Beobachtung keiner Teilpopulation zugeordnet werden kann. Sollte im Bemerkungsfeld begründet werden. In der Regel ist die Artbestimmung zweifelhaft. Oder die Beobachtung ist nicht (genau genug) lokalisierbar';
+COMMENT ON COLUMN apflora.beob.bemerkungen IS 'Bemerkungen zur Zuordnung';
+COMMENT ON COLUMN apflora.beob.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
+COMMENT ON COLUMN apflora.beob.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
 -- beobprojekt is used to control
 -- what beob are seen in what projekt

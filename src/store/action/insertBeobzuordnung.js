@@ -1,5 +1,4 @@
 // @flow
-import axios from 'axios'
 
 const updateBeobzuordnungData = (
   store: Object,
@@ -15,12 +14,12 @@ const updateBeobzuordnungData = (
   tree.setOpenNodesFromActiveNodeArray()
 }
 
-const continueWithBeob = (
+export default async (
   store: Object,
   tree: Object,
   beob: Object,
   newKey: string,
-  newValue: string | number
+  newValue: number
 ): void => {
   const { projekt, ap } = tree.activeNodes
 
@@ -55,40 +54,4 @@ const continueWithBeob = (
     tree.setActiveNodeArray(newActiveNodeArray)
     updateBeobzuordnungData(store, tree, beob, newKey, newValue)
   }
-}
-
-export default async (
-  store: Object,
-  tree: Object,
-  beob: Object,
-  newKey: string,
-  newValue: number
-): void => {
-  /**
-   * newKey is either nicht_zuordnen or id
-   */
-  // get data from beob in activeDataset
-  // check if a corresponding tpopbeob already exists
-  const beobzuordnungExists = !!store.table.tpopbeob.get(beob.id)
-  if (beobzuordnungExists) {
-    return continueWithBeob(store, tree, beob, newKey, newValue)
-  }
-  // insert new dataset in db and fetch id
-  let response
-  try {
-    response = await axios({
-      method: 'POST',
-      url: '/tpopbeob',
-      data: { beob_id: beob.id },
-      headers: {
-        Prefer: 'return=representation',
-      },
-    })
-  } catch (error) {
-    return store.listError(error)
-  }
-  const row = response.data[0]
-  // insert this dataset in store.table
-  store.table.tpopbeob.set(row.beob_id, row)
-  continueWithBeob(store, tree, beob, newKey, newValue)
 }

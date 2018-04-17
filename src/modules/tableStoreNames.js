@@ -15,7 +15,6 @@ export default [
   'apart',
   'beobprojekt',
   'beob_quelle',
-  'tpopbeob',
   'ber',
   'erfkrit',
   'gemeinde',

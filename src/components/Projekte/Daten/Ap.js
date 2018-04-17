@@ -67,11 +67,12 @@ const enhance = compose(
     const { store } = props
     const { updateProperty, updatePropertyInDb, table, tree } = store
     const { activeDataset, activeNodes } = tree
-    const { ae_eigenschaften } = table
+    const { ae_eigenschaften, ap } = table
     let artwert = 'Diese Art hat keinen Artwert'
     let artname = ''
     if (activeNodes.ap && ae_eigenschaften.size > 0) {
-      const ae = ae_eigenschaften.get(activeNodes.ap)
+      const apArt = ap.get(activeNodes.ap).art
+      const ae = ae_eigenschaften.get(apArt)
       if (ae && ae.artwert) {
         artwert = ae.artwert
       }

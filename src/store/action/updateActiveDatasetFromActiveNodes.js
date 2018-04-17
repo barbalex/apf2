@@ -58,8 +58,8 @@ export default (store: Object, tree: Object): Object => {
         }
       } else if (aEl.beobNichtZuzuordnen) {
         activeDataset = {
-          table: 'tpopbeob',
-          row: table.tpopbeob.get(aEl.beobNichtZuzuordnen),
+          table: 'beob',
+          row: table.beob.get(aEl.beobNichtZuzuordnen),
           folder: null,
         }
       } else if (aEl.assozart) {
@@ -98,8 +98,8 @@ export default (store: Object, tree: Object): Object => {
         } else if (aEl.tpop) {
           if (aEl.tpopbeob) {
             activeDataset = {
-              table: 'tpopbeob',
-              row: table.tpopbeob.get(aEl.tpopbeob),
+              table: 'beob',
+              row: table.beob.get(aEl.tpopbeob),
               folder: null,
             }
           } else if (aEl.tpopber) {
