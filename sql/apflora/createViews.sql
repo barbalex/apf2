@@ -1,5 +1,7 @@
+-- this view is used to fetch tpopbeob for ap
 DROP VIEW IF EXISTS apflora.v_tpopbeob CASCADE;
-CREATE OR REPLACE VIEW apflora.v_tpopbeob AS
+DROP VIEW IF EXISTS apflora.v_tpopbeob_for_ap CASCADE;
+CREATE OR REPLACE VIEW apflora.v_tpopbeob_for_ap AS
 SELECT
   apflora.tpopbeob.*,
   apflora.beob.art_id,
@@ -12,7 +14,7 @@ FROM
   INNER JOIN apflora.tpop
     INNER JOIN apflora.pop
     ON apflora.tpop.pop_id = apflora.pop.id
-  ON apflora.tpopbeob.tpop_id = apflora.pop.id;
+  ON apflora.tpopbeob.tpop_id = apflora.tpop.id;
 
 DROP VIEW IF EXISTS apflora.v_tpop_for_ap CASCADE;
 CREATE OR REPLACE VIEW apflora.v_tpop_for_ap AS

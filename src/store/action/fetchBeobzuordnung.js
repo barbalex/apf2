@@ -45,7 +45,7 @@ export default (store: Object, apId: number): any => {
 
   store.loading.push('tpopbeob')
   axios
-    .get(`/v_tpopbeob?ap_id=eq.${apId}`)
+    .get(`/v_tpopbeob_for_ap?ap_id=eq.${apId}`)
     .then(({ data }) => {
       store.loading = store.loading.filter(el => el !== 'tpopbeob')
       // copy array without the individual objects being references

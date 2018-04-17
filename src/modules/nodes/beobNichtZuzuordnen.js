@@ -16,14 +16,15 @@ export default (
     { id: apId }
   )
 
+  const apArten = Array.from(store.table.apart.values())
+    .filter(v => v.ap_id === apId)
+    .map(v => v.art_id)
   // map through all and create array of nodes
   return filteredAndSorted.beobNichtZuzuordnen
     .filter(b => {
-      const beob = Array.from(store.table.beob.values()).find(
-        beo => beo.id === b.beob_id
-      )
+      const beob = store.table.beob.get(b.beob_id)
       const artId = beob ? beob.art_id : null
-      return artId === apId
+      return artId && apArten.includes(artId)
     })
     .map((el, index) => {
       const beobId = el.beob_id

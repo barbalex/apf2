@@ -5,7 +5,9 @@ export default (store: Object, tree: Object): Array<Object> => {
   const { table } = store
   const { nodeLabelFilter, apFilter } = tree
   // grab beobNichtZuzuordnen as array and sort them by year
-  let beobNichtZuzuordnen = Array.from(table.tpopbeob.values())
+  const aps = Array.from(table.ap.values())
+  const tpopbeob = Array.from(table.tpopbeob.values())
+  let beobNichtZuzuordnen = tpopbeob
     .filter(b => b.nicht_zuordnen === 1)
     // filter by apFilter
     .filter(b => {
@@ -15,7 +17,7 @@ export default (store: Object, tree: Object): Array<Object> => {
       let ap
       const beob = table.beob.get(b.beob_id)
       if (beob) {
-        ap = table.ap.get(beob.art_id)
+        ap = aps.filter(v => v.art === beob.art_id)
       }
       if (ap && ap.bearbeitung) {
         return [1, 2, 3].includes(ap.bearbeitung)
