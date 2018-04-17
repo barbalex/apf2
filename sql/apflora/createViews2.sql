@@ -1615,14 +1615,13 @@ SELECT
   apflora.tpop.klima AS tpop_klima,
   apflora.tpop.neigung AS tpop_neigung,
   apflora.tpop.beschreibung AS tpop_beschreibung,
-  apflora.tpop.kataster_nr AS "TPop Kataster-Nr",
-  apflora.tpop.apber_relevant AS "TPop fuer AP-Bericht relevant",
-  apflora.tpop.eigentuemer AS "TPop EigentuemerIn",
-  apflora.tpop.kontakt AS "TPop Kontakt vor Ort",
-  apflora.tpop.nutzungszone AS "TPop Nutzungszone",
-  apflora.tpop.bewirtschafter AS "TPop BewirtschafterIn",
-  apflora.tpop.bewirtschaftung AS "TPop Bewirtschaftung",
-  apflora.v_tpop_berjahrundmassnjahr."Jahr",
+  apflora.tpop.kataster_nr AS tpop_kataster_nr,
+  apflora.tpop.apber_relevant AS tpop_apber_relevant,
+  apflora.tpop.eigentuemer AS tpop_eigentuemer,
+  apflora.tpop.kontakt AS tpop_kontakt,
+  apflora.tpop.nutzungszone AS tpop_nutzungszone,
+  apflora.tpop.bewirtschafter AS tpop_bewirtschafter,
+  apflora.tpop.bewirtschaftung AS tpop_bewirtschaftung,
   apflora.tpopber.id AS "TPopBer Id",
   apflora.tpopber.jahr AS "TPopBer Jahr",
   tpop_entwicklung_werte.text AS "TPopBer Entwicklung",
@@ -1663,14 +1662,14 @@ FROM
     apflora.tpopmassnber
     ON
       (apflora.v_tpop_berjahrundmassnjahr.id = apflora.tpopmassnber.tpop_id)
-      AND (apflora.v_tpop_berjahrundmassnjahr."Jahr" = apflora.tpopmassnber.jahr))
+      AND (apflora.v_tpop_berjahrundmassnjahr.jahr = apflora.tpopmassnber.jahr))
   LEFT JOIN
     apflora.tpopmassn_erfbeurt_werte
     ON apflora.tpopmassnber.beurteilung = tpopmassn_erfbeurt_werte.code)
   LEFT JOIN
     apflora.tpopber
     ON
-      (apflora.v_tpop_berjahrundmassnjahr."Jahr" = apflora.tpopber.jahr)
+      (apflora.v_tpop_berjahrundmassnjahr.jahr = apflora.tpopber.jahr)
       AND (apflora.v_tpop_berjahrundmassnjahr.id = apflora.tpopber.tpop_id))
   LEFT JOIN
     apflora.tpop_entwicklung_werte
@@ -1679,13 +1678,13 @@ ORDER BY
   apflora.ae_eigenschaften.artname,
   apflora.pop.nr,
   apflora.tpop.nr,
-  apflora.v_tpop_berjahrundmassnjahr."Jahr";
+  apflora.v_tpop_berjahrundmassnjahr.jahr;
 
 DROP VIEW IF EXISTS apflora.v_pop_berjahrundmassnjahrvontpop CASCADE;
 CREATE OR REPLACE VIEW apflora.v_pop_berjahrundmassnjahrvontpop AS
 SELECT
   apflora.tpop.pop_id,
-  apflora.v_tpop_berjahrundmassnjahr."Jahr"
+  apflora.v_tpop_berjahrundmassnjahr.jahr
 FROM
   apflora.v_tpop_berjahrundmassnjahr
   INNER JOIN
@@ -1693,7 +1692,7 @@ FROM
     ON apflora.v_tpop_berjahrundmassnjahr.id = apflora.tpop.id
 GROUP BY
   apflora.tpop.pop_id,
-  apflora.v_tpop_berjahrundmassnjahr."Jahr";
+  apflora.v_tpop_berjahrundmassnjahr.jahr;
 
 DROP VIEW IF EXISTS apflora.v_tpopber_mitletzterid CASCADE;
 CREATE OR REPLACE VIEW apflora.v_tpopber_mitletzterid AS

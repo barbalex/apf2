@@ -195,34 +195,34 @@ SELECT
   apflora.tpop.klima AS tpop_klima,
   apflora.tpop.neigung AS tpop_neigung,
   apflora.tpop.beschreibung AS tpop_beschreibung,
-  apflora.tpop.kataster_nr AS "TPop Kataster-Nr",
-  apflora.tpop.apber_relevant AS "TPop fuer AP-Bericht relevant",
-  apflora.tpop.eigentuemer AS "TPop EigentuemerIn",
-  apflora.tpop.kontakt AS "TPop Kontakt vor Ort",
-  apflora.tpop.nutzungszone AS "TPop Nutzungszone",
-  apflora.tpop.bewirtschafter AS "TPop BewirtschafterIn",
-  apflora.tpop.bewirtschaftung AS "TPop Bewirtschaftung",
+  apflora.tpop.kataster_nr AS tpop_kataster_nr,
+  apflora.tpop.apber_relevant AS tpop_apber_relevant,
+  apflora.tpop.eigentuemer AS tpop_eigentuemer,
+  apflora.tpop.kontakt AS tpop_kontakt,
+  apflora.tpop.nutzungszone AS tpop_nutzungszone,
+  apflora.tpop.bewirtschafter AS tpop_bewirtschafter,
+  apflora.tpop.bewirtschaftung AS tpop_bewirtschaftung,
   apflora.tpopmassn.id,
-  apflora.tpopmassn.jahr AS "Massn Jahr",
-  apflora.tpopmassn.datum AS "Massn Datum",
-  tpopmassn_typ_werte.text AS "Massn Typ",
-  apflora.tpopmassn.beschreibung AS "Massn Massnahme",
-  apflora.adresse."AdrName" AS "Massn BearbeiterIn",
-  apflora.tpopmassn.bemerkungen::char AS "Massn Bemerkungen",
-  apflora.tpopmassn.plan_vorhanden AS "Massn Plan vorhanden",
-  apflora.tpopmassn.plan_bezeichnung AS "Massn Plan Bezeichnung",
-  apflora.tpopmassn.flaeche AS "Massn Flaeche m2",
-  apflora.tpopmassn.form AS "Massn Form der Ansiedlung",
-  apflora.tpopmassn.pflanzanordnung AS "Massn Pflanzanordnung",
-  apflora.tpopmassn.markierung AS "Massn Markierung",
-  apflora.tpopmassn.anz_triebe AS "Massn Anz Triebe",
-  apflora.tpopmassn.anz_pflanzen AS "Massn Pflanzen",
-  apflora.tpopmassn.anz_pflanzstellen AS "Massn Anz Pflanzstellen",
-  apflora.tpopmassn.wirtspflanze AS "Massn Wirtspflanze",
-  apflora.tpopmassn.herkunft_pop AS "Massn Herkunftspopulation",
-  apflora.tpopmassn.sammeldatum AS "Massn Sammeldatum",
-  apflora.tpopmassn.changed AS "Datensatz zuletzt geaendert",
-  apflora.tpopmassn.changed_by AS "Datensatz zuletzt geaendert von"
+  apflora.tpopmassn.jahr,
+  apflora.tpopmassn.datum,
+  tpopmassn_typ_werte.text AS typ,
+  apflora.tpopmassn.beschreibung,
+  apflora.adresse."AdrName" AS bearbeiter,
+  apflora.tpopmassn.bemerkungen,
+  apflora.tpopmassn.plan_vorhanden,
+  apflora.tpopmassn.plan_bezeichnung,
+  apflora.tpopmassn.flaeche,
+  apflora.tpopmassn.form,
+  apflora.tpopmassn.pflanzanordnung,
+  apflora.tpopmassn.markierung,
+  apflora.tpopmassn.anz_triebe,
+  apflora.tpopmassn.anz_pflanzen,
+  apflora.tpopmassn.anz_pflanzstellen,
+  apflora.tpopmassn.wirtspflanze,
+  apflora.tpopmassn.herkunft_pop,
+  apflora.tpopmassn.sammeldatum,
+  apflora.tpopmassn.changed,
+  apflora.tpopmassn.changed_by
 FROM
   ((((((apflora.ae_eigenschaften
   INNER JOIN
@@ -1114,6 +1114,7 @@ SELECT
   apflora.pop.x AS "POP_X",
   apflora.pop.y AS "POP_Y",
   apflora.tpop.id AS "TPOPID",
+  apflora.tpop.id AS "TPOPGUID",
   apflora.tpop.nr AS "TPOPNR",
   apflora.tpop.gemeinde AS "TPOPGEMEINDE",
   apflora.tpop.flurname AS "TPOPFLURNAME",
@@ -3422,7 +3423,7 @@ SELECT
   apflora.ae_eigenschaften.artname AS "APART",
   apflora.pop.id AS "POPGUID",
   apflora.pop.nr AS "POPNR",
-  apflora.tpop.id AS "TPOPID",
+  apflora.tpop.id AS "TPOPGUID",
   apflora.tpop.nr AS "TPOPNR",
   apflora.tpopkontr.id AS "KONTRGUID",
   apflora.tpopkontr.jahr AS "KONTRJAHR",
@@ -4351,13 +4352,13 @@ SELECT
   apflora.tpop.klima AS tpop_klima,
   apflora.tpop.neigung AS tpop_neigung,
   apflora.tpop.beschreibung AS tpop_beschreibung,
-  apflora.tpop.kataster_nr AS "TPop Kataster-Nr",
-  apflora.tpop.apber_relevant AS "TPop fuer AP-Bericht relevant",
-  apflora.tpop.eigentuemer AS "TPop EigentuemerIn",
-  apflora.tpop.kontakt AS "TPop Kontakt vor Ort",
-  apflora.tpop.nutzungszone AS "TPop Nutzungszone",
-  apflora.tpop.bewirtschafter AS "TPop BewirtschafterIn",
-  apflora.tpop.bewirtschaftung AS "TPop Bewirtschaftung",
+  apflora.tpop.kataster_nr AS tpop_kataster_nr,
+  apflora.tpop.apber_relevant AS tpop_apber_relevant,
+  apflora.tpop.eigentuemer AS tpop_eigentuemer,
+  apflora.tpop.kontakt AS tpop_kontakt,
+  apflora.tpop.nutzungszone AS tpop_nutzungszone,
+  apflora.tpop.bewirtschafter AS tpop_bewirtschafter,
+  apflora.tpop.bewirtschaftung AS tpop_bewirtschaftung,
   apflora.tpopmassnber.id AS "TPopMassnBer Id",
   apflora.tpopmassnber.jahr AS "TPopMassnBer Jahr",
   tpopmassn_erfbeurt_werte.text AS "TPopMassnBer Entwicklung",
@@ -4700,13 +4701,13 @@ SELECT
   apflora.tpop.klima AS tpop_klima,
   apflora.tpop.neigung AS tpop_neigung,
   apflora.tpop.beschreibung AS tpop_beschreibung,
-  apflora.tpop.kataster_nr AS "TPop Kataster-Nr",
-  apflora.tpop.apber_relevant AS "TPop fuer AP-Bericht relevant",
-  apflora.tpop.eigentuemer AS "TPop EigentuemerIn",
-  apflora.tpop.kontakt AS "TPop Kontakt vor Ort",
-  apflora.tpop.nutzungszone AS "TPop Nutzungszone",
-  apflora.tpop.bewirtschafter AS "TPop BewirtschafterIn",
-  apflora.tpop.bewirtschaftung AS "TPop Bewirtschaftung",
+  apflora.tpop.kataster_nr AS tpop_kataster_nr,
+  apflora.tpop.apber_relevant AS tpop_apber_relevant,
+  apflora.tpop.eigentuemer AS tpop_eigentuemer,
+  apflora.tpop.kontakt AS tpop_kontakt,
+  apflora.tpop.nutzungszone AS tpop_nutzungszone,
+  apflora.tpop.bewirtschafter AS tpop_bewirtschafter,
+  apflora.tpop.bewirtschaftung AS tpop_bewirtschaftung,
   apflora.tpopkontr.tpop_id,
   apflora.tpopkontr.id AS "Kontr id",
   apflora.tpopkontr.jahr AS "Kontr Jahr",
@@ -4848,13 +4849,13 @@ SELECT
   apflora.tpop.klima AS tpop_klima,
   apflora.tpop.neigung AS tpop_neigung,
   apflora.tpop.beschreibung AS tpop_beschreibung,
-  apflora.tpop.kataster_nr AS "TPop Kataster-Nr",
-  apflora.tpop.apber_relevant AS "TPop fuer AP-Bericht relevant",
-  apflora.tpop.eigentuemer AS "TPop EigentuemerIn",
-  apflora.tpop.kontakt AS "TPop Kontakt vor Ort",
-  apflora.tpop.nutzungszone AS "TPop Nutzungszone",
-  apflora.tpop.bewirtschafter AS "TPop BewirtschafterIn",
-  apflora.tpop.bewirtschaftung AS "TPop Bewirtschaftung",
+  apflora.tpop.kataster_nr AS tpop_kataster_nr,
+  apflora.tpop.apber_relevant AS tpop_apber_relevant,
+  apflora.tpop.eigentuemer AS tpop_eigentuemer,
+  apflora.tpop.kontakt AS tpop_kontakt,
+  apflora.tpop.nutzungszone AS tpop_nutzungszone,
+  apflora.tpop.bewirtschafter AS tpop_bewirtschafter,
+  apflora.tpop.bewirtschaftung AS tpop_bewirtschaftung,
   apflora.tpopber.id AS "TPopBer Id",
   apflora.tpopber.jahr AS "TPopBer Jahr",
   tpop_entwicklung_werte.text AS "TPopBer Entwicklung",
@@ -4901,20 +4902,20 @@ DROP VIEW IF EXISTS apflora.v_tpop_berjahrundmassnjahr CASCADE;
 CREATE OR REPLACE VIEW apflora.v_tpop_berjahrundmassnjahr AS
 SELECT
   apflora.tpop.id,
-  apflora.tpopber.jahr as "Jahr"
+  apflora.tpopber.jahr
 FROM
   apflora.tpop
   INNER JOIN apflora.tpopber ON apflora.tpop.id = apflora.tpopber.tpop_id
 UNION DISTINCT SELECT
   apflora.tpop.id,
-  apflora.tpopmassnber.jahr as "Jahr"
+  apflora.tpopmassnber.jahr
 FROM
   apflora.tpop
   INNER JOIN
     apflora.tpopmassnber
     ON apflora.tpop.id = apflora.tpopmassnber.tpop_id
 ORDER BY
-  "Jahr";
+  jahr;
 
 DROP VIEW IF EXISTS apflora.v_tpop_kontrjahrundberjahrundmassnjahr CASCADE;
 CREATE OR REPLACE VIEW apflora.v_tpop_kontrjahrundberjahrundmassnjahr AS
