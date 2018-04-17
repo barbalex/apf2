@@ -21,9 +21,8 @@ const Container = styled.div`
 
 const enhance = compose(
   withHandlers({
-    onCheck: props => (e, isInputChecked) => {
+    onCheck: props => (e, val) => {
       const { updatePropertyInDb, fieldName } = props
-      const val = isInputChecked ? 1 : null
       updatePropertyInDb(props.tree, fieldName, val)
     },
   }),
@@ -48,7 +47,7 @@ const CheckboxWithInfo = ({
   <Container>
     <div>
       <Label label={label} />
-      <Checkbox checked={value === 1} onCheck={onCheck} />
+      <Checkbox checked={value} onCheck={onCheck} />
     </div>
     <InfoWithPopover>{popover}</InfoWithPopover>
   </Container>

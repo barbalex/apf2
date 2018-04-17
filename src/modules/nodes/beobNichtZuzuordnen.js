@@ -21,31 +21,23 @@ export default (
     .map(v => v.art_id)
   // map through all and create array of nodes
   return filteredAndSorted.beobNichtZuzuordnen
-    .filter(b => {
-      const beob = store.table.beob.get(b.beob_id)
-      const artId = beob ? beob.art_id : null
-      return !!artId && apArten.includes(artId)
-    })
-    .map((el, index) => {
-      const beobId = el.beob_id
-
-      return {
-        nodeType: 'table',
-        menuType: 'beobNichtZuzuordnen',
-        id: beobId,
-        parentId: apId,
-        urlLabel: beobId,
-        label: el.label,
-        url: [
-          'Projekte',
-          projId,
-          'Arten',
-          apId,
-          'nicht-zuzuordnende-Beobachtungen',
-          beobId,
-        ],
-        sort: [projIndex, 1, apIndex, 10, index],
-        hasChildren: false,
-      }
-    })
+    .filter(b => !!b.art_id && apArten.includes(b.art_id))
+    .map((el, index) => ({
+      nodeType: 'table',
+      menuType: 'beobNichtZuzuordnen',
+      id: el.id,
+      parentId: apId,
+      urlLabel: el.id,
+      label: el.label,
+      url: [
+        'Projekte',
+        projId,
+        'Arten',
+        apId,
+        'nicht-zuzuordnende-Beobachtungen',
+        el.id,
+      ],
+      sort: [projIndex, 1, apIndex, 10, index],
+      hasChildren: false,
+    }))
 }

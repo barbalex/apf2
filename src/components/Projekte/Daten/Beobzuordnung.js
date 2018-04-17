@@ -154,7 +154,7 @@ const enhance = compose(
           updatePropertyInDb(tree, fieldname, val)
         }
       } else {
-        deleteBeobzuordnung(tree, activeDataset.row.beob_id)
+        deleteBeobzuordnung(tree, activeDataset.row.id)
       }
     },
   }),
@@ -183,6 +183,10 @@ const Beobzuordnung = ({
     beob && beob.art_id ? store.table.ae_eigenschaften.get(beob.art_id) : null
   const artname = adbArt ? adbArt.artname : ''
   const artLabel = `Beobachtete Art: ${artname}`
+  console.log(
+    'activeDataset.row.nicht_zuordnen:',
+    activeDataset.row.nicht_zuordnen
+  )
 
   return (
     <ErrorBoundary>

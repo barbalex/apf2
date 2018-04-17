@@ -9,8 +9,8 @@ const updateBeobzuordnungData = (
 ): void => {
   store.updateProperty(tree, newKey, newValue)
   store.updatePropertyInDb(tree, newKey, newValue)
-  store.updateProperty(tree, 'beob_id', beob.id)
-  store.updatePropertyInDb(tree, 'beob_id', beob.id)
+  store.updateProperty(tree, 'id', beob.id)
+  store.updatePropertyInDb(tree, 'id', beob.id)
   tree.setOpenNodesFromActiveNodeArray()
 }
 

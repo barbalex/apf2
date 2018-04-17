@@ -1,5 +1,6 @@
 // @flow
 import axios from 'axios'
+import clone from 'lodash/clone'
 
 export default async (
   store: Object,
@@ -8,10 +9,11 @@ export default async (
 ): Promise<void> => {
   const { table } = store
   const { activeNodes } = tree
-  const beob = table.beob.get(beobId)
+  const beob = clone(table.beob.get(beobId))
   beob.tpop_id = null
   beob.nicht_zuordnen = false
   beob.bemerkungen = null
+  delete beob.label
   try {
     await axios.patch(`/beob?id=eq.${beobId}`, beob)
   } catch (error) {

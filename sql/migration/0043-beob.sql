@@ -64,8 +64,8 @@ DROP TABLE apflora.beob_projekt;
 UPDATE apflora.beob SET tpop_id = (
   SELECT tpop_id FROM apflora.tpopbeob WHERE beob_id = apflora.beob.id LIMIT 1
 );
-UPDATE apflora.beob SET nicht_zuordnen = (
-  SELECT nicht_zuordnen FROM apflora.tpopbeob WHERE beob_id = apflora.beob.id AND nicht_zuordnen === 1 LIMIT 1
+UPDATE apflora.beob SET nicht_zuordnen = true where id in (
+  SELECT distinct beob_id FROM apflora.tpopbeob WHERE nicht_zuordnen = 1
 );
 UPDATE apflora.beob SET bemerkungen = (
   SELECT bemerkungen FROM apflora.tpopbeob WHERE beob_id = apflora.beob.id LIMIT 1
@@ -98,12 +98,12 @@ CREATE TRIGGER beob_on_update_set_mut BEFORE UPDATE OR INSERT ON apflora.beob
   FOR EACH ROW EXECUTE PROCEDURE beob_on_update_set_mut();
 
 -- done: make sure createTable is correct
--- TODO: rename in sql
--- TODO: rename in js
--- TODO: check if old id was used somewhere. If so: rename that field, add new one and update that
--- TODO: add all views, functions, triggers containing this table to this file
--- TODO: replace all callst to tpopbeob in views etc.
--- TODO: run migration sql in dev
+-- done: rename in sql
+-- done: rename in js
+-- done: check if old id was used somewhere. If so: rename that field, add new one and update that
+-- done: add all views, functions, triggers containing this table to this file
+-- done: replace all callst to tpopbeob in views etc.
+-- done: run migration sql in dev
 -- TODO: restart postgrest and test app
 -- TODO: CHECK child tables: are they correct?
 -- TODO: update js and run this file on server

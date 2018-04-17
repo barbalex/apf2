@@ -8,7 +8,7 @@ export default (store: Object, tree: Object): Array<Object> => {
   const aps = Array.from(table.ap.values())
   const beob = Array.from(table.beob.values())
   let beobNichtZuzuordnen = beob
-    .filter(b => b.nicht_zuordnen === 1)
+    .filter(b => b.nicht_zuordnen)
     // filter by apFilter
     .filter(b => {
       if (!apFilter) return true
@@ -28,16 +28,13 @@ export default (store: Object, tree: Object): Array<Object> => {
     let datum = ''
     let autor = ''
     let quelle
-    const beob = table.beob.get(el.beob_id)
-    if (beob) {
-      if (beob.datum) {
-        datum = format(beob.datum, 'YYYY.MM.DD')
-      }
-      if (beob.autor) {
-        autor = beob.autor
-      }
-      quelle = table.beob_quelle.get(beob.quelle_id)
+    if (el.datum) {
+      datum = format(el.datum, 'YYYY.MM.DD')
     }
+    if (el.autor) {
+      autor = el.autor
+    }
+    quelle = table.beob_quelle.get(el.quelle_id)
     const quelleName = quelle && quelle.name ? quelle.name : ''
     el.label = `${datum || '(kein Datum)'}: ${autor ||
       '(kein Autor)'} (${quelleName})`

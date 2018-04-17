@@ -22,13 +22,7 @@ export default (
     .map(v => v.art_id)
 
   const beobNichtZuzuordnenNodesLength = filteredAndSorted.beobNichtZuzuordnen.filter(
-    b => {
-      const beob = store.table.beob.get(b.beob_id)
-      console.log('beob:', beob)
-      const artId = beob ? beob.art_id : null
-      console.log('artId:', artId)
-      return !!artId && apArten.includes(artId)
-    }
+    b => !!b.art_id && apArten.includes(b.art_id)
   ).length
 
   let message = beobNichtZuzuordnenNodesLength

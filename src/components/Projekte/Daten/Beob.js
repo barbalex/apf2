@@ -29,7 +29,7 @@ const Beob = ({
 }) => {
   const { row } = tree.activeDataset
   const width = isNaN(dimensions.width) ? 380 : dimensions.width
-  const beob = store.table.beob.get(row.beob_id || row.id)
+  const beob = store.table.beob.get(row.id)
   if (!beob) return null
   const beobFields = Object.entries(beob.data).filter(
     ([key, value]) => value || value === 0

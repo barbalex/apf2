@@ -277,8 +277,7 @@ SELECT
   apflora.tpop.y AS "TPOP_Y",
   apflora.tpopmassn.id AS "MASSNGUID",
   apflora.tpopmassn.jahr AS "MASSNJAHR",
-  -- need to convert date
-  apflora.tpopmassn.datum AS "MASSNDAT",
+  to_char(apflora.tpopmassn.datum, 'DD.MM.YY') AS "MASSNDAT",
   tpopmassn_typ_werte.text AS "MASSTYP",
   apflora.tpopmassn.beschreibung AS "MASSNMASSNAHME",
   apflora.adresse."AdrName" AS "MASSNBEARBEITER",
@@ -295,8 +294,7 @@ SELECT
   apflora.tpopmassn.wirtspflanze AS "MASSNWIRTSPFLANZEN",
   apflora.tpopmassn.herkunft_pop AS "MASSNHERKUNFTSPOP",
   apflora.tpopmassn.sammeldatum AS "MASSNSAMMELDAT",
-  -- need to convert date
-  apflora.tpopmassn.changed AS "MASSNCHANGEDAT",
+  to_char(apflora.tpopmassn.changed, 'DD.MM.YY') AS "MASSNCHANGEDAT",
   apflora.tpopmassn.changed_by AS "MASSNCHANGEBY"
 FROM
   ((((((apflora.ae_eigenschaften
@@ -1139,8 +1137,7 @@ SELECT
   apflora.tpop.nutzungszone AS "TPOP_NUTZUNGSZONE",
   apflora.tpop.bewirtschafter AS "TPOPBEWIRTSCHAFTER",
   apflora.tpop.bewirtschaftung AS "TPOPBEWIRTSCHAFTUNG",
-  -- TODO: convert
-  apflora.tpop.changed AS "TPOPCHANGEDAT",
+  to_char(apflora.tpop.changed, 'DD.MM.YY') AS "TPOPCHANGEDAT",
   apflora.tpop.changed AS "TPOPCHANGEBY"
 FROM
   ((((((apflora.ae_eigenschaften
@@ -3431,8 +3428,7 @@ SELECT
   apflora.tpop.nr AS "TPOPNR",
   apflora.tpopkontr.id AS "KONTRGUID",
   apflora.tpopkontr.jahr AS "KONTRJAHR",
-  --TODO: convert?
-  apflora.tpopkontr.datum AS "KONTRDAT",
+  to_char(apflora.tpopkontr.datum, 'DD.MM.YY') AS "KONTRDAT",
   apflora.tpopkontr_typ_werte."DomainTxt" AS "KONTRTYP",
   apflora.adresse."AdrName" AS "KONTRBEARBEITER",
   apflora.tpopkontr.ueberlebensrate AS "KONTRUEBERLEBENSRATE",
@@ -3472,8 +3468,7 @@ SELECT
   apflora.tpopkontr.vegetationshoehe_maximum AS "KONTRMAXHOEHEVEG",
   apflora.tpopkontr.vegetationshoehe_mittel AS "KONTRMITTELHOEHEVEG",
   apflora.tpopkontr.gefaehrdung AS "KONTRGEFAEHRDUNG",
-  -- TODO: convert
-  apflora.tpopkontr.changed AS "KONTRCHANGEDAT",
+  to_char(apflora.tpopkontr.changed, 'DD.MM.YY') AS "KONTRCHANGEDAT",
   apflora.tpopkontr.changed_by AS "KONTRCHANGEBY",
   string_agg(apflora.tpopkontrzaehl_einheit_werte.text, ', ') AS "ZAEHLEINHEITEN",
   array_to_string(array_agg(apflora.tpopkontrzaehl.anzahl), ', ') AS "ANZAHLEN",
