@@ -19,7 +19,7 @@ export default (
     features: beobsToUse.map(b => ({
       type: 'Feature',
       properties: {
-        BeobId: b.beob_id,
+        BeobId: b.id,
       },
       geometry: {
         type: 'Point',

@@ -108,7 +108,7 @@ export default async (
         value === 1
           ? 'nicht-zuzuordnende-Beobachtungen'
           : 'nicht-beurteilte-Beobachtungen'
-      newActiveNodeArray[5] = tree.activeDataset.row.beob_id
+      newActiveNodeArray[5] = tree.activeDataset.row.id
       tree.setActiveNodeArray(newActiveNodeArray.slice(0, 6))
     }
     // if for a beobZugeordnet tpop_id is set, url needs to change

@@ -13,9 +13,8 @@ export default (store: Object, tree: Object): Array<Object> => {
     .filter(b => {
       if (!apFilter) return true
       let ap
-      const beob = table.beob.get(b.beob_id)
-      if (beob) {
-        ap = aps.find(v => v.art === beob.art_id)
+      if (b) {
+        ap = aps.find(v => v.art === b.art_id)
       }
       if (ap && ap.bearbeitung) {
         return [1, 2, 3].includes(ap.bearbeitung)

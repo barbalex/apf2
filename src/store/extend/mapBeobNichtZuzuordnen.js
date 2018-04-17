@@ -36,7 +36,7 @@ export default (store: Object): void => {
       () =>
         getBeobNichtZuzuordnenBounds(
           store.map.beobNichtZuzuordnen.beobs.filter(b =>
-            store.map.beobNichtZuzuordnen.highlightedIds.includes(b.beob_id)
+            store.map.beobNichtZuzuordnen.highlightedIds.includes(b.id)
           )
         ),
       { name: 'mapBeobNichtZuzuordnenBoundsOfHighlightedIds' }

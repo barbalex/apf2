@@ -55,7 +55,7 @@ export default (store: Object): Array<Object> => {
             'Teil-Populationen',
             nearestTpopId,
             'Beobachtungen',
-            p.beob_id,
+            p.id,
           ]
           store.tree.setActiveNodeArray(newActiveNodeArray)
           updatePropertyInDb(tree, 'tpop_id', nearestTpopId)

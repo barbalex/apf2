@@ -40,9 +40,7 @@ export default async ({
   // if tpop was deleted: set beob free
   if (table === 'tpop') {
     const beob = Array.from(store.table.beob.values())
-    const beobzuordnungIds = beob
-      .filter(b => b.tpop_id === id)
-      .map(b => b.beob_id)
+    const beobzuordnungIds = beob.filter(b => b.tpop_id === id).map(b => b.id)
 
     beobzuordnungIds.forEach(id => {
       // empty zuordnung values

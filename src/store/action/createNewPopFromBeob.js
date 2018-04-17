@@ -76,7 +76,7 @@ export default async ({
   store.table.tpop.set(tpop.id, tpop)
 
   try {
-    await axios.patch(`/beob?beob_id=eq.${beobId}`, {
+    await axios.patch(`/beob?id=eq.${beobId}`, {
       tpop_id: tpop.id,
     })
   } catch (error) {
@@ -84,7 +84,7 @@ export default async ({
   }
 
   // insert this dataset in store.table
-  store.table.beob.set(beob.beob_id, beob)
+  store.table.beob.set(beob.id, beob)
 
   // set new activeNodeArray
   const newActiveNodeArray = [
