@@ -87,13 +87,14 @@ const enhance = compose(
       store,
       changeArtFuerEierlegendeWollmilchsau,
       artFuerEierlegendeWollmilchsau,
-    }) => ({ view, fileName, apId, kml }) =>
+    }) => ({ view, fileName, apIdName, apId, kml }) =>
       exportModule({
         store,
         changeArtFuerEierlegendeWollmilchsau,
         artFuerEierlegendeWollmilchsau,
         view,
         fileName,
+        apIdName,
         apId,
         kml,
       }),
@@ -147,6 +148,7 @@ const Exporte = ({
               onClick={() =>
                 downloadFromView({
                   view: 'v_ap',
+                  apIdName: 'id',
                   fileName: 'Arten',
                 })
               }

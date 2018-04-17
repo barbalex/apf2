@@ -22,7 +22,7 @@ CREATE OR REPLACE VIEW apflora.v_ap_anzmassnprojahr AS
 SELECT
   apflora.v_ap_massnjahre.id,
   apflora.v_ap_massnjahre.jahr,
-  COALESCE(apflora.v_ap_anzmassnprojahr0."AnzahlvonTPopMassnId", 0) AS "AnzahlMassnahmen"
+  COALESCE(apflora.v_ap_anzmassnprojahr0."AnzahlvonTPopMassnId", 0) AS anzahl_massnahmen
 FROM
   apflora.v_ap_massnjahre
   LEFT JOIN
@@ -39,7 +39,7 @@ CREATE OR REPLACE VIEW apflora.v_ap_anzmassnbisjahr AS
 SELECT
   apflora.v_ap_massnjahre.id,
   apflora.v_ap_massnjahre.jahr,
-  sum(apflora.v_ap_anzmassnprojahr."AnzahlMassnahmen") AS "AnzahlMassnahmen"
+  sum(apflora.v_ap_anzmassnprojahr.anzahl_massnahmen) AS anzahl_massnahmen
 FROM
   apflora.v_ap_massnjahre
   INNER JOIN
@@ -65,13 +65,13 @@ SELECT
   apflora.adresse."AdrName" AS bearbeiter,
   apflora.ae_eigenschaften.artwert,
   apflora.v_ap_anzmassnprojahr.jahr AS massn_jahr,
-  apflora.v_ap_anzmassnprojahr."AnzahlMassnahmen" AS massn_anzahl,
-  apflora.v_ap_anzmassnbisjahr."AnzahlMassnahmen" AS massn_anzahl_bisher,
+  apflora.v_ap_anzmassnprojahr.anzahl_massnahmen AS massn_anzahl,
+  apflora.v_ap_anzmassnbisjahr.anzahl_massnahmen AS massn_anzahl_bisher,
   CASE
     WHEN apflora.apber.jahr > 0
-    THEN 'Ja'
-    ELSE 'Nein'
-  END AS "Bericht erstellt"
+    THEN 'ja'
+    ELSE 'nein'
+  END AS bericht_erstellt
 FROM
   apflora.ae_eigenschaften
     INNER JOIN
@@ -98,7 +98,7 @@ FROM
             (apflora.v_ap_anzmassnprojahr.jahr = apflora.v_ap_anzmassnbisjahr.jahr)
             AND (apflora.v_ap_anzmassnprojahr.id = apflora.v_ap_anzmassnbisjahr.id))
         ON apflora.ap.id = apflora.v_ap_anzmassnprojahr.id)
-      ON apflora.ae_eigenschaften.id = apflora.ap.id
+      ON apflora.ae_eigenschaften.id = apflora.ap.art
 ORDER BY
   apflora.ae_eigenschaften.artname,
   apflora.v_ap_anzmassnprojahr.jahr;
@@ -180,7 +180,7 @@ CREATE OR REPLACE VIEW apflora.v_apber_uebe AS
 SELECT
   apflora.apber.*,
   apflora.ae_eigenschaften.artname,
-  apflora.v_ap_anzmassnbisjahr."AnzahlMassnahmen"
+  apflora.v_ap_anzmassnbisjahr.anzahl_massnahmen
 FROM
   apflora._variable AS "tblKonstanten_1"
   INNER JOIN
@@ -190,7 +190,7 @@ FROM
       INNER JOIN
         apflora.v_ap_apberrelevant
         ON apflora.ap.id = apflora.v_ap_apberrelevant.id)
-      ON apflora.ae_eigenschaften.id = apflora.ap.id)
+      ON apflora.ae_eigenschaften.id = apflora.ap.art)
     INNER JOIN
       (apflora._variable
       INNER JOIN
@@ -202,7 +202,7 @@ FROM
       ON apflora.ap.id = apflora.apber.ap_id)
     ON "tblKonstanten_1".apber_jahr = apflora.v_ap_anzmassnbisjahr.jahr
 WHERE
-  apflora.v_ap_anzmassnbisjahr."AnzahlMassnahmen" > 0
+  apflora.v_ap_anzmassnbisjahr.anzahl_massnahmen > 0
   AND apflora.apber.beurteilung = 1
   AND apflora.ap.bearbeitung BETWEEN 1 AND 3
 ORDER BY
@@ -221,7 +221,7 @@ FROM
       INNER JOIN
         apflora.v_ap_apberrelevant
         ON apflora.ap.id = apflora.v_ap_apberrelevant.id)
-      ON apflora.ae_eigenschaften.id = apflora.ap.id)
+      ON apflora.ae_eigenschaften.id = apflora.ap.art)
     INNER JOIN
       (apflora._variable
       INNER JOIN
@@ -233,7 +233,7 @@ FROM
       ON apflora.ap.id = apflora.apber.ap_id)
     ON "tblKonstanten_1".apber_jahr = apflora.v_ap_anzmassnbisjahr.jahr
 WHERE
-  apflora.v_ap_anzmassnbisjahr."AnzahlMassnahmen" > 0
+  apflora.v_ap_anzmassnbisjahr.anzahl_massnahmen > 0
   AND apflora.apber.beurteilung = 1
   AND apflora.ap.bearbeitung BETWEEN 1 AND 3;
 
@@ -261,7 +261,7 @@ FROM
       INNER JOIN
         apflora.v_ap_apberrelevant
         ON apflora.ap.id = apflora.v_ap_apberrelevant.id)
-      ON apflora.ae_eigenschaften.id = apflora.ap.id)
+      ON apflora.ae_eigenschaften.id = apflora.ap.art)
     INNER JOIN
       (apflora.apber
       INNER JOIN
@@ -272,7 +272,7 @@ FROM
         AND (apflora.ap.id = apflora.apber.ap_id)
 WHERE
   apflora.ap.bearbeitung BETWEEN 1 AND 3
-  AND "vApAnzMassnBisJahr_1"."AnzahlMassnahmen" = '0'
+  AND "vApAnzMassnBisJahr_1".anzahl_massnahmen = '0'
 ORDER BY
   apflora.ae_eigenschaften.artname;
 
@@ -280,7 +280,7 @@ DROP VIEW IF EXISTS apflora.v_apber_uebma CASCADE;
 CREATE OR REPLACE VIEW apflora.v_apber_uebma AS
 SELECT
   apflora.ae_eigenschaften.artname,
-  apflora.v_ap_anzmassnbisjahr."AnzahlMassnahmen"
+  apflora.v_ap_anzmassnbisjahr.anzahl_massnahmen
 FROM
   apflora._variable
   INNER JOIN
@@ -290,13 +290,13 @@ FROM
       INNER JOIN
         apflora.v_ap_apberrelevant
         ON apflora.ap.id = apflora.v_ap_apberrelevant.id)
-      ON apflora.ae_eigenschaften.id = apflora.ap.id)
+      ON apflora.ae_eigenschaften.id = apflora.ap.art)
     INNER JOIN
       apflora.v_ap_anzmassnbisjahr
       ON apflora.ap.id = apflora.v_ap_anzmassnbisjahr.id)
     ON apflora._variable.apber_jahr = apflora.v_ap_anzmassnbisjahr.jahr
 WHERE
-  apflora.v_ap_anzmassnbisjahr."AnzahlMassnahmen" > 0
+  apflora.v_ap_anzmassnbisjahr.anzahl_massnahmen > 0
   AND apflora.ap.bearbeitung BETWEEN 1 AND 3
 ORDER BY
   apflora.ae_eigenschaften.artname;
@@ -314,13 +314,13 @@ FROM
       INNER JOIN
         apflora.v_ap_apberrelevant
         ON apflora.ap.id = apflora.v_ap_apberrelevant.id)
-      ON apflora.ae_eigenschaften.id = apflora.ap.id)
+      ON apflora.ae_eigenschaften.id = apflora.ap.art)
     INNER JOIN
       apflora.v_ap_anzmassnbisjahr
       ON apflora.ap.id = apflora.v_ap_anzmassnbisjahr.id)
     ON apflora._variable.apber_jahr = apflora.v_ap_anzmassnbisjahr.jahr
 WHERE
-  apflora.v_ap_anzmassnbisjahr."AnzahlMassnahmen" > 0
+  apflora.v_ap_anzmassnbisjahr.anzahl_massnahmen > 0
   AND apflora.ap.bearbeitung BETWEEN 1 AND 3;
 
 DROP VIEW IF EXISTS apflora.v_apber_uebme CASCADE;
@@ -337,7 +337,7 @@ FROM
       INNER JOIN
         apflora.v_ap_apberrelevant
         ON apflora.ap.id = apflora.v_ap_apberrelevant.id)
-      ON apflora.ae_eigenschaften.id = apflora.ap.id)
+      ON apflora.ae_eigenschaften.id = apflora.ap.art)
     INNER JOIN
       ((apflora.apber
       INNER JOIN
@@ -350,7 +350,7 @@ FROM
     ON "tblKonstanten_1".apber_jahr = apflora.v_ap_anzmassnbisjahr.jahr
 WHERE
   apflora.apber.beurteilung = 5
-  AND apflora.v_ap_anzmassnbisjahr."AnzahlMassnahmen" > 0
+  AND apflora.v_ap_anzmassnbisjahr.anzahl_massnahmen > 0
   AND apflora.ap.bearbeitung BETWEEN 1 AND 3
 ORDER BY
   apflora.ae_eigenschaften.artname;
@@ -368,7 +368,7 @@ FROM
       INNER JOIN
         apflora.v_ap_apberrelevant
         ON apflora.ap.id = apflora.v_ap_apberrelevant.id)
-      ON apflora.ae_eigenschaften.id = apflora.ap.id)
+      ON apflora.ae_eigenschaften.id = apflora.ap.art)
     INNER JOIN
       ((apflora.apber
       INNER JOIN
@@ -381,7 +381,7 @@ FROM
     ON "tblKonstanten_1".apber_jahr = apflora.v_ap_anzmassnbisjahr.jahr
 WHERE
   apflora.apber.beurteilung = 5
-  AND apflora.v_ap_anzmassnbisjahr."AnzahlMassnahmen" > 0
+  AND apflora.v_ap_anzmassnbisjahr.anzahl_massnahmen > 0
   AND apflora.ap.bearbeitung BETWEEN 1 AND 3;
 
 DROP VIEW IF EXISTS apflora.v_apber_uebne CASCADE;
@@ -398,7 +398,7 @@ FROM
       INNER JOIN
         apflora.v_ap_apberrelevant
         ON apflora.ap.id = apflora.v_ap_apberrelevant.id)
-      ON apflora.ae_eigenschaften.id = apflora.ap.id)
+      ON apflora.ae_eigenschaften.id = apflora.ap.art)
     INNER JOIN
       ((apflora.apber
       INNER JOIN
@@ -412,7 +412,7 @@ FROM
 WHERE
   apflora.apber.beurteilung = 3
   AND apflora.ap.bearbeitung BETWEEN 1 AND 3
-  AND apflora.v_ap_anzmassnbisjahr."AnzahlMassnahmen" > 0
+  AND apflora.v_ap_anzmassnbisjahr.anzahl_massnahmen > 0
 ORDER BY
   apflora.ae_eigenschaften.artname;
 
@@ -429,7 +429,7 @@ FROM
       INNER JOIN
         apflora.v_ap_apberrelevant
         ON apflora.ap.id = apflora.v_ap_apberrelevant.id)
-      ON apflora.ae_eigenschaften.id = apflora.ap.id)
+      ON apflora.ae_eigenschaften.id = apflora.ap.art)
     INNER JOIN
       ((apflora.apber
       INNER JOIN
@@ -443,7 +443,7 @@ FROM
 WHERE
   apflora.apber.beurteilung = 3
   AND apflora.ap.bearbeitung BETWEEN 1 AND 3
-  AND apflora.v_ap_anzmassnbisjahr."AnzahlMassnahmen" > 0;
+  AND apflora.v_ap_anzmassnbisjahr.anzahl_massnahmen > 0;
 
 DROP VIEW IF EXISTS apflora.v_apber_uebse CASCADE;
 CREATE OR REPLACE VIEW apflora.v_apber_uebse AS
@@ -459,7 +459,7 @@ FROM
       INNER JOIN
         apflora.v_ap_apberrelevant
         ON apflora.ap.id = apflora.v_ap_apberrelevant.id)
-      ON apflora.ae_eigenschaften.id = apflora.ap.id)
+      ON apflora.ae_eigenschaften.id = apflora.ap.art)
     INNER JOIN
       ((apflora.apber
       INNER JOIN
@@ -472,7 +472,7 @@ FROM
   ON "tblKonstanten_1".apber_jahr = apflora.v_ap_anzmassnbisjahr.jahr
 WHERE
   apflora.apber.beurteilung = 4
-  AND apflora.v_ap_anzmassnbisjahr."AnzahlMassnahmen" > 0
+  AND apflora.v_ap_anzmassnbisjahr.anzahl_massnahmen > 0
   AND apflora.ap.bearbeitung BETWEEN 1 AND 3
 ORDER BY
   apflora.ae_eigenschaften.artname;
@@ -490,7 +490,7 @@ FROM
       INNER JOIN
         apflora.v_ap_apberrelevant
         ON apflora.ap.id = apflora.v_ap_apberrelevant.id)
-      ON apflora.ae_eigenschaften.id = apflora.ap.id)
+      ON apflora.ae_eigenschaften.id = apflora.ap.art)
     INNER JOIN
       ((apflora.apber
       INNER JOIN
@@ -503,7 +503,7 @@ FROM
   ON "tblKonstanten_1".apber_jahr = apflora.v_ap_anzmassnbisjahr.jahr
 WHERE
   apflora.apber.beurteilung = 4
-  AND apflora.v_ap_anzmassnbisjahr."AnzahlMassnahmen" > 0
+  AND apflora.v_ap_anzmassnbisjahr.anzahl_massnahmen > 0
   AND apflora.ap.bearbeitung BETWEEN 1 AND 3;
 
 DROP VIEW IF EXISTS apflora.v_apber_uebun CASCADE;
@@ -517,7 +517,7 @@ FROM
     ((apflora.ae_eigenschaften
     INNER JOIN
       (apflora.ap INNER JOIN apflora.v_ap_apberrelevant ON apflora.ap.id = apflora.v_ap_apberrelevant.id)
-      ON apflora.ae_eigenschaften.id = apflora.ap.id)
+      ON apflora.ae_eigenschaften.id = apflora.ap.art)
     INNER JOIN
       ((apflora.apber
       INNER JOIN
@@ -530,7 +530,7 @@ FROM
   ON "tblKonstanten_1".apber_jahr = apflora.v_ap_anzmassnbisjahr.jahr
 WHERE
   apflora.apber.beurteilung = 1168274204
-  AND apflora.v_ap_anzmassnbisjahr."AnzahlMassnahmen" > 0
+  AND apflora.v_ap_anzmassnbisjahr.anzahl_massnahmen > 0
   AND apflora.ap.bearbeitung BETWEEN 1 AND 3
 ORDER BY
   apflora.ae_eigenschaften.artname;
@@ -545,7 +545,7 @@ FROM
     ((apflora.ae_eigenschaften
     INNER JOIN
       (apflora.ap INNER JOIN apflora.v_ap_apberrelevant ON apflora.ap.id = apflora.v_ap_apberrelevant.id)
-      ON apflora.ae_eigenschaften.id = apflora.ap.id)
+      ON apflora.ae_eigenschaften.id = apflora.ap.art)
     INNER JOIN
       ((apflora.apber
       INNER JOIN
@@ -558,7 +558,7 @@ FROM
   ON "tblKonstanten_1".apber_jahr = apflora.v_ap_anzmassnbisjahr.jahr
 WHERE
   apflora.apber.beurteilung = 1168274204
-  AND apflora.v_ap_anzmassnbisjahr."AnzahlMassnahmen" > 0
+  AND apflora.v_ap_anzmassnbisjahr.anzahl_massnahmen > 0
   AND apflora.ap.bearbeitung BETWEEN 1 AND 3;
 
 DROP VIEW IF EXISTS apflora.v_apber_uebwe CASCADE;
@@ -575,7 +575,7 @@ FROM
       INNER JOIN
         apflora.v_ap_apberrelevant
         ON apflora.ap.id = apflora.v_ap_apberrelevant.id)
-      ON apflora.ae_eigenschaften.id = apflora.ap.id)
+      ON apflora.ae_eigenschaften.id = apflora.ap.art)
     INNER JOIN
       ((apflora.apber
       INNER JOIN
@@ -588,7 +588,7 @@ FROM
     ON "tblKonstanten_1".apber_jahr = apflora.v_ap_anzmassnbisjahr.jahr
 WHERE
   apflora.apber.beurteilung = 6
-  AND apflora.v_ap_anzmassnbisjahr."AnzahlMassnahmen" > 0
+  AND apflora.v_ap_anzmassnbisjahr.anzahl_massnahmen > 0
   AND apflora.ap.bearbeitung BETWEEN 1 AND 3
 ORDER BY
   apflora.ae_eigenschaften.artname;
@@ -606,7 +606,7 @@ FROM
       INNER JOIN
         apflora.v_ap_apberrelevant
         ON apflora.ap.id = apflora.v_ap_apberrelevant.id)
-      ON apflora.ae_eigenschaften.id = apflora.ap.id)
+      ON apflora.ae_eigenschaften.id = apflora.ap.art)
     INNER JOIN
       ((apflora.apber
       INNER JOIN
@@ -619,7 +619,7 @@ FROM
     ON "tblKonstanten_1".apber_jahr = apflora.v_ap_anzmassnbisjahr.jahr
 WHERE
   apflora.apber.beurteilung = 6
-  AND apflora.v_ap_anzmassnbisjahr."AnzahlMassnahmen" > 0
+  AND apflora.v_ap_anzmassnbisjahr.anzahl_massnahmen > 0
   AND apflora.ap.bearbeitung BETWEEN 1 AND 3;
 
 DROP VIEW IF EXISTS apflora.v_apber_uebnb000 CASCADE;
@@ -693,7 +693,7 @@ FROM
   apflora.ae_eigenschaften
   INNER JOIN
     apflora.ap
-    ON apflora.ae_eigenschaften.id = apflora.ap.id
+    ON apflora.ae_eigenschaften.id = apflora.ap.art
 WHERE
   apflora.ap.bearbeitung BETWEEN 1 AND 3
   AND apflora.ap.id NOT IN (SELECT * FROM apflora.v_apber_uebse_apid)
@@ -739,7 +739,7 @@ FROM
     INNER JOIN
       apflora.v_ap_apberrelevant
       ON apflora.ap.id = apflora.v_ap_apberrelevant.id)
-    ON apflora.ae_eigenschaften.id = apflora.ap.id
+    ON apflora.ae_eigenschaften.id = apflora.ap.art
 WHERE
   apflora.ap.bearbeitung BETWEEN 1 AND 3
 ORDER BY
@@ -780,7 +780,7 @@ FROM
   ((apflora.ae_eigenschaften
   INNER JOIN
     apflora.ap
-    ON apflora.ae_eigenschaften.id = apflora.ap.id)
+    ON apflora.ae_eigenschaften.id = apflora.ap.art)
   INNER JOIN
     (apflora.pop
     INNER JOIN
@@ -838,7 +838,7 @@ FROM
     LEFT JOIN
       apflora.v_erstemassnproap
       ON apflora.ap.id = apflora.v_erstemassnproap.ap_id)
-    ON apflora.ae_eigenschaften.id = apflora.ap.id)
+    ON apflora.ae_eigenschaften.id = apflora.ap.art)
   INNER JOIN
     (((apflora.apber
     LEFT JOIN
@@ -1454,7 +1454,7 @@ FROM
           (apflora.v_pop_berundmassnjahre.jahr = apflora.popber.jahr)
           AND (apflora.v_pop_berundmassnjahre.id = apflora.popber.pop_id))
       ON apflora.ap.id = apflora.pop.ap_id)
-    ON apflora.ae_eigenschaften.id = apflora.ap.id
+    ON apflora.ae_eigenschaften.id = apflora.ap.art
 WHERE
   apflora.ae_eigenschaften.taxid > 150
 ORDER BY
@@ -1514,7 +1514,7 @@ FROM
         apflora.pop_status_werte
         ON apflora.pop.status  = pop_status_werte.code)
       ON apflora.ap.id = apflora.pop.ap_id)
-    ON apflora.ae_eigenschaften.id = apflora.ap.id
+    ON apflora.ae_eigenschaften.id = apflora.ap.art
 WHERE
   apflora.ae_eigenschaften.taxid > 150
 ORDER BY
@@ -1574,7 +1574,7 @@ FROM
         apflora.pop_status_werte
         ON apflora.pop.status  = pop_status_werte.code)
       ON apflora.ap.id = apflora.pop.ap_id)
-    ON apflora.ae_eigenschaften.id = apflora.ap.id
+    ON apflora.ae_eigenschaften.id = apflora.ap.art
 WHERE
   apflora.ae_eigenschaften.taxid > 150
 ORDER BY
@@ -1638,7 +1638,7 @@ FROM
   ((((((((((apflora.ae_eigenschaften
   RIGHT JOIN
     apflora.ap
-    ON apflora.ae_eigenschaften.id = apflora.ap.id)
+    ON apflora.ae_eigenschaften.id = apflora.ap.art)
   RIGHT JOIN
     (apflora.pop
     RIGHT JOIN
@@ -2051,7 +2051,7 @@ FROM
       ON apflora.pop.id = apflora.tpop.pop_id)
     ON apflora.ap.id = apflora.pop.ap_id
   INNER JOIN apflora.ae_eigenschaften
-  ON apflora.ae_eigenschaften.id = apflora.ap.id
+  ON apflora.ae_eigenschaften.id = apflora.ap.art
 WHERE
   -- keine Testarten
   apflora.ae_eigenschaften.taxid > 150
@@ -2119,12 +2119,12 @@ SELECT
   apflora.popmassnber.bemerkungen AS "PopMassnBer Interpretation",
   apflora.popmassnber.changed AS "PopMassnBer MutWann",
   apflora.popmassnber.changed_by AS "PopMassnBer MutWer",
-  apflora.v_popmassnber_anzmassn0."AnzahlMassnahmen"
+  apflora.v_popmassnber_anzmassn0.anzahl_massnahmen
 FROM
   ((((((apflora.ae_eigenschaften
   INNER JOIN
     apflora.ap
-    ON apflora.ae_eigenschaften.id = apflora.ap.id)
+    ON apflora.ae_eigenschaften.id = apflora.ap.art)
   INNER JOIN
     apflora.pop
     ON apflora.ap.id = apflora.pop.ap_id)

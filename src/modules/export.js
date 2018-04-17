@@ -16,6 +16,7 @@ export default async ({
   artFuerEierlegendeWollmilchsau,
   view,
   fileName,
+  apIdName,
   apId,
   kml,
 }: {
@@ -24,7 +25,8 @@ export default async ({
   artFuerEierlegendeWollmilchsau: string,
   view: string,
   fileName: string,
-  apId: number,
+  apIdName: string,
+  apId: string,
   kml: Boolean,
 }) => {
   const onError = error => {
@@ -34,7 +36,8 @@ export default async ({
     store.listError(error)
     store.export.removeDownload(fileName)
   }
-  const url = apId ? `/${view}?ap_id=eq.${apId}` : `/${view}`
+  const apIdString = apIdName ? apIdName : 'ap_id'
+  const url = apId ? `/${view}?${apIdString}=eq.${apId}` : `/${view}`
 
   store.export.addDownload(fileName)
   let result: { data: Array<Object> }
