@@ -30,9 +30,9 @@ export default (
     .map((el, index) => ({
       nodeType: 'table',
       menuType: 'tpopbeob',
-      id: el.beob_id,
+      id: el.id,
       parentId: tpopId,
-      urlLabel: el.beob_id,
+      urlLabel: el.id,
       label: el.label,
       url: [
         'Projekte',
@@ -44,7 +44,7 @@ export default (
         'Teil-Populationen',
         tpopId,
         'Beobachtungen',
-        el.beob_id,
+        el.id,
       ],
       sort: [projIndex, 1, apIndex, 1, popIndex, 1, tpopIndex, 6, index],
       hasChildren: false,

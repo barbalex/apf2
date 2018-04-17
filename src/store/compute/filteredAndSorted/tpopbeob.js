@@ -14,18 +14,15 @@ export default (store: Object, tree: Object): Array<Object> => {
     let autor = ''
     let quelle = ''
     let quelleName = ''
-    const beob = table.beob.get(el.beob_id)
-    if (beob) {
-      if (beob.datum) {
-        datum = format(beob.datum, 'YYYY.MM.DD')
-      }
-      if (beob.autor) {
-        autor = beob.autor
-      }
-      if (beob.quelle_id) {
-        quelle = table.beob_quelle.get(beob.quelle_id)
-        quelleName = quelle && quelle.name ? quelle.name : ''
-      }
+    if (el.datum) {
+      datum = format(el.datum, 'YYYY.MM.DD')
+    }
+    if (el.autor) {
+      autor = el.autor
+    }
+    if (el.quelle_id) {
+      quelle = table.beob_quelle.get(el.quelle_id)
+      quelleName = quelle && quelle.name ? quelle.name : ''
     }
     el.label = `${datum || '(kein Datum)'}: ${autor ||
       '(kein Autor)'} (${quelleName})`
