@@ -1317,7 +1317,7 @@ DROP VIEW IF EXISTS apflora.v_abper_ziel CASCADE;
 CREATE OR REPLACE VIEW apflora.v_abper_ziel AS
 SELECT
   apflora.ziel.*,
-  ziel_typ_werte.text
+  ziel_typ_werte.text as typ_decodiert
 FROM
   apflora._variable
   INNER JOIN
@@ -1357,8 +1357,8 @@ CREATE OR REPLACE VIEW apflora.v_apber AS
 SELECT
   apflora.ae_eigenschaften.artname,
   apflora.apber.*,
-  apflora.ap_erfkrit_werte.text AS beurteilung,
-  apflora.adresse."AdrName" AS bearbeiter
+  apflora.ap_erfkrit_werte.text AS beurteilung_decodiert,
+  apflora.adresse."AdrName" AS bearbeiter_docodiert
 FROM
   apflora.ap
   INNER JOIN
@@ -4328,12 +4328,12 @@ SELECT
   apflora.tpop.nutzungszone AS tpop_nutzungszone,
   apflora.tpop.bewirtschafter AS tpop_bewirtschafter,
   apflora.tpop.bewirtschaftung AS tpop_bewirtschaftung,
-  apflora.tpopmassnber.id AS "TPopMassnBer Id",
-  apflora.tpopmassnber.jahr AS "TPopMassnBer Jahr",
-  tpopmassn_erfbeurt_werte.text AS "TPopMassnBer Entwicklung",
-  apflora.tpopmassnber.bemerkungen AS "TPopMassnBer Interpretation",
-  apflora.tpopmassnber.changed AS "TPopMassnBer MutWann",
-  apflora.tpopmassnber.changed_by AS "TPopMassnBer MutWer"
+  apflora.tpopmassnber.id,
+  apflora.tpopmassnber.jahr,
+  tpopmassn_erfbeurt_werte.text AS entwicklung,
+  apflora.tpopmassnber.bemerkungen,
+  apflora.tpopmassnber.changed,
+  apflora.tpopmassnber.changed_by
 FROM
   apflora.ae_eigenschaften
   INNER JOIN
@@ -4677,7 +4677,6 @@ SELECT
   apflora.tpop.nutzungszone AS tpop_nutzungszone,
   apflora.tpop.bewirtschafter AS tpop_bewirtschafter,
   apflora.tpop.bewirtschaftung AS tpop_bewirtschaftung,
-  apflora.tpopkontr.tpop_id,
   apflora.tpopkontr.id AS "Kontr id",
   apflora.tpopkontr.jahr AS "Kontr Jahr",
   apflora.tpopkontr.datum AS "Kontr Datum",
