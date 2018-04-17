@@ -27,6 +27,7 @@ export default (store: Object, tree: Object): Array<Object> => {
   beobNichtZuzuordnen.forEach(el => {
     let datum = ''
     let autor = ''
+    let quelle
     const beob = table.beob.get(el.beob_id)
     if (beob) {
       if (beob.datum) {
@@ -35,8 +36,8 @@ export default (store: Object, tree: Object): Array<Object> => {
       if (beob.autor) {
         autor = beob.autor
       }
+      quelle = table.beob_quelle.get(beob.quelle_id)
     }
-    const quelle = table.beob_quelle.get(el.quelle_id)
     const quelleName = quelle && quelle.name ? quelle.name : ''
     el.label = `${datum || '(kein Datum)'}: ${autor ||
       '(kein Autor)'} (${quelleName})`
