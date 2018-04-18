@@ -207,7 +207,7 @@ SELECT
   apflora.tpopmassn.datum,
   tpopmassn_typ_werte.text AS typ,
   apflora.tpopmassn.beschreibung,
-  apflora.adresse."AdrName" AS bearbeiter,
+  apflora.adresse.name AS bearbeiter,
   apflora.tpopmassn.bemerkungen,
   apflora.tpopmassn.plan_vorhanden,
   apflora.tpopmassn.plan_bezeichnung,
@@ -253,7 +253,7 @@ FROM
     ON apflora.tpop.status = "domPopHerkunft_1".code)
   LEFT JOIN
     apflora.adresse
-    ON apflora.tpopmassn.bearbeiter = apflora.adresse."AdrId"
+    ON apflora.tpopmassn.bearbeiter = apflora.adresse.id
 WHERE
   apflora.ae_eigenschaften.taxid > 150
 ORDER BY
@@ -280,7 +280,7 @@ SELECT
   to_char(apflora.tpopmassn.datum, 'DD.MM.YY') AS "MASSNDAT",
   tpopmassn_typ_werte.text AS "MASSTYP",
   apflora.tpopmassn.beschreibung AS "MASSNMASSNAHME",
-  apflora.adresse."AdrName" AS "MASSNBEARBEITER",
+  apflora.adresse.name AS "MASSNBEARBEITER",
   apflora.tpopmassn.bemerkungen::char AS "MASSNBEMERKUNG",
   apflora.tpopmassn.plan_vorhanden AS "MASSNPLAN",
   apflora.tpopmassn.plan_bezeichnung AS "MASSPLANBEZ",
@@ -326,7 +326,7 @@ FROM
     ON apflora.tpop.status = "domPopHerkunft_1".code)
   LEFT JOIN
     apflora.adresse
-    ON apflora.tpopmassn.bearbeiter = apflora.adresse."AdrId"
+    ON apflora.tpopmassn.bearbeiter = apflora.adresse.id
 WHERE
   apflora.ae_eigenschaften.taxid > 150
 ORDER BY
@@ -396,7 +396,7 @@ SELECT
   apflora.tpop.neigung AS tpop_neigung,
   apflora.tpop.beschreibung AS tpop_beschreibung,
   apflora.tpop.kataster_nr AS tpop_kataster_nr,
-  apflora.adresse."AdrName" AS tpop_bearbeiter,
+  apflora.adresse.name AS tpop_bearbeiter,
   apflora.tpop.apber_relevant AS tpop_apber_relevant,
   apflora.tpop.bekannt_seit AS tpop_bekannt_seit,
   apflora.tpop.eigentuemer AS tpop_eigentuemer,
@@ -409,7 +409,7 @@ SELECT
   apflora.tpopmassn.datum::timestamp AS massn_datum,
   tpopmassn_typ_werte.text AS massn_typ,
   apflora.tpopmassn.beschreibung AS massn_beschreibung,
-  apflora.adresse."AdrName" AS massn_bearbeiter,
+  apflora.adresse.name AS massn_bearbeiter,
   apflora.tpopmassn.plan_vorhanden AS massn_plan_vorhanden,
   apflora.tpopmassn.plan_bezeichnung AS massn_plan_bezeichnung,
   apflora.tpopmassn.flaeche AS massn_flaeche,
@@ -454,7 +454,7 @@ FROM
     ON apflora.tpop.status = "domPopHerkunft_1".code)
   LEFT JOIN
     apflora.adresse
-    ON apflora.tpopmassn.bearbeiter = apflora.adresse."AdrId"
+    ON apflora.tpopmassn.bearbeiter = apflora.adresse.id
 ORDER BY
   apflora.ae_eigenschaften.artname,
   apflora.pop.nr,
@@ -1028,7 +1028,7 @@ SELECT
   apflora.ap_bearbstand_werte.text AS ap_bearb_stand,
   apflora.ap.start_jahr AS ap_start_jahr,
   apflora.ap_umsetzung_werte.text AS ab_umsetzung_stand,
-  apflora.adresse."AdrName" AS ap_verantwortlich,
+  apflora.adresse.name AS ap_verantwortlich,
   apflora.pop.id as pop_id,
   apflora.pop.nr AS pop_nr,
   apflora.pop.name AS pop_name,
@@ -1088,7 +1088,7 @@ FROM
     ON apflora.tpop.status = "domPopHerkunft_1".code)
   LEFT JOIN
     apflora.adresse
-    ON apflora.ap.bearbeiter = apflora.adresse."AdrId"
+    ON apflora.ap.bearbeiter = apflora.adresse.id
 WHERE
   apflora.ae_eigenschaften.taxid > 150
 ORDER BY
@@ -1130,7 +1130,7 @@ SELECT
   apflora.tpop.neigung AS "TPOPHANGNEIGUNG",
   apflora.tpop.beschreibung AS "TPOPBESCHREIBUNG",
   apflora.tpop.kataster_nr AS "TPOPKATASTERNR",
-  apflora.adresse."AdrName" AS "TPOPVERANTWORTLICH",
+  apflora.adresse.name AS "TPOPVERANTWORTLICH",
   apflora.tpop.apber_relevant AS "TPOPBERICHTSRELEVANZ",
   apflora.tpop.bekannt_seit AS "TPOPBEKANNTSEIT",
   apflora.tpop.eigentuemer AS "TPOPEIGENTUEMERIN",
@@ -1165,7 +1165,7 @@ FROM
     ON apflora.tpop.status = "domPopHerkunft_1".code)
   LEFT JOIN
     apflora.adresse
-    ON apflora.ap.bearbeiter = apflora.adresse."AdrId"
+    ON apflora.ap.bearbeiter = apflora.adresse.id
 WHERE
   apflora.ae_eigenschaften.taxid > 150
 ORDER BY
@@ -1358,7 +1358,7 @@ SELECT
   apflora.ae_eigenschaften.artname,
   apflora.apber.*,
   apflora.ap_erfkrit_werte.text AS beurteilung_decodiert,
-  apflora.adresse."AdrName" AS bearbeiter_docodiert
+  apflora.adresse.name AS bearbeiter_docodiert
 FROM
   apflora.ap
   INNER JOIN
@@ -1371,7 +1371,7 @@ FROM
       ON (apflora.apber.beurteilung = apflora.ap_erfkrit_werte.code))
     LEFT JOIN
       apflora.adresse
-      ON (apflora.apber.bearbeiter = apflora.adresse."AdrId"))
+      ON (apflora.apber.bearbeiter = apflora.adresse.id))
     ON apflora.ap.id = apflora.apber.ap_id
 ORDER BY
   apflora.ae_eigenschaften.artname;
@@ -1636,7 +1636,7 @@ SELECT
   apflora.ap_bearbstand_werte.text AS bearbeitung,
   apflora.ap.start_jahr,
   apflora.ap_umsetzung_werte.text AS umsetzung,
-  apflora.adresse."AdrName" AS bearbeiter,
+  apflora.adresse.name AS bearbeiter,
   apflora.ap.changed,
   apflora.ap.changed_by
 FROM
@@ -1652,7 +1652,7 @@ FROM
     ON apflora.ap.umsetzung = apflora.ap_umsetzung_werte.code)
   LEFT JOIN
     apflora.adresse
-    ON apflora.ap.bearbeiter = apflora.adresse."AdrId"
+    ON apflora.ap.bearbeiter = apflora.adresse.id
 ORDER BY
   apflora.ae_eigenschaften.artname;
 
@@ -1664,7 +1664,7 @@ SELECT
   apflora.ap_bearbstand_werte.text AS ap_bearbeitung,
   apflora.ap.start_jahr AS ap_start_jahr,
   apflora.ap_umsetzung_werte.text AS ap_umsetzung,
-  apflora.adresse."AdrName" AS ap_bearbeiter,
+  apflora.adresse.name AS ap_bearbeiter,
   apflora.ap.changed AS ap_changed,
   apflora.ap.changed_by AS ap_changed_by,
   apflora.idealbiotop.erstelldatum,
@@ -1702,7 +1702,7 @@ FROM
       ON apflora.ap.umsetzung = apflora.ap_umsetzung_werte.code)
     LEFT JOIN
       apflora.adresse
-      ON apflora.ap.bearbeiter = apflora.adresse."AdrId")
+      ON apflora.ap.bearbeiter = apflora.adresse.id)
     ON apflora.idealbiotop.ap_id = apflora.ap.id
 ORDER BY
   apflora.ae_eigenschaften.artname,
@@ -1716,7 +1716,7 @@ SELECT
   apflora.ap_bearbstand_werte.text as ap_bearbeitung,
   apflora.ap.start_jahr AS ap_start_jahr,
   apflora.ap_umsetzung_werte.text AS ap_umsetzung,
-  apflora.adresse."AdrName" AS ap_bearbeiter,
+  apflora.adresse.name AS ap_bearbeiter,
   apflora.ber.id,
   apflora.ber.autor,
   apflora.ber.jahr,
@@ -1737,7 +1737,7 @@ FROM
     ON apflora.ap.umsetzung = apflora.ap_umsetzung_werte.code)
   LEFT JOIN
     apflora.adresse
-    ON apflora.ap.bearbeiter = apflora.adresse."AdrId")
+    ON apflora.ap.bearbeiter = apflora.adresse.id)
   RIGHT JOIN
     apflora.ber
     ON apflora.ap.id = apflora.ber.ap_id
@@ -1752,7 +1752,7 @@ SELECT
   apflora.ap_bearbstand_werte.text as ap_bearbeitung,
   apflora.ap.start_jahr AS ap_start_jahr,
   apflora.ap_umsetzung_werte.text AS ap_umsetzung,
-  apflora.adresse."AdrName" AS ap_bearbeiter,
+  apflora.adresse.name AS ap_bearbeiter,
   apflora.assozart.id,
   "ArtenDb_Arteigenschaften_1".artname as artname_assoziiert,
   apflora.assozart.bemerkungen,
@@ -1773,7 +1773,7 @@ FROM
       ON apflora.ap.umsetzung = apflora.ap_umsetzung_werte.code)
     LEFT JOIN
       apflora.adresse
-      ON apflora.ap.bearbeiter = apflora.adresse."AdrId")
+      ON apflora.ap.bearbeiter = apflora.adresse.id)
     RIGHT JOIN
       apflora.assozart
       ON apflora.ap.id = apflora.assozart.ap_id)
@@ -1789,7 +1789,7 @@ SELECT
   apflora.ap_bearbstand_werte.text AS ap_bearbeitung,
   apflora.ap.start_jahr AS ap_start_jahr,
   apflora.ap_umsetzung_werte.text AS ap_umsetzung,
-  apflora.adresse."AdrName" AS ap_bearbeiter,
+  apflora.adresse.name AS ap_bearbeiter,
   apflora.pop.id AS pop_id
 FROM
   ((((apflora.ae_eigenschaften
@@ -1804,7 +1804,7 @@ FROM
     ON apflora.ap.umsetzung = apflora.ap_umsetzung_werte.code)
   LEFT JOIN
     apflora.adresse
-    ON apflora.ap.bearbeiter = apflora.adresse."AdrId")
+    ON apflora.ap.bearbeiter = apflora.adresse.id)
   LEFT JOIN
     apflora.pop
     ON apflora.ap.id = apflora.pop.ap_id
@@ -1850,7 +1850,7 @@ SELECT
   apflora.ap_bearbstand_werte.text AS ap_bearbeitung,
   apflora.ap.start_jahr AS ap_start_jahr,
   apflora.ap_umsetzung_werte.text AS ap_umsetzung,
-  apflora.adresse."AdrName" AS ap_bearbeiter,
+  apflora.adresse.name AS ap_bearbeiter,
   apflora.erfkrit.id,
   ap_erfkrit_werte.text AS beurteilung,
   apflora.erfkrit.kriterien,
@@ -1869,7 +1869,7 @@ FROM
     ON apflora.ap.umsetzung = apflora.ap_umsetzung_werte.code)
   LEFT JOIN
     apflora.adresse
-    ON apflora.ap.bearbeiter = apflora.adresse."AdrId")
+    ON apflora.ap.bearbeiter = apflora.adresse.id)
   RIGHT JOIN
     apflora.erfkrit
     ON apflora.ap.id = apflora.erfkrit.ap_id)
@@ -1911,7 +1911,7 @@ GROUP BY
 DROP VIEW IF EXISTS apflora.v_auswapbearbmassninjahr0 CASCADE;
 CREATE OR REPLACE VIEW apflora.v_auswapbearbmassninjahr0 AS
 SELECT
-  apflora.adresse."AdrName" as bearbeiter,
+  apflora.adresse.name as bearbeiter,
   apflora.ae_eigenschaften.artname,
   apflora.pop.nr as pop_nr,
   apflora.pop.name as pop_name,
@@ -1949,7 +1949,7 @@ FROM
       ((apflora.tpopmassn
       LEFT JOIN
         apflora.adresse
-        ON apflora.tpopmassn.bearbeiter = apflora.adresse."AdrId")
+        ON apflora.tpopmassn.bearbeiter = apflora.adresse.id)
       INNER JOIN
         apflora.tpopmassn_typ_werte
         ON apflora.tpopmassn.typ = tpopmassn_typ_werte.code)
@@ -1958,7 +1958,7 @@ FROM
 WHERE
   apflora.ap.bearbeitung BETWEEN 1 AND 3
 ORDER BY
-  apflora.adresse."AdrName",
+  apflora.adresse.name,
   apflora.ae_eigenschaften.artname,
   apflora.pop.nr,
   apflora.pop.name,
@@ -1979,7 +1979,7 @@ SELECT
   tpopmassn_typ_werte.text AS typ,
   apflora.tpopmassn.beschreibung,
   apflora.tpopmassn.datum,
-  apflora.adresse."AdrName" AS bearbeiter,
+  apflora.adresse.name AS bearbeiter,
   apflora.tpopmassn.bemerkungen,
   apflora.tpopmassn.plan_vorhanden,
   apflora.tpopmassn.plan_bezeichnung,
@@ -2010,7 +2010,7 @@ FROM
         ON apflora.tpopmassn.typ = tpopmassn_typ_werte.code)
       LEFT JOIN
         apflora.adresse
-        ON apflora.tpopmassn.bearbeiter = apflora.adresse."AdrId")
+        ON apflora.tpopmassn.bearbeiter = apflora.adresse.id)
       ON apflora.tpop.id = apflora.tpopmassn.tpop_id)
     ON apflora.ap.id = apflora.pop.ap_id
 WHERE
@@ -2113,7 +2113,7 @@ SELECT
   tpopmassn_typ_werte.text AS "Massnahme",
   apflora.tpopmassn.beschreibung,
   apflora.tpopmassn.datum,
-  apflora.adresse."AdrName" AS bearbeiter,
+  apflora.adresse.name AS bearbeiter,
   apflora.tpopmassn.bemerkungen,
   apflora.tpopmassn.plan_vorhanden,
   apflora.tpopmassn.plan_bezeichnung,
@@ -2147,7 +2147,7 @@ FROM
         ON apflora.tpopmassn.typ = tpopmassn_typ_werte.code)
       LEFT JOIN
         apflora.adresse
-        ON apflora.tpopmassn.bearbeiter = apflora.adresse."AdrId")
+        ON apflora.tpopmassn.bearbeiter = apflora.adresse.id)
       ON apflora.tpop.id = apflora.tpopmassn.tpop_id)
     ON apflora.ap.id = apflora.pop.ap_id
 ORDER BY
@@ -2195,7 +2195,7 @@ SELECT
   tpopmassn_typ_werte.text AS "Massnahme-Typ",
   apflora.tpopmassn.beschreibung AS "Massnahme-Beschreibung",
   apflora.tpopmassn.datum AS "Massnahme-Datum",
-  apflora.adresse."AdrName" AS "Massnahme-BearbeiterIn",
+  apflora.adresse.name AS "Massnahme-BearbeiterIn",
   apflora.tpopmassn.bemerkungen AS "Massnahme-Bemerkungen",
   apflora.tpopmassn.plan_vorhanden AS "Massnahme-Plan",
   apflora.tpopmassn.plan_bezeichnung AS "Massnahme-Planbezeichnung",
@@ -2241,7 +2241,7 @@ FROM
         ON apflora.tpopmassn.typ = tpopmassn_typ_werte.code)
       LEFT JOIN
         apflora.adresse
-        ON apflora.tpopmassn.bearbeiter = apflora.adresse."AdrId")
+        ON apflora.tpopmassn.bearbeiter = apflora.adresse.id)
       ON apflora.tpop.id = apflora.tpopmassn.tpop_id)
     ON apflora.ap.id = apflora.pop.ap_id
 ORDER BY
@@ -3035,7 +3035,7 @@ SELECT
   apflora.ap_bearbstand_werte.text AS ap_bearbeitung,
   apflora.ap.start_jahr AS ap_start_jahr,
   apflora.ap_umsetzung_werte.text AS ap_umsetzung,
-  apflora.adresse."AdrName" AS ap_bearbeiter,
+  apflora.adresse.name AS ap_bearbeiter,
   apflora.ziel.id AS "Ziel Id",
   apflora.ziel.jahr AS "Ziel Jahr",
   ziel_typ_werte.text AS "Ziel Typ",
@@ -3053,7 +3053,7 @@ FROM
     ON apflora.ap.umsetzung = apflora.ap_umsetzung_werte.code)
   LEFT JOIN
     apflora.adresse
-    ON apflora.ap.bearbeiter = apflora.adresse."AdrId")
+    ON apflora.ap.bearbeiter = apflora.adresse.id)
   RIGHT JOIN
     apflora.ziel
     ON apflora.ap.id = apflora.ziel.ap_id)
@@ -3076,7 +3076,7 @@ SELECT
   apflora.ap_bearbstand_werte.text AS ap_bearbeitung,
   apflora.ap.start_jahr AS ap_start_jahr,
   apflora.ap_umsetzung_werte.text AS ap_umsetzung,
-  apflora.adresse."AdrName" AS ap_bearbeiter,
+  apflora.adresse.name AS ap_bearbeiter,
   apflora.ziel.id AS ziel_id,
   apflora.ziel.jahr AS ziel_jahr,
   ziel_typ_werte.text AS ziel_typ,
@@ -3100,7 +3100,7 @@ FROM
     ON apflora.ap.umsetzung = apflora.ap_umsetzung_werte.code)
   LEFT JOIN
     apflora.adresse
-    ON apflora.ap.bearbeiter = apflora.adresse."AdrId")
+    ON apflora.ap.bearbeiter = apflora.adresse.id)
   RIGHT JOIN
     apflora.ziel
     ON apflora.ap.id = apflora.ziel.ap_id)
@@ -3172,7 +3172,7 @@ SELECT
   apflora.ap_bearbstand_werte.text AS ap_bearb_stand,
   apflora.ap.start_jahr AS ap_start_jahr,
   apflora.ap_umsetzung_werte.text AS ab_umsetzung_stand,
-  "tblAdresse_1"."AdrName" AS ap_verantwortlich,
+  "tblAdresse_1".name AS ap_verantwortlich,
   apflora.pop.id as pop_id,
   apflora.pop.nr AS pop_nr,
   apflora.pop.name AS pop_name,
@@ -3205,7 +3205,7 @@ SELECT
   apflora.tpopkontr.jahr,
   apflora.tpopkontr.datum,
   apflora.tpopkontr_typ_werte."DomainTxt" AS typ,
-  apflora.adresse."AdrName" AS bearbeiter,
+  apflora.adresse.name AS bearbeiter,
   apflora.tpopkontr.ueberlebensrate,
   apflora.tpopkontr.vitalitaet,
   apflora.tpop_entwicklung_werte.text AS entwicklung,
@@ -3264,7 +3264,7 @@ FROM
             ON apflora.tpopkontr.typ = apflora.tpopkontr_typ_werte."DomainTxt")
           LEFT JOIN
             apflora.adresse
-            ON apflora.tpopkontr.bearbeiter = apflora.adresse."AdrId")
+            ON apflora.tpopkontr.bearbeiter = apflora.adresse.id)
           LEFT JOIN
             apflora.tpop_entwicklung_werte
             ON apflora.tpopkontr.entwicklung = apflora.tpop_entwicklung_werte.code)
@@ -3294,7 +3294,7 @@ FROM
       ON apflora.tpopkontr.idealbiotop_uebereinstimmung = apflora.tpopkontr_idbiotuebereinst_werte.code)
   LEFT JOIN
     apflora.adresse AS "tblAdresse_1"
-    ON apflora.ap.bearbeiter = "tblAdresse_1"."AdrId")
+    ON apflora.ap.bearbeiter = "tblAdresse_1".id)
   ON "domPopHerkunft_1".code = apflora.tpop.status
 WHERE
   apflora.ae_eigenschaften.taxid > 150
@@ -3305,7 +3305,7 @@ GROUP BY
   apflora.ap_bearbstand_werte.text,
   apflora.ap.start_jahr,
   apflora.ap_umsetzung_werte.text,
-  "tblAdresse_1"."AdrName",
+  "tblAdresse_1".name,
   apflora.pop.id,
   apflora.pop.nr,
   apflora.pop.name,
@@ -3340,7 +3340,7 @@ GROUP BY
   apflora.tpopkontr.jahr,
   apflora.tpopkontr.datum,
   apflora.tpopkontr_typ_werte."DomainTxt",
-  apflora.adresse."AdrName",
+  apflora.adresse.name,
   apflora.tpopkontr.ueberlebensrate,
   apflora.tpopkontr.vitalitaet,
   apflora.tpop_entwicklung_werte.text,
@@ -3398,7 +3398,7 @@ SELECT
   apflora.tpopkontr.jahr AS "KONTRJAHR",
   to_char(apflora.tpopkontr.datum, 'DD.MM.YY') AS "KONTRDAT",
   apflora.tpopkontr_typ_werte."DomainTxt" AS "KONTRTYP",
-  apflora.adresse."AdrName" AS "KONTRBEARBEITER",
+  apflora.adresse.name AS "KONTRBEARBEITER",
   apflora.tpopkontr.ueberlebensrate AS "KONTRUEBERLEBENSRATE",
   apflora.tpopkontr.vitalitaet AS "KONTRVITALITAET",
   apflora.tpop_entwicklung_werte.text AS "KONTRENTWICKLUNG",
@@ -3459,7 +3459,7 @@ FROM
             ON apflora.tpopkontr.typ = apflora.tpopkontr_typ_werte."DomainTxt")
           LEFT JOIN
             apflora.adresse
-            ON apflora.tpopkontr.bearbeiter = apflora.adresse."AdrId")
+            ON apflora.tpopkontr.bearbeiter = apflora.adresse.id)
           LEFT JOIN
             apflora.tpop_entwicklung_werte
             ON apflora.tpopkontr.entwicklung = apflora.tpop_entwicklung_werte.code)
@@ -3489,7 +3489,7 @@ FROM
       ON apflora.tpopkontr.idealbiotop_uebereinstimmung = apflora.tpopkontr_idbiotuebereinst_werte.code)
   LEFT JOIN
     apflora.adresse AS "tblAdresse_1"
-    ON apflora.ap.bearbeiter = "tblAdresse_1"."AdrId")
+    ON apflora.ap.bearbeiter = "tblAdresse_1".id)
   ON "domPopHerkunft_1".code = apflora.tpop.status
 WHERE
   apflora.ae_eigenschaften.taxid > 150
@@ -3505,7 +3505,7 @@ GROUP BY
   apflora.tpopkontr.jahr,
   apflora.tpopkontr.datum,
   apflora.tpopkontr_typ_werte."DomainTxt",
-  apflora.adresse."AdrName",
+  apflora.adresse.name,
   apflora.tpopkontr.ueberlebensrate,
   apflora.tpopkontr.vitalitaet,
   apflora.tpop_entwicklung_werte.text,
@@ -3697,7 +3697,7 @@ SELECT
   apflora.tpopkontr.jahr AS tpopkontrjahr,
   apflora.tpopkontr.datum::timestamp AS tpopkontrdatum,
   apflora.tpopkontr_typ_werte."DomainTxt" AS tpopkontrtyp,
-  apflora.adresse."AdrName" AS tpopkontrbearb,
+  apflora.adresse.name AS tpopkontrbearb,
   apflora.tpopkontr.ueberlebensrate AS tpopkontrueberleb,
   apflora.tpopkontr.vitalitaet AS tpopkontrvitalitaet,
   apflora.tpop_entwicklung_werte.text AS tpopkontrentwicklung,
@@ -3749,7 +3749,7 @@ FROM
           ON apflora.tpopkontr.typ = apflora.tpopkontr_typ_werte."DomainTxt")
         LEFT JOIN
           apflora.adresse
-          ON apflora.tpopkontr.bearbeiter = apflora.adresse."AdrId")
+          ON apflora.tpopkontr.bearbeiter = apflora.adresse.id)
         LEFT JOIN
           apflora.tpop_entwicklung_werte
           ON apflora.tpopkontr.entwicklung = apflora.tpop_entwicklung_werte.code)
@@ -3974,7 +3974,7 @@ FROM
           ON apflora.v_tpopkontr_maxanzahl.id = apflora.tpopkontr.id)
         LEFT JOIN
           apflora.adresse
-          ON apflora.tpopkontr.bearbeiter = apflora.adresse."AdrId")
+          ON apflora.tpopkontr.bearbeiter = apflora.adresse.id)
         ON apflora.tpop.id = apflora.tpopkontr.tpop_id)
       ON apflora.pop.id = apflora.tpop.pop_id)
     ON apflora.ap.id = apflora.pop.ap_id
@@ -4058,7 +4058,7 @@ FROM
           ON apflora.v_tpopkontr_maxanzahl.id = apflora.tpopkontr.id)
         LEFT JOIN
           apflora.adresse
-          ON apflora.tpopkontr.bearbeiter = apflora.adresse."AdrId")
+          ON apflora.tpopkontr.bearbeiter = apflora.adresse.id)
         ON apflora.tpop.id = apflora.tpopkontr.tpop_id)
       ON apflora.pop.id = apflora.tpop.pop_id)
     ON apflora.ap.id = apflora.pop.ap_id
@@ -4165,7 +4165,7 @@ FROM
           ON apflora.v_tpopkontr_maxanzahl.id = apflora.tpopkontr.id)
         LEFT JOIN
           apflora.adresse
-          ON apflora.tpopkontr.bearbeiter = apflora.adresse."AdrId")
+          ON apflora.tpopkontr.bearbeiter = apflora.adresse.id)
         LEFT JOIN apflora.evab_typologie
           ON apflora.tpopkontr.lr_delarze = apflora.evab_typologie."TYPO")
         ON apflora.tpop.id = apflora.tpopkontr.tpop_id)
@@ -4255,7 +4255,7 @@ FROM
           ON apflora.v_tpopkontr_maxanzahl.id = apflora.tpopkontr.id)
         LEFT JOIN
           apflora.adresse
-          ON apflora.tpopkontr.bearbeiter = apflora.adresse."AdrId")
+          ON apflora.tpopkontr.bearbeiter = apflora.adresse.id)
         ON apflora.tpop.id = apflora.tpopkontr.tpop_id)
       ON apflora.pop.id = apflora.tpop.pop_id)
     ON apflora.ap.id = apflora.pop.ap_id
@@ -4648,7 +4648,7 @@ SELECT
   apflora.ap_bearbstand_werte.text AS ap_bearbeitung,
   apflora.ap.start_jahr AS ap_start_jahr,
   apflora.ap_umsetzung_werte.text AS ap_umsetzung,
-  "tblAdresse_1"."AdrName" AS ap_bearbeiter,
+  "tblAdresse_1".name AS ap_bearbeiter,
   apflora.pop.id as pop_id,
   apflora.pop.nr AS pop_nr,
   apflora.pop.name AS pop_name,
@@ -4681,7 +4681,7 @@ SELECT
   apflora.tpopkontr.jahr AS "Kontr Jahr",
   apflora.tpopkontr.datum AS "Kontr Datum",
   apflora.tpopkontr_typ_werte."DomainTxt" AS "Kontr Typ",
-  apflora.adresse."AdrName" AS "Kontr BearbeiterIn",
+  apflora.adresse.name AS "Kontr BearbeiterIn",
   apflora.tpopkontr.ueberlebensrate AS "Kontr Ueberlebensrate",
   apflora.tpopkontr.vitalitaet AS "Kontr Vitalitaet",
   apflora.tpop_entwicklung_werte.text AS "Kontr Entwicklung",
@@ -4731,7 +4731,7 @@ FROM
     ((((apflora.ap
     LEFT JOIN
       apflora.adresse AS "tblAdresse_1"
-      ON apflora.ap.bearbeiter = "tblAdresse_1"."AdrId")
+      ON apflora.ap.bearbeiter = "tblAdresse_1".id)
     LEFT JOIN
       apflora.ap_bearbstand_werte
       ON apflora.ap.bearbeitung = apflora.ap_bearbstand_werte.code)
@@ -4758,7 +4758,7 @@ FROM
             ON apflora.tpopkontr.typ = apflora.tpopkontr_typ_werte."DomainTxt")
           LEFT JOIN
             apflora.adresse
-            ON apflora.tpopkontr.bearbeiter = apflora.adresse."AdrId")
+            ON apflora.tpopkontr.bearbeiter = apflora.adresse.id)
           LEFT JOIN
             apflora.tpop_entwicklung_werte
             ON apflora.tpopkontr.entwicklung = apflora.tpop_entwicklung_werte.code)

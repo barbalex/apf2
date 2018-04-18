@@ -34,8 +34,8 @@ const getBearbName = ({ store, tree }: { store: Object, tree: Object }) => {
   const { activeDataset } = tree
   let name = ''
   if (activeDataset.row.bearbeiter && adressen.length > 0) {
-    const adresse = adressen.find(a => a.AdrId === activeDataset.row.bearbeiter)
-    if (adresse && adresse.AdrName) return adresse.AdrName
+    const adresse = adressen.find(a => a.id === activeDataset.row.bearbeiter)
+    if (adresse && adresse.name) return adresse.name
   }
   return name
 }
@@ -106,8 +106,8 @@ const Tpopmassn = ({
             errorText={activeDataset.valid.bearbeiter}
             dataSource={store.dropdownList.adressen}
             dataSourceConfig={{
-              value: 'AdrId',
-              text: 'AdrName',
+              value: 'id',
+              text: 'name',
             }}
             updatePropertyInDb={store.updatePropertyInDb}
           />

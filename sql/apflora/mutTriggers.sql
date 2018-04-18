@@ -2,8 +2,8 @@ DROP TRIGGER IF EXISTS adresse_on_update_set_mut ON apflora.adresse;
 DROP FUNCTION IF EXISTS adresse_on_update_set_mut();
 CREATE FUNCTION adresse_on_update_set_mut() RETURNS trigger AS $adresse_on_update_set_mut$
   BEGIN
-    NEW."MutWer" = current_setting('request.jwt.claim.username', true);
-    NEW."MutWann" = NOW();
+    NEW.changed_by = current_setting('request.jwt.claim.username', true);
+    NEW.changed = NOW();
     RETURN NEW;
   END;
 $adresse_on_update_set_mut$ LANGUAGE plpgsql;

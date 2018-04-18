@@ -6,7 +6,7 @@ import sortBy from 'lodash/sortBy'
 export default (store: Object): void => {
   extendObservable(store.dropdownList, {
     adressen: computed(
-      () => sortBy(Array.from(store.table.adresse.values()), 'AdrName'),
+      () => sortBy(Array.from(store.table.adresse.values()), 'name'),
       { name: 'dropdownListAdressen' }
     ),
     apUmsetzungen: computed(

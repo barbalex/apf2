@@ -13,26 +13,29 @@ DROP TABLE IF EXISTS adresse;
 CREATE TABLE apflora.adresse (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
   id_old integer DEFAULT NULL,
-  "AdrId" SERIAL PRIMARY KEY,
-  "AdrName" text DEFAULT NULL,
-  "AdrAdresse" text DEFAULT NULL,
-  "AdrTel" text DEFAULT NULL,
-  "AdrEmail" text DEFAULT NULL,
-  "freiwErfko" integer DEFAULT NULL,
-  "EvabIdPerson" UUID DEFAULT NULL,
-  "MutWann" date DEFAULT NOW(),
-  "MutWer" varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
+  id SERIAL PRIMARY KEY,
+  name text DEFAULT NULL,
+  adresse text DEFAULT NULL,
+  telefon text DEFAULT NULL,
+  email text DEFAULT NULL,
+  freiw_erfko boolean DEFAULT false,
+  evab_id_person UUID DEFAULT NULL,
+  changed date DEFAULT NOW(),
+  changed_by varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
 );
-COMMENT ON COLUMN apflora.adresse."AdrId" IS 'Primärschlüssel der Tabelle "adresse"';
-COMMENT ON COLUMN apflora.adresse."AdrName" IS 'Vor- und Nachname';
-COMMENT ON COLUMN apflora.adresse."AdrAdresse" IS 'Strasse, PLZ und Ort';
-COMMENT ON COLUMN apflora.adresse."AdrTel" IS 'Telefonnummer';
-COMMENT ON COLUMN apflora.adresse."AdrEmail" IS 'Email';
-COMMENT ON COLUMN apflora.adresse."freiwErfko" IS '-1 = freiwillige(r) Kontrolleur(in)';
-COMMENT ON COLUMN apflora.adresse."MutWann" IS 'Wann wurde der Datensatz zuletzt geändert?';
-COMMENT ON COLUMN apflora.adresse."MutWer" IS 'Von wem wurde der Datensatz zuletzt geändert?';
-CREATE INDEX ON apflora.adresse USING btree ("AdrId");
-CREATE INDEX ON apflora.adresse USING btree ("AdrName");
+CREATE INDEX ON apflora.adresse USING btree (id);
+CREATE INDEX ON apflora.adresse USING btree (name);
+CREATE INDEX ON apflora.adresse USING btree (freiw_erfko);
+COMMENT ON COLUMN apflora.adresse.id IS 'Primärschlüssel';
+COMMENT ON COLUMN apflora.adresse.id_old IS 'Frühere id';
+COMMENT ON COLUMN apflora.adresse.name IS 'Vor- und Nachname';
+COMMENT ON COLUMN apflora.adresse.adresse IS 'Strasse, PLZ und Ort';
+COMMENT ON COLUMN apflora.adresse.telefon IS 'Telefonnummer';
+COMMENT ON COLUMN apflora.adresse.email IS 'Email';
+COMMENT ON COLUMN apflora.adresse.freiw_erfko IS 'Ist die Person freiwillige(r) Kontrolleur(in)';
+COMMENT ON COLUMN apflora.adresse.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
+COMMENT ON COLUMN apflora.adresse.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
+COMMENT ON COLUMN apflora.adresse.evab_id_person IS 'Personen werden in EvAB separat und mit eigener ID erfasst. Daher muss die passende Person hier gewählt werden';
 
 DROP TABLE IF EXISTS apflora.ap;
 CREATE TABLE apflora.ap (
@@ -42,7 +45,7 @@ CREATE TABLE apflora.ap (
   bearbeitung integer DEFAULT NULL REFERENCES apflora.ap_bearbstand_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
   start_jahr smallint DEFAULT NULL,
   umsetzung integer DEFAULT NULL REFERENCES apflora.ap_umsetzung_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
-  bearbeiter integer DEFAULT NULL REFERENCES apflora.adresse ("AdrId") ON DELETE SET NULL ON UPDATE CASCADE,
+  bearbeiter integer DEFAULT NULL REFERENCES apflora.adresse (id) ON DELETE SET NULL ON UPDATE CASCADE,
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
 );
@@ -159,7 +162,7 @@ CREATE TABLE apflora.apber (
   massnahmen_planung_vs_ausfuehrung text,
   wirkung_auf_art text,
   datum date DEFAULT NULL,
-  bearbeiter integer DEFAULT NULL REFERENCES apflora.adresse ("AdrId") ON DELETE SET NULL ON UPDATE CASCADE,
+  bearbeiter integer DEFAULT NULL REFERENCES apflora.adresse (id) ON DELETE SET NULL ON UPDATE CASCADE,
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
 );
@@ -585,7 +588,7 @@ CREATE TABLE apflora.tpopkontr (
   typ varchar(50) DEFAULT NULL,
   datum date DEFAULT NULL,
   jahr smallint DEFAULT NULL,
-  bearbeiter integer DEFAULT NULL REFERENCES apflora.adresse ("AdrId") ON DELETE SET NULL ON UPDATE CASCADE,
+  bearbeiter integer DEFAULT NULL REFERENCES apflora.adresse (id) ON DELETE SET NULL ON UPDATE CASCADE,
   -- should be tpopkontrzaehl:
   jungpflanzen_anzahl integer DEFAULT NULL,
   vitalitaet text DEFAULT NULL,
@@ -777,7 +780,7 @@ CREATE TABLE apflora.tpopmassn (
   beschreibung text DEFAULT NULL,
   jahr smallint DEFAULT NULL,
   datum date DEFAULT NULL,
-  bearbeiter integer DEFAULT NULL REFERENCES apflora.adresse ("AdrId") ON DELETE SET NULL ON UPDATE CASCADE,
+  bearbeiter integer DEFAULT NULL REFERENCES apflora.adresse (id) ON DELETE SET NULL ON UPDATE CASCADE,
   bemerkungen text,
   plan_vorhanden smallint DEFAULT NULL,
   plan_bezeichnung text DEFAULT NULL,

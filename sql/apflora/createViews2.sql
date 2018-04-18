@@ -62,7 +62,7 @@ SELECT
   apflora.ap_bearbstand_werte.text AS bearbeitung,
   apflora.ap.start_jahr,
   apflora.ap_umsetzung_werte.text AS umsetzung,
-  apflora.adresse."AdrName" AS bearbeiter,
+  apflora.adresse.name AS bearbeiter,
   apflora.ae_eigenschaften.artwert,
   apflora.v_ap_anzmassnprojahr.jahr AS massn_jahr,
   apflora.v_ap_anzmassnprojahr.anzahl_massnahmen AS massn_anzahl,
@@ -84,7 +84,7 @@ FROM
         ON apflora.ap.umsetzung = apflora.ap_umsetzung_werte.code)
       LEFT JOIN
         apflora.adresse
-        ON apflora.ap.bearbeiter = apflora.adresse."AdrId")
+        ON apflora.ap.bearbeiter = apflora.adresse.id)
       INNER JOIN
         (apflora.v_ap_anzmassnprojahr
         INNER JOIN
@@ -827,7 +827,7 @@ SELECT
   apflora.ap.id as ap_id,
   apflora.ae_eigenschaften.artname,
   apflora.apber.id,
-  concat(apflora.adresse."AdrName", ', ', apflora.adresse."AdrAdresse") AS bearbeiter,
+  concat(apflora.adresse.name, ', ', apflora.adresse.adresse) AS bearbeiter,
   apflora.apberuebersicht.jahr AS apberuebersicht_jahr,
   apflora.apberuebersicht.bemerkungen,
   apflora.v_erstemassnproap.jahr AS jahr_erste_massnahme
@@ -843,7 +843,7 @@ FROM
     (((apflora.apber
     LEFT JOIN
       apflora.adresse
-      ON apflora.apber.bearbeiter = apflora.adresse."AdrId")
+      ON apflora.apber.bearbeiter = apflora.adresse.id)
     LEFT JOIN
       apflora.apberuebersicht
       ON apflora.apber.jahr = apflora.apberuebersicht.jahr)
@@ -1936,8 +1936,8 @@ CREATE OR REPLACE VIEW apflora.v_exportevab_beob AS
 SELECT
   apflora.tpopkontr.zeit_id AS "fkZeitpunkt",
   apflora.tpopkontr.id AS "idBeobachtung",
-  -- TODO: should EvabIdPerson be real uuid?
-  COALESCE(apflora.adresse."EvabIdPerson", '{7C71B8AF-DF3E-4844-A83B-55735F80B993}'::uuid) AS fkAutor,
+  -- TODO: should evab_id_person be real uuid?
+  COALESCE(apflora.adresse.evab_id_person, '{7C71B8AF-DF3E-4844-A83B-55735F80B993}'::uuid) AS fkAutor,
   apflora.ap.id AS fkArt,
   18 AS fkArtgruppe,
   1 AS fkAA1,
@@ -2016,15 +2016,15 @@ SELECT
    * AP-Verantwortliche oder topos als EXPERTISE_INTRODUITE_NOM setzen
    */
   CASE
-    WHEN "tblAdresse_2"."EvabIdPerson" IS NOT NULL
-    THEN "tblAdresse_2"."AdrName"
+    WHEN "tblAdresse_2".evab_id_person IS NOT NULL
+    THEN "tblAdresse_2".name
     ELSE 'topos Marti & Müller AG Zürich'
   END AS "EXPERTISE_INTRODUITE_NOM"
 FROM
   (apflora.ap
   LEFT JOIN
     apflora.adresse AS "tblAdresse_2"
-    ON apflora.ap.bearbeiter = "tblAdresse_2"."AdrId")
+    ON apflora.ap.bearbeiter = "tblAdresse_2".id)
   INNER JOIN
     (apflora.pop
     INNER JOIN
@@ -2033,7 +2033,7 @@ FROM
         (((apflora.tpopkontr
         LEFT JOIN
           apflora.adresse
-          ON apflora.tpopkontr.bearbeiter = apflora.adresse."AdrId")
+          ON apflora.tpopkontr.bearbeiter = apflora.adresse.id)
         INNER JOIN
           apflora.v_tpopkontr_maxanzahl
           ON apflora.v_tpopkontr_maxanzahl.id = apflora.tpopkontr.id)
@@ -2083,15 +2083,15 @@ GROUP BY
   apflora.tpopkontr.tpop_id,
   apflora.tpopkontr.id,
   apflora.tpopkontr.jahr,
-  apflora.adresse."EvabIdPerson",
+  apflora.adresse.evab_id_person,
   apflora.ap.id,
   "fkAAINTRODUIT",
   apflora.v_tpopkontr_maxanzahl.anzahl,
   apflora.tpopkontr.gefaehrdung,
   apflora.tpopkontr.vitalitaet,
   apflora.tpop.beschreibung,
-  "tblAdresse_2"."EvabIdPerson",
-  "tblAdresse_2"."AdrName";
+  "tblAdresse_2".evab_id_person,
+  "tblAdresse_2".name;
 
 DROP VIEW IF EXISTS apflora.v_popmassnber_anzmassn CASCADE;
 CREATE OR REPLACE VIEW apflora.v_popmassnber_anzmassn AS
