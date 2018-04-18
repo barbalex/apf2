@@ -1,6 +1,6 @@
 DROP FUNCTION apflora.qk_tpop_ohne_massnber(apid integer, berichtjahr integer);
-CREATE OR REPLACE FUNCTION apflora.qk_tpop_ohne_massnber(apid integer, berichtjahr integer)
-  RETURNS table("ProjId" integer, ap_id integer, hw text, url text[], text text[]) AS
+CREATE OR REPLACE FUNCTION apflora.qk_tpop_ohne_massnber(apid uuid, berichtjahr integer)
+  RETURNS table("ProjId" integer, ap_id uuid, hw text, url text[], text text[]) AS
   $$
   -- 4. "TPop ohne verlangten Massnahmen-Bericht im Berichtjahr" ermitteln und in Qualitätskontrollen auflisten:
   SELECT DISTINCT
@@ -48,5 +48,5 @@ CREATE OR REPLACE FUNCTION apflora.qk_tpop_ohne_massnber(apid integer, berichtja
     AND apflora.pop.ap_id = $1
   $$
   LANGUAGE sql STABLE;
-ALTER FUNCTION apflora.qk_tpop_ohne_massnber(apid integer, berichtjahr integer)
+ALTER FUNCTION apflora.qk_tpop_ohne_massnber(apid uuid, berichtjahr integer)
   OWNER TO postgres;
