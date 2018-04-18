@@ -1,5 +1,5 @@
 CREATE OR REPLACE FUNCTION apflora.qk_pop_ohne_popber(apid uuid, berichtjahr integer)
-  RETURNS table("ProjId" integer, ap_id uuid, hw text, url text[], text text[]) AS
+  RETURNS table(proj_id uuid, ap_id uuid, hw text, url text[], text text[]) AS
   $$
   SELECT DISTINCT
     apflora.ap.proj_id,

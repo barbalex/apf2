@@ -42,7 +42,7 @@ CREATE TABLE apflora.ap (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
   id_old integer DEFAULT NULL,
   art_id UUID UNIQUE DEFAULT NULL,
-  proj_id integer DEFAULT NULL REFERENCES apflora.projekt ("ProjId") ON DELETE CASCADE ON UPDATE CASCADE,
+  proj_id uuid DEFAULT NULL REFERENCES apflora.projekt (id) ON DELETE CASCADE ON UPDATE CASCADE,
   bearbeitung integer DEFAULT NULL REFERENCES apflora.ap_bearbstand_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
   start_jahr smallint DEFAULT NULL,
   umsetzung integer DEFAULT NULL REFERENCES apflora.ap_umsetzung_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
@@ -71,7 +71,7 @@ COMMENT ON COLUMN apflora.ap.changed_by IS 'Von wem wurde der Datensatz zuletzt 
 DROP TABLE IF EXISTS apflora.userprojekt;
 CREATE TABLE apflora.userprojekt (
   name varchar(30) REFERENCES basic_auth.users (name) ON DELETE CASCADE ON UPDATE CASCADE,
-  proj_id integer REFERENCES apflora.projekt (id) ON DELETE CASCADE ON UPDATE CASCADE
+  proj_id uuid REFERENCES apflora.projekt (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 CREATE INDEX ON apflora.userprojekt USING btree (name, proj_id);
 
@@ -240,16 +240,15 @@ DROP TABLE IF EXISTS apflora.tpopbeob;
 
 DROP TABLE IF EXISTS apflora.projekt;
 CREATE TABLE apflora.projekt (
-  "ProjId" SERIAL PRIMARY KEY,
-  "ProjName" varchar(150) DEFAULT NULL,
-  "MutWann" date DEFAULT NOW(),
-  "MutWer" varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
+  name varchar(150) DEFAULT NULL,
+  changed date DEFAULT NOW(),
+  changed_by varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
 );
-CREATE INDEX ON apflora.projekt USING btree ("ProjId");
-CREATE INDEX ON apflora.projekt USING btree ("ProjName");
-COMMENT ON COLUMN apflora.projekt."MutWann" IS 'Wann wurde der Datensatz zuletzt geändert?';
-COMMENT ON COLUMN apflora.projekt."MutWer" IS 'Von wem wurde der Datensatz zuletzt geändert?';
-INSERT INTO apflora.projekt VALUES (1, 'AP Flora Kt. ZH');
+CREATE INDEX ON apflora.projekt USING btree (id);
+CREATE INDEX ON apflora.projekt USING btree (name);
+COMMENT ON COLUMN apflora.projekt.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
+COMMENT ON COLUMN apflora.projekt.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
 DROP TABLE IF EXISTS apflora.ber;
 CREATE TABLE apflora.ber (
@@ -890,22 +889,22 @@ CREATE INDEX ON apflora.tpopmassnber USING btree (jahr);
 
 DROP TABLE IF EXISTS apflora.message CASCADE;
 CREATE TABLE apflora.message (
-  id SERIAL PRIMARY KEY,
-  "message" text NOT NULL,
-  "time" timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
+  message text NOT NULL,
+  time timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   -- active is used to prevent to many datasets fro being fetched
   -- old messages can be set inactive, expecially if read by all
-  "active" boolean NOT NULL DEFAULT 'true'
+  active boolean NOT NULL DEFAULT 'true'
 );
 CREATE INDEX ON apflora.message USING btree (id);
-CREATE INDEX ON apflora.message USING btree ("time");
+CREATE INDEX ON apflora.message USING btree (time);
 COMMENT ON COLUMN apflora.message."message" IS 'Nachricht an die Benutzer';
 
 -- list of read messages per user
 DROP TABLE IF EXISTS apflora.usermessage;
 CREATE TABLE apflora.usermessage (
   user_name varchar(30) NOT NULL REFERENCES basic_auth.users (name) ON DELETE CASCADE ON UPDATE CASCADE,
-  message_id integer NOT NULL REFERENCES apflora.message (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  message_id UUID NOT NULL REFERENCES apflora.message (id) ON DELETE CASCADE ON UPDATE CASCADE,
   UNIQUE (user_name, message_id)
 );
 CREATE INDEX ON apflora.usermessage USING btree (user_name, message_id);

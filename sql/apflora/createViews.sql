@@ -5001,7 +5001,7 @@ ORDER BY
 DROP VIEW IF EXISTS apflora.v_qk_tpop_popnrtpopnrmehrdeutig CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk_tpop_popnrtpopnrmehrdeutig AS
 SELECT
-  apflora.projekt."ProjId",
+  apflora.projekt.id as proj_id,
   apflora.ap.id as ap_id,
   'Teilpopulation: Die TPop.-Nr. ist mehrdeutig:'::text AS hw,
   ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id]::text[] AS url,
@@ -5016,7 +5016,7 @@ FROM
         apflora.tpop
         ON apflora.tpop.pop_id = apflora.pop.id
       ON apflora.pop.ap_id = apflora.ap.id
-    ON apflora.projekt."ProjId" = apflora.ap.proj_id
+    ON apflora.projekt.id = apflora.ap.proj_id
 WHERE
   apflora.tpop.pop_id IN (
     SELECT DISTINCT pop_id
@@ -5031,7 +5031,7 @@ WHERE
     HAVING COUNT(*) > 1
   )
 ORDER BY
-  apflora.projekt."ProjId",
+  apflora.projekt.id,
   apflora.ap.id,
   apflora.pop.nr,
   apflora.tpop.nr;
@@ -5039,7 +5039,7 @@ ORDER BY
 DROP VIEW IF EXISTS apflora.v_qk_pop_popnrmehrdeutig CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk_pop_popnrmehrdeutig AS
 SELECT
-  apflora.projekt."ProjId",
+  apflora.projekt.id as proj_id,
   apflora.ap.id as ap_id,
   'Population: Die Nr. ist mehrdeutig:'::text AS hw,
   ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS url,
@@ -5051,7 +5051,7 @@ FROM
     INNER JOIN
       apflora.pop
       ON apflora.pop.ap_id = apflora.ap.id
-    ON apflora.projekt."ProjId" = apflora.ap.proj_id
+    ON apflora.projekt.id = apflora.ap.proj_id
 WHERE
   apflora.pop.ap_id IN (
     SELECT DISTINCT ap_id
@@ -5066,7 +5066,7 @@ WHERE
     HAVING COUNT(*) > 1
   )
 ORDER BY
-  apflora.projekt."ProjId",
+  apflora.projekt.id,
   apflora.ap.id,
   apflora.pop.nr;
 
@@ -6561,7 +6561,7 @@ WHERE
 DROP VIEW IF EXISTS apflora.v_qk_tpop_mitstatuspotentiellundzaehlungmitanzahl CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk_tpop_mitstatuspotentiellundzaehlungmitanzahl AS
 SELECT DISTINCT
-  apflora.projekt."ProjId",
+  apflora.projekt.id as proj_id,
   apflora.pop.ap_id,
   apflora.pop.id as pop_id,
   apflora.tpop.id,
@@ -6578,7 +6578,7 @@ FROM
         apflora.tpop
         ON apflora.tpop.pop_id = apflora.pop.id
       ON apflora.pop.ap_id = apflora.ap.id
-    ON apflora.projekt."ProjId" = apflora.ap.proj_id
+    ON apflora.projekt.id = apflora.ap.proj_id
 WHERE
   apflora.tpop.status = 300
   AND apflora.tpop.id IN (
@@ -6882,7 +6882,7 @@ WITH lasttpopber AS (
     jahr DESC
 )
 SELECT
-  apflora.projekt."ProjId",
+  apflora.projekt.id as proj_id,
   apflora.ap.id as ap_id,
   'Teilpopulation: Status ist "aktuell" (ursprünglich oder angesiedelt) oder potentieller Wuchsort; der letzte Teilpopulations-Bericht meldet aber "erloschen" und es gab seither keine Ansiedlung:'::text AS "hw",
   ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id]::text[] AS "url",
@@ -6899,7 +6899,7 @@ FROM
         ON apflora.tpop.id = lasttpopber.tpop_id
       ON apflora.pop.id = apflora.tpop.pop_id
     ON apflora.ap.id = apflora.pop.ap_id
-  ON apflora.projekt."ProjId" = apflora.ap.proj_id
+  ON apflora.projekt.id = apflora.ap.proj_id
 WHERE
   apflora.tpop.status IN (100, 200, 210, 300)
   AND lasttpopber.entwicklung = 8
@@ -6932,7 +6932,7 @@ WITH lastpopber AS (
     jahr DESC
 )
 SELECT
-  apflora.projekt."ProjId",
+  apflora.projekt.id as proj_id,
   apflora.ap.id as ap_id,
   'Population: Status ist "aktuell" (ursprünglich oder angesiedelt) oder potentieller Wuchsort; der letzte Populations-Bericht meldet aber "erloschen" und es gab seither keine Ansiedlung:'::text AS "hw",
   ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS "url",
@@ -6946,7 +6946,7 @@ FROM
       INNER JOIN lastpopber
       ON apflora.pop.id = lastpopber.pop_id
     ON apflora.ap.id = apflora.pop.ap_id
-  ON apflora.projekt."ProjId" = apflora.ap.proj_id
+  ON apflora.projekt.id = apflora.ap.proj_id
 WHERE
   apflora.pop.status  IN (100, 200, 210, 300)
   AND lastpopber.entwicklung = 8
@@ -6980,7 +6980,7 @@ WITH lasttpopber AS (
     jahr DESC
 )
 SELECT
-  apflora.projekt."ProjId",
+  apflora.projekt.id as proj_id,
   apflora.ap.id as ap_id,
   'Teilpopulation: Status ist "erloschen" (ursprünglich oder angesiedelt), Ansaatversuch oder potentieller Wuchsort; der letzte Teilpopulations-Bericht meldet aber "zunehmend" und es gab seither keine Ansiedlung:'::text AS "hw",
   ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id]::text[] AS "url",
@@ -6997,7 +6997,7 @@ FROM
         ON apflora.tpop.id = lasttpopber.tpop_id
       ON apflora.pop.id = apflora.tpop.pop_id
     ON apflora.ap.id = apflora.pop.ap_id
-  ON apflora.projekt."ProjId" = apflora.ap.proj_id
+  ON apflora.projekt.id = apflora.ap.proj_id
 WHERE
   apflora.tpop.status IN (101, 201, 202, 211, 300)
   AND lasttpopber.entwicklung = 3
@@ -7030,7 +7030,7 @@ WITH lastpopber AS (
     jahr DESC
 )
 SELECT
-  apflora.projekt."ProjId",
+  apflora.projekt.id as proj_id,
   apflora.ap.id as ap_id,
   'Population: Status ist "erloschen" (ursprünglich oder angesiedelt), Ansaatversuch oder potentieller Wuchsort; der letzte Populations-Bericht meldet aber "zunehmend" und es gab seither keine Ansiedlung:'::text AS "hw",
   ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS "url",
@@ -7044,7 +7044,7 @@ FROM
       INNER JOIN lastpopber
       ON apflora.pop.id = lastpopber.pop_id
     ON apflora.ap.id = apflora.pop.ap_id
-  ON apflora.projekt."ProjId" = apflora.ap.proj_id
+  ON apflora.projekt.id = apflora.ap.proj_id
 WHERE
   apflora.pop.status  IN (101, 201, 202, 211, 300)
   AND lastpopber.entwicklung = 3
@@ -7078,7 +7078,7 @@ WITH lasttpopber AS (
     jahr DESC
 )
 SELECT
-  apflora.projekt."ProjId",
+  apflora.projekt.id as proj_id,
   apflora.ap.id as ap_id,
   'Teilpopulation: Status ist "erloschen" (ursprünglich oder angesiedelt), Ansaatversuch oder potentieller Wuchsort; der letzte Teilpopulations-Bericht meldet aber "stabil" und es gab seither keine Ansiedlung:'::text AS "hw",
   ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id]::text[] AS "url",
@@ -7095,7 +7095,7 @@ FROM
         ON apflora.tpop.id = lasttpopber.tpop_id
       ON apflora.pop.id = apflora.tpop.pop_id
     ON apflora.ap.id = apflora.pop.ap_id
-  ON apflora.projekt."ProjId" = apflora.ap.proj_id
+  ON apflora.projekt.id = apflora.ap.proj_id
 WHERE
   apflora.tpop.status IN (101, 201, 202, 211, 300)
   AND lasttpopber.entwicklung = 2
@@ -7128,7 +7128,7 @@ WITH lastpopber AS (
     jahr DESC
 )
 SELECT
-  apflora.projekt."ProjId",
+  apflora.projekt.id as proj_id,
   apflora.ap.id as ap_id,
   'Population: Status ist "erloschen" (ursprünglich oder angesiedelt), Ansaatversuch oder potentieller Wuchsort; der letzte Populations-Bericht meldet aber "stabil" und es gab seither keine Ansiedlung:'::text AS "hw",
   ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS "url",
@@ -7142,7 +7142,7 @@ FROM
       INNER JOIN lastpopber
       ON apflora.pop.id = lastpopber.pop_id
     ON apflora.ap.id = apflora.pop.ap_id
-  ON apflora.projekt."ProjId" = apflora.ap.proj_id
+  ON apflora.projekt.id = apflora.ap.proj_id
 WHERE
   apflora.pop.status  IN (101, 201, 202, 211, 300)
   AND lastpopber.entwicklung = 2
@@ -7176,7 +7176,7 @@ WITH lasttpopber AS (
     jahr DESC
 )
 SELECT
-  apflora.projekt."ProjId",
+  apflora.projekt.id as proj_id,
   apflora.ap.id as ap_id,
   'Teilpopulation: Status ist "erloschen" (ursprünglich oder angesiedelt), Ansaatversuch oder potentieller Wuchsort; der letzte Teilpopulations-Bericht meldet aber "abnehmend" und es gab seither keine Ansiedlung:'::text AS "hw",
   ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id]::text[] AS "url",
@@ -7193,7 +7193,7 @@ FROM
         ON apflora.tpop.id = lasttpopber.tpop_id
       ON apflora.pop.id = apflora.tpop.pop_id
     ON apflora.ap.id = apflora.pop.ap_id
-  ON apflora.projekt."ProjId" = apflora.ap.proj_id
+  ON apflora.projekt.id = apflora.ap.proj_id
 WHERE
   apflora.tpop.status IN (101, 201, 202, 211, 300)
   AND lasttpopber.entwicklung = 1
@@ -7226,7 +7226,7 @@ WITH lastpopber AS (
     jahr DESC
 )
 SELECT
-  apflora.projekt."ProjId",
+  apflora.projekt.id as proj_id,
   apflora.ap.id as ap_id,
   'Population: Status ist "erloschen" (ursprünglich oder angesiedelt), Ansaatversuch oder potentieller Wuchsort; der letzte Populations-Bericht meldet aber "abnehmend" und es gab seither keine Ansiedlung:'::text AS "hw",
   ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS "url",
@@ -7240,7 +7240,7 @@ FROM
       INNER JOIN lastpopber
       ON apflora.pop.id = lastpopber.pop_id
     ON apflora.ap.id = apflora.pop.ap_id
-  ON apflora.projekt."ProjId" = apflora.ap.proj_id
+  ON apflora.projekt.id = apflora.ap.proj_id
 WHERE
   apflora.pop.status  IN (101, 201, 202, 211, 300)
   AND lastpopber.entwicklung = 1
@@ -7274,7 +7274,7 @@ WITH lasttpopber AS (
     jahr DESC
 )
 SELECT
-  apflora.projekt."ProjId",
+  apflora.projekt.id as proj_id,
   apflora.ap.id as ap_id,
   'Teilpopulation: Status ist "erloschen" (ursprünglich oder angesiedelt) oder potentieller Wuchsort; der letzte Teilpopulations-Bericht meldet aber "unsicher" und es gab seither keine Ansiedlung:'::text AS "hw",
   ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id]::text[] AS "url",
@@ -7291,7 +7291,7 @@ FROM
         ON apflora.tpop.id = lasttpopber.tpop_id
       ON apflora.pop.id = apflora.tpop.pop_id
     ON apflora.ap.id = apflora.pop.ap_id
-  ON apflora.projekt."ProjId" = apflora.ap.proj_id
+  ON apflora.projekt.id = apflora.ap.proj_id
 WHERE
   apflora.tpop.status IN (101, 202, 211, 300)
   AND lasttpopber.entwicklung = 4
@@ -7324,7 +7324,7 @@ WITH lastpopber AS (
     jahr DESC
 )
 SELECT
-  apflora.projekt."ProjId",
+  apflora.projekt.id as proj_id,
   apflora.ap.id as ap_id,
   'Population: Status ist "erloschen" (ursprünglich oder angesiedelt) oder potentieller Wuchsort; der letzte Populations-Bericht meldet aber "unsicher" und es gab seither keine Ansiedlung:'::text AS "hw",
   ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS "url",
@@ -7338,7 +7338,7 @@ FROM
       INNER JOIN lastpopber
       ON apflora.pop.id = lastpopber.pop_id
     ON apflora.ap.id = apflora.pop.ap_id
-  ON apflora.projekt."ProjId" = apflora.ap.proj_id
+  ON apflora.projekt.id = apflora.ap.proj_id
 WHERE
   apflora.pop.status  IN (101, 202, 211, 300)
   AND lastpopber.entwicklung = 4
@@ -7359,7 +7359,7 @@ WHERE
 DROP VIEW IF EXISTS apflora.v_qk_pop_ohnetpopmitgleichemstatus CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk_pop_ohnetpopmitgleichemstatus AS
 SELECT
-  apflora.projekt."ProjId",
+  apflora.projekt.id as proj_id,
   apflora.ap.id as ap_id,
   'Population: Keine Teil-Population hat den Status der Population:'::text AS "hw",
   ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS "url",
@@ -7371,7 +7371,7 @@ FROM
     INNER JOIN
       apflora.pop
     ON apflora.ap.id = apflora.pop.ap_id
-  ON apflora.projekt."ProjId" = apflora.ap.proj_id
+  ON apflora.projekt.id = apflora.ap.proj_id
 WHERE
   --why was this here? deactivated 2017-11-03
   --apflora.pop.status  = 210
@@ -7397,7 +7397,7 @@ WHERE
 DROP VIEW IF EXISTS apflora.v_qk_pop_status300tpopstatusanders CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk_pop_status300tpopstatusanders AS
 SELECT
-  apflora.projekt."ProjId",
+  apflora.projekt.id as proj_id,
   apflora.ap.id as ap_id,
   'Population: Status ist "potentieller Wuchs-/Ansiedlungsort". Es gibt aber Teil-Populationen mit abweichendem Status:'::text AS "hw",
   ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS "url",
@@ -7409,7 +7409,7 @@ FROM
     INNER JOIN
       apflora.pop
     ON apflora.ap.id = apflora.pop.ap_id
-  ON apflora.projekt."ProjId" = apflora.ap.proj_id
+  ON apflora.projekt.id = apflora.ap.proj_id
 WHERE
   apflora.pop.status  = 300
   AND apflora.pop.id IN (
@@ -7425,7 +7425,7 @@ WHERE
 DROP VIEW IF EXISTS apflora.v_qk_pop_status201tpopstatusunzulaessig CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk_pop_status201tpopstatusunzulaessig AS
 SELECT
-  apflora.projekt."ProjId",
+  apflora.projekt.id as proj_id,
   apflora.ap.id as ap_id,
   'Population: Status ist "Ansaatversuch". Es gibt Teil-Populationen mit nicht zulässigen Stati ("ursprünglich" oder "angesiedelt, aktuell"):'::text AS "hw",
   ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS "url",
@@ -7437,7 +7437,7 @@ FROM
     INNER JOIN
       apflora.pop
     ON apflora.ap.id = apflora.pop.ap_id
-  ON apflora.projekt."ProjId" = apflora.ap.proj_id
+  ON apflora.projekt.id = apflora.ap.proj_id
 WHERE
   apflora.pop.status  = 201
   AND apflora.pop.id IN (
@@ -7453,7 +7453,7 @@ WHERE
 DROP VIEW IF EXISTS apflora.v_qk_pop_status202tpopstatusanders CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk_pop_status202tpopstatusanders AS
 SELECT
-  apflora.projekt."ProjId",
+  apflora.projekt.id as proj_id,
   apflora.ap.id as ap_id,
   'Population: Status ist "angesiedelt nach Beginn AP, erloschen/nicht etabliert". Es gibt Teil-Populationen mit abweichendem Status:'::text AS "hw",
   ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS "url",
@@ -7465,7 +7465,7 @@ FROM
     INNER JOIN
       apflora.pop
     ON apflora.ap.id = apflora.pop.ap_id
-  ON apflora.projekt."ProjId" = apflora.ap.proj_id
+  ON apflora.projekt.id = apflora.ap.proj_id
 WHERE
   apflora.pop.status  = 202
   AND apflora.pop.id IN (
@@ -7481,7 +7481,7 @@ WHERE
 DROP VIEW IF EXISTS apflora.v_qk_pop_status211tpopstatusunzulaessig CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk_pop_status211tpopstatusunzulaessig AS
 SELECT
-  apflora.projekt."ProjId",
+  apflora.projekt.id as proj_id,
   apflora.ap.id as ap_id,
   'Population: Status ist "angesiedelt vor Beginn AP, erloschen/nicht etabliert". Es gibt Teil-Populationen mit nicht zulässigen Stati ("ursprünglich", "angesiedelt, aktuell", "Ansaatversuch", "potentieller Wuchsort"):'::text AS "hw",
   ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS "url",
@@ -7493,7 +7493,7 @@ FROM
     INNER JOIN
       apflora.pop
     ON apflora.ap.id = apflora.pop.ap_id
-  ON apflora.projekt."ProjId" = apflora.ap.proj_id
+  ON apflora.projekt.id = apflora.ap.proj_id
 WHERE
   apflora.pop.status  = 211
   AND apflora.pop.id IN (
@@ -7509,7 +7509,7 @@ WHERE
 DROP VIEW IF EXISTS apflora.v_qk_pop_status200tpopstatusunzulaessig CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk_pop_status200tpopstatusunzulaessig AS
 SELECT
-  apflora.projekt."ProjId",
+  apflora.projekt.id as proj_id,
   apflora.ap.id as ap_id,
   'Population: Status ist "angesiedelt nach Beginn AP, aktuell". Es gibt Teil-Populationen mit nicht zulässigen Stati ("ursprünglich", "angesiedelt vor Beginn AP, aktuell"):'::text AS "hw",
   ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS "url",
@@ -7521,7 +7521,7 @@ FROM
     INNER JOIN
       apflora.pop
     ON apflora.ap.id = apflora.pop.ap_id
-  ON apflora.projekt."ProjId" = apflora.ap.proj_id
+  ON apflora.projekt.id = apflora.ap.proj_id
 WHERE
   apflora.pop.status  = 200
   AND apflora.pop.id IN (
@@ -7537,7 +7537,7 @@ WHERE
 DROP VIEW IF EXISTS apflora.v_qk_pop_status210tpopstatusunzulaessig CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk_pop_status210tpopstatusunzulaessig AS
 SELECT
-  apflora.projekt."ProjId",
+  apflora.projekt.id as proj_id,
   apflora.ap.id as ap_id,
   'Population: Status ist "angesiedelt vor Beginn AP, aktuell". Es gibt Teil-Populationen mit nicht zulässigen Stati ("ursprünglich"):'::text AS "hw",
   ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS "url",
@@ -7549,7 +7549,7 @@ FROM
     INNER JOIN
       apflora.pop
     ON apflora.ap.id = apflora.pop.ap_id
-  ON apflora.projekt."ProjId" = apflora.ap.proj_id
+  ON apflora.projekt.id = apflora.ap.proj_id
 WHERE
   apflora.pop.status  = 210
   AND apflora.pop.id IN (
@@ -7565,7 +7565,7 @@ WHERE
 DROP VIEW IF EXISTS apflora.v_qk_pop_status101tpopstatusanders CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk_pop_status101tpopstatusanders AS
 SELECT
-  apflora.projekt."ProjId",
+  apflora.projekt.id as proj_id,
   apflora.ap.id as ap_id,
   'Population: Status ist "ursprünglich, erloschen". Es gibt Teil-Populationen (ausser potentiellen Wuchs-/Ansiedlungsorten) mit abweichendem Status:'::text AS "hw",
   ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS "url",
@@ -7577,7 +7577,7 @@ FROM
     INNER JOIN
       apflora.pop
     ON apflora.ap.id = apflora.pop.ap_id
-  ON apflora.projekt."ProjId" = apflora.ap.proj_id
+  ON apflora.projekt.id = apflora.ap.proj_id
 WHERE
   apflora.pop.status  = 101
   AND apflora.pop.id IN (
@@ -7606,7 +7606,7 @@ WITH lastpopber AS (
     jahr DESC
 )
 SELECT
-  apflora.projekt."ProjId",
+  apflora.projekt.id as proj_id,
   apflora.ap.id as ap_id,
   'Population: Status ist "erloschen" (ursprünglich oder angesiedelt); der letzte Populations-Bericht meldet "erloschen". Seither gab es aber eine Ansiedlung:'::text AS "hw",
   ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS "url",
@@ -7620,7 +7620,7 @@ FROM
       INNER JOIN lastpopber
       ON apflora.pop.id = lastpopber.pop_id
     ON apflora.ap.id = apflora.pop.ap_id
-  ON apflora.projekt."ProjId" = apflora.ap.proj_id
+  ON apflora.projekt.id = apflora.ap.proj_id
 WHERE
   apflora.pop.status  IN (101, 202, 211)
   AND lastpopber.entwicklung = 8
@@ -7654,7 +7654,7 @@ WITH lasttpopber AS (
     jahr DESC
 )
 SELECT
-  apflora.projekt."ProjId",
+  apflora.projekt.id as proj_id,
   apflora.ap.id as ap_id,
   'Teilpopulation: Status ist "erloschen" (ursprünglich oder angesiedelt); der letzte Teilpopulations-Bericht meldet "erloschen". Seither gab es aber eine Ansiedlung:'::text AS "hw",
   ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id]::text[] AS "url",
@@ -7671,7 +7671,7 @@ FROM
         ON apflora.tpop.id = lasttpopber.tpop_id
       ON apflora.pop.id = apflora.tpop.pop_id
     ON apflora.ap.id = apflora.pop.ap_id
-  ON apflora.projekt."ProjId" = apflora.ap.proj_id
+  ON apflora.projekt.id = apflora.ap.proj_id
 WHERE
   apflora.tpop.status IN (101, 202, 211)
   AND lasttpopber.entwicklung = 8

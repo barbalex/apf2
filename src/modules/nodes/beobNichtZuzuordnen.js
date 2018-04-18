@@ -10,7 +10,7 @@ export default (
   const { filteredAndSorted } = tree
 
   // fetch sorting indexes of parents
-  const projIndex = findIndex(filteredAndSorted.projekt, { ProjId: projId })
+  const projIndex = findIndex(filteredAndSorted.projekt, { id: projId })
   const apIndex = findIndex(
     filteredAndSorted.ap.filter(a => a.proj_id === projId),
     { id: apId }

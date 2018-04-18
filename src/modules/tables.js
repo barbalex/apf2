@@ -211,7 +211,7 @@ export default [
     table: 'projekt',
     label: 'Projekte',
     labelSingular: 'Projekt',
-    idField: 'ProjId',
+    idField: 'id',
   },
   {
     table: 'beob',

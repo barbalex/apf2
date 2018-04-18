@@ -30,7 +30,7 @@ const Projekt = ({ store, tree }: { store: Object, tree: Object }) => {
         <FormTitle tree={tree} title="Projekt" />
         <FieldsContainer>
           <TextField
-            key={`${activeDataset.row.ProjId}ProjName`}
+            key={`${activeDataset.row.id}ProjName`}
             tree={tree}
             label="Name"
             fieldName="ProjName"

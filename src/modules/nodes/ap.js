@@ -4,7 +4,7 @@ import findIndex from 'lodash/findIndex'
 export default (store: Object, tree: Object, projId: number): Array<Object> => {
   // fetch sorting indexes of parents
   const projIndex = findIndex(tree.filteredAndSorted.projekt, {
-    ProjId: projId,
+    id: projId,
   })
 
   // map through all pop and create array of nodes

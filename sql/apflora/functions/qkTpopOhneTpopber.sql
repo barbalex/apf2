@@ -1,5 +1,5 @@
 CREATE OR REPLACE FUNCTION apflora.qk_tpop_ohne_tpopber(apid uuid, berichtjahr integer)
-  RETURNS table("ProjId" integer, ap_id uuid, hw text, url text[], text text[]) AS
+  RETURNS table(proj_id uuid, ap_id uuid, hw text, url text[], text text[]) AS
   $$
   -- 3. "TPop ohne verlangten TPop-Bericht im Berichtjahr" ermitteln und in Qualitätskontrollen auflisten:
   SELECT DISTINCT

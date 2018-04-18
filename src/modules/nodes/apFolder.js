@@ -6,7 +6,7 @@ export default (store: Object, tree: Object, projId: number): Array<Object> => {
 
   // fetch sorting indexes of parents
   const projIndex = findIndex(filteredAndSorted.projekt, {
-    ProjId: projId,
+    id: projId,
   })
 
   // build label
