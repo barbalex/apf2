@@ -11,6 +11,8 @@ CREATE INDEX ON apflora._variable USING btree (ap_id);
 
 DROP TABLE IF EXISTS adresse;
 CREATE TABLE apflora.adresse (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
+  id_old integer DEFAULT NULL,
   "AdrId" SERIAL PRIMARY KEY,
   "AdrName" text DEFAULT NULL,
   "AdrAdresse" text DEFAULT NULL,
@@ -29,7 +31,6 @@ COMMENT ON COLUMN apflora.adresse."AdrEmail" IS 'Email';
 COMMENT ON COLUMN apflora.adresse."freiwErfko" IS '-1 = freiwillige(r) Kontrolleur(in)';
 COMMENT ON COLUMN apflora.adresse."MutWann" IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.adresse."MutWer" IS 'Von wem wurde der Datensatz zuletzt geändert?';
-SELECT setval(pg_get_serial_sequence('apflora.adresse', 'AdrId'), coalesce(max("AdrId"), 0) + 1, false) FROM apflora.adresse;
 CREATE INDEX ON apflora.adresse USING btree ("AdrId");
 CREATE INDEX ON apflora.adresse USING btree ("AdrName");
 

@@ -104,8 +104,8 @@ CREATE TRIGGER beob_on_update_set_mut BEFORE UPDATE OR INSERT ON apflora.beob
 -- done: add all views, functions, triggers containing this table to this file
 -- done: replace all callst to tpopbeob in views etc.
 -- done: run migration sql in dev
--- TODO: restart postgrest and test app
--- TODO: CHECK child tables: are they correct?
+-- done: restart postgrest and test app
+-- done: CHECK child tables: are they correct?
 -- TODO: update js and run this file on server
 -- TODO: restart postgrest
 
