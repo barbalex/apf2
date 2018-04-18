@@ -904,11 +904,11 @@ COMMENT ON COLUMN apflora.message."message" IS 'Nachricht an die Benutzer';
 -- list of read messages per user
 DROP TABLE IF EXISTS apflora.usermessage;
 CREATE TABLE apflora.usermessage (
-  "UserName" varchar(30) NOT NULL REFERENCES basic_auth.users (name) ON DELETE CASCADE ON UPDATE CASCADE,
-  "MessageId" integer NOT NULL REFERENCES apflora.message (id) ON DELETE CASCADE ON UPDATE CASCADE,
-  UNIQUE ("UserName", "MessageId")
+  user varchar(30) NOT NULL REFERENCES basic_auth.users (name) ON DELETE CASCADE ON UPDATE CASCADE,
+  message_id integer NOT NULL REFERENCES apflora.message (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  UNIQUE (user, message_id)
 );
-CREATE INDEX ON apflora.usermessage USING btree ("UserName", "MessageId");
+CREATE INDEX ON apflora.usermessage USING btree (user, message_id);
 
 DROP TABLE IF EXISTS apflora.ziel;
 CREATE TABLE apflora.ziel (

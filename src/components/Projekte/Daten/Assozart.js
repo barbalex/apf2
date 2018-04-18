@@ -2,7 +2,6 @@
 import React from 'react'
 import { observer, inject } from 'mobx-react'
 import sortBy from 'lodash/sortBy'
-import filter from 'lodash/filter'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
 
