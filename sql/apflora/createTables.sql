@@ -68,10 +68,10 @@ COMMENT ON COLUMN apflora.ap.changed_by IS 'Von wem wurde der Datensatz zuletzt 
 
 DROP TABLE IF EXISTS apflora.userprojekt;
 CREATE TABLE apflora.userprojekt (
-  "UserName" varchar(30) REFERENCES basic_auth.users (name) ON DELETE CASCADE ON UPDATE CASCADE,
-  "ProjId" integer REFERENCES apflora.projekt ("ProjId") ON DELETE CASCADE ON UPDATE CASCADE
+  name varchar(30) REFERENCES basic_auth.users (name) ON DELETE CASCADE ON UPDATE CASCADE,
+  proj_id integer REFERENCES apflora.projekt (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
-CREATE INDEX ON apflora.userprojekt USING btree ("UserName", "ProjId");
+CREATE INDEX ON apflora.userprojekt USING btree (name, proj_id);
 
 DROP TABLE IF EXISTS apflora.ap_bearbstand_werte;
 CREATE TABLE apflora.ap_bearbstand_werte (
@@ -1078,8 +1078,8 @@ COMMENT ON COLUMN apflora.beob.changed_by IS 'Von wem wurde der Datensatz zuletz
 DROP TABLE IF EXISTS apflora.beobprojekt;
 CREATE TABLE apflora.beobprojekt (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
-  proj_id UUID NOT NULL,
-  beob_id UUID NOT NULL,
+  proj_id UUID NOT NULL REFERENCES apflora.projekt (id) ON DELETE SET NULL ON UPDATE CASCADE,
+  beob_id UUID NOT NULL REFERENCES apflora.beob (id) ON DELETE SET NULL ON UPDATE CASCADE,
   UNIQUE (proj_id, beob_id)
 );
 

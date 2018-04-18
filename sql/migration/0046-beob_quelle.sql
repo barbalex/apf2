@@ -1,10 +1,10 @@
 
 ALTER TABLE apflora.beob_quelle RENAME TO beob_quelle_werte;
-ALTER TABLE apflora.beob_quelle RENAME id TO id_old;
-ALTER TABLE apflora.beob_quelle ADD COLUMN id UUID UNIQUE DEFAULT uuid_generate_v1mc();
+ALTER TABLE apflora.beob_quelle_werte RENAME id TO id_old;
+ALTER TABLE apflora.beob_quelle_werte ADD COLUMN id UUID UNIQUE DEFAULT uuid_generate_v1mc();
 
 -- change primary key
-ALTER TABLE apflora.beob_quelle_werte DROP CONSTRAINT beob_quelle_werte_pkey;
+ALTER TABLE apflora.beob_quelle_werte DROP CONSTRAINT beob_quelle_pkey;
 ALTER TABLE apflora.beob_quelle_werte ADD PRIMARY KEY (id);
 ALTER TABLE apflora.beob_quelle_werte ALTER COLUMN id_old DROP NOT NULL;
 ALTER TABLE apflora.beob_quelle_werte ALTER COLUMN id_old SET DEFAULT null;
@@ -20,7 +20,7 @@ CREATE INDEX ON apflora.beob_quelle_werte USING btree (id);
 -- done: check if old id was used somewhere. If so: rename that field, add new one and update that
 -- done: add all views, functions, triggers containing this table to this file
 -- done: run migration sql in dev
--- done: restart postgrest and test app
+-- TODO: restart postgrest and test app
 -- TODO: update js and run this file on server
 -- TODO: restart postgrest
 
