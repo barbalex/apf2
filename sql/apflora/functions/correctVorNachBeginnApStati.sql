@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION apflora.correct_vornach_beginnap_stati(apid integer)
+CREATE OR REPLACE FUNCTION apflora.correct_vornach_beginnap_stati(apid uuid)
  RETURNS VOID LANGUAGE plpgsql SECURITY DEFINER AS $$
  BEGIN
 
@@ -201,5 +201,5 @@ CREATE OR REPLACE FUNCTION apflora.correct_vornach_beginnap_stati(apid integer)
  END;
  $$;
 
-ALTER FUNCTION apflora.correct_vornach_beginnap_stati(apid integer)
+ALTER FUNCTION apflora.correct_vornach_beginnap_stati(apid uuid)
    OWNER TO postgres;
