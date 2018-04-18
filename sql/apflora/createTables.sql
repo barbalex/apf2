@@ -41,7 +41,7 @@ DROP TABLE IF EXISTS apflora.ap;
 CREATE TABLE apflora.ap (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
   id_old integer DEFAULT NULL,
-  art_id UUID UNIQUE DEFAULT NULL,
+  art_id UUID UNIQUE DEFAULT NULL REFERENCES apflora.ae_eigenschaften(id) on delete set null on update cascade,
   proj_id uuid DEFAULT NULL REFERENCES apflora.projekt (id) ON DELETE CASCADE ON UPDATE CASCADE,
   bearbeitung integer DEFAULT NULL REFERENCES apflora.ap_bearbstand_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
   start_jahr smallint DEFAULT NULL,
@@ -278,12 +278,15 @@ DROP TABLE IF EXISTS apflora.erfkrit;
 CREATE TABLE apflora.erfkrit (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
   id_old integer DEFAULT NULL,
-  ap_id integer NOT NULL DEFAULT '0' REFERENCES apflora.ap (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  ap_id integer NOT NULL DEFAULT NULL REFERENCES apflora.ap (id) ON DELETE CASCADE ON UPDATE CASCADE,
   erfolg integer DEFAULT NULL REFERENCES apflora.ap_erfkrit_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
   kriterien text DEFAULT NULL,
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
 );
+CREATE INDEX ON apflora.erfkrit USING btree (id);
+CREATE INDEX ON apflora.erfkrit USING btree (ap_id);
+CREATE INDEX ON apflora.erfkrit USING btree (erfolg);
 COMMENT ON COLUMN apflora.erfkrit.id IS 'Primärschlüssel';
 COMMENT ON COLUMN apflora.erfkrit.id_old IS 'frühere id';
 COMMENT ON COLUMN apflora.erfkrit.ap_id IS 'Zugehöriger Aktionsplan. Fremdschlüssel aus der Tabelle "ap"';
@@ -291,9 +294,6 @@ COMMENT ON COLUMN apflora.erfkrit.erfolg IS 'Wie gut werden die Ziele erreicht? 
 COMMENT ON COLUMN apflora.erfkrit.kriterien IS 'Beschreibung der Kriterien für den Erfolg';
 COMMENT ON COLUMN apflora.erfkrit.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.erfkrit.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
-CREATE INDEX ON apflora.erfkrit USING btree (id);
-CREATE INDEX ON apflora.erfkrit USING btree (ap_id);
-CREATE INDEX ON apflora.erfkrit USING btree (erfolg);
 
 DROP TABLE IF EXISTS apflora.gemeinde;
 CREATE TABLE apflora.gemeinde (
@@ -1037,7 +1037,7 @@ CREATE TABLE apflora.beob (
   id_field varchar(38) DEFAULT NULL,
   -- SISF Nr.
   art_id_old integer DEFAULT NULL,
-  art_id UUID DEFAULT NULL,
+  art_id UUID DEFAULT NULL REFERENCES apflora.ae_eigenschaften(id) on delete set null on update cascade,
   -- data without year is not imported
   -- when no month exists: month = 01
   -- when no day exists: day = 01
