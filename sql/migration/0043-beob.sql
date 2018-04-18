@@ -65,7 +65,7 @@ DROP TABLE apflora.beob_projekt;
 UPDATE apflora.beob SET tpop_id = (
   SELECT tpop_id FROM apflora.tpopbeob WHERE beob_id = apflora.beob.id_old LIMIT 1
 );
-UPDATE apflora.beob SET nicht_zuordnen = true where id in (
+UPDATE apflora.beob SET nicht_zuordnen = true where id_old in (
   SELECT distinct beob_id FROM apflora.tpopbeob WHERE nicht_zuordnen = 1
 );
 UPDATE apflora.beob SET bemerkungen = (
