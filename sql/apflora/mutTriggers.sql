@@ -132,8 +132,8 @@ DROP TRIGGER IF EXISTS projekt_on_update_set_mut ON apflora.projekt;
 DROP FUNCTION IF EXISTS projekt_on_update_set_mut();
 CREATE FUNCTION projekt_on_update_set_mut() RETURNS trigger AS $projekt_on_update_set_mut$
   BEGIN
-    NEW."MutWer" = current_setting('request.jwt.claim.username', true);
-    NEW."MutWann" = NOW();
+    NEW.changed_by = current_setting('request.jwt.claim.username', true);
+    NEW.changed = NOW();
     RETURN NEW;
   END;
 $projekt_on_update_set_mut$ LANGUAGE plpgsql;

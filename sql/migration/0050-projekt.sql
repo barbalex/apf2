@@ -5,7 +5,7 @@ ALTER TABLE apflora.projekt RENAME "MutWann" TO changed;
 ALTER TABLE apflora.projekt RENAME "MutWer" TO changed_by;
 
 -- change primary key
-ALTER TABLE apflora.projekt DROP CONSTRAINT ap_pkey cascade;
+ALTER TABLE apflora.projekt DROP CONSTRAINT projekt_pkey cascade;
 ALTER TABLE apflora.projekt ADD PRIMARY KEY (id);
 ALTER TABLE apflora.projekt ALTER COLUMN id_old DROP NOT NULL;
 ALTER TABLE apflora.projekt ALTER COLUMN id_old SET DEFAULT null;
@@ -28,33 +28,11 @@ CREATE INDEX ON apflora.ap USING btree (proj_id);
 ALTER TABLE apflora.ap DROP COLUMN proj_id_old CASCADE;
 COMMENT ON COLUMN apflora.ap.proj_id IS 'Zugehöriger Aktionsplan. Fremdschlüssel aus der Tabelle "projekt"';
 
--- change userprojekt
-ALTER TABLE apflora.userprojekt RENAME proj_id TO proj_id_old;
-DROP index IF EXISTS apflora.apflora."userprojekt_proj_id_idx";
-ALTER TABLE apflora.userprojekt ADD COLUMN proj_id UUID DEFAULT NULL REFERENCES apflora.projekt (id) ON DELETE CASCADE ON UPDATE CASCADE;
-UPDATE apflora.userprojekt SET proj_id = (
-  SELECT id FROM apflora.projekt WHERE id_old = apflora.userprojekt.proj_id_old
-) WHERE proj_id_old IS NOT NULL;
-CREATE INDEX ON apflora.userprojekt USING btree (proj_id);
-ALTER TABLE apflora.userprojekt DROP COLUMN proj_id_old CASCADE;
-COMMENT ON COLUMN apflora.userprojekt.proj_id IS 'Zugehöriger Aktionsplan. Fremdschlüssel aus der Tabelle "projekt"';
-
--- change beobprojekt
-ALTER TABLE apflora.beobprojekt RENAME proj_id TO proj_id_old;
-DROP index IF EXISTS apflora.apflora."beobprojekt_proj_id_idx";
-ALTER TABLE apflora.beobprojekt ADD COLUMN proj_id UUID DEFAULT NULL REFERENCES apflora.projekt (id) ON DELETE CASCADE ON UPDATE CASCADE;
-UPDATE apflora.beobprojekt SET proj_id = (
-  SELECT id FROM apflora.projekt WHERE id_old = apflora.beobprojekt.proj_id_old
-) WHERE proj_id_old IS NOT NULL;
-CREATE INDEX ON apflora.beobprojekt USING btree (proj_id);
-ALTER TABLE apflora.beobprojekt DROP COLUMN proj_id_old CASCADE;
-COMMENT ON COLUMN apflora.beobprojekt.proj_id IS 'Zugehöriger Aktionsplan. Fremdschlüssel aus der Tabelle "projekt"';
-
--- TODO: make sure createTable is correct
--- TODO: rename in sql
--- TODO: rename in js
--- TODO: check if old id was used somewhere. If so: rename that field, add new one and update that
--- TODO: add all views, functions, triggers containing this table to this file
+-- done: make sure createTable is correct
+-- done: rename in sql
+-- done: rename in js
+-- done: check if old id was used somewhere. If so: rename that field, add new one and update that
+-- done: add all views, functions, triggers containing this table to this file
 -- TODO: run migration sql in dev
 -- TODO: restart postgrest and test app
 -- TODO: special ap functions work?
@@ -109,14 +87,13 @@ CREATE OR REPLACE FUNCTION apflora.qk_tpop_ohne_tpopber(apid uuid, berichtjahr i
 ALTER FUNCTION apflora.qk_tpop_ohne_tpopber(apid uuid, berichtjahr integer)
   OWNER TO postgres;
 
-DROP FUNCTION apflora.qk_tpop_ohne_massnber(apid integer, berichtjahr integer);
-DROP FUNCTION apflora.qk_tpop_ohne_massnber(apid integer, berichtjahr integer);
+DROP FUNCTION if exists apflora.qk_tpop_ohne_massnber(apid uuid, berichtjahr integer);
 CREATE OR REPLACE FUNCTION apflora.qk_tpop_ohne_massnber(apid uuid, berichtjahr integer)
   RETURNS table(proj_id uuid, ap_id uuid, hw text, url text[], text text[]) AS
   $$
   -- 4. "TPop ohne verlangten Massnahmen-Bericht im Berichtjahr" ermitteln und in Qualitätskontrollen auflisten:
   SELECT DISTINCT
-    '4635372c-431c-11e8-bb30-e77f6cdd35a6' AS proj_id,
+    '4635372c-431c-11e8-bb30-e77f6cdd35a6'::uuid AS proj_id,
     apflora.pop.ap_id,
     'Teilpopulation mit Ansiedlung (vor dem Berichtjahr) und Kontrolle (im Berichtjahr) aber ohne Massnahmen-Bericht (im Berichtjahr):' AS hw,
     ARRAY['Projekte', 1 , 'Arten', apflora.pop.ap_id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id]::text[] AS "url",
@@ -301,3 +278,17 @@ CREATE OR REPLACE FUNCTION apflora.qk_pop_ohne_popber(apid uuid, berichtjahr int
   LANGUAGE sql STABLE;
 ALTER FUNCTION apflora.qk_pop_ohne_popber(apid uuid, berichtjahr integer)
   OWNER TO postgres;
+
+
+DROP TRIGGER IF EXISTS projekt_on_update_set_mut ON apflora.projekt;
+DROP FUNCTION IF EXISTS projekt_on_update_set_mut();
+CREATE FUNCTION projekt_on_update_set_mut() RETURNS trigger AS $projekt_on_update_set_mut$
+  BEGIN
+    NEW.changed_by = current_setting('request.jwt.claim.username', true);
+    NEW.changed = NOW();
+    RETURN NEW;
+  END;
+$projekt_on_update_set_mut$ LANGUAGE plpgsql;
+
+CREATE TRIGGER projekt_on_update_set_mut BEFORE UPDATE OR INSERT ON apflora.projekt
+  FOR EACH ROW EXECUTE PROCEDURE projekt_on_update_set_mut();

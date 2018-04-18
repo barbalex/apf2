@@ -3,9 +3,7 @@ export default (activeNodeArray: Array<mixed>, store: Object): Object => {
   const projektFolder =
     (activeNodeArray.length > 0 && activeNodeArray[0] === 'Projekte') || false
   const projekt =
-    projektFolder && activeNodeArray.length > 1
-      ? parseInt(activeNodeArray[1], 10)
-      : null
+    projektFolder && activeNodeArray.length > 1 ? activeNodeArray[1] : null
   const apberuebersichtFolder =
     (projekt &&
       activeNodeArray.length > 2 &&

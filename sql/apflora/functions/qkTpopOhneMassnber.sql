@@ -4,7 +4,7 @@ CREATE OR REPLACE FUNCTION apflora.qk_tpop_ohne_massnber(apid uuid, berichtjahr 
   $$
   -- 4. "TPop ohne verlangten Massnahmen-Bericht im Berichtjahr" ermitteln und in Qualitätskontrollen auflisten:
   SELECT DISTINCT
-    '4635372c-431c-11e8-bb30-e77f6cdd35a6' AS proj_id,
+    '4635372c-431c-11e8-bb30-e77f6cdd35a6'::uuid AS proj_id,
     apflora.pop.ap_id,
     'Teilpopulation mit Ansiedlung (vor dem Berichtjahr) und Kontrolle (im Berichtjahr) aber ohne Massnahmen-Bericht (im Berichtjahr):' AS hw,
     ARRAY['Projekte', 1 , 'Arten', apflora.pop.ap_id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id]::text[] AS "url",
