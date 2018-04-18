@@ -51,7 +51,6 @@ COMMENT ON COLUMN apflora.apberuebersicht.proj_id IS 'Zugehöriger Aktionsplan. 
 -- TODO: update js and run this file on server
 -- TODO: restart postgrest
 
-
 DROP TRIGGER IF EXISTS projekt_on_update_set_mut ON apflora.projekt;
 DROP FUNCTION IF EXISTS projekt_on_update_set_mut();
 CREATE FUNCTION projekt_on_update_set_mut() RETURNS trigger AS $projekt_on_update_set_mut$
