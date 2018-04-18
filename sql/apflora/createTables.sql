@@ -1096,12 +1096,12 @@ CREATE INDEX ON apflora.beob_quelle_werte USING btree (id);
 DROP TABLE IF EXISTS apflora.apart;
 CREATE TABLE apflora.apart (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
-  id_old integer,,
-  art_id UUID DEFAULT NULL,
+  id_old integer,
+  art_id UUID DEFAULT NULL REFERENCES apflora.ae_eigenschaften (id) ON DELETE SET NULL ON UPDATE CASCADE,
   ap_id integer DEFAULT NULL REFERENCES apflora.ap (id) ON DELETE CASCADE ON UPDATE CASCADE,
   changed date DEFAULT NULL,
   changed_by varchar(20) DEFAULT NULL
-  --UNIQUE (taxid) --no, maybe after beob were rearranged
+  --UNIQUE (art_id) --no, maybe after beob were rearranged
 );
 CREATE INDEX ON apflora.apart USING btree (id);
 CREATE INDEX ON apflora.apart USING btree (ap_id);
