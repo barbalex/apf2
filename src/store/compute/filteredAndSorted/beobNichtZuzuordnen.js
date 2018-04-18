@@ -14,7 +14,7 @@ export default (store: Object, tree: Object): Array<Object> => {
       if (!apFilter) return true
       let ap
       if (b) {
-        ap = aps.find(v => v.art === b.art_id)
+        ap = aps.find(v => v.art_id === b.art_id)
       }
       if (ap && ap.bearbeitung) {
         return [1, 2, 3].includes(ap.bearbeitung)

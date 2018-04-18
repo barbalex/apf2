@@ -226,7 +226,7 @@ SELECT
 FROM
   ((((((apflora.ae_eigenschaften
   INNER JOIN
-    apflora.ap ON apflora.ae_eigenschaften.id = apflora.ap.art)
+    apflora.ap ON apflora.ae_eigenschaften.id = apflora.ap.art_id)
     INNER JOIN
       ((apflora.pop
       INNER JOIN
@@ -299,7 +299,7 @@ SELECT
 FROM
   ((((((apflora.ae_eigenschaften
   INNER JOIN
-    apflora.ap ON apflora.ae_eigenschaften.id = apflora.ap.art)
+    apflora.ap ON apflora.ae_eigenschaften.id = apflora.ap.art_id)
     INNER JOIN
       ((apflora.pop
       INNER JOIN
@@ -427,7 +427,7 @@ SELECT
 FROM
   ((((((apflora.ae_eigenschaften
   INNER JOIN
-    apflora.ap ON apflora.ae_eigenschaften.id = apflora.ap.art)
+    apflora.ap ON apflora.ae_eigenschaften.id = apflora.ap.art_id)
     INNER JOIN
       ((apflora.pop
       INNER JOIN
@@ -530,7 +530,7 @@ FROM
     LEFT JOIN
       apflora.ap_umsetzung_werte
       ON apflora.ap.umsetzung = apflora.ap_umsetzung_werte.code)
-  ON apflora.ae_eigenschaften.id = apflora.ap.art
+  ON apflora.ae_eigenschaften.id = apflora.ap.art_id
 GROUP BY
   apflora.ap.id,
   apflora.ae_eigenschaften.familie,
@@ -597,7 +597,7 @@ FROM
   ((((apflora.ae_eigenschaften
   INNER JOIN
     apflora.ap
-    ON apflora.ae_eigenschaften.id = apflora.ap.art)
+    ON apflora.ae_eigenschaften.id = apflora.ap.art_id)
   INNER JOIN
     ((apflora.pop
     LEFT JOIN
@@ -657,7 +657,7 @@ FROM
   ((((apflora.ae_eigenschaften
   INNER JOIN
     apflora.ap
-    ON apflora.ae_eigenschaften.id = apflora.ap.art)
+    ON apflora.ae_eigenschaften.id = apflora.ap.art_id)
   INNER JOIN
     ((apflora.pop
     LEFT JOIN
@@ -708,7 +708,7 @@ FROM
   (((apflora.ae_eigenschaften
   INNER JOIN
     apflora.ap
-    ON apflora.ae_eigenschaften.id = apflora.ap.art)
+    ON apflora.ae_eigenschaften.id = apflora.ap.art_id)
   LEFT JOIN
     ((apflora.pop
     LEFT JOIN
@@ -746,7 +746,7 @@ FROM
   (((apflora.ae_eigenschaften
   INNER JOIN
     apflora.ap
-    ON apflora.ae_eigenschaften.id = apflora.ap.art)
+    ON apflora.ae_eigenschaften.id = apflora.ap.art_id)
   LEFT JOIN
     ((apflora.pop
     LEFT JOIN
@@ -806,7 +806,7 @@ FROM
         apflora.pop_status_werte
         ON apflora.pop.status  = pop_status_werte.code)
       ON apflora.ap.id = apflora.pop.ap_id)
-    ON apflora.ae_eigenschaften.id = apflora.ap.art
+    ON apflora.ae_eigenschaften.id = apflora.ap.art_id
 ORDER BY
   apflora.ae_eigenschaften.artname,
   apflora.pop.nr;
@@ -834,7 +834,7 @@ FROM
   ((((apflora.ae_eigenschaften
   INNER JOIN
     apflora.ap
-    ON apflora.ae_eigenschaften.id = apflora.ap.art)
+    ON apflora.ae_eigenschaften.id = apflora.ap.art_id)
   INNER JOIN
     apflora.pop
     ON apflora.ap.id = apflora.pop.ap_id)
@@ -895,7 +895,7 @@ FROM
   ((((apflora.ae_eigenschaften
   INNER JOIN
     apflora.ap
-    ON apflora.ae_eigenschaften.id = apflora.ap.art)
+    ON apflora.ae_eigenschaften.id = apflora.ap.art_id)
   INNER JOIN
     apflora.pop
     ON apflora.ap.id = apflora.pop.ap_id)
@@ -942,7 +942,7 @@ FROM
   ((((((apflora.ae_eigenschaften
   INNER JOIN
     apflora.ap
-    ON apflora.ae_eigenschaften.id = apflora.ap.art)
+    ON apflora.ae_eigenschaften.id = apflora.ap.art_id)
   INNER JOIN
     apflora.pop
     ON apflora.ap.id = apflora.pop.ap_id)
@@ -996,7 +996,7 @@ FROM
   ((((((apflora.ae_eigenschaften
   INNER JOIN
     apflora.ap
-    ON apflora.ae_eigenschaften.id = apflora.ap.art)
+    ON apflora.ae_eigenschaften.id = apflora.ap.art_id)
   INNER JOIN
     apflora.pop
     ON apflora.ap.id = apflora.pop.ap_id)
@@ -1067,7 +1067,7 @@ FROM
   ((((((apflora.ae_eigenschaften
   INNER JOIN
     apflora.ap
-    ON apflora.ae_eigenschaften.id = apflora.ap.art)
+    ON apflora.ae_eigenschaften.id = apflora.ap.art_id)
   INNER JOIN
     (apflora.pop
     INNER JOIN
@@ -1144,7 +1144,7 @@ FROM
   ((((((apflora.ae_eigenschaften
   INNER JOIN
     apflora.ap
-    ON apflora.ae_eigenschaften.id = apflora.ap.art)
+    ON apflora.ae_eigenschaften.id = apflora.ap.art_id)
   INNER JOIN
     (apflora.pop
     INNER JOIN
@@ -1250,7 +1250,7 @@ FROM
   (((((apflora.ae_eigenschaften
   INNER JOIN
     apflora.ap
-    ON apflora.ae_eigenschaften.id = apflora.ap.art)
+    ON apflora.ae_eigenschaften.id = apflora.ap.art_id)
   INNER JOIN
     (apflora.pop
     INNER JOIN
@@ -1295,7 +1295,7 @@ FROM
     INNER JOIN
       apflora.pop
       ON apflora.ap.id = apflora.pop.ap_id)
-    ON apflora.ae_eigenschaften.id = apflora.ap.art
+    ON apflora.ae_eigenschaften.id = apflora.ap.art_id
 WHERE
   apflora.ap.bearbeitung = 3
   AND apflora.pop.status  IS NULL
@@ -1363,7 +1363,7 @@ FROM
   apflora.ap
   INNER JOIN
     apflora.ae_eigenschaften
-    ON (apflora.ap.art = apflora.ae_eigenschaften.id)
+    ON (apflora.ap.art_id = apflora.ae_eigenschaften.id)
   INNER JOIN
     ((apflora.apber
     LEFT JOIN
@@ -1523,7 +1523,7 @@ FROM
     (apflora.ae_eigenschaften
     INNER JOIN
       apflora.ap
-      ON apflora.ae_eigenschaften.id = apflora.ap.art)
+      ON apflora.ae_eigenschaften.id = apflora.ap.art_id)
     ON apflora.ap_bearbstand_werte.code = apflora.ap.bearbeitung)
   INNER JOIN
     ((apflora.pop
@@ -1556,7 +1556,7 @@ FROM
   ((apflora.ae_eigenschaften
   INNER JOIN
     apflora.ap
-    ON apflora.ae_eigenschaften.id = apflora.ap.art)
+    ON apflora.ae_eigenschaften.id = apflora.ap.art_id)
   INNER JOIN
     apflora.ap_bearbstand_werte
     ON apflora.ap.bearbeitung = apflora.ap_bearbstand_werte.code)
@@ -1593,7 +1593,7 @@ FROM
   ((apflora.ae_eigenschaften
   INNER JOIN
     apflora.ap
-    ON apflora.ae_eigenschaften.id = apflora.ap.art)
+    ON apflora.ae_eigenschaften.id = apflora.ap.art_id)
   INNER JOIN
     apflora.ap_bearbstand_werte
     ON apflora.ap.bearbeitung = apflora.ap_bearbstand_werte.code)
@@ -1643,7 +1643,7 @@ FROM
   (((apflora.ae_eigenschaften
   INNER JOIN
     apflora.ap
-    ON apflora.ae_eigenschaften.id = apflora.ap.art)
+    ON apflora.ae_eigenschaften.id = apflora.ap.art_id)
   LEFT JOIN
     apflora.ap_bearbstand_werte
     ON apflora.ap.bearbeitung = apflora.ap_bearbstand_werte.code)
@@ -1693,7 +1693,7 @@ FROM
     ((((apflora.ae_eigenschaften
     RIGHT JOIN
       apflora.ap
-      ON apflora.ae_eigenschaften.id = apflora.ap.art)
+      ON apflora.ae_eigenschaften.id = apflora.ap.art_id)
     LEFT JOIN
       apflora.ap_bearbstand_werte
       ON apflora.ap.bearbeitung = apflora.ap_bearbstand_werte.code)
@@ -1728,7 +1728,7 @@ FROM
   ((((apflora.ae_eigenschaften
   RIGHT JOIN
     apflora.ap
-    ON apflora.ae_eigenschaften.id = apflora.ap.art)
+    ON apflora.ae_eigenschaften.id = apflora.ap.art_id)
   LEFT JOIN
     apflora.ap_bearbstand_werte
     ON apflora.ap.bearbeitung = apflora.ap_bearbstand_werte.code)
@@ -1764,7 +1764,7 @@ FROM
     (((((apflora.ae_eigenschaften
     RIGHT JOIN
       apflora.ap
-      ON apflora.ae_eigenschaften.id = apflora.ap.art)
+      ON apflora.ae_eigenschaften.id = apflora.ap.art_id)
     LEFT JOIN
       apflora.ap_bearbstand_werte
       ON apflora.ap.bearbeitung = apflora.ap_bearbstand_werte.code)
@@ -1795,7 +1795,7 @@ FROM
   ((((apflora.ae_eigenschaften
   INNER JOIN
     apflora.ap
-    ON apflora.ae_eigenschaften.id = apflora.ap.art)
+    ON apflora.ae_eigenschaften.id = apflora.ap.art_id)
   INNER JOIN
     apflora.ap_bearbstand_werte
     ON apflora.ap.bearbeitung = apflora.ap_bearbstand_werte.code)
@@ -1824,7 +1824,7 @@ FROM
   (apflora.ap
   INNER JOIN
     apflora.ae_eigenschaften
-    ON apflora.ap.art = apflora.ae_eigenschaften.id)
+    ON apflora.ap.art_id = apflora.ae_eigenschaften.id)
   INNER JOIN
     (apflora.pop
     INNER JOIN
@@ -1860,7 +1860,7 @@ FROM
   (((((apflora.ae_eigenschaften
   RIGHT JOIN
     apflora.ap
-    ON apflora.ae_eigenschaften.id = apflora.ap.art)
+    ON apflora.ae_eigenschaften.id = apflora.ap.art_id)
   LEFT JOIN
     apflora.ap_bearbstand_werte
     ON apflora.ap.bearbeitung = apflora.ap_bearbstand_werte.code)
@@ -1890,7 +1890,7 @@ FROM
   (apflora.ap
   INNER JOIN
     apflora.ae_eigenschaften
-    ON apflora.ap.art = apflora.ae_eigenschaften.id)
+    ON apflora.ap.art_id = apflora.ae_eigenschaften.id)
   INNER JOIN
     ((apflora.pop
     INNER JOIN
@@ -1939,7 +1939,7 @@ FROM
   (apflora.ae_eigenschaften
   INNER JOIN
     apflora.ap
-    ON apflora.ae_eigenschaften.id = apflora.ap.art)
+    ON apflora.ae_eigenschaften.id = apflora.ap.art_id)
   INNER JOIN
     ((apflora.pop
     INNER JOIN
@@ -1997,7 +1997,7 @@ FROM
   (apflora.ae_eigenschaften
   INNER JOIN
     apflora.ap
-    ON apflora.ae_eigenschaften.id = apflora.ap.art)
+    ON apflora.ae_eigenschaften.id = apflora.ap.art_id)
   INNER JOIN
     ((apflora.pop
     INNER JOIN
@@ -2062,7 +2062,7 @@ FROM
   (((apflora.ae_eigenschaften
   INNER JOIN
     apflora.ap
-    ON apflora.ae_eigenschaften.id = apflora.ap.art)
+    ON apflora.ae_eigenschaften.id = apflora.ap.art_id)
   LEFT JOIN
     apflora.ap_bearbstand_werte
     ON apflora.ap.bearbeitung = apflora.ap_bearbstand_werte.code)
@@ -2131,7 +2131,7 @@ FROM
   ((apflora.ae_eigenschaften
   INNER JOIN
     apflora.ap
-    ON apflora.ae_eigenschaften.id = apflora.ap.art)
+    ON apflora.ae_eigenschaften.id = apflora.ap.art_id)
   LEFT JOIN
     apflora.ap_bearbstand_werte
     ON apflora.ap.bearbeitung = apflora.ap_bearbstand_werte.code)
@@ -2219,7 +2219,7 @@ FROM
     LEFT JOIN
       apflora.ap_umsetzung_werte
       ON apflora.ap.umsetzung = apflora.ap_umsetzung_werte.code)
-    ON apflora.ae_eigenschaften.id = apflora.ap.art)
+    ON apflora.ae_eigenschaften.id = apflora.ap.art_id)
   INNER JOIN
     (((apflora.pop
     LEFT JOIN
@@ -3019,7 +3019,7 @@ FROM
     INNER JOIN
       apflora.popber
       ON apflora.pop.id = apflora.popber.pop_id)
-    ON apflora.ae_eigenschaften.id = apflora.ap.art)
+    ON apflora.ae_eigenschaften.id = apflora.ap.art_id)
   LEFT JOIN
     apflora.pop_status_werte
     ON apflora.pop.status  = pop_status_werte.code)
@@ -3044,7 +3044,7 @@ FROM
   (((((apflora.ae_eigenschaften
   RIGHT JOIN
     apflora.ap
-    ON apflora.ae_eigenschaften.id = apflora.ap.art)
+    ON apflora.ae_eigenschaften.id = apflora.ap.art_id)
   LEFT JOIN
     apflora.ap_bearbstand_werte
     ON apflora.ap.bearbeitung = apflora.ap_bearbstand_werte.code)
@@ -3091,7 +3091,7 @@ FROM
   ((((((apflora.ae_eigenschaften
   RIGHT JOIN
     apflora.ap
-    ON apflora.ae_eigenschaften.id = apflora.ap.art)
+    ON apflora.ae_eigenschaften.id = apflora.ap.art_id)
   LEFT JOIN
     apflora.ap_bearbstand_werte
     ON apflora.ap.bearbeitung = apflora.ap_bearbstand_werte.code)
@@ -3149,7 +3149,7 @@ FROM
     INNER JOIN
       apflora.tpop
       ON apflora.pop.id = apflora.tpop.pop_id)
-    ON apflora.ae_eigenschaften.id = apflora.ap.art)
+    ON apflora.ae_eigenschaften.id = apflora.ap.art_id)
   LEFT JOIN
     apflora.ap_bearbstand_werte
     ON apflora.ap.bearbeitung = apflora.ap_bearbstand_werte.code)
@@ -3252,7 +3252,7 @@ FROM
     (((((((apflora.ae_eigenschaften
     INNER JOIN
       apflora.ap
-      ON apflora.ae_eigenschaften.id = apflora.ap.art)
+      ON apflora.ae_eigenschaften.id = apflora.ap.art_id)
     INNER JOIN
       (apflora.pop
       INNER JOIN
@@ -3447,7 +3447,7 @@ FROM
     (((((((apflora.ae_eigenschaften
     INNER JOIN
       apflora.ap
-      ON apflora.ae_eigenschaften.id = apflora.ap.art)
+      ON apflora.ae_eigenschaften.id = apflora.ap.art_id)
     INNER JOIN
       (apflora.pop
       INNER JOIN
@@ -3737,7 +3737,7 @@ FROM
   (((((apflora.ae_eigenschaften
   INNER JOIN
     apflora.ap
-    ON apflora.ae_eigenschaften.id = apflora.ap.art)
+    ON apflora.ae_eigenschaften.id = apflora.ap.art_id)
   INNER JOIN
     (apflora.pop
     INNER JOIN
@@ -3821,7 +3821,7 @@ FROM
     apflora.ae_eigenschaften
     INNER JOIN
       apflora.ap
-      ON apflora.ap.art = apflora.ae_eigenschaften.id
+      ON apflora.ap.art_id = apflora.ae_eigenschaften.id
     ON apflora.beob.art_id = apflora.ae_eigenschaften.id)
   INNER JOIN
     apflora.beob_quelle_werte
@@ -3887,7 +3887,7 @@ FROM
     apflora.ae_eigenschaften
     INNER JOIN
       apflora.ap
-      ON apflora.ap.art = apflora.ae_eigenschaften.id
+      ON apflora.ap.art_id = apflora.ae_eigenschaften.id
     ON apflora.beob.art_id = apflora.ae_eigenschaften.id)
   INNER JOIN
     apflora.beob_quelle_werte
@@ -3959,7 +3959,7 @@ FROM
     ON apflora.ap.umsetzung = apflora.ap_umsetzung_werte.code)
   INNER JOIN
     apflora.ae_eigenschaften
-    ON apflora.ap.art = apflora.ae_eigenschaften.id)
+    ON apflora.ap.art_id = apflora.ae_eigenschaften.id)
   INNER JOIN
     ((apflora.pop
     LEFT JOIN
@@ -4063,7 +4063,7 @@ FROM
       ON apflora.pop.id = apflora.tpop.pop_id)
     ON apflora.ap.id = apflora.pop.ap_id
   INNER JOIN apflora.ae_eigenschaften
-  ON apflora.ae_eigenschaften.id = apflora.ap.art
+  ON apflora.ae_eigenschaften.id = apflora.ap.art_id
 WHERE
   -- keine Testarten
   apflora.ae_eigenschaften.taxid > 150
@@ -4172,7 +4172,7 @@ FROM
       ON apflora.pop.id = apflora.tpop.pop_id)
     ON apflora.ap.id = apflora.pop.ap_id
   INNER JOIN apflora.ae_eigenschaften
-  ON apflora.ae_eigenschaften.id = apflora.ap.art
+  ON apflora.ae_eigenschaften.id = apflora.ap.art_id
 WHERE
   -- keine Testarten
   apflora.ae_eigenschaften.taxid > 150
@@ -4260,7 +4260,7 @@ FROM
       ON apflora.pop.id = apflora.tpop.pop_id)
     ON apflora.ap.id = apflora.pop.ap_id
   INNER JOIN apflora.ae_eigenschaften
-  ON apflora.ae_eigenschaften.id = apflora.ap.art
+  ON apflora.ae_eigenschaften.id = apflora.ap.art_id
 WHERE
   -- keine Testarten
   apflora.ae_eigenschaften.taxid > 150
@@ -4362,7 +4362,7 @@ FROM
           ON apflora.tpop.id = apflora.tpopmassnber.tpop_id)
         ON apflora.pop.id = apflora.tpop.pop_id)
       ON apflora.ap.id = apflora.pop.ap_id)
-    ON apflora.ae_eigenschaften.id = apflora.ap.art
+    ON apflora.ae_eigenschaften.id = apflora.ap.art_id
 ORDER BY
   apflora.ae_eigenschaften.artname,
   apflora.pop.nr,
@@ -4429,7 +4429,7 @@ FROM
   (apflora.ae_eigenschaften
   INNER JOIN
     apflora.ap
-    ON apflora.ae_eigenschaften.id = apflora.ap.art)
+    ON apflora.ae_eigenschaften.id = apflora.ap.art_id)
   INNER JOIN
     (apflora.pop
     INNER JOIN
@@ -4508,7 +4508,7 @@ FROM
   (apflora.ae_eigenschaften
   INNER JOIN
     apflora.ap
-    ON apflora.ae_eigenschaften.id = apflora.ap.art)
+    ON apflora.ae_eigenschaften.id = apflora.ap.art_id)
   INNER JOIN
     (apflora.pop
     INNER JOIN
@@ -4572,7 +4572,7 @@ FROM
     INNER JOIN
       apflora.pop
       ON apflora.ap.id = apflora.pop.ap_id)
-    ON apflora.ae_eigenschaften.id = apflora.ap.art
+    ON apflora.ae_eigenschaften.id = apflora.ap.art_id
 WHERE
   apflora.pop.y is not null
   AND apflora.pop.y is not null
@@ -4631,7 +4631,7 @@ FROM
     INNER JOIN
       apflora.pop
       ON apflora.ap.id = apflora.pop.ap_id)
-    ON apflora.ae_eigenschaften.id = apflora.ap.art
+    ON apflora.ae_eigenschaften.id = apflora.ap.art_id
 WHERE
   apflora.pop.y is not null
   AND apflora.pop.y is not null
@@ -4774,7 +4774,7 @@ FROM
           ON apflora.tpop.id = apflora.tpopkontr.tpop_id)
         ON apflora.pop.id = apflora.tpop.pop_id)
       ON apflora.ap.id = apflora.pop.ap_id)
-    ON apflora.ae_eigenschaften.id = apflora.ap.art
+    ON apflora.ae_eigenschaften.id = apflora.ap.art_id
 WHERE
   apflora.ae_eigenschaften.taxid > 150
 ORDER BY
@@ -4858,7 +4858,7 @@ FROM
           ON apflora.tpop.id = apflora.tpopber.tpop_id)
         ON apflora.pop.id = apflora.tpop.pop_id)
       ON apflora.ap.id = apflora.pop.ap_id)
-    ON apflora.ae_eigenschaften.id = apflora.ap.art
+    ON apflora.ae_eigenschaften.id = apflora.ap.art_id
 ORDER BY
   apflora.ae_eigenschaften.artname,
   apflora.pop.nr,
@@ -4990,7 +4990,7 @@ FROM
         apflora.tpop
         ON apflora.tpop.pop_id = apflora.pop.id)
       ON apflora.pop.ap_id = apflora.ap.id)
-    ON apflora.ae_eigenschaften.id = apflora.ap.art
+    ON apflora.ae_eigenschaften.id = apflora.ap.art_id
 WHERE
   apflora.tpop.apber_relevant IS NULL
 ORDER BY
@@ -6715,7 +6715,7 @@ FROM
     INNER JOIN
       apflora.pop
       ON apflora.ap.id = apflora.pop.ap_id)
-    ON apflora.ae_eigenschaften.id = apflora.ap.art
+    ON apflora.ae_eigenschaften.id = apflora.ap.art_id
 WHERE
   apflora.ap.bearbeitung BETWEEN 1 AND 3
 GROUP BY

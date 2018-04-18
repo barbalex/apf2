@@ -150,7 +150,7 @@ CREATE FUNCTION apflora.ap_insert_add_apart() RETURNS trigger AS $ap_insert_add_
 BEGIN
   INSERT INTO
     apflora.apart (ap_id, art_id)
-  VALUES (NEW.id, NEW.art);
+  VALUES (NEW.id, NEW.art_id);
   RETURN NEW;
 END;
 $ap_insert_add_apart$ LANGUAGE plpgsql;
@@ -168,7 +168,7 @@ CREATE FUNCTION apflora.ap_insert_add_apart() RETURNS trigger AS $ap_insert_add_
 BEGIN
   INSERT INTO
     apflora.apart (ap_id, art_id)
-  VALUES (NEW.id, NEW.art);
+  VALUES (NEW.id, NEW.art_id);
   RETURN NEW;
 END;
 $ap_insert_add_apart$ LANGUAGE plpgsql;

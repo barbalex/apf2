@@ -71,7 +71,7 @@ const enhance = compose(
     let artwert = 'Diese Art hat keinen Artwert'
     let artname = ''
     if (activeNodes.ap && ae_eigenschaften.size > 0) {
-      const apArt = ap.get(activeNodes.ap).art
+      const apArt = ap.get(activeNodes.ap).art_id
       const ae = ae_eigenschaften.get(apArt)
       if (ae && ae.artwert) {
         artwert = ae.artwert
@@ -113,12 +113,12 @@ const Ap = ({
       <FormTitle tree={tree} title="Art" />
       <FieldsContainer>
         <AutoComplete
-          key={`${activeDataset.row.id}art`}
+          key={`${activeDataset.row.id}art_id`}
           tree={tree}
           label="Art (gibt dem Aktionsplan den Namen)"
-          fieldName="art"
+          fieldName="art_id"
           valueText={artname}
-          errorText={activeDataset.valid.art}
+          errorText={activeDataset.valid.art_id}
           dataSource={store.dropdownList.artListForAp}
           dataSourceConfig={{
             value: 'id',

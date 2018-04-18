@@ -11,7 +11,7 @@ export default (store: Object, tree: Object): Array<Object> => {
     // filter by apFilter if exists
     .filter(beob => {
       if (!apFilter) return true
-      const ap = aps.find(ap => ap.art === beob.art_id)
+      const ap = aps.find(ap => ap.art_id === beob.art_id)
       if (ap) return [1, 2, 3].includes(ap.bearbeitung)
       return false
     })

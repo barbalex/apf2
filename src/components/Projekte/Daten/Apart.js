@@ -2,7 +2,6 @@
 import React from 'react'
 import { observer, inject } from 'mobx-react'
 import sortBy from 'lodash/sortBy'
-import filter from 'lodash/filter'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
 
@@ -32,9 +31,8 @@ const getArtList = ({ store, tree }: { store: Object, tree: Object }) => {
     v => v.art_id
   )*/
   const apArtIdsNotToShow = []
-  const artList = filter(
-    Array.from(ae_eigenschaften.values()),
-    r => !apArtIdsNotToShow.includes(r.art)
+  const artList = Array.from(ae_eigenschaften.values()).filter(
+    r => !apArtIdsNotToShow.includes(r.id)
   )
   return sortBy(artList, 'artname')
 }

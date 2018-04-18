@@ -31,9 +31,8 @@ const getArtList = ({ store, tree }: { store: Object, tree: Object }) => {
     .filter(a => a.ap_id === activeDataset.row.ap_id)
     .map(a => a.ae_id)
   const apArtIdsNotToShow = assozartenOfAp.concat(activeNodes.ap)
-  const artList = filter(
-    Array.from(ae_eigenschaften.values()),
-    r => !apArtIdsNotToShow.includes(r.art)
+  const artList = Array.from(ae_eigenschaften.values()).filter(
+    r => !apArtIdsNotToShow.includes(r.id)
   )
   return sortBy(artList, 'artname')
 }

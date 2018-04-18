@@ -18,7 +18,7 @@ export default (store: Object, tree: Object): Array<Object> => {
   // need to add artnameVollständig to sort and filter by nodeLabelFilter
   if (ae_eigenschaften.size > 0) {
     aps.forEach(ap => {
-      const ae = ae_eigenschaften.get(ap.art)
+      const ae = ae_eigenschaften.get(ap.art_id)
       return (ap.label = ae ? ae.artname : '(keine Art gewählt)')
     })
     // filter by nodeLabelFilter

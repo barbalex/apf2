@@ -34,10 +34,10 @@ export default (store: Object): void => {
     artListForAp: computed(
       () => {
         const aps = Array.from(store.table.ap.values())
-        const alreadyUsedArtIds = aps.map(a => a.art)
-        // let user choose active ap's art
+        const alreadyUsedArtIds = aps.map(a => a.art_id)
+        // let user choose active ap's art_id
         const activeAp = store.table.ap.get(store.tree.activeNodes.ap)
-        const activeArtId = activeAp ? activeAp.art : null
+        const activeArtId = activeAp ? activeAp.art_id : null
         const artIdsNotToShow = alreadyUsedArtIds.filter(r => r !== activeArtId)
         const artList = Array.from(
           store.table.ae_eigenschaften.values()

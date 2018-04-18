@@ -113,7 +113,7 @@ const enhance = compose(
   withProps(props => {
     const { store } = props
     const { ae_eigenschaften } = store.table
-    const apArten = Array.from(store.table.ap.values()).map(n => n.art)
+    const apArten = Array.from(store.table.ap.values()).map(n => n.art_id)
     let artList = Array.from(ae_eigenschaften.values())
     artList = filter(artList, r => apArten.includes(r.id))
     artList = sortBy(artList, 'artname')
