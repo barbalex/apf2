@@ -61,20 +61,21 @@ DROP TABLE apflora.beob_projekt;
 
 -- TODO
 -- tpopbeob
+-- id = uuid?
 UPDATE apflora.beob SET tpop_id = (
-  SELECT tpop_id FROM apflora.tpopbeob WHERE beob_id = apflora.beob.id LIMIT 1
+  SELECT tpop_id FROM apflora.tpopbeob WHERE beob_id = apflora.beob.id_old LIMIT 1
 );
 UPDATE apflora.beob SET nicht_zuordnen = true where id in (
   SELECT distinct beob_id FROM apflora.tpopbeob WHERE nicht_zuordnen = 1
 );
 UPDATE apflora.beob SET bemerkungen = (
-  SELECT bemerkungen FROM apflora.tpopbeob WHERE beob_id = apflora.beob.id LIMIT 1
+  SELECT bemerkungen FROM apflora.tpopbeob WHERE beob_id = apflora.beob.id_old LIMIT 1
 );
 UPDATE apflora.beob SET changed = (
-  SELECT changed FROM apflora.tpopbeob WHERE beob_id = apflora.beob.id LIMIT 1
+  SELECT changed FROM apflora.tpopbeob WHERE beob_id = apflora.beob.id_old LIMIT 1
 );
 UPDATE apflora.beob SET changed_by = (
-  SELECT changed_by FROM apflora.tpopbeob WHERE beob_id = apflora.beob.id LIMIT 1
+  SELECT changed_by FROM apflora.tpopbeob WHERE beob_id = apflora.beob.id_old LIMIT 1
 );
 
 ALTER TABLE apflora.apart ADD COLUMN art_id UUID DEFAULT NULL;
