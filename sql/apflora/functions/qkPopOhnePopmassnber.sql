@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION apflora.qk2_pop_ohne_popmassnber(apid uuid, berichtjahr integer)
+CREATE OR REPLACE FUNCTION apflora.qk_pop_ohne_popmassnber(apid uuid, berichtjahr integer)
   RETURNS table("ProjId" integer, ap_id uuid, hw text, url text[], text text[]) AS
   $$
   -- 5. "Pop ohne verlangten Pop-Massn-Bericht im Berichtjahr" ermitteln und in Qualitätskontrollen auflisten:
@@ -64,5 +64,5 @@ CREATE OR REPLACE FUNCTION apflora.qk2_pop_ohne_popmassnber(apid uuid, berichtja
     AND apflora.pop.ap_id = $1
   $$
   LANGUAGE sql STABLE;
-ALTER FUNCTION apflora.qk2_pop_ohne_popmassnber(apid uuid, berichtjahr integer)
+ALTER FUNCTION apflora.qk_pop_ohne_popmassnber(apid uuid, berichtjahr integer)
   OWNER TO postgres;

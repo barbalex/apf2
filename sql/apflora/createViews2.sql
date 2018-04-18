@@ -1817,8 +1817,8 @@ FROM
     apflora.v_tpop
     ON apflora.v_tpop_letzteKontrId.id = apflora.v_tpop.id;
 
-DROP VIEW IF EXISTS apflora.v_qk2_tpop_erloschenundrelevantaberletztebeobvor1950 CASCADE;
-CREATE OR REPLACE VIEW apflora.v_qk2_tpop_erloschenundrelevantaberletztebeobvor1950 AS
+DROP VIEW IF EXISTS apflora.v_qk_tpop_erloschenundrelevantaberletztebeobvor1950 CASCADE;
+CREATE OR REPLACE VIEW apflora.v_qk_tpop_erloschenundrelevantaberletztebeobvor1950 AS
 SELECT
   apflora.ap.proj_id,
   apflora.ap.id as ap_id,
@@ -1862,8 +1862,8 @@ ORDER BY
   apflora.pop.nr,
   apflora.tpop.nr;
 
-DROP VIEW IF EXISTS apflora.v_qk2_pop_statuserloschenletzterpopberaktuell CASCADE;
-CREATE OR REPLACE VIEW apflora.v_qk2_pop_statuserloschenletzterpopberaktuell AS
+DROP VIEW IF EXISTS apflora.v_qk_pop_statuserloschenletzterpopberaktuell CASCADE;
+CREATE OR REPLACE VIEW apflora.v_qk_pop_statuserloschenletzterpopberaktuell AS
 SELECT DISTINCT
   apflora.ap.proj_id,
   apflora.pop.ap_id,
@@ -1891,8 +1891,8 @@ WHERE
   AND apflora.pop.status  IN (101, 202, 211)
   AND apflora.tpop.apber_relevant = 1;
 
-DROP VIEW IF EXISTS apflora.v_qk2_tpop_statuserloschenletzterpopberaktuell CASCADE;
-CREATE OR REPLACE VIEW apflora.v_qk2_tpop_statuserloschenletzterpopberaktuell AS
+DROP VIEW IF EXISTS apflora.v_qk_tpop_statuserloschenletzterpopberaktuell CASCADE;
+CREATE OR REPLACE VIEW apflora.v_qk_tpop_statuserloschenletzterpopberaktuell AS
 SELECT DISTINCT
   apflora.ap.proj_id,
   apflora.pop.ap_id,
