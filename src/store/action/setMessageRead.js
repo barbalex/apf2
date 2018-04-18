@@ -11,8 +11,8 @@ export default async (
       method: 'POST',
       url: `/usermessage`,
       data: {
-        UserName: store.user.name,
-        MessageId: id,
+        user_name: store.user.name,
+        message_id: id,
       },
     })
   } catch (error) {

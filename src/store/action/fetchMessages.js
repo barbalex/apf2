@@ -5,12 +5,12 @@ export default async (store: Object): Promise<void> => {
   const fetchUserMessages = async () => {
     let result
     try {
-      result = await axios.get(`/usermessage?UserName=eq.${store.user.name}`)
+      result = await axios.get(`/usermessage?user_name=eq.${store.user.name}`)
     } catch (error) {
       store.listError(error)
     }
     if (result && result.data) {
-      return result.data.map(m => m.MessageId)
+      return result.data.map(m => m.message_id)
     }
     return []
   }
