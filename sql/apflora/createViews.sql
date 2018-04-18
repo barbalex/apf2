@@ -4418,7 +4418,7 @@ SELECT
     )::numeric, 10
   ) AS "Breitengrad",
   concat(
-    'http://www.apflora.ch/Projekte/1/Arten/',
+    'http://www.apflora.ch/Projekte/4635372c-431c-11e8-bb30-e77f6cdd35a6/Arten/',
     apflora.ap.id,
     '/Populationen/',
     apflora.pop.id,
@@ -4497,7 +4497,7 @@ SELECT
     )::numeric, 10
   ) AS "Breitengrad",
   concat(
-    'http://www.apflora.ch/Projekte/1/Arten/',
+    'http://www.apflora.ch/Projekte/4635372c-431c-11e8-bb30-e77f6cdd35a6/Arten/',
     apflora.ap.id,
     '/Populationen/',
     apflora.pop.id,
@@ -4560,7 +4560,7 @@ SELECT
     )::numeric, 10
   ) AS "Breitengrad",
   concat(
-    'http://www.apflora.ch/Projekte/1/Arten/',
+    'http://www.apflora.ch/Projekte/4635372c-431c-11e8-bb30-e77f6cdd35a6/Arten/',
     apflora.ap.id,
     '/Populationen/',
     apflora.pop.id
@@ -4619,7 +4619,7 @@ SELECT
     )::numeric, 10
   ) AS "Breitengrad",
   concat(
-    'http://www.apflora.ch/Projekte/1/Arten/',
+    'http://www.apflora.ch/Projekte/4635372c-431c-11e8-bb30-e77f6cdd35a6/Arten/',
     apflora.ap.id,
     '/Populationen/',
     apflora.pop.id
@@ -5004,7 +5004,7 @@ SELECT
   apflora.projekt.id as proj_id,
   apflora.ap.id as ap_id,
   'Teilpopulation: Die TPop.-Nr. ist mehrdeutig:'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id]::text[] AS url,
+  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id]::text[] AS url,
   ARRAY[concat('Population (Nr.): ', apflora.pop.nr), concat('Teil-Population (Nr.): ', apflora.tpop.nr)]::text[] AS text
 FROM
   apflora.projekt
@@ -5042,7 +5042,7 @@ SELECT
   apflora.projekt.id as proj_id,
   apflora.ap.id as ap_id,
   'Population: Die Nr. ist mehrdeutig:'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS url,
+  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS url,
   ARRAY[concat('Population (Nr.): ', apflora.pop.nr)]::text[] AS text
 FROM
   apflora.projekt
@@ -5076,7 +5076,7 @@ SELECT
   apflora.ap.proj_id,
   apflora.ap.id as ap_id,
   'Population: Mindestens eine Koordinate fehlt:'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS url,
+  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS url,
   ARRAY[concat('Population (Nr.): ', apflora.pop.nr)]::text[] AS text
 FROM
   apflora.ap
@@ -5096,7 +5096,7 @@ SELECT
   apflora.ap.proj_id,
   apflora.ap.id as ap_id,
   'Population ohne Nr.:'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS url,
+  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS url,
   ARRAY[concat('Population (Name): ', apflora.pop.name)]::text[] AS text
 FROM
   apflora.ap
@@ -5115,7 +5115,7 @@ SELECT
   apflora.ap.proj_id,
   apflora.ap.id as ap_id,
   'Population ohne Name:'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS url,
+  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS url,
   ARRAY[concat('Population: ', apflora.pop.nr)]::text[] AS text
 FROM
   apflora.ap
@@ -5134,7 +5134,7 @@ SELECT
   apflora.ap.proj_id,
   apflora.ap.id as ap_id,
   'Population ohne Status:'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS url,
+  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS url,
   ARRAY[concat('Population (Nr.): ', apflora.pop.nr)]::text[] AS text
 FROM
   apflora.ap
@@ -5153,7 +5153,7 @@ SELECT
   apflora.ap.proj_id,
   apflora.ap.id as ap_id,
   'Population ohne "bekannt seit":'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS url,
+  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS url,
   ARRAY[concat('Population (Nr.): ', apflora.pop.nr)]::text[] AS text
 FROM
   apflora.ap
@@ -5172,7 +5172,7 @@ SELECT
   apflora.ap.proj_id,
   apflora.ap.id as ap_id,
   'Population mit "Status unklar", ohne Begruendung:'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS url,
+  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS url,
   ARRAY[concat('Population (Nr.): ', apflora.pop.nr)]::text[] AS text
 FROM
   apflora.ap
@@ -5192,7 +5192,7 @@ SELECT
   apflora.ap.proj_id,
   apflora.ap.id as ap_id,
   'Population ohne Teilpopulation:'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS url,
+  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS url,
   ARRAY[concat('Population (Nr.): ', apflora.pop.nr)]::text[] AS text
 FROM
   apflora.ap
@@ -5214,7 +5214,7 @@ SELECT
   apflora.ap.proj_id,
   apflora.ap.id as ap_id,
   'Teilpopulation ohne Nr.:'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id]::text[] AS url,
+  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id]::text[] AS url,
   ARRAY[concat('Population (Nr.): ', apflora.pop.nr), concat('Teil-Population (Nr.): ', apflora.tpop.nr)]::text[] AS text
 FROM
   apflora.ap
@@ -5237,7 +5237,7 @@ SELECT
   apflora.ap.proj_id,
   apflora.ap.id as ap_id,
   'Teilpopulation ohne Flurname:'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id]::text[] AS url,
+  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id]::text[] AS url,
   ARRAY[concat('Population (Nr.): ', apflora.pop.nr), concat('Teil-Population (Nr.): ', apflora.tpop.nr)]::text[] AS text
 FROM
   apflora.ap
@@ -5260,7 +5260,7 @@ SELECT
   apflora.ap.proj_id,
   apflora.ap.id as ap_id,
   'Teilpopulation ohne Status:'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id]::text[] AS url,
+  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id]::text[] AS url,
   ARRAY[concat('Population (Nr.): ', apflora.pop.nr), concat('Teil-Population (Nr.): ', apflora.tpop.nr)]::text[] AS text
 FROM
   apflora.ap
@@ -5282,7 +5282,7 @@ CREATE OR REPLACE VIEW apflora.v_qk_tpop_ohnebekanntseit AS
 SELECT
   apflora.ap.id as ap_id,
   'Teilpopulation ohne "bekannt seit":'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id]::text[] AS url,
+  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id]::text[] AS url,
   ARRAY[concat('Population (Nr.): ', apflora.pop.nr), concat('Teil-Population (Nr.): ', apflora.tpop.nr)]::text[] AS text
 FROM
   apflora.ap
@@ -5305,7 +5305,7 @@ SELECT
   apflora.ap.proj_id,
   apflora.ap.id as ap_id,
   'Teilpopulation ohne "Fuer AP-Bericht relevant":'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id]::text[] AS url,
+  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id]::text[] AS url,
   ARRAY[concat('Population (Nr.): ', apflora.pop.nr), concat('Teil-Population (Nr.): ', apflora.tpop.nr)]::text[] AS text
 FROM
   apflora.ap
@@ -5328,7 +5328,7 @@ SELECT
   apflora.ap.proj_id,
   apflora.ap.id as ap_id,
   'Teilpopulation mit Status "potenzieller Wuchs-/Ansiedlungsort" und "Fuer AP-Bericht relevant?" = ja:'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id]::text[] AS url,
+  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id]::text[] AS url,
   ARRAY[concat('Population (Nr.): ', apflora.pop.nr), concat('Teil-Population (Nr.): ', apflora.tpop.nr)]::text[] AS text
 FROM
   apflora.ap
@@ -5352,7 +5352,7 @@ SELECT
   apflora.ap.proj_id,
   apflora.ap.id as ap_id,
   'Teilpopulation mit "Status unklar", ohne Begruendung:'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id]::text[] AS url,
+  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id]::text[] AS url,
   ARRAY[concat('Population (Nr.): ', apflora.pop.nr), concat('Teil-Population (Nr.): ', apflora.tpop.nr)]::text[] AS text
 FROM
   apflora.ap
@@ -5376,7 +5376,7 @@ SELECT
   apflora.ap.proj_id,
   apflora.ap.id as ap_id,
   'Teilpopulation: Mindestens eine Koordinate fehlt:'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id]::text[] AS url,
+  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id]::text[] AS url,
   ARRAY[concat('Population (Nr.): ', apflora.pop.nr), concat('Teil-Population (Nr.): ', apflora.tpop.nr)]::text[] AS text
 FROM
   apflora.ap
@@ -5400,7 +5400,7 @@ SELECT
   apflora.ap.proj_id,
   apflora.ap.id as ap_id,
   'Massnahme ohne Jahr:'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id, 'Massnahmen', apflora.tpopmassn.id]::text[] AS url,
+  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id, 'Massnahmen', apflora.tpopmassn.id]::text[] AS url,
   ARRAY[concat('Population (Nr.): ', apflora.pop.nr), concat('Teil-Population (Nr.): ', apflora.tpop.nr), concat('Massnahme: ', apflora.tpopmassn.jahr)]::text[] AS text
 FROM
   apflora.ap
@@ -5427,7 +5427,7 @@ SELECT
   apflora.ap.proj_id,
   apflora.ap.id as ap_id,
   'Massnahme ohne BearbeiterIn:'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id, 'Massnahmen', apflora.tpopmassn.id]::text[] AS url,
+  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id, 'Massnahmen', apflora.tpopmassn.id]::text[] AS url,
   ARRAY[concat('Population (Nr.): ', apflora.pop.nr), concat('Teil-Population (Nr.): ', apflora.tpop.nr), concat('Massnahme (id): ', apflora.tpopmassn.id)]::text[] AS text
 FROM
   apflora.ap
@@ -5454,7 +5454,7 @@ SELECT
   apflora.ap.proj_id,
   apflora.ap.id as ap_id,
   'Massnahmen ohne Typ:'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id, 'Massnahmen', apflora.tpopmassn.id]::text[] AS url,
+  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id, 'Massnahmen', apflora.tpopmassn.id]::text[] AS url,
   ARRAY[concat('Population (Nr.): ', apflora.pop.nr), concat('Teil-Population (Nr.): ', apflora.tpop.nr), concat('Massnahme (Jahr): ', apflora.tpopmassn.jahr)]::text[] AS text,
   apflora.tpopmassn.jahr AS "Berichtjahr"
 FROM
@@ -5482,7 +5482,7 @@ SELECT
   apflora.ap.proj_id,
   apflora.ap.id as ap_id,
   'Massnahmen-Bericht ohne Jahr:'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id, 'Massnahmen-Berichte', apflora.tpopmassnber.id]::text[] AS url,
+  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id, 'Massnahmen-Berichte', apflora.tpopmassnber.id]::text[] AS url,
   ARRAY[concat('Population (Nr.): ', apflora.pop.nr), concat('Teil-Population (Nr.): ', apflora.tpop.nr), concat('Massnahmen-Bericht (Jahr): ', apflora.tpopmassnber.jahr)]::text[] AS text
 FROM
   apflora.ap
@@ -5509,7 +5509,7 @@ SELECT
   apflora.ap.proj_id,
   apflora.ap.id as ap_id,
   'Massnahmen-Bericht ohne Entwicklung:'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id, 'Massnahmen-Berichte', apflora.tpopmassnber.id]::text[] AS url,
+  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id, 'Massnahmen-Berichte', apflora.tpopmassnber.id]::text[] AS url,
   ARRAY[concat('Population (Nr.): ', apflora.pop.nr), concat('Teil-Population (Nr.): ', apflora.tpop.nr), concat('Massnahmen-Bericht (Jahr): ', apflora.tpopmassnber.jahr)]::text[] AS text,
   apflora.tpopmassnber.jahr AS "Berichtjahr"
 FROM
@@ -5537,7 +5537,7 @@ SELECT
   apflora.ap.proj_id,
   apflora.ap.id as ap_id,
   'Feldkontrolle ohne Jahr:'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id, 'Feld-Kontrollen', apflora.tpopkontr.id]::text[] AS url,
+  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id, 'Feld-Kontrollen', apflora.tpopkontr.id]::text[] AS url,
   ARRAY[concat('Population (Nr.): ', apflora.pop.nr), concat('Teil-Population (Nr.): ', apflora.tpop.nr), concat('Feld-Kontrolle (Jahr): ', apflora.tpopkontr.jahr)]::text[] AS text
 FROM
   apflora.ap
@@ -5564,7 +5564,7 @@ SELECT
   apflora.ap.proj_id,
   apflora.ap.id as ap_id,
   'Feldkontrolle ohne BearbeiterIn:'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id, 'Feld-Kontrollen', apflora.tpopkontr.id]::text[] AS url,
+  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id, 'Feld-Kontrollen', apflora.tpopkontr.id]::text[] AS url,
   ARRAY[concat('Population (Nr.): ', apflora.pop.nr), concat('Teil-Population (Nr.): ', apflora.tpop.nr), concat('Kontrolle (id): ', apflora.tpopkontr.id)]::text[] AS text
 FROM
   apflora.ap
@@ -5591,7 +5591,7 @@ SELECT
   apflora.ap.proj_id,
   apflora.ap.id as ap_id,
   'Freiwilligen-Kontrolle ohne Jahr:'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id, 'Freiwilligen-Kontrollen', apflora.tpopkontr.id]::text[] AS url,
+  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id, 'Freiwilligen-Kontrollen', apflora.tpopkontr.id]::text[] AS url,
   ARRAY[concat('Population (Nr.): ', apflora.pop.nr), concat('Teil-Population (Nr.): ', apflora.tpop.nr), concat('Feld-Kontrolle (id): ', apflora.tpopkontr.id)]::text[] AS text
 FROM
   apflora.ap
@@ -5619,7 +5619,7 @@ SELECT
   apflora.ap.proj_id,
   apflora.ap.id as ap_id,
   'Freiwilligen-Kontrolle ohne BearbeiterIn:'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id, 'Freiwilligen-Kontrollen', apflora.tpopkontr.id]::text[] AS url,
+  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id, 'Freiwilligen-Kontrollen', apflora.tpopkontr.id]::text[] AS url,
   ARRAY[concat('Population (Nr.): ', apflora.pop.nr), concat('Teil-Population (Nr.): ', apflora.tpop.nr), concat('Feld-Kontrolle (id): ', apflora.tpopkontr.id)]::text[] AS text
 FROM
   apflora.ap
@@ -5647,7 +5647,7 @@ SELECT
   apflora.ap.proj_id,
   apflora.ap.id as ap_id,
   'Feldkontrolle ohne Typ:'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id, 'Feld-Kontrollen', apflora.tpopkontr.id]::text[] AS url,
+  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id, 'Feld-Kontrollen', apflora.tpopkontr.id]::text[] AS url,
   ARRAY[concat('Population (Nr.): ', apflora.pop.nr), concat('Teil-Population (Nr.): ', apflora.tpop.nr), concat('Feld-Kontrolle (Jahr): ', apflora.tpopkontr.jahr)]::text[] AS text,
   apflora.tpopkontr.jahr AS "Berichtjahr"
 FROM
@@ -5678,7 +5678,7 @@ SELECT
   apflora.ap.proj_id,
   apflora.ap.id as ap_id,
   'Feldkontrolle ohne Zaehlung:'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id, 'Feld-Kontrollen', apflora.tpopkontr.id]::text[] AS url,
+  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id, 'Feld-Kontrollen', apflora.tpopkontr.id]::text[] AS url,
   ARRAY[concat('Population (Nr.): ', apflora.pop.nr), concat('Teil-Population (Nr.): ', apflora.tpop.nr), concat('Feld-Kontrolle (Jahr): ', apflora.tpopkontr.jahr)]::text[] AS text,
   apflora.tpopkontr.jahr AS "Berichtjahr"
 FROM
@@ -5718,7 +5718,7 @@ SELECT
   apflora.ap.proj_id,
   apflora.ap.id as ap_id,
   'Freiwilligen-Kontrolle ohne Zaehlung:'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id, 'Freiwilligen-Kontrollen', apflora.tpopkontr.id]::text[] AS url,
+  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id, 'Freiwilligen-Kontrollen', apflora.tpopkontr.id]::text[] AS url,
   ARRAY[concat('Population (Nr.): ', apflora.pop.nr), concat('Teil-Population (Nr.): ', apflora.tpop.nr), concat('Feld-Kontrolle (Jahr): ', apflora.tpopkontr.jahr)]::text[] AS text,
   apflora.tpopkontr.jahr AS "Berichtjahr"
 FROM
@@ -5758,7 +5758,7 @@ SELECT
   apflora.ap.proj_id,
   apflora.ap.id as ap_id,
   'Zaehlung ohne Zaehleinheit (Feldkontrolle):'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id, 'Feld-Kontrollen', apflora.tpopkontr.id, 'Zählungen', apflora.tpopkontrzaehl.id]::text[] AS url,
+  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id, 'Feld-Kontrollen', apflora.tpopkontr.id, 'Zählungen', apflora.tpopkontrzaehl.id]::text[] AS url,
   ARRAY[concat('Population (Nr.): ', apflora.pop.nr), concat('Teil-Population (Nr.): ', apflora.tpop.nr), concat('Feld-Kontrolle (Jahr): ', apflora.tpopkontr.jahr), concat('Zählung (id): ', apflora.tpopkontrzaehl.id)]::text[] AS text,
   apflora.tpopkontr.jahr AS "Berichtjahr"
 FROM
@@ -5790,7 +5790,7 @@ SELECT
   apflora.ap.proj_id,
   apflora.ap.id as ap_id,
   'Zaehlung ohne Zaehleinheit (Freiwilligen-Kontrolle):'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id, 'Freiwilligen-Kontrollen', apflora.tpopkontr.id, 'Zählungen', apflora.tpopkontrzaehl.id]::text[] AS url,
+  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id, 'Freiwilligen-Kontrollen', apflora.tpopkontr.id, 'Zählungen', apflora.tpopkontrzaehl.id]::text[] AS url,
   ARRAY[concat('Population (Nr.): ', apflora.pop.nr), concat('Teil-Population (Nr.): ', apflora.tpop.nr), concat('Feld-Kontrolle (Jahr): ', apflora.tpopkontr.jahr), concat('Zählung (id): ', apflora.tpopkontrzaehl.id)]::text[] AS text,
   apflora.tpopkontr.jahr AS "Berichtjahr"
 FROM
@@ -5822,7 +5822,7 @@ SELECT
   apflora.ap.proj_id,
   apflora.ap.id as ap_id,
   'Zaehlung ohne Methode (Feldkontrolle):'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id, 'Feld-Kontrollen', apflora.tpopkontr.id, 'Zählungen', apflora.tpopkontrzaehl.id]::text[] AS url,
+  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id, 'Feld-Kontrollen', apflora.tpopkontr.id, 'Zählungen', apflora.tpopkontrzaehl.id]::text[] AS url,
   ARRAY[concat('Population (Nr.): ', apflora.pop.nr), concat('Teil-Population (Nr.): ', apflora.tpop.nr), concat('Feld-Kontrolle (Jahr): ', apflora.tpopkontr.jahr), concat('Zählung (id): ', apflora.tpopkontrzaehl.id)]::text[] AS text,
   apflora.tpopkontr.jahr AS "Berichtjahr"
 FROM
@@ -5854,7 +5854,7 @@ SELECT
   apflora.ap.proj_id,
   apflora.ap.id as ap_id,
   'Zaehlung ohne Methode (Freiwilligen-Kontrolle):'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id, 'Freiwilligen-Kontrollen', apflora.tpopkontr.id, 'Zählungen', apflora.tpopkontrzaehl.id]::text[] AS url,
+  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id, 'Freiwilligen-Kontrollen', apflora.tpopkontr.id, 'Zählungen', apflora.tpopkontrzaehl.id]::text[] AS url,
   ARRAY[concat('Population (Nr.): ', apflora.pop.nr), concat('Teil-Population (Nr.): ', apflora.tpop.nr), concat('Feld-Kontrolle (Jahr): ', apflora.tpopkontr.jahr), concat('Zählung (id): ', apflora.tpopkontrzaehl.id)]::text[] AS text,
   apflora.tpopkontr.jahr AS "Berichtjahr"
 FROM
@@ -5886,7 +5886,7 @@ SELECT
   apflora.ap.proj_id,
   apflora.ap.id as ap_id,
   'Zaehlung ohne Anzahl (Feldkontrolle):'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id, 'Feld-Kontrollen', apflora.tpopkontr.id, 'Zählungen', apflora.tpopkontrzaehl.id]::text[] AS url,
+  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id, 'Feld-Kontrollen', apflora.tpopkontr.id, 'Zählungen', apflora.tpopkontrzaehl.id]::text[] AS url,
   ARRAY[concat('Population (Nr.): ', apflora.pop.nr), concat('Teil-Population (Nr.): ', apflora.tpop.nr), concat('Feld-Kontrolle (Jahr): ', apflora.tpopkontr.jahr), concat('Zählung (id): ', apflora.tpopkontrzaehl.id)]::text[] AS text,
   apflora.tpopkontr.jahr AS "Berichtjahr"
 FROM
@@ -5918,7 +5918,7 @@ SELECT
   apflora.ap.proj_id,
   apflora.ap.id as ap_id,
   'Zaehlung ohne Anzahl (Freiwilligen-Kontrolle):'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id, 'Freiwilligen-Kontrollen', apflora.tpopkontr.id, 'Zählungen', apflora.tpopkontrzaehl.id]::text[] AS url,
+  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id, 'Freiwilligen-Kontrollen', apflora.tpopkontr.id, 'Zählungen', apflora.tpopkontrzaehl.id]::text[] AS url,
   ARRAY[concat('Population (Nr.): ', apflora.pop.nr), concat('Teil-Population (Nr.): ', apflora.tpop.nr), concat('Feld-Kontrolle (Jahr): ', apflora.tpopkontr.jahr), concat('Zählung (id): ', apflora.tpopkontrzaehl.id)]::text[] AS text,
   apflora.tpopkontr.jahr AS "Berichtjahr"
 FROM
@@ -5950,7 +5950,7 @@ SELECT
   apflora.ap.proj_id,
   apflora.ap.id as ap_id,
   'Teilpopulations-Bericht ohne Jahr:'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id, 'Kontroll-Berichte', apflora.tpopber.id]::text[] AS url,
+  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id, 'Kontroll-Berichte', apflora.tpopber.id]::text[] AS url,
   ARRAY[concat('Population (Nr.): ', apflora.pop.nr), concat('Teil-Population (Nr.): ', apflora.tpop.nr), concat('Teilpopulations-Bericht (id): ', apflora.tpopber.id)]::text[] AS text
 FROM
   apflora.ap
@@ -5976,7 +5976,7 @@ SELECT
   apflora.ap.proj_id,
   apflora.ap.id as ap_id,
   'Teilpopulations-Bericht ohne Entwicklung:'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id, 'Kontroll-Berichte', apflora.tpopber.id]::text[] AS url,
+  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id, 'Kontroll-Berichte', apflora.tpopber.id]::text[] AS url,
   ARRAY[concat('Population (Nr.): ', apflora.pop.nr), concat('Teil-Population (Nr.): ', apflora.tpop.nr), concat('Teilpopulations-Bericht (Jahr): ', apflora.tpopber.jahr)]::text[] AS text,
   apflora.tpopber.jahr AS "Berichtjahr"
 FROM
@@ -6004,7 +6004,7 @@ SELECT
   apflora.ap.proj_id,
   apflora.ap.id as ap_id,
   'Populations-Bericht ohne Entwicklung:'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id, 'Kontroll-Berichte', apflora.popber.id]::text[] AS url,
+  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id, 'Kontroll-Berichte', apflora.popber.id]::text[] AS url,
   ARRAY[concat('Population (Nr.): ', apflora.pop.nr), concat('Populations-Bericht (Jahr): ', apflora.popber.jahr)]::text[] AS text,
   apflora.popber.jahr AS "Berichtjahr"
 FROM
@@ -6028,7 +6028,7 @@ SELECT
   apflora.ap.proj_id,
   apflora.ap.id as ap_id,
   'Populations-Bericht ohne Jahr:'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id, 'Kontroll-Berichte', apflora.popber.id]::text[] AS url,
+  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id, 'Kontroll-Berichte', apflora.popber.id]::text[] AS url,
   ARRAY[concat('Population (Nr.): ', apflora.pop.nr), concat('Populations-Bericht (Jahr): ', apflora.popber.jahr)]::text[] AS text
 FROM
   apflora.ap
@@ -6050,7 +6050,7 @@ SELECT
   apflora.ap.proj_id,
   apflora.ap.id as ap_id,
   'Populations-Massnahmen-Bericht ohne Jahr:'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id, 'Massnahmen-Berichte', apflora.popmassnber.id]::text[] AS url,
+  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id, 'Massnahmen-Berichte', apflora.popmassnber.id]::text[] AS url,
   ARRAY[concat('Population (Nr.): ', apflora.pop.nr), concat('Populations-Massnahmen-Bericht (Jahr): ', apflora.popmassnber.jahr)]::text[] AS text
 FROM
   apflora.ap
@@ -6072,7 +6072,7 @@ SELECT
   apflora.ap.proj_id,
   apflora.ap.id as ap_id,
   'Populations-Massnahmen-Bericht ohne Entwicklung:'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id, 'Massnahmen-Berichte', apflora.popmassnber.id]::text[] AS url,
+  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id, 'Massnahmen-Berichte', apflora.popmassnber.id]::text[] AS url,
   ARRAY[concat('Population (Nr.): ', apflora.pop.nr), concat('Populations-Massnahmen-Bericht (Jahr): ', apflora.popmassnber.jahr)]::text[] AS text,
   apflora.popmassnber.jahr AS "Berichtjahr"
 FROM
@@ -6096,7 +6096,7 @@ SELECT
   apflora.ap.proj_id,
   apflora.ap.id as ap_id,
   'Ziel-Bericht ohne Entwicklung:'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Ziele', apflora.ziel.id, 'Berichte', apflora.zielber.id]::text[] AS url,
+  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Arten', apflora.ap.id, 'Ziele', apflora.ziel.id, 'Berichte', apflora.zielber.id]::text[] AS url,
   ARRAY[concat('Ziel (Jahr): ', apflora.ziel.jahr), concat('Ziel-Bericht (Jahr): ', apflora.zielber.jahr)]::text[] AS text,
   apflora.zielber.jahr AS "Berichtjahr"
 FROM
@@ -6121,7 +6121,7 @@ SELECT
   apflora.ap.proj_id,
   apflora.ap.id as ap_id,
   'Ziel-Bericht ohne Jahr:'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Ziele', apflora.ziel.id, 'Berichte', apflora.zielber.id]::text[] AS url,
+  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Arten', apflora.ap.id, 'Ziele', apflora.ziel.id, 'Berichte', apflora.zielber.id]::text[] AS url,
   ARRAY[concat('Ziel (Jahr): ', apflora.ziel.jahr), concat('Ziel-Bericht (Jahr): ', apflora.zielber.jahr)]::text[] AS text
 FROM
   apflora.ap
@@ -6144,7 +6144,7 @@ SELECT
   apflora.ap.proj_id,
   apflora.ap.id as ap_id,
   'Ziel ohne Jahr:'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Ziele', apflora.ziel.id]::text[] AS url,
+  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Arten', apflora.ap.id, 'Ziele', apflora.ziel.id]::text[] AS url,
   ARRAY[concat('Ziel (id): ', apflora.ziel.id)]::text[] AS text
 FROM
   apflora.ap
@@ -6163,7 +6163,7 @@ SELECT
   apflora.ap.proj_id,
   apflora.ap.id as ap_id,
   'Ziel ohne Typ:'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Ziele', apflora.ziel.id]::text[] AS url,
+  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Arten', apflora.ap.id, 'Ziele', apflora.ziel.id]::text[] AS url,
   ARRAY[concat('Ziel (Jahr): ', apflora.ziel.jahr)]::text[] AS text
 FROM
   apflora.ap
@@ -6181,7 +6181,7 @@ SELECT
   apflora.ap.proj_id,
   apflora.ap.id as ap_id,
   'Ziel ohne Ziel:'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Ziele', apflora.ziel.id]::text[] AS url,
+  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Arten', apflora.ap.id, 'Ziele', apflora.ziel.id]::text[] AS url,
   ARRAY[concat('Ziel (Jahr): ', apflora.ziel.jahr)]::text[] AS text
 FROM
   apflora.ap
@@ -6199,7 +6199,7 @@ SELECT
   apflora.ap.proj_id,
   apflora.ap.id as ap_id,
   'Erfolgskriterium ohne Beurteilung:'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Erfolgskriterien', apflora.erfkrit.id]::text[] AS url,
+  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Arten', apflora.ap.id, 'Erfolgskriterien', apflora.erfkrit.id]::text[] AS url,
   ARRAY[concat('Erfolgskriterium (id): ', apflora.erfkrit.id)]::text[] AS text
 FROM
   apflora.ap
@@ -6217,7 +6217,7 @@ SELECT
   apflora.ap.proj_id,
   apflora.ap.id as ap_id,
   'Erfolgskriterium ohne Kriterien:'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Erfolgskriterien', apflora.erfkrit.id]::text[] AS url,
+  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Arten', apflora.ap.id, 'Erfolgskriterien', apflora.erfkrit.id]::text[] AS url,
   ARRAY[concat('Erfolgskriterium (id): ', apflora.erfkrit.id)]::text[] AS text
 FROM
   apflora.ap
@@ -6235,7 +6235,7 @@ SELECT
   apflora.ap.proj_id,
   apflora.ap.id as ap_id,
   'AP-Bericht ohne Jahr:'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'AP-Berichte', apflora.apber.id]::text[] AS url,
+  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Arten', apflora.ap.id, 'AP-Berichte', apflora.apber.id]::text[] AS url,
   ARRAY[concat('AP-Bericht (id): ', apflora.apber.id)]::text[] AS text
 FROM
   apflora.ap
@@ -6256,7 +6256,7 @@ SELECT
   apflora.ap.proj_id,
   apflora.ap.id as ap_id,
   'AP-Bericht ohne Vergleich Vorjahr - Gesamtziel:'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'AP-Berichte', apflora.apber.id]::text[] AS url,
+  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Arten', apflora.ap.id, 'AP-Berichte', apflora.apber.id]::text[] AS url,
   ARRAY[concat('AP-Bericht (Jahr): ', apflora.apber.jahr)]::text[] AS text,
   apflora.apber.jahr AS "Berichtjahr"
 FROM
@@ -6276,7 +6276,7 @@ SELECT
   apflora.ap.proj_id,
   apflora.ap.id as ap_id,
   'AP-Bericht ohne Beurteilung:'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'AP-Berichte', apflora.apber.id]::text[] AS url,
+  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Arten', apflora.ap.id, 'AP-Berichte', apflora.apber.id]::text[] AS url,
   ARRAY[concat('AP-Bericht (Jahr): ', apflora.apber.jahr)]::text[] AS text,
   apflora.apber.jahr AS "Berichtjahr"
 FROM
@@ -6296,7 +6296,7 @@ SELECT
   apflora.ap.proj_id,
   apflora.ap.id as ap_id,
   'Assoziierte Art ohne Art:'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'assoziierte-Arten', apflora.assozart.id]::text[] AS url,
+  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Arten', apflora.ap.id, 'assoziierte-Arten', apflora.assozart.id]::text[] AS url,
   ARRAY[concat('Assoziierte Art (id): ', apflora.assozart.id)]::text[] AS text
 FROM
   apflora.ap
@@ -6314,7 +6314,7 @@ SELECT DISTINCT
   apflora.ap.proj_id,
   apflora.pop.ap_id,
   'Population: Koordinaten entsprechen keiner Teilpopulation:'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS url,
+  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS url,
   ARRAY[concat('Population (Nr): ', apflora.pop.nr)]::text[] AS text,
   apflora.pop.x AS "XKoord",
   apflora.pop.y AS "YKoord"
@@ -6345,7 +6345,7 @@ SELECT DISTINCT
   apflora.ap.proj_id,
   apflora.pop.ap_id,
   'Population: Status ist "angesiedelt, Ansaatversuch", es gibt aber eine aktuelle Teilpopulation oder eine ursprüngliche erloschene:'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS url,
+  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS url,
   ARRAY[concat('Population (Nr): ', apflora.pop.nr)]::text[] AS text
 FROM
   apflora.ap
@@ -6369,7 +6369,7 @@ SELECT DISTINCT
   apflora.ap.proj_id,
   apflora.pop.ap_id,
   'Population: Status ist "angesiedelt, Ansaatversuch", alle Teilpopulationen sind gemäss Status erloschen:'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS url,
+  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS url,
   ARRAY[concat('Population (Nr): ', apflora.pop.nr)]::text[] AS text
 FROM
   apflora.ap
@@ -6404,7 +6404,7 @@ SELECT DISTINCT
   apflora.ap.proj_id,
   apflora.pop.ap_id,
   'Population: Status ist "angesiedelt, Ansaatversuch", es gibt aber eine Teilpopulation mit Status "urspruenglich, erloschen":'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS url,
+  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS url,
 ARRAY[concat('Population (Nr): ', apflora.pop.nr)]::text[] AS text
 FROM
   apflora.ap
@@ -6428,7 +6428,7 @@ SELECT DISTINCT
   apflora.ap.proj_id,
   apflora.pop.ap_id,
   'Population: Status ist "erloschen" (urspruenglich oder angesiedelt), es gibt aber eine Teilpopulation mit Status "aktuell" (urspruenglich oder angesiedelt):'::text AS hw,
-    ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS url,
+    ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS url,
   ARRAY[concat('Population (Nr): ', apflora.pop.nr)]::text[] AS text
 FROM
   apflora.ap
@@ -6452,7 +6452,7 @@ SELECT DISTINCT
   apflora.ap.proj_id,
   apflora.pop.ap_id,
   'Population: Status ist "erloschen" (urspruenglich oder angesiedelt), es gibt aber eine Teilpopulation mit Status "angesiedelt, Ansaatversuch":'::text AS hw,
-    ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS url,
+    ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS url,
   ARRAY[concat('Population (Nr): ', apflora.pop.nr)]::text[] AS text
 FROM
   apflora.ap
@@ -6476,7 +6476,7 @@ SELECT DISTINCT
   apflora.ap.proj_id,
   apflora.pop.ap_id,
   'Population: Status ist "angesiedelt", es gibt aber eine Teilpopulation mit Status "urspruenglich":'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS url,
+  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS url,
   ARRAY[concat('Population (Nr): ', apflora.pop.nr)]::text[] AS text
 FROM
   apflora.ap
@@ -6500,7 +6500,7 @@ SELECT DISTINCT
   apflora.ap.proj_id,
   apflora.pop.ap_id,
   'Population: Status ist "potenzieller Wuchs-/Ansiedlungsort", es gibt aber eine Teilpopulation mit Status "angesiedelt" oder "urspruenglich":'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS url,
+  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS url,
   ARRAY[concat('Population (Nr): ', apflora.pop.nr)]::text[] AS text
 FROM
   apflora.ap
@@ -6526,7 +6526,7 @@ SELECT DISTINCT
   apflora.pop.id as pop_id,
   apflora.tpop.id,
   'Teilpopulation mit Status "Ansaatversuch", bei denen in der letzten Kontrolle eine Anzahl festgestellt wurde:'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id]::text[] AS url,
+  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id]::text[] AS url,
   ARRAY[concat('Population (Nr.): ', apflora.pop.nr), concat('Teil-Population (Nr.): ', apflora.tpop.nr)]::text[] AS text
 FROM
   apflora.ap
@@ -6566,7 +6566,7 @@ SELECT DISTINCT
   apflora.pop.id as pop_id,
   apflora.tpop.id,
   'Teilpopulation mit Status "potentieller Wuchs-/Ansiedlungsort", bei denen in einer Kontrolle eine Anzahl festgestellt wurde:'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id]::text[] AS url,
+  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id]::text[] AS url,
   ARRAY[concat('Population (Nr.): ', apflora.pop.nr), concat('Teil-Population (Nr.): ', apflora.tpop.nr)]::text[] AS text
 FROM
   apflora.projekt
@@ -6605,7 +6605,7 @@ SELECT DISTINCT
   apflora.pop.id as pop_id,
   apflora.tpop.id,
   'Teilpopulation mit Status "potentieller Wuchs-/Ansiedlungsort", bei der eine Massnahme des Typs "Ansiedlung" existiert:'::text AS hw,
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id]::text[] AS url,
+  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id]::text[] AS url,
   ARRAY[concat('Population (Nr.): ', apflora.pop.nr), concat('Teil-Population (Nr.): ', apflora.tpop.nr)]::text[] AS text
 FROM
   apflora.ap
@@ -6885,7 +6885,7 @@ SELECT
   apflora.projekt.id as proj_id,
   apflora.ap.id as ap_id,
   'Teilpopulation: Status ist "aktuell" (ursprünglich oder angesiedelt) oder potentieller Wuchsort; der letzte Teilpopulations-Bericht meldet aber "erloschen" und es gab seither keine Ansiedlung:'::text AS "hw",
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id]::text[] AS "url",
+  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id]::text[] AS "url",
   ARRAY[concat('Population (Nr.): ', apflora.pop.nr), concat('Teil-Population (Nr.): ', apflora.tpop.nr)]::text[] AS text
 FROM
   apflora.projekt
@@ -6935,7 +6935,7 @@ SELECT
   apflora.projekt.id as proj_id,
   apflora.ap.id as ap_id,
   'Population: Status ist "aktuell" (ursprünglich oder angesiedelt) oder potentieller Wuchsort; der letzte Populations-Bericht meldet aber "erloschen" und es gab seither keine Ansiedlung:'::text AS "hw",
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS "url",
+  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS "url",
   ARRAY[concat('Population (Nr.): ', apflora.pop.nr)]::text[] AS text
 FROM
   apflora.projekt
@@ -6983,7 +6983,7 @@ SELECT
   apflora.projekt.id as proj_id,
   apflora.ap.id as ap_id,
   'Teilpopulation: Status ist "erloschen" (ursprünglich oder angesiedelt), Ansaatversuch oder potentieller Wuchsort; der letzte Teilpopulations-Bericht meldet aber "zunehmend" und es gab seither keine Ansiedlung:'::text AS "hw",
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id]::text[] AS "url",
+  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id]::text[] AS "url",
   ARRAY[concat('Population (Nr.): ', apflora.pop.nr), concat('Teil-Population (Nr.): ', apflora.tpop.nr)]::text[] AS text
 FROM
   apflora.projekt
@@ -7033,7 +7033,7 @@ SELECT
   apflora.projekt.id as proj_id,
   apflora.ap.id as ap_id,
   'Population: Status ist "erloschen" (ursprünglich oder angesiedelt), Ansaatversuch oder potentieller Wuchsort; der letzte Populations-Bericht meldet aber "zunehmend" und es gab seither keine Ansiedlung:'::text AS "hw",
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS "url",
+  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS "url",
   ARRAY[concat('Population (Nr.): ', apflora.pop.nr)]::text[] AS text
 FROM
   apflora.projekt
@@ -7081,7 +7081,7 @@ SELECT
   apflora.projekt.id as proj_id,
   apflora.ap.id as ap_id,
   'Teilpopulation: Status ist "erloschen" (ursprünglich oder angesiedelt), Ansaatversuch oder potentieller Wuchsort; der letzte Teilpopulations-Bericht meldet aber "stabil" und es gab seither keine Ansiedlung:'::text AS "hw",
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id]::text[] AS "url",
+  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id]::text[] AS "url",
   ARRAY[concat('Population (Nr.): ', apflora.pop.nr), concat('Teil-Population (Nr.): ', apflora.tpop.nr)]::text[] AS text
 FROM
   apflora.projekt
@@ -7131,7 +7131,7 @@ SELECT
   apflora.projekt.id as proj_id,
   apflora.ap.id as ap_id,
   'Population: Status ist "erloschen" (ursprünglich oder angesiedelt), Ansaatversuch oder potentieller Wuchsort; der letzte Populations-Bericht meldet aber "stabil" und es gab seither keine Ansiedlung:'::text AS "hw",
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS "url",
+  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS "url",
   ARRAY[concat('Population (Nr.): ', apflora.pop.nr)]::text[] AS text
 FROM
   apflora.projekt
@@ -7179,7 +7179,7 @@ SELECT
   apflora.projekt.id as proj_id,
   apflora.ap.id as ap_id,
   'Teilpopulation: Status ist "erloschen" (ursprünglich oder angesiedelt), Ansaatversuch oder potentieller Wuchsort; der letzte Teilpopulations-Bericht meldet aber "abnehmend" und es gab seither keine Ansiedlung:'::text AS "hw",
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id]::text[] AS "url",
+  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id]::text[] AS "url",
   ARRAY[concat('Population (Nr.): ', apflora.pop.nr), concat('Teil-Population (Nr.): ', apflora.tpop.nr)]::text[] AS text
 FROM
   apflora.projekt
@@ -7229,7 +7229,7 @@ SELECT
   apflora.projekt.id as proj_id,
   apflora.ap.id as ap_id,
   'Population: Status ist "erloschen" (ursprünglich oder angesiedelt), Ansaatversuch oder potentieller Wuchsort; der letzte Populations-Bericht meldet aber "abnehmend" und es gab seither keine Ansiedlung:'::text AS "hw",
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS "url",
+  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS "url",
   ARRAY[concat('Population (Nr.): ', apflora.pop.nr)]::text[] AS text
 FROM
   apflora.projekt
@@ -7277,7 +7277,7 @@ SELECT
   apflora.projekt.id as proj_id,
   apflora.ap.id as ap_id,
   'Teilpopulation: Status ist "erloschen" (ursprünglich oder angesiedelt) oder potentieller Wuchsort; der letzte Teilpopulations-Bericht meldet aber "unsicher" und es gab seither keine Ansiedlung:'::text AS "hw",
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id]::text[] AS "url",
+  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id]::text[] AS "url",
   ARRAY[concat('Population (Nr.): ', apflora.pop.nr), concat('Teil-Population (Nr.): ', apflora.tpop.nr)]::text[] AS text
 FROM
   apflora.projekt
@@ -7327,7 +7327,7 @@ SELECT
   apflora.projekt.id as proj_id,
   apflora.ap.id as ap_id,
   'Population: Status ist "erloschen" (ursprünglich oder angesiedelt) oder potentieller Wuchsort; der letzte Populations-Bericht meldet aber "unsicher" und es gab seither keine Ansiedlung:'::text AS "hw",
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS "url",
+  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS "url",
   ARRAY[concat('Population (Nr.): ', apflora.pop.nr)]::text[] AS text
 FROM
   apflora.projekt
@@ -7362,7 +7362,7 @@ SELECT
   apflora.projekt.id as proj_id,
   apflora.ap.id as ap_id,
   'Population: Keine Teil-Population hat den Status der Population:'::text AS "hw",
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS "url",
+  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS "url",
   ARRAY[concat('Population (Nr.): ', apflora.pop.nr)]::text[] AS text
 FROM
   apflora.projekt
@@ -7400,7 +7400,7 @@ SELECT
   apflora.projekt.id as proj_id,
   apflora.ap.id as ap_id,
   'Population: Status ist "potentieller Wuchs-/Ansiedlungsort". Es gibt aber Teil-Populationen mit abweichendem Status:'::text AS "hw",
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS "url",
+  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS "url",
   ARRAY[concat('Population (Nr.): ', apflora.pop.nr)]::text[] AS text
 FROM
   apflora.projekt
@@ -7428,7 +7428,7 @@ SELECT
   apflora.projekt.id as proj_id,
   apflora.ap.id as ap_id,
   'Population: Status ist "Ansaatversuch". Es gibt Teil-Populationen mit nicht zulässigen Stati ("ursprünglich" oder "angesiedelt, aktuell"):'::text AS "hw",
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS "url",
+  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS "url",
   ARRAY[concat('Population (Nr.): ', apflora.pop.nr)]::text[] AS text
 FROM
   apflora.projekt
@@ -7456,7 +7456,7 @@ SELECT
   apflora.projekt.id as proj_id,
   apflora.ap.id as ap_id,
   'Population: Status ist "angesiedelt nach Beginn AP, erloschen/nicht etabliert". Es gibt Teil-Populationen mit abweichendem Status:'::text AS "hw",
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS "url",
+  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS "url",
   ARRAY[concat('Population (Nr.): ', apflora.pop.nr)]::text[] AS text
 FROM
   apflora.projekt
@@ -7484,7 +7484,7 @@ SELECT
   apflora.projekt.id as proj_id,
   apflora.ap.id as ap_id,
   'Population: Status ist "angesiedelt vor Beginn AP, erloschen/nicht etabliert". Es gibt Teil-Populationen mit nicht zulässigen Stati ("ursprünglich", "angesiedelt, aktuell", "Ansaatversuch", "potentieller Wuchsort"):'::text AS "hw",
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS "url",
+  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS "url",
   ARRAY[concat('Population (Nr.): ', apflora.pop.nr)]::text[] AS text
 FROM
   apflora.projekt
@@ -7512,7 +7512,7 @@ SELECT
   apflora.projekt.id as proj_id,
   apflora.ap.id as ap_id,
   'Population: Status ist "angesiedelt nach Beginn AP, aktuell". Es gibt Teil-Populationen mit nicht zulässigen Stati ("ursprünglich", "angesiedelt vor Beginn AP, aktuell"):'::text AS "hw",
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS "url",
+  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS "url",
   ARRAY[concat('Population (Nr.): ', apflora.pop.nr)]::text[] AS text
 FROM
   apflora.projekt
@@ -7540,7 +7540,7 @@ SELECT
   apflora.projekt.id as proj_id,
   apflora.ap.id as ap_id,
   'Population: Status ist "angesiedelt vor Beginn AP, aktuell". Es gibt Teil-Populationen mit nicht zulässigen Stati ("ursprünglich"):'::text AS "hw",
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS "url",
+  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS "url",
   ARRAY[concat('Population (Nr.): ', apflora.pop.nr)]::text[] AS text
 FROM
   apflora.projekt
@@ -7568,7 +7568,7 @@ SELECT
   apflora.projekt.id as proj_id,
   apflora.ap.id as ap_id,
   'Population: Status ist "ursprünglich, erloschen". Es gibt Teil-Populationen (ausser potentiellen Wuchs-/Ansiedlungsorten) mit abweichendem Status:'::text AS "hw",
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS "url",
+  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS "url",
   ARRAY[concat('Population (Nr.): ', apflora.pop.nr)]::text[] AS text
 FROM
   apflora.projekt
@@ -7609,7 +7609,7 @@ SELECT
   apflora.projekt.id as proj_id,
   apflora.ap.id as ap_id,
   'Population: Status ist "erloschen" (ursprünglich oder angesiedelt); der letzte Populations-Bericht meldet "erloschen". Seither gab es aber eine Ansiedlung:'::text AS "hw",
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS "url",
+  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS "url",
   ARRAY[concat('Population (Nr.): ', apflora.pop.nr)]::text[] AS text
 FROM
   apflora.projekt
@@ -7657,7 +7657,7 @@ SELECT
   apflora.projekt.id as proj_id,
   apflora.ap.id as ap_id,
   'Teilpopulation: Status ist "erloschen" (ursprünglich oder angesiedelt); der letzte Teilpopulations-Bericht meldet "erloschen". Seither gab es aber eine Ansiedlung:'::text AS "hw",
-  ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id]::text[] AS "url",
+  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id]::text[] AS "url",
   ARRAY[concat('Population (Nr.): ', apflora.pop.nr), concat('Teil-Population (Nr.): ', apflora.tpop.nr)]::text[] AS text
 FROM
   apflora.projekt

@@ -30,20 +30,18 @@ const Projekt = ({ store, tree }: { store: Object, tree: Object }) => {
         <FormTitle tree={tree} title="Projekt" />
         <FieldsContainer>
           <TextField
-            key={`${activeDataset.row.id}ProjName`}
+            key={`${activeDataset.row.id}name`}
             tree={tree}
             label="Name"
-            fieldName="ProjName"
+            fieldName="name"
             value={
-              activeDataset && activeDataset.row && activeDataset.row.ProjName
-                ? activeDataset.row.ProjName
+              activeDataset && activeDataset.row && activeDataset.row.name
+                ? activeDataset.row.name
                 : ''
             }
             errorText={
-              activeDataset &&
-              activeDataset.valid &&
-              activeDataset.valid.ProjName
-                ? activeDataset.valid.ProjName
+              activeDataset && activeDataset.valid && activeDataset.valid.name
+                ? activeDataset.valid.name
                 : ''
             }
             type="text"

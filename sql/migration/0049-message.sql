@@ -29,9 +29,6 @@ COMMENT ON COLUMN apflora.usermessage.message_id IS 'Zugehörige Nachricht. Frem
 -- done: check if old id was used somewhere. If so: rename that field, add new one and update that
 -- done: add all views, functions, triggers containing this table to this file
 -- done: run migration sql in dev
--- TODO: restart postgrest and test app
--- TODO: special ap functions work?
--- TODO: CHECK child tables: are they correct?
--- TODO: check that unique && default 0 from id_old is gone
+-- done: restart postgrest and test app
 -- TODO: update js and run this file on server
 -- TODO: restart postgrest

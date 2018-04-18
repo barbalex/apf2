@@ -28,20 +28,44 @@ CREATE INDEX ON apflora.ap USING btree (proj_id);
 ALTER TABLE apflora.ap DROP COLUMN proj_id_old CASCADE;
 COMMENT ON COLUMN apflora.ap.proj_id IS 'Zugehöriger Aktionsplan. Fremdschlüssel aus der Tabelle "projekt"';
 
+-- change apberuebersicht
+ALTER TABLE apflora.apberuebersicht RENAME proj_id TO proj_id_old;
+DROP index IF EXISTS apflora.apflora."apberuebersicht_proj_id_idx";
+ALTER TABLE apflora.apberuebersicht ADD COLUMN proj_id UUID DEFAULT NULL REFERENCES apflora.projekt (id) ON DELETE CASCADE ON UPDATE CASCADE;
+UPDATE apflora.apberuebersicht SET proj_id = (
+  SELECT id FROM apflora.projekt WHERE id_old = apflora.apberuebersicht.proj_id_old
+) WHERE proj_id_old IS NOT NULL;
+CREATE INDEX ON apflora.apberuebersicht USING btree (proj_id);
+ALTER TABLE apflora.apberuebersicht DROP COLUMN proj_id_old CASCADE;
+COMMENT ON COLUMN apflora.apberuebersicht.proj_id IS 'Zugehöriger Aktionsplan. Fremdschlüssel aus der Tabelle "projekt"';
+
 -- done: make sure createTable is correct
 -- done: rename in sql
 -- done: rename in js
 -- done: check if old id was used somewhere. If so: rename that field, add new one and update that
 -- done: add all views, functions, triggers containing this table to this file
--- TODO: run migration sql in dev
--- TODO: restart postgrest and test app
--- TODO: special ap functions work?
--- TODO: CHECK child tables: are they correct?
--- TODO: check that unique && default 0 from id_old is gone
+-- done: run migration sql in dev
+-- done: restart postgrest and test app
+-- done: special ap functions work?
+-- done: CHECK child tables: are they correct?
 -- TODO: update js and run this file on server
 -- TODO: restart postgrest
 
-drop FUNCTION apflora.qk_tpop_ohne_tpopber(apid uuid, berichtjahr integer);
+
+DROP TRIGGER IF EXISTS projekt_on_update_set_mut ON apflora.projekt;
+DROP FUNCTION IF EXISTS projekt_on_update_set_mut();
+CREATE FUNCTION projekt_on_update_set_mut() RETURNS trigger AS $projekt_on_update_set_mut$
+  BEGIN
+    NEW.changed_by = current_setting('request.jwt.claim.username', true);
+    NEW.changed = NOW();
+    RETURN NEW;
+  END;
+$projekt_on_update_set_mut$ LANGUAGE plpgsql;
+
+CREATE TRIGGER projekt_on_update_set_mut BEFORE UPDATE OR INSERT ON apflora.projekt
+  FOR EACH ROW EXECUTE PROCEDURE projekt_on_update_set_mut();
+
+DROP FUNCTION IF EXISTS apflora.qk_tpop_ohne_tpopber(apid uuid, berichtjahr integer);
 CREATE OR REPLACE FUNCTION apflora.qk_tpop_ohne_tpopber(apid uuid, berichtjahr integer)
   RETURNS table(proj_id uuid, ap_id uuid, hw text, url text[], text text[]) AS
   $$
@@ -50,7 +74,7 @@ CREATE OR REPLACE FUNCTION apflora.qk_tpop_ohne_tpopber(apid uuid, berichtjahr i
     apflora.ap.proj_id,
     apflora.pop.ap_id,
     'Teilpopulation mit Kontrolle (im Berichtjahr) aber ohne Teilpopulations-Bericht (im Berichtjahr):' AS hw,
-    ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id]::text[] AS "url",
+    ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6' , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id]::text[] AS "url",
     ARRAY[concat('Population (Nr.): ', apflora.pop.nr), concat('Teil-Population (Nr.): ', apflora.tpop.nr)]::text[] AS text
   FROM
     apflora.ap
@@ -87,7 +111,7 @@ CREATE OR REPLACE FUNCTION apflora.qk_tpop_ohne_tpopber(apid uuid, berichtjahr i
 ALTER FUNCTION apflora.qk_tpop_ohne_tpopber(apid uuid, berichtjahr integer)
   OWNER TO postgres;
 
-DROP FUNCTION if exists apflora.qk_tpop_ohne_massnber(apid uuid, berichtjahr integer);
+DROP FUNCTION IF EXISTS apflora.qk_tpop_ohne_massnber(apid uuid, berichtjahr integer);
 CREATE OR REPLACE FUNCTION apflora.qk_tpop_ohne_massnber(apid uuid, berichtjahr integer)
   RETURNS table(proj_id uuid, ap_id uuid, hw text, url text[], text text[]) AS
   $$
@@ -96,7 +120,7 @@ CREATE OR REPLACE FUNCTION apflora.qk_tpop_ohne_massnber(apid uuid, berichtjahr 
     '4635372c-431c-11e8-bb30-e77f6cdd35a6'::uuid AS proj_id,
     apflora.pop.ap_id,
     'Teilpopulation mit Ansiedlung (vor dem Berichtjahr) und Kontrolle (im Berichtjahr) aber ohne Massnahmen-Bericht (im Berichtjahr):' AS hw,
-    ARRAY['Projekte', 1 , 'Arten', apflora.pop.ap_id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id]::text[] AS "url",
+    ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6' , 'Arten', apflora.pop.ap_id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id]::text[] AS "url",
     ARRAY[concat('Population (Nr.): ', apflora.pop.nr), concat('Teil-Population (Nr.): ', apflora.tpop.nr)]::text[] AS text
   FROM
     apflora.pop
@@ -140,7 +164,7 @@ CREATE OR REPLACE FUNCTION apflora.qk_tpop_ohne_massnber(apid uuid, berichtjahr 
 ALTER FUNCTION apflora.qk_tpop_ohne_massnber(apid uuid, berichtjahr integer)
   OWNER TO postgres;
 
-drop FUNCTION apflora.qk_pop_ohne_popmassnber(apid uuid, berichtjahr integer);
+DROP FUNCTION IF EXISTS apflora.qk_pop_ohne_popmassnber(apid uuid, berichtjahr integer);
 CREATE OR REPLACE FUNCTION apflora.qk_pop_ohne_popmassnber(apid uuid, berichtjahr integer)
   RETURNS table(proj_id uuid, ap_id uuid, hw text, url text[], text text[]) AS
   $$
@@ -149,7 +173,7 @@ CREATE OR REPLACE FUNCTION apflora.qk_pop_ohne_popmassnber(apid uuid, berichtjah
     apflora.ap.proj_id,
     apflora.pop.ap_id,
     'Population mit angesiedelten Teilpopulationen (vor dem Berichtjahr), die (im Berichtjahr) kontrolliert wurden, aber ohne Massnahmen-Bericht (im Berichtjahr):' AS hw,
-    ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS "url",
+    ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6' , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS "url",
     ARRAY[concat('Population (Nr.): ', apflora.pop.nr)]::text[] AS text
   FROM
     apflora.ap
@@ -210,7 +234,7 @@ CREATE OR REPLACE FUNCTION apflora.qk_pop_ohne_popmassnber(apid uuid, berichtjah
 ALTER FUNCTION apflora.qk_pop_ohne_popmassnber(apid uuid, berichtjahr integer)
   OWNER TO postgres;
 
-drop FUNCTION apflora.qk_pop_ohne_popber(apid uuid, berichtjahr integer);
+DROP FUNCTION IF EXISTS apflora.qk_pop_ohne_popber(apid uuid, berichtjahr integer);
 CREATE OR REPLACE FUNCTION apflora.qk_pop_ohne_popber(apid uuid, berichtjahr integer)
   RETURNS table(proj_id uuid, ap_id uuid, hw text, url text[], text text[]) AS
   $$
@@ -218,7 +242,7 @@ CREATE OR REPLACE FUNCTION apflora.qk_pop_ohne_popber(apid uuid, berichtjahr int
     apflora.ap.proj_id,
     apflora.pop.ap_id,
     'Population mit angesiedelten Teilpopulationen (vor dem Berichtjahr), die (im Berichtjahr) kontrolliert wurden, aber ohne Populations-Bericht (im Berichtjahr):' AS hw,
-    ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS "url",
+    ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6' , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS "url",
     ARRAY[concat('Population (Nr.): ', apflora.pop.nr)]::text[] AS text
   FROM
     apflora.ap
@@ -278,17 +302,3 @@ CREATE OR REPLACE FUNCTION apflora.qk_pop_ohne_popber(apid uuid, berichtjahr int
   LANGUAGE sql STABLE;
 ALTER FUNCTION apflora.qk_pop_ohne_popber(apid uuid, berichtjahr integer)
   OWNER TO postgres;
-
-
-DROP TRIGGER IF EXISTS projekt_on_update_set_mut ON apflora.projekt;
-DROP FUNCTION IF EXISTS projekt_on_update_set_mut();
-CREATE FUNCTION projekt_on_update_set_mut() RETURNS trigger AS $projekt_on_update_set_mut$
-  BEGIN
-    NEW.changed_by = current_setting('request.jwt.claim.username', true);
-    NEW.changed = NOW();
-    RETURN NEW;
-  END;
-$projekt_on_update_set_mut$ LANGUAGE plpgsql;
-
-CREATE TRIGGER projekt_on_update_set_mut BEFORE UPDATE OR INSERT ON apflora.projekt
-  FOR EACH ROW EXECUTE PROCEDURE projekt_on_update_set_mut();

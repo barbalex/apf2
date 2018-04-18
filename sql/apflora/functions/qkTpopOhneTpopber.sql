@@ -1,3 +1,4 @@
+DROP FUNCTION IF EXISTS apflora.qk_tpop_ohne_tpopber(apid uuid, berichtjahr integer);
 CREATE OR REPLACE FUNCTION apflora.qk_tpop_ohne_tpopber(apid uuid, berichtjahr integer)
   RETURNS table(proj_id uuid, ap_id uuid, hw text, url text[], text text[]) AS
   $$
@@ -6,7 +7,7 @@ CREATE OR REPLACE FUNCTION apflora.qk_tpop_ohne_tpopber(apid uuid, berichtjahr i
     apflora.ap.proj_id,
     apflora.pop.ap_id,
     'Teilpopulation mit Kontrolle (im Berichtjahr) aber ohne Teilpopulations-Bericht (im Berichtjahr):' AS hw,
-    ARRAY['Projekte', 1 , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id]::text[] AS "url",
+    ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6' , 'Arten', apflora.ap.id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id]::text[] AS "url",
     ARRAY[concat('Population (Nr.): ', apflora.pop.nr), concat('Teil-Population (Nr.): ', apflora.tpop.nr)]::text[] AS text
   FROM
     apflora.ap

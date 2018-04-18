@@ -5,7 +5,7 @@ export default (store: Object, tree: Object): Array<Object> =>
     menuType: 'projekt',
     id: el.id,
     urlLabel: el.id,
-    label: el.ProjName || '(kein Name)',
+    label: el.name || '(kein Name)',
     url: ['Projekte', el.id],
     sort: [index],
     hasChildren: true,

@@ -198,7 +198,7 @@ DROP TABLE IF EXISTS apflora.apberuebersicht;
 CREATE TABLE apflora.apberuebersicht (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
   id_old integer,
-  proj_id integer DEFAULT 1,
+  proj_id uuid DEFAULT NULL REFERENCES apflora.projekt (id) ON DELETE CASCADE ON UPDATE CASCADE,
   jahr smallint,
   bemerkungen text,
   changed date DEFAULT NOW(),

@@ -45,7 +45,12 @@ const enhance = compose(
           // insert this dataset in store.table
           store.table.ap.set(row.id, row)
           // set new url
-          tree.setActiveNodeArray(['Projekte', 1, 'Arten', row.id])
+          tree.setActiveNodeArray([
+            'Projekte',
+            '4635372c-431c-11e8-bb30-e77f6cdd35a6',
+            'Arten',
+            row.id,
+          ])
           store.setShowNewApModal(false)
           changeSearchText('')
         })

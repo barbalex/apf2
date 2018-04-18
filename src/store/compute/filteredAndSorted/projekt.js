@@ -11,12 +11,12 @@ export default (store: Object, tree: Object): Array<Object> => {
   const filterString = nodeLabelFilter.get('projekt')
   if (filterString) {
     projekte = projekte.filter(p =>
-      p.ProjName.toLowerCase().includes(filterString.toLowerCase()),
+      p.name.toLowerCase().includes(filterString.toLowerCase())
     )
   }
 
   // sort by name
-  projekte = sortBy(projekte, 'ProjName')
+  projekte = sortBy(projekte, 'name')
 
   return projekte
 }

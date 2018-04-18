@@ -346,7 +346,7 @@ const fetchQk = async ({
     if (tpops.length > 0) {
       const messages = tpops.map(tpop => {
         const projekt = store.table.projekt.get(store.tree.activeNodes.projekt)
-        const projName = projekt && projekt.ProjName ? projekt.ProjName : ''
+        const projName = projekt && projekt.name ? projekt.name : ''
         const art = store.table.ae_eigenschaften.get(store.tree.activeNodes.ap)
         const artName = art && art.artname ? art.artname : ''
         const pop = store.table.pop.get(tpop.pop_id)
