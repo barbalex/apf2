@@ -30,7 +30,7 @@ DROP index IF EXISTS apflora.apflora."beob_quelle_id_idx";
 ALTER TABLE apflora.beob ADD COLUMN quelle_id UUID DEFAULT NULL REFERENCES apflora.beob_quelle_werte (id) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE apflora.beob DROP CONSTRAINT IF EXISTS beob_quelle_id_fkey;
 UPDATE apflora.beob SET quelle_id = (
-  SELECT id FROM apflora.adresse WHERE id_old = apflora.beob.quelle_id_old
+  SELECT id FROM apflora.beob_quelle_werte WHERE id_old = apflora.beob.quelle_id_old
 ) WHERE quelle_id_old IS NOT NULL;
 CREATE INDEX ON apflora.beob USING btree (quelle_id);
 ALTER TABLE apflora.beob DROP COLUMN quelle_id_old CASCADE;
