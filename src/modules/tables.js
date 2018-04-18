@@ -295,7 +295,7 @@ export default [
     stammdaten: true,
   },
   {
-    table: 'beob_quelle',
+    table: 'beob_quelle_werte',
     label: 'none',
     idField: 'id',
     parentIdField: 'none',

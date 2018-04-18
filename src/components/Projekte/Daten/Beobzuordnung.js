@@ -175,7 +175,7 @@ const Beobzuordnung = ({
   const { table } = store
   const { activeDataset } = tree
   const beob = activeDataset.row
-  const quelle = beob ? table.beob_quelle.get(beob.quelle_id) : null
+  const quelle = beob ? table.beob_quelle_werte_werte.get(beob.quelle_id) : null
   const quelleName = quelle && quelle.name ? quelle.name : '?'
   const beobTitle = `Informationen aus ${quelleName} (nicht veränderbar)`
   const showTPopId = activeDataset.row.nicht_zuordnen !== 1

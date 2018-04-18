@@ -95,12 +95,12 @@ COMMENT ON COLUMN apflora.tpopmassn.bearbeiter IS 'Zugehöriger Bearbeiter. Frem
 -- done: make sure createTable is correct
 -- done: rename in sql
 -- done: rename in js
--- TODO: check if old id was used somewhere. If so: rename that field, add new one and update that
--- TODO: add all views, functions, triggers containing this table to this file
--- TODO: replace all callst to table in views etc.
--- TODO: run migration sql in dev
--- TODO: restart postgrest and test app
--- TODO: CHECK child tables: are they correct?
+-- done: check if old id was used somewhere. If so: rename that field, add new one and update that
+-- done: add all views, functions, triggers containing this table to this file
+-- done: replace all callst to table in views etc.
+-- done: run migration sql in dev
+-- done: restart postgrest and test app
+-- done: CHECK child tables: are they correct?
 -- TODO: update js and run this file on server
 -- TODO: restart postgrest
 

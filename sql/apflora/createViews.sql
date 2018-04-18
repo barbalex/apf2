@@ -3779,7 +3779,7 @@ DROP VIEW IF EXISTS apflora.v_beob CASCADE;
 CREATE OR REPLACE VIEW apflora.v_beob AS
 SELECT
   apflora.beob.id,
-  apflora.beob_quelle.name AS quelle,
+  apflora.beob_quelle_werte.name AS quelle,
   beob.id_field,
   beob.data->>(SELECT id_field FROM apflora.beob WHERE id = beob2.id) AS "OriginalId",
   apflora.beob.art_id,
@@ -3824,8 +3824,8 @@ FROM
       ON apflora.ap.art = apflora.ae_eigenschaften.id
     ON apflora.beob.art_id = apflora.ae_eigenschaften.id)
   INNER JOIN
-    apflora.beob_quelle
-    ON beob.quelle_id = beob_quelle.id)
+    apflora.beob_quelle_werte
+    ON beob.quelle_id = beob_quelle_werte.id)
   LEFT JOIN
     apflora.tpop
     ON apflora.tpop.id = apflora.beob.tpop_id
@@ -3844,7 +3844,7 @@ DROP VIEW IF EXISTS apflora.v_beob__mit_data CASCADE;
 CREATE OR REPLACE VIEW apflora.v_beob__mit_data AS
 SELECT
   apflora.beob.id,
-  apflora.beob_quelle.name AS quelle,
+  apflora.beob_quelle_werte.name AS quelle,
   beob.id_field,
   beob.data->>(SELECT id_field FROM apflora.beob WHERE id = beob2.id) AS "OriginalId",
   apflora.beob.art_id,
@@ -3890,8 +3890,8 @@ FROM
       ON apflora.ap.art = apflora.ae_eigenschaften.id
     ON apflora.beob.art_id = apflora.ae_eigenschaften.id)
   INNER JOIN
-    apflora.beob_quelle
-    ON beob.quelle_id = beob_quelle.id)
+    apflora.beob_quelle_werte
+    ON beob.quelle_id = beob_quelle_werte.id)
   LEFT JOIN
     apflora.tpop
     ON apflora.tpop.id = apflora.beob.tpop_id

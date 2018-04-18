@@ -93,7 +93,7 @@ const fetchDataForOpenNodes = (
           showBeobNichtZuzuordnen ||
           showBeobZugeordnet
         ) {
-          store.fetchTable('beob_quelle')
+          store.fetchTable('beob_quelle_werte')
           store.fetchPopForAp(activeNodes.ap)
           store.fetchTpopForAp(activeNodes.ap)
         }
@@ -105,7 +105,7 @@ const fetchDataForOpenNodes = (
       apArtFolder() {},
       idealbiotopFolder() {},
       beobNichtZuzuordnenFolder() {
-        store.fetchTable('beob_quelle')
+        store.fetchTable('beob_quelle_werte')
         store.fetchTpopForAp(activeNodes.ap)
       },
       beobNichtZuzuordnen() {
@@ -115,7 +115,7 @@ const fetchDataForOpenNodes = (
         })
       },
       beobzuordnungFolder() {
-        store.fetchTable('beob_quelle')
+        store.fetchTable('beob_quelle_werte')
         store.fetchTpopForAp(activeNodes.ap)
       },
       beobzuordnung() {},
@@ -183,7 +183,7 @@ const fetchDataForOpenNodes = (
       tpopkontrzaehlFolder() {},
       tpopberFolder() {},
       beobZugeordnetFolder() {
-        store.fetchTable('beob_quelle')
+        store.fetchTable('beob_quelle_werte')
         store.fetchTpopForAp(activeNodes.ap)
       },
       beobZugeordnet() {

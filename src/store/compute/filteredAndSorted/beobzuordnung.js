@@ -23,7 +23,7 @@ export default (store: Object, tree: Object): Array<Object> => {
     })
 
   beobNichtBeurteilt.forEach(el => {
-    const quelle = table.beob_quelle.get(el.quelle_id)
+    const quelle = table.beob_quelle_werte.get(el.quelle_id)
     const quelleName = quelle && quelle.name ? quelle.name : ''
     const datum = el.datum ? format(el.datum, 'YYYY.MM.DD') : '(kein Datum)'
     el.label = `${datum}: ${el.autor || '(kein Autor)'} (${quelleName})`

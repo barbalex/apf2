@@ -1048,7 +1048,7 @@ CREATE TABLE apflora.beob (
   y integer DEFAULT NULL,
   -- maybe later add a geojson field for polygons?
   data jsonb,
-  quelle_id integer Default Null REFERENCES beob.beob_quelle (id) ON DELETE SET NULL ON UPDATE CASCADE,
+  quelle_id integer Default Null REFERENCES apflora.beob_quelle_werte (id) ON DELETE SET NULL ON UPDATE CASCADE,
   tpop_id integer DEFAULT NULL REFERENCES apflora.tpop (id) ON DELETE CASCADE ON UPDATE CASCADE,
   nicht_zuordnen boolean default false,
   bemerkungen text,
@@ -1083,15 +1083,13 @@ CREATE TABLE apflora.beobprojekt (
   UNIQUE (proj_id, beob_id)
 );
 
-DROP TABLE IF EXISTS apflora.beob_quelle;
-CREATE TABLE apflora.beob_quelle
+DROP TABLE IF EXISTS apflora.beob_quelle_werte;
+CREATE TABLE apflora.beob_quelle_werte
 (
-   id integer PRIMARY KEY,
-   "name" varchar(255) DEFAULT NULL
+   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
+   name varchar(255) DEFAULT NULL
 );
-INSERT INTO apflora.beob_quelle VALUES (1, 'evab');
-INSERT INTO apflora.beob_quelle VALUES (2, 'infospezies');
-CREATE INDEX ON apflora.beob_quelle USING btree (id);
+CREATE INDEX ON apflora.beob_quelle_werte USING btree (id);
 
 -- create table
 DROP TABLE IF EXISTS apflora.apart;

@@ -14,7 +14,7 @@ export default [
   'beob',
   'apart',
   'beobprojekt',
-  'beob_quelle',
+  'beob_quelle_werte',
   'ber',
   'erfkrit',
   'gemeinde',

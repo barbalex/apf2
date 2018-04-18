@@ -33,7 +33,7 @@ export default (store: Object, tree: Object): Array<Object> => {
     if (el.autor) {
       autor = el.autor
     }
-    quelle = table.beob_quelle.get(el.quelle_id)
+    quelle = table.beob_quelle_werte.get(el.quelle_id)
     const quelleName = quelle && quelle.name ? quelle.name : ''
     el.label = `${datum || '(kein Datum)'}: ${autor ||
       '(kein Autor)'} (${quelleName})`
