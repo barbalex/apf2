@@ -206,7 +206,7 @@ export default (store: Object, tree: Object): Array<Object> => {
     }
     if (
       nodeUrl.length === 5 &&
-      nodeUrl[4] === 'ap-arten' &&
+      nodeUrl[4] === 'AP-Arten' &&
       allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
     ) {
       const apId = nodeUrl[3]

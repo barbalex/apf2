@@ -30,7 +30,7 @@ export default (activeNodeArray: Array<mixed>, store: Object): Object => {
       activeNodeArray[4] === 'assoziierte-Arten') ||
     false
   const apArtFolder =
-    (ap && activeNodeArray.length > 4 && activeNodeArray[4] === 'ap-arten') ||
+    (ap && activeNodeArray.length > 4 && activeNodeArray[4] === 'AP-Arten') ||
     false
   const qk =
     (ap &&
