@@ -1937,8 +1937,9 @@ CREATE OR REPLACE VIEW apflora.v_exportevab_beob AS
 SELECT
   apflora.tpopkontr.zeit_id AS "fkZeitpunkt",
   apflora.tpopkontr.id AS "idBeobachtung",
-  -- TODO: should evab_id_person be real uuid?
-  COALESCE(apflora.adresse.evab_id_person, '{7C71B8AF-DF3E-4844-A83B-55735F80B993}'::uuid) AS fkAutor,
+  -- if no bearbeiter pass unbekannt
+  -- should never happen because not existing bearbeiter is filtered out
+  COALESCE(apflora.adresse.evab_id_person, '{A1146AE4-4E03-4032-8AA8-BC46BA02F468}'::uuid) AS fkAutor,
   apflora.ap.id AS fkArt,
   18 AS fkArtgruppe,
   1 AS fkAA1,
@@ -2062,6 +2063,10 @@ WHERE
   AND apflora.tpopkontr.typ IN ('Ausgangszustand', 'Zwischenbeurteilung', 'Freiwilligen-Erfolgskontrolle')
   -- keine Ansaatversuche
   AND apflora.tpop.status <> 201
+  -- nur wenn die Kontrolle einen bearbeiter hat
+  AND apflora.tpopkontr.bearbeiter IS NOT NULL
+  -- ...und nicht unbekannt ist
+  AND apflora.tpopkontr.bearbeiter <> 'a1146ae4-4e03-4032-8aa8-bc46ba02f468'
   -- nur wenn Kontrolljahr existiert
   AND apflora.tpopkontr.jahr IS NOT NULL
   -- keine Kontrollen aus dem aktuellen Jahr - die wurden ev. noch nicht verifiziert

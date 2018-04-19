@@ -3988,6 +3988,10 @@ WHERE
   AND apflora.tpopkontr.typ IN ('Ausgangszustand', 'Zwischenbeurteilung', 'Freiwilligen-Erfolgskontrolle')
   -- keine Ansaatversuche
   AND apflora.tpop.status <> 201
+  -- nur wenn die Kontrolle einen bearbeiter hat
+  AND apflora.tpopkontr.bearbeiter IS NOT NULL
+  -- ...und nicht unbekannt ist
+  AND apflora.tpopkontr.bearbeiter <> 'a1146ae4-4e03-4032-8aa8-bc46ba02f468'
   -- nur wenn Kontrolljahr existiert
   AND apflora.tpopkontr.jahr IS NOT NULL
   -- keine Kontrollen aus dem aktuellen Jahr - die wurden ev. noch nicht verifiziert
@@ -4074,6 +4078,10 @@ WHERE
   AND apflora.tpopkontr.typ IN ('Ausgangszustand', 'Zwischenbeurteilung', 'Freiwilligen-Erfolgskontrolle')
   -- keine Ansaatversuche
   AND apflora.tpop.status <> 201
+  -- nur wenn die Kontrolle einen bearbeiter hat
+  AND apflora.tpopkontr.bearbeiter IS NOT NULL
+  -- ...und nicht unbekannt ist
+  AND apflora.tpopkontr.bearbeiter <> 'a1146ae4-4e03-4032-8aa8-bc46ba02f468'
   -- nur wenn Kontrolljahr existiert
   AND apflora.tpopkontr.jahr IS NOT NULL
   -- keine Kontrollen aus dem aktuellen Jahr - die wurden ev. noch nicht verifiziert
@@ -4183,6 +4191,10 @@ WHERE
   AND apflora.tpopkontr.typ IN ('Ausgangszustand', 'Zwischenbeurteilung', 'Freiwilligen-Erfolgskontrolle')
   -- keine Ansaatversuche
   AND apflora.tpop.status <> 201
+  -- nur wenn die Kontrolle einen bearbeiter hat
+  AND apflora.tpopkontr.bearbeiter IS NOT NULL
+  -- ...und nicht unbekannt ist
+  AND apflora.tpopkontr.bearbeiter <> 'a1146ae4-4e03-4032-8aa8-bc46ba02f468'
   -- nur wenn Kontrolljahr existiert
   AND apflora.tpopkontr.jahr IS NOT NULL
   -- keine Kontrollen aus dem aktuellen Jahr - die wurden ev. noch nicht verifiziert
@@ -4271,6 +4283,10 @@ WHERE
   AND apflora.tpopkontr.typ IN ('Ausgangszustand', 'Zwischenbeurteilung', 'Freiwilligen-Erfolgskontrolle')
   -- keine Ansaatversuche
   AND apflora.tpop.status <> 201
+  -- nur wenn die Kontrolle einen bearbeiter hat
+  AND apflora.tpopkontr.bearbeiter IS NOT NULL
+  -- ...und nicht unbekannt ist
+  AND apflora.tpopkontr.bearbeiter <> 'a1146ae4-4e03-4032-8aa8-bc46ba02f468'
   -- nur wenn Kontrolljahr existiert
   AND apflora.tpopkontr.jahr IS NOT NULL
   -- keine Kontrollen aus dem aktuellen Jahr - die wurden ev. noch nicht verifiziert
