@@ -32,7 +32,7 @@ export default (
       url: [
         'Projekte',
         projId,
-        'Arten',
+        'Aktionspläne',
         apId,
         'Populationen',
         el.pop_id,

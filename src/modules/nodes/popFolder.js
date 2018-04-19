@@ -36,7 +36,7 @@ export default (
       id: apId,
       urlLabel: 'Populationen',
       label: `Populationen (${message})`,
-      url: ['Projekte', projId, 'Arten', apId, 'Populationen'],
+      url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen'],
       sort: [projIndex, 1, apIndex, 1],
       hasChildren: popNodesLength > 0,
     },

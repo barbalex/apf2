@@ -67,7 +67,7 @@ export default (
       label: `Qualitätskontrollen${
         nrOfQkMessages !== null ? ` (${nrOfQkMessages})` : ''
       }`,
-      url: ['Projekte', projId, 'Arten', apId, 'Qualitaetskontrollen'],
+      url: ['Projekte', projId, 'Aktionspläne', apId, 'Qualitaetskontrollen'],
       sort: [projIndex, 1, apIndex, 11],
       hasChildren: false,
     },

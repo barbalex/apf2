@@ -357,7 +357,7 @@ const fetchQk = async ({
           url: [
             'Projekte',
             1,
-            'Arten',
+            'Aktionspläne',
             tpop.ap_id,
             'Populationen',
             tpop.pop_id,

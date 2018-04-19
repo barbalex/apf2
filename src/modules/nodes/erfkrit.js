@@ -29,7 +29,7 @@ export default (
       url: [
         'Projekte',
         projId,
-        'Arten',
+        'Aktionspläne',
         el.ap_id,
         'AP-Erfolgskriterien',
         el.id,

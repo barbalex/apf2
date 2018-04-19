@@ -101,14 +101,14 @@ export default (store: Object, tree: Object): Array<Object> => {
     }
     if (
       nodeUrl.length === 3 &&
-      nodeUrl[2] === 'Arten' &&
+      nodeUrl[2] === 'Aktionspläne' &&
       allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
     ) {
       nodes = [...nodes, ...apNodes(store, tree, projId)]
     }
     if (
       nodeUrl.length === 4 &&
-      nodeUrl[2] === 'Arten' &&
+      nodeUrl[2] === 'Aktionspläne' &&
       allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
     ) {
       const apId = nodeUrl[3]
@@ -127,7 +127,7 @@ export default (store: Object, tree: Object): Array<Object> => {
         ...qkFolderNodes(store, tree, projId, apId),
       ]
     }
-    // if nodeUrl.length > 4, nodeUrl[2] is always 'Arten'
+    // if nodeUrl.length > 4, nodeUrl[2] is always 'Aktionspläne'
     if (
       nodeUrl.length === 5 &&
       nodeUrl[4] === 'AP-Ziele' &&

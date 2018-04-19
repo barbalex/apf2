@@ -19,18 +19,18 @@ const BeobPopup = ({ store, beob }: { store: Object, beob: Object }) => {
   const { ap, projekt } = activeNodes
 
   // build url to open beob form
-  let url = `${appBaseUrl}/Projekte/${projekt}/Arten/${ap}/nicht-beurteilte-Beobachtungen/${
+  let url = `${appBaseUrl}/Projekte/${projekt}/Aktionspläne/${ap}/nicht-beurteilte-Beobachtungen/${
     beob.id
   }`
   if (beob.nicht_zuordnen && beob.nicht_zuordnen === 1) {
-    url = `${appBaseUrl}/Projekte/${projekt}/Arten/${ap}/nicht-zuzuordnende-Beobachtungen/${
+    url = `${appBaseUrl}/Projekte/${projekt}/Aktionspläne/${ap}/nicht-zuzuordnende-Beobachtungen/${
       beob.id
     }`
   } else {
     const tpopId = beob.tpop_id
     const tpop = store.table.tpop.get(tpopId)
     const popId = tpop ? tpop.pop_id : ''
-    url = `${appBaseUrl}/Projekte/${projekt}/Arten/${ap}/Populationen/${popId}/Teil-Populationen/${tpopId}/Beobachtungen/${
+    url = `${appBaseUrl}/Projekte/${projekt}/Aktionspläne/${ap}/Populationen/${popId}/Teil-Populationen/${tpopId}/Beobachtungen/${
       beob.id
     }`
   }

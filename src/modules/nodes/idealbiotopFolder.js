@@ -23,7 +23,7 @@ export default (
       id: apId,
       urlLabel: 'Idealbiotop',
       label: 'Idealbiotop',
-      url: ['Projekte', projId, 'Arten', apId, 'Idealbiotop'],
+      url: ['Projekte', projId, 'Aktionspläne', apId, 'Idealbiotop'],
       sort: [projIndex, 1, apIndex, 6],
       hasChildren: false,
     },

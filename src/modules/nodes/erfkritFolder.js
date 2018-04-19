@@ -35,7 +35,7 @@ export default (
       id: apId,
       urlLabel: 'AP-Erfolgskriterien',
       label: `AP-Erfolgskriterien (${message})`,
-      url: ['Projekte', projId, 'Arten', apId, 'AP-Erfolgskriterien'],
+      url: ['Projekte', projId, 'Aktionspläne', apId, 'AP-Erfolgskriterien'],
       sort: [projIndex, 1, apIndex, 3],
       hasChildren: erfkritNodesLength > 0,
     },

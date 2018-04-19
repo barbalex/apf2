@@ -45,7 +45,7 @@ export default (store: Object): Array<Object> => {
           const newActiveNodeArray = [
             'Projekte',
             activeNodes.projekt,
-            'Arten',
+            'Aktionspläne',
             activeNodes.ap,
             'nicht-beurteilte-Beobachtungen',
             beob.id,

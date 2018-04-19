@@ -25,7 +25,7 @@ export default (
       parentId: apId,
       urlLabel: el.id,
       label: el.label,
-      url: ['Projekte', projId, 'Arten', apId, 'ap-arten', el.id],
+      url: ['Projekte', projId, 'Aktionspläne', apId, 'ap-arten', el.id],
       sort: [projIndex, 1, apIndex, 7, index],
       hasChildren: false,
     }))

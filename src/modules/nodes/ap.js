@@ -17,7 +17,7 @@ export default (store: Object, tree: Object, projId: number): Array<Object> => {
       parentId: el.proj_id,
       urlLabel: el.id,
       label: el.label,
-      url: ['Projekte', el.proj_id, 'Arten', el.id],
+      url: ['Projekte', el.proj_id, 'Aktionspläne', el.id],
       sort: [projIndex, 1, index],
       hasChildren: true,
     }))

@@ -28,7 +28,7 @@ export default async (
     const newActiveNodeArray = [
       'Projekte',
       projekt,
-      'Arten',
+      'Aktionspläne',
       ap,
       'nicht-zuzuordnende-Beobachtungen',
       beob.id,
@@ -42,7 +42,7 @@ export default async (
     const newActiveNodeArray = [
       'Projekte',
       projekt,
-      'Arten',
+      'Aktionspläne',
       ap,
       'Populationen',
       tpop.pop_id,

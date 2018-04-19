@@ -1,7 +1,7 @@
 // @flow
 export default (table: string): string => {
   const names = {
-    ap: 'Arten',
+    ap: 'Aktionspläne',
     apber: 'AP-Berichte',
     apberuebersicht: 'AP-Berichte',
     assozart: 'assoziierte-Arten',

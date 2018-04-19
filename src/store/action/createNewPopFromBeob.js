@@ -90,7 +90,7 @@ export default async ({
   const newActiveNodeArray = [
     `Projekte`,
     projekt,
-    `Arten`,
+    `Aktionspläne`,
     ap,
     `Populationen`,
     tpop.pop_id,

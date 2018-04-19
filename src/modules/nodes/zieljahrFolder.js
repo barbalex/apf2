@@ -34,7 +34,7 @@ export default (
       id: apId,
       urlLabel: 'AP-Ziele',
       label: `AP-Ziele (${message})`,
-      url: ['Projekte', projId, 'Arten', apId, 'AP-Ziele'],
+      url: ['Projekte', projId, 'Aktionspläne', apId, 'AP-Ziele'],
       sort: [projIndex, 1, apIndex, 2],
       hasChildren: zieljahreNodesLength > 0,
     },

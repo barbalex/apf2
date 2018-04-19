@@ -48,7 +48,7 @@ const enhance = compose(
           tree.setActiveNodeArray([
             'Projekte',
             '4635372c-431c-11e8-bb30-e77f6cdd35a6',
-            'Arten',
+            'Aktionspläne',
             row.id,
           ])
           store.setShowNewApModal(false)

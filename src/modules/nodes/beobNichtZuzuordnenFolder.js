@@ -43,7 +43,7 @@ export default (
       url: [
         'Projekte',
         projId,
-        'Arten',
+        'Aktionspläne',
         apId,
         'nicht-zuzuordnende-Beobachtungen',
       ],

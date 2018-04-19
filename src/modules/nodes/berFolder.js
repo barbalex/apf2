@@ -37,7 +37,7 @@ export default (
       id: apId,
       urlLabel: 'Berichte',
       label: `Berichte (${message})`,
-      url: ['Projekte', projId, 'Arten', apId, 'Berichte'],
+      url: ['Projekte', projId, 'Aktionspläne', apId, 'Berichte'],
       sort: [projIndex, 1, apIndex, 5],
       hasChildren: berNodesLength > 0,
     },

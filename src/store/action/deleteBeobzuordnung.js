@@ -25,7 +25,7 @@ export default async (
   const newActiveNodeArray = [
     'Projekte',
     activeNodes.projekt,
-    'Arten',
+    'Aktionspläne',
     activeNodes.ap,
     'nicht-beurteilte-Beobachtungen',
     beobId,

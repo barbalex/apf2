@@ -16,7 +16,7 @@ const StyledH3 = styled.h3`
 const PopPopup = ({ store, pop }: { store: Object, pop: Object }) => {
   const { activeNodes } = store.tree
   const { ap, projekt } = activeNodes
-  const popUrl = `${appBaseUrl}/Projekte/${projekt}/Arten/${ap}/Populationen/${
+  const popUrl = `${appBaseUrl}/Projekte/${projekt}/Aktionspläne/${ap}/Populationen/${
     pop.id
   }`
 
@@ -31,9 +31,9 @@ const PopPopup = ({ store, pop }: { store: Object, pop: Object }) => {
       <div>
         {`Koordinaten: ${
           pop.PopKoordWgs84
-            ? `${pop.x.toLocaleString(
+            ? `${pop.x.toLocaleString('de-ch')} / ${pop.y.toLocaleString(
                 'de-ch'
-              )} / ${pop.y.toLocaleString('de-ch')}`
+              )}`
             : '(keine)'
         }`}
       </div>

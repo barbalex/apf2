@@ -38,7 +38,7 @@ export default (
       url: [
         'Projekte',
         projId,
-        'Arten',
+        'Aktionspläne',
         apId,
         'AP-Ziele',
         zieljahr,

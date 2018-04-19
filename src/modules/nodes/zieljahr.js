@@ -28,7 +28,7 @@ export default (
       parentId: apId,
       urlLabel: z.jahr == null ? 'kein-Jahr' : z.jahr,
       label: `${z.jahr == null ? 'kein Jahr' : z.jahr} (${z.length})`,
-      url: ['Projekte', projId, 'Arten', apId, 'AP-Ziele', z.jahr],
+      url: ['Projekte', projId, 'Aktionspläne', apId, 'AP-Ziele', z.jahr],
       sort: [projIndex, 1, apIndex, 2, index],
       hasChildren: childrenLength > 0,
     }
