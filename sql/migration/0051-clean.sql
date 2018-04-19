@@ -19,3 +19,22 @@ alter table apflora.beob
    ADD CONSTRAINT beob_fk_beob_quelle_werte
    FOREIGN KEY (quelle_id) 
    REFERENCES apflora.beob_quelle_werte(id) on delete set null on update cascade;
+DROP index IF EXISTS apflora.apflora."tpop_TPopHerkunft_idx";
+DROP index IF EXISTS apflora.apflora."tpop_TPopApBerichtRelevant_idx";
+DROP index IF EXISTS apflora.apflora."tpop_TPopFlurname_idx";
+DROP index IF EXISTS apflora.apflora."tpop_gemeinde_idx";
+DROP index IF EXISTS apflora.apflora."tpop_TPopGemeinde_idx";
+DROP index IF EXISTS apflora.apflora."tpop_TPopId_idx";
+DROP index IF EXISTS apflora.apflora."tpop_TPopNr_idx";
+DROP index IF EXISTS apflora.apflora."tpop_TPopXKoord_idx";
+DROP index IF EXISTS apflora.apflora."tpop_TPopYKoord_idx";
+alter table apflora.tpopkontr 
+   ADD CONSTRAINT tpopkontr_fk_adresse
+   FOREIGN KEY (bearbeiter) 
+   REFERENCES apflora.adresse(id) on delete set null on update cascade;
+DROP index IF EXISTS apflora.apflora."tpopkontr_idbiotuebereinst_werte_DomainCode_idx";
+DROP index IF EXISTS apflora.apflora."tpopkontr_idbiotuebereinst_werte_DomainOrd_idx";
+DROP index IF EXISTS apflora.apflora."tpopkontr_idbiotuebereinst_werte_id_idx";
+CREATE INDEX ON apflora.tpopkontr_idbiotuebereinst_werte USING btree (id);
+CREATE INDEX ON apflora.tpopkontr_idbiotuebereinst_werte USING btree (code);
+CREATE INDEX ON apflora.tpopkontr_idbiotuebereinst_werte USING btree (sort);
