@@ -49,6 +49,7 @@ const fetchDataForOpenNodes = (
 
   openNodesToUse.forEach(node => {
     const activeNodes = getActiveNodes(node, store)
+    console.log('fetchDataForOpenNodes:', activeNodes)
     const fetchingFromActiveElements = {
       exporte() {
         store.fetchTableByParentId('ap', activeNodes.projekt)
@@ -196,7 +197,7 @@ const fetchDataForOpenNodes = (
 
     runInAction(() => {
       forEach(fetchingFromActiveElements, (func, key) => {
-        if (activeNodes[key]) {
+        if (!!activeNodes[key]) {
           func()
         }
       })

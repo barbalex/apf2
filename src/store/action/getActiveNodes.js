@@ -21,7 +21,7 @@ export default (activeNodeArray: Array<mixed>, store: Object): Object => {
   const apFolder =
     (projekt &&
       activeNodeArray.length > 2 &&
-      activeNodeArray[2] === 'Aktionspläne') ||
+      decodeURIComponent(activeNodeArray[2]) === 'Aktionspläne') ||
     false
   const ap = apFolder && activeNodeArray.length > 3 ? activeNodeArray[3] : null
   const assozartFolder =
