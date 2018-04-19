@@ -37,8 +37,8 @@ ALTER TABLE apflora.beobart RENAME TO apart;
 -- done: run migration sql in dev
 -- done: restart postgrest and test app
 -- done: rebuild creating new ap
--- TODO: update js and run this file on server
--- TODO: restart postgrest
+-- done: update js and run this file on server
+-- done: restart postgrest
 
 -- when ap is inserted
 -- ensure apart is created too

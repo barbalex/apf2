@@ -297,11 +297,11 @@ COMMENT ON COLUMN apflora.erfkrit.changed_by IS 'Von wem wurde der Datensatz zul
 
 DROP TABLE IF EXISTS apflora.gemeinde;
 CREATE TABLE apflora.gemeinde (
-  "BfsNr" integer PRIMARY KEY,
-  "GmdName" varchar(50) DEFAULT NULL
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
+  name varchar(50) DEFAULT NULL
 );
-CREATE INDEX ON apflora.gemeinde USING btree ("BfsNr");
-CREATE INDEX ON apflora.gemeinde USING btree ("GmdName");
+CREATE INDEX ON apflora.gemeinde USING btree (id);
+CREATE INDEX ON apflora.gemeinde USING btree (name);
 
 DROP TABLE IF EXISTS apflora.idealbiotop;
 CREATE TABLE apflora.idealbiotop (
@@ -501,7 +501,7 @@ COMMENT ON COLUMN apflora.tpop.id IS 'Primärschlüssel';
 COMMENT ON COLUMN apflora.tpop.id_old IS 'frühere id';
 COMMENT ON COLUMN apflora.tpop.pop_id IS 'Zugehörige Population. Fremdschlüssel aus der Tabelle "pop"';
 COMMENT ON COLUMN apflora.tpop.nr IS 'Nummer der Teilpopulation';
-COMMENT ON COLUMN apflora.tpop.gemeinde IS 'Gemeinde';
+COMMENT ON COLUMN apflora.tpop.gemeinde IS 'Gemeinde. Freier Text, Einträge aus apflora.gemeinde sollen gewählt werden können.';
 COMMENT ON COLUMN apflora.tpop.flurname IS 'Flurname';
 COMMENT ON COLUMN apflora.tpop.x IS 'X-Koordinate';
 COMMENT ON COLUMN apflora.tpop.y IS 'Y-Koordinate';

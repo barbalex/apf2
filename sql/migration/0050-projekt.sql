@@ -48,8 +48,8 @@ COMMENT ON COLUMN apflora.apberuebersicht.proj_id IS 'Zugehöriger Aktionsplan. 
 -- done: restart postgrest and test app
 -- done: special ap functions work?
 -- done: CHECK child tables: are they correct?
--- TODO: update js and run this file on server
--- TODO: restart postgrest
+-- done: update js and run this file on server
+-- done: restart postgrest
 
 DROP TRIGGER IF EXISTS projekt_on_update_set_mut ON apflora.projekt;
 DROP FUNCTION IF EXISTS projekt_on_update_set_mut();

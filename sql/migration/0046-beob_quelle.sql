@@ -20,9 +20,9 @@ CREATE INDEX ON apflora.beob_quelle_werte USING btree (id);
 -- done: check if old id was used somewhere. If so: rename that field, add new one and update that
 -- done: add all views, functions, triggers containing this table to this file
 -- done: run migration sql in dev
--- TODO: restart postgrest and test app
--- TODO: update js and run this file on server
--- TODO: restart postgrest
+-- done: restart postgrest and test app
+-- done: update js and run this file on server
+-- done: restart postgrest
 
 -- change beob
 ALTER TABLE apflora.beob RENAME quelle_id TO quelle_id_old;

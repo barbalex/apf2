@@ -105,8 +105,8 @@ export default (store: Object): void => {
     gemeinden: computed(
       () => {
         let gemeinden = Array.from(store.table.gemeinde.values())
-        gemeinden = sortBy(gemeinden, 'GmdName')
-        return gemeinden.map(el => el.GmdName)
+        gemeinden = sortBy(gemeinden, 'name')
+        return gemeinden.map(el => el.name)
       },
       { name: 'dropdownListGemeinden' }
     ),

@@ -276,7 +276,7 @@ export default [
   {
     table: 'gemeinde',
     label: 'none',
-    idField: 'BfsNr',
+    idField: 'id',
     parentIdField: 'none',
     stammdaten: true,
   },

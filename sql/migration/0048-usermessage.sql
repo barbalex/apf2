@@ -22,5 +22,5 @@ CREATE INDEX ON apflora.usermessage USING btree (message_id);
 -- done: run migration sql in dev
 -- done: restart postgrest and test app
 -- done: CHECK child tables: are they correct?
--- TODO: update js and run this file on server
--- TODO: restart postgrest
+-- done: update js and run this file on server
+-- done: restart postgrest

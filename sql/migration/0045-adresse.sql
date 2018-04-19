@@ -101,8 +101,8 @@ COMMENT ON COLUMN apflora.tpopmassn.bearbeiter IS 'Zugehöriger Bearbeiter. Frem
 -- done: run migration sql in dev
 -- done: restart postgrest and test app
 -- done: CHECK child tables: are they correct?
--- TODO: update js and run this file on server
--- TODO: restart postgrest
+-- done: update js and run this file on server
+-- done: restart postgrest
 
 DROP TRIGGER IF EXISTS adresse_on_update_set_mut ON apflora.adresse;
 DROP FUNCTION IF EXISTS adresse_on_update_set_mut();

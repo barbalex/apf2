@@ -146,12 +146,12 @@ COMMENT ON COLUMN apflora.apart.ap_id IS 'Zugehöriger Aktionsplan. Fremdschlüs
 -- done: check if old id was used somewhere. If so: rename that field, add new one and update that
 -- done: add all views, functions, triggers containing this table to this file
 -- done: run migration sql in dev
--- TODO: restart postgrest and test app
--- TODO: special ap functions work?
--- TODO: CHECK child tables: are they correct?
--- TODO: check that unique && default 0 from id_old is gone
--- TODO: update js and run this file on server
--- TODO: restart postgrest
+-- done: restart postgrest and test app
+-- done: special ap functions work?
+-- done: CHECK child tables: are they correct?
+-- done: check that unique && default 0 from id_old is gone
+-- done: update js and run this file on server
+-- done: restart postgrest
 
 DROP TRIGGER IF EXISTS ap_on_update_set_mut ON apflora.ap;
 DROP FUNCTION IF EXISTS ap_on_update_set_mut();
