@@ -78,3 +78,20 @@ $tpopmassn_typ_werte_on_update_set_mut$ LANGUAGE plpgsql;
 
 CREATE TRIGGER tpopmassn_typ_werte_on_update_set_mut BEFORE UPDATE OR INSERT ON apflora.tpopmassn_typ_werte
   FOR EACH ROW EXECUTE PROCEDURE tpopmassn_typ_werte_on_update_set_mut();
+
+alter table apflora.tpopmassn 
+   ADD CONSTRAINT tpopmassn_fk_adresse
+   FOREIGN KEY (bearbeiter) 
+   REFERENCES apflora.adresse(id) on delete set null on update cascade;
+
+DROP TABLE IF EXISTS apflora.userprojekt;
+
+DROP index IF EXISTS apflora.apflora."ziel_typ_werte_ZieltypId_idx";
+DROP index IF EXISTS apflora.apflora."ziel_typ_werte_ZieltypOrd_idx";
+DROP index IF EXISTS apflora.apflora."ziel_typ_werte_id_idx";
+CREATE INDEX ON apflora.ziel_typ_werte USING btree (id);
+CREATE INDEX ON apflora.ziel_typ_werte USING btree (code);
+CREATE INDEX ON apflora.ziel_typ_werte USING btree (sort);
+
+DROP index IF EXISTS apflora.apflora."zielber_ziel_id_idx1";
+CREATE INDEX ON apflora.zielber USING btree (ziel_id);
