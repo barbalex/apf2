@@ -68,12 +68,13 @@ COMMENT ON COLUMN apflora.ap.bearbeiter IS 'Verantwortliche(r) für die Art';
 COMMENT ON COLUMN apflora.ap.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.ap.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
+-- this table is NOT YET IN USE
 DROP TABLE IF EXISTS apflora.userprojekt;
 CREATE TABLE apflora.userprojekt (
-  name varchar(30) REFERENCES basic_auth.users (name) ON DELETE CASCADE ON UPDATE CASCADE,
+  username varchar(30) REFERENCES basic_auth.users (name) ON DELETE CASCADE ON UPDATE CASCADE,
   proj_id uuid REFERENCES apflora.projekt (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
-CREATE INDEX ON apflora.userprojekt USING btree (name, proj_id);
+CREATE INDEX ON apflora.userprojekt USING btree (username, proj_id);
 
 DROP TABLE IF EXISTS apflora.ap_bearbstand_werte;
 CREATE TABLE apflora.ap_bearbstand_werte (
@@ -875,6 +876,10 @@ CREATE TABLE apflora.tpopmassnber (
   changed date DEFAULT NOW(),
   changed_by varchar(20) DEFAULT current_setting('request.jwt.claim.username', true)
 );
+CREATE INDEX ON apflora.tpopmassnber USING btree (id);
+CREATE INDEX ON apflora.tpopmassnber USING btree (tpop_id);
+CREATE INDEX ON apflora.tpopmassnber USING btree (beurteilung);
+CREATE INDEX ON apflora.tpopmassnber USING btree (jahr);
 COMMENT ON COLUMN apflora.tpopmassnber.id IS 'Primärschlüssel der Tabelle "tpopmassnber"';
 COMMENT ON COLUMN apflora.tpopmassnber.id_old IS 'frühere id';
 COMMENT ON COLUMN apflora.tpopmassnber.tpop_id IS 'Zugehörige Teilpopulation. Fremdschlüssel aus Tabelle "tpop"';
@@ -883,10 +888,6 @@ COMMENT ON COLUMN apflora.tpopmassnber.beurteilung IS 'Beurteilung des Erfolgs. 
 COMMENT ON COLUMN apflora.tpopmassnber.bemerkungen IS 'Bemerkungen zur Beurteilung';
 COMMENT ON COLUMN apflora.tpopmassnber.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.tpopmassnber.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
-CREATE INDEX ON apflora.tpopmassnber USING btree (id);
-CREATE INDEX ON apflora.tpopmassnber USING btree (tpop_id);
-CREATE INDEX ON apflora.tpopmassnber USING btree (beurteilung);
-CREATE INDEX ON apflora.tpopmassnber USING btree (jahr);
 
 DROP TABLE IF EXISTS apflora.message CASCADE;
 CREATE TABLE apflora.message (
@@ -909,7 +910,9 @@ CREATE TABLE apflora.usermessage (
   message_id UUID NOT NULL REFERENCES apflora.message (id) ON DELETE CASCADE ON UPDATE CASCADE,
   UNIQUE (user_name, message_id)
 );
-CREATE INDEX ON apflora.usermessage USING btree (user_name, message_id);
+CREATE INDEX ON apflora.usermessage USING btree (id);
+CREATE INDEX ON apflora.usermessage USING btree (user_name);
+CREATE INDEX ON apflora.usermessage USING btree (message_id);
 
 DROP TABLE IF EXISTS apflora.ziel;
 CREATE TABLE apflora.ziel (
