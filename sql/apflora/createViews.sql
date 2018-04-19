@@ -3204,7 +3204,7 @@ SELECT
   apflora.tpopkontr.id,
   apflora.tpopkontr.jahr,
   apflora.tpopkontr.datum,
-  apflora.tpopkontr_typ_werte."DomainTxt" AS typ,
+  apflora.tpopkontr_typ_werte.text AS typ,
   apflora.adresse.name AS bearbeiter,
   apflora.tpopkontr.ueberlebensrate,
   apflora.tpopkontr.vitalitaet,
@@ -3261,7 +3261,7 @@ FROM
           ((((((apflora.tpopkontr
           LEFT JOIN
             apflora.tpopkontr_typ_werte
-            ON apflora.tpopkontr.typ = apflora.tpopkontr_typ_werte."DomainTxt")
+            ON apflora.tpopkontr.typ = apflora.tpopkontr_typ_werte.text)
           LEFT JOIN
             apflora.adresse
             ON apflora.tpopkontr.bearbeiter = apflora.adresse.id)
@@ -3339,7 +3339,7 @@ GROUP BY
   apflora.tpopkontr.id,
   apflora.tpopkontr.jahr,
   apflora.tpopkontr.datum,
-  apflora.tpopkontr_typ_werte."DomainTxt",
+  apflora.tpopkontr_typ_werte.text,
   apflora.adresse.name,
   apflora.tpopkontr.ueberlebensrate,
   apflora.tpopkontr.vitalitaet,
@@ -3397,7 +3397,7 @@ SELECT
   apflora.tpopkontr.id AS "KONTRGUID",
   apflora.tpopkontr.jahr AS "KONTRJAHR",
   to_char(apflora.tpopkontr.datum, 'DD.MM.YY') AS "KONTRDAT",
-  apflora.tpopkontr_typ_werte."DomainTxt" AS "KONTRTYP",
+  apflora.tpopkontr_typ_werte.text AS "KONTRTYP",
   apflora.adresse.name AS "KONTRBEARBEITER",
   apflora.tpopkontr.ueberlebensrate AS "KONTRUEBERLEBENSRATE",
   apflora.tpopkontr.vitalitaet AS "KONTRVITALITAET",
@@ -3456,7 +3456,7 @@ FROM
           ((((((apflora.tpopkontr
           LEFT JOIN
             apflora.tpopkontr_typ_werte
-            ON apflora.tpopkontr.typ = apflora.tpopkontr_typ_werte."DomainTxt")
+            ON apflora.tpopkontr.typ = apflora.tpopkontr_typ_werte.text)
           LEFT JOIN
             apflora.adresse
             ON apflora.tpopkontr.bearbeiter = apflora.adresse.id)
@@ -3504,7 +3504,7 @@ GROUP BY
   apflora.tpopkontr.id,
   apflora.tpopkontr.jahr,
   apflora.tpopkontr.datum,
-  apflora.tpopkontr_typ_werte."DomainTxt",
+  apflora.tpopkontr_typ_werte.text,
   apflora.adresse.name,
   apflora.tpopkontr.ueberlebensrate,
   apflora.tpopkontr.vitalitaet,
@@ -3696,7 +3696,7 @@ SELECT
   CAST(apflora.tpopkontr.id AS varchar(50)) AS tpopkontrid,
   apflora.tpopkontr.jahr AS tpopkontrjahr,
   apflora.tpopkontr.datum::timestamp AS tpopkontrdatum,
-  apflora.tpopkontr_typ_werte."DomainTxt" AS tpopkontrtyp,
+  apflora.tpopkontr_typ_werte.text AS tpopkontrtyp,
   apflora.adresse.name AS tpopkontrbearb,
   apflora.tpopkontr.ueberlebensrate AS tpopkontrueberleb,
   apflora.tpopkontr.vitalitaet AS tpopkontrvitalitaet,
@@ -3746,7 +3746,7 @@ FROM
         (((apflora.tpopkontr
         LEFT JOIN
           apflora.tpopkontr_typ_werte
-          ON apflora.tpopkontr.typ = apflora.tpopkontr_typ_werte."DomainTxt")
+          ON apflora.tpopkontr.typ = apflora.tpopkontr_typ_werte.text)
         LEFT JOIN
           apflora.adresse
           ON apflora.tpopkontr.bearbeiter = apflora.adresse.id)
@@ -4680,7 +4680,7 @@ SELECT
   apflora.tpopkontr.id AS "Kontr id",
   apflora.tpopkontr.jahr AS "Kontr Jahr",
   apflora.tpopkontr.datum AS "Kontr Datum",
-  apflora.tpopkontr_typ_werte."DomainTxt" AS "Kontr Typ",
+  apflora.tpopkontr_typ_werte.text AS "Kontr Typ",
   apflora.adresse.name AS "Kontr BearbeiterIn",
   apflora.tpopkontr.ueberlebensrate AS "Kontr Ueberlebensrate",
   apflora.tpopkontr.vitalitaet AS "Kontr Vitalitaet",
@@ -4755,7 +4755,7 @@ FROM
             ON apflora.tpopkontr.idealbiotop_uebereinstimmung = apflora.tpopkontr_idbiotuebereinst_werte.code)
           LEFT JOIN
             apflora.tpopkontr_typ_werte
-            ON apflora.tpopkontr.typ = apflora.tpopkontr_typ_werte."DomainTxt")
+            ON apflora.tpopkontr.typ = apflora.tpopkontr_typ_werte.text)
           LEFT JOIN
             apflora.adresse
             ON apflora.tpopkontr.bearbeiter = apflora.adresse.id)
@@ -4824,12 +4824,12 @@ SELECT
   apflora.tpop.nutzungszone AS tpop_nutzungszone,
   apflora.tpop.bewirtschafter AS tpop_bewirtschafter,
   apflora.tpop.bewirtschaftung AS tpop_bewirtschaftung,
-  apflora.tpopber.id AS "TPopBer Id",
-  apflora.tpopber.jahr AS "TPopBer Jahr",
-  tpop_entwicklung_werte.text AS "TPopBer Entwicklung",
-  apflora.tpopber.bemerkungen AS "TPopBer Bemerkungen",
-  apflora.tpopber.changed AS "TPopBer MutWann",
-  apflora.tpopber.changed_by AS "TPopBer MutWer"
+  apflora.tpopber.id AS tpopber_id,
+  apflora.tpopber.jahr AS tpopber_jahr,
+  tpop_entwicklung_werte.text AS tpopber_entwicklung,
+  apflora.tpopber.bemerkungen AS tpopber_bemerkungen,
+  apflora.tpopber.changed AS tpopber_changed,
+  apflora.tpopber.changed_by AS tpopber_changed_by
 FROM
   apflora.ae_eigenschaften
   INNER JOIN

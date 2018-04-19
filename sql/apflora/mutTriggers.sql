@@ -41,8 +41,8 @@ DROP TRIGGER IF EXISTS ap_erfbeurtkrit_werte_on_update_set_mut ON apflora.ap_erf
 DROP FUNCTION IF EXISTS ap_erfbeurtkrit_werte_on_update_set_mut();
 CREATE FUNCTION ap_erfbeurtkrit_werte_on_update_set_mut() RETURNS trigger AS $ap_erfbeurtkrit_werte_on_update_set_mut$
   BEGIN
-    NEW."MutWer" = current_setting('request.jwt.claim.username', true);
-    NEW."MutWann" = NOW();
+    NEW.changed_by = current_setting('request.jwt.claim.username', true);
+    NEW.changed = NOW();
     RETURN NEW;
   END;
 $ap_erfbeurtkrit_werte_on_update_set_mut$ LANGUAGE plpgsql;
@@ -314,8 +314,8 @@ DROP TRIGGER IF EXISTS tpopkontr_typ_werte_on_update_set_mut ON apflora.tpopkont
 DROP FUNCTION IF EXISTS tpopkontr_typ_werte_on_update_set_mut();
 CREATE FUNCTION tpopkontr_typ_werte_on_update_set_mut() RETURNS trigger AS $tpopkontr_typ_werte_on_update_set_mut$
   BEGIN
-    NEW."MutWer" = current_setting('request.jwt.claim.username', true);
-    NEW."MutWann" = NOW();
+    NEW.changed_by = current_setting('request.jwt.claim.username', true);
+    NEW.changed = NOW();
     RETURN NEW;
   END;
 $tpopkontr_typ_werte_on_update_set_mut$ LANGUAGE plpgsql;
@@ -379,8 +379,8 @@ DROP TRIGGER IF EXISTS tpopmassn_erfbeurt_werte_on_update_set_mut ON apflora.tpo
 DROP FUNCTION IF EXISTS tpopmassn_erfbeurt_werte_on_update_set_mut();
 CREATE FUNCTION tpopmassn_erfbeurt_werte_on_update_set_mut() RETURNS trigger AS $tpopmassn_erfbeurt_werte_on_update_set_mut$
   BEGIN
-    NEW."MutWer" = current_setting('request.jwt.claim.username', true);
-    NEW."MutWann" = NOW();
+    NEW.changed_by = current_setting('request.jwt.claim.username', true);
+    NEW.changed = NOW();
     RETURN NEW;
   END;
 $tpopmassn_erfbeurt_werte_on_update_set_mut$ LANGUAGE plpgsql;
@@ -392,8 +392,8 @@ DROP TRIGGER IF EXISTS tpopmassn_typ_werte_on_update_set_mut ON apflora.tpopmass
 DROP FUNCTION IF EXISTS tpopmassn_typ_werte_on_update_set_mut();
 CREATE FUNCTION tpopmassn_typ_werte_on_update_set_mut() RETURNS trigger AS $tpopmassn_typ_werte_on_update_set_mut$
   BEGIN
-    NEW."MutWer" = current_setting('request.jwt.claim.username', true);
-    NEW."MutWann" = NOW();
+    NEW.changed_by = current_setting('request.jwt.claim.username', true);
+    NEW.changed = NOW();
     RETURN NEW;
   END;
 $tpopmassn_typ_werte_on_update_set_mut$ LANGUAGE plpgsql;

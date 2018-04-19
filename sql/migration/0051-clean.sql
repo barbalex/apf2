@@ -38,3 +38,43 @@ DROP index IF EXISTS apflora.apflora."tpopkontr_idbiotuebereinst_werte_id_idx";
 CREATE INDEX ON apflora.tpopkontr_idbiotuebereinst_werte USING btree (id);
 CREATE INDEX ON apflora.tpopkontr_idbiotuebereinst_werte USING btree (code);
 CREATE INDEX ON apflora.tpopkontr_idbiotuebereinst_werte USING btree (sort);
+DROP TRIGGER IF EXISTS ap_erfbeurtkrit_werte_on_update_set_mut ON apflora.ap_erfbeurtkrit_werte;
+
+DROP TRIGGER IF EXISTS ap_erfbeurtkrit_werte_on_update_set_mut ON apflora.ap_erfbeurtkrit_werte;
+DROP FUNCTION IF EXISTS ap_erfbeurtkrit_werte_on_update_set_mut();
+CREATE FUNCTION ap_erfbeurtkrit_werte_on_update_set_mut() RETURNS trigger AS $ap_erfbeurtkrit_werte_on_update_set_mut$
+  BEGIN
+    NEW.changed_by = current_setting('request.jwt.claim.username', true);
+    NEW.changed = NOW();
+    RETURN NEW;
+  END;
+$ap_erfbeurtkrit_werte_on_update_set_mut$ LANGUAGE plpgsql;
+
+CREATE TRIGGER ap_erfbeurtkrit_werte_on_update_set_mut BEFORE UPDATE OR INSERT ON apflora.ap_erfbeurtkrit_werte
+  FOR EACH ROW EXECUTE PROCEDURE ap_erfbeurtkrit_werte_on_update_set_mut();
+
+DROP TRIGGER IF EXISTS tpopmassn_erfbeurt_werte_on_update_set_mut ON apflora.tpopmassn_erfbeurt_werte;
+DROP FUNCTION IF EXISTS tpopmassn_erfbeurt_werte_on_update_set_mut();
+CREATE FUNCTION tpopmassn_erfbeurt_werte_on_update_set_mut() RETURNS trigger AS $tpopmassn_erfbeurt_werte_on_update_set_mut$
+  BEGIN
+    NEW.changed_by = current_setting('request.jwt.claim.username', true);
+    NEW.changed = NOW();
+    RETURN NEW;
+  END;
+$tpopmassn_erfbeurt_werte_on_update_set_mut$ LANGUAGE plpgsql;
+
+CREATE TRIGGER tpopmassn_erfbeurt_werte_on_update_set_mut BEFORE UPDATE OR INSERT ON apflora.tpopmassn_erfbeurt_werte
+  FOR EACH ROW EXECUTE PROCEDURE tpopmassn_erfbeurt_werte_on_update_set_mut();
+
+DROP TRIGGER IF EXISTS tpopmassn_typ_werte_on_update_set_mut ON apflora.tpopmassn_typ_werte;
+DROP FUNCTION IF EXISTS tpopmassn_typ_werte_on_update_set_mut();
+CREATE FUNCTION tpopmassn_typ_werte_on_update_set_mut() RETURNS trigger AS $tpopmassn_typ_werte_on_update_set_mut$
+  BEGIN
+    NEW.changed_by = current_setting('request.jwt.claim.username', true);
+    NEW.changed = NOW();
+    RETURN NEW;
+  END;
+$tpopmassn_typ_werte_on_update_set_mut$ LANGUAGE plpgsql;
+
+CREATE TRIGGER tpopmassn_typ_werte_on_update_set_mut BEFORE UPDATE OR INSERT ON apflora.tpopmassn_typ_werte
+  FOR EACH ROW EXECUTE PROCEDURE tpopmassn_typ_werte_on_update_set_mut();

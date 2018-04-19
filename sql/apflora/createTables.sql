@@ -495,7 +495,6 @@ CREATE INDEX ON apflora.tpop USING btree (apber_relevant);
 CREATE INDEX ON apflora.tpop USING btree (x);
 CREATE INDEX ON apflora.tpop USING btree (y);
 CREATE INDEX ON apflora.tpop USING btree (nr);
-CREATE INDEX ON apflora.tpop USING btree (gemeinde);
 CREATE INDEX ON apflora.tpop USING btree (flurname);
 COMMENT ON COLUMN apflora.tpop.id IS 'Primärschlüssel';
 COMMENT ON COLUMN apflora.tpop.id_old IS 'frühere id';
@@ -586,7 +585,7 @@ CREATE TABLE apflora.tpopkontr (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
   id_old integer,
   tpop_id integer DEFAULT NULL REFERENCES apflora.tpop (id) ON DELETE CASCADE ON UPDATE CASCADE,
-  typ varchar(50) DEFAULT NULL,
+  typ varchar(50) DEFAULT NULL REFERENCES apflora.tpopkontr_typ_werte (text) ON DELETE SET NULL ON UPDATE CASCADE,
   datum date DEFAULT NULL,
   jahr smallint DEFAULT NULL,
   bearbeiter integer DEFAULT NULL REFERENCES apflora.adresse (id) ON DELETE SET NULL ON UPDATE CASCADE,
@@ -705,17 +704,19 @@ COMMENT ON COLUMN apflora.tpopkontr_idbiotuebereinst_werte.changed_by IS 'Von we
 
 DROP TABLE IF EXISTS apflora.tpopkontr_typ_werte;
 CREATE TABLE apflora.tpopkontr_typ_werte (
-  "DomainCode" integer PRIMARY KEY,
-  "DomainTxt" varchar(50) DEFAULT NULL,
-  "DomainOrd" smallint DEFAULT NULL,
-  "MutWann" date DEFAULT NOW(),
-  "MutWer" varchar(20) NOT NULL
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
+  code integer UNIQUE DEFAULT NULL,
+  text varchar(50) unique DEFAULT NULL,
+  sort smallint DEFAULT NULL,
+  changed date DEFAULT NOW(),
+  changed_by varchar(20) NOT NULL
 );
-COMMENT ON COLUMN apflora.tpopkontr_typ_werte."MutWann" IS 'Wann wurde der Datensatz zuletzt geändert?';
-COMMENT ON COLUMN apflora.tpopkontr_typ_werte."MutWer" IS 'Von wem wurde der Datensatz zuletzt geändert?';
-CREATE INDEX ON apflora.tpopkontr_typ_werte USING btree ("DomainCode");
-CREATE INDEX ON apflora.tpopkontr_typ_werte USING btree ("DomainTxt");
-CREATE INDEX ON apflora.tpopkontr_typ_werte USING btree ("DomainOrd");
+CREATE INDEX ON apflora.tpopkontr_typ_werte USING btree (id);
+CREATE INDEX ON apflora.tpopkontr_typ_werte USING btree (code);
+CREATE INDEX ON apflora.tpopkontr_typ_werte USING btree (sort);
+COMMENT ON COLUMN apflora.tpopkontr_typ_werte.id IS 'Primärschlüssel';
+COMMENT ON COLUMN apflora.tpopkontr_typ_werte.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
+COMMENT ON COLUMN apflora.tpopkontr_typ_werte.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 
 DROP TABLE IF EXISTS apflora.tpopkontrzaehl;
 CREATE TABLE apflora.tpopkontrzaehl (
@@ -898,7 +899,8 @@ CREATE TABLE apflora.message (
 );
 CREATE INDEX ON apflora.message USING btree (id);
 CREATE INDEX ON apflora.message USING btree (time);
-COMMENT ON COLUMN apflora.message."message" IS 'Nachricht an die Benutzer';
+COMMENT ON COLUMN apflora.message.message IS 'Nachricht an die Benutzer';
+COMMENT ON COLUMN apflora.message.active IS 'false: diese Nachricht wird nicht mehr übermittelt';
 
 -- list of read messages per user
 DROP TABLE IF EXISTS apflora.usermessage;

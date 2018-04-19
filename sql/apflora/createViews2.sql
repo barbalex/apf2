@@ -1407,18 +1407,18 @@ SELECT
   apflora.pop.changed AS pop_changed,
   apflora.pop.changed_by AS pop_changed_by,
   apflora.v_pop_berundmassnjahre.jahr,
-  apflora.popber.id AS "PopBer Id",
-  apflora.popber.jahr AS "PopBer Jahr",
-  tpop_entwicklung_werte.text AS "PopBer Entwicklung",
-  apflora.popber.bemerkungen AS "PopBer Bemerkungen",
-  apflora.popber.changed AS "PopBer MutWann",
-  apflora.popber.changed_by AS "PopBer MutWer",
-  apflora.popmassnber.id AS "PopMassnBer Id",
-  apflora.popmassnber.jahr AS "PopMassnBer Jahr",
-  tpopmassn_erfbeurt_werte.text AS "PopMassnBer Entwicklung",
-  apflora.popmassnber.bemerkungen AS "PopMassnBer Interpretation",
-  apflora.popmassnber.changed AS "PopMassnBer MutWann",
-  apflora.popmassnber.changed_by AS "PopMassnBer MutWer"
+  apflora.popber.id AS popber_id,
+  apflora.popber.jahr AS popber_jahr,
+  tpop_entwicklung_werte.text AS popber_entwicklung,
+  apflora.popber.bemerkungen AS popber_bemerkungen,
+  apflora.popber.changed AS popber_changed,
+  apflora.popber.changed_by AS popber_changed_by,
+  apflora.popmassnber.id AS popmassnber_id,
+  apflora.popmassnber.jahr AS popmassnber_jahr,
+  tpopmassn_erfbeurt_werte.text AS popmassnber_entwicklung,
+  apflora.popmassnber.bemerkungen AS popmassnber_bemerkungen,
+  apflora.popmassnber.changed AS popmassnber_changed,
+  apflora.popmassnber.changed_by AS popmassnber_changed_by
 FROM
   apflora.ae_eigenschaften
   INNER JOIN
@@ -1481,12 +1481,12 @@ SELECT
   apflora.pop.y AS pop_y,
   apflora.pop.changed AS pop_changed,
   apflora.pop.changed_by AS pop_changed_by,
-  apflora.popber.id AS "PopBer Id",
-  apflora.popber.jahr AS "PopBer Jahr",
-  tpop_entwicklung_werte.text AS "PopBer Entwicklung",
-  apflora.popber.bemerkungen AS "PopBer Bemerkungen",
-  apflora.popber.changed AS "PopBer MutWann",
-  apflora.popber.changed_by AS "PopBer MutWer"
+  apflora.popber.id AS popber_id,
+  apflora.popber.jahr AS popber_jahr,
+  tpop_entwicklung_werte.text AS popber_entwicklung,
+  apflora.popber.bemerkungen AS popber_bemerkungen,
+  apflora.popber.changed AS popber_changed,
+  apflora.popber.changed_by AS popber_changed_by
 FROM
   apflora.ae_eigenschaften
   INNER JOIN
@@ -1541,12 +1541,12 @@ SELECT
   apflora.pop.y AS pop_y,
   apflora.pop.changed AS pop_changed,
   apflora.pop.changed_by AS pop_changed_by,
-  apflora.popmassnber.id AS "PopMassnBer Id",
-  apflora.popmassnber.jahr AS "PopMassnBer Jahr",
-  tpopmassn_erfbeurt_werte.text AS "PopMassnBer Entwicklung",
-  apflora.popmassnber.bemerkungen AS "PopMassnBer Interpretation",
-  apflora.popmassnber.changed AS "PopMassnBer MutWann",
-  apflora.popmassnber.changed_by AS "PopMassnBer MutWer"
+  apflora.popmassnber.id AS popmassnber_id,
+  apflora.popmassnber.jahr AS popmassnber_jahr,
+  tpopmassn_erfbeurt_werte.text AS popmassnber_entwicklung,
+  apflora.popmassnber.bemerkungen AS popmassnber_bemerkungen,
+  apflora.popmassnber.changed AS popmassnber_changed,
+  apflora.popmassnber.changed_by AS popmassnber_changed_by
 FROM
   apflora.ae_eigenschaften
   INNER JOIN
@@ -1622,17 +1622,18 @@ SELECT
   apflora.tpop.nutzungszone AS tpop_nutzungszone,
   apflora.tpop.bewirtschafter AS tpop_bewirtschafter,
   apflora.tpop.bewirtschaftung AS tpop_bewirtschaftung,
-  apflora.tpopber.id AS "TPopBer Id",
-  apflora.tpopber.jahr AS "TPopBer Jahr",
-  tpop_entwicklung_werte.text AS "TPopBer Entwicklung",
-  apflora.tpopber.bemerkungen AS "TPopBer Bemerkungen",
-  apflora.tpopber.changed AS "TPopBer MutWann",
-  apflora.tpopber.changed_by AS "TPopBer MutWer",
-  apflora.tpopmassnber.jahr AS "TPopMassnBer Jahr",
-  tpopmassn_erfbeurt_werte.text AS "TPopMassnBer Entwicklung",
-  apflora.tpopmassnber.bemerkungen AS "TPopMassnBer Interpretation",
-  apflora.tpopmassnber.changed AS "TPopMassnBer MutWann",
-  apflora.tpopmassnber.changed_by AS "TPopMassnBer MutWer"
+  apflora.tpopber.id AS tpopber_id,
+  apflora.tpopber.jahr AS tpopber_jahr,
+  tpop_entwicklung_werte.text AS tpopber_entwicklung,
+  apflora.tpopber.bemerkungen AS tpopber_bemerkungen,
+  apflora.tpopber.changed AS tpopber_changed,
+  apflora.tpopber.changed_by AS tpopber_changed_by,
+  apflora.tpopmassnber.id AS tpopmassnber_id,
+  apflora.tpopmassnber.jahr AS tpopmassnber_jahr,
+  tpopmassn_erfbeurt_werte.text AS tpopmassnber_entwicklung,
+  apflora.tpopmassnber.bemerkungen AS tpopmassnber_bemerkungen,
+  apflora.tpopmassnber.changed AS tpopmassnber_changed,
+  apflora.tpopmassnber.changed_by AS tpopmassnber_changed_by
 FROM
   ((((((((((apflora.ae_eigenschaften
   RIGHT JOIN
@@ -2112,12 +2113,12 @@ SELECT
   apflora.pop.y AS pop_y,
   apflora.pop.changed AS pop_changed,
   apflora.pop.changed_by AS pop_changed_by,
-  apflora.popmassnber.id AS "PopMassnBer Id",
-  apflora.popmassnber.jahr AS "PopMassnBer Jahr",
-  tpopmassn_erfbeurt_werte.text AS "PopMassnBer Entwicklung",
-  apflora.popmassnber.bemerkungen AS "PopMassnBer Interpretation",
-  apflora.popmassnber.changed AS "PopMassnBer MutWann",
-  apflora.popmassnber.changed_by AS "PopMassnBer MutWer",
+  apflora.popmassnber.id AS popmassnber_id,
+  apflora.popmassnber.jahr AS popmassnber_jahr,
+  tpopmassn_erfbeurt_werte.text AS popmassnber_entwicklung,
+  apflora.popmassnber.bemerkungen AS popmassnber_bemerkungen,
+  apflora.popmassnber.changed AS popmassnber_changed,
+  apflora.popmassnber.changed_by AS popmassnber_changed_by,
   apflora.v_popmassnber_anzmassn0.anzahl_massnahmen
 FROM
   ((((((apflora.ae_eigenschaften
