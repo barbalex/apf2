@@ -155,7 +155,7 @@ Dazu werden die Feld- und Freiwilligenkontrollen (ausser solche von soeben anges
 - Login steuert, welche Projekte sichtbar sind
 - Berichte direkt in apflora.ch erstellen (statt wie bisher in Access)
 - Freiwilligen-Erfolgskontrollen: Internet-Eingabeformular entsprechend dem Feld-Formular schaffen. Ziel: Freiwillige erfassen ihre Kontrollen selber. Sie fliessen in die Auswertung ein, wenn sie von Mitarbeiterinnen von Topos geprüft wurden
-- Korrekturen an von InfoFlora bezogenen Beobachtungen können durchgeführt und per mail an InfoFlora gemeldet werden
+- Von InfoFlora bezogene Beobachtungen können korrigiert und die Änderung per mail an InfoFlora gemeldet werden
 - Filter-Funktionen ausbauen
 
 ### Langfristige Vision
