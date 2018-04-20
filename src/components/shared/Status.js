@@ -2,7 +2,8 @@
 import React from 'react'
 import { observer } from 'mobx-react'
 import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton'
-import TextField from 'material-ui/TextField'
+import Input, { InputLabel } from 'material-ui-next/Input'
+import { FormControl, FormHelperText } from 'material-ui-next/Form'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
@@ -10,9 +11,6 @@ import withHandlers from 'recompose/withHandlers'
 import Label from './Label'
 import InfoWithPopover from './InfoWithPopover'
 
-const InfoWithPopoverContainer = styled.div`
-  padding-bottom: 5px;
-`
 const FieldWithInfoContainer = styled.div`
   display: flex;
   flex-direction: row;
@@ -43,6 +41,11 @@ const HerkunftColumnContainer = styled.div`
 const GroupLabelContainer = styled.div`
   padding-bottom: 2px;
 `
+const StyledInput = styled(Input)`
+  &:before {
+    background-color: rgba(0, 0, 0, 0.1) !important;
+  }
+`
 const enhance = compose(
   withHandlers({
     onChangeStatus: props => (event, valuePassed) => {
@@ -50,8 +53,12 @@ const enhance = compose(
       const val = valuePassed === props.herkunftValue ? null : valuePassed
       props.updatePropertyInDb(props.tree, props.herkunftFieldName, val)
     },
-    onChangeBekanntSeit: props => (event, val) =>
-      props.updateProperty(props.tree, props.bekanntSeitFieldName, val),
+    onChangeBekanntSeit: props => event =>
+      props.updateProperty(
+        props.tree,
+        props.bekanntSeitFieldName,
+        event.target.value
+      ),
     onBlurBekanntSeit: props => event => {
       const { value } = event.target
       // only update if value has changed
@@ -61,7 +68,7 @@ const enhance = compose(
       }
     },
   }),
-  observer,
+  observer
 )
 
 const Status = ({
@@ -91,9 +98,8 @@ const Status = ({
   onChangeBekanntSeit: () => void,
   onBlurBekanntSeit: () => void,
 }) => {
-  const valueSelected = herkunftValue !== null && herkunftValue !== undefined
-    ? herkunftValue
-    : ''
+  const valueSelected =
+    herkunftValue !== null && herkunftValue !== undefined ? herkunftValue : ''
   const showNachBeginnAp =
     !apJahr || !bekanntSeitValue || apJahr <= bekanntSeitValue
   const disabled = !bekanntSeitValue && bekanntSeitValue !== 0
@@ -101,24 +107,33 @@ const Status = ({
   return (
     <div>
       <FieldWithInfoContainer>
-        <TextField
-          floatingLabelText="bekannt seit"
-          type="number"
-          value={
-            bekanntSeitValue || bekanntSeitValue === 0 ? bekanntSeitValue : ''
-          }
-          errorText={bekanntSeitValid}
+        <FormControl
+          error={!!bekanntSeitValid}
+          disabled={disabled}
           fullWidth
-          onChange={onChangeBekanntSeit}
-          onBlur={onBlurBekanntSeit}
-        />
-        <InfoWithPopoverContainer>
-          <InfoWithPopover>
-            <PopoverContentRow>
-              Dieses Feld immer ausfüllen
-            </PopoverContentRow>
-          </InfoWithPopover>
-        </InfoWithPopoverContainer>
+          aria-describedby="bekanntSeitHelper"
+        >
+          <InputLabel htmlFor="bekanntSeit">bekannt seit</InputLabel>
+          <StyledInput
+            id="bekanntSeit"
+            value={
+              bekanntSeitValue || bekanntSeitValue === 0 ? bekanntSeitValue : ''
+            }
+            type="number"
+            onChange={onChangeBekanntSeit}
+            onBlur={onBlurBekanntSeit}
+            endAdornment={
+              <InfoWithPopover>
+                <PopoverContentRow>
+                  Dieses Feld immer ausfüllen
+                </PopoverContentRow>
+              </InfoWithPopover>
+            }
+          />
+          <FormHelperText id="bekanntSeitHelper">
+            {bekanntSeitValid}
+          </FormHelperText>
+        </FormControl>
       </FieldWithInfoContainer>
       <StatusContainer>
         <Label label="Status" />

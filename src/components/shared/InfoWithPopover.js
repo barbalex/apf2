@@ -19,12 +19,13 @@ const enhance = compose(
     },
     onRequestClosePopover: props => () => props.changePopupOpen(false),
   }),
-  observer,
+  observer
 )
 
 const StyledFontIcon = styled(FontIcon)`
   cursor: pointer;
   pointer-events: auto;
+  padding-left: 5px;
 `
 const StyledPopover = styled(Popover)`
   border-radius: 4px;
