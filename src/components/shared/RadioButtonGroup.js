@@ -1,33 +1,36 @@
 // @flow
 import React from 'react'
 import { observer } from 'mobx-react'
-import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton'
+import Radio, { RadioGroup } from 'material-ui-next/Radio'
+import { FormLabel, FormControl, FormControlLabel } from 'material-ui-next/Form'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 import styled from 'styled-components'
 
-const Container = styled.div`
-  margin-top: 5px;
-  flex-grow: 1;
+// without slight padding radio is slightly cut off!
+const StyledFormControl = styled(FormControl)`
+  padding-left: 1px !important;
   break-inside: avoid;
 `
-const StyledLabel = styled.div`
-  margin-top: 10px;
+const StyledFormLabel = styled(FormLabel)`
+  padding-top: 10px !important;
+  font-size: 12px !important;
   cursor: text;
-  font-size: 12px;
-  color: rgba(0, 0, 0, 0.5);
-  pointer-events: none;
   user-select: none;
-  padding-bottom: 8px;
+  pointer-events: none;
+  padding-bottom: 8px !important;
+`
+const StyledFormControlLabel = styled(FormControlLabel)`
+  height: 26px !important;
 `
 
 const enhance = compose(
   withHandlers({
-    onChange: ({ updatePropertyInDb, tree, fieldName }) => (event, val) => {
+    onChange: ({ updatePropertyInDb, tree, fieldName }) => event => {
       // if clicked element is active value: set null
       // Problem: does not work because change event does not happen
       // Solution: do this in click event of button
-      updatePropertyInDb(tree, fieldName, val)
+      updatePropertyInDb(tree, fieldName, event.target.value)
     },
     onClickButton: ({
       value,
@@ -39,7 +42,14 @@ const enhance = compose(
         event.target.value && !isNaN(event.target.value)
           ? +event.target.value
           : event.target.value
-      if (valueClicked === value) {
+      console.log('RadioButtonGroup: data:', {
+        fieldName,
+        value,
+        targetValue: event.target.value,
+        valueClicked,
+      })
+      // eslint-disable-next-line eqeqeq
+      if (valueClicked == value) {
         // an already active tpopId was clicked
         // set value null
         updatePropertyInDb(tree, fieldName, null)
@@ -49,7 +59,7 @@ const enhance = compose(
   observer
 )
 
-const MyRadioButtonGroup = ({
+const RadioButtonGroup = ({
   fieldName,
   value,
   label,
@@ -64,31 +74,34 @@ const MyRadioButtonGroup = ({
   onChange: () => void,
   onClickButton: () => void,
 }) => {
-  const valueSelected = value !== null && value !== undefined ? value : ''
+  const valueSelected =
+    value !== null && value !== undefined ? value.toString() : ''
 
   return (
-    <Container>
-      <StyledLabel>{label}</StyledLabel>
-      <RadioButtonGroup
+    <StyledFormControl component="fieldset">
+      <StyledFormLabel component="legend">{label}</StyledFormLabel>
+      <RadioGroup
+        aria-label={fieldName}
         name={fieldName}
-        valueSelected={valueSelected}
+        value={valueSelected}
         onChange={onChange}
       >
         {dataSource.map((e, index) => (
-          <RadioButton
-            value={e.value}
-            label={e.label}
+          <StyledFormControlLabel
             key={index}
+            value={e.value.toString()}
+            control={<Radio color="primary" />}
+            label={e.label}
             onClick={onClickButton}
           />
         ))}
-      </RadioButtonGroup>
-    </Container>
+      </RadioGroup>
+    </StyledFormControl>
   )
 }
 
-MyRadioButtonGroup.defaultProps = {
+RadioButtonGroup.defaultProps = {
   value: null,
 }
 
-export default enhance(MyRadioButtonGroup)
+export default enhance(RadioButtonGroup)

@@ -7,10 +7,9 @@ import withHandlers from 'recompose/withHandlers'
 import compose from 'recompose/compose'
 import styled from 'styled-components'
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  break-inside: avoid;
+// without slight padding radio is slightly cut off!
+const StyledFormControl = styled(FormControl)`
+  padding-left: 1px !important;
 `
 const StyledFormLabel = styled(FormLabel)`
   padding-top: 10px !important;
@@ -45,7 +44,7 @@ const enhance = compose(
   observer
 )
 
-const MyRadioButton = ({
+const RadioButton = ({
   fieldName,
   value,
   label,
@@ -58,26 +57,24 @@ const MyRadioButton = ({
   onChange: () => void,
   onClickButton: () => void,
 }) => (
-  <Container>
-    <FormControl component="fieldset">
-      <StyledFormLabel component="legend">{label}</StyledFormLabel>
-      <RadioGroup
-        aria-label={label}
-        name={fieldName}
-        value={!!value ? value.toString() : null}
-        onChange={onChange}
-      >
-        <StyledFormControlLabel
-          value="1"
-          control={<Radio onClick={onClickButton} color="primary" />}
-        />
-      </RadioGroup>
-    </FormControl>
-  </Container>
+  <StyledFormControl component="fieldset">
+    <StyledFormLabel component="legend">{label}</StyledFormLabel>
+    <RadioGroup
+      aria-label={label}
+      name={fieldName}
+      value={!!value ? value.toString() : null}
+      onChange={onChange}
+    >
+      <StyledFormControlLabel
+        value="1"
+        control={<Radio onClick={onClickButton} color="primary" />}
+      />
+    </RadioGroup>
+  </StyledFormControl>
 )
 
-MyRadioButton.defaultProps = {
+RadioButton.defaultProps = {
   value: '',
 }
 
-export default enhance(MyRadioButton)
+export default enhance(RadioButton)
