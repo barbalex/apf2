@@ -1,15 +1,16 @@
 // @flow
 import React from 'react'
 import { observer } from 'mobx-react'
-import TextField from 'material-ui/TextField'
-import { orange500 } from 'material-ui/styles/colors'
+import Input, { InputLabel } from 'material-ui-next/Input'
+import { FormControl, FormHelperText } from 'material-ui-next/Form'
 import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
 import styled from 'styled-components'
-
-const StyledTextField = styled(TextField)`
-  margin-bottom: -15px;
+const StyledInput = styled(Input)`
+  &:before {
+    background-color: rgba(0, 0, 0, 0.1) !important;
+  }
 `
 
 const enhance = compose(
@@ -20,7 +21,7 @@ const enhance = compose(
       setTimeout(() => props.updateErrorText(''), 5000)
     },
   }),
-  observer,
+  observer
 )
 
 const MyTextField = ({
@@ -34,14 +35,19 @@ const MyTextField = ({
   errorText: string,
   onChange: () => void,
 }) => (
-  <StyledTextField
-    floatingLabelText={label}
-    errorText={errorText}
-    value={value || value === 0 ? value : ''}
+  <FormControl
+    error={!!errorText}
     fullWidth
-    errorStyle={{ color: orange500 }}
-    onChange={onChange}
-  />
+    aria-describedby={`${label}-helper`}
+  >
+    <InputLabel htmlFor={label}>{label}</InputLabel>
+    <StyledInput
+      id={label}
+      value={value || value === 0 ? value : ''}
+      onChange={onChange}
+    />
+    <FormHelperText id={`${label}-helper`}>{errorText}</FormHelperText>
+  </FormControl>
 )
 
 MyTextField.defaultProps = {

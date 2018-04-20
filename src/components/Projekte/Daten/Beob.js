@@ -9,7 +9,7 @@ import constants from '../../../modules/constants'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 
 const Container = styled.div`
-  padding: 0 10px 0 10px;
+  padding: 15px 10px 0 10px;
   column-width: ${props =>
     props['data-width'] > 2 * constants.columnWidth
       ? `${constants.columnWidth}px`
