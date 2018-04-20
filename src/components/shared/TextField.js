@@ -68,7 +68,12 @@ const TextField = ({
   updateProperty: () => void,
   updatePropertyInDb: () => void,
 }) => (
-  <FormControl error={!!errorText} disabled={disabled} fullWidth>
+  <FormControl
+    error={!!errorText}
+    disabled={disabled}
+    fullWidth
+    aria-describedby={`${label}-helper`}
+  >
     <InputLabel htmlFor={label}>{label}</InputLabel>
     <StyledInput
       id={label}
@@ -79,7 +84,7 @@ const TextField = ({
       onBlur={onBlur}
       placeholder={hintText}
     />
-    <FormHelperText id={`${label}-text`}>{errorText}</FormHelperText>
+    <FormHelperText id={`${label}-helper`}>{errorText}</FormHelperText>
   </FormControl>
 )
 

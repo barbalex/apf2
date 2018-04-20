@@ -1,7 +1,8 @@
 // @flow
 import React from 'react'
 import { observer } from 'mobx-react'
-import TextField from 'material-ui/TextField'
+import Input, { InputLabel } from 'material-ui-next/Input'
+import { FormControl, FormHelperText } from 'material-ui-next/Form'
 import withHandlers from 'recompose/withHandlers'
 import compose from 'recompose/compose'
 import withState from 'recompose/withState'
@@ -9,16 +10,6 @@ import styled from 'styled-components'
 
 import InfoWithPopover from './InfoWithPopover'
 
-const FieldWithInfoContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: flex-end;
-  margin-bottom: -10px;
-  break-inside: avoid;
-`
-const InfoWithPopoverContainer = styled.div`
-  padding-bottom: 5px;
-`
 const PopoverContentRow = styled.div`
   padding: 2px 5px 2px 5px;
   display: flex;
@@ -27,16 +18,22 @@ const PopoverContentRow = styled.div`
   border-style: solid;
   border-radius: 4px;
 `
+const StyledInput = styled(Input)`
+  &:before {
+    background-color: rgba(0, 0, 0, 0.1) !important;
+  }
+`
 
 const enhance = compose(
   withState('valueHasBeenChanged', 'changeValueHasBeenChanged', false),
   withHandlers({
-    onChange: props => (event, val) => {
+    onChange: props => event => {
+      let { value } = event.target
       // ensure numbers saved as numbers
       if (event.target.type === 'number') {
-        val = +val
+        value = +value
       }
-      props.updateProperty(props.tree, props.fieldName, val)
+      props.updateProperty(props.tree, props.fieldName, value)
       props.changeValueHasBeenChanged(true)
     },
     onBlur: props => event => {
@@ -82,25 +79,29 @@ const MyTextField = ({
   updatePropertyInDb: () => void,
   popover: Object,
 }) => (
-  <FieldWithInfoContainer>
-    <TextField
-      floatingLabelText={label}
-      hintText={hintText}
-      type={type}
-      multiLine={multiLine}
+  <FormControl
+    error={!!errorText}
+    disabled={disabled}
+    fullWidth
+    aria-describedby={`${label}-helper`}
+  >
+    <InputLabel htmlFor={label}>{label}</InputLabel>
+    <StyledInput
+      id={label}
       value={value || value === 0 ? value : ''}
-      errorText={errorText}
-      disabled={disabled}
-      fullWidth
+      type={type}
+      multiline={multiLine}
       onChange={onChange}
       onBlur={onBlur}
+      placeholder={hintText}
+      endAdornment={
+        <InfoWithPopover>
+          <PopoverContentRow>{popover}</PopoverContentRow>
+        </InfoWithPopover>
+      }
     />
-    <InfoWithPopoverContainer>
-      <InfoWithPopover>
-        <PopoverContentRow>{popover}</PopoverContentRow>
-      </InfoWithPopover>
-    </InfoWithPopoverContainer>
-  </FieldWithInfoContainer>
+    <FormHelperText id={`${label}-helper`}>{errorText}</FormHelperText>
+  </FormControl>
 )
 
 MyTextField.defaultProps = {
