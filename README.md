@@ -157,6 +157,7 @@ Dazu werden die Feld- und Freiwilligenkontrollen (ausser solche von soeben anges
 - Freiwilligen-Erfolgskontrollen: Internet-Eingabeformular entsprechend dem Feld-Formular schaffen. Ziel: Freiwillige erfassen ihre Kontrollen selber. Sie fliessen in die Auswertung ein, wenn sie von Mitarbeiterinnen von Topos geprüft wurden
 - Von InfoFlora bezogene Beobachtungen können korrigiert und die Änderung per mail an InfoFlora gemeldet werden
 - Filter-Funktionen ausbauen
+- Diverse kleinere Optimierungen, um die Effizienz für die BenutzerInnen zu steigern
 
 ### Langfristige Vision
 
