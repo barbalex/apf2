@@ -4,6 +4,8 @@ import { observer } from 'mobx-react'
 import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton'
 import Input, { InputLabel } from 'material-ui-next/Input'
 import { FormControl, FormHelperText } from 'material-ui-next/Form'
+import Radio, { RadioGroup } from 'material-ui-next/Radio'
+import { FormControlLabel } from 'material-ui-next/Form'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
@@ -50,11 +52,18 @@ const StyledInput = styled(Input)`
     background-color: rgba(0, 0, 0, 0.1) !important;
   }
 `
+const StyledRadio = styled(Radio)`
+  height: 26px !important;
+  max-height: 26px !important;
+`
+
 const enhance = compose(
   withHandlers({
-    onChangeStatus: props => (event, valuePassed) => {
+    onChangeStatus: props => event => {
+      const { value: valuePassed } = event.target
       // if clicked element is active herkunftValue: set null
-      const val = valuePassed === props.herkunftValue ? null : valuePassed
+      // eslint-disable-next-line eqeqeq
+      const val = valuePassed == props.herkunftValue ? null : valuePassed
       props.updatePropertyInDb(props.tree, props.herkunftFieldName, val)
     },
     onChangeBekanntSeit: props => event =>
@@ -144,66 +153,69 @@ const Status = ({
         <HerkunftContainer>
           <HerkunftColumnContainer>
             <GroupLabelContainer>ursprünglich:</GroupLabelContainer>
-            <RadioButtonGroup
+            <RadioGroup
+              aria-label={herkunftFieldName}
               name={herkunftFieldName}
-              valueSelected={valueSelected}
+              value={valueSelected.toString()}
               onChange={onChangeStatus}
             >
-              <RadioButton
-                value={100}
+              <FormControlLabel
+                value="100"
+                control={<StyledRadio color="primary" />}
                 label="aktuell"
-                key={1}
                 disabled={disabled}
               />
-              <RadioButton
-                value={101}
+              <FormControlLabel
+                value="101"
+                control={<StyledRadio color="primary" />}
                 label="erloschen"
-                key={2}
                 disabled={disabled}
               />
-            </RadioButtonGroup>
+            </RadioGroup>
           </HerkunftColumnContainer>
           <HerkunftColumnContainer>
             <GroupLabelContainer>angesiedelt:</GroupLabelContainer>
-            <RadioButtonGroup
+            <RadioGroup
+              aria-label={herkunftFieldName}
               name={herkunftFieldName}
-              valueSelected={valueSelected}
+              value={valueSelected.toString()}
               onChange={onChangeStatus}
             >
-              <RadioButton
-                value={showNachBeginnAp ? 200 : 210}
+              <FormControlLabel
+                value={showNachBeginnAp ? '200' : '210'}
+                control={<StyledRadio color="primary" />}
                 label="aktuell"
-                key={1}
                 disabled={disabled}
               />
-              <RadioButton
-                value={201}
+              <FormControlLabel
+                value="201"
+                control={<StyledRadio color="primary" />}
                 label="Ansaatversuch"
-                key={3}
                 disabled={disabled}
               />
-              <RadioButton
-                value={showNachBeginnAp ? 202 : 211}
+              <FormControlLabel
+                value={showNachBeginnAp ? '202' : '211'}
+                control={<StyledRadio color="primary" />}
                 label="erloschen / nicht etabliert"
-                key={4}
                 disabled={disabled}
               />
-            </RadioButtonGroup>
+            </RadioGroup>
           </HerkunftColumnContainer>
           <HerkunftColumnContainerLast>
             <GroupLabelContainer>potenziell:</GroupLabelContainer>
-            <RadioButtonGroup
+            <RadioGroup
+              aria-label={herkunftFieldName}
               name={herkunftFieldName}
-              valueSelected={valueSelected}
+              value={valueSelected.toString()}
               onChange={onChangeStatus}
             >
-              <RadioButton
-                value={300}
+              <FormControlLabel
+                value="300"
+                control={<StyledRadio color="primary" />}
                 label="potenzieller Wuchs-/Ansiedlungsort"
-                key={1}
                 disabled={disabled}
               />
-            </RadioButtonGroup>
+            </RadioGroup>
           </HerkunftColumnContainerLast>
         </HerkunftContainer>
       </StatusContainer>

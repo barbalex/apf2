@@ -21,7 +21,7 @@ const StyledFormLabel = styled(FormLabel)`
   padding-bottom: 8px !important;
 `
 const StyledRadio = styled(Radio)`
-  height: 24px !important;
+  height: 26px !important;
 `
 
 const enhance = compose(
