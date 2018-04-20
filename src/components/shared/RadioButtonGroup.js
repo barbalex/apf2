@@ -22,6 +22,7 @@ const StyledFormLabel = styled(FormLabel)`
 `
 const StyledFormControlLabel = styled(FormControlLabel)`
   height: 26px !important;
+  max-height: 26px !important;
 `
 
 const enhance = compose(
@@ -42,12 +43,6 @@ const enhance = compose(
         event.target.value && !isNaN(event.target.value)
           ? +event.target.value
           : event.target.value
-      console.log('RadioButtonGroup: data:', {
-        fieldName,
-        value,
-        targetValue: event.target.value,
-        valueClicked,
-      })
       // eslint-disable-next-line eqeqeq
       if (valueClicked == value) {
         // an already active tpopId was clicked
