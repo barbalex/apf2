@@ -1,7 +1,8 @@
 // @flow
 import React from 'react'
 import { observer } from 'mobx-react'
-import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton'
+import Radio, { RadioGroup } from 'material-ui-next/Radio'
+import { FormLabel, FormControl, FormControlLabel } from 'material-ui-next/Form'
 import withHandlers from 'recompose/withHandlers'
 import compose from 'recompose/compose'
 import styled from 'styled-components'
@@ -11,15 +12,9 @@ const Container = styled.div`
   flex-direction: column;
   break-inside: avoid;
 `
-const StyledRadioButtonGroup = styled(RadioButtonGroup)`margin-bottom: 0;`
-const StyledLabel = styled.div`
-  margin-top: 10px;
-  cursor: text;
-  font-size: 12px;
-  color: rgba(0, 0, 0, 0.5);
-  pointer-events: none;
+const StyledLabel = styled(FormLabel)`
+  font-size: 12px !important;
   user-select: none;
-  padding-bottom: 8px;
 `
 
 const enhance = compose(
@@ -31,11 +26,9 @@ const enhance = compose(
       props.updatePropertyInDb(props.tree, props.fieldName, val)
     },
     onClickButton: props => event => {
-      const valueClicked =
-        event.target.value && !isNaN(event.target.value)
-          ? +event.target.value
-          : event.target.value
-      if (valueClicked === props.value) {
+      const { value } = event.target
+      // eslint-disable-next-line eqeqeq
+      if (value == props.value) {
         // an already active tpopId was clicked
         // set value null
         props.updatePropertyInDb(props.tree, props.fieldName, null)
@@ -59,14 +52,21 @@ const MyRadioButton = ({
   onClickButton: () => void,
 }) => (
   <Container>
-    <StyledLabel>{label}</StyledLabel>
-    <StyledRadioButtonGroup
-      name={fieldName}
-      valueSelected={value}
-      onChange={onChange}
-    >
-      <RadioButton value={1} onClick={onClickButton} />
-    </StyledRadioButtonGroup>
+    <FormControl component="fieldset">
+      <StyledLabel component="legend">{label}</StyledLabel>
+      <RadioGroup
+        aria-label={label}
+        name={fieldName}
+        value={!!value ? value.toString() : null}
+        onChange={onChange}
+      >
+        <FormControlLabel
+          value="1"
+          control={<Radio onClick={onClickButton} />}
+          //label={label}
+        />
+      </RadioGroup>
+    </FormControl>
   </Container>
 )
 
