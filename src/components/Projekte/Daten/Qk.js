@@ -2,7 +2,8 @@
 import React from 'react'
 import { toJS } from 'mobx'
 import { observer, inject } from 'mobx-react'
-import TextField from 'material-ui/TextField'
+import Input, { InputLabel } from 'material-ui-next/Input'
+import { FormControl } from 'material-ui-next/Form'
 import styled from 'styled-components'
 import { Card, CardText } from 'material-ui/Card'
 import compose from 'recompose/compose'
@@ -31,12 +32,9 @@ const StyledCard = styled(Card)`
 const Title = styled.div`
   font-weight: bold;
 `
-const FilterField = styled(TextField)`
-  margin-top: -15px;
-  margin-bottom: 10px;
-`
 const LoadingIndicator = styled.div`
   margin-bottom: 15px;
+  margin-top: 10px;
   color: ${props =>
     props.loading ? 'rgba(0, 0, 0, 0.87)' : 'rgb(46, 125, 50)'};
 `
@@ -44,23 +42,33 @@ const StyledA = styled.a`
   color: inherit;
   font-weight: 100;
 `
+const StyledInput = styled(Input)`
+  &:before {
+    background-color: rgba(0, 0, 0, 0.1) !important;
+  }
+`
 
 const enhance = compose(
   inject('store'),
   withState('berichtjahr', 'changeBerichtjahr', standardQkYear()),
   withHandlers({
-    onChangeBerichtjahr: props => (event, val) => {
+    onChangeBerichtjahr: props => event => {
+      const { value } = event.target
       const { changeBerichtjahr, store, tree } = props
-      changeBerichtjahr(val)
-      if ((isNaN(val) && val.length === 4) || (!isNaN(val) && val > 1000)) {
+      changeBerichtjahr(value)
+      if (
+        (isNaN(value) && value.length === 4) ||
+        (!isNaN(value) && value > 1000)
+      ) {
         // reset messages
         store.qk.setMessages([])
         // call fetchQk and pass it berichtjahr and apId
         const apId = tree.activeNodes.ap
-        fetchQk({ store, berichtjahr: val, apId })
+        fetchQk({ store, berichtjahr: value, apId })
       }
     },
-    onChangeFilter: props => (event, val) => props.store.qk.setFilter(val),
+    onChangeFilter: props => event =>
+      props.store.qk.setFilter(event.target.value),
   }),
   withLifecycle({
     onDidMount({ berichtjahr, changeBerichtjahr, store, tree }) {
@@ -110,20 +118,21 @@ const Qk = ({
       <Container>
         <FormTitle tree={tree} title="Qualitätskontrollen" />
         <FieldsContainer>
-          <TextField
-            floatingLabelText="Berichtjahr"
-            type="number"
-            value={berichtjahr}
-            fullWidth
-            onChange={onChangeBerichtjahr}
-          />
-          <FilterField
-            floatingLabelText="nach Abschnitts-Titel filtern"
-            type="text"
-            value={filter}
-            fullWidth
-            onChange={onChangeFilter}
-          />
+          <FormControl fullWidth>
+            <InputLabel htmlFor="berichtjahr">Berichtjahr</InputLabel>
+            <StyledInput
+              id="berichtjahr"
+              value={berichtjahr}
+              type="number"
+              onChange={onChangeBerichtjahr}
+            />
+          </FormControl>
+          <FormControl fullWidth>
+            <InputLabel htmlFor="filter">
+              nach Abschnitts-Titel filtern
+            </InputLabel>
+            <StyledInput id="filter" value={filter} onChange={onChangeFilter} />
+          </FormControl>
           <LoadingIndicator loading={loading}>
             {loadingMessage}
           </LoadingIndicator>
