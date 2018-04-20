@@ -7,7 +7,7 @@ import compose from 'recompose/compose'
 import TextField from '../../shared/TextField'
 import TextFieldWithInfo from '../../shared/TextFieldWithInfo'
 import Status from '../../shared/Status'
-import AutoCompleteFromArray from '../../shared/AutocompleteFromArray'
+import AutoCompleteFromArrayNew from '../../shared/AutocompleteFromArray'
 import RadioButton from '../../shared/RadioButton'
 import RadioButtonGroupWithInfo from '../../shared/RadioButtonGroupWithInfo'
 import FormTitle from '../../shared/FormTitle'
@@ -138,14 +138,14 @@ const Tpop = ({
             updateProperty={store.updateProperty}
             updatePropertyInDb={store.updatePropertyInDb}
           />
-          <AutoCompleteFromArray
-            key={activeDataset.row.id}
+          <AutoCompleteFromArrayNew
+            key={`${activeDataset.row.id}gemeinde`}
             tree={tree}
             label="Gemeinde"
             fieldName="gemeinde"
-            valueText={activeDataset.row.gemeinde}
+            value={activeDataset.row.gemeinde}
             errorText={activeDataset.valid.gemeinde}
-            dataSource={store.dropdownList.gemeinden}
+            values={store.dropdownList.gemeinden}
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField

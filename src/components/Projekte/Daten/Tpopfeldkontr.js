@@ -8,8 +8,7 @@ import withHandlers from 'recompose/withHandlers'
 
 import RadioButtonGroup from '../../shared/RadioButtonGroup'
 import TextField from '../../shared/TextField'
-import AutoCompleteFromArray from '../../shared/AutocompleteFromArray'
-import AutoCompleteFromArrayNew from '../../shared/AutocompleteFromArrayNew'
+import AutoCompleteFromArrayNew from '../../shared/AutocompleteFromArray'
 import AutoComplete from '../../shared/Autocomplete'
 import RadioButtonGroupWithInfo from '../../shared/RadioButtonGroupWithInfo'
 import StringToCopy from '../../shared/StringToCopy'
@@ -293,7 +292,7 @@ const Tpopfeldkontr = ({
                   />
                   <Section>Vegetation</Section>
                   <AutoCompleteFromArrayNew
-                    key={`${activeDataset.row.id}Lebensraum`}
+                    key={`${activeDataset.row.id}lr_delarze`}
                     tree={tree}
                     label="Lebensraum nach Delarze"
                     fieldName="lr_delarze"

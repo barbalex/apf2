@@ -1,7 +1,7 @@
 // @flow
 import React from 'react'
 import { observer, inject } from 'mobx-react'
-import AutoCompleteFromArray from '../../shared/AutocompleteFromArray'
+import AutoCompleteFromArrayNew from '../../shared/AutocompleteFromArray'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
 
@@ -219,14 +219,14 @@ const Tpopmassn = ({
             updateProperty={store.updateProperty}
             updatePropertyInDb={store.updatePropertyInDb}
           />
-          <AutoCompleteFromArray
-            key={`${activeDataset.row.id}wirtspflanze`}
+          <AutoCompleteFromArrayNew
+            key={`${activeDataset.row.id}wirtspflanzeNeu`}
             tree={tree}
             label="Wirtspflanze"
             fieldName="wirtspflanze"
-            valueText={activeDataset.row.wirtspflanze}
+            value={activeDataset.row.wirtspflanze}
             errorText={activeDataset.valid.wirtspflanze}
-            dataSource={store.dropdownList.artnamen}
+            values={store.dropdownList.artnamen}
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField
