@@ -1,7 +1,6 @@
 // @flow
 import React from 'react'
 import { observer } from 'mobx-react'
-import { RadioButton, RadioButtonGroup } from 'material-ui/RadioButton'
 import Input, { InputLabel } from 'material-ui-next/Input'
 import { FormControl, FormHelperText } from 'material-ui-next/Form'
 import Radio, { RadioGroup } from 'material-ui-next/Radio'
@@ -122,7 +121,6 @@ const Status = ({
       <FieldWithInfoContainer>
         <FormControl
           error={!!bekanntSeitValid}
-          disabled={disabled}
           fullWidth
           aria-describedby="bekanntSeitHelper"
         >
