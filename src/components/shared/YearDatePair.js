@@ -10,6 +10,8 @@
 import React from 'react'
 import { observer } from 'mobx-react'
 import TextField from 'material-ui/TextField'
+import Input, { InputLabel } from 'material-ui-next/Input'
+import { FormControl, FormHelperText } from 'material-ui-next/Form'
 import DatePicker from 'material-ui/DatePicker'
 import FontIcon from 'material-ui/FontIcon'
 import format from 'date-fns/format'
@@ -26,8 +28,11 @@ const DateFieldContainer = styled.div`
   align-items: center;
   break-inside: avoid;
 `
-const YearTextField = styled(TextField)`
+const StyledInput = styled(Input)`
   margin-bottom: -15px;
+  &:before {
+    background-color: rgba(0, 0, 0, 0.1) !important;
+  }
 `
 const StyledFontIcon = styled(FontIcon)`
   cursor: pointer;
@@ -186,18 +191,28 @@ const YearDatePair = ({
   onFocusYear: () => void,
   onFocusDate: () => void,
   changeDateStringValue: () => void,
-}) =>
+}) => (
   <div>
-    <YearTextField
-      floatingLabelText={yearLabel}
-      type="number"
-      value={yearValue || ''}
-      errorText={yearErrorText}
+    <FormControl
+      error={!!yearErrorText}
       fullWidth
-      onChange={(event, val) => updateProperty(tree, yearFieldName, val)}
-      onBlur={onBlurYear}
-      onFocus={onFocusYear}
-    />
+      aria-describedby={`${yearLabel}-helper`}
+    >
+      <InputLabel htmlFor={yearLabel}>{yearLabel}</InputLabel>
+      <StyledInput
+        id={yearLabel}
+        value={yearValue || ''}
+        type="number"
+        onChange={event =>
+          updateProperty(tree, yearFieldName, event.target.value)
+        }
+        onBlur={onBlurYear}
+        onFocus={onFocusYear}
+      />
+      <FormHelperText id={`${yearLabel}-helper`}>
+        {yearErrorText}
+      </FormHelperText>
+    </FormControl>
     <DateFieldContainer>
       <TextField
         floatingLabelText={dateLabel}
@@ -237,5 +252,6 @@ const YearDatePair = ({
       </DatePickerDiv>
     </DateFieldContainer>
   </div>
+)
 
 export default enhance(YearDatePair)
