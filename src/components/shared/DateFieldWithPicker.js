@@ -11,7 +11,8 @@
  */
 import React, { Component } from 'react'
 import { observer } from 'mobx-react'
-import TextField from 'material-ui/TextField'
+import Input, { InputLabel } from 'material-ui-next/Input'
+import { FormControl, FormHelperText } from 'material-ui-next/Form'
 import DatePicker from 'material-ui/DatePicker'
 import FontIcon from 'material-ui/FontIcon'
 import format from 'date-fns/format'
@@ -33,11 +34,15 @@ const StyledFontIcon = styled(FontIcon)`
   cursor: pointer;
   pointer-events: auto;
   font-size: 34px !important;
-  margin-top: 15px;
 `
 const DatePickerDiv = styled.div`
   width: 0;
   height: 0;
+`
+const StyledInput = styled(Input)`
+  &:before {
+    background-color: rgba(0, 0, 0, 0.1) !important;
+  }
 `
 
 const enhance = compose(
@@ -52,20 +57,20 @@ const enhance = compose(
   // if it has changed on blur
   withState('valueOnFocus', 'changeValueOnFocus', ''),
   withHandlers({
-    onChangeDatePicker: props => (event, val) => {
+    onChangeDatePicker: props => (event, value) => {
       props.updateProperty(
         props.tree,
         props.fieldName,
-        format(val, 'YYYY-MM-DD')
+        format(value, 'YYYY-MM-DD')
       )
       props.updatePropertyInDb(
         props.tree,
         props.fieldName,
-        format(val, 'YYYY-MM-DD')
+        format(value, 'YYYY-MM-DD')
       )
-      props.changeStringValue(format(val, 'DD.MM.YYYY'))
+      props.changeStringValue(format(value, 'DD.MM.YYYY'))
     },
-    onChange: props => (event, val) => props.changeStringValue(val),
+    onChange: props => event => props.changeStringValue(event.target.value),
     onBlur: props => event => {
       const { value } = event.target
       // only update if value has changed
@@ -134,25 +139,33 @@ class MyDatePicker extends Component {
 
     return (
       <Container>
-        <TextField
-          floatingLabelText={label}
-          type="text"
-          value={stringValue || ''}
-          errorText={errorText}
+        <FormControl
+          error={!!errorText}
           disabled={disabled}
           fullWidth
-          onChange={onChange}
-          onBlur={onBlur}
-          onFocus={onFocus}
-        />
-        <StyledFontIcon
-          id="iconCalendar"
-          className="material-icons"
-          title="Kalender öffnen"
-          onClick={() => this.datePicker.focus()}
+          aria-describedby={`${label}-helper`}
         >
-          event
-        </StyledFontIcon>
+          <InputLabel htmlFor={label}>{label}</InputLabel>
+          <StyledInput
+            id={label}
+            value={stringValue || ''}
+            type="text"
+            onChange={onChange}
+            onBlur={onBlur}
+            onFocus={onFocus}
+            endAdornment={
+              <StyledFontIcon
+                id="iconCalendar"
+                className="material-icons"
+                title="Kalender öffnen"
+                onClick={() => this.datePicker.focus()}
+              >
+                event
+              </StyledFontIcon>
+            }
+          />
+          <FormHelperText id={`${label}-helper`}>{errorText}</FormHelperText>
+        </FormControl>
         <DatePickerDiv>
           <DatePicker
             id="dataPicker"
