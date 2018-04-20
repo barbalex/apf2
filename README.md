@@ -170,7 +170,7 @@ Heute wird apflora.ch für die Förderung von Flora-Arten verwendet. Ihre Grunds
 
 Die Anwendung wird auf einem virtuellen Server mit der jeweils aktuellen Ubuntu LTS Version gehostet.
 
-Serverseitig wird sie mit [node.js](//nodejs.org) gesteuert. Als Datenbank dient [PostgreSQL](//postgresql.org/). Hier ein [Diagramm der Beziehungen](//apflora.ch/static-files/beziehungen.png).
+Serverseitig wird sie mit [node.js](//nodejs.org) gesteuert. Als Datenbank dient [PostgreSQL](//postgresql.org/). Hier ein [Diagramm der Beziehungen](//raw.githubusercontent.com/barbalex/apf2/master/src/etc/beziehungen.png).
 
 Die Anwendung ist zweigeteilt:
 - das Backend bietet die API (Daten) auf [apflora.ch/api](//apflora.ch/api) an
