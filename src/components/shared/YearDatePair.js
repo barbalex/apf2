@@ -29,7 +29,6 @@ const DateFieldContainer = styled.div`
   break-inside: avoid;
 `
 const StyledInput = styled(Input)`
-  margin-bottom: -15px;
   &:before {
     background-color: rgba(0, 0, 0, 0.1) !important;
   }
@@ -38,7 +37,6 @@ const StyledFontIcon = styled(FontIcon)`
   cursor: pointer;
   pointer-events: auto;
   font-size: 34px !important;
-  margin-top: 15px;
 `
 const DatePickerDiv = styled.div`
   width: 0;
@@ -214,16 +212,24 @@ const YearDatePair = ({
       </FormHelperText>
     </FormControl>
     <DateFieldContainer>
-      <TextField
-        floatingLabelText={dateLabel}
-        type="text"
-        value={dateStringValue}
-        errorText={dateErrorText}
+      <FormControl
+        error={!!dateErrorText}
         fullWidth
-        onChange={onChangeDate}
-        onBlur={onBlurDate}
-        onFocus={onFocusDate}
-      />
+        aria-describedby={`${dateLabel}-helper`}
+      >
+        <InputLabel htmlFor={dateLabel}>{dateLabel}</InputLabel>
+        <StyledInput
+          id={dateLabel}
+          value={dateStringValue}
+          type="text"
+          onChange={onChangeDate}
+          onBlur={onBlurDate}
+          onFocus={onFocusDate}
+        />
+        <FormHelperText id={`${dateLabel}-helper`}>
+          {dateErrorText}
+        </FormHelperText>
+      </FormControl>
       <StyledFontIcon
         id="iconCalendar"
         className="material-icons"
