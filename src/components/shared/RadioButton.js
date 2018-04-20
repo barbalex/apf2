@@ -19,11 +19,11 @@ const StyledLabel = styled(FormLabel)`
 
 const enhance = compose(
   withHandlers({
-    onChange: props => (event, val) => {
+    onChange: props => event => {
       // if clicked element is active value: set null
       // Problem: does not work because change event does not happen
       // Solution: do this in click event of button
-      props.updatePropertyInDb(props.tree, props.fieldName, val)
+      props.updatePropertyInDb(props.tree, props.fieldName, event.target.value)
     },
     onClickButton: props => event => {
       const { value } = event.target
@@ -63,7 +63,6 @@ const MyRadioButton = ({
         <FormControlLabel
           value="1"
           control={<Radio onClick={onClickButton} />}
-          //label={label}
         />
       </RadioGroup>
     </FormControl>
