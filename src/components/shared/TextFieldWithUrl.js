@@ -1,7 +1,8 @@
 // @flow
 import React from 'react'
 import { observer } from 'mobx-react'
-import TextField from 'material-ui/TextField'
+import Input, { InputLabel } from 'material-ui-next/Input'
+import { FormControl, FormHelperText } from 'material-ui-next/Form'
 import FontIcon from 'material-ui/FontIcon'
 import { greenA200 } from 'material-ui/styles/colors'
 /**
@@ -22,19 +23,25 @@ const Container = styled.div`
   break-inside: avoid;
 `
 const StyledFontIcon = styled(FontIcon)`
-  margin-top: 33px;
+  margin-top: 20px;
   cursor: pointer;
+`
+const StyledInput = styled(Input)`
+  &:before {
+    background-color: rgba(0, 0, 0, 0.1) !important;
+  }
 `
 
 const enhance = compose(
   withState('valueHasBeenChanged', 'changeValueHasBeenChanged', false),
   withHandlers({
-    onChange: props => (event, val) => {
+    onChange: props => event => {
+      let { value } = event.target
       // ensure numbers saved as numbers
       if (event.target.type === 'number') {
-        val = +val
+        value = +value
       }
-      props.updateProperty(props.tree, props.fieldName, val)
+      props.updateProperty(props.tree, props.fieldName, value)
       props.changeValueHasBeenChanged(true)
     },
     onBlur: props => event => {
@@ -75,17 +82,29 @@ const MyTextFieldWithUrl = ({
 
   return (
     <Container>
-      <TextField
-        floatingLabelText={`${label} (bitte "www." statt "https://" eingeben)`}
-        type={type}
-        multiLine={multiLine}
-        value={value || ''}
-        errorText={errorText}
+      <FormControl
+        error={!!errorText}
         disabled={disabled}
         fullWidth
-        onChange={onChange}
-        onBlur={onBlur}
-      />
+        aria-describedby={`${label}-helper`}
+      >
+        <InputLabel htmlFor={label}>
+          {`${label} (bitte "www." statt "https://" eingeben)`}
+        </InputLabel>
+        <StyledInput
+          id={label}
+          value={value || ''}
+          type={type}
+          multiline={multiLine}
+          onChange={onChange}
+          onBlur={onBlur}
+          autoComplete="off"
+          autoCorrect="off"
+          autoCapitalize="off"
+          spellCheck="false"
+        />
+        <FormHelperText id={`${label}-helper`}>{errorText}</FormHelperText>
+      </FormControl>
       {Array.from(urls).map((url, index) => (
         <StyledFontIcon
           className={'material-icons'}
