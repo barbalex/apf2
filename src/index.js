@@ -121,10 +121,6 @@ const DownloadMessages = Loadable({
 
     await setLoginFromIdb(store)
 
-    // turned off because of errors in production
-    // const socket = window.io(apiBaseUrl)
-    // socket.on('tabelle_update', payload => updateFromSocket(store, payload))
-
     const AppContainer = styled.div`
       display: flex;
       flex-direction: column;
