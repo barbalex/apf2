@@ -225,20 +225,22 @@ const YearDatePair = ({
           onChange={onChangeDate}
           onBlur={onBlurDate}
           onFocus={onFocusDate}
+          endAdornment={
+            <StyledFontIcon
+              id="iconCalendar"
+              className="material-icons"
+              title="Kalender öffnen"
+              // $FlowIssue
+              onClick={() => this.datePicker.focus()}
+            >
+              event
+            </StyledFontIcon>
+          }
         />
         <FormHelperText id={`${dateLabel}-helper`}>
           {dateErrorText}
         </FormHelperText>
       </FormControl>
-      <StyledFontIcon
-        id="iconCalendar"
-        className="material-icons"
-        title="Kalender öffnen"
-        // $FlowIssue
-        onClick={() => this.datePicker.focus()}
-      >
-        event
-      </StyledFontIcon>
       <DatePickerDiv>
         <DatePicker
           id="dataPicker"
