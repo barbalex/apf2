@@ -184,7 +184,7 @@ Die wichtigsten verwendeten Technologien sind:
 - [React](//facebook.github.io/react): Deklarative Benutzer-Oberfläche. Aufgebaut aus Komponenten
 - [styled-components](https://github.com/styled-components/styled-components): modular stylen
 - [Flow](//flow.org): Static type checker. Fehler finden, bevor der Code ausgeführt wird
-- [PostgREST](//postgrest.com): Null-Aufwand-API. Dank dessen Benutzug soll 2018 die gesammte Datenstruktur modernisiert und für den Nachfolger ([GraphQL](https://graphql.org) via [PostGraphile](https://www.graphile.org/postgraphile)) optimiert werden 
+- [PostgREST](//postgrest.com): Null-Aufwand-API. Dank dessen Benutzug konnte 2018 die gesammte Datenstruktur modernisiert und für den Nachfolger ([GraphQL](https://graphql.org) via [PostGraphile](https://www.graphile.org/postgraphile)) optimiert werden 
 
 <a href="#top">&#8593; top</a>
 
