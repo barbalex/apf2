@@ -40,6 +40,7 @@
   },
   "dependencies": {
     "@hocs/with-lifecycle": "0.3.0",
+    "@material-ui/icons": "1.0.0-beta.42",
     "@turf/inside": "4.7.3",
     "@turf/nearest": "4.7.3",
     "@turf/within": "4.7.3",
@@ -86,7 +87,8 @@
     "react-sortable-hoc": "0.6.8",
     "react-virtualized": "9.18.5",
     "recompose": "0.27.0",
-    "styled-components": "3.2.6"
+    "styled-components": "3.2.6",
+    "typeface-roboto": "^0.0.54"
   },
   "scripts": {
     "start": "react-scripts start",

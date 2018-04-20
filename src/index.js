@@ -24,6 +24,7 @@ import DevTools from 'mobx-react-devtools'
 import styled from 'styled-components'
 
 import app from 'ampersand-app'
+import 'typeface-roboto'
 import 'react-reflex/styles.css'
 
 // import components
