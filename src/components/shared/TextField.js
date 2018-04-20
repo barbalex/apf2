@@ -1,25 +1,29 @@
 // @flow
 import React from 'react'
 import { observer } from 'mobx-react'
-import TextField from 'material-ui/TextField'
+import Input, { InputLabel } from 'material-ui-next/Input'
+import { FormControl, FormHelperText } from 'material-ui-next/Form'
 import withHandlers from 'recompose/withHandlers'
 import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import styled from 'styled-components'
 
-const StyledTextField = styled(TextField)`
-  margin-bottom: -15px;
+const StyledInput = styled(Input)`
+  &:before {
+    background-color: rgba(0, 0, 0, 0.1) !important;
+  }
 `
 
 const enhance = compose(
   withState('valueHasBeenChanged', 'changeValueHasBeenChanged', false),
   withHandlers({
-    onChange: props => (event, val) => {
+    onChange: props => event => {
+      let { value } = event.target
       // ensure numbers saved as numbers
       if (event.target.type === 'number') {
-        val = +val
+        value = +value
       }
-      props.updateProperty(props.tree, props.fieldName, val)
+      props.updateProperty(props.tree, props.fieldName, value)
       props.changeValueHasBeenChanged(true)
     },
     onBlur: props => event => {
@@ -38,7 +42,7 @@ const enhance = compose(
   observer
 )
 
-const MyTextField = ({
+const TextField = ({
   label,
   value,
   errorText,
@@ -50,35 +54,36 @@ const MyTextField = ({
   onBlur,
 }: {
   tree: Object,
-  label: string,
-  fieldName: string,
-  value?: ?number | ?string,
-  errorText?: ?string,
-  type?: string,
-  multiLine?: boolean,
-  disabled?: boolean,
-  hintText?: string,
+  label: String,
+  fieldName: String,
+  value?: ?Number | ?String,
+  errorText?: ?String,
+  type?: String,
+  multiLine?: Boolean,
+  disabled?: Boolean,
+  hintText?: String,
   onChange: () => void,
   onBlur: () => void,
   // no idea why but this CAN get passed as undefined...
   updateProperty: () => void,
   updatePropertyInDb: () => void,
 }) => (
-  <StyledTextField
-    floatingLabelText={label}
-    hintText={hintText}
-    type={type}
-    multiLine={multiLine}
-    value={value || value === 0 ? value : ''}
-    errorText={errorText}
-    disabled={disabled}
-    fullWidth
-    onChange={onChange}
-    onBlur={onBlur}
-  />
+  <FormControl error={!!errorText} disabled={disabled} fullWidth>
+    <InputLabel htmlFor={label}>{label}</InputLabel>
+    <StyledInput
+      id={label}
+      value={value || value === 0 ? value : ''}
+      type={type}
+      multiline={multiLine}
+      onChange={onChange}
+      onBlur={onBlur}
+      placeholder={hintText}
+    />
+    <FormHelperText id={`${label}-text`}>{errorText}</FormHelperText>
+  </FormControl>
 )
 
-MyTextField.defaultProps = {
+TextField.defaultProps = {
   value: '',
   errorText: '',
   type: 'text',
@@ -89,4 +94,4 @@ MyTextField.defaultProps = {
   updatePropertyInDb: null,
 }
 
-export default enhance(MyTextField)
+export default enhance(TextField)
