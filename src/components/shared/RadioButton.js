@@ -10,6 +10,7 @@ import styled from 'styled-components'
 // without slight padding radio is slightly cut off!
 const StyledFormControl = styled(FormControl)`
   padding-left: 1px !important;
+  padding-bottom: 15px !important;
 `
 const StyledFormLabel = styled(FormLabel)`
   padding-top: 10px !important;
@@ -19,8 +20,8 @@ const StyledFormLabel = styled(FormLabel)`
   pointer-events: none;
   padding-bottom: 8px !important;
 `
-const StyledFormControlLabel = styled(FormControlLabel)`
-  height: 26px !important;
+const StyledRadio = styled(Radio)`
+  height: 24px !important;
 `
 
 const enhance = compose(
@@ -65,9 +66,9 @@ const RadioButton = ({
       value={!!value ? value.toString() : null}
       onChange={onChange}
     >
-      <StyledFormControlLabel
+      <FormControlLabel
         value="1"
-        control={<Radio onClick={onClickButton} color="primary" />}
+        control={<StyledRadio onClick={onClickButton} color="primary" />}
       />
     </RadioGroup>
   </StyledFormControl>
