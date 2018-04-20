@@ -94,6 +94,7 @@ const ApDivToggle = styled(Toggle)`
 `
 const InnerTreeContainer = styled.div`
   height: 100%;
+  overflow: hidden;
 `
 
 const getAndValidateCoordinatesOfTpop = (store, id) => {

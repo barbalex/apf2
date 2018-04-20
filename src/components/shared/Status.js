@@ -33,9 +33,13 @@ const StatusContainer = styled.div`
 const HerkunftContainer = styled.div`
   display: flex;
   margin-top: -2px;
+  flex-wrap: wrap;
 `
 const HerkunftColumnContainer = styled.div`
   padding-right: 25px;
+  overflow: visible !important;
+`
+const HerkunftColumnContainerLast = styled.div`
   overflow: visible !important;
 `
 const GroupLabelContainer = styled.div`
@@ -186,7 +190,7 @@ const Status = ({
               />
             </RadioButtonGroup>
           </HerkunftColumnContainer>
-          <HerkunftColumnContainer>
+          <HerkunftColumnContainerLast>
             <GroupLabelContainer>potenziell:</GroupLabelContainer>
             <RadioButtonGroup
               name={herkunftFieldName}
@@ -200,7 +204,7 @@ const Status = ({
                 disabled={disabled}
               />
             </RadioButtonGroup>
-          </HerkunftColumnContainer>
+          </HerkunftColumnContainerLast>
         </HerkunftContainer>
       </StatusContainer>
     </div>
