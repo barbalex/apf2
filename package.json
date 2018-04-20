@@ -17,8 +17,7 @@
   "dependenciesThatNeedToBeFixed": {
     "material-ui": {
       "version": "0.19.0",
-      "reason":
-        "AutoComplete does not work on 0.19.1 and 0.19.2. Well: with self managed searchText it does"
+      "reason": "AutoComplete does not work on 0.19.1 and 0.19.2. Well: with self managed searchText it does"
     },
     "get-urls": {
       "version": "5.0.1",
@@ -30,8 +29,7 @@
     },
     "json2csv": {
       "version": "^4.0.0-alpha.0",
-      "reason":
-        "Failed to minify the code from this file: ./node_modules/json2csv/lib/JSON2CSVBase.js:9"
+      "reason": "Failed to minify the code from this file: ./node_modules/json2csv/lib/JSON2CSVBase.js:9"
     },
     "mobx": {
       "version": "^3.5.1",
@@ -45,6 +43,7 @@
     "@turf/nearest": "4.7.3",
     "@turf/within": "4.7.3",
     "ampersand-app": "2.0.0",
+    "autosuggest-highlight": "^3.1.1",
     "axios": "0.18.0",
     "babel-polyfill": "6.26.0",
     "date-fns": "1.29.0",
@@ -75,6 +74,7 @@
     "prop-types": "15.6.1",
     "query-string": "^5.1.0",
     "react": "16.3.2",
+    "react-autosuggest": "^9.3.4",
     "react-contextmenu": "2.9.2",
     "react-copy-to-clipboard": "5.0.1",
     "react-dom": "16.3.2",

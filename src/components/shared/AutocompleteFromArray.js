@@ -7,27 +7,27 @@ import withHandlers from 'recompose/withHandlers'
 import withState from 'recompose/withState'
 import styled from 'styled-components'
 
-const StyledAutoComplete = styled(AutoComplete)`margin-bottom: -12px;`
+const StyledAutoComplete = styled(AutoComplete)`
+  margin-bottom: -12px;
+`
 
 const enhance = compose(
   withState('focused', 'changeFocused', false),
   withState('searchText', 'changeSearchText', ''),
   withState('searchTextWasChanged', 'changeSearchTextWasChanged', ''),
   withHandlers({
-    onNewRequest: props => val => {
-      const { updatePropertyInDb, fieldName } = props
-      updatePropertyInDb(props.tree, fieldName, val)
+    onNewRequest: ({ updatePropertyInDb, fieldName, tree }) => val => {
+      updatePropertyInDb(tree, fieldName, val)
     },
     onFocus: props => () => props.changeFocused(true),
-    onBlur: props => () => {
-      const {
-        changeFocused,
-        searchText,
-        searchTextWasChanged,
-        updatePropertyInDb,
-        tree,
-        fieldName,
-      } = props
+    onBlur: ({
+      changeFocused,
+      searchText,
+      searchTextWasChanged,
+      updatePropertyInDb,
+      tree,
+      fieldName,
+    }) => () => {
       changeFocused(false)
       if (!searchText && searchTextWasChanged) {
         // onNewRequest does not happen when value was removed by deleting text
@@ -104,9 +104,9 @@ const MyAutocomplete = ({
     labelNumberLimit = 'Nur die ersten 200 Einträge werden aufgelistet.'
   }
   const labelText = focused
-    ? `${label}${labelFilterHint || labelNumberLimit
-        ? '. '
-        : ''}${labelFilterHint}${labelNumberLimit}`
+    ? `${label}${
+        labelFilterHint || labelNumberLimit ? '. ' : ''
+      }${labelFilterHint}${labelNumberLimit}`
     : label
 
   return (

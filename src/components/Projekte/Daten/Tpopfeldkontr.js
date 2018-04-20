@@ -9,6 +9,7 @@ import withHandlers from 'recompose/withHandlers'
 import RadioButtonGroup from '../../shared/RadioButtonGroup'
 import TextField from '../../shared/TextField'
 import AutoCompleteFromArray from '../../shared/AutocompleteFromArray'
+import AutoCompleteFromArrayNew from '../../shared/AutocompleteFromArrayNew'
 import AutoComplete from '../../shared/Autocomplete'
 import RadioButtonGroupWithInfo from '../../shared/RadioButtonGroupWithInfo'
 import StringToCopy from '../../shared/StringToCopy'
@@ -291,24 +292,24 @@ const Tpopfeldkontr = ({
                     updatePropertyInDb={store.updatePropertyInDb}
                   />
                   <Section>Vegetation</Section>
-                  <AutoCompleteFromArray
+                  <AutoCompleteFromArrayNew
                     key={`${activeDataset.row.id}Lebensraum`}
                     tree={tree}
                     label="Lebensraum nach Delarze"
                     fieldName="lr_delarze"
-                    valueText={activeDataset.row.lr_delarze}
+                    value={activeDataset.row.lr_delarze}
                     errorText={activeDataset.valid.lr_delarze}
-                    dataSource={store.dropdownList.lr}
+                    values={store.dropdownList.lr}
                     updatePropertyInDb={store.updatePropertyInDb}
                   />
-                  <AutoCompleteFromArray
+                  <AutoCompleteFromArrayNew
                     key={`${activeDataset.row.id}Umgebung`}
                     tree={tree}
                     label="Umgebung nach Delarze"
                     fieldName="lr_umgebung_delarze"
-                    valueText={activeDataset.row.lr_umgebung_delarze}
+                    value={activeDataset.row.lr_umgebung_delarze}
                     errorText={activeDataset.valid.lr_umgebung_delarze}
-                    dataSource={store.dropdownList.lr}
+                    values={store.dropdownList.lr}
                     updatePropertyInDb={store.updatePropertyInDb}
                   />
                   <TextField
