@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import compose from 'recompose/compose'
 
 import RadioButton from '../../shared/RadioButton'
-import RadioButton3Values from '../../shared/RadioButton3Values'
+import RadioButtonGroup from '../../shared/RadioButtonGroup'
 import TextField from '../../shared/TextField'
 import AutoComplete from '../../shared/Autocomplete'
 import StringToCopy from '../../shared/StringToCopy'
@@ -40,6 +40,10 @@ const getBearbName = ({ store, tree }: { store: Object, tree: Object }) => {
 }
 
 const enhance = compose(inject('store'), observer)
+const jungpflanzenVorhandenDataSource = [
+  { value: 1, label: 'ja' },
+  { value: 0, label: 'nein' },
+]
 
 const Tpopfreiwkontr = ({
   store,
@@ -126,11 +130,12 @@ const Tpopfreiwkontr = ({
             updateProperty={store.updateProperty}
             updatePropertyInDb={store.updatePropertyInDb}
           />
-          <RadioButton3Values
+          <RadioButtonGroup
             tree={tree}
             fieldName="jungpflanzen_vorhanden"
             label="Auch junge Pflanzen vorhanden"
             value={activeDataset.row.jungpflanzen_vorhanden}
+            dataSource={jungpflanzenVorhandenDataSource}
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField

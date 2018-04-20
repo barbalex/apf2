@@ -23,21 +23,26 @@ const StyledLabel = styled.div`
 
 const enhance = compose(
   withHandlers({
-    onChange: props => (event, val) => {
+    onChange: ({ updatePropertyInDb, tree, fieldName }) => (event, val) => {
       // if clicked element is active value: set null
       // Problem: does not work because change event does not happen
       // Solution: do this in click event of button
-      props.updatePropertyInDb(props.tree, props.fieldName, val)
+      updatePropertyInDb(tree, fieldName, val)
     },
-    onClickButton: props => event => {
+    onClickButton: ({
+      value,
+      updatePropertyInDb,
+      tree,
+      fieldName,
+    }) => event => {
       const valueClicked =
         event.target.value && !isNaN(event.target.value)
           ? +event.target.value
           : event.target.value
-      if (valueClicked === props.value) {
+      if (valueClicked === value) {
         // an already active tpopId was clicked
         // set value null
-        props.updatePropertyInDb(props.tree, props.fieldName, null)
+        updatePropertyInDb(tree, fieldName, null)
       }
     },
   }),
