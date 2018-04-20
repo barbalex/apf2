@@ -62,7 +62,7 @@ const MyRadioButton = ({
       >
         <FormControlLabel
           value="1"
-          control={<Radio onClick={onClickButton} />}
+          control={<Radio onClick={onClickButton} color="primary" />}
         />
       </RadioGroup>
     </FormControl>

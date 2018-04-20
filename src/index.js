@@ -14,8 +14,10 @@ import ReactDOM from 'react-dom'
 import axios from 'axios'
 import Loadable from 'react-loadable'
 
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
+import MuiThemeProvider0x from 'material-ui/styles/MuiThemeProvider'
+import { MuiThemeProvider } from 'material-ui-next/styles'
 import uiTheme from './modules/uiTheme'
+import v1Theme from './theme'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import { Provider } from 'mobx-react'
 
@@ -128,19 +130,21 @@ const DownloadMessages = Loadable({
 
     ReactDOM.render(
       <Provider store={store}>
-        <MuiThemeProvider muiTheme={getMuiTheme(theme)}>
-          <AppContainer>
-            {false && <DevTools />}
-            <AppBar />
-            <Projekte />
-            <User />
-            <NewAp />
-            <Deletions />
-            <Errors />
-            <UpdateAvailable />
-            <Messages />
-            <DownloadMessages />
-          </AppContainer>
+        <MuiThemeProvider theme={v1Theme}>
+          <MuiThemeProvider0x muiTheme={getMuiTheme(theme)}>
+            <AppContainer>
+              {false && <DevTools />}
+              <AppBar />
+              <Projekte />
+              <User />
+              <NewAp />
+              <Deletions />
+              <Errors />
+              <UpdateAvailable />
+              <Messages />
+              <DownloadMessages />
+            </AppContainer>
+          </MuiThemeProvider0x>
         </MuiThemeProvider>
       </Provider>,
       document.getElementById('root')
