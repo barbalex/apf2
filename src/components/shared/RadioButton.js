@@ -12,9 +12,16 @@ const Container = styled.div`
   flex-direction: column;
   break-inside: avoid;
 `
-const StyledLabel = styled(FormLabel)`
+const StyledFormLabel = styled(FormLabel)`
+  padding-top: 10px !important;
   font-size: 12px !important;
+  cursor: text;
   user-select: none;
+  pointer-events: none;
+  padding-bottom: 8px !important;
+`
+const StyledFormControlLabel = styled(FormControlLabel)`
+  height: 26px !important;
 `
 
 const enhance = compose(
@@ -53,14 +60,14 @@ const MyRadioButton = ({
 }) => (
   <Container>
     <FormControl component="fieldset">
-      <StyledLabel component="legend">{label}</StyledLabel>
+      <StyledFormLabel component="legend">{label}</StyledFormLabel>
       <RadioGroup
         aria-label={label}
         name={fieldName}
         value={!!value ? value.toString() : null}
         onChange={onChange}
       >
-        <FormControlLabel
+        <StyledFormControlLabel
           value="1"
           control={<Radio onClick={onClickButton} color="primary" />}
         />
