@@ -2,7 +2,11 @@
 import React from 'react'
 import { observer, inject } from 'mobx-react'
 import Dialog from 'material-ui/Dialog'
-import TextField from 'material-ui/TextField'
+import Input, { InputLabel, InputAdornment } from 'material-ui-next/Input'
+import { FormControl, FormHelperText } from 'material-ui-next/Form'
+import IconButton from 'material-ui-next/IconButton'
+import Visibility from '@material-ui/icons/Visibility'
+import VisibilityOff from '@material-ui/icons/VisibilityOff'
 import FlatButton from 'material-ui/FlatButton'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
@@ -15,11 +19,17 @@ const StyledDiv = styled.div`
   display: flex;
   flex-direction: column;
 `
+const StyledInput = styled(Input)`
+  &:before {
+    background-color: rgba(0, 0, 0, 0.1) !important;
+  }
+`
 
 const enhance = compose(
   inject('store'),
   withState('name', 'changeName', ''),
   withState('password', 'changePassword', ''),
+  withState('showPass', 'changeShowPass', false),
   withState('nameErrorText', 'changeNameErrorText', ''),
   withState('passwordErrorText', 'changePasswordErrorText', ''),
   withHandlers({
@@ -89,6 +99,8 @@ const User = ({
   store,
   name,
   password,
+  showPass,
+  changeShowPass,
   nameErrorText,
   passwordErrorText,
   changeNameErrorText,
@@ -99,8 +111,10 @@ const User = ({
 }: {
   store: Object,
   name: string,
+  showPass: Boolean,
   changeName: () => void,
   password: string,
+  changeShowPass: () => void,
   changePassword: () => void,
   nameErrorText: string,
   changeNameErrorText: () => void,
@@ -126,32 +140,60 @@ const User = ({
         }}
       >
         <StyledDiv>
-          <TextField
-            floatingLabelText="Name"
-            defaultValue={name}
-            onBlur={onBlurName}
-            errorText={nameErrorText}
+          <FormControl
+            error={!!nameErrorText}
             fullWidth
-            autoFocus
-            onKeyPress={e => {
-              if (e.key === 'Enter') {
-                onBlurName(e)
-              }
-            }}
-          />
-          <TextField
-            floatingLabelText="Passwort"
-            type="password"
-            defaultValue={password}
-            onBlur={onBlurPassword}
-            errorText={passwordErrorText}
+            aria-describedby="nameHelper"
+          >
+            <InputLabel htmlFor="name">Name</InputLabel>
+            <StyledInput
+              id="name"
+              defaultValue={name}
+              onBlur={onBlurName}
+              autoFocus
+              onKeyPress={e => {
+                if (e.key === 'Enter') {
+                  onBlurName(e)
+                }
+              }}
+            />
+            <FormHelperText id="nameHelper">{nameErrorText}</FormHelperText>
+          </FormControl>
+          <FormControl
+            error={!!passwordErrorText}
             fullWidth
-            onKeyPress={e => {
-              if (e.key === 'Enter') {
-                onBlurPassword(e)
+            aria-describedby="passwortHelper"
+          >
+            <InputLabel htmlFor="passwort">Passwort</InputLabel>
+            <StyledInput
+              id="passwort"
+              type={showPass ? 'text' : 'password'}
+              defaultValue={password}
+              onBlur={onBlurPassword}
+              onKeyPress={e => {
+                if (e.key === 'Enter') {
+                  onBlurPassword(e)
+                }
+              }}
+              autoComplete="current-password"
+              autoCorrect="off"
+              spellCheck="false"
+              endAdornment={
+                <InputAdornment position="end">
+                  <IconButton
+                    onClick={() => changeShowPass(!showPass)}
+                    onMouseDown={e => e.preventDefault()}
+                    title={showPass ? 'verstecken' : 'anzeigen'}
+                  >
+                    {showPass ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
               }
-            }}
-          />
+            />
+            <FormHelperText id="passwortHelper">
+              {passwordErrorText}
+            </FormHelperText>
+          </FormControl>
         </StyledDiv>
       </Dialog>
     </ErrorBoundary>
