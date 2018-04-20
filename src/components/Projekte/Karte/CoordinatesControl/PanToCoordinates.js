@@ -6,7 +6,8 @@ import styled from 'styled-components'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 import withState from 'recompose/withState'
-import TextField from 'material-ui/TextField'
+import Input from 'material-ui-next/Input'
+import { FormControl, FormHelperText } from 'material-ui-next/Form'
 import FlatButton from 'material-ui/FlatButton'
 import PanIcon from 'material-ui/svg-icons/maps/my-location'
 import ClearIcon from 'material-ui/svg-icons/content/clear'
@@ -22,14 +23,17 @@ const Container = styled.div`
   padding-right: 5px;
   margin-bottom: 2px !important;
   margin-right: 5px !important;
+  max-width: 380px;
 `
 const GotoButton = styled(FlatButton)`
   min-width: 30px !important;
-  margin-top: 5px !important;
+  cursor: pointer !important;
 `
-const GotoTextField = styled(TextField)`
-  width: 150px !important;
+const StyledInput = styled(Input)`
   padding: 0 5px;
+  &:before {
+    background-color: rgba(0, 0, 0, 0.1) !important;
+  }
 `
 
 const xIsValid = (x: ?number) => !x || (x >= 2485071 && x < 2828516)
@@ -189,27 +193,42 @@ class PanToCoordinates extends Component {
 
     return (
       <Container onBlur={onBlurGotoContainer} onFocus={onFocusGotoContainer}>
-        <GotoTextField
-          type="number"
-          min="470000"
-          max="850000"
-          value={x}
-          onChange={onChangeX}
-          onBlur={onBlurX}
-          hintText="X-Koordinate"
-          errorText={xError}
-          ref={c => (this.xkoordField = c)}
-        />
-        <GotoTextField
-          type="number"
-          min="62000"
-          max="320000"
-          value={y}
-          onChange={onChangeY}
-          onBlur={onBlurY}
-          hintText="Y-Koordinate"
-          errorText={yError}
-        />
+        <FormControl
+          error={!!xError}
+          fullWidth
+          aria-describedby="XKoordinate-helper"
+        >
+          <StyledInput
+            id="XKoordinate"
+            value={x}
+            type="number"
+            min="2485071"
+            max="2828516"
+            onChange={onChangeX}
+            onBlur={onBlurX}
+            placeholder="X-Koordinate"
+            ref={c => (this.xkoordField = c)}
+          />
+          <FormHelperText id="XKoordinate-helper">{xError}</FormHelperText>
+        </FormControl>
+        <FormControl
+          error={!!yError}
+          fullWidth
+          aria-describedby="YKoordinate-helper"
+        >
+          <StyledInput
+            id="YKoordinate"
+            value={y}
+            type="number"
+            min="1075346"
+            max="1299942"
+            onChange={onChangeY}
+            onBlur={onBlurY}
+            placeholder="Y-Koordinate"
+            ref={c => (this.ykoordField = c)}
+          />
+          <FormHelperText id="YKoordinate-helper">{yError}</FormHelperText>
+        </FormControl>
         <GotoButton
           title="auf Koordinaten zentrieren"
           icon={<PanIcon />}
