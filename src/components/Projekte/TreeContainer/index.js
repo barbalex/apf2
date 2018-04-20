@@ -80,6 +80,8 @@ const Container = styled.div`
 const LabelFilterContainer = styled.div`
   display: flex;
   justify-content: space-between;
+  padding-left: 12px;
+  padding-top: 5px;
 `
 const NurApDiv = styled.div`
   display: flex;

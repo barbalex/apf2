@@ -2,23 +2,53 @@
 
 import React from 'react'
 import { observer, inject } from 'mobx-react'
-import TextField from 'material-ui/TextField'
+import Input, { InputLabel } from 'material-ui-next/Input'
+import { FormControl } from 'material-ui-next/Form'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
+import withHandlers from 'recompose/withHandlers'
 
 import tables from '../../../modules/tables'
 
-const FilterField = styled(TextField)`
-  margin-top: -0.6em;
-  padding: 0 0.8em 0 0.8em;
+const StyledFormControl = styled(FormControl)`
+  padding-right: 0.8em !important;
+`
+const StyledInput = styled(Input)`
   div hr {
     width: calc(100% - 20px) !important;
   }
+  &:before {
+    background-color: rgba(0, 0, 0, 0.1) !important;
+  }
 `
 
-const enhance = compose(inject('store'), observer)
+const enhance = compose(
+  inject('store'),
+  withHandlers({
+    onChange: ({ store, tree }: { store: Object, tree: Object }) => event => {
+      const { activeDataset } = tree
+      let filteredTable = ''
 
-const LabelFilter = ({ store, tree }: { store: Object, tree: Object }) => {
+      if (activeDataset && activeDataset.folder) {
+        filteredTable = activeDataset.folder
+      } else if (activeDataset && activeDataset.table) {
+        filteredTable = activeDataset.table
+      }
+      tree.updateLabelFilter(filteredTable, event.target.value)
+    },
+  }),
+  observer
+)
+
+const LabelFilter = ({
+  store,
+  tree,
+  onChange,
+}: {
+  store: Object,
+  tree: Object,
+  onChange: () => void,
+}) => {
   const { activeDataset } = tree
   let filteredTable = ''
 
@@ -41,12 +71,10 @@ const LabelFilter = ({ store, tree }: { store: Object, tree: Object }) => {
   }
 
   return (
-    <FilterField
-      floatingLabelText={labelText}
-      fullWidth
-      value={filterValue}
-      onChange={(event, val) => tree.updateLabelFilter(filteredTable, val)}
-    />
+    <StyledFormControl fullWidth>
+      <InputLabel htmlFor={labelText}>{labelText}</InputLabel>
+      <StyledInput id={labelText} value={filterValue} onChange={onChange} />
+    </StyledFormControl>
   )
 }
 
