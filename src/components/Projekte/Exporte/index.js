@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { Card, CardHeader, CardText } from 'material-ui/Card'
 import FlatButton from 'material-ui/FlatButton'
 import sortBy from 'lodash/sortBy'
-import AutoCompleteNew from './AutocompleteNew'
+import AutoComplete from './Autocomplete'
 import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import withProps from 'recompose/withProps'
@@ -481,7 +481,7 @@ const Exporte = ({
               <div>{'= "Eier legende Wollmilchsau"'}</div>
             </DownloadCardButton>
             <AutocompleteContainer>
-              <AutoCompleteNew
+              <AutoComplete
                 label={`"Eier legende Wollmilchsau" für eine Art`}
                 value={artFuerEierlegendeWollmilchsau}
                 objects={artList}

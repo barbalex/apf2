@@ -1,121 +1,234 @@
-// @flow
+//@flow
+/**
+ * similar to AutocompleteFromArray
+ * but receives an array of objects
+ * with keys id and value
+ * presents value and saves id
+ */
 import React from 'react'
-import { observer } from 'mobx-react'
-import AutoComplete from 'material-ui/AutoComplete'
-import compose from 'recompose/compose'
-import withHandlers from 'recompose/withHandlers'
-import withState from 'recompose/withState'
+import Autosuggest from 'react-autosuggest'
+import match from 'autosuggest-highlight/match'
+import parse from 'autosuggest-highlight/parse'
+import TextField from 'material-ui-next/TextField'
+import Paper from 'material-ui-next/Paper'
+import { MenuItem } from 'material-ui-next/Menu'
+import { withStyles } from 'material-ui-next/styles'
 import styled from 'styled-components'
+import compose from 'recompose/compose'
+import trimStart from 'lodash/trimStart'
 
-const StyledAutoComplete = styled(AutoComplete)`
-  margin-bottom: -12px;
+const StyledPaper = styled(Paper)`
+  z-index: 1;
+  /* need this so text is visible when overflowing */
+  > ul > li > div {
+    overflow: inherit;
+  }
+`
+const StyledAutosuggest = styled(Autosuggest)`
+  height: auto;
+  .react-autosuggest__suggestions-container--open {
+    bottom: ${props => (props.openabove ? '27px !important' : 'unset')};
+  }
+  .react-autosuggest__suggestions-container {
+    bottom: 27px !important;
+  }
+`
+const StyledTextField = styled(TextField)`
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  width: 100%;
+  > div:before {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
 `
 
-const enhance = compose(
-  withState('focused', 'changeFocused', false),
-  withState('searchText', 'changeSearchText', ''),
-  withHandlers({
-    onNewRequest: props => val => {
-      props.changeArtFuerEierlegendeWollmilchsau(val.artname)
-      props.downloadFromView({
-        view: 'v_tpop_anzkontrinklletzterundletztertpopber',
-        fileName: 'anzkontrinklletzterundletztertpopber_2016',
-        apId: val.id,
-      })
-    },
-    onFocus: props => () => props.changeFocused(true),
-    onBlur: props => () => {
-      const { changeFocused } = props
-      changeFocused(false)
-    },
-    onUpdateSearchText: props => searchText => {
-      props.changeSearchText(searchText)
-    },
-  }),
-  observer
-)
-
-const MyAutocomplete = ({
-  dataSource,
-  dataSourceConfig = {
-    value: 'id',
-    text: 'label',
-  },
-  onNewRequest,
-  focused,
-  changeFocused,
-  onFocus,
-  onBlur,
-  searchText,
-  changeSearchText,
-  onUpdateSearchText,
-  downloadFromView,
-  changeArtFuerEierlegendeWollmilchsau,
-}: {
-  dataSource: Array<Object>,
-  dataSourceConfig: Object,
-  onNewRequest: () => void,
-  focused: boolean,
-  changeFocused: () => void,
-  onFocus: () => void,
-  onBlur: () => void,
-  searchText: ?string,
-  changeSearchText: () => void,
-  onUpdateSearchText: () => void,
-  downloadFromView: () => void,
-  changeArtFuerEierlegendeWollmilchsau: () => void,
-}) => {
-  const dataSourceLength = dataSource.filter(d => {
-    if (
-      dataSourceConfig &&
-      dataSourceConfig.text &&
-      d[dataSourceConfig.text] &&
-      d[dataSourceConfig.text].toLowerCase() &&
-      searchText &&
-      searchText.toLowerCase()
-    ) {
-      return d[dataSourceConfig.text]
-        .toLowerCase()
-        .includes(searchText.toLowerCase())
-    }
-    return true
-  }).length
-  const labelFilterHint = 'Zum Filtern tippen. '
-  let labelNumberLimit = ''
-  if (searchText && dataSourceLength === 0) {
-    labelNumberLimit = 'Kein Eintrag entspricht dem Filter.'
-  } else if (dataSourceLength && dataSourceLength <= 20) {
-    labelNumberLimit = `Alle Einträge angezeigt.`
-  } else if (dataSourceLength > 20) {
-    labelNumberLimit = 'Erste 20 Einträge angezeigt.'
-  }
-  const labelText = focused
-    ? `Wollmilchsau${
-        labelFilterHint || labelNumberLimit ? '. ' : ''
-      }${labelFilterHint}${labelNumberLimit}`
-    : '"Eier legende Wollmilchsau" für eine Art'
+function renderSuggestion(suggestion, { query, isHighlighted }) {
+  const matches = match(suggestion, query)
+  const parts = parse(suggestion, matches)
 
   return (
-    <StyledAutoComplete
-      hintText={dataSource.length === 0 ? 'lade Daten...' : 'Art wählen'}
-      fullWidth
-      floatingLabelText={labelText}
-      dataSource={dataSource}
-      dataSourceConfig={dataSourceConfig}
-      searchText={searchText}
-      onUpdateInput={onUpdateSearchText}
-      filter={AutoComplete.caseInsensitiveFilter}
-      maxSearchResults={20}
-      onNewRequest={onNewRequest}
-      openOnFocus
-      onFocus={onFocus}
-      onBlur={onBlur}
-      menuStyle={{
-        maxHeight: '500px',
-        fontSize: '6px !important',
-      }}
-    />
+    <MenuItem selected={isHighlighted} component="div">
+      <div>
+        {parts.map((part, index) => {
+          return part.highlight ? (
+            <span key={String(index)} style={{ fontWeight: 500 }}>
+              {part.text}
+            </span>
+          ) : (
+            <strong key={String(index)} style={{ fontWeight: 300 }}>
+              {part.text}
+            </strong>
+          )
+        })}
+      </div>
+    </MenuItem>
   )
 }
 
-export default enhance(MyAutocomplete)
+function renderSuggestionsContainer(options) {
+  const { containerProps, children } = options
+
+  return (
+    <StyledPaper {...containerProps} square>
+      {children}
+    </StyledPaper>
+  )
+}
+
+function getSuggestionValue(suggestion) {
+  return suggestion
+}
+
+function shouldRenderSuggestions(value) {
+  return true
+}
+
+const styles = theme => ({
+  container: {
+    flexGrow: 1,
+    position: 'relative',
+    paddingTop: '12px',
+  },
+  suggestion: {
+    display: 'block',
+  },
+  suggestionsList: {
+    margin: 0,
+    padding: 0,
+    listStyleType: 'none',
+    maxHeight: '400px',
+    overflow: 'auto',
+  },
+})
+
+const enhance = compose(withStyles(styles))
+
+type Props = {
+  label: String,
+  value: String,
+  objects: Array<Object>,
+  changeArtFuerEierlegendeWollmilchsau: () => void,
+  downloadFromView: () => void,
+  classes: Object,
+}
+
+type State = {
+  suggestions: Array<string>,
+  value: string,
+}
+
+class IntegrationAutosuggest extends React.Component<Props, State> {
+  constructor(props) {
+    super(props)
+    this.state = {
+      suggestions: [],
+      value: props.value || '',
+    }
+  }
+
+  getSuggestions = value => {
+    const { objects } = this.props
+    const inputValue = value.toLowerCase()
+    const values = objects.map(o => o.value)
+
+    if (value === ' ') return values
+    if (inputValue.length === 0) return []
+    return values.filter(v => v.toLowerCase().includes(inputValue))
+  }
+
+  handleSuggestionsFetchRequested = ({ value }) => {
+    this.setState({
+      suggestions: this.getSuggestions(value),
+    })
+  }
+
+  handleSuggestionsClearRequested = () => {
+    this.setState({
+      suggestions: this.getSuggestions(' '),
+    })
+  }
+
+  handleChange = (event, { newValue }) => {
+    // trim the start to enable entering space
+    // at start to open list
+    const value = trimStart(newValue)
+    this.setState({ value })
+  }
+
+  handleOnSuggestionSelected = (event, { suggestion }) => {
+    const { objects } = this.props
+    console.log('handleOnSuggestionSelected', { suggestion })
+    this.props.changeArtFuerEierlegendeWollmilchsau(suggestion.artname)
+    this.props.downloadFromView({
+      view: 'v_tpop_anzkontrinklletzterundletztertpopber',
+      fileName: 'anzkontrinklletzterundletztertpopber_2016',
+      apId: objects.find(o => o.value === suggestion).id,
+    })
+    setTimeout(() => {
+      this.props.changeArtFuerEierlegendeWollmilchsau('')
+      this.setState({ value: '', suggestions: [] })
+    }, 5000)
+  }
+
+  renderInput = inputProps => {
+    const { label, value } = this.props
+    const { autoFocus, ref, ...other } = inputProps
+
+    return (
+      <StyledTextField
+        label={label}
+        fullWidth
+        value={value || ''}
+        inputRef={ref}
+        InputProps={{
+          ...other,
+        }}
+        autoComplete="off"
+        autoCorrect="off"
+        autoCapitalize="off"
+        spellCheck="false"
+      />
+    )
+  }
+
+  render() {
+    const { classes, openabove } = this.props
+    const { suggestions } = this.state
+
+    return (
+      <StyledAutosuggest
+        theme={{
+          container: classes.container,
+          suggestionsContainerOpen: {
+            position: 'absolute',
+            marginTop: '8px',
+            marginBottom: '24px',
+            left: 0,
+            right: 0,
+            bottom: openabove ? '27px' : 'unset',
+          },
+          suggestionsList: classes.suggestionsList,
+          suggestion: classes.suggestion,
+        }}
+        renderInputComponent={this.renderInput}
+        suggestions={suggestions}
+        onSuggestionsFetchRequested={this.handleSuggestionsFetchRequested}
+        onSuggestionsClearRequested={this.handleSuggestionsClearRequested}
+        renderSuggestionsContainer={renderSuggestionsContainer}
+        getSuggestionValue={getSuggestionValue}
+        renderSuggestion={renderSuggestion}
+        shouldRenderSuggestions={shouldRenderSuggestions}
+        onSuggestionSelected={this.handleOnSuggestionSelected}
+        inputProps={{
+          value: this.state.value,
+          autoFocus: true,
+          placeholder: 'Für Auswahlliste: Leerschlag tippen',
+          onChange: this.handleChange,
+        }}
+      />
+    )
+  }
+}
+
+export default enhance(IntegrationAutosuggest)
