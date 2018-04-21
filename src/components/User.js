@@ -7,7 +7,7 @@ import { FormControl, FormHelperText } from 'material-ui-next/Form'
 import IconButton from 'material-ui-next/IconButton'
 import Visibility from '@material-ui/icons/Visibility'
 import VisibilityOff from '@material-ui/icons/VisibilityOff'
-import FlatButton from 'material-ui/FlatButton'
+import Button from 'material-ui-next/Button'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
@@ -125,7 +125,9 @@ const User = ({
   fetchLogin: () => void,
 }) => {
   const actions = [
-    <FlatButton label="anmelden" primary={true} onClick={fetchLogin} />,
+    <Button color="primary" onClick={fetchLogin}>
+      anmelden
+    </Button>,
   ]
   // TODO Authorization:
   // open depends on store.user.jwt

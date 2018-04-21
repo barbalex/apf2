@@ -1,11 +1,13 @@
 // @flow
 import React from 'react'
 import CopyToClipboard from 'react-copy-to-clipboard'
-import FlatButton from 'material-ui/FlatButton'
+import Button from 'material-ui-next/Button'
 import styled from 'styled-components'
 import withHandlers from 'recompose/withHandlers'
 import withState from 'recompose/withState'
 import compose from 'recompose/compose'
+
+import ErrorBoundary from './ErrorBoundary'
 
 const enhance = compose(
   withState('copied', 'updateCopied', false),
@@ -16,7 +18,7 @@ const enhance = compose(
         props.updateCopied(false)
       }, 10000)
     },
-  }),
+  })
 )
 
 const StringToCopy = ({
@@ -37,9 +39,9 @@ const StringToCopy = ({
     break-inside: avoid;
   `
   const StringToCopyContainer = styled.div`
-      display: flex;
-      justify-content: space-between;
-    `
+    display: flex;
+    justify-content: space-between;
+  `
   const GuidContainer = styled.div`
     flex-grow: 1;
   `
@@ -50,28 +52,28 @@ const StringToCopy = ({
     margin-top: 10px;
     cursor: text;
     font-size: 12px;
-    color: rgba(0,0,0,0.5);
+    color: rgba(0, 0, 0, 0.5);
     pointer-events: none;
     user-select: none;
     padding-bottom: 8px;
   `
 
   return (
-    <Container>
-      <StyledLabel>
-        {label}
-      </StyledLabel>
-      <StringToCopyContainer>
-        <GuidContainer>
-          {text}
-        </GuidContainer>
-        <CopyButtonContainer>
-          <CopyToClipboard text={text} onCopy={onCopy}>
-            <FlatButton label={copied ? 'kopiert' : 'kopieren'} />
-          </CopyToClipboard>
-        </CopyButtonContainer>
-      </StringToCopyContainer>
-    </Container>
+    <ErrorBoundary>
+      <Container>
+        <StyledLabel>{label}</StyledLabel>
+        <StringToCopyContainer>
+          <GuidContainer>{text}</GuidContainer>
+          <CopyButtonContainer>
+            <CopyToClipboard text={text} onCopy={onCopy}>
+              <Button color="primary" onCopy={onCopy}>
+                {copied ? `${label} kopiert` : `${label} kopieren`}
+              </Button>
+            </CopyToClipboard>
+          </CopyButtonContainer>
+        </StringToCopyContainer>
+      </Container>
+    </ErrorBoundary>
   )
 }
 
