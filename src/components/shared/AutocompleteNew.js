@@ -194,7 +194,6 @@ class IntegrationAutosuggest extends React.Component<Props, State> {
   render() {
     const { classes, openabove } = this.props
     const { suggestions } = this.state
-    console.log('AutocompleteNew: openabove:', this.props.openabove)
 
     return (
       <StyledAutosuggest

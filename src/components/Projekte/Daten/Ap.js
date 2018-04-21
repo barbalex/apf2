@@ -1,11 +1,10 @@
 // @flow
-import React from 'react'
+import React, { Fragment } from 'react'
 import { observer, inject } from 'mobx-react'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
 import withProps from 'recompose/withProps'
 
-import AutoComplete from '../../shared/Autocomplete'
 import AutoCompleteNew from '../../shared/AutocompleteNew'
 import RadioButtonGroupWithInfo from '../../shared/RadioButtonGroupWithInfo'
 import TextField from '../../shared/TextField'
@@ -130,7 +129,7 @@ const Ap = ({
           dataSource={store.dropdownList.apStati}
           updatePropertyInDb={updatePropertyInDb}
           popover={
-            <div>
+            <Fragment>
               <LabelPopoverTitleRow>Legende</LabelPopoverTitleRow>
               <LabelPopoverContentRow>
                 <LabelPopoverRowColumnLeft>keiner:</LabelPopoverRowColumnLeft>
@@ -144,7 +143,7 @@ const Ap = ({
                   Aktionsplan fertig, auf der Webseite der FNS
                 </LabelPopoverRowColumnRight>
               </LabelPopoverContentRow>
-            </div>
+            </Fragment>
           }
           label="Aktionsplan"
         />
@@ -168,7 +167,7 @@ const Ap = ({
             dataSource={store.dropdownList.apUmsetzungen}
             updatePropertyInDb={updatePropertyInDb}
             popover={
-              <div>
+              <Fragment>
                 <LabelPopoverTitleRow>Legende</LabelPopoverTitleRow>
                 <LabelPopoverContentRow>
                   <LabelPopoverRowColumnLeft>
@@ -187,27 +186,11 @@ const Ap = ({
                     erstellt)
                   </LabelPopoverRowColumnRight>
                 </LabelPopoverContentRow>
-              </div>
+              </Fragment>
             }
             label="Stand Umsetzung"
           />
         </FieldContainer>
-        <AutoComplete
-          key={`${activeDataset.row.id}bearbeiter`}
-          tree={tree}
-          label="Verantwortlich"
-          fieldName="bearbeiter"
-          valueText={getBearbName({ store, tree })}
-          errorText={activeDataset.valid.bearbeiter}
-          dataSource={store.dropdownList.adressen}
-          dataSourceConfig={{
-            value: 'id',
-            text: 'name',
-          }}
-          anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
-          targetOrigin={{ vertical: 'bottom', horizontal: 'left' }}
-          updatePropertyInDb={store.updatePropertyInDb}
-        />
         <AutoCompleteNew
           key={`${activeDataset.row.id}bearbeiterNew`}
           tree={tree}
