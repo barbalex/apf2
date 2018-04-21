@@ -6,7 +6,7 @@ import compose from 'recompose/compose'
 
 import RadioButtonGroup from '../../shared/RadioButtonGroup'
 import TextField from '../../shared/TextField'
-import AutoCompleteNew from '../../shared/AutocompleteNew'
+import AutoComplete from '../../shared/Autocomplete'
 import DateFieldWithPicker from '../../shared/DateFieldWithPicker'
 import FormTitle from '../../shared/FormTitle'
 import constants from '../../../modules/constants'
@@ -231,7 +231,7 @@ const Apber = ({
             updateProperty={store.updateProperty}
             updatePropertyInDb={store.updatePropertyInDb}
           />
-          <AutoCompleteNew
+          <AutoComplete
             key={`${activeDataset.row.id}bearbeiter`}
             tree={tree}
             label="BearbeiterIn"

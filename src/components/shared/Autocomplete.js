@@ -1,157 +1,236 @@
-// @flow
+//@flow
+/**
+ * similar to AutocompleteFromArray
+ * but receives an array of objects
+ * with keys id and value
+ * presents value and saves id
+ */
 import React from 'react'
-import { toJS } from 'mobx'
-import { observer } from 'mobx-react'
-import AutoComplete from 'material-ui/AutoComplete'
-import compose from 'recompose/compose'
-import withHandlers from 'recompose/withHandlers'
-import withState from 'recompose/withState'
+import Autosuggest from 'react-autosuggest'
+import match from 'autosuggest-highlight/match'
+import parse from 'autosuggest-highlight/parse'
+import TextField from 'material-ui-next/TextField'
+import Paper from 'material-ui-next/Paper'
+import { MenuItem } from 'material-ui-next/Menu'
+import { withStyles } from 'material-ui-next/styles'
 import styled from 'styled-components'
+import compose from 'recompose/compose'
+import trimStart from 'lodash/trimStart'
 
-const StyledAutoComplete = styled(AutoComplete)`
-  margin-bottom: -12px;
+const StyledPaper = styled(Paper)`
+  z-index: 1;
+  /* need this so text is visible when overflowing */
+  > ul > li > div {
+    overflow: inherit;
+  }
+`
+const StyledAutosuggest = styled(Autosuggest)`
+  height: auto;
+  .react-autosuggest__suggestions-container--open {
+    bottom: ${props => (props.openabove ? '27px !important' : 'unset')};
+  }
+  .react-autosuggest__suggestions-container {
+    bottom: 27px !important;
+  }
+`
+const StyledTextField = styled(TextField)`
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  width: 100%;
+  > div:before {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
 `
 
-const enhance = compose(
-  withState('focused', 'changeFocused', false),
-  withState('searchText', 'changeSearchText', ''),
-  withState('searchTextWasChanged', 'changeSearchTextWasChanged', ''),
-  withHandlers({
-    onNewRequest: props => val => {
-      const { updatePropertyInDb, fieldName, dataSourceConfig } = props
-      updatePropertyInDb(props.tree, fieldName, val[dataSourceConfig.value])
-    },
-    onFocus: props => () => props.changeFocused(true),
-    onBlur: props => () => {
-      const {
-        changeFocused,
-        searchText,
-        searchTextWasChanged,
-        updatePropertyInDb,
-        tree,
-        fieldName,
-      } = props
-      changeFocused(false)
-      if (!searchText && searchTextWasChanged) {
-        // onNewRequest does not happen when value was removed by deleting text
-        updatePropertyInDb(tree, fieldName, null)
-      }
-    },
-    onUpdateSearchText: props => searchText => {
-      props.changeSearchText(searchText)
-      props.changeSearchTextWasChanged(true)
-    },
-  }),
-  observer
-)
-
-const MyAutocomplete = ({
-  label,
-  valueText = '',
-  dataSource,
-  dataSourceConfig = {
-    value: 'id',
-    text: 'label',
-  },
-  anchorOrigin,
-  targetOrigin,
-  onNewRequest,
-  focused,
-  changeFocused,
-  onFocus,
-  onBlur,
-  searchText,
-  changeSearchText,
-  onUpdateSearchText,
-  searchTextWasChanged,
-  changeSearchTextWasChanged,
-}: {
-  tree: Object,
-  label: string,
-  fieldName: string,
-  valueText?: string,
-  dataSource: Array<Object>,
-  dataSourceConfig: Object,
-  anchorOrigin: Object,
-  targetOrigin: Object,
-  updatePropertyInDb: () => void,
-  onNewRequest: () => void,
-  focused: boolean,
-  changeFocused: () => void,
-  onFocus: () => void,
-  onBlur: () => void,
-  searchText: ?string,
-  changeSearchText: () => void,
-  onUpdateSearchText: () => void,
-  searchTextWasChanged: boolean,
-  changeSearchTextWasChanged: () => void,
-}) => {
-  let searchTextToUse = searchText
-  if (!searchText && valueText && isNaN(valueText) && !searchTextWasChanged) {
-    searchTextToUse = valueText
-  }
-  if (searchTextToUse === null) searchTextToUse = ''
-  const dataSourceLength = dataSource.filter(d => {
-    if (
-      dataSourceConfig &&
-      dataSourceConfig.text &&
-      d[dataSourceConfig.text] &&
-      d[dataSourceConfig.text].toLowerCase() &&
-      searchTextToUse &&
-      searchTextToUse.toLowerCase()
-    ) {
-      return d[dataSourceConfig.text]
-        .toLowerCase()
-        .includes(searchTextToUse.toLowerCase())
-    }
-    return true
-  }).length
-  let labelFilterHint = 'Zum Filtern tippen. '
-  if (valueText && !searchTextWasChanged) {
-    labelFilterHint = 'Zum Filtern: Eintrag löschen, dann tippen. '
-  }
-  let labelNumberLimit = ''
-  if (searchText && dataSourceLength === 0) {
-    labelNumberLimit = 'Kein Eintrag entspricht dem Filter.'
-  } else if (dataSourceLength && dataSourceLength <= 200) {
-    labelNumberLimit = `Alle passenden Einträge werden aufgelistet.`
-  } else if (dataSourceLength > 200) {
-    labelNumberLimit = 'Nur die ersten 200 Einträge werden aufgelistet.'
-  }
-  const labelText = focused
-    ? `${label}${
-        labelFilterHint || labelNumberLimit ? '. ' : ''
-      }${labelFilterHint}${labelNumberLimit}`
-    : label
-  const myAnchorOrigin = anchorOrigin
-    ? anchorOrigin
-    : { vertical: 'bottom', horizontal: 'left' }
-  const myTargetOrigin = targetOrigin
-    ? targetOrigin
-    : { vertical: 'top', horizontal: 'left' }
+function renderSuggestion(suggestion, { query, isHighlighted }) {
+  const matches = match(suggestion, query)
+  const parts = parse(suggestion, matches)
 
   return (
-    <StyledAutoComplete
-      hintText={dataSource.length === 0 ? 'lade Daten...' : ''}
-      fullWidth
-      floatingLabelText={labelText}
-      dataSource={toJS(dataSource)}
-      dataSourceConfig={dataSourceConfig}
-      searchText={searchTextToUse}
-      onUpdateInput={onUpdateSearchText}
-      filter={AutoComplete.caseInsensitiveFilter}
-      maxSearchResults={200}
-      onNewRequest={onNewRequest}
-      openOnFocus
-      onFocus={onFocus}
-      onBlur={onBlur}
-      menuStyle={{
-        maxHeight: `${window.innerHeight * 0.8}px`,
-      }}
-      anchorOrigin={myAnchorOrigin}
-      targetOrigin={myTargetOrigin}
-    />
+    <MenuItem selected={isHighlighted} component="div">
+      <div>
+        {parts.map((part, index) => {
+          return part.highlight ? (
+            <span key={String(index)} style={{ fontWeight: 500 }}>
+              {part.text}
+            </span>
+          ) : (
+            <strong key={String(index)} style={{ fontWeight: 300 }}>
+              {part.text}
+            </strong>
+          )
+        })}
+      </div>
+    </MenuItem>
   )
 }
 
-export default enhance(MyAutocomplete)
+function renderSuggestionsContainer(options) {
+  const { containerProps, children } = options
+
+  return (
+    <StyledPaper {...containerProps} square>
+      {children}
+    </StyledPaper>
+  )
+}
+
+function getSuggestionValue(suggestion) {
+  return suggestion
+}
+
+function shouldRenderSuggestions(value) {
+  return true
+}
+
+const styles = theme => ({
+  container: {
+    flexGrow: 1,
+    position: 'relative',
+    paddingTop: '12px',
+    paddingBottom: '18px',
+  },
+  suggestion: {
+    display: 'block',
+  },
+  suggestionsList: {
+    margin: 0,
+    padding: 0,
+    listStyleType: 'none',
+    maxHeight: '400px',
+    overflow: 'auto',
+    zIndex: 1000,
+  },
+})
+
+const enhance = compose(withStyles(styles))
+
+type Props = {
+  tree: Object,
+  label: String,
+  fieldName: String,
+  value: String,
+  objects: Array<Object>,
+  updatePropertyInDb: () => void,
+  classes: Object,
+  openabove: Boolean,
+}
+
+type State = {
+  suggestions: Array<string>,
+  value: string,
+}
+
+class IntegrationAutosuggest extends React.Component<Props, State> {
+  constructor(props) {
+    super(props)
+    this.state = {
+      suggestions: [],
+      value: props.value || '',
+    }
+  }
+
+  getSuggestions = value => {
+    const { objects } = this.props
+    const inputValue = value.toLowerCase()
+    const values = objects.map(o => o.value)
+
+    if (value === ' ') return values
+    if (inputValue.length === 0) return []
+    return values.filter(v => v.toLowerCase().includes(inputValue))
+  }
+
+  handleSuggestionsFetchRequested = ({ value }) => {
+    this.setState({
+      suggestions: this.getSuggestions(value),
+    })
+  }
+
+  handleSuggestionsClearRequested = () => {
+    this.setState({
+      suggestions: this.getSuggestions(' '),
+    })
+  }
+
+  handleChange = (event, { newValue }) => {
+    // trim the start to enable entering space
+    // at start to open list
+    const value = trimStart(newValue)
+    this.setState({ value })
+  }
+
+  handleBlur = event => {
+    const { value } = this.state
+    const { objects, updatePropertyInDb, tree, fieldName } = this.props
+    const object = objects.find(o => o.value === value)
+    // check if value is in values
+    if (object) {
+      return updatePropertyInDb(tree, fieldName, object.id)
+    }
+    if (!value) return updatePropertyInDb(tree, fieldName, null)
+    this.setState({ value: '' })
+  }
+
+  renderInput = inputProps => {
+    const { label, value } = this.props
+    const { autoFocus, ref, ...other } = inputProps
+
+    return (
+      <StyledTextField
+        label={label}
+        fullWidth
+        value={value || ''}
+        inputRef={ref}
+        InputProps={{
+          ...other,
+        }}
+        onBlur={this.handleBlur}
+        autoComplete="off"
+        autoCorrect="off"
+        autoCapitalize="off"
+        spellCheck="false"
+      />
+    )
+  }
+
+  render() {
+    const { classes, openabove } = this.props
+    const { suggestions } = this.state
+
+    return (
+      <StyledAutosuggest
+        theme={{
+          container: classes.container,
+          suggestionsContainerOpen: {
+            position: 'absolute',
+            marginTop: '8px',
+            marginBottom: '24px',
+            left: 0,
+            right: 0,
+            bottom: openabove ? '27px' : 'unset',
+          },
+          suggestionsList: classes.suggestionsList,
+          suggestion: classes.suggestion,
+        }}
+        renderInputComponent={this.renderInput}
+        suggestions={suggestions}
+        onSuggestionsFetchRequested={this.handleSuggestionsFetchRequested}
+        onSuggestionsClearRequested={this.handleSuggestionsClearRequested}
+        renderSuggestionsContainer={renderSuggestionsContainer}
+        getSuggestionValue={getSuggestionValue}
+        renderSuggestion={renderSuggestion}
+        shouldRenderSuggestions={shouldRenderSuggestions}
+        inputProps={{
+          value: this.state.value,
+          autoFocus: true,
+          placeholder: 'Für Auswahlliste: Leerschlag tippen',
+          onChange: this.handleChange,
+          onBlur: this.handleBlur,
+        }}
+      />
+    )
+  }
+}
+
+export default enhance(IntegrationAutosuggest)

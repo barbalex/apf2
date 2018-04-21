@@ -7,7 +7,7 @@ import compose from 'recompose/compose'
 import RadioButtonGroup from '../../shared/RadioButtonGroup'
 import TextField from '../../shared/TextField'
 import FormTitle from '../../shared/FormTitle'
-import AutoCompleteNew from '../../shared/AutocompleteNew'
+import AutoComplete from '../../shared/Autocomplete'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 
 const Container = styled.div`
@@ -50,7 +50,7 @@ const Tpopkontrzaehl = ({ store, tree }: { store: Object, tree: Object }) => {
       <Container>
         <FormTitle tree={tree} title="Zählung" />
         <FieldsContainer>
-          <AutoCompleteNew
+          <AutoComplete
             key={`${activeDataset.row.id}einheitNew`}
             tree={tree}
             label="Einheit"

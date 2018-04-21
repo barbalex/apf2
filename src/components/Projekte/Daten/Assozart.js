@@ -6,7 +6,7 @@ import styled from 'styled-components'
 import compose from 'recompose/compose'
 
 import TextField from '../../shared/TextField'
-import AutoCompleteNew from '../../shared/AutocompleteNew'
+import AutoComplete from '../../shared/Autocomplete'
 import FormTitle from '../../shared/FormTitle'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 
@@ -56,7 +56,7 @@ const Assozart = ({ store, tree }: { store: Object, tree: Object }) => {
       <Container>
         <FormTitle tree={tree} title="assoziierte Art" />
         <FieldsContainer>
-          <AutoCompleteNew
+          <AutoComplete
             key={`${activeDataset.row.id}ae_id`}
             tree={tree}
             label="Art"

@@ -9,7 +9,7 @@ import withHandlers from 'recompose/withHandlers'
 import RadioButtonGroup from '../../shared/RadioButtonGroup'
 import TextField from '../../shared/TextField'
 import AutoCompleteFromArrayNew from '../../shared/AutocompleteFromArray'
-import AutoCompleteNew from '../../shared/AutocompleteNew'
+import AutoComplete from '../../shared/Autocomplete'
 import RadioButtonGroupWithInfo from '../../shared/RadioButtonGroupWithInfo'
 import StringToCopy from '../../shared/StringToCopy'
 import FormTitle from '../../shared/FormTitle'
@@ -151,7 +151,7 @@ const Tpopfeldkontr = ({
                     dataSource={tpopkontrTypWerte}
                     updatePropertyInDb={store.updatePropertyInDb}
                   />
-                  <AutoCompleteNew
+                  <AutoComplete
                     key={`${activeDataset.row.id}bearbeiterNew`}
                     tree={tree}
                     label="BearbeiterIn"

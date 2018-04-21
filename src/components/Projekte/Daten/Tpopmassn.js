@@ -7,7 +7,7 @@ import compose from 'recompose/compose'
 
 import RadioButtonGroup from '../../shared/RadioButtonGroup'
 import TextField from '../../shared/TextField'
-import AutoCompleteNew from '../../shared/AutocompleteNew'
+import AutoComplete from '../../shared/Autocomplete'
 import RadioButton from '../../shared/RadioButton'
 import StringToCopy from '../../shared/StringToCopy'
 import FormTitle from '../../shared/FormTitle'
@@ -98,7 +98,7 @@ const Tpopmassn = ({
             updateProperty={store.updateProperty}
             updatePropertyInDb={store.updatePropertyInDb}
           />
-          <AutoCompleteNew
+          <AutoComplete
             key={`${activeDataset.row.id}bearbeiter`}
             tree={tree}
             label="BearbeiterIn"

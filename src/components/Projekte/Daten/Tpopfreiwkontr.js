@@ -7,7 +7,7 @@ import compose from 'recompose/compose'
 import RadioButton from '../../shared/RadioButton'
 import RadioButtonGroup from '../../shared/RadioButtonGroup'
 import TextField from '../../shared/TextField'
-import AutoCompleteNew from '../../shared/AutocompleteNew'
+import AutoComplete from '../../shared/Autocomplete'
 import StringToCopy from '../../shared/StringToCopy'
 import FormTitle from '../../shared/FormTitle'
 import YearDatePair from '../../shared/YearDatePair'
@@ -77,7 +77,7 @@ const Tpopfreiwkontr = ({
             updateProperty={store.updateProperty}
             updatePropertyInDb={store.updatePropertyInDb}
           />
-          <AutoCompleteNew
+          <AutoComplete
             key={`${activeDataset.row.id}bearbeiter`}
             tree={tree}
             label="BearbeiterIn"

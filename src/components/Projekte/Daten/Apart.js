@@ -5,7 +5,7 @@ import sortBy from 'lodash/sortBy'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
 
-import AutoCompleteNew from '../../shared/AutocompleteNew'
+import AutoComplete from '../../shared/Autocomplete'
 import FormTitle from '../../shared/FormTitle'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 
@@ -81,7 +81,7 @@ const ApArt = ({ store, tree }: { store: Object, tree: Object }) => {
             InfoFlora geliefert.<br />
             <br />
           </div>
-          <AutoCompleteNew
+          <AutoComplete
             key={`${activeDataset.row.id}art_id`}
             tree={tree}
             label="Art"

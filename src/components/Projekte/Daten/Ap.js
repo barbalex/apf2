@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import compose from 'recompose/compose'
 import withProps from 'recompose/withProps'
 
-import AutoCompleteNew from '../../shared/AutocompleteNew'
+import AutoComplete from '../../shared/Autocomplete'
 import RadioButtonGroupWithInfo from '../../shared/RadioButtonGroupWithInfo'
 import TextField from '../../shared/TextField'
 import FormTitle from '../../shared/FormTitle'
@@ -113,7 +113,7 @@ const Ap = ({
     <Container>
       <FormTitle tree={tree} title="Art" />
       <FieldsContainer>
-        <AutoCompleteNew
+        <AutoComplete
           key={`${activeDataset.row.id}art_id`}
           tree={tree}
           label="Art (gibt dem Aktionsplan den Namen)"
@@ -191,7 +191,7 @@ const Ap = ({
             label="Stand Umsetzung"
           />
         </FieldContainer>
-        <AutoCompleteNew
+        <AutoComplete
           key={`${activeDataset.row.id}bearbeiter`}
           tree={tree}
           label="Verantwortlich"
