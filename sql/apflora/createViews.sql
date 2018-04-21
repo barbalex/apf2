@@ -1022,7 +1022,7 @@ ORDER BY
 DROP VIEW IF EXISTS apflora.v_tpop CASCADE;
 CREATE OR REPLACE VIEW apflora.v_tpop AS
 SELECT
-  apflora.ae_eigenschaften.id AS ap_id,
+  apflora.ap.id AS ap_id,
   apflora.ae_eigenschaften.familie,
   apflora.ae_eigenschaften.artname,
   apflora.ap_bearbstand_werte.text AS ap_bearb_stand,

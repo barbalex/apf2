@@ -62,7 +62,6 @@ export default async ({
   const filterFeatures = mapFilter.filter.features
   if (filterFeatures.length > 0 && applyMapFilterToExport) {
     const keys = Object.keys(data[0])
-    console.log('export: data', { keys, jsonData })
     // filter data
     // beob can also have PopId and tpop-id, so dont filter by TPopId if you filter by beob id
     if (keys.includes('id')) {

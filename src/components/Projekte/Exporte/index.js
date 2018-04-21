@@ -4,8 +4,7 @@ import styled from 'styled-components'
 import { Card, CardHeader, CardText } from 'material-ui/Card'
 import FlatButton from 'material-ui/FlatButton'
 import sortBy from 'lodash/sortBy'
-import filter from 'lodash/filter'
-import AutoComplete from './Autocomplete'
+import AutoCompleteNew from './AutocompleteNew'
 import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import withProps from 'recompose/withProps'
@@ -65,14 +64,6 @@ const AutocompleteContainer = styled.div`
   flex-basis: 450px;
   padding-left: 16px;
 `
-const StyledAutoComplete = styled(AutoComplete)`
-  > input,
-  > div,
-  > label {
-    font-size: 14px !important;
-    font-color: red !important;
-  }
-`
 const isRemoteHost = window.location.hostname !== 'localhost'
 
 const enhance = compose(
@@ -113,10 +104,14 @@ const enhance = compose(
   withProps(props => {
     const { store } = props
     const { ae_eigenschaften } = store.table
-    const apArten = Array.from(store.table.ap.values()).map(n => n.art_id)
-    let artList = Array.from(ae_eigenschaften.values())
-    artList = filter(artList, r => apArten.includes(r.id))
-    artList = sortBy(artList, 'artname')
+    const aps = Array.from(store.table.ap.values()).filter(ap => !!ap.art_id)
+    let aes = Array.from(ae_eigenschaften.values())
+    console.log('export, data:', { aps, aes })
+    let artList = aps.map(ap => ({
+      id: ap.id,
+      value: aes.find(a => a.id === ap.art_id).artname,
+    }))
+    artList = sortBy(artList, 'value')
     return { artList }
   })
 )
@@ -486,16 +481,14 @@ const Exporte = ({
               <div>{'= "Eier legende Wollmilchsau"'}</div>
             </DownloadCardButton>
             <AutocompleteContainer>
-              <StyledAutoComplete
-                dataSource={artList}
-                dataSourceConfig={{
-                  value: 'id',
-                  text: 'artname',
-                }}
-                downloadFromView={downloadFromView}
+              <AutoCompleteNew
+                label={`"Eier legende Wollmilchsau" für eine Art`}
+                value={artFuerEierlegendeWollmilchsau}
+                objects={artList}
                 changeArtFuerEierlegendeWollmilchsau={
                   changeArtFuerEierlegendeWollmilchsau
                 }
+                downloadFromView={downloadFromView}
               />
             </AutocompleteContainer>
             <DownloadCardButton
