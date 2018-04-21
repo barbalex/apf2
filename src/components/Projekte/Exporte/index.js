@@ -3,6 +3,7 @@ import { observer, inject } from 'mobx-react'
 import styled from 'styled-components'
 import { Card, CardHeader, CardText } from 'material-ui/Card'
 import FlatButton from 'material-ui/FlatButton'
+import Button from 'material-ui-next/Button'
 import sortBy from 'lodash/sortBy'
 import AutoComplete from './Autocomplete'
 import compose from 'recompose/compose'
@@ -58,6 +59,14 @@ const DownloadCardButton = styled(FlatButton)`
     > div {
       font-weight: 500;
     }
+  }
+`
+const DownloadCardButtonNew = styled(Button)`
+  flex-basis: 450px;
+  > span:first-of-type {
+    text-transform: none !important;
+    font-weight: 500;
+    justify-content: flex-start !important;
   }
 `
 const AutocompleteContainer = styled.div`
@@ -138,8 +147,7 @@ const Exporte = ({
         <FirstLevelCard>
           <CardHeader title="Art" actAsExpander showExpandableButton />
           <DownloadCardText expandable>
-            <DownloadCardButton
-              label="Arten"
+            <DownloadCardButtonNew
               onClick={() =>
                 downloadFromView({
                   view: 'v_ap',
@@ -147,52 +155,60 @@ const Exporte = ({
                   fileName: 'Arten',
                 })
               }
-            />
-            <DownloadCardButton
-              label="Arten ohne Populationen"
+            >
+              Arten
+            </DownloadCardButtonNew>
+            <DownloadCardButtonNew
               onClick={() =>
                 downloadFromView({
                   view: 'v_ap_ohnepop',
                   fileName: 'ArtenOhnePopulationen',
                 })
               }
-            />
-            <DownloadCardButton
-              label="Anzahl Massnahmen pro Art"
+            >
+              Arten ohne Populationen
+            </DownloadCardButtonNew>
+            <DownloadCardButtonNew
               onClick={() =>
                 downloadFromView({
                   view: 'v_ap_anzmassn',
                   fileName: 'ArtenAnzahlMassnahmen',
                 })
               }
-            />
-            <DownloadCardButton
-              label="Anzahl Kontrollen pro Art"
+            >
+              Anzahl Massnahmen pro Art
+            </DownloadCardButtonNew>
+            <DownloadCardButtonNew
               onClick={() =>
                 downloadFromView({
                   view: 'v_ap_anzkontr',
                   fileName: 'ArtenAnzahlKontrollen',
                 })
               }
-            />
-            <DownloadCardButton
-              label="AP-Berichte (Jahresberichte)"
+            >
+              Anzahl Kontrollen pro Art
+            </DownloadCardButtonNew>
+            <DownloadCardButtonNew
               onClick={() =>
                 downloadFromView({
                   view: 'v_apber',
                   fileName: 'Jahresberichte',
                 })
               }
-            />
-            <DownloadCardButton
-              label="AP-Berichte und Massnahmen"
+            >
+              AP-Berichte (Jahresberichte)
+            </DownloadCardButtonNew>
+            <DownloadCardButtonNew
               onClick={() =>
                 downloadFromView({
                   view: 'v_ap_apberundmassn',
                   fileName: 'ApJahresberichteUndMassnahmen',
                 })
               }
-            />
+            >
+              AP-Berichte und Massnahmen
+            </DownloadCardButtonNew>
+
             <DownloadCardButton
               label="Ziele"
               onClick={() =>

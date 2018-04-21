@@ -9,6 +9,7 @@ import withState from 'recompose/withState'
 import Input from 'material-ui-next/Input'
 import { FormControl, FormHelperText } from 'material-ui-next/Form'
 import FlatButton from 'material-ui/FlatButton'
+import Button from 'material-ui-next/Button'
 import PanIcon from 'material-ui/svg-icons/maps/my-location'
 import ClearIcon from 'material-ui/svg-icons/content/clear'
 

@@ -2,7 +2,7 @@
 import React from 'react'
 import { inject } from 'mobx-react'
 import Dialog from 'material-ui/Dialog'
-import FlatButton from 'material-ui/FlatButton'
+import Button from 'material-ui-next/Button'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 
@@ -27,13 +27,10 @@ const DatasetDeleteModal = ({
   onClickDelete: () => void,
 }) => {
   const actions = [
-    <FlatButton label="Abbrechen" onClick={onClickAbort} />,
-    <FlatButton
-      label="Löschen"
-      primary
-      keyboardFocused
-      onClick={onClickDelete}
-    />,
+    <Button onClick={onClickAbort}>Abbrechen</Button>,
+    <Button color="primary" onClick={onClickDelete}>
+      Löschen
+    </Button>,
   ]
   const table = tables.find(t => t.table === store.datasetToDelete.table)
   let tableName = null
