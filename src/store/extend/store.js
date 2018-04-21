@@ -235,15 +235,5 @@ export default (store: Object): void => {
       }
     ),
     initiated: false,
-    showNewApModal: false,
-    setShowNewApModal: action((show: boolean) => {
-      store.showNewApModal = show
-    }),
-    newApData: {
-      tree: {},
-    },
-    setNewApData: action(({ tree }: { tree: Object }) => {
-      store.newApData.tree = tree
-    }),
   })
 }

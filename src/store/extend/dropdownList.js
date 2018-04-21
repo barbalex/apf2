@@ -46,7 +46,7 @@ export default (store: Object): void => {
         const artList = Array.from(store.table.ae_eigenschaften.values())
           .filter(r => !artIdsNotToShow.includes(r.id))
           .map(o => ({ id: o.id, value: o.artname }))
-        return sortBy(artList, 'artname')
+        return sortBy(artList, 'value')
       },
       { name: 'dropdownListArtListForAp' }
     ),

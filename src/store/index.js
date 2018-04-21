@@ -184,12 +184,6 @@ function Store(): void {
     filter: '',
     setFilter: () => {},
   }
-  this.showNewApModal = false
-  this.setShowNewApModal = () => {}
-  this.newApData = {
-    tree: {},
-  }
-  this.setNewApData = () => {}
 }
 
 const MyStore = new Store()

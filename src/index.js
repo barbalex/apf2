@@ -56,10 +56,6 @@ const User = Loadable({
   loader: () => import('./components/User'),
   loading: Loading,
 })
-const NewAp = Loadable({
-  loader: () => import('./components/NewAp'),
-  loading: Loading,
-})
 const Deletions = Loadable({
   loader: () => import('./components/Deletions'),
   loading: Loading,
@@ -137,7 +133,6 @@ const DownloadMessages = Loadable({
               <AppBar />
               <Projekte />
               <User />
-              <NewAp />
               <Deletions />
               <Errors />
               <UpdateAvailable />

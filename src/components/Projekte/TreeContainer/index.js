@@ -182,16 +182,7 @@ const enhance = compose(
             baseUrl.push(1)
           }
           const idToPass = parentId || id
-          if (table === 'ap') {
-            /**
-             * need to fetch new ap_id before creating new ap
-             * because of all the dependencies
-             */
-            store.setShowNewApModal(true)
-            store.setNewApData({ tree })
-          } else {
-            store.insertDataset(tree, table, idToPass, baseUrl)
-          }
+          store.insertDataset(tree, table, idToPass, baseUrl)
         },
         openLowerNodes() {
           const node = tree.nodes.find(
