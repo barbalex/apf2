@@ -25,6 +25,7 @@ const Container = styled.div`
 const FieldsContainer = styled.div`
   padding: 10px;
   overflow: auto !important;
+  height: 100%;
 `
 const StyledCard = styled(Card)`
   margin-bottom: 10px !important;

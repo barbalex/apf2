@@ -107,7 +107,7 @@ const NewAp = ({
   const dataSource = store.dropdownList.artListForAp
   const dataSourceConfig = {
     value: 'id',
-    text: 'artname',
+    text: 'value',
   }
   const dataSourceLength = dataSource.filter(d => {
     if (

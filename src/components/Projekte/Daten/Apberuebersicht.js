@@ -15,6 +15,7 @@ const Container = styled.div`
 `
 const FieldsContainer = styled.div`
   overflow: auto !important;
+  height: 100%;
   padding: 10px;
   height: 100%;
 `

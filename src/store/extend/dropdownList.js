@@ -39,9 +39,9 @@ export default (store: Object): void => {
         const activeAp = store.table.ap.get(store.tree.activeNodes.ap)
         const activeArtId = activeAp ? activeAp.art_id : null
         const artIdsNotToShow = alreadyUsedArtIds.filter(r => r !== activeArtId)
-        const artList = Array.from(
-          store.table.ae_eigenschaften.values()
-        ).filter(r => !artIdsNotToShow.includes(r.id))
+        const artList = Array.from(store.table.ae_eigenschaften.values())
+          .filter(r => !artIdsNotToShow.includes(r.id))
+          .map(o => ({ id: o.id, value: o.artname }))
         return sortBy(artList, 'artname')
       },
       { name: 'dropdownListArtListForAp' }
