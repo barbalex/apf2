@@ -7,7 +7,7 @@ import compose from 'recompose/compose'
 
 import RadioButtonGroup from '../../shared/RadioButtonGroup'
 import TextField from '../../shared/TextField'
-import AutoComplete from '../../shared/Autocomplete'
+import AutoCompleteNew from '../../shared/AutocompleteNew'
 import RadioButton from '../../shared/RadioButton'
 import StringToCopy from '../../shared/StringToCopy'
 import FormTitle from '../../shared/FormTitle'
@@ -33,12 +33,12 @@ const FieldsContainer = styled.div`
 const getBearbName = ({ store, tree }: { store: Object, tree: Object }) => {
   const { adressen } = store.dropdownList
   const { activeDataset } = tree
-  let name = ''
+  let value = ''
   if (activeDataset.row.bearbeiter && adressen.length > 0) {
     const adresse = adressen.find(a => a.id === activeDataset.row.bearbeiter)
-    if (adresse && adresse.name) return adresse.name
+    if (adresse && adresse.value) return adresse.value
   }
-  return name
+  return value
 }
 
 const enhance = compose(inject('store'), observer)
@@ -98,18 +98,13 @@ const Tpopmassn = ({
             updateProperty={store.updateProperty}
             updatePropertyInDb={store.updatePropertyInDb}
           />
-          <AutoComplete
+          <AutoCompleteNew
             key={`${activeDataset.row.id}bearbeiter`}
             tree={tree}
             label="BearbeiterIn"
             fieldName="bearbeiter"
-            valueText={getBearbName({ store, tree })}
-            errorText={activeDataset.valid.bearbeiter}
-            dataSource={store.dropdownList.adressen}
-            dataSourceConfig={{
-              value: 'id',
-              text: 'name',
-            }}
+            value={getBearbName({ store, tree })}
+            objects={store.dropdownList.adressen}
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField

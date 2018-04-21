@@ -89,6 +89,7 @@ const styles = theme => ({
     flexGrow: 1,
     position: 'relative',
     paddingTop: '12px',
+    paddingBottom: '18px',
   },
   suggestion: {
     display: 'block',
@@ -166,6 +167,7 @@ class IntegrationAutosuggest extends React.Component<Props, State> {
     if (object) {
       return updatePropertyInDb(tree, fieldName, object.id)
     }
+    if (!value) return updatePropertyInDb(tree, fieldName, null)
     this.setState({ value: '' })
   }
 

@@ -192,15 +192,12 @@ const Ap = ({
           />
         </FieldContainer>
         <AutoCompleteNew
-          key={`${activeDataset.row.id}bearbeiterNew`}
+          key={`${activeDataset.row.id}bearbeiter`}
           tree={tree}
           label="Verantwortlich"
           fieldName="bearbeiter"
           value={getBearbName({ store, tree })}
-          objects={store.dropdownList.adressen.map(o => ({
-            id: o.id,
-            value: o.name,
-          }))}
+          objects={store.dropdownList.adressen}
           updatePropertyInDb={updatePropertyInDb}
           openabove
         />

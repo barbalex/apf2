@@ -6,7 +6,11 @@ import sortBy from 'lodash/sortBy'
 export default (store: Object): void => {
   extendObservable(store.dropdownList, {
     adressen: computed(
-      () => sortBy(Array.from(store.table.adresse.values()), 'name'),
+      () =>
+        sortBy(Array.from(store.table.adresse.values()), 'name').map(o => ({
+          id: o.id,
+          value: o.name,
+        })),
       { name: 'dropdownListAdressen' }
     ),
     apUmsetzungen: computed(
@@ -140,8 +144,8 @@ export default (store: Object): void => {
         )
         zaehleinheitWerte = sortBy(zaehleinheitWerte, 'sort')
         zaehleinheitWerte = zaehleinheitWerte.map(el => ({
-          value: el.code,
-          label: el.text,
+          id: el.code,
+          value: el.text,
         }))
         return zaehleinheitWerte
       },

@@ -5,7 +5,7 @@ import sortBy from 'lodash/sortBy'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
 
-import AutoComplete from '../../shared/Autocomplete'
+import AutoCompleteNew from '../../shared/AutocompleteNew'
 import FormTitle from '../../shared/FormTitle'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 
@@ -31,11 +31,11 @@ const getArtList = ({ store, tree }: { store: Object, tree: Object }) => {
   const apArtIdsNotToShow = Array.from(store.table.apart.values()).map(
     v => v.art_id
   )*/
-  const apArtIdsNotToShow = []
-  const artList = Array.from(ae_eigenschaften.values()).filter(
-    r => !apArtIdsNotToShow.includes(r.id)
-  )
-  return sortBy(artList, 'artname')
+  const artList = Array.from(ae_eigenschaften.values()).map(a => ({
+    id: a.id,
+    value: a.artname,
+  }))
+  return sortBy(artList, 'value')
 }
 
 const getArtname = ({ store, tree }: { store: Object, tree: Object }) => {
@@ -81,25 +81,21 @@ const ApArt = ({ store, tree }: { store: Object, tree: Object }) => {
             InfoFlora geliefert.<br />
             <br />
           </div>
-          <AutoComplete
-            key={`${activeDataset.row.id}art_id`}
+          <AutoCompleteNew
+            key={`${activeDataset.row.id}art_idNew`}
             tree={tree}
             label="Art"
             fieldName="art_id"
-            valueText={getArtname({
+            value={getArtname({
               store,
               tree,
             })}
-            errorText={activeDataset.valid.art_id}
-            dataSource={getArtList({
+            objects={getArtList({
               store,
               tree,
             })}
-            dataSourceConfig={{
-              value: 'id',
-              text: 'artname',
-            }}
             updatePropertyInDb={store.updatePropertyInDb}
+            openabove
           />
         </FieldsContainer>
       </Container>
