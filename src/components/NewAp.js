@@ -4,6 +4,7 @@ import { observer, inject } from 'mobx-react'
 import { toJS } from 'mobx'
 import Dialog from 'material-ui/Dialog'
 import AutoComplete from 'material-ui/AutoComplete'
+import AutoCompleteNew from './shared/AutocompleteNew'
 import FlatButton from 'material-ui/FlatButton'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
@@ -170,6 +171,14 @@ const NewAp = ({
             menuStyle={{
               maxHeight: `${window.innerHeight * 0.4}px`,
             }}
+          />
+          <AutoCompleteNew
+            tree={store.tree}
+            label="Art (gibt dem Aktionsplan den Namen)"
+            fieldName="art_id"
+            value={searchTextToUse}
+            objects={store.dropdownList.artListForAp}
+            updatePropertyInDb={store.updatePropertyInDb}
           />
         </StyledDiv>
       </Dialog>

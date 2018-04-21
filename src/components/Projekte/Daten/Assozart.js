@@ -6,7 +6,7 @@ import styled from 'styled-components'
 import compose from 'recompose/compose'
 
 import TextField from '../../shared/TextField'
-import AutoComplete from '../../shared/Autocomplete'
+import AutoCompleteNew from '../../shared/AutocompleteNew'
 import FormTitle from '../../shared/FormTitle'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 
@@ -30,10 +30,10 @@ const getArtList = ({ store, tree }: { store: Object, tree: Object }) => {
     .filter(a => a.ap_id === activeDataset.row.ap_id)
     .map(a => a.ae_id)
   const apArtIdsNotToShow = assozartenOfAp.concat(activeNodes.ap)
-  const artList = Array.from(ae_eigenschaften.values()).filter(
-    r => !apArtIdsNotToShow.includes(r.id)
-  )
-  return sortBy(artList, 'artname')
+  const artList = Array.from(ae_eigenschaften.values())
+    .filter(r => !apArtIdsNotToShow.includes(r.id))
+    .map(o => ({ id: o.id, value: o.artname }))
+  return sortBy(artList, 'value')
 }
 
 const getArtname = ({ store, tree }: { store: Object, tree: Object }) => {
@@ -56,24 +56,19 @@ const Assozart = ({ store, tree }: { store: Object, tree: Object }) => {
       <Container>
         <FormTitle tree={tree} title="assoziierte Art" />
         <FieldsContainer>
-          <AutoComplete
+          <AutoCompleteNew
             key={`${activeDataset.row.id}ae_id`}
             tree={tree}
             label="Art"
             fieldName="ae_id"
-            valueText={getArtname({
+            value={getArtname({
               store,
               tree,
             })}
-            errorText={activeDataset.valid.ae_id}
-            dataSource={getArtList({
+            objects={getArtList({
               store,
               tree,
             })}
-            dataSourceConfig={{
-              value: 'id',
-              text: 'artname',
-            }}
             updatePropertyInDb={store.updatePropertyInDb}
           />
           <TextField

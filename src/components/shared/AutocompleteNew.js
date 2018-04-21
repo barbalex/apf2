@@ -100,6 +100,7 @@ const styles = theme => ({
     listStyleType: 'none',
     maxHeight: '400px',
     overflow: 'auto',
+    zIndex: 1000,
   },
 })
 

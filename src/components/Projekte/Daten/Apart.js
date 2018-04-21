@@ -82,7 +82,7 @@ const ApArt = ({ store, tree }: { store: Object, tree: Object }) => {
             <br />
           </div>
           <AutoCompleteNew
-            key={`${activeDataset.row.id}art_idNew`}
+            key={`${activeDataset.row.id}art_id`}
             tree={tree}
             label="Art"
             fieldName="art_id"
