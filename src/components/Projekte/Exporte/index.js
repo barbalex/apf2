@@ -2,7 +2,6 @@ import React from 'react'
 import { observer, inject } from 'mobx-react'
 import styled from 'styled-components'
 import { Card, CardHeader, CardText } from 'material-ui/Card'
-import FlatButton from 'material-ui/FlatButton'
 import Button from 'material-ui-next/Button'
 import sortBy from 'lodash/sortBy'
 import AutoComplete from './Autocomplete'
@@ -44,22 +43,6 @@ const DownloadCardText = styled(CardText)`
   align-items: stretch;
   justify-content: stretch;
   align-content: stretch;
-`
-const DownloadCardButton = styled(FlatButton)`
-  flex-basis: 450px;
-  height: 100% !important;
-  text-align: left !important;
-  line-height: 18px !important;
-  padding: 16px !important;
-  > div {
-    > span {
-      text-transform: none !important;
-      padding-left: 0 !important;
-    }
-    > div {
-      font-weight: 500;
-    }
-  }
 `
 const DownloadCardButtonNew = styled(Button)`
   flex-basis: 450px;
@@ -318,15 +301,16 @@ const Exporte = ({
             >
               Populationen von AP-Arten ohne Status
             </DownloadCardButtonNew>
-            <DownloadCardButton
-              label="Populationen ohne Koordinaten"
+            <DownloadCardButtonNew
               onClick={() =>
                 downloadFromView({
                   view: 'v_pop_ohnekoord',
                   fileName: 'PopulationenOhneKoordinaten',
                 })
               }
-            />
+            >
+              Populationen ohne Koordinaten
+            </DownloadCardButtonNew>
             <DownloadCardButtonNew
               onClick={() =>
                 downloadFromView({
@@ -368,24 +352,26 @@ const Exporte = ({
             >
               Populationen inkl. Populations- und Massnahmen-Berichte
             </DownloadCardButtonNew>
-            <DownloadCardButton
-              label="Populationen mit dem letzten Populations-Bericht"
+            <DownloadCardButtonNew
               onClick={() =>
                 downloadFromView({
                   view: 'v_pop_mit_letzter_popber',
                   fileName: 'PopulationenMitLetzemPopBericht',
                 })
               }
-            />
-            <DownloadCardButton
-              label="Populationen mit dem letzten Massnahmen-Bericht"
+            >
+              Populationen mit dem letzten Populations-Bericht
+            </DownloadCardButtonNew>
+            <DownloadCardButtonNew
               onClick={() =>
                 downloadFromView({
                   view: 'v_pop_mit_letzter_popmassnber',
                   fileName: 'PopulationenMitLetztemMassnBericht',
                 })
               }
-            />
+            >
+              Populationen mit dem letzten Massnahmen-Bericht
+            </DownloadCardButtonNew>
           </DownloadCardText>
         </FirstLevelCard>
         <FirstLevelCard>
@@ -395,25 +381,27 @@ const Exporte = ({
             showExpandableButton
           />
           <DownloadCardText expandable>
-            <DownloadCardButton
-              label="Teilpopulationen"
+            <DownloadCardButtonNew
               onClick={() =>
                 downloadFromView({
                   view: 'v_tpop',
                   fileName: 'Teilpopulationen',
                 })
               }
-            />
-            <DownloadCardButton
-              label="Teilpopulationen für WebGIS BUN"
+            >
+              Teilpopulationen
+            </DownloadCardButtonNew>
+            <DownloadCardButtonNew
               onClick={() =>
                 downloadFromView({
                   view: 'v_tpop_webgisbun',
                   fileName: 'TeilpopulationenWebGisBun',
                 })
               }
-            />
-            <DownloadCardButton
+            >
+              Teilpopulationen für WebGIS BUN
+            </DownloadCardButtonNew>
+            <DownloadCardButtonNew
               onClick={() =>
                 downloadFromView({
                   view: 'v_tpop_kml',
@@ -424,8 +412,8 @@ const Exporte = ({
             >
               <div>Teilpopulationen für Google Earth</div>
               <div>(beschriftet mit PopNr/TPopNr)</div>
-            </DownloadCardButton>
-            <DownloadCardButton
+            </DownloadCardButtonNew>
+            <DownloadCardButtonNew
               onClick={() =>
                 downloadFromView({
                   view: 'v_tpop_kmlnamen',
@@ -436,8 +424,8 @@ const Exporte = ({
             >
               <div>Teilpopulationen für Google Earth</div>
               <div>(beschriftet mit Artname, PopNr/TPopNr)</div>
-            </DownloadCardButton>
-            <DownloadCardButton
+            </DownloadCardButtonNew>
+            <DownloadCardButtonNew
               onClick={() =>
                 downloadFromView({
                   view: 'v_tpop_ohnebekanntseit',
@@ -447,8 +435,8 @@ const Exporte = ({
             >
               <div>Teilpopulationen von AP-Arten</div>
               <div>{'ohne "Bekannt seit"'}</div>
-            </DownloadCardButton>
-            <DownloadCardButton
+            </DownloadCardButtonNew>
+            <DownloadCardButtonNew
               onClick={() =>
                 downloadFromView({
                   view: 'v_tpop_ohneapberichtrelevant',
@@ -458,8 +446,8 @@ const Exporte = ({
             >
               <div>Teilpopulationen ohne Eintrag</div>
               <div>{'im Feld "Für AP-Bericht relevant"'}</div>
-            </DownloadCardButton>
-            <DownloadCardButton
+            </DownloadCardButtonNew>
+            <DownloadCardButtonNew
               onClick={() =>
                 downloadFromView({
                   view: 'v_tpop_popnrtpopnrmehrdeutig',
@@ -469,17 +457,18 @@ const Exporte = ({
             >
               <div>Teilpopulationen mit mehrdeutiger</div>
               <div>Kombination von PopNr und TPopNr</div>
-            </DownloadCardButton>
-            <DownloadCardButton
-              label="Anzahl Massnahmen pro Teilpopulation"
+            </DownloadCardButtonNew>
+            <DownloadCardButtonNew
               onClick={() =>
                 downloadFromView({
                   view: 'v_tpop_anzmassn',
                   fileName: 'TeilpopulationenAnzahlMassnahmen',
                 })
               }
-            />
-            <DownloadCardButton
+            >
+              Anzahl Massnahmen pro Teilpopulation
+            </DownloadCardButtonNew>
+            <DownloadCardButtonNew
               onClick={() =>
                 downloadFromView({
                   view: 'v_tpop_anzkontrinklletzterundletztertpopber',
@@ -508,7 +497,7 @@ const Exporte = ({
                 <li>letzte Zählung</li>
               </ul>
               <div>{'= "Eier legende Wollmilchsau"'}</div>
-            </DownloadCardButton>
+            </DownloadCardButtonNew>
             <AutocompleteContainer>
               <AutoComplete
                 label={`"Eier legende Wollmilchsau" für eine Art`}
@@ -520,70 +509,77 @@ const Exporte = ({
                 downloadFromView={downloadFromView}
               />
             </AutocompleteContainer>
-            <DownloadCardButton
-              label="Teilpopulationen inklusive Teilpopulations- und Massnahmen-Berichten"
+            <DownloadCardButtonNew
               onClick={() =>
                 downloadFromView({
                   view: 'v_tpop_popberundmassnber',
                   fileName: 'TeilpopulationenTPopUndMassnBerichte',
                 })
               }
-            />
+            >
+              Teilpopulationen inklusive Teilpopulations- und
+              Massnahmen-Berichten
+            </DownloadCardButtonNew>
           </DownloadCardText>
         </FirstLevelCard>
         <FirstLevelCard>
           <CardHeader title="Kontrollen" actAsExpander showExpandableButton />
           <DownloadCardText expandable>
-            <DownloadCardButton
-              label="Kontrollen"
+            <DownloadCardButtonNew
               onClick={() =>
                 downloadFromView({
                   view: 'v_tpopkontr',
                   fileName: 'Kontrollen',
                 })
               }
-            />
-            <DownloadCardButton
-              label="Kontrollen für WebGIS BUN"
+            >
+              Kontrollen
+            </DownloadCardButtonNew>
+            <DownloadCardButtonNew
               onClick={() =>
                 downloadFromView({
                   view: 'v_tpopkontr_webgisbun',
                   fileName: 'KontrollenWebGisBun',
                 })
               }
-            />
-            <DownloadCardButton
-              label="Kontrollen: Anzahl pro Zähleinheit"
+            >
+              Kontrollen für WebGIS BUN
+            </DownloadCardButtonNew>
+            <DownloadCardButtonNew
               onClick={() =>
                 downloadFromView({
                   view: 'v_kontrzaehl_anzproeinheit',
                   fileName: 'KontrollenAnzahlProZaehleinheit',
                 })
               }
-            />
+            >
+              Kontrollen: Anzahl pro Zähleinheit
+            </DownloadCardButtonNew>
           </DownloadCardText>
         </FirstLevelCard>
         <FirstLevelCard>
           <CardHeader title="Massnahmen" actAsExpander showExpandableButton />
           <DownloadCardText expandable>
-            <DownloadCardButton
-              label="Massnahmen"
+            <DownloadCardButtonNew
               onClick={() =>
                 downloadFromView({
                   view: 'v_massn',
                   fileName: 'Massnahmen',
                 })
               }
-            />
-            <DownloadCardButton
-              label="Massnahmen für WebGIS BUN"
+            >
+              Massnahmen
+            </DownloadCardButtonNew>
+            <DownloadCardButtonNew
               onClick={() =>
                 downloadFromView({
                   view: 'v_massn_webgisbun',
                   fileName: 'MassnahmenWebGisBun',
                 })
               }
-            />
+            >
+              Massnahmen für WebGIS BUN
+            </DownloadCardButtonNew>
           </DownloadCardText>
         </FirstLevelCard>
         <FirstLevelCard>
@@ -593,7 +589,7 @@ const Exporte = ({
             showExpandableButton
           />
           <DownloadCardText expandable>
-            <DownloadCardButton
+            <DownloadCardButtonNew
               onClick={() =>
                 downloadFromView({
                   view: 'v_beob',
@@ -603,10 +599,10 @@ const Exporte = ({
             >
               <div>Alle Beobachtungen von Arten aus apflora.ch</div>
               <div>Nutzungsbedingungen der FNS beachten</div>
-            </DownloadCardButton>
+            </DownloadCardButtonNew>
           </DownloadCardText>
           <DownloadCardText expandable>
-            <DownloadCardButton
+            <DownloadCardButtonNew
               onClick={() =>
                 downloadFromView({
                   view: 'v_beob__mit_data',
@@ -618,27 +614,29 @@ const Exporte = ({
               <div>...inklusive Original-Beobachtungsdaten (JSON)</div>
               <div>Dauert Minuten und umfasst hunderte Megabytes!</div>
               <div>Nutzungsbedingungen der FNS beachten</div>
-            </DownloadCardButton>
+            </DownloadCardButtonNew>
           </DownloadCardText>
         </FirstLevelCard>
         <FirstLevelCard>
           <CardHeader title="Anwendung" actAsExpander showExpandableButton />
           <DownloadCardText expandable>
-            <DownloadCardButton
-              label="Tabellen und Felder"
+            <DownloadCardButtonNew
               onClick={() =>
                 downloadFromView({
                   view: 'v_datenstruktur',
                   fileName: 'Datenstruktur',
                 })
               }
-            />
-            <DownloadCardButton
-              label="Datenstruktur grafisch dargestellt"
+            >
+              Tabellen und Felder
+            </DownloadCardButtonNew>
+            <DownloadCardButtonNew
               onClick={() => {
                 window.open(beziehungen)
               }}
-            />
+            >
+              Datenstruktur grafisch dargestellt
+            </DownloadCardButtonNew>
           </DownloadCardText>
         </FirstLevelCard>
       </FieldsContainer>
