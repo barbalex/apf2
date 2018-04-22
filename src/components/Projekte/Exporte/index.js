@@ -49,6 +49,8 @@ const DownloadCardButtonNew = styled(Button)`
   > span:first-of-type {
     text-transform: none !important;
     font-weight: 500;
+    display: block;
+    text-align: left;
     justify-content: flex-start !important;
   }
 `
@@ -98,7 +100,6 @@ const enhance = compose(
     const { ae_eigenschaften } = store.table
     const aps = Array.from(store.table.ap.values()).filter(ap => !!ap.art_id)
     const aes = Array.from(ae_eigenschaften.values())
-    console.log('export, data:', { aps, aes })
     let artList = aps.map(ap => {
       const ae = aes.find(a => a.id === ap.art_id)
       return {
@@ -277,8 +278,7 @@ const Exporte = ({
                 })
               }
             >
-              <div>Populationen für Google Earth</div>
-              <div>(beschriftet mit PopNr)</div>
+              <div>Populationen für Google Earth (beschriftet mit PopNr)</div>
             </DownloadCardButtonNew>
             <DownloadCardButtonNew
               onClick={() =>
@@ -288,8 +288,9 @@ const Exporte = ({
                 })
               }
             >
-              <div>Populationen für Google Earth</div>
-              <div>(beschriftet mit Artname, PopNr)</div>
+              <div>
+                Populationen für Google Earth (beschriftet mit Artname, PopNr)
+              </div>
             </DownloadCardButtonNew>
             <DownloadCardButtonNew
               onClick={() =>
