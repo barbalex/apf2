@@ -8,7 +8,6 @@ import withHandlers from 'recompose/withHandlers'
 import withState from 'recompose/withState'
 import Input from 'material-ui-next/Input'
 import { FormControl, FormHelperText } from 'material-ui-next/Form'
-import FlatButton from 'material-ui/FlatButton'
 import Button from 'material-ui-next/Button'
 import PanIcon from 'material-ui/svg-icons/maps/my-location'
 import ClearIcon from 'material-ui/svg-icons/content/clear'
@@ -26,7 +25,7 @@ const Container = styled.div`
   margin-right: 5px !important;
   max-width: 380px;
 `
-const GotoButton = styled(FlatButton)`
+const StyledButton = styled(Button)`
   min-width: 30px !important;
   cursor: pointer !important;
 `
@@ -230,18 +229,20 @@ class PanToCoordinates extends Component {
           />
           <FormHelperText id="YKoordinate-helper">{yError}</FormHelperText>
         </FormControl>
-        <GotoButton
+        <StyledButton
           title="auf Koordinaten zentrieren"
-          icon={<PanIcon />}
           onClick={onClickGoto}
           disabled={!(x && y && xIsValid(x) && yIsValid(y))}
-        />
-        <GotoButton
+        >
+          <PanIcon />
+        </StyledButton>
+        <StyledButton
           title="Markierung und Koordinaten entfernen"
-          icon={<ClearIcon />}
           onClick={onClickClear}
           disabled={!(panToMarker || x || y)}
-        />
+        >
+          <ClearIcon />
+        </StyledButton>
       </Container>
     )
   }
