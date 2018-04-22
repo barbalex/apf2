@@ -2,7 +2,6 @@
 import React from 'react'
 import { observer, inject } from 'mobx-react'
 import Dialog from 'material-ui/Dialog'
-import FlatButton from 'material-ui/FlatButton'
 import Button from 'material-ui-next/Button'
 import Checkbox from 'material-ui/Checkbox'
 import styled from 'styled-components'
@@ -69,13 +68,16 @@ const Deletions = ({
   toggleChoosenDeletions: () => void,
 }) => {
   const actions = [
-    <FlatButton
-      label="wiederherstellen"
+    <Button
       primary={false}
       onClick={onClickUndo}
       disabled={choosenDeletions.length === 0}
-    />,
-    <FlatButton label="schliessen" primary={true} onClick={close} />,
+    >
+      wiederherstellen
+    </Button>,
+    <Button primary={true} onClick={close}>
+      schliessen
+    </Button>,
   ]
 
   return (
