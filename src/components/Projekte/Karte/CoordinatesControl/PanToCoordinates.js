@@ -8,9 +8,9 @@ import withHandlers from 'recompose/withHandlers'
 import withState from 'recompose/withState'
 import Input from 'material-ui-next/Input'
 import { FormControl, FormHelperText } from 'material-ui-next/Form'
-import Button from 'material-ui-next/Button'
-import PanIcon from 'material-ui/svg-icons/maps/my-location'
-import ClearIcon from 'material-ui/svg-icons/content/clear'
+import IconButton from 'material-ui-next/IconButton'
+import PanIcon from '@material-ui/icons/MyLocation'
+import ClearIcon from '@material-ui/icons/Clear'
 
 import epsg2056to4326 from '../../../../modules/epsg2056to4326'
 import panCentreIcon from '../../../../etc/panTo.png'
@@ -25,9 +25,14 @@ const Container = styled.div`
   margin-right: 5px !important;
   max-width: 380px;
 `
-const StyledButton = styled(Button)`
-  min-width: 30px !important;
-  cursor: pointer !important;
+const StyledIconButton = styled(IconButton)`
+  cursor: ${props => (props.disabled ? 'pointer !important' : 'default')};
+`
+const StyledPanIcon = styled(PanIcon)`
+  color: ${props => (props.disabled ? 'grey !important' : 'unset')};
+`
+const StyledClearIcon = styled(ClearIcon)`
+  color: ${props => (props.disabled ? 'grey !important' : 'unset')};
 `
 const StyledInput = styled(Input)`
   padding: 0 5px;
@@ -229,20 +234,22 @@ class PanToCoordinates extends Component {
           />
           <FormHelperText id="YKoordinate-helper">{yError}</FormHelperText>
         </FormControl>
-        <StyledButton
+        <StyledIconButton
           title="auf Koordinaten zentrieren"
           onClick={onClickGoto}
-          disabled={!(x && y && xIsValid(x) && yIsValid(y))}
+          disabled={!(!!x && !!y && xIsValid(x) && yIsValid(y))}
         >
-          <PanIcon />
-        </StyledButton>
-        <StyledButton
+          <StyledPanIcon
+            disabled={!(!!x && !!y && xIsValid(x) && yIsValid(y))}
+          />
+        </StyledIconButton>
+        <StyledIconButton
           title="Markierung und Koordinaten entfernen"
           onClick={onClickClear}
-          disabled={!(panToMarker || x || y)}
+          disabled={!(panToMarker || !!x || !!y)}
         >
-          <ClearIcon />
-        </StyledButton>
+          <StyledClearIcon disabled={!(panToMarker || !!x || !!y)} />
+        </StyledIconButton>
       </Container>
     )
   }
