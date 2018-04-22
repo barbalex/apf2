@@ -114,12 +114,15 @@ const enhance = compose(
     const { store } = props
     const { ae_eigenschaften } = store.table
     const aps = Array.from(store.table.ap.values()).filter(ap => !!ap.art_id)
-    let aes = Array.from(ae_eigenschaften.values())
+    const aes = Array.from(ae_eigenschaften.values())
     console.log('export, data:', { aps, aes })
-    let artList = aps.map(ap => ({
-      id: ap.id,
-      value: aes.find(a => a.id === ap.art_id).artname,
-    }))
+    let artList = aps.map(ap => {
+      const ae = aes.find(a => a.id === ap.art_id)
+      return {
+        id: ap.id,
+        value: ae && ae.artname ? ae.artname : '',
+      }
+    })
     artList = sortBy(artList, 'value')
     return { artList }
   })
@@ -208,108 +211,113 @@ const Exporte = ({
             >
               AP-Berichte und Massnahmen
             </DownloadCardButtonNew>
-
-            <DownloadCardButton
-              label="Ziele"
+            <DownloadCardButtonNew
               onClick={() =>
                 downloadFromView({
                   view: 'v_ziel',
                   fileName: 'ApZiele',
                 })
               }
-            />
-            <DownloadCardButton
-              label="Ziel-Berichte"
+            >
+              Ziele
+            </DownloadCardButtonNew>
+            <DownloadCardButtonNew
               onClick={() =>
                 downloadFromView({
                   view: 'v_zielber',
                   fileName: 'Zielberichte',
                 })
               }
-            />
-            <DownloadCardButton
-              label="Berichte"
+            >
+              Ziel-Berichte
+            </DownloadCardButtonNew>
+            <DownloadCardButtonNew
               onClick={() =>
                 downloadFromView({
                   view: 'v_ber',
                   fileName: 'Berichte',
                 })
               }
-            />
-            <DownloadCardButton
-              label="Erfolgskriterien"
+            >
+              Berichte
+            </DownloadCardButtonNew>
+            <DownloadCardButtonNew
               onClick={() =>
                 downloadFromView({
                   view: 'v_erfkrit',
                   fileName: 'Erfolgskriterien',
                 })
               }
-            />
-            <DownloadCardButton
-              label="Idealbiotope"
+            >
+              Erfolgskriterien
+            </DownloadCardButtonNew>
+            <DownloadCardButtonNew
               onClick={() =>
                 downloadFromView({
                   view: 'v_idealbiotop',
                   fileName: 'Idealbiotope',
                 })
               }
-            />
-            <DownloadCardButton
-              label="Assoziierte Arten"
+            >
+              Idealbiotope
+            </DownloadCardButtonNew>
+            <DownloadCardButtonNew
               onClick={() =>
                 downloadFromView({
                   view: 'v_assozart',
                   fileName: 'AssoziierteArten',
                 })
               }
-            />
+            >
+              Assoziierte Arten
+            </DownloadCardButtonNew>
           </DownloadCardText>
         </FirstLevelCard>
         <FirstLevelCard>
           <CardHeader title="Populationen" actAsExpander showExpandableButton />
           <DownloadCardText expandable>
-            <DownloadCardButton
-              label="Populationen"
+            <DownloadCardButtonNew
               onClick={() =>
                 downloadFromView({
                   view: 'v_pop',
                   fileName: 'Populationen',
                 })
               }
-            />
-            <DownloadCardButton
+            >
+              Populationen
+            </DownloadCardButtonNew>
+            <DownloadCardButtonNew
               onClick={() =>
                 downloadFromView({
                   view: 'v_pop_kml',
                   fileName: 'Populationen',
-                  kml: true,
                 })
               }
             >
               <div>Populationen für Google Earth</div>
               <div>(beschriftet mit PopNr)</div>
-            </DownloadCardButton>
-            <DownloadCardButton
+            </DownloadCardButtonNew>
+            <DownloadCardButtonNew
               onClick={() =>
                 downloadFromView({
                   view: 'v_pop_kmlnamen',
                   fileName: 'PopulationenNachNamen',
-                  kml: true,
                 })
               }
             >
               <div>Populationen für Google Earth</div>
               <div>(beschriftet mit Artname, PopNr)</div>
-            </DownloadCardButton>
-            <DownloadCardButton
-              label="Populationen von AP-Arten ohne Status"
+            </DownloadCardButtonNew>
+            <DownloadCardButtonNew
               onClick={() =>
                 downloadFromView({
                   view: 'v_pop_vonapohnestatus',
                   fileName: 'PopulationenVonApArtenOhneStatus',
                 })
               }
-            />
+            >
+              Populationen von AP-Arten ohne Status
+            </DownloadCardButtonNew>
             <DownloadCardButton
               label="Populationen ohne Koordinaten"
               onClick={() =>
@@ -319,42 +327,47 @@ const Exporte = ({
                 })
               }
             />
-            <DownloadCardButton
-              label="Populationen mit Massnahmen-Berichten: Anzahl Massnahmen im Berichtsjahr"
+            <DownloadCardButtonNew
               onClick={() =>
                 downloadFromView({
                   view: 'v_popmassnber_anzmassn',
                   fileName: 'PopulationenAnzMassnProMassnber',
                 })
               }
-            />
-            <DownloadCardButton
-              label="Anzahl Massnahmen pro Population"
+            >
+              Populationen mit Massnahmen-Berichten: Anzahl Massnahmen im
+              Berichtsjahr
+            </DownloadCardButtonNew>
+            <DownloadCardButtonNew
               onClick={() =>
                 downloadFromView({
                   view: 'v_pop_anzmassn',
                   fileName: 'PopulationenAnzahlMassnahmen',
                 })
               }
-            />
-            <DownloadCardButton
-              label="Anzahl Kontrollen pro Population"
+            >
+              Anzahl Massnahmen pro Population
+            </DownloadCardButtonNew>
+            <DownloadCardButtonNew
               onClick={() =>
                 downloadFromView({
                   view: 'v_pop_anzkontr',
                   fileName: 'PopulationenAnzahlKontrollen',
                 })
               }
-            />
-            <DownloadCardButton
-              label="Populationen inkl. Populations- und Massnahmen-Berichte"
+            >
+              Anzahl Kontrollen pro Population
+            </DownloadCardButtonNew>
+            <DownloadCardButtonNew
               onClick={() =>
                 downloadFromView({
                   view: 'v_pop_popberundmassnber',
                   fileName: 'PopulationenPopUndMassnBerichte',
                 })
               }
-            />
+            >
+              Populationen inkl. Populations- und Massnahmen-Berichte
+            </DownloadCardButtonNew>
             <DownloadCardButton
               label="Populationen mit dem letzten Populations-Bericht"
               onClick={() =>
