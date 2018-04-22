@@ -7,8 +7,7 @@ import IconMenu from 'material-ui/IconMenu'
 import MenuItem from 'material-ui/MenuItem'
 import IconButton from 'material-ui/IconButton/IconButton'
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert'
-import FlatButton from 'material-ui/FlatButton'
-//import Button from 'material-ui-next/Button'
+import Button from 'material-ui-next/Button'
 import clone from 'lodash/clone'
 import remove from 'lodash/remove'
 import styled from 'styled-components'
@@ -27,21 +26,11 @@ const StyledAppBar = styled(AppBar)`
     display: none !important;
   }
 `
-const Button = styled(FlatButton)`
+const StyledButton = styled(Button)`
   color: ${props =>
     props['data-visible']
       ? 'rgb(255, 255, 255) !important'
       : 'rgba(255, 255, 255, 0.298039) !important'};
-`
-const TreeButton = Button.extend`
-  > div > span {
-    padding-right: 6px !important;
-  }
-`
-const DatenButton = Button.extend`
-  > div > span {
-    padding-left: 6px !important;
-  }
 `
 const MenuDiv = styled.div`
   display: flex;
@@ -159,42 +148,48 @@ const MyAppBar = ({
           title={isMobile ? '' : 'AP Flora'}
           iconElementRight={
             <MenuDiv>
-              <TreeButton
-                label="Strukturbaum"
+              <StyledButton
                 data-visible={treeIsVisible}
                 onClick={onClickButtonStrukturbaum}
-              />
-              <DatenButton
-                label="Daten"
+              >
+                Strukturbaum
+              </StyledButton>
+              <StyledButton
                 data-visible={datenIsVisible}
                 onClick={onClickButtonDaten}
-              />
+              >
+                Daten
+              </StyledButton>
               {!isMobile && (
-                <TreeButton
-                  label="Strukturbaum 2"
+                <StyledButton
                   data-visible={tree2IsVisible}
                   onClick={onClickButtonStrukturbaum2}
-                />
+                >
+                  Strukturbaum 2
+                </StyledButton>
               )}
               {!isMobile && (
-                <DatenButton
-                  label="Daten 2"
+                <StyledButton
                   data-visible={daten2IsVisible}
                   onClick={onClickButtonDaten2}
-                />
+                >
+                  Daten 2
+                </StyledButton>
               )}
-              <Button
-                label="Karte"
+              <StyledButton
                 data-visible={karteIsVisible}
                 onClick={onClickButtonKarte}
-              />
+              >
+                Karte
+              </StyledButton>
               {!isMobile &&
                 exporteIsActive && (
-                  <Button
-                    label="Exporte"
+                  <StyledButton
                     data-visible={exporteIsVisible}
                     onClick={onClickButtonExporte}
-                  />
+                  >
+                    Exporte
+                  </StyledButton>
                 )}
               <IconMenu
                 iconButtonElement={
