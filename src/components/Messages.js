@@ -2,7 +2,6 @@
 import React from 'react'
 import { observer, inject } from 'mobx-react'
 import Dialog from 'material-ui/Dialog'
-import FlatButton from 'material-ui/FlatButton'
 import Button from 'material-ui-next/Button'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
@@ -20,10 +19,10 @@ const MessageContainer = styled.div`
   justify-content: space-between;
   padding-bottom: ${props => (props.paddBottom ? '20px' : 0)};
 `
-const AllOkButton = styled(FlatButton)`
+const AllOkButton = styled(Button)`
   position: absolute !important;
   top: 25px;
-  right: 30px;
+  right: 25px;
 `
 
 const enhance = compose(
@@ -62,13 +61,13 @@ const UserMessages = ({
         }}
       >
         <div>
-          <AllOkButton label="alle o.k." onClick={onClickReadAll} />
+          <AllOkButton onClick={onClickReadAll}>alle o.k.</AllOkButton>
           {store.messages.messages.sort(m => m.time).map((m, index) => {
             const paddBottom = index < store.messages.messages.length - 1
             return (
               <MessageContainer key={m.id} paddBottom={paddBottom}>
                 <div>{m.message}</div>
-                <FlatButton label="o.k." onClick={() => onClickRead(m)} />
+                <Button onClick={() => onClickRead(m)}>o.k.</Button>
               </MessageContainer>
             )
           })}
