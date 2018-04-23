@@ -17,7 +17,6 @@ const StyledDialog = styled(Dialog)`
   max-width: ${window.innerWidth * 0.8}px;
 `
 const List = styled.div`
-  width: 100%;
   padding-left: 24px;
   padding-right: 24px;
   display: flex;
