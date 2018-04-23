@@ -164,25 +164,20 @@ const SortableItem = SortableElement(
             apfloraLayer.value
           ) && (
             <ZuordnenDiv>
-              <StyledIconButton>
+              <StyledIconButton
+                title={getZuordnenIconTitle()}
+                onClick={() => {
+                  if (store.map.activeApfloraLayers.includes('Tpop')) {
+                    store.map.beob.toggleAssigning()
+                  }
+                }}
+              >
                 {store.map.beob.assigning ? (
                   <StyledPauseCircleOutlineIcon
-                    title={getZuordnenIconTitle()}
-                    onClick={() => {
-                      if (store.map.activeApfloraLayers.includes('Tpop')) {
-                        store.map.beob.toggleAssigning()
-                      }
-                    }}
                     data-assigningispossible={assigningispossible}
                   />
                 ) : (
                   <StyledPlayCircleOutlineIcon
-                    title={getZuordnenIconTitle()}
-                    onClick={() => {
-                      if (store.map.activeApfloraLayers.includes('Tpop')) {
-                        store.map.beob.toggleAssigning()
-                      }
-                    }}
                     data-assigningispossible={assigningispossible}
                   />
                 )}
