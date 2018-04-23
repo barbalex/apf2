@@ -1,7 +1,7 @@
 // @flow
 import React from 'react'
 import { observer, inject } from 'mobx-react'
-import Dialog from 'material-ui/Dialog'
+import Dialog, { DialogTitle, DialogActions } from 'material-ui-next/Dialog'
 import Button from 'material-ui-next/Button'
 import Checkbox from 'material-ui/Checkbox'
 import styled from 'styled-components'
@@ -13,7 +13,13 @@ import format from 'date-fns/format'
 
 import ErrorBoundary from './shared/ErrorBoundary'
 
+const StyledDialog = styled(Dialog)`
+  max-width: ${window.innerWidth * 0.8}px;
+`
 const List = styled.div`
+  width: 100%;
+  padding-left: 24px;
+  padding-right: 24px;
   display: flex;
   flex-direction: column;
 `
@@ -67,29 +73,13 @@ const Deletions = ({
   choosenDeletions: Array<string>,
   toggleChoosenDeletions: () => void,
 }) => {
-  const actions = [
-    <Button
-      primary={false}
-      onClick={onClickUndo}
-      disabled={choosenDeletions.length === 0}
-    >
-      wiederherstellen
-    </Button>,
-    <Button primary={true} onClick={close}>
-      schliessen
-    </Button>,
-  ]
-
   return (
     <ErrorBoundary>
-      <Dialog
-        title="gelöschte Datensätze"
+      <StyledDialog
+        aria-labelledby="dialog-title"
         open={store.showDeletedDatasets}
-        actions={actions}
-        contentStyle={{
-          maxWidth: window.innerWidth * 0.8,
-        }}
       >
+        <DialogTitle id="dialog-title">gelöschte Datensätze</DialogTitle>
         <List>
           {store.deletedDatasets.map((ds, index) => {
             const dataset = clone(ds.dataset)
@@ -113,7 +103,19 @@ const Deletions = ({
             )
           })}
         </List>
-      </Dialog>
+        <DialogActions>
+          <Button
+            primary={false}
+            onClick={onClickUndo}
+            disabled={choosenDeletions.length === 0}
+          >
+            wiederherstellen
+          </Button>
+          <Button primary={true} onClick={close}>
+            schliessen
+          </Button>
+        </DialogActions>
+      </StyledDialog>
     </ErrorBoundary>
   )
 }
