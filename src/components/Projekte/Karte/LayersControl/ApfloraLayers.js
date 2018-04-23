@@ -2,7 +2,14 @@ import React from 'react'
 import { toJS } from 'mobx'
 import { observer } from 'mobx-react'
 import styled from 'styled-components'
-import FontIcon from 'material-ui/FontIcon'
+import Button from 'material-ui-next/Button'
+import DragHandleIcon from '@material-ui/icons/DragHandle'
+import PauseCircleOutlineIcon from '@material-ui/icons/PauseCircleOutline'
+import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline'
+import LocalFloristIcon from '@material-ui/icons/LocalFlorist'
+import FilterCenterFocusIcon from '@material-ui/icons/FilterCenterFocus'
+import RemoveIcon from '@material-ui/icons/Remove'
+import PhotoFilterIcon from '@material-ui/icons/PhotoFilter'
 import {
   SortableContainer,
   SortableElement,
@@ -14,28 +21,38 @@ import 'leaflet-draw'
 import Checkbox from './shared/Checkbox'
 import bufferBoundsTo50m from '../../../../modules/bufferBoundsTo50m'
 
+const StyledIconButton = styled(Button)`
+  max-width: 18px;
+  min-height: 20px !important;
+  min-width: 20px !important;
+  padding: 0 !important;
+  margin-top: -3px !important;
+`
+const StyledPauseCircleOutlineIcon = styled(PauseCircleOutlineIcon)`
+  cursor: ${props =>
+    props['data-assigningispossible'] ? 'pointer' : 'not-allowed'};
+`
+const StyledPlayCircleOutlineIcon = styled(PlayCircleOutlineIcon)`
+  color: ${props =>
+    props['data-assigningispossible'] ? 'black' : 'rgba(0,0,0,0.2) !important'};
+  cursor: ${props =>
+    props['data-assigningispossible'] ? 'pointer' : 'not-allowed'};
+`
 const CardContent = styled.div`
   color: rgb(48, 48, 48);
   padding-left: 5px;
-  padding-right: 5px;
+  padding-right: 4px;
 `
-const DragHandleIcon = styled(FontIcon)`
-  font-size: 18px !important;
+const StyledDragHandleIcon = styled(DragHandleIcon)`
+  height: 20px !important;
   color: #7b7b7b !important;
   cursor: grab;
 `
-const DragHandleDiv = styled.div`
-  padding-left: 3px;
-  min-width: 18px;
+const ZoomToIcon = styled(FilterCenterFocusIcon)`
+  height: 20px !important;
 `
-const ZuordnenIcon = styled(FontIcon)`
-  font-size: 20px !important;
-`
-const ZoomToIcon = styled(FontIcon)`
-  font-size: 20px !important;
-`
-const FilterIcon = styled(FontIcon)`
-  font-size: 20px !important;
+const FilterIcon = styled(PhotoFilterIcon)`
+  height: 20px !important;
 `
 const LayerDiv = styled.div`
   display: flex;
@@ -67,9 +84,9 @@ const ZoomToDiv = styled.div`
 const FilterDiv = styled.div`
   padding-left: 3px;
 `
-const MapIcon = styled(FontIcon)`
+const MapIcon = styled(LocalFloristIcon)`
   margin-right: -0.1em;
-  font-size: 20px !important;
+  height: 20px !important;
   -webkit-text-stroke: 1px black;
   -moz-text-stroke: 1px black;
 `
@@ -88,10 +105,10 @@ const BeobNichtZuzuordnenMapIcon = MapIcon.extend`
 const BeobZugeordnetMapIcon = MapIcon.extend`
   color: #ff00ff !important;
 `
-const BeobZugeordnetAssignPolylinesIcon = MapIcon.extend`
+const BeobZugeordnetAssignPolylinesIcon = styled(RemoveIcon)`
+  margin-right: -0.1em;
+  height: 20px !important;
   color: #ff00ff !important;
-  -webkit-text-stroke: 0 black;
-  -moz-text-stroke: 0 black;
 `
 const MapIconDiv = styled.div``
 /**
@@ -101,24 +118,22 @@ const MapIconDiv = styled.div``
  */
 
 const DragHandle = SortableHandle(() => (
-  <DragHandleIcon
-    className="material-icons"
-    title="ziehen, um Layer höher/tiefer zu stapeln"
-  >
-    drag_handle{' '}
-  </DragHandleIcon>
+  <StyledIconButton title="ziehen, um Layer höher/tiefer zu stapeln">
+    <StyledDragHandleIcon />
+  </StyledIconButton>
 ))
 const SortableItem = SortableElement(
   ({ apfloraLayer, store, activeApfloraLayers }) => {
-    const assigningIsPossible =
+    const assigningispossible =
       store.map.activeApfloraLayers.includes('Tpop') &&
       ((store.map.activeApfloraLayers.includes('BeobNichtBeurteilt') &&
         apfloraLayer.value === 'BeobNichtBeurteilt') ||
         (store.map.activeApfloraLayers.includes('BeobZugeordnet') &&
           apfloraLayer.value === 'BeobZugeordnet'))
+    console.log('assigningispossible:', assigningispossible)
     const getZuordnenIconTitle = () => {
       if (store.map.beob.assigning) return 'Zuordnung beenden'
-      if (assigningIsPossible) return 'Teil-Populationen zuordnen'
+      if (assigningispossible) return 'Teil-Populationen zuordnen'
       return 'Teil-Populationen zuordnen (aktivierbar, wenn auch Teil-Populationen eingeblendet werden)'
     }
     const mapNameToStoreNameObject = {
@@ -143,82 +158,67 @@ const SortableItem = SortableElement(
             }
             return store.map.addActiveApfloraLayer(apfloraLayer.value)
           }}
-        />{' '}
+        />
         <IconsDiv>
-          {' '}
           {['BeobNichtBeurteilt', 'BeobZugeordnet'].includes(
             apfloraLayer.value
           ) && (
             <ZuordnenDiv>
-              <ZuordnenIcon
-                className="material-icons"
-                title={getZuordnenIconTitle()}
-                style={{
-                  color: assigningIsPossible ? 'black' : '#e2e2e2',
-                  cursor: assigningIsPossible ? 'pointer' : 'inherit',
-                }}
-                onClick={() => {
-                  if (store.map.activeApfloraLayers.includes('Tpop')) {
-                    store.map.beob.toggleAssigning()
-                  }
-                }}
-              >
-                {' '}
-                {store.map.beob.assigning
-                  ? 'pause_circle_outline'
-                  : 'play_circle_outline'}{' '}
-              </ZuordnenIcon>{' '}
+              <StyledIconButton>
+                {store.map.beob.assigning ? (
+                  <StyledPauseCircleOutlineIcon
+                    title={getZuordnenIconTitle()}
+                    onClick={() => {
+                      if (store.map.activeApfloraLayers.includes('Tpop')) {
+                        store.map.beob.toggleAssigning()
+                      }
+                    }}
+                    data-assigningispossible={assigningispossible}
+                  />
+                ) : (
+                  <StyledPlayCircleOutlineIcon
+                    title={getZuordnenIconTitle()}
+                    onClick={() => {
+                      if (store.map.activeApfloraLayers.includes('Tpop')) {
+                        store.map.beob.toggleAssigning()
+                      }
+                    }}
+                    data-assigningispossible={assigningispossible}
+                  />
+                )}
+              </StyledIconButton>
             </ZuordnenDiv>
-          )}{' '}
+          )}
           {apfloraLayer.value === 'Pop' &&
             activeApfloraLayers.includes('Pop') && (
               <MapIconDiv>
-                <PopMapIcon id="PopMapIcon" className="material-icons">
-                  local_florist{' '}
-                </PopMapIcon>{' '}
+                <PopMapIcon id="PopMapIcon" />
               </MapIconDiv>
-            )}{' '}
+            )}
           {apfloraLayer.value === 'Tpop' &&
             activeApfloraLayers.includes('Tpop') && (
               <MapIconDiv>
-                <TpopMapIcon id="TpopMapIcon" className="material-icons">
-                  local_florist{' '}
-                </TpopMapIcon>{' '}
+                <TpopMapIcon id="TpopMapIcon" />
               </MapIconDiv>
-            )}{' '}
+            )}
           {apfloraLayer.value === 'BeobNichtBeurteilt' &&
             activeApfloraLayers.includes('BeobNichtBeurteilt') && (
               <MapIconDiv>
-                <BeobNichtBeurteiltMapIcon
-                  id="BeobNichtBeurteiltMapIcon"
-                  className="material-icons"
-                >
-                  local_florist{' '}
-                </BeobNichtBeurteiltMapIcon>{' '}
+                <BeobNichtBeurteiltMapIcon id="BeobNichtBeurteiltMapIcon" />
               </MapIconDiv>
-            )}{' '}
+            )}
           {apfloraLayer.value === 'BeobNichtZuzuordnen' &&
             activeApfloraLayers.includes('BeobNichtZuzuordnen') && (
               <MapIconDiv>
-                <BeobNichtZuzuordnenMapIcon
-                  id="BeobNichtZuzuordnenMapIcon"
-                  className="material-icons"
-                >
-                  local_florist{' '}
-                </BeobNichtZuzuordnenMapIcon>{' '}
+                <BeobNichtZuzuordnenMapIcon id="BeobNichtZuzuordnenMapIcon" />
               </MapIconDiv>
-            )}{' '}
+            )}
           {apfloraLayer.value === 'BeobZugeordnet' &&
             activeApfloraLayers.includes('BeobZugeordnet') && (
               <MapIconDiv>
-                <BeobZugeordnetMapIcon
-                  id="BeobZugeordnetMapIcon"
-                  className="material-icons"
-                >
-                  local_florist{' '}
-                </BeobZugeordnetMapIcon>{' '}
+                <BeobZugeordnetMapIcon id="BeobZugeordnetMapIcon" />
               </MapIconDiv>
-            )}{' '}
+            )}
           {apfloraLayer.value === 'BeobZugeordnetAssignPolylines' &&
             activeApfloraLayers.includes('BeobZugeordnetAssignPolylines') && (
               <MapIconDiv>
@@ -226,13 +226,12 @@ const SortableItem = SortableElement(
                   id="BeobZugeordnetAssignPolylinesMapIcon"
                   className="material-icons"
                 >
-                  remove{' '}
-                </BeobZugeordnetAssignPolylinesIcon>{' '}
+                  remove
+                </BeobZugeordnetAssignPolylinesIcon>
               </MapIconDiv>
-            )}{' '}
+            )}
           {false && (
             <FilterDiv>
-              {' '}
               {[
                 'Pop',
                 'Tpop',
@@ -240,21 +239,8 @@ const SortableItem = SortableElement(
                 'BeobNichtZuzuordnen',
                 'BeobZugeordnet',
               ].includes(apfloraLayer.value) && (
-                <FilterIcon
-                  className="material-icons"
+                <StyledIconButton
                   title="mit Umriss(en) filtern"
-                  style={{
-                    color: store.map.activeApfloraLayers.includes(
-                      apfloraLayer.value
-                    )
-                      ? 'black'
-                      : '#e2e2e2',
-                    cursor: store.map.activeApfloraLayers.includes(
-                      apfloraLayer.value
-                    )
-                      ? 'pointer'
-                      : 'inherit',
-                  }}
                   onClick={() => {
                     if (activeApfloraLayers.includes('MapFilter')) {
                       return store.map.removeActiveApfloraLayer('MapFilter')
@@ -266,25 +252,28 @@ const SortableItem = SortableElement(
                     //window.L.Draw.Rectangle.initialize()
                   }}
                 >
-                  photo_filter{' '}
-                </FilterIcon>
-              )}{' '}
+                  <FilterIcon
+                    style={{
+                      color: store.map.activeApfloraLayers.includes(
+                        apfloraLayer.value
+                      )
+                        ? 'black'
+                        : '#e2e2e2',
+                      cursor: store.map.activeApfloraLayers.includes(
+                        apfloraLayer.value
+                      )
+                        ? 'pointer'
+                        : 'not-allowed',
+                    }}
+                  />
+                </StyledIconButton>
+              )}
             </FilterDiv>
-          )}{' '}
+          )}
           <ZoomToDiv>
-            {' '}
             {apfloraLayer.value !== 'MapFilter' && (
-              <ZoomToIcon
-                className="material-icons"
+              <StyledIconButton
                 title={`auf alle '${apfloraLayer.label}' zoomen`}
-                style={{
-                  color: activeApfloraLayers.includes(apfloraLayer.value)
-                    ? 'black'
-                    : '#e2e2e2',
-                  cursor: activeApfloraLayers.includes(apfloraLayer.value)
-                    ? 'pointer'
-                    : 'inherit',
-                }}
                 onClick={() => {
                   if (activeApfloraLayers.includes(apfloraLayer.value)) {
                     store.map.changeBounds(
@@ -294,36 +283,23 @@ const SortableItem = SortableElement(
                   }
                 }}
               >
-                filter_center_focus{' '}
-              </ZoomToIcon>
-            )}{' '}
-          </ZoomToDiv>{' '}
-          <ZoomToDiv>
-            {' '}
-            {apfloraLayer.value !== 'MapFilter' && (
-              <ZoomToIcon
-                className="material-icons"
-                title={`auf aktive '${apfloraLayer.label}' zoomen`}
-                style={{
-                  color:
-                    activeApfloraLayers.includes(apfloraLayer.value) &&
-                    store.map[mapNameToStoreNameObject[apfloraLayer.value]]
-                      .highlightedIds.length > 0
-                      ? '#fbec04'
+                <ZoomToIcon
+                  style={{
+                    color: activeApfloraLayers.includes(apfloraLayer.value)
+                      ? 'black'
                       : '#e2e2e2',
-                  fontWeight:
-                    activeApfloraLayers.includes(apfloraLayer.value) &&
-                    store.map[mapNameToStoreNameObject[apfloraLayer.value]]
-                      .highlightedIds.length > 0
-                      ? 'bold'
-                      : 'normal',
-                  cursor:
-                    activeApfloraLayers.includes(apfloraLayer.value) &&
-                    store.map[mapNameToStoreNameObject[apfloraLayer.value]]
-                      .highlightedIds.length > 0
+                    cursor: activeApfloraLayers.includes(apfloraLayer.value)
                       ? 'pointer'
-                      : 'inherit',
-                }}
+                      : 'not-allowed',
+                  }}
+                />
+              </StyledIconButton>
+            )}
+          </ZoomToDiv>
+          <ZoomToDiv>
+            {apfloraLayer.value !== 'MapFilter' && (
+              <StyledIconButton
+                title={`auf aktive '${apfloraLayer.label}' zoomen`}
                 onClick={() => {
                   // TODO: if set min bounds
                   // that accords to 50m
@@ -339,17 +315,37 @@ const SortableItem = SortableElement(
                   }
                 }}
               >
-                filter_center_focus{' '}
-              </ZoomToIcon>
-            )}{' '}
-          </ZoomToDiv>{' '}
-          <DragHandleDiv>
-            {' '}
+                <ZoomToIcon
+                  style={{
+                    color:
+                      activeApfloraLayers.includes(apfloraLayer.value) &&
+                      store.map[mapNameToStoreNameObject[apfloraLayer.value]]
+                        .highlightedIds.length > 0
+                        ? '#fbec04'
+                        : '#e2e2e2',
+                    fontWeight:
+                      activeApfloraLayers.includes(apfloraLayer.value) &&
+                      store.map[mapNameToStoreNameObject[apfloraLayer.value]]
+                        .highlightedIds.length > 0
+                        ? 'bold'
+                        : 'normal',
+                    cursor:
+                      activeApfloraLayers.includes(apfloraLayer.value) &&
+                      store.map[mapNameToStoreNameObject[apfloraLayer.value]]
+                        .highlightedIds.length > 0
+                        ? 'pointer'
+                        : 'not-allowed',
+                  }}
+                />
+              </StyledIconButton>
+            )}
+          </ZoomToDiv>
+          <div>
             {!['BeobZugeordnetAssignPolylines', 'MapFilter'].includes(
               apfloraLayer.value
-            ) && <DragHandle />}{' '}
-          </DragHandleDiv>{' '}
-        </IconsDiv>{' '}
+            ) && <DragHandle />}
+          </div>
+        </IconsDiv>
       </LayerDiv>
     )
   }
@@ -357,7 +353,6 @@ const SortableItem = SortableElement(
 const SortableList = SortableContainer(
   ({ items, store, activeApfloraLayers }) => (
     <div>
-      {' '}
       {items.map((apfloraLayer, index) => (
         <SortableItem
           key={index}
@@ -366,7 +361,7 @@ const SortableList = SortableContainer(
           store={store}
           activeApfloraLayers={activeApfloraLayers}
         />
-      ))}{' '}
+      ))}
     </div>
   )
 )
@@ -385,7 +380,7 @@ const ApfloraLayers = ({ store }: { store: Object }) => (
       lockAxis="y"
       store={store}
       activeApfloraLayers={toJS(store.map.activeApfloraLayers)}
-    />{' '}
+    />
   </CardContent>
 )
 
