@@ -1,13 +1,20 @@
 // @flow
 import React from 'react'
 import { inject } from 'mobx-react'
-import Dialog from 'material-ui/Dialog'
+import Dialog, { DialogActions } from 'material-ui-next/Dialog'
 import Button from 'material-ui-next/Button'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
+import styled from 'styled-components'
 
 import tables from '../../../modules/tables'
 import ErrorBoundary from '../../shared/ErrorBoundary'
+
+const StyledDialog = styled(Dialog)`
+  > div {
+    padding: 24px 24px 0 24px;
+  }
+`
 
 const enhance = compose(
   inject('store'),
@@ -26,12 +33,6 @@ const DatasetDeleteModal = ({
   onClickAbort: () => void,
   onClickDelete: () => void,
 }) => {
-  const actions = [
-    <Button onClick={onClickAbort}>Abbrechen</Button>,
-    <Button color="primary" onClick={onClickDelete}>
-      Löschen
-    </Button>,
-  ]
   const table = tables.find(t => t.table === store.datasetToDelete.table)
   let tableName = null
   if (table && table.labelSingular) {
@@ -40,11 +41,17 @@ const DatasetDeleteModal = ({
 
   return (
     <ErrorBoundary>
-      <Dialog actions={actions} modal open={!!store.datasetToDelete.id}>
+      <StyledDialog open={!!store.datasetToDelete.id}>
         {`${tableName ? `${tableName} "` : ''}${store.datasetToDelete.label}${
           tableName ? '"' : ''
         } löschen?`}
-      </Dialog>
+        <DialogActions>
+          <Button onClick={onClickAbort}>Abbrechen</Button>
+          <Button color="primary" onClick={onClickDelete}>
+            Löschen
+          </Button>,
+        </DialogActions>
+      </StyledDialog>
     </ErrorBoundary>
   )
 }

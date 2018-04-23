@@ -1,7 +1,6 @@
 // @flow
 import React from 'react'
 import { observer, inject } from 'mobx-react'
-//import Dialog from 'material-ui/Dialog'
 import Dialog, { DialogTitle } from 'material-ui-next/Dialog'
 import Button from 'material-ui-next/Button'
 import compose from 'recompose/compose'
@@ -63,8 +62,9 @@ const UserMessages = ({
     <ErrorBoundary>
       <StyledDialog
         open={store.messages.messages.length > 0 && !!store.user.name}
+        aria-labelledby="dialog-title"
       >
-        <DialogTitle>Letzte Anpassungen:</DialogTitle>
+        <DialogTitle id="dialog-title">Letzte Anpassungen:</DialogTitle>
         <div>
           <AllOkButton onClick={onClickReadAll}>alle o.k.</AllOkButton>
           {store.messages.messages.sort(m => m.time).map((m, index) => {
