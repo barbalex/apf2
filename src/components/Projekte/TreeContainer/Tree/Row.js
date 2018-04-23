@@ -5,12 +5,13 @@ import { observer, inject } from 'mobx-react'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
 import { ContextMenuTrigger } from 'react-contextmenu'
-import FontIcon from 'material-ui/FontIcon'
 import SwapVerticalCircleIcon from '@material-ui/icons/SwapVerticalCircle'
 import ContentCopyIcon from '@material-ui/icons/ContentCopy'
 import PhotoLibraryIcon from '@material-ui/icons/PhotoLibrary'
 import LocalFloristIcon from '@material-ui/icons/LocalFlorist'
-//import XxxIcon from '@material-ui/icons/Xxx'
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
+import ChevronRightIcon from '@material-ui/icons/ChevronRight'
+import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
 
 import isNodeInActiveNodePath from '../../../../modules/isNodeInActiveNodePath'
 import isNodeOpen from '../../../../modules/isNodeOpen'
@@ -29,19 +30,44 @@ const StyledNode = styled.div`
   color: ${props =>
     props['data-nodeisinactivenodepath'] ? '#D84315' : 'inherit'};
 `
-const SymbolIcon = styled(FontIcon)`
+const StyledExpandMoreIcon = styled(ExpandMoreIcon)`
+  margin-top: ${props =>
+    props['data-nodeIsOpen'] ? '-6px !important' : '1px !important'};
+  margin-left: ${props => (props['data-nodeIsOpen'] ? '-1px !important' : 0)};
+  margin-right: ${props => (props['data-nodeIsOpen'] ? '-5px !important' : 0)};
+  padding-left: ${props => (props['data-nodeIsOpen'] ? '2px' : '2px')};
+  height: ${props =>
+    props['data-nodeIsOpen'] ? '30px !important' : '22px !important'};
+  width: ${props =>
+    props['data-nodeIsOpen'] ? '30px !important' : '26px !important'};
+  color: ${props =>
+    props['data-nodeisinactivenodepath'] ? '#D84315 !important' : 'inherit'};
+  cursor: pointer;
+  &:hover {
+    color: #f57c00 !important;
+  }
+`
+const StyledChevronRightIcon = styled(ChevronRightIcon)`
+  margin-top: -2px !important;
+  padding-left: 2px;
+  height: 22px !important;
+  width: 26px;
+  cursor: pointer;
+  &:hover {
+    color: #f57c00 !important;
+  }
+`
+const StyledMoreHorizIcon = styled(MoreHorizIcon)`
   margin-top: ${props =>
     props['data-nodeisinactivenodepath']
       ? '-5px !important'
       : '-2px !important'};
   padding-left: ${props =>
-    props['data-nodeisinactivenodepath'] ? '2px' : '2px'};
-  font-size: ${props =>
+    props['data-nodeisinactivenodepath'] ? '1px' : '2px'};
+  height: ${props =>
     props['data-nodeisinactivenodepath']
       ? '26px !important'
       : '22px !important'};
-  font-weight: ${props =>
-    props['data-nodeisinactivenodepath'] ? '900 !important' : 'inherit'};
   color: ${props =>
     props['data-nodeisinactivenodepath'] ? '#D84315 !important' : 'inherit'};
   width: 26px;
@@ -49,6 +75,9 @@ const SymbolIcon = styled(FontIcon)`
   &:hover {
     color: #f57c00 !important;
   }
+`
+const SymbolDiv = styled.div`
+  cursor: pointer;
 `
 const SymbolSpan = styled.span`
   padding-right: 8px !important;
@@ -197,16 +226,17 @@ const Row = ({
     node,
     toJS(tree.activeNodeArray)
   )
+  const nodeIsOpen = isNodeOpen(toJS(tree.openNodes), node.url)
   // build symbols
   let useSymbolIcon = true
   let useSymbolSpan = false
   let symbolIcon
-  if (node.hasChildren && isNodeOpen(toJS(tree.openNodes), node.url)) {
-    symbolIcon = 'expand_more'
+  if (node.hasChildren && nodeIsOpen) {
+    symbolIcon = 'expandMore'
   } else if (node.hasChildren) {
-    symbolIcon = 'chevron_right'
+    symbolIcon = 'chevronRight'
   } else if (node.label === 'lade Daten...') {
-    symbolIcon = 'more_horiz'
+    symbolIcon = 'moreHoriz'
   } else {
     useSymbolSpan = true
     useSymbolIcon = false
@@ -244,14 +274,24 @@ const Row = ({
           data-menutype={node.menuType}
         >
           {useSymbolIcon && (
-            <SymbolIcon
-              data-nodeisinactivenodepath={nodeIsInActiveNodePath}
-              id="symbol"
-              className="material-icons"
-              onClick={onClickNodeSymbol}
-            >
-              {symbolIcon}
-            </SymbolIcon>
+            <SymbolDiv onClick={onClickNodeSymbol}>
+              {symbolIcon === 'expandMore' && (
+                <StyledExpandMoreIcon
+                  data-nodeisinactivenodepath={nodeIsInActiveNodePath}
+                  data-nodeIsOpen={nodeIsOpen}
+                />
+              )}
+              {symbolIcon === 'chevronRight' && (
+                <StyledChevronRightIcon
+                  data-nodeisinactivenodepath={nodeIsInActiveNodePath}
+                />
+              )}
+              {symbolIcon === 'moreHoriz' && (
+                <StyledMoreHorizIcon
+                  data-nodeisinactivenodepath={nodeIsInActiveNodePath}
+                />
+              )}
+            </SymbolDiv>
           )}
           {useSymbolSpan && (
             <SymbolSpan data-nodeisinactivenodepath={nodeIsInActiveNodePath}>
