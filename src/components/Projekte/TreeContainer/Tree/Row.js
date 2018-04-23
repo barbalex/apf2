@@ -6,6 +6,11 @@ import styled from 'styled-components'
 import compose from 'recompose/compose'
 import { ContextMenuTrigger } from 'react-contextmenu'
 import FontIcon from 'material-ui/FontIcon'
+//import SwapVerticalCircleIcon from '@material-ui/icons/SwapVerticalCircle'
+import ContentCopyIcon from '@material-ui/icons/ContentCopy'
+import PhotoLibraryIcon from '@material-ui/icons/PhotoLibrary'
+//import XxxIcon from '@material-ui/icons/Xxx'
+//import XxxIcon from '@material-ui/icons/Xxx'
 
 import isNodeInActiveNodePath from '../../../../modules/isNodeInActiveNodePath'
 import isNodeOpen from '../../../../modules/isNodeOpen'
@@ -110,7 +115,16 @@ const MovingIcon = styled(FontIcon)`
   font-size: 20px !important;
   color: rgb(255, 90, 0) !important;
 `
-const CopyingIcon = styled(MovingIcon)``
+const CopyingIcon = styled(ContentCopyIcon)`
+  padding-left: 0.2em;
+  font-size: 20px !important;
+  color: rgb(255, 90, 0) !important;
+`
+const BiotopCopyingIcon = styled(PhotoLibraryIcon)`
+  padding-left: 0.2em;
+  font-size: 20px !important;
+  color: rgb(255, 90, 0) !important;
+`
 const showPopMapIcon = (store, tree, node) =>
   node.menuType === 'ap' &&
   node.id === (tree.activeNodes.ap || store.map.pop.apId) &&
@@ -351,22 +365,14 @@ const Row = ({
             </MovingIcon>
           )}
           {copying && (
-            <CopyingIcon
-              id="copying"
-              className="material-icons"
-              title="kopiert, bereit zum Einfügen"
-            >
-              content_copy
-            </CopyingIcon>
+            <div title="kopiert, bereit zum Einfügen">
+              <CopyingIcon />
+            </div>
           )}
           {copyingBiotop && (
-            <CopyingIcon
-              id="copyingBiotop"
-              className="material-icons"
-              title="Biotop kopiert, bereit zum Einfügen"
-            >
-              photo_library
-            </CopyingIcon>
+            <div title="Biotop kopiert, bereit zum Einfügen">
+              <BiotopCopyingIcon />
+            </div>
           )}
         </StyledNode>
       </ContextMenuTrigger>
