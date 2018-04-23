@@ -2,7 +2,9 @@ import React from 'react'
 import { toJS } from 'mobx'
 import { observer } from 'mobx-react'
 import styled from 'styled-components'
-import FontIcon from 'material-ui/FontIcon'
+import Button from 'material-ui-next/Button'
+import DragHandleIcon from '@material-ui/icons/DragHandle'
+import InfoOutlineIcon from '@material-ui/icons/InfoOutline'
 import {
   SortableContainer,
   SortableElement,
@@ -18,13 +20,20 @@ const CardContent = styled.div`
   padding-left: 5px;
   padding-right: 5px;
 `
-const DragHandleIcon = styled(FontIcon)`
-  font-size: 18px !important;
+const StyledIconButton = styled(Button)`
+  max-width: 18px;
+  min-height: 20px !important;
+  min-width: 20px !important;
+  padding: 0 !important;
+  margin-top: -3px !important;
+`
+const StyledDragHandleIcon = styled(DragHandleIcon)`
+  height: 20px !important;
   color: #7b7b7b !important;
   cursor: grab;
 `
-const LegendIcon = styled(FontIcon)`
-  font-size: 18px !important;
+const StyledLegendIcon = styled(InfoOutlineIcon)`
+  height: 20px !important;
   color: #7b7b7b !important;
   cursor: pointer;
 `
@@ -55,8 +64,10 @@ const IconsDiv = styled.div`
 // TODO: add icon: https://material.io/icons/#ic_info
 // for layers with legend
 const layerLegends = {
-  ZhSvoColor: 'http://wms.zh.ch/FnsSVOZHWMS?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=zonen-schutzverordnungen&format=image/png&STYLE=default',
-  ZhPflegeplan: 'http://wms.zh.ch/FnsPflegeZHWMS?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=pfpl&format=image/png&STYLE=default',
+  ZhSvoColor:
+    'http://wms.zh.ch/FnsSVOZHWMS?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=zonen-schutzverordnungen&format=image/png&STYLE=default',
+  ZhPflegeplan:
+    'http://wms.zh.ch/FnsPflegeZHWMS?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=pfpl&format=image/png&STYLE=default',
 }
 /**
  * don't know why but passing store
@@ -65,12 +76,9 @@ const layerLegends = {
  */
 
 const DragHandle = SortableHandle(() => (
-  <DragHandleIcon
-    className="material-icons"
-    title="ziehen, um Layer höher/tiefer zu stapeln"
-  >
-    drag_handle
-  </DragHandleIcon>
+  <StyledIconButton title="ziehen, um Layer höher/tiefer zu stapeln">
+    <StyledDragHandleIcon />
+  </StyledIconButton>
 ))
 
 const SortableItem = SortableElement(({ overlay, store, activeOverlays }) => (
@@ -88,20 +96,20 @@ const SortableItem = SortableElement(({ overlay, store, activeOverlays }) => (
       }}
     />
     <IconsDivs>
-      {!!layerLegends[overlay.value] &&
+      {!!layerLegends[overlay.value] && (
         <IconsDiv>
           <div>
-            <LegendIcon
-              className="material-icons"
+            <StyledIconButton
               title="Legende öffnen"
               onClick={() => {
                 window.open(layerLegends[overlay.value])
               }}
             >
-              info_outline
-            </LegendIcon>
+              <StyledLegendIcon />
+            </StyledIconButton>
           </div>
-        </IconsDiv>}
+        </IconsDiv>
+      )}
       <IconsDiv>
         <div>
           <DragHandle />
@@ -130,7 +138,7 @@ const enhance = compose(
     onSortEnd: props => ({ oldIndex, newIndex }) =>
       props.store.map.moveOverlay({ oldIndex, newIndex }),
   }),
-  observer,
+  observer
 )
 
 const Overlays = ({
