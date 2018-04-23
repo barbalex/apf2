@@ -281,11 +281,7 @@ const Row = ({
                   data-nodeIsOpen={nodeIsOpen}
                 />
               )}
-              {symbolIcon === 'chevronRight' && (
-                <StyledChevronRightIcon
-                  data-nodeisinactivenodepath={nodeIsInActiveNodePath}
-                />
-              )}
+              {symbolIcon === 'chevronRight' && <StyledChevronRightIcon />}
               {symbolIcon === 'moreHoriz' && (
                 <StyledMoreHorizIcon
                   data-nodeisinactivenodepath={nodeIsInActiveNodePath}
