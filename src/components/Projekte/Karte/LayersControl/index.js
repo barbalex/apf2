@@ -8,7 +8,8 @@ import withState from 'recompose/withState'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme'
-import FontIcon from 'material-ui/FontIcon'
+import ExpandLessIcon from '@material-ui/icons/ExpandLess'
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 
 import Overlays from './Overlays'
 import ApfloraLayers from './ApfloraLayers'
@@ -20,21 +21,21 @@ const CardContainer = styled.div`
   background-color: white;
   background-clip: padding-box;
   border-radius: 5px;
-  border: 2px solid rgba(0,0,0,0.2);
+  border: 2px solid rgba(0, 0, 0, 0.2);
 `
 const Card = styled.div`
   padding-top: 3px;
   color: rgb(48, 48, 48);
   &:not(:first-of-type) {
-    border-top: 1px solid rgba(0,0,0,0.2);
+    border-top: 1px solid rgba(0, 0, 0, 0.2);
   }
 `
 const CardHeader = styled.div`
   display: flex;
   justify-content: space-between;
   padding-left: 7px;
-  padding-right: 5px;
-  border-bottom: 1px solid rgba(0,0,0,0.2);
+  padding-right: 2px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
   cursor: pointer;
   font-weight: bold;
   user-select: none;
@@ -48,9 +49,11 @@ const CardTitleApfloraOpen = styled(CardTitle)`
   text-overflow: ellipsis;
   width: 70px;
 `
-const StyledFontIcon = styled(FontIcon)`
-  font-size: 18px !important;
-  color: rgb(48, 48, 48) !important;
+const StyledExpandLessIcon = styled(ExpandLessIcon)`
+  height: 18px !important;
+`
+const StyledExpandMoreIcon = styled(ExpandMoreIcon)`
+  height: 18px !important;
 `
 
 const enhance = compose(
@@ -111,7 +114,7 @@ const enhance = compose(
       }
     },
   }),
-  observer,
+  observer
 )
 
 const LayersControl = ({
@@ -139,11 +142,10 @@ const LayersControl = ({
     if (!ap || !ap.label) return 'apflora'
     return ap.label
   }
-  const ApfloraCard = baseLayersExpanded ||
-    apfloraLayersExpanded ||
-    overlaysExpanded
-    ? CardTitle
-    : CardTitleApfloraOpen
+  const ApfloraCard =
+    baseLayersExpanded || apfloraLayersExpanded || overlaysExpanded
+      ? CardTitle
+      : CardTitleApfloraOpen
 
   return (
     <Control position="topright">
@@ -153,12 +155,14 @@ const LayersControl = ({
             <CardHeader onClick={onToggleApfloraLayersExpanded}>
               <ApfloraCard>{getApfloraLayersTitle()}</ApfloraCard>
               <div>
-                <StyledFontIcon className="material-icons">
-                  {apfloraLayersExpanded ? 'expand_less' : 'expand_more'}
-                </StyledFontIcon>
+                {apfloraLayersExpanded ? (
+                  <StyledExpandLessIcon />
+                ) : (
+                  <StyledExpandMoreIcon />
+                )}
               </div>
             </CardHeader>
-            {apfloraLayersExpanded &&
+            {apfloraLayersExpanded && (
               <ApfloraLayers
                 store={store}
                 /**
@@ -167,18 +171,21 @@ const LayersControl = ({
                  */
                 apfloraLayersString={store.map.apfloraLayersString}
                 assigning={store.map.beob.assigning}
-              />}
+              />
+            )}
           </Card>
           <Card>
             <CardHeader onClick={onToggleOverlaysExpanded}>
               <CardTitle>überlagernd</CardTitle>
               <div>
-                <StyledFontIcon className="material-icons">
-                  {overlaysExpanded ? 'expand_less' : 'expand_more'}
-                </StyledFontIcon>
+                {overlaysExpanded ? (
+                  <StyledExpandLessIcon />
+                ) : (
+                  <StyledExpandMoreIcon />
+                )}
               </div>
             </CardHeader>
-            {overlaysExpanded &&
+            {overlaysExpanded && (
               <Overlays
                 store={store}
                 /**
@@ -187,15 +194,18 @@ const LayersControl = ({
                  */
                 overlaysString={store.map.overlaysString}
                 assigning={store.map.beob.assigning}
-              />}
+              />
+            )}
           </Card>
           <Card>
             <CardHeader onClick={onToggleBaseLayersExpanded}>
               <CardTitle>Hintergrund</CardTitle>
               <div>
-                <StyledFontIcon className="material-icons">
-                  {baseLayersExpanded ? 'expand_less' : 'expand_more'}
-                </StyledFontIcon>
+                {baseLayersExpanded ? (
+                  <StyledExpandLessIcon />
+                ) : (
+                  <StyledExpandMoreIcon />
+                )}
               </div>
             </CardHeader>
             {baseLayersExpanded && <BaseLayers store={store} />}
