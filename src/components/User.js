@@ -1,7 +1,7 @@
 // @flow
 import React from 'react'
 import { observer, inject } from 'mobx-react'
-import Dialog from 'material-ui/Dialog'
+import Dialog, { DialogTitle, DialogActions } from 'material-ui-next/Dialog'
 import Input, { InputLabel, InputAdornment } from 'material-ui-next/Input'
 import { FormControl, FormHelperText } from 'material-ui-next/Form'
 import IconButton from 'material-ui-next/IconButton'
@@ -15,9 +15,14 @@ import withState from 'recompose/withState'
 
 import ErrorBoundary from './shared/ErrorBoundary'
 
+const StyledDialog = styled(Dialog)`
+  > div {
+  }
+`
 const StyledDiv = styled.div`
   display: flex;
   flex-direction: column;
+  padding: 0 24px;
 `
 const StyledInput = styled(Input)`
   &:before {
@@ -124,23 +129,18 @@ const User = ({
   onBlurPassword: () => void,
   fetchLogin: () => void,
 }) => {
-  const actions = [
-    <Button color="primary" onClick={fetchLogin}>
-      anmelden
-    </Button>,
-  ]
   // TODO Authorization:
   // open depends on store.user.jwt
   return (
     <ErrorBoundary>
-      <Dialog
-        title="Anmeldung"
+      <StyledDialog
+        aria-labelledby="dialog-title"
         open={!store.user.token}
-        actions={actions}
-        contentStyle={{
+        /*contentStyle={{
           maxWidth: '400px',
-        }}
+        }}*/
       >
+        <DialogTitle id="dialog-title">Anmeldung</DialogTitle>
         <StyledDiv>
           <FormControl
             error={!!nameErrorText}
@@ -197,7 +197,12 @@ const User = ({
             </FormHelperText>
           </FormControl>
         </StyledDiv>
-      </Dialog>
+        <DialogActions>
+          <Button color="primary" onClick={fetchLogin}>
+            anmelden
+          </Button>
+        </DialogActions>
+      </StyledDialog>
     </ErrorBoundary>
   )
 }
