@@ -104,13 +104,12 @@ const Deletions = ({
         </List>
         <DialogActions>
           <Button
-            primary={false}
             onClick={onClickUndo}
             disabled={choosenDeletions.length === 0}
           >
             wiederherstellen
           </Button>
-          <Button primary={true} onClick={close}>
+          <Button primary onClick={close}>
             schliessen
           </Button>
         </DialogActions>
