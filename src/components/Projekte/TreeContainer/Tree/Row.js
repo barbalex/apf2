@@ -6,10 +6,10 @@ import styled from 'styled-components'
 import compose from 'recompose/compose'
 import { ContextMenuTrigger } from 'react-contextmenu'
 import FontIcon from 'material-ui/FontIcon'
-//import SwapVerticalCircleIcon from '@material-ui/icons/SwapVerticalCircle'
+import SwapVerticalCircleIcon from '@material-ui/icons/SwapVerticalCircle'
 import ContentCopyIcon from '@material-ui/icons/ContentCopy'
 import PhotoLibraryIcon from '@material-ui/icons/PhotoLibrary'
-//import XxxIcon from '@material-ui/icons/Xxx'
+import LocalFloristIcon from '@material-ui/icons/LocalFlorist'
 //import XxxIcon from '@material-ui/icons/Xxx'
 
 import isNodeInActiveNodePath from '../../../../modules/isNodeInActiveNodePath'
@@ -70,10 +70,10 @@ const TextSpan = styled.span`
     color: #f57c00;
   }
 `
-const StyledMapIcon = styled(FontIcon)`
+const StyledMapIcon = styled(LocalFloristIcon)`
   padding-right: 2px;
   margin-left: -2px;
-  font-size: 20px !important;
+  height: 20px !important;
 `
 const PopMapIcon = styled(StyledMapIcon)`
   color: #947500 !important;
@@ -110,19 +110,19 @@ const BeobZugeordnetFilteredMapIcon = styled(BeobZugeordnetMapIcon)`
   -webkit-text-stroke: 1px #f5ef00;
   -moz-text-stroke: 1px #f5ef00;
 `
-const MovingIcon = styled(FontIcon)`
+const MovingIcon = styled(SwapVerticalCircleIcon)`
   padding-left: 0.2em;
-  font-size: 20px !important;
+  height: 20px !important;
   color: rgb(255, 90, 0) !important;
 `
 const CopyingIcon = styled(ContentCopyIcon)`
   padding-left: 0.2em;
-  font-size: 20px !important;
+  height: 20px !important;
   color: rgb(255, 90, 0) !important;
 `
 const BiotopCopyingIcon = styled(PhotoLibraryIcon)`
   padding-left: 0.2em;
-  font-size: 20px !important;
+  height: 20px !important;
   color: rgb(255, 90, 0) !important;
 `
 const showPopMapIcon = (store, tree, node) =>
@@ -259,94 +259,54 @@ const Row = ({
             </SymbolSpan>
           )}
           {showPopMapIcon(store, tree, node) && (
-            <PopMapIcon
-              id="map"
-              className="material-icons"
-              title="in Karte sichtbar"
-            >
-              local_florist
-            </PopMapIcon>
+            <div title="in Karte sichtbar">
+              <PopMapIcon />
+            </div>
           )}
           {showTpopMapIcon(store, tree, node) && (
-            <TpopMapIcon
-              id="map"
-              className="material-icons"
-              title="in Karte sichtbar"
-            >
-              local_florist
-            </TpopMapIcon>
+            <div title="in Karte sichtbar">
+              <TpopMapIcon />
+            </div>
           )}
           {showBeobNichtBeurteiltMapIcon(store, tree, node) && (
-            <BeobNichtBeurteiltMapIcon
-              id="map"
-              className="material-icons"
-              title="in Karte sichtbar"
-            >
-              local_florist
-            </BeobNichtBeurteiltMapIcon>
+            <div title="in Karte sichtbar">
+              <BeobNichtBeurteiltMapIcon />
+            </div>
           )}
           {showBeobNichtZuzuordnenMapIcon(store, tree, node) && (
-            <BeobNichtZuzuordnenMapIcon
-              id="map"
-              className="material-icons"
-              title="in Karte sichtbar"
-            >
-              local_florist
-            </BeobNichtZuzuordnenMapIcon>
+            <div title="in Karte sichtbar">
+              <BeobNichtZuzuordnenMapIcon />
+            </div>
           )}
           {showBeobZugeordnetMapIcon(store, tree, node) && (
-            <BeobZugeordnetMapIcon
-              id="map"
-              className="material-icons"
-              title="in Karte sichtbar"
-            >
-              local_florist
-            </BeobZugeordnetMapIcon>
+            <div title="in Karte sichtbar">
+              <BeobZugeordnetMapIcon />
+            </div>
           )}
           {showPopFilteredMapIcon(store, node) && (
-            <PopFilteredMapIcon
-              id="map"
-              className="material-icons"
-              title="in Karte hervorgehoben"
-            >
-              local_florist
-            </PopFilteredMapIcon>
+            <div title="in Karte hervorgehoben">
+              <PopFilteredMapIcon />
+            </div>
           )}
           {showTpopFilteredMapIcon(store, node) && (
-            <TpopFilteredMapIcon
-              id="map"
-              className="material-icons"
-              title="in Karte hervorgehoben"
-            >
-              local_florist
-            </TpopFilteredMapIcon>
+            <div title="in Karte hervorgehoben">
+              <TpopFilteredMapIcon />
+            </div>
           )}
           {showBeobNichtBeurteiltFilteredMapIcon(store, node) && (
-            <BeobNichtBeurteiltFilteredMapIcon
-              id="BeobNichtBeurteiltFilteredMapIcon"
-              className="material-icons"
-              title="in Karte hervorgehoben"
-            >
-              local_florist
-            </BeobNichtBeurteiltFilteredMapIcon>
+            <div title="in Karte hervorgehoben">
+              <BeobNichtBeurteiltFilteredMapIcon />
+            </div>
           )}
           {showBeobNichtZuzuordnenFilteredMapIcon(store, node) && (
-            <BeobNichtZuzuordnenFilteredMapIcon
-              id="BeobNichtZuzuordnenFilteredMapIcon"
-              className="material-icons"
-              title="in Karte hervorgehoben"
-            >
-              local_florist
-            </BeobNichtZuzuordnenFilteredMapIcon>
+            <div title="in Karte hervorgehoben">
+              <BeobNichtZuzuordnenFilteredMapIcon />
+            </div>
           )}
           {showBeobZugeordnetFilteredMapIcon(store, tree, node) && (
-            <BeobZugeordnetFilteredMapIcon
-              id="BeobZugeordnetFilteredMapIcon"
-              className="material-icons"
-              title="in Karte hervorgehoben"
-            >
-              local_florist
-            </BeobZugeordnetFilteredMapIcon>
+            <div title="in Karte hervorgehoben">
+              <BeobZugeordnetFilteredMapIcon />
+            </div>
           )}
           <TextSpan
             data-nodeisinactivenodepath={nodeIsInActiveNodePath}
@@ -356,13 +316,9 @@ const Row = ({
             {node.label}
           </TextSpan>
           {moving && (
-            <MovingIcon
-              id="moving"
-              className="material-icons"
-              title="zum Verschieben gemerkt, bereit zum Einfügen"
-            >
-              swap_vertical_circle
-            </MovingIcon>
+            <div title="zum Verschieben gemerkt, bereit zum Einfügen">
+              <MovingIcon />
+            </div>
           )}
           {copying && (
             <div title="kopiert, bereit zum Einfügen">
