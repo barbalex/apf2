@@ -3,7 +3,8 @@ import React from 'react'
 import { observer, inject } from 'mobx-react'
 import Dialog, { DialogTitle, DialogActions } from 'material-ui-next/Dialog'
 import Button from 'material-ui-next/Button'
-import Checkbox from 'material-ui/Checkbox'
+import { FormControlLabel } from 'material-ui-next/Form'
+import Checkbox from 'material-ui-next/Checkbox'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
@@ -21,6 +22,16 @@ const List = styled.div`
   padding-right: 24px;
   display: flex;
   flex-direction: column;
+`
+const StyledFormControlLabel = styled(FormControlLabel)`
+  margin-left: 0 !important;
+  padding: 8px 0;
+  border-top: ${props =>
+    props['data-withtopline'] ? '1px solid rgba(0,0,0,0.1)' : 'none'};
+`
+const StyledCheckbox = styled(Checkbox)`
+  width: 30px !important;
+  height: 30px !important;
 `
 
 const enhance = compose(
@@ -92,12 +103,17 @@ const Deletions = ({
             )}`
 
             return (
-              <Checkbox
+              <StyledFormControlLabel
                 key={`${ds.time}`}
+                control={
+                  <StyledCheckbox
+                    checked={choosenDeletions.includes(ds.time)}
+                    onChange={toggleChoosenDeletions}
+                    value={ds.time}
+                  />
+                }
                 label={label}
-                value={ds.time}
-                checked={choosenDeletions.includes(ds.time)}
-                onCheck={toggleChoosenDeletions}
+                data-withtopline={index > 0}
               />
             )
           })}
