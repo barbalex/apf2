@@ -62,12 +62,6 @@ const LabelPopoverContentRow = styled(LabelPopoverRow)`
     border-bottom-left-radius: 4px;
   }
 `
-const MaxHeightDiv = styled.div`
-  div + div {
-    max-height: 250px;
-    overflow-y: auto !important;
-  }
-`
 const nichtZuordnenPopover = (
   <Container>
     <LabelPopoverTitleRow>Legende</LabelPopoverTitleRow>
