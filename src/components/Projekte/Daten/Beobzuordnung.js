@@ -7,15 +7,17 @@ import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 
 import FormTitle from '../../shared/FormTitle'
-import RadioButtonGroupWithInfo from '../../shared/RadioButtonGroupWithInfo'
 import TextField from '../../shared/TextField'
 import CheckboxWithInfo from '../../shared/CheckboxWithInfo'
+import AutoComplete from '../../shared/Autocomplete'
 import Beob from './Beob'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 
 const Container = styled.div`
   height: 100%;
   overflow-x: auto;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
 `
 const FormContainer = styled.div`
   height: 100%;
@@ -46,7 +48,8 @@ const LabelPopoverRow = styled.div`
 const LabelPopoverTitleRow = styled(LabelPopoverRow)`
   border-top-left-radius: 4px;
   border-top-right-radius: 4px;
-  background-color: grey;
+  background-color: #565656;
+  color: white;
 `
 const LabelPopoverContentRow = styled(LabelPopoverRow)`
   display: flex;
@@ -103,7 +106,7 @@ const getTpopZuordnenSource = (store: Object, tree: Object): Array<Object> => {
     const dX = Math.abs(beob.x - t.x)
     const dY = Math.abs(beob.y - t.y)
     t.distance = Math.round((dX ** 2 + dY ** 2) ** 0.5)
-    t.popNr = store.table.pop.get(t.pop_id).nr
+    const pop = store.table.pop.get(t.pop_id)
     // build label
     const popStatusWerte = Array.from(store.table.pop_status_werte.values())
     let popStatusWert
@@ -115,7 +118,7 @@ const getTpopZuordnenSource = (store: Object, tree: Object): Array<Object> => {
     } else {
       t.herkunft = 'ohne Status'
     }
-    const popNr = t.popNr || t.popNr === 0 ? t.popNr : '(keine Nr)'
+    const popNr = pop.nr || pop.nr === 0 ? pop.nr : '(keine Nr)'
     const tpopNr = t.nr || t.nr === 0 ? t.nr : '(keine Nr)'
     t.label = `${t.distance.toLocaleString('de-ch')}m: ${popNr}/${tpopNr} (${
       t.herkunft
@@ -125,8 +128,8 @@ const getTpopZuordnenSource = (store: Object, tree: Object): Array<Object> => {
   tpopList = sortBy(tpopList, 'distance')
   // return array of id, label
   return tpopList.map(t => ({
-    value: t.id,
-    label: t.label,
+    id: t.id,
+    value: t.label,
   }))
 }
 
@@ -182,6 +185,15 @@ const Beobzuordnung = ({
     beob && beob.art_id ? store.table.ae_eigenschaften.get(beob.art_id) : null
   const artname = adbArt ? adbArt.artname : ''
   const artLabel = `Beobachtete Art: ${artname}`
+  const tpopZuordnenSource = getTpopZuordnenSource(store, tree)
+  const tpopZuordnenObject = tpopZuordnenSource.find(
+    o => o.id === activeDataset.row.tpop_id
+  )
+  const tpopZuordnenValue =
+    tpopZuordnenObject && tpopZuordnenObject.value
+      ? tpopZuordnenObject.value
+      : null
+  console.log('tpopZuordnenSource:', tpopZuordnenSource)
 
   return (
     <ErrorBoundary>
@@ -200,25 +212,15 @@ const Beobzuordnung = ({
             />
             {showTPopId && (
               <ZuordnenDiv>
-                <MaxHeightDiv>
-                  <RadioButtonGroupWithInfo
-                    tree={tree}
-                    fieldName="tpop_id"
-                    value={activeDataset.row.tpop_id}
-                    label="Einer Teilpopulation zuordnen"
-                    dataSource={getTpopZuordnenSource(store, tree)}
-                    updatePropertyInDb={updatePropertyInDb}
-                    popover={
-                      <div>
-                        <LabelPopoverTitleRow>Legende</LabelPopoverTitleRow>
-                        <LabelPopoverContentRow>
-                          Um eine Zuordnung zu entfernen: Nochmals auf die
-                          bereits Markierte Teil-Population klicken
-                        </LabelPopoverContentRow>
-                      </div>
-                    }
-                  />
-                </MaxHeightDiv>
+                <AutoComplete
+                  key={`${activeDataset.row.id}tpop_id`}
+                  tree={tree}
+                  label="Einer Teilpopulation zuordnen"
+                  fieldName="tpop_id"
+                  value={tpopZuordnenValue}
+                  objects={tpopZuordnenSource}
+                  updatePropertyInDb={updatePropertyInDb}
+                />
               </ZuordnenDiv>
             )}
             <TextField
