@@ -1,8 +1,8 @@
 // @flow
-import React from 'react'
+import React, { Fragment } from 'react'
 import { observer } from 'mobx-react'
 import Popover from 'material-ui/Popover'
-import FontIcon from 'material-ui/FontIcon'
+import InfoOutlineIcon from '@material-ui/icons/InfoOutline'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
 import withState from 'recompose/withState'
@@ -22,7 +22,7 @@ const enhance = compose(
   observer
 )
 
-const StyledFontIcon = styled(FontIcon)`
+const StyledInfoOutlineIcon = styled(InfoOutlineIcon)`
   cursor: pointer;
   pointer-events: auto;
   padding-left: 5px;
@@ -44,14 +44,8 @@ const InfoWithPopover = ({
   onClickFontIcon: () => void,
   children: Array<Object> | Object,
 }) => (
-  <div>
-    <StyledFontIcon
-      id="iconEl"
-      className="material-icons"
-      onClick={onClickFontIcon}
-    >
-      info_outline
-    </StyledFontIcon>
+  <Fragment>
+    <StyledInfoOutlineIcon onClick={onClickFontIcon} />
     <StyledPopover
       open={popupOpen}
       anchorEl={popupAnchorEl}
@@ -64,7 +58,7 @@ const InfoWithPopover = ({
     >
       {children}
     </StyledPopover>
-  </div>
+  </Fragment>
 )
 
 InfoWithPopover.defaultProps = {
