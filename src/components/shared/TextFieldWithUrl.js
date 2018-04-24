@@ -106,11 +106,10 @@ const MyTextFieldWithUrl = ({
         <FormHelperText id={`${label}-helper`}>{errorText}</FormHelperText>
       </FormControl>
       {Array.from(urls).map((url, index) => (
-        <div title={`${url} öffnen`}>
+        <div key={index} title={`${url} öffnen`}>
           <StyledOpenInNewIcon
             onClick={() => window.open(url, '_blank')}
             hoverColor={green300}
-            key={index}
           />
         </div>
       ))}
