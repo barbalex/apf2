@@ -1,8 +1,6 @@
 import React from 'react'
 import { observer, inject } from 'mobx-react'
 import styled from 'styled-components'
-import { Card, CardHeader, CardText } from 'material-ui/Card'
-import Button from 'material-ui-next/Button'
 import sortBy from 'lodash/sortBy'
 import compose from 'recompose/compose'
 import withState from 'recompose/withState'
@@ -10,13 +8,15 @@ import withProps from 'recompose/withProps'
 import withHandlers from 'recompose/withHandlers'
 import withLifecycle from '@hocs/with-lifecycle'
 
-import beziehungen from '../../../etc/beziehungen.png'
 import FormTitle from '../../shared/FormTitle'
 import Tipps from './Tipps'
 import Art from './Art'
 import Populationen from './Populationen'
 import Teilpopulationen from './Teilpopulationen'
 import Kontrollen from './Kontrollen'
+import Massnahmen from './Massnahmen'
+import Beobachtungen from './Beobachtungen'
+import Anwendung from './Anwendung'
 import Optionen from './Optionen'
 import exportModule from '../../../modules/export'
 import ErrorBoundary from '../../shared/ErrorBoundary'
@@ -35,27 +35,6 @@ const FieldsContainer = styled.div`
   height: 100%;
   padding-bottom: 10px;
   overflow: auto !important;
-`
-const FirstLevelCard = styled(Card)`
-  margin-bottom: 10px;
-  background-color: #fff8e1 !important;
-`
-const DownloadCardText = styled(CardText)`
-  display: flex;
-  flex-wrap: wrap;
-  align-items: stretch;
-  justify-content: stretch;
-  align-content: stretch;
-`
-const DownloadCardButton = styled(Button)`
-  flex-basis: 450px;
-  > span:first-of-type {
-    text-transform: none !important;
-    font-weight: 500;
-    display: block;
-    text-align: left;
-    justify-content: flex-start !important;
-  }
 `
 
 const enhance = compose(
@@ -139,88 +118,9 @@ const Exporte = ({
           }
         />
         <Kontrollen downloadFromView={downloadFromView} />
-        <FirstLevelCard>
-          <CardHeader title="Massnahmen" actAsExpander showExpandableButton />
-          <DownloadCardText expandable>
-            <DownloadCardButton
-              onClick={() =>
-                downloadFromView({
-                  view: 'v_massn',
-                  fileName: 'Massnahmen',
-                })
-              }
-            >
-              Massnahmen
-            </DownloadCardButton>
-            <DownloadCardButton
-              onClick={() =>
-                downloadFromView({
-                  view: 'v_massn_webgisbun',
-                  fileName: 'MassnahmenWebGisBun',
-                })
-              }
-            >
-              Massnahmen für WebGIS BUN
-            </DownloadCardButton>
-          </DownloadCardText>
-        </FirstLevelCard>
-        <FirstLevelCard>
-          <CardHeader
-            title="Beobachtungen"
-            actAsExpander
-            showExpandableButton
-          />
-          <DownloadCardText expandable>
-            <DownloadCardButton
-              onClick={() =>
-                downloadFromView({
-                  view: 'v_beob',
-                  fileName: 'Beobachtungen',
-                })
-              }
-            >
-              <div>Alle Beobachtungen von Arten aus apflora.ch</div>
-              <div>Nutzungsbedingungen der FNS beachten</div>
-            </DownloadCardButton>
-          </DownloadCardText>
-          <DownloadCardText expandable>
-            <DownloadCardButton
-              onClick={() =>
-                downloadFromView({
-                  view: 'v_beob__mit_data',
-                  fileName: 'Beobachtungen',
-                })
-              }
-            >
-              <div>Alle Beobachtungen von Arten aus apflora.ch...</div>
-              <div>...inklusive Original-Beobachtungsdaten (JSON)</div>
-              <div>Dauert Minuten und umfasst hunderte Megabytes!</div>
-              <div>Nutzungsbedingungen der FNS beachten</div>
-            </DownloadCardButton>
-          </DownloadCardText>
-        </FirstLevelCard>
-        <FirstLevelCard>
-          <CardHeader title="Anwendung" actAsExpander showExpandableButton />
-          <DownloadCardText expandable>
-            <DownloadCardButton
-              onClick={() =>
-                downloadFromView({
-                  view: 'v_datenstruktur',
-                  fileName: 'Datenstruktur',
-                })
-              }
-            >
-              Tabellen und Felder
-            </DownloadCardButton>
-            <DownloadCardButton
-              onClick={() => {
-                window.open(beziehungen)
-              }}
-            >
-              Datenstruktur grafisch dargestellt
-            </DownloadCardButton>
-          </DownloadCardText>
-        </FirstLevelCard>
+        <Massnahmen downloadFromView={downloadFromView} />
+        <Beobachtungen downloadFromView={downloadFromView} />
+        <Anwendung downloadFromView={downloadFromView} />
       </FieldsContainer>
     </Container>
   </ErrorBoundary>
