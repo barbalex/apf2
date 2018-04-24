@@ -87,9 +87,7 @@ function Store(): void {
   }
   this.export = {
     applyNodeLabelFilterToExport: false,
-    toggleApplyNodeLabelFilterToExport: () => {},
     applyActiveNodeFilterToExport: false,
-    toggleApplyActiveNodeFilterToExport: () => {},
     applyMapFilterToExport: false,
     toggleApplyMapFilterToExport: () => {},
     // array of names of downloads started
