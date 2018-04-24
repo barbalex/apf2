@@ -4,7 +4,6 @@ import styled from 'styled-components'
 import { Card, CardHeader, CardText } from 'material-ui/Card'
 import Button from 'material-ui-next/Button'
 import sortBy from 'lodash/sortBy'
-import AutoComplete from './Autocomplete'
 import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import withProps from 'recompose/withProps'
@@ -14,6 +13,10 @@ import withLifecycle from '@hocs/with-lifecycle'
 import beziehungen from '../../../etc/beziehungen.png'
 import FormTitle from '../../shared/FormTitle'
 import Tipps from './Tipps'
+import Art from './Art'
+import Populationen from './Populationen'
+import Teilpopulationen from './Teilpopulationen'
+import Kontrollen from './Kontrollen'
 import Optionen from './Optionen'
 import exportModule from '../../../modules/export'
 import ErrorBoundary from '../../shared/ErrorBoundary'
@@ -44,7 +47,7 @@ const DownloadCardText = styled(CardText)`
   justify-content: stretch;
   align-content: stretch;
 `
-const DownloadCardButtonNew = styled(Button)`
+const DownloadCardButton = styled(Button)`
   flex-basis: 450px;
   > span:first-of-type {
     text-transform: none !important;
@@ -54,11 +57,6 @@ const DownloadCardButtonNew = styled(Button)`
     justify-content: flex-start !important;
   }
 `
-const AutocompleteContainer = styled.div`
-  flex-basis: 450px;
-  padding-left: 16px;
-`
-const isRemoteHost = window.location.hostname !== 'localhost'
 
 const enhance = compose(
   inject('store'),
@@ -120,7 +118,7 @@ const Exporte = ({
   downloadFromView,
 }: {
   store: Object,
-  artFuerEierlegendeWollmilchsau: string,
+  artFuerEierlegendeWollmilchsau: String,
   changeArtFuerEierlegendeWollmilchsau: () => void,
   artList: Array<Object>,
   downloadFromView: () => void,
@@ -131,437 +129,20 @@ const Exporte = ({
       <FieldsContainer>
         <Optionen />
         <Tipps />
-        <FirstLevelCard>
-          <CardHeader title="Art" actAsExpander showExpandableButton />
-          <DownloadCardText expandable>
-            <DownloadCardButtonNew
-              onClick={() =>
-                downloadFromView({
-                  view: 'v_ap',
-                  apIdName: 'id',
-                  fileName: 'Arten',
-                })
-              }
-            >
-              Arten
-            </DownloadCardButtonNew>
-            <DownloadCardButtonNew
-              onClick={() =>
-                downloadFromView({
-                  view: 'v_ap_ohnepop',
-                  fileName: 'ArtenOhnePopulationen',
-                })
-              }
-            >
-              Arten ohne Populationen
-            </DownloadCardButtonNew>
-            <DownloadCardButtonNew
-              onClick={() =>
-                downloadFromView({
-                  view: 'v_ap_anzmassn',
-                  fileName: 'ArtenAnzahlMassnahmen',
-                })
-              }
-            >
-              Anzahl Massnahmen pro Art
-            </DownloadCardButtonNew>
-            <DownloadCardButtonNew
-              onClick={() =>
-                downloadFromView({
-                  view: 'v_ap_anzkontr',
-                  fileName: 'ArtenAnzahlKontrollen',
-                })
-              }
-            >
-              Anzahl Kontrollen pro Art
-            </DownloadCardButtonNew>
-            <DownloadCardButtonNew
-              onClick={() =>
-                downloadFromView({
-                  view: 'v_apber',
-                  fileName: 'Jahresberichte',
-                })
-              }
-            >
-              AP-Berichte (Jahresberichte)
-            </DownloadCardButtonNew>
-            <DownloadCardButtonNew
-              onClick={() =>
-                downloadFromView({
-                  view: 'v_ap_apberundmassn',
-                  fileName: 'ApJahresberichteUndMassnahmen',
-                })
-              }
-            >
-              AP-Berichte und Massnahmen
-            </DownloadCardButtonNew>
-            <DownloadCardButtonNew
-              onClick={() =>
-                downloadFromView({
-                  view: 'v_ziel',
-                  fileName: 'ApZiele',
-                })
-              }
-            >
-              Ziele
-            </DownloadCardButtonNew>
-            <DownloadCardButtonNew
-              onClick={() =>
-                downloadFromView({
-                  view: 'v_zielber',
-                  fileName: 'Zielberichte',
-                })
-              }
-            >
-              Ziel-Berichte
-            </DownloadCardButtonNew>
-            <DownloadCardButtonNew
-              onClick={() =>
-                downloadFromView({
-                  view: 'v_ber',
-                  fileName: 'Berichte',
-                })
-              }
-            >
-              Berichte
-            </DownloadCardButtonNew>
-            <DownloadCardButtonNew
-              onClick={() =>
-                downloadFromView({
-                  view: 'v_erfkrit',
-                  fileName: 'Erfolgskriterien',
-                })
-              }
-            >
-              Erfolgskriterien
-            </DownloadCardButtonNew>
-            <DownloadCardButtonNew
-              onClick={() =>
-                downloadFromView({
-                  view: 'v_idealbiotop',
-                  fileName: 'Idealbiotope',
-                })
-              }
-            >
-              Idealbiotope
-            </DownloadCardButtonNew>
-            <DownloadCardButtonNew
-              onClick={() =>
-                downloadFromView({
-                  view: 'v_assozart',
-                  fileName: 'AssoziierteArten',
-                })
-              }
-            >
-              Assoziierte Arten
-            </DownloadCardButtonNew>
-          </DownloadCardText>
-        </FirstLevelCard>
-        <FirstLevelCard>
-          <CardHeader title="Populationen" actAsExpander showExpandableButton />
-          <DownloadCardText expandable>
-            <DownloadCardButtonNew
-              onClick={() =>
-                downloadFromView({
-                  view: 'v_pop',
-                  fileName: 'Populationen',
-                })
-              }
-            >
-              Populationen
-            </DownloadCardButtonNew>
-            <DownloadCardButtonNew
-              onClick={() =>
-                downloadFromView({
-                  view: 'v_pop_kml',
-                  fileName: 'Populationen',
-                })
-              }
-            >
-              <div>Populationen für Google Earth (beschriftet mit PopNr)</div>
-            </DownloadCardButtonNew>
-            <DownloadCardButtonNew
-              onClick={() =>
-                downloadFromView({
-                  view: 'v_pop_kmlnamen',
-                  fileName: 'PopulationenNachNamen',
-                })
-              }
-            >
-              <div>
-                Populationen für Google Earth (beschriftet mit Artname, PopNr)
-              </div>
-            </DownloadCardButtonNew>
-            <DownloadCardButtonNew
-              onClick={() =>
-                downloadFromView({
-                  view: 'v_pop_vonapohnestatus',
-                  fileName: 'PopulationenVonApArtenOhneStatus',
-                })
-              }
-            >
-              Populationen von AP-Arten ohne Status
-            </DownloadCardButtonNew>
-            <DownloadCardButtonNew
-              onClick={() =>
-                downloadFromView({
-                  view: 'v_pop_ohnekoord',
-                  fileName: 'PopulationenOhneKoordinaten',
-                })
-              }
-            >
-              Populationen ohne Koordinaten
-            </DownloadCardButtonNew>
-            <DownloadCardButtonNew
-              onClick={() =>
-                downloadFromView({
-                  view: 'v_popmassnber_anzmassn',
-                  fileName: 'PopulationenAnzMassnProMassnber',
-                })
-              }
-            >
-              Populationen mit Massnahmen-Berichten: Anzahl Massnahmen im
-              Berichtsjahr
-            </DownloadCardButtonNew>
-            <DownloadCardButtonNew
-              onClick={() =>
-                downloadFromView({
-                  view: 'v_pop_anzmassn',
-                  fileName: 'PopulationenAnzahlMassnahmen',
-                })
-              }
-            >
-              Anzahl Massnahmen pro Population
-            </DownloadCardButtonNew>
-            <DownloadCardButtonNew
-              onClick={() =>
-                downloadFromView({
-                  view: 'v_pop_anzkontr',
-                  fileName: 'PopulationenAnzahlKontrollen',
-                })
-              }
-            >
-              Anzahl Kontrollen pro Population
-            </DownloadCardButtonNew>
-            <DownloadCardButtonNew
-              onClick={() =>
-                downloadFromView({
-                  view: 'v_pop_popberundmassnber',
-                  fileName: 'PopulationenPopUndMassnBerichte',
-                })
-              }
-            >
-              Populationen inkl. Populations- und Massnahmen-Berichte
-            </DownloadCardButtonNew>
-            <DownloadCardButtonNew
-              onClick={() =>
-                downloadFromView({
-                  view: 'v_pop_mit_letzter_popber',
-                  fileName: 'PopulationenMitLetzemPopBericht',
-                })
-              }
-            >
-              Populationen mit dem letzten Populations-Bericht
-            </DownloadCardButtonNew>
-            <DownloadCardButtonNew
-              onClick={() =>
-                downloadFromView({
-                  view: 'v_pop_mit_letzter_popmassnber',
-                  fileName: 'PopulationenMitLetztemMassnBericht',
-                })
-              }
-            >
-              Populationen mit dem letzten Massnahmen-Bericht
-            </DownloadCardButtonNew>
-          </DownloadCardText>
-        </FirstLevelCard>
-        <FirstLevelCard>
-          <CardHeader
-            title="Teilpopulationen"
-            actAsExpander
-            showExpandableButton
-          />
-          <DownloadCardText expandable>
-            <DownloadCardButtonNew
-              onClick={() =>
-                downloadFromView({
-                  view: 'v_tpop',
-                  fileName: 'Teilpopulationen',
-                })
-              }
-            >
-              Teilpopulationen
-            </DownloadCardButtonNew>
-            <DownloadCardButtonNew
-              onClick={() =>
-                downloadFromView({
-                  view: 'v_tpop_webgisbun',
-                  fileName: 'TeilpopulationenWebGisBun',
-                })
-              }
-            >
-              Teilpopulationen für WebGIS BUN
-            </DownloadCardButtonNew>
-            <DownloadCardButtonNew
-              onClick={() =>
-                downloadFromView({
-                  view: 'v_tpop_kml',
-                  fileName: 'Teilpopulationen',
-                  kml: true,
-                })
-              }
-            >
-              <div>Teilpopulationen für Google Earth</div>
-              <div>(beschriftet mit PopNr/TPopNr)</div>
-            </DownloadCardButtonNew>
-            <DownloadCardButtonNew
-              onClick={() =>
-                downloadFromView({
-                  view: 'v_tpop_kmlnamen',
-                  fileName: 'TeilpopulationenNachNamen',
-                  kml: true,
-                })
-              }
-            >
-              <div>Teilpopulationen für Google Earth</div>
-              <div>(beschriftet mit Artname, PopNr/TPopNr)</div>
-            </DownloadCardButtonNew>
-            <DownloadCardButtonNew
-              onClick={() =>
-                downloadFromView({
-                  view: 'v_tpop_ohnebekanntseit',
-                  fileName: 'TeilpopulationenVonApArtenOhneBekanntSeit',
-                })
-              }
-            >
-              <div>Teilpopulationen von AP-Arten</div>
-              <div>{'ohne "Bekannt seit"'}</div>
-            </DownloadCardButtonNew>
-            <DownloadCardButtonNew
-              onClick={() =>
-                downloadFromView({
-                  view: 'v_tpop_ohneapberichtrelevant',
-                  fileName: 'TeilpopulationenOhneApBerichtRelevant',
-                })
-              }
-            >
-              <div>Teilpopulationen ohne Eintrag</div>
-              <div>{'im Feld "Für AP-Bericht relevant"'}</div>
-            </DownloadCardButtonNew>
-            <DownloadCardButtonNew
-              onClick={() =>
-                downloadFromView({
-                  view: 'v_tpop_popnrtpopnrmehrdeutig',
-                  fileName: 'TeilpopulationenPopnrTpopnrMehrdeutig',
-                })
-              }
-            >
-              <div>Teilpopulationen mit mehrdeutiger</div>
-              <div>Kombination von PopNr und TPopNr</div>
-            </DownloadCardButtonNew>
-            <DownloadCardButtonNew
-              onClick={() =>
-                downloadFromView({
-                  view: 'v_tpop_anzmassn',
-                  fileName: 'TeilpopulationenAnzahlMassnahmen',
-                })
-              }
-            >
-              Anzahl Massnahmen pro Teilpopulation
-            </DownloadCardButtonNew>
-            <DownloadCardButtonNew
-              onClick={() =>
-                downloadFromView({
-                  view: 'v_tpop_anzkontrinklletzterundletztertpopber',
-                  fileName:
-                    'TeilpopulationenAnzKontrInklusiveLetzteKontrUndLetztenTPopBericht',
-                })
-              }
-              disabled={isRemoteHost}
-              title={
-                isRemoteHost
-                  ? 'nur aktiv, wenn apflora lokal installiert wird'
-                  : ''
-              }
-            >
-              <div>Teilpopulationen mit:</div>
-              <ul
-                style={{
-                  paddingLeft: '18px',
-                  marginTop: '5px',
-                  marginBottom: '10px',
-                }}
-              >
-                <li>Anzahl Kontrollen</li>
-                <li>letzte Kontrolle</li>
-                <li>letzter Teilpopulationsbericht</li>
-                <li>letzte Zählung</li>
-              </ul>
-              <div>{'= "Eier legende Wollmilchsau"'}</div>
-            </DownloadCardButtonNew>
-            <AutocompleteContainer>
-              <AutoComplete
-                label={`"Eier legende Wollmilchsau" für eine Art`}
-                value={artFuerEierlegendeWollmilchsau}
-                objects={artList}
-                changeArtFuerEierlegendeWollmilchsau={
-                  changeArtFuerEierlegendeWollmilchsau
-                }
-                downloadFromView={downloadFromView}
-              />
-            </AutocompleteContainer>
-            <DownloadCardButtonNew
-              onClick={() =>
-                downloadFromView({
-                  view: 'v_tpop_popberundmassnber',
-                  fileName: 'TeilpopulationenTPopUndMassnBerichte',
-                })
-              }
-            >
-              Teilpopulationen inklusive Teilpopulations- und
-              Massnahmen-Berichten
-            </DownloadCardButtonNew>
-          </DownloadCardText>
-        </FirstLevelCard>
-        <FirstLevelCard>
-          <CardHeader title="Kontrollen" actAsExpander showExpandableButton />
-          <DownloadCardText expandable>
-            <DownloadCardButtonNew
-              onClick={() =>
-                downloadFromView({
-                  view: 'v_tpopkontr',
-                  fileName: 'Kontrollen',
-                })
-              }
-            >
-              Kontrollen
-            </DownloadCardButtonNew>
-            <DownloadCardButtonNew
-              onClick={() =>
-                downloadFromView({
-                  view: 'v_tpopkontr_webgisbun',
-                  fileName: 'KontrollenWebGisBun',
-                })
-              }
-            >
-              Kontrollen für WebGIS BUN
-            </DownloadCardButtonNew>
-            <DownloadCardButtonNew
-              onClick={() =>
-                downloadFromView({
-                  view: 'v_kontrzaehl_anzproeinheit',
-                  fileName: 'KontrollenAnzahlProZaehleinheit',
-                })
-              }
-            >
-              Kontrollen: Anzahl pro Zähleinheit
-            </DownloadCardButtonNew>
-          </DownloadCardText>
-        </FirstLevelCard>
+        <Art downloadFromView={downloadFromView} />
+        <Populationen downloadFromView={downloadFromView} />
+        <Teilpopulationen
+          downloadFromView={downloadFromView}
+          artFuerEierlegendeWollmilchsau={artFuerEierlegendeWollmilchsau}
+          changeArtFuerEierlegendeWollmilchsau={
+            changeArtFuerEierlegendeWollmilchsau
+          }
+        />
+        <Kontrollen downloadFromView={downloadFromView} />
         <FirstLevelCard>
           <CardHeader title="Massnahmen" actAsExpander showExpandableButton />
           <DownloadCardText expandable>
-            <DownloadCardButtonNew
+            <DownloadCardButton
               onClick={() =>
                 downloadFromView({
                   view: 'v_massn',
@@ -570,8 +151,8 @@ const Exporte = ({
               }
             >
               Massnahmen
-            </DownloadCardButtonNew>
-            <DownloadCardButtonNew
+            </DownloadCardButton>
+            <DownloadCardButton
               onClick={() =>
                 downloadFromView({
                   view: 'v_massn_webgisbun',
@@ -580,7 +161,7 @@ const Exporte = ({
               }
             >
               Massnahmen für WebGIS BUN
-            </DownloadCardButtonNew>
+            </DownloadCardButton>
           </DownloadCardText>
         </FirstLevelCard>
         <FirstLevelCard>
@@ -590,7 +171,7 @@ const Exporte = ({
             showExpandableButton
           />
           <DownloadCardText expandable>
-            <DownloadCardButtonNew
+            <DownloadCardButton
               onClick={() =>
                 downloadFromView({
                   view: 'v_beob',
@@ -600,10 +181,10 @@ const Exporte = ({
             >
               <div>Alle Beobachtungen von Arten aus apflora.ch</div>
               <div>Nutzungsbedingungen der FNS beachten</div>
-            </DownloadCardButtonNew>
+            </DownloadCardButton>
           </DownloadCardText>
           <DownloadCardText expandable>
-            <DownloadCardButtonNew
+            <DownloadCardButton
               onClick={() =>
                 downloadFromView({
                   view: 'v_beob__mit_data',
@@ -615,13 +196,13 @@ const Exporte = ({
               <div>...inklusive Original-Beobachtungsdaten (JSON)</div>
               <div>Dauert Minuten und umfasst hunderte Megabytes!</div>
               <div>Nutzungsbedingungen der FNS beachten</div>
-            </DownloadCardButtonNew>
+            </DownloadCardButton>
           </DownloadCardText>
         </FirstLevelCard>
         <FirstLevelCard>
           <CardHeader title="Anwendung" actAsExpander showExpandableButton />
           <DownloadCardText expandable>
-            <DownloadCardButtonNew
+            <DownloadCardButton
               onClick={() =>
                 downloadFromView({
                   view: 'v_datenstruktur',
@@ -630,14 +211,14 @@ const Exporte = ({
               }
             >
               Tabellen und Felder
-            </DownloadCardButtonNew>
-            <DownloadCardButtonNew
+            </DownloadCardButton>
+            <DownloadCardButton
               onClick={() => {
                 window.open(beziehungen)
               }}
             >
               Datenstruktur grafisch dargestellt
-            </DownloadCardButtonNew>
+            </DownloadCardButton>
           </DownloadCardText>
         </FirstLevelCard>
       </FieldsContainer>
