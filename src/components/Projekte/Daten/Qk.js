@@ -5,7 +5,7 @@ import { observer, inject } from 'mobx-react'
 import Input, { InputLabel } from 'material-ui-next/Input'
 import { FormControl } from 'material-ui-next/Form'
 import styled from 'styled-components'
-import { Card, CardText } from 'material-ui/Card'
+import Paper from 'material-ui-next/Paper'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 import withState from 'recompose/withState'
@@ -27,8 +27,10 @@ const FieldsContainer = styled.div`
   overflow: auto !important;
   height: 100%;
 `
-const StyledCard = styled(Card)`
-  margin-bottom: 10px !important;
+const StyledPaper = styled(Paper)`
+  padding: 10px;
+  margin-bottom: 12px !important;
+  background-color: transparent !important;
 `
 const Title = styled.div`
   font-weight: bold;
@@ -41,7 +43,8 @@ const LoadingIndicator = styled.div`
 `
 const StyledA = styled.a`
   color: inherit;
-  font-weight: 100;
+  font-weight: normal;
+  font-size: 12px;
 `
 const StyledInput = styled(Input)`
   &:before {
@@ -138,21 +141,19 @@ const Qk = ({
             {loadingMessage}
           </LoadingIndicator>
           {messageArraysFiltered.map((messageArray, index) => (
-            <StyledCard key={index}>
-              <CardText>
-                <Title>{messageArray[0].hw}</Title>
-                {messageArray.map(m => (
-                  <div key={m.url.join()}>
-                    <StyledA
-                      href={`${appBaseUrl}/${m.url.join('/')}`}
-                      target="_blank"
-                    >
-                      {m.text.join('; ')}
-                    </StyledA>
-                  </div>
-                ))}
-              </CardText>
-            </StyledCard>
+            <StyledPaper key={index}>
+              <Title>{messageArray[0].hw}</Title>
+              {messageArray.map(m => (
+                <div key={m.url.join()}>
+                  <StyledA
+                    href={`${appBaseUrl}/${m.url.join('/')}`}
+                    target="_blank"
+                  >
+                    {m.text.join('; ')}
+                  </StyledA>
+                </div>
+              ))}
+            </StyledPaper>
           ))}
         </FieldsContainer>
       </Container>
