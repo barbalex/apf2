@@ -2,29 +2,31 @@
 import React from 'react'
 import { toJS } from 'mobx'
 import { observer, inject } from 'mobx-react'
-import AppBar from 'material-ui/AppBar'
-import IconMenu from 'material-ui/IconMenu'
-import MenuItem from 'material-ui/MenuItem'
-import IconButton from 'material-ui/IconButton/IconButton'
-import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert'
+import AppBar from 'material-ui-next/AppBar'
+import Toolbar from 'material-ui-next/Toolbar'
+import Typography from 'material-ui-next/Typography'
+import IconButton from 'material-ui-next/IconButton'
+import Menu, { MenuItem } from 'material-ui-next/Menu'
 import Button from 'material-ui-next/Button'
+import MoreVertIcon from '@material-ui/icons/MoreVert'
 import clone from 'lodash/clone'
 import remove from 'lodash/remove'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
+import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
 import shouldUpdate from 'recompose/shouldUpdate'
 
 import isMobilePhone from '../modules/isMobilePhone'
 import ErrorBoundary from './shared/ErrorBoundary'
 
-const Container = styled.div`
-  display: block;
-`
 const StyledAppBar = styled(AppBar)`
   @media print {
     display: none !important;
   }
+`
+const StyledToolbar = styled(Toolbar)`
+  justify-content: space-between;
 `
 const StyledButton = styled(Button)`
   color: ${props =>
@@ -35,16 +37,10 @@ const StyledButton = styled(Button)`
 const MenuDiv = styled.div`
   display: flex;
   flex-wrap: wrap;
-  > button {
-    padding-top: 4px !important;
-  }
 `
 const StyledMoreVertIcon = styled(MoreVertIcon)`
   color: white !important;
 `
-const iconMenuAnchorOrigin = { horizontal: 'left', vertical: 'bottom' }
-const iconMenuTargetOrigin = { horizontal: 'left', vertical: 'top' }
-const iconMenuStyle = { paddingLeft: 10 }
 
 /**
  * checking props change according to
@@ -58,6 +54,7 @@ const checkPropsChange = (props, nextProps) =>
 const enhance = compose(
   inject('store'),
   shouldUpdate(checkPropsChange),
+  withState('anchorEl', 'setAnchorEl', null),
   withHandlers({
     onClickButton: props => name => {
       const { store } = props
@@ -88,11 +85,16 @@ const enhance = compose(
         store.setUrlQueryValue('projekteTabs', projekteTabs)
       }
     },
-    watchVideos: props => () =>
+    watchVideos: ({ setAnchorEl }) => () => {
+      setAnchorEl(null)
       window.open(
         'https://www.youtube.com/playlist?list=PLTz8Xt5SOQPS-dbvpJ_DrB4-o3k3yj09J'
-      ),
-    showDeletedDatasets: props => () => props.store.toggleShowDeletedDatasets(),
+      )
+    },
+    showDeletedDatasets: ({ setAnchorEl, store }) => () => {
+      setAnchorEl(null)
+      store.toggleShowDeletedDatasets()
+    },
   }),
   withHandlers({
     onClickButtonStrukturbaum: ({ onClickButton }) => () =>
@@ -102,7 +104,10 @@ const enhance = compose(
     onClickButtonDaten: ({ onClickButton }) => () => onClickButton('daten'),
     onClickButtonDaten2: ({ onClickButton }) => () => onClickButton('daten2'),
     onClickButtonKarte: ({ onClickButton }) => () => onClickButton('karte'),
-    onClickButtonExporte: ({ onClickButton }) => () => onClickButton('exporte'),
+    onClickButtonExporte: ({ onClickButton, setAnchorEl }) => () => {
+      setAnchorEl(null)
+      onClickButton('exporte')
+    },
   }),
   observer
 )
@@ -117,6 +122,8 @@ const MyAppBar = ({
   onClickButtonExporte,
   showDeletedDatasets,
   watchVideos,
+  anchorEl,
+  setAnchorEl,
 }: {
   store: Object,
   onClickButton: () => void,
@@ -128,6 +135,8 @@ const MyAppBar = ({
   onClickButtonExporte: () => void,
   showDeletedDatasets: () => void,
   watchVideos: () => void,
+  anchorEl: Object,
+  setAnchorEl: () => void,
 }) => {
   const projekteTabs = store.urlQuery.projekteTabs
   const treeIsVisible = projekteTabs.includes('tree')
@@ -143,91 +152,98 @@ const MyAppBar = ({
 
   return (
     <ErrorBoundary>
-      <Container>
-        <StyledAppBar
-          title={isMobile ? '' : 'AP Flora'}
-          iconElementRight={
-            <MenuDiv>
+      <StyledAppBar position="static">
+        <StyledToolbar>
+          <Typography variant="title" color="inherit">
+            {isMobile ? '' : 'AP Flora'}
+          </Typography>
+          <MenuDiv>
+            <StyledButton
+              data-visible={treeIsVisible}
+              onClick={onClickButtonStrukturbaum}
+            >
+              Strukturbaum
+            </StyledButton>
+            <StyledButton
+              data-visible={datenIsVisible}
+              onClick={onClickButtonDaten}
+            >
+              Daten
+            </StyledButton>
+            {!isMobile && (
               <StyledButton
-                data-visible={treeIsVisible}
-                onClick={onClickButtonStrukturbaum}
+                data-visible={tree2IsVisible}
+                onClick={onClickButtonStrukturbaum2}
               >
-                Strukturbaum
+                Strukturbaum 2
               </StyledButton>
+            )}
+            {!isMobile && (
               <StyledButton
-                data-visible={datenIsVisible}
-                onClick={onClickButtonDaten}
+                data-visible={daten2IsVisible}
+                onClick={onClickButtonDaten2}
               >
-                Daten
+                Daten 2
               </StyledButton>
-              {!isMobile && (
+            )}
+            <StyledButton
+              data-visible={karteIsVisible}
+              onClick={onClickButtonKarte}
+            >
+              Karte
+            </StyledButton>
+            {!isMobile &&
+              exporteIsActive && (
                 <StyledButton
-                  data-visible={tree2IsVisible}
-                  onClick={onClickButtonStrukturbaum2}
+                  data-visible={exporteIsVisible}
+                  onClick={onClickButtonExporte}
                 >
-                  Strukturbaum 2
+                  Exporte
                 </StyledButton>
               )}
-              {!isMobile && (
-                <StyledButton
-                  data-visible={daten2IsVisible}
-                  onClick={onClickButtonDaten2}
-                >
-                  Daten 2
-                </StyledButton>
-              )}
-              <StyledButton
-                data-visible={karteIsVisible}
-                onClick={onClickButtonKarte}
+
+            <div>
+              <IconButton
+                aria-label="Mehr"
+                aria-owns={anchorEl ? 'long-menu' : null}
+                aria-haspopup="true"
+                onClick={event => setAnchorEl(event.currentTarget)}
               >
-                Karte
-              </StyledButton>
-              {!isMobile &&
-                exporteIsActive && (
-                  <StyledButton
-                    data-visible={exporteIsVisible}
-                    onClick={onClickButtonExporte}
-                  >
-                    Exporte
-                  </StyledButton>
-                )}
-              <IconMenu
-                iconButtonElement={
-                  <IconButton>
-                    <StyledMoreVertIcon />
-                  </IconButton>
-                }
-                anchorOrigin={iconMenuAnchorOrigin}
-                targetOrigin={iconMenuTargetOrigin}
-                style={iconMenuStyle}
+                <StyledMoreVertIcon />
+              </IconButton>
+              <Menu
+                id="long-menu"
+                anchorEl={anchorEl}
+                open={Boolean(anchorEl)}
+                onClose={() => setAnchorEl(null)}
               >
                 {isMobile &&
                   exporteIsActive && (
                     <MenuItem
-                      primaryText="Exporte"
                       onClick={onClickButtonExporte}
                       disabled={exporteIsVisible}
-                    />
+                    >
+                      Exporte
+                    </MenuItem>
                   )}
                 <MenuItem
-                  primaryText="gelöschte Datensätze wiederherstellen"
                   onClick={showDeletedDatasets}
                   disabled={store.deletedDatasets.length === 0}
-                />
+                >
+                  gelöschte Datensätze wiederherstellen
+                </MenuItem>
+                <MenuItem onClick={watchVideos}>Video-Anleitungen</MenuItem>
                 <MenuItem
-                  primaryText="Video-Anleitungen"
-                  onClick={watchVideos}
-                />
-                <MenuItem
-                  primaryText={`${store.user.name} abmelden`}
-                  onClick={store.logout}
-                />
-              </IconMenu>
-            </MenuDiv>
-          }
-          showMenuIconButton={false}
-        />
-      </Container>
+                  onClick={() => {
+                    setAnchorEl(null)
+                    store.logout()
+                  }}
+                >{`${store.user.name} abmelden`}</MenuItem>
+              </Menu>
+            </div>
+          </MenuDiv>
+        </StyledToolbar>
+      </StyledAppBar>
     </ErrorBoundary>
   )
 }

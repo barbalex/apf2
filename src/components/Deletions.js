@@ -110,6 +110,7 @@ const Deletions = ({
                     checked={choosenDeletions.includes(ds.time)}
                     onChange={toggleChoosenDeletions}
                     value={ds.time}
+                    color="primary"
                   />
                 }
                 label={label}
