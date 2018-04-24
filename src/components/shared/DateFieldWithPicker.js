@@ -14,7 +14,7 @@ import { observer } from 'mobx-react'
 import Input, { InputLabel } from 'material-ui-next/Input'
 import { FormControl, FormHelperText } from 'material-ui-next/Form'
 import DatePicker from 'material-ui/DatePicker'
-import FontIcon from 'material-ui/FontIcon'
+import EventIcon from '@material-ui/icons/Event'
 import format from 'date-fns/format'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
@@ -30,10 +30,11 @@ const Container = styled.div`
   margin-bottom: -15px;
   break-inside: avoid;
 `
-const StyledFontIcon = styled(FontIcon)`
+const StyledEventIcon = styled(EventIcon)`
   cursor: pointer;
   pointer-events: auto;
-  font-size: 34px !important;
+  height: 30px !important;
+  width: 30px !important;
 `
 const DatePickerDiv = styled.div`
   width: 0;
@@ -154,14 +155,9 @@ class MyDatePicker extends Component {
             onBlur={onBlur}
             onFocus={onFocus}
             endAdornment={
-              <StyledFontIcon
-                id="iconCalendar"
-                className="material-icons"
-                title="Kalender öffnen"
-                onClick={() => this.datePicker.focus()}
-              >
-                event
-              </StyledFontIcon>
+              <div title="Kalender öffnen">
+                <StyledEventIcon onClick={() => this.datePicker.focus()} />
+              </div>
             }
           />
           <FormHelperText id={`${label}-helper`}>{errorText}</FormHelperText>
