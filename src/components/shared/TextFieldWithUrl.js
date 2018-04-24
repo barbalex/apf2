@@ -3,8 +3,8 @@ import React from 'react'
 import { observer } from 'mobx-react'
 import Input, { InputLabel } from 'material-ui-next/Input'
 import { FormControl, FormHelperText } from 'material-ui-next/Form'
-import FontIcon from 'material-ui/FontIcon'
-import { greenA200 } from 'material-ui/styles/colors'
+import OpenInNewIcon from '@material-ui/icons/OpenInNew'
+import { green300 } from 'material-ui/styles/colors'
 /**
  * DO NOT UPDATE get-urls
  * before create-react-app moves to using babili
@@ -22,7 +22,7 @@ const Container = styled.div`
   margin-bottom: -15px;
   break-inside: avoid;
 `
-const StyledFontIcon = styled(FontIcon)`
+const StyledOpenInNewIcon = styled(OpenInNewIcon)`
   margin-top: 20px;
   cursor: pointer;
 `
@@ -106,15 +106,13 @@ const MyTextFieldWithUrl = ({
         <FormHelperText id={`${label}-helper`}>{errorText}</FormHelperText>
       </FormControl>
       {Array.from(urls).map((url, index) => (
-        <StyledFontIcon
-          className={'material-icons'}
-          onClick={() => window.open(url, '_blank')}
-          hoverColor={greenA200}
-          title={`${url} öffnen`}
-          key={index}
-        >
-          open_in_new
-        </StyledFontIcon>
+        <div title={`${url} öffnen`}>
+          <StyledOpenInNewIcon
+            onClick={() => window.open(url, '_blank')}
+            hoverColor={green300}
+            key={index}
+          />
+        </div>
       ))}
     </Container>
   )
