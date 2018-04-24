@@ -1,7 +1,8 @@
 // @flow
-import React from 'react'
+import React, { Fragment } from 'react'
 import { observer } from 'mobx-react'
-import { Checkbox } from 'material-ui/Checkbox'
+import { FormControlLabel } from 'material-ui-next/Form'
+import Checkbox from 'material-ui-next/Checkbox'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 
@@ -27,10 +28,14 @@ const MyCheckbox = ({
   label: string,
   onCheck: () => void,
 }) => (
-  <div>
+  <Fragment>
     <Label label={label} />
-    <Checkbox checked={value === 1} onCheck={onCheck} />
-  </div>
+    <FormControlLabel
+      control={
+        <Checkbox checked={value === 1} onChange={onCheck} value={label} />
+      }
+    />
+  </Fragment>
 )
 
 MyCheckbox.defaultProps = {

@@ -1,7 +1,8 @@
 // @flow
 import React from 'react'
 import { observer } from 'mobx-react'
-import Checkbox from 'material-ui/Checkbox'
+import { FormGroup, FormControlLabel } from 'material-ui-next/Form'
+import Checkbox from 'material-ui-next/Checkbox'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 import styled from 'styled-components'
@@ -17,6 +18,9 @@ const Container = styled.div`
     flex-direction: column;
     justify-content: space-around;
   }
+`
+const StyledFormControlLabel = styled(FormControlLabel)`
+  margin-top: -10px;
 `
 
 const enhance = compose(
@@ -45,11 +49,15 @@ const CheckboxWithInfo = ({
   updatePropertyInDb: () => void,
 }) => (
   <Container>
-    <div>
+    <FormGroup>
       <Label label={label} />
-      <Checkbox checked={value} onCheck={onCheck} />
+      <StyledFormControlLabel
+        control={<Checkbox checked={value} onChange={onCheck} value={label} />}
+      />
+    </FormGroup>
+    <div>
+      <InfoWithPopover>{popover}</InfoWithPopover>
     </div>
-    <InfoWithPopover>{popover}</InfoWithPopover>
   </Container>
 )
 
