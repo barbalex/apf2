@@ -32,14 +32,14 @@ const StyledNode = styled.div`
 `
 const StyledExpandMoreIcon = styled(ExpandMoreIcon)`
   margin-top: ${props =>
-    props['data-nodeIsOpen'] ? '-6px !important' : '1px !important'};
-  margin-left: ${props => (props['data-nodeIsOpen'] ? '-1px !important' : 0)};
-  margin-right: ${props => (props['data-nodeIsOpen'] ? '-5px !important' : 0)};
-  padding-left: ${props => (props['data-nodeIsOpen'] ? '2px' : '2px')};
+    props['data-nodeisopen'] ? '-6px !important' : '1px !important'};
+  margin-left: ${props => (props['data-nodeisopen'] ? '-1px !important' : 0)};
+  margin-right: ${props => (props['data-nodeisopen'] ? '-5px !important' : 0)};
+  padding-left: ${props => (props['data-nodeisopen'] ? '2px' : '2px')};
   height: ${props =>
-    props['data-nodeIsOpen'] ? '30px !important' : '22px !important'};
+    props['data-nodeisopen'] ? '30px !important' : '22px !important'};
   width: ${props =>
-    props['data-nodeIsOpen'] ? '30px !important' : '26px !important'};
+    props['data-nodeisopen'] ? '30px !important' : '26px !important'};
   color: ${props =>
     props['data-nodeisinactivenodepath'] ? '#D84315 !important' : 'inherit'};
   cursor: pointer;
@@ -278,7 +278,7 @@ const Row = ({
               {symbolIcon === 'expandMore' && (
                 <StyledExpandMoreIcon
                   data-nodeisinactivenodepath={nodeIsInActiveNodePath}
-                  data-nodeIsOpen={nodeIsOpen}
+                  data-nodeisopen={nodeIsOpen}
                 />
               )}
               {symbolIcon === 'chevronRight' && <StyledChevronRightIcon />}
