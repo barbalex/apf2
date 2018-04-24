@@ -16,7 +16,6 @@ const Tipps = () => (
   <FirstLevelCard>
     <CardHeader title="Tipps und Tricks" actAsExpander showExpandableButton />
     <CardText expandable>
-      Exporte werden als .csv-Datei heruntergeladen.
       <SecondLevelCard>
         <CardHeader
           title="Was ist eine .csv-Datei?"
@@ -53,7 +52,7 @@ const Tipps = () => (
       </SecondLevelCard>
       <SecondLevelCard>
         <CardHeader
-          title="Wie öffne ich diese Datei?"
+          title="Wie öffne ich eine .csv-Datei?"
           actAsExpander
           showExpandableButton
         />
@@ -85,7 +84,7 @@ const Tipps = () => (
       </SecondLevelCard>
       <SecondLevelCard>
         <CardHeader
-          title="Welches Programm soll ich verwenden?"
+          title="Welches Programm soll ich dazu verwenden?"
           actAsExpander
           showExpandableButton
         />
@@ -150,7 +149,7 @@ const Tipps = () => (
       </SecondLevelCard>
       <SecondLevelCard>
         <CardHeader
-          title="Hilfe, ich sehe nur ungeordnete Daten!"
+          title="Sind die Daten ungeordnet und chaotisch?"
           actAsExpander
           showExpandableButton
         />
