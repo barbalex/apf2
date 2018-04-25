@@ -16,7 +16,7 @@ const enhance = compose(
       props.updateCopied(true)
       setTimeout(() => {
         props.updateCopied(false)
-      }, 10000)
+      }, 3000)
     },
   })
 )
