@@ -73,6 +73,7 @@ const Container = styled.div`
   border-left-color: rgb(46, 125, 50);
   border-left-width: 1px;
   border-left-style: solid;
+  overflow: hidden;
   @media print {
     display: none !important;
   }
