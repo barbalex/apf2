@@ -6,7 +6,7 @@ import styled from 'styled-components'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 import withState from 'recompose/withState'
-import Input from 'material-ui/Input'
+import Input, { InputLabel } from 'material-ui/Input'
 import { FormControl, FormHelperText } from 'material-ui/Form'
 import IconButton from 'material-ui/IconButton'
 import PanIcon from '@material-ui/icons/MyLocation'
@@ -26,6 +26,7 @@ const Container = styled.div`
   max-width: 380px;
 `
 const StyledIconButton = styled(IconButton)`
+  margin-top: 8px !important;
   cursor: ${props => (props.disabled ? 'pointer !important' : 'default')};
 `
 const StyledPanIcon = styled(PanIcon)`
@@ -35,7 +36,6 @@ const StyledClearIcon = styled(ClearIcon)`
   color: ${props => (props.disabled ? 'grey !important' : 'unset')};
 `
 const StyledInput = styled(Input)`
-  padding: 0 5px;
   &:before {
     background-color: rgba(0, 0, 0, 0.1) !important;
   }
@@ -198,11 +198,8 @@ class PanToCoordinates extends Component {
 
     return (
       <Container onBlur={onBlurGotoContainer} onFocus={onFocusGotoContainer}>
-        <FormControl
-          error={!!xError}
-          fullWidth
-          aria-describedby="XKoordinate-helper"
-        >
+        <FormControl error={!!xError} fullWidth aria-describedby="xhelper">
+          <InputLabel htmlFor="XKoordinate">X-Koordinate</InputLabel>
           <StyledInput
             id="XKoordinate"
             value={x}
@@ -211,16 +208,12 @@ class PanToCoordinates extends Component {
             max="2828516"
             onChange={onChangeX}
             onBlur={onBlurX}
-            placeholder="X-Koordinate"
             ref={c => (this.xkoordField = c)}
           />
-          <FormHelperText id="XKoordinate-helper">{xError}</FormHelperText>
+          <FormHelperText id="xhelper">{xError}</FormHelperText>
         </FormControl>
-        <FormControl
-          error={!!yError}
-          fullWidth
-          aria-describedby="YKoordinate-helper"
-        >
+        <FormControl error={!!yError} fullWidth aria-describedby="yhelper">
+          <InputLabel htmlFor="YKoordinate">Y-Koordinate</InputLabel>
           <StyledInput
             id="YKoordinate"
             value={y}
@@ -229,13 +222,13 @@ class PanToCoordinates extends Component {
             max="1299942"
             onChange={onChangeY}
             onBlur={onBlurY}
-            placeholder="Y-Koordinate"
             ref={c => (this.ykoordField = c)}
           />
-          <FormHelperText id="YKoordinate-helper">{yError}</FormHelperText>
+          <FormHelperText id="yhelper">{yError}</FormHelperText>
         </FormControl>
         <StyledIconButton
           title="auf Koordinaten zentrieren"
+          aria-label="auf Koordinaten zentrieren"
           onClick={onClickGoto}
           disabled={!(!!x && !!y && xIsValid(x) && yIsValid(y))}
         >
@@ -245,6 +238,7 @@ class PanToCoordinates extends Component {
         </StyledIconButton>
         <StyledIconButton
           title="Markierung und Koordinaten entfernen"
+          aria-label="Markierung und Koordinaten entfernen"
           onClick={onClickClear}
           disabled={!(panToMarker || !!x || !!y)}
         >
