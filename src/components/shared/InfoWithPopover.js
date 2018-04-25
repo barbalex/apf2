@@ -1,7 +1,8 @@
 // @flow
 import React, { Fragment } from 'react'
 import { observer } from 'mobx-react'
-import Popover from 'material-ui/Popover'
+import Popover from 'material-ui-next/Popover'
+
 import InfoOutlineIcon from '@material-ui/icons/InfoOutline'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
@@ -50,11 +51,8 @@ const InfoWithPopover = ({
       open={popupOpen}
       anchorEl={popupAnchorEl}
       anchorOrigin={{ horizontal: 'left', vertical: 'top' }}
-      targetOrigin={{ horizontal: 'left', vertical: 'bottom' }}
-      animated
-      autoCloseWhenOffScreen
-      canAutoPosition
-      onRequestClose={onRequestClosePopover}
+      transformOrigin={{ horizontal: 'left', vertical: 'bottom' }}
+      onClose={onRequestClosePopover}
     >
       {children}
     </StyledPopover>
