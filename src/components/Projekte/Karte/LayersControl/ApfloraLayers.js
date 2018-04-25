@@ -130,7 +130,6 @@ const SortableItem = SortableElement(
         apfloraLayer.value === 'BeobNichtBeurteilt') ||
         (store.map.activeApfloraLayers.includes('BeobZugeordnet') &&
           apfloraLayer.value === 'BeobZugeordnet'))
-    console.log('assigningispossible:', assigningispossible)
     const getZuordnenIconTitle = () => {
       if (store.map.beob.assigning) return 'Zuordnung beenden'
       if (assigningispossible) return 'Teil-Populationen zuordnen'
