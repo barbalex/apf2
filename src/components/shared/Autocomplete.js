@@ -98,9 +98,10 @@ const styles = theme => ({
     margin: 0,
     padding: 0,
     listStyleType: 'none',
-    maxHeight: '400px',
+    maxHeight: '200px',
     overflow: 'auto',
     zIndex: 1000,
+    breakInside: 'avoid',
   },
 })
 

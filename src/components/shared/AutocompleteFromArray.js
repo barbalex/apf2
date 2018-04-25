@@ -92,8 +92,9 @@ const styles = theme => ({
     margin: 0,
     padding: 0,
     listStyleType: 'none',
-    maxHeight: '500px',
+    maxHeight: '200px',
     overflow: 'auto',
+    breakInside: 'avoid',
   },
 })
 
