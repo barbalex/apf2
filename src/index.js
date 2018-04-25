@@ -15,7 +15,7 @@ import axios from 'axios'
 import Loadable from 'react-loadable'
 
 import { MuiThemeProvider } from 'material-ui/styles'
-import v1Theme from './theme'
+import theme from './theme'
 import moment from 'moment'
 import 'moment/locale/de-ch' // this is the important bit, you have to import the locale your'e trying to use.
 import MomentUtils from 'material-ui-pickers/utils/moment-utils'
@@ -121,7 +121,7 @@ const DownloadMessages = Loadable({
 
     ReactDOM.render(
       <Provider store={store}>
-        <MuiThemeProvider theme={v1Theme}>
+        <MuiThemeProvider theme={theme}>
           <MuiPickersUtilsProvider
             utils={MomentUtils}
             moment={moment}

@@ -11,7 +11,7 @@ import PropTypes from 'prop-types'
 
 import ShowCoordinates from './ShowCoordinates'
 import PanToCoordinates from './PanToCoordinates'
-import v1Theme from '../../../../theme'
+import theme from '../../../../theme'
 
 /**
  * onClick coordinates container: render coordinate-field-pair and go-to button
@@ -47,7 +47,7 @@ const CoordinatesControl = ({
   map: Object,
 }) => (
   <StyledControl position="bottomright">
-    <MuiThemeProvider theme={v1Theme}>
+    <MuiThemeProvider theme={theme}>
       {controlType === 'coordinates' ? (
         <ShowCoordinates changeControlType={changeControlType} store={store} />
       ) : (

@@ -6,7 +6,7 @@ import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 import withState from 'recompose/withState'
 import { MuiThemeProvider } from 'material-ui/styles'
-import v1Theme from '../../../../theme'
+import theme from '../../../../theme'
 import ExpandLessIcon from '@material-ui/icons/ExpandLess'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 
@@ -146,7 +146,7 @@ const LayersControl = ({
 
   return (
     <Control position="topright">
-      <MuiThemeProvider theme={v1Theme}>
+      <MuiThemeProvider theme={theme}>
         <CardContainer>
           <Card>
             <CardHeader onClick={onToggleApfloraLayersExpanded}>

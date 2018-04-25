@@ -10,7 +10,8 @@ import withHandlers from 'recompose/withHandlers'
 import getContext from 'recompose/getContext'
 import { MuiThemeProvider } from 'material-ui/styles'
 import FileDownloadIcon from '@material-ui/icons/FileDownload'
-import v1Theme from '../../../theme'
+
+import theme from '../../../theme'
 
 const StyledButton = styled.button`
   background-color: white;
@@ -63,7 +64,7 @@ class PrintControl extends Component {
 
     return (
       <Control position="topright">
-        <MuiThemeProvider theme={v1Theme}>
+        <MuiThemeProvider theme={theme}>
           <StyledButton onClick={savePng} title="Karte als png speichern">
             <FileDownloadIcon />
           </StyledButton>
