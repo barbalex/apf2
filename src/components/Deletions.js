@@ -109,7 +109,9 @@ const Deletions = ({
                   <StyledCheckbox
                     checked={choosenDeletions.includes(ds.time)}
                     onChange={toggleChoosenDeletions}
-                    value={ds.time}
+                    value={
+                      ds.time && ds.time.toString() ? ds.time.toString() : ''
+                    }
                     color="primary"
                   />
                 }
@@ -126,7 +128,7 @@ const Deletions = ({
           >
             wiederherstellen
           </Button>
-          <Button primary onClick={close}>
+          <Button color="primary" onClick={close}>
             schliessen
           </Button>
         </DialogActions>
