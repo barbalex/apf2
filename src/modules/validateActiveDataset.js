@@ -1,6 +1,6 @@
 // @flow
 import _forEach from 'lodash/forEach'
-import Joi from 'joi-browser'
+import yup from 'yup'
 
 export default (
   table: ?string,
@@ -32,9 +32,10 @@ export default (
       const dataType = field.data_type
       switch (dataType) {
         case 'integer': {
-          validDataType = Joi.validate(
+          validDataType = yup.validate(
             value,
-            Joi.number()
+            yup
+              .number()
               .integer()
               .min(-2147483648)
               .max(+2147483647)
@@ -45,9 +46,10 @@ export default (
         }
 
         case 'smallint': {
-          validDataType = Joi.validate(
+          validDataType = yup.validate(
             value,
-            Joi.number()
+            yup
+              .number()
               .integer()
               .min(-32768)
               .max(+32767)
@@ -58,9 +60,10 @@ export default (
         }
 
         case 'double precision': {
-          validDataType = Joi.validate(
+          validDataType = yup.validate(
             value,
-            Joi.number()
+            yup
+              .number()
               .precision(15)
               .allow('')
               .allow(null)
@@ -69,20 +72,22 @@ export default (
         }
 
         case 'character varying': {
-          validDataType = Joi.validate(
+          validDataType = yup.validate(
             value,
-            Joi.alternatives()
-              .try(Joi.number(), Joi.string())
+            yup
+              .alternatives()
+              .try(yup.number(), yup.string())
               .allow('')
               .allow(null)
           )
           // - if field type is varchar: check if value length complies to character_maximum_length
           const maxLen = field.character_maximum_length
           if (!validDataType.error && maxLen) {
-            validDataType = Joi.validate(
+            validDataType = yup.validate(
               value,
-              Joi.alternatives()
-                .try(Joi.string().max(maxLen), Joi.number())
+              yup
+                .alternatives()
+                .try(yup.string().max(maxLen), yup.number())
                 .allow('')
                 .allow(null)
             )
@@ -91,9 +96,10 @@ export default (
         }
 
         case 'uuid': {
-          validDataType = Joi.validate(
+          validDataType = yup.validate(
             value,
-            Joi.string()
+            yup
+              .string()
               .guid()
               .allow(null)
           )
@@ -101,15 +107,16 @@ export default (
         }
 
         case 'date': {
-          validDataType = Joi.validate(value, Joi.string().allow(null))
+          validDataType = yup.validate(value, yup.string().allow(null))
           break
         }
 
         case 'text': {
-          validDataType = Joi.validate(
+          validDataType = yup.validate(
             value,
-            Joi.alternatives()
-              .try(Joi.number(), Joi.string())
+            yup
+              .alternatives()
+              .try(yup.number(), yup.string())
               .allow('')
               .allow(null)
           )
