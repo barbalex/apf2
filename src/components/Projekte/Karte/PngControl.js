@@ -3,44 +3,36 @@ import PropTypes from 'prop-types'
 import 'leaflet'
 import 'leaflet-easyprint'
 import Control from 'react-leaflet-control'
-import FontIcon from 'material-ui-v0/FontIcon'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
 import getContext from 'recompose/getContext'
-import MuiThemeProvider0x from 'material-ui-v0/styles/MuiThemeProvider'
-import darkBaseTheme from 'material-ui-v0/styles/baseThemes/darkBaseTheme'
-import getMuiTheme from 'material-ui-v0/styles/getMuiTheme'
 import { MuiThemeProvider } from 'material-ui/styles'
+import FileDownloadIcon from '@material-ui/icons/FileDownload'
 import v1Theme from '../../../theme'
 
 const StyledButton = styled.button`
   background-color: white;
-  width: 47px;
-  height: 47px;
-  border-radius: 5px;
+  width: 34px;
+  height: 34px;
+  border-radius: 4px;
   border: 2px solid rgba(0, 0, 0, 0.2);
   background-clip: padding-box;
-  span {
-    color: rgba(0, 0, 0, 0.54) !important;
+  cursor: pointer;
+  svg {
+    margin-left: -2px;
+    padding-top: 2px;
+    color: rgba(0, 0, 0, 0.7) !important;
   }
 `
-
-const theme = Object.assign({}, darkBaseTheme, {
-  appBar: {
-    height: 51,
-  },
-})
 
 const enhance = compose(
   getContext({ map: PropTypes.object.isRequired }),
   withState('printPlugin', 'changePrintPlugin', {}),
   withHandlers({
-    savePng: props => () => {
-      const { printPlugin } = props
-      printPlugin.printMap('CurrentSize', 'apfloraKarte')
-    },
+    savePng: ({ printPlugin }) => () =>
+      printPlugin.printMap('CurrentSize', 'apfloraKarte'),
   })
 )
 
@@ -71,15 +63,11 @@ class PrintControl extends Component {
 
     return (
       <Control position="topright">
-        <StyledButton onClick={savePng} title="Karte als png speichern">
-          <MuiThemeProvider theme={v1Theme}>
-            <MuiThemeProvider0x muiTheme={getMuiTheme(theme)}>
-              <FontIcon id="karteAlsPngSpeichern" className="material-icons">
-                file_download
-              </FontIcon>
-            </MuiThemeProvider0x>
-          </MuiThemeProvider>
-        </StyledButton>
+        <MuiThemeProvider theme={v1Theme}>
+          <StyledButton onClick={savePng} title="Karte als png speichern">
+            <FileDownloadIcon />
+          </StyledButton>
+        </MuiThemeProvider>
       </Control>
     )
   }
