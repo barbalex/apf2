@@ -22,8 +22,6 @@ import MomentUtils from 'material-ui-pickers/utils/moment-utils'
 import MuiPickersUtilsProvider from 'material-ui-pickers/utils/MuiPickersUtilsProvider'
 import { Provider } from 'mobx-react'
 
-import DevTools from 'mobx-react-devtools'
-
 import styled from 'styled-components'
 
 import app from 'ampersand-app'
@@ -128,7 +126,6 @@ const DownloadMessages = Loadable({
             locale="de-ch"
           >
             <AppContainer>
-              {false && <DevTools />}
               <AppBar />
               <Projekte />
               <User />
