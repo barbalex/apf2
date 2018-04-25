@@ -10,19 +10,26 @@
  */
 
 import React from 'react'
-import Snackbar from 'material-ui/Snackbar'
+import Snackbar from 'material-ui-next/Snackbar'
+import Button from 'material-ui-next/Button'
 import { observer, inject } from 'mobx-react'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
-//import styled from 'styled-components'
+import styled from 'styled-components'
 
 import ErrorBoundary from './shared/ErrorBoundary'
+
+const StyledSnackbar = styled(Snackbar)`
+  > div {
+    min-width: 350px !important;
+  }
+`
 
 const enhance = compose(
   inject(`store`),
   withHandlers({
-    onClickClose: props => () => props.store.setUpdateAvailable(false),
-    onClickInstall: props => event => {
+    onClose: ({ store }) => () => store.setUpdateAvailable(false),
+    onClickInstall: () => event => {
       event.preventDefault()
       window.location.reload(false)
     },
@@ -32,24 +39,28 @@ const enhance = compose(
 
 const UpdateAvailable = ({
   store,
-  onClickClose,
+  onClose,
   onClickInstall,
 }: {
   store: Object,
-  onClickClose: () => void,
+  onClose: () => void,
   onClickInstall: () => void,
 }) => (
   <ErrorBoundary>
-    <Snackbar
+    <StyledSnackbar
       open={store.updateAvailable}
-      message="Ein Update steht zur Verfügung"
-      action="installieren"
-      autoHideDuration={1000 * 30}
-      onActionClick={onClickInstall}
-      onRequestClose={onClickClose}
-      bodyStyle={{
-        backgroundColor: 'rgb(35, 98, 38)',
+      message={<span id="message-id">Ein Update steht zur Verfügung</span>}
+      SnackbarContentProps={{
+        'aria-describedby': 'message-id',
       }}
+      anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      action={
+        <Button color="primary" size="small" onClick={onClickInstall}>
+          installieren
+        </Button>
+      }
+      autoHideDuration={1000 * 60}
+      onClose={onClose}
     />
   </ErrorBoundary>
 )
