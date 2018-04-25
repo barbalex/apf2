@@ -19,6 +19,10 @@ import { MuiThemeProvider } from 'material-ui/styles'
 import uiTheme from './modules/uiTheme'
 import v1Theme from './theme'
 import getMuiTheme from 'material-ui-v0/styles/getMuiTheme'
+import moment from 'moment'
+import 'moment/locale/de-ch' // this is the important bit, you have to import the locale your'e trying to use.
+import MomentUtils from 'material-ui-pickers/utils/moment-utils'
+import MuiPickersUtilsProvider from 'material-ui-pickers/utils/MuiPickersUtilsProvider'
 import { Provider } from 'mobx-react'
 
 import DevTools from 'mobx-react-devtools'
@@ -127,19 +131,25 @@ const DownloadMessages = Loadable({
     ReactDOM.render(
       <Provider store={store}>
         <MuiThemeProvider theme={v1Theme}>
-          <MuiThemeProvider0x muiTheme={getMuiTheme(theme)}>
-            <AppContainer>
-              {false && <DevTools />}
-              <AppBar />
-              <Projekte />
-              <User />
-              <Deletions />
-              <Errors />
-              <UpdateAvailable />
-              <Messages />
-              <DownloadMessages />
-            </AppContainer>
-          </MuiThemeProvider0x>
+          <MuiPickersUtilsProvider
+            utils={MomentUtils}
+            moment={moment}
+            locale="de-ch"
+          >
+            <MuiThemeProvider0x muiTheme={getMuiTheme(theme)}>
+              <AppContainer>
+                {false && <DevTools />}
+                <AppBar />
+                <Projekte />
+                <User />
+                <Deletions />
+                <Errors />
+                <UpdateAvailable />
+                <Messages />
+                <DownloadMessages />
+              </AppContainer>
+            </MuiThemeProvider0x>
+          </MuiPickersUtilsProvider>
         </MuiThemeProvider>
       </Provider>,
       document.getElementById('root')
