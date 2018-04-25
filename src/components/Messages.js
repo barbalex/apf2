@@ -61,7 +61,11 @@ const UserMessages = ({
   return (
     <ErrorBoundary>
       <StyledDialog
-        open={store.messages.messages.length > 0 && !!store.user.name}
+        open={
+          store.messages.messages.length > 0 &&
+          !!store.user.name &&
+          (store.updateAvailable = false)
+        }
         aria-labelledby="dialog-title"
       >
         <DialogTitle id="dialog-title">Letzte Anpassungen:</DialogTitle>
