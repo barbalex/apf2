@@ -8,15 +8,7 @@ import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import styled from 'styled-components'
 
-/**
- * without input > div height auto
- * height is set to 28px
- * which creates scrollbar in textareas :-(
- */
 const StyledInput = styled(Input)`
-  div {
-    height: auto !important;
-  }
   &:before {
     background-color: rgba(0, 0, 0, 0.1) !important;
   }
