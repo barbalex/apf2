@@ -4,7 +4,7 @@ import { observer } from 'mobx-react'
 import Input, { InputLabel } from 'material-ui-next/Input'
 import { FormControl, FormHelperText } from 'material-ui-next/Form'
 import OpenInNewIcon from '@material-ui/icons/OpenInNew'
-import { green300 } from 'material-ui/styles/colors'
+import green from 'material-ui-next/colors/green'
 /**
  * DO NOT UPDATE get-urls
  * before create-react-app moves to using babili
@@ -109,7 +109,7 @@ const MyTextFieldWithUrl = ({
         <div key={index} title={`${url} öffnen`}>
           <StyledOpenInNewIcon
             onClick={() => window.open(url, '_blank')}
-            hoverColor={green300}
+            hoverColor={green[300]}
           />
         </div>
       ))}
