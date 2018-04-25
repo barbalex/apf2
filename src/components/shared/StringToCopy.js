@@ -35,15 +35,29 @@ const StringToCopy = ({
   const Container = styled.div`
     display: flex;
     flex-direction: column;
-    margin-top: 10px;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
     break-inside: avoid;
   `
   const StringToCopyContainer = styled.div`
     display: flex;
     justify-content: space-between;
+    position: relative;
   `
   const GuidContainer = styled.div`
     flex-grow: 1;
+    &::before {
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 1px;
+      content: '';
+      position: absolute;
+      transition: background-color 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+      pointer-events: none;
+      background-color: rgba(0, 0, 0, 0.1);
+      width: 100%;
+    }
   `
   const CopyButtonContainer = styled.div`
     margin-top: -7px;
