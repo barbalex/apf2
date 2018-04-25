@@ -9,9 +9,11 @@ import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
 import getContext from 'recompose/getContext'
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
+import MuiThemeProvider0x from 'material-ui/styles/MuiThemeProvider'
 import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
+import { MuiThemeProvider } from 'material-ui-next/styles'
+import v1Theme from '../../../theme'
 
 const StyledButton = styled.button`
   background-color: white;
@@ -70,10 +72,12 @@ class PrintControl extends Component {
     return (
       <Control position="topright">
         <StyledButton onClick={savePng} title="Karte als png speichern">
-          <MuiThemeProvider muiTheme={getMuiTheme(theme)}>
-            <FontIcon id="karteAlsPngSpeichern" className="material-icons">
-              file_download
-            </FontIcon>
+          <MuiThemeProvider theme={v1Theme}>
+            <MuiThemeProvider0x muiTheme={getMuiTheme(theme)}>
+              <FontIcon id="karteAlsPngSpeichern" className="material-icons">
+                file_download
+              </FontIcon>
+            </MuiThemeProvider0x>
           </MuiThemeProvider>
         </StyledButton>
       </Control>
