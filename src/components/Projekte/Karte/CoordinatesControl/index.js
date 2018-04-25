@@ -6,7 +6,12 @@ import styled from 'styled-components'
 import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import getContext from 'recompose/getContext'
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
+import { MuiThemeProvider } from 'material-ui-next/styles'
+import v1Theme from '../../../../theme'
+/**
+ * Get error if remove old theme provider???!!!
+ */
+import MuiThemeProvider0x from 'material-ui/styles/MuiThemeProvider'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme'
 import PropTypes from 'prop-types'
@@ -50,16 +55,21 @@ const CoordinatesControl = ({
   map: Object,
 }) => (
   <StyledControl position="bottomright">
-    <MuiThemeProvider muiTheme={getMuiTheme(theme)}>
-      {controlType === 'coordinates' ? (
-        <ShowCoordinates changeControlType={changeControlType} store={store} />
-      ) : (
-        <PanToCoordinates
-          changeControlType={changeControlType}
-          store={store}
-          map={map}
-        />
-      )}
+    <MuiThemeProvider theme={v1Theme}>
+      <MuiThemeProvider0x muiTheme={getMuiTheme(theme)}>
+        {controlType === 'coordinates' ? (
+          <ShowCoordinates
+            changeControlType={changeControlType}
+            store={store}
+          />
+        ) : (
+          <PanToCoordinates
+            changeControlType={changeControlType}
+            store={store}
+            map={map}
+          />
+        )}
+      </MuiThemeProvider0x>
     </MuiThemeProvider>
   </StyledControl>
 )
