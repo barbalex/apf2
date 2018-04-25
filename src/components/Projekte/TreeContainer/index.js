@@ -8,7 +8,7 @@ import { observer, inject } from 'mobx-react'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
-import Toggle from 'material-ui/Toggle'
+import Switch from 'material-ui-next/Switch'
 import clone from 'lodash/clone'
 
 import Label from '../../shared/Label'
@@ -89,8 +89,9 @@ const NurApDiv = styled.div`
   padding-right: 5px;
   min-width: 40px;
 `
-const ApDivToggle = styled(Toggle)`
-  margin-left: -8px;
+const StyledSwitch = styled(Switch)`
+  margin-left: -13px;
+  margin-top: -18px;
 `
 const InnerTreeContainer = styled.div`
   height: 100%;
@@ -305,9 +306,10 @@ const TreeContainer = ({
           {showApDivToggle && (
             <NurApDiv>
               <Label label="nur AP" />
-              <ApDivToggle
-                toggled={tree.apFilter}
-                onToggle={tree.toggleApFilter}
+              <StyledSwitch
+                checked={tree.apFilter}
+                onChange={tree.toggleApFilter}
+                color="primary"
               />
             </NurApDiv>
           )}
