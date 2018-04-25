@@ -7,19 +7,11 @@ import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import getContext from 'recompose/getContext'
 import { MuiThemeProvider } from 'material-ui/styles'
-import v1Theme from '../../../../theme'
-/**
- * Get error if remove old theme provider???!!!
- */
-import MuiThemeProvider0x from 'material-ui-v0/styles/MuiThemeProvider'
-import getMuiTheme from 'material-ui-v0/styles/getMuiTheme'
-import baseTheme from 'material-ui-v0/styles/baseThemes/lightBaseTheme'
 import PropTypes from 'prop-types'
 
 import ShowCoordinates from './ShowCoordinates'
 import PanToCoordinates from './PanToCoordinates'
-
-const theme = Object.assign({}, baseTheme)
+import v1Theme from '../../../../theme'
 
 /**
  * onClick coordinates container: render coordinate-field-pair and go-to button
@@ -56,20 +48,15 @@ const CoordinatesControl = ({
 }) => (
   <StyledControl position="bottomright">
     <MuiThemeProvider theme={v1Theme}>
-      <MuiThemeProvider0x muiTheme={getMuiTheme(theme)}>
-        {controlType === 'coordinates' ? (
-          <ShowCoordinates
-            changeControlType={changeControlType}
-            store={store}
-          />
-        ) : (
-          <PanToCoordinates
-            changeControlType={changeControlType}
-            store={store}
-            map={map}
-          />
-        )}
-      </MuiThemeProvider0x>
+      {controlType === 'coordinates' ? (
+        <ShowCoordinates changeControlType={changeControlType} store={store} />
+      ) : (
+        <PanToCoordinates
+          changeControlType={changeControlType}
+          store={store}
+          map={map}
+        />
+      )}
     </MuiThemeProvider>
   </StyledControl>
 )
