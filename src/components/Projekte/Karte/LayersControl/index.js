@@ -5,11 +5,14 @@ import styled from 'styled-components'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 import withState from 'recompose/withState'
+/**
+ * Get error if remove old theme provider???!!!
+ */
 import MuiThemeProvider0x from 'material-ui/styles/MuiThemeProvider'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
+import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme'
 import { MuiThemeProvider } from 'material-ui-next/styles'
 import v1Theme from '../../../../theme'
-import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme'
 import ExpandLessIcon from '@material-ui/icons/ExpandLess'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 
