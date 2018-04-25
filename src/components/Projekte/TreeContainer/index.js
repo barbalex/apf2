@@ -8,7 +8,7 @@ import { observer, inject } from 'mobx-react'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
-import Switch from 'material-ui-next/Switch'
+import Switch from 'material-ui/Switch'
 import clone from 'lodash/clone'
 
 import Label from '../../shared/Label'

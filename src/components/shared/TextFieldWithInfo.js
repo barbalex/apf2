@@ -1,8 +1,8 @@
 // @flow
 import React from 'react'
 import { observer } from 'mobx-react'
-import Input, { InputLabel } from 'material-ui-next/Input'
-import { FormControl, FormHelperText } from 'material-ui-next/Form'
+import Input, { InputLabel } from 'material-ui/Input'
+import { FormControl, FormHelperText } from 'material-ui/Form'
 import withHandlers from 'recompose/withHandlers'
 import compose from 'recompose/compose'
 import withState from 'recompose/withState'

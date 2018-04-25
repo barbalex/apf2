@@ -11,8 +11,8 @@
  */
 import React, { Component } from 'react'
 import { observer } from 'mobx-react'
-import Input, { InputLabel } from 'material-ui-next/Input'
-import { FormControl, FormHelperText } from 'material-ui-next/Form'
+import Input, { InputLabel } from 'material-ui/Input'
+import { FormControl, FormHelperText } from 'material-ui/Form'
 //import DatePicker from 'material-ui/DatePicker'
 import DatePicker from 'material-ui-pickers/DatePicker'
 import EventIcon from '@material-ui/icons/Event'

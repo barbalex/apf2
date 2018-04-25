@@ -1,8 +1,8 @@
 // @flow
 import React from 'react'
 import { observer } from 'mobx-react'
-import Radio, { RadioGroup } from 'material-ui-next/Radio'
-import { FormLabel, FormControl, FormControlLabel } from 'material-ui-next/Form'
+import Radio, { RadioGroup } from 'material-ui/Radio'
+import { FormLabel, FormControl, FormControlLabel } from 'material-ui/Form'
 import withHandlers from 'recompose/withHandlers'
 import compose from 'recompose/compose'
 import styled from 'styled-components'

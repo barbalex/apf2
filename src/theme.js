@@ -1,6 +1,6 @@
-import { createMuiTheme } from 'material-ui-next/styles'
-import orange from 'material-ui-next/colors/orange'
-import red from 'material-ui-next/colors/red'
+import { createMuiTheme } from 'material-ui/styles'
+import orange from 'material-ui/colors/orange'
+import red from 'material-ui/colors/red'
 
 // All the following keys are optional.
 // We try our best to provide a great default value.

@@ -8,10 +8,10 @@ import withState from 'recompose/withState'
 /**
  * Get error if remove old theme provider???!!!
  */
-import MuiThemeProvider0x from 'material-ui/styles/MuiThemeProvider'
-import getMuiTheme from 'material-ui/styles/getMuiTheme'
-import baseTheme from 'material-ui/styles/baseThemes/lightBaseTheme'
-import { MuiThemeProvider } from 'material-ui-next/styles'
+import MuiThemeProvider0x from 'material-ui-v0/styles/MuiThemeProvider'
+import getMuiTheme from 'material-ui-v0/styles/getMuiTheme'
+import baseTheme from 'material-ui-v0/styles/baseThemes/lightBaseTheme'
+import { MuiThemeProvider } from 'material-ui/styles'
 import v1Theme from '../../../../theme'
 import ExpandLessIcon from '@material-ui/icons/ExpandLess'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'

@@ -1,10 +1,10 @@
 // @flow
 import React from 'react'
 import { observer } from 'mobx-react'
-import Input, { InputLabel } from 'material-ui-next/Input'
-import { FormControl, FormHelperText } from 'material-ui-next/Form'
+import Input, { InputLabel } from 'material-ui/Input'
+import { FormControl, FormHelperText } from 'material-ui/Form'
 import OpenInNewIcon from '@material-ui/icons/OpenInNew'
-import green from 'material-ui-next/colors/green'
+import green from 'material-ui/colors/green'
 /**
  * DO NOT UPDATE get-urls
  * before create-react-app moves to using babili

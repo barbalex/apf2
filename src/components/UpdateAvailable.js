@@ -10,8 +10,8 @@
  */
 
 import React from 'react'
-import Snackbar from 'material-ui-next/Snackbar'
-import Button from 'material-ui-next/Button'
+import Snackbar from 'material-ui/Snackbar'
+import Button from 'material-ui/Button'
 import { observer, inject } from 'mobx-react'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'

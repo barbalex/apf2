@@ -14,10 +14,10 @@ import {
   grey500,
   darkBlack,
   fullBlack,
-} from 'material-ui/styles/colors'
+} from 'material-ui-v0/styles/colors'
 
-import { fade } from 'material-ui/utils/colorManipulator'
-import spacing from 'material-ui/styles/spacing'
+import { fade } from 'material-ui-v0/utils/colorManipulator'
+import spacing from 'material-ui-v0/styles/spacing'
 
 /**
  *  Light Theme is the default theme used in material-ui. It is guaranteed to
