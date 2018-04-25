@@ -5,12 +5,6 @@ import styled from 'styled-components'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 import withState from 'recompose/withState'
-/**
- * Get error if remove old theme provider???!!!
- */
-import MuiThemeProvider0x from 'material-ui-v0/styles/MuiThemeProvider'
-import getMuiTheme from 'material-ui-v0/styles/getMuiTheme'
-import baseTheme from 'material-ui-v0/styles/baseThemes/lightBaseTheme'
 import { MuiThemeProvider } from 'material-ui/styles'
 import v1Theme from '../../../../theme'
 import ExpandLessIcon from '@material-ui/icons/ExpandLess'
@@ -19,8 +13,6 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import Overlays from './Overlays'
 import ApfloraLayers from './ApfloraLayers'
 import BaseLayers from './BaseLayers'
-
-const theme = Object.assign({}, baseTheme)
 
 const CardContainer = styled.div`
   background-color: white;
@@ -155,69 +147,67 @@ const LayersControl = ({
   return (
     <Control position="topright">
       <MuiThemeProvider theme={v1Theme}>
-        <MuiThemeProvider0x muiTheme={getMuiTheme(theme)}>
-          <CardContainer>
-            <Card>
-              <CardHeader onClick={onToggleApfloraLayersExpanded}>
-                <ApfloraCard>{getApfloraLayersTitle()}</ApfloraCard>
-                <div>
-                  {apfloraLayersExpanded ? (
-                    <StyledExpandLessIcon />
-                  ) : (
-                    <StyledExpandMoreIcon />
-                  )}
-                </div>
-              </CardHeader>
-              {apfloraLayersExpanded && (
-                <ApfloraLayers
-                  store={store}
-                  /**
-                   * overlaysString enforces rererender
-                   * even when only the sorting changes
-                   */
-                  apfloraLayersString={store.map.apfloraLayersString}
-                  assigning={store.map.beob.assigning}
-                />
-              )}
-            </Card>
-            <Card>
-              <CardHeader onClick={onToggleOverlaysExpanded}>
-                <CardTitle>überlagernd</CardTitle>
-                <div>
-                  {overlaysExpanded ? (
-                    <StyledExpandLessIcon />
-                  ) : (
-                    <StyledExpandMoreIcon />
-                  )}
-                </div>
-              </CardHeader>
-              {overlaysExpanded && (
-                <Overlays
-                  store={store}
-                  /**
-                   * overlaysString enforces rererender
-                   * even when only the sorting changes
-                   */
-                  overlaysString={store.map.overlaysString}
-                  assigning={store.map.beob.assigning}
-                />
-              )}
-            </Card>
-            <Card>
-              <CardHeader onClick={onToggleBaseLayersExpanded}>
-                <CardTitle>Hintergrund</CardTitle>
-                <div>
-                  {baseLayersExpanded ? (
-                    <StyledExpandLessIcon />
-                  ) : (
-                    <StyledExpandMoreIcon />
-                  )}
-                </div>
-              </CardHeader>
-              {baseLayersExpanded && <BaseLayers store={store} />}
-            </Card>
-          </CardContainer>
-        </MuiThemeProvider0x>
+        <CardContainer>
+          <Card>
+            <CardHeader onClick={onToggleApfloraLayersExpanded}>
+              <ApfloraCard>{getApfloraLayersTitle()}</ApfloraCard>
+              <div>
+                {apfloraLayersExpanded ? (
+                  <StyledExpandLessIcon />
+                ) : (
+                  <StyledExpandMoreIcon />
+                )}
+              </div>
+            </CardHeader>
+            {apfloraLayersExpanded && (
+              <ApfloraLayers
+                store={store}
+                /**
+                 * overlaysString enforces rererender
+                 * even when only the sorting changes
+                 */
+                apfloraLayersString={store.map.apfloraLayersString}
+                assigning={store.map.beob.assigning}
+              />
+            )}
+          </Card>
+          <Card>
+            <CardHeader onClick={onToggleOverlaysExpanded}>
+              <CardTitle>überlagernd</CardTitle>
+              <div>
+                {overlaysExpanded ? (
+                  <StyledExpandLessIcon />
+                ) : (
+                  <StyledExpandMoreIcon />
+                )}
+              </div>
+            </CardHeader>
+            {overlaysExpanded && (
+              <Overlays
+                store={store}
+                /**
+                 * overlaysString enforces rererender
+                 * even when only the sorting changes
+                 */
+                overlaysString={store.map.overlaysString}
+                assigning={store.map.beob.assigning}
+              />
+            )}
+          </Card>
+          <Card>
+            <CardHeader onClick={onToggleBaseLayersExpanded}>
+              <CardTitle>Hintergrund</CardTitle>
+              <div>
+                {baseLayersExpanded ? (
+                  <StyledExpandLessIcon />
+                ) : (
+                  <StyledExpandMoreIcon />
+                )}
+              </div>
+            </CardHeader>
+            {baseLayersExpanded && <BaseLayers store={store} />}
+          </Card>
+        </CardContainer>
       </MuiThemeProvider>
     </Control>
   )
