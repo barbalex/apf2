@@ -187,7 +187,6 @@ const Beobzuordnung = ({
     tpopZuordnenObject && tpopZuordnenObject.value
       ? tpopZuordnenObject.value
       : null
-  console.log('tpopZuordnenSource:', tpopZuordnenSource)
 
   return (
     <ErrorBoundary>
