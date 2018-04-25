@@ -14,11 +14,8 @@ import ReactDOM from 'react-dom'
 import axios from 'axios'
 import Loadable from 'react-loadable'
 
-import MuiThemeProvider0x from 'material-ui-v0/styles/MuiThemeProvider'
 import { MuiThemeProvider } from 'material-ui/styles'
-import uiTheme from './modules/uiTheme'
 import v1Theme from './theme'
-import getMuiTheme from 'material-ui-v0/styles/getMuiTheme'
 import moment from 'moment'
 import 'moment/locale/de-ch' // this is the important bit, you have to import the locale your'e trying to use.
 import MomentUtils from 'material-ui-pickers/utils/moment-utils'
@@ -101,12 +98,6 @@ const DownloadMessages = Loadable({
     })
     app.init()
 
-    const theme = Object.assign({}, uiTheme, {
-      appBar: {
-        height: 51,
-      },
-    })
-
     // make store accessible in dev
     window.app = app
 
@@ -136,19 +127,17 @@ const DownloadMessages = Loadable({
             moment={moment}
             locale="de-ch"
           >
-            <MuiThemeProvider0x muiTheme={getMuiTheme(theme)}>
-              <AppContainer>
-                {false && <DevTools />}
-                <AppBar />
-                <Projekte />
-                <User />
-                <Deletions />
-                <Errors />
-                <UpdateAvailable />
-                <Messages />
-                <DownloadMessages />
-              </AppContainer>
-            </MuiThemeProvider0x>
+            <AppContainer>
+              {false && <DevTools />}
+              <AppBar />
+              <Projekte />
+              <User />
+              <Deletions />
+              <Errors />
+              <UpdateAvailable />
+              <Messages />
+              <DownloadMessages />
+            </AppContainer>
           </MuiPickersUtilsProvider>
         </MuiThemeProvider>
       </Provider>,
