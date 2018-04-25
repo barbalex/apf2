@@ -28,33 +28,29 @@ const StyledDatePicker = styled(DatePicker)`
 
 const enhance = compose(
   withHandlers({
-    onChange: props => value => {
-      console.log('onChange, value:', value)
-      props.updateProperty(
-        props.tree,
-        props.fieldName,
-        format(value, 'YYYY-MM-DD')
-      )
-      props.updatePropertyInDb(
-        props.tree,
-        props.fieldName,
-        format(value, 'YYYY-MM-DD')
-      )
+    onChange: ({
+      updateProperty,
+      updatePropertyInDb,
+      tree,
+      fieldName,
+    }) => value => {
+      updateProperty(tree, fieldName, format(value, 'YYYY-MM-DD'))
+      updatePropertyInDb(tree, fieldName, format(value, 'YYYY-MM-DD'))
     },
-    onBlur: props => event => {
-      console.log('onBlur, value:', event.target.value)
+    onBlur: ({
+      tree,
+      fieldName,
+      updateProperty,
+      updatePropertyInDb,
+    }) => event => {
       const { value } = event.target
-      if (!value) {
+      if (!value || value === '0') {
         // avoid creating an invalid date
-        props.updatePropertyInDb(props.tree, props.fieldName, null)
+        updatePropertyInDb(tree, fieldName, null)
       } else {
         // write a real date to db
         const date = new Date(convertDateToYyyyMmDd(value))
-        props.updatePropertyInDb(
-          props.tree,
-          props.fieldName,
-          format(date, 'YYYY-MM-DD')
-        )
+        updatePropertyInDb(tree, fieldName, format(date, 'YYYY-MM-DD'))
       }
     },
   }),
@@ -79,14 +75,13 @@ class MyDatePicker extends Component {
 
   render() {
     const { label, value, onChange, onBlur } = this.props
-    const valueDate = value ? new Date(value) : {}
 
     return (
       <StyledDatePicker
         keyboard
         label={label}
         format="DD.MM.YYYY"
-        value={valueDate}
+        value={value}
         onChange={onChange}
         onBlur={onBlur}
         disableOpenOnEnter
