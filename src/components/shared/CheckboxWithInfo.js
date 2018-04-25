@@ -52,7 +52,14 @@ const CheckboxWithInfo = ({
     <FormGroup>
       <Label label={label} />
       <StyledFormControlLabel
-        control={<Checkbox checked={value} onChange={onCheck} value={label} />}
+        control={
+          <Checkbox
+            checked={value}
+            onChange={onCheck}
+            value={label}
+            color="primary"
+          />
+        }
       />
     </FormGroup>
     <div>

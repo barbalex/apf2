@@ -32,7 +32,12 @@ const MyCheckbox = ({
     <Label label={label} />
     <FormControlLabel
       control={
-        <Checkbox checked={value === 1} onChange={onCheck} value={label} />
+        <Checkbox
+          checked={value === 1}
+          onChange={onCheck}
+          value={label}
+          color="primary"
+        />
       }
     />
   </Fragment>
