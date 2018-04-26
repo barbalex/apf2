@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS basic_auth.users (
   -- so names and roles can be set beforehand by topos
   email text DEFAULT NULL check ( email ~* '^.+@.+\..+$' ),
   pass text DEFAULT NULL check (length(pass) < 512),
-  block boolean DEFAULT 'false'
+  block boolean DEFAULT false
 );
 
 -- use a trigger to manually enforce the role being a foreign key to actual

@@ -1,3 +1,20 @@
+-- this one first because of references to it
+DROP TABLE IF EXISTS ae.user CASCADE;
+CREATE TABLE ae.user (
+  id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
+  name text UNIQUE,
+  -- allow other attributes to be null
+  -- so names and roles can be set beforehand by topos
+  email text UNIQUE default null,
+  -- is role still used?
+  role name DEFAULT NULL check (length(role) < 512),
+  pass text DEFAULT NULL check (length(pass) > 5),
+  block boolean DEFAULT false,
+  CONSTRAINT proper_email CHECK (email ~* '^[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+[.][A-Za-z]+$')
+);
+CREATE INDEX ON ae.user USING btree (id);
+CREATE INDEX ON ae.user USING btree (name);
+
 DROP TABLE IF EXISTS _variable;
 CREATE TABLE apflora._variable (
   "KonstId" SERIAL PRIMARY KEY,
