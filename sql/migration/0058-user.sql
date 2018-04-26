@@ -32,6 +32,10 @@ grant select (id, name, email) on apflora.user to apflora_artverantwortlich;
 
 drop table if exists auth.users cascade;
 
+create or replace function current_user_name() returns text as $$
+  select nullif(current_setting('jwt.claims.username', true), '')::text;
+$$ language sql stable security definer;
+
 ALTER TABLE apflora.user ENABLE ROW LEVEL SECURITY;
 DROP POLICY IF EXISTS reader_writer ON apflora.user;
 CREATE POLICY reader_writer ON apflora.user
