@@ -6,16 +6,6 @@ ALTER DATABASE apflora SET "app.jwt_secret" TO 'secret';
 -- refer to helpers and tables inside.
 CREATE SCHEMA IF NOT EXISTS auth;
 
-CREATE TABLE IF NOT EXISTS auth.users (
-  name varchar(30) PRIMARY KEY,
-  role name NOT NULL check (length(role) < 512),
-  -- allow other attributes to be null
-  -- so names and roles can be set beforehand by topos
-  email text DEFAULT NULL check ( email ~* '^.+@.+\..+$' ),
-  pass text DEFAULT NULL check (length(pass) < 512),
-  block boolean DEFAULT false
-);
-
 -- use a trigger to manually enforce the role being a foreign key to actual
 -- database roles
 create or replace function auth.check_role_exists() returns trigger
@@ -31,9 +21,9 @@ begin
 end
 $$;
 
-drop trigger if exists ensure_user_role_exists on auth.users;
+drop trigger if exists ensure_user_role_exists on apflora.user;
 create constraint trigger ensure_user_role_exists
-  after insert or update on auth.users
+  after insert or update on apflora.user
   for each row
   execute procedure auth.check_role_exists();
 
@@ -56,9 +46,9 @@ $$;
 
 -- We’ll use the pgcrypto extension and a trigger
 -- to keep passwords safe in the users table
-drop trigger if exists encrypt_pass on auth.users;
+drop trigger if exists encrypt_pass on apflora.user;
 create trigger encrypt_pass
-  before insert or update on auth.users
+  before insert or update on apflora.user
   for each row
   execute procedure auth.encrypt_pass();
 
@@ -71,10 +61,9 @@ returns name
   as $$
 begin
   return (
-  select role from auth.users
-   where users.name = $1
-     and users.pass = crypt($2, users.pass)
-     and users.block = 'false'
+  select role from apflora.user
+   where apflora.user.name = $1
+     and apflora.user.pass = crypt($2, apflora.user.pass)
   );
 end;
 $$;
@@ -122,10 +111,11 @@ grant connect on database apflora to authenticator;
 grant connect on database apflora to anon;
 
 grant usage on schema public, auth, apflora, request to anon;
-grant select on table pg_authid, auth.users to anon;
+grant select on table pg_authid to anon;
 grant execute on function apflora.login(text,text) to anon;
 grant execute on function auth.sign(json,text,text) to anon;
 grant execute on function auth.user_role(text,text) to anon;
 grant execute on function request.user_name() to anon;
 grant execute on function request.jwt_claim(text) to anon;
 grant execute on function request.env_var(text) to anon;
+grant select on table apflora.user to anon;

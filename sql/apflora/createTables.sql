@@ -1,6 +1,6 @@
 -- this one first because of references to it
-DROP TABLE IF EXISTS ae.user CASCADE;
-CREATE TABLE ae.user (
+DROP TABLE IF EXISTS apflora.user CASCADE;
+CREATE TABLE apflora.user (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v1mc(),
   name text UNIQUE,
   -- allow other attributes to be null
@@ -9,11 +9,23 @@ CREATE TABLE ae.user (
   -- is role still used?
   role name DEFAULT NULL check (length(role) < 512),
   pass text DEFAULT NULL check (length(pass) > 5),
-  block boolean DEFAULT false,
   CONSTRAINT proper_email CHECK (email ~* '^[A-Za-z0-9._%-]+@[A-Za-z0-9.-]+[.][A-Za-z]+$')
 );
-CREATE INDEX ON ae.user USING btree (id);
-CREATE INDEX ON ae.user USING btree (name);
+CREATE INDEX ON apflora.user USING btree (id);
+CREATE INDEX ON apflora.user USING btree (name);
+
+create or replace function current_user_name() returns text as $$
+  select nullif(current_setting('jwt.claims.username', true), '')::text;
+$$ language sql stable security definer;
+
+ALTER TABLE apflora.user ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS reader_writer ON apflora.user;
+CREATE POLICY reader_writer ON apflora.user
+  USING (
+    name = current_user_name()
+    -- TODO: this only for USING, not for CHECK?
+    OR current_user = 'anon'
+  );
 
 DROP TABLE IF EXISTS _variable;
 CREATE TABLE apflora._variable (
@@ -88,7 +100,7 @@ COMMENT ON COLUMN apflora.ap.changed_by IS 'Von wem wurde der Datensatz zuletzt 
 -- this table is NOT YET IN USE
 DROP TABLE IF EXISTS apflora.userprojekt;
 CREATE TABLE apflora.userprojekt (
-  username varchar(30) REFERENCES auth.users (name) ON DELETE CASCADE ON UPDATE CASCADE,
+  username varchar(30) REFERENCES apflora.user (name) ON DELETE CASCADE ON UPDATE CASCADE,
   proj_id uuid REFERENCES apflora.projekt (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 CREATE INDEX ON apflora.userprojekt USING btree (username, proj_id);
@@ -923,7 +935,7 @@ COMMENT ON COLUMN apflora.message.active IS 'false: diese Nachricht wird nicht m
 -- list of read messages per user
 DROP TABLE IF EXISTS apflora.usermessage;
 CREATE TABLE apflora.usermessage (
-  user_name varchar(30) NOT NULL REFERENCES auth.users (name) ON DELETE CASCADE ON UPDATE CASCADE,
+  user_name varchar(30) NOT NULL REFERENCES apflora.user (name) ON DELETE CASCADE ON UPDATE CASCADE,
   message_id UUID NOT NULL REFERENCES apflora.message (id) ON DELETE CASCADE ON UPDATE CASCADE,
   UNIQUE (user_name, message_id)
 );

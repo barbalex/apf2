@@ -7,7 +7,7 @@ create role apflora_reader;
 grant connect on database apflora to apflora_reader;
 grant select on all tables in schema apflora to apflora_reader;
 grant usage on schema public, auth to apflora_reader;
-grant select on table pg_authid, auth.users to apflora_reader;
+grant select on table pg_authid to apflora_reader;
 grant execute on function apflora.login(text,text) to apflora_reader;
 alter default privileges in schema apflora
   grant select on tables to apflora_reader;
@@ -44,3 +44,9 @@ grant all on apflora.tpopkontr, apflora.tpopkontrzaehl to apflora_freiwillig;
 -- SELECT * FROM pg_group;
 -- lost roles: \du
 -- check privileges on table: \z apflora.message
+
+-- secure pass and role in apflora.user:
+revoke all on apflora.user from public;
+grant select (id, name, email) on apflora.user to anon;
+grant select (id, name, email) on apflora.user to apflora_reader;
+grant select (id, name, email) on apflora.user to apflora_artverantwortlich;
