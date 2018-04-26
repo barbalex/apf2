@@ -26,8 +26,8 @@ const StyledRadio = styled(Radio)`
 
 const enhance = compose(
   withHandlers({
-    onChange: props => event =>
-      props.updatePropertyInDb(props.tree, props.fieldName, event.target.value),
+    onClickButton: ({ updatePropertyInDb, tree, fieldName, value }) => () =>
+      updatePropertyInDb(tree, fieldName, !value),
   }),
   observer
 )
@@ -36,31 +36,26 @@ const RadioButton = ({
   fieldName,
   value,
   label,
-  onChange,
+  onClickButton,
 }: {
   fieldName: String,
   value: Boolean,
   label: String,
-  onChange: () => void,
+  onClickButton: () => void,
 }) => (
   <StyledFormControl component="fieldset">
     <StyledFormLabel component="legend">{label}</StyledFormLabel>
-    <RadioGroup
-      aria-label={label}
-      name={fieldName}
-      value={value.toString()}
-      onChange={onChange}
-    >
+    <RadioGroup aria-label={label} name={fieldName} value={value.toString()}>
       <FormControlLabel
         value="true"
-        control={<StyledRadio color="primary" />}
+        control={<StyledRadio onClick={onClickButton} color="primary" />}
       />
     </RadioGroup>
   </StyledFormControl>
 )
 
 RadioButton.defaultProps = {
-  value: '',
+  value: 'false',
 }
 
 export default enhance(RadioButton)

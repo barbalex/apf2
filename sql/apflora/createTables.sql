@@ -623,7 +623,7 @@ CREATE TABLE apflora.tpopkontr (
   deckung_vegetation smallint DEFAULT NULL,
   deckung_nackter_boden smallint DEFAULT NULL,
   deckung_ap_art smallint DEFAULT NULL,
-  jungpflanzen_vorhanden boolean DEFAULT false,
+  jungpflanzen_vorhanden boolean DEFAULT null,
   vegetationshoehe_maximum smallint DEFAULT NULL,
   vegetationshoehe_mittel smallint DEFAULT NULL,
   gefaehrdung text DEFAULT NULL,

@@ -3173,7 +3173,7 @@ SELECT
   apflora.ap_bearbstand_werte.text AS ap_bearb_stand,
   apflora.ap.start_jahr AS ap_start_jahr,
   apflora.ap_umsetzung_werte.text AS ab_umsetzung_stand,
-  "tblAdresse_1".name AS ap_verantwortlich,
+  apflora_adresse_1.name AS ap_verantwortlich,
   apflora.pop.id as pop_id,
   apflora.pop.nr AS pop_nr,
   apflora.pop.name AS pop_name,
@@ -3294,8 +3294,8 @@ FROM
       apflora.tpopkontr_idbiotuebereinst_werte
       ON apflora.tpopkontr.idealbiotop_uebereinstimmung = apflora.tpopkontr_idbiotuebereinst_werte.code)
   LEFT JOIN
-    apflora.adresse AS "tblAdresse_1"
-    ON apflora.ap.bearbeiter = "tblAdresse_1".id)
+    apflora.adresse AS apflora_adresse_1
+    ON apflora.ap.bearbeiter = apflora_adresse_1.id)
   ON pop_status_werte_2.code = apflora.tpop.status
 WHERE
   apflora.ae_eigenschaften.taxid > 150
@@ -3306,7 +3306,7 @@ GROUP BY
   apflora.ap_bearbstand_werte.text,
   apflora.ap.start_jahr,
   apflora.ap_umsetzung_werte.text,
-  "tblAdresse_1".name,
+  apflora_adresse_1.name,
   apflora.pop.id,
   apflora.pop.nr,
   apflora.pop.name,
@@ -3491,8 +3491,8 @@ FROM
       apflora.tpopkontr_idbiotuebereinst_werte
       ON apflora.tpopkontr.idealbiotop_uebereinstimmung = apflora.tpopkontr_idbiotuebereinst_werte.code)
   LEFT JOIN
-    apflora.adresse AS "tblAdresse_1"
-    ON apflora.ap.bearbeiter = "tblAdresse_1".id)
+    apflora.adresse AS apflora_adresse_1
+    ON apflora.ap.bearbeiter = apflora_adresse_1.id)
 WHERE
   apflora.ae_eigenschaften.taxid > 150
 GROUP BY
@@ -4261,8 +4261,8 @@ FROM
     INNER JOIN
       ((apflora.tpop
       LEFT JOIN
-        apflora.pop_status_werte AS "tpopHerkunft"
-        ON apflora.tpop.status = "tpopHerkunft".code)
+        apflora.pop_status_werte AS tpop_status_werte
+        ON apflora.tpop.status = tpop_status_werte.code)
       INNER JOIN
         ((apflora.tpopkontr
         INNER JOIN
@@ -4328,7 +4328,7 @@ SELECT
   apflora.tpop.nr AS tpop_nr,
   apflora.tpop.gemeinde AS tpop_gemeinde,
   apflora.tpop.flurname AS tpop_flurname,
-  "tpopHerkunft".text AS tpop_status,
+  tpop_status_werte.text AS tpop_status,
   apflora.tpop.bekannt_seit AS tpop_bekannt_seit,
   apflora.tpop.status_unklar AS tpop_status_unklar,
   apflora.tpop.status_unklar_grund AS tpop_status_unklar_grund,
@@ -4371,8 +4371,8 @@ FROM
       INNER JOIN
         ((apflora.tpop
         LEFT JOIN
-          apflora.pop_status_werte AS "tpopHerkunft"
-          ON apflora.tpop.status = "tpopHerkunft".code)
+          apflora.pop_status_werte AS tpop_status_werte
+          ON apflora.tpop.status = tpop_status_werte.code)
         INNER JOIN
           (apflora.tpopmassnber
           LEFT JOIN
@@ -4667,7 +4667,7 @@ SELECT
   apflora.ap_bearbstand_werte.text AS ap_bearbeitung,
   apflora.ap.start_jahr AS ap_start_jahr,
   apflora.ap_umsetzung_werte.text AS ap_umsetzung,
-  "tblAdresse_1".name AS ap_bearbeiter,
+  apflora_adresse_1.name AS ap_bearbeiter,
   apflora.pop.id as pop_id,
   apflora.pop.nr AS pop_nr,
   apflora.pop.name AS pop_name,
@@ -4677,7 +4677,7 @@ SELECT
   apflora.tpop.nr AS tpop_nr,
   apflora.tpop.gemeinde AS tpop_gemeinde,
   apflora.tpop.flurname AS tpop_flurname,
-  "tpopHerkunft".text AS tpop_status,
+  tpop_status_werte.text AS tpop_status,
   apflora.tpop.bekannt_seit AS tpop_bekannt_seit,
   apflora.tpop.status_unklar AS tpop_status_unklar,
   apflora.tpop.status_unklar_grund AS tpop_status_unklar_grund,
@@ -4749,8 +4749,8 @@ FROM
   INNER JOIN
     ((((apflora.ap
     LEFT JOIN
-      apflora.adresse AS "tblAdresse_1"
-      ON apflora.ap.bearbeiter = "tblAdresse_1".id)
+      apflora.adresse AS apflora_adresse_1
+      ON apflora.ap.bearbeiter = apflora_adresse_1.id)
     LEFT JOIN
       apflora.ap_bearbstand_werte
       ON apflora.ap.bearbeitung = apflora.ap_bearbstand_werte.code)
@@ -4765,8 +4765,8 @@ FROM
       INNER JOIN
         ((apflora.tpop
         LEFT JOIN
-          apflora.pop_status_werte AS "tpopHerkunft"
-          ON "tpopHerkunft".code = apflora.tpop.status)
+          apflora.pop_status_werte AS tpop_status_werte
+          ON tpop_status_werte.code = apflora.tpop.status)
         INNER JOIN
           (((((apflora.tpopkontr
           LEFT JOIN
@@ -4824,7 +4824,7 @@ SELECT
   apflora.tpop.nr AS tpop_nr,
   apflora.tpop.gemeinde AS tpop_gemeinde,
   apflora.tpop.flurname AS tpop_flurname,
-  "tpopHerkunft".text AS tpop_status,
+  tpop_status_werte.text AS tpop_status,
   apflora.tpop.bekannt_seit AS tpop_bekannt_seit,
   apflora.tpop.status_unklar AS tpop_status_unklar,
   apflora.tpop.status_unklar_grund AS tpop_status_unklar_grund,
@@ -4867,8 +4867,8 @@ FROM
       INNER JOIN
         ((apflora.tpop
         LEFT JOIN
-          apflora.pop_status_werte AS "tpopHerkunft"
-          ON apflora.tpop.status = "tpopHerkunft".code)
+          apflora.pop_status_werte AS tpop_status_werte
+          ON apflora.tpop.status = tpop_status_werte.code)
         RIGHT JOIN
           (apflora.tpopber
           LEFT JOIN
