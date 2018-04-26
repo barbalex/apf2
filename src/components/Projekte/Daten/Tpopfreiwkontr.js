@@ -42,8 +42,8 @@ const getBearbName = ({ store, tree }: { store: Object, tree: Object }) => {
 
 const enhance = compose(inject('store'), observer)
 const jungpflanzenVorhandenDataSource = [
-  { value: 1, label: 'ja' },
-  { value: 0, label: 'nein' },
+  { value: true, label: 'ja' },
+  { value: false, label: 'nein' },
 ]
 
 const Tpopfreiwkontr = ({

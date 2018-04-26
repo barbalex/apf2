@@ -362,7 +362,7 @@ CREATE TABLE apflora.pop (
   nr integer DEFAULT NULL,
   name varchar(150) DEFAULT NULL,
   status integer DEFAULT NULL REFERENCES apflora.pop_status_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
-  status_unklar smallint DEFAULT NULL,
+  status_unklar boolean default false,
   status_unklar_begruendung text DEFAULT NULL,
   bekannt_seit smallint DEFAULT NULL,
   x integer DEFAULT NULL CONSTRAINT zulaessige_x_koordinate CHECK (x IS NULL OR (x > 2485071 AND x < 2828516)),
@@ -384,7 +384,7 @@ COMMENT ON COLUMN apflora.pop.ap_id IS 'Zugehöriger Aktionsplan. Fremdschlüsse
 COMMENT ON COLUMN apflora.pop.nr IS 'Nummer der Population';
 COMMENT ON COLUMN apflora.pop.name IS 'Bezeichnung der Population';
 COMMENT ON COLUMN apflora.pop.status IS 'Herkunft der Population: autochthon oder angesiedelt? Auswahl aus der Tabelle "pop_status_werte"';
-COMMENT ON COLUMN apflora.pop.status_unklar IS '1 = die Herkunft der Population ist unklar';
+COMMENT ON COLUMN apflora.pop.status_unklar IS 'true = die Herkunft der Population ist unklar';
 COMMENT ON COLUMN apflora.pop.status_unklar_begruendung IS 'Begründung, wieso die Herkunft unklar ist';
 COMMENT ON COLUMN apflora.pop.bekannt_seit IS 'Seit wann ist die Population bekannt?';
 COMMENT ON COLUMN apflora.pop.x IS 'Wird in der Regel von einer Teilpopulation übernommen';
@@ -476,7 +476,7 @@ CREATE TABLE apflora.tpop (
   beschreibung text DEFAULT NULL,
   kataster_nr text DEFAULT NULL,
   status integer DEFAULT NULL REFERENCES apflora.pop_status_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
-  status_unklar smallint DEFAULT NULL,
+  status_unklar boolean default false,
   status_unklar_grund text DEFAULT NULL,
   apber_relevant integer DEFAULT NULL REFERENCES apflora.tpop_apberrelevant_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
   bekannt_seit smallint DEFAULT NULL,
@@ -619,11 +619,11 @@ CREATE TABLE apflora.tpopkontr (
   idealbiotop_uebereinstimmung integer DEFAULT NULL REFERENCES apflora.tpopkontr_idbiotuebereinst_werte (code) ON DELETE SET NULL ON UPDATE CASCADE,
   handlungsbedarf text,
   flaeche_ueberprueft integer DEFAULT NULL,
-  plan_vorhanden smallint DEFAULT NULL,
+  plan_vorhanden boolean DEFAULT false,
   deckung_vegetation smallint DEFAULT NULL,
   deckung_nackter_boden smallint DEFAULT NULL,
   deckung_ap_art smallint DEFAULT NULL,
-  jungpflanzen_vorhanden smallint DEFAULT NULL,
+  jungpflanzen_vorhanden boolean DEFAULT false,
   vegetationshoehe_maximum smallint DEFAULT NULL,
   vegetationshoehe_mittel smallint DEFAULT NULL,
   gefaehrdung text DEFAULT NULL,
@@ -785,7 +785,7 @@ CREATE TABLE apflora.tpopmassn (
   datum date DEFAULT NULL,
   bearbeiter integer DEFAULT NULL REFERENCES apflora.adresse (id) ON DELETE SET NULL ON UPDATE CASCADE,
   bemerkungen text,
-  plan_vorhanden smallint DEFAULT NULL,
+  plan_vorhanden boolean DEFAULT false,
   plan_bezeichnung text DEFAULT NULL,
   flaeche integer DEFAULT NULL,
   markierung text DEFAULT NULL,
@@ -896,7 +896,7 @@ CREATE TABLE apflora.message (
   time timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   -- active is used to prevent to many datasets fro being fetched
   -- old messages can be set inactive, expecially if read by all
-  active boolean NOT NULL DEFAULT 'true'
+  active boolean NOT NULL DEFAULT true
 );
 CREATE INDEX ON apflora.message USING btree (id);
 CREATE INDEX ON apflora.message USING btree (time);
@@ -997,7 +997,7 @@ CREATE TABLE apflora.ae_eigenschaften (
   namedeutsch varchar(100) DEFAULT NULL,
   status varchar(47) DEFAULT NULL,
   artwert smallint DEFAULT NULL,
-  kefart smallint DEFAULT NULL,
+  kefart boolean DEFAULT false,
   kefkontrolljahr smallint DEFAULT NULL,
   fnsjahresartjahr smallint DEFAULT NULL
 );

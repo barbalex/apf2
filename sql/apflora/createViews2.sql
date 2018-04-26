@@ -242,7 +242,7 @@ CREATE OR REPLACE VIEW apflora.v_apber_uebkm AS
 SELECT
   apflora.ae_eigenschaften.artname,
   CASE
-    WHEN apflora.ae_eigenschaften.kefart = -1
+    WHEN apflora.ae_eigenschaften.kefart = true
     THEN 'Ja'
     ELSE ''
   END AS "FnsKefArt2",
@@ -717,7 +717,7 @@ SELECT
     ELSE 0
   END AS "keineMassnahmen",
   CASE
-    WHEN apflora.ae_eigenschaften.kefart = -1
+    WHEN apflora.ae_eigenschaften.kefart = true
     THEN 1
     ELSE 0
   END AS "FnsKefArt",
@@ -1967,7 +1967,7 @@ SELECT
         AND apflora.tpopmassn.typ BETWEEN 1 AND 3
         AND apflora.tpopmassn.jahr <= apflora.tpopkontr.jahr
     ) THEN 6
-    WHEN apflora.tpop.status_unklar = 1 THEN 3
+    WHEN apflora.tpop.status_unklar = true THEN 3
     ELSE 5
   END AS "fkAAINTRODUIT",
   /*
@@ -2018,15 +2018,15 @@ SELECT
    * AP-Verantwortliche oder topos als EXPERTISE_INTRODUITE_NOM setzen
    */
   CASE
-    WHEN "tblAdresse_2".evab_id_person IS NOT NULL
-    THEN substring("tblAdresse_2".name from 1 for 99)
+    WHEN apflora_adresse_2.evab_id_person IS NOT NULL
+    THEN substring(apflora_adresse_2.name from 1 for 99)
     ELSE 'topos Marti & Müller AG Zürich'
   END AS "EXPERTISE_INTRODUITE_NOM"
 FROM
   (apflora.ap
   LEFT JOIN
-    apflora.adresse AS "tblAdresse_2"
-    ON apflora.ap.bearbeiter = "tblAdresse_2".id)
+    apflora.adresse AS apflora_adresse_2
+    ON apflora.ap.bearbeiter = apflora_adresse_2.id)
   INNER JOIN
     (apflora.pop
     INNER JOIN
@@ -2096,8 +2096,8 @@ GROUP BY
   apflora.tpopkontr.gefaehrdung,
   apflora.tpopkontr.vitalitaet,
   apflora.tpop.beschreibung,
-  "tblAdresse_2".evab_id_person,
-  "tblAdresse_2".name;
+  apflora_adresse_2.evab_id_person,
+  apflora_adresse_2.name;
 
 DROP VIEW IF EXISTS apflora.v_popmassnber_anzmassn CASCADE;
 CREATE OR REPLACE VIEW apflora.v_popmassnber_anzmassn AS

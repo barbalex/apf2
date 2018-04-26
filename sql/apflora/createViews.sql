@@ -5199,7 +5199,7 @@ FROM
     apflora.pop
     ON apflora.ap.id = apflora.pop.ap_id
 WHERE
-  apflora.pop.status_unklar = 1
+  apflora.pop.status_unklar = true
   AND apflora.pop.status_unklar_begruendung IS NULL
 ORDER BY
   apflora.ap.id,
@@ -5382,7 +5382,7 @@ FROM
       ON apflora.pop.id = apflora.tpop.pop_id)
     ON apflora.ap.id = apflora.pop.ap_id
 WHERE
-  apflora.tpop.status_unklar = 1
+  apflora.tpop.status_unklar = true
   AND apflora.tpop.status_unklar_grund IS NULL
 ORDER BY
   apflora.ap.id,

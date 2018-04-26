@@ -26,21 +26,8 @@ const StyledRadio = styled(Radio)`
 
 const enhance = compose(
   withHandlers({
-    onChange: props => event => {
-      // if clicked element is active value: set null
-      // Problem: does not work because change event does not happen
-      // Solution: do this in click event of button
-      props.updatePropertyInDb(props.tree, props.fieldName, event.target.value)
-    },
-    onClickButton: props => event => {
-      const { value } = event.target
-      // eslint-disable-next-line eqeqeq
-      if (value == props.value) {
-        // an already active tpopId was clicked
-        // set value null
-        props.updatePropertyInDb(props.tree, props.fieldName, null)
-      }
-    },
+    onChange: props => event =>
+      props.updatePropertyInDb(props.tree, props.fieldName, event.target.value),
   }),
   observer
 )
@@ -50,25 +37,23 @@ const RadioButton = ({
   value,
   label,
   onChange,
-  onClickButton,
 }: {
-  fieldName: string,
-  value?: ?number | ?string,
-  label: string,
+  fieldName: String,
+  value: Boolean,
+  label: String,
   onChange: () => void,
-  onClickButton: () => void,
 }) => (
   <StyledFormControl component="fieldset">
     <StyledFormLabel component="legend">{label}</StyledFormLabel>
     <RadioGroup
       aria-label={label}
       name={fieldName}
-      value={!!value ? value.toString() : null}
+      value={value.toString()}
       onChange={onChange}
     >
       <FormControlLabel
-        value="1"
-        control={<StyledRadio onClick={onClickButton} color="primary" />}
+        value="true"
+        control={<StyledRadio color="primary" />}
       />
     </RadioGroup>
   </StyledFormControl>
