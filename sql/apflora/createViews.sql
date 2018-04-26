@@ -1139,7 +1139,7 @@ SELECT
   apflora.tpop.bewirtschafter AS "TPOPBEWIRTSCHAFTER",
   apflora.tpop.bewirtschaftung AS "TPOPBEWIRTSCHAFTUNG",
   to_char(apflora.tpop.changed, 'DD.MM.YY') AS "TPOPCHANGEDAT",
-  apflora.tpop.changed AS "TPOPCHANGEBY"
+  apflora.tpop.changed_by AS "TPOPCHANGEBY"
 FROM
   ((((((apflora.ae_eigenschaften
   INNER JOIN
