@@ -1940,7 +1940,7 @@ SELECT
   -- if no bearbeiter pass unbekannt
   -- should never happen because not existing bearbeiter is filtered out
   COALESCE(apflora.adresse.evab_id_person, '{A1146AE4-4E03-4032-8AA8-BC46BA02F468}'::uuid) AS fkAutor,
-  apflora.ap.id AS fkArt,
+  apflora.ap.art_id AS fkArt,
   18 AS fkArtgruppe,
   1 AS fkAA1,
   /*
@@ -1996,7 +1996,7 @@ SELECT
     WHEN apflora.v_tpopkontr_maxanzahl.anzahl = 0 THEN 3
     ELSE 1
   END AS "fkAAPRESENCE",
-  apflora.tpopkontr.gefaehrdung AS "MENACES",
+  substring(apflora.tpopkontr.gefaehrdung from 1 for 244) AS "MENACES",
   substring(apflora.tpopkontr.vitalitaet from 1 for 200) AS "VITALITE_PLANTE",
   substring(apflora.tpop.beschreibung from 1 for 244) AS "STATION",
   /*
@@ -2011,7 +2011,7 @@ SELECT
       ', Methoden: ',
       string_agg(apflora.tpopkontrzaehl_methode_werte.text, ', ')
       )
-    from 1 for 160
+    from 1 for 244
   ) AS "ABONDANCE",
   'C'::TEXT AS "EXPERTISE_INTRODUIT",
   /*
@@ -2019,7 +2019,7 @@ SELECT
    */
   CASE
     WHEN "tblAdresse_2".evab_id_person IS NOT NULL
-    THEN "tblAdresse_2".name
+    THEN substring("tblAdresse_2".name from 1 for 99)
     ELSE 'topos Marti & Müller AG Zürich'
   END AS "EXPERTISE_INTRODUITE_NOM"
 FROM
