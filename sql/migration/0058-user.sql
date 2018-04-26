@@ -1,0 +1,1 @@
+alter schema basic_auth rename to auth;

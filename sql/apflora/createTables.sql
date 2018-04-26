@@ -88,7 +88,7 @@ COMMENT ON COLUMN apflora.ap.changed_by IS 'Von wem wurde der Datensatz zuletzt 
 -- this table is NOT YET IN USE
 DROP TABLE IF EXISTS apflora.userprojekt;
 CREATE TABLE apflora.userprojekt (
-  username varchar(30) REFERENCES basic_auth.users (name) ON DELETE CASCADE ON UPDATE CASCADE,
+  username varchar(30) REFERENCES auth.users (name) ON DELETE CASCADE ON UPDATE CASCADE,
   proj_id uuid REFERENCES apflora.projekt (id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 CREATE INDEX ON apflora.userprojekt USING btree (username, proj_id);
@@ -923,7 +923,7 @@ COMMENT ON COLUMN apflora.message.active IS 'false: diese Nachricht wird nicht m
 -- list of read messages per user
 DROP TABLE IF EXISTS apflora.usermessage;
 CREATE TABLE apflora.usermessage (
-  user_name varchar(30) NOT NULL REFERENCES basic_auth.users (name) ON DELETE CASCADE ON UPDATE CASCADE,
+  user_name varchar(30) NOT NULL REFERENCES auth.users (name) ON DELETE CASCADE ON UPDATE CASCADE,
   message_id UUID NOT NULL REFERENCES apflora.message (id) ON DELETE CASCADE ON UPDATE CASCADE,
   UNIQUE (user_name, message_id)
 );

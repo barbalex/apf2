@@ -1,12 +1,12 @@
 -- run this once
 ALTER DATABASE apflora SET "app.jwt_secret" TO 'secret';
 
--- We put things inside the basic_auth schema to hide
+-- We put things inside the auth schema to hide
 -- them from public view. Certain public procs/views will
 -- refer to helpers and tables inside.
-CREATE SCHEMA IF NOT EXISTS basic_auth;
+CREATE SCHEMA IF NOT EXISTS auth;
 
-CREATE TABLE IF NOT EXISTS basic_auth.users (
+CREATE TABLE IF NOT EXISTS auth.users (
   name varchar(30) PRIMARY KEY,
   role name NOT NULL check (length(role) < 512),
   -- allow other attributes to be null
@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS basic_auth.users (
 
 -- use a trigger to manually enforce the role being a foreign key to actual
 -- database roles
-create or replace function basic_auth.check_role_exists() returns trigger
+create or replace function auth.check_role_exists() returns trigger
   language plpgsql
   as $$
 begin
@@ -31,18 +31,18 @@ begin
 end
 $$;
 
-drop trigger if exists ensure_user_role_exists on basic_auth.users;
+drop trigger if exists ensure_user_role_exists on auth.users;
 create constraint trigger ensure_user_role_exists
-  after insert or update on basic_auth.users
+  after insert or update on auth.users
   for each row
-  execute procedure basic_auth.check_role_exists();
+  execute procedure auth.check_role_exists();
 
 create extension if not exists pgcrypto;
 -- this does not work on windows
 -- need to run pgjwt.sql
 --create extension if not exists pgjwt;
 
-create or replace function basic_auth.encrypt_pass()
+create or replace function auth.encrypt_pass()
   returns trigger
   language plpgsql as
 $$
@@ -56,22 +56,22 @@ $$;
 
 -- We’ll use the pgcrypto extension and a trigger
 -- to keep passwords safe in the users table
-drop trigger if exists encrypt_pass on basic_auth.users;
+drop trigger if exists encrypt_pass on auth.users;
 create trigger encrypt_pass
-  before insert or update on basic_auth.users
+  before insert or update on auth.users
   for each row
-  execute procedure basic_auth.encrypt_pass();
+  execute procedure auth.encrypt_pass();
 
 -- Helper to check a password against the encrypted column
 -- It returns the database role for a user
 -- if the name and password are correct
-create or replace function basic_auth.user_role(username text, pass text)
+create or replace function auth.user_role(username text, pass text)
 returns name
   language plpgsql
   as $$
 begin
   return (
-  select role from basic_auth.users
+  select role from auth.users
    where users.name = $1
      and users.pass = crypt($2, users.pass)
      and users.block = 'false'
@@ -80,27 +80,27 @@ end;
 $$;
 
 -- stored procedure that returns the token
-CREATE TYPE basic_auth.jwt_token AS (
+CREATE TYPE auth.jwt_token AS (
   token text
 );
 
 -- Login function which takes an user name and password
 -- and returns JWT if the credentials match a user in the internal table
---create type login_return as (token basic_auth.jwt_token, role text);
+--create type login_return as (token auth.jwt_token, role text);
 create or replace function apflora.login(username text, pass text)
-returns basic_auth.jwt_token
+returns auth.jwt_token
   as $$
 declare
   _role name;
-  result basic_auth.jwt_token;
+  result auth.jwt_token;
 begin
   -- check username and password
-  select basic_auth.user_role($1, $2) into _role;
+  select auth.user_role($1, $2) into _role;
   if _role is null then
     raise invalid_password using message = 'invalid user or password';
   end if;
 
-  select basic_auth.sign(
+  select auth.sign(
       row_to_json(r), current_setting('app.jwt_secret')
     ) as token
     from (
@@ -121,11 +121,11 @@ grant anon to authenticator;
 grant connect on database apflora to authenticator;
 grant connect on database apflora to anon;
 
-grant usage on schema public, basic_auth, apflora, request to anon;
-grant select on table pg_authid, basic_auth.users to anon;
+grant usage on schema public, auth, apflora, request to anon;
+grant select on table pg_authid, auth.users to anon;
 grant execute on function apflora.login(text,text) to anon;
-grant execute on function basic_auth.sign(json,text,text) to anon;
-grant execute on function basic_auth.user_role(text,text) to anon;
+grant execute on function auth.sign(json,text,text) to anon;
+grant execute on function auth.user_role(text,text) to anon;
 grant execute on function request.user_name() to anon;
 grant execute on function request.jwt_claim(text) to anon;
 grant execute on function request.env_var(text) to anon;
