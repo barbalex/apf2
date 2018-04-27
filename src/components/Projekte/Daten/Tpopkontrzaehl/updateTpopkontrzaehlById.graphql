@@ -1,0 +1,9 @@
+mutation updateAnzahl($id: UUID!, $anzahl: Number!) {
+  updateTpopkontrzaehlById(
+    input: { id: $id, tpopkontrzaehlPatch: { anzahl: $anzahl } }
+  ) {
+    tpopkontrzaehl {
+      id
+    }
+  }
+}
