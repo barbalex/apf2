@@ -21,16 +21,7 @@ import 'moment/locale/de-ch' // this is the important bit, you have to import th
 import MomentUtils from 'material-ui-pickers/utils/moment-utils'
 import MuiPickersUtilsProvider from 'material-ui-pickers/utils/MuiPickersUtilsProvider'
 import { Provider } from 'mobx-react'
-
-import { ApolloClient } from 'apollo-client'
-import { createHttpLink } from 'apollo-link-http'
-import { setContext } from 'apollo-link-context'
-import { InMemoryCache } from 'apollo-cache-inmemory'
-import { withClientState } from 'apollo-link-state'
 import { ApolloProvider } from 'react-apollo'
-import { ApolloLink } from 'apollo-link'
-import get from 'lodash/get'
-import jwtDecode from 'jwt-decode'
 
 import styled from 'styled-components'
 
@@ -43,9 +34,7 @@ import store from './store'
 import initializeDb from './modules/initializeDb'
 import setLoginFromIdb from './store/action/setLoginFromIdb'
 import Loading from './components/shared/Loading'
-import resolvers from './gqlStore/resolvers'
-import defaults from './gqlStore/defaults'
-import setLoginMutation from './modules/loginMutation'
+import client from './client'
 
 // service worker
 import registerServiceWorker from './registerServiceWorker'
@@ -53,7 +42,6 @@ import registerServiceWorker from './registerServiceWorker'
 import apiBaseUrl from './modules/apiBaseUrl'
 // turned off because of errors in production
 //import updateFromSocket from './modules/updateFromSocket'
-import graphQlUri from './modules/graphQlUri'
 
 import './index.css'
 
@@ -104,60 +92,6 @@ const DownloadMessages = Loadable({
 
     const db = initializeDb()
 
-    const authMiddleware = setContext(async () => {
-      let users
-      users = await db.users.toArray()
-      const token = get(users, '[0].token')
-      if (token) {
-        const tokenDecoded = jwtDecode(token)
-        // for unknown reason, date.now returns three more after comma
-        // numbers than the exp date contains
-        const tokenIsValid = tokenDecoded.exp > Date.now() / 1000
-        if (tokenIsValid) {
-          return {
-            headers: {
-              authorization: `Bearer ${token}`,
-            },
-          }
-        } else {
-          // token is not valid any more > remove it
-          db.users.clear()
-          client.mutate({
-            mutation: setLoginMutation,
-            variables: {
-              username: 'Login abgelaufen',
-              token: '',
-            },
-          })
-          setTimeout(
-            () =>
-              client.mutate({
-                mutation: setLoginMutation,
-                variables: {
-                  username: '',
-                  token: '',
-                },
-              }),
-            10000
-          )
-        }
-        // TODO: tell user "Ihre Anmeldung ist abgelaufen"
-      }
-    })
-    const cache = new InMemoryCache()
-    const stateLink = withClientState({
-      resolvers,
-      cache,
-      defaults,
-    })
-    const httpLink = createHttpLink({
-      uri: graphQlUri(),
-    })
-    const client = new ApolloClient({
-      link: ApolloLink.from([stateLink, authMiddleware, httpLink]),
-      cache,
-    })
-
     app.extend({
       init() {
         this.db = db
@@ -188,7 +122,7 @@ const DownloadMessages = Loadable({
     `
 
     ReactDOM.render(
-      <ApolloProvider client={client}>
+      <ApolloProvider client={client(db)}>
         <Provider store={store}>
           <MuiThemeProvider theme={theme}>
             <MuiPickersUtilsProvider
