@@ -17,23 +17,32 @@ const StyledInput = styled(Input)`
 const enhance = compose(
   withState('valueHasBeenChanged', 'changeValueHasBeenChanged', false),
   withHandlers({
-    onChange: props => event => {
+    onChange: ({
+      updateProperty,
+      tree,
+      fieldName,
+      changeValueHasBeenChanged,
+    }) => event => {
       let { value } = event.target
       // ensure numbers saved as numbers
       if (event.target.type === 'number') {
         value = +value
       }
-      props.updateProperty(props.tree, props.fieldName, value)
-      props.changeValueHasBeenChanged(true)
+      updateProperty(tree, fieldName, value)
+      changeValueHasBeenChanged(true)
     },
-    onBlur: props => event => {
+    onBlur: ({
+      valueHasBeenChanged,
+      tree,
+      fieldName,
+      updatePropertyInDb,
+    }) => event => {
       const { type } = event.target
       let { value } = event.target
       // ensure numbers saved as numbers
       if (type === 'number') {
         value = +value
       }
-      const { valueHasBeenChanged, tree, fieldName, updatePropertyInDb } = props
       if (valueHasBeenChanged) {
         updatePropertyInDb(tree, fieldName, value)
       }
