@@ -4,12 +4,12 @@ import { observer, inject } from 'mobx-react'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
 import gql from 'graphql-tag'
-import { Query } from 'react-apollo'
+import { Query, Mutation } from 'react-apollo'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 
 import RadioButtonGroup from '../../shared/RadioButtonGroup'
-import TextField from '../../shared/TextField'
+import TextField from '../../shared/TextFieldGql'
 import FormTitle from '../../shared/FormTitle'
 import AutoComplete from '../../shared/Autocomplete'
 import ErrorBoundary from '../../shared/ErrorBoundary'
@@ -103,16 +103,37 @@ const Tpopkontrzaehl = ({ store, tree }: { store: Object, tree: Object }) => {
                   objects={zaehleinheitWerte}
                   updatePropertyInDb={store.updatePropertyInDb}
                 />
-                <TextField
-                  key={`${row.id}anzahl`}
-                  tree={tree}
-                  label="Anzahl (nur ganze Zahlen)"
-                  fieldName="anzahl"
-                  value={row.anzahl}
-                  type="number"
-                  updateProperty={store.updateProperty}
-                  updatePropertyInDb={store.updatePropertyInDb}
-                />
+                <Mutation
+                  mutation={gql`
+                    mutation updateAnzahl($id: UUID!, $anzahl: Number!) {
+                      updateTpopkontrzaehlById(
+                        input: {
+                          id: $id
+                          tpopkontrzaehlPatch: { anzahl: $anzahl }
+                        }
+                      ) {
+                        tpopkontrzaehl {
+                          id
+                        }
+                      }
+                    }
+                  `}
+                >
+                  {(updateAnzahl, { data }) => (
+                    <TextField
+                      key={`${row.id}anzahl`}
+                      label="Anzahl (nur ganze Zahlen)"
+                      value={row.anzahl}
+                      type="number"
+                      onBlur={event => {
+                        console.log('blur anzahl')
+                        updateAnzahl({
+                          variables: { id: row.id, anzahl: event.target.value },
+                        })
+                      }}
+                    />
+                  )}
+                </Mutation>
                 <RadioButtonGroup
                   key={`${row.id}methode`}
                   tree={tree}
