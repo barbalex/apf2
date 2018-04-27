@@ -114,16 +114,6 @@ export default (store: Object): void => {
       },
       { name: 'dropdownListGemeinden' }
     ),
-    lr: computed(
-      () =>
-        sortBy(
-          Array.from(store.table.ae_lrdelarze.values()).map(
-            e => `${e.label}: ${e.einheit.replace(/  +/g, ' ')}`
-          ),
-          'sort'
-        ),
-      { name: 'dropdownListLr' }
-    ),
     tpopMassnTypWerte: computed(
       () => {
         let tpopMassnTypWerte = Array.from(
