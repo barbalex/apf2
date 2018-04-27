@@ -98,6 +98,9 @@
     "typeface-roboto": "0.0.54",
     "yup": "0.24.1"
   },
+  "resolutions": {
+    "graphql": "0.13.2"
+  },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
