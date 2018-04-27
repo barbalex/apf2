@@ -4,19 +4,16 @@ import { setContext } from 'apollo-link-context'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 import { withClientState } from 'apollo-link-state'
 import { ApolloLink } from 'apollo-link'
-import get from 'lodash/get'
 import jwtDecode from 'jwt-decode'
+import get from 'lodash/get'
 
 import graphQlUri from './modules/graphQlUri'
 import resolvers from './gqlStore/resolvers'
 import defaults from './gqlStore/defaults'
-import setLoginMutation from './modules/loginMutation'
 
-export default db => {
+export default store => {
   const authMiddleware = setContext(async () => {
-    let users
-    users = await db.users.toArray()
-    const token = get(users, '[0].token')
+    const token = get(store, 'user.token')
     if (token) {
       const tokenDecoded = jwtDecode(token)
       // for unknown reason, date.now returns three more after comma
@@ -28,29 +25,7 @@ export default db => {
             authorization: `Bearer ${token}`,
           },
         }
-      } else {
-        // token is not valid any more > remove it
-        db.users.clear()
-        client.mutate({
-          mutation: setLoginMutation,
-          variables: {
-            username: 'Login abgelaufen',
-            token: '',
-          },
-        })
-        setTimeout(
-          () =>
-            client.mutate({
-              mutation: setLoginMutation,
-              variables: {
-                username: '',
-                token: '',
-              },
-            }),
-          10000
-        )
       }
-      // TODO: tell user "Ihre Anmeldung ist abgelaufen"
     }
   })
   const cache = new InMemoryCache()

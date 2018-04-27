@@ -122,7 +122,7 @@ const DownloadMessages = Loadable({
     `
 
     ReactDOM.render(
-      <ApolloProvider client={client(db)}>
+      <ApolloProvider client={client(store)}>
         <Provider store={store}>
           <MuiThemeProvider theme={theme}>
             <MuiPickersUtilsProvider

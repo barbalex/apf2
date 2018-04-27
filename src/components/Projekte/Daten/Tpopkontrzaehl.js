@@ -3,6 +3,10 @@ import React from 'react'
 import { observer, inject } from 'mobx-react'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
+import gql from 'graphql-tag'
+import { Query } from 'react-apollo'
+import get from 'lodash/get'
+import sortBy from 'lodash/sortBy'
 
 import RadioButtonGroup from '../../shared/RadioButtonGroup'
 import TextField from '../../shared/TextField'
@@ -21,68 +25,109 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
-const getZaehleinheitName = ({
-  store,
-  tree,
-}: {
-  store: Object,
-  tree: Object,
-}) => {
-  const { zaehleinheitWerte } = store.dropdownList
-  const { activeDataset } = tree
-  let value = ''
-  if (activeDataset.row.einheit && zaehleinheitWerte.length > 0) {
-    const zaehleinheit = zaehleinheitWerte.find(
-      a => a.id === activeDataset.row.einheit
-    )
-    if (zaehleinheit && zaehleinheit.value) return zaehleinheit.value
-  }
-  return value
-}
-
 const enhance = compose(inject('store'), observer)
 
 const Tpopkontrzaehl = ({ store, tree }: { store: Object, tree: Object }) => {
-  const { activeDataset } = tree
+  const { activeNode } = tree
 
   return (
-    <ErrorBoundary>
-      <Container>
-        <FormTitle tree={tree} title="Zählung" />
-        <FieldsContainer>
-          <AutoComplete
-            key={`${activeDataset.row.id}einheitNew`}
-            tree={tree}
-            label="Einheit"
-            fieldName="einheit"
-            value={getZaehleinheitName({ store, tree })}
-            objects={store.dropdownList.zaehleinheitWerte}
-            updatePropertyInDb={store.updatePropertyInDb}
-          />
-          <TextField
-            key={`${activeDataset.row.id}anzahl`}
-            tree={tree}
-            label="Anzahl (nur ganze Zahlen)"
-            fieldName="anzahl"
-            value={activeDataset.row.anzahl}
-            errorText={activeDataset.valid.anzahl}
-            type="number"
-            updateProperty={store.updateProperty}
-            updatePropertyInDb={store.updatePropertyInDb}
-          />
-          <RadioButtonGroup
-            key={`${activeDataset.row.id}methode`}
-            tree={tree}
-            fieldName="methode"
-            label="Methode"
-            value={activeDataset.row.methode}
-            errorText={activeDataset.valid.methode}
-            dataSource={store.dropdownList.methodeWerte}
-            updatePropertyInDb={store.updatePropertyInDb}
-          />
-        </FieldsContainer>
-      </Container>
-    </ErrorBoundary>
+    <Query
+      query={gql`
+        query TpopkontrzaehlQuery($id: UUID!) {
+          tpopkontrzaehlById(id: $id) {
+            id
+            anzahl
+            einheit
+            tpopkontrzaehlEinheitWerteByEinheit {
+              text
+            }
+            methode
+          }
+          allTpopkontrzaehlEinheitWertes {
+            nodes {
+              id
+              code
+              text
+              sort
+            }
+          }
+          allTpopkontrzaehlMethodeWertes {
+            nodes {
+              id
+              code
+              text
+              sort
+            }
+          }
+        }
+      `}
+      variables={{ id: activeNode.id }}
+    >
+      {({ loading, error, data }) => {
+        if (loading)
+          return (
+            <Container>
+              <FieldsContainer>Lade...</FieldsContainer>
+            </Container>
+          )
+        if (error) return `Fehler: ${error.message}`
+
+        const row = get(data, 'tpopkontrzaehlById')
+        let zaehleinheitWerte = get(
+          data,
+          'allTpopkontrzaehlEinheitWertes.nodes',
+          []
+        )
+        zaehleinheitWerte = sortBy(zaehleinheitWerte, 'sort').map(el => ({
+          id: el.code,
+          value: el.text,
+        }))
+        let methodeWerte = get(data, 'allTpopkontrzaehlMethodeWertes.nodes', [])
+        methodeWerte = sortBy(methodeWerte, 'sort')
+        methodeWerte = methodeWerte.map(el => ({
+          value: el.code,
+          label: el.text,
+        }))
+
+        return (
+          <ErrorBoundary>
+            <Container>
+              <FormTitle tree={tree} title="Zählung" />
+              <FieldsContainer>
+                <AutoComplete
+                  key={`${row.id}einheitNew`}
+                  tree={tree}
+                  label="Einheit"
+                  fieldName="einheit"
+                  value={get(row, 'tpopkontrzaehlEinheitWerteByEinheit.text')}
+                  objects={zaehleinheitWerte}
+                  updatePropertyInDb={store.updatePropertyInDb}
+                />
+                <TextField
+                  key={`${row.id}anzahl`}
+                  tree={tree}
+                  label="Anzahl (nur ganze Zahlen)"
+                  fieldName="anzahl"
+                  value={row.anzahl}
+                  type="number"
+                  updateProperty={store.updateProperty}
+                  updatePropertyInDb={store.updatePropertyInDb}
+                />
+                <RadioButtonGroup
+                  key={`${row.id}methode`}
+                  tree={tree}
+                  fieldName="methode"
+                  label="Methode"
+                  value={row.methode}
+                  dataSource={methodeWerte}
+                  updatePropertyInDb={store.updatePropertyInDb}
+                />
+              </FieldsContainer>
+            </Container>
+          </ErrorBoundary>
+        )
+      }}
+    </Query>
   )
 }
 
