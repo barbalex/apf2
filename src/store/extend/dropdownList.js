@@ -114,19 +114,6 @@ export default (store: Object): void => {
       },
       { name: 'dropdownListGemeinden' }
     ),
-    idbiotopuebereinstWerte: computed(
-      () => {
-        let idbiotopuebereinstWerte = Array.from(
-          store.table.tpopkontr_idbiotuebereinst_werte.values()
-        )
-        idbiotopuebereinstWerte = sortBy(idbiotopuebereinstWerte, 'sort')
-        return idbiotopuebereinstWerte.map(el => ({
-          value: el.code,
-          label: el.text,
-        }))
-      },
-      { name: 'dropdownListIdbiotopuebereinstWerte' }
-    ),
     lr: computed(
       () =>
         sortBy(

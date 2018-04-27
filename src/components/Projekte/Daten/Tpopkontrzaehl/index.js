@@ -36,6 +36,7 @@ const Tpopkontrzaehl = ({ id, tree }: { id: String, tree: Object }) => (
       if (error) return `Fehler: ${error.message}`
 
       const row = get(data, 'tpopkontrzaehlById')
+      console.log({ row })
       let zaehleinheitWerte = get(
         data,
         'allTpopkontrzaehlEinheitWertes.nodes',
@@ -73,10 +74,8 @@ const Tpopkontrzaehl = ({ id, tree }: { id: String, tree: Object }) => (
                     saveToDb={val =>
                       updateTpopkontrzaehl({
                         variables: {
-                          id: row.id,
-                          anzahl: row.anzahl,
+                          id,
                           einheit: val,
-                          methode: row.methode,
                         },
                       })
                     }
@@ -89,10 +88,8 @@ const Tpopkontrzaehl = ({ id, tree }: { id: String, tree: Object }) => (
                     saveToDb={event =>
                       updateTpopkontrzaehl({
                         variables: {
-                          id: row.id,
+                          id,
                           anzahl: event.target.value,
-                          einheit: row.einheit,
-                          methode: row.methode,
                         },
                       })
                     }
@@ -105,9 +102,7 @@ const Tpopkontrzaehl = ({ id, tree }: { id: String, tree: Object }) => (
                     saveToDb={val =>
                       updateTpopkontrzaehl({
                         variables: {
-                          id: row.id,
-                          anzahl: row.anzahl,
-                          einheit: row.einheit,
+                          id,
                           methode: val,
                         },
                       })

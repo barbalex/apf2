@@ -9,6 +9,8 @@ import withState from 'recompose/withState'
 import { Query, Mutation } from 'react-apollo'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
+import clone from 'lodash/clone'
+import omit from 'lodash/omit'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroupGql'
 import TextField from '../../../shared/TextFieldGql'
@@ -22,6 +24,7 @@ import TpopfeldkontrentwicklungPopover from '../TpopfeldkontrentwicklungPopover'
 import constants from '../../../../modules/constants'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import tpopkontrByIdGql from './tpopkontrById.graphql'
+import updateTpopkontrByIdGql from './updateTpopkontrById.graphql'
 
 const Container = styled.div`
   height: 100%;
@@ -108,13 +111,42 @@ const Tpopfeldkontr = ({
             </Container>
           )
         if (error) return `Fehler: ${error.message}`
-        const row = get(data, 'tpopkontrById')
+        const row = omit(clone(get(data, 'tpopkontrById')), [
+          'adresseByBearbeiter',
+          'tpopByTpopId',
+        ])
+        row.__typename = 'TpopkontrPatch!'
         let adressenWerte = get(data, 'allAdresses.nodes', [])
         adressenWerte = sortBy(adressenWerte, 'name')
         adressenWerte = adressenWerte.map(el => ({
           value: el.id,
           label: el.name,
         }))
+        let idbiotopuebereinstWerte = get(
+          data,
+          'allTpopkontrIdbiotuebereinstWertes.nodes',
+          []
+        )
+        idbiotopuebereinstWerte = sortBy(idbiotopuebereinstWerte, 'sort')
+        idbiotopuebereinstWerte = idbiotopuebereinstWerte.map(el => ({
+          value: el.code,
+          label: el.text,
+        }))
+        let tpopEntwicklungWerte = get(
+          data,
+          'allTpopEntwicklungWertes.nodes',
+          []
+        )
+        tpopEntwicklungWerte = sortBy(tpopEntwicklungWerte, 'sort')
+        tpopEntwicklungWerte = tpopEntwicklungWerte.map(el => ({
+          value: el.code,
+          label: el.text,
+        }))
+        let aeLrWerte = get(data, 'allAeLrdelarzes', [])
+        aeLrWerte = sortBy(aeLrWerte, 'sort')
+        aeLrWerte = aeLrWerte.map(
+          e => `${e.label}: ${e.einheit ? e.einheit.replace(/  +/g, ' ') : ''}`
+        )
 
         return (
           <ErrorBoundary>
@@ -123,253 +155,460 @@ const Tpopfeldkontr = ({
                 apId={get(data, 'tpopkontrById.tpopByTpopId.popByPopId.apId')}
                 title="Feld-Kontrolle"
               />
-              <FieldsContainer>
-                <Tabs
-                  value={value}
-                  onChange={onChangeTab}
-                  indicatorColor="primary"
-                  textColor="primary"
-                  centered
-                >
-                  <Tab label="Entwicklung" value="entwicklung" />
-                  <Tab label="Biotop" value="biotop" />
-                </Tabs>
-                {value === 'entwicklung' && (
-                  <FormContainer data-width={width}>
-                    <YearDatePair
-                      key={row.id}
-                      tree={tree}
-                      yearLabel="Jahr"
-                      yearFieldName="jahr"
-                      yearValue={row.jahr}
-                      dateLabel="Datum"
-                      dateFieldName="datum"
-                      dateValue={row.datum}
-                      updateProperty={store.updateProperty}
-                      updatePropertyInDb={store.updatePropertyInDb}
-                    />
-                    <RadioButtonGroup
-                      key={`${row.id}typ`}
-                      label="Kontrolltyp"
-                      value={row.typ}
-                      dataSource={tpopkontrTypWerte}
-                      saveToDb={() => 'TODO'}
-                    />
-                    <AutoComplete
-                      key={`${row.id}bearbeiter`}
-                      label="BearbeiterIn"
-                      value={get(row, 'adresseByBearbeiter.name')}
-                      objects={adressenWerte}
-                      saveToDb={() => 'TODO'}
-                    />
-                    <TextField
-                      key={`${row.id}jungpflanzen_anzahl`}
-                      label="Anzahl Jungpflanzen"
-                      value={row.jungpflanzen_anzahl}
-                      type="number"
-                      saveToDb={() => 'TODO'}
-                    />
-                    <TextField
-                      key={`${row.id}vitalitaet`}
-                      label="Vitalität"
-                      value={row.vitalitaet}
-                      type="text"
-                      saveToDb={() => 'TODO'}
-                    />
-                    <TextField
-                      key={`${row.id}ueberlebensrate`}
-                      label="Überlebensrate"
-                      value={row.ueberlebensrate}
-                      type="number"
-                      saveToDb={() => 'TODO'}
-                    />
-                    <RadioButtonGroupWithInfo
-                      key={`${row.id}entwicklung`}
-                      label="Entwicklung"
-                      value={row.entwicklung}
-                      dataSource={store.dropdownList.tpopEntwicklungWerte}
-                      saveToDb={() => 'TODO'}
-                      popover={TpopfeldkontrentwicklungPopover}
-                    />
-                    <TextField
-                      key={`${row.id}ursachen`}
-                      label="Ursachen"
-                      value={row.ursachen}
-                      hintText="Standort: ..., Klima: ..., anderes: ..."
-                      type="text"
-                      multiLine
-                      saveToDb={() => 'TODO'}
-                    />
-                    <TextField
-                      key={`${row.id}erfolgsbeurteilung`}
-                      label="Erfolgsbeurteilung"
-                      value={row.erfolgsbeurteilung}
-                      type="text"
-                      multiLine
-                      saveToDb={() => 'TODO'}
-                    />
-                    <TextField
-                      key={`${row.id}umsetzung_aendern`}
-                      label="Änderungs-Vorschläge Umsetzung"
-                      value={row.umsetzung_aendern}
-                      type="text"
-                      multiLine
-                      saveToDb={() => 'TODO'}
-                    />
-                    <TextField
-                      key={`${row.id}kontrolle_aendern`}
-                      label="Änderungs-Vorschläge Kontrolle"
-                      value={row.kontrolle_aendern}
-                      type="text"
-                      multiLine
-                      saveToDb={() => 'TODO'}
-                    />
-                    <TextField
-                      key={`${row.id}bemerkungen`}
-                      label="Bemerkungen"
-                      value={row.bemerkungen}
-                      type="text"
-                      multiLine
-                      saveToDb={() => 'TODO'}
-                    />
-                    <StringToCopy text={row.id} label="id" />
-                  </FormContainer>
+              <Mutation mutation={updateTpopkontrByIdGql}>
+                {(updateTpopkontr, { data }) => (
+                  <FieldsContainer>
+                    <Tabs
+                      value={value}
+                      onChange={onChangeTab}
+                      indicatorColor="primary"
+                      textColor="primary"
+                      centered
+                    >
+                      <Tab label="Entwicklung" value="entwicklung" />
+                      <Tab label="Biotop" value="biotop" />
+                    </Tabs>
+                    {value === 'entwicklung' && (
+                      <FormContainer data-width={width}>
+                        {/*<YearDatePair
+                          key={row.id}
+                          tree={'tree'}
+                          yearLabel="Jahr"
+                          yearFieldName="jahr"
+                          yearValue={row.jahr}
+                          dateLabel="Datum"
+                          dateFieldName="datum"
+                          dateValue={row.datum}
+                          updateProperty={'store.updateProperty'}
+                          updatePropertyInDb={'store.updatePropertyInDb'}
+                        />*/}
+                        <RadioButtonGroup
+                          key={`${row.id}typ`}
+                          label="Kontrolltyp"
+                          value={row.typ}
+                          dataSource={tpopkontrTypWerte}
+                          saveToDb={value =>
+                            updateTpopkontr({
+                              variables: {
+                                id,
+                                typ: value,
+                              },
+                            })
+                          }
+                        />
+                        <AutoComplete
+                          key={`${row.id}bearbeiter`}
+                          label="BearbeiterIn"
+                          value={get(row, 'adresseByBearbeiter.name')}
+                          objects={adressenWerte}
+                          saveToDb={value =>
+                            updateTpopkontr({
+                              variables: {
+                                id,
+                                bearbeiter: value,
+                              },
+                            })
+                          }
+                        />
+                        <TextField
+                          key={`${row.id}jungpflanzen_anzahl`}
+                          label="Anzahl Jungpflanzen"
+                          value={row.jungpflanzenAnzahl}
+                          type="number"
+                          saveToDb={event =>
+                            updateTpopkontr({
+                              variables: {
+                                id,
+                                jungpflanzenAnzahl: event.target.value,
+                              },
+                            })
+                          }
+                        />
+                        <TextField
+                          key={`${row.id}vitalitaet`}
+                          label="Vitalität"
+                          value={row.vitalitaet}
+                          type="text"
+                          saveToDb={event =>
+                            updateTpopkontr({
+                              variables: {
+                                id,
+                                vitalitaet: event.target.value,
+                              },
+                            })
+                          }
+                        />
+                        <TextField
+                          key={`${row.id}ueberlebensrate`}
+                          label="Überlebensrate"
+                          value={row.ueberlebensrate}
+                          type="number"
+                          saveToDb={event =>
+                            updateTpopkontr({
+                              variables: {
+                                id,
+                                ueberlebensrate: event.target.value,
+                              },
+                            })
+                          }
+                        />
+                        <RadioButtonGroupWithInfo
+                          key={`${row.id}entwicklung`}
+                          label="Entwicklung"
+                          value={row.entwicklung}
+                          dataSource={tpopEntwicklungWerte}
+                          saveToDb={event =>
+                            updateTpopkontr({
+                              variables: {
+                                id,
+                                entwicklung: event.target.value,
+                              },
+                            })
+                          }
+                          popover={TpopfeldkontrentwicklungPopover}
+                        />
+                        <TextField
+                          key={`${row.id}ursachen`}
+                          label="Ursachen"
+                          value={row.ursachen}
+                          hintText="Standort: ..., Klima: ..., anderes: ..."
+                          type="text"
+                          multiLine
+                          saveToDb={event =>
+                            updateTpopkontr({
+                              variables: {
+                                id,
+                                ursachen: event.target.value,
+                              },
+                            })
+                          }
+                        />
+                        <TextField
+                          key={`${row.id}erfolgsbeurteilung`}
+                          label="Erfolgsbeurteilung"
+                          value={row.erfolgsbeurteilung}
+                          type="text"
+                          multiLine
+                          saveToDb={event =>
+                            updateTpopkontr({
+                              variables: {
+                                id,
+                                erfolgsbeurteilung: event.target.value,
+                              },
+                            })
+                          }
+                        />
+                        <TextField
+                          key={`${row.id}umsetzung_aendern`}
+                          label="Änderungs-Vorschläge Umsetzung"
+                          value={row.umsetzungAendern}
+                          type="text"
+                          multiLine
+                          saveToDb={event =>
+                            updateTpopkontr({
+                              variables: {
+                                id,
+                                umsetzungAendern: event.target.value,
+                              },
+                            })
+                          }
+                        />
+                        <TextField
+                          key={`${row.id}kontrolle_aendern`}
+                          label="Änderungs-Vorschläge Kontrolle"
+                          value={row.kontrolleAendern}
+                          type="text"
+                          multiLine
+                          saveToDb={event =>
+                            updateTpopkontr({
+                              variables: {
+                                id,
+                                kontrolleAendern: event.target.value,
+                              },
+                            })
+                          }
+                        />
+                        <TextField
+                          key={`${row.id}bemerkungen`}
+                          label="Bemerkungen"
+                          value={row.bemerkungen}
+                          type="text"
+                          multiLine
+                          saveToDb={event =>
+                            updateTpopkontr({
+                              variables: {
+                                id,
+                                bemerkungen: event.target.value,
+                              },
+                            })
+                          }
+                        />
+                        <StringToCopy text={row.id} label="id" />
+                      </FormContainer>
+                    )}
+                    {value === 'biotop' && (
+                      <FormContainer data-width={width}>
+                        <TextField
+                          key={`${row.id}flaeche`}
+                          label="Fläche"
+                          value={row.flaeche}
+                          type="number"
+                          saveToDb={event =>
+                            updateTpopkontr({
+                              variables: {
+                                id,
+                                flaeche: event.target.value,
+                              },
+                            })
+                          }
+                        />
+                        <Section>Vegetation</Section>
+                        <AutoCompleteFromArray
+                          key={`${row.id}lr_delarze`}
+                          label="Lebensraum nach Delarze"
+                          value={row.lrDelarze}
+                          values={aeLrWerte}
+                          saveToDb={event =>
+                            updateTpopkontr({
+                              variables: {
+                                id,
+                                lrDelarze: event.target.value,
+                              },
+                            })
+                          }
+                        />
+                        <AutoCompleteFromArray
+                          key={`${row.id}Umgebung`}
+                          label="Umgebung nach Delarze"
+                          value={row.lrUmgebungDelarze}
+                          values={aeLrWerte}
+                          saveToDb={event =>
+                            updateTpopkontr({
+                              variables: {
+                                id,
+                                lrUmgebungDelarze: event.target.value,
+                              },
+                            })
+                          }
+                        />
+                        <TextField
+                          key={`${row.id}vegetationstyp`}
+                          label="Vegetationstyp"
+                          value={row.vegetationstyp}
+                          type="text"
+                          saveToDb={event =>
+                            updateTpopkontr({
+                              variables: {
+                                id,
+                                vegetationstyp: event.target.value,
+                              },
+                            })
+                          }
+                        />
+                        <TextField
+                          key={`${row.id}konkurrenz`}
+                          label="Konkurrenz"
+                          value={row.konkurrenz}
+                          type="text"
+                          saveToDb={event =>
+                            updateTpopkontr({
+                              variables: {
+                                id,
+                                konkurrenz: event.target.value,
+                              },
+                            })
+                          }
+                        />
+                        <TextField
+                          key={`${row.id}moosschicht`}
+                          label="Moosschicht"
+                          value={row.moosschicht}
+                          type="text"
+                          saveToDb={event =>
+                            updateTpopkontr({
+                              variables: {
+                                id,
+                                moosschicht: event.target.value,
+                              },
+                            })
+                          }
+                        />
+                        <TextField
+                          key={`${row.id}krautschicht`}
+                          label="Krautschicht"
+                          value={row.krautschicht}
+                          type="text"
+                          saveToDb={event =>
+                            updateTpopkontr({
+                              variables: {
+                                id,
+                                krautschicht: event.target.value,
+                              },
+                            })
+                          }
+                        />
+                        <TextField
+                          key={`${row.id}strauchschicht`}
+                          label="Strauchschicht"
+                          value={row.strauchschicht}
+                          type="text"
+                          saveToDb={event =>
+                            updateTpopkontr({
+                              variables: {
+                                id,
+                                strauchschicht: event.target.value,
+                              },
+                            })
+                          }
+                        />
+                        <TextField
+                          key={`${row.id}baumschicht`}
+                          label="Baumschicht"
+                          value={row.baumschicht}
+                          type="text"
+                          saveToDb={event =>
+                            updateTpopkontr({
+                              variables: {
+                                id,
+                                baumschicht: event.target.value,
+                              },
+                            })
+                          }
+                        />
+                        <Section>Boden</Section>
+                        <TextField
+                          key={`${row.id}boden_typ`}
+                          label="Typ"
+                          value={row.bodenTyp}
+                          type="text"
+                          saveToDb={event =>
+                            updateTpopkontr({
+                              variables: {
+                                id,
+                                bodenTyp: event.target.value,
+                              },
+                            })
+                          }
+                        />
+                        <TextField
+                          key={`${row.id}boden_kalkgehalt`}
+                          label="Kalkgehalt"
+                          value={row.bodenKalkgehalt}
+                          type="text"
+                          saveToDb={event =>
+                            updateTpopkontr({
+                              variables: {
+                                id,
+                                bodenKalkgehalt: event.target.value,
+                              },
+                            })
+                          }
+                        />
+                        <TextField
+                          key={`${row.id}boden_durchlaessigkeit`}
+                          label="Durchlässigkeit"
+                          value={row.bodenDurchlaessigkeit}
+                          type="text"
+                          saveToDb={event =>
+                            updateTpopkontr({
+                              variables: {
+                                id,
+                                bodenDurchlaessigkeit: event.target.value,
+                              },
+                            })
+                          }
+                        />
+                        <TextField
+                          key={`${row.id}boden_humus`}
+                          label="Humusgehalt"
+                          value={row.bodenHumus}
+                          type="text"
+                          saveToDb={event =>
+                            updateTpopkontr({
+                              variables: {
+                                id,
+                                bodenHumus: event.target.value,
+                              },
+                            })
+                          }
+                        />
+                        <TextField
+                          key={`${row.id}boden_naehrstoffgehalt`}
+                          label="Nährstoffgehalt"
+                          value={row.bodenNaehrstoffgehalt}
+                          type="text"
+                          saveToDb={event =>
+                            updateTpopkontr({
+                              variables: {
+                                id,
+                                bodenNaehrstoffgehalt: event.target.value,
+                              },
+                            })
+                          }
+                        />
+                        <TextField
+                          key={`${row.id}boden_abtrag`}
+                          label="Bodenabtrag"
+                          value={row.bodenAbtrag}
+                          type="text"
+                          saveToDb={event =>
+                            updateTpopkontr({
+                              variables: {
+                                id,
+                                bodenAbtrag: event.target.value,
+                              },
+                            })
+                          }
+                        />
+                        <TextField
+                          key={`${row.id}wasserhaushalt`}
+                          label="Wasserhaushalt"
+                          value={row.wasserhaushalt}
+                          type="text"
+                          saveToDb={event =>
+                            updateTpopkontr({
+                              variables: {
+                                id,
+                                wasserhaushalt: event.target.value,
+                              },
+                            })
+                          }
+                        />
+                        <Section>Beurteilung</Section>
+                        <TextField
+                          key={`${row.id}handlungsbedarf`}
+                          label="Handlungsbedarf"
+                          value={row.handlungsbedarf}
+                          type="text"
+                          multiline
+                          saveToDb={event =>
+                            updateTpopkontr({
+                              variables: {
+                                id,
+                                handlungsbedarf: event.target.value,
+                              },
+                            })
+                          }
+                        />
+                        <RadioButtonGroup
+                          key={`${row.id}idealbiotop_uebereinstimmung`}
+                          label="Übereinstimmung mit Idealbiotop"
+                          value={row.idealbiotopUebereinstimmung}
+                          dataSource={idbiotopuebereinstWerte}
+                          saveToDb={value =>
+                            updateTpopkontr({
+                              variables: {
+                                id,
+                                idealbiotopUebereinstimmung: value,
+                              },
+                            })
+                          }
+                        />
+                      </FormContainer>
+                    )}
+                  </FieldsContainer>
                 )}
-                {value === 'biotop' && (
-                  <FormContainer data-width={width}>
-                    <TextField
-                      key={`${row.id}flaeche`}
-                      label="Fläche"
-                      value={row.flaeche}
-                      type="number"
-                      saveToDb={() => 'TODO'}
-                    />
-                    <Section>Vegetation</Section>
-                    <AutoCompleteFromArray
-                      key={`${row.id}lr_delarze`}
-                      label="Lebensraum nach Delarze"
-                      value={row.lr_delarze}
-                      values={store.dropdownList.lr}
-                      saveToDb={() => 'TODO'}
-                    />
-                    <AutoCompleteFromArray
-                      key={`${row.id}Umgebung`}
-                      label="Umgebung nach Delarze"
-                      value={row.lr_umgebung_delarze}
-                      values={store.dropdownList.lr}
-                      saveToDb={() => 'TODO'}
-                    />
-                    <TextField
-                      key={`${row.id}vegetationstyp`}
-                      label="Vegetationstyp"
-                      value={row.vegetationstyp}
-                      type="text"
-                      saveToDb={() => 'TODO'}
-                    />
-                    <TextField
-                      key={`${row.id}konkurrenz`}
-                      label="Konkurrenz"
-                      value={row.konkurrenz}
-                      type="text"
-                      saveToDb={() => 'TODO'}
-                    />
-                    <TextField
-                      key={`${row.id}moosschicht`}
-                      label="Moosschicht"
-                      value={row.moosschicht}
-                      type="text"
-                      saveToDb={() => 'TODO'}
-                    />
-                    <TextField
-                      key={`${row.id}krautschicht`}
-                      label="Krautschicht"
-                      value={row.krautschicht}
-                      type="text"
-                      saveToDb={() => 'TODO'}
-                    />
-                    <TextField
-                      key={`${row.id}strauchschicht`}
-                      label="Strauchschicht"
-                      value={row.strauchschicht}
-                      type="text"
-                      saveToDb={() => 'TODO'}
-                    />
-                    <TextField
-                      key={`${row.id}baumschicht`}
-                      label="Baumschicht"
-                      value={row.baumschicht}
-                      type="text"
-                      saveToDb={() => 'TODO'}
-                    />
-                    <Section>Boden</Section>
-                    <TextField
-                      key={`${row.id}boden_typ`}
-                      label="Typ"
-                      value={row.boden_typ}
-                      type="text"
-                      saveToDb={() => 'TODO'}
-                    />
-                    <TextField
-                      key={`${row.id}boden_kalkgehalt`}
-                      label="Kalkgehalt"
-                      value={row.boden_kalkgehalt}
-                      type="text"
-                      saveToDb={() => 'TODO'}
-                    />
-                    <TextField
-                      key={`${row.id}boden_durchlaessigkeit`}
-                      label="Durchlässigkeit"
-                      value={row.boden_durchlaessigkeit}
-                      type="text"
-                      saveToDb={() => 'TODO'}
-                    />
-                    <TextField
-                      key={`${row.id}boden_humus`}
-                      label="Humusgehalt"
-                      value={row.boden_humus}
-                      type="text"
-                      saveToDb={() => 'TODO'}
-                    />
-                    <TextField
-                      key={`${row.id}boden_naehrstoffgehalt`}
-                      label="Nährstoffgehalt"
-                      value={row.boden_naehrstoffgehalt}
-                      type="text"
-                      saveToDb={() => 'TODO'}
-                    />
-                    <TextField
-                      key={`${row.id}boden_abtrag`}
-                      label="Bodenabtrag"
-                      value={row.boden_abtrag}
-                      type="text"
-                      saveToDb={() => 'TODO'}
-                    />
-                    <TextField
-                      key={`${row.id}wasserhaushalt`}
-                      label="Wasserhaushalt"
-                      value={row.wasserhaushalt}
-                      type="text"
-                      saveToDb={() => 'TODO'}
-                    />
-                    <Section>Beurteilung</Section>
-                    <TextField
-                      key={`${row.id}handlungsbedarf`}
-                      label="Handlungsbedarf"
-                      value={row.handlungsbedarf}
-                      type="text"
-                      multiline
-                      saveToDb={() => 'TODO'}
-                    />
-                    <RadioButtonGroup
-                      key={`${row.id}idealbiotop_uebereinstimmung`}
-                      label="Übereinstimmung mit Idealbiotop"
-                      value={row.idealbiotop_uebereinstimmung}
-                      dataSource={store.dropdownList.idbiotopuebereinstWerte}
-                      saveToDb={() => 'TODO'}
-                    />
-                  </FormContainer>
-                )}
-              </FieldsContainer>
+              </Mutation>
             </Container>
           </ErrorBoundary>
         )

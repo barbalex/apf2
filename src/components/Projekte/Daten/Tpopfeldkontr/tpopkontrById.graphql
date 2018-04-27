@@ -58,4 +58,28 @@ query tpopkontrByIdQuery($id: UUID!) {
       name
     }
   }
+  allTpopkontrIdbiotuebereinstWertes {
+    nodes {
+      id
+      code
+      text
+      sort
+    }
+  }
+  allTpopEntwicklungWertes {
+    nodes {
+      id
+      code
+      text
+      sort
+    }
+  }
+  allAeLrdelarzes {
+    nodes {
+      id
+      label
+      einheit
+      sort
+    }
+  }
 }
