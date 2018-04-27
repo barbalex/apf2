@@ -1,16 +1,28 @@
 import React from 'react'
 import { inject } from 'mobx-react'
 import styled from 'styled-components'
+import get from 'lodash/get'
+
+import constants from '../../modules/constants'
 
 const Div = styled.div`
   color: #c8e6c9;
   padding: 10px 10px 0 10px;
 `
 
-const TestdataMessage = ({ store, tree }: { store: Object, tree: Object }) => {
-  const { activeNodes } = tree
-  const isTestSpecies = activeNodes.ap && activeNodes.ap < 200
-  if (isTestSpecies) {
+const TestdataMessage = ({
+  store,
+  tree,
+  apId,
+}: {
+  store: Object,
+  tree: Object,
+  apId: String,
+}) => {
+  const apIdFromTree = get(tree, 'activeNodes.ap')
+  const apIdUsed = apIdFromTree || apId
+  const isTestAp = apIdUsed && constants.testAps.includes(apIdUsed)
+  if (isTestAp) {
     return (
       <Div>Das ist ein Test-Aktionsplan. Sie können alles ausprobieren!</Div>
     )

@@ -31,7 +31,7 @@ const TextFieldGql = ({
   disabled,
   hintText,
   onChange,
-  onBlur,
+  saveToDb,
 }: {
   label: String,
   val?: ?Number | ?String,
@@ -40,7 +40,7 @@ const TextFieldGql = ({
   disabled?: Boolean,
   hintText?: String,
   onChange: () => void,
-  onBlur: () => void,
+  saveToDb: () => void,
 }) => (
   <StyledTextField
     id={label}
@@ -49,7 +49,7 @@ const TextFieldGql = ({
     type={type}
     multiline={multiLine}
     onChange={onChange}
-    onBlur={onBlur}
+    onBlur={saveToDb}
     placeholder={hintText}
     disabled={disabled}
     fullWidth
@@ -63,7 +63,7 @@ TextFieldGql.defaultProps = {
   disabled: false,
   hintText: '',
   onChange: null,
-  onBlur: null,
+  saveToDb: null,
 }
 
 export default enhance(TextFieldGql)

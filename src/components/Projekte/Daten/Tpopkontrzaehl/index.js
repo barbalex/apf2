@@ -3,15 +3,14 @@ import React from 'react'
 import { observer, inject } from 'mobx-react'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
-import gql from 'graphql-tag'
 import { Query, Mutation } from 'react-apollo'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 
-import RadioButtonGroup from '../../../shared/RadioButtonGroup'
+import RadioButtonGroup from '../../../shared/RadioButtonGroupGql'
 import TextField from '../../../shared/TextFieldGql'
 import FormTitle from '../../../shared/FormTitle'
-import AutoComplete from '../../../shared/Autocomplete'
+import AutoComplete from '../../../shared/AutocompleteGql'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import tpopkontrzaehlByIdGql from './tpopkontrzaehlById.graphql'
 import updateTpopkontrzaehlByIdGql from './updateTpopkontrzaehlById.graphql'
@@ -29,11 +28,9 @@ const FieldsContainer = styled.div`
 
 const enhance = compose(inject('store'), observer)
 
-const Tpopkontrzaehl = ({ store, tree }: { store: Object, tree: Object }) => {
-  const { activeNode } = tree
-
+const Tpopkontrzaehl = ({ id, tree }: { id: String, tree: Object }) => {
   return (
-    <Query query={tpopkontrzaehlByIdGql} variables={{ id: activeNode.id }}>
+    <Query query={tpopkontrzaehlByIdGql} variables={{ id }}>
       {({ loading, error, data }) => {
         if (loading)
           return (
@@ -63,43 +60,71 @@ const Tpopkontrzaehl = ({ store, tree }: { store: Object, tree: Object }) => {
         return (
           <ErrorBoundary>
             <Container>
-              <FormTitle tree={tree} title="Zählung" />
-              <FieldsContainer>
-                <AutoComplete
-                  key={`${row.id}einheit`}
-                  tree={tree}
-                  label="Einheit"
-                  fieldName="einheit"
-                  value={get(row, 'tpopkontrzaehlEinheitWerteByEinheit.text')}
-                  objects={zaehleinheitWerte}
-                  updatePropertyInDb={store.updatePropertyInDb}
-                />
-                <Mutation mutation={updateTpopkontrzaehlByIdGql}>
-                  {(updateAnzahl, { data }) => (
+              <FormTitle
+                tree={tree}
+                apId={get(
+                  data,
+                  'tpopkontrzaehlById.tpopkontrByTpopkontrId.tpopByTpopId.popByPopId.apId'
+                )}
+                title="Zählung"
+              />
+              <Mutation mutation={updateTpopkontrzaehlByIdGql}>
+                {(updateTpopkontrzaehl, { data }) => (
+                  <FieldsContainer>
+                    <AutoComplete
+                      key={`${row.id}einheit`}
+                      label="Einheit"
+                      value={get(
+                        row,
+                        'tpopkontrzaehlEinheitWerteByEinheit.text'
+                      )}
+                      objects={zaehleinheitWerte}
+                      saveToDb={val =>
+                        updateTpopkontrzaehl({
+                          variables: {
+                            id: row.id,
+                            anzahl: row.anzahl,
+                            einheit: val,
+                            methode: row.methode,
+                          },
+                        })
+                      }
+                    />
                     <TextField
                       key={`${row.id}anzahl`}
                       label="Anzahl (nur ganze Zahlen)"
                       value={row.anzahl}
                       type="number"
-                      onBlur={event => {
-                        console.log('blur anzahl')
-                        updateAnzahl({
-                          variables: { id: row.id, anzahl: event.target.value },
+                      saveToDb={event =>
+                        updateTpopkontrzaehl({
+                          variables: {
+                            id: row.id,
+                            anzahl: event.target.value,
+                            einheit: row.einheit,
+                            methode: row.methode,
+                          },
                         })
-                      }}
+                      }
                     />
-                  )}
-                </Mutation>
-                <RadioButtonGroup
-                  key={`${row.id}methode`}
-                  tree={tree}
-                  fieldName="methode"
-                  label="Methode"
-                  value={row.methode}
-                  dataSource={methodeWerte}
-                  updatePropertyInDb={store.updatePropertyInDb}
-                />
-              </FieldsContainer>
+                    <RadioButtonGroup
+                      key={`${row.id}methode`}
+                      label="Methode"
+                      value={row.methode}
+                      dataSource={methodeWerte}
+                      saveToDb={val =>
+                        updateTpopkontrzaehl({
+                          variables: {
+                            id: row.id,
+                            anzahl: row.anzahl,
+                            einheit: row.einheit,
+                            methode: val,
+                          },
+                        })
+                      }
+                    />
+                  </FieldsContainer>
+                )}
+              </Mutation>
             </Container>
           </ErrorBoundary>
         )

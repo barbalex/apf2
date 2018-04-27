@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import TestdataMessage from './TestdataMessage'
 
 const Container = styled.div`
-  background-color: #388E3C;
+  background-color: #388e3c;
   padding-bottom: 10px;
   flex-shrink: 0;
 `
@@ -15,12 +15,18 @@ const Title = styled.div`
   font-weight: bold;
 `
 
-const FormTitle = ({ tree, title }: { tree: Object, title: string }) => (
+const FormTitle = ({
+  tree,
+  title,
+  apId,
+}: {
+  tree: Object,
+  title: String,
+  apId: String,
+}) => (
   <Container>
-    <Title>
-      {title}
-    </Title>
-    <TestdataMessage tree={tree} />
+    <Title>{title}</Title>
+    <TestdataMessage tree={tree} apId={apId} />
   </Container>
 )
 

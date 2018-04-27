@@ -28,7 +28,7 @@ export default store => {
       }
     }
   })
-  const cache = new InMemoryCache()
+  const cache = new InMemoryCache({ dataIdFromObject: object => object.id })
   const stateLink = withClientState({
     resolvers,
     cache,

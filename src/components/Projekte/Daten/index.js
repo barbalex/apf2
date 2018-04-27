@@ -160,7 +160,13 @@ const Daten = ({
     tpopmassnber: <Tpopmassnber tree={tree} dimensions={dimensions} />,
     tpopfeldkontr: <Tpopfeldkontr tree={tree} dimensions={dimensions} />,
     tpopfreiwkontr: <Tpopfreiwkontr tree={tree} dimensions={dimensions} />,
-    tpopkontrzaehl: <Tpopkontrzaehl tree={tree} dimensions={dimensions} />,
+    tpopkontrzaehl: (
+      <Tpopkontrzaehl
+        id={activeDataset.row.id}
+        tree={tree}
+        dimensions={dimensions}
+      />
+    ),
     exporte: <Exporte tree={tree} dimensions={dimensions} />,
     qk: <Qk tree={tree} />,
     beobNichtZuzuordnen: <Beobzuordnung tree={tree} dimensions={dimensions} />,
