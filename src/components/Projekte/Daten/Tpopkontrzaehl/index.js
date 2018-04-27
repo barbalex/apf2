@@ -8,11 +8,13 @@ import { Query, Mutation } from 'react-apollo'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 
-import RadioButtonGroup from '../../shared/RadioButtonGroup'
-import TextField from '../../shared/TextFieldGql'
-import FormTitle from '../../shared/FormTitle'
-import AutoComplete from '../../shared/Autocomplete'
-import ErrorBoundary from '../../shared/ErrorBoundary'
+import RadioButtonGroup from '../../../shared/RadioButtonGroup'
+import TextField from '../../../shared/TextFieldGql'
+import FormTitle from '../../../shared/FormTitle'
+import AutoComplete from '../../../shared/Autocomplete'
+import ErrorBoundary from '../../../shared/ErrorBoundary'
+import tpopkontrzaehlByIdGql from './tpopkontrzaehlById.graphql'
+import updateTpopkontrzaehlByIdGql from './updateTpopkontrzaehlById.graphql'
 
 const Container = styled.div`
   height: 100%;
@@ -31,38 +33,7 @@ const Tpopkontrzaehl = ({ store, tree }: { store: Object, tree: Object }) => {
   const { activeNode } = tree
 
   return (
-    <Query
-      query={gql`
-        query TpopkontrzaehlQuery($id: UUID!) {
-          tpopkontrzaehlById(id: $id) {
-            id
-            anzahl
-            einheit
-            tpopkontrzaehlEinheitWerteByEinheit {
-              text
-            }
-            methode
-          }
-          allTpopkontrzaehlEinheitWertes {
-            nodes {
-              id
-              code
-              text
-              sort
-            }
-          }
-          allTpopkontrzaehlMethodeWertes {
-            nodes {
-              id
-              code
-              text
-              sort
-            }
-          }
-        }
-      `}
-      variables={{ id: activeNode.id }}
-    >
+    <Query query={tpopkontrzaehlByIdGql} variables={{ id: activeNode.id }}>
       {({ loading, error, data }) => {
         if (loading)
           return (
@@ -103,22 +74,7 @@ const Tpopkontrzaehl = ({ store, tree }: { store: Object, tree: Object }) => {
                   objects={zaehleinheitWerte}
                   updatePropertyInDb={store.updatePropertyInDb}
                 />
-                <Mutation
-                  mutation={gql`
-                    mutation updateAnzahl($id: UUID!, $anzahl: Number!) {
-                      updateTpopkontrzaehlById(
-                        input: {
-                          id: $id
-                          tpopkontrzaehlPatch: { anzahl: $anzahl }
-                        }
-                      ) {
-                        tpopkontrzaehl {
-                          id
-                        }
-                      }
-                    }
-                  `}
-                >
+                <Mutation mutation={updateTpopkontrzaehlByIdGql}>
                   {(updateAnzahl, { data }) => (
                     <TextField
                       key={`${row.id}anzahl`}
