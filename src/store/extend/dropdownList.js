@@ -137,34 +137,6 @@ export default (store: Object): void => {
         ),
       { name: 'dropdownListLr' }
     ),
-    zaehleinheitWerte: computed(
-      () => {
-        let zaehleinheitWerte = Array.from(
-          store.table.tpopkontrzaehl_einheit_werte.values()
-        )
-        zaehleinheitWerte = sortBy(zaehleinheitWerte, 'sort')
-        zaehleinheitWerte = zaehleinheitWerte.map(el => ({
-          id: el.code,
-          value: el.text,
-        }))
-        return zaehleinheitWerte
-      },
-      { name: 'dropdownListZaehleinheitWerte' }
-    ),
-    methodeWerte: computed(
-      () => {
-        let methodeWerte = Array.from(
-          store.table.tpopkontrzaehl_methode_werte.values()
-        )
-        methodeWerte = sortBy(methodeWerte, 'sort')
-        methodeWerte = methodeWerte.map(el => ({
-          value: el.code,
-          label: el.text,
-        }))
-        return methodeWerte
-      },
-      { name: 'dropdownListMethodeWerte' }
-    ),
     tpopMassnTypWerte: computed(
       () => {
         let tpopMassnTypWerte = Array.from(

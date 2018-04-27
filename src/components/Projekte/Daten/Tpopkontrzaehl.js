@@ -95,7 +95,7 @@ const Tpopkontrzaehl = ({ store, tree }: { store: Object, tree: Object }) => {
               <FormTitle tree={tree} title="Zählung" />
               <FieldsContainer>
                 <AutoComplete
-                  key={`${row.id}einheitNew`}
+                  key={`${row.id}einheit`}
                   tree={tree}
                   label="Einheit"
                   fieldName="einheit"
