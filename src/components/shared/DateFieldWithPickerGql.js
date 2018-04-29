@@ -81,7 +81,7 @@ class MyDatePicker extends Component<Props, State> {
         animateYearScrolling={false}
         autoOk
         // remove message because dont want it when user
-        // enters ony day and maybe month
+        // enters only day and maybe month
         // need a value because seems that too expects one
         invalidDateMessage=" "
         cancelLabel="schliessen"
