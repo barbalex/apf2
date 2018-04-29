@@ -1,9 +1,6 @@
 // @flow
-import React from 'react'
+import React, { Component } from 'react'
 import TextField from 'material-ui/TextField'
-import compose from 'recompose/compose'
-import withState from 'recompose/withState'
-import withHandlers from 'recompose/withHandlers'
 import styled from 'styled-components'
 
 const StyledTextField = styled(TextField)`
@@ -13,58 +10,65 @@ const StyledTextField = styled(TextField)`
   }
 `
 
-const enhance = compose(
-  withState(
-    'val',
-    'setVal',
-    ({ value }) => (value || value === 0 ? value : '')
-  ),
-  withHandlers({
-    onChange: ({ setVal }) => event => setVal(event.target.value),
-  })
-)
-
-const TextFieldGql = ({
-  label,
-  val,
-  type,
-  multiLine,
-  disabled,
-  hintText,
-  onChange,
-  saveToDb,
-}: {
+type Props = {
   label: String,
-  val?: ?Number | ?String,
   type?: String,
   multiLine?: Boolean,
   disabled?: Boolean,
   hintText?: String,
-  onChange: () => void,
   saveToDb: () => void,
-}) => (
-  <StyledTextField
-    id={label}
-    label={label}
-    value={val}
-    type={type}
-    multiline={multiLine}
-    onChange={onChange}
-    onBlur={saveToDb}
-    placeholder={hintText}
-    disabled={disabled}
-    fullWidth
-  />
-)
-
-TextFieldGql.defaultProps = {
-  value: '',
-  type: 'text',
-  multiLine: false,
-  disabled: false,
-  hintText: '',
-  onChange: null,
-  saveToDb: null,
 }
 
-export default enhance(TextFieldGql)
+type State = {
+  value: Number | String,
+}
+
+class TextFieldGql extends Component<Props, State> {
+  constructor(props) {
+    super(props)
+    this.state = {
+      value: props.value || props.value === 0 ? props.value : '',
+    }
+  }
+
+  static defaultProps = {
+    value: '',
+    type: 'text',
+    multiLine: false,
+    disabled: false,
+    hintText: '',
+    saveToDb: null,
+  }
+
+  static getDerivedStateFromProps(nextProps, prevState) {
+    const value =
+      nextProps.value || nextProps.value === 0 ? nextProps.value : ''
+    return { value }
+  }
+
+  handleChange = event => {
+    this.setState({ value: event.target.value })
+  }
+
+  render() {
+    const { label, type, multiLine, disabled, hintText, saveToDb } = this.props
+    const { value } = this.state
+
+    return (
+      <StyledTextField
+        id={label}
+        label={label}
+        value={value}
+        type={type}
+        multiline={multiLine}
+        onChange={this.handleChange}
+        onBlur={saveToDb}
+        placeholder={hintText}
+        disabled={disabled}
+        fullWidth
+      />
+    )
+  }
+}
+
+export default TextFieldGql

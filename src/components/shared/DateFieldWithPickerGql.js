@@ -1,11 +1,7 @@
 // @flow
 import React, { Component } from 'react'
-import { observer } from 'mobx-react'
 import DatePicker from 'material-ui-pickers/DatePicker'
 import format from 'date-fns/format'
-import compose from 'recompose/compose'
-import withHandlers from 'recompose/withHandlers'
-import withState from 'recompose/withState'
 import styled from 'styled-components'
 
 import convertDateToYyyyMmDd from '../../modules/convertDateToYyyyMmDd'
@@ -18,53 +14,69 @@ padding-top:
   }
 `
 
-const enhance = compose(
-  withState('value', 'setValue', ({ value }) => value),
-  withHandlers({
-    onChange: ({ saveToDb, setValue }) => value => {
-      setValue(format(value, 'YYYY-MM-DD'))
-      saveToDb(format(value, 'YYYY-MM-DD'))
-    },
-    onBlur: ({ saveToDb, setValue }) => event => {
-      const { value } = event.target
-      if (!value || value === '0') {
-        // avoid creating an invalid date
-        saveToDb(null)
-      } else {
-        // write a real date to db
-        const date = new Date(convertDateToYyyyMmDd(value))
-        saveToDb(format(date, 'YYYY-MM-DD'))
-        setValue(format(date, 'YYYY-MM-DD'))
-      }
-    },
-  }),
-  observer
-)
+type Props = {
+  label: String,
+  value?: String | Number,
+  saveToDb: () => void,
+}
 
-class MyDatePicker extends Component {
-  props: {
-    label: String,
-    value?: String | Number,
-    saveToDb: () => void,
-    onChange: () => void,
-    onBlur: () => void,
+type State = {
+  value: Number | String,
+}
+
+class MyDatePicker extends Component<Props, State> {
+  constructor(props) {
+    super(props)
+    this.state = {
+      value: props.value,
+    }
   }
 
   static defaultProps = {
     value: null,
   }
 
+  static getDerivedStateFromProps(nextProps, prevState) {
+    return { value: nextProps.value }
+  }
+
+  handleChange = value => {
+    if (!value || value === '0') {
+      this.props.saveToDb(null)
+      this.setState({ value: null })
+      return
+    }
+    const newValue = format(value, 'YYYY-MM-DD')
+    this.props.saveToDb(newValue)
+    this.setState({ value: newValue })
+  }
+
+  handleBlur = event => {
+    const { saveToDb } = this.props
+    const { value } = event.target
+    if (!value || value === '0') {
+      // avoid creating an invalid date
+      saveToDb(null)
+    } else {
+      // write a real date to db
+      const date = new Date(convertDateToYyyyMmDd(value))
+      const newValue = format(date, 'YYYY-MM-DD')
+      saveToDb(newValue)
+      this.setState({ value: newValue })
+    }
+  }
+
   render() {
-    const { label, value, onChange, onBlur } = this.props
+    const { label } = this.props
 
     return (
       <StyledDatePicker
         keyboard
         label={label}
         format="DD.MM.YYYY"
-        value={value}
-        onChange={onChange}
-        onBlur={onBlur}
+        value={this.state.value}
+        onChange={this.handleChange}
+        onBlur={this.handleBlur}
         disableOpenOnEnter
         animateYearScrolling={false}
         autoOk
@@ -80,4 +92,4 @@ class MyDatePicker extends Component {
   }
 }
 
-export default enhance(MyDatePicker)
+export default MyDatePicker

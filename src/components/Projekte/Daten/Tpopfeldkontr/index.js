@@ -174,7 +174,7 @@ const Tpopfeldkontr = ({
                             updateTpopkontr({
                               variables: {
                                 id,
-                                jahr: event.target.value,
+                                jahr: event.target.value || null,
                                 datum: null,
                               },
                             })
@@ -189,7 +189,7 @@ const Tpopfeldkontr = ({
                               variables: {
                                 id,
                                 datum: value,
-                                jahr: format(value, 'YYYY'),
+                                jahr: !!value ? format(value, 'YYYY') : null,
                               },
                             })
                           }
