@@ -9,12 +9,10 @@ import withState from 'recompose/withState'
 import { Query, Mutation } from 'react-apollo'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
-import clone from 'lodash/clone'
-import omit from 'lodash/omit'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroupGql'
 import TextField from '../../../shared/TextFieldGql'
-import AutoCompleteFromArray from '../../../shared/AutocompleteFromArray'
+import AutoCompleteFromArray from '../../../shared/AutocompleteFromArrayGql'
 import AutoComplete from '../../../shared/AutocompleteGql'
 import RadioButtonGroupWithInfo from '../../../shared/RadioButtonGroupWithInfo'
 import StringToCopy from '../../../shared/StringToCopy'
@@ -111,16 +109,12 @@ const Tpopfeldkontr = ({
             </Container>
           )
         if (error) return `Fehler: ${error.message}`
-        const row = omit(clone(get(data, 'tpopkontrById')), [
-          'adresseByBearbeiter',
-          'tpopByTpopId',
-        ])
-        row.__typename = 'TpopkontrPatch!'
+        const row = get(data, 'tpopkontrById')
         let adressenWerte = get(data, 'allAdresses.nodes', [])
         adressenWerte = sortBy(adressenWerte, 'name')
         adressenWerte = adressenWerte.map(el => ({
-          value: el.id,
-          label: el.name,
+          id: el.id,
+          value: el.name,
         }))
         let idbiotopuebereinstWerte = get(
           data,
@@ -368,11 +362,11 @@ const Tpopfeldkontr = ({
                           label="Lebensraum nach Delarze"
                           value={row.lrDelarze}
                           values={aeLrWerte}
-                          saveToDb={event =>
+                          saveToDb={val =>
                             updateTpopkontr({
                               variables: {
                                 id,
-                                lrDelarze: event.target.value,
+                                lrDelarze: val,
                               },
                             })
                           }
@@ -382,11 +376,11 @@ const Tpopfeldkontr = ({
                           label="Umgebung nach Delarze"
                           value={row.lrUmgebungDelarze}
                           values={aeLrWerte}
-                          saveToDb={event =>
+                          saveToDb={val =>
                             updateTpopkontr({
                               variables: {
                                 id,
-                                lrUmgebungDelarze: event.target.value,
+                                lrUmgebungDelarze: val,
                               },
                             })
                           }
