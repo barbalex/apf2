@@ -7,6 +7,7 @@ import withHandlers from 'recompose/withHandlers'
 import styled from 'styled-components'
 
 const StyledTextField = styled(TextField)`
+  padding-bottom: 19px !important;
   > div:before {
     background-color: rgba(0, 0, 0, 0.1) !important;
   }

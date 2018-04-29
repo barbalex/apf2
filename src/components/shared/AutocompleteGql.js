@@ -88,7 +88,7 @@ const styles = theme => ({
   container: {
     flexGrow: 1,
     position: 'relative',
-    paddingTop: '12px',
+    paddingTop: 0,
     paddingBottom: '18px',
   },
   suggestion: {

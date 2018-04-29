@@ -9,6 +9,7 @@ import withState from 'recompose/withState'
 import { Query, Mutation } from 'react-apollo'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
+import format from 'date-fns/format'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroupGql'
 import TextField from '../../../shared/TextFieldGql'
@@ -17,9 +18,10 @@ import AutoComplete from '../../../shared/AutocompleteGql'
 import RadioButtonGroupWithInfo from '../../../shared/RadioButtonGroupWithInfo'
 import StringToCopy from '../../../shared/StringToCopy'
 import FormTitle from '../../../shared/FormTitle'
-import YearDatePair from '../../../shared/YearDatePair'
+import DateFieldWithPicker from '../../../shared/DateFieldWithPickerGql'
 import TpopfeldkontrentwicklungPopover from '../TpopfeldkontrentwicklungPopover'
 import constants from '../../../../modules/constants'
+
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import tpopkontrByIdGql from './tpopkontrById.graphql'
 import updateTpopkontrByIdGql from './updateTpopkontrById.graphql'
@@ -41,7 +43,7 @@ const FieldsContainer = styled.div`
 `
 const Section = styled.div`
   padding-top: 20px;
-  margin-bottom: -7px;
+  padding-bottom: 5px;
   font-weight: bold;
   &:after {
     content: ':';
@@ -163,18 +165,35 @@ const Tpopfeldkontr = ({
                     </Tabs>
                     {value === 'entwicklung' && (
                       <FormContainer data-width={width}>
-                        {/*<YearDatePair
-                          key={row.id}
-                          tree={'tree'}
-                          yearLabel="Jahr"
-                          yearFieldName="jahr"
-                          yearValue={row.jahr}
-                          dateLabel="Datum"
-                          dateFieldName="datum"
-                          dateValue={row.datum}
-                          updateProperty={'store.updateProperty'}
-                          updatePropertyInDb={'store.updatePropertyInDb'}
-                        />*/}
+                        <TextField
+                          key={`${row.id}jahr`}
+                          label="Jahr"
+                          value={row.jahr}
+                          type="number"
+                          saveToDb={event =>
+                            updateTpopkontr({
+                              variables: {
+                                id,
+                                jahr: event.target.value,
+                                datum: null,
+                              },
+                            })
+                          }
+                        />
+                        <DateFieldWithPicker
+                          key={`${row.id}datum`}
+                          label="Datum"
+                          value={row.datum}
+                          saveToDb={value =>
+                            updateTpopkontr({
+                              variables: {
+                                id,
+                                datum: value,
+                                jahr: format(value, 'YYYY'),
+                              },
+                            })
+                          }
+                        />
                         <RadioButtonGroup
                           key={`${row.id}typ`}
                           label="Kontrolltyp"
