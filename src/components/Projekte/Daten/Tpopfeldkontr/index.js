@@ -42,7 +42,6 @@ const FieldsContainer = styled.div`
 const Section = styled.div`
   padding-top: 20px;
   margin-bottom: -7px;
-  color: rgba(255, 255, 255, 0.298039);
   font-weight: bold;
   &:after {
     content: ':';
