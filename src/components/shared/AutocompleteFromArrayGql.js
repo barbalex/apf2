@@ -1,10 +1,4 @@
 //@flow
-/**
- * similar to AutocompleteFromArray
- * but receives an array of objects
- * with keys id and value
- * presents value and saves id
- */
 import React from 'react'
 import Autosuggest from 'react-autosuggest'
 import match from 'autosuggest-highlight/match'
@@ -110,7 +104,7 @@ const enhance = compose(withStyles(styles))
 type Props = {
   label: String,
   value: String,
-  objects: Array<Object>,
+  values: Array<Object>,
   saveToDb: () => void,
   classes: Object,
   openabove: Boolean,
@@ -131,9 +125,8 @@ class IntegrationAutosuggest extends React.Component<Props, State> {
   }
 
   getSuggestions = value => {
-    const { objects } = this.props
+    const { values } = this.props
     const inputValue = value.toLowerCase()
-    const values = objects.map(o => o.value)
 
     if (value === ' ') return values
     if (inputValue.length === 0) return []
@@ -160,15 +153,8 @@ class IntegrationAutosuggest extends React.Component<Props, State> {
   }
 
   handleBlur = event => {
-    const { value } = this.state
-    const { objects, saveToDb } = this.props
-    const object = objects.find(o => trimStart(o.value) === value)
-    // check if value is in values
-    if (object) {
-      return saveToDb(object.id)
-    }
-    if (!value) return saveToDb(null)
-    this.setState({ value: '' })
+    const { saveToDb } = this.props
+    return saveToDb(this.state.value || null)
   }
 
   renderInput = inputProps => {

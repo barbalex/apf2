@@ -136,7 +136,7 @@ const Tpopfeldkontr = ({
           value: el.code,
           label: el.text,
         }))
-        let aeLrWerte = get(data, 'allAeLrdelarzes', [])
+        let aeLrWerte = get(data, 'allAeLrdelarzes.nodes', [])
         aeLrWerte = sortBy(aeLrWerte, 'sort')
         aeLrWerte = aeLrWerte.map(
           e => `${e.label}: ${e.einheit ? e.einheit.replace(/  +/g, ' ') : ''}`
