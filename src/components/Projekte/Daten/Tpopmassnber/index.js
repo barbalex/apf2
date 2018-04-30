@@ -23,94 +23,89 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
-const Tpopmassnber = ({ id }: { id: String }) => {
-  return (
-    <Query query={tpopmassnberByIdGql} variables={{ id }}>
-      {({ loading, error, data }) => {
-        if (loading)
-          return (
-            <Container>
-              <FieldsContainer>Lade...</FieldsContainer>
-            </Container>
-          )
-        if (error) return `Fehler: ${error.message}`
-
-        const row = get(data, 'tpopmassnberById')
-        let tpopmassnbeurtWerte = get(
-          data,
-          'allTpopmassnErfbeurtWertes.nodes',
-          []
-        )
-        tpopmassnbeurtWerte = sortBy(tpopmassnbeurtWerte, 'sort')
-        tpopmassnbeurtWerte = tpopmassnbeurtWerte.map(el => ({
-          value: el.code,
-          label: el.text,
-        }))
-
+const Tpopmassnber = ({ id }: { id: String }) => (
+  <Query query={tpopmassnberByIdGql} variables={{ id }}>
+    {({ loading, error, data }) => {
+      if (loading)
         return (
-          <ErrorBoundary>
-            <Container>
-              <FormTitle
-                apId={get(
-                  data,
-                  'tpopmassnberById.tpopByTpopId.popByPopId.apId'
-                )}
-                title="Massnahmen-Bericht Teil-Population"
-              />
-              <Mutation mutation={updateTpopmassnberByIdGql}>
-                {(updateTpopmassnber, { data }) => (
-                  <FieldsContainer>
-                    <TextField
-                      key={`${row.id}jahr`}
-                      label="Jahr"
-                      value={row.jahr}
-                      type="number"
-                      saveToDb={event =>
-                        updateTpopmassnber({
-                          variables: {
-                            id,
-                            jahr: event.target.value,
-                          },
-                        })
-                      }
-                    />
-                    <RadioButtonGroup
-                      label="Entwicklung"
-                      value={row.beurteilung}
-                      dataSource={tpopmassnbeurtWerte}
-                      saveToDb={value =>
-                        updateTpopmassnber({
-                          variables: {
-                            id,
-                            beurteilung: value,
-                          },
-                        })
-                      }
-                    />
-                    <TextField
-                      key={`${row.id}bemerkungen`}
-                      label="Interpretation"
-                      value={row.bemerkungen}
-                      type="text"
-                      multiLine
-                      saveToDb={event =>
-                        updateTpopmassnber({
-                          variables: {
-                            id,
-                            bemerkungen: event.target.value,
-                          },
-                        })
-                      }
-                    />
-                  </FieldsContainer>
-                )}
-              </Mutation>
-            </Container>
-          </ErrorBoundary>
+          <Container>
+            <FieldsContainer>Lade...</FieldsContainer>
+          </Container>
         )
-      }}
-    </Query>
-  )
-}
+      if (error) return `Fehler: ${error.message}`
+
+      const row = get(data, 'tpopmassnberById')
+      let tpopmassnbeurtWerte = get(
+        data,
+        'allTpopmassnErfbeurtWertes.nodes',
+        []
+      )
+      tpopmassnbeurtWerte = sortBy(tpopmassnbeurtWerte, 'sort')
+      tpopmassnbeurtWerte = tpopmassnbeurtWerte.map(el => ({
+        value: el.code,
+        label: el.text,
+      }))
+
+      return (
+        <ErrorBoundary>
+          <Container>
+            <FormTitle
+              apId={get(data, 'tpopmassnberById.tpopByTpopId.popByPopId.apId')}
+              title="Massnahmen-Bericht Teil-Population"
+            />
+            <Mutation mutation={updateTpopmassnberByIdGql}>
+              {(updateTpopmassnber, { data }) => (
+                <FieldsContainer>
+                  <TextField
+                    key={`${row.id}jahr`}
+                    label="Jahr"
+                    value={row.jahr}
+                    type="number"
+                    saveToDb={event =>
+                      updateTpopmassnber({
+                        variables: {
+                          id,
+                          jahr: event.target.value,
+                        },
+                      })
+                    }
+                  />
+                  <RadioButtonGroup
+                    label="Entwicklung"
+                    value={row.beurteilung}
+                    dataSource={tpopmassnbeurtWerte}
+                    saveToDb={value =>
+                      updateTpopmassnber({
+                        variables: {
+                          id,
+                          beurteilung: value,
+                        },
+                      })
+                    }
+                  />
+                  <TextField
+                    key={`${row.id}bemerkungen`}
+                    label="Interpretation"
+                    value={row.bemerkungen}
+                    type="text"
+                    multiLine
+                    saveToDb={event =>
+                      updateTpopmassnber({
+                        variables: {
+                          id,
+                          bemerkungen: event.target.value,
+                        },
+                      })
+                    }
+                  />
+                </FieldsContainer>
+              )}
+            </Mutation>
+          </Container>
+        </ErrorBoundary>
+      )
+    }}
+  </Query>
+)
 
 export default Tpopmassnber

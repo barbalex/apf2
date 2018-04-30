@@ -1,0 +1,28 @@
+query tpopberByIdQuery($id: UUID!) {
+  tpopberById(id: $id) {
+    id
+    tpopId
+    jahr
+    entwicklung
+    tpopEntwicklungWerteByEntwicklung {
+      id
+      code
+      text
+      sort
+    }
+    bemerkungen
+    tpopByTpopId {
+      popByPopId {
+        apId
+      }
+    }
+  }
+  allTpopEntwicklungWertes {
+    nodes {
+      id
+      code
+      text
+      sort
+    }
+  }
+}
