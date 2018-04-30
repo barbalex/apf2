@@ -30,6 +30,11 @@ query tpopmassnByIdQuery($id: UUID!) {
       name
     }
     planVorhanden
+    tpopByTpopId {
+      popByPopId {
+        apId
+      }
+    }
   }
   allAdresses {
     nodes {
@@ -44,6 +49,12 @@ query tpopmassnByIdQuery($id: UUID!) {
       text
       ansiedlung
       sort
+    }
+  }
+  allAeEigenschaftens {
+    nodes {
+      id
+      artname
     }
   }
 }

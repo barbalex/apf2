@@ -31,7 +31,12 @@ const enhance = compose(
       // if clicked element is active value: set null
       // Problem: does not work on change event on RadioGroup
       // Solution: do this in click event of button
-      const newValue = event.target.value === 'true'
+      const newValue =
+        event.target.value === 'true'
+          ? true
+          : event.target.value === 'false'
+            ? false
+            : event.target.value
       if (newValue === value) {
         // an already active option was clicked
         // set value null

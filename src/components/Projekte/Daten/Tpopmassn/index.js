@@ -3,17 +3,23 @@ import React from 'react'
 import { observer, inject } from 'mobx-react'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
+import { Query, Mutation } from 'react-apollo'
+import get from 'lodash/get'
+import sortBy from 'lodash/sortBy'
+import format from 'date-fns/format'
 
-import RadioButtonGroup from '../../../shared/RadioButtonGroup'
-import AutoCompleteFromArrayNew from '../../../shared/AutocompleteFromArray'
-import TextField from '../../../shared/TextField'
-import AutoComplete from '../../../shared/Autocomplete'
+import RadioButtonGroup from '../../../shared/RadioButtonGroupGql'
+import AutoCompleteFromArray from '../../../shared/AutocompleteFromArrayGql'
+import TextField from '../../../shared/TextFieldGql'
+import AutoComplete from '../../../shared/AutocompleteGql'
 import RadioButton from '../../../shared/RadioButton'
 import StringToCopy from '../../../shared/StringToCopy'
 import FormTitle from '../../../shared/FormTitle'
-import YearDatePair from '../../../shared/YearDatePair'
+import DateFieldWithPicker from '../../../shared/DateFieldWithPickerGql'
 import constants from '../../../../modules/constants'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
+import tpopmassnByIdGql from './tpopmassnById.graphql'
+import updateTpopmassnByIdGql from './updateTpopmassnById.graphql'
 
 const Container = styled.div`
   height: 100%;
@@ -30,26 +36,17 @@ const FieldsContainer = styled.div`
       : 'auto'};
 `
 
-const getBearbName = ({ store, tree }: { store: Object, tree: Object }) => {
-  const { adressen } = store.dropdownList
-  const { activeDataset } = tree
-  let value = ''
-  if (activeDataset.row.bearbeiter && adressen.length > 0) {
-    const adresse = adressen.find(a => a.id === activeDataset.row.bearbeiter)
-    if (adresse && adresse.value) return adresse.value
-  }
-  return value
-}
-
 const enhance = compose(inject('store'), observer)
 
 const Tpopmassn = ({
+  id,
   store,
   tree,
   onNewRequestWirtspflanze,
   onBlurWirtspflanze,
   dimensions = { width: 380 },
 }: {
+  id: String,
   store: Object,
   tree: Object,
   onNewRequestWirtspflanze: () => void,
@@ -60,197 +57,299 @@ const Tpopmassn = ({
   const width = isNaN(dimensions.width) ? 380 : dimensions.width
 
   return (
-    <ErrorBoundary>
-      <Container innerRef={c => (this.container = c)}>
-        <FormTitle tree={tree} title="Massnahme" />
-        <FieldsContainer data-width={width}>
-          <YearDatePair
-            key={activeDataset.row.id}
-            tree={tree}
-            yearLabel="Jahr"
-            yearFieldName="jahr"
-            yearValue={activeDataset.row.jahr}
-            yearErrorText={activeDataset.valid.jahr}
-            dateLabel="Datum"
-            dateFieldName="datum"
-            dateValue={activeDataset.row.datum}
-            dateErrorText={activeDataset.valid.datum}
-            updateProperty={store.updateProperty}
-            updatePropertyInDb={store.updatePropertyInDb}
-          />
-          <RadioButtonGroup
-            tree={tree}
-            fieldName="typ"
-            label="Typ"
-            value={activeDataset.row.typ}
-            errorText={activeDataset.valid.typ}
-            dataSource={store.dropdownList.tpopMassnTypWerte}
-            updatePropertyInDb={store.updatePropertyInDb}
-          />
-          <TextField
-            key={`${activeDataset.row.id}beschreibung`}
-            tree={tree}
-            label="Massnahme"
-            fieldName="beschreibung"
-            value={activeDataset.row.beschreibung}
-            errorText={activeDataset.valid.beschreibung}
-            type="text"
-            updateProperty={store.updateProperty}
-            updatePropertyInDb={store.updatePropertyInDb}
-          />
-          <AutoComplete
-            key={`${activeDataset.row.id}bearbeiter`}
-            tree={tree}
-            label="BearbeiterIn"
-            fieldName="bearbeiter"
-            value={getBearbName({ store, tree })}
-            objects={store.dropdownList.adressen}
-            updatePropertyInDb={store.updatePropertyInDb}
-          />
-          <TextField
-            key={`${activeDataset.row.id}bemerkungen`}
-            tree={tree}
-            label="Bemerkungen"
-            fieldName="bemerkungen"
-            value={activeDataset.row.bemerkungen}
-            errorText={activeDataset.valid.bemerkungen}
-            type="text"
-            multiLine
-            fullWidth
-            updateProperty={store.updateProperty}
-            updatePropertyInDb={store.updatePropertyInDb}
-          />
-          <RadioButton
-            tree={tree}
-            fieldName="plan_vorhanden"
-            label="Plan vorhanden"
-            value={activeDataset.row.plan_vorhanden}
-            updatePropertyInDb={store.updatePropertyInDb}
-          />
-          <TextField
-            key={`${activeDataset.row.id}plan_bezeichnung`}
-            tree={tree}
-            label="Plan Bezeichnung"
-            fieldName="plan_bezeichnung"
-            value={activeDataset.row.plan_bezeichnung}
-            errorText={activeDataset.valid.plan_bezeichnung}
-            type="text"
-            updateProperty={store.updateProperty}
-            updatePropertyInDb={store.updatePropertyInDb}
-          />
-          <TextField
-            key={`${activeDataset.row.id}flaeche`}
-            tree={tree}
-            label="Fläche (m2)"
-            fieldName="flaeche"
-            value={activeDataset.row.flaeche}
-            errorText={activeDataset.valid.flaeche}
-            type="number"
-            updateProperty={store.updateProperty}
-            updatePropertyInDb={store.updatePropertyInDb}
-          />
-          <TextField
-            key={`${activeDataset.row.id}form`}
-            tree={tree}
-            label="Form der Ansiedlung"
-            fieldName="form"
-            value={activeDataset.row.form}
-            errorText={activeDataset.valid.form}
-            type="text"
-            updateProperty={store.updateProperty}
-            updatePropertyInDb={store.updatePropertyInDb}
-          />
-          <TextField
-            key={`${activeDataset.row.id}pflanzanordnung`}
-            tree={tree}
-            label="Pflanzanordnung"
-            fieldName="pflanzanordnung"
-            value={activeDataset.row.pflanzanordnung}
-            errorText={activeDataset.valid.pflanzanordnung}
-            type="text"
-            updateProperty={store.updateProperty}
-            updatePropertyInDb={store.updatePropertyInDb}
-          />
-          <TextField
-            key={`${activeDataset.row.id}markierung`}
-            tree={tree}
-            label="Markierung"
-            fieldName="markierung"
-            value={activeDataset.row.markierung}
-            errorText={activeDataset.valid.markierung}
-            type="text"
-            updateProperty={store.updateProperty}
-            updatePropertyInDb={store.updatePropertyInDb}
-          />
-          <TextField
-            key={`${activeDataset.row.id}anz_triebe`}
-            tree={tree}
-            label="Anzahl Triebe"
-            fieldName="anz_triebe"
-            value={activeDataset.row.anz_triebe}
-            errorText={activeDataset.valid.anz_triebe}
-            type="number"
-            updateProperty={store.updateProperty}
-            updatePropertyInDb={store.updatePropertyInDb}
-          />
-          <TextField
-            key={`${activeDataset.row.id}anz_pflanzen`}
-            tree={tree}
-            label="Anzahl Pflanzen"
-            fieldName="anz_pflanzen"
-            value={activeDataset.row.anz_pflanzen}
-            errorText={activeDataset.valid.anz_pflanzen}
-            type="number"
-            updateProperty={store.updateProperty}
-            updatePropertyInDb={store.updatePropertyInDb}
-          />
-          <TextField
-            key={`${activeDataset.row.id}anz_pflanzstellen`}
-            tree={tree}
-            label="Anzahl Pflanzstellen"
-            fieldName="anz_pflanzstellen"
-            value={activeDataset.row.anz_pflanzstellen}
-            errorText={activeDataset.valid.anz_pflanzstellen}
-            type="number"
-            updateProperty={store.updateProperty}
-            updatePropertyInDb={store.updatePropertyInDb}
-          />
-          <AutoCompleteFromArrayNew
-            key={`${activeDataset.row.id}wirtspflanzeNeu`}
-            tree={tree}
-            label="Wirtspflanze"
-            fieldName="wirtspflanze"
-            value={activeDataset.row.wirtspflanze}
-            errorText={activeDataset.valid.wirtspflanze}
-            values={store.dropdownList.artnamen}
-            updatePropertyInDb={store.updatePropertyInDb}
-          />
-          <TextField
-            key={`${activeDataset.row.id}herkunft_pop`}
-            tree={tree}
-            label="Herkunftspopulation"
-            fieldName="herkunft_pop"
-            value={activeDataset.row.herkunft_pop}
-            errorText={activeDataset.valid.herkunft_pop}
-            type="text"
-            updateProperty={store.updateProperty}
-            updatePropertyInDb={store.updatePropertyInDb}
-          />
-          <TextField
-            key={`${activeDataset.row.id}sammeldatum`}
-            tree={tree}
-            label="Sammeldatum"
-            fieldName="sammeldatum"
-            value={activeDataset.row.sammeldatum}
-            errorText={activeDataset.valid.sammeldatum}
-            type="text"
-            updateProperty={store.updateProperty}
-            updatePropertyInDb={store.updatePropertyInDb}
-          />
-          <StringToCopy text={activeDataset.row.id} label="id" />
-        </FieldsContainer>
-      </Container>
-    </ErrorBoundary>
+    <Query query={tpopmassnByIdGql} variables={{ id }}>
+      {({ loading, error, data }) => {
+        if (loading)
+          return (
+            <Container>
+              <FieldsContainer>Lade...</FieldsContainer>
+            </Container>
+          )
+        if (error) return `Fehler: ${error.message}`
+
+        const row = get(data, 'tpopmassnById')
+        let adressenWerte = get(data, 'allAdresses.nodes', [])
+        adressenWerte = sortBy(adressenWerte, 'name')
+        adressenWerte = adressenWerte.map(el => ({
+          id: el.id,
+          value: el.name,
+        }))
+        let tpopmasstypWerte = get(data, 'allTpopmassnTypWertes.nodes', [])
+        tpopmasstypWerte = sortBy(tpopmasstypWerte, 'sort')
+        tpopmasstypWerte = tpopmasstypWerte.map(el => ({
+          value: el.code,
+          label: el.text,
+        }))
+        const artWerte = get(data, 'allAeEigenschaftens.nodes', [])
+          .map(o => o.artname)
+          .sort()
+
+        return (
+          <ErrorBoundary>
+            <Container innerRef={c => (this.container = c)}>
+              <FormTitle
+                apId={get(data, 'tpopmassnById.tpopByTpopId.popByPopId.apId')}
+                title="Massnahme"
+              />
+              <Mutation mutation={updateTpopmassnByIdGql}>
+                {(updateTpopmassn, { data }) => (
+                  <FieldsContainer data-width={width}>
+                    <TextField
+                      key={`${row.id}jahr`}
+                      label="Jahr"
+                      value={row.jahr}
+                      type="number"
+                      saveToDb={event =>
+                        updateTpopmassn({
+                          variables: {
+                            id,
+                            jahr: event.target.value || null,
+                            datum: null,
+                          },
+                        })
+                      }
+                    />
+                    <DateFieldWithPicker
+                      key={`${row.id}datum`}
+                      label="Datum"
+                      value={row.datum}
+                      saveToDb={value =>
+                        updateTpopmassn({
+                          variables: {
+                            id,
+                            datum: value,
+                            jahr: !!value ? format(value, 'YYYY') : null,
+                          },
+                        })
+                      }
+                    />
+                    <RadioButtonGroup
+                      key={`${row.id}typ`}
+                      label="Typ"
+                      value={row.typ}
+                      dataSource={tpopmasstypWerte}
+                      saveToDb={value =>
+                        updateTpopmassn({
+                          variables: {
+                            id,
+                            typ: value,
+                          },
+                        })
+                      }
+                    />
+                    <TextField
+                      key={`${row.id}beschreibung`}
+                      label="Massnahme"
+                      value={row.beschreibung}
+                      type="text"
+                      saveToDb={event =>
+                        updateTpopmassn({
+                          variables: {
+                            id,
+                            beschreibung: event.target.value,
+                          },
+                        })
+                      }
+                    />
+                    <AutoComplete
+                      key={`${activeDataset.row.id}bearbeiter`}
+                      label="BearbeiterIn"
+                      value={get(row, 'adresseByBearbeiter.name')}
+                      objects={adressenWerte}
+                      saveToDb={value =>
+                        updateTpopmassn({
+                          variables: {
+                            id,
+                            bearbeiter: value,
+                          },
+                        })
+                      }
+                    />
+                    <TextField
+                      key={`${row.id}bemerkungen`}
+                      label="Bemerkungen"
+                      value={row.bemerkungen}
+                      type="text"
+                      multiLine
+                      saveToDb={event =>
+                        updateTpopmassn({
+                          variables: {
+                            id,
+                            bemerkungen: event.target.value,
+                          },
+                        })
+                      }
+                    />
+                    <RadioButton
+                      tree={tree}
+                      fieldName="plan_vorhanden"
+                      label="Plan vorhanden"
+                      value={activeDataset.row.plan_vorhanden}
+                      updatePropertyInDb={store.updatePropertyInDb}
+                    />
+                    <TextField
+                      key={`${row.id}planBezeichnung`}
+                      label="Plan Bezeichnung"
+                      value={row.planBezeichnung}
+                      type="text"
+                      saveToDb={event =>
+                        updateTpopmassn({
+                          variables: {
+                            id,
+                            planBezeichnung: event.target.value,
+                          },
+                        })
+                      }
+                    />
+                    <TextField
+                      key={`${row.id}flaeche`}
+                      label="Fläche (m2)"
+                      value={row.flaeche}
+                      type="number"
+                      saveToDb={event =>
+                        updateTpopmassn({
+                          variables: {
+                            id,
+                            flaeche: event.target.value,
+                          },
+                        })
+                      }
+                    />
+                    <TextField
+                      key={`${row.id}form`}
+                      label="Form der Ansiedlung"
+                      value={row.form}
+                      type="text"
+                      saveToDb={event =>
+                        updateTpopmassn({
+                          variables: {
+                            id,
+                            form: event.target.value,
+                          },
+                        })
+                      }
+                    />
+                    <TextField
+                      key={`${row.id}pflanzanordnung`}
+                      label="Pflanzanordnung"
+                      value={row.pflanzanordnung}
+                      type="text"
+                      saveToDb={event =>
+                        updateTpopmassn({
+                          variables: {
+                            id,
+                            pflanzanordnung: event.target.value,
+                          },
+                        })
+                      }
+                    />
+                    <TextField
+                      key={`${row.id}markierung`}
+                      label="Markierung"
+                      value={row.markierung}
+                      type="text"
+                      saveToDb={event =>
+                        updateTpopmassn({
+                          variables: {
+                            id,
+                            markierung: event.target.value,
+                          },
+                        })
+                      }
+                    />
+                    <TextField
+                      key={`${row.id}anzTriebe`}
+                      label="Anzahl Triebe"
+                      value={row.anzTriebe}
+                      type="number"
+                      saveToDb={event =>
+                        updateTpopmassn({
+                          variables: {
+                            id,
+                            anzTriebe: event.target.value,
+                          },
+                        })
+                      }
+                    />
+                    <TextField
+                      key={`${row.id}anzPflanzen`}
+                      label="Anzahl Pflanzen"
+                      value={row.anzPflanzen}
+                      type="number"
+                      saveToDb={event =>
+                        updateTpopmassn({
+                          variables: {
+                            id,
+                            anzPflanzen: event.target.value,
+                          },
+                        })
+                      }
+                    />
+                    <TextField
+                      key={`${row.id}anzPflanzstellen`}
+                      label="Anzahl Pflanzstellen"
+                      value={row.anzPflanzstellen}
+                      type="number"
+                      saveToDb={event =>
+                        updateTpopmassn({
+                          variables: {
+                            id,
+                            anzPflanzstellen: event.target.value,
+                          },
+                        })
+                      }
+                    />
+                    <AutoCompleteFromArray
+                      key={`${activeDataset.row.id}wirtspflanze`}
+                      label="Wirtspflanze"
+                      value={row.wirtspflanze}
+                      values={artWerte}
+                      saveToDb={val =>
+                        updateTpopmassn({
+                          variables: {
+                            id,
+                            wirtspflanze: val,
+                          },
+                        })
+                      }
+                    />
+                    <TextField
+                      key={`${row.id}herkunftPop`}
+                      label="Herkunftspopulation"
+                      value={row.herkunftPop}
+                      type="text"
+                      saveToDb={event =>
+                        updateTpopmassn({
+                          variables: {
+                            id,
+                            herkunftPop: event.target.value,
+                          },
+                        })
+                      }
+                    />
+                    <TextField
+                      key={`${row.id}sammeldatum`}
+                      label="Sammeldatum"
+                      value={row.sammeldatum}
+                      type="text"
+                      saveToDb={event =>
+                        updateTpopmassn({
+                          variables: {
+                            id,
+                            sammeldatum: event.target.value,
+                          },
+                        })
+                      }
+                    />
+                    <StringToCopy text={row.id} label="id" />
+                  </FieldsContainer>
+                )}
+              </Mutation>
+            </Container>
+          </ErrorBoundary>
+        )
+      }}
+    </Query>
   )
 }
 
