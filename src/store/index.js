@@ -106,8 +106,6 @@ function Store(): void {
     artnamen: [],
     tpopEntwicklungWerte: [],
     apErfkritWerte: [],
-    tpopApBerichtRelevantWerte: [],
-    gemeinden: [],
     zielTypWerte: [],
   }
   this.ui = {}

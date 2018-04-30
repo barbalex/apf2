@@ -81,26 +81,6 @@ export default (store: Object): void => {
       },
       { name: 'dropdownListApErfkritWerte' }
     ),
-    tpopApBerichtRelevantWerte: computed(
-      () => {
-        const tpopApBerichtRelevantWerte = Array.from(
-          store.table.tpop_apberrelevant_werte.values()
-        )
-        return tpopApBerichtRelevantWerte.map(t => ({
-          value: t.code,
-          label: t.text,
-        }))
-      },
-      { name: 'dropdownListTpopApBerichtRelevantWerte' }
-    ),
-    gemeinden: computed(
-      () => {
-        let gemeinden = Array.from(store.table.gemeinde.values())
-        gemeinden = sortBy(gemeinden, 'name')
-        return gemeinden.map(el => el.name)
-      },
-      { name: 'dropdownListGemeinden' }
-    ),
     zielTypWerte: computed(
       () => {
         let zielTypWerte = Array.from(store.table.ziel_typ_werte.values())
