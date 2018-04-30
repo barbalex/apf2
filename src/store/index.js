@@ -106,7 +106,6 @@ function Store(): void {
     artnamen: [],
     tpopEntwicklungWerte: [],
     apErfkritWerte: [],
-    tpopmassnErfbeurtWerte: [],
     tpopApBerichtRelevantWerte: [],
     gemeinden: [],
     zielTypWerte: [],

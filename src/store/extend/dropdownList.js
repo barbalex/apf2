@@ -81,19 +81,6 @@ export default (store: Object): void => {
       },
       { name: 'dropdownListApErfkritWerte' }
     ),
-    tpopmassnErfbeurtWerte: computed(
-      () => {
-        let tpopmassnErfbeurtWerte = Array.from(
-          store.table.tpopmassn_erfbeurt_werte.values()
-        )
-        tpopmassnErfbeurtWerte = sortBy(tpopmassnErfbeurtWerte, 'sort')
-        return tpopmassnErfbeurtWerte.map(el => ({
-          value: el.code,
-          label: el.text,
-        }))
-      },
-      { name: 'dropdownListTpopmassnErfbeurtWerte' }
-    ),
     tpopApBerichtRelevantWerte: computed(
       () => {
         const tpopApBerichtRelevantWerte = Array.from(
