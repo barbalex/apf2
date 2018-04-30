@@ -35,6 +35,9 @@ query tpopByIdQuery($id: UUID!) {
     statusUnklar
     popByPopId {
       apId
+      apByApId {
+        startJahr
+      }
     }
   }
   allPopStatusWertes {

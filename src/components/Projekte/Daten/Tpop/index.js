@@ -1,8 +1,6 @@
 // @flow
 import React from 'react'
-import { observer, inject } from 'mobx-react'
 import styled from 'styled-components'
-import compose from 'recompose/compose'
 import { Query, Mutation } from 'react-apollo'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
@@ -35,17 +33,11 @@ const FieldsContainer = styled.div`
       : 'auto'};
 `
 
-const enhance = compose(inject('store'), observer)
-
 const Tpop = ({
   id,
-  store,
-  tree,
   dimensions = { width: 380 },
 }: {
   id: String,
-  store: Object,
-  tree: Object,
   dimensions: Object,
 }) => {
   const width = isNaN(dimensions.width) ? 380 : dimensions.width
@@ -62,10 +54,7 @@ const Tpop = ({
         if (error) return `Fehler: ${error.message}`
 
         const row = get(data, 'tpopById')
-        const ads = store.table.pop.get(row.id)
-        const apId = ads && ads.ap_id ? ads.ap_id : null
-        const ap = store.table.ap.get(apId)
-        const apJahr = ap && ap.start_jahr ? ap.start_jahr : null
+        const apJahr = get(data, 'tpopById.popByPopId.apByApId.startJahr', null)
         let gemeindeWerte = get(data, 'allGemeindes.nodes', [])
         gemeindeWerte = gemeindeWerte.map(el => el.name).sort()
         let apberrelevantWerte = get(
@@ -419,4 +408,4 @@ const Tpop = ({
   )
 }
 
-export default enhance(Tpop)
+export default Tpop
