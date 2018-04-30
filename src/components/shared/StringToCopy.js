@@ -12,10 +12,10 @@ import ErrorBoundary from './ErrorBoundary'
 const enhance = compose(
   withState('copied', 'updateCopied', false),
   withHandlers({
-    onCopy: props => () => {
-      props.updateCopied(true)
+    onCopy: ({ updateCopied }) => () => {
+      updateCopied(true)
       setTimeout(() => {
-        props.updateCopied(false)
+        updateCopied(false)
       }, 3000)
     },
   })

@@ -15,7 +15,7 @@ import RadioButtonGroup from '../../../shared/RadioButtonGroupGql'
 import TextField from '../../../shared/TextFieldGql'
 import AutoCompleteFromArray from '../../../shared/AutocompleteFromArrayGql'
 import AutoComplete from '../../../shared/AutocompleteGql'
-import RadioButtonGroupWithInfo from '../../../shared/RadioButtonGroupWithInfo'
+import RadioButtonGroupWithInfo from '../../../shared/RadioButtonGroupWithInfoGql'
 import StringToCopy from '../../../shared/StringToCopy'
 import FormTitle from '../../../shared/FormTitle'
 import DateFieldWithPicker from '../../../shared/DateFieldWithPickerGql'
@@ -269,11 +269,11 @@ const Tpopfeldkontr = ({
                           label="Entwicklung"
                           value={row.entwicklung}
                           dataSource={tpopEntwicklungWerte}
-                          saveToDb={event =>
+                          saveToDb={value =>
                             updateTpopkontr({
                               variables: {
                                 id,
-                                entwicklung: event.target.value,
+                                entwicklung: value,
                               },
                             })
                           }
