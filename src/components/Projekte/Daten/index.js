@@ -152,7 +152,9 @@ const Daten = ({
     ziel: <Ziel tree={tree} dimensions={dimensions} />,
     zielber: <Zielber tree={tree} dimensions={dimensions} />,
     pop: <Pop tree={tree} dimensions={dimensions} />,
-    popmassnber: <Popmassnber tree={tree} dimensions={dimensions} />,
+    popmassnber: (
+      <Popmassnber id={activeDataset.row.id} dimensions={dimensions} />
+    ),
     popber: <Popber id={activeDataset.row.id} dimensions={dimensions} />,
     tpop: <Tpop tree={tree} dimensions={dimensions} />,
     tpopber: <Tpopber id={activeDataset.row.id} dimensions={dimensions} />,
