@@ -1,10 +1,9 @@
 // @flow
 import React from 'react'
-import { observer, inject } from 'mobx-react'
 import styled from 'styled-components'
-import compose from 'recompose/compose'
 import { Query, Mutation } from 'react-apollo'
 import get from 'lodash/get'
+import sortBy from 'lodash/sortBy'
 import format from 'date-fns/format'
 
 import RadioButton from '../../../shared/RadioButtonGql'
@@ -34,7 +33,6 @@ const FieldsContainer = styled.div`
       : 'auto'};
 `
 
-const enhance = compose(inject('store'), observer)
 const jungpflanzenVorhandenDataSource = [
   { value: true, label: 'ja' },
   { value: false, label: 'nein' },
@@ -42,16 +40,11 @@ const jungpflanzenVorhandenDataSource = [
 
 const Tpopfreiwkontr = ({
   id,
-  store,
-  tree,
   dimensions = { width: 380 },
 }: {
   id: String,
-  store: Object,
-  tree: Object,
   dimensions: number,
 }) => {
-  const { activeDataset } = tree
   const width = isNaN(dimensions.width) ? 380 : dimensions.width
 
   return (
@@ -66,11 +59,20 @@ const Tpopfreiwkontr = ({
         if (error) return `Fehler: ${error.message}`
 
         const row = get(data, 'tpopkontrById')
+        let adressenWerte = get(data, 'allAdresses.nodes', [])
+        adressenWerte = sortBy(adressenWerte, 'name')
+        adressenWerte = adressenWerte.map(el => ({
+          id: el.id,
+          value: el.name,
+        }))
 
         return (
           <ErrorBoundary>
             <Container innerRef={c => (this.container = c)}>
-              <FormTitle tree={tree} title="Freiwilligen-Kontrolle" />
+              <FormTitle
+                apId={get(data, 'tpopkontrById.tpopByTpopId.popByPopId.apId')}
+                title="Freiwilligen-Kontrolle"
+              />
               <Mutation mutation={updateTpopkontrByIdGql}>
                 {(updateTpopkontr, { data }) => (
                   <FieldsContainer data-width={width}>
@@ -103,12 +105,11 @@ const Tpopfreiwkontr = ({
                         })
                       }
                     />
-
                     <AutoComplete
-                      key={`${activeDataset.row.id}bearbeiter`}
+                      key={`${row.id}bearbeiter`}
                       label="BearbeiterIn"
                       value={get(row, 'adresseByBearbeiter.name')}
-                      objects={store.dropdownList.adressen}
+                      objects={adressenWerte}
                       saveToDb={value =>
                         updateTpopkontr({
                           variables: {
@@ -119,7 +120,7 @@ const Tpopfreiwkontr = ({
                       }
                     />
                     <RadioButton
-                      key={`${activeDataset.row.id}planVorhanden`}
+                      key={`${row.id}planVorhanden`}
                       label="Auf Plan eingezeichnet"
                       value={row.planVorhanden}
                       saveToDb={value =>
@@ -132,7 +133,7 @@ const Tpopfreiwkontr = ({
                       }
                     />
                     <TextField
-                      key={`${activeDataset.row.id}flaecheUeberprueft`}
+                      key={`${row.id}flaecheUeberprueft`}
                       label="Überprüfte Fläche in m2"
                       value={row.flaecheUeberprueft}
                       type="number"
@@ -146,7 +147,7 @@ const Tpopfreiwkontr = ({
                       }
                     />
                     <TextField
-                      key={`${activeDataset.row.id}deckungApArt`}
+                      key={`${row.id}deckungApArt`}
                       label="Deckung überprüfte Art (%)"
                       value={row.deckungApArt}
                       type="number"
@@ -160,9 +161,9 @@ const Tpopfreiwkontr = ({
                       }
                     />
                     <TextField
-                      key={`${activeDataset.row.id}deckungNackterBoden`}
+                      key={`${row.id}deckungNackterBoden`}
                       label="Deckung nackter Boden (%)"
-                      value={activeDataset.row.deckungNackterBoden}
+                      value={row.deckungNackterBoden}
                       type="number"
                       saveToDb={event =>
                         updateTpopkontr({
@@ -187,7 +188,7 @@ const Tpopfreiwkontr = ({
                       }
                     />
                     <TextField
-                      key={`${activeDataset.row.id}vegetationshoeheMaximum`}
+                      key={`${row.id}vegetationshoeheMaximum`}
                       label="Maximum der Vegetationshöhe in cm"
                       value={row.vegetationshoeheMaximum}
                       type="number"
@@ -201,7 +202,7 @@ const Tpopfreiwkontr = ({
                       }
                     />
                     <TextField
-                      key={`${activeDataset.row.id}vegetationshoeheMittel`}
+                      key={`${row.id}vegetationshoeheMittel`}
                       label="Mittelwert der Vegetationshöhe in cm"
                       value={row.vegetationshoeheMittel}
                       type="number"
@@ -215,9 +216,8 @@ const Tpopfreiwkontr = ({
                       }
                     />
                     <TextField
-                      key={`${activeDataset.row.id}gefaehrdung`}
+                      key={`${row.id}gefaehrdung`}
                       label="Gefährdung"
-                      fieldName="gefaehrdung"
                       value={row.gefaehrdung}
                       type="text"
                       multiLine
@@ -231,7 +231,7 @@ const Tpopfreiwkontr = ({
                       }
                     />
                     <TextField
-                      key={`${activeDataset.row.id}bemerkungen`}
+                      key={`${row.id}bemerkungen`}
                       label="Bemerkungen"
                       value={row.bemerkungen}
                       type="text"
@@ -257,4 +257,4 @@ const Tpopfreiwkontr = ({
   )
 }
 
-export default enhance(Tpopfreiwkontr)
+export default Tpopfreiwkontr

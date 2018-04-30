@@ -9,11 +9,11 @@ import styled from 'styled-components'
 // without slight padding radio is slightly cut off!
 const StyledFormControl = styled(FormControl)`
   padding-left: 1px !important;
-  padding-bottom: 12px !important;
+  padding-bottom: 19px !important;
   break-inside: avoid;
 `
 const StyledFormLabel = styled(FormLabel)`
-  padding-top: 10px !important;
+  padding-top: 1px !important;
   font-size: 12px !important;
   cursor: text;
   user-select: none;

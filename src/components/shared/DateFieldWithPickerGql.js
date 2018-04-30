@@ -7,8 +7,7 @@ import styled from 'styled-components'
 import convertDateToYyyyMmDd from '../../modules/convertDateToYyyyMmDd'
 
 const StyledDatePicker = styled(DatePicker)`
-padding-top: 
-  padding-bottom: 9px !important;
+  padding-bottom: 19px !important;
   > div:before {
     background-color: rgba(0, 0, 0, 0.1) !important;
   }
@@ -65,6 +64,12 @@ class MyDatePicker extends Component<Props, State> {
     const newValue = format(date, 'YYYY-MM-DD')
     saveToDb(newValue)
     this.setState({ value: newValue })
+
+    /**
+     * TODO
+     * When manually re-inserting the same data already existing,
+     * it is not re-rendered?
+     */
   }
 
   render() {
