@@ -1,14 +1,14 @@
-mutation updateTpopmassn(
+mutation updateTpopmassnber(
   $id: UUID!
   $tpopId: UUID
   $jahr: Int
   $beurteilung: Int
   $bemerkungen: String
 ) {
-  updateTpopmassnById(
+  updateTpopmassnberById(
     input: {
       id: $id
-      tpopmassnPatch: {
+      tpopmassnberPatch: {
         id: $id
         tpopId: $tpopId
         jahr: $jahr
@@ -17,7 +17,7 @@ mutation updateTpopmassn(
       }
     }
   ) {
-    tpopmassn {
+    tpopmassnber {
       id
       tpopId
       jahr

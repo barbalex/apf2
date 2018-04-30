@@ -37,7 +37,8 @@ const enhance = compose(
           : event.target.value === 'false'
             ? false
             : event.target.value
-      if (newValue === value) {
+      // eslint-disable-next-line eqeqeq
+      if (newValue == value) {
         // an already active option was clicked
         // set value null
         return saveToDb(null)

@@ -157,7 +157,9 @@ const Daten = ({
     tpop: <Tpop tree={tree} dimensions={dimensions} />,
     tpopber: <Tpopber tree={tree} dimensions={dimensions} />,
     tpopmassn: <Tpopmassn id={activeDataset.row.id} dimensions={dimensions} />,
-    tpopmassnber: <Tpopmassnber tree={tree} dimensions={dimensions} />,
+    tpopmassnber: (
+      <Tpopmassnber id={activeDataset.row.id} dimensions={dimensions} />
+    ),
     tpopfeldkontr: (
       <Tpopfeldkontr id={activeDataset.row.id} dimensions={dimensions} />
     ),
