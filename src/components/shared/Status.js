@@ -1,6 +1,5 @@
 // @flow
 import React from 'react'
-import { observer } from 'mobx-react'
 import Input, { InputLabel } from 'material-ui/Input'
 import { FormControl, FormHelperText } from 'material-ui/Form'
 import Radio, { RadioGroup } from 'material-ui/Radio'
@@ -8,6 +7,7 @@ import { FormControlLabel } from 'material-ui/Form'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
+import withState from 'recompose/withState'
 
 import Label from './Label'
 import InfoWithPopover from './InfoWithPopover'
@@ -57,55 +57,48 @@ const StyledRadio = styled(Radio)`
 `
 
 const enhance = compose(
+  withState(
+    'bekanntSeitStateValue',
+    'setBekanntSeitStateValue',
+    ({ bekanntSeitValue }) =>
+      bekanntSeitValue || bekanntSeitValue === 0 ? bekanntSeitValue : ''
+  ),
   withHandlers({
-    onChangeStatus: props => event => {
+    onChangeStatus: ({ herkunftValue, saveToDbStatus }) => event => {
       const { value: valuePassed } = event.target
       // if clicked element is active herkunftValue: set null
       // eslint-disable-next-line eqeqeq
-      const val = valuePassed == props.herkunftValue ? null : valuePassed
-      props.updatePropertyInDb(props.tree, props.herkunftFieldName, val)
+      const val = valuePassed == herkunftValue ? null : valuePassed
+      saveToDbStatus(val)
     },
-    onChangeBekanntSeit: props => event =>
-      props.updateProperty(
-        props.tree,
-        props.bekanntSeitFieldName,
-        event.target.value
-      ),
-    onBlurBekanntSeit: props => event => {
+    onChangeBekanntSeit: ({ setBekanntSeitStateValue }) => event =>
+      setBekanntSeitStateValue(event.target.value),
+    onBlurBekanntSeit: ({ valueOnFocus, saveToDbBekanntSeit }) => event => {
       const { value } = event.target
       // only update if value has changed
       // eslint-disable-next-line eqeqeq
-      if (value != props.valueOnFocus) {
-        props.updatePropertyInDb(props.tree, props.bekanntSeitFieldName, value)
+      if (value != valueOnFocus) {
+        saveToDbBekanntSeit(value)
       }
     },
-  }),
-  observer
+  })
 )
 
 const Status = ({
-  tree,
   apJahr,
-  herkunftFieldName,
   herkunftValue,
-  bekanntSeitFieldName,
   bekanntSeitValue,
-  bekanntSeitValid,
-  updateProperty,
-  updatePropertyInDb,
+  saveToDbBekanntSeit,
+  saveToDbStatus,
   onChangeStatus,
   onChangeBekanntSeit,
   onBlurBekanntSeit,
 }: {
-  tree: Object,
-  apJahr?: number,
-  herkunftFieldName: string,
-  herkunftValue?: number,
-  bekanntSeitFieldName: string,
-  bekanntSeitValue?: number,
-  bekanntSeitValid?: string,
-  updateProperty: () => void,
-  updatePropertyInDb: () => void,
+  apJahr?: Number,
+  herkunftValue?: Number,
+  bekanntSeitValue?: Number,
+  saveToDbBekanntSeit: () => void,
+  saveToDbStatus: () => void,
   onChangeStatus: () => void,
   onChangeBekanntSeit: () => void,
   onBlurBekanntSeit: () => void,
@@ -119,11 +112,7 @@ const Status = ({
   return (
     <div>
       <FieldWithInfoContainer>
-        <FormControl
-          error={!!bekanntSeitValid}
-          fullWidth
-          aria-describedby="bekanntSeitHelper"
-        >
+        <FormControl fullWidth aria-describedby="bekanntSeitHelper">
           <InputLabel htmlFor="bekanntSeit">bekannt seit</InputLabel>
           <StyledInput
             id="bekanntSeit"
@@ -141,9 +130,6 @@ const Status = ({
               </InfoWithPopover>
             }
           />
-          <FormHelperText id="bekanntSeitHelper">
-            {bekanntSeitValid}
-          </FormHelperText>
         </FormControl>
       </FieldWithInfoContainer>
       <StatusContainer>
@@ -152,8 +138,7 @@ const Status = ({
           <HerkunftColumnContainer>
             <GroupLabelContainer>ursprünglich:</GroupLabelContainer>
             <RadioGroup
-              aria-label={herkunftFieldName}
-              name={herkunftFieldName}
+              aria-label="Status"
               value={valueSelected.toString()}
               onChange={onChangeStatus}
             >
@@ -174,8 +159,7 @@ const Status = ({
           <HerkunftColumnContainer>
             <GroupLabelContainer>angesiedelt:</GroupLabelContainer>
             <RadioGroup
-              aria-label={herkunftFieldName}
-              name={herkunftFieldName}
+              aria-label="Status"
               value={valueSelected.toString()}
               onChange={onChangeStatus}
             >
@@ -202,8 +186,7 @@ const Status = ({
           <HerkunftColumnContainerLast>
             <GroupLabelContainer>potenziell:</GroupLabelContainer>
             <RadioGroup
-              aria-label={herkunftFieldName}
-              name={herkunftFieldName}
+              aria-label="Status"
               value={valueSelected.toString()}
               onChange={onChangeStatus}
             >
@@ -225,7 +208,6 @@ Status.defaultProps = {
   apJahr: null,
   herkunftValue: null,
   bekanntSeitValue: '',
-  bekanntSeitValid: '',
 }
 
 export default enhance(Status)

@@ -8,11 +8,11 @@ import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 
 import TextField from '../../../shared/TextFieldGql'
-import TextFieldWithInfo from '../../../shared/TextFieldWithInfo'
+import TextFieldWithInfo from '../../../shared/TextFieldWithInfoGql'
 import Status from '../../../shared/Status'
-import AutoCompleteFromArrayNew from '../../../shared/AutocompleteFromArray'
-import RadioButton from '../../../shared/RadioButton'
-import RadioButtonGroupWithInfo from '../../../shared/RadioButtonGroupWithInfo'
+import AutoCompleteFromArray from '../../../shared/AutocompleteFromArrayGql'
+import RadioButton from '../../../shared/RadioButtonGql'
+import RadioButtonGroupWithInfo from '../../../shared/RadioButtonGroupWithInfoGql'
 import FormTitle from '../../../shared/FormTitle'
 import TpopAbBerRelevantInfoPopover from '../TpopAbBerRelevantInfoPopover'
 import constants from '../../../../modules/constants'
@@ -48,11 +48,6 @@ const Tpop = ({
   tree: Object,
   dimensions: Object,
 }) => {
-  const { activeDataset } = tree
-  const ads = store.table.pop.get(activeDataset.row.id)
-  const apId = ads && ads.ap_id ? ads.ap_id : null
-  const ap = store.table.ap.get(apId)
-  const apJahr = ap && ap.start_jahr ? ap.start_jahr : null
   const width = isNaN(dimensions.width) ? 380 : dimensions.width
 
   return (
@@ -67,13 +62,19 @@ const Tpop = ({
         if (error) return `Fehler: ${error.message}`
 
         const row = get(data, 'tpopById')
-        let popentwicklungWerte = get(
+        const ads = store.table.pop.get(row.id)
+        const apId = ads && ads.ap_id ? ads.ap_id : null
+        const ap = store.table.ap.get(apId)
+        const apJahr = ap && ap.start_jahr ? ap.start_jahr : null
+        let gemeindeWerte = get(data, 'allGemeindes.nodes', [])
+        gemeindeWerte = gemeindeWerte.map(el => el.name).sort()
+        let apberrelevantWerte = get(
           data,
-          'allTpopEntwicklungWertes.nodes',
+          'allTpopApberrelevantWertes.nodes',
           []
         )
-        popentwicklungWerte = sortBy(popentwicklungWerte, 'sort')
-        popentwicklungWerte = popentwicklungWerte.map(el => ({
+        apberrelevantWerte = sortBy(apberrelevantWerte, 'sort')
+        apberrelevantWerte = apberrelevantWerte.map(el => ({
           value: el.code,
           label: el.text,
         }))
@@ -89,9 +90,9 @@ const Tpop = ({
                 {(updateTpop, { data }) => (
                   <FieldsContainer data-width={width}>
                     <TextField
-                      key={`${activeDataset.row.id}nr`}
+                      key={`${row.id}nr`}
                       label="Nr."
-                      value={activeDataset.row.nr}
+                      value={row.nr}
                       type="number"
                       saveToDb={event =>
                         updateTpop({
@@ -103,9 +104,9 @@ const Tpop = ({
                       }
                     />
                     <TextFieldWithInfo
-                      key={`${activeDataset.row.id}flurname`}
+                      key={`${row.id}flurname`}
                       label="Flurname"
-                      value={activeDataset.row.flurname}
+                      value={row.flurname}
                       type="text"
                       saveToDb={event =>
                         updateTpop({
@@ -118,28 +119,44 @@ const Tpop = ({
                       popover="Dieses Feld möglichst immer ausfüllen"
                     />
                     <Status
-                      key={`${activeDataset.row.id}status`}
-                      tree={tree}
+                      key={`${row.id}status`}
                       apJahr={apJahr}
-                      herkunftFieldName="status"
-                      herkunftValue={activeDataset.row.status}
-                      bekanntSeitFieldName="bekannt_seit"
-                      bekanntSeitValue={activeDataset.row.bekannt_seit}
-                      bekanntSeitValid={activeDataset.valid.bekannt_seit}
-                      updateProperty={store.updateProperty}
-                      updatePropertyInDb={store.updatePropertyInDb}
+                      herkunftValue={row.status}
+                      bekanntSeitValue={row.bekanntSeit}
+                      saveToDbBekanntSeit={event =>
+                        updateTpop({
+                          variables: {
+                            id,
+                            bekanntSeit: event.target.value,
+                          },
+                        })
+                      }
+                      saveToDbStatus={value =>
+                        updateTpop({
+                          variables: {
+                            id,
+                            status: value,
+                          },
+                        })
+                      }
                     />
                     <RadioButton
-                      tree={tree}
-                      fieldName="status_unklar"
+                      key={`${row.id}statusUnklar`}
                       label="Status unklar"
-                      value={activeDataset.row.status_unklar}
-                      updatePropertyInDb={store.updatePropertyInDb}
+                      value={row.statusUnklar}
+                      saveToDb={value =>
+                        updateTpop({
+                          variables: {
+                            id,
+                            statusUnklar: value,
+                          },
+                        })
+                      }
                     />
                     <TextField
-                      key={`${activeDataset.row.id}statusUnklarGrund`}
+                      key={`${row.id}statusUnklarGrund`}
                       label="Begründung"
-                      value={activeDataset.row.statusUnklarGrund}
+                      value={row.statusUnklarGrund}
                       type="text"
                       multiLine
                       saveToDb={event =>
@@ -152,18 +169,23 @@ const Tpop = ({
                       }
                     />
                     <RadioButtonGroupWithInfo
-                      tree={tree}
-                      fieldName="apber_relevant"
-                      value={activeDataset.row.apber_relevant}
-                      dataSource={store.dropdownList.tpopApBerichtRelevantWerte}
-                      updatePropertyInDb={store.updatePropertyInDb}
+                      value={row.apberRelevant}
+                      dataSource={apberrelevantWerte}
                       popover={TpopAbBerRelevantInfoPopover}
                       label="Für AP-Bericht relevant"
+                      saveToDb={value =>
+                        updateTpop({
+                          variables: {
+                            id,
+                            apberRelevant: value,
+                          },
+                        })
+                      }
                     />
                     <TextField
-                      key={`${activeDataset.row.id}x`}
+                      key={`${row.id}x`}
                       label="X-Koordinaten"
-                      value={activeDataset.row.x}
+                      value={row.x}
                       type="number"
                       saveToDb={event =>
                         updateTpop({
@@ -175,9 +197,9 @@ const Tpop = ({
                       }
                     />
                     <TextField
-                      key={`${activeDataset.row.id}y`}
+                      key={`${row.id}y`}
                       label="Y-Koordinaten"
-                      value={activeDataset.row.y}
+                      value={row.y}
                       type="number"
                       saveToDb={event =>
                         updateTpop({
@@ -188,20 +210,24 @@ const Tpop = ({
                         })
                       }
                     />
-                    <AutoCompleteFromArrayNew
-                      key={`${activeDataset.row.id}gemeinde`}
-                      tree={tree}
+                    <AutoCompleteFromArray
+                      key={`${row.id}gemeinde`}
                       label="Gemeinde"
-                      fieldName="gemeinde"
-                      value={activeDataset.row.gemeinde}
-                      errorText={activeDataset.valid.gemeinde}
-                      values={store.dropdownList.gemeinden}
-                      updatePropertyInDb={store.updatePropertyInDb}
+                      value={row.gemeinde}
+                      values={gemeindeWerte}
+                      saveToDb={value =>
+                        updateTpop({
+                          variables: {
+                            id,
+                            gemeinde: value,
+                          },
+                        })
+                      }
                     />
                     <TextField
-                      key={`${activeDataset.row.id}radius`}
+                      key={`${row.id}radius`}
                       label="Radius (m)"
-                      value={activeDataset.row.radius}
+                      value={row.radius}
                       type="number"
                       saveToDb={event =>
                         updateTpop({
@@ -213,9 +239,9 @@ const Tpop = ({
                       }
                     />
                     <TextField
-                      key={`${activeDataset.row.id}hoehe`}
+                      key={`${row.id}hoehe`}
                       label="Höhe (m.ü.M.)"
-                      value={activeDataset.row.hoehe}
+                      value={row.hoehe}
                       type="number"
                       saveToDb={event =>
                         updateTpop({
@@ -227,9 +253,9 @@ const Tpop = ({
                       }
                     />
                     <TextField
-                      key={`${activeDataset.row.id}exposition`}
+                      key={`${row.id}exposition`}
                       label="Exposition, Besonnung"
-                      value={activeDataset.row.exposition}
+                      value={row.exposition}
                       type="text"
                       saveToDb={event =>
                         updateTpop({
@@ -241,9 +267,9 @@ const Tpop = ({
                       }
                     />
                     <TextField
-                      key={`${activeDataset.row.id}klima`}
+                      key={`${row.id}klima`}
                       label="Klima"
-                      value={activeDataset.row.klima}
+                      value={row.klima}
                       type="text"
                       saveToDb={event =>
                         updateTpop({
@@ -255,9 +281,9 @@ const Tpop = ({
                       }
                     />
                     <TextField
-                      key={`${activeDataset.row.id}neigung`}
+                      key={`${row.id}neigung`}
                       label="Hangneigung"
-                      value={activeDataset.row.neigung}
+                      value={row.neigung}
                       type="text"
                       saveToDb={event =>
                         updateTpop({
@@ -269,9 +295,9 @@ const Tpop = ({
                       }
                     />
                     <TextField
-                      key={`${activeDataset.row.id}beschreibung`}
+                      key={`${row.id}beschreibung`}
                       label="Beschreibung"
-                      value={activeDataset.row.beschreibung}
+                      value={row.beschreibung}
                       type="text"
                       multiline
                       saveToDb={event =>
@@ -284,9 +310,9 @@ const Tpop = ({
                       }
                     />
                     <TextField
-                      key={`${activeDataset.row.id}katasterNr`}
+                      key={`${row.id}katasterNr`}
                       label="Kataster-Nr."
-                      value={activeDataset.row.katasterNr}
+                      value={row.katasterNr}
                       type="text"
                       saveToDb={event =>
                         updateTpop({
@@ -298,9 +324,9 @@ const Tpop = ({
                       }
                     />
                     <TextField
-                      key={`${activeDataset.row.id}eigentuemer`}
+                      key={`${row.id}eigentuemer`}
                       label="EigentümerIn"
-                      value={activeDataset.row.eigentuemer}
+                      value={row.eigentuemer}
                       type="text"
                       saveToDb={event =>
                         updateTpop({
@@ -312,9 +338,9 @@ const Tpop = ({
                       }
                     />
                     <TextField
-                      key={`${activeDataset.row.id}kontakt`}
+                      key={`${row.id}kontakt`}
                       label="Kontakt vor Ort"
-                      value={activeDataset.row.kontakt}
+                      value={row.kontakt}
                       type="text"
                       saveToDb={event =>
                         updateTpop({
@@ -326,9 +352,9 @@ const Tpop = ({
                       }
                     />
                     <TextField
-                      key={`${activeDataset.row.id}nutzungszone`}
+                      key={`${row.id}nutzungszone`}
                       label="Nutzungszone"
-                      value={activeDataset.row.nutzungszone}
+                      value={row.nutzungszone}
                       type="text"
                       saveToDb={event =>
                         updateTpop({
@@ -340,9 +366,9 @@ const Tpop = ({
                       }
                     />
                     <TextField
-                      key={`${activeDataset.row.id}bewirtschafter`}
+                      key={`${row.id}bewirtschafter`}
                       label="BewirtschafterIn"
-                      value={activeDataset.row.bewirtschafter}
+                      value={row.bewirtschafter}
                       type="text"
                       saveToDb={event =>
                         updateTpop({
@@ -354,9 +380,9 @@ const Tpop = ({
                       }
                     />
                     <TextField
-                      key={`${activeDataset.row.id}bewirtschaftung`}
+                      key={`${row.id}bewirtschaftung`}
                       label="Bewirtschaftung"
-                      value={activeDataset.row.bewirtschaftung}
+                      value={row.bewirtschaftung}
                       type="text"
                       saveToDb={event =>
                         updateTpop({
@@ -368,9 +394,9 @@ const Tpop = ({
                       }
                     />
                     <TextField
-                      key={`${activeDataset.row.id}bemerkungen`}
+                      key={`${row.id}bemerkungen`}
                       label="Bemerkungen"
-                      value={activeDataset.row.bemerkungen}
+                      value={row.bemerkungen}
                       type="text"
                       multiline
                       saveToDb={event =>
