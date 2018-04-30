@@ -1,0 +1,39 @@
+mutation updateTpopmassn(
+  $id: UUID!
+  $tpopId: UUID
+  $jahr: Int
+  $beurteilung: Int
+  $bemerkungen: String
+) {
+  updateTpopmassnById(
+    input: {
+      id: $id
+      tpopmassnPatch: {
+        id: $id
+        tpopId: $tpopId
+        jahr: $jahr
+        beurteilung: $beurteilung
+        bemerkungen: $bemerkungen
+      }
+    }
+  ) {
+    tpopmassn {
+      id
+      tpopId
+      jahr
+      beurteilung
+      tpopmassnErfbeurtWerteByBeurteilung {
+        id
+        code
+        text
+        sort
+      }
+      bemerkungen
+      tpopByTpopId {
+        popByPopId {
+          apId
+        }
+      }
+    }
+  }
+}
