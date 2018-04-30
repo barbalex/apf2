@@ -3,6 +3,9 @@ import React from 'react'
 import { observer, inject } from 'mobx-react'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
+import { Query, Mutation } from 'react-apollo'
+import get from 'lodash/get'
+import sortBy from 'lodash/sortBy'
 
 import TextField from '../../../shared/TextField'
 import TextFieldWithInfo from '../../../shared/TextFieldWithInfo'
@@ -14,6 +17,8 @@ import FormTitle from '../../../shared/FormTitle'
 import TpopAbBerRelevantInfoPopover from '../TpopAbBerRelevantInfoPopover'
 import constants from '../../../../modules/constants'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
+import tpopByIdGql from './tpopById.graphql'
+import updateTpopByIdGql from './updateTpopById.graphql'
 
 const Container = styled.div`
   height: 100%;
@@ -33,10 +38,12 @@ const FieldsContainer = styled.div`
 const enhance = compose(inject('store'), observer)
 
 const Tpop = ({
+  id,
   store,
   tree,
   dimensions = { width: 380 },
 }: {
+  id: String,
   store: Object,
   tree: Object,
   dimensions: Object,
@@ -49,254 +56,287 @@ const Tpop = ({
   const width = isNaN(dimensions.width) ? 380 : dimensions.width
 
   return (
-    <ErrorBoundary>
-      <Container innerRef={c => (this.container = c)}>
-        <FormTitle tree={tree} title="Teil-Population" />
-        <FieldsContainer data-width={width}>
-          <TextField
-            key={`${activeDataset.row.id}nr`}
-            tree={tree}
-            label="Nr."
-            fieldName="nr"
-            value={activeDataset.row.nr}
-            errorText={activeDataset.valid.nr}
-            type="number"
-            updateProperty={store.updateProperty}
-            updatePropertyInDb={store.updatePropertyInDb}
-          />
-          <TextFieldWithInfo
-            key={`${activeDataset.row.id}flurname`}
-            tree={tree}
-            label="Flurname"
-            fieldName="flurname"
-            value={activeDataset.row.flurname}
-            errorText={activeDataset.valid.flurname}
-            type="text"
-            updateProperty={store.updateProperty}
-            updatePropertyInDb={store.updatePropertyInDb}
-            popover="Dieses Feld möglichst immer ausfüllen"
-          />
-          <Status
-            key={`${activeDataset.row.id}status`}
-            tree={tree}
-            apJahr={apJahr}
-            herkunftFieldName="status"
-            herkunftValue={activeDataset.row.status}
-            bekanntSeitFieldName="bekannt_seit"
-            bekanntSeitValue={activeDataset.row.bekannt_seit}
-            bekanntSeitValid={activeDataset.valid.bekannt_seit}
-            updateProperty={store.updateProperty}
-            updatePropertyInDb={store.updatePropertyInDb}
-          />
-          <RadioButton
-            tree={tree}
-            fieldName="status_unklar"
-            label="Status unklar"
-            value={activeDataset.row.status_unklar}
-            updatePropertyInDb={store.updatePropertyInDb}
-          />
-          <TextField
-            key={`${activeDataset.row.id}status_unklar_grund`}
-            tree={tree}
-            label="Begründung"
-            fieldName="status_unklar_grund"
-            value={activeDataset.row.status_unklar_grund}
-            errorText={activeDataset.valid.status_unklar_grund}
-            type="text"
-            multiLine
-            fullWidth
-            updateProperty={store.updateProperty}
-            updatePropertyInDb={store.updatePropertyInDb}
-          />
-          <RadioButtonGroupWithInfo
-            tree={tree}
-            fieldName="apber_relevant"
-            value={activeDataset.row.apber_relevant}
-            dataSource={store.dropdownList.tpopApBerichtRelevantWerte}
-            updatePropertyInDb={store.updatePropertyInDb}
-            popover={TpopAbBerRelevantInfoPopover}
-            label="Für AP-Bericht relevant"
-          />
-          <TextField
-            key={`${activeDataset.row.id}x`}
-            tree={tree}
-            label="X-Koordinaten"
-            fieldName="x"
-            value={activeDataset.row.x}
-            errorText={activeDataset.valid.x}
-            type="number"
-            updateProperty={store.updateProperty}
-            updatePropertyInDb={store.updatePropertyInDb}
-          />
-          <TextField
-            key={`${activeDataset.row.id}y`}
-            tree={tree}
-            label="Y-Koordinaten"
-            fieldName="y"
-            value={activeDataset.row.y}
-            errorText={activeDataset.valid.y}
-            type="number"
-            updateProperty={store.updateProperty}
-            updatePropertyInDb={store.updatePropertyInDb}
-          />
-          <AutoCompleteFromArrayNew
-            key={`${activeDataset.row.id}gemeinde`}
-            tree={tree}
-            label="Gemeinde"
-            fieldName="gemeinde"
-            value={activeDataset.row.gemeinde}
-            errorText={activeDataset.valid.gemeinde}
-            values={store.dropdownList.gemeinden}
-            updatePropertyInDb={store.updatePropertyInDb}
-          />
-          <TextField
-            key={`${activeDataset.row.id}radius`}
-            tree={tree}
-            label="Radius (m)"
-            fieldName="radius"
-            value={activeDataset.row.radius}
-            errorText={activeDataset.valid.radius}
-            type="number"
-            updateProperty={store.updateProperty}
-            updatePropertyInDb={store.updatePropertyInDb}
-          />
-          <TextField
-            key={`${activeDataset.row.id}hoehe`}
-            tree={tree}
-            label="Höhe (m.ü.M.)"
-            fieldName="hoehe"
-            value={activeDataset.row.hoehe}
-            errorText={activeDataset.valid.hoehe}
-            type="number"
-            updateProperty={store.updateProperty}
-            updatePropertyInDb={store.updatePropertyInDb}
-          />
-          <TextField
-            key={`${activeDataset.row.id}exposition`}
-            tree={tree}
-            label="Exposition, Besonnung"
-            fieldName="exposition"
-            value={activeDataset.row.exposition}
-            errorText={activeDataset.valid.exposition}
-            type="text"
-            updateProperty={store.updateProperty}
-            updatePropertyInDb={store.updatePropertyInDb}
-          />
-          <TextField
-            key={`${activeDataset.row.id}klima`}
-            tree={tree}
-            label="Klima"
-            fieldName="klima"
-            value={activeDataset.row.klima}
-            errorText={activeDataset.valid.klima}
-            type="text"
-            updateProperty={store.updateProperty}
-            updatePropertyInDb={store.updatePropertyInDb}
-          />
-          <TextField
-            key={`${activeDataset.row.id}neigung`}
-            tree={tree}
-            label="Hangneigung"
-            fieldName="neigung"
-            value={activeDataset.row.neigung}
-            errorText={activeDataset.valid.neigung}
-            type="text"
-            updateProperty={store.updateProperty}
-            updatePropertyInDb={store.updatePropertyInDb}
-          />
-          <TextField
-            key={`${activeDataset.row.id}beschreibung`}
-            tree={tree}
-            label="Beschreibung"
-            fieldName="beschreibung"
-            value={activeDataset.row.beschreibung}
-            errorText={activeDataset.valid.beschreibung}
-            type="text"
-            multiline
-            updateProperty={store.updateProperty}
-            updatePropertyInDb={store.updatePropertyInDb}
-          />
-          <TextField
-            key={`${activeDataset.row.id}kataster_nr`}
-            tree={tree}
-            label="Kataster-Nr."
-            fieldName="kataster_nr"
-            value={activeDataset.row.kataster_nr}
-            errorText={activeDataset.valid.kataster_nr}
-            type="text"
-            updateProperty={store.updateProperty}
-            updatePropertyInDb={store.updatePropertyInDb}
-          />
-          <TextField
-            key={`${activeDataset.row.id}eigentuemer`}
-            tree={tree}
-            label="EigentümerIn"
-            fieldName="eigentuemer"
-            value={activeDataset.row.eigentuemer}
-            errorText={activeDataset.valid.eigentuemer}
-            type="text"
-            updateProperty={store.updateProperty}
-            updatePropertyInDb={store.updatePropertyInDb}
-          />
-          <TextField
-            key={`${activeDataset.row.id}kontakt`}
-            tree={tree}
-            label="Kontakt vor Ort"
-            fieldName="kontakt"
-            value={activeDataset.row.kontakt}
-            errorText={activeDataset.valid.kontakt}
-            type="text"
-            updateProperty={store.updateProperty}
-            updatePropertyInDb={store.updatePropertyInDb}
-          />
-          <TextField
-            key={`${activeDataset.row.id}nutzungszone`}
-            tree={tree}
-            label="Nutzungszone"
-            fieldName="nutzungszone"
-            value={activeDataset.row.nutzungszone}
-            errorText={activeDataset.valid.nutzungszone}
-            type="text"
-            updateProperty={store.updateProperty}
-            updatePropertyInDb={store.updatePropertyInDb}
-          />
-          <TextField
-            key={`${activeDataset.row.id}bewirtschafter`}
-            tree={tree}
-            label="BewirtschafterIn"
-            fieldName="bewirtschafter"
-            value={activeDataset.row.bewirtschafter}
-            errorText={activeDataset.valid.bewirtschafter}
-            type="text"
-            updateProperty={store.updateProperty}
-            updatePropertyInDb={store.updatePropertyInDb}
-          />
-          <TextField
-            key={`${activeDataset.row.id}bewirtschaftung`}
-            tree={tree}
-            label="Bewirtschaftung"
-            fieldName="bewirtschaftung"
-            value={activeDataset.row.bewirtschaftung}
-            errorText={activeDataset.valid.bewirtschaftung}
-            type="text"
-            updateProperty={store.updateProperty}
-            updatePropertyInDb={store.updatePropertyInDb}
-          />
-          <TextField
-            key={`${activeDataset.row.id}bemerkungen`}
-            tree={tree}
-            label="Bemerkungen"
-            fieldName="bemerkungen"
-            value={activeDataset.row.bemerkungen}
-            errorText={activeDataset.valid.bemerkungen}
-            type="text"
-            multiline
-            updateProperty={store.updateProperty}
-            updatePropertyInDb={store.updatePropertyInDb}
-          />
-        </FieldsContainer>
-      </Container>
-    </ErrorBoundary>
+    <Query query={tpopByIdGql} variables={{ id }}>
+      {({ loading, error, data }) => {
+        if (loading)
+          return (
+            <Container>
+              <FieldsContainer>Lade...</FieldsContainer>
+            </Container>
+          )
+        if (error) return `Fehler: ${error.message}`
+
+        const row = get(data, 'tpopById')
+        let popentwicklungWerte = get(
+          data,
+          'allTpopEntwicklungWertes.nodes',
+          []
+        )
+        popentwicklungWerte = sortBy(popentwicklungWerte, 'sort')
+        popentwicklungWerte = popentwicklungWerte.map(el => ({
+          value: el.code,
+          label: el.text,
+        }))
+
+        return (
+          <ErrorBoundary>
+            <Container innerRef={c => (this.container = c)}>
+              <FormTitle
+                apId={get(data, 'tpopById.popByPopId.apId')}
+                title="Teil-Population"
+              />
+              <Mutation mutation={updateTpopByIdGql}>
+                {(updateTpop, { data }) => (
+                  <FieldsContainer data-width={width}>
+                    <TextField
+                      key={`${activeDataset.row.id}nr`}
+                      tree={tree}
+                      label="Nr."
+                      fieldName="nr"
+                      value={activeDataset.row.nr}
+                      errorText={activeDataset.valid.nr}
+                      type="number"
+                      updateProperty={store.updateProperty}
+                      updatePropertyInDb={store.updatePropertyInDb}
+                    />
+                    <TextFieldWithInfo
+                      key={`${activeDataset.row.id}flurname`}
+                      tree={tree}
+                      label="Flurname"
+                      fieldName="flurname"
+                      value={activeDataset.row.flurname}
+                      errorText={activeDataset.valid.flurname}
+                      type="text"
+                      updateProperty={store.updateProperty}
+                      updatePropertyInDb={store.updatePropertyInDb}
+                      popover="Dieses Feld möglichst immer ausfüllen"
+                    />
+                    <Status
+                      key={`${activeDataset.row.id}status`}
+                      tree={tree}
+                      apJahr={apJahr}
+                      herkunftFieldName="status"
+                      herkunftValue={activeDataset.row.status}
+                      bekanntSeitFieldName="bekannt_seit"
+                      bekanntSeitValue={activeDataset.row.bekannt_seit}
+                      bekanntSeitValid={activeDataset.valid.bekannt_seit}
+                      updateProperty={store.updateProperty}
+                      updatePropertyInDb={store.updatePropertyInDb}
+                    />
+                    <RadioButton
+                      tree={tree}
+                      fieldName="status_unklar"
+                      label="Status unklar"
+                      value={activeDataset.row.status_unklar}
+                      updatePropertyInDb={store.updatePropertyInDb}
+                    />
+                    <TextField
+                      key={`${activeDataset.row.id}status_unklar_grund`}
+                      tree={tree}
+                      label="Begründung"
+                      fieldName="status_unklar_grund"
+                      value={activeDataset.row.status_unklar_grund}
+                      errorText={activeDataset.valid.status_unklar_grund}
+                      type="text"
+                      multiLine
+                      fullWidth
+                      updateProperty={store.updateProperty}
+                      updatePropertyInDb={store.updatePropertyInDb}
+                    />
+                    <RadioButtonGroupWithInfo
+                      tree={tree}
+                      fieldName="apber_relevant"
+                      value={activeDataset.row.apber_relevant}
+                      dataSource={store.dropdownList.tpopApBerichtRelevantWerte}
+                      updatePropertyInDb={store.updatePropertyInDb}
+                      popover={TpopAbBerRelevantInfoPopover}
+                      label="Für AP-Bericht relevant"
+                    />
+                    <TextField
+                      key={`${activeDataset.row.id}x`}
+                      tree={tree}
+                      label="X-Koordinaten"
+                      fieldName="x"
+                      value={activeDataset.row.x}
+                      errorText={activeDataset.valid.x}
+                      type="number"
+                      updateProperty={store.updateProperty}
+                      updatePropertyInDb={store.updatePropertyInDb}
+                    />
+                    <TextField
+                      key={`${activeDataset.row.id}y`}
+                      tree={tree}
+                      label="Y-Koordinaten"
+                      fieldName="y"
+                      value={activeDataset.row.y}
+                      errorText={activeDataset.valid.y}
+                      type="number"
+                      updateProperty={store.updateProperty}
+                      updatePropertyInDb={store.updatePropertyInDb}
+                    />
+                    <AutoCompleteFromArrayNew
+                      key={`${activeDataset.row.id}gemeinde`}
+                      tree={tree}
+                      label="Gemeinde"
+                      fieldName="gemeinde"
+                      value={activeDataset.row.gemeinde}
+                      errorText={activeDataset.valid.gemeinde}
+                      values={store.dropdownList.gemeinden}
+                      updatePropertyInDb={store.updatePropertyInDb}
+                    />
+                    <TextField
+                      key={`${activeDataset.row.id}radius`}
+                      tree={tree}
+                      label="Radius (m)"
+                      fieldName="radius"
+                      value={activeDataset.row.radius}
+                      errorText={activeDataset.valid.radius}
+                      type="number"
+                      updateProperty={store.updateProperty}
+                      updatePropertyInDb={store.updatePropertyInDb}
+                    />
+                    <TextField
+                      key={`${activeDataset.row.id}hoehe`}
+                      tree={tree}
+                      label="Höhe (m.ü.M.)"
+                      fieldName="hoehe"
+                      value={activeDataset.row.hoehe}
+                      errorText={activeDataset.valid.hoehe}
+                      type="number"
+                      updateProperty={store.updateProperty}
+                      updatePropertyInDb={store.updatePropertyInDb}
+                    />
+                    <TextField
+                      key={`${activeDataset.row.id}exposition`}
+                      tree={tree}
+                      label="Exposition, Besonnung"
+                      fieldName="exposition"
+                      value={activeDataset.row.exposition}
+                      errorText={activeDataset.valid.exposition}
+                      type="text"
+                      updateProperty={store.updateProperty}
+                      updatePropertyInDb={store.updatePropertyInDb}
+                    />
+                    <TextField
+                      key={`${activeDataset.row.id}klima`}
+                      tree={tree}
+                      label="Klima"
+                      fieldName="klima"
+                      value={activeDataset.row.klima}
+                      errorText={activeDataset.valid.klima}
+                      type="text"
+                      updateProperty={store.updateProperty}
+                      updatePropertyInDb={store.updatePropertyInDb}
+                    />
+                    <TextField
+                      key={`${activeDataset.row.id}neigung`}
+                      tree={tree}
+                      label="Hangneigung"
+                      fieldName="neigung"
+                      value={activeDataset.row.neigung}
+                      errorText={activeDataset.valid.neigung}
+                      type="text"
+                      updateProperty={store.updateProperty}
+                      updatePropertyInDb={store.updatePropertyInDb}
+                    />
+                    <TextField
+                      key={`${activeDataset.row.id}beschreibung`}
+                      tree={tree}
+                      label="Beschreibung"
+                      fieldName="beschreibung"
+                      value={activeDataset.row.beschreibung}
+                      errorText={activeDataset.valid.beschreibung}
+                      type="text"
+                      multiline
+                      updateProperty={store.updateProperty}
+                      updatePropertyInDb={store.updatePropertyInDb}
+                    />
+                    <TextField
+                      key={`${activeDataset.row.id}kataster_nr`}
+                      tree={tree}
+                      label="Kataster-Nr."
+                      fieldName="kataster_nr"
+                      value={activeDataset.row.kataster_nr}
+                      errorText={activeDataset.valid.kataster_nr}
+                      type="text"
+                      updateProperty={store.updateProperty}
+                      updatePropertyInDb={store.updatePropertyInDb}
+                    />
+                    <TextField
+                      key={`${activeDataset.row.id}eigentuemer`}
+                      tree={tree}
+                      label="EigentümerIn"
+                      fieldName="eigentuemer"
+                      value={activeDataset.row.eigentuemer}
+                      errorText={activeDataset.valid.eigentuemer}
+                      type="text"
+                      updateProperty={store.updateProperty}
+                      updatePropertyInDb={store.updatePropertyInDb}
+                    />
+                    <TextField
+                      key={`${activeDataset.row.id}kontakt`}
+                      tree={tree}
+                      label="Kontakt vor Ort"
+                      fieldName="kontakt"
+                      value={activeDataset.row.kontakt}
+                      errorText={activeDataset.valid.kontakt}
+                      type="text"
+                      updateProperty={store.updateProperty}
+                      updatePropertyInDb={store.updatePropertyInDb}
+                    />
+                    <TextField
+                      key={`${activeDataset.row.id}nutzungszone`}
+                      tree={tree}
+                      label="Nutzungszone"
+                      fieldName="nutzungszone"
+                      value={activeDataset.row.nutzungszone}
+                      errorText={activeDataset.valid.nutzungszone}
+                      type="text"
+                      updateProperty={store.updateProperty}
+                      updatePropertyInDb={store.updatePropertyInDb}
+                    />
+                    <TextField
+                      key={`${activeDataset.row.id}bewirtschafter`}
+                      tree={tree}
+                      label="BewirtschafterIn"
+                      fieldName="bewirtschafter"
+                      value={activeDataset.row.bewirtschafter}
+                      errorText={activeDataset.valid.bewirtschafter}
+                      type="text"
+                      updateProperty={store.updateProperty}
+                      updatePropertyInDb={store.updatePropertyInDb}
+                    />
+                    <TextField
+                      key={`${activeDataset.row.id}bewirtschaftung`}
+                      tree={tree}
+                      label="Bewirtschaftung"
+                      fieldName="bewirtschaftung"
+                      value={activeDataset.row.bewirtschaftung}
+                      errorText={activeDataset.valid.bewirtschaftung}
+                      type="text"
+                      updateProperty={store.updateProperty}
+                      updatePropertyInDb={store.updatePropertyInDb}
+                    />
+                    <TextField
+                      key={`${activeDataset.row.id}bemerkungen`}
+                      tree={tree}
+                      label="Bemerkungen"
+                      fieldName="bemerkungen"
+                      value={activeDataset.row.bemerkungen}
+                      errorText={activeDataset.valid.bemerkungen}
+                      type="text"
+                      multiline
+                      updateProperty={store.updateProperty}
+                      updatePropertyInDb={store.updatePropertyInDb}
+                    />
+                  </FieldsContainer>
+                )}
+              </Mutation>
+            </Container>
+          </ErrorBoundary>
+        )
+      }}
+    </Query>
   )
 }
 

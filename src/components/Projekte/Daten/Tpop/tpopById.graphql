@@ -1,0 +1,61 @@
+query tpopByIdQuery($id: UUID!) {
+  tpopById(id: $id) {
+    id
+    popId
+    nr
+    gemeinde
+    flurname
+    x
+    y
+    radius
+    hoehe
+    exposition
+    klima
+    neigung
+    beschreibung
+    katasterNr
+    status
+    popStatusWerteByStatus {
+      id
+      text
+    }
+    statusUnklarGrund
+    apberRelevant
+    tpopApberrelevantWerteByApberRelevant {
+      id
+      text
+    }
+    bekanntSeit
+    eigentuemer
+    kontakt
+    nutzungszone
+    bewirtschafter
+    bewirtschaftung
+    bemerkungen
+    statusUnklar
+    popByPopId {
+      apId
+    }
+  }
+  allPopStatusWertes {
+    nodes {
+      id
+      code
+      text
+      sort
+    }
+  }
+  allTpopApberrelevantWertes {
+    nodes {
+      id
+      code
+      text
+    }
+  }
+  allGemeindes {
+    nodes {
+      id
+      name
+    }
+  }
+}

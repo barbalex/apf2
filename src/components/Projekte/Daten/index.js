@@ -156,7 +156,9 @@ const Daten = ({
       <Popmassnber id={activeDataset.row.id} dimensions={dimensions} />
     ),
     popber: <Popber id={activeDataset.row.id} dimensions={dimensions} />,
-    tpop: <Tpop tree={tree} dimensions={dimensions} />,
+    tpop: (
+      <Tpop id={activeDataset.row.id} tree={tree} dimensions={dimensions} />
+    ),
     tpopber: <Tpopber id={activeDataset.row.id} dimensions={dimensions} />,
     tpopmassn: <Tpopmassn id={activeDataset.row.id} dimensions={dimensions} />,
     tpopmassnber: (
