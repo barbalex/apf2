@@ -156,30 +156,16 @@ const Daten = ({
     popber: <Popber tree={tree} dimensions={dimensions} />,
     tpop: <Tpop tree={tree} dimensions={dimensions} />,
     tpopber: <Tpopber tree={tree} dimensions={dimensions} />,
-    tpopmassn: (
-      <Tpopmassn
-        id={activeDataset.row.id}
-        tree={tree}
-        dimensions={dimensions}
-      />
-    ),
+    tpopmassn: <Tpopmassn id={activeDataset.row.id} dimensions={dimensions} />,
     tpopmassnber: <Tpopmassnber tree={tree} dimensions={dimensions} />,
     tpopfeldkontr: (
       <Tpopfeldkontr id={activeDataset.row.id} dimensions={dimensions} />
     ),
     tpopfreiwkontr: (
-      <Tpopfreiwkontr
-        id={activeDataset.row.id}
-        tree={tree}
-        dimensions={dimensions}
-      />
+      <Tpopfreiwkontr id={activeDataset.row.id} dimensions={dimensions} />
     ),
     tpopkontrzaehl: (
-      <Tpopkontrzaehl
-        id={activeDataset.row.id}
-        tree={tree}
-        dimensions={dimensions}
-      />
+      <Tpopkontrzaehl id={activeDataset.row.id} dimensions={dimensions} />
     ),
     exporte: <Exporte tree={tree} dimensions={dimensions} />,
     qk: <Qk tree={tree} />,

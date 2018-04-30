@@ -1,8 +1,6 @@
 // @flow
 import React from 'react'
-import { observer, inject } from 'mobx-react'
 import styled from 'styled-components'
-import compose from 'recompose/compose'
 import { Query, Mutation } from 'react-apollo'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
@@ -12,7 +10,7 @@ import RadioButtonGroup from '../../../shared/RadioButtonGroupGql'
 import AutoCompleteFromArray from '../../../shared/AutocompleteFromArrayGql'
 import TextField from '../../../shared/TextFieldGql'
 import AutoComplete from '../../../shared/AutocompleteGql'
-import RadioButton from '../../../shared/RadioButton'
+import RadioButton from '../../../shared/RadioButtonGql'
 import StringToCopy from '../../../shared/StringToCopy'
 import FormTitle from '../../../shared/FormTitle'
 import DateFieldWithPicker from '../../../shared/DateFieldWithPickerGql'
@@ -36,24 +34,17 @@ const FieldsContainer = styled.div`
       : 'auto'};
 `
 
-const enhance = compose(inject('store'), observer)
-
 const Tpopmassn = ({
   id,
-  store,
-  tree,
   onNewRequestWirtspflanze,
   onBlurWirtspflanze,
   dimensions = { width: 380 },
 }: {
   id: String,
-  store: Object,
-  tree: Object,
   onNewRequestWirtspflanze: () => void,
   onBlurWirtspflanze: () => void,
   dimensions: number,
 }) => {
-  const { activeDataset } = tree
   const width = isNaN(dimensions.width) ? 380 : dimensions.width
 
   return (
@@ -152,7 +143,7 @@ const Tpopmassn = ({
                       }
                     />
                     <AutoComplete
-                      key={`${activeDataset.row.id}bearbeiter`}
+                      key={`${row.id}bearbeiter`}
                       label="BearbeiterIn"
                       value={get(row, 'adresseByBearbeiter.name')}
                       objects={adressenWerte}
@@ -181,11 +172,17 @@ const Tpopmassn = ({
                       }
                     />
                     <RadioButton
-                      tree={tree}
-                      fieldName="plan_vorhanden"
+                      key={`${row.id}planVorhanden`}
                       label="Plan vorhanden"
-                      value={activeDataset.row.plan_vorhanden}
-                      updatePropertyInDb={store.updatePropertyInDb}
+                      value={row.planVorhanden}
+                      saveToDb={value =>
+                        updateTpopmassn({
+                          variables: {
+                            id,
+                            planVorhanden: value,
+                          },
+                        })
+                      }
                     />
                     <TextField
                       key={`${row.id}planBezeichnung`}
@@ -300,7 +297,7 @@ const Tpopmassn = ({
                       }
                     />
                     <AutoCompleteFromArray
-                      key={`${activeDataset.row.id}wirtspflanze`}
+                      key={`${row.id}wirtspflanze`}
                       label="Wirtspflanze"
                       value={row.wirtspflanze}
                       values={artWerte}
@@ -353,4 +350,4 @@ const Tpopmassn = ({
   )
 }
 
-export default enhance(Tpopmassn)
+export default Tpopmassn
