@@ -57,19 +57,6 @@ export default (store: Object): void => {
           .sort(),
       { name: 'dropdownListArtnamen' }
     ),
-    tpopEntwicklungWerte: computed(
-      () => {
-        let tpopEntwicklungWerte = Array.from(
-          store.table.tpop_entwicklung_werte.values()
-        )
-        tpopEntwicklungWerte = sortBy(tpopEntwicklungWerte, 'sort')
-        return tpopEntwicklungWerte.map(el => ({
-          value: el.code,
-          label: el.text,
-        }))
-      },
-      { name: 'dropdownListTpopEntwicklungWerte' }
-    ),
     apErfkritWerte: computed(
       () => {
         let apErfkritWerte = Array.from(store.table.ap_erfkrit_werte.values())

@@ -104,7 +104,6 @@ function Store(): void {
     apStati: [],
     artListForAp: [],
     artnamen: [],
-    tpopEntwicklungWerte: [],
     apErfkritWerte: [],
     zielTypWerte: [],
   }
