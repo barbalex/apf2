@@ -1,11 +1,12 @@
 // @flow
 import React, { Component } from 'react'
-import TextField from 'material-ui/TextField'
+import Input, { InputLabel } from 'material-ui/Input'
+import { FormControl } from 'material-ui/Form'
 import styled from 'styled-components'
 
 import InfoWithPopover from './InfoWithPopover'
 
-const StyledTextField = styled(TextField)`
+const StyledFormControl = styled(FormControl)`
   padding-bottom: 19px !important;
   > div:before {
     background-color: rgba(0, 0, 0, 0.1) !important;
@@ -74,23 +75,23 @@ class TextFieldGql extends Component<Props, State> {
     const { value } = this.state
 
     return (
-      <StyledTextField
-        id={label}
-        label={label}
-        value={value}
-        type={type}
-        multiline={multiLine}
-        onChange={this.handleChange}
-        onBlur={saveToDb}
-        placeholder={hintText}
-        disabled={disabled}
-        fullWidth
-        endAdornment={
-          <InfoWithPopover>
-            <PopoverContentRow>{popover}</PopoverContentRow>
-          </InfoWithPopover>
-        }
-      />
+      <StyledFormControl fullWidth disabled={disabled}>
+        <InputLabel htmlFor={label}>{label}</InputLabel>
+        <Input
+          id={label}
+          value={value}
+          type={type}
+          multiline={multiLine}
+          onChange={this.handleChange}
+          onBlur={saveToDb}
+          placeholder={hintText}
+          endAdornment={
+            <InfoWithPopover>
+              <PopoverContentRow>{popover}</PopoverContentRow>
+            </InfoWithPopover>
+          }
+        />
+      </StyledFormControl>
     )
   }
 }
