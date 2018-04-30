@@ -7,7 +7,7 @@ import { Query, Mutation } from 'react-apollo'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 
-import TextField from '../../../shared/TextField'
+import TextField from '../../../shared/TextFieldGql'
 import TextFieldWithInfo from '../../../shared/TextFieldWithInfo'
 import Status from '../../../shared/Status'
 import AutoCompleteFromArrayNew from '../../../shared/AutocompleteFromArray'
@@ -90,25 +90,31 @@ const Tpop = ({
                   <FieldsContainer data-width={width}>
                     <TextField
                       key={`${activeDataset.row.id}nr`}
-                      tree={tree}
                       label="Nr."
-                      fieldName="nr"
                       value={activeDataset.row.nr}
-                      errorText={activeDataset.valid.nr}
                       type="number"
-                      updateProperty={store.updateProperty}
-                      updatePropertyInDb={store.updatePropertyInDb}
+                      saveToDb={event =>
+                        updateTpop({
+                          variables: {
+                            id,
+                            nr: event.target.value,
+                          },
+                        })
+                      }
                     />
                     <TextFieldWithInfo
                       key={`${activeDataset.row.id}flurname`}
-                      tree={tree}
                       label="Flurname"
-                      fieldName="flurname"
                       value={activeDataset.row.flurname}
-                      errorText={activeDataset.valid.flurname}
                       type="text"
-                      updateProperty={store.updateProperty}
-                      updatePropertyInDb={store.updatePropertyInDb}
+                      saveToDb={event =>
+                        updateTpop({
+                          variables: {
+                            id,
+                            flurname: event.target.value,
+                          },
+                        })
+                      }
                       popover="Dieses Feld möglichst immer ausfüllen"
                     />
                     <Status
@@ -131,17 +137,19 @@ const Tpop = ({
                       updatePropertyInDb={store.updatePropertyInDb}
                     />
                     <TextField
-                      key={`${activeDataset.row.id}status_unklar_grund`}
-                      tree={tree}
+                      key={`${activeDataset.row.id}statusUnklarGrund`}
                       label="Begründung"
-                      fieldName="status_unklar_grund"
-                      value={activeDataset.row.status_unklar_grund}
-                      errorText={activeDataset.valid.status_unklar_grund}
+                      value={activeDataset.row.statusUnklarGrund}
                       type="text"
                       multiLine
-                      fullWidth
-                      updateProperty={store.updateProperty}
-                      updatePropertyInDb={store.updatePropertyInDb}
+                      saveToDb={event =>
+                        updateTpop({
+                          variables: {
+                            id,
+                            statusUnklarGrund: event.target.value,
+                          },
+                        })
+                      }
                     />
                     <RadioButtonGroupWithInfo
                       tree={tree}
@@ -154,25 +162,31 @@ const Tpop = ({
                     />
                     <TextField
                       key={`${activeDataset.row.id}x`}
-                      tree={tree}
                       label="X-Koordinaten"
-                      fieldName="x"
                       value={activeDataset.row.x}
-                      errorText={activeDataset.valid.x}
                       type="number"
-                      updateProperty={store.updateProperty}
-                      updatePropertyInDb={store.updatePropertyInDb}
+                      saveToDb={event =>
+                        updateTpop({
+                          variables: {
+                            id,
+                            x: event.target.value,
+                          },
+                        })
+                      }
                     />
                     <TextField
                       key={`${activeDataset.row.id}y`}
-                      tree={tree}
                       label="Y-Koordinaten"
-                      fieldName="y"
                       value={activeDataset.row.y}
-                      errorText={activeDataset.valid.y}
                       type="number"
-                      updateProperty={store.updateProperty}
-                      updatePropertyInDb={store.updatePropertyInDb}
+                      saveToDb={event =>
+                        updateTpop({
+                          variables: {
+                            id,
+                            y: event.target.value,
+                          },
+                        })
+                      }
                     />
                     <AutoCompleteFromArrayNew
                       key={`${activeDataset.row.id}gemeinde`}
@@ -186,148 +200,187 @@ const Tpop = ({
                     />
                     <TextField
                       key={`${activeDataset.row.id}radius`}
-                      tree={tree}
                       label="Radius (m)"
-                      fieldName="radius"
                       value={activeDataset.row.radius}
-                      errorText={activeDataset.valid.radius}
                       type="number"
-                      updateProperty={store.updateProperty}
-                      updatePropertyInDb={store.updatePropertyInDb}
+                      saveToDb={event =>
+                        updateTpop({
+                          variables: {
+                            id,
+                            radius: event.target.value,
+                          },
+                        })
+                      }
                     />
                     <TextField
                       key={`${activeDataset.row.id}hoehe`}
-                      tree={tree}
                       label="Höhe (m.ü.M.)"
-                      fieldName="hoehe"
                       value={activeDataset.row.hoehe}
-                      errorText={activeDataset.valid.hoehe}
                       type="number"
-                      updateProperty={store.updateProperty}
-                      updatePropertyInDb={store.updatePropertyInDb}
+                      saveToDb={event =>
+                        updateTpop({
+                          variables: {
+                            id,
+                            hoehe: event.target.value,
+                          },
+                        })
+                      }
                     />
                     <TextField
                       key={`${activeDataset.row.id}exposition`}
-                      tree={tree}
                       label="Exposition, Besonnung"
-                      fieldName="exposition"
                       value={activeDataset.row.exposition}
-                      errorText={activeDataset.valid.exposition}
                       type="text"
-                      updateProperty={store.updateProperty}
-                      updatePropertyInDb={store.updatePropertyInDb}
+                      saveToDb={event =>
+                        updateTpop({
+                          variables: {
+                            id,
+                            exposition: event.target.value,
+                          },
+                        })
+                      }
                     />
                     <TextField
                       key={`${activeDataset.row.id}klima`}
-                      tree={tree}
                       label="Klima"
-                      fieldName="klima"
                       value={activeDataset.row.klima}
-                      errorText={activeDataset.valid.klima}
                       type="text"
-                      updateProperty={store.updateProperty}
-                      updatePropertyInDb={store.updatePropertyInDb}
+                      saveToDb={event =>
+                        updateTpop({
+                          variables: {
+                            id,
+                            klima: event.target.value,
+                          },
+                        })
+                      }
                     />
                     <TextField
                       key={`${activeDataset.row.id}neigung`}
-                      tree={tree}
                       label="Hangneigung"
-                      fieldName="neigung"
                       value={activeDataset.row.neigung}
-                      errorText={activeDataset.valid.neigung}
                       type="text"
-                      updateProperty={store.updateProperty}
-                      updatePropertyInDb={store.updatePropertyInDb}
+                      saveToDb={event =>
+                        updateTpop({
+                          variables: {
+                            id,
+                            neigung: event.target.value,
+                          },
+                        })
+                      }
                     />
                     <TextField
                       key={`${activeDataset.row.id}beschreibung`}
-                      tree={tree}
                       label="Beschreibung"
-                      fieldName="beschreibung"
                       value={activeDataset.row.beschreibung}
-                      errorText={activeDataset.valid.beschreibung}
                       type="text"
                       multiline
-                      updateProperty={store.updateProperty}
-                      updatePropertyInDb={store.updatePropertyInDb}
+                      saveToDb={event =>
+                        updateTpop({
+                          variables: {
+                            id,
+                            beschreibung: event.target.value,
+                          },
+                        })
+                      }
                     />
                     <TextField
-                      key={`${activeDataset.row.id}kataster_nr`}
-                      tree={tree}
+                      key={`${activeDataset.row.id}katasterNr`}
                       label="Kataster-Nr."
-                      fieldName="kataster_nr"
-                      value={activeDataset.row.kataster_nr}
-                      errorText={activeDataset.valid.kataster_nr}
+                      value={activeDataset.row.katasterNr}
                       type="text"
-                      updateProperty={store.updateProperty}
-                      updatePropertyInDb={store.updatePropertyInDb}
+                      saveToDb={event =>
+                        updateTpop({
+                          variables: {
+                            id,
+                            katasterNr: event.target.value,
+                          },
+                        })
+                      }
                     />
                     <TextField
                       key={`${activeDataset.row.id}eigentuemer`}
-                      tree={tree}
                       label="EigentümerIn"
-                      fieldName="eigentuemer"
                       value={activeDataset.row.eigentuemer}
-                      errorText={activeDataset.valid.eigentuemer}
                       type="text"
-                      updateProperty={store.updateProperty}
-                      updatePropertyInDb={store.updatePropertyInDb}
+                      saveToDb={event =>
+                        updateTpop({
+                          variables: {
+                            id,
+                            eigentuemer: event.target.value,
+                          },
+                        })
+                      }
                     />
                     <TextField
                       key={`${activeDataset.row.id}kontakt`}
-                      tree={tree}
                       label="Kontakt vor Ort"
-                      fieldName="kontakt"
                       value={activeDataset.row.kontakt}
-                      errorText={activeDataset.valid.kontakt}
                       type="text"
-                      updateProperty={store.updateProperty}
-                      updatePropertyInDb={store.updatePropertyInDb}
+                      saveToDb={event =>
+                        updateTpop({
+                          variables: {
+                            id,
+                            kontakt: event.target.value,
+                          },
+                        })
+                      }
                     />
                     <TextField
                       key={`${activeDataset.row.id}nutzungszone`}
-                      tree={tree}
                       label="Nutzungszone"
-                      fieldName="nutzungszone"
                       value={activeDataset.row.nutzungszone}
-                      errorText={activeDataset.valid.nutzungszone}
                       type="text"
-                      updateProperty={store.updateProperty}
-                      updatePropertyInDb={store.updatePropertyInDb}
+                      saveToDb={event =>
+                        updateTpop({
+                          variables: {
+                            id,
+                            nutzungszone: event.target.value,
+                          },
+                        })
+                      }
                     />
                     <TextField
                       key={`${activeDataset.row.id}bewirtschafter`}
-                      tree={tree}
                       label="BewirtschafterIn"
-                      fieldName="bewirtschafter"
                       value={activeDataset.row.bewirtschafter}
-                      errorText={activeDataset.valid.bewirtschafter}
                       type="text"
-                      updateProperty={store.updateProperty}
-                      updatePropertyInDb={store.updatePropertyInDb}
+                      saveToDb={event =>
+                        updateTpop({
+                          variables: {
+                            id,
+                            bewirtschafter: event.target.value,
+                          },
+                        })
+                      }
                     />
                     <TextField
                       key={`${activeDataset.row.id}bewirtschaftung`}
-                      tree={tree}
                       label="Bewirtschaftung"
-                      fieldName="bewirtschaftung"
                       value={activeDataset.row.bewirtschaftung}
-                      errorText={activeDataset.valid.bewirtschaftung}
                       type="text"
-                      updateProperty={store.updateProperty}
-                      updatePropertyInDb={store.updatePropertyInDb}
+                      saveToDb={event =>
+                        updateTpop({
+                          variables: {
+                            id,
+                            bewirtschaftung: event.target.value,
+                          },
+                        })
+                      }
                     />
                     <TextField
                       key={`${activeDataset.row.id}bemerkungen`}
-                      tree={tree}
                       label="Bemerkungen"
-                      fieldName="bemerkungen"
                       value={activeDataset.row.bemerkungen}
-                      errorText={activeDataset.valid.bemerkungen}
                       type="text"
                       multiline
-                      updateProperty={store.updateProperty}
-                      updatePropertyInDb={store.updatePropertyInDb}
+                      saveToDb={event =>
+                        updateTpop({
+                          variables: {
+                            id,
+                            bemerkungen: event.target.value,
+                          },
+                        })
+                      }
                     />
                   </FieldsContainer>
                 )}
