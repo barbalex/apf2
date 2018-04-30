@@ -87,7 +87,7 @@ const enhance = compose(
 const Status = ({
   apJahr,
   herkunftValue,
-  bekanntSeitValue,
+  bekanntSeitStateValue,
   saveToDbBekanntSeit,
   saveToDbStatus,
   onChangeStatus,
@@ -96,7 +96,7 @@ const Status = ({
 }: {
   apJahr?: Number,
   herkunftValue?: Number,
-  bekanntSeitValue?: Number,
+  bekanntSeitStateValue: Number,
   saveToDbBekanntSeit: () => void,
   saveToDbStatus: () => void,
   onChangeStatus: () => void,
@@ -106,8 +106,8 @@ const Status = ({
   const valueSelected =
     herkunftValue !== null && herkunftValue !== undefined ? herkunftValue : ''
   const showNachBeginnAp =
-    !apJahr || !bekanntSeitValue || apJahr <= bekanntSeitValue
-  const disabled = !bekanntSeitValue && bekanntSeitValue !== 0
+    !apJahr || !bekanntSeitStateValue || apJahr <= bekanntSeitStateValue
+  const disabled = !bekanntSeitStateValue && bekanntSeitStateValue !== 0
 
   return (
     <div>
@@ -116,9 +116,7 @@ const Status = ({
           <InputLabel htmlFor="bekanntSeit">bekannt seit</InputLabel>
           <StyledInput
             id="bekanntSeit"
-            value={
-              bekanntSeitValue || bekanntSeitValue === 0 ? bekanntSeitValue : ''
-            }
+            value={bekanntSeitStateValue}
             type="number"
             onChange={onChangeBekanntSeit}
             onBlur={onBlurBekanntSeit}

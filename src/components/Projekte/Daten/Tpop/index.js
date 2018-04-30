@@ -112,11 +112,11 @@ const Tpop = ({
                       apJahr={apJahr}
                       herkunftValue={row.status}
                       bekanntSeitValue={row.bekanntSeit}
-                      saveToDbBekanntSeit={event =>
+                      saveToDbBekanntSeit={value =>
                         updateTpop({
                           variables: {
                             id,
-                            bekanntSeit: event.target.value,
+                            bekanntSeit: value,
                           },
                         })
                       }
