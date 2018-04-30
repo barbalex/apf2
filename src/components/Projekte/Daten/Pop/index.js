@@ -1,15 +1,17 @@
 // @flow
 import React from 'react'
-import { observer, inject } from 'mobx-react'
 import styled from 'styled-components'
-import compose from 'recompose/compose'
+import { Query, Mutation } from 'react-apollo'
+import get from 'lodash/get'
 
-import TextField from '../../../shared/TextField'
-import TextFieldWithInfo from '../../../shared/TextFieldWithInfo'
+import TextField from '../../../shared/TextFieldGql'
+import TextFieldWithInfo from '../../../shared/TextFieldWithInfoGql'
 import Status from '../../../shared/Status'
-import RadioButton from '../../../shared/RadioButton'
+import RadioButton from '../../../shared/RadioButtonGql'
 import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
+import popByIdGql from './popById.graphql'
+import updatePopByIdGql from './updatePopById.graphql'
 
 const Container = styled.div`
   height: 100%;
@@ -22,98 +24,140 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
-const enhance = compose(inject('store'), observer)
+const Pop = ({ id }: { id: String }) => (
+  <Query query={popByIdGql} variables={{ id }}>
+    {({ loading, error, data }) => {
+      if (loading)
+        return (
+          <Container>
+            <FieldsContainer>Lade...</FieldsContainer>
+          </Container>
+        )
+      if (error) return `Fehler: ${error.message}`
 
-const Pop = ({ store, tree }: { store: Object, tree: Object }) => {
-  const { activeDataset } = tree
-  const apTable = store.table.ap.get(activeDataset.row.id)
-  const apJahr = apTable ? apTable.start_jahr : null
+      const row = get(data, 'tpopById')
 
-  return (
-    <ErrorBoundary>
-      <Container>
-        <FormTitle tree={tree} title="Population" />
-        <FieldsContainer>
-          <TextField
-            key={`${activeDataset.row.id}nr`}
-            tree={tree}
-            label="Nr."
-            fieldName="nr"
-            value={activeDataset.row.nr}
-            errorText={activeDataset.valid.nr}
-            type="number"
-            updateProperty={store.updateProperty}
-            updatePropertyInDb={store.updatePropertyInDb}
-          />
-          <TextFieldWithInfo
-            key={`${activeDataset.row.id}name`}
-            tree={tree}
-            label="Name"
-            fieldName="name"
-            value={activeDataset.row.name}
-            errorText={activeDataset.valid.name}
-            type="text"
-            updateProperty={store.updateProperty}
-            updatePropertyInDb={store.updatePropertyInDb}
-            popover="Dieses Feld möglichst immer ausfüllen"
-          />
-          <Status
-            tree={tree}
-            apJahr={apJahr}
-            herkunftFieldName="status"
-            herkunftValue={activeDataset.row.status}
-            bekanntSeitFieldName="bekannt_seit"
-            bekanntSeitValue={activeDataset.row.bekannt_seit}
-            bekanntSeitValid={activeDataset.valid.bekannt_seit}
-            updateProperty={store.updateProperty}
-            updatePropertyInDb={store.updatePropertyInDb}
-          />
-          <RadioButton
-            tree={tree}
-            fieldName="status_unklar"
-            label="Status unklar"
-            value={activeDataset.row.status_unklar}
-            updatePropertyInDb={store.updatePropertyInDb}
-          />
-          <TextField
-            key={`${activeDataset.row.id}status_unklar_begruendung`}
-            tree={tree}
-            label="Begründung"
-            fieldName="status_unklar_begruendung"
-            value={activeDataset.row.status_unklar_begruendung}
-            errorText={activeDataset.valid.status_unklar_begruendung}
-            type="text"
-            multiLine
-            fullWidth
-            updateProperty={store.updateProperty}
-            updatePropertyInDb={store.updatePropertyInDb}
-          />
-          <TextField
-            key={`${activeDataset.row.id}x`}
-            tree={tree}
-            label="X-Koordinaten"
-            fieldName="x"
-            value={activeDataset.row.x}
-            errorText={activeDataset.valid.x}
-            type="number"
-            updateProperty={store.updateProperty}
-            updatePropertyInDb={store.updatePropertyInDb}
-          />
-          <TextField
-            key={`${activeDataset.row.id}y`}
-            tree={tree}
-            label="Y-Koordinaten"
-            fieldName="y"
-            value={activeDataset.row.y}
-            errorText={activeDataset.valid.y}
-            type="number"
-            updateProperty={store.updateProperty}
-            updatePropertyInDb={store.updatePropertyInDb}
-          />
-        </FieldsContainer>
-      </Container>
-    </ErrorBoundary>
-  )
-}
+      return (
+        <ErrorBoundary>
+          <Container>
+            <FormTitle apId={get(data, 'popById.apId')} title="Population" />
+            <Mutation mutation={updatePopByIdGql}>
+              {(updatePop, { data }) => (
+                <FieldsContainer>
+                  <TextField
+                    key={`${row.id}nr`}
+                    label="Nr."
+                    value={row.nr}
+                    type="number"
+                    saveToDb={event =>
+                      updatePop({
+                        variables: {
+                          id,
+                          nr: event.target.value,
+                        },
+                      })
+                    }
+                  />
+                  <TextFieldWithInfo
+                    key={`${row.id}name`}
+                    label="Name"
+                    value={row.name}
+                    type="text"
+                    saveToDb={event =>
+                      updatePop({
+                        variables: {
+                          id,
+                          name: event.target.value,
+                        },
+                      })
+                    }
+                    popover="Dieses Feld möglichst immer ausfüllen"
+                  />
+                  <Status
+                    apJahr={get(data, 'tpopById.apByApId.startJahr')}
+                    herkunftValue={row.status}
+                    bekanntSeitValue={row.bekanntSeit}
+                    saveToDbBekanntSeit={value =>
+                      updatePop({
+                        variables: {
+                          id,
+                          bekanntSeit: value,
+                        },
+                      })
+                    }
+                    saveToDbStatus={value =>
+                      updatePop({
+                        variables: {
+                          id,
+                          status: value,
+                        },
+                      })
+                    }
+                  />
+                  <RadioButton
+                    key={`${row.id}statusUnklar`}
+                    label="Status unklar"
+                    value={row.statusUnklar}
+                    saveToDb={value =>
+                      updatePop({
+                        variables: {
+                          id,
+                          statusUnklar: value,
+                        },
+                      })
+                    }
+                  />
+                  <TextField
+                    key={`${row.id}statusUnklarBegruendung`}
+                    label="Begründung"
+                    value={row.statusUnklarBegruendung}
+                    type="text"
+                    multiLine
+                    saveToDb={event =>
+                      updatePop({
+                        variables: {
+                          id,
+                          statusUnklarBegruendung: event.target.value,
+                        },
+                      })
+                    }
+                  />
+                  <TextField
+                    key={`${row.id}x`}
+                    label="X-Koordinaten"
+                    value={row.x}
+                    type="number"
+                    saveToDb={event =>
+                      updatePop({
+                        variables: {
+                          id,
+                          x: event.target.value,
+                        },
+                      })
+                    }
+                  />
+                  <TextField
+                    key={`${row.id}y`}
+                    label="Y-Koordinaten"
+                    value={row.y}
+                    type="number"
+                    saveToDb={event =>
+                      updatePop({
+                        variables: {
+                          id,
+                          y: event.target.value,
+                        },
+                      })
+                    }
+                  />
+                </FieldsContainer>
+              )}
+            </Mutation>
+          </Container>
+        </ErrorBoundary>
+      )
+    }}
+  </Query>
+)
 
-export default enhance(Pop)
+export default Pop
