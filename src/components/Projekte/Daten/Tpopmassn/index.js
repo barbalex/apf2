@@ -1,11 +1,11 @@
 // @flow
 import React from 'react'
 import { observer, inject } from 'mobx-react'
-import AutoCompleteFromArrayNew from '../../shared/AutocompleteFromArray'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroup'
+import AutoCompleteFromArrayNew from '../../../shared/AutocompleteFromArray'
 import TextField from '../../../shared/TextField'
 import AutoComplete from '../../../shared/Autocomplete'
 import RadioButton from '../../../shared/RadioButton'
