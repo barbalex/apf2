@@ -31,17 +31,13 @@ const enhance = compose(
       // if clicked element is active value: set null
       // Problem: does not work on change event on RadioGroup
       // Solution: do this in click event of button
-      const valueClicked =
-        event.target.value && !isNaN(event.target.value)
-          ? +event.target.value
-          : event.target.value
-      // eslint-disable-next-line eqeqeq
-      if (valueClicked == value) {
+      const newValue = event.target.value === 'true'
+      if (newValue === value) {
         // an already active option was clicked
         // set value null
         return saveToDb(null)
       }
-      saveToDb(valueClicked)
+      saveToDb(newValue)
     },
   })
 )

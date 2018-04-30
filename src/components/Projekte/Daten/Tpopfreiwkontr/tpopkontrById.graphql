@@ -1,0 +1,35 @@
+query tpopkontrByIdQuery($id: UUID!) {
+  tpopkontrById(id: $id) {
+    id
+    typ
+    datum
+    jahr
+    bemerkungen
+    flaecheUeberprueft
+    deckungVegetation
+    deckungNackterBoden
+    deckungApArt
+    vegetationshoeheMaximum
+    vegetationshoeheMittel
+    gefaehrdung
+    tpopId
+    bearbeiter
+    adresseByBearbeiter {
+      id
+      name
+    }
+    planVorhanden
+    jungpflanzenVorhanden
+    tpopByTpopId {
+      popByPopId {
+        apId
+      }
+    }
+  }
+  allAdresses {
+    nodes {
+      id
+      name
+    }
+  }
+}

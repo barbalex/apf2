@@ -110,6 +110,7 @@ const Tpopfeldkontr = ({
             </Container>
           )
         if (error) return `Fehler: ${error.message}`
+
         const row = get(data, 'tpopkontrById')
         let adressenWerte = get(data, 'allAdresses.nodes', [])
         adressenWerte = sortBy(adressenWerte, 'name')

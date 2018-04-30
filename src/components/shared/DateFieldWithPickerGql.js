@@ -41,11 +41,10 @@ class MyDatePicker extends Component<Props, State> {
   }
 
   handleChange = value => {
-    if (!value || value === '0') {
-      this.props.saveToDb(null)
-      this.setState({ value: null })
-      return
-    }
+    /**
+     * change happens when data is picked in picker
+     * so is never null
+     */
     const newValue = format(value, 'YYYY-MM-DD')
     this.props.saveToDb(newValue)
     this.setState({ value: newValue })
@@ -54,16 +53,18 @@ class MyDatePicker extends Component<Props, State> {
   handleBlur = event => {
     const { saveToDb } = this.props
     const { value } = event.target
-    if (!value || value === '0') {
-      // avoid creating an invalid date
-      saveToDb(null)
-    } else {
-      // write a real date to db
-      const date = new Date(convertDateToYyyyMmDd(value))
-      const newValue = format(date, 'YYYY-MM-DD')
-      saveToDb(newValue)
-      this.setState({ value: newValue })
-    }
+    // do not change anything of there are no values
+    if (this.props.value === null && value === '') return
+
+    // avoid creating an invalid date which happens
+    // when falsy values are passed
+    if (!value || value === '0') return saveToDb(null)
+
+    // write a real date to db
+    const date = new Date(convertDateToYyyyMmDd(value))
+    const newValue = format(date, 'YYYY-MM-DD')
+    saveToDb(newValue)
+    this.setState({ value: newValue })
   }
 
   render() {
