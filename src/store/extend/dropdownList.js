@@ -114,19 +114,6 @@ export default (store: Object): void => {
       },
       { name: 'dropdownListGemeinden' }
     ),
-    tpopMassnTypWerte: computed(
-      () => {
-        let tpopMassnTypWerte = Array.from(
-          store.table.tpopmassn_typ_werte.values()
-        )
-        tpopMassnTypWerte = sortBy(tpopMassnTypWerte, 'sort')
-        return tpopMassnTypWerte.map(el => ({
-          value: el.code,
-          label: el.text,
-        }))
-      },
-      { name: 'dropdownListTpopMassnTypWerte' }
-    ),
     zielTypWerte: computed(
       () => {
         let zielTypWerte = Array.from(store.table.ziel_typ_werte.values())

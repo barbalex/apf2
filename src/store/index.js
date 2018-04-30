@@ -109,11 +109,6 @@ function Store(): void {
     tpopmassnErfbeurtWerte: [],
     tpopApBerichtRelevantWerte: [],
     gemeinden: [],
-    idbiotopuebereinstWerte: [],
-    lr: [],
-    zaehleinheitWerte: [],
-    methodeWerte: [],
-    tpopMassnTypWerte: [],
     zielTypWerte: [],
   }
   this.ui = {}
