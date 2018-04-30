@@ -35,7 +35,7 @@ const Pop = ({ id }: { id: String }) => (
         )
       if (error) return `Fehler: ${error.message}`
 
-      const row = get(data, 'tpopById')
+      const row = get(data, 'popById')
 
       return (
         <ErrorBoundary>
