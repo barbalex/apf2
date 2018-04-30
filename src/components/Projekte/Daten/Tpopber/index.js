@@ -4,10 +4,10 @@ import { observer, inject } from 'mobx-react'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
 
-import RadioButtonGroup from '../../shared/RadioButtonGroup'
-import TextField from '../../shared/TextField'
-import FormTitle from '../../shared/FormTitle'
-import ErrorBoundary from '../../shared/ErrorBoundary'
+import RadioButtonGroup from '../../../shared/RadioButtonGroup'
+import TextField from '../../../shared/TextField'
+import FormTitle from '../../../shared/FormTitle'
+import ErrorBoundary from '../../../shared/ErrorBoundary'
 
 const Container = styled.div`
   height: 100%;
