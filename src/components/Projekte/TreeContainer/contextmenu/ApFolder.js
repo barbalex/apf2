@@ -7,7 +7,7 @@ import ErrorBoundary from '../../../shared/ErrorBoundary'
 const Apfolder = ({ onClick, tree }: { onClick: () => void, tree: Object }) => (
   <ErrorBoundary>
     <ContextMenu id={`${tree.name}apFolder`}>
-      <div className="react-contextmenu-title">Art</div>
+      <div className="react-contextmenu-title">Aktionsplan</div>
       <MenuItem
         onClick={onClick}
         data={{
@@ -15,7 +15,7 @@ const Apfolder = ({ onClick, tree }: { onClick: () => void, tree: Object }) => (
           table: 'ap',
         }}
       >
-        erstelle neue
+        erstelle neuen
       </MenuItem>
       <MenuItem
         onClick={onClick}

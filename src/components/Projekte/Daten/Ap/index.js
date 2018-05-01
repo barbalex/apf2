@@ -10,6 +10,7 @@ import updateApByIdGql from './updateApById.graphql'
 import AutoComplete from '../../../shared/AutocompleteGql'
 import RadioButtonGroupWithInfo from '../../../shared/RadioButtonGroupWithInfoGql'
 import TextField from '../../../shared/TextFieldGql'
+import TextFieldNonUpdatable from '../../../shared/TextFieldNonUpdatable'
 import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 
@@ -220,7 +221,7 @@ const Ap = ({ id }: { id: String }) => (
                     }
                     openabove
                   />
-                  <TextField
+                  <TextFieldNonUpdatable
                     key={`${row.id}artwert`}
                     label="Artwert"
                     value={get(
@@ -228,8 +229,6 @@ const Ap = ({ id }: { id: String }) => (
                       'aeEigenschaftenByArtId.artwert',
                       'Diese Art hat keinen Artwert'
                     )}
-                    type="text"
-                    saveToDb={event => console.log('nope')}
                   />
                 </FieldsContainer>
               )}

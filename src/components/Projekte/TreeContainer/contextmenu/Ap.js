@@ -22,7 +22,7 @@ const Ap = ({
   return (
     <ErrorBoundary>
       <ContextMenu id={`${tree.name}ap`}>
-        <div className="react-contextmenu-title">Art</div>
+        <div className="react-contextmenu-title">Aktionsplan</div>
         <MenuItem
           onClick={onClick}
           data={{
@@ -30,7 +30,7 @@ const Ap = ({
             table: 'ap',
           }}
         >
-          erstelle neue
+          erstelle neuen
         </MenuItem>
         <MenuItem
           onClick={onClick}

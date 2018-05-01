@@ -48,7 +48,7 @@ const DownloadCardButton = styled(Button)`
 
 const enhance = compose(withState('expanded', 'setExpanded', false))
 
-const Art = ({
+const AP = ({
   expanded,
   setExpanded,
   downloadFromView,
@@ -62,7 +62,7 @@ const Art = ({
       disableActionSpacing
       onClick={() => setExpanded(!expanded)}
     >
-      <CardActionTitle>Art</CardActionTitle>
+      <CardActionTitle>Aktionsplan</CardActionTitle>
       <CardActionIconButton
         data-expanded={expanded}
         aria-expanded={expanded}
@@ -201,4 +201,4 @@ const Art = ({
   </StyledCard>
 )
 
-export default enhance(Art)
+export default enhance(AP)
