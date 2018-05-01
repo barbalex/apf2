@@ -6,12 +6,12 @@ import sortBy from 'lodash/sortBy'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 
-import FormTitle from '../../shared/FormTitle'
-import TextField from '../../shared/TextField'
-import CheckboxWithInfo from '../../shared/CheckboxWithInfo'
-import AutoComplete from '../../shared/Autocomplete'
-import Beob from './Beob'
-import ErrorBoundary from '../../shared/ErrorBoundary'
+import FormTitle from '../../../shared/FormTitle'
+import TextField from '../../../shared/TextField'
+import CheckboxWithInfo from '../../../shared/CheckboxWithInfo'
+import AutoComplete from '../../../shared/Autocomplete'
+import Beob from '../Beob'
+import ErrorBoundary from '../../../shared/ErrorBoundary'
 
 const Container = styled.div`
   height: 100%;
@@ -158,11 +158,13 @@ const enhance = compose(
 )
 
 const Beobzuordnung = ({
+  id,
   store,
   tree,
   updatePropertyInDb,
   dimensions = { width: 380 },
 }: {
+  id: String,
   store: Object,
   tree: Object,
   updatePropertyInDb: () => void,
