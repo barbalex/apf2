@@ -1,0 +1,8 @@
+query apberuebersichtByIdQuery($id: UUID!) {
+  apberuebersichtById(id: $id) {
+    id
+    projId
+    jahr
+    bemerkungen
+  }
+}
