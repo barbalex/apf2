@@ -1,9 +1,6 @@
 // @flow
 import React, { Fragment } from 'react'
-import { observer, inject } from 'mobx-react'
 import styled from 'styled-components'
-import compose from 'recompose/compose'
-import withProps from 'recompose/withProps'
 import { Query, Mutation } from 'react-apollo'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
@@ -57,66 +54,7 @@ const LabelPopoverRowColumnRight = styled.div`
   padding-left: 5px;
 `
 
-const getBearbName = ({ store, tree }: { store: Object, tree: Object }) => {
-  const { adressen } = store.dropdownList
-  const { activeDataset } = tree
-  let name = ''
-  if (row.bearbeiter && adressen.length > 0) {
-    const adresse = adressen.find(a => a.id === row.bearbeiter)
-    if (adresse && adresse.name) return adresse.name
-  }
-  return name
-}
-
-const enhance = compose(
-  inject('store'),
-  withProps(props => {
-    const { store } = props
-    const { updateProperty, updatePropertyInDb, table, tree } = store
-    const { activeDataset, activeNodes } = tree
-    const { ae_eigenschaften, ap } = table
-    let artwert = 'Diese Art hat keinen Artwert'
-    let artname = ''
-    if (activeNodes.ap && ae_eigenschaften.size > 0) {
-      const apArt = ap.get(activeNodes.ap).art_id
-      const ae = ae_eigenschaften.get(apArt)
-      if (ae && ae.artwert) {
-        artwert = ae.artwert
-      }
-      if (ae && ae.artname) {
-        artname = ae.artname
-      }
-    }
-    return {
-      artwert,
-      artname,
-      activeDataset,
-      updateProperty,
-      updatePropertyInDb,
-    }
-  }),
-  observer
-)
-
-const Ap = ({
-  id,
-  store,
-  tree,
-  activeDataset,
-  updateProperty,
-  updatePropertyInDb,
-  artwert,
-  artname,
-}: {
-  id: String,
-  store: Object,
-  tree: Object,
-  activeDataset: Object,
-  updateProperty: () => void,
-  updatePropertyInDb: () => void,
-  artwert?: number,
-  artname?: string,
-}) => (
+const Ap = ({ id }: { id: String }) => (
   <Query query={apByIdGql} variables={{ id }}>
     {({ loading, error, data }) => {
       if (loading)
@@ -146,19 +84,31 @@ const Ap = ({
         id: el.id,
         value: el.name,
       }))
+      // list all ap-Arten BUT the active one
+      const apArten = get(data, 'allAps.nodes', [])
+        .filter(o => o.id !== id)
+        .map(o => o.artId)
+      let artWerte = get(data, 'allAeEigenschaftens.nodes', [])
+      // filter ap arten but the active one
+      artWerte = artWerte.filter(o => !apArten.includes(o.id))
+      artWerte = sortBy(artWerte, 'artname')
+      artWerte = artWerte.map(el => ({
+        id: el.id,
+        value: el.artname,
+      }))
 
       return (
         <ErrorBoundary>
           <Container>
-            <FormTitle apId={id} title="Art" />
+            <FormTitle apId={id} title="Aktionsplan" />
             <Mutation mutation={updateApByIdGql}>
               {(updateAp, { data }) => (
                 <FieldsContainer>
                   <AutoComplete
                     key={`${row.id}artId`}
                     label="Art (gibt dem Aktionsplan den Namen)"
-                    value={artname}
-                    objects={store.dropdownList.artListForAp}
+                    value={get(row, 'aeEigenschaftenByArtId.artname', '')}
+                    objects={artWerte}
                     saveToDb={value =>
                       updateAp({
                         variables: {
@@ -212,7 +162,7 @@ const Ap = ({
                       updateAp({
                         variables: {
                           id,
-                          startJahr: event.target.value,
+                          startJahr: +event.target.value || null,
                         },
                       })
                     }
@@ -258,7 +208,7 @@ const Ap = ({
                   <AutoComplete
                     key={`${row.id}bearbeiter`}
                     label="Verantwortlich"
-                    value={get(data, 'apById.adresseByBearbeiter.name', null)}
+                    value={get(row, 'adresseByBearbeiter.name', null)}
                     objects={adressenWerte}
                     saveToDb={value =>
                       updateAp({
@@ -270,6 +220,17 @@ const Ap = ({
                     }
                     openabove
                   />
+                  <TextField
+                    key={`${row.id}artwert`}
+                    label="Artwert"
+                    value={get(
+                      row,
+                      'aeEigenschaftenByArtId.artwert',
+                      'Diese Art hat keinen Artwert'
+                    )}
+                    type="text"
+                    saveToDb={event => console.log('nope')}
+                  />
                 </FieldsContainer>
               )}
             </Mutation>
@@ -280,4 +241,4 @@ const Ap = ({
   </Query>
 )
 
-export default enhance(Ap)
+export default Ap

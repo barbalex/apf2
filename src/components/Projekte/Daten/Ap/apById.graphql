@@ -39,4 +39,16 @@ query apByIdQuery($id: UUID!) {
       name
     }
   }
+  allAeEigenschaftens {
+    nodes {
+      id
+      artname
+    }
+  }
+  allAps {
+    nodes {
+      id
+      artId
+    }
+  }
 }

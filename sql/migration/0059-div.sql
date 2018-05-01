@@ -17,3 +17,15 @@ ALTER TABLE apflora.ap
     REFERENCES apflora.adresse (id) MATCH SIMPLE
     ON UPDATE CASCADE
     ON DELETE SET NULL;
+
+
+ALTER TABLE apflora.ap DROP CONSTRAINT ap_id_key cascade;
+
+ALTER TABLE apflora.apart ADD CONSTRAINT apart_ap_id_fkey FOREIGN KEY (ap_id) REFERENCES apflora.ap (id) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE apflora.apber ADD CONSTRAINT apber_ap_id_fkey FOREIGN KEY (ap_id) REFERENCES apflora.ap (id) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE apflora.assozart ADD CONSTRAINT assozart_ap_id_fkey FOREIGN KEY (ap_id) REFERENCES apflora.ap (id) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE apflora.ber ADD CONSTRAINT ber_ap_id_fkey FOREIGN KEY (ap_id) REFERENCES apflora.ap (id) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE apflora.erfkrit ADD CONSTRAINT erfkrit_ap_id_fkey FOREIGN KEY (ap_id) REFERENCES apflora.ap (id) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE apflora.idealbiotop ADD CONSTRAINT idealbiotop_ap_id_fkey FOREIGN KEY (ap_id) REFERENCES apflora.ap (id) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE apflora.pop ADD CONSTRAINT pop_ap_id_fkey FOREIGN KEY (ap_id) REFERENCES apflora.ap (id) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE apflora.ziel ADD CONSTRAINT ziel_ap_id_fkey FOREIGN KEY (ap_id) REFERENCES apflora.ap (id) ON DELETE CASCADE ON UPDATE CASCADE;
