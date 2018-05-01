@@ -1,0 +1,17 @@
+query apartByIdQuery($id: UUID!) {
+  apartById(id: $id) {
+    id
+    apId
+    artId
+    aeEigenschaftenByArtId {
+      id
+      artname
+    }
+  }
+  allAeEigenschaftens {
+    nodes {
+      id
+      artname
+    }
+  }
+}

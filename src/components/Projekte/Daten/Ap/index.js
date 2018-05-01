@@ -4,8 +4,6 @@ import styled from 'styled-components'
 import { Query, Mutation } from 'react-apollo'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
-import apByIdGql from './apById.graphql'
-import updateApByIdGql from './updateApById.graphql'
 
 import AutoComplete from '../../../shared/AutocompleteGql'
 import RadioButtonGroupWithInfo from '../../../shared/RadioButtonGroupWithInfoGql'
@@ -13,6 +11,8 @@ import TextField from '../../../shared/TextFieldGql'
 import TextFieldNonUpdatable from '../../../shared/TextFieldNonUpdatable'
 import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
+import apByIdGql from './apById.graphql'
+import updateApByIdGql from './updateApById.graphql'
 
 const Container = styled.div`
   height: 100%;

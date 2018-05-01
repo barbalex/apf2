@@ -1,13 +1,15 @@
 // @flow
 import React from 'react'
-import { observer, inject } from 'mobx-react'
 import sortBy from 'lodash/sortBy'
 import styled from 'styled-components'
-import compose from 'recompose/compose'
+import { Query, Mutation } from 'react-apollo'
+import get from 'lodash/get'
 
-import AutoComplete from '../../../shared/Autocomplete'
+import AutoComplete from '../../../shared/AutocompleteGql'
 import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
+import apartByIdGql from './apartById.graphql'
+import updateApartByIdGql from './updateApartById.graphql'
 
 const Container = styled.div`
   height: 100%;
@@ -20,87 +22,89 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
-const enhance = compose(inject('store'), observer)
+const ApArt = ({ id }: { id: String }) => (
+  <Query query={apartByIdGql} variables={{ id }}>
+    {({ loading, error, data }) => {
+      if (loading)
+        return (
+          <Container>
+            <FieldsContainer>Lade...</FieldsContainer>
+          </Container>
+        )
+      if (error) return `Fehler: ${error.message}`
 
-const getArtList = ({ store, tree }: { store: Object, tree: Object }) => {
-  const { ae_eigenschaften } = store.table
-  // do not show any art_id's that have been used
-  // turned off because some species have already been worked as separate ap
-  // because apart did not exist...
-  /*
-  const apArtIdsNotToShow = Array.from(store.table.apart.values()).map(
-    v => v.art_id
-  )*/
-  const artList = Array.from(ae_eigenschaften.values()).map(a => ({
-    id: a.id,
-    value: a.artname,
-  }))
-  return sortBy(artList, 'value')
-}
+      const row = get(data, 'apartById')
+      // do not show any artId's that have been used?
+      // Nope: because some species have already been worked as separate ap
+      // because apart did not exist...
+      // maybe do later
+      let artWerte = get(data, 'allAeEigenschaftens.nodes', [])
+      artWerte = sortBy(artWerte, 'artname')
+      artWerte = artWerte.map(el => ({
+        id: el.id,
+        value: el.artname,
+      }))
 
-const getArtname = ({ store, tree }: { store: Object, tree: Object }) => {
-  const { ae_eigenschaften } = store.table
-  const { activeDataset } = tree
-  let name = ''
-  if (activeDataset.row.art_id && ae_eigenschaften.size > 0) {
-    name = ae_eigenschaften.get(activeDataset.row.art_id).artname
-  }
-  return name
-}
+      return (
+        <ErrorBoundary>
+          <Container>
+            <FormTitle apId={row.apId} title="Aktionsplan-Art" />
+            <Mutation mutation={updateApartByIdGql}>
+              {(updateApart, { data }) => (
+                <FieldsContainer>
+                  <div>
+                    "Aktionsplan-Arten" sind alle Arten, welche der Aktionsplan
+                    behandelt. Häufig dürfte das bloss eine einzige Art sein.
+                    Folgende Gründe können dazu führen, dass hier mehrere
+                    aufgelistet werden:
+                    <ul>
+                      <li>Die AP-Art hat Synonyme</li>
+                      <li>
+                        Beobachtungen liegen in unterschiedlichen Taxonomien
+                        vor, z.B. SISF 2 und SISF 3 bzw. Checklist 2017
+                      </li>
+                      <li>
+                        Wenn eine Art im Rahmen des Aktionsplans inklusive nicht
+                        synonymer aber eng verwandter Arten gefasst wid (z.B.
+                        Unterarten)
+                      </li>
+                    </ul>
+                  </div>
+                  <div>
+                    Beobachtungen aller AP-Arten stehen im Ordner "Beobachtungen
+                    nicht beurteilt" zur Verfügung und können Teilpopulationen
+                    zugeordnet werden.<br />
+                    <br />
+                  </div>
+                  <div>
+                    Die im Aktionsplan gewählte namensgebende Art gibt dem
+                    Aktionsplan nicht nur den Namen. Unter ihrer id werden auch
+                    die Kontrollen an InfoFlora geliefert.<br />
+                    <br />
+                  </div>
+                  <AutoComplete
+                    key={`${row.id}artId`}
+                    label="Art"
+                    value={get(row, 'aeEigenschaftenByArtId.artname', '')}
+                    objects={artWerte}
+                    saveToDb={value =>
+                      updateApart({
+                        variables: {
+                          id,
+                          artId: value,
+                        },
+                      })
+                    }
+                    openabove
+                  />
+                </FieldsContainer>
+              )}
+            </Mutation>
+          </Container>
+        </ErrorBoundary>
+      )
+    }}
+  </Query>
+)
 
-const ApArt = ({ store, tree }: { store: Object, tree: Object }) => {
-  const { activeDataset } = tree
-
-  return (
-    <ErrorBoundary>
-      <Container>
-        <FormTitle tree={tree} title="Aktionsplan-Art" />
-        <FieldsContainer>
-          <div>
-            "Aktionsplan-Arten" sind alle Arten, welche der Aktionsplan
-            behandelt. Häufig dürfte das bloss eine einzige Art sein. Folgende
-            Gründe können dazu führen, dass hier mehrere aufgelistet werden:
-            <ul>
-              <li>Die AP-Art hat Synonyme</li>
-              <li>
-                Wenn eine Art im Rahmen des Aktionsplans inklusive nicht
-                synonymer aber eng verwandter Arten gefasst wid (z.B.
-                Unterarten)
-              </li>
-            </ul>
-          </div>
-          <div>
-            Beobachtungen aller AP-Arten stehen im Ordner "Beobachtungen nicht
-            beurteilt" zur Verfügung und können Teilpopulationen zugeordnet
-            werden.<br />
-            <br />
-          </div>
-          <div>
-            Die im Aktionsplan gewählte namensgebende Art gibt dem Aktionsplan
-            nicht nur den Namen. Unter ihrer id werden auch die Kontrollen an
-            InfoFlora geliefert.<br />
-            <br />
-          </div>
-          <AutoComplete
-            key={`${activeDataset.row.id}art_id`}
-            tree={tree}
-            label="Art"
-            fieldName="art_id"
-            value={getArtname({
-              store,
-              tree,
-            })}
-            objects={getArtList({
-              store,
-              tree,
-            })}
-            updatePropertyInDb={store.updatePropertyInDb}
-            openabove
-          />
-        </FieldsContainer>
-      </Container>
-    </ErrorBoundary>
-  )
-}
-
-export default enhance(ApArt)
+export default ApArt
