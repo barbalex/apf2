@@ -5,14 +5,6 @@ import sortBy from 'lodash/sortBy'
 
 export default (store: Object): void => {
   extendObservable(store.dropdownList, {
-    adressen: computed(
-      () =>
-        sortBy(Array.from(store.table.adresse.values()), 'name').map(o => ({
-          id: o.id,
-          value: o.name,
-        })),
-      { name: 'dropdownListAdressen' }
-    ),
     apErfkritWerte: computed(
       () => {
         let apErfkritWerte = Array.from(store.table.ap_erfkrit_werte.values())

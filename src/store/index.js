@@ -99,7 +99,6 @@ function Store(): void {
     toggleFileType: () => {},
   }
   this.dropdownList = {
-    adressen: [],
     apErfkritWerte: [],
     zielTypWerte: [],
   }

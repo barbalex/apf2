@@ -1,0 +1,46 @@
+query apberByIdQuery($id: UUID!) {
+  apberById(id: $id) {
+    id
+    jahr
+    situation
+    vergleichVorjahrGesamtziel
+    beurteilung
+    veraenderungZumVorjahr
+    apberAnalyse
+    konsequenzenUmsetzung
+    konsequenzenErfolgskontrolle
+    biotopeNeue
+    biotopeOptimieren
+    massnahmenOptimieren
+    wirkungAufArt
+    datum
+    massnahmenApBearb
+    massnahmenPlanungVsAusfuehrung
+    apId
+    bearbeiter
+    apErfkritWerteByBeurteilung {
+      id
+      code
+      text
+      sort
+    }
+    adresseByBearbeiter {
+      id
+      name
+    }
+  }
+  allApErfkritWertes {
+    nodes {
+      id
+      code
+      text
+      sort
+    }
+  }
+  allAdresses {
+    nodes {
+      id
+      name
+    }
+  }
+}
