@@ -100,8 +100,6 @@ function Store(): void {
   }
   this.dropdownList = {
     adressen: [],
-    apUmsetzungen: [],
-    apStati: [],
     artListForAp: [],
     artnamen: [],
     apErfkritWerte: [],

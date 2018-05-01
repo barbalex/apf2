@@ -13,28 +13,6 @@ export default (store: Object): void => {
         })),
       { name: 'dropdownListAdressen' }
     ),
-    apUmsetzungen: computed(
-      () => {
-        let apUmsetzungen = Array.from(store.table.ap_umsetzung_werte.values())
-        apUmsetzungen = sortBy(apUmsetzungen, 'sort')
-        return apUmsetzungen.map(el => ({
-          value: el.code,
-          label: el.text,
-        }))
-      },
-      { name: 'dropdownListApUmsetzungen' }
-    ),
-    apStati: computed(
-      () => {
-        let apStati = Array.from(store.table.ap_bearbstand_werte.values())
-        apStati = sortBy(apStati, 'sort')
-        return apStati.map(el => ({
-          value: el.code,
-          label: el.text,
-        }))
-      },
-      { name: 'dropdownListApStati' }
-    ),
     artListForAp: computed(
       () => {
         const aps = Array.from(store.table.ap.values())

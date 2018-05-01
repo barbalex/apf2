@@ -11,3 +11,9 @@ ALTER TABLE apflora.pop DROP CONSTRAINT pop_id_key cascade;
 ALTER TABLE apflora.popber ADD CONSTRAINT popber_pop_id_fkey FOREIGN KEY (pop_id) REFERENCES apflora.pop (id) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE apflora.popmassnber ADD CONSTRAINT popmassnber_pop_id_fkey FOREIGN KEY (pop_id) REFERENCES apflora.pop (id) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE apflora.tpop ADD CONSTRAINT tpop_pop_id_fkey FOREIGN KEY (pop_id) REFERENCES apflora.pop (id) ON DELETE CASCADE ON UPDATE CASCADE;
+
+ALTER TABLE apflora.ap
+    ADD CONSTRAINT ap_fk_adresse FOREIGN KEY (bearbeiter)
+    REFERENCES apflora.adresse (id) MATCH SIMPLE
+    ON UPDATE CASCADE
+    ON DELETE SET NULL;

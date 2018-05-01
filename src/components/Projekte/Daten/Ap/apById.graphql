@@ -6,6 +6,10 @@ query apByIdQuery($id: UUID!) {
     umsetzung
     artId
     bearbeiter
+    adresseByBearbeiter {
+      id
+      name
+    }
     projId
     aeEigenschaftenByArtId {
       id

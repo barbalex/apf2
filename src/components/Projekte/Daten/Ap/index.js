@@ -10,9 +10,9 @@ import sortBy from 'lodash/sortBy'
 import apByIdGql from './apById.graphql'
 import updateApByIdGql from './updateApById.graphql'
 
-import AutoComplete from '../../../shared/Autocomplete'
-import RadioButtonGroupWithInfo from '../../../shared/RadioButtonGroupWithInfo'
-import TextField from '../../../shared/TextField'
+import AutoComplete from '../../../shared/AutocompleteGql'
+import RadioButtonGroupWithInfo from '../../../shared/RadioButtonGroupWithInfoGql'
+import TextField from '../../../shared/TextFieldGql'
 import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 
@@ -61,8 +61,8 @@ const getBearbName = ({ store, tree }: { store: Object, tree: Object }) => {
   const { adressen } = store.dropdownList
   const { activeDataset } = tree
   let name = ''
-  if (activeDataset.row.bearbeiter && adressen.length > 0) {
-    const adresse = adressen.find(a => a.id === activeDataset.row.bearbeiter)
+  if (row.bearbeiter && adressen.length > 0) {
+    const adresse = adressen.find(a => a.id === row.bearbeiter)
     if (adresse && adresse.name) return adresse.name
   }
   return name
@@ -128,11 +128,23 @@ const Ap = ({
       if (error) return `Fehler: ${error.message}`
 
       const row = get(data, 'apById')
-      let apberrelevantWerte = get(data, 'allTpopApberrelevantWertes.nodes', [])
-      apberrelevantWerte = sortBy(apberrelevantWerte, 'sort')
-      apberrelevantWerte = apberrelevantWerte.map(el => ({
+      let bearbeitungWerte = get(data, 'allApBearbstandWertes.nodes', [])
+      bearbeitungWerte = sortBy(bearbeitungWerte, 'sort')
+      bearbeitungWerte = bearbeitungWerte.map(el => ({
         value: el.code,
         label: el.text,
+      }))
+      let umsetzungWerte = get(data, 'allApUmsetzungWertes.nodes', [])
+      umsetzungWerte = sortBy(umsetzungWerte, 'sort')
+      umsetzungWerte = umsetzungWerte.map(el => ({
+        value: el.code,
+        label: el.text,
+      }))
+      let adressenWerte = get(data, 'allAdresses.nodes', [])
+      adressenWerte = sortBy(adressenWerte, 'name')
+      adressenWerte = adressenWerte.map(el => ({
+        id: el.id,
+        value: el.name,
       }))
 
       return (
@@ -143,20 +155,31 @@ const Ap = ({
               {(updateAp, { data }) => (
                 <FieldsContainer>
                   <AutoComplete
-                    key={`${activeDataset.row.id}art_id`}
-                    tree={tree}
+                    key={`${row.id}artId`}
                     label="Art (gibt dem Aktionsplan den Namen)"
-                    fieldName="art_id"
                     value={artname}
                     objects={store.dropdownList.artListForAp}
-                    updatePropertyInDb={updatePropertyInDb}
+                    saveToDb={value =>
+                      updateAp({
+                        variables: {
+                          id,
+                          artId: value,
+                        },
+                      })
+                    }
                   />
                   <RadioButtonGroupWithInfo
-                    tree={tree}
-                    fieldName="bearbeitung"
-                    value={activeDataset.row.bearbeitung}
-                    dataSource={store.dropdownList.apStati}
-                    updatePropertyInDb={updatePropertyInDb}
+                    key={`${row.id}bearbeitung`}
+                    value={row.bearbeitung}
+                    dataSource={bearbeitungWerte}
+                    saveToDb={value =>
+                      updateAp({
+                        variables: {
+                          id,
+                          bearbeitung: value,
+                        },
+                      })
+                    }
                     popover={
                       <Fragment>
                         <LabelPopoverTitleRow>Legende</LabelPopoverTitleRow>
@@ -181,24 +204,32 @@ const Ap = ({
                     label="Aktionsplan"
                   />
                   <TextField
-                    key={`${activeDataset.row.id}start_jahr`}
-                    tree={tree}
+                    key={`${row.id}startJahr`}
                     label="Start im Jahr"
-                    fieldName="start_jahr"
-                    value={activeDataset.row.start_jahr}
-                    errorText={activeDataset.valid.start_jahr}
+                    value={row.startJahr}
                     type="number"
-                    updateProperty={updateProperty}
-                    updatePropertyInDb={updatePropertyInDb}
+                    saveToDb={event =>
+                      updateAp({
+                        variables: {
+                          id,
+                          startJahr: event.target.value,
+                        },
+                      })
+                    }
                   />
                   <FieldContainer>
                     <RadioButtonGroupWithInfo
-                      tree={tree}
-                      fieldName="umsetzung"
-                      value={activeDataset.row.umsetzung}
-                      errorText={activeDataset.valid.umsetzung}
-                      dataSource={store.dropdownList.apUmsetzungen}
-                      updatePropertyInDb={updatePropertyInDb}
+                      key={`${row.id}umsetzung`}
+                      value={row.umsetzung}
+                      dataSource={umsetzungWerte}
+                      saveToDb={value =>
+                        updateAp({
+                          variables: {
+                            id,
+                            umsetzung: value,
+                          },
+                        })
+                      }
                       popover={
                         <Fragment>
                           <LabelPopoverTitleRow>Legende</LabelPopoverTitleRow>
@@ -225,13 +256,18 @@ const Ap = ({
                     />
                   </FieldContainer>
                   <AutoComplete
-                    key={`${activeDataset.row.id}bearbeiter`}
-                    tree={tree}
+                    key={`${row.id}bearbeiter`}
                     label="Verantwortlich"
-                    fieldName="bearbeiter"
-                    value={getBearbName({ store, tree })}
-                    objects={store.dropdownList.adressen}
-                    updatePropertyInDb={updatePropertyInDb}
+                    value={get(data, 'apById.adresseByBearbeiter.name', null)}
+                    objects={adressenWerte}
+                    saveToDb={value =>
+                      updateAp({
+                        variables: {
+                          id,
+                          bearbeiter: value,
+                        },
+                      })
+                    }
                     openabove
                   />
                 </FieldsContainer>

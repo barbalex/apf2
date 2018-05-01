@@ -27,7 +27,16 @@ mutation updateAp(
       umsetzung
       artId
       bearbeiter
+      adresseByBearbeiter {
+        id
+        name
+      }
       projId
+      aeEigenschaftenByArtId {
+        id
+        artname
+        artwert
+      }
     }
   }
 }
