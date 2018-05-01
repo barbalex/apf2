@@ -5,9 +5,9 @@ import sortBy from 'lodash/sortBy'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
 
-import AutoComplete from '../../shared/Autocomplete'
-import FormTitle from '../../shared/FormTitle'
-import ErrorBoundary from '../../shared/ErrorBoundary'
+import AutoComplete from '../../../shared/Autocomplete'
+import FormTitle from '../../../shared/FormTitle'
+import ErrorBoundary from '../../../shared/ErrorBoundary'
 
 const Container = styled.div`
   height: 100%;

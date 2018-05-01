@@ -139,38 +139,34 @@ const Daten = ({
   if (!activeDataset || !activeDataset.table || !activeDataset.row) {
     return <div />
   }
+  /**
+   * For the time-being bass id from here
+   * When store is moved to apollo:
+   * Fetch id directly in components
+   */
+  const { id } = activeDataset.row
   const formObject = {
     projekt: <Projekt tree={tree} dimensions={dimensions} />,
     apberuebersicht: <Apberuebersicht tree={tree} dimensions={dimensions} />,
-    ap: <Ap id={activeDataset.row.id} dimensions={dimensions} />,
+    ap: <Ap id={id} dimensions={dimensions} />,
     assozart: <Assozart tree={tree} dimensions={dimensions} />,
-    apart: <Apart tree={tree} dimensions={dimensions} />,
+    apart: <Apart id={id} tree={tree} dimensions={dimensions} />,
     idealbiotop: <Idealbiotop tree={tree} dimensions={dimensions} />,
     erfkrit: <Erfkrit tree={tree} dimensions={dimensions} />,
     apber: <Apber tree={tree} dimensions={dimensions} />,
     ber: <Ber tree={tree} dimensions={dimensions} />,
     ziel: <Ziel tree={tree} dimensions={dimensions} />,
     zielber: <Zielber tree={tree} dimensions={dimensions} />,
-    pop: <Pop id={activeDataset.row.id} dimensions={dimensions} />,
-    popmassnber: (
-      <Popmassnber id={activeDataset.row.id} dimensions={dimensions} />
-    ),
-    popber: <Popber id={activeDataset.row.id} dimensions={dimensions} />,
-    tpop: <Tpop id={activeDataset.row.id} dimensions={dimensions} />,
-    tpopber: <Tpopber id={activeDataset.row.id} dimensions={dimensions} />,
-    tpopmassn: <Tpopmassn id={activeDataset.row.id} dimensions={dimensions} />,
-    tpopmassnber: (
-      <Tpopmassnber id={activeDataset.row.id} dimensions={dimensions} />
-    ),
-    tpopfeldkontr: (
-      <Tpopfeldkontr id={activeDataset.row.id} dimensions={dimensions} />
-    ),
-    tpopfreiwkontr: (
-      <Tpopfreiwkontr id={activeDataset.row.id} dimensions={dimensions} />
-    ),
-    tpopkontrzaehl: (
-      <Tpopkontrzaehl id={activeDataset.row.id} dimensions={dimensions} />
-    ),
+    pop: <Pop id={id} dimensions={dimensions} />,
+    popmassnber: <Popmassnber id={id} dimensions={dimensions} />,
+    popber: <Popber id={id} dimensions={dimensions} />,
+    tpop: <Tpop id={id} dimensions={dimensions} />,
+    tpopber: <Tpopber id={id} dimensions={dimensions} />,
+    tpopmassn: <Tpopmassn id={id} dimensions={dimensions} />,
+    tpopmassnber: <Tpopmassnber id={id} dimensions={dimensions} />,
+    tpopfeldkontr: <Tpopfeldkontr id={id} dimensions={dimensions} />,
+    tpopfreiwkontr: <Tpopfreiwkontr id={id} dimensions={dimensions} />,
+    tpopkontrzaehl: <Tpopkontrzaehl id={id} dimensions={dimensions} />,
     exporte: <Exporte tree={tree} dimensions={dimensions} />,
     qk: <Qk tree={tree} />,
     beobNichtZuzuordnen: <Beobzuordnung tree={tree} dimensions={dimensions} />,
