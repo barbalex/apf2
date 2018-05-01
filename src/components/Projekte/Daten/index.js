@@ -142,7 +142,7 @@ const Daten = ({
   const formObject = {
     projekt: <Projekt tree={tree} dimensions={dimensions} />,
     apberuebersicht: <Apberuebersicht tree={tree} dimensions={dimensions} />,
-    ap: <Ap id={activeDataset.row.id} tree={tree} dimensions={dimensions} />,
+    ap: <Ap id={activeDataset.row.id} dimensions={dimensions} />,
     assozart: <Assozart tree={tree} dimensions={dimensions} />,
     apart: <Apart tree={tree} dimensions={dimensions} />,
     idealbiotop: <Idealbiotop tree={tree} dimensions={dimensions} />,

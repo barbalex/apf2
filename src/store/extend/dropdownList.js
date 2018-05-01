@@ -13,28 +13,6 @@ export default (store: Object): void => {
         })),
       { name: 'dropdownListAdressen' }
     ),
-    artListForAp: computed(
-      () => {
-        const aps = Array.from(store.table.ap.values())
-        const alreadyUsedArtIds = aps.map(a => a.art_id)
-        // let user choose active ap's art_id
-        const activeAp = store.table.ap.get(store.tree.activeNodes.ap)
-        const activeArtId = activeAp ? activeAp.art_id : null
-        const artIdsNotToShow = alreadyUsedArtIds.filter(r => r !== activeArtId)
-        const artList = Array.from(store.table.ae_eigenschaften.values())
-          .filter(r => !artIdsNotToShow.includes(r.id))
-          .map(o => ({ id: o.id, value: o.artname }))
-        return sortBy(artList, 'value')
-      },
-      { name: 'dropdownListArtListForAp' }
-    ),
-    artnamen: computed(
-      () =>
-        Array.from(store.table.ae_eigenschaften.values())
-          .map(a => a.artname)
-          .sort(),
-      { name: 'dropdownListArtnamen' }
-    ),
     apErfkritWerte: computed(
       () => {
         let apErfkritWerte = Array.from(store.table.ap_erfkrit_werte.values())
