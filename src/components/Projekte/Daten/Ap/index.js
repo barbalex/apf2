@@ -5,11 +5,11 @@ import styled from 'styled-components'
 import compose from 'recompose/compose'
 import withProps from 'recompose/withProps'
 
-import AutoComplete from '../../shared/Autocomplete'
-import RadioButtonGroupWithInfo from '../../shared/RadioButtonGroupWithInfo'
-import TextField from '../../shared/TextField'
-import FormTitle from '../../shared/FormTitle'
-import ErrorBoundary from '../../shared/ErrorBoundary'
+import AutoComplete from '../../../shared/Autocomplete'
+import RadioButtonGroupWithInfo from '../../../shared/RadioButtonGroupWithInfo'
+import TextField from '../../../shared/TextField'
+import FormTitle from '../../../shared/FormTitle'
+import ErrorBoundary from '../../../shared/ErrorBoundary'
 
 const Container = styled.div`
   height: 100%;

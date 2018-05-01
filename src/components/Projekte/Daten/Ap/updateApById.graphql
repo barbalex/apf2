@@ -1,0 +1,33 @@
+mutation updateAp(
+  $id: UUID!bearbeitung
+  $startJahr: Int
+  $umsetzung: Int
+  $artId: UUID
+  $bearbeiter: UUID
+  $projId: UUID
+) {
+  updateApById(
+    input: {
+      id: $id
+      apPatch: {
+        id: $id
+        bearbeitung: $bearbeitung
+        startJahr: $startJahr
+        umsetzung: $umsetzung
+        artId: $artId
+        bearbeiter: $bearbeiter
+        projId: $projId
+      }
+    }
+  ) {
+    ap {
+      id
+      bearbeitung
+      startJahr
+      umsetzung
+      artId
+      bearbeiter
+      projId
+    }
+  }
+}
