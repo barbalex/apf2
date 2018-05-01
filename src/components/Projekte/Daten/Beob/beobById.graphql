@@ -1,0 +1,6 @@
+query beobByIdQuery($id: UUID!) {
+  beobById(id: $id) {
+    id
+    data
+  }
+}

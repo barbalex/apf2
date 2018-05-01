@@ -231,7 +231,7 @@ const Beobzuordnung = ({
             />
           </FieldsContainer>
           <Title>{beobTitle}</Title>
-          <Beob tree={tree} dimensions={dimensions} />
+          <Beob id={activeDataset.row.id} dimensions={dimensions} />
         </DataContainer>
       </FormContainer>
     </ErrorBoundary>
