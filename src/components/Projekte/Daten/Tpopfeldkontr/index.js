@@ -171,11 +171,11 @@ const Tpopfeldkontr = ({
                           label="Jahr"
                           value={row.jahr}
                           type="number"
-                          saveToDb={event =>
+                          saveToDb={value =>
                             updateTpopkontr({
                               variables: {
                                 id,
-                                jahr: event.target.value || null,
+                                jahr: value,
                                 datum: null,
                               },
                             })
@@ -228,11 +228,11 @@ const Tpopfeldkontr = ({
                           label="Anzahl Jungpflanzen"
                           value={row.jungpflanzenAnzahl}
                           type="number"
-                          saveToDb={event =>
+                          saveToDb={value =>
                             updateTpopkontr({
                               variables: {
                                 id,
-                                jungpflanzenAnzahl: event.target.value,
+                                jungpflanzenAnzahl: value,
                               },
                             })
                           }
@@ -242,11 +242,11 @@ const Tpopfeldkontr = ({
                           label="Vitalität"
                           value={row.vitalitaet}
                           type="text"
-                          saveToDb={event =>
+                          saveToDb={value =>
                             updateTpopkontr({
                               variables: {
                                 id,
-                                vitalitaet: event.target.value,
+                                vitalitaet: value,
                               },
                             })
                           }
@@ -256,11 +256,11 @@ const Tpopfeldkontr = ({
                           label="Überlebensrate"
                           value={row.ueberlebensrate}
                           type="number"
-                          saveToDb={event =>
+                          saveToDb={value =>
                             updateTpopkontr({
                               variables: {
                                 id,
-                                ueberlebensrate: event.target.value,
+                                ueberlebensrate: value,
                               },
                             })
                           }
@@ -287,11 +287,11 @@ const Tpopfeldkontr = ({
                           hintText="Standort: ..., Klima: ..., anderes: ..."
                           type="text"
                           multiLine
-                          saveToDb={event =>
+                          saveToDb={value =>
                             updateTpopkontr({
                               variables: {
                                 id,
-                                ursachen: event.target.value,
+                                ursachen: value,
                               },
                             })
                           }
@@ -302,11 +302,11 @@ const Tpopfeldkontr = ({
                           value={row.erfolgsbeurteilung}
                           type="text"
                           multiLine
-                          saveToDb={event =>
+                          saveToDb={value =>
                             updateTpopkontr({
                               variables: {
                                 id,
-                                erfolgsbeurteilung: event.target.value,
+                                erfolgsbeurteilung: value,
                               },
                             })
                           }
@@ -317,11 +317,11 @@ const Tpopfeldkontr = ({
                           value={row.umsetzungAendern}
                           type="text"
                           multiLine
-                          saveToDb={event =>
+                          saveToDb={value =>
                             updateTpopkontr({
                               variables: {
                                 id,
-                                umsetzungAendern: event.target.value,
+                                umsetzungAendern: value,
                               },
                             })
                           }
@@ -332,11 +332,11 @@ const Tpopfeldkontr = ({
                           value={row.kontrolleAendern}
                           type="text"
                           multiLine
-                          saveToDb={event =>
+                          saveToDb={value =>
                             updateTpopkontr({
                               variables: {
                                 id,
-                                kontrolleAendern: event.target.value,
+                                kontrolleAendern: value,
                               },
                             })
                           }
@@ -347,11 +347,11 @@ const Tpopfeldkontr = ({
                           value={row.bemerkungen}
                           type="text"
                           multiLine
-                          saveToDb={event =>
+                          saveToDb={value =>
                             updateTpopkontr({
                               variables: {
                                 id,
-                                bemerkungen: event.target.value,
+                                bemerkungen: value,
                               },
                             })
                           }
@@ -366,11 +366,11 @@ const Tpopfeldkontr = ({
                           label="Fläche"
                           value={row.flaeche}
                           type="number"
-                          saveToDb={event =>
+                          saveToDb={value =>
                             updateTpopkontr({
                               variables: {
                                 id,
-                                flaeche: event.target.value,
+                                flaeche: value,
                               },
                             })
                           }
@@ -409,11 +409,11 @@ const Tpopfeldkontr = ({
                           label="Vegetationstyp"
                           value={row.vegetationstyp}
                           type="text"
-                          saveToDb={event =>
+                          saveToDb={value =>
                             updateTpopkontr({
                               variables: {
                                 id,
-                                vegetationstyp: event.target.value,
+                                vegetationstyp: value,
                               },
                             })
                           }
@@ -423,11 +423,11 @@ const Tpopfeldkontr = ({
                           label="Konkurrenz"
                           value={row.konkurrenz}
                           type="text"
-                          saveToDb={event =>
+                          saveToDb={value =>
                             updateTpopkontr({
                               variables: {
                                 id,
-                                konkurrenz: event.target.value,
+                                konkurrenz: value,
                               },
                             })
                           }
@@ -437,11 +437,11 @@ const Tpopfeldkontr = ({
                           label="Moosschicht"
                           value={row.moosschicht}
                           type="text"
-                          saveToDb={event =>
+                          saveToDb={value =>
                             updateTpopkontr({
                               variables: {
                                 id,
-                                moosschicht: event.target.value,
+                                moosschicht: value,
                               },
                             })
                           }
@@ -451,11 +451,11 @@ const Tpopfeldkontr = ({
                           label="Krautschicht"
                           value={row.krautschicht}
                           type="text"
-                          saveToDb={event =>
+                          saveToDb={value =>
                             updateTpopkontr({
                               variables: {
                                 id,
-                                krautschicht: event.target.value,
+                                krautschicht: value,
                               },
                             })
                           }
@@ -465,11 +465,11 @@ const Tpopfeldkontr = ({
                           label="Strauchschicht"
                           value={row.strauchschicht}
                           type="text"
-                          saveToDb={event =>
+                          saveToDb={value =>
                             updateTpopkontr({
                               variables: {
                                 id,
-                                strauchschicht: event.target.value,
+                                strauchschicht: value,
                               },
                             })
                           }
@@ -479,11 +479,11 @@ const Tpopfeldkontr = ({
                           label="Baumschicht"
                           value={row.baumschicht}
                           type="text"
-                          saveToDb={event =>
+                          saveToDb={value =>
                             updateTpopkontr({
                               variables: {
                                 id,
-                                baumschicht: event.target.value,
+                                baumschicht: value,
                               },
                             })
                           }
@@ -494,11 +494,11 @@ const Tpopfeldkontr = ({
                           label="Typ"
                           value={row.bodenTyp}
                           type="text"
-                          saveToDb={event =>
+                          saveToDb={value =>
                             updateTpopkontr({
                               variables: {
                                 id,
-                                bodenTyp: event.target.value,
+                                bodenTyp: value,
                               },
                             })
                           }
@@ -508,11 +508,11 @@ const Tpopfeldkontr = ({
                           label="Kalkgehalt"
                           value={row.bodenKalkgehalt}
                           type="text"
-                          saveToDb={event =>
+                          saveToDb={value =>
                             updateTpopkontr({
                               variables: {
                                 id,
-                                bodenKalkgehalt: event.target.value,
+                                bodenKalkgehalt: value,
                               },
                             })
                           }
@@ -522,11 +522,11 @@ const Tpopfeldkontr = ({
                           label="Durchlässigkeit"
                           value={row.bodenDurchlaessigkeit}
                           type="text"
-                          saveToDb={event =>
+                          saveToDb={value =>
                             updateTpopkontr({
                               variables: {
                                 id,
-                                bodenDurchlaessigkeit: event.target.value,
+                                bodenDurchlaessigkeit: value,
                               },
                             })
                           }
@@ -536,11 +536,11 @@ const Tpopfeldkontr = ({
                           label="Humusgehalt"
                           value={row.bodenHumus}
                           type="text"
-                          saveToDb={event =>
+                          saveToDb={value =>
                             updateTpopkontr({
                               variables: {
                                 id,
-                                bodenHumus: event.target.value,
+                                bodenHumus: value,
                               },
                             })
                           }
@@ -550,11 +550,11 @@ const Tpopfeldkontr = ({
                           label="Nährstoffgehalt"
                           value={row.bodenNaehrstoffgehalt}
                           type="text"
-                          saveToDb={event =>
+                          saveToDb={value =>
                             updateTpopkontr({
                               variables: {
                                 id,
-                                bodenNaehrstoffgehalt: event.target.value,
+                                bodenNaehrstoffgehalt: value,
                               },
                             })
                           }
@@ -564,11 +564,11 @@ const Tpopfeldkontr = ({
                           label="Bodenabtrag"
                           value={row.bodenAbtrag}
                           type="text"
-                          saveToDb={event =>
+                          saveToDb={value =>
                             updateTpopkontr({
                               variables: {
                                 id,
-                                bodenAbtrag: event.target.value,
+                                bodenAbtrag: value,
                               },
                             })
                           }
@@ -578,11 +578,11 @@ const Tpopfeldkontr = ({
                           label="Wasserhaushalt"
                           value={row.wasserhaushalt}
                           type="text"
-                          saveToDb={event =>
+                          saveToDb={value =>
                             updateTpopkontr({
                               variables: {
                                 id,
-                                wasserhaushalt: event.target.value,
+                                wasserhaushalt: value,
                               },
                             })
                           }
@@ -594,11 +594,11 @@ const Tpopfeldkontr = ({
                           value={row.handlungsbedarf}
                           type="text"
                           multiline
-                          saveToDb={event =>
+                          saveToDb={value =>
                             updateTpopkontr({
                               variables: {
                                 id,
-                                handlungsbedarf: event.target.value,
+                                handlungsbedarf: value,
                               },
                             })
                           }

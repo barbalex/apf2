@@ -83,11 +83,11 @@ const Tpop = ({
                       label="Nr."
                       value={row.nr}
                       type="number"
-                      saveToDb={event =>
+                      saveToDb={value =>
                         updateTpop({
                           variables: {
                             id,
-                            nr: event.target.value,
+                            nr: value,
                           },
                         })
                       }
@@ -148,11 +148,11 @@ const Tpop = ({
                       value={row.statusUnklarGrund}
                       type="text"
                       multiLine
-                      saveToDb={event =>
+                      saveToDb={value =>
                         updateTpop({
                           variables: {
                             id,
-                            statusUnklarGrund: event.target.value,
+                            statusUnklarGrund: value,
                           },
                         })
                       }
@@ -176,11 +176,11 @@ const Tpop = ({
                       label="X-Koordinaten"
                       value={row.x}
                       type="number"
-                      saveToDb={event =>
+                      saveToDb={value =>
                         updateTpop({
                           variables: {
                             id,
-                            x: event.target.value,
+                            x: value,
                           },
                         })
                       }
@@ -190,11 +190,11 @@ const Tpop = ({
                       label="Y-Koordinaten"
                       value={row.y}
                       type="number"
-                      saveToDb={event =>
+                      saveToDb={value =>
                         updateTpop({
                           variables: {
                             id,
-                            y: event.target.value,
+                            y: value,
                           },
                         })
                       }
@@ -218,11 +218,11 @@ const Tpop = ({
                       label="Radius (m)"
                       value={row.radius}
                       type="number"
-                      saveToDb={event =>
+                      saveToDb={value =>
                         updateTpop({
                           variables: {
                             id,
-                            radius: event.target.value,
+                            radius: value,
                           },
                         })
                       }
@@ -232,11 +232,11 @@ const Tpop = ({
                       label="Höhe (m.ü.M.)"
                       value={row.hoehe}
                       type="number"
-                      saveToDb={event =>
+                      saveToDb={value =>
                         updateTpop({
                           variables: {
                             id,
-                            hoehe: event.target.value,
+                            hoehe: value,
                           },
                         })
                       }
@@ -246,11 +246,11 @@ const Tpop = ({
                       label="Exposition, Besonnung"
                       value={row.exposition}
                       type="text"
-                      saveToDb={event =>
+                      saveToDb={value =>
                         updateTpop({
                           variables: {
                             id,
-                            exposition: event.target.value,
+                            exposition: value,
                           },
                         })
                       }
@@ -260,11 +260,11 @@ const Tpop = ({
                       label="Klima"
                       value={row.klima}
                       type="text"
-                      saveToDb={event =>
+                      saveToDb={value =>
                         updateTpop({
                           variables: {
                             id,
-                            klima: event.target.value,
+                            klima: value,
                           },
                         })
                       }
@@ -274,11 +274,11 @@ const Tpop = ({
                       label="Hangneigung"
                       value={row.neigung}
                       type="text"
-                      saveToDb={event =>
+                      saveToDb={value =>
                         updateTpop({
                           variables: {
                             id,
-                            neigung: event.target.value,
+                            neigung: value,
                           },
                         })
                       }
@@ -289,11 +289,11 @@ const Tpop = ({
                       value={row.beschreibung}
                       type="text"
                       multiline
-                      saveToDb={event =>
+                      saveToDb={value =>
                         updateTpop({
                           variables: {
                             id,
-                            beschreibung: event.target.value,
+                            beschreibung: value,
                           },
                         })
                       }
@@ -303,11 +303,11 @@ const Tpop = ({
                       label="Kataster-Nr."
                       value={row.katasterNr}
                       type="text"
-                      saveToDb={event =>
+                      saveToDb={value =>
                         updateTpop({
                           variables: {
                             id,
-                            katasterNr: event.target.value,
+                            katasterNr: value,
                           },
                         })
                       }
@@ -317,11 +317,11 @@ const Tpop = ({
                       label="EigentümerIn"
                       value={row.eigentuemer}
                       type="text"
-                      saveToDb={event =>
+                      saveToDb={value =>
                         updateTpop({
                           variables: {
                             id,
-                            eigentuemer: event.target.value,
+                            eigentuemer: value,
                           },
                         })
                       }
@@ -331,11 +331,11 @@ const Tpop = ({
                       label="Kontakt vor Ort"
                       value={row.kontakt}
                       type="text"
-                      saveToDb={event =>
+                      saveToDb={value =>
                         updateTpop({
                           variables: {
                             id,
-                            kontakt: event.target.value,
+                            kontakt: value,
                           },
                         })
                       }
@@ -345,11 +345,11 @@ const Tpop = ({
                       label="Nutzungszone"
                       value={row.nutzungszone}
                       type="text"
-                      saveToDb={event =>
+                      saveToDb={value =>
                         updateTpop({
                           variables: {
                             id,
-                            nutzungszone: event.target.value,
+                            nutzungszone: value,
                           },
                         })
                       }
@@ -359,11 +359,11 @@ const Tpop = ({
                       label="BewirtschafterIn"
                       value={row.bewirtschafter}
                       type="text"
-                      saveToDb={event =>
+                      saveToDb={value =>
                         updateTpop({
                           variables: {
                             id,
-                            bewirtschafter: event.target.value,
+                            bewirtschafter: value,
                           },
                         })
                       }
@@ -373,11 +373,11 @@ const Tpop = ({
                       label="Bewirtschaftung"
                       value={row.bewirtschaftung}
                       type="text"
-                      saveToDb={event =>
+                      saveToDb={value =>
                         updateTpop({
                           variables: {
                             id,
-                            bewirtschaftung: event.target.value,
+                            bewirtschaftung: value,
                           },
                         })
                       }
@@ -388,11 +388,11 @@ const Tpop = ({
                       value={row.bemerkungen}
                       type="text"
                       multiline
-                      saveToDb={event =>
+                      saveToDb={value =>
                         updateTpop({
                           variables: {
                             id,
-                            bemerkungen: event.target.value,
+                            bemerkungen: value,
                           },
                         })
                       }

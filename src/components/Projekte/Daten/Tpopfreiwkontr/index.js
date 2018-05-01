@@ -81,11 +81,11 @@ const Tpopfreiwkontr = ({
                       label="Jahr"
                       value={row.jahr}
                       type="number"
-                      saveToDb={event =>
+                      saveToDb={value =>
                         updateTpopkontr({
                           variables: {
                             id,
-                            jahr: event.target.value || null,
+                            jahr: value,
                             datum: null,
                           },
                         })
@@ -137,11 +137,11 @@ const Tpopfreiwkontr = ({
                       label="Überprüfte Fläche in m2"
                       value={row.flaecheUeberprueft}
                       type="number"
-                      saveToDb={event =>
+                      saveToDb={value =>
                         updateTpopkontr({
                           variables: {
                             id,
-                            flaecheUeberprueft: event.target.value,
+                            flaecheUeberprueft: value,
                           },
                         })
                       }
@@ -151,11 +151,11 @@ const Tpopfreiwkontr = ({
                       label="Deckung überprüfte Art (%)"
                       value={row.deckungApArt}
                       type="number"
-                      saveToDb={event =>
+                      saveToDb={value =>
                         updateTpopkontr({
                           variables: {
                             id,
-                            deckungApArt: event.target.value,
+                            deckungApArt: value,
                           },
                         })
                       }
@@ -165,11 +165,11 @@ const Tpopfreiwkontr = ({
                       label="Deckung nackter Boden (%)"
                       value={row.deckungNackterBoden}
                       type="number"
-                      saveToDb={event =>
+                      saveToDb={value =>
                         updateTpopkontr({
                           variables: {
                             id,
-                            deckungNackterBoden: event.target.value,
+                            deckungNackterBoden: value,
                           },
                         })
                       }
@@ -192,11 +192,11 @@ const Tpopfreiwkontr = ({
                       label="Maximum der Vegetationshöhe in cm"
                       value={row.vegetationshoeheMaximum}
                       type="number"
-                      saveToDb={event =>
+                      saveToDb={value =>
                         updateTpopkontr({
                           variables: {
                             id,
-                            vegetationshoeheMaximum: event.target.value,
+                            vegetationshoeheMaximum: value,
                           },
                         })
                       }
@@ -206,11 +206,11 @@ const Tpopfreiwkontr = ({
                       label="Mittelwert der Vegetationshöhe in cm"
                       value={row.vegetationshoeheMittel}
                       type="number"
-                      saveToDb={event =>
+                      saveToDb={value =>
                         updateTpopkontr({
                           variables: {
                             id,
-                            vegetationshoeheMittel: event.target.value,
+                            vegetationshoeheMittel: value,
                           },
                         })
                       }
@@ -221,11 +221,11 @@ const Tpopfreiwkontr = ({
                       value={row.gefaehrdung}
                       type="text"
                       multiLine
-                      saveToDb={event =>
+                      saveToDb={value =>
                         updateTpopkontr({
                           variables: {
                             id,
-                            gefaehrdung: event.target.value,
+                            gefaehrdung: value,
                           },
                         })
                       }
@@ -236,11 +236,11 @@ const Tpopfreiwkontr = ({
                       value={row.bemerkungen}
                       type="text"
                       multiLine
-                      saveToDb={event =>
+                      saveToDb={value =>
                         updateTpopkontr({
                           variables: {
                             id,
-                            bemerkungen: event.target.value,
+                            bemerkungen: value,
                           },
                         })
                       }

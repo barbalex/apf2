@@ -159,11 +159,11 @@ const Ap = ({ id }: { id: String }) => (
                     label="Start im Jahr"
                     value={row.startJahr}
                     type="number"
-                    saveToDb={event =>
+                    saveToDb={value =>
                       updateAp({
                         variables: {
                           id,
-                          startJahr: +event.target.value || null,
+                          startJahr: value,
                         },
                       })
                     }

@@ -57,11 +57,11 @@ const Popber = ({ id }: { id: String }) => (
                     label="Jahr"
                     value={row.jahr}
                     type="number"
-                    saveToDb={event =>
+                    saveToDb={value =>
                       updatePopber({
                         variables: {
                           id,
-                          jahr: event.target.value,
+                          jahr: value,
                         },
                       })
                     }
@@ -86,11 +86,11 @@ const Popber = ({ id }: { id: String }) => (
                     value={row.bemerkungen}
                     type="text"
                     multiLine
-                    saveToDb={event =>
+                    saveToDb={value =>
                       updatePopber({
                         variables: {
                           id,
-                          bemerkungen: event.target.value,
+                          bemerkungen: value,
                         },
                       })
                     }

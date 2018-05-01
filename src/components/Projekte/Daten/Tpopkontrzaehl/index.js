@@ -85,11 +85,11 @@ const Tpopkontrzaehl = ({ id, tree }: { id: String, tree: Object }) => (
                     label="Anzahl (nur ganze Zahlen)"
                     value={row.anzahl}
                     type="number"
-                    saveToDb={event =>
+                    saveToDb={value =>
                       updateTpopkontrzaehl({
                         variables: {
                           id,
-                          anzahl: event.target.value,
+                          anzahl: value,
                         },
                       })
                     }

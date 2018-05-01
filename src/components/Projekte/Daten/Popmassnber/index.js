@@ -61,11 +61,11 @@ const Popmassnber = ({ id }: { id: String }) => (
                     label="Jahr"
                     value={row.jahr}
                     type="number"
-                    saveToDb={event =>
+                    saveToDb={value =>
                       updatePopmassnber({
                         variables: {
                           id,
-                          jahr: event.target.value,
+                          jahr: value,
                         },
                       })
                     }
@@ -90,11 +90,11 @@ const Popmassnber = ({ id }: { id: String }) => (
                     value={row.bemerkungen}
                     type="text"
                     multiLine
-                    saveToDb={event =>
+                    saveToDb={value =>
                       updatePopmassnber({
                         variables: {
                           id,
-                          bemerkungen: event.target.value,
+                          bemerkungen: value,
                         },
                       })
                     }

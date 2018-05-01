@@ -50,8 +50,13 @@ class TextFieldGql extends Component<Props, State> {
     this.setState({ value: event.target.value })
   }
 
+  handleBlur = event => {
+    const { saveToDb } = this.props
+    saveToDb(event.target.value || null)
+  }
+
   render() {
-    const { label, type, multiLine, disabled, hintText, saveToDb } = this.props
+    const { label, type, multiLine, disabled, hintText } = this.props
     const { value } = this.state
 
     return (
@@ -62,7 +67,7 @@ class TextFieldGql extends Component<Props, State> {
         type={type}
         multiline={multiLine}
         onChange={this.handleChange}
-        onBlur={saveToDb}
+        onBlur={this.handleBlur}
         placeholder={hintText}
         disabled={disabled}
         fullWidth

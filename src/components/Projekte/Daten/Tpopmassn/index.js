@@ -90,11 +90,11 @@ const Tpopmassn = ({
                       label="Jahr"
                       value={row.jahr}
                       type="number"
-                      saveToDb={event =>
+                      saveToDb={value =>
                         updateTpopmassn({
                           variables: {
                             id,
-                            jahr: event.target.value || null,
+                            jahr: value,
                             datum: null,
                           },
                         })
@@ -133,11 +133,11 @@ const Tpopmassn = ({
                       label="Massnahme"
                       value={row.beschreibung}
                       type="text"
-                      saveToDb={event =>
+                      saveToDb={value =>
                         updateTpopmassn({
                           variables: {
                             id,
-                            beschreibung: event.target.value,
+                            beschreibung: value,
                           },
                         })
                       }
@@ -162,11 +162,11 @@ const Tpopmassn = ({
                       value={row.bemerkungen}
                       type="text"
                       multiLine
-                      saveToDb={event =>
+                      saveToDb={value =>
                         updateTpopmassn({
                           variables: {
                             id,
-                            bemerkungen: event.target.value,
+                            bemerkungen: value,
                           },
                         })
                       }
@@ -189,11 +189,11 @@ const Tpopmassn = ({
                       label="Plan Bezeichnung"
                       value={row.planBezeichnung}
                       type="text"
-                      saveToDb={event =>
+                      saveToDb={value =>
                         updateTpopmassn({
                           variables: {
                             id,
-                            planBezeichnung: event.target.value,
+                            planBezeichnung: value,
                           },
                         })
                       }
@@ -203,11 +203,11 @@ const Tpopmassn = ({
                       label="Fläche (m2)"
                       value={row.flaeche}
                       type="number"
-                      saveToDb={event =>
+                      saveToDb={value =>
                         updateTpopmassn({
                           variables: {
                             id,
-                            flaeche: event.target.value,
+                            flaeche: value,
                           },
                         })
                       }
@@ -217,11 +217,11 @@ const Tpopmassn = ({
                       label="Form der Ansiedlung"
                       value={row.form}
                       type="text"
-                      saveToDb={event =>
+                      saveToDb={value =>
                         updateTpopmassn({
                           variables: {
                             id,
-                            form: event.target.value,
+                            form: value,
                           },
                         })
                       }
@@ -231,11 +231,11 @@ const Tpopmassn = ({
                       label="Pflanzanordnung"
                       value={row.pflanzanordnung}
                       type="text"
-                      saveToDb={event =>
+                      saveToDb={value =>
                         updateTpopmassn({
                           variables: {
                             id,
-                            pflanzanordnung: event.target.value,
+                            pflanzanordnung: value,
                           },
                         })
                       }
@@ -245,11 +245,11 @@ const Tpopmassn = ({
                       label="Markierung"
                       value={row.markierung}
                       type="text"
-                      saveToDb={event =>
+                      saveToDb={value =>
                         updateTpopmassn({
                           variables: {
                             id,
-                            markierung: event.target.value,
+                            markierung: value,
                           },
                         })
                       }
@@ -259,11 +259,11 @@ const Tpopmassn = ({
                       label="Anzahl Triebe"
                       value={row.anzTriebe}
                       type="number"
-                      saveToDb={event =>
+                      saveToDb={value =>
                         updateTpopmassn({
                           variables: {
                             id,
-                            anzTriebe: event.target.value,
+                            anzTriebe: value,
                           },
                         })
                       }
@@ -273,11 +273,11 @@ const Tpopmassn = ({
                       label="Anzahl Pflanzen"
                       value={row.anzPflanzen}
                       type="number"
-                      saveToDb={event =>
+                      saveToDb={value =>
                         updateTpopmassn({
                           variables: {
                             id,
-                            anzPflanzen: event.target.value,
+                            anzPflanzen: value,
                           },
                         })
                       }
@@ -287,11 +287,11 @@ const Tpopmassn = ({
                       label="Anzahl Pflanzstellen"
                       value={row.anzPflanzstellen}
                       type="number"
-                      saveToDb={event =>
+                      saveToDb={value =>
                         updateTpopmassn({
                           variables: {
                             id,
-                            anzPflanzstellen: event.target.value,
+                            anzPflanzstellen: value,
                           },
                         })
                       }
@@ -315,11 +315,11 @@ const Tpopmassn = ({
                       label="Herkunftspopulation"
                       value={row.herkunftPop}
                       type="text"
-                      saveToDb={event =>
+                      saveToDb={value =>
                         updateTpopmassn({
                           variables: {
                             id,
-                            herkunftPop: event.target.value,
+                            herkunftPop: value,
                           },
                         })
                       }
@@ -329,11 +329,11 @@ const Tpopmassn = ({
                       label="Sammeldatum"
                       value={row.sammeldatum}
                       type="text"
-                      saveToDb={event =>
+                      saveToDb={value =>
                         updateTpopmassn({
                           variables: {
                             id,
-                            sammeldatum: event.target.value,
+                            sammeldatum: value,
                           },
                         })
                       }

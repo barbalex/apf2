@@ -49,11 +49,11 @@ const Pop = ({ id }: { id: String }) => (
                     label="Nr."
                     value={row.nr}
                     type="number"
-                    saveToDb={event =>
+                    saveToDb={value =>
                       updatePop({
                         variables: {
                           id,
-                          nr: event.target.value,
+                          nr: value,
                         },
                       })
                     }
@@ -113,11 +113,11 @@ const Pop = ({ id }: { id: String }) => (
                     value={row.statusUnklarBegruendung}
                     type="text"
                     multiLine
-                    saveToDb={event =>
+                    saveToDb={value =>
                       updatePop({
                         variables: {
                           id,
-                          statusUnklarBegruendung: event.target.value,
+                          statusUnklarBegruendung: value,
                         },
                       })
                     }
@@ -127,11 +127,11 @@ const Pop = ({ id }: { id: String }) => (
                     label="X-Koordinaten"
                     value={row.x}
                     type="number"
-                    saveToDb={event =>
+                    saveToDb={value =>
                       updatePop({
                         variables: {
                           id,
-                          x: event.target.value,
+                          x: value,
                         },
                       })
                     }
@@ -141,11 +141,11 @@ const Pop = ({ id }: { id: String }) => (
                     label="Y-Koordinaten"
                     value={row.y}
                     type="number"
-                    saveToDb={event =>
+                    saveToDb={value =>
                       updatePop({
                         variables: {
                           id,
-                          y: event.target.value,
+                          y: value,
                         },
                       })
                     }
