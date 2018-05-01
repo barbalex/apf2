@@ -4,6 +4,11 @@ import { observer, inject } from 'mobx-react'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
 import withProps from 'recompose/withProps'
+import { Query, Mutation } from 'react-apollo'
+import get from 'lodash/get'
+import sortBy from 'lodash/sortBy'
+import apByIdGql from './apById.graphql'
+import updateApByIdGql from './updateApById.graphql'
 
 import AutoComplete from '../../../shared/Autocomplete'
 import RadioButtonGroupWithInfo from '../../../shared/RadioButtonGroupWithInfo'
@@ -94,6 +99,7 @@ const enhance = compose(
 )
 
 const Ap = ({
+  id,
   store,
   tree,
   activeDataset,
@@ -102,6 +108,7 @@ const Ap = ({
   artwert,
   artname,
 }: {
+  id: String,
   store: Object,
   tree: Object,
   activeDataset: Object,
@@ -110,101 +117,131 @@ const Ap = ({
   artwert?: number,
   artname?: string,
 }) => (
-  <ErrorBoundary>
-    <Container>
-      <FormTitle tree={tree} title="Art" />
-      <FieldsContainer>
-        <AutoComplete
-          key={`${activeDataset.row.id}art_id`}
-          tree={tree}
-          label="Art (gibt dem Aktionsplan den Namen)"
-          fieldName="art_id"
-          value={artname}
-          objects={store.dropdownList.artListForAp}
-          updatePropertyInDb={updatePropertyInDb}
-        />
-        <RadioButtonGroupWithInfo
-          tree={tree}
-          fieldName="bearbeitung"
-          value={activeDataset.row.bearbeitung}
-          dataSource={store.dropdownList.apStati}
-          updatePropertyInDb={updatePropertyInDb}
-          popover={
-            <Fragment>
-              <LabelPopoverTitleRow>Legende</LabelPopoverTitleRow>
-              <LabelPopoverContentRow>
-                <LabelPopoverRowColumnLeft>keiner:</LabelPopoverRowColumnLeft>
-                <LabelPopoverRowColumnRight>
-                  kein Aktionsplan vorgesehen
-                </LabelPopoverRowColumnRight>
-              </LabelPopoverContentRow>
-              <LabelPopoverContentRow>
-                <LabelPopoverRowColumnLeft>erstellt:</LabelPopoverRowColumnLeft>
-                <LabelPopoverRowColumnRight>
-                  Aktionsplan fertig, auf der Webseite der FNS
-                </LabelPopoverRowColumnRight>
-              </LabelPopoverContentRow>
-            </Fragment>
-          }
-          label="Aktionsplan"
-        />
-        <TextField
-          key={`${activeDataset.row.id}start_jahr`}
-          tree={tree}
-          label="Start im Jahr"
-          fieldName="start_jahr"
-          value={activeDataset.row.start_jahr}
-          errorText={activeDataset.valid.start_jahr}
-          type="number"
-          updateProperty={updateProperty}
-          updatePropertyInDb={updatePropertyInDb}
-        />
-        <FieldContainer>
-          <RadioButtonGroupWithInfo
-            tree={tree}
-            fieldName="umsetzung"
-            value={activeDataset.row.umsetzung}
-            errorText={activeDataset.valid.umsetzung}
-            dataSource={store.dropdownList.apUmsetzungen}
-            updatePropertyInDb={updatePropertyInDb}
-            popover={
-              <Fragment>
-                <LabelPopoverTitleRow>Legende</LabelPopoverTitleRow>
-                <LabelPopoverContentRow>
-                  <LabelPopoverRowColumnLeft>
-                    noch keine<br />Umsetzung:
-                  </LabelPopoverRowColumnLeft>
-                  <LabelPopoverRowColumnRight>
-                    noch keine Massnahmen ausgeführt
-                  </LabelPopoverRowColumnRight>
-                </LabelPopoverContentRow>
-                <LabelPopoverContentRow>
-                  <LabelPopoverRowColumnLeft>
-                    in Umsetzung:
-                  </LabelPopoverRowColumnLeft>
-                  <LabelPopoverRowColumnRight>
-                    bereits Massnahmen ausgeführt (auch wenn AP noch nicht
-                    erstellt)
-                  </LabelPopoverRowColumnRight>
-                </LabelPopoverContentRow>
-              </Fragment>
-            }
-            label="Stand Umsetzung"
-          />
-        </FieldContainer>
-        <AutoComplete
-          key={`${activeDataset.row.id}bearbeiter`}
-          tree={tree}
-          label="Verantwortlich"
-          fieldName="bearbeiter"
-          value={getBearbName({ store, tree })}
-          objects={store.dropdownList.adressen}
-          updatePropertyInDb={updatePropertyInDb}
-          openabove
-        />
-      </FieldsContainer>
-    </Container>
-  </ErrorBoundary>
+  <Query query={apByIdGql} variables={{ id }}>
+    {({ loading, error, data }) => {
+      if (loading)
+        return (
+          <Container>
+            <FieldsContainer>Lade...</FieldsContainer>
+          </Container>
+        )
+      if (error) return `Fehler: ${error.message}`
+
+      const row = get(data, 'apById')
+      let apberrelevantWerte = get(data, 'allTpopApberrelevantWertes.nodes', [])
+      apberrelevantWerte = sortBy(apberrelevantWerte, 'sort')
+      apberrelevantWerte = apberrelevantWerte.map(el => ({
+        value: el.code,
+        label: el.text,
+      }))
+
+      return (
+        <ErrorBoundary>
+          <Container>
+            <FormTitle apId={id} title="Art" />
+            <Mutation mutation={updateApByIdGql}>
+              {(updateAp, { data }) => (
+                <FieldsContainer>
+                  <AutoComplete
+                    key={`${activeDataset.row.id}art_id`}
+                    tree={tree}
+                    label="Art (gibt dem Aktionsplan den Namen)"
+                    fieldName="art_id"
+                    value={artname}
+                    objects={store.dropdownList.artListForAp}
+                    updatePropertyInDb={updatePropertyInDb}
+                  />
+                  <RadioButtonGroupWithInfo
+                    tree={tree}
+                    fieldName="bearbeitung"
+                    value={activeDataset.row.bearbeitung}
+                    dataSource={store.dropdownList.apStati}
+                    updatePropertyInDb={updatePropertyInDb}
+                    popover={
+                      <Fragment>
+                        <LabelPopoverTitleRow>Legende</LabelPopoverTitleRow>
+                        <LabelPopoverContentRow>
+                          <LabelPopoverRowColumnLeft>
+                            keiner:
+                          </LabelPopoverRowColumnLeft>
+                          <LabelPopoverRowColumnRight>
+                            kein Aktionsplan vorgesehen
+                          </LabelPopoverRowColumnRight>
+                        </LabelPopoverContentRow>
+                        <LabelPopoverContentRow>
+                          <LabelPopoverRowColumnLeft>
+                            erstellt:
+                          </LabelPopoverRowColumnLeft>
+                          <LabelPopoverRowColumnRight>
+                            Aktionsplan fertig, auf der Webseite der FNS
+                          </LabelPopoverRowColumnRight>
+                        </LabelPopoverContentRow>
+                      </Fragment>
+                    }
+                    label="Aktionsplan"
+                  />
+                  <TextField
+                    key={`${activeDataset.row.id}start_jahr`}
+                    tree={tree}
+                    label="Start im Jahr"
+                    fieldName="start_jahr"
+                    value={activeDataset.row.start_jahr}
+                    errorText={activeDataset.valid.start_jahr}
+                    type="number"
+                    updateProperty={updateProperty}
+                    updatePropertyInDb={updatePropertyInDb}
+                  />
+                  <FieldContainer>
+                    <RadioButtonGroupWithInfo
+                      tree={tree}
+                      fieldName="umsetzung"
+                      value={activeDataset.row.umsetzung}
+                      errorText={activeDataset.valid.umsetzung}
+                      dataSource={store.dropdownList.apUmsetzungen}
+                      updatePropertyInDb={updatePropertyInDb}
+                      popover={
+                        <Fragment>
+                          <LabelPopoverTitleRow>Legende</LabelPopoverTitleRow>
+                          <LabelPopoverContentRow>
+                            <LabelPopoverRowColumnLeft>
+                              noch keine<br />Umsetzung:
+                            </LabelPopoverRowColumnLeft>
+                            <LabelPopoverRowColumnRight>
+                              noch keine Massnahmen ausgeführt
+                            </LabelPopoverRowColumnRight>
+                          </LabelPopoverContentRow>
+                          <LabelPopoverContentRow>
+                            <LabelPopoverRowColumnLeft>
+                              in Umsetzung:
+                            </LabelPopoverRowColumnLeft>
+                            <LabelPopoverRowColumnRight>
+                              bereits Massnahmen ausgeführt (auch wenn AP noch
+                              nicht erstellt)
+                            </LabelPopoverRowColumnRight>
+                          </LabelPopoverContentRow>
+                        </Fragment>
+                      }
+                      label="Stand Umsetzung"
+                    />
+                  </FieldContainer>
+                  <AutoComplete
+                    key={`${activeDataset.row.id}bearbeiter`}
+                    tree={tree}
+                    label="Verantwortlich"
+                    fieldName="bearbeiter"
+                    value={getBearbName({ store, tree })}
+                    objects={store.dropdownList.adressen}
+                    updatePropertyInDb={updatePropertyInDb}
+                    openabove
+                  />
+                </FieldsContainer>
+              )}
+            </Mutation>
+          </Container>
+        </ErrorBoundary>
+      )
+    }}
+  </Query>
 )
 
 export default enhance(Ap)
