@@ -1,13 +1,16 @@
 // @flow
 import React from 'react'
-import { observer, inject } from 'mobx-react'
 import styled from 'styled-components'
-import compose from 'recompose/compose'
+import { Query, Mutation } from 'react-apollo'
+import get from 'lodash/get'
+import sortBy from 'lodash/sortBy'
 
-import RadioButtonGroup from '../../../shared/RadioButtonGroup'
-import TextField from '../../../shared/TextField'
+import RadioButtonGroup from '../../../shared/RadioButtonGroupGql'
+import TextField from '../../../shared/TextFieldGql'
 import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
+import zielByIdGql from './zielById.graphql'
+import updateZielByIdGql from './updateZielById.graphql'
 
 const Container = styled.div`
   height: 100%;
@@ -20,53 +23,83 @@ const FieldsContainer = styled.div`
   overflow: auto !important;
 `
 
-const enhance = compose(inject('store'), observer)
+const Ziel = ({ id }: { id: String }) => (
+  <Query query={zielByIdGql} variables={{ id }}>
+    {({ loading, error, data }) => {
+      if (loading)
+        return (
+          <Container>
+            <FieldsContainer>Lade...</FieldsContainer>
+          </Container>
+        )
+      if (error) return `Fehler: ${error.message}`
 
-const Ziel = ({ store, tree }: { store: Object, tree: Object }) => {
-  const { activeDataset } = tree
+      const row = get(data, 'zielById')
+      let typWerte = get(data, 'allZielTypWertes.nodes', [])
+      typWerte = sortBy(typWerte, 'sort')
+      typWerte = typWerte.map(el => ({
+        value: el.code,
+        label: el.text,
+      }))
 
-  return (
-    <ErrorBoundary>
-      <Container>
-        <FormTitle tree={tree} title="Ziel" />
-        <FieldsContainer>
-          <TextField
-            key={`${activeDataset.row.id}jahr`}
-            tree={tree}
-            label="Jahr"
-            fieldName="jahr"
-            value={activeDataset.row.jahr}
-            errorText={activeDataset.valid.jahr}
-            type="number"
-            updateProperty={store.updateProperty}
-            updatePropertyInDb={store.updatePropertyInDb}
-          />
-          <RadioButtonGroup
-            tree={tree}
-            fieldName="typ"
-            label="Zieltyp"
-            value={activeDataset.row.typ}
-            errorText={activeDataset.valid.typ}
-            dataSource={store.dropdownList.zielTypWerte}
-            updatePropertyInDb={store.updatePropertyInDb}
-          />
-          <TextField
-            key={`${activeDataset.row.id}bezeichnung`}
-            tree={tree}
-            label="Ziel"
-            fieldName="bezeichnung"
-            value={activeDataset.row.bezeichnung}
-            errorText={activeDataset.valid.bezeichnung}
-            type="text"
-            multiLine
-            fullWidth
-            updateProperty={store.updateProperty}
-            updatePropertyInDb={store.updatePropertyInDb}
-          />
-        </FieldsContainer>
-      </Container>
-    </ErrorBoundary>
-  )
-}
+      return (
+        <ErrorBoundary>
+          <Container>
+            <FormTitle apId={row.apId} title="Ziel" />
+            <Mutation mutation={updateZielByIdGql}>
+              {(updateZiel, { data }) => (
+                <FieldsContainer>
+                  <TextField
+                    key={`${row.id}jahr`}
+                    label="Jahr"
+                    value={row.jahr}
+                    type="number"
+                    saveToDb={value =>
+                      updateZiel({
+                        variables: {
+                          id,
+                          jahr: value,
+                        },
+                      })
+                    }
+                  />
+                  <RadioButtonGroup
+                    key={`${row.id}typ`}
+                    label="Zieltyp"
+                    value={row.typ}
+                    dataSource={typWerte}
+                    saveToDb={value =>
+                      updateZiel({
+                        variables: {
+                          id,
+                          typ: value,
+                        },
+                      })
+                    }
+                  />
+                  <TextField
+                    key={`${row.id}bezeichnung`}
+                    label="Ziel"
+                    value={row.bezeichnung}
+                    type="text"
+                    multiLine
+                    saveToDb={value =>
+                      updateZiel({
+                        variables: {
+                          id,
+                          bezeichnung: value,
+                        },
+                      })
+                    }
+                  />
+                </FieldsContainer>
+              )}
+            </Mutation>
+          </Container>
+        </ErrorBoundary>
+      )
+    }}
+  </Query>
+)
 
-export default enhance(Ziel)
+export default Ziel

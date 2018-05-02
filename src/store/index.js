@@ -98,9 +98,6 @@ function Store(): void {
     fileType: 'xlsx',
     toggleFileType: () => {},
   }
-  this.dropdownList = {
-    zielTypWerte: [],
-  }
   this.ui = {}
   this.app = {
     ktZh: null,

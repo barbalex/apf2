@@ -1,7 +1,6 @@
 import extendStore from './store'
 import extendStoreAutoruns from './storeAutoruns'
 import extendTree from './tree'
-import extendDropdownList from './dropdownList'
 import extendApp from './app'
 import extendUser from './user'
 import extendMap from './map'
@@ -19,7 +18,6 @@ export default (store: Object): void => {
   extendStore(store)
   extendTree(store, store.tree)
   extendTree(store, store.tree2)
-  extendDropdownList(store)
   extendApp(store)
   extendUser(store)
   extendMap(store)
