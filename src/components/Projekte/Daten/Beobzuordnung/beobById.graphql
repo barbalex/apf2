@@ -20,7 +20,6 @@ query beobByIdQuery($id: UUID!) {
         popsByApId {
           nodes {
             id
-            nr
             tpopsByPopId {
               nodes {
                 id

@@ -52,7 +52,6 @@ mutation updateBeob(
           popsByApId {
             nodes {
               id
-              nr
               tpopsByPopId {
                 nodes {
                   id
