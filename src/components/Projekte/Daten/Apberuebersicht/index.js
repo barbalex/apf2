@@ -3,6 +3,8 @@ import React from 'react'
 import styled from 'styled-components'
 import { Query, Mutation } from 'react-apollo'
 import get from 'lodash/get'
+import compose from 'recompose/compose'
+import withHandlers from 'recompose/withHandlers'
 
 import TextField from '../../../shared/TextFieldGql'
 import FormTitle from '../../../shared/FormTitle'
@@ -22,7 +24,38 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
-const Apberuebersicht = ({ id }: { id: String }) => (
+const enhance = compose(
+  withHandlers({
+    saveToDb: props => ({ row, field, value, updateApberuebersicht }) =>
+      updateApberuebersicht({
+        variables: {
+          id: row.id,
+          [field]: value,
+        },
+        optimisticResponse: {
+          __typename: 'Mutation',
+          updateApberuebersichtById: {
+            apberuebersicht: {
+              id: row.id,
+              projId: field === 'projId' ? value : row.projId,
+              jahr: field === 'jahr' ? value : row.jahr,
+              bemerkungen: field === 'bemerkungen' ? value : row.bemerkungen,
+              __typename: 'Apberuebersicht',
+            },
+            __typename: 'Apberuebersicht',
+          },
+        },
+      }),
+  })
+)
+
+const Apberuebersicht = ({
+  id,
+  saveToDb,
+}: {
+  id: String,
+  saveToDb: () => void,
+}) => (
   <Query query={apberuebersichtByIdGql} variables={{ id }}>
     {({ loading, error, data }) => {
       if (loading)
@@ -48,11 +81,11 @@ const Apberuebersicht = ({ id }: { id: String }) => (
                     value={row.jahr}
                     type="number"
                     saveToDb={value =>
-                      updateApberuebersicht({
-                        variables: {
-                          id,
-                          jahr: value,
-                        },
+                      saveToDb({
+                        row,
+                        field: 'jahr',
+                        value,
+                        updateApberuebersicht,
                       })
                     }
                   />
@@ -63,11 +96,11 @@ const Apberuebersicht = ({ id }: { id: String }) => (
                     type="text"
                     multiLine
                     saveToDb={value =>
-                      updateApberuebersicht({
-                        variables: {
-                          id,
-                          bemerkungen: value,
-                        },
+                      saveToDb({
+                        row,
+                        field: 'bemerkungen',
+                        value,
+                        updateApberuebersicht,
                       })
                     }
                   />
@@ -81,4 +114,4 @@ const Apberuebersicht = ({ id }: { id: String }) => (
   </Query>
 )
 
-export default Apberuebersicht
+export default enhance(Apberuebersicht)
