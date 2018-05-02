@@ -31,3 +31,16 @@ ALTER TABLE apflora.pop ADD CONSTRAINT pop_ap_id_fkey FOREIGN KEY (ap_id) REFERE
 ALTER TABLE apflora.ziel ADD CONSTRAINT ziel_ap_id_fkey FOREIGN KEY (ap_id) REFERENCES apflora.ap (id) ON DELETE CASCADE ON UPDATE CASCADE;
 
 ALTER TABLE apflora.beob DROP CONSTRAINT beob_id_key;
+
+
+ALTER TABLE apflora.projekt DROP CONSTRAINT projekt_id_key cascade;
+ALTER TABLE apflora.ap
+    ADD CONSTRAINT ap_proj_id_fkey FOREIGN KEY (proj_id)
+    REFERENCES apflora.projekt (id) MATCH SIMPLE
+    ON UPDATE CASCADE
+    ON DELETE CASCADE;
+ALTER TABLE apflora.apberuebersicht
+    ADD CONSTRAINT apberuebersicht_proj_id_fkey FOREIGN KEY (proj_id)
+    REFERENCES apflora.projekt (id) MATCH SIMPLE
+    ON UPDATE CASCADE
+    ON DELETE CASCADE;

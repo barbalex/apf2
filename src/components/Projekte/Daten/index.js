@@ -146,7 +146,7 @@ const Daten = ({
    */
   const { id } = activeDataset.row
   const formObject = {
-    projekt: <Projekt tree={tree} dimensions={dimensions} />,
+    projekt: <Projekt id={id} dimensions={dimensions} />,
     apberuebersicht: <Apberuebersicht id={id} dimensions={dimensions} />,
     ap: <Ap id={id} dimensions={dimensions} />,
     assozart: <Assozart id={id} dimensions={dimensions} />,

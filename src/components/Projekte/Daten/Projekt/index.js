@@ -1,12 +1,14 @@
 // @flow
 import React from 'react'
-import { observer, inject } from 'mobx-react'
 import styled from 'styled-components'
-import compose from 'recompose/compose'
+import { Query, Mutation } from 'react-apollo'
+import get from 'lodash/get'
 
-import TextField from '../../../shared/TextField'
+import TextField from '../../../shared/TextFieldGql'
 import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
+import projektByIdGql from './projektById.graphql'
+import updateProjektByIdGql from './updateProjektById.graphql'
 
 const Container = styled.div`
   height: 100%;
@@ -19,39 +21,48 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
-const enhance = compose(inject('store'), observer)
+const Projekt = ({ id }: { id: String }) => (
+  <Query query={projektByIdGql} variables={{ id }}>
+    {({ loading, error, data }) => {
+      if (loading)
+        return (
+          <Container>
+            <FieldsContainer>Lade...</FieldsContainer>
+          </Container>
+        )
+      if (error) return `Fehler: ${error.message}`
 
-const Projekt = ({ store, tree }: { store: Object, tree: Object }) => {
-  const { activeDataset } = tree
+      const row = get(data, 'projektById')
 
-  return (
-    <ErrorBoundary>
-      <Container>
-        <FormTitle tree={tree} title="Projekt" />
-        <FieldsContainer>
-          <TextField
-            key={`${activeDataset.row.id}name`}
-            tree={tree}
-            label="Name"
-            fieldName="name"
-            value={
-              activeDataset && activeDataset.row && activeDataset.row.name
-                ? activeDataset.row.name
-                : ''
-            }
-            errorText={
-              activeDataset && activeDataset.valid && activeDataset.valid.name
-                ? activeDataset.valid.name
-                : ''
-            }
-            type="text"
-            updateProperty={store.updateProperty}
-            updatePropertyInDb={store.updatePropertyInDb}
-          />
-        </FieldsContainer>
-      </Container>
-    </ErrorBoundary>
-  )
-}
+      return (
+        <ErrorBoundary>
+          <Container>
+            <FormTitle title="Projekt" />
+            <Mutation mutation={updateProjektByIdGql}>
+              {(updateProjekt, { data }) => (
+                <FieldsContainer>
+                  <TextField
+                    key={`${row.id}name`}
+                    label="Name"
+                    value={row.name}
+                    type="text"
+                    saveToDb={value =>
+                      updateProjekt({
+                        variables: {
+                          id,
+                          name: value,
+                        },
+                      })
+                    }
+                  />
+                </FieldsContainer>
+              )}
+            </Mutation>
+          </Container>
+        </ErrorBoundary>
+      )
+    }}
+  </Query>
+)
 
-export default enhance(Projekt)
+export default Projekt

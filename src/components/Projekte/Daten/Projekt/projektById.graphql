@@ -1,0 +1,6 @@
+query projektByIdQuery($id: UUID!) {
+  projektById(id: $id) {
+    id
+    name
+  }
+}
