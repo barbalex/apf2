@@ -25,28 +25,23 @@ const StyledFormControlLabel = styled(FormControlLabel)`
 
 const enhance = compose(
   withHandlers({
-    onCheck: props => (e, val) => {
-      const { updatePropertyInDb, fieldName } = props
-      updatePropertyInDb(props.tree, fieldName, val)
-    },
+    onCheck: ({ saveToDb }) => (e, val) => saveToDb(val),
   }),
   observer
 )
 
 const CheckboxWithInfo = ({
-  fieldName,
   value,
   label,
   onCheck,
   popover,
-  updatePropertyInDb,
+  saveToDb,
 }: {
-  fieldName: string,
   value?: number | string,
   label: string,
   onCheck: () => void,
   popover: Object,
-  updatePropertyInDb: () => void,
+  saveToDb: () => void,
 }) => (
   <Container>
     <FormGroup>

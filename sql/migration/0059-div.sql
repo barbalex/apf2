@@ -29,3 +29,5 @@ ALTER TABLE apflora.erfkrit ADD CONSTRAINT erfkrit_ap_id_fkey FOREIGN KEY (ap_id
 ALTER TABLE apflora.idealbiotop ADD CONSTRAINT idealbiotop_ap_id_fkey FOREIGN KEY (ap_id) REFERENCES apflora.ap (id) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE apflora.pop ADD CONSTRAINT pop_ap_id_fkey FOREIGN KEY (ap_id) REFERENCES apflora.ap (id) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE apflora.ziel ADD CONSTRAINT ziel_ap_id_fkey FOREIGN KEY (ap_id) REFERENCES apflora.ap (id) ON DELETE CASCADE ON UPDATE CASCADE;
+
+ALTER TABLE apflora.beob DROP CONSTRAINT beob_id_key;

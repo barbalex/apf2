@@ -1,0 +1,45 @@
+query beobByIdQuery($id: UUID!) {
+  beobById(id: $id) {
+    id
+    idField
+    datum
+    autor
+    x
+    y
+    data
+    artId
+    tpopId
+    nichtZuordnen
+    bemerkungen
+    quelleId
+    aeEigenschaftenByArtId {
+      id
+      artname
+      apByArtId {
+        id
+        popsByApId {
+          nodes {
+            id
+            nr
+            tpopsByPopId {
+              nodes {
+                id
+                nr
+                x
+                y
+                popStatusWerteByStatus {
+                  id
+                  text
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    beobQuelleWerteByQuelleId {
+      id
+      name
+    }
+  }
+}
