@@ -1,0 +1,53 @@
+mutation updateBeob(
+  $id: UUID!
+  $idField: String
+  $datum: Date
+  $autor: String
+  $x: Int
+  $y: Int
+  $data: JSON
+  $artId: UUID
+  $tpopId: UUID
+  $nichtZuordnen: Boolean
+  $bemerkungen: String
+  $quelleId: UUID
+) {
+  updateBeobById(
+    input: {
+      id: $id
+      beobPatch: {
+        id: $id
+        idField: $idField
+        datum: $datum
+        autor: $autor
+        x: $x
+        y: $y
+        data: $data
+        artId: $artId
+        tpopId: $tpopId
+        nichtZuordnen: $nichtZuordnen
+        bemerkungen: $bemerkungen
+        quelleId: $quelleId
+      }
+    }
+  ) {
+    beob {
+      id
+      idField
+      datum
+      autor
+      x
+      y
+      data
+      artId
+      tpopId
+      nichtZuordnen
+      bemerkungen
+      quelleId
+      aeEigenschaftenByArtId {
+        id
+        artname
+      }
+    }
+  }
+}

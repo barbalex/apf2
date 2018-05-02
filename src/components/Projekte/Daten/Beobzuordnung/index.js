@@ -130,12 +130,11 @@ const getTpopZuordnenSource = (store: Object, tree: Object): Array<Object> => {
 const enhance = compose(
   inject('store'),
   withHandlers({
-    updatePropertyInDb: props => (
+    updatePropertyInDb: ({ store, tree }) => (
       treePassedByUpdatePropertyInDb,
       fieldname,
       val
     ) => {
-      const { store, tree } = props
       const {
         insertBeobzuordnung,
         updatePropertyInDb,
