@@ -4,6 +4,8 @@ import styled from 'styled-components'
 import { Query, Mutation } from 'react-apollo'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
+import compose from 'recompose/compose'
+import withHandlers from 'recompose/withHandlers'
 
 import AutoComplete from '../../../shared/AutocompleteGql'
 import RadioButtonGroupWithInfo from '../../../shared/RadioButtonGroupWithInfoGql'
@@ -55,7 +57,37 @@ const LabelPopoverRowColumnRight = styled.div`
   padding-left: 5px;
 `
 
-const Ap = ({ id }: { id: String }) => (
+const enhance = compose(
+  withHandlers({
+    saveToDb: props => ({ row, field, value, updateAp }) =>
+      updateAp({
+        variables: {
+          id: row.id,
+          [field]: value,
+        },
+        optimisticResponse: {
+          __typename: 'Mutation',
+          updateApById: {
+            ap: {
+              id: row.id,
+              startJahr: field === 'startJahr' ? value : row.startJahr,
+              bearbeitung: field === 'bearbeitung' ? value : row.bearbeitung,
+              umsetzung: field === 'umsetzung' ? value : row.umsetzung,
+              artId: field === 'artId' ? value : row.artId,
+              bearbeiter: field === 'bearbeiter' ? value : row.bearbeiter,
+              projId: field === 'projId' ? value : row.projId,
+              adresseByBearbeiter: row.adresseByBearbeiter,
+              aeEigenschaftenByArtId: row.aeEigenschaftenByArtId,
+              __typename: 'Ap',
+            },
+            __typename: 'Ap',
+          },
+        },
+      }),
+  })
+)
+
+const Ap = ({ id, saveToDb }: { id: String, saveToDb: () => void }) => (
   <Query query={apByIdGql} variables={{ id }}>
     {({ loading, error, data }) => {
       if (loading)
@@ -111,12 +143,7 @@ const Ap = ({ id }: { id: String }) => (
                     value={get(row, 'aeEigenschaftenByArtId.artname', '')}
                     objects={artWerte}
                     saveToDb={value =>
-                      updateAp({
-                        variables: {
-                          id,
-                          artId: value,
-                        },
-                      })
+                      saveToDb({ row, field: 'artId', value, updateAp })
                     }
                   />
                   <RadioButtonGroupWithInfo
@@ -124,12 +151,7 @@ const Ap = ({ id }: { id: String }) => (
                     value={row.bearbeitung}
                     dataSource={bearbeitungWerte}
                     saveToDb={value =>
-                      updateAp({
-                        variables: {
-                          id,
-                          bearbeitung: value,
-                        },
-                      })
+                      saveToDb({ row, field: 'bearbeitung', value, updateAp })
                     }
                     popover={
                       <Fragment>
@@ -160,36 +182,7 @@ const Ap = ({ id }: { id: String }) => (
                     value={row.startJahr}
                     type="number"
                     saveToDb={value =>
-                      updateAp({
-                        variables: {
-                          id,
-                          startJahr: value,
-                        },
-                        /**
-                         * try this as example
-                         * for optimistic ui
-                         * TODO: generalize
-                         */
-                        optimisticResponse: {
-                          __typename: 'Mutation',
-                          updateApById: {
-                            ap: {
-                              id: row.id,
-                              startJahr: value,
-                              bearbeitung: row.bearbeitung,
-                              umsetzung: row.umsetzung,
-                              artId: row.artId,
-                              bearbeiter: row.bearbeiter,
-                              projId: row.projId,
-                              adresseByBearbeiter: row.adresseByBearbeiter,
-                              aeEigenschaftenByArtId:
-                                row.aeEigenschaftenByArtId,
-                              __typename: 'Ap',
-                            },
-                            __typename: 'Ap',
-                          },
-                        },
-                      })
+                      saveToDb({ row, field: 'startJahr', value, updateAp })
                     }
                   />
                   <FieldContainer>
@@ -236,12 +229,7 @@ const Ap = ({ id }: { id: String }) => (
                     value={get(row, 'adresseByBearbeiter.name', null)}
                     objects={adressenWerte}
                     saveToDb={value =>
-                      updateAp({
-                        variables: {
-                          id,
-                          bearbeiter: value,
-                        },
-                      })
+                      saveToDb({ row, field: 'bearbeiter', value, updateAp })
                     }
                     openabove
                   />
@@ -264,4 +252,4 @@ const Ap = ({ id }: { id: String }) => (
   </Query>
 )
 
-export default Ap
+export default enhance(Ap)
