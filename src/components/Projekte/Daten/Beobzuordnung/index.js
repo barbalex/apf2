@@ -1,13 +1,9 @@
 // @flow
 import React from 'react'
-import { observer, inject } from 'mobx-react'
 import styled from 'styled-components'
 import sortBy from 'lodash/sortBy'
-import compose from 'recompose/compose'
-import withHandlers from 'recompose/withHandlers'
 import { Query, Mutation } from 'react-apollo'
 import get from 'lodash/get'
-import chain from 'lodash/chain'
 import flatten from 'lodash/flatten'
 
 import FormTitle from '../../../shared/FormTitle'
@@ -119,150 +115,110 @@ const getTpopZuordnenSource = (row: Object): Array<Object> => {
   }))
 }
 
-const enhance = compose(
-  inject('store'),
-  withHandlers({
-    updatePropertyInDb: ({ store, tree }) => (
-      treePassedByUpdatePropertyInDb,
-      fieldname,
-      val
-    ) => {
-      const {
-        insertBeobzuordnung,
-        updatePropertyInDb,
-        deleteBeobzuordnung,
-      } = store
-      const { activeDataset } = tree
-      if (val) {
-        if (activeDataset.table === 'beob') {
-          insertBeobzuordnung(tree, activeDataset.row, fieldname, val)
-        } else {
-          // beob was moved from one tpop-id to another
-          updatePropertyInDb(tree, fieldname, val)
-        }
-      } else {
-        deleteBeobzuordnung(tree, activeDataset.row.id)
-      }
-    },
-  }),
-  observer
-)
-
 const Beobzuordnung = ({
   id,
-  store,
-  tree,
-  updatePropertyInDb,
   dimensions = { width: 380 },
 }: {
   id: String,
-  store: Object,
-  tree: Object,
-  updatePropertyInDb: () => void,
   dimensions: Object,
-}) => {
-  const { table } = store
-  const { activeDataset } = tree
-  const beob = activeDataset.row
-  const quelle = beob ? table.beob_quelle_werte.get(beob.quelle_id) : null
-  const quelleName = quelle && quelle.name ? quelle.name : '?'
-  const beobTitle = `Informationen aus ${quelleName} (nicht veränderbar)`
-  const showTPopId = activeDataset.row.nicht_zuordnen !== 1
-  const adbArt =
-    beob && beob.art_id ? store.table.ae_eigenschaften.get(beob.art_id) : null
-  const artname = adbArt ? adbArt.artname : ''
-  const artLabel = `Beobachtete Art: ${artname}`
-
-  return (
-    <Query query={beobByIdGql} variables={{ id }}>
-      {({ loading, error, data }) => {
-        if (loading)
-          return (
-            <Container>
-              <FieldsContainer>Lade...</FieldsContainer>
-            </Container>
-          )
-        if (error) return `Fehler: ${error.message}`
-
-        const row = get(data, 'beobById')
-        const tpopZuordnenSource = getTpopZuordnenSource(row, store, tree)
-        const tpopZuordnenObject = tpopZuordnenSource.find(
-          o => o.id === activeDataset.row.tpop_id
-        )
-        const tpopZuordnenValue =
-          tpopZuordnenObject && tpopZuordnenObject.value
-            ? tpopZuordnenObject.value
-            : null
-
+}) => (
+  <Query query={beobByIdGql} variables={{ id }}>
+    {({ loading, error, data }) => {
+      if (loading)
         return (
-          <ErrorBoundary>
-            <FormContainer>
-              <FormTitle
-                apId={get(row, 'aeEigenschaftenByArtId.apByArtId.id', null)}
-                title="Beobachtung"
-              />
-              <DataContainer>
-                <Mutation mutation={updateBeobByIdGql}>
-                  {(updateBeob, { data }) => (
-                    <FieldsContainer>
-                      <div>{artLabel}</div>
-                      <CheckboxWithInfo
-                        key={`${activeDataset.row.id}nichtZuordnen`}
-                        label="Nicht zuordnen"
-                        value={activeDataset.row.nichtZuordnen}
-                        saveToDb={value =>
-                          updateBeob({
-                            variables: {
-                              id,
-                              nichtZuordnen: value,
-                            },
-                          })
-                        }
-                        popover={nichtZuordnenPopover}
-                      />
-                      {showTPopId && (
-                        <ZuordnenDiv>
-                          <AutoComplete
-                            key={`${activeDataset.row.id}tpopId`}
-                            label="Einer Teilpopulation zuordnen"
-                            value={tpopZuordnenValue}
-                            objects={tpopZuordnenSource}
-                            saveToDb={value =>
-                              updateBeob({
-                                variables: {
-                                  id,
-                                  tpopId: value,
-                                },
-                              })
-                            }
-                          />
-                        </ZuordnenDiv>
-                      )}
-                      <TextField
-                        key={`${activeDataset.row.id}bemerkungen`}
-                        tree={tree}
-                        label="Bemerkungen zur Zuordnung"
-                        fieldName="bemerkungen"
-                        value={activeDataset.row.bemerkungen}
-                        errorText={activeDataset.valid.bemerkungen}
-                        type="text"
-                        multiLine
-                        fullWidth
-                        updateProperty={store.updateProperty}
-                        updatePropertyInDb={store.updatePropertyInDb}
-                      />
-                    </FieldsContainer>
-                  )}
-                </Mutation>
-                <Title>{beobTitle}</Title>
-                <Beob id={activeDataset.row.id} dimensions={dimensions} />
-              </DataContainer>
-            </FormContainer>
-          </ErrorBoundary>
+          <Container>
+            <FieldsContainer>Lade...</FieldsContainer>
+          </Container>
         )
-      }}
-    </Query>
-  )
-}
+      if (error) return `Fehler: ${error.message}`
 
-export default enhance(Beobzuordnung)
+      const row = get(data, 'beobById')
+
+      return (
+        <ErrorBoundary>
+          <FormContainer>
+            <FormTitle
+              apId={get(row, 'aeEigenschaftenByArtId.apByArtId.id', null)}
+              title="Beobachtung"
+            />
+            <DataContainer>
+              <Mutation mutation={updateBeobByIdGql}>
+                {(updateBeob, { data }) => (
+                  <FieldsContainer>
+                    <div>{`Beobachtete Art: ${get(
+                      row,
+                      'aeEigenschaftenByArtId.artname'
+                    )}`}</div>
+                    <CheckboxWithInfo
+                      key={`${row.id}nichtZuordnen`}
+                      label="Nicht zuordnen"
+                      value={row.nichtZuordnen}
+                      saveToDb={value => {
+                        const variables = {
+                          id,
+                          nichtZuordnen: value,
+                        }
+                        // if true, empty tpopId
+                        if (value) variables.tpopId = null
+                        updateBeob({
+                          variables,
+                        })
+                      }}
+                      popover={nichtZuordnenPopover}
+                    />
+                    <ZuordnenDiv>
+                      <AutoComplete
+                        key={`${row.id}tpopId`}
+                        label={
+                          !!row.tpopId
+                            ? 'Einer anderen Teilpopulation zuordnen'
+                            : 'Einer Teilpopulation zuordnen'
+                        }
+                        value=""
+                        objects={getTpopZuordnenSource(row)}
+                        saveToDb={value => {
+                          const variables = {
+                            id,
+                            tpopId: value,
+                          }
+                          // if value, set nichtZuordnen false
+                          if (!!value) variables.nichtZuordnen = false
+                          updateBeob({
+                            variables,
+                          })
+                        }}
+                      />
+                    </ZuordnenDiv>
+                    <TextField
+                      key={`${row.id}bemerkungen`}
+                      label="Bemerkungen zur Zuordnung"
+                      value={row.bemerkungen}
+                      type="text"
+                      multiLine
+                      saveToDb={value =>
+                        updateBeob({
+                          variables: {
+                            id,
+                            bemerkungen: value,
+                          },
+                        })
+                      }
+                    />
+                  </FieldsContainer>
+                )}
+              </Mutation>
+              <Title>{`Informationen aus ${get(
+                row,
+                'beobQuelleWerteByQuelleId.name',
+                '?'
+              )} (nicht veränderbar)`}</Title>
+              <Beob id={row.id} dimensions={dimensions} />
+            </DataContainer>
+          </FormContainer>
+        </ErrorBoundary>
+      )
+    }}
+  </Query>
+)
+
+export default Beobzuordnung
