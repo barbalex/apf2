@@ -44,3 +44,5 @@ ALTER TABLE apflora.apberuebersicht
     REFERENCES apflora.projekt (id) MATCH SIMPLE
     ON UPDATE CASCADE
     ON DELETE CASCADE;
+
+ALTER TABLE apflora.apart DROP CONSTRAINT beobart_id_key;

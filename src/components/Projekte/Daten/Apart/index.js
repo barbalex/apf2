@@ -4,6 +4,8 @@ import sortBy from 'lodash/sortBy'
 import styled from 'styled-components'
 import { Query, Mutation } from 'react-apollo'
 import get from 'lodash/get'
+import compose from 'recompose/compose'
+import withHandlers from 'recompose/withHandlers'
 
 import AutoComplete from '../../../shared/AutocompleteGql'
 import FormTitle from '../../../shared/FormTitle'
@@ -22,7 +24,32 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
-const ApArt = ({ id }: { id: String }) => (
+const enhance = compose(
+  withHandlers({
+    saveToDb: props => ({ row, field, value, updateApart }) =>
+      updateApart({
+        variables: {
+          id: row.id,
+          [field]: value,
+        },
+        optimisticResponse: {
+          __typename: 'Mutation',
+          updateApartById: {
+            apart: {
+              id: row.id,
+              apId: field === 'apId' ? value : row.apId,
+              artId: field === 'artId' ? value : row.artId,
+              aeEigenschaftenByArtId: row.aeEigenschaftenByArtId,
+              __typename: 'Apart',
+            },
+            __typename: 'Apart',
+          },
+        },
+      }),
+  })
+)
+
+const ApArt = ({ id, saveToDb }: { id: String, saveToDb: () => void }) => (
   <Query query={apartByIdGql} variables={{ id }}>
     {({ loading, error, data }) => {
       if (loading)
@@ -88,12 +115,7 @@ const ApArt = ({ id }: { id: String }) => (
                     value={get(row, 'aeEigenschaftenByArtId.artname', '')}
                     objects={artWerte}
                     saveToDb={value =>
-                      updateApart({
-                        variables: {
-                          id,
-                          artId: value,
-                        },
-                      })
+                      saveToDb({ row, field: 'artId', value, updateApart })
                     }
                     openabove
                   />
@@ -107,4 +129,4 @@ const ApArt = ({ id }: { id: String }) => (
   </Query>
 )
 
-export default ApArt
+export default enhance(ApArt)
