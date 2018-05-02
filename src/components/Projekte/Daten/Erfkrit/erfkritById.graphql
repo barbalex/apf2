@@ -1,0 +1,16 @@
+query erfkritByIdQuery($id: UUID!) {
+  erfkritById(id: $id) {
+    id
+    apId
+    erfolg
+    kriterien
+  }
+  allApErfkritWertes {
+    nodes {
+      id
+      code
+      text
+      sort
+    }
+  }
+}

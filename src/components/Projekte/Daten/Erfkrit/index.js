@@ -1,13 +1,16 @@
 // @flow
 import React from 'react'
-import { observer, inject } from 'mobx-react'
 import styled from 'styled-components'
-import compose from 'recompose/compose'
+import { Query, Mutation } from 'react-apollo'
+import get from 'lodash/get'
+import sortBy from 'lodash/sortBy'
 
-import RadioButtonGroup from '../../../shared/RadioButtonGroup'
-import TextField from '../../../shared/TextField'
+import RadioButtonGroup from '../../../shared/RadioButtonGroupGql'
+import TextField from '../../../shared/TextFieldGql'
 import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
+import erfkritByIdGql from './erfkritById.graphql'
+import updateErfkritByIdGql from './updateErfkritById.graphql'
 
 const Container = styled.div`
   height: 100%;
@@ -20,41 +23,69 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
-const enhance = compose(inject('store'), observer)
+const Erfkrit = ({ id }: { id: String }) => (
+  <Query query={erfkritByIdGql} variables={{ id }}>
+    {({ loading, error, data }) => {
+      if (loading)
+        return (
+          <Container>
+            <FieldsContainer>Lade...</FieldsContainer>
+          </Container>
+        )
+      if (error) return `Fehler: ${error.message}`
 
-const Erfkrit = ({ store, tree }: { store: Object, tree: Object }) => {
-  const { activeDataset } = tree
-  return (
-    <ErrorBoundary>
-      <Container>
-        <FormTitle tree={tree} title="Erfolgs-Kriterium" />
-        <FieldsContainer>
-          <RadioButtonGroup
-            tree={tree}
-            fieldName="erfolg"
-            label="Beurteilung"
-            value={activeDataset.row.erfolg}
-            errorText={activeDataset.valid.erfolg}
-            dataSource={store.dropdownList.apErfkritWerte}
-            updatePropertyInDb={store.updatePropertyInDb}
-          />
-          <TextField
-            key={`${activeDataset.row.id}kriterien`}
-            tree={tree}
-            label="Kriterien"
-            fieldName="kriterien"
-            value={activeDataset.row.kriterien}
-            errorText={activeDataset.valid.kriterien}
-            type="text"
-            multiLine
-            fullWidth
-            updateProperty={store.updateProperty}
-            updatePropertyInDb={store.updatePropertyInDb}
-          />
-        </FieldsContainer>
-      </Container>
-    </ErrorBoundary>
-  )
-}
+      const row = get(data, 'erfkritById')
+      let erfolgWerte = get(data, 'allApErfkritWertes.nodes', [])
+      erfolgWerte = sortBy(erfolgWerte, 'sort')
+      erfolgWerte = erfolgWerte.map(el => ({
+        value: el.code,
+        label: el.text,
+      }))
 
-export default enhance(Erfkrit)
+      return (
+        <ErrorBoundary>
+          <Container>
+            <FormTitle apId={row.apId} title="Erfolgs-Kriterium" />
+            <Mutation mutation={updateErfkritByIdGql}>
+              {(updateErfkrit, { data }) => (
+                <FieldsContainer>
+                  <RadioButtonGroup
+                    key={`${row.id}erfolg`}
+                    label="Beurteilung"
+                    value={row.erfolg}
+                    dataSource={erfolgWerte}
+                    saveToDb={value =>
+                      updateErfkrit({
+                        variables: {
+                          id,
+                          erfolg: value,
+                        },
+                      })
+                    }
+                  />
+                  <TextField
+                    key={`${row.id}kriterien`}
+                    label="Kriterien"
+                    value={row.kriterien}
+                    type="text"
+                    multiLine
+                    saveToDb={value =>
+                      updateErfkrit({
+                        variables: {
+                          id,
+                          kriterien: value,
+                        },
+                      })
+                    }
+                  />
+                </FieldsContainer>
+              )}
+            </Mutation>
+          </Container>
+        </ErrorBoundary>
+      )
+    }}
+  </Query>
+)
+
+export default Erfkrit
