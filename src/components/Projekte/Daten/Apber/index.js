@@ -4,6 +4,8 @@ import styled from 'styled-components'
 import { Query, Mutation } from 'react-apollo'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
+import compose from 'recompose/compose'
+import withHandlers from 'recompose/withHandlers'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroupGql'
 import TextField from '../../../shared/TextFieldGql'
@@ -30,12 +32,76 @@ const FieldsContainer = styled.div`
       : 'auto'};
 `
 
+const enhance = compose(
+  withHandlers({
+    saveToDb: props => ({ row, field, value, updateApber }) =>
+      updateApber({
+        variables: {
+          id: row.id,
+          [field]: value,
+        },
+        optimisticResponse: {
+          __typename: 'Mutation',
+          updateApberById: {
+            apber: {
+              id: row.id,
+              jahr: field === 'jahr' ? value : row.jahr,
+              situation: field === 'situation' ? value : row.situation,
+              vergleichVorjahrGesamtziel:
+                field === 'vergleichVorjahrGesamtziel'
+                  ? value
+                  : row.vergleichVorjahrGesamtziel,
+              beurteilung: field === 'beurteilung' ? value : row.beurteilung,
+              veraenderungZumVorjahr:
+                field === 'veraenderungZumVorjahr'
+                  ? value
+                  : row.veraenderungZumVorjahr,
+              apberAnalyse: field === 'apberAnalyse' ? value : row.apberAnalyse,
+              konsequenzenUmsetzung:
+                field === 'konsequenzenUmsetzung'
+                  ? value
+                  : row.konsequenzenUmsetzung,
+              konsequenzenErfolgskontrolle:
+                field === 'konsequenzenErfolgskontrolle'
+                  ? value
+                  : row.konsequenzenErfolgskontrolle,
+              biotopeNeue: field === 'biotopeNeue' ? value : row.biotopeNeue,
+              biotopeOptimieren:
+                field === 'biotopeOptimieren' ? value : row.biotopeOptimieren,
+              massnahmenOptimieren:
+                field === 'massnahmenOptimieren'
+                  ? value
+                  : row.massnahmenOptimieren,
+              wirkungAufArt:
+                field === 'wirkungAufArt' ? value : row.wirkungAufArt,
+              datum: field === 'datum' ? value : row.datum,
+              massnahmenApBearb:
+                field === 'massnahmenApBearb' ? value : row.massnahmenApBearb,
+              massnahmenPlanungVsAusfuehrung:
+                field === 'massnahmenPlanungVsAusfuehrung'
+                  ? value
+                  : row.massnahmenPlanungVsAusfuehrung,
+              apId: field === 'apId' ? value : row.apId,
+              bearbeiter: field === 'bearbeiter' ? value : row.bearbeiter,
+              apErfkritWerteByBeurteilung: row.apErfkritWerteByBeurteilung,
+              adresseByBearbeiter: row.adresseByBearbeiter,
+              __typename: 'Apber',
+            },
+            __typename: 'Apber',
+          },
+        },
+      }),
+  })
+)
+
 const Apber = ({
   id,
   dimensions = { width: 380 },
+  saveToDb,
 }: {
   id: String,
   dimensions: Object,
+  saveToDb: () => void,
 }) => {
   const veraenGegenVorjahrWerte = [
     { value: '+', label: '+' },
@@ -81,12 +147,7 @@ const Apber = ({
                       value={row.jahr}
                       type="number"
                       saveToDb={value =>
-                        updateApber({
-                          variables: {
-                            id,
-                            jahr: value,
-                          },
-                        })
+                        saveToDb({ row, field: 'jahr', value, updateApber })
                       }
                     />
                     <TextField
@@ -96,11 +157,11 @@ const Apber = ({
                       type="text"
                       multiLine
                       saveToDb={value =>
-                        updateApber({
-                          variables: {
-                            id,
-                            vergleichVorjahrGesamtziel: value,
-                          },
+                        saveToDb({
+                          row,
+                          field: 'vergleichVorjahrGesamtziel',
+                          value,
+                          updateApber,
                         })
                       }
                     />
@@ -110,11 +171,11 @@ const Apber = ({
                       label="Beurteilung"
                       dataSource={beurteilungWerte}
                       saveToDb={value =>
-                        updateApber({
-                          variables: {
-                            id,
-                            beurteilung: value,
-                          },
+                        saveToDb({
+                          row,
+                          field: 'beurteilung',
+                          value,
+                          updateApber,
                         })
                       }
                     />
@@ -124,11 +185,11 @@ const Apber = ({
                       label="Veränderung zum Vorjahr"
                       dataSource={veraenGegenVorjahrWerte}
                       saveToDb={value =>
-                        updateApber({
-                          variables: {
-                            id,
-                            veraenderungZumVorjahr: value,
-                          },
+                        saveToDb({
+                          row,
+                          field: 'veraenderungZumVorjahr',
+                          value,
+                          updateApber,
                         })
                       }
                     />
@@ -139,11 +200,11 @@ const Apber = ({
                       type="text"
                       multiLine
                       saveToDb={value =>
-                        updateApber({
-                          variables: {
-                            id,
-                            apberAnalyse: value,
-                          },
+                        saveToDb({
+                          row,
+                          field: 'apberAnalyse',
+                          value,
+                          updateApber,
                         })
                       }
                     />
@@ -154,11 +215,11 @@ const Apber = ({
                       type="text"
                       multiLine
                       saveToDb={value =>
-                        updateApber({
-                          variables: {
-                            id,
-                            konsequenzenUmsetzung: value,
-                          },
+                        saveToDb({
+                          row,
+                          field: 'konsequenzenUmsetzung',
+                          value,
+                          updateApber,
                         })
                       }
                     />
@@ -169,11 +230,11 @@ const Apber = ({
                       type="text"
                       multiLine
                       saveToDb={value =>
-                        updateApber({
-                          variables: {
-                            id,
-                            konsequenzenErfolgskontrolle: value,
-                          },
+                        saveToDb({
+                          row,
+                          field: 'konsequenzenErfolgskontrolle',
+                          value,
+                          updateApber,
                         })
                       }
                     />
@@ -184,11 +245,11 @@ const Apber = ({
                       type="text"
                       multiLine
                       saveToDb={value =>
-                        updateApber({
-                          variables: {
-                            id,
-                            biotopeNeue: value,
-                          },
+                        saveToDb({
+                          row,
+                          field: 'biotopeNeue',
+                          value,
+                          updateApber,
                         })
                       }
                     />
@@ -199,11 +260,11 @@ const Apber = ({
                       type="text"
                       multiLine
                       saveToDb={value =>
-                        updateApber({
-                          variables: {
-                            id,
-                            biotopeOptimieren: value,
-                          },
+                        saveToDb({
+                          row,
+                          field: 'biotopeOptimieren',
+                          value,
+                          updateApber,
                         })
                       }
                     />
@@ -214,11 +275,11 @@ const Apber = ({
                       type="text"
                       multiLine
                       saveToDb={value =>
-                        updateApber({
-                          variables: {
-                            id,
-                            massnahmenApBearb: value,
-                          },
+                        saveToDb({
+                          row,
+                          field: 'massnahmenApBearb',
+                          value,
+                          updateApber,
                         })
                       }
                     />
@@ -229,11 +290,11 @@ const Apber = ({
                       type="text"
                       multiLine
                       saveToDb={value =>
-                        updateApber({
-                          variables: {
-                            id,
-                            massnahmenPlanungVsAusfuehrung: value,
-                          },
+                        saveToDb({
+                          row,
+                          field: 'massnahmenPlanungVsAusfuehrung',
+                          value,
+                          updateApber,
                         })
                       }
                     />
@@ -244,11 +305,11 @@ const Apber = ({
                       type="text"
                       multiLine
                       saveToDb={value =>
-                        updateApber({
-                          variables: {
-                            id,
-                            massnahmenOptimieren: value,
-                          },
+                        saveToDb({
+                          row,
+                          field: 'massnahmenOptimieren',
+                          value,
+                          updateApber,
                         })
                       }
                     />
@@ -259,11 +320,11 @@ const Apber = ({
                       type="text"
                       multiLine
                       saveToDb={value =>
-                        updateApber({
-                          variables: {
-                            id,
-                            wirkungAufArt: value,
-                          },
+                        saveToDb({
+                          row,
+                          field: 'wirkungAufArt',
+                          value,
+                          updateApber,
                         })
                       }
                     />
@@ -272,12 +333,7 @@ const Apber = ({
                       label="Datum"
                       value={row.datum}
                       saveToDb={value =>
-                        updateApber({
-                          variables: {
-                            id,
-                            datum: value,
-                          },
-                        })
+                        saveToDb({ row, field: 'datum', value, updateApber })
                       }
                     />
                     <AutoComplete
@@ -286,11 +342,11 @@ const Apber = ({
                       value={get(row, 'adresseByBearbeiter.name', '')}
                       objects={adressenWerte}
                       saveToDb={value =>
-                        updateApber({
-                          variables: {
-                            id,
-                            bearbeiter: value,
-                          },
+                        saveToDb({
+                          row,
+                          field: 'bearbeiter',
+                          value,
+                          updateApber,
                         })
                       }
                       openabove
@@ -306,4 +362,4 @@ const Apber = ({
   )
 }
 
-export default Apber
+export default enhance(Apber)
