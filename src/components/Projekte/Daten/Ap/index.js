@@ -165,6 +165,30 @@ const Ap = ({ id }: { id: String }) => (
                           id,
                           startJahr: value,
                         },
+                        /**
+                         * try this as example
+                         * for optimistic ui
+                         * TODO: generalize
+                         */
+                        optimisticResponse: {
+                          __typename: 'Mutation',
+                          updateApById: {
+                            ap: {
+                              id: row.id,
+                              startJahr: value,
+                              bearbeitung: row.bearbeitung,
+                              umsetzung: row.umsetzung,
+                              artId: row.artId,
+                              bearbeiter: row.bearbeiter,
+                              projId: row.projId,
+                              adresseByBearbeiter: row.adresseByBearbeiter,
+                              aeEigenschaftenByArtId:
+                                row.aeEigenschaftenByArtId,
+                              __typename: 'Ap',
+                            },
+                            __typename: 'Ap',
+                          },
+                        },
                       })
                     }
                   />
