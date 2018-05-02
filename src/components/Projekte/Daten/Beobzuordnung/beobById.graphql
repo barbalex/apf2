@@ -31,6 +31,10 @@ query beobByIdQuery($id: UUID!) {
                   id
                   text
                 }
+                popByPopId {
+                  id
+                  nr
+                }
               }
             }
           }

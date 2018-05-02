@@ -7,7 +7,8 @@ import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 import { Query, Mutation } from 'react-apollo'
 import get from 'lodash/get'
-import clone from 'lodash/clone'
+import chain from 'lodash/chain'
+import flatten from 'lodash/flatten'
 
 import FormTitle from '../../../shared/FormTitle'
 import TextField from '../../../shared/TextFieldGql'
@@ -80,12 +81,7 @@ const nichtZuordnenPopover = (
   </Container>
 )
 
-const getTpopZuordnenSource = (
-  row: Object,
-  store: Object,
-  tree: Object
-): Array<Object> => {
-  const { activeDataset } = tree
+const getTpopZuordnenSource = (row: Object): Array<Object> => {
   // get all popIds of active ap
   const popList = get(
     row,
@@ -93,51 +89,27 @@ const getTpopZuordnenSource = (
     []
   )
   // get all tpop
-  let tpopList = []
-  popList.forEach(
-    // clone tpop objects to make them extensible
-    p => (tpopList = [...tpopList, ...get(p, 'tpopsByPopId.nodes', [])])
-  )
-  // with coordinates
-  tpopList = tpopList.filter(t => t.x && t.y)
-  tpopList = tpopList.map(o => ({
-    id: o.id,
-    nr: o.nr,
-    popStatusWerteByStatus: o.popStatusWerteByStatus,
-    x: o.x,
-    y: o.y,
-  }))
-  console.log({ row, popList, tpopList })
-  // calculate their distance to this beob
-  const beob = store.table.beob.get(activeDataset.row.id)
-  // beob loads later
-  // prevent an error occuring if it does not yet exist
-  // by passing back an empty array
-  if (!beob) {
-    return []
-  }
-  tpopList.forEach(t => {
-    const dX = Math.abs(beob.x - t.x)
-    const dY = Math.abs(beob.y - t.y)
-    t.distance = Math.round((dX ** 2 + dY ** 2) ** 0.5)
-    const pop = store.table.pop.get(t.pop_id)
-    // build label
-    const popStatusWerte = Array.from(store.table.pop_status_werte.values())
-    let popStatusWert
-    if (popStatusWerte) {
-      popStatusWert = popStatusWerte.find(x => x.code === t.status)
-    }
-    if (popStatusWert && popStatusWert.text) {
-      t.herkunft = popStatusWert.text
-    } else {
-      t.herkunft = 'ohne Status'
-    }
-    const popNr = pop.nr || pop.nr === 0 ? pop.nr : '(keine Nr)'
-    const tpopNr = t.nr || t.nr === 0 ? t.nr : '(keine Nr)'
-    t.label = `${t.distance.toLocaleString('de-ch')}m: ${popNr}/${tpopNr} (${
-      t.herkunft
-    })`
-  })
+  let tpopList = flatten(popList.map(p => get(p, 'tpopsByPopId.nodes', [])))
+    // with coordinates
+    .filter(t => !!t.x && !!t.y)
+    .map(t => {
+      // calculate their distance to this beob
+      const dX = Math.abs(row.x - t.x)
+      const dY = Math.abs(row.y - t.y)
+      const distance = Math.round((dX ** 2 + dY ** 2) ** 0.5).toLocaleString(
+        'de-ch'
+      )
+      // build label
+      const tpopStatus = get(t, 'popStatusWerteByStatus.text', 'ohne Status')
+      const popNr = get(t, 'popByPopId.nr', '(keine Nr)')
+      const tpopNr = t.nr || '(keine Nr)'
+
+      return {
+        id: t.id,
+        distance,
+        label: `${distance}m: ${popNr}/${tpopNr} (${tpopStatus})`,
+      }
+    })
   // order them by distance
   tpopList = sortBy(tpopList, 'distance')
   // return array of id, label
