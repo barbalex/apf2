@@ -7,11 +7,12 @@ import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 import { Query, Mutation } from 'react-apollo'
 import get from 'lodash/get'
+import clone from 'lodash/clone'
 
 import FormTitle from '../../../shared/FormTitle'
-import TextField from '../../../shared/TextField'
+import TextField from '../../../shared/TextFieldGql'
 import CheckboxWithInfo from '../../../shared/CheckboxWithInfo'
-import AutoComplete from '../../../shared/Autocomplete'
+import AutoComplete from '../../../shared/AutocompleteGql'
 import Beob from '../Beob'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import beobByIdGql from './beobById.graphql'
@@ -79,19 +80,34 @@ const nichtZuordnenPopover = (
   </Container>
 )
 
-const getTpopZuordnenSource = (store: Object, tree: Object): Array<Object> => {
-  const { activeDataset, activeNodes } = tree
+const getTpopZuordnenSource = (
+  row: Object,
+  store: Object,
+  tree: Object
+): Array<Object> => {
+  const { activeDataset } = tree
   // get all popIds of active ap
-  const popList = Array.from(store.table.pop.values()).filter(
-    p => p.ap_id === activeNodes.ap
+  const popList = get(
+    row,
+    'aeEigenschaftenByArtId.apByArtId.popsByApId.nodes',
+    []
   )
-  const popIdList = popList.map(p => p.id)
   // get all tpop
-  let tpopList = Array.from(store.table.tpop.values())
-    // of active ap
-    .filter(t => popIdList.includes(t.pop_id))
-    // with coordinates
-    .filter(t => t.x && t.y)
+  let tpopList = []
+  popList.forEach(
+    // clone tpop objects to make them extensible
+    p => (tpopList = [...tpopList, ...get(p, 'tpopsByPopId.nodes', [])])
+  )
+  // with coordinates
+  tpopList = tpopList.filter(t => t.x && t.y)
+  tpopList = tpopList.map(o => ({
+    id: o.id,
+    nr: o.nr,
+    popStatusWerteByStatus: o.popStatusWerteByStatus,
+    x: o.x,
+    y: o.y,
+  }))
+  console.log({ row, popList, tpopList })
   // calculate their distance to this beob
   const beob = store.table.beob.get(activeDataset.row.id)
   // beob loads later
@@ -184,14 +200,6 @@ const Beobzuordnung = ({
     beob && beob.art_id ? store.table.ae_eigenschaften.get(beob.art_id) : null
   const artname = adbArt ? adbArt.artname : ''
   const artLabel = `Beobachtete Art: ${artname}`
-  const tpopZuordnenSource = getTpopZuordnenSource(store, tree)
-  const tpopZuordnenObject = tpopZuordnenSource.find(
-    o => o.id === activeDataset.row.tpop_id
-  )
-  const tpopZuordnenValue =
-    tpopZuordnenObject && tpopZuordnenObject.value
-      ? tpopZuordnenObject.value
-      : null
 
   return (
     <Query query={beobByIdGql} variables={{ id }}>
@@ -205,6 +213,14 @@ const Beobzuordnung = ({
         if (error) return `Fehler: ${error.message}`
 
         const row = get(data, 'beobById')
+        const tpopZuordnenSource = getTpopZuordnenSource(row, store, tree)
+        const tpopZuordnenObject = tpopZuordnenSource.find(
+          o => o.id === activeDataset.row.tpop_id
+        )
+        const tpopZuordnenValue =
+          tpopZuordnenObject && tpopZuordnenObject.value
+            ? tpopZuordnenObject.value
+            : null
 
         return (
           <ErrorBoundary>
@@ -235,13 +251,18 @@ const Beobzuordnung = ({
                       {showTPopId && (
                         <ZuordnenDiv>
                           <AutoComplete
-                            key={`${activeDataset.row.id}tpop_id`}
-                            tree={tree}
+                            key={`${activeDataset.row.id}tpopId`}
                             label="Einer Teilpopulation zuordnen"
-                            fieldName="tpop_id"
                             value={tpopZuordnenValue}
                             objects={tpopZuordnenSource}
-                            updatePropertyInDb={updatePropertyInDb}
+                            saveToDb={value =>
+                              updateBeob({
+                                variables: {
+                                  id,
+                                  tpopId: value,
+                                },
+                              })
+                            }
                           />
                         </ZuordnenDiv>
                       )}
