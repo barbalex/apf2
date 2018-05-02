@@ -169,15 +169,9 @@ const Daten = ({
     tpopkontrzaehl: <Tpopkontrzaehl id={id} dimensions={dimensions} />,
     exporte: <Exporte tree={tree} dimensions={dimensions} />,
     qk: <Qk tree={tree} />,
-    beobNichtZuzuordnen: (
-      <Beobzuordnung id={id} tree={tree} dimensions={dimensions} />
-    ),
-    beobzuordnung: (
-      <Beobzuordnung id={id} tree={tree} dimensions={dimensions} />
-    ),
-    beobZugeordnet: (
-      <Beobzuordnung id={id} tree={tree} dimensions={dimensions} />
-    ),
+    beobNichtZuzuordnen: <Beobzuordnung id={id} dimensions={dimensions} />,
+    beobzuordnung: <Beobzuordnung id={id} dimensions={dimensions} />,
+    beobZugeordnet: <Beobzuordnung id={id} dimensions={dimensions} />,
   }
   const standardForm = (
     <div>
