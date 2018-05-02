@@ -1,0 +1,24 @@
+query idealbiotopByIdQuery($id: UUID!) {
+  idealbiotopById(id: $id) {
+    id
+    apId
+    erstelldatum
+    hoehenlage
+    region
+    exposition
+    besonnung
+    hangneigung
+    bodenTyp
+    bodenKalkgehalt
+    bodenDurchlaessigkeit
+    bodenHumus
+    bodenNaehrstoffgehalt
+    wasserhaushalt
+    konkurrenz
+    moosschicht
+    krautschicht
+    strauchschicht
+    baumschicht
+    bemerkungen
+  }
+}

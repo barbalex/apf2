@@ -151,7 +151,7 @@ const Daten = ({
     ap: <Ap id={id} dimensions={dimensions} />,
     assozart: <Assozart id={id} dimensions={dimensions} />,
     apart: <Apart id={id} dimensions={dimensions} />,
-    idealbiotop: <Idealbiotop tree={tree} dimensions={dimensions} />,
+    idealbiotop: <Idealbiotop id={id} dimensions={dimensions} />,
     erfkrit: <Erfkrit id={id} dimensions={dimensions} />,
     apber: <Apber id={id} dimensions={dimensions} />,
     ber: <Ber id={id} dimensions={dimensions} />,
