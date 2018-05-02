@@ -4,6 +4,8 @@ import sortBy from 'lodash/sortBy'
 import styled from 'styled-components'
 import { Query, Mutation } from 'react-apollo'
 import get from 'lodash/get'
+import compose from 'recompose/compose'
+import withHandlers from 'recompose/withHandlers'
 
 import TextField from '../../../shared/TextFieldGql'
 import AutoComplete from '../../../shared/AutocompleteGql'
@@ -23,7 +25,34 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
-const Assozart = ({ id }: { id: String }) => (
+const enhance = compose(
+  withHandlers({
+    saveToDb: props => ({ row, field, value, updateAssozart }) =>
+      updateAssozart({
+        variables: {
+          id: row.id,
+          [field]: value,
+        },
+        optimisticResponse: {
+          __typename: 'Mutation',
+          updateAssozartById: {
+            assozart: {
+              id: row.id,
+              bemerkungen: field === 'bemerkungen' ? value : row.bemerkungen,
+              aeId: field === 'aeId' ? value : row.aeId,
+              apId: field === 'apId' ? value : row.apId,
+              aeEigenschaftenByAeId: row.aeEigenschaftenByAeId,
+              apByApId: row.apByApId,
+              __typename: 'Assozart',
+            },
+            __typename: 'Assozart',
+          },
+        },
+      }),
+  })
+)
+
+const Assozart = ({ id, saveToDb }: { id: String, saveToDb: () => void }) => (
   <Query query={assozartByIdGql} variables={{ id }}>
     {({ loading, error, data }) => {
       if (loading)
@@ -64,12 +93,7 @@ const Assozart = ({ id }: { id: String }) => (
                     value={get(row, 'aeEigenschaftenByAeId.artname', '')}
                     objects={artWerte}
                     saveToDb={value =>
-                      updateAssozart({
-                        variables: {
-                          id,
-                          aeId: value,
-                        },
-                      })
+                      saveToDb({ row, field: 'aeId', value, updateAssozart })
                     }
                   />
                   <TextField
@@ -79,11 +103,11 @@ const Assozart = ({ id }: { id: String }) => (
                     type="text"
                     multiLine
                     saveToDb={value =>
-                      updateAssozart({
-                        variables: {
-                          id,
-                          bemerkungen: value,
-                        },
+                      saveToDb({
+                        row,
+                        field: 'bemerkungen',
+                        value,
+                        updateAssozart,
                       })
                     }
                   />
@@ -97,4 +121,4 @@ const Assozart = ({ id }: { id: String }) => (
   </Query>
 )
 
-export default Assozart
+export default enhance(Assozart)
