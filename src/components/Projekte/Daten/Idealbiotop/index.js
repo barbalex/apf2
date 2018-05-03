@@ -3,6 +3,8 @@ import React from 'react'
 import styled from 'styled-components'
 import { Query, Mutation } from 'react-apollo'
 import get from 'lodash/get'
+import compose from 'recompose/compose'
+import withHandlers from 'recompose/withHandlers'
 
 import TextField from '../../../shared/TextFieldGql'
 import DateFieldWithPicker from '../../../shared/DateFieldWithPickerGql'
@@ -35,11 +37,63 @@ const Section = styled.div`
   }
 `
 
+const enhance = compose(
+  withHandlers({
+    saveToDb: props => ({ row, field, value, updateIdealbiotop }) =>
+      updateIdealbiotop({
+        variables: {
+          id: row.id,
+          [field]: value,
+        },
+        optimisticResponse: {
+          __typename: 'Mutation',
+          updateIdealbiotopById: {
+            idealbiotop: {
+              id: row.id,
+              apId: field === 'apId' ? value : row.apId,
+              erstelldatum: field === 'erstelldatum' ? value : row.erstelldatum,
+              hoehenlage: field === 'hoehenlage' ? value : row.hoehenlage,
+              region: field === 'region' ? value : row.region,
+              exposition: field === 'exposition' ? value : row.exposition,
+              besonnung: field === 'besonnung' ? value : row.besonnung,
+              hangneigung: field === 'hangneigung' ? value : row.hangneigung,
+              bodenTyp: field === 'bodenTyp' ? value : row.bodenTyp,
+              bodenKalkgehalt:
+                field === 'bodenKalkgehalt' ? value : row.bodenKalkgehalt,
+              bodenDurchlaessigkeit:
+                field === 'bodenDurchlaessigkeit'
+                  ? value
+                  : row.bodenDurchlaessigkeit,
+              bodenHumus: field === 'bodenHumus' ? value : row.bodenHumus,
+              bodenNaehrstoffgehalt:
+                field === 'bodenNaehrstoffgehalt'
+                  ? value
+                  : row.bodenNaehrstoffgehalt,
+              wasserhaushalt:
+                field === 'wasserhaushalt' ? value : row.wasserhaushalt,
+              konkurrenz: field === 'konkurrenz' ? value : row.konkurrenz,
+              moosschicht: field === 'moosschicht' ? value : row.moosschicht,
+              krautschicht: field === 'krautschicht' ? value : row.krautschicht,
+              strauchschicht:
+                field === 'strauchschicht' ? value : row.strauchschicht,
+              baumschicht: field === 'baumschicht' ? value : row.baumschicht,
+              bemerkungen: field === 'bemerkungen' ? value : row.bemerkungen,
+              __typename: 'Idealbiotop',
+            },
+            __typename: 'Idealbiotop',
+          },
+        },
+      }),
+  })
+)
+
 const Idealbiotop = ({
   id,
+  saveToDb,
   dimensions = { width: 380 },
 }: {
   id: String,
+  saveToDb: () => void,
   dimensions: Object,
 }) => (
   <Query query={idealbiotopByIdGql} variables={{ id }}>
@@ -344,4 +398,4 @@ const Idealbiotop = ({
   </Query>
 )
 
-export default Idealbiotop
+export default enhance(Idealbiotop)
