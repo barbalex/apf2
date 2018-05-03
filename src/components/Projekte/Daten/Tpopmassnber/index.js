@@ -4,6 +4,8 @@ import styled from 'styled-components'
 import { Query, Mutation } from 'react-apollo'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
+import compose from 'recompose/compose'
+import withHandlers from 'recompose/withHandlers'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroupGql'
 import TextField from '../../../shared/TextFieldGql'
@@ -23,7 +25,40 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
-const Tpopmassnber = ({ id }: { id: String }) => (
+const enhance = compose(
+  withHandlers({
+    saveToDb: props => ({ row, field, value, updateTpopmassnber }) =>
+      updateTpopmassnber({
+        variables: {
+          id: row.id,
+          [field]: value,
+        },
+        optimisticResponse: {
+          __typename: 'Mutation',
+          updateTpopmassnberById: {
+            tpopmassnber: {
+              id: row.id,
+              tpopId: field === 'tpopId' ? value : row.tpopId,
+              jahr: field === 'jahr' ? value : row.jahr,
+              beurteilung: field === 'beurteilung' ? value : row.beurteilung,
+              bemerkungen: field === 'bemerkungen' ? value : row.bemerkungen,
+              tpopByTpopId: row.tpopByTpopId,
+              __typename: 'Tpopmassnber',
+            },
+            __typename: 'Tpopmassnber',
+          },
+        },
+      }),
+  })
+)
+
+const Tpopmassnber = ({
+  id,
+  saveToDb,
+}: {
+  id: String,
+  saveToDb: () => void,
+}) => (
   <Query query={tpopmassnberByIdGql} variables={{ id }}>
     {({ loading, error, data }) => {
       if (loading)
@@ -62,11 +97,11 @@ const Tpopmassnber = ({ id }: { id: String }) => (
                     value={row.jahr}
                     type="number"
                     saveToDb={value =>
-                      updateTpopmassnber({
-                        variables: {
-                          id,
-                          jahr: value,
-                        },
+                      saveToDb({
+                        row,
+                        field: 'jahr',
+                        value,
+                        updateTpopmassnber,
                       })
                     }
                   />
@@ -75,11 +110,11 @@ const Tpopmassnber = ({ id }: { id: String }) => (
                     value={row.beurteilung}
                     dataSource={tpopmassnbeurtWerte}
                     saveToDb={value =>
-                      updateTpopmassnber({
-                        variables: {
-                          id,
-                          beurteilung: value,
-                        },
+                      saveToDb({
+                        row,
+                        field: 'beurteilung',
+                        value,
+                        updateTpopmassnber,
                       })
                     }
                   />
@@ -90,11 +125,11 @@ const Tpopmassnber = ({ id }: { id: String }) => (
                     type="text"
                     multiLine
                     saveToDb={value =>
-                      updateTpopmassnber({
-                        variables: {
-                          id,
-                          bemerkungen: value,
-                        },
+                      saveToDb({
+                        row,
+                        field: 'bemerkungen',
+                        value,
+                        updateTpopmassnber,
                       })
                     }
                   />
@@ -108,4 +143,4 @@ const Tpopmassnber = ({ id }: { id: String }) => (
   </Query>
 )
 
-export default Tpopmassnber
+export default enhance(Tpopmassnber)
