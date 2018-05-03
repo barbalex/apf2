@@ -484,11 +484,11 @@ const Tpopfeldkontr = ({
                         />
                         <Section>Vegetation</Section>
                         <AutoCompleteFromArray
-                          key={`${row.id}lr_delarze`}
+                          key={`${row.id}lrDelarze`}
                           label="Lebensraum nach Delarze"
                           value={row.lrDelarze}
                           values={aeLrWerte}
-                          saveToDb={val =>
+                          saveToDb={value =>
                             saveToDb({
                               row,
                               field: 'lrDelarze',
@@ -498,11 +498,11 @@ const Tpopfeldkontr = ({
                           }
                         />
                         <AutoCompleteFromArray
-                          key={`${row.id}Umgebung`}
+                          key={`${row.id}lrUmgebungDelarze`}
                           label="Umgebung nach Delarze"
                           value={row.lrUmgebungDelarze}
                           values={aeLrWerte}
-                          saveToDb={val =>
+                          saveToDb={value =>
                             saveToDb({
                               row,
                               field: 'lrUmgebungDelarze',
