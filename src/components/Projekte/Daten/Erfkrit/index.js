@@ -4,6 +4,8 @@ import styled from 'styled-components'
 import { Query, Mutation } from 'react-apollo'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
+import compose from 'recompose/compose'
+import withHandlers from 'recompose/withHandlers'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroupGql'
 import TextField from '../../../shared/TextFieldGql'
@@ -23,7 +25,32 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
-const Erfkrit = ({ id }: { id: String }) => (
+const enhance = compose(
+  withHandlers({
+    saveToDb: props => ({ row, field, value, updateErfkrit }) =>
+      updateErfkrit({
+        variables: {
+          id: row.id,
+          [field]: value,
+        },
+        optimisticResponse: {
+          __typename: 'Mutation',
+          updateErfkritById: {
+            erfkrit: {
+              id: row.id,
+              apId: field === 'apId' ? value : row.apId,
+              erfolg: field === 'erfolg' ? value : row.erfolg,
+              kriterien: field === 'kriterien' ? value : row.kriterien,
+              __typename: 'Erfkrit',
+            },
+            __typename: 'Erfkrit',
+          },
+        },
+      }),
+  })
+)
+
+const Erfkrit = ({ id, saveToDb }: { id: String, saveToDb: () => void }) => (
   <Query query={erfkritByIdGql} variables={{ id }}>
     {({ loading, error, data }) => {
       if (loading)
@@ -55,12 +82,7 @@ const Erfkrit = ({ id }: { id: String }) => (
                     value={row.erfolg}
                     dataSource={erfolgWerte}
                     saveToDb={value =>
-                      updateErfkrit({
-                        variables: {
-                          id,
-                          erfolg: value,
-                        },
-                      })
+                      saveToDb({ row, field: 'erfolg', value, updateErfkrit })
                     }
                   />
                   <TextField
@@ -70,11 +92,11 @@ const Erfkrit = ({ id }: { id: String }) => (
                     type="text"
                     multiLine
                     saveToDb={value =>
-                      updateErfkrit({
-                        variables: {
-                          id,
-                          kriterien: value,
-                        },
+                      saveToDb({
+                        row,
+                        field: 'kriterien',
+                        value,
+                        updateErfkrit,
                       })
                     }
                   />
@@ -88,4 +110,4 @@ const Erfkrit = ({ id }: { id: String }) => (
   </Query>
 )
 
-export default Erfkrit
+export default enhance(Erfkrit)
