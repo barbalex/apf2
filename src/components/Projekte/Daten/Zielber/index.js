@@ -3,6 +3,8 @@ import React from 'react'
 import styled from 'styled-components'
 import { Query, Mutation } from 'react-apollo'
 import get from 'lodash/get'
+import compose from 'recompose/compose'
+import withHandlers from 'recompose/withHandlers'
 
 import TextField from '../../../shared/TextFieldGql'
 import FormTitle from '../../../shared/FormTitle'
@@ -21,7 +23,34 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
-const Zielber = ({ id }: { id: String }) => (
+const enhance = compose(
+  withHandlers({
+    saveToDb: props => ({ row, field, value, updateZielber }) =>
+      updateZielber({
+        variables: {
+          id: row.id,
+          [field]: value,
+        },
+        optimisticResponse: {
+          __typename: 'Mutation',
+          updateZielberById: {
+            zielber: {
+              id: row.id,
+              zielId: field === 'zielId' ? value : row.zielId,
+              jahr: field === 'jahr' ? value : row.jahr,
+              erreichung: field === 'erreichung' ? value : row.erreichung,
+              bemerkungen: field === 'bemerkungen' ? value : row.bemerkungen,
+              zielByZielId: row.zielByZielId,
+              __typename: 'Zielber',
+            },
+            __typename: 'Zielber',
+          },
+        },
+      }),
+  })
+)
+
+const Zielber = ({ id, saveToDb }: { id: String, saveToDb: () => void }) => (
   <Query query={zielberByIdGql} variables={{ id }}>
     {({ loading, error, data }) => {
       if (loading)
@@ -50,12 +79,7 @@ const Zielber = ({ id }: { id: String }) => (
                     value={row.jahr}
                     type="number"
                     saveToDb={value =>
-                      updateZielber({
-                        variables: {
-                          id,
-                          jahr: value,
-                        },
-                      })
+                      saveToDb({ row, field: 'jahr', value, updateZielber })
                     }
                   />
                   <TextField
@@ -64,11 +88,11 @@ const Zielber = ({ id }: { id: String }) => (
                     value={row.erreichung}
                     type="text"
                     saveToDb={value =>
-                      updateZielber({
-                        variables: {
-                          id,
-                          erreichung: value,
-                        },
+                      saveToDb({
+                        row,
+                        field: 'erreichung',
+                        value,
+                        updateZielber,
                       })
                     }
                   />
@@ -79,11 +103,11 @@ const Zielber = ({ id }: { id: String }) => (
                     type="text"
                     multiLine
                     saveToDb={value =>
-                      updateZielber({
-                        variables: {
-                          id,
-                          bemerkungen: value,
-                        },
+                      saveToDb({
+                        row,
+                        field: 'bemerkungen',
+                        value,
+                        updateZielber,
                       })
                     }
                   />
@@ -97,4 +121,4 @@ const Zielber = ({ id }: { id: String }) => (
   </Query>
 )
 
-export default Zielber
+export default enhance(Zielber)
