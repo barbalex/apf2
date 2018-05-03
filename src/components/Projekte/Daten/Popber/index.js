@@ -4,6 +4,8 @@ import styled from 'styled-components'
 import { Query, Mutation } from 'react-apollo'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
+import compose from 'recompose/compose'
+import withHandlers from 'recompose/withHandlers'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroupGql'
 import TextField from '../../../shared/TextFieldGql'
@@ -23,7 +25,36 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
-const Popber = ({ id }: { id: String }) => (
+const enhance = compose(
+  withHandlers({
+    saveToDb: props => ({ row, field, value, updatePopber }) =>
+      updatePopber({
+        variables: {
+          id: row.id,
+          [field]: value,
+        },
+        optimisticResponse: {
+          __typename: 'Mutation',
+          updatePopberById: {
+            popber: {
+              id: row.id,
+              popId: field === 'popId' ? value : row.popId,
+              jahr: field === 'jahr' ? value : row.jahr,
+              entwicklung: field === 'entwicklung' ? value : row.entwicklung,
+              bemerkungen: field === 'bemerkungen' ? value : row.bemerkungen,
+              tpopEntwicklungWerteByEntwicklung:
+                row.tpopEntwicklungWerteByEntwicklung,
+              popByPopId: row.popByPopId,
+              __typename: 'Popber',
+            },
+            __typename: 'Popber',
+          },
+        },
+      }),
+  })
+)
+
+const Popber = ({ id, saveToDb }: { id: String, saveToDb: () => void }) => (
   <Query query={popberByIdGql} variables={{ id }}>
     {({ loading, error, data }) => {
       if (loading)
@@ -58,12 +89,7 @@ const Popber = ({ id }: { id: String }) => (
                     value={row.jahr}
                     type="number"
                     saveToDb={value =>
-                      updatePopber({
-                        variables: {
-                          id,
-                          jahr: value,
-                        },
-                      })
+                      saveToDb({ row, field: 'jahr', value, updatePopber })
                     }
                   />
                   <RadioButtonGroup
@@ -72,11 +98,11 @@ const Popber = ({ id }: { id: String }) => (
                     value={row.entwicklung}
                     dataSource={popentwicklungWerte}
                     saveToDb={value =>
-                      updatePopber({
-                        variables: {
-                          id,
-                          entwicklung: value,
-                        },
+                      saveToDb({
+                        row,
+                        field: 'entwicklung',
+                        value,
+                        updatePopber,
                       })
                     }
                   />
@@ -87,11 +113,11 @@ const Popber = ({ id }: { id: String }) => (
                     type="text"
                     multiLine
                     saveToDb={value =>
-                      updatePopber({
-                        variables: {
-                          id,
-                          bemerkungen: value,
-                        },
+                      saveToDb({
+                        row,
+                        field: 'bemerkungen',
+                        value,
+                        updatePopber,
                       })
                     }
                   />
@@ -105,4 +131,4 @@ const Popber = ({ id }: { id: String }) => (
   </Query>
 )
 
-export default Popber
+export default enhance(Popber)
