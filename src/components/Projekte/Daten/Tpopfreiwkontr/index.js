@@ -5,6 +5,8 @@ import { Query, Mutation } from 'react-apollo'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 import format from 'date-fns/format'
+import compose from 'recompose/compose'
+import withHandlers from 'recompose/withHandlers'
 
 import RadioButton from '../../../shared/RadioButtonGql'
 import RadioButtonGroup from '../../../shared/RadioButtonGroupGql'
@@ -33,6 +35,60 @@ const FieldsContainer = styled.div`
       : 'auto'};
 `
 
+const enhance = compose(
+  withHandlers({
+    saveToDb: props => ({ row, field, value, updateTpopkontr }) =>
+      updateTpopkontr({
+        variables: {
+          id: row.id,
+          [field]: value,
+        },
+        optimisticResponse: {
+          __typename: 'Mutation',
+          updateTpopkontrById: {
+            tpopkontr: {
+              id: row.id,
+              typ: field === 'typ' ? value : row.typ,
+              datum: field === 'datum' ? value : row.datum,
+              jahr: field === 'jahr' ? value : row.jahr,
+              bemerkungen: field === 'bemerkungen' ? value : row.bemerkungen,
+              flaecheUeberprueft:
+                field === 'flaecheUeberprueft' ? value : row.flaecheUeberprueft,
+              deckungVegetation:
+                field === 'deckungVegetation' ? value : row.deckungVegetation,
+              deckungNackterBoden:
+                field === 'deckungNackterBoden'
+                  ? value
+                  : row.deckungNackterBoden,
+              deckungApArt: field === 'deckungApArt' ? value : row.deckungApArt,
+              vegetationshoeheMaximum:
+                field === 'vegetationshoeheMaximum'
+                  ? value
+                  : row.vegetationshoeheMaximum,
+              vegetationshoeheMittel:
+                field === 'vegetationshoeheMittel'
+                  ? value
+                  : row.vegetationshoeheMittel,
+              gefaehrdung: field === 'gefaehrdung' ? value : row.gefaehrdung,
+              tpopId: field === 'tpopId' ? value : row.tpopId,
+              bearbeiter: field === 'bearbeiter' ? value : row.bearbeiter,
+              planVorhanden:
+                field === 'planVorhanden' ? value : row.planVorhanden,
+              jungpflanzenVorhanden:
+                field === 'jungpflanzenVorhanden'
+                  ? value
+                  : row.jungpflanzenVorhanden,
+              adresseByBearbeiter: row.adresseByBearbeiter,
+              aeEigenschaftenByArtId: row.tpopByTpopId,
+              __typename: 'Tpopkontr',
+            },
+            __typename: 'Tpopkontr',
+          },
+        },
+      }),
+  })
+)
+
 const jungpflanzenVorhandenDataSource = [
   { value: true, label: 'ja' },
   { value: false, label: 'nein' },
@@ -40,9 +96,11 @@ const jungpflanzenVorhandenDataSource = [
 
 const Tpopfreiwkontr = ({
   id,
+  saveToDb,
   dimensions = { width: 380 },
 }: {
   id: String,
+  saveToDb: () => void,
   dimensions: number,
 }) => {
   const width = isNaN(dimensions.width) ? 380 : dimensions.width
@@ -81,29 +139,34 @@ const Tpopfreiwkontr = ({
                       label="Jahr"
                       value={row.jahr}
                       type="number"
-                      saveToDb={value =>
-                        updateTpopkontr({
-                          variables: {
-                            id,
-                            jahr: value,
-                            datum: null,
-                          },
+                      saveToDb={value => {
+                        saveToDb({ row, field: 'jahr', value, updateTpopkontr })
+                        saveToDb({
+                          row,
+                          field: 'datum',
+                          value: null,
+                          updateTpopkontr,
                         })
-                      }
+                      }}
                     />
                     <DateFieldWithPicker
                       key={`${row.id}datum`}
                       label="Datum"
                       value={row.datum}
-                      saveToDb={value =>
-                        updateTpopkontr({
-                          variables: {
-                            id,
-                            datum: value,
-                            jahr: !!value ? format(value, 'YYYY') : null,
-                          },
+                      saveToDb={value => {
+                        saveToDb({
+                          row,
+                          field: 'datum',
+                          value,
+                          updateTpopkontr,
                         })
-                      }
+                        saveToDb({
+                          row,
+                          field: 'jahr',
+                          value: !!value ? format(value, 'YYYY') : null,
+                          updateTpopkontr,
+                        })
+                      }}
                     />
                     <AutoComplete
                       key={`${row.id}bearbeiter`}
@@ -111,11 +174,11 @@ const Tpopfreiwkontr = ({
                       value={get(row, 'adresseByBearbeiter.name')}
                       objects={adressenWerte}
                       saveToDb={value =>
-                        updateTpopkontr({
-                          variables: {
-                            id,
-                            bearbeiter: value,
-                          },
+                        saveToDb({
+                          row,
+                          field: 'bearbeiter',
+                          value,
+                          updateTpopkontr,
                         })
                       }
                     />
@@ -124,11 +187,11 @@ const Tpopfreiwkontr = ({
                       label="Auf Plan eingezeichnet"
                       value={row.planVorhanden}
                       saveToDb={value =>
-                        updateTpopkontr({
-                          variables: {
-                            id,
-                            planVorhanden: value,
-                          },
+                        saveToDb({
+                          row,
+                          field: 'planVorhanden',
+                          value,
+                          updateTpopkontr,
                         })
                       }
                     />
@@ -138,11 +201,11 @@ const Tpopfreiwkontr = ({
                       value={row.flaecheUeberprueft}
                       type="number"
                       saveToDb={value =>
-                        updateTpopkontr({
-                          variables: {
-                            id,
-                            flaecheUeberprueft: value,
-                          },
+                        saveToDb({
+                          row,
+                          field: 'flaecheUeberprueft',
+                          value,
+                          updateTpopkontr,
                         })
                       }
                     />
@@ -152,11 +215,11 @@ const Tpopfreiwkontr = ({
                       value={row.deckungApArt}
                       type="number"
                       saveToDb={value =>
-                        updateTpopkontr({
-                          variables: {
-                            id,
-                            deckungApArt: value,
-                          },
+                        saveToDb({
+                          row,
+                          field: 'deckungApArt',
+                          value,
+                          updateTpopkontr,
                         })
                       }
                     />
@@ -166,11 +229,11 @@ const Tpopfreiwkontr = ({
                       value={row.deckungNackterBoden}
                       type="number"
                       saveToDb={value =>
-                        updateTpopkontr({
-                          variables: {
-                            id,
-                            deckungNackterBoden: value,
-                          },
+                        saveToDb({
+                          row,
+                          field: 'deckungNackterBoden',
+                          value,
+                          updateTpopkontr,
                         })
                       }
                     />
@@ -179,11 +242,11 @@ const Tpopfreiwkontr = ({
                       value={row.jungpflanzenVorhanden}
                       dataSource={jungpflanzenVorhandenDataSource}
                       saveToDb={value =>
-                        updateTpopkontr({
-                          variables: {
-                            id,
-                            jungpflanzenVorhanden: value,
-                          },
+                        saveToDb({
+                          row,
+                          field: 'jungpflanzenVorhanden',
+                          value,
+                          updateTpopkontr,
                         })
                       }
                     />
@@ -193,11 +256,11 @@ const Tpopfreiwkontr = ({
                       value={row.vegetationshoeheMaximum}
                       type="number"
                       saveToDb={value =>
-                        updateTpopkontr({
-                          variables: {
-                            id,
-                            vegetationshoeheMaximum: value,
-                          },
+                        saveToDb({
+                          row,
+                          field: 'vegetationshoeheMaximum',
+                          value,
+                          updateTpopkontr,
                         })
                       }
                     />
@@ -207,11 +270,11 @@ const Tpopfreiwkontr = ({
                       value={row.vegetationshoeheMittel}
                       type="number"
                       saveToDb={value =>
-                        updateTpopkontr({
-                          variables: {
-                            id,
-                            vegetationshoeheMittel: value,
-                          },
+                        saveToDb({
+                          row,
+                          field: 'vegetationshoeheMittel',
+                          value,
+                          updateTpopkontr,
                         })
                       }
                     />
@@ -222,11 +285,11 @@ const Tpopfreiwkontr = ({
                       type="text"
                       multiLine
                       saveToDb={value =>
-                        updateTpopkontr({
-                          variables: {
-                            id,
-                            gefaehrdung: value,
-                          },
+                        saveToDb({
+                          row,
+                          field: 'gefaehrdung',
+                          value,
+                          updateTpopkontr,
                         })
                       }
                     />
@@ -237,11 +300,11 @@ const Tpopfreiwkontr = ({
                       type="text"
                       multiLine
                       saveToDb={value =>
-                        updateTpopkontr({
-                          variables: {
-                            id,
-                            bemerkungen: value,
-                          },
+                        saveToDb({
+                          row,
+                          field: 'bemerkungen',
+                          value,
+                          updateTpopkontr,
                         })
                       }
                     />
@@ -257,4 +320,4 @@ const Tpopfreiwkontr = ({
   )
 }
 
-export default Tpopfreiwkontr
+export default enhance(Tpopfreiwkontr)
