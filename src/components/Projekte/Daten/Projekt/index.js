@@ -3,6 +3,8 @@ import React from 'react'
 import styled from 'styled-components'
 import { Query, Mutation } from 'react-apollo'
 import get from 'lodash/get'
+import compose from 'recompose/compose'
+import withHandlers from 'recompose/withHandlers'
 
 import TextField from '../../../shared/TextFieldGql'
 import FormTitle from '../../../shared/FormTitle'
@@ -21,7 +23,30 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
-const Projekt = ({ id }: { id: String }) => (
+const enhance = compose(
+  withHandlers({
+    saveToDb: props => ({ row, field, value, updateProjekt }) =>
+      updateProjekt({
+        variables: {
+          id: row.id,
+          [field]: value,
+        },
+        optimisticResponse: {
+          __typename: 'Mutation',
+          updateProjektById: {
+            projekt: {
+              id: row.id,
+              name: field === 'name' ? value : row.name,
+              __typename: 'Projekt',
+            },
+            __typename: 'Projekt',
+          },
+        },
+      }),
+  })
+)
+
+const Projekt = ({ id, saveToDb }: { id: String, saveToDb: () => void }) => (
   <Query query={projektByIdGql} variables={{ id }}>
     {({ loading, error, data }) => {
       if (loading)
@@ -47,12 +72,7 @@ const Projekt = ({ id }: { id: String }) => (
                     value={row.name}
                     type="text"
                     saveToDb={value =>
-                      updateProjekt({
-                        variables: {
-                          id,
-                          name: value,
-                        },
-                      })
+                      saveToDb({ row, field: 'name', value, updateProjekt })
                     }
                   />
                 </FieldsContainer>
@@ -65,4 +85,4 @@ const Projekt = ({ id }: { id: String }) => (
   </Query>
 )
 
-export default Projekt
+export default enhance(Projekt)
