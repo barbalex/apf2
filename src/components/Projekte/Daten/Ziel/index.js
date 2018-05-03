@@ -4,6 +4,8 @@ import styled from 'styled-components'
 import { Query, Mutation } from 'react-apollo'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
+import compose from 'recompose/compose'
+import withHandlers from 'recompose/withHandlers'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroupGql'
 import TextField from '../../../shared/TextFieldGql'
@@ -23,7 +25,33 @@ const FieldsContainer = styled.div`
   overflow: auto !important;
 `
 
-const Ziel = ({ id }: { id: String }) => (
+const enhance = compose(
+  withHandlers({
+    saveToDb: props => ({ row, field, value, updateZiel }) =>
+      updateZiel({
+        variables: {
+          id: row.id,
+          [field]: value,
+        },
+        optimisticResponse: {
+          __typename: 'Mutation',
+          updateZielById: {
+            ziel: {
+              id: row.id,
+              apId: field === 'apId' ? value : row.apId,
+              typ: field === 'typ' ? value : row.typ,
+              jahr: field === 'jahr' ? value : row.jahr,
+              bezeichnung: field === 'bezeichnung' ? value : row.bezeichnung,
+              __typename: 'Ziel',
+            },
+            __typename: 'Ziel',
+          },
+        },
+      }),
+  })
+)
+
+const Ziel = ({ id, saveToDb }: { id: String, saveToDb: () => void }) => (
   <Query query={zielByIdGql} variables={{ id }}>
     {({ loading, error, data }) => {
       if (loading)
@@ -55,12 +83,7 @@ const Ziel = ({ id }: { id: String }) => (
                     value={row.jahr}
                     type="number"
                     saveToDb={value =>
-                      updateZiel({
-                        variables: {
-                          id,
-                          jahr: value,
-                        },
-                      })
+                      saveToDb({ row, field: 'jahr', value, updateZiel })
                     }
                   />
                   <RadioButtonGroup
@@ -69,12 +92,7 @@ const Ziel = ({ id }: { id: String }) => (
                     value={row.typ}
                     dataSource={typWerte}
                     saveToDb={value =>
-                      updateZiel({
-                        variables: {
-                          id,
-                          typ: value,
-                        },
-                      })
+                      saveToDb({ row, field: 'typ', value, updateZiel })
                     }
                   />
                   <TextField
@@ -84,12 +102,7 @@ const Ziel = ({ id }: { id: String }) => (
                     type="text"
                     multiLine
                     saveToDb={value =>
-                      updateZiel({
-                        variables: {
-                          id,
-                          bezeichnung: value,
-                        },
-                      })
+                      saveToDb({ row, field: 'bezeichnung', value, updateZiel })
                     }
                   />
                 </FieldsContainer>
@@ -102,4 +115,4 @@ const Ziel = ({ id }: { id: String }) => (
   </Query>
 )
 
-export default Ziel
+export default enhance(Ziel)
