@@ -3,6 +3,8 @@ import React from 'react'
 import styled from 'styled-components'
 import { Query, Mutation } from 'react-apollo'
 import get from 'lodash/get'
+import compose from 'recompose/compose'
+import withHandlers from 'recompose/withHandlers'
 
 import TextField from '../../../shared/TextFieldGql'
 import TextFieldWithUrl from '../../../shared/TextFieldWithUrlGql'
@@ -22,7 +24,34 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
-const Ber = ({ id }: { id: String }) => (
+const enhance = compose(
+  withHandlers({
+    saveToDb: props => ({ row, field, value, updateBer }) =>
+      updateBer({
+        variables: {
+          id: row.id,
+          [field]: value,
+        },
+        optimisticResponse: {
+          __typename: 'Mutation',
+          updateBerById: {
+            ber: {
+              id: row.id,
+              apId: field === 'apId' ? value : row.apId,
+              autor: field === 'autor' ? value : row.autor,
+              jahr: field === 'jahr' ? value : row.jahr,
+              titel: field === 'titel' ? value : row.titel,
+              url: field === 'url' ? value : row.url,
+              __typename: 'Ber',
+            },
+            __typename: 'Ber',
+          },
+        },
+      }),
+  })
+)
+
+const Ber = ({ id, saveToDb }: { id: String, saveToDb: () => void }) => (
   <Query query={berByIdGql} variables={{ id }}>
     {({ loading, error, data }) => {
       if (loading)
@@ -48,12 +77,7 @@ const Ber = ({ id }: { id: String }) => (
                     value={row.autor}
                     type="text"
                     saveToDb={value =>
-                      updateBer({
-                        variables: {
-                          id,
-                          autor: value,
-                        },
-                      })
+                      saveToDb({ row, field: 'autor', value, updateBer })
                     }
                   />
                   <TextField
@@ -62,12 +86,7 @@ const Ber = ({ id }: { id: String }) => (
                     value={row.jahr}
                     type="number"
                     saveToDb={value =>
-                      updateBer({
-                        variables: {
-                          id,
-                          jahr: value,
-                        },
-                      })
+                      saveToDb({ row, field: 'jahr', value, updateBer })
                     }
                   />
                   <TextField
@@ -77,12 +96,7 @@ const Ber = ({ id }: { id: String }) => (
                     type="text"
                     multiLine
                     saveToDb={value =>
-                      updateBer({
-                        variables: {
-                          id,
-                          titel: value,
-                        },
-                      })
+                      saveToDb({ row, field: 'titel', value, updateBer })
                     }
                   />
                   <TextFieldWithUrl
@@ -92,12 +106,7 @@ const Ber = ({ id }: { id: String }) => (
                     type="text"
                     multiLine
                     saveToDb={value =>
-                      updateBer({
-                        variables: {
-                          id,
-                          url: value,
-                        },
-                      })
+                      saveToDb({ row, field: 'url', value, updateBer })
                     }
                   />
                 </FieldsContainer>
