@@ -5,6 +5,8 @@ import { Query, Mutation } from 'react-apollo'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 import format from 'date-fns/format'
+import compose from 'recompose/compose'
+import withHandlers from 'recompose/withHandlers'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroupGql'
 import AutoCompleteFromArray from '../../../shared/AutocompleteFromArrayGql'
@@ -34,16 +36,66 @@ const FieldsContainer = styled.div`
       : 'auto'};
 `
 
+const enhance = compose(
+  withHandlers({
+    saveToDb: props => ({ row, field, value, updateTpopmassn }) =>
+      updateTpopmassn({
+        variables: {
+          id: row.id,
+          [field]: value,
+        },
+        optimisticResponse: {
+          __typename: 'Mutation',
+          updateTpopmassnById: {
+            tpopmassn: {
+              id: row.id,
+              typ: field === 'typ' ? value : row.typ,
+              beschreibung: field === 'beschreibung' ? value : row.beschreibung,
+              jahr: field === 'jahr' ? value : row.jahr,
+              datum: field === 'datum' ? value : row.datum,
+              bemerkungen: field === 'bemerkungen' ? value : row.bemerkungen,
+              planBezeichnung:
+                field === 'planBezeichnung' ? value : row.planBezeichnung,
+              flaeche: field === 'flaeche' ? value : row.flaeche,
+              markierung: field === 'markierung' ? value : row.markierung,
+              anzTriebe: field === 'anzTriebe' ? value : row.anzTriebe,
+              anzPflanzen: field === 'anzPflanzen' ? value : row.anzPflanzen,
+              anzPflanzstellen:
+                field === 'anzPflanzstellen' ? value : row.anzPflanzstellen,
+              wirtspflanze: field === 'wirtspflanze' ? value : row.wirtspflanze,
+              herkunftPop: field === 'herkunftPop' ? value : row.herkunftPop,
+              sammeldatum: field === 'sammeldatum' ? value : row.sammeldatum,
+              form: field === 'form' ? value : row.form,
+              pflanzanordnung:
+                field === 'pflanzanordnung' ? value : row.pflanzanordnung,
+              tpopId: field === 'tpopId' ? value : row.tpopId,
+              bearbeiter: field === 'bearbeiter' ? value : row.bearbeiter,
+              planVorhanden:
+                field === 'planVorhanden' ? value : row.planVorhanden,
+              tpopmassnTypWerteByTyp: row.tpopmassnTypWerteByTyp,
+              adresseByBearbeiter: row.adresseByBearbeiter,
+              tpopByTpopId: row.tpopByTpopId,
+              __typename: 'Tpopmassn',
+            },
+            __typename: 'Tpopmassn',
+          },
+        },
+      }),
+  })
+)
+
 const Tpopmassn = ({
   id,
   onNewRequestWirtspflanze,
   onBlurWirtspflanze,
   dimensions = { width: 380 },
+  saveToDb,
 }: {
   id: String,
   onNewRequestWirtspflanze: () => void,
   onBlurWirtspflanze: () => void,
   dimensions: number,
+  saveToDb: () => void,
 }) => {
   const width = isNaN(dimensions.width) ? 380 : dimensions.width
 
@@ -90,29 +142,34 @@ const Tpopmassn = ({
                       label="Jahr"
                       value={row.jahr}
                       type="number"
-                      saveToDb={value =>
-                        updateTpopmassn({
-                          variables: {
-                            id,
-                            jahr: value,
-                            datum: null,
-                          },
+                      saveToDb={value => {
+                        saveToDb({ row, field: 'jahr', value, updateTpopmassn })
+                        saveToDb({
+                          row,
+                          field: 'datum',
+                          value: null,
+                          updateTpopmassn,
                         })
-                      }
+                      }}
                     />
                     <DateFieldWithPicker
                       key={`${row.id}datum`}
                       label="Datum"
                       value={row.datum}
-                      saveToDb={value =>
-                        updateTpopmassn({
-                          variables: {
-                            id,
-                            datum: value,
-                            jahr: !!value ? format(value, 'YYYY') : null,
-                          },
+                      saveToDb={value => {
+                        saveToDb({
+                          row,
+                          field: 'datum',
+                          value,
+                          updateTpopmassn,
                         })
-                      }
+                        saveToDb({
+                          row,
+                          field: 'jahr',
+                          value: !!value ? format(value, 'YYYY') : null,
+                          updateTpopmassn,
+                        })
+                      }}
                     />
                     <RadioButtonGroup
                       key={`${row.id}typ`}
@@ -120,12 +177,7 @@ const Tpopmassn = ({
                       value={row.typ}
                       dataSource={tpopmasstypWerte}
                       saveToDb={value =>
-                        updateTpopmassn({
-                          variables: {
-                            id,
-                            typ: value,
-                          },
-                        })
+                        saveToDb({ row, field: 'typ', value, updateTpopmassn })
                       }
                     />
                     <TextField
@@ -134,11 +186,11 @@ const Tpopmassn = ({
                       value={row.beschreibung}
                       type="text"
                       saveToDb={value =>
-                        updateTpopmassn({
-                          variables: {
-                            id,
-                            beschreibung: value,
-                          },
+                        saveToDb({
+                          row,
+                          field: 'beschreibung',
+                          value,
+                          updateTpopmassn,
                         })
                       }
                     />
@@ -148,11 +200,11 @@ const Tpopmassn = ({
                       value={get(row, 'adresseByBearbeiter.name')}
                       objects={adressenWerte}
                       saveToDb={value =>
-                        updateTpopmassn({
-                          variables: {
-                            id,
-                            bearbeiter: value,
-                          },
+                        saveToDb({
+                          row,
+                          field: 'bearbeiter',
+                          value,
+                          updateTpopmassn,
                         })
                       }
                     />
@@ -163,11 +215,11 @@ const Tpopmassn = ({
                       type="text"
                       multiLine
                       saveToDb={value =>
-                        updateTpopmassn({
-                          variables: {
-                            id,
-                            bemerkungen: value,
-                          },
+                        saveToDb({
+                          row,
+                          field: 'bemerkungen',
+                          value,
+                          updateTpopmassn,
                         })
                       }
                     />
@@ -176,11 +228,11 @@ const Tpopmassn = ({
                       label="Plan vorhanden"
                       value={row.planVorhanden}
                       saveToDb={value =>
-                        updateTpopmassn({
-                          variables: {
-                            id,
-                            planVorhanden: value,
-                          },
+                        saveToDb({
+                          row,
+                          field: 'planVorhanden',
+                          value,
+                          updateTpopmassn,
                         })
                       }
                     />
@@ -190,11 +242,11 @@ const Tpopmassn = ({
                       value={row.planBezeichnung}
                       type="text"
                       saveToDb={value =>
-                        updateTpopmassn({
-                          variables: {
-                            id,
-                            planBezeichnung: value,
-                          },
+                        saveToDb({
+                          row,
+                          field: 'planBezeichnung',
+                          value,
+                          updateTpopmassn,
                         })
                       }
                     />
@@ -204,11 +256,11 @@ const Tpopmassn = ({
                       value={row.flaeche}
                       type="number"
                       saveToDb={value =>
-                        updateTpopmassn({
-                          variables: {
-                            id,
-                            flaeche: value,
-                          },
+                        saveToDb({
+                          row,
+                          field: 'flaeche',
+                          value,
+                          updateTpopmassn,
                         })
                       }
                     />
@@ -218,12 +270,7 @@ const Tpopmassn = ({
                       value={row.form}
                       type="text"
                       saveToDb={value =>
-                        updateTpopmassn({
-                          variables: {
-                            id,
-                            form: value,
-                          },
-                        })
+                        saveToDb({ row, field: 'form', value, updateTpopmassn })
                       }
                     />
                     <TextField
@@ -232,11 +279,11 @@ const Tpopmassn = ({
                       value={row.pflanzanordnung}
                       type="text"
                       saveToDb={value =>
-                        updateTpopmassn({
-                          variables: {
-                            id,
-                            pflanzanordnung: value,
-                          },
+                        saveToDb({
+                          row,
+                          field: 'pflanzanordnung',
+                          value,
+                          updateTpopmassn,
                         })
                       }
                     />
@@ -246,11 +293,11 @@ const Tpopmassn = ({
                       value={row.markierung}
                       type="text"
                       saveToDb={value =>
-                        updateTpopmassn({
-                          variables: {
-                            id,
-                            markierung: value,
-                          },
+                        saveToDb({
+                          row,
+                          field: 'markierung',
+                          value,
+                          updateTpopmassn,
                         })
                       }
                     />
@@ -260,11 +307,11 @@ const Tpopmassn = ({
                       value={row.anzTriebe}
                       type="number"
                       saveToDb={value =>
-                        updateTpopmassn({
-                          variables: {
-                            id,
-                            anzTriebe: value,
-                          },
+                        saveToDb({
+                          row,
+                          field: 'anzTriebe',
+                          value,
+                          updateTpopmassn,
                         })
                       }
                     />
@@ -274,11 +321,11 @@ const Tpopmassn = ({
                       value={row.anzPflanzen}
                       type="number"
                       saveToDb={value =>
-                        updateTpopmassn({
-                          variables: {
-                            id,
-                            anzPflanzen: value,
-                          },
+                        saveToDb({
+                          row,
+                          field: 'anzPflanzen',
+                          value,
+                          updateTpopmassn,
                         })
                       }
                     />
@@ -288,11 +335,11 @@ const Tpopmassn = ({
                       value={row.anzPflanzstellen}
                       type="number"
                       saveToDb={value =>
-                        updateTpopmassn({
-                          variables: {
-                            id,
-                            anzPflanzstellen: value,
-                          },
+                        saveToDb({
+                          row,
+                          field: 'anzPflanzstellen',
+                          value,
+                          updateTpopmassn,
                         })
                       }
                     />
@@ -301,12 +348,12 @@ const Tpopmassn = ({
                       label="Wirtspflanze"
                       value={row.wirtspflanze}
                       values={artWerte}
-                      saveToDb={val =>
-                        updateTpopmassn({
-                          variables: {
-                            id,
-                            wirtspflanze: val,
-                          },
+                      saveToDb={value =>
+                        saveToDb({
+                          row,
+                          field: 'wirtspflanze',
+                          value,
+                          updateTpopmassn,
                         })
                       }
                     />
@@ -316,11 +363,11 @@ const Tpopmassn = ({
                       value={row.herkunftPop}
                       type="text"
                       saveToDb={value =>
-                        updateTpopmassn({
-                          variables: {
-                            id,
-                            herkunftPop: value,
-                          },
+                        saveToDb({
+                          row,
+                          field: 'herkunftPop',
+                          value,
+                          updateTpopmassn,
                         })
                       }
                     />
@@ -330,11 +377,11 @@ const Tpopmassn = ({
                       value={row.sammeldatum}
                       type="text"
                       saveToDb={value =>
-                        updateTpopmassn({
-                          variables: {
-                            id,
-                            sammeldatum: value,
-                          },
+                        saveToDb({
+                          row,
+                          field: 'sammeldatum',
+                          value,
+                          updateTpopmassn,
                         })
                       }
                     />
@@ -350,4 +397,4 @@ const Tpopmassn = ({
   )
 }
 
-export default Tpopmassn
+export default enhance(Tpopmassn)
