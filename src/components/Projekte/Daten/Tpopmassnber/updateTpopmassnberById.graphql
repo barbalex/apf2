@@ -22,12 +22,6 @@ mutation updateTpopmassnber(
       tpopId
       jahr
       beurteilung
-      tpopmassnErfbeurtWerteByBeurteilung {
-        id
-        code
-        text
-        sort
-      }
       bemerkungen
       tpopByTpopId {
         popByPopId {
