@@ -4,6 +4,8 @@ import styled from 'styled-components'
 import { Query, Mutation } from 'react-apollo'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
+import compose from 'recompose/compose'
+import withHandlers from 'recompose/withHandlers'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroupGql'
 import TextField from '../../../shared/TextFieldGql'
@@ -24,7 +26,41 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
-const Tpopkontrzaehl = ({ id, tree }: { id: String, tree: Object }) => (
+const enhance = compose(
+  withHandlers({
+    saveToDb: props => ({ row, field, value, updateTpopkontrzaehl }) =>
+      updateTpopkontrzaehl({
+        variables: {
+          id: row.id,
+          [field]: value,
+        },
+        optimisticResponse: {
+          __typename: 'Mutation',
+          updateTpopkontrzaehlById: {
+            tpopkontrzaehl: {
+              id: row.id,
+              anzahl: field === 'anzahl' ? value : row.anzahl,
+              einheit: field === 'einheit' ? value : row.einheit,
+              methode: field === 'methode' ? value : row.methode,
+              tpopkontrzaehlEinheitWerteByEinheit:
+                row.tpopkontrzaehlEinheitWerteByEinheit,
+              tpopkontrByTpopkontrId: row.tpopkontrByTpopkontrId,
+              __typename: 'Tpopkontrzaehl',
+            },
+            __typename: 'Tpopkontrzaehl',
+          },
+        },
+      }),
+  })
+)
+
+const Tpopkontrzaehl = ({
+  id,
+  saveToDb,
+}: {
+  id: String,
+  saveToDb: () => void,
+}) => (
   <Query query={tpopkontrzaehlByIdGql} variables={{ id }}>
     {({ loading, error, data }) => {
       if (loading)
@@ -36,7 +72,6 @@ const Tpopkontrzaehl = ({ id, tree }: { id: String, tree: Object }) => (
       if (error) return `Fehler: ${error.message}`
 
       const row = get(data, 'tpopkontrzaehlById')
-      console.log({ row })
       let zaehleinheitWerte = get(
         data,
         'allTpopkontrzaehlEinheitWertes.nodes',
@@ -71,12 +106,12 @@ const Tpopkontrzaehl = ({ id, tree }: { id: String, tree: Object }) => (
                     label="Einheit"
                     value={get(row, 'tpopkontrzaehlEinheitWerteByEinheit.text')}
                     objects={zaehleinheitWerte}
-                    saveToDb={val =>
-                      updateTpopkontrzaehl({
-                        variables: {
-                          id,
-                          einheit: val,
-                        },
+                    saveToDb={value =>
+                      saveToDb({
+                        row,
+                        field: 'einheit',
+                        value,
+                        updateTpopkontrzaehl,
                       })
                     }
                   />
@@ -86,11 +121,11 @@ const Tpopkontrzaehl = ({ id, tree }: { id: String, tree: Object }) => (
                     value={row.anzahl}
                     type="number"
                     saveToDb={value =>
-                      updateTpopkontrzaehl({
-                        variables: {
-                          id,
-                          anzahl: value,
-                        },
+                      saveToDb({
+                        row,
+                        field: 'anzahl',
+                        value,
+                        updateTpopkontrzaehl,
                       })
                     }
                   />
@@ -99,12 +134,12 @@ const Tpopkontrzaehl = ({ id, tree }: { id: String, tree: Object }) => (
                     label="Methode"
                     value={row.methode}
                     dataSource={methodeWerte}
-                    saveToDb={val =>
-                      updateTpopkontrzaehl({
-                        variables: {
-                          id,
-                          methode: val,
-                        },
+                    saveToDb={value =>
+                      saveToDb({
+                        row,
+                        field: 'methode',
+                        value,
+                        updateTpopkontrzaehl,
                       })
                     }
                   />
@@ -118,4 +153,4 @@ const Tpopkontrzaehl = ({ id, tree }: { id: String, tree: Object }) => (
   </Query>
 )
 
-export default Tpopkontrzaehl
+export default enhance(Tpopkontrzaehl)
