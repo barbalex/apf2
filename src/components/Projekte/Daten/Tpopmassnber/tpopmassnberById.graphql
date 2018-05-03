@@ -4,12 +4,6 @@ query tpopmassnberByIdQuery($id: UUID!) {
     tpopId
     jahr
     beurteilung
-    tpopmassnErfbeurtWerteByBeurteilung {
-      id
-      code
-      text
-      sort
-    }
     bemerkungen
     tpopByTpopId {
       popByPopId {
