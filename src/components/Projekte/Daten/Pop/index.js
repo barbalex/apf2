@@ -3,6 +3,8 @@ import React from 'react'
 import styled from 'styled-components'
 import { Query, Mutation } from 'react-apollo'
 import get from 'lodash/get'
+import compose from 'recompose/compose'
+import withHandlers from 'recompose/withHandlers'
 
 import TextField from '../../../shared/TextFieldGql'
 import TextFieldWithInfo from '../../../shared/TextFieldWithInfoGql'
@@ -24,7 +26,42 @@ const FieldsContainer = styled.div`
   height: 100%;
 `
 
-const Pop = ({ id }: { id: String }) => (
+const enhance = compose(
+  withHandlers({
+    saveToDb: props => ({ row, field, value, updatePop }) =>
+      updatePop({
+        variables: {
+          id: row.id,
+          [field]: value,
+        },
+        optimisticResponse: {
+          __typename: 'Mutation',
+          updatePopById: {
+            pop: {
+              id: row.id,
+              apId: field === 'apId' ? value : row.apId,
+              nr: field === 'nr' ? value : row.nr,
+              name: field === 'name' ? value : row.name,
+              status: field === 'status' ? value : row.status,
+              statusUnklar: field === 'statusUnklar' ? value : row.statusUnklar,
+              statusUnklarBegruendung:
+                field === 'statusUnklarBegruendung'
+                  ? value
+                  : row.statusUnklarBegruendung,
+              bekanntSeit: field === 'bekanntSeit' ? value : row.bekanntSeit,
+              x: field === 'x' ? value : row.x,
+              y: field === 'y' ? value : row.y,
+              apByApId: row.apByApId,
+              __typename: 'Pop',
+            },
+            __typename: 'Pop',
+          },
+        },
+      }),
+  })
+)
+
+const Pop = ({ id, saveToDb }: { id: String, saveToDb: () => void }) => (
   <Query query={popByIdGql} variables={{ id }}>
     {({ loading, error, data }) => {
       if (loading)
@@ -50,12 +87,7 @@ const Pop = ({ id }: { id: String }) => (
                     value={row.nr}
                     type="number"
                     saveToDb={value =>
-                      updatePop({
-                        variables: {
-                          id,
-                          nr: value,
-                        },
-                      })
+                      saveToDb({ row, field: 'nr', value, updatePop })
                     }
                   />
                   <TextFieldWithInfo
@@ -63,13 +95,8 @@ const Pop = ({ id }: { id: String }) => (
                     label="Name"
                     value={row.name}
                     type="text"
-                    saveToDb={event =>
-                      updatePop({
-                        variables: {
-                          id,
-                          name: event.target.value,
-                        },
-                      })
+                    saveToDb={value =>
+                      saveToDb({ row, field: 'name', value, updatePop })
                     }
                     popover="Dieses Feld möglichst immer ausfüllen"
                   />
@@ -99,12 +126,7 @@ const Pop = ({ id }: { id: String }) => (
                     label="Status unklar"
                     value={row.statusUnklar}
                     saveToDb={value =>
-                      updatePop({
-                        variables: {
-                          id,
-                          statusUnklar: value,
-                        },
-                      })
+                      saveToDb({ row, field: 'statusUnklar', value, updatePop })
                     }
                   />
                   <TextField
@@ -114,11 +136,11 @@ const Pop = ({ id }: { id: String }) => (
                     type="text"
                     multiLine
                     saveToDb={value =>
-                      updatePop({
-                        variables: {
-                          id,
-                          statusUnklarBegruendung: value,
-                        },
+                      saveToDb({
+                        row,
+                        field: 'statusUnklarBegruendung',
+                        value,
+                        updatePop,
                       })
                     }
                   />
@@ -128,12 +150,7 @@ const Pop = ({ id }: { id: String }) => (
                     value={row.x}
                     type="number"
                     saveToDb={value =>
-                      updatePop({
-                        variables: {
-                          id,
-                          x: value,
-                        },
-                      })
+                      saveToDb({ row, field: 'x', value, updatePop })
                     }
                   />
                   <TextField
@@ -142,12 +159,7 @@ const Pop = ({ id }: { id: String }) => (
                     value={row.y}
                     type="number"
                     saveToDb={value =>
-                      updatePop({
-                        variables: {
-                          id,
-                          y: value,
-                        },
-                      })
+                      saveToDb({ row, field: 'y', value, updatePop })
                     }
                   />
                 </FieldsContainer>
@@ -160,4 +172,4 @@ const Pop = ({ id }: { id: String }) => (
   </Query>
 )
 
-export default Pop
+export default enhance(Pop)

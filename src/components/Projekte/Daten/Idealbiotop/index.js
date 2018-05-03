@@ -122,11 +122,11 @@ const Idealbiotop = ({
                     label="Erstelldatum"
                     value={row.erstelldatum}
                     saveToDb={value =>
-                      updateIdealbiotop({
-                        variables: {
-                          id,
-                          erstelldatum: value,
-                        },
+                      saveToDb({
+                        row,
+                        field: 'erstelldatum',
+                        value,
+                        updateIdealbiotop,
                       })
                     }
                   />
@@ -138,11 +138,11 @@ const Idealbiotop = ({
                     type="text"
                     multiLine
                     saveToDb={value =>
-                      updateIdealbiotop({
-                        variables: {
-                          id,
-                          hoehenlage: value,
-                        },
+                      saveToDb({
+                        row,
+                        field: 'hoehenlage',
+                        value,
+                        updateIdealbiotop,
                       })
                     }
                   />
@@ -153,11 +153,11 @@ const Idealbiotop = ({
                     type="text"
                     multiLine
                     saveToDb={value =>
-                      updateIdealbiotop({
-                        variables: {
-                          id,
-                          region: value,
-                        },
+                      saveToDb({
+                        row,
+                        field: 'region',
+                        value,
+                        updateIdealbiotop,
                       })
                     }
                   />
@@ -168,11 +168,11 @@ const Idealbiotop = ({
                     type="text"
                     multiLine
                     saveToDb={value =>
-                      updateIdealbiotop({
-                        variables: {
-                          id,
-                          exposition: value,
-                        },
+                      saveToDb({
+                        row,
+                        field: 'exposition',
+                        value,
+                        updateIdealbiotop,
                       })
                     }
                   />
@@ -183,11 +183,11 @@ const Idealbiotop = ({
                     type="text"
                     multiLine
                     saveToDb={value =>
-                      updateIdealbiotop({
-                        variables: {
-                          id,
-                          besonnung: value,
-                        },
+                      saveToDb({
+                        row,
+                        field: 'besonnung',
+                        value,
+                        updateIdealbiotop,
                       })
                     }
                   />
@@ -198,11 +198,11 @@ const Idealbiotop = ({
                     type="text"
                     multiLine
                     saveToDb={value =>
-                      updateIdealbiotop({
-                        variables: {
-                          id,
-                          hangneigung: value,
-                        },
+                      saveToDb({
+                        row,
+                        field: 'hangneigung',
+                        value,
+                        updateIdealbiotop,
                       })
                     }
                   />
@@ -214,11 +214,11 @@ const Idealbiotop = ({
                     type="text"
                     multiLine
                     saveToDb={value =>
-                      updateIdealbiotop({
-                        variables: {
-                          id,
-                          bodenTyp: value,
-                        },
+                      saveToDb({
+                        row,
+                        field: 'bodenTyp',
+                        value,
+                        updateIdealbiotop,
                       })
                     }
                   />
@@ -229,11 +229,11 @@ const Idealbiotop = ({
                     type="text"
                     multiLine
                     saveToDb={value =>
-                      updateIdealbiotop({
-                        variables: {
-                          id,
-                          bodenKalkgehalt: value,
-                        },
+                      saveToDb({
+                        row,
+                        field: 'bodenKalkgehalt',
+                        value,
+                        updateIdealbiotop,
                       })
                     }
                   />
@@ -244,11 +244,11 @@ const Idealbiotop = ({
                     type="text"
                     multiLine
                     saveToDb={value =>
-                      updateIdealbiotop({
-                        variables: {
-                          id,
-                          bodenDurchlaessigkeit: value,
-                        },
+                      saveToDb({
+                        row,
+                        field: 'bodenDurchlaessigkeit',
+                        value,
+                        updateIdealbiotop,
                       })
                     }
                   />
@@ -259,11 +259,11 @@ const Idealbiotop = ({
                     type="text"
                     multiLine
                     saveToDb={value =>
-                      updateIdealbiotop({
-                        variables: {
-                          id,
-                          bodenHumus: value,
-                        },
+                      saveToDb({
+                        row,
+                        field: 'bodenHumus',
+                        value,
+                        updateIdealbiotop,
                       })
                     }
                   />
@@ -274,11 +274,11 @@ const Idealbiotop = ({
                     type="text"
                     multiLine
                     saveToDb={value =>
-                      updateIdealbiotop({
-                        variables: {
-                          id,
-                          bodenNaehrstoffgehalt: value,
-                        },
+                      saveToDb({
+                        row,
+                        field: 'bodenNaehrstoffgehalt',
+                        value,
+                        updateIdealbiotop,
                       })
                     }
                   />
@@ -289,11 +289,11 @@ const Idealbiotop = ({
                     type="text"
                     multiLine
                     saveToDb={value =>
-                      updateIdealbiotop({
-                        variables: {
-                          id,
-                          wasserhaushalt: value,
-                        },
+                      saveToDb({
+                        row,
+                        field: 'wasserhaushalt',
+                        value,
+                        updateIdealbiotop,
                       })
                     }
                   />
@@ -305,11 +305,11 @@ const Idealbiotop = ({
                     type="text"
                     multiLine
                     saveToDb={value =>
-                      updateIdealbiotop({
-                        variables: {
-                          id,
-                          konkurrenz: value,
-                        },
+                      saveToDb({
+                        row,
+                        field: 'konkurrenz',
+                        value,
+                        updateIdealbiotop,
                       })
                     }
                   />
@@ -320,11 +320,11 @@ const Idealbiotop = ({
                     type="text"
                     multiLine
                     saveToDb={value =>
-                      updateIdealbiotop({
-                        variables: {
-                          id,
-                          moosschicht: value,
-                        },
+                      saveToDb({
+                        row,
+                        field: 'moosschicht',
+                        value,
+                        updateIdealbiotop,
                       })
                     }
                   />
@@ -335,11 +335,11 @@ const Idealbiotop = ({
                     type="text"
                     multiLine
                     saveToDb={value =>
-                      updateIdealbiotop({
-                        variables: {
-                          id,
-                          krautschicht: value,
-                        },
+                      saveToDb({
+                        row,
+                        field: 'krautschicht',
+                        value,
+                        updateIdealbiotop,
                       })
                     }
                   />
@@ -350,11 +350,11 @@ const Idealbiotop = ({
                     type="text"
                     multiLine
                     saveToDb={value =>
-                      updateIdealbiotop({
-                        variables: {
-                          id,
-                          strauchschicht: value,
-                        },
+                      saveToDb({
+                        row,
+                        field: 'strauchschicht',
+                        value,
+                        updateIdealbiotop,
                       })
                     }
                   />
@@ -365,11 +365,11 @@ const Idealbiotop = ({
                     type="text"
                     multiLine
                     saveToDb={value =>
-                      updateIdealbiotop({
-                        variables: {
-                          id,
-                          baumschicht: value,
-                        },
+                      saveToDb({
+                        row,
+                        field: 'baumschicht',
+                        value,
+                        updateIdealbiotop,
                       })
                     }
                   />
@@ -380,11 +380,11 @@ const Idealbiotop = ({
                     type="text"
                     multiLine
                     saveToDb={value =>
-                      updateIdealbiotop({
-                        variables: {
-                          id,
-                          bemerkungen: value,
-                        },
+                      saveToDb({
+                        row,
+                        field: 'bemerkungen',
+                        value,
+                        updateIdealbiotop,
                       })
                     }
                   />
