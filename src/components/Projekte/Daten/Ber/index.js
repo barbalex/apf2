@@ -119,4 +119,4 @@ const Ber = ({ id, saveToDb }: { id: String, saveToDb: () => void }) => (
   </Query>
 )
 
-export default Ber
+export default enhance(Ber)
