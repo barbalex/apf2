@@ -9,8 +9,8 @@ import tables from '../../modules/tables'
 export default async (
   store: Object,
   tree: Object,
-  key: string,
-  valuePassed: string | number
+  key: String,
+  valuePassed: String | Number
 ): any => {
   const { row, valid } = tree.activeDataset
   let value = valuePassed

@@ -1,10 +1,7 @@
 // @flow
 import isEqual from 'lodash/isEqual'
 
-export default (
-  nodes: Array<Object>,
-  nodeUrl: Array<string | number>
-): boolean => {
+export default (nodes: Array<Object>, nodeUrl: Array<String>): Boolean => {
   const parentNodesUrlArray = []
   for (let i = 3; i <= nodeUrl.length; i++) {
     parentNodesUrlArray.push(nodeUrl.slice(0, i))

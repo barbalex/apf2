@@ -4,8 +4,8 @@ const updateBeobzuordnungData = (
   store: Object,
   tree: Object,
   beob: Object,
-  newKey: string,
-  newValue: string | number
+  newKey: String,
+  newValue: String | Number
 ): void => {
   store.updateProperty(tree, newKey, newValue)
   store.updatePropertyInDb(tree, newKey, newValue)

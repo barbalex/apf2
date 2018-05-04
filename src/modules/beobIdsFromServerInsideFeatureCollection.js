@@ -5,10 +5,7 @@ import { toJS } from 'mobx'
 
 import epsg2056to4326 from './epsg2056to4326notReverse'
 
-export default (
-  store: Object,
-  beobs: Array<Object>
-): Array<string | number> => {
+export default (store: Object, beobs: Array<Object>): Array<String> => {
   /**
    * data is passed from view fetched from the server
    * so need to filter to data with coordinates first...

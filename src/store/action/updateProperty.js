@@ -5,8 +5,8 @@ import { toJS } from 'mobx'
 export default (
   store: Object,
   tree: Object,
-  key: string,
-  valuePassed: string | number
+  key: String,
+  valuePassed: String | Number
 ): void => {
   const { table, row } = tree.activeDataset
   let value = valuePassed

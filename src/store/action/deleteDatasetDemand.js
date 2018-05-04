@@ -3,10 +3,10 @@ import tables from '../../modules/tables'
 
 export default (
   store: Object,
-  table: string,
-  id: string | number,
-  url: string,
-  label: string
+  table: String,
+  id: String,
+  url: String,
+  label: String
 ): void => {
   const tableMetadata = tables.find(t => t.table === table)
   if (!tableMetadata) {

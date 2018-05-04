@@ -8,9 +8,9 @@ export default async ({
   id,
 }: {
   store: Object,
-  table: string,
-  idField: string,
-  id: string | number,
+  table: String,
+  idField: String,
+  id: String,
 }): Promise<void> => {
   // first get dataset from server (possible that does not yet exist in store)
   // to be able to undo

@@ -2,8 +2,8 @@
 import isNodeOpen from './isNodeOpen'
 
 export default (
-  openNodes: Array<Array<string | number>>,
-  node: Array<string | number>
+  openNodes: Array<Array<string>>,
+  node: Array<string>
 ): boolean => {
   const parentNodesOpennessArray = []
   for (let i = 1; i < node.length; i++) {
