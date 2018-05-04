@@ -56,9 +56,8 @@ const enhance = compose(
   inject('store'),
   withState('berichtjahr', 'changeBerichtjahr', standardQkYear()),
   withHandlers({
-    onChangeBerichtjahr: props => event => {
+    onChangeBerichtjahr: ({ changeBerichtjahr, store, tree }) => event => {
       const { value } = event.target
-      const { changeBerichtjahr, store, tree } = props
       changeBerichtjahr(value)
       if (
         (isNaN(value) && value.length === 4) ||
@@ -71,8 +70,8 @@ const enhance = compose(
         fetchQk({ store, berichtjahr: value, apId })
       }
     },
-    onChangeFilter: props => event =>
-      props.store.qk.setFilter(event.target.value),
+    onChangeFilter: ({ store }) => event =>
+      store.qk.setFilter(event.target.value),
   }),
   withLifecycle({
     onDidMount({ berichtjahr, changeBerichtjahr, store, tree }) {
@@ -92,12 +91,14 @@ const Qk = ({
   berichtjahr,
   onChangeBerichtjahr,
   onChangeFilter,
+  id,
 }: {
   store: Object,
   tree: Object,
   berichtjahr: number,
   onChangeBerichtjahr: () => void,
   onChangeFilter: () => void,
+  id: String,
 }) => {
   const { filter, messages, loading } = store.qk
   const pureMessageArrays = toJS(messages)
@@ -120,7 +121,7 @@ const Qk = ({
   return (
     <ErrorBoundary>
       <Container>
-        <FormTitle tree={tree} title="Qualitätskontrollen" />
+        <FormTitle title="Qualitätskontrollen" />
         <FieldsContainer>
           <FormControl fullWidth>
             <InputLabel htmlFor="berichtjahr">Berichtjahr</InputLabel>
