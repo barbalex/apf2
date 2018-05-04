@@ -100,11 +100,10 @@ const InnerTreeContainer = styled.div`
 `
 
 const getAndValidateCoordinatesOfTpop = (store, id) => {
-  const myId = isNaN(id) ? id : +id
-  const tpop = store.table.tpop.get(myId)
+  const tpop = store.table.tpop.get(id)
   if (!tpop) {
     store.listError(
-      new Error(`Die Teilpopulation mit der ID ${myId} wurde nicht gefunden`)
+      new Error(`Die Teilpopulation mit der ID ${id} wurde nicht gefunden`)
     )
     return { x: null, y: null }
   }
@@ -113,7 +112,7 @@ const getAndValidateCoordinatesOfTpop = (store, id) => {
   if (!x || !y) {
     store.listError(
       new Error(
-        `Die Teilpopulation mit der ID ${myId} kat keine (vollständigen) Koordinaten`
+        `Die Teilpopulation mit der ID ${id} kat keine (vollständigen) Koordinaten`
       )
     )
     return { x: null, y: null }
@@ -155,8 +154,7 @@ const showMapIfNotYetVisible = ({ store }: { store: Object }) => {
 const enhance = compose(
   inject('store'),
   withHandlers({
-    handleClick: props => (e, data, element) => {
-      const { store, tree } = props
+    handleClick: ({ store, tree }) => (e, data, element) => {
       if (!data) return store.listError(new Error('no data passed with click'))
       if (!element)
         return store.listError(new Error('no element passed with click'))
