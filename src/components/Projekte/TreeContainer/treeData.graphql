@@ -1,0 +1,13 @@
+query TreeDataQuery() {
+  allProjekts {
+    nodes {
+      id
+      name
+    }
+  }
+  allApberuebersichts(filter: {projId: {in: ["e57f56f4-4376-11e8-ab21-4314b6749d13"]}}) {
+    nodes {
+      id
+    }
+  }
+}
