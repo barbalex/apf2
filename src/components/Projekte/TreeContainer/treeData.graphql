@@ -29,11 +29,24 @@ query TreeDataQuery() {
       }
     }
   }
+  allPops(filter: {apId: {in: ["6c52d173-4f62-11e7-aebe-2bd3a2ea4576"]}}, orderBy: NR_ASC) {
+    nodes {
+      id
+      name
+    }
+  }
   allZiels(filter: {apId: {in: ["6c52d173-4f62-11e7-aebe-2bd3a2ea4576"]}}) {
     nodes {
       id
       jahr
       bezeichnung
+    }
+  }
+  allZielbers(filter: {zielId: {in: ["b41cdf2a-3cf9-11e8-b0c5-fff3a8fbb9e5"]}}, orderBy: JAHR_ASC) {
+    nodes {
+      id
+      jahr
+      erreichung
     }
   }
   allErfkrits(filter: {apId: {in: ["6c52d173-4f62-11e7-aebe-2bd3a2ea4576"]}}) {
