@@ -29,7 +29,17 @@ query TreeDataQuery() {
       }
     }
   }
-  beobNichtZuzuordnen: allBeobs(filter: {artId: {in: ["d62ae70f-a1f4-48b3-b63e-6a9422ade189"]}, nichtZuordnen: {equalTo: true}}, orderBy: DATUM_DESC) {
+  allAssozarts(filter: {apId: {in: ["6c52d173-4f62-11e7-aebe-2bd3a2ea4576"]}}) {
+    nodes {
+      id
+      aeId
+      aeEigenschaftenByAeId {
+        id
+        artname
+      }
+    }
+  }
+  beobNichtBeurteilt: allBeobs(filter: {artId: {in: ["d62ae70f-a1f4-48b3-b63e-6a9422ade189"]}, nichtZuordnen: {equalTo: false}}, orderBy: DATUM_DESC) {
     nodes {
       id
       nichtZuordnen
@@ -42,7 +52,7 @@ query TreeDataQuery() {
       }
     }
   }
-  beobNichtBeurteilt: allBeobs(filter: {artId: {in: ["d62ae70f-a1f4-48b3-b63e-6a9422ade189"]}, nichtZuordnen: {equalTo: false}}, orderBy: DATUM_DESC) {
+  beobNichtZuzuordnen: allBeobs(filter: {artId: {in: ["d62ae70f-a1f4-48b3-b63e-6a9422ade189"]}, nichtZuordnen: {equalTo: true}}, orderBy: DATUM_DESC) {
     nodes {
       id
       nichtZuordnen
