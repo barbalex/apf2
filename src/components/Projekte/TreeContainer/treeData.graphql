@@ -29,9 +29,34 @@ query TreeDataQuery() {
       }
     }
   }
-  allBers(filter: {apId: {in: ["6c52d173-4f62-11e7-aebe-2bd3a2ea4576"]}}) {
+  allZiels(filter: {apId: {in: ["6c52d173-4f62-11e7-aebe-2bd3a2ea4576"]}}) {
     nodes {
       id
+      jahr
+      bezeichnung
+    }
+  }
+  allErfkrits(filter: {apId: {in: ["6c52d173-4f62-11e7-aebe-2bd3a2ea4576"]}}) {
+    nodes {
+      id
+      kriterien
+      apErfkritWerteByErfolg {
+        id
+        text
+      }
+    }
+  }
+  allApbers(filter: {apId: {in: ["6c52d173-4f62-11e7-aebe-2bd3a2ea4576"]}}, orderBy: JAHR_ASC) {
+    nodes {
+      id
+      jahr
+    }
+  }
+  allBers(filter: {apId: {in: ["6c52d173-4f62-11e7-aebe-2bd3a2ea4576"]}}, orderBy: JAHR_ASC) {
+    nodes {
+      id
+      jahr
+      titel
     }
   }
   allIdealbiotops(filter: {apId: {in: ["6c52d173-4f62-11e7-aebe-2bd3a2ea4576"]}}) {
