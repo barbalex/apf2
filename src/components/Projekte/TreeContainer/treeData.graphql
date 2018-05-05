@@ -35,6 +35,33 @@ query TreeDataQuery() {
       name
     }
   }
+  allTpops(filter: {popId: {in: ["70b29dc2-4f62-11e7-aebe-e74c0c656391"]}}, orderBy: NR_ASC) {
+    nodes {
+      id
+      nr
+      flurname
+    }
+  }
+  allPopbers(filter: {popId: {in: ["70b29dc2-4f62-11e7-aebe-e74c0c656391"]}}, orderBy: JAHR_ASC) {
+    nodes {
+      id
+      jahr
+      tpopEntwicklungWerteByEntwicklung {
+        id
+        text
+      }
+    }
+  }
+  allPopmassnbers(filter: {popId: {in: ["70b29dc2-4f62-11e7-aebe-e74c0c656391"]}}, orderBy: JAHR_ASC) {
+    nodes {
+      id
+      jahr
+      tpopmassnErfbeurtWerteByBeurteilung {
+        id
+        text
+      }
+    }
+  }
   allZiels(filter: {apId: {in: ["6c52d173-4f62-11e7-aebe-2bd3a2ea4576"]}}) {
     nodes {
       id
