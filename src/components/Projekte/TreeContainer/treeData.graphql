@@ -42,14 +42,35 @@ query TreeDataQuery() {
       flurname
     }
   }
-  tpopFreiwKontr: allTpopkontrs(filter: {typ: "Freiwilligen-Erfolgskontrolle", tpopId: {in: ["76b33548-4f62-11e7-aebe-a35a38869314"]}}) {
+  tpopFeldKontr: allTpopkontrs(filter: {typ: {notEqualTo: "Freiwilligen-Erfolgskontrolle"}, tpopId: {in: ["76b33548-4f62-11e7-aebe-a35a38869314"]}}) {
     nodes {
       id
       datum
       jahr
     }
   }
-  allTpopkontrs(filter: {tpopId: {in: ["76b33548-4f62-11e7-aebe-a35a38869314"]}}, orderBy: JAHR_ASC) {
+  tpopFreiwKontr: allTpopkontrs(filter: {typ: {equalTo: "Freiwilligen-Erfolgskontrolle"}, tpopId: {in: ["76b33548-4f62-11e7-aebe-a35a38869314"]}}) {
+    nodes {
+      id
+      datum
+      jahr
+    }
+  }
+  allTpopkontrzaehls(filter: {tpopkontrId: {in: ["8223d046-4f62-11e7-aebe-777a214c7467"]}}) {
+    nodes {
+      id
+      anzahl
+      tpopkontrzaehlEinheitWerteByEinheit {
+        id
+        text
+      }
+      tpopkontrzaehlMethodeWerteByMethode {
+        id
+        text
+      }
+    }
+  }
+  allTpopbers(filter: {tpopId: {in: ["76b33548-4f62-11e7-aebe-a35a38869314"]}}, orderBy: JAHR_ASC) {
     nodes {
       id
       jahr
