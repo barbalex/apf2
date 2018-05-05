@@ -29,6 +29,16 @@ query TreeDataQuery() {
       }
     }
   }
+  allBers(filter: {apId: {in: ["6c52d173-4f62-11e7-aebe-2bd3a2ea4576"]}}) {
+    nodes {
+      id
+    }
+  }
+  allIdealbiotops(filter: {apId: {in: ["6c52d173-4f62-11e7-aebe-2bd3a2ea4576"]}}) {
+    nodes {
+      id
+    }
+  }
   allAparts(filter: {apId: {in: ["6c52d173-4f62-11e7-aebe-2bd3a2ea4576"]}}) {
     nodes {
       id
