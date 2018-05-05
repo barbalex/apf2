@@ -42,6 +42,26 @@ query TreeDataQuery() {
       flurname
     }
   }
+  allTpopmassns(filter: {tpopId: {in: ["76b33548-4f62-11e7-aebe-a35a38869314"]}}, orderBy: JAHR_ASC) {
+    nodes {
+      id
+      jahr
+      tpopmassnTypWerteByTyp {
+        id
+        text
+      }
+    }
+  }
+  allTpopmassnbers(filter: {tpopId: {in: ["76b33548-4f62-11e7-aebe-a35a38869314"]}}, orderBy: JAHR_ASC) {
+    nodes {
+      id
+      jahr
+      tpopmassnErfbeurtWerteByBeurteilung {
+        id
+        text
+      }
+    }
+  }
   tpopFeldKontr: allTpopkontrs(filter: {typ: {notEqualTo: "Freiwilligen-Erfolgskontrolle"}, tpopId: {in: ["76b33548-4f62-11e7-aebe-a35a38869314"]}}) {
     nodes {
       id
