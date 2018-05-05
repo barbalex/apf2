@@ -21,18 +21,37 @@ query TreeDataQuery() {
         id
         artname
       }
+      apartsByApId {
+        nodes {
+          id
+          artId
+        }
+      }
     }
   }
-  beobNichtZuzuordnen: allBeobs(filter: {nichtZuordnen: {equalTo: true}, artId: {in: ["d62ae70f-a1f4-48b3-b63e-6a9422ade189"]}}) {
+  beobNichtZuzuordnen: allBeobs(filter: {artId: {in: ["d62ae70f-a1f4-48b3-b63e-6a9422ade189"]}, nichtZuordnen: {equalTo: true}}, orderBy: DATUM_DESC) {
     nodes {
       id
       nichtZuordnen
       artId
-      aeEigenschaftenByArtId {
+      datum
+      autor
+      beobQuelleWerteByQuelleId {
         id
-        apByArtId {
-          id
-        }
+        name
+      }
+    }
+  }
+  beobNichtBeurteilt: allBeobs(filter: {artId: {in: ["d62ae70f-a1f4-48b3-b63e-6a9422ade189"]}, nichtZuordnen: {equalTo: false}}, orderBy: DATUM_DESC) {
+    nodes {
+      id
+      nichtZuordnen
+      artId
+      datum
+      autor
+      beobQuelleWerteByQuelleId {
+        id
+        name
       }
     }
   }
