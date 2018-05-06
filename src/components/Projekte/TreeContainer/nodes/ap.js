@@ -17,7 +17,7 @@ export default ({
 }): Array<Object> => {
   const { nodeLabelFilter, apFilter } = tree
   const nodeLabelFilterString = nodeLabelFilter.get('ap')
-  const aps = get(data, 'allAps.nodes', [])
+  const aps = get(data, 'aps.nodes', [])
 
   // fetch sorting indexes of parents
   const projIndex = findIndex(projektNodes, {

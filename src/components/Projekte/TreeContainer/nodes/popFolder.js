@@ -6,27 +6,28 @@ export default ({
   data,
   tree,
   projektNodes,
-  apNodes,
   projId,
   apId,
 }: {
   data: Object,
   tree: Object,
   projektNodes: Array<Object>,
-  apNodes: Array<Object>,
   projId: String,
   apId: String,
 }): Array<Object> => {
   const pops = get(data, 'pops.nodes', [])
+
   // fetch sorting indexes of parents
   const projIndex = findIndex(projektNodes, {
     id: projId,
   })
-  const apIndex = findIndex(apNodes, { id: apId })
+  const apIndex = findIndex(
+    tree.filteredAndSorted.ap.filter(a => a.proj_id === projId),
+    { id: apId }
+  )
   const nodeLabelFilterString = tree.nodeLabelFilter.get('pop')
 
-  // map through all elements and create array of nodes
-  const nodes = pops
+  const popNodesLength = pops
     .filter(el => el.apId === apId)
     // filter by nodeLabelFilter
     .filter(el => {
@@ -36,24 +37,22 @@ export default ({
           .includes(nodeLabelFilterString.toLowerCase())
       }
       return true
-    })
-    .map(el => ({
-      nodeType: 'table',
-      menuType: 'pop',
-      id: el.id,
-      parentId: el.apId,
-      urlLabel: el.id,
-      label: `${el.nr || '(keine Nr)'}: ${el.name || '(kein Name)'}`,
-      url: ['Projekte', projId, 'Aktionspläne', el.apId, 'Populationen', el.id],
-      hasChildren: true,
-      nr: el.nr || 0,
-    }))
-    // sort again to sort (keine Nr) on top
-    .sort((a, b) => a.nr - b.nr)
-    .map((el, index) => {
-      el.sort = [projIndex, 1, apIndex, 1, index]
-      return el
-    })
+    }).length
+  let message = popNodesLength
+  if (tree.nodeLabelFilter.get('pop')) {
+    message = `${popNodesLength} gefiltert`
+  }
 
-  return nodes
+  return [
+    {
+      nodeType: 'folder',
+      menuType: 'popFolder',
+      id: apId,
+      urlLabel: 'Populationen',
+      label: `Populationen (${message})`,
+      url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen'],
+      sort: [projIndex, 1, apIndex, 1],
+      hasChildren: popNodesLength > 0,
+    },
+  ]
 }

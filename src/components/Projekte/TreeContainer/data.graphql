@@ -12,21 +12,23 @@ query TreeDataQuery(
   $tpopkontr: [UUID!]
   $isTpopkontr: Boolean!
 ) {
-  allProjekts(orderBy: NAME_ASC) {
+  projekts: allProjekts(orderBy: NAME_ASC) {
     nodes {
       id
       name
     }
   }
-  allApberuebersichts(filter: { projId: { in: $projekt } }, orderBy: JAHR_ASC)
-    @include(if: $isProjekt) {
+  apberuebersichts: allApberuebersichts(
+    filter: { projId: { in: $projekt } }
+    orderBy: JAHR_ASC
+  ) @include(if: $isProjekt) {
     nodes {
       id
       projId
       jahr
     }
   }
-  allAps(filter: { projId: { in: $projekt } }) @include(if: $isProjekt) {
+  aps: allAps(filter: { projId: { in: $projekt } }) @include(if: $isProjekt) {
     nodes {
       id
       projId
@@ -43,7 +45,8 @@ query TreeDataQuery(
       }
     }
   }
-  allPops(filter: { apId: { in: $ap } }, orderBy: NR_ASC) @include(if: $isAp) {
+  pops: allPops(filter: { apId: { in: $ap } }, orderBy: NR_ASC)
+    @include(if: $isAp) {
     nodes {
       id
       apId
@@ -51,18 +54,22 @@ query TreeDataQuery(
       name
     }
   }
-  allTpops(filter: { popId: { in: $pop } }, orderBy: NR_ASC)
+  tpops: allTpops(filter: { popId: { in: $pop } }, orderBy: NR_ASC)
     @include(if: $isPop) {
     nodes {
       id
+      popId
       nr
       flurname
     }
   }
-  allTpopmassns(filter: { tpopId: { in: $tpop } }, orderBy: JAHR_ASC)
-    @include(if: $isTpop) {
+  tpopmassns: allTpopmassns(
+    filter: { tpopId: { in: $tpop } }
+    orderBy: JAHR_ASC
+  ) @include(if: $isTpop) {
     nodes {
       id
+      tpopId
       jahr
       tpopmassnTypWerteByTyp {
         id
@@ -70,10 +77,13 @@ query TreeDataQuery(
       }
     }
   }
-  allTpopmassnbers(filter: { tpopId: { in: $tpop } }, orderBy: JAHR_ASC)
-    @include(if: $isTpop) {
+  tpopmassnbers: allTpopmassnbers(
+    filter: { tpopId: { in: $tpop } }
+    orderBy: JAHR_ASC
+  ) @include(if: $isTpop) {
     nodes {
       id
+      tpopId
       jahr
       tpopmassnErfbeurtWerteByBeurteilung {
         id
@@ -89,6 +99,7 @@ query TreeDataQuery(
   ) @include(if: $isTpop) {
     nodes {
       id
+      tpopId
       datum
       jahr
     }
@@ -101,14 +112,17 @@ query TreeDataQuery(
   ) @include(if: $isTpop) {
     nodes {
       id
+      tpopId
       datum
       jahr
     }
   }
-  allTpopkontrzaehls(filter: { tpopkontrId: { in: $tpopkontr } })
-    @include(if: $isTpopkontr) {
+  tpopkontrzaehls: allTpopkontrzaehls(
+    filter: { tpopkontrId: { in: $tpopkontr } }
+  ) @include(if: $isTpopkontr) {
     nodes {
       id
+      tpopkontrId
       anzahl
       tpopkontrzaehlEinheitWerteByEinheit {
         id
@@ -120,10 +134,11 @@ query TreeDataQuery(
       }
     }
   }
-  allTpopbers(filter: { tpopId: { in: $tpop } }, orderBy: JAHR_ASC)
+  tpopbers: allTpopbers(filter: { tpopId: { in: $tpop } }, orderBy: JAHR_ASC)
     @include(if: $isTpop) {
     nodes {
       id
+      tpopId
       jahr
       tpopEntwicklungWerteByEntwicklung {
         id
@@ -137,6 +152,7 @@ query TreeDataQuery(
   ) @include(if: $isTpop) {
     nodes {
       id
+      tpopId
       nichtZuordnen
       artId
       datum
@@ -145,10 +161,11 @@ query TreeDataQuery(
       tpopId
     }
   }
-  allPopbers(filter: { popId: { in: $pop } }, orderBy: JAHR_ASC)
+  popbers: allPopbers(filter: { popId: { in: $pop } }, orderBy: JAHR_ASC)
     @include(if: $isPop) {
     nodes {
       id
+      popId
       jahr
       tpopEntwicklungWerteByEntwicklung {
         id
@@ -156,10 +173,13 @@ query TreeDataQuery(
       }
     }
   }
-  allPopmassnbers(filter: { popId: { in: $pop } }, orderBy: JAHR_ASC)
-    @include(if: $isPop) {
+  popmassnbers: allPopmassnbers(
+    filter: { popId: { in: $pop } }
+    orderBy: JAHR_ASC
+  ) @include(if: $isPop) {
     nodes {
       id
+      popId
       jahr
       tpopmassnErfbeurtWerteByBeurteilung {
         id
@@ -167,24 +187,27 @@ query TreeDataQuery(
       }
     }
   }
-  allZiels(filter: { apId: { in: $ap } }) @include(if: $isAp) {
+  ziels: allZiels(filter: { apId: { in: $ap } }) @include(if: $isAp) {
     nodes {
       id
+      apId
       jahr
       bezeichnung
     }
   }
-  allZielbers(filter: { zielId: { in: $ziel } }, orderBy: JAHR_ASC)
+  zielbers: allZielbers(filter: { zielId: { in: $ziel } }, orderBy: JAHR_ASC)
     @include(if: $isZiel) {
     nodes {
       id
+      zielId
       jahr
       erreichung
     }
   }
-  allErfkrits(filter: { apId: { in: $ap } }) @include(if: $isAp) {
+  erfkrits: allErfkrits(filter: { apId: { in: $ap } }) @include(if: $isAp) {
     nodes {
       id
+      apId
       kriterien
       apErfkritWerteByErfolg {
         id
@@ -192,38 +215,44 @@ query TreeDataQuery(
       }
     }
   }
-  allApbers(filter: { apId: { in: $ap } }, orderBy: JAHR_ASC)
+  apbers: allApbers(filter: { apId: { in: $ap } }, orderBy: JAHR_ASC)
     @include(if: $isAp) {
     nodes {
       id
+      apId
       jahr
     }
   }
-  allBers(filter: { apId: { in: $ap } }, orderBy: JAHR_ASC)
+  bers: allBers(filter: { apId: { in: $ap } }, orderBy: JAHR_ASC)
     @include(if: $isAp) {
     nodes {
       id
+      apId
       jahr
       titel
     }
   }
-  allIdealbiotops(filter: { apId: { in: $ap } }) @include(if: $isAp) {
+  idealbiotops: allIdealbiotops(filter: { apId: { in: $ap } })
+    @include(if: $isAp) {
     nodes {
       id
+      apId
     }
   }
-  allAparts(filter: { apId: { in: $ap } }) @include(if: $isAp) {
+  aparts: allAparts(filter: { apId: { in: $ap } }) @include(if: $isAp) {
     nodes {
       id
+      apId
       aeEigenschaftenByArtId {
         id
         artname
       }
     }
   }
-  allAssozarts(filter: { apId: { in: $ap } }) @include(if: $isAp) {
+  assozarts: allAssozarts(filter: { apId: { in: $ap } }) @include(if: $isAp) {
     nodes {
       id
+      apId
       aeId
       aeEigenschaftenByAeId {
         id
@@ -237,6 +266,7 @@ query TreeDataQuery(
   ) @include(if: $isAp) {
     nodes {
       id
+      apId
       nichtZuordnen
       artId
       datum
@@ -250,6 +280,7 @@ query TreeDataQuery(
   ) @include(if: $isAp) {
     nodes {
       id
+      apId
       nichtZuordnen
       artId
       datum

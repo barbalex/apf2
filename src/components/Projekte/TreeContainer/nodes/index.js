@@ -8,7 +8,7 @@ import apFolderNodes from '../../../../modules/nodes/apFolder'
 import apberuebersichtFolderNodes from '../../../../modules/nodes/apberuebersichtFolder'
 import apberuebersichtNodes from '../../../../modules/nodes/apberuebersicht'
 import buildApNodes from './ap'
-import popFolderNodes from '../../../../modules/nodes/popFolder'
+import buildPopFolderNodes from './popFolder'
 import qkFolderNodes from '../../../../modules/nodes/qkFolder'
 import beobNichtZuzuordnenFolderNodes from '../../../../modules/nodes/beobNichtZuzuordnenFolder'
 import beobzuordnungFolderNodes from '../../../../modules/nodes/beobzuordnungFolder'
@@ -23,7 +23,7 @@ import zieljahrNodes from '../../../../modules/nodes/zieljahr'
 import zielNodes from '../../../../modules/nodes/ziel'
 import zielberFolderNodes from '../../../../modules/nodes/zielberFolder'
 import zielberNodes from '../../../../modules/nodes/zielber'
-import popNodes from './pop'
+import buildPopNodes from './pop'
 import beobNichtZuzuordnenNodes from '../../../../modules/nodes/beobNichtZuzuordnen'
 import beobzuordnungNodes from '../../../../modules/nodes/beobzuordnung'
 import assozartNodes from '../../../../modules/nodes/assozart'
@@ -31,7 +31,7 @@ import apartNodes from '../../../../modules/nodes/apart'
 import berNodes from '../../../../modules/nodes/ber'
 import apberNodes from '../../../../modules/nodes/apber'
 import erfkritNodes from '../../../../modules/nodes/erfkrit'
-import tpopFolderNodes from '../../../../modules/nodes/tpopFolder'
+import buildTpopFolderNodes from './tpopFolder'
 import popberFolderNodes from '../../../../modules/nodes/popberFolder'
 import popmassnberFolderNodes from '../../../../modules/nodes/popmassnberFolder'
 import popmassnberNodes from '../../../../modules/nodes/popmassnber'
@@ -85,6 +85,7 @@ export default ({
   const projektNodes = buildProjektNodes({ data, tree })
   let nodes = projektNodes
   let apNodes
+  let popNodes
   let tpopNodes
   // do not process ['Projekte']
   const nodeUrlsToProcess = openNodes.filter(n => n.length > 1)
@@ -121,7 +122,7 @@ export default ({
       const apId = nodeUrl[3]
       nodes = [
         ...nodes,
-        ...popFolderNodes(store, tree, projId, apId),
+        ...buildPopFolderNodes({ data, tree, projektNodes, projId, apId }),
         ...zieljahrFolderNodes(store, tree, projId, apId),
         ...erfkritFolderNodes(store, tree, projId, apId),
         ...apberFolderNodes(store, tree, projId, apId),
@@ -185,10 +186,15 @@ export default ({
       allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
     ) {
       const apId = nodeUrl[3]
-      nodes = [
-        ...nodes,
-        ...popNodes({ data, tree, apNodes, projektNodes, projId, apId }),
-      ]
+      popNodes = buildPopNodes({
+        data,
+        tree,
+        apNodes,
+        projektNodes,
+        projId,
+        apId,
+      })
+      nodes = [...nodes, ...popNodes]
     }
     if (
       nodeUrl.length === 5 &&
@@ -255,7 +261,16 @@ export default ({
       const popId = nodeUrl[5]
       nodes = [
         ...nodes,
-        ...tpopFolderNodes(store, tree, projId, apId, popId),
+        ...buildTpopFolderNodes({
+          data,
+          tree,
+          projektNodes,
+          projId,
+          apNodes,
+          apId,
+          popNodes,
+          popId,
+        }),
         ...popberFolderNodes(store, tree, projId, apId, popId),
         ...popmassnberFolderNodes(store, tree, projId, apId, popId),
       ]

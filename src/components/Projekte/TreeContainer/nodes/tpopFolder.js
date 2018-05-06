@@ -1,4 +1,3 @@
-// @flow
 import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
 
@@ -27,11 +26,9 @@ export default ({
   })
   const apIndex = findIndex(apNodes, { id: apId })
   const popIndex = findIndex(popNodes, { id: popId })
-  //console.log({ popNodes, popIndex, popId })
   const nodeLabelFilterString = tree.nodeLabelFilter.get('tpop')
 
-  // map through all elements and create array of nodes
-  const nodes = get(data, 'tpops.nodes', [])
+  const childrenLength = get(data, 'tpops.nodes', [])
     .filter(el => el.popId === popId)
     // filter by nodeLabelFilter
     .filter(el => {
@@ -41,33 +38,43 @@ export default ({
           .includes(nodeLabelFilterString.toLowerCase())
       }
       return true
-    })
-    .map((el, index) => ({
-      nodeType: 'table',
-      menuType: 'tpop',
-      id: el.id,
-      parentId: el.popId,
-      urlLabel: el.id,
-      label: `${el.nr || '(keine Nr)'}: ${el.flurname || '(kein Flurname)'}`,
+    }).length
+  console.log({
+    data,
+    projektNodes,
+    apNodes,
+    popNodes,
+    apIndex,
+    popIndex,
+    projIndex,
+    apId,
+    popId,
+    childrenLength,
+  })
+
+  let message = childrenLength
+  if (tree.nodeLabelFilter.get('tpop')) {
+    message = `${childrenLength} gefiltert`
+  }
+
+  return [
+    {
+      nodeType: 'folder',
+      menuType: 'tpopFolder',
+      id: popId,
+      urlLabel: 'Teil-Populationen',
+      label: `Teil-Populationen (${message})`,
       url: [
         'Projekte',
         projId,
         'Aktionspläne',
         apId,
         'Populationen',
-        el.popId,
+        popId,
         'Teil-Populationen',
-        el.id,
       ],
-      hasChildren: true,
-      nr: el.nr,
-    }))
-    // sort again to sort (keine Nr) on top
-    .sort((a, b) => a.nr - b.nr)
-    .map((el, index) => {
-      el.sort = [projIndex, 1, apIndex, 1, popIndex, 1, index]
-      return el
-    })
-
-  return nodes
+      sort: [projIndex, 1, apIndex, 1, popIndex, 1],
+      hasChildren: childrenLength > 0,
+    },
+  ]
 }
