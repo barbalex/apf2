@@ -40,10 +40,13 @@ import client from './client'
 import registerServiceWorker from './registerServiceWorker'
 
 import apiBaseUrl from './modules/apiBaseUrl'
-// turned off because of errors in production
-//import updateFromSocket from './modules/updateFromSocket'
 
 import './index.css'
+
+const AppContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+`
 
 const AppBar = Loadable({
   loader: () => import('./components/AppBar'),
@@ -90,11 +93,9 @@ const DownloadMessages = Loadable({
       }
     })
 
-    const db = initializeDb()
-
     app.extend({
       init() {
-        this.db = db
+        this.db = initializeDb()
         this.store = store
       },
     })
@@ -115,11 +116,6 @@ const DownloadMessages = Loadable({
     })
 
     await setLoginFromIdb(store)
-
-    const AppContainer = styled.div`
-      display: flex;
-      flex-direction: column;
-    `
 
     ReactDOM.render(
       <ApolloProvider client={client(store)}>

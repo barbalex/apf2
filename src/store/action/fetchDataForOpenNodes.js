@@ -12,7 +12,7 @@ import uniq from 'lodash/uniq'
 import difference from 'lodash/difference'
 import { toJS } from 'mobx'
 
-import getActiveNodes from './getActiveNodes'
+import getActiveNodes from '../../modules/getActiveNodes'
 
 const fetchDataForOpenNodes = (
   store: Object,

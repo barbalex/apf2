@@ -10,7 +10,7 @@ import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 import Switch from 'material-ui/Switch'
 import clone from 'lodash/clone'
-import { Query, Mutation } from 'react-apollo'
+import { Query } from 'react-apollo'
 
 import dataGql from './data.graphql'
 import Label from '../../shared/Label'

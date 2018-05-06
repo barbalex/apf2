@@ -198,7 +198,7 @@ export default (activeNodeArray: Array<mixed>, store: Object): Object => {
       ? activeNodeArray[9]
       : null
 
-  return {
+  const activeNodes = {
     exporte,
     projektFolder,
     projekt,
@@ -253,4 +253,6 @@ export default (activeNodeArray: Array<mixed>, store: Object): Object => {
     beobZugeordnetFolder,
     beobZugeordnet,
   }
+  console.log('getActiveNodes: activeNodes:', activeNodes)
+  return activeNodes
 }
