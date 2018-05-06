@@ -3,7 +3,7 @@ import { toJS } from 'mobx'
 
 import allParentNodesAreOpen from '../../../../modules/allParentNodesAreOpen'
 import allParentNodesAreVisible from '../../../../modules/allParentNodesAreVisible'
-import projektNodes from '../../../../modules/nodes/projekt'
+import projektNodes from './projekt'
 import apFolderNodes from '../../../../modules/nodes/apFolder'
 import apberuebersichtFolderNodes from '../../../../modules/nodes/apberuebersichtFolder'
 import apberuebersichtNodes from '../../../../modules/nodes/apberuebersicht'
@@ -82,7 +82,7 @@ export default ({
 }): Array<Object> => {
   const openNodes = toJS(tree.openNodes)
 
-  let nodes = projektNodes(store, tree)
+  let nodes = projektNodes({ data, tree })
   // do not process ['Projekte']
   const nodeUrlsToProcess = openNodes.filter(n => n.length > 1)
 

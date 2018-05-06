@@ -2,6 +2,7 @@
 import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
 
+//import projektNodes from './projekt'
 import apNodes from './ap'
 
 export default ({
