@@ -11,10 +11,10 @@
   "private": true,
   "devDependencies": {
     "flow-bin": "0.71.0",
-    "postgraphile": "4.0.0-beta.5",
+    "postgraphile": "4.0.0-beta.7",
     "postgraphile-plugin-connection-filter": "1.0.0-beta.6",
     "react-scripts": "2.0.0-next.66cc7a90",
-    "serve": "^6.5.6",
+    "serve": "6.5.6",
     "source-map-explorer": "1.5.0"
   },
   "dependenciesThatNeedToBeFixed": {
@@ -35,8 +35,8 @@
     "@turf/nearest": "4.7.3",
     "@turf/within": "4.7.3",
     "ampersand-app": "2.0.0",
-    "apollo-cache-inmemory": "1.2.0",
-    "apollo-client": "2.3.0",
+    "apollo-cache-inmemory": "1.2.1",
+    "apollo-client": "2.3.1",
     "apollo-link": "1.2.2",
     "apollo-link-context": "1.0.8",
     "apollo-link-http": "1.5.4",
