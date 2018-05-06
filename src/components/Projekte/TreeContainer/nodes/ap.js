@@ -13,7 +13,7 @@ export default ({
   data: Object,
   tree: Object,
   projektNodes: Array<Object>,
-  projId: number,
+  projId: String,
 }): Array<Object> => {
   const { nodeLabelFilter, apFilter } = tree
   const nodeLabelFilterString = nodeLabelFilter.get('ap')

@@ -7,7 +7,7 @@ import buildProjektNodes from './projekt'
 import apFolderNodes from '../../../../modules/nodes/apFolder'
 import apberuebersichtFolderNodes from '../../../../modules/nodes/apberuebersichtFolder'
 import apberuebersichtNodes from '../../../../modules/nodes/apberuebersicht'
-import apNodes from './ap'
+import buildApNodes from './ap'
 import popFolderNodes from '../../../../modules/nodes/popFolder'
 import qkFolderNodes from '../../../../modules/nodes/qkFolder'
 import beobNichtZuzuordnenFolderNodes from '../../../../modules/nodes/beobNichtZuzuordnenFolder'
@@ -36,7 +36,7 @@ import popberFolderNodes from '../../../../modules/nodes/popberFolder'
 import popmassnberFolderNodes from '../../../../modules/nodes/popmassnberFolder'
 import popmassnberNodes from '../../../../modules/nodes/popmassnber'
 import popberNodes from '../../../../modules/nodes/popber'
-import tpopNodes from '../../../../modules/nodes/tpop'
+import buildTpopNodes from './tpop'
 import beobZugeordnetFolderNodes from '../../../../modules/nodes/beobZugeordnetFolder'
 import tpopberFolderNodes from '../../../../modules/nodes/tpopberFolder'
 import tpopfreiwkontrFolderNodes from '../../../../modules/nodes/tpopfreiwkontrFolder'
@@ -84,6 +84,8 @@ export default ({
 
   const projektNodes = buildProjektNodes({ data, tree })
   let nodes = projektNodes
+  let apNodes
+  let tpopNodes
   // do not process ['Projekte']
   const nodeUrlsToProcess = openNodes.filter(n => n.length > 1)
 
@@ -108,7 +110,8 @@ export default ({
       nodeUrl[2] === 'Aktionspläne' &&
       allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
     ) {
-      nodes = [...nodes, ...apNodes({ data, tree, projektNodes, projId })]
+      apNodes = buildApNodes({ data, tree, projektNodes, projId })
+      nodes = [...nodes, ...apNodes]
     }
     if (
       nodeUrl.length === 4 &&
@@ -285,7 +288,16 @@ export default ({
     ) {
       const apId = nodeUrl[3]
       const popId = nodeUrl[5]
-      nodes = [...nodes, ...tpopNodes(store, tree, projId, apId, popId)]
+      tpopNodes = buildTpopNodes({
+        tree,
+        projId,
+        projektNodes,
+        apId,
+        apNodes,
+        popId,
+        popNodes,
+      })
+      nodes = [...nodes, ...tpopNodes]
     }
     if (
       nodeUrl.length === 8 &&
