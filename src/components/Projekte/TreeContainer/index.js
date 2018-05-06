@@ -10,7 +10,9 @@ import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 import Switch from 'material-ui/Switch'
 import clone from 'lodash/clone'
+import { Query, Mutation } from 'react-apollo'
 
+import dataGql from './data.graphql'
 import Label from '../../shared/Label'
 import LabelFilter from './LabelFilter'
 import Tree from './Tree'
@@ -297,94 +299,109 @@ const TreeContainer = ({
   const deleteDatasetModalIsVisible = !!store.datasetToDelete.id
 
   return (
-    <ErrorBoundary>
-      <Container>
-        {deleteDatasetModalIsVisible && <DeleteDatasetModal tree={tree} />}
-        <LabelFilterContainer>
-          <LabelFilter tree={tree} />
-          {showApDivToggle && (
-            <NurApDiv>
-              <Label label="nur AP" />
-              <StyledSwitch
-                checked={tree.apFilter}
-                onChange={tree.toggleApFilter}
-                color="primary"
-              />
-            </NurApDiv>
-          )}
-        </LabelFilterContainer>
-        <InnerTreeContainer
-          // $FlowIssue
-          innerRef={c => (this.tree = c)}
-        >
-          <Tree
-            tree={tree}
-            projektLoading={store.table.projektLoading}
-            nodes={tree.nodes}
-            mapBeobZugeordnetVisible={store.map.activeApfloraLayers.includes(
-              'BeobZugeordnet'
-            )}
-            mapBeobNichtBeurteiltVisible={store.map.activeApfloraLayers.includes(
-              'BeobNichtBeurteilt'
-            )}
-            mapBeobNichtZuzuordnenVisible={store.map.activeApfloraLayers.includes(
-              'BeobNichtZuzuordnen'
-            )}
-            mapPopVisible={store.map.activeApfloraLayers.includes('Pop')}
-            mapTpopVisible={store.map.activeApfloraLayers.includes('Tpop')}
-            popHighlightedIdsString={store.map.pop.highlightedIds.join()}
-            activeNodeArray={toJS(tree.activeNodeArray)}
-            lastClickedNode={toJS(tree.lastClickedNode)}
-            openNodes={tree.openNodes}
-          />
-        </InnerTreeContainer>
-        <CmApFolder onClick={handleClick} tree={tree} />
-        <CmAp onClick={handleClick} tree={tree} />
-        <CmApberuebersichtFolder onClick={handleClick} tree={tree} />
-        <CmApberuebersicht onClick={handleClick} tree={tree} />
-        <CmAssozartFolder onClick={handleClick} tree={tree} />
-        <CmAssozart onClick={handleClick} tree={tree} />
-        <CmApartFolder onClick={handleClick} tree={tree} />
-        <CmApart onClick={handleClick} tree={tree} />
-        <CmBeobZugeordnetFolder onClick={handleClick} tree={tree} />
-        <CmBerFolder onClick={handleClick} tree={tree} />
-        <CmBer onClick={handleClick} tree={tree} />
-        <CmApberFolder onClick={handleClick} tree={tree} />
-        <CmApber onClick={handleClick} tree={tree} />
-        <CmErfkritFolder onClick={handleClick} tree={tree} />
-        <CmErfkrit onClick={handleClick} tree={tree} />
-        <CmZielFolder onClick={handleClick} tree={tree} />
-        <CmZielJahrFolder onClick={handleClick} tree={tree} />
-        <CmZiel onClick={handleClick} tree={tree} />
-        <CmZielBerFolder onClick={handleClick} tree={tree} />
-        <CmZielBer onClick={handleClick} tree={tree} />
-        <CmPopFolder onClick={handleClick} tree={tree} />
-        <CmPop onClick={handleClick} tree={tree} />
-        <CmPopmassnberFolder onClick={handleClick} tree={tree} />
-        <CmPopmassnber onClick={handleClick} tree={tree} />
-        <CmPopberFolder onClick={handleClick} tree={tree} />
-        <CmPopber onClick={handleClick} tree={tree} />
-        <CmTpopFolder onClick={handleClick} tree={tree} />
-        <CmTpop onClick={handleClick} tree={tree} />
-        <CmTpopberFolder onClick={handleClick} tree={tree} />
-        <CmTpopber onClick={handleClick} tree={tree} />
-        <CmBeobZugeordnet onClick={handleClick} tree={tree} />
-        <CmBeobnichtbeurteilt onClick={handleClick} tree={tree} />
-        <CmBeobNichtZuzuordnen onClick={handleClick} tree={tree} />
-        <CmTpopfreiwkontrFolder onClick={handleClick} tree={tree} />
-        <CmTpopfreiwkontr onClick={handleClick} tree={tree} />
-        <CmTpopfreiwkontrzaehlFolder onClick={handleClick} tree={tree} />
-        <CmTpopfreiwkontrzaehl onClick={handleClick} tree={tree} />
-        <CmTpopfeldkontrFolder onClick={handleClick} tree={tree} />
-        <CmTpopfeldkontr onClick={handleClick} tree={tree} />
-        <CmTpopfeldkontrzaehlFolder onClick={handleClick} tree={tree} />
-        <CmTpopfeldkontrzaehl onClick={handleClick} tree={tree} />
-        <CmTpopmassnberFolder onClick={handleClick} tree={tree} />
-        <CmTpopmassnber onClick={handleClick} tree={tree} />
-        <CmTpopmassnFolder onClick={handleClick} tree={tree} />
-        <CmTpopmassn onClick={handleClick} tree={tree} />
-      </Container>
-    </ErrorBoundary>
+    <Query query={dataGql} variables={{ id: 'TODO' }}>
+      {({ loading, error, data }) => {
+        if (loading) return <Container>Lade...</Container>
+        if (error) return `Fehler: ${error.message}`
+
+        console.log('data:', data)
+
+        return (
+          <ErrorBoundary>
+            <Container>
+              {deleteDatasetModalIsVisible && (
+                <DeleteDatasetModal tree={tree} />
+              )}
+              <LabelFilterContainer>
+                <LabelFilter tree={tree} />
+                {showApDivToggle && (
+                  <NurApDiv>
+                    <Label label="nur AP" />
+                    <StyledSwitch
+                      checked={tree.apFilter}
+                      onChange={tree.toggleApFilter}
+                      color="primary"
+                    />
+                  </NurApDiv>
+                )}
+              </LabelFilterContainer>
+              <InnerTreeContainer
+                // $FlowIssue
+                innerRef={c => (this.tree = c)}
+              >
+                <Tree
+                  tree={tree}
+                  projektLoading={store.table.projektLoading}
+                  nodes={tree.nodes}
+                  mapBeobZugeordnetVisible={store.map.activeApfloraLayers.includes(
+                    'BeobZugeordnet'
+                  )}
+                  mapBeobNichtBeurteiltVisible={store.map.activeApfloraLayers.includes(
+                    'BeobNichtBeurteilt'
+                  )}
+                  mapBeobNichtZuzuordnenVisible={store.map.activeApfloraLayers.includes(
+                    'BeobNichtZuzuordnen'
+                  )}
+                  mapPopVisible={store.map.activeApfloraLayers.includes('Pop')}
+                  mapTpopVisible={store.map.activeApfloraLayers.includes(
+                    'Tpop'
+                  )}
+                  popHighlightedIdsString={store.map.pop.highlightedIds.join()}
+                  activeNodeArray={toJS(tree.activeNodeArray)}
+                  lastClickedNode={toJS(tree.lastClickedNode)}
+                  openNodes={tree.openNodes}
+                />
+              </InnerTreeContainer>
+              <CmApFolder onClick={handleClick} tree={tree} />
+              <CmAp onClick={handleClick} tree={tree} />
+              <CmApberuebersichtFolder onClick={handleClick} tree={tree} />
+              <CmApberuebersicht onClick={handleClick} tree={tree} />
+              <CmAssozartFolder onClick={handleClick} tree={tree} />
+              <CmAssozart onClick={handleClick} tree={tree} />
+              <CmApartFolder onClick={handleClick} tree={tree} />
+              <CmApart onClick={handleClick} tree={tree} />
+              <CmBeobZugeordnetFolder onClick={handleClick} tree={tree} />
+              <CmBerFolder onClick={handleClick} tree={tree} />
+              <CmBer onClick={handleClick} tree={tree} />
+              <CmApberFolder onClick={handleClick} tree={tree} />
+              <CmApber onClick={handleClick} tree={tree} />
+              <CmErfkritFolder onClick={handleClick} tree={tree} />
+              <CmErfkrit onClick={handleClick} tree={tree} />
+              <CmZielFolder onClick={handleClick} tree={tree} />
+              <CmZielJahrFolder onClick={handleClick} tree={tree} />
+              <CmZiel onClick={handleClick} tree={tree} />
+              <CmZielBerFolder onClick={handleClick} tree={tree} />
+              <CmZielBer onClick={handleClick} tree={tree} />
+              <CmPopFolder onClick={handleClick} tree={tree} />
+              <CmPop onClick={handleClick} tree={tree} />
+              <CmPopmassnberFolder onClick={handleClick} tree={tree} />
+              <CmPopmassnber onClick={handleClick} tree={tree} />
+              <CmPopberFolder onClick={handleClick} tree={tree} />
+              <CmPopber onClick={handleClick} tree={tree} />
+              <CmTpopFolder onClick={handleClick} tree={tree} />
+              <CmTpop onClick={handleClick} tree={tree} />
+              <CmTpopberFolder onClick={handleClick} tree={tree} />
+              <CmTpopber onClick={handleClick} tree={tree} />
+              <CmBeobZugeordnet onClick={handleClick} tree={tree} />
+              <CmBeobnichtbeurteilt onClick={handleClick} tree={tree} />
+              <CmBeobNichtZuzuordnen onClick={handleClick} tree={tree} />
+              <CmTpopfreiwkontrFolder onClick={handleClick} tree={tree} />
+              <CmTpopfreiwkontr onClick={handleClick} tree={tree} />
+              <CmTpopfreiwkontrzaehlFolder onClick={handleClick} tree={tree} />
+              <CmTpopfreiwkontrzaehl onClick={handleClick} tree={tree} />
+              <CmTpopfeldkontrFolder onClick={handleClick} tree={tree} />
+              <CmTpopfeldkontr onClick={handleClick} tree={tree} />
+              <CmTpopfeldkontrzaehlFolder onClick={handleClick} tree={tree} />
+              <CmTpopfeldkontrzaehl onClick={handleClick} tree={tree} />
+              <CmTpopmassnberFolder onClick={handleClick} tree={tree} />
+              <CmTpopmassnber onClick={handleClick} tree={tree} />
+              <CmTpopmassnFolder onClick={handleClick} tree={tree} />
+              <CmTpopmassn onClick={handleClick} tree={tree} />
+            </Container>
+          </ErrorBoundary>
+        )
+      }}
+    </Query>
   )
 }
 

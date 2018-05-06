@@ -1,0 +1,291 @@
+query TreeDataQuery {
+  allProjekts {
+    nodes {
+      id
+      name
+    }
+  }
+  allApberuebersichts(
+    filter: { projId: { in: ["e57f56f4-4376-11e8-ab21-4314b6749d13"] } }
+    orderBy: JAHR_ASC
+  ) {
+    nodes {
+      id
+      projId
+      jahr
+    }
+  }
+  allAps(filter: { projId: { in: ["e57f56f4-4376-11e8-ab21-4314b6749d13"] } }) {
+    nodes {
+      id
+      projId
+      artId
+      aeEigenschaftenByArtId {
+        id
+        artname
+      }
+      apartsByApId {
+        nodes {
+          id
+          artId
+        }
+      }
+    }
+  }
+  allPops(
+    filter: { apId: { in: ["6c52d173-4f62-11e7-aebe-2bd3a2ea4576"] } }
+    orderBy: NR_ASC
+  ) {
+    nodes {
+      id
+      name
+    }
+  }
+  allTpops(
+    filter: { popId: { in: ["70b29dc2-4f62-11e7-aebe-e74c0c656391"] } }
+    orderBy: NR_ASC
+  ) {
+    nodes {
+      id
+      nr
+      flurname
+    }
+  }
+  allTpopmassns(
+    filter: { tpopId: { in: ["76b33548-4f62-11e7-aebe-a35a38869314"] } }
+    orderBy: JAHR_ASC
+  ) {
+    nodes {
+      id
+      jahr
+      tpopmassnTypWerteByTyp {
+        id
+        text
+      }
+    }
+  }
+  allTpopmassnbers(
+    filter: { tpopId: { in: ["76b33548-4f62-11e7-aebe-a35a38869314"] } }
+    orderBy: JAHR_ASC
+  ) {
+    nodes {
+      id
+      jahr
+      tpopmassnErfbeurtWerteByBeurteilung {
+        id
+        text
+      }
+    }
+  }
+  tpopFeldKontr: allTpopkontrs(
+    filter: {
+      typ: { notEqualTo: "Freiwilligen-Erfolgskontrolle" }
+      tpopId: { in: ["76b33548-4f62-11e7-aebe-a35a38869314"] }
+    }
+  ) {
+    nodes {
+      id
+      datum
+      jahr
+    }
+  }
+  tpopFreiwKontr: allTpopkontrs(
+    filter: {
+      typ: { equalTo: "Freiwilligen-Erfolgskontrolle" }
+      tpopId: { in: ["76b33548-4f62-11e7-aebe-a35a38869314"] }
+    }
+  ) {
+    nodes {
+      id
+      datum
+      jahr
+    }
+  }
+  allTpopkontrzaehls(
+    filter: { tpopkontrId: { in: ["8223d046-4f62-11e7-aebe-777a214c7467"] } }
+  ) {
+    nodes {
+      id
+      anzahl
+      tpopkontrzaehlEinheitWerteByEinheit {
+        id
+        text
+      }
+      tpopkontrzaehlMethodeWerteByMethode {
+        id
+        text
+      }
+    }
+  }
+  allTpopbers(
+    filter: { tpopId: { in: ["76b33548-4f62-11e7-aebe-a35a38869314"] } }
+    orderBy: JAHR_ASC
+  ) {
+    nodes {
+      id
+      jahr
+      tpopEntwicklungWerteByEntwicklung {
+        id
+        text
+      }
+    }
+  }
+  beobZugeordnet: allBeobs(
+    filter: { tpopId: { in: ["76b33548-4f62-11e7-aebe-a35a38869314"] } }
+    orderBy: DATUM_DESC
+  ) {
+    nodes {
+      id
+      nichtZuordnen
+      artId
+      datum
+      autor
+      beobQuelleWerteByQuelleId {
+        id
+        name
+      }
+    }
+  }
+  allPopbers(
+    filter: { popId: { in: ["70b29dc2-4f62-11e7-aebe-e74c0c656391"] } }
+    orderBy: JAHR_ASC
+  ) {
+    nodes {
+      id
+      jahr
+      tpopEntwicklungWerteByEntwicklung {
+        id
+        text
+      }
+    }
+  }
+  allPopmassnbers(
+    filter: { popId: { in: ["70b29dc2-4f62-11e7-aebe-e74c0c656391"] } }
+    orderBy: JAHR_ASC
+  ) {
+    nodes {
+      id
+      jahr
+      tpopmassnErfbeurtWerteByBeurteilung {
+        id
+        text
+      }
+    }
+  }
+  allZiels(filter: { apId: { in: ["6c52d173-4f62-11e7-aebe-2bd3a2ea4576"] } }) {
+    nodes {
+      id
+      jahr
+      bezeichnung
+    }
+  }
+  allZielbers(
+    filter: { zielId: { in: ["b41cdf2a-3cf9-11e8-b0c5-fff3a8fbb9e5"] } }
+    orderBy: JAHR_ASC
+  ) {
+    nodes {
+      id
+      jahr
+      erreichung
+    }
+  }
+  allErfkrits(
+    filter: { apId: { in: ["6c52d173-4f62-11e7-aebe-2bd3a2ea4576"] } }
+  ) {
+    nodes {
+      id
+      kriterien
+      apErfkritWerteByErfolg {
+        id
+        text
+      }
+    }
+  }
+  allApbers(
+    filter: { apId: { in: ["6c52d173-4f62-11e7-aebe-2bd3a2ea4576"] } }
+    orderBy: JAHR_ASC
+  ) {
+    nodes {
+      id
+      jahr
+    }
+  }
+  allBers(
+    filter: { apId: { in: ["6c52d173-4f62-11e7-aebe-2bd3a2ea4576"] } }
+    orderBy: JAHR_ASC
+  ) {
+    nodes {
+      id
+      jahr
+      titel
+    }
+  }
+  allIdealbiotops(
+    filter: { apId: { in: ["6c52d173-4f62-11e7-aebe-2bd3a2ea4576"] } }
+  ) {
+    nodes {
+      id
+    }
+  }
+  allAparts(
+    filter: { apId: { in: ["6c52d173-4f62-11e7-aebe-2bd3a2ea4576"] } }
+  ) {
+    nodes {
+      id
+      aeEigenschaftenByArtId {
+        id
+        artname
+      }
+    }
+  }
+  allAssozarts(
+    filter: { apId: { in: ["6c52d173-4f62-11e7-aebe-2bd3a2ea4576"] } }
+  ) {
+    nodes {
+      id
+      aeId
+      aeEigenschaftenByAeId {
+        id
+        artname
+      }
+    }
+  }
+  beobNichtBeurteilt: allBeobs(
+    filter: {
+      artId: { in: ["d62ae70f-a1f4-48b3-b63e-6a9422ade189"] }
+      nichtZuordnen: { equalTo: false }
+    }
+    orderBy: DATUM_DESC
+  ) {
+    nodes {
+      id
+      nichtZuordnen
+      artId
+      datum
+      autor
+      beobQuelleWerteByQuelleId {
+        id
+        name
+      }
+    }
+  }
+  beobNichtZuzuordnen: allBeobs(
+    filter: {
+      artId: { in: ["d62ae70f-a1f4-48b3-b63e-6a9422ade189"] }
+      nichtZuordnen: { equalTo: true }
+    }
+    orderBy: DATUM_DESC
+  ) {
+    nodes {
+      id
+      nichtZuordnen
+      artId
+      datum
+      autor
+      beobQuelleWerteByQuelleId {
+        id
+        name
+      }
+    }
+  }
+}
