@@ -2,14 +2,7 @@
 import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
 
-const compareLabels = (a, b) => {
-  if (a.label.toLowerCase() < b.label.toLowerCase()) {
-    return -1
-  } else if (a.label.toLowerCase() > b.label.toLowerCase()) {
-    return 1
-  }
-  return 0
-}
+import compareLabel from './compareLabel'
 
 export default ({
   data,
@@ -60,11 +53,10 @@ export default ({
       url: ['Projekte', el.projId, 'Aktionspläne', el.id],
       hasChildren: true,
     }))
-    .sort(compareLabels)
+    .sort(compareLabel)
     .map((el, index) => {
       el.sort = [projIndex, 1, index]
       return el
     })
-  console.log('ap: nodes:', nodes)
   return nodes
 }

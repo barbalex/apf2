@@ -23,7 +23,7 @@ import zieljahrNodes from '../../../../modules/nodes/zieljahr'
 import zielNodes from '../../../../modules/nodes/ziel'
 import zielberFolderNodes from '../../../../modules/nodes/zielberFolder'
 import zielberNodes from '../../../../modules/nodes/zielber'
-import popNodes from '../../../../modules/nodes/pop'
+import popNodes from './pop'
 import beobNichtZuzuordnenNodes from '../../../../modules/nodes/beobNichtZuzuordnen'
 import beobzuordnungNodes from '../../../../modules/nodes/beobzuordnung'
 import assozartNodes from '../../../../modules/nodes/assozart'
@@ -181,7 +181,7 @@ export default ({
       allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
     ) {
       const apId = nodeUrl[3]
-      nodes = [...nodes, ...popNodes(store, tree, projId, apId)]
+      nodes = [...nodes, ...popNodes({ data, tree, projId, apId })]
     }
     if (
       nodeUrl.length === 5 &&

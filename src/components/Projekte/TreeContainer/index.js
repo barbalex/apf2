@@ -305,7 +305,8 @@ const TreeContainer = ({
   return (
     <Query query={dataGql} variables={myVariables}>
       {({ loading, error, data }) => {
-        if (loading) return <Container>Lade...</Container>
+        // do not show loading but rather last state
+        //if (loading) return <Container>Lade...</Container>
         if (error) return `Fehler: ${error.message}`
 
         const nodes = buildNodes({ store, tree, data })

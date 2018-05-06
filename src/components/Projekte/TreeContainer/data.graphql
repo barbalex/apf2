@@ -46,6 +46,8 @@ query TreeDataQuery(
   allPops(filter: { apId: { in: $ap } }, orderBy: NR_ASC) @include(if: $isAp) {
     nodes {
       id
+      apId
+      nr
       name
     }
   }
