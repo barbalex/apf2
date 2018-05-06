@@ -104,6 +104,7 @@ class Tree extends Component {
       style={style}
       tree={this.props.tree}
       openNodes={this.props.tree.openNodes}
+      nodes={this.props.nodes}
     />
   )
 

@@ -211,14 +211,16 @@ const Row = ({
   style,
   store,
   tree,
+  nodes,
 }: {
   key?: number,
   index: number,
   style: Object,
   store: Object,
   tree: Object,
+  nodes: Array<Object>,
 }) => {
-  const node = tree.nodes[index]
+  const node = nodes[index]
   const onClickNode = event => tree.toggleNode(tree, node)
   const onClickNodeSymbol = event => tree.toggleNodeSymbol(tree, node)
   const myProps = { key: index }

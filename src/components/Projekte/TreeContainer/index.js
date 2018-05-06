@@ -14,6 +14,7 @@ import { Query } from 'react-apollo'
 
 import variables from './variables'
 import dataGql from './data.graphql'
+import buildNodes from './nodes'
 import Label from '../../shared/Label'
 import LabelFilter from './LabelFilter'
 import Tree from './Tree'
@@ -307,10 +308,14 @@ const TreeContainer = ({
         if (loading) return <Container>Lade...</Container>
         if (error) return `Fehler: ${error.message}`
 
+        const nodes = buildNodes({ store, tree, data })
+
         console.log('TreeContainer:', {
           data,
           variables: myVariables,
           activeNodes: tree.activeNodes,
+          nodes,
+          treeNodes: tree.nodes,
         })
 
         return (
@@ -339,7 +344,7 @@ const TreeContainer = ({
                 <Tree
                   tree={tree}
                   projektLoading={store.table.projektLoading}
-                  nodes={tree.nodes}
+                  nodes={nodes}
                   mapBeobZugeordnetVisible={store.map.activeApfloraLayers.includes(
                     'BeobZugeordnet'
                   )}
