@@ -24,7 +24,7 @@ query TreeDataQuery(
       jahr
     }
   }
-  allAps(filter: { projId: { in: $projekt } }) {
+  allAps(filter: { projId: { in: $projekt } }) @include(if: $isProjekt) {
     nodes {
       id
       projId
@@ -142,6 +142,16 @@ query TreeDataQuery(
         id
         name
       }
+      tpopByTpopId {
+        id
+        popByPopId {
+          id
+          apByApId {
+            id
+            artId
+          }
+        }
+      }
     }
   }
   allPopbers(filter: { popId: { in: $pop } }, orderBy: JAHR_ASC)
@@ -231,12 +241,9 @@ query TreeDataQuery(
     }
   }
   beobNichtBeurteilt: allBeobs(
-    filter: {
-      artId: { in: ["d62ae70f-a1f4-48b3-b63e-6a9422ade189"] }
-      nichtZuordnen: { equalTo: false }
-    }
+    filter: { nichtZuordnen: { equalTo: false } }
     orderBy: DATUM_DESC
-  ) {
+  ) @include(if: $isAp) {
     nodes {
       id
       nichtZuordnen
@@ -247,15 +254,21 @@ query TreeDataQuery(
         id
         name
       }
+      aeEigenschaftenByArtId {
+        id
+        apartsByArtId(filter: { apId: { in: $ap } }) {
+          nodes {
+            id
+            apId
+          }
+        }
+      }
     }
   }
   beobNichtZuzuordnen: allBeobs(
-    filter: {
-      artId: { in: ["d62ae70f-a1f4-48b3-b63e-6a9422ade189"] }
-      nichtZuordnen: { equalTo: true }
-    }
+    filter: { nichtZuordnen: { equalTo: true } }
     orderBy: DATUM_DESC
-  ) {
+  ) @include(if: $isAp) {
     nodes {
       id
       nichtZuordnen
@@ -265,6 +278,15 @@ query TreeDataQuery(
       beobQuelleWerteByQuelleId {
         id
         name
+      }
+      aeEigenschaftenByArtId {
+        id
+        apartsByArtId(filter: { apId: { in: $ap } }) {
+          nodes {
+            id
+            apId
+          }
+        }
       }
     }
   }

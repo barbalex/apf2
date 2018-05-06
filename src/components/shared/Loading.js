@@ -6,8 +6,8 @@ const Container = styled.div`
   padding: 10px;
 `
 
-const LoadingComponent = ({ isLoading, error }) => {
-  if (isLoading) {
+const LoadingComponent = ({ isLoading, loading, error }) => {
+  if (isLoading || loading) {
     return <Container>Lade...</Container>
   } else if (error) {
     return (
