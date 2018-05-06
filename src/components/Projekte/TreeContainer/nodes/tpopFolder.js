@@ -39,18 +39,6 @@ export default ({
       }
       return true
     }).length
-  console.log({
-    data,
-    projektNodes,
-    apNodes,
-    popNodes,
-    apIndex,
-    popIndex,
-    projIndex,
-    apId,
-    popId,
-    childrenLength,
-  })
 
   let message = childrenLength
   if (tree.nodeLabelFilter.get('tpop')) {
