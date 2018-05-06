@@ -7706,3 +7706,20 @@ WHERE
       AND apflora.tpopmassn.jahr IS NOT NULL
       AND apflora.tpopmassn.jahr > lasttpopber.jahr
   );
+
+-- need this because filtering on apart
+-- in graphql overwhelms the server
+DROP VIEW IF EXISTS apflora.v_apbeob CASCADE;
+CREATE OR REPLACE VIEW apflora.v_apbeob AS
+select
+  apflora.beob.*,
+  apflora.apart.ap_id,
+  apflora.beob_quelle_werte.name as quelle
+from
+  apflora.beob
+  inner join apflora.apart
+  on apflora.apart.art_id = apflora.beob.art_id
+  inner join apflora.beob_quelle_werte
+  on apflora.beob_quelle_werte.id = apflora.beob.quelle_id
+order by
+  apflora.beob.datum desc;

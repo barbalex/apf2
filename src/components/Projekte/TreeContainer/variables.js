@@ -4,10 +4,16 @@ export default ({ activeNodes: n }: { activeNodes: Object }) => ({
   isProjekt: !!n.projekt,
   ap: n.ap ? [n.ap] : [],
   isAp: !!n.ap,
-  pop: n.ap ? [n.pop] : [],
+  pop: n.pop ? [n.pop] : [],
   isPop: !!n.pop,
-  tpop: n.ap ? [n.tpop] : [],
+  tpop: n.tpop ? [n.tpop] : [],
   isTpop: !!n.tpop,
-  ziel: n.ap ? [n.ziel] : [],
+  ziel: n.ziel ? [n.ziel] : [],
   isZiel: !!n.ziel,
+  tpopkontr: n.tpopfeldkontr
+    ? [n.tpopfeldkontr]
+    : n.tpopreiwkontr
+      ? [n.tpopreiwkontr]
+      : [],
+  isTpopkontr: !!n.tpopfeldkontr || !!n.tpopfreiwkontr,
 })

@@ -9,6 +9,8 @@ query TreeDataQuery(
   $isTpop: Boolean!
   $ziel: [UUID!]
   $isZiel: Boolean!
+  $tpopkontr: [UUID!]
+  $isTpopkontr: Boolean!
 ) {
   allProjekts {
     nodes {
@@ -101,9 +103,8 @@ query TreeDataQuery(
       jahr
     }
   }
-  allTpopkontrzaehls(
-    filter: { tpopkontrId: { in: ["8223d046-4f62-11e7-aebe-777a214c7467"] } }
-  ) {
+  allTpopkontrzaehls(filter: { tpopkontrId: { in: $tpopkontr } })
+    @include(if: $isTpopkontr) {
     nodes {
       id
       anzahl
@@ -128,7 +129,7 @@ query TreeDataQuery(
       }
     }
   }
-  beobZugeordnet: allBeobs(
+  beobZugeordnet: allVApbeobs(
     filter: { tpopId: { in: $tpop } }
     orderBy: DATUM_DESC
   ) @include(if: $isTpop) {
@@ -138,20 +139,8 @@ query TreeDataQuery(
       artId
       datum
       autor
-      beobQuelleWerteByQuelleId {
-        id
-        name
-      }
-      tpopByTpopId {
-        id
-        popByPopId {
-          id
-          apByApId {
-            id
-            artId
-          }
-        }
-      }
+      quelle
+      tpopId
     }
   }
   allPopbers(filter: { popId: { in: $pop } }, orderBy: JAHR_ASC)
@@ -240,8 +229,8 @@ query TreeDataQuery(
       }
     }
   }
-  beobNichtBeurteilt: allBeobs(
-    filter: { nichtZuordnen: { equalTo: false } }
+  beobNichtBeurteilt: allVApbeobs(
+    filter: { nichtZuordnen: { equalTo: false }, apId: { in: $ap } }
     orderBy: DATUM_DESC
   ) @include(if: $isAp) {
     nodes {
@@ -250,23 +239,11 @@ query TreeDataQuery(
       artId
       datum
       autor
-      beobQuelleWerteByQuelleId {
-        id
-        name
-      }
-      aeEigenschaftenByArtId {
-        id
-        apartsByArtId(filter: { apId: { in: $ap } }) {
-          nodes {
-            id
-            apId
-          }
-        }
-      }
+      quelle
     }
   }
-  beobNichtZuzuordnen: allBeobs(
-    filter: { nichtZuordnen: { equalTo: true } }
+  beobNichtZuzuordnen: allVApbeobs(
+    filter: { nichtZuordnen: { equalTo: true }, apId: { in: $ap } }
     orderBy: DATUM_DESC
   ) @include(if: $isAp) {
     nodes {
@@ -275,19 +252,7 @@ query TreeDataQuery(
       artId
       datum
       autor
-      beobQuelleWerteByQuelleId {
-        id
-        name
-      }
-      aeEigenschaftenByArtId {
-        id
-        apartsByArtId(filter: { apId: { in: $ap } }) {
-          nodes {
-            id
-            apId
-          }
-        }
-      }
+      quelle
     }
   }
 }
