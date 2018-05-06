@@ -2,29 +2,30 @@
 import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
 
-import projektNodes from './projekt'
-import apNodes from './ap'
-
 export default ({
   data,
   tree,
+  projektNodes,
+  apNodes,
   projId,
   apId,
 }: {
   data: Object,
   tree: Object,
+  projektNodes: Array<Object>,
+  apNodes: Array<Object>,
   projId: number,
   apId: number,
 }): Array<Object> => {
   const pops = get(data, 'allPops.nodes', [])
   // fetch sorting indexes of parents
-  const projIndex = findIndex(projektNodes({ data, tree }), {
+  const projIndex = findIndex(projektNodes, {
     id: projId,
   })
-  const apIndex = findIndex(apNodes({ data, tree, projId }), { id: apId })
+  const apIndex = findIndex(apNodes, { id: apId })
   const nodeLabelFilterString = tree.nodeLabelFilter.get('pop')
 
-  // map through all pop and create array of nodes
+  // map through all elements and create array of nodes
   const nodes = pops
     .filter(el => el.apId === apId)
     // filter by nodeLabelFilter
@@ -53,6 +54,5 @@ export default ({
       return el
     })
 
-  //console.log('popNodes:', { projekts, aps, pops, nodes })
   return nodes
 }

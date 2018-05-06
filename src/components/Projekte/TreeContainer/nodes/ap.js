@@ -3,15 +3,16 @@ import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
 
 import compareLabel from './compareLabel'
-import projektNodes from './projekt'
 
 export default ({
   data,
   tree,
+  projektNodes,
   projId,
 }: {
   data: Object,
   tree: Object,
+  projektNodes: Array<Object>,
   projId: number,
 }): Array<Object> => {
   const { nodeLabelFilter, apFilter } = tree
@@ -19,7 +20,7 @@ export default ({
   const aps = get(data, 'allAps.nodes', [])
 
   // fetch sorting indexes of parents
-  const projIndex = findIndex(projektNodes({ data, tree }), {
+  const projIndex = findIndex(projektNodes, {
     id: projId,
   })
 

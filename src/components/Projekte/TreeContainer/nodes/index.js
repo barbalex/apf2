@@ -3,7 +3,7 @@ import { toJS } from 'mobx'
 
 import allParentNodesAreOpen from '../../../../modules/allParentNodesAreOpen'
 import allParentNodesAreVisible from '../../../../modules/allParentNodesAreVisible'
-import projektNodes from './projekt'
+import buildProjektNodes from './projekt'
 import apFolderNodes from '../../../../modules/nodes/apFolder'
 import apberuebersichtFolderNodes from '../../../../modules/nodes/apberuebersichtFolder'
 import apberuebersichtNodes from '../../../../modules/nodes/apberuebersicht'
@@ -82,7 +82,8 @@ export default ({
 }): Array<Object> => {
   const openNodes = toJS(tree.openNodes)
 
-  let nodes = projektNodes({ data, tree })
+  const projektNodes = buildProjektNodes({ data, tree })
+  let nodes = projektNodes
   // do not process ['Projekte']
   const nodeUrlsToProcess = openNodes.filter(n => n.length > 1)
 
@@ -107,7 +108,7 @@ export default ({
       nodeUrl[2] === 'Aktionspläne' &&
       allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
     ) {
-      nodes = [...nodes, ...apNodes({ data, tree, projId })]
+      nodes = [...nodes, ...apNodes({ data, tree, projektNodes, projId })]
     }
     if (
       nodeUrl.length === 4 &&
@@ -181,7 +182,10 @@ export default ({
       allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
     ) {
       const apId = nodeUrl[3]
-      nodes = [...nodes, ...popNodes({ data, tree, projId, apId })]
+      nodes = [
+        ...nodes,
+        ...popNodes({ data, tree, apNodes, projektNodes, projId, apId }),
+      ]
     }
     if (
       nodeUrl.length === 5 &&
