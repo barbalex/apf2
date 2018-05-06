@@ -12,6 +12,7 @@ import Switch from 'material-ui/Switch'
 import clone from 'lodash/clone'
 import { Query } from 'react-apollo'
 
+import variables from './variables'
 import dataGql from './data.graphql'
 import Label from '../../shared/Label'
 import LabelFilter from './LabelFilter'
@@ -298,13 +299,19 @@ const TreeContainer = ({
   const showApDivToggle = activeDataset
   const deleteDatasetModalIsVisible = !!store.datasetToDelete.id
 
+  const myVariables = variables({ activeNodes: tree.activeNodes })
+
   return (
-    <Query query={dataGql} variables={{ id: 'TODO' }}>
+    <Query query={dataGql} variables={myVariables}>
       {({ loading, error, data }) => {
         if (loading) return <Container>Lade...</Container>
         if (error) return `Fehler: ${error.message}`
 
-        console.log('data:', data)
+        console.log('TreeContainer:', {
+          data,
+          variables: myVariables,
+          activeNodes: tree.activeNodes,
+        })
 
         return (
           <ErrorBoundary>

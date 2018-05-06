@@ -1,21 +1,30 @@
-query TreeDataQuery {
+query TreeDataQuery(
+  $projekt: [UUID!]
+  $isProjekt: Boolean!
+  $ap: [UUID!]
+  $isAp: Boolean!
+  $pop: [UUID!]
+  $isPop: Boolean!
+  $tpop: [UUID!]
+  $isTpop: Boolean!
+  $ziel: [UUID!]
+  $isZiel: Boolean!
+) {
   allProjekts {
     nodes {
       id
       name
     }
   }
-  allApberuebersichts(
-    filter: { projId: { in: ["e57f56f4-4376-11e8-ab21-4314b6749d13"] } }
-    orderBy: JAHR_ASC
-  ) {
+  allApberuebersichts(filter: { projId: { in: $projekt } }, orderBy: JAHR_ASC)
+    @include(if: $isProjekt) {
     nodes {
       id
       projId
       jahr
     }
   }
-  allAps(filter: { projId: { in: ["e57f56f4-4376-11e8-ab21-4314b6749d13"] } }) {
+  allAps(filter: { projId: { in: $projekt } }) {
     nodes {
       id
       projId
@@ -32,29 +41,22 @@ query TreeDataQuery {
       }
     }
   }
-  allPops(
-    filter: { apId: { in: ["6c52d173-4f62-11e7-aebe-2bd3a2ea4576"] } }
-    orderBy: NR_ASC
-  ) {
+  allPops(filter: { apId: { in: $ap } }, orderBy: NR_ASC) @include(if: $isAp) {
     nodes {
       id
       name
     }
   }
-  allTpops(
-    filter: { popId: { in: ["70b29dc2-4f62-11e7-aebe-e74c0c656391"] } }
-    orderBy: NR_ASC
-  ) {
+  allTpops(filter: { popId: { in: $pop } }, orderBy: NR_ASC)
+    @include(if: $isPop) {
     nodes {
       id
       nr
       flurname
     }
   }
-  allTpopmassns(
-    filter: { tpopId: { in: ["76b33548-4f62-11e7-aebe-a35a38869314"] } }
-    orderBy: JAHR_ASC
-  ) {
+  allTpopmassns(filter: { tpopId: { in: $tpop } }, orderBy: JAHR_ASC)
+    @include(if: $isTpop) {
     nodes {
       id
       jahr
@@ -64,10 +66,8 @@ query TreeDataQuery {
       }
     }
   }
-  allTpopmassnbers(
-    filter: { tpopId: { in: ["76b33548-4f62-11e7-aebe-a35a38869314"] } }
-    orderBy: JAHR_ASC
-  ) {
+  allTpopmassnbers(filter: { tpopId: { in: $tpop } }, orderBy: JAHR_ASC)
+    @include(if: $isTpop) {
     nodes {
       id
       jahr
@@ -80,9 +80,9 @@ query TreeDataQuery {
   tpopFeldKontr: allTpopkontrs(
     filter: {
       typ: { notEqualTo: "Freiwilligen-Erfolgskontrolle" }
-      tpopId: { in: ["76b33548-4f62-11e7-aebe-a35a38869314"] }
+      tpopId: { in: $tpop }
     }
-  ) {
+  ) @include(if: $isTpop) {
     nodes {
       id
       datum
@@ -92,9 +92,9 @@ query TreeDataQuery {
   tpopFreiwKontr: allTpopkontrs(
     filter: {
       typ: { equalTo: "Freiwilligen-Erfolgskontrolle" }
-      tpopId: { in: ["76b33548-4f62-11e7-aebe-a35a38869314"] }
+      tpopId: { in: $tpop }
     }
-  ) {
+  ) @include(if: $isTpop) {
     nodes {
       id
       datum
@@ -117,10 +117,8 @@ query TreeDataQuery {
       }
     }
   }
-  allTpopbers(
-    filter: { tpopId: { in: ["76b33548-4f62-11e7-aebe-a35a38869314"] } }
-    orderBy: JAHR_ASC
-  ) {
+  allTpopbers(filter: { tpopId: { in: $tpop } }, orderBy: JAHR_ASC)
+    @include(if: $isTpop) {
     nodes {
       id
       jahr
@@ -131,9 +129,9 @@ query TreeDataQuery {
     }
   }
   beobZugeordnet: allBeobs(
-    filter: { tpopId: { in: ["76b33548-4f62-11e7-aebe-a35a38869314"] } }
+    filter: { tpopId: { in: $tpop } }
     orderBy: DATUM_DESC
-  ) {
+  ) @include(if: $isTpop) {
     nodes {
       id
       nichtZuordnen
@@ -146,10 +144,8 @@ query TreeDataQuery {
       }
     }
   }
-  allPopbers(
-    filter: { popId: { in: ["70b29dc2-4f62-11e7-aebe-e74c0c656391"] } }
-    orderBy: JAHR_ASC
-  ) {
+  allPopbers(filter: { popId: { in: $pop } }, orderBy: JAHR_ASC)
+    @include(if: $isPop) {
     nodes {
       id
       jahr
@@ -159,10 +155,8 @@ query TreeDataQuery {
       }
     }
   }
-  allPopmassnbers(
-    filter: { popId: { in: ["70b29dc2-4f62-11e7-aebe-e74c0c656391"] } }
-    orderBy: JAHR_ASC
-  ) {
+  allPopmassnbers(filter: { popId: { in: $pop } }, orderBy: JAHR_ASC)
+    @include(if: $isPop) {
     nodes {
       id
       jahr
@@ -172,26 +166,22 @@ query TreeDataQuery {
       }
     }
   }
-  allZiels(filter: { apId: { in: ["6c52d173-4f62-11e7-aebe-2bd3a2ea4576"] } }) {
+  allZiels(filter: { apId: { in: $ap } }) @include(if: $isAp) {
     nodes {
       id
       jahr
       bezeichnung
     }
   }
-  allZielbers(
-    filter: { zielId: { in: ["b41cdf2a-3cf9-11e8-b0c5-fff3a8fbb9e5"] } }
-    orderBy: JAHR_ASC
-  ) {
+  allZielbers(filter: { zielId: { in: $ziel } }, orderBy: JAHR_ASC)
+    @include(if: $isZiel) {
     nodes {
       id
       jahr
       erreichung
     }
   }
-  allErfkrits(
-    filter: { apId: { in: ["6c52d173-4f62-11e7-aebe-2bd3a2ea4576"] } }
-  ) {
+  allErfkrits(filter: { apId: { in: $ap } }) @include(if: $isAp) {
     nodes {
       id
       kriterien
@@ -201,35 +191,27 @@ query TreeDataQuery {
       }
     }
   }
-  allApbers(
-    filter: { apId: { in: ["6c52d173-4f62-11e7-aebe-2bd3a2ea4576"] } }
-    orderBy: JAHR_ASC
-  ) {
+  allApbers(filter: { apId: { in: $ap } }, orderBy: JAHR_ASC)
+    @include(if: $isAp) {
     nodes {
       id
       jahr
     }
   }
-  allBers(
-    filter: { apId: { in: ["6c52d173-4f62-11e7-aebe-2bd3a2ea4576"] } }
-    orderBy: JAHR_ASC
-  ) {
+  allBers(filter: { apId: { in: $ap } }, orderBy: JAHR_ASC)
+    @include(if: $isAp) {
     nodes {
       id
       jahr
       titel
     }
   }
-  allIdealbiotops(
-    filter: { apId: { in: ["6c52d173-4f62-11e7-aebe-2bd3a2ea4576"] } }
-  ) {
+  allIdealbiotops(filter: { apId: { in: $ap } }) @include(if: $isAp) {
     nodes {
       id
     }
   }
-  allAparts(
-    filter: { apId: { in: ["6c52d173-4f62-11e7-aebe-2bd3a2ea4576"] } }
-  ) {
+  allAparts(filter: { apId: { in: $ap } }) @include(if: $isAp) {
     nodes {
       id
       aeEigenschaftenByArtId {
@@ -238,9 +220,7 @@ query TreeDataQuery {
       }
     }
   }
-  allAssozarts(
-    filter: { apId: { in: ["6c52d173-4f62-11e7-aebe-2bd3a2ea4576"] } }
-  ) {
+  allAssozarts(filter: { apId: { in: $ap } }) @include(if: $isAp) {
     nodes {
       id
       aeId
