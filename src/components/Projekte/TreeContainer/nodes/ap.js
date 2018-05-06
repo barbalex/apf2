@@ -3,6 +3,7 @@ import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
 
 import compareLabel from './compareLabel'
+import projektNodes from './projekt'
 
 export default ({
   data,
@@ -15,11 +16,10 @@ export default ({
 }): Array<Object> => {
   const { nodeLabelFilter, apFilter } = tree
   const nodeLabelFilterString = nodeLabelFilter.get('ap')
-  const projekts = get(data, 'allProjekts.nodes', [])
   const aps = get(data, 'allAps.nodes', [])
 
   // fetch sorting indexes of parents
-  const projIndex = findIndex(projekts, {
+  const projIndex = findIndex(projektNodes({ data, tree }), {
     id: projId,
   })
 
@@ -43,7 +43,7 @@ export default ({
       }
       return true
     })
-    .map((el, index) => ({
+    .map(el => ({
       nodeType: 'table',
       menuType: 'ap',
       id: el.id,
@@ -53,6 +53,7 @@ export default ({
       url: ['Projekte', el.projId, 'Aktionspläne', el.id],
       hasChildren: true,
     }))
+    // sort by label
     .sort(compareLabel)
     .map((el, index) => {
       el.sort = [projIndex, 1, index]

@@ -2,7 +2,7 @@
 import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
 
-//import projektNodes from './projekt'
+import projektNodes from './projekt'
 import apNodes from './ap'
 
 export default ({
@@ -16,10 +16,9 @@ export default ({
   projId: number,
   apId: number,
 }): Array<Object> => {
-  const projekts = get(data, 'allProjekts.nodes', [])
   const pops = get(data, 'allPops.nodes', [])
   // fetch sorting indexes of parents
-  const projIndex = findIndex(projekts, {
+  const projIndex = findIndex(projektNodes({ data, tree }), {
     id: projId,
   })
   const apIndex = findIndex(apNodes({ data, tree, projId }), { id: apId })
