@@ -15,7 +15,7 @@ export default ({
   projId: String,
   apId: String,
 }): Array<Object> => {
-  const assozarts = get(data, 'assozarts.nodes', [])
+  const aparts = get(data, 'aparts.nodes', [])
 
   // fetch sorting indexes of parents
   const projIndex = findIndex(projektNodes, {
@@ -25,34 +25,34 @@ export default ({
     tree.filteredAndSorted.ap.filter(a => a.proj_id === projId),
     { id: apId }
   )
-  const nodeLabelFilterString = tree.nodeLabelFilter.get('assozart')
+  const nodeLabelFilterString = tree.nodeLabelFilter.get('apart')
 
-  const assozartNodesLength = assozarts
+  const apartNodesLength = aparts
     .filter(el => el.apId === apId)
     // filter by nodeLabelFilter
     .filter(el => {
       if (nodeLabelFilterString) {
-        return get(el, 'aeEigenschaftenByAeId.artname', '(keine Art gewählt)')
+        return get(el, 'aeEigenschaftenByArtId.artname', '(keine Art gewählt)')
           .toLowerCase()
           .includes(nodeLabelFilterString.toLowerCase())
       }
       return true
     }).length
-  let message = assozartNodesLength
-  if (tree.nodeLabelFilter.get('assozart')) {
-    message = `${assozartNodesLength} gefiltert`
+  let message = apartNodesLength
+  if (tree.nodeLabelFilter.get('apart')) {
+    message = `${apartNodesLength} gefiltert`
   }
 
   return [
     {
       nodeType: 'folder',
-      menuType: 'assozartFolder',
+      menuType: 'apArtFolder',
       id: apId,
-      urlLabel: 'assoziierte-Arten',
-      label: `assoziierte Arten (${message})`,
-      url: ['Projekte', projId, 'Aktionspläne', apId, 'assoziierte-Arten'],
-      sort: [projIndex, 1, apIndex, 8],
-      hasChildren: assozartNodesLength > 0,
+      urlLabel: 'AP-Arten',
+      label: `AP-Arten (${message})`,
+      url: ['Projekte', projId, 'Aktionspläne', apId, 'AP-Arten'],
+      sort: [projIndex, 1, apIndex, 7],
+      hasChildren: apartNodesLength > 0,
     },
   ]
 }

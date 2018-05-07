@@ -19,21 +19,21 @@ export default ({
   projId: String,
   apId: String,
 }): Array<Object> => {
-  const assozarts = get(data, 'assozarts.nodes', [])
+  const aparts = get(data, 'aparts.nodes', [])
   // fetch sorting indexes of parents
   const projIndex = findIndex(projektNodes, {
     id: projId,
   })
   const apIndex = findIndex(apNodes, { id: apId })
-  const nodeLabelFilterString = tree.nodeLabelFilter.get('assozart')
+  const nodeLabelFilterString = tree.nodeLabelFilter.get('apart')
 
   // map through all elements and create array of nodes
-  const nodes = assozarts
+  const nodes = aparts
     .filter(el => el.apId === apId)
     // filter by nodeLabelFilter
     .filter(el => {
       if (nodeLabelFilterString) {
-        return get(el, 'aeEigenschaftenByAeId.artname', '(keine Art gewählt)')
+        return get(el, 'aeEigenschaftenByArtId.artname', '(keine Art gewählt)')
           .toLowerCase()
           .includes(nodeLabelFilterString.toLowerCase())
       }
@@ -41,25 +41,18 @@ export default ({
     })
     .map(el => ({
       nodeType: 'table',
-      menuType: 'assozart',
+      menuType: 'apart',
       id: el.id,
       parentId: apId,
       urlLabel: el.id,
-      label: get(el, 'aeEigenschaftenByAeId.artname', '(keine Art gewählt)'),
-      url: [
-        'Projekte',
-        projId,
-        'Aktionspläne',
-        apId,
-        'assoziierte-Arten',
-        el.id,
-      ],
+      label: get(el, 'aeEigenschaftenByArtId.artname', '(keine Art gewählt)'),
+      url: ['Projekte', projId, 'Aktionspläne', apId, 'AP-Arten', el.id],
       hasChildren: false,
     }))
     // sort by label
     .sort(compareLabel)
     .map((el, index) => {
-      el.sort = [projIndex, 1, apIndex, 8, index]
+      el.sort = [projIndex, 1, apIndex, 7, index]
       return el
     })
 

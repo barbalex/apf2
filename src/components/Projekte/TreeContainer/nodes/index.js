@@ -14,7 +14,7 @@ import qkFolderNodes from '../../../../modules/nodes/qkFolder'
 import buildBeobNichtZuzuordnenFolderNodes from './beobNichtZuzuordnenFolder'
 import buildBeobNichtBeurteiltFolderNodes from './beobNichtBeurteiltFolder'
 import buildAssozartFolderNodes from './assozartFolder'
-import apartFolderNodes from '../../../../modules/nodes/apartFolder'
+import buildApartFolderNodes from './apartFolder'
 import idealbiotopFolderNodes from '../../../../modules/nodes/idealbiotopFolder'
 import berFolderNodes from '../../../../modules/nodes/berFolder'
 import apberFolderNodes from '../../../../modules/nodes/apberFolder'
@@ -28,7 +28,7 @@ import buildPopNodes from './pop'
 import buildBeobNichtZuzuordnenNodes from './beobNichtZuzuordnen'
 import buildBeobNichtBeurteiltNodes from './beobNichtBeurteilt'
 import buildAssozartNodes from './assozart'
-import apartNodes from '../../../../modules/nodes/apart'
+import buildApartNodes from './apart'
 import berNodes from '../../../../modules/nodes/ber'
 import apberNodes from '../../../../modules/nodes/apber'
 import erfkritNodes from '../../../../modules/nodes/erfkrit'
@@ -147,7 +147,14 @@ export default ({
           projId,
           apId,
         }),
-        ...apartFolderNodes(store, tree, projId, apId),
+        ...buildApartFolderNodes({
+          data,
+          tree,
+          apNodes,
+          projektNodes,
+          projId,
+          apId,
+        }),
         ...buildBeobNichtBeurteiltFolderNodes({
           data,
           tree,
@@ -283,8 +290,17 @@ export default ({
       nodeUrl[4] === 'AP-Arten' &&
       allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
     ) {
-      const apId = nodeUrl[3]
-      nodes = [...nodes, ...apartNodes(store, tree, projId, apId)]
+      nodes = [
+        ...nodes,
+        ...buildApartNodes({
+          data,
+          tree,
+          apNodes,
+          projektNodes,
+          projId,
+          apId: nodeUrl[3],
+        }),
+      ]
     }
     if (
       nodeUrl.length === 5 &&
