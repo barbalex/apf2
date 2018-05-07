@@ -187,14 +187,13 @@ export default ({
       nodeUrl[4] === 'Populationen' &&
       allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
     ) {
-      const apId = nodeUrl[3]
       popNodes = buildPopNodes({
         data,
         tree,
         apNodes,
         projektNodes,
         projId,
-        apId,
+        apId: nodeUrl[3],
       })
       nodes = [...nodes, ...popNodes]
     }
@@ -301,8 +300,6 @@ export default ({
       nodeUrl[6] === 'Massnahmen-Berichte' &&
       allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
     ) {
-      const apId = nodeUrl[3]
-      const popId = nodeUrl[5]
       nodes = [
         ...nodes,
         ...buildPopmassnberNodes({
@@ -310,9 +307,9 @@ export default ({
           tree,
           projId,
           projektNodes,
-          apId,
+          apId: nodeUrl[3],
           apNodes,
-          popId,
+          popId: nodeUrl[5],
           popNodes,
         }),
       ]
@@ -323,8 +320,6 @@ export default ({
       nodeUrl[6] === 'Kontroll-Berichte' &&
       allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
     ) {
-      const apId = nodeUrl[3]
-      const popId = nodeUrl[5]
       nodes = [
         ...nodes,
         ...buildPopberNodes({
@@ -332,9 +327,9 @@ export default ({
           tree,
           projId,
           projektNodes,
-          apId,
+          apId: nodeUrl[3],
           apNodes,
-          popId,
+          popId: nodeUrl[5],
           popNodes,
         }),
       ]
@@ -345,16 +340,14 @@ export default ({
       nodeUrl[6] === 'Teil-Populationen' &&
       allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
     ) {
-      const apId = nodeUrl[3]
-      const popId = nodeUrl[5]
       tpopNodes = buildTpopNodes({
         data,
         tree,
         projId,
         projektNodes,
-        apId,
+        apId: nodeUrl[3],
         apNodes,
-        popId,
+        popId: nodeUrl[5],
         popNodes,
       })
       nodes = [...nodes, ...tpopNodes]
