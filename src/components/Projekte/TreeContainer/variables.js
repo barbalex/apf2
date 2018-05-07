@@ -10,10 +10,10 @@ export default ({ activeNodes: n }: { activeNodes: Object }) => ({
   isTpop: !!n.tpop,
   ziel: n.ziel ? [n.ziel] : [],
   isZiel: !!n.ziel,
-  tpopkontr: n.tpopfeldkontr
+  tpopkontr: !!n.tpopfeldkontr
     ? [n.tpopfeldkontr]
-    : n.tpopreiwkontr
-      ? [n.tpopreiwkontr]
+    : !!n.tpopfreiwkontr
+      ? [n.tpopfreiwkontr]
       : [],
   isTpopkontr: !!n.tpopfeldkontr || !!n.tpopfreiwkontr,
 })

@@ -302,6 +302,12 @@ const TreeContainer = ({
 
   const myVariables = variables({ activeNodes: tree.activeNodes })
 
+  console.log('TreeContainer:', {
+    dataGql,
+    treeActiveNodes: tree.activeNodes,
+    myVariables,
+  })
+
   return (
     <Query query={dataGql} variables={myVariables}>
       {({ loading, error, data }) => {
