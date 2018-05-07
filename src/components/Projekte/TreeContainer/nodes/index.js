@@ -41,13 +41,13 @@ import beobZugeordnetFolderNodes from '../../../../modules/nodes/beobZugeordnetF
 import tpopberFolderNodes from '../../../../modules/nodes/tpopberFolder'
 import tpopfreiwkontrFolderNodes from '../../../../modules/nodes/tpopfreiwkontrFolder'
 import tpopfeldkontrFolderNodes from '../../../../modules/nodes/tpopfeldkontrFolder'
-import tpopmassnberFolderNodes from '../../../../modules/nodes/tpopmassnberFolder'
+import buildTpopmassnberFolderNodes from './tpopmassnberFolder'
 import tpopmassnFolderNodes from './tpopmassnFolder'
 import beobZugeordnetNodes from '../../../../modules/nodes/beobZugeordnet'
 import tpopberNodes from '../../../../modules/nodes/tpopber'
 import tpopfreiwkontrNodes from '../../../../modules/nodes/tpopfreiwkontr'
 import tpopfeldkontrNodes from '../../../../modules/nodes/tpopfeldkontr'
-import tpopmassnberNodes from '../../../../modules/nodes/tpopmassnber'
+import buildTpopmassnberNodes from './tpopmassnber'
 import tpopmassnNodes from './tpopmassn'
 import tpopfeldkontrzaehlFolderNodes from '../../../../modules/nodes/tpopfeldkontrzaehlFolder'
 import tpopfreiwkontrzaehlFolderNodes from '../../../../modules/nodes/tpopfreiwkontrzaehlFolder'
@@ -380,7 +380,18 @@ export default ({
           tpopId,
           tpopNodes,
         }),
-        ...tpopmassnberFolderNodes(store, tree, projId, apId, popId, tpopId),
+        ...buildTpopmassnberFolderNodes({
+          data,
+          tree,
+          projId,
+          projektNodes,
+          apId,
+          apNodes,
+          popId,
+          popNodes,
+          tpopId,
+          tpopNodes,
+        }),
         ...tpopfeldkontrFolderNodes(store, tree, projId, apId, popId, tpopId),
         ...tpopfreiwkontrFolderNodes(store, tree, projId, apId, popId, tpopId),
         ...tpopberFolderNodes(store, tree, projId, apId, popId, tpopId),
@@ -459,7 +470,18 @@ export default ({
       const tpopId = nodeUrl[7]
       nodes = [
         ...nodes,
-        ...tpopmassnberNodes(store, tree, projId, apId, popId, tpopId),
+        ...buildTpopmassnberNodes({
+          data,
+          tree,
+          projId,
+          projektNodes,
+          apId,
+          apNodes,
+          popId,
+          popNodes,
+          tpopId,
+          tpopNodes,
+        }),
       ]
     }
     if (
