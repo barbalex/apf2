@@ -18,7 +18,7 @@ import buildApartFolderNodes from './apartFolder'
 import buildIdealbiotopFolderNodes from './idealbiotopFolder'
 import buildBerFolderNodes from './berFolder'
 import buildApberFolderNodes from './apberFolder'
-import erfkritFolderNodes from '../../../../modules/nodes/erfkritFolder'
+import buildAperfkritFolderNodes from './aperfkritFolder'
 import zieljahrFolderNodes from '../../../../modules/nodes/zieljahrFolder'
 import zieljahrNodes from '../../../../modules/nodes/zieljahr'
 import zielNodes from '../../../../modules/nodes/ziel'
@@ -31,7 +31,7 @@ import buildAssozartNodes from './assozart'
 import buildApartNodes from './apart'
 import buildBerNodes from './ber'
 import buildApberNodes from './apber'
-import erfkritNodes from '../../../../modules/nodes/erfkrit'
+import buildAperfkritNodes from './aperfkrit'
 import buildTpopFolderNodes from './tpopFolder'
 import buildPopberFolderNodes from './popberFolder'
 import buildPopmassnberFolderNodes from './popmassnberFolder'
@@ -135,7 +135,14 @@ export default ({
         ...nodes,
         ...buildPopFolderNodes({ data, tree, projektNodes, projId, apId }),
         ...zieljahrFolderNodes(store, tree, projId, apId),
-        ...erfkritFolderNodes(store, tree, projId, apId),
+        ...buildAperfkritFolderNodes({
+          data,
+          tree,
+          apNodes,
+          projektNodes,
+          projId,
+          apId,
+        }),
         ...buildApberFolderNodes({
           data,
           tree,
@@ -361,8 +368,17 @@ export default ({
       nodeUrl[4] === 'AP-Erfolgskriterien' &&
       allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
     ) {
-      const apId = nodeUrl[3]
-      nodes = [...nodes, ...erfkritNodes(store, tree, projId, apId)]
+      nodes = [
+        ...nodes,
+        ...buildAperfkritNodes({
+          data,
+          tree,
+          apNodes,
+          projektNodes,
+          projId,
+          apId: nodeUrl[3],
+        }),
+      ]
     }
     if (
       nodeUrl.length === 6 &&

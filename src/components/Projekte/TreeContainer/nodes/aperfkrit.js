@@ -2,6 +2,8 @@
 import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
 
+import compareLabel from './compareLabel'
+
 export default ({
   data,
   tree,
@@ -17,21 +19,25 @@ export default ({
   projId: String,
   apId: String,
 }): Array<Object> => {
-  const apbers = get(data, 'apbers.nodes', [])
+  const erfkrits = get(data, 'erfkrits.nodes', [])
   // fetch sorting indexes of parents
   const projIndex = findIndex(projektNodes, {
     id: projId,
   })
   const apIndex = findIndex(apNodes, { id: apId })
-  const nodeLabelFilterString = tree.nodeLabelFilter.get('apber')
+  const nodeLabelFilterString = tree.nodeLabelFilter.get('erfkrit')
 
   // map through all elements and create array of nodes
-  const nodes = apbers
+  const nodes = erfkrits
     .filter(el => el.apId === apId)
     // filter by nodeLabelFilter
     .filter(el => {
       if (nodeLabelFilterString) {
-        return (el.jahr || '(kein Jahr)').includes(
+        return `${get(
+          el,
+          'apErfkritWerteByErfolg.text',
+          '(nicht beurteilt)'
+        )}: ${el.kriterien || '(keine Kriterien erfasst)'}`.includes(
           nodeLabelFilterString.toLowerCase()
         )
       }
@@ -39,18 +45,33 @@ export default ({
     })
     .map(el => ({
       nodeType: 'table',
-      menuType: 'apber',
+      menuType: 'erfkrit',
       id: el.id,
       parentId: el.apId,
       urlLabel: el.id,
-      label: el.jahr || '(kein Jahr)',
-      url: ['Projekte', projId, 'Aktionspläne', el.apId, 'AP-Berichte', el.id],
+      label: `${get(
+        el,
+        'apErfkritWerteByErfolg.text',
+        '(nicht beurteilt)'
+      )}: ${el.kriterien || '(keine Kriterien erfasst)'}`,
+      url: [
+        'Projekte',
+        projId,
+        'Aktionspläne',
+        el.apId,
+        'AP-Erfolgskriterien',
+        el.id,
+      ],
       hasChildren: false,
     }))
     // sort by label
-    .sort((a, b) => (a.jahr || 0) - (b.jahr || 0))
+    .sort(
+      (a, b) =>
+        get(b, 'apErfkritWerteByErfolg.sort', 0) -
+        get(a, 'apErfkritWerteByErfolg.sort', 0)
+    )
     .map((el, index) => {
-      el.sort = [projIndex, 1, apIndex, 4, index]
+      el.sort = [projIndex, 1, apIndex, 3, index]
       return el
     })
 
