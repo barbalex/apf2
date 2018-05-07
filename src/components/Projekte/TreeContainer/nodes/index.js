@@ -11,7 +11,7 @@ import buildApberuebersichtNodes from './apberuebersicht'
 import buildApNodes from './ap'
 import buildPopFolderNodes from './popFolder'
 import qkFolderNodes from '../../../../modules/nodes/qkFolder'
-import beobNichtZuzuordnenFolderNodes from '../../../../modules/nodes/beobNichtZuzuordnenFolder'
+import buildBeobNichtZuzuordnenFolderNodes from './beobNichtZuzuordnenFolder'
 import beobzuordnungFolderNodes from '../../../../modules/nodes/beobzuordnungFolder'
 import assozartFolderNodes from '../../../../modules/nodes/assozartFolder'
 import apartFolderNodes from '../../../../modules/nodes/apartFolder'
@@ -25,7 +25,7 @@ import zielNodes from '../../../../modules/nodes/ziel'
 import zielberFolderNodes from '../../../../modules/nodes/zielberFolder'
 import zielberNodes from '../../../../modules/nodes/zielber'
 import buildPopNodes from './pop'
-import beobNichtZuzuordnenNodes from '../../../../modules/nodes/beobNichtZuzuordnen'
+import buildBeobNichtZuzuordnenNodes from './beobNichtZuzuordnen'
 import beobzuordnungNodes from '../../../../modules/nodes/beobzuordnung'
 import assozartNodes from '../../../../modules/nodes/assozart'
 import apartNodes from '../../../../modules/nodes/apart'
@@ -142,7 +142,14 @@ export default ({
         ...assozartFolderNodes(store, tree, projId, apId),
         ...apartFolderNodes(store, tree, projId, apId),
         ...beobzuordnungFolderNodes(store, tree, projId, apId),
-        ...beobNichtZuzuordnenFolderNodes(store, tree, projId, apId),
+        ...buildBeobNichtZuzuordnenFolderNodes({
+          data,
+          tree,
+          apNodes,
+          projektNodes,
+          projId,
+          apId,
+        }),
         ...qkFolderNodes(store, tree, projId, apId),
       ]
     }
@@ -211,8 +218,17 @@ export default ({
       nodeUrl[4] === 'nicht-zuzuordnende-Beobachtungen' &&
       allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
     ) {
-      const apId = nodeUrl[3]
-      nodes = [...nodes, ...beobNichtZuzuordnenNodes(store, tree, projId, apId)]
+      nodes = [
+        ...nodes,
+        ...buildBeobNichtZuzuordnenNodes({
+          data,
+          tree,
+          apNodes,
+          projektNodes,
+          projId,
+          apId: nodeUrl[3],
+        }),
+      ]
     }
     if (
       nodeUrl.length === 5 &&
