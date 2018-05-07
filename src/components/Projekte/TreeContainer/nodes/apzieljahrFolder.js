@@ -42,6 +42,7 @@ export default ({
       return true
     })
     .reduce((a, el, index) => union(a, [el.jahr]), [])
+    .sort()
 
   return zieljahre.map((jahr, index) => ({
     nodeType: 'folder',
