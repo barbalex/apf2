@@ -62,7 +62,6 @@ export default ({
   if (tree.nodeLabelFilter.get('tpopkontrzaehl')) {
     message = `${childrenLength} gefiltert`
   }
-  console.log('tpopfreiwkontrzaehlFolder:', { tpopkontrId })
 
   return [
     {
