@@ -32,7 +32,7 @@ import berNodes from '../../../../modules/nodes/ber'
 import apberNodes from '../../../../modules/nodes/apber'
 import erfkritNodes from '../../../../modules/nodes/erfkrit'
 import buildTpopFolderNodes from './tpopFolder'
-import popberFolderNodes from '../../../../modules/nodes/popberFolder'
+import buildPopberFolderNodes from './popberFolder'
 import popmassnberFolderNodes from '../../../../modules/nodes/popmassnberFolder'
 import popmassnberNodes from '../../../../modules/nodes/popmassnber'
 import popberNodes from '../../../../modules/nodes/popber'
@@ -271,7 +271,16 @@ export default ({
           popNodes,
           popId,
         }),
-        ...popberFolderNodes(store, tree, projId, apId, popId),
+        ...buildPopberFolderNodes({
+          data,
+          tree,
+          projektNodes,
+          projId,
+          apNodes,
+          apId,
+          popNodes,
+          popId,
+        }),
         ...popmassnberFolderNodes(store, tree, projId, apId, popId),
       ]
     }
