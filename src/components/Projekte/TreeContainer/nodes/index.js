@@ -451,9 +451,6 @@ export default ({
       nodeUrl[8] === 'Beobachtungen' &&
       allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
     ) {
-      const apId = nodeUrl[3]
-      const popId = nodeUrl[5]
-      const tpopId = nodeUrl[7]
       nodes = [
         ...nodes,
         ...buildBeobZugeordnetNodes({
@@ -461,11 +458,11 @@ export default ({
           tree,
           projId,
           projektNodes,
-          apId,
+          apId: nodeUrl[3],
           apNodes,
-          popId,
+          popId: nodeUrl[5],
           popNodes,
-          tpopId,
+          tpopId: nodeUrl[7],
           tpopNodes,
         }),
       ]
@@ -477,9 +474,6 @@ export default ({
       nodeUrl[8] === 'Kontroll-Berichte' &&
       allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
     ) {
-      const apId = nodeUrl[3]
-      const popId = nodeUrl[5]
-      const tpopId = nodeUrl[7]
       nodes = [
         ...nodes,
         ...buildTpopberNodes({
@@ -487,11 +481,11 @@ export default ({
           tree,
           projId,
           projektNodes,
-          apId,
+          apId: nodeUrl[3],
           apNodes,
-          popId,
+          popId: nodeUrl[5],
           popNodes,
-          tpopId,
+          tpopId: nodeUrl[7],
           tpopNodes,
         }),
       ]
@@ -503,19 +497,16 @@ export default ({
       nodeUrl[8] === 'Freiwilligen-Kontrollen' &&
       allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
     ) {
-      const apId = nodeUrl[3]
-      const popId = nodeUrl[5]
-      const tpopId = nodeUrl[7]
       tpopfreiwkontrNodes = buildTpopfreiwkontrNodes({
         data,
         tree,
         projId,
         projektNodes,
-        apId,
+        apId: nodeUrl[3],
         apNodes,
-        popId,
+        popId: nodeUrl[5],
         popNodes,
-        tpopId,
+        tpopId: nodeUrl[7],
         tpopNodes,
       })
       nodes = [...nodes, ...tpopfreiwkontrNodes]
@@ -527,19 +518,16 @@ export default ({
       nodeUrl[8] === 'Feld-Kontrollen' &&
       allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
     ) {
-      const apId = nodeUrl[3]
-      const popId = nodeUrl[5]
-      const tpopId = nodeUrl[7]
       tpopfeldkontrNodes = buildTpopfeldkontrNodes({
         data,
         tree,
         projId,
         projektNodes,
-        apId,
+        apId: nodeUrl[3],
         apNodes,
-        popId,
+        popId: nodeUrl[5],
         popNodes,
-        tpopId,
+        tpopId: nodeUrl[7],
         tpopNodes,
       })
       nodes = [...nodes, ...tpopfeldkontrNodes]
@@ -551,9 +539,6 @@ export default ({
       nodeUrl[8] === 'Massnahmen-Berichte' &&
       allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
     ) {
-      const apId = nodeUrl[3]
-      const popId = nodeUrl[5]
-      const tpopId = nodeUrl[7]
       nodes = [
         ...nodes,
         ...buildTpopmassnberNodes({
@@ -561,11 +546,11 @@ export default ({
           tree,
           projId,
           projektNodes,
-          apId,
+          apId: nodeUrl[3],
           apNodes,
-          popId,
+          popId: nodeUrl[5],
           popNodes,
-          tpopId,
+          tpopId: nodeUrl[7],
           tpopNodes,
         }),
       ]
@@ -577,9 +562,6 @@ export default ({
       nodeUrl[8] === 'Massnahmen' &&
       allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
     ) {
-      const apId = nodeUrl[3]
-      const popId = nodeUrl[5]
-      const tpopId = nodeUrl[7]
       nodes = [
         ...nodes,
         ...tpopmassnNodes({
@@ -587,11 +569,11 @@ export default ({
           tree,
           projId,
           projektNodes,
-          apId,
+          apId: nodeUrl[3],
           apNodes,
-          popId,
+          popId: nodeUrl[5],
           popNodes,
-          tpopId,
+          tpopId: nodeUrl[7],
           tpopNodes,
         }),
       ]
@@ -603,10 +585,6 @@ export default ({
       nodeUrl[8] === 'Freiwilligen-Kontrollen' &&
       allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
     ) {
-      const apId = nodeUrl[3]
-      const popId = nodeUrl[5]
-      const tpopId = nodeUrl[7]
-      const tpopkontrId = nodeUrl[9]
       nodes = [
         ...nodes,
         ...buildTpopfreiwkontrzaehlFolderNodes({
@@ -614,13 +592,13 @@ export default ({
           tree,
           projId,
           projektNodes,
-          apId,
+          apId: nodeUrl[3],
           apNodes,
-          popId,
+          popId: nodeUrl[5],
           popNodes,
-          tpopId,
+          tpopId: nodeUrl[7],
           tpopNodes,
-          tpopkontrId,
+          tpopkontrId: nodeUrl[9],
           tpopfreiwkontrNodes,
         }),
       ]
@@ -632,10 +610,6 @@ export default ({
       nodeUrl[8] === 'Feld-Kontrollen' &&
       allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
     ) {
-      const apId = nodeUrl[3]
-      const popId = nodeUrl[5]
-      const tpopId = nodeUrl[7]
-      const tpopkontrId = nodeUrl[9]
       nodes = [
         ...nodes,
         ...buildTpopfeldkontrzaehlFolderNodes({
@@ -643,13 +617,13 @@ export default ({
           tree,
           projId,
           projektNodes,
-          apId,
+          apId: nodeUrl[3],
           apNodes,
-          popId,
+          popId: nodeUrl[5],
           popNodes,
-          tpopId,
+          tpopId: nodeUrl[7],
           tpopNodes,
-          tpopkontrId,
+          tpopkontrId: nodeUrl[9],
           tpopfeldkontrNodes,
         }),
       ]
@@ -661,10 +635,6 @@ export default ({
       nodeUrl[8] === 'Feld-Kontrollen' &&
       allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
     ) {
-      const apId = nodeUrl[3]
-      const popId = nodeUrl[5]
-      const tpopId = nodeUrl[7]
-      const tpopkontrId = nodeUrl[9]
       nodes = [
         ...nodes,
         ...buildTpopfeldkontrzaehlNodes({
@@ -672,13 +642,13 @@ export default ({
           tree,
           projId,
           projektNodes,
-          apId,
+          apId: nodeUrl[3],
           apNodes,
-          popId,
+          popId: nodeUrl[5],
           popNodes,
-          tpopId,
+          tpopId: nodeUrl[7],
           tpopNodes,
-          tpopkontrId,
+          tpopkontrId: nodeUrl[9],
           tpopfeldkontrNodes,
         }),
       ]
@@ -690,10 +660,6 @@ export default ({
       nodeUrl[8] === 'Freiwilligen-Kontrollen' &&
       allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
     ) {
-      const apId = nodeUrl[3]
-      const popId = nodeUrl[5]
-      const tpopId = nodeUrl[7]
-      const tpopkontrId = nodeUrl[9]
       nodes = [
         ...nodes,
         ...buildTpopfreiwkontrzaehlNodes({
@@ -701,13 +667,13 @@ export default ({
           tree,
           projId,
           projektNodes,
-          apId,
+          apId: nodeUrl[3],
           apNodes,
-          popId,
+          popId: nodeUrl[5],
           popNodes,
-          tpopId,
+          tpopId: nodeUrl[7],
           tpopNodes,
-          tpopkontrId,
+          tpopkontrId: nodeUrl[9],
           tpopfreiwkontrNodes,
         }),
       ]

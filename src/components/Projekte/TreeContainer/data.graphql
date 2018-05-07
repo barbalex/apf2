@@ -113,6 +113,7 @@ query TreeDataQuery(
       typ: { equalTo: "Freiwilligen-Erfolgskontrolle" }
       tpopId: { in: $tpop }
     }
+    orderBy: JAHR_ASC
   ) @include(if: $isTpop) {
     nodes {
       id
