@@ -33,19 +33,15 @@ export default ({
   const apIndex = findIndex(apNodes, { id: apId })
   const popIndex = findIndex(popNodes, { id: popId })
   const tpopIndex = findIndex(tpopNodes, { id: tpopId })
-  const nodeLabelFilterString = tree.nodeLabelFilter.get('tpopfeldkontr')
+  const nodeLabelFilterString = tree.nodeLabelFilter.get('tpopfreiwkontr')
 
   // map through all elements and create array of nodes
-  let nodes = get(data, 'tpopfeldkontrs.nodes', [])
+  let nodes = get(data, 'tpopfreiwkontrs.nodes', [])
     .filter(el => el.tpopId === tpopId)
     // filter by nodeLabelFilter
     .filter(el => {
       if (nodeLabelFilterString) {
-        return `${el.jahr || '(kein Jahr)'}: ${get(
-          el,
-          'tpopkontrTypWerteByTyp.text',
-          '(kein Typ)'
-        )}`
+        return `${el.jahr || '(kein Jahr)'}`
           .toLowerCase()
           .includes(nodeLabelFilterString.toLowerCase())
       }
@@ -53,15 +49,11 @@ export default ({
     })
     .map(el => ({
       nodeType: 'table',
-      menuType: 'tpopfeldkontr',
+      menuType: 'tpopfreiwkontr',
       id: el.id,
       parentId: tpopId,
       urlLabel: el.id,
-      label: `${el.jahr || '(kein Jahr)'}: ${get(
-        el,
-        'tpopkontrTypWerteByTyp.text',
-        '(kein Typ)'
-      )}`,
+      label: `${el.jahr || '(kein Jahr)'}`,
       url: [
         'Projekte',
         projId,
@@ -71,14 +63,14 @@ export default ({
         popId,
         'Teil-Populationen',
         tpopId,
-        'Feld-Kontrollen',
+        'Freiwilligen-Kontrollen',
         el.id,
       ],
       hasChildren: true,
     }))
   nodes = sortBy(nodes, n => (n.datum ? n.datum : `${n.jahr}-01-01`)).map(
     (el, index) => {
-      el.sort = [projIndex, 1, apIndex, 1, popIndex, 1, tpopIndex, 3, index]
+      el.sort = [projIndex, 1, apIndex, 1, popIndex, 1, tpopIndex, 4, index]
       return el
     }
   )

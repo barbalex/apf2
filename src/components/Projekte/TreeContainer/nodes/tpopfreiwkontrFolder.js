@@ -1,7 +1,5 @@
-// @flow
 import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
-import sortBy from 'lodash/sortBy'
 
 export default ({
   data,
@@ -33,35 +31,32 @@ export default ({
   const apIndex = findIndex(apNodes, { id: apId })
   const popIndex = findIndex(popNodes, { id: popId })
   const tpopIndex = findIndex(tpopNodes, { id: tpopId })
-  const nodeLabelFilterString = tree.nodeLabelFilter.get('tpopfeldkontr')
+  const nodeLabelFilterString = tree.nodeLabelFilter.get('tpopfreiwkontr')
 
-  // map through all elements and create array of nodes
-  let nodes = get(data, 'tpopfeldkontrs.nodes', [])
+  const childrenLength = get(data, 'tpopfreiwkontrs.nodes', [])
     .filter(el => el.tpopId === tpopId)
     // filter by nodeLabelFilter
     .filter(el => {
       if (nodeLabelFilterString) {
-        return `${el.jahr || '(kein Jahr)'}: ${get(
-          el,
-          'tpopkontrTypWerteByTyp.text',
-          '(kein Typ)'
-        )}`
+        return `${el.jahr || '(kein Jahr)'}`
           .toLowerCase()
           .includes(nodeLabelFilterString.toLowerCase())
       }
       return true
-    })
-    .map(el => ({
-      nodeType: 'table',
-      menuType: 'tpopfeldkontr',
-      id: el.id,
-      parentId: tpopId,
-      urlLabel: el.id,
-      label: `${el.jahr || '(kein Jahr)'}: ${get(
-        el,
-        'tpopkontrTypWerteByTyp.text',
-        '(kein Typ)'
-      )}`,
+    }).length
+
+  let message = childrenLength
+  if (tree.nodeLabelFilter.get('tpopfreiwkontr')) {
+    message = `${childrenLength} gefiltert`
+  }
+
+  return [
+    {
+      nodeType: 'folder',
+      menuType: 'tpopfreiwkontrFolder',
+      id: tpopId,
+      urlLabel: 'Freiwilligen-Kontrollen',
+      label: `Freiwilligen-Kontrollen (${message})`,
       url: [
         'Projekte',
         projId,
@@ -71,17 +66,10 @@ export default ({
         popId,
         'Teil-Populationen',
         tpopId,
-        'Feld-Kontrollen',
-        el.id,
+        'Freiwilligen-Kontrollen',
       ],
-      hasChildren: true,
-    }))
-  nodes = sortBy(nodes, n => (n.datum ? n.datum : `${n.jahr}-01-01`)).map(
-    (el, index) => {
-      el.sort = [projIndex, 1, apIndex, 1, popIndex, 1, tpopIndex, 3, index]
-      return el
-    }
-  )
-
-  return nodes
+      sort: [projIndex, 1, apIndex, 1, popIndex, 1, tpopIndex, 4],
+      hasChildren: childrenLength > 0,
+    },
+  ]
 }
