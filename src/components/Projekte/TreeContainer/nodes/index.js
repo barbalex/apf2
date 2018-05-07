@@ -1,5 +1,6 @@
 // @flow
 import { toJS } from 'mobx'
+import clone from 'lodash/clone'
 
 import allParentNodesAreOpen from '../../../../modules/allParentNodesAreOpen'
 import allParentNodesAreVisible from '../../../../modules/allParentNodesAreVisible'
@@ -83,7 +84,7 @@ export default ({
   const openNodes = toJS(tree.openNodes)
 
   const projektNodes = buildProjektNodes({ data, tree })
-  let nodes = projektNodes
+  let nodes = clone(projektNodes)
   let apNodes
   let popNodes
   let tpopNodes

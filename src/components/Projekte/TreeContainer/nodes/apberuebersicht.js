@@ -44,9 +44,9 @@ export default ({
       hasChildren: false,
     }))
     // sort by Jahr
-    .sort((a, b) => (a.jahr || 0) - (b.jahr || 0))
+    //.sort((a, b) => (a.jahr || 0) - (b.jahr || 0))
     .map((el, index) => {
-      el.sort = [projIndex, 2, el.jahr]
+      el.sort = [projIndex, 2, index]
       return el
     })
   return nodes
