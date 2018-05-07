@@ -49,10 +49,10 @@ import buildTpopfreiwkontrNodes from './tpopfreiwkontr'
 import buildTpopfeldkontrNodes from './tpopfeldkontr'
 import buildTpopmassnberNodes from './tpopmassnber'
 import tpopmassnNodes from './tpopmassn'
-import tpopfeldkontrzaehlFolderNodes from '../../../../modules/nodes/tpopfeldkontrzaehlFolder'
-import tpopfreiwkontrzaehlFolderNodes from '../../../../modules/nodes/tpopfreiwkontrzaehlFolder'
-import tpopfeldkontrzaehlNodes from '../../../../modules/nodes/tpopfeldkontrzaehl'
-import tpopfreiwkontrzaehlNodes from '../../../../modules/nodes/tpopfreiwkontrzaehl'
+import buildTpopfeldkontrzaehlFolderNodes from './tpopfeldkontrzaehlFolder'
+import buildTpopfreiwkontrzaehlFolderNodes from './tpopfreiwkontrzaehlFolder'
+import buildTpopfeldkontrzaehlNodes from './tpopfeldkontrzaehl'
+import buildTpopfreiwkontrzaehlNodes from './tpopfreiwkontrzaehl'
 
 const compare = (a, b) => {
   // sort a before, if it has no value at this index
@@ -609,15 +609,20 @@ export default ({
       const tpopkontrId = nodeUrl[9]
       nodes = [
         ...nodes,
-        ...tpopfreiwkontrzaehlFolderNodes(
-          store,
+        ...buildTpopfreiwkontrzaehlFolderNodes({
+          data,
           tree,
           projId,
+          projektNodes,
           apId,
+          apNodes,
           popId,
+          popNodes,
           tpopId,
-          tpopkontrId
-        ),
+          tpopNodes,
+          tpopkontrId,
+          tpopfreiwkontrNodes,
+        }),
       ]
     }
     if (
@@ -633,15 +638,20 @@ export default ({
       const tpopkontrId = nodeUrl[9]
       nodes = [
         ...nodes,
-        ...tpopfeldkontrzaehlFolderNodes(
-          store,
+        ...buildTpopfeldkontrzaehlFolderNodes({
+          data,
           tree,
           projId,
+          projektNodes,
           apId,
+          apNodes,
           popId,
+          popNodes,
           tpopId,
-          tpopkontrId
-        ),
+          tpopNodes,
+          tpopkontrId,
+          tpopfeldkontrNodes,
+        }),
       ]
     }
     if (
@@ -657,15 +667,20 @@ export default ({
       const tpopkontrId = nodeUrl[9]
       nodes = [
         ...nodes,
-        ...tpopfeldkontrzaehlNodes(
-          store,
+        ...buildTpopfeldkontrzaehlNodes({
+          data,
           tree,
           projId,
+          projektNodes,
           apId,
+          apNodes,
           popId,
+          popNodes,
           tpopId,
-          tpopkontrId
-        ),
+          tpopNodes,
+          tpopkontrId,
+          tpopfeldkontrNodes,
+        }),
       ]
     }
     if (
@@ -681,15 +696,20 @@ export default ({
       const tpopkontrId = nodeUrl[9]
       nodes = [
         ...nodes,
-        ...tpopfreiwkontrzaehlNodes(
-          store,
+        ...buildTpopfreiwkontrzaehlNodes({
+          data,
           tree,
           projId,
+          projektNodes,
           apId,
+          apNodes,
           popId,
+          popNodes,
           tpopId,
-          tpopkontrId
-        ),
+          tpopNodes,
+          tpopkontrId,
+          tpopfreiwkontrNodes,
+        }),
       ]
     }
   })
