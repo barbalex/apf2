@@ -4,9 +4,9 @@ import { toJS } from 'mobx'
 import allParentNodesAreOpen from '../../../../modules/allParentNodesAreOpen'
 import allParentNodesAreVisible from '../../../../modules/allParentNodesAreVisible'
 import buildProjektNodes from './projekt'
-import apFolderNodes from '../../../../modules/nodes/apFolder'
-import apberuebersichtFolderNodes from '../../../../modules/nodes/apberuebersichtFolder'
-import apberuebersichtNodes from '../../../../modules/nodes/apberuebersicht'
+import buildApFolderNodes from './apFolder'
+import buildApberuebersichtFolderNodes from './apberuebersichtFolder'
+import buildApberuebersichtNodes from './apberuebersicht'
 import buildApNodes from './ap'
 import buildPopFolderNodes from './popFolder'
 import qkFolderNodes from '../../../../modules/nodes/qkFolder'
@@ -97,8 +97,13 @@ export default ({
     if (nodeUrl.length === 2) {
       nodes = [
         ...nodes,
-        ...apFolderNodes(store, tree, projId),
-        ...apberuebersichtFolderNodes(store, tree, projId),
+        ...buildApFolderNodes({ data, tree, projektNodes, projId }),
+        ...buildApberuebersichtFolderNodes({
+          data,
+          tree,
+          projektNodes,
+          projId,
+        }),
       ]
     }
     if (
@@ -106,7 +111,10 @@ export default ({
       nodeUrl[2] === 'AP-Berichte' &&
       allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
     ) {
-      nodes = [...nodes, ...apberuebersichtNodes(store, tree, projId)]
+      nodes = [
+        ...nodes,
+        ...buildApberuebersichtNodes({ data, tree, projektNodes, projId }),
+      ]
     }
     if (
       nodeUrl.length === 3 &&
