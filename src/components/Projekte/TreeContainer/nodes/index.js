@@ -13,7 +13,7 @@ import buildPopFolderNodes from './popFolder'
 import qkFolderNodes from '../../../../modules/nodes/qkFolder'
 import buildBeobNichtZuzuordnenFolderNodes from './beobNichtZuzuordnenFolder'
 import buildBeobNichtBeurteiltFolderNodes from './beobNichtBeurteiltFolder'
-import assozartFolderNodes from '../../../../modules/nodes/assozartFolder'
+import buildAssozartFolderNodes from './assozartFolder'
 import apartFolderNodes from '../../../../modules/nodes/apartFolder'
 import idealbiotopFolderNodes from '../../../../modules/nodes/idealbiotopFolder'
 import berFolderNodes from '../../../../modules/nodes/berFolder'
@@ -27,7 +27,7 @@ import zielberNodes from '../../../../modules/nodes/zielber'
 import buildPopNodes from './pop'
 import buildBeobNichtZuzuordnenNodes from './beobNichtZuzuordnen'
 import buildBeobNichtBeurteiltNodes from './beobNichtBeurteilt'
-import assozartNodes from '../../../../modules/nodes/assozart'
+import buildAssozartNodes from './assozart'
 import apartNodes from '../../../../modules/nodes/apart'
 import berNodes from '../../../../modules/nodes/ber'
 import apberNodes from '../../../../modules/nodes/apber'
@@ -139,7 +139,14 @@ export default ({
         ...apberFolderNodes(store, tree, projId, apId),
         ...berFolderNodes(store, tree, projId, apId),
         ...idealbiotopFolderNodes(store, tree, projId, apId),
-        ...assozartFolderNodes(store, tree, projId, apId),
+        ...buildAssozartFolderNodes({
+          data,
+          tree,
+          apNodes,
+          projektNodes,
+          projId,
+          apId,
+        }),
         ...apartFolderNodes(store, tree, projId, apId),
         ...buildBeobNichtBeurteiltFolderNodes({
           data,
@@ -259,8 +266,17 @@ export default ({
       nodeUrl[4] === 'assoziierte-Arten' &&
       allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
     ) {
-      const apId = nodeUrl[3]
-      nodes = [...nodes, ...assozartNodes(store, tree, projId, apId)]
+      nodes = [
+        ...nodes,
+        ...buildAssozartNodes({
+          data,
+          tree,
+          apNodes,
+          projektNodes,
+          projId,
+          apId: nodeUrl[3],
+        }),
+      ]
     }
     if (
       nodeUrl.length === 5 &&
