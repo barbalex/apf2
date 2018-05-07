@@ -7,18 +7,22 @@ export default ({
   projektNodes,
   apNodes,
   popNodes,
+  tpopNodes,
   projId,
   apId,
   popId,
+  tpopId,
 }: {
   data: Object,
   tree: Object,
   projektNodes: Array<Object>,
   apNodes: Array<Object>,
   popNodes: Array<Object>,
+  tpopNodes: Array<Object>,
   projId: String,
   apId: String,
   popId: String,
+  tpopId: String,
 }): Array<Object> => {
   // fetch sorting indexes of parents
   const projIndex = findIndex(projektNodes, {
@@ -26,17 +30,18 @@ export default ({
   })
   const apIndex = findIndex(apNodes, { id: apId })
   const popIndex = findIndex(popNodes, { id: popId })
-  const nodeLabelFilterString = tree.nodeLabelFilter.get('popber')
+  const tpopIndex = findIndex(tpopNodes, { id: tpopId })
+  const nodeLabelFilterString = tree.nodeLabelFilter.get('tpopmassn')
 
-  const childrenLength = get(data, 'popbers.nodes', [])
-    .filter(el => el.popId === popId)
+  const childrenLength = get(data, 'tpopmassns.nodes', [])
+    .filter(el => el.tpopId === tpopId)
     // filter by nodeLabelFilter
     .filter(el => {
       if (nodeLabelFilterString) {
         return `${el.jahr || '(kein Jahr)'}: ${get(
           el,
-          'tpopEntwicklungWerteByEntwicklung.text',
-          '(nicht beurteilt)'
+          'tpopmassnTypWerteByTyp.text',
+          '(kein Typ)'
         )}`
           .toLowerCase()
           .includes(nodeLabelFilterString.toLowerCase())
@@ -45,17 +50,17 @@ export default ({
     }).length
 
   let message = childrenLength
-  if (tree.nodeLabelFilter.get('popber')) {
+  if (tree.nodeLabelFilter.get('tpopmassn')) {
     message = `${childrenLength} gefiltert`
   }
 
   return [
     {
       nodeType: 'folder',
-      menuType: 'popberFolder',
-      id: popId,
-      urlLabel: 'Kontroll-Berichte',
-      label: `Kontroll-Berichte (${message})`,
+      menuType: 'tpopmassnFolder',
+      id: tpopId,
+      urlLabel: 'Massnahmen',
+      label: `Massnahmen (${message})`,
       url: [
         'Projekte',
         projId,
@@ -63,9 +68,11 @@ export default ({
         apId,
         'Populationen',
         popId,
-        'Kontroll-Berichte',
+        'Teil-Populationen',
+        tpopId,
+        'Massnahmen',
       ],
-      sort: [projIndex, 1, apIndex, 1, popIndex, 2],
+      sort: [projIndex, 1, apIndex, 1, popIndex, 1, tpopIndex, 1],
       hasChildren: childrenLength > 0,
     },
   ]

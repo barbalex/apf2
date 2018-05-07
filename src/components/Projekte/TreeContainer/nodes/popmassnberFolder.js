@@ -26,16 +26,16 @@ export default ({
   })
   const apIndex = findIndex(apNodes, { id: apId })
   const popIndex = findIndex(popNodes, { id: popId })
-  const nodeLabelFilterString = tree.nodeLabelFilter.get('popber')
+  const nodeLabelFilterString = tree.nodeLabelFilter.get('popmassnber')
 
-  const childrenLength = get(data, 'popbers.nodes', [])
+  const childrenLength = get(data, 'popmassnbers.nodes', [])
     .filter(el => el.popId === popId)
     // filter by nodeLabelFilter
     .filter(el => {
       if (nodeLabelFilterString) {
         return `${el.jahr || '(kein Jahr)'}: ${get(
           el,
-          'tpopEntwicklungWerteByEntwicklung.text',
+          'tpopmassnErfbeurtWerteByBeurteilung.text',
           '(nicht beurteilt)'
         )}`
           .toLowerCase()
@@ -45,17 +45,17 @@ export default ({
     }).length
 
   let message = childrenLength
-  if (tree.nodeLabelFilter.get('popber')) {
+  if (tree.nodeLabelFilter.get('popmassnber')) {
     message = `${childrenLength} gefiltert`
   }
 
   return [
     {
       nodeType: 'folder',
-      menuType: 'popberFolder',
+      menuType: 'popmassnberFolder',
       id: popId,
-      urlLabel: 'Kontroll-Berichte',
-      label: `Kontroll-Berichte (${message})`,
+      urlLabel: 'Massnahmen-Berichte',
+      label: `Massnahmen-Berichte (${message})`,
       url: [
         'Projekte',
         projId,
@@ -63,9 +63,9 @@ export default ({
         apId,
         'Populationen',
         popId,
-        'Kontroll-Berichte',
+        'Massnahmen-Berichte',
       ],
-      sort: [projIndex, 1, apIndex, 1, popIndex, 2],
+      sort: [projIndex, 1, apIndex, 1, popIndex, 3],
       hasChildren: childrenLength > 0,
     },
   ]

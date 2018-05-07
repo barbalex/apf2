@@ -1,5 +1,8 @@
+// @flow
 import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
+
+import compareLabel from './compareLabel'
 
 export default ({
   data,
@@ -26,36 +29,36 @@ export default ({
   })
   const apIndex = findIndex(apNodes, { id: apId })
   const popIndex = findIndex(popNodes, { id: popId })
-  const nodeLabelFilterString = tree.nodeLabelFilter.get('popber')
+  //console.log({ popNodes, popIndex, popId })
+  const nodeLabelFilterString = tree.nodeLabelFilter.get('popmassnber')
 
-  const childrenLength = get(data, 'popbers.nodes', [])
+  // map through all elements and create array of nodes
+  const nodes = get(data, 'popmassnbers.nodes', [])
     .filter(el => el.popId === popId)
     // filter by nodeLabelFilter
     .filter(el => {
       if (nodeLabelFilterString) {
         return `${el.jahr || '(kein Jahr)'}: ${get(
           el,
-          'tpopEntwicklungWerteByEntwicklung.text',
+          'tpopmassnErfbeurtWerteByBeurteilung.text',
           '(nicht beurteilt)'
         )}`
           .toLowerCase()
           .includes(nodeLabelFilterString.toLowerCase())
       }
       return true
-    }).length
-
-  let message = childrenLength
-  if (tree.nodeLabelFilter.get('popber')) {
-    message = `${childrenLength} gefiltert`
-  }
-
-  return [
-    {
-      nodeType: 'folder',
-      menuType: 'popberFolder',
-      id: popId,
-      urlLabel: 'Kontroll-Berichte',
-      label: `Kontroll-Berichte (${message})`,
+    })
+    .map(el => ({
+      nodeType: 'table',
+      menuType: 'popmassnber',
+      id: el.id,
+      parentId: popId,
+      urlLabel: el.id,
+      label: `${el.jahr || '(kein Jahr)'}: ${get(
+        el,
+        'tpopmassnErfbeurtWerteByBeurteilung.text',
+        '(nicht beurteilt)'
+      )}`,
       url: [
         'Projekte',
         projId,
@@ -63,10 +66,16 @@ export default ({
         apId,
         'Populationen',
         popId,
-        'Kontroll-Berichte',
+        'Massnahmen-Berichte',
+        el.id,
       ],
-      sort: [projIndex, 1, apIndex, 1, popIndex, 2],
-      hasChildren: childrenLength > 0,
-    },
-  ]
+      hasChildren: false,
+    }))
+    // sort by label
+    .sort(compareLabel)
+    .map((el, index) => {
+      el.sort = [projIndex, 1, apIndex, 1, popIndex, 3, index]
+      return el
+    })
+  return nodes
 }

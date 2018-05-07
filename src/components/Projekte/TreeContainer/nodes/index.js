@@ -33,22 +33,22 @@ import apberNodes from '../../../../modules/nodes/apber'
 import erfkritNodes from '../../../../modules/nodes/erfkrit'
 import buildTpopFolderNodes from './tpopFolder'
 import buildPopberFolderNodes from './popberFolder'
-import popmassnberFolderNodes from '../../../../modules/nodes/popmassnberFolder'
-import popmassnberNodes from '../../../../modules/nodes/popmassnber'
-import popberNodes from '../../../../modules/nodes/popber'
+import buildPopmassnberFolderNodes from './popmassnberFolder'
+import buildPopmassnberNodes from './popmassnber'
+import buildPopberNodes from './popber'
 import buildTpopNodes from './tpop'
 import beobZugeordnetFolderNodes from '../../../../modules/nodes/beobZugeordnetFolder'
 import tpopberFolderNodes from '../../../../modules/nodes/tpopberFolder'
 import tpopfreiwkontrFolderNodes from '../../../../modules/nodes/tpopfreiwkontrFolder'
 import tpopfeldkontrFolderNodes from '../../../../modules/nodes/tpopfeldkontrFolder'
 import tpopmassnberFolderNodes from '../../../../modules/nodes/tpopmassnberFolder'
-import tpopmassnFolderNodes from '../../../../modules/nodes/tpopmassnFolder'
+import tpopmassnFolderNodes from './tpopmassnFolder'
 import beobZugeordnetNodes from '../../../../modules/nodes/beobZugeordnet'
 import tpopberNodes from '../../../../modules/nodes/tpopber'
 import tpopfreiwkontrNodes from '../../../../modules/nodes/tpopfreiwkontr'
 import tpopfeldkontrNodes from '../../../../modules/nodes/tpopfeldkontr'
 import tpopmassnberNodes from '../../../../modules/nodes/tpopmassnber'
-import tpopmassnNodes from '../../../../modules/nodes/tpopmassn'
+import tpopmassnNodes from './tpopmassn'
 import tpopfeldkontrzaehlFolderNodes from '../../../../modules/nodes/tpopfeldkontrzaehlFolder'
 import tpopfreiwkontrzaehlFolderNodes from '../../../../modules/nodes/tpopfreiwkontrzaehlFolder'
 import tpopfeldkontrzaehlNodes from '../../../../modules/nodes/tpopfeldkontrzaehl'
@@ -281,7 +281,16 @@ export default ({
           popNodes,
           popId,
         }),
-        ...popmassnberFolderNodes(store, tree, projId, apId, popId),
+        ...buildPopmassnberFolderNodes({
+          data,
+          tree,
+          projektNodes,
+          projId,
+          apNodes,
+          apId,
+          popNodes,
+          popId,
+        }),
       ]
     }
     if (
@@ -292,7 +301,19 @@ export default ({
     ) {
       const apId = nodeUrl[3]
       const popId = nodeUrl[5]
-      nodes = [...nodes, ...popmassnberNodes(store, tree, projId, apId, popId)]
+      nodes = [
+        ...nodes,
+        ...buildPopmassnberNodes({
+          data,
+          tree,
+          projId,
+          projektNodes,
+          apId,
+          apNodes,
+          popId,
+          popNodes,
+        }),
+      ]
     }
     if (
       nodeUrl.length === 7 &&
@@ -302,7 +323,19 @@ export default ({
     ) {
       const apId = nodeUrl[3]
       const popId = nodeUrl[5]
-      nodes = [...nodes, ...popberNodes(store, tree, projId, apId, popId)]
+      nodes = [
+        ...nodes,
+        ...buildPopberNodes({
+          data,
+          tree,
+          projId,
+          projektNodes,
+          apId,
+          apNodes,
+          popId,
+          popNodes,
+        }),
+      ]
     }
     if (
       nodeUrl.length === 7 &&
@@ -313,6 +346,7 @@ export default ({
       const apId = nodeUrl[3]
       const popId = nodeUrl[5]
       tpopNodes = buildTpopNodes({
+        data,
         tree,
         projId,
         projektNodes,
@@ -334,7 +368,18 @@ export default ({
       const tpopId = nodeUrl[7]
       nodes = [
         ...nodes,
-        ...tpopmassnFolderNodes(store, tree, projId, apId, popId, tpopId),
+        ...tpopmassnFolderNodes({
+          data,
+          tree,
+          projId,
+          projektNodes,
+          apId,
+          apNodes,
+          popId,
+          popNodes,
+          tpopId,
+          tpopNodes,
+        }),
         ...tpopmassnberFolderNodes(store, tree, projId, apId, popId, tpopId),
         ...tpopfeldkontrFolderNodes(store, tree, projId, apId, popId, tpopId),
         ...tpopfreiwkontrFolderNodes(store, tree, projId, apId, popId, tpopId),
@@ -429,7 +474,18 @@ export default ({
       const tpopId = nodeUrl[7]
       nodes = [
         ...nodes,
-        ...tpopmassnNodes(store, tree, projId, apId, popId, tpopId),
+        ...tpopmassnNodes({
+          data,
+          tree,
+          projId,
+          projektNodes,
+          apId,
+          apNodes,
+          popId,
+          popNodes,
+          tpopId,
+          tpopNodes,
+        }),
       ]
     }
     if (
