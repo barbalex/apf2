@@ -64,7 +64,7 @@ const UserMessages = ({
         open={
           store.messages.messages.length > 0 &&
           !!store.user.name &&
-          (store.updateAvailable = false)
+          store.updateAvailable === false
         }
         aria-labelledby="dialog-title"
       >
