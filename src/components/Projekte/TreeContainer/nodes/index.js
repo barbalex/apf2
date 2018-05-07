@@ -15,9 +15,9 @@ import buildBeobNichtZuzuordnenFolderNodes from './beobNichtZuzuordnenFolder'
 import buildBeobNichtBeurteiltFolderNodes from './beobNichtBeurteiltFolder'
 import buildAssozartFolderNodes from './assozartFolder'
 import buildApartFolderNodes from './apartFolder'
-import idealbiotopFolderNodes from '../../../../modules/nodes/idealbiotopFolder'
-import berFolderNodes from '../../../../modules/nodes/berFolder'
-import apberFolderNodes from '../../../../modules/nodes/apberFolder'
+import buildIdealbiotopFolderNodes from './idealbiotopFolder'
+import buildBerFolderNodes from './berFolder'
+import buildApberFolderNodes from './apberFolder'
 import erfkritFolderNodes from '../../../../modules/nodes/erfkritFolder'
 import zieljahrFolderNodes from '../../../../modules/nodes/zieljahrFolder'
 import zieljahrNodes from '../../../../modules/nodes/zieljahr'
@@ -29,8 +29,8 @@ import buildBeobNichtZuzuordnenNodes from './beobNichtZuzuordnen'
 import buildBeobNichtBeurteiltNodes from './beobNichtBeurteilt'
 import buildAssozartNodes from './assozart'
 import buildApartNodes from './apart'
-import berNodes from '../../../../modules/nodes/ber'
-import apberNodes from '../../../../modules/nodes/apber'
+import buildBerNodes from './ber'
+import buildApberNodes from './apber'
 import erfkritNodes from '../../../../modules/nodes/erfkrit'
 import buildTpopFolderNodes from './tpopFolder'
 import buildPopberFolderNodes from './popberFolder'
@@ -136,9 +136,29 @@ export default ({
         ...buildPopFolderNodes({ data, tree, projektNodes, projId, apId }),
         ...zieljahrFolderNodes(store, tree, projId, apId),
         ...erfkritFolderNodes(store, tree, projId, apId),
-        ...apberFolderNodes(store, tree, projId, apId),
-        ...berFolderNodes(store, tree, projId, apId),
-        ...idealbiotopFolderNodes(store, tree, projId, apId),
+        ...buildApberFolderNodes({
+          data,
+          tree,
+          apNodes,
+          projektNodes,
+          projId,
+          apId,
+        }),
+        ...buildBerFolderNodes({
+          data,
+          tree,
+          apNodes,
+          projektNodes,
+          projId,
+          apId,
+        }),
+        ...buildIdealbiotopFolderNodes({
+          tree,
+          apNodes,
+          projektNodes,
+          projId,
+          apId,
+        }),
         ...buildAssozartFolderNodes({
           data,
           tree,
@@ -307,16 +327,34 @@ export default ({
       nodeUrl[4] === 'Berichte' &&
       allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
     ) {
-      const apId = nodeUrl[3]
-      nodes = [...nodes, ...berNodes(store, tree, projId, apId)]
+      nodes = [
+        ...nodes,
+        ...buildBerNodes({
+          data,
+          tree,
+          apNodes,
+          projektNodes,
+          projId,
+          apId: nodeUrl[3],
+        }),
+      ]
     }
     if (
       nodeUrl.length === 5 &&
       nodeUrl[4] === 'AP-Berichte' &&
       allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
     ) {
-      const apId = nodeUrl[3]
-      nodes = [...nodes, ...apberNodes(store, tree, projId, apId)]
+      nodes = [
+        ...nodes,
+        ...buildApberNodes({
+          data,
+          tree,
+          apNodes,
+          projektNodes,
+          projId,
+          apId: nodeUrl[3],
+        }),
+      ]
     }
     if (
       nodeUrl.length === 5 &&
