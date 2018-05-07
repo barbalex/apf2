@@ -110,6 +110,7 @@ export default ({
       ]
       return el
     })
+  console.log('tpopfreiwkontrzaehl:', { nodes, tpopkontrId })
 
   return nodes
 }
