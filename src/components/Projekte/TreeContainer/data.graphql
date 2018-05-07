@@ -91,7 +91,7 @@ query TreeDataQuery(
       }
     }
   }
-  tpopFeldKontr: allTpopkontrs(
+  tpopfeldkontrs: allTpopkontrs(
     filter: {
       typ: { notEqualTo: "Freiwilligen-Erfolgskontrolle" }
       tpopId: { in: $tpop }
@@ -102,9 +102,13 @@ query TreeDataQuery(
       tpopId
       datum
       jahr
+      tpopkontrTypWerteByTyp {
+        id
+        text
+      }
     }
   }
-  tpopFreiwKontr: allTpopkontrs(
+  tpopfreiwkontrs: allTpopkontrs(
     filter: {
       typ: { equalTo: "Freiwilligen-Erfolgskontrolle" }
       tpopId: { in: $tpop }
@@ -115,6 +119,10 @@ query TreeDataQuery(
       tpopId
       datum
       jahr
+      tpopkontrTypWerteByTyp {
+        id
+        text
+      }
     }
   }
   tpopkontrzaehls: allTpopkontrzaehls(
@@ -146,7 +154,7 @@ query TreeDataQuery(
       }
     }
   }
-  beobZugeordnet: allVApbeobs(
+  beobZugeordnets: allVApbeobs(
     filter: { tpopId: { in: $tpop } }
     orderBy: DATUM_DESC
   ) @include(if: $isTpop) {
@@ -260,7 +268,7 @@ query TreeDataQuery(
       }
     }
   }
-  beobNichtBeurteilt: allVApbeobs(
+  beobNichtBeurteilts: allVApbeobs(
     filter: { nichtZuordnen: { equalTo: false }, apId: { in: $ap } }
     orderBy: DATUM_DESC
   ) @include(if: $isAp) {
@@ -274,7 +282,7 @@ query TreeDataQuery(
       quelle
     }
   }
-  beobNichtZuzuordnen: allVApbeobs(
+  beobNichtZuzuordnens: allVApbeobs(
     filter: { nichtZuordnen: { equalTo: true }, apId: { in: $ap } }
     orderBy: DATUM_DESC
   ) @include(if: $isAp) {
