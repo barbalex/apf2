@@ -270,7 +270,11 @@ query TreeDataQuery(
     }
   }
   beobNichtBeurteilts: allVApbeobs(
-    filter: { nichtZuordnen: { equalTo: false }, apId: { in: $ap } }
+    filter: {
+      nichtZuordnen: { equalTo: false }
+      apId: { in: $ap }
+      tpopId: { isNull: true }
+    }
     orderBy: DATUM_DESC
   ) @include(if: $isAp) {
     nodes {

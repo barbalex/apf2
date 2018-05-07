@@ -1,0 +1,67 @@
+// @flow
+import findIndex from 'lodash/findIndex'
+import get from 'lodash/get'
+import format from 'date-fns/format'
+
+export default ({
+  data,
+  tree,
+  projektNodes,
+  projId,
+  apId,
+}: {
+  data: Object,
+  tree: Object,
+  projektNodes: Array<Object>,
+  projId: String,
+  apId: String,
+}): Array<Object> => {
+  const beobNichtBeurteilts = get(data, 'beobNichtBeurteilts.nodes', [])
+
+  // fetch sorting indexes of parents
+  const projIndex = findIndex(projektNodes, {
+    id: projId,
+  })
+  const apIndex = findIndex(
+    tree.filteredAndSorted.ap.filter(a => a.proj_id === projId),
+    { id: apId }
+  )
+  const nodeLabelFilterString = tree.nodeLabelFilter.get('beobNichtBeurteilt')
+
+  const beobNichtBeurteiltNodesLength = beobNichtBeurteilts
+    .filter(el => el.apId === apId)
+    // filter by nodeLabelFilter
+    .filter(el => {
+      if (nodeLabelFilterString) {
+        return `${
+          el.datum ? format(el.datum, 'YYYY.MM.DD') : '(kein Datum)'
+        }: ${el.autor || '(kein Autor)'} (${el.quelle})`
+          .toLowerCase()
+          .includes(nodeLabelFilterString.toLowerCase())
+      }
+      return true
+    }).length
+  let message = beobNichtBeurteiltNodesLength
+  if (tree.nodeLabelFilter.get('beobNichtBeurteilt')) {
+    message = `${beobNichtBeurteiltNodesLength} gefiltert`
+  }
+
+  return [
+    {
+      nodeType: 'folder',
+      menuType: 'beobzuordnungFolder',
+      id: apId,
+      urlLabel: 'nicht-beurteilte-Beobachtungen',
+      label: `Beobachtungen nicht beurteilt (${message})`,
+      url: [
+        'Projekte',
+        projId,
+        'Aktionspläne',
+        apId,
+        'nicht-beurteilte-Beobachtungen',
+      ],
+      sort: [projIndex, 1, apIndex, 9],
+      hasChildren: beobNichtBeurteiltNodesLength > 0,
+    },
+  ]
+}
