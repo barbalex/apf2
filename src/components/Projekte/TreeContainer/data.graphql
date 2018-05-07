@@ -202,6 +202,10 @@ query TreeDataQuery(
       apId
       jahr
       bezeichnung
+      zielTypWerteByTyp {
+        id
+        text
+      }
     }
   }
   zielbers: allZielbers(filter: { zielId: { in: $ziel } }, orderBy: JAHR_ASC)

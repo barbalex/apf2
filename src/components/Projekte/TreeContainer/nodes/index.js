@@ -19,8 +19,8 @@ import buildIdealbiotopFolderNodes from './idealbiotopFolder'
 import buildBerFolderNodes from './berFolder'
 import buildApberFolderNodes from './apberFolder'
 import buildAperfkritFolderNodes from './aperfkritFolder'
-import zieljahrFolderNodes from '../../../../modules/nodes/zieljahrFolder'
-import zieljahrNodes from '../../../../modules/nodes/zieljahr'
+import buildApzielFolderNodes from './apzielFolder'
+import zieljahrNodes from './apzieljahrFolder'
 import zielNodes from '../../../../modules/nodes/ziel'
 import zielberFolderNodes from '../../../../modules/nodes/zielberFolder'
 import zielberNodes from '../../../../modules/nodes/zielber'
@@ -134,7 +134,14 @@ export default ({
       nodes = [
         ...nodes,
         ...buildPopFolderNodes({ data, tree, projektNodes, projId, apId }),
-        ...zieljahrFolderNodes(store, tree, projId, apId),
+        ...buildApzielFolderNodes({
+          data,
+          tree,
+          apNodes,
+          projektNodes,
+          projId,
+          apId,
+        }),
         ...buildAperfkritFolderNodes({
           data,
           tree,
@@ -207,8 +214,19 @@ export default ({
       nodeUrl[4] === 'AP-Ziele' &&
       allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
     ) {
-      const apId = nodeUrl[3]
-      nodes = [...nodes, ...zieljahrNodes(store, tree, projId, apId)]
+      console.log('zieljahr:', { nodeUrl, nodeUrl5: nodeUrl[5] })
+      nodes = [
+        ...nodes,
+        ...zieljahrNodes({
+          data,
+          tree,
+          apNodes,
+          projektNodes,
+          projId,
+          apId: nodeUrl[3],
+          jahr: nodeUrl[5],
+        }),
+      ]
     }
     if (
       nodeUrl.length === 6 &&
