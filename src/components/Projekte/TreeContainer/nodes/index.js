@@ -23,9 +23,9 @@ import buildApberFolderNodes from './apberFolder'
 import buildAperfkritFolderNodes from './aperfkritFolder'
 import buildApzielFolderNodes from './apzielFolder'
 import buildApzieljahrFolderNodes from './apzieljahrFolder'
-import apzielNodes from './apziel'
-import zielberFolderNodes from '../../../../modules/nodes/zielberFolder'
-import zielberNodes from '../../../../modules/nodes/zielber'
+import buildApzielNodes from './apziel'
+import buildApzielberFolderNodes from './apzielberFolder'
+import buildApzielberNodes from './apzielber'
 import buildPopNodes from './pop'
 import buildBeobNichtZuzuordnenNodes from './beobNichtZuzuordnen'
 import buildBeobNichtBeurteiltNodes from './beobNichtBeurteilt'
@@ -96,6 +96,7 @@ export default ({
   let tpopfeldkontrNodes
   let tpopfreiwkontrNodes
   let apzieljahrFolderNodes
+  let apzielNodes
   // do not process ['Projekte']
   const nodeUrlsToProcess = openNodes.filter(n => n.length > 1)
 
@@ -259,18 +260,19 @@ export default ({
       nodeUrl[4] === 'AP-Ziele' &&
       allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
     ) {
+      apzielNodes = buildApzielNodes({
+        data,
+        tree,
+        apNodes,
+        projektNodes,
+        projId,
+        apId: nodeUrl[3],
+        jahr: +nodeUrl[5],
+        apzieljahrFolderNodes
+      })
       nodes = [
         ...nodes,
-        ...apzielNodes({
-          data,
-          tree,
-          apNodes,
-          projektNodes,
-          projId,
-          apId: nodeUrl[3],
-          jahr: +nodeUrl[5],
-          apzieljahrFolderNodes
-        }),
+        ...apzielNodes,
       ]
     }
     if (
@@ -278,12 +280,20 @@ export default ({
       nodeUrl[4] === 'AP-Ziele' &&
       allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
     ) {
-      const apId = nodeUrl[3]
-      const zieljahr = nodeUrl[5]
-      const zielId = nodeUrl[6]
       nodes = [
         ...nodes,
-        ...zielberFolderNodes(store, tree, projId, apId, zieljahr, zielId),
+        ...buildApzielberFolderNodes({
+          data,
+          tree,
+          apNodes,
+          projektNodes,
+          projId,
+          apId: nodeUrl[3],
+          zielJahr: +nodeUrl[5],
+          apzieljahrFolderNodes,
+          zielId: nodeUrl[6],
+          apzielNodes
+        }),
       ]
     }
     if (
@@ -292,12 +302,20 @@ export default ({
       nodeUrl[7] === 'Berichte' &&
       allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
     ) {
-      const apId = nodeUrl[3]
-      const zieljahr = nodeUrl[5]
-      const zielId = nodeUrl[6]
       nodes = [
         ...nodes,
-        ...zielberNodes(store, tree, projId, apId, zieljahr, zielId),
+        ...buildApzielberNodes({
+          data,
+          tree,
+          apNodes,
+          projektNodes,
+          projId,
+          apId: nodeUrl[3],
+          zielJahr: +nodeUrl[5],
+          apzieljahrFolderNodes,
+          zielId: nodeUrl[6],
+          apzielNodes
+        }),
       ]
     }
     if (

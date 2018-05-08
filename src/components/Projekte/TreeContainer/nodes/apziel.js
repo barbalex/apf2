@@ -46,7 +46,7 @@ export default ({
           el,
           'zielTypWerteByTyp.text',
           '(kein Typ)'
-        )})`.includes(nodeLabelFilterString.toLowerCase())
+        )})`.toLowerCase().includes(nodeLabelFilterString.toLowerCase())
       }
       return true
     })
