@@ -81,15 +81,11 @@ const Teilpopulationen = ({
   expanded,
   setExpanded,
   downloadFromView,
-  artFuerEierlegendeWollmilchsau,
-  changeArtFuerEierlegendeWollmilchsau,
   artList,
 }: {
   expanded: Boolean,
   setExpanded: () => void,
   downloadFromView: () => void,
-  artFuerEierlegendeWollmilchsau: String,
-  changeArtFuerEierlegendeWollmilchsau: () => void,
   artList: Array<Object>,
 }) => (
   <StyledCard>
@@ -228,11 +224,7 @@ const Teilpopulationen = ({
         <AutocompleteContainer>
           <AutoComplete
             label={`"Eier legende Wollmilchsau" für eine Art`}
-            value={artFuerEierlegendeWollmilchsau}
             objects={artList}
-            changeArtFuerEierlegendeWollmilchsau={
-              changeArtFuerEierlegendeWollmilchsau
-            }
             downloadFromView={downloadFromView}
           />
         </AutocompleteContainer>

@@ -108,7 +108,6 @@ type Props = {
   label: String,
   value: String,
   objects: Array<Object>,
-  changeArtFuerEierlegendeWollmilchsau: () => void,
   downloadFromView: () => void,
   classes: Object,
 }
@@ -158,14 +157,12 @@ class IntegrationAutosuggest extends React.Component<Props, State> {
 
   handleOnSuggestionSelected = (event, { suggestion }) => {
     const { objects } = this.props
-    this.props.changeArtFuerEierlegendeWollmilchsau(suggestion.artname)
     this.props.downloadFromView({
       view: 'v_tpop_anzkontrinklletzterundletztertpopber',
       fileName: 'anzkontrinklletzterundletztertpopber_2016',
       apId: objects.find(o => o.value === suggestion).id,
     })
     setTimeout(() => {
-      this.props.changeArtFuerEierlegendeWollmilchsau('')
       this.setState({ value: '', suggestions: [] })
     }, 5000)
   }

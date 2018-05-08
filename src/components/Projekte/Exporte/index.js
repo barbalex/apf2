@@ -3,7 +3,6 @@ import { observer, inject } from 'mobx-react'
 import styled from 'styled-components'
 import sortBy from 'lodash/sortBy'
 import compose from 'recompose/compose'
-import withState from 'recompose/withState'
 import withProps from 'recompose/withProps'
 import withHandlers from 'recompose/withHandlers'
 import withLifecycle from '@hocs/with-lifecycle'
@@ -39,21 +38,12 @@ const FieldsContainer = styled.div`
 
 const enhance = compose(
   inject('store'),
-  withState(
-    'artFuerEierlegendeWollmilchsau',
-    'changeArtFuerEierlegendeWollmilchsau',
-    ''
-  ),
   withHandlers({
     downloadFromView: ({
       store,
-      changeArtFuerEierlegendeWollmilchsau,
-      artFuerEierlegendeWollmilchsau,
     }) => ({ view, fileName, apIdName, apId, kml }) =>
       exportModule({
         store,
-        changeArtFuerEierlegendeWollmilchsau,
-        artFuerEierlegendeWollmilchsau,
         view,
         fileName,
         apIdName,
@@ -91,14 +81,10 @@ const enhance = compose(
 
 const Exporte = ({
   store,
-  artFuerEierlegendeWollmilchsau,
-  changeArtFuerEierlegendeWollmilchsau,
   artList,
   downloadFromView,
 }: {
   store: Object,
-  artFuerEierlegendeWollmilchsau: String,
-  changeArtFuerEierlegendeWollmilchsau: () => void,
   artList: Array<Object>,
   downloadFromView: () => void,
 }) => (
@@ -112,10 +98,6 @@ const Exporte = ({
         <Populationen downloadFromView={downloadFromView} />
         <Teilpopulationen
           downloadFromView={downloadFromView}
-          artFuerEierlegendeWollmilchsau={artFuerEierlegendeWollmilchsau}
-          changeArtFuerEierlegendeWollmilchsau={
-            changeArtFuerEierlegendeWollmilchsau
-          }
         />
         <Kontrollen downloadFromView={downloadFromView} />
         <Massnahmen downloadFromView={downloadFromView} />
