@@ -31,6 +31,7 @@ const CardActionTitle = styled.div`
   padding-left: 8px;
   font-weight: bold;
   word-break: break-word;
+  user-select: none;
 `
 const StyledCardContent = styled(CardContent)`
   margin: -15px 0 0 0;
@@ -48,6 +49,7 @@ const DownloadCardButton = styled(Button)`
     display: block;
     text-align: left;
     justify-content: flex-start !important;
+    user-select: none;
   }
 `
 
@@ -400,12 +402,29 @@ const AP = ({
               Idealbiotope
             </DownloadCardButton>
             <DownloadCardButton
-              onClick={() =>
-                downloadFromView({
-                  view: 'v_assozart',
-                  fileName: 'AssoziierteArten',
+              onClick={async () => {
+                const { data } = await client.query({
+                  query: gql`
+                    query view {
+                      allVAssozarts {
+                        nodes {
+                          ap_id: apId
+                          artname
+                          ap_bearbeitung: apBearbeitung
+                          ap_start_jahr: apStartJahr
+                          ap_umsetzung: apUmsetzung
+                          ap_bearbeiter: apBearbeiter
+                          id
+                          artname_assoziiert: artnameAssoziiert
+                          bemerkungen
+                          changed
+                          changed_by: changedBy
+                        }
+                      }
+                    }`
                 })
-              }
+                exportModule({data: get(data, 'allVAssozarts.nodes', []), store, fileName: 'AssoziierteArten'})
+              }}
             >
               Assoziierte Arten
             </DownloadCardButton>
