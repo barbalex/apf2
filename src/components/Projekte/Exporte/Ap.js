@@ -217,12 +217,29 @@ const AP = ({
               AP-Berichte (Jahresberichte)
             </DownloadCardButton>
             <DownloadCardButton
-              onClick={() =>
-                downloadFromView({
-                  view: 'v_ap_apberundmassn',
-                  fileName: 'ApJahresberichteUndMassnahmen',
+              onClick={async () => {
+                const { data } = await client.query({
+                  query: gql`
+                    query view {
+                      allVApApberundmassns {
+                        nodes {
+                          id
+                          artname
+                          bearbeitung
+                          start_jahr: startJahr
+                          umsetzung
+                          bearbeiter
+                          artwert
+                          massn_jahr: massnJahr
+                          massn_anzahl: massnAnzahl
+                          massn_anzahl_bisher: massnAnzahlBisher
+                          bericht_erstellt: berichtErstellt
+                        }
+                      }
+                    }`
                 })
-              }
+                exportModule({data: get(data, 'allVApApberundmassns.nodes', []), store, fileName: 'ApJahresberichteUndMassnahmen'})
+              }}
             >
               AP-Berichte und Massnahmen
             </DownloadCardButton>
