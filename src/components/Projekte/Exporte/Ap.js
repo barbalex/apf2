@@ -244,22 +244,60 @@ const AP = ({
               AP-Berichte und Massnahmen
             </DownloadCardButton>
             <DownloadCardButton
-              onClick={() =>
-                downloadFromView({
-                  view: 'v_ziel',
-                  fileName: 'ApZiele',
+              onClick={async () => {
+                const { data } = await client.query({
+                  query: gql`
+                    query view {
+                      allVZiels {
+                        nodes {
+                          ap_id: apId
+                          artname
+                          ap_bearbeitung: apBearbeitung
+                          ap_start_jahr: apStartJahr
+                          ap_umsetzung: apUmsetzung
+                          ap_bearbeiter: apBearbeiter
+                          id
+                          jahr
+                          typ
+                          bezeichnung
+                        }
+                      }
+                    }`
                 })
-              }
+                exportModule({data: get(data, 'allVZiels.nodes', []), store, fileName: 'ApZiele'})
+              }}
             >
               Ziele
             </DownloadCardButton>
             <DownloadCardButton
-              onClick={() =>
-                downloadFromView({
-                  view: 'v_zielber',
-                  fileName: 'Zielberichte',
+              onClick={async () => {
+                const { data } = await client.query({
+                  query: gql`
+                    query view {
+                      allVZielbers {
+                        nodes {
+                          ap_id: apId
+                          artname
+                          ap_bearbeitung: apBearbeitung
+                          ap_start_jahr: apStartJahr
+                          ap_umsetzung: apUmsetzung
+                          ap_bearbeiter: apBearbeiter
+                          ziel_id: zielId
+                          ziel_jahr: zielJahr
+                          ziel_typ: zielTyp
+                          ziel_bezeichnung: zielBezeichnung
+                          id
+                          jahr
+                          erreichung
+                          bemerkungen
+                          changed
+                          changed_by: changedBy
+                        }
+                      }
+                    }`
                 })
-              }
+                exportModule({data: get(data, 'allVZielbers.nodes', []), store, fileName: 'Zielberichte'})
+              }}
             >
               Ziel-Berichte
             </DownloadCardButton>

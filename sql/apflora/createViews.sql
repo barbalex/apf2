@@ -3037,10 +3037,10 @@ SELECT
   apflora.ap.start_jahr AS ap_start_jahr,
   apflora.ap_umsetzung_werte.text AS ap_umsetzung,
   apflora.adresse.name AS ap_bearbeiter,
-  apflora.ziel.id AS "Ziel Id",
-  apflora.ziel.jahr AS "Ziel Jahr",
-  ziel_typ_werte.text AS "Ziel Typ",
-  apflora.ziel.bezeichnung AS "Ziel Beschreibung"
+  apflora.ziel.id,
+  apflora.ziel.jahr,
+  ziel_typ_werte.text AS typ,
+  apflora.ziel.bezeichnung
 FROM
   (((((apflora.ae_eigenschaften
   RIGHT JOIN
