@@ -1359,7 +1359,7 @@ SELECT
   apflora.ae_eigenschaften.artname,
   apflora.apber.*,
   apflora.ap_erfkrit_werte.text AS beurteilung_decodiert,
-  apflora.adresse.name AS bearbeiter_docodiert
+  apflora.adresse.name AS bearbeiter_decodiert
 FROM
   apflora.ap
   INNER JOIN
@@ -1787,10 +1787,10 @@ CREATE OR REPLACE VIEW apflora.v_ap_ohnepop AS
 SELECT
   apflora.ap.id,
   apflora.ae_eigenschaften.artname,
-  apflora.ap_bearbstand_werte.text AS ap_bearbeitung,
-  apflora.ap.start_jahr AS ap_start_jahr,
-  apflora.ap_umsetzung_werte.text AS ap_umsetzung,
-  apflora.adresse.name AS ap_bearbeiter,
+  apflora.ap_bearbstand_werte.text AS bearbeitung,
+  apflora.ap.start_jahr AS start_jahr,
+  apflora.ap_umsetzung_werte.text AS umsetzung,
+  apflora.adresse.name AS bearbeiter,
   apflora.pop.id AS pop_id
 FROM
   ((((apflora.ae_eigenschaften

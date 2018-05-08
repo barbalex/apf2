@@ -1,5 +1,5 @@
 // @flow
-import clone from 'lodash/clone'
+import omit from 'lodash/omit'
 
 import beobIdsFromServerInsideFeatureCollection from './beobIdsFromServerInsideFeatureCollection'
 import tpopIdsInsideFeatureCollection from './tpopIdsInsideFeatureCollection'
@@ -11,18 +11,12 @@ import exportKml from './exportKmlGql'
 export default async ({
   data:dataPassed,
   store,
-  view,
   fileName,
-  apIdName,
-  apId,
   kml,
 }: {
   data: Array<Object>,
   store: Object,
-  view: string,
   fileName: string,
-  apIdName: string,
-  apId: string,
   kml: Boolean,
 }) => {
   const onError = error => {
@@ -30,7 +24,7 @@ export default async ({
   }
   const { mapFilter } = store.map
   const { applyMapFilterToExport } = store.export
-  let data = clone(dataPassed)
+  let data = dataPassed.map(d=> omit(d, ['__typename', 'Symbol(id)']))
   // now we could manipulate the data, for instance apply mapFilter
   const filterFeatures = mapFilter.filter.features
   if (filterFeatures.length > 0 && applyMapFilterToExport) {

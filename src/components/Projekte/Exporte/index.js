@@ -9,7 +9,7 @@ import withLifecycle from '@hocs/with-lifecycle'
 
 import FormTitle from '../../shared/FormTitle'
 import Tipps from './Tipps'
-import Art from './Art'
+import Ap from './Ap'
 import Populationen from './Populationen'
 import Teilpopulationen from './Teilpopulationen'
 import Kontrollen from './Kontrollen'
@@ -94,15 +94,15 @@ const Exporte = ({
       <FieldsContainer>
         <Optionen />
         <Tipps />
-        <Art downloadFromView={downloadFromView} />
-        <Populationen downloadFromView={downloadFromView} />
-        <Teilpopulationen
+        <Ap store={store} downloadFromView={downloadFromView} />
+        <Populationen store={store} downloadFromView={downloadFromView} />
+        <Teilpopulationen store={store}
           downloadFromView={downloadFromView}
         />
-        <Kontrollen downloadFromView={downloadFromView} />
-        <Massnahmen downloadFromView={downloadFromView} />
-        <Beobachtungen downloadFromView={downloadFromView} />
-        <Anwendung downloadFromView={downloadFromView} />
+        <Kontrollen store={store} downloadFromView={downloadFromView} />
+        <Massnahmen store={store} downloadFromView={downloadFromView} />
+        <Beobachtungen store={store} downloadFromView={downloadFromView} />
+        <Anwendung store={store} downloadFromView={downloadFromView} />
       </FieldsContainer>
     </Container>
   </ErrorBoundary>
