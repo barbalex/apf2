@@ -12,7 +12,7 @@ import buildApberuebersichtFolderNodes from './apberuebersichtFolder'
 import buildApberuebersichtNodes from './apberuebersicht'
 import buildApNodes from './ap'
 import buildPopFolderNodes from './popFolder'
-import qkFolderNodes from '../../../../modules/nodes/qkFolder'
+import qkFolderNodes from './qkFolder'
 import buildBeobNichtZuzuordnenFolderNodes from './beobNichtZuzuordnenFolder'
 import buildBeobNichtBeurteiltFolderNodes from './beobNichtBeurteiltFolder'
 import buildAssozartFolderNodes from './assozartFolder'
@@ -234,7 +234,15 @@ export default ({
           projId,
           apId,
         }),
-        ...qkFolderNodes(store, tree, projId, apId),
+        ...qkFolderNodes({
+          data,
+          store,
+          tree,
+          apNodes,
+          projektNodes,
+          projId,
+          apId,
+        }),
       ]
     }
     // if nodeUrl.length > 4, nodeUrl[2] is always 'Aktionspläne'
