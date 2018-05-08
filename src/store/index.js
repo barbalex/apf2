@@ -49,10 +49,6 @@ function Store(): void {
     setOpenNodesFromActiveNodeArray: () => {},
     cloneActiveNodeArrayToTree2: () => {},
     activeNodes: {},
-    activeNode: null,
-    lastClickedNode: [],
-    initializeLastClickedNode: () => {},
-    setLastClickedNode: () => {},
     activeDataset: {},
     openNodes: [],
     apFilter: false,
@@ -61,8 +57,6 @@ function Store(): void {
     emptyNodeLabelFilter: () => {},
     activeNodeFilter: {},
     applyMapFilterToTree: false,
-    filteredAndSorted: {},
-    nodes: [],
   }
   this.tree2 = {
     name: 'tree2',
@@ -71,10 +65,6 @@ function Store(): void {
     setOpenNodesFromActiveNodeArray: () => {},
     cloneActiveNodeArrayToTree2: () => {},
     activeNodes: {},
-    activeNode: null,
-    lastClickedNode: [],
-    initializeLastClickedNode: () => {},
-    setLastClickedNode: () => {},
     activeDataset: {},
     openNodes: [],
     apFilter: false,
@@ -82,8 +72,6 @@ function Store(): void {
     nodeLabelFilter: {},
     activeNodeFilter: {},
     applyMapFilterToTree: false,
-    filteredAndSorted: {},
-    nodes: [],
   }
   this.export = {
     applyNodeLabelFilterToExport: false,

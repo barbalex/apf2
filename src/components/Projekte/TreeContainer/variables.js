@@ -1,5 +1,6 @@
 // @flow
-export default ({ activeNodes: n }: { activeNodes: Object }) => ({
+// n = activeNodes
+export default (n: Object) => ({
   projekt: n.projekt ? [n.projekt] : [],
   isProjekt: !!n.projekt,
   ap: n.ap ? [n.ap] : [],
@@ -10,10 +11,7 @@ export default ({ activeNodes: n }: { activeNodes: Object }) => ({
   isTpop: !!n.tpop,
   ziel: n.ziel ? [n.ziel] : [],
   isZiel: !!n.ziel,
-  tpopkontr: !!n.tpopfeldkontr
-    ? [n.tpopfeldkontr]
-    : !!n.tpopfreiwkontr
-      ? [n.tpopfreiwkontr]
-      : [],
+  tpopkontr: !!n.tpopfeldkontr ? [n.tpopfeldkontr] :
+    !!n.tpopfreiwkontr ? [n.tpopfreiwkontr] : [],
   isTpopkontr: !!n.tpopfeldkontr || !!n.tpopfreiwkontr,
 })

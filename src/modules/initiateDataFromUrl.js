@@ -14,7 +14,6 @@ export default (store: Object) => {
   }
 
   store.tree.setActiveNodeArray(initialActiveNodeArray)
-  store.tree.setLastClickedNode(initialActiveNodeArray)
   // need to set openNodes
   store.tree.setOpenNodesFromActiveNodeArray()
   // clone tree2 in case tree2 is open

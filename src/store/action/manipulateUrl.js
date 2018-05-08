@@ -1,5 +1,6 @@
 // @flow
 import isEqual from 'lodash/isEqual'
+import clone from 'lodash/clone'
 import queryString from 'query-string'
 import { toJS } from 'mobx'
 
@@ -11,7 +12,6 @@ export default (store: Object): void => {
   const activeNodeArray = toJS(tree.activeNodeArray)
   const urlQueryFromUrl = queryString.parse(window.location.search)
   const urlQuery = toJS(store.urlQuery)
-  const nodes = toJS(tree.nodes)
 
   // do not manipulate url if store is not yet initiated
   if (!store.initiated) return
@@ -26,19 +26,5 @@ export default (store: Object): void => {
     const search = queryString.stringify(urlQuery)
     const query = `${Object.keys(urlQuery).length > 0 ? `?${search}` : ''}`
     store.history.push(`/${activeNodeArray.join('/')}${query}`)
-  }
-
-  // if activeNodeArray.length === 1
-  // and there is only one projekte
-  // open it
-  const projekteFolderIsActive =
-    activeNodeArray.length === 1 && activeNodeArray[0] === 'Projekte'
-  const projekteNodes = nodes.filter(n => n.menuType === 'projekt')
-  const existsOnlyOneProjekt = projekteNodes.length === 1
-  if (projekteFolderIsActive && existsOnlyOneProjekt) {
-    const projektNode = projekteNodes[0]
-    if (projektNode) {
-      tree.toggleNode(tree, projektNode)
-    }
   }
 }

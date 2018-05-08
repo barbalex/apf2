@@ -27,6 +27,5 @@ export default (store: Object, tree: Object, node: Object): any => {
   } else if (!nodeIsOpen) {
     openNode({tree, node})
   }
-  tree.setLastClickedNode(node.url)
   tree.setActiveNodeArray(newActiveNodeArray)
 }

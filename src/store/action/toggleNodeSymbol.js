@@ -12,5 +12,4 @@ export default (store: Object, tree: Object, node: Object): any => {
   } else {
     tree.openNodes.push(node.url)
   }
-  tree.setLastClickedNode(node.url)
 }

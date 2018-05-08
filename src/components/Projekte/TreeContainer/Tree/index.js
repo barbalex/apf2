@@ -62,7 +62,6 @@ class Tree extends Component {
     mapPopVisible: boolean,
     mapTpopVisible: boolean,
     activeNodeArray: Array<Object>,
-    lastClickedNode: Object,
   }
 
   tree: ?HTMLDivElement
@@ -117,17 +116,7 @@ class Tree extends Component {
   )
 
   render() {
-    // eslint-disable-line class-methods-use-this
-    const { nodes, activeNodeArray, lastClickedNode } = this.props
-    let lastClickedNodeIndex = findIndex(nodes, node =>
-      isEqual(node.url, lastClickedNode)
-    )
-    // if no index found, use activeNodeArray
-    if (lastClickedNodeIndex === -1) {
-      lastClickedNodeIndex = findIndex(nodes, node =>
-        isEqual(node.url, activeNodeArray)
-      )
-    }
+    const { nodes, activeNodeArray } = this.props
 
     return (
       <ErrorBoundary>
@@ -140,7 +129,9 @@ class Tree extends Component {
                 rowHeight={singleRowHeight}
                 rowRenderer={this.rowRenderer}
                 noRowsRenderer={this.noRowsRenderer}
-                scrollToIndex={lastClickedNodeIndex}
+                scrollToIndex={findIndex(nodes, node =>
+                  isEqual(node.url, activeNodeArray)
+                )}
                 width={width}
                 innerRef={c => (this.tree = c)}
               />
