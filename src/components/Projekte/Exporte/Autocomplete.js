@@ -158,7 +158,6 @@ class IntegrationAutosuggest extends React.Component<Props, State> {
 
   handleOnSuggestionSelected = (event, { suggestion }) => {
     const { objects } = this.props
-    console.log('handleOnSuggestionSelected', { suggestion })
     this.props.changeArtFuerEierlegendeWollmilchsau(suggestion.artname)
     this.props.downloadFromView({
       view: 'v_tpop_anzkontrinklletzterundletztertpopber',

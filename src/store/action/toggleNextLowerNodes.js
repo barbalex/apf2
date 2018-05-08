@@ -39,11 +39,6 @@ export default ({
   menuType: String,
   nodes: Array < Object >
 }) => {
-  console.log('toggleNextLowerNodes:', {
-    id,
-    menuType,
-    nodes,
-  })
   const node = nodes.find(
     n => n.id === id && n.menuType === menuType
   )

@@ -26,7 +26,6 @@ class FullScreenControl extends Component {
   }
 
   render() {
-    //console.log('FullScreenControl: zoom:', this.props.map.getZoom())
     return <div style={{ display: 'none' }} />
   }
 }

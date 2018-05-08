@@ -53,14 +53,11 @@ export default (store: Object, pops: Array<Object>): Array<number> => {
    */
   /*
   const checkCoordinates = points.features.map(x => x.geometry.coordinates)
-  console.log('coordinates:', checkCoordinates)
   const isNumberCoordinates = checkCoordinates.map(x => [
     x.length > 1,
     typeof x[0] === 'number',
     typeof x[1] === 'number',
   ])*/
-  //console.log('isNumberCoordinates:', isNumberCoordinates)
-  //console.log('filter:', filter)
 
   // let turf check what points are within filter
   const result = within(toJS(points), toJS(store.map.mapFilter.filter))
