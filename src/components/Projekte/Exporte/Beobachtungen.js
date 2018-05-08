@@ -87,12 +87,37 @@ const Beobachtungen = ({
     <Collapse in={expanded} timeout="auto" unmountOnExit>
       <StyledCardContent>
         <DownloadCardButton
-          onClick={() =>
-            downloadFromView({
-              view: 'v_beob',
-              fileName: 'Beobachtungen',
+          onClick={async () => {
+            const { data } = await client.query({
+              query: gql`
+                query view {
+                  allVBeobs {
+                    nodes {
+                      id
+                      quelle
+                      id_field: idField
+                      original_id: originalId
+                      art_id: artId
+                      artname
+                      pop_id: popId
+                      pop_nr: popNr
+                      tpop_id: tpopId
+                      tpop_nr: tpopNr
+                      x
+                      y
+                      distanz_zur_teilpopulation: distanzZurTeilpopulation
+                      datum
+                      autor
+                      nicht_zuordnen: nichtZuordnen
+                      bemerkungen
+                      changed
+                      changed_by: changedBy
+                    }
+                  }
+                }`
             })
-          }
+            exportModule({data: get(data, 'allVBeobs.nodes', []), store, fileName: 'Beobachtungen'})
+          }}
         >
           <div>Alle Beobachtungen von Arten aus apflora.ch</div>
           <div>Nutzungsbedingungen der FNS beachten</div>
