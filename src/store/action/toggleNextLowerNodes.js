@@ -22,34 +22,49 @@ const openLowerNodes = ({
     const activeNodeArrayPartWithEqualLength = n.url.slice(0, node.url.length)
     return isEqual(activeNodeArrayPartWithEqualLength, node.url)
   })
-  lowerNodes.forEach(n => openNode({
+  lowerNodes.forEach(lowerNode => openNode({
     tree,
-    node: n
+    node: lowerNode
   }))
 }
 
 export default ({
   tree,
-  node
+  id,
+  menuType,
+  nodes
 }: {
   tree: Object,
-  node: Object
+  id: String,
+  menuType: String,
+  nodes: Array < Object >
 }) => {
+  console.log('toggleNextLowerNodes:', {
+    id,
+    menuType,
+    nodes,
+  })
+  const node = nodes.find(
+    n => n.id === id && n.menuType === menuType
+  )
   // if node is not open, toggle it
   if (!isNodeOpen(toJS(tree.openNodes), node.url)) {
     openNode({
       tree,
-      node
+      node,
+      nodes
     })
     // wait a while for node to load
     setTimeout(() => openLowerNodes({
       tree,
-      node
+      node,
+      nodes
     }), 1000)
   } else {
     openLowerNodes({
       tree,
-      node
+      node,
+      nodes
     })
   }
 }

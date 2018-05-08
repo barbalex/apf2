@@ -79,16 +79,19 @@ export default (store: Object, tree: Object): void => {
       'toggleNextLowerNodes',
       ({
         tree,
-        node,
+        id,
+        menuType,
         nodes
       }: {
         tree: Object,
-        node: Object,
+        id: String,
+        menuType:String,
         nodes: Array < Object >
       }) =>
       toggleNextLowerNodes({
         tree,
-        node,
+        id,
+        menuType,
         nodes
       })
     ),

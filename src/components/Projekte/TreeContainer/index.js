@@ -158,7 +158,7 @@ const showMapIfNotYetVisible = ({ store }: { store: Object }) => {
 const enhance = compose(
   inject('store'),
   withHandlers({
-    handleClick: ({ store, tree, nodes }) => (e, data, element) => {
+    handleClick: ({ store, tree, nodes }) => ({data, element,nodes}) => {
       if (!data) return store.listError(new Error('no data passed with click'))
       if (!element)
         return store.listError(new Error('no element passed with click'))
@@ -189,10 +189,7 @@ const enhance = compose(
           store.insertDataset(tree, table, idToPass, baseUrl)
         },
         openLowerNodes() {
-          const node = nodes.find(
-            n => n.id === id && n.menuType === menuType
-          )
-          tree.toggleNextLowerNodes({ tree, node, nodes })
+          tree.toggleNextLowerNodes({ tree, id, menuType, nodes })
         },
         delete() {
           store.deleteDatasetDemand(table, id, baseUrl, label)
@@ -301,12 +298,6 @@ const TreeContainer = ({
   const deleteDatasetModalIsVisible = !!store.datasetToDelete.id
   const myVariables = variables(activeNodes)
 
-  console.log('TreeContainer:', {
-    dataGql,
-    treeActiveNodes: activeNodes,
-    myVariables,
-  })
-
   return (
     <Query query={dataGql} variables={myVariables}>
       {({ loading, error, data }) => {
@@ -376,51 +367,51 @@ const TreeContainer = ({
                   openNodes={tree.openNodes}
                 />
               </InnerTreeContainer>
-              <CmApFolder onClick={handleClick} nodes={nodes} tree={tree} />
-              <CmAp onClick={handleClick} nodes={nodes} tree={tree} />
-              <CmApberuebersichtFolder onClick={handleClick} nodes={nodes} tree={tree} />
-              <CmApberuebersicht onClick={handleClick} nodes={nodes} tree={tree} />
-              <CmAssozartFolder onClick={handleClick} nodes={nodes} tree={tree} />
-              <CmAssozart onClick={handleClick} nodes={nodes} tree={tree} />
-              <CmApartFolder onClick={handleClick} nodes={nodes} tree={tree} />
-              <CmApart onClick={handleClick} nodes={nodes} tree={tree} />
-              <CmBeobZugeordnetFolder onClick={handleClick} nodes={nodes} tree={tree} />
-              <CmBerFolder onClick={handleClick} nodes={nodes} tree={tree} />
-              <CmBer onClick={handleClick} nodes={nodes} tree={tree} />
-              <CmApberFolder onClick={handleClick} nodes={nodes} tree={tree} />
-              <CmApber onClick={handleClick} nodes={nodes} tree={tree} />
-              <CmErfkritFolder onClick={handleClick} nodes={nodes} tree={tree} />
-              <CmErfkrit onClick={handleClick} nodes={nodes} tree={tree} />
-              <CmZielFolder onClick={handleClick} nodes={nodes} tree={tree} />
-              <CmZielJahrFolder onClick={handleClick} nodes={nodes} tree={tree} />
-              <CmZiel onClick={handleClick} nodes={nodes} tree={tree} />
-              <CmZielBerFolder onClick={handleClick} nodes={nodes} tree={tree} />
-              <CmZielBer onClick={handleClick} nodes={nodes} tree={tree} />
-              <CmPopFolder onClick={handleClick} nodes={nodes} tree={tree} />
-              <CmPop onClick={handleClick} nodes={nodes} tree={tree} />
-              <CmPopmassnberFolder onClick={handleClick} nodes={nodes} tree={tree} />
-              <CmPopmassnber onClick={handleClick} nodes={nodes} tree={tree} />
-              <CmPopberFolder onClick={handleClick} nodes={nodes} tree={tree} />
-              <CmPopber onClick={handleClick} nodes={nodes} tree={tree} />
-              <CmTpopFolder onClick={handleClick} nodes={nodes} tree={tree} />
-              <CmTpop onClick={handleClick} nodes={nodes} tree={tree} />
-              <CmTpopberFolder onClick={handleClick} nodes={nodes} tree={tree} />
-              <CmTpopber onClick={handleClick} nodes={nodes} tree={tree} />
-              <CmBeobZugeordnet onClick={handleClick} nodes={nodes} tree={tree} />
-              <CmBeobnichtbeurteilt onClick={handleClick} nodes={nodes} tree={tree} />
-              <CmBeobNichtZuzuordnen onClick={handleClick} nodes={nodes} tree={tree} />
-              <CmTpopfreiwkontrFolder onClick={handleClick} nodes={nodes} tree={tree} />
-              <CmTpopfreiwkontr onClick={handleClick} nodes={nodes} tree={tree} />
-              <CmTpopfreiwkontrzaehlFolder onClick={handleClick} nodes={nodes} tree={tree} />
-              <CmTpopfreiwkontrzaehl onClick={handleClick} nodes={nodes} tree={tree} />
-              <CmTpopfeldkontrFolder onClick={handleClick} nodes={nodes} tree={tree} />
-              <CmTpopfeldkontr onClick={handleClick} nodes={nodes} tree={tree} />
-              <CmTpopfeldkontrzaehlFolder onClick={handleClick} nodes={nodes} tree={tree} />
-              <CmTpopfeldkontrzaehl onClick={handleClick} nodes={nodes} tree={tree} />
-              <CmTpopmassnberFolder onClick={handleClick} nodes={nodes} tree={tree} />
-              <CmTpopmassnber onClick={handleClick} nodes={nodes} tree={tree} />
-              <CmTpopmassnFolder onClick={handleClick} nodes={nodes} tree={tree} />
-              <CmTpopmassn onClick={handleClick} nodes={nodes} tree={tree} />
+              <CmApFolder onClick={(e, data, element)=>handleClick({data,element,nodes})} tree={tree} />
+              <CmAp onClick={(e, data, element)=>handleClick({data,element,nodes})} tree={tree} />
+              <CmApberuebersichtFolder onClick={(e, data, element)=>handleClick({data,element,nodes})} tree={tree} />
+              <CmApberuebersicht onClick={(e, data, element)=>handleClick({data,element,nodes})} tree={tree} />
+              <CmAssozartFolder onClick={(e, data, element)=>handleClick({data,element,nodes})} tree={tree} />
+              <CmAssozart onClick={(e, data, element)=>handleClick({data,element,nodes})} tree={tree} />
+              <CmApartFolder onClick={(e, data, element)=>handleClick({data,element,nodes})} tree={tree} />
+              <CmApart onClick={(e, data, element)=>handleClick({data,element,nodes})} tree={tree} />
+              <CmBeobZugeordnetFolder onClick={(e, data, element)=>handleClick({data,element,nodes})} tree={tree} />
+              <CmBerFolder onClick={(e, data, element)=>handleClick({data,element,nodes})} tree={tree} />
+              <CmBer onClick={(e, data, element)=>handleClick({data,element,nodes})} tree={tree} />
+              <CmApberFolder onClick={(e, data, element)=>handleClick({data,element,nodes})} tree={tree} />
+              <CmApber onClick={(e, data, element)=>handleClick({data,element,nodes})} tree={tree} />
+              <CmErfkritFolder onClick={(e, data, element)=>handleClick({data,element,nodes})} tree={tree} />
+              <CmErfkrit onClick={(e, data, element)=>handleClick({data,element,nodes})} tree={tree} />
+              <CmZielFolder onClick={(e, data, element)=>handleClick({data,element,nodes})} tree={tree} />
+              <CmZielJahrFolder onClick={(e, data, element)=>handleClick({data,element,nodes})} tree={tree} />
+              <CmZiel onClick={(e, data, element)=>handleClick({data,element,nodes})} tree={tree} />
+              <CmZielBerFolder onClick={(e, data, element)=>handleClick({data,element,nodes})} tree={tree} />
+              <CmZielBer onClick={(e, data, element)=>handleClick({data,element,nodes})} tree={tree} />
+              <CmPopFolder onClick={(e, data, element)=>handleClick({data,element,nodes})} tree={tree} />
+              <CmPop onClick={(e, data, element)=>handleClick({data,element,nodes})} tree={tree} />
+              <CmPopmassnberFolder onClick={(e, data, element)=>handleClick({data,element,nodes})} tree={tree} />
+              <CmPopmassnber onClick={(e, data, element)=>handleClick({data,element,nodes})} tree={tree} />
+              <CmPopberFolder onClick={(e, data, element)=>handleClick({data,element,nodes})} tree={tree} />
+              <CmPopber onClick={(e, data, element)=>handleClick({data,element,nodes})} tree={tree} />
+              <CmTpopFolder onClick={(e, data, element)=>handleClick({data,element,nodes})} tree={tree} />
+              <CmTpop onClick={(e, data, element)=>handleClick({data,element,nodes})} tree={tree} />
+              <CmTpopberFolder onClick={(e, data, element)=>handleClick({data,element,nodes})} tree={tree} />
+              <CmTpopber onClick={(e, data, element)=>handleClick({data,element,nodes})} tree={tree} />
+              <CmBeobZugeordnet onClick={(e, data, element)=>handleClick({data,element,nodes})} tree={tree} />
+              <CmBeobnichtbeurteilt onClick={(e, data, element)=>handleClick({data,element,nodes})} tree={tree} />
+              <CmBeobNichtZuzuordnen onClick={(e, data, element)=>handleClick({data,element,nodes})} tree={tree} />
+              <CmTpopfreiwkontrFolder onClick={(e, data, element)=>handleClick({data,element,nodes})} tree={tree} />
+              <CmTpopfreiwkontr onClick={(e, data, element)=>handleClick({data,element,nodes})} tree={tree} />
+              <CmTpopfreiwkontrzaehlFolder onClick={(e, data, element)=>handleClick({data,element,nodes})} tree={tree} />
+              <CmTpopfreiwkontrzaehl onClick={(e, data, element)=>handleClick({data,element,nodes})} tree={tree} />
+              <CmTpopfeldkontrFolder onClick={(e, data, element)=>handleClick({data,element,nodes})} tree={tree} />
+              <CmTpopfeldkontr onClick={(e, data, element)=>handleClick({data,element,nodes})} tree={tree} />
+              <CmTpopfeldkontrzaehlFolder onClick={(e, data, element)=>handleClick({data,element,nodes})} tree={tree} />
+              <CmTpopfeldkontrzaehl onClick={(e, data, element)=>handleClick({data,element,nodes})} tree={tree} />
+              <CmTpopmassnberFolder onClick={(e, data, element)=>handleClick({data,element,nodes})} tree={tree} />
+              <CmTpopmassnber onClick={(e, data, element)=>handleClick({data,element,nodes})} tree={tree} />
+              <CmTpopmassnFolder onClick={(e, data, element)=>handleClick({data,element,nodes})} tree={tree} />
+              <CmTpopmassn onClick={(e, data, element)=>handleClick({data,element,nodes})} tree={tree} />
             </Container>
           </ErrorBoundary>
         )
