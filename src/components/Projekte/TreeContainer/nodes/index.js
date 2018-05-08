@@ -160,6 +160,7 @@ export default ({
           tree,
           projektNodes,
           projId,
+          apNodes,
           apId
         }),
         ...buildApzielFolderNodes({

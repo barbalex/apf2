@@ -7,24 +7,25 @@ export default ({
   tree,
   projektNodes,
   projId,
+  apNodes,
   apId,
 }: {
   data: Object,
   tree: Object,
-  projektNodes: Array<Object>,
+  projektNodes: Array < Object > ,
   projId: String,
+  apNodes: Array < Object > ,
   apId: String,
-}): Array<Object> => {
+}): Array < Object > => {
   const apbers = get(data, 'apbers.nodes', [])
 
   // fetch sorting indexes of parents
   const projIndex = findIndex(projektNodes, {
     id: projId,
   })
-  const apIndex = findIndex(
-    tree.filteredAndSorted.ap.filter(a => a.proj_id === projId),
-    { id: apId }
-  )
+  const apIndex = findIndex(apNodes, {
+    id: apId
+  })
   const nodeLabelFilterString = tree.nodeLabelFilter.get('apber')
 
   const apberNodesLength = apbers
@@ -43,16 +44,14 @@ export default ({
     message = `${apberNodesLength} gefiltert`
   }
 
-  return [
-    {
-      nodeType: 'folder',
-      menuType: 'apberFolder',
-      id: apId,
-      urlLabel: 'AP-Berichte',
-      label: `AP-Berichte (${message})`,
-      url: ['Projekte', projId, 'Aktionspläne', apId, 'AP-Berichte'],
-      sort: [projIndex, 1, apIndex, 4],
-      hasChildren: apberNodesLength > 0,
-    },
-  ]
+  return [{
+    nodeType: 'folder',
+    menuType: 'apberFolder',
+    id: apId,
+    urlLabel: 'AP-Berichte',
+    label: `AP-Berichte (${message})`,
+    url: ['Projekte', projId, 'Aktionspläne', apId, 'AP-Berichte'],
+    sort: [projIndex, 1, apIndex, 4],
+    hasChildren: apberNodesLength > 0,
+  }, ]
 }

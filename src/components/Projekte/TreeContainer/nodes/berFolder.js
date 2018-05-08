@@ -7,24 +7,25 @@ export default ({
   tree,
   projektNodes,
   projId,
+  apNodes,
   apId,
 }: {
   data: Object,
   tree: Object,
-  projektNodes: Array<Object>,
+  projektNodes: Array < Object > ,
   projId: String,
+  apNodes: Array < Object > ,
   apId: String,
-}): Array<Object> => {
+}): Array < Object > => {
   const bers = get(data, 'bers.nodes', [])
 
   // fetch sorting indexes of parents
   const projIndex = findIndex(projektNodes, {
     id: projId,
   })
-  const apIndex = findIndex(
-    tree.filteredAndSorted.ap.filter(a => a.proj_id === projId),
-    { id: apId }
-  )
+  const apIndex = findIndex(apNodes, {
+    id: apId
+  })
   const nodeLabelFilterString = tree.nodeLabelFilter.get('ber')
 
   const berNodesLength = bers
@@ -43,16 +44,14 @@ export default ({
     message = `${berNodesLength} gefiltert`
   }
 
-  return [
-    {
-      nodeType: 'folder',
-      menuType: 'berFolder',
-      id: apId,
-      urlLabel: 'Berichte',
-      label: `Berichte (${message})`,
-      url: ['Projekte', projId, 'Aktionspläne', apId, 'Berichte'],
-      sort: [projIndex, 1, apIndex, 5],
-      hasChildren: berNodesLength > 0,
-    },
-  ]
+  return [{
+    nodeType: 'folder',
+    menuType: 'berFolder',
+    id: apId,
+    urlLabel: 'Berichte',
+    label: `Berichte (${message})`,
+    url: ['Projekte', projId, 'Aktionspläne', apId, 'Berichte'],
+    sort: [projIndex, 1, apIndex, 5],
+    hasChildren: berNodesLength > 0,
+  }, ]
 }

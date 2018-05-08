@@ -8,24 +8,25 @@ export default ({
   tree,
   projektNodes,
   projId,
+  apNodes,
   apId,
 }: {
   data: Object,
   tree: Object,
-  projektNodes: Array<Object>,
+  projektNodes: Array < Object > ,
   projId: String,
+  apNodes: Array < Object > ,
   apId: String,
-}): Array<Object> => {
+}): Array < Object > => {
   const ziels = get(data, 'ziels.nodes', [])
 
   // fetch sorting indexes of parents
   const projIndex = findIndex(projektNodes, {
     id: projId,
   })
-  const apIndex = findIndex(
-    tree.filteredAndSorted.ap.filter(a => a.proj_id === projId),
-    { id: apId }
-  )
+  const apIndex = findIndex(apNodes, {
+    id: apId
+  })
   const nodeLabelFilterString = tree.nodeLabelFilter.get('ziel')
 
   const zieljahre = ziels
@@ -51,16 +52,14 @@ export default ({
     } gefiltert`
   }
 
-  return [
-    {
-      nodeType: 'folder',
-      menuType: 'zieljahrFolder',
-      id: apId,
-      urlLabel: 'AP-Ziele',
-      label: `AP-Ziele (${message})`,
-      url: ['Projekte', projId, 'Aktionspläne', apId, 'AP-Ziele'],
-      sort: [projIndex, 1, apIndex, 2],
-      hasChildren: zieljahreLength > 0,
-    },
-  ]
+  return [{
+    nodeType: 'folder',
+    menuType: 'zieljahrFolder',
+    id: apId,
+    urlLabel: 'AP-Ziele',
+    label: `AP-Ziele (${message})`,
+    url: ['Projekte', projId, 'Aktionspläne', apId, 'AP-Ziele'],
+    sort: [projIndex, 1, apIndex, 2],
+    hasChildren: zieljahreLength > 0,
+  }, ]
 }

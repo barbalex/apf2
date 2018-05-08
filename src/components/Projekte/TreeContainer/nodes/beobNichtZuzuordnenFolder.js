@@ -8,24 +8,25 @@ export default ({
   tree,
   projektNodes,
   projId,
+  apNodes,
   apId,
 }: {
   data: Object,
   tree: Object,
-  projektNodes: Array<Object>,
+  projektNodes: Array < Object > ,
   projId: String,
+  apNodes: Array < Object > ,
   apId: String,
-}): Array<Object> => {
+}): Array < Object > => {
   const beobNichtZuzuordnens = get(data, 'beobNichtZuzuordnens.nodes', [])
 
   // fetch sorting indexes of parents
   const projIndex = findIndex(projektNodes, {
     id: projId,
   })
-  const apIndex = findIndex(
-    tree.filteredAndSorted.ap.filter(a => a.proj_id === projId),
-    { id: apId }
-  )
+  const apIndex = findIndex(apNodes, {
+    id: apId
+  })
   const nodeLabelFilterString = tree.nodeLabelFilter.get('beobNichtZuzuordnen')
 
   const beobNichtZuzuordnenNodesLength = beobNichtZuzuordnens
@@ -46,22 +47,20 @@ export default ({
     message = `${beobNichtZuzuordnenNodesLength} gefiltert`
   }
 
-  return [
-    {
-      nodeType: 'folder',
-      menuType: 'beobNichtZuzuordnenFolder',
-      id: apId,
-      urlLabel: 'nicht-zuzuordnende-Beobachtungen',
-      label: `Beobachtungen nicht zuzuordnen (${message})`,
-      url: [
-        'Projekte',
-        projId,
-        'Aktionspläne',
-        apId,
-        'nicht-zuzuordnende-Beobachtungen',
-      ],
-      sort: [projIndex, 1, apIndex, 10],
-      hasChildren: beobNichtZuzuordnenNodesLength > 0,
-    },
-  ]
+  return [{
+    nodeType: 'folder',
+    menuType: 'beobNichtZuzuordnenFolder',
+    id: apId,
+    urlLabel: 'nicht-zuzuordnende-Beobachtungen',
+    label: `Beobachtungen nicht zuzuordnen (${message})`,
+    url: [
+      'Projekte',
+      projId,
+      'Aktionspläne',
+      apId,
+      'nicht-zuzuordnende-Beobachtungen',
+    ],
+    sort: [projIndex, 1, apIndex, 10],
+    hasChildren: beobNichtZuzuordnenNodesLength > 0,
+  }, ]
 }

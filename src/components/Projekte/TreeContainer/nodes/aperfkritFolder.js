@@ -7,24 +7,25 @@ export default ({
   tree,
   projektNodes,
   projId,
+  apNodes,
   apId,
 }: {
   data: Object,
   tree: Object,
-  projektNodes: Array<Object>,
+  projektNodes: Array < Object > ,
   projId: String,
+  apNodes: Array < Object > ,
   apId: String,
-}): Array<Object> => {
+}): Array < Object > => {
   const erfkrits = get(data, 'erfkrits.nodes', [])
 
   // fetch sorting indexes of parents
   const projIndex = findIndex(projektNodes, {
     id: projId,
   })
-  const apIndex = findIndex(
-    tree.filteredAndSorted.ap.filter(a => a.proj_id === projId),
-    { id: apId }
-  )
+  const apIndex = findIndex(apNodes, {
+    id: apId
+  })
   const nodeLabelFilterString = tree.nodeLabelFilter.get('erfkrit')
 
   const erfkritNodesLength = erfkrits
@@ -47,16 +48,14 @@ export default ({
     message = `${erfkritNodesLength} gefiltert`
   }
 
-  return [
-    {
-      nodeType: 'folder',
-      menuType: 'erfkritFolder',
-      id: apId,
-      urlLabel: 'AP-Erfolgskriterien',
-      label: `AP-Erfolgskriterien (${message})`,
-      url: ['Projekte', projId, 'Aktionspläne', apId, 'AP-Erfolgskriterien'],
-      sort: [projIndex, 1, apIndex, 3],
-      hasChildren: erfkritNodesLength > 0,
-    },
-  ]
+  return [{
+    nodeType: 'folder',
+    menuType: 'erfkritFolder',
+    id: apId,
+    urlLabel: 'AP-Erfolgskriterien',
+    label: `AP-Erfolgskriterien (${message})`,
+    url: ['Projekte', projId, 'Aktionspläne', apId, 'AP-Erfolgskriterien'],
+    sort: [projIndex, 1, apIndex, 3],
+    hasChildren: erfkritNodesLength > 0,
+  }, ]
 }
