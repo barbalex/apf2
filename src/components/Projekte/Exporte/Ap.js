@@ -302,22 +302,58 @@ const AP = ({
               Ziel-Berichte
             </DownloadCardButton>
             <DownloadCardButton
-              onClick={() =>
-                downloadFromView({
-                  view: 'v_ber',
-                  fileName: 'Berichte',
+              onClick={async () => {
+                const { data } = await client.query({
+                  query: gql`
+                    query view {
+                      allVBers {
+                        nodes {
+                          ap_id: apId
+                          artname
+                          ap_bearbeitung: apBearbeitung
+                          ap_start_jahr: apStartJahr
+                          ap_umsetzung: apUmsetzung
+                          ap_bearbeiter: apBearbeiter
+                          id
+                          autor
+                          jahr
+                          titel
+                          url
+                          changed
+                          changed_by: changedBy
+                        }
+                      }
+                    }`
                 })
-              }
+                exportModule({data: get(data, 'allVBers.nodes', []), store, fileName: 'Berichte'})
+              }}
             >
               Berichte
             </DownloadCardButton>
             <DownloadCardButton
-              onClick={() =>
-                downloadFromView({
-                  view: 'v_erfkrit',
-                  fileName: 'Erfolgskriterien',
+              onClick={async () => {
+                const { data } = await client.query({
+                  query: gql`
+                    query view {
+                      allVErfkrits {
+                        nodes {
+                          ap_id: apId
+                          artname
+                          ap_bearbeitung: apBearbeitung
+                          ap_start_jahr: apStartJahr
+                          ap_umsetzung: apUmsetzung
+                          ap_bearbeiter: apBearbeiter
+                          id
+                          beurteilung
+                          kriterien
+                          changed
+                          changed_by: changedBy
+                        }
+                      }
+                    }`
                 })
-              }
+                exportModule({data: get(data, 'allVErfkrits.nodes', []), store, fileName: 'Erfolgskriterien'})
+              }}
             >
               Erfolgskriterien
             </DownloadCardButton>
