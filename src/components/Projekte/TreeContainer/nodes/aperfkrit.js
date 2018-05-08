@@ -2,8 +2,6 @@
 import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
 
-import compareLabel from './compareLabel'
-
 export default ({
   data,
   tree,
@@ -14,17 +12,19 @@ export default ({
 }: {
   data: Object,
   tree: Object,
-  projektNodes: Array<Object>,
-  apNodes: Array<Object>,
+  projektNodes: Array < Object > ,
+  apNodes: Array < Object > ,
   projId: String,
   apId: String,
-}): Array<Object> => {
+}): Array < Object > => {
   const erfkrits = get(data, 'erfkrits.nodes', [])
   // fetch sorting indexes of parents
   const projIndex = findIndex(projektNodes, {
     id: projId,
   })
-  const apIndex = findIndex(apNodes, { id: apId })
+  const apIndex = findIndex(apNodes, {
+    id: apId
+  })
   const nodeLabelFilterString = tree.nodeLabelFilter.get('erfkrit')
 
   // map through all elements and create array of nodes
@@ -67,8 +67,8 @@ export default ({
     // sort by label
     .sort(
       (a, b) =>
-        get(b, 'apErfkritWerteByErfolg.sort', 0) -
-        get(a, 'apErfkritWerteByErfolg.sort', 0)
+      get(b, 'apErfkritWerteByErfolg.sort', 0) -
+      get(a, 'apErfkritWerteByErfolg.sort', 0)
     )
     .map((el, index) => {
       el.sort = [projIndex, 1, apIndex, 3, index]
