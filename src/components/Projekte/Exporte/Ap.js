@@ -358,12 +358,44 @@ const AP = ({
               Erfolgskriterien
             </DownloadCardButton>
             <DownloadCardButton
-              onClick={() =>
-                downloadFromView({
-                  view: 'v_idealbiotop',
-                  fileName: 'Idealbiotope',
+              onClick={async () => {
+                const { data } = await client.query({
+                  query: gql`
+                    query view {
+                      allVIdealbiotops {
+                        nodes {
+                          ap_id: 
+                          artname
+                          ap_bearbeitung: 
+                          ap_start_jahr: 
+                          ap_umsetzung: 
+                          ap_bearbeiter: 
+                          erstelldatum
+                          hoehenlage
+                          region
+                          exposition
+                          besonnung
+                          hangneigung
+                          boden_typ: 
+                          boden_kalkgehalt: 
+                          boden_durchlaessigkeit: 
+                          boden_humus: 
+                          boden_naehrstoffgehalt: 
+                          wasserhaushalt
+                          konkurrenz
+                          moosschicht
+                          krautschicht
+                          strauchschicht
+                          baumschicht
+                          bemerkungen
+                          changed
+                          changed_by: 
+                        }
+                      }
+                    }`
                 })
-              }
+                exportModule({data: get(data, 'allVErfkrits.nodes', []), store, fileName: 'Idealbiotope'})
+              }}
             >
               Idealbiotope
             </DownloadCardButton>
