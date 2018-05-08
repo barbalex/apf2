@@ -12,10 +12,10 @@ export default ({
 }: {
   data: Object,
   tree: Object,
-  projektNodes: Array<Object>,
+  projektNodes: Array < Object > ,
   projId: String,
   apId: String,
-}): Array<Object> => {
+}): Array < Object > => {
   const ziels = get(data, 'ziels.nodes', [])
 
   // fetch sorting indexes of parents
@@ -23,8 +23,9 @@ export default ({
     id: projId,
   })
   const apIndex = findIndex(
-    tree.filteredAndSorted.ap.filter(a => a.proj_id === projId),
-    { id: apId }
+    tree.filteredAndSorted.ap.filter(a => a.proj_id === projId), {
+      id: apId
+    }
   )
   const nodeLabelFilterString = tree.nodeLabelFilter.get('ziel')
 
@@ -44,17 +45,35 @@ export default ({
     .reduce((a, el, index) => union(a, [el.jahr]), [])
     .sort()
 
-  return zieljahre.map((jahr, index) => ({
-    nodeType: 'folder',
-    menuType: 'zieljahr',
-    id: apId,
-    parentId: apId,
-    urlLabel: `${jahr === null || jahr === undefined ? 'kein Jahr' : jahr}`,
-    label: `${jahr === null || jahr === undefined ? 'kein Jahr' : jahr} (${
-      zieljahre.length
+  return zieljahre.map((jahr, index) => {
+    const zieleOfJahr = ziels
+      .filter(el => el.apId === apId)
+      .filter(el => el.jahr === jahr)
+      // filter by nodeLabelFilter
+      .filter(el => {
+        if (nodeLabelFilterString) {
+          return `${el.bezeichnung || '(kein Ziel)'} (${get(
+          el,
+          'zielTypWerteByTyp.text',
+          '(kein Typ)'
+        )})`.includes(nodeLabelFilterString.toLowerCase())
+        }
+        return true
+      })
+
+    return ({
+      nodeType: 'folder',
+      menuType: 'zieljahr',
+      id: apId,
+      jahr,
+      parentId: apId,
+      urlLabel: `${jahr === null || jahr === undefined ? 'kein Jahr' : jahr}`,
+      label: `${jahr === null || jahr === undefined ? 'kein Jahr' : jahr} (${
+        zieleOfJahr.length
     })`,
-    url: ['Projekte', projId, 'Aktionspläne', apId, 'AP-Ziele', jahr],
-    sort: [projIndex, 1, apIndex, 2, index],
-    hasChildren: true,
-  }))
+      url: ['Projekte', projId, 'Aktionspläne', apId, 'AP-Ziele', jahr],
+      sort: [projIndex, 1, apIndex, 2, index],
+      hasChildren: true,
+    })
+  })
 }

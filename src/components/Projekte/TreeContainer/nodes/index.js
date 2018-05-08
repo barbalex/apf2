@@ -1,5 +1,7 @@
 // @flow
-import { toJS } from 'mobx'
+import {
+  toJS
+} from 'mobx'
 import clone from 'lodash/clone'
 
 import allParentNodesAreOpen from '../../../../modules/allParentNodesAreOpen'
@@ -21,7 +23,7 @@ import buildApberFolderNodes from './apberFolder'
 import buildAperfkritFolderNodes from './aperfkritFolder'
 import buildApzielFolderNodes from './apzielFolder'
 import buildApzieljahrFolderNodes from './apzieljahrFolder'
-import zielNodes from './apziel'
+import apzielNodes from './apziel'
 import zielberFolderNodes from '../../../../modules/nodes/zielberFolder'
 import zielberNodes from '../../../../modules/nodes/zielber'
 import buildPopNodes from './pop'
@@ -65,10 +67,10 @@ const compare = (a, b) => {
 }
 
 const allParentNodesAreOpenAndVisible = (
-  nodes: Array<Object>,
-  nodeUrl: Array<string>,
-  openNodes: Array<Array<string>>
-): boolean =>
+    nodes: Array < Object > ,
+    nodeUrl: Array < string > ,
+    openNodes: Array < Array < string >>
+  ): boolean =>
   allParentNodesAreVisible(nodes, nodeUrl) &&
   allParentNodesAreOpen(openNodes, nodeUrl)
 
@@ -80,16 +82,20 @@ export default ({
   store: Object,
   tree: Object,
   data: Object,
-}): Array<Object> => {
+}): Array < Object > => {
   const openNodes = toJS(tree.openNodes)
 
-  const projektNodes = buildProjektNodes({ data, tree })
+  const projektNodes = buildProjektNodes({
+    data,
+    tree
+  })
   let nodes = clone(projektNodes)
   let apNodes
   let popNodes
   let tpopNodes
   let tpopfeldkontrNodes
   let tpopfreiwkontrNodes
+  let apzieljahrFolderNodes
   // do not process ['Projekte']
   const nodeUrlsToProcess = openNodes.filter(n => n.length > 1)
 
@@ -98,7 +104,12 @@ export default ({
     if (nodeUrl.length === 2) {
       nodes = [
         ...nodes,
-        ...buildApFolderNodes({ data, tree, projektNodes, projId }),
+        ...buildApFolderNodes({
+          data,
+          tree,
+          projektNodes,
+          projId
+        }),
         ...buildApberuebersichtFolderNodes({
           data,
           tree,
@@ -114,7 +125,12 @@ export default ({
     ) {
       nodes = [
         ...nodes,
-        ...buildApberuebersichtNodes({ data, tree, projektNodes, projId }),
+        ...buildApberuebersichtNodes({
+          data,
+          tree,
+          projektNodes,
+          projId
+        }),
       ]
     }
     if (
@@ -122,7 +138,12 @@ export default ({
       nodeUrl[2] === 'Aktionspläne' &&
       allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
     ) {
-      apNodes = buildApNodes({ data, tree, projektNodes, projId })
+      apNodes = buildApNodes({
+        data,
+        tree,
+        projektNodes,
+        projId
+      })
       nodes = [...nodes, ...apNodes]
     }
     if (
@@ -133,7 +154,13 @@ export default ({
       const apId = nodeUrl[3]
       nodes = [
         ...nodes,
-        ...buildPopFolderNodes({ data, tree, projektNodes, projId, apId }),
+        ...buildPopFolderNodes({
+          data,
+          tree,
+          projektNodes,
+          projId,
+          apId
+        }),
         ...buildApzielFolderNodes({
           data,
           tree,
@@ -214,16 +241,17 @@ export default ({
       nodeUrl[4] === 'AP-Ziele' &&
       allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
     ) {
+      apzieljahrFolderNodes = buildApzieljahrFolderNodes({
+        data,
+        tree,
+        apNodes,
+        projektNodes,
+        projId,
+        apId: nodeUrl[3],
+      })
       nodes = [
         ...nodes,
-        ...buildApzieljahrFolderNodes({
-          data,
-          tree,
-          apNodes,
-          projektNodes,
-          projId,
-          apId: nodeUrl[3],
-        }),
+        ...apzieljahrFolderNodes,
       ]
     }
     if (
@@ -233,7 +261,7 @@ export default ({
     ) {
       nodes = [
         ...nodes,
-        ...zielNodes({
+        ...apzielNodes({
           data,
           tree,
           apNodes,
@@ -241,6 +269,7 @@ export default ({
           projId,
           apId: nodeUrl[3],
           jahr: +nodeUrl[5],
+          apzieljahrFolderNodes
         }),
       ]
     }
@@ -845,16 +874,16 @@ export default ({
    */
   return nodes.sort(
     (a, b) =>
-      compare(a.sort[0], b.sort[0]) ||
-      compare(a.sort[1], b.sort[1]) ||
-      compare(a.sort[2], b.sort[2]) ||
-      compare(a.sort[3], b.sort[3]) ||
-      compare(a.sort[4], b.sort[4]) ||
-      compare(a.sort[5], b.sort[5]) ||
-      compare(a.sort[6], b.sort[6]) ||
-      compare(a.sort[7], b.sort[7]) ||
-      compare(a.sort[8], b.sort[8]) ||
-      compare(a.sort[9], b.sort[9]) ||
-      compare(a.sort[10], b.sort[10])
+    compare(a.sort[0], b.sort[0]) ||
+    compare(a.sort[1], b.sort[1]) ||
+    compare(a.sort[2], b.sort[2]) ||
+    compare(a.sort[3], b.sort[3]) ||
+    compare(a.sort[4], b.sort[4]) ||
+    compare(a.sort[5], b.sort[5]) ||
+    compare(a.sort[6], b.sort[6]) ||
+    compare(a.sort[7], b.sort[7]) ||
+    compare(a.sort[8], b.sort[8]) ||
+    compare(a.sort[9], b.sort[9]) ||
+    compare(a.sort[10], b.sort[10])
   )
 }

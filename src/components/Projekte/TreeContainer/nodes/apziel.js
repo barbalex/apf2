@@ -13,39 +13,27 @@ export default ({
   projId,
   apId,
   jahr,
+  apzieljahrFolderNodes
 }: {
   data: Object,
   tree: Object,
-  projektNodes: Array<Object>,
-  apNodes: Array<Object>,
+  projektNodes: Array < Object > ,
+  apNodes: Array < Object > ,
   projId: String,
   apId: String,
   jahr: Number,
-}): Array<Object> => {
+  apzieljahrFolderNodes: Array < Object >
+}): Array < Object > => {
   const ziels = get(data, 'ziels.nodes', [])
   // fetch sorting indexes of parents
   const projIndex = findIndex(projektNodes, {
     id: projId,
   })
-  const apIndex = findIndex(apNodes, { id: apId })
+  const apIndex = findIndex(apNodes, {
+    id: apId
+  })
   const nodeLabelFilterString = tree.nodeLabelFilter.get('ziel')
-
-  const zieljahre = ziels
-    .filter(el => el.apId === apId)
-    // filter by nodeLabelFilter
-    .filter(el => {
-      if (nodeLabelFilterString) {
-        return `${el.bezeichnung || '(kein Ziel)'} (${get(
-          el,
-          'zielTypWerteByTyp.text',
-          '(kein Typ)'
-        )})`.includes(nodeLabelFilterString.toLowerCase())
-      }
-      return true
-    })
-    .reduce((a, el, index) => union(a, [el.jahr]), [])
-    .sort()
-  const zieljahrIndex = findIndex(zieljahre, el => el === jahr)
+  const zieljahrIndex = findIndex(apzieljahrFolderNodes, el => el.jahr === jahr)
 
   // map through all elements and create array of nodes
   const nodes = ziels
