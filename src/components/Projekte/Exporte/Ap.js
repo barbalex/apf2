@@ -364,23 +364,23 @@ const AP = ({
                     query view {
                       allVIdealbiotops {
                         nodes {
-                          ap_id: 
+                          ap_id: apId
                           artname
-                          ap_bearbeitung: 
-                          ap_start_jahr: 
-                          ap_umsetzung: 
-                          ap_bearbeiter: 
+                          ap_bearbeitung: apBearbeitung
+                          ap_start_jahr: apStartJahr
+                          ap_umsetzung: apUmsetzung
+                          ap_bearbeiter: apBearbeiter
                           erstelldatum
                           hoehenlage
                           region
                           exposition
                           besonnung
                           hangneigung
-                          boden_typ: 
-                          boden_kalkgehalt: 
-                          boden_durchlaessigkeit: 
-                          boden_humus: 
-                          boden_naehrstoffgehalt: 
+                          boden_typ: bodenTyp
+                          boden_kalkgehalt: bodenKalkgehalt
+                          boden_durchlaessigkeit: bodenDurchlaessigkeit
+                          boden_humus: bodenHumus
+                          boden_naehrstoffgehalt: bodenNaehrstoffgehalt
                           wasserhaushalt
                           konkurrenz
                           moosschicht
@@ -389,12 +389,12 @@ const AP = ({
                           baumschicht
                           bemerkungen
                           changed
-                          changed_by: 
+                          changed_by: changedBy
                         }
                       }
                     }`
                 })
-                exportModule({data: get(data, 'allVErfkrits.nodes', []), store, fileName: 'Idealbiotope'})
+                exportModule({data: get(data, 'allVIdealbiotops.nodes', []), store, fileName: 'Idealbiotope'})
               }}
             >
               Idealbiotope
