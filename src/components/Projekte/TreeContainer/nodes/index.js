@@ -51,7 +51,7 @@ import buildTpopberNodes from './tpopber'
 import buildTpopfreiwkontrNodes from './tpopfreiwkontr'
 import buildTpopfeldkontrNodes from './tpopfeldkontr'
 import buildTpopmassnberNodes from './tpopmassnber'
-import tpopmassnNodes from './tpopmassn'
+import buildTpopmassnNodes from './tpopmassn'
 import buildTpopfeldkontrzaehlFolderNodes from './tpopfeldkontrzaehlFolder'
 import buildTpopfreiwkontrzaehlFolderNodes from './tpopfreiwkontrzaehlFolder'
 import buildTpopfeldkontrzaehlNodes from './tpopfeldkontrzaehl'
@@ -756,7 +756,7 @@ export default ({
     ) {
       nodes = [
         ...nodes,
-        ...tpopmassnNodes({
+        ...buildTpopmassnNodes({
           data,
           tree,
           projId,
