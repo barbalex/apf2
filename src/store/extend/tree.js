@@ -9,12 +9,12 @@ import {
 } from 'mobx'
 import clone from 'lodash/clone'
 
-import toggleNode from '../../action/toggleNode'
-import toggleNodeSymbol from '../../action/toggleNodeSymbol'
-import toggleNextLowerNodes from '../../action/toggleNextLowerNodes'
-import getActiveNodes from '../../../modules/getActiveNodes'
-import updateActiveDatasetFromActiveNodes from '../../action/updateActiveDatasetFromActiveNodes'
-import setOpenNodesFromActiveNodeArray from '../../action/setOpenNodesFromActiveNodeArray'
+import toggleNode from '../action/toggleNode'
+import toggleNodeSymbol from '../action/toggleNodeSymbol'
+import toggleNextLowerNodes from '../action/toggleNextLowerNodes'
+import getActiveNodes from '../../modules/getActiveNodes'
+import updateActiveDatasetFromActiveNodes from '../action/updateActiveDatasetFromActiveNodes'
+import setOpenNodesFromActiveNodeArray from '../action/setOpenNodesFromActiveNodeArray'
 
 export default (store: Object, tree: Object): void => {
   extendObservable(tree, {
