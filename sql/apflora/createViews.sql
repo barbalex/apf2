@@ -4948,7 +4948,7 @@ FROM
     ON information_schema.tables.table_name = information_schema.columns.table_name
     AND information_schema.tables.table_schema = information_schema.columns.table_schema
 WHERE
-  information_schema.tables.table_schema IN ('apflora', 'beob')
+  information_schema.tables.table_schema = 'apflora'
 ORDER BY
   information_schema.tables.table_schema,
   information_schema.tables.table_name,

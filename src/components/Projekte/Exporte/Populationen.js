@@ -9,6 +9,11 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import styled from 'styled-components'
+import { ApolloConsumer } from 'react-apollo'
+import gql from "graphql-tag"
+import get from 'lodash/get'
+
+import exportModule from '../../../modules/exportGql'
 
 const StyledCard = styled(Card)`
   margin: 10px 0;
@@ -51,14 +56,18 @@ const DownloadCardButton = styled(Button)`
 const enhance = compose(withState('expanded', 'setExpanded', false))
 
 const Populationen = ({
+  store,
   expanded,
   setExpanded,
   downloadFromView,
 }: {
+  store:Object,
   expanded: Boolean,
   setExpanded: () => void,
   downloadFromView: () => void,
 }) => (
+  <ApolloConsumer>
+    {client =>
   <StyledCard>
     <StyledCardActions
       disableActionSpacing
@@ -193,6 +202,8 @@ const Populationen = ({
       </StyledCardContent>
     </Collapse>
   </StyledCard>
+    }
+  </ApolloConsumer>
 )
 
 export default enhance(Populationen)

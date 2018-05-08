@@ -27,6 +27,7 @@ const CardActionTitle = styled.div`
   padding-left: 8px;
   font-weight: bold;
   word-break: break-word;
+  user-select: none;
 `
 const StyledCardContent = styled(CardContent)`
   margin: -15px 0 0 0;

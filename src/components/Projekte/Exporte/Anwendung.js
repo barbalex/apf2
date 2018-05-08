@@ -9,8 +9,12 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import styled from 'styled-components'
+import { ApolloConsumer } from 'react-apollo'
+import gql from "graphql-tag"
+import get from 'lodash/get'
 
 import beziehungen from '../../../etc/beziehungen.png'
+import exportModule from '../../../modules/exportGql'
 
 const StyledCard = styled(Card)`
   margin: 10px 0;
@@ -53,14 +57,18 @@ const DownloadCardButton = styled(Button)`
 const enhance = compose(withState('expanded', 'setExpanded', false))
 
 const Anwendung = ({
+  store,
   expanded,
   setExpanded,
   downloadFromView,
 }: {
+  store:Object,
   expanded: Boolean,
   setExpanded: () => void,
   downloadFromView: () => void,
 }) => (
+  <ApolloConsumer>
+    {client =>
   <StyledCard>
     <StyledCardActions
       disableActionSpacing
@@ -80,12 +88,25 @@ const Anwendung = ({
     <Collapse in={expanded} timeout="auto" unmountOnExit>
       <StyledCardContent>
         <DownloadCardButton
-          onClick={() =>
-            downloadFromView({
-              view: 'v_datenstruktur',
-              fileName: 'Datenstruktur',
+          onClick={async () => {
+            const { data } = await client.query({
+              query: gql`
+                query view {
+                  allVDatenstrukturs {
+                    nodes {
+                      tabelle_schema: tabelleSchema
+                      tabelle_name: tabelleName
+                      tabelle_anzahl_datensaetze: tabelleAnzahlDatensaetze
+                      feld_name: feldName
+                      feld_standardwert: feldStandardwert
+                      feld_datentyp: feldDatentyp
+                      feld_nullwerte: feldNullwerte
+                    }
+                  }
+                }`
             })
-          }
+            exportModule({data: get(data, 'allVDatenstrukturs.nodes', []), store, fileName: 'Datenstruktur'})
+          }}
         >
           Tabellen und Felder
         </DownloadCardButton>
@@ -99,6 +120,8 @@ const Anwendung = ({
       </StyledCardContent>
     </Collapse>
   </StyledCard>
+    }
+  </ApolloConsumer>
 )
 
 export default enhance(Anwendung)

@@ -12,8 +12,12 @@ import withState from 'recompose/withState'
 import withProps from 'recompose/withProps'
 import styled from 'styled-components'
 import sortBy from 'lodash/sortBy'
+import { ApolloConsumer } from 'react-apollo'
+import gql from "graphql-tag"
+import get from 'lodash/get'
 
 import AutoComplete from './Autocomplete'
+import exportModule from '../../../modules/exportGql'
 
 const StyledCard = styled(Card)`
   margin: 10px 0;
@@ -80,16 +84,20 @@ const enhance = compose(
 )
 
 const Teilpopulationen = ({
+  store,
   expanded,
   setExpanded,
   downloadFromView,
   artList,
 }: {
+  store:Object,
   expanded: Boolean,
   setExpanded: () => void,
   downloadFromView: () => void,
   artList: Array<Object>,
 }) => (
+  <ApolloConsumer>
+    {client =>
   <StyledCard>
     <StyledCardActions
       disableActionSpacing
@@ -243,6 +251,8 @@ const Teilpopulationen = ({
       </StyledCardContent>
     </Collapse>
   </StyledCard>
+    }
+  </ApolloConsumer>
 )
 
 export default enhance(Teilpopulationen)
