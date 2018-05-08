@@ -1,7 +1,6 @@
 // @flow
 import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
-import union from 'lodash/union'
 
 import compareLabel from './compareLabel'
 

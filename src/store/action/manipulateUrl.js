@@ -1,6 +1,5 @@
 // @flow
 import isEqual from 'lodash/isEqual'
-import clone from 'lodash/clone'
 import queryString from 'query-string'
 import { toJS } from 'mobx'
 
