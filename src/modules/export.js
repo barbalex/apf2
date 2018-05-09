@@ -1,7 +1,5 @@
 // @flow
-
-import axios from 'axios'
-import clone from 'lodash/clone'
+import omit from 'lodash/omit'
 
 import beobIdsFromServerInsideFeatureCollection from './beobIdsFromServerInsideFeatureCollection'
 import tpopIdsInsideFeatureCollection from './tpopIdsInsideFeatureCollection'
@@ -11,45 +9,22 @@ import exportCsv from './exportCsv'
 import exportKml from './exportKml'
 
 export default async ({
+  data:dataPassed,
   store,
-  changeArtFuerEierlegendeWollmilchsau,
-  artFuerEierlegendeWollmilchsau,
-  view,
   fileName,
-  apIdName,
-  apId,
   kml,
 }: {
+  data: Array<Object>,
   store: Object,
-  changeArtFuerEierlegendeWollmilchsau: () => {},
-  artFuerEierlegendeWollmilchsau: string,
-  view: string,
   fileName: string,
-  apIdName: string,
-  apId: string,
   kml: Boolean,
 }) => {
   const onError = error => {
-    if (artFuerEierlegendeWollmilchsau) {
-      changeArtFuerEierlegendeWollmilchsau('')
-    }
     store.listError(error)
-    store.export.removeDownload(fileName)
   }
-  const apIdString = apIdName ? apIdName : 'ap_id'
-  const url = apId ? `/${view}?${apIdString}=eq.${apId}` : `/${view}`
-
-  store.export.addDownload(fileName)
-  let result: { data: Array<Object> }
-  try {
-    result = await axios.get(url)
-  } catch (error) {
-    onError(error)
-  }
-  const { data } = result
   const { mapFilter } = store.map
   const { applyMapFilterToExport } = store.export
-  let jsonData = clone(data)
+  let data = dataPassed.map(d=> omit(d, ['__typename', 'Symbol(id)']))
   // now we could manipulate the data, for instance apply mapFilter
   const filterFeatures = mapFilter.filter.features
   if (filterFeatures.length > 0 && applyMapFilterToExport) {
@@ -58,18 +33,18 @@ export default async ({
     // beob can also have PopId and tpop-id, so dont filter by TPopId if you filter by beob id
     if (keys.includes('id')) {
       const beobIds = beobIdsFromServerInsideFeatureCollection(store, data)
-      jsonData = jsonData.filter(d => beobIds.includes(d.id))
+      data = data.filter(d => beobIds.includes(d.id))
     } else if (keys.includes('TPopId')) {
       // data sets with TPopId usually also deliver PopId,
       // so only filter by TPopid then
       const tpopIds = tpopIdsInsideFeatureCollection(store, data)
-      jsonData = jsonData.filter(d => tpopIds.includes(d.id))
+      data = data.filter(d => tpopIds.includes(d.id))
     } else if (keys.includes('PopId')) {
       const popIds = popIdsInsideFeatureCollection(store, data)
-      jsonData = jsonData.filter(d => popIds.includes(d.PopId))
+      data = data.filter(d => popIds.includes(d.PopId))
     }
   }
-  if (jsonData.length === 0) {
+  if (data.length === 0) {
     return onError(
       'Es gibt offenbar keine Daten, welche exportiert werden können'
     )
@@ -77,27 +52,20 @@ export default async ({
   if (kml) {
     exportKml({
       fileName,
-      jsonData,
+      data,
     })
   } else if (store.export.fileType === 'csv') {
     exportCsv({
       fileName,
-      jsonData,
+      data,
     })
   } else {
     // pass some data in case something goes wrong
     exportXlsx({
       store,
-      changeArtFuerEierlegendeWollmilchsau,
-      artFuerEierlegendeWollmilchsau,
       fileName,
-      jsonData,
+      data,
     })
-  }
-
-  // always do:
-  if (artFuerEierlegendeWollmilchsau) {
-    changeArtFuerEierlegendeWollmilchsau('')
   }
   store.export.removeDownload(fileName)
 }

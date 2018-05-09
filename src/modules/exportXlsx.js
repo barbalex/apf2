@@ -7,26 +7,18 @@ import getXlsxBuffer from './getXlsxBuffer'
 
 export default async ({
   store,
-  changeArtFuerEierlegendeWollmilchsau,
-  artFuerEierlegendeWollmilchsau,
   fileName,
-  jsonData,
+  data,
 }: {
   store: Object,
-  changeArtFuerEierlegendeWollmilchsau: () => {},
-  artFuerEierlegendeWollmilchsau: string,
   fileName: string,
-  jsonData: Array<Object>,
+  data: Array<Object>,
 }) => {
   let buffer
   try {
-    buffer = await getXlsxBuffer(store, jsonData)
+    buffer = await getXlsxBuffer(store, data)
   } catch (error) {
-    if (artFuerEierlegendeWollmilchsau) {
-      changeArtFuerEierlegendeWollmilchsau('')
-    }
     store.listError(error)
-    store.export.removeDownload(fileName)
   }
   const file = `${fileName}_${format(new Date(), 'YYYY-MM-DD_HH-mm-ss')}`
   fileSaver.saveAs(

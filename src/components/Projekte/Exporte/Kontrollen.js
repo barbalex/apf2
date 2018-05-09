@@ -13,7 +13,7 @@ import { ApolloConsumer } from 'react-apollo'
 import gql from "graphql-tag"
 import get from 'lodash/get'
 
-import exportModule from '../../../modules/exportGql'
+import exportModule from '../../../modules/export'
 import Message from './Message'
 
 const StyledCard = styled(Card)`

@@ -4,7 +4,6 @@ import styled from 'styled-components'
 import sortBy from 'lodash/sortBy'
 import compose from 'recompose/compose'
 import withProps from 'recompose/withProps'
-import withHandlers from 'recompose/withHandlers'
 import withLifecycle from '@hocs/with-lifecycle'
 
 import FormTitle from '../../shared/FormTitle'
@@ -17,7 +16,6 @@ import Massnahmen from './Massnahmen'
 import Beobachtungen from './Beobachtungen'
 import Anwendung from './Anwendung'
 import Optionen from './Optionen'
-import exportModule from '../../../modules/export'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 
 const Container = styled.div`
@@ -38,19 +36,6 @@ const FieldsContainer = styled.div`
 
 const enhance = compose(
   inject('store'),
-  withHandlers({
-    downloadFromView: ({
-      store,
-    }) => ({ view, fileName, apIdName, apId, kml }) =>
-      exportModule({
-        store,
-        view,
-        fileName,
-        apIdName,
-        apId,
-        kml,
-      }),
-  }),
   withLifecycle({
     onDidMount({ store }) {
       if (store.table.ae_eigenschaften.size === 0) {
@@ -82,11 +67,9 @@ const enhance = compose(
 const Exporte = ({
   store,
   artList,
-  downloadFromView,
 }: {
   store: Object,
   artList: Array<Object>,
-  downloadFromView: () => void,
 }) => (
   <ErrorBoundary>
     <Container>
@@ -94,15 +77,13 @@ const Exporte = ({
       <FieldsContainer>
         <Optionen />
         <Tipps />
-        <Ap store={store} downloadFromView={downloadFromView} />
-        <Populationen store={store} downloadFromView={downloadFromView} />
-        <Teilpopulationen store={store}
-          downloadFromView={downloadFromView}
-        />
-        <Kontrollen store={store} downloadFromView={downloadFromView} />
-        <Massnahmen store={store} downloadFromView={downloadFromView} />
-        <Beobachtungen store={store} downloadFromView={downloadFromView} />
-        <Anwendung store={store} downloadFromView={downloadFromView} />
+        <Ap store={store}/>
+        <Populationen store={store}/>
+        <Teilpopulationen store={store} />
+        <Kontrollen store={store}/>
+        <Massnahmen store={store}/>
+        <Beobachtungen store={store}/>
+        <Anwendung store={store}/>
       </FieldsContainer>
     </Container>
   </ErrorBoundary>

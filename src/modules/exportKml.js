@@ -6,10 +6,10 @@ import clean from './removeKmlNogoChar'
 
 export default ({
   fileName,
-  jsonData,
+  data,
 }: {
   fileName: string,
-  jsonData: Array<Object>,
+  data: Array<Object>,
 }) => {
   const file = `${fileName}_${format(new Date(), 'YYYY-MM-DD_HH-mm-ss')}`
   const kml = `<?xml version='1.0' encoding='UTF-8'?>
@@ -25,7 +25,7 @@ export default ({
           </Icon>
         </IconStyle>
       </Style>
-      ${jsonData.map(
+      ${data.map(
         ({ Art, Label, Inhalte, Breitengrad, Laengengrad, url }) => `
         <Folder>
           <name>${clean(Art)}</name>

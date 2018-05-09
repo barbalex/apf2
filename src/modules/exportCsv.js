@@ -5,12 +5,12 @@ import format from 'date-fns/format'
 
 export default ({
   fileName,
-  jsonData,
+  data,
 }: {
   fileName: string,
-  jsonData: Array<Object>,
+  data: Array<Object>,
 }) => {
-  const csvData = parse(jsonData)
+  const csvData = parse(data)
   const file = `${fileName}_${format(new Date(), 'YYYY-MM-DD_HH-mm-ss')}`
   fileDownload(csvData, `${file}.csv`)
 }
