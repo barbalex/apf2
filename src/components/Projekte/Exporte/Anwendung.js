@@ -15,6 +15,7 @@ import get from 'lodash/get'
 
 import beziehungen from '../../../etc/beziehungen.png'
 import exportModule from '../../../modules/exportGql'
+import Message from './Message'
 
 const StyledCard = styled(Card)`
   margin: 10px 0;
@@ -54,17 +55,24 @@ const DownloadCardButton = styled(Button)`
   }
 `
 
-const enhance = compose(withState('expanded', 'setExpanded', false))
+const enhance = compose(
+  withState('expanded', 'setExpanded', false),
+  withState('message', 'setMessage', null)
+)
 
 const Anwendung = ({
   store,
   expanded,
   setExpanded,
+  message,
+  setMessage,
   downloadFromView,
 }: {
   store:Object,
   expanded: Boolean,
   setExpanded: () => void,
+  message: String,
+  setMessage: () => void,
   downloadFromView: () => void,
 }) => (
   <ApolloConsumer>
@@ -89,23 +97,30 @@ const Anwendung = ({
       <StyledCardContent>
         <DownloadCardButton
           onClick={async () => {
-            const { data } = await client.query({
-              query: gql`
-                query view {
-                  allVDatenstrukturs {
-                    nodes {
-                      tabelle_schema: tabelleSchema
-                      tabelle_name: tabelleName
-                      tabelle_anzahl_datensaetze: tabelleAnzahlDatensaetze
-                      feld_name: feldName
-                      feld_standardwert: feldStandardwert
-                      feld_datentyp: feldDatentyp
-                      feld_nullwerte: feldNullwerte
+            setMessage('Export "Datenstruktur" wird vorbereitet...')
+            try {
+              const { data } = await client.query({
+                query: gql`
+                  query view {
+                    allVDatenstrukturs {
+                      nodes {
+                        tabelle_schema: tabelleSchema
+                        tabelle_name: tabelleName
+                        tabelle_anzahl_datensaetze: tabelleAnzahlDatensaetze
+                        feld_name: feldName
+                        feld_standardwert: feldStandardwert
+                        feld_datentyp: feldDatentyp
+                        feld_nullwerte: feldNullwerte
+                      }
                     }
-                  }
-                }`
-            })
-            exportModule({data: get(data, 'allVDatenstrukturs.nodes', []), store, fileName: 'Datenstruktur'})
+                  }`
+              })
+              exportModule({data: get(data, 'allVDatenstrukturs.nodes', []), store, fileName: 'Datenstruktur'})
+            } catch(error) {
+              setMessage(`Fehler: ${error.message}`)
+              setTimeout(() => setMessage(null), 5000)
+            }
+            setMessage(null)
           }}
         >
           Tabellen und Felder
@@ -119,6 +134,10 @@ const Anwendung = ({
         </DownloadCardButton>
       </StyledCardContent>
     </Collapse>
+        {
+          !!message &&
+          <Message message={message} />
+        }
   </StyledCard>
     }
   </ApolloConsumer>

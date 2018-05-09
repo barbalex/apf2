@@ -18,6 +18,7 @@ import get from 'lodash/get'
 
 import AutoComplete from './Autocomplete'
 import exportModule from '../../../modules/exportGql'
+import Message from './Message'
 
 const StyledCard = styled(Card)`
   margin: 10px 0;
@@ -65,6 +66,7 @@ const isRemoteHost = window.location.hostname !== 'localhost'
 const enhance = compose(
   inject('store'),
   withState('expanded', 'setExpanded', false),
+  withState('message', 'setMessage', null),
   observer,
   withProps(props => {
     const { store } = props
@@ -87,170 +89,178 @@ const Teilpopulationen = ({
   store,
   expanded,
   setExpanded,
+  message,
+  setMessage,
   downloadFromView,
   artList,
 }: {
   store:Object,
   expanded: Boolean,
   setExpanded: () => void,
+  message: String,
+  setMessage: () => void,
   downloadFromView: () => void,
   artList: Array<Object>,
 }) => (
   <ApolloConsumer>
     {client =>
-  <StyledCard>
-    <StyledCardActions
-      disableActionSpacing
-      onClick={() => setExpanded(!expanded)}
-    >
-      <CardActionTitle>Teilpopulationen</CardActionTitle>
-      <CardActionIconButton
-        data-expanded={expanded}
-        aria-expanded={expanded}
-        aria-label="öffnen"
-      >
-        <Icon title={expanded ? 'schliessen' : 'öffnen'}>
-          <ExpandMoreIcon />
-        </Icon>
-      </CardActionIconButton>
-    </StyledCardActions>
-    <Collapse in={expanded} timeout="auto" unmountOnExit>
-      <StyledCardContent>
-        <DownloadCardButton
-          onClick={() =>
-            downloadFromView({
-              view: 'v_tpop',
-              fileName: 'Teilpopulationen',
-            })
-          }
+      <StyledCard>
+        <StyledCardActions
+          disableActionSpacing
+          onClick={() => setExpanded(!expanded)}
         >
-          Teilpopulationen
-        </DownloadCardButton>
-        <DownloadCardButton
-          onClick={() =>
-            downloadFromView({
-              view: 'v_tpop_webgisbun',
-              fileName: 'TeilpopulationenWebGisBun',
-            })
-          }
-        >
-          Teilpopulationen für WebGIS BUN
-        </DownloadCardButton>
-        <DownloadCardButton
-          onClick={() =>
-            downloadFromView({
-              view: 'v_tpop_kml',
-              fileName: 'Teilpopulationen',
-              kml: true,
-            })
-          }
-        >
-          <div>Teilpopulationen für Google Earth</div>
-          <div>(beschriftet mit PopNr/TPopNr)</div>
-        </DownloadCardButton>
-        <DownloadCardButton
-          onClick={() =>
-            downloadFromView({
-              view: 'v_tpop_kmlnamen',
-              fileName: 'TeilpopulationenNachNamen',
-              kml: true,
-            })
-          }
-        >
-          <div>Teilpopulationen für Google Earth</div>
-          <div>(beschriftet mit Artname, PopNr/TPopNr)</div>
-        </DownloadCardButton>
-        <DownloadCardButton
-          onClick={() =>
-            downloadFromView({
-              view: 'v_tpop_ohnebekanntseit',
-              fileName: 'TeilpopulationenVonApArtenOhneBekanntSeit',
-            })
-          }
-        >
-          <div>Teilpopulationen von AP-Arten</div>
-          <div>{'ohne "Bekannt seit"'}</div>
-        </DownloadCardButton>
-        <DownloadCardButton
-          onClick={() =>
-            downloadFromView({
-              view: 'v_tpop_ohneapberichtrelevant',
-              fileName: 'TeilpopulationenOhneApBerichtRelevant',
-            })
-          }
-        >
-          <div>Teilpopulationen ohne Eintrag</div>
-          <div>{'im Feld "Für AP-Bericht relevant"'}</div>
-        </DownloadCardButton>
-        <DownloadCardButton
-          onClick={() =>
-            downloadFromView({
-              view: 'v_tpop_popnrtpopnrmehrdeutig',
-              fileName: 'TeilpopulationenPopnrTpopnrMehrdeutig',
-            })
-          }
-        >
-          <div>Teilpopulationen mit mehrdeutiger</div>
-          <div>Kombination von PopNr und TPopNr</div>
-        </DownloadCardButton>
-        <DownloadCardButton
-          onClick={() =>
-            downloadFromView({
-              view: 'v_tpop_anzmassn',
-              fileName: 'TeilpopulationenAnzahlMassnahmen',
-            })
-          }
-        >
-          Anzahl Massnahmen pro Teilpopulation
-        </DownloadCardButton>
-        <DownloadCardButton
-          onClick={() =>
-            downloadFromView({
-              view: 'v_tpop_anzkontrinklletzterundletztertpopber',
-              fileName:
-                'TeilpopulationenAnzKontrInklusiveLetzteKontrUndLetztenTPopBericht',
-            })
-          }
-          disabled={isRemoteHost}
-          title={
-            isRemoteHost ? 'nur aktiv, wenn apflora lokal installiert wird' : ''
-          }
-        >
-          <div>Teilpopulationen mit:</div>
-          <ul
-            style={{
-              paddingLeft: '18px',
-              marginTop: '5px',
-              marginBottom: '10px',
-            }}
+          <CardActionTitle>Teilpopulationen</CardActionTitle>
+          <CardActionIconButton
+            data-expanded={expanded}
+            aria-expanded={expanded}
+            aria-label="öffnen"
           >
-            <li>Anzahl Kontrollen</li>
-            <li>letzte Kontrolle</li>
-            <li>letzter Teilpopulationsbericht</li>
-            <li>letzte Zählung</li>
-          </ul>
-          <div>{'= "Eier legende Wollmilchsau"'}</div>
-        </DownloadCardButton>
-        <AutocompleteContainer>
-          <AutoComplete
-            label={`"Eier legende Wollmilchsau" für eine Art`}
-            objects={artList}
-            downloadFromView={downloadFromView}
-          />
-        </AutocompleteContainer>
-        <DownloadCardButton
-          onClick={() =>
-            downloadFromView({
-              view: 'v_tpop_popberundmassnber',
-              fileName: 'TeilpopulationenTPopUndMassnBerichte',
-            })
-          }
-        >
-          Teilpopulationen inklusive Teilpopulations- und Massnahmen-Berichten
-        </DownloadCardButton>
-      </StyledCardContent>
-    </Collapse>
-  </StyledCard>
+            <Icon title={expanded ? 'schliessen' : 'öffnen'}>
+              <ExpandMoreIcon />
+            </Icon>
+          </CardActionIconButton>
+        </StyledCardActions>
+        <Collapse in={expanded} timeout="auto" unmountOnExit>
+          <StyledCardContent>
+            <DownloadCardButton
+              onClick={() =>
+                downloadFromView({
+                  view: 'v_tpop',
+                  fileName: 'Teilpopulationen',
+                })
+              }
+            >
+              Teilpopulationen
+            </DownloadCardButton>
+            <DownloadCardButton
+              onClick={() =>
+                downloadFromView({
+                  view: 'v_tpop_webgisbun',
+                  fileName: 'TeilpopulationenWebGisBun',
+                })
+              }
+            >
+              Teilpopulationen für WebGIS BUN
+            </DownloadCardButton>
+            <DownloadCardButton
+              onClick={() =>
+                downloadFromView({
+                  view: 'v_tpop_kml',
+                  fileName: 'Teilpopulationen',
+                  kml: true,
+                })
+              }
+            >
+              <div>Teilpopulationen für Google Earth</div>
+              <div>(beschriftet mit PopNr/TPopNr)</div>
+            </DownloadCardButton>
+            <DownloadCardButton
+              onClick={() =>
+                downloadFromView({
+                  view: 'v_tpop_kmlnamen',
+                  fileName: 'TeilpopulationenNachNamen',
+                  kml: true,
+                })
+              }
+            >
+              <div>Teilpopulationen für Google Earth</div>
+              <div>(beschriftet mit Artname, PopNr/TPopNr)</div>
+            </DownloadCardButton>
+            <DownloadCardButton
+              onClick={() =>
+                downloadFromView({
+                  view: 'v_tpop_ohnebekanntseit',
+                  fileName: 'TeilpopulationenVonApArtenOhneBekanntSeit',
+                })
+              }
+            >
+              <div>Teilpopulationen von AP-Arten</div>
+              <div>{'ohne "Bekannt seit"'}</div>
+            </DownloadCardButton>
+            <DownloadCardButton
+              onClick={() =>
+                downloadFromView({
+                  view: 'v_tpop_ohneapberichtrelevant',
+                  fileName: 'TeilpopulationenOhneApBerichtRelevant',
+                })
+              }
+            >
+              <div>Teilpopulationen ohne Eintrag</div>
+              <div>{'im Feld "Für AP-Bericht relevant"'}</div>
+            </DownloadCardButton>
+            <DownloadCardButton
+              onClick={() =>
+                downloadFromView({
+                  view: 'v_tpop_popnrtpopnrmehrdeutig',
+                  fileName: 'TeilpopulationenPopnrTpopnrMehrdeutig',
+                })
+              }
+            >
+              <div>Teilpopulationen mit mehrdeutiger</div>
+              <div>Kombination von PopNr und TPopNr</div>
+            </DownloadCardButton>
+            <DownloadCardButton
+              onClick={() =>
+                downloadFromView({
+                  view: 'v_tpop_anzmassn',
+                  fileName: 'TeilpopulationenAnzahlMassnahmen',
+                })
+              }
+            >
+              Anzahl Massnahmen pro Teilpopulation
+            </DownloadCardButton>
+            <DownloadCardButton
+              onClick={() =>
+                downloadFromView({
+                  view: 'v_tpop_anzkontrinklletzterundletztertpopber',
+                  fileName:
+                    'TeilpopulationenAnzKontrInklusiveLetzteKontrUndLetztenTPopBericht',
+                })
+              }
+              disabled={isRemoteHost}
+              title={
+                isRemoteHost ? 'nur aktiv, wenn apflora lokal installiert wird' : ''
+              }
+            >
+              <div>Teilpopulationen mit:</div>
+              <ul
+                style={{
+                  paddingLeft: '18px',
+                  marginTop: '5px',
+                  marginBottom: '10px',
+                }}
+              >
+                <li>Anzahl Kontrollen</li>
+                <li>letzte Kontrolle</li>
+                <li>letzter Teilpopulationsbericht</li>
+                <li>letzte Zählung</li>
+              </ul>
+              <div>{'= "Eier legende Wollmilchsau"'}</div>
+            </DownloadCardButton>
+            <AutocompleteContainer>
+              <AutoComplete
+                label={`"Eier legende Wollmilchsau" für eine Art`}
+                objects={artList}
+                downloadFromView={downloadFromView}
+              />
+            </AutocompleteContainer>
+            <DownloadCardButton
+              onClick={() =>
+                downloadFromView({
+                  view: 'v_tpop_popberundmassnber',
+                  fileName: 'TeilpopulationenTPopUndMassnBerichte',
+                })
+              }
+            >
+              Teilpopulationen inklusive Teilpopulations- und Massnahmen-Berichten
+            </DownloadCardButton>
+          </StyledCardContent>
+        </Collapse>
+        {
+          !!message &&
+          <Message message={message} />
+        }
+      </StyledCard>
     }
   </ApolloConsumer>
 )

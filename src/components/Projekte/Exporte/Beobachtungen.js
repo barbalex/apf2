@@ -14,6 +14,7 @@ import gql from "graphql-tag"
 import get from 'lodash/get'
 
 import exportModule from '../../../modules/exportGql'
+import Message from './Message'
 
 const StyledCard = styled(Card)`
   margin: 10px 0;
@@ -53,90 +54,101 @@ const DownloadCardButton = styled(Button)`
   }
 `
 
-const enhance = compose(withState('expanded', 'setExpanded', false))
+const enhance = compose(
+  withState('expanded', 'setExpanded', false),
+  withState('message', 'setMessage', null)
+)
 
 const Beobachtungen = ({
   store,
   expanded,
   setExpanded,
+  message,
+  setMessage,
   downloadFromView,
 }: {
   store:Object,
   expanded: Boolean,
   setExpanded: () => void,
+  message: String,
+  setMessage: () => void,
   downloadFromView: () => void,
 }) => (
   <ApolloConsumer>
     {client =>
-  <StyledCard>
-    <StyledCardActions
-      disableActionSpacing
-      onClick={() => setExpanded(!expanded)}
-    >
-      <CardActionTitle>Beobachtungen</CardActionTitle>
-      <CardActionIconButton
-        data-expanded={expanded}
-        aria-expanded={expanded}
-        aria-label="öffnen"
-      >
-        <Icon title={expanded ? 'schliessen' : 'öffnen'}>
-          <ExpandMoreIcon />
-        </Icon>
-      </CardActionIconButton>
-    </StyledCardActions>
-    <Collapse in={expanded} timeout="auto" unmountOnExit>
-      <StyledCardContent>
-        <DownloadCardButton
-          onClick={async () => {
-            const { data } = await client.query({
-              query: gql`
-                query view {
-                  allVBeobs {
-                    nodes {
-                      id
-                      quelle
-                      id_field: idField
-                      original_id: originalId
-                      art_id: artId
-                      artname
-                      pop_id: popId
-                      pop_nr: popNr
-                      tpop_id: tpopId
-                      tpop_nr: tpopNr
-                      x
-                      y
-                      distanz_zur_teilpopulation: distanzZurTeilpopulation
-                      datum
-                      autor
-                      nicht_zuordnen: nichtZuordnen
-                      bemerkungen
-                      changed
-                      changed_by: changedBy
-                    }
-                  }
-                }`
-            })
-            exportModule({data: get(data, 'allVBeobs.nodes', []), store, fileName: 'Beobachtungen'})
-          }}
+      <StyledCard>
+        <StyledCardActions
+          disableActionSpacing
+          onClick={() => setExpanded(!expanded)}
         >
-          <div>Alle Beobachtungen von Arten aus apflora.ch</div>
-          <div>Nutzungsbedingungen der FNS beachten</div>
-        </DownloadCardButton>
-        <DownloadCardButton
-          onClick={() =>
-            downloadFromView({
-              view: 'v_beob__mit_data',
-              fileName: 'Beobachtungen',
-            })
-          }
-        >
-          <div>Alle Beobachtungen von Arten aus apflora.ch...</div>
-          <div>...inklusive Original-Beobachtungsdaten (JSON)</div>
-          <div>Dauert Minuten und umfasst hunderte Megabytes!</div>
-          <div>Nutzungsbedingungen der FNS beachten</div>
-        </DownloadCardButton>
-      </StyledCardContent>
-    </Collapse>
+          <CardActionTitle>Beobachtungen</CardActionTitle>
+          <CardActionIconButton
+            data-expanded={expanded}
+            aria-expanded={expanded}
+            aria-label="öffnen"
+          >
+            <Icon title={expanded ? 'schliessen' : 'öffnen'}>
+              <ExpandMoreIcon />
+            </Icon>
+          </CardActionIconButton>
+        </StyledCardActions>
+        <Collapse in={expanded} timeout="auto" unmountOnExit>
+          <StyledCardContent>
+            <DownloadCardButton
+              onClick={async () => {
+                const { data } = await client.query({
+                  query: gql`
+                    query view {
+                      allVBeobs {
+                        nodes {
+                          id
+                          quelle
+                          id_field: idField
+                          original_id: originalId
+                          art_id: artId
+                          artname
+                          pop_id: popId
+                          pop_nr: popNr
+                          tpop_id: tpopId
+                          tpop_nr: tpopNr
+                          x
+                          y
+                          distanz_zur_teilpopulation: distanzZurTeilpopulation
+                          datum
+                          autor
+                          nicht_zuordnen: nichtZuordnen
+                          bemerkungen
+                          changed
+                          changed_by: changedBy
+                        }
+                      }
+                    }`
+                })
+                exportModule({data: get(data, 'allVBeobs.nodes', []), store, fileName: 'Beobachtungen'})
+              }}
+            >
+              <div>Alle Beobachtungen von Arten aus apflora.ch</div>
+              <div>Nutzungsbedingungen der FNS beachten</div>
+            </DownloadCardButton>
+            <DownloadCardButton
+              onClick={() =>
+                downloadFromView({
+                  view: 'v_beob__mit_data',
+                  fileName: 'Beobachtungen',
+                })
+              }
+            >
+              <div>Alle Beobachtungen von Arten aus apflora.ch...</div>
+              <div>...inklusive Original-Beobachtungsdaten (JSON)</div>
+              <div>Dauert Minuten und umfasst hunderte Megabytes!</div>
+              <div>Nutzungsbedingungen der FNS beachten</div>
+            </DownloadCardButton>
+          </StyledCardContent>
+        </Collapse>
+        {
+          !!message &&
+          <Message message={message} />
+        }
   </StyledCard>
     }
   </ApolloConsumer>

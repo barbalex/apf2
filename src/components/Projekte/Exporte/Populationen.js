@@ -14,6 +14,7 @@ import gql from "graphql-tag"
 import get from 'lodash/get'
 
 import exportModule from '../../../modules/exportGql'
+import Message from './Message'
 
 const StyledCard = styled(Card)`
   margin: 10px 0;
@@ -53,155 +54,166 @@ const DownloadCardButton = styled(Button)`
   }
 `
 
-const enhance = compose(withState('expanded', 'setExpanded', false))
+const enhance = compose(
+  withState('expanded', 'setExpanded', false),
+  withState('message', 'setMessage', null)
+)
 
 const Populationen = ({
   store,
   expanded,
   setExpanded,
+  message,
+  setMessage,
   downloadFromView,
 }: {
   store:Object,
   expanded: Boolean,
   setExpanded: () => void,
+  message: String,
+  setMessage: () => void,
   downloadFromView: () => void,
 }) => (
   <ApolloConsumer>
     {client =>
-  <StyledCard>
-    <StyledCardActions
-      disableActionSpacing
-      onClick={() => setExpanded(!expanded)}
-    >
-      <CardActionTitle>Populationen</CardActionTitle>
-      <CardActionIconButton
-        data-expanded={expanded}
-        aria-expanded={expanded}
-        aria-label="öffnen"
-      >
-        <Icon title={expanded ? 'schliessen' : 'öffnen'}>
-          <ExpandMoreIcon />
-        </Icon>
-      </CardActionIconButton>
-    </StyledCardActions>
-    <Collapse in={expanded} timeout="auto" unmountOnExit>
-      <StyledCardContent>
-        <DownloadCardButton
-          onClick={() =>
-            downloadFromView({
-              view: 'v_pop',
-              fileName: 'Populationen',
-            })
-          }
+      <StyledCard>
+        <StyledCardActions
+          disableActionSpacing
+          onClick={() => setExpanded(!expanded)}
         >
-          Populationen
-        </DownloadCardButton>
-        <DownloadCardButton
-          onClick={() =>
-            downloadFromView({
-              view: 'v_pop_kml',
-              fileName: 'Populationen',
-            })
-          }
-        >
-          <div>Populationen für Google Earth (beschriftet mit PopNr)</div>
-        </DownloadCardButton>
-        <DownloadCardButton
-          onClick={() =>
-            downloadFromView({
-              view: 'v_pop_kmlnamen',
-              fileName: 'PopulationenNachNamen',
-            })
-          }
-        >
-          <div>
-            Populationen für Google Earth (beschriftet mit Artname, PopNr)
-          </div>
-        </DownloadCardButton>
-        <DownloadCardButton
-          onClick={() =>
-            downloadFromView({
-              view: 'v_pop_vonapohnestatus',
-              fileName: 'PopulationenVonApArtenOhneStatus',
-            })
-          }
-        >
-          Populationen von AP-Arten ohne Status
-        </DownloadCardButton>
-        <DownloadCardButton
-          onClick={() =>
-            downloadFromView({
-              view: 'v_pop_ohnekoord',
-              fileName: 'PopulationenOhneKoordinaten',
-            })
-          }
-        >
-          Populationen ohne Koordinaten
-        </DownloadCardButton>
-        <DownloadCardButton
-          onClick={() =>
-            downloadFromView({
-              view: 'v_popmassnber_anzmassn',
-              fileName: 'PopulationenAnzMassnProMassnber',
-            })
-          }
-        >
-          Populationen mit Massnahmen-Berichten: Anzahl Massnahmen im
-          Berichtsjahr
-        </DownloadCardButton>
-        <DownloadCardButton
-          onClick={() =>
-            downloadFromView({
-              view: 'v_pop_anzmassn',
-              fileName: 'PopulationenAnzahlMassnahmen',
-            })
-          }
-        >
-          Anzahl Massnahmen pro Population
-        </DownloadCardButton>
-        <DownloadCardButton
-          onClick={() =>
-            downloadFromView({
-              view: 'v_pop_anzkontr',
-              fileName: 'PopulationenAnzahlKontrollen',
-            })
-          }
-        >
-          Anzahl Kontrollen pro Population
-        </DownloadCardButton>
-        <DownloadCardButton
-          onClick={() =>
-            downloadFromView({
-              view: 'v_pop_popberundmassnber',
-              fileName: 'PopulationenPopUndMassnBerichte',
-            })
-          }
-        >
-          Populationen inkl. Populations- und Massnahmen-Berichte
-        </DownloadCardButton>
-        <DownloadCardButton
-          onClick={() =>
-            downloadFromView({
-              view: 'v_pop_mit_letzter_popber',
-              fileName: 'PopulationenMitLetzemPopBericht',
-            })
-          }
-        >
-          Populationen mit dem letzten Populations-Bericht
-        </DownloadCardButton>
-        <DownloadCardButton
-          onClick={() =>
-            downloadFromView({
-              view: 'v_pop_mit_letzter_popmassnber',
-              fileName: 'PopulationenMitLetztemMassnBericht',
-            })
-          }
-        >
-          Populationen mit dem letzten Massnahmen-Bericht
-        </DownloadCardButton>
-      </StyledCardContent>
-    </Collapse>
-  </StyledCard>
+          <CardActionTitle>Populationen</CardActionTitle>
+          <CardActionIconButton
+            data-expanded={expanded}
+            aria-expanded={expanded}
+            aria-label="öffnen"
+          >
+            <Icon title={expanded ? 'schliessen' : 'öffnen'}>
+              <ExpandMoreIcon />
+            </Icon>
+          </CardActionIconButton>
+        </StyledCardActions>
+        <Collapse in={expanded} timeout="auto" unmountOnExit>
+          <StyledCardContent>
+            <DownloadCardButton
+              onClick={() =>
+                downloadFromView({
+                  view: 'v_pop',
+                  fileName: 'Populationen',
+                })
+              }
+            >
+              Populationen
+            </DownloadCardButton>
+            <DownloadCardButton
+              onClick={() =>
+                downloadFromView({
+                  view: 'v_pop_kml',
+                  fileName: 'Populationen',
+                })
+              }
+            >
+              <div>Populationen für Google Earth (beschriftet mit PopNr)</div>
+            </DownloadCardButton>
+            <DownloadCardButton
+              onClick={() =>
+                downloadFromView({
+                  view: 'v_pop_kmlnamen',
+                  fileName: 'PopulationenNachNamen',
+                })
+              }
+            >
+              <div>
+                Populationen für Google Earth (beschriftet mit Artname, PopNr)
+              </div>
+            </DownloadCardButton>
+            <DownloadCardButton
+              onClick={() =>
+                downloadFromView({
+                  view: 'v_pop_vonapohnestatus',
+                  fileName: 'PopulationenVonApArtenOhneStatus',
+                })
+              }
+            >
+              Populationen von AP-Arten ohne Status
+            </DownloadCardButton>
+            <DownloadCardButton
+              onClick={() =>
+                downloadFromView({
+                  view: 'v_pop_ohnekoord',
+                  fileName: 'PopulationenOhneKoordinaten',
+                })
+              }
+            >
+              Populationen ohne Koordinaten
+            </DownloadCardButton>
+            <DownloadCardButton
+              onClick={() =>
+                downloadFromView({
+                  view: 'v_popmassnber_anzmassn',
+                  fileName: 'PopulationenAnzMassnProMassnber',
+                })
+              }
+            >
+              Populationen mit Massnahmen-Berichten: Anzahl Massnahmen im
+              Berichtsjahr
+            </DownloadCardButton>
+            <DownloadCardButton
+              onClick={() =>
+                downloadFromView({
+                  view: 'v_pop_anzmassn',
+                  fileName: 'PopulationenAnzahlMassnahmen',
+                })
+              }
+            >
+              Anzahl Massnahmen pro Population
+            </DownloadCardButton>
+            <DownloadCardButton
+              onClick={() =>
+                downloadFromView({
+                  view: 'v_pop_anzkontr',
+                  fileName: 'PopulationenAnzahlKontrollen',
+                })
+              }
+            >
+              Anzahl Kontrollen pro Population
+            </DownloadCardButton>
+            <DownloadCardButton
+              onClick={() =>
+                downloadFromView({
+                  view: 'v_pop_popberundmassnber',
+                  fileName: 'PopulationenPopUndMassnBerichte',
+                })
+              }
+            >
+              Populationen inkl. Populations- und Massnahmen-Berichte
+            </DownloadCardButton>
+            <DownloadCardButton
+              onClick={() =>
+                downloadFromView({
+                  view: 'v_pop_mit_letzter_popber',
+                  fileName: 'PopulationenMitLetzemPopBericht',
+                })
+              }
+            >
+              Populationen mit dem letzten Populations-Bericht
+            </DownloadCardButton>
+            <DownloadCardButton
+              onClick={() =>
+                downloadFromView({
+                  view: 'v_pop_mit_letzter_popmassnber',
+                  fileName: 'PopulationenMitLetztemMassnBericht',
+                })
+              }
+            >
+              Populationen mit dem letzten Massnahmen-Bericht
+            </DownloadCardButton>
+          </StyledCardContent>
+        </Collapse>
+        {
+          !!message &&
+          <Message message={message} />
+        }
+      </StyledCard>
     }
   </ApolloConsumer>
 )
