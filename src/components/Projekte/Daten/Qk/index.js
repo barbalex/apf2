@@ -10,12 +10,14 @@ import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 import withState from 'recompose/withState'
 import withLifecycle from '@hocs/with-lifecycle'
+import { Query } from 'react-apollo'
 
 import FormTitle from '../../../shared/FormTitle'
 import appBaseUrl from '../../../../modules/appBaseUrl'
 import standardQkYear from '../../../../modules/standardQkYear'
 import fetchQk from '../../../../modules/fetchQk'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
+import dataGql from './data.graphql'
 
 const Container = styled.div`
   height: 100%;
@@ -114,50 +116,63 @@ const Qk = ({
         return false
       })
     : pureMessageArrays
-  const loadingMessage = loading
-    ? 'Die Daten werden analysiert...'
-    : 'Analyse abgeschlossen'
 
   return (
     <ErrorBoundary>
-      <Container>
-        <FormTitle title="Qualitätskontrollen" />
-        <FieldsContainer>
-          <FormControl fullWidth>
-            <InputLabel htmlFor="berichtjahr">Berichtjahr</InputLabel>
-            <StyledInput
-              id="berichtjahr"
-              value={berichtjahr}
-              type="number"
-              onChange={onChangeBerichtjahr}
-            />
-          </FormControl>
-          <FormControl fullWidth>
-            <InputLabel htmlFor="filter">
-              nach Abschnitts-Titel filtern
-            </InputLabel>
-            <StyledInput id="filter" value={filter} onChange={onChangeFilter} />
-          </FormControl>
-          <LoadingIndicator loading={loading}>
-            {loadingMessage}
-          </LoadingIndicator>
-          {messageArraysFiltered.map((messageArray, index) => (
-            <StyledPaper key={index}>
-              <Title>{messageArray[0].hw}</Title>
-              {messageArray.map(m => (
-                <div key={m.url.join()}>
-                  <StyledA
-                    href={`${appBaseUrl}/${m.url.join('/')}`}
-                    target="_blank"
-                  >
-                    {m.text.join('; ')}
-                  </StyledA>
-                </div>
-              ))}
-            </StyledPaper>
-          ))}
-        </FieldsContainer>
-      </Container>
+      <Query
+        query={dataGql}
+        variables={{ berichtjahr, apId: tree.activeNodes.ap, projId: tree.activeNodes.projekt }}
+      >
+        {({ loading: loadingGql, error, data }) => {
+          // do not show loading but rather last state
+          //if (loading) return <Container>Lade...</Container>
+          if (error) return `Fehler: ${error.message}`
+          const loadingMessage = (loading || loadingGql)
+            ? 'Die Daten werden analysiert...'
+            : 'Analyse abgeschlossen'
+
+          return (
+            <Container>
+              <FormTitle title="Qualitätskontrollen" />
+              <FieldsContainer>
+                <FormControl fullWidth>
+                  <InputLabel htmlFor="berichtjahr">Berichtjahr</InputLabel>
+                  <StyledInput
+                    id="berichtjahr"
+                    value={berichtjahr}
+                    type="number"
+                    onChange={onChangeBerichtjahr}
+                  />
+                </FormControl>
+                <FormControl fullWidth>
+                  <InputLabel htmlFor="filter">
+                    nach Abschnitts-Titel filtern
+                  </InputLabel>
+                  <StyledInput id="filter" value={filter} onChange={onChangeFilter} />
+                </FormControl>
+                <LoadingIndicator loading={loading}>
+                  {loadingMessage}
+                </LoadingIndicator>
+                {messageArraysFiltered.map((messageArray, index) => (
+                  <StyledPaper key={index}>
+                    <Title>{messageArray[0].hw}</Title>
+                    {messageArray.map(m => (
+                      <div key={m.url.join()}>
+                        <StyledA
+                          href={`${appBaseUrl}/${m.url.join('/')}`}
+                          target="_blank"
+                        >
+                          {m.text.join('; ')}
+                        </StyledA>
+                      </div>
+                    ))}
+                  </StyledPaper>
+                ))}
+              </FieldsContainer>
+            </Container>
+          )
+        }}
+      </Query>
     </ErrorBoundary>
   )
 }

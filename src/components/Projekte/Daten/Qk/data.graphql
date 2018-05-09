@@ -1,7 +1,9 @@
 query QkQuery(
-  $projekt: [UUID!]
+  $berichtsjahr: Int
+  $isBerichtsjahr: Boolean!
+  $projekt: UUID!
   $isProjekt: Boolean!
-  $ap: [UUID!]
+  $ap: UUID!
   $isAp: Boolean!
 ) {
   zielOhneJahr: allZiels(filter: {jahr: {isNull: true}}) {

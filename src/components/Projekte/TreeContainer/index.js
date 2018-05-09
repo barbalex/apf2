@@ -296,10 +296,9 @@ const TreeContainer = ({
   const { activeDataset,activeNodes,setActiveNodeArray,openNodes } = store.tree
   const showApDivToggle = activeDataset
   const deleteDatasetModalIsVisible = !!store.datasetToDelete.id
-  const myVariables = variables(activeNodes)
 
   return (
-    <Query query={dataGql} variables={myVariables}>
+    <Query query={dataGql} variables={variables(activeNodes)}>
       {({ loading, error, data }) => {
         // do not show loading but rather last state
         //if (loading) return <Container>Lade...</Container>
