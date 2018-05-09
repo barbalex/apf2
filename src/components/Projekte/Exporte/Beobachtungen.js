@@ -96,51 +96,45 @@ const Beobachtungen = ({
           <StyledCardContent>
             <DownloadCardButton
               onClick={async () => {
-                const { data } = await client.query({
-                  query: gql`
-                    query view {
-                      allVBeobs {
-                        nodes {
-                          id
-                          quelle
-                          id_field: idField
-                          original_id: originalId
-                          art_id: artId
-                          artname
-                          pop_id: popId
-                          pop_nr: popNr
-                          tpop_id: tpopId
-                          tpop_nr: tpopNr
-                          x
-                          y
-                          distanz_zur_teilpopulation: distanzZurTeilpopulation
-                          datum
-                          autor
-                          nicht_zuordnen: nichtZuordnen
-                          bemerkungen
-                          changed
-                          changed_by: changedBy
+                setMessage('Export "Beobachtungen" wird vorbereitet...')
+                try {
+                  const { data } = await client.query({
+                    query: gql`
+                      query view {
+                        allVBeobs {
+                          nodes {
+                            id
+                            quelle
+                            id_field: idField
+                            original_id: originalId
+                            art_id: artId
+                            artname
+                            pop_id: popId
+                            pop_nr: popNr
+                            tpop_id: tpopId
+                            tpop_nr: tpopNr
+                            x
+                            y
+                            distanz_zur_teilpopulation: distanzZurTeilpopulation
+                            datum
+                            autor
+                            nicht_zuordnen: nichtZuordnen
+                            bemerkungen
+                            changed
+                            changed_by: changedBy
+                          }
                         }
-                      }
-                    }`
-                })
-                exportModule({data: get(data, 'allVBeobs.nodes', []), store, fileName: 'Beobachtungen'})
+                      }`
+                  })
+                  exportModule({data: get(data, 'allVBeobs.nodes', []), store, fileName: 'Beobachtungen'})
+                } catch(error) {
+                  setMessage(`Fehler: ${error.message}`)
+                  setTimeout(() => setMessage(null), 5000)
+                }
+                setMessage(null)
               }}
             >
               <div>Alle Beobachtungen von Arten aus apflora.ch</div>
-              <div>Nutzungsbedingungen der FNS beachten</div>
-            </DownloadCardButton>
-            <DownloadCardButton
-              onClick={() =>
-                downloadFromView({
-                  view: 'v_beob__mit_data',
-                  fileName: 'Beobachtungen',
-                })
-              }
-            >
-              <div>Alle Beobachtungen von Arten aus apflora.ch...</div>
-              <div>...inklusive Original-Beobachtungsdaten (JSON)</div>
-              <div>Dauert Minuten und umfasst hunderte Megabytes!</div>
               <div>Nutzungsbedingungen der FNS beachten</div>
             </DownloadCardButton>
           </StyledCardContent>

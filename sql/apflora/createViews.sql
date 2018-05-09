@@ -3843,6 +3843,7 @@ ORDER BY
   apflora.tpop.nr ASC,
   apflora.beob.datum DESC;
 
+-- nicht mehr benutzt
 DROP VIEW IF EXISTS apflora.v_beob__mit_data CASCADE;
 CREATE OR REPLACE VIEW apflora.v_beob__mit_data AS
 SELECT
