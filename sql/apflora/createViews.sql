@@ -647,7 +647,7 @@ SELECT
   apflora.pop.id,
   apflora.pop.nr,
   apflora.pop.name,
-  pop_status_werte.text AS sttus,
+  pop_status_werte.text AS status,
   apflora.pop.bekannt_seit,
   apflora.pop.status_unklar,
   apflora.pop.status_unklar_begruendung,
