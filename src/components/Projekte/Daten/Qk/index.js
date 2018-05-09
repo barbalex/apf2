@@ -11,11 +11,11 @@ import withHandlers from 'recompose/withHandlers'
 import withState from 'recompose/withState'
 import withLifecycle from '@hocs/with-lifecycle'
 
-import FormTitle from '../../shared/FormTitle'
-import appBaseUrl from '../../../modules/appBaseUrl'
-import standardQkYear from '../../../modules/standardQkYear'
-import fetchQk from '../../../modules/fetchQk'
-import ErrorBoundary from '../../shared/ErrorBoundary'
+import FormTitle from '../../../shared/FormTitle'
+import appBaseUrl from '../../../../modules/appBaseUrl'
+import standardQkYear from '../../../../modules/standardQkYear'
+import fetchQk from '../../../../modules/fetchQk'
+import ErrorBoundary from '../../../shared/ErrorBoundary'
 
 const Container = styled.div`
   height: 100%;

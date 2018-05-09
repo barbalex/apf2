@@ -1,6 +1,6 @@
 DROP FUNCTION IF EXISTS apflora.qk_pop_ohne_popber(apid uuid, berichtjahr integer);
 CREATE OR REPLACE FUNCTION apflora.qk_pop_ohne_popber(apid uuid, berichtjahr integer)
-  RETURNS table(proj_id uuid, ap_id uuid, hw text, url text[], text text[]) AS
+  RETURNS setof apflora.qk_pop_ohne_popber AS
   $$
   SELECT DISTINCT
     apflora.ap.proj_id,

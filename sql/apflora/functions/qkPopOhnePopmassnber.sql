@@ -1,6 +1,6 @@
 DROP FUNCTION IF EXISTS apflora.qk_pop_ohne_popmassnber(apid uuid, berichtjahr integer);
 CREATE OR REPLACE FUNCTION apflora.qk_pop_ohne_popmassnber(apid uuid, berichtjahr integer)
-  RETURNS table(proj_id uuid, ap_id uuid, hw text, url text[], text text[]) AS
+  RETURNS setof apflora.qk_pop_ohne_popmassnber AS
   $$
   -- 5. "Pop ohne verlangten Pop-Massn-Bericht im Berichtjahr" ermitteln und in Qualitätskontrollen auflisten:
   SELECT DISTINCT

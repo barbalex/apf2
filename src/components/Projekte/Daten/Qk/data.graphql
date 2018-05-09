@@ -1,0 +1,17 @@
+query QkQuery(
+  $projekt: [UUID!]
+  $isProjekt: Boolean!
+  $ap: [UUID!]
+  $isAp: Boolean!
+) {
+  zielOhneJahr: allZiels(filter: {jahr: {isNull: true}}) {
+    nodes {
+      id
+      apId
+      apByApId {
+        id
+        projId
+      }
+    }
+  }
+}
