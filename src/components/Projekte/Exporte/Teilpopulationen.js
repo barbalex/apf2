@@ -123,61 +123,244 @@ const Teilpopulationen = ({
         <Collapse in={expanded} timeout="auto" unmountOnExit>
           <StyledCardContent>
             <DownloadCardButton
-              onClick={() =>
-                downloadFromView({
-                  view: 'v_tpop',
-                  fileName: 'Teilpopulationen',
-                })
-              }
+              onClick={async () => {
+                setMessage('Export "Teilpopulationen" wird vorbereitet...')
+                try {
+                  const { data } = await client.query({
+                    query: gql`
+                      query view {
+                        allVTpops {
+                          nodes {
+                            apId
+                            familie
+                            artname
+                            apBearbeitung
+                            apStartJahr
+                            apUmsetzung
+                            popId
+                            popNr
+                            popName
+                            popStatus
+                            popBekanntSeit
+                            popStatusUnklar
+                            popStatusUnklarBegruendung
+                            popX
+                            popY
+                            id
+                            nr
+                            gemeinde
+                            flurname
+                            status
+                            bekanntSeit
+                            statusUnklar
+                            statusUnklarGrund
+                            x
+                            y
+                            radius
+                            hoehe
+                            exposition
+                            klima
+                            neigung
+                            beschreibung
+                            katasterNr
+                            apberRelevant
+                            eigentuemer
+                            kontakt
+                            nutzungszone
+                            bewirtschafter
+                            bewirtschaftung
+                            changed
+                            changedBy
+                          }
+                        }
+                      }`
+                  })
+                  exportModule({data: get(data, 'allVTpops.nodes', []), store, fileName: 'Teilpopulationen'})
+                } catch(error) {
+                  setMessage(`Fehler: ${error.message}`)
+                  setTimeout(() => setMessage(null), 5000)
+                }
+                setMessage(null)
+              }}
             >
               Teilpopulationen
             </DownloadCardButton>
             <DownloadCardButton
-              onClick={() =>
-                downloadFromView({
-                  view: 'v_tpop_webgisbun',
-                  fileName: 'TeilpopulationenWebGisBun',
-                })
-              }
+              onClick={async () => {
+                setMessage('Export "TeilpopulationenWebGisBun" wird vorbereitet...')
+                try {
+                  const { data } = await client.query({
+                    query: gql`
+                      query view {
+                        allVTpopWebgisbuns {
+                          nodes {
+                            APARTID: apartid
+                            APART: apart
+                            APSTATUS: apstatus
+                            APSTARTJAHR: apstartjahr
+                            APSTANDUMSETZUNG: apstandumsetzung
+                            POPGUID: popguid
+                            POPNR: popnr
+                            POPNAME: popname
+                            POPSTATUS: popstatus
+                            POPSTATUSUNKLAR: popstatusunklar
+                            POPUNKLARGRUND: popunklargrund
+                            POPBEKANNTSEIT: popbekanntseit
+                            POP_X: pop_X
+                            POP_Y: pop_Y
+                            TPOPID: tpopid
+                            TPOPGUID: tpopguid
+                            TPOPNR: tpopnr
+                            TPOPGEMEINDE: tpopgemeinde
+                            TPOPFLURNAME: tpopflurname
+                            TPOPSTATUS: tpopstatus
+                            TPOPSTATUSUNKLAR: tpopstatusunklar
+                            TPOPUNKLARGRUND: tpopunklargrund
+                            TPOP_X: tpop_X
+                            TPOP_Y: tpop_Y
+                            TPOPRADIUS: tpopradius
+                            TPOPHOEHE: tpophoehe
+                            TPOPEXPOSITION: tpopexposition
+                            TPOPKLIMA: tpopklima
+                            TPOPHANGNEIGUNG: tpophangneigung
+                            TPOPBESCHREIBUNG: tpopbeschreibung
+                            TPOPKATASTERNR: tpopkatasternr
+                            TPOPVERANTWORTLICH: tpopverantwortlich
+                            TPOPBERICHTSRELEVANZ: tpopberichtsrelevanz
+                            TPOPBEKANNTSEIT: tpopbekanntseit
+                            TPOPEIGENTUEMERIN: tpopeigentuemerin
+                            TPOPKONTAKTVO: tpopkontaktVo
+                            TPOPNUTZUNGSZONE: tpopNutzungszone
+                            TPOPBEWIRTSCHAFTER: tpopbewirtschafter
+                            TPOPBEWIRTSCHAFTUNG: tpopbewirtschaftung
+                            TPOPCHANGEDAT: tpopchangedat
+                            TPOPCHANGEBY: tpopchangeby
+                          }
+                        }
+                      }`
+                  })
+                  exportModule({data: get(data, 'allVTpopWebgisbuns.nodes', []), store, fileName: 'TeilpopulationenWebGisBun'})
+                } catch(error) {
+                  setMessage(`Fehler: ${error.message}`)
+                  setTimeout(() => setMessage(null), 5000)
+                }
+                setMessage(null)
+              }}
             >
               Teilpopulationen für WebGIS BUN
             </DownloadCardButton>
             <DownloadCardButton
-              onClick={() =>
-                downloadFromView({
-                  view: 'v_tpop_kml',
-                  fileName: 'Teilpopulationen',
-                  kml: true,
-                })
-              }
+              onClick={async () => {
+                setMessage('Export "Teilpopulationen" wird vorbereitet...')
+                try {
+                  const { data } = await client.query({
+                    query: gql`
+                      query view {
+                        allVTpopKmls {
+                          nodes {
+                            art
+                            label
+                            inhalte
+                            laengengrad
+                            breitengrad
+                            url
+                          }
+                        }
+                      }`
+                  })
+                  exportModule({data: get(data, 'allVTpopKmls.nodes', []), store, fileName: 'Teilpopulationen'})
+                } catch(error) {
+                  setMessage(`Fehler: ${error.message}`)
+                  setTimeout(() => setMessage(null), 5000)
+                }
+                setMessage(null)
+              }}
             >
               <div>Teilpopulationen für Google Earth</div>
               <div>(beschriftet mit PopNr/TPopNr)</div>
             </DownloadCardButton>
             <DownloadCardButton
-              onClick={() =>
-                downloadFromView({
-                  view: 'v_tpop_kmlnamen',
-                  fileName: 'TeilpopulationenNachNamen',
-                  kml: true,
-                })
-              }
+              onClick={async () => {
+                setMessage('Export "TeilpopulationenNachNamen" wird vorbereitet...')
+                try {
+                  const { data } = await client.query({
+                    query: gql`
+                      query view {
+                        allVTpopKmlnamen {
+                          nodes {
+                            art
+                            label
+                            inhalte
+                            laengengrad
+                            breitengrad
+                            url
+                          }
+                        }
+                      }`
+                  })
+                  exportModule({data: get(data, 'allVTpopKmlnamen.nodes', []), store, fileName: 'TeilpopulationenNachNamen'})
+                } catch(error) {
+                  setMessage(`Fehler: ${error.message}`)
+                  setTimeout(() => setMessage(null), 5000)
+                }
+                setMessage(null)
+              }}
             >
               <div>Teilpopulationen für Google Earth</div>
               <div>(beschriftet mit Artname, PopNr/TPopNr)</div>
             </DownloadCardButton>
             <DownloadCardButton
-              onClick={() =>
-                downloadFromView({
-                  view: 'v_tpop_ohnebekanntseit',
-                  fileName: 'TeilpopulationenVonApArtenOhneBekanntSeit',
-                })
-              }
+              onClick={async () => {
+                setMessage('Export "TeilpopulationenVonApArtenOhneBekanntSeit" wird vorbereitet...')
+                try {
+                  const { data } = await client.query({
+                    query: gql`
+                      query view {
+                        allVTpopOhnebekanntseits {
+                          nodes {
+                            artname
+                            apBearbeitung
+                            popNr
+                            popName
+                            nr
+                            gemeinde
+                            flurname
+                            bekanntSeit
+                          }
+                        }
+                      }`
+                  })
+                  exportModule({data: get(data, 'allVTpopOhnebekanntseits.nodes', []), store, fileName: 'TeilpopulationenVonApArtenOhneBekanntSeit'})
+                } catch(error) {
+                  setMessage(`Fehler: ${error.message}`)
+                  setTimeout(() => setMessage(null), 5000)
+                }
+                setMessage(null)
+              }}
             >
               <div>Teilpopulationen von AP-Arten</div>
               <div>{'ohne "Bekannt seit"'}</div>
             </DownloadCardButton>
             <DownloadCardButton
+              onClick={async () => {
+                setMessage('Export "yyyy" wird vorbereitet...')
+                try {
+                  const { data } = await client.query({
+                    query: gql`
+                      query view {
+                        xxx {
+                          nodes {
+                          }
+                        }
+                      }`
+                  })
+                  exportModule({data: get(data, 'xxx.nodes', []), store, fileName: 'yyyy'})
+                } catch(error) {
+                  setMessage(`Fehler: ${error.message}`)
+                  setTimeout(() => setMessage(null), 5000)
+                }
+                setMessage(null)
+              }}
               onClick={() =>
                 downloadFromView({
                   view: 'v_tpop_ohneapberichtrelevant',
@@ -189,6 +372,25 @@ const Teilpopulationen = ({
               <div>{'im Feld "Für AP-Bericht relevant"'}</div>
             </DownloadCardButton>
             <DownloadCardButton
+              onClick={async () => {
+                setMessage('Export "yyyy" wird vorbereitet...')
+                try {
+                  const { data } = await client.query({
+                    query: gql`
+                      query view {
+                        xxx {
+                          nodes {
+                          }
+                        }
+                      }`
+                  })
+                  exportModule({data: get(data, 'xxx.nodes', []), store, fileName: 'yyyy'})
+                } catch(error) {
+                  setMessage(`Fehler: ${error.message}`)
+                  setTimeout(() => setMessage(null), 5000)
+                }
+                setMessage(null)
+              }}
               onClick={() =>
                 downloadFromView({
                   view: 'v_tpop_popnrtpopnrmehrdeutig',
@@ -200,6 +402,25 @@ const Teilpopulationen = ({
               <div>Kombination von PopNr und TPopNr</div>
             </DownloadCardButton>
             <DownloadCardButton
+              onClick={async () => {
+                setMessage('Export "yyyy" wird vorbereitet...')
+                try {
+                  const { data } = await client.query({
+                    query: gql`
+                      query view {
+                        xxx {
+                          nodes {
+                          }
+                        }
+                      }`
+                  })
+                  exportModule({data: get(data, 'xxx.nodes', []), store, fileName: 'yyyy'})
+                } catch(error) {
+                  setMessage(`Fehler: ${error.message}`)
+                  setTimeout(() => setMessage(null), 5000)
+                }
+                setMessage(null)
+              }}
               onClick={() =>
                 downloadFromView({
                   view: 'v_tpop_anzmassn',
@@ -210,6 +431,25 @@ const Teilpopulationen = ({
               Anzahl Massnahmen pro Teilpopulation
             </DownloadCardButton>
             <DownloadCardButton
+              onClick={async () => {
+                setMessage('Export "yyyy" wird vorbereitet...')
+                try {
+                  const { data } = await client.query({
+                    query: gql`
+                      query view {
+                        xxx {
+                          nodes {
+                          }
+                        }
+                      }`
+                  })
+                  exportModule({data: get(data, 'xxx.nodes', []), store, fileName: 'yyyy'})
+                } catch(error) {
+                  setMessage(`Fehler: ${error.message}`)
+                  setTimeout(() => setMessage(null), 5000)
+                }
+                setMessage(null)
+              }}
               onClick={() =>
                 downloadFromView({
                   view: 'v_tpop_anzkontrinklletzterundletztertpopber',
@@ -245,6 +485,25 @@ const Teilpopulationen = ({
               />
             </AutocompleteContainer>
             <DownloadCardButton
+              onClick={async () => {
+                setMessage('Export "yyyy" wird vorbereitet...')
+                try {
+                  const { data } = await client.query({
+                    query: gql`
+                      query view {
+                        xxx {
+                          nodes {
+                          }
+                        }
+                      }`
+                  })
+                  exportModule({data: get(data, 'xxx.nodes', []), store, fileName: 'yyyy'})
+                } catch(error) {
+                  setMessage(`Fehler: ${error.message}`)
+                  setTimeout(() => setMessage(null), 5000)
+                }
+                setMessage(null)
+              }}
               onClick={() =>
                 downloadFromView({
                   view: 'v_tpop_popberundmassnber',
