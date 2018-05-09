@@ -204,8 +204,8 @@ const Teilpopulationen = ({
                             POPSTATUSUNKLAR: popstatusunklar
                             POPUNKLARGRUND: popunklargrund
                             POPBEKANNTSEIT: popbekanntseit
-                            POP_X: pop_X
-                            POP_Y: pop_Y
+                            POP_X: popX
+                            POP_Y: popY
                             TPOPID: tpopid
                             TPOPGUID: tpopguid
                             TPOPNR: tpopnr
@@ -214,8 +214,8 @@ const Teilpopulationen = ({
                             TPOPSTATUS: tpopstatus
                             TPOPSTATUSUNKLAR: tpopstatusunklar
                             TPOPUNKLARGRUND: tpopunklargrund
-                            TPOP_X: tpop_X
-                            TPOP_Y: tpop_Y
+                            TPOP_X: tpopX
+                            TPOP_Y: tpopY
                             TPOPRADIUS: tpopradius
                             TPOPHOEHE: tpophoehe
                             TPOPEXPOSITION: tpopexposition

@@ -702,7 +702,7 @@ SELECT
   apflora.ap.id,
   apflora.ae_eigenschaften.artname,
   apflora.ap_bearbstand_werte.text AS bearbeitung,
-  apflora.ap.start_jahr AS start_jahr,
+  apflora.ap.start_jahr,
   apflora.ap_umsetzung_werte.text AS umsetzung,
   count(apflora.tpopmassn.id) AS anzahl_massnahmen
 FROM
