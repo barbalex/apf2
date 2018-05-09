@@ -87,12 +87,77 @@ const Massnahmen = ({
     <Collapse in={expanded} timeout="auto" unmountOnExit>
       <StyledCardContent>
         <DownloadCardButton
-          onClick={() =>
-            downloadFromView({
-              view: 'v_massn',
-              fileName: 'Massnahmen',
-            })
-          }
+              onClick={async () => {
+                const { data } = await client.query({
+                  query: gql`
+                    query view {
+                      allVMassns {
+                        nodes {
+                          apId
+                          familie
+                          artname
+                          apBearbeitung
+                          apStartJahr
+                          apUmsetzung
+                          popId
+                          popNr
+                          popName
+                          popStatus
+                          popBekanntSeit
+                          popStatusUnklar
+                          popStatusUnklarBegruendung
+                          popX
+                          popY
+                          tpopId
+                          tpopNr
+                          tpopGemeinde
+                          tpopFlurname
+                          tpopStatus
+                          tpopBekanntSeit
+                          tpopStatusUnklar
+                          tpopStatusUnklarGrund
+                          tpopX
+                          tpopY
+                          tpopRadius
+                          tpopHoehe
+                          tpopExposition
+                          tpopKlima
+                          tpopNeigung
+                          tpopBeschreibung
+                          tpopKatasterNr
+                          tpopApberRelevant
+                          tpopEigentuemer
+                          tpopKontakt
+                          tpopNutzungszone
+                          tpopBewirtschafter
+                          tpopBewirtschaftung
+                          id
+                          jahr
+                          datum
+                          typ
+                          beschreibung
+                          bearbeiter
+                          bemerkungen
+                          planVorhanden
+                          planBezeichnung
+                          flaeche
+                          form
+                          pflanzanordnung
+                          markierung
+                          anzTriebe
+                          anzPflanzen
+                          anzPflanzstellen
+                          wirtspflanze
+                          herkunftPop
+                          sammeldatum
+                          changed
+                          changedBy
+                        }
+                      }
+                    }`
+                })
+                exportModule({data: get(data, 'allVMassns.nodes', []), store, fileName: 'Massnahmen'})
+              }}
         >
           Massnahmen
         </DownloadCardButton>
