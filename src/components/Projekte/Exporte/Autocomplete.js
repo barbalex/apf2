@@ -5,7 +5,7 @@
  * with keys id and value
  * presents value and saves id
  */
-import React from 'react'
+import React, {Fragment} from 'react'
 import Autosuggest from 'react-autosuggest'
 import match from 'autosuggest-highlight/match'
 import parse from 'autosuggest-highlight/parse'
@@ -16,6 +16,12 @@ import { withStyles } from 'material-ui/styles'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
 import trimStart from 'lodash/trimStart'
+import { ApolloConsumer } from 'react-apollo'
+import gql from "graphql-tag"
+import get from 'lodash/get'
+
+import exportModule from '../../../modules/exportGql'
+import Message from './Message'
 
 const StyledPaper = styled(Paper)`
   z-index: 1;
@@ -108,13 +114,14 @@ type Props = {
   label: String,
   value: String,
   objects: Array<Object>,
-  downloadFromView: () => void,
   classes: Object,
+  store: Object,
 }
 
 type State = {
   suggestions: Array<string>,
   value: string,
+  message: String,
 }
 
 class IntegrationAutosuggest extends React.Component<Props, State> {
@@ -123,6 +130,7 @@ class IntegrationAutosuggest extends React.Component<Props, State> {
     this.state = {
       suggestions: [],
       value: props.value || '',
+      message: null
     }
   }
 
@@ -155,18 +163,6 @@ class IntegrationAutosuggest extends React.Component<Props, State> {
     this.setState({ value })
   }
 
-  handleOnSuggestionSelected = (event, { suggestion }) => {
-    const { objects } = this.props
-    this.props.downloadFromView({
-      view: 'v_tpop_anzkontrinklletzterundletztertpopber',
-      fileName: 'anzkontrinklletzterundletztertpopber_2016',
-      apId: objects.find(o => o.value === suggestion).id,
-    })
-    setTimeout(() => {
-      this.setState({ value: '', suggestions: [] })
-    }, 5000)
-  }
-
   renderInput = inputProps => {
     const { label, value } = this.props
     const { autoFocus, ref, ...other } = inputProps
@@ -189,40 +185,161 @@ class IntegrationAutosuggest extends React.Component<Props, State> {
   }
 
   render() {
-    const { classes, openabove } = this.props
+    const { classes, openabove, objects, store } = this.props
     const { suggestions } = this.state
 
     return (
-      <StyledAutosuggest
-        theme={{
-          container: classes.container,
-          suggestionsContainerOpen: {
-            position: 'absolute',
-            marginTop: '8px',
-            marginBottom: '24px',
-            left: 0,
-            right: 0,
-            bottom: openabove ? '27px' : 'unset',
-          },
-          suggestionsList: classes.suggestionsList,
-          suggestion: classes.suggestion,
-        }}
-        renderInputComponent={this.renderInput}
-        suggestions={suggestions}
-        onSuggestionsFetchRequested={this.handleSuggestionsFetchRequested}
-        onSuggestionsClearRequested={this.handleSuggestionsClearRequested}
-        renderSuggestionsContainer={renderSuggestionsContainer}
-        getSuggestionValue={getSuggestionValue}
-        renderSuggestion={renderSuggestion}
-        shouldRenderSuggestions={shouldRenderSuggestions}
-        onSuggestionSelected={this.handleOnSuggestionSelected}
-        inputProps={{
-          value: this.state.value,
-          autoFocus: true,
-          placeholder: 'Für Auswahlliste: Leerschlag tippen',
-          onChange: this.handleChange,
-        }}
-      />
+      <ApolloConsumer>
+        {client =>
+          <Fragment>
+            <StyledAutosuggest
+              theme={{
+                container: classes.container,
+                suggestionsContainerOpen: {
+                  position: 'absolute',
+                  marginTop: '8px',
+                  marginBottom: '24px',
+                  left: 0,
+                  right: 0,
+                  bottom: openabove ? '27px' : 'unset',
+                },
+                suggestionsList: classes.suggestionsList,
+                suggestion: classes.suggestion,
+              }}
+              renderInputComponent={this.renderInput}
+              suggestions={suggestions}
+              onSuggestionsFetchRequested={this.handleSuggestionsFetchRequested}
+              onSuggestionsClearRequested={this.handleSuggestionsClearRequested}
+              renderSuggestionsContainer={renderSuggestionsContainer}
+              getSuggestionValue={getSuggestionValue}
+              renderSuggestion={renderSuggestion}
+              shouldRenderSuggestions={shouldRenderSuggestions}
+              onSuggestionSelected={async (event, { suggestion }) => {
+                this.setState({ message: 'Export "anzkontrinklletzterundletztertpopber" wird vorbereitet...'})
+                try {
+                  const { data } = await client.query({
+                    query: gql`
+                      query view($apId: UUID!) {
+                        allVTpopAnzkontrinklletzterundletztertpopbers(filter: { apId: { equalTo: $apId } }) {
+                          nodes {
+                            apId
+                            familie
+                            artname
+                            apBearbeitung
+                            apStartJahr
+                            apUmsetzung
+                            popId
+                            popNr
+                            popName
+                            popStatus
+                            popBekanntSeit
+                            popStatusUnklar
+                            popStatusUnklarBegruendung
+                            popX
+                            popY
+                            id
+                            nr
+                            gemeinde
+                            flurname
+                            status
+                            bekanntSeit
+                            statusUnklar
+                            statusUnklarGrund
+                            x
+                            y
+                            radius
+                            hoehe
+                            exposition
+                            klima
+                            neigung
+                            beschreibung
+                            katasterNr
+                            apberRelevant
+                            eigentuemer
+                            kontakt
+                            nutzungszone
+                            bewirtschafter
+                            bewirtschaftung
+                            changed
+                            changedBy
+                            kontrId
+                            kontrJahr
+                            kontrDatum
+                            kontrTyp
+                            kontrBearbeiter
+                            kontrUeberlebensrate
+                            kontrVitalitaet
+                            kontrEntwicklung
+                            kontrUrsachen
+                            kontrErfolgsbeurteilung
+                            kontrUmsetzungAendern
+                            kontrKontrolleAendern
+                            kontrBemerkungen
+                            kontrLrDelarze
+                            kontrLrUmgebungDelarze
+                            kontrVegetationstyp
+                            kontrKonkurrenz
+                            kontrMoosschicht
+                            kontrKrautschicht
+                            kontrStrauchschicht
+                            kontrBaumschicht
+                            kontrBodenTyp
+                            kontrBodenKalkgehalt
+                            kontrBodenDurchlaessigkeit
+                            kontrBodenHumus
+                            kontrBodenNaehrstoffgehalt
+                            kontrBodenAbtrag
+                            kontrWasserhaushalt
+                            kontrIdealbiotopUebereinstimmung
+                            kontrHandlungsbedarf
+                            kontrFlaecheUeberprueft
+                            kontrFlaeche
+                            kontrPlanVorhanden
+                            kontrDeckungVegetation
+                            kontrDeckungNackterBoden
+                            kontrDeckungApArt
+                            kontrJungpflanzenVorhanden
+                            kontrVegetationshoeheMaximum
+                            kontrVegetationshoeheMittel
+                            kontrGefaehrdung
+                            kontrChanged
+                            kontrChangedBy
+                            tpopberAnz
+                            tpopberId
+                            tpopberJahr
+                            tpopberEntwicklung
+                            tpopberBemerkungen
+                            tpopberChanged
+                            tpopberChangedBy
+                          }
+                        }
+                      }`,
+                      variables: { apId: objects.find(o => o.value === suggestion).id }
+                  })
+                  exportModule({data: get(data, 'allVTpopAnzkontrinklletzterundletztertpopbers.nodes', []), store, fileName: 'anzkontrinklletzterundletztertpopber'})
+                } catch(error) {
+                  this.setState({ message: `Fehler: ${error.message}`})
+                  setTimeout(() => this.setState({ message: null}), 5000)
+                }
+                this.setState({ message: null})
+                setTimeout(() => {
+                  this.setState({ value: '', suggestions: [] })
+                }, 5000)
+              }}
+              inputProps={{
+                value: this.state.value,
+                autoFocus: true,
+                placeholder: 'Für Auswahlliste: Leerschlag tippen',
+                onChange: this.handleChange,
+              }}
+            />
+            {
+              !!this.state.message &&
+              <Message message={this.state.message} />
+            }
+          </Fragment>
+        }
+      </ApolloConsumer>
     )
   }
 }

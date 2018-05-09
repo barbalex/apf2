@@ -65,14 +65,12 @@ const Massnahmen = ({
   setExpanded,
   message,
   setMessage,
-  downloadFromView,
 }: {
   store:Object,
   expanded: Boolean,
   setExpanded: () => void,
   message: String,
   setMessage: () => void,
-  downloadFromView: () => void,
 }) => (
   <ApolloConsumer>
     {client =>

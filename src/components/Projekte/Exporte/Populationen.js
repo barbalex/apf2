@@ -65,14 +65,12 @@ const Populationen = ({
   setExpanded,
   message,
   setMessage,
-  downloadFromView,
 }: {
   store:Object,
   expanded: Boolean,
   setExpanded: () => void,
   message: String,
   setMessage: () => void,
-  downloadFromView: () => void,
 }) => (
   <ApolloConsumer>
     {client =>
@@ -130,12 +128,6 @@ const Populationen = ({
                 }
                 setMessage(null)
               }}
-              onClick={() =>
-                downloadFromView({
-                  view: 'v_pop',
-                  fileName: 'Populationen',
-                })
-              }
             >
               Populationen
             </DownloadCardButton>

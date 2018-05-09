@@ -91,7 +91,6 @@ const Teilpopulationen = ({
   setExpanded,
   message,
   setMessage,
-  downloadFromView,
   artList,
 }: {
   store:Object,
@@ -99,7 +98,6 @@ const Teilpopulationen = ({
   setExpanded: () => void,
   message: String,
   setMessage: () => void,
-  downloadFromView: () => void,
   artList: Array<Object>,
 }) => (
   <ApolloConsumer>
@@ -343,120 +341,207 @@ const Teilpopulationen = ({
             </DownloadCardButton>
             <DownloadCardButton
               onClick={async () => {
-                setMessage('Export "yyyy" wird vorbereitet...')
+                setMessage('Export "TeilpopulationenOhneApBerichtRelevant" wird vorbereitet...')
                 try {
                   const { data } = await client.query({
                     query: gql`
                       query view {
-                        xxx {
+                        allVTpopOhneapberichtrelevants {
                           nodes {
+                            artname
+                            popNr
+                            popName
+                            id
+                            nr
+                            gemeinde
+                            flurname
+                            apberRelevant
                           }
                         }
                       }`
                   })
-                  exportModule({data: get(data, 'xxx.nodes', []), store, fileName: 'yyyy'})
+                  exportModule({data: get(data, 'allVTpopOhneapberichtrelevants.nodes', []), store, fileName: 'TeilpopulationenOhneApBerichtRelevant'})
                 } catch(error) {
                   setMessage(`Fehler: ${error.message}`)
                   setTimeout(() => setMessage(null), 5000)
                 }
                 setMessage(null)
               }}
-              onClick={() =>
-                downloadFromView({
-                  view: 'v_tpop_ohneapberichtrelevant',
-                  fileName: 'TeilpopulationenOhneApBerichtRelevant',
-                })
-              }
             >
               <div>Teilpopulationen ohne Eintrag</div>
               <div>{'im Feld "Für AP-Bericht relevant"'}</div>
             </DownloadCardButton>
             <DownloadCardButton
               onClick={async () => {
-                setMessage('Export "yyyy" wird vorbereitet...')
+                setMessage('Export "TeilpopulationenAnzahlMassnahmen" wird vorbereitet...')
                 try {
                   const { data } = await client.query({
                     query: gql`
                       query view {
-                        xxx {
+                        allVTpopAnzmassns {
                           nodes {
+                            apId
+                            familie
+                            artname
+                            apBearbeitung
+                            apStartJahr
+                            apUmsetzung
+                            popId
+                            popNr
+                            popName
+                            popStatus
+                            popBekanntSeit
+                            popStatusUnklar
+                            popStatusUnklarBegruendung
+                            popX
+                            popY
+                            id
+                            nr
+                            gemeinde
+                            flurname
+                            status
+                            bekanntSeit
+                            statusUnklar
+                            statusUnklarGrund
+                            x
+                            y
+                            radius
+                            hoehe
+                            exposition
+                            klima
+                            neigung
+                            beschreibung
+                            katasterNr
+                            apberRelevant
+                            eigentuemer
+                            kontakt
+                            nutzungszone
+                            bewirtschafter
+                            bewirtschaftung
+                            anzahlMassnahmen
                           }
                         }
                       }`
                   })
-                  exportModule({data: get(data, 'xxx.nodes', []), store, fileName: 'yyyy'})
+                  exportModule({data: get(data, 'allVTpopAnzmassns.nodes', []), store, fileName: 'TeilpopulationenAnzahlMassnahmen'})
                 } catch(error) {
                   setMessage(`Fehler: ${error.message}`)
                   setTimeout(() => setMessage(null), 5000)
                 }
                 setMessage(null)
               }}
-              onClick={() =>
-                downloadFromView({
-                  view: 'v_tpop_popnrtpopnrmehrdeutig',
-                  fileName: 'TeilpopulationenPopnrTpopnrMehrdeutig',
-                })
-              }
-            >
-              <div>Teilpopulationen mit mehrdeutiger</div>
-              <div>Kombination von PopNr und TPopNr</div>
-            </DownloadCardButton>
-            <DownloadCardButton
-              onClick={async () => {
-                setMessage('Export "yyyy" wird vorbereitet...')
-                try {
-                  const { data } = await client.query({
-                    query: gql`
-                      query view {
-                        xxx {
-                          nodes {
-                          }
-                        }
-                      }`
-                  })
-                  exportModule({data: get(data, 'xxx.nodes', []), store, fileName: 'yyyy'})
-                } catch(error) {
-                  setMessage(`Fehler: ${error.message}`)
-                  setTimeout(() => setMessage(null), 5000)
-                }
-                setMessage(null)
-              }}
-              onClick={() =>
-                downloadFromView({
-                  view: 'v_tpop_anzmassn',
-                  fileName: 'TeilpopulationenAnzahlMassnahmen',
-                })
-              }
             >
               Anzahl Massnahmen pro Teilpopulation
             </DownloadCardButton>
             <DownloadCardButton
               onClick={async () => {
-                setMessage('Export "yyyy" wird vorbereitet...')
+                setMessage('Export "TeilpopulationenAnzKontrInklusiveLetzteKontrUndLetztenTPopBericht" wird vorbereitet...')
                 try {
                   const { data } = await client.query({
                     query: gql`
                       query view {
-                        xxx {
+                        allVTpopAnzkontrinklletzterundletztertpopbers {
                           nodes {
+                            apId
+                            familie
+                            artname
+                            apBearbeitung
+                            apStartJahr
+                            apUmsetzung
+                            popId
+                            popNr
+                            popName
+                            popStatus
+                            popBekanntSeit
+                            popStatusUnklar
+                            popStatusUnklarBegruendung
+                            popX
+                            popY
+                            id
+                            nr
+                            gemeinde
+                            flurname
+                            status
+                            bekanntSeit
+                            statusUnklar
+                            statusUnklarGrund
+                            x
+                            y
+                            radius
+                            hoehe
+                            exposition
+                            klima
+                            neigung
+                            beschreibung
+                            katasterNr
+                            apberRelevant
+                            eigentuemer
+                            kontakt
+                            nutzungszone
+                            bewirtschafter
+                            bewirtschaftung
+                            changed
+                            changedBy
+                            kontrId
+                            kontrJahr
+                            kontrDatum
+                            kontrTyp
+                            kontrBearbeiter
+                            kontrUeberlebensrate
+                            kontrVitalitaet
+                            kontrEntwicklung
+                            kontrUrsachen
+                            kontrErfolgsbeurteilung
+                            kontrUmsetzungAendern
+                            kontrKontrolleAendern
+                            kontrBemerkungen
+                            kontrLrDelarze
+                            kontrLrUmgebungDelarze
+                            kontrVegetationstyp
+                            kontrKonkurrenz
+                            kontrMoosschicht
+                            kontrKrautschicht
+                            kontrStrauchschicht
+                            kontrBaumschicht
+                            kontrBodenTyp
+                            kontrBodenKalkgehalt
+                            kontrBodenDurchlaessigkeit
+                            kontrBodenHumus
+                            kontrBodenNaehrstoffgehalt
+                            kontrBodenAbtrag
+                            kontrWasserhaushalt
+                            kontrIdealbiotopUebereinstimmung
+                            kontrHandlungsbedarf
+                            kontrFlaecheUeberprueft
+                            kontrFlaeche
+                            kontrPlanVorhanden
+                            kontrDeckungVegetation
+                            kontrDeckungNackterBoden
+                            kontrDeckungApArt
+                            kontrJungpflanzenVorhanden
+                            kontrVegetationshoeheMaximum
+                            kontrVegetationshoeheMittel
+                            kontrGefaehrdung
+                            kontrChanged
+                            kontrChangedBy
+                            tpopberAnz
+                            tpopberId
+                            tpopberJahr
+                            tpopberEntwicklung
+                            tpopberBemerkungen
+                            tpopberChanged
+                            tpopberChangedBy
                           }
                         }
                       }`
                   })
-                  exportModule({data: get(data, 'xxx.nodes', []), store, fileName: 'yyyy'})
+                  exportModule({data: get(data, 'allVTpopAnzkontrinklletzterundletztertpopbers.nodes', []), store, fileName: 'TeilpopulationenAnzKontrInklusiveLetzteKontrUndLetztenTPopBericht'})
                 } catch(error) {
                   setMessage(`Fehler: ${error.message}`)
                   setTimeout(() => setMessage(null), 5000)
                 }
                 setMessage(null)
               }}
-              onClick={() =>
-                downloadFromView({
-                  view: 'v_tpop_anzkontrinklletzterundletztertpopber',
-                  fileName:
-                    'TeilpopulationenAnzKontrInklusiveLetzteKontrUndLetztenTPopBericht',
-                })
-              }
               disabled={isRemoteHost}
               title={
                 isRemoteHost ? 'nur aktiv, wenn apflora lokal installiert wird' : ''
@@ -481,35 +566,79 @@ const Teilpopulationen = ({
               <AutoComplete
                 label={`"Eier legende Wollmilchsau" für eine Art`}
                 objects={artList}
-                downloadFromView={downloadFromView}
+                store={store}
+                openabove
               />
             </AutocompleteContainer>
             <DownloadCardButton
               onClick={async () => {
-                setMessage('Export "yyyy" wird vorbereitet...')
+                setMessage('Export "TeilpopulationenTPopUndMassnBerichte" wird vorbereitet...')
                 try {
                   const { data } = await client.query({
                     query: gql`
                       query view {
-                        xxx {
+                        allVTpopPopberundmassnbers {
                           nodes {
+                            apId
+                            artname
+                            apBearbeitung
+                            apStartJahr
+                            apUmsetzung
+                            popId
+                            popNr
+                            popName
+                            popStatus
+                            popBekanntSeit
+                            popStatusUnklar
+                            popStatusUnklarBegruendung
+                            popX
+                            popY
+                            tpopId
+                            tpopNr
+                            tpopGemeinde
+                            tpopFlurname
+                            tpopStatus
+                            tpopBekanntSeit
+                            tpopStatusUnklar
+                            tpopStatusUnklarGrund
+                            tpopX
+                            tpopY
+                            tpopRadius
+                            tpopHoehe
+                            tpopExposition
+                            tpopKlima
+                            tpopNeigung
+                            tpopBeschreibung
+                            tpopKatasterNr
+                            tpopApberRelevant
+                            tpopEigentuemer
+                            tpopKontakt
+                            tpopNutzungszone
+                            tpopBewirtschafter
+                            tpopBewirtschaftung
+                            tpopberId
+                            tpopberJahr
+                            tpopberEntwicklung
+                            tpopberBemerkungen
+                            tpopberChanged
+                            tpopberChangedBy
+                            tpopmassnberId
+                            tpopmassnberJahr
+                            tpopmassnberEntwicklung
+                            tpopmassnberBemerkungen
+                            tpopmassnberChanged
+                            tpopmassnberChangedBy
                           }
                         }
                       }`
                   })
-                  exportModule({data: get(data, 'xxx.nodes', []), store, fileName: 'yyyy'})
+                  exportModule({data: get(data, 'allVTpopPopberundmassnbers.nodes', []), store, fileName: 'TeilpopulationenTPopUndMassnBerichte'})
                 } catch(error) {
                   setMessage(`Fehler: ${error.message}`)
                   setTimeout(() => setMessage(null), 5000)
                 }
                 setMessage(null)
               }}
-              onClick={() =>
-                downloadFromView({
-                  view: 'v_tpop_popberundmassnber',
-                  fileName: 'TeilpopulationenTPopUndMassnBerichte',
-                })
-              }
             >
               Teilpopulationen inklusive Teilpopulations- und Massnahmen-Berichten
             </DownloadCardButton>

@@ -56,12 +56,10 @@ const Optionen = ({
   store,
   expanded,
   setExpanded,
-  downloadFromView,
 }: {
   store: Object,
   expanded: Boolean,
   setExpanded: () => void,
-  downloadFromView: () => void,
 }) => (
   <StyledCard>
     <StyledCardActions
