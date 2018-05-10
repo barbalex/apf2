@@ -6232,8 +6232,6 @@ WHERE
 ORDER BY
   apflora.ziel.jahr;
 
-
-
 DROP VIEW IF EXISTS apflora.v_qk_ziel_ohneziel CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk_ziel_ohneziel AS
 SELECT
@@ -6243,14 +6241,40 @@ SELECT
   ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Aktionspläne', apflora.ap.id, 'Ziele', apflora.ziel.id]::text[] AS url,
   ARRAY[concat('Ziel (Jahr): ', apflora.ziel.jahr)]::text[] AS text
 FROM
-  apflora.ap
-  INNER JOIN
-    apflora.ziel
-    ON apflora.ap.id = apflora.ziel.ap_id
+  apflora.projekt
+  inner join
+    apflora.ap
+    INNER JOIN
+      apflora.ziel
+      ON apflora.ap.id = apflora.ziel.ap_id
+    on apflora.projekt.id = apflora.ap.proj_id
 WHERE
   apflora.ziel.bezeichnung IS NULL
 ORDER BY
   apflora.ziel.jahr;
+
+DROP VIEW IF EXISTS apflora.v_q_ziel_ohneziel CASCADE;
+CREATE OR REPLACE VIEW apflora.v_q_ziel_ohneziel AS
+SELECT
+  apflora.projekt.id as proj_id,
+  apflora.ap.id as ap_id,
+  apflora.ziel.id,
+  apflora.ziel.jahr
+FROM
+  apflora.projekt
+  inner join
+    apflora.ap
+    INNER JOIN
+      apflora.ziel
+      ON apflora.ap.id = apflora.ziel.ap_id
+    on apflora.projekt.id = apflora.ap.proj_id
+WHERE
+  apflora.ziel.bezeichnung IS NULL
+ORDER BY
+  apflora.ziel.jahr;
+
+
+
 
 DROP VIEW IF EXISTS apflora.v_qk_erfkrit_ohnebeurteilung CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk_erfkrit_ohnebeurteilung AS

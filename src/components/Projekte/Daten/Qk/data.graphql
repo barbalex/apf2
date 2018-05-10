@@ -6,14 +6,27 @@ query QkQuery(
   $ap: UUID!
   $isAp: Boolean!
 ) {
-  zielOhneJahr: allZiels(filter: {jahr: {isNull: true}}) {
+  allVQZielOhnejahrs {
     nodes {
-      id
+      projId
       apId
-      apByApId {
-        id
-        projId
-      }
+      id
+    }
+  }
+  allVQZielOhnetyps {
+    nodes {
+      projId
+      apId
+      id
+      jahr
+    }
+  }
+  allVQZielOhneziels {
+    nodes {
+      projId
+      apId
+      id
+      jahr
     }
   }
 }

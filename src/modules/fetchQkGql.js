@@ -32,7 +32,12 @@ const fetchQk = async ({
       url: (o) => `Projekte/${o.projId}/Aktionspläne'/${o.apId}/Ziele/${o.id}`,
       text: (o) => `Ziel (Jahr): ${o.jahr}`
     },
-    { type: 'view', name: 'v_qk_ziel_ohneziel' },
+    {
+      query: 'allVQZielOhneziels',
+      hw: 'Ziel ohne Ziel:',
+      url: (o) => `Projekte/${o.projId}/Aktionspläne'/${o.apId}/Ziele/${o.id}`,
+      text: (o) => `Ziel (Jahr): ${o.jahr}`
+    },
     // Ziel-Bericht ohne Jahr/Entwicklung
     { type: 'view', name: 'v_qk_zielber_ohnejahr' },
     { type: 'view', name: 'v_qk_zielber_ohneentwicklung', berichtjahr },
