@@ -106,7 +106,7 @@ const Karte = ({ store }: { store: Object }) =>
         })
       const popBounds = getBounds(pops)
       const popMarkers = buildPopMarkers({ pops, store })
-      console.log({data, pops, popBounds})
+      console.log({ data, pops, popBounds, popMarkers })
 
       const { activeBaseLayer, activeApfloraLayers } = store.map
       const { idOfTpopBeingLocalized } = store.map.tpop
