@@ -19,10 +19,6 @@ const fetchQk = async ({
   const qualityControls = [
     // 1. Art
 
-    // Ziel ohne Jahr/Zieltyp/Ziel
-    { type: 'view', name: 'v_qk_ziel_ohnejahr' },
-    { type: 'view', name: 'v_qk_ziel_ohnetyp' },
-    { type: 'view', name: 'v_qk_ziel_ohneziel' },
     // Ziel-Bericht ohne Jahr/Entwicklung
     { type: 'view', name: 'v_qk_zielber_ohnejahr' },
     { type: 'view', name: 'v_qk_zielber_ohneentwicklung', berichtjahr },

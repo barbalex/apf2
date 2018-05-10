@@ -5,6 +5,7 @@ query QkQuery(
   $apId: UUID!
 ) {
   allVQZielOhnejahrs(filter: {projId: {equalTo: $projId}, apId: {equalTo: $apId}}) {
+    totalCount
     nodes {
       projId
       apId
@@ -12,6 +13,7 @@ query QkQuery(
     }
   }
   allVQZielOhnetyps(filter: {projId: {equalTo: $projId}, apId: {equalTo: $apId}}) {
+    totalCount
     nodes {
       projId
       apId
@@ -20,6 +22,7 @@ query QkQuery(
     }
   }
   allVQZielOhneziels(filter: {projId: {equalTo: $projId}, apId: {equalTo: $apId}}) {
+    totalCount
     nodes {
       projId
       apId
