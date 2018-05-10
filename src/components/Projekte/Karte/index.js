@@ -16,6 +16,7 @@ import { Query } from 'react-apollo'
 import 'leaflet'
 import 'proj4'
 import 'proj4leaflet'
+import get from 'lodash/get'
 
 import dataGql from './data.graphql'
 import LayersControl from './LayersControl'
@@ -59,6 +60,21 @@ import PngControl from './PngControl'
 import CoordinatesControl from './CoordinatesControl/index.js'
 import epsg4326to2056 from '../../../modules/epsg4326to2056'
 import ErrorBoundary from '../../shared/ErrorBoundary'
+import getBounds from '../../../modules/getBounds'
+import buildPopMarkers from './buildPopMarkers'
+
+// this does not work
+// see issue on proj4js: https://github.com/proj4js/proj4js/issues/214
+/*
+const crs = new window.L.Proj.CRS(
+  'EPSG:2056',
+  '+proj=somerc +lat_0=46.95240555555556 +lon_0=7.439583333333333 +k_0=1 +x_0=600000 +y_0=200000 +ellps=bessel +towgs84=674.374,15.056,405.346,0,0,0,0 +units=m +no_defs',
+  {
+    resolutions: [8192, 4096, 2048], // 3 example zoom level resolutions
+    bounds,
+  }
+)*/
+
 
 const StyledMap = styled(Map)`
   height: 100%;
@@ -80,23 +96,24 @@ const Karte = ({ store }: { store: Object }) =>
   >
     {({ loading, error, data }) => {
       if (error) return `Fehler: ${error.message}`
+
+      const popFilterString = store.tree.nodeLabelFilter.get('pop')
+      const pops = get(data, 'projektById.apsByProjId.nodes[0].popsByApId.nodes', [])
+        // filter them by nodeLabelFilter
+        .filter(p => {
+          if (!popFilterString) return true
+          return `${p.nr || '(keine Nr)'}: ${p.name || '(kein Name)'}`.toLowerCase().includes(popFilterString.toLowerCase())
+        })
+      const popBounds = getBounds(pops)
+      const popMarkers = buildPopMarkers({ pops, store })
+      console.log({data, pops, popBounds})
+
       const { activeBaseLayer, activeApfloraLayers } = store.map
       const { idOfTpopBeingLocalized } = store.map.tpop
       const MapElement = !!idOfTpopBeingLocalized ? StyledMapLocalizing : StyledMap
-      // this does not work
-      // see issue on proj4js: https://github.com/proj4js/proj4js/issues/214
-      /*
-      const crs = new window.L.Proj.CRS(
-        'EPSG:2056',
-        '+proj=somerc +lat_0=46.95240555555556 +lon_0=7.439583333333333 +k_0=1 +x_0=600000 +y_0=200000 +ellps=bessel +towgs84=674.374,15.056,405.346,0,0,0,0 +units=m +no_defs',
-        {
-          resolutions: [8192, 4096, 2048], // 3 example zoom level resolutions
-          bounds,
-        }
-      )*/
       /**
        * need an object whose methods return overlays
-       * in order to dynamically display active overlays
+       * in order to dynamically display and sort active overlays
        */
       const ApfloraLayerComponents = {
         // MapFilter is used for filtering, need to return null
@@ -104,7 +121,7 @@ const Karte = ({ store }: { store: Object }) =>
         Pop: () => (
           <Pop
             visible={activeApfloraLayers.includes('Pop')}
-            markers={store.map.pop.markers}
+            markers={popMarkers}
           />
         ),
         Tpop: () => {
@@ -216,7 +233,8 @@ const Karte = ({ store }: { store: Object }) =>
             // probably clustering function
             maxZoom={22}
             minZoom={0}
-            pop={store.map.pop.pops}
+            // what is this pop for?
+            //pop={pops}
             onClick={event => {
               if (!!idOfTpopBeingLocalized) {
                 const { lat, lng } = event.latlng

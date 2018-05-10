@@ -1,5 +1,5 @@
 // @flow
-import epsg2056to4326 from '../../modules/epsg2056to4326'
+import epsg2056to4326 from './epsg2056to4326'
 
 export default (os: Array<Object>): Array<Array<number>> => {
   if (os.length === 0) return []

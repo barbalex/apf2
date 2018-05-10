@@ -7,7 +7,7 @@ import epsg2056to4326 from './epsg2056to4326notReverse'
 
 export default (store: Object, tpops: Array<Object>): Array<number> => {
   /**
-   * data is passed from map.pop.pops OR a view fetched from the server
+   * data is passed from pops OR a view fetched from the server
    * so need to filter to data with coordinates first...
    */
   // make sure all tpops used have coordinates
