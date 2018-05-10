@@ -115,9 +115,10 @@ const Qk = ({
       // only results with data
       .filter(q => get(data, `${q.query}.totalCount`, 0) > 0)
       // convert
+      // TODO:
+      // make this simpler after moving all calls to graphql
       .map(q => {
         const qData = get(data, `${q.query}.nodes`, [])
-        console.log({q,qData})
         return qData.map(o => ({
           proj_id: o.projId,
           ap_id: o.apId,
@@ -145,7 +146,7 @@ const Qk = ({
         const loadingMessage = (store.qkloading || loading)
           ? 'Die Daten werden analysiert...'
           : 'Analyse abgeschlossen'
-        console.log('Qk:',{messageArrays,gqlMessages})
+        //console.log('Qk:',{messageArrays,gqlMessages})
 
         return (
           <ErrorBoundary>
