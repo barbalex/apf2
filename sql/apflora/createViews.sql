@@ -6274,6 +6274,8 @@ ORDER BY
   apflora.ziel.jahr;
 
 
+-- TODO:
+-- build gql versions of following qk views
 
 
 DROP VIEW IF EXISTS apflora.v_qk_erfkrit_ohnebeurteilung CASCADE;
