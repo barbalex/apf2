@@ -1,19 +1,17 @@
 query QkQuery(
-  $berichtsjahr: Int
-  $isBerichtsjahr: Boolean!
-  $projekt: UUID!
-  $isProjekt: Boolean!
-  $ap: UUID!
-  $isAp: Boolean!
+  #$berichtjahr: Int
+  #$isBerichtjahr: Boolean!
+  $projId: UUID!
+  $apId: UUID!
 ) {
-  allVQZielOhnejahrs {
+  allVQZielOhnejahrs(filter: {projId: {equalTo: $projId}, apId: {equalTo: $apId}}) {
     nodes {
       projId
       apId
       id
     }
   }
-  allVQZielOhnetyps {
+  allVQZielOhnetyps(filter: {projId: {equalTo: $projId}, apId: {equalTo: $apId}}) {
     nodes {
       projId
       apId
@@ -21,7 +19,7 @@ query QkQuery(
       jahr
     }
   }
-  allVQZielOhneziels {
+  allVQZielOhneziels(filter: {projId: {equalTo: $projId}, apId: {equalTo: $apId}}) {
     nodes {
       projId
       apId

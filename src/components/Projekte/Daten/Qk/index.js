@@ -118,12 +118,13 @@ const Qk = ({
     : pureMessageArrays
 
   return (
-    <ErrorBoundary>
-      <Query
-        query={dataGql}
-        variables={{ berichtjahr, apId: tree.activeNodes.ap, projId: tree.activeNodes.projekt }}
-      >
-        {({ loading: loadingGql, error, data }) => {
+    <Query
+      query={dataGql}
+      //variables={{ berichtjahr, apId: tree.activeNodes.ap, projId: tree.activeNodes.projekt }}
+      variables={{ apId: tree.activeNodes.ap, projId: tree.activeNodes.projekt }}
+    >
+      {({ loading: loadingGql, error, data }) => {
+          console.log('hi:',{loadingGql,error,data})
           // do not show loading but rather last state
           //if (loading) return <Container>Lade...</Container>
           if (error) return `Fehler: ${error.message}`
@@ -132,6 +133,7 @@ const Qk = ({
             : 'Analyse abgeschlossen'
 
           return (
+            <ErrorBoundary>
             <Container>
               <FormTitle title="Qualitätskontrollen" />
               <FieldsContainer>
@@ -170,10 +172,10 @@ const Qk = ({
                 ))}
               </FieldsContainer>
             </Container>
-          )
-        }}
-      </Query>
-    </ErrorBoundary>
+          </ErrorBoundary>
+        )
+      }}
+    </Query>
   )
 }
 
