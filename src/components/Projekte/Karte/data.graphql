@@ -1,0 +1,16 @@
+# TODO
+query QkQuery(
+  #$berichtjahr: Int
+  #$isBerichtjahr: Boolean!
+  $projId: UUID!
+  $apId: UUID!
+) {
+  allVQZielOhnejahrs(filter: {projId: {equalTo: $projId}, apId: {equalTo: $apId}}) {
+    totalCount
+    nodes {
+      projId
+      apId
+      id
+    }
+  }
+}
