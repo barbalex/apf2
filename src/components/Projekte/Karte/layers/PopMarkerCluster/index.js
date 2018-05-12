@@ -34,7 +34,6 @@ const PmcComponent = ({ store, apId, projId }:{ store: Object, apId: String, pro
             if (!popFilterString) return true
             return `${p.nr || '(keine Nr)'}: ${p.name || '(kein Name)'}`.toLowerCase().includes(popFilterString.toLowerCase())
           })
-        //const popBounds = getBounds(pops)
         const popMarkers = buildPopMarkers({ pops, store })
 
         return <PopMarkerCluster markers={popMarkers} />
