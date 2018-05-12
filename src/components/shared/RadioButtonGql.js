@@ -13,11 +13,11 @@ const StyledFormControl = styled(FormControl)`
 `
 const StyledFormLabel = styled(FormLabel)`
   padding-top: 10px !important;
+  padding-bottom: 8px !important;
   font-size: 12px !important;
   cursor: text;
   user-select: none;
   pointer-events: none;
-  padding-bottom: 8px !important;
 `
 const StyledRadio = styled(Radio)`
   height: 26px !important;
