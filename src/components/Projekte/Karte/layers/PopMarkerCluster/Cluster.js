@@ -3,21 +3,19 @@ import compose from 'recompose/compose'
 import getContext from 'recompose/getContext'
 import 'leaflet'
 import PropTypes from 'prop-types'
-import '../../../../../node_modules/leaflet.markercluster/dist/leaflet.markercluster-src.js'
+import '../../../../../../node_modules/leaflet.markercluster/dist/leaflet.markercluster-src.js'
 
 const enhance = compose(getContext({ map: PropTypes.object.isRequired }))
 
 class PopMarkerCluster extends Component {
   props: {
-    visible: boolean,
     markers: Object,
+    map: Object,
   }
 
   componentDidMount() {
-    const { map, markers, visible } = this.props
-    if (visible) {
-      map.addLayer(markers)
-    }
+    const { map, markers } = this.props
+    map.addLayer(markers)
   }
 
   componentWillReceiveProps(nextProps) {
@@ -28,10 +26,8 @@ class PopMarkerCluster extends Component {
   }
 
   componentDidUpdate() {
-    const { map, markers, visible } = this.props
-    if (visible) {
-      map.addLayer(markers)
-    }
+    const { map, markers } = this.props
+    map.addLayer(markers)
   }
 
   componentWillUnmount() {
@@ -43,5 +39,6 @@ class PopMarkerCluster extends Component {
     return <div style={{ display: 'none' }} />
   }
 }
+
 
 export default enhance(PopMarkerCluster)

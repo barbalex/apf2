@@ -2,7 +2,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import appBaseUrl from '../../../modules/appBaseUrl'
+import appBaseUrl from '../../../../../modules/appBaseUrl'
 const StyledH3 = styled.h3`
   margin: 7px 0;
 `
