@@ -1,111 +1,79 @@
 // @flow
-import React from 'react'
-import { observer } from 'mobx-react'
-import Input, { InputLabel } from 'material-ui/Input'
-import { FormControl, FormHelperText } from 'material-ui/Form'
-import withHandlers from 'recompose/withHandlers'
-import compose from 'recompose/compose'
-import withState from 'recompose/withState'
+import React, { Component } from 'react'
+import TextField from 'material-ui/TextField'
 import styled from 'styled-components'
 
-const StyledInput = styled(Input)`
-  &:before {
+const StyledTextField = styled(TextField)`
+  padding-bottom: 19px !important;
+  > div:before {
     background-color: rgba(0, 0, 0, 0.1) !important;
   }
 `
 
-const enhance = compose(
-  withState('valueHasBeenChanged', 'changeValueHasBeenChanged', false),
-  withHandlers({
-    onChange: ({
-      updateProperty,
-      tree,
-      fieldName,
-      changeValueHasBeenChanged,
-    }) => event => {
-      let { value } = event.target
-      // ensure numbers saved as numbers
-      if (event.target.type === 'number') {
-        value = +value
-      }
-      updateProperty(tree, fieldName, value)
-      changeValueHasBeenChanged(true)
-    },
-    onBlur: ({
-      valueHasBeenChanged,
-      tree,
-      fieldName,
-      updatePropertyInDb,
-    }) => event => {
-      const { type } = event.target
-      let { value } = event.target
-      // ensure numbers saved as numbers
-      if (type === 'number') {
-        value = +value
-      }
-      if (valueHasBeenChanged) {
-        updatePropertyInDb(tree, fieldName, value)
-      }
-    },
-  }),
-  observer
-)
-
-const TextField = ({
-  label,
-  value,
-  errorText,
-  type,
-  multiLine,
-  disabled,
-  hintText,
-  onChange,
-  onBlur,
-}: {
-  tree: Object,
+type Props = {
   label: String,
-  fieldName: String,
-  value?: ?Number | ?String,
-  errorText?: ?String,
   type?: String,
   multiLine?: Boolean,
   disabled?: Boolean,
   hintText?: String,
-  onChange: () => void,
-  onBlur: () => void,
-  // no idea why but this CAN get passed as undefined...
-  updateProperty: () => void,
-  updatePropertyInDb: () => void,
-}) => (
-  <FormControl
-    error={!!errorText}
-    disabled={disabled}
-    fullWidth
-    aria-describedby={`${label}-helper`}
-  >
-    <InputLabel htmlFor={label}>{label}</InputLabel>
-    <StyledInput
-      id={label}
-      value={value || value === 0 ? value : ''}
-      type={type}
-      multiline={multiLine}
-      onChange={onChange}
-      onBlur={onBlur}
-      placeholder={hintText}
-    />
-    <FormHelperText id={`${label}-helper`}>{errorText}</FormHelperText>
-  </FormControl>
-)
-
-TextField.defaultProps = {
-  value: '',
-  errorText: '',
-  type: 'text',
-  multiLine: false,
-  disabled: false,
-  hintText: '',
-  updateProperty: null,
-  updatePropertyInDb: null,
+  saveToDb: () => void,
 }
 
-export default enhance(TextField)
+type State = {
+  value: Number | String,
+}
+
+class TextField extends Component<Props, State> {
+  constructor(props) {
+    super(props)
+    this.state = {
+      value: props.value || props.value === 0 ? props.value : '',
+    }
+  }
+
+  static defaultProps = {
+    value: '',
+    type: 'text',
+    multiLine: false,
+    disabled: false,
+    hintText: '',
+    saveToDb: null,
+  }
+
+  static getDerivedStateFromProps(nextProps, prevState) {
+    const value =
+      nextProps.value || nextProps.value === 0 ? nextProps.value : ''
+    return { value }
+  }
+
+  handleChange = event => {
+    this.setState({ value: event.target.value })
+  }
+
+  handleBlur = event => {
+    const { saveToDb } = this.props
+    saveToDb(event.target.value || null)
+  }
+
+  render() {
+    const { label, type, multiLine, disabled, hintText } = this.props
+    const { value } = this.state
+
+    return (
+      <StyledTextField
+        id={label}
+        label={label}
+        value={value}
+        type={type}
+        multiline={multiLine}
+        onChange={this.handleChange}
+        onBlur={this.handleBlur}
+        placeholder={hintText}
+        disabled={disabled}
+        fullWidth
+      />
+    )
+  }
+}
+
+export default TextField

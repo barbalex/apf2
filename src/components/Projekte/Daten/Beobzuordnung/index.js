@@ -7,7 +7,7 @@ import get from 'lodash/get'
 import flatten from 'lodash/flatten'
 
 import FormTitle from '../../../shared/FormTitle'
-import TextField from '../../../shared/TextFieldGql'
+import TextField from '../../../shared/TextField'
 import CheckboxWithInfo from '../../../shared/CheckboxWithInfo'
 import AutoComplete from '../../../shared/Autocomplete'
 import Beob from '../Beob'

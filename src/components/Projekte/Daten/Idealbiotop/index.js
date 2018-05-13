@@ -6,7 +6,7 @@ import get from 'lodash/get'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 
-import TextField from '../../../shared/TextFieldGql'
+import TextField from '../../../shared/TextField'
 import DateFieldWithPicker from '../../../shared/DateFieldWithPicker'
 import FormTitle from '../../../shared/FormTitle'
 import constants from '../../../../modules/constants'

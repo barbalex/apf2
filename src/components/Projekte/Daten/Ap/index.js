@@ -9,7 +9,7 @@ import withHandlers from 'recompose/withHandlers'
 
 import AutoComplete from '../../../shared/Autocomplete'
 import RadioButtonGroupWithInfo from '../../../shared/RadioButtonGroupWithInfo'
-import TextField from '../../../shared/TextFieldGql'
+import TextField from '../../../shared/TextField'
 import TextFieldNonUpdatable from '../../../shared/TextFieldNonUpdatable'
 import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'

@@ -12,7 +12,7 @@ import sortBy from 'lodash/sortBy'
 import format from 'date-fns/format'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroup'
-import TextField from '../../../shared/TextFieldGql'
+import TextField from '../../../shared/TextField'
 import AutoCompleteFromArray from '../../../shared/AutocompleteFromArray'
 import AutoComplete from '../../../shared/Autocomplete'
 import RadioButtonGroupWithInfo from '../../../shared/RadioButtonGroupWithInfo'

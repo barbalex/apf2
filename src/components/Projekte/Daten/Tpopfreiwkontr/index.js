@@ -10,7 +10,7 @@ import withHandlers from 'recompose/withHandlers'
 
 import RadioButton from '../../../shared/RadioButton'
 import RadioButtonGroup from '../../../shared/RadioButtonGroup'
-import TextField from '../../../shared/TextFieldGql'
+import TextField from '../../../shared/TextField'
 import AutoComplete from '../../../shared/Autocomplete'
 import StringToCopy from '../../../shared/StringToCopy'
 import FormTitle from '../../../shared/FormTitle'

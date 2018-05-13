@@ -7,7 +7,7 @@ import sortBy from 'lodash/sortBy'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 
-import TextField from '../../../shared/TextFieldGql'
+import TextField from '../../../shared/TextField'
 import TextFieldWithInfo from '../../../shared/TextFieldWithInfoGql'
 import Status from '../../../shared/Status'
 import AutoCompleteFromArray from '../../../shared/AutocompleteFromArray'

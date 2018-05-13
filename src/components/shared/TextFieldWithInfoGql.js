@@ -35,7 +35,7 @@ type State = {
   value: Number | String,
 }
 
-class TextFieldGql extends Component<Props, State> {
+class TextField extends Component<Props, State> {
   constructor(props) {
     super(props)
     this.state = {
@@ -93,4 +93,4 @@ class TextFieldGql extends Component<Props, State> {
   }
 }
 
-export default TextFieldGql
+export default TextField
