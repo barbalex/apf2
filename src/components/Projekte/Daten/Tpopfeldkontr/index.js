@@ -11,7 +11,7 @@ import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 import format from 'date-fns/format'
 
-import RadioButtonGroup from '../../../shared/RadioButtonGroupGql'
+import RadioButtonGroup from '../../../shared/RadioButtonGroup'
 import TextField from '../../../shared/TextFieldGql'
 import AutoCompleteFromArray from '../../../shared/AutocompleteFromArrayGql'
 import AutoComplete from '../../../shared/AutocompleteGql'

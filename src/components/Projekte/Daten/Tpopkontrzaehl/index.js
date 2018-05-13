@@ -7,7 +7,7 @@ import sortBy from 'lodash/sortBy'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 
-import RadioButtonGroup from '../../../shared/RadioButtonGroupGql'
+import RadioButtonGroup from '../../../shared/RadioButtonGroup'
 import TextField from '../../../shared/TextFieldGql'
 import FormTitle from '../../../shared/FormTitle'
 import AutoComplete from '../../../shared/AutocompleteGql'

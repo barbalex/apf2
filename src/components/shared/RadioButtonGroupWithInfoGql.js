@@ -3,7 +3,7 @@ import React from 'react'
 import { observer } from 'mobx-react'
 import styled from 'styled-components'
 
-import RadioButtonGroup from './RadioButtonGroupGql'
+import RadioButtonGroup from './RadioButtonGroup'
 import InfoWithPopover from './InfoWithPopover'
 
 const Container = styled.div`
