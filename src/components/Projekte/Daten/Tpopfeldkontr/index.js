@@ -13,7 +13,7 @@ import format from 'date-fns/format'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroup'
 import TextField from '../../../shared/TextFieldGql'
-import AutoCompleteFromArray from '../../../shared/AutocompleteFromArrayGql'
+import AutoCompleteFromArray from '../../../shared/AutocompleteFromArray'
 import AutoComplete from '../../../shared/AutocompleteGql'
 import RadioButtonGroupWithInfo from '../../../shared/RadioButtonGroupWithInfo'
 import StringToCopy from '../../../shared/StringToCopy'

@@ -20,6 +20,12 @@ const StyledPaper = styled(Paper)`
 `
 const StyledAutosuggest = styled(Autosuggest)`
   height: auto;
+  .react-autosuggest__suggestions-container--open {
+    bottom: ${props => (props.openabove ? '27px !important' : 'unset')};
+  }
+  .react-autosuggest__suggestions-container {
+    bottom: 27px !important;
+  }
 `
 const StyledTextField = styled(TextField)`
   text-overflow: ellipsis !important;
@@ -76,14 +82,8 @@ const styles = theme => ({
   container: {
     flexGrow: 1,
     position: 'relative',
-    paddingBottom: '20px',
-  },
-  suggestionsContainerOpen: {
-    position: 'absolute',
-    marginTop: theme.spacing.unit,
-    marginBottom: theme.spacing.unit * 3,
-    left: 0,
-    right: 0,
+    paddingTop: 0,
+    paddingBottom: '18px',
   },
   suggestion: {
     display: 'block',
@@ -94,6 +94,7 @@ const styles = theme => ({
     listStyleType: 'none',
     maxHeight: '200px',
     overflow: 'auto',
+    zIndex: 1000,
     breakInside: 'avoid',
   },
 })
@@ -101,18 +102,17 @@ const styles = theme => ({
 const enhance = compose(withStyles(styles))
 
 type Props = {
-  tree: Object,
-  fieldName: String,
   label: String,
   value: String,
-  values: Array<String>,
-  updatePropertyInDb: () => void,
+  values: Array<Object>,
+  saveToDb: () => void,
   classes: Object,
+  openabove: Boolean,
 }
 
 type State = {
-  suggestions: Array<String>,
-  value: String,
+  suggestions: Array<string>,
+  value: string,
 }
 
 class IntegrationAutosuggest extends React.Component<Props, State> {
@@ -122,10 +122,6 @@ class IntegrationAutosuggest extends React.Component<Props, State> {
       suggestions: [],
       value: props.value || '',
     }
-  }
-
-  static getDerivedStateFromProps(nextProps, prevState) {
-    return { value: nextProps.value || '', suggestions: nextProps.values }
   }
 
   getSuggestions = value => {
@@ -157,13 +153,8 @@ class IntegrationAutosuggest extends React.Component<Props, State> {
   }
 
   handleBlur = event => {
-    const { value } = this.state
-    const { values, updatePropertyInDb, tree, fieldName } = this.props
-    // check if value is in values
-    if (!value || values.includes(value)) {
-      return updatePropertyInDb(tree, fieldName, value)
-    }
-    this.setState({ value: '' })
+    const { saveToDb } = this.props
+    return saveToDb(this.state.value || null)
   }
 
   renderInput = inputProps => {
@@ -189,14 +180,21 @@ class IntegrationAutosuggest extends React.Component<Props, State> {
   }
 
   render() {
-    const { classes } = this.props
+    const { classes, openabove } = this.props
     const { suggestions } = this.state
 
     return (
       <StyledAutosuggest
         theme={{
           container: classes.container,
-          suggestionsContainerOpen: classes.suggestionsContainerOpen,
+          suggestionsContainerOpen: {
+            position: 'absolute',
+            marginTop: '8px',
+            marginBottom: '24px',
+            left: 0,
+            right: 0,
+            bottom: openabove ? '27px' : 'unset',
+          },
           suggestionsList: classes.suggestionsList,
           suggestion: classes.suggestion,
         }}
