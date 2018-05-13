@@ -9,7 +9,7 @@ import withHandlers from 'recompose/withHandlers'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroup'
 import TextField from '../../../shared/TextFieldGql'
-import AutoComplete from '../../../shared/AutocompleteGql'
+import AutoComplete from '../../../shared/Autocomplete'
 import DateFieldWithPicker from '../../../shared/DateFieldWithPicker'
 import FormTitle from '../../../shared/FormTitle'
 import constants from '../../../../modules/constants'

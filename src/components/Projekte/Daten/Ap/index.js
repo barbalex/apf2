@@ -7,7 +7,7 @@ import sortBy from 'lodash/sortBy'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 
-import AutoComplete from '../../../shared/AutocompleteGql'
+import AutoComplete from '../../../shared/Autocomplete'
 import RadioButtonGroupWithInfo from '../../../shared/RadioButtonGroupWithInfo'
 import TextField from '../../../shared/TextFieldGql'
 import TextFieldNonUpdatable from '../../../shared/TextFieldNonUpdatable'

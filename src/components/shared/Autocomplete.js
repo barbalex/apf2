@@ -88,7 +88,7 @@ const styles = theme => ({
   container: {
     flexGrow: 1,
     position: 'relative',
-    paddingTop: '12px',
+    paddingTop: 0,
     paddingBottom: '18px',
   },
   suggestion: {
@@ -108,12 +108,10 @@ const styles = theme => ({
 const enhance = compose(withStyles(styles))
 
 type Props = {
-  tree: Object,
   label: String,
-  fieldName: String,
   value: String,
   objects: Array<Object>,
-  updatePropertyInDb: () => void,
+  saveToDb: () => void,
   classes: Object,
   openabove: Boolean,
 }
@@ -163,13 +161,13 @@ class IntegrationAutosuggest extends React.Component<Props, State> {
 
   handleBlur = event => {
     const { value } = this.state
-    const { objects, updatePropertyInDb, tree, fieldName } = this.props
-    const object = objects.find(o => o.value === value)
+    const { objects, saveToDb } = this.props
+    const object = objects.find(o => trimStart(o.value) === value)
     // check if value is in values
     if (object) {
-      return updatePropertyInDb(tree, fieldName, object.id)
+      return saveToDb(object.id)
     }
-    if (!value) return updatePropertyInDb(tree, fieldName, null)
+    if (!value) return saveToDb(null)
     this.setState({ value: '' })
   }
 

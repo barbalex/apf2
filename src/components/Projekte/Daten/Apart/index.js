@@ -7,7 +7,7 @@ import get from 'lodash/get'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 
-import AutoComplete from '../../../shared/AutocompleteGql'
+import AutoComplete from '../../../shared/Autocomplete'
 import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import apartByIdGql from './apartById.graphql'
