@@ -18,7 +18,7 @@ import AutoComplete from '../../../shared/AutocompleteGql'
 import RadioButtonGroupWithInfo from '../../../shared/RadioButtonGroupWithInfo'
 import StringToCopy from '../../../shared/StringToCopy'
 import FormTitle from '../../../shared/FormTitle'
-import DateFieldWithPicker from '../../../shared/DateFieldWithPickerGql'
+import DateFieldWithPicker from '../../../shared/DateFieldWithPicker'
 import TpopfeldkontrentwicklungPopover from '../TpopfeldkontrentwicklungPopover'
 import constants from '../../../../modules/constants'
 

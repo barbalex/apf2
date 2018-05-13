@@ -7,7 +7,7 @@ import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 
 import TextField from '../../../shared/TextFieldGql'
-import DateFieldWithPicker from '../../../shared/DateFieldWithPickerGql'
+import DateFieldWithPicker from '../../../shared/DateFieldWithPicker'
 import FormTitle from '../../../shared/FormTitle'
 import constants from '../../../../modules/constants'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
