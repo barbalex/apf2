@@ -11,7 +11,7 @@ import some from 'lodash/some'
  */
 import popIcon from '../../../../../etc/pop.png'
 import popIconHighlighted from '../../../../../etc/popHighlighted.png'
-import PopPopup from './PopPopup'
+import Popup from './Popup'
 import epsg2056to4326 from '../../../../../modules/epsg2056to4326'
 
 export default ({ pops, store }:{ pops:Array<Object>, store: Object}): Object => {
@@ -65,7 +65,7 @@ export default ({ pops, store }:{ pops:Array<Object>, store: Object}): Object =>
       })
         .bindPopup(
           ReactDOMServer.renderToStaticMarkup(
-            <PopPopup store={store} pop={p} />
+            <Popup store={store} pop={p} />
           )
         )
         .bindTooltip(title, tooltipOptions)

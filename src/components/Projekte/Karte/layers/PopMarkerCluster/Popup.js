@@ -13,7 +13,7 @@ const StyledH3 = styled.h3`
  * or to observe
  */
 
-const PopPopup = ({ store, pop }: { store: Object, pop: Object }) => {
+const Popup = ({ store, pop }: { store: Object, pop: Object }) => {
   const { activeNodes } = store.tree
   const { ap, projekt } = activeNodes
   const popUrl = `${appBaseUrl}/Projekte/${projekt}/Aktionspläne/${ap}/Populationen/${
@@ -44,4 +44,4 @@ const PopPopup = ({ store, pop }: { store: Object, pop: Object }) => {
   )
 }
 
-export default PopPopup
+export default Popup

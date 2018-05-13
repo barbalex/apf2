@@ -11,7 +11,7 @@ import some from 'lodash/some'
  */
 import popIcon from '../../etc/pop.png'
 import popIconHighlighted from '../../etc/popHighlighted.png'
-import PopPopup from '../../components/Projekte/Karte/layers/PopMarkerCluster/PopPopup'
+import Popup from '../../components/Projekte/Karte/layers/PopMarkerCluster/Popup'
 
 export default (store: Object): Object => {
   const { pops, labelUsingNr, highlightedIds } = store.map.pop
@@ -65,7 +65,7 @@ export default (store: Object): Object => {
         })
           .bindPopup(
             ReactDOMServer.renderToStaticMarkup(
-              <PopPopup store={store} pop={p} />
+              <Popup store={store} pop={p} />
             )
           )
           .bindTooltip(title, tooltipOptions)
