@@ -23,7 +23,7 @@ type State = {
   value: Number | String,
 }
 
-class TextField extends Component<Props, State> {
+class MyTextField extends Component<Props, State> {
   constructor(props) {
     super(props)
     this.state = {
@@ -76,4 +76,4 @@ class TextField extends Component<Props, State> {
   }
 }
 
-export default TextField
+export default MyTextField
