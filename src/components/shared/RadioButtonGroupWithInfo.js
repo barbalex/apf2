@@ -14,34 +14,26 @@ const Container = styled.div`
 `
 
 const RadioButtonGroupWithInfo = ({
-  tree,
-  fieldName,
+  label,
   value,
   dataSource,
-  updatePropertyInDb,
+  saveToDb,
   popover,
-  label,
 }: {
-  tree: Object,
-  fieldName: string,
-  value?: ?number | ?string,
+  label: String,
+  value?: ?Number | ?String,
   dataSource: Array<Object>,
-  updatePropertyInDb: () => void,
+  saveToDb: () => void,
   popover: Object,
-  label: string,
 }) => (
   <Container>
     <RadioButtonGroup
-      tree={tree}
-      fieldName={fieldName}
       value={value}
       dataSource={dataSource}
-      updatePropertyInDb={updatePropertyInDb}
+      saveToDb={saveToDb}
       label={label}
     />
-    <InfoWithPopover>
-      {popover}
-    </InfoWithPopover>
+    <InfoWithPopover>{popover}</InfoWithPopover>
   </Container>
 )
 
