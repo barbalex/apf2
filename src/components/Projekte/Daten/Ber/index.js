@@ -7,7 +7,7 @@ import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 
 import TextField from '../../../shared/TextField'
-import TextFieldWithUrl from '../../../shared/TextFieldWithUrlGql'
+import TextFieldWithUrl from '../../../shared/TextFieldWithUrl'
 import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import berByIdGql from './berById.graphql'
