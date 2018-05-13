@@ -1,15 +1,17 @@
 // @flow
-import React from 'react'
-import { observer } from 'mobx-react'
+import React, { Component } from 'react'
 import Input, { InputLabel } from 'material-ui/Input'
-import { FormControl, FormHelperText } from 'material-ui/Form'
-import withHandlers from 'recompose/withHandlers'
-import compose from 'recompose/compose'
-import withState from 'recompose/withState'
+import { FormControl } from 'material-ui/Form'
 import styled from 'styled-components'
 
 import InfoWithPopover from './InfoWithPopover'
 
+const StyledFormControl = styled(FormControl)`
+  padding-bottom: 19px !important;
+  > div:before {
+    background-color: rgba(0, 0, 0, 0.1) !important;
+  }
+`
 const PopoverContentRow = styled.div`
   padding: 2px 5px 2px 5px;
   display: flex;
@@ -18,101 +20,77 @@ const PopoverContentRow = styled.div`
   border-style: solid;
   border-radius: 4px;
 `
-const StyledInput = styled(Input)`
-  &:before {
-    background-color: rgba(0, 0, 0, 0.1) !important;
-  }
-`
 
-const enhance = compose(
-  withState('valueHasBeenChanged', 'changeValueHasBeenChanged', false),
-  withHandlers({
-    onChange: props => event => {
-      let { value } = event.target
-      // ensure numbers saved as numbers
-      if (event.target.type === 'number') {
-        value = +value
-      }
-      props.updateProperty(props.tree, props.fieldName, value)
-      props.changeValueHasBeenChanged(true)
-    },
-    onBlur: props => event => {
-      let { value } = event.target
-      // ensure numbers saved as numbers
-      if (event.target.type === 'number') {
-        value = +value
-      }
-      const { valueHasBeenChanged, tree, fieldName, updatePropertyInDb } = props
-      if (valueHasBeenChanged) {
-        updatePropertyInDb(tree, fieldName, value)
-      }
-    },
-  }),
-  observer
-)
-
-const MyTextField = ({
-  label,
-  value,
-  errorText,
-  type,
-  multiLine,
-  disabled,
-  hintText,
-  onChange,
-  onBlur,
-  popover,
-}: {
-  tree: Object,
-  label: string,
-  fieldName: string,
-  value?: ?number | ?string,
-  errorText?: ?string,
-  type?: string,
-  multiLine?: boolean,
-  disabled?: boolean,
-  hintText?: string,
-  onChange: () => void,
-  onBlur: () => void,
-  // no idea why but this CAN get passed as undefined...
-  updateProperty: () => void,
-  updatePropertyInDb: () => void,
+type Props = {
+  label: String,
+  type?: String,
+  multiLine?: Boolean,
+  disabled?: Boolean,
+  hintText?: String,
   popover: Object,
-}) => (
-  <FormControl
-    error={!!errorText}
-    disabled={disabled}
-    fullWidth
-    aria-describedby={`${label}-helper`}
-  >
-    <InputLabel htmlFor={label}>{label}</InputLabel>
-    <StyledInput
-      id={label}
-      value={value || value === 0 ? value : ''}
-      type={type}
-      multiline={multiLine}
-      onChange={onChange}
-      onBlur={onBlur}
-      placeholder={hintText}
-      endAdornment={
-        <InfoWithPopover>
-          <PopoverContentRow>{popover}</PopoverContentRow>
-        </InfoWithPopover>
-      }
-    />
-    <FormHelperText id={`${label}-helper`}>{errorText}</FormHelperText>
-  </FormControl>
-)
-
-MyTextField.defaultProps = {
-  value: '',
-  errorText: '',
-  type: 'text',
-  multiLine: false,
-  disabled: false,
-  hintText: '',
-  updateProperty: null,
-  updatePropertyInDb: null,
+  saveToDb: () => void,
 }
 
-export default enhance(MyTextField)
+type State = {
+  value: Number | String,
+}
+
+class TextField extends Component<Props, State> {
+  constructor(props) {
+    super(props)
+    this.state = {
+      value: props.value || props.value === 0 ? props.value : '',
+    }
+  }
+
+  static defaultProps = {
+    value: '',
+    type: 'text',
+    multiLine: false,
+    disabled: false,
+    hintText: '',
+    saveToDb: null,
+  }
+
+  static getDerivedStateFromProps(nextProps, prevState) {
+    const value =
+      nextProps.value || nextProps.value === 0 ? nextProps.value : ''
+    return { value }
+  }
+
+  handleChange = event => {
+    this.setState({ value: event.target.value })
+  }
+
+  handleBlur = event => {
+    const { saveToDb } = this.props
+    saveToDb(event.target.value || null)
+  }
+
+  render() {
+    const { label, type, multiLine, disabled, hintText, popover } = this.props
+    const { value } = this.state
+
+    return (
+      <StyledFormControl fullWidth disabled={disabled}>
+        <InputLabel htmlFor={label}>{label}</InputLabel>
+        <Input
+          id={label}
+          value={value}
+          type={type}
+          multiline={multiLine}
+          onChange={this.handleChange}
+          onBlur={this.handleBlur}
+          placeholder={hintText}
+          endAdornment={
+            <InfoWithPopover>
+              <PopoverContentRow>{popover}</PopoverContentRow>
+            </InfoWithPopover>
+          }
+        />
+      </StyledFormControl>
+    )
+  }
+}
+
+export default TextField

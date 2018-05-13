@@ -8,7 +8,7 @@ import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 
 import TextField from '../../../shared/TextField'
-import TextFieldWithInfo from '../../../shared/TextFieldWithInfoGql'
+import TextFieldWithInfo from '../../../shared/TextFieldWithInfo'
 import Status from '../../../shared/Status'
 import AutoCompleteFromArray from '../../../shared/AutocompleteFromArray'
 import RadioButton from '../../../shared/RadioButton'
