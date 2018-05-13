@@ -8,7 +8,7 @@ import format from 'date-fns/format'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 
-import RadioButton from '../../../shared/RadioButtonGql'
+import RadioButton from '../../../shared/RadioButton'
 import RadioButtonGroup from '../../../shared/RadioButtonGroupGql'
 import TextField from '../../../shared/TextFieldGql'
 import AutoComplete from '../../../shared/AutocompleteGql'

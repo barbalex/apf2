@@ -1,6 +1,5 @@
 // @flow
 import React from 'react'
-import { observer } from 'mobx-react'
 import Radio, { RadioGroup } from 'material-ui/Radio'
 import { FormLabel, FormControl, FormControlLabel } from 'material-ui/Form'
 import withHandlers from 'recompose/withHandlers'
@@ -14,11 +13,11 @@ const StyledFormControl = styled(FormControl)`
 `
 const StyledFormLabel = styled(FormLabel)`
   padding-top: 10px !important;
+  padding-bottom: 8px !important;
   font-size: 12px !important;
   cursor: text;
   user-select: none;
   pointer-events: none;
-  padding-bottom: 8px !important;
 `
 const StyledRadio = styled(Radio)`
   height: 26px !important;
@@ -26,26 +25,22 @@ const StyledRadio = styled(Radio)`
 
 const enhance = compose(
   withHandlers({
-    onClickButton: ({ updatePropertyInDb, tree, fieldName, value }) => () =>
-      updatePropertyInDb(tree, fieldName, !value),
-  }),
-  observer
+    onClickButton: ({ saveToDb, value }) => () => saveToDb(!value),
+  })
 )
 
 const RadioButton = ({
-  fieldName,
-  value,
   label,
+  value,
   onClickButton,
 }: {
-  fieldName: String,
-  value: Boolean,
   label: String,
+  value: Boolean,
   onClickButton: () => void,
 }) => (
   <StyledFormControl component="fieldset">
     <StyledFormLabel component="legend">{label}</StyledFormLabel>
-    <RadioGroup aria-label={label} name={fieldName} value={value.toString()}>
+    <RadioGroup aria-label={label} value={value.toString()}>
       <FormControlLabel
         value="true"
         control={<StyledRadio onClick={onClickButton} color="primary" />}
