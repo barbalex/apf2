@@ -21,8 +21,7 @@ export default ({ beobs, store }:{ beobs: Array<Object>, store: Object }): Array
   const { activeNodes } = tree
   const { ap, projekt } = activeNodes
   const { highlightedIds } = map.beobNichtBeurteilt
-  const visible = map.activeApfloraLayers.includes('BeobNichtBeurteilt')
-  if (!visible) return []
+
   return beobs.map(beob => {
     const isHighlighted = highlightedIds.includes(beob.id)
     const latLng = new window.L.LatLng(...epsg2056to4326(beob.x, beob.y))

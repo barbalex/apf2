@@ -12,7 +12,7 @@ import Marker from './Marker'
 
 const enhance = compose(inject('store'))
 
-const PmcComponent = ({ store }:{ store: Object }) => {
+const BeobNichtBeurteiltMarker = ({ store }:{ store: Object }) => {
   const { tree } = store
   const { activeNodes, nodeLabelFilter } = tree
   const { ap, projekt } = activeNodes
@@ -37,10 +37,8 @@ const PmcComponent = ({ store }:{ store: Object }) => {
               el.datum ? format(el.datum, 'YYYY.MM.DD') : '(kein Datum)'
             }: ${el.autor || '(kein Autor)'} (${get(el, 'beobQuelleWerteByQuelleId.name', '')})`.toLowerCase().includes(beobNichtBeurteiltFilterString.toLowerCase())
           })
-        console.log('BeobNichtBeurteiltMarker:', {projekt, ap, data, aparts, beobs})
-        const markers = buildMarkers({ beobs, store })
 
-        return <Marker markers={markers} />
+        return <Marker markers={buildMarkers({ beobs, store })} />
       
     }}
   </Query>
@@ -48,4 +46,4 @@ const PmcComponent = ({ store }:{ store: Object }) => {
 }
 
 
-export default enhance(PmcComponent)
+export default enhance(BeobNichtBeurteiltMarker)
