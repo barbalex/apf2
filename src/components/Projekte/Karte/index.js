@@ -50,6 +50,7 @@ import Pop from './layers/PopMarkerCluster'
 import Tpop from './layers/TpopMarker'
 import TpopCluster from './layers/TpopMarkerCluster'
 import BeobNichtBeurteilt from './layers/BeobNichtBeurteiltMarker'
+import BeobNichtZuzuordnen from './layers/BeobNichtZuzuordnenMarker'
 import BeobZugeordnet from './layers/BeobZugeordnetMarker'
 import BeobCluster from './layers/BeobMarkerCluster'
 import BeobZugeordnetAssignPolylines from './layers/BeobZugeordnetAssignPolylines'
@@ -161,13 +162,20 @@ const Karte = ({ store }: { store: Object }) => {
               />
             )
           },
-          BeobNichtZuzuordnen: () => (
-            <BeobCluster
-              visible={activeApfloraLayers.includes('BeobNichtZuzuordnen')}
-              markers={store.map.beobNichtZuzuordnen.markersClustered}
-              type="nichtZuzuordnen"
-            />
-          ),
+          BeobNichtZuzuordnen: () => {
+            if (
+              store.map.beob.assigning ||
+              activeApfloraLayers.includes('BeobZugeordnetAssignPolylines')
+            ) {
+              return <BeobNichtZuzuordnen />
+            }
+            return (
+              <BeobCluster
+                visible={activeApfloraLayers.includes('BeobNichtZuzuordnen')}
+                markers={store.map.beobNichtZuzuordnen.markersClustered}
+              />
+            )
+          },
           BeobZugeordnet: () => {
             if (
               store.map.beob.assigning ||
