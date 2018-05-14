@@ -49,7 +49,6 @@ import '../../../../node_modules/leaflet.markercluster/dist/MarkerCluster.css'
 import Pop from './layers/PopMarkerCluster'
 import Tpop from './layers/TpopMarker'
 import TpopCluster from './layers/TpopMarkerCluster'
-import Beob from './layers/BeobMarker'
 import BeobNichtBeurteilt from './layers/BeobNichtBeurteiltMarker'
 import BeobZugeordnet from './layers/BeobZugeordnetMarker'
 import BeobCluster from './layers/BeobMarkerCluster'
@@ -152,9 +151,7 @@ const Karte = ({ store }: { store: Object }) => {
               store.map.beob.assigning ||
               activeApfloraLayers.includes('BeobZugeordnetAssignPolylines')
             ) {
-              return (
-                <BeobNichtBeurteilt />
-              )
+              return <BeobNichtBeurteilt />
             }
             return (
               <BeobCluster
@@ -176,9 +173,7 @@ const Karte = ({ store }: { store: Object }) => {
               store.map.beob.assigning ||
               activeApfloraLayers.includes('BeobZugeordnetAssignPolylines')
             ) {
-              return (
-                <BeobZugeordnet/>
-              )
+              return <BeobZugeordnet/>
             }
             return (
               <BeobCluster
