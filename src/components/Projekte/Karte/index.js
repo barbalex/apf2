@@ -49,9 +49,9 @@ import '../../../../node_modules/leaflet.markercluster/dist/MarkerCluster.css'
 import Pop from './layers/PopMarkerCluster'
 import Tpop from './layers/TpopMarker'
 import TpopCluster from './layers/TpopMarkerCluster'
-import BeobNichtBeurteilt from './layers/BeobNichtBeurteiltMarker'
-import BeobNichtZuzuordnen from './layers/BeobNichtZuzuordnenMarker'
-import BeobZugeordnet from './layers/BeobZugeordnetMarker'
+import BeobNichtBeurteilt from './layers/BeobNichtBeurteilt'
+import BeobNichtZuzuordnen from './layers/BeobNichtZuzuordnen'
+import BeobZugeordnet from './layers/BeobZugeordnet'
 import BeobCluster from './layers/BeobMarkerCluster'
 import BeobZugeordnetAssignPolylines from './layers/BeobZugeordnetAssignPolylines'
 import MeasureControl from './MeasureControl'
@@ -147,21 +147,10 @@ const Karte = ({ store }: { store: Object }) => {
               />
             )
           },
-          BeobNichtBeurteilt: () => {
-            if (
-              store.map.beob.assigning ||
-              activeApfloraLayers.includes('BeobZugeordnetAssignPolylines')
-            ) {
-              return <BeobNichtBeurteilt />
-            }
-            return (
-              <BeobCluster
-                visible={activeApfloraLayers.includes('BeobNichtBeurteilt')}
-                markers={store.map.beobNichtBeurteilt.markersClustered}
-                type="nichtBeurteilt"
-              />
-            )
-          },
+          BeobNichtBeurteilt: () =>
+            <BeobNichtBeurteilt
+              clustered={!(store.map.beob.assigning || activeApfloraLayers.includes('BeobZugeordnetAssignPolylines'))}
+            />,
           BeobNichtZuzuordnen: () => {
             if (
               store.map.beob.assigning ||

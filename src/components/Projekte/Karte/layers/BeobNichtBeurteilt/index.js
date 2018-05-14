@@ -8,11 +8,13 @@ import format from 'date-fns/format'
 
 import dataGql from './data.graphql'
 import buildMarkers from './buildMarkers'
+import buildMarkersClustered from './buildMarkersClustered'
 import Marker from './Marker'
+import MarkerCluster from './MarkerCluster'
 
 const enhance = compose(inject('store'))
 
-const BeobNichtBeurteiltMarker = ({ store }:{ store: Object }) => {
+const BeobNichtBeurteiltMarker = ({ store, clustered } : { store: Object, clustered: Boolean }) => {
   const { tree } = store
   const { activeNodes, nodeLabelFilter } = tree
   const { ap, projekt } = activeNodes
@@ -38,6 +40,7 @@ const BeobNichtBeurteiltMarker = ({ store }:{ store: Object }) => {
             }: ${el.autor || '(kein Autor)'} (${get(el, 'beobQuelleWerteByQuelleId.name', '')})`.toLowerCase().includes(beobNichtBeurteiltFilterString.toLowerCase())
           })
 
+        if (clustered) return <MarkerCluster markers={buildMarkersClustered({ beobs, store })} />
         return <Marker markers={buildMarkers({ beobs, store })} />
       
     }}
