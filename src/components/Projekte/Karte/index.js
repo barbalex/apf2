@@ -16,7 +16,6 @@ import { Query } from 'react-apollo'
 import 'leaflet'
 import 'proj4'
 import 'proj4leaflet'
-import get from 'lodash/get'
 
 import dataGql from './data.graphql'
 import LayersControl from './LayersControl'
@@ -92,7 +91,7 @@ const enhance = compose(inject('store'), observer)
 
 const Karte = ({ store }: { store: Object }) => {
   const { map, tree } = store
-  const { activeNodes, nodeLabelFilter } = tree
+  const { activeNodes } = tree
   const { ap, projekt } = activeNodes
   const queryPops = map.activeApfloraLayers.includes('Pop')
 
@@ -106,15 +105,6 @@ const Karte = ({ store }: { store: Object }) => {
     >
       {({ loading, error, data }) => {
         if (error) return `Fehler: ${error.message}`
-
-        const popFilterString = nodeLabelFilter.get('pop')
-        const pops = get(data, 'projektById.apsByProjId.nodes[0].popsByApId.nodes', [])
-          // filter them by nodeLabelFilter
-          .filter(p => {
-            if (!popFilterString) return true
-            return `${p.nr || '(keine Nr)'}: ${p.name || '(kein Name)'}`.toLowerCase().includes(popFilterString.toLowerCase())
-          })
-        //const popBounds = getBounds(pops)
 
         const { activeBaseLayer, activeApfloraLayers } = store.map
         const { idOfTpopBeingLocalized } = store.map.tpop
