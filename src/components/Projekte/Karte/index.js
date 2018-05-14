@@ -158,12 +158,7 @@ const Karte = ({ store }: { store: Object }) => {
             <BeobZugeordnet
               clustered={!(store.map.beob.assigning || activeApfloraLayers.includes('BeobZugeordnetAssignPolylines'))}
             />,
-          BeobZugeordnetAssignPolylines: () => (
-            <BeobZugeordnetAssignPolylines
-              visible={activeApfloraLayers.includes('BeobZugeordnetAssignPolylines')}
-              assignPolylines={store.map.beobZugeordnet.assignPolylines}
-            />
-          ),
+          BeobZugeordnetAssignPolylines: () => <BeobZugeordnetAssignPolylines />
         }
         const OverlayComponents = {
           ZhUep: () => <ZhUepOverlay />,
