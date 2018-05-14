@@ -158,21 +158,6 @@ const Karte = ({ store }: { store: Object }) => {
             <BeobZugeordnet
               clustered={!(store.map.beob.assigning || activeApfloraLayers.includes('BeobZugeordnetAssignPolylines'))}
             />,
-          /*BeobZugeordnet: () => {
-            if (
-              store.map.beob.assigning ||
-              activeApfloraLayers.includes('BeobZugeordnetAssignPolylines')
-            ) {
-              return <BeobZugeordnet/>
-            }
-            return (
-              <BeobCluster
-                visible={activeApfloraLayers.includes('BeobZugeordnet')}
-                markers={store.map.beobZugeordnet.markersClustered}
-                type="zugeordnet"
-              />
-            )
-          },*/
           BeobZugeordnetAssignPolylines: () => (
             <BeobZugeordnetAssignPolylines
               visible={activeApfloraLayers.includes('BeobZugeordnetAssignPolylines')}
