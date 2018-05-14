@@ -22,7 +22,6 @@ export default ({ beobs, store }:{ beobs: Array<Object>, store: Object }): Objec
   const { activeNodes } = tree
   const { ap, projekt } = activeNodes
   const { highlightedIds } = map.beobNichtBeurteilt
-  const visible = store.map.activeApfloraLayers.includes('BeobNichtBeurteilt')
   const mcgOptions = {
     maxClusterRadius: 66,
     iconCreateFunction: function(cluster) {
@@ -42,49 +41,47 @@ export default ({ beobs, store }:{ beobs: Array<Object>, store: Object }): Objec
     },
   }
   const markers = window.L.markerClusterGroup(mcgOptions)
-  if (visible) {
-    beobs.forEach(beob => {
-      const isHighlighted = highlightedIds.includes(beob.id)
-      const latLng = new window.L.LatLng(...epsg2056to4326(beob.x, beob.y))
-      const icon = window.L.icon({
-        iconUrl: isHighlighted ? beobIconHighlighted : beobIcon,
-        iconSize: [24, 24],
-        className: isHighlighted ? 'beobIconHighlighted' : 'beobIcon',
-      })
-      const label = `${beob.datum ? format(beob.datum, 'YYYY.MM.DD') : '(kein Datum)'}: ${beob.autor || '(kein Autor)'} (${get(beob, 'beobQuelleWerteByQuelleId.name', '')})`
-      const marker = window.L
-        .marker(latLng, {
-          title: label,
-          icon,
-          draggable: store.map.beob.assigning,
-          zIndexOffset: -store.map.apfloraLayers.findIndex(
-            apfloraLayer => apfloraLayer.value === 'BeobNichtBeurteilt',
-          ),
-        })
-        .bindPopup(
-          ReactDOMServer.renderToStaticMarkup(
-            <Fragment>
-              <div>{`Beobachtung von ${get(beob, 'aeEigenschaftenByArtId.artname', '')}`}</div>
-              <StyledH3>
-                {label}
-              </StyledH3>
-              <div>
-                {`Koordinaten: ${beob.x.toLocaleString(
-                  'de-ch'
-                )} / ${beob.y.toLocaleString('de-ch')}`}
-              </div>
-              <a
-                href={`${appBaseUrl}/Projekte/${projekt}/Aktionspläne/${ap}/nicht-beurteilte-Beobachtungen/${beob.id}`}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Formular in neuem Tab öffnen
-              </a>
-            </Fragment>,
-          ),
-        )
-      markers.addLayer(marker)
+  beobs.forEach(beob => {
+    const isHighlighted = highlightedIds.includes(beob.id)
+    const latLng = new window.L.LatLng(...epsg2056to4326(beob.x, beob.y))
+    const icon = window.L.icon({
+      iconUrl: isHighlighted ? beobIconHighlighted : beobIcon,
+      iconSize: [24, 24],
+      className: isHighlighted ? 'beobIconHighlighted' : 'beobIcon',
     })
-  }
+    const label = `${beob.datum ? format(beob.datum, 'YYYY.MM.DD') : '(kein Datum)'}: ${beob.autor || '(kein Autor)'} (${get(beob, 'beobQuelleWerteByQuelleId.name', '')})`
+    const marker = window.L
+      .marker(latLng, {
+        title: label,
+        icon,
+        draggable: store.map.beob.assigning,
+        zIndexOffset: -store.map.apfloraLayers.findIndex(
+          apfloraLayer => apfloraLayer.value === 'BeobNichtBeurteilt',
+        ),
+      })
+      .bindPopup(
+        ReactDOMServer.renderToStaticMarkup(
+          <Fragment>
+            <div>{`Beobachtung von ${get(beob, 'aeEigenschaftenByArtId.artname', '')}`}</div>
+            <StyledH3>
+              {label}
+            </StyledH3>
+            <div>
+              {`Koordinaten: ${beob.x.toLocaleString(
+                'de-ch'
+              )} / ${beob.y.toLocaleString('de-ch')}`}
+            </div>
+            <a
+              href={`${appBaseUrl}/Projekte/${projekt}/Aktionspläne/${ap}/nicht-beurteilte-Beobachtungen/${beob.id}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Formular in neuem Tab öffnen
+            </a>
+          </Fragment>,
+        ),
+      )
+    markers.addLayer(marker)
+  })
   return markers
 }
