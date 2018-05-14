@@ -30,8 +30,9 @@ export default ({ beobs, store }:{ beobs: Array<Object>, store: Object }): Array
       iconSize: [24, 24],
       className: isHighlighted ? 'beobIconHighlighted' : 'beobIcon',
     })
+    const label = `${beob.datum ? format(beob.datum, 'YYYY.MM.DD') : '(kein Datum)'}: ${beob.autor || '(kein Autor)'} (${get(beob, 'beobQuelleWerteByQuelleId.name', '')})`
     return window.L.marker(latLng, {
-      title: beob.label,
+      title: label,
       icon,
       draggable: store.map.beob.assigning,
       zIndexOffset: -store.map.apfloraLayers.findIndex(
@@ -43,7 +44,7 @@ export default ({ beobs, store }:{ beobs: Array<Object>, store: Object }): Array
           <Fragment>
             <div>{`Beobachtung von ${get(beob, 'aeEigenschaftenByArtId.artname', '')}`}</div>
             <StyledH3>
-              {`${beob.datum ? format(beob.datum, 'YYYY.MM.DD') : '(kein Datum)'}: ${beob.autor || '(kein Autor)'} (${get(beob, 'beobQuelleWerteByQuelleId.name', '')})`}
+              {label}
             </StyledH3>
             <div>
               {`Koordinaten: ${beob.x.toLocaleString(
