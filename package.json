@@ -30,7 +30,7 @@
   },
   "dependencies": {
     "@hocs/with-lifecycle": "0.4.0",
-    "@material-ui/icons": "1.0.0-rc.0",
+    "@material-ui/icons": "^1.0.0-beta.43",
     "@turf/inside": "4.7.3",
     "@turf/nearest": "4.7.3",
     "@turf/within": "4.7.3",

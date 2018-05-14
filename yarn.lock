@@ -1187,11 +1187,11 @@
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/@hocs/with-lifecycle/-/with-lifecycle-0.4.0.tgz#8df9c71f4efd3d6bffe39857776c2bf7f1becbe8"
 
-"@material-ui/icons@1.0.0-rc.0":
-  version "1.0.0-rc.0"
-  resolved "https://registry.yarnpkg.com/@material-ui/icons/-/icons-1.0.0-rc.0.tgz#1c836832183d509eaac9df42aa31dbbe4dd337cb"
+"@material-ui/icons@1.0.0-beta.43":
+  version "1.0.0-beta.43"
+  resolved "https://registry.yarnpkg.com/@material-ui/icons/-/icons-1.0.0-beta.43.tgz#38bba799a4e575de7eced4bd10a0afbd546e9b47"
   dependencies:
-    recompose "^0.26.0 || ^0.27.0"
+    recompose "^0.26.0"
 
 "@turf/area@^5.1.5":
   version "5.1.5"
@@ -8522,6 +8522,15 @@ recompose@0.27.0, "recompose@^0.26.0 || ^0.27.0":
     fbjs "^0.8.1"
     hoist-non-react-statics "^2.3.1"
     react-lifecycles-compat "^3.0.2"
+    symbol-observable "^1.0.4"
+
+recompose@^0.26.0:
+  version "0.26.0"
+  resolved "https://registry.yarnpkg.com/recompose/-/recompose-0.26.0.tgz#9babff039cb72ba5bd17366d55d7232fbdfb2d30"
+  dependencies:
+    change-emitter "^0.1.2"
+    fbjs "^0.8.1"
+    hoist-non-react-statics "^2.3.1"
     symbol-observable "^1.0.4"
 
 recursive-readdir@2.2.1:
