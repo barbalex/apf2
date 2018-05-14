@@ -151,7 +151,11 @@ const Karte = ({ store }: { store: Object }) => {
             <BeobNichtBeurteilt
               clustered={!(store.map.beob.assigning || activeApfloraLayers.includes('BeobZugeordnetAssignPolylines'))}
             />,
-          BeobNichtZuzuordnen: () => {
+          BeobNichtZuzuordnen: () =>
+            <BeobNichtZuzuordnen
+              clustered={!(store.map.beob.assigning || activeApfloraLayers.includes('BeobZugeordnetAssignPolylines'))}
+            />,
+          /*BeobNichtZuzuordnen: () => {
             if (
               store.map.beob.assigning ||
               activeApfloraLayers.includes('BeobZugeordnetAssignPolylines')
@@ -164,7 +168,7 @@ const Karte = ({ store }: { store: Object }) => {
                 markers={store.map.beobNichtZuzuordnen.markersClustered}
               />
             )
-          },
+          },*/
           BeobZugeordnet: () => {
             if (
               store.map.beob.assigning ||
