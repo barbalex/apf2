@@ -6,7 +6,7 @@ import get from 'lodash/get'
 
 import dataGql from './data.graphql'
 import buildMarkers from './buildMarkers'
-import PopMarkerCluster from './Cluster'
+import Marker from './Marker'
 
 const enhance = compose(inject('store'))
 
@@ -34,7 +34,7 @@ const PmcComponent = ({ store }:{ store: Object }) => {
           })
         const popMarkers = buildMarkers({ pops, store })
 
-        return <PopMarkerCluster markers={popMarkers} />
+        return <Marker markers={popMarkers} />
       
     }}
   </Query>
