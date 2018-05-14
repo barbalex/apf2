@@ -3,6 +3,7 @@ import { inject } from 'mobx-react'
 import compose from 'recompose/compose'
 import { Query } from 'react-apollo'
 import get from 'lodash/get'
+import format from 'date-fns/format'
 
 import dataGql from './data.graphql'
 import buildMarkers from './buildMarkers'
@@ -10,31 +11,34 @@ import Marker from './Marker'
 
 const enhance = compose(inject('store'))
 
-const PmcComponent = ({ store }:{ store: Object }) => {
+const BeobNichtZuzuordnenMarker = ({ store }:{ store: Object }) => {
   const { tree } = store
   const { activeNodes, nodeLabelFilter } = tree
-  const { ap, projekt } = activeNodes
+  const { ap, projekt, pop, tpop } = activeNodes
 
   return (
     <Query query={dataGql}
       variables={{
         apId: ap,
         projId: projekt,
+        popId: pop,
+        tpopId: tpop
       }}
     >
       {({ loading, error, data }) => {
         if (error) return `Fehler: ${error.message}`
 
-        const popFilterString = nodeLabelFilter.get('pop')
-        const pops = get(data, 'projektById.apsByProjId.nodes[0].popsByApId.nodes', [])
+        const beobZugeordnetFilterString = nodeLabelFilter.get('beobZugeordnet')
+        const beobs = get(data, 'projektById.apsByProjId.nodes[0].popsByApId.nodes[0].tpopsByPopId.nodes[0].beobsByTpopId.nodes', [])
           // filter them by nodeLabelFilter
-          .filter(p => {
-            if (!popFilterString) return true
-            return `${p.nr || '(keine Nr)'}: ${p.name || '(kein Name)'}`.toLowerCase().includes(popFilterString.toLowerCase())
+          .filter(el => {
+            if (!beobZugeordnetFilterString) return true
+            return `${
+              el.datum ? format(el.datum, 'YYYY.MM.DD') : '(kein Datum)'
+            }: ${el.autor || '(kein Autor)'} (${get(el, 'beobQuelleWerteByQuelleId.name', '')})`.toLowerCase().includes(beobZugeordnetFilterString.toLowerCase())
           })
-        const popMarkers = buildMarkers({ pops, store })
 
-        return <Marker markers={popMarkers} />
+        return <Marker markers={buildMarkers({ beobs, store })} />
       
     }}
   </Query>
@@ -42,4 +46,4 @@ const PmcComponent = ({ store }:{ store: Object }) => {
 }
 
 
-export default enhance(PmcComponent)
+export default enhance(BeobNichtZuzuordnenMarker)

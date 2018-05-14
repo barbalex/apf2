@@ -51,6 +51,7 @@ import Tpop from './layers/TpopMarker'
 import TpopCluster from './layers/TpopMarkerCluster'
 import Beob from './layers/BeobMarker'
 import BeobNichtBeurteilt from './layers/BeobNichtBeurteiltMarker'
+import BeobZugeordnet from './layers/BeobZugeordnetMarker'
 import BeobCluster from './layers/BeobMarkerCluster'
 import BeobZugeordnetAssignPolylines from './layers/BeobZugeordnetAssignPolylines'
 import MeasureControl from './MeasureControl'
@@ -176,11 +177,7 @@ const Karte = ({ store }: { store: Object }) => {
               activeApfloraLayers.includes('BeobZugeordnetAssignPolylines')
             ) {
               return (
-                <Beob
-                  visible={activeApfloraLayers.includes('BeobZugeordnet')}
-                  markers={store.map.beobZugeordnet.markers}
-                  type="zugeordnet"
-                />
+                <BeobZugeordnet/>
               )
             }
             return (

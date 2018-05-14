@@ -6,8 +6,8 @@ import format from 'date-fns/format'
 import styled from 'styled-components'
 import get from 'lodash/get'
 
-import beobIcon from '../../../../../etc/beob.png'
-import beobIconHighlighted from '../../../../../etc/beobHighlighted.png'
+import beobIcon from '../../../../../etc/beobZugeordnet.png'
+import beobIconHighlighted from '../../../../../etc/beobZugeordnetHighlighted.png'
 import getNearestTpopId from '../../../../../modules/getNearestTpopId'
 import appBaseUrl from '../../../../../modules/appBaseUrl'
 import epsg2056to4326 from '../../../../../modules/epsg2056to4326'
@@ -17,10 +17,10 @@ const StyledH3 = styled.h3`
 `
 
 export default ({ beobs, store }:{ beobs: Array<Object>, store: Object }): Array<Object> => {
-  const { tree, insertBeobzuordnung, map, table } = store
+  const { tree, updatePropertyInDb, map, table } = store
   const { activeNodes } = tree
   const { ap, projekt } = activeNodes
-  const { highlightedIds } = map.beobNichtBeurteilt
+  const { highlightedIds } = map.beobZugeordnet
 
   return beobs.map(beob => {
     const isHighlighted = highlightedIds.includes(beob.id)
@@ -36,7 +36,7 @@ export default ({ beobs, store }:{ beobs: Array<Object>, store: Object }): Array
       icon,
       draggable: store.map.beob.assigning,
       zIndexOffset: -store.map.apfloraLayers.findIndex(
-        apfloraLayer => apfloraLayer.value === 'BeobNichtBeurteilt'
+        apfloraLayer => apfloraLayer.value === 'BeobZugeordnet'
       ),
     })
       .bindPopup(
@@ -52,7 +52,9 @@ export default ({ beobs, store }:{ beobs: Array<Object>, store: Object }): Array
               )} / ${beob.y.toLocaleString('de-ch')}`}
             </div>
             <a
-              href={`${appBaseUrl}/Projekte/${projekt}/Aktionspläne/${ap}/nicht-beurteilte-Beobachtungen/${beob.id}`}
+              href={`${appBaseUrl}/Projekte/${projekt}/Aktionspläne/${ap}/Populationen/${get(beob, 'tpopByTpopId.popId', '')}/Teil-Populationen/${get(beob, 'tpopByTpopId.id', '')}/Beobachtungen/${
+                beob.id
+              }`}
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -82,7 +84,7 @@ export default ({ beobs, store }:{ beobs: Array<Object>, store: Object }): Array
           beob.id,
         ]
         tree.setActiveNodeArray(newActiveNodeArray)
-        insertBeobzuordnung(tree, beob, 'tpop_id', nearestTpopId)
+        updatePropertyInDb(tree, 'tpop_id', nearestTpopId)
       })
   })
 }
