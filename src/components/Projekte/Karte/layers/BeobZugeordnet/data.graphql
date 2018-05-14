@@ -1,39 +1,33 @@
-query Query($projId: UUID!, $apId: UUID!, $popId: UUID!, $tpopId: UUID!) {
+query Query($projId: UUID!, $apId: UUID!) {
   projektById(id: $projId) {
     id
     apsByProjId(filter: { id: { equalTo: $apId } }) {
       nodes {
         id
-        popsByApId(
-          filter: { id: { equalTo: $popId } }
-        ) {
+        apartsByApId {
           nodes {
             id
-            tpopsByPopId(
-              filter: {
-                id: { equalTo: $tpopId }
-              }
-            ) {
-              nodes {
-                id
-                beobsByTpopId(filter: {x: {isNull: false}, y: {isNull: false}}) {
-                  nodes {
+            artId
+            aeEigenschaftenByArtId {
+              id
+              beobsByArtId(filter: {tpopId: {isNull: false}, nichtZuordnen: {equalTo: false}, x: {isNull: false}, y: {isNull: false}}) {
+                nodes {
+                  id
+                  autor
+                  datum
+                  beobQuelleWerteByQuelleId {
+                    name
+                  }
+                  x
+                  y
+                  aeEigenschaftenByArtId {
                     id
-                    autor
-                    datum
-                    beobQuelleWerteByQuelleId {
-                      name
-                    }
-                    x
-                    y
-                    aeEigenschaftenByArtId {
-                      id
-                      artname
-                    }
-                    tpopByTpopId {
-                      id
-                      popId
-                    }
+                    artname
+                  }
+                  tpopByTpopId {
+                    id
+                    nr
+                    flurname
                   }
                 }
               }

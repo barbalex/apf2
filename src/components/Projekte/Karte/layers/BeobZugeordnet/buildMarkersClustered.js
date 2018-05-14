@@ -2,13 +2,14 @@
 import React, { Fragment } from 'react'
 import ReactDOMServer from 'react-dom/server'
 import 'leaflet'
+import '../../../../../../node_modules/leaflet.markercluster/dist/leaflet.markercluster-src.js'
 import format from 'date-fns/format'
-import styled from 'styled-components'
+import some from 'lodash/some'
 import get from 'lodash/get'
+import styled from 'styled-components'
 
 import beobIcon from '../../../../../etc/beobZugeordnet.png'
 import beobIconHighlighted from '../../../../../etc/beobZugeordnetHighlighted.png'
-import getNearestTpopId from '../../../../../modules/getNearestTpopId'
 import appBaseUrl from '../../../../../modules/appBaseUrl'
 import epsg2056to4326 from '../../../../../modules/epsg2056to4326'
 
@@ -16,13 +17,31 @@ const StyledH3 = styled.h3`
   margin: 7px 0;
 `
 
-export default ({ beobs, store }:{ beobs: Array<Object>, store: Object }): Array<Object> => {
-  const { tree, updatePropertyInDb, map, table } = store
+export default ({ beobs, store }:{ beobs: Array<Object>, store: Object }): Object => {
+  const { tree, map } = store
   const { activeNodes } = tree
   const { ap, projekt } = activeNodes
   const { highlightedIds } = map.beobZugeordnet
-
-  return beobs.map(beob => {
+  const mcgOptions = {
+    maxClusterRadius: 66,
+    iconCreateFunction: function(cluster) {
+      const markers = cluster.getAllChildMarkers()
+      const hasHighlightedTpop = some(
+        markers,
+        m => m.options.icon.options.className === 'beobIconHighlighted'
+      )
+      const className = hasHighlightedTpop
+        ? 'beobZugeordnetClusterHighlighted'
+        : 'beobZugeordnetCluster'
+      return window.L.divIcon({
+        html: markers.length,
+        className,
+        iconSize: window.L.point(40, 40),
+      })
+    },
+  }
+  const markers = window.L.markerClusterGroup(mcgOptions)
+  beobs.forEach(beob => {
     const isHighlighted = highlightedIds.includes(beob.id)
     const latLng = new window.L.LatLng(...epsg2056to4326(beob.x, beob.y))
     const icon = window.L.icon({
@@ -31,14 +50,15 @@ export default ({ beobs, store }:{ beobs: Array<Object>, store: Object }): Array
       className: isHighlighted ? 'beobIconHighlighted' : 'beobIcon',
     })
     const label = `${beob.datum ? format(beob.datum, 'YYYY.MM.DD') : '(kein Datum)'}: ${beob.autor || '(kein Autor)'} (${get(beob, 'beobQuelleWerteByQuelleId.name', '')})`
-    return window.L.marker(latLng, {
-      title: label,
-      icon,
-      draggable: store.map.beob.assigning,
-      zIndexOffset: -store.map.apfloraLayers.findIndex(
-        apfloraLayer => apfloraLayer.value === 'BeobZugeordnet'
-      ),
-    })
+    const marker = window.L
+      .marker(latLng, {
+        title: label,
+        icon,
+        draggable: store.map.beob.assigning,
+        zIndexOffset: -store.map.apfloraLayers.findIndex(
+          apfloraLayer => apfloraLayer.value === 'BeobZugeordnet',
+        ),
+      })
       .bindPopup(
         ReactDOMServer.renderToStaticMarkup(
           <Fragment>
@@ -53,39 +73,16 @@ export default ({ beobs, store }:{ beobs: Array<Object>, store: Object }): Array
             </div>
             <div>{`Teil-Population: ${get(beob, 'tpopByTpopId.nr', '(keine Nr)')}: ${get(beob, 'tpopByTpopId.flurname', '(kein Flurname)')}`}</div>
             <a
-              href={`${appBaseUrl}/Projekte/${projekt}/Aktionspläne/${ap}/Populationen/${get(beob, 'tpopByTpopId.popId', '')}/Teil-Populationen/${get(beob, 'tpopByTpopId.id', '')}/Beobachtungen/${
-                beob.id
-              }`}
+              href={`${appBaseUrl}/Projekte/${projekt}/Aktionspläne/${ap}/nicht-beurteilte-Beobachtungen/${beob.id}`}
               target="_blank"
               rel="noopener noreferrer"
             >
               Formular in neuem Tab öffnen
             </a>
-          </Fragment>
-        )
+          </Fragment>,
+        ),
       )
-      .on('moveend', event => {
-        /**
-         * assign to nearest tpop
-         * point url to moved beob
-         * open form of beob?
-         */
-        const nearestTpopId = getNearestTpopId(store, event.target._latlng)
-        const popId = table.tpop.get(nearestTpopId).pop_id
-        const newActiveNodeArray = [
-          'Projekte',
-          activeNodes.projekt,
-          'Aktionspläne',
-          activeNodes.ap,
-          'Populationen',
-          popId,
-          'Teil-Populationen',
-          nearestTpopId,
-          'Beobachtungen',
-          beob.id,
-        ]
-        tree.setActiveNodeArray(newActiveNodeArray)
-        updatePropertyInDb(tree, 'tpop_id', nearestTpopId)
-      })
+    markers.addLayer(marker)
   })
+  return markers
 }

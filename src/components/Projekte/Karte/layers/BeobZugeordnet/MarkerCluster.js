@@ -3,21 +3,18 @@ import compose from 'recompose/compose'
 import getContext from 'recompose/getContext'
 import 'leaflet'
 import PropTypes from 'prop-types'
-import '../../../../../node_modules/leaflet.markercluster/dist/leaflet.markercluster-src.js'
+import '../../../../../../node_modules/leaflet.markercluster/dist/leaflet.markercluster-src.js'
 
 const enhance = compose(getContext({ map: PropTypes.object.isRequired }))
 
 class BeobMarkerCluster extends Component {
   props: {
-    visible: boolean,
     markers: Object,
   }
 
   componentDidMount() {
-    const { map, markers, visible } = this.props
-    if (visible) {
-      map.addLayer(markers)
-    }
+    const { map, markers } = this.props
+    map.addLayer(markers)
   }
 
   componentWillReceiveProps(nextProps) {
@@ -28,10 +25,8 @@ class BeobMarkerCluster extends Component {
   }
 
   componentDidUpdate() {
-    const { map, markers, visible } = this.props
-    if (visible) {
-      map.addLayer(markers)
-    }
+    const { map, markers } = this.props
+    map.addLayer(markers)
   }
 
   componentWillUnmount() {

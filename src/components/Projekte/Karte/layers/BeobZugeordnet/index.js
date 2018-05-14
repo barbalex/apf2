@@ -3,33 +3,35 @@ import { inject } from 'mobx-react'
 import compose from 'recompose/compose'
 import { Query } from 'react-apollo'
 import get from 'lodash/get'
+import flatten from 'lodash/flatten'
 import format from 'date-fns/format'
 
 import dataGql from './data.graphql'
 import buildMarkers from './buildMarkers'
+import buildMarkersClustered from './buildMarkersClustered'
 import Marker from './Marker'
+import MarkerCluster from './MarkerCluster'
 
 const enhance = compose(inject('store'))
 
-const BeobNichtZuzuordnenMarker = ({ store }:{ store: Object }) => {
+const BeobZugeordnetMarker = ({ store, clustered } : { store: Object, clustered: Boolean }) => {
   const { tree } = store
   const { activeNodes, nodeLabelFilter } = tree
-  const { ap, projekt, pop, tpop } = activeNodes
+  const { ap, projekt } = activeNodes
 
   return (
     <Query query={dataGql}
       variables={{
         apId: ap,
-        projId: projekt,
-        popId: pop,
-        tpopId: tpop
+        projId: projekt
       }}
     >
       {({ loading, error, data }) => {
         if (error) return `Fehler: ${error.message}`
 
         const beobZugeordnetFilterString = nodeLabelFilter.get('beobZugeordnet')
-        const beobs = get(data, 'projektById.apsByProjId.nodes[0].popsByApId.nodes[0].tpopsByPopId.nodes[0].beobsByTpopId.nodes', [])
+        const aparts = get(data, 'projektById.apsByProjId.nodes[0].apartsByApId.nodes', [])
+        const beobs = flatten(aparts.map(a => get(a, 'aeEigenschaftenByArtId.beobsByArtId.nodes', [])))
           // filter them by nodeLabelFilter
           .filter(el => {
             if (!beobZugeordnetFilterString) return true
@@ -38,6 +40,7 @@ const BeobNichtZuzuordnenMarker = ({ store }:{ store: Object }) => {
             }: ${el.autor || '(kein Autor)'} (${get(el, 'beobQuelleWerteByQuelleId.name', '')})`.toLowerCase().includes(beobZugeordnetFilterString.toLowerCase())
           })
 
+        if (clustered) return <MarkerCluster markers={buildMarkersClustered({ beobs, store })} />
         return <Marker markers={buildMarkers({ beobs, store })} />
       
     }}
@@ -46,4 +49,4 @@ const BeobNichtZuzuordnenMarker = ({ store }:{ store: Object }) => {
 }
 
 
-export default enhance(BeobNichtZuzuordnenMarker)
+export default enhance(BeobZugeordnetMarker)
