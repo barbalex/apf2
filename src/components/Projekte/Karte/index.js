@@ -154,6 +154,7 @@ const Karte = ({ store }: { store: Object }) => {
                 <Beob
                   visible={activeApfloraLayers.includes('BeobNichtBeurteilt')}
                   markers={store.map.beobNichtBeurteilt.markers}
+                  type="nichtBeurteilt"
                 />
               )
             }
@@ -161,6 +162,7 @@ const Karte = ({ store }: { store: Object }) => {
               <BeobCluster
                 visible={activeApfloraLayers.includes('BeobNichtBeurteilt')}
                 markers={store.map.beobNichtBeurteilt.markersClustered}
+                type="nichtBeurteilt"
               />
             )
           },
@@ -168,6 +170,7 @@ const Karte = ({ store }: { store: Object }) => {
             <BeobCluster
               visible={activeApfloraLayers.includes('BeobNichtZuzuordnen')}
               markers={store.map.beobNichtZuzuordnen.markersClustered}
+              type="nichtZuzuordnen"
             />
           ),
           BeobZugeordnet: () => {
@@ -179,6 +182,7 @@ const Karte = ({ store }: { store: Object }) => {
                 <Beob
                   visible={activeApfloraLayers.includes('BeobZugeordnet')}
                   markers={store.map.beobZugeordnet.markers}
+                  type="zugeordnet"
                 />
               )
             }
@@ -186,6 +190,7 @@ const Karte = ({ store }: { store: Object }) => {
               <BeobCluster
                 visible={activeApfloraLayers.includes('BeobZugeordnet')}
                 markers={store.map.beobZugeordnet.markersClustered}
+                type="zugeordnet"
               />
             )
           },
