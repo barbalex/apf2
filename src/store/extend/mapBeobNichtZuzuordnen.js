@@ -2,44 +2,31 @@
 import { extendObservable, computed } from 'mobx'
 
 import getBeobNichtZuzuordnenBounds from '../action/getBeobNichtZuzuordnenBounds'
-import getBeobNichtZuzuordnenMarkersClustered from '../action/getBeobNichtZuzuordnenMarkersClustered'
 import getBeobForMap from '../action/getBeobForMap'
 
 export default (store: Object): void => {
   extendObservable(store.map.beobNichtZuzuordnen, {
-    highlightedIds: computed(
-      () => {
-        const mapFilterBeobNichtZuzuordnen =
-          store.map.mapFilter.beobNichtZuzuordnen
-        if (mapFilterBeobNichtZuzuordnen.length > 0) {
-          return mapFilterBeobNichtZuzuordnen
-        }
-        if (store.tree.activeNodes.beobNichtZuzuordnen) {
-          return [store.tree.activeNodes.beobNichtZuzuordnen]
-        }
-        return []
-      },
-      { name: 'mapBeobNichtZuzuordnenHighlightedIds' }
-    ),
-    markersClustered: computed(
-      () => getBeobNichtZuzuordnenMarkersClustered(store),
-      { name: 'mapBeobNichtZuzuordnenMarkersClustered' }
-    ),
-    beobs: computed(() => getBeobForMap(store).filter(b => b.nicht_zuordnen), {
-      name: 'mapBeobNichtZuzuordnenBeobs',
+    highlightedIds: computed(() => {
+      const mapFilterBeobNichtZuzuordnen =
+        store.map.mapFilter.beobNichtZuzuordnen
+      if (mapFilterBeobNichtZuzuordnen.length > 0) {
+        return mapFilterBeobNichtZuzuordnen
+      }
+      if (store.tree.activeNodes.beobNichtZuzuordnen) {
+        return [store.tree.activeNodes.beobNichtZuzuordnen]
+      }
+      return []
     }),
-    bounds: computed(
-      () => getBeobNichtZuzuordnenBounds(store.map.beobNichtZuzuordnen.beobs),
-      { name: 'mapBeobNichtZuzuordnenBounds' }
+    beobs: computed(() => getBeobForMap(store).filter(b => b.nicht_zuordnen)),
+    bounds: computed(() =>
+      getBeobNichtZuzuordnenBounds(store.map.beobNichtZuzuordnen.beobs)
     ),
-    boundsOfHighlightedIds: computed(
-      () =>
-        getBeobNichtZuzuordnenBounds(
-          store.map.beobNichtZuzuordnen.beobs.filter(b =>
-            store.map.beobNichtZuzuordnen.highlightedIds.includes(b.id)
-          )
-        ),
-      { name: 'mapBeobNichtZuzuordnenBoundsOfHighlightedIds' }
+    boundsOfHighlightedIds: computed(() =>
+      getBeobNichtZuzuordnenBounds(
+        store.map.beobNichtZuzuordnen.beobs.filter(b =>
+          store.map.beobNichtZuzuordnen.highlightedIds.includes(b.id)
+        )
+      )
     ),
   })
 }

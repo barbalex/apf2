@@ -3,8 +3,6 @@ import { extendObservable, computed } from 'mobx'
 
 import getTpopsForMap from '../action/getTpopsForMap'
 import getTpopBounds from '../action/getTpopBounds'
-import getTpopMarkers from '../action/getTpopMarkers'
-import getTpopMarkersClustered from '../action/getTpopMarkersClustered'
 
 export default (store: Object): void => {
   extendObservable(store.map.tpop, {
@@ -43,10 +41,6 @@ export default (store: Object): void => {
     ),
     // alternative is using names
     labelUsingNr: true,
-    markers: computed(() => getTpopMarkers(store), { name: 'mapTpopMarkers' }),
-    markersClustered: computed(() => getTpopMarkersClustered(store), {
-      name: 'mapTpopMarkersClustered',
-    }),
     idOfTpopBeingLocalized: 0,
   })
 }

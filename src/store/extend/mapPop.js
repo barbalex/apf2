@@ -3,7 +3,6 @@ import { extendObservable, computed } from 'mobx'
 
 import getPopsForMap from '../action/getPopsForMap'
 import getPopBounds from '../action/getPopBounds'
-import getPopMarkers from '../action/getPopMarkers'
 
 export default (store: Object): void => {
   extendObservable(store.map.pop, {
@@ -45,6 +44,5 @@ export default (store: Object): void => {
     ),
     // alternative is using names
     labelUsingNr: true,
-    markers: computed(() => getPopMarkers(store), { name: 'mapPopMarkers' }),
   })
 }
