@@ -8,8 +8,8 @@ import some from 'lodash/some'
 import get from 'lodash/get'
 import styled from 'styled-components'
 
-import beobIcon from '../../../../../etc/beob.png'
-import beobIconHighlighted from '../../../../../etc/beobHighlighted.png'
+import tpopIcon from '../../../../../etc/tpop.png'
+import tpopIconHighlighted from '../../../../../etc/tpopHighlighted.png'
 import appBaseUrl from '../../../../../modules/appBaseUrl'
 import epsg2056to4326 from '../../../../../modules/epsg2056to4326'
 
@@ -17,22 +17,23 @@ const StyledH3 = styled.h3`
   margin: 7px 0;
 `
 
-export default ({ beobs, store }:{ beobs: Array<Object>, store: Object }): Object => {
+export default ({ tpops, store }:{ tpops: Array<Object>, store: Object }): Object => {
   const { tree, map } = store
   const { activeNodes } = tree
   const { ap, projekt } = activeNodes
-  const { highlightedIds } = map.beobNichtBeurteilt
+  const { labelUsingNr, highlightedIds } = map.tpop
+  
   const mcgOptions = {
     maxClusterRadius: 66,
     iconCreateFunction: function(cluster) {
       const markers = cluster.getAllChildMarkers()
-      const hasHighlightedBeob = some(
+      const hasHighlightedTpop = some(
         markers,
-        m => m.options.icon.options.className === 'beobIconHighlighted',
+        m => m.options.icon.options.className === 'tpopIconHighlighted'
       )
-      const className = hasHighlightedBeob
-        ? 'beobClusterHighlighted'
-        : 'beobCluster'
+      const className = hasHighlightedTpop
+        ? 'tpopClusterHighlighted'
+        : 'tpopCluster'
       return window.L.divIcon({
         html: markers.length,
         className,
@@ -41,46 +42,63 @@ export default ({ beobs, store }:{ beobs: Array<Object>, store: Object }): Objec
     },
   }
   const markers = window.L.markerClusterGroup(mcgOptions)
-  beobs.forEach(beob => {
-    const isHighlighted = highlightedIds.includes(beob.id)
-    const latLng = new window.L.LatLng(...epsg2056to4326(beob.x, beob.y))
+
+  tpops.forEach(tpop => {
+    const tpopNr = get(tpop, 'nr', '(keine Nr)')
+    const nrLabel = `${get(tpop, 'popByPopId.nr', '(keine Nr)')}.${tpopNr}`
+    let title = labelUsingNr ? tpop.flurname : nrLabel
+    // beware: leaflet needs title to always be a string
+    if (title && title.toString) {
+      title = title.toString()
+    }
+    let tooltipText = labelUsingNr ? nrLabel : tpop.flurname
+    if (tooltipText && tooltipText.toString) {
+      tooltipText = tooltipText.toString()
+    }
+    const tooltipOptions = {
+      permanent: true,
+      direction: 'bottom',
+      className: 'mapTooltip',
+      opacity: 1,
+    }
+    const isHighlighted = highlightedIds.includes(tpop.id)
+    const latLng = new window.L.LatLng(...epsg2056to4326(tpop.x, tpop.y))
     const icon = window.L.icon({
-      iconUrl: isHighlighted ? beobIconHighlighted : beobIcon,
+      iconUrl: isHighlighted ? tpopIconHighlighted : tpopIcon,
       iconSize: [24, 24],
-      className: isHighlighted ? 'beobIconHighlighted' : 'beobIcon',
+      className: isHighlighted ? 'tpopIconHighlighted' : 'tpopIcon',
     })
-    const label = `${beob.datum ? format(beob.datum, 'YYYY.MM.DD') : '(kein Datum)'}: ${beob.autor || '(kein Autor)'} (${get(beob, 'beobQuelleWerteByQuelleId.name', '')})`
-    const marker = window.L
-      .marker(latLng, {
-        title: label,
-        icon,
-        draggable: store.map.beob.assigning,
-        zIndexOffset: -store.map.apfloraLayers.findIndex(
-          apfloraLayer => apfloraLayer.value === 'BeobNichtBeurteilt',
-        ),
-      })
+    const marker = window.L.marker(latLng, {
+      title,
+      icon,
+      zIndexOffset: -store.map.apfloraLayers.findIndex(
+        apfloraLayer => apfloraLayer.value === 'Tpop'
+      ),
+    })
       .bindPopup(
         ReactDOMServer.renderToStaticMarkup(
           <Fragment>
-            <div>{`Beobachtung von ${get(beob, 'aeEigenschaftenByArtId.artname', '')}`}</div>
+            <div>Teil-Population</div>
             <StyledH3>
-              {label}
+              {`${tpop.nr || '(keine Nr)'}: ${tpop.flurname || '(kein Flurname)'}`}
             </StyledH3>
             <div>
-              {`Koordinaten: ${beob.x.toLocaleString(
-                'de-ch'
-              )} / ${beob.y.toLocaleString('de-ch')}`}
+              {`Population: ${get(tpop, 'popByPopId.nr', '(keine Nr)')}: ${get(tpop, 'popByPopId.name', '(kein Name)')}`}
+            </div>
+            <div>
+              {`Koordinaten: ${tpop.x.toLocaleString('de-ch')} / ${tpop.y.toLocaleString('de-ch')}`}
             </div>
             <a
-              href={`${appBaseUrl}/Projekte/${projekt}/Aktionspläne/${ap}/nicht-beurteilte-Beobachtungen/${beob.id}`}
+              href={`${appBaseUrl}/Projekte/${projekt}/Aktionspläne/${ap}/Populationen/${get(tpop, 'popByPopId.id', '')}/Teil-Populationen/${tpop.id}`}
               target="_blank"
               rel="noopener noreferrer"
             >
               Formular in neuem Tab öffnen
             </a>
-          </Fragment>,
-        ),
+          </Fragment>
+        )
       )
+      .bindTooltip(tooltipText, tooltipOptions)
     markers.addLayer(marker)
   })
   return markers

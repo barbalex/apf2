@@ -109,6 +109,7 @@ const Karte = ({ store }: { store: Object }) => {
         const { activeBaseLayer, activeApfloraLayers } = store.map
         const { idOfTpopBeingLocalized } = store.map.tpop
         const MapElement = !!idOfTpopBeingLocalized ? StyledMapLocalizing : StyledMap
+        const clustered = !(store.map.beob.assigning || activeApfloraLayers.includes('BeobZugeordnetAssignPolylines'))
         /**
          * need an object whose methods return overlays
          * in order to dynamically display and sort active overlays
@@ -117,34 +118,10 @@ const Karte = ({ store }: { store: Object }) => {
           // MapFilter is used for filtering, need to return null
           MapFilter: () => null,
           Pop: () => <Pop />,
-          Tpop: () => {
-            if (
-              store.map.beob.assigning ||
-              activeApfloraLayers.includes('BeobZugeordnetAssignPolylines')
-            ) {
-              return (
-                <Tpop />
-              )
-            }
-            return (
-              <TpopCluster
-                visible={activeApfloraLayers.includes('Tpop')}
-                markers={store.map.tpop.markersClustered}
-              />
-            )
-          },
-          BeobNichtBeurteilt: () =>
-            <BeobNichtBeurteilt
-              clustered={!(store.map.beob.assigning || activeApfloraLayers.includes('BeobZugeordnetAssignPolylines'))}
-            />,
-          BeobNichtZuzuordnen: () =>
-            <BeobNichtZuzuordnen
-              clustered={!(store.map.beob.assigning || activeApfloraLayers.includes('BeobZugeordnetAssignPolylines'))}
-            />,
-          BeobZugeordnet: () =>
-            <BeobZugeordnet
-              clustered={!(store.map.beob.assigning || activeApfloraLayers.includes('BeobZugeordnetAssignPolylines'))}
-            />,
+          Tpop: () => <Tpop clustered={clustered} />,
+          BeobNichtBeurteilt: () => <BeobNichtBeurteilt clustered={clustered} />,
+          BeobNichtZuzuordnen: () => <BeobNichtZuzuordnen clustered={clustered} />,
+          BeobZugeordnet: () => <BeobZugeordnet clustered={clustered} />,
           BeobZugeordnetAssignPolylines: () => <BeobZugeordnetAssignPolylines />
         }
         const OverlayComponents = {
