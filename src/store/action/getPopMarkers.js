@@ -11,7 +11,7 @@ import some from 'lodash/some'
  */
 import popIcon from '../../etc/pop.png'
 import popIconHighlighted from '../../etc/popHighlighted.png'
-import Popup from '../../components/Projekte/Karte/layers/PopMarkerCluster/Popup'
+import Popup from '../../components/Projekte/Karte/layers/PopMarker/Popup'
 
 export default (store: Object): Object => {
   const { pops, labelUsingNr, highlightedIds } = store.map.pop

@@ -45,7 +45,7 @@ import '../../../../node_modules/leaflet/dist/leaflet.css'
 import '../../../../node_modules/leaflet-measure/dist/leaflet-measure.css'
 import '../../../../node_modules/leaflet-draw/dist/leaflet.draw.css'
 import '../../../../node_modules/leaflet.markercluster/dist/MarkerCluster.css'
-import Pop from './layers/PopMarkerCluster'
+import Pop from './layers/PopMarker'
 import Tpop from './layers/TpopMarker'
 import TpopCluster from './layers/TpopMarkerCluster'
 import BeobNichtBeurteilt from './layers/BeobNichtBeurteilt'
@@ -123,10 +123,7 @@ const Karte = ({ store }: { store: Object }) => {
               activeApfloraLayers.includes('BeobZugeordnetAssignPolylines')
             ) {
               return (
-                <Tpop
-                  visible={activeApfloraLayers.includes('Tpop')}
-                  markers={store.map.tpop.markers}
-                />
+                <Tpop />
               )
             }
             return (
