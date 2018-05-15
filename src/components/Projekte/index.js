@@ -170,32 +170,12 @@ const myChildren = (store: Object) => {
              * when daten or tree tab is removed :-(
              */
             key={store.urlQuery.projekteTabs.toString()}
-            popMarkers={store.map.pop.markers}
             popHighlighted={store.map.pop.highlightedIds.join()}
-            tpopMarkers={store.map.tpop.markers}
             tpopHighlighted={store.map.tpop.highlightedIds.join()}
-            tpopMarkersClustered={store.map.tpop.markersClustered}
-            beobNichtBeurteiltMarkers={store.map.beobNichtBeurteilt.markers}
             beobNichtBeurteiltHighlighted={store.map.beobNichtBeurteilt.highlightedIds.join()}
-            beobNichtBeurteiltMarkersClustered={
-              store.map.beobNichtBeurteilt.markersClustered
-            }
-            beobNichtZuzuordnenMarkers={
-              store.map.beobNichtZuzuordnen.markersClustered
-            }
             beobNichtZuzuordnenHighlighted={store.map.beobNichtZuzuordnen.highlightedIds.join()}
-            beobZugeordnetMarkers={store.map.beobZugeordnet.markers}
             beobZugeordnetHighlighted={store.map.beobZugeordnet.highlightedIds.join()}
-            beobZugeordnetMarkersClustered={
-              store.map.beobZugeordnet.markersClustered
-            }
             beobZugeordnetAssigning={store.map.beob.assigning}
-            beobZugeordnetAssignPolylines={
-              store.map.beobZugeordnet.assignPolylines
-            }
-            beobZugeordnetAssignPolylinesLength={
-              store.map.beobZugeordnet.assignPolylines.length
-            }
             idOfTpopBeingLocalized={store.map.tpop.idOfTpopBeingLocalized}
             activeBaseLayer={store.map.activeBaseLayer}
             activeOverlays={store.map.activeOverlays}
