@@ -43,23 +43,8 @@ export default ({ tpops, store }:{ tpops: Array<Object>, store: Object }): Objec
   const markers = window.L.markerClusterGroup(mcgOptions)
 
   tpops.forEach(tpop => {
-    const tpopNr = get(tpop, 'nr', '(keine Nr)')
-    const nrLabel = `${get(tpop, 'popByPopId.nr', '(keine Nr)')}.${tpopNr}`
-    let title = labelUsingNr ? tpop.flurname : nrLabel
     // beware: leaflet needs title to always be a string
-    if (title && title.toString) {
-      title = title.toString()
-    }
-    let tooltipText = labelUsingNr ? nrLabel : tpop.flurname
-    if (tooltipText && tooltipText.toString) {
-      tooltipText = tooltipText.toString()
-    }
-    const tooltipOptions = {
-      permanent: true,
-      direction: 'bottom',
-      className: 'mapTooltip',
-      opacity: 1,
-    }
+    const nrLabel = `${get(tpop, 'popByPopId.nr', '(keine Nr)')}.${get(tpop, 'nr', '(keine Nr)')}`.toString()
     const isHighlighted = highlightedIds.includes(tpop.id)
     const latLng = new window.L.LatLng(...epsg2056to4326(tpop.x, tpop.y))
     const icon = window.L.icon({
@@ -68,7 +53,7 @@ export default ({ tpops, store }:{ tpops: Array<Object>, store: Object }): Objec
       className: isHighlighted ? 'tpopIconHighlighted' : 'tpopIcon',
     })
     const marker = window.L.marker(latLng, {
-      title,
+      title: labelUsingNr ? tpop.flurname : nrLabel,
       icon,
       zIndexOffset: -store.map.apfloraLayers.findIndex(
         apfloraLayer => apfloraLayer.value === 'Tpop'
@@ -97,7 +82,15 @@ export default ({ tpops, store }:{ tpops: Array<Object>, store: Object }): Objec
           </Fragment>
         )
       )
-      .bindTooltip(tooltipText, tooltipOptions)
+      .bindTooltip(
+        labelUsingNr ? nrLabel : tpop.flurname,
+        {
+          permanent: true,
+          direction: 'bottom',
+          className: 'mapTooltip',
+          opacity: 1,
+        }
+      )
     markers.addLayer(marker)
   })
   return markers

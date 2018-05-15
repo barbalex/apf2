@@ -29,13 +29,7 @@ const Popup = ({ store, pop }: { store: Object, pop: Object }) => {
         }`}
       </StyledH3>
       <div>
-        {`Koordinaten: ${
-          pop.PopKoordWgs84
-            ? `${pop.x.toLocaleString('de-ch')} / ${pop.y.toLocaleString(
-                'de-ch'
-              )}`
-            : '(keine)'
-        }`}
+        {`Koordinaten: ${pop.x.toLocaleString('de-ch')} / ${pop.y.toLocaleString('de-ch')}`}
       </div>
       <a href={popUrl} target="_blank" rel="noopener noreferrer">
         Formular in neuem Tab öffnen
