@@ -1,8 +1,8 @@
 // @flow
 import React from 'react'
 import { observer } from 'mobx-react'
-import { FormGroup, FormControlLabel } from 'material-ui/Form'
-import Checkbox from 'material-ui/Checkbox'
+import { FormGroup, FormControlLabel } from '@material-ui/core'
+import Checkbox from '@material-ui/core/Checkbox'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 import styled from 'styled-components'

@@ -1,7 +1,7 @@
 // @flow
 import React, { Fragment } from 'react'
 import { observer } from 'mobx-react'
-import Popover from 'material-ui/Popover'
+import Popover from '@material-ui/core/Popover'
 
 import InfoOutlineIcon from '@material-ui/icons/InfoOutline'
 import styled from 'styled-components'

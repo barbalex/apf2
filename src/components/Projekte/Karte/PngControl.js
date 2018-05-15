@@ -8,7 +8,7 @@ import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
 import getContext from 'recompose/getContext'
-import { MuiThemeProvider } from 'material-ui/styles'
+import { MuiThemeProvider } from '@material-ui/core/styles'
 import FileDownloadIcon from '@material-ui/icons/FileDownload'
 
 import theme from '../../../theme'

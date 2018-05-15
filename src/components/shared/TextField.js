@@ -1,6 +1,6 @@
 // @flow
 import React, { Component } from 'react'
-import TextField from 'material-ui/TextField'
+import TextField from '@material-ui/core/TextField'
 import styled from 'styled-components'
 
 const StyledTextField = styled(TextField)`

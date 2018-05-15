@@ -1,10 +1,10 @@
 // @flow
 import React, { Component } from 'react'
-import Input, { InputLabel } from 'material-ui/Input'
-import { FormControl } from 'material-ui/Form'
+import Input, { InputLabel } from '@material-ui/core/Input'
+import { FormControl } from '@material-ui/core'
 import styled from 'styled-components'
 import OpenInNewIcon from '@material-ui/icons/OpenInNew'
-import green from 'material-ui/colors/green'
+import green from '@material-ui/core/colors/green'
 /**
  * DO NOT UPDATE get-urls
  * before create-react-app moves to using babili

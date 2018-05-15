@@ -2,7 +2,7 @@ import React from 'react'
 import { toJS } from 'mobx'
 import { observer } from 'mobx-react'
 import styled from 'styled-components'
-import Button from 'material-ui/Button'
+import Button from '@material-ui/core/Button'
 import DragHandleIcon from '@material-ui/icons/DragHandle'
 import InfoOutlineIcon from '@material-ui/icons/InfoOutline'
 import {

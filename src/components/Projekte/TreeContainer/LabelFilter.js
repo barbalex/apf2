@@ -2,8 +2,8 @@
 
 import React from 'react'
 import { observer, inject } from 'mobx-react'
-import Input, { InputLabel } from 'material-ui/Input'
-import { FormControl } from 'material-ui/Form'
+import Input, { InputLabel } from '@material-ui/core/Input'
+import { FormControl } from '@material-ui/core'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'

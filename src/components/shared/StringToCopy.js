@@ -1,7 +1,7 @@
 // @flow
 import React from 'react'
 import CopyToClipboard from 'react-copy-to-clipboard'
-import Button from 'material-ui/Button'
+import Button from '@material-ui/core/Button'
 import styled from 'styled-components'
 import withHandlers from 'recompose/withHandlers'
 import withState from 'recompose/withState'

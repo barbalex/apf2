@@ -8,7 +8,7 @@ import { observer, inject } from 'mobx-react'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
-import Switch from 'material-ui/Switch'
+import Switch from '@material-ui/core/Switch'
 import clone from 'lodash/clone'
 import { Query } from 'react-apollo'
 

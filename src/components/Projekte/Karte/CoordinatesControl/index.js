@@ -6,7 +6,7 @@ import styled from 'styled-components'
 import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import getContext from 'recompose/getContext'
-import { MuiThemeProvider } from 'material-ui/styles'
+import { MuiThemeProvider } from '@material-ui/core/styles'
 import PropTypes from 'prop-types'
 
 import ShowCoordinates from './ShowCoordinates'

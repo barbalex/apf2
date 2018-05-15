@@ -11,10 +11,10 @@
   "private": true,
   "devDependencies": {
     "flow-bin": "0.72.0",
-    "postgraphile": "4.0.0-beta.8",
-    "postgraphile-plugin-connection-filter": "1.0.0-beta.6",
+    "postgraphile": "4.0.0-beta.9",
+    "postgraphile-plugin-connection-filter": "1.0.0-beta.7",
     "react-scripts": "2.0.0-next.66cc7a90",
-    "serve": "6.5.6",
+    "serve": "6.5.7",
     "source-map-explorer": "1.5.0"
   },
   "dependenciesThatNeedToBeFixed": {

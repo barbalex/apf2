@@ -1,7 +1,7 @@
 // @flow
 import React, { Component } from 'react'
-import Input, { InputLabel } from 'material-ui/Input'
-import { FormControl } from 'material-ui/Form'
+import Input, { InputLabel } from '@material-ui/core/Input'
+import { FormControl } from '@material-ui/core'
 import styled from 'styled-components'
 
 import InfoWithPopover from './InfoWithPopover'

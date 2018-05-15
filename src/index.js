@@ -14,7 +14,7 @@ import ReactDOM from 'react-dom'
 import axios from 'axios'
 import Loadable from 'react-loadable'
 
-import { MuiThemeProvider } from 'material-ui/styles'
+import { MuiThemeProvider } from '@material-ui/core/styles'
 import theme from './theme'
 import moment from 'moment'
 import 'moment/locale/de-ch' // this is the important bit, you have to import the locale your'e trying to use.
