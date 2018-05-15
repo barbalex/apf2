@@ -12,10 +12,14 @@ import { observer, inject } from 'mobx-react'
 import { Map, ScaleControl } from 'react-leaflet'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
+import withState from 'recompose/withState'
+import withHandlers from 'recompose/withHandlers'
 import { Query } from 'react-apollo'
+import gql from 'graphql-tag'
 import 'leaflet'
 import 'proj4'
 import 'proj4leaflet'
+import debounceHandler from '@hocs/debounce-handler'
 
 import dataGql from './data.graphql'
 import LayersControl from './LayersControl'
@@ -86,9 +90,52 @@ const StyledMapLocalizing = styled(StyledMap)`
   cursor: crosshair !important;
 `
 
-const enhance = compose(inject('store'), observer)
+/**
+ * DO NOT use component state / props to track mouseCoordinates
+ * Reason: when state variable is updated, map is re-drawn
+ * which results in a hideous flash (and unusability if not debounced)
+ * So: need to use app level store state
+ */
 
-const Karte = ({ store }: { store: Object }) => {
+const enhance = compose(
+  inject('store'),
+  withState('mouseCoordinates', 'setMouseCoordinates', [2683000, 1247500]),
+  withHandlers({
+    onMouseMove: ({ setMouseCoordinates }) => (e, client) => {
+      // TODO: set store state value instead
+      const coord = epsg4326to2056(
+        e.latlng.lng,
+        e.latlng.lat
+      )
+      client.mutate({
+        mutation: gql`
+          mutation setMapMouseCoordinates($x: Number!, $y: Number!) {
+            setMapMouseCoordinates(x: $x, y: $y) @client {
+              x
+              y
+            }
+          }
+        `,
+        variables: {
+          x: coord[0],
+          y: coord[1]
+        }
+      })
+    }
+  }),
+  debounceHandler('onMouseMove', 300),
+  observer
+)
+
+const Karte = ({
+  store,
+  mouseCoordinates,
+  onMouseMove
+}: {
+  store: Object,
+  mouseCoordinates: Array<Number>,
+  onMouseMove: () => void
+}) => {
   const { map, tree } = store
   const { activeNodes } = tree
   const { ap, projekt } = activeNodes
@@ -102,7 +149,7 @@ const Karte = ({ store }: { store: Object }) => {
         queryPops
       }}
     >
-      {({ loading, error, data }) => {
+      {({ loading, error, data, client }) => {
         if (error) return `Fehler: ${error.message}`
 
         const { activeBaseLayer, activeApfloraLayers } = store.map
@@ -156,7 +203,7 @@ const Karte = ({ store }: { store: Object }) => {
             <MapElement
               bounds={toJS(store.map.bounds)}
               preferCanvas
-              onMouseMove={store.map.setMapMouseCoord}
+              onMouseMove={(e) => onMouseMove(e, client)}
               // need max and min zoom because otherwise
               // something errors
               // probably clustering function
@@ -218,7 +265,7 @@ const Karte = ({ store }: { store: Object }) => {
               <PrintControl />
               */}
               <PngControl />
-              <CoordinatesControl />
+              <CoordinatesControl mouseCoordinates={mouseCoordinates} />
             </MapElement>
           </ErrorBoundary>
         )

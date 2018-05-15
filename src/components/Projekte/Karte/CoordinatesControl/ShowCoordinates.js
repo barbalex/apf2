@@ -31,12 +31,15 @@ const enhance = compose(
 
 const ShowCoordinates = ({
   store,
+  mouseCoordinates,
   onClickCoordinates,
 }: {
   store: Object,
+  mouseCoordinates: Array<Number>,
   onClickCoordinates: () => void,
 }) => {
-  let [x, y] = store.map.mouseCoordEpsg2056
+  //let [x, y] = store.map.mouseCoordEpsg2056
+  let [x, y] = mouseCoordinates
   let coord = ''
   if (x && y) {
     x = parseInt(x, 10).toLocaleString('de-ch')

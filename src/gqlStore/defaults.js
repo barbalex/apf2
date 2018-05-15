@@ -1,6 +1,6 @@
 // @flow
 export const exportDefaults = {
-  updateAvailable: false,
+  updateAvailable: false
 }
 
 const otherDefaults = {
@@ -10,6 +10,11 @@ const otherDefaults = {
     username: '',
     __typename: 'Login',
   },
+  mapMouseCoordinates: {
+    x: 2683000,
+    y: 1247500,
+    __typename: 'MapMouseCoordinates',
+  }
 }
 
 export default Object.assign({}, exportDefaults, otherDefaults)
