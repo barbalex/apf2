@@ -19,10 +19,11 @@ export default async ({
   fileName: string,
   kml: Boolean,
 }) => {
+  const { listError, map } = store
   const onError = error => {
-    store.listError(error)
+    listError(error)
   }
-  const { mapFilter } = store.map
+  const { mapFilter } = map
   const { applyMapFilterToExport } = store.export
   let data = dataPassed.map(d=> omit(d, ['__typename', 'Symbol(id)']))
   // now we could manipulate the data, for instance apply mapFilter

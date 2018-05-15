@@ -12,6 +12,7 @@ import styled from 'styled-components'
 import { ApolloConsumer } from 'react-apollo'
 import gql from "graphql-tag"
 import get from 'lodash/get'
+import { inject } from 'mobx-react'
 
 import beziehungen from '../../../etc/beziehungen.png'
 import exportModule from '../../../modules/export'
@@ -57,7 +58,8 @@ const DownloadCardButton = styled(Button)`
 
 const enhance = compose(
   withState('expanded', 'setExpanded', false),
-  withState('message', 'setMessage', null)
+  withState('message', 'setMessage', null),
+  inject('store')
 )
 
 const Anwendung = ({
