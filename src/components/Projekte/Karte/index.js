@@ -169,7 +169,6 @@ const Karte = ({ store }: { store: Object }) => {
                 if (!!idOfTpopBeingLocalized) {
                   const { lat, lng } = event.latlng
                   const [x, y] = epsg4326to2056(lng, lat)
-                  // TODO: cannot localize from map2!!!
                   store.map.localizeTpop(store.tree, x, y)
                 }
               }}
