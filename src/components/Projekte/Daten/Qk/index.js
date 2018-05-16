@@ -68,8 +68,6 @@ const enhance = compose(
         (isNaN(value) && value.length === 4) ||
         (!isNaN(value) && value > 1000)
       ) {
-        // reset messages
-        store.qk.setMessages([])
         // call fetchQk and pass it berichtjahr and apId
         const apId = tree.activeNodes.ap
         fetchQk({ store, berichtjahr: value, apId })
@@ -80,8 +78,6 @@ const enhance = compose(
   }),
   withLifecycle({
     onDidMount({ berichtjahr, changeBerichtjahr, store, tree }) {
-      // reset messages
-      store.qk.setMessages([])
       // call fetchQk and pass it berichtjahr and apId
       const apId = tree.activeNodes.ap
       fetchQk({ store, berichtjahr, apId })

@@ -138,10 +138,6 @@ function Store(): void {
     label: null,
     withNextLevel: false,
   }
-  this.copyingBiotop = {
-    id: null,
-    label: null,
-  }
   this.qk = {
     setMessages: () => {},
     addMessages: () => {},

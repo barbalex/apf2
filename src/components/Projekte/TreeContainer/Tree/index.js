@@ -52,6 +52,7 @@ const enhance = compose(inject('store'), observer)
 
 class Tree extends Component {
   props: {
+    data: Object,
     store: Object,
     tree: Object,
     projektLoading: boolean,
@@ -104,6 +105,7 @@ class Tree extends Component {
       tree={this.props.tree}
       openNodes={this.props.tree.openNodes}
       nodes={this.props.nodes}
+      data={this.props.data}
     />
   )
 

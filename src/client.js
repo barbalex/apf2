@@ -1,7 +1,7 @@
 import { ApolloClient } from 'apollo-client'
 import { createHttpLink } from 'apollo-link-http'
 import { setContext } from 'apollo-link-context'
-import { InMemoryCache } from 'apollo-cache-inmemory'
+import { InMemoryCache  } from 'apollo-cache-inmemory'
 import { withClientState } from 'apollo-link-state'
 import { ApolloLink } from 'apollo-link'
 import jwtDecode from 'jwt-decode'
@@ -28,7 +28,10 @@ export default store => {
       }
     }
   })
-  const cache = new InMemoryCache({ dataIdFromObject: object => object.id })
+  const cache = new InMemoryCache({ dataIdFromObject: object => {
+    if (object.__typename === 'copyingBiotop') return 'copyingBiotop'
+    return object.id
+  } })
   const stateLink = withClientState({
     resolvers,
     cache,

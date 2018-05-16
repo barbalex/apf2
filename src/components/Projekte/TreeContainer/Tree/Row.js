@@ -12,6 +12,7 @@ import LocalFloristIcon from '@material-ui/icons/LocalFlorist'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import ChevronRightIcon from '@material-ui/icons/ChevronRight'
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
+import get from 'lodash/get'
 
 import isNodeInActiveNodePath from '../../../../modules/isNodeInActiveNodePath'
 import isNodeOpen from '../../../../modules/isNodeOpen'
@@ -212,6 +213,7 @@ const Row = ({
   store,
   tree,
   nodes,
+  data,
 }: {
   key?: number,
   index: number,
@@ -219,6 +221,7 @@ const Row = ({
   store: Object,
   tree: Object,
   nodes: Array<Object>,
+  data: Object
 }) => {
   const node = nodes[index]
   const onClickNode = event => tree.toggleNode(tree, node)
@@ -253,8 +256,9 @@ const Row = ({
     node.nodeType === 'table' &&
     node.menuType === store.copying.table &&
     node.id === store.copying.id
+  
   const copyingBiotop =
-    node.nodeType === 'table' && node.id === store.copyingBiotop.id
+    node.nodeType === 'table' && node.id === get(data, 'copyingBiotop.id')
 
   return (
     <div key={key} style={style}>

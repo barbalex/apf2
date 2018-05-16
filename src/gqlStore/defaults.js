@@ -15,6 +15,11 @@ const otherDefaults = {
     y: 1247500,
     __typename: 'MapMouseCoordinates',
   },
+  copyingBiotop: {
+    id: 0,
+    label: null,
+    __typename: 'CopyingBiotop'
+  }
 }
 
 export default Object.assign({}, exportDefaults, otherDefaults)

@@ -83,23 +83,11 @@ export default (store: Object): void => {
       store.copying.label = null
       store.copying.withNextLevel = false
     }),
-    copyingBiotop: {
-      id: null,
-      label: null,
-    },
-    markForCopyingBiotop: action('markForCopyingBiotop', (id, label) => {
-      store.copyingBiotop.id = id
-      store.copyingBiotop.label = label
-    }),
     copyBiotopTo: action('copyBiotopTo', id => {
       // insert new dataset with:
       // - data of dataset with id copying.id
       // - id as passed
       copyBiotopTo(store, id)
-    }),
-    resetCopyingBiotop: action('resetCopyingBiotop', () => {
-      store.copyingBiotop.id = null
-      store.copyingBiotop.label = null
     }),
     copyTpopKoordToPop: action('copyTpopKoordToPop', tpopId =>
       copyTpopKoordToPop(store, tpopId)
