@@ -1,7 +1,8 @@
 // @flow
 import React, { Component } from 'react'
-import Input, { InputLabel } from '@material-ui/core/Input'
-import { FormControl } from '@material-ui/core'
+import Input from '@material-ui/core/Input'
+import InputLabel from '@material-ui/core/InputLabel'
+import FormControl from '@material-ui/core/FormControl'
 import styled from 'styled-components'
 import OpenInNewIcon from '@material-ui/icons/OpenInNew'
 import green from '@material-ui/core/colors/green'

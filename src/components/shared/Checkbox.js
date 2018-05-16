@@ -1,7 +1,7 @@
 // @flow
 import React, { Fragment } from 'react'
 import { observer } from 'mobx-react'
-import { FormControlLabel } from '@material-ui/core'
+import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Checkbox from '@material-ui/core/Checkbox'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'

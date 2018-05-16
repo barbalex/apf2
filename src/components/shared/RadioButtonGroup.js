@@ -1,7 +1,10 @@
 // @flow
 import React from 'react'
-import Radio, { RadioGroup } from '@material-ui/core/Radio'
-import { FormLabel, FormControl, FormControlLabel } from '@material-ui/core'
+import Radio from '@material-ui/core/Radio'
+import RadioGroup from '@material-ui/core/RadioGroup'
+import FormLabel from '@material-ui/core/FormLabel'
+import FormControl from '@material-ui/core/FormControl'
+import FormControlLabel from '@material-ui/core/FormControlLabel'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 import styled from 'styled-components'

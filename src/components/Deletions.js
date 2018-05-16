@@ -1,9 +1,11 @@
 // @flow
 import React from 'react'
 import { observer, inject } from 'mobx-react'
-import Dialog, { DialogTitle, DialogActions } from '@material-ui/core/Dialog'
+import Dialog from '@material-ui/core/Dialog'
+import DialogTitle from '@material-ui/core/DialogTitle'
+import DialogActions from '@material-ui/core/DialogActions'
 import Button from '@material-ui/core/Button'
-import { FormControlLabel } from '@material-ui/core'
+import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Checkbox from '@material-ui/core/Checkbox'
 import styled from 'styled-components'
 import compose from 'recompose/compose'

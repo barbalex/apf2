@@ -1,7 +1,8 @@
 // @flow
 import React from 'react'
 import { observer, inject } from 'mobx-react'
-import Tabs, { Tab } from '@material-ui/core/Tabs'
+import Tabs from '@material-ui/core/Tabs'
+import Tab from '@material-ui/core/Tab'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'

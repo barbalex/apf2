@@ -1,7 +1,8 @@
 // @flow
 import React from 'react'
 import { inject } from 'mobx-react'
-import Dialog, { DialogActions } from '@material-ui/core/Dialog'
+import Dialog from '@material-ui/core/Dialog'
+import DialogActions from '@material-ui/core/DialogActions'
 import Button from '@material-ui/core/Button'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'

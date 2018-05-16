@@ -1,7 +1,8 @@
 // @flow
 import React from 'react'
 import { observer, inject } from 'mobx-react'
-import Dialog, { DialogTitle } from '@material-ui/core/Dialog'
+import Dialog from '@material-ui/core/Dialog'
+import DialogTitle from '@material-ui/core/DialogTitle'
 import Button from '@material-ui/core/Button'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
