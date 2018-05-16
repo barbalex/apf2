@@ -2,8 +2,6 @@
 import get from 'lodash/get'
 import gql from "graphql-tag"
 
-import biotopFields from './biotopFields'
-
 export default async ({ id, client }:{ id: String, client: Object }): Promise<void> => {
   // fetch previous id from copyingBiotop
   const { data: data1 } = await client.query({
