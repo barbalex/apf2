@@ -14,6 +14,15 @@ const otherDefaults = {
     x: 2683000,
     y: 1247500,
     __typename: 'MapMouseCoordinates',
+  },
+  map: {
+    panTo: {
+      marker: null,
+      x: null,
+      y: null,
+      __typename: 'PanTo'
+    },
+    __typename: 'Map'
   }
 }
 

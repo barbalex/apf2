@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
 import 'leaflet'
-import { observer } from 'mobx-react'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
@@ -47,6 +46,9 @@ const xIsValid = (x: ?number) => !x || (x >= 2485071 && x < 2828516)
 const yIsValid = (y: ?number) => !y || (y >= 1075346 && y < 1299942)
 
 const enhance = compose(
+  withState('x', 'setX', ''),
+  withState('y', 'setY', ''),
+  withState('marker', 'setMarker', null),
   withState('xError', 'changeXError', ''),
   withState('yError', 'changeYError', ''),
   // on dealing with focus of div with children, see:
@@ -54,34 +56,36 @@ const enhance = compose(
   withState('timeoutId', 'changeTimeoutId', ''),
   withState('gotoFocused', 'changeGotoFocused', false),
   withHandlers({
-    onFocusGotoContainer: props => () => {
-      const { timeoutId, gotoFocused, changeGotoFocused } = props
+    onFocusGotoContainer: ({
+      timeoutId,
+      gotoFocused,
+      changeGotoFocused
+    }) => () => {
       clearTimeout(timeoutId)
       if (!gotoFocused) {
         changeGotoFocused(true)
       }
     },
-    onClickClear: props => () => {
-      const { map, store, changeControlType } = props
-      const {
-        changePanToX,
-        changePanToY,
-        panToMarker,
-        changePanToMarker,
-      } = store.map
-      panToMarker && map.removeLayer(panToMarker)
-      changePanToMarker(null)
-      changePanToX('')
-      changePanToY('')
+    onClickClear: ({
+      map,
+      changeControlType,
+      setX,
+      setY,
+      marker,
+      setMarker
+    }) => () => {
+      setMarker(null)
+      if (marker) map.removeLayer(marker)
+      setX('')
+      setY('')
       changeControlType('coordinates')
     },
-    onBlurGotoContainer: props => () => {
-      const {
-        changeTimeoutId,
-        gotoFocused,
-        changeGotoFocused,
-        changeControlType,
-      } = props
+    onBlurGotoContainer: ({
+      changeTimeoutId,
+      gotoFocused,
+      changeGotoFocused,
+      changeControlType,
+    }) => () => {
       const timeoutId = setTimeout(() => {
         if (gotoFocused) {
           changeGotoFocused(false)
@@ -97,77 +101,72 @@ const enhance = compose(
      * is added to the map
      * but marker passed second time is saved in state...
      */
-    onClickGoto: props => () => {
-      const { xError, yError, map, store } = props
-      const { panToMarker, changePanToMarker } = store.map
-      const { panToX: x, panToY: y } = store.map
+    onClickGoto: ({
+      xError,
+      yError,
+      map,
+      x,
+      y,
+      marker,
+      setMarker
+    }) => () => {
       if (x && y && !xError && !yError) {
-        const my4326 = epsg2056to4326(x, y)
-        const latLng = new window.L.LatLng(...my4326)
+        const latLng = new window.L.LatLng(...epsg2056to4326(x, y))
         map.flyTo(latLng)
-        const marker = window.L.marker(latLng, {
+        const newMarker = window.L.marker(latLng, {
           title: `${x}/${y}`,
           icon: window.L.icon({
             iconUrl: panCentreIcon,
             iconSize: [36, 36],
           }),
         })
-        if (!panToMarker) {
-          marker.addTo(map)
-          changePanToMarker(marker)
-        }
+        if (marker) map.removeLayer(marker)
+        newMarker.addTo(map)
+        setMarker(newMarker)
       }
     },
-    onChangeX: props => event => {
+    onChangeX: ({ changeXError, setX }) => event => {
       let { value } = event.target
       // convert string to number
       value = value ? +value : value
-      const { changeXError, store } = props
-      store.map.changePanToX(value)
+      setX(value)
       // immediately cancel possible existing error
       if (xIsValid(value)) changeXError('')
     },
-    onChangeY: props => event => {
-      const { changeYError, store } = props
+    onChangeY: ({ changeYError, setY }) => event => {
       let { value } = event.target
       // convert string to number
       value = value ? +value : value
-      store.map.changePanToY(value)
+      setY(value)
       // immediately cancel possible existing error
       if (yIsValid(value)) changeYError('')
     },
-    onBlurX: props => () => {
-      const { changeXError, store } = props
-      if (xIsValid(store.map.panToX)) {
-        changeXError('')
-      } else {
-        changeXError(`x muss zwischen 2'485'071 und 2'828'515 liegen`)
-      }
+    onBlurX: ({ changeXError, x }) => () => {
+      if (xIsValid(x)) return changeXError('')
+      changeXError(`x muss zwischen 2'485'071 und 2'828'515 liegen`)
     },
-    onBlurY: props => () => {
-      const { store, changeYError } = props
-      if (yIsValid(store.map.panToY)) {
-        changeYError('')
-      } else {
-        changeYError(`y muss zwischen 1'075'346 und 1'299'941 liegen`)
-      }
+    onBlurY: ({ changeYError, y }) => () => {
+      if (yIsValid(y)) return changeYError('')
+      changeYError(`y muss zwischen 1'075'346 und 1'299'941 liegen`)
     },
-  }),
-  observer
+  })
 )
 
 class PanToCoordinates extends Component {
   props: {
-    store: Object,
     controlType: string,
     onClickCoordinates: () => void,
     onClickGoto: () => void,
     onChangeX: () => void,
     onChangeY: () => void,
+    x: string,
+    y: string,
     xError: string,
     yError: string,
     onBlurX: () => void,
     onBlurY: () => void,
+    setX: () => void,
+    setY: () => void,
     onBlurGotoContainer: () => void,
     onFocusGotoContainer: () => void,
     onClickClear: () => void,
@@ -187,6 +186,8 @@ class PanToCoordinates extends Component {
       onClickGoto,
       onChangeX,
       onChangeY,
+      x,
+      y,
       xError,
       yError,
       onBlurX,
@@ -194,9 +195,7 @@ class PanToCoordinates extends Component {
       onBlurGotoContainer,
       onFocusGotoContainer,
       onClickClear,
-      store,
     } = this.props
-    const { panToX: x, panToY: y, panToMarker } = store.map
 
     return (
       <Container onBlur={onBlurGotoContainer} onFocus={onFocusGotoContainer}>

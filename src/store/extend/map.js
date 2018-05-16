@@ -190,14 +190,6 @@ export default (store: Object): void => {
       }
       store.map.mapFilter.filter = mapFilterItems.toGeoJSON()
     }),
-    panToX: '',
-    changePanToX: action(x => (store.map.panToX = x)),
-    panToY: '',
-    changePanToY: action(y => (store.map.panToY = y)),
-    panToMarker: null,
-    changePanToMarker: action(
-      marker => (store.map.panToMarker = marker)
-    ),
   })
   extendObservable(store.map.mapFilter.filter, {
     features: [],

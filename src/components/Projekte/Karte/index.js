@@ -130,8 +130,6 @@ const Karte = ({
     {({ loading, error, data, client }) => {
       if (error) return `Fehler: ${error.message}`
 
-      console.log('karte: data:', data)
-
       const { activeBaseLayer, activeApfloraLayers } = store.map
       const { idOfTpopBeingLocalized } = store.map.tpop
       const MapElement = !!idOfTpopBeingLocalized ? StyledMapLocalizing : StyledMap
