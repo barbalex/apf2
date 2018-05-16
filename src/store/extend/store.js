@@ -20,7 +20,6 @@ import deleteBeobzuordnung from '../action/deleteBeobzuordnung'
 import writeToStore from '../action/writeToStore'
 import moveTo from '../action/moveTo'
 import copyTo from '../action/copyTo'
-import copyBiotopTo from '../action/copyBiotopTo'
 import copyTpopKoordToPop from '../action/copyTpopKoordToPop'
 import copyBeobZugeordnetKoordToPop from '../action/copyBeobZugeordnetKoordToPop'
 import createNewPopFromBeob from '../action/createNewPopFromBeob'
@@ -82,12 +81,6 @@ export default (store: Object): void => {
       store.copying.id = null
       store.copying.label = null
       store.copying.withNextLevel = false
-    }),
-    copyBiotopTo: action('copyBiotopTo', id => {
-      // insert new dataset with:
-      // - data of dataset with id copying.id
-      // - id as passed
-      copyBiotopTo(store, id)
     }),
     copyTpopKoordToPop: action('copyTpopKoordToPop', tpopId =>
       copyTpopKoordToPop(store, tpopId)
