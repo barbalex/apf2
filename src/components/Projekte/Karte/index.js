@@ -99,7 +99,6 @@ const StyledMapLocalizing = styled(StyledMap)`
 
 const enhance = compose(
   inject('store'),
-  withState('mouseCoordinates', 'setMouseCoordinates', [2683000, 1247500]),
   withHandlers({
     onMouseMove: ({ setMouseCoordinates }) => (e, client) => {
       // TODO: set store state value instead
@@ -147,141 +146,135 @@ const enhance = compose(
 
 const Karte = ({
   store,
-  mouseCoordinates,
   onMouseMove
 }: {
   store: Object,
-  mouseCoordinates: Array<Number>,
   onMouseMove: () => void
-}) => {
+}) =>
+  <Query query={dataGql} >
+    {({ loading, error, data, client }) => {
+      if (error) return `Fehler: ${error.message}`
 
-  return (
-    <Query query={dataGql}
-    >
-      {({ loading, error, data, client }) => {
-        if (error) return `Fehler: ${error.message}`
+      console.log('karte: data:', data)
 
-        console.log('karte: data:', data)
-
-        const { activeBaseLayer, activeApfloraLayers } = store.map
-        const { idOfTpopBeingLocalized } = store.map.tpop
-        const MapElement = !!idOfTpopBeingLocalized ? StyledMapLocalizing : StyledMap
-        const clustered = !(store.map.beob.assigning || activeApfloraLayers.includes('BeobZugeordnetAssignPolylines'))
-        /**
-         * need an object whose methods return overlays
-         * in order to dynamically display and sort active overlays
-         */
-        const ApfloraLayerComponents = {
-          // MapFilter is used for filtering, need to return null
-          MapFilter: () => null,
-          Pop: () => <Pop />,
-          Tpop: () => <Tpop clustered={clustered} />,
-          BeobNichtBeurteilt: () => <BeobNichtBeurteilt clustered={clustered} />,
-          BeobNichtZuzuordnen: () => <BeobNichtZuzuordnen clustered={clustered} />,
-          BeobZugeordnet: () => <BeobZugeordnet clustered={clustered} />,
-          BeobZugeordnetAssignPolylines: () => <BeobZugeordnetAssignPolylines />
-        }
-        const OverlayComponents = {
-          ZhUep: () => <ZhUepOverlay />,
-          Detailplaene: () => <Detailplaene />,
-          Markierungen: () => <Markierungen />,
-          ZhGemeindegrenzen: () => <ZhGemeindegrenzen />,
-          ZhSvoColor: () => <ZhSvoColor />,
-          ZhSvoGrey: () => <ZhSvoGrey />,
-          ZhPflegeplan: () => <ZhPflegeplan />,
-          ZhLrVegKartierungen: () => <ZhLrVegKartierungen />,
-          ZhLichteWaelder: () => <ZhLichteWaelder />,
-          ZhWaelderVegetation: () => <ZhWaelderVegetation />,
-        }
-        const BaseLayerComponents = {
-          OsmColor: () => <OsmColor />,
-          OsmBw: () => <OsmBw />,
-          SwissTopoPixelFarbe: () => <SwissTopoPixelFarbe />,
-          SwissTopoPixelGrau: () => <SwissTopoPixelGrau />,
-          SwisstopoSiegfried: () => <SwisstopoSiegfried />,
-          SwisstopoDufour: () => <SwisstopoDufour />,
-          ZhUep: () => <ZhUep />,
-          BingAerial: () => <BingAerial />,
-          ZhOrtho: () => <ZhOrtho />,
-          ZhOrthoIr: () => <ZhOrthoIr />,
-          ZhOrtho2015: () => <ZhOrtho2015 />,
-          ZhOrtho2015Ir: () => <ZhOrtho2015Ir />,
-        }
-        const BaseLayerComponent = BaseLayerComponents[activeBaseLayer]
-      
-        return (
-          <ErrorBoundary>
-            <MapElement
-              bounds={toJS(store.map.bounds)}
-              preferCanvas
-              onMouseMove={(e) => onMouseMove(e, client)}
-              // need max and min zoom because otherwise
-              // something errors
-              // probably clustering function
-              maxZoom={22}
-              minZoom={0}
-              // what is this pop for?
-              //pop={pops}
-              onClick={event => {
-                if (!!idOfTpopBeingLocalized) {
-                  const { lat, lng } = event.latlng
-                  const [x, y] = epsg4326to2056(lng, lat)
-                  store.map.localizeTpop(store.tree, x, y)
-                }
-              }}
-              onZoomlevelschange={event => {
-                // need to update bounds, otherwise map jumps back
-                // when adding new tpop
-                const bounds = event.target.getBounds()
-                store.map.changeBounds([bounds._southWest, bounds._northEast])
-              }}
-              onZoomend={event => {
-                // need to update bounds, otherwise map jumps back
-                const bounds = event.target.getBounds()
-                store.map.changeBounds([bounds._southWest, bounds._northEast])
-              }}
-              onMoveend={event => {
-                // need to update bounds, otherwise map jumps back
-                const bounds = event.target.getBounds()
-                store.map.changeBounds([bounds._southWest, bounds._northEast])
-              }}
-            >
-              {activeBaseLayer && <BaseLayerComponent />}
-              {store.map.activeOverlaysSorted
-                .map((overlayName, index) => {
-                  const OverlayComponent = OverlayComponents[overlayName]
-                  return <OverlayComponent key={index} />
-                })
-                .reverse()}
-              {store.map.activeApfloraLayersSorted
-                .map((apfloraLayerName, index) => {
-                  const ApfloraLayerComponent =
-                    ApfloraLayerComponents[apfloraLayerName]
-                  return <ApfloraLayerComponent key={index} />
-                })
-                .reverse()}
-              <ScaleControl imperial={false} />
-              <LayersControl
-                // this enforces rerendering when sorting changes
-                activeOverlaysSortedString={store.map.activeOverlaysSortedString}
-                activeApfloraLayersSortedString={
-                  store.map.activeApfloraLayersSortedString
-                }
-              />
-              <MeasureControl />
-              <FullScreenControl />
-              {store.map.activeApfloraLayers.includes('MapFilter') && <DrawControl />}
-              {/*
-              need to get background maps to show when printing A4
-              <PrintControl />
-              */}
-              <PngControl />
-              <CoordinatesControl mouseCoordinates={mouseCoordinates} />
-            </MapElement>
-          </ErrorBoundary>
-        )
-      }}
-    </Query>
-  )}
+      const { activeBaseLayer, activeApfloraLayers } = store.map
+      const { idOfTpopBeingLocalized } = store.map.tpop
+      const MapElement = !!idOfTpopBeingLocalized ? StyledMapLocalizing : StyledMap
+      const clustered = !(store.map.beob.assigning || activeApfloraLayers.includes('BeobZugeordnetAssignPolylines'))
+      /**
+       * need an object whose methods return overlays
+       * in order to dynamically display and sort active overlays
+       */
+      const ApfloraLayerComponents = {
+        // MapFilter is used for filtering, need to return null
+        MapFilter: () => null,
+        Pop: () => <Pop />,
+        Tpop: () => <Tpop clustered={clustered} />,
+        BeobNichtBeurteilt: () => <BeobNichtBeurteilt clustered={clustered} />,
+        BeobNichtZuzuordnen: () => <BeobNichtZuzuordnen clustered={clustered} />,
+        BeobZugeordnet: () => <BeobZugeordnet clustered={clustered} />,
+        BeobZugeordnetAssignPolylines: () => <BeobZugeordnetAssignPolylines />
+      }
+      const OverlayComponents = {
+        ZhUep: () => <ZhUepOverlay />,
+        Detailplaene: () => <Detailplaene />,
+        Markierungen: () => <Markierungen />,
+        ZhGemeindegrenzen: () => <ZhGemeindegrenzen />,
+        ZhSvoColor: () => <ZhSvoColor />,
+        ZhSvoGrey: () => <ZhSvoGrey />,
+        ZhPflegeplan: () => <ZhPflegeplan />,
+        ZhLrVegKartierungen: () => <ZhLrVegKartierungen />,
+        ZhLichteWaelder: () => <ZhLichteWaelder />,
+        ZhWaelderVegetation: () => <ZhWaelderVegetation />,
+      }
+      const BaseLayerComponents = {
+        OsmColor: () => <OsmColor />,
+        OsmBw: () => <OsmBw />,
+        SwissTopoPixelFarbe: () => <SwissTopoPixelFarbe />,
+        SwissTopoPixelGrau: () => <SwissTopoPixelGrau />,
+        SwisstopoSiegfried: () => <SwisstopoSiegfried />,
+        SwisstopoDufour: () => <SwisstopoDufour />,
+        ZhUep: () => <ZhUep />,
+        BingAerial: () => <BingAerial />,
+        ZhOrtho: () => <ZhOrtho />,
+        ZhOrthoIr: () => <ZhOrthoIr />,
+        ZhOrtho2015: () => <ZhOrtho2015 />,
+        ZhOrtho2015Ir: () => <ZhOrtho2015Ir />,
+      }
+      const BaseLayerComponent = BaseLayerComponents[activeBaseLayer]
+    
+      return (
+        <ErrorBoundary>
+          <MapElement
+            bounds={toJS(store.map.bounds)}
+            preferCanvas
+            onMouseMove={(e) => onMouseMove(e, client)}
+            // need max and min zoom because otherwise
+            // something errors
+            // probably clustering function
+            maxZoom={22}
+            minZoom={0}
+            // what is this pop for?
+            //pop={pops}
+            onClick={event => {
+              if (!!idOfTpopBeingLocalized) {
+                const { lat, lng } = event.latlng
+                const [x, y] = epsg4326to2056(lng, lat)
+                store.map.localizeTpop(store.tree, x, y)
+              }
+            }}
+            onZoomlevelschange={event => {
+              // need to update bounds, otherwise map jumps back
+              // when adding new tpop
+              const bounds = event.target.getBounds()
+              store.map.changeBounds([bounds._southWest, bounds._northEast])
+            }}
+            onZoomend={event => {
+              // need to update bounds, otherwise map jumps back
+              const bounds = event.target.getBounds()
+              store.map.changeBounds([bounds._southWest, bounds._northEast])
+            }}
+            onMoveend={event => {
+              // need to update bounds, otherwise map jumps back
+              const bounds = event.target.getBounds()
+              store.map.changeBounds([bounds._southWest, bounds._northEast])
+            }}
+          >
+            {activeBaseLayer && <BaseLayerComponent />}
+            {store.map.activeOverlaysSorted
+              .map((overlayName, index) => {
+                const OverlayComponent = OverlayComponents[overlayName]
+                return <OverlayComponent key={index} />
+              })
+              .reverse()}
+            {store.map.activeApfloraLayersSorted
+              .map((apfloraLayerName, index) => {
+                const ApfloraLayerComponent =
+                  ApfloraLayerComponents[apfloraLayerName]
+                return <ApfloraLayerComponent key={index} />
+              })
+              .reverse()}
+            <ScaleControl imperial={false} />
+            <LayersControl
+              // this enforces rerendering when sorting changes
+              activeOverlaysSortedString={store.map.activeOverlaysSortedString}
+              activeApfloraLayersSortedString={
+                store.map.activeApfloraLayersSortedString
+              }
+            />
+            <MeasureControl />
+            <FullScreenControl />
+            {store.map.activeApfloraLayers.includes('MapFilter') && <DrawControl />}
+            {/*
+            need to get background maps to show when printing A4
+            <PrintControl />
+            */}
+            <PngControl />
+            <CoordinatesControl />
+          </MapElement>
+        </ErrorBoundary>
+      )
+    }}
+  </Query>
 
 export default enhance(Karte)

@@ -1,6 +1,5 @@
 import React from 'react'
 import 'leaflet'
-import { observer } from 'mobx-react'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
@@ -31,51 +30,34 @@ const enhance = compose(
       const { changeControlType } = props
       changeControlType('goto')
     },
-  }),
-  observer
+  })
 )
 
 const ShowCoordinates = ({
-  store,
-  mouseCoordinates,
   onClickCoordinates,
 }: {
-  store: Object,
-  mouseCoordinates: Array<Number>,
   onClickCoordinates: () => void,
-}) => {
-  //let [x, y] = store.map.mouseCoordEpsg2056
-  let [x, y] = mouseCoordinates
-  let coord = ''
-  if (x && y) {
-    x = parseInt(x, 10).toLocaleString('de-ch')
-    y = parseInt(y, 10).toLocaleString('de-ch')
-    coord = `${x}, ${y}`
-  }
+}) => 
+  <ApolloProvider client={app.client}>
+    <Query query={dataGql} >
+      {({ loading, error, data }) => {
+        console.log('ShowCoordinates:', { loading, error, data, app })
+        if (error) return `Fehler: ${error.message}`
 
-  return (
-    <ApolloProvider client={app.client}>
-      <Query query={dataGql} >
-        {({ loading, error, data }) => {
-          console.log('ShowCoordinates:', { loading, error, data, app })
-          if (error) return `Fehler: ${error.message}`
+        const x = get(data, 'mapMouseCoordinates.x').toLocaleString('de-ch')
+        const y = get(data, 'mapMouseCoordinates.y').toLocaleString('de-ch')
+        const coord = `${x}, ${y}`
 
-          x = get(data, 'mapMouseCoordinates.x').toLocaleString('de-ch')
-          y = get(data, 'mapMouseCoordinates.y').toLocaleString('de-ch')
-          coord = `${x}, ${y}`
-
-          return (
-            <StyledDiv
-              onClick={onClickCoordinates}
-              title="Klicken um Koordinaten zu suchen"
-            >
-              {coord}
-            </StyledDiv>
-          )
-        }}
-      </Query>
-    </ApolloProvider>
-  )
-}
+        return (
+          <StyledDiv
+            onClick={onClickCoordinates}
+            title="Klicken um Koordinaten zu suchen"
+          >
+            {coord}
+          </StyledDiv>
+        )
+      }}
+    </Query>
+  </ApolloProvider>
 
 export default enhance(ShowCoordinates)

@@ -37,13 +37,11 @@ const enhance = compose(
 
 const CoordinatesControl = ({
   store,
-  mouseCoordinates,
   controlType,
   changeControlType,
   map,
 }: {
   store: Object,
-  mouseCoordinates: Array<Number>,
   controlType: string,
   changeControlType: () => void,
   map: Object,
@@ -51,7 +49,7 @@ const CoordinatesControl = ({
   <StyledControl position="bottomright">
     <MuiThemeProvider theme={theme}>
       {controlType === 'coordinates' ? (
-        <ShowCoordinates mouseCoordinates={mouseCoordinates} changeControlType={changeControlType} store={store} />
+        <ShowCoordinates changeControlType={changeControlType} />
       ) : (
         <PanToCoordinates
           changeControlType={changeControlType}
