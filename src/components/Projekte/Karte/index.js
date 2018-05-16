@@ -101,12 +101,7 @@ const enhance = compose(
   inject('store'),
   withHandlers({
     onMouseMove: ({ setMouseCoordinates }) => (e, client) => {
-      // TODO: set store state value instead
-      const coord = epsg4326to2056(
-        e.latlng.lng,
-        e.latlng.lat
-      )
-      console.log('onMouseMove, coord:', coord)
+      const [x, y] = epsg4326to2056(e.latlng.lng, e.latlng.lat)
       client.mutate({
         mutation: gql`
           mutation setMapMouseCoordinates($x: Number!, $y: Number!) {
@@ -116,28 +111,8 @@ const enhance = compose(
             }
           }
         `,
-        variables: {
-          x: coord[0],
-          y: coord[1]
-        },
-        optimisticResponse: {
-          setMapMouseCoordinates: {
-            x: coord[0],
-            y: coord[1],
-            __typename: 'MapMouseCoordinates',
-          },
-          __typename: 'Mutation',
-        }
+        variables: { x, y }
       })
-      client.query({
-        query: gql`
-          query Query {
-          mapMouseCoordinates @client {
-            x
-            y
-          }
-        }`
-      }).then(data => console.log('queried:', data))
     }
   }),
   debounceHandler('onMouseMove', 15),
@@ -214,8 +189,6 @@ const Karte = ({
             // probably clustering function
             maxZoom={22}
             minZoom={0}
-            // what is this pop for?
-            //pop={pops}
             onClick={event => {
               if (!!idOfTpopBeingLocalized) {
                 const { lat, lng } = event.latlng

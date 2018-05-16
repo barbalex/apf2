@@ -35,7 +35,7 @@ const StyledPanIcon = styled(PanIcon)`
   color: ${props => (props.disabled ? 'grey !important' : 'unset')};
 `
 const StyledClearIcon = styled(ClearIcon)`
-  color: ${props => (props.disabled ? 'grey !important' : 'unset')};
+  cursor: pointer !important;
 `
 const StyledInput = styled(Input)`
   &:before {
@@ -239,12 +239,11 @@ class PanToCoordinates extends Component {
           />
         </StyledIconButton>
         <StyledIconButton
-          title="Markierung und Koordinaten entfernen"
-          aria-label="Markierung und Koordinaten entfernen"
+          title="schliessen"
+          aria-label="schliessen"
           onClick={onClickClear}
-          disabled={!(panToMarker || !!x || !!y)}
         >
-          <StyledClearIcon disabled={!(panToMarker || !!x || !!y)} />
+          <StyledClearIcon />
         </StyledIconButton>
       </Container>
     )
