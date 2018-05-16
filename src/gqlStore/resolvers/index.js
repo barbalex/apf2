@@ -6,11 +6,13 @@ import login from './login'
 import updateAvailable from './updateAvailable'
 import mapMouseCoordinates from './mapMouseCoordinates'
 import copyingBiotop from './copyingBiotop'
+import user from './user'
 
 export default merge(
   activeNodeArray,
   login,
   updateAvailable,
   mapMouseCoordinates,
-  copyingBiotop
+  copyingBiotop,
+  user
 )

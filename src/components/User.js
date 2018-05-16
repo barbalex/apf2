@@ -141,9 +141,6 @@ const User = ({
       <StyledDialog
         aria-labelledby="dialog-title"
         open={!store.user.token}
-        /*contentStyle={{
-          maxWidth: '400px',
-        }}*/
       >
         <DialogTitle id="dialog-title">Anmeldung</DialogTitle>
         <StyledDiv>

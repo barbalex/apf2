@@ -20,6 +20,18 @@ const otherDefaults = {
     id: 'copyingBiotop',
     label: null,
     __typename: 'CopyingBiotop'
+  },
+  user: {
+    // gql needs an id?
+    name: null,
+    role: null,
+    // computed: !store.user.role || store.user.role === 'apflora_reader'
+    readOnly: null,
+    // TODO: add freiwillig, computed from role
+    // give token a temporary value to prevent login form from opening
+    // before login has been fetched
+    token: 'none',
+    __typename: 'User'
   }
 }
 

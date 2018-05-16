@@ -17,9 +17,12 @@ import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
 import shouldUpdate from 'recompose/shouldUpdate'
+import { Query } from 'react-apollo'
+//import get from 'lodash/get'
 
-import isMobilePhone from '../modules/isMobilePhone'
-import ErrorBoundary from './shared/ErrorBoundary'
+import isMobilePhone from '../../modules/isMobilePhone'
+import ErrorBoundary from '../shared/ErrorBoundary'
+import dataGql from './data.graphql'
 
 const StyledAppBar = styled(AppBar)`
   @media print {
@@ -152,100 +155,108 @@ const MyAppBar = ({
   const isMobile = isMobilePhone()
 
   return (
-    <ErrorBoundary>
-      <StyledAppBar position="static">
-        <StyledToolbar>
-          <Typography variant="title" color="inherit">
-            {isMobile ? '' : 'AP Flora'}
-          </Typography>
-          <MenuDiv>
-            <StyledButton
-              data-visible={treeIsVisible}
-              onClick={onClickButtonStrukturbaum}
-            >
-              Strukturbaum
-            </StyledButton>
-            <StyledButton
-              data-visible={datenIsVisible}
-              onClick={onClickButtonDaten}
-            >
-              Daten
-            </StyledButton>
-            {!isMobile && (
-              <StyledButton
-                data-visible={tree2IsVisible}
-                onClick={onClickButtonStrukturbaum2}
-              >
-                Strukturbaum 2
-              </StyledButton>
-            )}
-            {!isMobile && (
-              <StyledButton
-                data-visible={daten2IsVisible}
-                onClick={onClickButtonDaten2}
-              >
-                Daten 2
-              </StyledButton>
-            )}
-            <StyledButton
-              data-visible={karteIsVisible}
-              onClick={onClickButtonKarte}
-            >
-              Karte
-            </StyledButton>
-            {!isMobile &&
-              exporteIsActive && (
-                <StyledButton
-                  data-visible={exporteIsVisible}
-                  onClick={onClickButtonExporte}
-                >
-                  Exporte
-                </StyledButton>
-              )}
+    <Query query={dataGql} >
+      {({ loading, error, data }) => {
+        if (error) return `Fehler: ${error.message}`
 
-            <div>
-              <IconButton
-                aria-label="Mehr"
-                aria-owns={anchorEl ? 'long-menu' : null}
-                aria-haspopup="true"
-                onClick={event => setAnchorEl(event.currentTarget)}
-              >
-                <StyledMoreVertIcon />
-              </IconButton>
-              <Menu
-                id="long-menu"
-                anchorEl={anchorEl}
-                open={Boolean(anchorEl)}
-                onClose={() => setAnchorEl(null)}
-              >
-                {isMobile &&
-                  exporteIsActive && (
-                    <MenuItem
-                      onClick={onClickButtonExporte}
-                      disabled={exporteIsVisible}
+        return (
+          <ErrorBoundary>
+            <StyledAppBar position="static">
+              <StyledToolbar>
+                <Typography variant="title" color="inherit">
+                  {isMobile ? '' : 'AP Flora'}
+                </Typography>
+                <MenuDiv>
+                  <StyledButton
+                    data-visible={treeIsVisible}
+                    onClick={onClickButtonStrukturbaum}
+                  >
+                    Strukturbaum
+                  </StyledButton>
+                  <StyledButton
+                    data-visible={datenIsVisible}
+                    onClick={onClickButtonDaten}
+                  >
+                    Daten
+                  </StyledButton>
+                  {!isMobile && (
+                    <StyledButton
+                      data-visible={tree2IsVisible}
+                      onClick={onClickButtonStrukturbaum2}
                     >
-                      Exporte
-                    </MenuItem>
+                      Strukturbaum 2
+                    </StyledButton>
                   )}
-                <MenuItem
-                  onClick={showDeletedDatasets}
-                  disabled={store.deletedDatasets.length === 0}
-                >
-                  gelöschte Datensätze wiederherstellen
-                </MenuItem>
-                <MenuItem onClick={watchVideos}>Video-Anleitungen</MenuItem>
-                <MenuItem
-                  onClick={() => {
-                    setAnchorEl(null)
-                    store.logout()
-                  }}
-                >{`${store.user.name} abmelden`}</MenuItem>
-              </Menu>
-            </div>
-          </MenuDiv>
-        </StyledToolbar>
-      </StyledAppBar>
-    </ErrorBoundary>
+                  {!isMobile && (
+                    <StyledButton
+                      data-visible={daten2IsVisible}
+                      onClick={onClickButtonDaten2}
+                    >
+                      Daten 2
+                    </StyledButton>
+                  )}
+                  <StyledButton
+                    data-visible={karteIsVisible}
+                    onClick={onClickButtonKarte}
+                  >
+                    Karte
+                  </StyledButton>
+                  {!isMobile &&
+                    exporteIsActive && (
+                      <StyledButton
+                        data-visible={exporteIsVisible}
+                        onClick={onClickButtonExporte}
+                      >
+                        Exporte
+                      </StyledButton>
+                    )}
+
+                  <div>
+                    <IconButton
+                      aria-label="Mehr"
+                      aria-owns={anchorEl ? 'long-menu' : null}
+                      aria-haspopup="true"
+                      onClick={event => setAnchorEl(event.currentTarget)}
+                    >
+                      <StyledMoreVertIcon />
+                    </IconButton>
+                    <Menu
+                      id="long-menu"
+                      anchorEl={anchorEl}
+                      open={Boolean(anchorEl)}
+                      onClose={() => setAnchorEl(null)}
+                    >
+                      {isMobile &&
+                        exporteIsActive && (
+                          <MenuItem
+                            onClick={onClickButtonExporte}
+                            disabled={exporteIsVisible}
+                          >
+                            Exporte
+                          </MenuItem>
+                        )}
+                      <MenuItem
+                        onClick={showDeletedDatasets}
+                        disabled={store.deletedDatasets.length === 0}
+                      >
+                        gelöschte Datensätze wiederherstellen
+                      </MenuItem>
+                      <MenuItem onClick={watchVideos}>Video-Anleitungen</MenuItem>
+                      <MenuItem
+                        onClick={() => {
+                          setAnchorEl(null)
+                          store.logout()
+                        }}
+                      >{`${store.user.name} abmelden`}</MenuItem>
+                    </Menu>
+                  </div>
+                </MenuDiv>
+              </StyledToolbar>
+            </StyledAppBar>
+          </ErrorBoundary>
+        )
+      }}
+    </Query>
   )
 }
 
