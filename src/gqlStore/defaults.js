@@ -15,15 +15,6 @@ const otherDefaults = {
     y: 1247500,
     __typename: 'MapMouseCoordinates',
   },
-  map: {
-    panTo: {
-      marker: null,
-      x: null,
-      y: null,
-      __typename: 'PanTo'
-    },
-    __typename: 'Map'
-  }
 }
 
 export default Object.assign({}, exportDefaults, otherDefaults)

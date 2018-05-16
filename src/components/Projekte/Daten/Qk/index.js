@@ -147,7 +147,6 @@ const Qk = ({
         const loadingMessage = (store.qkloading || loading)
           ? 'Die Daten werden analysiert...'
           : 'Analyse abgeschlossen'
-        //console.log('Qk:',{messageArrays,gqlMessages})
 
         return (
           <ErrorBoundary>

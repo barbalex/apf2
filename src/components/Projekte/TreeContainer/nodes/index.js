@@ -1,7 +1,5 @@
 // @flow
-import {
-  toJS
-} from 'mobx'
+import { toJS } from 'mobx'
 import clone from 'lodash/clone'
 
 import allParentNodesAreOpen from '../../../../modules/allParentNodesAreOpen'
