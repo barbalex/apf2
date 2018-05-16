@@ -1,5 +1,5 @@
 // @flow
-import React from 'react'
+import React, { Fragment } from 'react'
 import { ContextMenu, MenuItem } from 'react-contextmenu'
 import { inject, observer } from 'mobx-react'
 import compose from 'recompose/compose'
@@ -48,50 +48,55 @@ const TpopFolder = ({
         <MenuItem
           onClick={onClick}
           data={{
-            action: 'insert',
-            table: 'tpop',
-          }}
-        >
-          erstelle neue
-        </MenuItem>
-        <MenuItem
-          onClick={onClick}
-          data={{
             action: 'openLowerNodes',
           }}
         >
           alle öffnen
         </MenuItem>
-        {moving && (
-          <MenuItem
-            onClick={onClick}
-            data={{
-              action: 'move',
-            }}
-          >
-            {`verschiebe '${store.moving.label}' hierhin`}
-          </MenuItem>
-        )}
-        {copying && (
-          <MenuItem
-            onClick={onClick}
-            data={{
-              action: 'copy',
-            }}
-          >
-            {`kopiere '${store.copying.label}' hierhin`}
-          </MenuItem>
-        )}
-        {copying && (
-          <MenuItem
-            onClick={onClick}
-            data={{
-              action: 'resetCopying',
-            }}
-          >
-            Kopieren aufheben
-          </MenuItem>
-        )}
+        {
+          !store.user.readOnly &&
+          <Fragment>
+            <MenuItem
+              onClick={onClick}
+              data={{
+                action: 'insert',
+                table: 'tpop',
+              }}
+            >
+              erstelle neue
+            </MenuItem>
+            {moving && (
+              <MenuItem
+                onClick={onClick}
+                data={{
+                  action: 'move',
+                }}
+              >
+                {`verschiebe '${store.moving.label}' hierhin`}
+              </MenuItem>
+            )}
+            {copying && (
+              <MenuItem
+                onClick={onClick}
+                data={{
+                  action: 'copy',
+                }}
+              >
+                {`kopiere '${store.copying.label}' hierhin`}
+              </MenuItem>
+            )}
+            {copying && (
+              <MenuItem
+                onClick={onClick}
+                data={{
+                  action: 'resetCopying',
+                }}
+              >
+                Kopieren aufheben
+              </MenuItem>
+            )}
+          </Fragment>
+        }
       </ContextMenu>
     </ErrorBoundary>
   )

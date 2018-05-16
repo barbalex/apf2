@@ -1,5 +1,5 @@
 // @flow
-import React from 'react'
+import React, { Fragment } from 'react'
 import { ContextMenu, MenuItem } from 'react-contextmenu'
 import { inject } from 'mobx-react'
 import compose from 'recompose/compose'
@@ -40,52 +40,57 @@ const Tpopmassn = ({
       onShow={onShow}
     >
       <div className="react-contextmenu-title">Massnahme</div>
-      <MenuItem
-        onClick={onClick}
-        data={{
-          action: 'insert',
-          table: 'tpopmassn',
-        }}
-      >
-        erstelle neue
-      </MenuItem>
-      <MenuItem
-        onClick={onClick}
-        data={{
-          action: 'delete',
-          table: 'tpopmassn',
-        }}
-      >
-        lösche
-      </MenuItem>
-      <MenuItem
-        onClick={onClick}
-        data={{
-          action: 'markForMoving',
-          table: 'tpopmassn',
-        }}
-      >
-        verschiebe
-      </MenuItem>
-      <MenuItem
-        onClick={onClick}
-        data={{
-          action: 'markForCopying',
-          table: 'tpopmassn',
-        }}
-      >
-        kopiere
-      </MenuItem>
-      {store.copying.table && (
-        <MenuItem
-          onClick={onClick}
-          data={{
-            action: 'resetCopying',
-          }}
-        >
-          Kopieren aufheben
-        </MenuItem>
-      )}
+      {
+        !store.user.readOnly &&
+        <Fragment>
+          <MenuItem
+            onClick={onClick}
+            data={{
+              action: 'insert',
+              table: 'tpopmassn',
+            }}
+          >
+            erstelle neue
+          </MenuItem>
+          <MenuItem
+            onClick={onClick}
+            data={{
+              action: 'delete',
+              table: 'tpopmassn',
+            }}
+          >
+            lösche
+          </MenuItem>
+          <MenuItem
+            onClick={onClick}
+            data={{
+              action: 'markForMoving',
+              table: 'tpopmassn',
+            }}
+          >
+            verschiebe
+          </MenuItem>
+          <MenuItem
+            onClick={onClick}
+            data={{
+              action: 'markForCopying',
+              table: 'tpopmassn',
+            }}
+          >
+            kopiere
+          </MenuItem>
+          {store.copying.table && (
+            <MenuItem
+              onClick={onClick}
+              data={{
+                action: 'resetCopying',
+              }}
+            >
+              Kopieren aufheben
+            </MenuItem>
+          )}
+        </Fragment>
+      }
     </ContextMenu>
   </ErrorBoundary>
 )

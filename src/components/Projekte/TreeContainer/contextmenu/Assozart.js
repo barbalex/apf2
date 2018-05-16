@@ -1,39 +1,50 @@
 // @flow
-import React from 'react'
+import React, { Fragment } from 'react'
 import { ContextMenu, MenuItem } from 'react-contextmenu'
+import { inject, observer } from 'mobx-react'
+import compose from 'recompose/compose'
 
 import ErrorBoundary from '../../../shared/ErrorBoundary'
+
+const enhance = compose(inject('store'), observer)
 
 const AssozartFolder = ({
   onClick,
   tree,
+  store
 }: {
   onClick: () => void,
   tree: Object,
+  store: Object
 }) => (
   <ErrorBoundary>
     <ContextMenu id={`${tree.name}assozart`}>
       <div className="react-contextmenu-title">assoziierte Art</div>
-      <MenuItem
-        onClick={onClick}
-        data={{
-          action: 'insert',
-          table: 'assozart',
-        }}
-      >
-        erstelle neue
-      </MenuItem>
-      <MenuItem
-        onClick={onClick}
-        data={{
-          action: 'delete',
-          table: 'assozart',
-        }}
-      >
-        lösche
-      </MenuItem>
+      {
+        !store.user.readOnly &&
+        <Fragment>
+          <MenuItem
+            onClick={onClick}
+            data={{
+              action: 'insert',
+              table: 'assozart',
+            }}
+          >
+            erstelle neue
+          </MenuItem>
+          <MenuItem
+            onClick={onClick}
+            data={{
+              action: 'delete',
+              table: 'assozart',
+            }}
+          >
+            lösche
+          </MenuItem>
+        </Fragment>
+      }
     </ContextMenu>
   </ErrorBoundary>
 )
 
-export default AssozartFolder
+export default enhance(AssozartFolder)

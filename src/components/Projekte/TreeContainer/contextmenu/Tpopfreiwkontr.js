@@ -1,12 +1,12 @@
 // @flow
-import React from 'react'
+import React, { Fragment } from 'react'
 import { ContextMenu, MenuItem } from 'react-contextmenu'
-
-import ErrorBoundary from '../../../shared/ErrorBoundary'
 import { inject } from 'mobx-react'
 import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
+
+import ErrorBoundary from '../../../shared/ErrorBoundary'
 
 const enhance = compose(
   inject('store'),
@@ -40,52 +40,57 @@ const Tpopfreiwkontr = ({
       onShow={onShow}
     >
       <div className="react-contextmenu-title">Freiwilligen-Kontrolle</div>
-      <MenuItem
-        onClick={onClick}
-        data={{
-          action: 'insert',
-          table: 'tpopfreiwkontr',
-        }}
-      >
-        erstelle neue
-      </MenuItem>
-      <MenuItem
-        onClick={onClick}
-        data={{
-          action: 'delete',
-          table: 'tpopfreiwkontr',
-        }}
-      >
-        lösche
-      </MenuItem>
-      <MenuItem
-        onClick={onClick}
-        data={{
-          action: 'markForMoving',
-          table: 'tpopfreiwkontr',
-        }}
-      >
-        verschiebe
-      </MenuItem>
-      <MenuItem
-        onClick={onClick}
-        data={{
-          action: 'markForCopying',
-          table: 'tpopfreiwkontr',
-        }}
-      >
-        kopiere
-      </MenuItem>
-      {store.copying.table && (
-        <MenuItem
-          onClick={onClick}
-          data={{
-            action: 'resetCopying',
-          }}
-        >
-          Kopieren aufheben
-        </MenuItem>
-      )}
+      {
+        !store.user.readOnly &&
+        <Fragment>
+          <MenuItem
+            onClick={onClick}
+            data={{
+              action: 'insert',
+              table: 'tpopfreiwkontr',
+            }}
+          >
+            erstelle neue
+          </MenuItem>
+          <MenuItem
+            onClick={onClick}
+            data={{
+              action: 'delete',
+              table: 'tpopfreiwkontr',
+            }}
+          >
+            lösche
+          </MenuItem>
+          <MenuItem
+            onClick={onClick}
+            data={{
+              action: 'markForMoving',
+              table: 'tpopfreiwkontr',
+            }}
+          >
+            verschiebe
+          </MenuItem>
+          <MenuItem
+            onClick={onClick}
+            data={{
+              action: 'markForCopying',
+              table: 'tpopfreiwkontr',
+            }}
+          >
+            kopiere
+          </MenuItem>
+          {store.copying.table && (
+            <MenuItem
+              onClick={onClick}
+              data={{
+                action: 'resetCopying',
+              }}
+            >
+              Kopieren aufheben
+            </MenuItem>
+          )}
+        </Fragment>
+      }
     </ContextMenu>
   </ErrorBoundary>
 )

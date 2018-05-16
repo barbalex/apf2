@@ -1,6 +1,7 @@
 // @flow
-import React from 'react'
+import React, { Fragment } from 'react'
 import { ContextMenu, MenuItem } from 'react-contextmenu'
+import { inject } from 'mobx-react'
 import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
@@ -8,6 +9,7 @@ import withHandlers from 'recompose/withHandlers'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 
 const enhance = compose(
+  inject('store'),
   withState('label', 'changeLabel', ''),
   withHandlers({
     // according to https://github.com/vkbansal/react-contextmenu/issues/65
@@ -18,6 +20,7 @@ const enhance = compose(
 
 const BerFolder = ({
   tree,
+  store,
   onClick,
   changeLabel,
   label,
@@ -28,6 +31,7 @@ const BerFolder = ({
   changeLabel: () => void,
   label: string | number,
   onShow: () => void,
+  store: Object
 }) => (
   <ErrorBoundary>
     <ContextMenu
@@ -36,24 +40,29 @@ const BerFolder = ({
       onShow={onShow}
     >
       <div className="react-contextmenu-title">Bericht</div>
-      <MenuItem
-        onClick={onClick}
-        data={{
-          action: 'insert',
-          table: 'ber',
-        }}
-      >
-        erstelle neuen
-      </MenuItem>
-      <MenuItem
-        onClick={onClick}
-        data={{
-          action: 'delete',
-          table: 'ber',
-        }}
-      >
-        lösche
-      </MenuItem>
+      {
+        !store.user.readOnly &&
+        <Fragment>
+          <MenuItem
+            onClick={onClick}
+            data={{
+              action: 'insert',
+              table: 'ber',
+            }}
+          >
+            erstelle neuen
+          </MenuItem>
+          <MenuItem
+            onClick={onClick}
+            data={{
+              action: 'delete',
+              table: 'ber',
+            }}
+          >
+            lösche
+          </MenuItem>
+        </Fragment>
+      }
     </ContextMenu>
   </ErrorBoundary>
 )

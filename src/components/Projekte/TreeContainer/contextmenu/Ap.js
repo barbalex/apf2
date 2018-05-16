@@ -1,5 +1,5 @@
 // @flow
-import React from 'react'
+import React, { Fragment } from 'react'
 import { ContextMenu, MenuItem } from 'react-contextmenu'
 import { inject, observer } from 'mobx-react'
 import compose from 'recompose/compose'
@@ -18,29 +18,35 @@ const Ap = ({
   tree: Object,
 }) => {
   const moving = store.moving.table && store.moving.table === 'pop'
+  const mayWrite = !store.user.readOnly
 
   return (
     <ErrorBoundary>
       <ContextMenu id={`${tree.name}ap`}>
         <div className="react-contextmenu-title">Aktionsplan</div>
-        <MenuItem
-          onClick={onClick}
-          data={{
-            action: 'insert',
-            table: 'ap',
-          }}
-        >
-          erstelle neuen
-        </MenuItem>
-        <MenuItem
-          onClick={onClick}
-          data={{
-            action: 'delete',
-            table: 'ap',
-          }}
-        >
-          lösche
-        </MenuItem>
+        {
+          mayWrite &&
+          <Fragment>
+            <MenuItem
+              onClick={onClick}
+              data={{
+                action: 'insert',
+                table: 'ap',
+              }}
+            >
+              erstelle neuen
+            </MenuItem>
+            <MenuItem
+              onClick={onClick}
+              data={{
+                action: 'delete',
+                table: 'ap',
+              }}
+            >
+              lösche
+            </MenuItem>
+          </Fragment>
+        }
         {moving && (
           <MenuItem
             onClick={onClick}
