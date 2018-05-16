@@ -17,8 +17,11 @@ import styled from 'styled-components'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 import withState from 'recompose/withState'
+import { Query, Mutation } from 'react-apollo'
+import get from 'lodash/get'
 
-import ErrorBoundary from './shared/ErrorBoundary'
+import ErrorBoundary from '../shared/ErrorBoundary'
+import dataGql from './data.graphql'
 
 const StyledDialog = styled(Dialog)`
   > div {
@@ -137,75 +140,85 @@ const User = ({
   // TODO Authorization:
   // open depends on store.user.jwt
   return (
-    <ErrorBoundary>
-      <StyledDialog
-        aria-labelledby="dialog-title"
-        open={!store.user.token}
-      >
-        <DialogTitle id="dialog-title">Anmeldung</DialogTitle>
-        <StyledDiv>
-          <FormControl
-            error={!!nameErrorText}
-            fullWidth
-            aria-describedby="nameHelper"
-          >
-            <InputLabel htmlFor="name">Name</InputLabel>
-            <StyledInput
-              id="name"
-              defaultValue={name}
-              onBlur={onBlurName}
-              autoFocus
-              onKeyPress={e => {
-                if (e.key === 'Enter') {
-                  onBlurName(e)
-                }
-              }}
-            />
-            <FormHelperText id="nameHelper">{nameErrorText}</FormHelperText>
-          </FormControl>
-          <FormControl
-            error={!!passwordErrorText}
-            fullWidth
-            aria-describedby="passwortHelper"
-          >
-            <InputLabel htmlFor="passwort">Passwort</InputLabel>
-            <StyledInput
-              id="passwort"
-              type={showPass ? 'text' : 'password'}
-              defaultValue={password}
-              onBlur={onBlurPassword}
-              onKeyPress={e => {
-                if (e.key === 'Enter') {
-                  onBlurPassword(e)
-                }
-              }}
-              autoComplete="current-password"
-              autoCorrect="off"
-              spellCheck="false"
-              endAdornment={
-                <InputAdornment position="end">
-                  <IconButton
-                    onClick={() => changeShowPass(!showPass)}
-                    onMouseDown={e => e.preventDefault()}
-                    title={showPass ? 'verstecken' : 'anzeigen'}
-                  >
-                    {showPass ? <VisibilityOff /> : <Visibility />}
-                  </IconButton>
-                </InputAdornment>
-              }
-            />
-            <FormHelperText id="passwortHelper">
-              {passwordErrorText}
-            </FormHelperText>
-          </FormControl>
-        </StyledDiv>
-        <DialogActions>
-          <Button color="primary" onClick={fetchLogin}>
-            anmelden
-          </Button>
-        </DialogActions>
-      </StyledDialog>
-    </ErrorBoundary>
+    <Query query={dataGql}>
+      {({ loading, error, data }) => {
+        if (error) return `Fehler: ${error.message}`
+        const user = get(data, 'user', {})
+        console.log('user:', user)
+
+        return (
+          <ErrorBoundary>
+            <StyledDialog
+              aria-labelledby="dialog-title"
+              open={!store.user.token}
+            >
+              <DialogTitle id="dialog-title">Anmeldung</DialogTitle>
+              <StyledDiv>
+                <FormControl
+                  error={!!nameErrorText}
+                  fullWidth
+                  aria-describedby="nameHelper"
+                >
+                  <InputLabel htmlFor="name">Name</InputLabel>
+                  <StyledInput
+                    id="name"
+                    defaultValue={name}
+                    onBlur={onBlurName}
+                    autoFocus
+                    onKeyPress={e => {
+                      if (e.key === 'Enter') {
+                        onBlurName(e)
+                      }
+                    }}
+                  />
+                  <FormHelperText id="nameHelper">{nameErrorText}</FormHelperText>
+                </FormControl>
+                <FormControl
+                  error={!!passwordErrorText}
+                  fullWidth
+                  aria-describedby="passwortHelper"
+                >
+                  <InputLabel htmlFor="passwort">Passwort</InputLabel>
+                  <StyledInput
+                    id="passwort"
+                    type={showPass ? 'text' : 'password'}
+                    defaultValue={password}
+                    onBlur={onBlurPassword}
+                    onKeyPress={e => {
+                      if (e.key === 'Enter') {
+                        onBlurPassword(e)
+                      }
+                    }}
+                    autoComplete="current-password"
+                    autoCorrect="off"
+                    spellCheck="false"
+                    endAdornment={
+                      <InputAdornment position="end">
+                        <IconButton
+                          onClick={() => changeShowPass(!showPass)}
+                          onMouseDown={e => e.preventDefault()}
+                          title={showPass ? 'verstecken' : 'anzeigen'}
+                        >
+                          {showPass ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                      </InputAdornment>
+                    }
+                  />
+                  <FormHelperText id="passwortHelper">
+                    {passwordErrorText}
+                  </FormHelperText>
+                </FormControl>
+              </StyledDiv>
+              <DialogActions>
+                <Button color="primary" onClick={fetchLogin}>
+                  anmelden
+                </Button>
+              </DialogActions>
+            </StyledDialog>
+          </ErrorBoundary>
+        )
+      }}
+    </Query>
   )
 }
 

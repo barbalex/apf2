@@ -19,8 +19,6 @@ function Store(): void {
   }
   this.datasetToDelete = {}
   this.tellUserReadOnly = () => {}
-  this.fetchLogin = () => {}
-  this.logout = () => {}
   this.insertBeobzuordnung = () => {}
   this.insertDataset = () => {}
   this.deleteDatasetDemand = () => {}
@@ -90,6 +88,8 @@ function Store(): void {
     ktZh: null,
   }
   this.user = {}
+  this.fetchLogin = () => {}
+  this.logout = () => {}
   this.map = {
     bounds: [],
     mouseCoord: [],
