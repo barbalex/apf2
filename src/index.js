@@ -92,11 +92,13 @@ const DownloadMessages = Loadable({
         event.preventDefault()
       }
     })
+    const myClient = client(store)
 
     app.extend({
       init() {
         this.db = initializeDb()
         this.store = store
+        this.client = myClient
       },
     })
     app.init()
@@ -118,7 +120,7 @@ const DownloadMessages = Loadable({
     await setLoginFromIdb(store)
 
     ReactDOM.render(
-      <ApolloProvider client={client(store)}>
+      <ApolloProvider client={myClient}>
         <Provider store={store}>
           <MuiThemeProvider theme={theme}>
             <MuiPickersUtilsProvider

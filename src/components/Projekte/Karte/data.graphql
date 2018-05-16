@@ -1,29 +1,5 @@
-# TODO
-query QkQuery($projId: UUID!, $apId: UUID!, $queryPops: Boolean!) {
-  projektById(id: $projId) {
-    id
-    apsByProjId(filter: { id: { equalTo: $apId } }) {
-      nodes {
-        id
-        popsByApId(filter: { x: { isNull: false }, y: { isNull: false } }) @include(if: $queryPops) {
-          nodes {
-            id
-            nr
-            name
-            x
-            y
-            tpopsByPopId(filter: { x: { isNull: false }, y: { isNull: false } }) {
-              nodes {
-                id
-                nr
-                flurname
-                x
-                y
-              }
-            }
-          }
-        }
-      }
-    }
+query Query {
+  allProjekts {
+    totalCount
   }
 }

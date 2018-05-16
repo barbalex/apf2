@@ -5,6 +5,12 @@ import styled from 'styled-components'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 import withState from 'recompose/withState'
+import { ApolloProvider } from 'react-apollo'
+import { Query } from 'react-apollo'
+import app from 'ampersand-app'
+import get from 'lodash/get'
+
+import dataGql from './data.graphql'
 
 const StyledDiv = styled.div`
   background-color: transparent;
@@ -48,12 +54,27 @@ const ShowCoordinates = ({
   }
 
   return (
-    <StyledDiv
-      onClick={onClickCoordinates}
-      title="Klicken um Koordinaten zu suchen"
-    >
-      {coord}
-    </StyledDiv>
+    <ApolloProvider client={app.client}>
+      <Query query={dataGql} >
+        {({ loading, error, data }) => {
+          console.log('ShowCoordinates:', { loading, error, data, app })
+          if (error) return `Fehler: ${error.message}`
+
+          x = get(data, 'mapMouseCoordinates.x').toLocaleString('de-ch')
+          y = get(data, 'mapMouseCoordinates.y').toLocaleString('de-ch')
+          coord = `${x}, ${y}`
+
+          return (
+            <StyledDiv
+              onClick={onClickCoordinates}
+              title="Klicken um Koordinaten zu suchen"
+            >
+              {coord}
+            </StyledDiv>
+          )
+        }}
+      </Query>
+    </ApolloProvider>
   )
 }
 

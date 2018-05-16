@@ -1,0 +1,6 @@
+query GetMapMouseCoordinates {
+  mapMouseCoordinates @client {
+    x
+    y
+  }
+}

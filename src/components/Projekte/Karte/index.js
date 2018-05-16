@@ -107,6 +107,7 @@ const enhance = compose(
         e.latlng.lng,
         e.latlng.lat
       )
+      console.log('onMouseMove, coord:', coord)
       client.mutate({
         mutation: gql`
           mutation setMapMouseCoordinates($x: Number!, $y: Number!) {
@@ -119,11 +120,28 @@ const enhance = compose(
         variables: {
           x: coord[0],
           y: coord[1]
+        },
+        optimisticResponse: {
+          setMapMouseCoordinates: {
+            x: coord[0],
+            y: coord[1],
+            __typename: 'MapMouseCoordinates',
+          },
+          __typename: 'Mutation',
         }
       })
+      client.query({
+        query: gql`
+          query Query {
+          mapMouseCoordinates @client {
+            x
+            y
+          }
+        }`
+      }).then(data => console.log('queried:', data))
     }
   }),
-  debounceHandler('onMouseMove', 300),
+  debounceHandler('onMouseMove', 15),
   observer
 )
 
@@ -136,21 +154,14 @@ const Karte = ({
   mouseCoordinates: Array<Number>,
   onMouseMove: () => void
 }) => {
-  const { map, tree } = store
-  const { activeNodes } = tree
-  const { ap, projekt } = activeNodes
-  const queryPops = map.activeApfloraLayers.includes('Pop')
 
   return (
     <Query query={dataGql}
-      variables={{
-        apId: ap,
-        projId: projekt,
-        queryPops
-      }}
     >
       {({ loading, error, data, client }) => {
         if (error) return `Fehler: ${error.message}`
+
+        console.log('karte: data:', data)
 
         const { activeBaseLayer, activeApfloraLayers } = store.map
         const { idOfTpopBeingLocalized } = store.map.tpop
