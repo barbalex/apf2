@@ -86,7 +86,6 @@ function Store(): void {
     fileType: 'xlsx',
     toggleFileType: () => {},
   }
-  this.ui = {}
   this.app = {
     ktZh: null,
   }
