@@ -28,6 +28,7 @@ const Container = styled.div`
 `
 const StyledIconButton = styled(IconButton)`
   margin-top: 8px !important;
+  max-width: 30px !important;
   cursor: ${props => (props.disabled ? 'pointer !important' : 'default')};
 `
 const StyledPanIcon = styled(PanIcon)`
