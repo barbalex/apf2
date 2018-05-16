@@ -10,7 +10,7 @@ import InfoWithPopover from './InfoWithPopover'
 const StyledFormControl = styled(FormControl)`
   padding-bottom: 19px !important;
   > div:before {
-    background-color: rgba(0, 0, 0, 0.1) !important;
+    border-bottom-color: rgba(0, 0, 0, 0.1) !important;
   }
 `
 const PopoverContentRow = styled.div`

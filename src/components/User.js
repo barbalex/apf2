@@ -31,7 +31,7 @@ const StyledDiv = styled.div`
 `
 const StyledInput = styled(Input)`
   &:before {
-    background-color: rgba(0, 0, 0, 0.1) !important;
+    border-bottom-color: rgba(0, 0, 0, 0.1) !important;
   }
 `
 

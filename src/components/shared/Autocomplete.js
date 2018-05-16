@@ -39,7 +39,7 @@ const StyledTextField = styled(TextField)`
   overflow: hidden !important;
   width: 100%;
   > div:before {
-    background-color: rgba(0, 0, 0, 0.1);
+    border-bottom-color: rgba(0, 0, 0, 0.1);
   }
 `
 

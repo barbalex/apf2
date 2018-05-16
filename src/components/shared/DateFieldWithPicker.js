@@ -9,7 +9,7 @@ import convertDateToYyyyMmDd from '../../modules/convertDateToYyyyMmDd'
 const StyledDatePicker = styled(DatePicker)`
   padding-bottom: 19px !important;
   > div:before {
-    background-color: rgba(0, 0, 0, 0.1) !important;
+    border-bottom-color: rgba(0, 0, 0, 0.1) !important;
   }
 `
 
