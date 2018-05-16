@@ -16,7 +16,8 @@ const otherDefaults = {
     __typename: 'MapMouseCoordinates',
   },
   copyingBiotop: {
-    id: 0,
+    // gql needs an id
+    id: 'copyingBiotop',
     label: null,
     __typename: 'CopyingBiotop'
   }

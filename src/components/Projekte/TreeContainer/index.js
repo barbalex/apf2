@@ -66,6 +66,7 @@ import CmTpopmassnFolder from './contextmenu/TpopmassnFolder'
 import CmTpopmassn from './contextmenu/Tpopmassn'
 import DeleteDatasetModal from './DeleteDatasetModal'
 import ErrorBoundary from '../../shared/ErrorBoundarySingleChild'
+import copyBiotopTo from '../../../modules/copyBiotopTo'
 
 const Container = styled.div`
   height: 100%;
@@ -257,7 +258,7 @@ const enhance = compose(
           })
         },
         copyBiotop() {
-          store.copyBiotopTo(id)
+          copyBiotopTo({ id, client })
         },
         copyTpopKoordToPop() {
           store.copyTpopKoordToPop(id)

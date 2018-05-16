@@ -28,10 +28,7 @@ export default store => {
       }
     }
   })
-  const cache = new InMemoryCache({ dataIdFromObject: object => {
-    if (object.__typename === 'copyingBiotop') return 'copyingBiotop'
-    return object.id
-  } })
+  const cache = new InMemoryCache({ dataIdFromObject: object => object.id })
   const stateLink = withClientState({
     resolvers,
     cache,
