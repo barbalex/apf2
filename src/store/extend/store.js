@@ -27,7 +27,6 @@ import undoDeletion from '../action/undoDeletion'
 import userIsReadOnly from '../../modules/userIsReadOnly'
 
 export default (store: Object): void => {
-  const readOnly = userIsReadOnly(store.user.token)
   extendObservable(store, {
     loading: [],
     moving: {
@@ -135,18 +134,18 @@ export default (store: Object): void => {
     insertBeobzuordnung: action(
       'insertBeobzuordnung',
       (tree, beob, newKey, newValue) => {
-        if (readOnly) return store.tellUserReadOnly()
+        if (userIsReadOnly(store.user.token)) return store.tellUserReadOnly()
         insertBeobzuordnung(store, tree, beob, newKey, newValue)
       }
     ),
     insertDataset: action('insertDataset', (tree, table, parentId, baseUrl) => {
-      if (readOnly) return store.tellUserReadOnly()
+      if (userIsReadOnly(store.user.token)) return store.tellUserReadOnly()
       insertDataset(store, tree, table, parentId, baseUrl)
     }),
     deleteDatasetDemand: action(
       'deleteDatasetDemand',
       (table, id, url, label) => {
-        if (readOnly) return store.tellUserReadOnly()
+        if (userIsReadOnly(store.user.token)) return store.tellUserReadOnly()
         deleteDatasetDemand(store, table, id, url, label)
       }
     ),
@@ -154,7 +153,7 @@ export default (store: Object): void => {
       store.datasetToDelete = {}
     }),
     deleteDatasetExecute: action('deleteDatasetExecute', tree => {
-      if (readOnly) return store.tellUserReadOnly()
+      if (userIsReadOnly(store.user.token)) return store.tellUserReadOnly()
       deleteDatasetExecute(store, tree)
     }),
     deletedDatasets: [],
@@ -174,12 +173,12 @@ export default (store: Object): void => {
     listError: action('listError', error => listError(store, error)),
     // updates data in store
     updateProperty: action('updateProperty', (tree, key, value) => {
-      if (readOnly) return store.tellUserReadOnly()
+      if (userIsReadOnly(store.user.token)) return store.tellUserReadOnly()
       updateProperty(store, tree, key, value)
     }),
     // updates data in database
     updatePropertyInDb: action('updatePropertyInDb', (tree, key, value) => {
-      if (readOnly) return store.tellUserReadOnly()
+      if (userIsReadOnly(store.user.token)) return store.tellUserReadOnly()
       updatePropertyInDb(store, tree, key, value)
     }),
     // fetch all data of a table

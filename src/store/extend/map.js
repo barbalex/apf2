@@ -17,7 +17,6 @@ import fetchMarkierungen from '../action/fetchMarkierungen'
 import userIsReadOnly from '../../modules/userIsReadOnly'
 
 export default (store: Object): void => {
-  const readOnly = userIsReadOnly(store.user.token)
   extendObservable(store.map, {
     detailplaene: null,
     setDetailplaene: action(data => (store.map.detailplaene = data)),
@@ -141,11 +140,11 @@ export default (store: Object): void => {
       }
     }),
     setIdOfTpopBeingLocalized: action(id => {
-      if (readOnly) return store.tellUserReadOnly()
+      if (userIsReadOnly(store.user.token)) return store.tellUserReadOnly()
       store.map.tpop.idOfTpopBeingLocalized = id
     }),
     localizeTpop: action((tree, x, y) => {
-      if (readOnly) return store.tellUserReadOnly()
+      if (userIsReadOnly(store.user.token)) return store.tellUserReadOnly()
       localizeTpop(store, tree, x, y)
     }),
     setMapMouseCoord: action(e => {
