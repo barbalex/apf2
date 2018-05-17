@@ -12,7 +12,6 @@ function Store(): void {
   }
   this.datasetToDelete = {}
   this.tellUserReadOnly = () => {}
-  this.insertBeobzuordnung = () => {}
   this.insertDataset = () => {}
   this.deleteDatasetDemand = () => {}
   this.deleteDatasetAbort = () => {}

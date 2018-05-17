@@ -17,7 +17,7 @@ const StyledH3 = styled.h3`
 `
 
 export default ({ beobs, store }:{ beobs: Array<Object>, store: Object }): Array<Object> => {
-  const { tree, insertBeobzuordnung, map, table } = store
+  const { tree, map, table } = store
   const { activeNodes } = tree
   const { ap, projekt } = activeNodes
   const { highlightedIds } = map.beobNichtBeurteilt
@@ -82,7 +82,8 @@ export default ({ beobs, store }:{ beobs: Array<Object>, store: Object }): Array
           beob.id,
         ]
         tree.setActiveNodeArray(newActiveNodeArray)
-        insertBeobzuordnung(tree, beob, 'tpop_id', nearestTpopId)
+        // TODO
+        //insertBeobzuordnung(tree, beob, 'tpop_id', nearestTpopId)
       })
   })
 }

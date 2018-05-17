@@ -7,7 +7,6 @@ import fetchDatasetById from '../action/fetchDatasetById'
 import updateProperty from '../action/updateProperty'
 import updatePropertyInDb from '../action/updatePropertyInDb'
 import insertDataset from '../action/insertDataset'
-import insertBeobzuordnung from '../action/insertBeobzuordnung'
 import deleteDatasetDemand from '../action/deleteDatasetDemand'
 import deleteDatasetExecute from '../action/deleteDatasetExecute'
 import listError from '../action/listError'
@@ -119,12 +118,6 @@ export default (store: Object): void => {
     datasetToDelete: {},
     tellUserReadOnly: action('tellUserReadOnly', () =>
       store.listError(new Error('Sie haben keine Schreibrechte'))
-    ),
-    insertBeobzuordnung: action(
-      'insertBeobzuordnung',
-      (tree, beob, newKey, newValue) => {
-        insertBeobzuordnung(store, tree, beob, newKey, newValue)
-      }
     ),
     insertDataset: action('insertDataset', (tree, table, parentId, baseUrl) => {
       insertDataset(store, tree, table, parentId, baseUrl)
