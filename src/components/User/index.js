@@ -177,11 +177,10 @@ const User = ({
   fetchLogin: () => void,
 }) => 
   <Query query={dataGql}>
-    {({ loading, error, data, client }) => {
+    {({ error, data, client }) => {
       if (error) return `Fehler: ${error.message}`
 
       const user = get(data, 'user', {})
-      console.log('User:', {user, loading})
 
       return (
         <ErrorBoundary>
