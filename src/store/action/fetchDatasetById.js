@@ -1,8 +1,8 @@
 // @flow
-import axios from 'axios'
+//import axios from 'axios'
 
-import tables from '../../modules/tables'
-import recordValuesForWhichTableDataWasFetched from '../../modules/recordValuesForWhichTableDataWasFetched'
+//import tables from '../../modules/tables'
+//import recordValuesForWhichTableDataWasFetched from '../../modules/recordValuesForWhichTableDataWasFetched'
 
 export default async ({
   store,
@@ -13,7 +13,7 @@ export default async ({
   tableName: string,
   id: number | string,
 }): any => {
-  if (!tableName) {
+  /*if (!tableName) {
     return store.listError(
       new Error('action fetchDatasetById: tableName must be passed')
     )
@@ -66,5 +66,5 @@ export default async ({
     return store.listError(error)
   }
   const { data } = result
-  store.writeToStore({ data, table: tableName, field: idField })
+  store.writeToStore({ data, table: tableName, field: idField })*/
 }

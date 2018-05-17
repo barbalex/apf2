@@ -1,7 +1,7 @@
 // @flow
-import axios from 'axios'
+//import axios from 'axios'
 
-import tables from '../../modules/tables'
+//import tables from '../../modules/tables'
 
 export default async (store: Object, tableName: string) => {
   // only fetch if not yet fetched

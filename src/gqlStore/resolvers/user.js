@@ -2,7 +2,6 @@
 export default {
   Mutation: {
     setUser: (_, { name, token }, { cache }) => {
-      console.log('user resolver:', { name, token })
       cache.writeData({
         data: {
           user: {

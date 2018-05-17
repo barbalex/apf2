@@ -1,8 +1,8 @@
 // @flow
-import axios from 'axios'
+//import axios from 'axios'
 
-import tables from '../../modules/tables'
-import recordValuesForWhichTableDataWasFetched from '../../modules/recordValuesForWhichTableDataWasFetched'
+//import tables from '../../modules/tables'
+//import recordValuesForWhichTableDataWasFetched from '../../modules/recordValuesForWhichTableDataWasFetched'
 
 export default async (
   store: Object,

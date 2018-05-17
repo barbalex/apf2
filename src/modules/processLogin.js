@@ -15,10 +15,8 @@ export default async ({
   token: String,
   client: Object
 }) => {
-  console.log('processLogin:', { name, token, store })
   store.user.name = name
   store.user.token = token
-  console.log('processLogin after setting store.user:', { storeUserToken: store.user.token, storeUserName: store.user.name })
   axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
   await client.mutate({
     mutation: gql`

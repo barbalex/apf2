@@ -188,7 +188,6 @@ const User = ({
     {({ loading, error, data, client }) => {
       if (error) return `Fehler: ${error.message}`
       const user = get(data, 'user', {})
-      console.log('user:', user)
 
       return (
         <ErrorBoundary>

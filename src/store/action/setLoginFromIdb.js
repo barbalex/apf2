@@ -14,7 +14,6 @@ export default (store: Object, client: Object): void =>
   app.db.currentUser
     .toArray()
     .then(users => {
-      console.log('setLoginFromIdb:', { users })
       if (users[0] && users[0].name && users[0].token) {
         const { name, token } = users[0]
         processLogin({ store, name, token, client })

@@ -1,5 +1,5 @@
 // @flow
-import axios from 'axios'
+//import axios from 'axios'
 
 export default async (store: Object): Promise<void> => {
   /*const fetchUserMessages = async () => {

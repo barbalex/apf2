@@ -1,6 +1,6 @@
 // @flow
-import axios from 'axios'
-import recordValuesForWhichTableDataWasFetched from '../../modules/recordValuesForWhichTableDataWasFetched'
+//import axios from 'axios'
+//import recordValuesForWhichTableDataWasFetched from '../../modules/recordValuesForWhichTableDataWasFetched'
 
 export default (store: Object, apId: number): any => {
   /*if (!apId) {
