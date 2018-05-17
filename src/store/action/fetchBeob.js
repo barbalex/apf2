@@ -1,10 +1,10 @@
 // @flow
-import { runInAction } from 'mobx'
-import axios from 'axios'
-import cloneDeep from 'lodash/cloneDeep'
+//import { runInAction } from 'mobx'
+//import axios from 'axios'
+//import cloneDeep from 'lodash/cloneDeep'
 
-import recordValuesForWhichTableDataWasFetched from '../../modules/recordValuesForWhichTableDataWasFetched'
-
+//import recordValuesForWhichTableDataWasFetched from '../../modules/recordValuesForWhichTableDataWasFetched'
+/*
 const writeToStore = (store, data) => {
   runInAction(() => {
     data.forEach(beob => {
@@ -30,9 +30,10 @@ const onError = ({
     x => x !== apId
   )
   store.listError(error)
-}
+}*/
 
 export default async (store: Object, apId: number): any => {
+  /*
   const { valuesForWhichTableDataWasFetched } = store
   let apArtResult: { data: Array<Object> }
   try {
@@ -81,5 +82,5 @@ export default async (store: Object, apId: number): any => {
   // copy array without the individual objects being references
   // otherwise the computed values are passed to idb
   // and this creates errors, as they can't be cloned
-  writeToStore(store, cloneDeep(beobResult.data))
+  writeToStore(store, cloneDeep(beobResult.data))*/
 }

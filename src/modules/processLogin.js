@@ -1,5 +1,4 @@
 // @flow
-import axios from 'axios'
 import gql from 'graphql-tag'
 
 import initiateDataFromUrl from './initiateDataFromUrl'
@@ -15,9 +14,6 @@ export default async ({
   token: String,
   client: Object
 }) => {
-  // TODO: remove
-  axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
-
   await client.mutate({
     mutation: gql`
       mutation setUser($name: String, $token: String) {

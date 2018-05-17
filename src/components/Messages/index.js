@@ -75,7 +75,6 @@ const UserMessages = ({
       if (error) return `Fehler: ${error.message}`
 
       const userName = get(userData, 'user.name')
-      console.log('userName:', userName)
 
       return (
         <Query query={messagesGql} variables={{ name: userName }}>

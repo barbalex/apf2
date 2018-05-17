@@ -149,8 +149,6 @@ const MyAppBar = ({
       {({ loading, error, data, client, refetch }) => {
         if (error) return `Fehler: ${error.message}`
 
-        console.log('AppBar:', { data })
-
         return (
           <ErrorBoundary>
             <StyledAppBar position="static">
