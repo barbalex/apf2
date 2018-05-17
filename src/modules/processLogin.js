@@ -35,7 +35,5 @@ export default async ({
     },
   })
 
-  console.log('processLogin:', {name, token})
-
   initiateDataFromUrl(store)
 }
