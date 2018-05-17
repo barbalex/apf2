@@ -27,7 +27,7 @@ const otherDefaults = {
     // TODO: add freiwillig, computed from role
     // give token a temporary value to prevent login form from opening
     // before login has been fetched
-    token: 'none',
+    token: null,
     __typename: 'User'
   }
 }

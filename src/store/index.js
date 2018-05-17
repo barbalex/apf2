@@ -89,7 +89,6 @@ function Store(): void {
   }
   this.user = {}
   this.fetchLogin = () => {}
-  this.logout = () => {}
   this.map = {
     bounds: [],
     mouseCoord: [],

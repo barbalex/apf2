@@ -17,11 +17,14 @@ import styled from 'styled-components'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 import withState from 'recompose/withState'
-import { Query, Mutation } from 'react-apollo'
+import { Query } from 'react-apollo'
 import get from 'lodash/get'
+import gql from 'graphql-tag'
+import app from 'ampersand-app'
 
 import ErrorBoundary from '../shared/ErrorBoundary'
 import dataGql from './data.graphql'
+import processLogin from '../../modules/processLogin'
 
 const StyledDialog = styled(Dialog)`
   > div {
@@ -46,19 +49,18 @@ const enhance = compose(
   withState('nameErrorText', 'changeNameErrorText', ''),
   withState('passwordErrorText', 'changePasswordErrorText', ''),
   withHandlers({
-    fetchLogin: props => (namePassed, passwordPassed) => {
-      const {
-        changeNameErrorText,
-        changePasswordErrorText,
-        changeName,
-        changePassword,
-        store,
-      } = props
+    fetchLogin: ({
+      changeNameErrorText,
+      changePasswordErrorText,
+      changeName,
+      changePassword,
+      store,
+      name,
+      password
+    }) => async (client) => {
       // when bluring fields need to pass event value
       // on the other hand when clicking on Anmelden button,
       // need to grab props
-      const name = namePassed || props.name
-      const password = passwordPassed || props.password
       if (!name) {
         return changeNameErrorText(
           'Geben Sie den Ihnen zugeteilten Benutzernamen ein'
@@ -67,7 +69,49 @@ const enhance = compose(
       if (!password) {
         return changePasswordErrorText('Bitte Passwort eingeben')
       }
-      store.fetchLogin(name, password)
+
+      let result
+      try {
+        result = await client.mutate({
+          mutation: gql`
+            mutation logIn($name: String, $password: String) {
+              login(input: { username: $name, pass: $password }) {
+                clientMutationId
+                jwtToken
+              }
+            }
+          `,
+          variables: {
+            name,
+            password,
+          },
+        })
+      } catch (error) {
+        const messages = error.graphQLErrors.map(x => x.message)
+        const isNamePassError =
+          messages.includes('invalid user or password') ||
+          messages.includes('permission denied for relation user')
+        if (isNamePassError) {
+          const message = 'Name oder Passwort nicht bekannt'
+          changeNameErrorText(message)
+          return changePasswordErrorText(message)
+        }
+        return console.log(error)
+      }
+      const token = get(result, 'data.login.jwtToken')
+      processLogin({ store, name, token, client })
+      // refresh currentUser in idb
+      console.log('User will set app.db:', { name, token })
+      app.db.currentUser.clear()
+      app.db.currentUser.put({ name, token })
+      console.log('User HAS set app.db:', { name, token })
+      app.db.currentUser
+        .toArray()
+        .then(users => {
+          console.log('Users from app.db:', { users })
+        })
+
+      // TODO
       setTimeout(() => {
         if (store.user.name) {
           changeName('')
@@ -77,31 +121,34 @@ const enhance = compose(
     },
   }),
   withHandlers({
-    onBlurName: props => e => {
-      const { password, changeName, changeNameErrorText, fetchLogin } = props
+    onBlurName: ({
+      password,
+      changeName,
+      changeNameErrorText,
+      fetchLogin
+    }) => (e, client) => {
       changeNameErrorText('')
       const name = e.target.value
       changeName(name)
       if (!name) {
         changeNameErrorText('Geben Sie den Ihnen zugeteilten Benutzernamen ein')
       } else if (password) {
-        fetchLogin(name, password)
+        fetchLogin(client)
       }
     },
-    onBlurPassword: props => e => {
-      const {
-        name,
-        changePassword,
-        changePasswordErrorText,
-        fetchLogin,
-      } = props
+    onBlurPassword: ({
+      name,
+      changePassword,
+      changePasswordErrorText,
+      fetchLogin
+    }) => (e, client) => {
       changePasswordErrorText('')
       const password = e.target.value
       changePassword(password)
       if (!password) {
         changePasswordErrorText('Bitte Passwort eingeben')
       } else if (name) {
-        fetchLogin(name, password)
+        fetchLogin(client)
       }
     },
   }),
@@ -136,90 +183,88 @@ const User = ({
   onBlurName: () => void,
   onBlurPassword: () => void,
   fetchLogin: () => void,
-}) => {
-  // TODO Authorization:
-  // open depends on store.user.jwt
-  return (
-    <Query query={dataGql}>
-      {({ loading, error, data }) => {
-        if (error) return `Fehler: ${error.message}`
-        const user = get(data, 'user', {})
-        console.log('user:', user)
+}) => 
+  <Query query={dataGql}>
+    {({ loading, error, data, client }) => {
+      if (error) return `Fehler: ${error.message}`
+      const user = get(data, 'user', {})
+      console.log('user:', user)
 
-        return (
-          <ErrorBoundary>
-            <StyledDialog
-              aria-labelledby="dialog-title"
-              open={!store.user.token}
-            >
-              <DialogTitle id="dialog-title">Anmeldung</DialogTitle>
-              <StyledDiv>
-                <FormControl
-                  error={!!nameErrorText}
-                  fullWidth
-                  aria-describedby="nameHelper"
-                >
-                  <InputLabel htmlFor="name">Name</InputLabel>
-                  <StyledInput
-                    id="name"
-                    defaultValue={name}
-                    onBlur={onBlurName}
-                    autoFocus
-                    onKeyPress={e => {
-                      if (e.key === 'Enter') {
-                        onBlurName(e)
-                      }
-                    }}
-                  />
-                  <FormHelperText id="nameHelper">{nameErrorText}</FormHelperText>
-                </FormControl>
-                <FormControl
-                  error={!!passwordErrorText}
-                  fullWidth
-                  aria-describedby="passwortHelper"
-                >
-                  <InputLabel htmlFor="passwort">Passwort</InputLabel>
-                  <StyledInput
-                    id="passwort"
-                    type={showPass ? 'text' : 'password'}
-                    defaultValue={password}
-                    onBlur={onBlurPassword}
-                    onKeyPress={e => {
-                      if (e.key === 'Enter') {
-                        onBlurPassword(e)
-                      }
-                    }}
-                    autoComplete="current-password"
-                    autoCorrect="off"
-                    spellCheck="false"
-                    endAdornment={
-                      <InputAdornment position="end">
-                        <IconButton
-                          onClick={() => changeShowPass(!showPass)}
-                          onMouseDown={e => e.preventDefault()}
-                          title={showPass ? 'verstecken' : 'anzeigen'}
-                        >
-                          {showPass ? <VisibilityOff /> : <Visibility />}
-                        </IconButton>
-                      </InputAdornment>
+      return (
+        <ErrorBoundary>
+          <StyledDialog
+            aria-labelledby="dialog-title"
+            open={!user.token}
+          >
+            <DialogTitle id="dialog-title">Anmeldung</DialogTitle>
+            <StyledDiv>
+              <FormControl
+                error={!!nameErrorText}
+                fullWidth
+                aria-describedby="nameHelper"
+              >
+                <InputLabel htmlFor="name">Name</InputLabel>
+                <StyledInput
+                  id="name"
+                  defaultValue={name}
+                  onBlur={e => onBlurName(e, client)}
+                  autoFocus
+                  onKeyPress={e => {
+                    if (e.key === 'Enter') {
+                      onBlurName(e, client)
                     }
-                  />
-                  <FormHelperText id="passwortHelper">
-                    {passwordErrorText}
-                  </FormHelperText>
-                </FormControl>
-              </StyledDiv>
-              <DialogActions>
-                <Button color="primary" onClick={fetchLogin}>
-                  anmelden
-                </Button>
-              </DialogActions>
-            </StyledDialog>
-          </ErrorBoundary>
-        )
-      }}
-    </Query>
-  )
-}
+                  }}
+                />
+                <FormHelperText id="nameHelper">{nameErrorText}</FormHelperText>
+              </FormControl>
+              <FormControl
+                error={!!passwordErrorText}
+                fullWidth
+                aria-describedby="passwortHelper"
+              >
+                <InputLabel htmlFor="passwort">Passwort</InputLabel>
+                <StyledInput
+                  id="passwort"
+                  type={showPass ? 'text' : 'password'}
+                  defaultValue={password}
+                  onBlur={e => onBlurPassword(e, client)}
+                  onKeyPress={e => {
+                    if (e.key === 'Enter') {
+                      onBlurPassword(e, client)
+                    }
+                  }}
+                  autoComplete="current-password"
+                  autoCorrect="off"
+                  spellCheck="false"
+                  endAdornment={
+                    <InputAdornment position="end">
+                      <IconButton
+                        onClick={() => changeShowPass(!showPass)}
+                        onMouseDown={e => e.preventDefault()}
+                        title={showPass ? 'verstecken' : 'anzeigen'}
+                      >
+                        {showPass ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  }
+                />
+                <FormHelperText id="passwortHelper">
+                  {passwordErrorText}
+                </FormHelperText>
+              </FormControl>
+            </StyledDiv>
+            <DialogActions>
+              <Button
+                color="primary"
+                onClick={() => fetchLogin(client)}
+              >
+                anmelden
+              </Button>
+            </DialogActions>
+          </StyledDialog>
+        </ErrorBoundary>
+      )
+    }}
+  </Query>
 
 export default enhance(User)

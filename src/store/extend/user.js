@@ -1,5 +1,5 @@
 // @flow
-import { extendObservable, computed } from 'mobx'
+import { extendObservable } from 'mobx'
 
 export default (store: Object): void => {
   // name set to prevent Login Dialog from appearing before setLoginFromIdb has fetched from idb

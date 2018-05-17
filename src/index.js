@@ -112,12 +112,12 @@ const DownloadMessages = Loadable({
         console.log('axios interceptor found status 401')
         // need to empty user
         //store.user.token = null
-        return store.logout()
+        //return store.logout()
       }
       return Promise.reject(error)
     })
 
-    await setLoginFromIdb(store)
+    await setLoginFromIdb(store, myClient)
 
     ReactDOM.render(
       <ApolloProvider client={myClient}>

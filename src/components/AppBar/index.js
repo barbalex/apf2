@@ -23,6 +23,7 @@ import { Query } from 'react-apollo'
 import isMobilePhone from '../../modules/isMobilePhone'
 import ErrorBoundary from '../shared/ErrorBoundary'
 import dataGql from './data.graphql'
+import logout from '../../modules/logout'
 
 const StyledAppBar = styled(AppBar)`
   @media print {
@@ -156,7 +157,7 @@ const MyAppBar = ({
 
   return (
     <Query query={dataGql} >
-      {({ loading, error, data }) => {
+      {({ loading, error, data, client }) => {
         if (error) return `Fehler: ${error.message}`
 
         return (
@@ -245,7 +246,7 @@ const MyAppBar = ({
                       <MenuItem
                         onClick={() => {
                           setAnchorEl(null)
-                          store.logout()
+                          logout(store, client)
                         }}
                       >{`${store.user.name} abmelden`}</MenuItem>
                     </Menu>
