@@ -14,7 +14,6 @@ import beobNichtZuzuordnenIdsInsideFeatureCollection from '../../modules/beobNic
 import beobZugeordnetIdsInsideFeatureCollection from '../../modules/beobZugeordnetIdsInsideFeatureCollection'
 import fetchDetailplaene from '../action/fetchDetailplaene'
 import fetchMarkierungen from '../action/fetchMarkierungen'
-import userIsReadOnly from '../../modules/userIsReadOnly'
 
 export default (store: Object): void => {
   extendObservable(store.map, {
@@ -140,11 +139,9 @@ export default (store: Object): void => {
       }
     }),
     setIdOfTpopBeingLocalized: action(id => {
-      if (userIsReadOnly(store.user.token)) return store.tellUserReadOnly()
       store.map.tpop.idOfTpopBeingLocalized = id
     }),
     localizeTpop: action((tree, x, y) => {
-      if (userIsReadOnly(store.user.token)) return store.tellUserReadOnly()
       localizeTpop(store, tree, x, y)
     }),
     setMapMouseCoord: action(e => {

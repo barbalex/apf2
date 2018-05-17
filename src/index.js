@@ -111,15 +111,6 @@ const DownloadMessages = Loadable({
     window.app = app
 
     axios.defaults.baseURL = apiBaseUrl
-    axios.interceptors.response.use(undefined, function(error) {
-      if (error.response.status === 401) {
-        console.log('axios interceptor found status 401')
-        // need to empty user
-        //store.user.token = null
-        //return store.logout()
-      }
-      return Promise.reject(error)
-    })
 
     /**
      * user was set in client defaults from idb

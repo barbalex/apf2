@@ -16,8 +16,6 @@ export default async ({
   client: Object
 }) => {
   // TODO: remove
-  store.user.name = name
-  store.user.token = token
   axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
 
   await client.mutate({

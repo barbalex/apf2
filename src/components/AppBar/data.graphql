@@ -1,7 +1,4 @@
 query AppBarQuery {
-  allProjekts {
-    totalCount
-  }
   user @client {
     name
     token

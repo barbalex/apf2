@@ -41,6 +41,4 @@ export default (store: Object) => {
   // on changes to urlQuery and activeNodes
   store.initiated = true
 
-  // fetch messages
-  store.messages.fetch()
 }
