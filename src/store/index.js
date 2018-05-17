@@ -88,7 +88,6 @@ function Store(): void {
     ktZh: null,
   }
   this.user = {}
-  this.fetchLogin = () => {}
   this.map = {
     bounds: [],
     mouseCoord: [],

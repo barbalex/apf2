@@ -101,15 +101,8 @@ const enhance = compose(
       const token = get(result, 'data.login.jwtToken')
       processLogin({ store, name, token, client })
       // refresh currentUser in idb
-      console.log('User will set app.db:', { name, token })
       app.db.currentUser.clear()
       app.db.currentUser.put({ name, token })
-      console.log('User HAS set app.db:', { name, token })
-      app.db.currentUser
-        .toArray()
-        .then(users => {
-          console.log('Users from app.db:', { users })
-        })
 
       // TODO
       setTimeout(() => {
@@ -168,6 +161,7 @@ const User = ({
   onBlurName,
   onBlurPassword,
   fetchLogin,
+  token,
 }: {
   store: Object,
   name: string,
@@ -183,17 +177,20 @@ const User = ({
   onBlurName: () => void,
   onBlurPassword: () => void,
   fetchLogin: () => void,
+  token: String
 }) => 
   <Query query={dataGql}>
     {({ loading, error, data, client }) => {
       if (error) return `Fehler: ${error.message}`
+      
       const user = get(data, 'user', {})
+      const tokenExists = !!token || !!user.token
 
       return (
         <ErrorBoundary>
           <StyledDialog
             aria-labelledby="dialog-title"
-            open={!user.token}
+            open={!tokenExists}
           >
             <DialogTitle id="dialog-title">Anmeldung</DialogTitle>
             <StyledDiv>

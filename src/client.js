@@ -12,7 +12,7 @@ import resolvers from './gqlStore/resolvers'
 import defaults from './gqlStore/defaults'
 
 export default store => {
-  const authMiddleware = setContext(async () => {
+  const authLink = setContext((_, { headers }) => {
     const token = get(store, 'user.token')
     if (token) {
       const tokenDecoded = jwtDecode(token)
@@ -22,10 +22,14 @@ export default store => {
       if (tokenIsValid) {
         return {
           headers: {
+            ...headers,
             authorization: `Bearer ${token}`,
           },
         }
       }
+    }
+    return {
+      headers,
     }
   })
   const cache = new InMemoryCache({ dataIdFromObject: object => object.id })
@@ -38,7 +42,7 @@ export default store => {
     uri: graphQlUri(),
   })
   const client = new ApolloClient({
-    link: ApolloLink.from([stateLink, authMiddleware, httpLink]),
+    link: ApolloLink.from([stateLink, authLink, httpLink]),
     cache,
   })
   return client

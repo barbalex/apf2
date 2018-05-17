@@ -14,7 +14,6 @@ import insertBeobzuordnung from '../action/insertBeobzuordnung'
 import deleteDatasetDemand from '../action/deleteDatasetDemand'
 import deleteDatasetExecute from '../action/deleteDatasetExecute'
 import listError from '../action/listError'
-import fetchLogin from '../action/fetchLogin'
 import deleteBeobzuordnung from '../action/deleteBeobzuordnung'
 import writeToStore from '../action/writeToStore'
 import moveTo from '../action/moveTo'
@@ -125,9 +124,6 @@ export default (store: Object): void => {
     datasetToDelete: {},
     tellUserReadOnly: action('tellUserReadOnly', () =>
       store.listError(new Error('Sie haben keine Schreibrechte'))
-    ),
-    fetchLogin: action('fetchLogin', (name, password) =>
-      fetchLogin(store, name, password)
     ),
     insertBeobzuordnung: action(
       'insertBeobzuordnung',

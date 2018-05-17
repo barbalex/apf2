@@ -24,6 +24,7 @@ import { Provider } from 'mobx-react'
 import { ApolloProvider } from 'react-apollo'
 
 import styled from 'styled-components'
+import get from 'lodash/get'
 
 import app from 'ampersand-app'
 import 'typeface-roboto'
@@ -119,6 +120,10 @@ const DownloadMessages = Loadable({
     })
 
     await setLoginFromIdb(store, myClient)
+    // need to pass this token because
+    // on first load User component seems
+    // to query stale data!
+    const token = get(store, 'user.token')
 
     ReactDOM.render(
       <ApolloProvider client={myClient}>
@@ -132,7 +137,7 @@ const DownloadMessages = Loadable({
               <AppContainer>
                 <AppBar />
                 <Projekte />
-                <User />
+                <User token={token} />
                 <Deletions />
                 <Errors />
                 <UpdateAvailable />
