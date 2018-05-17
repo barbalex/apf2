@@ -33,7 +33,6 @@ import 'react-reflex/styles.css'
 // import components
 import store from './store'
 import initializeIdb from './modules/initializeIdb'
-import setLoginFromIdb from './store/action/setLoginFromIdb'
 import Loading from './components/shared/Loading'
 import client from './client'
 
@@ -41,6 +40,8 @@ import client from './client'
 import registerServiceWorker from './registerServiceWorker'
 
 import apiBaseUrl from './modules/apiBaseUrl'
+import processLogin from './modules/processLogin'
+import logout from './modules/logout'
 
 import './index.css'
 
@@ -94,11 +95,12 @@ const DownloadMessages = Loadable({
       }
     })
     
-    const myClient = client(store)
+    const idb = initializeIdb()
+    const myClient = await client(store, idb)
 
     app.extend({
       init() {
-        this.db = initializeIdb()
+        this.db = idb
         this.store = store
         this.client = myClient
       },
@@ -119,11 +121,20 @@ const DownloadMessages = Loadable({
       return Promise.reject(error)
     })
 
-    await setLoginFromIdb(store, myClient)
+    /**
+     * user was set in client defaults from idb
+     * if there was one
+     */
     // need to pass this token because
     // on first load User component seems
     // to query stale data!
     const token = get(store, 'user.token')
+    const name = get(store, 'user.name')
+    if (!token) {
+      processLogin({ store, name, token, client: myClient })
+    } else {
+      logout(store, myClient)
+    }
 
     ReactDOM.render(
       <ApolloProvider client={myClient}>
@@ -137,7 +148,7 @@ const DownloadMessages = Loadable({
               <AppContainer>
                 <AppBar />
                 <Projekte />
-                <User token={token} />
+                <User />
                 <Deletions />
                 <Errors />
                 <UpdateAvailable />

@@ -161,7 +161,6 @@ const User = ({
   onBlurName,
   onBlurPassword,
   fetchLogin,
-  token,
 }: {
   store: Object,
   name: string,
@@ -177,20 +176,19 @@ const User = ({
   onBlurName: () => void,
   onBlurPassword: () => void,
   fetchLogin: () => void,
-  token: String
 }) => 
   <Query query={dataGql}>
     {({ loading, error, data, client }) => {
       if (error) return `Fehler: ${error.message}`
-      
+
       const user = get(data, 'user', {})
-      const tokenExists = !!token || !!user.token
+      console.log('User:', {user, loading})
 
       return (
         <ErrorBoundary>
           <StyledDialog
             aria-labelledby="dialog-title"
-            open={!tokenExists}
+            open={!user.token}
           >
             <DialogTitle id="dialog-title">Anmeldung</DialogTitle>
             <StyledDiv>

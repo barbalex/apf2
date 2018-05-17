@@ -11,7 +11,7 @@ import graphQlUri from './modules/graphQlUri'
 import resolvers from './gqlStore/resolvers'
 import defaults from './gqlStore/defaults'
 
-export default store => {
+export default async (store, idb) => {
   const authLink = setContext((_, { headers }) => {
     const token = get(store, 'user.token')
     if (token) {
@@ -28,15 +28,14 @@ export default store => {
         }
       }
     }
-    return {
-      headers,
-    }
+    return { headers }
   })
   const cache = new InMemoryCache({ dataIdFromObject: object => object.id })
+  const myDefaults = await defaults(idb)
   const stateLink = withClientState({
     resolvers,
     cache,
-    defaults,
+    defaults: myDefaults,
   })
   const httpLink = createHttpLink({
     uri: graphQlUri(),

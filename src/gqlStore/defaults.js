@@ -1,35 +1,42 @@
 // @flow
-export const exportDefaults = {
-  updateAvailable: false
-}
+import get from 'lodash/get'
 
-const otherDefaults = {
-  activeNodeArray: [],
-  login: {
-    token: '',
-    username: '',
-    __typename: 'Login',
-  },
-  mapMouseCoordinates: {
-    x: 2683000,
-    y: 1247500,
-    __typename: 'MapMouseCoordinates',
-  },
-  copyingBiotop: {
-    // gql needs an id
-    id: 'copyingBiotop',
-    label: null,
-    __typename: 'CopyingBiotop'
-  },
-  user: {
-    // gql needs an id?
-    name: null,
-    // TODO: add freiwillig, computed from role
-    // give token a temporary value to prevent login form from opening
-    // before login has been fetched
-    token: null,
-    __typename: 'User'
+export default async (idb) => {
+  const exportDefaults = {
+    updateAvailable: false
   }
-}
+  
+  // fetch user from idb
+  const users = await idb.currentUser.toArray()
+  
+  const otherDefaults = {
+    activeNodeArray: [],
+    login: {
+      token: '',
+      username: '',
+      __typename: 'Login',
+    },
+    mapMouseCoordinates: {
+      x: 2683000,
+      y: 1247500,
+      __typename: 'MapMouseCoordinates',
+    },
+    copyingBiotop: {
+      // gql needs an id
+      id: 'copyingBiotop',
+      label: null,
+      __typename: 'CopyingBiotop'
+    },
+    user: {
+      // gql needs an id?
+      name: get(users, '[0].name', null),
+      // TODO: add freiwillig, computed from role
+      // give token a temporary value to prevent login form from opening
+      // before login has been fetched
+      token: get(users, '[0].token', null),
+      __typename: 'User'
+    }
+  }
 
-export default Object.assign({}, exportDefaults, otherDefaults)
+  return Object.assign({}, exportDefaults, otherDefaults)
+}

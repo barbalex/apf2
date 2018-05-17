@@ -18,7 +18,7 @@ import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
 import shouldUpdate from 'recompose/shouldUpdate'
 import { Query } from 'react-apollo'
-//import get from 'lodash/get'
+import get from 'lodash/get'
 
 import isMobilePhone from '../../modules/isMobilePhone'
 import ErrorBoundary from '../shared/ErrorBoundary'
@@ -160,6 +160,8 @@ const MyAppBar = ({
       {({ loading, error, data, client }) => {
         if (error) return `Fehler: ${error.message}`
 
+        console.log('AppBar:', { data })
+
         return (
           <ErrorBoundary>
             <StyledAppBar position="static">
@@ -248,7 +250,7 @@ const MyAppBar = ({
                           setAnchorEl(null)
                           logout(store, client)
                         }}
-                      >{`${store.user.name} abmelden`}</MenuItem>
+                      >{`${get(data, 'user.name')} abmelden`}</MenuItem>
                     </Menu>
                   </div>
                 </MenuDiv>
