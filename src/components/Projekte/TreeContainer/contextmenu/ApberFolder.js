@@ -1,28 +1,24 @@
 // @flow
 import React from 'react'
 import { ContextMenu, MenuItem } from 'react-contextmenu'
-import { inject } from 'mobx-react'
-import compose from 'recompose/compose'
 
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import userIsReadOnly from '../../../../modules/userIsReadOnly'
 
-const enhance = compose(inject('store'))
-
 const ApberFolder = ({
   onClick,
   tree,
-  store
+  token
 }: {
   onClick: () => void,
   tree: Object,
-  store: Object
+  token: String
 }) => (
   <ErrorBoundary>
     <ContextMenu id={`${tree.name}apberFolder`}>
       <div className="react-contextmenu-title">AP-Bericht</div>
       {
-        !userIsReadOnly(store.user.token) &&
+        !userIsReadOnly(token) &&
         <MenuItem
           onClick={onClick}
           data={{
@@ -37,4 +33,4 @@ const ApberFolder = ({
   </ErrorBoundary>
 )
 
-export default enhance(ApberFolder)
+export default ApberFolder

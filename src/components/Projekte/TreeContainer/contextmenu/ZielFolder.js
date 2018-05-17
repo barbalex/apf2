@@ -1,22 +1,18 @@
 // @flow
 import React from 'react'
 import { ContextMenu, MenuItem } from 'react-contextmenu'
-import { inject } from 'mobx-react'
-import compose from 'recompose/compose'
 
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import userIsReadOnly from '../../../../modules/userIsReadOnly'
 
-const enhance = compose(inject('store'))
-
 const ZielFolder = ({
   onClick,
   tree,
-  store
+  token
 }: {
   onClick: () => void,
   tree: Object,
-  store: Object
+  token: String
 }) => (
   <ErrorBoundary>
     <ContextMenu id={`${tree.name}zieljahrFolder`}>
@@ -30,7 +26,7 @@ const ZielFolder = ({
         alle öffnen
       </MenuItem>
       {
-        !userIsReadOnly(store.user.token) &&
+        !userIsReadOnly(token) &&
         <MenuItem
           onClick={onClick}
           data={{
@@ -45,4 +41,4 @@ const ZielFolder = ({
   </ErrorBoundary>
 )
 
-export default enhance(ZielFolder)
+export default ZielFolder

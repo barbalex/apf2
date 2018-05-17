@@ -13,10 +13,12 @@ const TpopfeldkontrFolder = ({
   store,
   onClick,
   tree,
+  token
 }: {
   store: Object,
   tree: Object,
   onClick: () => void,
+  token: String
 }) => {
   const moving = store.moving.table && store.moving.table === 'tpopfeldkontr'
   const copying = store.copying.table && store.copying.table === 'tpopfeldkontr'
@@ -34,7 +36,7 @@ const TpopfeldkontrFolder = ({
           alle öffnen
         </MenuItem>
         {
-          !userIsReadOnly(store.user.token) &&
+          !userIsReadOnly(token) &&
           <Fragment>
             <MenuItem
               onClick={onClick}

@@ -33,6 +33,7 @@ const Pop = ({
   changeLabel,
   label,
   onShow,
+  token
 }: {
   onClick: () => void,
   store: Object,
@@ -42,6 +43,7 @@ const Pop = ({
   changeLabel: () => void,
   label: string,
   onShow: () => void,
+  token: String
 }) => {
   const moving = store.moving.table && store.moving.table === 'tpop'
   const copying = store.copying.table && store.copying.table === 'tpop'
@@ -55,7 +57,7 @@ const Pop = ({
       >
         <div className="react-contextmenu-title">Population</div>
       {
-        !userIsReadOnly(store.user.token) &&
+        !userIsReadOnly(token) &&
         <Fragment>
           <MenuItem
             onClick={onClick}

@@ -27,6 +27,7 @@ const PopFolder = ({
   changeLabel,
   label,
   onShow,
+  token
 }: {
   tree: Object,
   onClick: () => void,
@@ -34,6 +35,7 @@ const PopFolder = ({
   changeLabel: () => void,
   label: string | number,
   onShow: () => void,
+  token: String
 }) => {
   const moving = store.moving.table && store.moving.table === 'pop'
   const copying = store.copying.table && store.copying.table === 'pop'
@@ -55,7 +57,7 @@ const PopFolder = ({
           alle öffnen
         </MenuItem>
       {
-        !userIsReadOnly(store.user.token) &&
+        !userIsReadOnly(token) &&
         <Fragment>
           <MenuItem
             onClick={onClick}

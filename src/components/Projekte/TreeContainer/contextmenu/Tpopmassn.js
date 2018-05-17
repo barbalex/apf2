@@ -26,6 +26,7 @@ const Tpopmassn = ({
   changeLabel,
   label,
   onShow,
+  token
 }: {
   store: Object,
   tree: Object,
@@ -33,6 +34,7 @@ const Tpopmassn = ({
   changeLabel: () => void,
   label: string | number,
   onShow: () => void,
+  token: String
 }) => (
   <ErrorBoundary>
     <ContextMenu
@@ -42,7 +44,7 @@ const Tpopmassn = ({
     >
       <div className="react-contextmenu-title">Massnahme</div>
       {
-        !userIsReadOnly(store.user.token) &&
+        !userIsReadOnly(token) &&
         <Fragment>
           <MenuItem
             onClick={onClick}

@@ -26,6 +26,7 @@ const Tpopfreiwkontr = ({
   changeLabel,
   label,
   onShow,
+  token
 }: {
   store: Object,
   tree: Object,
@@ -33,6 +34,7 @@ const Tpopfreiwkontr = ({
   changeLabel: () => void,
   label: string | number,
   onShow: () => void,
+  token: String
 }) => (
   <ErrorBoundary>
     <ContextMenu
@@ -42,7 +44,7 @@ const Tpopfreiwkontr = ({
     >
       <div className="react-contextmenu-title">Freiwilligen-Kontrolle</div>
       {
-        !userIsReadOnly(store.user.token) &&
+        !userIsReadOnly(token) &&
         <Fragment>
           <MenuItem
             onClick={onClick}

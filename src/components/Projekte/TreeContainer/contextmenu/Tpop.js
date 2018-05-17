@@ -13,10 +13,12 @@ const Tpop = ({
   onClick,
   store,
   tree,
+  token
 }: {
   onClick: () => void,
   store: Object,
   tree: Object,
+  token: String
 }) => {
   const moving =
     store.moving.table &&
@@ -34,7 +36,7 @@ const Tpop = ({
       <ContextMenu id={`${tree.name}tpop`}>
         <div className="react-contextmenu-title">Teil-Population</div>
         {
-          !userIsReadOnly(store.user.token) &&
+          !userIsReadOnly(token) &&
           <Fragment>
             <MenuItem
               onClick={onClick}

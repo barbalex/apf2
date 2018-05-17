@@ -13,13 +13,15 @@ const Ap = ({
   onClick,
   store,
   tree,
+  token
 }: {
   onClick: () => void,
   store: Object,
   tree: Object,
+  token: String
 }) => {
   const moving = store.moving.table && store.moving.table === 'pop'
-  const mayWrite = !userIsReadOnly(store.user.token)
+  const mayWrite = !userIsReadOnly(token)
 
   return (
     <ErrorBoundary>

@@ -27,14 +27,14 @@ const BeobZugeordnetFolder = ({
   onClick,
   changeId,
   id,
-  onShow,
+  onShow
 }: {
   store: Object,
   changeId: () => {},
   tree: Object,
   onClick: () => void,
   id: number,
-  onShow: () => {},
+  onShow: () => {}
 }) => (
   <ErrorBoundary>
     <ContextMenu

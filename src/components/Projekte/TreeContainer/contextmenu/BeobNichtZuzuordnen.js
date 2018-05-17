@@ -1,28 +1,24 @@
 // @flow
 import React from 'react'
 import { ContextMenu, MenuItem } from 'react-contextmenu'
-import { inject, observer } from 'mobx-react'
-import compose from 'recompose/compose'
 
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import userIsReadOnly from '../../../../modules/userIsReadOnly'
 
-const enhance = compose(inject('store'), observer)
-
 const BeobNichtZuzuordnen = ({
   tree,
   onClick,
-  store
+  token
 }: {
   tree: Object,
   onClick: () => void,
-  store: Object
+  token: String
 }) => (
   <ErrorBoundary>
     <ContextMenu id={`${tree.name}beobNichtZuzuordnen`}>
       <div className="react-contextmenu-title">Beobachtung</div>
       {
-        !userIsReadOnly(store.user.token) &&
+        !userIsReadOnly(token) &&
         <MenuItem
           onClick={onClick}
           data={{
@@ -53,4 +49,4 @@ const BeobNichtZuzuordnen = ({
   </ErrorBoundary>
 )
 
-export default enhance(BeobNichtZuzuordnen)
+export default BeobNichtZuzuordnen

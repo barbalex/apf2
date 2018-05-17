@@ -13,10 +13,12 @@ const TpopmassnFolder = ({
   store,
   tree,
   onClick,
+  token
 }: {
   store: Object,
   tree: Object,
   onClick: () => void,
+  token: String
 }) => {
   const moving = store.moving.table && store.moving.table === 'tpopmassn'
   const copying = store.copying.table && store.copying.table === 'tpopmassn'
@@ -26,7 +28,7 @@ const TpopmassnFolder = ({
       <ContextMenu id={`${tree.name}tpopmassnFolder`}>
         <div className="react-contextmenu-title">Massnahmen</div>
         {
-          !userIsReadOnly(store.user.token) &&
+          !userIsReadOnly(token) &&
           <Fragment>
             <MenuItem
               onClick={onClick}

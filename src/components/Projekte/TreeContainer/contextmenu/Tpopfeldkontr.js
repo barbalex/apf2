@@ -29,6 +29,7 @@ const Tpopfeldkontr = ({
   changeLabel,
   label,
   onShow,
+  token
 }: {
   store: Object,
   tree: Object,
@@ -36,6 +37,7 @@ const Tpopfeldkontr = ({
   changeLabel: () => void,
   label: string | number,
   onShow: () => void,
+  token: String
 }) => {
 
   return (
@@ -62,7 +64,7 @@ const Tpopfeldkontr = ({
             >
               <div className="react-contextmenu-title">Feld-Kontrolle</div>
               {
-                !userIsReadOnly(store.user.token) &&
+                !userIsReadOnly(token) &&
                 <Fragment>
                   <MenuItem
                     onClick={onClick}
