@@ -27,8 +27,6 @@ function Store(): void {
   this.updatePropertyInDb = () => {}
   this.fetchTable = () => {}
   this.fetchTableByParentId = () => {}
-  this.fetchTpopForAp = () => {}
-  this.fetchPopForAp = () => {}
   this.fetchDatasetById = () => {}
   this.fetchBeob = () => {}
   this.writeToStore = () => {}

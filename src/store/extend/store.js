@@ -3,8 +3,6 @@ import { extendObservable, action } from 'mobx'
 
 import fetchTable from '../action/fetchTable'
 import fetchTableByParentId from '../action/fetchTableByParentId'
-import fetchTpopForAp from '../action/fetchTpopForAp'
-import fetchPopForAp from '../action/fetchPopForAp'
 import fetchDatasetById from '../action/fetchDatasetById'
 import fetchBeob from '../action/fetchBeob'
 import updateProperty from '../action/updateProperty'
@@ -178,10 +176,6 @@ export default (store: Object): void => {
       'fetchTableByParentId',
       (tableName, parentId) => fetchTableByParentId(store, tableName, parentId)
     ),
-    fetchTpopForAp: action('fetchTpopForAp', apId =>
-      fetchTpopForAp(store, apId)
-    ),
-    fetchPopForAp: action('fetchPopForAp', apId => fetchPopForAp(store, apId)),
     fetchDatasetById: action('fetchDatasetById', ({ tableName, id }) =>
       fetchDatasetById({ store: store, tableName, id })
     ),
