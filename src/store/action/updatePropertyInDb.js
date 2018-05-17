@@ -118,9 +118,5 @@ export default async (
       newActiveNodeArray[7] = value
       tree.setActiveNodeArray(newActiveNodeArray)
     }
-    if (table === 'apart') {
-      // refetch beob
-      store.fetchBeob(tree.activeNodes.ap)
-    }
   }
 }

@@ -28,7 +28,6 @@ function Store(): void {
   this.fetchTable = () => {}
   this.fetchTableByParentId = () => {}
   this.fetchDatasetById = () => {}
-  this.fetchBeob = () => {}
   this.writeToStore = () => {}
   this.setUrlQuery = () => {}
   this.tree = {

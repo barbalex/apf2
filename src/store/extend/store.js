@@ -4,7 +4,6 @@ import { extendObservable, action } from 'mobx'
 import fetchTable from '../action/fetchTable'
 import fetchTableByParentId from '../action/fetchTableByParentId'
 import fetchDatasetById from '../action/fetchDatasetById'
-import fetchBeob from '../action/fetchBeob'
 import updateProperty from '../action/updateProperty'
 import updatePropertyInDb from '../action/updatePropertyInDb'
 import insertDataset from '../action/insertDataset'
@@ -179,7 +178,6 @@ export default (store: Object): void => {
     fetchDatasetById: action('fetchDatasetById', ({ tableName, id }) =>
       fetchDatasetById({ store: store, tableName, id })
     ),
-    fetchBeob: action('fetchBeob', apId => fetchBeob(store, apId)),
     writeToStore: action('writeToStore', ({ data, table, field }) =>
       writeToStore({ store: store, data, table, field })
     ),
