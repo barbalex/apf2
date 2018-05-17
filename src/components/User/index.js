@@ -43,32 +43,33 @@ const StyledInput = styled(Input)`
 
 const enhance = compose(
   inject('store'),
-  withState('name', 'changeName', ''),
-  withState('password', 'changePassword', ''),
-  withState('showPass', 'changeShowPass', false),
-  withState('nameErrorText', 'changeNameErrorText', ''),
-  withState('passwordErrorText', 'changePasswordErrorText', ''),
+  withState('name', 'setName', ''),
+  withState('password', 'setPassword', ''),
+  withState('showPass', 'setShowPass', false),
+  withState('nameErrorText', 'setNameErrorText', ''),
+  withState('passwordErrorText', 'setPasswordErrorText', ''),
   withHandlers({
     fetchLogin: ({
-      changeNameErrorText,
-      changePasswordErrorText,
-      changeName,
-      changePassword,
+      setNameErrorText,
+      setPasswordErrorText,
+      setName,
+      setPassword,
       store,
       name,
       password
-    }) => async (client) => {
+    }) => async (client, refetch) => {
       // when bluring fields need to pass event value
       // on the other hand when clicking on Anmelden button,
       // need to grab props
+      /*
       if (!name) {
-        return changeNameErrorText(
+        return setNameErrorText(
           'Geben Sie den Ihnen zugeteilten Benutzernamen ein'
         )
       }
       if (!password) {
-        return changePasswordErrorText('Bitte Passwort eingeben')
-      }
+        return setPasswordErrorText('Bitte Passwort eingeben')
+      }*/
 
       let result
       try {
@@ -93,21 +94,21 @@ const enhance = compose(
           messages.includes('permission denied for relation user')
         if (isNamePassError) {
           const message = 'Name oder Passwort nicht bekannt'
-          changeNameErrorText(message)
-          return changePasswordErrorText(message)
+          setNameErrorText(message)
+          return setPasswordErrorText(message)
         }
         return console.log(error)
       }
       const token = get(result, 'data.login.jwtToken')
-      processLogin({ store, name, token, client })
+      processLogin({ store, name, token, client, refetch })
       // refresh currentUser in idb
       app.db.currentUser.clear()
       app.db.currentUser.put({ name, token })
 
       setTimeout(() => {
         if (name) {
-          changeName('')
-          changePassword('')
+          setName('')
+          setPassword('')
         }
       }, 2000)
     },
@@ -115,32 +116,33 @@ const enhance = compose(
   withHandlers({
     onBlurName: ({
       password,
-      changeName,
-      changeNameErrorText,
+      setName,
+      setNameErrorText,
       fetchLogin
-    }) => (e, client) => {
-      changeNameErrorText('')
+    }) => (e, client, refetch) => {
+      setNameErrorText('')
       const name = e.target.value
-      changeName(name)
+      setName(name)
       if (!name) {
-        changeNameErrorText('Geben Sie den Ihnen zugeteilten Benutzernamen ein')
+        setNameErrorText('Geben Sie den Ihnen zugeteilten Benutzernamen ein')
       } else if (password) {
-        fetchLogin(client)
+        setTimeout(() => fetchLogin(client, refetch))
       }
     },
     onBlurPassword: ({
       name,
-      changePassword,
-      changePasswordErrorText,
+      setPassword,
+      setPasswordErrorText,
       fetchLogin
-    }) => (e, client) => {
-      changePasswordErrorText('')
+    }) => (e, client, refetch) => {
+      setPasswordErrorText('')
       const password = e.target.value
-      changePassword(password)
+      console.log('onBlurPassword:', {password,name})
+      setPassword(password)
       if (!password) {
-        changePasswordErrorText('Bitte Passwort eingeben')
+        setPasswordErrorText('Bitte Passwort eingeben')
       } else if (name) {
-        fetchLogin(client)
+        setTimeout(() => fetchLogin(client, refetch))
       }
     },
   }),
@@ -152,11 +154,11 @@ const User = ({
   name,
   password,
   showPass,
-  changeShowPass,
+  setShowPass,
   nameErrorText,
   passwordErrorText,
-  changeNameErrorText,
-  changePasswordErrorText,
+  setNameErrorText,
+  setPasswordErrorText,
   onBlurName,
   onBlurPassword,
   fetchLogin,
@@ -164,14 +166,14 @@ const User = ({
   store: Object,
   name: string,
   showPass: Boolean,
-  changeName: () => void,
+  setName: () => void,
   password: string,
-  changeShowPass: () => void,
-  changePassword: () => void,
+  setShowPass: () => void,
+  setPassword: () => void,
   nameErrorText: string,
-  changeNameErrorText: () => void,
+  setNameErrorText: () => void,
   passwordErrorText: string,
-  changePasswordErrorText: () => void,
+  setPasswordErrorText: () => void,
   onBlurName: () => void,
   onBlurPassword: () => void,
   fetchLogin: () => void,
@@ -231,7 +233,7 @@ const User = ({
                   endAdornment={
                     <InputAdornment position="end">
                       <IconButton
-                        onClick={() => changeShowPass(!showPass)}
+                        onClick={() => setShowPass(!showPass)}
                         onMouseDown={e => e.preventDefault()}
                         title={showPass ? 'verstecken' : 'anzeigen'}
                       >

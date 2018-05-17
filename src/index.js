@@ -24,7 +24,6 @@ import { Provider } from 'mobx-react'
 import { ApolloProvider } from 'react-apollo'
 
 import styled from 'styled-components'
-import get from 'lodash/get'
 
 import app from 'ampersand-app'
 import 'typeface-roboto'
@@ -40,8 +39,6 @@ import client from './client'
 import registerServiceWorker from './registerServiceWorker'
 
 import apiBaseUrl from './modules/apiBaseUrl'
-import processLogin from './modules/processLogin'
-import logout from './modules/logout'
 
 import './index.css'
 
@@ -96,7 +93,7 @@ const DownloadMessages = Loadable({
     })
     
     const idb = initializeIdb()
-    const myClient = await client(store, idb)
+    const myClient = await client(idb)
 
     app.extend({
       init() {
@@ -111,21 +108,6 @@ const DownloadMessages = Loadable({
     window.app = app
 
     axios.defaults.baseURL = apiBaseUrl
-
-    /**
-     * user was set in client defaults from idb
-     * if there was one
-     */
-    // need to pass this token because
-    // on first load User component seems
-    // to query stale data!
-    const token = get(store, 'user.token')
-    const name = get(store, 'user.name')
-    if (!token) {
-      processLogin({ store, name, token, client: myClient })
-    } else {
-      logout(store, myClient)
-    }
 
     ReactDOM.render(
       <ApolloProvider client={myClient}>

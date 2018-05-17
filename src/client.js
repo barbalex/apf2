@@ -11,11 +11,13 @@ import graphQlUri from './modules/graphQlUri'
 import resolvers from './gqlStore/resolvers'
 import defaults from './gqlStore/defaults'
 
-export default async (store, idb) => {
+export default async (idb) => {
+  const users = await idb.currentUser.toArray()
+  const token = get(users, '[0].token', null)
   const authLink = setContext((_, { headers }) => {
-    const token = get(store, 'user.token')
     if (token) {
       const tokenDecoded = jwtDecode(token)
+      console.log('client, tokenDecoded:', tokenDecoded)
       // for unknown reason, date.now returns three more after comma
       // numbers than the exp date contains
       const tokenIsValid = tokenDecoded.exp > Date.now() / 1000

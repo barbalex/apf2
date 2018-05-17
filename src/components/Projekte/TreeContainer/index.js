@@ -279,7 +279,10 @@ const enhance = compose(
         showCoordOfTpopOnMapGeoAdminCh() {
           const { x, y } = getAndValidateCoordinatesOfTpop(store, id)
           if (x && y) {
-            store.showCoordOnMapGeoAdminCh(x, y)
+            window.open(
+              `https://map.geo.admin.ch/?bgLayer=ch.swisstopo.pixelkarte-farbe&Y=${x}&X=${y}&zoom=10&crosshair=circle`,
+              'target="_blank"'
+            )
           }
         },
         showCoordOfBeobOnMapsZhCh() {

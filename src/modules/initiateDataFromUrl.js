@@ -12,7 +12,7 @@ export default (store: Object) => {
   if (activeNodeArrayFromPathname.length === 0) {
     initialActiveNodeArray.push('Projekte')
   }
-
+  
   store.tree.setActiveNodeArray(initialActiveNodeArray)
   // need to set openNodes
   store.tree.setOpenNodesFromActiveNodeArray()
@@ -22,6 +22,7 @@ export default (store: Object) => {
   store.setUrlQuery(urlQuery)
 
   // set projekte tabs of not yet existing
+  /*
   if (
     (activeNodeArrayFromPathname.length === 0 ||
       activeNodeArrayFromPathname[0] === 'Projekte') &&
@@ -34,7 +35,7 @@ export default (store: Object) => {
     } else {
       store.urlQuery.projekteTabs = ['tree', 'daten']
     }
-  }
+  }*/
 
   // signal to autorun that store is initiated
   // i.e. history shall be manipulated

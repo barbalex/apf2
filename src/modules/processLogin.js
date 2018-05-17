@@ -7,13 +7,14 @@ export default async ({
   store,
   name,
   token,
-  client
+  client,
 }: {
   store: Object,
   name: String,
   token: String,
-  client: Object
+  client: Object,
 }) => {
+  console.log('processLogin, token:', token)
   await client.mutate({
     mutation: gql`
       mutation setUser($name: String, $token: String) {
@@ -28,6 +29,5 @@ export default async ({
       token,
     },
   })
-
   initiateDataFromUrl(store)
 }
