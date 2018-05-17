@@ -11,7 +11,6 @@ import insertBeobzuordnung from '../action/insertBeobzuordnung'
 import deleteDatasetDemand from '../action/deleteDatasetDemand'
 import deleteDatasetExecute from '../action/deleteDatasetExecute'
 import listError from '../action/listError'
-import deleteBeobzuordnung from '../action/deleteBeobzuordnung'
 import writeToStore from '../action/writeToStore'
 import moveTo from '../action/moveTo'
 import copyTo from '../action/copyTo'
@@ -153,9 +152,6 @@ export default (store: Object): void => {
     undoDeletion: action('undoDeletion', deletedDataset => {
       undoDeletion({ store, deletedDataset })
     }),
-    deleteBeobzuordnung: action('deleteBeobzuordnung', (tree, beobId) =>
-      deleteBeobzuordnung(store, tree, beobId)
-    ),
     listError: action('listError', error => listError(store, error)),
     // updates data in store
     updateProperty: action('updateProperty', (tree, key, value) => {
