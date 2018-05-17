@@ -17,7 +17,6 @@ export default async (idb) => {
   const authLink = setContext((_, { headers }) => {
     if (token) {
       const tokenDecoded = jwtDecode(token)
-      console.log('client, tokenDecoded:', tokenDecoded)
       // for unknown reason, date.now returns three more after comma
       // numbers than the exp date contains
       const tokenIsValid = tokenDecoded.exp > Date.now() / 1000

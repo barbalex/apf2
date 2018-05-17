@@ -54,6 +54,8 @@ const ExporteContainer = styled.div`
 
 const enhance = compose(inject('store'), observer)
 
+// TODO
+// get this to work again
 const myChildren = (store: Object) => {
   const projekteTabs = toJS(store.urlQuery.projekteTabs)
   // if daten and exporte are shown, only show exporte
