@@ -196,6 +196,7 @@ const myChildren = (store: Object) => {
 }
 
 const Projekte = ({ store }: { store: Object }) => {
+  console.log('Projekte rendering')
   return (
     <Container data-loading={store.loading.length > 0}>
       <ErrorBoundary>

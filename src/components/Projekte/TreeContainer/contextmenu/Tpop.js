@@ -30,7 +30,6 @@ const Tpop = ({
     ['tpopmassn', 'tpopfeldkontr', 'tpopfreiwkontr'].includes(
       store.copying.table
     )
-  //console.log('Tpop: token:', token)
 
   return (
     <ErrorBoundary>

@@ -273,7 +273,10 @@ const enhance = compose(
         showCoordOfTpopOnMapsZhCh() {
           const { x, y } = getAndValidateCoordinatesOfTpop(store, id)
           if (x && y) {
-            store.showCoordOnMapsZhCh(x, y)
+            window.open(
+              `https://maps.zh.ch/?x=${x}&y=${y}&scale=3000&markers=ring`,
+              'target="_blank"'
+            )
           }
         },
         showCoordOfTpopOnMapGeoAdminCh() {
@@ -288,13 +291,19 @@ const enhance = compose(
         showCoordOfBeobOnMapsZhCh() {
           const { x, y } = getAndValidateCoordinatesOfBeob(store, id)
           if (x && y) {
-            store.showCoordOnMapsZhCh(x, y)
+            window.open(
+              `https://maps.zh.ch/?x=${x}&y=${y}&scale=3000&markers=ring`,
+              'target="_blank"'
+            )
           }
         },
         showCoordOfBeobOnMapGeoAdminCh() {
           const { x, y } = getAndValidateCoordinatesOfBeob(store, id)
           if (x && y) {
-            store.showCoordOnMapGeoAdminCh(x, y)
+            window.open(
+              `https://map.geo.admin.ch/?bgLayer=ch.swisstopo.pixelkarte-farbe&Y=${x}&X=${y}&zoom=10&crosshair=circle`,
+              'target="_blank"'
+            )
           }
         },
       }
@@ -347,6 +356,7 @@ const TreeContainer = ({
             openNodes.push(projektUrl)
           }
         }
+        console.log('TreeContainer rendering')
 
         return (
           <ErrorBoundary>

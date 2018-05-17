@@ -85,18 +85,6 @@ export default (store: Object): void => {
     createNewPopFromBeob: action('createNewPopFromBeob', (tree, beobId) =>
       createNewPopFromBeob({ store, tree, beobId })
     ),
-    showCoordOnMapsZhCh: action('showCoordOnMapsZhCh', (x, y) =>
-      window.open(
-        `https://maps.zh.ch/?x=${x}&y=${y}&scale=3000&markers=ring`,
-        'target="_blank"'
-      )
-    ),
-    showCoordOnMapGeoAdminCh: action('showCoordOnMapGeoAdminCh', (x, y) =>
-      window.open(
-        `https://map.geo.admin.ch/?bgLayer=ch.swisstopo.pixelkarte-farbe&Y=${x}&X=${y}&zoom=10&crosshair=circle`,
-        'target="_blank"'
-      )
-    ),
     /**
      * urlQueries are used to control tabs
      * for instance: Entwicklung or Biotop in tpopfeldkontr
