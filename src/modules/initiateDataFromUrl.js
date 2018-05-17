@@ -2,7 +2,7 @@
 import clone from 'lodash/clone'
 import getActiveNodeArrayFromPathname from '../store/action/getActiveNodeArrayFromPathname'
 import getUrlQuery from '../store/action/getUrlQuery'
-import isMobilePhone from '../modules/isMobilePhone'
+//import isMobilePhone from '../modules/isMobilePhone'
 
 export default (store: Object) => {
   const activeNodeArrayFromPathname = getActiveNodeArrayFromPathname()
@@ -22,6 +22,11 @@ export default (store: Object) => {
   store.setUrlQuery(urlQuery)
 
   // set projekte tabs of not yet existing
+  /**
+   * TODO
+   * TURNED OFF BECAUSE:
+   * caused reloading login component after login!!!???
+   */
   /*
   if (
     (activeNodeArrayFromPathname.length === 0 ||

@@ -70,6 +70,8 @@ $$;
 
 -- stored procedure that returns the token
 CREATE TYPE auth.jwt_token AS (
+  role text,
+  username text,
   token text
 );
 
@@ -82,6 +84,7 @@ returns auth.jwt_token
 declare
   _role name;
   result auth.jwt_token;
+  token text;
 begin
   -- check username and password
   select auth.user_role($1, $2) into _role;
@@ -89,48 +92,13 @@ begin
     raise invalid_password using message = 'invalid user or password';
   end if;
 
-  select
-    auth.sign(
-      row_to_json(r), current_setting('app.jwt_secret')
-    ) as token
-    from (
-      select _role as role,
-      'fuck' as test,
-      $1 as username,
-      extract(epoch from now())::integer + 60*60*24*30 as exp
-    ) r
-    into result;
-  return result;
+  return (
+    _role,
+    $1,
+    current_setting('app.jwt_secret')
+  )::auth.jwt_token;
 end;
 $$ language plpgsql;
-
-
---create or replace function apflora.login(username text, pass text)
---returns auth.jwt_token
-  --as $$
---declare
-  --_role name;
-  --result auth.jwt_token;
---begin
-  -- check username and password
-  --select auth.user_role($1, $2) into _role;
-  --if _role is null then
-    --raise invalid_password using message = 'invalid user or password';
-  --end if;
---
-  --select
-    --auth.sign(
-      --row_to_json(r), current_setting('app.jwt_secret')
-    --) as token
-    --from (
-      --select _role as role,
-      --$1 as username,
-      --extract(epoch from now())::integer + 60*60*24*30 as exp
-    --) r
-    --into result;
-  --return result;
---end;
---$$ language plpgsql;
 
 -- permissions that allow anonymous users to create accounts
 -- and attempt to log in
