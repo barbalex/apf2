@@ -5,6 +5,7 @@ import { inject, observer } from 'mobx-react'
 import compose from 'recompose/compose'
 
 import ErrorBoundary from '../../../shared/ErrorBoundary'
+import userIsReadOnly from '../../../../modules/userIsReadOnly'
 
 const enhance = compose(inject('store'), observer)
 
@@ -16,7 +17,7 @@ const Apart = ({ onClick,
   tree: Object,
   store: Object
 }) => {
-  const mayWrite = !store.user.readOnly
+  const mayWrite = !userIsReadOnly(store.user.token)
 
   return (
     <ErrorBoundary>

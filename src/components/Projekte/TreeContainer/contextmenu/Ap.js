@@ -5,6 +5,7 @@ import { inject, observer } from 'mobx-react'
 import compose from 'recompose/compose'
 
 import ErrorBoundary from '../../../shared/ErrorBoundary'
+import userIsReadOnly from '../../../../modules/userIsReadOnly'
 
 const enhance = compose(inject('store'), observer)
 
@@ -18,7 +19,7 @@ const Ap = ({
   tree: Object,
 }) => {
   const moving = store.moving.table && store.moving.table === 'pop'
-  const mayWrite = !store.user.readOnly
+  const mayWrite = !userIsReadOnly(store.user.token)
 
   return (
     <ErrorBoundary>

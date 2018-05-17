@@ -7,6 +7,7 @@ import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
 
 import ErrorBoundary from '../../../shared/ErrorBoundary'
+import userIsReadOnly from '../../../../modules/userIsReadOnly'
 
 const enhance = compose(
   inject('store'),
@@ -54,7 +55,7 @@ const TpopFolder = ({
           alle öffnen
         </MenuItem>
         {
-          !store.user.readOnly &&
+          !userIsReadOnly(store.user.token) &&
           <Fragment>
             <MenuItem
               onClick={onClick}

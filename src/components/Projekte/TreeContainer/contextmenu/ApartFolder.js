@@ -5,6 +5,7 @@ import { inject, observer } from 'mobx-react'
 import compose from 'recompose/compose'
 
 import ErrorBoundary from '../../../shared/ErrorBoundary'
+import userIsReadOnly from '../../../../modules/userIsReadOnly'
 
 const enhance = compose(inject('store'), observer)
 
@@ -21,7 +22,7 @@ const ApartFolder = ({
     <ContextMenu id={`${tree.name}apArtFolder`}>
       <div className="react-contextmenu-title">AP-Arten</div>
       {
-        !store.user.readOnly &&
+        !userIsReadOnly(store.user.token) &&
         <Fragment>
           <MenuItem
             onClick={onClick}

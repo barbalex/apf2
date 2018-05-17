@@ -5,6 +5,7 @@ import { inject } from 'mobx-react'
 import compose from 'recompose/compose'
 
 import ErrorBoundary from '../../../shared/ErrorBoundary'
+import userIsReadOnly from '../../../../modules/userIsReadOnly'
 
 const enhance = compose(inject('store'))
 
@@ -29,7 +30,7 @@ const ZielFolder = ({
         alle öffnen
       </MenuItem>
       {
-        !store.user.readOnly &&
+        !userIsReadOnly(store.user.token) &&
         <MenuItem
           onClick={onClick}
           data={{

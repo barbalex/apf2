@@ -13,9 +13,9 @@ export default (store: Object): void =>
   app.db.currentUser
     .toArray()
     .then(users => {
-      if (users[0] && users[0].name && users[0].role && users[0].token) {
-        const { name, role, token } = users[0]
-        processLogin({ store, name, role, token })
+      if (users[0] && users[0].name && users[0].token) {
+        const { name, token } = users[0]
+        processLogin({ store, name, token })
       } else {
         store.logout()
       }

@@ -10,6 +10,7 @@ import gql from "graphql-tag"
 import get from 'lodash/get'
 
 import ErrorBoundary from '../../../shared/ErrorBoundary'
+import userIsReadOnly from '../../../../modules/userIsReadOnly'
 
 const enhance = compose(
   inject('store'),
@@ -61,7 +62,7 @@ const Tpopfeldkontr = ({
             >
               <div className="react-contextmenu-title">Feld-Kontrolle</div>
               {
-                !store.user.readOnly &&
+                !userIsReadOnly(store.user.token) &&
                 <Fragment>
                   <MenuItem
                     onClick={onClick}

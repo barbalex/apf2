@@ -5,6 +5,7 @@ import { inject, observer } from 'mobx-react'
 import compose from 'recompose/compose'
 
 import ErrorBoundary from '../../../shared/ErrorBoundary'
+import userIsReadOnly from '../../../../modules/userIsReadOnly'
 
 const enhance = compose(inject('store'), observer)
 
@@ -21,7 +22,7 @@ const BeobNichtBeurteilt = ({
     <ContextMenu id={`${tree.name}beobzuordnung`}>
       <div className="react-contextmenu-title">Beobachtung</div>
       {
-        !store.user.readOnly &&
+        !userIsReadOnly(store.user.token) &&
         <MenuItem
           onClick={onClick}
           data={{
