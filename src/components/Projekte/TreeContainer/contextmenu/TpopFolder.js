@@ -27,13 +27,15 @@ const TpopFolder = ({
   changeId,
   id,
   onShow,
+  token
 }: {
   tree: Object,
   onClick: () => void,
   store: Object,
   changeId: () => void,
-  id: number,
+  id: Number,
   onShow: () => void,
+  token: String,
 }) => {
   const moving = store.moving.table && store.moving.table === 'tpop'
   const copying = store.copying.table && store.copying.table === 'tpop'
@@ -55,7 +57,7 @@ const TpopFolder = ({
           alle öffnen
         </MenuItem>
         {
-          !userIsReadOnly(store.user.token) &&
+          !userIsReadOnly(token) &&
           <Fragment>
             <MenuItem
               onClick={onClick}

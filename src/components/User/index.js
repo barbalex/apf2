@@ -104,9 +104,8 @@ const enhance = compose(
       app.db.currentUser.clear()
       app.db.currentUser.put({ name, token })
 
-      // TODO
       setTimeout(() => {
-        if (store.user.name) {
+        if (name) {
           changeName('')
           changePassword('')
         }
