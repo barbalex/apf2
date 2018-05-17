@@ -31,7 +31,7 @@ import 'react-reflex/styles.css'
 
 // import components
 import store from './store'
-import initializeDb from './modules/initializeDb'
+import initializeIdb from './modules/initializeIdb'
 import setLoginFromIdb from './store/action/setLoginFromIdb'
 import Loading from './components/shared/Loading'
 import client from './client'
@@ -92,11 +92,12 @@ const DownloadMessages = Loadable({
         event.preventDefault()
       }
     })
+    
     const myClient = client(store)
 
     app.extend({
       init() {
-        this.db = initializeDb()
+        this.db = initializeIdb()
         this.store = store
         this.client = myClient
       },

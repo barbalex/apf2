@@ -4,7 +4,7 @@ import axios from 'axios'
 import recordValuesForWhichTableDataWasFetched from '../../modules/recordValuesForWhichTableDataWasFetched'
 
 export default (store: Object, apId: number): any => {
-  const { valuesForWhichTableDataWasFetched } = store
+  /*const { valuesForWhichTableDataWasFetched } = store
 
   // only fetch if not yet fetched
   if (
@@ -32,5 +32,5 @@ export default (store: Object, apId: number): any => {
     .catch(error => {
       store.loading = store.loading.filter(el => el !== 'tpopForAp')
       store.listError(error)
-    })
+    })*/
 }

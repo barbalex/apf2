@@ -2,7 +2,7 @@
 import axios from 'axios'
 
 export default async (store: Object): Promise<void> => {
-  const fetchUserMessages = async () => {
+  /*const fetchUserMessages = async () => {
     let result
     try {
       result = await axios.get(`/usermessage?user_name=eq.${store.user.name}`)
@@ -32,5 +32,5 @@ export default async (store: Object): Promise<void> => {
   ])
   const unreadMessages = messages.filter(m => !userMessages.includes(m.id))
   store.messages.messages = unreadMessages
-  store.messages.setFetched(unreadMessages)
+  store.messages.setFetched(unreadMessages)*/
 }

@@ -9,7 +9,7 @@ export default async (
   tableName: string,
   parentId: number
 ): Promise<void> => {
-  const table: {
+  /*const table: {
     table: string,
     idField: string,
     parentIdField: string,
@@ -62,5 +62,5 @@ export default async (
   }
   if (result && result.data) {
     store.writeToStore({ data: result.data, table: tableName, field: idField })
-  }
+  }*/
 }

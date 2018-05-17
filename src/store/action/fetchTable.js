@@ -5,7 +5,7 @@ import tables from '../../modules/tables'
 
 export default async (store: Object, tableName: string) => {
   // only fetch if not yet fetched
-  if (!store.loading.includes(tableName) && store.table[tableName].size === 0) {
+  /*if (!store.loading.includes(tableName) && store.table[tableName].size === 0) {
     const tableMetadata = tables.find(t => t.table === tableName)
     if (!tableMetadata) {
       return store.listError(
@@ -38,5 +38,5 @@ export default async (store: Object, tableName: string) => {
       })
     }
     store.loading = store.loading.filter(el => el !== tableName)
-  }
+  }*/
 }

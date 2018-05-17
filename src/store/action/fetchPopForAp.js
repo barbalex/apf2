@@ -3,7 +3,7 @@ import axios from 'axios'
 import recordValuesForWhichTableDataWasFetched from '../../modules/recordValuesForWhichTableDataWasFetched'
 
 export default (store: Object, apId: number): any => {
-  if (!apId) {
+  /*if (!apId) {
     return store.listError(
       new Error('action fetchPopForAp: apId must be passed')
     )
@@ -35,5 +35,5 @@ export default (store: Object, apId: number): any => {
     .catch(error => {
       store.loading = store.loading.filter(el => el !== 'popForAp')
       store.listError(error)
-    })
+    })*/
 }
