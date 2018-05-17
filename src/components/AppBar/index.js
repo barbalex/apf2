@@ -16,7 +16,6 @@ import styled from 'styled-components'
 import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
-import shouldUpdate from 'recompose/shouldUpdate'
 import { Query } from 'react-apollo'
 import get from 'lodash/get'
 
@@ -47,18 +46,8 @@ const StyledMoreVertIcon = styled(MoreVertIcon)`
   color: white !important;
 `
 
-/**
- * checking props change according to
- * https://marmelab.com/blog/2017/02/06/react-is-slow-react-is-fast.html
- */
-const checkPropsChange = (props, nextProps) =>
-  toJS(nextProps.store.urlQuery.projekteTabs).join() !==
-    toJS(props.store.urlQuery.projekteTabs).join() ||
-  nextProps.store.user.name !== props.store.user.name
-
 const enhance = compose(
   inject('store'),
-  shouldUpdate(checkPropsChange),
   withState('anchorEl', 'setAnchorEl', null),
   withHandlers({
     onClickButton: props => name => {
