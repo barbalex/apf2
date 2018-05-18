@@ -10,8 +10,8 @@ import withHandlers from 'recompose/withHandlers'
 import AutoComplete from '../../../shared/Autocomplete'
 import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
-import data1 from './data1.graphql'
-import data2 from './data2.graphql'
+import data1Gql from './data1.graphql'
+import data2Gql from './data2.graphql'
 import updateApartByIdGql from './updateApartById.graphql'
 
 const Container = styled.div`
@@ -57,13 +57,13 @@ const ApArt = ({
   treeName: String,
   saveToDb: () => void
 }) => (
-  <Query query={data1}>
+  <Query query={data1Gql}>
     {({ loading, error, data }) => {
       if (error) return `Fehler: ${error.message}`
       const id = get(data, `${treeName}.activeNodeArray[5]`)
 
       return (
-        <Query query={data2} variables={{ id }}>
+        <Query query={data2Gql} variables={{ id }}>
           {({ loading, error, data }) => {
             if (loading)
               return (

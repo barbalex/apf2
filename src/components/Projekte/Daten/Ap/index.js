@@ -13,8 +13,8 @@ import TextField from '../../../shared/TextField'
 import TextFieldNonUpdatable from '../../../shared/TextFieldNonUpdatable'
 import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
-import data1 from './data1.graphql'
-import data2 from './data2.graphql'
+import data1Gql from './data1.graphql'
+import data2Gql from './data2.graphql'
 import updateApByIdGql from './updateApById.graphql'
 
 const Container = styled.div`
@@ -95,13 +95,13 @@ const Ap = ({
   treeName: String,
   saveToDb: () => void
 }) => (
-  <Query query={data1}>
+  <Query query={data1Gql}>
     {({ loading, error, data }) => {
       if (error) return `Fehler: ${error.message}`
       const id = get(data, `${treeName}.activeNodeArray[3]`)
 
       return (
-        <Query query={data2} variables={{ id }}>
+        <Query query={data2Gql} variables={{ id }}>
           {({ loading, error, data }) => {
             if (loading)
               return (
