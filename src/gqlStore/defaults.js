@@ -9,7 +9,7 @@ export default async (idb) => {
   const defaults = {
     updateAvailable: false,
     tree: {
-      id: 'tree',
+      name: 'tree',
       activeNodeArray: [],
       activeNodes: {},
       activeDataset: {},
@@ -19,7 +19,7 @@ export default async (idb) => {
       __typename: 'Tree'
     },
     tree2: {
-      id: 'tree2',
+      name: 'tree2',
       activeNodeArray: [],
       activeNodes: {},
       activeDataset: {},
@@ -28,13 +28,12 @@ export default async (idb) => {
       nodeLabelFilter: {},
       __typename: 'Tree2'
     },
-    activeNodeArray: [],
     /**
      * urlQueries are used to control tabs
      * for instance: Entwicklung or Biotop in tpopfeldkontr
      */
     urlQuery: {
-      projekteTabs: [],
+      projekteTabs: ['tree', 'daten'],
       feldkontrTab: 'entwicklung',
       __typename: 'UrlQuery'
     },

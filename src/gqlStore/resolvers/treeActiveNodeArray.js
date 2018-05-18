@@ -13,7 +13,13 @@ export default {
         query: gql`
             query Query {
               tree @client {
+                name
                 activeNodeArray
+                activeNodes
+                activeDataset
+                openNodes
+                apFilter
+                nodeLabelFilter
               }
             }
           `
@@ -23,26 +29,32 @@ export default {
       // only write if changed
       if (!isEqual(activeNodeArray, value)) {
         console.log('resolvers: treeActiveNodeArray, will 3:')
+        /*
         cache.writeFragment({
-          id: 'tree',
           fragment: gql`
             fragment myTree on Tree {
               activeNodeArray
+              __typename: Tree
             }
           `,
           data: {
-            activeNodeArray
+            activeNodeArray: value
           }
-        })
-        /*
+        })*/
         cache.writeData({
           data: {
             tree: {
+              name: get(data, 'name', null),
               activeNodeArray: value,
+              activeNodes: get(data, 'activeNodes', null),
+              activeDataset: get(data, 'activeDataset', null),
+              openNodes: get(data, 'openNodes', null),
+              apFilter: get(data, 'apFilter', null),
+              nodeLabelFilter: get(data, 'nodeLabelFilter', null),
               __typename: 'Tree'
             }
           } 
-        })*/
+        })
         console.log('resolvers: treeActiveNodeArray, 3:')
         app.history.push(`/${value.join('/')}`)
       }
