@@ -16,6 +16,7 @@ import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
 import { Query } from 'react-apollo'
 import get from 'lodash/get'
+import clone from 'lodash/clone'
 
 import isMobilePhone from '../../modules/isMobilePhone'
 import ErrorBoundary from '../shared/ErrorBoundary'
@@ -110,7 +111,11 @@ const MyAppBar = ({
     {({ loading, error, data, client }) => {
       if (error) return `Fehler: ${error.message}`
 
-      const projekteTabs = get(data, 'urlQuery.projekteTabs', [])
+      /**
+       * need to clone projekteTabs
+       * because otherwise removing elements errors out (because elements are sealed)
+       */
+      const projekteTabs = clone(get(data, 'urlQuery.projekteTabs', []))
       const treeIsVisible = projekteTabs.includes('tree')
       const tree2IsVisible = projekteTabs.includes('tree2')
       const datenIsVisible =

@@ -8,7 +8,6 @@ import gql from 'graphql-tag'
 export default {
   Mutation: {
     setTreeActiveNodeArray: (_, { value }, { cache }) => {
-      console.log('resolvers: treeActiveNodeArray, value:', value)
       const data = cache.readQuery({
         query: gql`
             query Query {
@@ -25,22 +24,8 @@ export default {
           `
       })
       const activeNodeArray = get(data, 'tree.activeNodeArray')
-      console.log('resolvers: treeActiveNodeArray, 2:', {data,activeNodeArray})
       // only write if changed
       if (!isEqual(activeNodeArray, value)) {
-        console.log('resolvers: treeActiveNodeArray, will 3:')
-        /*
-        cache.writeFragment({
-          fragment: gql`
-            fragment myTree on Tree {
-              activeNodeArray
-              __typename: Tree
-            }
-          `,
-          data: {
-            activeNodeArray: value
-          }
-        })*/
         cache.writeData({
           data: {
             tree: {
@@ -55,7 +40,6 @@ export default {
             }
           } 
         })
-        console.log('resolvers: treeActiveNodeArray, 3:')
         app.history.push(`/${value.join('/')}`)
       }
       return null

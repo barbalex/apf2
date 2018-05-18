@@ -15,6 +15,5 @@ export default (): String => {
   if (query.projekteTabs && isString(query.projekteTabs)) {
     query.projekteTabs = [query.projekteTabs]
   }
-  console.log('getUrlQuery:', { queryFromUrl: queryString.parse(window.location.search), queryReturned: query })
   return query
 }

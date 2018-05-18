@@ -17,7 +17,6 @@ export default (store: Object, client: Object) => {
   }
   
   //store.tree.setActiveNodeArray(initialActiveNodeArray)
-  console.log('initiateDataFromUrl 1')
   client.mutate({
     mutation: gql`
       mutation setTreeActiveNodeArray($value: Array!) {
@@ -31,14 +30,12 @@ export default (store: Object, client: Object) => {
     `,
     variables: { value: initialActiveNodeArray }
   })
-  console.log('initiateDataFromUrl 2')
   // need to set openNodes
   store.tree.setOpenNodesFromActiveNodeArray()
   // clone tree2 in case tree2 is open
   store.tree.cloneActiveNodeArrayToTree2()
   const urlQuery = getUrlQuery()
   const { projekteTabs, feldkontrTab } = urlQuery
-  console.log('initiateDataFromUrl:', { initialActiveNodeArray, urlQuery, projekteTabs, feldkontrTab })
   client.mutate({
     mutation: gql`
       mutation setUrlQuery($projekteTabs: Array!, $feldkontrTab: String!) {

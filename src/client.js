@@ -1,7 +1,7 @@
 import { ApolloClient } from 'apollo-client'
 import { createHttpLink } from 'apollo-link-http'
 import { setContext } from 'apollo-link-context'
-import { InMemoryCache, defaultDataIdFromObject  } from 'apollo-cache-inmemory'
+import { InMemoryCache  } from 'apollo-cache-inmemory'
 import { withClientState } from 'apollo-link-state'
 import { ApolloLink } from 'apollo-link'
 import jwtDecode from 'jwt-decode'
@@ -33,7 +33,7 @@ export default async (idb) => {
   })
   const cache = new InMemoryCache({
     dataIdFromObject: object => {
-      if (['Tree'].includes(object.__typename)) return defaultDataIdFromObject(object)
+      //if (['Tree'].includes(object.__typename)) return defaultDataIdFromObject(object)
       return object.id
     }
   })

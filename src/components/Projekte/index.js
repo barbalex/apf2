@@ -62,6 +62,7 @@ const enhance = compose(inject('store'), observer)
 // get this to work again
 const myChildren = (store: Object, data: Object) => {
   const projekteTabs = clone(get(data, 'urlQuery.projekteTabs'))
+  console.log('Projekte:', {projekteTabs, pTOriginal: get(data, 'urlQuery.projekteTabs')})
   // if daten and exporte are shown, only show exporte
   if (projekteTabs.includes('daten') && projekteTabs.includes('exporte')) {
     const i = projekteTabs.indexOf('daten')
