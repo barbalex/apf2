@@ -2,15 +2,32 @@
 import get from 'lodash/get'
 
 export default async (idb) => {
-  const exportDefaults = {
-    updateAvailable: false
-  }
-  
+
   // fetch user from idb
   const users = await idb.currentUser.toArray()
   
-  const otherDefaults = {
-    storeInitiated: false,
+  const defaults = {
+    updateAvailable: false,
+    tree: {
+      id: 'tree',
+      activeNodeArray: [],
+      activeNodes: {},
+      activeDataset: {},
+      openNodes: [],
+      apFilter: false,
+      nodeLabelFilter: {},
+      __typename: 'Tree'
+    },
+    tree2: {
+      id: 'tree2',
+      activeNodeArray: [],
+      activeNodes: {},
+      activeDataset: {},
+      openNodes: [],
+      apFilter: false,
+      nodeLabelFilter: {},
+      __typename: 'Tree2'
+    },
     activeNodeArray: [],
     /**
      * urlQueries are used to control tabs
@@ -48,5 +65,5 @@ export default async (idb) => {
     }
   }
   console.log('store defaults setting')
-  return Object.assign({}, exportDefaults, otherDefaults)
+  return defaults
 }

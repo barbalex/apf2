@@ -15,6 +15,9 @@ query TreeDataQuery(
   user @client {
     token
   }
+  tree @client {
+    activeNodeArray
+  }
   urlQuery @client {
     projekteTabs
     feldkontrTab

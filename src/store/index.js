@@ -34,23 +34,18 @@ function Store(): void {
     toggleApFilter: () => {},
     nodeLabelFilter: {},
     emptyNodeLabelFilter: () => {},
-    activeNodeFilter: {},
-    applyMapFilterToTree: false,
   }
   this.tree2 = {
     name: 'tree2',
     activeNodeArray: [],
     setActiveNodeArray: () => {},
     setOpenNodesFromActiveNodeArray: () => {},
-    cloneActiveNodeArrayToTree2: () => {},
     activeNodes: {},
     activeDataset: {},
     openNodes: [],
     apFilter: false,
     toggleApFilter: () => {},
     nodeLabelFilter: {},
-    activeNodeFilter: {},
-    applyMapFilterToTree: false,
   }
   this.export = {
     applyNodeLabelFilterToExport: false,

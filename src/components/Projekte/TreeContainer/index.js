@@ -3,7 +3,6 @@
  * need to keep class because of ref
  */
 import React from 'react'
-import { toJS } from 'mobx'
 import { observer, inject } from 'mobx-react'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
@@ -349,6 +348,7 @@ const TreeContainer = ({
 
         const nodes = buildNodes({ store, tree, data })
         const token = get(data, 'user.token', null)
+        const activeNodeArray = get(data, 'tree.activeNodeArray')
 
         // if activeNodeArray.length === 1
         // and there is only one projekte
@@ -407,7 +407,7 @@ const TreeContainer = ({
                     'Tpop'
                   )}
                   popHighlightedIdsString={store.map.pop.highlightedIds.join()}
-                  activeNodeArray={toJS(tree.activeNodeArray)}
+                  activeNodeArray={activeNodeArray}
                   openNodes={tree.openNodes}
                 />
               </InnerTreeContainer>

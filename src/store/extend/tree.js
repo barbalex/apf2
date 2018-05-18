@@ -57,16 +57,6 @@ export default (store: Object, tree: Object): void => {
       }
       tree.nodeLabelFilter.set(table, value)
     }),
-    activeNodeFilter: {
-      ap: computed(() => tree.activeNodes.ap, {
-        name: 'activeNodeFilterAp'
-      }),
-    },
-    applyMapFilterToTree: false,
-    toggleApplyMapFilterToTree: action(
-      'toggleApplyMapFilterToTree',
-      () => (tree.applyMapFilterToTree = !tree.applyMapFilterToTree)
-    ),
     // action when user clicks on a node in the tree
     toggleNode: action('toggleNode', (tree, node) =>
       toggleNode(store, tree, node)

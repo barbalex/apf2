@@ -17,16 +17,21 @@ export default (store: Object, client: Object) => {
   }
   
   //store.tree.setActiveNodeArray(initialActiveNodeArray)
+  console.log('initiateDataFromUrl 1')
   client.mutate({
     mutation: gql`
-      mutation setActiveNodeArray($value: Array!) {
-        setActiveNodeArray(value: $value) @client {
-          activeNodeArray
+      mutation setTreeActiveNodeArray($value: Array!) {
+        setTreeActiveNodeArray(value: $value) @client {
+          tree @client {
+            activeNodeArray
+            __typename: Tree
+          }
         }
       }
     `,
     variables: { value: initialActiveNodeArray }
   })
+  console.log('initiateDataFromUrl 2')
   // need to set openNodes
   store.tree.setOpenNodesFromActiveNodeArray()
   // clone tree2 in case tree2 is open
