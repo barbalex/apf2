@@ -30,8 +30,8 @@
   "dependencies": {
     "@hocs/debounce-handler": "0.3.0",
     "@hocs/with-lifecycle": "0.4.0",
-    "@material-ui/core": "1.0.0-rc.1",
-    "@material-ui/icons": "1.0.0-rc.0",
+    "@material-ui/core": "1.0.0",
+    "@material-ui/icons": "1.0.0",
     "@turf/inside": "4.7.3",
     "@turf/nearest": "4.7.3",
     "@turf/within": "4.7.3",
@@ -84,12 +84,12 @@
     "react-linkify": "0.2.2",
     "react-loadable": "5.4.0",
     "react-reflex": "2.2.4",
-    "react-sortable-hoc": "0.6.8",
+    "react-sortable-hoc": "0.7.0",
     "react-virtualized": "9.19.0",
     "recompose": "0.27.0",
     "styled-components": "3.2.6",
     "typeface-roboto": "0.0.54",
-    "yup": "0.25.0"
+    "yup": "0.25.1"
   },
   "resolutions": {
     "graphql": "0.13.2"
