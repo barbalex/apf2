@@ -14,7 +14,6 @@ export default async ({
   token: String,
   client: Object,
 }) => {
-  console.log('processLogin, token:', token)
   await client.mutate({
     mutation: gql`
       mutation setUser($name: String, $token: String) {

@@ -197,17 +197,13 @@ const myChildren = (store: Object) => {
   return children
 }
 
-const Projekte = ({ store }: { store: Object }) => {
-  console.log('Projekte rendering')
-  return (
-    <Container data-loading={store.loading.length > 0}>
-      <ErrorBoundary>
-        <ReflexContainer orientation="vertical">
-          {myChildren(store)}
-        </ReflexContainer>
-      </ErrorBoundary>
-    </Container>
-  )
-}
+const Projekte = ({ store }: { store: Object }) =>
+  <Container data-loading={store.loading.length > 0}>
+    <ErrorBoundary>
+      <ReflexContainer orientation="vertical">
+        {myChildren(store)}
+      </ReflexContainer>
+    </ErrorBoundary>
+  </Container>
 
 export default enhance(Projekte)

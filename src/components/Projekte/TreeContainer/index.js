@@ -356,7 +356,6 @@ const TreeContainer = ({
             openNodes.push(projektUrl)
           }
         }
-        console.log('TreeContainer rendering')
 
         return (
           <ErrorBoundary>

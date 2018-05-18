@@ -35,6 +35,8 @@ import initializeIdb from './modules/initializeIdb'
 import Loading from './components/shared/Loading'
 import client from './client'
 
+import initiateDataFromUrl from './modules/initiateDataFromUrl'
+
 // service worker
 import registerServiceWorker from './registerServiceWorker'
 
@@ -108,6 +110,8 @@ const DownloadMessages = Loadable({
     window.app = app
 
     axios.defaults.baseURL = apiBaseUrl
+
+    initiateDataFromUrl(store)
 
     ReactDOM.render(
       <ApolloProvider client={myClient}>

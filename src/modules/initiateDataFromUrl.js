@@ -24,8 +24,8 @@ export default (store: Object) => {
   // set projekte tabs of not yet existing
   /**
    * TODO
-   * TURNED OFF BECAUSE:
-   * caused reloading login component after login!!!???
+   * SHOULD BE TURNED OFF BECAUSE:
+   * causes reloading login component after login!!!???
    */
   /*
   if (
