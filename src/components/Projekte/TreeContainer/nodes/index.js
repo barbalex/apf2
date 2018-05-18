@@ -73,11 +73,9 @@ const allParentNodesAreOpenAndVisible = (
   allParentNodesAreOpen(openNodes, nodeUrl)
 
 export default ({
-  store,
   tree,
   data,
 }: {
-  store: Object,
   tree: Object,
   data: Object,
 }): Array < Object > => {
@@ -234,7 +232,6 @@ export default ({
         }),
         ...qkFolderNodes({
           data,
-          store,
           tree,
           apNodes,
           projektNodes,

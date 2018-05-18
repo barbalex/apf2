@@ -16,6 +16,7 @@ query TreeDataQuery(
     token
   }
   tree @client {
+    name
     activeNodeArray
     activeNodes
     activeDataset
@@ -24,6 +25,7 @@ query TreeDataQuery(
     nodeLabelFilter
   }
   tree2 @client {
+    name
     activeNodeArray
     activeNodes
     activeDataset

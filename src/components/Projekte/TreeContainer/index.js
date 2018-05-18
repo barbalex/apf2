@@ -348,7 +348,7 @@ const TreeContainer = ({
         //if (loading) return <Container>Lade...</Container>
         if (error) return `Fehler: ${error.message}`
 
-        const nodes = buildNodes({ store, tree, data })
+        const nodes = buildNodes({ tree, data })
         const token = get(data, 'user.token', null)
         const activeNodeArray = get(data, `${treeName}.activeNodeArray`)
 
