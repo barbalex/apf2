@@ -85,24 +85,6 @@ export default (store: Object): void => {
     createNewPopFromBeob: action('createNewPopFromBeob', (tree, beobId) =>
       createNewPopFromBeob({ store, tree, beobId })
     ),
-    /**
-     * urlQueries are used to control tabs
-     * for instance: Entwicklung or Biotop in tpopfeldkontr
-     */
-    urlQuery: {
-      projekteTabs: [],
-      feldkontrTab: 'entwicklung',
-    },
-    setUrlQuery: action('setUrlQuery', query =>
-      Object.keys(query).forEach(k => (store.urlQuery[k] = query[k]))
-    ),
-    setUrlQueryValue: action('setUrlQueryValue', (key, value) => {
-      if (!value && value !== 0) {
-        delete store.urlQuery[key]
-      } else {
-        store.urlQuery[key] = value
-      }
-    }),
     datasetToDelete: {},
     tellUserReadOnly: action('tellUserReadOnly', () =>
       store.listError(new Error('Sie haben keine Schreibrechte'))

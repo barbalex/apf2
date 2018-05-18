@@ -1,10 +1,13 @@
 // @flow
 import clone from 'lodash/clone'
+import gql from 'graphql-tag'
+
 import getActiveNodeArrayFromPathname from './getActiveNodeArrayFromPathname'
 import getUrlQuery from '../modules/getUrlQuery'
 import isMobilePhone from '../modules/isMobilePhone'
+import setUrlQueryValue from '../modules/setUrlQueryValue'
 
-export default (store: Object) => {
+export default (store: Object, client: Object) => {
   const activeNodeArrayFromPathname = getActiveNodeArrayFromPathname()
   let initialActiveNodeArray = clone(activeNodeArrayFromPathname)
 
@@ -19,7 +22,18 @@ export default (store: Object) => {
   // clone tree2 in case tree2 is open
   store.tree.cloneActiveNodeArrayToTree2()
   const urlQuery = getUrlQuery()
-  store.setUrlQuery(urlQuery)
+  const { projekteTabs, feldkontrTab } = urlQuery
+  client.mutate({
+    mutation: gql`
+      mutation setUrlQuery($projekteTabs: Array!, $feldkontrTab: String!) {
+        setUrlQuery(projekteTabs: $projekteTabs, feldkontrTab: $feldkontrTab) @client {
+          projekteTabs
+          feldkontrTab
+        }
+      }
+    `,
+    variables: { projekteTabs, feldkontrTab }
+  })
 
   // set projekte tabs of not yet existing
   /**
@@ -36,15 +50,15 @@ export default (store: Object) => {
       urlQuery.projekteTabs.length === 0)
   ) {
     if (isMobilePhone()) {
-      store.urlQuery.projekteTabs = ['tree']
+      setUrlQueryValue({ client, key: 'projekteTabs', value: ['tree'] })
     } else {
-      store.urlQuery.projekteTabs = ['tree', 'daten']
+      setUrlQueryValue({ client, key: 'projekteTabs', value: ['tree', 'daten'] })
     }
   }
 
   // signal to autorun that store is initiated
   // i.e. history shall be manipulated
   // on changes to urlQuery and activeNodes
-  store.initiated = true
+  //store.initiated = true
 
 }

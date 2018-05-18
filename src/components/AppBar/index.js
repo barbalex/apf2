@@ -1,6 +1,5 @@
 // @flow
 import React from 'react'
-import { toJS } from 'mobx'
 import { observer, inject } from 'mobx-react'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
@@ -10,7 +9,6 @@ import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
 import Button from '@material-ui/core/Button'
 import MoreVertIcon from '@material-ui/icons/MoreVert'
-import clone from 'lodash/clone'
 import remove from 'lodash/remove'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
@@ -23,6 +21,7 @@ import isMobilePhone from '../../modules/isMobilePhone'
 import ErrorBoundary from '../shared/ErrorBoundary'
 import dataGql from './data.graphql'
 import logout from '../../modules/logout'
+import setUrlQueryValue from '../../modules/setUrlQueryValue'
 
 const StyledAppBar = styled(AppBar)`
   @media print {
@@ -50,12 +49,11 @@ const enhance = compose(
   inject('store'),
   withState('anchorEl', 'setAnchorEl', null),
   withHandlers({
-    onClickButton: props => name => {
+    onClickButton: props => (name, client, projekteTabs) => {
       const { store } = props
-      const projekteTabs = clone(toJS(store.urlQuery.projekteTabs))
       if (isMobilePhone()) {
         // show one tab only
-        store.setUrlQueryValue('projekteTabs', [name])
+        setUrlQueryValue({ client, key: 'projekteTabs', value: [name] })
       } else {
         const exporteIsVisible = projekteTabs.includes('exporte')
         const isVisible = projekteTabs.includes(name)
@@ -76,7 +74,7 @@ const enhance = compose(
             remove(projekteTabs, el => el === 'exporte')
           }
         }
-        store.setUrlQueryValue('projekteTabs', projekteTabs)
+        setUrlQueryValue({ client, key: 'projekteTabs', value: projekteTabs })
       }
     },
     watchVideos: ({ setAnchorEl }) => () => {
@@ -90,30 +88,12 @@ const enhance = compose(
       store.toggleShowDeletedDatasets()
     },
   }),
-  withHandlers({
-    onClickButtonStrukturbaum: ({ onClickButton }) => () =>
-      onClickButton('tree'),
-    onClickButtonStrukturbaum2: ({ onClickButton }) => () =>
-      onClickButton('tree2'),
-    onClickButtonDaten: ({ onClickButton }) => () => onClickButton('daten'),
-    onClickButtonDaten2: ({ onClickButton }) => () => onClickButton('daten2'),
-    onClickButtonKarte: ({ onClickButton }) => () => onClickButton('karte'),
-    onClickButtonExporte: ({ onClickButton, setAnchorEl }) => () => {
-      setAnchorEl(null)
-      onClickButton('exporte')
-    },
-  }),
   observer
 )
 
 const MyAppBar = ({
   store,
-  onClickButtonStrukturbaum,
-  onClickButtonStrukturbaum2,
-  onClickButtonDaten,
-  onClickButtonDaten2,
-  onClickButtonKarte,
-  onClickButtonExporte,
+  onClickButton,
   showDeletedDatasets,
   watchVideos,
   anchorEl,
@@ -121,133 +101,132 @@ const MyAppBar = ({
 }: {
   store: Object,
   onClickButton: () => void,
-  onClickButtonStrukturbaum: () => void,
-  onClickButtonStrukturbaum2: () => void,
-  onClickButtonDaten: () => void,
-  onClickButtonDaten2: () => void,
-  onClickButtonKarte: () => void,
-  onClickButtonExporte: () => void,
   showDeletedDatasets: () => void,
   watchVideos: () => void,
   anchorEl: Object,
   setAnchorEl: () => void,
-}) => {
-  const projekteTabs = store.urlQuery.projekteTabs
-  const treeIsVisible = projekteTabs.includes('tree')
-  const tree2IsVisible = projekteTabs.includes('tree2')
-  const datenIsVisible =
-    projekteTabs.includes('daten') && !projekteTabs.includes('exporte')
-  const daten2IsVisible =
-    projekteTabs.includes('daten2') && !projekteTabs.includes('exporte')
-  const karteIsVisible = projekteTabs.includes('karte')
-  const exporteIsVisible = projekteTabs.includes('exporte')
-  const exporteIsActive = !!store.tree.activeNodes.projekt
-  const isMobile = isMobilePhone()
+}) => 
+  <Query query={dataGql} >
+    {({ loading, error, data, client }) => {
+      if (error) return `Fehler: ${error.message}`
 
-  return (
-    <Query query={dataGql} >
-      {({ loading, error, data, client }) => {
-        if (error) return `Fehler: ${error.message}`
+      const projekteTabs = get(data, 'urlQuery.projekteTabs', [])
+      const treeIsVisible = projekteTabs.includes('tree')
+      const tree2IsVisible = projekteTabs.includes('tree2')
+      const datenIsVisible =
+        projekteTabs.includes('daten') && !projekteTabs.includes('exporte')
+      const daten2IsVisible =
+        projekteTabs.includes('daten2') && !projekteTabs.includes('exporte')
+      const karteIsVisible = projekteTabs.includes('karte')
+      const exporteIsVisible = projekteTabs.includes('exporte')
+      const exporteIsActive = !!store.tree.activeNodes.projekt
+      const isMobile = isMobilePhone()
 
-        return (
-          <ErrorBoundary>
-            <StyledAppBar position="static">
-              <StyledToolbar>
-                <Typography variant="title" color="inherit">
-                  {isMobile ? '' : 'AP Flora'}
-                </Typography>
-                <MenuDiv>
+      console.log('AppBar:', { data, projekteTabs, treeIsVisible, datenIsVisible })
+
+      return (
+        <ErrorBoundary>
+          <StyledAppBar position="static">
+            <StyledToolbar>
+              <Typography variant="title" color="inherit">
+                {isMobile ? '' : 'AP Flora'}
+              </Typography>
+              <MenuDiv>
+                <StyledButton
+                  data-visible={treeIsVisible}
+                  onClick={() => onClickButton('tree', client, projekteTabs)}
+                >
+                  Strukturbaum
+                </StyledButton>
+                <StyledButton
+                  data-visible={datenIsVisible}
+                  onClick={() => onClickButton('daten', client, projekteTabs)}
+                >
+                  Daten
+                </StyledButton>
+                {!isMobile && (
                   <StyledButton
-                    data-visible={treeIsVisible}
-                    onClick={onClickButtonStrukturbaum}
+                    data-visible={tree2IsVisible}
+                    onClick={() => onClickButton('tree2', client, projekteTabs)}
                   >
-                    Strukturbaum
+                    Strukturbaum 2
                   </StyledButton>
+                )}
+                {!isMobile && (
                   <StyledButton
-                    data-visible={datenIsVisible}
-                    onClick={onClickButtonDaten}
+                    data-visible={daten2IsVisible}
+                    onClick={() => onClickButton('daten2', client, projekteTabs)}
                   >
-                    Daten
+                    Daten 2
                   </StyledButton>
-                  {!isMobile && (
+                )}
+                <StyledButton
+                  data-visible={karteIsVisible}
+                  onClick={() => onClickButton('karte', client, projekteTabs)}
+                >
+                  Karte
+                </StyledButton>
+                {!isMobile &&
+                  exporteIsActive && (
                     <StyledButton
-                      data-visible={tree2IsVisible}
-                      onClick={onClickButtonStrukturbaum2}
+                      data-visible={exporteIsVisible}
+                      onClick={() => {
+                        setAnchorEl(null)
+                        onClickButton('exporte', client, projekteTabs)
+                      }}
                     >
-                      Strukturbaum 2
+                      Exporte
                     </StyledButton>
                   )}
-                  {!isMobile && (
-                    <StyledButton
-                      data-visible={daten2IsVisible}
-                      onClick={onClickButtonDaten2}
-                    >
-                      Daten 2
-                    </StyledButton>
-                  )}
-                  <StyledButton
-                    data-visible={karteIsVisible}
-                    onClick={onClickButtonKarte}
-                  >
-                    Karte
-                  </StyledButton>
-                  {!isMobile &&
-                    exporteIsActive && (
-                      <StyledButton
-                        data-visible={exporteIsVisible}
-                        onClick={onClickButtonExporte}
-                      >
-                        Exporte
-                      </StyledButton>
-                    )}
 
-                  <div>
-                    <IconButton
-                      aria-label="Mehr"
-                      aria-owns={anchorEl ? 'long-menu' : null}
-                      aria-haspopup="true"
-                      onClick={event => setAnchorEl(event.currentTarget)}
+                <div>
+                  <IconButton
+                    aria-label="Mehr"
+                    aria-owns={anchorEl ? 'long-menu' : null}
+                    aria-haspopup="true"
+                    onClick={event => setAnchorEl(event.currentTarget)}
+                  >
+                    <StyledMoreVertIcon />
+                  </IconButton>
+                  <Menu
+                    id="long-menu"
+                    anchorEl={anchorEl}
+                    open={Boolean(anchorEl)}
+                    onClose={() => setAnchorEl(null)}
+                  >
+                    {isMobile &&
+                      exporteIsActive && (
+                        <MenuItem
+                          onClick={() => {
+                            setAnchorEl(null)
+                            onClickButton('exporte', client, projekteTabs)
+                          }}
+                          disabled={exporteIsVisible}
+                        >
+                          Exporte
+                        </MenuItem>
+                      )}
+                    <MenuItem
+                      onClick={showDeletedDatasets}
+                      disabled={store.deletedDatasets.length === 0}
                     >
-                      <StyledMoreVertIcon />
-                    </IconButton>
-                    <Menu
-                      id="long-menu"
-                      anchorEl={anchorEl}
-                      open={Boolean(anchorEl)}
-                      onClose={() => setAnchorEl(null)}
-                    >
-                      {isMobile &&
-                        exporteIsActive && (
-                          <MenuItem
-                            onClick={onClickButtonExporte}
-                            disabled={exporteIsVisible}
-                          >
-                            Exporte
-                          </MenuItem>
-                        )}
-                      <MenuItem
-                        onClick={showDeletedDatasets}
-                        disabled={store.deletedDatasets.length === 0}
-                      >
-                        gelöschte Datensätze wiederherstellen
-                      </MenuItem>
-                      <MenuItem onClick={watchVideos}>Video-Anleitungen</MenuItem>
-                      <MenuItem
-                        onClick={() => {
-                          setAnchorEl(null)
-                          logout({ store, client })
-                        }}
-                      >{`${get(data, 'user.name')} abmelden`}</MenuItem>
-                    </Menu>
-                  </div>
-                </MenuDiv>
-              </StyledToolbar>
-            </StyledAppBar>
-          </ErrorBoundary>
-        )
-      }}
-    </Query>
-  )
-}
+                      gelöschte Datensätze wiederherstellen
+                    </MenuItem>
+                    <MenuItem onClick={watchVideos}>Video-Anleitungen</MenuItem>
+                    <MenuItem
+                      onClick={() => {
+                        setAnchorEl(null)
+                        logout({ store, client })
+                      }}
+                    >{`${get(data, 'user.name')} abmelden`}</MenuItem>
+                  </Menu>
+                </div>
+              </MenuDiv>
+            </StyledToolbar>
+          </StyledAppBar>
+        </ErrorBoundary>
+      )
+    }}
+  </Query>
 
 export default enhance(MyAppBar)

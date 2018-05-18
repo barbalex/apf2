@@ -8,7 +8,7 @@ import updateAvailable from './updateAvailable'
 import mapMouseCoordinates from './mapMouseCoordinates'
 import copyingBiotop from './copyingBiotop'
 import user from './user'
-import storeInitated from './storeInitated'
+import storeInitiated from './storeInitiated'
 
 export default merge(
   activeNodeArray,
@@ -18,5 +18,5 @@ export default merge(
   mapMouseCoordinates,
   copyingBiotop,
   user,
-  storeInitated
+  storeInitiated
 )

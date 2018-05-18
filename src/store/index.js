@@ -6,10 +6,6 @@ import extendStore from './extend'
 function Store(): void {
   this.history = ObservableHistory
   this.loading = []
-  this.urlQuery = {
-    projekteTabs: [],
-    feldkontrTab: 'entwicklung',
-  }
   this.datasetToDelete = {}
   this.tellUserReadOnly = () => {}
   this.insertDataset = () => {}
@@ -27,7 +23,6 @@ function Store(): void {
   this.fetchTableByParentId = () => {}
   this.fetchDatasetById = () => {}
   this.writeToStore = () => {}
-  this.setUrlQuery = () => {}
   this.tree = {
     name: 'tree',
     activeNodeArray: [],

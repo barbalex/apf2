@@ -6,12 +6,15 @@ import styled from 'styled-components'
 import compose from 'recompose/compose'
 import { ReflexContainer, ReflexSplitter, ReflexElement } from 'react-reflex'
 import Loadable from 'react-loadable'
+import { Query } from 'react-apollo'
+import get from 'lodash/get'
 
 // when Karte was loaded async, it did not load,
 // but only in production!
 import Karte from './Karte'
 import Loading from '../shared/Loading'
 import ErrorBoundary from '../shared/ErrorBoundary'
+import dataGql from './data.graphql'
 
 const TreeContainer = Loadable({
   loader: () => import('./TreeContainer'),
@@ -56,8 +59,8 @@ const enhance = compose(inject('store'), observer)
 
 // TODO
 // get this to work again
-const myChildren = (store: Object) => {
-  const projekteTabs = toJS(store.urlQuery.projekteTabs)
+const myChildren = (store: Object, data: Object) => {
+  const projekteTabs = get(data, 'urlQuery.projekteTabs')
   // if daten and exporte are shown, only show exporte
   if (projekteTabs.includes('daten') && projekteTabs.includes('exporte')) {
     const i = projekteTabs.indexOf('daten')
@@ -171,7 +174,7 @@ const myChildren = (store: Object) => {
              * without remounting grey space remains
              * when daten or tree tab is removed :-(
              */
-            key={store.urlQuery.projekteTabs.toString()}
+            key={projekteTabs.toString()}
             popHighlighted={store.map.pop.highlightedIds.join()}
             tpopHighlighted={store.map.tpop.highlightedIds.join()}
             beobNichtBeurteiltHighlighted={store.map.beobNichtBeurteilt.highlightedIds.join()}
@@ -198,12 +201,20 @@ const myChildren = (store: Object) => {
 }
 
 const Projekte = ({ store }: { store: Object }) =>
-  <Container data-loading={store.loading.length > 0}>
-    <ErrorBoundary>
-      <ReflexContainer orientation="vertical">
-        {myChildren(store)}
-      </ReflexContainer>
-    </ErrorBoundary>
-  </Container>
+  <Query query={dataGql} >
+    {({ loading, error, data, client }) => {
+      if (error) return `Fehler: ${error.message}`
+
+      return (
+        <Container data-loading={store.loading.length > 0}>
+          <ErrorBoundary>
+            <ReflexContainer orientation="vertical">
+              {myChildren(store, data)}
+            </ReflexContainer>
+          </ErrorBoundary>
+        </Container>
+      )
+    }}
+  </Query>
 
 export default enhance(Projekte)

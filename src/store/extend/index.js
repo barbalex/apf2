@@ -1,5 +1,4 @@
 import extendStore from './store'
-import extendStoreAutoruns from './storeAutoruns'
 import extendTree from './tree'
 import extendApp from './app'
 import extendMap from './map'
@@ -24,7 +23,6 @@ export default (store: Object): void => {
   extendMapBeobNichtBeurteilt(store)
   extendMapBeobNichtZuzuordnen(store)
   extendMapBeobZugeordnet(store)
-  extendStoreAutoruns(store)
   extendExport(store)
   extendQk(store)
 }

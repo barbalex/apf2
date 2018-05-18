@@ -111,7 +111,7 @@ const DownloadMessages = Loadable({
 
     axios.defaults.baseURL = apiBaseUrl
 
-    initiateDataFromUrl(store)
+    initiateDataFromUrl(store, myClient)
 
     ReactDOM.render(
       <ApolloProvider client={myClient}>

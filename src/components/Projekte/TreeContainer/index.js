@@ -68,6 +68,7 @@ import CmTpopmassn from './contextmenu/Tpopmassn'
 import DeleteDatasetModal from './DeleteDatasetModal'
 import ErrorBoundary from '../../shared/ErrorBoundarySingleChild'
 import copyBiotopTo from '../../../modules/copyBiotopTo'
+import setUrlQueryValue from '../../../modules/setUrlQueryValue'
 
 const Container = styled.div`
   height: 100%;
@@ -149,12 +150,17 @@ const getAndValidateCoordinatesOfBeob = (store, beobId) => {
   return { x, y }
 }
 
-const showMapIfNotYetVisible = ({ store }: { store: Object }) => {
-  const projekteTabs = clone(toJS(store.urlQuery.projekteTabs))
+const showMapIfNotYetVisible = ({
+  client,
+  projekteTabs
+}: {
+  client: Object,
+  projekteTabs: Array<String>
+}) => {
   const isVisible = projekteTabs.includes('karte')
   if (!isVisible) {
     projekteTabs.push('karte')
-    store.setUrlQueryValue('projekteTabs', projekteTabs)
+    setUrlQueryValue({ client, key: 'projekteTabs', value: projekteTabs})
   }
 }
 
@@ -198,8 +204,9 @@ const enhance = compose(
           store.deleteDatasetDemand(table, id, baseUrl, label)
         },
         showBeobOnMap() {
+          const projekteTabs = get(data, 'urlQuery.projekteTabs', [])
           // 1. open map if not yet open
-          showMapIfNotYetVisible({ store })
+          showMapIfNotYetVisible({ client, projekteTabs })
           // 2 add layer for actionTable
           store.map.showMapLayer(
             actionTable,
@@ -210,8 +217,9 @@ const enhance = compose(
           store.map.toggleMapPopLabelContent(actionTable)
         },
         localizeOnMap() {
+          const projekteTabs = get(data, 'urlQuery.projekteTabs', [])
           store.map.setIdOfTpopBeingLocalized(id)
-          showMapIfNotYetVisible({ store })
+          showMapIfNotYetVisible({ client, projekteTabs })
           store.map.showMapApfloraLayer('Tpop', true)
         },
         markForMoving() {

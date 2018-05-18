@@ -12,6 +12,10 @@ export default async (idb) => {
   const otherDefaults = {
     storeInitiated: false,
     activeNodeArray: [],
+    /**
+     * urlQueries are used to control tabs
+     * for instance: Entwicklung or Biotop in tpopfeldkontr
+     */
     urlQuery: {
       projekteTabs: [],
       feldkontrTab: 'entwicklung',

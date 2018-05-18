@@ -92,7 +92,7 @@ const enhance = compose(
         mutation: setUserGql,
         variables: { name, token },
       })
-      initiateDataFromUrl(store)
+      initiateDataFromUrl(store, client)
       // refresh currentUser in idb
       app.db.currentUser.clear()
       app.db.currentUser.put({ name, token })

@@ -7,10 +7,11 @@ import styled from 'styled-components'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 import withState from 'recompose/withState'
-import { Query, Mutation } from 'react-apollo'
+import { Query, Mutation, withApollo } from 'react-apollo'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 import format from 'date-fns/format'
+import gql from 'graphql-tag'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroup'
 import TextField from '../../../shared/TextField'
@@ -22,10 +23,10 @@ import FormTitle from '../../../shared/FormTitle'
 import DateFieldWithPicker from '../../../shared/DateFieldWithPicker'
 import TpopfeldkontrentwicklungPopover from '../TpopfeldkontrentwicklungPopover'
 import constants from '../../../../modules/constants'
-
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import tpopkontrByIdGql from './tpopkontrById.graphql'
 import updateTpopkontrByIdGql from './updateTpopkontrById.graphql'
+import setUrlQueryValue from '../../../../modules/setUrlQueryValue'
 
 const Container = styled.div`
   height: 100%;
@@ -72,10 +73,23 @@ const tpopkontrTypWerte = [
 
 const enhance = compose(
   inject('store'),
+  withApollo,
   withState(
     'value',
     'setValue',
-    ({ store }) => store.urlQuery.feldkontrTab || 'entwicklung'
+    ({ client }) => {
+      const { data } = client.query({
+        query: gql`
+            query Query {
+              urlQuery @client {
+                projekteTabs
+                feldkontrTab
+              }
+            }
+          `
+      })
+      return get(data, 'urlQuery.feldkontrTab', 'entwicklung')
+    }
   ),
   withHandlers({
     saveToDb: props => ({ row, field, value, updateTpopkontr }) =>
@@ -173,8 +187,8 @@ const enhance = compose(
           },
         },
       }),
-    onChangeTab: ({ setValue, store }) => (event, value) => {
-      store.setUrlQueryValue('feldkontrTab', value)
+    onChangeTab: ({ setValue }) => (event, value, client) => {
+      setUrlQueryValue({ client, key: 'feldkontrTab', value})
       setValue(value)
     },
   }),
@@ -200,7 +214,7 @@ const Tpopfeldkontr = ({
 
   return (
     <Query query={tpopkontrByIdGql} variables={{ id }}>
-      {({ loading, error, data }) => {
+      {({ loading, error, data, client }) => {
         if (loading)
           return (
             <Container>
@@ -254,7 +268,7 @@ const Tpopfeldkontr = ({
                   <FieldsContainer>
                     <Tabs
                       value={value}
-                      onChange={onChangeTab}
+                      onChange={(event, value) => onChangeTab(event, value, client)}
                       indicatorColor="primary"
                       textColor="primary"
                       centered

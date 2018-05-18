@@ -3,4 +3,8 @@ query AppBarQuery {
     name
     token
   }
+  urlQuery @client {
+    projekteTabs
+    feldkontrTab
+  }
 }
