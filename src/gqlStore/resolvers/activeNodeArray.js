@@ -3,13 +3,18 @@
 import app from 'ampersand-app'
 import isEqual from 'lodash/isEqual'
 
-import getActiveNodeArrayFromPathname from '../../store/action/getActiveNodeArrayFromPathname'
+import getActiveNodeArrayFromPathname from '../../modules/getActiveNodeArrayFromPathname'
 
 export default {
   Mutation: {
-    // update values in the store on mutations
     setActiveNodeArray: (_, { value }, { cache }) => {
-      cache.writeData({ data: { activeNodeArray: value } })
+      // do not manipulate url if store is not yet initiated?
+      //if (!store.initiated) return
+      cache.writeData({
+        data: {
+          activeNodeArray: value
+        } 
+      })
       const activeNodeArrayFromUrl = getActiveNodeArrayFromPathname()
       if (!isEqual(activeNodeArrayFromUrl, value)) {
         app.history.push(`/${value.join('/')}`)

@@ -1,8 +1,8 @@
 // @flow
 import clone from 'lodash/clone'
-import getActiveNodeArrayFromPathname from '../store/action/getActiveNodeArrayFromPathname'
-import getUrlQuery from '../store/action/getUrlQuery'
-//import isMobilePhone from '../modules/isMobilePhone'
+import getActiveNodeArrayFromPathname from './getActiveNodeArrayFromPathname'
+import getUrlQuery from '../modules/getUrlQuery'
+import isMobilePhone from '../modules/isMobilePhone'
 
 export default (store: Object) => {
   const activeNodeArrayFromPathname = getActiveNodeArrayFromPathname()
@@ -18,7 +18,7 @@ export default (store: Object) => {
   store.tree.setOpenNodesFromActiveNodeArray()
   // clone tree2 in case tree2 is open
   store.tree.cloneActiveNodeArrayToTree2()
-  const urlQuery = getUrlQuery(window.location.search)
+  const urlQuery = getUrlQuery()
   store.setUrlQuery(urlQuery)
 
   // set projekte tabs of not yet existing
@@ -27,7 +27,7 @@ export default (store: Object) => {
    * SHOULD BE TURNED OFF BECAUSE:
    * causes reloading login component after login!!!???
    */
-  /*
+  
   if (
     (activeNodeArrayFromPathname.length === 0 ||
       activeNodeArrayFromPathname[0] === 'Projekte') &&
@@ -40,7 +40,7 @@ export default (store: Object) => {
     } else {
       store.urlQuery.projekteTabs = ['tree', 'daten']
     }
-  }*/
+  }
 
   // signal to autorun that store is initiated
   // i.e. history shall be manipulated

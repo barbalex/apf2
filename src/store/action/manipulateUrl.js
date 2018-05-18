@@ -3,7 +3,7 @@ import isEqual from 'lodash/isEqual'
 import queryString from 'query-string'
 import { toJS } from 'mobx'
 
-import getActiveNodeArrayFromPathname from './getActiveNodeArrayFromPathname'
+import getActiveNodeArrayFromPathname from '../../modules/getActiveNodeArrayFromPathname'
 
 export default (store: Object): void => {
   const activeNodeArrayFromUrl = getActiveNodeArrayFromPathname()

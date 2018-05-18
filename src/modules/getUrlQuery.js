@@ -2,8 +2,8 @@
 import isString from 'lodash/isString'
 import queryString from 'query-string'
 
-export default (search: string): string => {
-  const query = queryString.parse(search)
+export default (): string => {
+  const query = queryString.parse(window.location.search)
   /**
    * arrays are converted to strings in url if only one element is contained
    * need to convert it to array

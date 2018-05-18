@@ -10,7 +10,13 @@ export default async (idb) => {
   const users = await idb.currentUser.toArray()
   
   const otherDefaults = {
+    storeInitiated: false,
     activeNodeArray: [],
+    urlQuery: {
+      projekteTabs: [],
+      feldkontrTab: 'entwicklung',
+      __typename: 'UrlQuery'
+    },
     login: {
       token: '',
       username: '',
