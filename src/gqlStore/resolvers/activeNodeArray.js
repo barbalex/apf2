@@ -2,21 +2,25 @@
 
 import app from 'ampersand-app'
 import isEqual from 'lodash/isEqual'
-
-import getActiveNodeArrayFromPathname from '../../modules/getActiveNodeArrayFromPathname'
+import gql from 'graphql-tag'
 
 export default {
   Mutation: {
     setActiveNodeArray: (_, { value }, { cache }) => {
-      // do not manipulate url if store is not yet initiated?
-      //if (!store.initiated) return
-      cache.writeData({
-        data: {
-          activeNodeArray: value
-        } 
+      const { activeNodeArray } = cache.readQuery({
+        query: gql`
+            query Query {
+              activeNodeArray @client
+            }
+          `
       })
-      const activeNodeArrayFromUrl = getActiveNodeArrayFromPathname()
-      if (!isEqual(activeNodeArrayFromUrl, value)) {
+      // only write if changed
+      if (!isEqual(activeNodeArray, value)) {
+        cache.writeData({
+          data: {
+            activeNodeArray: value
+          } 
+        })
         app.history.push(`/${value.join('/')}`)
       }
       return null

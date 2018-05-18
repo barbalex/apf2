@@ -28,6 +28,7 @@ import styled from 'styled-components'
 import app from 'ampersand-app'
 import 'typeface-roboto'
 import 'react-reflex/styles.css'
+import createHistory from 'history/createBrowserHistory'
 
 // import components
 import store from './store'
@@ -102,6 +103,7 @@ const DownloadMessages = Loadable({
         this.db = idb
         this.store = store
         this.client = myClient
+        this.history = createHistory()
       },
     })
     app.init()

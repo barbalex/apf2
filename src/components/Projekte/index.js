@@ -8,6 +8,7 @@ import { ReflexContainer, ReflexSplitter, ReflexElement } from 'react-reflex'
 import Loadable from 'react-loadable'
 import { Query } from 'react-apollo'
 import get from 'lodash/get'
+import clone from 'lodash/clone'
 
 // when Karte was loaded async, it did not load,
 // but only in production!
@@ -60,7 +61,7 @@ const enhance = compose(inject('store'), observer)
 // TODO
 // get this to work again
 const myChildren = (store: Object, data: Object) => {
-  const projekteTabs = get(data, 'urlQuery.projekteTabs')
+  const projekteTabs = clone(get(data, 'urlQuery.projekteTabs'))
   // if daten and exporte are shown, only show exporte
   if (projekteTabs.includes('daten') && projekteTabs.includes('exporte')) {
     const i = projekteTabs.indexOf('daten')

@@ -1,10 +1,8 @@
 // @flow
 import TableStore from './Table'
-import ObservableHistory from './ObservableHistory'
 import extendStore from './extend'
 
 function Store(): void {
-  this.history = ObservableHistory
   this.loading = []
   this.datasetToDelete = {}
   this.tellUserReadOnly = () => {}
