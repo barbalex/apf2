@@ -10,7 +10,7 @@ import gql from 'graphql-tag'
 
 export default {
   Mutation: {
-    setTreeActiveNodeArray: (_, { tree, key, value }, { cache }) => {
+    setTreeKey: (_, { tree, key, value }, { cache }) => {
       const data = cache.readQuery({
         query: gql`
             query Query {

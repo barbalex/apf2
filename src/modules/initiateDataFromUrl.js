@@ -19,8 +19,8 @@ export default (store: Object, client: Object) => {
   //store.tree.setActiveNodeArray(initialActiveNodeArray)
   client.mutate({
     mutation: gql`
-      mutation setTreeActiveNodeArray($value: Array!, $tree: String!, $key: String!) {
-        setTreeActiveNodeArray(value: $value, tree: $tree, key: $key) @client {
+      mutation setTreeKey($value: Array!, $tree: String!, $key: String!) {
+        setTreeKey(tree: $tree, key: $key, value: $value) @client {
           tree @client {
             activeNodeArray
             __typename: Tree

@@ -63,6 +63,5 @@ export default async (idb) => {
       __typename: 'User'
     }
   }
-  console.log('store defaults setting')
   return defaults
 }
