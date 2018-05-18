@@ -24,7 +24,6 @@ import app from 'ampersand-app'
 
 import ErrorBoundary from '../shared/ErrorBoundary'
 import dataGql from './data.graphql'
-import processLogin from '../../modules/processLogin'
 import initiateDataFromUrl from '../../modules/initiateDataFromUrl'
 import setUserGql from './setUser.graphql'
 
@@ -91,10 +90,7 @@ const enhance = compose(
       const token = get(result, 'data.login.jwtToken')
       await client.mutate({
         mutation: setUserGql,
-        variables: {
-          name,
-          token,
-        },
+        variables: { name, token },
       })
       initiateDataFromUrl(store)
       // refresh currentUser in idb
