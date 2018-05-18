@@ -11,7 +11,8 @@ import RadioButtonGroup from '../../../shared/RadioButtonGroup'
 import TextField from '../../../shared/TextField'
 import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
-import zielByIdGql from './zielById.graphql'
+import data1Gql from './data1.graphql'
+import data2Gql from './data2.graphql'
 import updateZielByIdGql from './updateZielById.graphql'
 
 const Container = styled.div`
@@ -51,65 +52,80 @@ const enhance = compose(
   })
 )
 
-const Ziel = ({ id, saveToDb }: { id: String, saveToDb: () => void }) => (
-  <Query query={zielByIdGql} variables={{ id }}>
+const Ziel = ({
+  treeName,
+  saveToDb
+}: {
+  treeName: String,
+  saveToDb: () => void
+}) => (
+  <Query query={data1Gql}>
     {({ loading, error, data }) => {
-      if (loading)
-        return (
-          <Container>
-            <FieldsContainer>Lade...</FieldsContainer>
-          </Container>
-        )
       if (error) return `Fehler: ${error.message}`
-
-      const row = get(data, 'zielById')
-      let typWerte = get(data, 'allZielTypWertes.nodes', [])
-      typWerte = sortBy(typWerte, 'sort')
-      typWerte = typWerte.map(el => ({
-        value: el.code,
-        label: el.text,
-      }))
-
+      const id = get(data, `${treeName}.activeNodeArray[6]`)
+  
       return (
-        <ErrorBoundary>
-          <Container>
-            <FormTitle apId={row.apId} title="Ziel" />
-            <Mutation mutation={updateZielByIdGql}>
-              {(updateZiel, { data }) => (
-                <FieldsContainer>
-                  <TextField
-                    key={`${row.id}jahr`}
-                    label="Jahr"
-                    value={row.jahr}
-                    type="number"
-                    saveToDb={value =>
-                      saveToDb({ row, field: 'jahr', value, updateZiel })
-                    }
-                  />
-                  <RadioButtonGroup
-                    key={`${row.id}typ`}
-                    label="Zieltyp"
-                    value={row.typ}
-                    dataSource={typWerte}
-                    saveToDb={value =>
-                      saveToDb({ row, field: 'typ', value, updateZiel })
-                    }
-                  />
-                  <TextField
-                    key={`${row.id}bezeichnung`}
-                    label="Ziel"
-                    value={row.bezeichnung}
-                    type="text"
-                    multiLine
-                    saveToDb={value =>
-                      saveToDb({ row, field: 'bezeichnung', value, updateZiel })
-                    }
-                  />
-                </FieldsContainer>
-              )}
-            </Mutation>
-          </Container>
-        </ErrorBoundary>
+        <Query query={data2Gql} variables={{ id }}>
+          {({ loading, error, data }) => {
+            if (loading)
+              return (
+                <Container>
+                  <FieldsContainer>Lade...</FieldsContainer>
+                </Container>
+              )
+            if (error) return `Fehler: ${error.message}`
+
+            const row = get(data, 'zielById')
+            let typWerte = get(data, 'allZielTypWertes.nodes', [])
+            typWerte = sortBy(typWerte, 'sort')
+            typWerte = typWerte.map(el => ({
+              value: el.code,
+              label: el.text,
+            }))
+
+            return (
+              <ErrorBoundary>
+                <Container>
+                  <FormTitle apId={row.apId} title="Ziel" />
+                  <Mutation mutation={updateZielByIdGql}>
+                    {(updateZiel, { data }) => (
+                      <FieldsContainer>
+                        <TextField
+                          key={`${row.id}jahr`}
+                          label="Jahr"
+                          value={row.jahr}
+                          type="number"
+                          saveToDb={value =>
+                            saveToDb({ row, field: 'jahr', value, updateZiel })
+                          }
+                        />
+                        <RadioButtonGroup
+                          key={`${row.id}typ`}
+                          label="Zieltyp"
+                          value={row.typ}
+                          dataSource={typWerte}
+                          saveToDb={value =>
+                            saveToDb({ row, field: 'typ', value, updateZiel })
+                          }
+                        />
+                        <TextField
+                          key={`${row.id}bezeichnung`}
+                          label="Ziel"
+                          value={row.bezeichnung}
+                          type="text"
+                          multiLine
+                          saveToDb={value =>
+                            saveToDb({ row, field: 'bezeichnung', value, updateZiel })
+                          }
+                        />
+                      </FieldsContainer>
+                    )}
+                  </Mutation>
+                </Container>
+              </ErrorBoundary>
+            )
+          }}
+        </Query>
       )
     }}
   </Query>

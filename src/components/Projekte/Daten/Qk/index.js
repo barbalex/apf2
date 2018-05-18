@@ -19,7 +19,8 @@ import appBaseUrl from '../../../../modules/appBaseUrl'
 import standardQkYear from '../../../../modules/standardQkYear'
 import fetchQk from '../../../../modules/fetchQk'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
-import dataGql from './data.graphql'
+import data1Gql from './data1.graphql'
+import data2Gql from './data2.graphql'
 import qk from './qk'
 
 const Container = styled.div`
@@ -92,99 +93,109 @@ const Qk = ({
   berichtjahr,
   onChangeBerichtjahr,
   onChangeFilter,
-  id,
+  treeName,
 }: {
   store: Object,
   tree: Object,
   berichtjahr: number,
   onChangeBerichtjahr: () => void,
   onChangeFilter: () => void,
-  id: String,
+  treeName: String,
 }) =>
-  <Query
-    query={dataGql}
-    //variables={{ berichtjahr, apId: tree.activeNodes.ap, projId: tree.activeNodes.projekt }}
-    variables={{ apId: tree.activeNodes.ap, projId: tree.activeNodes.projekt }}
-  >
-    {({ loading, error, data }) => {
-      const qks = qk(berichtjahr).filter(q => !!q.query)
-      const gqlMessages = qks
-      // only results with data
-      .filter(q => get(data, `${q.query}.totalCount`, 0) > 0)
-      // convert
-      // TODO:
-      // make this simpler after moving all calls to graphql
-      .map(q => {
-        const qData = get(data, `${q.query}.nodes`, [])
-        return qData.map(o => ({
-          proj_id: o.projId,
-          ap_id: o.apId,
-          hw: q.title,
-          text: [q.text(o)],
-          url: q.url(o)
-        }))
-      })
+<Query query={data1Gql}>
+  {({ loading, error, data }) => {
+    if (error) return `Fehler: ${error.message}`
+    const projId = get(data, `${treeName}.activeNodeArray[1]`)
+    const apId = get(data, `${treeName}.activeNodeArray[3]`)
 
-      const { filter } = store.qk
-      const messageArrays = [...gqlMessages, ...toJS(store.qk.messages)]
-      const messageArraysFiltered = filter
-        ? messageArrays.filter(messageArray => {
-            if (
-              messageArray[0] &&
-              messageArray[0].hw &&
-              messageArray[0].hw.toLowerCase
-            ) {
-              return messageArray[0].hw.toLowerCase().includes(filter.toLowerCase())
-            }
-            return false
-          })
-        : messageArrays
-        if (error) return `Fehler: ${error.message}`
-        const loadingMessage = (store.qkloading || loading)
-          ? 'Die Daten werden analysiert...'
-          : 'Analyse abgeschlossen'
+    return (
+        <Query
+          query={data2Gql}
+          //variables={{ berichtjahr, apId, projId }}
+          variables={{ apId, projId }}
+        >
+          {({ loading, error, data }) => {
+            const qks = qk(berichtjahr).filter(q => !!q.query)
+            const gqlMessages = qks
+            // only results with data
+            .filter(q => get(data, `${q.query}.totalCount`, 0) > 0)
+            // convert
+            // TODO:
+            // make this simpler after moving all calls to graphql
+            .map(q => {
+              const qData = get(data, `${q.query}.nodes`, [])
+              return qData.map(o => ({
+                proj_id: o.projId,
+                ap_id: o.apId,
+                hw: q.title,
+                text: [q.text(o)],
+                url: q.url(o)
+              }))
+            })
 
-        return (
-          <ErrorBoundary>
-          <Container>
-            <FormTitle title="Qualitätskontrollen" />
-            <FieldsContainer>
-              <FormControl fullWidth>
-                <InputLabel htmlFor="berichtjahr">Berichtjahr</InputLabel>
-                <StyledInput
-                  id="berichtjahr"
-                  value={berichtjahr}
-                  type="number"
-                  onChange={onChangeBerichtjahr}
-                />
-              </FormControl>
-              <FormControl fullWidth>
-                <InputLabel htmlFor="filter">
-                  nach Abschnitts-Titel filtern
-                </InputLabel>
-                <StyledInput id="filter" value={filter} onChange={onChangeFilter} />
-              </FormControl>
-              <LoadingIndicator loading={loading}>
-                {loadingMessage}
-              </LoadingIndicator>
-              {messageArraysFiltered.map((messageArray, index) => (
-                <StyledPaper key={index}>
-                  <Title>{messageArray[0].hw}</Title>
-                  {messageArray.map(m => (
-                    <div key={m.url.join()}>
-                      <StyledA
-                        href={`${appBaseUrl}/${m.url.join('/')}`}
-                        target="_blank"
-                      >
-                        {m.text.join('; ')}
-                      </StyledA>
-                    </div>
-                  ))}
-                </StyledPaper>
-              ))}
-            </FieldsContainer>
-          </Container>
-        </ErrorBoundary>
+            const { filter } = store.qk
+            const messageArrays = [...gqlMessages, ...toJS(store.qk.messages)]
+            const messageArraysFiltered = filter
+              ? messageArrays.filter(messageArray => {
+                  if (
+                    messageArray[0] &&
+                    messageArray[0].hw &&
+                    messageArray[0].hw.toLowerCase
+                  ) {
+                    return messageArray[0].hw.toLowerCase().includes(filter.toLowerCase())
+                  }
+                  return false
+                })
+              : messageArrays
+              if (error) return `Fehler: ${error.message}`
+              const loadingMessage = (store.qkloading || loading)
+                ? 'Die Daten werden analysiert...'
+                : 'Analyse abgeschlossen'
+
+              return (
+                <ErrorBoundary>
+                <Container>
+                  <FormTitle title="Qualitätskontrollen" />
+                  <FieldsContainer>
+                    <FormControl fullWidth>
+                      <InputLabel htmlFor="berichtjahr">Berichtjahr</InputLabel>
+                      <StyledInput
+                        id="berichtjahr"
+                        value={berichtjahr}
+                        type="number"
+                        onChange={onChangeBerichtjahr}
+                      />
+                    </FormControl>
+                    <FormControl fullWidth>
+                      <InputLabel htmlFor="filter">
+                        nach Abschnitts-Titel filtern
+                      </InputLabel>
+                      <StyledInput id="filter" value={filter} onChange={onChangeFilter} />
+                    </FormControl>
+                    <LoadingIndicator loading={loading}>
+                      {loadingMessage}
+                    </LoadingIndicator>
+                    {messageArraysFiltered.map((messageArray, index) => (
+                      <StyledPaper key={index}>
+                        <Title>{messageArray[0].hw}</Title>
+                        {messageArray.map(m => (
+                          <div key={m.url.join()}>
+                            <StyledA
+                              href={`${appBaseUrl}/${m.url.join('/')}`}
+                              target="_blank"
+                            >
+                              {m.text.join('; ')}
+                            </StyledA>
+                          </div>
+                        ))}
+                      </StyledPaper>
+                    ))}
+                  </FieldsContainer>
+                </Container>
+              </ErrorBoundary>
+            )
+          }}
+        </Query>
       )
     }}
   </Query>
