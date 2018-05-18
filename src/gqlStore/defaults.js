@@ -11,21 +11,21 @@ export default async (idb) => {
     tree: {
       name: 'tree',
       activeNodeArray: [],
-      activeNodes: {},
-      activeDataset: {},
+      activeNodes: null,
+      activeDataset: null,
       openNodes: [],
       apFilter: false,
-      nodeLabelFilter: {},
+      nodeLabelFilter: null,
       __typename: 'Tree'
     },
     tree2: {
       name: 'tree2',
       activeNodeArray: [],
-      activeNodes: {},
-      activeDataset: {},
+      activeNodes: null,
+      activeDataset: null,
       openNodes: [],
       apFilter: false,
-      nodeLabelFilter: {},
+      nodeLabelFilter: null,
       __typename: 'Tree2'
     },
     /**

@@ -329,10 +329,12 @@ const enhance = compose(
 const TreeContainer = ({
   store,
   tree,
+  treeName,
   handleClick,
 }: {
   store: Object,
   tree: Object,
+  treeName: String,
   handleClick: () => void,
 }) => {
   const { activeDataset,activeNodes,setActiveNodeArray,openNodes } = store.tree
@@ -348,7 +350,7 @@ const TreeContainer = ({
 
         const nodes = buildNodes({ store, tree, data })
         const token = get(data, 'user.token', null)
-        const activeNodeArray = get(data, 'tree.activeNodeArray')
+        const activeNodeArray = get(data, `${treeName}.activeNodeArray`)
 
         // if activeNodeArray.length === 1
         // and there is only one projekte

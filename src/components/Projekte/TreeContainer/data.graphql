@@ -17,6 +17,19 @@ query TreeDataQuery(
   }
   tree @client {
     activeNodeArray
+    activeNodes
+    activeDataset
+    openNodes
+    apFilter
+    nodeLabelFilter
+  }
+  tree2 @client {
+    activeNodeArray
+    activeNodes
+    activeDataset
+    openNodes
+    apFilter
+    nodeLabelFilter
   }
   urlQuery @client {
     projekteTabs

@@ -19,8 +19,8 @@ export default (store: Object, client: Object) => {
   //store.tree.setActiveNodeArray(initialActiveNodeArray)
   client.mutate({
     mutation: gql`
-      mutation setTreeActiveNodeArray($value: Array!) {
-        setTreeActiveNodeArray(value: $value) @client {
+      mutation setTreeActiveNodeArray($value: Array!, $tree: String!, $key: String!) {
+        setTreeActiveNodeArray(value: $value, tree: $tree, key: $key) @client {
           tree @client {
             activeNodeArray
             __typename: Tree
@@ -28,7 +28,7 @@ export default (store: Object, client: Object) => {
         }
       }
     `,
-    variables: { value: initialActiveNodeArray }
+    variables: { value: initialActiveNodeArray, tree: 'tree', key: 'activeNodeArray' }
   })
   // need to set openNodes
   store.tree.setOpenNodesFromActiveNodeArray()

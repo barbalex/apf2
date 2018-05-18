@@ -61,8 +61,10 @@ const enhance = compose(inject('store'), observer)
 // TODO
 // get this to work again
 const myChildren = (store: Object, data: Object) => {
+  /**
+   * need to clone projekteTabs because elements are sealed
+   */
   const projekteTabs = clone(get(data, 'urlQuery.projekteTabs'))
-  console.log('Projekte:', {projekteTabs, pTOriginal: get(data, 'urlQuery.projekteTabs')})
   // if daten and exporte are shown, only show exporte
   if (projekteTabs.includes('daten') && projekteTabs.includes('exporte')) {
     const i = projekteTabs.indexOf('daten')
@@ -102,7 +104,7 @@ const myChildren = (store: Object, data: Object) => {
   if (projekteTabs.includes('tree')) {
     children.push(
       <ReflexElement flex={flex} key="tree">
-        <TreeContainer tree={store.tree} />
+        <TreeContainer tree={store.tree} treeName="tree" />
       </ReflexElement>
     )
     projekteTabs.splice(projekteTabs.indexOf('tree'), 1)
@@ -142,7 +144,7 @@ const myChildren = (store: Object, data: Object) => {
   if (projekteTabs.includes('tree2')) {
     children.push(
       <ReflexElement flex={flex} key="tree2">
-        <TreeContainer tree={store.tree2} />
+        <TreeContainer tree={store.tree2} treeName="tree2" />
       </ReflexElement>
     )
     projekteTabs.splice(projekteTabs.indexOf('tree2'), 1)
