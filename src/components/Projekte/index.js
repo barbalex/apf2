@@ -120,7 +120,7 @@ const myChildren = (store: Object, data: Object) => {
         renderOnResizeRate={100}
         renderOnResize={true}
       >
-        <Daten tree={store.tree} />
+        <Daten tree={store.tree} treeName="tree" />
       </ReflexElement>
     )
     projekteTabs.splice(projekteTabs.indexOf('daten'), 1)
@@ -155,7 +155,7 @@ const myChildren = (store: Object, data: Object) => {
   if (projekteTabs.includes('daten2')) {
     children.push(
       <ReflexElement key="daten2">
-        <Daten tree={store.tree2} />
+        <Daten tree={store.tree2} treeName="tree2" />
       </ReflexElement>
     )
     projekteTabs.splice(projekteTabs.indexOf('daten2'), 1)

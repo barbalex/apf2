@@ -11,8 +11,8 @@ export default async (idb) => {
     tree: {
       name: 'tree',
       activeNodeArray: [],
-      activeNodes: null,
-      activeDataset: null,
+      activeNodes: null, // remove using getActiveNodes
+      activeDataset: null, // remove?
       openNodes: [],
       apFilter: false,
       nodeLabelFilter: null,

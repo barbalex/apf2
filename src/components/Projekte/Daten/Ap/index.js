@@ -13,7 +13,8 @@ import TextField from '../../../shared/TextField'
 import TextFieldNonUpdatable from '../../../shared/TextFieldNonUpdatable'
 import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
-import apByIdGql from './apById.graphql'
+import data1 from './data1.graphql'
+import data2 from './data2.graphql'
 import updateApByIdGql from './updateApById.graphql'
 
 const Container = styled.div`
@@ -87,166 +88,181 @@ const enhance = compose(
   })
 )
 
-const Ap = ({ id, saveToDb }: { id: String, saveToDb: () => void }) => (
-  <Query query={apByIdGql} variables={{ id }}>
+const Ap = ({
+  treeName,
+  saveToDb
+}: {
+  treeName: String,
+  saveToDb: () => void
+}) => (
+  <Query query={data1}>
     {({ loading, error, data }) => {
-      if (loading)
-        return (
-          <Container>
-            <FieldsContainer>Lade...</FieldsContainer>
-          </Container>
-        )
       if (error) return `Fehler: ${error.message}`
-
-      const row = get(data, 'apById')
-      let bearbeitungWerte = get(data, 'allApBearbstandWertes.nodes', [])
-      bearbeitungWerte = sortBy(bearbeitungWerte, 'sort')
-      bearbeitungWerte = bearbeitungWerte.map(el => ({
-        value: el.code,
-        label: el.text,
-      }))
-      let umsetzungWerte = get(data, 'allApUmsetzungWertes.nodes', [])
-      umsetzungWerte = sortBy(umsetzungWerte, 'sort')
-      umsetzungWerte = umsetzungWerte.map(el => ({
-        value: el.code,
-        label: el.text,
-      }))
-      let adressenWerte = get(data, 'allAdresses.nodes', [])
-      adressenWerte = sortBy(adressenWerte, 'name')
-      adressenWerte = adressenWerte.map(el => ({
-        id: el.id,
-        value: el.name,
-      }))
-      // list all ap-Arten BUT the active one
-      const apArten = get(data, 'allAps.nodes', [])
-        .filter(o => o.id !== id)
-        .map(o => o.artId)
-      let artWerte = get(data, 'allAeEigenschaftens.nodes', [])
-      // filter ap arten but the active one
-      artWerte = artWerte.filter(o => !apArten.includes(o.id))
-      artWerte = sortBy(artWerte, 'artname')
-      artWerte = artWerte.map(el => ({
-        id: el.id,
-        value: el.artname,
-      }))
+      const id = get(data, `${treeName}.activeNodeArray[3]`)
 
       return (
-        <ErrorBoundary>
-          <Container>
-            <FormTitle apId={id} title="Aktionsplan" />
-            <Mutation mutation={updateApByIdGql}>
-              {(updateAp, { data }) => (
-                <FieldsContainer>
-                  <AutoComplete
-                    key={`${row.id}artId`}
-                    label="Art (gibt dem Aktionsplan den Namen)"
-                    value={get(row, 'aeEigenschaftenByArtId.artname', '')}
-                    objects={artWerte}
-                    saveToDb={value =>
-                      saveToDb({ row, field: 'artId', value, updateAp })
-                    }
-                  />
-                  <RadioButtonGroupWithInfo
-                    key={`${row.id}bearbeitung`}
-                    value={row.bearbeitung}
-                    dataSource={bearbeitungWerte}
-                    saveToDb={value =>
-                      saveToDb({ row, field: 'bearbeitung', value, updateAp })
-                    }
-                    popover={
-                      <Fragment>
-                        <LabelPopoverTitleRow>Legende</LabelPopoverTitleRow>
-                        <LabelPopoverContentRow>
-                          <LabelPopoverRowColumnLeft>
-                            keiner:
-                          </LabelPopoverRowColumnLeft>
-                          <LabelPopoverRowColumnRight>
-                            kein Aktionsplan vorgesehen
-                          </LabelPopoverRowColumnRight>
-                        </LabelPopoverContentRow>
-                        <LabelPopoverContentRow>
-                          <LabelPopoverRowColumnLeft>
-                            erstellt:
-                          </LabelPopoverRowColumnLeft>
-                          <LabelPopoverRowColumnRight>
-                            Aktionsplan fertig, auf der Webseite der FNS
-                          </LabelPopoverRowColumnRight>
-                        </LabelPopoverContentRow>
-                      </Fragment>
-                    }
-                    label="Aktionsplan"
-                  />
-                  <TextField
-                    key={`${row.id}startJahr`}
-                    label="Start im Jahr"
-                    value={row.startJahr}
-                    type="number"
-                    saveToDb={value =>
-                      saveToDb({ row, field: 'startJahr', value, updateAp })
-                    }
-                  />
-                  <FieldContainer>
-                    <RadioButtonGroupWithInfo
-                      key={`${row.id}umsetzung`}
-                      value={row.umsetzung}
-                      dataSource={umsetzungWerte}
-                      saveToDb={value =>
-                        updateAp({
-                          variables: {
-                            id,
-                            umsetzung: value,
-                          },
-                        })
-                      }
-                      popover={
-                        <Fragment>
-                          <LabelPopoverTitleRow>Legende</LabelPopoverTitleRow>
-                          <LabelPopoverContentRow>
-                            <LabelPopoverRowColumnLeft>
-                              noch keine<br />Umsetzung:
-                            </LabelPopoverRowColumnLeft>
-                            <LabelPopoverRowColumnRight>
-                              noch keine Massnahmen ausgeführt
-                            </LabelPopoverRowColumnRight>
-                          </LabelPopoverContentRow>
-                          <LabelPopoverContentRow>
-                            <LabelPopoverRowColumnLeft>
-                              in Umsetzung:
-                            </LabelPopoverRowColumnLeft>
-                            <LabelPopoverRowColumnRight>
-                              bereits Massnahmen ausgeführt (auch wenn AP noch
-                              nicht erstellt)
-                            </LabelPopoverRowColumnRight>
-                          </LabelPopoverContentRow>
-                        </Fragment>
-                      }
-                      label="Stand Umsetzung"
-                    />
-                  </FieldContainer>
-                  <AutoComplete
-                    key={`${row.id}bearbeiter`}
-                    label="Verantwortlich"
-                    value={get(row, 'adresseByBearbeiter.name', null)}
-                    objects={adressenWerte}
-                    saveToDb={value =>
-                      saveToDb({ row, field: 'bearbeiter', value, updateAp })
-                    }
-                    openabove
-                  />
-                  <TextFieldNonUpdatable
-                    key={`${row.id}artwert`}
-                    label="Artwert"
-                    value={get(
-                      row,
-                      'aeEigenschaftenByArtId.artwert',
-                      'Diese Art hat keinen Artwert'
+        <Query query={data2} variables={{ id }}>
+          {({ loading, error, data }) => {
+            if (loading)
+              return (
+                <Container>
+                  <FieldsContainer>Lade...</FieldsContainer>
+                </Container>
+              )
+            if (error) return `Fehler: ${error.message}`
+
+            const row = get(data, 'apById')
+            let bearbeitungWerte = get(data, 'allApBearbstandWertes.nodes', [])
+            bearbeitungWerte = sortBy(bearbeitungWerte, 'sort')
+            bearbeitungWerte = bearbeitungWerte.map(el => ({
+              value: el.code,
+              label: el.text,
+            }))
+            let umsetzungWerte = get(data, 'allApUmsetzungWertes.nodes', [])
+            umsetzungWerte = sortBy(umsetzungWerte, 'sort')
+            umsetzungWerte = umsetzungWerte.map(el => ({
+              value: el.code,
+              label: el.text,
+            }))
+            let adressenWerte = get(data, 'allAdresses.nodes', [])
+            adressenWerte = sortBy(adressenWerte, 'name')
+            adressenWerte = adressenWerte.map(el => ({
+              id: el.id,
+              value: el.name,
+            }))
+            // list all ap-Arten BUT the active one
+            const apArten = get(data, 'allAps.nodes', [])
+              .filter(o => o.id !== id)
+              .map(o => o.artId)
+            let artWerte = get(data, 'allAeEigenschaftens.nodes', [])
+            // filter ap arten but the active one
+            artWerte = artWerte.filter(o => !apArten.includes(o.id))
+            artWerte = sortBy(artWerte, 'artname')
+            artWerte = artWerte.map(el => ({
+              id: el.id,
+              value: el.artname,
+            }))
+
+            return (
+              <ErrorBoundary>
+                <Container>
+                  <FormTitle apId={id} title="Aktionsplan" />
+                  <Mutation mutation={updateApByIdGql}>
+                    {(updateAp, { data }) => (
+                      <FieldsContainer>
+                        <AutoComplete
+                          key={`${row.id}artId`}
+                          label="Art (gibt dem Aktionsplan den Namen)"
+                          value={get(row, 'aeEigenschaftenByArtId.artname', '')}
+                          objects={artWerte}
+                          saveToDb={value =>
+                            saveToDb({ row, field: 'artId', value, updateAp })
+                          }
+                        />
+                        <RadioButtonGroupWithInfo
+                          key={`${row.id}bearbeitung`}
+                          value={row.bearbeitung}
+                          dataSource={bearbeitungWerte}
+                          saveToDb={value =>
+                            saveToDb({ row, field: 'bearbeitung', value, updateAp })
+                          }
+                          popover={
+                            <Fragment>
+                              <LabelPopoverTitleRow>Legende</LabelPopoverTitleRow>
+                              <LabelPopoverContentRow>
+                                <LabelPopoverRowColumnLeft>
+                                  keiner:
+                                </LabelPopoverRowColumnLeft>
+                                <LabelPopoverRowColumnRight>
+                                  kein Aktionsplan vorgesehen
+                                </LabelPopoverRowColumnRight>
+                              </LabelPopoverContentRow>
+                              <LabelPopoverContentRow>
+                                <LabelPopoverRowColumnLeft>
+                                  erstellt:
+                                </LabelPopoverRowColumnLeft>
+                                <LabelPopoverRowColumnRight>
+                                  Aktionsplan fertig, auf der Webseite der FNS
+                                </LabelPopoverRowColumnRight>
+                              </LabelPopoverContentRow>
+                            </Fragment>
+                          }
+                          label="Aktionsplan"
+                        />
+                        <TextField
+                          key={`${row.id}startJahr`}
+                          label="Start im Jahr"
+                          value={row.startJahr}
+                          type="number"
+                          saveToDb={value =>
+                            saveToDb({ row, field: 'startJahr', value, updateAp })
+                          }
+                        />
+                        <FieldContainer>
+                          <RadioButtonGroupWithInfo
+                            key={`${row.id}umsetzung`}
+                            value={row.umsetzung}
+                            dataSource={umsetzungWerte}
+                            saveToDb={value =>
+                              updateAp({
+                                variables: {
+                                  id,
+                                  umsetzung: value,
+                                },
+                              })
+                            }
+                            popover={
+                              <Fragment>
+                                <LabelPopoverTitleRow>Legende</LabelPopoverTitleRow>
+                                <LabelPopoverContentRow>
+                                  <LabelPopoverRowColumnLeft>
+                                    noch keine<br />Umsetzung:
+                                  </LabelPopoverRowColumnLeft>
+                                  <LabelPopoverRowColumnRight>
+                                    noch keine Massnahmen ausgeführt
+                                  </LabelPopoverRowColumnRight>
+                                </LabelPopoverContentRow>
+                                <LabelPopoverContentRow>
+                                  <LabelPopoverRowColumnLeft>
+                                    in Umsetzung:
+                                  </LabelPopoverRowColumnLeft>
+                                  <LabelPopoverRowColumnRight>
+                                    bereits Massnahmen ausgeführt (auch wenn AP noch
+                                    nicht erstellt)
+                                  </LabelPopoverRowColumnRight>
+                                </LabelPopoverContentRow>
+                              </Fragment>
+                            }
+                            label="Stand Umsetzung"
+                          />
+                        </FieldContainer>
+                        <AutoComplete
+                          key={`${row.id}bearbeiter`}
+                          label="Verantwortlich"
+                          value={get(row, 'adresseByBearbeiter.name', null)}
+                          objects={adressenWerte}
+                          saveToDb={value =>
+                            saveToDb({ row, field: 'bearbeiter', value, updateAp })
+                          }
+                          openabove
+                        />
+                        <TextFieldNonUpdatable
+                          key={`${row.id}artwert`}
+                          label="Artwert"
+                          value={get(
+                            row,
+                            'aeEigenschaftenByArtId.artwert',
+                            'Diese Art hat keinen Artwert'
+                          )}
+                        />
+                      </FieldsContainer>
                     )}
-                  />
-                </FieldsContainer>
-              )}
-            </Mutation>
-          </Container>
-        </ErrorBoundary>
+                  </Mutation>
+                </Container>
+              </ErrorBoundary>
+            )
+          }}
+        </Query>
       )
     }}
   </Query>

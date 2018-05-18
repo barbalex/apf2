@@ -9,7 +9,8 @@ import withHandlers from 'recompose/withHandlers'
 import TextField from '../../../shared/TextField'
 import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
-import projektByIdGql from './projektById.graphql'
+import data1Gql from './data1.graphql'
+import data2Gql from './data2.graphql'
 import updateProjektByIdGql from './updateProjektById.graphql'
 
 const Container = styled.div`
@@ -46,40 +47,55 @@ const enhance = compose(
   })
 )
 
-const Projekt = ({ id, saveToDb }: { id: String, saveToDb: () => void }) => (
-  <Query query={projektByIdGql} variables={{ id }}>
+const Projekt = ({
+  saveToDb,
+  treeName
+}: {
+  saveToDb: () => void,
+  treeName: String
+}) => (
+  <Query query={data1Gql} >
     {({ loading, error, data }) => {
-      if (loading)
-        return (
-          <Container>
-            <FieldsContainer>Lade...</FieldsContainer>
-          </Container>
-        )
       if (error) return `Fehler: ${error.message}`
-
-      const row = get(data, 'projektById')
+      const id = get(data, `${treeName}.activeNodeArray[1]`)
 
       return (
-        <ErrorBoundary>
-          <Container>
-            <FormTitle title="Projekt" />
-            <Mutation mutation={updateProjektByIdGql}>
-              {(updateProjekt, { data }) => (
-                <FieldsContainer>
-                  <TextField
-                    key={`${row.id}name`}
-                    label="Name"
-                    value={row.name}
-                    type="text"
-                    saveToDb={value =>
-                      saveToDb({ row, field: 'name', value, updateProjekt })
-                    }
-                  />
-                </FieldsContainer>
-              )}
-            </Mutation>
-          </Container>
-        </ErrorBoundary>
+        <Query query={data2Gql} variables={{ id }}>
+          {({ loading, error, data }) => {
+            if (loading)
+              return (
+                <Container>
+                  <FieldsContainer>Lade...</FieldsContainer>
+                </Container>
+              )
+            if (error) return `Fehler: ${error.message}`
+
+            const row = get(data, 'projektById')
+
+            return (
+              <ErrorBoundary>
+                <Container>
+                  <FormTitle title="Projekt" />
+                  <Mutation mutation={updateProjektByIdGql}>
+                    {(updateProjekt, { data }) => (
+                      <FieldsContainer>
+                        <TextField
+                          key={`${row.id}name`}
+                          label="Name"
+                          value={row.name}
+                          type="text"
+                          saveToDb={value =>
+                            saveToDb({ row, field: 'name', value, updateProjekt })
+                          }
+                        />
+                      </FieldsContainer>
+                    )}
+                  </Mutation>
+                </Container>
+              </ErrorBoundary>
+            )
+          }}
+        </Query>
       )
     }}
   </Query>

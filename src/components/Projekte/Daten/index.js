@@ -10,9 +10,13 @@ import { observer, inject } from 'mobx-react'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
 import Loadable from 'react-loadable'
+import { Query } from 'react-apollo'
+import get from 'lodash/get'
 
 import ErrorBoundary from '../../shared/ErrorBoundarySingleChild'
 import Loading from '../../shared/Loading'
+import dataGql from './data.graphql'
+import getActiveNodes from '../../../modules/getActiveNodes'
 
 const Projekt = Loadable({
   loader: () => import('./Projekt'),
@@ -129,76 +133,93 @@ const enhance = compose(inject('store'), observer)
 const Daten = ({
   store,
   tree,
+  treeName,
   dimensions = { width: 380 },
 }: {
   store: Object,
   tree: Object,
+  treeName: String,
   dimensions: Object,
 }) => {
-  const { activeNodes, activeDataset } = tree
-  if (!activeDataset || !activeDataset.table || !activeDataset.row) {
-    return <div />
-  }
-  /**
-   * For the time-being bass id from here
-   * When store is moved to apollo:
-   * Fetch id directly in components
-   */
-  const { id } = activeDataset.row
-  const formObject = {
-    projekt: <Projekt id={id} dimensions={dimensions} />,
-    apberuebersicht: <Apberuebersicht id={id} dimensions={dimensions} />,
-    ap: <Ap id={id} dimensions={dimensions} />,
-    assozart: <Assozart id={id} dimensions={dimensions} />,
-    apart: <Apart id={id} dimensions={dimensions} />,
-    idealbiotop: <Idealbiotop id={id} dimensions={dimensions} />,
-    erfkrit: <Erfkrit id={id} dimensions={dimensions} />,
-    apber: <Apber id={id} dimensions={dimensions} />,
-    ber: <Ber id={id} dimensions={dimensions} />,
-    ziel: <Ziel id={id} dimensions={dimensions} />,
-    zielber: <Zielber id={id} dimensions={dimensions} />,
-    pop: <Pop id={id} dimensions={dimensions} />,
-    popmassnber: <Popmassnber id={id} dimensions={dimensions} />,
-    popber: <Popber id={id} dimensions={dimensions} />,
-    tpop: <Tpop id={id} dimensions={dimensions} />,
-    tpopber: <Tpopber id={id} dimensions={dimensions} />,
-    tpopmassn: <Tpopmassn id={id} dimensions={dimensions} />,
-    tpopmassnber: <Tpopmassnber id={id} dimensions={dimensions} />,
-    tpopfeldkontr: <Tpopfeldkontr id={id} dimensions={dimensions} />,
-    tpopfreiwkontr: <Tpopfreiwkontr id={id} dimensions={dimensions} />,
-    tpopkontrzaehl: <Tpopkontrzaehl id={id} dimensions={dimensions} />,
-    exporte: <Exporte tree={tree} dimensions={dimensions} />,
-    qk: <Qk id={id} tree={tree} />,
-    beobNichtZuzuordnen: <Beobzuordnung id={id} dimensions={dimensions} />,
-    beobzuordnung: <Beobzuordnung id={id} dimensions={dimensions} />,
-    beobZugeordnet: <Beobzuordnung id={id} dimensions={dimensions} />,
-  }
-  const standardForm = (
-    <div>
-      <p>Daten</p>
-      <pre>{JSON.stringify(activeDataset.row, null, 2)}</pre>
-    </div>
-  )
-  let key
-  if (activeNodes.exporte) {
-    key = 'exporte'
-  } else if (activeNodes.qk) {
-    key = 'qk'
-  } else if (activeNodes.beobNichtZuzuordnen) {
-    key = 'beobNichtZuzuordnen'
-  } else if (activeNodes.beobzuordnung) {
-    key = 'beobzuordnung'
-  } else if (activeNodes.beobZugeordnet) {
-    key = 'beobZugeordnet'
-  } else {
-    key = activeDataset.table
-  }
-  const form = formObject[key] || standardForm
 
   return (
-    <ErrorBoundary>
-      <Container>{form}</Container>
-    </ErrorBoundary>
+    <Query query={dataGql} >
+      {({ loading, error, data }) => {
+        // do not show loading but rather last state
+        //if (loading) return <Container>Lade...</Container>
+        if (error) return `Fehler: ${error.message}`
+
+        const activeNodeArray = get(data, `${treeName}.activeNodeArray`)
+        console.log('Daten:', {activeNodeArray, treeName, data})
+        const activeNodes = getActiveNodes(activeNodeArray, store)
+
+        const { activeDataset } = tree
+        if (!activeDataset || !activeDataset.table || !activeDataset.row) {
+          return <div />
+        }
+        /**
+         * For the time-being pass id from here
+         * When store is moved to apollo:
+         * Fetch id directly in components
+         */
+        const { id } = activeDataset.row
+        const formObject = {
+          projekt: <Projekt dimensions={dimensions} treeName={treeName} />,
+          apberuebersicht: <Apberuebersicht id={id} dimensions={dimensions} treeName={treeName} />,
+          ap: <Ap id={id} dimensions={dimensions} treeName={treeName} />,
+          assozart: <Assozart id={id} dimensions={dimensions} treeName={treeName} />,
+          apart: <Apart id={id} dimensions={dimensions} treeName={treeName} />,
+          idealbiotop: <Idealbiotop id={id} dimensions={dimensions} treeName={treeName} />,
+          erfkrit: <Erfkrit id={id} dimensions={dimensions} treeName={treeName} />,
+          apber: <Apber id={id} dimensions={dimensions} treeName={treeName} />,
+          ber: <Ber id={id} dimensions={dimensions} treeName={treeName} />,
+          ziel: <Ziel id={id} dimensions={dimensions} treeName={treeName} />,
+          zielber: <Zielber id={id} dimensions={dimensions} treeName={treeName} />,
+          pop: <Pop id={id} dimensions={dimensions} treeName={treeName} />,
+          popmassnber: <Popmassnber id={id} dimensions={dimensions} treeName={treeName} />,
+          popber: <Popber id={id} dimensions={dimensions} treeName={treeName} />,
+          tpop: <Tpop id={id} dimensions={dimensions} treeName={treeName} />,
+          tpopber: <Tpopber id={id} dimensions={dimensions} treeName={treeName} />,
+          tpopmassn: <Tpopmassn id={id} dimensions={dimensions} treeName={treeName} />,
+          tpopmassnber: <Tpopmassnber id={id} dimensions={dimensions} treeName={treeName} />,
+          tpopfeldkontr: <Tpopfeldkontr id={id} dimensions={dimensions} treeName={treeName} />,
+          tpopfreiwkontr: <Tpopfreiwkontr id={id} dimensions={dimensions} treeName={treeName} />,
+          tpopkontrzaehl: <Tpopkontrzaehl id={id} dimensions={dimensions} treeName={treeName} />,
+          exporte: <Exporte tree={tree} dimensions={dimensions} treeName={treeName} />,
+          qk: <Qk id={id} tree={tree} treeName={treeName} />,
+          beobNichtZuzuordnen: <Beobzuordnung id={id} dimensions={dimensions} treeName={treeName} />,
+          beobzuordnung: <Beobzuordnung id={id} dimensions={dimensions} treeName={treeName} />,
+          beobZugeordnet: <Beobzuordnung id={id} dimensions={dimensions} treeName={treeName} />,
+        }
+        const standardForm = (
+          <div>
+            <p>Daten</p>
+            <pre>{JSON.stringify(activeDataset.row, null, 2)}</pre>
+          </div>
+        )
+        let key
+        if (activeNodes.exporte) {
+          key = 'exporte'
+        } else if (activeNodes.qk) {
+          key = 'qk'
+        } else if (activeNodes.beobNichtZuzuordnen) {
+          key = 'beobNichtZuzuordnen'
+        } else if (activeNodes.beobzuordnung) {
+          key = 'beobzuordnung'
+        } else if (activeNodes.beobZugeordnet) {
+          key = 'beobZugeordnet'
+        } else {
+          key = activeDataset.table
+        }
+        const form = formObject[key] || standardForm
+
+        return (
+          <ErrorBoundary>
+            <Container>{form}</Container>
+          </ErrorBoundary>
+        )
+      }}
+    </Query>
   )
 }
 
