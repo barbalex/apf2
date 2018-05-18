@@ -146,7 +146,7 @@ const MyAppBar = ({
 
   return (
     <Query query={dataGql} >
-      {({ loading, error, data, client, refetch }) => {
+      {({ loading, error, data, client }) => {
         if (error) return `Fehler: ${error.message}`
 
         return (
@@ -235,7 +235,7 @@ const MyAppBar = ({
                       <MenuItem
                         onClick={() => {
                           setAnchorEl(null)
-                          logout(store, client, refetch)
+                          logout({ store, client })
                         }}
                       >{`${get(data, 'user.name')} abmelden`}</MenuItem>
                     </Menu>

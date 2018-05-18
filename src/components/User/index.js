@@ -25,6 +25,8 @@ import app from 'ampersand-app'
 import ErrorBoundary from '../shared/ErrorBoundary'
 import dataGql from './data.graphql'
 import processLogin from '../../modules/processLogin'
+import initiateDataFromUrl from '../../modules/initiateDataFromUrl'
+import setUserGql from './setUser.graphql'
 
 const StyledDialog = styled(Dialog)`
   > div {
@@ -58,19 +60,6 @@ const enhance = compose(
       name,
       password
     }) => async (client, refetch) => {
-      // when bluring fields need to pass event value
-      // on the other hand when clicking on Anmelden button,
-      // need to grab props
-      /*
-      if (!name) {
-        return setNameErrorText(
-          'Geben Sie den Ihnen zugeteilten Benutzernamen ein'
-        )
-      }
-      if (!password) {
-        return setPasswordErrorText('Bitte Passwort eingeben')
-      }*/
-
       let result
       try {
         result = await client.mutate({
@@ -100,7 +89,14 @@ const enhance = compose(
         return console.log(error)
       }
       const token = get(result, 'data.login.jwtToken')
-      processLogin({ store, name, token, client, refetch })
+      await client.mutate({
+        mutation: setUserGql,
+        variables: {
+          name,
+          token,
+        },
+      })
+      initiateDataFromUrl(store)
       // refresh currentUser in idb
       app.db.currentUser.clear()
       app.db.currentUser.put({ name, token })
