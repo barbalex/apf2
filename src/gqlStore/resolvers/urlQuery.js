@@ -10,15 +10,6 @@ export default {
     // do not manipulate url if store is not yet initiated?
     //if (!store.initiated) return
     setUrlQuery: (_, { projekteTabs, feldkontrTab }, { cache }) => {
-      cache.writeData({
-        data: {
-          urlQuery: {
-            projekteTabs,
-            feldkontrTab,
-            __typename: 'UrlQuery'
-          } 
-        } 
-      })
       const urlQueryFromUrl = queryString.parse(window.location.search)
       const newUrlQuery = { projekteTabs, feldkontrTab }
       const { activeNodeArray } = cache.readQuery({
@@ -30,7 +21,16 @@ export default {
       })
       console.log('resolvers: urlQuery:', { urlQueryFromUrl, newUrlQuery, projekteTabs, feldkontrTab, activeNodeArray })
       if (!isEqual(urlQueryFromUrl, newUrlQuery)) {
-        console.log('resolvers: urlQuery is not equal, setting new urlQuery')
+        console.log('resolvers: urlQuery is not equal: writing to store and pushing to history')
+        cache.writeData({
+          data: {
+            urlQuery: {
+              projekteTabs,
+              feldkontrTab,
+              __typename: 'UrlQuery'
+            } 
+          } 
+        })
         const search = queryString.stringify(newUrlQuery)
         const query = `${Object.keys(newUrlQuery).length > 0 ? `?${search}` : ''}`
         app.history.push(`/${activeNodeArray.join('/')}${query}`)
