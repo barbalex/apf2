@@ -347,13 +347,13 @@ const TreeContainer = ({
       if (error) return `Fehler: ${error.message}`
 
       //const tree = get(data1, treeName)
-      console.log('TreeContainer: data1:', data1)
+      //console.log('TreeContainer: data1:', data1)
       const activeNodeArray = get(data1, `${treeName}.activeNodeArray`)
       console.log('TreeContainer: activeNodeArray:', activeNodeArray)
       const openNodes = get(data1, `${treeName}.openNodes`)
       console.log('TreeContainer: openNodes:', openNodes)
       const activeNodes = getActiveNodes(activeNodeArray, store)
-      console.log('TreeContainer: activeNodes:', activeNodes)
+      //console.log('TreeContainer: activeNodes:', activeNodes)
 
       return (
         <Query query={data2Gql} variables={variables(activeNodes)}>
