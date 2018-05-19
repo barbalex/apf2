@@ -15,20 +15,6 @@ query TreeDataQuery(
   user @client {
     token
   }
-  tree @client {
-    name
-    activeNodeArray
-    openNodes
-    apFilter
-    nodeLabelFilter
-  }
-  tree2 @client {
-    name
-    activeNodeArray
-    openNodes
-    apFilter
-    nodeLabelFilter
-  }
   urlQuery @client {
     projekteTabs
     feldkontrTab
