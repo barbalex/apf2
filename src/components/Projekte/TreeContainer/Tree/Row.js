@@ -1,6 +1,5 @@
 // @flow
 import React from 'react'
-import { toJS } from 'mobx'
 import { observer, inject } from 'mobx-react'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
@@ -16,6 +15,8 @@ import get from 'lodash/get'
 
 import isNodeInActiveNodePath from './isNodeInActiveNodePath'
 import isNodeOpen from './isNodeOpen'
+import toggleNode from './toggleNode'
+import toggleNodeSymbol from './toggleNodeSymbol'
 
 const singleRowHeight = 23
 const StyledNode = styled.div`
@@ -215,6 +216,7 @@ const Row = ({
   nodes,
   treeName,
   data,
+  client
 }: {
   key?: number,
   index: number,
@@ -223,17 +225,18 @@ const Row = ({
   tree: Object,
   nodes: Array<Object>,
   treeName: String,
-  data: Object
+  data: Object,
+  client: Object
 }) => {
   const node = nodes[index]
-  const onClickNode = event => tree.toggleNode(tree, node)
-  const onClickNodeSymbol = event => tree.toggleNodeSymbol(tree, node)
+  const tree2 = get(data, treeName)
+  const openNodes = get(data, `${treeName}.openNodes`)
+  const activeNodeArray = get(data, `${treeName}.activeNodeArray`)
+  const onClickNode = event => toggleNode({ tree: tree2, node, client })
+  const onClickNodeSymbol = event => toggleNodeSymbol({ tree: tree2, node, client })
   const myProps = { key: index }
-  const nodeIsInActiveNodePath = isNodeInActiveNodePath(
-    node,
-    toJS(tree.activeNodeArray)
-  )
-  const nodeIsOpen = isNodeOpen(toJS(tree.openNodes), node.url)
+  const nodeIsInActiveNodePath = isNodeInActiveNodePath(node, activeNodeArray)
+  const nodeIsOpen = isNodeOpen(openNodes, node.url)
   // build symbols
   let useSymbolIcon = true
   let useSymbolSpan = false

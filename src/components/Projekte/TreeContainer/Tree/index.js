@@ -52,6 +52,7 @@ const enhance = compose(inject('store'), observer)
 
 class Tree extends Component {
   props: {
+    client: Object,
     treeName: String,
     data: Object,
     store: Object,
@@ -108,6 +109,7 @@ class Tree extends Component {
       nodes={this.props.nodes}
       data={this.props.data}
       treeName={this.props.treeName}
+      client={this.props.client}
     />
   )
 

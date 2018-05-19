@@ -127,8 +127,6 @@ const MyAppBar = ({
       const exporteIsActive = !!store.tree.activeNodes.projekt
       const isMobile = isMobilePhone()
 
-      console.log('AppBar:', { data, projekteTabs, treeIsVisible, datenIsVisible })
-
       return (
         <ErrorBoundary>
           <StyledAppBar position="static">

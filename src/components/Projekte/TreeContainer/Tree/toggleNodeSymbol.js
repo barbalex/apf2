@@ -1,4 +1,6 @@
 // @flow
+import isEqual from 'lodash/isEqual'
+import clone from 'lodash/clone'
 import gql from 'graphql-tag'
 
 import isNodeOpen from './isNodeOpen'
@@ -7,25 +9,19 @@ export default ({
   tree,
   node,
   client
-}: {
+}:{
   tree: Object,
   node: Object,
   client: Object
-}) => {
-  // make sure this node's url is not yet contained
-  // otherwise same nodes will be added multiple times!
-  if (isNodeOpen(tree.openNodes, node.url)) return
+}): any => {
+  if (!node.url) throw new Error('passed node has no url')
 
-  const newOpenNodes = [...tree.openNodes, node.url]
-  if (['tpopfeldkontr', 'tpopfreiwkontr'].includes(node.menuType)) {
-    // automatically open zaehlFolder of tpopfeldkontr or tpopfreiwkontr
-    newOpenNodes.push([...node.url, 'Zaehlungen'])
+  let newOpenNodes = clone(tree.openNodes)
+  if (isNodeOpen(tree.openNodes, node.url)) {
+    newOpenNodes = newOpenNodes.filter(n => !isEqual(n, node.url))
+  } else {
+    newOpenNodes.push(node.url)
   }
-  if (node.menuType === 'ziel') {
-    // automatically open zielberFolder of ziel
-    newOpenNodes.push([...node.url, 'Berichte'])
-  }
-
   client.mutate({
     mutation: gql`
       mutation setTreeKey($value: Array!, $tree: String!, $key: String!) {

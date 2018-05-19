@@ -351,6 +351,7 @@ const TreeContainer = ({
         const nodes = buildNodes({ tree, data })
         const token = get(data, 'user.token', null)
         const activeNodeArray = get(data, `${treeName}.activeNodeArray`)
+        console.log('TreeContainer:', { nodes, activeNodeArray })
 
         // if activeNodeArray.length === 1
         // and there is only one projekte
@@ -391,6 +392,7 @@ const TreeContainer = ({
                 innerRef={c => (this.tree = c)}
               >
                 <Tree
+                  client={client}
                   treeName={treeName}
                   data={data}
                   tree={tree} token={token}

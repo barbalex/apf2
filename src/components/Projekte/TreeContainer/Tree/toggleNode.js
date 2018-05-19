@@ -1,18 +1,24 @@
 // @flow
 import clone from 'lodash/clone'
-import { toJS } from 'mobx'
+import gql from 'graphql-tag'
 
 import isNodeOpen from './isNodeOpen'
 import isNodeInActiveNodePath from './isNodeInActiveNodePath'
 import openNode from './openNode'
 
-export default (store: Object, tree: Object, node: Object): any => {
-  if (!node.url) {
-    return store.listError(new Error('passed node has no url'))
-  }
+export default ({
+  tree,
+  node,
+  client
+}:{
+  tree: Object, 
+  node: Object,
+  client: Object
+}): any => {
+  if (!node.url) throw new Error('passed node has no url')
 
   const newActiveNodeArray = clone(node.url)
-  const nodeIsOpen = isNodeOpen(toJS(tree.openNodes), node.url)
+  const nodeIsOpen = isNodeOpen(tree.openNodes, node.url)
   if (nodeIsOpen && isNodeInActiveNodePath(node, tree.activeNodeArray)) {
     // need to check if node is last in activeNodePath
     if (node.url.length === tree.activeNodeArray.length) {
@@ -25,7 +31,24 @@ export default (store: Object, tree: Object, node: Object): any => {
       // leave newActiveNodeArray as it is
     }
   } else if (!nodeIsOpen) {
-    openNode({tree, node})
+    openNode({ tree, node, client })
   }
-  tree.setActiveNodeArray(newActiveNodeArray)
+
+  client.mutate({
+    mutation: gql`
+      mutation setTreeKey($value: Array!, $tree: String!, $key: String!) {
+        setTreeKey(tree: $tree, key: $key, value: $value) @client {
+          tree @client {
+            activeNodeArray
+            __typename: Tree
+          }
+        }
+      }
+    `,
+    variables: {
+      value: newActiveNodeArray,
+      tree: tree.name,
+      key: 'activeNodeArray'
+    }
+  })
 }
