@@ -14,6 +14,7 @@ export default ({
   projId: String,
 }): Array<Object> => {
   const apberuebersichts = get(data, 'apberuebersichts.nodes', [])
+  console.log('apberuebersichtFolder:', {apberuebersichts,data,tree,projektNodes,projId})
 
   // fetch sorting indexes of parents
   const projIndex = findIndex(projektNodes, {

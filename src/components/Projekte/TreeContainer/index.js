@@ -345,6 +345,7 @@ const TreeContainer = ({
       //if (loading) return <Container>Lade...</Container>
       if (error) return `Fehler: ${error.message}`
 
+      //const tree = get(data1, treeName)
       console.log('TreeContainer: data1:', data1)
       const activeNodeArray = get(data1, `${treeName}.activeNodeArray`)
       console.log('TreeContainer: activeNodeArray:', activeNodeArray)
@@ -425,7 +426,7 @@ const TreeContainer = ({
                     <DeleteDatasetModal tree={tree} token={token} />
                   )}
                   <LabelFilterContainer>
-                    <LabelFilter tree={tree} token={token} />
+                    <LabelFilter tree={tree} treeName={treeName} />
                     {showApDivToggle && (
                       <NurApDiv>
                         <Label label="nur AP" />

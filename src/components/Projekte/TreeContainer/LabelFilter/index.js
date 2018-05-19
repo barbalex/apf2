@@ -9,7 +9,7 @@ import styled from 'styled-components'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 
-import tables from '../../../modules/tables'
+import tables from '../../../../modules/tables'
 
 const StyledFormControl = styled(FormControl)`
   padding-right: 0.8em !important;
@@ -36,6 +36,20 @@ const enhance = compose(
         filteredTable = activeDataset.table
       }
       tree.updateLabelFilter(filteredTable, event.target.value)
+      /*
+      client.mutate({
+        mutation: gql`
+          mutation setTreeKey($value: Array!, $tree: String!, $key: String!) {
+            setTreeKey(tree: $tree, key: $key, value: $value) @client {
+              tree @client {
+                openNodes
+                __typename: Tree
+              }
+            }
+          }
+        `,
+        variables: { value: openNodes, tree: 'tree', key: 'openNodes' }
+      })*/
     },
   }),
   observer
@@ -44,10 +58,12 @@ const enhance = compose(
 const LabelFilter = ({
   store,
   tree,
+  treeName,
   onChange,
 }: {
   store: Object,
   tree: Object,
+  treeName: String,
   onChange: () => void,
 }) => {
   const { activeDataset } = tree
