@@ -11,8 +11,6 @@ export default async (idb) => {
     tree: {
       name: 'tree',
       activeNodeArray: [],
-      activeNodes: null, // remove using getActiveNodes
-      activeDataset: null, // remove?
       openNodes: [],
       apFilter: false,
       nodeLabelFilter: [],
@@ -21,8 +19,6 @@ export default async (idb) => {
     tree2: {
       name: 'tree2',
       activeNodeArray: [],
-      activeNodes: null,
-      activeDataset: null,
       openNodes: [],
       apFilter: false,
       nodeLabelFilter: [],

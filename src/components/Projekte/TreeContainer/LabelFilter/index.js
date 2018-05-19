@@ -9,8 +9,8 @@ import styled from 'styled-components'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 import { Query } from 'react-apollo'
-import get from 'lodash/get'
-import isEqual from 'lodash/isEqual'
+//import get from 'lodash/get'
+//import isEqual from 'lodash/isEqual'
 
 import tables from '../../../../modules/tables'
 import dataGql from './data.graphql'
@@ -85,10 +85,10 @@ const LabelFilter = ({
     {({ error, data, client }) => {
       if (error) return `Fehler: ${error.message}`
 
-      const nodeLabelFilter = get(data, `${treeName}.nodeLabelFilter`)
-      const activeNodeArray = get(data, `${treeName}.activeNodeArray`)
-      const activeNode = nodes.find(n => isEqual(n.url, activeNodeArray))
-      console.log('LabelFilter: ', { nodeLabelFilter, activeNodeArray, activeNode, nodes })
+      //const nodeLabelFilter = get(data, `${treeName}.nodeLabelFilter`)
+      //const activeNodeArray = get(data, `${treeName}.activeNodeArray`)
+      //const activeNode = nodes.find(n => isEqual(n.url, activeNodeArray))
+      //console.log('LabelFilter: ', { nodeLabelFilter, activeNodeArray, activeNode, nodes })
 
       const { activeDataset } = tree
       let filteredTable = ''

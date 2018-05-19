@@ -150,7 +150,7 @@ const Daten = ({
         if (error) return `Fehler: ${error.message}`
 
         const activeNodeArray = get(data, `${treeName}.activeNodeArray`)
-        console.log('Daten:', {activeNodeArray, treeName, data})
+        //console.log('Daten:', {activeNodeArray, treeName, data})
         const activeNodes = getActiveNodes(activeNodeArray, store)
 
         const { activeDataset } = tree

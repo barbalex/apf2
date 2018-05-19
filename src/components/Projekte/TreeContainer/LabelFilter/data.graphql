@@ -2,8 +2,6 @@ query Query {
   tree @client {
     name
     activeNodeArray
-    activeNodes
-    activeDataset
     openNodes
     apFilter
     nodeLabelFilter
@@ -11,8 +9,6 @@ query Query {
   tree2 @client {
     name
     activeNodeArray
-    activeNodes
-    activeDataset
     openNodes
     apFilter
     nodeLabelFilter

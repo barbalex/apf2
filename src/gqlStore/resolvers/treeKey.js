@@ -17,8 +17,6 @@ export default {
               tree @client {
                 name
                 activeNodeArray
-                activeNodes
-                activeDataset
                 openNodes
                 apFilter
                 nodeLabelFilter
@@ -26,8 +24,6 @@ export default {
               tree2 @client {
                 name
                 activeNodeArray
-                activeNodes
-                activeDataset
                 openNodes
                 apFilter
                 nodeLabelFilter
@@ -38,14 +34,13 @@ export default {
       const oldValue = get(data, `${tree}.${key}`)
       // only write if changed
       if (!isEqual(oldValue, value)) {
-        //console.log('resolver for tree: writing data:', {tree,key,value})
+        console.log('resolver for tree: writing data:', {tree,key,value})
+        console.log('resolver for tree: existing activeNodeArray:', get(data, `${tree}.activeNodeArray`))
         cache.writeData({
           data: {
             [tree]: {
               name: key === 'name' ? value : get(data, `${tree}.name`, null),
               activeNodeArray: key === 'activeNodeArray' ? value : get(data, `${tree}.activeNodeArray`, null),
-              activeNodes: key === 'activeNodes' ? value : get(data, `${tree}.activeNodes`, null),
-              activeDataset: key === 'activeDataset' ? value : get(data, `${tree}.activeDataset`, null),
               openNodes: key === 'openNodes' ? value : get(data, `${tree}.openNodes`, null),
               apFilter: key === 'apFilter' ? value : get(data, `${tree}.apFilter`, null),
               nodeLabelFilter: key === 'nodeLabelFilter' ? value : get(data, `${tree}.nodeLabelFilter`, null),
@@ -53,7 +48,9 @@ export default {
             }
           } 
         })
-        app.history.push(`/${value.join('/')}`)
+        if (tree === 'tree' && key === 'activeNodeArray') {
+          app.history.push(`/${value.join('/')}`)
+        }
       }
       return null
     },
