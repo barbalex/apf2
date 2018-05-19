@@ -213,6 +213,7 @@ const Row = ({
   store,
   tree,
   nodes,
+  treeName,
   data,
 }: {
   key?: number,
@@ -221,6 +222,7 @@ const Row = ({
   store: Object,
   tree: Object,
   nodes: Array<Object>,
+  treeName: String,
   data: Object
 }) => {
   const node = nodes[index]
@@ -263,7 +265,7 @@ const Row = ({
   return (
     <div key={key} style={style}>
       <ContextMenuTrigger
-        id={`${tree.name}${node.menuType}`}
+        id={`${treeName}${node.menuType}`}
         collect={props => myProps}
         nodeId={node.id}
         nodeLabel={node.label}

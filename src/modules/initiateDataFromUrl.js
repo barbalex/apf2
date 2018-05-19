@@ -6,6 +6,7 @@ import getActiveNodeArrayFromPathname from './getActiveNodeArrayFromPathname'
 import getUrlQuery from '../modules/getUrlQuery'
 import isMobilePhone from '../modules/isMobilePhone'
 import setUrlQueryValue from '../modules/setUrlQueryValue'
+import setOpenNodesFromActiveNodeArray from '../modules/setOpenNodesFromActiveNodeArray'
 
 export default (store: Object, client: Object) => {
   const activeNodeArrayFromPathname = getActiveNodeArrayFromPathname()
@@ -31,7 +32,7 @@ export default (store: Object, client: Object) => {
     variables: { value: initialActiveNodeArray, tree: 'tree', key: 'activeNodeArray' }
   })
   // need to set openNodes
-  store.tree.setOpenNodesFromActiveNodeArray()
+  setOpenNodesFromActiveNodeArray({ client, activeNodeArray: initialActiveNodeArray })
   // clone tree2 in case tree2 is open
   store.tree.cloneActiveNodeArrayToTree2()
   const urlQuery = getUrlQuery()

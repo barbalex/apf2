@@ -101,5 +101,6 @@ export default async ({
   ]
 
   tree.setActiveNodeArray(newActiveNodeArray)
+  // TODO: use modules/setOpenNodesFromActiveNodeArray
   tree.setOpenNodesFromActiveNodeArray()
 }

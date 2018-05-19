@@ -391,6 +391,7 @@ const TreeContainer = ({
                 innerRef={c => (this.tree = c)}
               >
                 <Tree
+                  treeName={treeName}
                   data={data}
                   tree={tree} token={token}
                   projektLoading={store.table.projektLoading}
