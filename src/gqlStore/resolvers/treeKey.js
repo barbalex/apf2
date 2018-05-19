@@ -35,9 +35,10 @@ export default {
             }
           `
       })
-      const activeNodeArray = get(data, 'tree.activeNodeArray')
+      const oldValue = get(data, `${tree}.${key}`)
       // only write if changed
-      if (!isEqual(activeNodeArray, value)) {
+      if (!isEqual(oldValue, value)) {
+        console.log('resolver for tree: writing data:', {tree,key,value})
         cache.writeData({
           data: {
             [tree]: {

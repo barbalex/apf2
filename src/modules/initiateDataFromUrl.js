@@ -29,7 +29,11 @@ export default (store: Object, client: Object) => {
         }
       }
     `,
-    variables: { value: initialActiveNodeArray, tree: 'tree', key: 'activeNodeArray' }
+    variables: {
+      value: initialActiveNodeArray,
+      tree: 'tree',
+      key: 'activeNodeArray'
+    }
   })
   // need to set openNodes
   setOpenNodesFromActiveNodeArray({ client, activeNodeArray: initialActiveNodeArray })

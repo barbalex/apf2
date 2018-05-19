@@ -351,7 +351,11 @@ const TreeContainer = ({
         const nodes = buildNodes({ tree, data })
         const token = get(data, 'user.token', null)
         const activeNodeArray = get(data, `${treeName}.activeNodeArray`)
-        console.log('TreeContainer:', { nodes, activeNodeArray })
+        console.log('TreeContainer:', {
+          nodes,
+          activeNodeArray,
+          tree: get(data, treeName)
+        })
 
         // if activeNodeArray.length === 1
         // and there is only one projekte
