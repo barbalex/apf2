@@ -14,7 +14,8 @@ import { Query } from 'react-apollo'
 import gql from "graphql-tag"
 
 import variables from './variables'
-import dataGql from './data.graphql'
+import data1Gql from './data1.graphql'
+import data2Gql from './data2.graphql'
 import buildNodes from './nodes'
 import Label from '../../shared/Label'
 import LabelFilter from './LabelFilter'
@@ -68,6 +69,7 @@ import DeleteDatasetModal from './DeleteDatasetModal'
 import ErrorBoundary from '../../shared/ErrorBoundarySingleChild'
 import copyBiotopTo from '../../../modules/copyBiotopTo'
 import setUrlQueryValue from '../../../modules/setUrlQueryValue'
+import getActiveNodes from '../../../modules/getActiveNodes'
 
 const Container = styled.div`
   height: 100%;
@@ -336,141 +338,186 @@ const TreeContainer = ({
   tree: Object,
   treeName: String,
   handleClick: () => void,
-}) => {
-  const { activeDataset,activeNodes,setActiveNodeArray,openNodes } = store.tree
-  const showApDivToggle = activeDataset
-  const deleteDatasetModalIsVisible = !!store.datasetToDelete.id
+}) =>
+  <Query query={data1Gql} >
+    {({ error, data: data1 }) => {
+      // do not show loading but rather last state
+      //if (loading) return <Container>Lade...</Container>
+      if (error) return `Fehler: ${error.message}`
 
-  return (
-    <Query query={dataGql} variables={variables(activeNodes)}>
-      {({ loading, error, data, client }) => {
-        // do not show loading but rather last state
-        //if (loading) return <Container>Lade...</Container>
-        if (error) return `Fehler: ${error.message}`
+      console.log('TreeContainer: data1:', data1)
+      const activeNodeArray = get(data1, `${treeName}.activeNodeArray`)
+      console.log('TreeContainer: activeNodeArray:', activeNodeArray)
+      const openNodes = get(data1, `${treeName}.openNodes`)
+      console.log('TreeContainer: openNodes:', openNodes)
+      const activeNodes = getActiveNodes(activeNodeArray, store)
+      console.log('TreeContainer: activeNodes:', activeNodes)
 
-        const nodes = buildNodes({ tree, data })
-        const token = get(data, 'user.token', null)
-        const activeNodeArray = get(data, `${treeName}.activeNodeArray`)
-        console.log('TreeContainer:', {
-          nodes,
-          activeNodeArray,
-          tree: get(data, treeName)
-        })
+      return (
+        <Query query={data2Gql} variables={variables(activeNodes)}>
+          {({ loading, error, data, client }) => {
+            // do not show loading but rather last state
+            //if (loading) return <Container>Lade...</Container>
+            if (error) return `Fehler: ${error.message}`
 
-        // if activeNodeArray.length === 1
-        // and there is only one projekte
-        // open it
-        // TODO: need to do this on componentWillMount?
-        const projekteNodes = nodes.filter(n => n.menuType === 'projekt').length === 1
-        const existsOnlyOneProjekt = projekteNodes.length === 1
-        if (activeNodes.projektfolder && !activeNodes.projekt && existsOnlyOneProjekt) {
-          const projektNode = projekteNodes[0]
-          if (projektNode) {
-            const projektUrl = clone(projektNode.url)
-            setActiveNodeArray(projektUrl)
-            openNodes.push(projektUrl)
-          }
-        }
+            const { activeDataset } = store.tree
+            const showApDivToggle = activeDataset
+            const deleteDatasetModalIsVisible = !!store.datasetToDelete.id
 
-        return (
-          <ErrorBoundary>
-            <Container>
-              {deleteDatasetModalIsVisible && (
-                <DeleteDatasetModal tree={tree} token={token} />
-              )}
-              <LabelFilterContainer>
-                <LabelFilter tree={tree} token={token} />
-                {showApDivToggle && (
-                  <NurApDiv>
-                    <Label label="nur AP" />
-                    <StyledSwitch
-                      checked={tree.apFilter}
-                      onChange={tree.toggleApFilter}
-                      color="primary"
+            const nodes = buildNodes({ tree, data })
+            const token = get(data, 'user.token', null)
+            console.log('TreeContainer:', {
+              nodes,
+            })
+
+            // if activeNodeArray.length === 1
+            // and there is only one projekte
+            // open it
+            // TODO: need to do this on componentWillMount?
+            const projekteNodes = nodes.filter(n => n.menuType === 'projekt').length === 1
+            const existsOnlyOneProjekt = projekteNodes.length === 1
+            if (activeNodes.projektfolder && !activeNodes.projekt && existsOnlyOneProjekt) {
+              const projektNode = projekteNodes[0]
+              if (projektNode) {
+                const projektUrl = clone(projektNode.url)
+                client.mutate({
+                  mutation: gql`
+                    mutation setTreeKey($value: Array!, $tree: String!, $key: String!) {
+                      setTreeKey(tree: $tree, key: $key, value: $value) @client {
+                        tree @client {
+                          activeNodeArray
+                          __typename: Tree
+                        }
+                      }
+                    }
+                  `,
+                  variables: {
+                    value: projektUrl,
+                    tree: tree.name,
+                    key: 'activeNodeArray'
+                  }
+                })
+                // add projekt to open nodes
+                client.mutate({
+                  mutation: gql`
+                    mutation setTreeKey($value: Array!, $tree: String!, $key: String!) {
+                      setTreeKey(tree: $tree, key: $key, value: $value) @client {
+                        tree @client {
+                          openNodes
+                          __typename: Tree
+                        }
+                      }
+                    }
+                  `,
+                  variables: {
+                    value: [...openNodes, projektUrl],
+                    tree: tree.name,
+                    key: 'openNodes'
+                  }
+                })
+              }
+            }
+
+            return (
+              <ErrorBoundary>
+                <Container>
+                  {deleteDatasetModalIsVisible && (
+                    <DeleteDatasetModal tree={tree} token={token} />
+                  )}
+                  <LabelFilterContainer>
+                    <LabelFilter tree={tree} token={token} />
+                    {showApDivToggle && (
+                      <NurApDiv>
+                        <Label label="nur AP" />
+                        <StyledSwitch
+                          checked={tree.apFilter}
+                          onChange={tree.toggleApFilter}
+                          color="primary"
+                        />
+                      </NurApDiv>
+                    )}
+                  </LabelFilterContainer>
+                  <InnerTreeContainer
+                    // $FlowIssue
+                    innerRef={c => (this.tree = c)}
+                  >
+                    <Tree
+                      client={client}
+                      treeName={treeName}
+                      data={data}
+                      tree={tree} token={token}
+                      projektLoading={store.table.projektLoading}
+                      nodes={nodes}
+                      mapBeobZugeordnetVisible={store.map.activeApfloraLayers.includes(
+                        'BeobZugeordnet'
+                      )}
+                      mapBeobNichtBeurteiltVisible={store.map.activeApfloraLayers.includes(
+                        'BeobNichtBeurteilt'
+                      )}
+                      mapBeobNichtZuzuordnenVisible={store.map.activeApfloraLayers.includes(
+                        'BeobNichtZuzuordnen'
+                      )}
+                      mapPopVisible={store.map.activeApfloraLayers.includes('Pop')}
+                      mapTpopVisible={store.map.activeApfloraLayers.includes(
+                        'Tpop'
+                      )}
+                      popHighlightedIdsString={store.map.pop.highlightedIds.join()}
+                      activeNodeArray={activeNodeArray}
+                      openNodes={tree.openNodes}
                     />
-                  </NurApDiv>
-                )}
-              </LabelFilterContainer>
-              <InnerTreeContainer
-                // $FlowIssue
-                innerRef={c => (this.tree = c)}
-              >
-                <Tree
-                  client={client}
-                  treeName={treeName}
-                  data={data}
-                  tree={tree} token={token}
-                  projektLoading={store.table.projektLoading}
-                  nodes={nodes}
-                  mapBeobZugeordnetVisible={store.map.activeApfloraLayers.includes(
-                    'BeobZugeordnet'
-                  )}
-                  mapBeobNichtBeurteiltVisible={store.map.activeApfloraLayers.includes(
-                    'BeobNichtBeurteilt'
-                  )}
-                  mapBeobNichtZuzuordnenVisible={store.map.activeApfloraLayers.includes(
-                    'BeobNichtZuzuordnen'
-                  )}
-                  mapPopVisible={store.map.activeApfloraLayers.includes('Pop')}
-                  mapTpopVisible={store.map.activeApfloraLayers.includes(
-                    'Tpop'
-                  )}
-                  popHighlightedIdsString={store.map.pop.highlightedIds.join()}
-                  activeNodeArray={activeNodeArray}
-                  openNodes={tree.openNodes}
-                />
-              </InnerTreeContainer>
-              <CmApFolder onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
-              <CmAp onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
-              <CmApberuebersichtFolder onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
-              <CmApberuebersicht onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
-              <CmAssozartFolder onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
-              <CmAssozart onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
-              <CmApartFolder onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
-              <CmApart onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
-              <CmBeobZugeordnetFolder onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
-              <CmBerFolder onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
-              <CmBer onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
-              <CmApberFolder onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
-              <CmApber onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
-              <CmErfkritFolder onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
-              <CmErfkrit onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
-              <CmZielFolder onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
-              <CmZielJahrFolder onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
-              <CmZiel onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
-              <CmZielBerFolder onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
-              <CmZielBer onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
-              <CmPopFolder onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
-              <CmPop onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
-              <CmPopmassnberFolder onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
-              <CmPopmassnber onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
-              <CmPopberFolder onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
-              <CmPopber onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
-              <CmTpopFolder onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
-              <CmTpop onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
-              <CmTpopberFolder onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
-              <CmTpopber onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
-              <CmBeobZugeordnet onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
-              <CmBeobnichtbeurteilt onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
-              <CmBeobNichtZuzuordnen onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
-              <CmTpopfreiwkontrFolder onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
-              <CmTpopfreiwkontr onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
-              <CmTpopfreiwkontrzaehlFolder onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
-              <CmTpopfreiwkontrzaehl onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
-              <CmTpopfeldkontrFolder onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
-              <CmTpopfeldkontr onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
-              <CmTpopfeldkontrzaehlFolder onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
-              <CmTpopfeldkontrzaehl onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
-              <CmTpopmassnberFolder onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
-              <CmTpopmassnber onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
-              <CmTpopmassnFolder onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
-              <CmTpopmassn onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
-            </Container>
-          </ErrorBoundary>
-        )
-      }}
-    </Query>
-  )
-}
+                  </InnerTreeContainer>
+                  <CmApFolder onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
+                  <CmAp onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
+                  <CmApberuebersichtFolder onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
+                  <CmApberuebersicht onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
+                  <CmAssozartFolder onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
+                  <CmAssozart onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
+                  <CmApartFolder onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
+                  <CmApart onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
+                  <CmBeobZugeordnetFolder onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
+                  <CmBerFolder onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
+                  <CmBer onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
+                  <CmApberFolder onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
+                  <CmApber onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
+                  <CmErfkritFolder onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
+                  <CmErfkrit onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
+                  <CmZielFolder onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
+                  <CmZielJahrFolder onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
+                  <CmZiel onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
+                  <CmZielBerFolder onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
+                  <CmZielBer onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
+                  <CmPopFolder onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
+                  <CmPop onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
+                  <CmPopmassnberFolder onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
+                  <CmPopmassnber onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
+                  <CmPopberFolder onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
+                  <CmPopber onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
+                  <CmTpopFolder onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
+                  <CmTpop onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
+                  <CmTpopberFolder onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
+                  <CmTpopber onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
+                  <CmBeobZugeordnet onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
+                  <CmBeobnichtbeurteilt onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
+                  <CmBeobNichtZuzuordnen onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
+                  <CmTpopfreiwkontrFolder onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
+                  <CmTpopfreiwkontr onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
+                  <CmTpopfreiwkontrzaehlFolder onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
+                  <CmTpopfreiwkontrzaehl onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
+                  <CmTpopfeldkontrFolder onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
+                  <CmTpopfeldkontr onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
+                  <CmTpopfeldkontrzaehlFolder onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
+                  <CmTpopfeldkontrzaehl onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
+                  <CmTpopmassnberFolder onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
+                  <CmTpopmassnber onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
+                  <CmTpopmassnFolder onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
+                  <CmTpopmassn onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
+                </Container>
+              </ErrorBoundary>
+            )
+          }}
+        </Query>
+      )
+    }}
+  </Query>
 
 export default enhance(TreeContainer)

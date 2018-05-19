@@ -1,0 +1,30 @@
+query Query {
+  user @client {
+    token
+  }
+  tree @client {
+    name
+    activeNodeArray
+    activeNodes
+    activeDataset
+    openNodes
+    apFilter
+    nodeLabelFilter
+  }
+  tree2 @client {
+    name
+    activeNodeArray
+    activeNodes
+    activeDataset
+    openNodes
+    apFilter
+    nodeLabelFilter
+  }
+  urlQuery @client {
+    projekteTabs
+    feldkontrTab
+  }
+  copyingBiotop @client {
+    id
+  }
+}

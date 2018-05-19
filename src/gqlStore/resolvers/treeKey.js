@@ -38,7 +38,7 @@ export default {
       const oldValue = get(data, `${tree}.${key}`)
       // only write if changed
       if (!isEqual(oldValue, value)) {
-        console.log('resolver for tree: writing data:', {tree,key,value})
+        //console.log('resolver for tree: writing data:', {tree,key,value})
         cache.writeData({
           data: {
             [tree]: {
@@ -49,7 +49,7 @@ export default {
               openNodes: key === 'openNodes' ? value : get(data, `${tree}.openNodes`, null),
               apFilter: key === 'apFilter' ? value : get(data, `${tree}.apFilter`, null),
               nodeLabelFilter: key === 'nodeLabelFilter' ? value : get(data, `${tree}.nodeLabelFilter`, null),
-              __typename: 'Tree'
+              __typename: tree === 'tree' ? 'Tree' : 'Tree2'
             }
           } 
         })
