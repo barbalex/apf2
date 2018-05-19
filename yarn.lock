@@ -7871,9 +7871,9 @@ postgraphile-core@4.0.0-beta.7:
     graphile-build "4.0.0-beta.7"
     graphile-build-pg "4.0.0-beta.7"
 
-postgraphile-plugin-connection-filter@1.0.0-beta.7:
-  version "1.0.0-beta.7"
-  resolved "https://registry.yarnpkg.com/postgraphile-plugin-connection-filter/-/postgraphile-plugin-connection-filter-1.0.0-beta.7.tgz#5a15dcaa7de9f40124c6da4f2cb9db9a4688211d"
+postgraphile-plugin-connection-filter@1.0.0-beta.8:
+  version "1.0.0-beta.8"
+  resolved "https://registry.yarnpkg.com/postgraphile-plugin-connection-filter/-/postgraphile-plugin-connection-filter-1.0.0-beta.8.tgz#6211dd12c399a8a5af738248d31354fbe8b1fa80"
 
 postgraphile@4.0.0-beta.9:
   version "4.0.0-beta.9"
@@ -8429,9 +8429,9 @@ react-scrollbar-size@^2.0.2:
     react-event-listener "^0.5.1"
     stifle "^1.0.2"
 
-react-sortable-hoc@0.7.0:
-  version "0.7.0"
-  resolved "https://registry.yarnpkg.com/react-sortable-hoc/-/react-sortable-hoc-0.7.0.tgz#b0c760eb8846021a7a42ed5f0f29061bed0f243d"
+react-sortable-hoc@0.7.2:
+  version "0.7.2"
+  resolved "https://registry.yarnpkg.com/react-sortable-hoc/-/react-sortable-hoc-0.7.2.tgz#175615ead6c2ba254e2ee848b954a117c3b25219"
   dependencies:
     babel-runtime "^6.11.6"
     invariant "^2.2.1"

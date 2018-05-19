@@ -12,7 +12,7 @@
   "devDependencies": {
     "flow-bin": "0.72.0",
     "postgraphile": "4.0.0-beta.9",
-    "postgraphile-plugin-connection-filter": "1.0.0-beta.7",
+    "postgraphile-plugin-connection-filter": "1.0.0-beta.8",
     "react-scripts": "2.0.0-next.66cc7a90",
     "serve": "6.5.7",
     "source-map-explorer": "1.5.0"
@@ -84,7 +84,7 @@
     "react-linkify": "0.2.2",
     "react-loadable": "5.4.0",
     "react-reflex": "2.2.4",
-    "react-sortable-hoc": "0.7.0",
+    "react-sortable-hoc": "0.7.2",
     "react-virtualized": "9.19.0",
     "recompose": "0.27.0",
     "styled-components": "3.2.6",
