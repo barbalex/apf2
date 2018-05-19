@@ -2,7 +2,7 @@
 import { toJS } from 'mobx'
 import isEqual from 'lodash/isEqual'
 
-import isNodeOpen from '../../modules/isNodeOpen'
+import isNodeOpen from '../../components/Projekte/TreeContainer/Tree/isNodeOpen'
 
 export default (store: Object, tree: Object, node: Object): any => {
   if (!node.url) return store.listError(new Error('passed node has no url'))

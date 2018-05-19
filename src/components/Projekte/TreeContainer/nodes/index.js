@@ -2,8 +2,8 @@
 import { toJS } from 'mobx'
 import clone from 'lodash/clone'
 
-import allParentNodesAreOpen from '../../../../modules/allParentNodesAreOpen'
-import allParentNodesAreVisible from '../../../../modules/allParentNodesAreVisible'
+import allParentNodesAreOpen from '../Tree/allParentNodesAreOpen'
+import allParentNodesAreVisible from '../Tree/allParentNodesAreVisible'
 import buildProjektNodes from './projekt'
 import buildApFolderNodes from './apFolder'
 import buildApberuebersichtFolderNodes from './apberuebersichtFolder'

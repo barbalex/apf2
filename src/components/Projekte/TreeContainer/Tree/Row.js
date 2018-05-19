@@ -14,8 +14,8 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight'
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
 import get from 'lodash/get'
 
-import isNodeInActiveNodePath from '../../../../modules/isNodeInActiveNodePath'
-import isNodeOpen from '../../../../modules/isNodeOpen'
+import isNodeInActiveNodePath from './isNodeInActiveNodePath'
+import isNodeOpen from './isNodeOpen'
 
 const singleRowHeight = 23
 const StyledNode = styled.div`

@@ -2,8 +2,8 @@
 import clone from 'lodash/clone'
 import { toJS } from 'mobx'
 
-import isNodeOpen from '../../components/Projekte/TreeContainer/Tree/isNodeOpen'
-import isNodeInActiveNodePath from '../../components/Projekte/TreeContainer/Tree/isNodeInActiveNodePath'
+import isNodeOpen from './isNodeOpen'
+import isNodeInActiveNodePath from './isNodeInActiveNodePath'
 import openNode from './openNode'
 
 export default (store: Object, tree: Object, node: Object): any => {

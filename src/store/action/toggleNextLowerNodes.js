@@ -4,7 +4,7 @@ import {
 } from 'mobx'
 import isEqual from 'lodash/isEqual'
 
-import isNodeOpen from '../../modules/isNodeOpen'
+import isNodeOpen from '../../components/Projekte/TreeContainer/Tree/isNodeOpen'
 import openNode from './openNode'
 
 const openLowerNodes = ({

@@ -1,6 +1,6 @@
 // @flow
 import { toJS } from 'mobx'
-import isNodeOpen from '../../components/Projekte/TreeContainer/Tree/isNodeOpen'
+import isNodeOpen from './isNodeOpen'
 
 export default ({ tree, node }: { tree: Object, node: Object }) => {
   // make sure this node's url is not yet contained
