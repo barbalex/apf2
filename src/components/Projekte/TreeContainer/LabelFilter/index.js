@@ -41,6 +41,8 @@ const enhance = compose(
         filteredTable = activeDataset.table
       }
       tree.updateLabelFilter(filteredTable, event.target.value)
+      // TODO
+      // use array of objects
       /*
       client.mutate({
         mutation: gql`
