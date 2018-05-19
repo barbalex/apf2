@@ -10,6 +10,7 @@ import withHandlers from 'recompose/withHandlers'
 import Switch from '@material-ui/core/Switch'
 import clone from 'lodash/clone'
 import get from 'lodash/get'
+import merge from 'lodash/merge'
 import { Query } from 'react-apollo'
 import gql from "graphql-tag"
 
@@ -346,28 +347,29 @@ const TreeContainer = ({
       if (error) return `Fehler: ${error.message}`
 
       //const tree = get(data1, treeName)
-      //console.log('TreeContainer: data1:', data1)
+      console.log('TreeContainer: data1:', data1)
       const activeNodeArray = get(data1, `${treeName}.activeNodeArray`)
       console.log('TreeContainer: activeNodeArray:', activeNodeArray)
       const openNodes = get(data1, `${treeName}.openNodes`)
-      //console.log('TreeContainer: openNodes:', openNodes)
+      console.log('TreeContainer: openNodes:', openNodes)
       const activeNodes = getActiveNodes(activeNodeArray, store)
-      //console.log('TreeContainer: activeNodes:', activeNodes)
+      console.log('TreeContainer: activeNodes:', activeNodes)
 
       return (
         <Query query={data2Gql} variables={variables(activeNodes)}>
-          {({ loading, error, data, client }) => {
+          {({ loading, error, data: data2, client }) => {
             // do not show loading but rather last state
             //if (loading) return <Container>Lade...</Container>
             if (error) return `Fehler: ${error.message}`
 
+            const data = merge(data1, data2)
             const { activeDataset } = store.tree
             const showApDivToggle = activeDataset
             const deleteDatasetModalIsVisible = !!store.datasetToDelete.id
 
             const nodes = buildNodes({ tree, data })
             const token = get(data, 'user.token', null)
-            //console.log('TreeContainer: nodes:', nodes)
+            console.log('TreeContainer: nodes:', nodes)
 
             // if activeNodeArray.length === 1
             // and there is only one projekte
