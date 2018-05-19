@@ -8,8 +8,12 @@ import FormControl from '@material-ui/core/FormControl'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
+import { Query } from 'react-apollo'
+import get from 'lodash/get'
+import isEqual from 'lodash/isEqual'
 
 import tables from '../../../../modules/tables'
+import dataGql from './data.graphql'
 
 const StyledFormControl = styled(FormControl)`
   padding-right: 0.8em !important;
@@ -26,7 +30,16 @@ const StyledInput = styled(Input)`
 const enhance = compose(
   inject('store'),
   withHandlers({
-    onChange: ({ store, tree }: { store: Object, tree: Object }) => event => {
+    onChange: ({
+      store,
+      tree
+    }: {
+      store: Object,
+      tree: Object
+    }) => ({
+      event,
+      client
+    }) => {
       const { activeDataset } = tree
       let filteredTable = ''
 
@@ -60,39 +73,55 @@ const LabelFilter = ({
   tree,
   treeName,
   onChange,
+  nodes,
 }: {
   store: Object,
   tree: Object,
   treeName: String,
   onChange: () => void,
-}) => {
-  const { activeDataset } = tree
-  let filteredTable = ''
+  nodes: Array<Object>
+}) =>
+  <Query query={dataGql} >
+    {({ error, data, client }) => {
+      if (error) return `Fehler: ${error.message}`
 
-  if (activeDataset && activeDataset.folder) {
-    filteredTable = activeDataset.folder
-  } else if (activeDataset && activeDataset.table) {
-    filteredTable = activeDataset.table
-  }
-  let labelText = 'filtern'
-  let filterValue = ''
-  if (filteredTable) {
-    filterValue = tree.nodeLabelFilter.get(filteredTable) || ''
-    const table = tables.find(
-      (t: { label: string }) => t.table === filteredTable
-    )
-    const tableLabel = table ? table.label : null
-    if (tableLabel) {
-      labelText = `${tableLabel} filtern`
-    }
-  }
+      const nodeLabelFilter = get(data, `${treeName}.nodeLabelFilter`)
+      const activeNodeArray = get(data, `${treeName}.activeNodeArray`)
+      const activeNode = nodes.find(n => isEqual(n.url, activeNodeArray))
+      console.log('LabelFilter: ', { nodeLabelFilter, activeNodeArray, activeNode, nodes })
 
-  return (
-    <StyledFormControl fullWidth>
-      <InputLabel htmlFor={labelText}>{labelText}</InputLabel>
-      <StyledInput id={labelText} value={filterValue} onChange={onChange} />
-    </StyledFormControl>
-  )
-}
+      const { activeDataset } = tree
+      let filteredTable = ''
+
+      if (activeDataset && activeDataset.folder) {
+        filteredTable = activeDataset.folder
+      } else if (activeDataset && activeDataset.table) {
+        filteredTable = activeDataset.table
+      }
+      let labelText = 'filtern'
+      let filterValue = ''
+      if (filteredTable) {
+        filterValue = tree.nodeLabelFilter.get(filteredTable) || ''
+        const table = tables.find(
+          (t: { label: string }) => t.table === filteredTable
+        )
+        const tableLabel = table ? table.label : null
+        if (tableLabel) {
+          labelText = `${tableLabel} filtern`
+        }
+      }
+
+      return (
+        <StyledFormControl fullWidth>
+          <InputLabel htmlFor={labelText}>{labelText}</InputLabel>
+          <StyledInput
+            id={labelText}
+            value={filterValue}
+            onChange={(event) => onChange({ event, client })}
+          />
+        </StyledFormControl>
+      )
+    }}
+  </Query>
 
 export default enhance(LabelFilter)

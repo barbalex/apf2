@@ -54,7 +54,7 @@ export default (store: Object, tree: Object): void => {
         return store.listError(
           new Error('nodeLabelFilter cant be updated: no table passed')
         )
-      }
+      } 
       tree.nodeLabelFilter.set(table, value)
     }),
     // action when user clicks on a node in the tree

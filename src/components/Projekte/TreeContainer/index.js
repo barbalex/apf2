@@ -426,7 +426,7 @@ const TreeContainer = ({
                     <DeleteDatasetModal tree={tree} token={token} />
                   )}
                   <LabelFilterContainer>
-                    <LabelFilter tree={tree} treeName={treeName} />
+                    <LabelFilter tree={tree} treeName={treeName} nodes={nodes} />
                     {showApDivToggle && (
                       <NurApDiv>
                         <Label label="nur AP" />
