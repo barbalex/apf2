@@ -19,7 +19,7 @@ export default ({
   const projIndex = findIndex(projektNodes, {
     id: projId,
   })
-  const nodeLabelFilterString = tree.nodeLabelFilter.get('ap')
+  const nodeLabelFilterString = get(tree.nodeLabelFilter.find(f => f.table === 'ap'), 'value')
 
   const apNodesLength = aps
     .filter(el => el.projId === projId)

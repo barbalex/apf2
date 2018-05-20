@@ -26,7 +26,7 @@ export default ({
   const apIndex = findIndex(apNodes, {
     id: apId
   })
-  const nodeLabelFilterString = tree.nodeLabelFilter.get('apart')
+  const nodeLabelFilterString = get(tree.nodeLabelFilter.find(f => f.table === 'apart'), 'value')
 
   const apartNodesLength = aparts
     .filter(el => el.apId === apId)

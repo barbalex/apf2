@@ -13,8 +13,7 @@ export default ({
   projektNodes: Array<Object>,
   projId: String,
 }): Array<Object> => {
-  const { nodeLabelFilter } = tree
-  const nodeLabelFilterString = nodeLabelFilter.get('apberuebersicht')
+  const nodeLabelFilterString = get(tree.nodeLabelFilter.find(f => f.table === 'apberuebersicht'), 'value')
   const apberuebersichts = get(data, 'apberuebersichts.nodes', [])
 
   // fetch sorting indexes of parents

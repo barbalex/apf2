@@ -26,7 +26,7 @@ export default ({
   const apIndex = findIndex(apNodes, {
     id: apId
   })
-  const nodeLabelFilterString = tree.nodeLabelFilter.get('erfkrit')
+  const nodeLabelFilterString = get(tree.nodeLabelFilter.find(f => f.table === 'erfkrit'), 'value')
 
   const erfkritNodesLength = erfkrits
     .filter(el => el.apId === apId)

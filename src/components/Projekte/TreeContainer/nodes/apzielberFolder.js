@@ -36,7 +36,7 @@ export default ({
   })
   const zieljahrIndex = findIndex(apzieljahrFolderNodes, el => el.jahr === zielJahr)
   const zielIndex = findIndex(apzielNodes, el => el.id === zielId)
-  const nodeLabelFilterString = tree.nodeLabelFilter.get('zielber')
+  const nodeLabelFilterString = get(tree.nodeLabelFilter.find(f => f.table === 'zielber'), 'value')
   const zielberNodesLength = zielbers
     .filter(el => el.zielId === zielId)
     // filter by nodeLabelFilter

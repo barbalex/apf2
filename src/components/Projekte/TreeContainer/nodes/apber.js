@@ -23,7 +23,7 @@ export default ({
     id: projId,
   })
   const apIndex = findIndex(apNodes, { id: apId })
-  const nodeLabelFilterString = tree.nodeLabelFilter.get('apber')
+  const nodeLabelFilterString = get(tree.nodeLabelFilter.find(f => f.table === 'apber'), 'value')
 
   // map through all elements and create array of nodes
   const nodes = apbers

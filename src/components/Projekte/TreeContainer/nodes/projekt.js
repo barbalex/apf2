@@ -9,7 +9,7 @@ export default ({
   tree: Object,
 }): Array<Object> => {
   const { nodeLabelFilter } = tree
-  const nodeLabelFilterString = nodeLabelFilter.get('projekt')
+  const nodeLabelFilterString = get(nodeLabelFilter.find(f => f.table === 'projekt'), 'value')
   const projekts = get(data, 'projekts.nodes', [])
 
   // map through all elements and create array of nodes

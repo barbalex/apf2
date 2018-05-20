@@ -65,9 +65,9 @@ const compare = (a, b) => {
 }
 
 const allParentNodesAreOpenAndVisible = (
-    nodes: Array < Object > ,
-    nodeUrl: Array < string > ,
-    openNodes: Array < Array < string >>
+    nodes: Array<Object>,
+    nodeUrl: Array<String>,
+    openNodes: Array<Array<String>>
   ): boolean =>
   allParentNodesAreVisible(nodes, nodeUrl) &&
   allParentNodesAreOpen(openNodes, nodeUrl)

@@ -14,13 +14,12 @@ export default ({
   projId: String,
 }): Array<Object> => {
   const apberuebersichts = get(data, 'apberuebersichts.nodes', [])
-  console.log('apberuebersichtFolder:', {apberuebersichts,data,tree,projektNodes,projId})
 
   // fetch sorting indexes of parents
   const projIndex = findIndex(projektNodes, {
     id: projId,
   })
-  const nodeLabelFilterString = tree.nodeLabelFilter.get('apberuebersicht')
+  const nodeLabelFilterString = get(tree.nodeLabelFilter.find(f => f.table === 'apberuebersicht'), 'value')
 
   const apberuebersichtNodesLength = apberuebersichts
     .filter(el => el.projId === projId)
