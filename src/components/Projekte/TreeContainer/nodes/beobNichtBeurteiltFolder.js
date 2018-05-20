@@ -27,7 +27,7 @@ export default ({
   const apIndex = findIndex(apNodes, {
     id: apId
   })
-  const nodeLabelFilterString = tree.nodeLabelFilter.get('beobNichtBeurteilt')
+  const nodeLabelFilterString = get(tree.nodeLabelFilter.find(f => f.table === 'beobNichtBeurteilt'), 'value')
 
   const beobNichtBeurteiltNodesLength = beobNichtBeurteilts
     .filter(el => el.apId === apId)

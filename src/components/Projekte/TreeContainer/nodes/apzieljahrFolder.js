@@ -27,7 +27,7 @@ export default ({
   const apIndex = findIndex(apNodes, {
     id: apId
   })
-  const nodeLabelFilterString = tree.nodeLabelFilter.get('ziel')
+  const nodeLabelFilterString = get(tree.nodeLabelFilter.find(f => f.table === 'ziel'), 'value')
 
   const zieljahre = ziels
     .filter(el => el.apId === apId)

@@ -26,7 +26,7 @@ export default ({
   const apIndex = findIndex(apNodes, {
     id: apId
   })
-  const nodeLabelFilterString = tree.nodeLabelFilter.get('assozart')
+  const nodeLabelFilterString = get(tree.nodeLabelFilter.find(f => f.table === 'assozart'), 'value')
 
   const assozartNodesLength = assozarts
     .filter(el => el.apId === apId)
