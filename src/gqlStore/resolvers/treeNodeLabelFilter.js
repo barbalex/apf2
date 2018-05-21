@@ -90,7 +90,6 @@ export default {
         const oldNodeLabelFilter = get(data, `${tree}.nodeLabelFilter`)
         const newNodeLabelFilter = clone(oldNodeLabelFilter)
         newNodeLabelFilter[key] = value
-        console.log('resolver for treeNodeLabelFilter: writing data:', {tree,key,value})
         cache.writeData({
           data: {
             [tree]: {
