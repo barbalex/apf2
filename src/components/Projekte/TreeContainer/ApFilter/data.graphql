@@ -1,0 +1,10 @@
+query Query {
+  tree @client {
+    name
+    apFilter
+  }
+  tree2 @client {
+    name
+    apFilter
+  }
+}

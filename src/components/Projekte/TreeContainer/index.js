@@ -20,6 +20,7 @@ import data2Gql from './data2.graphql'
 import buildNodes from './nodes'
 import Label from '../../shared/Label'
 import LabelFilter from './LabelFilter'
+import ApFilter from './ApFilter'
 import Tree from './Tree'
 import CmApFolder from './contextmenu/ApFolder'
 import CmAp from './contextmenu/Ap'
@@ -432,16 +433,7 @@ const TreeContainer = ({
                   )}
                   <LabelFilterContainer>
                     <LabelFilter tree={tree} treeName={treeName} nodes={nodes} />
-                    {showApDivToggle && (
-                      <NurApDiv>
-                        <Label label="nur AP" />
-                        <StyledSwitch
-                          checked={tree.apFilter}
-                          onChange={tree.toggleApFilter}
-                          color="primary"
-                        />
-                      </NurApDiv>
-                    )}
+                    {showApDivToggle && <ApFilter />}
                   </LabelFilterContainer>
                   <InnerTreeContainer
                     // $FlowIssue
