@@ -347,9 +347,9 @@ const TreeContainer = ({
       if (error) return `Fehler: ${error.message}`
 
       const activeNodeArray = get(data1, `${treeName}.activeNodeArray`)
-      console.log('TreeContainer: activeNodeArray:', activeNodeArray)
+      //console.log('TreeContainer: activeNodeArray:', activeNodeArray)
       const openNodes = get(data1, `${treeName}.openNodes`)
-      console.log('TreeContainer: openNodes:', openNodes)
+      //console.log('TreeContainer: openNodes:', openNodes)
       const activeNodes = getActiveNodes(activeNodeArray, store)
 
       return (
@@ -366,7 +366,7 @@ const TreeContainer = ({
 
             const nodes = buildNodes({ data, treeName })
             const token = get(data, 'user.token', null)
-            console.log('TreeContainer: nodes:', nodes)
+            //console.log('TreeContainer: nodes:', nodes)
 
             // if activeNodeArray.length === 1
             // and there is only one projekte

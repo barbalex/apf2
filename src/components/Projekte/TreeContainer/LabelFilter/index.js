@@ -29,32 +29,55 @@ const StyledInput = styled(Input)`
 
 const enhance = compose(
   withHandlers({
-    onChange: ({ tree, treeName }: { tree: Object, treeName: String }) => ({
+    onChange: ({
+      tree,
+      treeName,
+    }: {
+      tree: Object,
+      treeName: String,
+    }) => ({
       event,
-      client
+      client,
+      tableName
     }) => {
-      const { activeDataset } = tree
-      let filteredTable = ''
-
-      if (activeDataset && activeDataset.folder) {
-        filteredTable = activeDataset.folder
-      } else if (activeDataset && activeDataset.table) {
-        filteredTable = activeDataset.table
-      }
-      //tree.updateLabelFilter(filteredTable, event.target.value)
-      // TODO
-      // use array of objects
-      
       client.mutate({
         mutation: gql`
           mutation setTreeNodeLabelFilterKey($value: String!, $tree: String!, $key: String!) {
-            setTreeKey(tree: $tree, key: $key, value: $value) @client {
+            setTreeNodeLabelFilterKey(tree: $tree, key: $key, value: $value) @client {
               tree @client {
-              name
-              activeNodeArray
-              openNodes
-              apFilter
-              nodeLabelFilter
+                name
+                activeNodeArray
+                openNodes
+                apFilter
+                nodeLabelFilter {
+                  ap
+                  pop
+                  tpop
+                  tpopkontr
+                  tpopfeldkontr
+                  tpopfreiwkontr
+                  tpopkontrzaehl
+                  tpopmassn
+                  ziel
+                  zielber
+                  erfkrit
+                  apber
+                  apberuebersicht
+                  ber
+                  idealbiotop
+                  assozart
+                  popber
+                  popmassnber
+                  tpopber
+                  tpopmassnber
+                  apart
+                  projekt
+                  beob
+                  beobprojekt
+                  adresse
+                  gemeinde
+                  __typename: NodeLabelFilter
+                }
                 __typename: Tree
               }
             }
@@ -63,7 +86,7 @@ const enhance = compose(
         variables: {
           value: event.target.value,
           tree: treeName,
-          key: filteredTable
+          key: tableName
         }
       })
     },
@@ -85,7 +108,6 @@ const LabelFilter = ({
     {({ error, data, client }) => {
       if (error) return `Fehler: ${error.message}`
 
-      const nodeLabelFilter = get(data, `${treeName}.nodeLabelFilter`)
       const activeNodeArray = get(data, `${treeName}.activeNodeArray`)
       const activeNode = nodes.find(n => isEqual(n.url, activeNodeArray))
       // name it projekt
@@ -94,12 +116,11 @@ const LabelFilter = ({
       if (activeNode) {
         tableName = activeNode.nodeType === 'table' ? activeNode.menuType : activeNode.menuType.replace('Folder', '')
       }
-      console.log('LabelFilter: ', { nodeLabelFilter, activeNodeArray, activeNode, nodes, tableName })
 
       let labelText = 'filtern'
       let filterValue = ''
       if (tableName) {
-        filterValue = get(nodeLabelFilter, tableName, '')
+        filterValue = get(data, `${treeName}.nodeLabelFilter.${tableName}`)
         const table = tables.find(
           (t: { label: string }) => t.table === tableName
         )
@@ -108,6 +129,7 @@ const LabelFilter = ({
           labelText = `${tableLabel} filtern`
         }
       }
+      console.log('LabelFilter: ', { activeNodeArray, activeNode, nodes, tableName, filterValue, labelText })
 
       return (
         <StyledFormControl fullWidth>
@@ -115,7 +137,7 @@ const LabelFilter = ({
           <StyledInput
             id={labelText}
             value={filterValue}
-            onChange={(event) => onChange({ event, client })}
+            onChange={(event) => onChange({ event, client, tableName })}
           />
         </StyledFormControl>
       )

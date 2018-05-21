@@ -230,7 +230,7 @@ const Row = ({
 }) => {
   const node = nodes[index]
   const tree2 = get(data, treeName)
-  console.log('Row:', { data, nodes })
+  //console.log('Row:', { data, nodes })
   const openNodes = get(data, `${treeName}.openNodes`)
   const activeNodeArray = get(data, `${treeName}.activeNodeArray`)
   const onClickNode = event => toggleNode({ tree: tree2, node, client })
