@@ -29,13 +29,7 @@ const StyledInput = styled(Input)`
 
 const enhance = compose(
   withHandlers({
-    onChange: ({
-      tree,
-      treeName,
-    }: {
-      tree: Object,
-      treeName: String,
-    }) => ({
+    onChange: ({ treeName }: { treeName: String }) => ({
       event,
       client,
       tableName
@@ -130,12 +124,10 @@ const enhance = compose(
 )
 
 const LabelFilter = ({
-  tree,
   treeName,
   onChange,
   nodes,
 }: {
-  tree: Object,
   treeName: String,
   onChange: () => void,
   nodes: Array<Object>

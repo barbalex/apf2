@@ -7,7 +7,6 @@ import { observer, inject } from 'mobx-react'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
-import Switch from '@material-ui/core/Switch'
 import clone from 'lodash/clone'
 import get from 'lodash/get'
 import merge from 'lodash/merge'
@@ -18,7 +17,6 @@ import variables from './variables'
 import data1Gql from './data1.graphql'
 import data2Gql from './data2.graphql'
 import buildNodes from './nodes'
-import Label from '../../shared/Label'
 import LabelFilter from './LabelFilter'
 import ApFilter from './ApFilter'
 import Tree from './Tree'
@@ -94,16 +92,6 @@ const LabelFilterContainer = styled.div`
   justify-content: space-between;
   padding-left: 12px;
   padding-top: 5px;
-`
-const NurApDiv = styled.div`
-  display: flex;
-  flex-direction: column;
-  padding-right: 5px;
-  min-width: 40px;
-`
-const StyledSwitch = styled(Switch)`
-  margin-left: -13px;
-  margin-top: -18px;
 `
 const InnerTreeContainer = styled.div`
   height: 100%;
@@ -367,7 +355,8 @@ const TreeContainer = ({
 
             const nodes = buildNodes({ data, treeName })
             const token = get(data, 'user.token', null)
-            //console.log('TreeContainer: nodes:', nodes)
+            const apFilter = get(data, `${treeName}.apFilter`)
+            console.log('TreeContainer: apFilter:', apFilter)
 
             // if activeNodeArray.length === 1
             // and there is only one projekte
@@ -432,8 +421,8 @@ const TreeContainer = ({
                     <DeleteDatasetModal tree={tree} token={token} />
                   )}
                   <LabelFilterContainer>
-                    <LabelFilter tree={tree} treeName={treeName} nodes={nodes} />
-                    {showApDivToggle && <ApFilter />}
+                    <LabelFilter treeName={treeName} nodes={nodes} />
+                    {showApDivToggle && <ApFilter treeName={treeName} />}
                   </LabelFilterContainer>
                   <InnerTreeContainer
                     // $FlowIssue
@@ -443,7 +432,8 @@ const TreeContainer = ({
                       client={client}
                       treeName={treeName}
                       data={data}
-                      tree={tree} token={token}
+                      tree={tree}
+                      token={token}
                       projektLoading={store.table.projektLoading}
                       nodes={nodes}
                       mapBeobZugeordnetVisible={store.map.activeApfloraLayers.includes(

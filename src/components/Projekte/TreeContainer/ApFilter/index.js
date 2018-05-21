@@ -50,7 +50,7 @@ const enhance = compose(
   })
 )
 
-const TreeContainer = ({
+const ApFilter = ({
   treeName,
   onChange,
 }: {
@@ -62,7 +62,7 @@ const TreeContainer = ({
       if (error) return `Fehler: ${error.message}`
 
       const apFilter = get(data, `${treeName}.apFilter`)
-      //console.log('TreeContainer: openNodes:', openNodes)
+      console.log('ApFilter: treeName:', treeName)
 
       return (
         <ErrorBoundary>
@@ -79,4 +79,4 @@ const TreeContainer = ({
     }}
   </Query>
 
-export default enhance(TreeContainer)
+export default enhance(ApFilter)

@@ -18,6 +18,7 @@ export default ({
   const apFilter = get(data, `${treeName}.apFilter`)
   const nodeLabelFilterString = get(data, `${treeName}.nodeLabelFilter.ap`)
   const aps = get(data, 'aps.nodes', [])
+  console.log('nodes.ap:', {treeName,apFilter})
 
   // fetch sorting indexes of parents
   const projIndex = findIndex(projektNodes, {

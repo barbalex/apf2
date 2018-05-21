@@ -32,6 +32,7 @@ export default {
       const oldValue = get(data, `${tree}.${key}`)
       // only write if changed
       if (!isEqual(oldValue, value)) {
+        console.log('resolver setTreeKey:', {tree, key, value})
         cache.writeData({
           data: {
             [tree]: {
