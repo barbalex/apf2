@@ -31,7 +31,8 @@ export default ({
   const apIndex = findIndex(apNodes, { id: apId })
   const popIndex = findIndex(popNodes, { id: popId })
   const tpopIndex = findIndex(tpopNodes, { id: tpopId })
-  const nodeLabelFilterString = tree.nodeLabelFilter.get('tpopfreiwkontr')
+  const nodeLabelFilterString = get(tree.nodeLabelFilter
+    .find(f => f.table === 'tpopfreiwkontr'), 'value')
 
   const childrenLength = get(data, 'tpopfreiwkontrs.nodes', [])
     .filter(el => el.tpopId === tpopId)

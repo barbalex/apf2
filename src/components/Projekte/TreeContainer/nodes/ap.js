@@ -16,7 +16,8 @@ export default ({
   projId: String,
 }): Array<Object> => {
   const { nodeLabelFilter, apFilter } = tree
-  const nodeLabelFilterString = get(nodeLabelFilter.find(f => f.table === 'ap'), 'value')
+  const nodeLabelFilterString = get(nodeLabelFilter
+    .find(f => f.table === 'ap'), 'value')
   const aps = get(data, 'aps.nodes', [])
 
   // fetch sorting indexes of parents

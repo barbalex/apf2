@@ -34,8 +34,8 @@ export default ({
   const apIndex = findIndex(apNodes, { id: apId })
   const popIndex = findIndex(popNodes, { id: popId })
   const tpopIndex = findIndex(tpopNodes, { id: tpopId })
-  //console.log({ popNodes, popIndex, popId })
-  const nodeLabelFilterString = tree.nodeLabelFilter.get('tpopber')
+  const nodeLabelFilterString = get(tree.nodeLabelFilter
+    .find(f => f.table === 'tpopber'), 'value')
 
   // map through all elements and create array of nodes
   const nodes = get(data, 'tpopbers.nodes', [])

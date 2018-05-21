@@ -27,7 +27,8 @@ export default ({
   const apIndex = findIndex(apNodes, {
     id: apId
   })
-  const nodeLabelFilterString = tree.nodeLabelFilter.get('beobNichtZuzuordnen')
+  const nodeLabelFilterString = get(tree.nodeLabelFilter
+    .find(f => f.table === 'beobNichtZuzuordnen'), 'value')
 
   const beobNichtZuzuordnenNodesLength = beobNichtZuzuordnens
     .filter(el => el.apId === apId)
