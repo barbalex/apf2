@@ -19,14 +19,12 @@ export default {
                 activeNodeArray
                 openNodes
                 apFilter
-                nodeLabelFilter
               }
               tree2 @client {
                 name
                 activeNodeArray
                 openNodes
                 apFilter
-                nodeLabelFilter
               }
             }
           `
@@ -43,7 +41,6 @@ export default {
               activeNodeArray: key === 'activeNodeArray' ? value : get(data, `${tree}.activeNodeArray`, null),
               openNodes: key === 'openNodes' ? value : get(data, `${tree}.openNodes`, null),
               apFilter: key === 'apFilter' ? value : get(data, `${tree}.apFilter`, null),
-              nodeLabelFilter: key === 'nodeLabelFilter' ? value : get(data, `${tree}.nodeLabelFilter`, null),
               __typename: tree === 'tree' ? 'Tree' : 'Tree2'
             }
           } 

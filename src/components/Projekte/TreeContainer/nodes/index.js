@@ -1,6 +1,6 @@
 // @flow
-import { toJS } from 'mobx'
 import clone from 'lodash/clone'
+import get from 'lodash/get'
 
 import allParentNodesAreOpen from '../Tree/allParentNodesAreOpen'
 import allParentNodesAreVisible from '../Tree/allParentNodesAreVisible'
@@ -73,13 +73,14 @@ const allParentNodesAreOpenAndVisible = (
   allParentNodesAreOpen(openNodes, nodeUrl)
 
 export default ({
-  tree,
   data,
+  treeName
 }: {
-  tree: Object,
   data: Object,
+  treeName: String,
 }): Array < Object > => {
-  const openNodes = toJS(tree.openNodes)
+  const tree = get(data, treeName)
+  const openNodes = tree.openNodes
 
   const projektNodes = buildProjektNodes({
     data,

@@ -346,14 +346,11 @@ const TreeContainer = ({
       //if (loading) return <Container>Lade...</Container>
       if (error) return `Fehler: ${error.message}`
 
-      //const tree = get(data1, treeName)
-      //console.log('TreeContainer: data1:', data1)
       const activeNodeArray = get(data1, `${treeName}.activeNodeArray`)
       console.log('TreeContainer: activeNodeArray:', activeNodeArray)
       const openNodes = get(data1, `${treeName}.openNodes`)
       console.log('TreeContainer: openNodes:', openNodes)
       const activeNodes = getActiveNodes(activeNodeArray, store)
-      //console.log('TreeContainer: activeNodes:', activeNodes)
 
       return (
         <Query query={data2Gql} variables={variables(activeNodes)}>
@@ -367,7 +364,7 @@ const TreeContainer = ({
             const showApDivToggle = activeDataset
             const deleteDatasetModalIsVisible = !!store.datasetToDelete.id
 
-            const nodes = buildNodes({ tree, data })
+            const nodes = buildNodes({ data, treeName })
             const token = get(data, 'user.token', null)
             console.log('TreeContainer: nodes:', nodes)
 
