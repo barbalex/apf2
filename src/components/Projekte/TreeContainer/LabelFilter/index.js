@@ -165,7 +165,6 @@ const LabelFilter = ({
           labelText = `${tableLabel} filtern`
         }
       }
-      console.log('LabelFilter: ', { activeNodeArray, activeNode, nodes, tableName, filterValue, labelText })
 
       return (
         <StyledFormControl fullWidth>
