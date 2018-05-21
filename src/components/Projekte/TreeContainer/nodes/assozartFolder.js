@@ -4,19 +4,19 @@ import get from 'lodash/get'
 
 export default ({
   data,
-  tree,
+  treeName,
   projektNodes,
   projId,
   apNodes,
   apId,
 }: {
   data: Object,
-  tree: Object,
-  projektNodes: Array < Object > ,
+  treeName: String,
+  projektNodes: Array<Object>,
   projId: String,
-  apNodes: Array < Object > ,
+  apNodes: Array<Object>,
   apId: String,
-}): Array < Object > => {
+}): Array<Object> => {
   const assozarts = get(data, 'assozarts.nodes', [])
 
   // fetch sorting indexes of parents
@@ -26,8 +26,7 @@ export default ({
   const apIndex = findIndex(apNodes, {
     id: apId
   })
-  const nodeLabelFilterString = get(tree.nodeLabelFilter
-    .find(f => f.table === 'assozart'), 'value')
+  const nodeLabelFilterString = get(data, `${treeName}.nodeLabelFilter.assozart`)
 
   const assozartNodesLength = assozarts
     .filter(el => el.apId === apId)
@@ -41,7 +40,7 @@ export default ({
       return true
     }).length
   let message = assozartNodesLength
-  if (tree.nodeLabelFilter.get('assozart')) {
+  if (nodeLabelFilterString) {
     message = `${assozartNodesLength} gefiltert`
   }
 

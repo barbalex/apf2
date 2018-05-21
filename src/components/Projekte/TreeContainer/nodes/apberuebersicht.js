@@ -4,16 +4,16 @@ import get from 'lodash/get'
 
 export default ({
   data,
-  tree,
+  treeName,
   projektNodes,
   projId,
 }: {
   data: Object,
-  tree: Object,
+  treeName: String,
   projektNodes: Array<Object>,
   projId: String,
 }): Array<Object> => {
-  const nodeLabelFilterString = get(tree.nodeLabelFilter.find(f => f.table === 'apberuebersicht'), 'value')
+  const nodeLabelFilterString = get(data, `${treeName}.nodeLabelFilter.apberuebersicht`)
   const apberuebersichts = get(data, 'apberuebersichts.nodes', [])
 
   // fetch sorting indexes of parents

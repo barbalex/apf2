@@ -5,19 +5,19 @@ import format from 'date-fns/format'
 
 export default ({
   data,
-  tree,
+  treeName,
   projektNodes,
   projId,
   apNodes,
   apId,
 }: {
   data: Object,
-  tree: Object,
-  projektNodes: Array < Object > ,
+  treeName: String,
+  projektNodes: Array<Object>,
   projId: String,
-  apNodes: Array < Object > ,
+  apNodes: Array<Object>,
   apId: String,
-}): Array < Object > => {
+}): Array<Object> => {
   const beobNichtZuzuordnens = get(data, 'beobNichtZuzuordnens.nodes', [])
 
   // fetch sorting indexes of parents
@@ -27,8 +27,7 @@ export default ({
   const apIndex = findIndex(apNodes, {
     id: apId
   })
-  const nodeLabelFilterString = get(tree.nodeLabelFilter
-    .find(f => f.table === 'beobNichtZuzuordnen'), 'value')
+  const nodeLabelFilterString = get(data, `${treeName}.nodeLabelFilter.beobNichtZuzuordnen`)
 
   const beobNichtZuzuordnenNodesLength = beobNichtZuzuordnens
     .filter(el => el.apId === apId)
@@ -44,7 +43,7 @@ export default ({
       return true
     }).length
   let message = beobNichtZuzuordnenNodesLength
-  if (tree.nodeLabelFilter.get('beobNichtZuzuordnen')) {
+  if (nodeLabelFilterString) {
     message = `${beobNichtZuzuordnenNodesLength} gefiltert`
   }
 

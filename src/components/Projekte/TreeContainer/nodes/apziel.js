@@ -6,7 +6,7 @@ import compareLabel from './compareLabel'
 
 export default ({
   data,
-  tree,
+  treeName,
   projektNodes,
   apNodes,
   projId,
@@ -15,7 +15,7 @@ export default ({
   apzieljahrFolderNodes
 }: {
   data: Object,
-  tree: Object,
+  treeName: String,
   projektNodes: Array < Object > ,
   apNodes: Array < Object > ,
   projId: String,
@@ -31,7 +31,7 @@ export default ({
   const apIndex = findIndex(apNodes, {
     id: apId
   })
-  const nodeLabelFilterString = get(tree.nodeLabelFilter.find(f => f.table === 'ziel'), 'value')
+  const nodeLabelFilterString = get(data, `${treeName}.nodeLabelFilter.ziel`)
   const zieljahrIndex = findIndex(apzieljahrFolderNodes, el => el.jahr === jahr)
 
   // map through all elements and create array of nodes

@@ -4,14 +4,14 @@ import get from 'lodash/get'
 
 export default ({
   data,
-  tree,
+  treeName,
   projektNodes,
   projId,
   apNodes,
   apId,
 }: {
   data: Object,
-  tree: Object,
+  treeName: String,
   projektNodes: Array < Object > ,
   projId: String,
   apNodes: Array < Object > ,
@@ -26,7 +26,7 @@ export default ({
   const apIndex = findIndex(apNodes, {
     id: apId
   })
-  const nodeLabelFilterString = get(tree.nodeLabelFilter.find(f => f.table === 'apber'), 'value')
+  const nodeLabelFilterString = get(data, `${treeName}.nodeLabelFilter.apber`)
 
   const apberNodesLength = apbers
     .filter(el => el.apId === apId)
@@ -40,7 +40,7 @@ export default ({
       return true
     }).length
   let message = apberNodesLength
-  if (tree.nodeLabelFilter.get('apber')) {
+  if (nodeLabelFilterString) {
     message = `${apberNodesLength} gefiltert`
   }
 

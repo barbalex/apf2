@@ -3,7 +3,7 @@ import get from 'lodash/get'
 
 export default ({
   data,
-  tree,
+  treeName,
   projektNodes,
   apNodes,
   popNodes,
@@ -12,7 +12,7 @@ export default ({
   popId,
 }: {
   data: Object,
-  tree: Object,
+  treeName: String,
   projektNodes: Array<Object>,
   apNodes: Array<Object>,
   popNodes: Array<Object>,
@@ -26,8 +26,7 @@ export default ({
   })
   const apIndex = findIndex(apNodes, { id: apId })
   const popIndex = findIndex(popNodes, { id: popId })
-  const nodeLabelFilterString = get(tree.nodeLabelFilter
-    .find(f => f.table === 'popmassnber'), 'value')
+  const nodeLabelFilterString = get(data, `${treeName}.nodeLabelFilter.popmassnber`)
 
   const childrenLength = get(data, 'popmassnbers.nodes', [])
     .filter(el => el.popId === popId)
@@ -46,7 +45,7 @@ export default ({
     }).length
 
   let message = childrenLength
-  if (tree.nodeLabelFilter.get('popmassnber')) {
+  if (nodeLabelFilterString) {
     message = `${childrenLength} gefiltert`
   }
 

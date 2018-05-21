@@ -5,7 +5,7 @@ import sortBy from 'lodash/sortBy'
 
 export default ({
   data,
-  tree,
+  treeName,
   projektNodes,
   apNodes,
   popNodes,
@@ -16,7 +16,7 @@ export default ({
   tpopId,
 }: {
   data: Object,
-  tree: Object,
+  treeName: String,
   projektNodes: Array<Object>,
   apNodes: Array<Object>,
   popNodes: Array<Object>,
@@ -33,8 +33,7 @@ export default ({
   const apIndex = findIndex(apNodes, { id: apId })
   const popIndex = findIndex(popNodes, { id: popId })
   const tpopIndex = findIndex(tpopNodes, { id: tpopId })
-  const nodeLabelFilterString = get(tree.nodeLabelFilter
-    .find(f => f.table === 'tpopfeldkontr'), 'value')
+  const nodeLabelFilterString = get(data, `${treeName}.nodeLabelFilter.tpopfeldkontr`)
 
   // map through all elements and create array of nodes
   let nodes = get(data, 'tpopfeldkontrs.nodes', [])

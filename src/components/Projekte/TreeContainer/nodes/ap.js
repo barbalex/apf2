@@ -6,18 +6,17 @@ import compareLabel from './compareLabel'
 
 export default ({
   data,
-  tree,
+  treeName,
   projektNodes,
   projId,
 }: {
   data: Object,
-  tree: Object,
+  treeName: String,
   projektNodes: Array<Object>,
   projId: String,
 }): Array<Object> => {
-  const { nodeLabelFilter, apFilter } = tree
-  const nodeLabelFilterString = get(nodeLabelFilter
-    .find(f => f.table === 'ap'), 'value')
+  const apFilter = get(data, `${treeName}.apFilter`)
+  const nodeLabelFilterString = get(data, `${treeName}.nodeLabelFilter.ap`)
   const aps = get(data, 'aps.nodes', [])
 
   // fetch sorting indexes of parents

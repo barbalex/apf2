@@ -5,19 +5,19 @@ import union from 'lodash/union'
 
 export default ({
   data,
-  tree,
+  treeName,
   projektNodes,
   projId,
   apNodes,
   apId,
 }: {
   data: Object,
-  tree: Object,
-  projektNodes: Array < Object > ,
+  treeName: String,
+  projektNodes: Array<Object>,
   projId: String,
-  apNodes: Array < Object > ,
+  apNodes: Array<Object>,
   apId: String,
-}): Array < Object > => {
+}): Array<Object> => {
   const ziels = get(data, 'ziels.nodes', [])
 
   // fetch sorting indexes of parents
@@ -27,7 +27,7 @@ export default ({
   const apIndex = findIndex(apNodes, {
     id: apId
   })
-  const nodeLabelFilterString = get(tree.nodeLabelFilter.find(f => f.table === 'ziel'), 'value')
+  const nodeLabelFilterString = get(data, `${treeName}.nodeLabelFilter.ziel`)
 
   const zieljahre = ziels
     .filter(el => el.apId === apId)

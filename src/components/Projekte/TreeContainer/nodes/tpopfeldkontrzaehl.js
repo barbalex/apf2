@@ -6,7 +6,7 @@ import compareLabel from './compareLabel'
 
 export default ({
   data,
-  tree,
+  treeName,
   projektNodes,
   apNodes,
   popNodes,
@@ -19,7 +19,7 @@ export default ({
   tpopkontrId,
 }: {
   data: Object,
-  tree: Object,
+  treeName: String,
   projektNodes: Array<Object>,
   apNodes: Array<Object>,
   popNodes: Array<Object>,
@@ -39,8 +39,7 @@ export default ({
   const popIndex = findIndex(popNodes, { id: popId })
   const tpopIndex = findIndex(tpopNodes, { id: tpopId })
   const tpopkontrIndex = findIndex(tpopfeldkontrNodes, { id: tpopkontrId })
-  const nodeLabelFilterString = get(tree.nodeLabelFilter
-    .find(f => f.table === 'tpopkontrzaehl'), 'value')
+  const nodeLabelFilterString = get(data, `${treeName}.nodeLabelFilter.tpopkontrzaehl`)
 
   // map through all elements and create array of nodes
   let nodes = get(data, 'tpopkontrzaehls.nodes', [])

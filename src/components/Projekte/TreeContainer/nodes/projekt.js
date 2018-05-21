@@ -3,15 +3,13 @@ import get from 'lodash/get'
 
 export default ({
   data,
-  tree,
+  treeName
 }: {
   data: Object,
-  tree: Object,
+  treeName: String,
 }): Array<Object> => {
-  const { nodeLabelFilter } = tree
-  const nodeLabelFilterString = nodeLabelFilter.projekt
+  const nodeLabelFilterString = get(data, `${treeName}.nodeLabelFilter.projekt`)
   const projekts = get(data, 'projekts.nodes', [])
-  console.log('nodes.projekt:', {tree,nodeLabelFilter,nodeLabelFilterString})
 
   // map through all elements and create array of nodes
   const nodes = projekts

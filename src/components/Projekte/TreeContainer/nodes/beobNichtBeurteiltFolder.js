@@ -5,19 +5,19 @@ import format from 'date-fns/format'
 
 export default ({
   data,
-  tree,
+  treeName,
   projektNodes,
   projId,
   apNodes,
   apId,
 }: {
   data: Object,
-  tree: Object,
-  projektNodes: Array < Object > ,
+  treeName: String,
+  projektNodes: Array<Object>,
   projId: String,
-  apNodes: Array < Object > ,
+  apNodes: Array<Object>,
   apId: String,
-}): Array < Object > => {
+}): Array<Object> => {
   const beobNichtBeurteilts = get(data, 'beobNichtBeurteilts.nodes', [])
 
   // fetch sorting indexes of parents
@@ -27,7 +27,7 @@ export default ({
   const apIndex = findIndex(apNodes, {
     id: apId
   })
-  const nodeLabelFilterString = get(tree.nodeLabelFilter.find(f => f.table === 'beobNichtBeurteilt'), 'value')
+  const nodeLabelFilterString = get(data, `${treeName}.nodeLabelFilter.beobNichtBeurteilt`)
 
   const beobNichtBeurteiltNodesLength = beobNichtBeurteilts
     .filter(el => el.apId === apId)
@@ -43,7 +43,7 @@ export default ({
       return true
     }).length
   let message = beobNichtBeurteiltNodesLength
-  if (tree.nodeLabelFilter.get('beobNichtBeurteilt')) {
+  if (nodeLabelFilterString) {
     message = `${beobNichtBeurteiltNodesLength} gefiltert`
   }
 

@@ -2,13 +2,11 @@
 import findIndex from 'lodash/findIndex'
 
 export default ({
-  tree,
   projektNodes,
   projId,
   apNodes,
   apId,
 }: {
-  tree: Object,
   projektNodes: Array < Object > ,
   projId: String,
   apNodes: Array < Object > ,

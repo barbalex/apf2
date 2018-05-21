@@ -4,14 +4,14 @@ import get from 'lodash/get'
 
 export default ({
   data,
-  tree,
+  treeName,
   projektNodes,
   apNodes,
   projId,
   apId,
 }: {
   data: Object,
-  tree: Object,
+  treeName: String,
   projektNodes: Array<Object>,
   apNodes: Array<Object>,
   projId: String,
@@ -23,8 +23,7 @@ export default ({
     id: projId,
   })
   const apIndex = findIndex(apNodes, { id: apId })
-  const nodeLabelFilterString = get(tree.nodeLabelFilter
-    .find(f => f.table === 'pop'), 'value')
+  const nodeLabelFilterString = get(data, `${treeName}.nodeLabelFilter.pop`)
 
   // map through all elements and create array of nodes
   const nodes = pops
