@@ -80,6 +80,42 @@ const enhance = compose(
                 }
                 __typename: Tree
               }
+              tree2 @client {
+                name
+                activeNodeArray
+                openNodes
+                apFilter
+                nodeLabelFilter {
+                  ap
+                  pop
+                  tpop
+                  tpopkontr
+                  tpopfeldkontr
+                  tpopfreiwkontr
+                  tpopkontrzaehl
+                  tpopmassn
+                  ziel
+                  zielber
+                  erfkrit
+                  apber
+                  apberuebersicht
+                  ber
+                  idealbiotop
+                  assozart
+                  popber
+                  popmassnber
+                  tpopber
+                  tpopmassnber
+                  apart
+                  projekt
+                  beob
+                  beobprojekt
+                  adresse
+                  gemeinde
+                  __typename: NodeLabelFilter
+                }
+                __typename: Tree2
+              }
             }
           }
         `,
