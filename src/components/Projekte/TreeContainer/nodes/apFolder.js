@@ -20,6 +20,7 @@ export default ({
     id: projId,
   })
   const nodeLabelFilterString = get(data, `${treeName}.nodeLabelFilter.ap`)
+  const apFilter = get(data, `${treeName}.apFilter`)
 
   const apNodesLength = aps
     .filter(el => el.projId === projId)
@@ -29,6 +30,13 @@ export default ({
         return get(el, 'aeEigenschaftenByArtId.artname', '')
           .toLowerCase()
           .includes(nodeLabelFilterString.toLowerCase())
+      }
+      return true
+    })
+    // filter by apFilter
+    .filter(el => {
+      if (apFilter) {
+        return [1, 2, 3].includes(el.bearbeitung)
       }
       return true
     }).length
