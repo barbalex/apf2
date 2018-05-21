@@ -12,6 +12,7 @@ import compose from 'recompose/compose'
 import Loadable from 'react-loadable'
 import { Query } from 'react-apollo'
 import get from 'lodash/get'
+import isUuid from 'is-uuid'
 
 import ErrorBoundary from '../../shared/ErrorBoundarySingleChild'
 import Loading from '../../shared/Loading'
@@ -144,12 +145,14 @@ const Daten = ({
 
   return (
     <Query query={dataGql} >
-      {({ loading, error, data }) => {
+      {({ loading, error, data, client }) => {
         // do not show loading but rather last state
         //if (loading) return <Container>Lade...</Container>
         if (error) return `Fehler: ${error.message}`
 
         const activeNodeArray = get(data, `${treeName}.activeNodeArray`)
+        const uuidsInActiveNodeArray = activeNodeArray.filter(o => isUuid(o))
+        const lastUuidInActiveNodeArray = uuidsInActiveNodeArray[uuidsInActiveNodeArray.length - 1]
         //console.log('Daten:', {activeNodeArray, treeName, data})
         const activeNodes = getActiveNodes(activeNodeArray, store)
 
