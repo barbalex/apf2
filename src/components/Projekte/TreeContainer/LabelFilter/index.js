@@ -10,6 +10,7 @@ import withHandlers from 'recompose/withHandlers'
 import { Query } from 'react-apollo'
 import get from 'lodash/get'
 import isEqual from 'lodash/isEqual'
+import gql from 'graphql-tag'
 
 import tables from '../../../../modules/tables'
 import dataGql from './data.graphql'
@@ -28,7 +29,7 @@ const StyledInput = styled(Input)`
 
 const enhance = compose(
   withHandlers({
-    onChange: ({ tree }: { tree: Object }) => ({
+    onChange: ({ tree, treeName }: { tree: Object, treeName: String }) => ({
       event,
       client
     }) => {
@@ -40,13 +41,13 @@ const enhance = compose(
       } else if (activeDataset && activeDataset.table) {
         filteredTable = activeDataset.table
       }
-      tree.updateLabelFilter(filteredTable, event.target.value)
+      //tree.updateLabelFilter(filteredTable, event.target.value)
       // TODO
       // use array of objects
-      /*
+      
       client.mutate({
         mutation: gql`
-          mutation setTreeKey($value: Array!, $tree: String!, $key: String!) {
+          mutation setTreeNodeLabelFilterKey($value: String!, $tree: String!, $key: String!) {
             setTreeKey(tree: $tree, key: $key, value: $value) @client {
               tree @client {
               name
@@ -59,8 +60,12 @@ const enhance = compose(
             }
           }
         `,
-        variables: { value: openNodes, tree: 'tree', key: 'openNodes' }
-      })*/
+        variables: {
+          value: event.target.value,
+          tree: treeName,
+          key: filteredTable
+        }
+      })
     },
   })
 )
@@ -94,7 +99,7 @@ const LabelFilter = ({
       let labelText = 'filtern'
       let filterValue = ''
       if (tableName) {
-        filterValue = tree.nodeLabelFilter.get(tableName) || ''
+        filterValue = get(nodeLabelFilter, tableName, '')
         const table = tables.find(
           (t: { label: string }) => t.table === tableName
         )

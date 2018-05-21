@@ -1,7 +1,7 @@
 // @flow
 import get from 'lodash/get'
 
-import nodeLabelFilterDefault from '../modules/nodeLabelFilterDefaultValues'
+import nodeLabelFilterDefault from '../modules/nodeLabelFilterDefault'
 
 export default async (idb) => {
 
