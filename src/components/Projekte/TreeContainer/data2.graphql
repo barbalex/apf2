@@ -43,6 +43,7 @@ query TreeDataQuery(
       id
       projId
       artId
+      bearbeitung
       aeEigenschaftenByArtId {
         id
         artname

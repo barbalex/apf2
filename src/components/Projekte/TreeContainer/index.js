@@ -355,8 +355,6 @@ const TreeContainer = ({
 
             const nodes = buildNodes({ data, treeName })
             const token = get(data, 'user.token', null)
-            const apFilter = get(data, `${treeName}.apFilter`)
-            console.log('TreeContainer: apFilter:', apFilter)
 
             // if activeNodeArray.length === 1
             // and there is only one projekte
@@ -433,9 +431,9 @@ const TreeContainer = ({
                       treeName={treeName}
                       data={data}
                       tree={tree}
-                      token={token}
-                      projektLoading={store.table.projektLoading}
                       nodes={nodes}
+                      activeNodeArray={activeNodeArray}
+                      openNodes={tree.openNodes}
                       mapBeobZugeordnetVisible={store.map.activeApfloraLayers.includes(
                         'BeobZugeordnet'
                       )}
@@ -450,8 +448,6 @@ const TreeContainer = ({
                         'Tpop'
                       )}
                       popHighlightedIdsString={store.map.pop.highlightedIds.join()}
-                      activeNodeArray={activeNodeArray}
-                      openNodes={tree.openNodes}
                     />
                   </InnerTreeContainer>
                   <CmApFolder onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />

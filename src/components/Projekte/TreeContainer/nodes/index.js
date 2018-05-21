@@ -81,10 +81,7 @@ export default ({
 }): Array < Object > => {
   const openNodes = get(data, `${treeName}.openNodes`)
 
-  const projektNodes = buildProjektNodes({
-    data,
-    treeName
-  })
+  const projektNodes = buildProjektNodes({ data, treeName })
   let nodes = clone(projektNodes)
   let apNodes
   let popNodes

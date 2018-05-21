@@ -57,7 +57,6 @@ class Tree extends Component {
     data: Object,
     store: Object,
     tree: Object,
-    projektLoading: boolean,
     nodes: Array<Object>,
     mapBeobZugeordnetVisible: boolean,
     mapBeobNichtBeurteiltVisible: boolean,
@@ -68,10 +67,6 @@ class Tree extends Component {
   }
 
   tree: ?HTMLDivElement
-
-  static defaultProps = {
-    projektLoading: false,
-  }
 
   componentDidUpdate(prevProps) {
     const {
@@ -99,24 +94,28 @@ class Tree extends Component {
     }
   }
 
-  rowRenderer = ({ key, index, style }) => (
-    <Row
-      key={key}
-      index={index}
-      style={style}
-      tree={this.props.tree}
-      openNodes={this.props.tree.openNodes}
-      nodes={this.props.nodes}
-      data={this.props.data}
-      treeName={this.props.treeName}
-      client={this.props.client}
-    />
-  )
+  rowRenderer = ({ key, index, style }) => {
+    const { tree, nodes, data, treeName, client } = this.props
+    
+    return (
+      <Row
+        key={key}
+        index={index}
+        style={style}
+        tree={tree}
+        openNodes={tree.openNodes}
+        nodes={nodes}
+        data={data}
+        treeName={treeName}
+        client={client}
+      />
+    )
+}
 
   noRowsRenderer = () => (
     <Container>
       <LoadingDiv>
-        {this.props.projektLoading ? 'lade Daten...' : 'keine Daten'}
+        lade Daten...
       </LoadingDiv>
     </Container>
   )

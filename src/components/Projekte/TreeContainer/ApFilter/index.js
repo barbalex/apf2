@@ -62,7 +62,6 @@ const ApFilter = ({
       if (error) return `Fehler: ${error.message}`
 
       const apFilter = get(data, `${treeName}.apFilter`)
-      console.log('ApFilter: treeName:', treeName)
 
       return (
         <ErrorBoundary>
