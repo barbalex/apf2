@@ -1,6 +1,6 @@
 query MyData {
   urlQuery @client {
     projekteTabs
-    feldkontrTab
+    
   }
 }
