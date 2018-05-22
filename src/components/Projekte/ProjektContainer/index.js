@@ -5,7 +5,6 @@ import { toJS } from 'mobx'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
 import { ReflexContainer, ReflexSplitter, ReflexElement } from 'react-reflex'
-import Loadable from 'react-loadable'
 import { Query } from 'react-apollo'
 import get from 'lodash/get'
 import clone from 'lodash/clone'
@@ -40,25 +39,35 @@ const enhance = compose(inject('store'), observer)
 
 // TODO
 // get this to work again
-const myChildren = (store: Object, data: Object) => {
-  /**
-   * need to clone projekteTabs because elements are sealed
-   */
-  const projekteTabs = clone(get(data, 'urlQuery.projekteTabs'))
+const myChildren = ({
+  store,
+  data,
+  treeName,
+  tabs
+}:{
+  store: Object,
+  data: Object,
+  treeName: String,
+  tabs: Array<String>
+}) => {
   // if daten and exporte are shown, only show exporte
-  if (projekteTabs.includes('daten') && projekteTabs.includes('exporte')) {
-    const i = projekteTabs.indexOf('daten')
-    projekteTabs.splice(i, 1)
+  if (tabs.includes('daten') && tabs.includes('exporte')) {
+    const i = tabs.indexOf('daten')
+    tabs.splice(i, 1)
+  }
+  if (tabs.includes('daten2') && tabs.includes('exporte2')) {
+    const i = tabs.indexOf('daten2')
+    tabs.splice(i, 1)
   }
 
   const children = []
   let flex
-  switch (projekteTabs.length) {
+  switch (tabs.length) {
     case 0:
       flex = 1
       break
     case 2: {
-      if (projekteTabs.includes('tree') && projekteTabs.includes('tree2')) {
+      if (tabs.includes('tree') && tabs.includes('tree2')) {
         // prevent 0.33 of screen being empty
         flex = 0.5
       } else {
@@ -79,54 +88,54 @@ const myChildren = (store: Object, data: Object) => {
       flex = 0.1666
       break
     default:
-      flex = 1 / projekteTabs.length
+      flex = 1 / tabs.length
   }
-  if (projekteTabs.includes('tree')) {
+  if (tabs.includes('tree')) {
     children.push(
       <TreeContainer treeName="tree" flex={flex} key="tree" />
     )
-    projekteTabs.splice(projekteTabs.indexOf('tree'), 1)
-    if (projekteTabs.length > 0) {
+    tabs.splice(tabs.indexOf('tree'), 1)
+    if (tabs.length > 0) {
       children.push(<ReflexSplitter key="treeSplitter" />)
     }
   }
-  if (projekteTabs.includes('daten')) {
+  if (tabs.includes('daten')) {
     children.push(
       <Daten tree={store.tree} treeName="tree" key="daten" />
     )
-    projekteTabs.splice(projekteTabs.indexOf('daten'), 1)
-    if (projekteTabs.length > 0) {
+    tabs.splice(tabs.indexOf('daten'), 1)
+    if (tabs.length > 0) {
       children.push(<ReflexSplitter key="treeDaten" />)
     }
   }
-  if (projekteTabs.includes('exporte')) {
+  if (tabs.includes('exporte')) {
     children.push(
       <Exporte key="exporte" />
     )
-    projekteTabs.splice(projekteTabs.indexOf('exporte'), 1)
-    if (projekteTabs.length > 0) {
+    tabs.splice(tabs.indexOf('exporte'), 1)
+    if (tabs.length > 0) {
       children.push(<ReflexSplitter key="exporteSplitter" />)
     }
   }
-  if (projekteTabs.includes('tree2')) {
+  if (tabs.includes('tree2')) {
     children.push(
       <TreeContainer treeName="tree2" flex={flex} key="tree2" />
     )
-    projekteTabs.splice(projekteTabs.indexOf('tree2'), 1)
-    if (projekteTabs.length > 0) {
+    tabs.splice(tabs.indexOf('tree2'), 1)
+    if (tabs.length > 0) {
       children.push(<ReflexSplitter key="tree2Splitter" />)
     }
   }
-  if (projekteTabs.includes('daten2')) {
+  if (tabs.includes('daten2')) {
     children.push(
       <Daten tree={store.tree2} treeName="tree2" key="daten2" />
     )
-    projekteTabs.splice(projekteTabs.indexOf('daten2'), 1)
-    if (projekteTabs.length > 0) {
+    tabs.splice(tabs.indexOf('daten2'), 1)
+    if (tabs.length > 0) {
       children.push(<ReflexSplitter key="daten2Splitter" />)
     }
   }
-  if (projekteTabs.includes('karte')) {
+  if (tabs.includes('karte')) {
     children.push(
       <ReflexElement
         key="karte"
@@ -141,7 +150,7 @@ const myChildren = (store: Object, data: Object) => {
              * without remounting grey space remains
              * when daten or tree tab is removed :-(
              */
-            key={projekteTabs.toString()}
+            key={tabs.toString()}
             popHighlighted={store.map.pop.highlightedIds.join()}
             tpopHighlighted={store.map.tpop.highlightedIds.join()}
             beobNichtBeurteiltHighlighted={store.map.beobNichtBeurteilt.highlightedIds.join()}
@@ -167,18 +176,18 @@ const myChildren = (store: Object, data: Object) => {
   return children
 }
 
-const Projekte = ({ store, treeName }: { store: Object, treeName: String }) =>
+const Projekte = ({ store, treeName, tabs }: { store: Object, treeName: String, tabs: Array<String> }) =>
   <Query query={data1Gql} >
     {({ loading, error, data, client }) => {
       if (error) return `Fehler: ${error.message}`
 
-      console.log('ProjektContainer rendering')
+      console.log('ProjektContainer rendering:', { treeName, tabs})
 
       return (
         <Container data-loading={loading}>
           <ErrorBoundary>
             <ReflexContainer orientation="vertical">
-              {myChildren(store, data)}
+              {myChildren({ store, data, treeName, tabs })}
             </ReflexContainer>
           </ErrorBoundary>
         </Container>

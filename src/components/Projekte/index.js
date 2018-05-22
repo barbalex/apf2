@@ -4,6 +4,8 @@ import styled from 'styled-components'
 import { ReflexContainer, ReflexSplitter, ReflexElement } from 'react-reflex'
 import { Query } from 'react-apollo'
 import get from 'lodash/get'
+import includes from 'lodash/includes'
+import filter from 'lodash/filter'
 import clone from 'lodash/clone'
 
 // when Karte was loaded async, it did not load,
@@ -17,7 +19,6 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   height: calc(100% - 49.3px);
-  cursor: ${props => (props['data-loading'] ? 'wait' : 'inherit')};
 `
 
 const Projekte = () => 
@@ -26,8 +27,8 @@ const Projekte = () =>
       if (error) return `Fehler: ${error.message}`
       // need to clone projekteTabs because elements are sealed
       const projekteTabs = clone(get(data, 'urlQuery.projekteTabs'))
-      const contains2 = projekteTabs.some(t => ['tree2', 'daten2', 'karte2', 'exporte2'].includes(t))
-      if (!contains2) return <ProjektContainer treeName="tree" />
+      const contains2 = projekteTabs.some(t => t.includes('2'))
+      if (!contains2) return <ProjektContainer treeName="tree" tabs={projekteTabs} />
 
       // if daten and exporte are shown, only show exporte
       if (projekteTabs.includes('daten') && projekteTabs.includes('exporte')) {
@@ -38,21 +39,27 @@ const Projekte = () =>
         const i = projekteTabs.indexOf('daten2')
         projekteTabs.splice(i, 1)
       }
-      const treeTabs = projekteTabs.filter(t => ['tree', 'daten', 'karte', 'exporte'].includes(t))
-      const tree2Tabs = projekteTabs.filter(t => ['tree2', 'daten2', 'karte2', 'exporte2'].includes(t))
+      console.log('Projekte 1:', {projekteTabs, contains2,treeTabsLive: projekteTabs.filter(t => !t.includes('2')),projekteTabsLength: projekteTabs.length})
+      let treeTabs = projekteTabs.filter(t => !t.includes('2'))
+      let tree2Tabs = projekteTabs.filter(t => t.includes('2'))
+      console.log('Projekte 2:', {treeTabs, tree2Tabs, treeTabsLength: treeTabs.length, tree2TabsLength: tree2Tabs.length, tree2Tabs0: tree2Tabs[0]})
 
-      const flex = treeTabs.length / tree2Tabs.length
+      let flex = treeTabs.length / tree2Tabs.length
+      if (projekteTabs.length === 2 && projekteTabs.includes('tree') && projekteTabs.includes('tree2')) {
+        // prevent 0.33 of screen being empty
+        flex = 0.5
+      }
 
       return (
-        <Container data-loading={loading}>
+        <Container>
           <ErrorBoundary>
             <ReflexContainer orientation="vertical">
               <ReflexElement flex={flex} >
-                <ProjektContainer treeName="tree" />
+                <ProjektContainer treeName="tree" tabs={treeTabs} />
               </ReflexElement>
               <ReflexSplitter key="treeSplitter" />
               <ReflexElement >
-                <ProjektContainer treeName="tree2" />
+                <ProjektContainer treeName="tree2" tabs={tree2Tabs} />
               </ReflexElement>
             </ReflexContainer>
           </ErrorBoundary>
