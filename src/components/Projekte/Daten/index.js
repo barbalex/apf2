@@ -12,6 +12,7 @@ import compose from 'recompose/compose'
 import Loadable from 'react-loadable'
 import { Query } from 'react-apollo'
 import get from 'lodash/get'
+import { ReflexElement } from 'react-reflex'
 
 import ErrorBoundary from '../../shared/ErrorBoundarySingleChild'
 import Loading from '../../shared/Loading'
@@ -213,9 +214,15 @@ const Daten = ({
         const form = formObject[key] || standardForm
 
         return (
-          <ErrorBoundary>
-            <Container>{form}</Container>
-          </ErrorBoundary>
+          <ReflexElement
+            propagateDimensions={true}
+            renderOnResizeRate={100}
+            renderOnResize={true}
+          >
+            <ErrorBoundary>
+              <Container>{form}</Container>
+            </ErrorBoundary>
+          </ReflexElement>
         )
       }}
     </Query>

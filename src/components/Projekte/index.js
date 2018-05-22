@@ -103,9 +103,7 @@ const myChildren = (store: Object, data: Object) => {
   }
   if (projekteTabs.includes('tree')) {
     children.push(
-      <ReflexElement flex={flex} key="tree">
-        <TreeContainer treeName="tree" />
-      </ReflexElement>
+      <TreeContainer treeName="tree" flex={flex} key="tree" />
     )
     projekteTabs.splice(projekteTabs.indexOf('tree'), 1)
     if (projekteTabs.length > 0) {
@@ -114,14 +112,7 @@ const myChildren = (store: Object, data: Object) => {
   }
   if (projekteTabs.includes('daten')) {
     children.push(
-      <ReflexElement
-        key="daten"
-        propagateDimensions={true}
-        renderOnResizeRate={100}
-        renderOnResize={true}
-      >
-        <Daten tree={store.tree} treeName="tree" />
-      </ReflexElement>
+      <Daten tree={store.tree} treeName="tree" key="daten" />
     )
     projekteTabs.splice(projekteTabs.indexOf('daten'), 1)
     if (projekteTabs.length > 0) {
@@ -143,9 +134,7 @@ const myChildren = (store: Object, data: Object) => {
   }
   if (projekteTabs.includes('tree2')) {
     children.push(
-      <ReflexElement flex={flex} key="tree2">
-        <TreeContainer tree={store.tree2} treeName="tree2" />
-      </ReflexElement>
+      <TreeContainer treeName="tree2" flex={flex} key="tree2" />
     )
     projekteTabs.splice(projekteTabs.indexOf('tree2'), 1)
     if (projekteTabs.length > 0) {
@@ -154,9 +143,7 @@ const myChildren = (store: Object, data: Object) => {
   }
   if (projekteTabs.includes('daten2')) {
     children.push(
-      <ReflexElement key="daten2">
-        <Daten tree={store.tree2} treeName="tree2" />
-      </ReflexElement>
+      <Daten tree={store.tree2} treeName="tree2" key="daten2" />
     )
     projekteTabs.splice(projekteTabs.indexOf('daten2'), 1)
     if (projekteTabs.length > 0) {
