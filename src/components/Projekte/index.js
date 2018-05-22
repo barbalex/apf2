@@ -104,7 +104,7 @@ const myChildren = (store: Object, data: Object) => {
   if (projekteTabs.includes('tree')) {
     children.push(
       <ReflexElement flex={flex} key="tree">
-        <TreeContainer tree={store.tree} treeName="tree" />
+        <TreeContainer treeName="tree" />
       </ReflexElement>
     )
     projekteTabs.splice(projekteTabs.indexOf('tree'), 1)

@@ -320,12 +320,10 @@ const enhance = compose(
 
 const TreeContainer = ({
   store,
-  tree,
   treeName,
   handleClick,
 }: {
   store: Object,
-  tree: Object,
   treeName: String,
   handleClick: () => void,
 }) =>
@@ -335,6 +333,7 @@ const TreeContainer = ({
       //if (loading) return <Container>Lade...</Container>
       if (error) return `Fehler: ${error.message}`
 
+      const tree = get(data1, treeName)
       const activeNodeArray = get(data1, `${treeName}.activeNodeArray`)
       //console.log('TreeContainer: activeNodeArray:', activeNodeArray)
       const openNodes = get(data1, `${treeName}.openNodes`)
@@ -383,7 +382,7 @@ const TreeContainer = ({
                   `,
                   variables: {
                     value: projektUrl,
-                    tree: tree.name,
+                    tree: treeName,
                     key: 'activeNodeArray'
                   }
                 })
@@ -405,7 +404,7 @@ const TreeContainer = ({
                   `,
                   variables: {
                     value: [...openNodes, projektUrl],
-                    tree: tree.name,
+                    tree: treeName,
                     key: 'openNodes'
                   }
                 })
@@ -416,7 +415,7 @@ const TreeContainer = ({
               <ErrorBoundary>
                 <Container>
                   {deleteDatasetModalIsVisible && (
-                    <DeleteDatasetModal tree={tree} token={token} />
+                    <DeleteDatasetModal tree={store[treeName]} token={token} />
                   )}
                   <LabelFilterContainer>
                     <LabelFilter treeName={treeName} nodes={nodes} />
@@ -433,7 +432,8 @@ const TreeContainer = ({
                       tree={tree}
                       nodes={nodes}
                       activeNodeArray={activeNodeArray}
-                      openNodes={tree.openNodes}
+                      openNodes={openNodes}
+                      activeNodes={activeNodes}
                       mapBeobZugeordnetVisible={store.map.activeApfloraLayers.includes(
                         'BeobZugeordnet'
                       )}

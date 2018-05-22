@@ -58,6 +58,7 @@ class Tree extends Component {
     store: Object,
     tree: Object,
     nodes: Array<Object>,
+    activeNodes: Array<Object>,
     mapBeobZugeordnetVisible: boolean,
     mapBeobNichtBeurteiltVisible: boolean,
     mapBeobNichtZuzuordnenVisible: boolean,
@@ -95,7 +96,7 @@ class Tree extends Component {
   }
 
   rowRenderer = ({ key, index, style }) => {
-    const { tree, nodes, data, treeName, client } = this.props
+    const { tree, nodes, data, treeName, client, activeNodes } = this.props
     
     return (
       <Row
@@ -104,6 +105,7 @@ class Tree extends Component {
         style={style}
         tree={tree}
         openNodes={tree.openNodes}
+        activeNodes={activeNodes}
         nodes={nodes}
         data={data}
         treeName={treeName}
