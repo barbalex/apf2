@@ -6,8 +6,6 @@ import styled from 'styled-components'
 import compose from 'recompose/compose'
 import { ReflexContainer, ReflexSplitter, ReflexElement } from 'react-reflex'
 import { Query } from 'react-apollo'
-import get from 'lodash/get'
-import clone from 'lodash/clone'
 
 // when Karte was loaded async, it did not load,
 // but only in production!
