@@ -5,6 +5,7 @@
 import isEqual from 'lodash/isEqual'
 import get from 'lodash/get'
 import clone from 'lodash/clone'
+import upperFirst from 'lodash/upperFirst'
 import gql from 'graphql-tag'
 
 export default {
@@ -98,7 +99,7 @@ export default {
               openNodes: get(data, `${tree}.openNodes`, null),
               apFilter: get(data, `${tree}.apFilter`, null),
               nodeLabelFilter: newNodeLabelFilter,
-              __typename: tree === 'tree' ? 'Tree' : 'Tree2'
+              __typename: upperFirst(tree)
             }
           } 
         })

@@ -133,6 +133,8 @@ const ProjekteContainer = ({
                              * when daten or tree tab is removed :-(
                              */
                             tree={tree}
+                            data={data}
+                            client={client}
                             activeNodes={activeNodes}
                             key={tabs.toString()}
                             popHighlighted={store.map.pop.highlightedIds.join()}
