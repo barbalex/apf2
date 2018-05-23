@@ -23,7 +23,6 @@ export default async ({
   })
   let projekteTabs = get(data, 'urlQuery.projekteTabs', [])
   let feldkontrTab = get(data, 'urlQuery.feldkontrTab', 'entwicklung')
-  console.log('setUrlQueryValues:', { data, projekteTabs, feldkontrTab })
   if (key === 'projekteTabs') {
     projekteTabs = value
   } else {
