@@ -24,8 +24,18 @@ const Projekte = () =>
     {({ loading, error, data, client }) => {
       if (error) return `Fehler: ${error.message}`
       // need to clone projekteTabs because elements are sealed
-      const projekteTabs = clone(get(data, 'urlQuery.projekteTabs'))
+      //const projekteTabs = clone(get(data, 'urlQuery.projekteTabs'))
+      //const projekteTabs = get(data, 'urlQuery.projekteTabs')
+      const projekteTabs = [...get(data, 'urlQuery.projekteTabs')]
       const contains2 = projekteTabs.some(t => t.includes('2'))
+      console.log('Projekte 1:', {
+        projekteTabs,
+        projekteTabsOriginal: get(data, 'urlQuery.projekteTabs'),
+        contains2,
+        treeTabsLive: projekteTabs.filter(t => !t.includes('2')),
+        projekteTabsLength: projekteTabs.length, 
+        data
+    })
       if (!contains2) return <ProjektContainer treeName="tree" tabs={projekteTabs} />
 
       // if daten and exporte are shown, only show exporte
@@ -37,10 +47,15 @@ const Projekte = () =>
         const i = projekteTabs.indexOf('daten2')
         projekteTabs.splice(i, 1)
       }
-      console.log('Projekte 1:', {projekteTabs, contains2,treeTabsLive: projekteTabs.filter(t => !t.includes('2')),projekteTabsLength: projekteTabs.length})
       let treeTabs = projekteTabs.filter(t => !t.includes('2'))
       let tree2Tabs = projekteTabs.filter(t => t.includes('2'))
-      console.log('Projekte 2:', {treeTabs, tree2Tabs, treeTabsLength: treeTabs.length, tree2TabsLength: tree2Tabs.length, tree2Tabs0: tree2Tabs[0]})
+      console.log('Projekte 2:', {
+        treeTabs, 
+        tree2Tabs, 
+        treeTabsLength: treeTabs.length, 
+        tree2TabsLength: tree2Tabs.length, 
+        tree2Tabs0: tree2Tabs[0]
+      })
 
       let flex = treeTabs.length / tree2Tabs.length
       if (projekteTabs.length === 2 && projekteTabs.includes('tree') && projekteTabs.includes('tree2')) {
@@ -53,11 +68,11 @@ const Projekte = () =>
           <ErrorBoundary>
             <ReflexContainer orientation="vertical">
               <ReflexElement flex={flex} >
-                <ProjektContainer treeName="tree" tabs={treeTabs} />
+                <ProjektContainer treeName="tree" tabs={projekteTabs.filter(t => !t.includes('2'))} />
               </ReflexElement>
               <ReflexSplitter key="treeSplitter" />
               <ReflexElement >
-                <ProjektContainer treeName="tree2" tabs={tree2Tabs} />
+                <ProjektContainer treeName="tree2" tabs={projekteTabs.filter(t => t.includes('2'))} />
               </ReflexElement>
             </ReflexContainer>
           </ErrorBoundary>

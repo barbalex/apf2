@@ -5,6 +5,9 @@ query AppBarQuery {
   }
   urlQuery @client {
     projekteTabs
-    feldkontrTab
+    
+  }
+  tree @client {
+    activeNodeArray
   }
 }

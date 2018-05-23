@@ -23,6 +23,7 @@ import ErrorBoundary from '../shared/ErrorBoundary'
 import dataGql from './data.graphql'
 import logout from '../../modules/logout'
 import setUrlQueryValue from '../../modules/setUrlQueryValue'
+import getActiveNodes from '../../modules/getActiveNodes'
 
 const StyledAppBar = styled(AppBar)`
   @media print {
@@ -50,8 +51,7 @@ const enhance = compose(
   inject('store'),
   withState('anchorEl', 'setAnchorEl', null),
   withHandlers({
-    onClickButton: props => (name, client, projekteTabs) => {
-      const { store } = props
+    onClickButton: ({ store }) => (name, client, projekteTabs) => {
       if (isMobilePhone()) {
         // show one tab only
         setUrlQueryValue({ client, key: 'projekteTabs', value: [name] })
@@ -111,6 +111,8 @@ const MyAppBar = ({
     {({ loading, error, data, client }) => {
       if (error) return `Fehler: ${error.message}`
 
+      const activeNodeArray = get(data, 'tree.activeNodeArray')
+      const activeNodes = getActiveNodes(activeNodeArray, store)
       /**
        * need to clone projekteTabs
        * because otherwise removing elements errors out (because elements are sealed)
@@ -124,7 +126,7 @@ const MyAppBar = ({
         projekteTabs.includes('daten2') && !projekteTabs.includes('exporte')
       const karteIsVisible = projekteTabs.includes('karte')
       const exporteIsVisible = projekteTabs.includes('exporte')
-      const exporteIsActive = !!store.tree.activeNodes.projekt
+      const exporteIsActive = !!activeNodes.projekt
       const isMobile = isMobilePhone()
 
       return (
