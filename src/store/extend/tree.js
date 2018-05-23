@@ -45,9 +45,6 @@ export default (store: Object, tree: Object): void => {
       () => setOpenNodesFromActiveNodeArray(store.tree)
     ),
     apFilter: false,
-    toggleApFilter: action('toggleApFilter', () => {
-      tree.apFilter = !tree.apFilter
-    }),
     nodeLabelFilter: observable.map({}),
     updateLabelFilter: action('updateLabelFilter', (table, value) => {
       if (!table) {
