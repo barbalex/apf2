@@ -26,11 +26,11 @@ const Projekte = () =>
     {({ loading, error, data, client }) => {
       if (error) return `Fehler: ${error.message}`
 
-      const projekteTabs = get(data, 'urlQuery.projekteTabs')
+      const projekteTabs = get(data, 'urlQuery.projekteTabs', [])
       const treeTabs = intersection(treeTabValues, projekteTabs)
       const tree2Tabs = intersection(tree2TabValues, projekteTabs)
       if (tree2Tabs.length === 0) {
-        return <ProjektContainer treeName="tree" tabs={treeTabs} />
+        return <ProjektContainer treeName="tree" tabs={treeTabs} projekteTabs={projekteTabs} />
       }
 
       return (
@@ -38,11 +38,11 @@ const Projekte = () =>
           <ErrorBoundary>
             <ReflexContainer orientation="vertical">
               <ReflexElement flex={treeTabs.length / projekteTabs.length} >
-                <ProjektContainer treeName="tree" tabs={treeTabs} />
+                <ProjektContainer treeName="tree" tabs={treeTabs} projekteTabs={projekteTabs} />
               </ReflexElement>
               <ReflexSplitter />
               <ReflexElement >
-                <ProjektContainer treeName="tree2" tabs={tree2Tabs} />
+                <ProjektContainer treeName="tree2" tabs={tree2Tabs} projekteTabs={projekteTabs} />
               </ReflexElement>
             </ReflexContainer>
           </ErrorBoundary>

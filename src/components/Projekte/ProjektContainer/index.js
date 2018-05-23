@@ -43,14 +43,16 @@ const KarteContainer = styled.div`
 
 const enhance = compose(inject('store'), observer)
 
-const Projekte = ({
+const ProjekteContainer = ({
   store,
   treeName,
-  tabs: tabsPassed
+  tabs: tabsPassed,
+  projekteTabs
 }: {
   store: Object,
   treeName: String,
-  tabs: Array<String>
+  tabs: Array<String>,
+  projekteTabs: Array<String>,
 }) =>
   <Query query={data1Gql} >
     {({ error, data: data1 }) => {
@@ -70,6 +72,11 @@ const Projekte = ({
             const activeNode = nodes.find(n => isEqual(n.url, activeNodeArray))
             // remove 2 to treat all same
             const tabs = clone(tabsPassed).map(t => t.replace('2', ''))
+            const treeFlex = (projekteTabs.length === 2 && tabs.length === 2) ?
+                              0.33 :
+                                tabs.length === 0 ?
+                                1 :
+                                  (1 / tabs.length)
 
             return (
               <Container data-loading={loading}>
@@ -77,7 +84,7 @@ const Projekte = ({
                   <ReflexContainer orientation="vertical">
                     { 
                       tabs.includes('tree') &&
-                      <ReflexElement>
+                      <ReflexElement flex={treeFlex}>
                         <TreeContainer
                           treeName={treeName}
                           data={data}
@@ -166,4 +173,4 @@ const Projekte = ({
     }}
   </Query>
 
-export default enhance(Projekte)
+export default enhance(ProjekteContainer)
