@@ -65,12 +65,16 @@ const enhance = compose(
 
 const Kontrollen = ({
   store,
+  fileType,
+  applyMapFilterToExport,
   expanded,
   setExpanded,
   message,
   setMessage,
 }: {
-  store:Object,
+  store: Object,
+  fileType: String,
+  applyMapFilterToExport: Boolean,
   expanded: Boolean,
   setExpanded: () => void,
   message: String,
@@ -189,7 +193,7 @@ const Kontrollen = ({
                         }
                       }`
                   })
-                  exportModule({data: get(data, 'allVTpopkontrs.nodes', []), store, fileName: 'Kontrollen'})
+                  exportModule({data: get(data, 'allVTpopkontrs.nodes', []), store, fileName: 'Kontrollen', fileType, applyMapFilterToExport})
                 } catch(error) {
                   setMessage(`Fehler: ${error.message}`)
                   setTimeout(() => setMessage(null), 5000)
@@ -266,7 +270,7 @@ const Kontrollen = ({
                         }
                       }`
                   })
-                  exportModule({data: get(data, 'allVTpopkontrWebgisbuns.nodes', []), store, fileName: 'KontrollenWebGisBun'})
+                  exportModule({data: get(data, 'allVTpopkontrWebgisbuns.nodes', []), store, fileName: 'KontrollenWebGisBun', fileType, applyMapFilterToExport})
                 } catch(error) {
                   setMessage(`Fehler: ${error.message}`)
                   setTimeout(() => setMessage(null), 5000)
@@ -368,7 +372,7 @@ const Kontrollen = ({
                         }
                       }`
                   })
-                  exportModule({data: get(data, 'allVKontrzaehlAnzproeinheits.nodes', []), store, fileName: 'KontrollenAnzahlProZaehleinheit'})
+                  exportModule({data: get(data, 'allVKontrzaehlAnzproeinheits.nodes', []), store, fileName: 'KontrollenAnzahlProZaehleinheit', fileType, applyMapFilterToExport})
                 } catch(error) {
                   setMessage(`Fehler: ${error.message}`)
                   setTimeout(() => setMessage(null), 5000)

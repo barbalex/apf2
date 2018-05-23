@@ -89,13 +89,17 @@ const enhance = compose(
 
 const Teilpopulationen = ({
   store,
+  fileType,
+  applyMapFilterToExport,
   expanded,
   setExpanded,
   message,
   setMessage,
   artList,
 }: {
-  store:Object,
+  store: Object,
+  fileType: String,
+  applyMapFilterToExport: Boolean,
   expanded: Boolean,
   setExpanded: () => void,
   message: String,
@@ -175,7 +179,7 @@ const Teilpopulationen = ({
                         }
                       }`
                   })
-                  exportModule({data: get(data, 'allVTpops.nodes', []), store, fileName: 'Teilpopulationen'})
+                  exportModule({data: get(data, 'allVTpops.nodes', []), store, fileName: 'Teilpopulationen', fileType, applyMapFilterToExport})
                 } catch(error) {
                   setMessage(`Fehler: ${error.message}`)
                   setTimeout(() => setMessage(null), 5000)
@@ -239,7 +243,7 @@ const Teilpopulationen = ({
                         }
                       }`
                   })
-                  exportModule({data: get(data, 'allVTpopWebgisbuns.nodes', []), store, fileName: 'TeilpopulationenWebGisBun'})
+                  exportModule({data: get(data, 'allVTpopWebgisbuns.nodes', []), store, fileName: 'TeilpopulationenWebGisBun', fileType, applyMapFilterToExport})
                 } catch(error) {
                   setMessage(`Fehler: ${error.message}`)
                   setTimeout(() => setMessage(null), 5000)
@@ -268,7 +272,7 @@ const Teilpopulationen = ({
                         }
                       }`
                   })
-                  exportModule({data: get(data, 'allVTpopKmls.nodes', []), store, fileName: 'Teilpopulationen'})
+                  exportModule({data: get(data, 'allVTpopKmls.nodes', []), store, fileName: 'Teilpopulationen', fileType, applyMapFilterToExport})
                 } catch(error) {
                   setMessage(`Fehler: ${error.message}`)
                   setTimeout(() => setMessage(null), 5000)
@@ -298,7 +302,7 @@ const Teilpopulationen = ({
                         }
                       }`
                   })
-                  exportModule({data: get(data, 'allVTpopKmlnamen.nodes', []), store, fileName: 'TeilpopulationenNachNamen'})
+                  exportModule({data: get(data, 'allVTpopKmlnamen.nodes', []), store, fileName: 'TeilpopulationenNachNamen', fileType, applyMapFilterToExport})
                 } catch(error) {
                   setMessage(`Fehler: ${error.message}`)
                   setTimeout(() => setMessage(null), 5000)
@@ -330,7 +334,7 @@ const Teilpopulationen = ({
                         }
                       }`
                   })
-                  exportModule({data: get(data, 'allVTpopOhnebekanntseits.nodes', []), store, fileName: 'TeilpopulationenVonApArtenOhneBekanntSeit'})
+                  exportModule({data: get(data, 'allVTpopOhnebekanntseits.nodes', []), store, fileName: 'TeilpopulationenVonApArtenOhneBekanntSeit', fileType, applyMapFilterToExport})
                 } catch(error) {
                   setMessage(`Fehler: ${error.message}`)
                   setTimeout(() => setMessage(null), 5000)
@@ -362,7 +366,7 @@ const Teilpopulationen = ({
                         }
                       }`
                   })
-                  exportModule({data: get(data, 'allVTpopOhneapberichtrelevants.nodes', []), store, fileName: 'TeilpopulationenOhneApBerichtRelevant'})
+                  exportModule({data: get(data, 'allVTpopOhneapberichtrelevants.nodes', []), store, fileName: 'TeilpopulationenOhneApBerichtRelevant', fileType, applyMapFilterToExport})
                 } catch(error) {
                   setMessage(`Fehler: ${error.message}`)
                   setTimeout(() => setMessage(null), 5000)
@@ -425,7 +429,7 @@ const Teilpopulationen = ({
                         }
                       }`
                   })
-                  exportModule({data: get(data, 'allVTpopAnzmassns.nodes', []), store, fileName: 'TeilpopulationenAnzahlMassnahmen'})
+                  exportModule({data: get(data, 'allVTpopAnzmassns.nodes', []), store, fileName: 'TeilpopulationenAnzahlMassnahmen', fileType, applyMapFilterToExport})
                 } catch(error) {
                   setMessage(`Fehler: ${error.message}`)
                   setTimeout(() => setMessage(null), 5000)
@@ -537,7 +541,7 @@ const Teilpopulationen = ({
                         }
                       }`
                   })
-                  exportModule({data: get(data, 'allVTpopAnzkontrinklletzterundletztertpopbers.nodes', []), store, fileName: 'TeilpopulationenAnzKontrInklusiveLetzteKontrUndLetztenTPopBericht'})
+                  exportModule({data: get(data, 'allVTpopAnzkontrinklletzterundletztertpopbers.nodes', []), store, fileName: 'TeilpopulationenAnzKontrInklusiveLetzteKontrUndLetztenTPopBericht', fileType, applyMapFilterToExport})
                 } catch(error) {
                   setMessage(`Fehler: ${error.message}`)
                   setTimeout(() => setMessage(null), 5000)
@@ -634,7 +638,7 @@ const Teilpopulationen = ({
                         }
                       }`
                   })
-                  exportModule({data: get(data, 'allVTpopPopberundmassnbers.nodes', []), store, fileName: 'TeilpopulationenTPopUndMassnBerichte'})
+                  exportModule({data: get(data, 'allVTpopPopberundmassnbers.nodes', []), store, fileName: 'TeilpopulationenTPopUndMassnBerichte', fileType, applyMapFilterToExport})
                 } catch(error) {
                   setMessage(`Fehler: ${error.message}`)
                   setTimeout(() => setMessage(null), 5000)

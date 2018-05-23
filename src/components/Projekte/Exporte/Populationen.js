@@ -65,12 +65,16 @@ const enhance = compose(
 
 const Populationen = ({
   store,
+  fileType,
+  applyMapFilterToExport,
   expanded,
   setExpanded,
   message,
   setMessage,
 }: {
-  store:Object,
+  store: Object,
+  fileType: String,
+  applyMapFilterToExport: Boolean,
   expanded: Boolean,
   setExpanded: () => void,
   message: String,
@@ -125,7 +129,7 @@ const Populationen = ({
                         }
                       }`
                   })
-                  exportModule({data: get(data, 'allVPops.nodes', []), store, fileName: 'Populationen'})
+                  exportModule({data: get(data, 'allVPops.nodes', []), store, fileName: 'Populationen', fileType, applyMapFilterToExport})
                 } catch(error) {
                   setMessage(`Fehler: ${error.message}`)
                   setTimeout(() => setMessage(null), 5000)
@@ -154,7 +158,7 @@ const Populationen = ({
                         }
                       }`
                   })
-                  exportModule({data: get(data, 'allVPopKmls.nodes', []), store, fileName: 'Populationen'})
+                  exportModule({data: get(data, 'allVPopKmls.nodes', []), store, fileName: 'Populationen', fileType, applyMapFilterToExport})
                 } catch(error) {
                   setMessage(`Fehler: ${error.message}`)
                   setTimeout(() => setMessage(null), 5000)
@@ -183,7 +187,7 @@ const Populationen = ({
                         }
                       }`
                   })
-                  exportModule({data: get(data, 'allVPopKmlnamen.nodes', []), store, fileName: 'PopulationenNachNamen'})
+                  exportModule({data: get(data, 'allVPopKmlnamen.nodes', []), store, fileName: 'PopulationenNachNamen', fileType, applyMapFilterToExport})
                 } catch(error) {
                   setMessage(`Fehler: ${error.message}`)
                   setTimeout(() => setMessage(null), 5000)
@@ -215,7 +219,7 @@ const Populationen = ({
                         }
                       }`
                   })
-                  exportModule({data: get(data, 'allVPopVonapohnestatuses.nodes', []), store, fileName: 'PopulationenVonApArtenOhneStatus'})
+                  exportModule({data: get(data, 'allVPopVonapohnestatuses.nodes', []), store, fileName: 'PopulationenVonApArtenOhneStatus', fileType, applyMapFilterToExport})
                 } catch(error) {
                   setMessage(`Fehler: ${error.message}`)
                   setTimeout(() => setMessage(null), 5000)
@@ -254,7 +258,7 @@ const Populationen = ({
                         }
                       }`
                   })
-                  exportModule({data: get(data, 'allVPopOhnekoords.nodes', []), store, fileName: 'PopulationenOhneKoordinaten'})
+                  exportModule({data: get(data, 'allVPopOhnekoords.nodes', []), store, fileName: 'PopulationenOhneKoordinaten', fileType, applyMapFilterToExport})
                 } catch(error) {
                   setMessage(`Fehler: ${error.message}`)
                   setTimeout(() => setMessage(null), 5000)
@@ -300,7 +304,7 @@ const Populationen = ({
                         }
                       }`
                   })
-                  exportModule({data: get(data, 'allVPopmassnberAnzmassns.nodes', []), store, fileName: 'PopulationenAnzMassnProMassnber'})
+                  exportModule({data: get(data, 'allVPopmassnberAnzmassns.nodes', []), store, fileName: 'PopulationenAnzMassnProMassnber', fileType, applyMapFilterToExport})
                 } catch(error) {
                   setMessage(`Fehler: ${error.message}`)
                   setTimeout(() => setMessage(null), 5000)
@@ -339,7 +343,7 @@ const Populationen = ({
                         }
                       }`
                   })
-                  exportModule({data: get(data, 'allVPopAnzmassns.nodes', []), store, fileName: 'PopulationenAnzahlMassnahmen'})
+                  exportModule({data: get(data, 'allVPopAnzmassns.nodes', []), store, fileName: 'PopulationenAnzahlMassnahmen', fileType, applyMapFilterToExport})
                 } catch(error) {
                   setMessage(`Fehler: ${error.message}`)
                   setTimeout(() => setMessage(null), 5000)
@@ -377,7 +381,7 @@ const Populationen = ({
                         }
                       }`
                   })
-                  exportModule({data: get(data, 'allVPopAnzkontrs.nodes', []), store, fileName: 'PopulationenAnzahlKontrollen'})
+                  exportModule({data: get(data, 'allVPopAnzkontrs.nodes', []), store, fileName: 'PopulationenAnzahlKontrollen', fileType, applyMapFilterToExport})
                 } catch(error) {
                   setMessage(`Fehler: ${error.message}`)
                   setTimeout(() => setMessage(null), 5000)
@@ -429,7 +433,7 @@ const Populationen = ({
                         }
                       }`
                   })
-                  exportModule({data: get(data, 'allVPopPopberundmassnbers.nodes', []), store, fileName: 'PopulationenPopUndMassnBerichte'})
+                  exportModule({data: get(data, 'allVPopPopberundmassnbers.nodes', []), store, fileName: 'PopulationenPopUndMassnBerichte', fileType, applyMapFilterToExport})
                 } catch(error) {
                   setMessage(`Fehler: ${error.message}`)
                   setTimeout(() => setMessage(null), 5000)
@@ -474,7 +478,7 @@ const Populationen = ({
                         }
                       }`
                   })
-                  exportModule({data: get(data, 'allVPopMitLetzterPopbers.nodes', []), store, fileName: 'PopulationenMitLetzemPopBericht'})
+                  exportModule({data: get(data, 'allVPopMitLetzterPopbers.nodes', []), store, fileName: 'PopulationenMitLetzemPopBericht', fileType, applyMapFilterToExport})
                 } catch(error) {
                   setMessage(`Fehler: ${error.message}`)
                   setTimeout(() => setMessage(null), 5000)
@@ -519,7 +523,7 @@ const Populationen = ({
                         }
                       }`
                   })
-                  exportModule({data: get(data, 'allVPopMitLetzterPopmassnbers.nodes', []), store, fileName: 'allVPopMitLetzterPopmassnbers'})
+                  exportModule({data: get(data, 'allVPopMitLetzterPopmassnbers.nodes', []), store, fileName: 'allVPopMitLetzterPopmassnbers', fileType, applyMapFilterToExport})
                 } catch(error) {
                   setMessage(`Fehler: ${error.message}`)
                   setTimeout(() => setMessage(null), 5000)

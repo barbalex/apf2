@@ -65,12 +65,16 @@ const enhance = compose(
 
 const Beobachtungen = ({
   store,
+  fileType,
+  applyMapFilterToExport,
   expanded,
   setExpanded,
   message,
   setMessage,
 }: {
-  store:Object,
+  store: Object,
+  fileType: String,
+  applyMapFilterToExport: Boolean,
   expanded: Boolean,
   setExpanded: () => void,
   message: String,
@@ -128,7 +132,7 @@ const Beobachtungen = ({
                         }
                       }`
                   })
-                  exportModule({data: get(data, 'allVBeobs.nodes', []), store, fileName: 'Beobachtungen'})
+                  exportModule({data: get(data, 'allVBeobs.nodes', []), store, fileName: 'Beobachtungen', fileType, applyMapFilterToExport})
                 } catch(error) {
                   setMessage(`Fehler: ${error.message}`)
                   setTimeout(() => setMessage(null), 5000)

@@ -65,12 +65,16 @@ const enhance = compose(
 
 const Massnahmen = ({
   store,
+  fileType,
+  applyMapFilterToExport,
   expanded,
   setExpanded,
   message,
   setMessage,
 }: {
-  store:Object,
+  store: Object,
+  fileType: String,
+  applyMapFilterToExport: Boolean,
   expanded: Boolean,
   setExpanded: () => void,
   message: String,
@@ -168,7 +172,7 @@ const Massnahmen = ({
                             }
                           }`
                       })
-                      exportModule({data: get(data, 'allVMassns.nodes', []), store, fileName: 'Massnahmen'})
+                      exportModule({data: get(data, 'allVMassns.nodes', []), store, fileName: 'Massnahmen', fileType, applyMapFilterToExport})
                     } catch(error) {
                       setMessage(`Fehler: ${error.message}`)
                       setTimeout(() => setMessage(null), 5000)
@@ -221,7 +225,7 @@ const Massnahmen = ({
                             }
                           }`
                       })
-                      exportModule({data: get(data, 'allVMassnWebgisbuns.nodes', []), store, fileName: 'MassnahmenWebGisBun'})
+                      exportModule({data: get(data, 'allVMassnWebgisbuns.nodes', []), store, fileName: 'MassnahmenWebGisBun', fileType, applyMapFilterToExport})
                     } catch(error) {
                       setMessage(`Fehler: ${error.message}`)
                       setTimeout(() => setMessage(null), 5000)

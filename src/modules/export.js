@@ -12,11 +12,15 @@ export default async ({
   data:dataPassed,
   store,
   fileName,
+  fileType,
+  applyMapFilterToExport,
   kml,
 }: {
   data: Array<Object>,
   store: Object,
-  fileName: string,
+  fileName: String,
+  fileType: String,
+  applyMapFilterToExport: Boolean,
   kml: Boolean,
 }) => {
   const { listError, map } = store
@@ -24,7 +28,6 @@ export default async ({
     listError(error)
   }
   const { mapFilter } = map
-  const { applyMapFilterToExport } = store.export
   let data = dataPassed.map(d=> omit(d, ['__typename', 'Symbol(id)']))
   // now we could manipulate the data, for instance apply mapFilter
   const filterFeatures = mapFilter.filter.features
@@ -55,7 +58,7 @@ export default async ({
       fileName,
       data,
     })
-  } else if (store.export.fileType === 'csv') {
+  } else if (fileType === 'csv') {
     exportCsv({
       fileName,
       data,
@@ -68,5 +71,4 @@ export default async ({
       data,
     })
   }
-  store.export.removeDownload(fileName)
 }

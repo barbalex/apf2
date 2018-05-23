@@ -65,12 +65,16 @@ const enhance = compose(
 
 const AP = ({
   store,
+  fileType,
+  applyMapFilterToExport,
   expanded,
   setExpanded,
   message,
   setMessage,
 }: {
   store: Object,
+  fileType: String,
+  applyMapFilterToExport: Boolean,
   expanded: Boolean,
   setExpanded: () => void,
   message: String,
@@ -117,7 +121,7 @@ const AP = ({
                         }
                       }`
                   })
-                  exportModule({data: get(data, 'allVAps.nodes', []), store, fileName: 'AP'})
+                  exportModule({data: get(data, 'allVAps.nodes', []), store, fileName: 'AP', fileType, applyMapFilterToExport})
                 } catch(error) {
                   setMessage(`Fehler: ${error.message}`)
                   setTimeout(() => setMessage(null), 5000)
@@ -147,7 +151,7 @@ const AP = ({
                         }
                       }`
                   })
-                  exportModule({data: get(data, 'allVApOhnepops.nodes', []), store, fileName: 'ApOhnePopulationen'})
+                  exportModule({data: get(data, 'allVApOhnepops.nodes', []), store, fileName: 'ApOhnePopulationen', fileType, applyMapFilterToExport})
                 } catch(error) {
                   setMessage(`Fehler: ${error.message}`)
                   setTimeout(() => setMessage(null), 5000)
@@ -176,7 +180,7 @@ const AP = ({
                         }
                       }`
                   })
-                  exportModule({data: get(data, 'allVApAnzmassns.nodes', []), store, fileName: 'ApAnzahlMassnahmen'})
+                  exportModule({data: get(data, 'allVApAnzmassns.nodes', []), store, fileName: 'ApAnzahlMassnahmen', fileType, applyMapFilterToExport})
                 } catch(error) {
                   setMessage(`Fehler: ${error.message}`)
                   setTimeout(() => setMessage(null), 5000)
@@ -205,7 +209,7 @@ const AP = ({
                         }
                       }`
                   })
-                  exportModule({data: get(data, 'allVApAnzkontrs.nodes', []), store, fileName: 'ApAnzahlKontrollen'})
+                  exportModule({data: get(data, 'allVApAnzkontrs.nodes', []), store, fileName: 'ApAnzahlKontrollen', fileType, applyMapFilterToExport})
                 } catch(error) {
                   setMessage(`Fehler: ${error.message}`)
                   setTimeout(() => setMessage(null), 5000)
@@ -251,7 +255,7 @@ const AP = ({
                         }
                       }`
                   })
-                  exportModule({data: get(data, 'allVApbers.nodes', []), store, fileName: 'Jahresberichte'})
+                  exportModule({data: get(data, 'allVApbers.nodes', []), store, fileName: 'Jahresberichte', fileType, applyMapFilterToExport})
                 } catch(error) {
                   setMessage(`Fehler: ${error.message}`)
                   setTimeout(() => setMessage(null), 5000)
@@ -285,7 +289,7 @@ const AP = ({
                         }
                       }`
                   })
-                  exportModule({data: get(data, 'allVApApberundmassns.nodes', []), store, fileName: 'ApJahresberichteUndMassnahmen'})
+                  exportModule({data: get(data, 'allVApApberundmassns.nodes', []), store, fileName: 'ApJahresberichteUndMassnahmen', fileType, applyMapFilterToExport})
                 } catch(error) {
                   setMessage(`Fehler: ${error.message}`)
                   setTimeout(() => setMessage(null), 5000)
@@ -318,7 +322,7 @@ const AP = ({
                         }
                       }`
                   })
-                  exportModule({data: get(data, 'allVZiels.nodes', []), store, fileName: 'ApZiele'})
+                  exportModule({data: get(data, 'allVZiels.nodes', []), store, fileName: 'ApZiele', fileType, applyMapFilterToExport})
                 } catch(error) {
                   setMessage(`Fehler: ${error.message}`)
                   setTimeout(() => setMessage(null), 5000)
@@ -357,7 +361,7 @@ const AP = ({
                         }
                       }`
                   })
-                  exportModule({data: get(data, 'allVZielbers.nodes', []), store, fileName: 'Zielberichte'})
+                  exportModule({data: get(data, 'allVZielbers.nodes', []), store, fileName: 'Zielberichte', fileType, applyMapFilterToExport})
                 } catch(error) {
                   setMessage(`Fehler: ${error.message}`)
                   setTimeout(() => setMessage(null), 5000)
@@ -393,7 +397,7 @@ const AP = ({
                         }
                       }`
                   })
-                  exportModule({data: get(data, 'allVBers.nodes', []), store, fileName: 'Berichte'})
+                  exportModule({data: get(data, 'allVBers.nodes', []), store, fileName: 'Berichte', fileType, applyMapFilterToExport})
                 } catch(error) {
                   setMessage(`Fehler: ${error.message}`)
                   setTimeout(() => setMessage(null), 5000)
@@ -427,7 +431,7 @@ const AP = ({
                         }
                       }`
                   })
-                  exportModule({data: get(data, 'allVErfkrits.nodes', []), store, fileName: 'Erfolgskriterien'})
+                  exportModule({data: get(data, 'allVErfkrits.nodes', []), store, fileName: 'Erfolgskriterien', fileType, applyMapFilterToExport})
                 } catch(error) {
                   setMessage(`Fehler: ${error.message}`)
                   setTimeout(() => setMessage(null), 5000)
@@ -476,7 +480,7 @@ const AP = ({
                         }
                       }`
                   })
-                  exportModule({data: get(data, 'allVIdealbiotops.nodes', []), store, fileName: 'Idealbiotope'})
+                  exportModule({data: get(data, 'allVIdealbiotops.nodes', []), store, fileName: 'Idealbiotope', fileType, applyMapFilterToExport})
                 } catch(error) {
                   setMessage(`Fehler: ${error.message}`)
                   setTimeout(() => setMessage(null), 5000)
@@ -510,7 +514,7 @@ const AP = ({
                         }
                       }`
                   })
-                  exportModule({data: get(data, 'allVAssozarts.nodes', []), store, fileName: 'AssoziierteArten'})
+                  exportModule({data: get(data, 'allVAssozarts.nodes', []), store, fileName: 'AssoziierteArten', fileType, applyMapFilterToExport})
                 } catch(error) {
                   setMessage(`Fehler: ${error.message}`)
                   setTimeout(() => setMessage(null), 5000)
