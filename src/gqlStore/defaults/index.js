@@ -1,7 +1,8 @@
 // @flow
 import get from 'lodash/get'
 
-import nodeLabelFilterDefault from '../modules/nodeLabelFilterDefault'
+import treeNodeLabelFilter from './tree/nodeLabelFilter'
+import treeMap from './tree/map'
 
 export default async (idb) => {
 
@@ -15,7 +16,8 @@ export default async (idb) => {
       activeNodeArray: [],
       openNodes: [],
       apFilter: false,
-      nodeLabelFilter: nodeLabelFilterDefault,
+      nodeLabelFilter: treeNodeLabelFilter,
+      map: treeMap,
       __typename: 'Tree'
     },
     tree2: {
@@ -23,7 +25,8 @@ export default async (idb) => {
       activeNodeArray: [],
       openNodes: [],
       apFilter: false,
-      nodeLabelFilter: nodeLabelFilterDefault,
+      nodeLabelFilter: treeNodeLabelFilter,
+      map: treeMap,
       __typename: 'Tree2'
     },
     /**

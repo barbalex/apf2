@@ -2,7 +2,6 @@
 import { extendObservable, action, computed, observable } from 'mobx'
 import sortBy from 'lodash/sortBy'
 
-import epsg4326to2056 from '../../modules/epsg4326to2056'
 import localizeTpop from '../action/localizeTpop'
 import setActiveBaseLayer from '../action/setActiveBaseLayer'
 import moveOverlay from '../action/moveOverlay'
