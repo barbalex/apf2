@@ -23,18 +23,6 @@ export default (store: Object): void => {
     setMarkierungen: action(data => (store.map.markierungen = data)),
     bounds: [[47.159, 8.354], [47.696, 8.984]],
     changeBounds: action(bounds => (store.map.bounds = bounds)),
-    mouseCoord: [],
-    mouseCoordEpsg2056: computed(
-      () => {
-        if (store.map.mouseCoord.length > 0) {
-          return epsg4326to2056(
-            store.map.mouseCoord[0],
-            store.map.mouseCoord[1]
-          )
-        }
-        return []
-      }
-    ),
     activeBaseLayer: 'OsmColor',
     setActiveBaseLayer: action(layer =>
       setActiveBaseLayer(store, layer)

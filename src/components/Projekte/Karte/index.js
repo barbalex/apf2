@@ -134,7 +134,7 @@ const Karte = ({
     {({ loading, error, data, client }) => {
       if (error) return `Fehler: ${error.message}`
 
-      const { activeBaseLayer, activeApfloraLayers } = store.map
+      const { activeBaseLayer, activeApfloraLayers, apfloraLayers } = store.map
       const { idOfTpopBeingLocalized } = store.map.tpop
       const MapElement = !!idOfTpopBeingLocalized ? StyledMapLocalizing : StyledMap
       const clustered = !(store.map.beob.assigning || activeApfloraLayers.includes('BeobZugeordnetAssignPolylines'))
@@ -179,12 +179,12 @@ const Karte = ({
         ZhOrtho2015Ir: () => <ZhOrtho2015Ir />,
       }
       const BaseLayerComponent = BaseLayerComponents[activeBaseLayer]
-      const activeApfloraLayersSorted = sortBy(store.map.activeApfloraLayers, activeApfloraLayer =>
-        store.map.apfloraLayers.findIndex(
+      const activeApfloraLayersSorted = sortBy(toJS(activeApfloraLayers), activeApfloraLayer =>
+        toJS(apfloraLayers).findIndex(
           apfloraLayer => apfloraLayer.value === activeApfloraLayer
         )
       )
-      console.log('Map:', { activeApfloraLayersSorted, activeApfloraLayers })
+      console.log('Map:', { activeApfloraLayersSorted, activeApfloraLayers, apfloraLayers })
     
       return (
         <ErrorBoundary>

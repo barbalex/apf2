@@ -77,6 +77,7 @@ const ProjekteContainer = ({
                                 tabs.length === 0 ?
                                 1 :
                                   (1 / tabs.length)
+            console.log('ProjektContainer: ', {activeApfloraLayers: toJS(store.map.activeApfloraLayers)})
 
             return (
               <Container data-loading={loading}>
@@ -143,10 +144,10 @@ const ProjekteContainer = ({
                             idOfTpopBeingLocalized={store.map.tpop.idOfTpopBeingLocalized}
                             activeBaseLayer={store.map.activeBaseLayer}
                             activeOverlays={store.map.activeOverlays}
-                            activeApfloraLayers={store.map.activeApfloraLayers}
+                            activeApfloraLayers={toJS(store.map.activeApfloraLayers)}
                             // SortedStrings enforce rerendering when sorting or visibility changes
-                            activeOverlaysSortedString={store.map.activeOverlaysSortedString}
-                            activeApfloraLayersSortedString={store.map.activeApfloraLayers.join()}
+                            activeOverlaysSortedString={toJS(store.map.activeOverlaysSortedString)}
+                            activeApfloraLayersSortedString={toJS(store.map.activeApfloraLayers).join()}
                             detailplaene={toJS(store.map.detailplaene)}
                             markierungen={toJS(store.map.markierungen)}
                           />

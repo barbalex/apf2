@@ -65,8 +65,6 @@ function Store(): void {
   }
   this.map = {
     bounds: [],
-    mouseCoord: [],
-    mouseCoordEpsg2056: [],
     pop: {},
     tpop: {},
     beob: {},
