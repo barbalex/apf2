@@ -26,7 +26,7 @@ import buildNodes from '../TreeContainer/nodes'
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  height: calc(100% - 49.3px);
+  height: 100%;
   cursor: ${props => (props['data-loading'] ? 'wait' : 'inherit')};
 `
 const KarteContainer = styled.div`
@@ -221,8 +221,6 @@ const Projekte = ({
       return (
         <Query query={data2Gql} variables={variables(activeNodes)}>
           {({ loading, error, data: data2, client }) => {
-            // do not show loading but rather last state
-            //if (loading) return <Container>Lade...</Container>
             if (error) return `Fehler: ${error.message}`
 
             const data = merge(data1, data2)
