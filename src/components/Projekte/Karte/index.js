@@ -239,10 +239,8 @@ const Karte = ({
             <ScaleControl imperial={false} />
             <LayersControl
               // this enforces rerendering when sorting changes
-              activeOverlaysSortedString={store.map.activeOverlaysSortedString}
-              activeApfloraLayersSortedString={
-                store.map.activeApfloraLayersSortedString
-              }
+              activeOverlaysSorted={store.map.activeOverlaysSortedString}
+              activeApfloraLayersSorted={store.map.activeApfloraLayers.join()}
             />
             <MeasureControl />
             <FullScreenControl />

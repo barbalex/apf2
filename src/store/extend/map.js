@@ -105,17 +105,6 @@ export default (store: Object): void => {
       moveApfloraLayer(store, oldIndex, newIndex)
     ),
     activeApfloraLayers: [],
-    activeApfloraLayersSorted: computed(
-      () =>
-        sortBy(store.map.activeApfloraLayers, activeApfloraLayer =>
-          store.map.apfloraLayers.findIndex(
-            apfloraLayer => apfloraLayer.value === activeApfloraLayer
-          )
-        )
-    ),
-    activeApfloraLayersSortedString: computed(
-      () => store.map.activeApfloraLayersSorted.join()
-    ),
     addActiveApfloraLayer: action(layer =>
       store.map.activeApfloraLayers.push(layer)
     ),

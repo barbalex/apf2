@@ -120,7 +120,7 @@ const ProjekteContainer = ({
                     {
                       tabs.includes('karte') &&
                       <ReflexElement
-                        //className="karte"
+                        className="karte"
                         //style={{ overflow: 'hidden' }}
                       >
                         <KarteContainer>
@@ -146,9 +146,7 @@ const ProjekteContainer = ({
                             activeApfloraLayers={store.map.activeApfloraLayers}
                             // SortedStrings enforce rerendering when sorting or visibility changes
                             activeOverlaysSortedString={store.map.activeOverlaysSortedString}
-                            activeApfloraLayersSortedString={
-                              store.map.activeApfloraLayersSortedString
-                            }
+                            activeApfloraLayersSortedString={store.map.activeApfloraLayers.join()}
                             detailplaene={toJS(store.map.detailplaene)}
                             markierungen={toJS(store.map.markierungen)}
                           />
