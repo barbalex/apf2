@@ -5,6 +5,7 @@ import get from 'lodash/get'
 export default ({
   data,
   treeName,
+  loading,
   projektNodes,
   projId,
   apNodes,
@@ -12,6 +13,7 @@ export default ({
 }: {
   data: Object,
   treeName: String,
+  loading: Boolean,
   projektNodes: Array < Object > ,
   projId: String,
   apNodes: Array < Object > ,
@@ -43,7 +45,7 @@ export default ({
       }
       return true
     }).length
-  let message = erfkritNodesLength
+  let message = (loading && !erfkritNodesLength) ? '...' : erfkritNodesLength
   if (nodeLabelFilterString) {
     message = `${erfkritNodesLength} gefiltert`
   }

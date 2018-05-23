@@ -4,6 +4,7 @@ import get from 'lodash/get'
 export default ({
   data,
   treeName,
+  loading,
   projektNodes,
   apNodes,
   popNodes,
@@ -17,6 +18,7 @@ export default ({
 }: {
   data: Object,
   treeName: String,
+  loading: Boolean,
   projektNodes: Array<Object>,
   apNodes: Array<Object>,
   popNodes: Array<Object>,
@@ -58,7 +60,7 @@ export default ({
       return true
     }).length
 
-  let message = childrenLength
+  let message = (loading && !childrenLength) ? '...' : childrenLength
   if (nodeLabelFilterString) {
     message = `${childrenLength} gefiltert`
   }

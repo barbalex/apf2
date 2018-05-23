@@ -58,6 +58,7 @@ class Tree extends Component {
     store: Object,
     tree: Object,
     nodes: Array<Object>,
+    loading: Boolean,
     activeNodes: Array<Object>,
     mapBeobZugeordnetVisible: boolean,
     mapBeobNichtBeurteiltVisible: boolean,
@@ -123,7 +124,7 @@ class Tree extends Component {
   )
 
   render() {
-    const { nodes, activeNodeArray } = this.props
+    const { nodes, activeNodeArray, loading } = this.props
 
     return (
       <ErrorBoundary>
@@ -141,6 +142,8 @@ class Tree extends Component {
                 )}
                 width={width}
                 innerRef={c => (this.tree = c)}
+                // force rerender when second query finisches
+                loading={loading}
               />
             )}
           </AutoSizer>

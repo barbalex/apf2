@@ -29,6 +29,7 @@ query TreeDataQuery(
     }
   }
   aps: allAps(filter: { projId: { in: $projekt } }) @include(if: $isProjekt) {
+    totalCount
     nodes {
       id
       projId

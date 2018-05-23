@@ -6,6 +6,7 @@ import union from 'lodash/union'
 export default ({
   data,
   treeName,
+  loading,
   projektNodes,
   projId,
   apNodes,
@@ -13,6 +14,7 @@ export default ({
 }: {
   data: Object,
   treeName: String,
+  loading: Boolean,
   projektNodes: Array<Object>,
   projId: String,
   apNodes: Array<Object>,
@@ -45,7 +47,7 @@ export default ({
     // reduce to distinct years
     .reduce((a, el, index) => union(a, [el.jahr]), [])
   const zieljahreLength = zieljahre.length
-  let message = `${zieljahreLength} ${zieljahreLength === 1 ? 'Jahr' : 'Jahre'}`
+  let message = (loading && !zieljahreLength) ? '...' : `${zieljahreLength} ${zieljahreLength === 1 ? 'Jahr' : 'Jahre'}`
   if (nodeLabelFilterString) {
     message = `${zieljahreLength} ${
       zieljahreLength === 1 ? 'Jahr' : 'Jahre'

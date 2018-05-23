@@ -5,11 +5,13 @@ import get from 'lodash/get'
 export default ({
   data,
   treeName,
+  loading,
   projektNodes,
   projId,
 }: {
   data: Object,
   treeName: String,
+  loading: Boolean,
   projektNodes: Array<Object>,
   projId: String,
 }): Array<Object> => {
@@ -40,7 +42,7 @@ export default ({
       }
       return true
     }).length
-  let message = apNodesLength
+  let message = (loading && !apNodesLength) ? '...' : apNodesLength
   if (nodeLabelFilterString) {
     message = `${apNodesLength} gefiltert`
   }

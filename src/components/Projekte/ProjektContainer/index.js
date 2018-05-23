@@ -66,7 +66,8 @@ const ProjekteContainer = ({
             if (error) return `Fehler: ${error.message}`
 
             const data = merge(data1, data2)
-            const nodes = buildNodes({ data, treeName })
+            const nodes = buildNodes({ data, treeName, loading })
+            console.log('ProjektContainer, nodes:', nodes)
             const tree = get(data, treeName)
             const activeNodeArray = get(data, `${treeName}.activeNodeArray`)
             const activeNode = nodes.find(n => isEqual(n.url, activeNodeArray))
@@ -77,7 +78,7 @@ const ProjekteContainer = ({
                                 tabs.length === 0 ?
                                 1 :
                                   (1 / tabs.length)
-            console.log('ProjektContainer: ', {activeApfloraLayers: toJS(store.map.activeApfloraLayers)})
+            console.log('ProjektContainer: loading:', loading)
 
             return (
               <Container data-loading={loading}>
@@ -93,6 +94,7 @@ const ProjekteContainer = ({
                           activeNodes={activeNodes}
                           activeNode={activeNode}
                           client={client}
+                          loading={loading}
                         />
                       </ReflexElement>
                     }

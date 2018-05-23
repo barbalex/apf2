@@ -6,6 +6,7 @@ import format from 'date-fns/format'
 export default ({
   data,
   treeName,
+  loading,
   projektNodes,
   projId,
   apNodes,
@@ -13,6 +14,7 @@ export default ({
 }: {
   data: Object,
   treeName: String,
+  loading: Boolean,
   projektNodes: Array<Object>,
   projId: String,
   apNodes: Array<Object>,
@@ -42,7 +44,7 @@ export default ({
       }
       return true
     }).length
-  let message = beobNichtBeurteiltNodesLength
+  let message = (loading && !beobNichtBeurteiltNodesLength) ? '...' : beobNichtBeurteiltNodesLength
   if (nodeLabelFilterString) {
     message = `${beobNichtBeurteiltNodesLength} gefiltert`
   }

@@ -320,7 +320,8 @@ const TreeContainer = ({
   nodes,
   activeNodes,
   activeNode,
-  client
+  client,
+  loading
 }: {
   store: Object,
   treeName: String,
@@ -330,7 +331,8 @@ const TreeContainer = ({
   nodes: Array<Object>,
   activeNodes: Object,
   activeNode: Object,
-  client: Object
+  client: Object,
+  loading: Boolean
 }) => {
   const { activeDataset } = store.tree
   const showApDivToggle = activeDataset
@@ -397,6 +399,8 @@ const TreeContainer = ({
     }
   }
 
+  console.log('TreeContainer:', {nodes, loading})
+
   return (
     <ErrorBoundary>
       <Container>
@@ -421,6 +425,7 @@ const TreeContainer = ({
             data={data}
             tree={tree}
             nodes={nodes}
+            loading={loading}
             activeNodeArray={activeNodeArray}
             openNodes={openNodes}
             activeNodes={activeNodes}
