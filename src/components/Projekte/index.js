@@ -27,27 +27,17 @@ const Projekte = () =>
       if (error) return `Fehler: ${error.message}`
 
       const projekteTabs = get(data, 'urlQuery.projekteTabs')
-      let treeTabs = intersection(treeTabValues, projekteTabs)
-      let tree2Tabs = intersection(tree2TabValues, projekteTabs)
-      // if daten and exporte are shown, only show exporte
-      if (treeTabs.includes('daten') && treeTabs.includes('exporte')) {
-        treeTabs = treeTabs.filter(t => t !== 'daten')
-      }
-      if (tree2Tabs.includes('daten2') && tree2Tabs.includes('exporte2')) {
-        tree2Tabs = tree2Tabs.filter(t => t !== 'daten2')
-      }
-      console.log('Projekte:', {treeTabs,tree2Tabs,projekteTabs})
+      const treeTabs = intersection(treeTabValues, projekteTabs)
+      const tree2Tabs = intersection(tree2TabValues, projekteTabs)
       if (tree2Tabs.length === 0) {
         return <ProjektContainer treeName="tree" tabs={treeTabs} />
       }
-      const flex = treeTabs.length / projekteTabs.length
-      console.log('Projekte: flex', flex)
 
       return (
         <Container>
           <ErrorBoundary>
             <ReflexContainer orientation="vertical">
-              <ReflexElement flex={flex} >
+              <ReflexElement flex={treeTabs.length / projekteTabs.length} >
                 <ProjektContainer treeName="tree" tabs={treeTabs} />
               </ReflexElement>
               <ReflexSplitter />

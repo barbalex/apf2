@@ -25,7 +25,6 @@ export default {
       const urlQuery = get(data, 'urlQuery')
       // only write if changed
       if (!isEqual(urlQuery, newUrlQuery)) {
-        console.log('resolvers setUrlQuery:', {projekteTabs, feldkontrTab})
         cache.writeData({
           data: {
             urlQuery: {

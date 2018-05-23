@@ -70,7 +70,7 @@ const AP = ({
   message,
   setMessage,
 }: {
-  store:Object,
+  store: Object,
   expanded: Boolean,
   setExpanded: () => void,
   message: String,

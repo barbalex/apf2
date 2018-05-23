@@ -68,7 +68,7 @@ const Projekte = ({
             const tree = get(data, treeName)
             const activeNodeArray = get(data, `${treeName}.activeNodeArray`)
             const activeNode = nodes.find(n => isEqual(n.url, activeNodeArray))
-            // if daten and exporte are shown, only show exporte
+            // remove 2 to treat all same
             const tabs = clone(tabsPassed).map(t => t.replace('2', ''))
 
             return (

@@ -56,23 +56,12 @@ const enhance = compose(
         // show one tab only
         setUrlQueryValue({ client, key: 'projekteTabs', value: [name] })
       } else {
-        const exporteIsVisible = projekteTabs.includes('exporte')
-        const isVisible = projekteTabs.includes(name)
-        if (isVisible) {
-          if (name === 'daten' && exporteIsVisible) {
-            remove(projekteTabs, el => el === 'exporte')
-          } else {
-            remove(projekteTabs, el => el === name)
-          }
+        if (projekteTabs.includes(name)) {
+          remove(projekteTabs, el => el === name)
         } else {
           projekteTabs.push(name)
           if (name === 'tree2') {
             store.tree.cloneActiveNodeArrayToTree2()
-          }
-          if (name === 'daten' && exporteIsVisible) {
-            // need to remove exporte
-            // because exporte replaces daten
-            remove(projekteTabs, el => el === 'exporte')
           }
         }
         setUrlQueryValue({ client, key: 'projekteTabs', value: projekteTabs })
@@ -118,14 +107,6 @@ const MyAppBar = ({
        * because otherwise removing elements errors out (because elements are sealed)
        */
       const projekteTabs = clone(get(data, 'urlQuery.projekteTabs', []))
-      const treeIsVisible = projekteTabs.includes('tree')
-      const tree2IsVisible = projekteTabs.includes('tree2')
-      const datenIsVisible =
-        projekteTabs.includes('daten') && !projekteTabs.includes('exporte')
-      const daten2IsVisible =
-        projekteTabs.includes('daten2') && !projekteTabs.includes('exporte')
-      const karteIsVisible = projekteTabs.includes('karte')
-      const exporteIsVisible = projekteTabs.includes('exporte')
       const exporteIsActive = !!activeNodes.projekt
       const isMobile = isMobilePhone()
 
@@ -138,35 +119,19 @@ const MyAppBar = ({
               </Typography>
               <MenuDiv>
                 <StyledButton
-                  data-visible={treeIsVisible}
+                  data-visible={projekteTabs.includes('tree')}
                   onClick={() => onClickButton('tree', client, projekteTabs)}
                 >
                   Strukturbaum
                 </StyledButton>
                 <StyledButton
-                  data-visible={datenIsVisible}
+                  data-visible={projekteTabs.includes('daten')}
                   onClick={() => onClickButton('daten', client, projekteTabs)}
                 >
                   Daten
                 </StyledButton>
-                {!isMobile && (
-                  <StyledButton
-                    data-visible={tree2IsVisible}
-                    onClick={() => onClickButton('tree2', client, projekteTabs)}
-                  >
-                    Strukturbaum 2
-                  </StyledButton>
-                )}
-                {!isMobile && (
-                  <StyledButton
-                    data-visible={daten2IsVisible}
-                    onClick={() => onClickButton('daten2', client, projekteTabs)}
-                  >
-                    Daten 2
-                  </StyledButton>
-                )}
                 <StyledButton
-                  data-visible={karteIsVisible}
+                  data-visible={projekteTabs.includes('karte')}
                   onClick={() => onClickButton('karte', client, projekteTabs)}
                 >
                   Karte
@@ -174,7 +139,7 @@ const MyAppBar = ({
                 {!isMobile &&
                   exporteIsActive && (
                     <StyledButton
-                      data-visible={exporteIsVisible}
+                      data-visible={projekteTabs.includes('exporte')}
                       onClick={() => {
                         setAnchorEl(null)
                         onClickButton('exporte', client, projekteTabs)
@@ -182,7 +147,24 @@ const MyAppBar = ({
                     >
                       Exporte
                     </StyledButton>
-                  )}
+                  )
+                }
+                {!isMobile && (
+                  <StyledButton
+                    data-visible={projekteTabs.includes('tree2')}
+                    onClick={() => onClickButton('tree2', client, projekteTabs)}
+                  >
+                    Strukturbaum 2
+                  </StyledButton>
+                )}
+                {!isMobile && (
+                  <StyledButton
+                    data-visible={projekteTabs.includes('daten2')}
+                    onClick={() => onClickButton('daten2', client, projekteTabs)}
+                  >
+                    Daten 2
+                  </StyledButton>
+                )}
 
                 <div>
                   <IconButton
@@ -206,7 +188,7 @@ const MyAppBar = ({
                             setAnchorEl(null)
                             onClickButton('exporte', client, projekteTabs)
                           }}
-                          disabled={exporteIsVisible}
+                          disabled={projekteTabs.includes('exporte')}
                         >
                           Exporte
                         </MenuItem>
