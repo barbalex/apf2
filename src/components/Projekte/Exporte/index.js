@@ -59,31 +59,38 @@ const Exporte = () => (
                 <Optionen
                   applyMapFilterToExport={applyMapFilterToExport}
                   fileType={fileType}
+                  client={client}
                 />
                 <Tipps />
                 <Ap
                   applyMapFilterToExport={applyMapFilterToExport}
                   fileType={fileType}
+                  client={client}
                 />
                 <Populationen
                   applyMapFilterToExport={applyMapFilterToExport}
                   fileType={fileType}
+                  client={client}
                 />
                 <Teilpopulationen
                   applyMapFilterToExport={applyMapFilterToExport}
                   fileType={fileType}
+                  client={client}
                 />
                 <Kontrollen
                   applyMapFilterToExport={applyMapFilterToExport}
                   fileType={fileType}
+                  client={client}
                 />
                 <Massnahmen
                   applyMapFilterToExport={applyMapFilterToExport}
                   fileType={fileType}
+                  client={client}
                 />
                 <Beobachtungen
                   applyMapFilterToExport={applyMapFilterToExport}
                   fileType={fileType}
+                  client={client}
                 />
                 <Anwendung />
               </FieldsContainer>
