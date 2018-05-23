@@ -399,7 +399,7 @@ const TreeContainer = ({
   }
 
   return (
-    <ReflexElement flex={flex} >
+    <ReflexElement >
       <ErrorBoundary>
         <Container>
           {deleteDatasetModalIsVisible && (

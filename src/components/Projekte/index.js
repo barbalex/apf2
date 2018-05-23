@@ -25,7 +25,7 @@ const Projekte = () =>
   <Query query={dataGql}>
     {({ loading, error, data, client }) => {
       if (error) return `Fehler: ${error.message}`
-      
+
       const projekteTabs = get(data, 'urlQuery.projekteTabs')
       let treeTabs = intersection(treeTabValues, projekteTabs)
       let tree2Tabs = intersection(tree2TabValues, projekteTabs)
@@ -36,18 +36,21 @@ const Projekte = () =>
       if (tree2Tabs.includes('daten2') && tree2Tabs.includes('exporte2')) {
         tree2Tabs = tree2Tabs.filter(t => t !== 'daten2')
       }
+      console.log('Projekte:', {treeTabs,tree2Tabs,projekteTabs})
       if (tree2Tabs.length === 0) {
         return <ProjektContainer treeName="tree" tabs={treeTabs} />
       }
+      const flex = treeTabs.length / projekteTabs.length
+      console.log('Projekte: flex', flex)
 
       return (
         <Container>
           <ErrorBoundary>
             <ReflexContainer orientation="vertical">
-              <ReflexElement flex={treeTabs.length / projekteTabs.length} >
+              <ReflexElement flex={flex} >
                 <ProjektContainer treeName="tree" tabs={treeTabs} />
               </ReflexElement>
-              <ReflexSplitter key="treeSplitter" />
+              <ReflexSplitter />
               <ReflexElement >
                 <ProjektContainer treeName="tree2" tabs={tree2Tabs} />
               </ReflexElement>

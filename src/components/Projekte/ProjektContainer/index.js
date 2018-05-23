@@ -1,5 +1,5 @@
 // @flow
-import React from 'react'
+import React, { Fragment } from 'react'
 import { observer, inject } from 'mobx-react'
 import { toJS } from 'mobx'
 import styled from 'styled-components'
@@ -59,6 +59,7 @@ const myChildren = ({
   client: Object
 }) => {
   const nodes = buildNodes({ data, treeName })
+  const tree = get(data, treeName)
   const activeNodeArray = get(data, `${treeName}.activeNodeArray`)
   const activeNode = nodes.find(n => isEqual(n.url, activeNodeArray))
   // if daten and exporte are shown, only show exporte
@@ -73,40 +74,10 @@ const myChildren = ({
   }
 
   const children = []
-  let flex
-  switch (tabs.length) {
-    case 0:
-      flex = 1
-      break
-    case 2: {
-      if (tabs.includes('tree') && tabs.includes('tree2')) {
-        // prevent 0.33 of screen being empty
-        flex = 0.5
-      } else {
-        flex = 0.33
-      }
-      break
-    }
-    case 3:
-      flex = 0.33
-      break
-    case 4:
-      flex = 0.25
-      break
-    case 5:
-      flex = 0.2
-      break
-    case 6:
-      flex = 0.1666
-      break
-    default:
-      flex = 1 / tabs.length
-  }
   if (tabs.includes('tree')) {
     children.push(
       <TreeContainer
         treeName="tree"
-        flex={flex}
         data={data}
         nodes={nodes}
         activeNodes={activeNodes}
@@ -123,7 +94,7 @@ const myChildren = ({
   if (tabs.includes('daten')) {
     children.push(
       <Daten
-        tree={store.tree}
+        tree={tree}
         treeName="tree"
         activeNode={activeNode}
         key="daten"
@@ -135,9 +106,7 @@ const myChildren = ({
     }
   }
   if (tabs.includes('exporte')) {
-    children.push(
-      <Exporte key="exporte" />
-    )
+    children.push(<Exporte key="exporte" />)
     tabs.splice(tabs.indexOf('exporte'), 1)
     if (tabs.length > 0) {
       children.push(<ReflexSplitter key="exporteSplitter" />)
@@ -147,7 +116,6 @@ const myChildren = ({
     children.push(
       <TreeContainer
         treeName="tree2"
-        flex={flex}
         data={data}
         nodes={nodes}
         activeNodes={activeNodes}
@@ -164,7 +132,7 @@ const myChildren = ({
   if (tabs.includes('daten2')) {
     children.push(
       <Daten
-        tree={store.tree2}
+        tree={tree}
         treeName="tree2"
         activeNode={activeNode}
         key="daten2"
@@ -179,8 +147,8 @@ const myChildren = ({
     children.push(
       <ReflexElement
         key="karte"
-        className="karte"
-        style={{ overflow: 'hidden' }}
+        //className="karte"
+        //style={{ overflow: 'hidden' }}
       >
         <KarteContainer>
           <Karte
@@ -244,7 +212,9 @@ const Projekte = ({
               <Container data-loading={loading}>
                 <ErrorBoundary>
                   <ReflexContainer orientation="vertical">
-                    {myChildren({ store, data, treeName, tabs, client, activeNodes })}
+                    <Fragment>
+                      {myChildren({ store, data, treeName, tabs, client, activeNodes })}
+                    </Fragment>
                   </ReflexContainer>
                 </ErrorBoundary>
               </Container>
