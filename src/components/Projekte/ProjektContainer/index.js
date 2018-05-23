@@ -9,6 +9,7 @@ import { Query } from 'react-apollo'
 import get from 'lodash/get'
 import merge from 'lodash/merge'
 import clone from 'lodash/clone'
+import isEqual from 'lodash/isEqual'
 
 // when Karte was loaded async, it did not load,
 // but only in production!
@@ -58,6 +59,8 @@ const myChildren = ({
   client: Object
 }) => {
   const nodes = buildNodes({ data, treeName })
+  const activeNodeArray = get(data, `${treeName}.activeNodeArray`)
+  const activeNode = nodes.find(n => isEqual(n.url, activeNodeArray))
   // if daten and exporte are shown, only show exporte
   const tabs = clone(tabsPassed)
   if (tabs.includes('daten') && tabs.includes('exporte')) {
@@ -107,6 +110,7 @@ const myChildren = ({
         data={data}
         nodes={nodes}
         activeNodes={activeNodes}
+        activeNode={activeNode}
         client={client}
         key="tree"
       />
@@ -142,6 +146,7 @@ const myChildren = ({
         data={data}
         nodes={nodes}
         activeNodes={activeNodes}
+        activeNode={activeNode}
         client={client}
         key="tree2"
       />

@@ -320,6 +320,7 @@ const TreeContainer = ({
   data,
   nodes,
   activeNodes,
+  activeNode,
   client
 }: {
   store: Object,
@@ -329,6 +330,7 @@ const TreeContainer = ({
   data: Object,
   nodes: Array<Object>,
   activeNodes: Object,
+  activeNode: Object,
   client: Object
 }) => {
   const { activeDataset } = store.tree
@@ -404,7 +406,11 @@ const TreeContainer = ({
             <DeleteDatasetModal tree={store[treeName]} token={token} />
           )}
           <LabelFilterContainer>
-            <LabelFilter treeName={treeName} nodes={nodes} />
+            <LabelFilter
+              treeName={treeName}
+              nodes={nodes} 
+              activeNode={activeNode}
+            />
             {showApDivToggle && <ApFilter treeName={treeName} />}
           </LabelFilterContainer>
           <InnerTreeContainer

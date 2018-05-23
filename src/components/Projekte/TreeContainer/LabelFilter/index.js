@@ -125,10 +125,12 @@ const enhance = compose(
 
 const LabelFilter = ({
   treeName,
+  activeNode,
   onChange,
   nodes,
 }: {
   treeName: String,
+  activeNode: Object,
   onChange: () => void,
   nodes: Array<Object>
 }) =>
@@ -136,8 +138,6 @@ const LabelFilter = ({
     {({ error, data, client }) => {
       if (error) return `Fehler: ${error.message}`
 
-      const activeNodeArray = get(data, `${treeName}.activeNodeArray`)
-      const activeNode = nodes.find(n => isEqual(n.url, activeNodeArray))
       // name it projekt
       // because: /projekte has no nodes!
       let tableName = 'projekt'

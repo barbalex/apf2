@@ -25,6 +25,7 @@ const Projekte = () =>
   <Query query={dataGql}>
     {({ loading, error, data, client }) => {
       if (error) return `Fehler: ${error.message}`
+      
       const projekteTabs = get(data, 'urlQuery.projekteTabs')
       let treeTabs = intersection(treeTabValues, projekteTabs)
       let tree2Tabs = intersection(tree2TabValues, projekteTabs)
@@ -35,37 +36,15 @@ const Projekte = () =>
       if (tree2Tabs.includes('daten2') && tree2Tabs.includes('exporte2')) {
         tree2Tabs = tree2Tabs.filter(t => t !== 'daten2')
       }
-      //const contains2 = projekteTabs.some(t => t.includes('2'))
-      const contains2 = tree2Tabs.length > 0
-      console.log('Projekte 1:', {
-        projekteTabs,
-        projekteTabsOriginal: get(data, 'urlQuery.projekteTabs'),
-        contains2,
-        treeTabsLive: intersection(treeTabValues, projekteTabs),
-        projekteTabsLength: projekteTabs.length, 
-        data,
-        treeTabs, 
-        tree2Tabs, 
-        treeTabsLength: treeTabs.length, 
-        tree2TabsLength: tree2Tabs.length, 
-        tree2Tabs0: tree2Tabs[0],
-        tree2TabsLive: intersection(tree2TabValues, projekteTabs),
-    })
-      if (tree2Tabs.length === 0) return <ProjektContainer treeName="tree" tabs={treeTabs} />
-
-      console.log('rendering two projekt containers')
-
-      let flex = treeTabs.length / tree2Tabs.length
-      if (projekteTabs.length === 2 && projekteTabs.includes('tree') && projekteTabs.includes('tree2')) {
-        // prevent 0.33 of screen being empty
-        flex = 0.5
+      if (tree2Tabs.length === 0) {
+        return <ProjektContainer treeName="tree" tabs={treeTabs} />
       }
 
       return (
         <Container>
           <ErrorBoundary>
             <ReflexContainer orientation="vertical">
-              <ReflexElement flex={flex} >
+              <ReflexElement flex={treeTabs.length / projekteTabs.length} >
                 <ProjektContainer treeName="tree" tabs={treeTabs} />
               </ReflexElement>
               <ReflexSplitter key="treeSplitter" />
