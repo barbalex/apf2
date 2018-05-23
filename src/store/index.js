@@ -31,7 +31,6 @@ function Store(): void {
     activeDataset: {},
     openNodes: [],
     apFilter: false,
-    toggleApFilter: () => {},
     nodeLabelFilter: {},
     emptyNodeLabelFilter: () => {},
   }
@@ -44,7 +43,6 @@ function Store(): void {
     activeDataset: {},
     openNodes: [],
     apFilter: false,
-    toggleApFilter: () => {},
     nodeLabelFilter: {},
   }
   this.app = {
