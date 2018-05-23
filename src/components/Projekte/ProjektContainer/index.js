@@ -107,17 +107,7 @@ const Projekte = ({
                       </ReflexElement>
                     }
                     {
-                      tabs.includes('exporte') && (tabs.includes('tree') || tabs.includes('daten')) &&
-                      <ReflexSplitter />
-                    }
-                    {
-                      tabs.includes('exporte') &&
-                      <ReflexElement>
-                        <Exporte />
-                      </ReflexElement>
-                    }
-                    {
-                      tabs.includes('karte') && (tabs.includes('tree') || tabs.includes('daten') || tabs.includes('exporte')) &&
+                      tabs.includes('karte') && (tabs.includes('tree') || tabs.includes('daten')) &&
                       <ReflexSplitter />
                     }
                     {
@@ -154,6 +144,16 @@ const Projekte = ({
                             markierungen={toJS(store.map.markierungen)}
                           />
                         </KarteContainer>
+                      </ReflexElement>
+                    }
+                    {
+                      tabs.includes('exporte') && (tabs.includes('tree') || tabs.includes('daten') || tabs.includes('karte')) &&
+                      <ReflexSplitter />
+                    }
+                    {
+                      tabs.includes('exporte') &&
+                      <ReflexElement>
+                        <Exporte />
                       </ReflexElement>
                     }
                   </ReflexContainer>
