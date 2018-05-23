@@ -64,8 +64,6 @@ export default async (idb) => {
       __typename: 'User'
     },
     export: {
-      applyNodeLabelFilterToExport: false,
-      applyActiveNodeFilterToExport: false,
       applyMapFilterToExport: false,
       fileType: 'xlsx',
       __typename: 'Export'

@@ -13,8 +13,6 @@ export default {
         query: gql`
             query Query {
               export @client {
-                applyNodeLabelFilterToExport
-                applyActiveNodeFilterToExport
                 applyMapFilterToExport
                 fileType
               }
@@ -28,12 +26,6 @@ export default {
         cache.writeData({
           data: {
             export: {
-              applyNodeLabelFilterToExport: key === 'applyNodeLabelFilterToExport' ?
-                value :
-                get(data, 'export.applyNodeLabelFilterToExport', null),
-              applyActiveNodeFilterToExport: key === 'applyActiveNodeFilterToExport' ?
-                value :
-                get(data, 'export.applyActiveNodeFilterToExport', null),
               applyMapFilterToExport: key === 'applyMapFilterToExport' ?
                 value :
                 get(data, 'export.applyMapFilterToExport', null),
