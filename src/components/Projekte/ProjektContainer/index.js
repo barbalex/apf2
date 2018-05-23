@@ -8,6 +8,7 @@ import { ReflexContainer, ReflexSplitter, ReflexElement } from 'react-reflex'
 import { Query } from 'react-apollo'
 import get from 'lodash/get'
 import merge from 'lodash/merge'
+import clone from 'lodash/clone'
 
 // when Karte was loaded async, it did not load,
 // but only in production!
@@ -41,13 +42,11 @@ const KarteContainer = styled.div`
 
 const enhance = compose(inject('store'), observer)
 
-// TODO
-// get this to work again
 const myChildren = ({
   store,
   data,
   treeName,
-  tabs,
+  tabs: tabsPassed,
   activeNodes,
   client
 }:{
@@ -60,6 +59,7 @@ const myChildren = ({
 }) => {
   const nodes = buildNodes({ data, treeName })
   // if daten and exporte are shown, only show exporte
+  const tabs = clone(tabsPassed)
   if (tabs.includes('daten') && tabs.includes('exporte')) {
     const i = tabs.indexOf('daten')
     tabs.splice(i, 1)
@@ -201,7 +201,15 @@ const myChildren = ({
   return children
 }
 
-const Projekte = ({ store, treeName, tabs }: { store: Object, treeName: String, tabs: Array<String> }) =>
+const Projekte = ({
+  store,
+  treeName,
+  tabs
+}: {
+  store: Object,
+  treeName: String,
+  tabs: Array<String>
+}) =>
   <Query query={data1Gql} >
     {({ error, data: data1 }) => {
       if (error) return `Fehler: ${error.message}`
