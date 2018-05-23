@@ -8,7 +8,6 @@ import extendMapBeob from './mapBeob'
 import extendMapBeobNichtBeurteilt from './mapBeobNichtBeurteilt'
 import extendMapBeobNichtZuzuordnen from './mapBeobNichtZuzuordnen'
 import extendMapBeobZugeordnet from './mapBeobZugeordnet'
-import extendExport from './export'
 import extendQk from './qk'
 
 export default (store: Object): void => {
@@ -23,6 +22,5 @@ export default (store: Object): void => {
   extendMapBeobNichtBeurteilt(store)
   extendMapBeobNichtZuzuordnen(store)
   extendMapBeobZugeordnet(store)
-  extendExport(store)
   extendQk(store)
 }

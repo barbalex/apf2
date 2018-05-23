@@ -78,10 +78,6 @@ const Messages = Loadable({
   loader: () => import('./components/Messages'),
   loading: Loading,
 })
-const DownloadMessages = Loadable({
-  loader: () => import('./components/DownloadMessages'),
-  loading: Loading,
-})
 ;(async () => {
   try {
     registerServiceWorker(store)
@@ -132,7 +128,6 @@ const DownloadMessages = Loadable({
                 <Errors />
                 <UpdateAvailable />
                 <Messages />
-                <DownloadMessages />
               </AppContainer>
             </MuiPickersUtilsProvider>
           </MuiThemeProvider>

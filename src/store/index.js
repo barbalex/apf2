@@ -47,19 +47,6 @@ function Store(): void {
     toggleApFilter: () => {},
     nodeLabelFilter: {},
   }
-  this.export = {
-    applyNodeLabelFilterToExport: false,
-    applyActiveNodeFilterToExport: false,
-    applyMapFilterToExport: false,
-    toggleApplyMapFilterToExport: () => {},
-    // array of names of downloads started
-    // when download finishes, it's name is removed
-    activeDownloads: [],
-    addDownload: () => {},
-    removeDownload: () => {},
-    fileType: 'xlsx',
-    toggleFileType: () => {},
-  }
   this.app = {
     ktZh: null,
   }

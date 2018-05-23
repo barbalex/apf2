@@ -66,12 +66,18 @@ const enhance = compose(
 
 const Anwendung = ({
   store,
+  fileType,
+  applyMapFilterToExport,
+  client,
   expanded,
   setExpanded,
   message,
   setMessage,
 }: {
   store:Object,
+  fileType: String,
+  applyMapFilterToExport: Boolean,
+  client: Object,
   expanded: Boolean,
   setExpanded: () => void,
   message: String,
@@ -117,7 +123,7 @@ const Anwendung = ({
                     }
                   }`
               })
-              exportModule({data: get(data, 'allVDatenstrukturs.nodes', []), store, fileName: 'Datenstruktur'})
+              exportModule({data: get(data, 'allVDatenstrukturs.nodes', []), store, fileName: 'Datenstruktur', fileType, applyMapFilterToExport})
             } catch(error) {
               setMessage(`Fehler: ${error.message}`)
               setTimeout(() => setMessage(null), 5000)
