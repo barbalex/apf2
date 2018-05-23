@@ -399,8 +399,6 @@ const TreeContainer = ({
     }
   }
 
-  console.log('TreeContainer:', {nodes, loading})
-
   return (
     <ErrorBoundary>
       <Container>
