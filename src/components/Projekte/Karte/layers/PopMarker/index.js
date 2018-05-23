@@ -10,9 +10,8 @@ import PopMarkerCluster from './Cluster'
 
 const enhance = compose(inject('store'))
 
-const PmcComponent = ({ store }:{ store: Object }) => {
-  const { tree } = store
-  const { activeNodes, nodeLabelFilter } = tree
+const PmcComponent = ({ store, tree, activeNodes }:{ store: Object, tree: Object, activeNodes: Array<Object> }) => {
+  const { nodeLabelFilter } = tree
   const { ap, projekt } = activeNodes
 
   return (
@@ -33,6 +32,7 @@ const PmcComponent = ({ store }:{ store: Object }) => {
             return `${p.nr || '(keine Nr)'}: ${p.name || '(kein Name)'}`.toLowerCase().includes(popFilterString.toLowerCase())
           })
         const popMarkers = buildMarkers({ pops, store })
+        console.log('PopMarker:', { tree, activeNodes, nodeLabelFilter, ap, projekt, popMarkers })
 
         return <PopMarkerCluster markers={popMarkers} />
       

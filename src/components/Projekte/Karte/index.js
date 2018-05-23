@@ -19,6 +19,7 @@ import 'leaflet'
 import 'proj4'
 import 'proj4leaflet'
 import debounceHandler from '@hocs/debounce-handler'
+import sortBy from 'lodash/sortBy'
 
 import dataGql from './data.graphql'
 import LayersControl from './LayersControl'
@@ -120,9 +121,13 @@ const enhance = compose(
 
 const Karte = ({
   store,
+  tree,
+  activeNodes,
   onMouseMove
 }: {
   store: Object,
+  tree: Object,
+  activeNodes: Array<Object>,
   onMouseMove: () => void
 }) =>
   <Query query={dataGql} >
@@ -140,12 +145,12 @@ const Karte = ({
       const ApfloraLayerComponents = {
         // MapFilter is used for filtering, need to return null
         MapFilter: () => null,
-        Pop: () => <Pop />,
-        Tpop: () => <Tpop clustered={clustered} />,
-        BeobNichtBeurteilt: () => <BeobNichtBeurteilt clustered={clustered} />,
-        BeobNichtZuzuordnen: () => <BeobNichtZuzuordnen clustered={clustered} />,
-        BeobZugeordnet: () => <BeobZugeordnet clustered={clustered} />,
-        BeobZugeordnetAssignPolylines: () => <BeobZugeordnetAssignPolylines />
+        Pop: () => <Pop tree={tree} activeNodes={activeNodes} />,
+        Tpop: () => <Tpop tree={tree} activeNodes={activeNodes} clustered={clustered} />,
+        BeobNichtBeurteilt: () => <BeobNichtBeurteilt tree={tree} activeNodes={activeNodes} clustered={clustered} />,
+        BeobNichtZuzuordnen: () => <BeobNichtZuzuordnen tree={tree} activeNodes={activeNodes} clustered={clustered} />,
+        BeobZugeordnet: () => <BeobZugeordnet tree={tree} activeNodes={activeNodes} clustered={clustered} />,
+        BeobZugeordnetAssignPolylines: () => <BeobZugeordnetAssignPolylines tree={tree} activeNodes={activeNodes} />
       }
       const OverlayComponents = {
         ZhUep: () => <ZhUepOverlay />,
@@ -174,6 +179,12 @@ const Karte = ({
         ZhOrtho2015Ir: () => <ZhOrtho2015Ir />,
       }
       const BaseLayerComponent = BaseLayerComponents[activeBaseLayer]
+      const activeApfloraLayersSorted = sortBy(store.map.activeApfloraLayers, activeApfloraLayer =>
+        store.map.apfloraLayers.findIndex(
+          apfloraLayer => apfloraLayer.value === activeApfloraLayer
+        )
+      )
+      console.log('Map:', { activeApfloraLayersSorted, activeApfloraLayers })
     
       return (
         <ErrorBoundary>
@@ -217,13 +228,14 @@ const Karte = ({
                 return <OverlayComponent key={index} />
               })
               .reverse()}
-            {store.map.activeApfloraLayersSorted
+            {activeApfloraLayersSorted
               .map((apfloraLayerName, index) => {
-                const ApfloraLayerComponent =
-                  ApfloraLayerComponents[apfloraLayerName]
+                const ApfloraLayerComponent = ApfloraLayerComponents[apfloraLayerName]
+                console.log({ apfloraLayerName, activeApfloraLayersSorted })
                 return <ApfloraLayerComponent key={index} />
               })
-              .reverse()}
+              .reverse()
+            }
             <ScaleControl imperial={false} />
             <LayersControl
               // this enforces rerendering when sorting changes

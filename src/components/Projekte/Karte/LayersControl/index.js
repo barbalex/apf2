@@ -59,15 +59,14 @@ const enhance = compose(
   withState('overlaysExpanded', 'toggleOverlaysExpanded', false),
   withState('apfloraLayersExpanded', 'toggleApfloraLayersExpanded', false),
   withHandlers({
-    onToggleBaseLayersExpanded: props => () => {
-      const {
-        overlaysExpanded,
-        baseLayersExpanded,
-        toggleOverlaysExpanded,
-        toggleBaseLayersExpanded,
-        toggleApfloraLayersExpanded,
-        apfloraLayersExpanded,
-      } = props
+    onToggleBaseLayersExpanded: ({
+      overlaysExpanded,
+      baseLayersExpanded,
+      toggleOverlaysExpanded,
+      toggleBaseLayersExpanded,
+      toggleApfloraLayersExpanded,
+      apfloraLayersExpanded,
+    }) => () => {
       toggleBaseLayersExpanded(!baseLayersExpanded)
       if (overlaysExpanded) {
         toggleOverlaysExpanded(!overlaysExpanded)
@@ -76,15 +75,14 @@ const enhance = compose(
         toggleApfloraLayersExpanded(!apfloraLayersExpanded)
       }
     },
-    onToggleOverlaysExpanded: props => () => {
-      const {
-        overlaysExpanded,
-        baseLayersExpanded,
-        toggleOverlaysExpanded,
-        toggleBaseLayersExpanded,
-        toggleApfloraLayersExpanded,
-        apfloraLayersExpanded,
-      } = props
+    onToggleOverlaysExpanded: ({
+      overlaysExpanded,
+      baseLayersExpanded,
+      toggleOverlaysExpanded,
+      toggleBaseLayersExpanded,
+      toggleApfloraLayersExpanded,
+      apfloraLayersExpanded,
+    }) => () => {
       toggleOverlaysExpanded(!overlaysExpanded)
       if (baseLayersExpanded) {
         toggleBaseLayersExpanded(!baseLayersExpanded)
@@ -93,15 +91,14 @@ const enhance = compose(
         toggleApfloraLayersExpanded(!apfloraLayersExpanded)
       }
     },
-    onToggleApfloraLayersExpanded: props => () => {
-      const {
-        overlaysExpanded,
-        baseLayersExpanded,
-        toggleOverlaysExpanded,
-        toggleBaseLayersExpanded,
-        toggleApfloraLayersExpanded,
-        apfloraLayersExpanded,
-      } = props
+    onToggleApfloraLayersExpanded: ({
+      overlaysExpanded,
+      baseLayersExpanded,
+      toggleOverlaysExpanded,
+      toggleBaseLayersExpanded,
+      toggleApfloraLayersExpanded,
+      apfloraLayersExpanded,
+    }) => () => {
       toggleApfloraLayersExpanded(!apfloraLayersExpanded)
       if (overlaysExpanded) {
         toggleOverlaysExpanded(!overlaysExpanded)

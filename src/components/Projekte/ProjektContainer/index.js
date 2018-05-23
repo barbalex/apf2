@@ -131,6 +131,8 @@ const ProjekteContainer = ({
                              * without remounting grey space remains
                              * when daten or tree tab is removed :-(
                              */
+                            tree={tree}
+                            activeNodes={activeNodes}
                             key={tabs.toString()}
                             popHighlighted={store.map.pop.highlightedIds.join()}
                             tpopHighlighted={store.map.tpop.highlightedIds.join()}
