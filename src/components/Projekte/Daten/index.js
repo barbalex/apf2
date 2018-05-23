@@ -155,7 +155,7 @@ const Daten = ({
       //console.log('Daten:', {activeNodeArray, treeName, data})
       const activeNodes = getActiveNodes(activeNodeArray, store)
 
-      
+      // get name of active table
       let tableName = null
       if (activeNode) {
         if (activeNode.nodeType === 'table') {
