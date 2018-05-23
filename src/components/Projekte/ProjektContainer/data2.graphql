@@ -12,12 +12,6 @@ query TreeDataQuery(
   $tpopkontr: [UUID!]
   $isTpopkontr: Boolean!
 ) {
-  user @client {
-    token
-  }
-  copyingBiotop @client {
-    id
-  }
   projekts: allProjekts(orderBy: NAME_ASC) {
     nodes {
       id

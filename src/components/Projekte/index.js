@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { ReflexContainer, ReflexSplitter, ReflexElement } from 'react-reflex'
 import { Query } from 'react-apollo'
 import get from 'lodash/get'
+import intersection from 'lodash/intersection'
 
 // when Karte was loaded async, it did not load,
 // but only in production!
@@ -17,14 +18,16 @@ const Container = styled.div`
   flex-direction: column;
   height: calc(100% - 49.3px);
 `
+const treeTabValues = ['tree', 'daten', 'karte', 'exporte']
+const tree2TabValues = ['tree2', 'daten2', 'karte2', 'exporte2']
 
 const Projekte = () => 
   <Query query={dataGql}>
     {({ loading, error, data, client }) => {
       if (error) return `Fehler: ${error.message}`
       const projekteTabs = get(data, 'urlQuery.projekteTabs')
-      let treeTabs = projekteTabs.filter(t => !t.includes('2'))
-      let tree2Tabs = projekteTabs.filter(t => t.includes('2'))
+      let treeTabs = intersection(treeTabValues, projekteTabs)
+      let tree2Tabs = intersection(tree2TabValues, projekteTabs)
       // if daten and exporte are shown, only show exporte
       if (treeTabs.includes('daten') && treeTabs.includes('exporte')) {
         treeTabs = treeTabs.filter(t => t !== 'daten')
@@ -38,7 +41,7 @@ const Projekte = () =>
         projekteTabs,
         projekteTabsOriginal: get(data, 'urlQuery.projekteTabs'),
         contains2,
-        treeTabsLive: projekteTabs.filter(t => !t.includes('2')),
+        treeTabsLive: intersection(treeTabValues, projekteTabs),
         projekteTabsLength: projekteTabs.length, 
         data,
         treeTabs, 
@@ -46,9 +49,11 @@ const Projekte = () =>
         treeTabsLength: treeTabs.length, 
         tree2TabsLength: tree2Tabs.length, 
         tree2Tabs0: tree2Tabs[0],
-        tree2TabsLive: projekteTabs.filter(t => t.includes('2')),
+        tree2TabsLive: intersection(tree2TabValues, projekteTabs),
     })
-      if (!contains2) return <ProjektContainer treeName="tree" tabs={treeTabs} />
+      if (tree2Tabs.length === 0) return <ProjektContainer treeName="tree" tabs={treeTabs} />
+
+      console.log('rendering two projekt containers')
 
       let flex = treeTabs.length / tree2Tabs.length
       if (projekteTabs.length === 2 && projekteTabs.includes('tree') && projekteTabs.includes('tree2')) {

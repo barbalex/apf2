@@ -6,15 +6,21 @@ import styled from 'styled-components'
 import compose from 'recompose/compose'
 import { ReflexContainer, ReflexSplitter, ReflexElement } from 'react-reflex'
 import { Query } from 'react-apollo'
+import get from 'lodash/get'
+import merge from 'lodash/merge'
 
 // when Karte was loaded async, it did not load,
 // but only in production!
 import Karte from '../Karte'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import data1Gql from './data1.graphql'
+import data2Gql from './data2.graphql'
 import TreeContainer from '../TreeContainer'
 import Daten from '../Daten'
 import Exporte from '../Exporte'
+import getActiveNodes from '../../../modules/getActiveNodes'
+import variables from './variables'
+import buildNodes from '../TreeContainer/nodes'
 
 const Container = styled.div`
   display: flex;
@@ -41,13 +47,18 @@ const myChildren = ({
   store,
   data,
   treeName,
-  tabs
+  tabs,
+  activeNodes,
+  client
 }:{
   store: Object,
   data: Object,
   treeName: String,
-  tabs: Array<String>
+  tabs: Array<String>,
+  activeNodes: Object,
+  client: Object
 }) => {
+  const nodes = buildNodes({ data, treeName })
   // if daten and exporte are shown, only show exporte
   if (tabs.includes('daten') && tabs.includes('exporte')) {
     const i = tabs.indexOf('daten')
@@ -90,7 +101,15 @@ const myChildren = ({
   }
   if (tabs.includes('tree')) {
     children.push(
-      <TreeContainer treeName="tree" flex={flex} key="tree" />
+      <TreeContainer
+        treeName="tree"
+        flex={flex}
+        data={data}
+        nodes={nodes}
+        activeNodes={activeNodes}
+        client={client}
+        key="tree"
+      />
     )
     tabs.splice(tabs.indexOf('tree'), 1)
     if (tabs.length > 0) {
@@ -117,7 +136,15 @@ const myChildren = ({
   }
   if (tabs.includes('tree2')) {
     children.push(
-      <TreeContainer treeName="tree2" flex={flex} key="tree2" />
+      <TreeContainer
+        treeName="tree2"
+        flex={flex}
+        data={data}
+        nodes={nodes}
+        activeNodes={activeNodes}
+        client={client}
+        key="tree2"
+      />
     )
     tabs.splice(tabs.indexOf('tree2'), 1)
     if (tabs.length > 0) {
@@ -176,19 +203,33 @@ const myChildren = ({
 
 const Projekte = ({ store, treeName, tabs }: { store: Object, treeName: String, tabs: Array<String> }) =>
   <Query query={data1Gql} >
-    {({ loading, error, data, client }) => {
+    {({ error, data: data1 }) => {
       if (error) return `Fehler: ${error.message}`
+      const activeNodeArray = get(data1, `${treeName}.activeNodeArray`)
+      const activeNodes = getActiveNodes(activeNodeArray, store)
 
       console.log('ProjektContainer rendering:', { treeName, tabs})
 
       return (
-        <Container data-loading={loading}>
-          <ErrorBoundary>
-            <ReflexContainer orientation="vertical">
-              {myChildren({ store, data, treeName, tabs })}
-            </ReflexContainer>
-          </ErrorBoundary>
-        </Container>
+        <Query query={data2Gql} variables={variables(activeNodes)}>
+          {({ loading, error, data: data2, client }) => {
+            // do not show loading but rather last state
+            //if (loading) return <Container>Lade...</Container>
+            if (error) return `Fehler: ${error.message}`
+
+            const data = merge(data1, data2)
+
+            return (
+              <Container data-loading={loading}>
+                <ErrorBoundary>
+                  <ReflexContainer orientation="vertical">
+                    {myChildren({ store, data, treeName, tabs, client, activeNodes })}
+                  </ReflexContainer>
+                </ErrorBoundary>
+              </Container>
+            )
+          }}
+        </Query>
       )
     }}
   </Query>
