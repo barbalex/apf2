@@ -1,6 +1,5 @@
 import React from 'react'
 import styled from 'styled-components'
-import { ReflexElement } from 'react-reflex'
 
 import FormTitle from '../../shared/FormTitle'
 import Tipps from './Tipps'
@@ -40,26 +39,24 @@ const ExporteContainer = styled.div`
 `
 
 const Exporte = () => (
-  <ReflexElement>
-    <ExporteContainer>
-      <ErrorBoundary>
-        <Container>
-          <FormTitle title="Exporte" />
-          <FieldsContainer>
-            <Optionen />
-            <Tipps />
-            <Ap />
-            <Populationen />
-            <Teilpopulationen />
-            <Kontrollen />
-            <Massnahmen />
-            <Beobachtungen />
-            <Anwendung />
-          </FieldsContainer>
-        </Container>
-      </ErrorBoundary>
-    </ExporteContainer>
-  </ReflexElement>
+  <ExporteContainer>
+    <ErrorBoundary>
+      <Container>
+        <FormTitle title="Exporte" />
+        <FieldsContainer>
+          <Optionen />
+          <Tipps />
+          <Ap />
+          <Populationen />
+          <Teilpopulationen />
+          <Kontrollen />
+          <Massnahmen />
+          <Beobachtungen />
+          <Anwendung />
+        </FieldsContainer>
+      </Container>
+    </ErrorBoundary>
+  </ExporteContainer>
 )
 
 export default Exporte

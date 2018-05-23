@@ -43,151 +43,10 @@ const KarteContainer = styled.div`
 
 const enhance = compose(inject('store'), observer)
 
-const myChildren = ({
-  store,
-  data,
-  treeName,
-  tabs: tabsPassed,
-  activeNodes,
-  client
-}:{
-  store: Object,
-  data: Object,
-  treeName: String,
-  tabs: Array<String>,
-  activeNodes: Object,
-  client: Object
-}) => {
-  const nodes = buildNodes({ data, treeName })
-  const tree = get(data, treeName)
-  const activeNodeArray = get(data, `${treeName}.activeNodeArray`)
-  const activeNode = nodes.find(n => isEqual(n.url, activeNodeArray))
-  // if daten and exporte are shown, only show exporte
-  const tabs = clone(tabsPassed)
-  if (tabs.includes('daten') && tabs.includes('exporte')) {
-    const i = tabs.indexOf('daten')
-    tabs.splice(i, 1)
-  }
-  if (tabs.includes('daten2') && tabs.includes('exporte2')) {
-    const i = tabs.indexOf('daten2')
-    tabs.splice(i, 1)
-  }
-
-  const children = []
-  if (tabs.includes('tree')) {
-    children.push(
-      <TreeContainer
-        treeName="tree"
-        data={data}
-        nodes={nodes}
-        activeNodes={activeNodes}
-        activeNode={activeNode}
-        client={client}
-        key="tree"
-      />
-    )
-    tabs.splice(tabs.indexOf('tree'), 1)
-    if (tabs.length > 0) {
-      children.push(<ReflexSplitter key="treeSplitter" />)
-    }
-  }
-  if (tabs.includes('daten')) {
-    children.push(
-      <Daten
-        tree={tree}
-        treeName="tree"
-        activeNode={activeNode}
-        key="daten"
-      />
-    )
-    tabs.splice(tabs.indexOf('daten'), 1)
-    if (tabs.length > 0) {
-      children.push(<ReflexSplitter key="treeDaten" />)
-    }
-  }
-  if (tabs.includes('exporte')) {
-    children.push(<Exporte key="exporte" />)
-    tabs.splice(tabs.indexOf('exporte'), 1)
-    if (tabs.length > 0) {
-      children.push(<ReflexSplitter key="exporteSplitter" />)
-    }
-  }
-  if (tabs.includes('tree2')) {
-    children.push(
-      <TreeContainer
-        treeName="tree2"
-        data={data}
-        nodes={nodes}
-        activeNodes={activeNodes}
-        activeNode={activeNode}
-        client={client}
-        key="tree2"
-      />
-    )
-    tabs.splice(tabs.indexOf('tree2'), 1)
-    if (tabs.length > 0) {
-      children.push(<ReflexSplitter key="tree2Splitter" />)
-    }
-  }
-  if (tabs.includes('daten2')) {
-    children.push(
-      <Daten
-        tree={tree}
-        treeName="tree2"
-        activeNode={activeNode}
-        key="daten2"
-      />
-    )
-    tabs.splice(tabs.indexOf('daten2'), 1)
-    if (tabs.length > 0) {
-      children.push(<ReflexSplitter key="daten2Splitter" />)
-    }
-  }
-  if (tabs.includes('karte')) {
-    children.push(
-      <ReflexElement
-        key="karte"
-        //className="karte"
-        //style={{ overflow: 'hidden' }}
-      >
-        <KarteContainer>
-          <Karte
-            /**
-             * key of tabs is added to force mounting
-             * when tabs change
-             * without remounting grey space remains
-             * when daten or tree tab is removed :-(
-             */
-            key={tabs.toString()}
-            popHighlighted={store.map.pop.highlightedIds.join()}
-            tpopHighlighted={store.map.tpop.highlightedIds.join()}
-            beobNichtBeurteiltHighlighted={store.map.beobNichtBeurteilt.highlightedIds.join()}
-            beobNichtZuzuordnenHighlighted={store.map.beobNichtZuzuordnen.highlightedIds.join()}
-            beobZugeordnetHighlighted={store.map.beobZugeordnet.highlightedIds.join()}
-            beobZugeordnetAssigning={store.map.beob.assigning}
-            idOfTpopBeingLocalized={store.map.tpop.idOfTpopBeingLocalized}
-            activeBaseLayer={store.map.activeBaseLayer}
-            activeOverlays={store.map.activeOverlays}
-            activeApfloraLayers={store.map.activeApfloraLayers}
-            // SortedStrings enforce rerendering when sorting or visibility changes
-            activeOverlaysSortedString={store.map.activeOverlaysSortedString}
-            activeApfloraLayersSortedString={
-              store.map.activeApfloraLayersSortedString
-            }
-            detailplaene={toJS(store.map.detailplaene)}
-            markierungen={toJS(store.map.markierungen)}
-          />
-        </KarteContainer>
-      </ReflexElement>
-    )
-  }
-  return children
-}
-
 const Projekte = ({
   store,
   treeName,
-  tabs
+  tabs: tabsPassed
 }: {
   store: Object,
   treeName: String,
@@ -199,22 +58,104 @@ const Projekte = ({
       const activeNodeArray = get(data1, `${treeName}.activeNodeArray`)
       const activeNodes = getActiveNodes(activeNodeArray, store)
 
-      console.log('ProjektContainer rendering:', { treeName, tabs})
-
       return (
         <Query query={data2Gql} variables={variables(activeNodes)}>
           {({ loading, error, data: data2, client }) => {
             if (error) return `Fehler: ${error.message}`
 
             const data = merge(data1, data2)
+            const nodes = buildNodes({ data, treeName })
+            const tree = get(data, treeName)
+            const activeNodeArray = get(data, `${treeName}.activeNodeArray`)
+            const activeNode = nodes.find(n => isEqual(n.url, activeNodeArray))
+            // if daten and exporte are shown, only show exporte
+            const tabs = clone(tabsPassed).map(t => t.replace('2', ''))
 
             return (
               <Container data-loading={loading}>
                 <ErrorBoundary>
                   <ReflexContainer orientation="vertical">
-                    <Fragment>
-                      {myChildren({ store, data, treeName, tabs, client, activeNodes })}
-                    </Fragment>
+                    { 
+                      tabs.includes('tree') &&
+                      <ReflexElement>
+                        <TreeContainer
+                          treeName={treeName}
+                          data={data}
+                          nodes={nodes}
+                          activeNodes={activeNodes}
+                          activeNode={activeNode}
+                          client={client}
+                        />
+                      </ReflexElement>
+                    }
+                    {
+                      tabs.includes('tree') && tabs.includes('daten') &&
+                      <ReflexSplitter />
+                    }
+                    {
+                      tabs.includes('daten') &&
+                      <ReflexElement
+                        propagateDimensions={true}
+                        renderOnResizeRate={100}
+                        renderOnResize={true}
+                      >
+                        <Daten
+                          tree={tree}
+                          treeName={treeName}
+                          activeNode={activeNode}
+                        />
+                      </ReflexElement>
+                    }
+                    {
+                      tabs.includes('exporte') && (tabs.includes('tree') || tabs.includes('daten')) &&
+                      <ReflexSplitter />
+                    }
+                    {
+                      tabs.includes('exporte') &&
+                      <ReflexElement>
+                        <Exporte />
+                      </ReflexElement>
+                    }
+                    {
+                      tabs.includes('karte') && (tabs.includes('tree') || tabs.includes('daten') || tabs.includes('exporte')) &&
+                      <ReflexSplitter />
+                    }
+                    {
+                      tabs.includes('karte') &&
+                      <ReflexElement
+                        //className="karte"
+                        //style={{ overflow: 'hidden' }}
+                      >
+                        <KarteContainer>
+                          <Karte
+                            /**
+                             * key of tabs is added to force mounting
+                             * when tabs change
+                             * without remounting grey space remains
+                             * when daten or tree tab is removed :-(
+                             */
+                            key={tabs.toString()}
+                            popHighlighted={store.map.pop.highlightedIds.join()}
+                            tpopHighlighted={store.map.tpop.highlightedIds.join()}
+                            beobNichtBeurteiltHighlighted={store.map.beobNichtBeurteilt.highlightedIds.join()}
+                            beobNichtZuzuordnenHighlighted={store.map.beobNichtZuzuordnen.highlightedIds.join()}
+                            beobZugeordnetHighlighted={store.map.beobZugeordnet.highlightedIds.join()}
+                            beobZugeordnetAssigning={store.map.beob.assigning}
+                            idOfTpopBeingLocalized={store.map.tpop.idOfTpopBeingLocalized}
+                            activeBaseLayer={store.map.activeBaseLayer}
+                            activeOverlays={store.map.activeOverlays}
+                            activeApfloraLayers={store.map.activeApfloraLayers}
+                            // SortedStrings enforce rerendering when sorting or visibility changes
+                            activeOverlaysSortedString={store.map.activeOverlaysSortedString}
+                            activeApfloraLayersSortedString={
+                              store.map.activeApfloraLayersSortedString
+                            }
+                            detailplaene={toJS(store.map.detailplaene)}
+                            markierungen={toJS(store.map.markierungen)}
+                          />
+                        </KarteContainer>
+                      </ReflexElement>
+                    }
                   </ReflexContainer>
                 </ErrorBoundary>
               </Container>
