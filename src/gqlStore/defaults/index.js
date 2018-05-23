@@ -62,7 +62,14 @@ export default async (idb) => {
       // before login has been fetched
       token: get(users, '[0].token', null),
       __typename: 'User'
-    }
+    },
+    export: {
+      applyNodeLabelFilterToExport: false,
+      applyActiveNodeFilterToExport: false,
+      applyMapFilterToExport: false,
+      fileType: 'xlsx',
+      __typename: 'Export'
+    },
   }
   return defaults
 }

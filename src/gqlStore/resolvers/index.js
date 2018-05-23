@@ -2,6 +2,7 @@
 import merge from 'lodash/merge'
 
 import treeKey from './treeKey'
+import exportKey from './exportKey'
 import treeNodeLabelFilter from './treeNodeLabelFilter'
 import treeMap from './treeMap'
 import urlQuery from './urlQuery'
@@ -13,6 +14,7 @@ import user from './user'
 
 export default merge(
   treeKey,
+  exportKey,
   treeNodeLabelFilter,
   treeMap,
   urlQuery,
