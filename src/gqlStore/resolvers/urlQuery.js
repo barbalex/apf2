@@ -22,10 +22,10 @@ export default {
             }
           `
       })
-      const activeNodeArray = get(data, 'tree.activeNodeArray')
       const urlQuery = get(data, 'urlQuery')
       // only write if changed
       if (!isEqual(urlQuery, newUrlQuery)) {
+        console.log('resolvers setUrlQuery:', {projekteTabs, feldkontrTab})
         cache.writeData({
           data: {
             urlQuery: {
@@ -37,6 +37,7 @@ export default {
         })
         const search = queryString.stringify(newUrlQuery)
         const query = `${Object.keys(newUrlQuery).length > 0 ? `?${search}` : ''}`
+        const activeNodeArray = get(data, 'tree.activeNodeArray')
         app.history.push(`/${activeNodeArray.join('/')}${query}`)
       }
       return null

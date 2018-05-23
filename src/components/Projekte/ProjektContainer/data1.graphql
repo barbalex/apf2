@@ -70,10 +70,6 @@ query Query {
       gemeinde
     }
   }
-  urlQuery @client {
-    projekteTabs
-    feldkontrTab
-  }
   copyingBiotop @client {
     id
   }

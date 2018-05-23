@@ -15,10 +15,6 @@ query TreeDataQuery(
   user @client {
     token
   }
-  urlQuery @client {
-    projekteTabs
-    feldkontrTab
-  }
   copyingBiotop @client {
     id
   }
