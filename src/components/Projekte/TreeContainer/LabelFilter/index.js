@@ -9,7 +9,6 @@ import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 import { Query } from 'react-apollo'
 import get from 'lodash/get'
-import isEqual from 'lodash/isEqual'
 import gql from 'graphql-tag'
 
 import tables from '../../../../modules/tables'
@@ -149,9 +148,7 @@ const LabelFilter = ({
       let filterValue = ''
       if (tableName) {
         filterValue = get(data, `${treeName}.nodeLabelFilter.${tableName}`)
-        const table = tables.find(
-          (t: { label: string }) => t.table === tableName
-        )
+        const table = tables.find(t => t.table === tableName)
         const tableLabel = table ? table.label : null
         if (tableLabel) {
           labelText = `${tableLabel} filtern`

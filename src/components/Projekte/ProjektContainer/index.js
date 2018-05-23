@@ -122,7 +122,12 @@ const myChildren = ({
   }
   if (tabs.includes('daten')) {
     children.push(
-      <Daten tree={store.tree} treeName="tree" key="daten" />
+      <Daten
+        tree={store.tree}
+        treeName="tree"
+        activeNode={activeNode}
+        key="daten"
+      />
     )
     tabs.splice(tabs.indexOf('daten'), 1)
     if (tabs.length > 0) {
@@ -158,7 +163,12 @@ const myChildren = ({
   }
   if (tabs.includes('daten2')) {
     children.push(
-      <Daten tree={store.tree2} treeName="tree2" key="daten2" />
+      <Daten
+        tree={store.tree2}
+        treeName="tree2"
+        activeNode={activeNode}
+        key="daten2"
+      />
     )
     tabs.splice(tabs.indexOf('daten2'), 1)
     if (tabs.length > 0) {

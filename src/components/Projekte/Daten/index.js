@@ -18,6 +18,7 @@ import ErrorBoundary from '../../shared/ErrorBoundarySingleChild'
 import Loading from '../../shared/Loading'
 import dataGql from './data.graphql'
 import getActiveNodes from '../../../modules/getActiveNodes'
+import tables from '../../../modules/tables'
 
 const Projekt = Loadable({
   loader: () => import('./Projekt'),
@@ -135,11 +136,13 @@ const Daten = ({
   store,
   tree,
   treeName,
+  activeNode,
   dimensions = { width: 380 },
 }: {
   store: Object,
   tree: Object,
   treeName: String,
+  activeNode: Object,
   dimensions: Object,
 }) =>
   <Query query={dataGql} >
@@ -152,15 +155,17 @@ const Daten = ({
       //console.log('Daten:', {activeNodeArray, treeName, data})
       const activeNodes = getActiveNodes(activeNodeArray, store)
 
-      const { activeDataset } = tree
-      if (!activeDataset || !activeDataset.table || !activeDataset.row) {
-        return <div />
+      
+      let tableName = null
+      if (activeNode) {
+        if (activeNode.nodeType === 'table') {
+          tableName = activeNode.menuType
+        } else {
+          const childTableName = activeNode.menuType.replace('Folder', '')
+          const childTable = tables.find(t => t.table === childTableName)
+          if (childTable && childTable.parentTable) tableName = childTable.parentTable
+        }
       }
-      /**
-       * For the time-being pass id from here
-       * When store is moved to apollo:
-       * Fetch id directly in components
-       */
       const formObject = {
         projekt: <Projekt dimensions={dimensions} treeName={treeName} />,
         apberuebersicht: <Apberuebersicht dimensions={dimensions} treeName={treeName} />,
@@ -189,12 +194,6 @@ const Daten = ({
         beobzuordnung: <Beobzuordnung dimensions={dimensions} treeName={treeName} />,
         beobZugeordnet: <Beobzuordnung dimensions={dimensions} treeName={treeName} />,
       }
-      const standardForm = (
-        <div>
-          <p>Daten</p>
-          <pre>{JSON.stringify(activeDataset.row, null, 2)}</pre>
-        </div>
-      )
       let key
       if (activeNodes.exporte) {
         key = 'exporte'
@@ -207,9 +206,9 @@ const Daten = ({
       } else if (activeNodes.beobZugeordnet) {
         key = 'beobZugeordnet'
       } else {
-        key = activeDataset.table
+        key = tableName
       }
-      const form = formObject[key] || standardForm
+      const form = key ? formObject[key] : ''
 
       return (
         <ReflexElement

@@ -3,6 +3,7 @@
 export default [
   {
     table: 'ap',
+    parentTable: 'projekt',
     label: 'Arten',
     labelSingular: 'Art',
     idField: 'id',
@@ -10,6 +11,7 @@ export default [
   },
   {
     table: 'pop',
+    parentTable: 'ap',
     label: 'Populationen',
     labelSingular: 'Population',
     idField: 'id',
@@ -17,6 +19,7 @@ export default [
   },
   {
     table: 'tpop',
+    parentTable: 'pop',
     label: 'Teil-Populationen',
     labelSingular: 'Teil-Population',
     idField: 'id',
@@ -24,6 +27,7 @@ export default [
   },
   {
     table: 'tpopkontr',
+    parentTable: 'tpop',
     label: 'Kontrollen',
     labelSingular: 'Kontrolle',
     idField: 'id',
@@ -31,6 +35,7 @@ export default [
   },
   {
     table: 'tpopfeldkontr',
+    parentTable: 'tpop',
     dbTable: 'tpopkontr',
     label: 'Feld-Kontrollen',
     labelSingular: 'Feld-Kontrolle',
@@ -39,6 +44,7 @@ export default [
   },
   {
     table: 'tpopfreiwkontr',
+    parentTable: 'tpop',
     dbTable: 'tpopkontr',
     label: 'Freiwilligen-Kontrollen',
     labelSingular: 'Freiwilligen-Kontrolle',
@@ -61,6 +67,7 @@ export default [
   },
   {
     table: 'tpopkontrzaehl',
+    parentTable: 'tpopkontr',
     label: 'Zählungen',
     labelSingular: 'Zählung',
     idField: 'id',
@@ -68,6 +75,7 @@ export default [
   },
   {
     table: 'tpopfreiwkontrzaehl',
+    parentTable: 'tpopkontr',
     dbTable: 'tpopkontrzaehl',
     label: 'Zählungen',
     labelSingular: 'Zählung',
@@ -76,6 +84,7 @@ export default [
   },
   {
     table: 'tpopfeldkontrzaehl',
+    parentTable: 'tpopkontr',
     dbTable: 'tpopkontrzaehl',
     label: 'Zählungen',
     labelSingular: 'Zählung',
@@ -84,6 +93,7 @@ export default [
   },
   {
     table: 'tpopmassn',
+    parentTable: 'tpop',
     label: 'Massnahmen',
     labelSingular: 'Massnahme',
     idField: 'id',
@@ -112,6 +122,7 @@ export default [
   },
   {
     table: 'ziel',
+    parentTable: 'ap',
     label: 'AP-Ziele',
     labelSingular: 'AP-Ziel',
     idField: 'id',
@@ -126,6 +137,7 @@ export default [
   },
   {
     table: 'zielber',
+    parentTable: 'ziel',
     label: 'Berichte',
     labelSingular: 'Bericht',
     idField: 'id',
@@ -133,6 +145,7 @@ export default [
   },
   {
     table: 'erfkrit',
+    parentTable: 'ap',
     label: 'AP-Erfolgskriterien',
     labelSingular: 'AP-Erfolgskriterium',
     idField: 'id',
@@ -140,6 +153,7 @@ export default [
   },
   {
     table: 'apber',
+    parentTable: 'ap',
     label: 'AP-Berichte',
     labelSingular: 'AP-Bericht',
     idField: 'id',
@@ -147,6 +161,7 @@ export default [
   },
   {
     table: 'apberuebersicht',
+    parentTable: 'projekt',
     label: 'AP-Berichte',
     labelSingular: 'AP-Bericht',
     idField: 'id',
@@ -154,6 +169,7 @@ export default [
   },
   {
     table: 'ber',
+    parentTable: 'ap',
     label: 'Berichte',
     labelSingular: 'Bericht',
     idField: 'id',
@@ -161,6 +177,7 @@ export default [
   },
   {
     table: 'idealbiotop',
+    parentTable: 'ap',
     label: 'Idealbiotop',
     labelSingular: 'Idealbiotop',
     idField: 'id',
@@ -168,6 +185,7 @@ export default [
   },
   {
     table: 'assozart',
+    parentTable: 'ap',
     label: 'assoziierte Arten',
     labelSingular: 'assoziierte Art',
     idField: 'id',
@@ -175,6 +193,7 @@ export default [
   },
   {
     table: 'popber',
+    parentTable: 'pop',
     label: 'Kontroll-Berichte',
     labelSingular: 'Kontroll-Bericht',
     idField: 'id',
@@ -182,6 +201,7 @@ export default [
   },
   {
     table: 'popmassnber',
+    parentTable: 'pop',
     label: 'Massnahmen-Berichte',
     labelSingular: 'Massnahmen-Bericht',
     idField: 'id',
@@ -189,6 +209,7 @@ export default [
   },
   {
     table: 'tpopber',
+    parentTable: 'tpop',
     label: 'Kontroll-Berichte',
     labelSingular: 'Kontroll-Bericht',
     idField: 'id',
@@ -196,6 +217,7 @@ export default [
   },
   {
     table: 'tpopmassnber',
+    parentTable: 'tpop',
     label: 'Massnahmen-Berichte',
     labelSingular: 'Massnahmen-Bericht',
     idField: 'id',
@@ -203,6 +225,7 @@ export default [
   },
   {
     table: 'apart',
+    parentTable: 'ap',
     label: 'none',
     idField: 'id',
     parentIdField: 'ap_id',
@@ -220,7 +243,29 @@ export default [
     parentIdField: 'art_id',
   },
   {
+    table: 'beobNichtZuzuordnen',
+    parentTable: 'ap',
+    label: 'none',
+    idField: 'id',
+    parentIdField: 'art_id',
+  },
+  {
+    table: 'beobNichtBeurteilt',
+    parentTable: 'ap',
+    label: 'none',
+    idField: 'id',
+    parentIdField: 'art_id',
+  },
+  {
+    table: 'beobZugeordnet',
+    parentTable: 'tpop',
+    label: 'none',
+    idField: 'id',
+    parentIdField: 'tpop_id',
+  },
+  {
     table: 'beobprojekt',
+    parentTable: 'projekt',
     label: 'none',
     idField: 'id',
     parentIdField: 'proj_id',
