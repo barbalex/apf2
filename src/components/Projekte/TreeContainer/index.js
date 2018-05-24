@@ -225,16 +225,53 @@ const enhance = compose(
           moveTo(store, id, client)
         },
         markForCopying() {
-          store.markForCopying(table, id, label)
+          client.mutate({
+            mutation: gql`
+              mutation setCopying($table: String!, $id: UUID!, $label: String!, $withNextLevel: Boolean!) {
+                setCopying(table: $table, id: $id, label: $label, withNextLevel: $withNextLevel) @client {
+                  table
+                  id
+                  label
+                  withNextLevel
+                }
+              }
+            `,
+            variables: { table, id, label, withNextLevel: false }
+          })
         },
         markForCopyingWithNextLevel() {
-          store.markForCopying(table, id, label, true)
+          client.mutate({
+            mutation: gql`
+              mutation setCopying($table: String!, $id: UUID!, $label: String!, $withNextLevel: Boolean!) {
+                setCopying(table: $table, id: $id, label: $label, withNextLevel: $withNextLevel) @client {
+                  table
+                  id
+                  label
+                  withNextLevel
+                }
+              }
+            `,
+            variables: { table, id, label, withNextLevel: true }
+          })
         },
         resetCopying() {
-          store.resetCopying()
+          client.mutate({
+            mutation: gql`
+              mutation setCopying($table: String!, $id: UUID!, $label: String!, $withNextLevel: Boolean!) {
+                setCopying(table: $table, id: $id, label: $label, withNextLevel: $withNextLevel) @client {
+                  table
+                  id
+                  label
+                  withNextLevel
+                }
+              }
+            `,
+            variables: { table: null, id: null, label: null, withNextLevel: false }
+          })
         },
         copy() {
           store.copyTo(id)
+          // TODO
         },
         markForCopyingBiotop() {
           client.mutate({
