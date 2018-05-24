@@ -14,23 +14,25 @@ const Tpop = ({
   store,
   tree,
   token,
-  moving
+  moving,
+  copying
 }: {
   onClick: () => void,
   store: Object,
   tree: Object,
   token: String,
-  moving: Object
+  moving: Object,
+  copying: Object
 }) => {
   const isMoving =
     moving.table &&
     ['tpopmassn', 'tpopfeldkontr', 'tpopfreiwkontr'].includes(
       moving.table
     )
-  const copying =
-    store.copying.table &&
+  const isCopying =
+    copying.table &&
     ['tpopmassn', 'tpopfeldkontr', 'tpopfreiwkontr'].includes(
-      store.copying.table
+      copying.table
     )
 
   return (
@@ -99,17 +101,17 @@ const Tpop = ({
             >
               kopiere
             </MenuItem>
-            {copying && (
+            {isCopying && (
               <MenuItem
                 onClick={onClick}
                 data={{
                   action: 'copy',
                 }}
               >
-                {`kopiere '${store.copying.label}' hierhin`}
+                {`kopiere '${copying.label}' hierhin`}
               </MenuItem>
             )}
-            {copying && (
+            {isCopying && (
               <MenuItem
                 onClick={onClick}
                 data={{

@@ -28,7 +28,8 @@ const PopFolder = ({
   label,
   onShow,
   token,
-  moving
+  moving,
+  copying
 }: {
   tree: Object,
   onClick: () => void,
@@ -37,10 +38,11 @@ const PopFolder = ({
   label: string | number,
   onShow: () => void,
   token: String,
-  moving: Object
+  moving: Object,
+  copying: Object
 }) => {
   const isMoving = moving.table && moving.table === 'pop'
-  const copying = store.copying.table && store.copying.table === 'pop'
+  const isCopying = copying.table && copying.table === 'pop'
 
   return (
     <ErrorBoundary>
@@ -80,17 +82,17 @@ const PopFolder = ({
               {`verschiebe '${moving.label}' hierhin`}
             </MenuItem>
           )}
-          {copying && (
+          {isCopying && (
             <MenuItem
               onClick={onClick}
               data={{
                 action: 'copy',
               }}
             >
-              {`kopiere '${store.copying.label}' hierhin`}
+              {`kopiere '${copying.label}' hierhin`}
             </MenuItem>
           )}
-          {copying && (
+          {isCopying && (
             <MenuItem
               onClick={onClick}
               data={{

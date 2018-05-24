@@ -34,7 +34,8 @@ const Pop = ({
   label,
   onShow,
   token,
-  moving
+  moving,
+  copying
 }: {
   onClick: () => void,
   store: Object,
@@ -45,10 +46,11 @@ const Pop = ({
   label: string,
   onShow: () => void,
   token: String,
-  moving: Object
+  moving: Object,
+  copying: Object
 }) => {
   const isMoving = moving.table && moving.table === 'tpop'
-  const copying = store.copying.table && store.copying.table === 'tpop'
+  const isCopying = copying.table && copying.table === 'tpop'
 
   return (
     <ErrorBoundary>
@@ -116,17 +118,17 @@ const Pop = ({
           >
             kopiere inklusive Teilpopulationen
           </MenuItem>
-          {copying && (
+          {isCopying && (
             <MenuItem
               onClick={onClick}
               data={{
                 action: 'copy',
               }}
             >
-              {`kopiere '${store.copying.label}' hierhin`}
+              {`kopiere '${copying.label}' hierhin`}
             </MenuItem>
           )}
-          {copying && (
+          {isCopying && (
             <MenuItem
               onClick={onClick}
               data={{

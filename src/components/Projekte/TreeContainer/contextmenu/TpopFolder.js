@@ -28,7 +28,8 @@ const TpopFolder = ({
   id,
   onShow,
   token,
-  moving
+  moving,
+  copying
 }: {
   tree: Object,
   onClick: () => void,
@@ -37,10 +38,11 @@ const TpopFolder = ({
   id: Number,
   onShow: () => void,
   token: String,
-  moving: Object
+  moving: Object,
+  copying: Object
 }) => {
   const isMoving = moving.table && moving.table === 'tpop'
-  const copying = store.copying.table && store.copying.table === 'tpop'
+  const isCopying = copying.table && copying.table === 'tpop'
 
   return (
     <ErrorBoundary>
@@ -80,17 +82,17 @@ const TpopFolder = ({
                 {`verschiebe '${moving.label}' hierhin`}
               </MenuItem>
             )}
-            {copying && (
+            {isCopying && (
               <MenuItem
                 onClick={onClick}
                 data={{
                   action: 'copy',
                 }}
               >
-                {`kopiere '${store.copying.label}' hierhin`}
+                {`kopiere '${copying.label}' hierhin`}
               </MenuItem>
             )}
-            {copying && (
+            {isCopying && (
               <MenuItem
                 onClick={onClick}
                 data={{

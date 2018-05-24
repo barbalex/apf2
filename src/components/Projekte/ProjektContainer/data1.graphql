@@ -84,4 +84,10 @@ query Query {
     id
     label
   }
+  copying @client {
+    table
+    id
+    label
+    withNextLevel
+  }
 }

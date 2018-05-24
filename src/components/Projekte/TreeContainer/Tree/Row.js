@@ -218,7 +218,8 @@ const Row = ({
   treeName,
   data,
   client,
-  moving
+  moving,
+  copying
 }: {
   key?: number,
   index: number,
@@ -230,7 +231,8 @@ const Row = ({
   treeName: String,
   data: Object,
   client: Object,
-  moving: Object
+  moving: Object,
+  copying: Object
 }) => {
   const node = nodes[index]
   const tree2 = get(data, treeName)
@@ -261,10 +263,10 @@ const Row = ({
     node.nodeType === 'table' &&
     node.menuType === moving.table &&
     node.id === moving.id
-  const copying =
+  const isCopying =
     node.nodeType === 'table' &&
-    node.menuType === store.copying.table &&
-    node.id === store.copying.id
+    node.menuType === copying.table &&
+    node.id === copying.id
   
   const copyingBiotop =
     node.nodeType === 'table' && node.id === get(data, 'copyingBiotop.id')
@@ -371,7 +373,7 @@ const Row = ({
               <MovingIcon />
             </div>
           )}
-          {copying && (
+          {isCopying && (
             <div title="kopiert, bereit zum Einfügen">
               <CopyingIcon />
             </div>
