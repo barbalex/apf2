@@ -98,9 +98,10 @@ const Idealbiotop = ({
   dimensions: Object,
 }) => (
   <Query query={data1Gql}>
-    {({ loading, error, data }) => {
+    {({ loading, error, data: data1 }) => {
       if (error) return `Fehler: ${error.message}`
-      const id = get(data, `${treeName}.activeNodeArray[3]`)
+      const id = get(data1, `${treeName}.activeNodeArray[3]`)
+      console.log('Idealbiotop:', {id,data1})
 
       return (
         <Query query={data2Gql} variables={{ id }}>
@@ -113,7 +114,7 @@ const Idealbiotop = ({
               )
             if (error) return `Fehler: ${error.message}`
 
-            const row = get(data, 'idealbiotopById')
+            const row = get(data, 'allIdealbiotops.nodes[0]')
 
             return (
               <ErrorBoundary>

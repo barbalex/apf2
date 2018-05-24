@@ -162,7 +162,12 @@ const Daten = ({
         } else {
           const childTableName = activeNode.menuType.replace('Folder', '')
           const childTable = tables.find(t => t.table === childTableName)
-          if (childTable && childTable.parentTable) tableName = childTable.parentTable
+          if (childTable && childTable.parentTable) {
+            tableName = childTable.parentTable
+          }
+          if (childTableName === 'idealbiotop') {
+            tableName = childTableName
+          }
         }
       }
       const formObject = {
@@ -207,6 +212,7 @@ const Daten = ({
       } else {
         key = tableName
       }
+      console.log('Daten:', {tableName, activeNode})
       const form = key ? formObject[key] : ''
 
       return (
