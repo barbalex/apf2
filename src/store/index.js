@@ -81,11 +81,6 @@ function Store(): void {
   }
   this.table = TableStore
   this.valuesForWhichTableDataWasFetched = {}
-  this.moving = {
-    table: null,
-    id: null,
-    label: null,
-  }
   this.copying = {
     table: null,
     id: null,

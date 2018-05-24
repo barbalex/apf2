@@ -20,11 +20,6 @@ import undoDeletion from '../action/undoDeletion'
 export default (store: Object): void => {
   extendObservable(store, {
     loading: [],
-    moving: {
-      table: null,
-      id: null,
-      label: null,
-    },
     copying: {
       table: null,
       id: null,
