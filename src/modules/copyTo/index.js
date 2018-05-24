@@ -19,8 +19,8 @@ import createTpopkontrzaehl from './createTpopkontrzaehl.graphql'
 import createTpopmassn from './createTpopmassn.graphql'
 import createTpop from './createTpop.graphql'
 import createPop from './createPop.graphql'
-import queryTpopfeldkontr from './queryTpopfeldkontr.graphql'
-import queryTpopfreiwkontr from './queryTpopfreiwkontr.graphql'
+//import queryTpopfeldkontr from './queryTpopfeldkontr.graphql'
+//import queryTpopfreiwkontr from './queryTpopfreiwkontr.graphql'
 
 // copyTpopsOfPop can pass table and id separately
 export default async (
