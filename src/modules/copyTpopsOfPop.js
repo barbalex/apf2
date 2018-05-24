@@ -9,11 +9,13 @@ export default async ({
   popIdFrom,
   popIdTo,
   client,
+  refetch
 }: {
   store: Object,
   popIdFrom: String,
   popIdTo: String,
-  client: Object
+  client: Object,
+  refetch: () => void
 }) => {
   // 1. fetch all tpops
   const { data } = await client.query({
@@ -37,7 +39,8 @@ export default async ({
       parentId: popIdTo,
       table: 'tpop',
       id: tpop.id,
-      client
+      client,
+      refetch
     })
   )
 }

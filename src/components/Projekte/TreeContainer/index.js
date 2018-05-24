@@ -153,7 +153,7 @@ const showMapIfNotYetVisible = ({
 const enhance = compose(
   inject('store'),
   withHandlers({
-    handleClick: ({ store, tree }) => ({ data, element, nodes, client }) => {
+    handleClick: ({ store, tree, refetch }) => ({ data, element, nodes, client }) => {
       if (!data) return store.listError(new Error('no data passed with click'))
       if (!element)
         return store.listError(new Error('no element passed with click'))
@@ -271,7 +271,7 @@ const enhance = compose(
           })
         },
         copy() {
-          copyTo({ store, parentId: id, client })
+          copyTo({ store, parentId: id, client, refetch })
         },
         markForCopyingBiotop() {
           client.mutate({
@@ -372,7 +372,8 @@ const TreeContainer = ({
   client,
   loading,
   moving,
-  copying
+  copying,
+  refetch,
 }: {
   store: Object,
   treeName: String,
@@ -385,7 +386,8 @@ const TreeContainer = ({
   client: Object,
   loading: Boolean,
   moving: Object,
-  copying: Object
+  copying: Object,
+  refetch: () => void
 }) => {
   const { activeDataset } = store.tree
   const showApDivToggle = activeDataset

@@ -19,6 +19,8 @@ import createTpopkontrzaehl from './createTpopkontrzaehl.graphql'
 import createTpopmassn from './createTpopmassn.graphql'
 import createTpop from './createTpop.graphql'
 import createPop from './createPop.graphql'
+import queryTpopfeldkontr from './queryTpopfeldkontr.graphql'
+import queryTpopfreiwkontr from './queryTpopfreiwkontr.graphql'
 
 // copyTpopsOfPop can pass table and id separately
 export default async (
@@ -28,12 +30,14 @@ export default async (
     table: tablePassed,
     id: idPassed,
     client,
+    refetch
   }:{
     store: Object,
     parentId: String,
     tablePassed: ?String,
     idPassed: ?String,
-    client: Object
+    client: Object,
+    refetch: () => void
   }
 ): Promise<void> => {
   const { data } = await client.query({
@@ -170,6 +174,85 @@ export default async (
           planVorhanden: row.planVorhanden,
           jungpflanzenVorhanden: row.jungpflanzenVorhanden,
         },
+        /**
+         * update does not work because query contains filter
+         */
+        /*
+        optimisticResponse: {
+          __typename: 'Mutation',
+          updateTpopkontrById: {
+            tpopkontr: {
+              tpopId: parentId,
+              typ: row.typ,
+              datum: row.datum,
+              jahr: row.jahr,
+              jungpflanzenAnzahl: row.jungpflanzenAnzahl,
+              vitalitaet: row.vitalitaet,
+              ueberlebensrate: row.ueberlebensrate,
+              entwicklung: row.entwicklung,
+              ursachen: row.ursachen,
+              erfolgsbeurteilung: row.erfolgsbeurteilung,
+              umsetzungAendern: row.umsetzungAendern,
+              kontrolleAendern: row.kontrolleAendern,
+              bemerkungen: row.bemerkungen,
+              lrDelarze: row.lrDelarze,
+              flaeche: row.flaeche,
+              lrUmgebungDelarze: row.lrUmgebungDelarze,
+              vegetationstyp: row.vegetationstyp,
+              konkurrenz: row.konkurrenz,
+              moosschicht: row.moosschicht,
+              krautschicht: row.krautschicht,
+              strauchschicht: row.strauchschicht,
+              baumschicht: row.baumschicht,
+              bodenTyp: row.bodenTyp,
+              bodenKalkgehalt: row.bodenKalkgehalt,
+              bodenDurchlaessigkeit: row.bodenDurchlaessigkeit,
+              bodenHumus: row.bodenHumus,
+              bodenNaehrstoffgehalt: row.bodenNaehrstoffgehalt,
+              bodenAbtrag: row.bodenAbtrag,
+              wasserhaushalt: row.wasserhaushalt,
+              idealbiotopUebereinstimmung: row.idealbiotopUebereinstimmung,
+              handlungsbedarf: row.handlungsbedarf,
+              flaecheUeberprueft: row.flaecheUeberprueft,
+              deckungVegetation: row.deckungVegetation,
+              deckungNackterBoden: row.deckungNackterBoden,
+              deckungApArt: row.deckungApArt,
+              vegetationshoeheMaximum: row.vegetationshoeheMaximum,
+              vegetationshoeheMittel: row.vegetationshoeheMittel,
+              gefaehrdung: row.gefaehrdung,
+              bearbeiter: row.bearbeiter,
+              planVorhanden: row.planVorhanden,
+              jungpflanzenVorhanden: row.jungpflanzenVorhanden,
+              __typename: 'Tpopkontr',
+            },
+            __typename: 'Tpopkontr',
+          },
+        },
+        update: (proxy, { data: { updateTpopkontrById } }) => {
+          // Read the data from our cache for this query.
+          // need to use exact same query with which data was queried!
+          let data
+          const kontrTyp = get(updateTpopkontrById, 'tpopkontr.typ')
+          if (kontrTyp !== 'Freiwilligen-Erfolgskontrolle') {
+            data = proxy.readQuery({
+              query: queryTpopfeldkontr,
+              variables: { tpop: parentId }
+            });
+          } else {
+            data = proxy.readQuery({
+              query: queryTpopfreiwkontr,
+              variables: { tpop: parentId }
+            });
+          }
+          // Add our comment from the mutation to the end.
+          data.tpopkontr.push(updateTpopkontrById.tpopkontr)
+          // Write our data back to the cache.
+          if (kontrTyp !== 'Freiwilligen-Erfolgskontrolle') {
+            proxy.writeQuery({ query: queryTpopfeldkontr, data })
+          } else {
+            proxy.writeQuery({ query: queryTpopfreiwkontr, data })
+          }
+        }*/
       })
       newId = get(response, 'data.createTpopkontr.tpopkontr.id')
       break;
@@ -254,13 +337,16 @@ export default async (
       break;
   }
 
+  refetch()
+
   // copy tpop if needed
   if (table === 'pop' && withNextLevel) {
     copyTpopsOfPop({
       store,
       popIdFrom: id,
       popIdTo: newId,
-      client
+      client,
+      refetch
     })
   }
   if (table === 'tpopkontr') {
@@ -269,7 +355,8 @@ export default async (
       store,
       tpopkontrIdFrom: id,
       tpopkontrIdTo: newId,
-      client
+      client,
+      refetch
     })
   }
 }

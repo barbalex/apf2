@@ -64,7 +64,7 @@ const ProjekteContainer = ({
 
       return (
         <Query query={data2Gql} variables={variables(activeNodes)}>
-          {({ loading, error, data: data2, client }) => {
+          {({ loading, error, data: data2, client, refetch }) => {
             if (error) return `Fehler: ${error.message}`
 
             const data = merge(data1, data2)
@@ -97,6 +97,7 @@ const ProjekteContainer = ({
                           loading={loading}
                           moving={moving}
                           copying={copying}
+                          refetch={refetch}
                         />
                       </ReflexElement>
                     }
