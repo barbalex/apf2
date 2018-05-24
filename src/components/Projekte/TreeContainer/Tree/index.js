@@ -128,7 +128,13 @@ class Tree extends Component {
   )
 
   render() {
-    const { nodes, activeNodeArray, loading } = this.props
+    const {
+      nodes,
+      activeNodeArray,
+      loading,
+      copying,
+      moving
+    } = this.props
 
     return (
       <ErrorBoundary>
@@ -148,6 +154,8 @@ class Tree extends Component {
                 innerRef={c => (this.tree = c)}
                 // force rerender when second query finisches
                 loading={loading}
+                copying={copying}
+                moving={moving}
               />
             )}
           </AutoSizer>

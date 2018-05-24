@@ -19,7 +19,7 @@ mutation createTpopmassn(
   $bearbeiter: UUID
   $planVorhanden: Boolean
 ) {
-  createTpopmassnById(
+  createTpopmassn(
     input: {
       tpopmassn: {
         typ: $typ

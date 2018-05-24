@@ -9,7 +9,7 @@ mutation ceatePop(
   $x: Int
   $y: Int
 ) {
-  createPopById(
+  createPop(
     input: {
       pop: {
         apId: $apId

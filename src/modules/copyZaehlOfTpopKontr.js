@@ -1,20 +1,44 @@
 // @flow
+import gql from 'graphql-tag'
+import get from 'lodash/get'
+
+import copyTo from './copyTo'
+
 export default async ({
   store,
   tpopkontrIdFrom,
   tpopkontrIdTo,
+  client,
 }: {
   store: Object,
-  tpopkontrIdFrom: number,
-  tpopkontrIdTo: number,
+  tpopkontrIdFrom: String,
+  tpopkontrIdTo: String,
+  client: Object
 }) => {
   // 1. fetch all tpopkontrzaehl
-  await store.fetchTableByParentId('tpopkontrzaehl', tpopkontrIdFrom)
+  const { data } = await client.query({
+    query: gql`
+      query myquery($tpopkontrId: UUID!) {
+        allTpopkontrzaehls(filter: {tpopkontrId: {equalTo: $tpopkontrId}}) {
+          nodes {
+            id
+            anzahl
+            einheit
+            methode
+          }
+        }
+      }
+    `,
+    variables: { tpopkontrId: tpopkontrIdFrom }
+  })
+  const tpopkontrzaehl = get(data, 'allTpopkontrzaehls.nodes')
   // 2. add tpopkontrzaehl to new tpopkontr
-  const tpopkontrzaehl = Array.from(store.table.tpopkontrzaehl.values()).filter(
-    zaehl => zaehl.tpopkontr_id === tpopkontrIdFrom
-  )
   tpopkontrzaehl.forEach(zaehl =>
-    store.copyTo(tpopkontrIdTo, 'tpopkontrzaehl', zaehl.id)
+    copyTo({
+      store,
+      parentId: tpopkontrIdTo,
+      table: 'tpopkontrzaehl',
+      id: zaehl.id
+    })
   )
 }

@@ -24,7 +24,7 @@ mutation createTpop(
   $bemerkungen: String
   $statusUnklar: Boolean
 ) {
-  createTpopById(
+  createTpop(
     input: {
       tpop: {
         popId: $popId

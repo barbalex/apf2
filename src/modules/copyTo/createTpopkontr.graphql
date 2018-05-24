@@ -41,7 +41,7 @@ mutation createTpopkontr(
   $planVorhanden: Boolean
   $jungpflanzenVorhanden: Boolean
 ) {
-  createTpopkontrById(
+  createTpopkontr(
     input: {
       tpopkontr: {
         typ: $typ

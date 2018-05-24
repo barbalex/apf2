@@ -13,18 +13,26 @@ import queryTpopKontrById from './queryTpopKontrById.graphql'
 import queryTpopmassnById from './queryTpopmassnById.graphql'
 import queryTpopById from './queryTpopById.graphql'
 import queryPopById from './queryPopById.graphql'
-import createTpopkontrById from './createTpopkontrById.graphql'
-import createTpopmassnById from './createTpopmassnById.graphql'
-import createTpopById from './createTpopById.graphql'
-import createPopById from './createPopById.graphql'
+import createTpopkontr from './createTpopkontr.graphql'
+import createTpopmassn from './createTpopmassn.graphql'
+import createTpop from './createTpop.graphql'
+import createPop from './createPop.graphql'
 
 // copyTpopsOfPop can pass table and id separately
 export default async (
-  store: Object,
-  parentId: Number,
-  tablePassed: ?String, // TODO: check if necessary
-  idPassed: ?Number, // TODO: check if necessary
-  client: Object
+  {
+    store,
+    parentId,
+    table: tablePassed,
+    id: idPassed,
+    client,
+  }:{
+    store: Object,
+    parentId: String,
+    tablePassed: ?String,
+    idPassed: ?String,
+    client: Object
+  }
 ): Promise<void> => {
   const { data } = await client.query({
     query: gql`
@@ -38,36 +46,18 @@ export default async (
         }
       `
   })
-  let table = get(data, 'moving.table')
-  const id = get(data, 'moving.id')
-  const withNextLevel = get(data, 'moving.withNextLevel')
+  let table = tablePassed || get(data, 'copying.table')
+  const id = idPassed || get(data, 'copying.id')
+  const withNextLevel = get(data, 'copying.withNextLevel')
 
   // ensure derived data exists
-  const tabelle: {
-    idField: string,
-    table: string,
-    parentIdField: string,
-  } = tables.find(t => t.table === table)
+  const tabelle = tables.find(t => t.table === table)
   // in tpopfeldkontr and tpopfreiwkontr need to find dbTable
   if (tabelle && tabelle.dbTable) {
     table = tabelle.dbTable
   }
-  const idField = tabelle ? tabelle.idField : undefined
-  if (!idField) {
-    return store.listError(
-      new Error('change was not saved because idField was not found')
-    )
-  }
-  const { parentIdField } = tabelle
-  if (!parentIdField) {
-    return store.listError(
-      new Error('change was not saved because parentIdField was not found')
-    )
-  }
-
-  // get data
   
-  // move
+  // get data
   let row
   switch (table) {
     case 'tpopkontr':
@@ -115,7 +105,7 @@ export default async (
   switch (table) {
     case 'tpopkontr':
       response = await client.mutate({
-        mutation: createTpopkontrById,
+        mutation: createTpopkontr,
         variables: {
           tpopId: parentId,
           typ: row.typ,
@@ -159,62 +149,12 @@ export default async (
           planVorhanden: row.planVorhanden,
           jungpflanzenVorhanden: row.jungpflanzenVorhanden,
         },
-        optimisticResponse: {
-          __typename: 'Mutation',
-          createTpopkontrById: {
-            tpopkontr: {
-              tpopId: parentId,
-              typ: row.typ,
-              datum: row.datum,
-              jahr: row.jahr,
-              jungpflanzenAnzahl: row.jungpflanzenAnzahl,
-              vitalitaet: row.vitalitaet,
-              ueberlebensrate: row.ueberlebensrate,
-              entwicklung: row.entwicklung,
-              ursachen: row.ursachen,
-              erfolgsbeurteilung: row.erfolgsbeurteilung,
-              umsetzungAendern: row.umsetzungAendern,
-              kontrolleAendern: row.kontrolleAendern,
-              bemerkungen: row.bemerkungen,
-              lrDelarze: row.lrDelarze,
-              flaeche: row.flaeche,
-              lrUmgebungDelarze: row.lrUmgebungDelarze,
-              vegetationstyp: row.vegetationstyp,
-              konkurrenz: row.konkurrenz,
-              moosschicht: row.moosschicht,
-              krautschicht: row.krautschicht,
-              strauchschicht: row.strauchschicht,
-              baumschicht: row.baumschicht,
-              bodenTyp: row.bodenTyp,
-              bodenKalkgehalt: row.bodenKalkgehalt,
-              bodenDurchlaessigkeit: row.bodenDurchlaessigkeit,
-              bodenHumus: row.bodenHumus,
-              bodenNaehrstoffgehalt: row.bodenNaehrstoffgehalt,
-              bodenAbtrag: row.bodenAbtrag,
-              wasserhaushalt: row.wasserhaushalt,
-              idealbiotopUebereinstimmung: row.idealbiotopUebereinstimmung,
-              handlungsbedarf: row.handlungsbedarf,
-              flaecheUeberprueft: row.flaecheUeberprueft,
-              deckungVegetation: row.deckungVegetation,
-              deckungNackterBoden: row.deckungNackterBoden,
-              deckungApArt: row.deckungApArt,
-              vegetationshoeheMaximum: row.vegetationshoeheMaximum,
-              vegetationshoeheMittel: row.vegetationshoeheMittel,
-              gefaehrdung: row.gefaehrdung,
-              bearbeiter: row.bearbeiter,
-              planVorhanden: row.planVorhanden,
-              jungpflanzenVorhanden: row.jungpflanzenVorhanden,
-              __typename: 'Tpopkontr',
-            },
-            __typename: 'Tpopkontr',
-          },
-        },
       })
       newId = get(response, 'data.tpopkontr')
       break;
     case 'tpopmassn':
       response = await client.mutate({
-        mutation: createTpopmassnById,
+        mutation: createTpopmassn,
         variables: {
           tpopId: parentId,
           typ: row.typ,
@@ -236,40 +176,12 @@ export default async (
           bearbeiter: row.bearbeiter,
           planVorhanden: row.planVorhanden,
         },
-        optimisticResponse: {
-          __typename: 'Mutation',
-          createTpopmassnById: {
-            tpopmassn: {
-              tpopId: parentId,
-              typ: row.typ,
-              beschreibung: row.beschreibung,
-              jahr: row.jahr,
-              datum: row.datum,
-              bemerkungen: row.bemerkungen,
-              planBezeichnung: row.planBezeichnung,
-              flaeche: row.flaeche,
-              markierung: row.markierung,
-              anzTriebe: row.anzTriebe,
-              anzPflanzen: row.anzPflanzen,
-              anzPflanzstellen: row.anzPflanzstellen,
-              wirtspflanze: row.wirtspflanze,
-              herkunftPop: row.herkunftPop,
-              sammeldatum: row.sammeldatum,
-              form: row.form,
-              pflanzanordnung: row.pflanzanordnung,
-              bearbeiter: row.bearbeiter,
-              planVorhanden: row.planVorhanden,
-              __typename: 'Tpopmassn',
-            },
-            __typename: 'Tpopmassn',
-          },
-        },
       })
       newId = get(response, 'data.tpopmassn')
       break;
     case 'tpop':
       response = await client.mutate({
-        mutation: createTpopById,
+        mutation: createTpop,
         variables: {
           popId: parentId,
           nr: row.nr,
@@ -296,45 +208,12 @@ export default async (
           bemerkungen: row.bemerkungen,
           statusUnklar: row.statusUnklar,
         },
-        optimisticResponse: {
-          __typename: 'Mutation',
-          createTpopById: {
-            tpop: {
-              popId: parentId,
-              nr: row.nr,
-              gemeinde: row.gemeinde,
-              flurname: row.flurname,
-              x: row.x,
-              y: row.y,
-              radius: row.radius,
-              hoehe: row.hoehe,
-              exposition: row.exposition,
-              klima: row.klima,
-              neigung: row.neigung,
-              beschreibung: row.beschreibung,
-              katasterNr: row.katasterNr,
-              status: row.status,
-              statusUnklarGrund: row.statusUnklarGrund,
-              apberRelevant: row.apberRelevant,
-              bekanntSeit: row.bekanntSeit,
-              eigentuemer: row.eigentuemer,
-              kontakt: row.kontakt,
-              nutzungszone: row.nutzungszone,
-              bewirtschafter: row.bewirtschafter,
-              bewirtschaftung: row.bewirtschaftung,
-              bemerkungen: row.bemerkungen,
-              statusUnklar: row.statusUnklar,
-              __typename: 'Tpop',
-            },
-            __typename: 'Tpop',
-          },
-        },
       })
       newId = get(response, 'data.tpop')
       break;
     case 'pop':
       response = await client.mutate({
-        mutation: createPopById,
+        mutation: createPop,
         variables: {
           apId: parentId,
           nr: row.nr,
@@ -346,24 +225,6 @@ export default async (
           x: row.x,
           y: row.y,
         },
-        optimisticResponse: {
-          __typename: 'Mutation',
-          createPopById: {
-            pop: {
-              apId: parentId,
-              nr: row.nr,
-              name: row.name,
-              status: row.status,
-              statusUnklar: row.statusUnklar,
-              statusUnklarBegruendung: row.statusUnklarBegruendung,
-              bekanntSeit: row.bekanntSeit,
-              x: row.x,
-              y: row.y,
-              __typename: 'Pop',
-            },
-            __typename: 'Pop',
-          },
-        },
       })
       newId = get(response, 'data.pop')
       break;
@@ -372,16 +233,22 @@ export default async (
       break;
   }
 
-  // TODO: check if need to copy tpop
+  // copy tpop if needed
   if (table === 'pop' && withNextLevel) {
-    copyTpopsOfPop({ store, popIdFrom: id, popIdTo: newId })
+    copyTpopsOfPop({
+      store,
+      popIdFrom: id,
+      popIdTo: newId,
+      client
+    })
   }
   if (table === 'tpopkontr') {
-    // TODO: always copy Zaehlungen
+    // always copy Zaehlungen
     copyZaehlOfTpopKontr({
       store,
       tpopkontrIdFrom: id,
       tpopkontrIdTo: newId,
+      client
     })
   }
 }
