@@ -1,5 +1,4 @@
-mutation updateTpopmassn(
-  $id: UUID!
+mutation createTpopmassn(
   $typ: Int
   $beschreibung: String
   $jahr: Int
@@ -20,11 +19,9 @@ mutation updateTpopmassn(
   $bearbeiter: UUID
   $planVorhanden: Boolean
 ) {
-  updateTpopmassnById(
+  createTpopmassnById(
     input: {
-      id: $id
-      tpopmassnPatch: {
-        id: $id
+      tpopmassn: {
         typ: $typ
         beschreibung: $beschreibung
         jahr: $jahr
@@ -48,7 +45,6 @@ mutation updateTpopmassn(
     }
   ) {
     tpopmassn {
-      id
       tpopId
       typ
       beschreibung

@@ -1,5 +1,4 @@
-mutation updateTpopkontr(
-  $id: UUID!
+mutation createTpopkontr(
   $typ: String
   $datum: Date
   $jahr: Int
@@ -42,10 +41,9 @@ mutation updateTpopkontr(
   $planVorhanden: Boolean
   $jungpflanzenVorhanden: Boolean
 ) {
-  updateTpopkontrById(
+  createTpopkontrById(
     input: {
-      id: $id
-      tpopkontrPatch: {
+      tpopkontr: {
         typ: $typ
         datum: $datum
         jahr: $jahr
@@ -91,7 +89,6 @@ mutation updateTpopkontr(
     }
   ) {
     tpopkontr {
-      id
       tpopId
       typ
       datum

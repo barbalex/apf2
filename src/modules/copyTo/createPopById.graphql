@@ -1,5 +1,4 @@
-mutation updatePop(
-  $id: UUID!
+mutation ceatePop(
   $apId: UUID
   $nr: Int
   $name: String
@@ -10,11 +9,9 @@ mutation updatePop(
   $x: Int
   $y: Int
 ) {
-  updatePopById(
+  createPopById(
     input: {
-      id: $id
-      popPatch: {
-        id: $id
+      pop: {
         apId: $apId
         nr: $nr
         name: $name
@@ -28,7 +25,6 @@ mutation updatePop(
     }
   ) {
     pop {
-      id
       apId
       nr
       name

@@ -13,10 +13,10 @@ import queryTpopKontrById from './queryTpopKontrById.graphql'
 import queryTpopmassnById from './queryTpopmassnById.graphql'
 import queryTpopById from './queryTpopById.graphql'
 import queryPopById from './queryPopById.graphql'
-import updateTpopkontrById from './updateTpopkontrById.graphql'
-import updateTpopmassnById from './updateTpopmassnById.graphql'
-import updateTpopById from './updateTpopById.graphql'
-import updatePopById from './updatePopById.graphql'
+import createTpopkontrById from './createTpopkontrById.graphql'
+import createTpopmassnById from './createTpopmassnById.graphql'
+import createTpopById from './createTpopById.graphql'
+import createPopById from './createPopById.graphql'
 
 // copyTpopsOfPop can pass table and id separately
 export default async (
@@ -109,16 +109,14 @@ export default async (
     )
   }
   
-  // move
-  // TODO: insert instead of update!
+  // insert
   let response
   let newId
   switch (table) {
     case 'tpopkontr':
       response = await client.mutate({
-        mutation: updateTpopkontrById,
+        mutation: createTpopkontrById,
         variables: {
-          id,
           tpopId: parentId,
           typ: row.typ,
           datum: row.datum,
@@ -163,9 +161,8 @@ export default async (
         },
         optimisticResponse: {
           __typename: 'Mutation',
-          updateTpopkontrById: {
+          createTpopkontrById: {
             tpopkontr: {
-              id,
               tpopId: parentId,
               typ: row.typ,
               datum: row.datum,
@@ -217,9 +214,8 @@ export default async (
       break;
     case 'tpopmassn':
       response = await client.mutate({
-        mutation: updateTpopmassnById,
+        mutation: createTpopmassnById,
         variables: {
-          id,
           tpopId: parentId,
           typ: row.typ,
           beschreibung: row.beschreibung,
@@ -242,9 +238,8 @@ export default async (
         },
         optimisticResponse: {
           __typename: 'Mutation',
-          updateTpopmassnById: {
+          createTpopmassnById: {
             tpopmassn: {
-              id,
               tpopId: parentId,
               typ: row.typ,
               beschreibung: row.beschreibung,
@@ -274,9 +269,8 @@ export default async (
       break;
     case 'tpop':
       response = await client.mutate({
-        mutation: updateTpopById,
+        mutation: createTpopById,
         variables: {
-          id,
           popId: parentId,
           nr: row.nr,
           gemeinde: row.gemeinde,
@@ -304,9 +298,8 @@ export default async (
         },
         optimisticResponse: {
           __typename: 'Mutation',
-          updateTpopById: {
+          createTpopById: {
             tpop: {
-              id,
               popId: parentId,
               nr: row.nr,
               gemeinde: row.gemeinde,
@@ -341,9 +334,8 @@ export default async (
       break;
     case 'pop':
       response = await client.mutate({
-        mutation: updatePopById,
+        mutation: createPopById,
         variables: {
-          id,
           apId: parentId,
           nr: row.nr,
           name: row.name,
@@ -356,9 +348,8 @@ export default async (
         },
         optimisticResponse: {
           __typename: 'Mutation',
-          updatePopById: {
+          createPopById: {
             pop: {
-              id,
               apId: parentId,
               nr: row.nr,
               name: row.name,

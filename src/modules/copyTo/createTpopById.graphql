@@ -1,5 +1,4 @@
-mutation updateTpop(
-  $id: UUID!
+mutation createTpop(
   $popId: UUID
   $nr: Int
   $gemeinde: String
@@ -25,11 +24,9 @@ mutation updateTpop(
   $bemerkungen: String
   $statusUnklar: Boolean
 ) {
-  updateTpopById(
+  createTpopById(
     input: {
-      id: $id
-      tpopPatch: {
-        id: $id
+      tpop: {
         popId: $popId
         nr: $nr
         gemeinde: $gemeinde
@@ -58,7 +55,6 @@ mutation updateTpop(
     }
   ) {
     tpop {
-      id
       popId
       nr
       gemeinde
