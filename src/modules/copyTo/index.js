@@ -18,6 +18,8 @@ import queryTpopById from './queryTpopById.graphql'
 import queryPopById from './queryPopById.graphql'
 import updateTpopkontrById from './updateTpopkontrById.graphql'
 import updateTpopmassnById from './updateTpopmassnById.graphql'
+import updateTpopById from './updateTpopById.graphql'
+import updatePopById from './updatePopById.graphql'
 
 // copyTpopsOfPop can pass table and id separately
 export default async (
@@ -109,32 +111,13 @@ export default async (
       new Error('change was not saved because dataset was not found in store')
     )
   }
-
-  // build new row (for now without idField)
-  const newRow = clone(row)
-  newRow[parentIdField] = parentId
-  delete newRow[idField]
-
-  // TODO: update db
-  let response: { data: Array<Object> }
-  try {
-    response = await axios({
-      method: 'POST',
-      url: `/${table}`,
-      data: newRow,
-      headers: {
-        Prefer: 'return=representation',
-      },
-    })
-  } catch (error) {
-    store.listError(error)
-  }
-  const data = response.data[0]
   
   // move
+  let response
+  let newId
   switch (table) {
     case 'tpopkontr':
-      client.mutate({
+      response = await client.mutate({
         mutation: updateTpopkontrById,
         variables: {
           id,
@@ -232,9 +215,10 @@ export default async (
           },
         },
       })
+      newId = get(response, 'data.tpopkontr')
       break;
     case 'tpopmassn':
-      client.mutate({
+      response = await client.mutate({
         mutation: updateTpopmassnById,
         variables: {
           id,
@@ -288,61 +272,127 @@ export default async (
           },
         },
       })
+      newId = get(response, 'data.tpopmassn')
       break;
     case 'tpop':
-      client.mutate({
-        mutation: gql`
-          mutation updateTpopById($id: UUID!, $popId: UUID!) {
-            updateTpopById(id: $id, popId: $popId) {
-              input: {
-                id: $id
-                tpopPatch: {
-                  popId: $popId
-                }
-              }
-            }
-          }
-        `,
-        variables: { id },
+      response = await client.mutate({
+        mutation: updateTpopById,
+        variables: {
+          id,
+          popId: parentId,
+          nr: row.nr,
+          gemeinde: row.gemeinde,
+          flurname: row.flurname,
+          x: row.x,
+          y: row.y,
+          radius: row.radius,
+          hoehe: row.hoehe,
+          exposition: row.exposition,
+          klima: row.klima,
+          neigung: row.neigung,
+          beschreibung: row.beschreibung,
+          katasterNr: row.katasterNr,
+          status: row.status,
+          statusUnklarGrund: row.statusUnklarGrund,
+          apberRelevant: row.apberRelevant,
+          bekanntSeit: row.bekanntSeit,
+          eigentuemer: row.eigentuemer,
+          kontakt: row.kontakt,
+          nutzungszone: row.nutzungszone,
+          bewirtschafter: row.bewirtschafter,
+          bewirtschaftung: row.bewirtschaftung,
+          bemerkungen: row.bemerkungen,
+          statusUnklar: row.statusUnklar,
+        },
         optimisticResponse: {
+          __typename: 'Mutation',
+          updateTpopById: {
+            tpop: {
+              id,
+              popId: parentId,
+              nr: row.nr,
+              gemeinde: row.gemeinde,
+              flurname: row.flurname,
+              x: row.x,
+              y: row.y,
+              radius: row.radius,
+              hoehe: row.hoehe,
+              exposition: row.exposition,
+              klima: row.klima,
+              neigung: row.neigung,
+              beschreibung: row.beschreibung,
+              katasterNr: row.katasterNr,
+              status: row.status,
+              statusUnklarGrund: row.statusUnklarGrund,
+              apberRelevant: row.apberRelevant,
+              bekanntSeit: row.bekanntSeit,
+              eigentuemer: row.eigentuemer,
+              kontakt: row.kontakt,
+              nutzungszone: row.nutzungszone,
+              bewirtschafter: row.bewirtschafter,
+              bewirtschaftung: row.bewirtschaftung,
+              bemerkungen: row.bemerkungen,
+              statusUnklar: row.statusUnklar,
+              __typename: 'Tpop',
+            },
+            __typename: 'Tpop',
+          },
         },
       })
+      newId = get(response, 'data.tpop')
       break;
     case 'pop':
-      client.mutate({
-        mutation: gql`
-          mutation updatePopById($id: UUID!, $apId: UUID!) {
-            updatePopById(id: $id, apId: $apId) {
-              input: {
-                id: $id
-                popPatch: {
-                  apId: $apId
-                }
-              }
-            }
-          }
-        `,
-        variables: { id },
+      response = await client.mutate({
+        mutation: updatePopById,
+        variables: {
+          id,
+          apId: parentId,
+          nr: row.nr,
+          name: row.name,
+          status: row.status,
+          statusUnklar: row.statusUnklar,
+          statusUnklarBegruendung: row.statusUnklarBegruendung,
+          bekanntSeit: row.bekanntSeit,
+          x: row.x,
+          y: row.y,
+        },
         optimisticResponse: {
+          __typename: 'Mutation',
+          updatePopById: {
+            pop: {
+              id,
+              apId: parentId,
+              nr: row.nr,
+              name: row.name,
+              status: row.status,
+              statusUnklar: row.statusUnklar,
+              statusUnklarBegruendung: row.statusUnklarBegruendung,
+              bekanntSeit: row.bekanntSeit,
+              x: row.x,
+              y: row.y,
+              __typename: 'Pop',
+            },
+            __typename: 'Pop',
+          },
         },
       })
+      newId = get(response, 'data.pop')
       break;
     default:
       // do nothing
       break;
   }
 
-
-  // check if need to copy tpop
+  // TODO: check if need to copy tpop
   if (table === 'pop' && withNextLevel) {
-    copyTpopsOfPop({ store, popIdFrom: id, popIdTo: data.id })
+    copyTpopsOfPop({ store, popIdFrom: id, popIdTo: newId })
   }
   if (table === 'tpopkontr') {
-    // always copy Zaehlungen
+    // TODO: always copy Zaehlungen
     copyZaehlOfTpopKontr({
       store,
       tpopkontrIdFrom: id,
-      tpopkontrIdTo: data.id,
+      tpopkontrIdTo: newId,
     })
   }
 }
