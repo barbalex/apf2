@@ -101,7 +101,6 @@ const Idealbiotop = ({
     {({ loading, error, data: data1 }) => {
       if (error) return `Fehler: ${error.message}`
       const id = get(data1, `${treeName}.activeNodeArray[3]`)
-      console.log('Idealbiotop:', {id,data1})
 
       return (
         <Query query={data2Gql} variables={{ id }}>

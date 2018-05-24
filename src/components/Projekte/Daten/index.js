@@ -151,7 +151,6 @@ const Daten = ({
       if (error) return `Fehler: ${error.message}`
 
       const activeNodeArray = get(data, `${treeName}.activeNodeArray`)
-      //console.log('Daten:', {activeNodeArray, treeName, data})
       const activeNodes = getActiveNodes(activeNodeArray, store)
 
       // get name of active table
@@ -212,7 +211,6 @@ const Daten = ({
       } else {
         key = tableName
       }
-      console.log('Daten:', {tableName, activeNode})
       const form = key ? formObject[key] : ''
 
       return (
