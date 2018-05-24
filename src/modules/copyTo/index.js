@@ -17,6 +17,7 @@ import queryTpopmassnById from './queryTpopmassnById.graphql'
 import queryTpopById from './queryTpopById.graphql'
 import queryPopById from './queryPopById.graphql'
 import updateTpopkontrById from './updateTpopkontrById.graphql'
+import updateTpopmassnById from './updateTpopmassnById.graphql'
 
 // copyTpopsOfPop can pass table and id separately
 export default async (
@@ -234,24 +235,53 @@ export default async (
       break;
     case 'tpopmassn':
       client.mutate({
-        mutation: gql`
-          mutation updateTpopmassnById($id: UUID!, $tpopId: UUID!) {
-            updateTpopmassnById(id: $id, tpopId: $tpopId) {
-              input: {
-                id: $id
-                tpopmassnPatch: {
-                  tpopId: $tpopId
-                }
-              }
-            }
-          }
-        `,
-        variables: { id, tpopId: newParentId },
+        mutation: updateTpopmassnById,
+        variables: {
+          id,
+          tpopId: parentId,
+          typ: row.typ,
+          beschreibung: row.beschreibung,
+          jahr: row.jahr,
+          datum: row.datum,
+          bemerkungen: row.bemerkungen,
+          planBezeichnung: row.planBezeichnung,
+          flaeche: row.flaeche,
+          markierung: row.markierung,
+          anzTriebe: row.anzTriebe,
+          anzPflanzen: row.anzPflanzen,
+          anzPflanzstellen: row.anzPflanzstellen,
+          wirtspflanze: row.wirtspflanze,
+          herkunftPop: row.herkunftPop,
+          sammeldatum: row.sammeldatum,
+          form: row.form,
+          pflanzanordnung: row.pflanzanordnung,
+          bearbeiter: row.bearbeiter,
+          planVorhanden: row.planVorhanden,
+        },
         optimisticResponse: {
           __typename: 'Mutation',
           updateTpopmassnById: {
             tpopmassn: {
-              tpopId: newParentId,
+              id,
+              tpopId: parentId,
+              typ: row.typ,
+              beschreibung: row.beschreibung,
+              jahr: row.jahr,
+              datum: row.datum,
+              bemerkungen: row.bemerkungen,
+              planBezeichnung: row.planBezeichnung,
+              flaeche: row.flaeche,
+              markierung: row.markierung,
+              anzTriebe: row.anzTriebe,
+              anzPflanzen: row.anzPflanzen,
+              anzPflanzstellen: row.anzPflanzstellen,
+              wirtspflanze: row.wirtspflanze,
+              herkunftPop: row.herkunftPop,
+              sammeldatum: row.sammeldatum,
+              form: row.form,
+              pflanzanordnung: row.pflanzanordnung,
+              bearbeiter: row.bearbeiter,
+              planVorhanden: row.planVorhanden,
               __typename: 'Tpopmassn',
             },
             __typename: 'Tpopmassn',
@@ -273,16 +303,8 @@ export default async (
             }
           }
         `,
-        variables: { id, popId: newParentId },
+        variables: { id },
         optimisticResponse: {
-          __typename: 'Mutation',
-          updateTpopById: {
-            tpop: {
-              popId: newParentId,
-              __typename: 'Tpop',
-            },
-            __typename: 'Tpop',
-          },
         },
       })
       break;
@@ -300,16 +322,8 @@ export default async (
             }
           }
         `,
-        variables: { id, apId: newParentId },
+        variables: { id },
         optimisticResponse: {
-          __typename: 'Mutation',
-          updatePopById: {
-            pop: {
-              apId: newParentId,
-              __typename: 'Pop',
-            },
-            __typename: 'Pop',
-          },
         },
       })
       break;
