@@ -45,6 +45,7 @@ mutation createTpopmassn(
     }
   ) {
     tpopmassn {
+      id
       tpopId
       typ
       beschreibung

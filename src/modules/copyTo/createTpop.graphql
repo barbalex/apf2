@@ -55,6 +55,7 @@ mutation createTpop(
     }
   ) {
     tpop {
+      id
       popId
       nr
       gemeinde

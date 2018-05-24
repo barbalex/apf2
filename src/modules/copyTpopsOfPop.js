@@ -22,30 +22,6 @@ export default async ({
         allTpops(filter: {popId: {equalTo: $popId}}) {
           nodes {
             id
-            popId
-            nr
-            gemeinde
-            flurname
-            x
-            y
-            radius
-            hoehe
-            exposition
-            klima
-            neigung
-            beschreibung
-            katasterNr
-            status
-            statusUnklarGrund
-            apberRelevant
-            bekanntSeit
-            eigentuemer
-            kontakt
-            nutzungszone
-            bewirtschafter
-            bewirtschaftung
-            bemerkungen
-            statusUnklar
           }
         }
       }

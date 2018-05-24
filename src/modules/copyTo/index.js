@@ -10,10 +10,12 @@ import tables from '../tables'
 import copyTpopsOfPop from '../copyTpopsOfPop'
 import copyZaehlOfTpopKontr from '../copyZaehlOfTpopKontr'
 import queryTpopKontrById from './queryTpopKontrById.graphql'
+import queryTpopKontrzaehlById from './queryTpopkontrzaehlById.graphql'
 import queryTpopmassnById from './queryTpopmassnById.graphql'
 import queryTpopById from './queryTpopById.graphql'
 import queryPopById from './queryPopById.graphql'
 import createTpopkontr from './createTpopkontr.graphql'
+import createTpopkontrzaehl from './createTpopkontrzaehl.graphql'
 import createTpopmassn from './createTpopmassn.graphql'
 import createTpop from './createTpop.graphql'
 import createPop from './createPop.graphql'
@@ -60,6 +62,13 @@ export default async (
   // get data
   let row
   switch (table) {
+    case 'tpopkontrzaehl':
+      const { data: data0 } = await client.query({
+        query: queryTpopKontrzaehlById,
+          variables: { id }
+      })
+      row = get(data0, 'tpopkontrzaehlById')
+      break;
     case 'tpopkontr':
       const { data: data1 } = await client.query({
         query: queryTpopKontrById,
@@ -103,6 +112,18 @@ export default async (
   let response
   let newId
   switch (table) {
+    case 'tpopkontrzaehl':
+      response = await client.mutate({
+        mutation: createTpopkontrzaehl,
+        variables: {
+          tpopkontrId: parentId,
+          anzahl: row.anzahl,
+          einheit: row.einheit,
+          methode: row.methode,
+        },
+      })
+      newId = get(response, 'data.createTpopkontrzaehl.tpopkontrzaehl.id')
+      break;
     case 'tpopkontr':
       response = await client.mutate({
         mutation: createTpopkontr,
@@ -150,7 +171,7 @@ export default async (
           jungpflanzenVorhanden: row.jungpflanzenVorhanden,
         },
       })
-      newId = get(response, 'data.tpopkontr')
+      newId = get(response, 'data.createTpopkontr.tpopkontr.id')
       break;
     case 'tpopmassn':
       response = await client.mutate({
@@ -177,7 +198,7 @@ export default async (
           planVorhanden: row.planVorhanden,
         },
       })
-      newId = get(response, 'data.tpopmassn')
+      newId = get(response, 'data.createTpopmassn.tpopmassn.id')
       break;
     case 'tpop':
       response = await client.mutate({
@@ -209,7 +230,7 @@ export default async (
           statusUnklar: row.statusUnklar,
         },
       })
-      newId = get(response, 'data.tpop')
+      newId = get(response, 'data.createTpop.tpop.id')
       break;
     case 'pop':
       response = await client.mutate({
@@ -226,7 +247,7 @@ export default async (
           y: row.y,
         },
       })
-      newId = get(response, 'data.pop')
+      newId = get(response, 'data.createPop.pop.id')
       break;
     default:
       // do nothing

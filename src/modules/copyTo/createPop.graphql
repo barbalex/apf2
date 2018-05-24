@@ -25,6 +25,7 @@ mutation ceatePop(
     }
   ) {
     pop {
+      id
       apId
       nr
       name

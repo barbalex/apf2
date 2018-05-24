@@ -89,6 +89,7 @@ mutation createTpopkontr(
     }
   ) {
     tpopkontr {
+      id
       tpopId
       typ
       datum
