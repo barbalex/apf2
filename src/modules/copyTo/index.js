@@ -3,9 +3,6 @@
  * moves a dataset to a different parent
  * used when copying for instance tpop to other pop in tree
  */
-
-import axios from 'axios'
-import clone from 'lodash/clone'
 import get from 'lodash/get'
 import gql from 'graphql-tag'
 
