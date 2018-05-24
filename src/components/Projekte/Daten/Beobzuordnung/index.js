@@ -124,9 +124,13 @@ const Beobzuordnung = ({
   dimensions: Object,
 }) => (
   <Query query={data1Gql}>
-    {({ loading, error, data }) => {
+    {({ loading, error, data: data1 }) => {
       if (error) return `Fehler: ${error.message}`
-      const id = get(data, `${treeName}.activeNodeArray[9]`)
+      // fetch id for beobNichtBeurteilt, beobNichtZuzuordnen and beobZugeordnet
+      // so array-index of beob-id is different
+      // but it is always the last
+      const activeNodeArray = get(data1, `${treeName}.activeNodeArray`)
+      const id = activeNodeArray[activeNodeArray.length -1]
 
       return (
         <Query query={data2Gql} variables={{ id }}>
@@ -219,7 +223,7 @@ const Beobzuordnung = ({
                       'beobQuelleWerteByQuelleId.name',
                       '?'
                     )} (nicht veränderbar)`}</Title>
-                    <Beob id={row.id} dimensions={dimensions} />
+                    <Beob id={id} dimensions={dimensions} />
                   </DataContainer>
                 </FormContainer>
               </ErrorBoundary>
