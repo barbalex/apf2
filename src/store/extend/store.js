@@ -11,7 +11,6 @@ import deleteDatasetDemand from '../action/deleteDatasetDemand'
 import deleteDatasetExecute from '../action/deleteDatasetExecute'
 import listError from '../action/listError'
 import writeToStore from '../action/writeToStore'
-import copyTo from '../action/copyTo'
 import copyTpopKoordToPop from '../action/copyTpopKoordToPop'
 import copyBeobZugeordnetKoordToPop from '../action/copyBeobZugeordnetKoordToPop'
 import createNewPopFromBeob from '../action/createNewPopFromBeob'
@@ -20,29 +19,6 @@ import undoDeletion from '../action/undoDeletion'
 export default (store: Object): void => {
   extendObservable(store, {
     loading: [],
-    copying: {
-      table: null,
-      id: null,
-      label: null,
-      withNextLevel: false,
-    },
-    copyTo: action('copyTo', (parentId, tablePassed, idPassed) => {
-      // insert new dataset with:
-      // - data of dataset with id copying.id
-      // - parentId as passed
-      // if table and id were passed, pass on
-      if (tablePassed && idPassed) {
-        copyTo(store, parentId, tablePassed, idPassed)
-      } else {
-        copyTo(store, parentId)
-      }
-    }),
-    resetCopying: action('resetCopying', () => {
-      store.copying.table = null
-      store.copying.id = null
-      store.copying.label = null
-      store.copying.withNextLevel = false
-    }),
     copyTpopKoordToPop: action('copyTpopKoordToPop', tpopId =>
       copyTpopKoordToPop(store, tpopId)
     ),
