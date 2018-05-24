@@ -13,14 +13,16 @@ const TpopmassnFolder = ({
   store,
   tree,
   onClick,
-  token
+  token,
+  moving
 }: {
   store: Object,
   tree: Object,
   onClick: () => void,
-  token: String
+  token: String,
+  moving: Object
 }) => {
-  const moving = store.moving.table && store.moving.table === 'tpopmassn'
+  const isMoving = moving.table && moving.table === 'tpopmassn'
   const copying = store.copying.table && store.copying.table === 'tpopmassn'
 
   return (
@@ -39,14 +41,14 @@ const TpopmassnFolder = ({
             >
               erstelle neue
             </MenuItem>
-            {moving && (
+            {isMoving && (
               <MenuItem
                 onClick={onClick}
                 data={{
                   action: 'move',
                 }}
               >
-                {`verschiebe '${store.moving.label}' hierhin`}
+                {`verschiebe '${moving.label}' hierhin`}
               </MenuItem>
             )}
             {copying && (

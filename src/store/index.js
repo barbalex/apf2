@@ -45,9 +45,7 @@ function Store(): void {
     apFilter: false,
     nodeLabelFilter: {},
   }
-  this.app = {
-    ktZh: null,
-  }
+  this.app = {}
   this.map = {
     bounds: [],
     pop: {},

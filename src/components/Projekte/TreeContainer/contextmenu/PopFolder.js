@@ -27,7 +27,8 @@ const PopFolder = ({
   changeLabel,
   label,
   onShow,
-  token
+  token,
+  moving
 }: {
   tree: Object,
   onClick: () => void,
@@ -35,9 +36,10 @@ const PopFolder = ({
   changeLabel: () => void,
   label: string | number,
   onShow: () => void,
-  token: String
+  token: String,
+  moving: Object
 }) => {
-  const moving = store.moving.table && store.moving.table === 'pop'
+  const isMoving = moving.table && moving.table === 'pop'
   const copying = store.copying.table && store.copying.table === 'pop'
 
   return (
@@ -68,14 +70,14 @@ const PopFolder = ({
           >
             erstelle neue
           </MenuItem>
-          {moving && (
+          {isMoving && (
             <MenuItem
               onClick={onClick}
               data={{
                 action: 'move',
               }}
             >
-              {`verschiebe '${store.moving.label}' hierhin`}
+              {`verschiebe '${moving.label}' hierhin`}
             </MenuItem>
           )}
           {copying && (

@@ -13,14 +13,16 @@ const TpopfreiwkontrFolder = ({
   store,
   onClick,
   tree,
-  token
+  token,
+  moving
 }: {
   store: Object,
   tree: Object,
   onClick: () => void,
-  token: String
+  token: String,
+  moving
 }) => {
-  const moving = store.moving.table && store.moving.table === 'tpopfreiwkontr'
+  const isMoving = moving.table && moving.table === 'tpopfreiwkontr'
   const copying =
     store.copying.table && store.copying.table === 'tpopfreiwkontr'
 
@@ -48,14 +50,14 @@ const TpopfreiwkontrFolder = ({
             >
               erstelle neue
             </MenuItem>
-            {moving && (
+            {isMoving && (
               <MenuItem
                 onClick={onClick}
                 data={{
                   action: 'move',
                 }}
               >
-                {`verschiebe '${store.moving.label}' hierhin`}
+                {`verschiebe '${moving.label}' hierhin`}
               </MenuItem>
             )}
             {copying && (

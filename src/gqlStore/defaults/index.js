@@ -68,6 +68,11 @@ export default async (idb) => {
       fileType: 'xlsx',
       __typename: 'Export'
     },
+    moving: {
+      table: null,
+      id: null,
+      label: null,
+    }
   }
   return defaults
 }

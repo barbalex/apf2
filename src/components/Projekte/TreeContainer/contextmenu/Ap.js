@@ -13,14 +13,16 @@ const Ap = ({
   onClick,
   store,
   tree,
-  token
+  token,
+  moving
 }: {
   onClick: () => void,
   store: Object,
   tree: Object,
-  token: String
+  token: String,
+  moving: Object
 }) => {
-  const moving = store.moving.table && store.moving.table === 'pop'
+  const isMoving = moving.table && moving.table === 'pop'
   const mayWrite = !userIsReadOnly(token)
 
   return (
@@ -50,14 +52,14 @@ const Ap = ({
             </MenuItem>
           </Fragment>
         }
-        {moving && (
+        {isMoving && (
           <MenuItem
             onClick={onClick}
             data={{
               action: 'move',
             }}
           >
-            {`verschiebe '${store.moving.label}' hierhin`}
+            {`verschiebe '${moving.label}' hierhin`}
           </MenuItem>
         )}
         {(store.map.activeApfloraLayers.includes('Pop') ||

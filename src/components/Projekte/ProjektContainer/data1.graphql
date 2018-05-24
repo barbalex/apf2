@@ -79,4 +79,9 @@ query Query {
   copyingBiotop @client {
     id
   }
+  moving @client {
+    table
+    id
+    label
+  }
 }

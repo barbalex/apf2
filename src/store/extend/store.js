@@ -11,7 +11,6 @@ import deleteDatasetDemand from '../action/deleteDatasetDemand'
 import deleteDatasetExecute from '../action/deleteDatasetExecute'
 import listError from '../action/listError'
 import writeToStore from '../action/writeToStore'
-import moveTo from '../action/moveTo'
 import copyTo from '../action/copyTo'
 import copyTpopKoordToPop from '../action/copyTpopKoordToPop'
 import copyBeobZugeordnetKoordToPop from '../action/copyBeobZugeordnetKoordToPop'
@@ -26,21 +25,6 @@ export default (store: Object): void => {
       id: null,
       label: null,
     },
-    markForMoving: action('markForMoving', (table, id, label) => {
-      store.moving.table = table
-      store.moving.id = id
-      store.moving.label = label
-    }),
-    moveTo: action('move', newParentId => {
-      // check if this is correct table is not necessary because context menu
-      // only shows menu when table is correct
-      // change parent id of dataset marked for moving
-      moveTo(store, newParentId)
-      // reset moving
-      store.moving.table = null
-      store.moving.id = null
-      store.moving.label = null
-    }),
     copying: {
       table: null,
       id: null,

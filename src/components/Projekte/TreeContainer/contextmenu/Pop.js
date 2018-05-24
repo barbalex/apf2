@@ -33,7 +33,8 @@ const Pop = ({
   changeLabel,
   label,
   onShow,
-  token
+  token,
+  moving
 }: {
   onClick: () => void,
   store: Object,
@@ -43,9 +44,10 @@ const Pop = ({
   changeLabel: () => void,
   label: string,
   onShow: () => void,
-  token: String
+  token: String,
+  moving: Object
 }) => {
-  const moving = store.moving.table && store.moving.table === 'tpop'
+  const isMoving = moving.table && moving.table === 'tpop'
   const copying = store.copying.table && store.copying.table === 'tpop'
 
   return (
@@ -86,14 +88,14 @@ const Pop = ({
           >
             verschiebe
           </MenuItem>
-          {moving && (
+          {isMoving && (
             <MenuItem
               onClick={onClick}
               data={{
                 action: 'move',
               }}
             >
-              {`verschiebe '${store.moving.label}' hierhin`}
+              {`verschiebe '${moving.label}' hierhin`}
             </MenuItem>
           )}
           <MenuItem

@@ -217,7 +217,8 @@ const Row = ({
   activeNodes,
   treeName,
   data,
-  client
+  client,
+  moving
 }: {
   key?: number,
   index: number,
@@ -228,7 +229,8 @@ const Row = ({
   activeNodes: Array<Object>,
   treeName: String,
   data: Object,
-  client: Object
+  client: Object,
+  moving: Object
 }) => {
   const node = nodes[index]
   const tree2 = get(data, treeName)
@@ -255,10 +257,10 @@ const Row = ({
   }
   const dataUrl = JSON.stringify(node.url)
   const level = node.url.length - 1
-  const moving =
+  const isMoving =
     node.nodeType === 'table' &&
-    node.menuType === store.moving.table &&
-    node.id === store.moving.id
+    node.menuType === moving.table &&
+    node.id === moving.id
   const copying =
     node.nodeType === 'table' &&
     node.menuType === store.copying.table &&
@@ -364,7 +366,7 @@ const Row = ({
           >
             {node.label}
           </TextSpan>
-          {moving && (
+          {isMoving && (
             <div title="zum Verschieben gemerkt, bereit zum Einfügen">
               <MovingIcon />
             </div>

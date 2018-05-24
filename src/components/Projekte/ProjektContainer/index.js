@@ -59,6 +59,7 @@ const ProjekteContainer = ({
       if (error) return `Fehler: ${error.message}`
       const activeNodeArray = get(data1, `${treeName}.activeNodeArray`)
       const activeNodes = getActiveNodes(activeNodeArray, store)
+      const moving = get(data1, 'moving')
 
       return (
         <Query query={data2Gql} variables={variables(activeNodes)}>
@@ -93,6 +94,7 @@ const ProjekteContainer = ({
                           activeNode={activeNode}
                           client={client}
                           loading={loading}
+                          moving={moving}
                         />
                       </ReflexElement>
                     }

@@ -13,17 +13,19 @@ const Tpop = ({
   onClick,
   store,
   tree,
-  token
+  token,
+  moving
 }: {
   onClick: () => void,
   store: Object,
   tree: Object,
-  token: String
+  token: String,
+  moving: Object
 }) => {
-  const moving =
-    store.moving.table &&
+  const isMoving =
+    moving.table &&
     ['tpopmassn', 'tpopfeldkontr', 'tpopfreiwkontr'].includes(
-      store.moving.table
+      moving.table
     )
   const copying =
     store.copying.table &&
@@ -78,14 +80,14 @@ const Tpop = ({
             >
               verschiebe
             </MenuItem>
-            {moving && (
+            {isMoving && (
               <MenuItem
                 onClick={onClick}
                 data={{
                   action: 'move',
                 }}
               >
-                {`verschiebe '${store.moving.label}' hierhin`}
+                {`verschiebe '${moving.label}' hierhin`}
               </MenuItem>
             )}
             <MenuItem

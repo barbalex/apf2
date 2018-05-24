@@ -7,6 +7,7 @@ import treeNodeLabelFilter from './treeNodeLabelFilter'
 import treeMap from './treeMap'
 import urlQuery from './urlQuery'
 import login from './login'
+import moving from './moving'
 import updateAvailable from './updateAvailable'
 import mapMouseCoordinates from './mapMouseCoordinates'
 import copyingBiotop from './copyingBiotop'
@@ -19,6 +20,7 @@ export default merge(
   treeMap,
   urlQuery,
   login,
+  moving,
   updateAvailable,
   mapMouseCoordinates,
   copyingBiotop,

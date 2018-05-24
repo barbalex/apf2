@@ -66,6 +66,7 @@ class Tree extends Component {
     mapPopVisible: boolean,
     mapTpopVisible: boolean,
     activeNodeArray: Array<Object>,
+    moving: Object,
   }
 
   tree: ?HTMLDivElement
@@ -97,7 +98,7 @@ class Tree extends Component {
   }
 
   rowRenderer = ({ key, index, style }) => {
-    const { tree, nodes, data, treeName, client, activeNodes } = this.props
+    const { tree, nodes, data, treeName, client, activeNodes, moving } = this.props
     
     return (
       <Row
@@ -111,6 +112,7 @@ class Tree extends Component {
         data={data}
         treeName={treeName}
         client={client}
+        moving={moving}
       />
     )
 }
