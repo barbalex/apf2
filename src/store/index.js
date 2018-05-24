@@ -81,12 +81,6 @@ function Store(): void {
   }
   this.table = TableStore
   this.valuesForWhichTableDataWasFetched = {}
-  this.copying = {
-    table: null,
-    id: null,
-    label: null,
-    withNextLevel: false,
-  }
   this.qk = {
     setMessages: () => {},
     addMessages: () => {},
