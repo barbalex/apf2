@@ -110,6 +110,7 @@ export default async (
   }
   
   // move
+  // TODO: insert instead of update!
   let response
   let newId
   switch (table) {
