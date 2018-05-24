@@ -20,7 +20,7 @@ const TpopfreiwkontrFolder = ({
   tree: Object,
   onClick: () => void,
   token: String,
-  moving
+  moving: Object
 }) => {
   const isMoving = moving.table && moving.table === 'tpopfreiwkontr'
   const copying =

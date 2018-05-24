@@ -72,6 +72,7 @@ export default async (idb) => {
       table: null,
       id: null,
       label: null,
+      __typename: 'Moving'
     }
   }
   return defaults
