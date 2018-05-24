@@ -29,7 +29,8 @@ const Tpopfeldkontr = ({
   changeLabel,
   label,
   onShow,
-  token
+  token,
+  copying
 }: {
   store: Object,
   tree: Object,
@@ -37,7 +38,8 @@ const Tpopfeldkontr = ({
   changeLabel: () => void,
   label: string | number,
   onShow: () => void,
-  token: String
+  token: String,
+  copying: Object
 }) => {
 
   return (
@@ -102,7 +104,7 @@ const Tpopfeldkontr = ({
                   >
                     kopiere
                   </MenuItem>
-                  {store.copying.table && (
+                  {copying.table && (
                     <MenuItem
                       onClick={onClick}
                       data={{

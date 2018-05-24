@@ -14,16 +14,18 @@ const TpopmassnFolder = ({
   tree,
   onClick,
   token,
-  moving
+  moving,
+  copying
 }: {
   store: Object,
   tree: Object,
   onClick: () => void,
   token: String,
-  moving: Object
+  moving: Object,
+  copying: Object
 }) => {
   const isMoving = moving.table && moving.table === 'tpopmassn'
-  const copying = store.copying.table && store.copying.table === 'tpopmassn'
+  const isCopying = copying.table && copying.table === 'tpopmassn'
 
   return (
     <ErrorBoundary>
@@ -51,17 +53,17 @@ const TpopmassnFolder = ({
                 {`verschiebe '${moving.label}' hierhin`}
               </MenuItem>
             )}
-            {copying && (
+            {isCopying && (
               <MenuItem
                 onClick={onClick}
                 data={{
                   action: 'copy',
                 }}
               >
-                {`kopiere '${store.copying.label}' hierhin`}
+                {`kopiere '${copying.label}' hierhin`}
               </MenuItem>
             )}
-            {store.copying.table && (
+            {copying.table && (
               <MenuItem
                 onClick={onClick}
                 data={{

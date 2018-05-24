@@ -26,7 +26,8 @@ const Tpopmassn = ({
   changeLabel,
   label,
   onShow,
-  token
+  token,
+  copying
 }: {
   store: Object,
   tree: Object,
@@ -34,7 +35,8 @@ const Tpopmassn = ({
   changeLabel: () => void,
   label: string | number,
   onShow: () => void,
-  token: String
+  token: String,
+  copying: Object
 }) => (
   <ErrorBoundary>
     <ContextMenu
@@ -82,7 +84,7 @@ const Tpopmassn = ({
           >
             kopiere
           </MenuItem>
-          {store.copying.table && (
+          {copying.table && (
             <MenuItem
               onClick={onClick}
               data={{
