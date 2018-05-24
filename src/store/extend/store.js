@@ -26,17 +26,6 @@ export default (store: Object): void => {
       label: null,
       withNextLevel: false,
     },
-    markForCopying: action(
-      'markForCopying',
-      (table, id, label, withNextLevel) => {
-        store.copying.table = table
-        store.copying.id = id
-        store.copying.label = label
-        withNextLevel === true
-          ? (store.copying.withNextLevel = true)
-          : (store.copying.withNextLevel = false)
-      }
-    ),
     copyTo: action('copyTo', (parentId, tablePassed, idPassed) => {
       // insert new dataset with:
       // - data of dataset with id copying.id

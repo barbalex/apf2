@@ -64,6 +64,7 @@ import ErrorBoundary from '../../shared/ErrorBoundarySingleChild'
 import copyBiotopTo from '../../../modules/copyBiotopTo'
 import setUrlQueryValue from '../../../modules/setUrlQueryValue'
 import moveTo from '../../../modules/moveTo'
+import copyTo from '../../../modules/copyTo'
 
 const Container = styled.div`
   height: 100%;
@@ -270,8 +271,9 @@ const enhance = compose(
           })
         },
         copy() {
-          store.copyTo(id)
+          //store.copyTo(id)
           // TODO
+          copyTo(store, id, client)
         },
         markForCopyingBiotop() {
           client.mutate({

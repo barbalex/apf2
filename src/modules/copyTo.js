@@ -219,27 +219,10 @@ export default async (
 
   // build new row (for now without idField)
   const newRow = clone(row)
-  delete newRow.id
-  // need to remove empty values and guids
-  Object.keys(newRow).forEach(k => {
-    const val = newRow[k]
-    // check for uuid
-    // see: https://stackoverflow.com/questions/7905929/how-to-test-valid-uuid-guid
-    const valueIsGuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(
-      val
-    )
-    if ((!newRow[k] && newRow[k] !== 0) || valueIsGuid) {
-      delete newRow[k]
-    }
-  })
   newRow[parentIdField] = parentId
   delete newRow[idField]
-  // remove computed fields
-  delete newRow.label
-  delete newRow.PopKoordWgs84
-  delete newRow.TPopKoordWgs84
 
-  // update db
+  // TODO: update db
   let response: { data: Array<Object> }
   try {
     response = await axios({
