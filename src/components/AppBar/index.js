@@ -101,7 +101,7 @@ const MyAppBar = ({
       if (error) return `Fehler: ${error.message}`
 
       const activeNodeArray = get(data, 'tree.activeNodeArray')
-      const activeNodes = getActiveNodes(activeNodeArray, store)
+      const activeNodes = getActiveNodes(activeNodeArray)
       /**
        * need to clone projekteTabs
        * because otherwise removing elements errors out (because elements are sealed)

@@ -59,16 +59,16 @@ const ProjekteContainer = ({
       if (error) return `Fehler: ${error.message}`
       const activeNodeArray = get(data1, `${treeName}.activeNodeArray`)
       const activeNodes = getActiveNodes(activeNodeArray, store)
+      const openNodes = get(data1, `${treeName}.openNodes`)
       const moving = get(data1, 'moving')
       const copying = get(data1, 'copying')
       /**
-       * TODO
-       * get data based on openNodes
-       * not activeNodes!!!
+       * get data based on openNodes, not activeNodes
+       * reason: multiple open nodes should recieve own data
        */
 
       return (
-        <Query query={data2Gql} variables={variables(activeNodes)}>
+        <Query query={data2Gql} variables={variables(openNodes)}>
           {({ loading, error, data: data2, client, refetch }) => {
             if (error) return `Fehler: ${error.message}`
 

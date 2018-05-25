@@ -16,7 +16,6 @@ import get from 'lodash/get'
 import ErrorBoundary from '../../shared/ErrorBoundarySingleChild'
 import Loading from '../../shared/Loading'
 import dataGql from './data.graphql'
-import getActiveNodes from '../../../modules/getActiveNodes'
 import tables from '../../../modules/tables'
 
 const Projekt = Loadable({
@@ -151,7 +150,7 @@ const Daten = ({
       if (error) return `Fehler: ${error.message}`
 
       const activeNodeArray = get(data, `${treeName}.activeNodeArray`)
-      const activeNodes = getActiveNodes(activeNodeArray, store)
+      const apId = get(data, `${treeName}.activeNodeArray[3]`)
 
       // get name of active table
       let tableName = null
@@ -196,21 +195,42 @@ const Daten = ({
         tpopfreiwkontr: <Tpopfreiwkontr dimensions={dimensions} treeName={treeName} />,
         tpopkontrzaehl: <Tpopkontrzaehl dimensions={dimensions} treeName={treeName} />,
         exporte: <Exporte tree={tree} dimensions={dimensions} treeName={treeName} />,
-        qk: <Qk tree={tree} treeName={treeName} activeNodes={activeNodes} />,
+        qk: <Qk tree={tree} treeName={treeName} apId={apId} />,
         beobNichtZuzuordnen: <Beobzuordnung dimensions={dimensions} treeName={treeName} />,
         beobzuordnung: <Beobzuordnung dimensions={dimensions} treeName={treeName} />,
         beobZugeordnet: <Beobzuordnung dimensions={dimensions} treeName={treeName} />,
       }
       let key
-      if (activeNodes.exporte) {
+      //if (activeNodes.exporte) {
+      if (
+        activeNodeArray.length > 2 &&
+        activeNodeArray[2] === 'Exporte'
+      ) {
         key = 'exporte'
-      } else if (activeNodes.qk) {
+      //} else if (activeNodes.qk) {
+      } else if (
+        activeNodeArray.length > 4 &&
+        activeNodeArray[4] === 'Qualitaetskontrollen'
+      ) {
         key = 'qk'
-      } else if (activeNodes.beobNichtZuzuordnen) {
+      //} else if (activeNodes.beobNichtZuzuordnen) {
+      } else if (
+        activeNodeArray.length > 5 &&
+        activeNodeArray[4] === 'nicht-zuzuordnende-Beobachtungen'
+      ) {
         key = 'beobNichtZuzuordnen'
-      } else if (activeNodes.beobzuordnung) {
+      //} else if (activeNodes.beobzuordnung) {
+      } else if (
+        activeNodeArray.length > 5 &&
+        activeNodeArray[4] === 'nicht-beurteilte-Beobachtungen'
+      ) {
         key = 'beobzuordnung'
-      } else if (activeNodes.beobZugeordnet) {
+      //} else if (activeNodes.beobZugeordnet) {
+      } else if (
+        activeNodeArray.length > 9 &&
+        activeNodeArray[6] === 'Teil-Populationen' &&
+        activeNodeArray[8] === 'Beobachtungen'
+      ) {
         key = 'beobZugeordnet'
       } else {
         key = tableName

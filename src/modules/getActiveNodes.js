@@ -1,5 +1,5 @@
 // @flow
-export default (activeNodeArray: Array<mixed>, store: Object): Object => {
+export default (activeNodeArray: Array<mixed>): Object => {
   const projektFolder =
     (activeNodeArray.length > 0 && activeNodeArray[0] === 'Projekte') || false
   const projekt =
@@ -46,12 +46,6 @@ export default (activeNodeArray: Array<mixed>, store: Object): Object => {
       activeNodeArray.length > 4 &&
       activeNodeArray[4] === 'Idealbiotop') ||
     false
-  const ibValues = Array.from(store.table.idealbiotop.values()) || []
-  let idealbiotop = null
-  if (idealbiotopFolder) {
-    const ib = ibValues.find(o => o.ap_id === activeNodeArray[3])
-    if (ib) idealbiotop = ib.id
-  }
   const beobNichtZuzuordnenFolder =
     (ap &&
       activeNodeArray.length > 4 &&
@@ -212,7 +206,6 @@ export default (activeNodeArray: Array<mixed>, store: Object): Object => {
     apart,
     qk,
     idealbiotopFolder,
-    idealbiotop,
     beobNichtZuzuordnenFolder,
     beobNichtZuzuordnen,
     beobzuordnungFolder,

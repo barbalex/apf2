@@ -62,7 +62,7 @@ const enhance = compose(
   inject('store'),
   withState('berichtjahr', 'changeBerichtjahr', standardQkYear()),
   withHandlers({
-    onChangeBerichtjahr: ({ changeBerichtjahr, store, tree, activeNodes }) => event => {
+    onChangeBerichtjahr: ({ changeBerichtjahr, store, tree, apId }) => event => {
       const { value } = event.target
       changeBerichtjahr(value)
       if (
@@ -70,7 +70,6 @@ const enhance = compose(
         (!isNaN(value) && value > 1000)
       ) {
         // call fetchQk and pass it berichtjahr and apId
-        const apId = activeNodes.ap
         fetchQk({ store, berichtjahr: value, apId })
       }
     },
@@ -78,9 +77,8 @@ const enhance = compose(
       store.qk.setFilter(event.target.value),
   }),
   withLifecycle({
-    onDidMount({ berichtjahr, changeBerichtjahr, store, tree, activeNodes }) {
+    onDidMount({ berichtjahr, changeBerichtjahr, store, tree, apId }) {
       // call fetchQk and pass it berichtjahr and apId
-      const apId = activeNodes.ap
       fetchQk({ store, berichtjahr, apId })
     },
   }),
@@ -90,7 +88,7 @@ const enhance = compose(
 const Qk = ({
   store,
   tree,
-  activeNodes,
+  apId,
   berichtjahr,
   onChangeBerichtjahr,
   onChangeFilter,
@@ -98,7 +96,7 @@ const Qk = ({
 }: {
   store: Object,
   tree: Object,
-  activeNodes: Object,
+  apId: String,
   berichtjahr: number,
   onChangeBerichtjahr: () => void,
   onChangeFilter: () => void,
@@ -108,8 +106,6 @@ const Qk = ({
   {({ loading, error, data: data1 }) => {
     if (error) return `Fehler: ${error.message}`
     const projId = get(data1, `${treeName}.activeNodeArray[1]`)
-    const apId = get(data1, `${treeName}.activeNodeArray[3]`)
-    console.log('Qk:', { data1, projId, apId })
 
     return (
         <Query
