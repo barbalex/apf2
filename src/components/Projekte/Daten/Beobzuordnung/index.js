@@ -7,6 +7,7 @@ import get from 'lodash/get'
 import clone from 'lodash/clone'
 import isEqual from 'lodash/isEqual'
 import flatten from 'lodash/flatten'
+import gql from 'graphql-tag'
 
 import FormTitle from '../../../shared/FormTitle'
 import TextField from '../../../shared/TextField'
@@ -121,11 +122,13 @@ const getTpopZuordnenSource = (row: Object): Array<Object> => {
 const Beobzuordnung = ({
   id,
   tree,
+  type,
   dimensions = { width: 380 },
   refetchTree
 }: {
   id: String,
   tree: Object,
+  type: String,
   dimensions: Object,
   refetchTree: () => void
 }) => (
@@ -160,7 +163,7 @@ const Beobzuordnung = ({
                       key={`${row.id}nichtZuordnen`}
                       label="Nicht zuordnen"
                       value={row.nichtZuordnen}
-                      saveToDb={value => {
+                      saveToDb={async value => {
                         const variables = {
                           id,
                           nichtZuordnen: value,
@@ -185,7 +188,7 @@ const Beobzuordnung = ({
                           if (isEqual(n, oldParentNodeUrl)) return newParentNodeUrl
                           return n
                         })
-                        client.mutate({
+                        await client.mutate({
                           mutation: setTreeKeyGql,
                           variables: {
                             tree: tree.name,
@@ -209,7 +212,7 @@ const Beobzuordnung = ({
                         }
                         value=""
                         objects={getTpopZuordnenSource(row)}
-                        saveToDb={value => {
+                        saveToDb={async value => {
                           const variables = {
                             id,
                             tpopId: value,
@@ -219,6 +222,130 @@ const Beobzuordnung = ({
                           updateBeob({
                             variables,
                           })
+                          // need to update activeNodeArray and openNodes
+                          const { data } = await client.query({
+                            query: gql`
+                              query Query($id: UUID!) {
+                                tpopById(id: $id) {
+                                  id
+                                  popId
+                                }
+                              }`,
+                              variables: { id: value }
+                          })
+                          // aNA = activeNodeArray
+                          const { activeNodeArray: aNA, openNodes } = tree
+                          const popId = get(data, 'tpopById.popId')
+                          const tpopId = get(data, 'tpopById.id')
+                          const newANA = [ aNA[0], aNA[1], aNA[2], aNA[3], 'Populationen', popId, 'Teil-Populationen', tpopId, 'Beobachtungen', id ]
+                          const oldParentNodeUrl = clone(aNA)
+                          oldParentNodeUrl.pop()
+                          const oldGrandParentNodeUrl = clone(oldParentNodeUrl)
+                          oldGrandParentNodeUrl.pop()
+                          let newOpenNodes
+                          if (['nichtZuzuordnen', 'nichtBeurteilt'].includes(type)) {
+                            newOpenNodes = [
+                              ...openNodes.filter(n => 
+                                !isEqual(n, aNA) &&
+                                !isEqual(n, oldParentNodeUrl)
+                              ),
+                              [ aNA[0], aNA[1], aNA[2], aNA[3], 'Populationen' ],
+                              [ aNA[0], aNA[1], aNA[2], aNA[3], 'Populationen', popId ],
+                              [ aNA[0], aNA[1], aNA[2], aNA[3], 'Populationen', popId, 'Teil-Populationen' ],
+                              [ aNA[0], aNA[1], aNA[2], aNA[3], 'Populationen', popId, 'Teil-Populationen', tpopId ],
+                              [ aNA[0], aNA[1], aNA[2], aNA[3], 'Populationen', popId, 'Teil-Populationen', tpopId, 'Beobachtungen' ],
+                              [ aNA[0], aNA[1], aNA[2], aNA[3], 'Populationen', popId, 'Teil-Populationen', tpopId, 'Beobachtungen', id ]
+                            ]
+                          } else {
+                            newOpenNodes = [
+                              ...openNodes.filter(n => 
+                                !isEqual(n, aNA) &&
+                                !isEqual(n, oldParentNodeUrl) &&
+                                !isEqual(n, oldGrandParentNodeUrl)
+                              ),
+                              [ aNA[0], aNA[1], aNA[2], aNA[3], 'Populationen', popId, 'Teil-Populationen', tpopId ],
+                              [ aNA[0], aNA[1], aNA[2], aNA[3], 'Populationen', popId, 'Teil-Populationen', tpopId, 'Beobachtungen' ],
+                              [ aNA[0], aNA[1], aNA[2], aNA[3], 'Populationen', popId, 'Teil-Populationen', tpopId, 'Beobachtungen', id ]
+                            ]
+                            // need to load pop and tpop of choosen tpop
+                            await client.query({
+                              query: gql`
+                                query Query($tpopId: UUID!, $popId: UUID!) {
+                                  tpopById(id: $tpopId) {
+                                    id
+                                    popId
+                                    nr
+                                    gemeinde
+                                    flurname
+                                    x
+                                    y
+                                    radius
+                                    hoehe
+                                    exposition
+                                    klima
+                                    neigung
+                                    beschreibung
+                                    katasterNr
+                                    status
+                                    popStatusWerteByStatus {
+                                      id
+                                      text
+                                    }
+                                    statusUnklarGrund
+                                    apberRelevant
+                                    tpopApberrelevantWerteByApberRelevant {
+                                      id
+                                      text
+                                    }
+                                    bekanntSeit
+                                    eigentuemer
+                                    kontakt
+                                    nutzungszone
+                                    bewirtschafter
+                                    bewirtschaftung
+                                    bemerkungen
+                                    statusUnklar
+                                    popByPopId {
+                                      id
+                                      apId
+                                      apByApId {
+                                        id
+                                        startJahr
+                                      }
+                                    }
+                                  }
+                                  popById(id: $popId) {
+                                    id
+                                    apId
+                                    nr
+                                    name
+                                    status
+                                    statusUnklar
+                                    statusUnklarBegruendung
+                                    bekanntSeit
+                                    x
+                                    y
+                                    apByApId {
+                                      id
+                                      startJahr
+                                    }
+                                  }
+                                }`,
+                                variables: { tpopId, popId }
+                            })
+                          }
+                          console.log('Beobzuordnung:', {openNodes, newOpenNodes})
+                          await client.mutate({
+                            mutation: setTreeKeyGql,
+                            variables: {
+                              tree: tree.name,
+                              value1: newANA,
+                              key1: 'activeNodeArray',
+                              value2: newOpenNodes,
+                              key2: 'openNodes'
+                            }
+                          })
+                          refetchTree()
                         }}
                       />
                     </ZuordnenDiv>

@@ -198,9 +198,9 @@ const Daten = ({
         tpopkontrzaehl: <Tpopkontrzaehl dimensions={dimensions} id={activeNodeArray[11]} />,
         exporte: <Exporte tree={tree} dimensions={dimensions} treeName={treeName} />,
         qk: <Qk tree={tree} treeName={treeName} apId={apId} />,
-        beobNichtZuzuordnen: <Beobzuordnung dimensions={dimensions} id={activeNodeArray[activeNodeArray.length -1]} tree={tree} refetchTree={refetchTree} />,
-        beobNichtBeurteilt: <Beobzuordnung dimensions={dimensions} id={activeNodeArray[activeNodeArray.length -1]} tree={tree} refetchTree={refetchTree} />,
-        beobZugeordnet: <Beobzuordnung dimensions={dimensions} id={activeNodeArray[activeNodeArray.length -1]} tree={tree} refetchTree={refetchTree} />,
+        beobNichtZuzuordnen: <Beobzuordnung dimensions={dimensions} id={activeNodeArray[activeNodeArray.length -1]} tree={tree} refetchTree={refetchTree} type="nichtZuzuordnen" />,
+        beobNichtBeurteilt: <Beobzuordnung dimensions={dimensions} id={activeNodeArray[activeNodeArray.length -1]} tree={tree} refetchTree={refetchTree} type="nichtBeurteilt" />,
+        beobZugeordnet: <Beobzuordnung dimensions={dimensions} id={activeNodeArray[activeNodeArray.length -1]} tree={tree} refetchTree={refetchTree} type="zugeordnet" />,
       }
       let key
       if (

@@ -1,6 +1,4 @@
 // @flow
-import clone from 'lodash/clone'
-import { toJS } from 'mobx'
 
 export default (
   store: Object,
@@ -18,13 +16,6 @@ export default (
         field: "${key}", table: "${table}", value: "${value}"`
       )
     )
-  }
-  // edge cases:
-  // if jahr of ziel is updated, url needs to change
-  if (table === 'ziel' && key === 'jahr') {
-    const newActiveNodeArray = clone(toJS(tree.activeNodeArray))
-    newActiveNodeArray[5] = value
-    tree.setActiveNodeArray(newActiveNodeArray)
   }
   row[key] = value
 }
