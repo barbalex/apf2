@@ -63,9 +63,10 @@ const Tpopkontrzaehl = ({
   saveToDb: () => void,
 }) => (
   <Query query={data1Gql}>
-    {({ loading, error, data }) => {
+    {({ loading, error, data: data1 }) => {
       if (error) return `Fehler: ${error.message}`
-      const id = get(data, `${treeName}.activeNodeArray[11]`)
+      const id = get(data1, `${treeName}.activeNodeArray[11]`)
+      console.log('Tpopkontrzaehl:', { data1, id, activeNodeArray: get(data1, `${treeName}.activeNodeArray`) })
   
       return (
         <Query query={data2Gql} variables={{ id }}>

@@ -158,6 +158,10 @@ const Daten = ({
       if (activeNode) {
         if (activeNode.nodeType === 'table') {
           tableName = activeNode.menuType
+          // need to convert feldkontrzaehl and freiwkontrzaehl to kontrzaehl
+          if (['tpopfreiwkontrzaehl', 'tpopfeldkontrzaehl'].includes(tableName)) {
+            tableName = 'tpopkontrzaehl'
+          }
         } else {
           const childTableName = activeNode.menuType.replace('Folder', '')
           const childTable = tables.find(t => t.table === childTableName)
@@ -211,6 +215,7 @@ const Daten = ({
       } else {
         key = tableName
       }
+      console.log('Daten:', { tableName, key, treeName, activeNode })
       const form = key ? formObject[key] : ''
 
       return (

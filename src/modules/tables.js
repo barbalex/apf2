@@ -75,7 +75,7 @@ export default [
   },
   {
     table: 'tpopfreiwkontrzaehl',
-    parentTable: 'tpopkontr',
+    parentTable: 'tpopfreiwkontr',
     dbTable: 'tpopkontrzaehl',
     label: 'Zählungen',
     labelSingular: 'Zählung',
@@ -84,7 +84,7 @@ export default [
   },
   {
     table: 'tpopfeldkontrzaehl',
-    parentTable: 'tpopkontr',
+    parentTable: 'tpopfeldkontr',
     dbTable: 'tpopkontrzaehl',
     label: 'Zählungen',
     labelSingular: 'Zählung',

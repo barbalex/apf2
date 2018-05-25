@@ -68,7 +68,7 @@ export default ({
   return [
     {
       nodeType: 'folder',
-      menuType: 'tpopfeldkontrzaehlFolder',
+      menuType: 'tpopfreiwkontrzaehlFolder',
       id: tpopkontrId,
       urlLabel: 'Zaehlungen',
       label: `Zählungen (${message})`,
