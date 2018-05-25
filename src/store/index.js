@@ -81,15 +81,6 @@ function Store(): void {
   }
   this.table = TableStore
   this.valuesForWhichTableDataWasFetched = {}
-  this.qk = {
-    setMessages: () => {},
-    addMessages: () => {},
-    messages: [],
-    loading: false,
-    setLoading: () => {},
-    filter: '',
-    setFilter: () => {},
-  }
 }
 
 const MyStore = new Store()
