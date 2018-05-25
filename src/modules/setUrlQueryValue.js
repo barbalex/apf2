@@ -11,7 +11,7 @@ export default async ({
   key: String,
   value: String
 }): void => {
-  const data = await client.query({
+  const { data } = await client.query({
     query: gql`
         query Query {
           urlQuery @client {
@@ -21,8 +21,8 @@ export default async ({
         }
       `
   })
-  let projekteTabs = get(data, 'urlQuery.projekteTabs', [])
-  let feldkontrTab = get(data, 'urlQuery.feldkontrTab', 'entwicklung')
+  let projekteTabs = get(data, 'urlQuery.projekteTabs')
+  let feldkontrTab = get(data, 'urlQuery.feldkontrTab')
   if (key === 'projekteTabs') {
     projekteTabs = value
   } else {
