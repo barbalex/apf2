@@ -78,14 +78,6 @@ export default async (
       row[key] = oldValue
       store.listError(error)
     }
-    // if beobNichtBeurteilt is set to beobNichtZuordnen, url needs to change
-    if (table === 'beob' && key === 'nicht_zuordnen') {
-      newActiveNodeArray[4] = value
-        ? 'nicht-zuzuordnende-Beobachtungen'
-        : 'nicht-beurteilte-Beobachtungen'
-      newActiveNodeArray[5] = tree.activeDataset.row.id
-      tree.setActiveNodeArray(newActiveNodeArray.slice(0, 6))
-    }
     // if for a beobZugeordnet tpop_id is set, url needs to change
     // namely: pop_id and tpop_id
     if (table === 'beob' && key === 'tpop_id' && value) {
