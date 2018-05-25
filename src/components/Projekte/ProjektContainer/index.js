@@ -61,6 +61,11 @@ const ProjekteContainer = ({
       const activeNodes = getActiveNodes(activeNodeArray, store)
       const moving = get(data1, 'moving')
       const copying = get(data1, 'copying')
+      /**
+       * TODO
+       * get data based on openNodes
+       * not activeNodes!!!
+       */
 
       return (
         <Query query={data2Gql} variables={variables(activeNodes)}>
