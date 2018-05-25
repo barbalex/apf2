@@ -3,7 +3,7 @@ import axios from 'axios'
 import isFinite from 'lodash/isFinite'
 
 import isPointInsidePolygon from './isPointInsidePolygon'
-import staticFilesBaseUrl from './staticFilesBaseUrl'
+import staticFilesBaseUrl from '../../../../modules/staticFilesBaseUrl'
 
 const fetchQk = async ({
   store,

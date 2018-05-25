@@ -6,7 +6,7 @@
  */
 import inside from '@turf/inside'
 
-import epsg2056to4326 from './epsg2056to4326notReverse'
+import epsg2056to4326 from '../../../../modules/epsg2056to4326notReverse'
 
 export default (
   polygon: {

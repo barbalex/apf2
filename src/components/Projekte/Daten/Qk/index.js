@@ -17,7 +17,7 @@ import get from 'lodash/get'
 import FormTitle from '../../../shared/FormTitle'
 import appBaseUrl from '../../../../modules/appBaseUrl'
 import standardQkYear from '../../../../modules/standardQkYear'
-import fetchQk from '../../../../modules/fetchQk'
+import fetchQk from './fetchQk'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import data1Gql from './data1.graphql'
 import data2Gql from './data2.graphql'
@@ -60,11 +60,12 @@ const StyledInput = styled(Input)`
 
 const enhance = compose(
   inject('store'),
-  withState('berichtjahr', 'changeBerichtjahr', standardQkYear()),
+  withState('berichtjahr', 'setBerichtjahr', standardQkYear()),
+  withState('filter', 'setFilter', ''),
   withHandlers({
-    onChangeBerichtjahr: ({ changeBerichtjahr, store, tree, apId }) => event => {
+    onChangeBerichtjahr: ({ setBerichtjahr, store, tree, apId }) => event => {
       const { value } = event.target
-      changeBerichtjahr(value)
+      setBerichtjahr(value)
       if (
         (isNaN(value) && value.length === 4) ||
         (!isNaN(value) && value > 1000)
@@ -73,11 +74,11 @@ const enhance = compose(
         fetchQk({ store, berichtjahr: value, apId })
       }
     },
-    onChangeFilter: ({ store }) => event =>
-      store.qk.setFilter(event.target.value),
+    onChangeFilter: ({ setFilter }) => event =>
+      setFilter(event.target.value),
   }),
   withLifecycle({
-    onDidMount({ berichtjahr, changeBerichtjahr, store, tree, apId }) {
+    onDidMount({ berichtjahr, setBerichtjahr, store, tree, apId }) {
       // call fetchQk and pass it berichtjahr and apId
       fetchQk({ store, berichtjahr, apId })
     },
@@ -92,14 +93,16 @@ const Qk = ({
   berichtjahr,
   onChangeBerichtjahr,
   onChangeFilter,
+  filter,
   treeName,
 }: {
   store: Object,
   tree: Object,
   apId: String,
-  berichtjahr: number,
+  berichtjahr: Number,
   onChangeBerichtjahr: () => void,
   onChangeFilter: () => void,
+  filter: String,
   treeName: String,
 }) =>
 <Query query={data1Gql}>
@@ -132,7 +135,6 @@ const Qk = ({
               }))
             })
 
-            const { filter } = store.qk
             const messageArrays = [...gqlMessages, ...toJS(store.qk.messages)]
             const messageArraysFiltered = filter
               ? messageArrays.filter(messageArray => {
@@ -147,7 +149,7 @@ const Qk = ({
                 })
               : messageArrays
               if (error) return `Fehler: ${error.message}`
-              const loadingMessage = (store.qkloading || loading)
+              const loadingMessage = loading
                 ? 'Die Daten werden analysiert...'
                 : 'Analyse abgeschlossen'
 
