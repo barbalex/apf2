@@ -318,7 +318,7 @@ const fetchQk = async ({
     store.listError(error)
     setLoading(false)
   }
-  let tpops = resultTpopKoord.data
+  let tpops = resultTpopKoord? resultTpopKoord.data : []
   let resultKtZh: { data: Object }
   try {
     const baseURL = staticFilesBaseUrl
