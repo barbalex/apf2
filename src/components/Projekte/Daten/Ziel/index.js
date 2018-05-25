@@ -67,7 +67,13 @@ const enhance = compose(
         })
         client.mutate({
           mutation: setTreeKeyGql,
-          variables: { tree: tree.name, value1: newActiveNodeArray, key1: 'activeNodeArray', value2: newOpenNodes, key2: 'openNodes' }
+          variables: {
+            tree: tree.name,
+            value1: newActiveNodeArray,
+            key1: 'activeNodeArray',
+            value2: newOpenNodes,
+            key2: 'openNodes'
+          }
         })
       }
     },

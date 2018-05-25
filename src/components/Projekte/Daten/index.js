@@ -136,12 +136,14 @@ const Daten = ({
   treeName,
   activeNode,
   dimensions = { width: 380 },
+  refetchTree
 }: {
   store: Object,
   tree: Object,
   treeName: String,
   activeNode: Object,
   dimensions: Object,
+  refetchTree: () => void
 }) =>
   <Query query={dataGql} >
     {({ loading, error, data, client }) => {
@@ -196,9 +198,9 @@ const Daten = ({
         tpopkontrzaehl: <Tpopkontrzaehl dimensions={dimensions} id={activeNodeArray[11]} />,
         exporte: <Exporte tree={tree} dimensions={dimensions} treeName={treeName} />,
         qk: <Qk tree={tree} treeName={treeName} apId={apId} />,
-        beobNichtZuzuordnen: <Beobzuordnung dimensions={dimensions} id={activeNodeArray[activeNodeArray.length -1]} />,
-        beobNichtBeurteilt: <Beobzuordnung dimensions={dimensions} id={activeNodeArray[activeNodeArray.length -1]} />,
-        beobZugeordnet: <Beobzuordnung dimensions={dimensions} id={activeNodeArray[activeNodeArray.length -1]} />,
+        beobNichtZuzuordnen: <Beobzuordnung dimensions={dimensions} id={activeNodeArray[activeNodeArray.length -1]} tree={tree} refetchTree={refetchTree} />,
+        beobNichtBeurteilt: <Beobzuordnung dimensions={dimensions} id={activeNodeArray[activeNodeArray.length -1]} tree={tree} refetchTree={refetchTree} />,
+        beobZugeordnet: <Beobzuordnung dimensions={dimensions} id={activeNodeArray[activeNodeArray.length -1]} tree={tree} refetchTree={refetchTree} />,
       }
       let key
       if (
