@@ -182,7 +182,7 @@ const Daten = ({
         erfkrit: <Erfkrit dimensions={dimensions} treeName={treeName} />,
         apber: <Apber dimensions={dimensions} treeName={treeName} />,
         ber: <Ber dimensions={dimensions} treeName={treeName} />,
-        ziel: <Ziel dimensions={dimensions} treeName={treeName} />,
+        ziel: <Ziel dimensions={dimensions} id={activeNodeArray[6]} tree={tree} />,
         zielber: <Zielber dimensions={dimensions} treeName={treeName} />,
         pop: <Pop dimensions={dimensions} treeName={treeName} />,
         popmassnber: <Popmassnber dimensions={dimensions} treeName={treeName} />,

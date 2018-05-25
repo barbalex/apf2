@@ -13,7 +13,6 @@ import toggleNode from '../action/toggleNode'
 import toggleNodeSymbol from '../action/toggleNodeSymbol'
 import toggleNextLowerNodes from '../action/toggleNextLowerNodes'
 import getActiveNodes from '../../modules/getActiveNodes'
-import updateActiveDatasetFromActiveNodes from '../action/updateActiveDatasetFromActiveNodes'
 import setOpenNodesFromActiveNodeArray from '../action/setOpenNodesFromActiveNodeArray'
 
 export default (store: Object, tree: Object): void => {
@@ -30,11 +29,6 @@ export default (store: Object, tree: Object): void => {
     activeNodes: computed(() => getActiveNodes(tree.activeNodeArray), {
       name: 'activeNodes',
     }),
-    activeDataset: computed(
-      () => updateActiveDatasetFromActiveNodes(store, tree), {
-        name: 'activeDataset'
-      }
-    ),
     cloneActiveNodeArrayToTree2: action('cloneActiveNodeArrayToTree2', () => {
       store.tree2.activeNodeArray = clone(toJS(tree.activeNodeArray))
       store.tree2.openNodes = clone(toJS(tree.openNodes))
