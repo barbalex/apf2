@@ -88,6 +88,7 @@ const LabelFilterContainer = styled.div`
   justify-content: space-between;
   padding-left: 12px;
   padding-top: 5px;
+  margin-bottom: 8px;
 `
 const InnerTreeContainer = styled.div`
   height: 100%;
@@ -454,8 +455,7 @@ const TreeContainer = ({
   copying: Object,
   refetch: () => void
 }) => {
-  const { activeDataset } = store.tree
-  const showApDivToggle = activeDataset
+  console.log('TreeContainer:', {activeNodes})
   const deleteDatasetModalIsVisible = !!store.datasetToDelete.id
   const openNodes = get(data, `${treeName}.openNodes`)
   const tree = get(data, treeName)
@@ -474,7 +474,7 @@ const TreeContainer = ({
             nodes={nodes} 
             activeNode={activeNode}
           />
-          {showApDivToggle && <ApFilter treeName={treeName} />}
+          {!!activeNodes.projekt && <ApFilter treeName={treeName} />}
         </LabelFilterContainer>
         <InnerTreeContainer
           // $FlowIssue

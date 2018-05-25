@@ -20,6 +20,7 @@ const NurApDiv = styled.div`
   flex-direction: column;
   padding-right: 5px;
   min-width: 40px;
+  margin-bottom: -14px;
 `
 const StyledSwitch = styled(Switch)`
   margin-left: -13px;
