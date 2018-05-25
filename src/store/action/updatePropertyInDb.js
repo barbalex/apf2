@@ -61,7 +61,6 @@ export default async (
   const combinedValidationMessages = objectValues(valid).join('')
   if (combinedValidationMessages.length === 0) {
     const oldValue = row[key]
-    const artWasChanged = table === 'ap' && key === 'id'
     row[key] = value
     const newActiveNodeArray = clone(toJS(tree.activeNodeArray))
     /**
@@ -78,11 +77,6 @@ export default async (
       // revert change in store
       row[key] = oldValue
       store.listError(error)
-    }
-    // if ApArtId of ap is updated, url needs to change
-    if (artWasChanged) {
-      newActiveNodeArray[3] = value
-      tree.setActiveNodeArray(newActiveNodeArray)
     }
     // if beobNichtBeurteilt is set to beobNichtZuordnen, url needs to change
     if (table === 'beob' && key === 'nicht_zuordnen') {
