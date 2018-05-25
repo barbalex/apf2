@@ -7,6 +7,7 @@ import app from 'ampersand-app'
 import isEqual from 'lodash/isEqual'
 import get from 'lodash/get'
 import gql from 'graphql-tag'
+import queryString from 'query-string'
 
 export default {
   Mutation: {
@@ -26,13 +27,21 @@ export default {
                 openNodes
                 apFilter
               }
+              urlQuery @client {
+                projekteTabs
+                feldkontrTab
+              }
             }
           `
       })
       const oldValue = get(data, `${tree}.${key}`)
+      const urlQueryRead = get(data, 'urlQuery')
+      const urlQuery = {
+        feldkontrTab: urlQueryRead.feldkontrTab,
+        projekteTabs: urlQueryRead.projekteTabs
+      }
       // only write if changed
       if (!isEqual(oldValue, value)) {
-        //console.log('resolver setTreeKey:', {tree, key, value})
         cache.writeData({
           data: {
             [tree]: {
@@ -45,7 +54,9 @@ export default {
           } 
         })
         if (tree === 'tree' && key === 'activeNodeArray') {
-          app.history.push(`/${value.join('/')}`)
+          const search = queryString.stringify(urlQuery)
+          const query = `${Object.keys(urlQuery).length > 0 ? `?${search}` : ''}`
+          app.history.push(`/${value.join('/')}${query}`)
         }
       }
       return null

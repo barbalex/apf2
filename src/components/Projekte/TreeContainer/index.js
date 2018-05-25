@@ -10,6 +10,7 @@ import withHandlers from 'recompose/withHandlers'
 import clone from 'lodash/clone'
 import get from 'lodash/get'
 import gql from "graphql-tag"
+import withLifecycle from '@hocs/with-lifecycle'
 
 import LabelFilter from './LabelFilter'
 import ApFilter from './ApFilter'
@@ -357,6 +358,70 @@ const enhance = compose(
       }
     },
   }),
+  withLifecycle({
+    onDidUpdate(prevProps, { nodes, activeNodes, treeName, data, client }) {
+      /**
+       * if activeNodeArray.length === 1
+       * and there is only one projekt
+       * open it
+       * dont do this in render!
+       */
+      const openNodes = get(data, `${treeName}.openNodes`)
+      const projekteNodes = nodes.filter(n => n.menuType === 'projekt')
+      const existsOnlyOneProjekt = projekteNodes.length === 1
+      const projektNode = projekteNodes[0]
+      if (activeNodes.projektFolder &&
+        !activeNodes.projekt &&
+        existsOnlyOneProjekt &&
+        projektNode
+      ) {
+        const projektUrl = clone(projektNode.url)
+        client.mutate({
+          mutation: gql`
+            mutation setTreeKey($value: Array!, $tree: String!, $key: String!) {
+              setTreeKey(tree: $tree, key: $key, value: $value) @client {
+                tree @client {
+                  name
+                  activeNodeArray
+                  openNodes
+                  apFilter
+                  nodeLabelFilter
+                  __typename: Tree
+                }
+              }
+            }
+          `,
+          variables: {
+            value: projektUrl,
+            tree: treeName,
+            key: 'activeNodeArray'
+          }
+        })
+        // add projekt to open nodes
+        client.mutate({
+          mutation: gql`
+            mutation setTreeKey($value: Array!, $tree: String!, $key: String!) {
+              setTreeKey(tree: $tree, key: $key, value: $value) @client {
+                tree @client {
+                  name
+                  activeNodeArray
+                  openNodes
+                  apFilter
+                  nodeLabelFilter
+                  __typename: Tree
+                }
+              }
+            }
+          `,
+          variables: {
+            value: [...openNodes, projektUrl],
+            tree: treeName,
+            key: 'openNodes'
+          }
+        })
+      }
+    },
+  }),
   observer
 )
 
@@ -395,64 +460,7 @@ const TreeContainer = ({
   const openNodes = get(data, `${treeName}.openNodes`)
   const tree = get(data, treeName)
   const activeNodeArray = get(data, `${treeName}.activeNodeArray`)
-
   const token = get(data, 'user.token', null)
-
-  // if activeNodeArray.length === 1
-  // and there is only one projekte
-  // open it
-  // TODO: need to do this on componentWillMount?
-  const projekteNodes = nodes.filter(n => n.menuType === 'projekt').length === 1
-  const existsOnlyOneProjekt = projekteNodes.length === 1
-  if (activeNodes.projektfolder && !activeNodes.projekt && existsOnlyOneProjekt) {
-    const projektNode = projekteNodes[0]
-    if (projektNode) {
-      const projektUrl = clone(projektNode.url)
-      client.mutate({
-        mutation: gql`
-          mutation setTreeKey($value: Array!, $tree: String!, $key: String!) {
-            setTreeKey(tree: $tree, key: $key, value: $value) @client {
-              tree @client {
-                name
-                activeNodeArray
-                openNodes
-                apFilter
-                nodeLabelFilter
-                __typename: Tree
-              }
-            }
-          }
-        `,
-        variables: {
-          value: projektUrl,
-          tree: treeName,
-          key: 'activeNodeArray'
-        }
-      })
-      // add projekt to open nodes
-      client.mutate({
-        mutation: gql`
-          mutation setTreeKey($value: Array!, $tree: String!, $key: String!) {
-            setTreeKey(tree: $tree, key: $key, value: $value) @client {
-              tree @client {
-                name
-                activeNodeArray
-                openNodes
-                apFilter
-                nodeLabelFilter
-                __typename: Tree
-              }
-            }
-          }
-        `,
-        variables: {
-          value: [...openNodes, projektUrl],
-          tree: treeName,
-          key: 'openNodes'
-        }
-      })
-    }
-  }
 
   return (
     <ErrorBoundary>
