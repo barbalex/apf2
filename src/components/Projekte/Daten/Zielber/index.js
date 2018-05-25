@@ -9,8 +9,7 @@ import withHandlers from 'recompose/withHandlers'
 import TextField from '../../../shared/TextField'
 import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
-import data1Gql from './data1.graphql'
-import data2Gql from './data2.graphql'
+import dataGql from './data.graphql'
 import updateZielberByIdGql from './updateZielberById.graphql'
 
 const Container = styled.div`
@@ -52,86 +51,77 @@ const enhance = compose(
 )
 
 const Zielber = ({
-  treeName,
+  id,
   saveToDb
 }: {
-  treeName: String,
+  id: String,
   saveToDb: () => void
 }) => (
-  <Query query={data1Gql}>
+  <Query query={dataGql} variables={{ id }}>
     {({ loading, error, data }) => {
+      if (loading)
+        return (
+          <Container>
+            <FieldsContainer>Lade...</FieldsContainer>
+          </Container>
+        )
       if (error) return `Fehler: ${error.message}`
-      const id = get(data, `${treeName}.activeNodeArray[8]`)
-  
+
+      const row = get(data, 'zielberById')
+
       return (
-        <Query query={data2Gql} variables={{ id }}>
-          {({ loading, error, data }) => {
-            if (loading)
-              return (
-                <Container>
-                  <FieldsContainer>Lade...</FieldsContainer>
-                </Container>
-              )
-            if (error) return `Fehler: ${error.message}`
-
-            const row = get(data, 'zielberById')
-
-            return (
-              <ErrorBoundary>
-                <Container>
-                  <FormTitle
-                    apId={get(row, 'zielByZielId.apId')}
-                    title="Ziel-Bericht"
+        <ErrorBoundary>
+          <Container>
+            <FormTitle
+              apId={get(row, 'zielByZielId.apId')}
+              title="Ziel-Bericht"
+            />
+            <Mutation mutation={updateZielberByIdGql}>
+              {(updateZielber, { data }) => (
+                <FieldsContainer>
+                  <TextField
+                    key={`${row.id}jahr`}
+                    label="Jahr"
+                    value={row.jahr}
+                    type="number"
+                    saveToDb={value =>
+                      saveToDb({ row, field: 'jahr', value, updateZielber })
+                    }
                   />
-                  <Mutation mutation={updateZielberByIdGql}>
-                    {(updateZielber, { data }) => (
-                      <FieldsContainer>
-                        <TextField
-                          key={`${row.id}jahr`}
-                          label="Jahr"
-                          value={row.jahr}
-                          type="number"
-                          saveToDb={value =>
-                            saveToDb({ row, field: 'jahr', value, updateZielber })
-                          }
-                        />
-                        <TextField
-                          key={`${row.id}erreichung`}
-                          label="Entwicklung"
-                          value={row.erreichung}
-                          type="text"
-                          saveToDb={value =>
-                            saveToDb({
-                              row,
-                              field: 'erreichung',
-                              value,
-                              updateZielber,
-                            })
-                          }
-                        />
-                        <TextField
-                          key={`${row.id}bemerkungen`}
-                          label="Bemerkungen"
-                          value={row.bemerkungen}
-                          type="text"
-                          multiLine
-                          saveToDb={value =>
-                            saveToDb({
-                              row,
-                              field: 'bemerkungen',
-                              value,
-                              updateZielber,
-                            })
-                          }
-                        />
-                      </FieldsContainer>
-                    )}
-                  </Mutation>
-                </Container>
-              </ErrorBoundary>
-            )
-          }}
-        </Query>
+                  <TextField
+                    key={`${row.id}erreichung`}
+                    label="Entwicklung"
+                    value={row.erreichung}
+                    type="text"
+                    saveToDb={value =>
+                      saveToDb({
+                        row,
+                        field: 'erreichung',
+                        value,
+                        updateZielber,
+                      })
+                    }
+                  />
+                  <TextField
+                    key={`${row.id}bemerkungen`}
+                    label="Bemerkungen"
+                    value={row.bemerkungen}
+                    type="text"
+                    multiLine
+                    saveToDb={value =>
+                      saveToDb({
+                        row,
+                        field: 'bemerkungen',
+                        value,
+                        updateZielber,
+                      })
+                    }
+                  />
+                </FieldsContainer>
+              )}
+            </Mutation>
+          </Container>
+        </ErrorBoundary>
       )
     }}
   </Query>

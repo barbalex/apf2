@@ -10,8 +10,7 @@ import TextField from '../../../shared/TextField'
 import TextFieldWithUrl from '../../../shared/TextFieldWithUrl'
 import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
-import data1Gql from './data1.graphql'
-import data2Gql from './data2.graphql'
+import dataGql from './data.graphql'
 import updateBerByIdGql from './updateBerById.graphql'
 
 const Container = styled.div`
@@ -53,83 +52,74 @@ const enhance = compose(
 )
 
 const Ber = ({
-  treeName,
+  id,
   saveToDb
 }: {
-  treeName: String,
+  id: String,
   saveToDb: () => void
 }) => (
-  <Query query={data1Gql}>
+  <Query query={dataGql} variables={{ id }}>
     {({ loading, error, data }) => {
+      if (loading)
+        return (
+          <Container>
+            <FieldsContainer>Lade...</FieldsContainer>
+          </Container>
+        )
       if (error) return `Fehler: ${error.message}`
-      const id = get(data, `${treeName}.activeNodeArray[5]`)
+
+      const row = get(data, 'berById')
 
       return (
-        <Query query={data2Gql} variables={{ id }}>
-          {({ loading, error, data }) => {
-            if (loading)
-              return (
-                <Container>
-                  <FieldsContainer>Lade...</FieldsContainer>
-                </Container>
-              )
-            if (error) return `Fehler: ${error.message}`
-
-            const row = get(data, 'berById')
-
-            return (
-              <ErrorBoundary>
-                <Container>
-                  <FormTitle apId={row.apId} title="Bericht" />
-                  <Mutation mutation={updateBerByIdGql}>
-                    {(updateBer, { data }) => (
-                      <FieldsContainer>
-                        <TextField
-                          key={`${row.id}autor`}
-                          label="AutorIn"
-                          value={row.autor}
-                          type="text"
-                          saveToDb={value =>
-                            saveToDb({ row, field: 'autor', value, updateBer })
-                          }
-                        />
-                        <TextField
-                          key={`${row.id}jahr`}
-                          label="Jahr"
-                          value={row.jahr}
-                          type="number"
-                          saveToDb={value =>
-                            saveToDb({ row, field: 'jahr', value, updateBer })
-                          }
-                        />
-                        <TextField
-                          key={`${row.id}titel`}
-                          label="Titel"
-                          value={row.titel}
-                          type="text"
-                          multiLine
-                          saveToDb={value =>
-                            saveToDb({ row, field: 'titel', value, updateBer })
-                          }
-                        />
-                        <TextFieldWithUrl
-                          key={`${row.id}url`}
-                          label="URL"
-                          value={row.url}
-                          type="text"
-                          multiLine
-                          saveToDb={value =>
-                            saveToDb({ row, field: 'url', value, updateBer })
-                          }
-                        />
-                      </FieldsContainer>
-                    )}
-                  </Mutation>
-                </Container>
-              </ErrorBoundary>
-            )
-          }}
-        </Query>
+        <ErrorBoundary>
+          <Container>
+            <FormTitle apId={row.apId} title="Bericht" />
+            <Mutation mutation={updateBerByIdGql}>
+              {(updateBer, { data }) => (
+                <FieldsContainer>
+                  <TextField
+                    key={`${row.id}autor`}
+                    label="AutorIn"
+                    value={row.autor}
+                    type="text"
+                    saveToDb={value =>
+                      saveToDb({ row, field: 'autor', value, updateBer })
+                    }
+                  />
+                  <TextField
+                    key={`${row.id}jahr`}
+                    label="Jahr"
+                    value={row.jahr}
+                    type="number"
+                    saveToDb={value =>
+                      saveToDb({ row, field: 'jahr', value, updateBer })
+                    }
+                  />
+                  <TextField
+                    key={`${row.id}titel`}
+                    label="Titel"
+                    value={row.titel}
+                    type="text"
+                    multiLine
+                    saveToDb={value =>
+                      saveToDb({ row, field: 'titel', value, updateBer })
+                    }
+                  />
+                  <TextFieldWithUrl
+                    key={`${row.id}url`}
+                    label="URL"
+                    value={row.url}
+                    type="text"
+                    multiLine
+                    saveToDb={value =>
+                      saveToDb({ row, field: 'url', value, updateBer })
+                    }
+                  />
+                </FieldsContainer>
+              )}
+            </Mutation>
+          </Container>
+        </ErrorBoundary>
       )
     }}
   </Query>
