@@ -196,7 +196,7 @@ const Daten = ({
         tpopfreiwkontr: <Tpopfreiwkontr dimensions={dimensions} treeName={treeName} />,
         tpopkontrzaehl: <Tpopkontrzaehl dimensions={dimensions} treeName={treeName} />,
         exporte: <Exporte tree={tree} dimensions={dimensions} treeName={treeName} />,
-        qk: <Qk tree={tree} treeName={treeName} />,
+        qk: <Qk tree={tree} treeName={treeName} activeNodes={activeNodes} />,
         beobNichtZuzuordnen: <Beobzuordnung dimensions={dimensions} treeName={treeName} />,
         beobzuordnung: <Beobzuordnung dimensions={dimensions} treeName={treeName} />,
         beobZugeordnet: <Beobzuordnung dimensions={dimensions} treeName={treeName} />,
