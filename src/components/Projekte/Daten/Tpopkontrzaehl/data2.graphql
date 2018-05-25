@@ -4,6 +4,7 @@ query TpopkontrzaehlQuery($id: UUID!) {
     anzahl
     einheit
     tpopkontrzaehlEinheitWerteByEinheit {
+      id
       text
     }
     methode

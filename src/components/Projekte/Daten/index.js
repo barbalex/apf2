@@ -215,7 +215,6 @@ const Daten = ({
       } else {
         key = tableName
       }
-      console.log('Daten:', { tableName, key, treeName, activeNode })
       const form = key ? formObject[key] : ''
 
       return (
