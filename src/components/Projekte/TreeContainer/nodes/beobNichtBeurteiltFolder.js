@@ -51,7 +51,7 @@ export default ({
 
   return [{
     nodeType: 'folder',
-    menuType: 'beobzuordnungFolder',
+    menuType: 'beobNichtBeurteiltFolder',
     id: apId,
     urlLabel: 'nicht-beurteilte-Beobachtungen',
     label: `Beobachtungen nicht beurteilt (${message})`,

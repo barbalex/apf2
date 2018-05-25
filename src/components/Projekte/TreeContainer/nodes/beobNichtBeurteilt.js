@@ -44,7 +44,7 @@ export default ({
     })
     .map(el => ({
       nodeType: 'table',
-      menuType: 'beobzuordnung',
+      menuType: 'beobNichtBeurteilt',
       id: el.id,
       parentId: apId,
       urlLabel: el.id,

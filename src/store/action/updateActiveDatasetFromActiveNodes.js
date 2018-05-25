@@ -50,10 +50,10 @@ export default (store: Object, tree: Object): Object => {
           row: table.ber.get(aEl.ber),
           folder: null,
         }
-      } else if (aEl.beobzuordnung) {
+      } else if (aEl.beobNichtBeurteilt) {
         activeDataset = {
           table: 'beob',
-          row: table.beob.get(aEl.beobzuordnung),
+          row: table.beob.get(aEl.beobNichtBeurteilt),
           folder: null,
         }
       } else if (aEl.beobNichtZuzuordnen) {
@@ -186,7 +186,7 @@ export default (store: Object, tree: Object): Object => {
         if (aEl.apartFolder) folder = 'apart'
         if (aEl.idealbiotopFolder) folder = 'idealbiotop'
         if (aEl.beobNichtZuzuordnenFolder) folder = 'beobNichtZuzuordnen'
-        if (aEl.beobzuordnungFolder) folder = 'beobzuordnung'
+        if (aEl.beobNichtBeurteiltFolder) folder = 'beobNichtBeurteilt'
         if (aEl.berFolder) folder = 'ber'
         if (aEl.apberFolder) folder = 'apber'
         if (aEl.erfkritFolder) folder = 'erfkrit'

@@ -55,13 +55,13 @@ export default (activeNodeArray: Array<mixed>): Object => {
     beobNichtZuzuordnenFolder && activeNodeArray.length > 5
       ? activeNodeArray[5]
       : null
-  const beobzuordnungFolder =
+  const beobNichtBeurteiltFolder =
     (ap &&
       activeNodeArray.length > 4 &&
       activeNodeArray[4] === 'nicht-beurteilte-Beobachtungen') ||
     false
-  let beobzuordnung =
-    beobzuordnungFolder && activeNodeArray.length > 5
+  let beobNichtBeurteilt =
+    beobNichtBeurteiltFolder && activeNodeArray.length > 5
       ? activeNodeArray[5]
       : null
   const berFolder =
@@ -208,8 +208,8 @@ export default (activeNodeArray: Array<mixed>): Object => {
     idealbiotopFolder,
     beobNichtZuzuordnenFolder,
     beobNichtZuzuordnen,
-    beobzuordnungFolder,
-    beobzuordnung,
+    beobNichtBeurteiltFolder,
+    beobNichtBeurteilt,
     berFolder,
     ber,
     apberFolder,

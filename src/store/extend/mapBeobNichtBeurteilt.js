@@ -12,8 +12,8 @@ export default (store: Object): void => {
       if (mapFilterBeobNichtBeurteilt.length > 0) {
         return mapFilterBeobNichtBeurteilt
       }
-      if (store.tree.activeNodes.beobzuordnung) {
-        return [store.tree.activeNodes.beobzuordnung]
+      if (store.tree.activeNodes.beobNichtBeurteilt) {
+        return [store.tree.activeNodes.beobNichtBeurteilt]
       }
       return []
     }),

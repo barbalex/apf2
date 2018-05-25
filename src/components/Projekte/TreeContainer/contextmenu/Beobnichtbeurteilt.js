@@ -15,7 +15,7 @@ const BeobNichtBeurteilt = ({
   token: String
 }) => (
   <ErrorBoundary>
-    <ContextMenu id={`${tree.name}beobzuordnung`}>
+    <ContextMenu id={`${tree.name}beobNichtBeurteilt`}>
       <div className="react-contextmenu-title">Beobachtung</div>
       {
         !userIsReadOnly(token) &&

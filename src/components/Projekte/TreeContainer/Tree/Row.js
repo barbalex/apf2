@@ -173,7 +173,7 @@ const showTpopFilteredMapIcon = (store, node) =>
   store.map.activeApfloraLayers.includes('Tpop') &&
   store.map.tpop.highlightedIds.includes(node.id)
 const showBeobNichtBeurteiltMapIcon = (store, tree, node, activeNodes) =>
-  node.menuType === 'beobzuordnungFolder' &&
+  node.menuType === 'beobNichtBeurteiltFolder' &&
   node.id === activeNodes.ap &&
   store.map.activeApfloraLayers.includes('BeobNichtBeurteilt')
 const showBeobNichtZuzuordnenMapIcon = (store, tree, node, activeNodes) =>
@@ -185,7 +185,7 @@ const showBeobZugeordnetMapIcon = (store, tree, node, activeNodes) =>
   node.id === activeNodes.tpop &&
   store.map.activeApfloraLayers.includes('BeobZugeordnet')
 const showBeobNichtBeurteiltFilteredMapIcon = (store, node) =>
-  node.menuType === 'beobzuordnung' &&
+  node.menuType === 'beobNichtBeurteilt' &&
   store.map.activeApfloraLayers.includes('BeobNichtBeurteilt') &&
   store.map.beobNichtBeurteilt.highlightedIds.includes(node.id)
 const showBeobNichtZuzuordnenFilteredMapIcon = (store, node) =>
