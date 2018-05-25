@@ -201,31 +201,26 @@ const Daten = ({
         beobZugeordnet: <Beobzuordnung dimensions={dimensions} treeName={treeName} />,
       }
       let key
-      //if (activeNodes.exporte) {
       if (
         activeNodeArray.length > 2 &&
         activeNodeArray[2] === 'Exporte'
       ) {
         key = 'exporte'
-      //} else if (activeNodes.qk) {
       } else if (
         activeNodeArray.length > 4 &&
         activeNodeArray[4] === 'Qualitaetskontrollen'
       ) {
         key = 'qk'
-      //} else if (activeNodes.beobNichtZuzuordnen) {
       } else if (
         activeNodeArray.length > 5 &&
         activeNodeArray[4] === 'nicht-zuzuordnende-Beobachtungen'
       ) {
         key = 'beobNichtZuzuordnen'
-      //} else if (activeNodes.beobzuordnung) {
       } else if (
         activeNodeArray.length > 5 &&
         activeNodeArray[4] === 'nicht-beurteilte-Beobachtungen'
       ) {
         key = 'beobzuordnung'
-      //} else if (activeNodes.beobZugeordnet) {
       } else if (
         activeNodeArray.length > 9 &&
         activeNodeArray[6] === 'Teil-Populationen' &&
@@ -235,6 +230,7 @@ const Daten = ({
       } else {
         key = tableName
       }
+      console.log('Daten:', {tableName,activeNode})
       const form = key ? formObject[key] : ''
 
       return (
