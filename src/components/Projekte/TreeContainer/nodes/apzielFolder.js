@@ -56,7 +56,7 @@ export default ({
 
   return [{
     nodeType: 'folder',
-    menuType: 'zieljahrFolder',
+    menuType: 'zielFolder',
     id: apId,
     urlLabel: 'AP-Ziele',
     label: `AP-Ziele (${message})`,

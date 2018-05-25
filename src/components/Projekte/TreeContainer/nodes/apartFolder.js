@@ -48,7 +48,7 @@ export default ({
 
   return [{
     nodeType: 'folder',
-    menuType: 'apArtFolder',
+    menuType: 'apartFolder',
     id: apId,
     urlLabel: 'AP-Arten',
     label: `AP-Arten (${message})`,

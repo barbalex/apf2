@@ -63,7 +63,7 @@ export default ({
 
     return ({
       nodeType: 'folder',
-      menuType: 'zieljahr',
+      menuType: 'zielFolder',
       id: apId,
       jahr,
       parentId: apId,
