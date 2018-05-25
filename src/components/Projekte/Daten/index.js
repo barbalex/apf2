@@ -230,7 +230,6 @@ const Daten = ({
       } else {
         key = tableName
       }
-      console.log('Daten:', {tableName,activeNode})
       const form = key ? formObject[key] : ''
 
       return (
