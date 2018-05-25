@@ -11,8 +11,7 @@ import RadioButtonGroup from '../../../shared/RadioButtonGroup'
 import TextField from '../../../shared/TextField'
 import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
-import data1Gql from './data1.graphql'
-import data2Gql from './data2.graphql'
+import dataGql from './data.graphql'
 import updatePopmassnberByIdGql from './updatePopmassnberById.graphql'
 
 const Container = styled.div`
@@ -56,96 +55,87 @@ const enhance = compose(
 )
 
 const Popmassnber = ({
-  treeName,
+  id,
   saveToDb,
 }: {
-  treeName: String,
+  id: String,
   saveToDb: () => void,
 }) => (
-  <Query query={data1Gql}>
+  <Query query={dataGql} variables={{ id }}>
     {({ loading, error, data }) => {
+      if (loading)
+        return (
+          <Container>
+            <FieldsContainer>Lade...</FieldsContainer>
+          </Container>
+        )
       if (error) return `Fehler: ${error.message}`
-      const id = get(data, `${treeName}.activeNodeArray[7]`)
+
+      const row = get(data, 'popmassnberById')
+      let popbeurteilungWerte = get(
+        data,
+        'allTpopmassnErfbeurtWertes.nodes',
+        []
+      )
+      popbeurteilungWerte = sortBy(popbeurteilungWerte, 'sort')
+      popbeurteilungWerte = popbeurteilungWerte.map(el => ({
+        value: el.code,
+        label: el.text,
+      }))
 
       return (
-        <Query query={data2Gql} variables={{ id }}>
-          {({ loading, error, data }) => {
-            if (loading)
-              return (
-                <Container>
-                  <FieldsContainer>Lade...</FieldsContainer>
-                </Container>
-              )
-            if (error) return `Fehler: ${error.message}`
-
-            const row = get(data, 'popmassnberById')
-            let popbeurteilungWerte = get(
-              data,
-              'allTpopmassnErfbeurtWertes.nodes',
-              []
-            )
-            popbeurteilungWerte = sortBy(popbeurteilungWerte, 'sort')
-            popbeurteilungWerte = popbeurteilungWerte.map(el => ({
-              value: el.code,
-              label: el.text,
-            }))
-
-            return (
-              <ErrorBoundary>
-                <Container>
-                  <FormTitle
-                    apId={get(data, 'popmassnberById.popByPopId.apId')}
-                    title="Massnahmen-Bericht Population"
+        <ErrorBoundary>
+          <Container>
+            <FormTitle
+              apId={get(data, 'popmassnberById.popByPopId.apId')}
+              title="Massnahmen-Bericht Population"
+            />
+            <Mutation mutation={updatePopmassnberByIdGql}>
+              {(updatePopmassnber, { data }) => (
+                <FieldsContainer>
+                  <TextField
+                    key={`${row.id}jahr`}
+                    label="Jahr"
+                    value={row.jahr}
+                    type="number"
+                    saveToDb={value =>
+                      saveToDb({ row, field: 'jahr', value, updatePopmassnber })
+                    }
                   />
-                  <Mutation mutation={updatePopmassnberByIdGql}>
-                    {(updatePopmassnber, { data }) => (
-                      <FieldsContainer>
-                        <TextField
-                          key={`${row.id}jahr`}
-                          label="Jahr"
-                          value={row.jahr}
-                          type="number"
-                          saveToDb={value =>
-                            saveToDb({ row, field: 'jahr', value, updatePopmassnber })
-                          }
-                        />
-                        <RadioButtonGroup
-                          key={`${row.id}beurteilung`}
-                          label="Entwicklung"
-                          value={row.beurteilung}
-                          dataSource={popbeurteilungWerte}
-                          saveToDb={value =>
-                            saveToDb({
-                              row,
-                              field: 'beurteilung',
-                              value,
-                              updatePopmassnber,
-                            })
-                          }
-                        />
-                        <TextField
-                          key={`${row.id}bemerkungen`}
-                          label="Interpretation"
-                          value={row.bemerkungen}
-                          type="text"
-                          multiLine
-                          saveToDb={value =>
-                            saveToDb({
-                              row,
-                              field: 'bemerkungen',
-                              value,
-                              updatePopmassnber,
-                            })
-                          }
-                        />
-                      </FieldsContainer>
-                    )}
-                  </Mutation>
-                </Container>
-              </ErrorBoundary>
-            )
-          }}
-        </Query>
+                  <RadioButtonGroup
+                    key={`${row.id}beurteilung`}
+                    label="Entwicklung"
+                    value={row.beurteilung}
+                    dataSource={popbeurteilungWerte}
+                    saveToDb={value =>
+                      saveToDb({
+                        row,
+                        field: 'beurteilung',
+                        value,
+                        updatePopmassnber,
+                      })
+                    }
+                  />
+                  <TextField
+                    key={`${row.id}bemerkungen`}
+                    label="Interpretation"
+                    value={row.bemerkungen}
+                    type="text"
+                    multiLine
+                    saveToDb={value =>
+                      saveToDb({
+                        row,
+                        field: 'bemerkungen',
+                        value,
+                        updatePopmassnber,
+                      })
+                    }
+                  />
+                </FieldsContainer>
+              )}
+            </Mutation>
+          </Container>
+        </ErrorBoundary>
       )
     }}
   </Query>

@@ -11,8 +11,7 @@ import RadioButtonGroup from '../../../shared/RadioButtonGroup'
 import TextField from '../../../shared/TextField'
 import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
-import data1Gql from './data1.graphql'
-import data2Gql from './data2.graphql'
+import dataGql from './data.graphql'
 import updateTpopberByIdGql from './updateTpopberById.graphql'
 
 const Container = styled.div`
@@ -56,92 +55,83 @@ const enhance = compose(
 )
 
 const Tpopber = ({
-  treeName,
+  id,
   saveToDb
 }: {
-  treeName: String,
+  id: String,
   saveToDb: () => void
 }) => (
-  <Query query={data1Gql}>
+  <Query query={dataGql} variables={{ id }}>
     {({ loading, error, data }) => {
+      if (loading)
+        return (
+          <Container>
+            <FieldsContainer>Lade...</FieldsContainer>
+          </Container>
+        )
       if (error) return `Fehler: ${error.message}`
-      const id = get(data, `${treeName}.activeNodeArray[9]`)
+
+      const row = get(data, 'tpopberById')
+      let tpopentwicklungWerte = get(data, 'allTpopEntwicklungWertes.nodes', [])
+      tpopentwicklungWerte = sortBy(tpopentwicklungWerte, 'sort')
+      tpopentwicklungWerte = tpopentwicklungWerte.map(el => ({
+        value: el.code,
+        label: el.text,
+      }))
 
       return (
-        <Query query={data2Gql} variables={{ id }}>
-          {({ loading, error, data }) => {
-            if (loading)
-              return (
-                <Container>
-                  <FieldsContainer>Lade...</FieldsContainer>
-                </Container>
-              )
-            if (error) return `Fehler: ${error.message}`
-
-            const row = get(data, 'tpopberById')
-            let tpopentwicklungWerte = get(data, 'allTpopEntwicklungWertes.nodes', [])
-            tpopentwicklungWerte = sortBy(tpopentwicklungWerte, 'sort')
-            tpopentwicklungWerte = tpopentwicklungWerte.map(el => ({
-              value: el.code,
-              label: el.text,
-            }))
-
-            return (
-              <ErrorBoundary>
-                <Container>
-                  <FormTitle
-                    apId={get(data, 'tpopberById.tpopByTpopId.popByPopId.apId')}
-                    title="Kontroll-Bericht Teil-Population"
+        <ErrorBoundary>
+          <Container>
+            <FormTitle
+              apId={get(data, 'tpopberById.tpopByTpopId.popByPopId.apId')}
+              title="Kontroll-Bericht Teil-Population"
+            />
+            <Mutation mutation={updateTpopberByIdGql}>
+              {(updateTpopber, { data }) => (
+                <FieldsContainer>
+                  <TextField
+                    key={`${row.id}jahr`}
+                    label="Jahr"
+                    value={row.jahr}
+                    type="number"
+                    saveToDb={value =>
+                      saveToDb({ row, field: 'jahr', value, updateTpopber })
+                    }
                   />
-                  <Mutation mutation={updateTpopberByIdGql}>
-                    {(updateTpopber, { data }) => (
-                      <FieldsContainer>
-                        <TextField
-                          key={`${row.id}jahr`}
-                          label="Jahr"
-                          value={row.jahr}
-                          type="number"
-                          saveToDb={value =>
-                            saveToDb({ row, field: 'jahr', value, updateTpopber })
-                          }
-                        />
-                        <RadioButtonGroup
-                          key={`${row.id}entwicklung`}
-                          label="Entwicklung"
-                          value={row.entwicklung}
-                          dataSource={tpopentwicklungWerte}
-                          saveToDb={value =>
-                            saveToDb({
-                              row,
-                              field: 'entwicklung',
-                              value,
-                              updateTpopber,
-                            })
-                          }
-                        />
-                        <TextField
-                          key={`${row.id}bemerkungen`}
-                          label="Bemerkungen"
-                          value={row.bemerkungen}
-                          type="text"
-                          multiLine
-                          saveToDb={value =>
-                            saveToDb({
-                              row,
-                              field: 'bemerkungen',
-                              value,
-                              updateTpopber,
-                            })
-                          }
-                        />
-                      </FieldsContainer>
-                    )}
-                  </Mutation>
-                </Container>
-              </ErrorBoundary>
-            )
-          }}
-        </Query>
+                  <RadioButtonGroup
+                    key={`${row.id}entwicklung`}
+                    label="Entwicklung"
+                    value={row.entwicklung}
+                    dataSource={tpopentwicklungWerte}
+                    saveToDb={value =>
+                      saveToDb({
+                        row,
+                        field: 'entwicklung',
+                        value,
+                        updateTpopber,
+                      })
+                    }
+                  />
+                  <TextField
+                    key={`${row.id}bemerkungen`}
+                    label="Bemerkungen"
+                    value={row.bemerkungen}
+                    type="text"
+                    multiLine
+                    saveToDb={value =>
+                      saveToDb({
+                        row,
+                        field: 'bemerkungen',
+                        value,
+                        updateTpopber,
+                      })
+                    }
+                  />
+                </FieldsContainer>
+              )}
+            </Mutation>
+          </Container>
+        </ErrorBoundary>
       )
     }}
   </Query>

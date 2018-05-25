@@ -12,8 +12,7 @@ import TextField from '../../../shared/TextField'
 import FormTitle from '../../../shared/FormTitle'
 import AutoComplete from '../../../shared/Autocomplete'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
-import data1Gql from './data1.graphql'
-import data2Gql from './data2.graphql'
+import dataGql from './data.graphql'
 import updateTpopkontrzaehlByIdGql from './updateTpopkontrzaehlById.graphql'
 
 const Container = styled.div`
@@ -56,108 +55,99 @@ const enhance = compose(
 )
 
 const Tpopkontrzaehl = ({
-  treeName,
+  id,
   saveToDb,
 }: {
-  treeName: String,
+  id: String,
   saveToDb: () => void,
 }) => (
-  <Query query={data1Gql}>
-    {({ loading, error, data: data1 }) => {
+  <Query query={dataGql} variables={{ id }}>
+    {({ loading, error, data }) => {
+      if (loading)
+        return (
+          <Container>
+            <FieldsContainer>Lade...</FieldsContainer>
+          </Container>
+        )
       if (error) return `Fehler: ${error.message}`
-      const id = get(data1, `${treeName}.activeNodeArray[11]`)
-  
+
+      const row = get(data, 'tpopkontrzaehlById')
+      let zaehleinheitWerte = get(
+        data,
+        'allTpopkontrzaehlEinheitWertes.nodes',
+        []
+      )
+      zaehleinheitWerte = sortBy(zaehleinheitWerte, 'sort').map(el => ({
+        id: el.code,
+        value: el.text,
+      }))
+      let methodeWerte = get(data, 'allTpopkontrzaehlMethodeWertes.nodes', [])
+      methodeWerte = sortBy(methodeWerte, 'sort')
+      methodeWerte = methodeWerte.map(el => ({
+        value: el.code,
+        label: el.text,
+      }))
+
       return (
-        <Query query={data2Gql} variables={{ id }}>
-          {({ loading, error, data }) => {
-            if (loading)
-              return (
-                <Container>
-                  <FieldsContainer>Lade...</FieldsContainer>
-                </Container>
-              )
-            if (error) return `Fehler: ${error.message}`
-
-            const row = get(data, 'tpopkontrzaehlById')
-            let zaehleinheitWerte = get(
-              data,
-              'allTpopkontrzaehlEinheitWertes.nodes',
-              []
-            )
-            zaehleinheitWerte = sortBy(zaehleinheitWerte, 'sort').map(el => ({
-              id: el.code,
-              value: el.text,
-            }))
-            let methodeWerte = get(data, 'allTpopkontrzaehlMethodeWertes.nodes', [])
-            methodeWerte = sortBy(methodeWerte, 'sort')
-            methodeWerte = methodeWerte.map(el => ({
-              value: el.code,
-              label: el.text,
-            }))
-
-            return (
-              <ErrorBoundary>
-                <Container>
-                  <FormTitle
-                    apId={get(
-                      data,
-                      'tpopkontrzaehlById.tpopkontrByTpopkontrId.tpopByTpopId.popByPopId.apId'
-                    )}
-                    title="Zählung"
+        <ErrorBoundary>
+          <Container>
+            <FormTitle
+              apId={get(
+                data,
+                'tpopkontrzaehlById.tpopkontrByTpopkontrId.tpopByTpopId.popByPopId.apId'
+              )}
+              title="Zählung"
+            />
+            <Mutation mutation={updateTpopkontrzaehlByIdGql}>
+              {(updateTpopkontrzaehl, { data }) => (
+                <FieldsContainer>
+                  <AutoComplete
+                    key={`${row.id}einheit`}
+                    label="Einheit"
+                    value={get(row, 'tpopkontrzaehlEinheitWerteByEinheit.text')}
+                    objects={zaehleinheitWerte}
+                    saveToDb={value =>
+                      saveToDb({
+                        row,
+                        field: 'einheit',
+                        value,
+                        updateTpopkontrzaehl,
+                      })
+                    }
                   />
-                  <Mutation mutation={updateTpopkontrzaehlByIdGql}>
-                    {(updateTpopkontrzaehl, { data }) => (
-                      <FieldsContainer>
-                        <AutoComplete
-                          key={`${row.id}einheit`}
-                          label="Einheit"
-                          value={get(row, 'tpopkontrzaehlEinheitWerteByEinheit.text')}
-                          objects={zaehleinheitWerte}
-                          saveToDb={value =>
-                            saveToDb({
-                              row,
-                              field: 'einheit',
-                              value,
-                              updateTpopkontrzaehl,
-                            })
-                          }
-                        />
-                        <TextField
-                          key={`${row.id}anzahl`}
-                          label="Anzahl (nur ganze Zahlen)"
-                          value={row.anzahl}
-                          type="number"
-                          saveToDb={value =>
-                            saveToDb({
-                              row,
-                              field: 'anzahl',
-                              value,
-                              updateTpopkontrzaehl,
-                            })
-                          }
-                        />
-                        <RadioButtonGroup
-                          key={`${row.id}methode`}
-                          label="Methode"
-                          value={row.methode}
-                          dataSource={methodeWerte}
-                          saveToDb={value =>
-                            saveToDb({
-                              row,
-                              field: 'methode',
-                              value,
-                              updateTpopkontrzaehl,
-                            })
-                          }
-                        />
-                      </FieldsContainer>
-                    )}
-                  </Mutation>
-                </Container>
-              </ErrorBoundary>
-            )
-          }}
-        </Query>
+                  <TextField
+                    key={`${row.id}anzahl`}
+                    label="Anzahl (nur ganze Zahlen)"
+                    value={row.anzahl}
+                    type="number"
+                    saveToDb={value =>
+                      saveToDb({
+                        row,
+                        field: 'anzahl',
+                        value,
+                        updateTpopkontrzaehl,
+                      })
+                    }
+                  />
+                  <RadioButtonGroup
+                    key={`${row.id}methode`}
+                    label="Methode"
+                    value={row.methode}
+                    dataSource={methodeWerte}
+                    saveToDb={value =>
+                      saveToDb({
+                        row,
+                        field: 'methode',
+                        value,
+                        updateTpopkontrzaehl,
+                      })
+                    }
+                  />
+                </FieldsContainer>
+              )}
+            </Mutation>
+          </Container>
+        </ErrorBoundary>
       )
     }}
   </Query>

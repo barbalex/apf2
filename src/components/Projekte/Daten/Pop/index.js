@@ -12,8 +12,7 @@ import Status from '../../../shared/Status'
 import RadioButton from '../../../shared/RadioButton'
 import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
-import data1Gql from './data1.graphql'
-import data2Gql from './data2.graphql'
+import dataGql from './data.graphql'
 import updatePopByIdGql from './updatePopById.graphql'
 
 const Container = styled.div`
@@ -63,126 +62,117 @@ const enhance = compose(
 )
 
 const Pop = ({
-  treeName,
+  id,
   saveToDb
 }: {
-  treeName: String,
+  id: String,
   saveToDb: () => void
 }) => (
-  <Query query={data1Gql}>
+  <Query query={dataGql} variables={{ id }}>
     {({ loading, error, data }) => {
+      if (loading)
+        return (
+          <Container>
+            <FieldsContainer>Lade...</FieldsContainer>
+          </Container>
+        )
       if (error) return `Fehler: ${error.message}`
-      const id = get(data, `${treeName}.activeNodeArray[5]`)
+
+      const row = get(data, 'popById')
 
       return (
-        <Query query={data2Gql} variables={{ id }}>
-          {({ loading, error, data }) => {
-            if (loading)
-              return (
-                <Container>
-                  <FieldsContainer>Lade...</FieldsContainer>
-                </Container>
-              )
-            if (error) return `Fehler: ${error.message}`
-
-            const row = get(data, 'popById')
-
-            return (
-              <ErrorBoundary>
-                <Container>
-                  <FormTitle apId={get(data, 'popById.apId')} title="Population" />
-                  <Mutation mutation={updatePopByIdGql}>
-                    {(updatePop, { data }) => (
-                      <FieldsContainer>
-                        <TextField
-                          key={`${row.id}nr`}
-                          label="Nr."
-                          value={row.nr}
-                          type="number"
-                          saveToDb={value =>
-                            saveToDb({ row, field: 'nr', value, updatePop })
-                          }
-                        />
-                        <TextFieldWithInfo
-                          key={`${row.id}name`}
-                          label="Name"
-                          value={row.name}
-                          type="text"
-                          saveToDb={value =>
-                            saveToDb({ row, field: 'name', value, updatePop })
-                          }
-                          popover="Dieses Feld möglichst immer ausfüllen"
-                        />
-                        <Status
-                          apJahr={get(data, 'tpopById.apByApId.startJahr')}
-                          herkunftValue={row.status}
-                          bekanntSeitValue={row.bekanntSeit}
-                          saveToDbBekanntSeit={value =>
-                            updatePop({
-                              variables: {
-                                id,
-                                bekanntSeit: value,
-                              },
-                            })
-                          }
-                          saveToDbStatus={value =>
-                            updatePop({
-                              variables: {
-                                id,
-                                status: value,
-                              },
-                            })
-                          }
-                        />
-                        <RadioButton
-                          key={`${row.id}statusUnklar`}
-                          label="Status unklar"
-                          value={row.statusUnklar}
-                          saveToDb={value =>
-                            saveToDb({ row, field: 'statusUnklar', value, updatePop })
-                          }
-                        />
-                        <TextField
-                          key={`${row.id}statusUnklarBegruendung`}
-                          label="Begründung"
-                          value={row.statusUnklarBegruendung}
-                          type="text"
-                          multiLine
-                          saveToDb={value =>
-                            saveToDb({
-                              row,
-                              field: 'statusUnklarBegruendung',
-                              value,
-                              updatePop,
-                            })
-                          }
-                        />
-                        <TextField
-                          key={`${row.id}x`}
-                          label="X-Koordinaten"
-                          value={row.x}
-                          type="number"
-                          saveToDb={value =>
-                            saveToDb({ row, field: 'x', value, updatePop })
-                          }
-                        />
-                        <TextField
-                          key={`${row.id}y`}
-                          label="Y-Koordinaten"
-                          value={row.y}
-                          type="number"
-                          saveToDb={value =>
-                            saveToDb({ row, field: 'y', value, updatePop })
-                          }
-                        />
-                      </FieldsContainer>
-                    )}
-                  </Mutation>
-                </Container>
-              </ErrorBoundary>
-            )
-          }}
-        </Query>
+        <ErrorBoundary>
+          <Container>
+            <FormTitle apId={get(data, 'popById.apId')} title="Population" />
+            <Mutation mutation={updatePopByIdGql}>
+              {(updatePop, { data }) => (
+                <FieldsContainer>
+                  <TextField
+                    key={`${row.id}nr`}
+                    label="Nr."
+                    value={row.nr}
+                    type="number"
+                    saveToDb={value =>
+                      saveToDb({ row, field: 'nr', value, updatePop })
+                    }
+                  />
+                  <TextFieldWithInfo
+                    key={`${row.id}name`}
+                    label="Name"
+                    value={row.name}
+                    type="text"
+                    saveToDb={value =>
+                      saveToDb({ row, field: 'name', value, updatePop })
+                    }
+                    popover="Dieses Feld möglichst immer ausfüllen"
+                  />
+                  <Status
+                    apJahr={get(data, 'tpopById.apByApId.startJahr')}
+                    herkunftValue={row.status}
+                    bekanntSeitValue={row.bekanntSeit}
+                    saveToDbBekanntSeit={value =>
+                      updatePop({
+                        variables: {
+                          id,
+                          bekanntSeit: value,
+                        },
+                      })
+                    }
+                    saveToDbStatus={value =>
+                      updatePop({
+                        variables: {
+                          id,
+                          status: value,
+                        },
+                      })
+                    }
+                  />
+                  <RadioButton
+                    key={`${row.id}statusUnklar`}
+                    label="Status unklar"
+                    value={row.statusUnklar}
+                    saveToDb={value =>
+                      saveToDb({ row, field: 'statusUnklar', value, updatePop })
+                    }
+                  />
+                  <TextField
+                    key={`${row.id}statusUnklarBegruendung`}
+                    label="Begründung"
+                    value={row.statusUnklarBegruendung}
+                    type="text"
+                    multiLine
+                    saveToDb={value =>
+                      saveToDb({
+                        row,
+                        field: 'statusUnklarBegruendung',
+                        value,
+                        updatePop,
+                      })
+                    }
+                  />
+                  <TextField
+                    key={`${row.id}x`}
+                    label="X-Koordinaten"
+                    value={row.x}
+                    type="number"
+                    saveToDb={value =>
+                      saveToDb({ row, field: 'x', value, updatePop })
+                    }
+                  />
+                  <TextField
+                    key={`${row.id}y`}
+                    label="Y-Koordinaten"
+                    value={row.y}
+                    type="number"
+                    saveToDb={value =>
+                      saveToDb({ row, field: 'y', value, updatePop })
+                    }
+                  />
+                </FieldsContainer>
+              )}
+            </Mutation>
+          </Container>
+        </ErrorBoundary>
       )
     }}
   </Query>
