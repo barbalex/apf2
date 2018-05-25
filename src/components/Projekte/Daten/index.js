@@ -174,12 +174,12 @@ const Daten = ({
       }
       const formObject = {
         projekt: <Projekt dimensions={dimensions} id={activeNodeArray[1]} />,
-        apberuebersicht: <Apberuebersicht dimensions={dimensions} treeName={treeName} />,
+        apberuebersicht: <Apberuebersicht dimensions={dimensions} id={activeNodeArray[3]} />,
         ap: <Ap dimensions={dimensions} treeName={treeName} />,
-        assozart: <Assozart dimensions={dimensions} treeName={treeName} />,
-        apart: <Apart dimensions={dimensions} treeName={treeName} />,
-        idealbiotop: <Idealbiotop dimensions={dimensions} treeName={treeName} />,
-        erfkrit: <Erfkrit dimensions={dimensions} treeName={treeName} />,
+        assozart: <Assozart dimensions={dimensions} id={activeNodeArray[5]} />,
+        apart: <Apart dimensions={dimensions} id={activeNodeArray[5]} />,
+        idealbiotop: <Idealbiotop dimensions={dimensions} id={activeNodeArray[3]} />,
+        erfkrit: <Erfkrit dimensions={dimensions} id={activeNodeArray[5]} />,
         apber: <Apber dimensions={dimensions} treeName={treeName} />,
         ber: <Ber dimensions={dimensions} treeName={treeName} />,
         ziel: <Ziel dimensions={dimensions} id={activeNodeArray[6]} tree={tree} />,

@@ -9,8 +9,7 @@ import withHandlers from 'recompose/withHandlers'
 import TextField from '../../../shared/TextField'
 import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
-import data1Gql from './data1.graphql'
-import data2Gql from './data2.graphql'
+import dataGql from './data.graphql'
 import updateApberuebersichtByIdGql from './updateApberuebersichtById.graphql'
 
 const Container = styled.div`
@@ -51,74 +50,65 @@ const enhance = compose(
 )
 
 const Apberuebersicht = ({
-  treeName,
+  id,
   saveToDb,
 }: {
-  treeName: String,
+  id: String,
   saveToDb: () => void,
 }) => (
-  <Query query={data1Gql}>
+  <Query query={dataGql} variables={{ id }}>
     {({ loading, error, data }) => {
+      if (loading)
+        return (
+          <Container>
+            <FieldsContainer>Lade...</FieldsContainer>
+          </Container>
+        )
       if (error) return `Fehler: ${error.message}`
-      const id = get(data, `${treeName}.activeNodeArray[3]`)
+
+      const row = get(data, 'apberuebersichtById')
 
       return (
-        <Query query={data2Gql} variables={{ id }}>
-          {({ loading, error, data }) => {
-            if (loading)
-              return (
-                <Container>
-                  <FieldsContainer>Lade...</FieldsContainer>
-                </Container>
-              )
-            if (error) return `Fehler: ${error.message}`
-
-            const row = get(data, 'apberuebersichtById')
-
-            return (
-              <ErrorBoundary>
-                <Container>
-                  <FormTitle title="AP-Bericht Jahresübersicht" />
-                  <Mutation mutation={updateApberuebersichtByIdGql}>
-                    {(updateApberuebersicht, { data }) => (
-                      <FieldsContainer>
-                        <TextField
-                          key={`${row.id}jahr`}
-                          label="Jahr"
-                          value={row.jahr}
-                          type="number"
-                          saveToDb={value =>
-                            saveToDb({
-                              row,
-                              field: 'jahr',
-                              value,
-                              updateApberuebersicht,
-                            })
-                          }
-                        />
-                        <TextField
-                          key={`${row.id}bemerkungen`}
-                          label="Bemerkungen"
-                          value={row.bemerkungen}
-                          type="text"
-                          multiLine
-                          saveToDb={value =>
-                            saveToDb({
-                              row,
-                              field: 'bemerkungen',
-                              value,
-                              updateApberuebersicht,
-                            })
-                          }
-                        />
-                      </FieldsContainer>
-                    )}
-                  </Mutation>
-                </Container>
-              </ErrorBoundary>
-            )
-          }}
-        </Query>
+        <ErrorBoundary>
+          <Container>
+            <FormTitle title="AP-Bericht Jahresübersicht" />
+            <Mutation mutation={updateApberuebersichtByIdGql}>
+              {(updateApberuebersicht, { data }) => (
+                <FieldsContainer>
+                  <TextField
+                    key={`${row.id}jahr`}
+                    label="Jahr"
+                    value={row.jahr}
+                    type="number"
+                    saveToDb={value =>
+                      saveToDb({
+                        row,
+                        field: 'jahr',
+                        value,
+                        updateApberuebersicht,
+                      })
+                    }
+                  />
+                  <TextField
+                    key={`${row.id}bemerkungen`}
+                    label="Bemerkungen"
+                    value={row.bemerkungen}
+                    type="text"
+                    multiLine
+                    saveToDb={value =>
+                      saveToDb({
+                        row,
+                        field: 'bemerkungen',
+                        value,
+                        updateApberuebersicht,
+                      })
+                    }
+                  />
+                </FieldsContainer>
+              )}
+            </Mutation>
+          </Container>
+        </ErrorBoundary>
       )
     }}
   </Query>

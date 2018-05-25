@@ -11,8 +11,7 @@ import RadioButtonGroup from '../../../shared/RadioButtonGroup'
 import TextField from '../../../shared/TextField'
 import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
-import data1Gql from './data1.graphql'
-import data2Gql from './data2.graphql'
+import dataGql from './data.graphql'
 import updateErfkritByIdGql from './updateErfkritById.graphql'
 
 const Container = styled.div`
@@ -52,75 +51,66 @@ const enhance = compose(
 )
 
 const Erfkrit = ({
-  treeName,
+  id,
   saveToDb
 }: {
-  treeName: String,
+  id: String,
   saveToDb: () => void
 }) => (
-  <Query query={data1Gql}>
+  <Query query={dataGql} variables={{ id }}>
     {({ loading, error, data }) => {
+      if (loading)
+        return (
+          <Container>
+            <FieldsContainer>Lade...</FieldsContainer>
+          </Container>
+        )
       if (error) return `Fehler: ${error.message}`
-      const id = get(data, `${treeName}.activeNodeArray[5]`)
+
+      const row = get(data, 'erfkritById')
+      let erfolgWerte = get(data, 'allApErfkritWertes.nodes', [])
+      erfolgWerte = sortBy(erfolgWerte, 'sort')
+      erfolgWerte = erfolgWerte.map(el => ({
+        value: el.code,
+        label: el.text,
+      }))
 
       return (
-        <Query query={data2Gql} variables={{ id }}>
-          {({ loading, error, data }) => {
-            if (loading)
-              return (
-                <Container>
-                  <FieldsContainer>Lade...</FieldsContainer>
-                </Container>
-              )
-            if (error) return `Fehler: ${error.message}`
-
-            const row = get(data, 'erfkritById')
-            let erfolgWerte = get(data, 'allApErfkritWertes.nodes', [])
-            erfolgWerte = sortBy(erfolgWerte, 'sort')
-            erfolgWerte = erfolgWerte.map(el => ({
-              value: el.code,
-              label: el.text,
-            }))
-
-            return (
-              <ErrorBoundary>
-                <Container>
-                  <FormTitle apId={row.apId} title="Erfolgs-Kriterium" />
-                  <Mutation mutation={updateErfkritByIdGql}>
-                    {(updateErfkrit, { data }) => (
-                      <FieldsContainer>
-                        <RadioButtonGroup
-                          key={`${row.id}erfolg`}
-                          label="Beurteilung"
-                          value={row.erfolg}
-                          dataSource={erfolgWerte}
-                          saveToDb={value =>
-                            saveToDb({ row, field: 'erfolg', value, updateErfkrit })
-                          }
-                        />
-                        <TextField
-                          key={`${row.id}kriterien`}
-                          label="Kriterien"
-                          value={row.kriterien}
-                          type="text"
-                          multiLine
-                          saveToDb={value =>
-                            saveToDb({
-                              row,
-                              field: 'kriterien',
-                              value,
-                              updateErfkrit,
-                            })
-                          }
-                        />
-                      </FieldsContainer>
-                    )}
-                  </Mutation>
-                </Container>
-              </ErrorBoundary>
-            )
-          }}
-        </Query>
+        <ErrorBoundary>
+          <Container>
+            <FormTitle apId={row.apId} title="Erfolgs-Kriterium" />
+            <Mutation mutation={updateErfkritByIdGql}>
+              {(updateErfkrit, { data }) => (
+                <FieldsContainer>
+                  <RadioButtonGroup
+                    key={`${row.id}erfolg`}
+                    label="Beurteilung"
+                    value={row.erfolg}
+                    dataSource={erfolgWerte}
+                    saveToDb={value =>
+                      saveToDb({ row, field: 'erfolg', value, updateErfkrit })
+                    }
+                  />
+                  <TextField
+                    key={`${row.id}kriterien`}
+                    label="Kriterien"
+                    value={row.kriterien}
+                    type="text"
+                    multiLine
+                    saveToDb={value =>
+                      saveToDb({
+                        row,
+                        field: 'kriterien',
+                        value,
+                        updateErfkrit,
+                      })
+                    }
+                  />
+                </FieldsContainer>
+              )}
+            </Mutation>
+          </Container>
+        </ErrorBoundary>
       )
     }}
   </Query>
