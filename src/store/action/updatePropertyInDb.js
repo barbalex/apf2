@@ -1,10 +1,12 @@
 // @flow
+/*
 import axios from 'axios'
 import objectValues from 'lodash/values'
 import clone from 'lodash/clone'
 import { toJS } from 'mobx'
 
 import tables from '../../modules/tables'
+*/
 
 export default async (
   store: Object,
@@ -12,6 +14,7 @@ export default async (
   key: String,
   valuePassed: String | Number
 ): any => {
+  /*
   const { row, valid } = tree.activeDataset
   let value = valuePassed
   let table = tree.activeDataset.table
@@ -62,14 +65,6 @@ export default async (
   if (combinedValidationMessages.length === 0) {
     const oldValue = row[key]
     row[key] = value
-    const newActiveNodeArray = clone(toJS(tree.activeNodeArray))
-    /**
-     * wert can contain characters such as /, &, %, ;
-     * this causes problems when passed as param
-     * so pass it as payload
-     * put keep url/route signature in the time being
-     * because of old application
-     */
     const url = `/${table}?${idField}=eq.${tabelleId}`
     try {
       await axios.patch(url, { [key]: value })
@@ -78,13 +73,6 @@ export default async (
       row[key] = oldValue
       store.listError(error)
     }
-    // if for a beobZugeordnet tpop_id is set, url needs to change
-    // namely: pop_id and tpop_id
-    if (table === 'beob' && key === 'tpop_id' && value) {
-      const tpop = store.table.tpop.get(value)
-      newActiveNodeArray[5] = tpop.pop_id
-      newActiveNodeArray[7] = value
-      tree.setActiveNodeArray(newActiveNodeArray)
-    }
   }
+  */
 }

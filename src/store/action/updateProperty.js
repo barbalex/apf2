@@ -6,6 +6,7 @@ export default (
   key: String,
   valuePassed: String | Number
 ): void => {
+  /*
   const { table, row } = tree.activeDataset
   let value = valuePassed
   // ensure primary data exists
@@ -18,4 +19,5 @@ export default (
     )
   }
   row[key] = value
+  */
 }
