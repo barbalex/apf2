@@ -197,7 +197,7 @@ const Daten = ({
         exporte: <Exporte tree={tree} dimensions={dimensions} treeName={treeName} />,
         qk: <Qk tree={tree} treeName={treeName} apId={apId} />,
         beobNichtZuzuordnen: <Beobzuordnung dimensions={dimensions} treeName={treeName} />,
-        beobzuordnung: <Beobzuordnung dimensions={dimensions} treeName={treeName} />,
+        beobNichtBeurteilt: <Beobzuordnung dimensions={dimensions} treeName={treeName} />,
         beobZugeordnet: <Beobzuordnung dimensions={dimensions} treeName={treeName} />,
       }
       let key
@@ -220,7 +220,7 @@ const Daten = ({
         activeNodeArray.length > 5 &&
         activeNodeArray[4] === 'nicht-beurteilte-Beobachtungen'
       ) {
-        key = 'beobzuordnung'
+        key = 'beobNichtBeurteilt'
       } else if (
         activeNodeArray.length > 9 &&
         activeNodeArray[6] === 'Teil-Populationen' &&
