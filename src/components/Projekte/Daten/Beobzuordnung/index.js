@@ -143,6 +143,20 @@ const Beobzuordnung = ({
       if (error) return `Fehler: ${error.message}`
 
       const row = get(data, 'beobById')
+      const tpop = get(row, 'aeEigenschaftenByArtId.apByArtId.popsByApId.tpopsByPopId')
+      let tpopLabel
+      if (tpop) {
+        const dX = Math.abs(tpop.x - row.x)
+        const dY = Math.abs(tpop.y - row.y)
+        const distance = Math.round((dX ** 2 + dY ** 2) ** 0.5).toLocaleString(
+          'de-ch'
+        )
+        // build label
+        const tpopStatus = get(tpop, 'popStatusWerteByStatus.text', 'ohne Status')
+        const popNr = get(tpop, 'popByPopId.nr', '(keine Nr)')
+        const tpopNr = tpop.nr || '(keine Nr)'
+        tpopLabel = `${distance}m: ${popNr}/${tpopNr} (${tpopStatus})`
+      }
 
       return (
         <ErrorBoundary>
@@ -211,7 +225,7 @@ const Beobzuordnung = ({
                             ? 'Einer anderen Teilpopulation zuordnen'
                             : 'Einer Teilpopulation zuordnen'
                         }
-                        value=""
+                        value={tpop ? tpopLabel : ''}
                         objects={getTpopZuordnenSource(row)}
                         saveToDb={async value => {
                           console.log('Beobzuordnung:', {value,id})
