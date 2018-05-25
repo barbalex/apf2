@@ -173,7 +173,7 @@ const Daten = ({
         }
       }
       const formObject = {
-        projekt: <Projekt dimensions={dimensions} treeName={treeName} />,
+        projekt: <Projekt dimensions={dimensions} id={activeNodeArray[1]} />,
         apberuebersicht: <Apberuebersicht dimensions={dimensions} treeName={treeName} />,
         ap: <Ap dimensions={dimensions} treeName={treeName} />,
         assozart: <Assozart dimensions={dimensions} treeName={treeName} />,

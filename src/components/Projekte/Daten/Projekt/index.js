@@ -9,8 +9,7 @@ import withHandlers from 'recompose/withHandlers'
 import TextField from '../../../shared/TextField'
 import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
-import data1Gql from './data1.graphql'
-import data2Gql from './data2.graphql'
+import dataGql from './data.graphql'
 import updateProjektByIdGql from './updateProjektById.graphql'
 
 const Container = styled.div`
@@ -49,53 +48,44 @@ const enhance = compose(
 
 const Projekt = ({
   saveToDb,
-  treeName
+  id
 }: {
   saveToDb: () => void,
-  treeName: String
+  id: String
 }) => (
-  <Query query={data1Gql} >
+  <Query query={dataGql} variables={{ id }}>
     {({ loading, error, data }) => {
+      if (loading)
+        return (
+          <Container>
+            <FieldsContainer>Lade...</FieldsContainer>
+          </Container>
+        )
       if (error) return `Fehler: ${error.message}`
-      const id = get(data, `${treeName}.activeNodeArray[1]`)
+
+      const row = get(data, 'projektById')
 
       return (
-        <Query query={data2Gql} variables={{ id }}>
-          {({ loading, error, data }) => {
-            if (loading)
-              return (
-                <Container>
-                  <FieldsContainer>Lade...</FieldsContainer>
-                </Container>
-              )
-            if (error) return `Fehler: ${error.message}`
-
-            const row = get(data, 'projektById')
-
-            return (
-              <ErrorBoundary>
-                <Container>
-                  <FormTitle title="Projekt" />
-                  <Mutation mutation={updateProjektByIdGql}>
-                    {(updateProjekt, { data }) => (
-                      <FieldsContainer>
-                        <TextField
-                          key={`${row.id}name`}
-                          label="Name"
-                          value={row.name}
-                          type="text"
-                          saveToDb={value =>
-                            saveToDb({ row, field: 'name', value, updateProjekt })
-                          }
-                        />
-                      </FieldsContainer>
-                    )}
-                  </Mutation>
-                </Container>
-              </ErrorBoundary>
-            )
-          }}
-        </Query>
+        <ErrorBoundary>
+          <Container>
+            <FormTitle title="Projekt" />
+            <Mutation mutation={updateProjektByIdGql}>
+              {(updateProjekt, { data }) => (
+                <FieldsContainer>
+                  <TextField
+                    key={`${row.id}name`}
+                    label="Name"
+                    value={row.name}
+                    type="text"
+                    saveToDb={value =>
+                      saveToDb({ row, field: 'name', value, updateProjekt })
+                    }
+                  />
+                </FieldsContainer>
+              )}
+            </Mutation>
+          </Container>
+        </ErrorBoundary>
       )
     }}
   </Query>

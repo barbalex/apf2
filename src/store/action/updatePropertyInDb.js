@@ -62,25 +62,7 @@ export default async (
   if (combinedValidationMessages.length === 0) {
     const oldValue = row[key]
     const artWasChanged = table === 'ap' && key === 'id'
-    if (artWasChanged) {
-      // if this was ap, then the map key has changed!
-      // need to delete map value and create new one
-      // then set activeDataset to this value
-      const rowCloned = clone(row)
-      rowCloned[key] = value
-      store.table.ap.delete(oldValue)
-      store.table.ap.set(value, rowCloned)
-      // correct url
-      // activeDataset will then be updated
-      const newActiveNodeArray = clone(toJS(tree.activeNodeArray))
-      newActiveNodeArray.pop()
-      newActiveNodeArray.push(value)
-      tree.setActiveNodeArray(newActiveNodeArray)
-    } else {
-      // need to set row[key] for select fields, checkboxes, radios...
-      // console.log('updatePropertyInDb: setting row[key] of store to:', value)
-      row[key] = value
-    }
+    row[key] = value
     const newActiveNodeArray = clone(toJS(tree.activeNodeArray))
     /**
      * wert can contain characters such as /, &, %, ;

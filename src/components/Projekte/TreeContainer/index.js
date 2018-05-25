@@ -455,7 +455,6 @@ const TreeContainer = ({
   copying: Object,
   refetch: () => void
 }) => {
-  console.log('TreeContainer:', {activeNodes})
   const deleteDatasetModalIsVisible = !!store.datasetToDelete.id
   const openNodes = get(data, `${treeName}.openNodes`)
   const tree = get(data, treeName)
