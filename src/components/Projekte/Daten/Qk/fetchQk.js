@@ -9,13 +9,13 @@ const fetchQk = async ({
   store,
   berichtjahr,
   apId,
+  addMessages
 }: {
   store: Object,
-  berichtjahr: number,
-  apId: number,
+  berichtjahr: Number,
+  apId: String,
+  addMessages: () => void
 }) => {
-  const { addMessages, setLoading } = store.qk
-  setLoading(true)
   const qualityControls = [
     // 1. Art
 
@@ -316,7 +316,6 @@ const fetchQk = async ({
     resultTpopKoord = await axios.get(`/v_tpopkoord?ap_id=eq.${apId}`)
   } catch (error) {
     store.listError(error)
-    setLoading(false)
   }
   let tpops = resultTpopKoord? resultTpopKoord.data : []
   let resultKtZh: { data: Object }
@@ -325,7 +324,6 @@ const fetchQk = async ({
     resultKtZh = await axios.get('/ktZh.json', { baseURL })
   } catch (error) {
     store.listError(error)
-    setLoading(false)
   }
   const ktZh = resultKtZh.data
   if (ktZh) {
@@ -368,7 +366,7 @@ const fetchQk = async ({
           ],
         }
       })
-      store.qk.addMessages(messages)
+      addMessages(messages)
       nrOfMessages += tpops.length
     }
   }
@@ -381,9 +379,8 @@ const fetchQk = async ({
         text: [],
       },
     ]
-    store.qk.addMessages(messages)
+    addMessages(messages)
   }
-  setLoading(false)
   try {
     await axios.post('/rpc/correct_vornach_beginnap_stati', {
       apid: apId,

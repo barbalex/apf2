@@ -1,6 +1,5 @@
 // @flow
 import React from 'react'
-import { toJS } from 'mobx'
 import { observer, inject } from 'mobx-react'
 import Input from '@material-ui/core/Input'
 import InputLabel from '@material-ui/core/InputLabel'
@@ -62,8 +61,14 @@ const enhance = compose(
   inject('store'),
   withState('berichtjahr', 'setBerichtjahr', standardQkYear()),
   withState('filter', 'setFilter', ''),
+  withState('messages', 'setMessages', []),
   withHandlers({
-    onChangeBerichtjahr: ({ setBerichtjahr, store, tree, apId }) => event => {
+    addMessages: ({ messages, setMessages }) => newMessages => {
+      setMessages([...messages, newMessages])
+    }
+  }),
+  withHandlers({
+    onChangeBerichtjahr: ({ setBerichtjahr, store, tree, apId, addMessages }) => event => {
       const { value } = event.target
       setBerichtjahr(value)
       if (
@@ -71,16 +76,16 @@ const enhance = compose(
         (!isNaN(value) && value > 1000)
       ) {
         // call fetchQk and pass it berichtjahr and apId
-        fetchQk({ store, berichtjahr: value, apId })
+        fetchQk({ store, berichtjahr: value, apId, addMessages })
       }
     },
     onChangeFilter: ({ setFilter }) => event =>
       setFilter(event.target.value),
   }),
   withLifecycle({
-    onDidMount({ berichtjahr, setBerichtjahr, store, tree, apId }) {
+    onDidMount({ berichtjahr, setBerichtjahr, store, tree, apId, addMessages }) {
       // call fetchQk and pass it berichtjahr and apId
-      fetchQk({ store, berichtjahr, apId })
+      fetchQk({ store, berichtjahr, apId, addMessages })
     },
   }),
   observer
@@ -95,6 +100,8 @@ const Qk = ({
   onChangeFilter,
   filter,
   treeName,
+  messages,
+  setMessages
 }: {
   store: Object,
   tree: Object,
@@ -104,6 +111,8 @@ const Qk = ({
   onChangeFilter: () => void,
   filter: String,
   treeName: String,
+  messages: Array<Object>,
+  setMessages: () => void
 }) =>
 <Query query={data1Gql}>
   {({ loading, error, data: data1 }) => {
@@ -135,7 +144,7 @@ const Qk = ({
               }))
             })
 
-            const messageArrays = [...gqlMessages, ...toJS(store.qk.messages)]
+            const messageArrays = [...gqlMessages, ...messages]
             const messageArraysFiltered = filter
               ? messageArrays.filter(messageArray => {
                   if (

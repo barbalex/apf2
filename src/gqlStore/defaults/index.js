@@ -81,9 +81,6 @@ export default async (idb) => {
       withNextLevel: false,
       __typename: 'Copying'
     },
-    qk: {
-      messages: [],
-    }
   }
   return defaults
 }
