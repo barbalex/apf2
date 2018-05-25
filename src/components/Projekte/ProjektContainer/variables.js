@@ -86,7 +86,6 @@ export default (openNodes: Array<Array<mixed>>): Object => {
       ))
       .filter(v => v !== null)
   )
-
   const variables = {
     projekt,
     isProjekt: projekt.length > 0,
@@ -101,6 +100,6 @@ export default (openNodes: Array<Array<mixed>>): Object => {
     tpopkontr,
     isTpopkontr: tpopkontr.length > 0,
   }
-  console.log('variables:', variables)
+
   return variables
 }
