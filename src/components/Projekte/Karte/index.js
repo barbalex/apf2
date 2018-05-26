@@ -125,13 +125,15 @@ const Karte = ({
   onMouseMove,
   data,
   client,
+  refetchTree
 }: {
   store: Object,
   tree: Object,
   activeNodes: Array<Object>,
   onMouseMove: () => void,
   data: Object,
-  client: Object
+  client: Object,
+  refetchTree: () => void
 }) => {
     const { activeBaseLayer, activeApfloraLayers, apfloraLayers } = store.map
     const { idOfTpopBeingLocalized } = store.map.tpop
@@ -146,7 +148,7 @@ const Karte = ({
       MapFilter: () => null,
       Pop: () => <Pop tree={tree} activeNodes={activeNodes} />,
       Tpop: () => <Tpop tree={tree} activeNodes={activeNodes} clustered={clustered} />,
-      BeobNichtBeurteilt: () => <BeobNichtBeurteilt tree={tree} activeNodes={activeNodes} clustered={clustered} />,
+      BeobNichtBeurteilt: () => <BeobNichtBeurteilt tree={tree} activeNodes={activeNodes} clustered={clustered} refetchTree={refetchTree} />,
       BeobNichtZuzuordnen: () => <BeobNichtZuzuordnen tree={tree} activeNodes={activeNodes} clustered={clustered} />,
       BeobZugeordnet: () => <BeobZugeordnet tree={tree} activeNodes={activeNodes} clustered={clustered} />,
       BeobZugeordnetAssignPolylines: () => <BeobZugeordnetAssignPolylines tree={tree} activeNodes={activeNodes} />

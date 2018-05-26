@@ -148,6 +148,7 @@ const ProjekteContainer = ({
                             client={client}
                             activeNodes={activeNodes}
                             key={tabs.toString()}
+                            refetchTree={refetch}
                             popHighlighted={store.map.pop.highlightedIds.join()}
                             tpopHighlighted={store.map.tpop.highlightedIds.join()}
                             beobNichtBeurteiltHighlighted={store.map.beobNichtBeurteilt.highlightedIds.join()}

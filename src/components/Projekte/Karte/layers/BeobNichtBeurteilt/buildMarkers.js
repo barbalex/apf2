@@ -11,14 +11,29 @@ import beobIconHighlighted from '../../../../../etc/beobHighlighted.png'
 import getNearestTpopId from '../../../../../modules/getNearestTpopId'
 import appBaseUrl from '../../../../../modules/appBaseUrl'
 import epsg2056to4326 from '../../../../../modules/epsg2056to4326'
+import setTreeKeyGql from './setTreeKey.graphql'
+import updateBeobByIdGql from './updateBeobById.graphql'
 
 const StyledH3 = styled.h3`
   margin: 7px 0;
 `
 
-export default ({ beobs, store }:{ beobs: Array<Object>, store: Object }): Array<Object> => {
-  const { tree, map, table } = store
-  const { activeNodes } = tree
+export default ({
+  beobs,
+  tree,
+  activeNodes,
+  client,
+  store,
+  refetchTree
+}:{
+  beobs: Array<Object>,
+  tree: Object,
+  activeNodes: Array<Object>,
+  client: Object,
+  store: Object,
+  refetchTree: () => void
+}): Array<Object> => {
+  const { map, table } = store
   const { ap, projekt } = activeNodes
   const { highlightedIds } = map.beobNichtBeurteilt
 
@@ -61,7 +76,7 @@ export default ({ beobs, store }:{ beobs: Array<Object>, store: Object }): Array
           </Fragment>
         )
       )
-      .on('moveend', event => {
+      .on('moveend', async event => {
         /**
          * assign to nearest tpop
          * point url to moved beob
@@ -81,9 +96,22 @@ export default ({ beobs, store }:{ beobs: Array<Object>, store: Object }): Array
           'Beobachtungen',
           beob.id,
         ]
-        tree.setActiveNodeArray(newActiveNodeArray)
-        // TODO
-        //insertBeobzuordnung(tree, beob, 'tpop_id', nearestTpopId)
+        await client.mutate({
+          mutation: setTreeKeyGql,
+          variables: {
+            value: newActiveNodeArray,
+            tree: tree.name,
+            key: 'activeNodeArray'
+          }
+        })
+        await client.mutate({
+          mutation: updateBeobByIdGql,
+          variables: {
+            id: beob.id,
+            tpopId: nearestTpopId,
+          }
+        })
+        refetchTree()
       })
   })
 }
