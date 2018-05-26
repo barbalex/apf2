@@ -134,7 +134,6 @@ const ProjekteContainer = ({
                       tabs.includes('karte') &&
                       <ReflexElement
                         className="karte"
-                        //style={{ overflow: 'hidden' }}
                       >
                         <KarteContainer>
                           <Karte
