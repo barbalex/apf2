@@ -16,24 +16,6 @@ FROM
     ON apflora.pop.id = apflora.tpop.pop_id;
 
 DROP VIEW IF EXISTS apflora.v_tpopkoord CASCADE;
-CREATE OR REPLACE VIEW apflora.v_tpopkoord AS
-SELECT DISTINCT
-  apflora.pop.ap_id,
-  apflora.pop.id as pop_id,
-  apflora.pop.nr as pop_nr,
-  apflora.tpop.id,
-  apflora.tpop.nr,
-  apflora.tpop.x,
-  apflora.tpop.y,
-  apflora.tpop.apber_relevant
-FROM
-  apflora.pop
-  INNER JOIN
-    apflora.tpop
-    ON apflora.pop.id = apflora.tpop.pop_id
-WHERE
-  apflora.tpop.x Is Not Null
-  AND apflora.tpop.y Is Not Null;
 
 DROP VIEW IF EXISTS apflora.v_pop_berundmassnjahre CASCADE;
 CREATE OR REPLACE VIEW apflora.v_pop_berundmassnjahre AS
