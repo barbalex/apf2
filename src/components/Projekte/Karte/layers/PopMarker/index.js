@@ -10,36 +10,39 @@ import PopMarkerCluster from './Cluster'
 
 const enhance = compose(inject('store'))
 
-const PmcComponent = ({ store, tree, activeNodes }:{ store: Object, tree: Object, activeNodes: Array<Object> }) => {
-  const { nodeLabelFilter } = tree
-  const { ap, projekt } = activeNodes
-
-  return (
-    <Query query={dataGql}
-      variables={{
-        apId: ap,
-        projId: projekt,
-      }}
-    >
-      {({ loading, error, data }) => {
-        if (error) return `Fehler: ${error.message}`
-
-        const popFilterString = nodeLabelFilter.get('pop')
-        const pops = get(data, 'projektById.apsByProjId.nodes[0].popsByApId.nodes', [])
-          // filter them by nodeLabelFilter
-          .filter(p => {
-            if (!popFilterString) return true
-            return `${p.nr || '(keine Nr)'}: ${p.name || '(kein Name)'}`.toLowerCase().includes(popFilterString.toLowerCase())
-          })
-        const popMarkers = buildMarkers({ pops, store })
-        console.log('PopMarker:', { tree, activeNodes, nodeLabelFilter, ap, projekt, popMarkers })
-
-        return <PopMarkerCluster markers={popMarkers} />
-      
+const PmcComponent = ({
+  store,
+  tree,
+  activeNodes
+}:{
+  store: Object,
+  tree: Object,
+  activeNodes: Array<Object>
+}) =>
+  <Query query={dataGql}
+    variables={{
+      apId: activeNodes.ap,
+      projId: activeNodes.projekt,
     }}
-  </Query>
-  )
-}
+  >
+    {({ loading, error, data }) => {
+      if (error) return `Fehler: ${error.message}`
+
+      const popFilterString = get(tree, 'nodeLabelFilter.pop')
+      const pops = get(data, 'projektById.apsByProjId.nodes[0].popsByApId.nodes', [])
+        // filter them by nodeLabelFilter
+        .filter(p => {
+          if (!popFilterString) return true
+          return `${p.nr || '(keine Nr)'}: ${p.name || '(kein Name)'}`
+            .toLowerCase()
+            .includes(popFilterString.toLowerCase())
+        })
+      const popMarkers = buildMarkers({ pops, store, activeNodes })
+
+      return <PopMarkerCluster markers={popMarkers} />
+    
+  }}
+</Query>
 
 
 export default enhance(PmcComponent)

@@ -15,9 +15,18 @@ const StyledH3 = styled.h3`
   margin: 7px 0;
 `
 
-export default ({ beobs, store }:{ beobs: Array<Object>, store: Object }): Array<Object> => {
-  const { tree, map } = store
-  const { activeNodes } = tree
+export default ({
+  beobs,
+  tree,
+  activeNodes,
+  store,
+}:{
+  beobs: Array<Object>,
+  tree: Object,
+  activeNodes: Array<Object>,
+  store: Object,
+}): Array<Object> => {
+  const { map } = store
   const { ap, projekt } = activeNodes
   const { highlightedIds } = map.beobNichtZuzuordnen
 
@@ -29,7 +38,10 @@ export default ({ beobs, store }:{ beobs: Array<Object>, store: Object }): Array
       iconSize: [24, 24],
       className: isHighlighted ? 'beobIconHighlighted' : 'beobIcon',
     })
-    const label = `${beob.datum ? format(beob.datum, 'YYYY.MM.DD') : '(kein Datum)'}: ${beob.autor || '(kein Autor)'} (${get(beob, 'beobQuelleWerteByQuelleId.name', '')})`
+    const datum = beob.datum ? format(beob.datum, 'YYYY.MM.DD') : '(kein Datum)'
+    const autor = beob.autor || '(kein Autor)'
+    const quelle = get(beob, 'beobQuelleWerteByQuelleId.name', '')
+    const label = `${datum}: ${autor} (${quelle})`
     return window.L.marker(latLng, {
       title: label,
       icon,

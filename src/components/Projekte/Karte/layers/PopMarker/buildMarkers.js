@@ -4,6 +4,7 @@ import ReactDOMServer from 'react-dom/server'
 import 'leaflet'
 import '../../../../../../node_modules/leaflet.markercluster/dist/leaflet.markercluster-src.js'
 import some from 'lodash/some'
+import styled from 'styled-components'
 
 /**
  * TODO: the svg path on production contains "Projekte/1/" !!??
@@ -11,10 +12,23 @@ import some from 'lodash/some'
  */
 import popIcon from '../../../../../etc/pop.png'
 import popIconHighlighted from '../../../../../etc/popHighlighted.png'
-import Popup from './Popup'
 import epsg2056to4326 from '../../../../../modules/epsg2056to4326'
+import appBaseUrl from '../../../../../modules/appBaseUrl'
 
-export default ({ pops, store }:{ pops:Array<Object>, store: Object}): Object => {
+const StyledH3 = styled.h3`
+  margin: 7px 0;
+`
+
+export default ({
+  pops,
+  activeNodes,
+  store
+}:{
+  pops:Array<Object>,
+  activeNodes:Array<Object>,
+  store: Object
+}): Object => {
+  const { ap, projekt } = activeNodes
   const { labelUsingNr, highlightedIds } = store.map.pop
   const visible = store.map.activeApfloraLayers.includes('Pop')
   const mcgOptions = {
@@ -65,7 +79,24 @@ export default ({ pops, store }:{ pops:Array<Object>, store: Object}): Object =>
       })
         .bindPopup(
           ReactDOMServer.renderToStaticMarkup(
-            <Popup store={store} pop={p} />
+            <div>
+              <div>Population</div>
+              <StyledH3>
+                {`${p.nr ? `${p.nr}: ` : '(keine Nummer): '}${
+                  p.name ? p.name : '(kein Name)'
+                }`}
+              </StyledH3>
+              <div>
+                {`Koordinaten: ${p.x.toLocaleString('de-ch')} / ${p.y.toLocaleString('de-ch')}`}
+              </div>
+              <a
+                href={`${appBaseUrl}/Projekte/${projekt}/Aktionspläne/${ap}/Populationen/${p.id}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Formular in neuem Tab öffnen
+              </a>
+            </div>
           )
         )
         .bindTooltip(title, tooltipOptions)

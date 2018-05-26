@@ -14,39 +14,47 @@ import MarkerCluster from './MarkerCluster'
 
 const enhance = compose(inject('store'))
 
-const BeobNichtZuzuordnenMarker = ({ store, clustered } : { store: Object, clustered: Boolean }) => {
-  const { tree } = store
-  const { activeNodes, nodeLabelFilter } = tree
-  const { ap, projekt } = activeNodes
-
-  return (
-    <Query query={dataGql}
-      variables={{
-        apId: ap,
-        projId: projekt,
-      }}
-    >
-      {({ loading, error, data }) => {
-        if (error) return `Fehler: ${error.message}`
-
-        const beobNichtZuzuordnenFilterString = nodeLabelFilter.get('beobNichtZuzuordnen')
-        const aparts = get(data, 'projektById.apsByProjId.nodes[0].apartsByApId.nodes', [])
-        const beobs = flatten(aparts.map(a => get(a, 'aeEigenschaftenByArtId.beobsByArtId.nodes', [])))
-          // filter them by nodeLabelFilter
-          .filter(el => {
-            if (!beobNichtZuzuordnenFilterString) return true
-            return `${
-              el.datum ? format(el.datum, 'YYYY.MM.DD') : '(kein Datum)'
-            }: ${el.autor || '(kein Autor)'} (${get(el, 'beobQuelleWerteByQuelleId.name', '')})`.toLowerCase().includes(beobNichtZuzuordnenFilterString.toLowerCase())
-          })
-
-        if (clustered) return <MarkerCluster markers={buildMarkersClustered({ beobs, store })} />
-        return <Marker markers={buildMarkers({ beobs, store })} />
-      
+const BeobNichtZuzuordnenMarker = ({
+  store,
+  tree,
+  activeNodes,
+  clustered
+} : {
+  store: Object,
+  tree: Object,
+  activeNodes: Array<Object>,
+  clustered: Boolean
+}) =>
+  <Query query={dataGql}
+    variables={{
+      apId: activeNodes.ap,
+      projId: activeNodes.projekt,
     }}
-  </Query>
-  )
-}
+  >
+    {({ loading, error, data }) => {
+      if (error) return `Fehler: ${error.message}`
+
+      const beobNichtZuzuordnenFilterString = get(tree, 'nodeLabelFilter.beobNichtZuzuordnen')
+      const aparts = get(data, 'projektById.apsByProjId.nodes[0].apartsByApId.nodes', [])
+      const beobs = flatten(
+        aparts.map(a => get(a, 'aeEigenschaftenByArtId.beobsByArtId.nodes', []))
+      )
+        // filter them by nodeLabelFilter
+        .filter(el => {
+          if (!beobNichtZuzuordnenFilterString) return true
+          const datum = el.datum ? format(el.datum, 'YYYY.MM.DD') : '(kein Datum)'
+          const autor = el.autor || '(kein Autor)'
+          const quelle = get(el, 'beobQuelleWerteByQuelleId.name', '')
+          return `${datum}: ${autor} (${quelle})`
+            .toLowerCase()
+            .includes(beobNichtZuzuordnenFilterString.toLowerCase())
+        })
+
+      if (clustered) return <MarkerCluster markers={buildMarkersClustered({ beobs, activeNodes, store })} />
+      return <Marker markers={buildMarkers({ beobs, tree, activeNodes, store })} />
+    
+  }}
+</Query>
 
 
 export default enhance(BeobNichtZuzuordnenMarker)
