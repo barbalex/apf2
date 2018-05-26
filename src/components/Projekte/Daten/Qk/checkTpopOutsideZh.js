@@ -7,7 +7,8 @@ import flatten from 'lodash/flatten'
 import isPointInsidePolygon from './isPointInsidePolygon'
 import staticFilesBaseUrl from '../../../../modules/staticFilesBaseUrl'
 
-export default async ({ store, data, addMessages, setOutsideZhChecked }) => {
+export default async ({ store, data, addMessages, setOutsideZhChecked, checkingOutsideZh }) => {
+  if (checkingOutsideZh) return
   console.log('checkTpopOutsideZh:', {data})
   const pops = get(data, 'projektById.apsByProjId.nodes[0].popsByApId.nodes', [])
   console.log('checkTpopOutsideZh:', {pops})
@@ -25,7 +26,9 @@ export default async ({ store, data, addMessages, setOutsideZhChecked }) => {
     return setOutsideZhChecked(true)
   }
   const ktZh = resultKtZh.data
+  console.log('checkTpopOutsideZh:', { resultKtZh })
   if (ktZh) {
+    console.log('checkTpopOutsideZh:', { ktZh })
     // kontrolliere die Relevanz ausserkantonaler Tpop
     const tpopsOutsideZh = tpops.filter(
       tpop =>
@@ -36,6 +39,7 @@ export default async ({ store, data, addMessages, setOutsideZhChecked }) => {
         isFinite(tpop.y) &&
         !isPointInsidePolygon(ktZh, tpop.x, tpop.y)
     )
+    console.log('checkTpopOutsideZh:', { tpopsOutsideZh })
     if (tpopsOutsideZh.length > 0) {
       const messages = tpopsOutsideZh.map(tpop => ({
         hw: `Teilpopulation ist als 'Für AP-Bericht relevant' markiert, liegt aber ausserhalb des Kt. Zürich und sollte daher nicht relevant sein:`,
@@ -56,10 +60,11 @@ export default async ({ store, data, addMessages, setOutsideZhChecked }) => {
           `Teil-Population: ${get(tpop, 'nr', '(keine Nr')}, ${get(tpop, 'flurname', '(kein Flurname')}`,
         ],
       }))
-      console.log('checkTpopOutsideZh:', {messagesOutsidZh: messages})
+      console.log('checkTpopOutsideZh:', { messages, tpopsOutsideZh})
       addMessages(messages)
       return setOutsideZhChecked(true) 
     }
   }
+  console.log('checkTpopOutsideZh: no ktZH')
   setOutsideZhChecked(true)
 }

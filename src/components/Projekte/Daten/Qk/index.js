@@ -64,6 +64,7 @@ const enhance = compose(
   withState('filter', 'setFilter', ''),
   withState('messages', 'setMessages', []),
   withState('outsideZhChecked', 'setOutsideZhChecked', false),
+  withState('checkingOutsideZh', 'setCheckingOutsideZh', false),
   withHandlers({
     addMessages: ({ messages, setMessages }) => newMessages => {
       setMessages([...messages, newMessages])
@@ -106,7 +107,9 @@ const Qk = ({
   addMessages,
   activeNodes,
   outsideZhChecked,
-  setOutsideZhChecked
+  setOutsideZhChecked,
+  checkingOutsideZh,
+  setCheckingOutsideZh
 }: {
   store: Object,
   tree: Object,
@@ -120,7 +123,9 @@ const Qk = ({
   addMessages: () => void,
   activeNodes: Array<Object>,
   outsideZhChecked: Boolean,
-  setOutsideZhChecked: () => void
+  setOutsideZhChecked: () => void,
+  checkingOutsideZh: Boolean,
+  setCheckingOutsideZh: () => void
 }) =>
 <Query query={data1Gql}>
   {({ loading, error, data: data1 }) => {
@@ -152,12 +157,17 @@ const Qk = ({
               }))
             })
 
-            outsideZhChecked && checkTpopOutsideZh({
+            console.log('QK:', { outsideZhChecked, checkingOutsideZh })
+            !outsideZhChecked && checkTpopOutsideZh({
               store,
               data,
               addMessages,
-              setOutsideZhChecked
+              setOutsideZhChecked,
+              checkingOutsideZh
             })
+            setCheckingOutsideZh(true)
+
+            console.log('QK:', { messages, gqlMessages })
 
             const messageArrays = [...gqlMessages, ...messages]
             const messageArraysFiltered = filter
