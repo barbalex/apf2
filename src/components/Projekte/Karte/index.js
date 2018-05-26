@@ -150,7 +150,7 @@ const Karte = ({
       Tpop: () => <Tpop tree={tree} activeNodes={activeNodes} clustered={clustered} />,
       BeobNichtBeurteilt: () => <BeobNichtBeurteilt tree={tree} activeNodes={activeNodes} clustered={clustered} refetchTree={refetchTree} />,
       BeobNichtZuzuordnen: () => <BeobNichtZuzuordnen tree={tree} activeNodes={activeNodes} clustered={clustered} />,
-      BeobZugeordnet: () => <BeobZugeordnet tree={tree} activeNodes={activeNodes} clustered={clustered} />,
+      BeobZugeordnet: () => <BeobZugeordnet tree={tree} activeNodes={activeNodes} clustered={clustered} refetchTree={refetchTree} />,
       BeobZugeordnetAssignPolylines: () => <BeobZugeordnetAssignPolylines tree={tree} activeNodes={activeNodes} />
     }
     const OverlayComponents = {

@@ -14,39 +14,44 @@ import MarkerCluster from './MarkerCluster'
 
 const enhance = compose(inject('store'))
 
-const BeobZugeordnetMarker = ({ store, clustered } : { store: Object, clustered: Boolean }) => {
-  const { tree } = store
-  const { activeNodes, nodeLabelFilter } = tree
-  const { ap, projekt } = activeNodes
-
-  return (
-    <Query query={dataGql}
-      variables={{
-        apId: ap,
-        projId: projekt
-      }}
-    >
-      {({ loading, error, data }) => {
-        if (error) return `Fehler: ${error.message}`
-
-        const beobZugeordnetFilterString = nodeLabelFilter.get('beobZugeordnet')
-        const aparts = get(data, 'projektById.apsByProjId.nodes[0].apartsByApId.nodes', [])
-        const beobs = flatten(aparts.map(a => get(a, 'aeEigenschaftenByArtId.beobsByArtId.nodes', [])))
-          // filter them by nodeLabelFilter
-          .filter(el => {
-            if (!beobZugeordnetFilterString) return true
-            return `${
-              el.datum ? format(el.datum, 'YYYY.MM.DD') : '(kein Datum)'
-            }: ${el.autor || '(kein Autor)'} (${get(el, 'beobQuelleWerteByQuelleId.name', '')})`.toLowerCase().includes(beobZugeordnetFilterString.toLowerCase())
-          })
-
-        if (clustered) return <MarkerCluster markers={buildMarkersClustered({ beobs, store })} />
-        return <Marker markers={buildMarkers({ beobs, store })} />
-      
+const BeobZugeordnetMarker = ({
+  store,
+  tree,
+  activeNodes,
+  clustered,
+  refetchTree
+} : {
+  store: Object,
+  tree: Object,
+  activeNodes: Array<Object>,
+  clustered: Boolean,
+  refetchTree: () => void
+}) =>
+  <Query query={dataGql}
+    variables={{
+      apId: activeNodes.ap,
+      projId: activeNodes.projekt
     }}
-  </Query>
-  )
-}
+  >
+    {({ loading, error, data }) => {
+      if (error) return `Fehler: ${error.message}`
 
+      const beobZugeordnetFilterString = get(tree, 'nodeLabelFilter.beobZugeordnet')
+      const aparts = get(data, 'projektById.apsByProjId.nodes[0].apartsByApId.nodes', [])
+      const beobs = flatten(aparts.map(a => get(a, 'aeEigenschaftenByArtId.beobsByArtId.nodes', [])))
+        // filter them by nodeLabelFilter
+        .filter(el => {
+          if (!beobZugeordnetFilterString) return true
+          const datum = el.datum ? format(el.datum, 'YYYY.MM.DD') : '(kein Datum)'
+          const autor = el.autor || '(kein Autor)'
+          const quelle = get(el, 'beobQuelleWerteByQuelleId.name', '')
+          return `${datum}: ${autor} (${quelle})`.toLowerCase().includes(beobZugeordnetFilterString.toLowerCase())
+        })
+
+      if (clustered) return <MarkerCluster markers={buildMarkersClustered({ beobs, store })} />
+      return <Marker markers={buildMarkers({ beobs, store })} />
+    
+  }}
+</Query>
 
 export default enhance(BeobZugeordnetMarker)

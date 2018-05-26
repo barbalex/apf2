@@ -49,7 +49,7 @@ const BeobNichtBeurteiltMarker = ({
         })
 
       if (clustered) {
-        return <MarkerCluster markers={buildMarkersClustered({ beobs, store })} />
+        return <MarkerCluster markers={buildMarkersClustered({ beobs, activeNodes, store })} />
       }
       const markers = buildMarkers({ beobs, tree, activeNodes, client, store, refetchTree })
       return <Marker markers={markers} />
