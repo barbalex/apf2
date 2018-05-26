@@ -21,6 +21,7 @@ import ErrorBoundary from '../../../shared/ErrorBoundary'
 import data1Gql from './data1.graphql'
 import data2Gql from './data2.graphql'
 import qk from './qk'
+import checkTpopOutsideZh from './checkTpopOutsideZh'
 
 const Container = styled.div`
   height: 100%;
@@ -62,6 +63,7 @@ const enhance = compose(
   withState('berichtjahr', 'setBerichtjahr', standardQkYear()),
   withState('filter', 'setFilter', ''),
   withState('messages', 'setMessages', []),
+  withState('outsideZhChecked', 'setOutsideZhChecked', false),
   withHandlers({
     addMessages: ({ messages, setMessages }) => newMessages => {
       setMessages([...messages, newMessages])
@@ -83,11 +85,10 @@ const enhance = compose(
       setFilter(event.target.value),
   }),
   withLifecycle({
-    /*
     onDidMount({ berichtjahr, setBerichtjahr, store, tree, apId, addMessages, activeNodes }) {
       // call fetchQk and pass it berichtjahr and apId
       fetchQk({ store, berichtjahr, apId, addMessages, activeNodes })
-    },*/
+    },
   }),
   observer
 )
@@ -103,7 +104,9 @@ const Qk = ({
   treeName,
   messages,
   addMessages,
-  activeNodes
+  activeNodes,
+  outsideZhChecked,
+  setOutsideZhChecked
 }: {
   store: Object,
   tree: Object,
@@ -115,7 +118,9 @@ const Qk = ({
   treeName: String,
   messages: Array<Object>,
   addMessages: () => void,
-  activeNodes: Array<Object>
+  activeNodes: Array<Object>,
+  outsideZhChecked: Boolean,
+  setOutsideZhChecked: () => void
 }) =>
 <Query query={data1Gql}>
   {({ loading, error, data: data1 }) => {
@@ -129,7 +134,6 @@ const Qk = ({
           variables={{ apId, projId }}
         >
           {({ loading, error, data }) => {
-            fetchQk({ store, berichtjahr, apId, addMessages, activeNodes, data })
             const qks = qk(berichtjahr).filter(q => !!q.query)
             const gqlMessages = qks
             // only results with data
@@ -146,6 +150,13 @@ const Qk = ({
                 text: [q.text(o)],
                 url: q.url(o)
               }))
+            })
+
+            outsideZhChecked && checkTpopOutsideZh({
+              store,
+              data,
+              addMessages,
+              setOutsideZhChecked
             })
 
             const messageArrays = [...gqlMessages, ...messages]
