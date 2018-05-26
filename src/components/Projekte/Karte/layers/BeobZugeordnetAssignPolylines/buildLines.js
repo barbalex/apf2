@@ -13,9 +13,16 @@ const StyledH3 = styled.h3`
   margin: 7px 0;
 `
 
-export default ({ beobs, store }:{ beobs: Array<Object>, store: Object }): Array<Object> => {
-  const { tree, map } = store
-  const { activeNodes } = tree
+export default ({
+  beobs,
+  activeNodes,
+  store
+}:{
+  beobs: Array<Object>,
+  activeNodes: Array<Object>,
+  store: Object
+}): Array<Object> => {
+  const { map } = store
   const { ap, projekt } = activeNodes
   const { highlightedIds } = map.beobZugeordnet
 
@@ -25,7 +32,10 @@ export default ({ beobs, store }:{ beobs: Array<Object>, store: Object }): Array
     const tpopX = get(beob, 'tpopByTpopId.x')
     const tpopY = get(beob, 'tpopByTpopId.y')
     const tpopLatLng = tpopX && tpopY ? new window.L.LatLng(...epsg2056to4326(tpopX, tpopY)) : beobLatLng
-    const label = `${beob.datum ? format(beob.datum, 'YYYY.MM.DD') : '(kein Datum)'}: ${beob.autor || '(kein Autor)'} (${get(beob, 'beobQuelleWerteByQuelleId.name', '')})`
+    const datum = beob.datum ? format(beob.datum, 'YYYY.MM.DD') : '(kein Datum)'
+    const autor = beob.autor || '(kein Autor)'
+    const quelle = get(beob, 'beobQuelleWerteByQuelleId.name', '')
+    const label = `${datum}: ${autor} (${quelle})`
 
     return window.L.polyline([beobLatLng, tpopLatLng], {
       color: isHighlighted ? 'yellow' : '#FF00FF',

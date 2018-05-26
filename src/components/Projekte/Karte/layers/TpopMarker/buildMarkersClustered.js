@@ -16,9 +16,16 @@ const StyledH3 = styled.h3`
   margin: 7px 0;
 `
 
-export default ({ tpops, store }:{ tpops: Array<Object>, store: Object }): Object => {
-  const { tree, map } = store
-  const { activeNodes } = tree
+export default ({
+  tpops,
+  activeNodes,
+  store,
+}:{
+  tpops: Array<Object>,
+  activeNodes: Array<Object>,
+  store: Object,
+}): Object => {
+  const { map } = store
   const { ap, projekt } = activeNodes
   const { labelUsingNr, highlightedIds } = map.tpop
   

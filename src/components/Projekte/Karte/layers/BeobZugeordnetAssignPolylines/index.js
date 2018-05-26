@@ -12,38 +12,42 @@ import Polylines from './Polylines'
 
 const enhance = compose(inject('store'))
 
-const Lines = ({ store } : { store: Object }) => {
-  const { tree } = store
-  const { activeNodes, nodeLabelFilter } = tree
-  const { ap, projekt } = activeNodes
-
-  return (
-    <Query query={dataGql}
-      variables={{
-        apId: ap,
-        projId: projekt
-      }}
-    >
-      {({ loading, error, data }) => {
-        if (error) return `Fehler: ${error.message}`
-
-        const beobZugeordnetFilterString = nodeLabelFilter.get('beobZugeordnet')
-        const aparts = get(data, 'projektById.apsByProjId.nodes[0].apartsByApId.nodes', [])
-        const beobs = flatten(aparts.map(a => get(a, 'aeEigenschaftenByArtId.beobsByArtId.nodes', [])))
-          // filter them by nodeLabelFilter
-          .filter(el => {
-            if (!beobZugeordnetFilterString) return true
-            return `${
-              el.datum ? format(el.datum, 'YYYY.MM.DD') : '(kein Datum)'
-            }: ${el.autor || '(kein Autor)'} (${get(el, 'beobQuelleWerteByQuelleId.name', '')})`.toLowerCase().includes(beobZugeordnetFilterString.toLowerCase())
-          })
-
-        return <Polylines lines={buildLines({ beobs, store })} />
-      
+const Lines = ({
+  store,
+  tree,
+  activeNodes
+} : {
+  store: Object,
+  tree: Object,
+  activeNodes: Array<Object>
+}) =>
+  <Query query={dataGql}
+    variables={{
+      apId: activeNodes.ap,
+      projId: activeNodes.projekt
     }}
-  </Query>
-  )
-}
+  >
+    {({ loading, error, data }) => {
+      if (error) return `Fehler: ${error.message}`
+
+      const beobZugeordnetFilterString = get(tree, 'nodeLabelFilter.beobZugeordnet')
+      const aparts = get(data, 'projektById.apsByProjId.nodes[0].apartsByApId.nodes', [])
+      const beobs = flatten(aparts.map(a => get(a, 'aeEigenschaftenByArtId.beobsByArtId.nodes', [])))
+        // filter them by nodeLabelFilter
+        .filter(el => {
+          if (!beobZugeordnetFilterString) return true
+          const datum = el.datum ? format(el.datum, 'YYYY.MM.DD') : '(kein Datum)'
+          const autor = el.autor || '(kein Autor)'
+          const quelle = get(el, 'beobQuelleWerteByQuelleId.name', '')
+          return `${datum}: ${autor} (${quelle})`
+            .toLowerCase()
+            .includes(beobZugeordnetFilterString.toLowerCase())
+        })
+
+      return <Polylines lines={buildLines({ beobs, store, activeNodes })} />
+    
+  }}
+</Query>
 
 
 export default enhance(Lines)
