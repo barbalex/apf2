@@ -4,6 +4,39 @@ query QkQuery(
   $projId: UUID!
   $apId: UUID!
 ) {
+  projektById(id: $projId) {
+    id
+    name
+    apsByProjId(filter: {id: {equalTo: $apId}}) {
+      nodes {
+        id
+        popsByApId {
+          nodes {
+            id
+            tpopsByPopId(filter: {x: {isNull: false}, y: {isNull: false}}) {
+              nodes {
+                id
+                nr
+                flurname
+                x
+                y
+                apberRelevant
+                popByPopId {
+                  id
+                  nr
+                  name
+                }
+              }
+            }
+          }
+        }
+        aeEigenschaftenByArtId {
+          id
+          artname
+        }
+      }
+    }
+  }
   allVQZielOhnejahrs(filter: {projId: {equalTo: $projId}, apId: {equalTo: $apId}}) {
     totalCount
     nodes {

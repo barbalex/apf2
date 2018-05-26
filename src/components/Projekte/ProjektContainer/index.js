@@ -121,6 +121,7 @@ const ProjekteContainer = ({
                           tree={tree}
                           treeName={treeName}
                           activeNode={activeNode}
+                          activeNodes={activeNodes}
                           refetchTree={refetch}
                         />
                       </ReflexElement>

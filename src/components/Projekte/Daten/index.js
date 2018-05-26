@@ -135,6 +135,7 @@ const Daten = ({
   tree,
   treeName,
   activeNode,
+  activeNodes,
   dimensions = { width: 380 },
   refetchTree
 }: {
@@ -142,6 +143,7 @@ const Daten = ({
   tree: Object,
   treeName: String,
   activeNode: Object,
+  activeNodes: Array<Object>,
   dimensions: Object,
   refetchTree: () => void
 }) =>
@@ -197,7 +199,7 @@ const Daten = ({
         tpopfreiwkontr: <Tpopfreiwkontr dimensions={dimensions} id={activeNodeArray[9]} />,
         tpopkontrzaehl: <Tpopkontrzaehl dimensions={dimensions} id={activeNodeArray[11]} />,
         exporte: <Exporte tree={tree} dimensions={dimensions} treeName={treeName} />,
-        qk: <Qk tree={tree} treeName={treeName} apId={apId} />,
+        qk: <Qk tree={tree} treeName={treeName} apId={apId} activeNodes={activeNodes} />,
         beobNichtZuzuordnen: <Beobzuordnung dimensions={dimensions} id={activeNodeArray[activeNodeArray.length -1]} tree={tree} refetchTree={refetchTree} type="nichtZuzuordnen" />,
         beobNichtBeurteilt: <Beobzuordnung dimensions={dimensions} id={activeNodeArray[activeNodeArray.length -1]} tree={tree} refetchTree={refetchTree} type="nichtBeurteilt" />,
         beobZugeordnet: <Beobzuordnung dimensions={dimensions} id={activeNodeArray[activeNodeArray.length -1]} tree={tree} refetchTree={refetchTree} type="zugeordnet" />,

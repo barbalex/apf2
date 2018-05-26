@@ -68,7 +68,7 @@ const enhance = compose(
     }
   }),
   withHandlers({
-    onChangeBerichtjahr: ({ setBerichtjahr, store, tree, apId, addMessages }) => event => {
+    onChangeBerichtjahr: ({ setBerichtjahr, store, tree, apId, addMessages, activeNodes }) => (event, data) => {
       const { value } = event.target
       setBerichtjahr(value)
       if (
@@ -76,17 +76,18 @@ const enhance = compose(
         (!isNaN(value) && value > 1000)
       ) {
         // call fetchQk and pass it berichtjahr and apId
-        fetchQk({ store, berichtjahr: value, apId, addMessages })
+        fetchQk({ store, berichtjahr: value, apId, addMessages, activeNodes })
       }
     },
     onChangeFilter: ({ setFilter }) => event =>
       setFilter(event.target.value),
   }),
   withLifecycle({
-    onDidMount({ berichtjahr, setBerichtjahr, store, tree, apId, addMessages }) {
+    /*
+    onDidMount({ berichtjahr, setBerichtjahr, store, tree, apId, addMessages, activeNodes }) {
       // call fetchQk and pass it berichtjahr and apId
-      fetchQk({ store, berichtjahr, apId, addMessages })
-    },
+      fetchQk({ store, berichtjahr, apId, addMessages, activeNodes })
+    },*/
   }),
   observer
 )
@@ -101,7 +102,8 @@ const Qk = ({
   filter,
   treeName,
   messages,
-  setMessages
+  addMessages,
+  activeNodes
 }: {
   store: Object,
   tree: Object,
@@ -112,7 +114,8 @@ const Qk = ({
   filter: String,
   treeName: String,
   messages: Array<Object>,
-  setMessages: () => void
+  addMessages: () => void,
+  activeNodes: Array<Object>
 }) =>
 <Query query={data1Gql}>
   {({ loading, error, data: data1 }) => {
@@ -126,6 +129,7 @@ const Qk = ({
           variables={{ apId, projId }}
         >
           {({ loading, error, data }) => {
+            fetchQk({ store, berichtjahr, apId, addMessages, activeNodes, data })
             const qks = qk(berichtjahr).filter(q => !!q.query)
             const gqlMessages = qks
             // only results with data
@@ -173,7 +177,7 @@ const Qk = ({
                         id="berichtjahr"
                         value={berichtjahr}
                         type="number"
-                        onChange={onChangeBerichtjahr}
+                        onChange={(event) => onChangeBerichtjahr(event, data)}
                       />
                     </FormControl>
                     <FormControl fullWidth>

@@ -1,6 +1,8 @@
 // @flow
 import axios from 'axios'
 import isFinite from 'lodash/isFinite'
+import get from 'lodash/get'
+import flatten from 'lodash/flatten'
 
 import isPointInsidePolygon from './isPointInsidePolygon'
 import staticFilesBaseUrl from '../../../../modules/staticFilesBaseUrl'
@@ -9,12 +11,16 @@ const fetchQk = async ({
   store,
   berichtjahr,
   apId,
-  addMessages
+  addMessages,
+  activeNodes,
+  data
 }: {
   store: Object,
   berichtjahr: Number,
   apId: String,
-  addMessages: () => void
+  addMessages: () => void,
+  activeNodes: Array<Object>,
+  data: Object
 }) => {
   const qualityControls = [
     // 1. Art
@@ -311,13 +317,15 @@ const fetchQk = async ({
   } catch (error) {
     store.listError(error)
   }
-  let resultTpopKoord: { data: Array<Object> }
-  try {
-    resultTpopKoord = await axios.get(`/v_tpopkoord?ap_id=eq.${apId}`)
-  } catch (error) {
-    store.listError(error)
-  }
-  let tpops = resultTpopKoord? resultTpopKoord.data : []
+
+  console.log('fetchQk:', {data})
+  const pops = get(data, 'projektById.apsByProjId.nodes[0].popsByApId.nodes', [])
+  console.log('fetchQk:', {pops})
+  const tpops =  flatten(pops.map(p => get(p, 'tpopsByPopId.nodes', [])))
+  const projName = get(data, 'projektById.name', '(kein Name)')
+  const artName = get(data, 'projektById.apsByProjId.nodes[0].aeEigenschaftenByArtId.artname', '(keine Art)')
+  console.log('fetchQk:', {tpops,projName,artName})
+
   let resultKtZh: { data: Object }
   try {
     const baseURL = staticFilesBaseUrl
@@ -328,44 +336,36 @@ const fetchQk = async ({
   const ktZh = resultKtZh.data
   if (ktZh) {
     // kontrolliere die Relevanz ausserkantonaler Tpop
-    tpops = tpops.filter(
+    const tpopsOutsideZh = tpops.filter(
       tpop =>
-        tpop.apber_relevant === 1 &&
+        tpop.apberRelevant === 1 &&
         tpop.x &&
         isFinite(tpop.x) &&
         tpop.y &&
         isFinite(tpop.y) &&
         !isPointInsidePolygon(ktZh, tpop.x, tpop.y)
     )
-    if (tpops.length > 0) {
-      const messages = tpops.map(tpop => {
-        const projekt = store.table.projekt.get(store.tree.activeNodes.projekt)
-        const projName = projekt && projekt.name ? projekt.name : ''
-        const art = store.table.ae_eigenschaften.get(store.tree.activeNodes.ap)
-        const artName = art && art.artname ? art.artname : ''
-        const pop = store.table.pop.get(tpop.pop_id)
-        const popName = pop && pop.name ? pop.name : ''
-
-        return {
-          hw: `Teilpopulation ist als 'Für AP-Bericht relevant' markiert, liegt aber ausserhalb des Kt. Zürich und sollte daher nicht relevant sein:`,
-          url: [
-            'Projekte',
-            1,
-            'Aktionspläne',
-            tpop.ap_id,
-            'Populationen',
-            tpop.pop_id,
-            'Teil-Populationen',
-            tpop.id,
-          ],
-          text: [
-            `Projekt: ${projName}`,
-            `Art: ${artName}`,
-            `Population: ${popName}`,
-            `Teil-Population: ${tpop.flurname}`,
-          ],
-        }
-      })
+    if (tpopsOutsideZh.length > 0) {
+      const messages = tpopsOutsideZh.map(tpop => ({
+        hw: `Teilpopulation ist als 'Für AP-Bericht relevant' markiert, liegt aber ausserhalb des Kt. Zürich und sollte daher nicht relevant sein:`,
+        url: [
+          'Projekte',
+          1,
+          'Aktionspläne',
+          tpop.ap_id,
+          'Populationen',
+          tpop.pop_id,
+          'Teil-Populationen',
+          tpop.id,
+        ],
+        text: [
+          `Projekt: ${projName}`,
+          `Art: ${artName}`,
+          `Population: ${get(tpop, 'popByPopId.nr', '(keine Nr')}, ${get(tpop, 'popByPopId.name', '(kein Name')}`,
+          `Teil-Population: ${get(tpop, 'nr', '(keine Nr')}, ${get(tpop, 'flurname', '(kein Flurname')}`,
+        ],
+      }))
+      console.log('fetchQk:', {messagesOutsidZh: messages})
       addMessages(messages)
       nrOfMessages += tpops.length
     }
