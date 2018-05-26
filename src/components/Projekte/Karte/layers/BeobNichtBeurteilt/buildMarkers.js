@@ -8,7 +8,7 @@ import get from 'lodash/get'
 
 import beobIcon from '../../../../../etc/beob.png'
 import beobIconHighlighted from '../../../../../etc/beobHighlighted.png'
-import getNearestTpopId from '../../../../../modules/getNearestTpopId'
+import getNearestTpop from '../../../../../modules/getNearestTpop'
 import appBaseUrl from '../../../../../modules/appBaseUrl'
 import epsg2056to4326 from '../../../../../modules/epsg2056to4326'
 import setTreeKeyGql from './setTreeKey.graphql'
@@ -33,7 +33,7 @@ export default ({
   store: Object,
   refetchTree: () => void
 }): Array<Object> => {
-  const { map, table } = store
+  const { map } = store
   const { ap, projekt } = activeNodes
   const { highlightedIds } = map.beobNichtBeurteilt
 
@@ -45,7 +45,10 @@ export default ({
       iconSize: [24, 24],
       className: isHighlighted ? 'beobIconHighlighted' : 'beobIcon',
     })
-    const label = `${beob.datum ? format(beob.datum, 'YYYY.MM.DD') : '(kein Datum)'}: ${beob.autor || '(kein Autor)'} (${get(beob, 'beobQuelleWerteByQuelleId.name', '')})`
+    const datum = beob.datum ? format(beob.datum, 'YYYY.MM.DD') : '(kein Datum)'
+    const autor = beob.autor || '(kein Autor)'
+    const quelle = get(beob, 'beobQuelleWerteByQuelleId.name', '')
+    const label = `${datum}: ${autor} (${quelle})`
     return window.L.marker(latLng, {
       title: label,
       icon,
@@ -82,17 +85,21 @@ export default ({
          * point url to moved beob
          * open form of beob?
          */
-        const nearestTpopId = getNearestTpopId({ activeNodes, tree, client, latLng: event.target._latlng })
-        const popId = table.tpop.get(nearestTpopId).pop_id
+        const nearestTpop = getNearestTpop({
+          activeNodes,
+          tree,
+          client,
+          latLng: event.target._latlng
+        })
         const newActiveNodeArray = [
           'Projekte',
           activeNodes.projekt,
           'Aktionspläne',
           activeNodes.ap,
           'Populationen',
-          popId,
+          nearestTpop.popId,
           'Teil-Populationen',
-          nearestTpopId,
+          nearestTpop.id,
           'Beobachtungen',
           beob.id,
         ]
@@ -108,7 +115,7 @@ export default ({
           mutation: updateBeobByIdGql,
           variables: {
             id: beob.id,
-            tpopId: nearestTpopId,
+            tpopId: nearestTpop.id,
           }
         })
         refetchTree()

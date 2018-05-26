@@ -1,0 +1,61 @@
+mutation updateBeob(
+  $id: UUID!
+  $tpopId: UUID
+) {
+  updateBeobById(
+    input: {
+      id: $id
+      beobPatch: {
+        id: $id
+        tpopId: $tpopId
+      }
+    }
+  ) {
+    beob {
+      id
+      idField
+      datum
+      autor
+      x
+      y
+      data
+      artId
+      tpopId
+      nichtZuordnen
+      bemerkungen
+      quelleId
+      aeEigenschaftenByArtId {
+        id
+        artname
+        apByArtId {
+          id
+          popsByApId {
+            nodes {
+              id
+              tpopsByPopId {
+                nodes {
+                  id
+                  nr
+                  x
+                  y
+                  popStatusWerteByStatus {
+                    id
+                    text
+                  }
+                  popByPopId {
+                    id
+                    nr
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      beobQuelleWerteByQuelleId {
+        id
+        name
+      }
+    }
+  }
+}

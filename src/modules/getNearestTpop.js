@@ -41,6 +41,7 @@ export default async ({
               tpopsByPopId(filter: {x: {isNull: false}, y: {isNull: false}}) {
                 nodes {
                   id
+                  popId
                   x
                   y
                 }
@@ -60,6 +61,7 @@ export default async ({
         type: 'Feature',
         properties: {
           id: t.id,
+          popId: t.popId
         },
         geometry: {
           type: 'Point',
@@ -72,5 +74,8 @@ export default async ({
     features: tpopFeatures,
   }
   const nearestTpopFeature = nearest(point, against)
-  return nearestTpopFeature.properties.id
+  return ({
+    id: nearestTpopFeature.properties.id,
+    popId: nearestTpopFeature.properties.popId
+  })
 }

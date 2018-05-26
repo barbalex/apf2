@@ -8,17 +8,32 @@ import get from 'lodash/get'
 
 import beobIcon from '../../../../../etc/beobZugeordnet.png'
 import beobIconHighlighted from '../../../../../etc/beobZugeordnetHighlighted.png'
-import getNearestTpopId from '../../../../../modules/getNearestTpopId'
+import getNearestTpop from '../../../../../modules/getNearestTpop'
 import appBaseUrl from '../../../../../modules/appBaseUrl'
 import epsg2056to4326 from '../../../../../modules/epsg2056to4326'
+import setTreeKeyGql from './setTreeKey.graphql'
+import updateBeobByIdGql from './updateBeobById.graphql'
 
 const StyledH3 = styled.h3`
   margin: 7px 0;
 `
 
-export default ({ beobs, store }:{ beobs: Array<Object>, store: Object }): Array<Object> => {
-  const { tree, updatePropertyInDb, map, table } = store
-  const { activeNodes } = tree
+export default ({
+  beobs,
+  tree,
+  activeNodes,
+  client,
+  store,
+  refetchTree
+}:{
+  beobs: Array<Object>,
+  tree: Object,
+  activeNodes: Array<Object>,
+  client: Object,
+  store: Object,
+  refetchTree: () => void
+}): Array<Object> => {
+  const { map } = store
   const { ap, projekt } = activeNodes
   const { highlightedIds } = map.beobZugeordnet
 
@@ -30,7 +45,10 @@ export default ({ beobs, store }:{ beobs: Array<Object>, store: Object }): Array
       iconSize: [24, 24],
       className: isHighlighted ? 'beobIconHighlighted' : 'beobIcon',
     })
-    const label = `${beob.datum ? format(beob.datum, 'YYYY.MM.DD') : '(kein Datum)'}: ${beob.autor || '(kein Autor)'} (${get(beob, 'beobQuelleWerteByQuelleId.name', '')})`
+    const datum = beob.datum ? format(beob.datum, 'YYYY.MM.DD') : '(kein Datum)'
+    const autor = beob.autor || '(kein Autor)'
+    const quelle = get(beob, 'beobQuelleWerteByQuelleId.name', '')
+    const label = `${datum}: ${autor} (${quelle})`
     return window.L.marker(latLng, {
       title: label,
       icon,
@@ -64,28 +82,41 @@ export default ({ beobs, store }:{ beobs: Array<Object>, store: Object }): Array
           </Fragment>
         )
       )
-      .on('moveend', event => {
+      .on('moveend', async event => {
         /**
          * assign to nearest tpop
          * point url to moved beob
          * open form of beob?
          */
-        const nearestTpopId = getNearestTpopId(store, event.target._latlng)
-        const popId = table.tpop.get(nearestTpopId).pop_id
+        const nearestTpop = getNearestTpop({ activeNodes, tree, client, latLng: event.target._latlng })
         const newActiveNodeArray = [
           'Projekte',
           activeNodes.projekt,
           'Aktionspläne',
           activeNodes.ap,
           'Populationen',
-          popId,
+          nearestTpop.popId,
           'Teil-Populationen',
-          nearestTpopId,
+          nearestTpop.id,
           'Beobachtungen',
           beob.id,
         ]
-        tree.setActiveNodeArray(newActiveNodeArray)
-        updatePropertyInDb(tree, 'tpop_id', nearestTpopId)
+        await client.mutate({
+          mutation: setTreeKeyGql,
+          variables: {
+            value: newActiveNodeArray,
+            tree: tree.name,
+            key: 'activeNodeArray'
+          }
+        })
+        await client.mutate({
+          mutation: updateBeobByIdGql,
+          variables: {
+            id: beob.id,
+            tpopId: nearestTpop.id,
+          }
+        })
+        refetchTree()
       })
   })
 }
