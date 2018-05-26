@@ -157,17 +157,14 @@ const Qk = ({
               }))
             })
 
-            console.log('QK:', { outsideZhChecked, checkingOutsideZh })
             !outsideZhChecked && checkTpopOutsideZh({
               store,
               data,
               addMessages,
               setOutsideZhChecked,
-              checkingOutsideZh
+              checkingOutsideZh,
+              setCheckingOutsideZh
             })
-            setCheckingOutsideZh(true)
-
-            console.log('QK:', { messages, gqlMessages })
 
             const messageArrays = [...gqlMessages, ...messages]
             const messageArraysFiltered = filter

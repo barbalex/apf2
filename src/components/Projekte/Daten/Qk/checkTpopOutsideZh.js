@@ -7,15 +7,13 @@ import flatten from 'lodash/flatten'
 import isPointInsidePolygon from './isPointInsidePolygon'
 import staticFilesBaseUrl from '../../../../modules/staticFilesBaseUrl'
 
-export default async ({ store, data, addMessages, setOutsideZhChecked, checkingOutsideZh }) => {
+export default async ({ store, data, addMessages, setOutsideZhChecked, checkingOutsideZh, setCheckingOutsideZh }) => {
   if (checkingOutsideZh) return
-  console.log('checkTpopOutsideZh:', {data})
   const pops = get(data, 'projektById.apsByProjId.nodes[0].popsByApId.nodes', [])
-  console.log('checkTpopOutsideZh:', {pops})
   const tpops =  flatten(pops.map(p => get(p, 'tpopsByPopId.nodes', [])))
+  if (tpops.length > 0) setCheckingOutsideZh(true)
   const projName = get(data, 'projektById.name', '(kein Name)')
   const artName = get(data, 'projektById.apsByProjId.nodes[0].aeEigenschaftenByArtId.artname', '(keine Art)')
-  console.log('checkTpopOutsideZh:', {tpops,projName,artName})
 
   let resultKtZh: { data: Object }
   try {
@@ -26,9 +24,7 @@ export default async ({ store, data, addMessages, setOutsideZhChecked, checkingO
     return setOutsideZhChecked(true)
   }
   const ktZh = resultKtZh.data
-  console.log('checkTpopOutsideZh:', { resultKtZh })
   if (ktZh) {
-    console.log('checkTpopOutsideZh:', { ktZh })
     // kontrolliere die Relevanz ausserkantonaler Tpop
     const tpopsOutsideZh = tpops.filter(
       tpop =>
@@ -39,7 +35,6 @@ export default async ({ store, data, addMessages, setOutsideZhChecked, checkingO
         isFinite(tpop.y) &&
         !isPointInsidePolygon(ktZh, tpop.x, tpop.y)
     )
-    console.log('checkTpopOutsideZh:', { tpopsOutsideZh })
     if (tpopsOutsideZh.length > 0) {
       const messages = tpopsOutsideZh.map(tpop => ({
         hw: `Teilpopulation ist als 'Für AP-Bericht relevant' markiert, liegt aber ausserhalb des Kt. Zürich und sollte daher nicht relevant sein:`,
@@ -60,11 +55,9 @@ export default async ({ store, data, addMessages, setOutsideZhChecked, checkingO
           `Teil-Population: ${get(tpop, 'nr', '(keine Nr')}, ${get(tpop, 'flurname', '(kein Flurname')}`,
         ],
       }))
-      console.log('checkTpopOutsideZh:', { messages, tpopsOutsideZh})
       addMessages(messages)
       return setOutsideZhChecked(true) 
     }
   }
-  console.log('checkTpopOutsideZh: no ktZH')
   setOutsideZhChecked(true)
 }
