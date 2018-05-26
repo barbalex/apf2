@@ -35,7 +35,6 @@ export default ({
     const datum = beob.datum ? format(beob.datum, 'YYYY.MM.DD') : '(kein Datum)'
     const autor = beob.autor || '(kein Autor)'
     const quelle = get(beob, 'beobQuelleWerteByQuelleId.name', '')
-    const label = `${datum}: ${autor} (${quelle})`
 
     return window.L.polyline([beobLatLng, tpopLatLng], {
       color: isHighlighted ? 'yellow' : '#FF00FF',
@@ -43,16 +42,16 @@ export default ({
       .bindPopup(
         ReactDOMServer.renderToStaticMarkup(
           <Fragment>
-            <div>{`Beobachtung von ${get(beob, 'aeEigenschaftenByArtId.artname', '')}`}</div>
-            <StyledH3>
-              {label}
-            </StyledH3>
+            <StyledH3>Zuordnung</StyledH3>
+            <div>einer Beobachtung</div>
+            <div>{`von ${get(beob, 'aeEigenschaftenByArtId.artname', '')}`}</div>
+            <div>{`am ${datum}`}</div>
+            <div>{`durch ${autor}`}</div>
             <div>
-              {`Koordinaten: ${beob.x.toLocaleString(
-                'de-ch'
-              )} / ${beob.y.toLocaleString('de-ch')}`}
+              {`bei: ${beob.x.toLocaleString('de-ch')} / ${beob.y.toLocaleString('de-ch')}`}
             </div>
-            <div>{`Teil-Population: ${get(beob, 'tpopByTpopId.nr', '(keine Nr)')}: ${get(beob, 'tpopByTpopId.flurname', '(kein Flurname)')}`}</div>
+            <div>{`zur Teil-Population: ${get(beob, 'tpopByTpopId.nr', '(keine Nr)')}: ${get(beob, 'tpopByTpopId.flurname', '(kein Flurname)')}`}</div>
+            <div>{`Quelle: ${quelle}`}</div>
             <a
               href={`${appBaseUrl}/Projekte/${projekt}/Aktionspläne/${ap}/Populationen/${get(beob, 'tpopByTpopId.popId', '')}/Teil-Populationen/${get(beob, 'tpopByTpopId.id', '')}/Beobachtungen/${
                 beob.id
