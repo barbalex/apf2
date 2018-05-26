@@ -45,7 +45,9 @@ const BeobNichtBeurteiltMarker = ({
           const datum = el.datum ? format(el.datum, 'YYYY.MM.DD') : '(kein Datum)'
           const autor = el.autor || '(kein Autor)'
           const quelle = get(el, 'beobQuelleWerteByQuelleId.name', '')
-          return `${datum}: ${autor} (${quelle})`.toLowerCase().includes(beobNichtBeurteiltFilterString.toLowerCase())
+          return `${datum}: ${autor} (${quelle})`
+            .toLowerCase()
+            .includes(beobNichtBeurteiltFilterString.toLowerCase())
         })
 
       if (clustered) {

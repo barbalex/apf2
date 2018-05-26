@@ -17,9 +17,16 @@ const StyledH3 = styled.h3`
   margin: 7px 0;
 `
 
-export default ({ beobs, store }:{ beobs: Array<Object>, store: Object }): Object => {
-  const { tree, map } = store
-  const { activeNodes } = tree
+export default ({
+  beobs,
+  activeNodes,
+  store,
+}:{
+  beobs: Array<Object>,
+  activeNodes: Array<Object>,
+  store: Object,
+}): Object => {
+  const { map } = store
   const { ap, projekt } = activeNodes
   const { highlightedIds } = map.beobNichtBeurteilt
   const mcgOptions = {
