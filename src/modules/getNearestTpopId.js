@@ -4,10 +4,23 @@
  * returns tpopId of nearest tpop
  */
 import nearest from '@turf/nearest'
+import gql from 'graphql-tag'
+import get from 'lodash/get'
+import flatten from 'lodash/flatten'
 
-export default (store: Object, latLng: Object): number => {
-  const { table, tree } = store
-  const { activeNodes } = tree
+import epsg2056to4326 from './epsg2056to4326'
+
+export default async ({
+  activeNodes,
+  tree,
+  client,
+  latLng
+}:{
+  activeNodes: Array<Object>,
+  tree: Object,
+  client: Object,
+  latLng: Object
+}): String => {
   const { lat, lng } = latLng
   const point = {
     type: 'Feature',
@@ -17,22 +30,43 @@ export default (store: Object, latLng: Object): number => {
       coordinates: [lat, lng],
     },
   }
-  const popIds = Array.from(table.pop.values())
-    .filter(p => p.ap_id === activeNodes.ap)
-    .map(p => p.id)
-  const tpopFeatures = Array.from(table.tpop.values())
-    .filter(t => popIds.includes(t.pop_id))
-    .filter(t => t.TPopKoordWgs84)
-    .map(t => ({
-      type: 'Feature',
-      properties: {
-        id: t.id,
-      },
-      geometry: {
-        type: 'Point',
-        coordinates: t.TPopKoordWgs84,
-      },
-    }))
+  const { data } = await client.query({
+    query: gql`
+      query Query($apId: UUID!) {
+        apById(id: $apId) {
+          id
+          popsByApId {
+            nodes {
+              id
+              tpopsByPopId(filter: {x: {isNull: false}, y: {isNull: false}}) {
+                nodes {
+                  id
+                  x
+                  y
+                }
+              }
+            }
+          }
+        }
+      }
+    `,
+    variables: { apId: activeNodes.ap }
+  })
+  const pops = get(data, 'apById.popsByApId.nodes')
+  const tpopFeatures = flatten(
+    pops
+      .map(p => get(p, 'tpopsByPopId.nodes'))
+      .map(t => ({
+        type: 'Feature',
+        properties: {
+          id: t.id,
+        },
+        geometry: {
+          type: 'Point',
+          coordinates: new window.L.LatLng(...epsg2056to4326(t.x, t.y))
+        },
+      }))
+  )
   const against = {
     type: 'FeatureCollection',
     features: tpopFeatures,

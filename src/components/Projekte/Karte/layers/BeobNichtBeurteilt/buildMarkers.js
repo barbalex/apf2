@@ -82,7 +82,7 @@ export default ({
          * point url to moved beob
          * open form of beob?
          */
-        const nearestTpopId = getNearestTpopId(store, event.target._latlng)
+        const nearestTpopId = getNearestTpopId({ activeNodes, tree, client, latLng: event.target._latlng })
         const popId = table.tpop.get(nearestTpopId).pop_id
         const newActiveNodeArray = [
           'Projekte',
