@@ -135,6 +135,7 @@ const Qk = ({
     return (
         <Query
           query={data2Gql}
+          // pass berichtjahr when queries exist that actually use it
           //variables={{ berichtjahr, apId, projId }}
           variables={{ apId, projId }}
         >
