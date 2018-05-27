@@ -2,6 +2,7 @@
 import axios from 'axios'
 
 import tables from '../../modules/tables'
+import listError from '../../modules/listError'
 
 export default async (
   store: Object,
@@ -12,7 +13,7 @@ export default async (
 ): any => {
   let table = tablePassed
   if (!table) {
-    return store.listError(new Error('no table passed'))
+    return listError(new Error('no table passed'))
   }
   // insert new dataset in db and fetch id
   const tableMetadata: {
@@ -21,7 +22,7 @@ export default async (
     parentIdField: string,
   } = tables.find(t => t.table === table)
   if (!tableMetadata) {
-    return store.listError(
+    return listError(
       new Error(`no table meta data found for table "${table}"`)
     )
   }
@@ -32,7 +33,7 @@ export default async (
   const parentIdField = tableMetadata.parentIdField
   const idField = tableMetadata.idField
   if (!idField) {
-    return store.listError(
+    return listError(
       new Error('new dataset not created as no idField could be found')
     )
   }
@@ -48,7 +49,7 @@ export default async (
       },
     })
   } catch (error) {
-    return store.listError(error)
+    return listError(error)
   }
   /**
    * TODO

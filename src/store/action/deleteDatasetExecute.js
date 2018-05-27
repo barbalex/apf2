@@ -1,5 +1,6 @@
 // @flow
 import tables from '../../modules/tables'
+import listError from '../../modules/listError'
 import deleteDataset from './deleteDataset'
 
 export default async (store: Object, tree: Object): Promise<void> => {
@@ -8,7 +9,7 @@ export default async (store: Object, tree: Object): Promise<void> => {
   let table = tablePassed
   const tableMetadata = tables.find(t => t.table === table)
   if (!tableMetadata) {
-    return store.listError(
+    return listError(
       new Error(
         `Error in action deleteDatasetDemand: no table meta data found for table "${table}"`
       )
@@ -29,7 +30,7 @@ export default async (store: Object, tree: Object): Promise<void> => {
       id,
     })
   } catch (error) {
-    store.listError(error)
+    listError(error)
   }
 
   // set new url

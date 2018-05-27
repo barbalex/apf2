@@ -14,7 +14,6 @@ function Store(): void {
   this.showDeletedDatasets = false
   this.undoDeletion = () => {}
   this.toggleShowDeletedDatasets = () => {}
-  this.listError = () => {}
   this.updateProperty = () => {}
   this.updatePropertyInDb = () => {}
   this.fetchTable = () => {}

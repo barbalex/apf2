@@ -8,6 +8,7 @@ import axios from 'axios'
 import { toJS } from 'mobx'
 
 import tables from '../../modules/tables'
+import listError from '../../modules/listError'
 
 export default async ({
   store,
@@ -26,7 +27,7 @@ export default async ({
   // in tpopfeldkontr and tpopfreiwkontr need to find dbTable
   const idField = tabelle ? tabelle.idField : undefined
   if (!idField && idField !== 0) {
-    return store.listError(
+    return listError(
       new Error('dataset not inserted because idField was not found')
     )
   }
@@ -48,7 +49,7 @@ export default async ({
       },
     })
   } catch (error) {
-    store.listError(error)
+    listError(error)
   }
   const { data } = response
   // write to store

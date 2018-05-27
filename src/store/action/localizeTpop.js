@@ -1,10 +1,12 @@
 // @flow
+import listError from '../../modules/listError'
+
 export default (store: Object, tree: Object, x: number, y: number): any => {
   let { idOfTpopBeingLocalized } = store.map.tpop
   const tpops = Array.from(store.table.tpop.values())
   const tpop = tpops.find(t => t.id === idOfTpopBeingLocalized)
   if (!tpop)
-    return store.listError(
+    return listError(
       new Error(`no tpop found with id "${idOfTpopBeingLocalized}"`)
     )
   const xRounded = Number(x).toFixed(0)

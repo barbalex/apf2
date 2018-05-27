@@ -9,7 +9,7 @@ import updatePropertyInDb from '../action/updatePropertyInDb'
 import insertDataset from '../action/insertDataset'
 import deleteDatasetDemand from '../action/deleteDatasetDemand'
 import deleteDatasetExecute from '../action/deleteDatasetExecute'
-import listError from '../action/listError'
+import listError from '../../modules/listError'
 import writeToStore from '../action/writeToStore'
 import copyTpopKoordToPop from '../action/copyTpopKoordToPop'
 import copyBeobZugeordnetKoordToPop from '../action/copyBeobZugeordnetKoordToPop'
@@ -31,7 +31,7 @@ export default (store: Object): void => {
     ),
     datasetToDelete: {},
     tellUserReadOnly: action('tellUserReadOnly', () =>
-      store.listError(new Error('Sie haben keine Schreibrechte'))
+      listError(new Error('Sie haben keine Schreibrechte'))
     ),
     insertDataset: action('insertDataset', (tree, table, parentId, baseUrl) => {
       insertDataset(store, tree, table, parentId, baseUrl)
@@ -59,7 +59,6 @@ export default (store: Object): void => {
     undoDeletion: action('undoDeletion', deletedDataset => {
       undoDeletion({ store, deletedDataset })
     }),
-    listError: action('listError', error => listError(store, error)),
     // updates data in store
     updateProperty: action('updateProperty', (tree, key, value) => {
       updateProperty(store, tree, key, value)

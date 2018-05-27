@@ -5,10 +5,11 @@ import { toJS } from 'mobx'
 import isNodeOpen from '../../components/Projekte/TreeContainer/Tree/isNodeOpen'
 import isNodeInActiveNodePath from '../../components/Projekte/TreeContainer/Tree/isNodeInActiveNodePath'
 import openNode from './openNode'
+import listError from '../../modules/listError'
 
 export default (store: Object, tree: Object, node: Object): any => {
   if (!node.url) {
-    return store.listError(new Error('passed node has no url'))
+    return listError(new Error('passed node has no url'))
   }
 
   const newActiveNodeArray = clone(node.url)

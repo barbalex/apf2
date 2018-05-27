@@ -14,6 +14,7 @@ import toggleNodeSymbol from '../action/toggleNodeSymbol'
 import toggleNextLowerNodes from '../action/toggleNextLowerNodes'
 import getActiveNodes from '../../modules/getActiveNodes'
 import setOpenNodesFromActiveNodeArray from '../action/setOpenNodesFromActiveNodeArray'
+import listError from '../../modules/listError'
 
 export default (store: Object, tree: Object): void => {
   extendObservable(tree, {
@@ -42,7 +43,7 @@ export default (store: Object, tree: Object): void => {
     nodeLabelFilter: observable.map({}),
     updateLabelFilter: action('updateLabelFilter', (table, value) => {
       if (!table) {
-        return store.listError(
+        return listError(
           new Error('nodeLabelFilter cant be updated: no table passed')
         )
       } 
