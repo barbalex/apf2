@@ -42,7 +42,6 @@ function Store(): void {
     apFilter: false,
     nodeLabelFilter: {},
   }
-  this.app = {}
   this.map = {
     bounds: [],
     pop: {},
