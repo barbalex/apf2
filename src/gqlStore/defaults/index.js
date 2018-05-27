@@ -81,6 +81,7 @@ export default async (idb) => {
       withNextLevel: false,
       __typename: 'Copying'
     },
+    errors: []
   }
   return defaults
 }

@@ -1,6 +1,8 @@
 // @flow
 import axios from 'axios'
 
+import listError from '../../modules/listError'
+
 export default async ({
   store,
   table,
@@ -18,7 +20,7 @@ export default async ({
   try {
     result = await axios.get(`/${table}?${idField}=eq.${id}`)
   } catch (error) {
-    return store.listError(error)
+    return listError(error)
   }
   // copy to store.deletedDatasets
   const deletedDataset = {
@@ -31,7 +33,7 @@ export default async ({
   try {
     await axios.delete(`/${table}?${idField}=eq.${id}`)
   } catch (error) {
-    store.listError(error)
+    listError(error)
     store.datasetToDelete = {}
   }
   // remove this dataset in store.table

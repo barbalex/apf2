@@ -3,13 +3,15 @@ import clone from 'lodash/clone'
 import axios from 'axios'
 import { toJS } from 'mobx'
 
+import listError from '../../modules/listError'
+
 export default async (store: Object, beobId: string): Promise<void> => {
   if (!beobId) {
-    return store.listError(new Error('keine beobId übergeben'))
+    return listError(new Error('keine beobId übergeben'))
   }
   const beob = store.table.beob.get(beobId)
   if (!beob) {
-    return store.listError(
+    return listError(
       new Error(`Die Beobachtung mit beobId ${beobId} wurde nicht gefunden`)
     )
   }
@@ -17,12 +19,12 @@ export default async (store: Object, beobId: string): Promise<void> => {
   const tpopId = beob.tpop_id
   let tpopInStore = store.table.tpop.get(tpopId)
   if (!tpopInStore) {
-    return store.listError(
+    return listError(
       new Error(`Die Teilpopulation mit tpopId ${tpopId} wurde nicht gefunden`)
     )
   }
   if (!x || !y) {
-    return store.listError(
+    return listError(
       new Error(
         'Es wurden keine Koordinaten gefunden. Daher wurden sie nicht in die Teilpopulation kopiert'
       )
@@ -51,6 +53,6 @@ export default async (store: Object, beobId: string): Promise<void> => {
     await axios.patch(`/tpop?id=eq.${tpopForDb.id}`, tpopForDb)
   } catch (error) {
     tpopInStore = originalTpop
-    store.listError(error)
+    return listError(error)
   }
 }

@@ -2,6 +2,8 @@
 import axios from 'axios'
 import format from 'date-fns/format'
 
+import listError from '../../modules/listError'
+
 export default async ({
   store,
   tree,
@@ -13,7 +15,7 @@ export default async ({
 }): Promise<void> => {
   const beob = store.table.beob.get(beobId)
   if (!beob) {
-    return store.listError(
+    return listError(
       new Error(`Die Beobachtung mit beobId ${beobId} wurde nicht gefunden`)
     )
   }
@@ -39,7 +41,7 @@ export default async ({
       },
     })
   } catch (error) {
-    store.listError(error)
+    listError(error)
   }
   if (!popResult || !popResult.data || !popResult.data[0]) {
     throw new Error(`Fehler bei der Erstellung einer neuen Population`)
@@ -67,7 +69,7 @@ export default async ({
       },
     })
   } catch (error) {
-    return store.listError(error)
+    return listError(error)
   }
   if (!tpopResult || !tpopResult.data || !tpopResult.data[0]) {
     throw new Error(`Fehler bei der Erstellung einer neuen Teilpopulation`)
@@ -80,7 +82,7 @@ export default async ({
       tpop_id: tpop.id,
     })
   } catch (error) {
-    return store.listError(error)
+    return listError(error)
   }
 
   // insert this dataset in store.table

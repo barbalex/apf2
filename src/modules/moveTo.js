@@ -7,6 +7,7 @@ import gql from 'graphql-tag'
 import get from 'lodash/get'
 
 import tables from './tables'
+import listError from './listError'
 
 export default async (store: Object, newParentId: String, client: Object): any => {
   const { data } = await client.query({
@@ -36,15 +37,11 @@ export default async (store: Object, newParentId: String, client: Object): any =
   }
   const idField = tabelle ? tabelle.idField : undefined
   if (!idField) {
-    return store.listError(
-      new Error('change was not saved: Reason: idField was not found')
-    )
+    return listError(new Error('change was not saved: Reason: idField was not found'))
   }
   const parentIdField = tabelle.parentIdField
   if (!parentIdField) {
-    return store.listError(
-      new Error('change was not saved: Reason: parentIdField was not found')
-    )
+    return listError(new Error('change was not saved: Reason: parentIdField was not found'))
   }
 
   // move

@@ -19,6 +19,7 @@ import createTpopkontrzaehl from './createTpopkontrzaehl.graphql'
 import createTpopmassn from './createTpopmassn.graphql'
 import createTpop from './createTpop.graphql'
 import createPop from './createPop.graphql'
+import listError from './listError'
 //import queryTpopfeldkontr from './queryTpopfeldkontr.graphql'
 //import queryTpopfreiwkontr from './queryTpopfreiwkontr.graphql'
 
@@ -107,9 +108,7 @@ export default async (
   }
 
   if (!row) {
-    return store.listError(
-      new Error('change was not saved because dataset was not found in store')
-    )
+    return listError(new Error('change was not saved because dataset was not found in store'))
   }
   
   // insert

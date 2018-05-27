@@ -2,7 +2,7 @@
 
 export default (store: Object, error: Object): void => {
   // reinitialize db if db has problem
-  // happens after resfactoring db structure
+  // happens after refactoring db structure
   if (
     error.message &&
     error.message.includes('IDBDatabase') &&

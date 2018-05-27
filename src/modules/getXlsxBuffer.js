@@ -4,7 +4,9 @@
 // see: https://github.com/guyonroche/exceljs/issues/313
 // @flow
 import * as ExcelJs from 'exceljs/dist/exceljs.min.js'
+
 import getDataArrayFromExportObjects from './getDataArrayFromExportObjects'
+import listError from './listError'
 
 export default async (store: Object, jsonArray: Array<Object>) => {
   const dataArray = getDataArrayFromExportObjects(jsonArray)
@@ -52,7 +54,7 @@ export default async (store: Object, jsonArray: Array<Object>) => {
   try {
     buffer = await workbook.xlsx.writeBuffer()
   } catch (error) {
-    store.listError(error)
+    return listError(error)
   }
   return buffer
 }

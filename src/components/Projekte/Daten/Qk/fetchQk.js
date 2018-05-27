@@ -1,6 +1,8 @@
 // @flow
 import axios from 'axios'
 
+import listError from '../../../../modules/listError'
+
 const fetchQk = async ({
   store,
   berichtjahr,
@@ -305,7 +307,7 @@ const fetchQk = async ({
       ...dataFetchingPromisesForFunctions,
     ])
   } catch (error) {
-    store.listError(error)
+    listError(error)
   }
 
   // if no messages: tell user
@@ -324,7 +326,7 @@ const fetchQk = async ({
       apid: apId,
     })
   } catch (error) {
-    store.listError(error)
+    listError(error)
   }
 }
 

@@ -4,6 +4,7 @@ import fileSaver from 'file-saver'
 import format from 'date-fns/format'
 
 import getXlsxBuffer from './getXlsxBuffer'
+import listError from './listError'
 
 export default async ({
   store,
@@ -18,7 +19,7 @@ export default async ({
   try {
     buffer = await getXlsxBuffer(store, data)
   } catch (error) {
-    store.listError(error)
+    return listError(error)
   }
   const file = `${fileName}_${format(new Date(), 'YYYY-MM-DD_HH-mm-ss')}`
   fileSaver.saveAs(

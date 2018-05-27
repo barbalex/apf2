@@ -66,6 +66,7 @@ import copyBiotopTo from '../../../modules/copyBiotopTo'
 import setUrlQueryValue from '../../../modules/setUrlQueryValue'
 import moveTo from '../../../modules/moveTo'
 import copyTo from '../../../modules/copyTo'
+import listError from '../../../modules/listError'
 
 const Container = styled.div`
   height: 100%;
@@ -98,19 +99,13 @@ const InnerTreeContainer = styled.div`
 const getAndValidateCoordinatesOfTpop = (store, id) => {
   const tpop = store.table.tpop.get(id)
   if (!tpop) {
-    store.listError(
-      new Error(`Die Teilpopulation mit der ID ${id} wurde nicht gefunden`)
-    )
+    listError(new Error(`Die Teilpopulation mit der ID ${id} wurde nicht gefunden`))
     return { x: null, y: null }
   }
   const x = tpop.x
   const y = tpop.y
   if (!x || !y) {
-    store.listError(
-      new Error(
-        `Die Teilpopulation mit der ID ${id} kat keine (vollständigen) Koordinaten`
-      )
-    )
+    listError(new Error(`Die Teilpopulation mit der ID ${id} kat keine (vollständigen) Koordinaten`))
     return { x: null, y: null }
   }
   return { x, y }
@@ -119,20 +114,12 @@ const getAndValidateCoordinatesOfTpop = (store, id) => {
 const getAndValidateCoordinatesOfBeob = (store, beobId) => {
   const beob = store.table.beob.get(beobId)
   if (!beob) {
-    store.listError(
-      new Error(
-        `Die bereitgestellte Beobachtung mit der ID ${beobId} wurde nicht gefunden`
-      )
-    )
+    store.listError(new Error(`Die bereitgestellte Beobachtung mit der ID ${beobId} wurde nicht gefunden`))
     return { x: null, y: null }
   }
   const { x, y } = beob
   if (!x || !y) {
-    store.listError(
-      new Error(
-        `Die Teilpopulation mit der ID ${beobId} kat keine (vollständigen) Koordinaten`
-      )
-    )
+    store.listError(new Error(`Die Teilpopulation mit der ID ${beobId} kat keine (vollständigen) Koordinaten`))
     return { x: null, y: null }
   }
   return { x, y }
@@ -156,15 +143,13 @@ const enhance = compose(
   inject('store'),
   withHandlers({
     handleClick: ({ store, tree, refetch }) => ({ data, element, nodes, client }) => {
-      if (!data) return store.listError(new Error('no data passed with click'))
+      if (!data) return listError('no data passed with click')
       if (!element)
-        return store.listError(new Error('no element passed with click'))
+        return listError(new Error('no element passed with click'))
       const { table, action, actionTable } = data
       const { firstElementChild } = element
       if (!firstElementChild)
-        return store.listError(
-          new Error('no firstElementChild passed with click')
-        )
+        return listError(new Error('no firstElementChild passed with click'))
       let id = firstElementChild.getAttribute('data-id')
       if (!isNaN(id)) id = +id
       const parentId = firstElementChild.getAttribute('data-parentid')
@@ -353,9 +338,7 @@ const enhance = compose(
       if (Object.keys(actions).includes(action)) {
         actions[action]()
       } else {
-        store.listError(
-          new Error(`action "${action}" unknown, therefore not executed`)
-        )
+        listError(new Error(`action "${action}" unknown, therefore not executed`))
       }
     },
   }),

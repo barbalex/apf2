@@ -7,6 +7,7 @@ import popIdsInsideFeatureCollection from './popIdsInsideFeatureCollection'
 import exportXlsx from './exportXlsx'
 import exportCsv from './exportCsv'
 import exportKml from './exportKml'
+import listError from './listError'
 
 export default async ({
   data:dataPassed,
@@ -23,10 +24,7 @@ export default async ({
   applyMapFilterToExport: Boolean,
   kml: Boolean,
 }) => {
-  const { listError, map } = store
-  const onError = error => {
-    listError(error)
-  }
+  const { map } = store
   const { mapFilter } = map
   let data = dataPassed.map(d=> omit(d, ['__typename', 'Symbol(id)']))
   // now we could manipulate the data, for instance apply mapFilter
@@ -49,9 +47,7 @@ export default async ({
     }
   }
   if (data.length === 0) {
-    return onError(
-      'Es gibt offenbar keine Daten, welche exportiert werden können'
-    )
+    return listError(new Error('Es gibt offenbar keine Daten, welche exportiert werden können'))
   }
   if (kml) {
     exportKml({

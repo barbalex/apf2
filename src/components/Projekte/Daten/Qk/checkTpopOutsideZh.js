@@ -6,6 +6,7 @@ import flatten from 'lodash/flatten'
 
 import isPointInsidePolygon from './isPointInsidePolygon'
 import staticFilesBaseUrl from '../../../../modules/staticFilesBaseUrl'
+import listError from '../../../../modules/listError'
 
 export default async ({ store, data, addMessages, setOutsideZhChecked, checkingOutsideZh, setCheckingOutsideZh }) => {
   if (checkingOutsideZh) return
@@ -17,10 +18,9 @@ export default async ({ store, data, addMessages, setOutsideZhChecked, checkingO
 
   let resultKtZh: { data: Object }
   try {
-    const baseURL = staticFilesBaseUrl
-    resultKtZh = await axios.get('/ktZh.json', { baseURL })
+    resultKtZh = await axios.get('/ktZh.json', { baseURL: staticFilesBaseUrl })
   } catch (error) {
-    store.listError(error)
+    listError(error)
     return setOutsideZhChecked(true)
   }
   const ktZh = resultKtZh.data

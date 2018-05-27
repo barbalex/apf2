@@ -3,33 +3,35 @@ import clone from 'lodash/clone'
 import axios from 'axios'
 import { toJS } from 'mobx'
 
+import listError from '../../modules/listError'
+
 export default async (store: Object, tpopId: number): Promise<void> => {
   if (!tpopId) {
-    return store.listError(new Error('keine tpopId übergeben'))
+    return listError(new Error('keine tpopId übergeben'))
   }
   const tpop = store.table.tpop.get(tpopId)
   if (!tpop) {
-    return store.listError(
+    return listError(
       new Error(
         `Für die Teilpopulation mit tpopId ${tpopId} wurde keine Teilpopulation gefunden`
       )
     )
   }
   if (!tpop.x || !tpop.y) {
-    return store.listError(
+    return listError(
       new Error(
         `Die Teilpopulation mit tpopId ${tpopId} hat keine (vollständigen) Koordinaten. Daher wurden sie nicht in die Population kopiert`
       )
     )
   }
   if (!tpop.pop_id) {
-    return store.listError(
+    return listError(
       new Error(`Die Teilpopulation mit tpopId ${tpopId} hat keine Population`)
     )
   }
   let popInStore = store.table.pop.get(tpop.pop_id)
   if (!popInStore) {
-    return store.listError(
+    return listError(
       new Error(
         `Für die Teilpopulation mit tpopId ${tpopId} wurde keine Population gefunden`
       )
@@ -54,6 +56,6 @@ export default async (store: Object, tpopId: number): Promise<void> => {
     await axios.patch(`/pop?id=eq.${popForDb.id}`, popForDb)
   } catch (error) {
     popInStore = originalPop
-    store.listError(error)
+    return listError(error)
   }
 }
