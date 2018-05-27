@@ -9,7 +9,6 @@ import updatePropertyInDb from '../action/updatePropertyInDb'
 import insertDataset from '../action/insertDataset'
 import deleteDatasetDemand from '../action/deleteDatasetDemand'
 import deleteDatasetExecute from '../action/deleteDatasetExecute'
-import listError from '../../modules/listError'
 import writeToStore from '../action/writeToStore'
 import copyTpopKoordToPop from '../action/copyTpopKoordToPop'
 import copyBeobZugeordnetKoordToPop from '../action/copyBeobZugeordnetKoordToPop'
@@ -30,9 +29,6 @@ export default (store: Object): void => {
       createNewPopFromBeob({ store, tree, beobId })
     ),
     datasetToDelete: {},
-    tellUserReadOnly: action('tellUserReadOnly', () =>
-      listError(new Error('Sie haben keine Schreibrechte'))
-    ),
     insertDataset: action('insertDataset', (tree, table, parentId, baseUrl) => {
       insertDataset(store, tree, table, parentId, baseUrl)
     }),

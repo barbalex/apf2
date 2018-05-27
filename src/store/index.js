@@ -5,7 +5,6 @@ import extendStore from './extend'
 function Store(): void {
   this.loading = []
   this.datasetToDelete = {}
-  this.tellUserReadOnly = () => {}
   this.insertDataset = () => {}
   this.deleteDatasetDemand = () => {}
   this.deleteDatasetAbort = () => {}
