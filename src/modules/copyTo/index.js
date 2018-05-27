@@ -19,7 +19,7 @@ import createTpopkontrzaehl from './createTpopkontrzaehl.graphql'
 import createTpopmassn from './createTpopmassn.graphql'
 import createTpop from './createTpop.graphql'
 import createPop from './createPop.graphql'
-import listError from './listError'
+import listError from '../listError'
 //import queryTpopfeldkontr from './queryTpopfeldkontr.graphql'
 //import queryTpopfreiwkontr from './queryTpopfreiwkontr.graphql'
 
