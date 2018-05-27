@@ -3,7 +3,6 @@ import {
   extendObservable,
   action,
   computed,
-  reaction,
   toJS,
 } from 'mobx'
 import clone from 'lodash/clone'
