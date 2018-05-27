@@ -4,7 +4,6 @@ import {
   action,
   computed,
   reaction,
-  observable,
   toJS,
 } from 'mobx'
 import clone from 'lodash/clone'
@@ -14,7 +13,6 @@ import toggleNodeSymbol from '../action/toggleNodeSymbol'
 import toggleNextLowerNodes from '../action/toggleNextLowerNodes'
 import getActiveNodes from '../../modules/getActiveNodes'
 import setOpenNodesFromActiveNodeArray from '../action/setOpenNodesFromActiveNodeArray'
-import listError from '../../modules/listError'
 
 export default (store: Object, tree: Object): void => {
   extendObservable(tree, {
@@ -40,15 +38,6 @@ export default (store: Object, tree: Object): void => {
       () => setOpenNodesFromActiveNodeArray(store.tree)
     ),
     apFilter: false,
-    nodeLabelFilter: observable.map({}),
-    updateLabelFilter: action('updateLabelFilter', (table, value) => {
-      if (!table) {
-        return listError(
-          new Error('nodeLabelFilter cant be updated: no table passed')
-        )
-      } 
-      tree.nodeLabelFilter.set(table, value)
-    }),
     // action when user clicks on a node in the tree
     toggleNode: action('toggleNode', (tree, node) =>
       toggleNode(store, tree, node)
@@ -76,21 +65,6 @@ export default (store: Object, tree: Object): void => {
         menuType,
         nodes
       })
-    ),
-  })
-  extendObservable(tree, {
-    // empty all keys but ap when changing ap
-    emptyTreeNodeLabelFilterOnChangeAp: reaction(
-      () => tree.activeNodes.ap,
-      ap => {
-        tree.nodeLabelFilter.keys().forEach(key => {
-          if (key !== 'ap') {
-            tree.nodeLabelFilter.delete(key)
-          }
-        })
-      }, {
-        name: 'emptyTreeNodeLabelFilterOnChangeAp'
-      }
     ),
   })
 }

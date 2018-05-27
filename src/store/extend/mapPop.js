@@ -1,7 +1,6 @@
 // @flow
 import { extendObservable, computed } from 'mobx'
 
-import getPopsForMap from '../action/getPopsForMap'
 import getPopBounds from '../action/getPopBounds'
 
 export default (store: Object): void => {
@@ -29,7 +28,7 @@ export default (store: Object): void => {
       },
       { name: 'highlightedIds' }
     ),
-    pops: computed(() => getPopsForMap(store), { name: 'mapPops' }),
+    pops: [],
     bounds: computed(() => getPopBounds(store.map.pop.pops), {
       name: 'mapPopBounds',
     }),

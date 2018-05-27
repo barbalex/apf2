@@ -1,7 +1,6 @@
 // @flow
 import { extendObservable, computed } from 'mobx'
 
-import getTpopsForMap from '../action/getTpopsForMap'
 import getTpopBounds from '../action/getTpopBounds'
 
 export default (store: Object): void => {
@@ -26,7 +25,7 @@ export default (store: Object): void => {
       { name: 'mapTpopHighlightedIds' }
     ),
     highlightedPopIds: [],
-    tpops: computed(() => getTpopsForMap(store), { name: 'mapTpopTpops' }),
+    tpops: [],
     bounds: computed(() => getTpopBounds(store.map.tpop.tpops), {
       name: 'mapTpopBounds',
     }),

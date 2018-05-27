@@ -28,7 +28,6 @@ function Store(): void {
     activeNodes: {},
     openNodes: [],
     apFilter: false,
-    nodeLabelFilter: {},
     emptyNodeLabelFilter: () => {},
   }
   this.tree2 = {
@@ -39,7 +38,6 @@ function Store(): void {
     activeNodes: {},
     openNodes: [],
     apFilter: false,
-    nodeLabelFilter: {},
   }
   this.map = {
     bounds: [],
