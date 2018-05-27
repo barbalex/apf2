@@ -3,9 +3,7 @@ import {
   extendObservable,
   action,
   computed,
-  toJS,
 } from 'mobx'
-import clone from 'lodash/clone'
 
 import toggleNode from '../action/toggleNode'
 import toggleNodeSymbol from '../action/toggleNodeSymbol'
@@ -26,10 +24,6 @@ export default (store: Object, tree: Object): void => {
     ),
     activeNodes: computed(() => getActiveNodes(tree.activeNodeArray), {
       name: 'activeNodes',
-    }),
-    cloneActiveNodeArrayToTree2: action('cloneActiveNodeArrayToTree2', () => {
-      store.tree2.activeNodeArray = clone(toJS(tree.activeNodeArray))
-      store.tree2.openNodes = clone(toJS(tree.openNodes))
     }),
     openNodes: [],
     setOpenNodesFromActiveNodeArray: action(

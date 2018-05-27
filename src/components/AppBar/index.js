@@ -17,6 +17,7 @@ import withHandlers from 'recompose/withHandlers'
 import { Query } from 'react-apollo'
 import get from 'lodash/get'
 import clone from 'lodash/clone'
+import gql from 'graphql-tag'
 
 import isMobilePhone from '../../modules/isMobilePhone'
 import ErrorBoundary from '../shared/ErrorBoundary'
@@ -61,7 +62,13 @@ const enhance = compose(
         } else {
           projekteTabs.push(name)
           if (name === 'tree2') {
-            store.tree.cloneActiveNodeArrayToTree2()
+            client.mutate({
+              mutation: gql`
+                 mutation cloneTree2From1 {
+                  cloneTree2From1 @client
+                }
+              `
+            })
           }
         }
         setUrlQueryValue({ client, key: 'projekteTabs', value: projekteTabs })

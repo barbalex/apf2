@@ -24,11 +24,9 @@ function Store(): void {
     activeNodeArray: [],
     setActiveNodeArray: () => {},
     setOpenNodesFromActiveNodeArray: () => {},
-    cloneActiveNodeArrayToTree2: () => {},
     activeNodes: {},
     openNodes: [],
     apFilter: false,
-    emptyNodeLabelFilter: () => {},
   }
   this.tree2 = {
     name: 'tree2',

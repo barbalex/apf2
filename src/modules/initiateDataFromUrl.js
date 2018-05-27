@@ -42,7 +42,13 @@ export default (store: Object, client: Object) => {
   // need to set openNodes
   setOpenNodesFromActiveNodeArray({ client, activeNodeArray: initialActiveNodeArray })
   // clone tree2 in case tree2 is open
-  store.tree.cloneActiveNodeArrayToTree2()
+  client.mutate({
+    mutation: gql`
+       mutation cloneTree2From1 {
+        cloneTree2From1 @client
+      }
+    `
+  })
   const urlQuery = getUrlQuery()
   const { projekteTabs, feldkontrTab } = urlQuery
   client.mutate({
