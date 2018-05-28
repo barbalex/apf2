@@ -4,13 +4,11 @@ import isEqual from 'lodash/isEqual'
 export default ({
   tree,
   id,
-  menuType,
-  nodes
+  menuType
 }: {
   tree: Object,
   id: String,
   menuType: String,
-  nodes: Array < Object >
 }) => {
    /**
    * 1. load all data
