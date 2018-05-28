@@ -69,6 +69,7 @@ import copyTo from '../../../modules/copyTo'
 import listError from '../../../modules/listError'
 import createNewPopFromBeob from '../../../modules/createNewPopFromBeob'
 import setTreeKeyGql from './setTreeKey.graphql'
+import copyBeobZugeordnetKoordToPop from '../../../modules/copyBeobZugeordnetKoordToPop'
 
 const Container = styled.div`
   height: 100%;
@@ -300,7 +301,7 @@ const enhance = compose(
           createNewPopFromBeob({ tree, activeNodes, id, refetch })
         },
         copyBeobZugeordnetKoordToPop() {
-          store.copyBeobZugeordnetKoordToPop(id)
+          copyBeobZugeordnetKoordToPop(id)
         },
         showCoordOfTpopOnMapsZhCh() {
           const { x, y } = getAndValidateCoordinatesOfTpop(store, id)
