@@ -76,6 +76,7 @@ import setCopying from './setCopying.graphql'
 import setMoving from './setMoving.graphql'
 import tpopById from './tpopById.graphql'
 import beobById from './beobById.graphql'
+import openLowerNodes from './openLowerNodes'
 
 const Container = styled.div`
   height: 100%;
@@ -192,7 +193,7 @@ const enhance = compose(
           store.insertDataset(tree, table, idToPass, baseUrl)
         },
         openLowerNodes() {
-          tree.toggleNextLowerNodes({ tree, id, menuType, nodes })
+          openLowerNodes({ tree, id, menuType, nodes })
         },
         delete() {
           store.deleteDatasetDemand(table, id, baseUrl, label)

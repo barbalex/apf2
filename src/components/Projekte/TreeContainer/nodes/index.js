@@ -2,8 +2,8 @@
 import clone from 'lodash/clone'
 import get from 'lodash/get'
 
-import allParentNodesAreOpen from '../Tree/allParentNodesAreOpen'
-import allParentNodesAreVisible from '../Tree/allParentNodesAreVisible'
+import allParentNodesAreOpen from '../allParentNodesAreOpen'
+import allParentNodesAreVisible from '../allParentNodesAreVisible'
 import buildProjektNodes from './projekt'
 import buildApFolderNodes from './apFolder'
 import buildApberuebersichtFolderNodes from './apberuebersichtFolder'

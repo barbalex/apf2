@@ -1,11 +1,8 @@
 // @flow
-import {
-  toJS
-} from 'mobx'
 import isEqual from 'lodash/isEqual'
 
-import isNodeOpen from '../../components/Projekte/TreeContainer/Tree/isNodeOpen'
-import openNode from './openNode'
+import isNodeOpen from '../isNodeOpen'
+import openNode from '../openNode'
 
 const openLowerNodes = ({
   tree,
@@ -43,7 +40,7 @@ export default ({
     n => n.id === id && n.menuType === menuType
   )
   // if node is not open, toggle it
-  if (!isNodeOpen(toJS(tree.openNodes), node.url)) {
+  if (!isNodeOpen(tree.openNodes, node.url)) {
     openNode({
       tree,
       node,

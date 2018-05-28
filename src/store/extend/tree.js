@@ -5,7 +5,6 @@ import {
   computed,
 } from 'mobx'
 
-import toggleNextLowerNodes from '../action/toggleNextLowerNodes'
 import getActiveNodes from '../../modules/getActiveNodes'
 
 export default (store: Object, tree: Object): void => {
@@ -23,25 +22,5 @@ export default (store: Object, tree: Object): void => {
       name: 'activeNodes',
     }),
     openNodes: [],
-    toggleNextLowerNodes: action(
-      'toggleNextLowerNodes',
-      ({
-        tree,
-        id,
-        menuType,
-        nodes
-      }: {
-        tree: Object,
-        id: String,
-        menuType:String,
-        nodes: Array < Object >
-      }) =>
-      toggleNextLowerNodes({
-        tree,
-        id,
-        menuType,
-        nodes
-      })
-    ),
   })
 }

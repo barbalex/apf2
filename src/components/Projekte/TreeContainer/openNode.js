@@ -1,17 +1,17 @@
 // @flow
 import gql from 'graphql-tag'
+import app from 'ampersand-app'
 
 import isNodeOpen from './isNodeOpen'
 
 export default ({
   tree,
   node,
-  client
 }: {
   tree: Object,
   node: Object,
-  client: Object
 }) => {
+  const { client } = app
   // make sure this node's url is not yet contained
   // otherwise same nodes will be added multiple times!
   if (isNodeOpen(tree.openNodes, node.url)) return
