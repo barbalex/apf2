@@ -1,12 +1,14 @@
 // @flow
-import isEqual from 'lodash/isEqual'
+import tpopfreiwkontrFolder from './tpopfreiwkontrFolder'
 
 export default ({
   tree,
+  activeNodes,
   id,
   menuType
 }: {
   tree: Object,
+  activeNodes: Object,
   id: String,
   menuType: String,
 }) => {
@@ -35,7 +37,7 @@ export default ({
       // TODO
       break;
     case 'tpopfreiwkontrFolder':
-      // TODO
+      tpopfreiwkontrFolder({ tree, id, activeNodes })
       break;
     default:
       // do nothing
