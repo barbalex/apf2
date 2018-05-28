@@ -1,5 +1,5 @@
-query Query($apId: UUID!) {
-  apById(id: $apId) {
+query Query($id: UUID!) {
+  apById(id: $id) {
     id
     popsByApId {
       nodes {

@@ -1,5 +1,5 @@
-query Query($tpopId: UUID!) {
-  tpopById(id: $tpopId) {
+query Query($id: UUID!) {
+  tpopById(id: $id) {
     id
     tpopkontrsByTpopId(
       filter: {

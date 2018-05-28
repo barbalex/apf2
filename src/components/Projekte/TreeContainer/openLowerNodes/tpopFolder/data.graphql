@@ -1,5 +1,5 @@
-query Query($popId: UUID!) {
-  popById(id: $popId) {
+query Query($id: UUID!) {
+  popById(id: $id) {
     id
     apId
     nr

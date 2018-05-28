@@ -1,36 +1,69 @@
 //@flow
 /**
    * 1. load all data
-   * 2. build openNodes for all data using setOpenNodesFromActiveNodeArray
-   * 3. add these nodes to existing openNodes
-   * 4. make sure every nodeArray is unique in openNodes
-   * 5. activeNodeArray stays same
-   * 6. refresh tree
+   * 2. add activeNodeArrays for all data to openNodes
+   * 3. make sure every nodeArray is unique in openNodes
+   * 4. update openNodes
+   * 5. refresh tree
    */
 import app from 'ampersand-app'
 import get from 'lodash/get'
-import flatten from 'lodash/flatten'
+import uniqWith from 'lodash/uniqWith'
+import isEqual from 'lodash/isEqual'
 
 import dataGql from './data.graphql'
+import setTreeKeyGql from './setTreeKey.graphql'
 
-export default ({
+export default async ({
   tree,
   activeNodes,
   id,
+  refetch,
 }:{
   tree: Object,
   activeNodes: Object,
   id: String,
+  refetch: () => void,
 }) => {
   const { client } = app
+  const { projekt, ap, pop } = activeNodes
   const { openNodes } = tree
-  const { data } = client.query({
+  // 1. load all data
+  const { data } = await client.query({
     query: dataGql,
     variables: { id }
   })
-  const newOpenNodes = [...openNodes]
   const tpopkontrs = get(data, 'tpopById.tpopkontrsByTpopId.nodes')
+  // 2. add activeNodeArrays for all data to openNodes
+  let newOpenNodes = [
+    ...openNodes,
+    ['Projekte', projekt, 'Aktionspläne', ap, 'Populationen', pop, 'Teil-Populationen', id, 'Freiwilligen-Kontrollen']
+  ]
   tpopkontrs.forEach(k => {
-    
+    newOpenNodes = [
+      ...newOpenNodes,
+      ['Projekte', projekt, 'Aktionspläne', ap, 'Populationen', pop, 'Teil-Populationen', id, 'Freiwilligen-Kontrollen', k.id],
+      ['Projekte', projekt, 'Aktionspläne', ap, 'Populationen', pop, 'Teil-Populationen', id, 'Freiwilligen-Kontrollen', k.id, 'Zaehlungen']
+    ]
+    const zaehls = get(k, 'tpopkontrzaehlsByTpopkontrId.nodes')
+    zaehls.forEach(z => {
+      newOpenNodes = [
+        ...newOpenNodes,
+        ['Projekte', projekt, 'Aktionspläne', ap, 'Populationen', pop, 'Teil-Populationen', id, 'Freiwilligen-Kontrollen', k.id, 'Zaehlungen', z.id]
+      ]
+    })
   })
+  // 3. make sure every nodeArray is unique in openNodes
+  newOpenNodes = uniqWith(newOpenNodes, isEqual)
+  // 4. update openNodes
+  await client.mutate({
+    mutation: setTreeKeyGql,
+    variables: {
+      tree: tree.name,
+      value: newOpenNodes,
+      key: 'openNodes',
+    }
+  })
+  // 5. refresh tree
+  refetch()
 }

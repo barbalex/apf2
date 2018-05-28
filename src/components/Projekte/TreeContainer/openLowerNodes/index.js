@@ -5,12 +5,14 @@ export default ({
   tree,
   activeNodes,
   id,
-  menuType
+  menuType,
+  refetch,
 }: {
   tree: Object,
   activeNodes: Object,
   id: String,
   menuType: String,
+  refetch: () => void,
 }) => {
    /**
    * 1. load all data
@@ -37,7 +39,7 @@ export default ({
       // TODO
       break;
     case 'tpopfreiwkontrFolder':
-      tpopfreiwkontrFolder({ tree, id, activeNodes })
+      tpopfreiwkontrFolder({ tree, id, activeNodes, refetch })
       break;
     default:
       // do nothing
