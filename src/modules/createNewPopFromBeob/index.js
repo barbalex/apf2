@@ -98,11 +98,19 @@ export default async ({
     id,
   ]
 
-  // add Beob to open nodes
-  const newOpenNodes = [...tree.openNodes, newActiveNodeArray]
-    // and remove old one
+  const newOpenNodes = [
+    ...tree.openNodes,
+    // add Beob and it's not yet existing parents to open nodes
+    [ `Projekte`, projekt, `Aktionspläne`, ap, `Populationen` ],
+    [ `Projekte`, projekt, `Aktionspläne`, ap, `Populationen`, tpop.popId ],
+    [ `Projekte`, projekt, `Aktionspläne`, ap, `Populationen`, tpop.popId, `Teil-Populationen` ],
+    [ `Projekte`, projekt, `Aktionspläne`, ap, `Populationen`, tpop.popId, `Teil-Populationen`, tpop.id ],
+    [ `Projekte`, projekt, `Aktionspläne`, ap, `Populationen`, tpop.popId, `Teil-Populationen`, tpop.id, `Beobachtungen` ],
+    [ `Projekte`, projekt, `Aktionspläne`, ap, `Populationen`, tpop.popId, `Teil-Populationen`, tpop.id, `Beobachtungen`, id ]
+  ]
+    // and remove old node
     .filter(n => !isEqual(n, tree.activeNodeArray))
-  client.mutate({
+  await client.mutate({
     mutation: setTreeKeyGql,
     variables: {
       value: newOpenNodes,
