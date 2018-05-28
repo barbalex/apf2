@@ -165,7 +165,6 @@ const enhance = compose(
   withHandlers({
     handleClick: ({ store, data: dbData, treeName, activeNodes, refetch }) => ({ data, element, nodes, client }) => {
       const tree = get(dbData, treeName)
-      console.log('handleClick:', {treeName, dbData, tree})
       if (!data) return listError('no data passed with click')
       if (!element)
         return listError(new Error('no element passed with click'))
