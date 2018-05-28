@@ -173,7 +173,6 @@ const enhance = compose(
       if (!firstElementChild)
         return listError(new Error('no firstElementChild passed with click'))
       let id = firstElementChild.getAttribute('data-id')
-      if (!isNaN(id)) id = +id
       const parentId = firstElementChild.getAttribute('data-parentid')
       const url = firstElementChild.getAttribute('data-url')
       const label = firstElementChild.getAttribute('data-label')
