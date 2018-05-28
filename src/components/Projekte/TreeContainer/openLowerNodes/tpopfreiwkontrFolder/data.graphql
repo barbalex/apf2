@@ -8,26 +8,9 @@ query Query($id: UUID!) {
     ) {
       nodes {
         id
-        tpopId
-        datum
-        jahr
-        tpopkontrTypWerteByTyp {
-          id
-          text
-        }
         tpopkontrzaehlsByTpopkontrId {
           nodes {
             id
-            tpopkontrId
-            anzahl
-            tpopkontrzaehlEinheitWerteByEinheit {
-              id
-              text
-            }
-            tpopkontrzaehlMethodeWerteByMethode {
-              id
-              text
-            }
           }
         }
       }
