@@ -12,7 +12,6 @@ import deleteDatasetExecute from '../action/deleteDatasetExecute'
 import writeToStore from '../action/writeToStore'
 import copyTpopKoordToPop from '../action/copyTpopKoordToPop'
 import copyBeobZugeordnetKoordToPop from '../action/copyBeobZugeordnetKoordToPop'
-import createNewPopFromBeob from '../action/createNewPopFromBeob'
 import undoDeletion from '../action/undoDeletion'
 
 export default (store: Object): void => {
@@ -24,9 +23,6 @@ export default (store: Object): void => {
     copyBeobZugeordnetKoordToPop: action(
       'copyBeobZugeordnetKoordToPop',
       beobId => copyBeobZugeordnetKoordToPop(store, beobId)
-    ),
-    createNewPopFromBeob: action('createNewPopFromBeob', (tree, beobId) =>
-      createNewPopFromBeob({ store, tree, beobId })
     ),
     datasetToDelete: {},
     insertDataset: action('insertDataset', (tree, table, parentId, baseUrl) => {

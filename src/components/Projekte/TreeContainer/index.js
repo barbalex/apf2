@@ -67,6 +67,8 @@ import setUrlQueryValue from '../../../modules/setUrlQueryValue'
 import moveTo from '../../../modules/moveTo'
 import copyTo from '../../../modules/copyTo'
 import listError from '../../../modules/listError'
+import createNewPopFromBeob from '../../../modules/createNewPopFromBeob'
+import setTreeKeyGql from './setTreeKey.graphql'
 
 const Container = styled.div`
   height: 100%;
@@ -142,7 +144,7 @@ const showMapIfNotYetVisible = ({
 const enhance = compose(
   inject('store'),
   withHandlers({
-    handleClick: ({ store, tree, refetch }) => ({ data, element, nodes, client }) => {
+    handleClick: ({ store, tree, activeNodes, refetch }) => ({ data, element, nodes, client }) => {
       if (!data) return listError('no data passed with click')
       if (!element)
         return listError(new Error('no element passed with click'))
@@ -293,7 +295,7 @@ const enhance = compose(
           store.copyTpopKoordToPop(id)
         },
         createNewPopFromBeob() {
-          store.createNewPopFromBeob(tree, id)
+          createNewPopFromBeob({ tree, activeNodes, id, refetch })
         },
         copyBeobZugeordnetKoordToPop() {
           store.copyBeobZugeordnetKoordToPop(id)
@@ -361,20 +363,7 @@ const enhance = compose(
       ) {
         const projektUrl = clone(projektNode.url)
         client.mutate({
-          mutation: gql`
-            mutation setTreeKey($value: Array!, $tree: String!, $key: String!) {
-              setTreeKey(tree: $tree, key: $key, value: $value) @client {
-                tree @client {
-                  name
-                  activeNodeArray
-                  openNodes
-                  apFilter
-                  nodeLabelFilter
-                  __typename: Tree
-                }
-              }
-            }
-          `,
+          mutation: setTreeKeyGql,
           variables: {
             value: projektUrl,
             tree: treeName,
@@ -383,20 +372,7 @@ const enhance = compose(
         })
         // add projekt to open nodes
         client.mutate({
-          mutation: gql`
-            mutation setTreeKey($value: Array!, $tree: String!, $key: String!) {
-              setTreeKey(tree: $tree, key: $key, value: $value) @client {
-                tree @client {
-                  name
-                  activeNodeArray
-                  openNodes
-                  apFilter
-                  nodeLabelFilter
-                  __typename: Tree
-                }
-              }
-            }
-          `,
+          mutation: setTreeKeyGql,
           variables: {
             value: [...openNodes, projektUrl],
             tree: treeName,
