@@ -71,6 +71,9 @@ import createNewPopFromBeob from '../../../modules/createNewPopFromBeob'
 import setTreeKeyGql from './setTreeKey.graphql'
 import copyBeobZugeordnetKoordToPop from '../../../modules/copyBeobZugeordnetKoordToPop'
 import copyTpopKoordToPop from '../../../modules/copyTpopKoordToPop'
+import setCopyingBiotop from './setCopyingBiotop.graphql'
+import setCopying from './setCopying.graphql'
+import setMoving from './setMoving.graphql'
 
 const Container = styled.div`
   height: 100%;
@@ -203,15 +206,7 @@ const enhance = compose(
         },
         markForMoving() {
           client.mutate({
-            mutation: gql`
-              mutation setMoving($table: String!, $id: UUID!, $label: String!) {
-                setMoving(table: $table, id: $id, label: $label) @client {
-                  table
-                  id
-                  label
-                }
-              }
-            `,
+            mutation: setMoving,
             variables: { table, id, label }
           })
         },
@@ -220,46 +215,19 @@ const enhance = compose(
         },
         markForCopying() {
           client.mutate({
-            mutation: gql`
-              mutation setCopying($table: String!, $id: UUID!, $label: String!, $withNextLevel: Boolean!) {
-                setCopying(table: $table, id: $id, label: $label, withNextLevel: $withNextLevel) @client {
-                  table
-                  id
-                  label
-                  withNextLevel
-                }
-              }
-            `,
+            mutation: setCopying,
             variables: { table, id, label, withNextLevel: false }
           })
         },
         markForCopyingWithNextLevel() {
           client.mutate({
-            mutation: gql`
-              mutation setCopying($table: String!, $id: UUID!, $label: String!, $withNextLevel: Boolean!) {
-                setCopying(table: $table, id: $id, label: $label, withNextLevel: $withNextLevel) @client {
-                  table
-                  id
-                  label
-                  withNextLevel
-                }
-              }
-            `,
+            mutation: setCopying,
             variables: { table, id, label, withNextLevel: true }
           })
         },
         resetCopying() {
           client.mutate({
-            mutation: gql`
-              mutation setCopying($table: String!, $id: UUID!, $label: String!, $withNextLevel: Boolean!) {
-                setCopying(table: $table, id: $id, label: $label, withNextLevel: $withNextLevel) @client {
-                  table
-                  id
-                  label
-                  withNextLevel
-                }
-              }
-            `,
+            mutation: setCopying,
             variables: { table: null, id: null, label: null, withNextLevel: false }
           })
         },
@@ -268,27 +236,13 @@ const enhance = compose(
         },
         markForCopyingBiotop() {
           client.mutate({
-            mutation: gql`
-              mutation setCopyingBiotop($id: UUID!, $label: String!) {
-                setCopyingBiotop(id: $id, label: $label) @client {
-                  id
-                  label
-                }
-              }
-            `,
+            mutation: setCopyingBiotop,
             variables: { id, label }
           })
         },
         resetCopyingBiotop() {
           client.mutate({
-            mutation: gql`
-              mutation setCopyingBiotop($id: UUID, $label: String) {
-                setCopyingBiotop(id: $id, label: $label) @client {
-                  id
-                  label
-                }
-              }
-            `,
+            mutation: setCopyingBiotop,
             variables: { id: 'copyingBiotop', label: null }
           })
         },

@@ -1,0 +1,7 @@
+mutation setMoving($table: String!, $id: UUID!, $label: String!) {
+  setMoving(table: $table, id: $id, label: $label) @client {
+    table
+    id
+    label
+  }
+}
