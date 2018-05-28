@@ -9,7 +9,7 @@ import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 import clone from 'lodash/clone'
 import get from 'lodash/get'
-import gql from "graphql-tag"
+import app from 'ampersand-app'
 import withLifecycle from '@hocs/with-lifecycle'
 
 import LabelFilter from './LabelFilter'
@@ -74,6 +74,8 @@ import copyTpopKoordToPop from '../../../modules/copyTpopKoordToPop'
 import setCopyingBiotop from './setCopyingBiotop.graphql'
 import setCopying from './setCopying.graphql'
 import setMoving from './setMoving.graphql'
+import tpopById from './tpopById.graphql'
+import beobById from './beobById.graphql'
 
 const Container = styled.div`
   height: 100%;
@@ -103,14 +105,19 @@ const InnerTreeContainer = styled.div`
   overflow: hidden;
 `
 
-const getAndValidateCoordinatesOfTpop = (store, id) => {
-  const tpop = store.table.tpop.get(id)
-  if (!tpop) {
-    listError(new Error(`Die Teilpopulation mit der ID ${id} wurde nicht gefunden`))
-    return { x: null, y: null }
+const getAndValidateCoordinatesOfTpop = async id => {
+  const { client } = app
+  let tpopResult
+  try {
+    tpopResult = await client.query({
+      query: tpopById,
+      variables: { id }
+    })
+  } catch (error) {
+    listError(error)
   }
-  const x = tpop.x
-  const y = tpop.y
+  const tpop = get(tpopResult, 'data.tpopById')
+  const { x, y } = tpops
   if (!x || !y) {
     listError(new Error(`Die Teilpopulation mit der ID ${id} kat keine (vollständigen) Koordinaten`))
     return { x: null, y: null }
@@ -118,12 +125,17 @@ const getAndValidateCoordinatesOfTpop = (store, id) => {
   return { x, y }
 }
 
-const getAndValidateCoordinatesOfBeob = (store, beobId) => {
-  const beob = store.table.beob.get(beobId)
-  if (!beob) {
-    store.listError(new Error(`Die bereitgestellte Beobachtung mit der ID ${beobId} wurde nicht gefunden`))
-    return { x: null, y: null }
+const getAndValidateCoordinatesOfBeob = async id => {
+  let beobResult
+  try {
+    beobResult = await client.query({
+      query: beobById,
+      variables: { id }
+    })
+  } catch (error) {
+    listError(error)
   }
+  const beob = get(beobResult, 'data.beobById')
   const { x, y } = beob
   if (!x || !y) {
     store.listError(new Error(`Die Teilpopulation mit der ID ${beobId} kat keine (vollständigen) Koordinaten`))
@@ -259,7 +271,7 @@ const enhance = compose(
           copyBeobZugeordnetKoordToPop(id)
         },
         showCoordOfTpopOnMapsZhCh() {
-          const { x, y } = getAndValidateCoordinatesOfTpop(store, id)
+          const { x, y } = await getAndValidateCoordinatesOfTpop(id)
           if (x && y) {
             window.open(
               `https://maps.zh.ch/?x=${x}&y=${y}&scale=3000&markers=ring`,
@@ -268,7 +280,7 @@ const enhance = compose(
           }
         },
         showCoordOfTpopOnMapGeoAdminCh() {
-          const { x, y } = getAndValidateCoordinatesOfTpop(store, id)
+          const { x, y } = await getAndValidateCoordinatesOfTpop(id)
           if (x && y) {
             window.open(
               `https://map.geo.admin.ch/?bgLayer=ch.swisstopo.pixelkarte-farbe&Y=${x}&X=${y}&zoom=10&crosshair=circle`,
@@ -277,7 +289,7 @@ const enhance = compose(
           }
         },
         showCoordOfBeobOnMapsZhCh() {
-          const { x, y } = getAndValidateCoordinatesOfBeob(store, id)
+          const { x, y } = async getAndValidateCoordinatesOfBeob(id)
           if (x && y) {
             window.open(
               `https://maps.zh.ch/?x=${x}&y=${y}&scale=3000&markers=ring`,
@@ -286,7 +298,7 @@ const enhance = compose(
           }
         },
         showCoordOfBeobOnMapGeoAdminCh() {
-          const { x, y } = getAndValidateCoordinatesOfBeob(store, id)
+          const { x, y } = async getAndValidateCoordinatesOfBeob(id)
           if (x && y) {
             window.open(
               `https://map.geo.admin.ch/?bgLayer=ch.swisstopo.pixelkarte-farbe&Y=${x}&X=${y}&zoom=10&crosshair=circle`,
