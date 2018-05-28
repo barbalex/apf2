@@ -10,15 +10,11 @@ import insertDataset from '../action/insertDataset'
 import deleteDatasetDemand from '../action/deleteDatasetDemand'
 import deleteDatasetExecute from '../action/deleteDatasetExecute'
 import writeToStore from '../action/writeToStore'
-import copyTpopKoordToPop from '../action/copyTpopKoordToPop'
 import undoDeletion from '../action/undoDeletion'
 
 export default (store: Object): void => {
   extendObservable(store, {
     loading: [],
-    copyTpopKoordToPop: action('copyTpopKoordToPop', tpopId =>
-      copyTpopKoordToPop(store, tpopId)
-    ),
     datasetToDelete: {},
     insertDataset: action('insertDataset', (tree, table, parentId, baseUrl) => {
       insertDataset(store, tree, table, parentId, baseUrl)

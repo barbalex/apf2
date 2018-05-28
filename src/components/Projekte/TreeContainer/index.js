@@ -70,6 +70,7 @@ import listError from '../../../modules/listError'
 import createNewPopFromBeob from '../../../modules/createNewPopFromBeob'
 import setTreeKeyGql from './setTreeKey.graphql'
 import copyBeobZugeordnetKoordToPop from '../../../modules/copyBeobZugeordnetKoordToPop'
+import copyTpopKoordToPop from '../../../modules/copyTpopKoordToPop'
 
 const Container = styled.div`
   height: 100%;
@@ -295,7 +296,7 @@ const enhance = compose(
           copyBiotopTo({ id, client })
         },
         copyTpopKoordToPop() {
-          store.copyTpopKoordToPop(id)
+          copyTpopKoordToPop(id)
         },
         createNewPopFromBeob() {
           createNewPopFromBeob({ tree, activeNodes, id, refetch })
