@@ -13,6 +13,15 @@ const openLowerNodes = ({
   node: Object,
   nodes: Array < Object >
 }) => {
+  /**
+   * 1. load all data
+   * 2. build openNodes for all data
+   * 3. activeNodeArray stays same
+   * 4. refresh tree
+   */
+
+
+
   const lowerNodes = nodes.filter(n => {
     const levelNeeded = n.url.length === node.url.length + 1
     if (!levelNeeded) return false

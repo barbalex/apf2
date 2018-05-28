@@ -1,0 +1,36 @@
+query Query($tpopId: UUID!) {
+  tpopById(id: $tpopId) {
+    id
+    tpopkontrsByTpopId(
+      filter: {
+        typ: { equalTo: "Freiwilligen-Erfolgskontrolle" }
+      }
+    ) {
+      nodes {
+        id
+        tpopId
+        datum
+        jahr
+        tpopkontrTypWerteByTyp {
+          id
+          text
+        }
+        tpopkontrzaehlsByTpopkontrId {
+          nodes {
+            id
+            tpopkontrId
+            anzahl
+            tpopkontrzaehlEinheitWerteByEinheit {
+              id
+              text
+            }
+            tpopkontrzaehlMethodeWerteByMethode {
+              id
+              text
+            }
+          }
+        }
+      }
+    }
+  }
+}
