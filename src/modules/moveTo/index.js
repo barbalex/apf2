@@ -3,23 +3,22 @@
  * moves a dataset to a different parent
  * used when moving for instance tpop to other pop in tree
  */
-import gql from 'graphql-tag'
 import get from 'lodash/get'
+import app from 'ampersand-app'
 
-import tables from './tables'
-import listError from './listError'
+import tables from '../tables'
+import listError from '../listError'
+import movingGql from './moving.graphql'
+import updateTpopkontrById from './updateTpopkontrById.graphql'
+import updateTpopmassnById from './updateTpopmassnById.graphql'
+import updateTpopById from './updateTpopById.graphql'
+import updatePopById from './updatePopById.graphql'
+import setMoving from './setMoving.graphql'
 
-export default async (store: Object, newParentId: String, client: Object): any => {
+export default async (newParentId: String): any => {
+  const { client } = app
   const { data } = await client.query({
-    query: gql`
-        query Query {
-          moving @client {
-            table
-            id
-            label
-          }
-        }
-      `
+    query: movingGql
   })
   let table = get(data, 'moving.table')
   const id = get(data, 'moving.id')
@@ -48,18 +47,7 @@ export default async (store: Object, newParentId: String, client: Object): any =
   switch (table) {
     case 'tpopkontr':
       client.mutate({
-        mutation: gql`
-          mutation updateTpopkontrById($id: UUID!, $tpopId: UUID!) {
-            updateTpopkontrById(id: $id, tpopId: $tpopId) {
-              input: {
-                id: $id
-                tpopkontrPatch: {
-                  tpopId: $tpopId
-                }
-              }
-            }
-          }
-        `,
+        mutation: updateTpopkontrById,
         variables: { id, tpopId: newParentId },
         optimisticResponse: {
           __typename: 'Mutation',
@@ -75,18 +63,7 @@ export default async (store: Object, newParentId: String, client: Object): any =
       break;
     case 'tpopmassn':
       client.mutate({
-        mutation: gql`
-          mutation updateTpopmassnById($id: UUID!, $tpopId: UUID!) {
-            updateTpopmassnById(id: $id, tpopId: $tpopId) {
-              input: {
-                id: $id
-                tpopmassnPatch: {
-                  tpopId: $tpopId
-                }
-              }
-            }
-          }
-        `,
+        mutation: updateTpopmassnById,
         variables: { id, tpopId: newParentId },
         optimisticResponse: {
           __typename: 'Mutation',
@@ -102,18 +79,7 @@ export default async (store: Object, newParentId: String, client: Object): any =
       break;
     case 'tpop':
       client.mutate({
-        mutation: gql`
-          mutation updateTpopById($id: UUID!, $popId: UUID!) {
-            updateTpopById(id: $id, popId: $popId) {
-              input: {
-                id: $id
-                tpopPatch: {
-                  popId: $popId
-                }
-              }
-            }
-          }
-        `,
+        mutation: updateTpopById,
         variables: { id, popId: newParentId },
         optimisticResponse: {
           __typename: 'Mutation',
@@ -129,18 +95,7 @@ export default async (store: Object, newParentId: String, client: Object): any =
       break;
     case 'pop':
       client.mutate({
-        mutation: gql`
-          mutation updatePopById($id: UUID!, $apId: UUID!) {
-            updatePopById(id: $id, apId: $apId) {
-              input: {
-                id: $id
-                popPatch: {
-                  apId: $apId
-                }
-              }
-            }
-          }
-        `,
+        mutation: updatePopById,
         variables: { id, apId: newParentId },
         optimisticResponse: {
           __typename: 'Mutation',
@@ -160,15 +115,7 @@ export default async (store: Object, newParentId: String, client: Object): any =
   }
   // reset moving
   client.mutate({
-    mutation: gql`
-      mutation setMoving($table: String!, $id: UUID!, $label: String!) {
-        setMoving(table: $table, id: $id, label: $label) @client {
-          table
-          id
-          label
-        }
-      }
-    `,
+    mutation: setMoving,
     variables: { table: null, id: null, label: null }
   })
 }

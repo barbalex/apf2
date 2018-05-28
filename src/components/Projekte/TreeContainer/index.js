@@ -117,7 +117,7 @@ const getAndValidateCoordinatesOfTpop = async id => {
     listError(error)
   }
   const tpop = get(tpopResult, 'data.tpopById')
-  const { x, y } = tpops
+  const { x, y } = tpop
   if (!x || !y) {
     listError(new Error(`Die Teilpopulation mit der ID ${id} kat keine (vollständigen) Koordinaten`))
     return { x: null, y: null }
@@ -126,6 +126,7 @@ const getAndValidateCoordinatesOfTpop = async id => {
 }
 
 const getAndValidateCoordinatesOfBeob = async id => {
+  const { client } = app
   let beobResult
   try {
     beobResult = await client.query({
@@ -138,7 +139,7 @@ const getAndValidateCoordinatesOfBeob = async id => {
   const beob = get(beobResult, 'data.beobById')
   const { x, y } = beob
   if (!x || !y) {
-    store.listError(new Error(`Die Teilpopulation mit der ID ${beobId} kat keine (vollständigen) Koordinaten`))
+    listError(new Error(`Die Teilpopulation mit der ID ${id} kat keine (vollständigen) Koordinaten`))
     return { x: null, y: null }
   }
   return { x, y }
@@ -223,7 +224,7 @@ const enhance = compose(
           })
         },
         move() {
-          moveTo(store, id, client)
+          moveTo(id)
         },
         markForCopying() {
           client.mutate({
@@ -270,7 +271,7 @@ const enhance = compose(
         copyBeobZugeordnetKoordToPop() {
           copyBeobZugeordnetKoordToPop(id)
         },
-        showCoordOfTpopOnMapsZhCh() {
+        async showCoordOfTpopOnMapsZhCh() {
           const { x, y } = await getAndValidateCoordinatesOfTpop(id)
           if (x && y) {
             window.open(
@@ -279,7 +280,7 @@ const enhance = compose(
             )
           }
         },
-        showCoordOfTpopOnMapGeoAdminCh() {
+        async showCoordOfTpopOnMapGeoAdminCh() {
           const { x, y } = await getAndValidateCoordinatesOfTpop(id)
           if (x && y) {
             window.open(
@@ -288,8 +289,8 @@ const enhance = compose(
             )
           }
         },
-        showCoordOfBeobOnMapsZhCh() {
-          const { x, y } = async getAndValidateCoordinatesOfBeob(id)
+        async showCoordOfBeobOnMapsZhCh() {
+          const { x, y } = await getAndValidateCoordinatesOfBeob(id)
           if (x && y) {
             window.open(
               `https://maps.zh.ch/?x=${x}&y=${y}&scale=3000&markers=ring`,
@@ -297,8 +298,8 @@ const enhance = compose(
             )
           }
         },
-        showCoordOfBeobOnMapGeoAdminCh() {
-          const { x, y } = async getAndValidateCoordinatesOfBeob(id)
+        async showCoordOfBeobOnMapGeoAdminCh() {
+          const { x, y } = await getAndValidateCoordinatesOfBeob(id)
           if (x && y) {
             window.open(
               `https://map.geo.admin.ch/?bgLayer=ch.swisstopo.pixelkarte-farbe&Y=${x}&X=${y}&zoom=10&crosshair=circle`,
