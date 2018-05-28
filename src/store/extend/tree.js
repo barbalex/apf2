@@ -25,7 +25,6 @@ export default (store: Object, tree: Object): void => {
       name: 'activeNodes',
     }),
     openNodes: [],
-    apFilter: false,
     // action when user clicks on a node in the tree
     toggleNode: action('toggleNode', (tree, node) =>
       toggleNode(store, tree, node)

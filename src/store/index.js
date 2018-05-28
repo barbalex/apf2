@@ -25,7 +25,6 @@ function Store(): void {
     setActiveNodeArray: () => {},
     activeNodes: {},
     openNodes: [],
-    apFilter: false,
   }
   this.tree2 = {
     name: 'tree2',
@@ -33,7 +32,6 @@ function Store(): void {
     setActiveNodeArray: () => {},
     activeNodes: {},
     openNodes: [],
-    apFilter: false,
   }
   this.map = {
     bounds: [],
