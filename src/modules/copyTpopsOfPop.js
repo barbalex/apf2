@@ -5,13 +5,11 @@ import get from 'lodash/get'
 import copyTo from './copyTo'
 
 export default async ({
-  store,
   popIdFrom,
   popIdTo,
   client,
   refetch
 }: {
-  store: Object,
   popIdFrom: String,
   popIdTo: String,
   client: Object,
@@ -35,7 +33,6 @@ export default async ({
   // 2. add tpops to new pop
   tpops.forEach(tpop =>
     copyTo({
-      store,
       parentId: popIdTo,
       table: 'tpop',
       id: tpop.id,

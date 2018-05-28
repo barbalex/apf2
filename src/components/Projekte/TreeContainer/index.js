@@ -245,7 +245,7 @@ const enhance = compose(
           })
         },
         copy() {
-          copyTo({ store, parentId: id, client, refetch })
+          copyTo({ parentId: id, client, refetch })
         },
         markForCopyingBiotop() {
           client.mutate({

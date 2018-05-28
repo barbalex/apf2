@@ -26,14 +26,12 @@ import listError from '../listError'
 // copyTpopsOfPop can pass table and id separately
 export default async (
   {
-    store,
     parentId,
     table: tablePassed,
     id: idPassed,
     client,
     refetch
   }:{
-    store: Object,
     parentId: String,
     tablePassed: ?String,
     idPassed: ?String,
@@ -341,7 +339,6 @@ export default async (
   // copy tpop if needed
   if (table === 'pop' && withNextLevel) {
     copyTpopsOfPop({
-      store,
       popIdFrom: id,
       popIdTo: newId,
       client,
@@ -351,7 +348,6 @@ export default async (
   if (table === 'tpopkontr') {
     // always copy Zaehlungen
     copyZaehlOfTpopKontr({
-      store,
       tpopkontrIdFrom: id,
       tpopkontrIdTo: newId,
       client,
