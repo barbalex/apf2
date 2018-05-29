@@ -34,11 +34,28 @@ export default async ({
     variables: { id }
   })
   const tpops = get(data, 'popById.tpopsByPopId.nodes')
+  const popbers = get(data, 'popById.popbersByPopId.nodes')
+  const popmassnbers = get(data, 'popById.popmassnbersByPopId.nodes')
   // 2. add activeNodeArrays for all data to openNodes
   let newOpenNodes = [
     ...openNodes,
+    ['Projekte', projekt, 'Aktionspläne', ap, 'Populationen', id],
     ['Projekte', projekt, 'Aktionspläne', ap, 'Populationen', id, 'Teil-Populationen'],
+    ['Projekte', projekt, 'Aktionspläne', ap, 'Populationen', id, 'Kontroll-Berichte'],
+    ['Projekte', projekt, 'Aktionspläne', ap, 'Populationen', id, 'Massnahmen-Berichte'],
   ]
+  popbers.forEach(o => {
+    newOpenNodes = [
+      ...newOpenNodes,
+      ['Projekte', projekt, 'Aktionspläne', ap, 'Populationen', id, 'Kontroll-Berichte', o.id],
+    ]
+  })
+  popmassnbers.forEach(o => {
+    newOpenNodes = [
+      ...newOpenNodes,
+      ['Projekte', projekt, 'Aktionspläne', ap, 'Populationen', id, 'Massnahmen-Berichte', o.id],
+    ]
+  })
   tpops.forEach(tpop => {
     newOpenNodes = [
       ...newOpenNodes,
