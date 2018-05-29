@@ -2,6 +2,7 @@
 import tpopfreiwkontrFolder from './tpopfreiwkontrFolder'
 import tpopfeldkontrFolder from './tpopfeldkontrFolder'
 import tpop from './tpop'
+import tpopFolder from './tpopFolder'
 
 export default ({
   tree,
@@ -32,7 +33,7 @@ export default ({
       // TODO
       break;
     case 'tpopFolder':
-      // TODO
+      tpopFolder({ tree, id, activeNodes, refetch })
       break;
     case 'tpop':
     tpop({ tree, id, activeNodes, refetch })
