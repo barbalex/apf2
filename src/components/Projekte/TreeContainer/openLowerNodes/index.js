@@ -1,6 +1,7 @@
 // @flow
 import tpopfreiwkontrFolder from './tpopfreiwkontrFolder'
 import tpopfeldkontrFolder from './tpopfeldkontrFolder'
+import tpop from './tpop'
 
 export default ({
   tree,
@@ -34,7 +35,7 @@ export default ({
       // TODO
       break;
     case 'tpop':
-      // TODO
+    tpop({ tree, id, activeNodes, refetch })
       break;
     case 'tpopfeldkontrFolder':
       tpopfeldkontrFolder({ tree, id, activeNodes, refetch })

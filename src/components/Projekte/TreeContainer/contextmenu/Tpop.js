@@ -39,6 +39,14 @@ const Tpop = ({
     <ErrorBoundary>
       <ContextMenu id={`${tree.name}tpop`}>
         <div className="react-contextmenu-title">Teil-Population</div>
+        <MenuItem
+          onClick={onClick}
+          data={{
+            action: 'openLowerNodes',
+          }}
+        >
+          alle öffnen
+        </MenuItem>
         {
           !userIsReadOnly(token) &&
           <Fragment>

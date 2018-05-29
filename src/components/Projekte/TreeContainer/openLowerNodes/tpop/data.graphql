@@ -4,23 +4,11 @@ query Query($id: UUID!) {
     tpopmassnsByTpopId {
       nodes {
         id
-        tpopId
-        jahr
-        tpopmassnTypWerteByTyp {
-          id
-          text
-        }
       }
     }
     tpopmassnbersByTpopId {
       nodes {
         id
-        tpopId
-        jahr
-        tpopmassnErfbeurtWerteByBeurteilung {
-          id
-          text
-        }
       }
     }
     tpopfeldkontrs: tpopkontrsByTpopId(
@@ -30,26 +18,9 @@ query Query($id: UUID!) {
     ) {
       nodes {
         id
-        tpopId
-        datum
-        jahr
-        tpopkontrTypWerteByTyp {
-          id
-          text
-        }
         tpopkontrzaehlsByTpopkontrId {
           nodes {
             id
-            tpopkontrId
-            anzahl
-            tpopkontrzaehlEinheitWerteByEinheit {
-              id
-              text
-            }
-            tpopkontrzaehlMethodeWerteByMethode {
-              id
-              text
-            }
           }
         }
       }
@@ -61,26 +32,9 @@ query Query($id: UUID!) {
     ) {
       nodes {
         id
-        tpopId
-        datum
-        jahr
-        tpopkontrTypWerteByTyp {
-          id
-          text
-        }
         tpopkontrzaehlsByTpopkontrId {
           nodes {
             id
-            tpopkontrId
-            anzahl
-            tpopkontrzaehlEinheitWerteByEinheit {
-              id
-              text
-            }
-            tpopkontrzaehlMethodeWerteByMethode {
-              id
-              text
-            }
           }
         }
       }
@@ -88,24 +42,11 @@ query Query($id: UUID!) {
     tpopbersByTpopId {
       nodes {
         id
-        tpopId
-        jahr
-        tpopEntwicklungWerteByEntwicklung {
-          id
-          text
-        }
       }
     }
     beobsByTpopId {
       nodes {
         id
-        tpopId
-        nichtZuordnen
-        artId
-        datum
-        autor
-        quelle
-        tpopId
       }
     }
   }
