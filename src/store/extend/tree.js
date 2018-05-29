@@ -21,6 +21,5 @@ export default (store: Object, tree: Object): void => {
     activeNodes: computed(() => getActiveNodes(tree.activeNodeArray), {
       name: 'activeNodes',
     }),
-    openNodes: [],
   })
 }

@@ -24,14 +24,12 @@ function Store(): void {
     activeNodeArray: [],
     setActiveNodeArray: () => {},
     activeNodes: {},
-    openNodes: [],
   }
   this.tree2 = {
     name: 'tree2',
     activeNodeArray: [],
     setActiveNodeArray: () => {},
     activeNodes: {},
-    openNodes: [],
   }
   this.map = {
     bounds: [],
