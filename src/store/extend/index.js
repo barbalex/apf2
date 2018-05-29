@@ -1,5 +1,4 @@
 import extendStore from './store'
-import extendTree from './tree'
 import extendMap from './map'
 import extendMapPop from './mapPop'
 import extendMapTpop from './mapTpop'
@@ -10,8 +9,6 @@ import extendMapBeobZugeordnet from './mapBeobZugeordnet'
 
 export default (store: Object): void => {
   extendStore(store)
-  extendTree(store, store.tree)
-  extendTree(store, store.tree2)
   extendMap(store)
   extendMapPop(store)
   extendMapTpop(store)

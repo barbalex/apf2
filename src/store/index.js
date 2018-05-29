@@ -20,12 +20,9 @@ function Store(): void {
   this.fetchDatasetById = () => {}
   this.writeToStore = () => {}
   this.tree = {
-    name: 'tree',
     activeNodes: {},
   }
   this.tree2 = {
-    name: 'tree2',
-    activeNodeArray: [],
     activeNodes: {},
   }
   this.map = {
