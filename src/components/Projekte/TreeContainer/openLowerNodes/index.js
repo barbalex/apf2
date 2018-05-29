@@ -4,6 +4,7 @@ import tpopfeldkontrFolder from './tpopfeldkontrFolder'
 import tpop from './tpop'
 import tpopFolder from './tpopFolder'
 import pop from './pop'
+import popFolder from './popFolder'
 
 export default ({
   tree,
@@ -28,7 +29,7 @@ export default ({
    */
   switch (menuType) {
     case 'popFolder':
-      // TODO
+      popFolder({ tree, id, activeNodes, refetch })
       break;
     case 'pop':
       pop({ tree, id, activeNodes, refetch })

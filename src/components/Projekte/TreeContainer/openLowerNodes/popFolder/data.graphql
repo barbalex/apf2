@@ -4,60 +4,25 @@ query Query($id: UUID!) {
     popsByApId {
       nodes {
         id
-        apId
-        nr
-        name
         tpopsByPopId {
           nodes {
             id
-            popId
-            nr
-            flurname
             tpopmassnsByTpopId {
               nodes {
                 id
-                tpopId
-                jahr
-                tpopmassnTypWerteByTyp {
-                  id
-                  text
-                }
               }
             }
             tpopmassnbersByTpopId {
               nodes {
                 id
-                tpopId
-                jahr
-                tpopmassnErfbeurtWerteByBeurteilung {
-                  id
-                  text
-                }
               }
             }
             tpopfeldkontrs: tpopkontrsByTpopId(filter: {typ: {notEqualTo: "Freiwilligen-Erfolgskontrolle"}}) {
               nodes {
                 id
-                tpopId
-                datum
-                jahr
-                tpopkontrTypWerteByTyp {
-                  id
-                  text
-                }
                 tpopkontrzaehlsByTpopkontrId {
                   nodes {
                     id
-                    tpopkontrId
-                    anzahl
-                    tpopkontrzaehlEinheitWerteByEinheit {
-                      id
-                      text
-                    }
-                    tpopkontrzaehlMethodeWerteByMethode {
-                      id
-                      text
-                    }
                   }
                 }
               }
@@ -65,26 +30,9 @@ query Query($id: UUID!) {
             tpopfreiwkontrs: tpopkontrsByTpopId(filter: {typ: {equalTo: "Freiwilligen-Erfolgskontrolle"}}) {
               nodes {
                 id
-                tpopId
-                datum
-                jahr
-                tpopkontrTypWerteByTyp {
-                  id
-                  text
-                }
                 tpopkontrzaehlsByTpopkontrId {
                   nodes {
                     id
-                    tpopkontrId
-                    anzahl
-                    tpopkontrzaehlEinheitWerteByEinheit {
-                      id
-                      text
-                    }
-                    tpopkontrzaehlMethodeWerteByMethode {
-                      id
-                      text
-                    }
                   }
                 }
               }
@@ -92,24 +40,11 @@ query Query($id: UUID!) {
             tpopbersByTpopId {
               nodes {
                 id
-                tpopId
-                jahr
-                tpopEntwicklungWerteByEntwicklung {
-                  id
-                  text
-                }
               }
             }
             beobsByTpopId {
               nodes {
                 id
-                tpopId
-                nichtZuordnen
-                artId
-                datum
-                autor
-                quelle
-                tpopId
               }
             }
           }
@@ -117,23 +52,11 @@ query Query($id: UUID!) {
         popbersByPopId {
           nodes {
             id
-            popId
-            jahr
-            tpopEntwicklungWerteByEntwicklung {
-              id
-              text
-            }
           }
         }
         popmassnbersByPopId {
           nodes {
             id
-            popId
-            jahr
-            tpopmassnErfbeurtWerteByBeurteilung {
-              id
-              text
-            }
           }
         }
       }

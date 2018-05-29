@@ -29,14 +29,6 @@ const Apfolder = ({
           erstelle neuen
         </MenuItem>
       }
-      <MenuItem
-        onClick={onClick}
-        data={{
-          action: 'openLowerNodes',
-        }}
-      >
-        alle öffnen
-      </MenuItem>
     </ContextMenu>
   </ErrorBoundary>
 )
