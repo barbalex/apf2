@@ -1,0 +1,16 @@
+query Query($id: UUID!) {
+  apById(id: $id) {
+    id
+    zielsByApId {
+      nodes {
+        id
+        jahr
+        zielbersByZielId {
+          nodes {
+            id
+          }
+        }
+      }
+    }
+  }
+}

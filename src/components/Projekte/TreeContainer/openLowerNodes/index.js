@@ -5,17 +5,21 @@ import tpop from './tpop'
 import tpopFolder from './tpopFolder'
 import pop from './pop'
 import popFolder from './popFolder'
+import zielFolder from './zielFolder'
+import zieljahrFolder from './zieljahrFolder'
 
 export default ({
   tree,
   activeNodes,
   id,
+  parentId,
   menuType,
   refetch,
 }: {
   tree: Object,
   activeNodes: Object,
-  id: String,
+  id: String|Number,
+  parentId: String|Number,
   menuType: String,
   refetch: () => void,
 }) => {
@@ -45,6 +49,12 @@ export default ({
       break;
     case 'tpopfreiwkontrFolder':
       tpopfreiwkontrFolder({ tree, id, activeNodes, refetch })
+      break;
+    case 'zielFolder':
+      zielFolder({ tree, id, activeNodes, refetch })
+      break;
+    case 'zieljahrFolder':
+      zieljahrFolder({ tree, id, parentId, activeNodes, refetch })
       break;
     default:
       // do nothing

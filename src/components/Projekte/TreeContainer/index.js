@@ -194,7 +194,7 @@ const enhance = compose(
           store.insertDataset(tree, table, idToPass, baseUrl)
         },
         openLowerNodes() {
-          openLowerNodes({ tree, activeNodes, id, menuType, refetch })
+          openLowerNodes({ tree, activeNodes, id, parentId, menuType, refetch })
         },
         closeLowerNodes() {
           closeLowerNodes({ tree, url: baseUrl, refetch })

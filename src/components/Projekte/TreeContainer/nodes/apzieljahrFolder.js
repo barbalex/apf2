@@ -63,8 +63,8 @@ export default ({
 
     return ({
       nodeType: 'folder',
-      menuType: 'zielFolder',
-      id: apId,
+      menuType: 'zieljahrFolder',
+      id: jahr || 'keinJahr',
       jahr,
       parentId: apId,
       urlLabel: `${jahr === null || jahr === undefined ? 'kein Jahr' : jahr}`,

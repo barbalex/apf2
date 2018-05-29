@@ -15,7 +15,7 @@ const ZielFolder = ({
   token: String
 }) => (
   <ErrorBoundary>
-    <ContextMenu id={`${tree.name}zieljahrFolder`}>
+    <ContextMenu id={`${tree.name}zielFolder`}>
       <div className="react-contextmenu-title">Ziele</div>
       <MenuItem
         onClick={onClick}
@@ -24,6 +24,14 @@ const ZielFolder = ({
         }}
       >
         alle öffnen
+      </MenuItem>
+      <MenuItem
+        onClick={onClick}
+        data={{
+          action: 'closeLowerNodes',
+        }}
+      >
+        alle schliessen
       </MenuItem>
       {
         !userIsReadOnly(token) &&
