@@ -79,6 +79,7 @@ import tpopById from './tpopById.graphql'
 import beobById from './beobById.graphql'
 import openLowerNodes from './openLowerNodes'
 import closeLowerNodes from './closeLowerNodes'
+import insertDataset from './insertDataset'
 
 const Container = styled.div`
   height: 100%;
@@ -191,7 +192,8 @@ const enhance = compose(
             baseUrl.push(1)
           }
           const idToPass = parentId || id
-          store.insertDataset(tree, table, idToPass, baseUrl)
+          console.log('TreeContainer:', { tree, table, idToPass, baseUrl })
+          insertDataset({ tree, tablePassed: table, parentId: idToPass, baseUrl, refetch })
         },
         openLowerNodes() {
           openLowerNodes({ tree, activeNodes, id, parentId, menuType, refetch })
