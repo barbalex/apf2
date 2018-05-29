@@ -76,13 +76,6 @@ export default async ({
     listError(error)
   }
   const row = get(result, `data.create${upperFirst(camelCase(table))}.${camelCase(table)}`)
-  /**
-   * TODO
-   * for adding new ap
-   * need to pass active project and add that to the new ap being created
-   * meanwhile it works because project 1 is set as standard value
-   * wait to do this in graphQL because new projects are not used yet
-   */
   // set new url
   const newActiveNodeArray = [
     ...baseUrl,
