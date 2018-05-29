@@ -21,14 +21,11 @@ function Store(): void {
   this.writeToStore = () => {}
   this.tree = {
     name: 'tree',
-    activeNodeArray: [],
-    setActiveNodeArray: () => {},
     activeNodes: {},
   }
   this.tree2 = {
     name: 'tree2',
     activeNodeArray: [],
-    setActiveNodeArray: () => {},
     activeNodes: {},
   }
   this.map = {

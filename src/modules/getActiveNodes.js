@@ -246,6 +246,5 @@ export default (activeNodeArray: Array<mixed>): Object => {
     beobZugeordnetFolder,
     beobZugeordnet,
   }
-  //console.log('getActiveNodes: activeNodes:', activeNodes)
   return activeNodes
 }

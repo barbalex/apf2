@@ -1,5 +1,7 @@
 // @flow
 import axios from 'axios'
+import gql from 'graphql-tag'
+import app from 'ampersand-app'
 
 import tables from '../../modules/tables'
 import listError from '../../modules/listError'
@@ -63,7 +65,23 @@ export default async (
   store.table[table].set(row[idField], row)
   // set new url
   baseUrl.push(row[idField])
-  tree.setActiveNodeArray(baseUrl)
+  await app.client.mutate({
+    mutation: gql`
+      mutation setTreeKey($value: Array!, $tree: String!, $key: String!) {
+        setTreeKey(tree: $tree, key: $key, value: $value) @client {
+          tree @client {
+            apFilter
+            __typename: Tree
+          }
+        }
+      }
+    `,
+    variables: {
+      value: baseUrl,
+      tree: tree.name,
+      key: 'activeNodeArray'
+    }
+  })
   // if zieljahr, need to update jahr
   if (tree.activeNodes.zieljahr) {
     store.updateProperty(tree, 'jahr', tree.activeNodes.zieljahr)

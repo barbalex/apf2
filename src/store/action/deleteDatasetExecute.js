@@ -1,4 +1,7 @@
 // @flow
+import gql from 'graphql-tag'
+import app from 'ampersand-app'
+
 import tables from '../../modules/tables'
 import listError from '../../modules/listError'
 import deleteDataset from './deleteDataset'
@@ -35,7 +38,23 @@ export default async (store: Object, tree: Object): Promise<void> => {
 
   // set new url
   url.pop()
-  tree.setActiveNodeArray(url)
+  await app.client.mutate({
+    mutation: gql`
+      mutation setTreeKey($value: Array!, $tree: String!, $key: String!) {
+        setTreeKey(tree: $tree, key: $key, value: $value) @client {
+          tree @client {
+            apFilter
+            __typename: Tree
+          }
+        }
+      }
+    `,
+    variables: {
+      value: url,
+      tree: tree.name,
+      key: 'activeNodeArray'
+    }
+  })
   store.datasetToDelete = {}
   // if zieljahr is active, need to pop again, if there is no other ziel left in same year
   if (tree.activeNodes.zieljahr && !tree.activeNodes.zielber) {
@@ -49,7 +68,23 @@ export default async (store: Object, tree: Object): Promise<void> => {
     )
     if (zieleWithActiveZieljahr.length === 0) {
       url.pop()
-      tree.setActiveNodeArray(url)
+      app.client.mutate({
+        mutation: gql`
+          mutation setTreeKey($value: Array!, $tree: String!, $key: String!) {
+            setTreeKey(tree: $tree, key: $key, value: $value) @client {
+              tree @client {
+                apFilter
+                __typename: Tree
+              }
+            }
+          }
+        `,
+        variables: {
+          value: url,
+          tree: tree.name,
+          key: 'activeNodeArray'
+        }
+      })
     }
   }
 }

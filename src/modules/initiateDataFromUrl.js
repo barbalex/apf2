@@ -17,7 +17,6 @@ export default (store: Object, client: Object) => {
     initialActiveNodeArray.push('Projekte')
   }
   
-  //store.tree.setActiveNodeArray(initialActiveNodeArray)
   client.mutate({
     mutation: gql`
       mutation setTreeKey($value: Array!, $tree: String!, $key: String!) {
