@@ -41,6 +41,7 @@ import CmPopmassnberFolder from './contextmenu/PopmassnberFolder'
 import CmPopmassnber from './contextmenu/Popmassnber'
 import CmPopberFolder from './contextmenu/PopberFolder'
 import CmPopber from './contextmenu/Popber'
+import CmProjekt from './contextmenu/Projekt'
 import CmTpopFolder from './contextmenu/TpopFolder'
 import CmTpop from './contextmenu/Tpop'
 import CmTpopberFolder from './contextmenu/TpopberFolder'
@@ -77,6 +78,7 @@ import setMoving from './setMoving.graphql'
 import tpopById from './tpopById.graphql'
 import beobById from './beobById.graphql'
 import openLowerNodes from './openLowerNodes'
+import closeLowerNodes from './closeLowerNodes'
 
 const Container = styled.div`
   height: 100%;
@@ -193,6 +195,9 @@ const enhance = compose(
         },
         openLowerNodes() {
           openLowerNodes({ tree, activeNodes, id, menuType, refetch })
+        },
+        closeLowerNodes() {
+          closeLowerNodes({ tree, url: baseUrl, refetch })
         },
         delete() {
           store.deleteDatasetDemand(table, id, baseUrl, label)
@@ -462,6 +467,7 @@ const TreeContainer = ({
         <CmPopmassnber onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
         <CmPopberFolder onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
         <CmPopber onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
+        <CmProjekt onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
         <CmTpopFolder onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} moving={moving} copying={copying} />
         <CmTpop onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} moving={moving} copying={copying} />
         <CmTpopberFolder onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />

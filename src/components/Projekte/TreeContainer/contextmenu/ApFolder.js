@@ -17,6 +17,14 @@ const Apfolder = ({
   <ErrorBoundary>
     <ContextMenu id={`${tree.name}apFolder`}>
       <div className="react-contextmenu-title">Aktionsplan</div>
+      <MenuItem
+        onClick={onClick}
+        data={{
+          action: 'closeLowerNodes',
+        }}
+      >
+        alle schliessen
+      </MenuItem>
       {
         !userIsReadOnly(token) &&
         <MenuItem

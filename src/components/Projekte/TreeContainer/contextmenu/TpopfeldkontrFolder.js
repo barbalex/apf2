@@ -39,6 +39,14 @@ const TpopfeldkontrFolder = ({
         >
           alle öffnen
         </MenuItem>
+        <MenuItem
+          onClick={onClick}
+          data={{
+            action: 'closeLowerNodes',
+          }}
+        >
+          alle schliessen
+        </MenuItem>
         {
           !userIsReadOnly(token) &&
           <Fragment>

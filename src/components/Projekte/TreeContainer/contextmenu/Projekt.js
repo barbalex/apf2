@@ -1,6 +1,6 @@
 // @flow
 import React from 'react'
-import { ContextMenu } from 'react-contextmenu'
+import { ContextMenu, MenuItem } from 'react-contextmenu'
 
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 
@@ -9,6 +9,14 @@ const Projekt = ({ onClick, tree }: { onClick: () => void, tree: Object }) => (
   <ErrorBoundary>
     <ContextMenu id={`${tree.name}projekt`}>
       <div className="react-contextmenu-title">Projekt</div>
+      <MenuItem
+        onClick={onClick}
+        data={{
+          action: 'closeLowerNodes',
+        }}
+      >
+        alle schliessen
+      </MenuItem>
     </ContextMenu>
   </ErrorBoundary>
 )

@@ -47,6 +47,14 @@ const Tpop = ({
         >
           alle öffnen
         </MenuItem>
+        <MenuItem
+          onClick={onClick}
+          data={{
+            action: 'closeLowerNodes',
+          }}
+        >
+          alle schliessen
+        </MenuItem>
         {
           !userIsReadOnly(token) &&
           <Fragment>
