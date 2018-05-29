@@ -152,12 +152,7 @@ export default async ({
     }
   })
 
-  // if zieljahr, need to update jahr
   /*
-  if (tree.activeNodes.zieljahr) {
-    store.updateProperty(tree, 'jahr', tree.activeNodes.zieljahr)
-    store.updatePropertyInDb(tree, 'jahr', tree.activeNodes.zieljahr)
-  }
   // if tpopfreiwkontr need to update typ
   if (tablePassed === 'tpopfreiwkontr') {
     store.updateProperty(tree, 'typ', 'Freiwilligen-Erfolgskontrolle')
