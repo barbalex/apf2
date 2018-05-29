@@ -152,7 +152,7 @@ export default async ({
     }
   })
 
-  /*
+  /* TODO
   // if tpopfreiwkontr need to update typ
   if (tablePassed === 'tpopfreiwkontr') {
     store.updateProperty(tree, 'typ', 'Freiwilligen-Erfolgskontrolle')
