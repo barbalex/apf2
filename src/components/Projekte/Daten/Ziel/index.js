@@ -6,6 +6,7 @@ import get from 'lodash/get'
 import clone from 'lodash/clone'
 import isEqual from 'lodash/isEqual'
 import sortBy from 'lodash/sortBy'
+import uniqWith from 'lodash/uniqWith'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 
@@ -60,11 +61,12 @@ const enhance = compose(
         oldParentNodeUrl.pop()
         const newParentNodeUrl = clone(newActiveNodeArray)
         newParentNodeUrl.pop()
-        const newOpenNodes = openNodes.map(n => {
+        let newOpenNodes = openNodes.map(n => {
           if (isEqual(n, activeNodeArray)) return newActiveNodeArray
           if (isEqual(n, oldParentNodeUrl)) return newParentNodeUrl
           return n
         })
+        newOpenNodes = uniqWith(newOpenNodes, isEqual)
         client.mutate({
           mutation: setTreeKeyGql,
           variables: {

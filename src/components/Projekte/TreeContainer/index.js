@@ -192,8 +192,8 @@ const enhance = compose(
             baseUrl.push(1)
           }
           const idToPass = parentId || id
-          console.log('TreeContainer:', { tree, table, idToPass, baseUrl })
-          insertDataset({ tree, tablePassed: table, parentId: idToPass, baseUrl, refetch })
+          console.log('TreeContainer:', { tree, table, idToPass, baseUrl, parentId, id, menuType })
+          insertDataset({ tree, tablePassed: table, parentId: idToPass, baseUrl, menuType, id, refetch })
         },
         openLowerNodes() {
           openLowerNodes({ tree, activeNodes, id, parentId, menuType, refetch })

@@ -1,6 +1,8 @@
 // @flow
 import gql from 'graphql-tag'
 import app from 'ampersand-app'
+import uniqWith from 'lodash/uniqWith'
+import isEqual from 'lodash/isEqual'
 
 import isNodeOpen from './isNodeOpen'
 
@@ -16,7 +18,7 @@ export default ({
   // otherwise same nodes will be added multiple times!
   if (isNodeOpen(tree.openNodes, node.url)) return
 
-  const newOpenNodes = [...tree.openNodes, node.url]
+  let newOpenNodes = [...tree.openNodes, node.url]
   if (['tpopfeldkontr', 'tpopfreiwkontr'].includes(node.menuType)) {
     // automatically open zaehlFolder of tpopfeldkontr or tpopfreiwkontr
     newOpenNodes.push([...node.url, 'Zaehlungen'])
@@ -25,6 +27,7 @@ export default ({
     // automatically open zielberFolder of ziel
     newOpenNodes.push([...node.url, 'Berichte'])
   }
+  newOpenNodes = uniqWith(newOpenNodes, isEqual)
 
   client.mutate({
     mutation: gql`

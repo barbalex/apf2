@@ -1,6 +1,7 @@
 //@flow
 import clone from 'lodash/clone'
 import isEqual from 'lodash/isEqual'
+import uniqWith from 'lodash/uniqWith'
 
 import setTreeKeyGql from './setTreeKey.graphql'
 
@@ -24,11 +25,12 @@ export default async ({ value, id, updateBeob, tree, client, refetch, refetchTre
   oldParentNodeUrl.pop()
   const newParentNodeUrl = clone(newActiveNodeArray)
   newParentNodeUrl.pop()
-  const newOpenNodes = openNodes.map(n => {
+  let newOpenNodes = openNodes.map(n => {
     if (isEqual(n, activeNodeArray)) return newActiveNodeArray
     if (isEqual(n, oldParentNodeUrl)) return newParentNodeUrl
     return n
   })
+  newOpenNodes = uniqWith(newOpenNodes, isEqual)
   await client.mutate({
     mutation: setTreeKeyGql,
     variables: {

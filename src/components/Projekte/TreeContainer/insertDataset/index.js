@@ -4,6 +4,8 @@ import app from 'ampersand-app'
 import upperFirst from 'lodash/upperFirst'
 import camelCase from 'lodash/camelCase'
 import get from 'lodash/get'
+import uniqWith from 'lodash/uniqWith'
+import isEqual from 'lodash/isEqual'
 
 import tables from '../../../../modules/tables'
 import listError from '../../../../modules/listError'
@@ -14,6 +16,8 @@ export default async ({
   tree,
   tablePassed,
   parentId,
+  id,
+  menuType,
   baseUrl,
   refetch,
 }:{
@@ -21,6 +25,8 @@ export default async ({
   tree: Object,
   tablePassed: String,
   parentId: String,
+  id: String,
+  menuType: String,
   baseUrl: Array<String>,
   refetch: () => void,
 }): any => {
@@ -48,39 +54,69 @@ export default async ({
       new Error('new dataset not created as no idField could be found')
     )
   }
+  console.log('insertDataset:', {id,parentId,menuType,baseUrl})
+  let mutation = gql`
+    mutation create${upperFirst(camelCase(table))}(
+      $parentId: UUID!
+    ) {
+      create${upperFirst(camelCase(table))} (
+        input: {
+          ${camelCase(table)}: {
+            ${parentIdField}: $parentId
+          }
+        }
+      ) {
+      ${camelCase(table)} {
+        id
+        ${parentIdField}
+      }
+    }
+  }`
+  let variables = { parentId }
+
+  let jahr
+  if (menuType === 'zielFolder') {
+    jahr = 1
+  }
+  if (menuType === 'zieljahrFolder') {
+    jahr = +id
+    mutation = gql`
+      mutation create${upperFirst(camelCase(table))}(
+        $parentId: UUID!
+        $jahr: Int
+      ) {
+        create${upperFirst(camelCase(table))} (
+          input: {
+            ${camelCase(table)}: {
+              ${parentIdField}: $parentId
+              jahr: $jahr
+            }
+          }
+        ) {
+        ${camelCase(table)} {
+          id
+          ${parentIdField}
+        }
+      }
+    }`
+    variables = { parentId, jahr }
+  }
+  console.log('insertDataset:', {mutation,variables})
 
   let result
   try {
-    result = await client.mutate({
-      mutation: gql`
-          mutation create${upperFirst(camelCase(table))}(
-            $parentId: UUID!
-          ) {
-            create${upperFirst(camelCase(table))} (
-              input: {
-                ${camelCase(table)}: {
-                  ${parentIdField}: $parentId
-                }
-              }
-            ) {
-            ${camelCase(table)} {
-              id
-              ${parentIdField}
-            }
-          }
-        }
-      `,
-      variables: { parentId }
-    })
+    result = await client.mutate({ mutation, variables })
   } catch (error) {
     listError(error)
   }
   const row = get(result, `data.create${upperFirst(camelCase(table))}.${camelCase(table)}`)
+  console.log('insertDataset:', {row})
   // set new url
   const newActiveNodeArray = [
     ...baseUrl,
     row[idField]
   ]
+  console.log('insertDataset:', {newActiveNodeArray})
   await app.client.mutate({
     mutation: setTreeKey,
     variables: {
@@ -91,10 +127,22 @@ export default async ({
   })
   // set open nodes
   const { openNodes } = tree
-  const newOpenNodes = [
+  let newOpenNodes = [
     ...openNodes,
     newActiveNodeArray
   ]
+  if (['zielFolder', 'zieljahrFolder'].includes(menuType)) {
+    const urlWithoutJahr = [...baseUrl]
+    urlWithoutJahr.pop()
+    //newOpenNodes.push(urlWithoutJahr)
+    newOpenNodes = [
+      ...openNodes,
+      urlWithoutJahr,
+      newActiveNodeArray
+    ]
+  }
+  newOpenNodes = uniqWith(newOpenNodes, isEqual)
+  console.log('insertDataset:', {newOpenNodes})
   await app.client.mutate({
     mutation: setTreeKey,
     variables: {
