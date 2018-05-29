@@ -38,7 +38,7 @@ export default ({
       tpopFolder({ tree, id, activeNodes, refetch })
       break;
     case 'tpop':
-    tpop({ tree, id, activeNodes, refetch })
+      tpop({ tree, id, activeNodes, refetch })
       break;
     case 'tpopfeldkontrFolder':
       tpopfeldkontrFolder({ tree, id, activeNodes, refetch })
