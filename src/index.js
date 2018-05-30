@@ -77,12 +77,11 @@ import './index.css'
     axios.defaults.baseURL = apiBaseUrl
 
     await initiateDataFromUrl(store, myClient)
-    
+
     // begin _after_ initiation data from url
     history.listen((location, action) => historyListen({
       location,
       action,
-      client: myClient
     }))
 
     ReactDOM.render(

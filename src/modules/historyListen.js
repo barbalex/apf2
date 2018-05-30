@@ -1,19 +1,19 @@
 //@flow
 import isEqual from 'lodash/isEqual'
 import gql from 'graphql-tag'
+import app from 'ampersand-app'
 
 import getActiveNodeArrayFromPathname from './getActiveNodeArrayFromPathname'
 
 export default ( {
   location,
   action,
-  client
 }:{
   location: Object,
   action: String,
-  client: Object
 }) => {
   const { pathname, state } = location
+  const { client } = app
   //console.log(action, location.pathname, location.state)
   // prevent never ending loop if user clicks back right after initial loading
   if (!(pathname === '/Projekte' && action === 'PUSH')) {

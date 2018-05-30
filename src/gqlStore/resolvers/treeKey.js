@@ -58,6 +58,7 @@ export default {
         if (tree === 'tree' && key === 'activeNodeArray') {
           const search = queryString.stringify(urlQuery)
           const query = `${Object.keys(urlQuery).length > 0 ? `?${search}` : ''}`
+          // pass openNodes as state
           app.history.push(`/${value.join('/')}${query}`, { openNodes: get(data, `${tree}.openNodes`) })
         }
       }
