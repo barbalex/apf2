@@ -95,7 +95,10 @@ query TreeDataQuery(
   }
   tpopfeldkontrs: allTpopkontrs(
     filter: {
-      typ: { notEqualTo: "Freiwilligen-Erfolgskontrolle" }
+      or: [
+        { typ: { notEqualTo: "Freiwilligen-Erfolgskontrolle" } },
+        { typ: { isNull: true } }
+      ],
       tpopId: { in: $tpop }
     }
   ) @include(if: $isTpop) {
