@@ -64,7 +64,6 @@ export default async ({
 
   // set new url if necessary
   const activeNodeArray1 = get(data, 'tree.activeNodeArray')
-  console.log('delete:', {activeNodeArray1})
   if (isEqual(activeNodeArray1, url)) {
     const newActiveNodeArray1 = [...url]
     newActiveNodeArray1.pop()
@@ -83,7 +82,6 @@ export default async ({
     })
   }
   const activeNodeArray2 = get(data, 'tree2.activeNodeArray')
-  console.log('delete:', {activeNodeArray2})
   if (isEqual(activeNodeArray2, url)) {
     const newActiveNodeArray2 = [...url]
     newActiveNodeArray2.pop()
@@ -105,7 +103,6 @@ export default async ({
   // remove from openNodes
   const openNodes1 = get(data, 'tree.openNodes')
   const newOpenNodes1 = openNodes1.filter(n => !isEqual(n, url))
-  console.log('delete:', {newOpenNodes1})
   await client.mutate({
     mutation: setTreeKey,
     variables: {
@@ -116,7 +113,6 @@ export default async ({
   })
   const openNodes2 = get(data, 'tree2.openNodes')
   const newOpenNodes2 = openNodes2.filter(n => !isEqual(n, url))
-  console.log('delete:', {newOpenNodes2})
   await client.mutate({
     mutation: setTreeKey,
     variables: {
