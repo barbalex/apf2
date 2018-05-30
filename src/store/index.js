@@ -9,9 +9,7 @@ function Store(): void {
   this.deleteDatasetAbort = () => {}
   this.deleteDatasetExecute = () => {}
   this.deletedDatasets = []
-  this.showDeletedDatasets = false
   this.undoDeletion = () => {}
-  this.toggleShowDeletedDatasets = () => {}
   this.updateProperty = () => {}
   this.updatePropertyInDb = () => {}
   this.fetchTable = () => {}
