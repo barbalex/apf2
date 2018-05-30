@@ -6,6 +6,7 @@
 import app from 'ampersand-app'
 import isEqual from 'lodash/isEqual'
 import get from 'lodash/get'
+import uniqWith from 'lodash/uniqWith'
 import gql from 'graphql-tag'
 import queryString from 'query-string'
 
@@ -47,7 +48,8 @@ export default {
             [tree]: {
               name: key === 'name' ? value : get(data, `${tree}.name`, null),
               activeNodeArray: key === 'activeNodeArray' ? value : get(data, `${tree}.activeNodeArray`, null),
-              openNodes: key === 'openNodes' ? value : get(data, `${tree}.openNodes`, null),
+              // openNodes: ensure every array exists only once
+              openNodes: key === 'openNodes' ? uniqWith(value, isEqual) : get(data, `${tree}.openNodes`, null),
               apFilter: key === 'apFilter' ? value : get(data, `${tree}.apFilter`, null),
               __typename: tree === 'tree' ? 'Tree' : 'Tree2'
             }

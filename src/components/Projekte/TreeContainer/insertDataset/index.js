@@ -101,7 +101,26 @@ export default async ({
     }`
     variables = { parentId, jahr }
   }
-  console.log('insertDataset:', {mutation,variables})
+  if (menuType === 'tpopfreiwkontrFolder') {
+    mutation = gql`
+      mutation create${upperFirst(camelCase(table))}(
+        $parentId: UUID!
+      ) {
+        create${upperFirst(camelCase(table))} (
+          input: {
+            ${camelCase(table)}: {
+              ${parentIdField}: $parentId
+              typ: "Freiwilligen-Erfolgskontrolle"
+            }
+          }
+        ) {
+        ${camelCase(table)} {
+          id
+          ${parentIdField}
+        }
+      }
+    }`
+  }
 
   let result
   try {
@@ -110,13 +129,11 @@ export default async ({
     listError(error)
   }
   const row = get(result, `data.create${upperFirst(camelCase(table))}.${camelCase(table)}`)
-  console.log('insertDataset:', {row})
   // set new url
   const newActiveNodeArray = [
     ...baseUrl,
     row[idField]
   ]
-  console.log('insertDataset:', {newActiveNodeArray})
   await app.client.mutate({
     mutation: setTreeKey,
     variables: {
@@ -142,7 +159,6 @@ export default async ({
     ]
   }
   newOpenNodes = uniqWith(newOpenNodes, isEqual)
-  console.log('insertDataset:', {newOpenNodes})
   await app.client.mutate({
     mutation: setTreeKey,
     variables: {
@@ -151,13 +167,6 @@ export default async ({
       key: 'openNodes'
     }
   })
-
-  /* TODO
-  // if tpopfreiwkontr need to update typ
-  if (tablePassed === 'tpopfreiwkontr') {
-    store.updateProperty(tree, 'typ', 'Freiwilligen-Erfolgskontrolle')
-    store.updatePropertyInDb(tree, 'typ', 'Freiwilligen-Erfolgskontrolle')
-  }*/
 
   refetch()
 }
