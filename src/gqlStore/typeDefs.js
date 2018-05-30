@@ -6,4 +6,9 @@ export default `
     label: String,
     url: String,
   }
+
+  type Query {
+    datasetToDelete: DatasetToDelete
+    datasetsDeleted: [DatasetToDelete]
+  }
 `
