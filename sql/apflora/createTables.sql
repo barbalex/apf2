@@ -1084,7 +1084,7 @@ CREATE TABLE apflora.beob (
   -- maybe later add a geojson field for polygons?
   data jsonb,
   quelle_id integer Default Null REFERENCES apflora.beob_quelle_werte (id) ON DELETE SET NULL ON UPDATE CASCADE,
-  tpop_id integer DEFAULT NULL REFERENCES apflora.tpop (id) ON DELETE CASCADE ON UPDATE CASCADE,
+  tpop_id integer DEFAULT NULL REFERENCES apflora.tpop (id) ON DELETE SET NULL ON UPDATE CASCADE,
   nicht_zuordnen boolean default false,
   bemerkungen text,
   changed date DEFAULT NOW(),

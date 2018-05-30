@@ -108,9 +108,7 @@ const MyAppBar = ({
   <Query query={dataGql} >
     {({ loading, error, data, client }) => {
       if (error) return `Fehler: ${error.message}`
-      console.log('AppBar:', {data})
       const activeNodeArray = get(data, 'tree.activeNodeArray')
-      console.log('AppBar:', {data,activeNodeArray})
       const activeNodes = getActiveNodes(activeNodeArray)
       /**
        * need to clone projekteTabs

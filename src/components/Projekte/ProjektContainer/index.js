@@ -102,7 +102,7 @@ const ProjekteContainer = ({
                           loading={loading}
                           moving={moving}
                           copying={copying}
-                          refetch={refetch}
+                          refetchTree={refetch}
                         />
                       </ReflexElement>
                     }

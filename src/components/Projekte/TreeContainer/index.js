@@ -8,8 +8,6 @@ import styled from 'styled-components'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 import clone from 'lodash/clone'
-import upperFirst from 'lodash/upperFirst'
-import camelCase from 'lodash/camelCase'
 import get from 'lodash/get'
 import app from 'ampersand-app'
 import withLifecycle from '@hocs/with-lifecycle'
@@ -176,7 +174,7 @@ const enhance = compose(
       treeName,
       activeNode,
       activeNodes,
-      refetch
+      refetchTree
     }) => ({
       data,
       element,
@@ -208,13 +206,13 @@ const enhance = compose(
             baseUrl.push(1)
           }
           const idToPass = parentId || id
-          insertDataset({ tree, tablePassed: table, parentId: idToPass, baseUrl, menuType, id, refetch })
+          insertDataset({ tree, tablePassed: table, parentId: idToPass, baseUrl, menuType, id, refetch: refetchTree })
         },
         openLowerNodes() {
-          openLowerNodes({ tree, activeNodes, id, parentId, menuType, refetch })
+          openLowerNodes({ tree, activeNodes, id, parentId, menuType, refetch: refetchTree })
         },
         closeLowerNodes() {
-          closeLowerNodes({ tree, url: baseUrl, refetch })
+          closeLowerNodes({ tree, url: baseUrl, refetch: refetchTree })
         },
         delete() {
           client.mutate({
@@ -274,7 +272,7 @@ const enhance = compose(
           })
         },
         copy() {
-          copyTo({ parentId: id, client, refetch })
+          copyTo({ parentId: id, client, refetch: refetchTree })
         },
         markForCopyingBiotop() {
           client.mutate({
@@ -295,7 +293,7 @@ const enhance = compose(
           copyTpopKoordToPop(id)
         },
         createNewPopFromBeob() {
-          createNewPopFromBeob({ tree, activeNodes, id, refetch })
+          createNewPopFromBeob({ tree, activeNodes, id, refetch: refetchTree })
         },
         copyBeobZugeordnetKoordToPop() {
           copyBeobZugeordnetKoordToPop(id)
@@ -398,7 +396,7 @@ const TreeContainer = ({
   loading,
   moving,
   copying,
-  refetch,
+  refetchTree,
 }: {
   store: Object,
   treeName: String,
@@ -412,11 +410,10 @@ const TreeContainer = ({
   loading: Boolean,
   moving: Object,
   copying: Object,
-  refetch: () => void
+  refetchTree: () => void
 }) => {
   const datasetToDelete = get(data, 'datasetToDelete')
   const deleteDatasetModalIsVisible = !!datasetToDelete.id
-  console.log('TreeContainer: datasetToDelete:', datasetToDelete)
   const openNodes = get(data, `${treeName}.openNodes`)
   const tree = get(data, treeName)
   const activeNodeArray = get(data, `${treeName}.activeNodeArray`)
@@ -426,7 +423,7 @@ const TreeContainer = ({
     <ErrorBoundary>
       <Container>
         {deleteDatasetModalIsVisible && (
-          <DeleteDatasetModal tree={tree} token={token} />
+          <DeleteDatasetModal tree={tree} token={token} refetchTree={refetchTree} />
         )}
         <LabelFilterContainer>
           <LabelFilter

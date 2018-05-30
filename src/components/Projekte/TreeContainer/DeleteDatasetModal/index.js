@@ -14,6 +14,7 @@ import tables from '../../../../modules/tables'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import dataGql from './data.graphql'
 import setDatasetToDelete from './setDatasetToDelete.graphql'
+import deleteDataset from './delete'
 
 const StyledDialog = styled(Dialog)`
   > div {
@@ -31,9 +32,11 @@ const enhance = compose(
 const DatasetDeleteModal = ({
   store,
   onClickDelete,
+  refetchTree,
 }: {
   store: Object,
   onClickDelete: () => void,
+  refetchTree: () => void,
 }) =>
   <Query query={dataGql}>
     {({ loading, error, data, client }) => {
@@ -69,9 +72,13 @@ const DatasetDeleteModal = ({
               </Button>
               <Button
                 color="primary"
-                onClick={() => {
-
-                }}
+                onClick={() =>
+                  deleteDataset({
+                    client,
+                    data,
+                    refetchTree
+                  })
+                }
               >
                 Löschen
               </Button>,

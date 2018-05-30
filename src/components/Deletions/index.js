@@ -92,8 +92,8 @@ const Deletions = ({
   <Query query={dataGql}>
     {({ loading, error, data }) => {
       if (error) return `Fehler: ${error.message}`
-      const datasetToDelete = get(data, 'datasetToDelete')
-      console.log('Deletions:', { data, datasetToDelete })
+      const datasetsDeleted = get(data, 'datasetsDeleted')
+      console.log('Deletions:', { data, datasetsDeleted })
 
       return (
         <ErrorBoundary>
