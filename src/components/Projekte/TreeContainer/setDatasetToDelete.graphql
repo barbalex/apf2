@@ -1,0 +1,21 @@
+mutation setDatasetToDelete(
+  $table: String!
+  $id: UUID!
+  $label: String!
+  $url: String
+  $data: TableRow
+) {
+  setDatasetToDelete(
+    table: $table
+    id: $id
+    label: $label
+    url: $url
+    data: $data
+  ) @client {
+    table
+    id
+    label
+    url
+    data
+  }
+}

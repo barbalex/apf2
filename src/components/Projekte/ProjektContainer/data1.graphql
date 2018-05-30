@@ -2,6 +2,13 @@ query Query {
   user @client {
     token
   }
+  datasetToDelete @client {
+    table
+    id
+    label
+    url
+    data
+  }
   tree @client {
     name
     activeNodeArray

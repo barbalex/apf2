@@ -16,17 +16,10 @@ export default async idb => {
       id: null,
       label: null,
       url: null,
+      data: null,
       __typename: 'DatasetToDelete'
     },
-    datasetsDeleted: [
-      {
-        id: null,
-        table: null,
-        label: null,
-        url: null,
-        __typename: 'DatasetDeleted'
-      }
-    ],
+    datasetsDeleted: [],
     tree: {
       name: 'tree',
       activeNodeArray: [],

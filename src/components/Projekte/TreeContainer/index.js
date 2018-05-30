@@ -77,6 +77,7 @@ import setCopying from './setCopying.graphql'
 import setMoving from './setMoving.graphql'
 import tpopById from './tpopById.graphql'
 import beobById from './beobById.graphql'
+import setDatasetToDelete from './setDatasetToDelete.graphql'
 import openLowerNodes from './openLowerNodes'
 import closeLowerNodes from './closeLowerNodes'
 import insertDataset from './insertDataset'
@@ -203,6 +204,10 @@ const enhance = compose(
         },
         delete() {
           store.deleteDatasetDemand(table, id, baseUrl, label)
+          client.mutate({
+            mutation: setDatasetToDelete,
+            variables: {}
+          })
         },
         showBeobOnMap() {
           const projekteTabs = get(data, 'urlQuery.projekteTabs', [])
@@ -391,7 +396,9 @@ const TreeContainer = ({
   copying: Object,
   refetch: () => void
 }) => {
-  const deleteDatasetModalIsVisible = !!store.datasetToDelete.id
+  const datasetToDelete = get(data, 'datasetToDelete')
+  const deleteDatasetModalIsVisible = !!datasetToDelete.id
+  console.log('TreeContainer: datasetToDelete:', datasetToDelete)
   const openNodes = get(data, `${treeName}.openNodes`)
   const tree = get(data, treeName)
   const activeNodeArray = get(data, `${treeName}.activeNodeArray`)
