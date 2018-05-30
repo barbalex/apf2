@@ -14,7 +14,7 @@
     "postgraphile": "4.0.0-beta.9",
     "postgraphile-plugin-connection-filter": "1.0.0-beta.9",
     "react-scripts": "2.0.0-next.66cc7a90",
-    "serve": "6.5.8",
+    "serve": "7.1.1",
     "source-map-explorer": "1.5.0"
   },
   "dependenciesThatNeedToBeFixed": {
@@ -36,8 +36,8 @@
     "@turf/nearest": "4.7.3",
     "@turf/within": "4.7.3",
     "ampersand-app": "2.0.0",
-    "apollo-cache-inmemory": "1.2.1",
-    "apollo-client": "2.3.1",
+    "apollo-cache-inmemory": "1.2.2",
+    "apollo-client": "2.3.2",
     "apollo-link": "1.2.2",
     "apollo-link-context": "1.0.8",
     "apollo-link-http": "1.5.4",
@@ -84,7 +84,7 @@
     "react-linkify": "0.2.2",
     "react-loadable": "5.4.0",
     "react-reflex": "2.2.4",
-    "react-sortable-hoc": "0.8.0",
+    "react-sortable-hoc": "0.8.3",
     "react-virtualized": "9.19.1",
     "recompose": "0.27.1",
     "styled-components": "3.3.0",
