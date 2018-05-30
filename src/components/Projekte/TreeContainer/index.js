@@ -81,7 +81,6 @@ import setDatasetToDelete from './setDatasetToDelete.graphql'
 import openLowerNodes from './openLowerNodes'
 import closeLowerNodes from './closeLowerNodes'
 import insertDataset from './insertDataset'
-import getTableNameFromActiveNode from '../../../modules/getTableNameFromActiveNode'
 
 const Container = styled.div`
   height: 100%;
@@ -196,6 +195,7 @@ const enhance = compose(
       const baseUrl = JSON.parse(url)
       const nodeType = firstElementChild.getAttribute('data-nodetype')
       const menuType = firstElementChild.getAttribute('data-menutype')
+      console.log('TreeContainer:', {table,menuType})
       const actions = {
         insert() {
           if (nodeType === 'table') {
@@ -218,7 +218,7 @@ const enhance = compose(
           client.mutate({
             mutation: setDatasetToDelete,
             variables: {
-              table: getTableNameFromActiveNode(activeNode),
+              table,
               id,
               label,
               url,
