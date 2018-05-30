@@ -16,7 +16,7 @@ import get from 'lodash/get'
 import ErrorBoundary from '../../shared/ErrorBoundarySingleChild'
 import Loading from '../../shared/Loading'
 import dataGql from './data.graphql'
-import tables from '../../../modules/tables'
+import getTableNameFromActiveNode from '../../../modules/getTableNameFromActiveNode'
 
 const Projekt = Loadable({
   loader: () => import('./Projekt'),
@@ -156,26 +156,6 @@ const Daten = ({
       const activeNodeArray = get(data, `${treeName}.activeNodeArray`)
       const apId = get(data, `${treeName}.activeNodeArray[3]`)
 
-      // get name of active table
-      let tableName = null
-      if (activeNode) {
-        if (activeNode.nodeType === 'table') {
-          tableName = activeNode.menuType
-          // need to convert feldkontrzaehl and freiwkontrzaehl to kontrzaehl
-          if (['tpopfreiwkontrzaehl', 'tpopfeldkontrzaehl'].includes(tableName)) {
-            tableName = 'tpopkontrzaehl'
-          }
-        } else {
-          const childTableName = activeNode.menuType.replace('Folder', '')
-          const childTable = tables.find(t => t.table === childTableName)
-          if (childTable && childTable.parentTable) {
-            tableName = childTable.parentTable
-          }
-          if (childTableName === 'idealbiotop') {
-            tableName = childTableName
-          }
-        }
-      }
       const formObject = {
         projekt: <Projekt dimensions={dimensions} id={activeNodeArray[1]} />,
         apberuebersicht: <Apberuebersicht dimensions={dimensions} id={activeNodeArray[3]} />,
@@ -232,7 +212,7 @@ const Daten = ({
       ) {
         key = 'beobZugeordnet'
       } else {
-        key = tableName
+        key = getTableNameFromActiveNode(activeNode)
       }
       const form = key ? formObject[key] : ''
 

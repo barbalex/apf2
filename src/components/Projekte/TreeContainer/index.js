@@ -81,6 +81,7 @@ import setDatasetToDelete from './setDatasetToDelete.graphql'
 import openLowerNodes from './openLowerNodes'
 import closeLowerNodes from './closeLowerNodes'
 import insertDataset from './insertDataset'
+import getTableNameFromActiveNode from '../../../modules/getTableNameFromActiveNode'
 
 const Container = styled.div`
   height: 100%;
@@ -167,7 +168,19 @@ const showMapIfNotYetVisible = ({
 const enhance = compose(
   inject('store'),
   withHandlers({
-    handleClick: ({ store, data: dbData, treeName, activeNodes, refetch }) => ({ data, element, nodes, client }) => {
+    handleClick: ({
+      store,
+      data: dbData,
+      treeName,
+      activeNode,
+      activeNodes,
+      refetch
+    }) => ({
+      data,
+      element,
+      nodes,
+      client
+    }) => {
       const tree = get(dbData, treeName)
       if (!data) return listError('no data passed with click')
       if (!element)
@@ -202,11 +215,21 @@ const enhance = compose(
         closeLowerNodes() {
           closeLowerNodes({ tree, url: baseUrl, refetch })
         },
-        delete() {
+        async delete() {
           store.deleteDatasetDemand(table, id, baseUrl, label)
+          const { data: row } = await client.query({
+            query: 'TODO',
+            variables: { 'TODO' }
+          })
           client.mutate({
             mutation: setDatasetToDelete,
-            variables: {}
+            variables: {
+              table: getTableNameFromActiveNode(activeNode)
+              id,
+              label,
+              url,
+              data: 'TODO'
+            }
           })
         },
         showBeobOnMap() {
