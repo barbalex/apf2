@@ -11,6 +11,17 @@ export default async (idb) => {
   
   const defaults = {
     updateAvailable: false,
+    delete: {
+      todo: {
+        table: null,
+        id: null,
+        __typename: 'DeleteTodo'
+      },
+      done: {
+        __typename: 'DeleteDone'
+      },
+      __typename: 'Delete'
+    },
     tree: {
       name: 'tree',
       activeNodeArray: [],
@@ -81,6 +92,10 @@ export default async (idb) => {
       withNextLevel: false,
       __typename: 'Copying'
     },
+    /**
+     * does this really work?
+     * objects are passed...
+     */
     errors: []
   }
   return defaults

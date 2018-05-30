@@ -12,7 +12,6 @@ import 'babel-polyfill'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import axios from 'axios'
-import Loadable from 'react-loadable'
 
 import { MuiThemeProvider } from '@material-ui/core/styles'
 import theme from './theme'
@@ -23,8 +22,6 @@ import MuiPickersUtilsProvider from 'material-ui-pickers/utils/MuiPickersUtilsPr
 import { Provider } from 'mobx-react'
 import { ApolloProvider } from 'react-apollo'
 
-import styled from 'styled-components'
-
 import app from 'ampersand-app'
 import 'typeface-roboto'
 import 'react-reflex/styles.css'
@@ -33,7 +30,6 @@ import createHistory from 'history/createBrowserHistory'
 // import components
 import store from './store'
 import initializeIdb from './modules/initializeIdb'
-import Loading from './components/shared/Loading'
 import client from './client'
 
 import initiateDataFromUrl from './modules/initiateDataFromUrl'
@@ -42,42 +38,10 @@ import initiateDataFromUrl from './modules/initiateDataFromUrl'
 import registerServiceWorker from './registerServiceWorker'
 
 import apiBaseUrl from './modules/apiBaseUrl'
+import AppContainer from './components/AppContainer'
 
 import './index.css'
 
-const AppContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-`
-
-const AppBar = Loadable({
-  loader: () => import('./components/AppBar'),
-  loading: Loading,
-})
-const Projekte = Loadable({
-  loader: () => import('./components/Projekte'),
-  loading: Loading,
-})
-const User = Loadable({
-  loader: () => import('./components/User'),
-  loading: Loading,
-})
-const Deletions = Loadable({
-  loader: () => import('./components/Deletions'),
-  loading: Loading,
-})
-const Errors = Loadable({
-  loader: () => import('./components/Errors'),
-  loading: Loading,
-})
-const UpdateAvailable = Loadable({
-  loader: () => import('./components/UpdateAvailable'),
-  loading: Loading,
-})
-const Messages = Loadable({
-  loader: () => import('./components/Messages'),
-  loading: Loading,
-})
 ;(async () => {
   try {
     registerServiceWorker(store)
@@ -120,15 +84,7 @@ const Messages = Loadable({
               moment={moment}
               locale="de-ch"
             >
-              <AppContainer>
-                <AppBar />
-                <Projekte />
-                <User />
-                <Deletions />
-                <Errors />
-                <UpdateAvailable />
-                <Messages />
-              </AppContainer>
+              <AppContainer />
             </MuiPickersUtilsProvider>
           </MuiThemeProvider>
         </Provider>
