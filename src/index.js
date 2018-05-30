@@ -21,7 +21,6 @@ import MomentUtils from 'material-ui-pickers/utils/moment-utils'
 import MuiPickersUtilsProvider from 'material-ui-pickers/utils/MuiPickersUtilsProvider'
 import { Provider } from 'mobx-react'
 import { ApolloProvider } from 'react-apollo'
-import gql from 'graphql-tag'
 
 import app from 'ampersand-app'
 import 'typeface-roboto'
@@ -40,7 +39,7 @@ import registerServiceWorker from './registerServiceWorker'
 
 import apiBaseUrl from './modules/apiBaseUrl'
 import AppContainer from './components/AppContainer'
-import getActiveNodeArrayFromPathname from './modules/getActiveNodeArrayFromPathname'
+import historyListen from './modules/historyListen'
 
 import './index.css'
 
@@ -61,32 +60,6 @@ import './index.css'
     const myClient = await client(idb)
 
     const history = createHistory()
-    history.listen((location, action) => {
-      // location is an object like window.location
-      console.log(action, location.pathname, location.state)
-      const activeNodeArray = getActiveNodeArrayFromPathname(location.pathname.replace('/', ''))
-      myClient.mutate({
-        mutation: gql`
-          mutation setTreeKey($value: Array!, $tree: String!, $key: String!) {
-            setTreeKey(tree: $tree, key: $key, value: $value) @client {
-              tree @client {
-                name
-                activeNodeArray
-                openNodes
-                apFilter
-                nodeLabelFilter
-                __typename: Tree
-              }
-            }
-          }
-        `,
-        variables: {
-          value: activeNodeArray,
-          tree: 'tree',
-          key: 'activeNodeArray'
-        }
-      })
-    })
 
     app.extend({
       init() {
@@ -103,7 +76,14 @@ import './index.css'
 
     axios.defaults.baseURL = apiBaseUrl
 
-    initiateDataFromUrl(store, myClient)
+    await initiateDataFromUrl(store, myClient)
+    
+    // begin _after_ initiation data from url
+    history.listen((location, action) => historyListen({
+      location,
+      action,
+      client: myClient
+    }))
 
     ReactDOM.render(
       <ApolloProvider client={myClient}>

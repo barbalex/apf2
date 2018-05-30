@@ -8,7 +8,7 @@ import isMobilePhone from '../modules/isMobilePhone'
 import setUrlQueryValue from '../modules/setUrlQueryValue'
 import setOpenNodesFromActiveNodeArray from '../modules/setOpenNodesFromActiveNodeArray'
 
-export default (store: Object, client: Object) => {
+export default async (store: Object, client: Object) => {
   const activeNodeArrayFromPathname = getActiveNodeArrayFromPathname(
     window.location.pathname.replace('/', '')
   )
@@ -19,7 +19,7 @@ export default (store: Object, client: Object) => {
     initialActiveNodeArray.push('Projekte')
   }
   
-  client.mutate({
+  await client.mutate({
     mutation: gql`
       mutation setTreeKey($value: Array!, $tree: String!, $key: String!) {
         setTreeKey(tree: $tree, key: $key, value: $value) @client {
@@ -43,7 +43,7 @@ export default (store: Object, client: Object) => {
   // need to set openNodes
   setOpenNodesFromActiveNodeArray({ client, activeNodeArray: initialActiveNodeArray })
   // clone tree2 in case tree2 is open
-  client.mutate({
+  await client.mutate({
     mutation: gql`
        mutation cloneTree2From1 {
         cloneTree2From1 @client
@@ -52,7 +52,7 @@ export default (store: Object, client: Object) => {
   })
   const urlQuery = getUrlQuery()
   const { projekteTabs, feldkontrTab } = urlQuery
-  client.mutate({
+  await client.mutate({
     mutation: gql`
       mutation setUrlQuery($projekteTabs: Array!, $feldkontrTab: String!) {
         setUrlQuery(projekteTabs: $projekteTabs, feldkontrTab: $feldkontrTab) @client {
@@ -84,10 +84,4 @@ export default (store: Object, client: Object) => {
       setUrlQueryValue({ client, key: 'projekteTabs', value: ['tree', 'daten'] })
     }
   }
-
-  // signal to autorun that store is initiated
-  // i.e. history shall be manipulated
-  // on changes to urlQuery and activeNodes
-  //store.initiated = true
-
 }
