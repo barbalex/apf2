@@ -4,8 +4,6 @@ import app from 'ampersand-app'
 import upperFirst from 'lodash/upperFirst'
 import camelCase from 'lodash/camelCase'
 import get from 'lodash/get'
-import uniqWith from 'lodash/uniqWith'
-import isEqual from 'lodash/isEqual'
 
 import tables from '../../../../modules/tables'
 import listError from '../../../../modules/listError'
@@ -158,7 +156,6 @@ export default async ({
       newActiveNodeArray
     ]
   }
-  newOpenNodes = uniqWith(newOpenNodes, isEqual)
   await app.client.mutate({
     mutation: setTreeKey,
     variables: {

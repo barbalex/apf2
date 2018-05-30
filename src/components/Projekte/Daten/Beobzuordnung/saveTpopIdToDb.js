@@ -3,7 +3,6 @@ import clone from 'lodash/clone'
 import isEqual from 'lodash/isEqual'
 import get from 'lodash/get'
 import gql from 'graphql-tag'
-import uniqWith from 'lodash/uniqWith'
 
 import setTreeKeyGql from './setTreeKey.graphql'
 
@@ -82,7 +81,6 @@ export default async ({
         [ aNA[0], aNA[1], aNA[2], aNA[3], 'Populationen', popId, 'Teil-Populationen', tpopId, 'Beobachtungen', id ]
       ]
     }
-    newOpenNodes = uniqWith(newOpenNodes, isEqual)
     await client.mutate({
       mutation: setTreeKeyGql,
       variables: {
@@ -129,7 +127,6 @@ export default async ({
         [ aNA[0], aNA[1], aNA[2], aNA[3], 'nicht-beurteilte-Beobachtungen', id ],
       ]
     }
-    newOpenNodes = uniqWith(newOpenNodes, isEqual)
     await client.mutate({
       mutation: setTreeKeyGql,
       variables: {

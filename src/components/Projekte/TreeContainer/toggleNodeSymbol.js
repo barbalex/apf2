@@ -1,7 +1,6 @@
 // @flow
 import isEqual from 'lodash/isEqual'
 import clone from 'lodash/clone'
-import uniqWith from 'lodash/uniqWith'
 import gql from 'graphql-tag'
 
 import isNodeOpen from './isNodeOpen'
@@ -23,7 +22,6 @@ export default ({
   } else {
     newOpenNodes.push(node.url)
   }
-  newOpenNodes = uniqWith(newOpenNodes, isEqual)
   client.mutate({
     mutation: gql`
       mutation setTreeKey($value: Array!, $tree: String!, $key: String!) {

@@ -2,7 +2,6 @@
 import format from 'date-fns/format'
 import app from 'ampersand-app'
 import get from 'lodash/get'
-import uniqWith from 'lodash/uniqWith'
 
 import listError from '../listError'
 import queryBeob from './queryBeob.graphql'
@@ -112,7 +111,6 @@ export default async ({
     // and remove old node
     .filter(n => !isEqual(n, tree.activeNodeArray))
   
-  newOpenNodes = uniqWith(newOpenNodes, isEqual)
   await client.mutate({
     mutation: setTreeKeyGql,
     variables: {

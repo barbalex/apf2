@@ -1,8 +1,6 @@
 // @flow
 import gql from 'graphql-tag'
 import app from 'ampersand-app'
-import uniqWith from 'lodash/uniqWith'
-import isEqual from 'lodash/isEqual'
 
 import isNodeOpen from './isNodeOpen'
 
@@ -27,7 +25,6 @@ export default ({
     // automatically open zielberFolder of ziel
     newOpenNodes.push([...node.url, 'Berichte'])
   }
-  newOpenNodes = uniqWith(newOpenNodes, isEqual)
 
   client.mutate({
     mutation: gql`

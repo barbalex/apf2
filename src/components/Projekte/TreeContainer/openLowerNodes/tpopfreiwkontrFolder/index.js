@@ -8,8 +8,6 @@
    */
 import app from 'ampersand-app'
 import get from 'lodash/get'
-import uniqWith from 'lodash/uniqWith'
-import isEqual from 'lodash/isEqual'
 
 import dataGql from './data.graphql'
 import setTreeKeyGql from './setTreeKey.graphql'
@@ -53,9 +51,8 @@ export default async ({
       ]
     })
   })
-  // 3. make sure every nodeArray is unique in openNodes
-  newOpenNodes = uniqWith(newOpenNodes, isEqual)
-  // 4. update openNodes
+
+  // 3. update openNodes
   await client.mutate({
     mutation: setTreeKeyGql,
     variables: {
@@ -64,6 +61,7 @@ export default async ({
       key: 'openNodes',
     }
   })
-  // 5. refresh tree
+
+  // 4. refresh tree
   refetch()
 }
