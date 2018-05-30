@@ -97,7 +97,7 @@ export default async idb => {
       __typename: 'Copying'
     },
     /**
-     * does this really work?
+     * TODO: does this really work?
      * objects are passed...
      */
     errors: []
