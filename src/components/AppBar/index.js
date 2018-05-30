@@ -80,9 +80,9 @@ const enhance = compose(
         'https://www.youtube.com/playlist?list=PLTz8Xt5SOQPS-dbvpJ_DrB4-o3k3yj09J'
       )
     },
-    showDeletedDatasets: ({ setAnchorEl, store }) => () => {
+    showDeletedDatasets: ({ setAnchorEl, setShowDeletions }) => () => {
       setAnchorEl(null)
-      store.toggleShowDeletedDatasets()
+      setShowDeletions(true)
     },
   }),
   observer
@@ -95,6 +95,7 @@ const MyAppBar = ({
   watchVideos,
   anchorEl,
   setAnchorEl,
+  setShowDeletions,
 }: {
   store: Object,
   onClickButton: () => void,
@@ -102,6 +103,7 @@ const MyAppBar = ({
   watchVideos: () => void,
   anchorEl: Object,
   setAnchorEl: () => void,
+  setShowDeletions: () => void,
 }) => 
   <Query query={dataGql} >
     {({ loading, error, data, client }) => {

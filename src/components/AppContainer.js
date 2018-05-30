@@ -8,7 +8,6 @@ import Loadable from 'react-loadable'
 import ErrorBoundary from './shared/ErrorBoundary'
 import Loading from './shared/Loading'
 
-
 const Container = styled.div`
   height: 100%;
   display: flex;
@@ -45,30 +44,25 @@ const Messages = Loadable({
 })
 
 const enhance = compose(
-  withState('anchorEl', 'setAnchorEl', null),
+  withState('showDeletions', 'setShowDeletions', false),
 )
 
 const MyAppBar = ({
-  store,
-  onClickButton,
-  showDeletedDatasets,
-  watchVideos,
-  anchorEl,
-  setAnchorEl,
+  showDeletions,
+  setShowDeletions,
 }: {
-  store: Object,
-  onClickButton: () => void,
-  showDeletedDatasets: () => void,
-  watchVideos: () => void,
-  anchorEl: Object,
-  setAnchorEl: () => void,
+  showDeletions: Boolean,
+  setShowDeletions: () => void,
 }) =>
   <ErrorBoundary>
     <Container>
-      <AppBar />
+      <AppBar setShowDeletions={setShowDeletions} />
       <Projekte />
       <User />
-      <Deletions />
+      <Deletions
+        showDeletions={showDeletions}
+        setShowDeletions={setShowDeletions}
+      />
       <Errors />
       <UpdateAvailable />
       <Messages />

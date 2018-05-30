@@ -40,9 +40,8 @@ const enhance = compose(
   inject('store'),
   withState('choosenDeletions', 'changeChoosenDeletions', []),
   withHandlers({
-    onClickUndo: props => () => {
-      const { undoDeletion, deletedDatasets } = props.store
-      const { choosenDeletions } = props
+    onClickUndo: ({ choosenDeletions, setShowDeletions, store }) => () => {
+      const { undoDeletion, deletedDatasets } = store
       // loop through all choosenDeletions
       choosenDeletions.forEach(time => {
         let deletedDataset = deletedDatasets.find(d => d.time === time)
@@ -50,12 +49,12 @@ const enhance = compose(
         // and to store
         undoDeletion(deletedDataset)
       })
+      // close window if no more deletions exist
+      if (deletedDatasets.length === 0) {
+        setShowDeletions(false)
+      }
     },
-    close: props => () => {
-      props.store.toggleShowDeletedDatasets()
-    },
-    toggleChoosenDeletions: props => event => {
-      const { choosenDeletions, changeChoosenDeletions } = props
+    toggleChoosenDeletions: ({ choosenDeletions, changeChoosenDeletions }) => event => {
       let time = event.target.value
       if (time) time = +time
       const previousChoosenDeletions = clone(choosenDeletions)
@@ -74,22 +73,24 @@ const enhance = compose(
 const Deletions = ({
   store,
   onClickUndo,
-  close,
   choosenDeletions,
   changeChoosenDeletions,
   toggleChoosenDeletions,
+  showDeletions,
+  setShowDeletions,
 }: {
   store: Object,
   onClickUndo: () => void,
-  close: () => void,
   choosenDeletions: Array<string>,
   toggleChoosenDeletions: () => void,
+  showDeletions: Boolean,
+  setShowDeletions: () => void,
 }) => {
   return (
     <ErrorBoundary>
       <StyledDialog
         aria-labelledby="dialog-title"
-        open={store.showDeletedDatasets}
+        open={showDeletions}
       >
         <DialogTitle id="dialog-title">gelöschte Datensätze</DialogTitle>
         <List>
@@ -130,7 +131,10 @@ const Deletions = ({
           >
             wiederherstellen
           </Button>
-          <Button color="primary" onClick={close}>
+          <Button
+            color="primary"
+            onClick={() => setShowDeletions(false)}
+          >
             schliessen
           </Button>
         </DialogActions>
