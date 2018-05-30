@@ -5,8 +5,6 @@ import extendStore from './extend'
 function Store(): void {
   this.loading = []
   this.datasetToDelete = {}
-  this.deleteDatasetDemand = () => {}
-  this.deleteDatasetAbort = () => {}
   this.deleteDatasetExecute = () => {}
   this.deletedDatasets = []
   this.undoDeletion = () => {}

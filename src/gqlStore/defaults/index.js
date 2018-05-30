@@ -16,7 +16,6 @@ export default async idb => {
       id: null,
       label: null,
       url: null,
-      data: null,
       __typename: 'DatasetToDelete'
     },
     datasetsDeleted: [],

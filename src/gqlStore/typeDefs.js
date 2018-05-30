@@ -1,8 +1,14 @@
 //@flow
-//import gql from 'graphql-tag'
 
 export default `
   type DatasetToDelete {
+    table: String!
+    id: String!
+    label: String
+    url: String
+  }
+
+  type DatasetDeleted {
     table: String!
     id: String!
     label: String
@@ -17,7 +23,7 @@ export default `
 
   type Query {
     datasetToDelete: DatasetToDelete
-    datasetsDeleted: [DatasetToDelete]
+    datasetsDeleted: [DatasetDeleted]
     errors: [Error]
   }
 

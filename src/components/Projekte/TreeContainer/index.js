@@ -8,6 +8,8 @@ import styled from 'styled-components'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 import clone from 'lodash/clone'
+import upperFirst from 'lodash/upperFirst'
+import camelCase from 'lodash/camelCase'
 import get from 'lodash/get'
 import app from 'ampersand-app'
 import withLifecycle from '@hocs/with-lifecycle'
@@ -206,7 +208,6 @@ const enhance = compose(
             baseUrl.push(1)
           }
           const idToPass = parentId || id
-          console.log('TreeContainer:', { tree, table, idToPass, baseUrl, parentId, id, menuType })
           insertDataset({ tree, tablePassed: table, parentId: idToPass, baseUrl, menuType, id, refetch })
         },
         openLowerNodes() {
@@ -215,20 +216,14 @@ const enhance = compose(
         closeLowerNodes() {
           closeLowerNodes({ tree, url: baseUrl, refetch })
         },
-        async delete() {
-          store.deleteDatasetDemand(table, id, baseUrl, label)
-          const { data: row } = await client.query({
-            query: 'TODO',
-            variables: { 'TODO' }
-          })
+        delete() {
           client.mutate({
             mutation: setDatasetToDelete,
             variables: {
-              table: getTableNameFromActiveNode(activeNode)
+              table: getTableNameFromActiveNode(activeNode),
               id,
               label,
               url,
-              data: 'TODO'
             }
           })
         },

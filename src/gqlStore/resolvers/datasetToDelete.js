@@ -6,10 +6,10 @@ export default {
       id,
       label,
       url,
-      data,
     }, {
       cache
     }) => {
+      console.log('resolver setDatasetToDelete:', {table, id, label, url})
       cache.writeData({
         data: {
           datasetToDelete: {
@@ -17,7 +17,6 @@ export default {
             id,
             label,
             url,
-            data,
             __typename: 'DatasetToDelete'
           }
         }

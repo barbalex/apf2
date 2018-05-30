@@ -1,0 +1,8 @@
+query Query {
+  datasetToDelete @client {
+    table
+    id
+    label
+    url
+  }
+}

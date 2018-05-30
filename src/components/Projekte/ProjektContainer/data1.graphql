@@ -7,7 +7,6 @@ query Query {
     id
     label
     url
-    data
   }
   tree @client {
     name
