@@ -9,7 +9,9 @@ import setUrlQueryValue from '../modules/setUrlQueryValue'
 import setOpenNodesFromActiveNodeArray from '../modules/setOpenNodesFromActiveNodeArray'
 
 export default (store: Object, client: Object) => {
-  const activeNodeArrayFromPathname = getActiveNodeArrayFromPathname()
+  const activeNodeArrayFromPathname = getActiveNodeArrayFromPathname(
+    window.location.pathname.replace('/', '')
+  )
   let initialActiveNodeArray = clone(activeNodeArrayFromPathname)
 
   // forward apflora.ch to Projekte

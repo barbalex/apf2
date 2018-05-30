@@ -4,7 +4,7 @@ import get from 'lodash/get'
 import treeNodeLabelFilter from './tree/nodeLabelFilter'
 import treeMap from './tree/map'
 
-export default async (idb) => {
+export default async idb => {
 
   // fetch user from idb
   const users = await idb.currentUser.toArray()
@@ -17,9 +17,13 @@ export default async (idb) => {
         id: null,
         __typename: 'DeleteTodo'
       },
-      done: {
-        __typename: 'DeleteDone'
-      },
+      done: [
+        {
+          id: null,
+          table: null,
+          __typename: 'DeleteDone'
+        }
+      ],
       __typename: 'Delete'
     },
     tree: {
