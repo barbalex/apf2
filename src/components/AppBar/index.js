@@ -109,6 +109,7 @@ const MyAppBar = ({
     {({ loading, error, data, client }) => {
       if (error) return `Fehler: ${error.message}`
       const activeNodeArray = get(data, 'tree.activeNodeArray')
+      const datasetsDeleted = get(data, 'datasetsDeleted')
       const activeNodes = getActiveNodes(activeNodeArray)
       /**
        * need to clone projekteTabs
@@ -203,7 +204,7 @@ const MyAppBar = ({
                       )}
                     <MenuItem
                       onClick={showDeletedDatasets}
-                      disabled={store.deletedDatasets.length === 0}
+                      disabled={datasetsDeleted.length === 0}
                     >
                       gelöschte Datensätze wiederherstellen
                     </MenuItem>

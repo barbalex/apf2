@@ -6,7 +6,6 @@ import fetchTableByParentId from '../action/fetchTableByParentId'
 import fetchDatasetById from '../action/fetchDatasetById'
 import updateProperty from '../action/updateProperty'
 import updatePropertyInDb from '../action/updatePropertyInDb'
-import deleteDatasetExecute from '../action/deleteDatasetExecute'
 import writeToStore from '../action/writeToStore'
 import undoDeletion from '../action/undoDeletion'
 
@@ -14,9 +13,6 @@ export default (store: Object): void => {
   extendObservable(store, {
     loading: [],
     datasetToDelete: {},
-    deleteDatasetExecute: action('deleteDatasetExecute', tree => {
-      deleteDatasetExecute(store, tree)
-    }),
     deletedDatasets: [],
     addDatasetToDeleted: action('addDatasetToDeleted', dataset => {
       store.deletedDatasets = [dataset, ...store.deletedDatasets]
