@@ -3,6 +3,7 @@ import get from 'lodash/get'
 import isEqual from 'lodash/isEqual'
 import upperFirst from 'lodash/upperFirst'
 import camelCase from 'lodash/camelCase'
+import omit from 'lodash/omit'
 import gql from 'graphql-tag'
 
 import tables from '../../../../modules/tables'
@@ -57,7 +58,7 @@ export default async ({
   } catch (error) {
     return listError(error)
   }
-  const data = {...get(result, `data.${camelCase(table)}ById`)}
+  const data = omit(get(result, `data.${camelCase(table)}ById`), 'Symbol(id)')
   data.__typename = upperFirst(camelCase(table))
 
   console.log('delete:', {tablePassed,table,data})
