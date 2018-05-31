@@ -1,0 +1,11 @@
+query Query {
+  allAeEigenschaftens(orderBy: ARTNAME_ASC) {
+    nodes {
+      id
+      artname
+      apByArtId {
+        id
+      }
+    }
+  }
+}
