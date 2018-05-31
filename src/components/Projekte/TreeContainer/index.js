@@ -195,7 +195,7 @@ const enhance = compose(
       const baseUrl = JSON.parse(url)
       const nodeType = firstElementChild.getAttribute('data-nodetype')
       const menuType = firstElementChild.getAttribute('data-menutype')
-      console.log('TreeContainer:', {table,menuType})
+      //console.log('TreeContainer:', {table,menuType})
       const actions = {
         insert() {
           if (nodeType === 'table') {

@@ -20,6 +20,7 @@ import TextField from '@material-ui/core/TextField'
 
 import ErrorBoundary from '../shared/ErrorBoundary'
 import dataGql from './data.graphql'
+import undelete from './undelete'
 
 const List = styled.div`
   padding-left: 24px;
@@ -60,17 +61,25 @@ const enhance = compose(
   inject('store'),
   withState('choosenDeletions', 'changeChoosenDeletions', []),
   withHandlers({
-    onClickUndo: ({ choosenDeletions, setShowDeletions, store }) => () => {
-      const { undoDeletion, deletedDatasets } = store
+    onClickUndo: ({
+      choosenDeletions,
+      setShowDeletions,
+      store
+    }) => ({
+      client,
+      datasetsDeleted
+    }) => {
       // loop through all choosenDeletions
       choosenDeletions.forEach(time => {
-        let deletedDataset = deletedDatasets.find(d => d.time === time)
-        // insert them to db
-        // and to store
-        undoDeletion(deletedDataset)
+        const dataset = datasetsDeleted.find(d => d.time === time)
+        undelete({
+          client,
+          datasetsDeleted,
+          dataset,
+        })
       })
       // close window if no more deletions exist
-      if (deletedDatasets.length === 0) {
+      if (datasetsDeleted.length === 0) {
         setShowDeletions(false)
       }
     },
@@ -107,10 +116,10 @@ const Deletions = ({
   setShowDeletions: () => void,
 }) =>
   <Query query={dataGql}>
-    {({ loading, error, data }) => {
+    {({ loading, error, data, client }) => {
       if (error) return `Fehler: ${error.message}`
-      let datasetsDeleted = get(data, 'datasetsDeleted')
-      datasetsDeleted = datasetsDeleted.map(d => JSON.parse(d))
+      const datasetsDeleted = get(data, 'datasetsDeleted', [])
+        .map(d => JSON.parse(d))
       console.log('Deletions, datasetsDeleted:', datasetsDeleted)
 
       return (
@@ -159,7 +168,7 @@ const Deletions = ({
             </DialogContent>
             <DialogActions>
               <Button
-                onClick={onClickUndo}
+                onClick={() => onClickUndo({ client, datasetsDeleted })}
                 disabled={choosenDeletions.length === 0}
               >
                 wiederherstellen

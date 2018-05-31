@@ -5,7 +5,6 @@ import get from 'lodash/get'
 export default {
   Mutation: {
     createDatasetDeleted: (_, { table, id, label, url, data, time }, { cache }) => {
-      console.log('resolvers, createDatasetDeleted: datasetDeleted:', { table, id, label, url, data })
       const previousDD = cache.readQuery({
         query: gql`
             query Query {
@@ -13,11 +12,8 @@ export default {
             }
           `
       })
-      console.log('resolvers, createDatasetDeleted: previousDD:', previousDD)
       const previousDatasetsDeleted = get(previousDD, 'datasetsDeleted', [])
         .map(d => JSON.parse(d))
-      console.log('resolvers, createDatasetDeleted: previousDatasetsDeleted:', previousDatasetsDeleted)
-
       let datasetsDeleted = [
         ...previousDatasetsDeleted,
         {
@@ -28,9 +24,7 @@ export default {
           data,
           time,
         }
-      ]
-      datasetsDeleted = datasetsDeleted.map(d => JSON.stringify(d))
-      console.log('resolvers, createDatasetDeleted, datasetsDeleted after:', datasetsDeleted)
+      ].map(d => JSON.stringify(d))
       cache.writeData({
         data: {
           datasetsDeleted
@@ -39,15 +33,18 @@ export default {
       return null
     },
     deleteDatasetDeletedById: (_, { id }, { cache }) => {
-      const data = cache.readQuery({
+      const previousDD = cache.readQuery({
         query: gql`
             query Query {
               datasetsDeleted @client
             }
           `
       })
-      let datasetsDeleted = get(data, 'datasetsDeleted')
-      datasetsDeleted = datasetsDeleted.filter(d => d.id !== id)
+      const previousDatasetsDeleted = get(previousDD, 'datasetsDeleted', [])
+        .map(d => JSON.parse(d))
+      const datasetsDeleted = previousDatasetsDeleted
+        .filter(d => d.id !== id)
+        .map(d => JSON.stringify(d))
       cache.writeData({
         data: {
           datasetsDeleted

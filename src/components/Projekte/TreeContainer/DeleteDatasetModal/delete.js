@@ -35,14 +35,12 @@ export default async ({
     )
   }
   const table = tableMetadata.dbTable ? tableMetadata.dbTable : tablePassed
-  console.log('delete:', {tablePassed,table,id,url})
 
   /**
    * fetch data for dataset
    * then add it to deletedDatasets
    */
   const queryName = `${camelCase(table)}ById`
-  console.log('delete:', {queryName})
   /**
    * cannot use `./${camelCase(table)}ById.graphql`
    * because webpack performs static analysis at build time
@@ -59,9 +57,6 @@ export default async ({
   }
   let data = {...get(result, `data.${camelCase(table)}ById`)}
   data = omit(data, '__typename')
-
-
-  console.log('delete:', {data})
 
   // add to datasetsDeleted
   await client.mutate({
