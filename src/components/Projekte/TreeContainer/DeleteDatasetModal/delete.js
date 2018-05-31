@@ -58,15 +58,12 @@ export default async ({
     return listError(error)
   }
   let data = {...get(result, `data.${camelCase(table)}ById`)}
-  data = omit(
-    data,
-    '__typename'
-  )
+  data = omit(data, '__typename')
 
 
   console.log('delete:', {data})
 
-  // TODO: add to datasetsDeleted
+  // add to datasetsDeleted
   await client.mutate({
     mutation: createDatasetDeleted,
     variables: {
