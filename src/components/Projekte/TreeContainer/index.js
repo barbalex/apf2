@@ -221,7 +221,7 @@ const enhance = compose(
               table,
               id,
               label,
-              url,
+              url: baseUrl,
             }
           })
         },

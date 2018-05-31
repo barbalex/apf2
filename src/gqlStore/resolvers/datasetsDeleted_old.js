@@ -6,36 +6,33 @@ export default {
   Mutation: {
     createDatasetDeleted: (_, { table, id, label, url, data, time }, { cache }) => {
       console.log('resolvers, createDatasetDeleted: datasetDeleted:', { table, id, label, url, data })
-      const previousDD = cache.readQuery({
+      const previousDatasetsDeleted = cache.readQuery({
         query: gql`
             query Query {
               datasetsDeleted @client
             }
           `
       })
-      console.log('resolvers, createDatasetDeleted: previousDD:', previousDD)
-      const previousDatasetsDeleted = get(previousDD, 'datasetsDeleted', [])
-        .map(d => JSON.parse(d))
-      console.log('resolvers, createDatasetDeleted: previousDatasetsDeleted:', previousDatasetsDeleted)
-
-      let datasetsDeleted = [
-        ...previousDatasetsDeleted,
-        {
-          table,
-          id,
-          label,
-          url,
-          data,
-          time,
-        }
-      ]
-      datasetsDeleted = datasetsDeleted.map(d => JSON.stringify(d))
-      console.log('resolvers, createDatasetDeleted, datasetsDeleted after:', datasetsDeleted)
+      const datasetsDeleted = [...get(previousDatasetsDeleted, 'datasetsDeleted')]
+      console.log('resolvers, createDatasetDeleted, datasetsDeleted:', [...datasetsDeleted])
+      
+      const newDatasetDeleted = {
+        table,
+        id,
+        label,
+        url,
+        data,
+        time,
+        __typename: 'DatasetDeleted'
+      }
+      datasetsDeleted.unshift(newDatasetDeleted)
+      console.log('resolvers, createDatasetDeleted, datasetsDeleted after adding:', [...datasetsDeleted])
       cache.writeData({
         data: {
           datasetsDeleted
         }
       })
+      console.log('resolvers, createDatasetDeleted: written data to cache')
       return null
     },
     deleteDatasetDeletedById: (_, { id }, { cache }) => {

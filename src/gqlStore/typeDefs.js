@@ -13,14 +13,14 @@ export default `
     url: String
   }
 
-  type DatasetDeleted {
-    table: String!
-    id: UUID!
-    label: String!
-    url: [String]!
-    data: String! #should be TableRow
-    time: Date!
-  }
+  #type DatasetDeleted {
+  #  table: String!
+  #  id: UUID!
+  #  label: String!
+  #  url: [String]!
+  #  data: String! #should be TableRow
+  #  time: Date!
+  #}
 
   type Error {
     message: String!
@@ -29,7 +29,7 @@ export default `
 
   type Query {
     datasetToDelete: DatasetToDelete
-    datasetsDeleted: [DatasetDeleted]
+    #datasetsDeleted: [DatasetDeleted]
     errors: [Error]
   }
 

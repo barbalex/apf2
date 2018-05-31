@@ -23,7 +23,7 @@ export default async ({
 }): Promise<void> => {
   // deleteDatasetDemand checks variables
   const datasetToDelete = get(dataPassed, 'datasetToDelete')
-  const { table: tablePassed, id, url } = datasetToDelete
+  const { table: tablePassed, id, url, label } = datasetToDelete
 
   // some tables need to be translated, i.e. tpopfreiwkontr
   const tableMetadata = tables.find(t => t.table === tablePassed)
@@ -38,12 +38,11 @@ export default async ({
   console.log('delete:', {tablePassed,table,id,url})
 
   /**
-   * TODO:
    * fetch data for dataset
    * then add it to deletedDatasets
    */
   const queryName = `${camelCase(table)}ById`
-  console.log('delete:', {tablePassed,table,queryName})
+  console.log('delete:', {queryName})
   /**
    * cannot use `./${camelCase(table)}ById.graphql`
    * because webpack performs static analysis at build time
@@ -58,23 +57,24 @@ export default async ({
   } catch (error) {
     return listError(error)
   }
-  const data = omit(
-    get(result, `data.${camelCase(table)}ById`),
-    'Symbol(id)'
+  let data = {...get(result, `data.${camelCase(table)}ById`)}
+  data = omit(
+    data,
+    '__typename'
   )
-  //data.__typename = upperFirst(camelCase(table))
 
-  console.log('delete:', {tablePassed,table,data})
+
+  console.log('delete:', {data})
 
   // TODO: add to datasetsDeleted
   await client.mutate({
     mutation: createDatasetDeleted,
     variables: {
-      table: datasetToDelete.table,
-      id: datasetToDelete.id,
-      label: datasetToDelete.label,
-      url: datasetToDelete.url,
-      data: JSON.stringify(data),
+      table,
+      id,
+      label,
+      url,
+      data,
       time: Date.now(),
     }
   })

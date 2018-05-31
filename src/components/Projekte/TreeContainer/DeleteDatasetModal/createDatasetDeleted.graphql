@@ -14,13 +14,6 @@ mutation createDatasetDeleted(
     data: $data
     time: $time
   ) @client {
-    datasetsDeleted {
-      table
-      id
-      label
-      url
-      data
-      time
-    }
+    datasetsDeleted @client
   }
 }

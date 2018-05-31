@@ -92,7 +92,8 @@ const Deletions = ({
   <Query query={dataGql}>
     {({ loading, error, data }) => {
       if (error) return `Fehler: ${error.message}`
-      const datasetsDeleted = get(data, 'datasetsDeleted')
+      let datasetsDeleted = get(data, 'datasetsDeleted')
+      datasetsDeleted = datasetsDeleted.map(d => JSON.parse(d))
       console.log('Deletions, datasetsDeleted:', datasetsDeleted)
 
       return (
@@ -104,7 +105,7 @@ const Deletions = ({
             <DialogTitle id="dialog-title">gelöschte Datensätze</DialogTitle>
             <List>
               {datasetsDeleted.map((ds, index) => {
-                const dataset = JSON.parse(ds.data)
+                const dataset = ds.data
                 // remove null values
                 Object.keys(dataset).forEach(
                   key => dataset[key] == null && delete dataset[key]
