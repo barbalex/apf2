@@ -1,7 +1,6 @@
 // @flow
 import { extendObservable, action } from 'mobx'
 
-import fetchTable from '../action/fetchTable'
 import updateProperty from '../action/updateProperty'
 import updatePropertyInDb from '../action/updatePropertyInDb'
 
@@ -16,10 +15,6 @@ export default (store: Object): void => {
     updatePropertyInDb: action('updatePropertyInDb', (tree, key, value) => {
       updatePropertyInDb(store, tree, key, value)
     }),
-    // fetch all data of a table
-    // primarily used for werte (domain) tables
-    // and projekt
-    fetchTable: action('fetchTable', tableName => fetchTable(store, tableName)),
     updateAvailable: false,
     setUpdateAvailable: action(
       'setUpdateAvailable',

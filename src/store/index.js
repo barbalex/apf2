@@ -6,7 +6,6 @@ function Store(): void {
   this.loading = []
   this.updateProperty = () => {}
   this.updatePropertyInDb = () => {}
-  this.fetchTable = () => {}
   this.tree = {
     activeNodes: {},
   }
