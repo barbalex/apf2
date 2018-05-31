@@ -1,19 +1,9 @@
 // @flow
 import { extendObservable, action } from 'mobx'
 
-import updateProperty from '../action/updateProperty'
-import updatePropertyInDb from '../action/updatePropertyInDb'
-
 export default (store: Object): void => {
   extendObservable(store, {
     // updates data in store
-    updateProperty: action('updateProperty', (tree, key, value) => {
-      updateProperty(store, tree, key, value)
-    }),
-    // updates data in database
-    updatePropertyInDb: action('updatePropertyInDb', (tree, key, value) => {
-      updatePropertyInDb(store, tree, key, value)
-    }),
     updateAvailable: false,
     setUpdateAvailable: action(
       'setUpdateAvailable',
@@ -28,6 +18,5 @@ export default (store: Object): void => {
         }
       }
     ),
-    initiated: false,
   })
 }

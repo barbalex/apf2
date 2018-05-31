@@ -3,8 +3,6 @@ import TableStore from './Table'
 import extendStore from './extend'
 
 function Store(): void {
-  this.updateProperty = () => {}
-  this.updatePropertyInDb = () => {}
   this.tree = {
     activeNodes: {},
   }
