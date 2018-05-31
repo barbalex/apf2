@@ -14,10 +14,10 @@ export default {
             }
           `
       })
-      const datasetsDeleted = get(data, 'datasetsDeleted')
-      console.log('resolvers, addDatasetDeleted:', {datasetsDeleted: [...datasetsDeleted]})
+      const datasetsDeleted = [...get(data, 'datasetsDeleted')]
+      console.log('resolvers, addDatasetDeleted, datasetsDeleted:', [...datasetsDeleted])
       datasetsDeleted.unshift(datasetDeleted)
-      console.log('resolvers, addDatasetDeleted:', {datasetsDeleted: [...datasetsDeleted]})
+      console.log('resolvers, addDatasetDeleted, datasetsDeleted after adding:', [...datasetsDeleted])
       cache.writeData({
         data: {
           datasetsDeleted

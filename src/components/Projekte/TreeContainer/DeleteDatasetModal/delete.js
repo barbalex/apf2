@@ -71,6 +71,7 @@ export default async ({
         label: datasetToDelete.label,
         url: datasetToDelete.url,
         data: {...data},
+        __typename: 'DatasetDeleted',
       }
     }
   })
