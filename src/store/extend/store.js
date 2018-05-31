@@ -7,19 +7,10 @@ import fetchDatasetById from '../action/fetchDatasetById'
 import updateProperty from '../action/updateProperty'
 import updatePropertyInDb from '../action/updatePropertyInDb'
 import writeToStore from '../action/writeToStore'
-import undoDeletion from '../action/undoDeletion'
 
 export default (store: Object): void => {
   extendObservable(store, {
     loading: [],
-    datasetToDelete: {},
-    deletedDatasets: [],
-    addDatasetToDeleted: action('addDatasetToDeleted', dataset => {
-      store.deletedDatasets = [dataset, ...store.deletedDatasets]
-    }),
-    undoDeletion: action('undoDeletion', deletedDataset => {
-      undoDeletion({ store, deletedDataset })
-    }),
     // updates data in store
     updateProperty: action('updateProperty', (tree, key, value) => {
       updateProperty(store, tree, key, value)
