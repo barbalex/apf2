@@ -65,13 +65,17 @@ export default async ({
   await client.mutate({
     mutation: addDatasetDeleted,
     variables: {
-      table: datasetToDelete.table,
-      id: datasetToDelete.id,
-      label: datasetToDelete.label,
-      url: datasetToDelete.url,
-      data
+      datasetDeleted: {
+        table: datasetToDelete.table,
+        id: datasetToDelete.id,
+        label: datasetToDelete.label,
+        url: datasetToDelete.url,
+        data: {...data},
+      }
     }
   })
+
+  console.log('delete: mutated datasetsToDelete')
 
   try {
     await client.mutate({
