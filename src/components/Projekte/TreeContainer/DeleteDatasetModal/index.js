@@ -47,7 +47,6 @@ const DatasetDeleteModal = ({
       if (table && table.labelSingular) {
         tableName = table.labelSingular
       }
-      console.log('DeleteDatasetModal:', {datasetToDelete,table})
 
       return (
         <ErrorBoundary>

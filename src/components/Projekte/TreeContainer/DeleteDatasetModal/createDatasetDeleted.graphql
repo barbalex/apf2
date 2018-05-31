@@ -1,9 +1,10 @@
 mutation createDatasetDeleted(
   $table: String!
   $id: String!
-  $label: String
-  $url: String
-  $data: TableRow
+  $label: String!
+  $url: String!
+  $data: TableRow!
+  $time: Date!
 ) {
   createDatasetDeleted(
     table: $table
@@ -11,13 +12,15 @@ mutation createDatasetDeleted(
     label: $label
     url: $url
     data: $data
+    time: $time
   ) @client {
-    datasetsDeleted @client {
+    datasetsDeleted {
       table
       id
       label
       url
       data
+      time
     }
   }
 }

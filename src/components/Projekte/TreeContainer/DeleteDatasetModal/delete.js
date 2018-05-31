@@ -62,7 +62,7 @@ export default async ({
     get(result, `data.${camelCase(table)}ById`),
     'Symbol(id)'
   )
-  data.__typename = upperFirst(camelCase(table))
+  //data.__typename = upperFirst(camelCase(table))
 
   console.log('delete:', {tablePassed,table,data})
 
@@ -74,11 +74,10 @@ export default async ({
       id: datasetToDelete.id,
       label: datasetToDelete.label,
       url: datasetToDelete.url,
-      data
+      data: JSON.stringify(data),
+      time: Date.now(),
     }
   })
-
-  console.log('delete: mutated datasetsToDelete')
 
   try {
     await client.mutate({

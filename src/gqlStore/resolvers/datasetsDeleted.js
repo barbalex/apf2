@@ -4,7 +4,7 @@ import get from 'lodash/get'
 
 export default {
   Mutation: {
-    createDatasetDeleted: (_, { table, id, label, url, data }, { cache }) => {
+    createDatasetDeleted: (_, { table, id, label, url, data, time }, { cache }) => {
       console.log('resolvers, createDatasetDeleted: datasetDeleted:', { table, id, label, url, data })
       const previousDatasetsDeleted = cache.readQuery({
         query: gql`
@@ -22,6 +22,7 @@ export default {
         label,
         url,
         data,
+        time,
         __typename: 'DatasetDeleted'
       }
       datasetsDeleted.unshift(newDatasetDeleted)

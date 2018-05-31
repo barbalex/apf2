@@ -1,4 +1,9 @@
 //@flow
+/**
+ * nested field resolvers do not work yet in apollo-link-state
+ * see: https://github.com/apollographql/apollo-link-state/issues/226
+ * so data is not a TableRow but rather a string created by JSON.stringify :-(
+ */
 
 export default `
   type DatasetToDelete {
@@ -10,10 +15,11 @@ export default `
 
   type DatasetDeleted {
     table: String!
-    id: String!
-    label: String
-    url: String
-    data: TableRow
+    id: UUID!
+    label: String!
+    url: [String]!
+    data: String! #should be TableRow
+    time: Date!
   }
 
   type Error {

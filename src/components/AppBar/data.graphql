@@ -10,5 +10,12 @@ query AppBarQuery {
   tree @client {
     activeNodeArray
   }
-  datasetsDeleted @client
+  datasetsDeleted @client {
+    table
+    id
+    label
+    url
+    data
+    time
+  }
 }
