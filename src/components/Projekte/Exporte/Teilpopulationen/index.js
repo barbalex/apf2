@@ -75,7 +75,6 @@ const Teilpopulationen = ({
   store,
   fileType,
   applyMapFilterToExport,
-  client,
   expanded,
   setExpanded,
   message,
@@ -84,7 +83,6 @@ const Teilpopulationen = ({
   store: Object,
   fileType: String,
   applyMapFilterToExport: Boolean,
-  client: Object,
   expanded: Boolean,
   setExpanded: () => void,
   message: String,
@@ -93,8 +91,8 @@ const Teilpopulationen = ({
   <Query query={dataGql}>
     {({ loading, error, data, client }) => {
       if (error) return `Fehler: ${error.message}`
-      console.log('Teilpopulationen:', {data})
-      const artList = get(data, 'allAeEigenschaftens.nodes')
+      const artList = get(data, 'allAeEigenschaftens.nodes', [])
+        .filter(n => !!get(n, 'apByArtId.id'))
         .map(n => ({
           id: get(n, 'apByArtId.id'),
           value: n.artname

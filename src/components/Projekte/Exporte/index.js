@@ -75,7 +75,6 @@ const Exporte = () => (
                 <Teilpopulationen
                   applyMapFilterToExport={applyMapFilterToExport}
                   fileType={fileType}
-                  client={client}
                 />
                 <Kontrollen
                   applyMapFilterToExport={applyMapFilterToExport}
