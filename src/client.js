@@ -10,7 +10,7 @@ import get from 'lodash/get'
 import graphQlUri from './modules/graphQlUri'
 import resolvers from './gqlStore/resolvers'
 import defaults from './gqlStore/defaults'
-import typeDefs from './gqlStore/typeDefs'
+//import typeDefs from './gqlStore/typeDefs'
 
 export default async (idb) => {
   const users = await idb.currentUser.toArray()
@@ -43,7 +43,7 @@ export default async (idb) => {
     resolvers,
     cache,
     defaults: myDefaults,
-    typeDefs,
+    //typeDefs,
   })
   const httpLink = createHttpLink({
     uri: graphQlUri(),
