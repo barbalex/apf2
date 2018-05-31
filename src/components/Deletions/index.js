@@ -44,7 +44,7 @@ const TextContainer = styled.div`
 const StyledTextField = styled(TextField)`
   padding-bottom: 19px !important;
   > div:before {
-    border-bottom-color: rgba(0, 0, 0, 0.1) !important;
+    border-bottom-color: rgba(0, 0, 0, 0) !important;
   }
 `
 const StyledFormControlLabel = styled(FormControlLabel)`
