@@ -3,7 +3,6 @@ import { extendObservable, action } from 'mobx'
 
 import fetchTable from '../action/fetchTable'
 import fetchTableByParentId from '../action/fetchTableByParentId'
-import fetchDatasetById from '../action/fetchDatasetById'
 import updateProperty from '../action/updateProperty'
 import updatePropertyInDb from '../action/updatePropertyInDb'
 
@@ -27,9 +26,6 @@ export default (store: Object): void => {
     fetchTableByParentId: action(
       'fetchTableByParentId',
       (tableName, parentId) => fetchTableByParentId(store, tableName, parentId)
-    ),
-    fetchDatasetById: action('fetchDatasetById', ({ tableName, id }) =>
-      fetchDatasetById({ store: store, tableName, id })
     ),
     updateAvailable: false,
     setUpdateAvailable: action(
