@@ -9,7 +9,14 @@ export default {
       const previousDatasetsDeleted = cache.readQuery({
         query: gql`
             query Query {
-              datasetsDeleted @client
+              datasetsDeleted @client {
+                table
+                id
+                label
+                url
+                data
+                time
+              }
             }
           `
       })

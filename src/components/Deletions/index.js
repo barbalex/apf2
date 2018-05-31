@@ -104,7 +104,7 @@ const Deletions = ({
             <DialogTitle id="dialog-title">gelöschte Datensätze</DialogTitle>
             <List>
               {datasetsDeleted.map((ds, index) => {
-                const dataset = clone(ds.data)
+                const dataset = JSON.parse(ds.data)
                 // remove null values
                 Object.keys(dataset).forEach(
                   key => dataset[key] == null && delete dataset[key]
