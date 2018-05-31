@@ -9,10 +9,11 @@ import tables from '../../../../modules/tables'
 import listError from '../../../../modules/listError'
 import setTreeKey from './setTreeKey.graphql'
 import setDatasetToDelete from './setDatasetToDelete.graphql'
+import addDatasetDeleted from './addDatasetDeleted.graphql'
 
 export default async ({
   client,
-  data,
+  data: dataPassed,
   refetchTree,
 }:{
   client: Object,
@@ -20,7 +21,7 @@ export default async ({
   refetchTree: () => void
 }): Promise<void> => {
   // deleteDatasetDemand checks variables
-  const datasetToDelete = get(data, 'datasetToDelete')
+  const datasetToDelete = get(dataPassed, 'datasetToDelete')
   const { table: tablePassed, id, url } = datasetToDelete
 
   // some tables need to be translated, i.e. tpopfreiwkontr
@@ -40,6 +41,37 @@ export default async ({
    * fetch data for dataset
    * then add it to deletedDatasets
    */
+  const queryName = `${camelCase(table)}ById`
+  console.log('delete:', {tablePassed,table,queryName})
+  /**
+   * cannot use `./${camelCase(table)}ById.graphql`
+   * because webpack performs static analysis at build time
+   * see: https://github.com/webpack/webpack/issues/6680#issuecomment-370800037
+   */
+  let result
+  try {
+    result = await client.query({
+      query: await import('./' + queryName + '.graphql'),
+      variables: { id },
+    }) 
+  } catch (error) {
+    return listError(error)
+  }
+  const data = get(result, `data.${camelCase(table)}ById`)
+
+  console.log('delete:', {tablePassed,table,result,data})
+
+  // TODO: add to datasetsDeleted
+  await client.mutate({
+    mutation: addDatasetDeleted,
+    variables: {
+      table: datasetToDelete.table,
+      id: datasetToDelete.id,
+      label: datasetToDelete.label,
+      url: datasetToDelete.url,
+      data
+    }
+  })
 
   try {
     await client.mutate({
@@ -63,7 +95,7 @@ export default async ({
   // BUT: need to refetch tree
 
   // set new url if necessary
-  const activeNodeArray1 = get(data, 'tree.activeNodeArray')
+  const activeNodeArray1 = get(dataPassed, 'tree.activeNodeArray')
   if (isEqual(activeNodeArray1, url)) {
     const newActiveNodeArray1 = [...url]
     newActiveNodeArray1.pop()
@@ -81,7 +113,7 @@ export default async ({
       }
     })
   }
-  const activeNodeArray2 = get(data, 'tree2.activeNodeArray')
+  const activeNodeArray2 = get(dataPassed, 'tree2.activeNodeArray')
   if (isEqual(activeNodeArray2, url)) {
     const newActiveNodeArray2 = [...url]
     newActiveNodeArray2.pop()
@@ -101,7 +133,7 @@ export default async ({
   }
 
   // remove from openNodes
-  const openNodes1 = get(data, 'tree.openNodes')
+  const openNodes1 = get(dataPassed, 'tree.openNodes')
   const newOpenNodes1 = openNodes1.filter(n => !isEqual(n, url))
   await client.mutate({
     mutation: setTreeKey,
@@ -111,7 +143,7 @@ export default async ({
       key: 'openNodes'
     }
   })
-  const openNodes2 = get(data, 'tree2.openNodes')
+  const openNodes2 = get(dataPassed, 'tree2.openNodes')
   const newOpenNodes2 = openNodes2.filter(n => !isEqual(n, url))
   await client.mutate({
     mutation: setTreeKey,

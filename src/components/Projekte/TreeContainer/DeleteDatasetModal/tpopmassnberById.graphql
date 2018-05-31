@@ -1,0 +1,9 @@
+query tpopmassnberById($id: UUID!) {
+  tpopmassnberById(id: $id) {
+    id
+    tpopId
+    jahr
+    beurteilung
+    bemerkungen
+  }
+}

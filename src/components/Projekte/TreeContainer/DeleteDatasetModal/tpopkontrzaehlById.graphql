@@ -1,0 +1,8 @@
+query Tpopkontrzaehl($id: UUID!) {
+  tpopkontrzaehlById(id: $id) {
+    id
+    anzahl
+    einheit
+    methode
+  }
+}

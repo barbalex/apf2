@@ -1,0 +1,9 @@
+query zielberById($id: UUID!) {
+  zielberById(id: $id) {
+    id
+    zielId
+    jahr
+    erreichung
+    bemerkungen
+  }
+}

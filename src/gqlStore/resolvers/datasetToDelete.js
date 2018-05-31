@@ -9,7 +9,6 @@ export default {
     }, {
       cache
     }) => {
-      console.log('resolver setDatasetToDelete:', {table, id, label, url})
       cache.writeData({
         data: {
           datasetToDelete: {
