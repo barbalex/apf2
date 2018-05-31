@@ -2,7 +2,6 @@
 import { extendObservable, action } from 'mobx'
 
 import fetchTable from '../action/fetchTable'
-import fetchTableByParentId from '../action/fetchTableByParentId'
 import updateProperty from '../action/updateProperty'
 import updatePropertyInDb from '../action/updatePropertyInDb'
 
@@ -21,12 +20,6 @@ export default (store: Object): void => {
     // primarily used for werte (domain) tables
     // and projekt
     fetchTable: action('fetchTable', tableName => fetchTable(store, tableName)),
-    // fetch data of table for id of parent table
-    // used for actual apflora data (but projekt)
-    fetchTableByParentId: action(
-      'fetchTableByParentId',
-      (tableName, parentId) => fetchTableByParentId(store, tableName, parentId)
-    ),
     updateAvailable: false,
     setUpdateAvailable: action(
       'setUpdateAvailable',

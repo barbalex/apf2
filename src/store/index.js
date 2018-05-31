@@ -7,7 +7,6 @@ function Store(): void {
   this.updateProperty = () => {}
   this.updatePropertyInDb = () => {}
   this.fetchTable = () => {}
-  this.fetchTableByParentId = () => {}
   this.tree = {
     activeNodes: {},
   }
