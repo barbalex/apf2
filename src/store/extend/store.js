@@ -6,7 +6,6 @@ import fetchTableByParentId from '../action/fetchTableByParentId'
 import fetchDatasetById from '../action/fetchDatasetById'
 import updateProperty from '../action/updateProperty'
 import updatePropertyInDb from '../action/updatePropertyInDb'
-import writeToStore from '../action/writeToStore'
 
 export default (store: Object): void => {
   extendObservable(store, {
@@ -31,9 +30,6 @@ export default (store: Object): void => {
     ),
     fetchDatasetById: action('fetchDatasetById', ({ tableName, id }) =>
       fetchDatasetById({ store: store, tableName, id })
-    ),
-    writeToStore: action('writeToStore', ({ data, table, field }) =>
-      writeToStore({ store: store, data, table, field })
     ),
     updateAvailable: false,
     setUpdateAvailable: action(

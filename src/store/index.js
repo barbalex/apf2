@@ -9,7 +9,6 @@ function Store(): void {
   this.fetchTable = () => {}
   this.fetchTableByParentId = () => {}
   this.fetchDatasetById = () => {}
-  this.writeToStore = () => {}
   this.tree = {
     activeNodes: {},
   }
