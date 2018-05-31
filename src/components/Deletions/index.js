@@ -93,7 +93,7 @@ const Deletions = ({
     {({ loading, error, data }) => {
       if (error) return `Fehler: ${error.message}`
       const datasetsDeleted = get(data, 'datasetsDeleted')
-      console.log('Deletions:', { data, datasetsDeleted })
+      console.log('Deletions, datasetsDeleted:', datasetsDeleted)
 
       return (
         <ErrorBoundary>

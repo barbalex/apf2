@@ -1,3 +1,9 @@
 query Query {
-  datasetsDeleted @client
+  datasetsDeleted @client {
+    table
+    id
+    label
+    url
+    data
+  }
 }
