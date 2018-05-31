@@ -2,7 +2,6 @@
 import { extendObservable, action, computed, observable } from 'mobx'
 import sortBy from 'lodash/sortBy'
 
-import localizeTpop from '../action/localizeTpop'
 import setActiveBaseLayer from '../action/setActiveBaseLayer'
 import moveOverlay from '../action/moveOverlay'
 import moveApfloraLayer from '../action/moveApfloraLayer'
@@ -116,9 +115,6 @@ export default (store: Object): void => {
     }),
     setIdOfTpopBeingLocalized: action(id => {
       store.map.tpop.idOfTpopBeingLocalized = id
-    }),
-    localizeTpop: action((tree, x, y) => {
-      localizeTpop(store, tree, x, y)
     }),
     setMapMouseCoord: action(e => {
       store.map.mouseCoord = [e.latlng.lng, e.latlng.lat]

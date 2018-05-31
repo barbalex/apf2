@@ -62,6 +62,7 @@ import PngControl from './PngControl'
 import CoordinatesControl from './CoordinatesControl/index.js'
 import epsg4326to2056 from '../../../modules/epsg4326to2056'
 import ErrorBoundary from '../../shared/ErrorBoundary'
+import updateTpopById from './updateTpopById.graphql'
 //import getBounds from '../../../modules/getBounds'
 
 // this does not work
@@ -207,7 +208,26 @@ const Karte = ({
             if (!!idOfTpopBeingLocalized) {
               const { lat, lng } = event.latlng
               const [x, y] = epsg4326to2056(lng, lat)
-              store.map.localizeTpop(store.tree, x, y)
+              client.mutate({
+                mutation: updateTpopById,
+                variables: {
+                  id: idOfTpopBeingLocalized,
+                  x,
+                  y
+                },
+                optimisticResponse: {
+                  __typename: 'Mutation',
+                  updateTpopById: {
+                    tpop: {
+                      id: idOfTpopBeingLocalized,
+                      x,
+                      y,
+                      __typename: 'Tpop',
+                    },
+                    __typename: 'Tpop',
+                  },
+                },
+              })
             }
           }}
           onZoomlevelschange={event => {
