@@ -1,4 +1,4 @@
-mutation ceatePop(
+mutation createPop(
   $apId: UUID
   $nr: Int
   $name: String

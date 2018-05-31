@@ -9,7 +9,7 @@ import tables from '../../../../modules/tables'
 import listError from '../../../../modules/listError'
 import setTreeKey from './setTreeKey.graphql'
 import setDatasetToDelete from './setDatasetToDelete.graphql'
-import addDatasetDeleted from './addDatasetDeleted.graphql'
+import createDatasetDeleted from './createDatasetDeleted.graphql'
 
 export default async ({
   client,
@@ -57,22 +57,20 @@ export default async ({
   } catch (error) {
     return listError(error)
   }
-  const data = get(result, `data.${camelCase(table)}ById`)
+  const data = {...get(result, `data.${camelCase(table)}ById`)}
+  data.__typename = upperFirst(camelCase(table))
 
-  console.log('delete:', {tablePassed,table,result,data})
+  console.log('delete:', {tablePassed,table,data})
 
   // TODO: add to datasetsDeleted
   await client.mutate({
-    mutation: addDatasetDeleted,
+    mutation: createDatasetDeleted,
     variables: {
-      datasetDeleted: {
-        table: datasetToDelete.table,
-        id: datasetToDelete.id,
-        label: datasetToDelete.label,
-        url: datasetToDelete.url,
-        data: {...data},
-        __typename: 'DatasetDeleted',
-      }
+      table: datasetToDelete.table,
+      id: datasetToDelete.id,
+      label: datasetToDelete.label,
+      url: datasetToDelete.url,
+      data
     }
   })
 

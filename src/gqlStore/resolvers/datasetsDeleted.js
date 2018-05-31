@@ -1,32 +1,40 @@
 // @flow
 import gql from 'graphql-tag'
 import get from 'lodash/get'
-import isEqual from 'lodash/isEqual'
 
 export default {
   Mutation: {
-    addDatasetDeleted: (_, { datasetDeleted }, { cache }) => {
-      console.log('resolvers, addDatasetDeleted: datasetDeleted:', datasetDeleted)
-      const data = cache.readQuery({
+    createDatasetDeleted: (_, { table, id, label, url, data }, { cache }) => {
+      console.log('resolvers, createDatasetDeleted: datasetDeleted:', { table, id, label, url, data })
+      const previousDatasetsDeleted = cache.readQuery({
         query: gql`
             query Query {
               datasetsDeleted @client
             }
           `
       })
-      const datasetsDeleted = [...get(data, 'datasetsDeleted')]
-      console.log('resolvers, addDatasetDeleted, datasetsDeleted:', [...datasetsDeleted])
-      datasetsDeleted.unshift(datasetDeleted)
-      console.log('resolvers, addDatasetDeleted, datasetsDeleted after adding:', [...datasetsDeleted])
+      const datasetsDeleted = [...get(previousDatasetsDeleted, 'datasetsDeleted')]
+      console.log('resolvers, createDatasetDeleted, datasetsDeleted:', [...datasetsDeleted])
+      
+      const newDatasetDeleted = {
+        table,
+        id,
+        label,
+        url,
+        data,
+        __typename: 'DatasetDeleted'
+      }
+      datasetsDeleted.unshift(newDatasetDeleted)
+      console.log('resolvers, createDatasetDeleted, datasetsDeleted after adding:', [...datasetsDeleted])
       cache.writeData({
         data: {
           datasetsDeleted
         }
       })
-      console.log('resolvers, addDatasetDeleted: written data to cache')
+      console.log('resolvers, createDatasetDeleted: written data to cache')
       return null
     },
-    removeDatasetDeleted: (_, { datasetDeleted }, { cache }) => {
+    deleteDatasetDeletedById: (_, { id }, { cache }) => {
       const data = cache.readQuery({
         query: gql`
             query Query {
@@ -35,7 +43,7 @@ export default {
           `
       })
       let datasetsDeleted = get(data, 'datasetsDeleted')
-      datasetsDeleted = datasetsDeleted.filter(d => !isEqual(d, datasetDeleted))
+      datasetsDeleted = datasetsDeleted.filter(d => d.id !== id)
       cache.writeData({
         data: {
           datasetsDeleted

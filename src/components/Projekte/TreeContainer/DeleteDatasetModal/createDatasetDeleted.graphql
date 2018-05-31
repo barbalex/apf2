@@ -1,0 +1,23 @@
+mutation createDatasetDeleted(
+  $table: String!
+  $id: String!
+  $label: String
+  $url: String
+  $data: TableRow
+) {
+  createDatasetDeleted(
+    table: $table
+    id: $id
+    label: $label
+    url: $url
+    data: $data
+  ) @client {
+    datasetsDeleted @client {
+      table
+      id
+      label
+      url
+      data
+    }
+  }
+}

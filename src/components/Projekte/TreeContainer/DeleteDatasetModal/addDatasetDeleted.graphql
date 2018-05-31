@@ -1,5 +1,0 @@
-mutation addDatasetDeleted($datasetDeleted: DatasetDeleted!) {
-  addDatasetDeleted(datasetDeleted: $datasetDeleted) @client {
-    datasetsDeleted @client
-  }
-}
