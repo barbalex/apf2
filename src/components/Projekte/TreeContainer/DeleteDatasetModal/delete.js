@@ -58,7 +58,10 @@ export default async ({
   } catch (error) {
     return listError(error)
   }
-  const data = omit(get(result, `data.${camelCase(table)}ById`), 'Symbol(id)')
+  const data = omit(
+    get(result, `data.${camelCase(table)}ById`),
+    'Symbol(id)'
+  )
   data.__typename = upperFirst(camelCase(table))
 
   console.log('delete:', {tablePassed,table,data})
