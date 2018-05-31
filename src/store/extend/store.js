@@ -6,7 +6,6 @@ import updatePropertyInDb from '../action/updatePropertyInDb'
 
 export default (store: Object): void => {
   extendObservable(store, {
-    loading: [],
     // updates data in store
     updateProperty: action('updateProperty', (tree, key, value) => {
       updateProperty(store, tree, key, value)

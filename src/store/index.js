@@ -3,7 +3,6 @@ import TableStore from './Table'
 import extendStore from './extend'
 
 function Store(): void {
-  this.loading = []
   this.updateProperty = () => {}
   this.updatePropertyInDb = () => {}
   this.tree = {
@@ -46,7 +45,6 @@ function Store(): void {
     updateMapFilter: () => {},
   }
   this.table = TableStore
-  this.valuesForWhichTableDataWasFetched = {}
 }
 
 const MyStore = new Store()
