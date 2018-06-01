@@ -1,11 +1,15 @@
 // @flow
-import React, { Component } from 'react'
+import React from 'react'
 import Input from '@material-ui/core/Input'
 import InputLabel from '@material-ui/core/InputLabel'
 import FormControl from '@material-ui/core/FormControl'
-import styled from 'styled-components'
 import OpenInNewIcon from '@material-ui/icons/OpenInNew'
 import green from '@material-ui/core/colors/green'
+import styled from 'styled-components'
+import compose from 'recompose/compose'
+import withState from 'recompose/withState'
+import withHandlers from 'recompose/withHandlers'
+import withLifecycle from '@hocs/with-lifecycle'
 /**
  * DO NOT UPDATE get-urls
  * before create-react-app moves to using babili
@@ -32,81 +36,79 @@ const StyledInput = styled(Input)`
   }
 `
 
-type Props = {
-  label: String,
-  type?: String,
-  multiLine?: Boolean,
-  disabled?: Boolean,
-  saveToDb: () => void,
-}
+const enhance = compose(
+  withState(
+    'stateValue',
+    'setStateValue',
+    ({ value: propsValue }) =>
+      (propsValue || propsValue === 0) ? propsValue : ''
+  ),
+  withHandlers({
+    onChange: ({ setStateValue }) => event =>
+      setStateValue(event.target.value),
+    onBlur: ({ saveToDb }) => event =>
+      saveToDb(event.target.value || null),
+  }),
+  withLifecycle({
+    onDidUpdate(prevProps, props) {
+      if (props.value !== prevProps.value) {
+        props.setStateValue(props.value)
+      }
+    },
+  }),
+)
 
-type State = {
+const TextFieldWithUrl = ({
+  value: propsValue,
+  stateValue,
+  label,
+  type = 'text',
+  multiLine = false,
+  disabled = false,
+  hintText = '',
+  saveToDb,
+  onChange,
+  onBlur,
+}: {
   value: Number | String,
+  stateValue: Number | String,
+  label: String,
+  type: String,
+  multiLine: Boolean,
+  disabled: Boolean,
+  hintText: String,
+  saveToDb: () => void,
+  onChange: () => void,
+  onBlur: () => void,
+}) => {
+  const urls = stateValue ? getUrls(stateValue) : []
+
+  return (
+    <Container>
+      <FormControl disabled={disabled} fullWidth>
+        <InputLabel htmlFor={label}>
+          {`${label} (bitte "www." statt "https://" eingeben)`}
+        </InputLabel>
+        <StyledInput
+          id={label}
+          value={stateValue}
+          type={type}
+          multiline={multiLine}
+          onChange={onChange}
+          onBlur={onBlur}
+          autoComplete="off"
+          autoCorrect="off"
+          autoCapitalize="off"
+          spellCheck="false"
+        />
+      </FormControl>
+      {Array.from(urls).map((url, index) => (
+        <div key={index} title={`${url} öffnen`}>
+          <StyledOpenInNewIcon onClick={() => window.open(url, '_blank')} />
+        </div>
+      ))}
+    </Container>
+  )
 }
 
-class TextFieldWithUrl extends Component<Props, State> {
-  constructor(props) {
-    super(props)
-    this.state = {
-      value: props.value || props.value === 0 ? props.value : '',
-    }
-  }
-
-  static defaultProps = {
-    value: '',
-    type: 'text',
-    multiLine: false,
-    disabled: false,
-    saveToDb: null,
-  }
-
-  static getDerivedStateFromProps(nextProps, prevState) {
-    const value =
-      nextProps.value || nextProps.value === 0 ? nextProps.value : ''
-    return { value }
-  }
-
-  handleChange = event => {
-    this.setState({ value: event.target.value })
-  }
-
-  handleBlur = event => {
-    const { saveToDb } = this.props
-    saveToDb(event.target.value || null)
-  }
-
-  render() {
-    const { label, type, multiLine, disabled } = this.props
-    const { value } = this.state
-    const urls = value ? getUrls(value) : []
-
-    return (
-      <Container>
-        <FormControl disabled={disabled} fullWidth>
-          <InputLabel htmlFor={label}>
-            {`${label} (bitte "www." statt "https://" eingeben)`}
-          </InputLabel>
-          <StyledInput
-            id={label}
-            value={value || ''}
-            type={type}
-            multiline={multiLine}
-            onChange={this.handleChange}
-            onBlur={this.handleBlur}
-            autoComplete="off"
-            autoCorrect="off"
-            autoCapitalize="off"
-            spellCheck="false"
-          />
-        </FormControl>
-        {Array.from(urls).map((url, index) => (
-          <div key={index} title={`${url} öffnen`}>
-            <StyledOpenInNewIcon onClick={() => window.open(url, '_blank')} />
-          </div>
-        ))}
-      </Container>
-    )
-  }
-}
-
-export default TextFieldWithUrl
+export default enhance(TextFieldWithUrl)
