@@ -30,23 +30,20 @@ export default async ({
   const { table, id, url, data } = dataset
   // 1. create new dataset
   const queryName = `create${upperFirst(camelCase(table))}`
-  console.log('undelete:', { table, id, url, data, queryName })
-  let query
+  let mutation
   try {
-    query = await import('./' + queryName + '.graphql')
+    mutation = await import('./' + queryName + '.graphql')
   } catch (error) {
     return listError(error)
   }
-  console.log('undelete:', { query })
   try {
     await client.mutate({
-      query,
+      mutation,
       variables: data,
     }) 
   } catch (error) {
     return listError(error)
   }
-  console.log('undelete: data crated')
 
   // set it as new activeNodeArray and open node
   const { openNodes } = tree
@@ -62,14 +59,12 @@ export default async ({
       key2: 'openNodes'
     }
   })
-  console.log('undelete: activeNodeArray and openNodes set:', {openNodes,newOpenNodes,url})
 
   // 2. remove dataset from datasetsDeleted
-  client.mutate({
+  await client.mutate({
     mutation: deleteDatasetDeletedById,
     variables: { id: dataset.id }
   })
-  console.log('undelete: removed dataset from datasetsDeleted:')
 
   // refetch tree
   refetchTree()
