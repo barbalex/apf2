@@ -78,10 +78,12 @@ import './index.css'
     await initiateDataFromUrl(store, myClient)
 
     // begin _after_ initiation data from url
-    history.listen((location, action) => historyListen({
-      location,
-      action,
-    }))
+    history.listen((location, action) =>
+      historyListen({
+        location,
+        action,
+      })
+    )
 
     ReactDOM.render(
       <ApolloProvider client={myClient}>
