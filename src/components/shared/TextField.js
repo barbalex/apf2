@@ -18,19 +18,17 @@ const enhance = compose(
   withState(
     'stateValue',
     'setStateValue',
-    ({ value: propsValue }) => propsValue || propsValue === 0 ? propsValue : ''
+    ({ value: propsValue }) =>
+      (propsValue || propsValue === 0) ? propsValue : ''
   ),
   withHandlers({
-    onChange: ({ setStateValue }) => event => {
-      setStateValue(event.target.value)
-    },
-    onBlur: ({ saveToDb }) => event => {
-      saveToDb(event.target.value || null)
-    }
+    onChange: ({ setStateValue }) => event =>
+      setStateValue(event.target.value),
+    onBlur: ({ saveToDb }) => event =>
+      saveToDb(event.target.value || null),
   }),
   withLifecycle({
     onDidUpdate(prevProps, props) {
-      console.log('TextField, onDidUpdate:', {prevProps,props})
       if (props.value !== prevProps.value) {
         props.setStateValue(props.value)
       }
@@ -60,22 +58,18 @@ const MyTextField = ({
   saveToDb: null,
   onChange: () => void,
   onBlur: () => void,
-}) => {
-  console.log('TextField, render:', {propsValue,stateValue})
-  return (
-    <StyledTextField
-      id={label}
-      label={label}
-      value={stateValue}
-      type={type}
-      multiline={multiLine}
-      onChange={onChange}
-      onBlur={onBlur}
-      placeholder={hintText}
-      disabled={disabled}
-      fullWidth
-    />
-  )
-}
+}) => 
+  <StyledTextField
+    id={label}
+    label={label}
+    value={stateValue}
+    type={type}
+    multiline={multiLine}
+    onChange={onChange}
+    onBlur={onBlur}
+    placeholder={hintText}
+    disabled={disabled}
+    fullWidth
+  />
 
 export default enhance(MyTextField)
