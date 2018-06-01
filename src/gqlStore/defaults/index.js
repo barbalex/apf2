@@ -89,10 +89,6 @@ export default async idb => {
       withNextLevel: false,
       __typename: 'Copying'
     },
-    /**
-     * TODO: does this really work?
-     * objects are passed...
-     */
     errors: []
   }
   return defaults
