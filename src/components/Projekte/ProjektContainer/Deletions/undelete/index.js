@@ -20,21 +20,23 @@ export default async ({
   dataset,
   tree,
   refetchTree,
+  setShowDeletions,
 }:{
   client: Object,
   datasetsDeleted: Array<Object>,
   dataset: Object,
   tree: Object,
   refetchTree: () => void,
+  setShowDeletions: () => void,
 }) => {
-  const { table, id, url, data } = dataset
+  const { table, url, data } = dataset
   // 1. create new dataset
   const queryName = `create${upperFirst(camelCase(table))}`
   let mutation
   try {
     mutation = await import('./' + queryName + '.graphql')
   } catch (error) {
-    return listError(error)
+    return listError('Hm. Die Abfrage, um einen Datensatz für diese Tabelle zu erstellen, fehlt. Sorry!')
   }
   try {
     await client.mutate({
@@ -61,6 +63,7 @@ export default async ({
   })
 
   // 2. remove dataset from datasetsDeleted
+  if (datasetsDeleted.length === 1) setShowDeletions(false)
   await client.mutate({
     mutation: deleteDatasetDeletedById,
     variables: { id: dataset.id }

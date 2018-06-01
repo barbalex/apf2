@@ -3,7 +3,7 @@ import gql from 'graphql-tag'
 import app from 'ampersand-app'
 
 export default (error: Object): void => {
-  app.client.query({
+  app.client.mutate({
     mutation: gql`
       mutation setError($error: String!) {
         setError(error: $error) @client

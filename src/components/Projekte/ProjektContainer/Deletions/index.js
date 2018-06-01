@@ -80,6 +80,7 @@ const enhance = compose(
           dataset,
           tree,
           refetchTree,
+          setShowDeletions,
         })
       })
       // close window if no more deletions exist
@@ -134,7 +135,7 @@ const Deletions = ({
         <ErrorBoundary>
           <Dialog
             aria-labelledby="dialog-title"
-            open={showDeletions}
+            open={showDeletions && datasetsDeleted.length > 0}
           >
             <DialogTitle id="dialog-title">gelöschte Datensätze</DialogTitle>
             <DialogContent>

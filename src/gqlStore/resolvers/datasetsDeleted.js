@@ -14,7 +14,7 @@ export default {
       })
       const previousDatasetsDeleted = get(previousDD, 'datasetsDeleted', [])
         .map(d => JSON.parse(d))
-      let datasetsDeleted = [
+      const datasetsDeleted = [
         ...previousDatasetsDeleted,
         {
           table,
