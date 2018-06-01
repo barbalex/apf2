@@ -1,4 +1,4 @@
-import extendStore from './store'
+
 import extendMap from './map'
 import extendMapPop from './mapPop'
 import extendMapTpop from './mapTpop'
@@ -8,7 +8,6 @@ import extendMapBeobNichtZuzuordnen from './mapBeobNichtZuzuordnen'
 import extendMapBeobZugeordnet from './mapBeobZugeordnet'
 
 export default (store: Object): void => {
-  extendStore(store)
   extendMap(store)
   extendMapPop(store)
   extendMapTpop(store)

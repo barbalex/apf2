@@ -45,8 +45,6 @@ import './index.css'
 
 ;(async () => {
   try {
-    registerServiceWorker(store)
-
     // prevent changing values in number inputs when scrolling pages!
     // see: http://stackoverflow.com/a/38589039/712005
     // and: https://stackoverflow.com/a/42058469/712005
@@ -58,6 +56,7 @@ import './index.css'
     
     const idb = initializeIdb()
     const myClient = await client(idb)
+    registerServiceWorker(myClient)
 
     const history = createHistory()
 

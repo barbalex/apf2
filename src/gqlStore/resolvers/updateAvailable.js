@@ -1,10 +1,14 @@
 // @flow
-import gql from 'graphql-tag'
 
-export default gql`
-  mutation setUpdateAvailable($value: Boolean) {
-    setUpdateAvailable(value: $value) @client {
-      updateAvailable
-    }
-  }
-`
+export default {
+  Mutation: {
+    setUpdateAvailable: (_, { value }, { cache }) => {
+      cache.writeData({
+        data: {
+          updateAvailable: value
+        }
+      })
+      return null
+    },
+  },
+}

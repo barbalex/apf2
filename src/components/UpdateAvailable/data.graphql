@@ -1,0 +1,3 @@
+query Query {
+  updateAvailable @client
+}

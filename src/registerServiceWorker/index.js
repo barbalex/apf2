@@ -1,3 +1,4 @@
+//@flow
 // In production, we register a service worker to serve assets from local cache.
 
 // This lets the app load faster on subsequent visits in production, and gives
@@ -7,8 +8,9 @@
 
 // To learn more about the benefits of this model, read https://goo.gl/KwvDNy.
 // This link also includes instructions on opting out of this behavior.
+import setUpdateAvailable from './setUpdateAvailable.graphql'
 
-export default function register(store) {
+export default function register(client) {
   if (process.env.NODE_ENV === 'production' && 'serviceWorker' in navigator) {
     window.addEventListener('load', () => {
       const swUrl = `${process.env.PUBLIC_URL}/service-worker.js`
@@ -25,7 +27,10 @@ export default function register(store) {
                   // It's the perfect time to display a "New content is
                   // available; please refresh." message in your web app.
                   console.log('New content is available; please refresh.')
-                  store.setUpdateAvailable(true)
+                  client.mutate({
+                    mutation: setUpdateAvailable,
+                    variables: { value: true }
+                  })
                 } else {
                   // At this point, everything has been precached.
                   // It's the perfect time to display a
