@@ -1,9 +1,14 @@
 mutation createTpopkontrzaehl(
-  $anzahl: Int, $einheit: Int, $methode: Int, $tpopkontrId: UUID
+  $id: UUID
+  $anzahl: Int
+  $einheit: Int
+  $methode: Int
+  $tpopkontrId: UUID
 ) {
   createTpopkontrzaehl(
     input: {
       tpopkontrzaehl: {
+        id: $id
         tpopkontrId: $tpopkontrId
         anzahl: $anzahl
         einheit: $einheit

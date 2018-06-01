@@ -1,4 +1,5 @@
 mutation createTpop(
+  $id: UUID
   $popId: UUID
   $nr: Int
   $gemeinde: String
@@ -27,6 +28,7 @@ mutation createTpop(
   createTpop(
     input: {
       tpop: {
+        id: $id
         popId: $popId
         nr: $nr
         gemeinde: $gemeinde

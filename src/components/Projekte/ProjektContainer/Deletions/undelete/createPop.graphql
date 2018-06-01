@@ -1,4 +1,5 @@
 mutation createPop(
+  $id: UUID
   $apId: UUID
   $nr: Int
   $name: String
@@ -12,6 +13,7 @@ mutation createPop(
   createPop(
     input: {
       pop: {
+        id: $id
         apId: $apId
         nr: $nr
         name: $name

@@ -1,4 +1,5 @@
 mutation createTpopmassn(
+  $id: UUID
   $typ: Int
   $beschreibung: String
   $jahr: Int
@@ -22,6 +23,7 @@ mutation createTpopmassn(
   createTpopmassn(
     input: {
       tpopmassn: {
+        id: $id
         typ: $typ
         beschreibung: $beschreibung
         jahr: $jahr

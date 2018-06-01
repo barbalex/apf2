@@ -132,7 +132,7 @@ export default async ({
     ...baseUrl,
     row[idField]
   ]
-  await app.client.mutate({
+  await client.mutate({
     mutation: setTreeKey,
     variables: {
       value: newActiveNodeArray,
@@ -156,7 +156,7 @@ export default async ({
       newActiveNodeArray
     ]
   }
-  await app.client.mutate({
+  await client.mutate({
     mutation: setTreeKey,
     variables: {
       value: newOpenNodes,

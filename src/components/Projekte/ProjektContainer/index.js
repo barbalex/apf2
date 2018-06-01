@@ -187,6 +187,7 @@ const ProjekteContainer = ({
                   <Deletions
                     showDeletions={showDeletions}
                     setShowDeletions={setShowDeletions}
+                    tree={tree}
                     refetchTree={refetch}
                   />
                 </ErrorBoundary>

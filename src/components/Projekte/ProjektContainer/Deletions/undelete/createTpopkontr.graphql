@@ -1,4 +1,5 @@
 mutation createTpopkontr(
+  $id: UUID
   $typ: String
   $datum: Date
   $jahr: Int
@@ -44,6 +45,7 @@ mutation createTpopkontr(
   createTpopkontr(
     input: {
       tpopkontr: {
+        id: $id
         typ: $typ
         datum: $datum
         jahr: $jahr

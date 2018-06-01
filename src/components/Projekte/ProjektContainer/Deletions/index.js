@@ -64,6 +64,7 @@ const enhance = compose(
     onClickUndo: ({
       choosenDeletions,
       setShowDeletions,
+      tree,
       refetchTree,
       store,
     }) => ({
@@ -77,6 +78,7 @@ const enhance = compose(
           client,
           datasetsDeleted,
           dataset,
+          tree,
           refetchTree,
         })
       })
@@ -109,6 +111,7 @@ const Deletions = ({
   toggleChoosenDeletions,
   showDeletions,
   setShowDeletions,
+  tree,
   refetchTree,
 }: {
   store: Object,
@@ -117,6 +120,7 @@ const Deletions = ({
   toggleChoosenDeletions: () => void,
   showDeletions: Boolean,
   setShowDeletions: () => void,
+  tree: Object,
   refetchTree: () => void,
 }) =>
   <Query query={dataGql}>
