@@ -21,7 +21,13 @@ const Container = styled.div`
 const treeTabValues = ['tree', 'daten', 'karte', 'exporte']
 const tree2TabValues = ['tree2', 'daten2', 'karte2', 'exporte2']
 
-const Projekte = () => 
+const Projekte = ({
+  showDeletions,
+  setShowDeletions,
+}:{
+  showDeletions: Boolean,
+  setShowDeletions: () => void,
+}) => 
   <Query query={dataGql}>
     {({ loading, error, data, client }) => {
       if (error) return `Fehler: ${error.message}`
@@ -30,7 +36,15 @@ const Projekte = () =>
       const treeTabs = intersection(treeTabValues, projekteTabs)
       const tree2Tabs = intersection(tree2TabValues, projekteTabs)
       if (tree2Tabs.length === 0) {
-        return <ProjektContainer treeName="tree" tabs={treeTabs} projekteTabs={projekteTabs} />
+        return (
+          <ProjektContainer
+            treeName="tree"
+            tabs={treeTabs}
+            projekteTabs={projekteTabs}
+            showDeletions={showDeletions}
+            setShowDeletions={setShowDeletions}
+          />
+        )
       }
 
       return (
@@ -38,11 +52,23 @@ const Projekte = () =>
           <ErrorBoundary>
             <ReflexContainer orientation="vertical">
               <ReflexElement flex={treeTabs.length / projekteTabs.length} >
-                <ProjektContainer treeName="tree" tabs={treeTabs} projekteTabs={projekteTabs} />
+                <ProjektContainer
+                  treeName="tree"
+                  tabs={treeTabs}
+                  projekteTabs={projekteTabs}
+                  showDeletions={showDeletions}
+                  setShowDeletions={setShowDeletions}
+                />
               </ReflexElement>
               <ReflexSplitter />
               <ReflexElement >
-                <ProjektContainer treeName="tree2" tabs={tree2Tabs} projekteTabs={projekteTabs} />
+                <ProjektContainer
+                  treeName="tree2"
+                  tabs={tree2Tabs}
+                  projekteTabs={projekteTabs}
+                  showDeletions={showDeletions}
+                  setShowDeletions={setShowDeletions}
+                />
               </ReflexElement>
             </ReflexContainer>
           </ErrorBoundary>

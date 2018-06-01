@@ -26,10 +26,6 @@ const User = Loadable({
   loader: () => import('./User'),
   loading: Loading,
 })
-const Deletions = Loadable({
-  loader: () => import('./Deletions'),
-  loading: Loading,
-})
 const Errors = Loadable({
   loader: () => import('./Errors'),
   loading: Loading,
@@ -57,12 +53,11 @@ const MyAppBar = ({
   <ErrorBoundary>
     <Container>
       <AppBar setShowDeletions={setShowDeletions} />
-      <Projekte />
-      <User />
-      <Deletions
+      <Projekte
         showDeletions={showDeletions}
         setShowDeletions={setShowDeletions}
       />
+      <User />
       <Errors />
       <UpdateAvailable />
       <Messages />

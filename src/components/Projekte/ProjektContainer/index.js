@@ -23,6 +23,7 @@ import Exporte from '../Exporte'
 import getActiveNodes from '../../../modules/getActiveNodes'
 import variables from './variables'
 import buildNodes from '../TreeContainer/nodes'
+import Deletions from './Deletions'
 
 const Container = styled.div`
   display: flex;
@@ -47,12 +48,16 @@ const ProjekteContainer = ({
   store,
   treeName,
   tabs: tabsPassed,
-  projekteTabs
+  projekteTabs,
+  showDeletions,
+  setShowDeletions,
 }: {
   store: Object,
   treeName: String,
   tabs: Array<String>,
   projekteTabs: Array<String>,
+  showDeletions: Boolean,
+  setShowDeletions: () => void,
 }) =>
   <Query query={data1Gql} >
     {({ error, data: data1 }) => {
@@ -179,6 +184,11 @@ const ProjekteContainer = ({
                       </ReflexElement>
                     }
                   </ReflexContainer>
+                  <Deletions
+                    showDeletions={showDeletions}
+                    setShowDeletions={setShowDeletions}
+                    refetchTree={refetch}
+                  />
                 </ErrorBoundary>
               </Container>
             )

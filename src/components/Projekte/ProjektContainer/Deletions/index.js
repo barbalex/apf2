@@ -18,7 +18,7 @@ import { Query } from 'react-apollo'
 import get from 'lodash/get'
 import TextField from '@material-ui/core/TextField'
 
-import ErrorBoundary from '../shared/ErrorBoundary'
+import ErrorBoundary from '../../../shared/ErrorBoundary'
 import dataGql from './data.graphql'
 import undelete from './undelete'
 
@@ -43,7 +43,7 @@ const TextContainer = styled.div`
   width: 100%;
 `
 const StyledTextField = styled(TextField)`
-  padding-bottom: 19px !important;
+  padding-bottom: 9px !important;
   > div:before {
     border-bottom-color: rgba(0, 0, 0, 0) !important;
   }
@@ -64,10 +64,11 @@ const enhance = compose(
     onClickUndo: ({
       choosenDeletions,
       setShowDeletions,
-      store
+      refetchTree,
+      store,
     }) => ({
       client,
-      datasetsDeleted
+      datasetsDeleted,
     }) => {
       // loop through all choosenDeletions
       choosenDeletions.forEach(time => {
@@ -76,6 +77,7 @@ const enhance = compose(
           client,
           datasetsDeleted,
           dataset,
+          refetchTree,
         })
       })
       // close window if no more deletions exist
@@ -107,6 +109,7 @@ const Deletions = ({
   toggleChoosenDeletions,
   showDeletions,
   setShowDeletions,
+  refetchTree,
 }: {
   store: Object,
   onClickUndo: () => void,
@@ -114,6 +117,7 @@ const Deletions = ({
   toggleChoosenDeletions: () => void,
   showDeletions: Boolean,
   setShowDeletions: () => void,
+  refetchTree: () => void,
 }) =>
   <Query query={dataGql}>
     {({ loading, error, data, client }) => {
