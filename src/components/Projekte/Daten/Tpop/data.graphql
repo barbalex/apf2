@@ -34,8 +34,10 @@ query tpopByIdQuery($id: UUID!) {
     bemerkungen
     statusUnklar
     popByPopId {
+      id
       apId
       apByApId {
+        id
         startJahr
       }
     }

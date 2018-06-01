@@ -1,6 +1,5 @@
 // @flow
 import React from 'react'
-import { observer } from 'mobx-react'
 import Input from '@material-ui/core/Input'
 import InputLabel from '@material-ui/core/InputLabel'
 import FormControl from '@material-ui/core/FormControl'
@@ -23,18 +22,17 @@ const enhance = compose(
       setTimeout(() => props.updateErrorText(''), 5000)
     },
   }),
-  observer
 )
 
 const MyTextField = ({
   label,
-  value,
+  value = '',
   errorText,
   onChange,
 }: {
-  label: string,
-  value?: ?number | ?string,
-  errorText: string,
+  label: String,
+  value?: ?Number | ?String,
+  errorText: String,
   onChange: () => void,
 }) => (
   <FormControl
@@ -51,9 +49,5 @@ const MyTextField = ({
     <FormHelperText id={`${label}-helper`}>{errorText}</FormHelperText>
   </FormControl>
 )
-
-MyTextField.defaultProps = {
-  value: '',
-}
 
 export default enhance(MyTextField)

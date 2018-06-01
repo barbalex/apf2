@@ -92,6 +92,7 @@ mutation updateTpop(
       bemerkungen
       statusUnklar
       popByPopId {
+        id
         apId
       }
     }

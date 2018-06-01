@@ -1,9 +1,13 @@
 // @flow
-import React, { Component } from 'react'
+import React from 'react'
 import Input from '@material-ui/core/Input'
 import InputLabel from '@material-ui/core/InputLabel'
 import FormControl from '@material-ui/core/FormControl'
 import styled from 'styled-components'
+import compose from 'recompose/compose'
+import withState from 'recompose/withState'
+import withHandlers from 'recompose/withHandlers'
+import withLifecycle from '@hocs/with-lifecycle'
 
 import InfoWithPopover from './InfoWithPopover'
 
@@ -22,76 +26,69 @@ const PopoverContentRow = styled.div`
   border-radius: 4px;
 `
 
-type Props = {
+const enhance = compose(
+  withState(
+    'stateValue',
+    'setStateValue',
+    ({ value: propsValue }) =>
+      (propsValue || propsValue === 0) ? propsValue : ''
+  ),
+  withHandlers({
+    onChange: ({ setStateValue }) => event =>
+      setStateValue(event.target.value),
+    onBlur: ({ saveToDb }) => event =>
+      saveToDb(event.target.value || null),
+  }),
+  withLifecycle({
+    onDidUpdate(prevProps, props) {
+      if (props.value !== prevProps.value) {
+        props.setStateValue(props.value)
+      }
+    },
+  }),
+)
+
+const TextFieldWithInfo = ({
+  value: propsValue,
+  stateValue,
+  label,
+  type = 'text',
+  multiLine = false,
+  disabled = false,
+  hintText = '',
+  popover,
+  saveToDb,
+  onChange,
+  onBlur,
+}: {
+  value: Number | String,
+  stateValue: Number | String,
   label: String,
-  type?: String,
-  multiLine?: Boolean,
-  disabled?: Boolean,
-  hintText?: String,
+  type: String,
+  multiLine: Boolean,
+  disabled: Boolean,
+  hintText: String,
   popover: Object,
   saveToDb: () => void,
-}
+  onChange: () => void,
+  onBlur: () => void,
+}) =>
+  <StyledFormControl fullWidth disabled={disabled}>
+    <InputLabel htmlFor={label}>{label}</InputLabel>
+    <Input
+      id={label}
+      value={stateValue}
+      type={type}
+      multiline={multiLine}
+      onChange={onChange}
+      onBlur={onBlur}
+      placeholder={hintText}
+      endAdornment={
+        <InfoWithPopover>
+          <PopoverContentRow>{popover}</PopoverContentRow>
+        </InfoWithPopover>
+      }
+    />
+  </StyledFormControl>
 
-type State = {
-  value: Number | String,
-}
-
-class TextField extends Component<Props, State> {
-  constructor(props) {
-    super(props)
-    this.state = {
-      value: props.value || props.value === 0 ? props.value : '',
-    }
-  }
-
-  static defaultProps = {
-    value: '',
-    type: 'text',
-    multiLine: false,
-    disabled: false,
-    hintText: '',
-    saveToDb: null,
-  }
-
-  static getDerivedStateFromProps(nextProps, prevState) {
-    const value =
-      nextProps.value || nextProps.value === 0 ? nextProps.value : ''
-    return { value }
-  }
-
-  handleChange = event => {
-    this.setState({ value: event.target.value })
-  }
-
-  handleBlur = event => {
-    const { saveToDb } = this.props
-    saveToDb(event.target.value || null)
-  }
-
-  render() {
-    const { label, type, multiLine, disabled, hintText, popover } = this.props
-    const { value } = this.state
-
-    return (
-      <StyledFormControl fullWidth disabled={disabled}>
-        <InputLabel htmlFor={label}>{label}</InputLabel>
-        <Input
-          id={label}
-          value={value}
-          type={type}
-          multiline={multiLine}
-          onChange={this.handleChange}
-          onBlur={this.handleBlur}
-          placeholder={hintText}
-          endAdornment={
-            <InfoWithPopover>
-              <PopoverContentRow>{popover}</PopoverContentRow>
-            </InfoWithPopover>
-          }
-        />
-      </StyledFormControl>
-    )
-  }
-}
-
-export default TextField
+export default enhance(TextFieldWithInfo)
