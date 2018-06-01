@@ -1,7 +1,11 @@
 // @flow
-import React, { Component } from 'react'
+import React from 'react'
 import TextField from '@material-ui/core/TextField'
 import styled from 'styled-components'
+import compose from 'recompose/compose'
+import withState from 'recompose/withState'
+import withHandlers from 'recompose/withHandlers'
+import withLifecycle from '@hocs/with-lifecycle'
 
 const StyledTextField = styled(TextField)`
   padding-bottom: 19px !important;
@@ -10,70 +14,68 @@ const StyledTextField = styled(TextField)`
   }
 `
 
-type Props = {
-  label: String,
-  type?: String,
-  multiLine?: Boolean,
-  disabled?: Boolean,
-  hintText?: String,
-  saveToDb: () => void,
-}
-
-type State = {
-  value: Number | String,
-}
-
-class MyTextField extends Component<Props, State> {
-  constructor(props) {
-    super(props)
-    this.state = {
-      value: props.value || props.value === 0 ? props.value : '',
+const enhance = compose(
+  withState(
+    'stateValue',
+    'setStateValue',
+    ({ value: propsValue }) => propsValue || propsValue === 0 ? propsValue : ''
+  ),
+  withHandlers({
+    onChange: ({ setStateValue }) => event => {
+      setStateValue(event.target.value)
+    },
+    onBlur: ({ saveToDb }) => event => {
+      saveToDb(event.target.value || null)
     }
-  }
+  }),
+  withLifecycle({
+    onDidUpdate(prevProps, props) {
+      console.log('TextField, onDidUpdate:', {prevProps,props})
+      if (props.value !== prevProps.value) {
+        props.setStateValue(props.value)
+      }
+    },
+  }),
+)
 
-  static defaultProps = {
-    value: '',
-    type: 'text',
-    multiLine: false,
-    disabled: false,
-    hintText: '',
-    saveToDb: null,
-  }
-
-  static getDerivedStateFromProps(nextProps, prevState) {
-    const value =
-      nextProps.value || nextProps.value === 0 ? nextProps.value : ''
-    return { value }
-  }
-
-  handleChange = event => {
-    this.setState({ value: event.target.value })
-  }
-
-  handleBlur = event => {
-    const { saveToDb } = this.props
-    saveToDb(event.target.value || null)
-  }
-
-  render() {
-    const { label, type, multiLine, disabled, hintText } = this.props
-    const { value } = this.state
-
-    return (
-      <StyledTextField
-        id={label}
-        label={label}
-        value={value}
-        type={type}
-        multiline={multiLine}
-        onChange={this.handleChange}
-        onBlur={this.handleBlur}
-        placeholder={hintText}
-        disabled={disabled}
-        fullWidth
-      />
-    )
-  }
+const MyTextField = ({
+  value: propsValue,
+  stateValue,
+  label,
+  type,
+  multiLine,
+  disabled,
+  hintText,
+  saveToDb,
+  onChange,
+  onBlur,
+}: {
+  value: Number | String,
+  stateValue: Number | String,
+  label: String,
+  type: 'text',
+  multiLine: false,
+  disabled: false,
+  hintText: '',
+  saveToDb: null,
+  onChange: () => void,
+  onBlur: () => void,
+}) => {
+  console.log('TextField, render:', {propsValue,stateValue})
+  return (
+    <StyledTextField
+      id={label}
+      label={label}
+      value={stateValue}
+      type={type}
+      multiline={multiLine}
+      onChange={onChange}
+      onBlur={onBlur}
+      placeholder={hintText}
+      disabled={disabled}
+      fullWidth
+    />
+  )
 }
 
-export default MyTextField
+export default enhance(MyTextField)
