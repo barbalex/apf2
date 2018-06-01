@@ -1,5 +1,4 @@
 import React from 'react'
-import { inject } from 'mobx-react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 
@@ -11,11 +10,9 @@ const Div = styled.div`
 `
 
 const TestdataMessage = ({
-  store,
   tree,
   apId,
 }: {
-  store: Object,
   tree: Object,
   apId: String,
 }) => {
@@ -30,4 +27,4 @@ const TestdataMessage = ({
   return null
 }
 
-export default inject('store')(TestdataMessage)
+export default TestdataMessage

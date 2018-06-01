@@ -1,6 +1,5 @@
 // @flow
 import React from 'react'
-import { observer } from 'mobx-react'
 import FormGroup from '@material-ui/core/FormGroup'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Checkbox from '@material-ui/core/Checkbox'
@@ -28,7 +27,6 @@ const enhance = compose(
   withHandlers({
     onCheck: ({ saveToDb }) => (e, val) => saveToDb(val),
   }),
-  observer
 )
 
 const CheckboxWithInfo = ({
