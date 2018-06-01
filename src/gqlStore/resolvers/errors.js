@@ -4,13 +4,14 @@ import get from 'lodash/get'
 
 export default {
   Mutation: {
-    createError: (_, { error }, { cache }) => {
+    addError: (_, { error }, { cache }) => {
       // reinitialize db if db has problem
       // happens after refactoring db structure
       if (
         error &&
-        error.includes('IDBDatabase') &&
-        error.includes('One of the specified object stores was not found')
+        error.message &&
+        error.message.includes('IDBDatabase') &&
+        error.message.includes('One of the specified object stores was not found')
       ) {
         window.indexedDB.deleteDatabase('apflora')
         window.open(window.location.href, '_self')
@@ -25,11 +26,10 @@ export default {
           `
       })
       const errors = get(data, 'errors', [])
-        .map(d => JSON.parse(d))
       const newErrors = [
         ...errors,
-        error
-      ].map(d => JSON.stringify(d))
+        error,
+      ]
       cache.writeData({
         data: {
           errors: newErrors
@@ -45,10 +45,11 @@ export default {
             `
         })
         const errors = get(data, 'errors')
-        errors.pop()
+        const newErrors = [ ...errors ]
+        newErrors.pop()
         cache.writeData({
           data: {
-            errors
+            errors: newErrors
           }
         })
       }, 1000 * 10)

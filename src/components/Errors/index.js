@@ -14,6 +14,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   max-width: 300px;
+  z-index: 2000;
 `
 const ErrorDiv = styled.div`
   padding: 10px 10px;
@@ -32,13 +33,12 @@ const Errors = () => (
       if (loadingError) return `Fehler: ${loadingError.message}`
 
       const errors = get(data, 'errors', [])
-        .map(e => JSON.parse(e))
 
       return (
         <ErrorBoundary>
           <Container>
             {errors.map((error, index) => (
-              <ErrorDiv key={index}>{error.message}</ErrorDiv>
+              <ErrorDiv key={index}>{error}</ErrorDiv>
             ))}
           </Container>
         </ErrorBoundary>

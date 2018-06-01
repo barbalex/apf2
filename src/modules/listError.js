@@ -5,13 +5,13 @@ import app from 'ampersand-app'
 export default (error: Object): void => {
   app.client.mutate({
     mutation: gql`
-      mutation createError($error: String!) {
-        createError(error: $error) @client {
+      mutation addError($error: String!) {
+        addError(error: $error) @client {
           errors @client
         }
       }
     `,
-    variables: { error }
+    variables: { error: error.message }
   })
-  console.log('listError: Error:', error) // eslint-disable-line no-console
+  console.log('listError: Error:', error.message) // eslint-disable-line no-console
 }
