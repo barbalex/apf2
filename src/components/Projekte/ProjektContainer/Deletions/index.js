@@ -1,6 +1,5 @@
 // @flow
 import React from 'react'
-import { observer, inject } from 'mobx-react'
 import Dialog from '@material-ui/core/Dialog'
 import DialogContent from '@material-ui/core/DialogContent'
 import DialogTitle from '@material-ui/core/DialogTitle'
@@ -58,7 +57,6 @@ const StyledCheckbox = styled(Checkbox)`
 `
 
 const enhance = compose(
-  inject('store'),
   withState('choosenDeletions', 'changeChoosenDeletions', []),
   withHandlers({
     onClickUndo: ({
@@ -66,7 +64,6 @@ const enhance = compose(
       setShowDeletions,
       tree,
       refetchTree,
-      store,
     }) => ({
       client,
       datasetsDeleted,
@@ -101,11 +98,9 @@ const enhance = compose(
       changeChoosenDeletions(newChoosenDeletions)
     },
   }),
-  observer
 )
 
 const Deletions = ({
-  store,
   onClickUndo,
   choosenDeletions,
   changeChoosenDeletions,
@@ -115,7 +110,6 @@ const Deletions = ({
   tree,
   refetchTree,
 }: {
-  store: Object,
   onClickUndo: () => void,
   choosenDeletions: Array<string>,
   toggleChoosenDeletions: () => void,
@@ -129,7 +123,6 @@ const Deletions = ({
       if (error) return `Fehler: ${error.message}`
       const datasetsDeleted = get(data, 'datasetsDeleted', [])
         .map(d => JSON.parse(d))
-      console.log('Deletions, datasetsDeleted:', datasetsDeleted)
 
       return (
         <ErrorBoundary>
