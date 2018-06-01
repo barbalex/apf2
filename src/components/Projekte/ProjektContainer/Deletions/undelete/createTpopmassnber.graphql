@@ -1,0 +1,27 @@
+mutation createTpopmassnber(
+  $id: UUID
+  $tpopId: UUID
+  $jahr: Int
+  $beurteilung: Int
+  $bemerkungen: UUID
+) {
+  createTpopmassnber(
+    input: {
+      tpopmassnber: {
+        id: $id
+        tpopId: $tpopId
+        jahr: $jahr
+        beurteilung: $beurteilung
+        bemerkungen: $bemerkungen
+      }
+    }
+  ) {
+    tpopmassnber {
+      id
+      tpopId
+      jahr
+      beurteilung
+      bemerkungen
+    }
+  }
+}

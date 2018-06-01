@@ -1,0 +1,18 @@
+mutation createProjekt(
+  $id: UUID
+  $name: String
+) {
+  createProjekt(
+    input: {
+      projekt: {
+        id: $id
+        name: $name
+      }
+    }
+  ) {
+    projekt {
+      id
+      name
+    }
+  }
+}

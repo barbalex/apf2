@@ -1,0 +1,27 @@
+mutation createZielber(
+  $id: UUID
+  $zielId: UUID
+  $jahr: Int
+  $erreichung: String
+  $bemerkungen: UUID
+) {
+  createZielber(
+    input: {
+      zielber: {
+        id: $id
+        zielId: $zielId
+        jahr: $jahr
+        erreichung: $erreichung
+        bemerkungen: $bemerkungen
+      }
+    }
+  ) {
+    zielber {
+      id
+      zielId
+      jahr
+      erreichung
+      bemerkungen
+    }
+  }
+}
