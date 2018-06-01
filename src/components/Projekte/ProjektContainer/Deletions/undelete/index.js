@@ -3,7 +3,7 @@ import upperFirst from 'lodash/upperFirst'
 import camelCase from 'lodash/camelCase'
 
 import deleteDatasetDeletedById from './deleteDatasetDeletedById.graphql'
-import listError from '../../../../modules/listError'
+import listError from '../../../../../modules/listError'
 
 export default async ({
   client,

@@ -6,10 +6,10 @@ import camelCase from 'lodash/camelCase'
 import omit from 'lodash/omit'
 import gql from 'graphql-tag'
 
-import tables from '../../../../modules/tables'
-import listError from '../../../../modules/listError'
+import tables from '../../../../../modules/tables'
+import listError from '../../../../../modules/listError'
 import setTreeKey from './setTreeKey.graphql'
-import setDatasetToDelete from './setDatasetToDelete.graphql'
+import setDatasetToDelete from '../setDatasetToDelete.graphql'
 import createDatasetDeleted from './createDatasetDeleted.graphql'
 
 export default async ({
