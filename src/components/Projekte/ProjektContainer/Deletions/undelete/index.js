@@ -36,7 +36,7 @@ export default async ({
   try {
     mutation = await import('./' + queryName + '.graphql')
   } catch (error) {
-    return listError('Hm. Die Abfrage, um einen Datensatz für diese Tabelle zu erstellen, fehlt. Sorry!')
+    return listError(new Error(`Die Abfrage, um einen Datensatz für die Tabelle ${table} zu erstellen, scheint zu fehlen. Sorry!`))
   }
   try {
     await client.mutate({

@@ -1,8 +1,6 @@
 // @flow
 import React from 'react'
-import { observer, inject } from 'mobx-react'
 import styled from 'styled-components'
-import compose from 'recompose/compose'
 import { Query } from 'react-apollo'
 import get from 'lodash/get'
 
@@ -28,20 +26,19 @@ const ErrorDiv = styled.div`
   font-size: 14px;
 `
 
-const enhance = compose(inject('store'), observer)
-
-const Errors = ({ store }: { store: Object }) => (
+const Errors = () => (
   <Query query={dataGql} >
-    {({ loading, error, data }) => {
-      if (error) return `Fehler: ${error.message}`
+    {({ loading, error: loadingError, data }) => {
+      if (loadingError) return `Fehler: ${loadingError.message}`
 
       const errors = get(data, 'errors', [])
+        .map(e => JSON.parse(e))
 
       return (
         <ErrorBoundary>
           <Container>
             {errors.map((error, index) => (
-              <ErrorDiv key={index}>{error}</ErrorDiv>
+              <ErrorDiv key={index}>{error.message}</ErrorDiv>
             ))}
           </Container>
         </ErrorBoundary>
@@ -50,4 +47,4 @@ const Errors = ({ store }: { store: Object }) => (
   </Query>
 )
 
-export default enhance(Errors)
+export default Errors

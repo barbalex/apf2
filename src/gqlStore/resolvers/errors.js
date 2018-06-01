@@ -4,7 +4,7 @@ import get from 'lodash/get'
 
 export default {
   Mutation: {
-    setError: (_, { error }, { cache }) => {
+    createError: (_, { error }, { cache }) => {
       // reinitialize db if db has problem
       // happens after refactoring db structure
       if (
@@ -24,11 +24,15 @@ export default {
             }
           `
       })
-      const errors = get(data, 'errors')
-      errors.unshift(error)
+      const errors = get(data, 'errors', [])
+        .map(d => JSON.parse(d))
+      const newErrors = [
+        ...errors,
+        error
+      ].map(d => JSON.stringify(d))
       cache.writeData({
         data: {
-          errors
+          errors: newErrors
         }
       })
       // pop after 10 seconds
