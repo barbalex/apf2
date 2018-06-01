@@ -35,16 +35,16 @@ export default async ({
   try {
     query = await import('./' + queryName + '.graphql')
   } catch (error) {
-    listError(error)
+    return listError(error)
   }
   console.log('undelete:', { query })
   try {
-    await client.query({
+    await client.mutate({
       query,
       variables: data,
     }) 
   } catch (error) {
-    listError(error)
+    return listError(error)
   }
   console.log('undelete: data crated')
 

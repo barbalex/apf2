@@ -1,11 +1,8 @@
 // @flow
 import React from 'react'
-import { inject } from 'mobx-react'
 import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
 import Button from '@material-ui/core/Button'
-import compose from 'recompose/compose'
-import withHandlers from 'recompose/withHandlers'
 import styled from 'styled-components'
 import { Query } from 'react-apollo'
 import get from 'lodash/get'
@@ -22,20 +19,9 @@ const StyledDialog = styled(Dialog)`
   }
 `
 
-const enhance = compose(
-  inject('store'),
-  withHandlers({
-    onClickDelete: props => () => props.store.deleteDatasetExecute(props.tree),
-  })
-)
-
 const DatasetDeleteModal = ({
-  store,
-  onClickDelete,
   refetchTree,
 }: {
-  store: Object,
-  onClickDelete: () => void,
   refetchTree: () => void,
 }) =>
   <Query query={dataGql}>
@@ -89,4 +75,4 @@ const DatasetDeleteModal = ({
     }}
   </Query>
 
-export default enhance(DatasetDeleteModal)
+export default DatasetDeleteModal

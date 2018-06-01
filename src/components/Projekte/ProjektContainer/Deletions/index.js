@@ -140,7 +140,8 @@ const Deletions = ({
             <DialogContent>
               <List>
                 {datasetsDeleted.map((ds, index) => {
-                  const dataset = ds.data
+                  // clone to remove keys _only_ for presentation
+                  const dataset = { ...ds.data }
                   // remove null values
                   Object.keys(dataset).forEach(
                     key => dataset[key] == null && delete dataset[key]
