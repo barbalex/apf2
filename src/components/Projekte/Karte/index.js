@@ -252,7 +252,6 @@ const Karte = ({
         apfloraLayer => apfloraLayer.value === activeApfloraLayer
       )
     )
-    console.log('Map:', { activeApfloraLayersSorted, activeApfloraLayers, apfloraLayers })
     const activeOverlaysSorted = sortBy(activeOverlays, activeOverlay =>
       overlays.findIndex(o => o.value === activeOverlay)
     )
@@ -321,7 +320,6 @@ const Karte = ({
           {activeApfloraLayersSorted
             .map((apfloraLayerName, index) => {
               const ApfloraLayerComponent = ApfloraLayerComponents[apfloraLayerName]
-              console.log({ apfloraLayerName, activeApfloraLayersSorted })
               return <ApfloraLayerComponent key={index} />
             })
             .reverse()
