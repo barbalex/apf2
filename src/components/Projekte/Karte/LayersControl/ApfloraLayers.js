@@ -1,5 +1,4 @@
 import React from 'react'
-import { toJS } from 'mobx'
 import { observer } from 'mobx-react'
 import styled from 'styled-components'
 import Button from '@material-ui/core/Button'
@@ -14,6 +13,7 @@ import {
   SortableContainer,
   SortableElement,
   SortableHandle,
+  arrayMove,
 } from 'react-sortable-hoc'
 import 'leaflet'
 import 'leaflet-draw'
@@ -125,10 +125,10 @@ const DragHandle = SortableHandle(() => (
 const SortableItem = SortableElement(
   ({ apfloraLayer, store, activeApfloraLayers }) => {
     const assigningispossible =
-      store.map.activeApfloraLayers.includes('Tpop') &&
-      ((store.map.activeApfloraLayers.includes('BeobNichtBeurteilt') &&
+      activeApfloraLayers.includes('Tpop') &&
+      ((activeApfloraLayers.includes('BeobNichtBeurteilt') &&
         apfloraLayer.value === 'BeobNichtBeurteilt') ||
-        (store.map.activeApfloraLayers.includes('BeobZugeordnet') &&
+        (activeApfloraLayers.includes('BeobZugeordnet') &&
           apfloraLayer.value === 'BeobZugeordnet'))
     const getZuordnenIconTitle = () => {
       if (store.map.beob.assigning) return 'Zuordnung beenden'
@@ -166,7 +166,7 @@ const SortableItem = SortableElement(
               <StyledIconButton
                 title={getZuordnenIconTitle()}
                 onClick={() => {
-                  if (store.map.activeApfloraLayers.includes('Tpop')) {
+                  if (activeApfloraLayers.includes('Tpop')) {
                     store.map.beob.toggleAssigning()
                   }
                 }}
@@ -248,12 +248,12 @@ const SortableItem = SortableElement(
                 >
                   <FilterIcon
                     style={{
-                      color: store.map.activeApfloraLayers.includes(
+                      color: activeApfloraLayers.includes(
                         apfloraLayer.value
                       )
                         ? 'black'
                         : '#e2e2e2',
-                      cursor: store.map.activeApfloraLayers.includes(
+                      cursor: activeApfloraLayers.includes(
                         apfloraLayer.value
                       )
                         ? 'pointer'
@@ -360,20 +360,27 @@ const SortableList = SortableContainer(
   )
 )
 
-const ApfloraLayers = ({ store }: { store: Object }) => (
+const ApfloraLayers = ({
+  store,
+  apfloraLayers,
+  setApfloraLayers,
+  activeApfloraLayers,
+}: {
+  store: Object,
+  apfloraLayers: Array<Object>,
+  setApfloraLayers: () => void,
+  activeApfloraLayers: Array<Object>,
+}) => (
   <CardContent>
     <SortableList
-      items={store.map.apfloraLayers}
+      items={apfloraLayers}
       onSortEnd={({ oldIndex, newIndex }) =>
-        store.map.moveApfloraLayer({
-          oldIndex,
-          newIndex,
-        })
+        setApfloraLayers(arrayMove(apfloraLayers, oldIndex, newIndex))
       }
       useDragHandle
       lockAxis="y"
       store={store}
-      activeApfloraLayers={toJS(store.map.activeApfloraLayers)}
+      activeApfloraLayers={activeApfloraLayers}
     />
   </CardContent>
 )

@@ -113,6 +113,9 @@ const enhance = compose(
 
 const LayersControl = ({
   store,
+  apfloraLayers,
+  setApfloraLayers,
+  activeApfloraLayers,
   baseLayersExpanded,
   overlaysExpanded,
   apfloraLayersExpanded,
@@ -121,6 +124,9 @@ const LayersControl = ({
   onToggleApfloraLayersExpanded,
 }: {
   store: Object,
+  apfloraLayers: Array<Object>,
+  setApfloraLayers: () => void,
+  activeApfloraLayers: Array<Object>,
   baseLayersExpanded: boolean,
   overlaysExpanded: boolean,
   toggleBaseLayersExpanded: () => void,
@@ -159,6 +165,9 @@ const LayersControl = ({
             {apfloraLayersExpanded && (
               <ApfloraLayers
                 store={store}
+                apfloraLayers={apfloraLayers}
+                setApfloraLayers={setApfloraLayers}
+                activeApfloraLayers={activeApfloraLayers}
                 /**
                  * overlaysString enforces rererender
                  * even when only the sorting changes

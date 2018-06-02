@@ -102,6 +102,7 @@ const StyledMapLocalizing = styled(StyledMap)`
 const enhance = compose(
   inject('store'),
   withState('apfloraLayers', 'setApfloraLayers', apfloraLayers),
+  withState('activeApfloraLayers', 'setActiveApfloraLayers', []),
   withHandlers({
     onMouseMove: ({ setMouseCoordinates }) => (e, client) => {
       const [x, y] = epsg4326to2056(e.latlng.lng, e.latlng.lat)
@@ -129,6 +130,8 @@ const Karte = ({
   onMouseMove,
   data,
   apfloraLayers,
+  setApfloraLayers,
+  activeApfloraLayers,
   client,
   refetchTree
 }: {
@@ -138,10 +141,12 @@ const Karte = ({
   onMouseMove: () => void,
   data: Object,
   apfloraLayers: Array<Object>,
+  setApfloraLayers: () => void,
+  activeApfloraLayers: Array<Object>,
   client: Object,
   refetchTree: () => void
 }) => {
-    const { activeBaseLayer, activeApfloraLayers, apfloraLayers } = store.map
+    const { activeBaseLayer } = store.map
     const { idOfTpopBeingLocalized } = store.map.tpop
     const MapElement = !!idOfTpopBeingLocalized ? StyledMapLocalizing : StyledMap
     const clustered = !(store.map.beob.assigning || activeApfloraLayers.includes('BeobZugeordnetAssignPolylines'))
@@ -191,8 +196,8 @@ const Karte = ({
       ZhOrtho2015Ir: () => <ZhOrtho2015Ir />,
     }
     const BaseLayerComponent = BaseLayerComponents[activeBaseLayer]
-    const activeApfloraLayersSorted = sortBy(toJS(activeApfloraLayers), activeApfloraLayer =>
-      toJS(apfloraLayers).findIndex(
+    const activeApfloraLayersSorted = sortBy(activeApfloraLayers, activeApfloraLayer =>
+      apfloraLayers.findIndex(
         apfloraLayer => apfloraLayer.value === activeApfloraLayer
       )
     )
@@ -270,12 +275,15 @@ const Karte = ({
           <ScaleControl imperial={false} />
           <LayersControl
             // this enforces rerendering when sorting changes
+            apfloraLayers={apfloraLayers}
+            setApfloraLayers={setApfloraLayers}
+            activeApfloraLayers={activeApfloraLayers}
             activeOverlaysSorted={store.map.activeOverlaysSortedString}
-            activeApfloraLayersSorted={store.map.activeApfloraLayers.join()}
+            activeApfloraLayersSorted={activeApfloraLayers.join()}
           />
           <MeasureControl />
           <FullScreenControl />
-          {store.map.activeApfloraLayers.includes('MapFilter') && <DrawControl />}
+          {activeApfloraLayers.includes('MapFilter') && <DrawControl />}
           {/*
           need to get background maps to show when printing A4
           <PrintControl />
