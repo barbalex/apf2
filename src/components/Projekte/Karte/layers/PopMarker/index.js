@@ -13,11 +13,13 @@ const enhance = compose(inject('store'))
 const PmcComponent = ({
   store,
   tree,
-  activeNodes
+  activeNodes,
+  apfloraLayers,
 }:{
   store: Object,
   tree: Object,
-  activeNodes: Array<Object>
+  activeNodes: Array<Object>,
+  apfloraLayers: Array<Object>,
 }) =>
   <Query query={dataGql}
     variables={{
@@ -37,8 +39,12 @@ const PmcComponent = ({
             .toLowerCase()
             .includes(popFilterString.toLowerCase())
         })
-      const popMarkers = buildMarkers({ pops, store, activeNodes })
-
+      const popMarkers = buildMarkers({
+        pops,
+        store,
+        activeNodes,
+        apfloraLayers,
+      })
       return <PopMarkerCluster markers={popMarkers} />
     
   }}

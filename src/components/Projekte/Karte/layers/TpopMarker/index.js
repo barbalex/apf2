@@ -17,11 +17,13 @@ const TpopMarkerMarker = ({
   store,
   tree,
   activeNodes,
+  apfloraLayers,
   clustered,
 } : {
   store: Object,
   tree: Object,
   activeNodes: Array<Object>,
+  apfloraLayers: Array<Object>,
   clustered: Boolean,
 }) =>
   <Query query={dataGql}
@@ -44,8 +46,22 @@ const TpopMarkerMarker = ({
             .includes(tpopFilterString.toLowerCase())
         })
 
-      if (clustered) return <MarkerCluster markers={buildMarkersClustered({ tpops, store, activeNodes })} />
-      return <Marker markers={buildMarkers({ tpops, store, activeNodes })} />
+      if (clustered) {
+        const markers = buildMarkersClustered({
+          tpops,
+          store,
+          activeNodes,
+          apfloraLayers,
+        })
+        return <MarkerCluster markers={markers} />
+      }
+      const markers = buildMarkers({
+        tpops,
+        store,
+        activeNodes,
+        apfloraLayers,
+      })
+      return <Marker markers={markers} />
     
   }}
 </Query>

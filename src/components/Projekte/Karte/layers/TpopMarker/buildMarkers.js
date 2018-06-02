@@ -18,11 +18,13 @@ export default ({
   tpops,
   tree,
   activeNodes,
+  apfloraLayers,
   store,
 }:{
   tpops: Array<Object>,
   tree: Object,
   activeNodes: Array<Object>,
+  apfloraLayers: Array<Object>,
   store: Object,
 }): Array<Object> => {
   const { map } = store
@@ -43,7 +45,7 @@ export default ({
       // beware: leaflet needs title to always be a string
       title: labelUsingNr ? tpop.flurname : nrLabel,
       icon,
-      zIndexOffset: -store.map.apfloraLayers.findIndex(
+      zIndexOffset: -apfloraLayers.findIndex(
         apfloraLayer => apfloraLayer.value === 'Tpop'
       ),
     })

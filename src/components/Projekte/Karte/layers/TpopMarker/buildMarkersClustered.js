@@ -19,10 +19,12 @@ const StyledH3 = styled.h3`
 export default ({
   tpops,
   activeNodes,
+  apfloraLayers,
   store,
 }:{
   tpops: Array<Object>,
   activeNodes: Array<Object>,
+  apfloraLayers: Array<Object>,
   store: Object,
 }): Object => {
   const { map } = store
@@ -62,7 +64,7 @@ export default ({
     const marker = window.L.marker(latLng, {
       title: labelUsingNr ? tpop.flurname : nrLabel,
       icon,
-      zIndexOffset: -store.map.apfloraLayers.findIndex(
+      zIndexOffset: -apfloraLayers.findIndex(
         apfloraLayer => apfloraLayer.value === 'Tpop'
       ),
     })

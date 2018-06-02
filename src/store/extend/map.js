@@ -29,18 +29,6 @@ export default (store: Object): void => {
     fetchMarkierungen: action(() =>
       fetchMarkierungen(store)
     ),
-    apfloraLayers: observable([
-      { label: 'Populationen', value: 'Pop' },
-      { label: 'Teil-Populationen', value: 'Tpop' },
-      { label: 'Beobachtungen: zugeordnet', value: 'BeobZugeordnet' },
-      { label: 'Beobachtungen: nicht beurteilt', value: 'BeobNichtBeurteilt' },
-      {
-        label: 'Beobachtungen: nicht zuzuordnen',
-        value: 'BeobNichtZuzuordnen',
-      },
-      { label: 'Zuordnungs-Linien', value: 'BeobZugeordnetAssignPolylines' },
-      { label: 'Karten-Filter', value: 'MapFilter' },
-    ]),
     activeApfloraLayers: [],
     addActiveApfloraLayer: action(layer =>
       store.map.activeApfloraLayers.push(layer)

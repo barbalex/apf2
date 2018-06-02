@@ -165,12 +165,14 @@ const Karte = ({
         <Pop
           tree={tree}
           activeNodes={activeNodes}
+          apfloraLayers={apfloraLayers}
         />
       ),
       Tpop: () => (
         <Tpop
           tree={tree}
           activeNodes={activeNodes}
+          apfloraLayers={apfloraLayers}
           clustered={clustered}
         />
       ),

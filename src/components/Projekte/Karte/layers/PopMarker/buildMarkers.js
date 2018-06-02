@@ -22,10 +22,12 @@ const StyledH3 = styled.h3`
 export default ({
   pops,
   activeNodes,
+  apfloraLayers,
   store
 }:{
   pops:Array<Object>,
   activeNodes:Array<Object>,
+  apfloraLayers: Array<Object>,
   store: Object
 }): Object => {
   const { ap, projekt } = activeNodes
@@ -73,7 +75,7 @@ export default ({
       const marker = window.L.marker(latLng, {
         title,
         icon,
-        zIndexOffset: -store.map.apfloraLayers.findIndex(
+        zIndexOffset: -apfloraLayers.findIndex(
           apfloraLayer => apfloraLayer.value === 'Pop'
         ),
       })
