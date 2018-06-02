@@ -1,7 +1,6 @@
 // @flow
 import { extendObservable, action, computed } from 'mobx'
 
-import setActiveBaseLayer from '../action/setActiveBaseLayer'
 import tpopIdsInsideFeatureCollection from '../../modules/tpopIdsInsideFeatureCollection'
 import popIdsInsideFeatureCollection from '../../modules/popIdsInsideFeatureCollection'
 import beobNichtBeurteiltIdsInsideFeatureCollection from '../../modules/beobNichtBeurteiltIdsInsideFeatureCollection'
@@ -18,11 +17,6 @@ export default (store: Object): void => {
     setMarkierungen: action(data => (store.map.markierungen = data)),
     bounds: [[47.159, 8.354], [47.696, 8.984]],
     changeBounds: action(bounds => (store.map.bounds = bounds)),
-    activeBaseLayer: 'OsmColor',
-    setActiveBaseLayer: action(layer =>
-      setActiveBaseLayer(store, layer)
-    ),
-    activeOverlays: [],
     fetchDetailplaene: action(() =>
       fetchDetailplaene(store)
     ),

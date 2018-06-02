@@ -125,6 +125,8 @@ const Karte = ({
   activeNodes,
   onMouseMove,
   data,
+  activeBaseLayer,
+  setActiveBaseLayer,
   apfloraLayers,
   setApfloraLayers,
   activeApfloraLayers,
@@ -140,6 +142,8 @@ const Karte = ({
   activeNodes: Array<Object>,
   onMouseMove: () => void,
   data: Object,
+  activeBaseLayer: String,
+  setActiveBaseLayer: () => void,
   apfloraLayers: Array<Object>,
   setApfloraLayers: () => void,
   activeApfloraLayers: Array<Object>,
@@ -150,7 +154,6 @@ const Karte = ({
   client: Object,
   refetchTree: () => void
 }) => {
-    const { activeBaseLayer } = store.map
     const { idOfTpopBeingLocalized } = store.map.tpop
     const MapElement = !!idOfTpopBeingLocalized ? StyledMapLocalizing : StyledMap
     const clustered = !(store.map.beob.assigning || activeApfloraLayers.includes('BeobZugeordnetAssignPolylines'))
@@ -322,6 +325,8 @@ const Karte = ({
           }
           <ScaleControl imperial={false} />
           <LayersControl
+            activeBaseLayer={activeBaseLayer}
+            setActiveBaseLayer={setActiveBaseLayer}
             apfloraLayers={apfloraLayers}
             setApfloraLayers={setApfloraLayers}
             activeApfloraLayers={activeApfloraLayers}

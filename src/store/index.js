@@ -17,12 +17,9 @@ function Store(): void {
     beobNichtBeurteilt: {},
     beobNichtZuzuordnen: {},
     beobZugeordnet: {},
-    activeBaseLayer: 'OsmColor',
-    activeOverlays: [],
     activeApfloraLayers: [],
     activeApfloraLayersSorted: [],
     detailplaene: null,
-    setActiveBaseLayer: () => {},
     addActiveApfloraLayer: () => {},
     removeActiveApfloraLayer: () => {},
     mapFilter: {

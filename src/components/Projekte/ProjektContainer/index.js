@@ -51,6 +51,7 @@ const enhance = compose(
   withState('activeApfloraLayers', 'setActiveApfloraLayers', []),
   withState('overlays', 'setOverlays', overlays),
   withState('activeOverlays', 'setActiveOverlays', []),
+  withState('activeBaseLayer', 'setActiveBaseLayer', 'OsmColor'),
   observer
 )
 
@@ -68,6 +69,8 @@ const ProjekteContainer = ({
   setOverlays,
   activeOverlays,
   setActiveOverlays,
+  activeBaseLayer,
+  setActiveBaseLayer,
 }: {
   store: Object,
   treeName: String,
@@ -82,6 +85,8 @@ const ProjekteContainer = ({
   setActiveOverlays: () => void,
   activeOverlays: Array<String>,
   setActiveOverlays: () => void,
+  activeBaseLayer: String,
+  setActiveBaseLayer: () => void,
 }) =>
   <Query query={data1Gql} >
     {({ error, data: data1 }) => {
@@ -177,6 +182,8 @@ const ProjekteContainer = ({
                              */
                             tree={tree}
                             data={data}
+                            activeBaseLayer={activeBaseLayer}
+                            setActiveBaseLayer={setActiveBaseLayer}
                             apfloraLayers={apfloraLayers}
                             setApfloraLayers={setApfloraLayers}
                             activeApfloraLayers={activeApfloraLayers}
@@ -195,7 +202,6 @@ const ProjekteContainer = ({
                             beobZugeordnetHighlighted={store.map.beobZugeordnet.highlightedIds.join()}
                             beobZugeordnetAssigning={store.map.beob.assigning}
                             idOfTpopBeingLocalized={store.map.tpop.idOfTpopBeingLocalized}
-                            activeBaseLayer={store.map.activeBaseLayer}
                             // SortedStrings enforce rerendering when sorting or visibility changes
                             activeOverlaysString={activeOverlays.join()}
                             activeApfloraLayersSortedString={toJS(store.map.activeApfloraLayers).join()}

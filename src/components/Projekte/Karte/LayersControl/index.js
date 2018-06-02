@@ -126,6 +126,8 @@ const LayersControl = ({
   setOverlays,
   activeOverlays,
   setActiveOverlays,
+  activeBaseLayer,
+  setActiveBaseLayer,
 }: {
   store: Object,
   apfloraLayers: Array<Object>,
@@ -141,6 +143,8 @@ const LayersControl = ({
   setOverlays: () => void,
   activeOverlays: Array<String>,
   setActiveOverlays: () => void,
+  activeBaseLayer: String,
+  setActiveBaseLayer: () => void,
 }) => {
   const { tree, table } = store
   const { activeNodes } = tree
@@ -223,7 +227,13 @@ const LayersControl = ({
                 )}
               </div>
             </CardHeader>
-            {baseLayersExpanded && <BaseLayers store={store} />}
+            {
+              baseLayersExpanded &&
+              <BaseLayers
+                activeBaseLayer={activeBaseLayer}
+                setActiveBaseLayer={setActiveBaseLayer}
+              />
+            }
           </Card>
         </CardContainer>
       </MuiThemeProvider>
