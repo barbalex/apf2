@@ -4,7 +4,6 @@ import sortBy from 'lodash/sortBy'
 
 import setActiveBaseLayer from '../action/setActiveBaseLayer'
 import moveOverlay from '../action/moveOverlay'
-import moveApfloraLayer from '../action/moveApfloraLayer'
 import tpopIdsInsideFeatureCollection from '../../modules/tpopIdsInsideFeatureCollection'
 import popIdsInsideFeatureCollection from '../../modules/popIdsInsideFeatureCollection'
 import beobNichtBeurteiltIdsInsideFeatureCollection from '../../modules/beobNichtBeurteiltIdsInsideFeatureCollection'
@@ -84,12 +83,6 @@ export default (store: Object): void => {
       { label: 'Zuordnungs-Linien', value: 'BeobZugeordnetAssignPolylines' },
       { label: 'Karten-Filter', value: 'MapFilter' },
     ]),
-    apfloraLayersString: computed(
-      () => store.map.apfloraLayers.map(o => o.value).join()
-    ),
-    moveApfloraLayer: action(({ oldIndex, newIndex }) =>
-      moveApfloraLayer(store, oldIndex, newIndex)
-    ),
     activeApfloraLayers: [],
     addActiveApfloraLayer: action(layer =>
       store.map.activeApfloraLayers.push(layer)

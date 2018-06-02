@@ -172,7 +172,7 @@ const LayersControl = ({
                  * overlaysString enforces rererender
                  * even when only the sorting changes
                  */
-                apfloraLayersString={store.map.apfloraLayersString}
+                apfloraLayersString={apfloraLayers.map(o => o.value).join()}
                 assigning={store.map.beob.assigning}
               />
             )}

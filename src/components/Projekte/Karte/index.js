@@ -103,6 +103,7 @@ const enhance = compose(
   inject('store'),
   withState('apfloraLayers', 'setApfloraLayers', apfloraLayers),
   withState('activeApfloraLayers', 'setActiveApfloraLayers', []),
+  withState('activeOverlays', 'setActiveOverlays', []),
   withHandlers({
     onMouseMove: ({ setMouseCoordinates }) => (e, client) => {
       const [x, y] = epsg4326to2056(e.latlng.lng, e.latlng.lat)
@@ -132,6 +133,7 @@ const Karte = ({
   apfloraLayers,
   setApfloraLayers,
   activeApfloraLayers,
+  activeOverlays,
   client,
   refetchTree
 }: {
@@ -143,6 +145,7 @@ const Karte = ({
   apfloraLayers: Array<Object>,
   setApfloraLayers: () => void,
   activeApfloraLayers: Array<Object>,
+  activeOverlays: Array<String>,
   client: Object,
   refetchTree: () => void
 }) => {
