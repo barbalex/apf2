@@ -13,7 +13,6 @@ import { Map, ScaleControl } from 'react-leaflet'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
-import withState from 'recompose/withState'
 import gql from 'graphql-tag'
 import 'leaflet'
 import 'proj4'
@@ -130,6 +129,7 @@ const Karte = ({
   setApfloraLayers,
   activeApfloraLayers,
   activeOverlays,
+  setActiveOverlays,
   client,
   refetchTree
 }: {
@@ -142,6 +142,7 @@ const Karte = ({
   setApfloraLayers: () => void,
   activeApfloraLayers: Array<Object>,
   activeOverlays: Array<String>,
+  setActiveOverlays: () => void,
   client: Object,
   refetchTree: () => void
 }) => {
@@ -201,6 +202,11 @@ const Karte = ({
       )
     )
     console.log('Map:', { activeApfloraLayersSorted, activeApfloraLayers, apfloraLayers })
+    const activeOverlaysSorted = sortBy(activeOverlays, activeOverlay =>
+      store.map.overlays.findIndex(
+        overlay => overlay.value === activeOverlay
+      )
+    )
   
     return (
       <ErrorBoundary>
@@ -257,7 +263,7 @@ const Karte = ({
           }}
         >
           {activeBaseLayer && <BaseLayerComponent />}
-          {store.map.activeOverlaysSorted
+          {activeOverlaysSorted
             .map((overlayName, index) => {
               const OverlayComponent = OverlayComponents[overlayName]
               return <OverlayComponent key={index} />
@@ -273,12 +279,14 @@ const Karte = ({
           }
           <ScaleControl imperial={false} />
           <LayersControl
-            // this enforces rerendering when sorting changes
             apfloraLayers={apfloraLayers}
             setApfloraLayers={setApfloraLayers}
             activeApfloraLayers={activeApfloraLayers}
-            activeOverlaysSorted={store.map.activeOverlaysSortedString}
-            activeApfloraLayersSorted={activeApfloraLayers.join()}
+            activeOverlays={activeOverlays}
+            setActiveOverlays={setActiveOverlays}
+            // this enforces rerendering when sorting changes
+            activeOverlaysString={activeOverlays.join()}
+            activeApfloraLayersString={activeApfloraLayers.join()}
           />
           <MeasureControl />
           <FullScreenControl />

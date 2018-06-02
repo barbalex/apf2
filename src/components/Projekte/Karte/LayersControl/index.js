@@ -122,6 +122,8 @@ const LayersControl = ({
   onToggleBaseLayersExpanded,
   onToggleOverlaysExpanded,
   onToggleApfloraLayersExpanded,
+  activeOverlays,
+  setActiveOverlays,
 }: {
   store: Object,
   apfloraLayers: Array<Object>,
@@ -133,6 +135,8 @@ const LayersControl = ({
   toggleOverlaysExpanded: () => void,
   onToggleBaseLayersExpanded: () => void,
   onToggleOverlaysExpanded: () => void,
+  activeOverlays: Array<String>,
+  setActiveOverlays: () => void,
 }) => {
   const { tree, table } = store
   const { activeNodes } = tree
@@ -191,6 +195,8 @@ const LayersControl = ({
             {overlaysExpanded && (
               <Overlays
                 store={store}
+                activeOverlays={activeOverlays}
+                setActiveOverlays={setActiveOverlays}
                 /**
                  * overlaysString enforces rererender
                  * even when only the sorting changes

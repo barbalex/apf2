@@ -46,25 +46,6 @@ export default (store: Object): void => {
       moveOverlay(store, oldIndex, newIndex)
     ),
     activeOverlays: [],
-    activeOverlaysSorted: computed(
-      () =>
-        sortBy(store.map.activeOverlays, activeOverlay =>
-          store.map.overlays.findIndex(
-            overlay => overlay.value === activeOverlay
-          )
-        )
-    ),
-    activeOverlaysSortedString: computed(
-      () => store.map.activeOverlaysSorted.join()
-    ),
-    addActiveOverlay: action(layer =>
-      store.map.activeOverlays.push(layer)
-    ),
-    removeActiveOverlay: action(layer => {
-      store.map.activeOverlays = store.map.activeOverlays.filter(
-        o => o !== layer
-      )
-    }),
     fetchDetailplaene: action(() =>
       fetchDetailplaene(store)
     ),
@@ -91,13 +72,6 @@ export default (store: Object): void => {
       store.map.activeApfloraLayers = store.map.activeApfloraLayers.filter(
         o => o !== layer
       )
-    }),
-    showMapLayer: action((layer, bool) => {
-      if (bool) {
-        store.map.addActiveOverlay(layer)
-      } else {
-        store.map.removeActiveOverlay(layer)
-      }
     }),
     showMapApfloraLayer: action((layer, bool) => {
       if (bool) {

@@ -173,7 +173,9 @@ const enhance = compose(
       treeName,
       activeNode,
       activeNodes,
-      refetchTree
+      refetchTree,
+      activeOverlays,
+      setActiveOverlays,
     }) => ({
       data,
       element,
@@ -230,10 +232,13 @@ const enhance = compose(
           // 1. open map if not yet open
           showMapIfNotYetVisible({ client, projekteTabs })
           // 2 add layer for actionTable
-          store.map.showMapLayer(
-            actionTable,
-            !store.map.activeOverlays.includes(actionTable)
-          )
+          if (activeOverlays.includes(actionTable)) {
+            setActiveOverlays(
+              activeOverlays.filter(o => o !== actionTable)
+            )
+          } else {
+            setActiveOverlays([...activeOverlays, actionTable])
+          }
         },
         toggleTooltip() {
           store.map.toggleMapPopLabelContent(actionTable)

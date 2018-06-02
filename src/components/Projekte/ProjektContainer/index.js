@@ -48,6 +48,7 @@ const enhance = compose(
   inject('store'),
   withState('apfloraLayers', 'setApfloraLayers', apfloraLayers),
   withState('activeApfloraLayers', 'setActiveApfloraLayers', []),
+  withState('overlays', 'setOverlays', []),
   withState('activeOverlays', 'setActiveOverlays', []),
   observer
 )
@@ -62,7 +63,10 @@ const ProjekteContainer = ({
   apfloraLayers,
   setApfloraLayers,
   activeApfloraLayers,
+  overlays,
+  setOverlays,
   activeOverlays,
+  setActiveOverlays,
 }: {
   store: Object,
   treeName: String,
@@ -73,7 +77,10 @@ const ProjekteContainer = ({
   apfloraLayers: Array<Object>,
   setApfloraLayers: () => void,
   activeApfloraLayers: Array<Object>,
+  overlays: Array<Object>,
+  setActiveOverlays: () => void,
   activeOverlays: Array<String>,
+  setActiveOverlays: () => void,
 }) =>
   <Query query={data1Gql} >
     {({ error, data: data1 }) => {
@@ -123,6 +130,8 @@ const ProjekteContainer = ({
                           loading={loading}
                           moving={moving}
                           copying={copying}
+                          activeOverlays={activeOverlays}
+                          setActiveOverlays={setActiveOverlays}
                           refetchTree={refetch}
                         />
                       </ReflexElement>
@@ -170,6 +179,7 @@ const ProjekteContainer = ({
                             setApfloraLayers={setApfloraLayers}
                             activeApfloraLayers={activeApfloraLayers}
                             activeOverlays={activeOverlays}
+                            setActiveOverlays={setActiveOverlays}
                             client={client}
                             activeNodes={activeNodes}
                             key={tabs.toString()}
@@ -183,7 +193,7 @@ const ProjekteContainer = ({
                             idOfTpopBeingLocalized={store.map.tpop.idOfTpopBeingLocalized}
                             activeBaseLayer={store.map.activeBaseLayer}
                             // SortedStrings enforce rerendering when sorting or visibility changes
-                            activeOverlaysSortedString={toJS(store.map.activeOverlaysSortedString)}
+                            activeOverlaysString={activeOverlays.join()}
                             activeApfloraLayersSortedString={toJS(store.map.activeApfloraLayers).join()}
                             detailplaene={toJS(store.map.detailplaene)}
                             markierungen={toJS(store.map.markierungen)}

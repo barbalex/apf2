@@ -81,7 +81,12 @@ const DragHandle = SortableHandle(() => (
   </StyledIconButton>
 ))
 
-const SortableItem = SortableElement(({ overlay, store, activeOverlays }) => (
+const SortableItem = SortableElement(({
+  overlay,
+  store,
+  activeOverlays,
+  setActiveOverlays,
+}) => (
   <LayerDiv>
     <Checkbox
       tree={store.tree}
@@ -90,9 +95,11 @@ const SortableItem = SortableElement(({ overlay, store, activeOverlays }) => (
       checked={activeOverlays.includes(overlay.value)}
       onChange={() => {
         if (activeOverlays.includes(overlay.value)) {
-          return store.map.removeActiveOverlay(overlay.value)
+          return setActiveOverlays(
+            activeOverlays.filter(o => o !== overlay.value)
+          )
         }
-        return store.map.addActiveOverlay(overlay.value)
+        return setActiveOverlays([...activeOverlays, overlay.value])
       }}
     />
     <IconsDivs>
@@ -119,7 +126,12 @@ const SortableItem = SortableElement(({ overlay, store, activeOverlays }) => (
   </LayerDiv>
 ))
 
-const SortableList = SortableContainer(({ items, store, activeOverlays }) => (
+const SortableList = SortableContainer(({
+  items,
+  store,
+  activeOverlays,
+  setActiveOverlays,
+}) => (
   <div>
     {items.map((overlay, index) => (
       <SortableItem
@@ -128,6 +140,7 @@ const SortableList = SortableContainer(({ items, store, activeOverlays }) => (
         overlay={overlay}
         store={store}
         activeOverlays={activeOverlays}
+        setActiveOverlays={setActiveOverlays}
       />
     ))}
   </div>
@@ -143,9 +156,13 @@ const enhance = compose(
 
 const Overlays = ({
   store,
+  activeOverlays,
+  setActiveOverlays,
   onSortEnd,
 }: {
   store: Object,
+  activeOverlays: Array<String>,
+  setActiveOverlays: () => void,
   onSortEnd: () => void,
 }) => (
   <CardContent>
@@ -155,7 +172,8 @@ const Overlays = ({
       useDragHandle
       lockAxis="y"
       store={store}
-      activeOverlays={toJS(store.map.activeOverlays)}
+      activeOverlays={activeOverlays}
+      setActiveOverlays={setActiveOverlays}
     />
   </CardContent>
 )
