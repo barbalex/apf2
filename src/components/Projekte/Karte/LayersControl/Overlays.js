@@ -1,5 +1,4 @@
 import React from 'react'
-import { toJS } from 'mobx'
 import { observer } from 'mobx-react'
 import styled from 'styled-components'
 import Button from '@material-ui/core/Button'
@@ -156,18 +155,20 @@ const enhance = compose(
 
 const Overlays = ({
   store,
+  overlays,
   activeOverlays,
   setActiveOverlays,
   onSortEnd,
 }: {
   store: Object,
+  overlays: Array<Object>,
   activeOverlays: Array<String>,
   setActiveOverlays: () => void,
   onSortEnd: () => void,
 }) => (
   <CardContent>
     <SortableList
-      items={store.map.overlays}
+      items={overlays}
       onSortEnd={onSortEnd}
       useDragHandle
       lockAxis="y"

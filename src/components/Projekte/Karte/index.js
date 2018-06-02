@@ -128,6 +128,7 @@ const Karte = ({
   apfloraLayers,
   setApfloraLayers,
   activeApfloraLayers,
+  overlays,
   activeOverlays,
   setActiveOverlays,
   client,
@@ -141,6 +142,7 @@ const Karte = ({
   apfloraLayers: Array<Object>,
   setApfloraLayers: () => void,
   activeApfloraLayers: Array<Object>,
+  overlays: Array<Object>,
   activeOverlays: Array<String>,
   setActiveOverlays: () => void,
   client: Object,
@@ -282,6 +284,7 @@ const Karte = ({
             apfloraLayers={apfloraLayers}
             setApfloraLayers={setApfloraLayers}
             activeApfloraLayers={activeApfloraLayers}
+            overlays={overlays}
             activeOverlays={activeOverlays}
             setActiveOverlays={setActiveOverlays}
             // this enforces rerendering when sorting changes

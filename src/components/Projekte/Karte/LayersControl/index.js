@@ -122,6 +122,7 @@ const LayersControl = ({
   onToggleBaseLayersExpanded,
   onToggleOverlaysExpanded,
   onToggleApfloraLayersExpanded,
+  overlays,
   activeOverlays,
   setActiveOverlays,
 }: {
@@ -135,6 +136,7 @@ const LayersControl = ({
   toggleOverlaysExpanded: () => void,
   onToggleBaseLayersExpanded: () => void,
   onToggleOverlaysExpanded: () => void,
+  overlays: Array<Object>,
   activeOverlays: Array<String>,
   setActiveOverlays: () => void,
 }) => {
@@ -195,6 +197,7 @@ const LayersControl = ({
             {overlaysExpanded && (
               <Overlays
                 store={store}
+                overlays={overlays}
                 activeOverlays={activeOverlays}
                 setActiveOverlays={setActiveOverlays}
                 /**

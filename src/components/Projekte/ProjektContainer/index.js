@@ -26,6 +26,7 @@ import variables from './variables'
 import buildNodes from '../TreeContainer/nodes'
 import Deletions from './Deletions'
 import apfloraLayers from '../Karte/apfloraLayers'
+import overlays from '../Karte/overlays'
 
 const Container = styled.div`
   display: flex;
@@ -178,6 +179,7 @@ const ProjekteContainer = ({
                             apfloraLayers={apfloraLayers}
                             setApfloraLayers={setApfloraLayers}
                             activeApfloraLayers={activeApfloraLayers}
+                            overlays={overlays}
                             activeOverlays={activeOverlays}
                             setActiveOverlays={setActiveOverlays}
                             client={client}
