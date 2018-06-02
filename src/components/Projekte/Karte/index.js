@@ -195,6 +195,7 @@ const Karte = ({
         <BeobZugeordnet
           tree={tree}
           activeNodes={activeNodes}
+          apfloraLayers={apfloraLayers}
           clustered={clustered}
           refetchTree={refetchTree}
         />

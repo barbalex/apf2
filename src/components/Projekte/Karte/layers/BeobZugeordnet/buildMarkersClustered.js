@@ -20,10 +20,12 @@ const StyledH3 = styled.h3`
 export default ({
   beobs,
   activeNodes,
+  apfloraLayers,
   store,
 }:{
   beobs: Array<Object>,
   activeNodes: Array<Object>,
+  apfloraLayers: Array<Object>,
   store: Object,
 }): Object => {
   const { map } = store
@@ -62,7 +64,7 @@ export default ({
         title: label,
         icon,
         draggable: store.map.beob.assigning,
-        zIndexOffset: -store.map.apfloraLayers.findIndex(
+        zIndexOffset: -apfloraLayers.findIndex(
           apfloraLayer => apfloraLayer.value === 'BeobZugeordnet',
         ),
       })

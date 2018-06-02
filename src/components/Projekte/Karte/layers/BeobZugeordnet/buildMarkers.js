@@ -22,6 +22,7 @@ export default ({
   beobs,
   tree,
   activeNodes,
+  apfloraLayers,
   client,
   store,
   refetchTree
@@ -29,6 +30,7 @@ export default ({
   beobs: Array<Object>,
   tree: Object,
   activeNodes: Array<Object>,
+  apfloraLayers: Array<Object>,
   client: Object,
   store: Object,
   refetchTree: () => void
@@ -53,7 +55,7 @@ export default ({
       title: label,
       icon,
       draggable: store.map.beob.assigning,
-      zIndexOffset: -store.map.apfloraLayers.findIndex(
+      zIndexOffset: -apfloraLayers.findIndex(
         apfloraLayer => apfloraLayer.value === 'BeobZugeordnet'
       ),
     })

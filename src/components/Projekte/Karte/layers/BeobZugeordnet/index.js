@@ -18,12 +18,14 @@ const BeobZugeordnetMarker = ({
   store,
   tree,
   activeNodes,
+  apfloraLayers,
   clustered,
   refetchTree
 } : {
   store: Object,
   tree: Object,
   activeNodes: Array<Object>,
+  apfloraLayers: Array<Object>,
   clustered: Boolean,
   refetchTree: () => void
 }) =>
@@ -52,8 +54,24 @@ const BeobZugeordnetMarker = ({
             .includes(beobZugeordnetFilterString.toLowerCase())
         })
 
-      if (clustered) return <MarkerCluster markers={buildMarkersClustered({ beobs, activeNodes, store })} />
-      const markers = buildMarkers({ beobs, tree, activeNodes, client, store, refetchTree })
+      if (clustered) {
+        const markers = buildMarkersClustered({
+          beobs,
+          activeNodes,
+          apfloraLayers,
+          store
+        })
+        return <MarkerCluster markers={markers} />
+      }
+      const markers = buildMarkers({
+        beobs,
+        tree,
+        activeNodes,
+        apfloraLayers,
+        client,
+        store,
+        refetchTree
+      })
       return <Marker markers={markers} />
     
   }}
