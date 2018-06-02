@@ -26,7 +26,6 @@ const FieldsContainer = styled.div`
 const enhance = compose(
   withHandlers({
     saveToDb: props => ({ row, field, value, updateProjekt }) => {
-      console.log('Projekt: saveToDb:', { row, field, value, updateProjekt })
       updateProjekt({
         variables: {
           id: row.id,
@@ -66,7 +65,6 @@ const Projekt = ({
       if (error) return `Fehler: ${error.message}`
 
       const row = get(data, 'projektById')
-      console.log('Projekt, render:', { value: row.name })
 
       return (
         <ErrorBoundary>
@@ -80,10 +78,9 @@ const Projekt = ({
                     label="Name"
                     value={row.name}
                     type="text"
-                    saveToDb={value => {
-                      console.log('Projekt:', { row, value, updateProjekt })
+                    saveToDb={value => 
                       saveToDb({ row, field: 'name', value, updateProjekt })
-                    }}
+                    }
                   />
                 </FieldsContainer>
               )}
