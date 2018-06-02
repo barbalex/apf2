@@ -13,6 +13,7 @@ import { Map, ScaleControl } from 'react-leaflet'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
+import withState from 'recompose/withState'
 import gql from 'graphql-tag'
 import 'leaflet'
 import 'proj4'
@@ -63,6 +64,7 @@ import CoordinatesControl from './CoordinatesControl/index.js'
 import epsg4326to2056 from '../../../modules/epsg4326to2056'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import updateTpopById from './updateTpopById.graphql'
+import apfloraLayers from './apfloraLayers'
 //import getBounds from '../../../modules/getBounds'
 
 // this does not work
@@ -99,6 +101,7 @@ const StyledMapLocalizing = styled(StyledMap)`
 
 const enhance = compose(
   inject('store'),
+  withState('apfloraLayers', 'setApfloraLayers', apfloraLayers),
   withHandlers({
     onMouseMove: ({ setMouseCoordinates }) => (e, client) => {
       const [x, y] = epsg4326to2056(e.latlng.lng, e.latlng.lat)
@@ -125,6 +128,7 @@ const Karte = ({
   activeNodes,
   onMouseMove,
   data,
+  apfloraLayers,
   client,
   refetchTree
 }: {
@@ -133,6 +137,7 @@ const Karte = ({
   activeNodes: Array<Object>,
   onMouseMove: () => void,
   data: Object,
+  apfloraLayers: Array<Object>,
   client: Object,
   refetchTree: () => void
 }) => {
