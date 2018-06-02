@@ -18,12 +18,14 @@ const BeobNichtBeurteiltMarker = ({
   store,
   tree,
   activeNodes,
+  apfloraLayers,
   clustered,
   refetchTree
 } : {
   store: Object,
   tree: Object,
   activeNodes: Array<Object>,
+  apfloraLayers: Array<Object>,
   clustered: Boolean,
   refetchTree: () => void
 }) =>
@@ -53,7 +55,15 @@ const BeobNichtBeurteiltMarker = ({
       if (clustered) {
         return <MarkerCluster markers={buildMarkersClustered({ beobs, activeNodes, store })} />
       }
-      const markers = buildMarkers({ beobs, tree, activeNodes, client, store, refetchTree })
+      const markers = buildMarkers({
+        beobs,
+        tree,
+        activeNodes,
+        apfloraLayers,
+        client,
+        store,
+        refetchTree
+      })
       return <Marker markers={markers} />
     
   }}

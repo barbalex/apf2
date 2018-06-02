@@ -161,12 +161,49 @@ const Karte = ({
     const ApfloraLayerComponents = {
       // MapFilter is used for filtering, need to return null
       MapFilter: () => null,
-      Pop: () => <Pop tree={tree} activeNodes={activeNodes} />,
-      Tpop: () => <Tpop tree={tree} activeNodes={activeNodes} clustered={clustered} />,
-      BeobNichtBeurteilt: () => <BeobNichtBeurteilt tree={tree} activeNodes={activeNodes} clustered={clustered} refetchTree={refetchTree} />,
-      BeobNichtZuzuordnen: () => <BeobNichtZuzuordnen tree={tree} activeNodes={activeNodes} clustered={clustered} />,
-      BeobZugeordnet: () => <BeobZugeordnet tree={tree} activeNodes={activeNodes} clustered={clustered} refetchTree={refetchTree} />,
-      BeobZugeordnetAssignPolylines: () => <BeobZugeordnetAssignPolylines tree={tree} activeNodes={activeNodes} />
+      Pop: () => (
+        <Pop
+          tree={tree}
+          activeNodes={activeNodes}
+        />
+      ),
+      Tpop: () => (
+        <Tpop
+          tree={tree}
+          activeNodes={activeNodes}
+          clustered={clustered}
+        />
+      ),
+      BeobNichtBeurteilt: () => (
+        <BeobNichtBeurteilt
+          tree={tree}
+          activeNodes={activeNodes}
+          clustered={clustered}
+          refetchTree={refetchTree}
+          apfloraLayers={apfloraLayers}
+        />
+      ),
+      BeobNichtZuzuordnen: () => (
+        <BeobNichtZuzuordnen
+          tree={tree}
+          activeNodes={activeNodes}
+          clustered={clustered}
+        />
+      ),
+      BeobZugeordnet: () => (
+        <BeobZugeordnet
+          tree={tree}
+          activeNodes={activeNodes}
+          clustered={clustered}
+          refetchTree={refetchTree}
+        />
+      ),
+      BeobZugeordnetAssignPolylines: () => (
+        <BeobZugeordnetAssignPolylines
+          tree={tree}
+          activeNodes={activeNodes}
+        />
+      )
     }
     const OverlayComponents = {
       ZhUep: () => <ZhUepOverlay />,

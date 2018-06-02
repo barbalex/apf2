@@ -158,7 +158,8 @@ const ProjekteContainer = ({
                       </ReflexElement>
                     }
                     {
-                      tabs.includes('karte') && (tabs.includes('tree') || tabs.includes('daten')) &&
+                      tabs.includes('karte') &&
+                      (tabs.includes('tree') || tabs.includes('daten')) &&
                       <ReflexSplitter />
                     }
                     {
