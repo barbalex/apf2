@@ -1,5 +1,5 @@
 // @flow
-import { extendObservable, action, computed, observable } from 'mobx'
+import { extendObservable, action, computed } from 'mobx'
 
 import setActiveBaseLayer from '../action/setActiveBaseLayer'
 import tpopIdsInsideFeatureCollection from '../../modules/tpopIdsInsideFeatureCollection'
