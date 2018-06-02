@@ -14,13 +14,15 @@ const Ap = ({
   store,
   tree,
   token,
-  moving
+  moving,
+  activeApfloraLayers,
 }: {
   onClick: () => void,
   store: Object,
   tree: Object,
   token: String,
-  moving: Object
+  moving: Object,
+  activeApfloraLayers: Array<String>,
 }) => {
   const isMoving = moving.table && moving.table === 'pop'
   const mayWrite = !userIsReadOnly(token)
@@ -70,14 +72,14 @@ const Ap = ({
             {`verschiebe '${moving.label}' hierhin`}
           </MenuItem>
         )}
-        {(store.map.activeApfloraLayers.includes('Pop') ||
-          store.map.activeApfloraLayers.includes('Tpop')) && (
+        {(activeApfloraLayers.includes('Pop') ||
+          activeApfloraLayers.includes('Tpop')) && (
           <div>
             <div className="react-contextmenu-divider" />
             <div className="react-contextmenu-title">Karte</div>
           </div>
         )}
-        {store.map.activeApfloraLayers.includes('Pop') && (
+        {activeApfloraLayers.includes('Pop') && (
           <MenuItem
             onClick={onClick}
             data={{
@@ -90,7 +92,7 @@ const Ap = ({
               : 'beschrifte Populationen mit Nummer'}
           </MenuItem>
         )}
-        {store.map.activeApfloraLayers.includes('Tpop') && (
+        {activeApfloraLayers.includes('Tpop') && (
           <MenuItem
             onClick={onClick}
             data={{

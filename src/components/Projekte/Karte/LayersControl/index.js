@@ -116,6 +116,7 @@ const LayersControl = ({
   apfloraLayers,
   setApfloraLayers,
   activeApfloraLayers,
+  setActiveApfloraLayers,
   baseLayersExpanded,
   overlaysExpanded,
   apfloraLayersExpanded,
@@ -133,6 +134,7 @@ const LayersControl = ({
   apfloraLayers: Array<Object>,
   setApfloraLayers: () => void,
   activeApfloraLayers: Array<Object>,
+  setActiveApfloraLayers: () => void,
   baseLayersExpanded: boolean,
   overlaysExpanded: boolean,
   toggleBaseLayersExpanded: () => void,
@@ -180,6 +182,7 @@ const LayersControl = ({
                 apfloraLayers={apfloraLayers}
                 setApfloraLayers={setApfloraLayers}
                 activeApfloraLayers={activeApfloraLayers}
+                setActiveApfloraLayers={setActiveApfloraLayers}
                 /**
                  * overlaysString enforces rererender
                  * even when only the sorting changes

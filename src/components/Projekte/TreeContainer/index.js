@@ -9,6 +9,7 @@ import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 import clone from 'lodash/clone'
 import get from 'lodash/get'
+import uniq from 'lodash/uniq'
 import app from 'ampersand-app'
 import withLifecycle from '@hocs/with-lifecycle'
 
@@ -174,6 +175,8 @@ const enhance = compose(
       activeNode,
       activeNodes,
       refetchTree,
+      activeApfloraLayers,
+      setActiveApfloraLayers,
       activeOverlays,
       setActiveOverlays,
     }) => ({
@@ -247,7 +250,7 @@ const enhance = compose(
           const projekteTabs = get(data, 'urlQuery.projekteTabs', [])
           store.map.setIdOfTpopBeingLocalized(id)
           showMapIfNotYetVisible({ client, projekteTabs })
-          store.map.showMapApfloraLayer('Tpop', true)
+          setActiveApfloraLayers(uniq([...activeApfloraLayers, 'Tpop']))
         },
         markForMoving() {
           client.mutate({
@@ -397,6 +400,7 @@ const TreeContainer = ({
   nodes,
   activeNodes,
   activeNode,
+  activeApfloraLayers,
   client,
   loading,
   moving,
@@ -411,6 +415,7 @@ const TreeContainer = ({
   nodes: Array<Object>,
   activeNodes: Object,
   activeNode: Object,
+  activeApfloraLayers: Array<String>,
   client: Object,
   loading: Boolean,
   moving: Object,
@@ -452,26 +457,28 @@ const TreeContainer = ({
             activeNodeArray={activeNodeArray}
             openNodes={openNodes}
             activeNodes={activeNodes}
+            activeApfloraLayers={activeApfloraLayers}
             moving={moving}
             copying={copying}
-            mapBeobZugeordnetVisible={store.map.activeApfloraLayers.includes(
+            activeApfloraLayersString={activeApfloraLayers.join()}
+            mapBeobZugeordnetVisible={activeApfloraLayers.includes(
               'BeobZugeordnet'
             )}
-            mapBeobNichtBeurteiltVisible={store.map.activeApfloraLayers.includes(
+            mapBeobNichtBeurteiltVisible={activeApfloraLayers.includes(
               'BeobNichtBeurteilt'
             )}
-            mapBeobNichtZuzuordnenVisible={store.map.activeApfloraLayers.includes(
+            mapBeobNichtZuzuordnenVisible={activeApfloraLayers.includes(
               'BeobNichtZuzuordnen'
             )}
-            mapPopVisible={store.map.activeApfloraLayers.includes('Pop')}
-            mapTpopVisible={store.map.activeApfloraLayers.includes(
+            mapPopVisible={activeApfloraLayers.includes('Pop')}
+            mapTpopVisible={activeApfloraLayers.includes(
               'Tpop'
             )}
             popHighlightedIdsString={store.map.pop.highlightedIds.join()}
           />
         </InnerTreeContainer>
         <CmApFolder onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
-        <CmAp onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} moving={moving} />
+        <CmAp onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} moving={moving} activeApfloraLayers={activeApfloraLayers} />
         <CmApberuebersichtFolder onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
         <CmApberuebersicht onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
         <CmAssozartFolder onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />

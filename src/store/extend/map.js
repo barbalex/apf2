@@ -24,21 +24,6 @@ export default (store: Object): void => {
       fetchMarkierungen(store)
     ),
     activeApfloraLayers: [],
-    addActiveApfloraLayer: action(layer =>
-      store.map.activeApfloraLayers.push(layer)
-    ),
-    removeActiveApfloraLayer: action(layer => {
-      store.map.activeApfloraLayers = store.map.activeApfloraLayers.filter(
-        o => o !== layer
-      )
-    }),
-    showMapApfloraLayer: action((layer, bool) => {
-      if (bool) {
-        store.map.addActiveApfloraLayer(layer)
-      } else {
-        store.map.removeActiveApfloraLayer(layer)
-      }
-    }),
     setIdOfTpopBeingLocalized: action(id => {
       store.map.tpop.idOfTpopBeingLocalized = id
     }),

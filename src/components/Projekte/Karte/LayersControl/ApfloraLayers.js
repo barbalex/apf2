@@ -123,7 +123,7 @@ const DragHandle = SortableHandle(() => (
   </StyledIconButton>
 ))
 const SortableItem = SortableElement(
-  ({ apfloraLayer, store, activeApfloraLayers }) => {
+  ({ apfloraLayer, store, activeApfloraLayers, setActiveApfloraLayers }) => {
     const assigningispossible =
       activeApfloraLayers.includes('Tpop') &&
       ((activeApfloraLayers.includes('BeobNichtBeurteilt') &&
@@ -153,9 +153,11 @@ const SortableItem = SortableElement(
           checked={activeApfloraLayers.includes(apfloraLayer.value)}
           onChange={() => {
             if (activeApfloraLayers.includes(apfloraLayer.value)) {
-              return store.map.removeActiveApfloraLayer(apfloraLayer.value)
+              return setActiveApfloraLayers(
+                activeApfloraLayers.filter(l => l !== apfloraLayer.value)
+              )
             }
-            return store.map.addActiveApfloraLayer(apfloraLayer.value)
+            return setActiveApfloraLayers([...activeApfloraLayers, apfloraLayer.value])
           }}
         />
         <IconsDiv>
@@ -237,12 +239,12 @@ const SortableItem = SortableElement(
                   title="mit Umriss(en) filtern"
                   onClick={() => {
                     if (activeApfloraLayers.includes('MapFilter')) {
-                      return store.map.removeActiveApfloraLayer('MapFilter')
+                      return setActiveApfloraLayers(
+                        activeApfloraLayers.filter(l => l !== 'MapFilter')
+                      )
                     }
-                    store.map.addActiveApfloraLayer('MapFilter')
-
+                    setActiveApfloraLayers([...activeApfloraLayers, 'MapFilter'])
                     // this does not work, see: https://github.com/Leaflet/Leaflet.draw/issues/708
-
                     //window.L.Draw.Rectangle.initialize()
                   }}
                 >
@@ -345,7 +347,7 @@ const SortableItem = SortableElement(
   }
 )
 const SortableList = SortableContainer(
-  ({ items, store, activeApfloraLayers }) => (
+  ({ items, store, activeApfloraLayers, setActiveApfloraLayers }) => (
     <div>
       {items.map((apfloraLayer, index) => (
         <SortableItem
@@ -354,6 +356,7 @@ const SortableList = SortableContainer(
           apfloraLayer={apfloraLayer}
           store={store}
           activeApfloraLayers={activeApfloraLayers}
+          setActiveApfloraLayers={setActiveApfloraLayers}
         />
       ))}
     </div>
@@ -365,11 +368,13 @@ const ApfloraLayers = ({
   apfloraLayers,
   setApfloraLayers,
   activeApfloraLayers,
+  setActiveApfloraLayers,
 }: {
   store: Object,
   apfloraLayers: Array<Object>,
   setApfloraLayers: () => void,
   activeApfloraLayers: Array<Object>,
+  setActiveApfloraLayers: () => void,
 }) => (
   <CardContent>
     <SortableList
@@ -381,6 +386,7 @@ const ApfloraLayers = ({
       lockAxis="y"
       store={store}
       activeApfloraLayers={activeApfloraLayers}
+      setActiveApfloraLayers={setActiveApfloraLayers}
     />
   </CardContent>
 )

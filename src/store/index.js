@@ -20,8 +20,6 @@ function Store(): void {
     activeApfloraLayers: [],
     activeApfloraLayersSorted: [],
     detailplaene: null,
-    addActiveApfloraLayer: () => {},
-    removeActiveApfloraLayer: () => {},
     mapFilter: {
       filter: {
         features: [],

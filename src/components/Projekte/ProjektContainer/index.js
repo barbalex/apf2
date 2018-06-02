@@ -65,6 +65,7 @@ const ProjekteContainer = ({
   apfloraLayers,
   setApfloraLayers,
   activeApfloraLayers,
+  setActiveApfloraLayers,
   overlays,
   setOverlays,
   activeOverlays,
@@ -81,6 +82,7 @@ const ProjekteContainer = ({
   apfloraLayers: Array<Object>,
   setApfloraLayers: () => void,
   activeApfloraLayers: Array<Object>,
+  setActiveApfloraLayers: () => void,
   overlays: Array<Object>,
   setActiveOverlays: () => void,
   activeOverlays: Array<String>,
@@ -136,6 +138,8 @@ const ProjekteContainer = ({
                           loading={loading}
                           moving={moving}
                           copying={copying}
+                          activeApfloraLayers={activeApfloraLayers}
+                          setActiveApfloraLayers={setActiveApfloraLayers}
                           activeOverlays={activeOverlays}
                           setActiveOverlays={setActiveOverlays}
                           refetchTree={refetch}
@@ -187,6 +191,7 @@ const ProjekteContainer = ({
                             apfloraLayers={apfloraLayers}
                             setApfloraLayers={setApfloraLayers}
                             activeApfloraLayers={activeApfloraLayers}
+                            setActiveApfloraLayers={setActiveApfloraLayers}
                             overlays={overlays}
                             setOverlays={setOverlays}
                             activeOverlays={activeOverlays}

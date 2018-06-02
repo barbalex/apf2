@@ -130,6 +130,7 @@ const Karte = ({
   apfloraLayers,
   setApfloraLayers,
   activeApfloraLayers,
+  setActiveApfloraLayers,
   overlays,
   setOverlays,
   activeOverlays,
@@ -147,6 +148,7 @@ const Karte = ({
   apfloraLayers: Array<Object>,
   setApfloraLayers: () => void,
   activeApfloraLayers: Array<Object>,
+  setActiveApfloraLayers: () => void,
   overlays: Array<Object>,
   setOverlays: () => void,
   activeOverlays: Array<String>,
@@ -330,6 +332,7 @@ const Karte = ({
             apfloraLayers={apfloraLayers}
             setApfloraLayers={setApfloraLayers}
             activeApfloraLayers={activeApfloraLayers}
+            setActiveApfloraLayers={setActiveApfloraLayers}
             overlays={overlays}
             setOverlays={setOverlays}
             activeOverlays={activeOverlays}
