@@ -4,6 +4,7 @@ import { observer, inject } from 'mobx-react'
 import { toJS } from 'mobx'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
+import withState from 'recompose/withState'
 import { ReflexContainer, ReflexSplitter, ReflexElement } from 'react-reflex'
 import { Query } from 'react-apollo'
 import get from 'lodash/get'
@@ -24,6 +25,7 @@ import getActiveNodes from '../../../modules/getActiveNodes'
 import variables from './variables'
 import buildNodes from '../TreeContainer/nodes'
 import Deletions from './Deletions'
+import apfloraLayers from '../Karte/apfloraLayers'
 
 const Container = styled.div`
   display: flex;
@@ -42,7 +44,13 @@ const KarteContainer = styled.div`
   overflow: hidden;
 `
 
-const enhance = compose(inject('store'), observer)
+const enhance = compose(
+  inject('store'),
+  withState('apfloraLayers', 'setApfloraLayers', apfloraLayers),
+  withState('activeApfloraLayers', 'setActiveApfloraLayers', []),
+  withState('activeOverlays', 'setActiveOverlays', []),
+  observer
+)
 
 const ProjekteContainer = ({
   store,
@@ -51,6 +59,10 @@ const ProjekteContainer = ({
   projekteTabs,
   showDeletions,
   setShowDeletions,
+  apfloraLayers,
+  setApfloraLayers,
+  activeApfloraLayers,
+  activeOverlays,
 }: {
   store: Object,
   treeName: String,
@@ -58,6 +70,10 @@ const ProjekteContainer = ({
   projekteTabs: Array<String>,
   showDeletions: Boolean,
   setShowDeletions: () => void,
+  apfloraLayers: Array<Object>,
+  setApfloraLayers: () => void,
+  activeApfloraLayers: Array<Object>,
+  activeOverlays: Array<String>,
 }) =>
   <Query query={data1Gql} >
     {({ error, data: data1 }) => {
@@ -150,6 +166,10 @@ const ProjekteContainer = ({
                              */
                             tree={tree}
                             data={data}
+                            apfloraLayers={apfloraLayers}
+                            setApfloraLayers={setApfloraLayers}
+                            activeApfloraLayers={activeApfloraLayers}
+                            activeOverlays={activeOverlays}
                             client={client}
                             activeNodes={activeNodes}
                             key={tabs.toString()}
@@ -162,8 +182,6 @@ const ProjekteContainer = ({
                             beobZugeordnetAssigning={store.map.beob.assigning}
                             idOfTpopBeingLocalized={store.map.tpop.idOfTpopBeingLocalized}
                             activeBaseLayer={store.map.activeBaseLayer}
-                            activeOverlays={store.map.activeOverlays}
-                            activeApfloraLayers={toJS(store.map.activeApfloraLayers)}
                             // SortedStrings enforce rerendering when sorting or visibility changes
                             activeOverlaysSortedString={toJS(store.map.activeOverlaysSortedString)}
                             activeApfloraLayersSortedString={toJS(store.map.activeApfloraLayers).join()}

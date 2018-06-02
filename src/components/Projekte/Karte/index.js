@@ -64,7 +64,6 @@ import CoordinatesControl from './CoordinatesControl/index.js'
 import epsg4326to2056 from '../../../modules/epsg4326to2056'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import updateTpopById from './updateTpopById.graphql'
-import apfloraLayers from './apfloraLayers'
 //import getBounds from '../../../modules/getBounds'
 
 // this does not work
@@ -101,9 +100,6 @@ const StyledMapLocalizing = styled(StyledMap)`
 
 const enhance = compose(
   inject('store'),
-  withState('apfloraLayers', 'setApfloraLayers', apfloraLayers),
-  withState('activeApfloraLayers', 'setActiveApfloraLayers', []),
-  withState('activeOverlays', 'setActiveOverlays', []),
   withHandlers({
     onMouseMove: ({ setMouseCoordinates }) => (e, client) => {
       const [x, y] = epsg4326to2056(e.latlng.lng, e.latlng.lat)
