@@ -23,16 +23,18 @@ export default ({
   pops,
   activeNodes,
   apfloraLayers,
+  activeApfloraLayers,
   store
 }:{
   pops:Array<Object>,
   activeNodes:Array<Object>,
   apfloraLayers: Array<Object>,
+  activeApfloraLayers: Array<String>,
   store: Object
 }): Object => {
   const { ap, projekt } = activeNodes
   const { labelUsingNr, highlightedIds } = store.map.pop
-  const visible = store.map.activeApfloraLayers.includes('Pop')
+  const visible = activeApfloraLayers.includes('Pop')
   const mcgOptions = {
     maxClusterRadius: 66,
     iconCreateFunction: function(cluster) {

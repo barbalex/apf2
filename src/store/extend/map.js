@@ -23,7 +23,6 @@ export default (store: Object): void => {
     fetchMarkierungen: action(() =>
       fetchMarkierungen(store)
     ),
-    activeApfloraLayers: [],
     setIdOfTpopBeingLocalized: action(id => {
       store.map.tpop.idOfTpopBeingLocalized = id
     }),

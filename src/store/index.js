@@ -17,7 +17,6 @@ function Store(): void {
     beobNichtBeurteilt: {},
     beobNichtZuzuordnen: {},
     beobZugeordnet: {},
-    activeApfloraLayers: [],
     activeApfloraLayersSorted: [],
     detailplaene: null,
     mapFilter: {

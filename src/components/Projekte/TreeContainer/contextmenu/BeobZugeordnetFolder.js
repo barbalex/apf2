@@ -27,14 +27,16 @@ const BeobZugeordnetFolder = ({
   onClick,
   changeId,
   id,
-  onShow
+  onShow,
+  activeApfloraLayers,
 }: {
   store: Object,
   changeId: () => {},
   tree: Object,
   onClick: () => void,
   id: number,
-  onShow: () => {}
+  onShow: () => {},
+  activeApfloraLayers: Array<String>,
 }) => (
   <ErrorBoundary>
     <ContextMenu
@@ -52,7 +54,7 @@ const BeobZugeordnetFolder = ({
         }}
       >
         {`blende auf Karte ${
-          store.map.activeApfloraLayers.includes('BeobZugeordnet')
+          activeApfloraLayers.includes('BeobZugeordnet')
             ? 'aus'
             : 'ein'
         }`}

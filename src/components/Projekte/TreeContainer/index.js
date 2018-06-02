@@ -485,7 +485,7 @@ const TreeContainer = ({
         <CmAssozart onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
         <CmApartFolder onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
         <CmApart onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
-        <CmBeobZugeordnetFolder onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
+        <CmBeobZugeordnetFolder onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} activeApfloraLayers={activeApfloraLayers} />
         <CmBerFolder onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
         <CmBer onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />
         <CmApberFolder onClick={(e, data, element)=>handleClick({data,element,nodes,client})} tree={tree} token={token} />

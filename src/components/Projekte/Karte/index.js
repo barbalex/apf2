@@ -171,6 +171,7 @@ const Karte = ({
           tree={tree}
           activeNodes={activeNodes}
           apfloraLayers={apfloraLayers}
+          activeApfloraLayers={activeApfloraLayers}
         />
       ),
       Tpop: () => (

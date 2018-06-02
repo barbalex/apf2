@@ -209,7 +209,7 @@ const ProjekteContainer = ({
                             idOfTpopBeingLocalized={store.map.tpop.idOfTpopBeingLocalized}
                             // SortedStrings enforce rerendering when sorting or visibility changes
                             activeOverlaysString={activeOverlays.join()}
-                            activeApfloraLayersSortedString={toJS(store.map.activeApfloraLayers).join()}
+                            activeApfloraLayersString={activeApfloraLayers.join()}
                             detailplaene={toJS(store.map.detailplaene)}
                             markierungen={toJS(store.map.markierungen)}
                           />
