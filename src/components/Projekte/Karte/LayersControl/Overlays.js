@@ -1,5 +1,4 @@
 import React from 'react'
-import { observer } from 'mobx-react'
 import styled from 'styled-components'
 import Button from '@material-ui/core/Button'
 import DragHandleIcon from '@material-ui/icons/DragHandle'
@@ -8,9 +7,8 @@ import {
   SortableContainer,
   SortableElement,
   SortableHandle,
+  arrayMove,
 } from 'react-sortable-hoc'
-import compose from 'recompose/compose'
-import withHandlers from 'recompose/withHandlers'
 
 import Checkbox from './shared/Checkbox'
 
@@ -145,31 +143,25 @@ const SortableList = SortableContainer(({
   </div>
 ))
 
-const enhance = compose(
-  withHandlers({
-    onSortEnd: props => ({ oldIndex, newIndex }) =>
-      props.store.map.moveOverlay({ oldIndex, newIndex }),
-  }),
-  observer
-)
-
 const Overlays = ({
   store,
   overlays,
+  setOverlays,
   activeOverlays,
   setActiveOverlays,
-  onSortEnd,
 }: {
   store: Object,
   overlays: Array<Object>,
+  setOverlays: () => void,
   activeOverlays: Array<String>,
   setActiveOverlays: () => void,
-  onSortEnd: () => void,
 }) => (
   <CardContent>
     <SortableList
       items={overlays}
-      onSortEnd={onSortEnd}
+      onSortEnd={({ oldIndex, newIndex }) =>
+      setOverlays(arrayMove(overlays, oldIndex, newIndex))
+    }
       useDragHandle
       lockAxis="y"
       store={store}
@@ -179,4 +171,4 @@ const Overlays = ({
   </CardContent>
 )
 
-export default enhance(Overlays)
+export default Overlays

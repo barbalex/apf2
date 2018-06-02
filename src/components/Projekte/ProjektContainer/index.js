@@ -49,7 +49,7 @@ const enhance = compose(
   inject('store'),
   withState('apfloraLayers', 'setApfloraLayers', apfloraLayers),
   withState('activeApfloraLayers', 'setActiveApfloraLayers', []),
-  withState('overlays', 'setOverlays', []),
+  withState('overlays', 'setOverlays', overlays),
   withState('activeOverlays', 'setActiveOverlays', []),
   observer
 )
@@ -180,6 +180,7 @@ const ProjekteContainer = ({
                             setApfloraLayers={setApfloraLayers}
                             activeApfloraLayers={activeApfloraLayers}
                             overlays={overlays}
+                            setOverlays={setOverlays}
                             activeOverlays={activeOverlays}
                             setActiveOverlays={setActiveOverlays}
                             client={client}

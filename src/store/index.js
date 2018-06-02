@@ -21,7 +21,6 @@ function Store(): void {
     activeOverlays: [],
     activeApfloraLayers: [],
     activeApfloraLayersSorted: [],
-    overlays: [],
     apfloraLayers: [],
     detailplaene: null,
     setActiveBaseLayer: () => {},

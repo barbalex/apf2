@@ -1,9 +1,7 @@
 // @flow
 import { extendObservable, action, computed, observable } from 'mobx'
-import sortBy from 'lodash/sortBy'
 
 import setActiveBaseLayer from '../action/setActiveBaseLayer'
-import moveOverlay from '../action/moveOverlay'
 import tpopIdsInsideFeatureCollection from '../../modules/tpopIdsInsideFeatureCollection'
 import popIdsInsideFeatureCollection from '../../modules/popIdsInsideFeatureCollection'
 import beobNichtBeurteiltIdsInsideFeatureCollection from '../../modules/beobNichtBeurteiltIdsInsideFeatureCollection'
@@ -23,27 +21,6 @@ export default (store: Object): void => {
     activeBaseLayer: 'OsmColor',
     setActiveBaseLayer: action(layer =>
       setActiveBaseLayer(store, layer)
-    ),
-    overlays: observable([
-      { label: 'Markierungen', value: 'Markierungen' },
-      { label: 'Detailpläne', value: 'Detailplaene' },
-      { label: 'ZH Übersichtsplan', value: 'ZhUep' },
-      { label: 'ZH Gemeindegrenzen', value: 'ZhGemeindegrenzen' },
-      { label: 'SVO grau', value: 'ZhSvoGrey' },
-      { label: 'SVO farbig', value: 'ZhSvoColor' },
-      { label: 'Pflegeplan', value: 'ZhPflegeplan' },
-      {
-        label: 'Lebensraum- und Vegetationskartierungen',
-        value: 'ZhLrVegKartierungen',
-      },
-      { label: 'Wälder: lichte', value: 'ZhLichteWaelder' },
-      { label: 'Wälder: Vegetation', value: 'ZhWaelderVegetation' },
-    ]),
-    overlaysString: computed(
-      () => store.map.overlays.map(o => o.value).join()
-    ),
-    moveOverlay: action(({ oldIndex, newIndex }) =>
-      moveOverlay(store, oldIndex, newIndex)
     ),
     activeOverlays: [],
     fetchDetailplaene: action(() =>

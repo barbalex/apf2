@@ -123,6 +123,7 @@ const LayersControl = ({
   onToggleOverlaysExpanded,
   onToggleApfloraLayersExpanded,
   overlays,
+  setOverlays,
   activeOverlays,
   setActiveOverlays,
 }: {
@@ -137,6 +138,7 @@ const LayersControl = ({
   onToggleBaseLayersExpanded: () => void,
   onToggleOverlaysExpanded: () => void,
   overlays: Array<Object>,
+  setOverlays: () => void,
   activeOverlays: Array<String>,
   setActiveOverlays: () => void,
 }) => {
@@ -198,13 +200,14 @@ const LayersControl = ({
               <Overlays
                 store={store}
                 overlays={overlays}
+                setOverlays={setOverlays}
                 activeOverlays={activeOverlays}
                 setActiveOverlays={setActiveOverlays}
                 /**
                  * overlaysString enforces rererender
                  * even when only the sorting changes
                  */
-                overlaysString={store.map.overlaysString}
+                overlaysString={overlays.map(o => o.value).join()}
                 assigning={store.map.beob.assigning}
               />
             )}

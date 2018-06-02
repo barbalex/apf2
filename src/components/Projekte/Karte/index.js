@@ -129,6 +129,7 @@ const Karte = ({
   setApfloraLayers,
   activeApfloraLayers,
   overlays,
+  setOverlays,
   activeOverlays,
   setActiveOverlays,
   client,
@@ -143,6 +144,7 @@ const Karte = ({
   setApfloraLayers: () => void,
   activeApfloraLayers: Array<Object>,
   overlays: Array<Object>,
+  setOverlays: () => void,
   activeOverlays: Array<String>,
   setActiveOverlays: () => void,
   client: Object,
@@ -205,9 +207,7 @@ const Karte = ({
     )
     console.log('Map:', { activeApfloraLayersSorted, activeApfloraLayers, apfloraLayers })
     const activeOverlaysSorted = sortBy(activeOverlays, activeOverlay =>
-      store.map.overlays.findIndex(
-        overlay => overlay.value === activeOverlay
-      )
+      overlays.findIndex(o => o.value === activeOverlay)
     )
   
     return (
@@ -285,6 +285,7 @@ const Karte = ({
             setApfloraLayers={setApfloraLayers}
             activeApfloraLayers={activeApfloraLayers}
             overlays={overlays}
+            setOverlays={setOverlays}
             activeOverlays={activeOverlays}
             setActiveOverlays={setActiveOverlays}
             // this enforces rerendering when sorting changes
