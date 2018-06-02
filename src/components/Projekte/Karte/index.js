@@ -178,15 +178,16 @@ const Karte = ({
         <BeobNichtBeurteilt
           tree={tree}
           activeNodes={activeNodes}
+          apfloraLayers={apfloraLayers}
           clustered={clustered}
           refetchTree={refetchTree}
-          apfloraLayers={apfloraLayers}
         />
       ),
       BeobNichtZuzuordnen: () => (
         <BeobNichtZuzuordnen
           tree={tree}
           activeNodes={activeNodes}
+          apfloraLayers={apfloraLayers}
           clustered={clustered}
         />
       ),

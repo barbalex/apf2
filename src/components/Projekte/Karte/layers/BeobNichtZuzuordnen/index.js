@@ -18,11 +18,13 @@ const BeobNichtZuzuordnenMarker = ({
   store,
   tree,
   activeNodes,
+  apfloraLayers,
   clustered
 } : {
   store: Object,
   tree: Object,
   activeNodes: Array<Object>,
+  apfloraLayers: Array<Object>,
   clustered: Boolean
 }) =>
   <Query query={dataGql}
@@ -50,8 +52,23 @@ const BeobNichtZuzuordnenMarker = ({
             .includes(beobNichtZuzuordnenFilterString.toLowerCase())
         })
 
-      if (clustered) return <MarkerCluster markers={buildMarkersClustered({ beobs, activeNodes, store })} />
-      return <Marker markers={buildMarkers({ beobs, tree, activeNodes, store })} />
+      if (clustered) {
+        const markers = buildMarkersClustered({
+          beobs,
+          activeNodes,
+          apfloraLayers,
+          store
+        })
+        return <MarkerCluster markers={markers} />
+      }
+      const markers = buildMarkers({
+        beobs,
+        tree,
+        activeNodes,
+        apfloraLayers,
+        store
+      })
+      return <Marker markers={markers} />
     
   }}
 </Query>

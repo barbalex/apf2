@@ -53,7 +53,13 @@ const BeobNichtBeurteiltMarker = ({
         })
 
       if (clustered) {
-        return <MarkerCluster markers={buildMarkersClustered({ beobs, activeNodes, store })} />
+        const markers = buildMarkersClustered({
+          beobs,
+          activeNodes,
+          apfloraLayers,
+          store
+        })
+        return <MarkerCluster markers={markers} />
       }
       const markers = buildMarkers({
         beobs,
