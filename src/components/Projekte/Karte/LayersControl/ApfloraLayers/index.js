@@ -195,7 +195,7 @@ const SortableItem = SortableElement(
                   }
                 }}
               >
-                {store.map.beob.assigning ? (
+                {assigning ? (
                   <StyledPauseCircleOutlineIcon
                     data-assigningispossible={assigningispossible}
                   />

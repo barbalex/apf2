@@ -158,7 +158,8 @@ const Karte = ({
 }) => {
     const { idOfTpopBeingLocalized } = store.map.tpop
     const MapElement = !!idOfTpopBeingLocalized ? StyledMapLocalizing : StyledMap
-    const clustered = !(store.map.beob.assigning || activeApfloraLayers.includes('BeobZugeordnetAssignPolylines'))
+    const assigning = get(data, 'assigningBeob')
+    const clustered = !(assigning || activeApfloraLayers.includes('BeobZugeordnetAssignPolylines'))
     /**
      * need an object whose methods return overlays
      * in order to dynamically display and sort active overlays

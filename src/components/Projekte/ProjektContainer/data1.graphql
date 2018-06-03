@@ -1,4 +1,5 @@
 query Query {
+  assigningBeob @client
   user @client {
     token
   }
