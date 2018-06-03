@@ -11,6 +11,7 @@ export default async idb => {
   
   const defaults = {
     updateAvailable: false,
+    assigningBeob: false,
     datasetToDelete: {
       table: null,
       id: null,

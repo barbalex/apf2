@@ -17,9 +17,14 @@ import {
 } from 'react-sortable-hoc'
 import 'leaflet'
 import 'leaflet-draw'
+import { ApolloProvider, Query } from 'react-apollo'
+import app from 'ampersand-app'
+import get from 'lodash/get'
 
 import Checkbox from '../shared/Checkbox'
 import bufferBoundsTo50m from '../../../../../modules/bufferBoundsTo50m'
+import dataGql from './data.graphql'
+import setAssigningBeob from './setAssigningBeob.graphql'
 
 const StyledIconButton = styled(Button)`
   max-width: 18px;
@@ -123,15 +128,29 @@ const DragHandle = SortableHandle(() => (
   </StyledIconButton>
 ))
 const SortableItem = SortableElement(
-  ({ apfloraLayer, store, activeApfloraLayers, setActiveApfloraLayers }) => {
+  ({
+    apfloraLayer,
+    store,
+    activeApfloraLayers,
+    setActiveApfloraLayers,
+    data,
+    client,
+  }) => {
+    const assigning = get(data, 'assigningBeob')
     const assigningispossible =
       activeApfloraLayers.includes('Tpop') &&
-      ((activeApfloraLayers.includes('BeobNichtBeurteilt') &&
-        apfloraLayer.value === 'BeobNichtBeurteilt') ||
-        (activeApfloraLayers.includes('BeobZugeordnet') &&
-          apfloraLayer.value === 'BeobZugeordnet'))
+      (
+        (
+          activeApfloraLayers.includes('BeobNichtBeurteilt') &&
+          apfloraLayer.value === 'BeobNichtBeurteilt'
+        ) ||
+        (
+          activeApfloraLayers.includes('BeobZugeordnet') &&
+          apfloraLayer.value === 'BeobZugeordnet'
+        )
+      )
     const getZuordnenIconTitle = () => {
-      if (store.map.beob.assigning) return 'Zuordnung beenden'
+      if (assigning) return 'Zuordnung beenden'
       if (assigningispossible) return 'Teil-Populationen zuordnen'
       return 'Teil-Populationen zuordnen (aktivierbar, wenn auch Teil-Populationen eingeblendet werden)'
     }
@@ -169,7 +188,10 @@ const SortableItem = SortableElement(
                 title={getZuordnenIconTitle()}
                 onClick={() => {
                   if (activeApfloraLayers.includes('Tpop')) {
-                    store.map.beob.toggleAssigning()
+                    client.mutate({
+                      mutation: setAssigningBeob,
+                      variables: { value: !assigning }
+                    })
                   }
                 }}
               >
@@ -347,18 +369,29 @@ const SortableItem = SortableElement(
   }
 )
 const SortableList = SortableContainer(
-  ({ items, store, activeApfloraLayers, setActiveApfloraLayers }) => (
+  ({
+    items,
+    store,
+    activeApfloraLayers,
+    setActiveApfloraLayers,
+    data,
+    client,
+  }) => (
     <div>
-      {items.map((apfloraLayer, index) => (
-        <SortableItem
-          key={index}
-          index={index}
-          apfloraLayer={apfloraLayer}
-          store={store}
-          activeApfloraLayers={activeApfloraLayers}
-          setActiveApfloraLayers={setActiveApfloraLayers}
-        />
-      ))}
+      {
+        items.map((apfloraLayer, index) => (
+          <SortableItem
+            key={index}
+            index={index}
+            apfloraLayer={apfloraLayer}
+            store={store}
+            activeApfloraLayers={activeApfloraLayers}
+            setActiveApfloraLayers={setActiveApfloraLayers}
+            data={data}
+            client={client}
+          />
+        ))
+      }
     </div>
   )
 )
@@ -376,19 +409,31 @@ const ApfloraLayers = ({
   activeApfloraLayers: Array<Object>,
   setActiveApfloraLayers: () => void,
 }) => (
-  <CardContent>
-    <SortableList
-      items={apfloraLayers}
-      onSortEnd={({ oldIndex, newIndex }) =>
-        setApfloraLayers(arrayMove(apfloraLayers, oldIndex, newIndex))
-      }
-      useDragHandle
-      lockAxis="y"
-      store={store}
-      activeApfloraLayers={activeApfloraLayers}
-      setActiveApfloraLayers={setActiveApfloraLayers}
-    />
-  </CardContent>
+  <ApolloProvider client={app.client}>
+    <Query query={dataGql}>
+      {({ loading, error, data, client }) => {
+        if (error) return `Fehler: ${error.message}`
+
+        return (
+          <CardContent>
+            <SortableList
+              items={apfloraLayers}
+              onSortEnd={({ oldIndex, newIndex }) =>
+                setApfloraLayers(arrayMove(apfloraLayers, oldIndex, newIndex))
+              }
+              useDragHandle
+              lockAxis="y"
+              store={store}
+              activeApfloraLayers={activeApfloraLayers}
+              setActiveApfloraLayers={setActiveApfloraLayers}
+              data={data}
+              client={client}
+            />
+          </CardContent>
+        )
+      }}
+    </Query>
+  </ApolloProvider>
 )
 
 export default observer(ApfloraLayers)

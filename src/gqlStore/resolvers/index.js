@@ -10,6 +10,7 @@ import login from './login'
 import moving from './moving'
 import copying from './copying'
 import updateAvailable from './updateAvailable'
+import assigningBeob from './assigningBeob'
 import mapMouseCoordinates from './mapMouseCoordinates'
 import datasetToDelete from './datasetToDelete'
 import copyingBiotop from './copyingBiotop'
@@ -28,6 +29,7 @@ export default merge(
   moving,
   copying,
   updateAvailable,
+  assigningBeob,
   mapMouseCoordinates,
   datasetToDelete,
   copyingBiotop,
