@@ -26,20 +26,16 @@ export default (store: Object): void => {
         }
         return []
       },
-      { name: 'highlightedIds' }
     ),
     pops: [],
-    bounds: computed(() => getPopBounds(store.map.pop.pops), {
-      name: 'mapPopBounds',
-    }),
+    bounds: computed(() => getPopBounds(store.map.pop.pops)),
     boundsOfHighlightedIds: computed(
       () =>
         getPopBounds(
           store.map.pop.pops.filter(p =>
             store.map.pop.highlightedIds.includes(p.id)
           )
-        ),
-      { name: 'mapPopBoundsOfHighlightedIds' }
+        )
     ),
     // alternative is using names
     labelUsingNr: true,

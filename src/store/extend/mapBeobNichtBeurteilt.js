@@ -32,6 +32,5 @@ export default (store: Object): void => {
         )
       )
     ),
-    idOfBeobBeingAssigned: 0,
   })
 }

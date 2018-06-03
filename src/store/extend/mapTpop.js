@@ -21,22 +21,18 @@ export default (store: Object): void => {
           return []
         }
         return []
-      },
-      { name: 'mapTpopHighlightedIds' }
+      }
     ),
     highlightedPopIds: [],
     tpops: [],
-    bounds: computed(() => getTpopBounds(store.map.tpop.tpops), {
-      name: 'mapTpopBounds',
-    }),
+    bounds: computed(() => getTpopBounds(store.map.tpop.tpops)),
     boundsOfHighlightedIds: computed(
       () =>
         getTpopBounds(
           store.map.tpop.tpops.filter(t =>
             store.map.tpop.highlightedIds.includes(t.id)
           )
-        ),
-      { name: 'mapTpopBoundsOfHighlightedIds' }
+        )
     ),
     // alternative is using names
     labelUsingNr: true,
