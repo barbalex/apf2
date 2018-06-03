@@ -18,8 +18,8 @@ import {
 import 'leaflet'
 import 'leaflet-draw'
 
-import Checkbox from './shared/Checkbox'
-import bufferBoundsTo50m from '../../../../modules/bufferBoundsTo50m'
+import Checkbox from '../shared/Checkbox'
+import bufferBoundsTo50m from '../../../../../modules/bufferBoundsTo50m'
 
 const StyledIconButton = styled(Button)`
   max-width: 18px;
