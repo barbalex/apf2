@@ -1,4 +1,5 @@
 query Query($projId: UUID!, $apId: UUID!) {
+  assigningBeob @client
   projektById(id: $projId) {
     id
     apsByProjId(filter: { id: { equalTo: $apId } }) {

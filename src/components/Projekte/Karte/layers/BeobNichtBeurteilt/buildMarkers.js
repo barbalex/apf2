@@ -25,7 +25,8 @@ export default ({
   apfloraLayers,
   client,
   store,
-  refetchTree
+  data,
+  refetchTree,
 }:{
   beobs: Array<Object>,
   tree: Object,
@@ -33,11 +34,13 @@ export default ({
   apfloraLayers: Array<Object>,
   client: Object,
   store: Object,
-  refetchTree: () => void
+  data: Object,
+  refetchTree: () => void,
 }): Array<Object> => {
   const { map } = store
   const { ap, projekt } = activeNodes
   const { highlightedIds } = map.beobNichtBeurteilt
+  const assigning = get(data, 'assigningBeob')
 
   return beobs.map(beob => {
     const isHighlighted = highlightedIds.includes(beob.id)
@@ -54,7 +57,7 @@ export default ({
     return window.L.marker(latLng, {
       title: label,
       icon,
-      draggable: store.map.beob.assigning,
+      draggable: assigning,
       zIndexOffset: -apfloraLayers.findIndex(
         apfloraLayer => apfloraLayer.value === 'BeobNichtBeurteilt'
       ),

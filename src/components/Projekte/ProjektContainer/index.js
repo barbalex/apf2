@@ -120,6 +120,7 @@ const ProjekteContainer = ({
                                 tabs.length === 0 ?
                                 1 :
                                   (1 / tabs.length)
+            const assigning = get(data, 'assigningBeob')
 
             return (
               <Container data-loading={loading}>
@@ -205,7 +206,7 @@ const ProjekteContainer = ({
                             beobNichtBeurteiltHighlighted={store.map.beobNichtBeurteilt.highlightedIds.join()}
                             beobNichtZuzuordnenHighlighted={store.map.beobNichtZuzuordnen.highlightedIds.join()}
                             beobZugeordnetHighlighted={store.map.beobZugeordnet.highlightedIds.join()}
-                            beobZugeordnetAssigning={store.map.beob.assigning}
+                            beobZugeordnetAssigning={assigning}
                             idOfTpopBeingLocalized={store.map.tpop.idOfTpopBeingLocalized}
                             // SortedStrings enforce rerendering when sorting or visibility changes
                             activeOverlaysString={activeOverlays.join()}

@@ -59,7 +59,8 @@ const BeobZugeordnetMarker = ({
           beobs,
           activeNodes,
           apfloraLayers,
-          store
+          store,
+          data,
         })
         return <MarkerCluster markers={markers} />
       }
@@ -70,7 +71,8 @@ const BeobZugeordnetMarker = ({
         apfloraLayers,
         client,
         store,
-        refetchTree
+        data,
+        refetchTree,
       })
       return <Marker markers={markers} />
     

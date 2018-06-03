@@ -22,15 +22,18 @@ export default ({
   activeNodes,
   apfloraLayers,
   store,
+  data,
 }:{
   beobs: Array<Object>,
   activeNodes: Array<Object>,
   apfloraLayers: Array<Object>,
   store: Object,
+  data: Object,
 }): Object => {
   const { map } = store
   const { ap, projekt } = activeNodes
   const { highlightedIds } = map.beobZugeordnet
+  const assigning = get(data, 'assigningBeob')
   const mcgOptions = {
     maxClusterRadius: 66,
     iconCreateFunction: function(cluster) {
@@ -66,7 +69,7 @@ export default ({
       .marker(latLng, {
         title: label,
         icon,
-        draggable: store.map.beob.assigning,
+        draggable: assigning,
         zIndexOffset: -apfloraLayers.findIndex(
           apfloraLayer => apfloraLayer.value === 'BeobZugeordnet',
         ),

@@ -47,6 +47,7 @@ const PmcComponent = ({
         activeNodes,
         apfloraLayers,
         activeApfloraLayers,
+        data,
       })
       return <PopMarkerCluster markers={popMarkers} />
     

@@ -7,6 +7,5 @@ export default (store: Object): void => {
   extendObservable(store.map.beob, {
     highlightedIds: [],
     beobs: computed(() => getBeobForMap(store), { name: 'mapBeobBeobs' }),
-    assigning: false,
   })
 }

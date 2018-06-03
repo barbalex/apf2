@@ -24,13 +24,15 @@ export default ({
   activeNodes,
   apfloraLayers,
   activeApfloraLayers,
-  store
+  store,
+  data,
 }:{
   pops:Array<Object>,
   activeNodes:Array<Object>,
   apfloraLayers: Array<Object>,
   activeApfloraLayers: Array<String>,
-  store: Object
+  store: Object,
+  data: Object,
 }): Object => {
   const { ap, projekt } = activeNodes
   const { labelUsingNr, highlightedIds } = store.map.pop

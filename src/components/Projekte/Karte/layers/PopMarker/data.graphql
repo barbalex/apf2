@@ -1,4 +1,4 @@
-query QkQuery($projId: UUID!, $apId: UUID!) {
+query Query($projId: UUID!, $apId: UUID!) {
   projektById(id: $projId) {
     id
     apsByProjId(filter: { id: { equalTo: $apId } }) {

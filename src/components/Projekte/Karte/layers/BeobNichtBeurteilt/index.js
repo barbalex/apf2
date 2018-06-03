@@ -57,7 +57,8 @@ const BeobNichtBeurteiltMarker = ({
           beobs,
           activeNodes,
           apfloraLayers,
-          store
+          store,
+          data,
         })
         return <MarkerCluster markers={markers} />
       }
@@ -68,7 +69,8 @@ const BeobNichtBeurteiltMarker = ({
         apfloraLayers,
         client,
         store,
-        refetchTree
+        data,
+        refetchTree,
       })
       return <Marker markers={markers} />
     

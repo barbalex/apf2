@@ -21,11 +21,13 @@ export default ({
   activeNodes,
   apfloraLayers,
   store,
+  data,
 }:{
   tpops: Array<Object>,
   activeNodes: Array<Object>,
   apfloraLayers: Array<Object>,
   store: Object,
+  data: Object,
 }): Object => {
   const { map } = store
   const { ap, projekt } = activeNodes

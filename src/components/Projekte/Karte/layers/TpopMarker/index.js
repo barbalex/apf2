@@ -52,6 +52,7 @@ const TpopMarkerMarker = ({
           store,
           activeNodes,
           apfloraLayers,
+          data,
         })
         return <MarkerCluster markers={markers} />
       }
@@ -60,6 +61,7 @@ const TpopMarkerMarker = ({
         store,
         activeNodes,
         apfloraLayers,
+        data,
       })
       return <Marker markers={markers} />
     

@@ -57,7 +57,8 @@ const BeobNichtZuzuordnenMarker = ({
           beobs,
           activeNodes,
           apfloraLayers,
-          store
+          store,
+          data,
         })
         return <MarkerCluster markers={markers} />
       }
@@ -66,7 +67,8 @@ const BeobNichtZuzuordnenMarker = ({
         tree,
         activeNodes,
         apfloraLayers,
-        store
+        store,
+        data,
       })
       return <Marker markers={markers} />
     

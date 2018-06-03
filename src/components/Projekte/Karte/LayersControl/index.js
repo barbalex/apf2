@@ -9,6 +9,7 @@ import { MuiThemeProvider } from '@material-ui/core/styles'
 import theme from '../../../../theme'
 import ExpandLessIcon from '@material-ui/icons/ExpandLess'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
+import get from 'lodash/get'
 
 import Overlays from './Overlays'
 import ApfloraLayers from './ApfloraLayers'
@@ -112,6 +113,7 @@ const enhance = compose(
 )
 
 const LayersControl = ({
+  data,
   store,
   apfloraLayers,
   setApfloraLayers,
@@ -130,6 +132,7 @@ const LayersControl = ({
   activeBaseLayer,
   setActiveBaseLayer,
 }: {
+  data: Object,
   store: Object,
   apfloraLayers: Array<Object>,
   setApfloraLayers: () => void,
@@ -150,6 +153,7 @@ const LayersControl = ({
 }) => {
   const { tree, table } = store
   const { activeNodes } = tree
+  const assigning = get(data, 'assigningBeob')
   const getApfloraLayersTitle = () => {
     if (!activeNodes.ap) return 'apflora'
     const ap = table.ap.get(activeNodes.ap)
@@ -188,7 +192,7 @@ const LayersControl = ({
                  * even when only the sorting changes
                  */
                 apfloraLayersString={apfloraLayers.map(o => o.value).join()}
-                assigning={store.map.beob.assigning}
+                assigning={assigning}
               />
             )}
           </Card>
@@ -215,7 +219,7 @@ const LayersControl = ({
                  * even when only the sorting changes
                  */
                 overlaysString={overlays.map(o => o.value).join()}
-                assigning={store.map.beob.assigning}
+                assigning={assigning}
               />
             )}
           </Card>

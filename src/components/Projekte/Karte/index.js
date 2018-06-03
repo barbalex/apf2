@@ -327,6 +327,7 @@ const Karte = ({
           }
           <ScaleControl imperial={false} />
           <LayersControl
+            data={data}
             activeBaseLayer={activeBaseLayer}
             setActiveBaseLayer={setActiveBaseLayer}
             apfloraLayers={apfloraLayers}
