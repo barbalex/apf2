@@ -97,4 +97,8 @@ query Query {
     label
     withNextLevel
   }
+  urlQuery @client {
+    projekteTabs
+    feldkontrTab
+  }
 }

@@ -159,7 +159,6 @@ const showMapIfNotYetVisible = ({
   projekteTabs: Array<String>
 }) => {
   const isVisible = projekteTabs.includes('karte')
-  console.log('TreeContainer, showMapIfNotYetVisible:', {projekteTabs})
   if (!isVisible) {
     setUrlQueryValue({
       key: 'projekteTabs',
@@ -235,7 +234,7 @@ const enhance = compose(
           })
         },
         showBeobOnMap() {
-          const projekteTabs = get(data, 'urlQuery.projekteTabs', [])
+          const projekteTabs = get(dbData, 'urlQuery.projekteTabs', [])
           // 1. open map if not yet open
           showMapIfNotYetVisible({ client, projekteTabs })
           // 2 add layer for actionTable
@@ -251,7 +250,7 @@ const enhance = compose(
           store.map.toggleMapPopLabelContent(actionTable)
         },
         localizeOnMap() {
-          const projekteTabs = get(data, 'urlQuery.projekteTabs', [])
+          const projekteTabs = get(dbData, 'urlQuery.projekteTabs', [])
           setIdOfTpopBeingLocalized(id)
           showMapIfNotYetVisible({ client, projekteTabs })
           setActiveApfloraLayers(uniq([...activeApfloraLayers, 'Tpop']))
