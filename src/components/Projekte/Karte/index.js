@@ -253,6 +253,7 @@ const Karte = ({
         <BeobZugeordnetAssignPolylines
           tree={tree}
           activeNodes={activeNodes}
+          beobZugeordnetHighlightedIds={beobZugeordnetHighlightedIds}
         />
       )
     }

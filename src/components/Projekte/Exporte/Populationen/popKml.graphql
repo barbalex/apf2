@@ -1,0 +1,12 @@
+query view {
+  allVPopKmls {
+    nodes {
+      art
+      label
+      inhalte
+      laengengrad
+      breitengrad
+      url
+    }
+  }
+}

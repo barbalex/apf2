@@ -16,8 +16,11 @@ import gql from "graphql-tag"
 import get from 'lodash/get'
 import { inject } from 'mobx-react'
 
-import exportModule from '../../../modules/export'
-import Message from './Message'
+import exportModule from '../../../../modules/export'
+import Message from '../Message'
+import populationenGql from './pop.graphql'
+import popKml from './popKml.graphql'
+import listError from '../../../../modules/listError'
 
 const StyledCard = styled(Card)`
   margin: 10px 0;
@@ -107,34 +110,17 @@ const Populationen = ({
                 setMessage('Export "Populationen" wird vorbereitet...')
                 try {
                   const { data } = await client.query({
-                    query: gql`
-                      query view {
-                        allVPops {
-                          nodes {
-                            apId
-                            artname
-                            apBearbeitung
-                            apStartJahr
-                            apUmsetzung
-                            id
-                            nr
-                            name
-                            status
-                            bekanntSeit
-                            statusUnklar
-                            statusUnklarBegruendung
-                            x
-                            y
-                            changed
-                            changedBy
-                          }
-                        }
-                      }`
+                    query: populationenGql
                   })
-                  exportModule({data: get(data, 'allVPops.nodes', []), store, fileName: 'Populationen', fileType, applyMapFilterToExport})
+                  exportModule({
+                    data: get(data, 'allVPops.nodes', []),
+                    store,
+                    fileName: 'Populationen',
+                    fileType,
+                    applyMapFilterToExport
+                  })
                 } catch(error) {
-                  setMessage(`Fehler: ${error.message}`)
-                  setTimeout(() => setMessage(null), 5000)
+                  listError(error)
                 }
                 setMessage(null)
               }}
@@ -146,24 +132,17 @@ const Populationen = ({
                 setMessage('Export "Populationen" wird vorbereitet...')
                 try {
                   const { data } = await client.query({
-                    query: gql`
-                      query view {
-                        allVPopKmls {
-                          nodes {
-                            art
-                            label
-                            inhalte
-                            laengengrad
-                            breitengrad
-                            url
-                          }
-                        }
-                      }`
+                    query: popKml
                   })
-                  exportModule({data: get(data, 'allVPopKmls.nodes', []), store, fileName: 'Populationen', fileType, applyMapFilterToExport})
+                  exportModule({
+                    data: get(data, 'allVPopKmls.nodes', []),
+                    store,
+                    fileName: 'Populationen',
+                    fileType,
+                    applyMapFilterToExport
+                  })
                 } catch(error) {
-                  setMessage(`Fehler: ${error.message}`)
-                  setTimeout(() => setMessage(null), 5000)
+                  listError(error)
                 }
                 setMessage(null)
               }}
@@ -189,10 +168,15 @@ const Populationen = ({
                         }
                       }`
                   })
-                  exportModule({data: get(data, 'allVPopKmlnamen.nodes', []), store, fileName: 'PopulationenNachNamen', fileType, applyMapFilterToExport})
+                  exportModule({
+                    data: get(data, 'allVPopKmlnamen.nodes', []), 
+                    store, 
+                    fileName: 'PopulationenNachNamen', 
+                    fileType, 
+                    applyMapFilterToExport
+                  })
                 } catch(error) {
-                  setMessage(`Fehler: ${error.message}`)
-                  setTimeout(() => setMessage(null), 5000)
+                  listError(error)
                 }
                 setMessage(null)
               }}
@@ -223,8 +207,7 @@ const Populationen = ({
                   })
                   exportModule({data: get(data, 'allVPopVonapohnestatuses.nodes', []), store, fileName: 'PopulationenVonApArtenOhneStatus', fileType, applyMapFilterToExport})
                 } catch(error) {
-                  setMessage(`Fehler: ${error.message}`)
-                  setTimeout(() => setMessage(null), 5000)
+                  listError(error)
                 }
                 setMessage(null)
               }}
@@ -262,8 +245,7 @@ const Populationen = ({
                   })
                   exportModule({data: get(data, 'allVPopOhnekoords.nodes', []), store, fileName: 'PopulationenOhneKoordinaten', fileType, applyMapFilterToExport})
                 } catch(error) {
-                  setMessage(`Fehler: ${error.message}`)
-                  setTimeout(() => setMessage(null), 5000)
+                  listError(error)
                 }
                 setMessage(null)
               }}
@@ -308,8 +290,7 @@ const Populationen = ({
                   })
                   exportModule({data: get(data, 'allVPopmassnberAnzmassns.nodes', []), store, fileName: 'PopulationenAnzMassnProMassnber', fileType, applyMapFilterToExport})
                 } catch(error) {
-                  setMessage(`Fehler: ${error.message}`)
-                  setTimeout(() => setMessage(null), 5000)
+                  listError(error)
                 }
                 setMessage(null)
               }}
@@ -347,8 +328,7 @@ const Populationen = ({
                   })
                   exportModule({data: get(data, 'allVPopAnzmassns.nodes', []), store, fileName: 'PopulationenAnzahlMassnahmen', fileType, applyMapFilterToExport})
                 } catch(error) {
-                  setMessage(`Fehler: ${error.message}`)
-                  setTimeout(() => setMessage(null), 5000)
+                  listError(error)
                 }
                 setMessage(null)
               }}
@@ -385,8 +365,7 @@ const Populationen = ({
                   })
                   exportModule({data: get(data, 'allVPopAnzkontrs.nodes', []), store, fileName: 'PopulationenAnzahlKontrollen', fileType, applyMapFilterToExport})
                 } catch(error) {
-                  setMessage(`Fehler: ${error.message}`)
-                  setTimeout(() => setMessage(null), 5000)
+                  listError(error)
                 }
                 setMessage(null)
               }}
@@ -437,8 +416,7 @@ const Populationen = ({
                   })
                   exportModule({data: get(data, 'allVPopPopberundmassnbers.nodes', []), store, fileName: 'PopulationenPopUndMassnBerichte', fileType, applyMapFilterToExport})
                 } catch(error) {
-                  setMessage(`Fehler: ${error.message}`)
-                  setTimeout(() => setMessage(null), 5000)
+                  listError(error)
                 }
                 setMessage(null)
               }}
@@ -482,8 +460,7 @@ const Populationen = ({
                   })
                   exportModule({data: get(data, 'allVPopMitLetzterPopbers.nodes', []), store, fileName: 'PopulationenMitLetzemPopBericht', fileType, applyMapFilterToExport})
                 } catch(error) {
-                  setMessage(`Fehler: ${error.message}`)
-                  setTimeout(() => setMessage(null), 5000)
+                  listError(error)
                 }
                 setMessage(null)
               }}
@@ -527,8 +504,7 @@ const Populationen = ({
                   })
                   exportModule({data: get(data, 'allVPopMitLetzterPopmassnbers.nodes', []), store, fileName: 'allVPopMitLetzterPopmassnbers', fileType, applyMapFilterToExport})
                 } catch(error) {
-                  setMessage(`Fehler: ${error.message}`)
-                  setTimeout(() => setMessage(null), 5000)
+                  listError(error)
                 }
                 setMessage(null)
               }}
