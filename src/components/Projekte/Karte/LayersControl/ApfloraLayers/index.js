@@ -135,6 +135,12 @@ const SortableItem = SortableElement(
     setActiveApfloraLayers,
     data,
     client,
+    bounds,
+    setBounds,
+    popBounds,
+    setPopBounds,
+    tpopBounds,
+    setTpopBounds,
   }) => {
     const assigning = get(data, 'assigningBeob')
     const assigningispossible =
@@ -321,6 +327,7 @@ const SortableItem = SortableElement(
                 onClick={() => {
                   // TODO: if set min bounds
                   // that accords to 50m
+                  // TODO: use bounds passed with props
                   if (activeApfloraLayers.includes(apfloraLayer.value)) {
                     const bounds =
                       store.map[mapNameToStoreNameObject[apfloraLayer.value]]
