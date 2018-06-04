@@ -19,12 +19,14 @@ const TpopMarkerMarker = ({
   activeNodes,
   apfloraLayers,
   clustered,
+  tpopLabelUsingNr,
 } : {
   store: Object,
   tree: Object,
   activeNodes: Array<Object>,
   apfloraLayers: Array<Object>,
   clustered: Boolean,
+  tpopLabelUsingNr: Boolean,
 }) =>
   <Query query={dataGql}
     variables={{
@@ -53,6 +55,7 @@ const TpopMarkerMarker = ({
           activeNodes,
           apfloraLayers,
           data,
+          tpopLabelUsingNr,
         })
         return <MarkerCluster markers={markers} />
       }
@@ -62,6 +65,7 @@ const TpopMarkerMarker = ({
         activeNodes,
         apfloraLayers,
         data,
+        tpopLabelUsingNr,
       })
       return <Marker markers={markers} />
     

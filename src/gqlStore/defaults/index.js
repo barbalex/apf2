@@ -11,7 +11,6 @@ export default async idb => {
   
   const defaults = {
     updateAvailable: false,
-    assigningBeob: false,
     datasetToDelete: {
       table: null,
       id: null,
@@ -52,6 +51,7 @@ export default async idb => {
       username: '',
       __typename: 'Login',
     },
+    assigningBeob: false,
     mapMouseCoordinates: {
       x: 2683000,
       y: 1247500,

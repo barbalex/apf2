@@ -26,9 +26,6 @@ export default (store: Object): void => {
     setMapMouseCoord: action(e => {
       store.map.mouseCoord = [e.latlng.lng, e.latlng.lat]
     }),
-    toggleMapPopLabelContent: action(
-      layer => (store.map[layer].labelUsingNr = !store.map[layer].labelUsingNr)
-    ),
     mapFilter: {
       filter: {
         features: [],

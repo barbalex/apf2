@@ -26,6 +26,7 @@ export default ({
   activeApfloraLayers,
   store,
   data,
+  popLabelUsingNr,
 }:{
   pops:Array<Object>,
   activeNodes:Array<Object>,
@@ -33,9 +34,10 @@ export default ({
   activeApfloraLayers: Array<String>,
   store: Object,
   data: Object,
+  popLabelUsingNr: Boolean,
 }): Object => {
   const { ap, projekt } = activeNodes
-  const { labelUsingNr, highlightedIds } = store.map.pop
+  const { highlightedIds } = store.map.pop
   const visible = activeApfloraLayers.includes('Pop')
   const mcgOptions = {
     maxClusterRadius: 66,
@@ -58,7 +60,7 @@ export default ({
   const markers = window.L.markerClusterGroup(mcgOptions)
   if (visible) {
     pops.forEach(p => {
-      let title = labelUsingNr ? p.nr : p.name
+      let title = popLabelUsingNr ? p.nr : p.name
       // beware: leaflet needs title to always be a string
       if (title && title.toString) {
         title = title.toString()

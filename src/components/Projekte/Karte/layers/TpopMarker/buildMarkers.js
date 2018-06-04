@@ -20,16 +20,18 @@ export default ({
   activeNodes,
   apfloraLayers,
   store,
+  tpopLabelUsingNr,
 }:{
   tpops: Array<Object>,
   tree: Object,
   activeNodes: Array<Object>,
   apfloraLayers: Array<Object>,
   store: Object,
+  tpopLabelUsingNr: Boolean,
 }): Array<Object> => {
   const { map } = store
   const { ap, projekt } = activeNodes
-  const { labelUsingNr, highlightedIds } = map.tpop
+  const { highlightedIds } = map.tpop
 
   return tpops.map(tpop => {
     const tpopNr = get(tpop, 'nr', '(keine Nr)')
@@ -43,7 +45,7 @@ export default ({
     })
     return window.L.marker(latLng, {
       // beware: leaflet needs title to always be a string
-      title: labelUsingNr ? tpop.flurname : nrLabel,
+      title: tpopLabelUsingNr ? tpop.flurname : nrLabel,
       icon,
       zIndexOffset: -apfloraLayers.findIndex(
         apfloraLayer => apfloraLayer.value === 'Tpop'
@@ -73,7 +75,7 @@ export default ({
         )
       )
       .bindTooltip(
-        labelUsingNr ? nrLabel : tpop.flurname,
+        tpopLabelUsingNr ? nrLabel : tpop.flurname,
         {
           permanent: true,
           direction: 'bottom',

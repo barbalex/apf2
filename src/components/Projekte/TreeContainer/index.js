@@ -182,6 +182,10 @@ const enhance = compose(
       activeOverlays,
       setActiveOverlays,
       setIdOfTpopBeingLocalized,
+      popLabelUsingNr,
+      setPopLabelUsingNr,
+      tpopLabelUsingNr,
+      setTpopLabelUsingNr,
     }) => ({
       data,
       element,
@@ -247,7 +251,16 @@ const enhance = compose(
           }
         },
         toggleTooltip() {
-          store.map.toggleMapPopLabelContent(actionTable)
+          switch (actionTable) {
+            case 'pop':
+              setPopLabelUsingNr(!popLabelUsingNr)
+              break
+            case 'tpop':
+              setTpopLabelUsingNr(!tpopLabelUsingNr)
+              break
+            default:
+              // Do nothing
+          }
         },
         localizeOnMap() {
           const projekteTabs = get(dbData, 'urlQuery.projekteTabs', [])
@@ -409,6 +422,8 @@ const TreeContainer = ({
   moving,
   copying,
   refetchTree,
+  popLabelUsingNr,
+  tpopLabelUsingNr,
 }: {
   store: Object,
   treeName: String,
@@ -423,7 +438,9 @@ const TreeContainer = ({
   loading: Boolean,
   moving: Object,
   copying: Object,
-  refetchTree: () => void
+  refetchTree: () => void,
+  popLabelUsingNr: Boolean,
+  tpopLabelUsingNr: Boolean,
 }) => {
   const datasetToDelete = get(data, 'datasetToDelete')
   const deleteDatasetModalIsVisible = !!datasetToDelete.id
@@ -491,6 +508,8 @@ const TreeContainer = ({
           token={token}
           moving={moving}
           activeApfloraLayers={activeApfloraLayers}
+          popLabelUsingNr={popLabelUsingNr}
+          tpopLabelUsingNr={tpopLabelUsingNr}
         />
         <CmApberuebersichtFolder
           onClick={(e, data, element)=>handleClick({data,element,nodes,client})}

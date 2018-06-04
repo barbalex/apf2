@@ -1,28 +1,26 @@
 // @flow
 import React, { Fragment } from 'react'
 import { ContextMenu, MenuItem } from 'react-contextmenu'
-import { inject, observer } from 'mobx-react'
-import compose from 'recompose/compose'
 
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import userIsReadOnly from '../../../../modules/userIsReadOnly'
 
-const enhance = compose(inject('store'), observer)
-
 const Ap = ({
   onClick,
-  store,
   tree,
   token,
   moving,
   activeApfloraLayers,
+  popLabelUsingNr,
+  tpopLabelUsingNr,
 }: {
   onClick: () => void,
-  store: Object,
   tree: Object,
   token: String,
   moving: Object,
   activeApfloraLayers: Array<String>,
+  popLabelUsingNr: Boolean,
+  tpopLabelUsingNr: Boolean,
 }) => {
   const isMoving = moving.table && moving.table === 'pop'
   const mayWrite = !userIsReadOnly(token)
@@ -87,7 +85,7 @@ const Ap = ({
               actionTable: 'pop',
             }}
           >
-            {store.map.pop.labelUsingNr
+            {popLabelUsingNr
               ? 'beschrifte Populationen mit Namen'
               : 'beschrifte Populationen mit Nummer'}
           </MenuItem>
@@ -100,7 +98,7 @@ const Ap = ({
               actionTable: 'tpop',
             }}
           >
-            {store.map.tpop.labelUsingNr
+            {tpopLabelUsingNr
               ? 'beschrifte Teil-Populationen mit Namen'
               : 'beschrifte Teil-Populationen mit Nummer'}
           </MenuItem>
@@ -110,4 +108,4 @@ const Ap = ({
   )
 }
 
-export default enhance(Ap)
+export default Ap

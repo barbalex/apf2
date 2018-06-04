@@ -55,6 +55,8 @@ const enhance = compose(
   withState('popLabelUsingNr', 'setPopLabelUsingNr', true),
   withState('tpopLabelUsingNr', 'setTpopLabelUsingNr', true),
   withState('idOfTpopBeingLocalized', 'setIdOfTpopBeingLocalized', null),
+  withState('tpopLabelUsingNr', 'setTpopLabelUsingNr', true),
+  withState('popLabelUsingNr', 'setPopLabelUsingNr', true),
   observer
 )
 
@@ -77,6 +79,10 @@ const ProjekteContainer = ({
   setActiveBaseLayer,
   idOfTpopBeingLocalized,
   setIdOfTpopBeingLocalized,
+  tpopLabelUsingNr,
+  setTpopLabelUsingNr,
+  popLabelUsingNr,
+  setPopLabelUsingNr,
 }: {
   store: Object,
   treeName: String,
@@ -96,6 +102,10 @@ const ProjekteContainer = ({
   setActiveBaseLayer: () => void,
   idOfTpopBeingLocalized: String,
   setIdOfTpopBeingLocalized: () => void,
+  tpopLabelUsingNr: Boolean,
+  setTpopLabelUsingNr: () => void,
+  popLabelUsingNr: Boolean,
+  setPopLabelUsingNr: () => void,
 }) =>
   <Query query={data1Gql} >
     {({ error, data: data1 }) => {
@@ -152,6 +162,10 @@ const ProjekteContainer = ({
                           setActiveOverlays={setActiveOverlays}
                           refetchTree={refetch}
                           setIdOfTpopBeingLocalized={setIdOfTpopBeingLocalized}
+                          tpopLabelUsingNr={tpopLabelUsingNr}
+                          popLabelUsingNr={popLabelUsingNr}
+                          setTpopLabelUsingNr={setTpopLabelUsingNr}
+                          setPopLabelUsingNr={setPopLabelUsingNr}
                         />
                       </ReflexElement>
                     }
@@ -217,6 +231,8 @@ const ProjekteContainer = ({
                             beobZugeordnetAssigning={assigning}
                             idOfTpopBeingLocalized={idOfTpopBeingLocalized}
                             setIdOfTpopBeingLocalized={setIdOfTpopBeingLocalized}
+                            tpopLabelUsingNr={tpopLabelUsingNr}
+                            popLabelUsingNr={popLabelUsingNr}
                             // SortedStrings enforce rerendering when sorting or visibility changes
                             activeOverlaysString={activeOverlays.join()}
                             activeApfloraLayersString={activeApfloraLayers.join()}

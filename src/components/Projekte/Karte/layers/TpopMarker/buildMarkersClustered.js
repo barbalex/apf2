@@ -22,16 +22,18 @@ export default ({
   apfloraLayers,
   store,
   data,
+  tpopLabelUsingNr,
 }:{
   tpops: Array<Object>,
   activeNodes: Array<Object>,
   apfloraLayers: Array<Object>,
   store: Object,
   data: Object,
+  tpopLabelUsingNr: Boolean,
 }): Object => {
   const { map } = store
   const { ap, projekt } = activeNodes
-  const { labelUsingNr, highlightedIds } = map.tpop
+  const { highlightedIds } = map.tpop
   
   const mcgOptions = {
     maxClusterRadius: 66,
@@ -64,7 +66,7 @@ export default ({
       className: isHighlighted ? 'tpopIconHighlighted' : 'tpopIcon',
     })
     const marker = window.L.marker(latLng, {
-      title: labelUsingNr ? tpop.flurname : nrLabel,
+      title: tpopLabelUsingNr ? tpop.flurname : nrLabel,
       icon,
       zIndexOffset: -apfloraLayers.findIndex(
         apfloraLayer => apfloraLayer.value === 'Tpop'
@@ -94,7 +96,7 @@ export default ({
         )
       )
       .bindTooltip(
-        labelUsingNr ? nrLabel : tpop.flurname,
+        tpopLabelUsingNr ? nrLabel : tpop.flurname,
         {
           permanent: true,
           direction: 'bottom',

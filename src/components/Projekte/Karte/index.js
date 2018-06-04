@@ -142,6 +142,8 @@ const Karte = ({
   refetchTree,
   idOfTpopBeingLocalized,
   setIdOfTpopBeingLocalized,
+  tpopLabelUsingNr,
+  popLabelUsingNr,
 }: {
   store: Object,
   tree: Object,
@@ -162,6 +164,8 @@ const Karte = ({
   refetchTree: () => void,
   idOfTpopBeingLocalized: String,
   setIdOfTpopBeingLocalized: () => void,
+  tpopLabelUsingNr: Boolean,
+  popLabelUsingNr: Boolean,
 }) => {
     const MapElement = !!idOfTpopBeingLocalized ? StyledMapLocalizing : StyledMap
     const assigning = get(data, 'assigningBeob')
@@ -179,6 +183,7 @@ const Karte = ({
           activeNodes={activeNodes}
           apfloraLayers={apfloraLayers}
           activeApfloraLayers={activeApfloraLayers}
+          popLabelUsingNr={popLabelUsingNr}
         />
       ),
       Tpop: () => (
@@ -187,6 +192,7 @@ const Karte = ({
           activeNodes={activeNodes}
           apfloraLayers={apfloraLayers}
           clustered={clustered}
+          tpopLabelUsingNr={tpopLabelUsingNr}
         />
       ),
       BeobNichtBeurteilt: () => (
