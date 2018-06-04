@@ -32,12 +32,19 @@ const enhance = compose(
   getContext({ map: PropTypes.object.isRequired }),
   withState('printPlugin', 'changePrintPlugin', {}),
   withHandlers({
-    savePng: ({ printPlugin }) => () =>
-      printPlugin.printMap('CurrentSize', 'apfloraKarte'),
+    savePng: ({ printPlugin }) => (event) => {
+      event.preventDefault()
+      printPlugin.printMap('CurrentSize', 'apfloraKarte')
+    },
   })
 )
 
 class PrintControl extends Component {
+  constructor(props) {
+    super(props)
+    this.container = React.createRef()
+  }
+
   props: {
     savePng: () => void,
     printPlugin: object,
@@ -57,19 +64,29 @@ class PrintControl extends Component {
     }
     const pp = window.L.easyPrint(options).addTo(map)
     changePrintPlugin(pp)
+    /**
+     * This was trying to prevent the map from taking over
+     * click events
+     * see: https://github.com/LiveBy/react-leaflet-control/issues/22
+     */
+    window.L.DomEvent
+      .disableClickPropagation(this.container.current)
+      .disableScrollPropagation(this.container.current)
   }
 
   render() {
     const { savePng } = this.props
 
     return (
-      <Control position="topright">
-        <MuiThemeProvider theme={theme}>
-          <StyledButton onClick={savePng} title="Karte als png speichern">
-            <FileDownloadIcon />
-          </StyledButton>
-        </MuiThemeProvider>
-      </Control>
+      <div ref={this.container}>
+        <Control position="topright" ref={this.container}>
+          <MuiThemeProvider theme={theme}>
+            <StyledButton onClick={savePng} title="Karte als png speichern">
+              <FileDownloadIcon />
+            </StyledButton>
+          </MuiThemeProvider>
+        </Control>
+      </div>
     )
   }
 }

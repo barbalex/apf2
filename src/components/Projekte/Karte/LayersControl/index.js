@@ -67,7 +67,9 @@ const enhance = compose(
       toggleBaseLayersExpanded,
       toggleApfloraLayersExpanded,
       apfloraLayersExpanded,
-    }) => () => {
+    }) => (event) => {
+      console.log('hi')
+      event.stopPropagation()
       toggleBaseLayersExpanded(!baseLayersExpanded)
       if (overlaysExpanded) {
         toggleOverlaysExpanded(!overlaysExpanded)

@@ -20,6 +20,7 @@ import 'proj4leaflet'
 import debounceHandler from '@hocs/debounce-handler'
 import sortBy from 'lodash/sortBy'
 import get from 'lodash/get'
+import app from 'ampersand-app'
 
 import LayersControl from './LayersControl'
 import OsmColor from './layers/OsmColor'
@@ -101,7 +102,8 @@ const StyledMapLocalizing = styled(StyledMap)`
 const enhance = compose(
   inject('store'),
   withHandlers({
-    onMouseMove: ({ setMouseCoordinates }) => (e, client) => {
+    onMouseMove: ({ setMouseCoordinates }) => (e) => {
+      const { client } = app
       const [x, y] = epsg4326to2056(e.latlng.lng, e.latlng.lat)
       client.mutate({
         mutation: gql`
@@ -266,13 +268,21 @@ const Karte = ({
         <MapElement
           bounds={toJS(store.map.bounds)}
           preferCanvas
-          onMouseMove={(e) => onMouseMove(e, client)}
+          onMouseMove={onMouseMove}
           // need max and min zoom because otherwise
           // something errors
           // probably clustering function
           maxZoom={22}
           minZoom={0}
           onClick={async event => {
+            /**
+             * TODO
+             * When clicking on Layertool
+             * somehow Mapelement grabs the click event
+             * although Layertool lies _over_ map element ??!!
+             * So when localizing, if user wants to change base map,
+             * click on Layertool sets new coordinates!
+             */
             if (!!idOfTpopBeingLocalized) {
               const { lat, lng } = event.latlng
               const [x, y] = epsg4326to2056(lng, lat)
