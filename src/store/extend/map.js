@@ -23,9 +23,6 @@ export default (store: Object): void => {
     fetchMarkierungen: action(() =>
       fetchMarkierungen(store)
     ),
-    setMapMouseCoord: action(e => {
-      store.map.mouseCoord = [e.latlng.lng, e.latlng.lat]
-    }),
     mapFilter: {
       filter: {
         features: [],
