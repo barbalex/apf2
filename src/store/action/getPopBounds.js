@@ -1,4 +1,6 @@
 // @flow
+import 'leaflet'
+
 import epsg2056to4326 from '../../modules/epsg2056to4326'
 
 export default (os: Array<Object>): Array<Array<number>> => {
