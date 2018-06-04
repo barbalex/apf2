@@ -52,7 +52,7 @@ export default ({
       icon,
       draggable: assigning,
       zIndexOffset: -apfloraLayers.findIndex(
-        apfloraLayer => apfloraLayer.value === 'BeobNichtZuzuordnen'
+        apfloraLayer => apfloraLayer.value === 'beobNichtZuzuordnen'
       ),
     })
       .bindPopup(

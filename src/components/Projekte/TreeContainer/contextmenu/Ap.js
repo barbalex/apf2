@@ -70,14 +70,14 @@ const Ap = ({
             {`verschiebe '${moving.label}' hierhin`}
           </MenuItem>
         )}
-        {(activeApfloraLayers.includes('Pop') ||
-          activeApfloraLayers.includes('Tpop')) && (
+        {(activeApfloraLayers.includes('pop') ||
+          activeApfloraLayers.includes('tpop')) && (
           <div>
             <div className="react-contextmenu-divider" />
             <div className="react-contextmenu-title">Karte</div>
           </div>
         )}
-        {activeApfloraLayers.includes('Pop') && (
+        {activeApfloraLayers.includes('pop') && (
           <MenuItem
             onClick={onClick}
             data={{
@@ -90,7 +90,7 @@ const Ap = ({
               : 'beschrifte Populationen mit Nummer'}
           </MenuItem>
         )}
-        {activeApfloraLayers.includes('Tpop') && (
+        {activeApfloraLayers.includes('tpop') && (
           <MenuItem
             onClick={onClick}
             data={{

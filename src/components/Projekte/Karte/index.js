@@ -172,7 +172,7 @@ const Karte = ({
 }) => {
     const MapElement = !!idOfTpopBeingLocalized ? StyledMapLocalizing : StyledMap
     const assigning = get(data, 'assigningBeob')
-    const clustered = !(assigning || activeApfloraLayers.includes('BeobZugeordnetAssignPolylines'))
+    const clustered = !(assigning || activeApfloraLayers.includes('beobZugeordnetAssignPolylines'))
     /**
      * need an object whose methods return overlays
      * in order to dynamically display and sort active overlays
@@ -376,7 +376,7 @@ const Karte = ({
           />
           <MeasureControl />
           <FullScreenControl />
-          {activeApfloraLayers.includes('MapFilter') && <DrawControl />}
+          {activeApfloraLayers.includes('mapFilter') && <DrawControl />}
           {/*
           need to get background maps to show when printing A4
           <PrintControl />

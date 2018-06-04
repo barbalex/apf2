@@ -69,7 +69,7 @@ export default ({
       title: tpopLabelUsingNr ? tpop.flurname : nrLabel,
       icon,
       zIndexOffset: -apfloraLayers.findIndex(
-        apfloraLayer => apfloraLayer.value === 'Tpop'
+        apfloraLayer => apfloraLayer.value === 'tpop'
       ),
     })
       .bindPopup(

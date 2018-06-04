@@ -38,7 +38,7 @@ export default ({
 }): Object => {
   const { ap, projekt } = activeNodes
   const { highlightedIds } = store.map.pop
-  const visible = activeApfloraLayers.includes('Pop')
+  const visible = activeApfloraLayers.includes('pop')
   const mcgOptions = {
     maxClusterRadius: 66,
     iconCreateFunction: function(cluster) {
@@ -82,7 +82,7 @@ export default ({
         title,
         icon,
         zIndexOffset: -apfloraLayers.findIndex(
-          apfloraLayer => apfloraLayer.value === 'Pop'
+          apfloraLayer => apfloraLayer.value === 'pop'
         ),
       })
         .bindPopup(

@@ -142,15 +142,15 @@ const SortableItem = SortableElement(
   }) => {
     const assigning = get(data, 'assigningBeob')
     const assigningispossible =
-      activeApfloraLayers.includes('Tpop') &&
+      activeApfloraLayers.includes('tpop') &&
       (
         (
-          activeApfloraLayers.includes('BeobNichtBeurteilt') &&
-          apfloraLayer.value === 'BeobNichtBeurteilt'
+          activeApfloraLayers.includes('beobNichtBeurteilt') &&
+          apfloraLayer.value === 'beobNichtBeurteilt'
         ) ||
         (
-          activeApfloraLayers.includes('BeobZugeordnet') &&
-          apfloraLayer.value === 'BeobZugeordnet'
+          activeApfloraLayers.includes('beobZugeordnet') &&
+          apfloraLayer.value === 'beobZugeordnet'
         )
       )
     const getZuordnenIconTitle = () => {
@@ -159,12 +159,12 @@ const SortableItem = SortableElement(
       return 'Teil-Populationen zuordnen (aktivierbar, wenn auch Teil-Populationen eingeblendet werden)'
     }
     const mapNameToStoreNameObject = {
-      Pop: 'pop',
-      Tpop: 'tpop',
-      BeobNichtBeurteilt: 'beobNichtBeurteilt',
-      BeobNichtZuzuordnen: 'beobNichtZuzuordnen',
-      BeobZugeordnet: 'beobZugeordnet',
-      BeobZugeordnetAssignPolylines: 'beobZugeordnet',
+      pop: 'pop',
+      tpop: 'tpop',
+      beobNichtBeurteilt: 'beobNichtBeurteilt',
+      beobNichtZuzuordnen: 'beobNichtZuzuordnen',
+      beobZugeordnet: 'beobZugeordnet',
+      beobZugeordnetAssignPolylines: 'beobZugeordnet',
     }
     console.log('ApfloraLayers:', {data})
 
@@ -184,14 +184,14 @@ const SortableItem = SortableElement(
           }}
         />
         <IconsDiv>
-          {['BeobNichtBeurteilt', 'BeobZugeordnet'].includes(
+          {['beobNichtBeurteilt', 'beobZugeordnet'].includes(
             apfloraLayer.value
           ) && (
             <ZuordnenDiv>
               <StyledIconButton
                 title={getZuordnenIconTitle()}
                 onClick={() => {
-                  if (activeApfloraLayers.includes('Tpop')) {
+                  if (activeApfloraLayers.includes('tpop')) {
                     client.mutate({
                       mutation: setAssigningBeob,
                       variables: { value: !assigning }
@@ -211,38 +211,38 @@ const SortableItem = SortableElement(
               </StyledIconButton>
             </ZuordnenDiv>
           )}
-          {apfloraLayer.value === 'Pop' &&
-            activeApfloraLayers.includes('Pop') && (
+          {apfloraLayer.value === 'pop' &&
+            activeApfloraLayers.includes('pop') && (
               <MapIconDiv>
                 <PopMapIcon id="PopMapIcon" />
               </MapIconDiv>
             )}
-          {apfloraLayer.value === 'Tpop' &&
-            activeApfloraLayers.includes('Tpop') && (
+          {apfloraLayer.value === 'tpop' &&
+            activeApfloraLayers.includes('tpop') && (
               <MapIconDiv>
                 <TpopMapIcon id="TpopMapIcon" />
               </MapIconDiv>
             )}
-          {apfloraLayer.value === 'BeobNichtBeurteilt' &&
-            activeApfloraLayers.includes('BeobNichtBeurteilt') && (
+          {apfloraLayer.value === 'beobNichtBeurteilt' &&
+            activeApfloraLayers.includes('beobNichtBeurteilt') && (
               <MapIconDiv>
                 <BeobNichtBeurteiltMapIcon id="BeobNichtBeurteiltMapIcon" />
               </MapIconDiv>
             )}
-          {apfloraLayer.value === 'BeobNichtZuzuordnen' &&
-            activeApfloraLayers.includes('BeobNichtZuzuordnen') && (
+          {apfloraLayer.value === 'beobNichtZuzuordnen' &&
+            activeApfloraLayers.includes('beobNichtZuzuordnen') && (
               <MapIconDiv>
                 <BeobNichtZuzuordnenMapIcon id="BeobNichtZuzuordnenMapIcon" />
               </MapIconDiv>
             )}
-          {apfloraLayer.value === 'BeobZugeordnet' &&
-            activeApfloraLayers.includes('BeobZugeordnet') && (
+          {apfloraLayer.value === 'beobZugeordnet' &&
+            activeApfloraLayers.includes('beobZugeordnet') && (
               <MapIconDiv>
                 <BeobZugeordnetMapIcon id="BeobZugeordnetMapIcon" />
               </MapIconDiv>
             )}
-          {apfloraLayer.value === 'BeobZugeordnetAssignPolylines' &&
-            activeApfloraLayers.includes('BeobZugeordnetAssignPolylines') && (
+          {apfloraLayer.value === 'beobZugeordnetAssignPolylines' &&
+            activeApfloraLayers.includes('beobZugeordnetAssignPolylines') && (
               <MapIconDiv>
                 <BeobZugeordnetAssignPolylinesIcon
                   id="BeobZugeordnetAssignPolylinesMapIcon"
@@ -255,21 +255,21 @@ const SortableItem = SortableElement(
           {false && (
             <FilterDiv>
               {[
-                'Pop',
-                'Tpop',
-                'BeobNichtBeurteilt',
-                'BeobNichtZuzuordnen',
-                'BeobZugeordnet',
+                'pop',
+                'tpop',
+                'beobNichtBeurteilt',
+                'beobNichtZuzuordnen',
+                'beobZugeordnet',
               ].includes(apfloraLayer.value) && (
                 <StyledIconButton
                   title="mit Umriss(en) filtern"
                   onClick={() => {
-                    if (activeApfloraLayers.includes('MapFilter')) {
+                    if (activeApfloraLayers.includes('mapFilter')) {
                       return setActiveApfloraLayers(
-                        activeApfloraLayers.filter(l => l !== 'MapFilter')
+                        activeApfloraLayers.filter(l => l !== 'mapFilter')
                       )
                     }
-                    setActiveApfloraLayers([...activeApfloraLayers, 'MapFilter'])
+                    setActiveApfloraLayers([...activeApfloraLayers, 'mapFilter'])
                     // this does not work, see: https://github.com/Leaflet/Leaflet.draw/issues/708
                     //window.L.Draw.Rectangle.initialize()
                   }}
@@ -293,42 +293,42 @@ const SortableItem = SortableElement(
             </FilterDiv>
           )}
           <ZoomToDiv>
-            {apfloraLayer.value !== 'MapFilter' && (
+            {apfloraLayer.value !== 'mapFilter' && (
               <StyledIconButton
                 title={`auf alle '${apfloraLayer.label}' zoomen`}
                 onClick={() => {
                   if (activeApfloraLayers.includes(apfloraLayer.value)) {
                     switch (apfloraLayer.value) {
-                      case 'Pop':
+                      case 'pop':
                         setBounds(
                           getBounds(
                             get(data, 'pops.nodes', [])
                           )
                         )
                         break
-                      case 'Tpop':
+                      case 'tpop':
                         setBounds(
                           getBounds(
                             get(data, 'tpops.nodes', [])
                           )
                         )
                         break
-                      case 'BeobNichtBeurteilt':
+                      case 'beobNichtBeurteilt':
                         setBounds(
                           getBounds(
                             get(data, 'beobNichtBeurteilts.nodes', [])
                           )
                         )
                         break
-                      case 'BeobNichtZuzuordnen':
+                      case 'beobNichtZuzuordnen':
                         setBounds(
                           getBounds(
                             get(data, 'beobNichtZuzuordnens.nodes', [])
                           )
                         )
                         break
-                      case 'BeobZugeordnet':
-                      case 'BeobZugeordnetAssignPolylines':
+                      case 'beobZugeordnet':
+                      case 'beobZugeordnetAssignPolylines':
                         setBounds(
                           getBounds(
                             get(data, 'beobZugeordnets.nodes', [])
@@ -355,7 +355,7 @@ const SortableItem = SortableElement(
             )}
           </ZoomToDiv>
           <ZoomToDiv>
-            {apfloraLayer.value !== 'MapFilter' && (
+            {apfloraLayer.value !== 'mapFilter' && (
               <StyledIconButton
                 title={`auf aktive '${apfloraLayer.label}' zoomen`}
                 onClick={() => {
@@ -412,7 +412,7 @@ const SortableItem = SortableElement(
             )}
           </ZoomToDiv>
           <div>
-            {!['BeobZugeordnetAssignPolylines', 'MapFilter'].includes(
+            {!['beobZugeordnetAssignPolylines', 'mapFilter'].includes(
               apfloraLayer.value
             ) && <DragHandle />}
           </div>

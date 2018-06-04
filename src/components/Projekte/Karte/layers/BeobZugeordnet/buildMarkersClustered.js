@@ -68,7 +68,7 @@ export default ({
         icon,
         draggable: assigning,
         zIndexOffset: -apfloraLayers.findIndex(
-          apfloraLayer => apfloraLayer.value === 'BeobZugeordnet',
+          apfloraLayer => apfloraLayer.value === 'beobZugeordnet',
         ),
       })
       .bindPopup(

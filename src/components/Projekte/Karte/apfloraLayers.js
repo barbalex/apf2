@@ -2,30 +2,30 @@
 export default [
   {
     label: 'Populationen',
-    value: 'Pop'
+    value: 'pop'
   },
   {
     label: 'Teil-Populationen',
-    value: 'Tpop'
+    value: 'tpop'
   },
   {
     label: 'Beobachtungen: zugeordnet',
-    value: 'BeobZugeordnet'
+    value: 'beobZugeordnet'
   },
   {
     label: 'Beobachtungen: nicht beurteilt',
-    value: 'BeobNichtBeurteilt'
+    value: 'beobNichtBeurteilt'
   },
   {
     label: 'Beobachtungen: nicht zuzuordnen',
-    value: 'BeobNichtZuzuordnen',
+    value: 'beobNichtZuzuordnen',
   },
   {
     label: 'Zuordnungs-Linien',
-    value: 'BeobZugeordnetAssignPolylines'
+    value: 'beobZugeordnetAssignPolylines'
   },
   {
     label: 'Karten-Filter',
-    value: 'MapFilter'
+    value: 'mapFilter'
   },
 ]

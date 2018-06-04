@@ -266,7 +266,7 @@ const enhance = compose(
           const projekteTabs = get(dbData, 'urlQuery.projekteTabs', [])
           setIdOfTpopBeingLocalized(id)
           showMapIfNotYetVisible({ client, projekteTabs })
-          setActiveApfloraLayers(uniq([...activeApfloraLayers, 'Tpop']))
+          setActiveApfloraLayers(uniq([...activeApfloraLayers, 'tpop']))
         },
         markForMoving() {
           client.mutate({
@@ -482,17 +482,17 @@ const TreeContainer = ({
             copying={copying}
             activeApfloraLayersString={activeApfloraLayers.join()}
             mapBeobZugeordnetVisible={activeApfloraLayers.includes(
-              'BeobZugeordnet'
+              'beobZugeordnet'
             )}
             mapBeobNichtBeurteiltVisible={activeApfloraLayers.includes(
-              'BeobNichtBeurteilt'
+              'beobNichtBeurteilt'
             )}
             mapBeobNichtZuzuordnenVisible={activeApfloraLayers.includes(
-              'BeobNichtZuzuordnen'
+              'beobNichtZuzuordnen'
             )}
-            mapPopVisible={activeApfloraLayers.includes('Pop')}
+            mapPopVisible={activeApfloraLayers.includes('pop')}
             mapTpopVisible={activeApfloraLayers.includes(
-              'Tpop'
+              'tpop'
             )}
             popHighlightedIdsString={store.map.pop.highlightedIds.join()}
           />

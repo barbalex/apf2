@@ -54,7 +54,7 @@ const BeobZugeordnetFolder = ({
         }}
       >
         {`blende auf Karte ${
-          activeApfloraLayers.includes('BeobZugeordnet')
+          activeApfloraLayers.includes('beobZugeordnet')
             ? 'aus'
             : 'ein'
         }`}
