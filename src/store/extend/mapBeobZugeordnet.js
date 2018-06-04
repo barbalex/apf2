@@ -44,9 +44,6 @@ export default (store: Object): void => {
           return beob && !beob.nicht_zuordnen && beob.tpop_id
         })
     ),
-    bounds: computed(
-      () => getBeobZugeordnetBounds(store.map.beobZugeordnet.beobs)
-    ),
     boundsOfHighlightedIds: computed(
       () =>
         getBeobZugeordnetBounds(

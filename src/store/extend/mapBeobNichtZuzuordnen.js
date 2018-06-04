@@ -18,9 +18,6 @@ export default (store: Object): void => {
       return []
     }),
     beobs: computed(() => getBeobForMap(store).filter(b => b.nicht_zuordnen)),
-    bounds: computed(() =>
-      getBeobNichtZuzuordnenBounds(store.map.beobNichtZuzuordnen.beobs)
-    ),
     boundsOfHighlightedIds: computed(() =>
       getBeobNichtZuzuordnenBounds(
         store.map.beobNichtZuzuordnen.beobs.filter(b =>

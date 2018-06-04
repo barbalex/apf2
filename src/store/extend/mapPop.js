@@ -28,7 +28,6 @@ export default (store: Object): void => {
       },
     ),
     pops: [],
-    bounds: computed(() => getPopBounds(store.map.pop.pops)),
     boundsOfHighlightedIds: computed(
       () =>
         getPopBounds(

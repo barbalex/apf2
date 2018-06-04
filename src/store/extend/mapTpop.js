@@ -25,7 +25,6 @@ export default (store: Object): void => {
     ),
     highlightedPopIds: [],
     tpops: [],
-    bounds: computed(() => getTpopBounds(store.map.tpop.tpops)),
     boundsOfHighlightedIds: computed(
       () =>
         getTpopBounds(

@@ -22,9 +22,6 @@ export default (store: Object): void => {
         return !b.nicht_zuordnen && !b.tpop_id
       })
     ),
-    bounds: computed(
-      () => getBeobNichtBeurteiltBounds(store.map.beobNichtBeurteilt.beobs)
-    ),
     boundsOfHighlightedIds: computed(() =>
       getBeobNichtBeurteiltBounds(
         store.map.beobNichtBeurteilt.beobs.filter(b =>
