@@ -139,6 +139,12 @@ const LayersControl = ({
   setPopBounds,
   tpopBounds,
   setTpopBounds,
+  beobNichtBeurteiltBounds,
+  setBeobNichtBeurteiltBounds,
+  beobNichtZuzuordnenBounds,
+  setBeobNichtZuzuordnenBounds,
+  beobZugeordnetBounds,
+  setBeobZugeordnetBounds,
 }: {
   data: Object,
   store: Object,
@@ -164,6 +170,12 @@ const LayersControl = ({
   setPopBounds: () => void,
   tpopBounds: Array<Array<Number>>,
   setTpopBounds: () => void,
+  beobNichtBeurteiltBounds: Array<Array<Number>>,
+  setBeobNichtBeurteiltBounds: () => void,
+  beobNichtZuzuordnenBounds: Array<Array<Number>>,
+  setBeobNichtZuzuordnenBounds: () => void,
+  beobZugeordnetBounds: Array<Array<Number>>,
+  setBeobZugeordnetBounds: () => void,
 }) => {
   const { tree, table } = store
   const { activeNodes } = tree
@@ -207,6 +219,12 @@ const LayersControl = ({
                 setPopBounds={setPopBounds}
                 tpopBounds={tpopBounds}
                 setTpopBounds={setTpopBounds}
+                beobNichtBeurteiltBounds={beobNichtBeurteiltBounds}
+                setBeobNichtBeurteiltBounds={setBeobNichtBeurteiltBounds}
+                beobNichtZuzuordnenBounds={beobNichtZuzuordnenBounds}
+                setBeobNichtZuzuordnenBounds={setBeobNichtZuzuordnenBounds}
+                beobZugeordnetBounds={beobZugeordnetBounds}
+                setBeobZugeordnetBounds={setBeobZugeordnetBounds}
                 /**
                  * overlaysString enforces rererender
                  * even when only the sorting changes

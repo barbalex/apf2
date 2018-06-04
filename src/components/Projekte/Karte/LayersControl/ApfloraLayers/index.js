@@ -141,6 +141,12 @@ const SortableItem = SortableElement(
     setPopBounds,
     tpopBounds,
     setTpopBounds,
+    beobNichtBeurteiltBounds,
+    setBeobNichtBeurteiltBounds,
+    beobNichtZuzuordnenBounds,
+    setBeobNichtZuzuordnenBounds,
+    beobZugeordnetBounds,
+    setBeobZugeordnetBounds,
   }) => {
     const assigning = get(data, 'assigningBeob')
     const assigningispossible =
@@ -300,10 +306,26 @@ const SortableItem = SortableElement(
                 title={`auf alle '${apfloraLayer.label}' zoomen`}
                 onClick={() => {
                   if (activeApfloraLayers.includes(apfloraLayer.value)) {
-                    store.map.changeBounds(
-                      store.map[mapNameToStoreNameObject[apfloraLayer.value]]
-                        .bounds
-                    )
+                    switch (apfloraLayer.value) {
+                      case 'pop':
+                        setBounds(popBounds)
+                        break
+                      case 'tpop':
+                        setBounds(tpopBounds)
+                        break
+                      case 'beobNichtBeurteilt':
+                        setBounds(beobNichtBeurteiltBounds)
+                        break
+                      case 'beobNichtZuzuordnen':
+                        setBounds(beobNichtZuzuordnenBounds)
+                        break
+                      case 'beobZugeordnet':
+                      case 'BeobZugeordnetAssignPolylines':
+                        setBounds(beobZugeordnetBounds)
+                        break
+                      default:
+                        // do nothing
+                    }
                   }
                 }}
               >
@@ -329,7 +351,18 @@ const SortableItem = SortableElement(
                   // that accords to 50m
                   // TODO: use bounds passed with props
                   if (activeApfloraLayers.includes(apfloraLayer.value)) {
-                    const bounds =
+                    let bounds
+                    switch (apfloraLayer.value) {
+                      case 'pop':
+                        // TODO
+                        break
+                      case 'tpop':
+                        // TODO
+                        break
+                      default:
+                      // nothing
+                    }
+                    bounds =
                       store.map[mapNameToStoreNameObject[apfloraLayer.value]]
                         .boundsOfHighlightedIds
                     // ensure bounds exist
