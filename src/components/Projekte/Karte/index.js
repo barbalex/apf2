@@ -7,7 +7,6 @@
  */
 
 import React from 'react'
-import { toJS } from 'mobx'
 import { observer, inject } from 'mobx-react'
 import { Map, ScaleControl } from 'react-leaflet'
 import styled from 'styled-components'
@@ -144,6 +143,12 @@ const Karte = ({
   setIdOfTpopBeingLocalized,
   tpopLabelUsingNr,
   popLabelUsingNr,
+  bounds,
+  setBounds,
+  popBounds,
+  setPopBounds,
+  tpopBounds,
+  setTpopBounds,
 }: {
   store: Object,
   tree: Object,
@@ -166,6 +171,12 @@ const Karte = ({
   setIdOfTpopBeingLocalized: () => void,
   tpopLabelUsingNr: Boolean,
   popLabelUsingNr: Boolean,
+  bounds: Array<Array<Number>>,
+  setBounds: () => void,
+  popBounds: Array<Array<Number>>,
+  setPopBounds: () => void,
+  tpopBounds: Array<Array<Number>>,
+  setTpopBounds: () => void,
 }) => {
     const MapElement = !!idOfTpopBeingLocalized ? StyledMapLocalizing : StyledMap
     const assigning = get(data, 'assigningBeob')
@@ -272,7 +283,7 @@ const Karte = ({
     return (
       <ErrorBoundary>
         <MapElement
-          bounds={toJS(store.map.bounds)}
+          bounds={bounds}
           preferCanvas
           onMouseMove={onMouseMove}
           // need max and min zoom because otherwise
@@ -322,18 +333,18 @@ const Karte = ({
           onZoomlevelschange={event => {
             // need to update bounds, otherwise map jumps back
             // when adding new tpop
-            const bounds = event.target.getBounds()
-            store.map.changeBounds([bounds._southWest, bounds._northEast])
+            const mapBounds = event.target.getBounds()
+            setBounds([mapBounds._southWest, mapBounds._northEast])
           }}
           onZoomend={event => {
             // need to update bounds, otherwise map jumps back
-            const bounds = event.target.getBounds()
-            store.map.changeBounds([bounds._southWest, bounds._northEast])
+            const mapBounds = event.target.getBounds()
+            setBounds([mapBounds._southWest, mapBounds._northEast])
           }}
           onMoveend={event => {
             // need to update bounds, otherwise map jumps back
-            const bounds = event.target.getBounds()
-            store.map.changeBounds([bounds._southWest, bounds._northEast])
+            const mapBounds = event.target.getBounds()
+            setBounds([mapBounds._southWest, mapBounds._northEast])
           }}
         >
           {activeBaseLayer && <BaseLayerComponent />}
@@ -363,6 +374,12 @@ const Karte = ({
             setOverlays={setOverlays}
             activeOverlays={activeOverlays}
             setActiveOverlays={setActiveOverlays}
+            bounds={bounds}
+            setBounds={setBounds}
+            popBounds={popBounds}
+            setPopBounds={setPopBounds}
+            tpopBounds={tpopBounds}
+            setTpopBounds={setTpopBounds}
             // this enforces rerendering when sorting changes
             activeOverlaysString={activeOverlays.join()}
             activeApfloraLayersString={activeApfloraLayers.join()}

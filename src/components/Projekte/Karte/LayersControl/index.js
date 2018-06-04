@@ -133,6 +133,12 @@ const LayersControl = ({
   setActiveOverlays,
   activeBaseLayer,
   setActiveBaseLayer,
+  bounds,
+  setBounds,
+  popBounds,
+  setPopBounds,
+  tpopBounds,
+  setTpopBounds,
 }: {
   data: Object,
   store: Object,
@@ -152,6 +158,12 @@ const LayersControl = ({
   setActiveOverlays: () => void,
   activeBaseLayer: String,
   setActiveBaseLayer: () => void,
+  bounds: Array<Array<Number>>,
+  setBounds: () => void,
+  popBounds: Array<Array<Number>>,
+  setPopBounds: () => void,
+  tpopBounds: Array<Array<Number>>,
+  setTpopBounds: () => void,
 }) => {
   const { tree, table } = store
   const { activeNodes } = tree
@@ -189,6 +201,12 @@ const LayersControl = ({
                 setApfloraLayers={setApfloraLayers}
                 activeApfloraLayers={activeApfloraLayers}
                 setActiveApfloraLayers={setActiveApfloraLayers}
+                bounds={bounds}
+                setBounds={setBounds}
+                popBounds={popBounds}
+                setPopBounds={setPopBounds}
+                tpopBounds={tpopBounds}
+                setTpopBounds={setTpopBounds}
                 /**
                  * overlaysString enforces rererender
                  * even when only the sorting changes

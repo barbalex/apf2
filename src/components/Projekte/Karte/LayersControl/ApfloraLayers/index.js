@@ -376,6 +376,12 @@ const SortableList = SortableContainer(
     setActiveApfloraLayers,
     data,
     client,
+    bounds,
+    setBounds,
+    popBounds,
+    setPopBounds,
+    tpopBounds,
+    setTpopBounds,
   }) => (
     <div>
       {
@@ -389,6 +395,12 @@ const SortableList = SortableContainer(
             setActiveApfloraLayers={setActiveApfloraLayers}
             data={data}
             client={client}
+            bounds={bounds}
+            setBounds={setBounds}
+            popBounds={popBounds}
+            setPopBounds={setPopBounds}
+            tpopBounds={tpopBounds}
+            setTpopBounds={setTpopBounds}
           />
         ))
       }
@@ -402,12 +414,24 @@ const ApfloraLayers = ({
   setApfloraLayers,
   activeApfloraLayers,
   setActiveApfloraLayers,
+  bounds,
+  setBounds,
+  popBounds,
+  setPopBounds,
+  tpopBounds,
+  setTpopBounds,
 }: {
   store: Object,
   apfloraLayers: Array<Object>,
   setApfloraLayers: () => void,
   activeApfloraLayers: Array<Object>,
   setActiveApfloraLayers: () => void,
+  bounds: Array<Array<Number>>,
+  setBounds: () => void,
+  popBounds: Array<Array<Number>>,
+  setPopBounds: () => void,
+  tpopBounds: Array<Array<Number>>,
+  setTpopBounds: () => void,
 }) => (
   <ApolloProvider client={app.client}>
     <Query query={dataGql}>
@@ -428,6 +452,12 @@ const ApfloraLayers = ({
               setActiveApfloraLayers={setActiveApfloraLayers}
               data={data}
               client={client}
+              bounds={bounds}
+              setBounds={setBounds}
+              popBounds={popBounds}
+              setPopBounds={setPopBounds}
+              tpopBounds={tpopBounds}
+              setTpopBounds={setTpopBounds}
             />
           </CardContent>
         )

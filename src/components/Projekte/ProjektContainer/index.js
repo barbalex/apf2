@@ -57,6 +57,9 @@ const enhance = compose(
   withState('idOfTpopBeingLocalized', 'setIdOfTpopBeingLocalized', null),
   withState('tpopLabelUsingNr', 'setTpopLabelUsingNr', true),
   withState('popLabelUsingNr', 'setPopLabelUsingNr', true),
+  withState('bounds', 'setBounds', [[47.159, 8.354], [47.696, 8.984]]),
+  withState('popBounds', 'setPopBounds', []),
+  withState('tpopBounds', 'setTpopBounds', []),
   observer
 )
 
@@ -83,6 +86,12 @@ const ProjekteContainer = ({
   setTpopLabelUsingNr,
   popLabelUsingNr,
   setPopLabelUsingNr,
+  bounds,
+  setBounds,
+  popBounds,
+  setPopBounds,
+  tpopBounds,
+  setTpopBounds,
 }: {
   store: Object,
   treeName: String,
@@ -106,6 +115,12 @@ const ProjekteContainer = ({
   setTpopLabelUsingNr: () => void,
   popLabelUsingNr: Boolean,
   setPopLabelUsingNr: () => void,
+  bounds: Array<Array<Number>>,
+  setBounds: () => void,
+  popBounds: Array<Array<Number>>,
+  setPopBounds: () => void,
+  tpopBounds: Array<Array<Number>>,
+  setTpopBounds: () => void,
 }) =>
   <Query query={data1Gql} >
     {({ error, data: data1 }) => {
@@ -233,6 +248,12 @@ const ProjekteContainer = ({
                             setIdOfTpopBeingLocalized={setIdOfTpopBeingLocalized}
                             tpopLabelUsingNr={tpopLabelUsingNr}
                             popLabelUsingNr={popLabelUsingNr}
+                            bounds={bounds}
+                            setBounds={setBounds}
+                            popBounds={popBounds}
+                            setPopBounds={setPopBounds}
+                            tpopBounds={tpopBounds}
+                            setTpopBounds={setTpopBounds}
                             // SortedStrings enforce rerendering when sorting or visibility changes
                             activeOverlaysString={activeOverlays.join()}
                             activeApfloraLayersString={activeApfloraLayers.join()}
