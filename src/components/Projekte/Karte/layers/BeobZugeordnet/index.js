@@ -1,6 +1,4 @@
 import React from 'react'
-import { inject } from 'mobx-react'
-import compose from 'recompose/compose'
 import { Query } from 'react-apollo'
 import get from 'lodash/get'
 import flatten from 'lodash/flatten'
@@ -12,22 +10,20 @@ import buildMarkersClustered from './buildMarkersClustered'
 import Marker from './Marker'
 import MarkerCluster from './MarkerCluster'
 
-const enhance = compose(inject('store'))
-
 const BeobZugeordnetMarker = ({
-  store,
   tree,
   activeNodes,
   apfloraLayers,
   clustered,
-  refetchTree
+  refetchTree,
+  beobZugeordnetHighlightedIds,
 } : {
-  store: Object,
   tree: Object,
   activeNodes: Array<Object>,
   apfloraLayers: Array<Object>,
   clustered: Boolean,
-  refetchTree: () => void
+  refetchTree: () => void,
+  beobZugeordnetHighlightedIds: Array<String>,
 }) =>
   <Query query={dataGql}
     variables={{
@@ -59,8 +55,8 @@ const BeobZugeordnetMarker = ({
           beobs,
           activeNodes,
           apfloraLayers,
-          store,
           data,
+          beobZugeordnetHighlightedIds,
         })
         return <MarkerCluster markers={markers} />
       }
@@ -70,13 +66,13 @@ const BeobZugeordnetMarker = ({
         activeNodes,
         apfloraLayers,
         client,
-        store,
         data,
         refetchTree,
+        beobZugeordnetHighlightedIds,
       })
       return <Marker markers={markers} />
     
   }}
 </Query>
 
-export default enhance(BeobZugeordnetMarker)
+export default BeobZugeordnetMarker

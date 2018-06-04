@@ -5,6 +5,7 @@ import 'leaflet'
 import format from 'date-fns/format'
 import styled from 'styled-components'
 import get from 'lodash/get'
+import app from 'ampersand-app'
 
 import beobIcon from '../../../../../etc/beob.png'
 import beobIconHighlighted from '../../../../../etc/beobHighlighted.png'
@@ -23,27 +24,24 @@ export default ({
   tree,
   activeNodes,
   apfloraLayers,
-  client,
-  store,
   data,
   refetchTree,
+  beobNichtBeurteiltHighlightedIds,
 }:{
   beobs: Array<Object>,
   tree: Object,
   activeNodes: Array<Object>,
   apfloraLayers: Array<Object>,
-  client: Object,
-  store: Object,
   data: Object,
   refetchTree: () => void,
+  beobNichtBeurteiltHighlightedIds: Array<String>,
 }): Array<Object> => {
-  const { map } = store
   const { ap, projekt } = activeNodes
-  const { highlightedIds } = map.beobNichtBeurteilt
   const assigning = get(data, 'assigningBeob')
+  const { client } = app
 
   return beobs.map(beob => {
-    const isHighlighted = highlightedIds.includes(beob.id)
+    const isHighlighted = beobNichtBeurteiltHighlightedIds.includes(beob.id)
     const latLng = new window.L.LatLng(...epsg2056to4326(beob.x, beob.y))
     const icon = window.L.icon({
       iconUrl: isHighlighted ? beobIconHighlighted : beobIcon,

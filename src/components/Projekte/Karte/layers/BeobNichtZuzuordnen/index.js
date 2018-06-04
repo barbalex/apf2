@@ -1,6 +1,4 @@
 import React from 'react'
-import { inject } from 'mobx-react'
-import compose from 'recompose/compose'
 import { Query } from 'react-apollo'
 import get from 'lodash/get'
 import flatten from 'lodash/flatten'
@@ -12,20 +10,18 @@ import buildMarkersClustered from './buildMarkersClustered'
 import Marker from './Marker'
 import MarkerCluster from './MarkerCluster'
 
-const enhance = compose(inject('store'))
-
 const BeobNichtZuzuordnenMarker = ({
-  store,
   tree,
   activeNodes,
   apfloraLayers,
-  clustered
+  clustered,
+  beobNichtBeurteiltHighlightedIds,
 } : {
-  store: Object,
   tree: Object,
   activeNodes: Array<Object>,
   apfloraLayers: Array<Object>,
-  clustered: Boolean
+  clustered: Boolean,
+  beobNichtBeurteiltHighlightedIds: Array<String>,
 }) =>
   <Query query={dataGql}
     variables={{
@@ -57,8 +53,8 @@ const BeobNichtZuzuordnenMarker = ({
           beobs,
           activeNodes,
           apfloraLayers,
-          store,
           data,
+          beobNichtBeurteiltHighlightedIds,
         })
         return <MarkerCluster markers={markers} />
       }
@@ -67,8 +63,8 @@ const BeobNichtZuzuordnenMarker = ({
         tree,
         activeNodes,
         apfloraLayers,
-        store,
         data,
+        beobNichtBeurteiltHighlightedIds,
       })
       return <Marker markers={markers} />
     
@@ -76,4 +72,4 @@ const BeobNichtZuzuordnenMarker = ({
 </Query>
 
 
-export default enhance(BeobNichtZuzuordnenMarker)
+export default BeobNichtZuzuordnenMarker

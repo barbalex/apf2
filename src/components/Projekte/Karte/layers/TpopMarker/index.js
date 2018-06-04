@@ -1,6 +1,4 @@
 import React from 'react'
-import { inject } from 'mobx-react'
-import compose from 'recompose/compose'
 import { Query } from 'react-apollo'
 import get from 'lodash/get'
 import flatten from 'lodash/flatten'
@@ -11,22 +9,20 @@ import buildMarkersClustered from './buildMarkersClustered'
 import Marker from './Marker'
 import MarkerCluster from './MarkerCluster'
 
-const enhance = compose(inject('store'))
-
 const TpopMarkerMarker = ({
-  store,
   tree,
   activeNodes,
   apfloraLayers,
   clustered,
   tpopLabelUsingNr,
+  tpopHighlightedIds,
 } : {
-  store: Object,
   tree: Object,
   activeNodes: Array<Object>,
   apfloraLayers: Array<Object>,
   clustered: Boolean,
   tpopLabelUsingNr: Boolean,
+  tpopHighlightedIds: Array<String>,
 }) =>
   <Query query={dataGql}
     variables={{
@@ -51,21 +47,21 @@ const TpopMarkerMarker = ({
       if (clustered) {
         const markers = buildMarkersClustered({
           tpops,
-          store,
           activeNodes,
           apfloraLayers,
           data,
           tpopLabelUsingNr,
+          tpopHighlightedIds,
         })
         return <MarkerCluster markers={markers} />
       }
       const markers = buildMarkers({
         tpops,
-        store,
         activeNodes,
         apfloraLayers,
         data,
         tpopLabelUsingNr,
+        tpopHighlightedIds,
       })
       return <Marker markers={markers} />
     
@@ -73,4 +69,4 @@ const TpopMarkerMarker = ({
 </Query>
 
 
-export default enhance(TpopMarkerMarker)
+export default TpopMarkerMarker

@@ -145,6 +145,16 @@ const Karte = ({
   popLabelUsingNr,
   bounds,
   setBounds,
+  popHighlightedIds,
+  setPopHighlightedIds,
+  tpopHighlightedIds,
+  setTpopHighlightedIds,
+  beobNichtBeurteiltHighlightedIds,
+  setBeobNichtBeurteiltHighlightedIds,
+  beobNichtZuzuordnenHighlightedIds,
+  setBeobNichtZuzuordnenHighlightedIds,
+  beobZugeordnetHighlightedIds,
+  setBeobZugeordnetHighlightedIds,
 }: {
   store: Object,
   tree: Object,
@@ -169,6 +179,16 @@ const Karte = ({
   popLabelUsingNr: Boolean,
   bounds: Array<Array<Number>>,
   setBounds: () => void,
+  popHighlightedIds: Array<String>,
+  setPopHighlightedIds: () => void,
+  tpopHighlightedIds: Array<String>,
+  setTpopHighlightedIds: () => void,
+  beobNichtBeurteiltHighlightedIds: Array<String>,
+  setBeobNichtBeurteiltHighlightedIds: () => void,
+  beobNichtZuzuordnenHighlightedIds: Array<String>,
+  setBeobNichtZuzuordnenHighlightedIds: () => void,
+  beobZugeordnetHighlightedIds: Array<String>,
+  setBeobZugeordnetHighlightedIds: () => void,
 }) => {
     const MapElement = !!idOfTpopBeingLocalized ? StyledMapLocalizing : StyledMap
     const assigning = get(data, 'assigningBeob')
@@ -187,6 +207,7 @@ const Karte = ({
           apfloraLayers={apfloraLayers}
           activeApfloraLayers={activeApfloraLayers}
           popLabelUsingNr={popLabelUsingNr}
+          popHighlightedIds={popHighlightedIds}
         />
       ),
       Tpop: () => (
@@ -196,6 +217,7 @@ const Karte = ({
           apfloraLayers={apfloraLayers}
           clustered={clustered}
           tpopLabelUsingNr={tpopLabelUsingNr}
+          tpopHighlightedIds={tpopHighlightedIds}
         />
       ),
       BeobNichtBeurteilt: () => (
@@ -205,6 +227,7 @@ const Karte = ({
           apfloraLayers={apfloraLayers}
           clustered={clustered}
           refetchTree={refetchTree}
+          beobNichtBeurteiltHighlightedIds={beobNichtBeurteiltHighlightedIds}
         />
       ),
       BeobNichtZuzuordnen: () => (
@@ -213,6 +236,7 @@ const Karte = ({
           activeNodes={activeNodes}
           apfloraLayers={apfloraLayers}
           clustered={clustered}
+          beobNichtZuzuordnenHighlightedIds={beobNichtZuzuordnenHighlightedIds}
         />
       ),
       BeobZugeordnet: () => (
@@ -222,6 +246,7 @@ const Karte = ({
           apfloraLayers={apfloraLayers}
           clustered={clustered}
           refetchTree={refetchTree}
+          beobZugeordnetHighlightedIds={beobZugeordnetHighlightedIds}
         />
       ),
       BeobZugeordnetAssignPolylines: () => (

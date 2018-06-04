@@ -24,26 +24,24 @@ export default ({
   activeNodes,
   apfloraLayers,
   client,
-  store,
   data,
-  refetchTree
+  refetchTree,
+  beobZugeordnetHighlightedIds,
 }:{
   beobs: Array<Object>,
   tree: Object,
   activeNodes: Array<Object>,
   apfloraLayers: Array<Object>,
   client: Object,
-  store: Object,
   data: Object,
-  refetchTree: () => void
+  refetchTree: () => void,
+  beobZugeordnetHighlightedIds: Array<String>,
 }): Array<Object> => {
-  const { map } = store
   const { ap, projekt } = activeNodes
-  const { highlightedIds } = map.beobZugeordnet
   const assigning = get(data, 'assigningBeob')
 
   return beobs.map(beob => {
-    const isHighlighted = highlightedIds.includes(beob.id)
+    const isHighlighted = beobZugeordnetHighlightedIds.includes(beob.id)
     const latLng = new window.L.LatLng(...epsg2056to4326(beob.x, beob.y))
     const icon = window.L.icon({
       iconUrl: isHighlighted ? beobIconHighlighted : beobIcon,

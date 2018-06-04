@@ -21,18 +21,16 @@ export default ({
   beobs,
   activeNodes,
   apfloraLayers,
-  store,
   data,
+  beobNichtBeurteiltHighlightedIds,
 }:{
   beobs: Array<Object>,
   activeNodes: Array<Object>,
   apfloraLayers: Array<Object>,
-  store: Object,
   data: Object,
+  beobNichtBeurteiltHighlightedIds: Array<String>,
 }): Object => {
-  const { map } = store
   const { ap, projekt } = activeNodes
-  const { highlightedIds } = map.beobZugeordnet
   const assigning = get(data, 'assigningBeob')
   const mcgOptions = {
     maxClusterRadius: 66,
@@ -54,7 +52,7 @@ export default ({
   }
   const markers = window.L.markerClusterGroup(mcgOptions)
   beobs.forEach(beob => {
-    const isHighlighted = highlightedIds.includes(beob.id)
+    const isHighlighted = beobNichtBeurteiltHighlightedIds.includes(beob.id)
     const latLng = new window.L.LatLng(...epsg2056to4326(beob.x, beob.y))
     const icon = window.L.icon({
       iconUrl: isHighlighted ? beobIconHighlighted : beobIcon,

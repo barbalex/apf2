@@ -20,20 +20,18 @@ export default ({
   tpops,
   activeNodes,
   apfloraLayers,
-  store,
   data,
   tpopLabelUsingNr,
+  tpopHighlightedIds,
 }:{
   tpops: Array<Object>,
   activeNodes: Array<Object>,
   apfloraLayers: Array<Object>,
-  store: Object,
   data: Object,
   tpopLabelUsingNr: Boolean,
+  tpopHighlightedIds: Array<String>,
 }): Object => {
-  const { map } = store
   const { ap, projekt } = activeNodes
-  const { highlightedIds } = map.tpop
   
   const mcgOptions = {
     maxClusterRadius: 66,
@@ -58,7 +56,7 @@ export default ({
   tpops.forEach(tpop => {
     // beware: leaflet needs title to always be a string
     const nrLabel = `${get(tpop, 'popByPopId.nr', '(keine Nr)')}.${get(tpop, 'nr', '(keine Nr)')}`.toString()
-    const isHighlighted = highlightedIds.includes(tpop.id)
+    const isHighlighted = tpopHighlightedIds.includes(tpop.id)
     const latLng = new window.L.LatLng(...epsg2056to4326(tpop.x, tpop.y))
     const icon = window.L.icon({
       iconUrl: isHighlighted ? tpopIconHighlighted : tpopIcon,

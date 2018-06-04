@@ -58,6 +58,11 @@ const enhance = compose(
   withState('tpopLabelUsingNr', 'setTpopLabelUsingNr', true),
   withState('popLabelUsingNr', 'setPopLabelUsingNr', true),
   withState('bounds', 'setBounds', [[47.159, 8.354], [47.696, 8.984]]),
+  withState('popHighlightedIds', 'setPopHighlightedIds', []),
+  withState('tpopHighlightedIds', 'setTpopHighlightedIds', []),
+  withState('beobNichtBeurteiltHighlightedIds', 'setBeobNichtBeurteiltHighlightedIds', []),
+  withState('beobNichtZuzuordnenHighlightedIds', 'setBeobNichtZuzuordnenHighlightedIds', []),
+  withState('beobZugeordnetHighlightedIds', 'setBeobZugeordnetHighlightedIds', []),
   observer
 )
 
@@ -86,6 +91,16 @@ const ProjekteContainer = ({
   setPopLabelUsingNr,
   bounds,
   setBounds,
+  popHighlightedIds,
+  setPopHighlightedIds,
+  tpopHighlightedIds,
+  setTpopHighlightedIds,
+  beobNichtBeurteiltHighlightedIds,
+  setBeobNichtBeurteiltHighlightedIds,
+  beobNichtZuzuordnenHighlightedIds,
+  setBeobNichtZuzuordnenHighlightedIds,
+  beobZugeordnetHighlightedIds,
+  setBeobZugeordnetHighlightedIds,
 }: {
   store: Object,
   treeName: String,
@@ -111,6 +126,16 @@ const ProjekteContainer = ({
   setPopLabelUsingNr: () => void,
   bounds: Array<Array<Number>>,
   setBounds: () => void,
+  popHighlightedIds: Array<String>,
+  setPopHighlightedIds: () => void,
+  tpopHighlightedIds: Array<String>,
+  setTpopHighlightedIds: () => void,
+  beobNichtBeurteiltHighlightedIds: Array<String>,
+  setBeobNichtBeurteiltHighlightedIds: () => void,
+  beobNichtZuzuordnenHighlightedIds: Array<String>,
+  setBeobNichtZuzuordnenHighlightedIds: () => void,
+  beobZugeordnetHighlightedIds: Array<String>,
+  setBeobZugeordnetHighlightedIds: () => void,
 }) =>
   <Query query={data1Gql} >
     {({ error, data: data1 }) => {
@@ -228,11 +253,16 @@ const ProjekteContainer = ({
                             activeNodes={activeNodes}
                             key={tabs.toString()}
                             refetchTree={refetch}
-                            popHighlighted={store.map.pop.highlightedIds.join()}
-                            tpopHighlighted={store.map.tpop.highlightedIds.join()}
-                            beobNichtBeurteiltHighlighted={store.map.beobNichtBeurteilt.highlightedIds.join()}
-                            beobNichtZuzuordnenHighlighted={store.map.beobNichtZuzuordnen.highlightedIds.join()}
-                            beobZugeordnetHighlighted={store.map.beobZugeordnet.highlightedIds.join()}
+                            popHighlightedIds={popHighlightedIds}
+                            setPopHighlightedIds={setPopHighlightedIds}
+                            tpopHighlightedIds={tpopHighlightedIds}
+                            setTpopHighlightedIds={setTpopHighlightedIds}
+                            beobNichtBeurteiltHighlightedIds={beobNichtBeurteiltHighlightedIds}
+                            setBeobNichtBeurteiltHighlightedIds={setBeobNichtBeurteiltHighlightedIds}
+                            beobNichtZuzuordnenHighlightedIds={beobNichtZuzuordnenHighlightedIds}
+                            setBeobNichtZuzuordnenHighlightedIds={setBeobNichtZuzuordnenHighlightedIds}
+                            beobZugeordnetHighlightedIds={beobZugeordnetHighlightedIds}
+                            setBeobZugeordnetHighlightedIds={setBeobZugeordnetHighlightedIds}
                             beobZugeordnetAssigning={assigning}
                             idOfTpopBeingLocalized={idOfTpopBeingLocalized}
                             setIdOfTpopBeingLocalized={setIdOfTpopBeingLocalized}

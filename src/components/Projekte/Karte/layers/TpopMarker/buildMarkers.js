@@ -19,24 +19,22 @@ export default ({
   tree,
   activeNodes,
   apfloraLayers,
-  store,
   tpopLabelUsingNr,
+  tpopHighlightedIds,
 }:{
   tpops: Array<Object>,
   tree: Object,
   activeNodes: Array<Object>,
   apfloraLayers: Array<Object>,
-  store: Object,
   tpopLabelUsingNr: Boolean,
+  tpopHighlightedIds: Array<String>,
 }): Array<Object> => {
-  const { map } = store
   const { ap, projekt } = activeNodes
-  const { highlightedIds } = map.tpop
 
   return tpops.map(tpop => {
     const tpopNr = get(tpop, 'nr', '(keine Nr)')
     const nrLabel = `${get(tpop, 'popByPopId.nr', '(keine Nr)')}.${tpopNr}`.toString()
-    const isHighlighted = highlightedIds.includes(tpop.id)
+    const isHighlighted = tpopHighlightedIds.includes(tpop.id)
     const latLng = new window.L.LatLng(...epsg2056to4326(tpop.x, tpop.y))
     const icon = window.L.icon({
       iconUrl: isHighlighted ? tpopIconHighlighted : tpopIcon,

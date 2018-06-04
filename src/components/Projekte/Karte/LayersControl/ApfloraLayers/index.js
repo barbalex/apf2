@@ -298,46 +298,12 @@ const SortableItem = SortableElement(
                 title={`auf alle '${apfloraLayer.label}' zoomen`}
                 onClick={() => {
                   if (activeApfloraLayers.includes(apfloraLayer.value)) {
-                    switch (apfloraLayer.value) {
-                      case 'pop':
-                        setBounds(
-                          getBounds(
-                            get(data, 'pops.nodes', [])
-                          )
-                        )
-                        break
-                      case 'tpop':
-                        setBounds(
-                          getBounds(
-                            get(data, 'tpops.nodes', [])
-                          )
-                        )
-                        break
-                      case 'beobNichtBeurteilt':
-                        setBounds(
-                          getBounds(
-                            get(data, 'beobNichtBeurteilts.nodes', [])
-                          )
-                        )
-                        break
-                      case 'beobNichtZuzuordnen':
-                        setBounds(
-                          getBounds(
-                            get(data, 'beobNichtZuzuordnens.nodes', [])
-                          )
-                        )
-                        break
-                      case 'beobZugeordnet':
-                      case 'beobZugeordnetAssignPolylines':
-                        setBounds(
-                          getBounds(
-                            get(data, 'beobZugeordnets.nodes', [])
-                          )
-                        )
-                        break
-                      default:
-                        // do nothing
-                    }
+                    // for each layer there must exist a path in data.graphql!
+                    setBounds(
+                      getBounds(
+                        get(data, `${apfloraLayer.value}.nodes`, [])
+                      )
+                    )
                   }
                 }}
               >

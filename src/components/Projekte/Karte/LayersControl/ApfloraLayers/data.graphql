@@ -1,6 +1,6 @@
 query Query($isAp: Boolean!, $ap: [UUID!], $isPop: Boolean!, $pop: [UUID!]) {
   assigningBeob @client
-  pops: allPops(
+  pop: allPops(
     filter: {
       apId: { in: $ap }
       x: { isNull: false }
@@ -13,7 +13,7 @@ query Query($isAp: Boolean!, $ap: [UUID!], $isPop: Boolean!, $pop: [UUID!]) {
       y
     }
   }
-  tpops: allTpops(
+  tpop: allTpops(
     filter: {
       popId: { in: $pop }
       x: { isNull: false }
@@ -26,7 +26,7 @@ query Query($isAp: Boolean!, $ap: [UUID!], $isPop: Boolean!, $pop: [UUID!]) {
       y
     }
   }
-  beobNichtBeurteilts: allVApbeobs(
+  beobNichtBeurteilt: allVApbeobs(
     filter: {
       apId: { in: $ap }
       nichtZuordnen: { equalTo: false }
@@ -39,7 +39,7 @@ query Query($isAp: Boolean!, $ap: [UUID!], $isPop: Boolean!, $pop: [UUID!]) {
       y
     }
   }
-  beobNichtZuzuordnens: allVApbeobs(
+  beobNichtZuzuordnen: allVApbeobs(
     filter: {
       apId: { in: $ap }
       nichtZuordnen: { equalTo: true }
@@ -51,7 +51,20 @@ query Query($isAp: Boolean!, $ap: [UUID!], $isPop: Boolean!, $pop: [UUID!]) {
       y
     }
   }
-  beobZugeordnets: allVApbeobs(
+  beobZugeordnet: allVApbeobs(
+    filter: {
+      apId: { in: $ap }
+      nichtZuordnen: { equalTo: false }
+      tpopId: { isNull: false }
+    }
+  ) @include(if: $isAp) {
+    nodes {
+      id
+      x
+      y
+    }
+  }
+  beobZugeordnetAssignPolylines: allVApbeobs(
     filter: {
       apId: { in: $ap }
       nichtZuordnen: { equalTo: false }

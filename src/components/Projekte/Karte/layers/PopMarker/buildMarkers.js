@@ -27,6 +27,7 @@ export default ({
   store,
   data,
   popLabelUsingNr,
+  popHighlightedIds,
 }:{
   pops:Array<Object>,
   activeNodes:Array<Object>,
@@ -35,9 +36,9 @@ export default ({
   store: Object,
   data: Object,
   popLabelUsingNr: Boolean,
+  popHighlightedIds: Array<String>,
 }): Object => {
   const { ap, projekt } = activeNodes
-  const { highlightedIds } = store.map.pop
   const visible = activeApfloraLayers.includes('pop')
   const mcgOptions = {
     maxClusterRadius: 66,
@@ -71,7 +72,7 @@ export default ({
         className: 'mapTooltip',
         opacity: 1,
       }
-      const isHighlighted = highlightedIds.includes(p.id)
+      const isHighlighted = popHighlightedIds.includes(p.id)
       const latLng = new window.L.LatLng(...epsg2056to4326(p.x, p.y))
       const icon = window.L.icon({
         iconUrl: isHighlighted ? popIconHighlighted : popIcon,

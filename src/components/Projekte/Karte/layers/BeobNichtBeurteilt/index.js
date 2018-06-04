@@ -1,6 +1,4 @@
 import React from 'react'
-import { inject } from 'mobx-react'
-import compose from 'recompose/compose'
 import { Query } from 'react-apollo'
 import get from 'lodash/get'
 import flatten from 'lodash/flatten'
@@ -12,22 +10,20 @@ import buildMarkersClustered from './buildMarkersClustered'
 import Marker from './Marker'
 import MarkerCluster from './MarkerCluster'
 
-const enhance = compose(inject('store'))
-
 const BeobNichtBeurteiltMarker = ({
-  store,
   tree,
   activeNodes,
   apfloraLayers,
   clustered,
-  refetchTree
+  refetchTree,
+  beobNichtBeurteiltHighlightedIds,
 } : {
-  store: Object,
   tree: Object,
   activeNodes: Array<Object>,
   apfloraLayers: Array<Object>,
   clustered: Boolean,
-  refetchTree: () => void
+  refetchTree: () => void,
+  beobNichtBeurteiltHighlightedIds: Array<String>,
 }) =>
   <Query query={dataGql}
     variables={{
@@ -57,8 +53,8 @@ const BeobNichtBeurteiltMarker = ({
           beobs,
           activeNodes,
           apfloraLayers,
-          store,
           data,
+          beobNichtBeurteiltHighlightedIds,
         })
         return <MarkerCluster markers={markers} />
       }
@@ -67,9 +63,8 @@ const BeobNichtBeurteiltMarker = ({
         tree,
         activeNodes,
         apfloraLayers,
-        client,
-        store,
         data,
+        beobNichtBeurteiltHighlightedIds,
         refetchTree,
       })
       return <Marker markers={markers} />
@@ -78,4 +73,4 @@ const BeobNichtBeurteiltMarker = ({
 </Query>
 
 
-export default enhance(BeobNichtBeurteiltMarker)
+export default BeobNichtBeurteiltMarker
