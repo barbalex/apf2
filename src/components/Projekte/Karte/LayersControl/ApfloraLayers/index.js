@@ -307,7 +307,6 @@ const SortableItem = SortableElement(
               <StyledIconButton
                 title={`auf alle '${apfloraLayer.label}' zoomen`}
                 onClick={() => {
-                  console.log('ApfloraLayers:', {activeApfloraLayers,apfloraLayer})
                   if (activeApfloraLayers.includes(apfloraLayer.value)) {
                     switch (apfloraLayer.value) {
                       case 'Pop':
