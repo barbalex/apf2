@@ -158,7 +158,7 @@ const Karte = ({
 }: {
   store: Object,
   tree: Object,
-  activeNodes: Array<Object>,
+  activeNodes: Object,
   onMouseMove: () => void,
   data: Object,
   activeBaseLayer: String,
@@ -376,6 +376,8 @@ const Karte = ({
           <ScaleControl imperial={false} />
           <LayersControl
             data={data}
+            tree={tree}
+            activeNodes={activeNodes}
             activeBaseLayer={activeBaseLayer}
             setActiveBaseLayer={setActiveBaseLayer}
             apfloraLayers={apfloraLayers}

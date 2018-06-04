@@ -25,6 +25,7 @@ import Checkbox from '../shared/Checkbox'
 import bufferBoundsTo50m from '../../../../../modules/bufferBoundsTo50m'
 import dataGql from './data.graphql'
 import setAssigningBeob from './setAssigningBeob.graphql'
+import getBounds from '../../../../../modules/getBounds'
 
 const StyledIconButton = styled(Button)`
   max-width: 18px;
@@ -131,6 +132,7 @@ const SortableItem = SortableElement(
   ({
     apfloraLayer,
     store,
+    activeNodes,
     activeApfloraLayers,
     setActiveApfloraLayers,
     data,
@@ -174,11 +176,11 @@ const SortableItem = SortableElement(
       BeobZugeordnet: 'beobZugeordnet',
       BeobZugeordnetAssignPolylines: 'beobZugeordnet',
     }
+    console.log('ApfloraLayers:', {data})
 
     return (
       <LayerDiv>
         <Checkbox
-          tree={store.tree}
           value={apfloraLayer.value}
           label={apfloraLayer.label}
           checked={activeApfloraLayers.includes(apfloraLayer.value)}
@@ -305,21 +307,24 @@ const SortableItem = SortableElement(
               <StyledIconButton
                 title={`auf alle '${apfloraLayer.label}' zoomen`}
                 onClick={() => {
+                  console.log('ApfloraLayers:', {activeApfloraLayers,apfloraLayer,popBounds,setBounds})
                   if (activeApfloraLayers.includes(apfloraLayer.value)) {
                     switch (apfloraLayer.value) {
-                      case 'pop':
-                        setBounds(popBounds)
+                      case 'Pop':
+                        const pops = get(data, 'pops.nodes', [])
+                        const bounds = getBounds(pops)
+                        setBounds(bounds)
                         break
-                      case 'tpop':
+                      case 'Tpop':
                         setBounds(tpopBounds)
                         break
-                      case 'beobNichtBeurteilt':
+                      case 'BeobNichtBeurteilt':
                         setBounds(beobNichtBeurteiltBounds)
                         break
                       case 'beobNichtZuzuordnen':
                         setBounds(beobNichtZuzuordnenBounds)
                         break
-                      case 'beobZugeordnet':
+                      case 'BeobZugeordnet':
                       case 'BeobZugeordnetAssignPolylines':
                         setBounds(beobZugeordnetBounds)
                         break
@@ -450,6 +455,7 @@ const SortableList = SortableContainer(
 
 const ApfloraLayers = ({
   store,
+  activeNodes,
   apfloraLayers,
   setApfloraLayers,
   activeApfloraLayers,
@@ -462,6 +468,7 @@ const ApfloraLayers = ({
   setTpopBounds,
 }: {
   store: Object,
+  activeNodes: Object,
   apfloraLayers: Array<Object>,
   setApfloraLayers: () => void,
   activeApfloraLayers: Array<Object>,
@@ -474,7 +481,15 @@ const ApfloraLayers = ({
   setTpopBounds: () => void,
 }) => (
   <ApolloProvider client={app.client}>
-    <Query query={dataGql}>
+    <Query
+      query={dataGql}
+      variables={{
+        isAp: !!activeNodes.ap,
+        ap: activeNodes.ap ? [activeNodes.ap] : [],
+        isPop: !!activeNodes.pop,
+        pop: activeNodes.pop ? [activeNodes.pop] : [],
+      }}
+    >
       {({ loading, error, data, client }) => {
         if (error) return `Fehler: ${error.message}`
 

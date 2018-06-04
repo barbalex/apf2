@@ -117,6 +117,8 @@ const enhance = compose(
 const LayersControl = ({
   data,
   store,
+  tree,
+  activeNodes,
   apfloraLayers,
   setApfloraLayers,
   activeApfloraLayers,
@@ -148,6 +150,8 @@ const LayersControl = ({
 }: {
   data: Object,
   store: Object,
+  tree: Object,
+  activeNodes: Object,
   apfloraLayers: Array<Object>,
   setApfloraLayers: () => void,
   activeApfloraLayers: Array<Object>,
@@ -177,12 +181,10 @@ const LayersControl = ({
   beobZugeordnetBounds: Array<Array<Number>>,
   setBeobZugeordnetBounds: () => void,
 }) => {
-  const { tree, table } = store
-  const { activeNodes } = tree
   const assigning = get(data, 'assigningBeob')
   const getApfloraLayersTitle = () => {
     if (!activeNodes.ap) return 'apflora'
-    const ap = table.ap.get(activeNodes.ap)
+    const ap = activeNodes.ap
     if (!ap || !ap.label) return 'apflora'
     return ap.label
   }
@@ -209,6 +211,7 @@ const LayersControl = ({
             {apfloraLayersExpanded && (
               <ApfloraLayers
                 store={store}
+                activeNodes={activeNodes}
                 apfloraLayers={apfloraLayers}
                 setApfloraLayers={setApfloraLayers}
                 activeApfloraLayers={activeApfloraLayers}

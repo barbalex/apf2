@@ -1,5 +1,6 @@
 // @flow
 import epsg2056to4326 from './epsg2056to4326'
+import bufferBoundsTo50m from './bufferBoundsTo50m'
 
 export default (os: Array<Object>): Array<Array<number>> => {
   if (os.length === 0) return []
@@ -9,5 +10,7 @@ export default (os: Array<Object>): Array<Array<number>> => {
   const minX = Math.min(...xKoords)
   const maxY = Math.max(...yKoords)
   const minY = Math.min(...yKoords)
-  return [[minX, minY], [maxX, maxY]]
+  const bounds = [[minX, minY], [maxX, maxY]]
+  // if one single point: buffer
+  return bufferBoundsTo50m(bounds)
 }
