@@ -63,6 +63,7 @@ import CoordinatesControl from './CoordinatesControl/index.js'
 import epsg4326to2056 from '../../../modules/epsg4326to2056'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import updateTpopById from './updateTpopById.graphql'
+import listError from '../../../modules/listError';
 //import getBounds from '../../../modules/getBounds'
 
 // this does not work
@@ -138,6 +139,7 @@ const Karte = ({
   client,
   refetchTree,
   idOfTpopBeingLocalized,
+  setIdOfTpopBeingLocalized,
 }: {
   store: Object,
   tree: Object,
@@ -157,6 +159,7 @@ const Karte = ({
   client: Object,
   refetchTree: () => void,
   idOfTpopBeingLocalized: String,
+  setIdOfTpopBeingLocalized: () => void,
 }) => {
     const MapElement = !!idOfTpopBeingLocalized ? StyledMapLocalizing : StyledMap
     const assigning = get(data, 'assigningBeob')
@@ -269,30 +272,35 @@ const Karte = ({
           // probably clustering function
           maxZoom={22}
           minZoom={0}
-          onClick={event => {
+          onClick={async event => {
             if (!!idOfTpopBeingLocalized) {
               const { lat, lng } = event.latlng
               const [x, y] = epsg4326to2056(lng, lat)
-              client.mutate({
-                mutation: updateTpopById,
-                variables: {
-                  id: idOfTpopBeingLocalized,
-                  x,
-                  y
-                },
-                optimisticResponse: {
-                  __typename: 'Mutation',
-                  updateTpopById: {
-                    tpop: {
-                      id: idOfTpopBeingLocalized,
-                      x,
-                      y,
+              try {
+                client.mutate({
+                  mutation: updateTpopById,
+                  variables: {
+                    id: idOfTpopBeingLocalized,
+                    x,
+                    y
+                  },
+                  optimisticResponse: {
+                    __typename: 'Mutation',
+                    updateTpopById: {
+                      tpop: {
+                        id: idOfTpopBeingLocalized,
+                        x,
+                        y,
+                        __typename: 'Tpop',
+                      },
                       __typename: 'Tpop',
                     },
-                    __typename: 'Tpop',
                   },
-                },
-              })
+                })
+              } catch (error) {
+                listError(error)
+              }
+              setIdOfTpopBeingLocalized(null)
             }
           }}
           onZoomlevelschange={event => {

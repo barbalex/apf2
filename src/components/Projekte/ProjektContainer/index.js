@@ -216,6 +216,7 @@ const ProjekteContainer = ({
                             beobZugeordnetHighlighted={store.map.beobZugeordnet.highlightedIds.join()}
                             beobZugeordnetAssigning={assigning}
                             idOfTpopBeingLocalized={idOfTpopBeingLocalized}
+                            setIdOfTpopBeingLocalized={setIdOfTpopBeingLocalized}
                             // SortedStrings enforce rerendering when sorting or visibility changes
                             activeOverlaysString={activeOverlays.join()}
                             activeApfloraLayersString={activeApfloraLayers.join()}
