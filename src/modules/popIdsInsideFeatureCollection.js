@@ -12,22 +12,29 @@ export default (store: Object, pops: Array<Object>): Array<number> => {
    */
   // make sure all pops used have coordinates
   let popsToUse = pops.filter(p => {
-    if (!p.id) return false
+    if (!p.id && !p.popId && !p.pop_id) return false
     if (p.x && isFinite(p.x) && p.y && isFinite(p.y)) return true
     if (
-      p['Pop X-Koordinaten'] &&
-      isFinite(p['Pop X-Koordinaten']) &&
-      p['Pop Y-Koordinaten'] &&
-      isFinite(p['Pop Y-Koordinaten'])
+      p.popX && isFinite(p.popX) &&
+      p.popY && isFinite(p.popY)
+    )
+      return true
+    if (
+      p.pop_x && isFinite(p.pop_x) &&
+      p.pop_y && isFinite(p.pop_y)
     )
       return true
     return false
   })
   // ...and account for user friendly field names in views
   popsToUse = popsToUse.map(p => {
-    if (p['Pop X-Koordinaten'] && p['Pop Y-Koordinaten']) {
-      p.x = p['Pop X-Koordinaten']
-      p.y = p['Pop Y-Koordinaten']
+    if (p.popX && p.popY) {
+      p.x = p.popX
+      p.y = p.popY
+    }
+    if (p.pop_x && p.pop_y) {
+      p.x = p.pop_x
+      p.y = p.pop_y
     }
     return p
   })
@@ -37,7 +44,7 @@ export default (store: Object, pops: Array<Object>): Array<number> => {
     features: popsToUse.map(p => ({
       type: 'Feature',
       properties: {
-        id: p.id,
+        id: p.id || p.popId || p.pop_id,
       },
       geometry: {
         type: 'Point',
@@ -46,21 +53,9 @@ export default (store: Object, pops: Array<Object>): Array<number> => {
       },
     })),
   }
-  /**
-   * within creates error
-   * Uncaught Error: coordinates must only contain numbers
-   * checked everything and it all seems correct :-(
-   */
-  /*
-  const checkCoordinates = points.features.map(x => x.geometry.coordinates)
-  const isNumberCoordinates = checkCoordinates.map(x => [
-    x.length > 1,
-    typeof x[0] === 'number',
-    typeof x[1] === 'number',
-  ])*/
 
   // let turf check what points are within filter
-  const result = within(toJS(points), toJS(store.map.mapFilter.filter))
+  const result = within(points, toJS(store.map.mapFilter.filter))
 
   return result.features.map(r => r.properties.id)
 }

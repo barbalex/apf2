@@ -12,22 +12,29 @@ export default (store: Object, tpops: Array<Object>): Array<number> => {
    */
   // make sure all tpops used have coordinates
   let tpopsToUse = tpops.filter(p => {
-    if (!p.id) return false
+    if (!p.id && !p.tpopId && !p.tpop_id) return false
     if (p.x && isFinite(p.x) && p.y && isFinite(p.y)) return true
     if (
-      p['TPop X-Koordinaten'] &&
-      isFinite(p['TPop X-Koordinaten']) &&
-      p['TPop Y-Koordinaten'] &&
-      isFinite(p['TPop Y-Koordinaten'])
+      p.tpopX && isFinite(p.tpopX) &&
+      p.tpopY && isFinite(p.tpopY)
+    )
+      return true
+    if (
+      p.tpop_x && isFinite(p.tpop_x) &&
+      p.tpop_y && isFinite(p.tpop_y)
     )
       return true
     return false
   })
   // ...and account for user friendly field names in views
   tpopsToUse = tpopsToUse.map(p => {
-    if (p['TPop X-Koordinaten'] && p['TPop Y-Koordinaten']) {
-      p.x = p['TPop X-Koordinaten']
-      p.y = p['TPop Y-Koordinaten']
+    if (p.tpopX && p.tpopY) {
+      p.x = p.tpopX
+      p.y = p.tpopY
+    }
+    if (p.tpop_x && p.tpop_y) {
+      p.x = p.tpop_x
+      p.y = p.tpop_y
     }
     return p
   })
@@ -35,7 +42,7 @@ export default (store: Object, tpops: Array<Object>): Array<number> => {
   const features = tpopsToUse.map(t => ({
     type: 'Feature',
     properties: {
-      id: t.id,
+      id: t.id || t.tpopId || t.tpop_id,
     },
     geometry: {
       type: 'Point',
@@ -49,7 +56,7 @@ export default (store: Object, tpops: Array<Object>): Array<number> => {
   }
 
   // let turf check what points are within filter
-  const result = within(toJS(points), toJS(store.map.mapFilter.filter))
+  const result = within(points, toJS(store.map.mapFilter.filter))
 
   return result.features.map(r => r.properties.id)
 }
