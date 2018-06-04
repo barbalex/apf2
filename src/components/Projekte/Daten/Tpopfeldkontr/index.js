@@ -187,8 +187,8 @@ const enhance = compose(
           },
         },
       }),
-    onChangeTab: ({ setValue }) => (event, value, client) => {
-      setUrlQueryValue({ client, key: 'feldkontrTab', value})
+    onChangeTab: ({ setValue }) => (event, value) => {
+      setUrlQueryValue({ key: 'feldkontrTab', value })
       setValue(value)
     },
   }),
@@ -266,7 +266,7 @@ const Tpopfeldkontr = ({
                 <FieldsContainer>
                   <Tabs
                     value={value}
-                    onChange={(event, value) => onChangeTab(event, value, client)}
+                    onChange={onChangeTab}
                     indicatorColor="primary"
                     textColor="primary"
                     centered

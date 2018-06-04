@@ -75,7 +75,7 @@ import './index.css'
 
     axios.defaults.baseURL = apiBaseUrl
 
-    await initiateDataFromUrl(store, myClient)
+    await initiateDataFromUrl()
 
     // begin _after_ initiation data from url
     history.listen((location, action) =>

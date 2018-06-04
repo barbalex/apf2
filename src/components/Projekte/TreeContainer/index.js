@@ -159,9 +159,12 @@ const showMapIfNotYetVisible = ({
   projekteTabs: Array<String>
 }) => {
   const isVisible = projekteTabs.includes('karte')
+  console.log('TreeContainer, showMapIfNotYetVisible:', {projekteTabs})
   if (!isVisible) {
-    projekteTabs.push('karte')
-    setUrlQueryValue({ client, key: 'projekteTabs', value: projekteTabs})
+    setUrlQueryValue({
+      key: 'projekteTabs',
+      value: [...projekteTabs, 'karte'],
+    })
   }
 }
 

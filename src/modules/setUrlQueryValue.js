@@ -1,16 +1,16 @@
 // @flow
 import gql from "graphql-tag"
 import get from 'lodash/get'
+import app from 'ampersand-app'
 
 export default async ({
-  client,
   key,
   value
 }:{
-  client: Object,
   key: String,
   value: String
 }): void => {
+  const { client } = app
   const { data } = await client.query({
     query: gql`
         query Query {

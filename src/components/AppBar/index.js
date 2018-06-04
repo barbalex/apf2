@@ -55,7 +55,7 @@ const enhance = compose(
     onClickButton: ({ store }) => (name, client, projekteTabs) => {
       if (isMobilePhone()) {
         // show one tab only
-        setUrlQueryValue({ client, key: 'projekteTabs', value: [name] })
+        setUrlQueryValue({ key: 'projekteTabs', value: [name] })
       } else {
         if (projekteTabs.includes(name)) {
           remove(projekteTabs, el => el === name)
@@ -71,7 +71,7 @@ const enhance = compose(
             })
           }
         }
-        setUrlQueryValue({ client, key: 'projekteTabs', value: projekteTabs })
+        setUrlQueryValue({ key: 'projekteTabs', value: projekteTabs })
       }
     },
     watchVideos: ({ setAnchorEl }) => () => {

@@ -1,6 +1,7 @@
 // @flow
 import clone from 'lodash/clone'
 import gql from 'graphql-tag'
+import app from 'ampersand-app'
 
 import getActiveNodeArrayFromPathname from './getActiveNodeArrayFromPathname'
 import getUrlQuery from '../modules/getUrlQuery'
@@ -8,7 +9,8 @@ import isMobilePhone from '../modules/isMobilePhone'
 import setUrlQueryValue from '../modules/setUrlQueryValue'
 import setOpenNodesFromActiveNodeArray from '../modules/setOpenNodesFromActiveNodeArray'
 
-export default async (store: Object, client: Object) => {
+export default async () => {
+  const { client } = app
   const activeNodeArrayFromPathname = getActiveNodeArrayFromPathname(
     window.location.pathname.replace('/', '')
   )
@@ -65,12 +67,6 @@ export default async (store: Object, client: Object) => {
   })
 
   // set projekte tabs of not yet existing
-  /**
-   * TODO
-   * SHOULD BE TURNED OFF BECAUSE:
-   * causes reloading login component after login!!!???
-   */
-  
   if (
     (activeNodeArrayFromPathname.length === 0 ||
       activeNodeArrayFromPathname[0] === 'Projekte') &&
@@ -79,9 +75,9 @@ export default async (store: Object, client: Object) => {
       urlQuery.projekteTabs.length === 0)
   ) {
     if (isMobilePhone()) {
-      setUrlQueryValue({ client, key: 'projekteTabs', value: ['tree'] })
+      setUrlQueryValue({ key: 'projekteTabs', value: ['tree'] })
     } else {
-      setUrlQueryValue({ client, key: 'projekteTabs', value: ['tree', 'daten'] })
+      setUrlQueryValue({ key: 'projekteTabs', value: ['tree', 'daten'] })
     }
   }
 }
