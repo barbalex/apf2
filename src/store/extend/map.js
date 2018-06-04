@@ -15,8 +15,6 @@ export default (store: Object): void => {
     setDetailplaene: action(data => (store.map.detailplaene = data)),
     markierungen: null,
     setMarkierungen: action(data => (store.map.markierungen = data)),
-    bounds: [[47.159, 8.354], [47.696, 8.984]],
-    changeBounds: action(bounds => (store.map.bounds = bounds)),
     fetchDetailplaene: action(() =>
       fetchDetailplaene(store)
     ),
