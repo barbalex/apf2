@@ -1,6 +1,4 @@
 import React from 'react'
-import { inject } from 'mobx-react'
-import compose from 'recompose/compose'
 import { Query } from 'react-apollo'
 import get from 'lodash/get'
 import flatten from 'lodash/flatten'
@@ -10,16 +8,14 @@ import dataGql from './data.graphql'
 import buildLines from './buildLines'
 import Polylines from './Polylines'
 
-const enhance = compose(inject('store'))
-
 const Lines = ({
-  store,
   tree,
-  activeNodes
+  activeNodes,
+  beobZugeordnetHighlightedIds,
 } : {
-  store: Object,
   tree: Object,
-  activeNodes: Array<Object>
+  activeNodes: Array<Object>,
+  beobZugeordnetHighlightedIds: Array<String>,
 }) =>
   <Query query={dataGql}
     variables={{
@@ -43,11 +39,15 @@ const Lines = ({
             .toLowerCase()
             .includes(beobZugeordnetFilterString.toLowerCase())
         })
-
-      return <Polylines lines={buildLines({ beobs, store, activeNodes })} />
+      const lines = buildLines({
+        beobs,
+        activeNodes,
+        beobZugeordnetHighlightedIds,
+      })
+      return <Polylines lines={lines} />
     
   }}
 </Query>
 
 
-export default enhance(Lines)
+export default Lines
