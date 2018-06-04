@@ -23,9 +23,6 @@ export default (store: Object): void => {
     fetchMarkierungen: action(() =>
       fetchMarkierungen(store)
     ),
-    setIdOfTpopBeingLocalized: action(id => {
-      store.map.tpop.idOfTpopBeingLocalized = id
-    }),
     setMapMouseCoord: action(e => {
       store.map.mouseCoord = [e.latlng.lng, e.latlng.lat]
     }),

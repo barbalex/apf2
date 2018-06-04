@@ -136,7 +136,8 @@ const Karte = ({
   activeOverlays,
   setActiveOverlays,
   client,
-  refetchTree
+  refetchTree,
+  idOfTpopBeingLocalized,
 }: {
   store: Object,
   tree: Object,
@@ -154,9 +155,9 @@ const Karte = ({
   activeOverlays: Array<String>,
   setActiveOverlays: () => void,
   client: Object,
-  refetchTree: () => void
+  refetchTree: () => void,
+  idOfTpopBeingLocalized: String,
 }) => {
-    const { idOfTpopBeingLocalized } = store.map.tpop
     const MapElement = !!idOfTpopBeingLocalized ? StyledMapLocalizing : StyledMap
     const assigning = get(data, 'assigningBeob')
     const clustered = !(assigning || activeApfloraLayers.includes('BeobZugeordnetAssignPolylines'))

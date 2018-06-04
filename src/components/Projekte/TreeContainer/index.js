@@ -179,6 +179,7 @@ const enhance = compose(
       setActiveApfloraLayers,
       activeOverlays,
       setActiveOverlays,
+      setIdOfTpopBeingLocalized,
     }) => ({
       data,
       element,
@@ -248,7 +249,7 @@ const enhance = compose(
         },
         localizeOnMap() {
           const projekteTabs = get(data, 'urlQuery.projekteTabs', [])
-          store.map.setIdOfTpopBeingLocalized(id)
+          setIdOfTpopBeingLocalized(id)
           showMapIfNotYetVisible({ client, projekteTabs })
           setActiveApfloraLayers(uniq([...activeApfloraLayers, 'Tpop']))
         },

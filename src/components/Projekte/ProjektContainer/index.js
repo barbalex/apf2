@@ -52,6 +52,9 @@ const enhance = compose(
   withState('overlays', 'setOverlays', overlays),
   withState('activeOverlays', 'setActiveOverlays', []),
   withState('activeBaseLayer', 'setActiveBaseLayer', 'OsmColor'),
+  withState('popLabelUsingNr', 'setPopLabelUsingNr', true),
+  withState('tpopLabelUsingNr', 'setTpopLabelUsingNr', true),
+  withState('idOfTpopBeingLocalized', 'setIdOfTpopBeingLocalized', null),
   observer
 )
 
@@ -72,6 +75,8 @@ const ProjekteContainer = ({
   setActiveOverlays,
   activeBaseLayer,
   setActiveBaseLayer,
+  idOfTpopBeingLocalized,
+  setIdOfTpopBeingLocalized,
 }: {
   store: Object,
   treeName: String,
@@ -89,6 +94,8 @@ const ProjekteContainer = ({
   setActiveOverlays: () => void,
   activeBaseLayer: String,
   setActiveBaseLayer: () => void,
+  idOfTpopBeingLocalized: String,
+  setIdOfTpopBeingLocalized: () => void,
 }) =>
   <Query query={data1Gql} >
     {({ error, data: data1 }) => {
@@ -144,6 +151,7 @@ const ProjekteContainer = ({
                           activeOverlays={activeOverlays}
                           setActiveOverlays={setActiveOverlays}
                           refetchTree={refetch}
+                          setIdOfTpopBeingLocalized={setIdOfTpopBeingLocalized}
                         />
                       </ReflexElement>
                     }
@@ -207,7 +215,7 @@ const ProjekteContainer = ({
                             beobNichtZuzuordnenHighlighted={store.map.beobNichtZuzuordnen.highlightedIds.join()}
                             beobZugeordnetHighlighted={store.map.beobZugeordnet.highlightedIds.join()}
                             beobZugeordnetAssigning={assigning}
-                            idOfTpopBeingLocalized={store.map.tpop.idOfTpopBeingLocalized}
+                            idOfTpopBeingLocalized={idOfTpopBeingLocalized}
                             // SortedStrings enforce rerendering when sorting or visibility changes
                             activeOverlaysString={activeOverlays.join()}
                             activeApfloraLayersString={activeApfloraLayers.join()}

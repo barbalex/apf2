@@ -90,7 +90,7 @@ export default async idb => {
       withNextLevel: false,
       __typename: 'Copying'
     },
-    errors: []
+    errors: [],
   }
   return defaults
 }

@@ -36,6 +36,5 @@ export default (store: Object): void => {
     ),
     // alternative is using names
     labelUsingNr: true,
-    idOfTpopBeingLocalized: 0,
   })
 }
