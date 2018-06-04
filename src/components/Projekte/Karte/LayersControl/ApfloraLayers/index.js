@@ -307,26 +307,44 @@ const SortableItem = SortableElement(
               <StyledIconButton
                 title={`auf alle '${apfloraLayer.label}' zoomen`}
                 onClick={() => {
-                  console.log('ApfloraLayers:', {activeApfloraLayers,apfloraLayer,popBounds,setBounds})
+                  console.log('ApfloraLayers:', {activeApfloraLayers,apfloraLayer})
                   if (activeApfloraLayers.includes(apfloraLayer.value)) {
                     switch (apfloraLayer.value) {
                       case 'Pop':
-                        const pops = get(data, 'pops.nodes', [])
-                        const bounds = getBounds(pops)
-                        setBounds(bounds)
+                        setBounds(
+                          getBounds(
+                            get(data, 'pops.nodes', [])
+                          )
+                        )
                         break
                       case 'Tpop':
-                        setBounds(tpopBounds)
+                        setBounds(
+                          getBounds(
+                            get(data, 'tpops.nodes', [])
+                          )
+                        )
                         break
                       case 'BeobNichtBeurteilt':
-                        setBounds(beobNichtBeurteiltBounds)
+                        setBounds(
+                          getBounds(
+                            get(data, 'beobNichtBeurteilts.nodes', [])
+                          )
+                        )
                         break
-                      case 'beobNichtZuzuordnen':
-                        setBounds(beobNichtZuzuordnenBounds)
+                      case 'BeobNichtZuzuordnen':
+                        setBounds(
+                          getBounds(
+                            get(data, 'beobNichtZuzuordnens.nodes', [])
+                          )
+                        )
                         break
                       case 'BeobZugeordnet':
                       case 'BeobZugeordnetAssignPolylines':
-                        setBounds(beobZugeordnetBounds)
+                        setBounds(
+                          getBounds(
+                            get(data, 'beobZugeordnets.nodes', [])
+                          )
+                        )
                         break
                       default:
                         // do nothing

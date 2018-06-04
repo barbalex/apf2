@@ -1,15 +1,63 @@
 query Query($isAp: Boolean!, $ap: [UUID!], $isPop: Boolean!, $pop: [UUID!]) {
   assigningBeob @client
-  pops: allPops(filter: { apId: { in: $ap }, x: { isNull: false }, y: { isNull: false } }, orderBy: NR_ASC)
-    @include(if: $isAp) {
+  pops: allPops(
+    filter: {
+      apId: { in: $ap }
+      x: { isNull: false }
+      y: { isNull: false }
+    }
+  ) @include(if: $isAp) {
     nodes {
       id
       x
       y
     }
   }
-  tpops: allTpops(filter: { popId: { in: $pop }, x: { isNull: false }, y: { isNull: false } }, orderBy: NR_ASC)
-    @include(if: $isPop) {
+  tpops: allTpops(
+    filter: {
+      popId: { in: $pop }
+      x: { isNull: false }
+      y: { isNull: false }
+    }
+  ) @include(if: $isPop) {
+    nodes {
+      id
+      x
+      y
+    }
+  }
+  beobNichtBeurteilts: allVApbeobs(
+    filter: {
+      apId: { in: $ap }
+      nichtZuordnen: { equalTo: false }
+      tpopId: { isNull: true }
+    }
+  ) @include(if: $isAp) {
+    nodes {
+      id
+      x
+      y
+    }
+  }
+  beobNichtZuzuordnens: allVApbeobs(
+    filter: {
+      apId: { in: $ap }
+      nichtZuordnen: { equalTo: true }
+    }
+  ) @include(if: $isAp) {
+    nodes {
+      id
+      x
+      y
+    }
+  }
+  beobZugeordnets: allVApbeobs(
+    filter: {
+      apId: { in: $ap }
+      nichtZuordnen: { equalTo: false }
+      tpopId: { isNull: false }
+    }
+  ) @include(if: $isAp) {
     nodes {
       id
       x
