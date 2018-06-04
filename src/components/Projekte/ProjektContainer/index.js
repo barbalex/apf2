@@ -58,11 +58,6 @@ const enhance = compose(
   withState('tpopLabelUsingNr', 'setTpopLabelUsingNr', true),
   withState('popLabelUsingNr', 'setPopLabelUsingNr', true),
   withState('bounds', 'setBounds', [[47.159, 8.354], [47.696, 8.984]]),
-  withState('popBounds', 'setPopBounds', []),
-  withState('tpopBounds', 'setTpopBounds', []),
-  withState('beobNichtBeurteiltBounds', 'setBeobNichtBeurteiltBounds', []),
-  withState('beobNichtZuzuordnenBounds', 'setBeobNichtZuzuordnenBounds', []),
-  withState('beobZugeordnetBounds', 'setBeobZugeordnetBounds', []),
   observer
 )
 
@@ -91,16 +86,6 @@ const ProjekteContainer = ({
   setPopLabelUsingNr,
   bounds,
   setBounds,
-  popBounds,
-  setPopBounds,
-  tpopBounds,
-  setTpopBounds,
-  beobNichtBeurteiltBounds,
-  setBeobNichtBeurteiltBounds,
-  beobNichtZuzuordnenBounds,
-  setBeobNichtZuzuordnenBounds,
-  beobZugeordnetBounds,
-  setBeobZugeordnetBounds,
 }: {
   store: Object,
   treeName: String,
@@ -126,16 +111,6 @@ const ProjekteContainer = ({
   setPopLabelUsingNr: () => void,
   bounds: Array<Array<Number>>,
   setBounds: () => void,
-  popBounds: Array<Array<Number>>,
-  setPopBounds: () => void,
-  tpopBounds: Array<Array<Number>>,
-  setTpopBounds: () => void,
-  beobNichtBeurteiltBounds: Array<Array<Number>>,
-  setBeobNichtBeurteiltBounds: () => void,
-  beobNichtZuzuordnenBounds: Array<Array<Number>>,
-  setBeobNichtZuzuordnenBounds: () => void,
-  beobZugeordnetBounds: Array<Array<Number>>,
-  setBeobZugeordnetBounds: () => void,
 }) =>
   <Query query={data1Gql} >
     {({ error, data: data1 }) => {
@@ -265,16 +240,6 @@ const ProjekteContainer = ({
                             popLabelUsingNr={popLabelUsingNr}
                             bounds={bounds}
                             setBounds={setBounds}
-                            popBounds={popBounds}
-                            setPopBounds={setPopBounds}
-                            tpopBounds={tpopBounds}
-                            setTpopBounds={setTpopBounds}
-                            beobNichtBeurteiltBounds={beobNichtBeurteiltBounds}
-                            setBeobNichtBeurteiltBounds={setBeobNichtBeurteiltBounds}
-                            beobNichtZuzuordnenBounds={beobNichtZuzuordnenBounds}
-                            setBeobNichtZuzuordnenBounds={setBeobNichtZuzuordnenBounds}
-                            beobZugeordnetBounds={beobZugeordnetBounds}
-                            setBeobZugeordnetBounds={setBeobZugeordnetBounds}
                             // SortedStrings enforce rerendering when sorting or visibility changes
                             activeOverlaysString={activeOverlays.join()}
                             activeApfloraLayersString={activeApfloraLayers.join()}

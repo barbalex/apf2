@@ -145,16 +145,6 @@ const Karte = ({
   popLabelUsingNr,
   bounds,
   setBounds,
-  popBounds,
-  setPopBounds,
-  tpopBounds,
-  setTpopBounds,
-  beobNichtBeurteiltBounds,
-  setBeobNichtBeurteiltBounds,
-  beobNichtZuzuordnenBounds,
-  setBeobNichtZuzuordnenBounds,
-  beobZugeordnetBounds,
-  setBeobZugeordnetBounds,
 }: {
   store: Object,
   tree: Object,
@@ -179,16 +169,6 @@ const Karte = ({
   popLabelUsingNr: Boolean,
   bounds: Array<Array<Number>>,
   setBounds: () => void,
-  popBounds: Array<Array<Number>>,
-  setPopBounds: () => void,
-  tpopBounds: Array<Array<Number>>,
-  setTpopBounds: () => void,
-  beobNichtBeurteiltBounds: Array<Array<Number>>,
-  setBeobNichtBeurteiltBounds: () => void,
-  beobNichtZuzuordnenBounds: Array<Array<Number>>,
-  setBeobNichtZuzuordnenBounds: () => void,
-  beobZugeordnetBounds: Array<Array<Number>>,
-  setBeobZugeordnetBounds: () => void,
 }) => {
     const MapElement = !!idOfTpopBeingLocalized ? StyledMapLocalizing : StyledMap
     const assigning = get(data, 'assigningBeob')
@@ -390,16 +370,6 @@ const Karte = ({
             setActiveOverlays={setActiveOverlays}
             bounds={bounds}
             setBounds={setBounds}
-            popBounds={popBounds}
-            setPopBounds={setPopBounds}
-            tpopBounds={tpopBounds}
-            setTpopBounds={setTpopBounds}
-            beobNichtBeurteiltBounds={beobNichtBeurteiltBounds}
-            setBeobNichtBeurteiltBounds={setBeobNichtBeurteiltBounds}
-            beobNichtZuzuordnenBounds={beobNichtZuzuordnenBounds}
-            setBeobNichtZuzuordnenBounds={setBeobNichtZuzuordnenBounds}
-            beobZugeordnetBounds={beobZugeordnetBounds}
-            setBeobZugeordnetBounds={setBeobZugeordnetBounds}
             // this enforces rerendering when sorting changes
             activeOverlaysString={activeOverlays.join()}
             activeApfloraLayersString={activeApfloraLayers.join()}

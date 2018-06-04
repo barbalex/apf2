@@ -137,16 +137,6 @@ const LayersControl = ({
   setActiveBaseLayer,
   bounds,
   setBounds,
-  popBounds,
-  setPopBounds,
-  tpopBounds,
-  setTpopBounds,
-  beobNichtBeurteiltBounds,
-  setBeobNichtBeurteiltBounds,
-  beobNichtZuzuordnenBounds,
-  setBeobNichtZuzuordnenBounds,
-  beobZugeordnetBounds,
-  setBeobZugeordnetBounds,
 }: {
   data: Object,
   store: Object,
@@ -170,16 +160,6 @@ const LayersControl = ({
   setActiveBaseLayer: () => void,
   bounds: Array<Array<Number>>,
   setBounds: () => void,
-  popBounds: Array<Array<Number>>,
-  setPopBounds: () => void,
-  tpopBounds: Array<Array<Number>>,
-  setTpopBounds: () => void,
-  beobNichtBeurteiltBounds: Array<Array<Number>>,
-  setBeobNichtBeurteiltBounds: () => void,
-  beobNichtZuzuordnenBounds: Array<Array<Number>>,
-  setBeobNichtZuzuordnenBounds: () => void,
-  beobZugeordnetBounds: Array<Array<Number>>,
-  setBeobZugeordnetBounds: () => void,
 }) => {
   const assigning = get(data, 'assigningBeob')
   const getApfloraLayersTitle = () => {
@@ -218,16 +198,6 @@ const LayersControl = ({
                 setActiveApfloraLayers={setActiveApfloraLayers}
                 bounds={bounds}
                 setBounds={setBounds}
-                popBounds={popBounds}
-                setPopBounds={setPopBounds}
-                tpopBounds={tpopBounds}
-                setTpopBounds={setTpopBounds}
-                beobNichtBeurteiltBounds={beobNichtBeurteiltBounds}
-                setBeobNichtBeurteiltBounds={setBeobNichtBeurteiltBounds}
-                beobNichtZuzuordnenBounds={beobNichtZuzuordnenBounds}
-                setBeobNichtZuzuordnenBounds={setBeobNichtZuzuordnenBounds}
-                beobZugeordnetBounds={beobZugeordnetBounds}
-                setBeobZugeordnetBounds={setBeobZugeordnetBounds}
                 /**
                  * overlaysString enforces rererender
                  * even when only the sorting changes

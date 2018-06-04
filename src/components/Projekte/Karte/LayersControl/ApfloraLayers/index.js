@@ -139,16 +139,6 @@ const SortableItem = SortableElement(
     client,
     bounds,
     setBounds,
-    popBounds,
-    setPopBounds,
-    tpopBounds,
-    setTpopBounds,
-    beobNichtBeurteiltBounds,
-    setBeobNichtBeurteiltBounds,
-    beobNichtZuzuordnenBounds,
-    setBeobNichtZuzuordnenBounds,
-    beobZugeordnetBounds,
-    setBeobZugeordnetBounds,
   }) => {
     const assigning = get(data, 'assigningBeob')
     const assigningispossible =
@@ -440,10 +430,6 @@ const SortableList = SortableContainer(
     client,
     bounds,
     setBounds,
-    popBounds,
-    setPopBounds,
-    tpopBounds,
-    setTpopBounds,
   }) => (
     <div>
       {
@@ -459,10 +445,6 @@ const SortableList = SortableContainer(
             client={client}
             bounds={bounds}
             setBounds={setBounds}
-            popBounds={popBounds}
-            setPopBounds={setPopBounds}
-            tpopBounds={tpopBounds}
-            setTpopBounds={setTpopBounds}
           />
         ))
       }
@@ -526,10 +508,6 @@ const ApfloraLayers = ({
               client={client}
               bounds={bounds}
               setBounds={setBounds}
-              popBounds={popBounds}
-              setPopBounds={setPopBounds}
-              tpopBounds={tpopBounds}
-              setTpopBounds={setTpopBounds}
             />
           </CardContent>
         )
