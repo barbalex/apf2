@@ -408,9 +408,7 @@ const Karte = ({
           <FullScreenControl />
           {
             activeApfloraLayers.includes('mapFilter') &&
-            <DrawControl
-              setStoreMapFilter={setMapFilter}
-            />
+            <DrawControl setStoreMapFilter={setMapFilter} />
             }
           {/*
           need to get background maps to show when printing A4

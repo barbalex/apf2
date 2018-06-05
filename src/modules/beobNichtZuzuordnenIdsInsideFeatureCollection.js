@@ -1,12 +1,11 @@
 // @flow
 import within from '@turf/within'
 import isFinite from 'lodash/isFinite'
-import { toJS } from 'mobx'
 
 import epsg2056to4326 from './epsg2056to4326notReverse'
 
 export default (
-  store: Object,
+  mapFilter: Object,
   beobs: Array<Object>
 ): Array<number | string> => {
   // make sure all beobs used have id and coordinates
@@ -29,6 +28,6 @@ export default (
   }
 
   // let turf check what points are within filter
-  const result = within(toJS(points), toJS(store.map.mapFilter.filter))
+  const result = within(points, mapFilter)
   return result.features.map(r => r.properties.id)
 }
