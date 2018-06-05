@@ -17,6 +17,7 @@ import get from 'lodash/get'
 import { inject } from 'mobx-react'
 
 import exportModule from '../../../modules/export'
+import listError from '../../../modules/listError'
 import Message from './Message'
 
 const StyledCard = styled(Card)`
@@ -174,10 +175,14 @@ const Massnahmen = ({
                             }
                           }`
                       })
-                      exportModule({data: get(data, 'allVMassns.nodes', []), store, fileName: 'Massnahmen', fileType, applyMapFilterToExport})
+                      exportModule({
+                        data: get(data, 'allVMassns.nodes', []),
+                        fileName: 'Massnahmen',
+                        fileType,
+                        applyMapFilterToExport,
+                      })
                     } catch(error) {
-                      setMessage(`Fehler: ${error.message}`)
-                      setTimeout(() => setMessage(null), 5000)
+                      listError(error)
                     }
                     setMessage(null)
                   }}
@@ -227,10 +232,14 @@ const Massnahmen = ({
                             }
                           }`
                       })
-                      exportModule({data: get(data, 'allVMassnWebgisbuns.nodes', []), store, fileName: 'MassnahmenWebGisBun', fileType, applyMapFilterToExport})
+                      exportModule({
+                        data: get(data, 'allVMassnWebgisbuns.nodes', []),
+                        fileName: 'MassnahmenWebGisBun',
+                        fileType,
+                        applyMapFilterToExport,
+                      })
                     } catch(error) {
-                      setMessage(`Fehler: ${error.message}`)
-                      setTimeout(() => setMessage(null), 5000)
+                      listError(error)
                     }
                     setMessage(null)
                   }}

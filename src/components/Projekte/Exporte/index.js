@@ -41,7 +41,7 @@ const ExporteContainer = styled.div`
   height: 100%;
 `
 
-const Exporte = () => (
+const Exporte = ({ mapFilter }:{ mapFilter: Object }) => (
   <Query query={dataGql}>
     {({ loading, error, data, client }) => {
       if (error) return `Fehler: ${error.message}`
@@ -57,6 +57,7 @@ const Exporte = () => (
               <FormTitle title="Exporte" />
               <FieldsContainer>
                 <Optionen
+                  mapFilter={mapFilter}
                   applyMapFilterToExport={applyMapFilterToExport}
                   fileType={fileType}
                   client={client}

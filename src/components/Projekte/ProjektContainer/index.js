@@ -63,6 +63,7 @@ const enhance = compose(
   withState('beobNichtBeurteiltHighlightedIds', 'setBeobNichtBeurteiltHighlightedIds', []),
   withState('beobNichtZuzuordnenHighlightedIds', 'setBeobNichtZuzuordnenHighlightedIds', []),
   withState('beobZugeordnetHighlightedIds', 'setBeobZugeordnetHighlightedIds', []),
+  withState('mapFilter', 'setMapFilter', { features: [] }),
   observer
 )
 
@@ -101,6 +102,8 @@ const ProjekteContainer = ({
   setBeobNichtZuzuordnenHighlightedIds,
   beobZugeordnetHighlightedIds,
   setBeobZugeordnetHighlightedIds,
+  mapFilter,
+  setMapFilter,
 }: {
   store: Object,
   treeName: String,
@@ -136,6 +139,8 @@ const ProjekteContainer = ({
   setBeobNichtZuzuordnenHighlightedIds: () => void,
   beobZugeordnetHighlightedIds: Array<String>,
   setBeobZugeordnetHighlightedIds: () => void,
+  mapFilter: Object,
+  setMapFilter: () => void,
 }) =>
   <Query query={data1Gql} >
     {({ error, data: data1 }) => {
@@ -270,6 +275,8 @@ const ProjekteContainer = ({
                             popLabelUsingNr={popLabelUsingNr}
                             bounds={bounds}
                             setBounds={setBounds}
+                            mapFilter={mapFilter}
+                            setMapFilter={setMapFilter}
                             // SortedStrings enforce rerendering when sorting or visibility changes
                             activeOverlaysString={activeOverlays.join()}
                             activeApfloraLayersString={activeApfloraLayers.join()}
@@ -286,7 +293,7 @@ const ProjekteContainer = ({
                     {
                       tabs.includes('exporte') &&
                       <ReflexElement>
-                        <Exporte />
+                        <Exporte mapFilter={mapFilter} />
                       </ReflexElement>
                     }
                   </ReflexContainer>

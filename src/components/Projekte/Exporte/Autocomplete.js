@@ -21,6 +21,7 @@ import gql from "graphql-tag"
 import get from 'lodash/get'
 
 import exportModule from '../../../modules/export'
+import listError from '../../../modules/listError'
 import Message from './Message'
 
 const StyledPaper = styled(Paper)`
@@ -185,7 +186,7 @@ class IntegrationAutosuggest extends React.Component<Props, State> {
   }
 
   render() {
-    const { classes, openabove, objects, store } = this.props
+    const { classes, openabove, objects } = this.props
     const { suggestions } = this.state
 
     return (
@@ -316,10 +317,12 @@ class IntegrationAutosuggest extends React.Component<Props, State> {
                       }`,
                       variables: { apId: objects.find(o => o.value === suggestion).id }
                   })
-                  exportModule({data: get(data, 'allVTpopAnzkontrinklletzterundletztertpopbers.nodes', []), store, fileName: 'anzkontrinklletzterundletztertpopber'})
+                  exportModule({
+                    data: get(data, 'allVTpopAnzkontrinklletzterundletztertpopbers.nodes', []),
+                    fileName: 'anzkontrinklletzterundletztertpopber',
+                  })
                 } catch(error) {
-                  this.setState({ message: `Fehler: ${error.message}`})
-                  setTimeout(() => this.setState({ message: null}), 5000)
+                  listError(error)
                 }
                 this.setState({ message: null})
                 setTimeout(() => {

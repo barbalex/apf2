@@ -17,6 +17,7 @@ import get from 'lodash/get'
 import { inject } from 'mobx-react'
 
 import exportModule from '../../../modules/export'
+import listError from '../../../modules/listError'
 import Message from './Message'
 
 const StyledCard = styled(Card)`
@@ -134,10 +135,14 @@ const Beobachtungen = ({
                         }
                       }`
                   })
-                  exportModule({data: get(data, 'allVBeobs.nodes', []), store, fileName: 'Beobachtungen', fileType, applyMapFilterToExport})
+                  exportModule({
+                    data: get(data, 'allVBeobs.nodes', []),
+                    fileName: 'Beobachtungen',
+                    fileType,
+                    applyMapFilterToExport,
+                  })
                 } catch(error) {
-                  setMessage(`Fehler: ${error.message}`)
-                  setTimeout(() => setMessage(null), 5000)
+                  listError(error)
                 }
                 setMessage(null)
               }}

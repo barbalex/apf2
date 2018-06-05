@@ -8,7 +8,7 @@ import * as ExcelJs from 'exceljs/dist/exceljs.min.js'
 import getDataArrayFromExportObjects from './getDataArrayFromExportObjects'
 import listError from './listError'
 
-export default async (store: Object, jsonArray: Array<Object>) => {
+export default async (jsonArray: Array<Object>) => {
   const dataArray = getDataArrayFromExportObjects(jsonArray)
   const numberOfColumns =
     dataArray && dataArray[0] && dataArray[0].length ? dataArray[0].length : 0

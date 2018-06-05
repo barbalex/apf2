@@ -18,6 +18,7 @@ import { Query } from 'react-apollo'
 
 import AutoComplete from '../Autocomplete'
 import exportModule from '../../../../modules/export'
+import listError from '../../../../modules/listError'
 import Message from '../Message'
 import dataGql from './data.graphql'
 
@@ -170,10 +171,14 @@ const Teilpopulationen = ({
                           }
                         }`
                     })
-                    exportModule({data: get(data, 'allVTpops.nodes', []), store, fileName: 'Teilpopulationen', fileType, applyMapFilterToExport})
+                    exportModule({
+                      data: get(data, 'allVTpops.nodes', []),
+                      fileName: 'Teilpopulationen',
+                      fileType,
+                      applyMapFilterToExport,
+                    })
                   } catch(error) {
-                    setMessage(`Fehler: ${error.message}`)
-                    setTimeout(() => setMessage(null), 5000)
+                    listError(error)
                   }
                   setMessage(null)
                 }}
@@ -234,10 +239,14 @@ const Teilpopulationen = ({
                           }
                         }`
                     })
-                    exportModule({data: get(data, 'allVTpopWebgisbuns.nodes', []), store, fileName: 'TeilpopulationenWebGisBun', fileType, applyMapFilterToExport})
+                    exportModule({
+                      data: get(data, 'allVTpopWebgisbuns.nodes', []),
+                      fileName: 'TeilpopulationenWebGisBun',
+                      fileType,
+                      applyMapFilterToExport,
+                    })
                   } catch(error) {
-                    setMessage(`Fehler: ${error.message}`)
-                    setTimeout(() => setMessage(null), 5000)
+                    listError(error)
                   }
                   setMessage(null)
                 }}
@@ -263,10 +272,14 @@ const Teilpopulationen = ({
                           }
                         }`
                     })
-                    exportModule({data: get(data, 'allVTpopKmls.nodes', []), store, fileName: 'Teilpopulationen', fileType, applyMapFilterToExport})
+                    exportModule({
+                      data: get(data, 'allVTpopKmls.nodes', []),
+                      fileName: 'Teilpopulationen',
+                      fileType,
+                      applyMapFilterToExport,
+                    })
                   } catch(error) {
-                    setMessage(`Fehler: ${error.message}`)
-                    setTimeout(() => setMessage(null), 5000)
+                    listError(error)
                   }
                   setMessage(null)
                 }}
@@ -293,10 +306,14 @@ const Teilpopulationen = ({
                           }
                         }`
                     })
-                    exportModule({data: get(data, 'allVTpopKmlnamen.nodes', []), store, fileName: 'TeilpopulationenNachNamen', fileType, applyMapFilterToExport})
+                    exportModule({
+                      data: get(data, 'allVTpopKmlnamen.nodes', []),
+                      fileName: 'TeilpopulationenNachNamen',
+                      fileType,
+                      applyMapFilterToExport,
+                    })
                   } catch(error) {
-                    setMessage(`Fehler: ${error.message}`)
-                    setTimeout(() => setMessage(null), 5000)
+                    listError(error)
                   }
                   setMessage(null)
                 }}
@@ -325,10 +342,14 @@ const Teilpopulationen = ({
                           }
                         }`
                     })
-                    exportModule({data: get(data, 'allVTpopOhnebekanntseits.nodes', []), store, fileName: 'TeilpopulationenVonApArtenOhneBekanntSeit', fileType, applyMapFilterToExport})
+                    exportModule({
+                      data: get(data, 'allVTpopOhnebekanntseits.nodes', []),
+                      fileName: 'TeilpopulationenVonApArtenOhneBekanntSeit',
+                      fileType,
+                      applyMapFilterToExport,
+                    })
                   } catch(error) {
-                    setMessage(`Fehler: ${error.message}`)
-                    setTimeout(() => setMessage(null), 5000)
+                    listError(error)
                   }
                   setMessage(null)
                 }}
@@ -357,10 +378,14 @@ const Teilpopulationen = ({
                           }
                         }`
                     })
-                    exportModule({data: get(data, 'allVTpopOhneapberichtrelevants.nodes', []), store, fileName: 'TeilpopulationenOhneApBerichtRelevant', fileType, applyMapFilterToExport})
+                    exportModule({
+                      data: get(data, 'allVTpopOhneapberichtrelevants.nodes', []),
+                      fileName: 'TeilpopulationenOhneApBerichtRelevant',
+                      fileType,
+                      applyMapFilterToExport,
+                    })
                   } catch(error) {
-                    setMessage(`Fehler: ${error.message}`)
-                    setTimeout(() => setMessage(null), 5000)
+                    listError(error)
                   }
                   setMessage(null)
                 }}
@@ -420,10 +445,14 @@ const Teilpopulationen = ({
                           }
                         }`
                     })
-                    exportModule({data: get(data, 'allVTpopAnzmassns.nodes', []), store, fileName: 'TeilpopulationenAnzahlMassnahmen', fileType, applyMapFilterToExport})
+                    exportModule({
+                      data: get(data, 'allVTpopAnzmassns.nodes', []),
+                      fileName: 'TeilpopulationenAnzahlMassnahmen',
+                      fileType,
+                      applyMapFilterToExport,
+                    })
                   } catch(error) {
-                    setMessage(`Fehler: ${error.message}`)
-                    setTimeout(() => setMessage(null), 5000)
+                    listError(error)
                   }
                   setMessage(null)
                 }}
@@ -532,10 +561,14 @@ const Teilpopulationen = ({
                           }
                         }`
                     })
-                    exportModule({data: get(data, 'allVTpopAnzkontrinklletzterundletztertpopbers.nodes', []), store, fileName: 'TeilpopulationenAnzKontrInklusiveLetzteKontrUndLetztenTPopBericht', fileType, applyMapFilterToExport})
+                    exportModule({
+                      data: get(data, 'allVTpopAnzkontrinklletzterundletztertpopbers.nodes', []),
+                      fileName: 'TeilpopulationenAnzKontrInklusiveLetzteKontrUndLetztenTPopBericht',
+                      fileType,
+                      applyMapFilterToExport,
+                    })
                   } catch(error) {
-                    setMessage(`Fehler: ${error.message}`)
-                    setTimeout(() => setMessage(null), 5000)
+                    listError(error)
                   }
                   setMessage(null)
                 }}
@@ -629,10 +662,15 @@ const Teilpopulationen = ({
                           }
                         }`
                     })
-                    exportModule({data: get(data, 'allVTpopPopberundmassnbers.nodes', []), store, fileName: 'TeilpopulationenTPopUndMassnBerichte', fileType, applyMapFilterToExport})
+                    exportModule({
+                      data: get(data, 'allVTpopPopberundmassnbers.nodes', []),
+                      store,
+                      fileName: 'TeilpopulationenTPopUndMassnBerichte',
+                      fileType,
+                      applyMapFilterToExport,
+                    })
                   } catch(error) {
-                    setMessage(`Fehler: ${error.message}`)
-                    setTimeout(() => setMessage(null), 5000)
+                    listError(error)
                   }
                   setMessage(null)
                 }}

@@ -18,6 +18,7 @@ import { inject } from 'mobx-react'
 
 import beziehungen from '../../../etc/beziehungen.png'
 import exportModule from '../../../modules/export'
+import listError from '../../../modules/listError'
 import Message from './Message'
 
 const StyledCard = styled(Card)`
@@ -123,10 +124,14 @@ const Anwendung = ({
                     }
                   }`
               })
-              exportModule({data: get(data, 'allVDatenstrukturs.nodes', []), store, fileName: 'Datenstruktur', fileType, applyMapFilterToExport})
+              exportModule({
+                data: get(data, 'allVDatenstrukturs.nodes', []),
+                fileName: 'Datenstruktur',
+                fileType,
+                applyMapFilterToExport,
+              })
             } catch(error) {
-              setMessage(`Fehler: ${error.message}`)
-              setTimeout(() => setMessage(null), 5000)
+                listError(error)
             }
             setMessage(null)
           }}

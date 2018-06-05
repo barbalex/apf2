@@ -18,6 +18,7 @@ import { inject } from 'mobx-react'
 
 import exportModule from '../../../modules/export'
 import Message from './Message'
+import listError from '../../../modules/listError'
 
 const StyledCard = styled(Card)`
   margin: 10px 0;
@@ -123,10 +124,14 @@ const AP = ({
                         }
                       }`
                   })
-                  exportModule({data: get(data, 'allVAps.nodes', []), store, fileName: 'AP', fileType, applyMapFilterToExport})
+                  exportModule({
+                    data: get(data, 'allVAps.nodes', []), 
+                    fileName: 'AP',
+                    fileType,
+                    applyMapFilterToExport,
+                  })
                 } catch(error) {
-                  setMessage(`Fehler: ${error.message}`)
-                  setTimeout(() => setMessage(null), 5000)
+                  listError(error)
                 }
                 setMessage(null)
               }}
@@ -153,10 +158,14 @@ const AP = ({
                         }
                       }`
                   })
-                  exportModule({data: get(data, 'allVApOhnepops.nodes', []), store, fileName: 'ApOhnePopulationen', fileType, applyMapFilterToExport})
+                  exportModule({
+                    data: get(data, 'allVApOhnepops.nodes', []),
+                    fileName: 'ApOhnePopulationen',
+                    fileType,
+                    applyMapFilterToExport,
+                  })
                 } catch(error) {
-                  setMessage(`Fehler: ${error.message}`)
-                  setTimeout(() => setMessage(null), 5000)
+                  listError(error)
                 }
                 setMessage(null)
               }}
@@ -182,10 +191,14 @@ const AP = ({
                         }
                       }`
                   })
-                  exportModule({data: get(data, 'allVApAnzmassns.nodes', []), store, fileName: 'ApAnzahlMassnahmen', fileType, applyMapFilterToExport})
+                  exportModule({
+                    data: get(data, 'allVApAnzmassns.nodes', []),
+                    fileName: 'ApAnzahlMassnahmen',
+                    fileType,
+                    applyMapFilterToExport,
+                  })
                 } catch(error) {
-                  setMessage(`Fehler: ${error.message}`)
-                  setTimeout(() => setMessage(null), 5000)
+                  listError(error)
                 }
                 setMessage(null)
               }}
@@ -211,10 +224,14 @@ const AP = ({
                         }
                       }`
                   })
-                  exportModule({data: get(data, 'allVApAnzkontrs.nodes', []), store, fileName: 'ApAnzahlKontrollen', fileType, applyMapFilterToExport})
+                  exportModule({
+                    data: get(data, 'allVApAnzkontrs.nodes', []),
+                    fileName: 'ApAnzahlKontrollen',
+                    fileType,
+                    applyMapFilterToExport,
+                  })
                 } catch(error) {
-                  setMessage(`Fehler: ${error.message}`)
-                  setTimeout(() => setMessage(null), 5000)
+                  listError(error)
                 }
                 setMessage(null)
               }}
@@ -257,10 +274,14 @@ const AP = ({
                         }
                       }`
                   })
-                  exportModule({data: get(data, 'allVApbers.nodes', []), store, fileName: 'Jahresberichte', fileType, applyMapFilterToExport})
+                  exportModule({
+                    data: get(data, 'allVApbers.nodes', []),
+                    fileName: 'Jahresberichte',
+                    fileType,
+                    applyMapFilterToExport,
+                  })
                 } catch(error) {
-                  setMessage(`Fehler: ${error.message}`)
-                  setTimeout(() => setMessage(null), 5000)
+                  listError(error)
                 }
                 setMessage(null)
               }}
@@ -291,10 +312,14 @@ const AP = ({
                         }
                       }`
                   })
-                  exportModule({data: get(data, 'allVApApberundmassns.nodes', []), store, fileName: 'ApJahresberichteUndMassnahmen', fileType, applyMapFilterToExport})
+                  exportModule({
+                    data: get(data, 'allVApApberundmassns.nodes', []),
+                    fileName: 'ApJahresberichteUndMassnahmen',
+                    fileType,
+                    applyMapFilterToExport,
+                  })
                 } catch(error) {
-                  setMessage(`Fehler: ${error.message}`)
-                  setTimeout(() => setMessage(null), 5000)
+                  listError(error)
                 }
                 setMessage(null)
               }}
@@ -324,10 +349,14 @@ const AP = ({
                         }
                       }`
                   })
-                  exportModule({data: get(data, 'allVZiels.nodes', []), store, fileName: 'ApZiele', fileType, applyMapFilterToExport})
+                  exportModule({
+                    data: get(data, 'allVZiels.nodes', []),
+                    fileName: 'ApZiele',
+                    fileType,
+                    applyMapFilterToExport,
+                  })
                 } catch(error) {
-                  setMessage(`Fehler: ${error.message}`)
-                  setTimeout(() => setMessage(null), 5000)
+                  listError(error)
                 }
                 setMessage(null)
               }}
@@ -363,10 +392,14 @@ const AP = ({
                         }
                       }`
                   })
-                  exportModule({data: get(data, 'allVZielbers.nodes', []), store, fileName: 'Zielberichte', fileType, applyMapFilterToExport})
+                  exportModule({
+                    data: get(data, 'allVZielbers.nodes', []),
+                    fileName: 'Zielberichte',
+                    fileType,
+                    applyMapFilterToExport,
+                  })
                 } catch(error) {
-                  setMessage(`Fehler: ${error.message}`)
-                  setTimeout(() => setMessage(null), 5000)
+                  listError(error)
                 }
                 setMessage(null)
               }}
@@ -399,10 +432,14 @@ const AP = ({
                         }
                       }`
                   })
-                  exportModule({data: get(data, 'allVBers.nodes', []), store, fileName: 'Berichte', fileType, applyMapFilterToExport})
+                  exportModule({
+                    data: get(data, 'allVBers.nodes', []),
+                    fileName: 'Berichte',
+                    fileType,
+                    applyMapFilterToExport,
+                  })
                 } catch(error) {
-                  setMessage(`Fehler: ${error.message}`)
-                  setTimeout(() => setMessage(null), 5000)
+                  listError(error)
                 }
                 setMessage(null)
               }}
@@ -433,10 +470,14 @@ const AP = ({
                         }
                       }`
                   })
-                  exportModule({data: get(data, 'allVErfkrits.nodes', []), store, fileName: 'Erfolgskriterien', fileType, applyMapFilterToExport})
+                  exportModule({
+                    data: get(data, 'allVErfkrits.nodes', []),
+                    fileName: 'Erfolgskriterien',
+                    fileType,
+                    applyMapFilterToExport,
+                  })
                 } catch(error) {
-                  setMessage(`Fehler: ${error.message}`)
-                  setTimeout(() => setMessage(null), 5000)
+                  listError(error)
                 }
                 setMessage(null)
               }}
@@ -482,10 +523,14 @@ const AP = ({
                         }
                       }`
                   })
-                  exportModule({data: get(data, 'allVIdealbiotops.nodes', []), store, fileName: 'Idealbiotope', fileType, applyMapFilterToExport})
+                  exportModule({
+                    data: get(data, 'allVIdealbiotops.nodes', []),
+                    fileName: 'Idealbiotope',
+                    fileType,
+                    applyMapFilterToExport,
+                  })
                 } catch(error) {
-                  setMessage(`Fehler: ${error.message}`)
-                  setTimeout(() => setMessage(null), 5000)
+                  listError(error)
                 }
                 setMessage(null)
               }}
@@ -516,10 +561,14 @@ const AP = ({
                         }
                       }`
                   })
-                  exportModule({data: get(data, 'allVAssozarts.nodes', []), store, fileName: 'AssoziierteArten', fileType, applyMapFilterToExport})
+                  exportModule({
+                    data: get(data, 'allVAssozarts.nodes', []),
+                    fileName: 'AssoziierteArten',
+                    fileType,
+                    applyMapFilterToExport,
+                  })
                 } catch(error) {
-                  setMessage(`Fehler: ${error.message}`)
-                  setTimeout(() => setMessage(null), 5000)
+                  listError(error)
                 }
                 setMessage(null)
               }}

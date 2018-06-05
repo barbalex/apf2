@@ -11,21 +11,19 @@ import listError from './listError'
 
 export default async ({
   data:dataPassed,
-  store,
   fileName,
   fileType,
   applyMapFilterToExport,
   kml,
+  mapFilter,
 }: {
   data: Array<Object>,
-  store: Object,
   fileName: String,
   fileType: String,
   applyMapFilterToExport: Boolean,
   kml: Boolean,
+  mapFilter: Object,
 }) => {
-  const { map } = store
-  const { mapFilter } = map
   let data = dataPassed.map(d=> omit(d, ['__typename', 'Symbol(id)']))
   // now we could manipulate the data, for instance apply mapFilter
   const filterFeatures = mapFilter.filter.features
@@ -34,15 +32,15 @@ export default async ({
     // filter data
     // beob can also have PopId and tpop-id, so dont filter by TPopId if you filter by beob id
     if (keys.includes('id')) {
-      const beobIds = beobIdsFromServerInsideFeatureCollection(store, data)
+      const beobIds = beobIdsFromServerInsideFeatureCollection({ mapFilter, data })
       data = data.filter(d => beobIds.includes(d.id))
     } else if (keys.includes('TPopId')) {
       // data sets with TPopId usually also deliver PopId,
       // so only filter by TPopid then
-      const tpopIds = tpopIdsInsideFeatureCollection(store, data)
+      const tpopIds = tpopIdsInsideFeatureCollection({ mapFilter, data })
       data = data.filter(d => tpopIds.includes(d.id))
     } else if (keys.includes('PopId')) {
-      const popIds = popIdsInsideFeatureCollection(store, data)
+      const popIds = popIdsInsideFeatureCollection({ mapFilter, data })
       data = data.filter(d => popIds.includes(d.PopId))
     }
   }
@@ -62,7 +60,6 @@ export default async ({
   } else {
     // pass some data in case something goes wrong
     exportXlsx({
-      store,
       fileName,
       data,
     })

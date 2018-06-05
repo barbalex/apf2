@@ -4,11 +4,9 @@ import 'leaflet-draw'
 import compose from 'recompose/compose'
 import getContext from 'recompose/getContext'
 import withState from 'recompose/withState'
-import { inject } from 'mobx-react'
 import PropTypes from 'prop-types'
 
 const enhance = compose(
-  inject('store'),
   withState('mapFilter', 'setMapFilter', null),
   withState('drawControl', 'setDrawControl', null),
   getContext({ map: PropTypes.object.isRequired }),
@@ -16,16 +14,17 @@ const enhance = compose(
 
 class DrawControl extends Component {
   props: {
-    store: Object,
     map: Object,
     mapFilter?: Object,
     setMapFilter: () => void,
     drawControl?: Object,
     setDrawControl: () => void,
+    setStoreMapFilter: () => void,
+
   }
 
   componentDidMount() {
-    const { map, store, setMapFilter, setDrawControl } = this.props
+    const { map, setStoreMapFilter, setMapFilter, setDrawControl } = this.props
     window.L.drawLocal.draw.toolbar.buttons.polygon =
       'Polygon(e) zeichnen, um zu filtern'
     window.L.drawLocal.draw.toolbar.buttons.rectangle =
@@ -80,20 +79,20 @@ class DrawControl extends Component {
     setDrawControl(drawControl)
     map.on('draw:created', e => {
       mapFilter.addLayer(e.layer)
-      store.map.updateMapFilter(mapFilter)
+      setStoreMapFilter(mapFilter)
     })
-    map.on('draw:edited', e => store.map.updateMapFilter(mapFilter))
-    map.on('draw:deleted', e => store.map.updateMapFilter(mapFilter))
+    map.on('draw:edited', e => setStoreMapFilter(mapFilter))
+    map.on('draw:deleted', e => setStoreMapFilter(mapFilter))
   }
 
   componentWillUnmount() {
-    const { store, map, mapFilter, drawControl } = this.props
+    const { setStoreMapFilter, map, mapFilter, drawControl } = this.props
     map.removeLayer(mapFilter)
     map.removeControl(drawControl)
     map.off('draw:created')
     map.off('draw:edited')
     map.off('draw:deleted')
-    store.map.updateMapFilter(null)
+    setStoreMapFilter(null)
   }
 
   render() {

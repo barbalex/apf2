@@ -7,17 +7,15 @@ import getXlsxBuffer from './getXlsxBuffer'
 import listError from './listError'
 
 export default async ({
-  store,
   fileName,
   data,
 }: {
-  store: Object,
   fileName: string,
   data: Array<Object>,
 }) => {
   let buffer
   try {
-    buffer = await getXlsxBuffer(store, data)
+    buffer = await getXlsxBuffer(data)
   } catch (error) {
     return listError(error)
   }

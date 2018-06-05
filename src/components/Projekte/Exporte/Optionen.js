@@ -1,6 +1,5 @@
 // @flow
 import React from 'react'
-import { observer, inject } from 'mobx-react'
 import Card from '@material-ui/core/Card'
 import CardActions from '@material-ui/core/CardActions'
 import CardContent from '@material-ui/core/CardContent'
@@ -50,25 +49,23 @@ const StyledCheckbox = styled(Checkbox)`
 `
 
 const enhance = compose(
-  inject('store'),
   withState('expanded', 'setExpanded', true),
-  observer
 )
 
 const Optionen = ({
-  store,
   fileType,
   applyMapFilterToExport,
   client,
   expanded,
   setExpanded,
+  mapFilter,
 }: {
-  store: Object,
   fileType: String,
   applyMapFilterToExport: Boolean,
   client: Object,
   expanded: Boolean,
   setExpanded: () => void,
+  mapFilter: Object,
 }) => (
   <StyledCard>
     <StyledCardActions
@@ -145,11 +142,11 @@ const Optionen = ({
             />
           }
           label={
-            store.map.mapFilter.filter.features.length > 0
+            mapFilter.features.length > 0
               ? 'Karten-Filter anwenden'
               : 'Karten-Filter anwenden (verfügbar, wenn ein Karten-Filter erstellt wurde)'
           }
-          disabled={!(store.map.mapFilter.filter.features.length > 0)}
+          disabled={!(mapFilter.features.length > 0)}
         />
       </StyledCardContent>
     </Collapse>

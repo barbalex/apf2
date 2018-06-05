@@ -17,6 +17,7 @@ import get from 'lodash/get'
 import { inject } from 'mobx-react'
 
 import exportModule from '../../../modules/export'
+import listError from '../../../modules/listError'
 import Message from './Message'
 
 const StyledCard = styled(Card)`
@@ -195,10 +196,14 @@ const Kontrollen = ({
                         }
                       }`
                   })
-                  exportModule({data: get(data, 'allVTpopkontrs.nodes', []), store, fileName: 'Kontrollen', fileType, applyMapFilterToExport})
+                  exportModule({
+                    data: get(data, 'allVTpopkontrs.nodes', []),
+                    fileName: 'Kontrollen',
+                    fileType,
+                    applyMapFilterToExport,
+                  })
                 } catch(error) {
-                  setMessage(`Fehler: ${error.message}`)
-                  setTimeout(() => setMessage(null), 5000)
+                  listError(error)
                 }
                 setMessage(null)
               }}
@@ -272,10 +277,14 @@ const Kontrollen = ({
                         }
                       }`
                   })
-                  exportModule({data: get(data, 'allVTpopkontrWebgisbuns.nodes', []), store, fileName: 'KontrollenWebGisBun', fileType, applyMapFilterToExport})
+                  exportModule({
+                    data: get(data, 'allVTpopkontrWebgisbuns.nodes', []),
+                    fileName: 'KontrollenWebGisBun',
+                    fileType,
+                    applyMapFilterToExport,
+                  })
                 } catch(error) {
-                  setMessage(`Fehler: ${error.message}`)
-                  setTimeout(() => setMessage(null), 5000)
+                  listError(error)
                 }
                 setMessage(null)
               }}
@@ -374,10 +383,14 @@ const Kontrollen = ({
                         }
                       }`
                   })
-                  exportModule({data: get(data, 'allVKontrzaehlAnzproeinheits.nodes', []), store, fileName: 'KontrollenAnzahlProZaehleinheit', fileType, applyMapFilterToExport})
+                  exportModule({
+                    data: get(data, 'allVKontrzaehlAnzproeinheits.nodes', []),
+                    fileName: 'KontrollenAnzahlProZaehleinheit',
+                    fileType,
+                    applyMapFilterToExport,
+                  })
                 } catch(error) {
-                  setMessage(`Fehler: ${error.message}`)
-                  setTimeout(() => setMessage(null), 5000)
+                  listError(error)
                 }
                 setMessage(null)
               }}

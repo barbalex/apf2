@@ -155,6 +155,8 @@ const Karte = ({
   setBeobNichtZuzuordnenHighlightedIds,
   beobZugeordnetHighlightedIds,
   setBeobZugeordnetHighlightedIds,
+  mapFilter,
+  setMapFilter,
 }: {
   store: Object,
   tree: Object,
@@ -189,6 +191,8 @@ const Karte = ({
   setBeobNichtZuzuordnenHighlightedIds: () => void,
   beobZugeordnetHighlightedIds: Array<String>,
   setBeobZugeordnetHighlightedIds: () => void,
+  mapFilter: Object,
+  setMapFilter: () => void,
 }) => {
     const MapElement = !!idOfTpopBeingLocalized ? StyledMapLocalizing : StyledMap
     const assigning = get(data, 'assigningBeob')
@@ -402,7 +406,12 @@ const Karte = ({
           />
           <MeasureControl />
           <FullScreenControl />
-          {activeApfloraLayers.includes('mapFilter') && <DrawControl />}
+          {
+            activeApfloraLayers.includes('mapFilter') &&
+            <DrawControl
+              setStoreMapFilter={setMapFilter}
+            />
+            }
           {/*
           need to get background maps to show when printing A4
           <PrintControl />

@@ -114,10 +114,9 @@ const Populationen = ({
                   })
                   exportModule({
                     data: get(data, 'allVPops.nodes', []),
-                    store,
                     fileName: 'Populationen',
                     fileType,
-                    applyMapFilterToExport
+                    applyMapFilterToExport,
                   })
                 } catch(error) {
                   listError(error)
@@ -136,10 +135,9 @@ const Populationen = ({
                   })
                   exportModule({
                     data: get(data, 'allVPopKmls.nodes', []),
-                    store,
                     fileName: 'Populationen',
                     fileType,
-                    applyMapFilterToExport
+                    applyMapFilterToExport,
                   })
                 } catch(error) {
                   listError(error)
@@ -169,11 +167,10 @@ const Populationen = ({
                       }`
                   })
                   exportModule({
-                    data: get(data, 'allVPopKmlnamen.nodes', []), 
-                    store, 
-                    fileName: 'PopulationenNachNamen', 
-                    fileType, 
-                    applyMapFilterToExport
+                    data: get(data, 'allVPopKmlnamen.nodes', []),
+                    fileName: 'PopulationenNachNamen',
+                    fileType,
+                    applyMapFilterToExport,
                   })
                 } catch(error) {
                   listError(error)
@@ -205,7 +202,12 @@ const Populationen = ({
                         }
                       }`
                   })
-                  exportModule({data: get(data, 'allVPopVonapohnestatuses.nodes', []), store, fileName: 'PopulationenVonApArtenOhneStatus', fileType, applyMapFilterToExport})
+                  exportModule({
+                    data: get(data, 'allVPopVonapohnestatuses.nodes', []),
+                    fileName: 'PopulationenVonApArtenOhneStatus',
+                    fileType,
+                    applyMapFilterToExport,
+                  })
                 } catch(error) {
                   listError(error)
                 }
@@ -243,7 +245,12 @@ const Populationen = ({
                         }
                       }`
                   })
-                  exportModule({data: get(data, 'allVPopOhnekoords.nodes', []), store, fileName: 'PopulationenOhneKoordinaten', fileType, applyMapFilterToExport})
+                  exportModule({
+                    data: get(data, 'allVPopOhnekoords.nodes', []),
+                    fileName: 'PopulationenOhneKoordinaten',
+                    fileType,
+                    applyMapFilterToExport,
+                  })
                 } catch(error) {
                   listError(error)
                 }
@@ -288,7 +295,12 @@ const Populationen = ({
                         }
                       }`
                   })
-                  exportModule({data: get(data, 'allVPopmassnberAnzmassns.nodes', []), store, fileName: 'PopulationenAnzMassnProMassnber', fileType, applyMapFilterToExport})
+                  exportModule({
+                    data: get(data, 'allVPopmassnberAnzmassns.nodes', []),
+                    fileName: 'PopulationenAnzMassnProMassnber',
+                    fileType,
+                    applyMapFilterToExport,
+                  })
                 } catch(error) {
                   listError(error)
                 }
@@ -326,7 +338,12 @@ const Populationen = ({
                         }
                       }`
                   })
-                  exportModule({data: get(data, 'allVPopAnzmassns.nodes', []), store, fileName: 'PopulationenAnzahlMassnahmen', fileType, applyMapFilterToExport})
+                  exportModule({
+                    data: get(data, 'allVPopAnzmassns.nodes', []),
+                    fileName: 'PopulationenAnzahlMassnahmen',
+                    fileType,
+                    applyMapFilterToExport,
+                  })
                 } catch(error) {
                   listError(error)
                 }
@@ -363,7 +380,12 @@ const Populationen = ({
                         }
                       }`
                   })
-                  exportModule({data: get(data, 'allVPopAnzkontrs.nodes', []), store, fileName: 'PopulationenAnzahlKontrollen', fileType, applyMapFilterToExport})
+                  exportModule({
+                    data: get(data, 'allVPopAnzkontrs.nodes', []),
+                    fileName: 'PopulationenAnzahlKontrollen',
+                    fileType,
+                    applyMapFilterToExport,
+                  })
                 } catch(error) {
                   listError(error)
                 }
@@ -414,7 +436,12 @@ const Populationen = ({
                         }
                       }`
                   })
-                  exportModule({data: get(data, 'allVPopPopberundmassnbers.nodes', []), store, fileName: 'PopulationenPopUndMassnBerichte', fileType, applyMapFilterToExport})
+                  exportModule({
+                    data: get(data, 'allVPopPopberundmassnbers.nodes', []),
+                    fileName: 'PopulationenPopUndMassnBerichte',
+                    fileType,
+                    applyMapFilterToExport,
+                  })
                 } catch(error) {
                   listError(error)
                 }
@@ -458,7 +485,12 @@ const Populationen = ({
                         }
                       }`
                   })
-                  exportModule({data: get(data, 'allVPopMitLetzterPopbers.nodes', []), store, fileName: 'PopulationenMitLetzemPopBericht', fileType, applyMapFilterToExport})
+                  exportModule({
+                    data: get(data, 'allVPopMitLetzterPopbers.nodes', []),
+                    fileName: 'PopulationenMitLetzemPopBericht',
+                    fileType,
+                    applyMapFilterToExport,
+                  })
                 } catch(error) {
                   listError(error)
                 }
@@ -502,7 +534,12 @@ const Populationen = ({
                         }
                       }`
                   })
-                  exportModule({data: get(data, 'allVPopMitLetzterPopmassnbers.nodes', []), store, fileName: 'allVPopMitLetzterPopmassnbers', fileType, applyMapFilterToExport})
+                  exportModule({
+                    data: get(data, 'allVPopMitLetzterPopmassnbers.nodes', []),
+                    fileName: 'allVPopMitLetzterPopmassnbers',
+                    fileType,
+                    applyMapFilterToExport,
+                  })
                 } catch(error) {
                   listError(error)
                 }
