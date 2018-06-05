@@ -1,7 +1,6 @@
 // @flow
 import { extendObservable, computed } from 'mobx'
 
-import getBeobNichtZuzuordnenBounds from '../action/getBeobNichtZuzuordnenBounds'
 import getBeobForMap from '../action/getBeobForMap'
 
 export default (store: Object): void => {
@@ -18,12 +17,5 @@ export default (store: Object): void => {
       return []
     }),
     beobs: computed(() => getBeobForMap(store).filter(b => b.nicht_zuordnen)),
-    boundsOfHighlightedIds: computed(() =>
-      getBeobNichtZuzuordnenBounds(
-        store.map.beobNichtZuzuordnen.beobs.filter(b =>
-          store.map.beobNichtZuzuordnen.highlightedIds.includes(b.id)
-        )
-      )
-    ),
   })
 }

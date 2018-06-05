@@ -494,7 +494,6 @@ const TreeContainer = ({
             mapTpopVisible={activeApfloraLayers.includes(
               'tpop'
             )}
-            popHighlightedIdsString={store.map.pop.highlightedIds.join()}
           />
         </InnerTreeContainer>
         <CmApFolder

@@ -1,7 +1,6 @@
 // @flow
 import { extendObservable, computed } from 'mobx'
 
-import getBeobNichtBeurteiltBounds from '../action/getBeobNichtBeurteiltBounds'
 import getBeobForMap from '../action/getBeobForMap'
 
 export default (store: Object): void => {
@@ -21,13 +20,6 @@ export default (store: Object): void => {
       getBeobForMap(store).filter(b => {
         return !b.nicht_zuordnen && !b.tpop_id
       })
-    ),
-    boundsOfHighlightedIds: computed(() =>
-      getBeobNichtBeurteiltBounds(
-        store.map.beobNichtBeurteilt.beobs.filter(b =>
-          store.map.beobNichtBeurteilt.highlightedIds.includes(b.id)
-        )
-      )
     ),
   })
 }

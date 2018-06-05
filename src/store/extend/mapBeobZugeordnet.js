@@ -2,7 +2,6 @@
 import { extendObservable, computed } from 'mobx'
 
 import getBeobForMap from '../action/getBeobForMap'
-import getBeobZugeordnetBounds from '../action/getBeobZugeordnetBounds'
 
 export default (store: Object): void => {
   extendObservable(store.map.beobZugeordnet, {
@@ -43,14 +42,6 @@ export default (store: Object): void => {
           const beob = store.table.beob.get(b.id)
           return beob && !beob.nicht_zuordnen && beob.tpop_id
         })
-    ),
-    boundsOfHighlightedIds: computed(
-      () =>
-        getBeobZugeordnetBounds(
-          store.map.beobZugeordnet.beobs.filter(b =>
-            store.map.beobZugeordnet.highlightedIds.includes(b.id)
-          )
-        )
     ),
   })
 }

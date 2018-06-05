@@ -1,8 +1,6 @@
 // @flow
 import { extendObservable, computed } from 'mobx'
 
-import getPopBounds from '../action/getPopBounds'
-
 export default (store: Object): void => {
   extendObservable(store.map.pop, {
     // apId is needed because
@@ -28,13 +26,5 @@ export default (store: Object): void => {
       },
     ),
     pops: [],
-    boundsOfHighlightedIds: computed(
-      () =>
-        getPopBounds(
-          store.map.pop.pops.filter(p =>
-            store.map.pop.highlightedIds.includes(p.id)
-          )
-        )
-    ),
   })
 }
