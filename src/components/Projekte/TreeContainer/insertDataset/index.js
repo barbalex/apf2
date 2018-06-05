@@ -10,7 +10,6 @@ import listError from '../../../../modules/listError'
 import setTreeKey from './setTreeKey.graphql'
 
 export default async ({
-  store,
   tree,
   tablePassed,
   parentId,
@@ -19,7 +18,6 @@ export default async ({
   baseUrl,
   refetch,
 }:{
-  store: Object,
   tree: Object,
   tablePassed: String,
   parentId: String,

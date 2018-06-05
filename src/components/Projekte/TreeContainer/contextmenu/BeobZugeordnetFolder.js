@@ -1,7 +1,6 @@
 // @flow
 import React from 'react'
 import { ContextMenu, MenuItem } from 'react-contextmenu'
-import { inject, observer } from 'mobx-react'
 import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
@@ -9,7 +8,6 @@ import withHandlers from 'recompose/withHandlers'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 
 const enhance = compose(
-  inject('store'),
   withState('id', 'changeId', 0),
   withHandlers({
     // according to https://github.com/vkbansal/react-contextmenu/issues/65
@@ -18,11 +16,9 @@ const enhance = compose(
       props.changeId(event.detail.data.nodeId)
     },
   }),
-  observer
 )
 
 const BeobZugeordnetFolder = ({
-  store,
   tree,
   onClick,
   changeId,
@@ -30,7 +26,6 @@ const BeobZugeordnetFolder = ({
   onShow,
   activeApfloraLayers,
 }: {
-  store: Object,
   changeId: () => {},
   tree: Object,
   onClick: () => void,

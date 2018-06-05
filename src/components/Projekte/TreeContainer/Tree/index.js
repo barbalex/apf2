@@ -5,11 +5,9 @@
  */
 
 import React, { Component } from 'react'
-import { observer, inject } from 'mobx-react'
 import AutoSizer from 'react-virtualized/dist/commonjs/AutoSizer'
 import List from 'react-virtualized/dist/commonjs/List'
 import styled from 'styled-components'
-import compose from 'recompose/compose'
 import findIndex from 'lodash/findIndex'
 import isEqual from 'lodash/isEqual'
 
@@ -48,14 +46,12 @@ const LoadingDiv = styled.div`
   padding-left: 15px;
   font-size: 14px;
 `
-const enhance = compose(inject('store'), observer)
 
 class Tree extends Component {
   props: {
     client: Object,
     treeName: String,
     data: Object,
-    store: Object,
     tree: Object,
     nodes: Array<Object>,
     loading: Boolean,
@@ -167,4 +163,4 @@ class Tree extends Component {
   }
 }
 
-export default enhance(Tree)
+export default Tree

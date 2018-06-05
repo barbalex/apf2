@@ -163,7 +163,7 @@ const SortableItem = SortableElement(
         pops.map(n => get(n, 'tpopsByPopId.nodes'))
       )
     }
-    const idsOfLayer = get(data, `${apfloraLayer.value}.nodes`, []).map(n => n.id)
+    //const idsOfLayer = get(data, `${apfloraLayer.value}.nodes`, []).map(n => n.id)
     const highlightedIdsOfLayer = idsInsideFeatureCollection({
       mapFilter,
       data: layerData,

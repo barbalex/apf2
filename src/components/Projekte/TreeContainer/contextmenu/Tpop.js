@@ -1,24 +1,18 @@
 // @flow
 import React, { Fragment } from 'react'
 import { ContextMenu, MenuItem } from 'react-contextmenu'
-import { inject, observer } from 'mobx-react'
-import compose from 'recompose/compose'
 
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import userIsReadOnly from '../../../../modules/userIsReadOnly'
 
-const enhance = compose(inject('store'), observer)
-
 const Tpop = ({
   onClick,
-  store,
   tree,
   token,
   moving,
   copying
 }: {
   onClick: () => void,
-  store: Object,
   tree: Object,
   token: String,
   moving: Object,
@@ -168,4 +162,4 @@ const Tpop = ({
   )
 }
 
-export default enhance(Tpop)
+export default Tpop

@@ -1,6 +1,5 @@
 // @flow
 import React from 'react'
-import { observer, inject } from 'mobx-react'
 import Dialog from '@material-ui/core/Dialog'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import DialogActions from '@material-ui/core/DialogActions'
@@ -43,7 +42,6 @@ const StyledInput = styled(Input)`
 `
 
 const enhance = compose(
-  inject('store'),
   withState('name', 'setName', ''),
   withState('password', 'setPassword', ''),
   withState('showPass', 'setShowPass', false),
@@ -55,7 +53,6 @@ const enhance = compose(
       setPasswordErrorText,
       setName,
       setPassword,
-      store,
       name,
       password
     }) => async (client, refetch) => {
@@ -92,7 +89,7 @@ const enhance = compose(
         mutation: setUserGql,
         variables: { name, token },
       })
-      initiateDataFromUrl(store, client)
+      initiateDataFromUrl()
       // refresh currentUser in idb
       app.db.currentUser.clear()
       app.db.currentUser.put({ name, token })
@@ -138,11 +135,9 @@ const enhance = compose(
       }
     },
   }),
-  observer
 )
 
 const User = ({
-  store,
   name,
   password,
   showPass,
@@ -155,7 +150,6 @@ const User = ({
   onBlurPassword,
   fetchLogin,
 }: {
-  store: Object,
   name: string,
   showPass: Boolean,
   setName: () => void,

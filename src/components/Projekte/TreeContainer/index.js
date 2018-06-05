@@ -3,7 +3,6 @@
  * need to keep class because of ref
  */
 import React from 'react'
-import { observer, inject } from 'mobx-react'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
@@ -168,10 +167,8 @@ const showMapIfNotYetVisible = ({
 }
 
 const enhance = compose(
-  inject('store'),
   withHandlers({
     handleClick: ({
-      store,
       data: dbData,
       treeName,
       activeNode,
@@ -404,11 +401,9 @@ const enhance = compose(
       }
     },
   }),
-  observer
 )
 
 const TreeContainer = ({
-  store,
   treeName,
   flex,
   handleClick,
@@ -425,7 +420,6 @@ const TreeContainer = ({
   popLabelUsingNr,
   tpopLabelUsingNr,
 }: {
-  store: Object,
   treeName: String,
   flex: Number,
   handleClick: () => void,

@@ -1,7 +1,6 @@
 // @flow
 import React, { Fragment } from 'react'
 import { ContextMenu, MenuItem } from 'react-contextmenu'
-import { inject, observer } from 'mobx-react'
 import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
@@ -10,7 +9,6 @@ import ErrorBoundary from '../../../shared/ErrorBoundary'
 import userIsReadOnly from '../../../../modules/userIsReadOnly'
 
 const enhance = compose(
-  inject('store'),
   withState('id', 'changeId', 0),
   withState('label', 'changeLabel', ''),
   withHandlers({
@@ -21,12 +19,10 @@ const enhance = compose(
       props.changeLabel(event.detail.data.nodeLabel)
     },
   }),
-  observer
 )
 
 const Pop = ({
   onClick,
-  store,
   tree,
   changeId,
   id,
@@ -38,7 +34,6 @@ const Pop = ({
   copying
 }: {
   onClick: () => void,
-  store: Object,
   tree: Object,
   changeId: () => {},
   id: number,
