@@ -1,6 +1,5 @@
 // @flow
 import React from 'react'
-import { observer, inject } from 'mobx-react'
 import Dialog from '@material-ui/core/Dialog'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import Button from '@material-ui/core/Button'
@@ -37,7 +36,6 @@ const AllOkButton = styled(Button)`
 `
 
 const enhance = compose(
-  inject('store'),
   withHandlers({
     onClickRead: () => async (message, userName, client, refetch) => {
       await client.mutate({
@@ -56,16 +54,13 @@ const enhance = compose(
       refetch()
     },
   }),
-  observer
 )
 
 const UserMessages = ({
-  store,
   open,
   onClickRead,
   onClickReadAll,
 }: {
-  store: Object,
   open: Boolean,
   onClickRead: () => {},
   onClickReadAll: () => {},
@@ -83,6 +78,7 @@ const UserMessages = ({
 
             const allMessages = get(messagesData, 'allMessages.nodes', [])
             const unreadMessages = allMessages.filter(m => get(m, 'usermessagesByMessageId.nodes').length === 0)
+            const updateAvailable = get(messagesGql, 'updateAvailable')
 
             return (
               <ErrorBoundary>
@@ -91,7 +87,7 @@ const UserMessages = ({
                     unreadMessages.length > 0 &&
                     !!userName &&
                     // do not open if update is available
-                    store.updateAvailable === false
+                    updateAvailable === false
                   }
                   aria-labelledby="dialog-title"
                 >

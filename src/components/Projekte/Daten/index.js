@@ -6,9 +6,7 @@
  */
 
 import React from 'react'
-import { observer, inject } from 'mobx-react'
 import styled from 'styled-components'
-import compose from 'recompose/compose'
 import Loadable from 'react-loadable'
 import { Query } from 'react-apollo'
 import get from 'lodash/get'
@@ -128,10 +126,7 @@ const Container = styled.div`
   }
 `
 
-const enhance = compose(inject('store'), observer)
-
 const Daten = ({
-  store,
   tree,
   treeName,
   activeNode,
@@ -139,7 +134,6 @@ const Daten = ({
   dimensions = { width: 380 },
   refetchTree
 }: {
-  store: Object,
   tree: Object,
   treeName: String,
   activeNode: Object,
@@ -224,4 +218,4 @@ const Daten = ({
     }}
   </Query>
 
-export default enhance(Daten)
+export default Daten
