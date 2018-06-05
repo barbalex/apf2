@@ -172,7 +172,6 @@ const SortableItem = SortableElement(
       yKey: 'y',
     })
     const layerDataHighlighted = layerData.filter(o => highlightedIdsOfLayer.includes(o.id))
-    console.log('ApfloraLayers:', {mapFilter,layer:apfloraLayer.value,data,idsOfLayer,highlightedIdsOfLayer})
 
     return (
       <LayerDiv>

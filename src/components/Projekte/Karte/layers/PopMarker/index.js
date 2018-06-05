@@ -1,6 +1,4 @@
 import React from 'react'
-import { inject } from 'mobx-react'
-import compose from 'recompose/compose'
 import { Query } from 'react-apollo'
 import get from 'lodash/get'
 
@@ -8,10 +6,7 @@ import dataGql from './data.graphql'
 import buildMarkers from './buildMarkers'
 import PopMarkerCluster from './Cluster'
 
-const enhance = compose(inject('store'))
-
 const PmcComponent = ({
-  store,
   tree,
   activeNodes,
   apfloraLayers,
@@ -19,7 +14,6 @@ const PmcComponent = ({
   popLabelUsingNr,
   popHighlightedIds,
 }:{
-  store: Object,
   tree: Object,
   activeNodes: Array<Object>,
   apfloraLayers: Array<Object>,
@@ -47,7 +41,6 @@ const PmcComponent = ({
         })
       const popMarkers = buildMarkers({
         pops,
-        store,
         activeNodes,
         apfloraLayers,
         activeApfloraLayers,
@@ -61,4 +54,4 @@ const PmcComponent = ({
 </Query>
 
 
-export default enhance(PmcComponent)
+export default PmcComponent

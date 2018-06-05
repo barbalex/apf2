@@ -1,6 +1,5 @@
 import React from 'react'
 import 'leaflet'
-import { inject, observer } from 'mobx-react'
 import Control from 'react-leaflet-control'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
@@ -29,19 +28,15 @@ const StyledControl = styled(Control)`
 `
 
 const enhance = compose(
-  inject('store'),
   getContext({ map: PropTypes.object.isRequired }),
   withState('controlType', 'changeControlType', 'coordinates'),
-  observer
 )
 
 const CoordinatesControl = ({
-  store,
   controlType,
   changeControlType,
   map,
 }: {
-  store: Object,
   controlType: string,
   changeControlType: () => void,
   map: Object,
@@ -53,7 +48,6 @@ const CoordinatesControl = ({
       ) : (
         <PanToCoordinates
           changeControlType={changeControlType}
-          store={store}
           map={map}
         />
       )}
