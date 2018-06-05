@@ -1,4 +1,4 @@
-query Query($isAp: Boolean!, $ap: [UUID!], $isPop: Boolean!, $pop: [UUID!]) {
+query Query($isAp: Boolean!, $ap: [UUID!]) {
   assigningBeob @client
   pop: allPops(
     filter: {
@@ -11,19 +11,18 @@ query Query($isAp: Boolean!, $ap: [UUID!], $isPop: Boolean!, $pop: [UUID!]) {
       id
       x
       y
-    }
-  }
-  tpop: allTpops(
-    filter: {
-      popId: { in: $pop }
-      x: { isNull: false }
-      y: { isNull: false }
-    }
-  ) @include(if: $isPop) {
-    nodes {
-      id
-      x
-      y
+      tpopsByPopId(
+        filter: {
+          x: { isNull: false }
+          y: { isNull: false }
+        }
+      ) {
+        nodes {
+          id
+          x
+          y
+        }
+      }
     }
   }
   beobNichtBeurteilt: allVApbeobs(

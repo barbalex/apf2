@@ -400,6 +400,7 @@ const Karte = ({
             setActiveOverlays={setActiveOverlays}
             bounds={bounds}
             setBounds={setBounds}
+            mapFilter={mapFilter}
             // this enforces rerendering when sorting changes
             activeOverlaysString={activeOverlays.join()}
             activeApfloraLayersString={activeApfloraLayers.join()}

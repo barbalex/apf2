@@ -20,12 +20,13 @@ import 'leaflet-draw'
 import { ApolloProvider, Query } from 'react-apollo'
 import app from 'ampersand-app'
 import get from 'lodash/get'
+import flatten from 'lodash/flatten'
 
 import Checkbox from '../shared/Checkbox'
-import bufferBoundsTo50m from '../../../../../modules/bufferBoundsTo50m'
 import dataGql from './data.graphql'
 import setAssigningBeob from './setAssigningBeob.graphql'
 import getBounds from '../../../../../modules/getBounds'
+import idsInsideFeatureCollection from '../../../../../modules/idsInsideFeatureCollection'
 
 const StyledIconButton = styled(Button)`
   max-width: 18px;
@@ -117,11 +118,6 @@ const BeobZugeordnetAssignPolylinesIcon = styled(RemoveIcon)`
   color: #ff00ff !important;
 `
 const MapIconDiv = styled.div``
-/**
- * don't know why but passing store
- * with mobx inject does not work here
- * so passed in from parent
- */
 
 const DragHandle = SortableHandle(() => (
   <StyledIconButton title="ziehen, um Layer höher/tiefer zu stapeln">
@@ -131,7 +127,6 @@ const DragHandle = SortableHandle(() => (
 const SortableItem = SortableElement(
   ({
     apfloraLayer,
-    store,
     activeNodes,
     activeApfloraLayers,
     setActiveApfloraLayers,
@@ -139,6 +134,7 @@ const SortableItem = SortableElement(
     client,
     bounds,
     setBounds,
+    mapFilter,
   }) => {
     const assigning = get(data, 'assigningBeob')
     const assigningispossible =
@@ -158,15 +154,25 @@ const SortableItem = SortableElement(
       if (assigningispossible) return 'Teil-Populationen zuordnen'
       return 'Teil-Populationen zuordnen (aktivierbar, wenn auch Teil-Populationen eingeblendet werden)'
     }
-    const mapNameToStoreNameObject = {
-      pop: 'pop',
-      tpop: 'tpop',
-      beobNichtBeurteilt: 'beobNichtBeurteilt',
-      beobNichtZuzuordnen: 'beobNichtZuzuordnen',
-      beobZugeordnet: 'beobZugeordnet',
-      beobZugeordnetAssignPolylines: 'beobZugeordnet',
+    // for each layer there must exist a path in data.graphql!
+    let layerData = get(data, `${apfloraLayer.value}.nodes`, [])
+    if (apfloraLayer.value === 'tpop') {
+      // but tpop is special...
+      const pops = get(data, 'pop.nodes', [])
+      layerData = flatten(
+        pops.map(n => get(n, 'tpopsByPopId.nodes'))
+      )
     }
-    console.log('ApfloraLayers:', {data})
+    const idsOfLayer = get(data, `${apfloraLayer.value}.nodes`, []).map(n => n.id)
+    const highlightedIdsOfLayer = idsInsideFeatureCollection({
+      mapFilter,
+      data: layerData,
+      idKey: 'id',
+      xKey: 'x',
+      yKey: 'y',
+    })
+    const layerDataHighlighted = layerData.filter(o => highlightedIdsOfLayer.includes(o.id))
+    console.log('ApfloraLayers:', {mapFilter,layer:apfloraLayer.value,data,idsOfLayer,highlightedIdsOfLayer})
 
     return (
       <LayerDiv>
@@ -298,12 +304,7 @@ const SortableItem = SortableElement(
                 title={`auf alle '${apfloraLayer.label}' zoomen`}
                 onClick={() => {
                   if (activeApfloraLayers.includes(apfloraLayer.value)) {
-                    // for each layer there must exist a path in data.graphql!
-                    setBounds(
-                      getBounds(
-                        get(data, `${apfloraLayer.value}.nodes`, [])
-                      )
-                    )
+                    setBounds(getBounds(layerData))
                   }
                 }}
               >
@@ -325,30 +326,8 @@ const SortableItem = SortableElement(
               <StyledIconButton
                 title={`auf aktive '${apfloraLayer.label}' zoomen`}
                 onClick={() => {
-                  // TODO: if set min bounds
-                  // that accords to 50m
-                  // TODO: use bounds passed with props
-                  // wait til mapFilter is in gql 
                   if (activeApfloraLayers.includes(apfloraLayer.value)) {
-                    let bounds
-                    switch (apfloraLayer.value) {
-                      case 'pop':
-                        // TODO
-                        break
-                      case 'tpop':
-                        // TODO
-                        break
-                      default:
-                      // nothing
-                    }
-                    bounds =
-                      store.map[mapNameToStoreNameObject[apfloraLayer.value]]
-                        .boundsOfHighlightedIds
-                    // ensure bounds exist
-                    if (bounds && bounds.length && bounds.length > 0) {
-                      const boundsBuffered = bufferBoundsTo50m(bounds)
-                      setBounds(boundsBuffered)
-                    }
+                    setBounds(getBounds(layerDataHighlighted))
                   }
                 }}
               >
@@ -356,20 +335,17 @@ const SortableItem = SortableElement(
                   style={{
                     color:
                       activeApfloraLayers.includes(apfloraLayer.value) &&
-                      store.map[mapNameToStoreNameObject[apfloraLayer.value]]
-                        .highlightedIds.length > 0
+                      highlightedIdsOfLayer.length > 0
                         ? '#fbec04'
                         : '#e2e2e2',
                     fontWeight:
                       activeApfloraLayers.includes(apfloraLayer.value) &&
-                      store.map[mapNameToStoreNameObject[apfloraLayer.value]]
-                        .highlightedIds.length > 0
+                      highlightedIdsOfLayer.length > 0
                         ? 'bold'
                         : 'normal',
                     cursor:
                       activeApfloraLayers.includes(apfloraLayer.value) &&
-                      store.map[mapNameToStoreNameObject[apfloraLayer.value]]
-                        .highlightedIds.length > 0
+                      highlightedIdsOfLayer.length > 0
                         ? 'pointer'
                         : 'not-allowed',
                   }}
@@ -390,13 +366,13 @@ const SortableItem = SortableElement(
 const SortableList = SortableContainer(
   ({
     items,
-    store,
     activeApfloraLayers,
     setActiveApfloraLayers,
     data,
     client,
     bounds,
     setBounds,
+    mapFilter,
   }) => (
     <div>
       {
@@ -405,13 +381,13 @@ const SortableList = SortableContainer(
             key={index}
             index={index}
             apfloraLayer={apfloraLayer}
-            store={store}
             activeApfloraLayers={activeApfloraLayers}
             setActiveApfloraLayers={setActiveApfloraLayers}
             data={data}
             client={client}
             bounds={bounds}
             setBounds={setBounds}
+            mapFilter={mapFilter}
           />
         ))
       }
@@ -432,6 +408,7 @@ const ApfloraLayers = ({
   setPopBounds,
   tpopBounds,
   setTpopBounds,
+  mapFilter,
 }: {
   store: Object,
   activeNodes: Object,
@@ -445,6 +422,7 @@ const ApfloraLayers = ({
   setPopBounds: () => void,
   tpopBounds: Array<Array<Number>>,
   setTpopBounds: () => void,
+  mapFilter: Object,
 }) => (
   <ApolloProvider client={app.client}>
     <Query
@@ -452,8 +430,6 @@ const ApfloraLayers = ({
       variables={{
         isAp: !!activeNodes.ap,
         ap: activeNodes.ap ? [activeNodes.ap] : [],
-        isPop: !!activeNodes.pop,
-        pop: activeNodes.pop ? [activeNodes.pop] : [],
       }}
     >
       {({ loading, error, data, client }) => {
@@ -468,13 +444,13 @@ const ApfloraLayers = ({
               }
               useDragHandle
               lockAxis="y"
-              store={store}
               activeApfloraLayers={activeApfloraLayers}
               setActiveApfloraLayers={setActiveApfloraLayers}
               data={data}
               client={client}
               bounds={bounds}
               setBounds={setBounds}
+              mapFilter={mapFilter}
             />
           </CardContent>
         )

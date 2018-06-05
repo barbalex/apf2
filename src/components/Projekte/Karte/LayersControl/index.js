@@ -137,6 +137,7 @@ const LayersControl = ({
   setActiveBaseLayer,
   bounds,
   setBounds,
+  mapFilter,
 }: {
   data: Object,
   store: Object,
@@ -160,6 +161,7 @@ const LayersControl = ({
   setActiveBaseLayer: () => void,
   bounds: Array<Array<Number>>,
   setBounds: () => void,
+  mapFilter: Object,
 }) => {
   const assigning = get(data, 'assigningBeob')
   const getApfloraLayersTitle = () => {
@@ -198,6 +200,7 @@ const LayersControl = ({
                 setActiveApfloraLayers={setActiveApfloraLayers}
                 bounds={bounds}
                 setBounds={setBounds}
+                mapFilter={mapFilter}
                 /**
                  * overlaysString enforces rererender
                  * even when only the sorting changes
