@@ -48,6 +48,7 @@ const Exporte = ({ mapFilter }:{ mapFilter: Object }) => (
 
       const applyMapFilterToExport = get(data, 'export.applyMapFilterToExport')
       const fileType = get(data, 'export.fileType')
+      console.log('Exporte: mapFilter:', mapFilter)
 
 
       return (
