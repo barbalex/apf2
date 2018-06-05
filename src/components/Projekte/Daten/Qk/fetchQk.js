@@ -4,12 +4,10 @@ import axios from 'axios'
 import listError from '../../../../modules/listError'
 
 const fetchQk = async ({
-  store,
   berichtjahr,
   apId,
   addMessages,
 }: {
-  store: Object,
   berichtjahr: Number,
   apId: String,
   addMessages: () => void,

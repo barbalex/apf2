@@ -1,6 +1,5 @@
 // @flow
 import React from 'react'
-import { observer, inject } from 'mobx-react'
 import Tabs from '@material-ui/core/Tabs'
 import Tab from '@material-ui/core/Tab'
 import styled from 'styled-components'
@@ -72,7 +71,6 @@ const tpopkontrTypWerte = [
 ]
 
 const enhance = compose(
-  inject('store'),
   withApollo,
   withState(
     'value',
@@ -192,7 +190,6 @@ const enhance = compose(
       setValue(value)
     },
   }),
-  observer
 )
 
 const Tpopfeldkontr = ({

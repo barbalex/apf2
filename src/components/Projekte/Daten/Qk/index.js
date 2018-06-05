@@ -1,6 +1,5 @@
 // @flow
 import React from 'react'
-import { observer, inject } from 'mobx-react'
 import Input from '@material-ui/core/Input'
 import InputLabel from '@material-ui/core/InputLabel'
 import FormControl from '@material-ui/core/FormControl'
@@ -59,7 +58,6 @@ const StyledInput = styled(Input)`
 `
 
 const enhance = compose(
-  inject('store'),
   withState('berichtjahr', 'setBerichtjahr', standardQkYear()),
   withState('filter', 'setFilter', ''),
   withState('messages', 'setMessages', []),
@@ -71,7 +69,7 @@ const enhance = compose(
     }
   }),
   withHandlers({
-    onChangeBerichtjahr: ({ setBerichtjahr, store, tree, apId, addMessages, activeNodes }) => (event, data) => {
+    onChangeBerichtjahr: ({ setBerichtjahr, tree, apId, addMessages, activeNodes }) => (event, data) => {
       const { value } = event.target
       setBerichtjahr(value)
       if (
@@ -79,23 +77,21 @@ const enhance = compose(
         (!isNaN(value) && value > 1000)
       ) {
         // call fetchQk and pass it berichtjahr and apId
-        fetchQk({ store, berichtjahr: value, apId, addMessages, activeNodes })
+        fetchQk({ berichtjahr: value, apId, addMessages, activeNodes })
       }
     },
     onChangeFilter: ({ setFilter }) => event =>
       setFilter(event.target.value),
   }),
   withLifecycle({
-    onDidMount({ berichtjahr, setBerichtjahr, store, tree, apId, addMessages, activeNodes }) {
+    onDidMount({ berichtjahr, setBerichtjahr, tree, apId, addMessages, activeNodes }) {
       // call fetchQk and pass it berichtjahr and apId
-      fetchQk({ store, berichtjahr, apId, addMessages, activeNodes })
+      fetchQk({ berichtjahr, apId, addMessages, activeNodes })
     },
   }),
-  observer
 )
 
 const Qk = ({
-  store,
   tree,
   apId,
   berichtjahr,
@@ -111,7 +107,6 @@ const Qk = ({
   checkingOutsideZh,
   setCheckingOutsideZh
 }: {
-  store: Object,
   tree: Object,
   apId: String,
   berichtjahr: Number,
@@ -159,7 +154,6 @@ const Qk = ({
             })
 
             !outsideZhChecked && checkTpopOutsideZh({
-              store,
               data,
               addMessages,
               setOutsideZhChecked,

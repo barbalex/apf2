@@ -8,7 +8,13 @@ import isPointInsidePolygon from './isPointInsidePolygon'
 import staticFilesBaseUrl from '../../../../modules/staticFilesBaseUrl'
 import listError from '../../../../modules/listError'
 
-export default async ({ store, data, addMessages, setOutsideZhChecked, checkingOutsideZh, setCheckingOutsideZh }) => {
+export default async ({
+  data,
+  addMessages,
+  setOutsideZhChecked,
+  checkingOutsideZh,
+  setCheckingOutsideZh
+}) => {
   if (checkingOutsideZh) return
   const pops = get(data, 'projektById.apsByProjId.nodes[0].popsByApId.nodes', [])
   const tpops =  flatten(pops.map(p => get(p, 'tpopsByPopId.nodes', [])))
