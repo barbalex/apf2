@@ -137,7 +137,7 @@ const Optionen = ({
                   }
                 })
               }}
-              value={applyMapFilterToExport}
+              value={applyMapFilterToExport.toString()}
               color="primary"
             />
           }

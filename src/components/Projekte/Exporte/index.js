@@ -48,8 +48,6 @@ const Exporte = ({ mapFilter }:{ mapFilter: Object }) => (
 
       const applyMapFilterToExport = get(data, 'export.applyMapFilterToExport')
       const fileType = get(data, 'export.fileType')
-      console.log('Exporte: mapFilter:', mapFilter)
-
 
       return (
         <ExporteContainer>
@@ -70,25 +68,30 @@ const Exporte = ({ mapFilter }:{ mapFilter: Object }) => (
                   client={client}
                 />
                 <Populationen
+                  mapFilter={mapFilter}
                   applyMapFilterToExport={applyMapFilterToExport}
                   fileType={fileType}
                   client={client}
                 />
                 <Teilpopulationen
+                  mapFilter={mapFilter}
                   applyMapFilterToExport={applyMapFilterToExport}
                   fileType={fileType}
                 />
                 <Kontrollen
+                  mapFilter={mapFilter}
                   applyMapFilterToExport={applyMapFilterToExport}
                   fileType={fileType}
                   client={client}
                 />
                 <Massnahmen
+                  mapFilter={mapFilter}
                   applyMapFilterToExport={applyMapFilterToExport}
                   fileType={fileType}
                   client={client}
                 />
                 <Beobachtungen
+                  mapFilter={mapFilter}
                   applyMapFilterToExport={applyMapFilterToExport}
                   fileType={fileType}
                   client={client}

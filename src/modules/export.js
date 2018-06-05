@@ -31,7 +31,11 @@ export default async ({
   let data = dataPassed.map(d=> omit(d, ['__typename', 'Symbol(id)']))
   // now we could manipulate the data, for instance apply mapFilter
   const filterFeatures = mapFilter.features
-  if (filterFeatures.length > 0 && applyMapFilterToExport && idKey && xKey && yKey ) {
+  if (
+    filterFeatures.length > 0 &&
+    applyMapFilterToExport &&
+    idKey && xKey && yKey
+  ) {
     // filter data
     const ids = idsInsideFeatureCollection({
       mapFilter,
