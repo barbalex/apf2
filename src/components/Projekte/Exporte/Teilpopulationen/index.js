@@ -66,14 +66,11 @@ const AutocompleteContainer = styled.div`
 const isRemoteHost = window.location.hostname !== 'localhost'
 
 const enhance = compose(
-  inject('store'),
   withState('expanded', 'setExpanded', false),
   withState('message', 'setMessage', null),
-  observer,
 )
 
 const Teilpopulationen = ({
-  store,
   fileType,
   mapFilter,
   applyMapFilterToExport,
@@ -82,7 +79,6 @@ const Teilpopulationen = ({
   message,
   setMessage,
 }: {
-  store: Object,
   fileType: String,
   mapFilter: Object,
   applyMapFilterToExport: Boolean,
@@ -635,7 +631,6 @@ const Teilpopulationen = ({
                 <AutoComplete
                   label={`"Eier legende Wollmilchsau" für eine Art`}
                   objects={artList}
-                  store={store}
                   openabove
                 />
               </AutocompleteContainer>
@@ -703,7 +698,6 @@ const Teilpopulationen = ({
                     })
                     exportModule({
                       data: get(data, 'allVTpopPopberundmassnbers.nodes', []),
-                      store,
                       fileName: 'TeilpopulationenTPopUndMassnBerichte',
                       fileType,
                       applyMapFilterToExport,

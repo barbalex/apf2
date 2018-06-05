@@ -14,7 +14,6 @@ import styled from 'styled-components'
 import { ApolloConsumer } from 'react-apollo'
 import gql from "graphql-tag"
 import get from 'lodash/get'
-import { inject } from 'mobx-react'
 
 import exportModule from '../../../../modules/export'
 import Message from '../Message'
@@ -63,11 +62,9 @@ const DownloadCardButton = styled(Button)`
 const enhance = compose(
   withState('expanded', 'setExpanded', false),
   withState('message', 'setMessage', null),
-  inject('store')
 )
 
 const Populationen = ({
-  store,
   fileType,
   mapFilter,
   applyMapFilterToExport,
@@ -77,7 +74,6 @@ const Populationen = ({
   message,
   setMessage,
 }: {
-  store: Object,
   fileType: String,
   applyMapFilterToExport: Boolean,
   mapFilter: Object,

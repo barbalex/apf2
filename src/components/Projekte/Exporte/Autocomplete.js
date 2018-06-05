@@ -116,7 +116,6 @@ type Props = {
   value: String,
   objects: Array<Object>,
   classes: Object,
-  store: Object,
 }
 
 type State = {
