@@ -1,5 +1,4 @@
 import React from 'react'
-import { observer } from 'mobx-react'
 import styled from 'styled-components'
 
 const Input = styled.input`
@@ -35,4 +34,4 @@ const Checkbox = (
     {label}
   </Label>
 
-export default observer(Checkbox)
+export default Checkbox

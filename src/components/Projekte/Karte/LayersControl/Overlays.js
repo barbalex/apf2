@@ -80,13 +80,11 @@ const DragHandle = SortableHandle(() => (
 
 const SortableItem = SortableElement(({
   overlay,
-  store,
   activeOverlays,
   setActiveOverlays,
 }) => (
   <LayerDiv>
     <Checkbox
-      tree={store.tree}
       value={overlay.value}
       label={overlay.label}
       checked={activeOverlays.includes(overlay.value)}
@@ -125,7 +123,6 @@ const SortableItem = SortableElement(({
 
 const SortableList = SortableContainer(({
   items,
-  store,
   activeOverlays,
   setActiveOverlays,
 }) => (
@@ -135,7 +132,6 @@ const SortableList = SortableContainer(({
         key={index}
         index={index}
         overlay={overlay}
-        store={store}
         activeOverlays={activeOverlays}
         setActiveOverlays={setActiveOverlays}
       />
@@ -144,13 +140,11 @@ const SortableList = SortableContainer(({
 ))
 
 const Overlays = ({
-  store,
   overlays,
   setOverlays,
   activeOverlays,
   setActiveOverlays,
 }: {
-  store: Object,
   overlays: Array<Object>,
   setOverlays: () => void,
   activeOverlays: Array<String>,
@@ -160,11 +154,10 @@ const Overlays = ({
     <SortableList
       items={overlays}
       onSortEnd={({ oldIndex, newIndex }) =>
-      setOverlays(arrayMove(overlays, oldIndex, newIndex))
-    }
+        setOverlays(arrayMove(overlays, oldIndex, newIndex))
+      }
       useDragHandle
       lockAxis="y"
-      store={store}
       activeOverlays={activeOverlays}
       setActiveOverlays={setActiveOverlays}
     />

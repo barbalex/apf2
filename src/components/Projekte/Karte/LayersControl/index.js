@@ -1,6 +1,5 @@
 import React from 'react'
 import Control from 'react-leaflet-control'
-import { observer, inject } from 'mobx-react'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
@@ -55,7 +54,6 @@ const StyledExpandMoreIcon = styled(ExpandMoreIcon)`
 `
 
 const enhance = compose(
-  inject('store'),
   withState('baseLayersExpanded', 'toggleBaseLayersExpanded', false),
   withState('overlaysExpanded', 'toggleOverlaysExpanded', false),
   withState('apfloraLayersExpanded', 'toggleApfloraLayersExpanded', false),
@@ -111,12 +109,10 @@ const enhance = compose(
       }
     },
   }),
-  observer
 )
 
 const LayersControl = ({
   data,
-  store,
   tree,
   activeNodes,
   apfloraLayers,
@@ -140,7 +136,6 @@ const LayersControl = ({
   mapFilter,
 }: {
   data: Object,
-  store: Object,
   tree: Object,
   activeNodes: Object,
   apfloraLayers: Array<Object>,
@@ -192,7 +187,6 @@ const LayersControl = ({
             </CardHeader>
             {apfloraLayersExpanded && (
               <ApfloraLayers
-                store={store}
                 activeNodes={activeNodes}
                 apfloraLayers={apfloraLayers}
                 setApfloraLayers={setApfloraLayers}
@@ -223,7 +217,6 @@ const LayersControl = ({
             </CardHeader>
             {overlaysExpanded && (
               <Overlays
-                store={store}
                 overlays={overlays}
                 setOverlays={setOverlays}
                 activeOverlays={activeOverlays}

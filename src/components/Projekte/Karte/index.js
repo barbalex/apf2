@@ -7,7 +7,6 @@
  */
 
 import React from 'react'
-import { observer, inject } from 'mobx-react'
 import { Map, ScaleControl } from 'react-leaflet'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
@@ -99,7 +98,6 @@ const StyledMapLocalizing = styled(StyledMap)`
  */
 
 const enhance = compose(
-  inject('store'),
   withHandlers({
     onMouseMove: ({ setMouseCoordinates }) => (e) => {
       const { client } = app
@@ -118,11 +116,9 @@ const enhance = compose(
     }
   }),
   debounceHandler('onMouseMove', 15),
-  observer
 )
 
 const Karte = ({
-  store,
   tree,
   activeNodes,
   onMouseMove,
@@ -158,7 +154,6 @@ const Karte = ({
   mapFilter,
   setMapFilter,
 }: {
-  store: Object,
   tree: Object,
   activeNodes: Object,
   onMouseMove: () => void,

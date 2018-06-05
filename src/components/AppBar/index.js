@@ -1,6 +1,5 @@
 // @flow
 import React from 'react'
-import { observer, inject } from 'mobx-react'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
@@ -49,10 +48,9 @@ const StyledMoreVertIcon = styled(MoreVertIcon)`
 `
 
 const enhance = compose(
-  inject('store'),
   withState('anchorEl', 'setAnchorEl', null),
   withHandlers({
-    onClickButton: ({ store }) => (name, client, projekteTabs) => {
+    onClickButton: () => (name, client, projekteTabs) => {
       if (isMobilePhone()) {
         // show one tab only
         setUrlQueryValue({ key: 'projekteTabs', value: [name] })
@@ -85,11 +83,9 @@ const enhance = compose(
       setShowDeletions(true)
     },
   }),
-  observer
 )
 
 const MyAppBar = ({
-  store,
   onClickButton,
   showDeletedDatasets,
   watchVideos,
@@ -97,7 +93,6 @@ const MyAppBar = ({
   setAnchorEl,
   setShowDeletions,
 }: {
-  store: Object,
   onClickButton: () => void,
   showDeletedDatasets: () => void,
   watchVideos: () => void,
@@ -212,7 +207,7 @@ const MyAppBar = ({
                     <MenuItem
                       onClick={() => {
                         setAnchorEl(null)
-                        logout({ store, client })
+                        logout()
                       }}
                     >{`${get(data, 'user.name')} abmelden`}</MenuItem>
                   </Menu>

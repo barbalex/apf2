@@ -156,31 +156,31 @@ const BiotopCopyingIcon = styled(PhotoLibraryIcon)`
   height: 20px !important;
   color: rgb(255, 90, 0) !important;
 `
-const showPopMapIcon = (store, tree, node, activeNodes, activeApfloraLayers) =>
+const showPopMapIcon = (tree, node, activeNodes, activeApfloraLayers) =>
   node.menuType === 'ap' &&
-  node.id === (activeNodes.ap || store.map.pop.apId) &&
+  node.id === activeNodes.ap &&
   activeApfloraLayers.includes('pop')
 const showPopFilteredMapIcon = (store, node, activeApfloraLayers) =>
   node.menuType === 'pop' &&
   activeApfloraLayers.includes('pop') &&
   store.map.pop.highlightedIds.includes(node.id)
-const showTpopMapIcon = (store, tree, node, activeNodes, activeApfloraLayers) =>
+const showTpopMapIcon = (tree, node, activeNodes, activeApfloraLayers) =>
   node.menuType === 'ap' &&
-  node.id === (activeNodes.ap || store.map.pop.apId) &&
+  node.id === activeNodes.ap &&
   activeApfloraLayers.includes('tpop')
 const showTpopFilteredMapIcon = (store, node, activeApfloraLayers) =>
   node.menuType === 'tpop' &&
   activeApfloraLayers.includes('tpop') &&
   store.map.tpop.highlightedIds.includes(node.id)
-const showBeobNichtBeurteiltMapIcon = (store, tree, node, activeNodes, activeApfloraLayers) =>
+const showBeobNichtBeurteiltMapIcon = (tree, node, activeNodes, activeApfloraLayers) =>
   node.menuType === 'beobNichtBeurteiltFolder' &&
   node.id === activeNodes.ap &&
   activeApfloraLayers.includes('beobNichtBeurteilt')
-const showBeobNichtZuzuordnenMapIcon = (store, tree, node, activeNodes, activeApfloraLayers) =>
+const showBeobNichtZuzuordnenMapIcon = (tree, node, activeNodes, activeApfloraLayers) =>
   node.menuType === 'beobNichtZuzuordnenFolder' &&
   node.id === activeNodes.ap &&
   activeApfloraLayers.includes('beobNichtZuzuordnen')
-const showBeobZugeordnetMapIcon = (store, tree, node, activeNodes, activeApfloraLayers) =>
+const showBeobZugeordnetMapIcon = (tree, node, activeNodes, activeApfloraLayers) =>
   node.menuType === 'beobZugeordnetFolder' &&
   node.id === activeNodes.tpop &&
   activeApfloraLayers.includes('beobZugeordnet')
@@ -269,7 +269,6 @@ const Row = ({
     node.nodeType === 'table' &&
     node.menuType === copying.table &&
     node.id === copying.id
-  
   const copyingBiotop =
     node.nodeType === 'table' && node.id === get(data, 'copyingBiotop.id')
 
@@ -313,27 +312,27 @@ const Row = ({
               {'-'}
             </SymbolSpan>
           )}
-          {showPopMapIcon(store, tree, node, activeNodes, activeApfloraLayers) && (
+          {showPopMapIcon(tree, node, activeNodes, activeApfloraLayers) && (
             <div title="in Karte sichtbar">
               <PopMapIcon />
             </div>
           )}
-          {showTpopMapIcon(store, tree, node, activeNodes, activeApfloraLayers) && (
+          {showTpopMapIcon(tree, node, activeNodes, activeApfloraLayers) && (
             <div title="in Karte sichtbar">
               <TpopMapIcon />
             </div>
           )}
-          {showBeobNichtBeurteiltMapIcon(store, tree, node, activeNodes, activeApfloraLayers) && (
+          {showBeobNichtBeurteiltMapIcon(tree, node, activeNodes, activeApfloraLayers) && (
             <div title="in Karte sichtbar">
               <BeobNichtBeurteiltMapIcon />
             </div>
           )}
-          {showBeobNichtZuzuordnenMapIcon(store, tree, node, activeNodes, activeApfloraLayers) && (
+          {showBeobNichtZuzuordnenMapIcon(tree, node, activeNodes, activeApfloraLayers) && (
             <div title="in Karte sichtbar">
               <BeobNichtZuzuordnenMapIcon />
             </div>
           )}
-          {showBeobZugeordnetMapIcon(store, tree, node, activeNodes, activeApfloraLayers) && (
+          {showBeobZugeordnetMapIcon(tree, node, activeNodes, activeApfloraLayers) && (
             <div title="in Karte sichtbar">
               <BeobZugeordnetMapIcon />
             </div>

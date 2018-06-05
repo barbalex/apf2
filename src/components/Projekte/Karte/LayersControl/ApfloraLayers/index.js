@@ -396,7 +396,6 @@ const SortableList = SortableContainer(
 )
 
 const ApfloraLayers = ({
-  store,
   activeNodes,
   apfloraLayers,
   setApfloraLayers,
@@ -410,7 +409,6 @@ const ApfloraLayers = ({
   setTpopBounds,
   mapFilter,
 }: {
-  store: Object,
   activeNodes: Object,
   apfloraLayers: Array<Object>,
   setApfloraLayers: () => void,

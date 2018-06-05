@@ -1,5 +1,4 @@
 import React from 'react'
-import { observer } from 'mobx-react'
 import styled from 'styled-components'
 
 const Input = styled.input`
@@ -38,4 +37,4 @@ const Radio = (
     {label}
   </Label>
 
-export default observer(Radio)
+export default Radio
