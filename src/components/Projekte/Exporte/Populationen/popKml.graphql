@@ -4,6 +4,9 @@ query view {
       art
       label
       inhalte
+      id
+      x
+      y
       laengengrad
       breitengrad
       url

@@ -180,6 +180,9 @@ const Massnahmen = ({
                         fileName: 'Massnahmen',
                         fileType,
                         applyMapFilterToExport,
+                        idKey: 'id',
+                        xKey: 'tpopX',
+                        yKey: 'tpopY',
                       })
                     } catch(error) {
                       listError(error)
@@ -237,6 +240,9 @@ const Massnahmen = ({
                         fileName: 'MassnahmenWebGisBun',
                         fileType,
                         applyMapFilterToExport,
+                        idKey: 'MASSNGUID',
+                        xKey: 'TPOP_X',
+                        yKey: 'TPOP_Y',
                       })
                     } catch(error) {
                       listError(error)

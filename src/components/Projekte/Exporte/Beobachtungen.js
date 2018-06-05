@@ -140,6 +140,9 @@ const Beobachtungen = ({
                     fileName: 'Beobachtungen',
                     fileType,
                     applyMapFilterToExport,
+                    idKey: 'id',
+                    xKey: 'x',
+                    yKey: 'y',
                   })
                 } catch(error) {
                   listError(error)

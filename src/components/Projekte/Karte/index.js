@@ -203,8 +203,8 @@ const Karte = ({
      */
     const ApfloraLayerComponents = {
       // MapFilter is used for filtering, need to return null
-      MapFilter: () => null,
-      Pop: () => (
+      mapFilter: () => null,
+      pop: () => (
         <Pop
           tree={tree}
           activeNodes={activeNodes}
@@ -214,7 +214,7 @@ const Karte = ({
           popHighlightedIds={popHighlightedIds}
         />
       ),
-      Tpop: () => (
+      tpop: () => (
         <Tpop
           tree={tree}
           activeNodes={activeNodes}
@@ -224,7 +224,7 @@ const Karte = ({
           tpopHighlightedIds={tpopHighlightedIds}
         />
       ),
-      BeobNichtBeurteilt: () => (
+      beobNichtBeurteilt: () => (
         <BeobNichtBeurteilt
           tree={tree}
           activeNodes={activeNodes}
@@ -234,7 +234,7 @@ const Karte = ({
           beobNichtBeurteiltHighlightedIds={beobNichtBeurteiltHighlightedIds}
         />
       ),
-      BeobNichtZuzuordnen: () => (
+      beobNichtZuzuordnen: () => (
         <BeobNichtZuzuordnen
           tree={tree}
           activeNodes={activeNodes}
@@ -243,7 +243,7 @@ const Karte = ({
           beobNichtZuzuordnenHighlightedIds={beobNichtZuzuordnenHighlightedIds}
         />
       ),
-      BeobZugeordnet: () => (
+      beobZugeordnet: () => (
         <BeobZugeordnet
           tree={tree}
           activeNodes={activeNodes}
@@ -253,7 +253,7 @@ const Karte = ({
           beobZugeordnetHighlightedIds={beobZugeordnetHighlightedIds}
         />
       ),
-      BeobZugeordnetAssignPolylines: () => (
+      beobZugeordnetAssignPolylines: () => (
         <BeobZugeordnetAssignPolylines
           tree={tree}
           activeNodes={activeNodes}

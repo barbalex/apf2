@@ -176,6 +176,9 @@ const Teilpopulationen = ({
                       fileName: 'Teilpopulationen',
                       fileType,
                       applyMapFilterToExport,
+                      idKey: 'id',
+                      xKey: 'x',
+                      yKey: 'y',
                     })
                   } catch(error) {
                     listError(error)
@@ -244,6 +247,9 @@ const Teilpopulationen = ({
                       fileName: 'TeilpopulationenWebGisBun',
                       fileType,
                       applyMapFilterToExport,
+                      idKey: 'TPOPID',
+                      xKey: 'TPOP_X',
+                      yKey: 'TPOP_Y',
                     })
                   } catch(error) {
                     listError(error)
@@ -299,6 +305,9 @@ const Teilpopulationen = ({
                               art
                               label
                               inhalte
+                              id
+                              x
+                              y
                               laengengrad
                               breitengrad
                               url
@@ -311,6 +320,9 @@ const Teilpopulationen = ({
                       fileName: 'TeilpopulationenNachNamen',
                       fileType,
                       applyMapFilterToExport,
+                      idKey: 'id',
+                      xKey: 'x',
+                      yKey: 'y',
                     })
                   } catch(error) {
                     listError(error)
@@ -330,6 +342,7 @@ const Teilpopulationen = ({
                         query view {
                           allVTpopOhnebekanntseits {
                             nodes {
+                              id
                               artname
                               apBearbeitung
                               popNr
@@ -338,6 +351,8 @@ const Teilpopulationen = ({
                               gemeinde
                               flurname
                               bekanntSeit
+                              x
+                              y
                             }
                           }
                         }`
@@ -347,6 +362,9 @@ const Teilpopulationen = ({
                       fileName: 'TeilpopulationenVonApArtenOhneBekanntSeit',
                       fileType,
                       applyMapFilterToExport,
+                      idKey: 'id',
+                      xKey: 'x',
+                      yKey: 'y',
                     })
                   } catch(error) {
                     listError(error)
@@ -374,6 +392,8 @@ const Teilpopulationen = ({
                               gemeinde
                               flurname
                               apberRelevant
+                              x
+                              y
                             }
                           }
                         }`
@@ -383,6 +403,9 @@ const Teilpopulationen = ({
                       fileName: 'TeilpopulationenOhneApBerichtRelevant',
                       fileType,
                       applyMapFilterToExport,
+                      idKey: 'id',
+                      xKey: 'x',
+                      yKey: 'y',
                     })
                   } catch(error) {
                     listError(error)
@@ -450,6 +473,9 @@ const Teilpopulationen = ({
                       fileName: 'TeilpopulationenAnzahlMassnahmen',
                       fileType,
                       applyMapFilterToExport,
+                      idKey: 'id',
+                      xKey: 'x',
+                      yKey: 'y',
                     })
                   } catch(error) {
                     listError(error)
@@ -566,6 +592,9 @@ const Teilpopulationen = ({
                       fileName: 'TeilpopulationenAnzKontrInklusiveLetzteKontrUndLetztenTPopBericht',
                       fileType,
                       applyMapFilterToExport,
+                      idKey: 'id',
+                      xKey: 'x',
+                      yKey: 'y',
                     })
                   } catch(error) {
                     listError(error)
@@ -668,6 +697,9 @@ const Teilpopulationen = ({
                       fileName: 'TeilpopulationenTPopUndMassnBerichte',
                       fileType,
                       applyMapFilterToExport,
+                      idKey: 'tpopId',
+                      xKey: 'tpopX',
+                      yKey: 'tpopY',
                     })
                   } catch(error) {
                     listError(error)

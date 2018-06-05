@@ -328,7 +328,7 @@ const SortableItem = SortableElement(
                   // TODO: if set min bounds
                   // that accords to 50m
                   // TODO: use bounds passed with props
-                  // wait til mapFilter is in gql
+                  // wait til mapFilter is in gql 
                   if (activeApfloraLayers.includes(apfloraLayer.value)) {
                     let bounds
                     switch (apfloraLayer.value) {

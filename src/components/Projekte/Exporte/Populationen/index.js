@@ -18,7 +18,7 @@ import { inject } from 'mobx-react'
 
 import exportModule from '../../../../modules/export'
 import Message from '../Message'
-import populationenGql from './pop.graphql'
+import popGql from './pop.graphql'
 import popKml from './popKml.graphql'
 import listError from '../../../../modules/listError'
 
@@ -110,13 +110,16 @@ const Populationen = ({
                 setMessage('Export "Populationen" wird vorbereitet...')
                 try {
                   const { data } = await client.query({
-                    query: populationenGql
+                    query: popGql
                   })
                   exportModule({
                     data: get(data, 'allVPops.nodes', []),
                     fileName: 'Populationen',
                     fileType,
                     applyMapFilterToExport,
+                    idKey: 'id',
+                    xKey: 'x',
+                    yKey: 'y',
                   })
                 } catch(error) {
                   listError(error)
@@ -138,6 +141,9 @@ const Populationen = ({
                     fileName: 'Populationen',
                     fileType,
                     applyMapFilterToExport,
+                    idKey: 'id',
+                    xKey: 'x',
+                    yKey: 'y',
                   })
                 } catch(error) {
                   listError(error)
@@ -159,6 +165,9 @@ const Populationen = ({
                             art
                             label
                             inhalte
+                            id
+                            x
+                            y
                             laengengrad
                             breitengrad
                             url
@@ -171,6 +180,9 @@ const Populationen = ({
                     fileName: 'PopulationenNachNamen',
                     fileType,
                     applyMapFilterToExport,
+                    idKey: 'id',
+                    xKey: 'x',
+                    yKey: 'y',
                   })
                 } catch(error) {
                   listError(error)
@@ -198,6 +210,8 @@ const Populationen = ({
                             nr
                             name
                             status
+                            x
+                            y
                           }
                         }
                       }`
@@ -207,6 +221,9 @@ const Populationen = ({
                     fileName: 'PopulationenVonApArtenOhneStatus',
                     fileType,
                     applyMapFilterToExport,
+                    idKey: 'id',
+                    xKey: 'x',
+                    yKey: 'y',
                   })
                 } catch(error) {
                   listError(error)
@@ -300,6 +317,9 @@ const Populationen = ({
                     fileName: 'PopulationenAnzMassnProMassnber',
                     fileType,
                     applyMapFilterToExport,
+                    idKey: 'popId',
+                    xKey: 'popX',
+                    yKey: 'popY',
                   })
                 } catch(error) {
                   listError(error)
@@ -343,6 +363,9 @@ const Populationen = ({
                     fileName: 'PopulationenAnzahlMassnahmen',
                     fileType,
                     applyMapFilterToExport,
+                    idKey: 'id',
+                    xKey: 'x',
+                    yKey: 'y',
                   })
                 } catch(error) {
                   listError(error)
@@ -385,6 +408,9 @@ const Populationen = ({
                     fileName: 'PopulationenAnzahlKontrollen',
                     fileType,
                     applyMapFilterToExport,
+                    idKey: 'id',
+                    xKey: 'x',
+                    yKey: 'y',
                   })
                 } catch(error) {
                   listError(error)
@@ -441,6 +467,9 @@ const Populationen = ({
                     fileName: 'PopulationenPopUndMassnBerichte',
                     fileType,
                     applyMapFilterToExport,
+                    idKey: 'popId',
+                    xKey: 'popX',
+                    yKey: 'popY',
                   })
                 } catch(error) {
                   listError(error)
@@ -490,6 +519,9 @@ const Populationen = ({
                     fileName: 'PopulationenMitLetzemPopBericht',
                     fileType,
                     applyMapFilterToExport,
+                    idKey: 'popId',
+                    xKey: 'popX',
+                    yKey: 'popY',
                   })
                 } catch(error) {
                   listError(error)
@@ -539,6 +571,9 @@ const Populationen = ({
                     fileName: 'allVPopMitLetzterPopmassnbers',
                     fileType,
                     applyMapFilterToExport,
+                    idKey: 'popId',
+                    xKey: 'popX',
+                    yKey: 'popY',
                   })
                 } catch(error) {
                   listError(error)

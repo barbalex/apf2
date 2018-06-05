@@ -201,6 +201,9 @@ const Kontrollen = ({
                     fileName: 'Kontrollen',
                     fileType,
                     applyMapFilterToExport,
+                    idKey: 'tpop_id',
+                    xKey: 'tpop_x',
+                    yKey: 'tpop_y',
                   })
                 } catch(error) {
                   listError(error)
@@ -282,6 +285,9 @@ const Kontrollen = ({
                     fileName: 'KontrollenWebGisBun',
                     fileType,
                     applyMapFilterToExport,
+                    idKey: 'KONTRGUID',
+                    xKey: 'KONTR_X',
+                    yKey: 'KONTR_Y',
                   })
                 } catch(error) {
                   listError(error)
@@ -388,6 +394,9 @@ const Kontrollen = ({
                     fileName: 'KontrollenAnzahlProZaehleinheit',
                     fileType,
                     applyMapFilterToExport,
+                    idKey: 'id',
+                    xKey: 'tpopX',
+                    yKey: 'tpopY',
                   })
                 } catch(error) {
                   listError(error)

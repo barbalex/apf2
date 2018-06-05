@@ -1,9 +1,7 @@
 // @flow
 import omit from 'lodash/omit'
 
-import beobIdsFromServerInsideFeatureCollection from './beobIdsFromServerInsideFeatureCollection'
-import tpopIdsInsideFeatureCollection from './tpopIdsInsideFeatureCollection'
-import popIdsInsideFeatureCollection from './popIdsInsideFeatureCollection'
+import idsInsideFeatureCollection from './idsInsideFeatureCollection'
 import exportXlsx from './exportXlsx'
 import exportCsv from './exportCsv'
 import exportKml from './exportKml'
@@ -16,34 +14,33 @@ export default async ({
   applyMapFilterToExport,
   kml,
   mapFilter,
-}: {
+  idKey,
+  xKey,
+  yKey,
+}:{
   data: Array<Object>,
   fileName: String,
   fileType: String,
   applyMapFilterToExport: Boolean,
   kml: Boolean,
   mapFilter: Object,
+  idKey: String,
+  xKey: String,
+  yKey: String,
 }) => {
-  // TODO
   let data = dataPassed.map(d=> omit(d, ['__typename', 'Symbol(id)']))
   // now we could manipulate the data, for instance apply mapFilter
-  const filterFeatures = mapFilter.filter.features
-  if (filterFeatures.length > 0 && applyMapFilterToExport) {
-    const keys = Object.keys(data[0])
+  const filterFeatures = mapFilter.features
+  if (filterFeatures.length > 0 && applyMapFilterToExport && idKey && xKey && yKey ) {
     // filter data
-    // beob can also have PopId and tpop-id, so dont filter by TPopId if you filter by beob id
-    if (keys.includes('id')) {
-      const beobIds = beobIdsFromServerInsideFeatureCollection({ mapFilter, data })
-      data = data.filter(d => beobIds.includes(d.id))
-    } else if (keys.includes('TPopId')) {
-      // data sets with TPopId usually also deliver PopId,
-      // so only filter by TPopid then
-      const tpopIds = tpopIdsInsideFeatureCollection({ mapFilter, data })
-      data = data.filter(d => tpopIds.includes(d.id))
-    } else if (keys.includes('PopId')) {
-      const popIds = popIdsInsideFeatureCollection({ mapFilter, data })
-      data = data.filter(d => popIds.includes(d.PopId))
-    }
+    const ids = idsInsideFeatureCollection({
+      mapFilter,
+      data,
+      idKey,
+      xKey,
+      yKey,
+    })
+    data = data.filter(d => ids.includes(d[idKey]))
   }
   if (data.length === 0) {
     return listError(new Error('Es gibt offenbar keine Daten, welche exportiert werden können'))
