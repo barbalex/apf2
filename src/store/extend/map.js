@@ -1,11 +1,6 @@
 // @flow
 import { extendObservable, action, computed } from 'mobx'
 
-import tpopIdsInsideFeatureCollection from '../../modules/tpopIdsInsideFeatureCollection'
-import popIdsInsideFeatureCollection from '../../modules/popIdsInsideFeatureCollection'
-import beobNichtBeurteiltIdsInsideFeatureCollection from '../../modules/beobNichtBeurteiltIdsInsideFeatureCollection'
-import beobNichtZuzuordnenIdsInsideFeatureCollection from '../../modules/beobNichtZuzuordnenIdsInsideFeatureCollection'
-import beobZugeordnetIdsInsideFeatureCollection from '../../modules/beobZugeordnetIdsInsideFeatureCollection'
 import fetchDetailplaene from '../action/fetchDetailplaene'
 import fetchMarkierungen from '../action/fetchMarkierungen'
 
@@ -26,31 +21,19 @@ export default (store: Object): void => {
         features: [],
       },
       pop: computed(
-        () => popIdsInsideFeatureCollection({mapFilter: store.map.mapFilter.filter, data: store.map.pop.pops})
+        () => 'TO REMOVE'
       ),
       tpop: computed(
-        () => tpopIdsInsideFeatureCollection({mapFilter: store.map.mapFilter.filter, data: store.map.tpop.tpops})
+        () => 'TO REMOVE'
       ),
       beobNichtBeurteilt: computed(
-        () =>
-          beobNichtBeurteiltIdsInsideFeatureCollection({
-            mapFilter: store.map.mapFilter.filter,
-            data: store.map.beobNichtBeurteilt.beobs
-          })
+        () => 'TO REMOVE'
       ),
       beobNichtZuzuordnen: computed(
-        () =>
-          beobNichtZuzuordnenIdsInsideFeatureCollection({
-            mapFilter: store.map.mapFilter.filter,
-            data: store.map.beobNichtZuzuordnen.beobs
-          })
+        () => 'TO REMOVE'
       ),
       beobZugeordnet: computed(
-        () =>
-          beobZugeordnetIdsInsideFeatureCollection({
-            mapFilter: store.map.mapFilter.filter,
-            data: store.map.beobZugeordnet.beobs
-          })
+        () => 'TO REMOVE'
       ),
     },
   })
