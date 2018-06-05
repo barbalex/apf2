@@ -24,6 +24,7 @@ export default async ({
   kml: Boolean,
   mapFilter: Object,
 }) => {
+  // TODO
   let data = dataPassed.map(d=> omit(d, ['__typename', 'Symbol(id)']))
   // now we could manipulate the data, for instance apply mapFilter
   const filterFeatures = mapFilter.filter.features

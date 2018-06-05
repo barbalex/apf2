@@ -6,17 +6,17 @@ import epsg2056to4326 from './epsg2056to4326notReverse'
 
 export default ({
   mapFilter, 
-  data: pops,
+  data,
 }:{
   mapFilter: Object, 
-  pops: Array<Object>,
-}): Array<number> => {
+  data: Array<Object>,
+}): Array<String> => {
   /**
    * data is passed from map.pop.pops OR a view fetched from the server
    * so need to filter to data with coordinates first...
    */
   // make sure all pops used have coordinates
-  let popsToUse = pops.filter(p => {
+  let popsToUse = data.filter(p => {
     if (!p.id && !p.popId && !p.pop_id) return false
     if (p.x && isFinite(p.x) && p.y && isFinite(p.y)) return true
     if (

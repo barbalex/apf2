@@ -26,39 +26,33 @@ export default (store: Object): void => {
         features: [],
       },
       pop: computed(
-        () => popIdsInsideFeatureCollection(store, store.map.pop.pops)
+        () => popIdsInsideFeatureCollection({mapFilter: store.map.mapFilter.filter, data: store.map.pop.pops})
       ),
       tpop: computed(
-        () => tpopIdsInsideFeatureCollection(store, store.map.tpop.tpops)
+        () => tpopIdsInsideFeatureCollection({mapFilter: store.map.mapFilter.filter, data: store.map.tpop.tpops})
       ),
       beobNichtBeurteilt: computed(
         () =>
-          beobNichtBeurteiltIdsInsideFeatureCollection(
-            store,
-            store.map.beobNichtBeurteilt.beobs
-          )
+          beobNichtBeurteiltIdsInsideFeatureCollection({
+            mapFilter: store.map.mapFilter.filter,
+            data: store.map.beobNichtBeurteilt.beobs
+          })
       ),
       beobNichtZuzuordnen: computed(
         () =>
-          beobNichtZuzuordnenIdsInsideFeatureCollection(
-            store,
-            store.map.beobNichtZuzuordnen.beobs
-          )
+          beobNichtZuzuordnenIdsInsideFeatureCollection({
+            mapFilter: store.map.mapFilter.filter,
+            data: store.map.beobNichtZuzuordnen.beobs
+          })
       ),
       beobZugeordnet: computed(
         () =>
-          beobZugeordnetIdsInsideFeatureCollection(
-            store,
-            store.map.beobZugeordnet.beobs
-          )
+          beobZugeordnetIdsInsideFeatureCollection({
+            mapFilter: store.map.mapFilter.filter,
+            data: store.map.beobZugeordnet.beobs
+          })
       ),
     },
-    updateMapFilter: action(mapFilterItems => {
-      if (!mapFilterItems) {
-        return (store.map.mapFilter.filter = { features: [] })
-      }
-      store.map.mapFilter.filter = mapFilterItems.toGeoJSON()
-    }),
   })
   extendObservable(store.map.mapFilter.filter, {
     features: [],

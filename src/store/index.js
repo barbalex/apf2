@@ -28,7 +28,6 @@ function Store(): void {
       beobNichtBeurteilt: [],
       beobZugeordnet: [],
     },
-    updateMapFilter: () => {},
   }
   this.table = TableStore
 }

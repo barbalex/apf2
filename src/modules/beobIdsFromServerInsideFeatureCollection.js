@@ -6,17 +6,17 @@ import epsg2056to4326 from './epsg2056to4326notReverse'
 
 export default ({
   mapFilter,
-  data: beobs,
+  data,
 }:{
   mapFilter: Object,
-  beobs: Array<Object>,
+  data: Array<Object>,
 }): Array<String> => {
   /**
    * data is passed from view fetched from the server
    * so need to filter to data with coordinates first...
    */
   // make sure all beobs used have id and coordinates
-  const beobsToUse = beobs.filter(
+  const beobsToUse = data.filter(
     b => b.id && b.x && isFinite(b.x) && b.y && isFinite(b.y)
   )
   const points = {
