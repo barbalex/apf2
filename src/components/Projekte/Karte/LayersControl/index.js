@@ -134,6 +134,11 @@ const LayersControl = ({
   bounds,
   setBounds,
   mapFilter,
+  mapPopIdsFiltered,
+  mapTpopIdsFiltered,
+  mapBeobNichtBeurteiltIdsFiltered,
+  mapBeobZugeordnetIdsFiltered,
+  mapBeobNichtZuzuordnenIdsFiltered,
 }: {
   data: Object,
   tree: Object,
@@ -157,6 +162,11 @@ const LayersControl = ({
   bounds: Array<Array<Number>>,
   setBounds: () => void,
   mapFilter: Object,
+  mapPopIdsFiltered: Array<String>,
+  mapTpopIdsFiltered: Array<String>,
+  mapBeobNichtBeurteiltIdsFiltered: Array<String>,
+  mapBeobZugeordnetIdsFiltered: Array<String>,
+  mapBeobNichtZuzuordnenIdsFiltered: Array<String>,
 }) => {
   const assigning = get(data, 'assigningBeob')
   const getApfloraLayersTitle = () => {
@@ -187,6 +197,7 @@ const LayersControl = ({
             </CardHeader>
             {apfloraLayersExpanded && (
               <ApfloraLayers
+                tree={tree}
                 activeNodes={activeNodes}
                 apfloraLayers={apfloraLayers}
                 setApfloraLayers={setApfloraLayers}
@@ -195,6 +206,11 @@ const LayersControl = ({
                 bounds={bounds}
                 setBounds={setBounds}
                 mapFilter={mapFilter}
+                mapPopIdsFiltered={mapPopIdsFiltered}
+                mapTpopIdsFiltered={mapTpopIdsFiltered}
+                mapBeobNichtBeurteiltIdsFiltered={mapBeobNichtBeurteiltIdsFiltered}
+                mapBeobNichtZuzuordnenIdsFiltered={mapBeobNichtZuzuordnenIdsFiltered}
+                mapBeobZugeordnetIdsFiltered={mapBeobZugeordnetIdsFiltered}
                 /**
                  * overlaysString enforces rererender
                  * even when only the sorting changes

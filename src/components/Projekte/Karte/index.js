@@ -386,6 +386,11 @@ const Karte = ({
             bounds={bounds}
             setBounds={setBounds}
             mapFilter={mapFilter}
+            mapPopIdsFiltered={mapPopIdsFiltered}
+            mapTpopIdsFiltered={mapTpopIdsFiltered}
+            mapBeobNichtBeurteiltIdsFiltered={mapBeobNichtBeurteiltIdsFiltered}
+            mapBeobNichtZuzuordnenIdsFiltered={mapBeobNichtZuzuordnenIdsFiltered}
+            mapBeobZugeordnetIdsFiltered={mapBeobZugeordnetIdsFiltered}
             // this enforces rerendering when sorting changes
             activeOverlaysString={activeOverlays.join()}
             activeApfloraLayersString={activeApfloraLayers.join()}

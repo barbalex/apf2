@@ -1,4 +1,10 @@
 query Query($isAp: Boolean!, $ap: [UUID!]) {
+  tree @client {
+    activeNodeArray
+  }
+  tree2 @client {
+    activeNodeArray
+  }
   assigningBeob @client
   pop: allPops(
     filter: {

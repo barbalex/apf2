@@ -26,7 +26,6 @@ import Checkbox from '../shared/Checkbox'
 import dataGql from './data.graphql'
 import setAssigningBeob from './setAssigningBeob.graphql'
 import getBounds from '../../../../../modules/getBounds'
-import idsInsideFeatureCollection from '../../../../../modules/idsInsideFeatureCollection'
 
 const StyledIconButton = styled(Button)`
   max-width: 18px;
@@ -127,6 +126,7 @@ const DragHandle = SortableHandle(() => (
 ))
 const SortableItem = SortableElement(
   ({
+    tree,
     apfloraLayer,
     activeNodes,
     activeApfloraLayers,
@@ -136,6 +136,11 @@ const SortableItem = SortableElement(
     bounds,
     setBounds,
     mapFilter,
+    mapPopIdsFiltered,
+    mapTpopIdsFiltered,
+    mapBeobNichtBeurteiltIdsFiltered,
+    mapBeobZugeordnetIdsFiltered,
+    mapBeobNichtZuzuordnenIdsFiltered,
   }) => {
     const assigning = get(data, 'assigningBeob')
     const assigningispossible =
@@ -150,6 +155,7 @@ const SortableItem = SortableElement(
           apfloraLayer.value === 'beobZugeordnet'
         )
       )
+    const activeNodeArray = get(data, `${tree.name}.activeNodeArray`)
     const getZuordnenIconTitle = () => {
       if (assigning) return 'Zuordnung beenden'
       if (assigningispossible) return 'Teil-Populationen zuordnen'
@@ -164,15 +170,31 @@ const SortableItem = SortableElement(
         pops.map(n => get(n, 'tpopsByPopId.nodes'))
       )
     }
-    //const idsOfLayer = get(data, `${apfloraLayer.value}.nodes`, []).map(n => n.id)
-    const highlightedIdsOfLayer = idsInsideFeatureCollection({
-      mapFilter,
-      data: layerData,
-      idKey: 'id',
-      xKey: 'x',
-      yKey: 'y',
-    })
+    let highlightedIdsOfLayer = activeNodeArray
+    if (activeApfloraLayers.includes('mapFilter')) {
+      switch (apfloraLayer.value) {
+        case 'pop':
+          highlightedIdsOfLayer = mapPopIdsFiltered
+          break
+        case 'tpop':
+          highlightedIdsOfLayer = mapTpopIdsFiltered
+          break
+        case 'beobNichtBeurteilt':
+          highlightedIdsOfLayer = mapBeobNichtBeurteiltIdsFiltered
+          break
+        case 'beobNichtZuzuordnen':
+          highlightedIdsOfLayer = mapBeobNichtZuzuordnenIdsFiltered
+          break
+        case 'beobZugeordnet':
+        case 'beobZugeordnetAssignPolylines':
+          highlightedIdsOfLayer = mapBeobZugeordnetIdsFiltered
+          break
+        default:
+          // do nothing
+      }
+    }
     const layerDataHighlighted = layerData.filter(o => highlightedIdsOfLayer.includes(o.id))
+    console.log('ApfloraLayers:', {activeNodeArray,activeApfloraLayers,highlightedIdsOfLayer,layerDataHighlighted})
 
     return (
       <LayerDiv>
@@ -365,6 +387,7 @@ const SortableItem = SortableElement(
 )
 const SortableList = SortableContainer(
   ({
+    tree,
     items,
     activeApfloraLayers,
     setActiveApfloraLayers,
@@ -373,6 +396,11 @@ const SortableList = SortableContainer(
     bounds,
     setBounds,
     mapFilter,
+    mapPopIdsFiltered,
+    mapTpopIdsFiltered,
+    mapBeobNichtBeurteiltIdsFiltered,
+    mapBeobZugeordnetIdsFiltered,
+    mapBeobNichtZuzuordnenIdsFiltered,
   }) => (
     <div>
       {
@@ -384,10 +412,16 @@ const SortableList = SortableContainer(
             activeApfloraLayers={activeApfloraLayers}
             setActiveApfloraLayers={setActiveApfloraLayers}
             data={data}
+            tree={tree}
             client={client}
             bounds={bounds}
             setBounds={setBounds}
             mapFilter={mapFilter}
+            mapPopIdsFiltered={mapPopIdsFiltered}
+            mapTpopIdsFiltered={mapTpopIdsFiltered}
+            mapBeobNichtBeurteiltIdsFiltered={mapBeobNichtBeurteiltIdsFiltered}
+            mapBeobNichtZuzuordnenIdsFiltered={mapBeobNichtZuzuordnenIdsFiltered}
+            mapBeobZugeordnetIdsFiltered={mapBeobZugeordnetIdsFiltered}
           />
         ))
       }
@@ -396,6 +430,7 @@ const SortableList = SortableContainer(
 )
 
 const ApfloraLayers = ({
+  tree,
   activeNodes,
   apfloraLayers,
   setApfloraLayers,
@@ -408,7 +443,13 @@ const ApfloraLayers = ({
   tpopBounds,
   setTpopBounds,
   mapFilter,
+  mapPopIdsFiltered,
+  mapTpopIdsFiltered,
+  mapBeobNichtBeurteiltIdsFiltered,
+  mapBeobZugeordnetIdsFiltered,
+  mapBeobNichtZuzuordnenIdsFiltered,
 }: {
+  tree: Object,
   activeNodes: Object,
   apfloraLayers: Array<Object>,
   setApfloraLayers: () => void,
@@ -421,6 +462,11 @@ const ApfloraLayers = ({
   tpopBounds: Array<Array<Number>>,
   setTpopBounds: () => void,
   mapFilter: Object,
+  mapPopIdsFiltered: Array<String>,
+  mapTpopIdsFiltered: Array<String>,
+  mapBeobNichtBeurteiltIdsFiltered: Array<String>,
+  mapBeobZugeordnetIdsFiltered: Array<String>,
+  mapBeobNichtZuzuordnenIdsFiltered: Array<String>,
 }) => (
   <ApolloProvider client={app.client}>
     <Query
@@ -445,10 +491,16 @@ const ApfloraLayers = ({
               activeApfloraLayers={activeApfloraLayers}
               setActiveApfloraLayers={setActiveApfloraLayers}
               data={data}
+              tree={tree}
               client={client}
               bounds={bounds}
               setBounds={setBounds}
               mapFilter={mapFilter}
+              mapPopIdsFiltered={mapPopIdsFiltered}
+              mapTpopIdsFiltered={mapTpopIdsFiltered}
+              mapBeobNichtBeurteiltIdsFiltered={mapBeobNichtBeurteiltIdsFiltered}
+              mapBeobNichtZuzuordnenIdsFiltered={mapBeobNichtZuzuordnenIdsFiltered}
+              mapBeobZugeordnetIdsFiltered={mapBeobZugeordnetIdsFiltered}
             />
           </CardContent>
         )
