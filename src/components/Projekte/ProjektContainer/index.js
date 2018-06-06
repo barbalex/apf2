@@ -1,6 +1,5 @@
 // @flow
 import React from 'react'
-import { observer, inject } from 'mobx-react'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
 import withState from 'recompose/withState'
@@ -47,7 +46,6 @@ const KarteContainer = styled.div`
 `
 
 const enhance = compose(
-  inject('store'),
   withState('apfloraLayers', 'setApfloraLayers', apfloraLayers),
   withState('activeApfloraLayers', 'setActiveApfloraLayers', []),
   withState('overlays', 'setOverlays', overlays),
@@ -62,11 +60,9 @@ const enhance = compose(
   withState('mapFilter', 'setMapFilter', { features: [] }),
   withState('detailplaene', 'setDetailplaene', null),
   withState('markierungen', 'setMarkierungen', null),
-  observer
 )
 
 const ProjekteContainer = ({
-  store,
   treeName,
   tabs: tabsPassed,
   projekteTabs,
@@ -97,7 +93,6 @@ const ProjekteContainer = ({
   markierungen,
   setMarkierungen,
 }: {
-  store: Object,
   treeName: String,
   tabs: Array<String>,
   projekteTabs: Array<String>,

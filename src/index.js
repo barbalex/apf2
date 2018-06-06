@@ -19,7 +19,6 @@ import moment from 'moment'
 import 'moment/locale/de-ch' // this is the important bit, you have to import the locale your'e trying to use.
 import MomentUtils from 'material-ui-pickers/utils/moment-utils'
 import MuiPickersUtilsProvider from 'material-ui-pickers/utils/MuiPickersUtilsProvider'
-import { Provider } from 'mobx-react'
 import { ApolloProvider } from 'react-apollo'
 
 import app from 'ampersand-app'
@@ -28,7 +27,6 @@ import 'react-reflex/styles.css'
 import createHistory from 'history/createBrowserHistory'
 
 // import components
-import store from './store'
 import initializeIdb from './modules/initializeIdb'
 import client from './client'
 
@@ -63,15 +61,11 @@ import './index.css'
     app.extend({
       init() {
         this.db = idb
-        this.store = store
         this.client = myClient
         this.history = history
       },
     })
     app.init()
-
-    // make store accessible in dev
-    window.app = app
 
     axios.defaults.baseURL = apiBaseUrl
 
@@ -87,17 +81,15 @@ import './index.css'
 
     ReactDOM.render(
       <ApolloProvider client={myClient}>
-        <Provider store={store}>
-          <MuiThemeProvider theme={theme}>
-            <MuiPickersUtilsProvider
-              utils={MomentUtils}
-              moment={moment}
-              locale="de-ch"
-            >
-              <AppContainer />
-            </MuiPickersUtilsProvider>
-          </MuiThemeProvider>
-        </Provider>
+        <MuiThemeProvider theme={theme}>
+          <MuiPickersUtilsProvider
+            utils={MomentUtils}
+            moment={moment}
+            locale="de-ch"
+          >
+            <AppContainer />
+          </MuiPickersUtilsProvider>
+        </MuiThemeProvider>
       </ApolloProvider>,
       document.getElementById('root')
     )
