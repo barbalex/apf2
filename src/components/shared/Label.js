@@ -1,6 +1,5 @@
 // @flow
 import React from 'react'
-import { observer } from 'mobx-react'
 import styled from 'styled-components'
 
 const StyledLabel = styled.div`
@@ -19,4 +18,4 @@ const Label = ({ label }: { label: string }) => (
   </StyledLabel>
 )
 
-export default observer(Label)
+export default Label

@@ -180,12 +180,15 @@ Die Anwendung ist zweigeteilt:
 Die wichtigsten verwendeten Technologien sind:
 
 - [create-react-app](//github.com/facebookincubator/create-react-app): Abhängigkeiten einfach aktuell halten
-- [MobX](//github.com/mobxjs/mobx): Anwendungs-Daten managen. Reaktiv wie Excel. Simpler als redux
+- [GraphQL](https://github.com/facebook/graphql) in Form von [PostGraphile](https://github.com/graphile/postgraphile)
+  - API-Server mit einer Zeile bauen und konfigurieren. Das sind _tausende_ weniger als bisher!
+  - Daten-Logik und Rechte-Verwaltung obliegen der Datenbank - wie es sein sollte<br/>
+  - GraphQL ist die kommende API-Technologie. Verglichen mit REST ist GraphQL einfach zu verstehen, extrem leistungsfähig und flexibel. Somit steht ein aussergewöhnlich benutzerfreundlicher API-Server zur Verfügung
+- [Apollo](https://www.apollodata.com). Komponenten definieren, welche Daten sie brauchen. GraphQL und Apollo kümmern sich um die Bereitstellung. React (siehe unten), GraphQL und Apollo haben die Entwicklung von Anwendungen revolutioniert
 - [recompose](https://github.com/acdlite/recompose): Logik und Benutzeroberfläche sauber trennen
 - [React](//facebook.github.io/react): Deklarative Benutzer-Oberfläche. Aufgebaut aus Komponenten
 - [styled-components](https://github.com/styled-components/styled-components): modular stylen
 - [Flow](//flow.org): Static type checker. Fehler finden, bevor der Code ausgeführt wird
-- [PostgREST](//postgrest.com): Null-Aufwand-API. Dank dessen Benutzug konnte 2018 die gesammte Datenstruktur modernisiert und für den Nachfolger ([GraphQL](https://graphql.org) via [PostGraphile](https://www.graphile.org/postgraphile)) optimiert werden 
 
 <a href="#top">&#8593; top</a>
 

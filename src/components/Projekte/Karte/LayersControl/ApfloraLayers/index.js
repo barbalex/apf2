@@ -1,5 +1,4 @@
 import React from 'react'
-import { observer } from 'mobx-react'
 import styled from 'styled-components'
 import Button from '@material-ui/core/Button'
 import DragHandleIcon from '@material-ui/icons/DragHandle'
@@ -514,4 +513,4 @@ const ApfloraLayers = ({
   </ApolloProvider>
 )
 
-export default observer(ApfloraLayers)
+export default ApfloraLayers

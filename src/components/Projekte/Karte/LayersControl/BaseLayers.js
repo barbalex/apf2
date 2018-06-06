@@ -15,11 +15,6 @@ const LayerDiv = styled.div`
   padding-top: 4px;
   padding-bottom: 4px;
 `
-/**
- * don't know why but passing store
- * with mobx inject does not work here
- * so passed in from parent
- */
 const baseLayers = [
   { label: 'OpenStreetMap farbig', value: 'OsmColor' },
   { label: 'OpenStreetMap grau', value: 'OsmBw' },

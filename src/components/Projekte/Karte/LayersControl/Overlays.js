@@ -66,12 +66,6 @@ const layerLegends = {
   ZhPflegeplan:
     'http://wms.zh.ch/FnsPflegeZHWMS?version=1.3.0&service=WMS&request=GetLegendGraphic&sld_version=1.1.0&layer=pfpl&format=image/png&STYLE=default',
 }
-/**
- * don't know why but passing store
- * with mobx inject does not work here
- * so passed in from parent
- */
-
 const DragHandle = SortableHandle(() => (
   <StyledIconButton title="ziehen, um Layer höher/tiefer zu stapeln">
     <StyledDragHandleIcon />
