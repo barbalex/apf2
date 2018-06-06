@@ -1,5 +1,5 @@
 // @flow
-import { extendObservable, action, computed } from 'mobx'
+import { extendObservable, action } from 'mobx'
 
 import fetchDetailplaene from '../action/fetchDetailplaene'
 import fetchMarkierungen from '../action/fetchMarkierungen'
@@ -16,28 +16,5 @@ export default (store: Object): void => {
     fetchMarkierungen: action(() =>
       fetchMarkierungen(store)
     ),
-    mapFilter: {
-      filter: {
-        features: [],
-      },
-      pop: computed(
-        () => 'TO REMOVE'
-      ),
-      tpop: computed(
-        () => 'TO REMOVE'
-      ),
-      beobNichtBeurteilt: computed(
-        () => 'TO REMOVE'
-      ),
-      beobNichtZuzuordnen: computed(
-        () => 'TO REMOVE'
-      ),
-      beobZugeordnet: computed(
-        () => 'TO REMOVE'
-      ),
-    },
-  })
-  extendObservable(store.map.mapFilter.filter, {
-    features: [],
   })
 }
