@@ -161,7 +161,7 @@ const BiotopCopyingIcon = styled(PhotoLibraryIcon)`
 `
 
 const Row = ({
-  key,
+  keyPassed,
   index,
   style,
   tree,
@@ -176,7 +176,7 @@ const Row = ({
   mapFilter,
   mapIdsFiltered,
 }: {
-  key?: number,
+  keyPassed?: number,
   index: number,
   style: Object,
   tree: Object,
@@ -228,7 +228,7 @@ const Row = ({
     node.nodeType === 'table' && node.id === get(data, 'copyingBiotop.id')
 
   return (
-    <div key={key} style={style}>
+    <div key={keyPassed} style={style}>
       <ContextMenuTrigger
         id={`${treeName}${node.menuType}`}
         collect={props => myProps}
