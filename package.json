@@ -14,14 +14,14 @@
     "postgraphile": "4.0.0-beta.10",
     "postgraphile-plugin-connection-filter": "1.0.0-beta.9",
     "react-scripts": "2.0.0-next.66cc7a90",
-    "serve": "8.0.0",
+    "serve": "8.1.0",
     "source-map-explorer": "1.5.0"
   },
   "dependenciesThatNeedToBeFixed": {
     "json2csv": {
       "version": "^4.0.0-alpha.0",
       "reason": "Failed to minify the code from this file: ./node_modules/json2csv/lib/JSON2CSVBase.js:9"
-    },
+    }
   },
   "dependencies": {
     "@hocs/debounce-handler": "0.3.0",
