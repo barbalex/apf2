@@ -3,12 +3,17 @@ import { Query } from 'react-apollo'
 import get from 'lodash/get'
 import flatten from 'lodash/flatten'
 import format from 'date-fns/format'
+import compose from 'recompose/compose'
+import getContext from 'recompose/getContext'
+import PropTypes from 'prop-types'
 
 import dataGql from './data.graphql'
 import buildMarkers from './buildMarkers'
 import buildMarkersClustered from './buildMarkersClustered'
 import Marker from './Marker'
 import MarkerCluster from './MarkerCluster'
+
+const enhance = compose(getContext({ map: PropTypes.object.isRequired }))
 
 const BeobZugeordnetMarker = ({
   tree,
@@ -17,6 +22,7 @@ const BeobZugeordnetMarker = ({
   clustered,
   refetchTree,
   mapIdsFiltered,
+  map,
 } : {
   tree: Object,
   activeNodes: Array<Object>,
@@ -24,6 +30,7 @@ const BeobZugeordnetMarker = ({
   clustered: Boolean,
   refetchTree: () => void,
   mapIdsFiltered: Array<String>,
+  map: Object,
 }) =>
   <Query query={dataGql}
     variables={{
@@ -69,10 +76,11 @@ const BeobZugeordnetMarker = ({
         data,
         refetchTree,
         mapIdsFiltered,
+        map,
       })
       return <Marker markers={markers} />
     
   }}
 </Query>
 
-export default BeobZugeordnetMarker
+export default enhance(BeobZugeordnetMarker)

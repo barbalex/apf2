@@ -88,10 +88,9 @@ export default ({
          * point url to moved beob
          * open form of beob?
          */
-        const nearestTpop = getNearestTpop({
+        const nearestTpop = await getNearestTpop({
           activeNodes,
           tree,
-          client,
           latLng: event.target._latlng
         })
         const newActiveNodeArray = [

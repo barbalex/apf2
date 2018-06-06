@@ -137,7 +137,7 @@ const ProjekteContainer = ({
        */
 
       return (
-        <Query query={data2Gql} variables={variables(openNodes)}>
+        <Query query={data2Gql} variables={variables(openNodes, activeNodeArray)}>
           {({ loading, error, data: data2, client, refetch }) => {
             if (error) return `Fehler: ${error.message}`
 
@@ -205,6 +205,8 @@ const ProjekteContainer = ({
                 ...mapBeobZugeordnetIdsFiltered,
               ]
             }
+            const aparts = get(data, 'projektById.apsByProjId.nodes[0].apartsByApId.nodes', [])
+            const beobs = flatten(aparts.map(a => get(a, 'aeEigenschaftenByArtId.beobsByArtId.nodes', [])))
 
             return (
               <Container data-loading={loading}>
@@ -314,6 +316,7 @@ const ProjekteContainer = ({
                             setDetailplaene={setDetailplaene}
                             markierungen={markierungen}
                             setMarkierungen={setMarkierungen}
+                            beobsString={beobs.toString()}
                           />
                         </KarteContainer>
                       </ReflexElement>

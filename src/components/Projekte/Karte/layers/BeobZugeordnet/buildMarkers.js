@@ -27,6 +27,7 @@ export default ({
   data,
   refetchTree,
   mapIdsFiltered,
+  map,
 }:{
   beobs: Array<Object>,
   tree: Object,
@@ -36,6 +37,7 @@ export default ({
   data: Object,
   refetchTree: () => void,
   mapIdsFiltered: Array<String>,
+  map: Object,
 }): Array<Object> => {
   const { ap, projekt } = activeNodes
   const assigning = get(data, 'assigningBeob')
@@ -91,7 +93,11 @@ export default ({
          * point url to moved beob
          * open form of beob?
          */
-        const nearestTpop = getNearestTpop({ activeNodes, tree, client, latLng: event.target._latlng })
+        const nearestTpop = await getNearestTpop({
+          activeNodes,
+          tree,
+          latLng: event.target._latlng
+        })
         const newActiveNodeArray = [
           'Projekte',
           activeNodes.projekt,
@@ -120,6 +126,7 @@ export default ({
           }
         })
         refetchTree()
+        map.redraw()
       })
   })
 }

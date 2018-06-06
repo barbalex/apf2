@@ -250,6 +250,7 @@ const Karte = ({
       ),
       beobZugeordnetAssignPolylines: () => (
         <BeobZugeordnetAssignPolylines
+          data={data}
           tree={tree}
           activeNodes={activeNodes}
           mapIdsFiltered={mapIdsFiltered}
@@ -301,6 +302,7 @@ const Karte = ({
     const activeOverlaysSorted = sortBy(activeOverlays, activeOverlay =>
       overlays.findIndex(o => o.value === activeOverlay)
     )
+    console.log('Karte rendering')
   
     return (
       <ErrorBoundary>

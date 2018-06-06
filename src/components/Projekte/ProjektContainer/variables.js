@@ -1,7 +1,7 @@
 // @flow
 import uniq from 'lodash/uniq'
 
-export default (openNodes: Array<Array<mixed>>): Object => {
+export default (openNodes: Array<Array<mixed>>, activeNodeArray: Array<String>): Object => {
   const projekt = uniq(
     openNodes
       .map(a => (
@@ -88,8 +88,10 @@ export default (openNodes: Array<Array<mixed>>): Object => {
   )
   const variables = {
     projekt,
+    projId: activeNodeArray[1] || '99999999-9999-9999-9999-999999999999',
     isProjekt: projekt.length > 0,
     ap,
+    apId: activeNodeArray[3],
     isAp: ap.length > 0,
     ziel,
     isZiel: ziel.length > 0,

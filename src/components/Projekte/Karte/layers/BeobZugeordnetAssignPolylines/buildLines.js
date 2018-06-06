@@ -21,6 +21,7 @@ export default ({
   beobs: Array<Object>,
   activeNodes: Array<Object>,
   mapIdsFiltered: Array<String>,
+  mapIdsFiltered: Array<String>,
 }): Array<Object> => {
   const { ap, projekt } = activeNodes
 
