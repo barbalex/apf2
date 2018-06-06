@@ -420,6 +420,11 @@ const TreeContainer = ({
   popLabelUsingNr,
   tpopLabelUsingNr,
   mapFilter,
+  mapPopIdsFiltered,
+  mapTpopIdsFiltered,
+  mapBeobNichtBeurteiltIdsFiltered,
+  mapBeobZugeordnetIdsFiltered,
+  mapBeobNichtZuzuordnenIdsFiltered,
 }: {
   treeName: String,
   flex: Number,
@@ -437,6 +442,11 @@ const TreeContainer = ({
   popLabelUsingNr: Boolean,
   tpopLabelUsingNr: Boolean,
   mapFilter: Object,
+  mapPopIdsFiltered: Array<String>,
+  mapTpopIdsFiltered: Array<String>,
+  mapBeobNichtBeurteiltIdsFiltered: Array<String>,
+  mapBeobZugeordnetIdsFiltered: Array<String>,
+  mapBeobNichtZuzuordnenIdsFiltered: Array<String>,
 }) => {
   const datasetToDelete = get(data, 'datasetToDelete')
   const deleteDatasetModalIsVisible = !!datasetToDelete.id
@@ -444,7 +454,7 @@ const TreeContainer = ({
   const tree = get(data, treeName)
   const activeNodeArray = get(data, `${treeName}.activeNodeArray`)
   const token = get(data, 'user.token', null)
-  console.log('TreeContainer:', {mapFilter})
+  //console.log('TreeContainer rendering')
 
   return (
     <ErrorBoundary>
@@ -478,6 +488,11 @@ const TreeContainer = ({
             moving={moving}
             copying={copying}
             mapFilter={mapFilter}
+            mapPopIdsFiltered={mapPopIdsFiltered}
+            mapTpopIdsFiltered={mapTpopIdsFiltered}
+            mapBeobNichtBeurteiltIdsFiltered={mapBeobNichtBeurteiltIdsFiltered}
+            mapBeobNichtZuzuordnenIdsFiltered={mapBeobNichtZuzuordnenIdsFiltered}
+            mapBeobZugeordnetIdsFiltered={mapBeobZugeordnetIdsFiltered}
           />
         </InnerTreeContainer>
         <CmApFolder

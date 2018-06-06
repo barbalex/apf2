@@ -15,13 +15,13 @@ const BeobNichtZuzuordnenMarker = ({
   activeNodes,
   apfloraLayers,
   clustered,
-  beobNichtBeurteiltHighlightedIds,
+  mapBeobNichtZuzuordnenIdsFiltered,
 } : {
   tree: Object,
   activeNodes: Array<Object>,
   apfloraLayers: Array<Object>,
   clustered: Boolean,
-  beobNichtBeurteiltHighlightedIds: Array<String>,
+  mapBeobNichtZuzuordnenIdsFiltered: Array<String>,
 }) =>
   <Query query={dataGql}
     variables={{
@@ -54,7 +54,7 @@ const BeobNichtZuzuordnenMarker = ({
           activeNodes,
           apfloraLayers,
           data,
-          beobNichtBeurteiltHighlightedIds,
+          mapBeobNichtZuzuordnenIdsFiltered,
         })
         return <MarkerCluster markers={markers} />
       }
@@ -64,7 +64,7 @@ const BeobNichtZuzuordnenMarker = ({
         activeNodes,
         apfloraLayers,
         data,
-        beobNichtBeurteiltHighlightedIds,
+        mapBeobNichtZuzuordnenIdsFiltered,
       })
       return <Marker markers={markers} />
     

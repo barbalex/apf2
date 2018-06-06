@@ -65,6 +65,12 @@ class Tree extends Component {
     moving: Object,
     copying: Object,
     activeApfloraLayers: Array<String>,
+    mapPopIdsFiltered: Array<String>,
+    mapTpopIdsFiltered: Array<String>,
+    mapBeobNichtBeurteiltIdsFiltered: Array<String>,
+    mapBeobZugeordnetIdsFiltered: Array<String>,
+    mapBeobNichtZuzuordnenIdsFiltered: Array<String>,
+    mapFilter: Object,
   }
 
   tree: ?HTMLDivElement
@@ -96,7 +102,23 @@ class Tree extends Component {
   }
 
   rowRenderer = ({ key, index, style }) => {
-    const { tree, nodes, data, treeName, client, activeNodes, moving, copying, activeApfloraLayers, mapFilter } = this.props
+    const {
+      tree,
+      nodes,
+      data,
+      treeName,
+      client,
+      activeNodes,
+      moving,
+      copying,
+      activeApfloraLayers,
+      mapFilter,
+      mapPopIdsFiltered,
+      mapTpopIdsFiltered,
+      mapBeobNichtBeurteiltIdsFiltered,
+      mapBeobZugeordnetIdsFiltered,
+      mapBeobNichtZuzuordnenIdsFiltered,
+    } = this.props
     
     return (
       <Row
@@ -114,6 +136,11 @@ class Tree extends Component {
         copying={copying}
         activeApfloraLayers={activeApfloraLayers}
         mapFilter={mapFilter}
+        mapPopIdsFiltered={mapPopIdsFiltered}
+        mapTpopIdsFiltered={mapTpopIdsFiltered}
+        mapBeobNichtBeurteiltIdsFiltered={mapBeobNichtBeurteiltIdsFiltered}
+        mapBeobNichtZuzuordnenIdsFiltered={mapBeobNichtZuzuordnenIdsFiltered}
+        mapBeobZugeordnetIdsFiltered={mapBeobZugeordnetIdsFiltered}
       />
     )
 }

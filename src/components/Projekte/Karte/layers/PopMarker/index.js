@@ -12,14 +12,14 @@ const PmcComponent = ({
   apfloraLayers,
   activeApfloraLayers,
   popLabelUsingNr,
-  popHighlightedIds,
+  mapPopIdsFiltered,
 }:{
   tree: Object,
   activeNodes: Array<Object>,
   apfloraLayers: Array<Object>,
   activeApfloraLayers: Array<String>,
   popLabelUsingNr: Boolean,
-  popHighlightedIds: Array<String>,
+  mapPopIdsFiltered: Array<String>,
 }) =>
   <Query query={dataGql}
     variables={{
@@ -46,7 +46,7 @@ const PmcComponent = ({
         activeApfloraLayers,
         data,
         popLabelUsingNr,
-        popHighlightedIds,
+        mapPopIdsFiltered,
       })
       return <PopMarkerCluster markers={popMarkers} />
     

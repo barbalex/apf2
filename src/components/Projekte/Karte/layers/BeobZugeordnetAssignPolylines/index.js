@@ -11,11 +11,11 @@ import Polylines from './Polylines'
 const Lines = ({
   tree,
   activeNodes,
-  beobZugeordnetHighlightedIds,
+  mapBeobZugeordnetIdsFiltered,
 } : {
   tree: Object,
   activeNodes: Array<Object>,
-  beobZugeordnetHighlightedIds: Array<String>,
+  mapBeobZugeordnetIdsFiltered: Array<String>,
 }) =>
   <Query query={dataGql}
     variables={{
@@ -42,7 +42,7 @@ const Lines = ({
       const lines = buildLines({
         beobs,
         activeNodes,
-        beobZugeordnetHighlightedIds,
+        mapBeobZugeordnetIdsFiltered,
       })
       return <Polylines lines={lines} />
     

@@ -20,7 +20,6 @@ class DrawControl extends Component {
     drawControl?: Object,
     setDrawControl: () => void,
     setStoreMapFilter: () => void,
-
   }
 
   componentDidMount() {
@@ -81,7 +80,9 @@ class DrawControl extends Component {
       mapFilter.addLayer(e.layer)
       setStoreMapFilter(mapFilter.toGeoJSON())
     })
-    map.on('draw:edited', e => setStoreMapFilter(mapFilter.toGeoJSON()))
+    map.on('draw:edited', e =>
+      setStoreMapFilter(mapFilter.toGeoJSON())
+    )
     map.on('draw:deleted', e => 
       setStoreMapFilter(mapFilter.toGeoJSON())
     )

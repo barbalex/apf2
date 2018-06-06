@@ -16,14 +16,14 @@ const BeobZugeordnetMarker = ({
   apfloraLayers,
   clustered,
   refetchTree,
-  beobZugeordnetHighlightedIds,
+  mapBeobZugeordnetIdsFiltered,
 } : {
   tree: Object,
   activeNodes: Array<Object>,
   apfloraLayers: Array<Object>,
   clustered: Boolean,
   refetchTree: () => void,
-  beobZugeordnetHighlightedIds: Array<String>,
+  mapBeobZugeordnetIdsFiltered: Array<String>,
 }) =>
   <Query query={dataGql}
     variables={{
@@ -56,7 +56,7 @@ const BeobZugeordnetMarker = ({
           activeNodes,
           apfloraLayers,
           data,
-          beobZugeordnetHighlightedIds,
+          mapBeobZugeordnetIdsFiltered,
         })
         return <MarkerCluster markers={markers} />
       }
@@ -68,7 +68,7 @@ const BeobZugeordnetMarker = ({
         client,
         data,
         refetchTree,
-        beobZugeordnetHighlightedIds,
+        mapBeobZugeordnetIdsFiltered,
       })
       return <Marker markers={markers} />
     

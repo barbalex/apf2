@@ -22,13 +22,13 @@ export default ({
   activeNodes,
   apfloraLayers,
   data,
-  beobNichtBeurteiltHighlightedIds,
+  mapBeobNichtBeurteiltIdsFiltered,
 }:{
   beobs: Array<Object>,
   activeNodes: Array<Object>,
   apfloraLayers: Array<Object>,
   data: Object,
-  beobNichtBeurteiltHighlightedIds: Array<String>,
+  mapBeobNichtBeurteiltIdsFiltered: Array<String>,
 }): Object => {
   const { ap, projekt } = activeNodes
   const assigning = get(data, 'assigningBeob')
@@ -52,7 +52,7 @@ export default ({
   }
   const markers = window.L.markerClusterGroup(mcgOptions)
   beobs.forEach(beob => {
-    const isHighlighted = beobNichtBeurteiltHighlightedIds.includes(beob.id)
+    const isHighlighted = mapBeobNichtBeurteiltIdsFiltered.includes(beob.id)
     const latLng = new window.L.LatLng(...epsg2056to4326(beob.x, beob.y))
     const icon = window.L.icon({
       iconUrl: isHighlighted ? beobIconHighlighted : beobIcon,

@@ -17,7 +17,6 @@ import isNodeInActiveNodePath from '../isNodeInActiveNodePath'
 import isNodeOpen from '../isNodeOpen'
 import toggleNode from '../toggleNode'
 import toggleNodeSymbol from '../toggleNodeSymbol'
-import idsInsideFeatureCollection from '../../../../modules/idsInsideFeatureCollection'
 
 const singleRowHeight = 23
 const StyledNode = styled.div`
@@ -124,28 +123,28 @@ const BeobZugeordnetMapIcon = styled(StyledMapIcon)`
 `
 const PopFilteredMapIcon = styled(PopMapIcon)`
   paint-order: stroke;
-  stroke-width: 5px;
-  stroke: #f5ef00;
+  stroke-width: 8px;
+  stroke: #fff900;
 `
 const TpopFilteredMapIcon = styled(TpopMapIcon)`
   paint-order: stroke;
-  stroke-width: 5px;
-  stroke: #f5ef00;
+  stroke-width: 8px;
+  stroke: #fff900;
 `
 const BeobNichtBeurteiltFilteredMapIcon = styled(BeobNichtBeurteiltMapIcon)`
   paint-order: stroke;
-  stroke-width: 5px;
-  stroke: #f5ef00;
+  stroke-width: 8px;
+  stroke: #fff900;
 `
 const BeobNichtZuzuordnenFilteredMapIcon = styled(BeobNichtZuzuordnenMapIcon)`
   paint-order: stroke;
-  stroke-width: 5px;
-  stroke: #f5ef00;
+  stroke-width: 8px;
+  stroke: #fff900;
 `
 const BeobZugeordnetFilteredMapIcon = styled(BeobZugeordnetMapIcon)`
   paint-order: stroke;
-  stroke-width: 5px;
-  stroke: #f5ef00;
+  stroke-width: 8px;
+  stroke: #fff900;
 `
 const MovingIcon = styled(SwapVerticalCircleIcon)`
   padding-left: 0.2em;
@@ -162,44 +161,6 @@ const BiotopCopyingIcon = styled(PhotoLibraryIcon)`
   height: 20px !important;
   color: rgb(255, 90, 0) !important;
 `
-const showPopFilteredMapIcon = (store, node, activeApfloraLayers, mapFilter, data) => {
-  const highlightedIds = idsInsideFeatureCollection({
-    mapFilter,
-    data: get(data, `popForMap.nodes`, []),
-    idKey: 'id',
-    xKey: 'x',
-    yKey: 'y',
-  })
-  return (
-    node.menuType === 'pop' &&
-    activeApfloraLayers.includes('pop') &&
-    highlightedIds.includes(node.id)
-  )
-}
-const showTpopFilteredMapIcon = (store, node, activeApfloraLayers, mapFilter, data) =>
-  node.menuType === 'tpop' &&
-  activeApfloraLayers.includes('tpop') &&
-  store.map.tpop.highlightedIds.includes(node.id)
-const showBeobNichtBeurteiltFilteredMapIcon = (store, node, activeApfloraLayers, mapFilter, data) =>
-  node.menuType === 'beobNichtBeurteilt' &&
-  activeApfloraLayers.includes('beobNichtBeurteilt') &&
-  store.map.beobNichtBeurteilt.highlightedIds.includes(node.id)
-const showBeobNichtZuzuordnenFilteredMapIcon = (store, node, activeApfloraLayers, mapFilter, data) =>
-  node.menuType === 'beobNichtZuzuordnen' &&
-  activeApfloraLayers.includes('beobNichtZuzuordnen') &&
-  store.map.beobNichtZuzuordnen.highlightedIds.includes(node.id)
-const showBeobZugeordnetFilteredMapIcon = (store, tree, node, activeNodes, activeApfloraLayers, mapFilter, data) =>
-  (node.menuType === 'beobZugeordnet' &&
-    activeApfloraLayers.includes('beobZugeordnet') &&
-    store.map.beobZugeordnet.highlightedIds.includes(node.id)) ||
-  (node.menuType === 'tpop' &&
-    !activeNodes.beobZugeordnet &&
-    activeApfloraLayers.includes('beobZugeordnet') &&
-    node.id === activeNodes.tpop) ||
-  (node.menuType === 'pop' &&
-    !activeNodes.tpop &&
-    activeApfloraLayers.includes('beobZugeordnet') &&
-    node.id === activeNodes.pop)
 
 const enhance = compose(inject('store'), observer)
 
@@ -218,6 +179,11 @@ const Row = ({
   copying,
   activeApfloraLayers,
   mapFilter,
+  mapPopIdsFiltered,
+  mapTpopIdsFiltered,
+  mapBeobNichtBeurteiltIdsFiltered,
+  mapBeobZugeordnetIdsFiltered,
+  mapBeobNichtZuzuordnenIdsFiltered,
 }: {
   key?: number,
   index: number,
@@ -233,6 +199,11 @@ const Row = ({
   copying: Object,
   activeApfloraLayers: Array<String>,
   mapFilter: Object,
+  mapPopIdsFiltered: Array<String>,
+  mapTpopIdsFiltered: Array<String>,
+  mapBeobNichtBeurteiltIdsFiltered: Array<String>,
+  mapBeobZugeordnetIdsFiltered: Array<String>,
+  mapBeobNichtZuzuordnenIdsFiltered: Array<String>,
 }) => {
   const node = nodes[index]
   const tree2 = get(data, treeName)
@@ -350,31 +321,86 @@ const Row = ({
               <BeobZugeordnetMapIcon />
             </div>
           }
-          {showPopFilteredMapIcon(store, node, activeApfloraLayers, mapFilter, data) && (
+          {
+            node.menuType === 'pop' &&
+            activeApfloraLayers.includes('pop') &&
+            !mapPopIdsFiltered.includes(node.id) &&
+            <div title="in Karte sichtbar">
+              <PopMapIcon />
+            </div>
+          }
+          {
+            node.menuType === 'pop' &&
+            activeApfloraLayers.includes('pop') &&
+            mapPopIdsFiltered.includes(node.id) &&
             <div title="in Karte hervorgehoben">
               <PopFilteredMapIcon />
             </div>
-          )}
-          {showTpopFilteredMapIcon(store, node, activeApfloraLayers, mapFilter, data) && (
+          }
+          {
+            node.menuType === 'tpop' &&
+            activeApfloraLayers.includes('tpop') &&
+            !mapTpopIdsFiltered.includes(node.id) && 
+            <div title="in Karte sichtbar">
+              <TpopMapIcon />
+            </div>
+          }
+          {
+            node.menuType === 'tpop' &&
+            activeApfloraLayers.includes('tpop') &&
+            mapTpopIdsFiltered.includes(node.id) && 
             <div title="in Karte hervorgehoben">
               <TpopFilteredMapIcon />
             </div>
-          )}
-          {showBeobNichtBeurteiltFilteredMapIcon(store, node, activeApfloraLayers, mapFilter, data) && (
+          }
+          {
+            node.menuType === 'beobNichtBeurteilt' &&
+            activeApfloraLayers.includes('beobNichtBeurteilt') &&
+            !mapBeobNichtBeurteiltIdsFiltered.includes(node.id) && 
+            <div title="in Karte sichtbar">
+              <BeobNichtBeurteiltMapIcon />
+            </div>
+          }
+          {
+            node.menuType === 'beobNichtBeurteilt' &&
+            activeApfloraLayers.includes('beobNichtBeurteilt') &&
+            mapBeobNichtBeurteiltIdsFiltered.includes(node.id) && 
             <div title="in Karte hervorgehoben">
               <BeobNichtBeurteiltFilteredMapIcon />
             </div>
-          )}
-          {showBeobNichtZuzuordnenFilteredMapIcon(store, node, activeApfloraLayers, mapFilter, data) && (
+          }
+          {
+            node.menuType === 'beobNichtZuzuordnen' &&
+            activeApfloraLayers.includes('beobNichtZuzuordnen') &&
+            !mapBeobNichtZuzuordnenIdsFiltered.includes(node.id) && 
+            <div title="in Karte sichtbar">
+              <BeobNichtZuzuordnenMapIcon />
+            </div>
+          }
+          {
+            node.menuType === 'beobNichtZuzuordnen' &&
+            activeApfloraLayers.includes('beobNichtZuzuordnen') &&
+            mapBeobNichtZuzuordnenIdsFiltered.includes(node.id) && 
             <div title="in Karte hervorgehoben">
               <BeobNichtZuzuordnenFilteredMapIcon />
             </div>
-          )}
-          {showBeobZugeordnetFilteredMapIcon(store, tree, node, activeNodes, activeApfloraLayers, mapFilter, data) && (
+          }
+          {
+            activeApfloraLayers.includes('beobZugeordnet') &&
+            node.menuType === 'beobZugeordnet' &&
+            !mapBeobZugeordnetIdsFiltered.includes(node.id) &&
+            <div title="in Karte sichtbar">
+              <BeobZugeordnetMapIcon />
+            </div>
+          }
+          {
+            activeApfloraLayers.includes('beobZugeordnet') &&
+            node.menuType === 'beobZugeordnet' &&
+            mapBeobZugeordnetIdsFiltered.includes(node.id) &&
             <div title="in Karte hervorgehoben">
               <BeobZugeordnetFilteredMapIcon />
             </div>
-          )}
+          }
           <TextSpan
             data-nodeisinactivenodepath={nodeIsInActiveNodePath}
             node={node}

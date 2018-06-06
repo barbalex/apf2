@@ -11,6 +11,7 @@ import get from 'lodash/get'
 import merge from 'lodash/merge'
 import clone from 'lodash/clone'
 import isEqual from 'lodash/isEqual'
+import flatten from 'lodash/flatten'
 
 // when Karte was loaded async, it did not load,
 // but only in production!
@@ -27,6 +28,7 @@ import buildNodes from '../TreeContainer/nodes'
 import Deletions from './Deletions'
 import apfloraLayers from '../Karte/apfloraLayers'
 import overlays from '../Karte/overlays'
+import idsInsideFeatureCollection from '../../../modules/idsInsideFeatureCollection'
 
 const Container = styled.div`
   display: flex;
@@ -58,11 +60,6 @@ const enhance = compose(
   withState('tpopLabelUsingNr', 'setTpopLabelUsingNr', true),
   withState('popLabelUsingNr', 'setPopLabelUsingNr', true),
   withState('bounds', 'setBounds', [[47.159, 8.354], [47.696, 8.984]]),
-  withState('popHighlightedIds', 'setPopHighlightedIds', []),
-  withState('tpopHighlightedIds', 'setTpopHighlightedIds', []),
-  withState('beobNichtBeurteiltHighlightedIds', 'setBeobNichtBeurteiltHighlightedIds', []),
-  withState('beobNichtZuzuordnenHighlightedIds', 'setBeobNichtZuzuordnenHighlightedIds', []),
-  withState('beobZugeordnetHighlightedIds', 'setBeobZugeordnetHighlightedIds', []),
   withState('mapFilter', 'setMapFilter', { features: [] }),
   observer
 )
@@ -92,16 +89,6 @@ const ProjekteContainer = ({
   setPopLabelUsingNr,
   bounds,
   setBounds,
-  popHighlightedIds,
-  setPopHighlightedIds,
-  tpopHighlightedIds,
-  setTpopHighlightedIds,
-  beobNichtBeurteiltHighlightedIds,
-  setBeobNichtBeurteiltHighlightedIds,
-  beobNichtZuzuordnenHighlightedIds,
-  setBeobNichtZuzuordnenHighlightedIds,
-  beobZugeordnetHighlightedIds,
-  setBeobZugeordnetHighlightedIds,
   mapFilter,
   setMapFilter,
 }: {
@@ -129,16 +116,6 @@ const ProjekteContainer = ({
   setPopLabelUsingNr: () => void,
   bounds: Array<Array<Number>>,
   setBounds: () => void,
-  popHighlightedIds: Array<String>,
-  setPopHighlightedIds: () => void,
-  tpopHighlightedIds: Array<String>,
-  setTpopHighlightedIds: () => void,
-  beobNichtBeurteiltHighlightedIds: Array<String>,
-  setBeobNichtBeurteiltHighlightedIds: () => void,
-  beobNichtZuzuordnenHighlightedIds: Array<String>,
-  setBeobNichtZuzuordnenHighlightedIds: () => void,
-  beobZugeordnetHighlightedIds: Array<String>,
-  setBeobZugeordnetHighlightedIds: () => void,
   mapFilter: Object,
   setMapFilter: () => void,
 }) =>
@@ -173,6 +150,45 @@ const ProjekteContainer = ({
                                 1 :
                                   (1 / tabs.length)
             const assigning = get(data, 'assigningBeob')
+            const mapPopIdsFiltered = idsInsideFeatureCollection({
+              mapFilter,
+              data: get(data, `popForMap.nodes`, []),
+              idKey: 'id',
+              xKey: 'x',
+              yKey: 'y',
+            })
+            const pops = get(data, 'popForMap.nodes', [])
+            const mapTpopsData = flatten(
+              pops.map(n => get(n, 'tpopsByPopId.nodes'))
+            )
+            const mapTpopIdsFiltered = idsInsideFeatureCollection({
+              mapFilter,
+              data: mapTpopsData,
+              idKey: 'id',
+              xKey: 'x',
+              yKey: 'y',
+            })
+            const mapBeobNichtBeurteiltIdsFiltered = idsInsideFeatureCollection({
+              mapFilter,
+              data: get(data, `beobNichtBeurteiltForMap.nodes`, []),
+              idKey: 'id',
+              xKey: 'x',
+              yKey: 'y',
+            })
+            const mapBeobNichtZuzuordnenIdsFiltered = idsInsideFeatureCollection({
+              mapFilter,
+              data: get(data, `beobNichtZuzuordnenForMap.nodes`, []),
+              idKey: 'id',
+              xKey: 'x',
+              yKey: 'y',
+            })
+            const mapBeobZugeordnetIdsFiltered = idsInsideFeatureCollection({
+              mapFilter,
+              data: get(data, `beobZugeordnetForMap.nodes`, []),
+              idKey: 'id',
+              xKey: 'x',
+              yKey: 'y',
+            })
 
             return (
               <Container data-loading={loading}>
@@ -202,6 +218,11 @@ const ProjekteContainer = ({
                           setTpopLabelUsingNr={setTpopLabelUsingNr}
                           setPopLabelUsingNr={setPopLabelUsingNr}
                           mapFilter={mapFilter}
+                          mapPopIdsFiltered={mapPopIdsFiltered}
+                          mapTpopIdsFiltered={mapTpopIdsFiltered}
+                          mapBeobNichtBeurteiltIdsFiltered={mapBeobNichtBeurteiltIdsFiltered}
+                          mapBeobNichtZuzuordnenIdsFiltered={mapBeobNichtZuzuordnenIdsFiltered}
+                          mapBeobZugeordnetIdsFiltered={mapBeobZugeordnetIdsFiltered}
                         />
                       </ReflexElement>
                     }
@@ -259,16 +280,11 @@ const ProjekteContainer = ({
                             activeNodes={activeNodes}
                             key={tabs.toString()}
                             refetchTree={refetch}
-                            popHighlightedIds={popHighlightedIds}
-                            setPopHighlightedIds={setPopHighlightedIds}
-                            tpopHighlightedIds={tpopHighlightedIds}
-                            setTpopHighlightedIds={setTpopHighlightedIds}
-                            beobNichtBeurteiltHighlightedIds={beobNichtBeurteiltHighlightedIds}
-                            setBeobNichtBeurteiltHighlightedIds={setBeobNichtBeurteiltHighlightedIds}
-                            beobNichtZuzuordnenHighlightedIds={beobNichtZuzuordnenHighlightedIds}
-                            setBeobNichtZuzuordnenHighlightedIds={setBeobNichtZuzuordnenHighlightedIds}
-                            beobZugeordnetHighlightedIds={beobZugeordnetHighlightedIds}
-                            setBeobZugeordnetHighlightedIds={setBeobZugeordnetHighlightedIds}
+                            mapPopIdsFiltered={mapPopIdsFiltered}
+                            mapTpopIdsFiltered={mapTpopIdsFiltered}
+                            mapBeobNichtBeurteiltIdsFiltered={mapBeobNichtBeurteiltIdsFiltered}
+                            mapBeobNichtZuzuordnenIdsFiltered={mapBeobNichtZuzuordnenIdsFiltered}
+                            mapBeobZugeordnetIdsFiltered={mapBeobZugeordnetIdsFiltered}
                             beobZugeordnetAssigning={assigning}
                             idOfTpopBeingLocalized={idOfTpopBeingLocalized}
                             setIdOfTpopBeingLocalized={setIdOfTpopBeingLocalized}

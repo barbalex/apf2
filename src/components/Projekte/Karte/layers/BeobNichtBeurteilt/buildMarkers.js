@@ -26,7 +26,7 @@ export default ({
   apfloraLayers,
   data,
   refetchTree,
-  beobNichtBeurteiltHighlightedIds,
+  mapBeobNichtBeurteiltIdsFiltered,
 }:{
   beobs: Array<Object>,
   tree: Object,
@@ -34,14 +34,14 @@ export default ({
   apfloraLayers: Array<Object>,
   data: Object,
   refetchTree: () => void,
-  beobNichtBeurteiltHighlightedIds: Array<String>,
+  mapBeobNichtBeurteiltIdsFiltered: Array<String>,
 }): Array<Object> => {
   const { ap, projekt } = activeNodes
   const assigning = get(data, 'assigningBeob')
   const { client } = app
 
   return beobs.map(beob => {
-    const isHighlighted = beobNichtBeurteiltHighlightedIds.includes(beob.id)
+    const isHighlighted = mapBeobNichtBeurteiltIdsFiltered.includes(beob.id)
     const latLng = new window.L.LatLng(...epsg2056to4326(beob.x, beob.y))
     const icon = window.L.icon({
       iconUrl: isHighlighted ? beobIconHighlighted : beobIcon,

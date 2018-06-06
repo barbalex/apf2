@@ -141,16 +141,11 @@ const Karte = ({
   popLabelUsingNr,
   bounds,
   setBounds,
-  popHighlightedIds,
-  setPopHighlightedIds,
-  tpopHighlightedIds,
-  setTpopHighlightedIds,
-  beobNichtBeurteiltHighlightedIds,
-  setBeobNichtBeurteiltHighlightedIds,
-  beobNichtZuzuordnenHighlightedIds,
-  setBeobNichtZuzuordnenHighlightedIds,
-  beobZugeordnetHighlightedIds,
-  setBeobZugeordnetHighlightedIds,
+  mapPopIdsFiltered,
+  mapTpopIdsFiltered,
+  mapBeobNichtBeurteiltIdsFiltered,
+  mapBeobZugeordnetIdsFiltered,
+  mapBeobNichtZuzuordnenIdsFiltered,
   mapFilter,
   setMapFilter,
 }: {
@@ -176,16 +171,11 @@ const Karte = ({
   popLabelUsingNr: Boolean,
   bounds: Array<Array<Number>>,
   setBounds: () => void,
-  popHighlightedIds: Array<String>,
-  setPopHighlightedIds: () => void,
-  tpopHighlightedIds: Array<String>,
-  setTpopHighlightedIds: () => void,
-  beobNichtBeurteiltHighlightedIds: Array<String>,
-  setBeobNichtBeurteiltHighlightedIds: () => void,
-  beobNichtZuzuordnenHighlightedIds: Array<String>,
-  setBeobNichtZuzuordnenHighlightedIds: () => void,
-  beobZugeordnetHighlightedIds: Array<String>,
-  setBeobZugeordnetHighlightedIds: () => void,
+  mapPopIdsFiltered: Array<String>,
+  mapTpopIdsFiltered: Array<String>,
+  mapBeobNichtBeurteiltIdsFiltered: Array<String>,
+  mapBeobZugeordnetIdsFiltered: Array<String>,
+  mapBeobNichtZuzuordnenIdsFiltered: Array<String>,
   mapFilter: Object,
   setMapFilter: () => void,
 }) => {
@@ -206,7 +196,7 @@ const Karte = ({
           apfloraLayers={apfloraLayers}
           activeApfloraLayers={activeApfloraLayers}
           popLabelUsingNr={popLabelUsingNr}
-          popHighlightedIds={popHighlightedIds}
+          mapPopIdsFiltered={mapPopIdsFiltered}
         />
       ),
       tpop: () => (
@@ -216,7 +206,7 @@ const Karte = ({
           apfloraLayers={apfloraLayers}
           clustered={clustered}
           tpopLabelUsingNr={tpopLabelUsingNr}
-          tpopHighlightedIds={tpopHighlightedIds}
+          mapTpopIdsFiltered={mapTpopIdsFiltered}
         />
       ),
       beobNichtBeurteilt: () => (
@@ -226,7 +216,7 @@ const Karte = ({
           apfloraLayers={apfloraLayers}
           clustered={clustered}
           refetchTree={refetchTree}
-          beobNichtBeurteiltHighlightedIds={beobNichtBeurteiltHighlightedIds}
+          mapBeobNichtBeurteiltIdsFiltered={mapBeobNichtBeurteiltIdsFiltered}
         />
       ),
       beobNichtZuzuordnen: () => (
@@ -235,7 +225,7 @@ const Karte = ({
           activeNodes={activeNodes}
           apfloraLayers={apfloraLayers}
           clustered={clustered}
-          beobNichtZuzuordnenHighlightedIds={beobNichtZuzuordnenHighlightedIds}
+          mapBeobNichtZuzuordnenIdsFiltered={mapBeobNichtZuzuordnenIdsFiltered}
         />
       ),
       beobZugeordnet: () => (
@@ -245,14 +235,14 @@ const Karte = ({
           apfloraLayers={apfloraLayers}
           clustered={clustered}
           refetchTree={refetchTree}
-          beobZugeordnetHighlightedIds={beobZugeordnetHighlightedIds}
+          mapBeobZugeordnetIdsFiltered={mapBeobZugeordnetIdsFiltered}
         />
       ),
       beobZugeordnetAssignPolylines: () => (
         <BeobZugeordnetAssignPolylines
           tree={tree}
           activeNodes={activeNodes}
-          beobZugeordnetHighlightedIds={beobZugeordnetHighlightedIds}
+          mapBeobZugeordnetIdsFiltered={mapBeobZugeordnetIdsFiltered}
         />
       )
     }

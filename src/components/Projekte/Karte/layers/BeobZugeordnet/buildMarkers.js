@@ -26,7 +26,7 @@ export default ({
   client,
   data,
   refetchTree,
-  beobZugeordnetHighlightedIds,
+  mapBeobZugeordnetIdsFiltered,
 }:{
   beobs: Array<Object>,
   tree: Object,
@@ -35,13 +35,13 @@ export default ({
   client: Object,
   data: Object,
   refetchTree: () => void,
-  beobZugeordnetHighlightedIds: Array<String>,
+  mapBeobZugeordnetIdsFiltered: Array<String>,
 }): Array<Object> => {
   const { ap, projekt } = activeNodes
   const assigning = get(data, 'assigningBeob')
 
   return beobs.map(beob => {
-    const isHighlighted = beobZugeordnetHighlightedIds.includes(beob.id)
+    const isHighlighted = mapBeobZugeordnetIdsFiltered.includes(beob.id)
     const latLng = new window.L.LatLng(...epsg2056to4326(beob.x, beob.y))
     const icon = window.L.icon({
       iconUrl: isHighlighted ? beobIconHighlighted : beobIcon,
