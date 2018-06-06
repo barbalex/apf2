@@ -141,11 +141,12 @@ const Karte = ({
   popLabelUsingNr,
   bounds,
   setBounds,
+  mapIdsFiltered,
   mapPopIdsFiltered,
   mapTpopIdsFiltered,
   mapBeobNichtBeurteiltIdsFiltered,
-  mapBeobZugeordnetIdsFiltered,
   mapBeobNichtZuzuordnenIdsFiltered,
+  mapBeobZugeordnetIdsFiltered,
   mapFilter,
   setMapFilter,
 }: {
@@ -171,13 +172,14 @@ const Karte = ({
   popLabelUsingNr: Boolean,
   bounds: Array<Array<Number>>,
   setBounds: () => void,
+  mapIdsFiltered: Array<String>,
+  mapFilter: Object,
+  setMapFilter: () => void,
   mapPopIdsFiltered: Array<String>,
   mapTpopIdsFiltered: Array<String>,
   mapBeobNichtBeurteiltIdsFiltered: Array<String>,
   mapBeobZugeordnetIdsFiltered: Array<String>,
   mapBeobNichtZuzuordnenIdsFiltered: Array<String>,
-  mapFilter: Object,
-  setMapFilter: () => void,
 }) => {
     const MapElement = !!idOfTpopBeingLocalized ? StyledMapLocalizing : StyledMap
     const assigning = get(data, 'assigningBeob')
@@ -196,7 +198,7 @@ const Karte = ({
           apfloraLayers={apfloraLayers}
           activeApfloraLayers={activeApfloraLayers}
           popLabelUsingNr={popLabelUsingNr}
-          mapPopIdsFiltered={mapPopIdsFiltered}
+          mapIdsFiltered={mapIdsFiltered}
         />
       ),
       tpop: () => (
@@ -206,7 +208,7 @@ const Karte = ({
           apfloraLayers={apfloraLayers}
           clustered={clustered}
           tpopLabelUsingNr={tpopLabelUsingNr}
-          mapTpopIdsFiltered={mapTpopIdsFiltered}
+          mapIdsFiltered={mapIdsFiltered}
         />
       ),
       beobNichtBeurteilt: () => (
@@ -216,7 +218,7 @@ const Karte = ({
           apfloraLayers={apfloraLayers}
           clustered={clustered}
           refetchTree={refetchTree}
-          mapBeobNichtBeurteiltIdsFiltered={mapBeobNichtBeurteiltIdsFiltered}
+          mapIdsFiltered={mapIdsFiltered}
         />
       ),
       beobNichtZuzuordnen: () => (
@@ -225,7 +227,7 @@ const Karte = ({
           activeNodes={activeNodes}
           apfloraLayers={apfloraLayers}
           clustered={clustered}
-          mapBeobNichtZuzuordnenIdsFiltered={mapBeobNichtZuzuordnenIdsFiltered}
+          mapIdsFiltered={mapIdsFiltered}
         />
       ),
       beobZugeordnet: () => (
@@ -235,14 +237,14 @@ const Karte = ({
           apfloraLayers={apfloraLayers}
           clustered={clustered}
           refetchTree={refetchTree}
-          mapBeobZugeordnetIdsFiltered={mapBeobZugeordnetIdsFiltered}
+          mapIdsFiltered={mapIdsFiltered}
         />
       ),
       beobZugeordnetAssignPolylines: () => (
         <BeobZugeordnetAssignPolylines
           tree={tree}
           activeNodes={activeNodes}
-          mapBeobZugeordnetIdsFiltered={mapBeobZugeordnetIdsFiltered}
+          mapIdsFiltered={mapIdsFiltered}
         />
       )
     }
@@ -386,6 +388,7 @@ const Karte = ({
             bounds={bounds}
             setBounds={setBounds}
             mapFilter={mapFilter}
+            mapIdsFiltered={mapIdsFiltered}
             mapPopIdsFiltered={mapPopIdsFiltered}
             mapTpopIdsFiltered={mapTpopIdsFiltered}
             mapBeobNichtBeurteiltIdsFiltered={mapBeobNichtBeurteiltIdsFiltered}

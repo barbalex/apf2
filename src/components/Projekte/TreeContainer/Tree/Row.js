@@ -1,6 +1,5 @@
 // @flow
 import React from 'react'
-import { observer, inject } from 'mobx-react'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
 import { ContextMenuTrigger } from 'react-contextmenu'
@@ -162,13 +161,10 @@ const BiotopCopyingIcon = styled(PhotoLibraryIcon)`
   color: rgb(255, 90, 0) !important;
 `
 
-const enhance = compose(inject('store'), observer)
-
 const Row = ({
   key,
   index,
   style,
-  store,
   tree,
   nodes,
   activeNodes,
@@ -179,16 +175,11 @@ const Row = ({
   copying,
   activeApfloraLayers,
   mapFilter,
-  mapPopIdsFiltered,
-  mapTpopIdsFiltered,
-  mapBeobNichtBeurteiltIdsFiltered,
-  mapBeobZugeordnetIdsFiltered,
-  mapBeobNichtZuzuordnenIdsFiltered,
+  mapIdsFiltered,
 }: {
   key?: number,
   index: number,
   style: Object,
-  store: Object,
   tree: Object,
   nodes: Array<Object>,
   activeNodes: Array<Object>,
@@ -199,11 +190,7 @@ const Row = ({
   copying: Object,
   activeApfloraLayers: Array<String>,
   mapFilter: Object,
-  mapPopIdsFiltered: Array<String>,
-  mapTpopIdsFiltered: Array<String>,
-  mapBeobNichtBeurteiltIdsFiltered: Array<String>,
-  mapBeobZugeordnetIdsFiltered: Array<String>,
-  mapBeobNichtZuzuordnenIdsFiltered: Array<String>,
+  mapIdsFiltered: Array<String>,
 }) => {
   const node = nodes[index]
   const tree2 = get(data, treeName)
@@ -324,7 +311,7 @@ const Row = ({
           {
             node.menuType === 'pop' &&
             activeApfloraLayers.includes('pop') &&
-            !mapPopIdsFiltered.includes(node.id) &&
+            !mapIdsFiltered.includes(node.id) &&
             <div title="in Karte sichtbar">
               <PopMapIcon />
             </div>
@@ -332,7 +319,7 @@ const Row = ({
           {
             node.menuType === 'pop' &&
             activeApfloraLayers.includes('pop') &&
-            mapPopIdsFiltered.includes(node.id) &&
+            mapIdsFiltered.includes(node.id) &&
             <div title="in Karte hervorgehoben">
               <PopFilteredMapIcon />
             </div>
@@ -340,7 +327,7 @@ const Row = ({
           {
             node.menuType === 'tpop' &&
             activeApfloraLayers.includes('tpop') &&
-            !mapTpopIdsFiltered.includes(node.id) && 
+            !mapIdsFiltered.includes(node.id) && 
             <div title="in Karte sichtbar">
               <TpopMapIcon />
             </div>
@@ -348,7 +335,7 @@ const Row = ({
           {
             node.menuType === 'tpop' &&
             activeApfloraLayers.includes('tpop') &&
-            mapTpopIdsFiltered.includes(node.id) && 
+            mapIdsFiltered.includes(node.id) && 
             <div title="in Karte hervorgehoben">
               <TpopFilteredMapIcon />
             </div>
@@ -356,7 +343,7 @@ const Row = ({
           {
             node.menuType === 'beobNichtBeurteilt' &&
             activeApfloraLayers.includes('beobNichtBeurteilt') &&
-            !mapBeobNichtBeurteiltIdsFiltered.includes(node.id) && 
+            !mapIdsFiltered.includes(node.id) && 
             <div title="in Karte sichtbar">
               <BeobNichtBeurteiltMapIcon />
             </div>
@@ -364,7 +351,7 @@ const Row = ({
           {
             node.menuType === 'beobNichtBeurteilt' &&
             activeApfloraLayers.includes('beobNichtBeurteilt') &&
-            mapBeobNichtBeurteiltIdsFiltered.includes(node.id) && 
+            mapIdsFiltered.includes(node.id) && 
             <div title="in Karte hervorgehoben">
               <BeobNichtBeurteiltFilteredMapIcon />
             </div>
@@ -372,7 +359,7 @@ const Row = ({
           {
             node.menuType === 'beobNichtZuzuordnen' &&
             activeApfloraLayers.includes('beobNichtZuzuordnen') &&
-            !mapBeobNichtZuzuordnenIdsFiltered.includes(node.id) && 
+            !mapIdsFiltered.includes(node.id) && 
             <div title="in Karte sichtbar">
               <BeobNichtZuzuordnenMapIcon />
             </div>
@@ -380,7 +367,7 @@ const Row = ({
           {
             node.menuType === 'beobNichtZuzuordnen' &&
             activeApfloraLayers.includes('beobNichtZuzuordnen') &&
-            mapBeobNichtZuzuordnenIdsFiltered.includes(node.id) && 
+            mapIdsFiltered.includes(node.id) && 
             <div title="in Karte hervorgehoben">
               <BeobNichtZuzuordnenFilteredMapIcon />
             </div>
@@ -388,7 +375,7 @@ const Row = ({
           {
             activeApfloraLayers.includes('beobZugeordnet') &&
             node.menuType === 'beobZugeordnet' &&
-            !mapBeobZugeordnetIdsFiltered.includes(node.id) &&
+            !mapIdsFiltered.includes(node.id) &&
             <div title="in Karte sichtbar">
               <BeobZugeordnetMapIcon />
             </div>
@@ -396,7 +383,7 @@ const Row = ({
           {
             activeApfloraLayers.includes('beobZugeordnet') &&
             node.menuType === 'beobZugeordnet' &&
-            mapBeobZugeordnetIdsFiltered.includes(node.id) &&
+            mapIdsFiltered.includes(node.id) &&
             <div title="in Karte hervorgehoben">
               <BeobZugeordnetFilteredMapIcon />
             </div>
@@ -429,4 +416,4 @@ const Row = ({
   )
 }
 
-export default enhance(Row)
+export default Row

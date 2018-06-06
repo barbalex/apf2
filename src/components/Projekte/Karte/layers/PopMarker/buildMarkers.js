@@ -26,7 +26,7 @@ export default ({
   activeApfloraLayers,
   data,
   popLabelUsingNr,
-  mapPopIdsFiltered,
+  mapIdsFiltered,
 }:{
   pops:Array<Object>,
   activeNodes:Array<Object>,
@@ -34,7 +34,7 @@ export default ({
   activeApfloraLayers: Array<String>,
   data: Object,
   popLabelUsingNr: Boolean,
-  mapPopIdsFiltered: Array<String>,
+  mapIdsFiltered: Array<String>,
 }): Object => {
   const { ap, projekt } = activeNodes
   const visible = activeApfloraLayers.includes('pop')
@@ -70,7 +70,7 @@ export default ({
         className: 'mapTooltip',
         opacity: 1,
       }
-      const isHighlighted = mapPopIdsFiltered.includes(p.id)
+      const isHighlighted = mapIdsFiltered.includes(p.id)
       const latLng = new window.L.LatLng(...epsg2056to4326(p.x, p.y))
       const icon = window.L.icon({
         iconUrl: isHighlighted ? popIconHighlighted : popIcon,

@@ -16,16 +16,16 @@ const StyledH3 = styled.h3`
 export default ({
   beobs,
   activeNodes,
-  mapBeobZugeordnetIdsFiltered,
+  mapIdsFiltered,
 }:{
   beobs: Array<Object>,
   activeNodes: Array<Object>,
-  mapBeobZugeordnetIdsFiltered: Array<String>,
+  mapIdsFiltered: Array<String>,
 }): Array<Object> => {
   const { ap, projekt } = activeNodes
 
   return beobs.map(beob => {
-    const isHighlighted = mapBeobZugeordnetIdsFiltered.includes(beob.id)
+    const isHighlighted = mapIdsFiltered.includes(beob.id)
     const beobLatLng = new window.L.LatLng(...epsg2056to4326(beob.x, beob.y))
     const tpopX = get(beob, 'tpopByTpopId.x')
     const tpopY = get(beob, 'tpopByTpopId.y')

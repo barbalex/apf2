@@ -16,14 +16,14 @@ const BeobNichtBeurteiltMarker = ({
   apfloraLayers,
   clustered,
   refetchTree,
-  mapBeobNichtBeurteiltIdsFiltered,
+  mapIdsFiltered,
 } : {
   tree: Object,
   activeNodes: Array<Object>,
   apfloraLayers: Array<Object>,
   clustered: Boolean,
   refetchTree: () => void,
-  mapBeobNichtBeurteiltIdsFiltered: Array<String>,
+  mapIdsFiltered: Array<String>,
 }) =>
   <Query query={dataGql}
     variables={{
@@ -54,7 +54,7 @@ const BeobNichtBeurteiltMarker = ({
           activeNodes,
           apfloraLayers,
           data,
-          mapBeobNichtBeurteiltIdsFiltered,
+          mapIdsFiltered,
         })
         return <MarkerCluster markers={markers} />
       }
@@ -64,7 +64,7 @@ const BeobNichtBeurteiltMarker = ({
         activeNodes,
         apfloraLayers,
         data,
-        mapBeobNichtBeurteiltIdsFiltered,
+        mapIdsFiltered,
         refetchTree,
       })
       return <Marker markers={markers} />

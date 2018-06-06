@@ -21,20 +21,20 @@ export default ({
   activeNodes,
   apfloraLayers,
   data,
-  mapBeobNichtZuzuordnenIdsFiltered,
+  mapIdsFiltered,
 }:{
   beobs: Array<Object>,
   tree: Object,
   activeNodes: Array<Object>,
   apfloraLayers: Array<Object>,
   data: Object,
-  mapBeobNichtZuzuordnenIdsFiltered: Array<String>,
+  mapIdsFiltered: Array<String>,
 }): Array<Object> => {
   const { ap, projekt } = activeNodes
   const assigning = get(data, 'assigningBeob')
 
   return beobs.map(beob => {
-    const isHighlighted = mapBeobNichtZuzuordnenIdsFiltered.includes(beob.id)
+    const isHighlighted = mapIdsFiltered.includes(beob.id)
     const latLng = new window.L.LatLng(...epsg2056to4326(beob.x, beob.y))
     const icon = window.L.icon({
       iconUrl: isHighlighted ? beobIconHighlighted : beobIcon,

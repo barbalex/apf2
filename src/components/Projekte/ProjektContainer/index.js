@@ -189,6 +189,18 @@ const ProjekteContainer = ({
               xKey: 'x',
               yKey: 'y',
             })
+            // when no map filter exists nodes in activeNodeArray should be highlighted
+            let mapIdsFiltered = activeNodeArray
+            if (activeApfloraLayers.includes('mapFilter')) {
+              // when map filter exists, nodes in map filter should be highlighted
+              mapIdsFiltered = [
+                ...mapPopIdsFiltered,
+                ...mapTpopIdsFiltered,
+                ...mapBeobNichtBeurteiltIdsFiltered,
+                ...mapBeobNichtZuzuordnenIdsFiltered,
+                ...mapBeobZugeordnetIdsFiltered,
+              ]
+            }
 
             return (
               <Container data-loading={loading}>
@@ -218,11 +230,7 @@ const ProjekteContainer = ({
                           setTpopLabelUsingNr={setTpopLabelUsingNr}
                           setPopLabelUsingNr={setPopLabelUsingNr}
                           mapFilter={mapFilter}
-                          mapPopIdsFiltered={mapPopIdsFiltered}
-                          mapTpopIdsFiltered={mapTpopIdsFiltered}
-                          mapBeobNichtBeurteiltIdsFiltered={mapBeobNichtBeurteiltIdsFiltered}
-                          mapBeobNichtZuzuordnenIdsFiltered={mapBeobNichtZuzuordnenIdsFiltered}
-                          mapBeobZugeordnetIdsFiltered={mapBeobZugeordnetIdsFiltered}
+                          mapIdsFiltered={mapIdsFiltered}
                         />
                       </ReflexElement>
                     }
@@ -280,6 +288,7 @@ const ProjekteContainer = ({
                             activeNodes={activeNodes}
                             key={tabs.toString()}
                             refetchTree={refetch}
+                            mapIdsFiltered={mapIdsFiltered}
                             mapPopIdsFiltered={mapPopIdsFiltered}
                             mapTpopIdsFiltered={mapTpopIdsFiltered}
                             mapBeobNichtBeurteiltIdsFiltered={mapBeobNichtBeurteiltIdsFiltered}

@@ -65,11 +65,7 @@ class Tree extends Component {
     moving: Object,
     copying: Object,
     activeApfloraLayers: Array<String>,
-    mapPopIdsFiltered: Array<String>,
-    mapTpopIdsFiltered: Array<String>,
-    mapBeobNichtBeurteiltIdsFiltered: Array<String>,
-    mapBeobZugeordnetIdsFiltered: Array<String>,
-    mapBeobNichtZuzuordnenIdsFiltered: Array<String>,
+    mapIdsFiltered: Array<String>,
     mapFilter: Object,
   }
 
@@ -113,11 +109,7 @@ class Tree extends Component {
       copying,
       activeApfloraLayers,
       mapFilter,
-      mapPopIdsFiltered,
-      mapTpopIdsFiltered,
-      mapBeobNichtBeurteiltIdsFiltered,
-      mapBeobZugeordnetIdsFiltered,
-      mapBeobNichtZuzuordnenIdsFiltered,
+      mapIdsFiltered,
     } = this.props
     
     return (
@@ -136,11 +128,7 @@ class Tree extends Component {
         copying={copying}
         activeApfloraLayers={activeApfloraLayers}
         mapFilter={mapFilter}
-        mapPopIdsFiltered={mapPopIdsFiltered}
-        mapTpopIdsFiltered={mapTpopIdsFiltered}
-        mapBeobNichtBeurteiltIdsFiltered={mapBeobNichtBeurteiltIdsFiltered}
-        mapBeobNichtZuzuordnenIdsFiltered={mapBeobNichtZuzuordnenIdsFiltered}
-        mapBeobZugeordnetIdsFiltered={mapBeobZugeordnetIdsFiltered}
+        mapIdsFiltered={mapIdsFiltered}
       />
     )
 }

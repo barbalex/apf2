@@ -134,11 +134,12 @@ const LayersControl = ({
   bounds,
   setBounds,
   mapFilter,
+  mapIdsFiltered,
   mapPopIdsFiltered,
   mapTpopIdsFiltered,
   mapBeobNichtBeurteiltIdsFiltered,
-  mapBeobZugeordnetIdsFiltered,
   mapBeobNichtZuzuordnenIdsFiltered,
+  mapBeobZugeordnetIdsFiltered,
 }: {
   data: Object,
   tree: Object,
@@ -162,6 +163,7 @@ const LayersControl = ({
   bounds: Array<Array<Number>>,
   setBounds: () => void,
   mapFilter: Object,
+  mapIdsFiltered: Array<String>,
   mapPopIdsFiltered: Array<String>,
   mapTpopIdsFiltered: Array<String>,
   mapBeobNichtBeurteiltIdsFiltered: Array<String>,
@@ -206,6 +208,7 @@ const LayersControl = ({
                 bounds={bounds}
                 setBounds={setBounds}
                 mapFilter={mapFilter}
+                mapIdsFiltered={mapIdsFiltered}
                 mapPopIdsFiltered={mapPopIdsFiltered}
                 mapTpopIdsFiltered={mapTpopIdsFiltered}
                 mapBeobNichtBeurteiltIdsFiltered={mapBeobNichtBeurteiltIdsFiltered}

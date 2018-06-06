@@ -16,6 +16,7 @@ query Query($projId: UUID!, $apId: UUID!) {
                   autor
                   datum
                   beobQuelleWerteByQuelleId {
+                    id
                     name
                   }
                   x

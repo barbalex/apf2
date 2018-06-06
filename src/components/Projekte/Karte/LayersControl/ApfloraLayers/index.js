@@ -136,11 +136,12 @@ const SortableItem = SortableElement(
     bounds,
     setBounds,
     mapFilter,
+    mapIdsFiltered,
     mapPopIdsFiltered,
     mapTpopIdsFiltered,
     mapBeobNichtBeurteiltIdsFiltered,
-    mapBeobZugeordnetIdsFiltered,
     mapBeobNichtZuzuordnenIdsFiltered,
+    mapBeobZugeordnetIdsFiltered,
   }) => {
     const assigning = get(data, 'assigningBeob')
     const assigningispossible =
@@ -193,8 +194,7 @@ const SortableItem = SortableElement(
           // do nothing
       }
     }
-    const layerDataHighlighted = layerData.filter(o => highlightedIdsOfLayer.includes(o.id))
-    console.log('ApfloraLayers:', {activeNodeArray,activeApfloraLayers,highlightedIdsOfLayer,layerDataHighlighted})
+    const layerDataHighlighted = layerData.filter(o => mapIdsFiltered.includes(o.id))
 
     return (
       <LayerDiv>
@@ -396,6 +396,7 @@ const SortableList = SortableContainer(
     bounds,
     setBounds,
     mapFilter,
+    mapIdsFiltered,
     mapPopIdsFiltered,
     mapTpopIdsFiltered,
     mapBeobNichtBeurteiltIdsFiltered,
@@ -417,6 +418,7 @@ const SortableList = SortableContainer(
             bounds={bounds}
             setBounds={setBounds}
             mapFilter={mapFilter}
+            mapIdsFiltered={mapIdsFiltered}
             mapPopIdsFiltered={mapPopIdsFiltered}
             mapTpopIdsFiltered={mapTpopIdsFiltered}
             mapBeobNichtBeurteiltIdsFiltered={mapBeobNichtBeurteiltIdsFiltered}
@@ -443,6 +445,7 @@ const ApfloraLayers = ({
   tpopBounds,
   setTpopBounds,
   mapFilter,
+  mapIdsFiltered,
   mapPopIdsFiltered,
   mapTpopIdsFiltered,
   mapBeobNichtBeurteiltIdsFiltered,
@@ -462,6 +465,7 @@ const ApfloraLayers = ({
   tpopBounds: Array<Array<Number>>,
   setTpopBounds: () => void,
   mapFilter: Object,
+  mapIdsFiltered: Array<String>,
   mapPopIdsFiltered: Array<String>,
   mapTpopIdsFiltered: Array<String>,
   mapBeobNichtBeurteiltIdsFiltered: Array<String>,
@@ -496,6 +500,7 @@ const ApfloraLayers = ({
               bounds={bounds}
               setBounds={setBounds}
               mapFilter={mapFilter}
+              mapIdsFiltered={mapIdsFiltered}
               mapPopIdsFiltered={mapPopIdsFiltered}
               mapTpopIdsFiltered={mapTpopIdsFiltered}
               mapBeobNichtBeurteiltIdsFiltered={mapBeobNichtBeurteiltIdsFiltered}
