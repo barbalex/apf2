@@ -7,6 +7,8 @@ import nearest from '@turf/nearest'
 import gql from 'graphql-tag'
 import get from 'lodash/get'
 import flatten from 'lodash/flatten'
+import isFinite from 'lodash/isFinite'
+import omit from 'lodash/omit'
 
 import epsg2056to4326 from './epsg2056to4326'
 
@@ -54,10 +56,22 @@ export default async ({
     variables: { apId: activeNodes.ap }
   })
   const pops = get(data, 'apById.popsByApId.nodes')
-  const tpopFeatures = flatten(
-    pops
-      .map(p => get(p, 'tpopsByPopId.nodes'))
-      .map(t => ({
+  const tpops = flatten(
+    pops.map(p =>
+      get(p, 'tpopsByPopId.nodes')
+        .filter(t => isFinite(t.x) && isFinite(t.y))
+        .map(t => ({
+          id: t.id,
+          popId: t.popId,
+          x: t.x,
+          y: t.y,
+        }))
+    )
+  )
+  const tpopFeatures = tpops
+    .map(t => {
+      const { lat, lng } = new window.L.LatLng(...epsg2056to4326(+t.x, +t.y))
+      return ({
         type: 'Feature',
         properties: {
           id: t.id,
@@ -65,15 +79,17 @@ export default async ({
         },
         geometry: {
           type: 'Point',
-          coordinates: new window.L.LatLng(...epsg2056to4326(t.x, t.y))
+          coordinates: [lat, lng]
         },
-      }))
-  )
+      })
+    })
   const against = {
     type: 'FeatureCollection',
     features: tpopFeatures,
   }
+  console.log('getNearestTpop:', {point,against,tpopFeatures,pops,tpops})
   const nearestTpopFeature = nearest(point, against)
+  console.log('getNearestTpop:', {nearestTpopFeature})
   return ({
     id: nearestTpopFeature.properties.id,
     popId: nearestTpopFeature.properties.popId
