@@ -1,15 +1,10 @@
 // @flow
-import extendStore from './extend'
 
 function Store(): void {
-  this.map = {
-    beobZugeordnet: {},
-    detailplaene: null,
-  }
+  this.detailplaene = null
+  this.markierungen = null
 }
 
 const MyStore = new Store()
-
-extendStore(MyStore)
 
 export default MyStore

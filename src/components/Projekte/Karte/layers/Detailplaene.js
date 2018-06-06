@@ -1,10 +1,9 @@
 // @flow
 import React from 'react'
 import { GeoJSON } from 'react-leaflet'
-import { inject } from 'mobx-react'
-import { toJS } from 'mobx'
 
 import popupFromProperties from './popupFromProperties'
+import fetchDetailplaene from '../../../../modules/fetchDetailplaene'
 
 const style = () => ({ fill: false, color: 'red', weight: 1 })
 const onEachFeature = (feature, layer) => {
@@ -13,13 +12,23 @@ const onEachFeature = (feature, layer) => {
   }
 }
 
-const DetailplaeneLayer = ({ store }) => {
-  const data = toJS(store.map.detailplaene)
-  !data && store.map.fetchDetailplaene()
+const DetailplaeneLayer = ({
+  detailplaene,
+  setDetailplaene
+}:{
+  detailplaene: Object,
+  setDetailplaene: () => void,
+}) => {
+  !detailplaene && fetchDetailplaene(setDetailplaene)
 
   return (
-    data && <GeoJSON data={data} style={style} onEachFeature={onEachFeature} />
+    detailplaene &&
+    <GeoJSON
+      data={detailplaene}
+      style={style}
+      onEachFeature={onEachFeature}
+    />
   )
 }
 
-export default inject('store')(DetailplaeneLayer)
+export default DetailplaeneLayer

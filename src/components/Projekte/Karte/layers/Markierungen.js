@@ -1,11 +1,10 @@
 // @flow
 import React from 'react'
 import { GeoJSON } from 'react-leaflet'
-import { inject } from 'mobx-react'
-import { toJS } from 'mobx'
 import 'leaflet'
 
 import popupFromProperties from './popupFromProperties'
+import fetchMarkierungen from '../../../../modules/fetchMarkierungen'
 
 const style = () => ({ fill: false, color: 'orange', weight: 1 })
 const onEachFeature = (feature, layer) => {
@@ -25,14 +24,19 @@ const pointToLayer = (feature, latlng) => {
   return window.L.circleMarker(latlng, pTLOptions)
 }
 
-const MarkierungenLayer = ({ store }) => {
-  const data = toJS(store.map.markierungen)
-  !data && store.map.fetchMarkierungen()
+const MarkierungenLayer = ({
+  markierungen,
+  setMarkierungen
+}:{
+  markierungen: Object,
+  setMarkierungen: () => void,
+}) => {
+  !markierungen && fetchMarkierungen(setMarkierungen)
 
   return (
-    data && (
+    markierungen && (
       <GeoJSON
-        data={data}
+        data={markierungen}
         style={style}
         onEachFeature={onEachFeature}
         pointToLayer={pointToLayer}
@@ -41,4 +45,4 @@ const MarkierungenLayer = ({ store }) => {
   )
 }
 
-export default inject('store')(MarkierungenLayer)
+export default MarkierungenLayer

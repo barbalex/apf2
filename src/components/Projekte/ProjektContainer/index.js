@@ -1,7 +1,6 @@
 // @flow
 import React from 'react'
 import { observer, inject } from 'mobx-react'
-import { toJS } from 'mobx'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
 import withState from 'recompose/withState'
@@ -61,6 +60,8 @@ const enhance = compose(
   withState('popLabelUsingNr', 'setPopLabelUsingNr', true),
   withState('bounds', 'setBounds', [[47.159, 8.354], [47.696, 8.984]]),
   withState('mapFilter', 'setMapFilter', { features: [] }),
+  withState('detailplaene', 'setDetailplaene', null),
+  withState('markierungen', 'setMarkierungen', null),
   observer
 )
 
@@ -91,6 +92,10 @@ const ProjekteContainer = ({
   setBounds,
   mapFilter,
   setMapFilter,
+  detailplaene,
+  setDetailplaene,
+  markierungen,
+  setMarkierungen,
 }: {
   store: Object,
   treeName: String,
@@ -118,6 +123,10 @@ const ProjekteContainer = ({
   setBounds: () => void,
   mapFilter: Object,
   setMapFilter: () => void,
+  detailplaene: Object,
+  setDetailplaene: () => void,
+  markierungen: Object,
+  setMarkierungen: () => void,
 }) =>
   <Query query={data1Gql} >
     {({ error, data: data1 }) => {
@@ -306,8 +315,10 @@ const ProjekteContainer = ({
                             // SortedStrings enforce rerendering when sorting or visibility changes
                             activeOverlaysString={activeOverlays.join()}
                             activeApfloraLayersString={activeApfloraLayers.join()}
-                            detailplaene={toJS(store.map.detailplaene)}
-                            markierungen={toJS(store.map.markierungen)}
+                            detailplaene={detailplaene}
+                            setDetailplaene={setDetailplaene}
+                            markierungen={markierungen}
+                            setMarkierungen={setMarkierungen}
                           />
                         </KarteContainer>
                       </ReflexElement>

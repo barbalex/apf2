@@ -1,8 +1,8 @@
 // @flow
 import axios from 'axios'
 
-import staticFilesBaseUrl from '../../modules/staticFilesBaseUrl'
-import listError from '../../modules/listError'
+import staticFilesBaseUrl from './staticFilesBaseUrl'
+import listError from './listError'
 
 export default (setMarkierungen: () => void): void => {
   const baseURL = staticFilesBaseUrl

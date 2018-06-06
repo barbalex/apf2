@@ -149,6 +149,10 @@ const Karte = ({
   mapBeobZugeordnetIdsFiltered,
   mapFilter,
   setMapFilter,
+  detailplaene,
+  setDetailplaene,
+  markierungen,
+  setMarkierungen,
 }: {
   tree: Object,
   activeNodes: Object,
@@ -180,6 +184,10 @@ const Karte = ({
   mapBeobNichtBeurteiltIdsFiltered: Array<String>,
   mapBeobZugeordnetIdsFiltered: Array<String>,
   mapBeobNichtZuzuordnenIdsFiltered: Array<String>,
+  detailplaene: Object,
+  setDetailplaene: () => void,
+  markierungen: Object,
+  setMarkierungen: () => void,
 }) => {
     const MapElement = !!idOfTpopBeingLocalized ? StyledMapLocalizing : StyledMap
     const assigning = get(data, 'assigningBeob')
@@ -252,11 +260,16 @@ const Karte = ({
       ZhUep: () => <ZhUepOverlay />,
       Detailplaene: () =>
         <Detailplaene
-          client={client}
-          treeName={tree.name}
-          detailplaene={get(data, 'map.detailplaene')}
-        />,
-      Markierungen: () => <Markierungen />,
+          detailplaene={detailplaene}
+          setDetailplaene={setDetailplaene}
+        />
+      ,
+      Markierungen: () =>
+        <Markierungen 
+          markierungen={markierungen}
+          setMarkierungen={setMarkierungen}
+        />
+      ,
       ZhGemeindegrenzen: () => <ZhGemeindegrenzen />,
       ZhSvoColor: () => <ZhSvoColor />,
       ZhSvoGrey: () => <ZhSvoGrey />,
