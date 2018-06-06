@@ -68,6 +68,7 @@ class DrawControl extends Component {
         marker: false,
         polyline: false,
         circle: false,
+        circlemarker: false,
       },
       edit: {
         featureGroup: mapFilter,
