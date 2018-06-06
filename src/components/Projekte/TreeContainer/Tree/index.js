@@ -96,7 +96,7 @@ class Tree extends Component {
   }
 
   rowRenderer = ({ key, index, style }) => {
-    const { tree, nodes, data, treeName, client, activeNodes, moving, copying, activeApfloraLayers } = this.props
+    const { tree, nodes, data, treeName, client, activeNodes, moving, copying, activeApfloraLayers, mapFilter } = this.props
     
     return (
       <Row
@@ -113,6 +113,7 @@ class Tree extends Component {
         moving={moving}
         copying={copying}
         activeApfloraLayers={activeApfloraLayers}
+        mapFilter={mapFilter}
       />
     )
 }
@@ -129,9 +130,11 @@ class Tree extends Component {
     const {
       nodes,
       activeNodeArray,
+      activeApfloraLayers,
       loading,
       copying,
-      moving
+      moving,
+      mapFilter
     } = this.props
 
     return (
@@ -150,10 +153,16 @@ class Tree extends Component {
                 )}
                 width={width}
                 innerRef={c => (this.tree = c)}
-                // force rerender when second query finisches
+                // force rerender when:
+                // ...second query finisches
                 loading={loading}
+                // ...after copying and moving
                 copying={copying}
                 moving={moving}
+                // ...map filter changes
+                mapFilterString={mapFilter.features.toString()}
+                // ...active apflora layers change
+                activeApfloraLayersString={activeApfloraLayers.join()}
               />
             )}
           </AutoSizer>

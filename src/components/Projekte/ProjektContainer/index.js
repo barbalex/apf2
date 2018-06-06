@@ -201,6 +201,7 @@ const ProjekteContainer = ({
                           popLabelUsingNr={popLabelUsingNr}
                           setTpopLabelUsingNr={setTpopLabelUsingNr}
                           setPopLabelUsingNr={setPopLabelUsingNr}
+                          mapFilter={mapFilter}
                         />
                       </ReflexElement>
                     }

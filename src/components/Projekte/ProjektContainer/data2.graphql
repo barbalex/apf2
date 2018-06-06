@@ -96,9 +96,9 @@ query TreeDataQuery(
   tpopfeldkontrs: allTpopkontrs(
     filter: {
       or: [
-        { typ: { notEqualTo: "Freiwilligen-Erfolgskontrolle" } },
+        { typ: { notEqualTo: "Freiwilligen-Erfolgskontrolle" } }
         { typ: { isNull: true } }
-      ],
+      ]
       tpopId: { in: $tpop }
     }
   ) @include(if: $isTpop) {
@@ -309,6 +309,72 @@ query TreeDataQuery(
       datum
       autor
       quelle
+    }
+  }
+  # these are used in Rows
+  # to extract data for map layers
+  popForMap: allPops(
+    filter: { apId: { in: $ap }, x: { isNull: false }, y: { isNull: false } }
+  ) @include(if: $isAp) {
+    nodes {
+      id
+      x
+      y
+      tpopsByPopId(filter: { x: { isNull: false }, y: { isNull: false } }) {
+        nodes {
+          id
+          x
+          y
+        }
+      }
+    }
+  }
+  beobNichtBeurteiltForMap: allVApbeobs(
+    filter: {
+      apId: { in: $ap }
+      nichtZuordnen: { equalTo: false }
+      tpopId: { isNull: true }
+    }
+  ) @include(if: $isAp) {
+    nodes {
+      id
+      x
+      y
+    }
+  }
+  beobNichtZuzuordnenForMap: allVApbeobs(
+    filter: { apId: { in: $ap }, nichtZuordnen: { equalTo: true } }
+  ) @include(if: $isAp) {
+    nodes {
+      id
+      x
+      y
+    }
+  }
+  beobZugeordnetForMap: allVApbeobs(
+    filter: {
+      apId: { in: $ap }
+      nichtZuordnen: { equalTo: false }
+      tpopId: { isNull: false }
+    }
+  ) @include(if: $isAp) {
+    nodes {
+      id
+      x
+      y
+    }
+  }
+  beobZugeordnetAssignPolylinesForMap: allVApbeobs(
+    filter: {
+      apId: { in: $ap }
+      nichtZuordnen: { equalTo: false }
+      tpopId: { isNull: false }
+    }
+  ) @include(if: $isAp) {
+    nodes {
+      id
+      x
+      y
     }
   }
 }

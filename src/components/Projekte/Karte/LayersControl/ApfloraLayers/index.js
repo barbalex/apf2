@@ -94,8 +94,9 @@ const FilterDiv = styled.div`
 const MapIcon = styled(LocalFloristIcon)`
   margin-right: -0.1em;
   height: 20px !important;
-  -webkit-text-stroke: 1px black;
-  -moz-text-stroke: 1px black;
+  paint-order: stroke;
+  stroke-width: 1px;
+  stroke: black;
 `
 const PopMapIcon = MapIcon.extend`
   color: #947500 !important;

@@ -419,6 +419,7 @@ const TreeContainer = ({
   refetchTree,
   popLabelUsingNr,
   tpopLabelUsingNr,
+  mapFilter,
 }: {
   treeName: String,
   flex: Number,
@@ -435,6 +436,7 @@ const TreeContainer = ({
   refetchTree: () => void,
   popLabelUsingNr: Boolean,
   tpopLabelUsingNr: Boolean,
+  mapFilter: Object,
 }) => {
   const datasetToDelete = get(data, 'datasetToDelete')
   const deleteDatasetModalIsVisible = !!datasetToDelete.id
@@ -442,6 +444,7 @@ const TreeContainer = ({
   const tree = get(data, treeName)
   const activeNodeArray = get(data, `${treeName}.activeNodeArray`)
   const token = get(data, 'user.token', null)
+  console.log('TreeContainer:', {mapFilter})
 
   return (
     <ErrorBoundary>
@@ -474,20 +477,7 @@ const TreeContainer = ({
             activeApfloraLayers={activeApfloraLayers}
             moving={moving}
             copying={copying}
-            activeApfloraLayersString={activeApfloraLayers.join()}
-            mapBeobZugeordnetVisible={activeApfloraLayers.includes(
-              'beobZugeordnet'
-            )}
-            mapBeobNichtBeurteiltVisible={activeApfloraLayers.includes(
-              'beobNichtBeurteilt'
-            )}
-            mapBeobNichtZuzuordnenVisible={activeApfloraLayers.includes(
-              'beobNichtZuzuordnen'
-            )}
-            mapPopVisible={activeApfloraLayers.includes('pop')}
-            mapTpopVisible={activeApfloraLayers.includes(
-              'tpop'
-            )}
+            mapFilter={mapFilter}
           />
         </InnerTreeContainer>
         <CmApFolder
