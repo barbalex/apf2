@@ -8,9 +8,9 @@ import jwtDecode from 'jwt-decode'
 import get from 'lodash/get'
 
 import graphQlUri from './modules/graphQlUri'
-import resolvers from './gqlStore/resolvers'
-import defaults from './gqlStore/defaults'
-//import typeDefs from './gqlStore/typeDefs'
+import resolvers from './store/resolvers'
+import defaults from './store/defaults'
+//import typeDefs from './store/typeDefs'
 
 export default async (idb) => {
   const users = await idb.currentUser.toArray()
