@@ -27,7 +27,7 @@ const FieldsContainer = styled.div`
 
 const enhance = compose(
   withHandlers({
-    saveToDb: props => ({ row, field, value, updatePopmassnber }) =>
+    saveToDb: ({ refetchTree }) => ({ row, field, value, updatePopmassnber }) => {
       updatePopmassnber({
         variables: {
           id: row.id,
@@ -50,7 +50,9 @@ const enhance = compose(
             __typename: 'Popmassnber',
           },
         },
-      }),
+      })
+      if (['beurteilung'].includes(field)) refetchTree()
+    },
   })
 )
 

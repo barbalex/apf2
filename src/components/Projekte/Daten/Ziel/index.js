@@ -30,7 +30,7 @@ const FieldsContainer = styled.div`
 
 const enhance = compose(
   withHandlers({
-    saveToDb: ({ tree }) => ({ row, field, value, updateZiel, client }) => {
+    saveToDb: ({ tree, refetchTree }) => ({ row, field, value, updateZiel, client }) => {
       updateZiel({
         variables: {
           id: row.id,
@@ -75,6 +75,7 @@ const enhance = compose(
             key2: 'openNodes'
           }
         })
+        if (['typ'].includes(field)) refetchTree()
       }
     },
   })

@@ -28,7 +28,7 @@ const FieldsContainer = styled.div`
 
 const enhance = compose(
   withHandlers({
-    saveToDb: props => ({ row, field, value, updateTpopkontrzaehl }) =>
+    saveToDb: ({ refetchTree }) => ({ row, field, value, updateTpopkontrzaehl }) => {
       updateTpopkontrzaehl({
         variables: {
           id: row.id,
@@ -44,13 +44,16 @@ const enhance = compose(
               methode: field === 'methode' ? value : row.methode,
               tpopkontrzaehlEinheitWerteByEinheit:
                 row.tpopkontrzaehlEinheitWerteByEinheit,
+                tpopkontrzaehlMethodeWerteByMethode: row.tpopkontrzaehlMethodeWerteByMethode,
               tpopkontrByTpopkontrId: row.tpopkontrByTpopkontrId,
               __typename: 'Tpopkontrzaehl',
             },
             __typename: 'Tpopkontrzaehl',
           },
         },
-      }),
+      })
+      if (['einheit', 'methode'].includes(field)) refetchTree()
+    },
   })
 )
 

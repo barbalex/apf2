@@ -8,6 +8,10 @@ query TpopkontrzaehlQuery($id: UUID!) {
       text
     }
     methode
+    tpopkontrzaehlMethodeWerteByMethode {
+      id
+      text
+    }
     tpopkontrByTpopkontrId {
       tpopByTpopId {
         popByPopId {

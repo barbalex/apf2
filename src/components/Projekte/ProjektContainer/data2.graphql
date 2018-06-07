@@ -75,6 +75,7 @@ query TreeDataQuery(
       id
       tpopId
       jahr
+      typ
       tpopmassnTypWerteByTyp {
         id
         text
@@ -89,6 +90,7 @@ query TreeDataQuery(
       id
       tpopId
       jahr
+      beurteilung
       tpopmassnErfbeurtWerteByBeurteilung {
         id
         text
@@ -156,6 +158,7 @@ query TreeDataQuery(
       id
       tpopId
       jahr
+      entwicklung
       tpopEntwicklungWerteByEntwicklung {
         id
         text
@@ -209,6 +212,7 @@ query TreeDataQuery(
       apId
       jahr
       bezeichnung
+      typ
       zielTypWerteByTyp {
         id
         text
