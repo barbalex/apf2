@@ -25,7 +25,7 @@ import dataGql from './data.graphql'
 import logout from '../../modules/logout'
 import setUrlQueryValue from '../../modules/setUrlQueryValue'
 import getActiveNodes from '../../modules/getActiveNodes'
-import DatasetsDeletedState from '../../state/DatasetsDeleted'
+import DeleteState from '../../state/Delete'
 
 const StyledAppBar = styled(AppBar)`
   @media print {
@@ -102,8 +102,8 @@ const MyAppBar = ({
   setAnchorEl: () => void,
   setShowDeletions: () => void,
 }) =>
-  <Subscribe to={[DatasetsDeletedState]}>
-    {datasetsDeletedState => (
+  <Subscribe to={[DeleteState]}>
+    {deleteState => (
       <Query query={dataGql} >
         {({ loading, error, data, client }) => {
           if (error) return `Fehler: ${error.message}`
@@ -116,7 +116,7 @@ const MyAppBar = ({
           const projekteTabs = clone(get(data, 'urlQuery.projekteTabs', []))
           const exporteIsActive = !!activeNodes.projekt
           const isMobile = isMobilePhone()
-          const datasetsDeleted = datasetsDeletedState.state.datasets
+          const datasetsDeleted = deleteState.state.datasets
 
           return (
             <ErrorBoundary>

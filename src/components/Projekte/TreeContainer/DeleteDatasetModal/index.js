@@ -11,8 +11,7 @@ import tables from '../../../../modules/tables'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import dataGql from './data.graphql'
 import deleteDataset from './delete'
-import DatasetsDeletedState from '../../../../state/DatasetsDeleted'
-import DatasetToDeleteState from '../../../../state/DatasetToDelete'
+import DeleteState from '../../../../state/Delete'
 
 const StyledDialog = styled(Dialog)`
   > div {
@@ -21,55 +20,50 @@ const StyledDialog = styled(Dialog)`
 `
 
 const DatasetDeleteModal = ({ refetchTree }:{ refetchTree: () => void }) =>
-  <Subscribe to={[DatasetsDeletedState]}>
-    {datasetsDeletedState => (
-      <Subscribe to={[DatasetToDeleteState]}>
-        {datasetToDeleteState => (
-          <Query query={dataGql}>
-            {({ loading, error, data, client }) => {
-              if (error) return `Fehler: ${error.message}`
-              const datasetToDelete = datasetToDeleteState.state
-              const table = tables.find(t => t.table === datasetToDelete.table)
-              let tableName = null
-              if (table && table.labelSingular) {
-                tableName = table.labelSingular
-              }
+  <Subscribe to={[DeleteState]}>
+    {deleteState => (
+      <Query query={dataGql}>
+        {({ loading, error, data, client }) => {
+          if (error) return `Fehler: ${error.message}`
+          const datasetToDelete = deleteState.state.toDelete
+          const table = tables.find(t => t.table === datasetToDelete.table)
+          let tableName = null
+          if (table && table.labelSingular) {
+            tableName = table.labelSingular
+          }
 
-              return (
-                <ErrorBoundary>
-                  <StyledDialog open={!!datasetToDelete.table}>
-                    {`${tableName ? `${tableName} "` : ''}${datasetToDelete.label}${
-                      tableName ? '"' : ''
-                    } löschen?`}
-                    <DialogActions>
-                      <Button
-                        onClick={() => 
-                          datasetToDeleteState.empty()
-                        }
-                      >
-                        Abbrechen
-                      </Button>
-                      <Button
-                        color="primary"
-                        onClick={() =>
-                          deleteDataset({
-                            dataPassedIn: data,
-                            datasetsDeletedState,
-                            datasetToDeleteState,
-                            refetchTree,
-                          })
-                        }
-                      >
-                        Löschen
-                      </Button>,
-                    </DialogActions>
-                  </StyledDialog>
-                </ErrorBoundary>
-              )
-            }}
-          </Query>
-        )}
-      </Subscribe>
+          return (
+            <ErrorBoundary>
+              <StyledDialog open={!!datasetToDelete.table}>
+                {`${tableName ? `${tableName} "` : ''}${datasetToDelete.label}${
+                  tableName ? '"' : ''
+                } löschen?`}
+                <DialogActions>
+                  <Button
+                    onClick={() => 
+                      deleteState.emptyToDelete()
+                    }
+                  >
+                    Abbrechen
+                  </Button>
+                  <Button
+                    color="primary"
+                    onClick={() =>
+                      deleteDataset({
+                        dataPassedIn: data,
+                        deleteState,
+                        refetchTree,
+                      })
+                    }
+                  >
+                    Löschen
+                  </Button>,
+                </DialogActions>
+              </StyledDialog>
+            </ErrorBoundary>
+          )
+        }}
+      </Query>
     )}
   </Subscribe>
 

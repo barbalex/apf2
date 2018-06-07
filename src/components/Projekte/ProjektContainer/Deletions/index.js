@@ -18,7 +18,7 @@ import { Subscribe } from 'unstated'
 
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import undelete from './undelete'
-import DatasetsDeletedState from '../../../../state/DatasetsDeleted'
+import DeleteState from '../../../../state/Delete'
 
 const List = styled.div`
   padding-left: 24px;
@@ -65,7 +65,7 @@ const enhance = compose(
       refetchTree,
     }) => ({
       datasetsDeleted,
-      datasetsDeletedState,
+      deleteState,
     }) => {
       // loop through all choosenDeletions
       choosenDeletions.forEach(time => {
@@ -76,7 +76,7 @@ const enhance = compose(
           tree,
           refetchTree,
           setShowDeletions,
-          datasetsDeletedState,
+          deleteState,
         })
       })
       // close window if no more deletions exist
@@ -117,9 +117,9 @@ const Deletions = ({
   tree: Object,
   refetchTree: () => void,
 }) =>
-  <Subscribe to={[DatasetsDeletedState]}>
-    {datasetsDeletedState => {
-        const datasetsDeleted = datasetsDeletedState.state.datasets
+  <Subscribe to={[DeleteState]}>
+    {deleteState => {
+        const datasetsDeleted = deleteState.state.datasets
 
         return (
           <ErrorBoundary>
@@ -174,7 +174,7 @@ const Deletions = ({
               <DialogActions>
                 <Button
                   onClick={() =>
-                    onClickUndo({ datasetsDeleted, datasetsDeletedState })
+                    onClickUndo({ datasetsDeleted, deleteState })
                   }
                   disabled={choosenDeletions.length === 0}
                 >

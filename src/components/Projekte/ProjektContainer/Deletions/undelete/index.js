@@ -20,14 +20,14 @@ export default async ({
   tree,
   refetchTree,
   setShowDeletions,
-  datasetsDeletedState,
+  deleteState,
 }:{
   datasetsDeleted: Array<Object>,
   dataset: Object,
   tree: Object,
   refetchTree: () => void,
   setShowDeletions: () => void,
-  datasetsDeletedState: Object,
+  deleteState: Object,
 }) => {
   const { client } = app
   const { table, url, data } = dataset
@@ -67,7 +67,7 @@ export default async ({
 
   // 2. remove dataset from datasetsDeleted
   if (datasetsDeleted.length === 1) setShowDeletions(false)
-  datasetsDeletedState.remove(dataset.id)
+  deleteState.removeDataset(dataset.id)
 
   // refetch tree
   refetchTree()

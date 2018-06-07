@@ -13,18 +13,16 @@ import setTreeKey from './setTreeKey.graphql'
 
 export default async ({
   dataPassedIn,
-  datasetsDeletedState,
-  datasetToDeleteState,
+  deleteState,
   refetchTree,
 }:{
   dataPassedIn: Object,
-  datasetsDeletedState: Object,
-  datasetToDeleteState: Object,
+  deleteState: Object,
   refetchTree: () => void
 }): Promise<void> => {
   const { client } = app
   // deleteDatasetDemand checks variables
-  const { table: tablePassed, id, url, label } = datasetToDeleteState.state
+  const { table: tablePassed, id, url, label } = deleteState.state.toDelete
 
   // some tables need to be translated, i.e. tpopfreiwkontr
   const tableMetadata = tables.find(t => t.table === tablePassed)
@@ -58,10 +56,9 @@ export default async ({
   }
   let data = {...get(result, `data.${camelCase(table)}ById`)}
   data = omit(data, '__typename')
-  //console.log('delete, data:', data)
 
   // add to datasetsDeleted
-  datasetsDeletedState.add({
+  deleteState.addDataset({
     table,
     id,
     label,
@@ -152,7 +149,7 @@ export default async ({
   })
 
   // reset datasetToDelete
-  datasetToDeleteState.empty()
+  deleteState.emptyToDelete()
 
   refetchTree()
 }
