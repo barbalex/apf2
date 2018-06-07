@@ -1,4 +1,9 @@
 // @flow
+/**
+ * for unknown reason need to set null
+ * if set '' (as React wants) value is shown and set as Unknown :-(
+ * setting null of cours makes react log errors
+ */
 import React from 'react'
 import DatePicker from 'material-ui-pickers/DatePicker'
 import format from 'date-fns/format'
