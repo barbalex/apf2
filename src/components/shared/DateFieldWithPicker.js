@@ -27,10 +27,7 @@ const enhance = compose(
   withState(
     'stateValue',
     'setStateValue',
-    ({ value: propsValue }) => {
-      console.log('DateFieldWithPicker, initial value passed:', propsValue)
-      return isValid(propsValue) ? propsValue : null
-    }
+    ({ value: propsValue }) => isValid(propsValue) ? propsValue : null
   ),
   withHandlers({
     onChange: ({ setStateValue, saveToDb }) => value =>{

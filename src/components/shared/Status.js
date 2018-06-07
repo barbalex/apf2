@@ -74,16 +74,12 @@ const enhance = compose(
       saveToDbStatus(val)
     },
     onChangeBekanntSeit: ({ setBekanntSeitStateValue }) => event =>
-      setBekanntSeitStateValue(event.target.value),
-    onBlurBekanntSeit: ({ valueOnFocus, saveToDbBekanntSeit }) => event => {
+      setBekanntSeitStateValue(event.target.value ? +event.target.value : ''),
+    onBlurBekanntSeit: ({ saveToDbBekanntSeit }) => event => {
       const { value } = event.target
-      // only update if value has changed
-      // eslint-disable-next-line eqeqeq
-      if (value != valueOnFocus) {
-        saveToDbBekanntSeit(value)
-      }
+      saveToDbBekanntSeit(value === '' ? null : value)
     },
-  })
+  }),
 )
 
 const Status = ({
