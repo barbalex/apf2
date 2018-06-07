@@ -157,14 +157,14 @@ const Tpopmassn = ({
                     saveToDb={value => {
                       saveToDb({
                         row,
-                        field: 'datum',
-                        value,
+                        field: 'jahr',
+                        value: !!value ? format(value, 'YYYY') : null,
                         updateTpopmassn,
                       })
                       saveToDb({
                         row,
-                        field: 'jahr',
-                        value: !!value ? format(value, 'YYYY') : null,
+                        field: 'datum',
+                        value,
                         updateTpopmassn,
                       })
                     }}

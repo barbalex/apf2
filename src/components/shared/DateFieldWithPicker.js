@@ -2,6 +2,7 @@
 import React from 'react'
 import DatePicker from 'material-ui-pickers/DatePicker'
 import format from 'date-fns/format'
+import isValid from 'date-fns/isValid'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
 import withState from 'recompose/withState'
@@ -21,43 +22,48 @@ const enhance = compose(
   withState(
     'stateValue',
     'setStateValue',
-    ({ value: propsValue }) =>
-      (propsValue || propsValue === 0) ? propsValue : ''
+    ({ value: propsValue }) => {
+      console.log('DateFieldWithPicker, initial value passed:', propsValue)
+      return isValid(propsValue) ? propsValue : null
+    }
   ),
   withHandlers({
     onChange: ({ setStateValue, saveToDb }) => value =>{
       /**
       * change happens when data is picked in picker
-      * so is never null
+      * so is never null or otherwise invalid
+      * oops: it is null if clear button is clicked!
       */
+      //console.log('DateFieldWithPicker, onChange:', {value})
+      if (!isValid(value)) {
+        saveToDb(null)
+        return setStateValue(null)
+      }
       const newValue = format(value, 'YYYY-MM-DD')
       saveToDb(newValue)
       setStateValue(newValue)
     },
-    onBlur: ({ saveToDb, stateValue, setStateValue }) => event => {
+    onBlur: ({ saveToDb, stateValue, setStateValue, value: propsValue }) => event => {
       const { value } = event.target
+      //console.log('DateFieldWithPicker, onBlur:', {value})
       // do not change anything of there are no values
-      if (stateValue === null && value === '') return
-
-      // avoid creating an invalid date which happens
-      // when falsy values are passed
-      if (!value || value === '0') return saveToDb(null)
+      if (!isValid(value)) {
+        //console.log('invalid value, propsValue:', propsValue)
+        saveToDb(null)
+        return setStateValue(null)
+      }
 
       // write a real date to db
       const date = new Date(convertDateToYyyyMmDd(value))
       const newValue = format(date, 'YYYY-MM-DD')
       saveToDb(newValue)
       setStateValue(newValue)
-      /**
-       * TODO
-       * When manually re-inserting the same data already existing,
-       * it is not re-rendered?
-       */
       },
   }),
   withLifecycle({
     onDidUpdate(prevProps, props) {
       if (props.value !== prevProps.value) {
+        //console.log('DateFieldWithPicker, onDidUpdate, setting state to:', props.value)
         props.setStateValue(props.value)
       }
     },
@@ -78,25 +84,31 @@ const DateFieldWithPicker = ({
   saveToDb: () => void,
   onChange: () => void,
   onBlur: () => void,
-}) =>
-  <StyledDatePicker
-    keyboard
-    label={label}
-    format="DD.MM.YYYY"
-    value={stateValue}
-    onChange={onChange}
-    onBlur={onBlur}
-    disableOpenOnEnter
-    animateYearScrolling={false}
-    autoOk
-    // remove message because dont want it when user
-    // enters only day and maybe month
-    // need a value because seems that too expects one
-    invalidDateMessage=" "
-    cancelLabel="schliessen"
-    okLabel="speichern"
-    fullWidth
-  />
+}) => {
+  //console.log('DateFieldWithPicker, render:', {stateValue})
+  return (
+    <StyledDatePicker
+      keyboard
+      label={label}
+      format="DD.MM.YYYY"
+      value={stateValue}
+      onChange={onChange}
+      onBlur={onBlur}
+      disableOpenOnEnter
+      animateYearScrolling={false}
+      autoOk
+      clearable={true}
+      clearLabel="leeren"
+      // remove message because dont want it when user
+      // enters only day and maybe month
+      // need a value because seems that too expects one
+      invalidDateMessage=" "
+      cancelLabel="schliessen"
+      okLabel="speichern"
+      fullWidth
+    />
+  )
+}
 
 
 export default enhance(DateFieldWithPicker)
