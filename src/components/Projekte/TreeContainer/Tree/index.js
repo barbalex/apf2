@@ -150,7 +150,8 @@ class Tree extends Component {
       loading,
       copying,
       moving,
-      mapFilter
+      mapFilter,
+      data,
     } = this.props
 
     return (
@@ -179,6 +180,9 @@ class Tree extends Component {
                 mapFilterString={mapFilter.features.toString()}
                 // ...active apflora layers change
                 activeApfloraLayersString={activeApfloraLayers.join()}
+                // ...when anything changes in the queried data
+                // without this AP label did not update when Art was changed
+                dataString={JSON.stringify(data)}
               />
             )}
           </AutoSizer>

@@ -60,8 +60,8 @@ const LabelPopoverRowColumnRight = styled.div`
 
 const enhance = compose(
   withHandlers({
-    saveToDb: props => ({ row, field, value, updateAp }) =>
-      updateAp({
+    saveToDb: () => async ({ row, field, value, updateAp }) => {
+      await updateAp({
         variables: {
           id: row.id,
           [field]: value,
@@ -84,7 +84,8 @@ const enhance = compose(
             __typename: 'Ap',
           },
         },
-      }),
+      })
+    },
   })
 )
 

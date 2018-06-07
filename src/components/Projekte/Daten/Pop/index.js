@@ -28,7 +28,7 @@ const FieldsContainer = styled.div`
 
 const enhance = compose(
   withHandlers({
-    saveToDb: props => ({ row, field, value, updatePop }) =>
+    saveToDb: () => ({ row, field, value, updatePop }) => {
       updatePop({
         variables: {
           id: row.id,
@@ -57,7 +57,8 @@ const enhance = compose(
             __typename: 'Pop',
           },
         },
-      }),
+      })
+    },
   })
 )
 

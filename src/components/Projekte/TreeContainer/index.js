@@ -450,7 +450,11 @@ const TreeContainer = ({
     <ErrorBoundary>
       <Container>
         {deleteDatasetModalIsVisible && (
-          <DeleteDatasetModal tree={tree} token={token} refetchTree={refetchTree} />
+          <DeleteDatasetModal
+            tree={tree}
+            token={token}
+            refetchTree={refetchTree}
+          />
         )}
         <LabelFilterContainer>
           <LabelFilter
