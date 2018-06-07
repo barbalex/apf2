@@ -11,6 +11,7 @@ import get from 'lodash/get'
 import uniq from 'lodash/uniq'
 import app from 'ampersand-app'
 import withLifecycle from '@hocs/with-lifecycle'
+import { Subscribe } from 'unstated'
 
 import LabelFilter from './LabelFilter'
 import ApFilter from './ApFilter'
@@ -77,10 +78,10 @@ import setCopying from './setCopying.graphql'
 import setMoving from './setMoving.graphql'
 import tpopById from './tpopById.graphql'
 import beobById from './beobById.graphql'
-import setDatasetToDelete from './setDatasetToDelete.graphql'
 import openLowerNodes from './openLowerNodes'
 import closeLowerNodes from './closeLowerNodes'
 import insertDataset from './insertDataset'
+import DatasetToDeleteState from '../../../state/DatasetToDelete'
 
 const Container = styled.div`
   height: 100%;
@@ -187,7 +188,8 @@ const enhance = compose(
       data,
       element,
       nodes,
-      client
+      client,
+      datasetToDeleteState,
     }) => {
       const tree = get(dbData, treeName)
       if (!data) return listError('no data passed with click')
@@ -243,14 +245,11 @@ const enhance = compose(
           })
         },
         delete() {
-          client.mutate({
-            mutation: setDatasetToDelete,
-            variables: {
-              table,
-              id,
-              label,
-              url: baseUrl,
-            }
+          datasetToDeleteState.set({
+            table,
+            id,
+            label,
+            url: baseUrl,
           })
         },
         showBeobOnMap() {
@@ -458,307 +457,310 @@ const TreeContainer = ({
   tpopLabelUsingNr: Boolean,
   mapFilter: Object,
   mapIdsFiltered: Array<String>,
-}) => {
-  const datasetToDelete = get(data, 'datasetToDelete')
-  const deleteDatasetModalIsVisible = !!datasetToDelete.id
-  const openNodes = get(data, `${treeName}.openNodes`)
-  const tree = get(data, treeName)
-  const activeNodeArray = get(data, `${treeName}.activeNodeArray`)
-  const token = get(data, 'user.token', null)
+}) => 
+  <Subscribe to={[DatasetToDeleteState]}>
+    {datasetToDeleteState => {
+      const datasetToDelete = datasetToDeleteState.state
+      const deleteDatasetModalIsVisible = !!datasetToDelete.id
+      const openNodes = get(data, `${treeName}.openNodes`)
+      const tree = get(data, treeName)
+      const activeNodeArray = get(data, `${treeName}.activeNodeArray`)
+      const token = get(data, 'user.token', null)
 
-  return (
-    <ErrorBoundary>
-      <Container>
-        {deleteDatasetModalIsVisible && (
-          <DeleteDatasetModal
-            tree={tree}
-            token={token}
-            refetchTree={refetchTree}
-          />
-        )}
-        <LabelFilterContainer>
-          <LabelFilter
-            treeName={treeName}
-            nodes={nodes} 
-            activeNode={activeNode}
-          />
-          {!!activeNodes.projekt && <ApFilter treeName={treeName} />}
-        </LabelFilterContainer>
-        <InnerTreeContainer
-          // $FlowIssue
-          innerRef={c => (this.tree = c)}
-        >
-          <Tree
-            client={client}
-            treeName={treeName}
-            data={data}
-            tree={tree}
-            nodes={nodes}
-            loading={loading}
-            activeNodeArray={activeNodeArray}
-            openNodes={openNodes}
-            activeNodes={activeNodes}
-            activeApfloraLayers={activeApfloraLayers}
-            moving={moving}
-            copying={copying}
-            mapFilter={mapFilter}
-            mapIdsFiltered={mapIdsFiltered}
-          />
-        </InnerTreeContainer>
-        <CmApFolder
-          onClick={(e, data, element)=>handleClick({data,element,nodes,client})}
-          tree={tree}
-          token={token}
-        />
-        <CmAp
-          onClick={(e, data, element)=>handleClick({data,element,nodes,client})}
-          tree={tree}
-          token={token}
-          moving={moving}
-          activeApfloraLayers={activeApfloraLayers}
-          popLabelUsingNr={popLabelUsingNr}
-          tpopLabelUsingNr={tpopLabelUsingNr}
-        />
-        <CmApberuebersichtFolder
-          onClick={(e, data, element)=>handleClick({data,element,nodes,client})}
-          tree={tree}
-          token={token}
-        />
-        <CmApberuebersicht
-          onClick={(e, data, element)=>handleClick({data,element,nodes,client})}
-          tree={tree}
-          token={token}
-        />
-        <CmAssozartFolder
-          onClick={(e, data, element)=>handleClick({data,element,nodes,client})}
-          tree={tree}
-          token={token}
-        />
-        <CmAssozart
-          onClick={(e, data, element)=>handleClick({data,element,nodes,client})}
-          tree={tree}
-          token={token}
-        />
-        <CmApartFolder
-          onClick={(e, data, element)=>handleClick({data,element,nodes,client})}
-          tree={tree}
-          token={token}
-        />
-        <CmApart
-          onClick={(e, data, element)=>handleClick({data,element,nodes,client})}
-          tree={tree}
-          token={token}
-        />
-        <CmBeobZugeordnetFolder
-          onClick={(e, data, element)=>handleClick({data,element,nodes,client})}
-          tree={tree}
-          token={token}
-          activeApfloraLayers={activeApfloraLayers}
-        />
-        <CmBerFolder
-          onClick={(e, data, element)=>handleClick({data,element,nodes,client})}
-          tree={tree}
-          token={token}
-        />
-        <CmBer
-          onClick={(e, data, element)=>handleClick({data,element,nodes,client})}
-          tree={tree}
-          token={token}
-        />
-        <CmApberFolder
-          onClick={(e, data, element)=>handleClick({data,element,nodes,client})}
-          tree={tree}
-          token={token}
-        />
-        <CmApber
-          onClick={(e, data, element)=>handleClick({data,element,nodes,client})}
-          tree={tree}
-          token={token}
-        />
-        <CmErfkritFolder
-          onClick={(e, data, element)=>handleClick({data,element,nodes,client})}
-          tree={tree}
-          token={token}
-        />
-        <CmErfkrit
-          onClick={(e, data, element)=>handleClick({data,element,nodes,client})}
-          tree={tree}
-          token={token}
-        />
-        <CmZielFolder
-          onClick={(e, data, element)=>handleClick({data,element,nodes,client})}
-          tree={tree}
-          token={token}
-        />
-        <CmZielJahrFolder
-          onClick={(e, data, element)=>handleClick({data,element,nodes,client})}
-          tree={tree}
-          token={token}
-        />
-        <CmZiel
-          onClick={(e, data, element)=>handleClick({data,element,nodes,client})}
-          tree={tree}
-          token={token}
-        />
-        <CmZielBerFolder
-          onClick={(e, data, element)=>handleClick({data,element,nodes,client})}
-          tree={tree}
-          token={token}
-        />
-        <CmZielBer
-          onClick={(e, data, element)=>handleClick({data,element,nodes,client})}
-          tree={tree}
-          token={token}
-        />
-        <CmPopFolder
-          onClick={(e, data, element)=>handleClick({data,element,nodes,client})}
-          tree={tree}
-          token={token}
-          moving={moving}
-          copying={copying}
-        />
-        <CmPop
-          onClick={(e, data, element)=>handleClick({data,element,nodes,client})}
-          tree={tree}
-          token={token}
-          moving={moving}
-          copying={copying}
-        />
-        <CmPopmassnberFolder
-          onClick={(e, data, element)=>handleClick({data,element,nodes,client})}
-          tree={tree}
-          token={token}
-        />
-        <CmPopmassnber
-          onClick={(e, data, element)=>handleClick({data,element,nodes,client})}
-          tree={tree}
-          token={token}
-        />
-        <CmPopberFolder
-          onClick={(e, data, element)=>handleClick({data,element,nodes,client})}
-          tree={tree}
-          token={token}
-        />
-        <CmPopber
-          onClick={(e, data, element)=>handleClick({data,element,nodes,client})}
-          tree={tree}
-          token={token}
-        />
-        <CmProjekt
-          onClick={(e, data, element)=>handleClick({data,element,nodes,client})}
-          tree={tree}
-          token={token}
-        />
-        <CmTpopFolder
-          onClick={(e, data, element)=>handleClick({data,element,nodes,client})}
-          tree={tree}
-          token={token}
-          moving={moving}
-          copying={copying}
-        />
-        <CmTpop
-          onClick={(e, data, element)=>handleClick({data,element,nodes,client})}
-          tree={tree}
-          token={token}
-          moving={moving}
-          copying={copying}
-        />
-        <CmTpopberFolder
-          onClick={(e, data, element)=>handleClick({data,element,nodes,client})}
-          tree={tree}
-          token={token}
-        />
-        <CmTpopber
-          onClick={(e, data, element)=>handleClick({data,element,nodes,client})}
-          tree={tree}
-          token={token}
-        />
-        <CmBeobZugeordnet
-          onClick={(e, data, element)=>handleClick({data,element,nodes,client})}
-          tree={tree}
-          token={token}
-        />
-        <CmBeobnichtbeurteilt
-          onClick={(e, data, element)=>handleClick({data,element,nodes,client})}
-          tree={tree}
-          token={token}
-        />
-        <CmBeobNichtZuzuordnen
-          onClick={(e, data, element)=>handleClick({data,element,nodes,client})}
-          tree={tree}
-          token={token}
-        />
-        <CmTpopfreiwkontrFolder
-          onClick={(e, data, element)=>handleClick({data,element,nodes,client})}
-          tree={tree}
-          token={token}
-          moving={moving}
-          copying={copying}
-        />
-        <CmTpopfreiwkontr
-          onClick={(e, data, element)=>handleClick({data,element,nodes,client})}
-          tree={tree}
-          token={token} copying={copying}
-        />
-        <CmTpopfreiwkontrzaehlFolder
-          onClick={(e, data, element)=>handleClick({data,element,nodes,client})}
-          tree={tree}
-          token={token}
-        />
-        <CmTpopfreiwkontrzaehl
-          onClick={(e, data, element)=>handleClick({data,element,nodes,client})}
-          tree={tree}
-          token={token}
-        />
-        <CmTpopfeldkontrFolder
-          onClick={(e, data, element)=>handleClick({data,element,nodes,client})}
-          tree={tree}
-          token={token}
-          moving={moving}
-          copying={copying}
-        />
-        <CmTpopfeldkontr
-          onClick={(e, data, element)=>handleClick({data,element,nodes,client})}
-          tree={tree}
-          token={token}
-          copying={copying}
-        />
-        <CmTpopfeldkontrzaehlFolder
-          onClick={(e, data, element)=>handleClick({data,element,nodes,client})}
-          tree={tree}
-          token={token}
-        />
-        <CmTpopfeldkontrzaehl
-          onClick={(e, data, element)=>handleClick({data,element,nodes,client})}
-          tree={tree}
-          token={token}
-        />
-        <CmTpopmassnberFolder
-          onClick={(e, data, element)=>handleClick({data,element,nodes,client})}
-          tree={tree}
-          token={token}
-        />
-        <CmTpopmassnber
-          onClick={(e, data, element)=>handleClick({data,element,nodes,client})}
-          tree={tree}
-          token={token}
-        />
-        <CmTpopmassnFolder
-          onClick={(e, data, element)=>handleClick({data,element,nodes,client})}
-          tree={tree}
-          token={token}
-          moving={moving}
-          copying={copying}
-        />
-        <CmTpopmassn
-          onClick={(e, data, element)=>handleClick({data,element,nodes,client})}
-          tree={tree}
-          token={token}
-          copying={copying}
-        />
-      </Container>
-    </ErrorBoundary>
-  )
-}
+      return (
+        <ErrorBoundary>
+          <Container>
+            {deleteDatasetModalIsVisible && (
+              <DeleteDatasetModal
+                tree={tree}
+                token={token}
+                refetchTree={refetchTree}
+              />
+            )}
+            <LabelFilterContainer>
+              <LabelFilter
+                treeName={treeName}
+                nodes={nodes} 
+                activeNode={activeNode}
+              />
+              {!!activeNodes.projekt && <ApFilter treeName={treeName} />}
+            </LabelFilterContainer>
+            <InnerTreeContainer
+              // $FlowIssue
+              innerRef={c => (this.tree = c)}
+            >
+              <Tree
+                client={client}
+                treeName={treeName}
+                data={data}
+                tree={tree}
+                nodes={nodes}
+                loading={loading}
+                activeNodeArray={activeNodeArray}
+                openNodes={openNodes}
+                activeNodes={activeNodes}
+                activeApfloraLayers={activeApfloraLayers}
+                moving={moving}
+                copying={copying}
+                mapFilter={mapFilter}
+                mapIdsFiltered={mapIdsFiltered}
+              />
+            </InnerTreeContainer>
+            <CmApFolder
+              onClick={(e, data, element)=>handleClick({data,element,nodes,datasetToDeleteState,client})}
+              tree={tree}
+              token={token}
+            />
+            <CmAp
+              onClick={(e, data, element)=>handleClick({data,element,nodes,datasetToDeleteState,client})}
+              tree={tree}
+              token={token}
+              moving={moving}
+              activeApfloraLayers={activeApfloraLayers}
+              popLabelUsingNr={popLabelUsingNr}
+              tpopLabelUsingNr={tpopLabelUsingNr}
+            />
+            <CmApberuebersichtFolder
+              onClick={(e, data, element)=>handleClick({data,element,nodes,datasetToDeleteState,client})}
+              tree={tree}
+              token={token}
+            />
+            <CmApberuebersicht
+              onClick={(e, data, element)=>handleClick({data,element,nodes,datasetToDeleteState,client})}
+              tree={tree}
+              token={token}
+            />
+            <CmAssozartFolder
+              onClick={(e, data, element)=>handleClick({data,element,nodes,datasetToDeleteState,client})}
+              tree={tree}
+              token={token}
+            />
+            <CmAssozart
+              onClick={(e, data, element)=>handleClick({data,element,nodes,datasetToDeleteState,client})}
+              tree={tree}
+              token={token}
+            />
+            <CmApartFolder
+              onClick={(e, data, element)=>handleClick({data,element,nodes,datasetToDeleteState,client})}
+              tree={tree}
+              token={token}
+            />
+            <CmApart
+              onClick={(e, data, element)=>handleClick({data,element,nodes,datasetToDeleteState,client})}
+              tree={tree}
+              token={token}
+            />
+            <CmBeobZugeordnetFolder
+              onClick={(e, data, element)=>handleClick({data,element,nodes,datasetToDeleteState,client})}
+              tree={tree}
+              token={token}
+              activeApfloraLayers={activeApfloraLayers}
+            />
+            <CmBerFolder
+              onClick={(e, data, element)=>handleClick({data,element,nodes,datasetToDeleteState,client})}
+              tree={tree}
+              token={token}
+            />
+            <CmBer
+              onClick={(e, data, element)=>handleClick({data,element,nodes,datasetToDeleteState,client})}
+              tree={tree}
+              token={token}
+            />
+            <CmApberFolder
+              onClick={(e, data, element)=>handleClick({data,element,nodes,datasetToDeleteState,client})}
+              tree={tree}
+              token={token}
+            />
+            <CmApber
+              onClick={(e, data, element)=>handleClick({data,element,nodes,datasetToDeleteState,client})}
+              tree={tree}
+              token={token}
+            />
+            <CmErfkritFolder
+              onClick={(e, data, element)=>handleClick({data,element,nodes,datasetToDeleteState,client})}
+              tree={tree}
+              token={token}
+            />
+            <CmErfkrit
+              onClick={(e, data, element)=>handleClick({data,element,nodes,datasetToDeleteState,client})}
+              tree={tree}
+              token={token}
+            />
+            <CmZielFolder
+              onClick={(e, data, element)=>handleClick({data,element,nodes,datasetToDeleteState,client})}
+              tree={tree}
+              token={token}
+            />
+            <CmZielJahrFolder
+              onClick={(e, data, element)=>handleClick({data,element,nodes,datasetToDeleteState,client})}
+              tree={tree}
+              token={token}
+            />
+            <CmZiel
+              onClick={(e, data, element)=>handleClick({data,element,nodes,datasetToDeleteState,client})}
+              tree={tree}
+              token={token}
+            />
+            <CmZielBerFolder
+              onClick={(e, data, element)=>handleClick({data,element,nodes,datasetToDeleteState,client})}
+              tree={tree}
+              token={token}
+            />
+            <CmZielBer
+              onClick={(e, data, element)=>handleClick({data,element,nodes,datasetToDeleteState,client})}
+              tree={tree}
+              token={token}
+            />
+            <CmPopFolder
+              onClick={(e, data, element)=>handleClick({data,element,nodes,datasetToDeleteState,client})}
+              tree={tree}
+              token={token}
+              moving={moving}
+              copying={copying}
+            />
+            <CmPop
+              onClick={(e, data, element)=>handleClick({data,element,nodes,datasetToDeleteState,client})}
+              tree={tree}
+              token={token}
+              moving={moving}
+              copying={copying}
+            />
+            <CmPopmassnberFolder
+              onClick={(e, data, element)=>handleClick({data,element,nodes,datasetToDeleteState,client})}
+              tree={tree}
+              token={token}
+            />
+            <CmPopmassnber
+              onClick={(e, data, element)=>handleClick({data,element,nodes,datasetToDeleteState,client})}
+              tree={tree}
+              token={token}
+            />
+            <CmPopberFolder
+              onClick={(e, data, element)=>handleClick({data,element,nodes,datasetToDeleteState,client})}
+              tree={tree}
+              token={token}
+            />
+            <CmPopber
+              onClick={(e, data, element)=>handleClick({data,element,nodes,datasetToDeleteState,client})}
+              tree={tree}
+              token={token}
+            />
+            <CmProjekt
+              onClick={(e, data, element)=>handleClick({data,element,nodes,datasetToDeleteState,client})}
+              tree={tree}
+              token={token}
+            />
+            <CmTpopFolder
+              onClick={(e, data, element)=>handleClick({data,element,nodes,datasetToDeleteState,client})}
+              tree={tree}
+              token={token}
+              moving={moving}
+              copying={copying}
+            />
+            <CmTpop
+              onClick={(e, data, element)=>handleClick({data,element,nodes,datasetToDeleteState,client})}
+              tree={tree}
+              token={token}
+              moving={moving}
+              copying={copying}
+            />
+            <CmTpopberFolder
+              onClick={(e, data, element)=>handleClick({data,element,nodes,datasetToDeleteState,client})}
+              tree={tree}
+              token={token}
+            />
+            <CmTpopber
+              onClick={(e, data, element)=>handleClick({data,element,nodes,datasetToDeleteState,client})}
+              tree={tree}
+              token={token}
+            />
+            <CmBeobZugeordnet
+              onClick={(e, data, element)=>handleClick({data,element,nodes,datasetToDeleteState,client})}
+              tree={tree}
+              token={token}
+            />
+            <CmBeobnichtbeurteilt
+              onClick={(e, data, element)=>handleClick({data,element,nodes,datasetToDeleteState,client})}
+              tree={tree}
+              token={token}
+            />
+            <CmBeobNichtZuzuordnen
+              onClick={(e, data, element)=>handleClick({data,element,nodes,datasetToDeleteState,client})}
+              tree={tree}
+              token={token}
+            />
+            <CmTpopfreiwkontrFolder
+              onClick={(e, data, element)=>handleClick({data,element,nodes,datasetToDeleteState,client})}
+              tree={tree}
+              token={token}
+              moving={moving}
+              copying={copying}
+            />
+            <CmTpopfreiwkontr
+              onClick={(e, data, element)=>handleClick({data,element,nodes,datasetToDeleteState,client})}
+              tree={tree}
+              token={token} copying={copying}
+            />
+            <CmTpopfreiwkontrzaehlFolder
+              onClick={(e, data, element)=>handleClick({data,element,nodes,datasetToDeleteState,client})}
+              tree={tree}
+              token={token}
+            />
+            <CmTpopfreiwkontrzaehl
+              onClick={(e, data, element)=>handleClick({data,element,nodes,datasetToDeleteState,client})}
+              tree={tree}
+              token={token}
+            />
+            <CmTpopfeldkontrFolder
+              onClick={(e, data, element)=>handleClick({data,element,nodes,datasetToDeleteState,client})}
+              tree={tree}
+              token={token}
+              moving={moving}
+              copying={copying}
+            />
+            <CmTpopfeldkontr
+              onClick={(e, data, element)=>handleClick({data,element,nodes,datasetToDeleteState,client})}
+              tree={tree}
+              token={token}
+              copying={copying}
+            />
+            <CmTpopfeldkontrzaehlFolder
+              onClick={(e, data, element)=>handleClick({data,element,nodes,datasetToDeleteState,client})}
+              tree={tree}
+              token={token}
+            />
+            <CmTpopfeldkontrzaehl
+              onClick={(e, data, element)=>handleClick({data,element,nodes,datasetToDeleteState,client})}
+              tree={tree}
+              token={token}
+            />
+            <CmTpopmassnberFolder
+              onClick={(e, data, element)=>handleClick({data,element,nodes,datasetToDeleteState,client})}
+              tree={tree}
+              token={token}
+            />
+            <CmTpopmassnber
+              onClick={(e, data, element)=>handleClick({data,element,nodes,datasetToDeleteState,client})}
+              tree={tree}
+              token={token}
+            />
+            <CmTpopmassnFolder
+              onClick={(e, data, element)=>handleClick({data,element,nodes,datasetToDeleteState,client})}
+              tree={tree}
+              token={token}
+              moving={moving}
+              copying={copying}
+            />
+            <CmTpopmassn
+              onClick={(e, data, element)=>handleClick({data,element,nodes,datasetToDeleteState,client})}
+              tree={tree}
+              token={token}
+              copying={copying}
+            />
+          </Container>
+        </ErrorBoundary>
+      )
+    }}
+  </Subscribe>
 
 export default enhance(TreeContainer)

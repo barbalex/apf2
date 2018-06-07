@@ -10,21 +10,21 @@ import app from 'ampersand-app'
 import tables from '../../../../../modules/tables'
 import listError from '../../../../../modules/listError'
 import setTreeKey from './setTreeKey.graphql'
-import setDatasetToDelete from '../setDatasetToDelete.graphql'
 
 export default async ({
   dataPassedIn,
   datasetsDeletedState,
+  datasetToDeleteState,
   refetchTree,
 }:{
   dataPassedIn: Object,
   datasetsDeletedState: Object,
+  datasetToDeleteState: Object,
   refetchTree: () => void
 }): Promise<void> => {
   const { client } = app
   // deleteDatasetDemand checks variables
-  const datasetToDelete = get(dataPassedIn, 'datasetToDelete')
-  const { table: tablePassed, id, url, label } = datasetToDelete
+  const { table: tablePassed, id, url, label } = datasetToDeleteState.state
 
   // some tables need to be translated, i.e. tpopfreiwkontr
   const tableMetadata = tables.find(t => t.table === tablePassed)
@@ -152,15 +152,7 @@ export default async ({
   })
 
   // reset datasetToDelete
-  await client.mutate({
-    mutation: setDatasetToDelete,
-    variables: {
-      table: null,
-      id: datasetToDelete.id,
-      label: null,
-      url: null,
-    }
-  })
+  datasetToDeleteState.empty()
 
   refetchTree()
 }

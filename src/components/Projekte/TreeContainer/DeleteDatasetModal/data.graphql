@@ -1,10 +1,4 @@
 query Query {
-  datasetToDelete @client {
-    table
-    id
-    label
-    url
-  }
   tree @client {
     name
     activeNodeArray

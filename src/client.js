@@ -31,11 +31,11 @@ export default async (idb) => {
     }
     return { headers }
   })
-  const cache = new InMemoryCache(/*{
+  const cache = new InMemoryCache({
     dataIdFromObject: object => {
       return object.id
     }
-  }*/)
+  })
   const myDefaults = await defaults(idb)
   const stateLink = withClientState({
     resolvers,

@@ -14,7 +14,6 @@ import copying from './copying'
 import updateAvailable from './updateAvailable'
 import assigningBeob from './assigningBeob'
 import mapMouseCoordinates from './mapMouseCoordinates'
-import datasetToDelete from './datasetToDelete'
 import copyingBiotop from './copyingBiotop'
 import user from './user'
 import cloneTree2From1 from './cloneTree2From1'
@@ -34,7 +33,6 @@ export default merge(
   updateAvailable,
   assigningBeob,
   mapMouseCoordinates,
-  datasetToDelete,
   copyingBiotop,
   user,
   cloneTree2From1,

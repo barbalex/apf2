@@ -11,13 +11,6 @@ export default async idb => {
   
   const defaults = {
     updateAvailable: false,
-    datasetToDelete: {
-      table: null,
-      id: null,
-      label: null,
-      url: null,
-      __typename: 'DatasetToDelete'
-    },
     tree: {
       name: 'tree',
       activeNodeArray: [],
