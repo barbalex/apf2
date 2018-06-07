@@ -9,10 +9,10 @@ import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 import { Query } from 'react-apollo'
 import get from 'lodash/get'
-import gql from 'graphql-tag'
 
 import tables from '../../../../modules/tables'
 import dataGql from './data.graphql'
+import setTreeNodeLabelFilterKey from './setTreeNodeLabelFilterKey.graphql'
 
 const StyledFormControl = styled(FormControl)`
   padding-right: 0.8em !important;
@@ -34,84 +34,7 @@ const enhance = compose(
       tableName
     }) => {
       client.mutate({
-        mutation: gql`
-          mutation setTreeNodeLabelFilterKey($value: String!, $tree: String!, $key: String!) {
-            setTreeNodeLabelFilterKey(tree: $tree, key: $key, value: $value) @client {
-              tree @client {
-                name
-                activeNodeArray
-                openNodes
-                apFilter
-                nodeLabelFilter {
-                  ap
-                  pop
-                  tpop
-                  tpopkontr
-                  tpopfeldkontr
-                  tpopfreiwkontr
-                  tpopkontrzaehl
-                  tpopmassn
-                  ziel
-                  zielber
-                  erfkrit
-                  apber
-                  apberuebersicht
-                  ber
-                  idealbiotop
-                  assozart
-                  popber
-                  popmassnber
-                  tpopber
-                  tpopmassnber
-                  apart
-                  projekt
-                  beob
-                  beobprojekt
-                  adresse
-                  gemeinde
-                  __typename: NodeLabelFilter
-                }
-                __typename: Tree
-              }
-              tree2 @client {
-                name
-                activeNodeArray
-                openNodes
-                apFilter
-                nodeLabelFilter {
-                  ap
-                  pop
-                  tpop
-                  tpopkontr
-                  tpopfeldkontr
-                  tpopfreiwkontr
-                  tpopkontrzaehl
-                  tpopmassn
-                  ziel
-                  zielber
-                  erfkrit
-                  apber
-                  apberuebersicht
-                  ber
-                  idealbiotop
-                  assozart
-                  popber
-                  popmassnber
-                  tpopber
-                  tpopmassnber
-                  apart
-                  projekt
-                  beob
-                  beobprojekt
-                  adresse
-                  gemeinde
-                  __typename: NodeLabelFilter
-                }
-                __typename: Tree2
-              }
-            }
-          }
-        `,
+        mutation: setTreeNodeLabelFilterKey,
         variables: {
           value: event.target.value,
           tree: treeName,
@@ -148,6 +71,8 @@ const LabelFilter = ({
       let filterValue = ''
       if (tableName) {
         filterValue = get(data, `${treeName}.nodeLabelFilter.${tableName}`)
+        // make sure 0 is kept
+        if (!filterValue && filterValue !== 0) filterValue = ''
         const table = tables.find(t => t.table === tableName)
         const tableLabel = table ? table.label : null
         if (tableLabel) {

@@ -204,7 +204,6 @@ const enhance = compose(
       const baseUrl = JSON.parse(url)
       const nodeType = firstElementChild.getAttribute('data-nodetype')
       const menuType = firstElementChild.getAttribute('data-menutype')
-      //console.log('TreeContainer:', {table,menuType})
       const actions = {
         insert() {
           if (nodeType === 'table') {
@@ -446,7 +445,6 @@ const TreeContainer = ({
   const tree = get(data, treeName)
   const activeNodeArray = get(data, `${treeName}.activeNodeArray`)
   const token = get(data, 'user.token', null)
-  //console.log('TreeContainer rendering')
 
   return (
     <ErrorBoundary>

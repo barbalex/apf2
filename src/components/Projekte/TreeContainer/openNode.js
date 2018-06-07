@@ -3,8 +3,9 @@ import gql from 'graphql-tag'
 import app from 'ampersand-app'
 
 import isNodeOpen from './isNodeOpen'
+import treeNodeLabelFilterResetExceptAp from './treeNodeLabelFilterResetExceptAp.graphql'
 
-export default ({
+export default async ({
   tree,
   node,
 }: {
@@ -47,4 +48,13 @@ export default ({
       key: 'openNodes'
     }
   })
+
+  if (node.menuType === 'ap') {
+    // if ap is changed, need to empty nodeLabelFilter,
+    // with exception of the ap key
+    await client.mutate({
+      mutation: treeNodeLabelFilterResetExceptAp,
+      variables: { tree: tree.name }
+    })
+  }
 }
