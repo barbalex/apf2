@@ -4,15 +4,12 @@ mutation setDatasetToDelete(
   $label: String!
   $url: String
 ) {
-  setDatasetToDelete(
-    table: $table
-    id: $id
-    label: $label
-    url: $url
-  ) @client {
-    table
-    id
-    label
-    url
+  setDatasetToDelete(table: $table, id: $id, label: $label, url: $url) @client {
+    datasetToDelete @client {
+      table
+      id
+      label
+      url
+    }
   }
 }

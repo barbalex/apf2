@@ -5,24 +5,25 @@ import upperFirst from 'lodash/upperFirst'
 import camelCase from 'lodash/camelCase'
 import omit from 'lodash/omit'
 import gql from 'graphql-tag'
+import app from 'ampersand-app'
 
 import tables from '../../../../../modules/tables'
 import listError from '../../../../../modules/listError'
 import setTreeKey from './setTreeKey.graphql'
 import setDatasetToDelete from '../setDatasetToDelete.graphql'
-import createDatasetDeleted from './createDatasetDeleted.graphql'
 
 export default async ({
-  client,
-  data: dataPassed,
+  dataPassedIn,
+  datasetsDeletedState,
   refetchTree,
 }:{
-  client: Object,
-  data: Object,
+  dataPassedIn: Object,
+  datasetsDeletedState: Object,
   refetchTree: () => void
 }): Promise<void> => {
+  const { client } = app
   // deleteDatasetDemand checks variables
-  const datasetToDelete = get(dataPassed, 'datasetToDelete')
+  const datasetToDelete = get(dataPassedIn, 'datasetToDelete')
   const { table: tablePassed, id, url, label } = datasetToDelete
 
   // some tables need to be translated, i.e. tpopfreiwkontr
@@ -57,18 +58,16 @@ export default async ({
   }
   let data = {...get(result, `data.${camelCase(table)}ById`)}
   data = omit(data, '__typename')
+  //console.log('delete, data:', data)
 
   // add to datasetsDeleted
-  await client.mutate({
-    mutation: createDatasetDeleted,
-    variables: {
-      table,
-      id,
-      label,
-      url,
-      data,
-      time: Date.now(),
-    }
+  datasetsDeletedState.add({
+    table,
+    id,
+    label,
+    url,
+    data,
+    time: Date.now(),
   })
 
   try {
@@ -93,7 +92,7 @@ export default async ({
   // BUT: need to refetch tree
 
   // set new url if necessary
-  const activeNodeArray1 = get(dataPassed, 'tree.activeNodeArray')
+  const activeNodeArray1 = get(dataPassedIn, 'tree.activeNodeArray')
   if (isEqual(activeNodeArray1, url)) {
     const newActiveNodeArray1 = [...url]
     newActiveNodeArray1.pop()
@@ -111,7 +110,7 @@ export default async ({
       }
     })
   }
-  const activeNodeArray2 = get(dataPassed, 'tree2.activeNodeArray')
+  const activeNodeArray2 = get(dataPassedIn, 'tree2.activeNodeArray')
   if (isEqual(activeNodeArray2, url)) {
     const newActiveNodeArray2 = [...url]
     newActiveNodeArray2.pop()
@@ -131,7 +130,7 @@ export default async ({
   }
 
   // remove from openNodes
-  const openNodes1 = get(dataPassed, 'tree.openNodes')
+  const openNodes1 = get(dataPassedIn, 'tree.openNodes')
   const newOpenNodes1 = openNodes1.filter(n => !isEqual(n, url))
   await client.mutate({
     mutation: setTreeKey,
@@ -141,7 +140,7 @@ export default async ({
       key: 'openNodes'
     }
   })
-  const openNodes2 = get(dataPassed, 'tree2.openNodes')
+  const openNodes2 = get(dataPassedIn, 'tree2.openNodes')
   const newOpenNodes2 = openNodes2.filter(n => !isEqual(n, url))
   await client.mutate({
     mutation: setTreeKey,

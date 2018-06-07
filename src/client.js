@@ -10,7 +10,6 @@ import get from 'lodash/get'
 import graphQlUri from './modules/graphQlUri'
 import resolvers from './store/resolvers'
 import defaults from './store/defaults'
-//import typeDefs from './store/typeDefs'
 
 export default async (idb) => {
   const users = await idb.currentUser.toArray()
@@ -32,18 +31,16 @@ export default async (idb) => {
     }
     return { headers }
   })
-  const cache = new InMemoryCache({
+  const cache = new InMemoryCache(/*{
     dataIdFromObject: object => {
-      //if (['Tree'].includes(object.__typename)) return defaultDataIdFromObject(object)
       return object.id
     }
-  })
+  }*/)
   const myDefaults = await defaults(idb)
   const stateLink = withClientState({
     resolvers,
     cache,
     defaults: myDefaults,
-    //typeDefs,
   })
   const httpLink = createHttpLink({
     uri: graphQlUri(),

@@ -1,8 +1,8 @@
 //@flow
 import upperFirst from 'lodash/upperFirst'
 import camelCase from 'lodash/camelCase'
+import app from 'ampersand-app'
 
-import deleteDatasetDeletedById from './deleteDatasetDeletedById.graphql'
 import listError from '../../../../../modules/listError'
 import setTreeKey from './setTreeKey.graphql'
 
@@ -15,20 +15,21 @@ const addNodeToOpenNodes = (openNodes, url) => {
 }
 
 export default async ({
-  client,
   datasetsDeleted,
   dataset,
   tree,
   refetchTree,
   setShowDeletions,
+  datasetsDeletedState,
 }:{
-  client: Object,
   datasetsDeleted: Array<Object>,
   dataset: Object,
   tree: Object,
   refetchTree: () => void,
   setShowDeletions: () => void,
+  datasetsDeletedState: Object,
 }) => {
+  const { client } = app
   const { table, url, data } = dataset
   // 1. create new dataset
   const queryName = `create${upperFirst(camelCase(table))}`
@@ -66,10 +67,7 @@ export default async ({
 
   // 2. remove dataset from datasetsDeleted
   if (datasetsDeleted.length === 1) setShowDeletions(false)
-  await client.mutate({
-    mutation: deleteDatasetDeletedById,
-    variables: { id: dataset.id }
-  })
+  datasetsDeletedState.remove(dataset.id)
 
   // refetch tree
   refetchTree()

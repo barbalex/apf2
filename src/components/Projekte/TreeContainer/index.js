@@ -214,13 +214,33 @@ const enhance = compose(
             baseUrl.push(1)
           }
           const idToPass = parentId || id
-          insertDataset({ tree, tablePassed: table, parentId: idToPass, baseUrl, menuType, id, refetch: refetchTree })
+          insertDataset({
+            tree,
+            tablePassed: table,
+            parentId: idToPass,
+            baseUrl,
+            menuType,
+            id,
+            refetch: refetchTree
+          })
         },
         openLowerNodes() {
-          openLowerNodes({ tree, activeNodes, id, parentId, menuType, refetch: refetchTree })
+          openLowerNodes({
+            tree,
+            activeNodes,
+            id,
+            parentId,
+            menuType,
+            refetch: refetchTree
+          })
         },
         closeLowerNodes() {
-          closeLowerNodes({ tree, url: baseUrl, refetch: refetchTree })
+          closeLowerNodes({
+            tree,
+            url:
+            baseUrl,
+            refetch: refetchTree
+          })
         },
         delete() {
           client.mutate({

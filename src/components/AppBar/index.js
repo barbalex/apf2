@@ -17,6 +17,7 @@ import { Query } from 'react-apollo'
 import get from 'lodash/get'
 import clone from 'lodash/clone'
 import gql from 'graphql-tag'
+import { Subscribe } from 'unstated'
 
 import isMobilePhone from '../../modules/isMobilePhone'
 import ErrorBoundary from '../shared/ErrorBoundary'
@@ -24,6 +25,7 @@ import dataGql from './data.graphql'
 import logout from '../../modules/logout'
 import setUrlQueryValue from '../../modules/setUrlQueryValue'
 import getActiveNodes from '../../modules/getActiveNodes'
+import DatasetsDeletedState from '../../state/DatasetsDeleted'
 
 const StyledAppBar = styled(AppBar)`
   @media print {
@@ -99,125 +101,129 @@ const MyAppBar = ({
   anchorEl: Object,
   setAnchorEl: () => void,
   setShowDeletions: () => void,
-}) => 
-  <Query query={dataGql} >
-    {({ loading, error, data, client }) => {
-      if (error) return `Fehler: ${error.message}`
-      const activeNodeArray = get(data, 'tree.activeNodeArray')
-      const datasetsDeleted = get(data, 'datasetsDeleted')
-      const activeNodes = getActiveNodes(activeNodeArray)
-      /**
-       * need to clone projekteTabs
-       * because otherwise removing elements errors out (because elements are sealed)
-       */
-      const projekteTabs = clone(get(data, 'urlQuery.projekteTabs', []))
-      const exporteIsActive = !!activeNodes.projekt
-      const isMobile = isMobilePhone()
+}) =>
+  <Subscribe to={[DatasetsDeletedState]}>
+    {datasetsDeletedState => (
+      <Query query={dataGql} >
+        {({ loading, error, data, client }) => {
+          if (error) return `Fehler: ${error.message}`
+          const activeNodeArray = get(data, 'tree.activeNodeArray')
+          const activeNodes = getActiveNodes(activeNodeArray)
+          /**
+           * need to clone projekteTabs
+           * because otherwise removing elements errors out (because elements are sealed)
+           */
+          const projekteTabs = clone(get(data, 'urlQuery.projekteTabs', []))
+          const exporteIsActive = !!activeNodes.projekt
+          const isMobile = isMobilePhone()
+          const datasetsDeleted = datasetsDeletedState.state.datasets
 
-      return (
-        <ErrorBoundary>
-          <StyledAppBar position="static">
-            <StyledToolbar>
-              <Typography variant="title" color="inherit">
-                {isMobile ? '' : 'AP Flora'}
-              </Typography>
-              <MenuDiv>
-                <StyledButton
-                  data-visible={projekteTabs.includes('tree')}
-                  onClick={() => onClickButton('tree', client, projekteTabs)}
-                >
-                  Strukturbaum
-                </StyledButton>
-                <StyledButton
-                  data-visible={projekteTabs.includes('daten')}
-                  onClick={() => onClickButton('daten', client, projekteTabs)}
-                >
-                  Daten
-                </StyledButton>
-                <StyledButton
-                  data-visible={projekteTabs.includes('karte')}
-                  onClick={() => onClickButton('karte', client, projekteTabs)}
-                >
-                  Karte
-                </StyledButton>
-                {!isMobile &&
-                  exporteIsActive && (
+          return (
+            <ErrorBoundary>
+              <StyledAppBar position="static">
+                <StyledToolbar>
+                  <Typography variant="title" color="inherit">
+                    {isMobile ? '' : 'AP Flora'}
+                  </Typography>
+                  <MenuDiv>
                     <StyledButton
-                      data-visible={projekteTabs.includes('exporte')}
-                      onClick={() => {
-                        setAnchorEl(null)
-                        onClickButton('exporte', client, projekteTabs)
-                      }}
+                      data-visible={projekteTabs.includes('tree')}
+                      onClick={() => onClickButton('tree', client, projekteTabs)}
                     >
-                      Exporte
+                      Strukturbaum
                     </StyledButton>
-                  )
-                }
-                {!isMobile && (
-                  <StyledButton
-                    data-visible={projekteTabs.includes('tree2')}
-                    onClick={() => onClickButton('tree2', client, projekteTabs)}
-                  >
-                    Strukturbaum 2
-                  </StyledButton>
-                )}
-                {!isMobile && (
-                  <StyledButton
-                    data-visible={projekteTabs.includes('daten2')}
-                    onClick={() => onClickButton('daten2', client, projekteTabs)}
-                  >
-                    Daten 2
-                  </StyledButton>
-                )}
-
-                <div>
-                  <IconButton
-                    aria-label="Mehr"
-                    aria-owns={anchorEl ? 'long-menu' : null}
-                    aria-haspopup="true"
-                    onClick={event => setAnchorEl(event.currentTarget)}
-                  >
-                    <StyledMoreVertIcon />
-                  </IconButton>
-                  <Menu
-                    id="long-menu"
-                    anchorEl={anchorEl}
-                    open={Boolean(anchorEl)}
-                    onClose={() => setAnchorEl(null)}
-                  >
-                    {isMobile &&
+                    <StyledButton
+                      data-visible={projekteTabs.includes('daten')}
+                      onClick={() => onClickButton('daten', client, projekteTabs)}
+                    >
+                      Daten
+                    </StyledButton>
+                    <StyledButton
+                      data-visible={projekteTabs.includes('karte')}
+                      onClick={() => onClickButton('karte', client, projekteTabs)}
+                    >
+                      Karte
+                    </StyledButton>
+                    {!isMobile &&
                       exporteIsActive && (
-                        <MenuItem
+                        <StyledButton
+                          data-visible={projekteTabs.includes('exporte')}
                           onClick={() => {
                             setAnchorEl(null)
                             onClickButton('exporte', client, projekteTabs)
                           }}
-                          disabled={projekteTabs.includes('exporte')}
                         >
                           Exporte
+                        </StyledButton>
+                      )
+                    }
+                    {!isMobile && (
+                      <StyledButton
+                        data-visible={projekteTabs.includes('tree2')}
+                        onClick={() => onClickButton('tree2', client, projekteTabs)}
+                      >
+                        Strukturbaum 2
+                      </StyledButton>
+                    )}
+                    {!isMobile && (
+                      <StyledButton
+                        data-visible={projekteTabs.includes('daten2')}
+                        onClick={() => onClickButton('daten2', client, projekteTabs)}
+                      >
+                        Daten 2
+                      </StyledButton>
+                    )}
+
+                    <div>
+                      <IconButton
+                        aria-label="Mehr"
+                        aria-owns={anchorEl ? 'long-menu' : null}
+                        aria-haspopup="true"
+                        onClick={event => setAnchorEl(event.currentTarget)}
+                      >
+                        <StyledMoreVertIcon />
+                      </IconButton>
+                      <Menu
+                        id="long-menu"
+                        anchorEl={anchorEl}
+                        open={Boolean(anchorEl)}
+                        onClose={() => setAnchorEl(null)}
+                      >
+                        {isMobile &&
+                          exporteIsActive && (
+                            <MenuItem
+                              onClick={() => {
+                                setAnchorEl(null)
+                                onClickButton('exporte', client, projekteTabs)
+                              }}
+                              disabled={projekteTabs.includes('exporte')}
+                            >
+                              Exporte
+                            </MenuItem>
+                          )}
+                        <MenuItem
+                          onClick={showDeletedDatasets}
+                          disabled={datasetsDeleted.length === 0}
+                        >
+                          gelöschte Datensätze wiederherstellen
                         </MenuItem>
-                      )}
-                    <MenuItem
-                      onClick={showDeletedDatasets}
-                      disabled={datasetsDeleted.length === 0}
-                    >
-                      gelöschte Datensätze wiederherstellen
-                    </MenuItem>
-                    <MenuItem onClick={watchVideos}>Video-Anleitungen</MenuItem>
-                    <MenuItem
-                      onClick={() => {
-                        setAnchorEl(null)
-                        logout()
-                      }}
-                    >{`${get(data, 'user.name')} abmelden`}</MenuItem>
-                  </Menu>
-                </div>
-              </MenuDiv>
-            </StyledToolbar>
-          </StyledAppBar>
-        </ErrorBoundary>
-      )
-    }}
-  </Query>
+                        <MenuItem onClick={watchVideos}>Video-Anleitungen</MenuItem>
+                        <MenuItem
+                          onClick={() => {
+                            setAnchorEl(null)
+                            logout()
+                          }}
+                        >{`${get(data, 'user.name')} abmelden`}</MenuItem>
+                      </Menu>
+                    </div>
+                  </MenuDiv>
+                </StyledToolbar>
+              </StyledAppBar>
+            </ErrorBoundary>
+          )
+        }}
+      </Query>
+    )}
+  </Subscribe>
 
 export default enhance(MyAppBar)

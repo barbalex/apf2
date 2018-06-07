@@ -20,6 +20,7 @@ import 'moment/locale/de-ch' // this is the important bit, you have to import th
 import MomentUtils from 'material-ui-pickers/utils/moment-utils'
 import MuiPickersUtilsProvider from 'material-ui-pickers/utils/MuiPickersUtilsProvider'
 import { ApolloProvider } from 'react-apollo'
+import { Provider as StateProvider } from 'unstated'
 
 import app from 'ampersand-app'
 import 'typeface-roboto'
@@ -80,17 +81,19 @@ import './index.css'
     )
 
     ReactDOM.render(
-      <ApolloProvider client={myClient}>
-        <MuiThemeProvider theme={theme}>
-          <MuiPickersUtilsProvider
-            utils={MomentUtils}
-            moment={moment}
-            locale="de-ch"
-          >
-            <AppContainer />
-          </MuiPickersUtilsProvider>
-        </MuiThemeProvider>
-      </ApolloProvider>,
+      <StateProvider>
+        <ApolloProvider client={myClient}>
+          <MuiThemeProvider theme={theme}>
+            <MuiPickersUtilsProvider
+              utils={MomentUtils}
+              moment={moment}
+              locale="de-ch"
+            >
+              <AppContainer />
+            </MuiPickersUtilsProvider>
+          </MuiThemeProvider>
+        </ApolloProvider>
+      </StateProvider>,
       document.getElementById('root')
     )
   } catch (error) {

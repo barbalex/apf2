@@ -18,7 +18,6 @@ import datasetToDelete from './datasetToDelete'
 import copyingBiotop from './copyingBiotop'
 import user from './user'
 import cloneTree2From1 from './cloneTree2From1'
-import datasetsDeleted from './datasetsDeleted'
 import errors from './errors'
 
 export default merge(
@@ -39,6 +38,5 @@ export default merge(
   copyingBiotop,
   user,
   cloneTree2From1,
-  datasetsDeleted,
   errors,
 )

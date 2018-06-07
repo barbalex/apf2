@@ -6,12 +6,14 @@ import Button from '@material-ui/core/Button'
 import styled from 'styled-components'
 import { Query } from 'react-apollo'
 import get from 'lodash/get'
+import { Subscribe } from 'unstated'
 
 import tables from '../../../../modules/tables'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import dataGql from './data.graphql'
 import setDatasetToDelete from './setDatasetToDelete.graphql'
 import deleteDataset from './delete'
+import DatasetsDeletedState from '../../../../state/DatasetsDeleted'
 
 const StyledDialog = styled(Dialog)`
   > div {
@@ -24,55 +26,55 @@ const DatasetDeleteModal = ({
 }: {
   refetchTree: () => void,
 }) =>
-  <Query query={dataGql}>
-    {({ loading, error, data, client }) => {
-      if (error) return `Fehler: ${error.message}`
-      const datasetToDelete = get(data, 'datasetToDelete')
-      const table = tables.find(t => t.table === datasetToDelete.table)
-      let tableName = null
-      if (table && table.labelSingular) {
-        tableName = table.labelSingular
-      }
+  <Subscribe to={[DatasetsDeletedState]}>
+    {datasetsDeletedState => (
+      <Query query={dataGql}>
+        {({ loading, error, data, client }) => {
+          if (error) return `Fehler: ${error.message}`
+          const datasetToDelete = get(data, 'datasetToDelete')
+          const table = tables.find(t => t.table === datasetToDelete.table)
+          let tableName = null
+          if (table && table.labelSingular) {
+            tableName = table.labelSingular
+          }
 
-      return (
-        <ErrorBoundary>
-          <StyledDialog open={!!datasetToDelete.table}>
-            {`${tableName ? `${tableName} "` : ''}${datasetToDelete.label}${
-              tableName ? '"' : ''
-            } löschen?`}
-            <DialogActions>
-              <Button
-                onClick={() => {
-                  client.mutate({
-                    mutation: setDatasetToDelete,
-                    variables: {
-                      table: null,
-                      id: datasetToDelete.id,
-                      label: null,
-                      url: null,
+          return (
+            <ErrorBoundary>
+              <StyledDialog open={!!datasetToDelete.table}>
+                {`${tableName ? `${tableName} "` : ''}${datasetToDelete.label}${
+                  tableName ? '"' : ''
+                } löschen?`}
+                <DialogActions>
+                  <Button
+                    onClick={() => {
+                      client.mutate({
+                        mutation: setDatasetToDelete,
+                        variables: {
+                          table: null,
+                          id: datasetToDelete.id,
+                          label: null,
+                          url: null,
+                        }
+                      })
+                    }}
+                  >
+                    Abbrechen
+                  </Button>
+                  <Button
+                    color="primary"
+                    onClick={() =>
+                      deleteDataset({ dataPassedIn: data, datasetsDeletedState, refetchTree })
                     }
-                  })
-                }}
-              >
-                Abbrechen
-              </Button>
-              <Button
-                color="primary"
-                onClick={() =>
-                  deleteDataset({
-                    client,
-                    data,
-                    refetchTree
-                  })
-                }
-              >
-                Löschen
-              </Button>,
-            </DialogActions>
-          </StyledDialog>
-        </ErrorBoundary>
-      )
-    }}
-  </Query>
+                  >
+                    Löschen
+                  </Button>,
+                </DialogActions>
+              </StyledDialog>
+            </ErrorBoundary>
+          )
+        }}
+      </Query>
+    )}
+  </Subscribe>
 
 export default DatasetDeleteModal

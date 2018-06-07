@@ -1,5 +1,0 @@
-mutation deleteDatasetDeletedById($id: UUID!) {
-  deleteDatasetDeletedById(id: $id) @client {
-    datasetsDeleted @client
-  }
-}
