@@ -60,7 +60,7 @@ const LabelPopoverRowColumnRight = styled.div`
 
 const enhance = compose(
   withHandlers({
-    saveToDb: () => async ({ row, field, value, updateAp }) => {
+    saveToDb: ({ refetchTree }) => async ({ row, field, value, updateAp }) => {
       await updateAp({
         variables: {
           id: row.id,
@@ -85,6 +85,7 @@ const enhance = compose(
           },
         },
       })
+      if (['artId'].includes(field)) refetchTree()
     },
   })
 )
