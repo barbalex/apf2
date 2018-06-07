@@ -90,7 +90,7 @@ const enhance = compose(
     }
   ),
   withHandlers({
-    saveToDb: props => ({ row, field, value, updateTpopkontr }) =>
+    saveToDb: ({ refetchTree }) => ({ row, field, value, updateTpopkontr }) => {
       updateTpopkontr({
         variables: {
           id: row.id,
@@ -184,7 +184,9 @@ const enhance = compose(
             __typename: 'Tpopkontr',
           },
         },
-      }),
+      })
+      if (['typ'].includes(field)) refetchTree()
+    },
     onChangeTab: ({ setValue }) => (event, value) => {
       setUrlQueryValue({ key: 'feldkontrTab', value })
       setValue(value)
