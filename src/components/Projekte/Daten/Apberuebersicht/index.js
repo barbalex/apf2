@@ -11,6 +11,7 @@ import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import dataGql from './data.graphql'
 import updateApberuebersichtByIdGql from './updateApberuebersichtById.graphql'
+import listError from '../../../../modules/listError'
 
 const Container = styled.div`
   height: 100%;
@@ -26,26 +27,31 @@ const FieldsContainer = styled.div`
 
 const enhance = compose(
   withHandlers({
-    saveToDb: props => ({ row, field, value, updateApberuebersicht }) =>
-      updateApberuebersicht({
-        variables: {
-          id: row.id,
-          [field]: value,
-        },
-        optimisticResponse: {
-          __typename: 'Mutation',
-          updateApberuebersichtById: {
-            apberuebersicht: {
-              id: row.id,
-              projId: field === 'projId' ? value : row.projId,
-              jahr: field === 'jahr' ? value : row.jahr,
-              bemerkungen: field === 'bemerkungen' ? value : row.bemerkungen,
+    saveToDb: props => async ({ row, field, value, updateApberuebersicht }) => {
+      try {
+        updateApberuebersicht({
+          variables: {
+            id: row.id,
+            [field]: value,
+          },
+          optimisticResponse: {
+            __typename: 'Mutation',
+            updateApberuebersichtById: {
+              apberuebersicht: {
+                id: row.id,
+                projId: field === 'projId' ? value : row.projId,
+                jahr: field === 'jahr' ? value : row.jahr,
+                bemerkungen: field === 'bemerkungen' ? value : row.bemerkungen,
+                __typename: 'Apberuebersicht',
+              },
               __typename: 'Apberuebersicht',
             },
-            __typename: 'Apberuebersicht',
           },
-        },
-      }),
+        })
+      } catch (error) {
+        return listError(error)
+      }
+    },
   })
 )
 
