@@ -11,6 +11,7 @@ import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import dataGql from './data.graphql'
 import updateProjektByIdGql from './updateProjektById.graphql'
+import listError from '../../../../modules/listError'
 
 const Container = styled.div`
   height: 100%;
@@ -25,24 +26,28 @@ const FieldsContainer = styled.div`
 
 const enhance = compose(
   withHandlers({
-    saveToDb: props => ({ row, field, value, updateProjekt }) => {
-      updateProjekt({
-        variables: {
-          id: row.id,
-          [field]: value,
-        },
-        optimisticResponse: {
-          __typename: 'Mutation',
-          updateProjektById: {
-            projekt: {
-              id: row.id,
-              name: field === 'name' ? value : row.name,
+    saveToDb: props => async ({ row, field, value, updateProjekt }) => {
+      try {
+        updateProjekt({
+          variables: {
+            id: row.id,
+            [field]: value,
+          },
+          optimisticResponse: {
+            __typename: 'Mutation',
+            updateProjektById: {
+              projekt: {
+                id: row.id,
+                name: field === 'name' ? value : row.name,
+                __typename: 'Projekt',
+              },
               __typename: 'Projekt',
             },
-            __typename: 'Projekt',
           },
-        },
-      })
+        })
+      } catch (error) {
+        return listError(error)
+      }
     }
   })
 )
