@@ -12,6 +12,7 @@ import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import dataGql from './data.graphql'
 import updateBerByIdGql from './updateBerById.graphql'
+import listError from '../../../../modules/listError'
 
 const Container = styled.div`
   height: 100%;
@@ -26,28 +27,33 @@ const FieldsContainer = styled.div`
 
 const enhance = compose(
   withHandlers({
-    saveToDb: props => ({ row, field, value, updateBer }) =>
-      updateBer({
-        variables: {
-          id: row.id,
-          [field]: value,
-        },
-        optimisticResponse: {
-          __typename: 'Mutation',
-          updateBerById: {
-            ber: {
-              id: row.id,
-              apId: field === 'apId' ? value : row.apId,
-              autor: field === 'autor' ? value : row.autor,
-              jahr: field === 'jahr' ? value : row.jahr,
-              titel: field === 'titel' ? value : row.titel,
-              url: field === 'url' ? value : row.url,
+    saveToDb: props => async ({ row, field, value, updateBer }) => {
+      try {
+        updateBer({
+          variables: {
+            id: row.id,
+            [field]: value,
+          },
+          optimisticResponse: {
+            __typename: 'Mutation',
+            updateBerById: {
+              ber: {
+                id: row.id,
+                apId: field === 'apId' ? value : row.apId,
+                autor: field === 'autor' ? value : row.autor,
+                jahr: field === 'jahr' ? value : row.jahr,
+                titel: field === 'titel' ? value : row.titel,
+                url: field === 'url' ? value : row.url,
+                __typename: 'Ber',
+              },
               __typename: 'Ber',
             },
-            __typename: 'Ber',
           },
-        },
-      }),
+        })
+      } catch (error) {
+        return listError(error)
+      }
+    },
   })
 )
 
