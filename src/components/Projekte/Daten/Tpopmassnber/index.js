@@ -6,6 +6,8 @@ import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
+import withState from 'recompose/withState'
+import withLifecycle from '@hocs/with-lifecycle'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroup'
 import TextField from '../../../shared/TextField'
@@ -13,7 +15,6 @@ import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import dataGql from './data.graphql'
 import updateTpopmassnberByIdGql from './updateTpopmassnberById.graphql'
-import listError from '../../../../modules/listError'
 
 const Container = styled.div`
   height: 100%;
@@ -27,8 +28,9 @@ const FieldsContainer = styled.div`
 `
 
 const enhance = compose(
+  withState('errors', 'setErrors', ({})),
   withHandlers({
-    saveToDb: ({ refetchTree }) => async ({ row, field, value, updateTpopmassnber }) => {
+    saveToDb: ({ refetchTree, setErrors, errors }) => async ({ row, field, value, updateTpopmassnber }) => {
       try {
         await updateTpopmassnber({
           variables: {
@@ -52,19 +54,29 @@ const enhance = compose(
           },
         })
       } catch (error) {
-        return listError(error)
+        return setErrors({ [field]: error.message })
       }
+      setErrors(({}))
       if (['beurteilung'].includes(field)) refetchTree()
     },
-  })
+  }),
+  withLifecycle({
+    onDidUpdate(prevProps, props) {
+      if (prevProps.id !== props.id) {
+        props.setErrors(({}))
+      }
+    },
+  }),
 )
 
 const Tpopmassnber = ({
   id,
   saveToDb,
+  errors,
 }: {
   id: String,
   saveToDb: () => void,
+  errors: Object,
 }) => (
   <Query query={dataGql} variables={{ id }}>
     {({ loading, error, data }) => {
@@ -111,6 +123,7 @@ const Tpopmassnber = ({
                         updateTpopmassnber,
                       })
                     }
+                    error={errors.jahr}
                   />
                   <RadioButtonGroup
                     label="Entwicklung"
@@ -124,6 +137,7 @@ const Tpopmassnber = ({
                         updateTpopmassnber,
                       })
                     }
+                    error={errors.beurteilung}
                   />
                   <TextField
                     key={`${row.id}bemerkungen`}
@@ -139,6 +153,7 @@ const Tpopmassnber = ({
                         updateTpopmassnber,
                       })
                     }
+                    error={errors.bemerkungen}
                   />
                 </FieldsContainer>
               )}
