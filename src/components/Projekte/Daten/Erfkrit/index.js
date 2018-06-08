@@ -6,6 +6,8 @@ import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
+import withState from 'recompose/withState'
+import withLifecycle from '@hocs/with-lifecycle'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroup'
 import TextField from '../../../shared/TextField'
@@ -13,7 +15,6 @@ import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import dataGql from './data.graphql'
 import updateErfkritByIdGql from './updateErfkritById.graphql'
-import listError from '../../../../modules/listError'
 
 const Container = styled.div`
   height: 100%;
@@ -27,8 +28,9 @@ const FieldsContainer = styled.div`
 `
 
 const enhance = compose(
+  withState('errors', 'setErrors', ({})),
   withHandlers({
-    saveToDb: ({ refetchTree }) => async ({ row, field, value, updateErfkrit }) => {
+    saveToDb: ({ refetchTree, setErrors, errors }) => async ({ row, field, value, updateErfkrit }) => {
       try {
         await updateErfkrit({
           variables: {
@@ -50,19 +52,29 @@ const enhance = compose(
           },
         })
       } catch (error) {
-        return listError(error)
+        return setErrors({ [field]: error.message })
       }
+      setErrors(({}))
       if (['erfolg'].includes(field)) refetchTree()
     },
-  })
+  }),
+  withLifecycle({
+    onDidUpdate(prevProps, props) {
+      if (prevProps.id !== props.id) {
+        props.setErrors(({}))
+      }
+    },
+  }),
 )
 
 const Erfkrit = ({
   id,
-  saveToDb
+  saveToDb,
+  errors,
 }: {
   id: String,
-  saveToDb: () => void
+  saveToDb: () => void,
+  errors: Object,
 }) => (
   <Query query={dataGql} variables={{ id }}>
     {({ loading, error, data }) => {
@@ -97,6 +109,7 @@ const Erfkrit = ({
                     saveToDb={value =>
                       saveToDb({ row, field: 'erfolg', value, updateErfkrit })
                     }
+                    error={errors.erfolg}
                   />
                   <TextField
                     key={`${row.id}kriterien`}
@@ -112,6 +125,7 @@ const Erfkrit = ({
                         updateErfkrit,
                       })
                     }
+                    error={errors.kriterien}
                   />
                 </FieldsContainer>
               )}
