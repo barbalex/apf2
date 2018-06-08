@@ -66,6 +66,7 @@ const Exporte = ({ mapFilter }:{ mapFilter: Object }) => (
                   applyMapFilterToExport={applyMapFilterToExport}
                   fileType={fileType}
                   client={client}
+                  mapFilter={mapFilter}
                 />
                 <Populationen
                   mapFilter={mapFilter}

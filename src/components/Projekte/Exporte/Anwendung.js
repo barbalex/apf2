@@ -11,14 +11,15 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import styled from 'styled-components'
-import { ApolloConsumer } from 'react-apollo'
 import gql from "graphql-tag"
 import get from 'lodash/get'
+import { Subscribe } from 'unstated'
+import app from 'ampersand-app'
 
 import beziehungen from '../../../etc/beziehungen.png'
 import exportModule from '../../../modules/export'
-import listError from '../../../modules/listError'
 import Message from './Message'
+import ErrorState from '../../../state/Error'
 
 const StyledCard = styled(Card)`
   margin: 10px 0;
@@ -80,76 +81,76 @@ const Anwendung = ({
   message: String,
   setMessage: () => void,
 }) => (
-  <ApolloConsumer>
-    {client =>
-  <StyledCard>
-    <StyledCardActions
-      disableActionSpacing
-      onClick={() => setExpanded(!expanded)}
-    >
-      <CardActionTitle>Anwendung</CardActionTitle>
-      <CardActionIconButton
-        data-expanded={expanded}
-        aria-expanded={expanded}
-        aria-label="öffnen"
-      >
-        <Icon title={expanded ? 'schliessen' : 'öffnen'}>
-          <ExpandMoreIcon />
-        </Icon>
-      </CardActionIconButton>
-    </StyledCardActions>
-    <Collapse in={expanded} timeout="auto" unmountOnExit>
-      <StyledCardContent>
-        <DownloadCardButton
-          onClick={async () => {
-            setMessage('Export "Datenstruktur" wird vorbereitet...')
-            try {
-              const { data } = await client.query({
-                query: gql`
-                  query view {
-                    allVDatenstrukturs {
-                      nodes {
-                        tabelle_schema: tabelleSchema
-                        tabelle_name: tabelleName
-                        tabelle_anzahl_datensaetze: tabelleAnzahlDatensaetze
-                        feld_name: feldName
-                        feld_standardwert: feldStandardwert
-                        feld_datentyp: feldDatentyp
-                        feld_nullwerte: feldNullwerte
-                      }
-                    }
-                  }`
-              })
-              exportModule({
-                data: get(data, 'allVDatenstrukturs.nodes', []),
-                fileName: 'Datenstruktur',
-                fileType,
-                applyMapFilterToExport,
-              })
-            } catch(error) {
-                listError(error)
+  <Subscribe to={[ErrorState]}>
+    {errorState =>
+      <StyledCard>
+        <StyledCardActions
+          disableActionSpacing
+          onClick={() => setExpanded(!expanded)}
+        >
+          <CardActionTitle>Anwendung</CardActionTitle>
+          <CardActionIconButton
+            data-expanded={expanded}
+            aria-expanded={expanded}
+            aria-label="öffnen"
+          >
+            <Icon title={expanded ? 'schliessen' : 'öffnen'}>
+              <ExpandMoreIcon />
+            </Icon>
+          </CardActionIconButton>
+        </StyledCardActions>
+        <Collapse in={expanded} timeout="auto" unmountOnExit>
+          <StyledCardContent>
+            <DownloadCardButton
+              onClick={async () => {
+                setMessage('Export "Datenstruktur" wird vorbereitet...')
+                try {
+                  const { data } = await app.client.query({
+                    query: gql`
+                      query view {
+                        allVDatenstrukturs {
+                          nodes {
+                            tabelle_schema: tabelleSchema
+                            tabelle_name: tabelleName
+                            tabelle_anzahl_datensaetze: tabelleAnzahlDatensaetze
+                            feld_name: feldName
+                            feld_standardwert: feldStandardwert
+                            feld_datentyp: feldDatentyp
+                            feld_nullwerte: feldNullwerte
+                          }
+                        }
+                      }`
+                  })
+                  exportModule({
+                    data: get(data, 'allVDatenstrukturs.nodes', []),
+                    fileName: 'Datenstruktur',
+                    fileType,
+                    applyMapFilterToExport,
+                  })
+                } catch(error) {
+                    errorState.add(error)
+                }
+                setMessage(null)
+              }}
+            >
+              Tabellen und Felder
+            </DownloadCardButton>
+            <DownloadCardButton
+              onClick={() => {
+                window.open(beziehungen)
+              }}
+            >
+              Datenstruktur grafisch dargestellt
+            </DownloadCardButton>
+          </StyledCardContent>
+        </Collapse>
+            {
+              !!message &&
+              <Message message={message} />
             }
-            setMessage(null)
-          }}
-        >
-          Tabellen und Felder
-        </DownloadCardButton>
-        <DownloadCardButton
-          onClick={() => {
-            window.open(beziehungen)
-          }}
-        >
-          Datenstruktur grafisch dargestellt
-        </DownloadCardButton>
-      </StyledCardContent>
-    </Collapse>
-        {
-          !!message &&
-          <Message message={message} />
-        }
-  </StyledCard>
+      </StyledCard>
     }
-  </ApolloConsumer>
+  </Subscribe>
 )
 
 export default enhance(Anwendung)
