@@ -13,6 +13,7 @@ import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import dataGql from './data.graphql'
 import updateTpopberByIdGql from './updateTpopberById.graphql'
+import listError from '../../../../modules/listError'
 
 const Container = styled.div`
   height: 100%;
@@ -27,30 +28,34 @@ const FieldsContainer = styled.div`
 
 const enhance = compose(
   withHandlers({
-    saveToDb: ({ refetchTree }) => ({ row, field, value, updateTpopber }) => {
-      updateTpopber({
-        variables: {
-          id: row.id,
-          [field]: value,
-        },
-        optimisticResponse: {
-          __typename: 'Mutation',
-          updateTpopberById: {
-            tpopber: {
-              id: row.id,
-              tpopId: field === 'tpopId' ? value : row.tpopId,
-              jahr: field === 'jahr' ? value : row.jahr,
-              entwicklung: field === 'entwicklung' ? value : row.entwicklung,
-              bemerkungen: field === 'bemerkungen' ? value : row.bemerkungen,
-              tpopEntwicklungWerteByEntwicklung:
-                row.tpopEntwicklungWerteByEntwicklung,
-              tpopByTpopId: row.tpopByTpopId,
+    saveToDb: ({ refetchTree }) => async ({ row, field, value, updateTpopber }) => {
+      try {
+        await updateTpopber({
+          variables: {
+            id: row.id,
+            [field]: value,
+          },
+          optimisticResponse: {
+            __typename: 'Mutation',
+            updateTpopberById: {
+              tpopber: {
+                id: row.id,
+                tpopId: field === 'tpopId' ? value : row.tpopId,
+                jahr: field === 'jahr' ? value : row.jahr,
+                entwicklung: field === 'entwicklung' ? value : row.entwicklung,
+                bemerkungen: field === 'bemerkungen' ? value : row.bemerkungen,
+                tpopEntwicklungWerteByEntwicklung:
+                  row.tpopEntwicklungWerteByEntwicklung,
+                tpopByTpopId: row.tpopByTpopId,
+                __typename: 'Tpopber',
+              },
               __typename: 'Tpopber',
             },
-            __typename: 'Tpopber',
           },
-        },
-      })
+        })
+      } catch (error) {
+        return listError(error)
+      }
       if (['entwicklung'].includes(field)) refetchTree()
     },
   })
