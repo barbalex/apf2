@@ -13,6 +13,7 @@ import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import dataGql from './data.graphql'
 import updateTpopmassnberByIdGql from './updateTpopmassnberById.graphql'
+import listError from '../../../../modules/listError'
 
 const Container = styled.div`
   height: 100%;
@@ -27,28 +28,32 @@ const FieldsContainer = styled.div`
 
 const enhance = compose(
   withHandlers({
-    saveToDb: ({ refetchTree }) => ({ row, field, value, updateTpopmassnber }) => {
-      updateTpopmassnber({
-        variables: {
-          id: row.id,
-          [field]: value,
-        },
-        optimisticResponse: {
-          __typename: 'Mutation',
-          updateTpopmassnberById: {
-            tpopmassnber: {
-              id: row.id,
-              tpopId: field === 'tpopId' ? value : row.tpopId,
-              jahr: field === 'jahr' ? value : row.jahr,
-              beurteilung: field === 'beurteilung' ? value : row.beurteilung,
-              bemerkungen: field === 'bemerkungen' ? value : row.bemerkungen,
-              tpopByTpopId: row.tpopByTpopId,
+    saveToDb: ({ refetchTree }) => async ({ row, field, value, updateTpopmassnber }) => {
+      try {
+        updateTpopmassnber({
+          variables: {
+            id: row.id,
+            [field]: value,
+          },
+          optimisticResponse: {
+            __typename: 'Mutation',
+            updateTpopmassnberById: {
+              tpopmassnber: {
+                id: row.id,
+                tpopId: field === 'tpopId' ? value : row.tpopId,
+                jahr: field === 'jahr' ? value : row.jahr,
+                beurteilung: field === 'beurteilung' ? value : row.beurteilung,
+                bemerkungen: field === 'bemerkungen' ? value : row.bemerkungen,
+                tpopByTpopId: row.tpopByTpopId,
+                __typename: 'Tpopmassnber',
+              },
               __typename: 'Tpopmassnber',
             },
-            __typename: 'Tpopmassnber',
           },
-        },
-      })
+        })
+      } catch (error) {
+        return listError(error)
+      }
       if (['beurteilung'].includes(field)) refetchTree()
     },
   })
