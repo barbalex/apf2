@@ -5,7 +5,6 @@ import idsInsideFeatureCollection from './idsInsideFeatureCollection'
 import exportXlsx from './exportXlsx'
 import exportCsv from './exportCsv'
 import exportKml from './exportKml'
-import listError from './listError'
 
 export default async ({
   data:dataPassed,
@@ -17,6 +16,7 @@ export default async ({
   idKey,
   xKey,
   yKey,
+  errorState,
 }:{
   data: Array<Object>,
   fileName: String,
@@ -27,6 +27,7 @@ export default async ({
   idKey: String,
   xKey: String,
   yKey: String,
+  errorState: Object,
 }) => {
   let data = dataPassed.map(d=> omit(d, ['__typename', 'Symbol(id)']))
   // now we could manipulate the data, for instance apply mapFilter
@@ -47,7 +48,7 @@ export default async ({
     data = data.filter(d => ids.includes(d[idKey]))
   }
   if (data.length === 0) {
-    return listError(new Error('Es gibt offenbar keine Daten, welche exportiert werden können'))
+    return errorState.add(new Error('Es gibt offenbar keine Daten, welche exportiert werden können'))
   }
   if (kml) {
     exportKml({
@@ -64,6 +65,7 @@ export default async ({
     exportXlsx({
       fileName,
       data,
+      errorState,
     })
   }
 }

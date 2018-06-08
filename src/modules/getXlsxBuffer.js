@@ -6,10 +6,15 @@
 import * as ExcelJs from 'exceljs/dist/exceljs.min.js'
 
 import getDataArrayFromExportObjects from './getDataArrayFromExportObjects'
-import listError from './listError'
 
-export default async (jsonArray: Array<Object>) => {
-  const dataArray = getDataArrayFromExportObjects(jsonArray)
+export default async ({
+  data,
+  errorState,
+}:{
+  data: Array<Object>, 
+  errorState: Object,
+}) => {
+  const dataArray = getDataArrayFromExportObjects(data)
   const numberOfColumns =
     dataArray && dataArray[0] && dataArray[0].length ? dataArray[0].length : 0
   const workbook = new ExcelJs.Workbook()
@@ -54,7 +59,7 @@ export default async (jsonArray: Array<Object>) => {
   try {
     buffer = await workbook.xlsx.writeBuffer()
   } catch (error) {
-    return listError(error)
+    return errorState.add(error)
   }
   return buffer
 }
