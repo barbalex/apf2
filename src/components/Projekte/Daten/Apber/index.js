@@ -16,6 +16,7 @@ import constants from '../../../../modules/constants'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import dataGql from './data.graphql'
 import updateApberByIdGql from './updateApberById.graphql'
+import listError from '../../../../modules/listError'
 
 const Container = styled.div`
   height: 100%;
@@ -34,63 +35,68 @@ const FieldsContainer = styled.div`
 
 const enhance = compose(
   withHandlers({
-    saveToDb: props => ({ row, field, value, updateApber }) =>
-      updateApber({
-        variables: {
-          id: row.id,
-          [field]: value,
-        },
-        optimisticResponse: {
-          __typename: 'Mutation',
-          updateApberById: {
-            apber: {
-              id: row.id,
-              jahr: field === 'jahr' ? value : row.jahr,
-              situation: field === 'situation' ? value : row.situation,
-              vergleichVorjahrGesamtziel:
-                field === 'vergleichVorjahrGesamtziel'
-                  ? value
-                  : row.vergleichVorjahrGesamtziel,
-              beurteilung: field === 'beurteilung' ? value : row.beurteilung,
-              veraenderungZumVorjahr:
-                field === 'veraenderungZumVorjahr'
-                  ? value
-                  : row.veraenderungZumVorjahr,
-              apberAnalyse: field === 'apberAnalyse' ? value : row.apberAnalyse,
-              konsequenzenUmsetzung:
-                field === 'konsequenzenUmsetzung'
-                  ? value
-                  : row.konsequenzenUmsetzung,
-              konsequenzenErfolgskontrolle:
-                field === 'konsequenzenErfolgskontrolle'
-                  ? value
-                  : row.konsequenzenErfolgskontrolle,
-              biotopeNeue: field === 'biotopeNeue' ? value : row.biotopeNeue,
-              biotopeOptimieren:
-                field === 'biotopeOptimieren' ? value : row.biotopeOptimieren,
-              massnahmenOptimieren:
-                field === 'massnahmenOptimieren'
-                  ? value
-                  : row.massnahmenOptimieren,
-              wirkungAufArt:
-                field === 'wirkungAufArt' ? value : row.wirkungAufArt,
-              datum: field === 'datum' ? value : row.datum,
-              massnahmenApBearb:
-                field === 'massnahmenApBearb' ? value : row.massnahmenApBearb,
-              massnahmenPlanungVsAusfuehrung:
-                field === 'massnahmenPlanungVsAusfuehrung'
-                  ? value
-                  : row.massnahmenPlanungVsAusfuehrung,
-              apId: field === 'apId' ? value : row.apId,
-              bearbeiter: field === 'bearbeiter' ? value : row.bearbeiter,
-              apErfkritWerteByBeurteilung: row.apErfkritWerteByBeurteilung,
-              adresseByBearbeiter: row.adresseByBearbeiter,
+    saveToDb: props => async ({ row, field, value, updateApber }) => {
+      try {
+        updateApber({
+          variables: {
+            id: row.id,
+            [field]: value,
+          },
+          optimisticResponse: {
+            __typename: 'Mutation',
+            updateApberById: {
+              apber: {
+                id: row.id,
+                jahr: field === 'jahr' ? value : row.jahr,
+                situation: field === 'situation' ? value : row.situation,
+                vergleichVorjahrGesamtziel:
+                  field === 'vergleichVorjahrGesamtziel'
+                    ? value
+                    : row.vergleichVorjahrGesamtziel,
+                beurteilung: field === 'beurteilung' ? value : row.beurteilung,
+                veraenderungZumVorjahr:
+                  field === 'veraenderungZumVorjahr'
+                    ? value
+                    : row.veraenderungZumVorjahr,
+                apberAnalyse: field === 'apberAnalyse' ? value : row.apberAnalyse,
+                konsequenzenUmsetzung:
+                  field === 'konsequenzenUmsetzung'
+                    ? value
+                    : row.konsequenzenUmsetzung,
+                konsequenzenErfolgskontrolle:
+                  field === 'konsequenzenErfolgskontrolle'
+                    ? value
+                    : row.konsequenzenErfolgskontrolle,
+                biotopeNeue: field === 'biotopeNeue' ? value : row.biotopeNeue,
+                biotopeOptimieren:
+                  field === 'biotopeOptimieren' ? value : row.biotopeOptimieren,
+                massnahmenOptimieren:
+                  field === 'massnahmenOptimieren'
+                    ? value
+                    : row.massnahmenOptimieren,
+                wirkungAufArt:
+                  field === 'wirkungAufArt' ? value : row.wirkungAufArt,
+                datum: field === 'datum' ? value : row.datum,
+                massnahmenApBearb:
+                  field === 'massnahmenApBearb' ? value : row.massnahmenApBearb,
+                massnahmenPlanungVsAusfuehrung:
+                  field === 'massnahmenPlanungVsAusfuehrung'
+                    ? value
+                    : row.massnahmenPlanungVsAusfuehrung,
+                apId: field === 'apId' ? value : row.apId,
+                bearbeiter: field === 'bearbeiter' ? value : row.bearbeiter,
+                apErfkritWerteByBeurteilung: row.apErfkritWerteByBeurteilung,
+                adresseByBearbeiter: row.adresseByBearbeiter,
+                __typename: 'Apber',
+              },
               __typename: 'Apber',
             },
-            __typename: 'Apber',
           },
-        },
-      }),
+        })
+      } catch (error) {
+        return listError(error)
+      }
+    },
   })
 )
 
