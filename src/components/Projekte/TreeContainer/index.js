@@ -313,7 +313,7 @@ const enhance = compose(
           })
         },
         copy() {
-          copyTo({ parentId: id, client, refetch: refetchTree })
+          copyTo({ parentId: id, client, refetch: refetchTree, errorState })
         },
         markForCopyingBiotop() {
           client.mutate({
@@ -331,13 +331,13 @@ const enhance = compose(
           copyBiotopTo({ id, client })
         },
         copyTpopKoordToPop() {
-          copyTpopKoordToPop(id)
+          copyTpopKoordToPop({ id, errorState })
         },
         createNewPopFromBeob() {
           createNewPopFromBeob({ tree, activeNodes, id, refetch: refetchTree })
         },
         copyBeobZugeordnetKoordToPop() {
-          copyBeobZugeordnetKoordToPop(id)
+          copyBeobZugeordnetKoordToPop({ id, errorState })
         },
         async showCoordOfTpopOnMapsZhCh() {
           const { x, y } = await getAndValidateCoordinatesOfTpop({ id, errorState })

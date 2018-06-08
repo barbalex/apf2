@@ -19,7 +19,6 @@ import createTpopkontrzaehl from './createTpopkontrzaehl.graphql'
 import createTpopmassn from './createTpopmassn.graphql'
 import createTpop from './createTpop.graphql'
 import createPop from './createPop.graphql'
-import listError from '../listError'
 //import queryTpopfeldkontr from './queryTpopfeldkontr.graphql'
 //import queryTpopfreiwkontr from './queryTpopfreiwkontr.graphql'
 
@@ -30,13 +29,15 @@ export default async (
     table: tablePassed,
     id: idPassed,
     client,
-    refetch
+    refetch,
+    errorState,
   }:{
     parentId: String,
     tablePassed: ?String,
     idPassed: ?String,
     client: Object,
-    refetch: () => void
+    refetch: () => void,
+    errorState: Object,
   }
 ): Promise<void> => {
   const { data } = await client.query({
@@ -106,7 +107,7 @@ export default async (
   }
 
   if (!row) {
-    return listError(new Error('change was not saved because dataset was not found in store'))
+    return errorState.add(new Error('change was not saved because dataset was not found in store'))
   }
   
   // insert

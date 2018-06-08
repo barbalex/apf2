@@ -2,12 +2,17 @@
 import get from 'lodash/get'
 import app from 'ampersand-app'
 
-import listError from '../listError'
 import queryBeob from './queryBeob.graphql'
 import queryTpop from './queryTpop.graphql'
 import updatePopById from './updatePopById.graphql'
 
-export default async (id: String): Promise<void> => {
+export default async ({
+  id, 
+  errorState,
+}:{
+  id: String, 
+  errorState: Object,
+}): Promise<void> => {
   const { client } = app
   // fetch beob coodinates
   let beobResult
@@ -17,7 +22,7 @@ export default async (id: String): Promise<void> => {
       variables: { id }
     })
   } catch(error) {
-    return listError(error)
+    return errorState.add(error)
   }
   const beob = get(beobResult, 'data.beobById')
   const { x, y, tpopId } = beob
@@ -30,7 +35,7 @@ export default async (id: String): Promise<void> => {
       variables: { id: tpopId }
     })
   } catch (error) {
-    return listError(error)
+    return errorState.add(error)
   }
   const popId = get(tpopResult, 'data.tpopById.popId')
 
@@ -57,6 +62,6 @@ export default async (id: String): Promise<void> => {
       },
     })
   } catch (error) {
-    return listError(error)
+    return errorState.add(error)
   }
 }
