@@ -6,13 +6,14 @@ import { Query, Mutation } from 'react-apollo'
 import get from 'lodash/get'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
+import withState from 'recompose/withState'
+import withLifecycle from '@hocs/with-lifecycle'
 
 import AutoComplete from '../../../shared/Autocomplete'
 import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import dataGql from './data.graphql'
 import updateApartByIdGql from './updateApartById.graphql'
-import listError from '../../../../modules/listError'
 
 const Container = styled.div`
   height: 100%;
@@ -26,8 +27,9 @@ const FieldsContainer = styled.div`
 `
 
 const enhance = compose(
+  withState('errors', 'setErrors', ({})),
   withHandlers({
-    saveToDb: ({ refetchTree }) => async ({ row, field, value, updateApart }) => {
+    saveToDb: ({ refetchTree, setErrors, errors }) => async ({ row, field, value, updateApart }) => {
       try {
         await updateApart({
           variables: {
@@ -49,19 +51,29 @@ const enhance = compose(
           },
         })
       } catch (error) {
-        return listError(error)
+        return setErrors({ [field]: error.message })
       }
+      setErrors(({}))
       if (['artId'].includes(field)) refetchTree()
     },
-  })
+  }),
+  withLifecycle({
+    onDidUpdate(prevProps, props) {
+      if (prevProps.id !== props.id) {
+        props.setErrors(({}))
+      }
+    },
+  }),
 )
 
 const ApArt = ({
   id,
-  saveToDb
+  saveToDb,
+  errors,
 }: {
   id: String,
-  saveToDb: () => void
+  saveToDb: () => void,
+  errors: Object,
 }) => (
   <Query query={dataGql} variables={{ id }}>
     {({ loading, error, data }) => {
@@ -130,6 +142,7 @@ const ApArt = ({
                     saveToDb={value =>
                       saveToDb({ row, field: 'artId', value, updateApart })
                     }
+                    error={errors.artId}
                     openabove
                   />
                 </FieldsContainer>
