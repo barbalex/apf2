@@ -2,9 +2,14 @@
 import axios from 'axios'
 
 import staticFilesBaseUrl from './staticFilesBaseUrl'
-import listError from './listError'
 
-export default (setMarkierungen: () => void): void => {
+export default ({
+  setMarkierungen,
+  errorState,
+}:{
+  setMarkierungen: () => void,
+  errorState: Object,
+}): void => {
   const baseURL = staticFilesBaseUrl
   const url = `/markierungen.json`
   axios
@@ -12,5 +17,5 @@ export default (setMarkierungen: () => void): void => {
     .then(({ data }) =>
       setMarkierungen(data)
     )
-    .catch(error => listError(error))
+    .catch(error => errorState.add(error))
 }

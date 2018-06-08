@@ -292,7 +292,7 @@ const enhance = compose(
           })
         },
         move() {
-          moveTo(id)
+          moveTo({ id, errorState })
         },
         markForCopying() {
           client.mutate({

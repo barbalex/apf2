@@ -271,6 +271,7 @@ const Karte = ({
         <Markierungen 
           markierungen={markierungen}
           setMarkierungen={setMarkierungen}
+          errorState={errorState}
         />
       ,
       ZhGemeindegrenzen: () => <ZhGemeindegrenzen />,

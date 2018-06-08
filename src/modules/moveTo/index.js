@@ -7,7 +7,6 @@ import get from 'lodash/get'
 import app from 'ampersand-app'
 
 import tables from '../tables'
-import listError from '../listError'
 import movingGql from './moving.graphql'
 import updateTpopkontrById from './updateTpopkontrById.graphql'
 import updateTpopmassnById from './updateTpopmassnById.graphql'
@@ -15,7 +14,13 @@ import updateTpopById from './updateTpopById.graphql'
 import updatePopById from './updatePopById.graphql'
 import setMoving from './setMoving.graphql'
 
-export default async (newParentId: String): any => {
+export default async ({
+  id: newParentId,
+  errorState,
+}:{
+  newParentId: String,
+  errorState: Object,
+}): any => {
   const { client } = app
   const { data } = await client.query({
     query: movingGql
@@ -36,11 +41,11 @@ export default async (newParentId: String): any => {
   }
   const idField = tabelle ? tabelle.idField : undefined
   if (!idField) {
-    return listError(new Error('change was not saved: Reason: idField was not found'))
+    return errorState.add(new Error('change was not saved: Reason: idField was not found'))
   }
   const parentIdField = tabelle.parentIdField
   if (!parentIdField) {
-    return listError(new Error('change was not saved: Reason: parentIdField was not found'))
+    return errorState.add(new Error('change was not saved: Reason: parentIdField was not found'))
   }
 
   // move

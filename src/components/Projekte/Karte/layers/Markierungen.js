@@ -26,12 +26,14 @@ const pointToLayer = (feature, latlng) => {
 
 const MarkierungenLayer = ({
   markierungen,
-  setMarkierungen
+  setMarkierungen,
+  errorState,
 }:{
   markierungen: Object,
   setMarkierungen: () => void,
+  errorStatef: Object,
 }) => {
-  !markierungen && fetchMarkierungen(setMarkierungen)
+  !markierungen && fetchMarkierungen({ setMarkierungen, errorState })
 
   return (
     markierungen && (
