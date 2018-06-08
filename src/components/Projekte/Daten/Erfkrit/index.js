@@ -13,6 +13,7 @@ import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import dataGql from './data.graphql'
 import updateErfkritByIdGql from './updateErfkritById.graphql'
+import listError from '../../../../modules/listError'
 
 const Container = styled.div`
   height: 100%;
@@ -27,26 +28,30 @@ const FieldsContainer = styled.div`
 
 const enhance = compose(
   withHandlers({
-    saveToDb: ({ refetchTree }) => ({ row, field, value, updateErfkrit }) => {
-      updateErfkrit({
-        variables: {
-          id: row.id,
-          [field]: value,
-        },
-        optimisticResponse: {
-          __typename: 'Mutation',
-          updateErfkritById: {
-            erfkrit: {
-              id: row.id,
-              apId: field === 'apId' ? value : row.apId,
-              erfolg: field === 'erfolg' ? value : row.erfolg,
-              kriterien: field === 'kriterien' ? value : row.kriterien,
+    saveToDb: ({ refetchTree }) => async ({ row, field, value, updateErfkrit }) => {
+      try {
+        updateErfkrit({
+          variables: {
+            id: row.id,
+            [field]: value,
+          },
+          optimisticResponse: {
+            __typename: 'Mutation',
+            updateErfkritById: {
+              erfkrit: {
+                id: row.id,
+                apId: field === 'apId' ? value : row.apId,
+                erfolg: field === 'erfolg' ? value : row.erfolg,
+                kriterien: field === 'kriterien' ? value : row.kriterien,
+                __typename: 'Erfkrit',
+              },
               __typename: 'Erfkrit',
             },
-            __typename: 'Erfkrit',
           },
-        },
-      })
+        })
+      } catch (error) {
+        return listError(error)
+      }
       if (['erfolg'].includes(field)) refetchTree()
     },
   })
