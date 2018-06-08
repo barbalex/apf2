@@ -6,6 +6,8 @@ import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
+import withState from 'recompose/withState'
+import withLifecycle from '@hocs/with-lifecycle'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroup'
 import TextField from '../../../shared/TextField'
@@ -16,7 +18,6 @@ import constants from '../../../../modules/constants'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import dataGql from './data.graphql'
 import updateApberByIdGql from './updateApberById.graphql'
-import listError from '../../../../modules/listError'
 
 const Container = styled.div`
   height: 100%;
@@ -34,8 +35,9 @@ const FieldsContainer = styled.div`
 `
 
 const enhance = compose(
+  withState('errors', 'setErrors', ({})),
   withHandlers({
-    saveToDb: props => async ({ row, field, value, updateApber }) => {
+    saveToDb: ({ setErrors, errors }) => async ({ row, field, value, updateApber }) => {
       try {
         await updateApber({
           variables: {
@@ -94,20 +96,30 @@ const enhance = compose(
           },
         })
       } catch (error) {
-        return listError(error)
+        return setErrors({ [field]: error.message })
+      }
+      setErrors(({}))
+    },
+  }),
+  withLifecycle({
+    onDidUpdate(prevProps, props) {
+      if (prevProps.id !== props.id) {
+        props.setErrors(({}))
       }
     },
-  })
+  }),
 )
 
 const Apber = ({
   id,
   dimensions = { width: 380 },
   saveToDb,
+  errors,
 }: {
   id: String,
   dimensions: Object,
   saveToDb: () => void,
+  errors: Object,
 }) =>
   <Query query={dataGql} variables={{ id }}>
     {({ loading, error, data }) => {
@@ -153,6 +165,7 @@ const Apber = ({
                     saveToDb={value =>
                       saveToDb({ row, field: 'jahr', value, updateApber })
                     }
+                    error={errors.jahr}
                   />
                   <TextField
                     key={`${row.id}vergleichVorjahrGesamtziel`}
@@ -168,6 +181,7 @@ const Apber = ({
                         updateApber,
                       })
                     }
+                    error={errors.vergleichVorjahrGesamtziel}
                   />
                   <RadioButtonGroup
                     key={`${row.id}beurteilung`}
@@ -182,6 +196,7 @@ const Apber = ({
                         updateApber,
                       })
                     }
+                    error={errors.beurteilung}
                   />
                   <RadioButtonGroup
                     key={`${row.id}veraenderungZumVorjahr`}
@@ -196,6 +211,7 @@ const Apber = ({
                         updateApber,
                       })
                     }
+                    error={errors.veraenderungZumVorjahr}
                   />
                   <TextField
                     key={`${row.id}apberAnalyse`}
@@ -211,6 +227,7 @@ const Apber = ({
                         updateApber,
                       })
                     }
+                    error={errors.apberAnalyse}
                   />
                   <TextField
                     key={`${row.id}konsequenzenUmsetzung`}
@@ -226,6 +243,7 @@ const Apber = ({
                         updateApber,
                       })
                     }
+                    error={errors.konsequenzenUmsetzung}
                   />
                   <TextField
                     key={`${row.id}konsequenzenErfolgskontrolle`}
@@ -241,6 +259,7 @@ const Apber = ({
                         updateApber,
                       })
                     }
+                    error={errors.konsequenzenErfolgskontrolle}
                   />
                   <TextField
                     key={`${row.id}biotopeNeue`}
@@ -256,6 +275,7 @@ const Apber = ({
                         updateApber,
                       })
                     }
+                    error={errors.biotopeNeue}
                   />
                   <TextField
                     key={`${row.id}biotopeOptimieren`}
@@ -271,6 +291,7 @@ const Apber = ({
                         updateApber,
                       })
                     }
+                    error={errors.biotopeOptimieren}
                   />
                   <TextField
                     key={`${row.id}massnahmenApBearb`}
@@ -286,6 +307,7 @@ const Apber = ({
                         updateApber,
                       })
                     }
+                    error={errors.massnahmenApBearb}
                   />
                   <TextField
                     key={`${row.id}massnahmenPlanungVsAusfuehrung`}
@@ -301,6 +323,7 @@ const Apber = ({
                         updateApber,
                       })
                     }
+                    error={errors.massnahmenPlanungVsAusfuehrung}
                   />
                   <TextField
                     key={`${row.id}massnahmenOptimieren`}
@@ -316,6 +339,7 @@ const Apber = ({
                         updateApber,
                       })
                     }
+                    error={errors.massnahmenOptimieren}
                   />
                   <TextField
                     key={`${row.id}wirkungAufArt`}
@@ -331,6 +355,7 @@ const Apber = ({
                         updateApber,
                       })
                     }
+                    error={errors.wirkungAufArt}
                   />
                   <DateFieldWithPicker
                     key={`${row.id}datum`}
@@ -339,6 +364,7 @@ const Apber = ({
                     saveToDb={value =>
                       saveToDb({ row, field: 'datum', value, updateApber })
                     }
+                    error={errors.datum}
                   />
                   <AutoComplete
                     key={`${row.id}bearbeiter`}
@@ -353,6 +379,7 @@ const Apber = ({
                         updateApber,
                       })
                     }
+                    error={errors.bearbeiter}
                     openabove
                   />
                 </FieldsContainer>
