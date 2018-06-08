@@ -6,6 +6,8 @@ import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
+import withState from 'recompose/withState'
+import withLifecycle from '@hocs/with-lifecycle'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroup'
 import TextField from '../../../shared/TextField'
@@ -14,7 +16,6 @@ import AutoComplete from '../../../shared/Autocomplete'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import dataGql from './data.graphql'
 import updateTpopkontrzaehlByIdGql from './updateTpopkontrzaehlById.graphql'
-import listError from '../../../../modules/listError'
 
 const Container = styled.div`
   height: 100%;
@@ -28,8 +29,9 @@ const FieldsContainer = styled.div`
 `
 
 const enhance = compose(
+  withState('errors', 'setErrors', ({})),
   withHandlers({
-    saveToDb: ({ refetchTree }) => async ({ row, field, value, updateTpopkontrzaehl }) => {
+    saveToDb: ({ refetchTree, setErrors, errors }) => async ({ row, field, value, updateTpopkontrzaehl }) => {
       try {
         await updateTpopkontrzaehl({
           variables: {
@@ -55,19 +57,29 @@ const enhance = compose(
           },
         })
       } catch (error) {
-        return listError(error)
+        return setErrors({ [field]: error.message })
       }
+      setErrors(({}))
       if (['einheit', 'methode'].includes(field)) refetchTree()
     },
-  })
+  }),
+  withLifecycle({
+    onDidUpdate(prevProps, props) {
+      if (prevProps.id !== props.id) {
+        props.setErrors(({}))
+      }
+    },
+  }),
 )
 
 const Tpopkontrzaehl = ({
   id,
   saveToDb,
+  errors,
 }: {
   id: String,
   saveToDb: () => void,
+  errors: Object,
 }) => (
   <Query query={dataGql} variables={{ id }}>
     {({ loading, error, data }) => {
@@ -122,6 +134,7 @@ const Tpopkontrzaehl = ({
                         updateTpopkontrzaehl,
                       })
                     }
+                    error={errors.einheit}
                   />
                   <TextField
                     key={`${row.id}anzahl`}
@@ -136,6 +149,7 @@ const Tpopkontrzaehl = ({
                         updateTpopkontrzaehl,
                       })
                     }
+                    error={errors.anzahl}
                   />
                   <RadioButtonGroup
                     key={`${row.id}methode`}
@@ -150,6 +164,7 @@ const Tpopkontrzaehl = ({
                         updateTpopkontrzaehl,
                       })
                     }
+                    error={errors.methode}
                   />
                 </FieldsContainer>
               )}
