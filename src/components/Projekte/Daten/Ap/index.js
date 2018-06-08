@@ -6,6 +6,8 @@ import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
+import withState from 'recompose/withState'
+import withLifecycle from '@hocs/with-lifecycle'
 
 import AutoComplete from '../../../shared/Autocomplete'
 import RadioButtonGroupWithInfo from '../../../shared/RadioButtonGroupWithInfo'
@@ -16,7 +18,6 @@ import ErrorBoundary from '../../../shared/ErrorBoundary'
 import data1Gql from './data1.graphql'
 import data2Gql from './data2.graphql'
 import updateApByIdGql from './updateApById.graphql'
-import listError from '../../../../modules/listError'
 
 const Container = styled.div`
   height: 100%;
@@ -60,8 +61,9 @@ const LabelPopoverRowColumnRight = styled.div`
 `
 
 const enhance = compose(
+  withState('errors', 'setErrors', ({})),
   withHandlers({
-    saveToDb: ({ refetchTree }) => async ({ row, field, value, updateAp }) => {
+    saveToDb: ({ refetchTree, setErrors, errors }) => async ({ row, field, value, updateAp }) => {
       try {
         await updateAp({
           variables: {
@@ -88,19 +90,29 @@ const enhance = compose(
           },
         })
       } catch (error) {
-        return listError(error)
+        return setErrors({ [field]: error.message })
       }
+      setErrors(({}))
       if (['artId'].includes(field)) refetchTree()
     },
-  })
+  }),
+  withLifecycle({
+    onDidUpdate(prevProps, props) {
+      if (prevProps.id !== props.id) {
+        props.setErrors(({}))
+      }
+    },
+  }),
 )
 
 const Ap = ({
   treeName,
-  saveToDb
+  saveToDb,
+  errors,
 }: {
   treeName: String,
-  saveToDb: () => void
+  saveToDb: () => void,
+  errors: Object,
 }) => (
   <Query query={data1Gql}>
     {({ loading, error, data }) => {
@@ -165,6 +177,7 @@ const Ap = ({
                           saveToDb={value =>
                             saveToDb({ row, field: 'artId', value, updateAp })
                           }
+                          error={errors.artId}
                         />
                         <RadioButtonGroupWithInfo
                           key={`${row.id}bearbeitung`}
@@ -173,6 +186,7 @@ const Ap = ({
                           saveToDb={value =>
                             saveToDb({ row, field: 'bearbeitung', value, updateAp })
                           }
+                          error={errors.bearbeitung}
                           popover={
                             <Fragment>
                               <LabelPopoverTitleRow>Legende</LabelPopoverTitleRow>
@@ -204,6 +218,7 @@ const Ap = ({
                           saveToDb={value =>
                             saveToDb({ row, field: 'startJahr', value, updateAp })
                           }
+                          error={errors.startJahr}
                         />
                         <FieldContainer>
                           <RadioButtonGroupWithInfo
@@ -218,6 +233,7 @@ const Ap = ({
                                 },
                               })
                             }
+                            error={errors.umsetzung}
                             popover={
                               <Fragment>
                                 <LabelPopoverTitleRow>Legende</LabelPopoverTitleRow>
@@ -251,6 +267,7 @@ const Ap = ({
                           saveToDb={value =>
                             saveToDb({ row, field: 'bearbeiter', value, updateAp })
                           }
+                          error={errors.bearbeiter}
                           openabove
                         />
                         <TextFieldNonUpdatable
