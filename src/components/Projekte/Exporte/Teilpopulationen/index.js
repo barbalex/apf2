@@ -14,12 +14,13 @@ import styled from 'styled-components'
 import gql from "graphql-tag"
 import get from 'lodash/get'
 import { Query } from 'react-apollo'
+import { Subscribe } from 'unstated'
 
 import AutoComplete from '../Autocomplete'
 import exportModule from '../../../../modules/export'
-import listError from '../../../../modules/listError'
 import Message from '../Message'
 import dataGql from './data.graphql'
+import ErrorState from '../../../../state/Error'
 
 const StyledCard = styled(Card)`
   margin: 10px 0;
@@ -86,643 +87,647 @@ const Teilpopulationen = ({
   message: String,
   setMessage: () => void,
 }) => (
-  <Query query={dataGql}>
-    {({ loading, error, data, client }) => {
-      if (error) return `Fehler: ${error.message}`
-      const artList = get(data, 'allAeEigenschaftens.nodes', [])
-        .filter(n => !!get(n, 'apByArtId.id'))
-        .map(n => ({
-          id: get(n, 'apByArtId.id'),
-          value: n.artname
-        }))
+  <Subscribe to={[ErrorState]}>
+    {errorState =>
+      <Query query={dataGql}>
+        {({ loading, error, data, client }) => {
+          if (error) return `Fehler: ${error.message}`
+          const artList = get(data, 'allAeEigenschaftens.nodes', [])
+            .filter(n => !!get(n, 'apByArtId.id'))
+            .map(n => ({
+              id: get(n, 'apByArtId.id'),
+              value: n.artname
+            }))
 
-      return (
-        <StyledCard>
-          <StyledCardActions
-            disableActionSpacing
-            onClick={() => setExpanded(!expanded)}
-          >
-            <CardActionTitle>Teilpopulationen</CardActionTitle>
-            <CardActionIconButton
-              data-expanded={expanded}
-              aria-expanded={expanded}
-              aria-label="öffnen"
-            >
-              <Icon title={expanded ? 'schliessen' : 'öffnen'}>
-                <ExpandMoreIcon />
-              </Icon>
-            </CardActionIconButton>
-          </StyledCardActions>
-          <Collapse in={expanded} timeout="auto" unmountOnExit>
-            <StyledCardContent>
-              <DownloadCardButton
-                onClick={async () => {
-                  setMessage('Export "Teilpopulationen" wird vorbereitet...')
-                  try {
-                    const { data } = await client.query({
-                      query: gql`
-                        query view {
-                          allVTpops {
-                            nodes {
-                              apId
-                              familie
-                              artname
-                              apBearbeitung
-                              apStartJahr
-                              apUmsetzung
-                              popId
-                              popNr
-                              popName
-                              popStatus
-                              popBekanntSeit
-                              popStatusUnklar
-                              popStatusUnklarBegruendung
-                              popX
-                              popY
-                              id
-                              nr
-                              gemeinde
-                              flurname
-                              status
-                              bekanntSeit
-                              statusUnklar
-                              statusUnklarGrund
-                              x
-                              y
-                              radius
-                              hoehe
-                              exposition
-                              klima
-                              neigung
-                              beschreibung
-                              katasterNr
-                              apberRelevant
-                              eigentuemer
-                              kontakt
-                              nutzungszone
-                              bewirtschafter
-                              bewirtschaftung
-                              changed
-                              changedBy
-                            }
-                          }
-                        }`
-                    })
-                    exportModule({
-                      data: get(data, 'allVTpops.nodes', []),
-                      fileName: 'Teilpopulationen',
-                      fileType,
-                      mapFilter,
-                      applyMapFilterToExport,
-                      idKey: 'id',
-                      xKey: 'x',
-                      yKey: 'y',
-                    })
-                  } catch(error) {
-                    listError(error)
-                  }
-                  setMessage(null)
-                }}
+          return (
+            <StyledCard>
+              <StyledCardActions
+                disableActionSpacing
+                onClick={() => setExpanded(!expanded)}
               >
-                Teilpopulationen
-              </DownloadCardButton>
-              <DownloadCardButton
-                onClick={async () => {
-                  setMessage('Export "TeilpopulationenWebGisBun" wird vorbereitet...')
-                  try {
-                    const { data } = await client.query({
-                      query: gql`
-                        query view {
-                          allVTpopWebgisbuns {
-                            nodes {
-                              APARTID: apartid
-                              APART: apart
-                              APSTATUS: apstatus
-                              APSTARTJAHR: apstartjahr
-                              APSTANDUMSETZUNG: apstandumsetzung
-                              POPGUID: popguid
-                              POPNR: popnr
-                              POPNAME: popname
-                              POPSTATUS: popstatus
-                              POPSTATUSUNKLAR: popstatusunklar
-                              POPUNKLARGRUND: popunklargrund
-                              POPBEKANNTSEIT: popbekanntseit
-                              POP_X: popX
-                              POP_Y: popY
-                              TPOPID: tpopid
-                              TPOPGUID: tpopguid
-                              TPOPNR: tpopnr
-                              TPOPGEMEINDE: tpopgemeinde
-                              TPOPFLURNAME: tpopflurname
-                              TPOPSTATUS: tpopstatus
-                              TPOPSTATUSUNKLAR: tpopstatusunklar
-                              TPOPUNKLARGRUND: tpopunklargrund
-                              TPOP_X: tpopX
-                              TPOP_Y: tpopY
-                              TPOPRADIUS: tpopradius
-                              TPOPHOEHE: tpophoehe
-                              TPOPEXPOSITION: tpopexposition
-                              TPOPKLIMA: tpopklima
-                              TPOPHANGNEIGUNG: tpophangneigung
-                              TPOPBESCHREIBUNG: tpopbeschreibung
-                              TPOPKATASTERNR: tpopkatasternr
-                              TPOPVERANTWORTLICH: tpopverantwortlich
-                              TPOPBERICHTSRELEVANZ: tpopberichtsrelevanz
-                              TPOPBEKANNTSEIT: tpopbekanntseit
-                              TPOPEIGENTUEMERIN: tpopeigentuemerin
-                              TPOPKONTAKTVO: tpopkontaktVo
-                              TPOPNUTZUNGSZONE: tpopNutzungszone
-                              TPOPBEWIRTSCHAFTER: tpopbewirtschafter
-                              TPOPBEWIRTSCHAFTUNG: tpopbewirtschaftung
-                              TPOPCHANGEDAT: tpopchangedat
-                              TPOPCHANGEBY: tpopchangeby
-                            }
-                          }
-                        }`
-                    })
-                    exportModule({
-                      data: get(data, 'allVTpopWebgisbuns.nodes', []),
-                      fileName: 'TeilpopulationenWebGisBun',
-                      fileType,
-                      applyMapFilterToExport,
-                      mapFilter,
-                      idKey: 'TPOPID',
-                      xKey: 'TPOP_X',
-                      yKey: 'TPOP_Y',
-                    })
-                  } catch(error) {
-                    listError(error)
-                  }
-                  setMessage(null)
-                }}
-              >
-                Teilpopulationen für WebGIS BUN
-              </DownloadCardButton>
-              <DownloadCardButton
-                onClick={async () => {
-                  setMessage('Export "Teilpopulationen" wird vorbereitet...')
-                  try {
-                    const { data } = await client.query({
-                      query: gql`
-                        query view {
-                          allVTpopKmls {
-                            nodes {
-                              art
-                              label
-                              inhalte
-                              laengengrad
-                              breitengrad
-                              url
-                            }
-                          }
-                        }`
-                    })
-                    exportModule({
-                      data: get(data, 'allVTpopKmls.nodes', []),
-                      fileName: 'Teilpopulationen',
-                      fileType,
-                      applyMapFilterToExport,
-                      mapFilter,
-                    })
-                  } catch(error) {
-                    listError(error)
-                  }
-                  setMessage(null)
-                }}
-              >
-                <div>Teilpopulationen für Google Earth</div>
-                <div>(beschriftet mit PopNr/TPopNr)</div>
-              </DownloadCardButton>
-              <DownloadCardButton
-                onClick={async () => {
-                  setMessage('Export "TeilpopulationenNachNamen" wird vorbereitet...')
-                  try {
-                    const { data } = await client.query({
-                      query: gql`
-                        query view {
-                          allVTpopKmlnamen {
-                            nodes {
-                              art
-                              label
-                              inhalte
-                              id
-                              x
-                              y
-                              laengengrad
-                              breitengrad
-                              url
-                            }
-                          }
-                        }`
-                    })
-                    exportModule({
-                      data: get(data, 'allVTpopKmlnamen.nodes', []),
-                      fileName: 'TeilpopulationenNachNamen',
-                      fileType,
-                      applyMapFilterToExport,
-                      mapFilter,
-                      idKey: 'id',
-                      xKey: 'x',
-                      yKey: 'y',
-                    })
-                  } catch(error) {
-                    listError(error)
-                  }
-                  setMessage(null)
-                }}
-              >
-                <div>Teilpopulationen für Google Earth</div>
-                <div>(beschriftet mit Artname, PopNr/TPopNr)</div>
-              </DownloadCardButton>
-              <DownloadCardButton
-                onClick={async () => {
-                  setMessage('Export "TeilpopulationenVonApArtenOhneBekanntSeit" wird vorbereitet...')
-                  try {
-                    const { data } = await client.query({
-                      query: gql`
-                        query view {
-                          allVTpopOhnebekanntseits {
-                            nodes {
-                              id
-                              artname
-                              apBearbeitung
-                              popNr
-                              popName
-                              nr
-                              gemeinde
-                              flurname
-                              bekanntSeit
-                              x
-                              y
-                            }
-                          }
-                        }`
-                    })
-                    exportModule({
-                      data: get(data, 'allVTpopOhnebekanntseits.nodes', []),
-                      fileName: 'TeilpopulationenVonApArtenOhneBekanntSeit',
-                      fileType,
-                      applyMapFilterToExport,
-                      mapFilter,
-                      idKey: 'id',
-                      xKey: 'x',
-                      yKey: 'y',
-                    })
-                  } catch(error) {
-                    listError(error)
-                  }
-                  setMessage(null)
-                }}
-              >
-                <div>Teilpopulationen von AP-Arten</div>
-                <div>{'ohne "Bekannt seit"'}</div>
-              </DownloadCardButton>
-              <DownloadCardButton
-                onClick={async () => {
-                  setMessage('Export "TeilpopulationenOhneApBerichtRelevant" wird vorbereitet...')
-                  try {
-                    const { data } = await client.query({
-                      query: gql`
-                        query view {
-                          allVTpopOhneapberichtrelevants {
-                            nodes {
-                              artname
-                              popNr
-                              popName
-                              id
-                              nr
-                              gemeinde
-                              flurname
-                              apberRelevant
-                              x
-                              y
-                            }
-                          }
-                        }`
-                    })
-                    exportModule({
-                      data: get(data, 'allVTpopOhneapberichtrelevants.nodes', []),
-                      fileName: 'TeilpopulationenOhneApBerichtRelevant',
-                      fileType,
-                      applyMapFilterToExport,
-                      mapFilter,
-                      idKey: 'id',
-                      xKey: 'x',
-                      yKey: 'y',
-                    })
-                  } catch(error) {
-                    listError(error)
-                  }
-                  setMessage(null)
-                }}
-              >
-                <div>Teilpopulationen ohne Eintrag</div>
-                <div>{'im Feld "Für AP-Bericht relevant"'}</div>
-              </DownloadCardButton>
-              <DownloadCardButton
-                onClick={async () => {
-                  setMessage('Export "TeilpopulationenAnzahlMassnahmen" wird vorbereitet...')
-                  try {
-                    const { data } = await client.query({
-                      query: gql`
-                        query view {
-                          allVTpopAnzmassns {
-                            nodes {
-                              apId
-                              familie
-                              artname
-                              apBearbeitung
-                              apStartJahr
-                              apUmsetzung
-                              popId
-                              popNr
-                              popName
-                              popStatus
-                              popBekanntSeit
-                              popStatusUnklar
-                              popStatusUnklarBegruendung
-                              popX
-                              popY
-                              id
-                              nr
-                              gemeinde
-                              flurname
-                              status
-                              bekanntSeit
-                              statusUnklar
-                              statusUnklarGrund
-                              x
-                              y
-                              radius
-                              hoehe
-                              exposition
-                              klima
-                              neigung
-                              beschreibung
-                              katasterNr
-                              apberRelevant
-                              eigentuemer
-                              kontakt
-                              nutzungszone
-                              bewirtschafter
-                              bewirtschaftung
-                              anzahlMassnahmen
-                            }
-                          }
-                        }`
-                    })
-                    exportModule({
-                      data: get(data, 'allVTpopAnzmassns.nodes', []),
-                      fileName: 'TeilpopulationenAnzahlMassnahmen',
-                      fileType,
-                      applyMapFilterToExport,
-                      mapFilter,
-                      idKey: 'id',
-                      xKey: 'x',
-                      yKey: 'y',
-                    })
-                  } catch(error) {
-                    listError(error)
-                  }
-                  setMessage(null)
-                }}
-              >
-                Anzahl Massnahmen pro Teilpopulation
-              </DownloadCardButton>
-              <DownloadCardButton
-                onClick={async () => {
-                  setMessage('Export "TeilpopulationenAnzKontrInklusiveLetzteKontrUndLetztenTPopBericht" wird vorbereitet...')
-                  try {
-                    const { data } = await client.query({
-                      query: gql`
-                        query view {
-                          allVTpopAnzkontrinklletzterundletztertpopbers {
-                            nodes {
-                              apId
-                              familie
-                              artname
-                              apBearbeitung
-                              apStartJahr
-                              apUmsetzung
-                              popId
-                              popNr
-                              popName
-                              popStatus
-                              popBekanntSeit
-                              popStatusUnklar
-                              popStatusUnklarBegruendung
-                              popX
-                              popY
-                              id
-                              nr
-                              gemeinde
-                              flurname
-                              status
-                              bekanntSeit
-                              statusUnklar
-                              statusUnklarGrund
-                              x
-                              y
-                              radius
-                              hoehe
-                              exposition
-                              klima
-                              neigung
-                              beschreibung
-                              katasterNr
-                              apberRelevant
-                              eigentuemer
-                              kontakt
-                              nutzungszone
-                              bewirtschafter
-                              bewirtschaftung
-                              changed
-                              changedBy
-                              kontrId
-                              kontrJahr
-                              kontrDatum
-                              kontrTyp
-                              kontrBearbeiter
-                              kontrUeberlebensrate
-                              kontrVitalitaet
-                              kontrEntwicklung
-                              kontrUrsachen
-                              kontrErfolgsbeurteilung
-                              kontrUmsetzungAendern
-                              kontrKontrolleAendern
-                              kontrBemerkungen
-                              kontrLrDelarze
-                              kontrLrUmgebungDelarze
-                              kontrVegetationstyp
-                              kontrKonkurrenz
-                              kontrMoosschicht
-                              kontrKrautschicht
-                              kontrStrauchschicht
-                              kontrBaumschicht
-                              kontrBodenTyp
-                              kontrBodenKalkgehalt
-                              kontrBodenDurchlaessigkeit
-                              kontrBodenHumus
-                              kontrBodenNaehrstoffgehalt
-                              kontrBodenAbtrag
-                              kontrWasserhaushalt
-                              kontrIdealbiotopUebereinstimmung
-                              kontrHandlungsbedarf
-                              kontrFlaecheUeberprueft
-                              kontrFlaeche
-                              kontrPlanVorhanden
-                              kontrDeckungVegetation
-                              kontrDeckungNackterBoden
-                              kontrDeckungApArt
-                              kontrJungpflanzenVorhanden
-                              kontrVegetationshoeheMaximum
-                              kontrVegetationshoeheMittel
-                              kontrGefaehrdung
-                              kontrChanged
-                              kontrChangedBy
-                              tpopberAnz
-                              tpopberId
-                              tpopberJahr
-                              tpopberEntwicklung
-                              tpopberBemerkungen
-                              tpopberChanged
-                              tpopberChangedBy
-                            }
-                          }
-                        }`
-                    })
-                    exportModule({
-                      data: get(data, 'allVTpopAnzkontrinklletzterundletztertpopbers.nodes', []),
-                      fileName: 'TeilpopulationenAnzKontrInklusiveLetzteKontrUndLetztenTPopBericht',
-                      fileType,
-                      applyMapFilterToExport,
-                      mapFilter,
-                      idKey: 'id',
-                      xKey: 'x',
-                      yKey: 'y',
-                    })
-                  } catch(error) {
-                    listError(error)
-                  }
-                  setMessage(null)
-                }}
-                disabled={isRemoteHost}
-                title={
-                  isRemoteHost ? 'nur aktiv, wenn apflora lokal installiert wird' : ''
-                }
-              >
-                <div>Teilpopulationen mit:</div>
-                <ul
-                  style={{
-                    paddingLeft: '18px',
-                    marginTop: '5px',
-                    marginBottom: '10px',
-                  }}
+                <CardActionTitle>Teilpopulationen</CardActionTitle>
+                <CardActionIconButton
+                  data-expanded={expanded}
+                  aria-expanded={expanded}
+                  aria-label="öffnen"
                 >
-                  <li>Anzahl Kontrollen</li>
-                  <li>letzte Kontrolle</li>
-                  <li>letzter Teilpopulationsbericht</li>
-                  <li>letzte Zählung</li>
-                </ul>
-                <div>{'= "Eier legende Wollmilchsau"'}</div>
-              </DownloadCardButton>
-              <AutocompleteContainer>
-                <AutoComplete
-                  label={`"Eier legende Wollmilchsau" für eine Art`}
-                  objects={artList}
-                  openabove
-                />
-              </AutocompleteContainer>
-              <DownloadCardButton
-                onClick={async () => {
-                  setMessage('Export "TeilpopulationenTPopUndMassnBerichte" wird vorbereitet...')
-                  try {
-                    const { data } = await client.query({
-                      query: gql`
-                        query view {
-                          allVTpopPopberundmassnbers {
-                            nodes {
-                              apId
-                              artname
-                              apBearbeitung
-                              apStartJahr
-                              apUmsetzung
-                              popId
-                              popNr
-                              popName
-                              popStatus
-                              popBekanntSeit
-                              popStatusUnklar
-                              popStatusUnklarBegruendung
-                              popX
-                              popY
-                              tpopId
-                              tpopNr
-                              tpopGemeinde
-                              tpopFlurname
-                              tpopStatus
-                              tpopBekanntSeit
-                              tpopStatusUnklar
-                              tpopStatusUnklarGrund
-                              tpopX
-                              tpopY
-                              tpopRadius
-                              tpopHoehe
-                              tpopExposition
-                              tpopKlima
-                              tpopNeigung
-                              tpopBeschreibung
-                              tpopKatasterNr
-                              tpopApberRelevant
-                              tpopEigentuemer
-                              tpopKontakt
-                              tpopNutzungszone
-                              tpopBewirtschafter
-                              tpopBewirtschaftung
-                              tpopberId
-                              tpopberJahr
-                              tpopberEntwicklung
-                              tpopberBemerkungen
-                              tpopberChanged
-                              tpopberChangedBy
-                              tpopmassnberId
-                              tpopmassnberJahr
-                              tpopmassnberEntwicklung
-                              tpopmassnberBemerkungen
-                              tpopmassnberChanged
-                              tpopmassnberChangedBy
-                            }
-                          }
-                        }`
-                    })
-                    exportModule({
-                      data: get(data, 'allVTpopPopberundmassnbers.nodes', []),
-                      fileName: 'TeilpopulationenTPopUndMassnBerichte',
-                      fileType,
-                      applyMapFilterToExport,
-                      mapFilter,
-                      idKey: 'tpopId',
-                      xKey: 'tpopX',
-                      yKey: 'tpopY',
-                    })
-                  } catch(error) {
-                    listError(error)
-                  }
-                  setMessage(null)
-                }}
-              >
-                Teilpopulationen inklusive Teilpopulations- und Massnahmen-Berichten
-              </DownloadCardButton>
-            </StyledCardContent>
-          </Collapse>
-          {
-            !!message &&
-            <Message message={message} />
-          }
-        </StyledCard>
-      )
-    }}
-  </Query>
+                  <Icon title={expanded ? 'schliessen' : 'öffnen'}>
+                    <ExpandMoreIcon />
+                  </Icon>
+                </CardActionIconButton>
+              </StyledCardActions>
+              <Collapse in={expanded} timeout="auto" unmountOnExit>
+                <StyledCardContent>
+                  <DownloadCardButton
+                    onClick={async () => {
+                      setMessage('Export "Teilpopulationen" wird vorbereitet...')
+                      try {
+                        const { data } = await client.query({
+                          query: gql`
+                            query view {
+                              allVTpops {
+                                nodes {
+                                  apId
+                                  familie
+                                  artname
+                                  apBearbeitung
+                                  apStartJahr
+                                  apUmsetzung
+                                  popId
+                                  popNr
+                                  popName
+                                  popStatus
+                                  popBekanntSeit
+                                  popStatusUnklar
+                                  popStatusUnklarBegruendung
+                                  popX
+                                  popY
+                                  id
+                                  nr
+                                  gemeinde
+                                  flurname
+                                  status
+                                  bekanntSeit
+                                  statusUnklar
+                                  statusUnklarGrund
+                                  x
+                                  y
+                                  radius
+                                  hoehe
+                                  exposition
+                                  klima
+                                  neigung
+                                  beschreibung
+                                  katasterNr
+                                  apberRelevant
+                                  eigentuemer
+                                  kontakt
+                                  nutzungszone
+                                  bewirtschafter
+                                  bewirtschaftung
+                                  changed
+                                  changedBy
+                                }
+                              }
+                            }`
+                        })
+                        exportModule({
+                          data: get(data, 'allVTpops.nodes', []),
+                          fileName: 'Teilpopulationen',
+                          fileType,
+                          mapFilter,
+                          applyMapFilterToExport,
+                          idKey: 'id',
+                          xKey: 'x',
+                          yKey: 'y',
+                        })
+                      } catch(error) {
+                        errorState.add(error)
+                      }
+                      setMessage(null)
+                    }}
+                  >
+                    Teilpopulationen
+                  </DownloadCardButton>
+                  <DownloadCardButton
+                    onClick={async () => {
+                      setMessage('Export "TeilpopulationenWebGisBun" wird vorbereitet...')
+                      try {
+                        const { data } = await client.query({
+                          query: gql`
+                            query view {
+                              allVTpopWebgisbuns {
+                                nodes {
+                                  APARTID: apartid
+                                  APART: apart
+                                  APSTATUS: apstatus
+                                  APSTARTJAHR: apstartjahr
+                                  APSTANDUMSETZUNG: apstandumsetzung
+                                  POPGUID: popguid
+                                  POPNR: popnr
+                                  POPNAME: popname
+                                  POPSTATUS: popstatus
+                                  POPSTATUSUNKLAR: popstatusunklar
+                                  POPUNKLARGRUND: popunklargrund
+                                  POPBEKANNTSEIT: popbekanntseit
+                                  POP_X: popX
+                                  POP_Y: popY
+                                  TPOPID: tpopid
+                                  TPOPGUID: tpopguid
+                                  TPOPNR: tpopnr
+                                  TPOPGEMEINDE: tpopgemeinde
+                                  TPOPFLURNAME: tpopflurname
+                                  TPOPSTATUS: tpopstatus
+                                  TPOPSTATUSUNKLAR: tpopstatusunklar
+                                  TPOPUNKLARGRUND: tpopunklargrund
+                                  TPOP_X: tpopX
+                                  TPOP_Y: tpopY
+                                  TPOPRADIUS: tpopradius
+                                  TPOPHOEHE: tpophoehe
+                                  TPOPEXPOSITION: tpopexposition
+                                  TPOPKLIMA: tpopklima
+                                  TPOPHANGNEIGUNG: tpophangneigung
+                                  TPOPBESCHREIBUNG: tpopbeschreibung
+                                  TPOPKATASTERNR: tpopkatasternr
+                                  TPOPVERANTWORTLICH: tpopverantwortlich
+                                  TPOPBERICHTSRELEVANZ: tpopberichtsrelevanz
+                                  TPOPBEKANNTSEIT: tpopbekanntseit
+                                  TPOPEIGENTUEMERIN: tpopeigentuemerin
+                                  TPOPKONTAKTVO: tpopkontaktVo
+                                  TPOPNUTZUNGSZONE: tpopNutzungszone
+                                  TPOPBEWIRTSCHAFTER: tpopbewirtschafter
+                                  TPOPBEWIRTSCHAFTUNG: tpopbewirtschaftung
+                                  TPOPCHANGEDAT: tpopchangedat
+                                  TPOPCHANGEBY: tpopchangeby
+                                }
+                              }
+                            }`
+                        })
+                        exportModule({
+                          data: get(data, 'allVTpopWebgisbuns.nodes', []),
+                          fileName: 'TeilpopulationenWebGisBun',
+                          fileType,
+                          applyMapFilterToExport,
+                          mapFilter,
+                          idKey: 'TPOPID',
+                          xKey: 'TPOP_X',
+                          yKey: 'TPOP_Y',
+                        })
+                      } catch(error) {
+                        errorState.add(error)
+                      }
+                      setMessage(null)
+                    }}
+                  >
+                    Teilpopulationen für WebGIS BUN
+                  </DownloadCardButton>
+                  <DownloadCardButton
+                    onClick={async () => {
+                      setMessage('Export "Teilpopulationen" wird vorbereitet...')
+                      try {
+                        const { data } = await client.query({
+                          query: gql`
+                            query view {
+                              allVTpopKmls {
+                                nodes {
+                                  art
+                                  label
+                                  inhalte
+                                  laengengrad
+                                  breitengrad
+                                  url
+                                }
+                              }
+                            }`
+                        })
+                        exportModule({
+                          data: get(data, 'allVTpopKmls.nodes', []),
+                          fileName: 'Teilpopulationen',
+                          fileType,
+                          applyMapFilterToExport,
+                          mapFilter,
+                        })
+                      } catch(error) {
+                        errorState.add(error)
+                      }
+                      setMessage(null)
+                    }}
+                  >
+                    <div>Teilpopulationen für Google Earth</div>
+                    <div>(beschriftet mit PopNr/TPopNr)</div>
+                  </DownloadCardButton>
+                  <DownloadCardButton
+                    onClick={async () => {
+                      setMessage('Export "TeilpopulationenNachNamen" wird vorbereitet...')
+                      try {
+                        const { data } = await client.query({
+                          query: gql`
+                            query view {
+                              allVTpopKmlnamen {
+                                nodes {
+                                  art
+                                  label
+                                  inhalte
+                                  id
+                                  x
+                                  y
+                                  laengengrad
+                                  breitengrad
+                                  url
+                                }
+                              }
+                            }`
+                        })
+                        exportModule({
+                          data: get(data, 'allVTpopKmlnamen.nodes', []),
+                          fileName: 'TeilpopulationenNachNamen',
+                          fileType,
+                          applyMapFilterToExport,
+                          mapFilter,
+                          idKey: 'id',
+                          xKey: 'x',
+                          yKey: 'y',
+                        })
+                      } catch(error) {
+                        errorState.add(error)
+                      }
+                      setMessage(null)
+                    }}
+                  >
+                    <div>Teilpopulationen für Google Earth</div>
+                    <div>(beschriftet mit Artname, PopNr/TPopNr)</div>
+                  </DownloadCardButton>
+                  <DownloadCardButton
+                    onClick={async () => {
+                      setMessage('Export "TeilpopulationenVonApArtenOhneBekanntSeit" wird vorbereitet...')
+                      try {
+                        const { data } = await client.query({
+                          query: gql`
+                            query view {
+                              allVTpopOhnebekanntseits {
+                                nodes {
+                                  id
+                                  artname
+                                  apBearbeitung
+                                  popNr
+                                  popName
+                                  nr
+                                  gemeinde
+                                  flurname
+                                  bekanntSeit
+                                  x
+                                  y
+                                }
+                              }
+                            }`
+                        })
+                        exportModule({
+                          data: get(data, 'allVTpopOhnebekanntseits.nodes', []),
+                          fileName: 'TeilpopulationenVonApArtenOhneBekanntSeit',
+                          fileType,
+                          applyMapFilterToExport,
+                          mapFilter,
+                          idKey: 'id',
+                          xKey: 'x',
+                          yKey: 'y',
+                        })
+                      } catch(error) {
+                        errorState.add(error)
+                      }
+                      setMessage(null)
+                    }}
+                  >
+                    <div>Teilpopulationen von AP-Arten</div>
+                    <div>{'ohne "Bekannt seit"'}</div>
+                  </DownloadCardButton>
+                  <DownloadCardButton
+                    onClick={async () => {
+                      setMessage('Export "TeilpopulationenOhneApBerichtRelevant" wird vorbereitet...')
+                      try {
+                        const { data } = await client.query({
+                          query: gql`
+                            query view {
+                              allVTpopOhneapberichtrelevants {
+                                nodes {
+                                  artname
+                                  popNr
+                                  popName
+                                  id
+                                  nr
+                                  gemeinde
+                                  flurname
+                                  apberRelevant
+                                  x
+                                  y
+                                }
+                              }
+                            }`
+                        })
+                        exportModule({
+                          data: get(data, 'allVTpopOhneapberichtrelevants.nodes', []),
+                          fileName: 'TeilpopulationenOhneApBerichtRelevant',
+                          fileType,
+                          applyMapFilterToExport,
+                          mapFilter,
+                          idKey: 'id',
+                          xKey: 'x',
+                          yKey: 'y',
+                        })
+                      } catch(error) {
+                        errorState.add(error)
+                      }
+                      setMessage(null)
+                    }}
+                  >
+                    <div>Teilpopulationen ohne Eintrag</div>
+                    <div>{'im Feld "Für AP-Bericht relevant"'}</div>
+                  </DownloadCardButton>
+                  <DownloadCardButton
+                    onClick={async () => {
+                      setMessage('Export "TeilpopulationenAnzahlMassnahmen" wird vorbereitet...')
+                      try {
+                        const { data } = await client.query({
+                          query: gql`
+                            query view {
+                              allVTpopAnzmassns {
+                                nodes {
+                                  apId
+                                  familie
+                                  artname
+                                  apBearbeitung
+                                  apStartJahr
+                                  apUmsetzung
+                                  popId
+                                  popNr
+                                  popName
+                                  popStatus
+                                  popBekanntSeit
+                                  popStatusUnklar
+                                  popStatusUnklarBegruendung
+                                  popX
+                                  popY
+                                  id
+                                  nr
+                                  gemeinde
+                                  flurname
+                                  status
+                                  bekanntSeit
+                                  statusUnklar
+                                  statusUnklarGrund
+                                  x
+                                  y
+                                  radius
+                                  hoehe
+                                  exposition
+                                  klima
+                                  neigung
+                                  beschreibung
+                                  katasterNr
+                                  apberRelevant
+                                  eigentuemer
+                                  kontakt
+                                  nutzungszone
+                                  bewirtschafter
+                                  bewirtschaftung
+                                  anzahlMassnahmen
+                                }
+                              }
+                            }`
+                        })
+                        exportModule({
+                          data: get(data, 'allVTpopAnzmassns.nodes', []),
+                          fileName: 'TeilpopulationenAnzahlMassnahmen',
+                          fileType,
+                          applyMapFilterToExport,
+                          mapFilter,
+                          idKey: 'id',
+                          xKey: 'x',
+                          yKey: 'y',
+                        })
+                      } catch(error) {
+                        errorState.add(error)
+                      }
+                      setMessage(null)
+                    }}
+                  >
+                    Anzahl Massnahmen pro Teilpopulation
+                  </DownloadCardButton>
+                  <DownloadCardButton
+                    onClick={async () => {
+                      setMessage('Export "TeilpopulationenAnzKontrInklusiveLetzteKontrUndLetztenTPopBericht" wird vorbereitet...')
+                      try {
+                        const { data } = await client.query({
+                          query: gql`
+                            query view {
+                              allVTpopAnzkontrinklletzterundletztertpopbers {
+                                nodes {
+                                  apId
+                                  familie
+                                  artname
+                                  apBearbeitung
+                                  apStartJahr
+                                  apUmsetzung
+                                  popId
+                                  popNr
+                                  popName
+                                  popStatus
+                                  popBekanntSeit
+                                  popStatusUnklar
+                                  popStatusUnklarBegruendung
+                                  popX
+                                  popY
+                                  id
+                                  nr
+                                  gemeinde
+                                  flurname
+                                  status
+                                  bekanntSeit
+                                  statusUnklar
+                                  statusUnklarGrund
+                                  x
+                                  y
+                                  radius
+                                  hoehe
+                                  exposition
+                                  klima
+                                  neigung
+                                  beschreibung
+                                  katasterNr
+                                  apberRelevant
+                                  eigentuemer
+                                  kontakt
+                                  nutzungszone
+                                  bewirtschafter
+                                  bewirtschaftung
+                                  changed
+                                  changedBy
+                                  kontrId
+                                  kontrJahr
+                                  kontrDatum
+                                  kontrTyp
+                                  kontrBearbeiter
+                                  kontrUeberlebensrate
+                                  kontrVitalitaet
+                                  kontrEntwicklung
+                                  kontrUrsachen
+                                  kontrErfolgsbeurteilung
+                                  kontrUmsetzungAendern
+                                  kontrKontrolleAendern
+                                  kontrBemerkungen
+                                  kontrLrDelarze
+                                  kontrLrUmgebungDelarze
+                                  kontrVegetationstyp
+                                  kontrKonkurrenz
+                                  kontrMoosschicht
+                                  kontrKrautschicht
+                                  kontrStrauchschicht
+                                  kontrBaumschicht
+                                  kontrBodenTyp
+                                  kontrBodenKalkgehalt
+                                  kontrBodenDurchlaessigkeit
+                                  kontrBodenHumus
+                                  kontrBodenNaehrstoffgehalt
+                                  kontrBodenAbtrag
+                                  kontrWasserhaushalt
+                                  kontrIdealbiotopUebereinstimmung
+                                  kontrHandlungsbedarf
+                                  kontrFlaecheUeberprueft
+                                  kontrFlaeche
+                                  kontrPlanVorhanden
+                                  kontrDeckungVegetation
+                                  kontrDeckungNackterBoden
+                                  kontrDeckungApArt
+                                  kontrJungpflanzenVorhanden
+                                  kontrVegetationshoeheMaximum
+                                  kontrVegetationshoeheMittel
+                                  kontrGefaehrdung
+                                  kontrChanged
+                                  kontrChangedBy
+                                  tpopberAnz
+                                  tpopberId
+                                  tpopberJahr
+                                  tpopberEntwicklung
+                                  tpopberBemerkungen
+                                  tpopberChanged
+                                  tpopberChangedBy
+                                }
+                              }
+                            }`
+                        })
+                        exportModule({
+                          data: get(data, 'allVTpopAnzkontrinklletzterundletztertpopbers.nodes', []),
+                          fileName: 'TeilpopulationenAnzKontrInklusiveLetzteKontrUndLetztenTPopBericht',
+                          fileType,
+                          applyMapFilterToExport,
+                          mapFilter,
+                          idKey: 'id',
+                          xKey: 'x',
+                          yKey: 'y',
+                        })
+                      } catch(error) {
+                        errorState.add(error)
+                      }
+                      setMessage(null)
+                    }}
+                    disabled={isRemoteHost}
+                    title={
+                      isRemoteHost ? 'nur aktiv, wenn apflora lokal installiert wird' : ''
+                    }
+                  >
+                    <div>Teilpopulationen mit:</div>
+                    <ul
+                      style={{
+                        paddingLeft: '18px',
+                        marginTop: '5px',
+                        marginBottom: '10px',
+                      }}
+                    >
+                      <li>Anzahl Kontrollen</li>
+                      <li>letzte Kontrolle</li>
+                      <li>letzter Teilpopulationsbericht</li>
+                      <li>letzte Zählung</li>
+                    </ul>
+                    <div>{'= "Eier legende Wollmilchsau"'}</div>
+                  </DownloadCardButton>
+                  <AutocompleteContainer>
+                    <AutoComplete
+                      label={`"Eier legende Wollmilchsau" für eine Art`}
+                      objects={artList}
+                      openabove
+                    />
+                  </AutocompleteContainer>
+                  <DownloadCardButton
+                    onClick={async () => {
+                      setMessage('Export "TeilpopulationenTPopUndMassnBerichte" wird vorbereitet...')
+                      try {
+                        const { data } = await client.query({
+                          query: gql`
+                            query view {
+                              allVTpopPopberundmassnbers {
+                                nodes {
+                                  apId
+                                  artname
+                                  apBearbeitung
+                                  apStartJahr
+                                  apUmsetzung
+                                  popId
+                                  popNr
+                                  popName
+                                  popStatus
+                                  popBekanntSeit
+                                  popStatusUnklar
+                                  popStatusUnklarBegruendung
+                                  popX
+                                  popY
+                                  tpopId
+                                  tpopNr
+                                  tpopGemeinde
+                                  tpopFlurname
+                                  tpopStatus
+                                  tpopBekanntSeit
+                                  tpopStatusUnklar
+                                  tpopStatusUnklarGrund
+                                  tpopX
+                                  tpopY
+                                  tpopRadius
+                                  tpopHoehe
+                                  tpopExposition
+                                  tpopKlima
+                                  tpopNeigung
+                                  tpopBeschreibung
+                                  tpopKatasterNr
+                                  tpopApberRelevant
+                                  tpopEigentuemer
+                                  tpopKontakt
+                                  tpopNutzungszone
+                                  tpopBewirtschafter
+                                  tpopBewirtschaftung
+                                  tpopberId
+                                  tpopberJahr
+                                  tpopberEntwicklung
+                                  tpopberBemerkungen
+                                  tpopberChanged
+                                  tpopberChangedBy
+                                  tpopmassnberId
+                                  tpopmassnberJahr
+                                  tpopmassnberEntwicklung
+                                  tpopmassnberBemerkungen
+                                  tpopmassnberChanged
+                                  tpopmassnberChangedBy
+                                }
+                              }
+                            }`
+                        })
+                        exportModule({
+                          data: get(data, 'allVTpopPopberundmassnbers.nodes', []),
+                          fileName: 'TeilpopulationenTPopUndMassnBerichte',
+                          fileType,
+                          applyMapFilterToExport,
+                          mapFilter,
+                          idKey: 'tpopId',
+                          xKey: 'tpopX',
+                          yKey: 'tpopY',
+                        })
+                      } catch(error) {
+                        errorState.add(error)
+                      }
+                      setMessage(null)
+                    }}
+                  >
+                    Teilpopulationen inklusive Teilpopulations- und Massnahmen-Berichten
+                  </DownloadCardButton>
+                </StyledCardContent>
+              </Collapse>
+              {
+                !!message &&
+                <Message message={message} />
+              }
+            </StyledCard>
+          )
+        }}
+      </Query>
+    }
+  </Subscribe>
 )
 
 export default enhance(Teilpopulationen)
