@@ -142,9 +142,7 @@ const ProjekteContainer = ({
             if (error) return `Fehler: ${error.message}`
 
             const data = merge(data1, data2)
-            console.log('ProjektContainer rendering:', {data,loading})
             const nodes = buildNodes({ data, treeName, loading })
-            console.log('ProjektContainer rendering:', {nodes})
             const tree = get(data, treeName)
             const activeNodeArray = get(data, `${treeName}.activeNodeArray`)
             const activeNode = nodes.find(n => isEqual(n.url, activeNodeArray))

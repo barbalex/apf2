@@ -47,10 +47,10 @@ const MyTextField = ({
   multiLine = false,
   disabled = false,
   hintText = '',
+  error,
   saveToDb,
   onChange,
   onBlur,
-  error,
 }: {
   value: Number | String,
   stateValue: Number | String,
@@ -64,7 +64,12 @@ const MyTextField = ({
   onChange: () => void,
   onBlur: () => void,
 }) => 
-  <StyledFormControl fullWidth disabled={disabled} error={!!error} aria-describedby={`${label}ErrorText`}>
+  <StyledFormControl
+    fullWidth
+    disabled={disabled}
+    error={!!error}
+    aria-describedby={`${label}ErrorText`}
+  >
     <InputLabel htmlFor={label}>{label}</InputLabel>
     <Input
       id={label}

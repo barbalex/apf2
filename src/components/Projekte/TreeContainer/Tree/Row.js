@@ -1,5 +1,5 @@
 // @flow
-import React, { Fragment } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import { ContextMenuTrigger } from 'react-contextmenu'
 import SwapVerticalCircleIcon from '@material-ui/icons/SwapVerticalCircle'
@@ -225,8 +225,13 @@ const Row = ({
   const copyingBiotop =
     node.nodeType === 'table' && node.id === get(data, 'copyingBiotop.id')
 
+  /**
+   * Why a div with style passed from Row?
+   * Would it not be better to use a Fragment?
+   * without styled div, list "flimmert"
+   */
   return (
-    <Fragment>
+    <div style={style}>
       <ContextMenuTrigger
         id={`${treeName}${node.menuType}`}
         collect={props => myProps}
@@ -234,7 +239,6 @@ const Row = ({
         nodeLabel={node.label}
         key={`${node.menuType}${node.id}`}
         // seems that react-virtualized wants this style here...
-        style={style}
       >
         <StyledNode
           data-level={level}
@@ -411,7 +415,7 @@ const Row = ({
           )}
         </StyledNode>
       </ContextMenuTrigger>
-    </Fragment>
+    </div>
   )
 }
 

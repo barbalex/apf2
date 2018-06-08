@@ -3,6 +3,7 @@ import React from 'react'
 import Input from '@material-ui/core/Input'
 import InputLabel from '@material-ui/core/InputLabel'
 import FormControl from '@material-ui/core/FormControl'
+import FormHelperText from '@material-ui/core/FormHelperText'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
 import withState from 'recompose/withState'
@@ -60,6 +61,7 @@ const TextFieldWithInfo = ({
   saveToDb,
   onChange,
   onBlur,
+  error,
 }: {
   value: Number | String,
   stateValue: Number | String,
@@ -68,12 +70,18 @@ const TextFieldWithInfo = ({
   multiLine: Boolean,
   disabled: Boolean,
   hintText: String,
+  error: String,
   popover: Object,
   saveToDb: () => void,
   onChange: () => void,
   onBlur: () => void,
 }) =>
-  <StyledFormControl fullWidth disabled={disabled}>
+  <StyledFormControl
+    fullWidth
+    disabled={disabled}
+    error={!!error}
+    aria-describedby={`${label}ErrorText`}
+  >
     <InputLabel htmlFor={label}>{label}</InputLabel>
     <Input
       id={label}
@@ -89,6 +97,10 @@ const TextFieldWithInfo = ({
         </InfoWithPopover>
       }
     />
+    {
+      !!error &&
+      <FormHelperText id={`${label}ErrorText`}>{error}</FormHelperText>
+    }
   </StyledFormControl>
 
 export default enhance(TextFieldWithInfo)

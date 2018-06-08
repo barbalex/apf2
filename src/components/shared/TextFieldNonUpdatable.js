@@ -8,18 +8,20 @@ import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
 import styled from 'styled-components'
-const StyledInput = styled(Input)`
-  &:before {
+
+const StyledFormControl = styled(FormControl)`
+  padding-bottom: 19px !important;
+  > div:before {
     border-bottom-color: rgba(0, 0, 0, 0.1) !important;
   }
 `
 
 const enhance = compose(
-  withState('errorText', 'updateErrorText', ''),
+  withState('error', 'setError', null),
   withHandlers({
-    onChange: props => () => {
-      props.updateErrorText('Dieser Wert ist nicht veränderbar')
-      setTimeout(() => props.updateErrorText(''), 5000)
+    onChange: ({ setError }) => () => {
+      setError('Dieser Wert ist nicht veränderbar')
+      setTimeout(() => setError(null), 5000)
     },
   }),
 )
@@ -27,27 +29,30 @@ const enhance = compose(
 const MyTextField = ({
   label,
   value = '',
-  errorText,
+  error,
   onChange,
 }: {
   label: String,
   value?: ?Number | ?String,
-  errorText: String,
+  error: String,
   onChange: () => void,
 }) => (
-  <FormControl
-    error={!!errorText}
+  <StyledFormControl
+    error={!!error}
     fullWidth
     aria-describedby={`${label}-helper`}
   >
     <InputLabel htmlFor={label}>{label}</InputLabel>
-    <StyledInput
+    <Input
       id={label}
       value={value || value === 0 ? value : ''}
       onChange={onChange}
     />
-    <FormHelperText id={`${label}-helper`}>{errorText}</FormHelperText>
-  </FormControl>
+    {
+      !!error &&
+      <FormHelperText id={`${label}-helper`}>{error}</FormHelperText>
+    }
+  </StyledFormControl>
 )
 
 export default enhance(MyTextField)

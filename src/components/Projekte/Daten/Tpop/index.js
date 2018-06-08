@@ -106,12 +106,13 @@ const Tpop = ({
 }) => (
   <Query query={dataGql} variables={{ id }}>
     {({ loading, error, data }) => {
-      if (loading)
+      if (loading) {
         return (
           <Container>
             <FieldsContainer>Lade...</FieldsContainer>
           </Container>
         )
+      }
       if (error) return `Fehler: ${error.message}`
 
       const row = get(data, 'tpopById')

@@ -3,6 +3,7 @@ import React from 'react'
 import Input from '@material-ui/core/Input'
 import InputLabel from '@material-ui/core/InputLabel'
 import FormControl from '@material-ui/core/FormControl'
+import FormHelperText from '@material-ui/core/FormHelperText'
 import OpenInNewIcon from '@material-ui/icons/OpenInNew'
 import green from '@material-ui/core/colors/green'
 import styled from 'styled-components'
@@ -30,8 +31,9 @@ const StyledOpenInNewIcon = styled(OpenInNewIcon)`
     color: ${green[300]};
   }
 `
-const StyledInput = styled(Input)`
-  &:before {
+const StyledFormControl = styled(FormControl)`
+  padding-bottom: 19px !important;
+  > div:before {
     border-bottom-color: rgba(0, 0, 0, 0.1) !important;
   }
 `
@@ -66,6 +68,7 @@ const TextFieldWithUrl = ({
   multiLine = false,
   disabled = false,
   hintText = '',
+  error,
   saveToDb,
   onChange,
   onBlur,
@@ -77,6 +80,7 @@ const TextFieldWithUrl = ({
   multiLine: Boolean,
   disabled: Boolean,
   hintText: String,
+  error: String,
   saveToDb: () => void,
   onChange: () => void,
   onBlur: () => void,
@@ -85,11 +89,16 @@ const TextFieldWithUrl = ({
 
   return (
     <Container>
-      <FormControl disabled={disabled} fullWidth>
+      <StyledFormControl
+        disabled={disabled}
+        fullWidth
+        error={!!error}
+        aria-describedby={`${label}ErrorText`}
+      >
         <InputLabel htmlFor={label}>
           {`${label} (bitte "www." statt "https://" eingeben)`}
         </InputLabel>
-        <StyledInput
+        <Input
           id={label}
           value={stateValue}
           type={type}
@@ -101,7 +110,11 @@ const TextFieldWithUrl = ({
           autoCapitalize="off"
           spellCheck="false"
         />
-      </FormControl>
+        {
+          !!error &&
+          <FormHelperText id={`${label}ErrorText`}>{error}</FormHelperText>
+        }
+      </StyledFormControl>
       {Array.from(urls).map((url, index) => (
         <div key={index} title={`${url} öffnen`}>
           <StyledOpenInNewIcon onClick={() => window.open(url, '_blank')} />

@@ -7,6 +7,7 @@ import sortBy from 'lodash/sortBy'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 import withState from 'recompose/withState'
+import withLifecycle from '@hocs/with-lifecycle'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroup'
 import TextField from '../../../shared/TextField'
@@ -60,20 +61,31 @@ const enhance = compose(
           },
         })
       } catch (error) {
-        setErrors({
-          ...errors,
-          [field]: error.message
-        })
+        setErrors({ [field]: error.message })
+        /**
+         * DO NOT do the following, because:
+         * can fire after component was unmounted...
+         */
+        /*
         setTimeout(() => {
           const newErrors = {...errors}
           delete newErrors[field]
           setErrors(newErrors)
         }, 1000 * 10)
+        */
         return
       }
+      setErrors(({}))
       if (['entwicklung'].includes(field)) refetchTree()
     },
-  })
+  }),
+  withLifecycle({
+    onDidUpdate(prevProps, props) {
+      if (prevProps.id !== props.id) {
+        props.setErrors(({}))
+      }
+    },
+  }),
 )
 
 const Tpopber = ({
@@ -94,6 +106,7 @@ const Tpopber = ({
           </Container>
         )
       if (error) return `Fehler: ${error.message}`
+      console.log('Tpopber rendering, errors:', errors)
 
       const row = get(data, 'tpopberById')
       let tpopentwicklungWerte = get(data, 'allTpopEntwicklungWertes.nodes', [])
