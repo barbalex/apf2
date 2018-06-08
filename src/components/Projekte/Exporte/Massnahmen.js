@@ -185,6 +185,7 @@ const Massnahmen = ({
                             idKey: 'id',
                             xKey: 'tpopX',
                             yKey: 'tpopY',
+                            errorState,
                           })
                         } catch(error) {
                           errorState.add(error)
@@ -246,6 +247,7 @@ const Massnahmen = ({
                             idKey: 'MASSNGUID',
                             xKey: 'TPOP_X',
                             yKey: 'TPOP_Y',
+                            errorState,
                           })
                         } catch(error) {
                           errorState.add(error)

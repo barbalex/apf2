@@ -206,6 +206,7 @@ const Kontrollen = ({
                         idKey: 'tpop_id',
                         xKey: 'tpop_x',
                         yKey: 'tpop_y',
+                        errorState,
                       })
                     } catch(error) {
                       errorState.add(error)
@@ -291,6 +292,7 @@ const Kontrollen = ({
                         idKey: 'KONTRGUID',
                         xKey: 'KONTR_X',
                         yKey: 'KONTR_Y',
+                        errorState,
                       })
                     } catch(error) {
                       errorState.add(error)
@@ -401,6 +403,7 @@ const Kontrollen = ({
                         idKey: 'id',
                         xKey: 'tpopX',
                         yKey: 'tpopY',
+                        errorState,
                       })
                     } catch(error) {
                       errorState.add(error)

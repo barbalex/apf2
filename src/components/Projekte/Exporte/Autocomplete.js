@@ -322,6 +322,7 @@ class IntegrationAutosuggest extends React.Component<Props, State> {
                       exportModule({
                         data: get(data, 'allVTpopAnzkontrinklletzterundletztertpopbers.nodes', []),
                         fileName: 'anzkontrinklletzterundletztertpopber',
+                        errorState,
                       })
                     } catch(error) {
                       errorState.add(error)

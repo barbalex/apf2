@@ -122,6 +122,7 @@ const Populationen = ({
                         idKey: 'id',
                         xKey: 'x',
                         yKey: 'y',
+                        errorState,
                       })
                     } catch(error) {
                       errorState.add(error)
@@ -147,6 +148,7 @@ const Populationen = ({
                         idKey: 'id',
                         xKey: 'x',
                         yKey: 'y',
+                        errorState,
                       })
                     } catch(error) {
                       errorState.add(error)
@@ -187,6 +189,7 @@ const Populationen = ({
                         idKey: 'id',
                         xKey: 'x',
                         yKey: 'y',
+                        errorState,
                       })
                     } catch(error) {
                       errorState.add(error)
@@ -229,6 +232,7 @@ const Populationen = ({
                         idKey: 'id',
                         xKey: 'x',
                         yKey: 'y',
+                        errorState,
                       })
                     } catch(error) {
                       errorState.add(error)
@@ -273,6 +277,7 @@ const Populationen = ({
                         fileType,
                         mapFilter,
                         applyMapFilterToExport,
+                        errorState,
                       })
                     } catch(error) {
                       errorState.add(error)
@@ -327,6 +332,7 @@ const Populationen = ({
                         idKey: 'popId',
                         xKey: 'popX',
                         yKey: 'popY',
+                        errorState,
                       })
                     } catch(error) {
                       errorState.add(error)
@@ -374,6 +380,7 @@ const Populationen = ({
                         idKey: 'id',
                         xKey: 'x',
                         yKey: 'y',
+                        errorState,
                       })
                     } catch(error) {
                       errorState.add(error)
@@ -420,6 +427,7 @@ const Populationen = ({
                         idKey: 'id',
                         xKey: 'x',
                         yKey: 'y',
+                        errorState,
                       })
                     } catch(error) {
                       errorState.add(error)
@@ -480,6 +488,7 @@ const Populationen = ({
                         idKey: 'popId',
                         xKey: 'popX',
                         yKey: 'popY',
+                        errorState,
                       })
                     } catch(error) {
                       errorState.add(error)
@@ -533,6 +542,7 @@ const Populationen = ({
                         idKey: 'popId',
                         xKey: 'popX',
                         yKey: 'popY',
+                        errorState,
                       })
                     } catch(error) {
                       errorState.add(error)
@@ -586,6 +596,7 @@ const Populationen = ({
                         idKey: 'popId',
                         xKey: 'popX',
                         yKey: 'popY',
+                        errorState,
                       })
                     } catch(error) {
                       errorState.add(error)

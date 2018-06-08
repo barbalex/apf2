@@ -126,6 +126,7 @@ const Anwendung = ({
                     fileName: 'Datenstruktur',
                     fileType,
                     applyMapFilterToExport,
+                    errorState,
                   })
                 } catch(error) {
                     errorState.add(error)

@@ -145,6 +145,7 @@ const Beobachtungen = ({
                         idKey: 'id',
                         xKey: 'x',
                         yKey: 'y',
+                        errorState,
                       })
                     } catch(error) {
                       errorState.add(error)

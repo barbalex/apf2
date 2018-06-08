@@ -3,7 +3,6 @@ import format from 'date-fns/format'
 import app from 'ampersand-app'
 import get from 'lodash/get'
 
-import listError from '../listError'
 import queryBeob from './queryBeob.graphql'
 import createPop from './createPop.graphql'
 import createTpop from './createTpop.graphql'
@@ -16,11 +15,13 @@ export default async ({
   activeNodes,
   id,
   refetch,
+  errorState,
 }: {
   tree: Object,
   activeNodes: Object,
   id: String,
-  refetch: () => void
+  refetch: () => void,
+  errorState: Object,
 }): Promise<void> => {
   const { client } = app
   const { ap, projekt } = activeNodes
@@ -31,7 +32,7 @@ export default async ({
       variables: { id }
     })
   } catch(error) {
-    return listError(error)
+    return errorState.add(error)
   }
   const beob = get(beobResult, 'data.beobById')
   const { x, y, datum, data } = beob
@@ -49,7 +50,7 @@ export default async ({
       }
     })
   } catch (error) {
-    return listError(error)
+    return errorState.add(error)
   }
   const pop = get(popResult, 'data.createPop.pop')
 
@@ -68,7 +69,7 @@ export default async ({
       }
     })
   } catch (error) {
-    return listError(error)
+    return errorState.add(error)
   }
   const tpop = get(tpopResult, 'data.createTpop.tpop')
 
@@ -81,7 +82,7 @@ export default async ({
       }
     })
   } catch (error) {
-    return listError(error)
+    return errorState.add(error)
   }
 
   // set new activeNodeArray

@@ -334,7 +334,7 @@ const enhance = compose(
           copyTpopKoordToPop({ id, errorState })
         },
         createNewPopFromBeob() {
-          createNewPopFromBeob({ tree, activeNodes, id, refetch: refetchTree })
+          createNewPopFromBeob({ tree, activeNodes, id, refetch: refetchTree, errorState })
         },
         copyBeobZugeordnetKoordToPop() {
           copyBeobZugeordnetKoordToPop({ id, errorState })

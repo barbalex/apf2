@@ -180,6 +180,7 @@ const Teilpopulationen = ({
                           idKey: 'id',
                           xKey: 'x',
                           yKey: 'y',
+                          errorState,
                         })
                       } catch(error) {
                         errorState.add(error)
@@ -252,6 +253,7 @@ const Teilpopulationen = ({
                           idKey: 'TPOPID',
                           xKey: 'TPOP_X',
                           yKey: 'TPOP_Y',
+                          errorState,
                         })
                       } catch(error) {
                         errorState.add(error)
@@ -286,6 +288,7 @@ const Teilpopulationen = ({
                           fileType,
                           applyMapFilterToExport,
                           mapFilter,
+                          errorState,
                         })
                       } catch(error) {
                         errorState.add(error)
@@ -327,6 +330,7 @@ const Teilpopulationen = ({
                           idKey: 'id',
                           xKey: 'x',
                           yKey: 'y',
+                          errorState,
                         })
                       } catch(error) {
                         errorState.add(error)
@@ -370,6 +374,7 @@ const Teilpopulationen = ({
                           idKey: 'id',
                           xKey: 'x',
                           yKey: 'y',
+                          errorState,
                         })
                       } catch(error) {
                         errorState.add(error)
@@ -412,6 +417,7 @@ const Teilpopulationen = ({
                           idKey: 'id',
                           xKey: 'x',
                           yKey: 'y',
+                          errorState,
                         })
                       } catch(error) {
                         errorState.add(error)
@@ -483,6 +489,7 @@ const Teilpopulationen = ({
                           idKey: 'id',
                           xKey: 'x',
                           yKey: 'y',
+                          errorState,
                         })
                       } catch(error) {
                         errorState.add(error)
@@ -603,6 +610,7 @@ const Teilpopulationen = ({
                           idKey: 'id',
                           xKey: 'x',
                           yKey: 'y',
+                          errorState,
                         })
                       } catch(error) {
                         errorState.add(error)
@@ -707,6 +715,7 @@ const Teilpopulationen = ({
                           idKey: 'tpopId',
                           xKey: 'tpopX',
                           yKey: 'tpopY',
+                          errorState,
                         })
                       } catch(error) {
                         errorState.add(error)
