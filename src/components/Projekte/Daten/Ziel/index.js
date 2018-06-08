@@ -16,6 +16,7 @@ import ErrorBoundary from '../../../shared/ErrorBoundary'
 import dataGql from './data.graphql'
 import updateZielByIdGql from './updateZielById.graphql'
 import setTreeKeyGql from './setTreeKey.graphql'
+import listError from '../../../../modules/listError'
 
 const Container = styled.div`
   height: 100%;
@@ -30,27 +31,31 @@ const FieldsContainer = styled.div`
 
 const enhance = compose(
   withHandlers({
-    saveToDb: ({ tree, refetchTree }) => ({ row, field, value, updateZiel, client }) => {
-      updateZiel({
-        variables: {
-          id: row.id,
-          [field]: value,
-        },
-        optimisticResponse: {
-          __typename: 'Mutation',
-          updateZielById: {
-            ziel: {
-              id: row.id,
-              apId: field === 'apId' ? value : row.apId,
-              typ: field === 'typ' ? value : row.typ,
-              jahr: field === 'jahr' ? value : row.jahr,
-              bezeichnung: field === 'bezeichnung' ? value : row.bezeichnung,
+    saveToDb: ({ tree, refetchTree }) => async ({ row, field, value, updateZiel, client }) => {
+      try {
+        updateZiel({
+          variables: {
+            id: row.id,
+            [field]: value,
+          },
+          optimisticResponse: {
+            __typename: 'Mutation',
+            updateZielById: {
+              ziel: {
+                id: row.id,
+                apId: field === 'apId' ? value : row.apId,
+                typ: field === 'typ' ? value : row.typ,
+                jahr: field === 'jahr' ? value : row.jahr,
+                bezeichnung: field === 'bezeichnung' ? value : row.bezeichnung,
+                __typename: 'Ziel',
+              },
               __typename: 'Ziel',
             },
-            __typename: 'Ziel',
           },
-        },
-      })
+        })
+      } catch (error) {
+        return listError(error)
+      }
       // if jahr of ziel is updated, activeNodeArray und openNodes need to change
       if (field === 'jahr') {
         const { activeNodeArray, openNodes } = tree
