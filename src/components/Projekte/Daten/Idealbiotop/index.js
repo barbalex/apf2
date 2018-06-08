@@ -5,6 +5,8 @@ import { Query, Mutation } from 'react-apollo'
 import get from 'lodash/get'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
+import withState from 'recompose/withState'
+import withLifecycle from '@hocs/with-lifecycle'
 
 import TextField from '../../../shared/TextField'
 import DateFieldWithPicker from '../../../shared/DateFieldWithPicker'
@@ -13,7 +15,6 @@ import constants from '../../../../modules/constants'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import dataGql from './data.graphql'
 import updateIdealbiotopByIdGql from './updateIdealbiotopById.graphql'
-import listError from '../../../../modules/listError'
 
 const Container = styled.div`
   height: 100%;
@@ -39,8 +40,9 @@ const Section = styled.div`
 `
 
 const enhance = compose(
+  withState('errors', 'setErrors', ({})),
   withHandlers({
-    saveToDb: props => async ({ row, field, value, updateIdealbiotop }) => {
+    saveToDb: ({ setErrors, errors }) => async ({ row, field, value, updateIdealbiotop }) => {
       try {
         await updateIdealbiotop({
           variables: {
@@ -87,20 +89,30 @@ const enhance = compose(
           },
         })
       } catch (error) {
-        return listError(error)
+        return setErrors({ [field]: error.message })
+      }
+      setErrors(({}))
+    },
+  }),
+  withLifecycle({
+    onDidUpdate(prevProps, props) {
+      if (prevProps.id !== props.id) {
+        props.setErrors(({}))
       }
     },
-  })
+  }),
 )
 
 const Idealbiotop = ({
   id,
   saveToDb,
   dimensions = { width: 380 },
+  errors,
 }: {
   id: String,
   saveToDb: () => void,
   dimensions: Object,
+  errors: Object,
 }) => (
   <Query query={dataGql} variables={{ id }}>
     {({ loading, error, data }) => {
@@ -135,6 +147,7 @@ const Idealbiotop = ({
                         updateIdealbiotop,
                       })
                     }
+                    error={errors.erstelldatum}
                   />
                   <Section>Lage</Section>
                   <TextField
@@ -151,6 +164,7 @@ const Idealbiotop = ({
                         updateIdealbiotop,
                       })
                     }
+                    error={errors.hoehenlage}
                   />
                   <TextField
                     key={`${row.id}region`}
@@ -166,6 +180,7 @@ const Idealbiotop = ({
                         updateIdealbiotop,
                       })
                     }
+                    error={errors.region}
                   />
                   <TextField
                     key={`${row.id}exposition`}
@@ -181,6 +196,7 @@ const Idealbiotop = ({
                         updateIdealbiotop,
                       })
                     }
+                    error={errors.exposition}
                   />
                   <TextField
                     key={`${row.id}besonnung`}
@@ -196,6 +212,7 @@ const Idealbiotop = ({
                         updateIdealbiotop,
                       })
                     }
+                    error={errors.besonnung}
                   />
                   <TextField
                     key={`${row.id}hangneigung`}
@@ -211,6 +228,7 @@ const Idealbiotop = ({
                         updateIdealbiotop,
                       })
                     }
+                    error={errors.hangneigung}
                   />
                   <Section>Boden</Section>
                   <TextField
@@ -227,6 +245,7 @@ const Idealbiotop = ({
                         updateIdealbiotop,
                       })
                     }
+                    error={errors.bodenTyp}
                   />
                   <TextField
                     key={`${row.id}bodenKalkgehalt`}
@@ -242,6 +261,7 @@ const Idealbiotop = ({
                         updateIdealbiotop,
                       })
                     }
+                    error={errors.bodenKalkgehalt}
                   />
                   <TextField
                     key={`${row.id}bodenDurchlaessigkeit`}
@@ -257,6 +277,7 @@ const Idealbiotop = ({
                         updateIdealbiotop,
                       })
                     }
+                    error={errors.bodenDurchlaessigkeit}
                   />
                   <TextField
                     key={`${row.id}bodenHumus`}
@@ -272,6 +293,7 @@ const Idealbiotop = ({
                         updateIdealbiotop,
                       })
                     }
+                    error={errors.bodenHumus}
                   />
                   <TextField
                     key={`${row.id}bodenNaehrstoffgehalt`}
@@ -287,6 +309,7 @@ const Idealbiotop = ({
                         updateIdealbiotop,
                       })
                     }
+                    error={errors.bodenNaehrstoffgehalt}
                   />
                   <TextField
                     key={`${row.id}wasserhaushalt`}
@@ -302,6 +325,7 @@ const Idealbiotop = ({
                         updateIdealbiotop,
                       })
                     }
+                    error={errors.wasserhaushalt}
                   />
                   <Section>Vegetation</Section>
                   <TextField
@@ -318,6 +342,7 @@ const Idealbiotop = ({
                         updateIdealbiotop,
                       })
                     }
+                    error={errors.konkurrenz}
                   />
                   <TextField
                     key={`${row.id}moosschicht`}
@@ -333,6 +358,7 @@ const Idealbiotop = ({
                         updateIdealbiotop,
                       })
                     }
+                    error={errors.moosschicht}
                   />
                   <TextField
                     key={`${row.id}Krautschicht`}
@@ -348,6 +374,7 @@ const Idealbiotop = ({
                         updateIdealbiotop,
                       })
                     }
+                    error={errors.krautschicht}
                   />
                   <TextField
                     key={`${row.id}Strauchschicht`}
@@ -363,6 +390,7 @@ const Idealbiotop = ({
                         updateIdealbiotop,
                       })
                     }
+                    error={errors.strauchschicht}
                   />
                   <TextField
                     key={`${row.id}baumschicht`}
@@ -378,6 +406,7 @@ const Idealbiotop = ({
                         updateIdealbiotop,
                       })
                     }
+                    error={errors.baumschicht}
                   />
                   <TextField
                     key={`${row.id}bemerkungen`}
@@ -393,6 +422,7 @@ const Idealbiotop = ({
                         updateIdealbiotop,
                       })
                     }
+                    error={errors.bemerkungen}
                   />
                 </FieldsContainer>
               )}
