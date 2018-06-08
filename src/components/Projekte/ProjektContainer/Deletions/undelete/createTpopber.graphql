@@ -3,7 +3,7 @@ mutation createTpopber(
   $tpopId: UUID
   $jahr: Int
   $entwicklung: Int
-  $bemerkungen: UUID
+  $bemerkungen: String
 ) {
   createTpopber(
     input: {
