@@ -12,6 +12,7 @@ import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import dataGql from './data.graphql'
 import updateApartByIdGql from './updateApartById.graphql'
+import listError from '../../../../modules/listError'
 
 const Container = styled.div`
   height: 100%;
@@ -26,26 +27,30 @@ const FieldsContainer = styled.div`
 
 const enhance = compose(
   withHandlers({
-    saveToDb: ({ refetchTree }) => ({ row, field, value, updateApart }) => {
-      updateApart({
-        variables: {
-          id: row.id,
-          [field]: value,
-        },
-        optimisticResponse: {
-          __typename: 'Mutation',
-          updateApartById: {
-            apart: {
-              id: row.id,
-              apId: field === 'apId' ? value : row.apId,
-              artId: field === 'artId' ? value : row.artId,
-              aeEigenschaftenByArtId: row.aeEigenschaftenByArtId,
+    saveToDb: ({ refetchTree }) => async ({ row, field, value, updateApart }) => {
+      try {
+        updateApart({
+          variables: {
+            id: row.id,
+            [field]: value,
+          },
+          optimisticResponse: {
+            __typename: 'Mutation',
+            updateApartById: {
+              apart: {
+                id: row.id,
+                apId: field === 'apId' ? value : row.apId,
+                artId: field === 'artId' ? value : row.artId,
+                aeEigenschaftenByArtId: row.aeEigenschaftenByArtId,
+                __typename: 'Apart',
+              },
               __typename: 'Apart',
             },
-            __typename: 'Apart',
           },
-        },
-      })
+        })
+      } catch (error) {
+        return listError(error)
+      }
       if (['artId'].includes(field)) refetchTree()
     },
   })
