@@ -14,6 +14,7 @@ import AutoComplete from '../../../shared/Autocomplete'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import dataGql from './data.graphql'
 import updateTpopkontrzaehlByIdGql from './updateTpopkontrzaehlById.graphql'
+import listError from '../../../../modules/listError'
 
 const Container = styled.div`
   height: 100%;
@@ -28,31 +29,34 @@ const FieldsContainer = styled.div`
 
 const enhance = compose(
   withHandlers({
-    saveToDb: ({ refetchTree }) => ({ row, field, value, updateTpopkontrzaehl }) => {
-      console.log('Tpopkontrzaehl, saveToDb:', {row,field,value,updateTpopkontrzaehl})
-      updateTpopkontrzaehl({
-        variables: {
-          id: row.id,
-          [field]: value,
-        },
-        optimisticResponse: {
-          __typename: 'Mutation',
-          updateTpopkontrzaehlById: {
-            tpopkontrzaehl: {
-              id: row.id,
-              anzahl: field === 'anzahl' ? value : row.anzahl,
-              einheit: field === 'einheit' ? value : row.einheit,
-              methode: field === 'methode' ? value : row.methode,
-              tpopkontrzaehlEinheitWerteByEinheit:
-                row.tpopkontrzaehlEinheitWerteByEinheit,
-                tpopkontrzaehlMethodeWerteByMethode: row.tpopkontrzaehlMethodeWerteByMethode,
-              tpopkontrByTpopkontrId: row.tpopkontrByTpopkontrId,
+    saveToDb: ({ refetchTree }) => async ({ row, field, value, updateTpopkontrzaehl }) => {
+      try {
+        updateTpopkontrzaehl({
+          variables: {
+            id: row.id,
+            [field]: value,
+          },
+          optimisticResponse: {
+            __typename: 'Mutation',
+            updateTpopkontrzaehlById: {
+              tpopkontrzaehl: {
+                id: row.id,
+                anzahl: field === 'anzahl' ? value : row.anzahl,
+                einheit: field === 'einheit' ? value : row.einheit,
+                methode: field === 'methode' ? value : row.methode,
+                tpopkontrzaehlEinheitWerteByEinheit:
+                  row.tpopkontrzaehlEinheitWerteByEinheit,
+                  tpopkontrzaehlMethodeWerteByMethode: row.tpopkontrzaehlMethodeWerteByMethode,
+                tpopkontrByTpopkontrId: row.tpopkontrByTpopkontrId,
+                __typename: 'Tpopkontrzaehl',
+              },
               __typename: 'Tpopkontrzaehl',
             },
-            __typename: 'Tpopkontrzaehl',
           },
-        },
-      })
+        })
+      } catch (error) {
+        return listError(error)
+      }
       if (['einheit', 'methode'].includes(field)) refetchTree()
     },
   })
