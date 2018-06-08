@@ -8,6 +8,8 @@ import isEqual from 'lodash/isEqual'
 import sortBy from 'lodash/sortBy'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
+import withState from 'recompose/withState'
+import withLifecycle from '@hocs/with-lifecycle'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroup'
 import TextField from '../../../shared/TextField'
@@ -16,7 +18,6 @@ import ErrorBoundary from '../../../shared/ErrorBoundary'
 import dataGql from './data.graphql'
 import updateZielByIdGql from './updateZielById.graphql'
 import setTreeKeyGql from './setTreeKey.graphql'
-import listError from '../../../../modules/listError'
 
 const Container = styled.div`
   height: 100%;
@@ -30,8 +31,9 @@ const FieldsContainer = styled.div`
 `
 
 const enhance = compose(
+  withState('errors', 'setErrors', ({})),
   withHandlers({
-    saveToDb: ({ tree, refetchTree }) => async ({ row, field, value, updateZiel, client }) => {
+    saveToDb: ({ tree, refetchTree, setErrors, errors }) => async ({ row, field, value, updateZiel, client }) => {
       try {
         await updateZiel({
           variables: {
@@ -54,8 +56,9 @@ const enhance = compose(
           },
         })
       } catch (error) {
-        return listError(error)
+        return setErrors({ [field]: error.message })
       }
+      setErrors(({}))
       // if jahr of ziel is updated, activeNodeArray und openNodes need to change
       if (field === 'jahr') {
         const { activeNodeArray, openNodes } = tree
@@ -83,17 +86,26 @@ const enhance = compose(
         if (['typ'].includes(field)) refetchTree()
       }
     },
-  })
+  }),
+  withLifecycle({
+    onDidUpdate(prevProps, props) {
+      if (prevProps.id !== props.id) {
+        props.setErrors(({}))
+      }
+    },
+  }),
 )
 
 const Ziel = ({
   id,
   tree,
-  saveToDb
+  saveToDb,
+  errors,
 }: {
   id: String,
   tree: Object,
-  saveToDb: () => void
+  saveToDb: () => void,
+  errors: Object,
 }) =>
   <Query query={dataGql} variables={{ id }}>
     {({ loading, error, data, client }) => {
@@ -128,6 +140,7 @@ const Ziel = ({
                     saveToDb={value =>
                       saveToDb({ row, field: 'jahr', value, updateZiel, client })
                     }
+                    error={errors.jahr}
                   />
                   <RadioButtonGroup
                     key={`${row.id}typ`}
@@ -137,6 +150,7 @@ const Ziel = ({
                     saveToDb={value =>
                       saveToDb({ row, field: 'typ', value, updateZiel })
                     }
+                    error={errors.typ}
                   />
                   <TextField
                     key={`${row.id}bezeichnung`}
@@ -147,6 +161,7 @@ const Ziel = ({
                     saveToDb={value =>
                       saveToDb({ row, field: 'bezeichnung', value, updateZiel })
                     }
+                    error={errors.bezeichnung}
                   />
                 </FieldsContainer>
               )}
