@@ -13,6 +13,7 @@ import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import dataGql from './data.graphql'
 import updateAssozartByIdGql from './updateAssozartById.graphql'
+import listError from '../../../../modules/listError'
 
 const Container = styled.div`
   height: 100%;
@@ -27,28 +28,32 @@ const FieldsContainer = styled.div`
 
 const enhance = compose(
   withHandlers({
-    saveToDb: ({ refetchTree }) => ({ row, field, value, updateAssozart }) => {
-      updateAssozart({
-        variables: {
-          id: row.id,
-          [field]: value,
-        },
-        optimisticResponse: {
-          __typename: 'Mutation',
-          updateAssozartById: {
-            assozart: {
-              id: row.id,
-              bemerkungen: field === 'bemerkungen' ? value : row.bemerkungen,
-              aeId: field === 'aeId' ? value : row.aeId,
-              apId: field === 'apId' ? value : row.apId,
-              aeEigenschaftenByAeId: row.aeEigenschaftenByAeId,
-              apByApId: row.apByApId,
+    saveToDb: ({ refetchTree }) => async ({ row, field, value, updateAssozart }) => {
+      try {
+        updateAssozart({
+          variables: {
+            id: row.id,
+            [field]: value,
+          },
+          optimisticResponse: {
+            __typename: 'Mutation',
+            updateAssozartById: {
+              assozart: {
+                id: row.id,
+                bemerkungen: field === 'bemerkungen' ? value : row.bemerkungen,
+                aeId: field === 'aeId' ? value : row.aeId,
+                apId: field === 'apId' ? value : row.apId,
+                aeEigenschaftenByAeId: row.aeEigenschaftenByAeId,
+                apByApId: row.apByApId,
+                __typename: 'Assozart',
+              },
               __typename: 'Assozart',
             },
-            __typename: 'Assozart',
           },
-        },
-      })
+        })
+      } catch (error) {
+        return listError(error)
+      }
       if (['aeId'].includes(field)) refetchTree()
     },
   })
