@@ -6,6 +6,8 @@ import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
+import withState from 'recompose/withState'
+import withLifecycle from '@hocs/with-lifecycle'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroup'
 import TextField from '../../../shared/TextField'
@@ -13,7 +15,6 @@ import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import dataGql from './data.graphql'
 import updatePopberByIdGql from './updatePopberById.graphql'
-import listError from '../../../../modules/listError'
 
 const Container = styled.div`
   height: 100%;
@@ -27,8 +28,9 @@ const FieldsContainer = styled.div`
 `
 
 const enhance = compose(
+  withState('errors', 'setErrors', ({})),
   withHandlers({
-    saveToDb: ({ refetchTree }) => async ({ row, field, value, updatePopber }) => {
+    saveToDb: ({ refetchTree, setErrors, errors }) => async ({ row, field, value, updatePopber }) => {
       try {
         await updatePopber({
           variables: {
@@ -54,19 +56,29 @@ const enhance = compose(
           },
         })
       } catch (error) {
-        return listError(error)
+        return setErrors({ [field]: error.message })
       }
+      setErrors(({}))
       if (['entwicklung'].includes(field)) refetchTree()
     },
-  })
+  }),
+  withLifecycle({
+    onDidUpdate(prevProps, props) {
+      if (prevProps.id !== props.id) {
+        props.setErrors(({}))
+      }
+    },
+  }),
 )
 
 const Popber = ({
   id,
-  saveToDb
+  saveToDb,
+  errors,
 }: {
   id: String,
-  saveToDb: () => void
+  saveToDb: () => void,
+  errors: Object,
 }) => (
   <Query query={dataGql} variables={{ id }}>
     {({ loading, error, data }) => {
@@ -104,6 +116,7 @@ const Popber = ({
                     saveToDb={value =>
                       saveToDb({ row, field: 'jahr', value, updatePopber })
                     }
+                    error={errors.jahr}
                   />
                   <RadioButtonGroup
                     key={`${row.id}entwicklung`}
@@ -118,6 +131,7 @@ const Popber = ({
                         updatePopber,
                       })
                     }
+                    error={errors.entwicklung}
                   />
                   <TextField
                     key={`${row.id}bemerkungen`}
@@ -133,6 +147,7 @@ const Popber = ({
                         updatePopber,
                       })
                     }
+                    error={errors.bemerkungen}
                   />
                 </FieldsContainer>
               )}
