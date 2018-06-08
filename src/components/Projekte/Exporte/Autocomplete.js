@@ -19,10 +19,11 @@ import trimStart from 'lodash/trimStart'
 import { ApolloConsumer } from 'react-apollo'
 import gql from "graphql-tag"
 import get from 'lodash/get'
+import { Subscribe } from 'unstated'
 
 import exportModule from '../../../modules/export'
-import listError from '../../../modules/listError'
 import Message from './Message'
+import ErrorState from '../../../state/Error'
 
 const StyledPaper = styled(Paper)`
   z-index: 1;
@@ -189,159 +190,163 @@ class IntegrationAutosuggest extends React.Component<Props, State> {
     const { suggestions } = this.state
 
     return (
-      <ApolloConsumer>
-        {client =>
-          <Fragment>
-            <StyledAutosuggest
-              theme={{
-                container: classes.container,
-                suggestionsContainerOpen: {
-                  position: 'absolute',
-                  marginTop: '8px',
-                  marginBottom: '24px',
-                  left: 0,
-                  right: 0,
-                  bottom: openabove ? '27px' : 'unset',
-                },
-                suggestionsList: classes.suggestionsList,
-                suggestion: classes.suggestion,
-              }}
-              renderInputComponent={this.renderInput}
-              suggestions={suggestions}
-              onSuggestionsFetchRequested={this.handleSuggestionsFetchRequested}
-              onSuggestionsClearRequested={this.handleSuggestionsClearRequested}
-              renderSuggestionsContainer={renderSuggestionsContainer}
-              getSuggestionValue={getSuggestionValue}
-              renderSuggestion={renderSuggestion}
-              shouldRenderSuggestions={shouldRenderSuggestions}
-              onSuggestionSelected={async (event, { suggestion }) => {
-                this.setState({ message: 'Export "anzkontrinklletzterundletztertpopber" wird vorbereitet...'})
-                try {
-                  const { data } = await client.query({
-                    query: gql`
-                      query view($apId: UUID!) {
-                        allVTpopAnzkontrinklletzterundletztertpopbers(filter: { apId: { equalTo: $apId } }) {
-                          nodes {
-                            apId
-                            familie
-                            artname
-                            apBearbeitung
-                            apStartJahr
-                            apUmsetzung
-                            popId
-                            popNr
-                            popName
-                            popStatus
-                            popBekanntSeit
-                            popStatusUnklar
-                            popStatusUnklarBegruendung
-                            popX
-                            popY
-                            id
-                            nr
-                            gemeinde
-                            flurname
-                            status
-                            bekanntSeit
-                            statusUnklar
-                            statusUnklarGrund
-                            x
-                            y
-                            radius
-                            hoehe
-                            exposition
-                            klima
-                            neigung
-                            beschreibung
-                            katasterNr
-                            apberRelevant
-                            eigentuemer
-                            kontakt
-                            nutzungszone
-                            bewirtschafter
-                            bewirtschaftung
-                            changed
-                            changedBy
-                            kontrId
-                            kontrJahr
-                            kontrDatum
-                            kontrTyp
-                            kontrBearbeiter
-                            kontrUeberlebensrate
-                            kontrVitalitaet
-                            kontrEntwicklung
-                            kontrUrsachen
-                            kontrErfolgsbeurteilung
-                            kontrUmsetzungAendern
-                            kontrKontrolleAendern
-                            kontrBemerkungen
-                            kontrLrDelarze
-                            kontrLrUmgebungDelarze
-                            kontrVegetationstyp
-                            kontrKonkurrenz
-                            kontrMoosschicht
-                            kontrKrautschicht
-                            kontrStrauchschicht
-                            kontrBaumschicht
-                            kontrBodenTyp
-                            kontrBodenKalkgehalt
-                            kontrBodenDurchlaessigkeit
-                            kontrBodenHumus
-                            kontrBodenNaehrstoffgehalt
-                            kontrBodenAbtrag
-                            kontrWasserhaushalt
-                            kontrIdealbiotopUebereinstimmung
-                            kontrHandlungsbedarf
-                            kontrFlaecheUeberprueft
-                            kontrFlaeche
-                            kontrPlanVorhanden
-                            kontrDeckungVegetation
-                            kontrDeckungNackterBoden
-                            kontrDeckungApArt
-                            kontrJungpflanzenVorhanden
-                            kontrVegetationshoeheMaximum
-                            kontrVegetationshoeheMittel
-                            kontrGefaehrdung
-                            kontrChanged
-                            kontrChangedBy
-                            tpopberAnz
-                            tpopberId
-                            tpopberJahr
-                            tpopberEntwicklung
-                            tpopberBemerkungen
-                            tpopberChanged
-                            tpopberChangedBy
-                          }
-                        }
-                      }`,
-                      variables: { apId: objects.find(o => o.value === suggestion).id }
-                  })
-                  exportModule({
-                    data: get(data, 'allVTpopAnzkontrinklletzterundletztertpopbers.nodes', []),
-                    fileName: 'anzkontrinklletzterundletztertpopber',
-                  })
-                } catch(error) {
-                  listError(error)
+      <Subscribe to={[ErrorState]}>
+        {errorState =>
+          <ApolloConsumer>
+            {client =>
+              <Fragment>
+                <StyledAutosuggest
+                  theme={{
+                    container: classes.container,
+                    suggestionsContainerOpen: {
+                      position: 'absolute',
+                      marginTop: '8px',
+                      marginBottom: '24px',
+                      left: 0,
+                      right: 0,
+                      bottom: openabove ? '27px' : 'unset',
+                    },
+                    suggestionsList: classes.suggestionsList,
+                    suggestion: classes.suggestion,
+                  }}
+                  renderInputComponent={this.renderInput}
+                  suggestions={suggestions}
+                  onSuggestionsFetchRequested={this.handleSuggestionsFetchRequested}
+                  onSuggestionsClearRequested={this.handleSuggestionsClearRequested}
+                  renderSuggestionsContainer={renderSuggestionsContainer}
+                  getSuggestionValue={getSuggestionValue}
+                  renderSuggestion={renderSuggestion}
+                  shouldRenderSuggestions={shouldRenderSuggestions}
+                  onSuggestionSelected={async (event, { suggestion }) => {
+                    this.setState({ message: 'Export "anzkontrinklletzterundletztertpopber" wird vorbereitet...'})
+                    try {
+                      const { data } = await client.query({
+                        query: gql`
+                          query view($apId: UUID!) {
+                            allVTpopAnzkontrinklletzterundletztertpopbers(filter: { apId: { equalTo: $apId } }) {
+                              nodes {
+                                apId
+                                familie
+                                artname
+                                apBearbeitung
+                                apStartJahr
+                                apUmsetzung
+                                popId
+                                popNr
+                                popName
+                                popStatus
+                                popBekanntSeit
+                                popStatusUnklar
+                                popStatusUnklarBegruendung
+                                popX
+                                popY
+                                id
+                                nr
+                                gemeinde
+                                flurname
+                                status
+                                bekanntSeit
+                                statusUnklar
+                                statusUnklarGrund
+                                x
+                                y
+                                radius
+                                hoehe
+                                exposition
+                                klima
+                                neigung
+                                beschreibung
+                                katasterNr
+                                apberRelevant
+                                eigentuemer
+                                kontakt
+                                nutzungszone
+                                bewirtschafter
+                                bewirtschaftung
+                                changed
+                                changedBy
+                                kontrId
+                                kontrJahr
+                                kontrDatum
+                                kontrTyp
+                                kontrBearbeiter
+                                kontrUeberlebensrate
+                                kontrVitalitaet
+                                kontrEntwicklung
+                                kontrUrsachen
+                                kontrErfolgsbeurteilung
+                                kontrUmsetzungAendern
+                                kontrKontrolleAendern
+                                kontrBemerkungen
+                                kontrLrDelarze
+                                kontrLrUmgebungDelarze
+                                kontrVegetationstyp
+                                kontrKonkurrenz
+                                kontrMoosschicht
+                                kontrKrautschicht
+                                kontrStrauchschicht
+                                kontrBaumschicht
+                                kontrBodenTyp
+                                kontrBodenKalkgehalt
+                                kontrBodenDurchlaessigkeit
+                                kontrBodenHumus
+                                kontrBodenNaehrstoffgehalt
+                                kontrBodenAbtrag
+                                kontrWasserhaushalt
+                                kontrIdealbiotopUebereinstimmung
+                                kontrHandlungsbedarf
+                                kontrFlaecheUeberprueft
+                                kontrFlaeche
+                                kontrPlanVorhanden
+                                kontrDeckungVegetation
+                                kontrDeckungNackterBoden
+                                kontrDeckungApArt
+                                kontrJungpflanzenVorhanden
+                                kontrVegetationshoeheMaximum
+                                kontrVegetationshoeheMittel
+                                kontrGefaehrdung
+                                kontrChanged
+                                kontrChangedBy
+                                tpopberAnz
+                                tpopberId
+                                tpopberJahr
+                                tpopberEntwicklung
+                                tpopberBemerkungen
+                                tpopberChanged
+                                tpopberChangedBy
+                              }
+                            }
+                          }`,
+                          variables: { apId: objects.find(o => o.value === suggestion).id }
+                      })
+                      exportModule({
+                        data: get(data, 'allVTpopAnzkontrinklletzterundletztertpopbers.nodes', []),
+                        fileName: 'anzkontrinklletzterundletztertpopber',
+                      })
+                    } catch(error) {
+                      errorState.add(error)
+                    }
+                    this.setState({ message: null})
+                    setTimeout(() => {
+                      this.setState({ value: '', suggestions: [] })
+                    }, 5000)
+                  }}
+                  inputProps={{
+                    value: this.state.value,
+                    autoFocus: true,
+                    placeholder: 'Für Auswahlliste: Leerschlag tippen',
+                    onChange: this.handleChange,
+                  }}
+                />
+                {
+                  !!this.state.message &&
+                  <Message message={this.state.message} />
                 }
-                this.setState({ message: null})
-                setTimeout(() => {
-                  this.setState({ value: '', suggestions: [] })
-                }, 5000)
-              }}
-              inputProps={{
-                value: this.state.value,
-                autoFocus: true,
-                placeholder: 'Für Auswahlliste: Leerschlag tippen',
-                onChange: this.handleChange,
-              }}
-            />
-            {
-              !!this.state.message &&
-              <Message message={this.state.message} />
+              </Fragment>
             }
-          </Fragment>
+          </ApolloConsumer>
         }
-      </ApolloConsumer>
+      </Subscribe>
     )
   }
 }
