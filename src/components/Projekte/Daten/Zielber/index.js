@@ -11,6 +11,7 @@ import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import dataGql from './data.graphql'
 import updateZielberByIdGql from './updateZielberById.graphql'
+import listError from '../../../../modules/listError'
 
 const Container = styled.div`
   height: 100%;
@@ -25,28 +26,33 @@ const FieldsContainer = styled.div`
 
 const enhance = compose(
   withHandlers({
-    saveToDb: props => ({ row, field, value, updateZielber }) =>
-      updateZielber({
-        variables: {
-          id: row.id,
-          [field]: value,
-        },
-        optimisticResponse: {
-          __typename: 'Mutation',
-          updateZielberById: {
-            zielber: {
-              id: row.id,
-              zielId: field === 'zielId' ? value : row.zielId,
-              jahr: field === 'jahr' ? value : row.jahr,
-              erreichung: field === 'erreichung' ? value : row.erreichung,
-              bemerkungen: field === 'bemerkungen' ? value : row.bemerkungen,
-              zielByZielId: row.zielByZielId,
+    saveToDb: props => async ({ row, field, value, updateZielber }) => {
+      try {
+        updateZielber({
+          variables: {
+            id: row.id,
+            [field]: value,
+          },
+          optimisticResponse: {
+            __typename: 'Mutation',
+            updateZielberById: {
+              zielber: {
+                id: row.id,
+                zielId: field === 'zielId' ? value : row.zielId,
+                jahr: field === 'jahr' ? value : row.jahr,
+                erreichung: field === 'erreichung' ? value : row.erreichung,
+                bemerkungen: field === 'bemerkungen' ? value : row.bemerkungen,
+                zielByZielId: row.zielByZielId,
+                __typename: 'Zielber',
+              },
               __typename: 'Zielber',
             },
-            __typename: 'Zielber',
           },
-        },
-      }),
+        })
+      } catch (error) {
+        return listError(error)
+      }
+    },
   })
 )
 
