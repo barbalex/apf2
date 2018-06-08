@@ -5,6 +5,8 @@ import { Query, Mutation } from 'react-apollo'
 import get from 'lodash/get'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
+import withState from 'recompose/withState'
+import withLifecycle from '@hocs/with-lifecycle'
 
 import TextField from '../../../shared/TextField'
 import TextFieldWithUrl from '../../../shared/TextFieldWithUrl'
@@ -12,7 +14,6 @@ import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import dataGql from './data.graphql'
 import updateBerByIdGql from './updateBerById.graphql'
-import listError from '../../../../modules/listError'
 
 const Container = styled.div`
   height: 100%;
@@ -26,8 +27,9 @@ const FieldsContainer = styled.div`
 `
 
 const enhance = compose(
+  withState('errors', 'setErrors', ({})),
   withHandlers({
-    saveToDb: props => async ({ row, field, value, updateBer }) => {
+    saveToDb: ({ setErrors, errors }) => async ({ row, field, value, updateBer }) => {
       try {
         await updateBer({
           variables: {
@@ -51,18 +53,28 @@ const enhance = compose(
           },
         })
       } catch (error) {
-        return listError(error)
+        return setErrors({ [field]: error.message })
+      }
+      setErrors(({}))
+    },
+  }),
+  withLifecycle({
+    onDidUpdate(prevProps, props) {
+      if (prevProps.id !== props.id) {
+        props.setErrors(({}))
       }
     },
-  })
+  }),
 )
 
 const Ber = ({
   id,
-  saveToDb
+  saveToDb,
+  errors,
 }: {
   id: String,
-  saveToDb: () => void
+  saveToDb: () => void,
+  errors: Object,
 }) => (
   <Query query={dataGql} variables={{ id }}>
     {({ loading, error, data }) => {
@@ -91,6 +103,7 @@ const Ber = ({
                     saveToDb={value =>
                       saveToDb({ row, field: 'autor', value, updateBer })
                     }
+                    error={errors.autor}
                   />
                   <TextField
                     key={`${row.id}jahr`}
@@ -100,6 +113,7 @@ const Ber = ({
                     saveToDb={value =>
                       saveToDb({ row, field: 'jahr', value, updateBer })
                     }
+                    error={errors.jahr}
                   />
                   <TextField
                     key={`${row.id}titel`}
@@ -110,6 +124,7 @@ const Ber = ({
                     saveToDb={value =>
                       saveToDb({ row, field: 'titel', value, updateBer })
                     }
+                    error={errors.titel}
                   />
                   <TextFieldWithUrl
                     key={`${row.id}url`}
@@ -120,6 +135,7 @@ const Ber = ({
                     saveToDb={value =>
                       saveToDb({ row, field: 'url', value, updateBer })
                     }
+                    error={errors.url}
                   />
                 </FieldsContainer>
               )}
