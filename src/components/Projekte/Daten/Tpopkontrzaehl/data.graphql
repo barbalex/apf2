@@ -3,11 +3,11 @@ query TpopkontrzaehlQuery($id: UUID!) {
     id
     anzahl
     einheit
+    methode
     tpopkontrzaehlEinheitWerteByEinheit {
       id
       text
     }
-    methode
     tpopkontrzaehlMethodeWerteByMethode {
       id
       text

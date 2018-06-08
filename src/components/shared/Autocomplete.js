@@ -167,7 +167,7 @@ class IntegrationAutosuggest extends React.Component<Props, State> {
     if (object) {
       return saveToDb(object.id)
     }
-    if (!value) return saveToDb(null)
+    if (!value) saveToDb(null)
     this.setState({ value: '' })
   }
 

@@ -30,23 +30,34 @@ const StyledRadio = styled(Radio)`
 
 const enhance = compose(
   withHandlers({
-    onClickButton: ({ value, saveToDb }) => event => {
-      // if clicked element is active value: set null
-      // Problem: does not work on change event on RadioGroup
-      // Solution: do this in click event of button
-      const newValue =
-        event.target.value === 'true'
-          ? true
-          : event.target.value === 'false'
-            ? false
-            : event.target.value
+    onClickButton: ({ value: oldValue, saveToDb }) => event => {
+      /**
+       * if clicked element is active value: set null
+       * Problem: does not work on change event on RadioGroup
+       * because that only fires on changes
+       * Solution: do this in click event of button
+       */
+      const targetValue = event.target.value
       // eslint-disable-next-line eqeqeq
-      if (newValue == value) {
+      if (targetValue !== undefined && targetValue == oldValue) {
         // an already active option was clicked
         // set value null
         return saveToDb(null)
       }
-      saveToDb(newValue)
+    },
+    onChangeGroup: ({ value: oldValue, saveToDb }) => event => {
+      // group only changes if value changes
+      const targetValue = event.target.value
+      // values are passed as strings > need to convert
+      const valueToUse =
+        targetValue === 'true'
+          ? true
+          : targetValue === 'false'
+            ? false
+            : isNaN(targetValue)
+              ? targetValue
+              : +targetValue
+      saveToDb(valueToUse)
     },
   })
 )
@@ -56,11 +67,13 @@ const RadioButtonGroup = ({
   label,
   dataSource = [],
   onClickButton,
+  onChangeGroup,
 }: {
   value: Number | String,
   label: String,
   dataSource: Array<Object>,
   onClickButton: () => void,
+  onChangeGroup: () => void,
 }) => {
   const valueSelected =
     value !== null && value !== undefined ? value.toString() : ''
@@ -68,7 +81,7 @@ const RadioButtonGroup = ({
   return (
     <StyledFormControl component="fieldset">
       <StyledFormLabel component="legend">{label}</StyledFormLabel>
-      <RadioGroup aria-label={label} value={valueSelected}>
+      <RadioGroup aria-label={label} value={valueSelected} onChange={onChangeGroup}>
         {dataSource.map((e, index) => (
           <FormControlLabel
             key={index}

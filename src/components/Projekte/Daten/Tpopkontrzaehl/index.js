@@ -29,6 +29,7 @@ const FieldsContainer = styled.div`
 const enhance = compose(
   withHandlers({
     saveToDb: ({ refetchTree }) => ({ row, field, value, updateTpopkontrzaehl }) => {
+      console.log('Tpopkontrzaehl, saveToDb:', {row,field,value,updateTpopkontrzaehl})
       updateTpopkontrzaehl({
         variables: {
           id: row.id,
