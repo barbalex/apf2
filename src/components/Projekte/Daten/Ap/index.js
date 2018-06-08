@@ -16,6 +16,7 @@ import ErrorBoundary from '../../../shared/ErrorBoundary'
 import data1Gql from './data1.graphql'
 import data2Gql from './data2.graphql'
 import updateApByIdGql from './updateApById.graphql'
+import listError from '../../../../modules/listError'
 
 const Container = styled.div`
   height: 100%;
@@ -61,30 +62,34 @@ const LabelPopoverRowColumnRight = styled.div`
 const enhance = compose(
   withHandlers({
     saveToDb: ({ refetchTree }) => async ({ row, field, value, updateAp }) => {
-      await updateAp({
-        variables: {
-          id: row.id,
-          [field]: value,
-        },
-        optimisticResponse: {
-          __typename: 'Mutation',
-          updateApById: {
-            ap: {
-              id: row.id,
-              startJahr: field === 'startJahr' ? value : row.startJahr,
-              bearbeitung: field === 'bearbeitung' ? value : row.bearbeitung,
-              umsetzung: field === 'umsetzung' ? value : row.umsetzung,
-              artId: field === 'artId' ? value : row.artId,
-              bearbeiter: field === 'bearbeiter' ? value : row.bearbeiter,
-              projId: field === 'projId' ? value : row.projId,
-              adresseByBearbeiter: row.adresseByBearbeiter,
-              aeEigenschaftenByArtId: row.aeEigenschaftenByArtId,
+      try {
+        await updateAp({
+          variables: {
+            id: row.id,
+            [field]: value,
+          },
+          optimisticResponse: {
+            __typename: 'Mutation',
+            updateApById: {
+              ap: {
+                id: row.id,
+                startJahr: field === 'startJahr' ? value : row.startJahr,
+                bearbeitung: field === 'bearbeitung' ? value : row.bearbeitung,
+                umsetzung: field === 'umsetzung' ? value : row.umsetzung,
+                artId: field === 'artId' ? value : row.artId,
+                bearbeiter: field === 'bearbeiter' ? value : row.bearbeiter,
+                projId: field === 'projId' ? value : row.projId,
+                adresseByBearbeiter: row.adresseByBearbeiter,
+                aeEigenschaftenByArtId: row.aeEigenschaftenByArtId,
+                __typename: 'Ap',
+              },
               __typename: 'Ap',
             },
-            __typename: 'Ap',
           },
-        },
-      })
+        })
+      } catch (error) {
+        return listError(error)
+      }
       if (['artId'].includes(field)) refetchTree()
     },
   })
