@@ -68,7 +68,6 @@ import copyBiotopTo from '../../../modules/copyBiotopTo'
 import setUrlQueryValue from '../../../modules/setUrlQueryValue'
 import moveTo from '../../../modules/moveTo'
 import copyTo from '../../../modules/copyTo'
-import listError from '../../../modules/listError'
 import createNewPopFromBeob from '../../../modules/createNewPopFromBeob'
 import setTreeKeyGql from './setTreeKey.graphql'
 import copyBeobZugeordnetKoordToPop from '../../../modules/copyBeobZugeordnetKoordToPop'
@@ -132,7 +131,7 @@ const getAndValidateCoordinatesOfTpop = async ({ id, errorState }) => {
   return { x, y }
 }
 
-const getAndValidateCoordinatesOfBeob = async id => {
+const getAndValidateCoordinatesOfBeob = async ({ id, errorState }) => {
   const { client } = app
   let beobResult
   try {
@@ -141,12 +140,12 @@ const getAndValidateCoordinatesOfBeob = async id => {
       variables: { id }
     })
   } catch (error) {
-    listError(error)
+    errorState.add(error)
   }
   const beob = get(beobResult, 'data.beobById')
   const { x, y } = beob
   if (!x || !y) {
-    listError(new Error(`Die Teilpopulation mit der ID ${id} kat keine (vollständigen) Koordinaten`))
+    errorState.add(new Error(`Die Teilpopulation mit der ID ${id} kat keine (vollständigen) Koordinaten`))
     return { x: null, y: null }
   }
   return { x, y }
@@ -194,13 +193,13 @@ const enhance = compose(
       errorState,
     }) => {
       const tree = get(dbData, treeName)
-      if (!data) return listError('no data passed with click')
+      if (!data) return errorState.add('no data passed with click')
       if (!element)
-        return listError(new Error('no element passed with click'))
+        return errorState.add(new Error('no element passed with click'))
       const { table, action, actionTable } = data
       const { firstElementChild } = element
       if (!firstElementChild)
-        return listError(new Error('no firstElementChild passed with click'))
+        return errorState.add(new Error('no firstElementChild passed with click'))
       let id = firstElementChild.getAttribute('data-id')
       const parentId = firstElementChild.getAttribute('data-parentid')
       const url = firstElementChild.getAttribute('data-url')
@@ -358,7 +357,7 @@ const enhance = compose(
           }
         },
         async showCoordOfBeobOnMapsZhCh() {
-          const { x, y } = await getAndValidateCoordinatesOfBeob(id)
+          const { x, y } = await getAndValidateCoordinatesOfBeob({ id, errorState })
           if (x && y) {
             window.open(
               `https://maps.zh.ch/?x=${x}&y=${y}&scale=3000&markers=ring`,
@@ -367,7 +366,7 @@ const enhance = compose(
           }
         },
         async showCoordOfBeobOnMapGeoAdminCh() {
-          const { x, y } = await getAndValidateCoordinatesOfBeob(id)
+          const { x, y } = await getAndValidateCoordinatesOfBeob({ id, errorState })
           if (x && y) {
             window.open(
               `https://map.geo.admin.ch/?bgLayer=ch.swisstopo.pixelkarte-farbe&Y=${x}&X=${y}&zoom=10&crosshair=circle`,
@@ -379,7 +378,7 @@ const enhance = compose(
       if (Object.keys(actions).includes(action)) {
         actions[action]()
       } else {
-        listError(new Error(`action "${action}" unknown, therefore not executed`))
+        errorState.add(new Error(`action "${action}" unknown, therefore not executed`))
       }
     },
   }),

@@ -14,10 +14,11 @@ import styled from 'styled-components'
 import { ApolloConsumer } from 'react-apollo'
 import gql from "graphql-tag"
 import get from 'lodash/get'
+import { Subscribe } from 'unstated'
 
 import exportModule from '../../../modules/export'
-import listError from '../../../modules/listError'
 import Message from './Message'
+import ErrorState from '../../../state/Error'
 
 const StyledCard = styled(Card)`
   margin: 10px 0;
@@ -81,186 +82,190 @@ const Massnahmen = ({
   message: String,
   setMessage: () => void,
 }) => (
-  <ApolloConsumer>
-    {client =>
-      <StyledCard>
-        <StyledCardActions
-          disableActionSpacing
-          onClick={() => setExpanded(!expanded)}
-        >
-          <CardActionTitle>Massnahmen</CardActionTitle>
-          <CardActionIconButton
-            data-expanded={expanded}
-            aria-expanded={expanded}
-            aria-label="öffnen"
-          >
-            <Icon title={expanded ? 'schliessen' : 'öffnen'}>
-              <ExpandMoreIcon />
-            </Icon>
-          </CardActionIconButton>
-        </StyledCardActions>
-        <Collapse in={expanded} timeout="auto" unmountOnExit>
-          <StyledCardContent>
-            <DownloadCardButton
-                  onClick={async () => {
-                    setMessage('Export "Massnahmen" wird vorbereitet...')
-                    try {
-                      const { data } = await client.query({
-                        query: gql`
-                          query view {
-                            allVMassns {
-                              nodes {
-                                apId
-                                familie
-                                artname
-                                apBearbeitung
-                                apStartJahr
-                                apUmsetzung
-                                popId
-                                popNr
-                                popName
-                                popStatus
-                                popBekanntSeit
-                                popStatusUnklar
-                                popStatusUnklarBegruendung
-                                popX
-                                popY
-                                tpopId
-                                tpopNr
-                                tpopGemeinde
-                                tpopFlurname
-                                tpopStatus
-                                tpopBekanntSeit
-                                tpopStatusUnklar
-                                tpopStatusUnklarGrund
-                                tpopX
-                                tpopY
-                                tpopRadius
-                                tpopHoehe
-                                tpopExposition
-                                tpopKlima
-                                tpopNeigung
-                                tpopBeschreibung
-                                tpopKatasterNr
-                                tpopApberRelevant
-                                tpopEigentuemer
-                                tpopKontakt
-                                tpopNutzungszone
-                                tpopBewirtschafter
-                                tpopBewirtschaftung
-                                id
-                                jahr
-                                datum
-                                typ
-                                beschreibung
-                                bearbeiter
-                                bemerkungen
-                                planVorhanden
-                                planBezeichnung
-                                flaeche
-                                form
-                                pflanzanordnung
-                                markierung
-                                anzTriebe
-                                anzPflanzen
-                                anzPflanzstellen
-                                wirtspflanze
-                                herkunftPop
-                                sammeldatum
-                                changed
-                                changedBy
-                              }
-                            }
-                          }`
-                      })
-                      exportModule({
-                        data: get(data, 'allVMassns.nodes', []),
-                        fileName: 'Massnahmen',
-                        fileType,
-                        applyMapFilterToExport,
-                        mapFilter,
-                        idKey: 'id',
-                        xKey: 'tpopX',
-                        yKey: 'tpopY',
-                      })
-                    } catch(error) {
-                      listError(error)
-                    }
-                    setMessage(null)
-                  }}
+  <Subscribe to={[ErrorState]}>
+    {errorState =>
+      <ApolloConsumer>
+        {client =>
+          <StyledCard>
+            <StyledCardActions
+              disableActionSpacing
+              onClick={() => setExpanded(!expanded)}
             >
-              Massnahmen
-            </DownloadCardButton>
-            <DownloadCardButton
-                  onClick={async () => {
-                    setMessage('Export "MassnahmenWebGisBun" wird vorbereitet...')
-                    try {
-                      const { data } = await client.query({
-                        query: gql`
-                          query view {
-                            allVMassnWebgisbuns {
-                              nodes {
-                                APARTID: apartid
-                                APART: apart
-                                POPGUID: popguid
-                                POPNR: popnr
-                                TPOPGUID: tpopguid
-                                TPOPNR: tpopnr
-                                TPOP_X: tpopX
-                                TPOP_Y: tpopY
-                                TPOPSTATUS: tpopstatus
-                                MASSNGUID: massnguid
-                                MASSNJAHR: massnjahr
-                                MASSNDAT: massndat
-                                MASSTYP: masstyp
-                                MASSNMASSNAHME: massnmassnahme
-                                MASSNBEARBEITER: massnbearbeiter
-                                MASSNBEMERKUNG: massnbemerkung
-                                MASSNPLAN: massnplan
-                                MASSPLANBEZ: massplanbez
-                                MASSNFLAECHE: massnflaeche
-                                MASSNFORMANSIEDL: massnformansiedl
-                                MASSNPFLANZANORDNUNG: massnpflanzanordnung
-                                MASSNMARKIERUNG: massnmarkierung
-                                MASSNANZTRIEBE: massnanztriebe
-                                MASSNANZPFLANZEN: massnanzpflanzen
-                                MASSNANZPFLANZSTELLEN: massnanzpflanzstellen
-                                MASSNWIRTSPFLANZEN: massnwirtspflanzen
-                                MASSNHERKUNFTSPOP: massnherkunftspop
-                                MASSNSAMMELDAT: massnsammeldat
-                                MASSNCHANGEDAT: massnchangedat
-                                MASSNCHANGEBY: massnchangeby
-                              }
-                            }
-                          }`
-                      })
-                      exportModule({
-                        data: get(data, 'allVMassnWebgisbuns.nodes', []),
-                        fileName: 'MassnahmenWebGisBun',
-                        fileType,
-                        applyMapFilterToExport,
-                        mapFilter,
-                        idKey: 'MASSNGUID',
-                        xKey: 'TPOP_X',
-                        yKey: 'TPOP_Y',
-                      })
-                    } catch(error) {
-                      listError(error)
-                    }
-                    setMessage(null)
-                  }}
-            >
-              Massnahmen für WebGIS BUN
-            </DownloadCardButton>
-          </StyledCardContent>
-        </Collapse>
-        {
-          !!message &&
-          <Message message={message} />
+              <CardActionTitle>Massnahmen</CardActionTitle>
+              <CardActionIconButton
+                data-expanded={expanded}
+                aria-expanded={expanded}
+                aria-label="öffnen"
+              >
+                <Icon title={expanded ? 'schliessen' : 'öffnen'}>
+                  <ExpandMoreIcon />
+                </Icon>
+              </CardActionIconButton>
+            </StyledCardActions>
+            <Collapse in={expanded} timeout="auto" unmountOnExit>
+              <StyledCardContent>
+                <DownloadCardButton
+                      onClick={async () => {
+                        setMessage('Export "Massnahmen" wird vorbereitet...')
+                        try {
+                          const { data } = await client.query({
+                            query: gql`
+                              query view {
+                                allVMassns {
+                                  nodes {
+                                    apId
+                                    familie
+                                    artname
+                                    apBearbeitung
+                                    apStartJahr
+                                    apUmsetzung
+                                    popId
+                                    popNr
+                                    popName
+                                    popStatus
+                                    popBekanntSeit
+                                    popStatusUnklar
+                                    popStatusUnklarBegruendung
+                                    popX
+                                    popY
+                                    tpopId
+                                    tpopNr
+                                    tpopGemeinde
+                                    tpopFlurname
+                                    tpopStatus
+                                    tpopBekanntSeit
+                                    tpopStatusUnklar
+                                    tpopStatusUnklarGrund
+                                    tpopX
+                                    tpopY
+                                    tpopRadius
+                                    tpopHoehe
+                                    tpopExposition
+                                    tpopKlima
+                                    tpopNeigung
+                                    tpopBeschreibung
+                                    tpopKatasterNr
+                                    tpopApberRelevant
+                                    tpopEigentuemer
+                                    tpopKontakt
+                                    tpopNutzungszone
+                                    tpopBewirtschafter
+                                    tpopBewirtschaftung
+                                    id
+                                    jahr
+                                    datum
+                                    typ
+                                    beschreibung
+                                    bearbeiter
+                                    bemerkungen
+                                    planVorhanden
+                                    planBezeichnung
+                                    flaeche
+                                    form
+                                    pflanzanordnung
+                                    markierung
+                                    anzTriebe
+                                    anzPflanzen
+                                    anzPflanzstellen
+                                    wirtspflanze
+                                    herkunftPop
+                                    sammeldatum
+                                    changed
+                                    changedBy
+                                  }
+                                }
+                              }`
+                          })
+                          exportModule({
+                            data: get(data, 'allVMassns.nodes', []),
+                            fileName: 'Massnahmen',
+                            fileType,
+                            applyMapFilterToExport,
+                            mapFilter,
+                            idKey: 'id',
+                            xKey: 'tpopX',
+                            yKey: 'tpopY',
+                          })
+                        } catch(error) {
+                          errorState.add(error)
+                        }
+                        setMessage(null)
+                      }}
+                >
+                  Massnahmen
+                </DownloadCardButton>
+                <DownloadCardButton
+                      onClick={async () => {
+                        setMessage('Export "MassnahmenWebGisBun" wird vorbereitet...')
+                        try {
+                          const { data } = await client.query({
+                            query: gql`
+                              query view {
+                                allVMassnWebgisbuns {
+                                  nodes {
+                                    APARTID: apartid
+                                    APART: apart
+                                    POPGUID: popguid
+                                    POPNR: popnr
+                                    TPOPGUID: tpopguid
+                                    TPOPNR: tpopnr
+                                    TPOP_X: tpopX
+                                    TPOP_Y: tpopY
+                                    TPOPSTATUS: tpopstatus
+                                    MASSNGUID: massnguid
+                                    MASSNJAHR: massnjahr
+                                    MASSNDAT: massndat
+                                    MASSTYP: masstyp
+                                    MASSNMASSNAHME: massnmassnahme
+                                    MASSNBEARBEITER: massnbearbeiter
+                                    MASSNBEMERKUNG: massnbemerkung
+                                    MASSNPLAN: massnplan
+                                    MASSPLANBEZ: massplanbez
+                                    MASSNFLAECHE: massnflaeche
+                                    MASSNFORMANSIEDL: massnformansiedl
+                                    MASSNPFLANZANORDNUNG: massnpflanzanordnung
+                                    MASSNMARKIERUNG: massnmarkierung
+                                    MASSNANZTRIEBE: massnanztriebe
+                                    MASSNANZPFLANZEN: massnanzpflanzen
+                                    MASSNANZPFLANZSTELLEN: massnanzpflanzstellen
+                                    MASSNWIRTSPFLANZEN: massnwirtspflanzen
+                                    MASSNHERKUNFTSPOP: massnherkunftspop
+                                    MASSNSAMMELDAT: massnsammeldat
+                                    MASSNCHANGEDAT: massnchangedat
+                                    MASSNCHANGEBY: massnchangeby
+                                  }
+                                }
+                              }`
+                          })
+                          exportModule({
+                            data: get(data, 'allVMassnWebgisbuns.nodes', []),
+                            fileName: 'MassnahmenWebGisBun',
+                            fileType,
+                            applyMapFilterToExport,
+                            mapFilter,
+                            idKey: 'MASSNGUID',
+                            xKey: 'TPOP_X',
+                            yKey: 'TPOP_Y',
+                          })
+                        } catch(error) {
+                          errorState.add(error)
+                        }
+                        setMessage(null)
+                      }}
+                >
+                  Massnahmen für WebGIS BUN
+                </DownloadCardButton>
+              </StyledCardContent>
+            </Collapse>
+            {
+              !!message &&
+              <Message message={message} />
+            }
+          </StyledCard>
         }
-      </StyledCard>
+      </ApolloConsumer>
     }
-  </ApolloConsumer>
+  </Subscribe>
 )
 
 export default enhance(Massnahmen)

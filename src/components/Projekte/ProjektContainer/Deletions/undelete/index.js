@@ -3,7 +3,6 @@ import upperFirst from 'lodash/upperFirst'
 import camelCase from 'lodash/camelCase'
 import app from 'ampersand-app'
 
-import listError from '../../../../../modules/listError'
 import setTreeKey from './setTreeKey.graphql'
 
 const addNodeToOpenNodes = (openNodes, url) => {
@@ -21,6 +20,7 @@ export default async ({
   refetchTree,
   setShowDeletions,
   deleteState,
+  errorState,
 }:{
   datasetsDeleted: Array<Object>,
   dataset: Object,
@@ -28,6 +28,7 @@ export default async ({
   refetchTree: () => void,
   setShowDeletions: () => void,
   deleteState: Object,
+  errorState: Object,
 }) => {
   const { client } = app
   const { table, url, data } = dataset
@@ -39,7 +40,7 @@ export default async ({
   try {
     mutation = await import('./' + queryName + '.graphql')
   } catch (error) {
-    return listError(new Error(
+    return errorState.add(new Error(
       `Die Abfrage, um einen Datensatz für die Tabelle ${table} zu erstellen, scheint zu fehlen. Sorry!`
     ))
   }
@@ -50,7 +51,7 @@ export default async ({
       variables: data,
     }) 
   } catch (error) {
-    return listError(error)
+    return errorState.add(error)
   }
   console.log('undelete: create mutation run')
 
