@@ -7,6 +7,8 @@ import sortBy from 'lodash/sortBy'
 import format from 'date-fns/format'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
+import withState from 'recompose/withState'
+import withLifecycle from '@hocs/with-lifecycle'
 
 import RadioButton from '../../../shared/RadioButton'
 import RadioButtonGroup from '../../../shared/RadioButtonGroup'
@@ -19,7 +21,6 @@ import constants from '../../../../modules/constants'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import dataGql from './data.graphql'
 import updateTpopkontrByIdGql from './updateTpopkontrById.graphql'
-import listError from '../../../../modules/listError'
 
 const Container = styled.div`
   height: 100%;
@@ -37,8 +38,9 @@ const FieldsContainer = styled.div`
 `
 
 const enhance = compose(
+  withState('errors', 'setErrors', ({})),
   withHandlers({
-    saveToDb: props => async ({ row, field, value, updateTpopkontr }) => {
+    saveToDb: ({ setErrors, errors }) => async ({ row, field, value, updateTpopkontr }) => {
       try {
         await updateTpopkontr({
           variables: {
@@ -89,10 +91,18 @@ const enhance = compose(
           },
         })
       } catch (error) {
-        return listError(error)
+        return setErrors({ [field]: error.message })
+      }
+      setErrors(({}))
+    },
+  }),
+  withLifecycle({
+    onDidUpdate(prevProps, props) {
+      if (prevProps.id !== props.id) {
+        props.setErrors(({}))
       }
     },
-  })
+  }),
 )
 
 const jungpflanzenVorhandenDataSource = [
@@ -104,10 +114,12 @@ const Tpopfreiwkontr = ({
   id,
   saveToDb,
   dimensions = { width: 380 },
+  errors,
 }: {
   id: String,
   saveToDb: () => void,
-  dimensions: number,
+  dimensions: Number,
+  errors: Object,
 }) =>
   <Query query={dataGql} variables={{ id }}>
     {({ loading, error, data }) => {
@@ -152,6 +164,7 @@ const Tpopfreiwkontr = ({
                         updateTpopkontr,
                       })
                     }}
+                    error={errors.jahr}
                   />
                   <DateFieldWithPicker
                     key={`${row.id}datum`}
@@ -171,6 +184,7 @@ const Tpopfreiwkontr = ({
                         updateTpopkontr,
                       })
                     }}
+                    error={errors.datum}
                   />
                   <AutoComplete
                     key={`${row.id}bearbeiter`}
@@ -185,6 +199,7 @@ const Tpopfreiwkontr = ({
                         updateTpopkontr,
                       })
                     }
+                    error={errors.bearbeiter}
                   />
                   <RadioButton
                     key={`${row.id}planVorhanden`}
@@ -198,6 +213,7 @@ const Tpopfreiwkontr = ({
                         updateTpopkontr,
                       })
                     }
+                    error={errors.planVorhanden}
                   />
                   <TextField
                     key={`${row.id}flaecheUeberprueft`}
@@ -212,6 +228,7 @@ const Tpopfreiwkontr = ({
                         updateTpopkontr,
                       })
                     }
+                    error={errors.flaecheUeberprueft}
                   />
                   <TextField
                     key={`${row.id}deckungApArt`}
@@ -226,6 +243,7 @@ const Tpopfreiwkontr = ({
                         updateTpopkontr,
                       })
                     }
+                    error={errors.deckungApArt}
                   />
                   <TextField
                     key={`${row.id}deckungNackterBoden`}
@@ -240,6 +258,7 @@ const Tpopfreiwkontr = ({
                         updateTpopkontr,
                       })
                     }
+                    error={errors.deckungNackterBoden}
                   />
                   <RadioButtonGroup
                     label="Auch junge Pflanzen vorhanden"
@@ -253,6 +272,7 @@ const Tpopfreiwkontr = ({
                         updateTpopkontr,
                       })
                     }
+                    error={errors.jungpflanzenVorhanden}
                   />
                   <TextField
                     key={`${row.id}vegetationshoeheMaximum`}
@@ -267,6 +287,7 @@ const Tpopfreiwkontr = ({
                         updateTpopkontr,
                       })
                     }
+                    error={errors.vegetationshoeheMaximum}
                   />
                   <TextField
                     key={`${row.id}vegetationshoeheMittel`}
@@ -281,6 +302,7 @@ const Tpopfreiwkontr = ({
                         updateTpopkontr,
                       })
                     }
+                    error={errors.vegetationshoeheMittel}
                   />
                   <TextField
                     key={`${row.id}gefaehrdung`}
@@ -296,6 +318,7 @@ const Tpopfreiwkontr = ({
                         updateTpopkontr,
                       })
                     }
+                    error={errors.gefaehrdung}
                   />
                   <TextField
                     key={`${row.id}bemerkungen`}
@@ -311,6 +334,7 @@ const Tpopfreiwkontr = ({
                         updateTpopkontr,
                       })
                     }
+                    error={errors.bemerkungen}
                   />
                   <StringToCopy text={row.id} label="GUID" />
                 </FieldsContainer>
