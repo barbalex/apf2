@@ -111,6 +111,7 @@ class Tree extends Component {
       mapFilter,
       mapIdsFiltered,
     } = this.props
+    console.log('Tree, rowRenderer:', {key})
     
     return (
       <Row

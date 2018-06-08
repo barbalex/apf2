@@ -1,5 +1,5 @@
 // @flow
-import React from 'react'
+import React, { Fragment } from 'react'
 import styled from 'styled-components'
 import { ContextMenuTrigger } from 'react-contextmenu'
 import SwapVerticalCircleIcon from '@material-ui/icons/SwapVerticalCircle'
@@ -176,8 +176,8 @@ const Row = ({
   mapFilter,
   mapIdsFiltered,
 }: {
-  keyPassed?: number,
-  index: number,
+  keyPassed?: String,
+  index: Number,
   style: Object,
   tree: Object,
   nodes: Array<Object>,
@@ -228,7 +228,7 @@ const Row = ({
     node.nodeType === 'table' && node.id === get(data, 'copyingBiotop.id')
 
   return (
-    <div key={keyPassed} style={style}>
+    <Fragment>
       <ContextMenuTrigger
         id={`${treeName}${node.menuType}`}
         collect={props => myProps}
@@ -411,7 +411,7 @@ const Row = ({
           )}
         </StyledNode>
       </ContextMenuTrigger>
-    </div>
+    </Fragment>
   )
 }
 
