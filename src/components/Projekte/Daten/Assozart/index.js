@@ -6,6 +6,8 @@ import { Query, Mutation } from 'react-apollo'
 import get from 'lodash/get'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
+import withState from 'recompose/withState'
+import withLifecycle from '@hocs/with-lifecycle'
 
 import TextField from '../../../shared/TextField'
 import AutoComplete from '../../../shared/Autocomplete'
@@ -13,7 +15,6 @@ import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import dataGql from './data.graphql'
 import updateAssozartByIdGql from './updateAssozartById.graphql'
-import listError from '../../../../modules/listError'
 
 const Container = styled.div`
   height: 100%;
@@ -27,8 +28,9 @@ const FieldsContainer = styled.div`
 `
 
 const enhance = compose(
+  withState('errors', 'setErrors', ({})),
   withHandlers({
-    saveToDb: ({ refetchTree }) => async ({ row, field, value, updateAssozart }) => {
+    saveToDb: ({ refetchTree, setErrors, errors }) => async ({ row, field, value, updateAssozart }) => {
       try {
         await updateAssozart({
           variables: {
@@ -52,19 +54,29 @@ const enhance = compose(
           },
         })
       } catch (error) {
-        return listError(error)
+        return setErrors({ [field]: error.message })
       }
+      setErrors(({}))
       if (['aeId'].includes(field)) refetchTree()
     },
-  })
+  }),
+  withLifecycle({
+    onDidUpdate(prevProps, props) {
+      if (prevProps.id !== props.id) {
+        props.setErrors(({}))
+      }
+    },
+  }),
 )
 
 const Assozart = ({
   id,
-  saveToDb
+  saveToDb,
+  errors,
 }: {
   id: String,
-  saveToDb: () => void
+  saveToDb: () => void,
+  errors: Object,
 }) => (
   <Query query={dataGql} variables={{ id }}>
     {({ loading, error, data }) => {
@@ -108,6 +120,7 @@ const Assozart = ({
                     saveToDb={value =>
                       saveToDb({ row, field: 'aeId', value, updateAssozart })
                     }
+                    error={errors.aeId}
                   />
                   <TextField
                     key={`${row.id}bemerkungen`}
@@ -123,6 +136,7 @@ const Assozart = ({
                         updateAssozart,
                       })
                     }
+                    error={errors.bemerkungen}
                   />
                 </FieldsContainer>
               )}
