@@ -224,7 +224,8 @@ const enhance = compose(
             baseUrl,
             menuType,
             id,
-            refetch: refetchTree
+            refetch: refetchTree,
+            errorState,
           })
         },
         openLowerNodes() {

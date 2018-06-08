@@ -6,7 +6,6 @@ import camelCase from 'lodash/camelCase'
 import get from 'lodash/get'
 
 import tables from '../../../../modules/tables'
-import listError from '../../../../modules/listError'
 import setTreeKey from './setTreeKey.graphql'
 
 export default async ({
@@ -17,6 +16,7 @@ export default async ({
   menuType,
   baseUrl,
   refetch,
+  errorState,
 }:{
   tree: Object,
   tablePassed: String,
@@ -25,6 +25,7 @@ export default async ({
   menuType: String,
   baseUrl: Array<String>,
   refetch: () => void,
+  errorState: Object,
 }): any => {
   const { client } = app
   let table = tablePassed
@@ -35,7 +36,7 @@ export default async ({
     parentIdField: String,
   } = tables.find(t => t.table === table)
   if (!tableMetadata) {
-    return listError(
+    return errorState.add(
       new Error(`no table meta data found for table "${table}"`)
     )
   }
@@ -46,7 +47,7 @@ export default async ({
   const parentIdField = camelCase(tableMetadata.parentIdField)
   const idField = tableMetadata.idField
   if (!idField) {
-    return listError(
+    return errorState.add(
       new Error('new dataset not created as no idField could be found')
     )
   }
@@ -122,7 +123,7 @@ export default async ({
   try {
     result = await client.mutate({ mutation, variables })
   } catch (error) {
-    listError(error)
+    errorState.add(error)
   }
   const row = get(result, `data.create${upperFirst(camelCase(table))}.${camelCase(table)}`)
   // set new url

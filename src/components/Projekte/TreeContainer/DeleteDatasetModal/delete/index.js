@@ -8,16 +8,17 @@ import gql from 'graphql-tag'
 import app from 'ampersand-app'
 
 import tables from '../../../../../modules/tables'
-import listError from '../../../../../modules/listError'
 import setTreeKey from './setTreeKey.graphql'
 
 export default async ({
   dataPassedIn,
   deleteState,
+  errorState,
   refetchTree,
 }:{
   dataPassedIn: Object,
   deleteState: Object,
+  errorState: Object,
   refetchTree: () => void
 }): Promise<void> => {
   const { client } = app
@@ -27,7 +28,7 @@ export default async ({
   // some tables need to be translated, i.e. tpopfreiwkontr
   const tableMetadata = tables.find(t => t.table === tablePassed)
   if (!tableMetadata) {
-    return listError(
+    return errorState.add(
       new Error(
         `Error in action deleteDatasetDemand: no table meta data found for table "${tablePassed}"`
       )
@@ -52,7 +53,7 @@ export default async ({
       variables: { id },
     }) 
   } catch (error) {
-    return listError(error)
+    return errorState.add(error)
   }
   let data = {...get(result, `data.${camelCase(table)}ById`)}
   data = omit(data, '__typename')
@@ -81,7 +82,7 @@ export default async ({
       variables: { id },
     }) 
   } catch (error) {
-    return listError(error)
+    return errorState.add(error)
   }
 
   // if tpop was deleted: set beob free
