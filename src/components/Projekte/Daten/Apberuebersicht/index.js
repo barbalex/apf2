@@ -5,13 +5,14 @@ import { Query, Mutation } from 'react-apollo'
 import get from 'lodash/get'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
+import withState from 'recompose/withState'
+import withLifecycle from '@hocs/with-lifecycle'
 
 import TextField from '../../../shared/TextField'
 import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import dataGql from './data.graphql'
 import updateApberuebersichtByIdGql from './updateApberuebersichtById.graphql'
-import listError from '../../../../modules/listError'
 
 const Container = styled.div`
   height: 100%;
@@ -26,8 +27,9 @@ const FieldsContainer = styled.div`
 `
 
 const enhance = compose(
+  withState('errors', 'setErrors', ({})),
   withHandlers({
-    saveToDb: props => async ({ row, field, value, updateApberuebersicht }) => {
+    saveToDb: ({ setErrors, errors }) => async ({ row, field, value, updateApberuebersicht }) => {
       try {
         await updateApberuebersicht({
           variables: {
@@ -49,18 +51,28 @@ const enhance = compose(
           },
         })
       } catch (error) {
-        return listError(error)
+        return setErrors({ [field]: error.message })
+      }
+      setErrors(({}))
+    },
+  }),
+  withLifecycle({
+    onDidUpdate(prevProps, props) {
+      if (prevProps.id !== props.id) {
+        props.setErrors(({}))
       }
     },
-  })
+  }),
 )
 
 const Apberuebersicht = ({
   id,
   saveToDb,
+  errors,
 }: {
   id: String,
   saveToDb: () => void,
+  errors: Object,
 }) => (
   <Query query={dataGql} variables={{ id }}>
     {({ loading, error, data }) => {
@@ -94,6 +106,7 @@ const Apberuebersicht = ({
                         updateApberuebersicht,
                       })
                     }
+                    error={errors.jahr}
                   />
                   <TextField
                     key={`${row.id}bemerkungen`}
@@ -109,6 +122,7 @@ const Apberuebersicht = ({
                         updateApberuebersicht,
                       })
                     }
+                    error={errors.bemerkungen}
                   />
                 </FieldsContainer>
               )}
