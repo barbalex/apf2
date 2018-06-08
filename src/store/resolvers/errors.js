@@ -26,6 +26,7 @@ export default {
           `
       })
       const errors = get(data, 'errors', [])
+      console.log('resolvers, errors:', {data,errors})
       const newErrors = [
         ...errors,
         error,
@@ -37,6 +38,7 @@ export default {
       })
       // pop after 10 seconds
       setTimeout(() => {
+        console.log('resolvers, errors: will pop error')
         const data = cache.readQuery({
           query: gql`
               query Query {
@@ -45,8 +47,10 @@ export default {
             `
         })
         const errors = get(data, 'errors')
+        console.log('resolvers, errors after timeout:', {data,errors})
         const newErrors = [ ...errors ]
         newErrors.pop()
+        console.log('resolvers, errors after timeout:', {newErrors})
         cache.writeData({
           data: {
             errors: newErrors

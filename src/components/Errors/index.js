@@ -1,11 +1,10 @@
 // @flow
 import React from 'react'
 import styled from 'styled-components'
-import { Query } from 'react-apollo'
-import get from 'lodash/get'
+import { Subscribe } from 'unstated'
 
 import ErrorBoundary from '../shared/ErrorBoundary'
-import dataGql from './data.graphql'
+import ErrorState from '../../state/Error'
 
 const Container = styled.div`
   position: absolute;
@@ -27,24 +26,17 @@ const ErrorDiv = styled.div`
   font-size: 14px;
 `
 
-const Errors = () => (
-  <Query query={dataGql} >
-    {({ loading, error: loadingError, data }) => {
-      if (loadingError) return `Fehler: ${loadingError.message}`
-
-      const errors = get(data, 'errors', [])
-
-      return (
-        <ErrorBoundary>
-          <Container>
-            {errors.map((error, index) => (
-              <ErrorDiv key={index}>{error}</ErrorDiv>
-            ))}
-          </Container>
-        </ErrorBoundary>
-      )
-    }}
-  </Query>
-)
+const Errors = () =>
+  <Subscribe to={[ErrorState]}>
+    {errorState =>
+      <ErrorBoundary>
+        <Container>
+          {errorState.state.errors.map((error, index) => (
+            <ErrorDiv key={index}>{error.message}</ErrorDiv>
+          ))}
+        </Container>
+      </ErrorBoundary>
+    }
+  </Subscribe>
 
 export default Errors

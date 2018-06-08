@@ -6,6 +6,7 @@ import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
+import withState from 'recompose/withState'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroup'
 import TextField from '../../../shared/TextField'
@@ -13,7 +14,6 @@ import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import dataGql from './data.graphql'
 import updateTpopberByIdGql from './updateTpopberById.graphql'
-import listError from '../../../../modules/listError'
 
 const Container = styled.div`
   height: 100%;
@@ -27,8 +27,14 @@ const FieldsContainer = styled.div`
 `
 
 const enhance = compose(
+  withState('errors', 'setErrors', ({})),
   withHandlers({
-    saveToDb: ({ refetchTree }) => async ({ row, field, value, updateTpopber }) => {
+    saveToDb: ({ refetchTree, setErrors, errors }) => async ({
+      row,
+      field,
+      value,
+      updateTpopber,
+    }) => {
       try {
         await updateTpopber({
           variables: {
@@ -54,7 +60,16 @@ const enhance = compose(
           },
         })
       } catch (error) {
-        return listError(error)
+        setErrors({
+          ...errors,
+          [field]: error.message
+        })
+        setTimeout(() => {
+          const newErrors = {...errors}
+          delete newErrors[field]
+          setErrors(newErrors)
+        }, 1000 * 10)
+        return
       }
       if (['entwicklung'].includes(field)) refetchTree()
     },
@@ -63,11 +78,13 @@ const enhance = compose(
 
 const Tpopber = ({
   id,
-  saveToDb
+  saveToDb,
+  errors,
 }: {
   id: String,
-  saveToDb: () => void
-}) => (
+  saveToDb: () => void,
+  errors: Object,
+}) =>
   <Query query={dataGql} variables={{ id }}>
     {({ loading, error, data }) => {
       if (loading)
@@ -102,8 +119,14 @@ const Tpopber = ({
                     value={row.jahr}
                     type="number"
                     saveToDb={value =>
-                      saveToDb({ row, field: 'jahr', value, updateTpopber })
+                      saveToDb({
+                        row,
+                        field: 'jahr',
+                        value,
+                        updateTpopber,
+                      })
                     }
+                    error={errors.jahr}
                   />
                   <RadioButtonGroup
                     key={`${row.id}entwicklung`}
@@ -142,6 +165,5 @@ const Tpopber = ({
       )
     }}
   </Query>
-)
 
 export default enhance(Tpopber)
