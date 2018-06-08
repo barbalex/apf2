@@ -8189,7 +8189,7 @@ react-dev-utils@6.0.0-next.66cc7a90:
     strip-ansi "4.0.0"
     text-table "0.2.0"
 
-react-dom@16.4.0:
+react-dom@16.4.0, react-dom@^16.4.0:
   version "16.4.0"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.4.0.tgz#099f067dd5827ce36a29eaf9a6cdc7cbf6216b1e"
   dependencies:
@@ -8378,7 +8378,7 @@ react-virtualized@9.19.1:
     prop-types "^15.6.0"
     react-lifecycles-compat "^3.0.4"
 
-react@16.4.0:
+react@16.4.0, react@^16.4.0:
   version "16.4.0"
   resolved "https://registry.yarnpkg.com/react/-/react-16.4.0.tgz#402c2db83335336fba1962c08b98c6272617d585"
   dependencies:
@@ -9981,6 +9981,14 @@ unset-value@^1.0.0:
   dependencies:
     has-value "^0.3.1"
     isobject "^3.0.0"
+
+unstated-connect@^0.0.3:
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/unstated-connect/-/unstated-connect-0.0.3.tgz#16ade203c2b6df72549fda63fe36e3dd37cf4a5e"
+  dependencies:
+    react "^16.4.0"
+    react-dom "^16.4.0"
+    unstated "^2.1.1"
 
 unstated@^2.1.1:
   version "2.1.1"
