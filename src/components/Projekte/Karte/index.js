@@ -19,7 +19,6 @@ import debounceHandler from '@hocs/debounce-handler'
 import sortBy from 'lodash/sortBy'
 import get from 'lodash/get'
 import app from 'ampersand-app'
-import { Subscribe } from 'unstated'
 
 import LayersControl from './LayersControl'
 import OsmColor from './layers/OsmColor'
@@ -63,7 +62,6 @@ import CoordinatesControl from './CoordinatesControl/index.js'
 import epsg4326to2056 from '../../../modules/epsg4326to2056'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import updateTpopById from './updateTpopById.graphql'
-import ErrorState from '../../../state/Error'
 //import getBounds from '../../../modules/getBounds'
 
 // this does not work
@@ -154,6 +152,7 @@ const Karte = ({
   setDetailplaene,
   markierungen,
   setMarkierungen,
+  errorState,
 }: {
   tree: Object,
   activeNodes: Object,
@@ -189,6 +188,7 @@ const Karte = ({
   setDetailplaene: () => void,
   markierungen: Object,
   setMarkierungen: () => void,
+  errorState: Object,
 }) => {
     const MapElement = !!idOfTpopBeingLocalized ? StyledMapLocalizing : StyledMap
     const assigning = get(data, 'assigningBeob')
@@ -264,6 +264,7 @@ const Karte = ({
         <Detailplaene
           detailplaene={detailplaene}
           setDetailplaene={setDetailplaene}
+          errorState={errorState}
         />
       ,
       Markierungen: () =>
@@ -303,135 +304,130 @@ const Karte = ({
     const activeOverlaysSorted = sortBy(activeOverlays, activeOverlay =>
       overlays.findIndex(o => o.value === activeOverlay)
     )
-    console.log('Karte rendering')
   
     return (
-      <Subscribe to={[ErrorState]}>
-        {errorState =>
-          <ErrorBoundary>
-            <MapElement
-              bounds={bounds}
-              preferCanvas
-              onMouseMove={onMouseMove}
-              // need max and min zoom because otherwise
-              // something errors
-              // probably clustering function
-              maxZoom={22}
-              minZoom={0}
-              onClick={async event => {
-                /**
-                 * TODO
-                 * When clicking on Layertool
-                 * somehow Mapelement grabs the click event
-                 * although Layertool lies _over_ map element ??!!
-                 * So when localizing, if user wants to change base map,
-                 * click on Layertool sets new coordinates!
-                 */
-                if (!!idOfTpopBeingLocalized) {
-                  const { lat, lng } = event.latlng
-                  const [x, y] = epsg4326to2056(lng, lat)
-                  try {
-                    client.mutate({
-                      mutation: updateTpopById,
-                      variables: {
+      <ErrorBoundary>
+        <MapElement
+          bounds={bounds}
+          preferCanvas
+          onMouseMove={onMouseMove}
+          // need max and min zoom because otherwise
+          // something errors
+          // probably clustering function
+          maxZoom={22}
+          minZoom={0}
+          onClick={async event => {
+            /**
+             * TODO
+             * When clicking on Layertool
+             * somehow Mapelement grabs the click event
+             * although Layertool lies _over_ map element ??!!
+             * So when localizing, if user wants to change base map,
+             * click on Layertool sets new coordinates!
+             */
+            if (!!idOfTpopBeingLocalized) {
+              const { lat, lng } = event.latlng
+              const [x, y] = epsg4326to2056(lng, lat)
+              try {
+                client.mutate({
+                  mutation: updateTpopById,
+                  variables: {
+                    id: idOfTpopBeingLocalized,
+                    x,
+                    y
+                  },
+                  optimisticResponse: {
+                    __typename: 'Mutation',
+                    updateTpopById: {
+                      tpop: {
                         id: idOfTpopBeingLocalized,
                         x,
-                        y
+                        y,
+                        __typename: 'Tpop',
                       },
-                      optimisticResponse: {
-                        __typename: 'Mutation',
-                        updateTpopById: {
-                          tpop: {
-                            id: idOfTpopBeingLocalized,
-                            x,
-                            y,
-                            __typename: 'Tpop',
-                          },
-                          __typename: 'Tpop',
-                        },
-                      },
-                    })
-                  } catch (error) {
-                    errorState.add(error)
-                  }
-                  setIdOfTpopBeingLocalized(null)
-                }
-              }}
-              onZoomlevelschange={event => {
-                // need to update bounds, otherwise map jumps back
-                // when adding new tpop
-                const mapBounds = event.target.getBounds()
-                setBounds([mapBounds._southWest, mapBounds._northEast])
-              }}
-              onZoomend={event => {
-                // need to update bounds, otherwise map jumps back
-                const mapBounds = event.target.getBounds()
-                setBounds([mapBounds._southWest, mapBounds._northEast])
-              }}
-              onMoveend={event => {
-                // need to update bounds, otherwise map jumps back
-                const mapBounds = event.target.getBounds()
-                setBounds([mapBounds._southWest, mapBounds._northEast])
-              }}
-            >
-              {activeBaseLayer && <BaseLayerComponent />}
-              {activeOverlaysSorted
-                .map((overlayName, index) => {
-                  const OverlayComponent = OverlayComponents[overlayName]
-                  return <OverlayComponent key={index} />
+                      __typename: 'Tpop',
+                    },
+                  },
                 })
-                .reverse()}
-              {activeApfloraLayersSorted
-                .map((apfloraLayerName, index) => {
-                  const ApfloraLayerComponent = ApfloraLayerComponents[apfloraLayerName]
-                  return <ApfloraLayerComponent key={index} />
-                })
-                .reverse()
+              } catch (error) {
+                errorState.add(error)
               }
-              <ScaleControl imperial={false} />
-              <LayersControl
-                data={data}
-                tree={tree}
-                activeNodes={activeNodes}
-                activeBaseLayer={activeBaseLayer}
-                setActiveBaseLayer={setActiveBaseLayer}
-                apfloraLayers={apfloraLayers}
-                setApfloraLayers={setApfloraLayers}
-                activeApfloraLayers={activeApfloraLayers}
-                setActiveApfloraLayers={setActiveApfloraLayers}
-                overlays={overlays}
-                setOverlays={setOverlays}
-                activeOverlays={activeOverlays}
-                setActiveOverlays={setActiveOverlays}
-                bounds={bounds}
-                setBounds={setBounds}
-                mapFilter={mapFilter}
-                mapIdsFiltered={mapIdsFiltered}
-                mapPopIdsFiltered={mapPopIdsFiltered}
-                mapTpopIdsFiltered={mapTpopIdsFiltered}
-                mapBeobNichtBeurteiltIdsFiltered={mapBeobNichtBeurteiltIdsFiltered}
-                mapBeobNichtZuzuordnenIdsFiltered={mapBeobNichtZuzuordnenIdsFiltered}
-                mapBeobZugeordnetIdsFiltered={mapBeobZugeordnetIdsFiltered}
-                // this enforces rerendering when sorting changes
-                activeOverlaysString={activeOverlays.join()}
-                activeApfloraLayersString={activeApfloraLayers.join()}
-              />
-              <MeasureControl />
-              <FullScreenControl />
-              {
-                activeApfloraLayers.includes('mapFilter') &&
-                <DrawControl setStoreMapFilter={setMapFilter} />
-                }
-              {/*
-              need to get background maps to show when printing A4
-              <PrintControl />
-              */}
-              <PngControl />
-              <CoordinatesControl />
-            </MapElement>
-          </ErrorBoundary>
-        }
-      </Subscribe>
+              setIdOfTpopBeingLocalized(null)
+            }
+          }}
+          onZoomlevelschange={event => {
+            // need to update bounds, otherwise map jumps back
+            // when adding new tpop
+            const mapBounds = event.target.getBounds()
+            setBounds([mapBounds._southWest, mapBounds._northEast])
+          }}
+          onZoomend={event => {
+            // need to update bounds, otherwise map jumps back
+            const mapBounds = event.target.getBounds()
+            setBounds([mapBounds._southWest, mapBounds._northEast])
+          }}
+          onMoveend={event => {
+            // need to update bounds, otherwise map jumps back
+            const mapBounds = event.target.getBounds()
+            setBounds([mapBounds._southWest, mapBounds._northEast])
+          }}
+        >
+          {activeBaseLayer && <BaseLayerComponent />}
+          {activeOverlaysSorted
+            .map((overlayName, index) => {
+              const OverlayComponent = OverlayComponents[overlayName]
+              return <OverlayComponent key={index} />
+            })
+            .reverse()}
+          {activeApfloraLayersSorted
+            .map((apfloraLayerName, index) => {
+              const ApfloraLayerComponent = ApfloraLayerComponents[apfloraLayerName]
+              return <ApfloraLayerComponent key={index} />
+            })
+            .reverse()
+          }
+          <ScaleControl imperial={false} />
+          <LayersControl
+            data={data}
+            tree={tree}
+            activeNodes={activeNodes}
+            activeBaseLayer={activeBaseLayer}
+            setActiveBaseLayer={setActiveBaseLayer}
+            apfloraLayers={apfloraLayers}
+            setApfloraLayers={setApfloraLayers}
+            activeApfloraLayers={activeApfloraLayers}
+            setActiveApfloraLayers={setActiveApfloraLayers}
+            overlays={overlays}
+            setOverlays={setOverlays}
+            activeOverlays={activeOverlays}
+            setActiveOverlays={setActiveOverlays}
+            bounds={bounds}
+            setBounds={setBounds}
+            mapFilter={mapFilter}
+            mapIdsFiltered={mapIdsFiltered}
+            mapPopIdsFiltered={mapPopIdsFiltered}
+            mapTpopIdsFiltered={mapTpopIdsFiltered}
+            mapBeobNichtBeurteiltIdsFiltered={mapBeobNichtBeurteiltIdsFiltered}
+            mapBeobNichtZuzuordnenIdsFiltered={mapBeobNichtZuzuordnenIdsFiltered}
+            mapBeobZugeordnetIdsFiltered={mapBeobZugeordnetIdsFiltered}
+            // this enforces rerendering when sorting changes
+            activeOverlaysString={activeOverlays.join()}
+            activeApfloraLayersString={activeApfloraLayers.join()}
+          />
+          <MeasureControl />
+          <FullScreenControl />
+          {
+            activeApfloraLayers.includes('mapFilter') &&
+            <DrawControl setStoreMapFilter={setMapFilter} />
+            }
+          {/*
+          need to get background maps to show when printing A4
+          <PrintControl />
+          */}
+          <PngControl />
+          <CoordinatesControl />
+        </MapElement>
+      </ErrorBoundary>
     )
   }
 

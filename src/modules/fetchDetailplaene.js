@@ -2,9 +2,14 @@
 import axios from 'axios'
 
 import staticFilesBaseUrl from './staticFilesBaseUrl'
-import listError from './listError'
 
-export default (setDetailplaene: () => void): void => {
+export default ({
+  setDetailplaene,
+  errorState,
+}:{
+  setDetailplaene: () => void,
+  errorState: Object,
+}): void => {
   const baseURL = staticFilesBaseUrl
   const url = `/detailplaeneWgs84neu.json`
   axios
@@ -12,5 +17,5 @@ export default (setDetailplaene: () => void): void => {
     .then(({ data }) =>
       setDetailplaene(data)
     )
-    .catch(error => listError(error))
+    .catch(error => errorState.add(error))
 }

@@ -14,12 +14,14 @@ const onEachFeature = (feature, layer) => {
 
 const DetailplaeneLayer = ({
   detailplaene,
-  setDetailplaene
+  setDetailplaene,
+  errorState,
 }:{
   detailplaene: Object,
   setDetailplaene: () => void,
+  errorState: Object,
 }) => {
-  !detailplaene && fetchDetailplaene(setDetailplaene)
+  !detailplaene && fetchDetailplaene({ setDetailplaene, errorState })
 
   return (
     detailplaene &&
