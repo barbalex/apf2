@@ -11,6 +11,7 @@ import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 import format from 'date-fns/format'
 import gql from 'graphql-tag'
+import withLifecycle from '@hocs/with-lifecycle'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroup'
 import TextField from '../../../shared/TextField'
@@ -26,7 +27,6 @@ import ErrorBoundary from '../../../shared/ErrorBoundary'
 import dataGql from './data.graphql'
 import updateTpopkontrByIdGql from './updateTpopkontrById.graphql'
 import setUrlQueryValue from '../../../../modules/setUrlQueryValue'
-import listError from '../../../../modules/listError'
 
 const Container = styled.div`
   height: 100%;
@@ -72,6 +72,7 @@ const tpopkontrTypWerte = [
 ]
 
 const enhance = compose(
+  withState('errors', 'setErrors', ({})),
   withApollo,
   withState(
     'value',
@@ -91,7 +92,7 @@ const enhance = compose(
     }
   ),
   withHandlers({
-    saveToDb: ({ refetchTree }) => async ({ row, field, value, updateTpopkontr }) => {
+    saveToDb: ({ refetchTree, setErrors, errors }) => async ({ row, field, value, updateTpopkontr }) => {
       try {
         await updateTpopkontr({
           variables: {
@@ -188,13 +189,21 @@ const enhance = compose(
           },
         })
       } catch (error) {
-        return listError(error)
+        return setErrors({ [field]: error.message })
       }
+      setErrors(({}))
       if (['typ'].includes(field)) refetchTree()
     },
     onChangeTab: ({ setValue }) => (event, value) => {
       setUrlQueryValue({ key: 'feldkontrTab', value })
       setValue(value)
+    },
+  }),
+  withLifecycle({
+    onDidUpdate(prevProps, props) {
+      if (prevProps.id !== props.id) {
+        props.setErrors(({}))
+      }
     },
   }),
 )
@@ -206,6 +215,7 @@ const Tpopfeldkontr = ({
   value,
   setValue,
   saveToDb,
+  errors,
 }: {
   id: String,
   onChangeTab: () => void,
@@ -213,6 +223,7 @@ const Tpopfeldkontr = ({
   value: String,
   setValue: () => void,
   saveToDb: () => void,
+  errors: Object,
 }) =>
   <Query query={dataGql} variables={{ id }}>
     {({ loading, error, data, client }) => {
@@ -299,6 +310,7 @@ const Tpopfeldkontr = ({
                             updateTpopkontr,
                           })
                         }}
+                        error={errors.jahr}
                       />
                       <DateFieldWithPicker
                         key={`${row.id}datum`}
@@ -318,6 +330,7 @@ const Tpopfeldkontr = ({
                             updateTpopkontr,
                           })
                         }}
+                        error={errors.datum}
                       />
                       <RadioButtonGroup
                         key={`${row.id}typ`}
@@ -332,6 +345,7 @@ const Tpopfeldkontr = ({
                             updateTpopkontr,
                           })
                         }
+                        error={errors.typ}
                       />
                       <AutoComplete
                         key={`${row.id}bearbeiter`}
@@ -346,6 +360,7 @@ const Tpopfeldkontr = ({
                             updateTpopkontr,
                           })
                         }
+                        error={errors.bearbeiter}
                       />
                       <TextField
                         key={`${row.id}jungpflanzen_anzahl`}
@@ -360,6 +375,7 @@ const Tpopfeldkontr = ({
                             updateTpopkontr,
                           })
                         }
+                        error={errors.jungpflanzenAnzahl}
                       />
                       <TextField
                         key={`${row.id}vitalitaet`}
@@ -374,6 +390,7 @@ const Tpopfeldkontr = ({
                             updateTpopkontr,
                           })
                         }
+                        error={errors.vitalitaet}
                       />
                       <TextField
                         key={`${row.id}ueberlebensrate`}
@@ -388,6 +405,7 @@ const Tpopfeldkontr = ({
                             updateTpopkontr,
                           })
                         }
+                        error={errors.ueberlebensrate}
                       />
                       <RadioButtonGroupWithInfo
                         key={`${row.id}entwicklung`}
@@ -402,6 +420,7 @@ const Tpopfeldkontr = ({
                             updateTpopkontr,
                           })
                         }
+                        error={errors.entwicklung}
                         popover={TpopfeldkontrentwicklungPopover}
                       />
                       <TextField
@@ -419,6 +438,7 @@ const Tpopfeldkontr = ({
                             updateTpopkontr,
                           })
                         }
+                        error={errors.ursachen}
                       />
                       <TextField
                         key={`${row.id}erfolgsbeurteilung`}
@@ -434,6 +454,7 @@ const Tpopfeldkontr = ({
                             updateTpopkontr,
                           })
                         }
+                        error={errors.erfolgsbeurteilung}
                       />
                       <TextField
                         key={`${row.id}umsetzung_aendern`}
@@ -449,6 +470,7 @@ const Tpopfeldkontr = ({
                             updateTpopkontr,
                           })
                         }
+                        error={errors.umsetzungAendern}
                       />
                       <TextField
                         key={`${row.id}kontrolle_aendern`}
@@ -464,6 +486,7 @@ const Tpopfeldkontr = ({
                             updateTpopkontr,
                           })
                         }
+                        error={errors.kontrolleAendern}
                       />
                       <TextField
                         key={`${row.id}bemerkungen`}
@@ -479,6 +502,7 @@ const Tpopfeldkontr = ({
                             updateTpopkontr,
                           })
                         }
+                        error={errors.bemerkungen}
                       />
                       <StringToCopy text={row.id} label="id" />
                     </FormContainer>
@@ -498,6 +522,7 @@ const Tpopfeldkontr = ({
                             updateTpopkontr,
                           })
                         }
+                        error={errors.flaeche}
                       />
                       <Section>Vegetation</Section>
                       <AutoCompleteFromArray
@@ -513,6 +538,7 @@ const Tpopfeldkontr = ({
                             updateTpopkontr,
                           })
                         }
+                        error={errors.lrDelarze}
                       />
                       <AutoCompleteFromArray
                         key={`${row.id}lrUmgebungDelarze`}
@@ -527,6 +553,7 @@ const Tpopfeldkontr = ({
                             updateTpopkontr,
                           })
                         }
+                        error={errors.lrUmgebungDelarze}
                       />
                       <TextField
                         key={`${row.id}vegetationstyp`}
@@ -541,6 +568,7 @@ const Tpopfeldkontr = ({
                             updateTpopkontr,
                           })
                         }
+                        error={errors.vegetationstyp}
                       />
                       <TextField
                         key={`${row.id}konkurrenz`}
@@ -555,6 +583,7 @@ const Tpopfeldkontr = ({
                             updateTpopkontr,
                           })
                         }
+                        error={errors.konkurrenz}
                       />
                       <TextField
                         key={`${row.id}moosschicht`}
@@ -569,6 +598,7 @@ const Tpopfeldkontr = ({
                             updateTpopkontr,
                           })
                         }
+                        error={errors.moosschicht}
                       />
                       <TextField
                         key={`${row.id}krautschicht`}
@@ -583,6 +613,7 @@ const Tpopfeldkontr = ({
                             updateTpopkontr,
                           })
                         }
+                        error={errors.krautschicht}
                       />
                       <TextField
                         key={`${row.id}strauchschicht`}
@@ -597,6 +628,7 @@ const Tpopfeldkontr = ({
                             updateTpopkontr,
                           })
                         }
+                        error={errors.strauchschicht}
                       />
                       <TextField
                         key={`${row.id}baumschicht`}
@@ -611,6 +643,7 @@ const Tpopfeldkontr = ({
                             updateTpopkontr,
                           })
                         }
+                        error={errors.baumschicht}
                       />
                       <Section>Boden</Section>
                       <TextField
@@ -626,6 +659,7 @@ const Tpopfeldkontr = ({
                             updateTpopkontr,
                           })
                         }
+                        error={errors.bodenTyp}
                       />
                       <TextField
                         key={`${row.id}boden_kalkgehalt`}
@@ -640,6 +674,7 @@ const Tpopfeldkontr = ({
                             updateTpopkontr,
                           })
                         }
+                        error={errors.bodenKalkgehalt}
                       />
                       <TextField
                         key={`${row.id}boden_durchlaessigkeit`}
@@ -654,6 +689,7 @@ const Tpopfeldkontr = ({
                             updateTpopkontr,
                           })
                         }
+                        error={errors.bodenDurchlaessigkeit}
                       />
                       <TextField
                         key={`${row.id}boden_humus`}
@@ -668,6 +704,7 @@ const Tpopfeldkontr = ({
                             updateTpopkontr,
                           })
                         }
+                        error={errors.bodenHumus}
                       />
                       <TextField
                         key={`${row.id}boden_naehrstoffgehalt`}
@@ -682,6 +719,7 @@ const Tpopfeldkontr = ({
                             updateTpopkontr,
                           })
                         }
+                        error={errors.bodenNaehrstoffgehalt}
                       />
                       <TextField
                         key={`${row.id}boden_abtrag`}
@@ -696,6 +734,7 @@ const Tpopfeldkontr = ({
                             updateTpopkontr,
                           })
                         }
+                        error={errors.bodenAbtrag}
                       />
                       <TextField
                         key={`${row.id}wasserhaushalt`}
@@ -710,6 +749,7 @@ const Tpopfeldkontr = ({
                             updateTpopkontr,
                           })
                         }
+                        error={errors.wasserhaushalt}
                       />
                       <Section>Beurteilung</Section>
                       <TextField
@@ -726,6 +766,7 @@ const Tpopfeldkontr = ({
                             updateTpopkontr,
                           })
                         }
+                        error={errors.handlungsbedarf}
                       />
                       <RadioButtonGroup
                         key={`${row.id}idealbiotop_uebereinstimmung`}
@@ -740,6 +781,7 @@ const Tpopfeldkontr = ({
                             updateTpopkontr,
                           })
                         }
+                        error={errors.idealbiotopUebereinstimmung}
                       />
                     </FormContainer>
                   )}
