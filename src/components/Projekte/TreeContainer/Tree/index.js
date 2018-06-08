@@ -116,9 +116,7 @@ class Tree extends Component {
     return (
       <Row
         key={key}
-        keyPassed={key}
         index={index}
-        style={style}
         tree={tree}
         openNodes={tree.openNodes}
         activeNodes={activeNodes}

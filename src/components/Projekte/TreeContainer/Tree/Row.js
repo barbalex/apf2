@@ -161,9 +161,7 @@ const BiotopCopyingIcon = styled(PhotoLibraryIcon)`
 `
 
 const Row = ({
-  keyPassed,
   index,
-  style,
   tree,
   nodes,
   activeNodes,
@@ -176,9 +174,7 @@ const Row = ({
   mapFilter,
   mapIdsFiltered,
 }: {
-  keyPassed?: String,
   index: Number,
-  style: Object,
   tree: Object,
   nodes: Array<Object>,
   activeNodes: Array<Object>,
