@@ -19,6 +19,7 @@ import constants from '../../../../modules/constants'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import dataGql from './data.graphql'
 import updateTpopkontrByIdGql from './updateTpopkontrById.graphql'
+import listError from '../../../../modules/listError'
 
 const Container = styled.div`
   height: 100%;
@@ -37,55 +38,60 @@ const FieldsContainer = styled.div`
 
 const enhance = compose(
   withHandlers({
-    saveToDb: props => ({ row, field, value, updateTpopkontr }) =>
-      updateTpopkontr({
-        variables: {
-          id: row.id,
-          [field]: value,
-        },
-        optimisticResponse: {
-          __typename: 'Mutation',
-          updateTpopkontrById: {
-            tpopkontr: {
-              id: row.id,
-              typ: field === 'typ' ? value : row.typ,
-              datum: field === 'datum' ? value : row.datum,
-              jahr: field === 'jahr' ? value : row.jahr,
-              bemerkungen: field === 'bemerkungen' ? value : row.bemerkungen,
-              flaecheUeberprueft:
-                field === 'flaecheUeberprueft' ? value : row.flaecheUeberprueft,
-              deckungVegetation:
-                field === 'deckungVegetation' ? value : row.deckungVegetation,
-              deckungNackterBoden:
-                field === 'deckungNackterBoden'
-                  ? value
-                  : row.deckungNackterBoden,
-              deckungApArt: field === 'deckungApArt' ? value : row.deckungApArt,
-              vegetationshoeheMaximum:
-                field === 'vegetationshoeheMaximum'
-                  ? value
-                  : row.vegetationshoeheMaximum,
-              vegetationshoeheMittel:
-                field === 'vegetationshoeheMittel'
-                  ? value
-                  : row.vegetationshoeheMittel,
-              gefaehrdung: field === 'gefaehrdung' ? value : row.gefaehrdung,
-              tpopId: field === 'tpopId' ? value : row.tpopId,
-              bearbeiter: field === 'bearbeiter' ? value : row.bearbeiter,
-              planVorhanden:
-                field === 'planVorhanden' ? value : row.planVorhanden,
-              jungpflanzenVorhanden:
-                field === 'jungpflanzenVorhanden'
-                  ? value
-                  : row.jungpflanzenVorhanden,
-              adresseByBearbeiter: row.adresseByBearbeiter,
-              aeEigenschaftenByArtId: row.tpopByTpopId,
+    saveToDb: props => async ({ row, field, value, updateTpopkontr }) => {
+      try {
+        updateTpopkontr({
+          variables: {
+            id: row.id,
+            [field]: value,
+          },
+          optimisticResponse: {
+            __typename: 'Mutation',
+            updateTpopkontrById: {
+              tpopkontr: {
+                id: row.id,
+                typ: field === 'typ' ? value : row.typ,
+                datum: field === 'datum' ? value : row.datum,
+                jahr: field === 'jahr' ? value : row.jahr,
+                bemerkungen: field === 'bemerkungen' ? value : row.bemerkungen,
+                flaecheUeberprueft:
+                  field === 'flaecheUeberprueft' ? value : row.flaecheUeberprueft,
+                deckungVegetation:
+                  field === 'deckungVegetation' ? value : row.deckungVegetation,
+                deckungNackterBoden:
+                  field === 'deckungNackterBoden'
+                    ? value
+                    : row.deckungNackterBoden,
+                deckungApArt: field === 'deckungApArt' ? value : row.deckungApArt,
+                vegetationshoeheMaximum:
+                  field === 'vegetationshoeheMaximum'
+                    ? value
+                    : row.vegetationshoeheMaximum,
+                vegetationshoeheMittel:
+                  field === 'vegetationshoeheMittel'
+                    ? value
+                    : row.vegetationshoeheMittel,
+                gefaehrdung: field === 'gefaehrdung' ? value : row.gefaehrdung,
+                tpopId: field === 'tpopId' ? value : row.tpopId,
+                bearbeiter: field === 'bearbeiter' ? value : row.bearbeiter,
+                planVorhanden:
+                  field === 'planVorhanden' ? value : row.planVorhanden,
+                jungpflanzenVorhanden:
+                  field === 'jungpflanzenVorhanden'
+                    ? value
+                    : row.jungpflanzenVorhanden,
+                adresseByBearbeiter: row.adresseByBearbeiter,
+                aeEigenschaftenByArtId: row.tpopByTpopId,
+                __typename: 'Tpopkontr',
+              },
               __typename: 'Tpopkontr',
             },
-            __typename: 'Tpopkontr',
           },
-        },
-      }),
+        })
+      } catch (error) {
+        return listError(error)
+      }
+    },
   })
 )
 
