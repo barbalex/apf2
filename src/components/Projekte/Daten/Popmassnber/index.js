@@ -13,6 +13,7 @@ import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import dataGql from './data.graphql'
 import updatePopmassnberByIdGql from './updatePopmassnberById.graphql'
+import listError from '../../../../modules/listError'
 
 const Container = styled.div`
   height: 100%;
@@ -27,30 +28,34 @@ const FieldsContainer = styled.div`
 
 const enhance = compose(
   withHandlers({
-    saveToDb: ({ refetchTree }) => ({ row, field, value, updatePopmassnber }) => {
-      updatePopmassnber({
-        variables: {
-          id: row.id,
-          [field]: value,
-        },
-        optimisticResponse: {
-          __typename: 'Mutation',
-          updatePopmassnberById: {
-            popmassnber: {
-              id: row.id,
-              popId: field === 'popId' ? value : row.popId,
-              jahr: field === 'jahr' ? value : row.jahr,
-              beurteilung: field === 'beurteilung' ? value : row.beurteilung,
-              bemerkungen: field === 'bemerkungen' ? value : row.bemerkungen,
-              tpopmassnErfbeurtWerteByBeurteilung:
-                row.tpopmassnErfbeurtWerteByBeurteilung,
-              popByPopId: row.popByPopId,
+    saveToDb: ({ refetchTree }) => async ({ row, field, value, updatePopmassnber }) => {
+      try {
+        updatePopmassnber({
+          variables: {
+            id: row.id,
+            [field]: value,
+          },
+          optimisticResponse: {
+            __typename: 'Mutation',
+            updatePopmassnberById: {
+              popmassnber: {
+                id: row.id,
+                popId: field === 'popId' ? value : row.popId,
+                jahr: field === 'jahr' ? value : row.jahr,
+                beurteilung: field === 'beurteilung' ? value : row.beurteilung,
+                bemerkungen: field === 'bemerkungen' ? value : row.bemerkungen,
+                tpopmassnErfbeurtWerteByBeurteilung:
+                  row.tpopmassnErfbeurtWerteByBeurteilung,
+                popByPopId: row.popByPopId,
+                __typename: 'Popmassnber',
+              },
               __typename: 'Popmassnber',
             },
-            __typename: 'Popmassnber',
           },
-        },
-      })
+        })
+      } catch (error) {
+        return listError(error)
+      }
       if (['beurteilung'].includes(field)) refetchTree()
     },
   })
