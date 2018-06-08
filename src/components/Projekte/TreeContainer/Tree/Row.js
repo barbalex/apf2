@@ -162,6 +162,7 @@ const BiotopCopyingIcon = styled(PhotoLibraryIcon)`
 
 const Row = ({
   index,
+  style,
   tree,
   nodes,
   activeNodes,
@@ -175,6 +176,7 @@ const Row = ({
   mapIdsFiltered,
 }: {
   index: Number,
+  style: Object,
   tree: Object,
   nodes: Array<Object>,
   activeNodes: Array<Object>,
@@ -231,6 +233,8 @@ const Row = ({
         nodeId={node.id}
         nodeLabel={node.label}
         key={`${node.menuType}${node.id}`}
+        // seems that react-virtualized wants this style here...
+        style={style}
       >
         <StyledNode
           data-level={level}
