@@ -11,6 +11,7 @@ import withState from 'recompose/withState'
 import withLifecycle from '@hocs/with-lifecycle'
 import { Query } from 'react-apollo'
 import get from 'lodash/get'
+import { Subscribe } from 'unstated'
 
 import FormTitle from '../../../shared/FormTitle'
 import appBaseUrl from '../../../../modules/appBaseUrl'
@@ -21,6 +22,7 @@ import data1Gql from './data1.graphql'
 import data2Gql from './data2.graphql'
 import qk from './qk'
 import checkTpopOutsideZh from './checkTpopOutsideZh'
+import ErrorState from '../../../../state/Error'
 
 const Container = styled.div`
   height: 100%;
@@ -122,109 +124,114 @@ const Qk = ({
   checkingOutsideZh: Boolean,
   setCheckingOutsideZh: () => void
 }) =>
-<Query query={data1Gql}>
-  {({ loading, error, data: data1 }) => {
-    if (error) return `Fehler: ${error.message}`
-    const projId = get(data1, `${treeName}.activeNodeArray[1]`)
+<Subscribe to={[ErrorState]}>
+  {errorState => (
+    <Query query={data1Gql}>
+      {({ loading, error, data: data1 }) => {
+        if (error) return `Fehler: ${error.message}`
+        const projId = get(data1, `${treeName}.activeNodeArray[1]`)
 
-    return (
-        <Query
-          query={data2Gql}
-          // pass berichtjahr when queries exist that actually use it
-          //variables={{ berichtjahr, apId, projId }}
-          variables={{ apId, projId }}
-        >
-          {({ loading, error, data }) => {
-            const qks = qk(berichtjahr).filter(q => !!q.query)
-            const gqlMessages = qks
-            // only results with data
-            .filter(q => get(data, `${q.query}.totalCount`, 0) > 0)
-            // convert
-            // TODO:
-            // make this simpler after moving all calls to graphql
-            .map(q => {
-              const qData = get(data, `${q.query}.nodes`, [])
-              return qData.map(o => ({
-                proj_id: o.projId,
-                ap_id: o.apId,
-                hw: q.title,
-                text: [q.text(o)],
-                url: q.url(o)
-              }))
-            })
-
-            !outsideZhChecked && checkTpopOutsideZh({
-              data,
-              addMessages,
-              setOutsideZhChecked,
-              checkingOutsideZh,
-              setCheckingOutsideZh
-            })
-
-            const messageArrays = [...gqlMessages, ...messages]
-            const messageArraysFiltered = filter
-              ? messageArrays.filter(messageArray => {
-                  if (
-                    messageArray[0] &&
-                    messageArray[0].hw &&
-                    messageArray[0].hw.toLowerCase
-                  ) {
-                    return messageArray[0].hw.toLowerCase().includes(filter.toLowerCase())
-                  }
-                  return false
+        return (
+            <Query
+              query={data2Gql}
+              // pass berichtjahr when queries exist that actually use it
+              //variables={{ berichtjahr, apId, projId }}
+              variables={{ apId, projId }}
+            >
+              {({ loading, error, data }) => {
+                const qks = qk(berichtjahr).filter(q => !!q.query)
+                const gqlMessages = qks
+                // only results with data
+                .filter(q => get(data, `${q.query}.totalCount`, 0) > 0)
+                // convert
+                // TODO:
+                // make this simpler after moving all calls to graphql
+                .map(q => {
+                  const qData = get(data, `${q.query}.nodes`, [])
+                  return qData.map(o => ({
+                    proj_id: o.projId,
+                    ap_id: o.apId,
+                    hw: q.title,
+                    text: [q.text(o)],
+                    url: q.url(o)
+                  }))
                 })
-              : messageArrays
-              if (error) return `Fehler: ${error.message}`
-              const loadingMessage = loading
-                ? 'Die Daten werden analysiert...'
-                : 'Analyse abgeschlossen'
 
-              return (
-                <ErrorBoundary>
-                <Container>
-                  <FormTitle title="Qualitätskontrollen" />
-                  <FieldsContainer>
-                    <FormControl fullWidth>
-                      <InputLabel htmlFor="berichtjahr">Berichtjahr</InputLabel>
-                      <StyledInput
-                        id="berichtjahr"
-                        value={berichtjahr}
-                        type="number"
-                        onChange={(event) => onChangeBerichtjahr(event, data)}
-                      />
-                    </FormControl>
-                    <FormControl fullWidth>
-                      <InputLabel htmlFor="filter">
-                        nach Abschnitts-Titel filtern
-                      </InputLabel>
-                      <StyledInput id="filter" value={filter} onChange={onChangeFilter} />
-                    </FormControl>
-                    <LoadingIndicator loading={loading}>
-                      {loadingMessage}
-                    </LoadingIndicator>
-                    {messageArraysFiltered.map((messageArray, index) => (
-                      <StyledPaper key={index}>
-                        <Title>{messageArray[0].hw}</Title>
-                        {messageArray.map(m => (
-                          <div key={m.url.join()}>
-                            <StyledA
-                              href={`${appBaseUrl}/${m.url.join('/')}`}
-                              target="_blank"
-                            >
-                              {m.text.join('; ')}
-                            </StyledA>
-                          </div>
+                !outsideZhChecked && checkTpopOutsideZh({
+                  data,
+                  addMessages,
+                  setOutsideZhChecked,
+                  checkingOutsideZh,
+                  setCheckingOutsideZh,
+                  errorState,
+                })
+
+                const messageArrays = [...gqlMessages, ...messages]
+                const messageArraysFiltered = filter
+                  ? messageArrays.filter(messageArray => {
+                      if (
+                        messageArray[0] &&
+                        messageArray[0].hw &&
+                        messageArray[0].hw.toLowerCase
+                      ) {
+                        return messageArray[0].hw.toLowerCase().includes(filter.toLowerCase())
+                      }
+                      return false
+                    })
+                  : messageArrays
+                  if (error) return `Fehler: ${error.message}`
+                  const loadingMessage = loading
+                    ? 'Die Daten werden analysiert...'
+                    : 'Analyse abgeschlossen'
+
+                  return (
+                    <ErrorBoundary>
+                    <Container>
+                      <FormTitle title="Qualitätskontrollen" />
+                      <FieldsContainer>
+                        <FormControl fullWidth>
+                          <InputLabel htmlFor="berichtjahr">Berichtjahr</InputLabel>
+                          <StyledInput
+                            id="berichtjahr"
+                            value={berichtjahr}
+                            type="number"
+                            onChange={(event) => onChangeBerichtjahr(event, data)}
+                          />
+                        </FormControl>
+                        <FormControl fullWidth>
+                          <InputLabel htmlFor="filter">
+                            nach Abschnitts-Titel filtern
+                          </InputLabel>
+                          <StyledInput id="filter" value={filter} onChange={onChangeFilter} />
+                        </FormControl>
+                        <LoadingIndicator loading={loading}>
+                          {loadingMessage}
+                        </LoadingIndicator>
+                        {messageArraysFiltered.map((messageArray, index) => (
+                          <StyledPaper key={index}>
+                            <Title>{messageArray[0].hw}</Title>
+                            {messageArray.map(m => (
+                              <div key={m.url.join()}>
+                                <StyledA
+                                  href={`${appBaseUrl}/${m.url.join('/')}`}
+                                  target="_blank"
+                                >
+                                  {m.text.join('; ')}
+                                </StyledA>
+                              </div>
+                            ))}
+                          </StyledPaper>
                         ))}
-                      </StyledPaper>
-                    ))}
-                  </FieldsContainer>
-                </Container>
-              </ErrorBoundary>
-            )
-          }}
-        </Query>
-      )
-    }}
-  </Query>
+                      </FieldsContainer>
+                    </Container>
+                  </ErrorBoundary>
+                )
+              }}
+            </Query>
+          )
+        }}
+      </Query>
+    )}
+  </Subscribe>
 
 export default enhance(Qk)
