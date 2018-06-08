@@ -5,6 +5,8 @@ import { Query, Mutation } from 'react-apollo'
 import get from 'lodash/get'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
+import withState from 'recompose/withState'
+import withLifecycle from '@hocs/with-lifecycle'
 
 import TextField from '../../../shared/TextField'
 import TextFieldWithInfo from '../../../shared/TextFieldWithInfo'
@@ -14,7 +16,6 @@ import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import dataGql from './data.graphql'
 import updatePopByIdGql from './updatePopById.graphql'
-import listError from '../../../../modules/listError'
 
 const Container = styled.div`
   height: 100%;
@@ -28,8 +29,9 @@ const FieldsContainer = styled.div`
 `
 
 const enhance = compose(
+  withState('errors', 'setErrors', ({})),
   withHandlers({
-    saveToDb: () => async ({ row, field, value, updatePop }) => {
+    saveToDb: ({ setErrors, errors }) => async ({ row, field, value, updatePop }) => {
       try {
         updatePop({
           variables: {
@@ -61,18 +63,28 @@ const enhance = compose(
           },
         })
       } catch (error) {
-        return listError(error)
+        return setErrors({ [field]: error.message })
+      }
+      setErrors(({}))
+    },
+  }),
+  withLifecycle({
+    onDidUpdate(prevProps, props) {
+      if (prevProps.id !== props.id) {
+        props.setErrors(({}))
       }
     },
-  })
+  }),
 )
 
 const Pop = ({
   id,
-  saveToDb
+  saveToDb,
+  errors,
 }: {
   id: String,
-  saveToDb: () => void
+  saveToDb: () => void,
+  errors: Object,
 }) => (
   <Query query={dataGql} variables={{ id }}>
     {({ loading, error, data }) => {
@@ -101,6 +113,7 @@ const Pop = ({
                     saveToDb={value =>
                       saveToDb({ row, field: 'nr', value, updatePop })
                     }
+                    error={errors.nr}
                   />
                   <TextFieldWithInfo
                     key={`${row.id}name`}
@@ -110,6 +123,7 @@ const Pop = ({
                     saveToDb={value =>
                       saveToDb({ row, field: 'name', value, updatePop })
                     }
+                    error={errors.name}
                     popover="Dieses Feld möglichst immer ausfüllen"
                   />
                   <Status
@@ -140,6 +154,7 @@ const Pop = ({
                     saveToDb={value =>
                       saveToDb({ row, field: 'statusUnklar', value, updatePop })
                     }
+                    error={errors.statusUnklar}
                   />
                   <TextField
                     key={`${row.id}statusUnklarBegruendung`}
@@ -155,6 +170,7 @@ const Pop = ({
                         updatePop,
                       })
                     }
+                    error={errors.statusUnklarBegruendung}
                   />
                   <TextField
                     key={`${row.id}x`}
@@ -164,6 +180,7 @@ const Pop = ({
                     saveToDb={value =>
                       saveToDb({ row, field: 'x', value, updatePop })
                     }
+                    error={errors.x}
                   />
                   <TextField
                     key={`${row.id}y`}
@@ -173,6 +190,7 @@ const Pop = ({
                     saveToDb={value =>
                       saveToDb({ row, field: 'y', value, updatePop })
                     }
+                    error={errors.y}
                   />
                 </FieldsContainer>
               )}
