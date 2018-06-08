@@ -26,6 +26,7 @@ import ErrorBoundary from '../../../shared/ErrorBoundary'
 import dataGql from './data.graphql'
 import updateTpopkontrByIdGql from './updateTpopkontrById.graphql'
 import setUrlQueryValue from '../../../../modules/setUrlQueryValue'
+import listError from '../../../../modules/listError'
 
 const Container = styled.div`
   height: 100%;
@@ -90,101 +91,105 @@ const enhance = compose(
     }
   ),
   withHandlers({
-    saveToDb: ({ refetchTree }) => ({ row, field, value, updateTpopkontr }) => {
-      updateTpopkontr({
-        variables: {
-          id: row.id,
-          [field]: value,
-        },
-        optimisticResponse: {
-          __typename: 'Mutation',
-          updateTpopkontrById: {
-            tpopkontr: {
-              id: row.id,
-              typ: field === 'typ' ? value : row.typ,
-              datum: field === 'datum' ? value : row.datum,
-              jahr: field === 'jahr' ? value : row.jahr,
-              jungpflanzenAnzahl:
-                field === 'jungpflanzenAnzahl' ? value : row.jungpflanzenAnzahl,
-              vitalitaet: field === 'vitalitaet' ? value : row.vitalitaet,
-              ueberlebensrate:
-                field === 'ueberlebensrate' ? value : row.ueberlebensrate,
-              entwicklung: field === 'entwicklung' ? value : row.entwicklung,
-              ursachen: field === 'ursachen' ? value : row.ursachen,
-              erfolgsbeurteilung:
-                field === 'erfolgsbeurteilung' ? value : row.erfolgsbeurteilung,
-              umsetzungAendern:
-                field === 'umsetzungAendern' ? value : row.umsetzungAendern,
-              kontrolleAendern:
-                field === 'kontrolleAendern' ? value : row.kontrolleAendern,
-              bemerkungen: field === 'bemerkungen' ? value : row.bemerkungen,
-              lrDelarze: field === 'lrDelarze' ? value : row.lrDelarze,
-              flaeche: field === 'flaeche' ? value : row.flaeche,
-              lrUmgebungDelarze:
-                field === 'lrUmgebungDelarze' ? value : row.lrUmgebungDelarze,
-              vegetationstyp:
-                field === 'vegetationstyp' ? value : row.vegetationstyp,
-              konkurrenz: field === 'konkurrenz' ? value : row.konkurrenz,
-              moosschicht: field === 'moosschicht' ? value : row.moosschicht,
-              krautschicht: field === 'krautschicht' ? value : row.krautschicht,
-              strauchschicht:
-                field === 'strauchschicht' ? value : row.strauchschicht,
-              baumschicht: field === 'baumschicht' ? value : row.baumschicht,
-              bodenTyp: field === 'bodenTyp' ? value : row.bodenTyp,
-              bodenKalkgehalt:
-                field === 'bodenKalkgehalt' ? value : row.bodenKalkgehalt,
-              bodenDurchlaessigkeit:
-                field === 'bodenDurchlaessigkeit'
-                  ? value
-                  : row.bodenDurchlaessigkeit,
-              bodenHumus: field === 'bodenHumus' ? value : row.bodenHumus,
-              bodenNaehrstoffgehalt:
-                field === 'bodenNaehrstoffgehalt'
-                  ? value
-                  : row.bodenNaehrstoffgehalt,
-              bodenAbtrag: field === 'bodenAbtrag' ? value : row.bodenAbtrag,
-              wasserhaushalt:
-                field === 'wasserhaushalt' ? value : row.wasserhaushalt,
-              idealbiotopUebereinstimmung:
-                field === 'idealbiotopUebereinstimmung'
-                  ? value
-                  : row.idealbiotopUebereinstimmung,
-              handlungsbedarf:
-                field === 'handlungsbedarf' ? value : row.handlungsbedarf,
-              flaecheUeberprueft:
-                field === 'flaecheUeberprueft' ? value : row.flaecheUeberprueft,
-              deckungVegetation:
-                field === 'deckungVegetation' ? value : row.deckungVegetation,
-              deckungNackterBoden:
-                field === 'deckungNackterBoden'
-                  ? value
-                  : row.deckungNackterBoden,
-              deckungApArt: field === 'deckungApArt' ? value : row.deckungApArt,
-              vegetationshoeheMaximum:
-                field === 'vegetationshoeheMaximum'
-                  ? value
-                  : row.vegetationshoeheMaximum,
-              vegetationshoeheMittel:
-                field === 'vegetationshoeheMittel'
-                  ? value
-                  : row.vegetationshoeheMittel,
-              gefaehrdung: field === 'gefaehrdung' ? value : row.gefaehrdung,
-              tpopId: field === 'tpopId' ? value : row.tpopId,
-              bearbeiter: field === 'bearbeiter' ? value : row.bearbeiter,
-              planVorhanden:
-                field === 'planVorhanden' ? value : row.planVorhanden,
-              jungpflanzenVorhanden:
-                field === 'jungpflanzenVorhanden'
-                  ? value
-                  : row.jungpflanzenVorhanden,
-              adresseByBearbeiter: row.adresseByBearbeiter,
-              tpopByTpopId: row.tpopByTpopId,
+    saveToDb: ({ refetchTree }) => async ({ row, field, value, updateTpopkontr }) => {
+      try {
+        updateTpopkontr({
+          variables: {
+            id: row.id,
+            [field]: value,
+          },
+          optimisticResponse: {
+            __typename: 'Mutation',
+            updateTpopkontrById: {
+              tpopkontr: {
+                id: row.id,
+                typ: field === 'typ' ? value : row.typ,
+                datum: field === 'datum' ? value : row.datum,
+                jahr: field === 'jahr' ? value : row.jahr,
+                jungpflanzenAnzahl:
+                  field === 'jungpflanzenAnzahl' ? value : row.jungpflanzenAnzahl,
+                vitalitaet: field === 'vitalitaet' ? value : row.vitalitaet,
+                ueberlebensrate:
+                  field === 'ueberlebensrate' ? value : row.ueberlebensrate,
+                entwicklung: field === 'entwicklung' ? value : row.entwicklung,
+                ursachen: field === 'ursachen' ? value : row.ursachen,
+                erfolgsbeurteilung:
+                  field === 'erfolgsbeurteilung' ? value : row.erfolgsbeurteilung,
+                umsetzungAendern:
+                  field === 'umsetzungAendern' ? value : row.umsetzungAendern,
+                kontrolleAendern:
+                  field === 'kontrolleAendern' ? value : row.kontrolleAendern,
+                bemerkungen: field === 'bemerkungen' ? value : row.bemerkungen,
+                lrDelarze: field === 'lrDelarze' ? value : row.lrDelarze,
+                flaeche: field === 'flaeche' ? value : row.flaeche,
+                lrUmgebungDelarze:
+                  field === 'lrUmgebungDelarze' ? value : row.lrUmgebungDelarze,
+                vegetationstyp:
+                  field === 'vegetationstyp' ? value : row.vegetationstyp,
+                konkurrenz: field === 'konkurrenz' ? value : row.konkurrenz,
+                moosschicht: field === 'moosschicht' ? value : row.moosschicht,
+                krautschicht: field === 'krautschicht' ? value : row.krautschicht,
+                strauchschicht:
+                  field === 'strauchschicht' ? value : row.strauchschicht,
+                baumschicht: field === 'baumschicht' ? value : row.baumschicht,
+                bodenTyp: field === 'bodenTyp' ? value : row.bodenTyp,
+                bodenKalkgehalt:
+                  field === 'bodenKalkgehalt' ? value : row.bodenKalkgehalt,
+                bodenDurchlaessigkeit:
+                  field === 'bodenDurchlaessigkeit'
+                    ? value
+                    : row.bodenDurchlaessigkeit,
+                bodenHumus: field === 'bodenHumus' ? value : row.bodenHumus,
+                bodenNaehrstoffgehalt:
+                  field === 'bodenNaehrstoffgehalt'
+                    ? value
+                    : row.bodenNaehrstoffgehalt,
+                bodenAbtrag: field === 'bodenAbtrag' ? value : row.bodenAbtrag,
+                wasserhaushalt:
+                  field === 'wasserhaushalt' ? value : row.wasserhaushalt,
+                idealbiotopUebereinstimmung:
+                  field === 'idealbiotopUebereinstimmung'
+                    ? value
+                    : row.idealbiotopUebereinstimmung,
+                handlungsbedarf:
+                  field === 'handlungsbedarf' ? value : row.handlungsbedarf,
+                flaecheUeberprueft:
+                  field === 'flaecheUeberprueft' ? value : row.flaecheUeberprueft,
+                deckungVegetation:
+                  field === 'deckungVegetation' ? value : row.deckungVegetation,
+                deckungNackterBoden:
+                  field === 'deckungNackterBoden'
+                    ? value
+                    : row.deckungNackterBoden,
+                deckungApArt: field === 'deckungApArt' ? value : row.deckungApArt,
+                vegetationshoeheMaximum:
+                  field === 'vegetationshoeheMaximum'
+                    ? value
+                    : row.vegetationshoeheMaximum,
+                vegetationshoeheMittel:
+                  field === 'vegetationshoeheMittel'
+                    ? value
+                    : row.vegetationshoeheMittel,
+                gefaehrdung: field === 'gefaehrdung' ? value : row.gefaehrdung,
+                tpopId: field === 'tpopId' ? value : row.tpopId,
+                bearbeiter: field === 'bearbeiter' ? value : row.bearbeiter,
+                planVorhanden:
+                  field === 'planVorhanden' ? value : row.planVorhanden,
+                jungpflanzenVorhanden:
+                  field === 'jungpflanzenVorhanden'
+                    ? value
+                    : row.jungpflanzenVorhanden,
+                adresseByBearbeiter: row.adresseByBearbeiter,
+                tpopByTpopId: row.tpopByTpopId,
+                __typename: 'Tpopkontr',
+              },
               __typename: 'Tpopkontr',
             },
-            __typename: 'Tpopkontr',
           },
-        },
-      })
+        })
+      } catch (error) {
+        return listError(error)
+      }
       if (['typ'].includes(field)) refetchTree()
     },
     onChangeTab: ({ setValue }) => (event, value) => {
