@@ -5,13 +5,14 @@ import { Query, Mutation } from 'react-apollo'
 import get from 'lodash/get'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
+import withState from 'recompose/withState'
+import withLifecycle from '@hocs/with-lifecycle'
 
 import TextField from '../../../shared/TextField'
 import FormTitle from '../../../shared/FormTitle'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import dataGql from './data.graphql'
 import updateZielberByIdGql from './updateZielberById.graphql'
-import listError from '../../../../modules/listError'
 
 const Container = styled.div`
   height: 100%;
@@ -25,8 +26,9 @@ const FieldsContainer = styled.div`
 `
 
 const enhance = compose(
+  withState('errors', 'setErrors', ({})),
   withHandlers({
-    saveToDb: props => async ({ row, field, value, updateZielber }) => {
+    saveToDb: ({ setErrors, errors }) => async ({ row, field, value, updateZielber }) => {
       try {
         await updateZielber({
           variables: {
@@ -50,18 +52,28 @@ const enhance = compose(
           },
         })
       } catch (error) {
-        return listError(error)
+        return setErrors({ [field]: error.message })
+      }
+      setErrors(({}))
+    },
+  }),
+  withLifecycle({
+    onDidUpdate(prevProps, props) {
+      if (prevProps.id !== props.id) {
+        props.setErrors(({}))
       }
     },
-  })
+  }),
 )
 
 const Zielber = ({
   id,
-  saveToDb
+  saveToDb,
+  errors,
 }: {
   id: String,
-  saveToDb: () => void
+  saveToDb: () => void,
+  errors: Object,
 }) => (
   <Query query={dataGql} variables={{ id }}>
     {({ loading, error, data }) => {
@@ -93,6 +105,7 @@ const Zielber = ({
                     saveToDb={value =>
                       saveToDb({ row, field: 'jahr', value, updateZielber })
                     }
+                    error={errors.jahr}
                   />
                   <TextField
                     key={`${row.id}erreichung`}
@@ -107,6 +120,7 @@ const Zielber = ({
                         updateZielber,
                       })
                     }
+                    error={errors.erreichung}
                   />
                   <TextField
                     key={`${row.id}bemerkungen`}
@@ -122,6 +136,7 @@ const Zielber = ({
                         updateZielber,
                       })
                     }
+                    error={errors.bemerkungen}
                   />
                 </FieldsContainer>
               )}
