@@ -61,7 +61,7 @@ const enhance = compose(
           },
         })
       } catch (error) {
-        setErrors({ [field]: error.message })
+        return setErrors({ [field]: error.message })
         /**
          * DO NOT do the following, because:
          * can fire after component was unmounted...
@@ -73,7 +73,6 @@ const enhance = compose(
           setErrors(newErrors)
         }, 1000 * 10)
         */
-        return
       }
       setErrors(({}))
       if (['entwicklung'].includes(field)) refetchTree()
@@ -106,7 +105,6 @@ const Tpopber = ({
           </Container>
         )
       if (error) return `Fehler: ${error.message}`
-      console.log('Tpopber rendering, errors:', errors)
 
       const row = get(data, 'tpopberById')
       let tpopentwicklungWerte = get(data, 'allTpopEntwicklungWertes.nodes', [])
@@ -154,6 +152,7 @@ const Tpopber = ({
                         updateTpopber,
                       })
                     }
+                    error={errors.entwicklung}
                   />
                   <TextField
                     key={`${row.id}bemerkungen`}
@@ -169,6 +168,7 @@ const Tpopber = ({
                         updateTpopber,
                       })
                     }
+                    error={errors.bemerkungen}
                   />
                 </FieldsContainer>
               )}

@@ -28,7 +28,7 @@ const enhance = compose(
   withHandlers({
     saveToDb: props => async ({ row, field, value, updateProjekt }) => {
       try {
-        updateProjekt({
+        await updateProjekt({
           variables: {
             id: row.id,
             [field]: value,

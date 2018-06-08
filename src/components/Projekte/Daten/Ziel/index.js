@@ -33,7 +33,7 @@ const enhance = compose(
   withHandlers({
     saveToDb: ({ tree, refetchTree }) => async ({ row, field, value, updateZiel, client }) => {
       try {
-        updateZiel({
+        await updateZiel({
           variables: {
             id: row.id,
             [field]: value,

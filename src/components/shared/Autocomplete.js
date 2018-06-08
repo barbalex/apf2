@@ -110,6 +110,7 @@ const enhance = compose(withStyles(styles))
 type Props = {
   label: String,
   value: String,
+  error: String,
   objects: Array<Object>,
   saveToDb: () => void,
   classes: Object,
@@ -172,7 +173,7 @@ class IntegrationAutosuggest extends React.Component<Props, State> {
   }
 
   renderInput = inputProps => {
-    const { label, value } = this.props
+    const { label, value, error } = this.props
     const { autoFocus, ref, ...other } = inputProps
 
     return (
@@ -189,6 +190,8 @@ class IntegrationAutosuggest extends React.Component<Props, State> {
         autoCorrect="off"
         autoCapitalize="off"
         spellCheck="false"
+        error={!!error}
+        helperText={!!error ? error : ''}
       />
     )
   }

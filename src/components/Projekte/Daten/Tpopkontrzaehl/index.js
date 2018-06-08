@@ -31,7 +31,7 @@ const enhance = compose(
   withHandlers({
     saveToDb: ({ refetchTree }) => async ({ row, field, value, updateTpopkontrzaehl }) => {
       try {
-        updateTpopkontrzaehl({
+        await updateTpopkontrzaehl({
           variables: {
             id: row.id,
             [field]: value,

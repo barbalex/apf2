@@ -30,7 +30,7 @@ const enhance = compose(
   withHandlers({
     saveToDb: ({ refetchTree }) => async ({ row, field, value, updateErfkrit }) => {
       try {
-        updateErfkrit({
+        await updateErfkrit({
           variables: {
             id: row.id,
             [field]: value,

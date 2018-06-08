@@ -4,8 +4,9 @@
  * if set '' (as React wants) value is shown and set as Unknown :-(
  * setting null of cours makes react log errors
  */
-import React from 'react'
+import React, { Fragment } from 'react'
 import DatePicker from 'material-ui-pickers/DatePicker'
+import FormHelperText from '@material-ui/core/FormHelperText'
 import format from 'date-fns/format'
 import isValid from 'date-fns/isValid'
 import styled from 'styled-components'
@@ -79,6 +80,7 @@ const DateFieldWithPicker = ({
   saveToDb,
   onChange,
   onBlur,
+  error,
 }:{
   label: String,
   value?: String | Number,
@@ -86,29 +88,36 @@ const DateFieldWithPicker = ({
   saveToDb: () => void,
   onChange: () => void,
   onBlur: () => void,
+  error: String,
 }) => {
   //console.log('DateFieldWithPicker, render:', {stateValue})
   return (
-    <StyledDatePicker
-      keyboard
-      label={label}
-      format="DD.MM.YYYY"
-      value={stateValue}
-      onChange={onChange}
-      onBlur={onBlur}
-      disableOpenOnEnter
-      animateYearScrolling={false}
-      autoOk
-      clearable={true}
-      clearLabel="leeren"
-      // remove message because dont want it when user
-      // enters only day and maybe month
-      // need a value because seems that too expects one
-      invalidDateMessage=" "
-      cancelLabel="schliessen"
-      okLabel="speichern"
-      fullWidth
-    />
+    <Fragment>
+      <StyledDatePicker
+        keyboard
+        label={label}
+        format="DD.MM.YYYY"
+        value={stateValue}
+        onChange={onChange}
+        onBlur={onBlur}
+        disableOpenOnEnter
+        animateYearScrolling={false}
+        autoOk
+        clearable={true}
+        clearLabel="leeren"
+        // remove message because dont want it when user
+        // enters only day and maybe month
+        // need a value because seems that too expects one
+        invalidDateMessage=" "
+        cancelLabel="schliessen"
+        okLabel="speichern"
+        fullWidth
+      />
+      {
+        !!error &&
+        <FormHelperText id={`${label}ErrorText`}>{error}</FormHelperText>
+      }
+    </Fragment>
   )
 }
 

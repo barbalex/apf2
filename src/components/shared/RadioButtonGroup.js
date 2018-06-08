@@ -4,6 +4,7 @@ import Radio from '@material-ui/core/Radio'
 import RadioGroup from '@material-ui/core/RadioGroup'
 import FormLabel from '@material-ui/core/FormLabel'
 import FormControl from '@material-ui/core/FormControl'
+import FormHelperText from '@material-ui/core/FormHelperText'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
@@ -65,12 +66,14 @@ const enhance = compose(
 const RadioButtonGroup = ({
   value,
   label,
+  error,
   dataSource = [],
   onClickButton,
   onChangeGroup,
 }: {
   value: Number | String,
   label: String,
+  error: String,
   dataSource: Array<Object>,
   onClickButton: () => void,
   onChangeGroup: () => void,
@@ -79,7 +82,11 @@ const RadioButtonGroup = ({
     value !== null && value !== undefined ? value.toString() : ''
 
   return (
-    <StyledFormControl component="fieldset">
+    <StyledFormControl
+      component="fieldset"
+      error={!!error}
+      aria-describedby={`${label}ErrorText`}
+    >
       <StyledFormLabel component="legend">{label}</StyledFormLabel>
       <RadioGroup aria-label={label} value={valueSelected} onChange={onChangeGroup}>
         {dataSource.map((e, index) => (
@@ -92,6 +99,10 @@ const RadioButtonGroup = ({
           />
         ))}
       </RadioGroup>
+      {
+        !!error &&
+        <FormHelperText id={`${label}ErrorText`}>{error}</FormHelperText>
+      }
     </StyledFormControl>
   )
 }

@@ -42,7 +42,7 @@ const enhance = compose(
   withHandlers({
     saveToDb: props => async ({ row, field, value, updateIdealbiotop }) => {
       try {
-        updateIdealbiotop({
+        await updateIdealbiotop({
           variables: {
             id: row.id,
             [field]: value,

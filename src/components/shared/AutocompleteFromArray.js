@@ -105,6 +105,7 @@ type Props = {
   label: String,
   value: String,
   values: Array<Object>,
+  error: String,
   saveToDb: () => void,
   classes: Object,
   openabove: Boolean,
@@ -158,7 +159,7 @@ class IntegrationAutosuggest extends React.Component<Props, State> {
   }
 
   renderInput = inputProps => {
-    const { label, value } = this.props
+    const { label, value, error } = this.props
     const { autoFocus, ref, ...other } = inputProps
 
     return (
@@ -175,6 +176,8 @@ class IntegrationAutosuggest extends React.Component<Props, State> {
         autoCorrect="off"
         autoCapitalize="off"
         spellCheck="false"
+        error={!!error}
+        helperText={!!error ? error : ''}
       />
     )
   }

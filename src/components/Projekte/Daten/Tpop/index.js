@@ -6,6 +6,9 @@ import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
+import withState from 'recompose/withState'
+import withLifecycle from '@hocs/with-lifecycle'
+
 
 import TextField from '../../../shared/TextField'
 import TextFieldWithInfo from '../../../shared/TextFieldWithInfo'
@@ -19,7 +22,6 @@ import constants from '../../../../modules/constants'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import dataGql from './data.graphql'
 import updateTpopByIdGql from './updateTpopById.graphql'
-import listError from '../../../../modules/listError'
 
 const Container = styled.div`
   height: 100%;
@@ -37,10 +39,11 @@ const FieldsContainer = styled.div`
 `
 
 const enhance = compose(
+  withState('errors', 'setErrors', ({})),
   withHandlers({
-    saveToDb: props => async ({ row, field, value, updateTpop }) => {
+    saveToDb: ({ setErrors, errors }) => async ({ row, field, value, updateTpop }) => {
       try {
-        updateTpop({
+        await updateTpop({
           variables: {
             id: row.id,
             [field]: value,
@@ -89,19 +92,29 @@ const enhance = compose(
           },
         })
       } catch (error) {
-        return listError(error)
+        return setErrors({ [field]: error.message })
+      }
+      setErrors(({}))
+    },
+  }),
+  withLifecycle({
+    onDidUpdate(prevProps, props) {
+      if (prevProps.id !== props.id) {
+        props.setErrors(({}))
       }
     },
-  })
+  }),
 )
 
 const Tpop = ({
   id,
   saveToDb,
+  errors,
   dimensions = { width: 380 },
 }: {
   id: String,
   saveToDb: () => void,
+  errors: Object,
   dimensions: Object,
 }) => (
   <Query query={dataGql} variables={{ id }}>
@@ -146,6 +159,7 @@ const Tpop = ({
                     saveToDb={value =>
                       saveToDb({ row, field: 'nr', value, updateTpop })
                     }
+                    error={errors.nr}
                   />
                   <TextFieldWithInfo
                     key={`${row.id}flurname`}
@@ -156,6 +170,7 @@ const Tpop = ({
                       saveToDb({ row, field: 'flurname', value, updateTpop })
                     }
                     popover="Dieses Feld möglichst immer ausfüllen"
+                    error={errors.flurname}
                   />
                   <Status
                     key={`${row.id}status`}
@@ -191,6 +206,7 @@ const Tpop = ({
                         updateTpop,
                       })
                     }
+                    error={errors.statusUnklar}
                   />
                   <TextField
                     key={`${row.id}statusUnklarGrund`}
@@ -206,6 +222,7 @@ const Tpop = ({
                         updateTpop,
                       })
                     }
+                    error={errors.statusUnklarGrund}
                   />
                   <RadioButtonGroupWithInfo
                     value={row.apberRelevant}
@@ -220,6 +237,7 @@ const Tpop = ({
                         updateTpop,
                       })
                     }
+                    error={errors.apberRelevant}
                   />
                   <TextField
                     key={`${row.id}x`}
@@ -229,6 +247,7 @@ const Tpop = ({
                     saveToDb={value =>
                       saveToDb({ row, field: 'x', value, updateTpop })
                     }
+                    error={errors.x}
                   />
                   <TextField
                     key={`${row.id}y`}
@@ -238,6 +257,7 @@ const Tpop = ({
                     saveToDb={value =>
                       saveToDb({ row, field: 'y', value, updateTpop })
                     }
+                    error={errors.y}
                   />
                   <AutoCompleteFromArray
                     key={`${row.id}gemeinde`}
@@ -247,6 +267,7 @@ const Tpop = ({
                     saveToDb={value =>
                       saveToDb({ row, field: 'gemeinde', value, updateTpop })
                     }
+                    error={errors.gemeinde}
                   />
                   <TextField
                     key={`${row.id}radius`}
@@ -256,6 +277,7 @@ const Tpop = ({
                     saveToDb={value =>
                       saveToDb({ row, field: 'radius', value, updateTpop })
                     }
+                    error={errors.radius}
                   />
                   <TextField
                     key={`${row.id}hoehe`}
@@ -265,6 +287,7 @@ const Tpop = ({
                     saveToDb={value =>
                       saveToDb({ row, field: 'hoehe', value, updateTpop })
                     }
+                    error={errors.hoehe}
                   />
                   <TextField
                     key={`${row.id}exposition`}
@@ -274,6 +297,7 @@ const Tpop = ({
                     saveToDb={value =>
                       saveToDb({ row, field: 'exposition', value, updateTpop })
                     }
+                    error={errors.exposition}
                   />
                   <TextField
                     key={`${row.id}klima`}
@@ -283,6 +307,7 @@ const Tpop = ({
                     saveToDb={value =>
                       saveToDb({ row, field: 'klima', value, updateTpop })
                     }
+                    error={errors.klima}
                   />
                   <TextField
                     key={`${row.id}neigung`}
@@ -292,6 +317,7 @@ const Tpop = ({
                     saveToDb={value =>
                       saveToDb({ row, field: 'neigung', value, updateTpop })
                     }
+                    error={errors.neigung}
                   />
                   <TextField
                     key={`${row.id}beschreibung`}
@@ -307,6 +333,7 @@ const Tpop = ({
                         updateTpop,
                       })
                     }
+                    error={errors.beschreibung}
                   />
                   <TextField
                     key={`${row.id}katasterNr`}
@@ -316,6 +343,7 @@ const Tpop = ({
                     saveToDb={value =>
                       saveToDb({ row, field: 'katasterNr', value, updateTpop })
                     }
+                    error={errors.katasterNr}
                   />
                   <TextField
                     key={`${row.id}eigentuemer`}
@@ -325,6 +353,7 @@ const Tpop = ({
                     saveToDb={value =>
                       saveToDb({ row, field: 'eigentuemer', value, updateTpop })
                     }
+                    error={errors.eigentuemer}
                   />
                   <TextField
                     key={`${row.id}kontakt`}
@@ -334,6 +363,7 @@ const Tpop = ({
                     saveToDb={value =>
                       saveToDb({ row, field: 'kontakt', value, updateTpop })
                     }
+                    error={errors.kontakt}
                   />
                   <TextField
                     key={`${row.id}nutzungszone`}
@@ -348,6 +378,7 @@ const Tpop = ({
                         updateTpop,
                       })
                     }
+                    error={errors.nutzungszone}
                   />
                   <TextField
                     key={`${row.id}bewirtschafter`}
@@ -362,6 +393,7 @@ const Tpop = ({
                         updateTpop,
                       })
                     }
+                    error={errors.bewirtschafter}
                   />
                   <TextField
                     key={`${row.id}bewirtschaftung`}
@@ -376,6 +408,7 @@ const Tpop = ({
                         updateTpop,
                       })
                     }
+                    error={errors.bewirtschaftung}
                   />
                   <TextField
                     key={`${row.id}bemerkungen`}
@@ -386,6 +419,7 @@ const Tpop = ({
                     saveToDb={value =>
                       saveToDb({ row, field: 'bemerkungen', value, updateTpop })
                     }
+                    error={errors.bemerkungen}
                   />
                 </FieldsContainer>
               )}

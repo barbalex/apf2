@@ -7,6 +7,8 @@ import sortBy from 'lodash/sortBy'
 import format from 'date-fns/format'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
+import withState from 'recompose/withState'
+import withLifecycle from '@hocs/with-lifecycle'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroup'
 import AutoCompleteFromArray from '../../../shared/AutocompleteFromArray'
@@ -20,7 +22,6 @@ import constants from '../../../../modules/constants'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import dataGql from './data.graphql'
 import updateTpopmassnByIdGql from './updateTpopmassnById.graphql'
-import listError from '../../../../modules/listError'
 
 const Container = styled.div`
   height: 100%;
@@ -38,10 +39,11 @@ const FieldsContainer = styled.div`
 `
 
 const enhance = compose(
+  withState('errors', 'setErrors', ({})),
   withHandlers({
-    saveToDb: ({ refetchTree }) => async ({ row, field, value, updateTpopmassn }) => {
+    saveToDb: ({ refetchTree, setErrors, errors }) => async ({ row, field, value, updateTpopmassn }) => {
       try {
-        updateTpopmassn({
+        await updateTpopmassn({
           variables: {
             id: row.id,
             [field]: value,
@@ -84,11 +86,19 @@ const enhance = compose(
           },
         })
       } catch (error) {
-        return listError(error)
+        return setErrors({ [field]: error.message })
       }
+      setErrors(({}))
       if (['typ'].includes(field)) refetchTree()
     },
-  })
+  }),
+  withLifecycle({
+    onDidUpdate(prevProps, props) {
+      if (prevProps.id !== props.id) {
+        props.setErrors(({}))
+      }
+    },
+  }),
 )
 
 const Tpopmassn = ({
@@ -97,12 +107,14 @@ const Tpopmassn = ({
   onBlurWirtspflanze,
   dimensions = { width: 380 },
   saveToDb,
+  errors,
 }: {
   id: String,
   onNewRequestWirtspflanze: () => void,
   onBlurWirtspflanze: () => void,
   dimensions: number,
   saveToDb: () => void,
+  errors: Object,
 }) =>
   <Query query={dataGql} variables={{ id }}>
     {({ loading, error, data }) => {
@@ -156,6 +168,7 @@ const Tpopmassn = ({
                         updateTpopmassn,
                       })
                     }}
+                    error={errors.jahr}
                   />
                   <DateFieldWithPicker
                     key={`${row.id}datum`}
@@ -175,6 +188,7 @@ const Tpopmassn = ({
                         updateTpopmassn,
                       })
                     }}
+                    error={errors.datum}
                   />
                   <RadioButtonGroup
                     key={`${row.id}typ`}
@@ -184,6 +198,7 @@ const Tpopmassn = ({
                     saveToDb={value =>
                       saveToDb({ row, field: 'typ', value, updateTpopmassn })
                     }
+                    error={errors.typ}
                   />
                   <TextField
                     key={`${row.id}beschreibung`}
@@ -198,6 +213,7 @@ const Tpopmassn = ({
                         updateTpopmassn,
                       })
                     }
+                    error={errors.beschreibung}
                   />
                   <AutoComplete
                     key={`${row.id}bearbeiter`}
@@ -212,6 +228,7 @@ const Tpopmassn = ({
                         updateTpopmassn,
                       })
                     }
+                    error={errors.bearbeiter}
                   />
                   <TextField
                     key={`${row.id}bemerkungen`}
@@ -227,6 +244,7 @@ const Tpopmassn = ({
                         updateTpopmassn,
                       })
                     }
+                    error={errors.bemerkungen}
                   />
                   <RadioButton
                     key={`${row.id}planVorhanden`}
@@ -240,6 +258,7 @@ const Tpopmassn = ({
                         updateTpopmassn,
                       })
                     }
+                    error={errors.planVorhanden}
                   />
                   <TextField
                     key={`${row.id}planBezeichnung`}
@@ -254,6 +273,7 @@ const Tpopmassn = ({
                         updateTpopmassn,
                       })
                     }
+                    error={errors.planBezeichnung}
                   />
                   <TextField
                     key={`${row.id}flaeche`}
@@ -268,6 +288,7 @@ const Tpopmassn = ({
                         updateTpopmassn,
                       })
                     }
+                    error={errors.flaeche}
                   />
                   <TextField
                     key={`${row.id}form`}
@@ -277,6 +298,7 @@ const Tpopmassn = ({
                     saveToDb={value =>
                       saveToDb({ row, field: 'form', value, updateTpopmassn })
                     }
+                    error={errors.form}
                   />
                   <TextField
                     key={`${row.id}pflanzanordnung`}
@@ -291,6 +313,7 @@ const Tpopmassn = ({
                         updateTpopmassn,
                       })
                     }
+                    error={errors.pflanzanordnung}
                   />
                   <TextField
                     key={`${row.id}markierung`}
@@ -305,6 +328,7 @@ const Tpopmassn = ({
                         updateTpopmassn,
                       })
                     }
+                    error={errors.markierung}
                   />
                   <TextField
                     key={`${row.id}anzTriebe`}
@@ -319,6 +343,7 @@ const Tpopmassn = ({
                         updateTpopmassn,
                       })
                     }
+                    error={errors.anzTriebe}
                   />
                   <TextField
                     key={`${row.id}anzPflanzen`}
@@ -333,6 +358,7 @@ const Tpopmassn = ({
                         updateTpopmassn,
                       })
                     }
+                    error={errors.anzPflanzen}
                   />
                   <TextField
                     key={`${row.id}anzPflanzstellen`}
@@ -347,6 +373,7 @@ const Tpopmassn = ({
                         updateTpopmassn,
                       })
                     }
+                    error={errors.anzPflanzstellen}
                   />
                   <AutoCompleteFromArray
                     key={`${row.id}wirtspflanze`}
@@ -361,6 +388,7 @@ const Tpopmassn = ({
                         updateTpopmassn,
                       })
                     }
+                    error={errors.wirtspflanze}
                   />
                   <TextField
                     key={`${row.id}herkunftPop`}
@@ -375,6 +403,7 @@ const Tpopmassn = ({
                         updateTpopmassn,
                       })
                     }
+                    error={errors.herkunftPop}
                   />
                   <TextField
                     key={`${row.id}sammeldatum`}
@@ -389,6 +418,7 @@ const Tpopmassn = ({
                         updateTpopmassn,
                       })
                     }
+                    error={errors.sammeldatum}
                   />
                   <StringToCopy text={row.id} label="id" />
                 </FieldsContainer>
