@@ -42,7 +42,19 @@ const Section = styled.div`
 const enhance = compose(
   withState('errors', 'setErrors', ({})),
   withHandlers({
-    saveToDb: ({ setErrors, errors }) => async ({ row, field, value, updateIdealbiotop }) => {
+    saveToDb: ({
+      setErrors,
+      errors,
+    }) => async ({
+      row,
+      field,
+      value,
+      updateIdealbiotop,
+    }) => {
+      /**
+       * only save if value changed
+       */
+      if (row[field] === value) return
       try {
         await updateIdealbiotop({
           variables: {
