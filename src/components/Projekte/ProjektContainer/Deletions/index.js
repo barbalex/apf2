@@ -11,7 +11,6 @@ import styled from 'styled-components'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 import withState from 'recompose/withState'
-import clone from 'lodash/clone'
 import format from 'date-fns/format'
 import TextField from '@material-ui/core/TextField'
 import { Subscribe } from 'unstated'
@@ -57,22 +56,23 @@ const StyledCheckbox = styled(Checkbox)`
 `
 
 const enhance = compose(
-  withState('choosenDeletions', 'changeChoosenDeletions', []),
+  withState('choosenDeletions', 'setChoosenDeletions', []),
   withHandlers({
     onClickUndo: ({
       choosenDeletions,
+      setChoosenDeletions,
       setShowDeletions,
       tree,
       refetchTree,
-    }) => ({
+    }) => async ({
       datasetsDeleted,
       deleteState,
       errorState,
     }) => {
       // loop through all choosenDeletions
-      choosenDeletions.forEach(time => {
-        const dataset = datasetsDeleted.find(d => d.time === time)
-        undelete({
+      await choosenDeletions.forEach(async id => {
+        const dataset = datasetsDeleted.find(d => d.id === id)
+        await undelete({
           datasetsDeleted,
           dataset,
           tree,
@@ -82,22 +82,21 @@ const enhance = compose(
           errorState,
         })
       })
+      setChoosenDeletions([])
       // close window if no more deletions exist
       if (datasetsDeleted.length === 0) {
         setShowDeletions(false)
       }
     },
-    toggleChoosenDeletions: ({ choosenDeletions, changeChoosenDeletions }) => event => {
-      let time = event.target.value
-      if (time) time = +time
-      const previousChoosenDeletions = clone(choosenDeletions)
+    toggleChoosenDeletions: ({ choosenDeletions, setChoosenDeletions }) => event => {
+      let id = event.target.value
       let newChoosenDeletions
-      if (choosenDeletions.includes(time)) {
-        newChoosenDeletions = previousChoosenDeletions.filter(d => d !== time)
+      if (choosenDeletions.includes(id)) {
+        newChoosenDeletions = choosenDeletions.filter(d => d !== id)
       } else {
-        newChoosenDeletions = [...choosenDeletions, time]
+        newChoosenDeletions = [...choosenDeletions, id]
       }
-      changeChoosenDeletions(newChoosenDeletions)
+      setChoosenDeletions(newChoosenDeletions)
     },
   }),
 )
@@ -105,7 +104,7 @@ const enhance = compose(
 const Deletions = ({
   onClickUndo,
   choosenDeletions,
-  changeChoosenDeletions,
+  setChoosenDeletions,
   toggleChoosenDeletions,
   showDeletions,
   setShowDeletions,
@@ -146,23 +145,21 @@ const Deletions = ({
 
                       return (
                         <Row
-                          key={`${ds.time}`}
+                          key={ds.id}
                           data-withtopline={index > 0}
                         >
                           <StyledFormControlLabel
                             control={
                               <StyledCheckbox
-                                checked={choosenDeletions.includes(ds.time)}
+                                checked={choosenDeletions.includes(ds.id)}
                                 onChange={toggleChoosenDeletions}
-                                value={
-                                  ds.time && ds.time.toString() ? ds.time.toString() : ''
-                                }
+                                value={ds.id}
                                 color="primary"
                               />
                             }
                           />
                           <TextContainer>
-                            <StyledTextField label="Zeit" value={time} fullWidth />
+                            <StyledTextField label="Lösch-Zeitpunkt" value={time} fullWidth />
                             <StyledTextField label="Tabelle" value={ds.table} fullWidth />
                             <StyledTextField
                               label="Daten"

@@ -20,7 +20,6 @@ class DeleteContainer extends Container<DeleteState> {
     this.setState(state => ({ datasets: [...state.datasets, dataset] }))
   }
   removeDataset(id) {
-    console.log('state, Delete: removing dataset with id:', id)
     this.setState(state =>
       ({ datasets: state.datasets.filter(d => d.id !== id)})
     )

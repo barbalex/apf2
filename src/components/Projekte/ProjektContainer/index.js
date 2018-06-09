@@ -337,13 +337,16 @@ const ProjekteContainer = ({
                           </ReflexElement>
                         }
                       </ReflexContainer>
-                      <Deletions
+                    </ErrorBoundary>
+                    {
+                      showDeletions &&
+                        <Deletions
                         showDeletions={showDeletions}
                         setShowDeletions={setShowDeletions}
                         tree={tree}
                         refetchTree={refetch}
                       />
-                    </ErrorBoundary>
+                    }
                   </Container>
                 )
               }}
