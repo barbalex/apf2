@@ -2606,8 +2606,8 @@ class-utils@^0.3.5:
     static-extend "^0.1.1"
 
 classnames@^2.2.3, classnames@^2.2.5:
-  version "2.2.5"
-  resolved "https://registry.yarnpkg.com/classnames/-/classnames-2.2.5.tgz#fb3801d453467649ef3603c7d61a02bd129bde6d"
+  version "2.2.6"
+  resolved "https://registry.yarnpkg.com/classnames/-/classnames-2.2.6.tgz#43935bffdd291f326dad0a205309b38d00f650ce"
 
 clean-css@4.1.x:
   version "4.1.11"
@@ -4649,13 +4649,13 @@ graceful-fs@^4.1.0, graceful-fs@^4.1.11, graceful-fs@^4.1.2, graceful-fs@^4.1.6,
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/graceful-readlink/-/graceful-readlink-1.0.1.tgz#4cafad76bc62f02fa039b2f94e9a3dd3a391a725"
 
-graphile-build-pg@4.0.0-beta.8:
-  version "4.0.0-beta.8"
-  resolved "https://registry.yarnpkg.com/graphile-build-pg/-/graphile-build-pg-4.0.0-beta.8.tgz#096735a79cf938b1c54bc80aeb46a6712daae4b5"
+graphile-build-pg@4.0.0-rc.1:
+  version "4.0.0-rc.1"
+  resolved "https://registry.yarnpkg.com/graphile-build-pg/-/graphile-build-pg-4.0.0-rc.1.tgz#178b6389b5dfe8d1793d5a3f16ce5ca7bb567d98"
   dependencies:
     chalk "^2.1.0"
     debug ">=2 <3"
-    graphile-build "4.0.0-beta.8"
+    graphile-build "4.0.0-rc.1"
     graphql-iso-date "^3.2.0"
     jsonwebtoken "^8.1.1"
     lodash ">=4 <5"
@@ -4663,12 +4663,12 @@ graphile-build-pg@4.0.0-beta.8:
     pg-sql2 "2.1.0"
     postgres-interval "1.1.1"
 
-graphile-build@4.0.0-beta.8:
-  version "4.0.0-beta.8"
-  resolved "https://registry.yarnpkg.com/graphile-build/-/graphile-build-4.0.0-beta.8.tgz#3e1ef87f21c581b7d9418077e677c4769b9e1801"
+graphile-build@4.0.0-rc.1:
+  version "4.0.0-rc.1"
+  resolved "https://registry.yarnpkg.com/graphile-build/-/graphile-build-4.0.0-rc.1.tgz#c6037491498fd498b129c3b1053ced9d6cc5bd3f"
   dependencies:
     debug ">=2 <3"
-    graphql-parse-resolve-info "4.0.0-beta.8"
+    graphql-parse-resolve-info "4.0.0-rc.1"
     lodash ">=4 <5"
     pluralize "7.0.0"
 
@@ -4682,9 +4682,9 @@ graphql-iso-date@^3.2.0:
   version "3.5.0"
   resolved "https://registry.yarnpkg.com/graphql-iso-date/-/graphql-iso-date-3.5.0.tgz#55a1be0efa8d28c1453afd2eb5ce1d052189a513"
 
-graphql-parse-resolve-info@4.0.0-beta.8:
-  version "4.0.0-beta.8"
-  resolved "https://registry.yarnpkg.com/graphql-parse-resolve-info/-/graphql-parse-resolve-info-4.0.0-beta.8.tgz#71be1a339ec0e36f26de432e4c77722e7c5c1ff5"
+graphql-parse-resolve-info@4.0.0-rc.1:
+  version "4.0.0-rc.1"
+  resolved "https://registry.yarnpkg.com/graphql-parse-resolve-info/-/graphql-parse-resolve-info-4.0.0-rc.1.tgz#66ce65d4ef004000c69f2c34e2b10dc7aab74e6e"
   dependencies:
     debug ">=2 <3"
 
@@ -7028,8 +7028,8 @@ nwmatcher@^1.4.1:
   resolved "https://registry.yarnpkg.com/nwmatcher/-/nwmatcher-1.4.4.tgz#2285631f34a95f0d0395cd900c96ed39b58f346e"
 
 nwsapi@^2.0.0:
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/nwsapi/-/nwsapi-2.0.2.tgz#33a0aab27c678d4dfdbba6a7f84b1c627fc4966f"
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/nwsapi/-/nwsapi-2.0.3.tgz#3f4010d6c943f34018d3dfb5f2fbc0de90476959"
 
 oauth-sign@~0.8.2:
   version "0.8.2"
@@ -7787,20 +7787,20 @@ postcss@^6.0.0, postcss@^6.0.1, postcss@^6.0.16:
     source-map "^0.6.1"
     supports-color "^5.4.0"
 
-postgraphile-core@4.0.0-beta.8:
-  version "4.0.0-beta.8"
-  resolved "https://registry.yarnpkg.com/postgraphile-core/-/postgraphile-core-4.0.0-beta.8.tgz#eb196fca611351ab81f79cfb265e7d51775c89ab"
+postgraphile-core@4.0.0-rc.1:
+  version "4.0.0-rc.1"
+  resolved "https://registry.yarnpkg.com/postgraphile-core/-/postgraphile-core-4.0.0-rc.1.tgz#b980ae3e658acaee760d465cfe1b727a465a3027"
   dependencies:
-    graphile-build "4.0.0-beta.8"
-    graphile-build-pg "4.0.0-beta.8"
+    graphile-build "4.0.0-rc.1"
+    graphile-build-pg "4.0.0-rc.1"
 
 postgraphile-plugin-connection-filter@1.0.0-beta.9:
   version "1.0.0-beta.9"
   resolved "https://registry.yarnpkg.com/postgraphile-plugin-connection-filter/-/postgraphile-plugin-connection-filter-1.0.0-beta.9.tgz#789ca2e42a42a1c151f183f88545a54fc9b246ed"
 
-postgraphile@4.0.0-beta.10:
-  version "4.0.0-beta.10"
-  resolved "https://registry.yarnpkg.com/postgraphile/-/postgraphile-4.0.0-beta.10.tgz#4a2c1225b665dae63e7c781b72999356cfd81045"
+postgraphile@4.0.0-rc.1:
+  version "4.0.0-rc.1"
+  resolved "https://registry.yarnpkg.com/postgraphile/-/postgraphile-4.0.0-rc.1.tgz#2ca9a417e9d100074cd3b80a6fcf0cd43a781307"
   dependencies:
     body-parser "^1.15.2"
     chalk "1.1.3"
@@ -7816,7 +7816,7 @@ postgraphile@4.0.0-beta.10:
     pg ">=6.1.0 <8"
     pg-connection-string "^0.1.3"
     pg-sql2 "2.1.0"
-    postgraphile-core "4.0.0-beta.8"
+    postgraphile-core "4.0.0-rc.1"
     send "^0.16.1"
     tslib "^1.5.0"
 
@@ -7855,8 +7855,8 @@ preserve@^0.2.0:
   resolved "https://registry.yarnpkg.com/preserve/-/preserve-0.2.0.tgz#815ed1f6ebc65926f865b310c0713bcb3315ce4b"
 
 prettier@^1.10.2:
-  version "1.13.4"
-  resolved "https://registry.yarnpkg.com/prettier/-/prettier-1.13.4.tgz#31bbae6990f13b1093187c731766a14036fa72e6"
+  version "1.13.5"
+  resolved "https://registry.yarnpkg.com/prettier/-/prettier-1.13.5.tgz#7ae2076998c8edce79d63834e9b7b09fead6bfd0"
 
 pretty-bytes@^4.0.2:
   version "4.0.2"
@@ -8189,7 +8189,7 @@ react-dev-utils@6.0.0-next.66cc7a90:
     strip-ansi "4.0.0"
     text-table "0.2.0"
 
-react-dom@16.4.0, react-dom@^16.4.0:
+react-dom@16.4.0:
   version "16.4.0"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.4.0.tgz#099f067dd5827ce36a29eaf9a6cdc7cbf6216b1e"
   dependencies:
@@ -8378,7 +8378,7 @@ react-virtualized@9.19.1:
     prop-types "^15.6.0"
     react-lifecycles-compat "^3.0.4"
 
-react@16.4.0, react@^16.4.0:
+react@16.4.0:
   version "16.4.0"
   resolved "https://registry.yarnpkg.com/react/-/react-16.4.0.tgz#402c2db83335336fba1962c08b98c6272617d585"
   dependencies:
@@ -8960,9 +8960,9 @@ serve-static@1.13.2:
     parseurl "~1.3.2"
     send "0.16.2"
 
-serve@8.1.1:
-  version "8.1.1"
-  resolved "https://registry.yarnpkg.com/serve/-/serve-8.1.1.tgz#21bf75ffc967c60b8e4c69e81bb82c476543150f"
+serve@8.1.2:
+  version "8.1.2"
+  resolved "https://registry.yarnpkg.com/serve/-/serve-8.1.2.tgz#a8574d36869d7e8480473a0d4be40c4a7dd92f6c"
   dependencies:
     "@zeit/schemas" "1.2.0"
     ajv "6.5.0"
@@ -9982,15 +9982,7 @@ unset-value@^1.0.0:
     has-value "^0.3.1"
     isobject "^3.0.0"
 
-unstated-connect@^0.0.3:
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/unstated-connect/-/unstated-connect-0.0.3.tgz#16ade203c2b6df72549fda63fe36e3dd37cf4a5e"
-  dependencies:
-    react "^16.4.0"
-    react-dom "^16.4.0"
-    unstated "^2.1.1"
-
-unstated@^2.1.1:
+unstated@2.1.1:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/unstated/-/unstated-2.1.1.tgz#36b124dfb2e7a12d39d0bb9c46dfb6e51276e3a2"
   dependencies:
@@ -10323,8 +10315,8 @@ whatwg-mimetype@^2.0.0, whatwg-mimetype@^2.1.0:
   resolved "https://registry.yarnpkg.com/whatwg-mimetype/-/whatwg-mimetype-2.1.0.tgz#f0f21d76cbba72362eb609dbed2a30cd17fcc7d4"
 
 whatwg-url@^6.1.0, whatwg-url@^6.4.0, whatwg-url@^6.4.1:
-  version "6.4.1"
-  resolved "https://registry.yarnpkg.com/whatwg-url/-/whatwg-url-6.4.1.tgz#fdb94b440fd4ad836202c16e9737d511f012fd67"
+  version "6.5.0"
+  resolved "https://registry.yarnpkg.com/whatwg-url/-/whatwg-url-6.5.0.tgz#f2df02bff176fd65070df74ad5ccbb5a199965a8"
   dependencies:
     lodash.sortby "^4.7.0"
     tr46 "^1.0.1"
