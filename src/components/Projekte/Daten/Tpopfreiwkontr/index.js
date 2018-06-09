@@ -40,21 +40,45 @@ const FieldsContainer = styled.div`
 const enhance = compose(
   withState('errors', 'setErrors', ({})),
   withHandlers({
-    saveToDb: ({ setErrors, errors }) => async ({ row, field, value, updateTpopkontr }) => {
+    saveToDb: ({
+      setErrors,
+      errors,
+    }) => async ({
+      row,
+      field,
+      value,
+      field2,
+      value2,
+      updateTpopkontr,
+    }) => {
+      /**
+       * only save if value changed
+       */
+      if (row[field] === value) return
+      /**
+       * enable passing two values
+       * with same update
+       */
+      const variables = {
+        id: row.id,
+        [field]: value,
+      }
+      if (field2) variables[field2] = value2
       try {
         await updateTpopkontr({
-          variables: {
-            id: row.id,
-            [field]: value,
-          },
+          variables,
           optimisticResponse: {
             __typename: 'Mutation',
             updateTpopkontrById: {
               tpopkontr: {
                 id: row.id,
                 typ: field === 'typ' ? value : row.typ,
-                datum: field === 'datum' ? value : row.datum,
-                jahr: field === 'jahr' ? value : row.jahr,
+                jahr: field === 'jahr' ? value :
+                    field2 === 'jahr' ? value2 :
+                    row.jahr,
+                datum: field === 'datum' ? value :
+                  field2 === 'datum' ? value2 :
+                  row.datum,
                 bemerkungen: field === 'bemerkungen' ? value : row.bemerkungen,
                 flaecheUeberprueft:
                   field === 'flaecheUeberprueft' ? value : row.flaecheUeberprueft,
@@ -156,12 +180,13 @@ const Tpopfreiwkontr = ({
                     value={row.jahr}
                     type="number"
                     saveToDb={value => {
-                      saveToDb({ row, field: 'jahr', value, updateTpopkontr })
                       saveToDb({
                         row,
-                        field: 'datum',
-                        value: null,
-                        updateTpopkontr,
+                        field:
+                        'jahr', value,
+                        field2: 'datum',
+                        value2: null,
+                        updateTpopkontr
                       })
                     }}
                     error={errors.jahr}
@@ -175,12 +200,8 @@ const Tpopfreiwkontr = ({
                         row,
                         field: 'datum',
                         value,
-                        updateTpopkontr,
-                      })
-                      saveToDb({
-                        row,
-                        field: 'jahr',
-                        value: !!value ? format(value, 'YYYY') : null,
+                        field2: 'jahr',
+                        value2: !!value ? format(value, 'YYYY') : null,
                         updateTpopkontr,
                       })
                     }}

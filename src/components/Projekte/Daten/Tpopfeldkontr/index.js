@@ -92,21 +92,46 @@ const enhance = compose(
     }
   ),
   withHandlers({
-    saveToDb: ({ refetchTree, setErrors, errors }) => async ({ row, field, value, updateTpopkontr }) => {
+    saveToDb: ({
+      refetchTree,
+      setErrors,
+      errors,
+    }) => async ({
+      row,
+      field,
+      value,
+      field2,
+      value2,
+      updateTpopkontr,
+    }) => {
+      /**
+       * only save if value changed
+       */
+      if (row[field] === value) return
+      /**
+       * enable passing two values
+       * with same update
+       */
+      const variables = {
+        id: row.id,
+        [field]: value,
+      }
+      if (field2) variables[field2] = value2
       try {
         await updateTpopkontr({
-          variables: {
-            id: row.id,
-            [field]: value,
-          },
+          variables,
           optimisticResponse: {
             __typename: 'Mutation',
             updateTpopkontrById: {
               tpopkontr: {
                 id: row.id,
                 typ: field === 'typ' ? value : row.typ,
-                datum: field === 'datum' ? value : row.datum,
-                jahr: field === 'jahr' ? value : row.jahr,
+                jahr: field === 'jahr' ? value :
+                    field2 === 'jahr' ? value2 :
+                    row.jahr,
+                datum: field === 'datum' ? value :
+                  field2 === 'datum' ? value2 :
+                  row.datum,
                 jungpflanzenAnzahl:
                   field === 'jungpflanzenAnzahl' ? value : row.jungpflanzenAnzahl,
                 vitalitaet: field === 'vitalitaet' ? value : row.vitalitaet,
@@ -301,12 +326,8 @@ const Tpopfeldkontr = ({
                             row,
                             field: 'jahr',
                             value,
-                            updateTpopkontr,
-                          })
-                          saveToDb({
-                            row,
-                            field: 'datum',
-                            value: null,
+                            field2: 'datum',
+                            value2: null,
                             updateTpopkontr,
                           })
                         }}
@@ -321,12 +342,8 @@ const Tpopfeldkontr = ({
                             row,
                             field: 'datum',
                             value,
-                            updateTpopkontr,
-                          })
-                          saveToDb({
-                            row,
-                            field: 'jahr',
-                            value: !!value ? format(value, 'YYYY') : null,
+                            field2: 'jahr',
+                            value2: !!value ? format(value, 'YYYY') : null,
                             updateTpopkontr,
                           })
                         }}

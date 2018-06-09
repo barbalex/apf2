@@ -57,24 +57,15 @@ const enhance = compose(
        * only save if value changed
        */
       if (row[field] === value) return
+      /**
+       * enable passing two values
+       * with same update
+       */
       const variables = {
         id: row.id,
         [field]: value,
       }
       if (field2) variables[field2] = value2
-      console.log('Tpopmassn, saveToDb:', {
-        field,
-        value,
-        field2,
-        value2,
-        variables,
-        jahrOptimistic: field === 'jahr' ? value :
-          field2 === 'jahr' ? value2 :
-          row.jahr,
-        datumOptimistic: field === 'datum' ? value :
-          field2 === 'datum' ? value2 :
-          row.datum,
-      })
       try {
         await updateTpopmassn({
           variables,
