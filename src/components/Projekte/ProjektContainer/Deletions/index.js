@@ -70,21 +70,21 @@ const enhance = compose(
       errorState,
     }) => {
       // loop through all choosenDeletions
-      await choosenDeletions.forEach(async id => {
-        const dataset = datasetsDeleted.find(d => d.id === id)
-        await undelete({
-          datasetsDeleted,
-          dataset,
-          tree,
-          refetchTree,
-          setShowDeletions,
-          deleteState,
-          errorState,
-        })
-      })
+      await Promise.all(
+        choosenDeletions.map(async id =>
+          await undelete({
+            datasetsDeleted,
+            dataset: datasetsDeleted.find(d => d.id === id),
+            tree,
+            refetchTree,
+            setShowDeletions,
+            deleteState,
+            errorState,
+          })
+        )
+      )
       setChoosenDeletions([])
-      // close window if no more deletions exist
-      if (datasetsDeleted.length === 0) {
+      if (choosenDeletions.length === datasetsDeleted.length) {
         setShowDeletions(false)
       }
     },

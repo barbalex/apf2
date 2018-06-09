@@ -340,7 +340,7 @@ const ProjekteContainer = ({
                     </ErrorBoundary>
                     {
                       showDeletions &&
-                        <Deletions
+                      <Deletions
                         showDeletions={showDeletions}
                         setShowDeletions={setShowDeletions}
                         tree={tree}

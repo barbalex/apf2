@@ -3,7 +3,7 @@ mutation createPopmassnber(
   $popId: UUID
   $jahr: Int
   $beurteilung: Int
-  $bemerkungen: UUID
+  $bemerkungen: String
 ) {
   createPopmassnber(
     input: {

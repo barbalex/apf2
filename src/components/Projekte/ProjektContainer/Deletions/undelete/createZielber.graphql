@@ -3,7 +3,7 @@ mutation createZielber(
   $zielId: UUID
   $jahr: Int
   $erreichung: String
-  $bemerkungen: UUID
+  $bemerkungen: String
 ) {
   createZielber(
     input: {

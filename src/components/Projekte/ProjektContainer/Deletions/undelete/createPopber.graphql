@@ -3,7 +3,7 @@ mutation createPopber(
   $popId: UUID
   $jahr: Int
   $entwicklung: Int
-  $bemerkungen: UUID
+  $bemerkungen: String
 ) {
   createPopber(
     input: {

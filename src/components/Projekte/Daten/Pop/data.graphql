@@ -11,6 +11,7 @@ query popByIdQuery($id: UUID!) {
     x
     y
     apByApId {
+      id
       startJahr
     }
   }
