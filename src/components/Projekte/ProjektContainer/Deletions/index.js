@@ -122,6 +122,7 @@ const Deletions = ({
   <Subscribe to={[DeleteState]}>
     {deleteState => {
       const datasetsDeleted = deleteState.state.datasets
+      console.log('Deletions, render:', {datasetsDeleted})
 
       return (
         <Subscribe to={[ErrorState]}>
