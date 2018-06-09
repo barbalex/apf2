@@ -63,7 +63,20 @@ const LabelPopoverRowColumnRight = styled.div`
 const enhance = compose(
   withState('errors', 'setErrors', ({})),
   withHandlers({
-    saveToDb: ({ refetchTree, setErrors, errors }) => async ({ row, field, value, updateAp }) => {
+    saveToDb: ({
+      refetchTree,
+      setErrors,
+      errors
+    }) => async ({
+      row,
+      field,
+      value,
+      updateAp
+    }) => {
+      /**
+       * only save if value changed
+       */
+      if (row[field] === value) return
       try {
         await updateAp({
           variables: {
