@@ -21,26 +21,23 @@ const enhance = compose(
   withState(
     'stateValue',
     'setStateValue',
-    ({ value: propsValue }) =>
-      (propsValue || propsValue === 0) ? propsValue : ''
+    ({ value }) => (value || value === 0) ? value : ''
   ),
   withHandlers({
-    onChange: ({ setStateValue }) => event =>
-      setStateValue(event.target.value),
-    onBlur: ({ saveToDb }) => event =>
-      saveToDb(event.target.value || null),
+    onChange: ({ setStateValue }) => event => setStateValue(event.target.value),
+    onBlur: ({ saveToDb }) => event => saveToDb(event.target.value || null),
   }),
   withLifecycle({
     onDidUpdate(prevProps, props) {
       if (props.value !== prevProps.value) {
-        props.setStateValue(props.value)
+        const value = (props.value || props.value === 0) ? props.value : ''
+        props.setStateValue(value)
       }
     },
   }),
 )
 
 const MyTextField = ({
-  value: propsValue,
   stateValue,
   label,
   type = 'text',
@@ -52,7 +49,6 @@ const MyTextField = ({
   onChange,
   onBlur,
 }: {
-  value: Number | String,
   stateValue: Number | String,
   label: String,
   type: String,
@@ -63,7 +59,7 @@ const MyTextField = ({
   saveToDb: () => void,
   onChange: () => void,
   onBlur: () => void,
-}) => 
+}) =>
   <StyledFormControl
     fullWidth
     disabled={disabled}

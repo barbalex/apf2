@@ -41,13 +41,43 @@ const FieldsContainer = styled.div`
 const enhance = compose(
   withState('errors', 'setErrors', ({})),
   withHandlers({
-    saveToDb: ({ refetchTree, setErrors, errors }) => async ({ row, field, value, updateTpopmassn }) => {
+    saveToDb: ({
+      refetchTree,
+      setErrors,
+      errors
+    }) => async ({
+      row,
+      field,
+      value,
+      field2,
+      value2,
+      updateTpopmassn
+    }) => {
+      /**
+       * only save if value changed
+       */
+      if (row[field] === value) return
+      const variables = {
+        id: row.id,
+        [field]: value,
+      }
+      if (field2) variables[field2] = value2
+      console.log('Tpopmassn, saveToDb:', {
+        field,
+        value,
+        field2,
+        value2,
+        variables,
+        jahrOptimistic: field === 'jahr' ? value :
+          field2 === 'jahr' ? value2 :
+          row.jahr,
+        datumOptimistic: field === 'datum' ? value :
+          field2 === 'datum' ? value2 :
+          row.datum,
+      })
       try {
         await updateTpopmassn({
-          variables: {
-            id: row.id,
-            [field]: value,
-          },
+          variables,
           optimisticResponse: {
             __typename: 'Mutation',
             updateTpopmassnById: {
@@ -55,8 +85,12 @@ const enhance = compose(
                 id: row.id,
                 typ: field === 'typ' ? value : row.typ,
                 beschreibung: field === 'beschreibung' ? value : row.beschreibung,
-                jahr: field === 'jahr' ? value : row.jahr,
-                datum: field === 'datum' ? value : row.datum,
+                jahr: field === 'jahr' ? value :
+                    field2 === 'jahr' ? value2 :
+                    row.jahr,
+                datum: field === 'datum' ? value :
+                  field2 === 'datum' ? value2 :
+                  row.datum,
                 bemerkungen: field === 'bemerkungen' ? value : row.bemerkungen,
                 planBezeichnung:
                   field === 'planBezeichnung' ? value : row.planBezeichnung,
@@ -94,6 +128,10 @@ const enhance = compose(
   }),
   withLifecycle({
     onDidUpdate(prevProps, props) {
+      /**
+       * reset errors if dataset was changed
+       * (but same form rerenders)
+       */
       if (prevProps.id !== props.id) {
         props.setErrors(({}))
       }
@@ -160,12 +198,13 @@ const Tpopmassn = ({
                     value={row.jahr}
                     type="number"
                     saveToDb={value => {
-                      saveToDb({ row, field: 'jahr', value, updateTpopmassn })
                       saveToDb({
                         row,
-                        field: 'datum',
-                        value: null,
-                        updateTpopmassn,
+                        field: 'jahr',
+                        value,
+                        field2: 'datum',
+                        value2: null,
+                        updateTpopmassn
                       })
                     }}
                     error={errors.jahr}
@@ -177,14 +216,10 @@ const Tpopmassn = ({
                     saveToDb={value => {
                       saveToDb({
                         row,
-                        field: 'jahr',
-                        value: !!value ? format(value, 'YYYY') : null,
-                        updateTpopmassn,
-                      })
-                      saveToDb({
-                        row,
                         field: 'datum',
                         value,
+                        field2: 'jahr',
+                        value2: !!value ? format(value, 'YYYY') : null,
                         updateTpopmassn,
                       })
                     }}

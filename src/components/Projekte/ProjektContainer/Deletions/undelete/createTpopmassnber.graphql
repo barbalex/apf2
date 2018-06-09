@@ -3,7 +3,7 @@ mutation createTpopmassnber(
   $tpopId: UUID
   $jahr: Int
   $beurteilung: Int
-  $bemerkungen: UUID
+  $bemerkungen: String
 ) {
   createTpopmassnber(
     input: {

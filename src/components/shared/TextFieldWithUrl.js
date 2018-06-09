@@ -54,7 +54,8 @@ const enhance = compose(
   withLifecycle({
     onDidUpdate(prevProps, props) {
       if (props.value !== prevProps.value) {
-        props.setStateValue(props.value)
+        const value = (props.value || props.value === 0) ? props.value : ''
+        props.setStateValue(value)
       }
     },
   }),
