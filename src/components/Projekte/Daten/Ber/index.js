@@ -29,7 +29,19 @@ const FieldsContainer = styled.div`
 const enhance = compose(
   withState('errors', 'setErrors', ({})),
   withHandlers({
-    saveToDb: ({ setErrors, errors }) => async ({ row, field, value, updateBer }) => {
+    saveToDb: ({
+      setErrors,
+      errors,
+    }) => async ({
+      row,
+      field,
+      value,
+      updateBer,
+    }) => {
+      /**
+       * only save if value changed
+       */
+      if (row[field] === value) return
       try {
         await updateBer({
           variables: {
