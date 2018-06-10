@@ -4428,7 +4428,10 @@ SELECT
     apflora.pop.id,
     '/Teil-Populationen/',
     apflora.tpop.id
-  ) AS url
+  ) AS url,
+  apflora.tpop.id,
+  apflora.tpop.x,
+  apflora.tpop.y
 FROM
   (apflora.ae_eigenschaften
   INNER JOIN
@@ -4507,7 +4510,10 @@ SELECT
     apflora.pop.id,
     '/Teil-Populationen/',
     apflora.tpop.id
-  ) AS url
+  ) AS url,
+  apflora.tpop.id,
+  apflora.tpop.x,
+  apflora.tpop.y
 FROM
   (apflora.ae_eigenschaften
   INNER JOIN

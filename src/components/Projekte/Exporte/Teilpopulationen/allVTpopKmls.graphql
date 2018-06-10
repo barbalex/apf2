@@ -1,0 +1,15 @@
+query view {
+  allVTpopKmls {
+    nodes {
+      art
+      label
+      inhalte
+      laengengrad
+      breitengrad
+      url
+      id
+      x
+      y
+    }
+  }
+}

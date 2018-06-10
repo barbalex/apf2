@@ -149,54 +149,7 @@ const Teilpopulationen = ({
                       setMessage('Export "TeilpopulationenWebGisBun" wird vorbereitet...')
                       try {
                         const { data } = await client.query({
-                          query: gql`
-                            query view {
-                              allVTpopWebgisbuns {
-                                nodes {
-                                  APARTID: apartid
-                                  APART: apart
-                                  APSTATUS: apstatus
-                                  APSTARTJAHR: apstartjahr
-                                  APSTANDUMSETZUNG: apstandumsetzung
-                                  POPGUID: popguid
-                                  POPNR: popnr
-                                  POPNAME: popname
-                                  POPSTATUS: popstatus
-                                  POPSTATUSUNKLAR: popstatusunklar
-                                  POPUNKLARGRUND: popunklargrund
-                                  POPBEKANNTSEIT: popbekanntseit
-                                  POP_X: popX
-                                  POP_Y: popY
-                                  TPOPID: tpopid
-                                  TPOPGUID: tpopguid
-                                  TPOPNR: tpopnr
-                                  TPOPGEMEINDE: tpopgemeinde
-                                  TPOPFLURNAME: tpopflurname
-                                  TPOPSTATUS: tpopstatus
-                                  TPOPSTATUSUNKLAR: tpopstatusunklar
-                                  TPOPUNKLARGRUND: tpopunklargrund
-                                  TPOP_X: tpopX
-                                  TPOP_Y: tpopY
-                                  TPOPRADIUS: tpopradius
-                                  TPOPHOEHE: tpophoehe
-                                  TPOPEXPOSITION: tpopexposition
-                                  TPOPKLIMA: tpopklima
-                                  TPOPHANGNEIGUNG: tpophangneigung
-                                  TPOPBESCHREIBUNG: tpopbeschreibung
-                                  TPOPKATASTERNR: tpopkatasternr
-                                  TPOPVERANTWORTLICH: tpopverantwortlich
-                                  TPOPBERICHTSRELEVANZ: tpopberichtsrelevanz
-                                  TPOPBEKANNTSEIT: tpopbekanntseit
-                                  TPOPEIGENTUEMERIN: tpopeigentuemerin
-                                  TPOPKONTAKTVO: tpopkontaktVo
-                                  TPOPNUTZUNGSZONE: tpopNutzungszone
-                                  TPOPBEWIRTSCHAFTER: tpopbewirtschafter
-                                  TPOPBEWIRTSCHAFTUNG: tpopbewirtschaftung
-                                  TPOPCHANGEDAT: tpopchangedat
-                                  TPOPCHANGEBY: tpopchangeby
-                                }
-                              }
-                            }`
+                          query: await import('./allVTpopWebgisbuns.graphql')
                         })
                         exportModule({
                           data: get(data, 'allVTpopWebgisbuns.nodes', []),
@@ -222,19 +175,7 @@ const Teilpopulationen = ({
                       setMessage('Export "Teilpopulationen" wird vorbereitet...')
                       try {
                         const { data } = await client.query({
-                          query: gql`
-                            query view {
-                              allVTpopKmls {
-                                nodes {
-                                  art
-                                  label
-                                  inhalte
-                                  laengengrad
-                                  breitengrad
-                                  url
-                                }
-                              }
-                            }`
+                          query: await import('./allVTpopKmls.graphql')
                         })
                         exportModule({
                           data: get(data, 'allVTpopKmls.nodes', []),
@@ -242,6 +183,9 @@ const Teilpopulationen = ({
                           fileType,
                           applyMapFilterToExport,
                           mapFilter,
+                          idKey: 'id',
+                          xKey: 'x',
+                          yKey: 'y',
                           errorState,
                         })
                       } catch(error) {
