@@ -1467,7 +1467,7 @@ CREATE OR REPLACE VIEW apflora.v_pop_mit_letzter_popber AS
 SELECT
   apflora.ap.id AS ap_id,
   apflora.ae_eigenschaften.artname,
-  apflora.ap_bearbstand_werte.text AS ap_status,
+  apflora.ap_bearbstand_werte.text AS ap_bearbeitung,
   apflora.ap.start_jahr AS ap_start_jahr,
   apflora.ap_umsetzung_werte.text AS ap_umsetzung,
   apflora.pop.id as pop_id,

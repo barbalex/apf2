@@ -293,28 +293,7 @@ const Populationen = ({
                     setMessage('Export "PopulationenAnzahlKontrollen" wird vorbereitet...')
                     try {
                       const { data } = await client.query({
-                        query: gql`
-                          query view {
-                            allVPopAnzkontrs {
-                              nodes {
-                                apId
-                                artname
-                                apBearbeitung
-                                apStartJahr
-                                apUmsetzung
-                                id
-                                nr
-                                name
-                                status
-                                bekanntSeit
-                                statusUnklar
-                                statusUnklarBegruendung
-                                x
-                                y
-                                anzahlKontrollen
-                              }
-                            }
-                          }`
+                        query: await import('./allVPopAnzkontrs.graphql')
                       })
                       exportModule({
                         data: get(data, 'allVPopAnzkontrs.nodes', []),
@@ -340,42 +319,7 @@ const Populationen = ({
                     setMessage('Export "PopulationenPopUndMassnBerichte" wird vorbereitet...')
                     try {
                       const { data } = await client.query({
-                        query: gql`
-                          query view {
-                            allVPopPopberundmassnbers {
-                              nodes {
-                                apId
-                                artname
-                                apBearbeitung
-                                apStartJahr
-                                apUmsetzung
-                                popId
-                                popNr
-                                popName
-                                popStatus
-                                popBekanntSeit
-                                popStatusUnklar
-                                popStatusUnklarBegruendung
-                                popX
-                                popY
-                                popChanged
-                                popChangedBy
-                                jahr
-                                popberId
-                                popberJahr
-                                popberEntwicklung
-                                popberBemerkungen
-                                popberChanged
-                                popberChangedBy
-                                popmassnberId
-                                popmassnberJahr
-                                popmassnberEntwicklung
-                                popmassnberBemerkungen
-                                popmassnberChanged
-                                popmassnberChangedBy
-                              }
-                            }
-                          }`
+                        query: await import('./allVPopPopberundmassnbers.graphql')
                       })
                       exportModule({
                         data: get(data, 'allVPopPopberundmassnbers.nodes', []),
@@ -383,9 +327,9 @@ const Populationen = ({
                         fileType,
                         mapFilter,
                         applyMapFilterToExport,
-                        idKey: 'popId',
-                        xKey: 'popX',
-                        yKey: 'popY',
+                        idKey: 'pop_id',
+                        xKey: 'pop_x',
+                        yKey: 'pop_y',
                         errorState,
                       })
                     } catch(error) {
@@ -401,35 +345,7 @@ const Populationen = ({
                     setMessage('Export "PopulationenMitLetzemPopBericht" wird vorbereitet...')
                     try {
                       const { data } = await client.query({
-                        query: gql`
-                          query view {
-                            allVPopMitLetzterPopbers {
-                              nodes {
-                                apId
-                                artname
-                                apStatus
-                                apStartJahr
-                                apUmsetzung
-                                popId
-                                popNr
-                                popName
-                                popStatus
-                                popBekanntSeit
-                                popStatusUnklar
-                                popStatusUnklarBegruendung
-                                popX
-                                popY
-                                popChanged
-                                popChangedBy
-                                popberId
-                                popberJahr
-                                popberEntwicklung
-                                popberBemerkungen
-                                popberChanged
-                                popberChangedBy
-                              }
-                            }
-                          }`
+                        query: await import('./allVPopMitLetzterPopbers.graphql')
                       })
                       exportModule({
                         data: get(data, 'allVPopMitLetzterPopbers.nodes', []),
@@ -437,9 +353,9 @@ const Populationen = ({
                         fileType,
                         mapFilter,
                         applyMapFilterToExport,
-                        idKey: 'popId',
-                        xKey: 'popX',
-                        yKey: 'popY',
+                        idKey: 'pop_id',
+                        xKey: 'pop_x',
+                        yKey: 'pop_y',
                         errorState,
                       })
                     } catch(error) {
