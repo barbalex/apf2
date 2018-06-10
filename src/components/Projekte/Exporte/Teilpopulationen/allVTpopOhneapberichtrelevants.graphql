@@ -1,0 +1,16 @@
+query view {
+  allVTpopOhneapberichtrelevants {
+    nodes {
+      artname
+      pop_nr: popNr
+      pop_name: popName
+      id
+      nr
+      gemeinde
+      flurname
+      apber_relevant: apberRelevant
+      x
+      y
+    }
+  }
+}

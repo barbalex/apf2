@@ -229,24 +229,7 @@ const Teilpopulationen = ({
                       setMessage('Export "TeilpopulationenVonApArtenOhneBekanntSeit" wird vorbereitet...')
                       try {
                         const { data } = await client.query({
-                          query: gql`
-                            query view {
-                              allVTpopOhnebekanntseits {
-                                nodes {
-                                  id
-                                  artname
-                                  apBearbeitung
-                                  popNr
-                                  popName
-                                  nr
-                                  gemeinde
-                                  flurname
-                                  bekanntSeit
-                                  x
-                                  y
-                                }
-                              }
-                            }`
+                          query: await import('./allVTpopOhnebekanntseits.graphql')
                         })
                         exportModule({
                           data: get(data, 'allVTpopOhnebekanntseits.nodes', []),
@@ -273,23 +256,7 @@ const Teilpopulationen = ({
                       setMessage('Export "TeilpopulationenOhneApBerichtRelevant" wird vorbereitet...')
                       try {
                         const { data } = await client.query({
-                          query: gql`
-                            query view {
-                              allVTpopOhneapberichtrelevants {
-                                nodes {
-                                  artname
-                                  popNr
-                                  popName
-                                  id
-                                  nr
-                                  gemeinde
-                                  flurname
-                                  apberRelevant
-                                  x
-                                  y
-                                }
-                              }
-                            }`
+                          query: await import('./allVTpopOhneapberichtrelevants.graphql')
                         })
                         exportModule({
                           data: get(data, 'allVTpopOhneapberichtrelevants.nodes', []),
@@ -316,52 +283,7 @@ const Teilpopulationen = ({
                       setMessage('Export "TeilpopulationenAnzahlMassnahmen" wird vorbereitet...')
                       try {
                         const { data } = await client.query({
-                          query: gql`
-                            query view {
-                              allVTpopAnzmassns {
-                                nodes {
-                                  apId
-                                  familie
-                                  artname
-                                  apBearbeitung
-                                  apStartJahr
-                                  apUmsetzung
-                                  popId
-                                  popNr
-                                  popName
-                                  popStatus
-                                  popBekanntSeit
-                                  popStatusUnklar
-                                  popStatusUnklarBegruendung
-                                  popX
-                                  popY
-                                  id
-                                  nr
-                                  gemeinde
-                                  flurname
-                                  status
-                                  bekanntSeit
-                                  statusUnklar
-                                  statusUnklarGrund
-                                  x
-                                  y
-                                  radius
-                                  hoehe
-                                  exposition
-                                  klima
-                                  neigung
-                                  beschreibung
-                                  katasterNr
-                                  apberRelevant
-                                  eigentuemer
-                                  kontakt
-                                  nutzungszone
-                                  bewirtschafter
-                                  bewirtschaftung
-                                  anzahlMassnahmen
-                                }
-                              }
-                            }`
+                          query: await import('./allVTpopAnzmassns.graphql')
                         })
                         exportModule({
                           data: get(data, 'allVTpopAnzmassns.nodes', []),
