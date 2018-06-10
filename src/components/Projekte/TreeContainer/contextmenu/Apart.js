@@ -5,13 +5,14 @@ import { ContextMenu, MenuItem } from 'react-contextmenu'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import userIsReadOnly from '../../../../modules/userIsReadOnly'
 
-const Apart = ({ onClick,
+const Apart = ({
+  onClick,
   tree,
-  token
+  token,
 }: {
   onClick: () => void,
   tree: Object,
-  token: String
+  token: String,
 }) => 
   <ErrorBoundary>
     <ContextMenu id={`${tree.name}apart`}>

@@ -15,7 +15,7 @@ const ApartFolder = ({
   token: String
 }) => (
   <ErrorBoundary>
-    <ContextMenu id={`${tree.name}apArtFolder`}>
+    <ContextMenu id={`${tree.name}apartFolder`}>
       <div className="react-contextmenu-title">AP-Arten</div>
       {
         !userIsReadOnly(token) &&
