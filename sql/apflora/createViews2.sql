@@ -2104,7 +2104,7 @@ CREATE OR REPLACE VIEW apflora.v_popmassnber_anzmassn AS
 SELECT
   apflora.ap.id AS ap_id,
   apflora.ae_eigenschaften.artname,
-  apflora.ap_bearbstand_werte.text AS ap_status,
+  apflora.ap_bearbstand_werte.text AS ap_bearbeitung,
   apflora.ap.start_jahr AS ap_start_jahr,
   apflora.ap_umsetzung_werte.text AS ap_umsetzung,
   apflora.pop.id AS pop_id,
@@ -2118,12 +2118,12 @@ SELECT
   apflora.pop.y AS pop_y,
   apflora.pop.changed AS pop_changed,
   apflora.pop.changed_by AS pop_changed_by,
-  apflora.popmassnber.id AS popmassnber_id,
-  apflora.popmassnber.jahr AS popmassnber_jahr,
-  tpopmassn_erfbeurt_werte.text AS popmassnber_entwicklung,
-  apflora.popmassnber.bemerkungen AS popmassnber_bemerkungen,
-  apflora.popmassnber.changed AS popmassnber_changed,
-  apflora.popmassnber.changed_by AS popmassnber_changed_by,
+  apflora.popmassnber.id AS id,
+  apflora.popmassnber.jahr AS jahr,
+  tpopmassn_erfbeurt_werte.text AS entwicklung,
+  apflora.popmassnber.bemerkungen AS bemerkungen,
+  apflora.popmassnber.changed AS changed,
+  apflora.popmassnber.changed_by AS changed_by,
   apflora.v_popmassnber_anzmassn0.anzahl_massnahmen
 FROM
   ((((((apflora.ae_eigenschaften

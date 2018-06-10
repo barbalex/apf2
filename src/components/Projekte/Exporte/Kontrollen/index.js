@@ -142,7 +142,7 @@ const Kontrollen = ({
                         fileType,
                         applyMapFilterToExport,
                         mapFilter,
-                        idKey: 'KONTRGUID',
+                        idKey: 'TPOPGUID',
                         xKey: 'KONTR_X',
                         yKey: 'KONTR_Y',
                         errorState,
@@ -168,9 +168,9 @@ const Kontrollen = ({
                         fileType,
                         applyMapFilterToExport,
                         mapFilter,
-                        idKey: 'id',
-                        xKey: 'tpopX',
-                        yKey: 'tpopY',
+                        idKey: 'tpop_id',
+                        xKey: 'tpop_x',
+                        yKey: 'tpop_y',
                         errorState,
                       })
                     } catch(error) {

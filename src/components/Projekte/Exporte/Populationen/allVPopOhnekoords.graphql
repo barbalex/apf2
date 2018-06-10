@@ -1,5 +1,5 @@
-query Query {
-  allVPops {
+query view {
+  allVPopOhnekoords {
     nodes {
       ap_id: apId
       artname

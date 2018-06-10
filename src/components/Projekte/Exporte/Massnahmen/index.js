@@ -18,8 +18,6 @@ import { Subscribe } from 'unstated'
 import exportModule from '../../../../modules/export'
 import Message from '../Message'
 import ErrorState from '../../../../state/Error'
-import allVMassns from './allVMassns.graphql'
-import allVMassnWebgisbuns from './allVMassnWebgisbuns.graphql'
 
 const StyledCard = styled(Card)`
   margin: 10px 0;
@@ -110,7 +108,7 @@ const Massnahmen = ({
                         setMessage('Export "Massnahmen" wird vorbereitet...')
                         try {
                           const { data } = await client.query({
-                            query: allVMassns
+                            query: await import('./allVMassns.graphql')
                           })
                           exportModule({
                             data: get(data, 'allVMassns.nodes', []),
@@ -118,9 +116,9 @@ const Massnahmen = ({
                             fileType,
                             applyMapFilterToExport,
                             mapFilter,
-                            idKey: 'id',
-                            xKey: 'tpopX',
-                            yKey: 'tpopY',
+                            idKey: 'tpop_id',
+                            xKey: 'tpop_x',
+                            yKey: 'tpop_y',
                             errorState,
                           })
                         } catch(error) {
@@ -136,7 +134,7 @@ const Massnahmen = ({
                         setMessage('Export "MassnahmenWebGisBun" wird vorbereitet...')
                         try {
                           const { data } = await client.query({
-                            query: allVMassnWebgisbuns
+                            query: await import('./allVMassnWebgisbuns.graphql')
                           })
                           exportModule({
                             data: get(data, 'allVMassnWebgisbuns.nodes', []),
@@ -144,7 +142,7 @@ const Massnahmen = ({
                             fileType,
                             applyMapFilterToExport,
                             mapFilter,
-                            idKey: 'MASSNGUID',
+                            idKey: 'TPOPGUID',
                             xKey: 'TPOP_X',
                             yKey: 'TPOP_Y',
                             errorState,

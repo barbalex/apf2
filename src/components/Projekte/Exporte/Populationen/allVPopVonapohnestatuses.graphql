@@ -1,0 +1,15 @@
+query view {
+  allVPopVonapohnestatuses {
+    nodes {
+      apId
+      artname
+      apBearbeitung
+      id
+      nr
+      name
+      status
+      x
+      y
+    }
+  }
+}

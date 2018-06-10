@@ -1,5 +1,5 @@
-query Query {
-  allVPops {
+query view {
+  allVPopAnzmassns {
     nodes {
       ap_id: apId
       artname
@@ -15,8 +15,7 @@ query Query {
       status_unklar_begruendung: statusUnklarBegruendung
       x
       y
-      changed
-      changed_by: changedBy
+      anzahl_massnahmen: anzahlMassnahmen
     }
   }
 }
