@@ -12,14 +12,11 @@ import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import styled from 'styled-components'
 import { ApolloConsumer } from 'react-apollo'
-import gql from "graphql-tag"
 import get from 'lodash/get'
 import { Subscribe } from 'unstated'
 
 import exportModule from '../../../../modules/export'
 import Message from '../Message'
-import popGql from './pop.graphql'
-import popKml from './popKml.graphql'
 import ErrorState from '../../../../state/Error'
 
 const StyledCard = styled(Card)`
@@ -111,7 +108,7 @@ const Populationen = ({
                     setMessage('Export "Populationen" wird vorbereitet...')
                     try {
                       const { data } = await client.query({
-                        query: await import('./pop.graphql')
+                        query: await import('./allVPops.graphql')
                       })
                       exportModule({
                         data: get(data, 'allVPops.nodes', []),
@@ -137,7 +134,7 @@ const Populationen = ({
                     setMessage('Export "Populationen" wird vorbereitet...')
                     try {
                       const { data } = await client.query({
-                        query: popKml
+                        query: await import('./allVPopKmls.graphql')
                       })
                       exportModule({
                         data: get(data, 'allVPopKmls.nodes', []),

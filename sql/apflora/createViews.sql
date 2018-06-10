@@ -1270,7 +1270,9 @@ SELECT
   apflora.pop.id,
   apflora.pop.nr,
   apflora.pop.name,
-  apflora.pop.status 
+  apflora.pop.status,
+  apflora.pop.x,
+  apflora.pop.y
 FROM
   apflora.ae_eigenschaften
   INNER JOIN
@@ -4566,7 +4568,10 @@ SELECT
     apflora.ap.id,
     '/Populationen/',
     apflora.pop.id
-  ) AS url
+  ) AS url,
+  apflora.pop.id,
+  apflora.pop.x,
+  apflora.pop.y
 FROM
   apflora.ae_eigenschaften
   INNER JOIN
@@ -4625,7 +4630,10 @@ SELECT
     apflora.ap.id,
     '/Populationen/',
     apflora.pop.id
-  ) AS url
+  ) AS url,
+  apflora.pop.id,
+  apflora.pop.x,
+  apflora.pop.y
 FROM
   apflora.ae_eigenschaften
   INNER JOIN
