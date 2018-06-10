@@ -176,6 +176,7 @@ const Teilpopulationen = ({
                         const { data } = await client.query({
                           query: await import('./allVTpopKmls.graphql')
                         })
+                        // TODO: add wgs84 fields
                         exportModule({
                           data: get(data, 'allVTpopKmls.nodes', []),
                           fileName: 'Teilpopulationen',
@@ -203,6 +204,7 @@ const Teilpopulationen = ({
                         const { data } = await client.query({
                           query: await import('./allVTpopKmlnamen.graphql')
                         })
+                        // TODO: add wgs84 fields
                         exportModule({
                           data: get(data, 'allVTpopKmlnamen.nodes', []),
                           fileName: 'TeilpopulationenNachNamen',

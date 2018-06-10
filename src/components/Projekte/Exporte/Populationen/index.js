@@ -136,6 +136,7 @@ const Populationen = ({
                       const { data } = await client.query({
                         query: await import('./allVPopKmls.graphql')
                       })
+                      // TODO: add wgs84 fields
                       exportModule({
                         data: get(data, 'allVPopKmls.nodes', []),
                         fileName: 'Populationen',
@@ -162,6 +163,7 @@ const Populationen = ({
                       const { data } = await client.query({
                         query: await import('./allVPopKmlnamen.graphql')
                       })
+                      // TODO: add wgs84 fields
                       exportModule({
                         data: get(data, 'allVPopKmlnamen.nodes', []),
                         fileName: 'PopulationenNachNamen',
