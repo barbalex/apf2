@@ -16,9 +16,9 @@ import gql from "graphql-tag"
 import get from 'lodash/get'
 import { Subscribe } from 'unstated'
 
-import exportModule from '../../../modules/export'
-import Message from './Message'
-import ErrorState from '../../../state/Error'
+import exportModule from '../../../../modules/export'
+import Message from '../Message'
+import ErrorState from '../../../../state/Error'
 
 const StyledCard = styled(Card)`
   margin: 10px 0;
@@ -109,21 +109,7 @@ const AP = ({
                     setMessage('Export "AP" wird vorbereitet...')
                     try {
                       const { data } = await client.query({
-                        query: gql`
-                          query view {
-                            allVAps {
-                              nodes {
-                                id
-                                artname
-                                bearbeitung
-                                start_jahr: startJahr
-                                umsetzung
-                                bearbeiter
-                                changed
-                                changed_by: changedBy
-                              }
-                            }
-                          }`
+                        query: await import('./allVAps.graphql')
                       })
                       exportModule({
                         data: get(data, 'allVAps.nodes', []), 
@@ -146,20 +132,7 @@ const AP = ({
                     setMessage('Export "ApOhnePopulationen" wird vorbereitet...')
                     try {
                       const { data } = await client.query({
-                        query: gql`
-                          query view {
-                            allVApOhnepops {
-                              nodes {
-                                id
-                                artname
-                                bearbeitung
-                                start_jahr: startJahr
-                                umsetzung
-                                bearbeiter
-                                pop_id: popId
-                              }
-                            }
-                          }`
+                        query: await import('./allVApOhnepops.graphql')
                       })
                       exportModule({
                         data: get(data, 'allVApOhnepops.nodes', []),
@@ -182,19 +155,7 @@ const AP = ({
                     setMessage('Export "ApAnzahlMassnahmen" wird vorbereitet...')
                     try {
                       const { data } = await client.query({
-                        query: gql`
-                          query view {
-                            allVApAnzmassns {
-                              nodes {
-                                id
-                                artname
-                                bearbeitung
-                                start_jahr: startJahr
-                                umsetzung
-                                anzahl_massnahmen: anzahlMassnahmen
-                              }
-                            }
-                          }`
+                        query: await import('./allVApAnzmassns.graphql')
                       })
                       exportModule({
                         data: get(data, 'allVApAnzmassns.nodes', []),
