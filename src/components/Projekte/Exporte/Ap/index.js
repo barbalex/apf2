@@ -12,7 +12,6 @@ import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import styled from 'styled-components'
 import { ApolloConsumer } from 'react-apollo'
-import gql from "graphql-tag"
 import get from 'lodash/get'
 import { Subscribe } from 'unstated'
 
