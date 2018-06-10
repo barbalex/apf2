@@ -4666,7 +4666,7 @@ SELECT
   apflora.tpop.status_unklar_grund AS tpop_status_unklar_grund,
   apflora.tpop.x AS tpop_x,
   apflora.tpop.y AS tpop_y,
-  apflora.tpop.radius AS tpop_radius_m,
+  apflora.tpop.radius AS tpop_radius,
   apflora.tpop.hoehe AS tpop_hoehe,
   apflora.tpop.exposition AS tpop_exposition,
   apflora.tpop.klima AS tpop_klima,
