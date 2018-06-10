@@ -117,6 +117,7 @@ type Props = {
   value: String,
   objects: Array<Object>,
   classes: Object,
+  mapFilter: Object,
 }
 
 type State = {
@@ -186,7 +187,7 @@ class IntegrationAutosuggest extends React.Component<Props, State> {
   }
 
   render() {
-    const { classes, openabove, objects } = this.props
+    const { classes, openabove, objects, mapFilter } = this.props
     const { suggestions } = this.state
 
     return (
@@ -322,6 +323,7 @@ class IntegrationAutosuggest extends React.Component<Props, State> {
                       exportModule({
                         data: get(data, 'allVTpopAnzkontrinklletzterundletztertpopbers.nodes', []),
                         fileName: 'anzkontrinklletzterundletztertpopber',
+                        mapFilter,
                         errorState,
                       })
                     } catch(error) {

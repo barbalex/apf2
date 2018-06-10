@@ -1536,7 +1536,10 @@ SELECT
   apflora.tpop.nr,
   apflora.tpop.gemeinde,
   apflora.tpop.flurname,
-  apflora.tpop.bekannt_seit
+  apflora.tpop.bekannt_seit,
+  apflora.tpop.id,
+  apflora.tpop.x,
+  apflora.tpop.y
 FROM
   ((apflora.ae_eigenschaften
   INNER JOIN
@@ -4993,7 +4996,9 @@ SELECT
   apflora.tpop.nr,
   apflora.tpop.gemeinde,
   apflora.tpop.flurname,
-  apflora.tpop.apber_relevant
+  apflora.tpop.apber_relevant,
+  apflora.tpop.x,
+  apflora.tpop.y
 FROM
   apflora.ae_eigenschaften
   INNER JOIN

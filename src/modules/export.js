@@ -12,7 +12,7 @@ export default async ({
   fileType,
   applyMapFilterToExport,
   kml,
-  mapFilter,
+  mapFilter = {},
   idKey,
   xKey,
   yKey,

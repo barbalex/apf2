@@ -352,6 +352,7 @@ const Teilpopulationen = ({
                       label={`"Eier legende Wollmilchsau" für eine Art`}
                       objects={artList}
                       openabove
+                      mapFilter={mapFilter}
                     />
                   </AutocompleteContainer>
                   <DownloadCardButton
@@ -359,62 +360,7 @@ const Teilpopulationen = ({
                       setMessage('Export "TeilpopulationenTPopUndMassnBerichte" wird vorbereitet...')
                       try {
                         const { data } = await client.query({
-                          query: gql`
-                            query view {
-                              allVTpopPopberundmassnbers {
-                                nodes {
-                                  apId
-                                  artname
-                                  apBearbeitung
-                                  apStartJahr
-                                  apUmsetzung
-                                  popId
-                                  popNr
-                                  popName
-                                  popStatus
-                                  popBekanntSeit
-                                  popStatusUnklar
-                                  popStatusUnklarBegruendung
-                                  popX
-                                  popY
-                                  tpopId
-                                  tpopNr
-                                  tpopGemeinde
-                                  tpopFlurname
-                                  tpopStatus
-                                  tpopBekanntSeit
-                                  tpopStatusUnklar
-                                  tpopStatusUnklarGrund
-                                  tpopX
-                                  tpopY
-                                  tpopRadius
-                                  tpopHoehe
-                                  tpopExposition
-                                  tpopKlima
-                                  tpopNeigung
-                                  tpopBeschreibung
-                                  tpopKatasterNr
-                                  tpopApberRelevant
-                                  tpopEigentuemer
-                                  tpopKontakt
-                                  tpopNutzungszone
-                                  tpopBewirtschafter
-                                  tpopBewirtschaftung
-                                  tpopberId
-                                  tpopberJahr
-                                  tpopberEntwicklung
-                                  tpopberBemerkungen
-                                  tpopberChanged
-                                  tpopberChangedBy
-                                  tpopmassnberId
-                                  tpopmassnberJahr
-                                  tpopmassnberEntwicklung
-                                  tpopmassnberBemerkungen
-                                  tpopmassnberChanged
-                                  tpopmassnberChangedBy
-                                }
-                              }
-                            }`
+                          query: await import('./allVTpopPopberundmassnbers.graphql')
                         })
                         exportModule({
                           data: get(data, 'allVTpopPopberundmassnbers.nodes', []),
@@ -422,9 +368,9 @@ const Teilpopulationen = ({
                           fileType,
                           applyMapFilterToExport,
                           mapFilter,
-                          idKey: 'tpopId',
-                          xKey: 'tpopX',
-                          yKey: 'tpopY',
+                          idKey: 'tpop_id',
+                          xKey: 'tpop_x',
+                          yKey: 'tpop_y',
                           errorState,
                         })
                       } catch(error) {
