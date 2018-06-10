@@ -371,35 +371,7 @@ const Populationen = ({
                     setMessage('Export "PopulationenMitLetztemMassnBericht" wird vorbereitet...')
                     try {
                       const { data } = await client.query({
-                        query: gql`
-                          query view {
-                            allVPopMitLetzterPopmassnbers {
-                              nodes {
-                                apId
-                                artname
-                                apStatus
-                                apStartJahr
-                                apUmsetzung
-                                popId
-                                popNr
-                                popName
-                                popStatus
-                                popBekanntSeit
-                                popStatusUnklar
-                                popStatusUnklarBegruendung
-                                popX
-                                popY
-                                popChanged
-                                popChangedBy
-                                popmassnberId
-                                popmassnberJahr
-                                popmassnberEntwicklung
-                                popmassnberBemerkungen
-                                popmassnberChanged
-                                popmassnberChangedBy
-                              }
-                            }
-                          }`
+                        query: await import('./allVPopMitLetzterPopmassnbers.graphql')
                       })
                       exportModule({
                         data: get(data, 'allVPopMitLetzterPopmassnbers.nodes', []),
@@ -407,9 +379,9 @@ const Populationen = ({
                         fileType,
                         mapFilter,
                         applyMapFilterToExport,
-                        idKey: 'popId',
-                        xKey: 'popX',
-                        yKey: 'popY',
+                        idKey: 'pop_id',
+                        xKey: 'pop_x',
+                        yKey: 'pop_y',
                         errorState,
                       })
                     } catch(error) {
