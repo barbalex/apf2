@@ -202,22 +202,7 @@ const Teilpopulationen = ({
                       setMessage('Export "TeilpopulationenNachNamen" wird vorbereitet...')
                       try {
                         const { data } = await client.query({
-                          query: gql`
-                            query view {
-                              allVTpopKmlnamen {
-                                nodes {
-                                  art
-                                  label
-                                  inhalte
-                                  id
-                                  x
-                                  y
-                                  laengengrad
-                                  breitengrad
-                                  url
-                                }
-                              }
-                            }`
+                          query: await import('./allVTpopKmlnamen.graphql')
                         })
                         exportModule({
                           data: get(data, 'allVTpopKmlnamen.nodes', []),
