@@ -178,19 +178,7 @@ const AP = ({
                     setMessage('Export "ApAnzahlKontrollen" wird vorbereitet...')
                     try {
                       const { data } = await client.query({
-                        query: gql`
-                          query view {
-                            allVApAnzkontrs {
-                              nodes {
-                                id
-                                artname
-                                bearbeitung
-                                start_jahr: startJahr
-                                umsetzung
-                                anzahl_kontrollen: anzahlKontrollen
-                              }
-                            }
-                          }`
+                        query: await import('./allVApAnzkontrs.graphql')
                       })
                       exportModule({
                         data: get(data, 'allVApAnzkontrs.nodes', []),
@@ -213,36 +201,7 @@ const AP = ({
                     setMessage('Export "Jahresberichte" wird vorbereitet...')
                     try {
                       const { data } = await client.query({
-                        query: gql`
-                          query view {
-                            allVApbers {
-                              nodes {
-                                id
-                                ap_id: apId
-                                artname
-                                jahr
-                                situation
-                                vergleich_vorjahr_gesamtziel: vergleichVorjahrGesamtziel
-                                beurteilung
-                                beurteilung_decodiert: beurteilungDecodiert
-                                veraenderung_zum_vorjahr: veraenderungZumVorjahr
-                                apber_analyse: apberAnalyse
-                                konsequenzen_umsetzung: konsequenzenUmsetzung
-                                konsequenzen_erfolgskontrolle: konsequenzenErfolgskontrolle
-                                biotope_neue: biotopeNeue
-                                biotope_optimieren: biotopeOptimieren
-                                massnahmen_optimieren: massnahmenOptimieren
-                                wirkung_auf_art: wirkungAufArt
-                                changed
-                                changed_by: changedBy
-                                massnahmen_ap_bearb: massnahmenApBearb
-                                massnahmen_planung_vs_ausfuehrung: massnahmenPlanungVsAusfuehrung
-                                datum
-                                bearbeiter
-                                bearbeiter_decodiert: bearbeiterDecodiert
-                              }
-                            }
-                          }`
+                        query: await import('./allVApbers.graphql')
                       })
                       exportModule({
                         data: get(data, 'allVApbers.nodes', []),
@@ -265,24 +224,7 @@ const AP = ({
                     setMessage('Export "ApJahresberichteUndMassnahmen" wird vorbereitet...')
                     try {
                       const { data } = await client.query({
-                        query: gql`
-                          query view {
-                            allVApApberundmassns {
-                              nodes {
-                                id
-                                artname
-                                bearbeitung
-                                start_jahr: startJahr
-                                umsetzung
-                                bearbeiter
-                                artwert
-                                massn_jahr: massnJahr
-                                massn_anzahl: massnAnzahl
-                                massn_anzahl_bisher: massnAnzahlBisher
-                                bericht_erstellt: berichtErstellt
-                              }
-                            }
-                          }`
+                        query: await import('./allVApApberundmassns.graphql')
                       })
                       exportModule({
                         data: get(data, 'allVApApberundmassns.nodes', []),
@@ -305,23 +247,7 @@ const AP = ({
                     setMessage('Export "ApZiele" wird vorbereitet...')
                     try {
                       const { data } = await client.query({
-                        query: gql`
-                          query view {
-                            allVZiels {
-                              nodes {
-                                ap_id: apId
-                                artname
-                                ap_bearbeitung: apBearbeitung
-                                ap_start_jahr: apStartJahr
-                                ap_umsetzung: apUmsetzung
-                                ap_bearbeiter: apBearbeiter
-                                id
-                                jahr
-                                typ
-                                bezeichnung
-                              }
-                            }
-                          }`
+                        query: await import('./allVZiels.graphql')
                       })
                       exportModule({
                         data: get(data, 'allVZiels.nodes', []),
@@ -344,29 +270,7 @@ const AP = ({
                     setMessage('Export "Zielberichte" wird vorbereitet...')
                     try {
                       const { data } = await client.query({
-                        query: gql`
-                          query view {
-                            allVZielbers {
-                              nodes {
-                                ap_id: apId
-                                artname
-                                ap_bearbeitung: apBearbeitung
-                                ap_start_jahr: apStartJahr
-                                ap_umsetzung: apUmsetzung
-                                ap_bearbeiter: apBearbeiter
-                                ziel_id: zielId
-                                ziel_jahr: zielJahr
-                                ziel_typ: zielTyp
-                                ziel_bezeichnung: zielBezeichnung
-                                id
-                                jahr
-                                erreichung
-                                bemerkungen
-                                changed
-                                changed_by: changedBy
-                              }
-                            }
-                          }`
+                        query: await import('./allVZielbers.graphql')
                       })
                       exportModule({
                         data: get(data, 'allVZielbers.nodes', []),
@@ -389,26 +293,7 @@ const AP = ({
                     setMessage('Export "Berichte" wird vorbereitet...')
                     try {
                       const { data } = await client.query({
-                        query: gql`
-                          query view {
-                            allVBers {
-                              nodes {
-                                ap_id: apId
-                                artname
-                                ap_bearbeitung: apBearbeitung
-                                ap_start_jahr: apStartJahr
-                                ap_umsetzung: apUmsetzung
-                                ap_bearbeiter: apBearbeiter
-                                id
-                                autor
-                                jahr
-                                titel
-                                url
-                                changed
-                                changed_by: changedBy
-                              }
-                            }
-                          }`
+                        query: await import('./allVBers.graphql')
                       })
                       exportModule({
                         data: get(data, 'allVBers.nodes', []),
@@ -431,24 +316,7 @@ const AP = ({
                     setMessage('Export "Erfolgskriterien" wird vorbereitet...')
                     try {
                       const { data } = await client.query({
-                        query: gql`
-                          query view {
-                            allVErfkrits {
-                              nodes {
-                                ap_id: apId
-                                artname
-                                ap_bearbeitung: apBearbeitung
-                                ap_start_jahr: apStartJahr
-                                ap_umsetzung: apUmsetzung
-                                ap_bearbeiter: apBearbeiter
-                                id
-                                beurteilung
-                                kriterien
-                                changed
-                                changed_by: changedBy
-                              }
-                            }
-                          }`
+                        query: await import('./allVErfkrits.graphql')
                       })
                       exportModule({
                         data: get(data, 'allVErfkrits.nodes', []),
@@ -471,39 +339,7 @@ const AP = ({
                     setMessage('Export "Idealbiotope" wird vorbereitet...')
                     try {
                       const { data } = await client.query({
-                        query: gql`
-                          query view {
-                            allVIdealbiotops {
-                              nodes {
-                                ap_id: apId
-                                artname
-                                ap_bearbeitung: apBearbeitung
-                                ap_start_jahr: apStartJahr
-                                ap_umsetzung: apUmsetzung
-                                ap_bearbeiter: apBearbeiter
-                                erstelldatum
-                                hoehenlage
-                                region
-                                exposition
-                                besonnung
-                                hangneigung
-                                boden_typ: bodenTyp
-                                boden_kalkgehalt: bodenKalkgehalt
-                                boden_durchlaessigkeit: bodenDurchlaessigkeit
-                                boden_humus: bodenHumus
-                                boden_naehrstoffgehalt: bodenNaehrstoffgehalt
-                                wasserhaushalt
-                                konkurrenz
-                                moosschicht
-                                krautschicht
-                                strauchschicht
-                                baumschicht
-                                bemerkungen
-                                changed
-                                changed_by: changedBy
-                              }
-                            }
-                          }`
+                        query: await import('./allVIdealbiotops.graphql')
                       })
                       exportModule({
                         data: get(data, 'allVIdealbiotops.nodes', []),
@@ -526,24 +362,7 @@ const AP = ({
                     setMessage('Export "AssoziierteArten" wird vorbereitet...')
                     try {
                       const { data } = await client.query({
-                        query: gql`
-                          query view {
-                            allVAssozarts {
-                              nodes {
-                                ap_id: apId
-                                artname
-                                ap_bearbeitung: apBearbeitung
-                                ap_start_jahr: apStartJahr
-                                ap_umsetzung: apUmsetzung
-                                ap_bearbeiter: apBearbeiter
-                                id
-                                artname_assoziiert: artnameAssoziiert
-                                bemerkungen
-                                changed
-                                changed_by: changedBy
-                              }
-                            }
-                          }`
+                        query: await import('./allVAssozarts.graphql')
                       })
                       exportModule({
                         data: get(data, 'allVAssozarts.nodes', []),
