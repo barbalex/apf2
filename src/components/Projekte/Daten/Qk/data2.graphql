@@ -87,14 +87,50 @@ query QkQuery(
       id
     }
   }
-  allVQZielberOhnejahrs(filter: {projId: {equalTo: $projId}, apId: {equalTo: $apId}}) {
-    totalCount
-    nodes {
-      projId
-      apId
-      zielId
-      zielJahr
-      id
+  zielberOhneJahr: projektById(id: $projId) {
+    id
+    apsByProjId(filter: {id: {equalTo: $apId}}) {
+      nodes {
+        id
+        zielsByApId {
+          nodes {
+            id
+            jahr
+            zielbersByZielId(filter: {jahr: {isNull: true}}) {
+              nodes {
+                id
+                zielByZielId {
+                  id
+                  jahr
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  zielberOhneEntwicklung: projektById(id: $projId) {
+    id
+    apsByProjId(filter: {id: {equalTo: $apId}}) {
+      nodes {
+        id
+        zielsByApId {
+          nodes {
+            id
+            jahr
+            zielbersByZielId(filter: {erreichung: {isNull: true}}) {
+              nodes {
+                id
+                zielByZielId {
+                  id
+                  jahr
+                }
+              }
+            }
+          }
+        }
+      }
     }
   }
 }

@@ -15,8 +15,6 @@ const fetchQk = async ({
   const qualityControls = [
     // 1. Art
 
-    // Ziel-Bericht ohne Jahr/Entwicklung
-    { type: 'view', name: 'v_qk_zielber_ohneentwicklung', berichtjahr },
     // AP-Erfolgskriterium ohne Beurteilung/Kriterien
     { type: 'view', name: 'v_qk_erfkrit_ohnekriterien' },
     // AP-Bericht ohne Jahr/Vergleich Vorjahr-Gesamtziel/Beurteilung

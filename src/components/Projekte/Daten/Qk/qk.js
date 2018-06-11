@@ -1,5 +1,6 @@
 // @flow
 import get from 'lodash/get'
+import flatten from 'lodash/flatten'
 
 export default (berichtjahr) => [
   // 1. Art
@@ -11,8 +12,8 @@ export default (berichtjahr) => [
     data: (data) => {
       const projId = get(data, 'zielOhneJahr.id')
       const apId = get(data, 'zielOhneJahr.apsByProjId.nodes[0].id')
-      const nodes = get(data, 'zielOhneJahr.apsByProjId.nodes[0].zielsByApId.nodes')
-      return nodes.map(n => ({
+      const zielNodes = get(data, 'zielOhneJahr.apsByProjId.nodes[0].zielsByApId.nodes')
+      return zielNodes.map(n => ({
         proj_id: projId,
         ap_id: apId,
         hw: 'Ziel ohne Jahr:',
@@ -27,8 +28,8 @@ export default (berichtjahr) => [
     data: (data) => {
       const projId = get(data, 'zielOhneTyp.id')
       const apId = get(data, 'zielOhneTyp.apsByProjId.nodes[0].id')
-      const nodes = get(data, 'zielOhneTyp.apsByProjId.nodes[0].zielsByApId.nodes')
-      return nodes.map(n => ({
+      const zielNodes = get(data, 'zielOhneTyp.apsByProjId.nodes[0].zielsByApId.nodes')
+      return zielNodes.map(n => ({
         proj_id: projId,
         ap_id: apId,
         hw: 'Ziel ohne Typ:',
@@ -43,8 +44,8 @@ export default (berichtjahr) => [
     data: (data) => {
       const projId = get(data, 'zielOhneZiel.id')
       const apId = get(data, 'zielOhneZiel.apsByProjId.nodes[0].id')
-      const nodes = get(data, 'zielOhneZiel.apsByProjId.nodes[0].zielsByApId.nodes')
-      return nodes.map(n => ({
+      const zielNodes = get(data, 'zielOhneZiel.apsByProjId.nodes[0].zielsByApId.nodes')
+      return zielNodes.map(n => ({
         proj_id: projId,
         ap_id: apId,
         hw: 'Ziel ohne Ziel:',
@@ -55,16 +56,42 @@ export default (berichtjahr) => [
   },
   // Ziel-Bericht ohne Jahr/Entwicklung
   {
-    query: 'allVQZielberOhnejahrs',
-    type: 'view',
-    title: 'Ziel-Bericht ohne Jahr:',
-    url: (o) => ['Projekte', o.projId, 'Aktionspläne', o.apId, 'AP-Ziele', o.zielJahr, o.zielId, 'Berichte', o.id],
-    text: (o) => `Ziel-Bericht (id): ${o.id}`
+    query: 'zielberOhneJahr',
+    type: 'query',
+    data: (data) => {
+      const projId = get(data, 'zielberOhneJahr.id')
+      const apId = get(data, 'zielberOhneJahr.apsByProjId.nodes[0].id')
+      const zielNodes = get(data, 'zielberOhneJahr.apsByProjId.nodes[0].zielsByApId.nodes', [])
+      const zielberNodes = flatten(
+        zielNodes.map(n => get(n, 'zielbersByZielId.nodes'), [])
+      )
+      return zielberNodes.map(n => ({
+        proj_id: projId,
+        ap_id: apId,
+        hw: 'Ziel-Bericht ohne Jahr:',
+        url: ['Projekte', projId, 'Aktionspläne', apId, 'AP-Ziele', get(n, 'zielByZielId.jahr'), get(n, 'zielByZielId.id'), 'Berichte', n.id],
+        text: [`Ziel-Bericht (id): ${n.id}`],
+      }))
+    }
   },
   {
-    type: 'view',
-    name: 'v_qk_zielber_ohneentwicklung',
-    berichtjahr
+    query: 'zielberOhneEntwicklung',
+    type: 'query',
+    data: (data) => {
+      const projId = get(data, 'zielberOhneEntwicklung.id')
+      const apId = get(data, 'zielberOhneEntwicklung.apsByProjId.nodes[0].id')
+      const zielNodes = get(data, 'zielberOhneEntwicklung.apsByProjId.nodes[0].zielsByApId.nodes', [])
+      const zielberNodes = flatten(
+        zielNodes.map(n => get(n, 'zielbersByZielId.nodes'), [])
+      )
+      return zielberNodes.map(n => ({
+        proj_id: projId,
+        ap_id: apId,
+        hw: 'Ziel-Bericht ohne Entwicklung:',
+        url: ['Projekte', projId, 'Aktionspläne', apId, 'AP-Ziele', get(n, 'zielByZielId.jahr'), get(n, 'zielByZielId.id'), 'Berichte', n.id],
+        text: [`Ziel-Bericht (id): ${n.id}`],
+      }))
+    }
   },
   // AP-Erfolgskriterium ohne Beurteilung/Kriterien
   {
