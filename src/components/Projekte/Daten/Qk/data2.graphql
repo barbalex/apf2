@@ -79,14 +79,6 @@ query QkQuery(
       }
     }
   }
-  allVQErfkritOhnebeurteilungs(filter: {projId: {equalTo: $projId}, apId: {equalTo: $apId}}) {
-    totalCount
-    nodes {
-      projId
-      apId
-      id
-    }
-  }
   zielberOhneJahr: projektById(id: $projId) {
     id
     apsByProjId(filter: {id: {equalTo: $apId}}) {
@@ -131,6 +123,27 @@ query QkQuery(
           }
         }
       }
+    }
+  }
+  erfkritOhneBeurteilung: projektById(id: $projId) {
+    id
+    apsByProjId(filter: {id: {equalTo: $apId}}) {
+      nodes {
+        id
+        erfkritsByApId(filter: {erfolg: {isNull: true}}, orderBy: ID_ASC) {
+          nodes {
+            id
+          }
+        }
+      }
+    }
+  }
+  allVQErfkritOhnebeurteilungs(filter: {projId: {equalTo: $projId}, apId: {equalTo: $apId}}) {
+    totalCount
+    nodes {
+      projId
+      apId
+      id
     }
   }
 }

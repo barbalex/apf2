@@ -213,7 +213,16 @@ const Qk = ({
                     }
                     return false
                   })
-                : messageArrays
+                : messageArrays.filter(messageArray => {
+                  if (
+                    messageArray[0] &&
+                    messageArray[0].hw
+                  ) {
+                    // only return values with hw
+                    return true
+                  }
+                  return false
+                })
                 if (error) return `Fehler: ${error.message}`
                 const loadingMessage = loading
                   ? 'Die Daten werden analysiert...'

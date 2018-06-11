@@ -12,7 +12,7 @@ export default (berichtjahr) => [
     data: (data) => {
       const projId = get(data, 'zielOhneJahr.id')
       const apId = get(data, 'zielOhneJahr.apsByProjId.nodes[0].id')
-      const zielNodes = get(data, 'zielOhneJahr.apsByProjId.nodes[0].zielsByApId.nodes')
+      const zielNodes = get(data, 'zielOhneJahr.apsByProjId.nodes[0].zielsByApId.nodes', [])
       return zielNodes.map(n => ({
         proj_id: projId,
         ap_id: apId,
@@ -28,7 +28,7 @@ export default (berichtjahr) => [
     data: (data) => {
       const projId = get(data, 'zielOhneTyp.id')
       const apId = get(data, 'zielOhneTyp.apsByProjId.nodes[0].id')
-      const zielNodes = get(data, 'zielOhneTyp.apsByProjId.nodes[0].zielsByApId.nodes')
+      const zielNodes = get(data, 'zielOhneTyp.apsByProjId.nodes[0].zielsByApId.nodes', [])
       return zielNodes.map(n => ({
         proj_id: projId,
         ap_id: apId,
@@ -44,7 +44,7 @@ export default (berichtjahr) => [
     data: (data) => {
       const projId = get(data, 'zielOhneZiel.id')
       const apId = get(data, 'zielOhneZiel.apsByProjId.nodes[0].id')
-      const zielNodes = get(data, 'zielOhneZiel.apsByProjId.nodes[0].zielsByApId.nodes')
+      const zielNodes = get(data, 'zielOhneZiel.apsByProjId.nodes[0].zielsByApId.nodes', [])
       return zielNodes.map(n => ({
         proj_id: projId,
         ap_id: apId,
@@ -95,11 +95,20 @@ export default (berichtjahr) => [
   },
   // AP-Erfolgskriterium ohne Beurteilung/Kriterien
   {
-    query: 'allVQErfkritOhnebeurteilungs',
-    type: 'view',
-    title: 'Erfolgskriterium ohne Beurteilung:',
-    url: (o) => ['Projekte', o.projId, 'Aktionspläne', o.apId, 'Erfolgskriterien', o.id],
-    text: (o) => `Erfolgskriterium (id): ${o.jahr}`
+    query: 'erfkritOhneBeurteilung',
+    type: 'query',
+    data: (data) => {
+      const projId = get(data, 'erfkritOhneBeurteilung.id')
+      const apId = get(data, 'erfkritOhneBeurteilung.apsByProjId.nodes[0].id')
+      const erfkritNodes = get(data, 'erfkritOhneBeurteilung.apsByProjId.nodes[0].erfkritsByApId.nodes', [])
+      return erfkritNodes.map(n => ({
+        proj_id: projId,
+        ap_id: apId,
+        hw: 'Erfolgskriterium ohne Beurteilung:',
+        url: ['Projekte', projId, 'Aktionspläne', apId, 'AP-Erfolgskriterien', n.id],
+        text: [`Erfolgskriterium (id): ${n.id}`],
+      }))
+    }
   },
   {
     type: 'view',
