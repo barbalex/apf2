@@ -111,8 +111,20 @@ export default (berichtjahr) => [
     }
   },
   {
-    type: 'view',
-    name: 'v_qk_erfkrit_ohnekriterien'
+    query: 'erfkritOhneKriterien',
+    type: 'query',
+    data: (data) => {
+      const projId = get(data, 'erfkritOhneKriterien.id')
+      const apId = get(data, 'erfkritOhneKriterien.apsByProjId.nodes[0].id')
+      const erfkritNodes = get(data, 'erfkritOhneKriterien.apsByProjId.nodes[0].erfkritsByApId.nodes', [])
+      return erfkritNodes.map(n => ({
+        proj_id: projId,
+        ap_id: apId,
+        hw: 'Erfolgskriterium ohne Kriterien:',
+        url: ['Projekte', projId, 'Aktionspläne', apId, 'AP-Erfolgskriterien', n.id],
+        text: [`Erfolgskriterium (id): ${n.id}`],
+      }))
+    }
   },
   // AP-Bericht ohne Jahr/Vergleich Vorjahr-Gesamtziel/Beurteilung
   {

@@ -138,12 +138,17 @@ query QkQuery(
       }
     }
   }
-  allVQErfkritOhnebeurteilungs(filter: {projId: {equalTo: $projId}, apId: {equalTo: $apId}}) {
-    totalCount
-    nodes {
-      projId
-      apId
-      id
+  erfkritOhneKriterien: projektById(id: $projId) {
+    id
+    apsByProjId(filter: {id: {equalTo: $apId}}) {
+      nodes {
+        id
+        erfkritsByApId(filter: {kriterien: {isNull: true}}, orderBy: ID_ASC) {
+          nodes {
+            id
+          }
+        }
+      }
     }
   }
 }
