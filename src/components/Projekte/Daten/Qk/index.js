@@ -165,22 +165,40 @@ const Qk = ({
           >
             {({ loading, error, data }) => {
               const qks = qk(berichtjahr).filter(q => !!q.query)
-              const gqlMessages = qks
-              // only results with data
-              .filter(q => get(data, `${q.query}.totalCount`, 0) > 0)
-              // convert
-              // TODO:
-              // make this simpler after moving all calls to graphql
-              .map(q => {
-                const qData = get(data, `${q.query}.nodes`, [])
-                return qData.map(o => ({
-                  proj_id: o.projId,
-                  ap_id: o.apId,
-                  hw: q.title,
-                  text: [q.text(o)],
-                  url: q.url(o)
-                }))
-              })
+              console.log('Qk: data:', data)
+              let gqlMessagesFromQuery = []
+              if (Object.keys(data).length > 0) {
+              const gqlMessagesFromQuery = qks
+                .filter(q => q.type === 'query')
+                .map(q =>
+                  q.data(data)
+                    .map(o => ({
+                      proj_id: o.projId,
+                      ap_id: o.apId,
+                      hw: o.title,
+                      text: [o.text],
+                      url: o.url
+                    })
+                  )
+                )
+              }
+              const gqlMessagesFromView = qks
+                .filter(q => q.type === 'view')
+                // only results with data
+                .filter(q => get(data, `${q.query}.totalCount`, 0) > 0)
+                // convert
+                // TODO:
+                // make this simpler after moving all calls to graphql
+                .map(q => {
+                  const qData = get(data, `${q.query}.nodes`, [])
+                  return qData.map(o => ({
+                    proj_id: o.projId,
+                    ap_id: o.apId,
+                    hw: q.title,
+                    text: [q.text(o)],
+                    url: q.url(o)
+                  }))
+                })
 
               !outsideZhChecked && checkTpopOutsideZh({
                 data,
@@ -191,7 +209,7 @@ const Qk = ({
                 errorState,
               })
 
-              const messageArrays = [...gqlMessages, ...messages]
+              const messageArrays = [...gqlMessagesFromQuery, ...gqlMessagesFromView, ...messages]
               const messageArraysFiltered = filter
                 ? messageArrays.filter(messageArray => {
                     if (

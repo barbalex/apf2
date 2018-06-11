@@ -1,30 +1,46 @@
 // @flow
+import get from 'lodash/get'
+
 export default (berichtjahr) => [
   // 1. Art
 
   // Ziel ohne Jahr/Zieltyp/Ziel
   {
-    query: 'allVQZielOhnejahrs',
-    title: 'Ziel ohne Jahr:',
-    url: (o) => ['Projekte', o.projId, 'Aktionspläne', o.apId, 'Ziele', o.id],
-    text: (o) => `Ziel (id): ${o.id}`
+    query: 'zielOhneJahr',
+    type: 'query',
+    data: (data) => {
+      console.log('zielOhneJahr, data:', data)
+      const projId = get(data, 'projektById.id')
+      const apId = get(data, 'projektById.apsByProjId.nodes[0].id')
+      const nodes = get(data, 'projektById.apsByProjId.nodes[0].zielsByApId.nodes')
+      return nodes.map(n => ({
+        title: 'Ziel ohne Jahr:',
+        url: ['Projekte', projId, 'Aktionspläne', apId, 'AP-Ziele', n.jahr, n.id],
+        text: `Ziel (id): ${n.id}`,
+      }))
+    }
   },
   {
     query: 'allVQZielOhnetyps',
+    type: 'view',
     title: 'Ziel ohne Typ:',
-    url: (o) => ['Projekte', o.projId, 'Aktionspläne', o.apId, 'Ziele', o.id],
+    url: (o) => ['Projekte', o.projId, 'Aktionspläne', o.apId, 'AP-Ziele', o.jahr, o.id],
     text: (o) => `Ziel (Jahr): ${o.jahr}`
   },
   {
     query: 'allVQZielOhneziels',
+    type: 'view',
     title: 'Ziel ohne Ziel:',
-    url: (o) => ['Projekte', o.projId, 'Aktionspläne', o.apId, 'Ziele', o.id],
+    url: (o) => ['Projekte', o.projId, 'Aktionspläne', o.apId, 'AP-Ziele', o.jahr, o.id],
     text: (o) => `Ziel (Jahr): ${o.jahr}`
   },
   // Ziel-Bericht ohne Jahr/Entwicklung
   {
+    query: 'allVQZielberOhnejahrs',
     type: 'view',
-    name: 'v_qk_zielber_ohnejahr'
+    title: 'Ziel-Bericht ohne Jahr:',
+    url: (o) => ['Projekte', o.projId, 'Aktionspläne', o.apId, 'AP-Ziele', o.zielJahr, o.zielId, 'Berichte', o.id],
+    text: (o) => `Ziel-Bericht (id): ${o.id}`
   },
   {
     type: 'view',
@@ -34,6 +50,7 @@ export default (berichtjahr) => [
   // AP-Erfolgskriterium ohne Beurteilung/Kriterien
   {
     query: 'allVQErfkritOhnebeurteilungs',
+    type: 'view',
     title: 'Erfolgskriterium ohne Beurteilung:',
     url: (o) => ['Projekte', o.projId, 'Aktionspläne', o.apId, 'Erfolgskriterien', o.id],
     text: (o) => `Erfolgskriterium (id): ${o.jahr}`

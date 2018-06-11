@@ -6134,6 +6134,9 @@ ORDER BY
   apflora.ziel.id,
   apflora.zielber.jahr;
 
+
+
+
 DROP VIEW IF EXISTS apflora.v_qk_zielber_ohnejahr CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk_zielber_ohnejahr AS
 SELECT
@@ -6156,6 +6159,32 @@ ORDER BY
   apflora.ziel.jahr,
   apflora.ziel.id,
   apflora.zielber.jahr;
+
+DROP VIEW IF EXISTS apflora.v_q_zielber_ohnejahr CASCADE;
+CREATE OR REPLACE VIEW apflora.v_q_zielber_ohnejahr AS
+SELECT
+  apflora.ap.proj_id,
+  apflora.ap.id as ap_id,
+  apflora.ziel.id as ziel_id,
+  apflora.ziel.jahr as ziel_jahr,
+  apflora.zielber.id
+FROM
+  apflora.ap
+  INNER JOIN
+    (apflora.ziel
+    INNER JOIN
+      apflora.zielber
+      ON apflora.ziel.id = apflora.zielber.ziel_id)
+    ON apflora.ap.id = apflora.ziel.ap_id
+WHERE
+  apflora.zielber.jahr IS NULL
+ORDER BY
+  apflora.ziel.jahr,
+  apflora.ziel.id,
+  apflora.zielber.id;
+
+
+
 
 DROP VIEW IF EXISTS apflora.v_qk_ziel_ohnejahr CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk_ziel_ohnejahr AS
@@ -6181,7 +6210,8 @@ CREATE OR REPLACE VIEW apflora.v_q_ziel_ohnejahr AS
 SELECT
   apflora.projekt.id as proj_id,
   apflora.ap.id as ap_id,
-  apflora.ziel.id
+  apflora.ziel.id,
+  apflora.ziel.jahr
 FROM
   apflora.projekt
   inner join
@@ -6192,6 +6222,8 @@ FROM
     on apflora.projekt.id = apflora.ap.proj_id
 WHERE
   apflora.ziel.jahr IS NULL
+  -- year is set to 1 when creating new ziel
+  OR apflora.ziel.jahr = 1
 ORDER BY
   apflora.ziel.id;
 

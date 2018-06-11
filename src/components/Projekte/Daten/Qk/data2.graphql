@@ -37,12 +37,27 @@ query QkQuery(
       }
     }
   }
+  zielOhneJahr: projektById(id: $projId) {
+    id
+    apsByProjId(filter: {id: {equalTo: $apId}}) {
+      nodes {
+        id
+        zielsByApId(filter: {or: [{jahr: {equalTo: 1}}, {jahr: {isNull: true}}]}) {
+          nodes {
+            id
+            jahr
+          }
+        }
+      }
+    }
+  }
   allVQZielOhnejahrs(filter: {projId: {equalTo: $projId}, apId: {equalTo: $apId}}) {
     totalCount
     nodes {
       projId
       apId
       id
+      jahr
     }
   }
   allVQZielOhnetyps(filter: {projId: {equalTo: $projId}, apId: {equalTo: $apId}}) {
@@ -68,6 +83,16 @@ query QkQuery(
     nodes {
       projId
       apId
+      id
+    }
+  }
+  allVQZielberOhnejahrs(filter: {projId: {equalTo: $projId}, apId: {equalTo: $apId}}) {
+    totalCount
+    nodes {
+      projId
+      apId
+      zielId
+      zielJahr
       id
     }
   }
