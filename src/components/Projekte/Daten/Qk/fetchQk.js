@@ -14,9 +14,6 @@ const fetchQk = async ({
 }) => {
   const qualityControls = [
     // 1. Art
-
-    // AP-Bericht ohne Jahr/Vergleich Vorjahr-Gesamtziel/Beurteilung
-    { type: 'view', name: 'v_qk_apber_ohnebeurteilung', berichtjahr },
     // assoziierte Art ohne Art
     { type: 'view', name: 'v_qk_assozart_ohneart' },
 

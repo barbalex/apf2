@@ -177,4 +177,17 @@ query QkQuery(
       }
     }
   }
+  apberOhneBeurteilung: projektById(id: $projId) {
+    id
+    apsByProjId(filter: {id: {equalTo: $apId}}) {
+      nodes {
+        id
+        apbersByApId(filter: {beurteilung: {isNull: true}}, orderBy: ID_ASC) {
+          nodes {
+            id
+          }
+        }
+      }
+    }
+  }
 }
