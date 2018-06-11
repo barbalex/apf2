@@ -79,15 +79,6 @@ query QkQuery(
       }
     }
   }
-  allVQZielOhneziels(filter: {projId: {equalTo: $projId}, apId: {equalTo: $apId}}) {
-    totalCount
-    nodes {
-      projId
-      apId
-      id
-      jahr
-    }
-  }
   allVQErfkritOhnebeurteilungs(filter: {projId: {equalTo: $projId}, apId: {equalTo: $apId}}) {
     totalCount
     nodes {
