@@ -6233,24 +6233,6 @@ WHERE
 ORDER BY
   apflora.erfkrit.id;
 
-DROP VIEW IF EXISTS apflora.v_q_erfkrit_ohnebeurteilung CASCADE;
-CREATE OR REPLACE VIEW apflora.v_q_erfkrit_ohnebeurteilung AS
-SELECT
-  apflora.ap.proj_id,
-  apflora.ap.id as ap_id,
-  apflora.erfkrit.id
-FROM
-  apflora.ap
-  INNER JOIN
-    apflora.erfkrit
-    ON apflora.ap.id = apflora.erfkrit.ap_id
-WHERE
-  apflora.erfkrit.erfolg IS NULL
-ORDER BY
-  apflora.erfkrit.id;
-
-
-
 DROP VIEW IF EXISTS apflora.v_qk_erfkrit_ohnekriterien CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk_erfkrit_ohnekriterien AS
 SELECT
