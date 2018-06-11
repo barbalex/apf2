@@ -9,30 +9,49 @@ export default (berichtjahr) => [
     query: 'zielOhneJahr',
     type: 'query',
     data: (data) => {
-      console.log('zielOhneJahr, data:', data)
-      const projId = get(data, 'projektById.id')
-      const apId = get(data, 'projektById.apsByProjId.nodes[0].id')
-      const nodes = get(data, 'projektById.apsByProjId.nodes[0].zielsByApId.nodes')
+      const projId = get(data, 'zielOhneJahr.id')
+      const apId = get(data, 'zielOhneJahr.apsByProjId.nodes[0].id')
+      const nodes = get(data, 'zielOhneJahr.apsByProjId.nodes[0].zielsByApId.nodes')
       return nodes.map(n => ({
-        title: 'Ziel ohne Jahr:',
+        proj_id: projId,
+        ap_id: apId,
+        hw: 'Ziel ohne Jahr:',
         url: ['Projekte', projId, 'Aktionspläne', apId, 'AP-Ziele', n.jahr, n.id],
-        text: `Ziel (id): ${n.id}`,
+        text: [`Ziel (id): ${n.id}`],
       }))
     }
   },
   {
-    query: 'allVQZielOhnetyps',
-    type: 'view',
-    title: 'Ziel ohne Typ:',
-    url: (o) => ['Projekte', o.projId, 'Aktionspläne', o.apId, 'AP-Ziele', o.jahr, o.id],
-    text: (o) => `Ziel (Jahr): ${o.jahr}`
+    query: 'zielOhneTyp',
+    type: 'query',
+    data: (data) => {
+      const projId = get(data, 'zielOhneTyp.id')
+      const apId = get(data, 'zielOhneTyp.apsByProjId.nodes[0].id')
+      const nodes = get(data, 'zielOhneTyp.apsByProjId.nodes[0].zielsByApId.nodes')
+      return nodes.map(n => ({
+        proj_id: projId,
+        ap_id: apId,
+        hw: 'Ziel ohne Typ:',
+        url: ['Projekte', projId, 'Aktionspläne', apId, 'AP-Ziele', n.jahr, n.id],
+        text: [`Ziel (Jahr): ${n.jahr}`],
+      }))
+    }
   },
   {
-    query: 'allVQZielOhneziels',
-    type: 'view',
-    title: 'Ziel ohne Ziel:',
-    url: (o) => ['Projekte', o.projId, 'Aktionspläne', o.apId, 'AP-Ziele', o.jahr, o.id],
-    text: (o) => `Ziel (Jahr): ${o.jahr}`
+    query: 'zielOhneZiel',
+    type: 'query',
+    data: (data) => {
+      const projId = get(data, 'zielOhneZiel.id')
+      const apId = get(data, 'zielOhneZiel.apsByProjId.nodes[0].id')
+      const nodes = get(data, 'zielOhneZiel.apsByProjId.nodes[0].zielsByApId.nodes')
+      return nodes.map(n => ({
+        proj_id: projId,
+        ap_id: apId,
+        hw: 'Ziel ohne Ziel:',
+        url: ['Projekte', projId, 'Aktionspläne', apId, 'AP-Ziele', n.jahr, n.id],
+        text: [`Ziel (Jahr): ${n.jahr}`],
+      }))
+    }
   },
   // Ziel-Bericht ohne Jahr/Entwicklung
   {

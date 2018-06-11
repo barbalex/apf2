@@ -51,22 +51,32 @@ query QkQuery(
       }
     }
   }
-  allVQZielOhnejahrs(filter: {projId: {equalTo: $projId}, apId: {equalTo: $apId}}) {
-    totalCount
-    nodes {
-      projId
-      apId
-      id
-      jahr
+  zielOhneTyp: projektById(id: $projId) {
+    id
+    apsByProjId(filter: {id: {equalTo: $apId}}) {
+      nodes {
+        id
+        zielsByApId(filter: {typ: {isNull: true}}) {
+          nodes {
+            id
+            jahr
+          }
+        }
+      }
     }
   }
-  allVQZielOhnetyps(filter: {projId: {equalTo: $projId}, apId: {equalTo: $apId}}) {
-    totalCount
-    nodes {
-      projId
-      apId
-      id
-      jahr
+  zielOhneZiel: projektById(id: $projId) {
+    id
+    apsByProjId(filter: {id: {equalTo: $apId}}) {
+      nodes {
+        id
+        zielsByApId(filter: {bezeichnung: {isNull: true}}) {
+          nodes {
+            id
+            jahr
+          }
+        }
+      }
     }
   }
   allVQZielOhneziels(filter: {projId: {equalTo: $projId}, apId: {equalTo: $apId}}) {

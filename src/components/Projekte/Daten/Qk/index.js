@@ -165,23 +165,15 @@ const Qk = ({
           >
             {({ loading, error, data }) => {
               const qks = qk(berichtjahr).filter(q => !!q.query)
-              console.log('Qk: data:', data)
               let gqlMessagesFromQuery = []
               if (Object.keys(data).length > 0) {
-              const gqlMessagesFromQuery = qks
-                .filter(q => q.type === 'query')
-                .map(q =>
-                  q.data(data)
-                    .map(o => ({
-                      proj_id: o.projId,
-                      ap_id: o.apId,
-                      hw: o.title,
-                      text: [o.text],
-                      url: o.url
-                    })
+                gqlMessagesFromQuery = qks
+                  .filter(q => q.type === 'query')
+                  .map(q =>
+                    q.data(data)
                   )
-                )
               }
+              
               const gqlMessagesFromView = qks
                 .filter(q => q.type === 'view')
                 // only results with data
