@@ -174,6 +174,7 @@ const Qk = ({
                   )
               }
               
+              // TODO: check if needed after moving to graphql
               const gqlMessagesFromView = qks
                 .filter(q => q.type === 'view')
                 // only results with data
