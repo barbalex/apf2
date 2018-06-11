@@ -190,4 +190,17 @@ query QkQuery(
       }
     }
   }
+  assozartOhneArt: projektById(id: $projId) {
+    id
+    apsByProjId(filter: {id: {equalTo: $apId}}) {
+      nodes {
+        id
+        assozartsByApId(filter: {aeId: {isNull: true}}) {
+          nodes {
+            id
+          }
+        }
+      }
+    }
+  }
 }

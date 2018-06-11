@@ -177,8 +177,20 @@ export default (berichtjahr) => [
   },
   // assoziierte Art ohne Art
   {
-    type: 'view',
-    name: 'v_qk_assozart_ohneart'
+    query: 'assozartOhneArt',
+    type: 'query',
+    data: (data) => {
+      const projId = get(data, 'assozartOhneArt.id')
+      const apId = get(data, 'assozartOhneArt.apsByProjId.nodes[0].id')
+      const nodes = get(data, 'assozartOhneArt.apsByProjId.nodes[0].assozartsByApId.nodes', [])
+      return nodes.map(n => ({
+        proj_id: projId,
+        ap_id: apId,
+        hw: 'Assoziierte Art ohne Art:',
+        url: ['Projekte', projId, 'Aktionspläne', apId, 'assoziierte-Arten', n.id],
+        text: [`Assoziierte Art (id): ${n.id}`],
+      }))
+    }
   },
 
   // 2. Population

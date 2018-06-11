@@ -14,9 +14,6 @@ const fetchQk = async ({
 }) => {
   const qualityControls = [
     // 1. Art
-    // assoziierte Art ohne Art
-    { type: 'view', name: 'v_qk_assozart_ohneart' },
-
     // 2. Population
 
     // Population: ohne Nr/Name/Status/bekannt seit/Koordinaten/tpop
