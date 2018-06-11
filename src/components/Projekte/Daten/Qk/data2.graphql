@@ -63,4 +63,12 @@ query QkQuery(
       jahr
     }
   }
+  allVQErfkritOhnebeurteilungs(filter: {projId: {equalTo: $projId}, apId: {equalTo: $apId}}) {
+    totalCount
+    nodes {
+      projId
+      apId
+      id
+    }
+  }
 }

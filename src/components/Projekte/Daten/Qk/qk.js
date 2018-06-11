@@ -33,8 +33,10 @@ export default (berichtjahr) => [
   },
   // AP-Erfolgskriterium ohne Beurteilung/Kriterien
   {
-    type: 'view',
-    name: 'v_qk_erfkrit_ohnebeurteilung'
+    query: 'allVQErfkritOhnebeurteilungs',
+    title: 'Erfolgskriterium ohne Beurteilung:',
+    url: (o) => ['Projekte', o.projId, 'Aktionspläne', o.apId, 'Erfolgskriterien', o.id],
+    text: (o) => `Erfolgskriterium (id): ${o.jahr}`
   },
   {
     type: 'view',
