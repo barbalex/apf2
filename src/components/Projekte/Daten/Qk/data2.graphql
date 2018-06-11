@@ -151,4 +151,17 @@ query QkQuery(
       }
     }
   }
+  apberOhneJahr: projektById(id: $projId) {
+    id
+    apsByProjId(filter: {id: {equalTo: $apId}}) {
+      nodes {
+        id
+        apbersByApId(filter: {jahr: {isNull: true}}, orderBy: ID_ASC) {
+          nodes {
+            id
+          }
+        }
+      }
+    }
+  }
 }

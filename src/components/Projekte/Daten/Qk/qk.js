@@ -128,8 +128,20 @@ export default (berichtjahr) => [
   },
   // AP-Bericht ohne Jahr/Vergleich Vorjahr-Gesamtziel/Beurteilung
   {
-    type: 'view',
-    name: 'v_qk_apber_ohnejahr'
+    query: 'apberOhneJahr',
+    type: 'query',
+    data: (data) => {
+      const projId = get(data, 'apberOhneJahr.id')
+      const apId = get(data, 'apberOhneJahr.apsByProjId.nodes[0].id')
+      const erfkritNodes = get(data, 'apberOhneJahr.apsByProjId.nodes[0].apbersByApId.nodes', [])
+      return erfkritNodes.map(n => ({
+        proj_id: projId,
+        ap_id: apId,
+        hw: 'AP-Bericht ohne Jahr:',
+        url: ['Projekte', projId, 'Aktionspläne', apId, 'AP-Berichte', n.id],
+        text: [`AP-Bericht (id): ${n.id}`],
+      }))
+    }
   },
   {
     type: 'view',
