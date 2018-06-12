@@ -339,4 +339,18 @@ query QkQuery(
       berichtjahr
     }
   }
+  popMitBerAbnehmendOhneTpopberAbnehmend: allVQPopMitBerAbnehmendOhneTpopberAbnehmends(filter: {
+      projId: {equalTo: $projId},
+      apId: {equalTo: $apId},
+      berichtjahr: {equalTo: $berichtjahr}
+    })
+    @include(if: $isBerichtjahr) {
+    nodes {
+      projId
+      apId
+      id
+      nr
+      berichtjahr
+    }
+  }
 }

@@ -369,9 +369,20 @@ export default (berichtjahr) => [
     }
   },
   {
-    type: 'view',
-    name: 'v_qk_pop_mit_ber_abnehmend_ohne_tpopber_abnehmend',
-    berichtjahr,
+    query: 'popMitBerAbnehmendOhneTpopberAbnehmend',
+    type: 'query',
+    data: (data) => {
+      const nodes = [...get(data, 'popMitBerAbnehmendOhneTpopberAbnehmend.nodes', [])]
+        .sort((a, b) => a.nr - b.nr)
+      return nodes
+        .map(n => ({
+          proj_id: n.projId,
+          ap_id: n.apId,
+          hw: 'Populationen mit Bericht "abnehmend" ohne Teil-Population mit Bericht "abnehmend":',
+          url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
+          text: [`Population (Nr.): ${n.nr}`],
+        }))
+    }
   },
   {
     type: 'view',

@@ -6884,6 +6884,40 @@ ORDER BY
   apflora.pop.id,
   apflora.popber.jahr;
 
+
+DROP VIEW IF EXISTS apflora.v_q_pop_mit_ber_abnehmend_ohne_tpopber_abnehmend CASCADE;
+CREATE OR REPLACE VIEW apflora.v_q_pop_mit_ber_abnehmend_ohne_tpopber_abnehmend AS
+SELECT DISTINCT
+  apflora.ap.proj_id,
+  apflora.ap.id as ap_id,
+  apflora.pop.id,
+  apflora.pop.nr,
+  apflora.popber.jahr AS berichtjahr
+FROM
+  apflora.ap
+  INNER JOIN
+  apflora.pop
+    INNER JOIN apflora.popber
+    ON apflora.pop.id = apflora.popber.pop_id
+  ON apflora.ap.id = apflora.pop.ap_id
+WHERE
+  apflora.popber.entwicklung = 1
+  AND apflora.popber.pop_id NOT IN (
+    SELECT DISTINCT apflora.tpop.pop_id
+    FROM
+      apflora.tpop
+      INNER JOIN apflora.tpopber
+      ON apflora.tpop.id = apflora.tpopber.tpop_id
+    WHERE
+      apflora.tpopber.entwicklung = 1
+      AND apflora.tpopber.jahr = apflora.popber.jahr
+  )
+ORDER BY
+  apflora.ap.proj_id,
+  apflora.ap.id,
+  apflora.pop.id,
+  apflora.popber.jahr;
+
 DROP VIEW IF EXISTS apflora.v_qk_pop_mit_ber_erloschen_ohne_tpopber_erloschen CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk_pop_mit_ber_erloschen_ohne_tpopber_erloschen AS
 SELECT DISTINCT
