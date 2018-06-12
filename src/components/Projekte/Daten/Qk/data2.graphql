@@ -316,7 +316,7 @@ query QkQuery(
       nr
     }
   }
-  popOhnePopber: qPopOhnePopber(berichtjahr: $berichtjahr, apid: $apId) @include(if: $isBerichtjahr) {
+  popOhnePopber: qPopOhnePopber(berichtjahr: $berichtjahr, apid: $apId, projid: $projId) @include(if: $isBerichtjahr) {
     nodes {
       projId
       apId
