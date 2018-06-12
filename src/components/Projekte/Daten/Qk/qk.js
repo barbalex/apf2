@@ -245,8 +245,20 @@ export default (berichtjahr) => [
     }
   },
   {
-    type: 'view',
-    name: 'v_qk_pop_ohnebekanntseit'
+    query: 'popOhneBekanntSeit',
+    type: 'query',
+    data: (data) => {
+      const projId = get(data, 'popOhneBekanntSeit.id')
+      const apId = get(data, 'popOhneBekanntSeit.apsByProjId.nodes[0].id')
+      const nodes = get(data, 'popOhneBekanntSeit.apsByProjId.nodes[0].popsByApId.nodes', [])
+      return nodes.map(n => ({
+        proj_id: projId,
+        ap_id: apId,
+        hw: 'Population ohne "bekannt seit":',
+        url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', n.id],
+        text: [`Population (Nr.): ${n.nr}`],
+      }))
+    }
   },
   {
     type: 'view',

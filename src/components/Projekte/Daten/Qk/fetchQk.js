@@ -16,7 +16,6 @@ const fetchQk = async ({
     // 1. Art
     // 2. Population
     // Population: ohne Nr/Name/Status/bekannt seit/Koordinaten/tpop
-    { type: 'view', name: 'v_qk_pop_ohnebekanntseit' },
     { type: 'view', name: 'v_qk_pop_ohnekoord' },
     { type: 'view', name: 'v_qk_pop_ohnetpop' },
     // Population: mit Status unklar, ohne Begründung
