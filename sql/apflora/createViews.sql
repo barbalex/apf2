@@ -7540,6 +7540,53 @@ WHERE
       AND apflora.tpopmassn.jahr > lastpopber.jahr
   );
 
+DROP VIEW IF EXISTS apflora.v_q_pop_statuserloschenletzterpopberabnehmend CASCADE;
+CREATE OR REPLACE VIEW apflora.v_q_pop_statuserloschenletzterpopberabnehmend AS
+WITH lastpopber AS (
+  SELECT DISTINCT ON (pop_id)
+    pop_id,
+    jahr,
+    entwicklung
+  FROM
+    apflora.popber
+  WHERE
+    jahr IS NOT NULL
+  ORDER BY
+    pop_id,
+    jahr DESC
+)
+SELECT
+  apflora.projekt.id as proj_id,
+  apflora.ap.id as ap_id,
+  apflora.pop.id,
+  apflora.pop.nr
+FROM
+  apflora.projekt
+  INNER JOIN
+    apflora.ap
+    INNER JOIN
+      apflora.pop
+      INNER JOIN lastpopber
+      ON apflora.pop.id = lastpopber.pop_id
+    ON apflora.ap.id = apflora.pop.ap_id
+  ON apflora.projekt.id = apflora.ap.proj_id
+WHERE
+  apflora.pop.status  IN (101, 201, 202, 211, 300)
+  AND lastpopber.entwicklung = 1
+  AND apflora.pop.id NOT IN (
+    -- Ansiedlungen since lastpopber.jahr
+    SELECT DISTINCT
+      apflora.tpop.pop_id
+    FROM
+      apflora.tpop
+      INNER JOIN
+        apflora.tpopmassn
+        ON apflora.tpop.id = apflora.tpopmassn.tpop_id
+    WHERE
+      apflora.tpopmassn.typ BETWEEN 1 AND 3
+      AND apflora.tpopmassn.jahr > lastpopber.jahr
+  );
+
 DROP VIEW IF EXISTS apflora.v_qk_tpop_statuserloschenletztertpopberunsicher CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk_tpop_statuserloschenletztertpopberunsicher AS
 WITH lasttpopber AS (
