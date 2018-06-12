@@ -531,11 +531,21 @@ export default (berichtjahr) => [
         }))
     }
   },
-  // Status ist "ursprünglich, erloschen".
-  // Es gibt Teil-Populationen mit abweichendem Status:
   {
-    type: 'view',
-    name: 'v_qk_pop_status101tpopstatusanders',
+    query: 'popStatus101TpopStatusAnders',
+    type: 'query',
+    data: (data) => {
+      const nodes = [...get(data, 'popStatus101TpopStatusAnders.nodes', [])]
+        .sort((a, b) => a.nr - b.nr)
+      return nodes
+        .map(n => ({
+          proj_id: n.projId,
+          ap_id: n.apId,
+          hw: 'Population: Status ist "ursprünglich, erloschen". Es gibt Teil-Populationen (ausser potentiellen Wuchs-/Ansiedlungsorten) mit abweichendem Status:',
+          url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
+          text: [`Population (Nr.): ${n.nr}`],
+        }))
+    }
   },
 
   // Stati mit letztem Bericht vergleichen

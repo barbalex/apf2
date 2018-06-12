@@ -14,12 +14,6 @@ const fetchQk = async ({
 }) => {
   const qualityControls = [
     // 2. Population
-    // Status ist "ursprünglich, erloschen".
-    // Es gibt Teil-Populationen mit abweichendem Status:
-    {
-      type: 'view',
-      name: 'v_qk_pop_status101tpopstatusanders',
-    },
 
     // Stati mit letztem Bericht vergleichen
     // Status ist "erloschen" (ursprünglich oder angesiedelt),
