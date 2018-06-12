@@ -632,9 +632,23 @@ export default (berichtjahr) => [
     }
   },
   // Population: Entsprechen Koordinaten der Pop einer der TPops?
+  // TODO: seems only to output pops with koord but no tpop
   {
-    type: 'view',
-    name: 'v_qk_pop_koordentsprechenkeinertpop'
+    query: 'popKoordEntsprechenKeinerTpop',
+    type: 'query',
+    data: (data) => {
+      const nodes = [...get(data, 'popKoordEntsprechenKeinerTpop.nodes', [])]
+        .sort((a, b) => a.nr - b.nr)
+      console.log({data,nodes})
+      return nodes
+        .map(n => ({
+          proj_id: n.projId,
+          ap_id: n.apId,
+          hw: 'Population: Koordinaten entsprechen keiner Teilpopulation:',
+          url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
+          text: [`Population (Nr.): ${n.nr}`],
+        }))
+    }
   },
   // Population: Status ist ansaatversuch,
   // es gibt tpop mit status aktuell oder erloschene, die vor Beginn AP bestanden

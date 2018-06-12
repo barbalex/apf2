@@ -521,4 +521,15 @@ query QkQuery(
       nr
     }
   }
+  popKoordEntsprechenKeinerTpop: allVQPopKoordentsprechenkeinertpops(filter: {
+      projId: {equalTo: $projId},
+      apId: {equalTo: $apId}
+    }) {
+    nodes {
+      projId
+      apId
+      id
+      nr
+    }
+  }
 }

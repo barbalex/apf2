@@ -6394,6 +6394,37 @@ WHERE
     apflora.ap.proj_id,
     apflora.pop.ap_id;
 
+-- TODO: seems only to output pops with koord but no tpop
+DROP VIEW IF EXISTS apflora.v_q_pop_koordentsprechenkeinertpop CASCADE;
+CREATE OR REPLACE VIEW apflora.v_q_pop_koordentsprechenkeinertpop AS
+SELECT DISTINCT
+  apflora.ap.proj_id,
+  apflora.pop.ap_id,
+  apflora.pop.id,
+  apflora.pop.nr,
+  apflora.pop.x as x,
+  apflora.pop.y as y
+FROM
+  apflora.ap
+  INNER JOIN
+    apflora.pop
+    ON apflora.pop.ap_id = apflora.ap.id
+WHERE
+  apflora.pop.x Is NOT Null
+  AND apflora.pop.y IS NOT NULL
+  AND apflora.pop.id NOT IN (
+    SELECT
+      apflora.tpop.pop_id
+    FROM
+      apflora.tpop
+    WHERE
+      apflora.tpop.x = x
+      AND apflora.tpop.y = y
+  )
+  ORDER BY
+    apflora.ap.proj_id,
+    apflora.pop.ap_id;
+
 DROP VIEW IF EXISTS apflora.v_qk_pop_statusansaatversuchmitaktuellentpop CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk_pop_statusansaatversuchmitaktuellentpop AS
 SELECT DISTINCT

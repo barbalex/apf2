@@ -17,8 +17,6 @@ const fetchQk = async ({
 
     // Stati mit letztem Bericht vergleichen
 
-    // Population: Entsprechen Koordinaten der Pop einer der TPops?
-    { type: 'view', name: 'v_qk_pop_koordentsprechenkeinertpop' },
     // Population: Status ist ansaatversuch,
     // es gibt tpop mit status aktuell oder erloschene, die vor Beginn AP bestanden
     { type: 'view', name: 'v_qk_pop_statusansaatversuchmitaktuellentpop' },
