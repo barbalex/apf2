@@ -7755,6 +7755,33 @@ WHERE
       AND apflora.tpop.status <> 202
   );
 
+DROP VIEW IF EXISTS apflora.v_q_pop_status202tpopstatusanders CASCADE;
+CREATE OR REPLACE VIEW apflora.v_q_pop_status202tpopstatusanders AS
+SELECT
+  apflora.projekt.id as proj_id,
+  apflora.ap.id as ap_id,
+  apflora.pop.id,
+  apflora.pop.nr
+FROM
+  apflora.projekt
+  INNER JOIN
+    apflora.ap
+    INNER JOIN
+      apflora.pop
+    ON apflora.ap.id = apflora.pop.ap_id
+  ON apflora.projekt.id = apflora.ap.proj_id
+WHERE
+  apflora.pop.status  = 202
+  AND apflora.pop.id IN (
+    SELECT DISTINCT
+      apflora.tpop.pop_id
+    FROM
+      apflora.tpop
+    WHERE
+      apflora.tpop.pop_id = apflora.pop.id
+      AND apflora.tpop.status <> 202
+  );
+
 DROP VIEW IF EXISTS apflora.v_qk_pop_status211tpopstatusunzulaessig CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk_pop_status211tpopstatusunzulaessig AS
 SELECT

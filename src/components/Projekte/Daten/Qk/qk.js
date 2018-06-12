@@ -467,11 +467,21 @@ export default (berichtjahr) => [
         }))
     }
   },
-  // Status ist "angesiedelt nach Beginn AP, erloschen/nicht etabliert".
-  // Es gibt Teil-Populationen mit abweichendem Status:
   {
-    type: 'view',
-    name: 'v_qk_pop_status202tpopstatusanders',
+    query: 'popStatus202TpopStatusAnders',
+    type: 'query',
+    data: (data) => {
+      const nodes = [...get(data, 'popStatus202TpopStatusAnders.nodes', [])]
+        .sort((a, b) => a.nr - b.nr)
+      return nodes
+        .map(n => ({
+          proj_id: n.projId,
+          ap_id: n.apId,
+          hw: 'Population: Status ist "angesiedelt nach Beginn AP, erloschen/nicht etabliert". Es gibt Teil-Populationen mit abweichendem Status:',
+          url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
+          text: [`Population (Nr.): ${n.nr}`],
+        }))
+    }
   },
   // Status ist "angesiedelt vor Beginn AP, erloschen/nicht etabliert".
   // Es gibt Teil-Populationen mit nicht zulässigen Stati

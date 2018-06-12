@@ -414,4 +414,15 @@ query QkQuery(
       nr
     }
   }
+  popStatus202TpopStatusAnders: allVQPopStatus202Tpopstatusanders(filter: {
+      projId: {equalTo: $projId},
+      apId: {equalTo: $apId}
+    }) {
+    nodes {
+      projId
+      apId
+      id
+      nr
+    }
+  }
 }
