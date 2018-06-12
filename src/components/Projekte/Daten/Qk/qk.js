@@ -1,6 +1,7 @@
 // @flow
 import get from 'lodash/get'
 import flatten from 'lodash/flatten'
+//import sortBy from 'lodash/sortBy'
 
 export default (berichtjahr) => [
   // 1. Art
@@ -28,7 +29,8 @@ export default (berichtjahr) => [
     data: (data) => {
       const projId = get(data, 'zielOhneTyp.id')
       const apId = get(data, 'zielOhneTyp.apsByProjId.nodes[0].id')
-      const zielNodes = get(data, 'zielOhneTyp.apsByProjId.nodes[0].zielsByApId.nodes', [])
+      const zielNodes = [...get(data, 'zielOhneTyp.apsByProjId.nodes[0].zielsByApId.nodes', [])]
+        .sort((a, b) => a.jahr - b.jahr)
       return zielNodes.map(n => ({
         proj_id: projId,
         ap_id: apId,
@@ -44,7 +46,8 @@ export default (berichtjahr) => [
     data: (data) => {
       const projId = get(data, 'zielOhneZiel.id')
       const apId = get(data, 'zielOhneZiel.apsByProjId.nodes[0].id')
-      const zielNodes = get(data, 'zielOhneZiel.apsByProjId.nodes[0].zielsByApId.nodes', [])
+      const zielNodes = [...get(data, 'zielOhneZiel.apsByProjId.nodes[0].zielsByApId.nodes', [])]
+        .sort((a, b) => a.jahr - b.jahr)
       return zielNodes.map(n => ({
         proj_id: projId,
         ap_id: apId,
@@ -218,7 +221,8 @@ export default (berichtjahr) => [
     data: (data) => {
       const projId = get(data, 'popOhneName.id')
       const apId = get(data, 'popOhneName.apsByProjId.nodes[0].id')
-      const nodes = get(data, 'popOhneName.apsByProjId.nodes[0].popsByApId.nodes', [])
+      const nodes = [...get(data, 'popOhneName.apsByProjId.nodes[0].popsByApId.nodes', [])]
+        .sort((a, b) => a.nr - b.nr)
       return nodes.map(n => ({
         proj_id: projId,
         ap_id: apId,
@@ -234,7 +238,8 @@ export default (berichtjahr) => [
     data: (data) => {
       const projId = get(data, 'popOhneStatus.id')
       const apId = get(data, 'popOhneStatus.apsByProjId.nodes[0].id')
-      const nodes = get(data, 'popOhneStatus.apsByProjId.nodes[0].popsByApId.nodes', [])
+      const nodes = [...get(data, 'popOhneStatus.apsByProjId.nodes[0].popsByApId.nodes', [])]
+        .sort((a, b) => a.nr - b.nr)
       return nodes.map(n => ({
         proj_id: projId,
         ap_id: apId,
@@ -250,7 +255,8 @@ export default (berichtjahr) => [
     data: (data) => {
       const projId = get(data, 'popOhneBekanntSeit.id')
       const apId = get(data, 'popOhneBekanntSeit.apsByProjId.nodes[0].id')
-      const nodes = get(data, 'popOhneBekanntSeit.apsByProjId.nodes[0].popsByApId.nodes', [])
+      const nodes = [...get(data, 'popOhneBekanntSeit.apsByProjId.nodes[0].popsByApId.nodes', [])]
+        .sort((a, b) => a.nr - b.nr)
       return nodes.map(n => ({
         proj_id: projId,
         ap_id: apId,
@@ -266,7 +272,8 @@ export default (berichtjahr) => [
     data: (data) => {
       const projId = get(data, 'popOhneKoord.id')
       const apId = get(data, 'popOhneKoord.apsByProjId.nodes[0].id')
-      const nodes = get(data, 'popOhneKoord.apsByProjId.nodes[0].popsByApId.nodes', [])
+      const nodes = [...get(data, 'popOhneKoord.apsByProjId.nodes[0].popsByApId.nodes', [])]
+        .sort((a, b) => a.nr - b.nr)
       return nodes.map(n => ({
         proj_id: projId,
         ap_id: apId,
@@ -282,8 +289,9 @@ export default (berichtjahr) => [
     data: (data) => {
       const projId = get(data, 'popOhneTpop.id')
       const apId = get(data, 'popOhneTpop.apsByProjId.nodes[0].id')
-      const nodes = get(data, 'popOhneTpop.apsByProjId.nodes[0].popsByApId.nodes', [])
+      const nodes = [...get(data, 'popOhneTpop.apsByProjId.nodes[0].popsByApId.nodes', [])]
         .filter(n => get(n, 'tpopsByPopId.totalCount') === 0)
+        .sort((a, b) => a.nr - b.nr)
       return nodes.map(n => ({
         proj_id: projId,
         ap_id: apId,
@@ -293,14 +301,14 @@ export default (berichtjahr) => [
       }))
     }
   },
-  // Population: mit Status unklar, ohne Begründung
   {
     query: 'popMitStatusUnklarOhneBegruendung',
     type: 'query',
     data: (data) => {
       const projId = get(data, 'popMitStatusUnklarOhneBegruendung.id')
       const apId = get(data, 'popMitStatusUnklarOhneBegruendung.apsByProjId.nodes[0].id')
-      const nodes = get(data, 'popMitStatusUnklarOhneBegruendung.apsByProjId.nodes[0].popsByApId.nodes', [])
+      const nodes = [...get(data, 'popMitStatusUnklarOhneBegruendung.apsByProjId.nodes[0].popsByApId.nodes', [])]
+        .sort((a, b) => a.nr - b.nr)
       return nodes.map(n => ({
         proj_id: projId,
         ap_id: apId,
@@ -312,8 +320,20 @@ export default (berichtjahr) => [
   },
   // Population: mit mehrdeutiger Nr
   {
-    type: 'view',
-    name: 'v_qk_pop_popnrmehrdeutig'
+    query: 'popMitMehrdeutigerPopNr',
+    type: 'query',
+    data: (data) => {
+      const nodes = [...get(data, 'popMitMehrdeutigerPopNr.nodes', [])]
+        .sort((a, b) => a.nr - b.nr)
+      return nodes
+        .map(n => ({
+          proj_id: n.projId,
+          ap_id: n.apId,
+          hw: 'Population: Die Nr. ist mehrdeutig:',
+          url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
+          text: [`Population (Nr.): ${n.nr}`],
+        }))
+    }
   },
   // Population: ohne verlangten Pop-Bericht im Berichtjahr
   {

@@ -5089,6 +5089,39 @@ ORDER BY
   apflora.ap.id,
   apflora.pop.nr;
 
+DROP VIEW IF EXISTS apflora.v_q_pop_popnrmehrdeutig CASCADE;
+CREATE OR REPLACE VIEW apflora.v_q_pop_popnrmehrdeutig AS
+SELECT
+  apflora.projekt.id as proj_id,
+  apflora.ap.id as ap_id,
+  apflora.pop.id,
+  apflora.pop.nr
+FROM
+  apflora.projekt
+  INNER JOIN
+    apflora.ap
+    INNER JOIN
+      apflora.pop
+      ON apflora.pop.ap_id = apflora.ap.id
+    ON apflora.projekt.id = apflora.ap.proj_id
+WHERE
+  apflora.pop.ap_id IN (
+    SELECT DISTINCT ap_id
+    FROM apflora.pop
+    GROUP BY ap_id, nr
+    HAVING COUNT(*) > 1
+  ) AND
+  apflora.pop.nr IN (
+    SELECT DISTINCT nr
+    FROM apflora.pop
+    GROUP BY ap_id, nr
+    HAVING COUNT(*) > 1
+  )
+ORDER BY
+  apflora.projekt.id,
+  apflora.ap.id,
+  apflora.pop.nr;
+
 DROP VIEW IF EXISTS apflora.v_qk_pop_ohnekoord CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk_pop_ohnekoord AS
 SELECT
