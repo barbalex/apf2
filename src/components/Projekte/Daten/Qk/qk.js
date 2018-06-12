@@ -420,8 +420,20 @@ export default (berichtjahr) => [
   // Stati der Population mit den Stati der Teil-Populationen vergleichen
   // Keine Teil-Population hat den Status der Population:
   {
-    type: 'view',
-    name: 'v_qk_pop_ohnetpopmitgleichemstatus',
+    query: 'popOhneTpopMitGleichemStatus',
+    type: 'query',
+    data: (data) => {
+      const nodes = [...get(data, 'popOhneTpopMitGleichemStatus.nodes', [])]
+        .sort((a, b) => a.nr - b.nr)
+      return nodes
+        .map(n => ({
+          proj_id: n.projId,
+          ap_id: n.apId,
+          hw: 'Population: Keine Teil-Population hat den Status der Population:',
+          url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
+          text: [`Population (Nr.): ${n.nr}`],
+        }))
+    }
   },
   // Status ist "potentieller Wuchs-/Ansiedlungsort".
   // Es gibt aber Teil-Populationen mit abweichendem Status:
