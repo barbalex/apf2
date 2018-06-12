@@ -334,7 +334,6 @@ export default (berichtjahr) => [
         }))
     }
   },
-  // Population: ohne verlangten Pop-Bericht im Berichtjahr
   {
     query: 'popOhnePopber',
     type: 'query',
@@ -354,9 +353,20 @@ export default (berichtjahr) => [
 
   // Bericht-Stati kontrollieren
   {
-    type: 'view',
-    name: 'v_qk_pop_mit_ber_zunehmend_ohne_tpopber_zunehmend',
-    berichtjahr,
+    query: 'popMitBerZunehmendOhneTpopberZunehmend',
+    type: 'query',
+    data: (data) => {
+      const nodes = [...get(data, 'popMitBerZunehmendOhneTpopberZunehmend.nodes', [])]
+        .sort((a, b) => a.nr - b.nr)
+      return nodes
+        .map(n => ({
+          proj_id: n.projId,
+          ap_id: n.apId,
+          hw: 'Populationen mit Bericht "zunehmend" ohne Teil-Population mit Bericht "zunehmend":',
+          url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
+          text: [`Population (Nr.): ${n.nr}`],
+        }))
+    }
   },
   {
     type: 'view',

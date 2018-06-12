@@ -19,11 +19,6 @@ const fetchQk = async ({
     // Bericht-Stati kontrollieren
     {
       type: 'view',
-      name: 'v_qk_pop_mit_ber_zunehmend_ohne_tpopber_zunehmend',
-      berichtjahr,
-    },
-    {
-      type: 'view',
       name: 'v_qk_pop_mit_ber_abnehmend_ohne_tpopber_abnehmend',
       berichtjahr,
     },
