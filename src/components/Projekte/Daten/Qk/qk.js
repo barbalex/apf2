@@ -261,8 +261,20 @@ export default (berichtjahr) => [
     }
   },
   {
-    type: 'view',
-    name: 'v_qk_pop_ohnekoord'
+    query: 'popOhneKoord',
+    type: 'query',
+    data: (data) => {
+      const projId = get(data, 'popOhneKoord.id')
+      const apId = get(data, 'popOhneKoord.apsByProjId.nodes[0].id')
+      const nodes = get(data, 'popOhneKoord.apsByProjId.nodes[0].popsByApId.nodes', [])
+      return nodes.map(n => ({
+        proj_id: projId,
+        ap_id: apId,
+        hw: 'Population: Mindestens eine Koordinate fehlt:',
+        url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', n.id],
+        text: [`Population (Nr.): ${n.nr}`],
+      }))
+    }
   },
   {
     type: 'view',
