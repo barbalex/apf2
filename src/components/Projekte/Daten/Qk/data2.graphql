@@ -480,4 +480,15 @@ query QkQuery(
       nr
     }
   }
+  popStatusErloschenLetzterPopberStabil: allVQPopStatuserloschenletzterpopberstabils(filter: {
+      projId: {equalTo: $projId},
+      apId: {equalTo: $apId}
+    }) {
+    nodes {
+      projId
+      apId
+      id
+      nr
+    }
+  }
 }

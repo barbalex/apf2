@@ -565,10 +565,21 @@ export default (berichtjahr) => [
         }))
     }
   },
-  // Status ist "erloschen" (ursprünglich oder angesiedelt), Ansaatversuch oder potentieller Wuchsort; der letzte Populations-Bericht meldet aber "stabil" und es gab seither keine Ansiedlung:
   {
-    type: 'view',
-    name: 'v_qk_pop_statuserloschenletzterpopberstabil'
+    query: 'popStatusErloschenLetzterPopberStabil',
+    type: 'query',
+    data: (data) => {
+      const nodes = [...get(data, 'popStatusErloschenLetzterPopberStabil.nodes', [])]
+        .sort((a, b) => a.nr - b.nr)
+      return nodes
+        .map(n => ({
+          proj_id: n.projId,
+          ap_id: n.apId,
+          hw: 'Population: Status ist "erloschen" (ursprünglich oder angesiedelt), Ansaatversuch oder potentieller Wuchsort; der letzte Populations-Bericht meldet aber "stabil" und es gab seither keine Ansiedlung:',
+          url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
+          text: [`Population (Nr.): ${n.nr}`],
+        }))
+    }
   },
   // Status ist "erloschen" (ursprünglich oder angesiedelt), Ansaatversuch oder potentieller Wuchsort; der letzte Populations-Bericht meldet aber "abnehmend" und es gab seither keine Ansiedlung:
   {
