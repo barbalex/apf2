@@ -318,12 +318,11 @@ export default (berichtjahr) => [
       }))
     }
   },
-  // Population: mit mehrdeutiger Nr
   {
-    query: 'popMitMehrdeutigerPopNr',
+    query: 'popMitMehrdeutigerNr',
     type: 'query',
     data: (data) => {
-      const nodes = [...get(data, 'popMitMehrdeutigerPopNr.nodes', [])]
+      const nodes = [...get(data, 'popMitMehrdeutigerNr.nodes', [])]
         .sort((a, b) => a.nr - b.nr)
       return nodes
         .map(n => ({
