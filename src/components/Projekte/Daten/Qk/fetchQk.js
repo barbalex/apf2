@@ -15,10 +15,6 @@ const fetchQk = async ({
   const qualityControls = [
     // 1. Art
     // 2. Population
-    // Population: ohne Nr/Name/Status/bekannt seit/Koordinaten/tpop
-    { type: 'view', name: 'v_qk_pop_ohnetpop' },
-    // Population: mit Status unklar, ohne Begründung
-    { type: 'view', name: 'v_qk_pop_mitstatusunklarohnebegruendung' },
     // Population: mit mehrdeutiger Nr
     { type: 'view', name: 'v_qk_pop_popnrmehrdeutig' },
     // Population: ohne verlangten Pop-Bericht im Berichtjahr

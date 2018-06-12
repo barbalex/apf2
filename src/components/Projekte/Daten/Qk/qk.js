@@ -277,13 +277,38 @@ export default (berichtjahr) => [
     }
   },
   {
-    type: 'view',
-    name: 'v_qk_pop_ohnetpop'
+    query: 'popOhneTpop',
+    type: 'query',
+    data: (data) => {
+      const projId = get(data, 'popOhneTpop.id')
+      const apId = get(data, 'popOhneTpop.apsByProjId.nodes[0].id')
+      const nodes = get(data, 'popOhneTpop.apsByProjId.nodes[0].popsByApId.nodes', [])
+        .filter(n => get(n, 'tpopsByPopId.totalCount') === 0)
+      return nodes.map(n => ({
+        proj_id: projId,
+        ap_id: apId,
+        hw: 'Population ohne Teilpopulation:',
+        url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', n.id],
+        text: [`Population (Nr.): ${n.nr}`],
+      }))
+    }
   },
   // Population: mit Status unklar, ohne Begründung
   {
-    type: 'view',
-    name: 'v_qk_pop_mitstatusunklarohnebegruendung'
+    query: 'popMitStatusUnklarOhneBegruendung',
+    type: 'query',
+    data: (data) => {
+      const projId = get(data, 'popMitStatusUnklarOhneBegruendung.id')
+      const apId = get(data, 'popMitStatusUnklarOhneBegruendung.apsByProjId.nodes[0].id')
+      const nodes = get(data, 'popMitStatusUnklarOhneBegruendung.apsByProjId.nodes[0].popsByApId.nodes', [])
+      return nodes.map(n => ({
+        proj_id: projId,
+        ap_id: apId,
+        hw: 'Population mit "Status unklar", ohne Begründung:',
+        url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', n.id],
+        text: [`Population (Nr.): ${n.nr}`],
+      }))
+    }
   },
   // Population: mit mehrdeutiger Nr
   {

@@ -273,4 +273,39 @@ query QkQuery(
       }
     }
   }
+  # need to filter totalCount = 0 from this result
+  popOhneTpop: projektById(id: $projId) {
+    id
+    apsByProjId(filter: {id: {equalTo: $apId}}) {
+      nodes {
+        id
+        popsByApId {
+          nodes {
+            id
+            nr
+            tpopsByPopId {
+              totalCount
+            }
+          }
+        }
+      }
+    }
+  }
+  popMitStatusUnklarOhneBegruendung: projektById(id: $projId) {
+    id
+    apsByProjId(filter: {id: {equalTo: $apId}}) {
+      nodes {
+        id
+        popsByApId(filter: {
+          statusUnklar: {equalTo: true},
+          statusUnklarBegruendung: {isNull: true}
+        }) {
+          nodes {
+            id
+            nr
+          }
+        }
+      }
+    }
+  }
 }
