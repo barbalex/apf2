@@ -513,4 +513,12 @@ query QkQuery(
       nr
     }
   }
+  popOhnePopmassnber: qPopOhnePopmassnber(berichtjahr: $berichtjahr, apid: $apId, projid: $projId) @include(if: $isBerichtjahr) {
+    nodes {
+      projId
+      apId
+      id
+      nr
+    }
+  }
 }

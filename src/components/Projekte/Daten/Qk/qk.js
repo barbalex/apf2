@@ -615,11 +615,21 @@ export default (berichtjahr) => [
   },
 
   // Stati kontrollieren
-  // Population: ohne verlangten Pop-Massn-Bericht im Berichtjahr
   {
-    type: 'function',
-    name: 'qk_pop_ohne_popmassnber',
-    berichtjahr
+    query: 'popOhnePopmassnber',
+    type: 'query',
+    data: (data) => {
+      const nodes = [...get(data, 'popOhnePopmassnber.nodes', [])]
+        .sort((a, b) => a.nr - b.nr)
+      return nodes
+        .map(n => ({
+          proj_id: n.projId,
+          ap_id: n.apId,
+          hw: 'Population mit angesiedelten Teilpopulationen (vor dem Berichtjahr), die (im Berichtjahr) kontrolliert wurden, aber ohne Massnahmen-Bericht (im Berichtjahr):',
+          url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
+          text: [`Population (Nr.): ${n.nr}`],
+        }))
+    }
   },
   // Population: Entsprechen Koordinaten der Pop einer der TPops?
   {

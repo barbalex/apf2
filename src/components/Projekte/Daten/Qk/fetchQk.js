@@ -17,9 +17,6 @@ const fetchQk = async ({
 
     // Stati mit letztem Bericht vergleichen
 
-    // Stati kontrollieren
-    // Population: ohne verlangten Pop-Massn-Bericht im Berichtjahr
-    { type: 'function', name: 'qk_pop_ohne_popmassnber', berichtjahr },
     // Population: Entsprechen Koordinaten der Pop einer der TPops?
     { type: 'view', name: 'v_qk_pop_koordentsprechenkeinertpop' },
     // Population: Status ist ansaatversuch,
