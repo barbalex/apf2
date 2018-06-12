@@ -14,12 +14,6 @@ const fetchQk = async ({
 }) => {
   const qualityControls = [
     // 2. Population
-    // Status ist "angesiedelt vor Beginn AP, aktuell".
-    // Es gibt Teil-Populationen mit nicht zulässigen Stati ("ursprünglich"):
-    {
-      type: 'view',
-      name: 'v_qk_pop_status210tpopstatusunzulaessig',
-    },
     // Status ist "ursprünglich, erloschen".
     // Es gibt Teil-Populationen mit abweichendem Status:
     {
