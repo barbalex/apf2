@@ -401,9 +401,20 @@ export default (berichtjahr) => [
     }
   },
   {
-    type: 'view',
-    name: 'v_qk_pop_mit_ber_erloschen_und_tpopber_nicht_erloschen',
-    berichtjahr,
+    query: 'popMitBerErloschenUndTpopberNichtErloschen',
+    type: 'query',
+    data: (data) => {
+      const nodes = [...get(data, 'popMitBerErloschenUndTpopberNichtErloschen.nodes', [])]
+        .sort((a, b) => a.nr - b.nr)
+      return nodes
+        .map(n => ({
+          proj_id: n.projId,
+          ap_id: n.apId,
+          hw: 'Populationen mit Bericht "erloschen" und mindestens einer gemäss Bericht nicht erloschenen Teil-Population:',
+          url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
+          text: [`Population (Nr.): ${n.nr}`],
+        }))
+    }
   },
 
   // Stati der Population mit den Stati der Teil-Populationen vergleichen

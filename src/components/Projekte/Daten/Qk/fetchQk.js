@@ -16,13 +16,6 @@ const fetchQk = async ({
     // 1. Art
     // 2. Population
 
-    // Bericht-Stati kontrollieren
-    {
-      type: 'view',
-      name: 'v_qk_pop_mit_ber_erloschen_und_tpopber_nicht_erloschen',
-      berichtjahr,
-    },
-
     // Stati der Population mit den Stati der Teil-Populationen vergleichen
     // Keine Teil-Population hat den Status der Population:
     {
