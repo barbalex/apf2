@@ -1,6 +1,6 @@
 query QkQuery(
-  #$berichtjahr: Int
-  #$isBerichtjahr: Boolean!
+  $berichtjahr: Int
+  $isBerichtjahr: Boolean!
   $projId: UUID!
   $apId: UUID!
 ) {
@@ -309,6 +309,14 @@ query QkQuery(
     }
   }
   popMitMehrdeutigerNr: allVQPopPopnrmehrdeutigs {
+    nodes {
+      projId
+      apId
+      id
+      nr
+    }
+  }
+  popOhnePopber: qPopOhnePopber(berichtjahr: $berichtjahr, apid: $apId) @include(if: $isBerichtjahr) {
     nodes {
       projId
       apId

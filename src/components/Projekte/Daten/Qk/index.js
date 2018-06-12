@@ -160,8 +160,8 @@ const Qk = ({
           <Query
             query={data2Gql}
             // pass berichtjahr when queries exist that actually use it
-            //variables={{ berichtjahr, apId, projId }}
-            variables={{ apId, projId }}
+            variables={{ berichtjahr, isBerichtjahr: !!berichtjahr, apId, projId }}
+            //variables={{ apId, projId }}
           >
             {({ loading, error, data }) => {
               const qks = qk(berichtjahr).filter(q => !!q.query)

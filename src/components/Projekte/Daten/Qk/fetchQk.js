@@ -15,8 +15,6 @@ const fetchQk = async ({
   const qualityControls = [
     // 1. Art
     // 2. Population
-    // Population: ohne verlangten Pop-Bericht im Berichtjahr
-    { type: 'function', name: 'qk_pop_ohne_popber', berichtjahr },
 
     // Bericht-Stati kontrollieren
     {
