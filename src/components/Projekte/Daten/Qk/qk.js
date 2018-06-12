@@ -213,8 +213,20 @@ export default (berichtjahr) => [
     }
   },
   {
-    type: 'view',
-    name: 'v_qk_pop_ohnepopname'
+    query: 'popOhneName',
+    type: 'query',
+    data: (data) => {
+      const projId = get(data, 'popOhneName.id')
+      const apId = get(data, 'popOhneName.apsByProjId.nodes[0].id')
+      const nodes = get(data, 'popOhneName.apsByProjId.nodes[0].popsByApId.nodes', [])
+      return nodes.map(n => ({
+        proj_id: projId,
+        ap_id: apId,
+        hw: 'Population ohne Name:',
+        url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', n.id],
+        text: [`Population (Nr.): ${n.nr}`],
+      }))
+    }
   },
   {
     type: 'view',

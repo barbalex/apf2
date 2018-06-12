@@ -217,4 +217,18 @@ query QkQuery(
       }
     }
   }
+  popOhneName: projektById(id: $projId) {
+    id
+    apsByProjId(filter: {id: {equalTo: $apId}}) {
+      nodes {
+        id
+        popsByApId(filter: {name: {isNull: true}}) {
+          nodes {
+            id
+            nr
+          }
+        }
+      }
+    }
+  }
 }
