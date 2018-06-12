@@ -353,4 +353,18 @@ query QkQuery(
       berichtjahr
     }
   }
+  popMitBerErloschenOhneTpopberErloschen: allVQPopMitBerErloschenOhneTpopberErloschens(filter: {
+      projId: {equalTo: $projId},
+      apId: {equalTo: $apId},
+      berichtjahr: {equalTo: $berichtjahr}
+    })
+    @include(if: $isBerichtjahr) {
+    nodes {
+      projId
+      apId
+      id
+      nr
+      berichtjahr
+    }
+  }
 }

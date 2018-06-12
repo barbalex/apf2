@@ -385,9 +385,20 @@ export default (berichtjahr) => [
     }
   },
   {
-    type: 'view',
-    name: 'v_qk_pop_mit_ber_erloschen_ohne_tpopber_erloschen',
-    berichtjahr,
+    query: 'popMitBerErloschenOhneTpopberErloschen',
+    type: 'query',
+    data: (data) => {
+      const nodes = [...get(data, 'popMitBerErloschenOhneTpopberErloschen.nodes', [])]
+        .sort((a, b) => a.nr - b.nr)
+      return nodes
+        .map(n => ({
+          proj_id: n.projId,
+          ap_id: n.apId,
+          hw: 'Populationen mit Bericht "erloschen" ohne Teil-Population mit Bericht "erloschen":',
+          url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
+          text: [`Population (Nr.): ${n.nr}`],
+        }))
+    }
   },
   {
     type: 'view',
