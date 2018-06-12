@@ -15,12 +15,6 @@ const fetchQk = async ({
   const qualityControls = [
     // 1. Art
     // 2. Population
-    // Status ist "potentieller Wuchs-/Ansiedlungsort".
-    // Es gibt aber Teil-Populationen mit abweichendem Status:
-    {
-      type: 'view',
-      name: 'v_qk_pop_status300tpopstatusanders',
-    },
     // Status ist "Ansaatversuch".
     // Es gibt Teil-Populationen mit nicht zulässigen Stati
     // ("ursprünglich" oder "angesiedelt, aktuell"):
