@@ -435,8 +435,6 @@ export default (berichtjahr) => [
         }))
     }
   },
-  // Status ist "potentieller Wuchs-/Ansiedlungsort".
-  // Es gibt aber Teil-Populationen mit abweichendem Status:
   {
     query: 'popStatus300TpopStatusAnders',
     type: 'query',
@@ -453,12 +451,21 @@ export default (berichtjahr) => [
         }))
     }
   },
-  // Status ist "Ansaatversuch".
-  // Es gibt Teil-Populationen mit nicht zulässigen Stati
-  // ("ursprünglich" oder "angesiedelt, aktuell"):
   {
-    type: 'view',
-    name: 'v_qk_pop_status201tpopstatusunzulaessig',
+    query: 'popStatus201TpopStatusUnzulaessig',
+    type: 'query',
+    data: (data) => {
+      const nodes = [...get(data, 'popStatus201TpopStatusUnzulaessig.nodes', [])]
+        .sort((a, b) => a.nr - b.nr)
+      return nodes
+        .map(n => ({
+          proj_id: n.projId,
+          ap_id: n.apId,
+          hw: 'Population: Status ist "Ansaatversuch". Es gibt Teil-Populationen mit nicht zulässigen Stati ("ursprünglich" oder "angesiedelt, aktuell"):',
+          url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
+          text: [`Population (Nr.): ${n.nr}`],
+        }))
+    }
   },
   // Status ist "angesiedelt nach Beginn AP, erloschen/nicht etabliert".
   // Es gibt Teil-Populationen mit abweichendem Status:
