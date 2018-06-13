@@ -22,7 +22,6 @@ const fetchQk = async ({
     // 5. Kontrollen
 
     // Kontrolle ohne Jahr/Zählung/Kontrolltyp
-    { type: 'view', name: 'v_qk_feldkontr_ohnejahr' },
     { type: 'view', name: 'v_qk_freiwkontr_ohnejahr' },
     { type: 'view', name: 'v_qk_feldkontr_ohnebearb' },
     { type: 'view', name: 'v_qk_freiwkontr_ohnebearb' },

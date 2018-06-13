@@ -1423,8 +1423,32 @@ export default (berichtjahr) => [
 
   // Kontrolle ohne Jahr/Zählung/Kontrolltyp
   {
-    type: 'view',
-    name: 'v_qk_feldkontr_ohnejahr'
+    query: 'tpopfeldkontrOhneJahr',
+    type: 'query',
+    data: (data) => {
+      const projId = get(data, 'tpopfeldkontrOhneJahr.id')
+      const apId = get(data, 'tpopfeldkontrOhneJahr.apsByProjId.nodes[0].id')
+      const popNodes = get(data, 'tpopfeldkontrOhneJahr.apsByProjId.nodes[0].popsByApId.nodes', [])
+      const tpopNodes = flatten(
+        popNodes.map(n => get(n, 'tpopsByPopId.nodes'), [])
+      )
+      const tpopkontrNodes = flatten(
+        tpopNodes.map(n => get(n, 'tpopkontrsByTpopId.nodes'), [])
+      )
+      return tpopkontrNodes.map(n => {
+        const popId = get(n, 'tpopByTpopId.popByPopId.id')
+        const popNr = get(n, 'tpopByTpopId.popByPopId.nr')
+        const tpopId = get(n, 'tpopByTpopId.id')
+        const tpopNr = get(n, 'tpopByTpopId.nr')
+        return ({
+          proj_id: projId,
+          ap_id: apId,
+          hw: 'Feldkontrolle ohne Jahr:',
+          url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', popId, 'Teil-Populationen', tpopId, 'Feld-Kontrollen', n.id],
+          text: [`Population: ${popNr || popId}, Teil-Population: ${tpopNr || tpopId}, Kontrolle: ${n.jahr || n.id}`],
+        })
+      })
+    }
   },
   {
     type: 'view',
