@@ -1132,4 +1132,36 @@ query QkQuery(
       }
     }
   }
+  tpopmassnOhneBearb: projektById(id: $projId) {
+    id
+    apsByProjId(filter: {id: {equalTo: $apId}}) {
+      nodes {
+        id
+        popsByApId {
+          nodes {
+            id
+            tpopsByPopId {
+              nodes {
+                id
+                tpopmassnsByTpopId(filter: {bearbeiter: {isNull: true}}) {
+                  nodes {
+                    id
+                    jahr
+                    tpopByTpopId {
+                      id
+                      nr
+                      popByPopId {
+                        id
+                        nr
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 }
