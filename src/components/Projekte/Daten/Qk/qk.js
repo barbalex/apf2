@@ -779,10 +779,21 @@ export default (berichtjahr) => [
         }))
     }
   },
-  // Status ist "erloschen" (ursprünglich oder angesiedelt); der letzte Populations-Bericht meldet "erloschen". Seither gab es aber eine Ansiedlung
   {
-    type: 'view',
-    name: 'v_qk_pop_statuserloschenletzterpopbererloschenmitansiedlung',
+    query: 'popStatusErloschenLetzterPopberErloschenMitAnsiedlung',
+    type: 'query',
+    data: (data) => {
+      const nodes = [...get(data, 'popStatusErloschenLetzterPopberErloschenMitAnsiedlung.nodes', [])]
+        .sort((a, b) => a.nr - b.nr)
+      return nodes
+        .map(n => ({
+          proj_id: n.projId,
+          ap_id: n.apId,
+          hw: 'Population: Status ist "erloschen" (ursprünglich oder angesiedelt); der letzte Populations-Bericht meldet "erloschen". Seither gab es aber eine Ansiedlung:',
+          url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
+          text: [`Population (Nr.): ${n.nr}`],
+        }))
+    }
   },
   // Pop-Bericht/Pop-Massn.-Bericht ohne Jahr/Entwicklung
   {
