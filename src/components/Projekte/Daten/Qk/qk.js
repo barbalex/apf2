@@ -714,11 +714,21 @@ export default (berichtjahr) => [
         }))
     }
   },
-  // Population: Status ist "erloschen" (ursprünglich oder angesiedelt),
-  // es gibt aber eine Teilpopulation mit Status "angesiedelt, Ansaatversuch":
   {
-    type: 'view',
-    name: 'v_qk_pop_statuserloschenmittpopansaatversuch'
+    query: 'popStatusErloschenMitTpopAnsaatversuch',
+    type: 'query',
+    data: (data) => {
+      const nodes = [...get(data, 'popStatusErloschenMitTpopAnsaatversuch.nodes', [])]
+        .sort((a, b) => a.nr - b.nr)
+      return nodes
+        .map(n => ({
+          proj_id: n.projId,
+          ap_id: n.apId,
+          hw: 'Population: Status ist "erloschen" (urspruenglich oder angesiedelt), es gibt aber eine Teilpopulation mit Status "angesiedelt, Ansaatversuch":',
+          url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
+          text: [`Population (Nr.): ${n.nr}`],
+        }))
+    }
   },
   // Population: Status ist "angesiedelt", es gibt aber eine Teilpopulation mit Status "ursprünglich":
   {
