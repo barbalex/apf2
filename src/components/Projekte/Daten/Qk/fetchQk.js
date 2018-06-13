@@ -22,7 +22,6 @@ const fetchQk = async ({
     // 4. Massnahmen
 
     // Massn ohne Jahr/Typ
-    { type: 'view', name: 'v_qk_massn_ohnejahr' },
     { type: 'view', name: 'v_qk_massn_ohnebearb' },
     { type: 'view', name: 'v_qk_massn_ohnetyp', berichtjahr },
     // Massn.-Bericht ohne Jahr/Entwicklung
