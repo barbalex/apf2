@@ -17,8 +17,6 @@ const fetchQk = async ({
 
     // Stati mit letztem Bericht vergleichen
 
-    // Population: Status ist ansaatversuch, alle tpop sind gemäss Status erloschen
-    { type: 'view', name: 'v_qk_pop_statusansaatversuchalletpoperloschen' },
     // Population: Status ist ansaatversuch, es gibt tpop mit status ursprünglich erloschen
     {
       type: 'view',

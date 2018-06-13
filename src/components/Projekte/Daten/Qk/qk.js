@@ -639,7 +639,7 @@ export default (berichtjahr) => [
     data: (data) => {
       const nodes = [...get(data, 'popKoordEntsprechenKeinerTpop.nodes', [])]
         .sort((a, b) => a.nr - b.nr)
-      console.log({data,nodes})
+      //console.log({data,nodes})
       return nodes
         .map(n => ({
           proj_id: n.projId,
@@ -650,15 +650,12 @@ export default (berichtjahr) => [
         }))
     }
   },
-  // Population: Status ist ansaatversuch,
-  // es gibt tpop mit status aktuell oder erloschene, die vor Beginn AP bestanden
   {
     query: 'popStatusAnsaatversuchTpopAktuell',
     type: 'query',
     data: (data) => {
       const nodes = [...get(data, 'popStatusAnsaatversuchTpopAktuell.nodes', [])]
         .sort((a, b) => a.nr - b.nr)
-      console.log({data,nodes})
       return nodes
         .map(n => ({
           proj_id: n.projId,
@@ -669,10 +666,21 @@ export default (berichtjahr) => [
         }))
     }
   },
-  // Population: Status ist ansaatversuch, alle tpop sind gemäss Status erloschen
   {
-    type: 'view',
-    name: 'v_qk_pop_statusansaatversuchalletpoperloschen'
+    query: 'popStatusAnsaatversuchAlleTpopErloschen',
+    type: 'query',
+    data: (data) => {
+      const nodes = [...get(data, 'popStatusAnsaatversuchAlleTpopErloschen.nodes', [])]
+        .sort((a, b) => a.nr - b.nr)
+      return nodes
+        .map(n => ({
+          proj_id: n.projId,
+          ap_id: n.apId,
+          hw: 'Population: Status ist "angesiedelt, Ansaatversuch", alle Teilpopulationen sind gemäss Status erloschen:',
+          url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
+          text: [`Population (Nr.): ${n.nr}`],
+        }))
+    }
   },
   // Population: Status ist ansaatversuch, es gibt tpop mit status ursprünglich erloschen
   {

@@ -6507,6 +6507,40 @@ WHERE
       AND apflora.tpop.pop_id = apflora.pop.id
   );
 
+DROP VIEW IF EXISTS apflora.v_q_pop_statusansaatversuchalletpoperloschen CASCADE;
+CREATE OR REPLACE VIEW apflora.v_q_pop_statusansaatversuchalletpoperloschen AS
+SELECT DISTINCT
+  apflora.ap.proj_id,
+  apflora.pop.ap_id,
+  apflora.pop.id,
+  apflora.pop.nr
+FROM
+  apflora.ap
+    INNER JOIN apflora.pop
+      INNER JOIN apflora.tpop
+      ON apflora.tpop.pop_id = apflora.pop.id
+    ON apflora.pop.ap_id = apflora.ap.id
+WHERE
+  apflora.pop.status  = 201
+  AND EXISTS (
+    SELECT
+      1
+    FROM
+      apflora.tpop
+    WHERE
+      apflora.tpop.status IN (101, 202, 211)
+      AND apflora.tpop.pop_id = apflora.pop.id
+  )
+  AND NOT EXISTS (
+    SELECT
+      1
+    FROM
+      apflora.tpop
+    WHERE
+      apflora.tpop.status NOT IN (101, 202, 211)
+      AND apflora.tpop.pop_id = apflora.pop.id
+  );
+
 DROP VIEW IF EXISTS apflora.v_qk_pop_statusansaatversuchmittpopursprerloschen CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk_pop_statusansaatversuchmittpopursprerloschen AS
 SELECT DISTINCT
