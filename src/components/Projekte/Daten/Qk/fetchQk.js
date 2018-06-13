@@ -19,12 +19,6 @@ const fetchQk = async ({
     // TPop ohne verlangten TPop-Massn.-Bericht im Berichtjahr
     { type: 'function', name: 'qk_tpop_ohne_massnber', berichtjahr },
 
-    // 4. Massnahmen
-
-    // Massn ohne Jahr/Typ
-    // Massn.-Bericht ohne Jahr/Entwicklung
-    { type: 'view', name: 'v_qk_massnber_ohneerfbeurt', berichtjahr },
-
     // 5. Kontrollen
 
     // Kontrolle ohne Jahr/Zählung/Kontrolltyp

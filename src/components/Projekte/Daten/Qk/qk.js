@@ -1391,9 +1391,32 @@ export default (berichtjahr) => [
     }
   },
   {
-    type: 'view',
-    name: 'v_qk_massnber_ohneerfbeurt',
-    berichtjahr
+    query: 'tpopmassnberOhneBeurteilung',
+    type: 'query',
+    data: (data) => {
+      const projId = get(data, 'tpopmassnberOhneBeurteilung.id')
+      const apId = get(data, 'tpopmassnberOhneBeurteilung.apsByProjId.nodes[0].id')
+      const popNodes = get(data, 'tpopmassnberOhneBeurteilung.apsByProjId.nodes[0].popsByApId.nodes', [])
+      const tpopNodes = flatten(
+        popNodes.map(n => get(n, 'tpopsByPopId.nodes'), [])
+      )
+      const tpopmassnberNodes = flatten(
+        tpopNodes.map(n => get(n, 'tpopmassnbersByTpopId.nodes'), [])
+      )
+      return tpopmassnberNodes.map(n => {
+        const popId = get(n, 'tpopByTpopId.popByPopId.id')
+        const popNr = get(n, 'tpopByTpopId.popByPopId.nr')
+        const tpopId = get(n, 'tpopByTpopId.id')
+        const tpopNr = get(n, 'tpopByTpopId.nr')
+        return ({
+          proj_id: projId,
+          ap_id: apId,
+          hw: 'Massnahmen-Bericht ohne Entwicklung:',
+          url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', popId, 'Teil-Populationen', tpopId, 'Massnahmen-Berichte', n.id],
+          text: [`Population: ${popNr || popId}, Teil-Population: ${tpopNr || tpopId}, Massnahmen-Bericht: ${n.jahr || n.id}`],
+        })
+      })
+    }
   },
 
   // 5. Kontrollen
