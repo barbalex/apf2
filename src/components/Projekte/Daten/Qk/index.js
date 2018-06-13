@@ -8,14 +8,14 @@ import Paper from '@material-ui/core/Paper'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 import withState from 'recompose/withState'
-import withLifecycle from '@hocs/with-lifecycle'
+//import withLifecycle from '@hocs/with-lifecycle'
 import { Query } from 'react-apollo'
 import get from 'lodash/get'
 
 import FormTitle from '../../../shared/FormTitle'
 import appBaseUrl from '../../../../modules/appBaseUrl'
 import standardQkYear from '../../../../modules/standardQkYear'
-import fetchQk from './fetchQk'
+//import fetchQk from './fetchQk'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import data1Gql from './data1.graphql'
 import data2Gql from './data2.graphql'
@@ -79,6 +79,7 @@ const enhance = compose(
     }) => ({ event, data }) => {
       const { value } = event.target
       setBerichtjahr(value)
+      /*
       if (
         (isNaN(value) && value.length === 4) ||
         (!isNaN(value) && value > 1000)
@@ -91,11 +92,12 @@ const enhance = compose(
           activeNodes,
           errorState,
         })
-      }
+      }*/
     },
     onChangeFilter: ({ setFilter }) => event =>
       setFilter(event.target.value),
   }),
+  /*
   withLifecycle({
     onDidMount({
       berichtjahr,
@@ -115,7 +117,7 @@ const enhance = compose(
         errorState
       })
     },
-  }),
+  }),*/
 )
 
 const Qk = ({
@@ -165,33 +167,14 @@ const Qk = ({
           >
             {({ loading, error, data }) => {
               const qks = qk(berichtjahr).filter(q => !!q.query)
-              let gqlMessagesFromQuery = []
+              let gqlMessages = []
               if (Object.keys(data).length > 0) {
-                gqlMessagesFromQuery = qks
+                gqlMessages = qks
                   .filter(q => q.type === 'query')
                   .map(q =>
                     q.data(data)
                   )
               }
-              
-              // TODO: check if needed after moving to graphql
-              const gqlMessagesFromView = qks
-                .filter(q => q.type === 'view')
-                // only results with data
-                .filter(q => get(data, `${q.query}.totalCount`, 0) > 0)
-                // convert
-                // TODO:
-                // make this simpler after moving all calls to graphql
-                .map(q => {
-                  const qData = get(data, `${q.query}.nodes`, [])
-                  return qData.map(o => ({
-                    proj_id: o.projId,
-                    ap_id: o.apId,
-                    hw: q.title,
-                    text: [q.text(o)],
-                    url: q.url(o)
-                  }))
-                })
 
               !outsideZhChecked && checkTpopOutsideZh({
                 data,
@@ -202,7 +185,7 @@ const Qk = ({
                 errorState,
               })
 
-              const messageArrays = [...gqlMessagesFromQuery, ...gqlMessagesFromView, ...messages]
+              const messageArrays = [...gqlMessages, ...messages]
               const messageArraysFiltered = filter
                 ? messageArrays.filter(messageArray => {
                     if (
