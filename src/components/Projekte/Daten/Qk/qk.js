@@ -1008,12 +1008,12 @@ export default (berichtjahr) => [
     }
   },
   {
-    query: 'tpopOhneNr',
+    query: 'tpopOhneFlurname',
     type: 'query',
     data: (data) => {
-      const projId = get(data, 'tpopOhneNr.id')
-      const apId = get(data, 'tpopOhneNr.apsByProjId.nodes[0].id')
-      const popNodes = get(data, 'tpopOhneNr.apsByProjId.nodes[0].popsByApId.nodes', [])
+      const projId = get(data, 'tpopOhneFlurname.id')
+      const apId = get(data, 'tpopOhneFlurname.apsByProjId.nodes[0].id')
+      const popNodes = get(data, 'tpopOhneFlurname.apsByProjId.nodes[0].popsByApId.nodes', [])
       const tpopNodes = flatten(
         popNodes.map(n => get(n, 'tpopsByPopId.nodes'), [])
       )
@@ -1027,8 +1027,23 @@ export default (berichtjahr) => [
     }
   },
   {
-    type: 'view',
-    name: 'v_qk_tpop_ohnestatus'
+    query: 'tpopOhneStatus',
+    type: 'query',
+    data: (data) => {
+      const projId = get(data, 'tpopOhneStatus.id')
+      const apId = get(data, 'tpopOhneStatus.apsByProjId.nodes[0].id')
+      const popNodes = get(data, 'tpopOhneStatus.apsByProjId.nodes[0].popsByApId.nodes', [])
+      const tpopNodes = flatten(
+        popNodes.map(n => get(n, 'tpopsByPopId.nodes'), [])
+      )
+      return tpopNodes.map(n => ({
+        proj_id: projId,
+        ap_id: apId,
+        hw: 'Teilpopulation ohne Status:',
+        url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', get(n, 'popByPopId.id'), 'Teil-Populationen', n.id],
+        text: [`Population: ${get(n, 'popByPopId.nr') || get(n, 'popByPopId.id')}, Teil-Population: ${n.nr || n.id}`],
+      }))
+    }
   },
   {
     type: 'view',
