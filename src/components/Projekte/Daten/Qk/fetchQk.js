@@ -14,8 +14,6 @@ const fetchQk = async ({
 }) => {
   const qualityControls = [
     // 3. Teilpopulation
-    // tpop mit mehrdeutiger Kombination von pop_nr und tpop_nr
-    { type: 'view', name: 'v_qk_tpop_popnrtpopnrmehrdeutig' },
     // TPop ohne verlangten TPop-Bericht im Berichtjahr
     { type: 'function', name: 'qk_tpop_ohne_tpopber', berichtjahr },
     // TPop ohne verlangten TPop-Massn.-Bericht im Berichtjahr

@@ -1102,7 +1102,6 @@ export default (berichtjahr) => [
       }))
     }
   },
-  // tpop relevant, die nicht relevant sein sollten
   {
     query: 'tpopStatusPotentiellApberrelevant',
     type: 'query',
@@ -1138,7 +1137,6 @@ export default (berichtjahr) => [
         }))
     }
   },
-  // tpop mit Status unklar ohne Begründung
   {
     query: 'tpopStatusUnklarOhneBegruendung',
     type: 'query',
@@ -1160,8 +1158,20 @@ export default (berichtjahr) => [
   },
   // tpop mit mehrdeutiger Kombination von pop_nr und tpop_nr
   {
-    type: 'view',
-    name: 'v_qk_tpop_popnrtpopnrmehrdeutig'
+    query: 'tpopPopnrTponrMehrdeutig',
+    type: 'query',
+    data: (data) => {
+      const nodes = [...get(data, 'tpopPopnrTponrMehrdeutig.nodes', [])]
+        .sort((a, b) => a.nr - b.nr)
+      return nodes
+        .map(n => ({
+          proj_id: n.projId,
+          ap_id: n.apId,
+          hw: 'Teilpopulation: Die TPop.-Nr. ist mehrdeutig:',
+          url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.popId, 'Teil-Populationen', n.id],
+          text: [`Population: ${n.popNr || n.popId}, Teil-Population: ${n.nr || n.id}`],
+        }))
+    }
   },
   // TPop ohne verlangten TPop-Bericht im Berichtjahr
   {
