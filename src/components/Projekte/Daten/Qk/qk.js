@@ -875,10 +875,21 @@ export default (berichtjahr) => [
   // 3. Teilpopulation
 
   // Stati mit letztem Bericht vergleichen
-  // Status ist "aktuell" (ursprünglich oder angesiedelt) oder potentieller Wuchsort, der letzte Teilpopulations-Bericht meldet aber "erloschen" und es gab seither keine Ansiedlung
   {
-    type: 'view',
-    name: 'v_qk_tpop_statusaktuellletztertpopbererloschen'
+    query: 'tpopStatusAktuellLetzterTpopberErloschen',
+    type: 'query',
+    data: (data) => {
+      const nodes = [...get(data, 'tpopStatusAktuellLetzterTpopberErloschen.nodes', [])]
+        .sort((a, b) => a.nr - b.nr)
+      return nodes
+        .map(n => ({
+          proj_id: n.projId,
+          ap_id: n.apId,
+          hw: 'Teilpopulation: Status ist "aktuell" (ursprünglich oder angesiedelt) oder potentieller Wuchsort; der letzte Teilpopulations-Bericht meldet aber "erloschen" und es gab seither keine Ansiedlung:',
+          url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.popId, 'Teil-Populationen', n.id],
+          text: [`Population (Nr.): ${n.popNr}, Teil-Population (Nr.): ${n.nr}`],
+        }))
+    }
   },
   // Status ist "erloschen" (ursprünglich oder angesiedelt), Ansaatversuch oder potentieller Wuchsort; der letzte Teilpopulations-Bericht meldet aber "stabil" und es gab seither keine Ansiedlung:
   {

@@ -139,6 +139,7 @@ mutation updateTpopkontr(
       jungpflanzenVorhanden
       tpopByTpopId {
         popByPopId {
+          id
           apId
         }
       }

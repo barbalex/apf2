@@ -28,6 +28,7 @@ mutation updatePopmassnber(
       }
       bemerkungen
       popByPopId {
+        id
         apId
       }
     }

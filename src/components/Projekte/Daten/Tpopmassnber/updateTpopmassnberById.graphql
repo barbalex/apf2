@@ -25,6 +25,7 @@ mutation updateTpopmassnber(
       bemerkungen
       tpopByTpopId {
         popByPopId {
+          id
           apId
         }
       }
