@@ -758,4 +758,17 @@ query QkQuery(
       nr
     }
   }
+  tpopStatusErloschenLetzterTpopberUnsicher: allVQTpopStatuserloschenletztertpopberunsichers(filter: {
+      projId: {equalTo: $projId},
+      apId: {equalTo: $apId}
+    }) {
+    nodes {
+      projId
+      apId
+      popId
+      popNr
+      id
+      nr
+    }
+  }
 }
