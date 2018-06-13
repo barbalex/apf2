@@ -977,4 +977,26 @@ query QkQuery(
       nr
     }
   }
+  tpopStatusUnklarOhneBegruendung: projektById(id: $projId) {
+    id
+    apsByProjId(filter: {id: {equalTo: $apId}}) {
+      nodes {
+        id
+        popsByApId {
+          nodes {
+            id
+            tpopsByPopId(filter: {statusUnklar: {equalTo: true}, statusUnklarGrund: {isNull: true}}) {
+              nodes {
+                id
+                popByPopId {
+                  id
+                  nr
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 }

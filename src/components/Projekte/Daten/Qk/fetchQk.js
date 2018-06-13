@@ -14,8 +14,6 @@ const fetchQk = async ({
 }) => {
   const qualityControls = [
     // 3. Teilpopulation
-    // tpop mit Status unklar ohne Begründung
-    { type: 'view', name: 'v_qk_tpop_mitstatusunklarohnebegruendung' },
     // tpop mit mehrdeutiger Kombination von pop_nr und tpop_nr
     { type: 'view', name: 'v_qk_tpop_popnrtpopnrmehrdeutig' },
     // TPop ohne verlangten TPop-Bericht im Berichtjahr

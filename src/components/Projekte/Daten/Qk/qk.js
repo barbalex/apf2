@@ -1140,8 +1140,23 @@ export default (berichtjahr) => [
   },
   // tpop mit Status unklar ohne Begründung
   {
-    type: 'view',
-    name: 'v_qk_tpop_mitstatusunklarohnebegruendung'
+    query: 'tpopStatusUnklarOhneBegruendung',
+    type: 'query',
+    data: (data) => {
+      const projId = get(data, 'tpopStatusUnklarOhneBegruendung.id')
+      const apId = get(data, 'tpopStatusUnklarOhneBegruendung.apsByProjId.nodes[0].id')
+      const popNodes = get(data, 'tpopStatusUnklarOhneBegruendung.apsByProjId.nodes[0].popsByApId.nodes', [])
+      const tpopNodes = flatten(
+        popNodes.map(n => get(n, 'tpopsByPopId.nodes'), [])
+      )
+      return tpopNodes.map(n => ({
+        proj_id: projId,
+        ap_id: apId,
+        hw: 'Teilpopulation mit "Status unklar", ohne Begruendung:',
+        url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', get(n, 'popByPopId.id'), 'Teil-Populationen', n.id],
+        text: [`Population: ${get(n, 'popByPopId.nr') || get(n, 'popByPopId.id')}, Teil-Population: ${n.nr || n.id}`],
+      }))
+    }
   },
   // tpop mit mehrdeutiger Kombination von pop_nr und tpop_nr
   {
