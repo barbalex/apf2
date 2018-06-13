@@ -13,20 +13,13 @@ const serverOptionsDevelopment = {
     request: ['error']
   }
 }*/
-const server = new Hapi.Server()
+const server = new Hapi.Server({
+  host: '0.0.0.0',
+  port: 3000,
+})
 
-server.register(Inert, function() {
-  server.connection({
-    host: '0.0.0.0',
-    port: 3000,
-  })
-
-  server.start(function(err) {
-    if (err) {
-      throw err
-    }
-    console.log('Server running at:', server.info.uri)
-  })
+async function start() {
+  await server.register(Inert)
 
   server.route({
     method: 'GET',
@@ -92,4 +85,11 @@ server.register(Inert, function() {
       },
     },
   })
+}
+
+process.on('unhandledRejection', err => {
+  console.log(err)
+  process.exit(1)
 })
+
+start()
