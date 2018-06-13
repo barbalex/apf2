@@ -15,7 +15,6 @@ const fetchQk = async ({
   const qualityControls = [
     // 3. Teilpopulation
     // tpop relevant, die nicht relevant sein sollten
-    { type: 'view', name: 'v_qk_tpop_statuspotentiellfuerapberrelevant' },
     {
       type: 'view',
       name: 'v_qk_tpop_erloschenundrelevantaberletztebeobvor1950',

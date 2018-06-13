@@ -942,4 +942,26 @@ query QkQuery(
       }
     }
   }
+  tpopStatusPotentiellApberrelevant: projektById(id: $projId) {
+    id
+    apsByProjId(filter: {id: {equalTo: $apId}}) {
+      nodes {
+        id
+        popsByApId {
+          nodes {
+            id
+            tpopsByPopId(filter: {status: {equalTo: 300}, apberRelevant: {equalTo: 1}}) {
+              nodes {
+                id
+                popByPopId {
+                  id
+                  nr
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 }

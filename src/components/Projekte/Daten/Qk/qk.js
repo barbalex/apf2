@@ -1104,8 +1104,23 @@ export default (berichtjahr) => [
   },
   // tpop relevant, die nicht relevant sein sollten
   {
-    type: 'view',
-    name: 'v_qk_tpop_statuspotentiellfuerapberrelevant'
+    query: 'tpopStatusPotentiellApberrelevant',
+    type: 'query',
+    data: (data) => {
+      const projId = get(data, 'tpopStatusPotentiellApberrelevant.id')
+      const apId = get(data, 'tpopStatusPotentiellApberrelevant.apsByProjId.nodes[0].id')
+      const popNodes = get(data, 'tpopStatusPotentiellApberrelevant.apsByProjId.nodes[0].popsByApId.nodes', [])
+      const tpopNodes = flatten(
+        popNodes.map(n => get(n, 'tpopsByPopId.nodes'), [])
+      )
+      return tpopNodes.map(n => ({
+        proj_id: projId,
+        ap_id: apId,
+        hw: 'Teilpopulation mit Status "potenzieller Wuchs-/Ansiedlungsort" und "Fuer AP-Bericht relevant?" = ja:',
+        url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', get(n, 'popByPopId.id'), 'Teil-Populationen', n.id],
+        text: [`Population: ${get(n, 'popByPopId.nr') || get(n, 'popByPopId.id')}, Teil-Population: ${n.nr || n.id}`],
+      }))
+    }
   },
   {
     type: 'view',

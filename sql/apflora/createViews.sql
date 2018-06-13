@@ -5122,30 +5122,6 @@ ORDER BY
   apflora.ap.id,
   apflora.pop.nr;
 
-DROP VIEW IF EXISTS apflora.v_qk_tpop_statuspotentiellfuerapberrelevant CASCADE;
-CREATE OR REPLACE VIEW apflora.v_qk_tpop_statuspotentiellfuerapberrelevant AS
-SELECT
-  apflora.ap.proj_id,
-  apflora.ap.id as ap_id,
-  'Teilpopulation mit Status "potenzieller Wuchs-/Ansiedlungsort" und "Fuer AP-Bericht relevant?" = ja:'::text AS hw,
-  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Aktionspläne', apflora.ap.id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id]::text[] AS url,
-  ARRAY[concat('Population (Nr.): ', apflora.pop.nr), concat('Teil-Population (Nr.): ', apflora.tpop.nr)]::text[] AS text
-FROM
-  apflora.ap
-  INNER JOIN
-    (apflora.pop
-    INNER JOIN
-      apflora.tpop
-      ON apflora.pop.id = apflora.tpop.pop_id)
-    ON apflora.ap.id = apflora.pop.ap_id
-WHERE
-  apflora.tpop.status = 300
-  AND apflora.tpop.apber_relevant = 1
-ORDER BY
-  apflora.ap.id,
-  apflora.pop.nr,
-  apflora.tpop.nr;
-
 DROP VIEW IF EXISTS apflora.v_qk_tpop_mitstatusunklarohnebegruendung CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk_tpop_mitstatusunklarohnebegruendung AS
 SELECT
