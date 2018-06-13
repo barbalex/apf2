@@ -13,6 +13,7 @@ query tpopberByIdQuery($id: UUID!) {
     bemerkungen
     tpopByTpopId {
       popByPopId {
+        id
         apId
       }
     }

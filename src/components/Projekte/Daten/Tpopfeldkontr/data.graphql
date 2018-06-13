@@ -48,6 +48,7 @@ query tpopkontrByIdQuery($id: UUID!) {
     jungpflanzenVorhanden
     tpopByTpopId {
       popByPopId {
+        id
         apId
       }
     }

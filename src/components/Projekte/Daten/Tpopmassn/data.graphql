@@ -32,6 +32,7 @@ query tpopmassnByIdQuery($id: UUID!) {
     planVorhanden
     tpopByTpopId {
       popByPopId {
+        id
         apId
       }
     }

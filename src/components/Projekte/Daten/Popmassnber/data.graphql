@@ -10,6 +10,7 @@ query popmassnberByIdQuery($id: UUID!) {
     }
     bemerkungen
     popByPopId {
+      id
       apId
     }
   }

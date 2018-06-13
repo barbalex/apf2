@@ -7,6 +7,7 @@ query tpopmassnberByIdQuery($id: UUID!) {
     bemerkungen
     tpopByTpopId {
       popByPopId {
+        id
         apId
       }
     }

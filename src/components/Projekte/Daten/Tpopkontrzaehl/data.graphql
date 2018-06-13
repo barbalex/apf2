@@ -15,6 +15,7 @@ query TpopkontrzaehlQuery($id: UUID!) {
     tpopkontrByTpopkontrId {
       tpopByTpopId {
         popByPopId {
+          id
           apId
         }
       }
