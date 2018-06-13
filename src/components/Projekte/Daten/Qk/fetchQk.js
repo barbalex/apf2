@@ -15,11 +15,6 @@ const fetchQk = async ({
   const qualityControls = [
     // 2. Population
 
-    // Pop-Bericht/Pop-Massn.-Bericht ohne Jahr/Entwicklung
-    { type: 'view', name: 'v_qk_popber_ohneentwicklung', berichtjahr },
-    { type: 'view', name: 'v_qk_popmassnber_ohnejahr' },
-    { type: 'view', name: 'v_qk_popmassnber_ohneentwicklung', berichtjahr },
-
     // 3. Teilpopulation
 
     // Stati mit letztem Bericht vergleichen

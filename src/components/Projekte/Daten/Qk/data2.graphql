@@ -675,4 +675,48 @@ query QkQuery(
       }
     }
   }
+  popmassnberOhneJahr: projektById(id: $projId) {
+    id
+    apsByProjId(filter: {id: {equalTo: $apId}}) {
+      nodes {
+        id
+        popsByApId {
+          nodes {
+            id
+            popmassnbersByPopId(filter: {jahr: {isNull: true}}) {
+              nodes {
+                id
+                popByPopId {
+                  id
+                  nr
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  popmassnberOhneEntwicklung: projektById(id: $projId) {
+    id
+    apsByProjId(filter: {id: {equalTo: $apId}}) {
+      nodes {
+        id
+        popsByApId {
+          nodes {
+            id
+            popmassnbersByPopId(filter: {beurteilung: {isNull: true}}) {
+              nodes {
+                id
+                popByPopId {
+                  id
+                  nr
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 }
