@@ -6000,30 +6000,6 @@ WHERE
       AND apflora.tpop.pop_id = apflora.pop.id
   );
 
-DROP VIEW IF EXISTS apflora.v_qk_pop_statusansaatversuchmittpopursprerloschen CASCADE;
-CREATE OR REPLACE VIEW apflora.v_qk_pop_statusansaatversuchmittpopursprerloschen AS
-SELECT DISTINCT
-  apflora.ap.proj_id,
-  apflora.pop.ap_id,
-  'Population: Status ist "angesiedelt, Ansaatversuch", es gibt aber eine Teilpopulation mit Status "urspruenglich, erloschen":'::text AS hw,
-  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Aktionspläne', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS url,
-ARRAY[concat('Population (Nr): ', apflora.pop.nr)]::text[] AS text
-FROM
-  apflora.ap
-  INNER JOIN
-    apflora.pop
-    ON apflora.pop.ap_id = apflora.ap.id
-WHERE
-  apflora.pop.status  = 201
-  AND apflora.pop.id IN (
-    SELECT DISTINCT
-      apflora.tpop.pop_id
-    FROM
-      apflora.tpop
-    WHERE
-      apflora.tpop.status = 101
-  );
-
 DROP VIEW IF EXISTS apflora.v_q_pop_statusansaatversuchmittpopursprerloschen CASCADE;
 CREATE OR REPLACE VIEW apflora.v_q_pop_statusansaatversuchmittpopursprerloschen AS
 SELECT DISTINCT
@@ -6045,30 +6021,6 @@ WHERE
       apflora.tpop
     WHERE
       apflora.tpop.status = 101
-  );
-
-DROP VIEW IF EXISTS apflora.v_qk_pop_statuserloschenmittpopaktuell CASCADE;
-CREATE OR REPLACE VIEW apflora.v_qk_pop_statuserloschenmittpopaktuell AS
-SELECT DISTINCT
-  apflora.ap.proj_id,
-  apflora.pop.ap_id,
-  'Population: Status ist "erloschen" (urspruenglich oder angesiedelt), es gibt aber eine Teilpopulation mit Status "aktuell" (urspruenglich oder angesiedelt):'::text AS hw,
-    ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Aktionspläne', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS url,
-  ARRAY[concat('Population (Nr): ', apflora.pop.nr)]::text[] AS text
-FROM
-  apflora.ap
-  INNER JOIN
-    apflora.pop
-    ON apflora.pop.ap_id = apflora.ap.id
-WHERE
-  apflora.pop.status  IN (101, 202, 211)
-  AND apflora.pop.id IN (
-    SELECT DISTINCT
-      apflora.tpop.pop_id
-    FROM
-      apflora.tpop
-    WHERE
-      apflora.tpop.status IN (100, 200, 210)
   );
 
 DROP VIEW IF EXISTS apflora.v_q_pop_statuserloschenmittpopaktuell CASCADE;
@@ -6094,30 +6046,6 @@ WHERE
       apflora.tpop.status IN (100, 200, 210)
   );
 
-DROP VIEW IF EXISTS apflora.v_qk_pop_statuserloschenmittpopansaatversuch CASCADE;
-CREATE OR REPLACE VIEW apflora.v_qk_pop_statuserloschenmittpopansaatversuch AS
-SELECT DISTINCT
-  apflora.ap.proj_id,
-  apflora.pop.ap_id,
-  'Population: Status ist "erloschen" (urspruenglich oder angesiedelt), es gibt aber eine Teilpopulation mit Status "angesiedelt, Ansaatversuch":'::text AS hw,
-    ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Aktionspläne', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS url,
-  ARRAY[concat('Population (Nr): ', apflora.pop.nr)]::text[] AS text
-FROM
-  apflora.ap
-  INNER JOIN
-    apflora.pop
-    ON apflora.pop.ap_id = apflora.ap.id
-WHERE
-  apflora.pop.status  IN (101, 202, 211)
-  AND apflora.pop.id IN (
-    SELECT DISTINCT
-      apflora.tpop.pop_id
-    FROM
-      apflora.tpop
-    WHERE
-      apflora.tpop.status = 201
-  );
-
 DROP VIEW IF EXISTS apflora.v_q_pop_statuserloschenmittpopansaatversuch CASCADE;
 CREATE OR REPLACE VIEW apflora.v_q_pop_statuserloschenmittpopansaatversuch AS
 SELECT DISTINCT
@@ -6141,30 +6069,6 @@ WHERE
       apflora.tpop.status = 201
   );
 
-DROP VIEW IF EXISTS apflora.v_qk_pop_statusangesiedeltmittpopurspruenglich CASCADE;
-CREATE OR REPLACE VIEW apflora.v_qk_pop_statusangesiedeltmittpopurspruenglich AS
-SELECT DISTINCT
-  apflora.ap.proj_id,
-  apflora.pop.ap_id,
-  'Population: Status ist "angesiedelt", es gibt aber eine Teilpopulation mit Status "urspruenglich":'::text AS hw,
-  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Aktionspläne', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS url,
-  ARRAY[concat('Population (Nr): ', apflora.pop.nr)]::text[] AS text
-FROM
-  apflora.ap
-  INNER JOIN
-    apflora.pop
-    ON apflora.pop.ap_id = apflora.ap.id
-WHERE
-  apflora.pop.status  IN (200, 201, 202, 210, 211)
-  AND apflora.pop.id IN (
-    SELECT DISTINCT
-      apflora.tpop.pop_id
-    FROM
-      apflora.tpop
-    WHERE
-      apflora.tpop.status = 100
-  );
-
 DROP VIEW IF EXISTS apflora.v_q_pop_statusangesiedeltmittpopurspruenglich CASCADE;
 CREATE OR REPLACE VIEW apflora.v_q_pop_statusangesiedeltmittpopurspruenglich AS
 SELECT DISTINCT
@@ -6186,30 +6090,6 @@ WHERE
       apflora.tpop
     WHERE
       apflora.tpop.status = 100
-  );
-
-DROP VIEW IF EXISTS apflora.v_qk_pop_statuspotwuchsortmittpopanders CASCADE;
-CREATE OR REPLACE VIEW apflora.v_qk_pop_statuspotwuchsortmittpopanders AS
-SELECT DISTINCT
-  apflora.ap.proj_id,
-  apflora.pop.ap_id,
-  'Population: Status ist "potenzieller Wuchs-/Ansiedlungsort", es gibt aber eine Teilpopulation mit Status "angesiedelt" oder "urspruenglich":'::text AS hw,
-  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Aktionspläne', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS url,
-  ARRAY[concat('Population (Nr): ', apflora.pop.nr)]::text[] AS text
-FROM
-  apflora.ap
-  INNER JOIN
-    apflora.pop
-    ON apflora.pop.ap_id = apflora.ap.id
-WHERE
-  apflora.pop.status  = 300
-  AND apflora.pop.id IN (
-    SELECT DISTINCT
-      apflora.tpop.pop_id
-    FROM
-      apflora.tpop
-    WHERE
-      apflora.tpop.status < 300
   );
 
 DROP VIEW IF EXISTS apflora.v_qk_tpop_mitstatusansaatversuchundzaehlungmitanzahl CASCADE;
