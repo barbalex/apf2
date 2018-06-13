@@ -554,4 +554,15 @@ query QkQuery(
       nr
     }
   }
+  popStatusAnsaatversuchMitTpopUrspruenglichErloschen: allVQPopStatusansaatversuchmittpopursprerloschens(filter: {
+      projId: {equalTo: $projId},
+      apId: {equalTo: $apId}
+    }) {
+    nodes {
+      projId
+      apId
+      id
+      nr
+    }
+  }
 }
