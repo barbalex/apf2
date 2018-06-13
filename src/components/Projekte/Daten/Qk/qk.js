@@ -971,10 +971,21 @@ export default (berichtjahr) => [
         }))
     }
   },
-  // Status ist "erloschen" (ursprünglich oder angesiedelt); der letzte Teilpopulations-Bericht meldet "erloschen". Seither gab es aber eine Ansiedlung:
   {
-    type: 'view',
-    name: 'v_qk_tpop_statuserloschenletztertpopbererloschenmitansiedlung',
+    query: 'tpopStatusErloschenLetzterTpopberErloschenMitAnsiedlung',
+    type: 'query',
+    data: (data) => {
+      const nodes = [...get(data, 'tpopStatusErloschenLetzterTpopberErloschenMitAnsiedlung.nodes', [])]
+        .sort((a, b) => a.nr - b.nr)
+      return nodes
+        .map(n => ({
+          proj_id: n.projId,
+          ap_id: n.apId,
+          hw: 'Teilpopulation: Status ist "erloschen" (ursprünglich oder angesiedelt); der letzte Teilpopulations-Bericht meldet "erloschen". Seither gab es aber eine Ansiedlung:',
+          url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.popId, 'Teil-Populationen', n.id],
+          text: [`Population: ${n.popNr || n.popId}, Teil-Population: ${n.nr || n.id}`],
+        }))
+    }
   },
   // tpop ohne Nr/Flurname/Status/bekannt seit/Koordinaten
   {

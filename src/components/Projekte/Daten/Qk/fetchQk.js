@@ -13,16 +13,7 @@ const fetchQk = async ({
   errorState: Object,
 }) => {
   const qualityControls = [
-    // 2. Population
-
     // 3. Teilpopulation
-
-    // Stati mit letztem Bericht vergleichen
-    // Status ist "erloschen" (ursprünglich oder angesiedelt); der letzte Teilpopulations-Bericht meldet "erloschen". Seither gab es aber eine Ansiedlung:
-    {
-      type: 'view',
-      name: 'v_qk_tpop_statuserloschenletztertpopbererloschenmitansiedlung',
-    },
     // tpop ohne Nr/Flurname/Status/bekannt seit/Koordinaten
     { type: 'view', name: 'v_qk_tpop_ohnenr' },
     { type: 'view', name: 'v_qk_tpop_ohneflurname' },
