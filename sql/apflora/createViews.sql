@@ -5985,16 +5985,15 @@ ORDER BY
   apflora.pop.id,
   apflora.tpop.id;
 
-DROP VIEW IF EXISTS apflora.v_qk_tpop_mitstatuspotentiellundmassnansiedlung CASCADE;
-CREATE OR REPLACE VIEW apflora.v_qk_tpop_mitstatuspotentiellundmassnansiedlung AS
+DROP VIEW IF EXISTS apflora.v_q_tpop_mitstatuspotentiellundmassnansiedlung CASCADE;
+CREATE OR REPLACE VIEW apflora.v_q_tpop_mitstatuspotentiellundmassnansiedlung AS
 SELECT DISTINCT
   apflora.ap.proj_id,
   apflora.pop.ap_id,
   apflora.pop.id as pop_id,
+  apflora.pop.nr as pop_nr,
   apflora.tpop.id,
-  'Teilpopulation mit Status "potentieller Wuchs-/Ansiedlungsort", bei der eine Massnahme des Typs "Ansiedlung" existiert:'::text AS hw,
-  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Aktionspläne', apflora.ap.id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id]::text[] AS url,
-  ARRAY[concat('Population (Nr.): ', apflora.pop.nr), concat('Teil-Population (Nr.): ', apflora.tpop.nr)]::text[] AS text
+  apflora.tpop.nr
 FROM
   apflora.ap
   INNER JOIN
