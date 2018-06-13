@@ -964,4 +964,17 @@ query QkQuery(
       }
     }
   }
+  tpopErloschenUndRelevantLetzteBeobVor1950: allVQTpopErloschenundrelevantaberletztebeobvor1950S(filter: {
+      projId: {equalTo: $projId},
+      apId: {equalTo: $apId}
+    }) {
+    nodes {
+      projId
+      apId
+      popId
+      popNr
+      id
+      nr
+    }
+  }
 }
