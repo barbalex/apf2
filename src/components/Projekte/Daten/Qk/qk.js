@@ -1046,16 +1046,61 @@ export default (berichtjahr) => [
     }
   },
   {
-    type: 'view',
-    name: 'v_qk_tpop_ohnebekanntseit'
+    query: 'tpopOhneBekanntSeit',
+    type: 'query',
+    data: (data) => {
+      const projId = get(data, 'tpopOhneBekanntSeit.id')
+      const apId = get(data, 'tpopOhneBekanntSeit.apsByProjId.nodes[0].id')
+      const popNodes = get(data, 'tpopOhneBekanntSeit.apsByProjId.nodes[0].popsByApId.nodes', [])
+      const tpopNodes = flatten(
+        popNodes.map(n => get(n, 'tpopsByPopId.nodes'), [])
+      )
+      return tpopNodes.map(n => ({
+        proj_id: projId,
+        ap_id: apId,
+        hw: 'Teilpopulation ohne "bekannt seit":',
+        url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', get(n, 'popByPopId.id'), 'Teil-Populationen', n.id],
+        text: [`Population: ${get(n, 'popByPopId.nr') || get(n, 'popByPopId.id')}, Teil-Population: ${n.nr || n.id}`],
+      }))
+    }
   },
   {
-    type: 'view',
-    name: 'v_qk_tpop_ohneapberrelevant'
+    query: 'tpopOhneApberRelevant',
+    type: 'query',
+    data: (data) => {
+      const projId = get(data, 'tpopOhneApberRelevant.id')
+      const apId = get(data, 'tpopOhneApberRelevant.apsByProjId.nodes[0].id')
+      const popNodes = get(data, 'tpopOhneApberRelevant.apsByProjId.nodes[0].popsByApId.nodes', [])
+      const tpopNodes = flatten(
+        popNodes.map(n => get(n, 'tpopsByPopId.nodes'), [])
+      )
+      return tpopNodes.map(n => ({
+        proj_id: projId,
+        ap_id: apId,
+        hw: 'Teilpopulation ohne "Fuer AP-Bericht relevant":',
+        url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', get(n, 'popByPopId.id'), 'Teil-Populationen', n.id],
+        text: [`Population: ${get(n, 'popByPopId.nr') || get(n, 'popByPopId.id')}, Teil-Population: ${n.nr || n.id}`],
+      }))
+    }
   },
   {
-    type: 'view',
-    name: 'v_qk_tpop_ohnekoordinaten'
+    query: 'tpopOhneKoord',
+    type: 'query',
+    data: (data) => {
+      const projId = get(data, 'tpopOhneKoord.id')
+      const apId = get(data, 'tpopOhneKoord.apsByProjId.nodes[0].id')
+      const popNodes = get(data, 'tpopOhneKoord.apsByProjId.nodes[0].popsByApId.nodes', [])
+      const tpopNodes = flatten(
+        popNodes.map(n => get(n, 'tpopsByPopId.nodes'), [])
+      )
+      return tpopNodes.map(n => ({
+        proj_id: projId,
+        ap_id: apId,
+        hw: 'Teilpopulation: Mindestens eine Koordinate fehlt:',
+        url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', get(n, 'popByPopId.id'), 'Teil-Populationen', n.id],
+        text: [`Population: ${get(n, 'popByPopId.nr') || get(n, 'popByPopId.id')}, Teil-Population: ${n.nr || n.id}`],
+      }))
+    }
   },
   // tpop relevant, die nicht relevant sein sollten
   {

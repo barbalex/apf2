@@ -14,10 +14,6 @@ const fetchQk = async ({
 }) => {
   const qualityControls = [
     // 3. Teilpopulation
-    // tpop ohne Nr/Flurname/Status/bekannt seit/Koordinaten
-    { type: 'view', name: 'v_qk_tpop_ohnebekanntseit' },
-    { type: 'view', name: 'v_qk_tpop_ohneapberrelevant' },
-    { type: 'view', name: 'v_qk_tpop_ohnekoordinaten' },
     // tpop relevant, die nicht relevant sein sollten
     { type: 'view', name: 'v_qk_tpop_statuspotentiellfuerapberrelevant' },
     {
