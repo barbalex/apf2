@@ -6612,6 +6612,29 @@ WHERE
       apflora.tpop.status IN (100, 200, 210)
   );
 
+DROP VIEW IF EXISTS apflora.v_q_pop_statuserloschenmittpopaktuell CASCADE;
+CREATE OR REPLACE VIEW apflora.v_q_pop_statuserloschenmittpopaktuell AS
+SELECT DISTINCT
+  apflora.ap.proj_id,
+  apflora.pop.ap_id,
+  apflora.pop.id,
+  apflora.pop.nr
+FROM
+  apflora.ap
+  INNER JOIN
+    apflora.pop
+    ON apflora.pop.ap_id = apflora.ap.id
+WHERE
+  apflora.pop.status  IN (101, 202, 211)
+  AND apflora.pop.id IN (
+    SELECT DISTINCT
+      apflora.tpop.pop_id
+    FROM
+      apflora.tpop
+    WHERE
+      apflora.tpop.status IN (100, 200, 210)
+  );
+
 DROP VIEW IF EXISTS apflora.v_qk_pop_statuserloschenmittpopansaatversuch CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk_pop_statuserloschenmittpopansaatversuch AS
 SELECT DISTINCT

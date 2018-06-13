@@ -565,4 +565,15 @@ query QkQuery(
       nr
     }
   }
+  popStatusErloschenMitTpopAktuell: allVQPopStatuserloschenmittpopaktuells(filter: {
+      projId: {equalTo: $projId},
+      apId: {equalTo: $apId}
+    }) {
+    nodes {
+      projId
+      apId
+      id
+      nr
+    }
+  }
 }
