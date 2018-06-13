@@ -891,7 +891,6 @@ export default (berichtjahr) => [
         }))
     }
   },
-  // Status ist "erloschen" (ursprünglich oder angesiedelt), Ansaatversuch oder potentieller Wuchsort; der letzte Teilpopulations-Bericht meldet aber "stabil" und es gab seither keine Ansiedlung:
   {
     query: 'tpopStatusErloschenLetzterTpopberStabil',
     type: 'query',
@@ -904,14 +903,25 @@ export default (berichtjahr) => [
           ap_id: n.apId,
           hw: 'Teilpopulation: Status ist "erloschen" (ursprünglich oder angesiedelt), Ansaatversuch oder potentieller Wuchsort; der letzte Teilpopulations-Bericht meldet aber "stabil" und es gab seither keine Ansiedlung:',
           url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.popId, 'Teil-Populationen', n.id],
-          text: [`Population (Nr.): ${n.popNr}, Teil-Population (Nr.): ${n.nr}`],
+          text: [`Population: ${n.popNr || n.popId}, Teil-Population: ${n.nr || n.id}`],
         }))
     }
   },
-  // Status ist "erloschen" (ursprünglich oder angesiedelt), Ansaatversuch oder potentieller Wuchsort; der letzte Teilpopulations-Bericht meldet aber "abnehmend" und es gab seither keine Ansiedlung:
   {
-    type: 'view',
-    name: 'v_qk_tpop_statuserloschenletztertpopberabnehmend'
+    query: 'tpopStatusErloschenLetzterTpopberAbnehmend',
+    type: 'query',
+    data: (data) => {
+      const nodes = [...get(data, 'tpopStatusErloschenLetzterTpopberAbnehmend.nodes', [])]
+        .sort((a, b) => a.nr - b.nr)
+      return nodes
+        .map(n => ({
+          proj_id: n.projId,
+          ap_id: n.apId,
+          hw: 'Teilpopulation: Status ist "erloschen" (ursprünglich oder angesiedelt), Ansaatversuch oder potentieller Wuchsort; der letzte Teilpopulations-Bericht meldet aber "abnehmend" und es gab seither keine Ansiedlung:',
+          url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.popId, 'Teil-Populationen', n.id],
+          text: [`Population: ${n.popNr || n.popId}, Teil-Population: ${n.nr || n.id}`],
+        }))
+    }
   },
   // Status ist "erloschen" (ursprünglich oder angesiedelt), Ansaatversuch oder potentieller Wuchsort; der letzte Teilpopulations-Bericht meldet aber "unsicher" und es gab seither keine Ansiedlung:
   {
