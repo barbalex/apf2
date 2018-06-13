@@ -653,8 +653,21 @@ export default (berichtjahr) => [
   // Population: Status ist ansaatversuch,
   // es gibt tpop mit status aktuell oder erloschene, die vor Beginn AP bestanden
   {
-    type: 'view',
-    name: 'v_qk_pop_statusansaatversuchmitaktuellentpop'
+    query: 'popStatusAnsaatversuchTpopAktuell',
+    type: 'query',
+    data: (data) => {
+      const nodes = [...get(data, 'popStatusAnsaatversuchTpopAktuell.nodes', [])]
+        .sort((a, b) => a.nr - b.nr)
+      console.log({data,nodes})
+      return nodes
+        .map(n => ({
+          proj_id: n.projId,
+          ap_id: n.apId,
+          hw: 'Population: Status ist "angesiedelt, Ansaatversuch", es gibt aber eine aktuelle Teilpopulation oder eine ursprüngliche erloschene:',
+          url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
+          text: [`Population (Nr.): ${n.nr}`],
+        }))
+    }
   },
   // Population: Status ist ansaatversuch, alle tpop sind gemäss Status erloschen
   {
