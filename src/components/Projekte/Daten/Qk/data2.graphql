@@ -1292,4 +1292,68 @@ query QkQuery(
       }
     }
   }
+  tpopfreiwkontrOhneJahr: projektById(id: $projId) {
+    id
+    apsByProjId(filter: {id: {equalTo: $apId}}) {
+      nodes {
+        id
+        popsByApId {
+          nodes {
+            id
+            tpopsByPopId {
+              nodes {
+                id
+                tpopkontrsByTpopId(filter: {jahr: {isNull: true}, typ: {equalTo: "Freiwilligen-Erfolgskontrolle"}}) {
+                  nodes {
+                    id
+                    jahr
+                    tpopByTpopId {
+                      id
+                      nr
+                      popByPopId {
+                        id
+                        nr
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  tpopfeldkontrOhneBearb: projektById(id: $projId) {
+    id
+    apsByProjId(filter: {id: {equalTo: $apId}}) {
+      nodes {
+        id
+        popsByApId {
+          nodes {
+            id
+            tpopsByPopId {
+              nodes {
+                id
+                tpopkontrsByTpopId(filter: {bearbeiter: {isNull: true}, typ: {notEqualTo: "Freiwilligen-Erfolgskontrolle"}}) {
+                  nodes {
+                    id
+                    jahr
+                    tpopByTpopId {
+                      id
+                      nr
+                      popByPopId {
+                        id
+                        nr
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 }
