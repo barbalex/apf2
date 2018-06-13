@@ -1920,14 +1920,15 @@ WHERE
   AND apflora.pop.status  IN (101, 202, 211)
   AND apflora.tpop.apber_relevant = 1;
 
-DROP VIEW IF EXISTS apflora.v_qk_tpop_statuserloschenletzterpopberaktuell CASCADE;
-CREATE OR REPLACE VIEW apflora.v_qk_tpop_statuserloschenletzterpopberaktuell AS
+DROP VIEW IF EXISTS apflora.v_q_tpop_statuserloschenletzterpopberaktuell CASCADE;
+CREATE OR REPLACE VIEW apflora.v_q_tpop_statuserloschenletzterpopberaktuell AS
 SELECT DISTINCT
   apflora.ap.proj_id,
   apflora.pop.ap_id,
-  'Teilpopulation: Status ist "erloschen", der letzte Teilpopulations-Bericht meldet aber "aktuell":' AS "hw",
-  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Aktionspläne', apflora.ap.id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id]::text[] AS "url",
-  ARRAY[concat('Population (Nr.): ', apflora.pop.nr), concat('Teil-Population (Nr.): ', apflora.tpop.nr)]::text[] AS text
+  apflora.pop.id as pop_id,
+  apflora.pop.nr as pop_nr,
+  apflora.tpop.id,
+  apflora.tpop.nr
 FROM
   apflora.ap
     INNER JOIN

@@ -18,9 +18,6 @@ const fetchQk = async ({
     // 3. Teilpopulation
 
     // Stati mit letztem Bericht vergleichen
-    // Teilpopulation: Status ist "erloschen", der letzte Teilpopulations-Bericht meldet aber "aktuell"
-    // ????? popber aktuell????
-    { type: 'view', name: 'v_qk_tpop_statuserloschenletzterpopberaktuell' },
     // Status ist "erloschen" (ursprünglich oder angesiedelt); der letzte Teilpopulations-Bericht meldet "erloschen". Seither gab es aber eine Ansiedlung:
     {
       type: 'view',

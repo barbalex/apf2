@@ -939,7 +939,6 @@ export default (berichtjahr) => [
         }))
     }
   },
-  // Status ist "erloschen" (ursprünglich oder angesiedelt), Ansaatversuch oder potentieller Wuchsort; der letzte Teilpopulations-Bericht meldet aber "zunehmend" und es gab seither keine Ansiedlung:
   {
     query: 'tpopStatusErloschenLetzterTpopberZunehmend',
     type: 'query',
@@ -956,11 +955,21 @@ export default (berichtjahr) => [
         }))
     }
   },
-  // Teilpopulation: Status ist "erloschen", der letzte Teilpopulations-Bericht meldet aber "aktuell"
-  // ????? popber aktuell????
   {
-    type: 'view',
-    name: 'v_qk_tpop_statuserloschenletzterpopberaktuell'
+    query: 'tpopStatusErloschenLetzterTpopberAktuell',
+    type: 'query',
+    data: (data) => {
+      const nodes = [...get(data, 'tpopStatusErloschenLetzterTpopberAktuell.nodes', [])]
+        .sort((a, b) => a.nr - b.nr)
+      return nodes
+        .map(n => ({
+          proj_id: n.projId,
+          ap_id: n.apId,
+          hw: 'Teilpopulation: Status ist "erloschen", der letzte Teilpopulations-Bericht meldet aber "abnehmend", "stabil", "zunehmend" oder "unsicher":',
+          url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.popId, 'Teil-Populationen', n.id],
+          text: [`Population: ${n.popNr || n.popId}, Teil-Population: ${n.nr || n.id}`],
+        }))
+    }
   },
   // Status ist "erloschen" (ursprünglich oder angesiedelt); der letzte Teilpopulations-Bericht meldet "erloschen". Seither gab es aber eine Ansiedlung:
   {
