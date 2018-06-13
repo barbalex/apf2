@@ -18,7 +18,7 @@ const server = new Hapi.Server()
 server.register(Inert, function() {
   server.connection({
     host: '0.0.0.0',
-    port: 5000,
+    port: 3000,
   })
 
   server.start(function(err) {
