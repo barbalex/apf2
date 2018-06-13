@@ -17,10 +17,6 @@ const fetchQk = async ({
 
     // Stati mit letztem Bericht vergleichen
 
-    // Status ist "aktuell" (ursprünglich oder angesiedelt) oder potentieller Wuchsort; der letzte Populations-Bericht meldet aber "erloschen" und es gab seither keine Ansiedlung:
-    { type: 'view', name: 'v_qk_pop_statusaktuellletzterpopbererloschen' },
-    // Population: Status ist "erloschen", der letzte Populations-Bericht meldet aber "aktuell"
-    { type: 'view', name: 'v_qk_pop_statuserloschenletzterpopberaktuell' },
     // Status ist "erloschen" (ursprünglich oder angesiedelt); der letzte Populations-Bericht meldet "erloschen". Seither gab es aber eine Ansiedlung
     {
       type: 'view',

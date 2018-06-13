@@ -746,15 +746,38 @@ export default (berichtjahr) => [
         }))
     }
   },
-  // Status ist "aktuell" (ursprünglich oder angesiedelt) oder potentieller Wuchsort; der letzte Populations-Bericht meldet aber "erloschen" und es gab seither keine Ansiedlung:
+  // Vergleich Pop Status mit letztem Pop-Bericht
   {
-    type: 'view',
-    name: 'v_qk_pop_statusaktuellletzterpopbererloschen'
+    query: 'popStatusAktuellLetzterPopberErloschen',
+    type: 'query',
+    data: (data) => {
+      const nodes = [...get(data, 'popStatusAktuellLetzterPopberErloschen.nodes', [])]
+        .sort((a, b) => a.nr - b.nr)
+      return nodes
+        .map(n => ({
+          proj_id: n.projId,
+          ap_id: n.apId,
+          hw: 'Population: Status ist "aktuell" (ursprünglich oder angesiedelt) oder potentieller Wuchsort; der letzte Populations-Bericht meldet aber "erloschen" und es gab seither keine Ansiedlung:',
+          url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
+          text: [`Population (Nr.): ${n.nr}`],
+        }))
+    }
   },
-  // Population: Status ist "erloschen", der letzte Populations-Bericht meldet aber "aktuell"
   {
-    type: 'view',
-    name: 'v_qk_pop_statuserloschenletzterpopberaktuell'
+    query: 'popStatusErloschenLetzterPopberAktuell',
+    type: 'query',
+    data: (data) => {
+      const nodes = [...get(data, 'popStatusErloschenLetzterPopberAktuell.nodes', [])]
+        .sort((a, b) => a.nr - b.nr)
+      return nodes
+        .map(n => ({
+          proj_id: n.projId,
+          ap_id: n.apId,
+          hw: 'Population: Status ist "erloschen", der letzte Populations-Bericht meldet aber "aktuell":',
+          url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
+          text: [`Population (Nr.): ${n.nr}`],
+        }))
+    }
   },
   // Status ist "erloschen" (ursprünglich oder angesiedelt); der letzte Populations-Bericht meldet "erloschen". Seither gab es aber eine Ansiedlung
   {

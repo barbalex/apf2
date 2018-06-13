@@ -1892,6 +1892,34 @@ WHERE
   AND apflora.pop.status  IN (101, 202, 211)
   AND apflora.tpop.apber_relevant = 1;
 
+DROP VIEW IF EXISTS apflora.v_q_pop_statuserloschenletzterpopberaktuell CASCADE;
+CREATE OR REPLACE VIEW apflora.v_q_pop_statuserloschenletzterpopberaktuell AS
+SELECT DISTINCT
+  apflora.ap.proj_id,
+  apflora.pop.ap_id,
+  apflora.pop.id,
+  apflora.pop.nr
+FROM
+  apflora.ap
+    INNER JOIN
+    (apflora.pop
+    INNER JOIN
+      (apflora.popber
+      INNER JOIN
+        apflora.v_pop_letzterpopber0_overall
+        ON
+          (v_pop_letzterpopber0_overall.jahr = apflora.popber.jahr)
+          AND (v_pop_letzterpopber0_overall.pop_id = apflora.popber.pop_id))
+      ON apflora.popber.pop_id = apflora.pop.id)
+    INNER JOIN
+      apflora.tpop
+      ON apflora.tpop.pop_id = apflora.pop.id
+    ON apflora.pop.ap_id = apflora.ap.id
+WHERE
+  apflora.popber.entwicklung < 8
+  AND apflora.pop.status  IN (101, 202, 211)
+  AND apflora.tpop.apber_relevant = 1;
+
 DROP VIEW IF EXISTS apflora.v_qk_tpop_statuserloschenletzterpopberaktuell CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk_tpop_statuserloschenletzterpopberaktuell AS
 SELECT DISTINCT

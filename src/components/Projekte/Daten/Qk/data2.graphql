@@ -598,4 +598,26 @@ query QkQuery(
       nr
     }
   }
+  popStatusAktuellLetzterPopberErloschen: allVQPopStatusaktuellletzterpopbererloschens(filter: {
+      projId: {equalTo: $projId},
+      apId: {equalTo: $apId}
+    }) {
+    nodes {
+      projId
+      apId
+      id
+      nr
+    }
+  }
+  popStatusErloschenLetzterPopberAktuell: allVQPopStatuserloschenletzterpopberaktuells(filter: {
+      projId: {equalTo: $projId},
+      apId: {equalTo: $apId}
+    }) {
+    nodes {
+      projId
+      apId
+      id
+      nr
+    }
+  }
 }
