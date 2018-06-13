@@ -1276,7 +1276,7 @@ export default (berichtjahr) => [
 
   // 4. Massnahmen
 
-  // Massn ohne Jahr/Typ
+  // Massn ohne gewollte Felder
   {
     query: 'tpopmassnOhneJahr',
     type: 'query',
@@ -1361,7 +1361,7 @@ export default (berichtjahr) => [
       })
     }
   },
-  // Massn.-Bericht ohne Jahr/Entwicklung
+  // Massn.-Bericht ohne gewollte Felder
   {
     query: 'tpopmassnberOhneJahr',
     type: 'query',
