@@ -5123,33 +5123,6 @@ ORDER BY
   apflora.ap.id,
   apflora.pop.nr;
 
-DROP VIEW IF EXISTS apflora.v_qk_massnber_ohnejahr CASCADE;
-CREATE OR REPLACE VIEW apflora.v_qk_massnber_ohnejahr AS
-SELECT
-  apflora.ap.proj_id,
-  apflora.ap.id as ap_id,
-  'Massnahmen-Bericht ohne Jahr:'::text AS hw,
-  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Aktionspläne', apflora.ap.id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id, 'Massnahmen-Berichte', apflora.tpopmassnber.id]::text[] AS url,
-  ARRAY[concat('Population (Nr.): ', apflora.pop.nr), concat('Teil-Population (Nr.): ', apflora.tpop.nr), concat('Massnahmen-Bericht (Jahr): ', apflora.tpopmassnber.jahr)]::text[] AS text
-FROM
-  apflora.ap
-  INNER JOIN
-    (apflora.pop
-    INNER JOIN
-      (apflora.tpop
-      INNER JOIN
-        apflora.tpopmassnber
-        ON apflora.tpop.id = apflora.tpopmassnber.tpop_id)
-      ON apflora.pop.id = apflora.tpop.pop_id)
-    ON apflora.ap.id = apflora.pop.ap_id
-WHERE
-  apflora.tpopmassnber.jahr IS NULL
-ORDER BY
-  apflora.pop.nr,
-  apflora.tpop.nr,
-  apflora.tpopmassnber.jahr,
-  apflora.tpopmassnber.id;
-
 DROP VIEW IF EXISTS apflora.v_qk_massnber_ohneerfbeurt CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk_massnber_ohneerfbeurt AS
 SELECT

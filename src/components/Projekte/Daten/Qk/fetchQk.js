@@ -23,7 +23,6 @@ const fetchQk = async ({
 
     // Massn ohne Jahr/Typ
     // Massn.-Bericht ohne Jahr/Entwicklung
-    { type: 'view', name: 'v_qk_massnber_ohnejahr' },
     { type: 'view', name: 'v_qk_massnber_ohneerfbeurt', berichtjahr },
 
     // 5. Kontrollen
