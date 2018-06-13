@@ -5912,37 +5912,6 @@ ORDER BY
   apflora.tpop.nr,
   apflora.tpopber.jahr;
 
-DROP VIEW IF EXISTS apflora.v_qk_pop_koordentsprechenkeinertpop CASCADE;
-CREATE OR REPLACE VIEW apflora.v_qk_pop_koordentsprechenkeinertpop AS
-SELECT DISTINCT
-  apflora.ap.proj_id,
-  apflora.pop.ap_id,
-  'Population: Koordinaten entsprechen keiner Teilpopulation:'::text AS hw,
-  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Aktionspläne', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS url,
-  ARRAY[concat('Population (Nr): ', apflora.pop.nr)]::text[] AS text,
-  apflora.pop.x AS "XKoord",
-  apflora.pop.y AS "YKoord"
-FROM
-  apflora.ap
-  INNER JOIN
-    apflora.pop
-    ON apflora.pop.ap_id = apflora.ap.id
-WHERE
-  apflora.pop.x Is NOT Null
-  AND apflora.pop.y IS NOT NULL
-  AND apflora.pop.id NOT IN (
-    SELECT
-      apflora.tpop.pop_id
-    FROM
-      apflora.tpop
-    WHERE
-      apflora.tpop.x = x
-      AND apflora.tpop.y = y
-  )
-  ORDER BY
-    apflora.ap.proj_id,
-    apflora.pop.ap_id;
-
 -- TODO: seems only to output pops with koord but no tpop
 DROP VIEW IF EXISTS apflora.v_q_pop_koordentsprechenkeinertpop CASCADE;
 CREATE OR REPLACE VIEW apflora.v_q_pop_koordentsprechenkeinertpop AS
@@ -5974,30 +5943,6 @@ WHERE
     apflora.ap.proj_id,
     apflora.pop.ap_id;
 
-DROP VIEW IF EXISTS apflora.v_qk_pop_statusansaatversuchmitaktuellentpop CASCADE;
-CREATE OR REPLACE VIEW apflora.v_qk_pop_statusansaatversuchmitaktuellentpop AS
-SELECT DISTINCT
-  apflora.ap.proj_id,
-  apflora.pop.ap_id,
-  'Population: Status ist "angesiedelt, Ansaatversuch", es gibt aber eine aktuelle Teilpopulation oder eine ursprüngliche erloschene:'::text AS hw,
-  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Aktionspläne', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS url,
-  ARRAY[concat('Population (Nr): ', apflora.pop.nr)]::text[] AS text
-FROM
-  apflora.ap
-  INNER JOIN
-    apflora.pop
-    ON apflora.pop.ap_id = apflora.ap.id
-WHERE
-  apflora.pop.status  = 201
-  AND apflora.pop.id IN (
-    SELECT DISTINCT
-      apflora.tpop.pop_id
-    FROM
-      apflora.tpop
-    WHERE
-      apflora.tpop.status IN (100, 101, 200, 210)
-  );
-
 DROP VIEW IF EXISTS apflora.v_q_pop_statusansaatversuchmitaktuellentpop CASCADE;
 CREATE OR REPLACE VIEW apflora.v_q_pop_statusansaatversuchmitaktuellentpop AS
 SELECT DISTINCT
@@ -6019,41 +5964,6 @@ WHERE
       apflora.tpop
     WHERE
       apflora.tpop.status IN (100, 101, 200, 210)
-  );
-
-DROP VIEW IF EXISTS apflora.v_qk_pop_statusansaatversuchalletpoperloschen CASCADE;
-CREATE OR REPLACE VIEW apflora.v_qk_pop_statusansaatversuchalletpoperloschen AS
-SELECT DISTINCT
-  apflora.ap.proj_id,
-  apflora.pop.ap_id,
-  'Population: Status ist "angesiedelt, Ansaatversuch", alle Teilpopulationen sind gemäss Status erloschen:'::text AS hw,
-  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Aktionspläne', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS url,
-  ARRAY[concat('Population (Nr): ', apflora.pop.nr)]::text[] AS text
-FROM
-  apflora.ap
-    INNER JOIN apflora.pop
-      INNER JOIN apflora.tpop
-      ON apflora.tpop.pop_id = apflora.pop.id
-    ON apflora.pop.ap_id = apflora.ap.id
-WHERE
-  apflora.pop.status  = 201
-  AND EXISTS (
-    SELECT
-      1
-    FROM
-      apflora.tpop
-    WHERE
-      apflora.tpop.status IN (101, 202, 211)
-      AND apflora.tpop.pop_id = apflora.pop.id
-  )
-  AND NOT EXISTS (
-    SELECT
-      1
-    FROM
-      apflora.tpop
-    WHERE
-      apflora.tpop.status NOT IN (101, 202, 211)
-      AND apflora.tpop.pop_id = apflora.pop.id
   );
 
 DROP VIEW IF EXISTS apflora.v_q_pop_statusansaatversuchalletpoperloschen CASCADE;
