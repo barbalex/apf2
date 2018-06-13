@@ -6706,6 +6706,29 @@ WHERE
       apflora.tpop.status = 100
   );
 
+DROP VIEW IF EXISTS apflora.v_q_pop_statusangesiedeltmittpopurspruenglich CASCADE;
+CREATE OR REPLACE VIEW apflora.v_q_pop_statusangesiedeltmittpopurspruenglich AS
+SELECT DISTINCT
+  apflora.ap.proj_id,
+  apflora.pop.ap_id,
+  apflora.pop.id,
+  apflora.pop.nr
+FROM
+  apflora.ap
+  INNER JOIN
+    apflora.pop
+    ON apflora.pop.ap_id = apflora.ap.id
+WHERE
+  apflora.pop.status  IN (200, 201, 202, 210, 211)
+  AND apflora.pop.id IN (
+    SELECT DISTINCT
+      apflora.tpop.pop_id
+    FROM
+      apflora.tpop
+    WHERE
+      apflora.tpop.status = 100
+  );
+
 DROP VIEW IF EXISTS apflora.v_qk_pop_statuspotwuchsortmittpopanders CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk_pop_statuspotwuchsortmittpopanders AS
 SELECT DISTINCT

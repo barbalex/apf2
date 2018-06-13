@@ -587,4 +587,15 @@ query QkQuery(
       nr
     }
   }
+  popStatusAngesiedeltMitTpopUrspruenglich: allVQPopStatusangesiedeltmittpopurspruengliches(filter: {
+      projId: {equalTo: $projId},
+      apId: {equalTo: $apId}
+    }) {
+    nodes {
+      projId
+      apId
+      id
+      nr
+    }
+  }
 }
