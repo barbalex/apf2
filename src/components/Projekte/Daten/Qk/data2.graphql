@@ -810,4 +810,48 @@ query QkQuery(
       nr
     }
   }
+  tpopOhneNr: projektById(id: $projId) {
+    id
+    apsByProjId(filter: {id: {equalTo: $apId}}) {
+      nodes {
+        id
+        popsByApId {
+          nodes {
+            id
+            tpopsByPopId(filter: {nr: {isNull: true}}) {
+              nodes {
+                id
+                popByPopId {
+                  id
+                  nr
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  tpopOhneFlurname: projektById(id: $projId) {
+    id
+    apsByProjId(filter: {id: {equalTo: $apId}}) {
+      nodes {
+        id
+        popsByApId {
+          nodes {
+            id
+            tpopsByPopId(filter: {flurname: {isNull: true}}) {
+              nodes {
+                id
+                popByPopId {
+                  id
+                  nr
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 }

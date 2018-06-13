@@ -987,14 +987,44 @@ export default (berichtjahr) => [
         }))
     }
   },
-  // tpop ohne Nr/Flurname/Status/bekannt seit/Koordinaten
+  // tpop ohne gewollte Werte
   {
-    type: 'view',
-    name: 'v_qk_tpop_ohnenr'
+    query: 'tpopOhneNr',
+    type: 'query',
+    data: (data) => {
+      const projId = get(data, 'tpopOhneNr.id')
+      const apId = get(data, 'tpopOhneNr.apsByProjId.nodes[0].id')
+      const popNodes = get(data, 'tpopOhneNr.apsByProjId.nodes[0].popsByApId.nodes', [])
+      const tpopNodes = flatten(
+        popNodes.map(n => get(n, 'tpopsByPopId.nodes'), [])
+      )
+      return tpopNodes.map(n => ({
+        proj_id: projId,
+        ap_id: apId,
+        hw: 'Teilpopulation ohne Nr.:',
+        url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', get(n, 'popByPopId.id'), 'Teil-Populationen', n.id],
+        text: [`Population: ${get(n, 'popByPopId.nr') || get(n, 'popByPopId.id')}, Teil-Population: ${n.id}`],
+      }))
+    }
   },
   {
-    type: 'view',
-    name: 'v_qk_tpop_ohneflurname'
+    query: 'tpopOhneNr',
+    type: 'query',
+    data: (data) => {
+      const projId = get(data, 'tpopOhneNr.id')
+      const apId = get(data, 'tpopOhneNr.apsByProjId.nodes[0].id')
+      const popNodes = get(data, 'tpopOhneNr.apsByProjId.nodes[0].popsByApId.nodes', [])
+      const tpopNodes = flatten(
+        popNodes.map(n => get(n, 'tpopsByPopId.nodes'), [])
+      )
+      return tpopNodes.map(n => ({
+        proj_id: projId,
+        ap_id: apId,
+        hw: 'Teilpopulation ohne Flurname:',
+        url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', get(n, 'popByPopId.id'), 'Teil-Populationen', n.id],
+        text: [`Population: ${get(n, 'popByPopId.nr') || get(n, 'popByPopId.id')}, Teil-Population: ${n.nr || n.id}`],
+      }))
+    }
   },
   {
     type: 'view',
