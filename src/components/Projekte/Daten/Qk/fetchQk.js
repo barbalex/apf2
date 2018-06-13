@@ -18,11 +18,6 @@ const fetchQk = async ({
     { type: 'function', name: 'qk_tpop_ohne_tpopber', berichtjahr },
     // TPop ohne verlangten TPop-Massn.-Bericht im Berichtjahr
     { type: 'function', name: 'qk_tpop_ohne_massnber', berichtjahr },
-    // Teilpopulation mit Status "Ansaatversuch", bei denen in einer Kontrolle eine Anzahl festgestellt wurde:
-    {
-      type: 'view',
-      name: 'v_qk_tpop_mitstatusansaatversuchundzaehlungmitanzahl',
-    },
     // Teilpopulation mit Status "potentieller Wuchs-/Ansiedlungsort",
     // bei der eine Massnahme des Typs "Ansiedlung" existiert:
     { type: 'view', name: 'v_qk_tpop_mitstatuspotentiellundmassnansiedlung' },

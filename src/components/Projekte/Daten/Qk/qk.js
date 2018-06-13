@@ -1156,7 +1156,6 @@ export default (berichtjahr) => [
       }))
     }
   },
-  // tpop mit mehrdeutiger Kombination von pop_nr und tpop_nr
   {
     query: 'tpopPopnrTponrMehrdeutig',
     type: 'query',
@@ -1173,13 +1172,13 @@ export default (berichtjahr) => [
         }))
     }
   },
-  // TPop ohne verlangten TPop-Bericht im Berichtjahr
+  // TODO: TPop ohne verlangten TPop-Bericht im Berichtjahr
   {
     type: 'function',
     name: 'qk_tpop_ohne_tpopber',
     berichtjahr
   },
-  // TPop ohne verlangten TPop-Massn.-Bericht im Berichtjahr
+  // TODO: TPop ohne verlangten TPop-Massn.-Bericht im Berichtjahr
   {
     type: 'function',
     name: 'qk_tpop_ohne_massnber',
@@ -1187,8 +1186,20 @@ export default (berichtjahr) => [
   },
   // Teilpopulation mit Status "Ansaatversuch", bei denen in einer Kontrolle eine Anzahl festgestellt wurde:
   {
-    type: 'view',
-    name: 'v_qk_tpop_mitstatusansaatversuchundzaehlungmitanzahl',
+    query: 'tpopMitStatusAnsaatversuchUndZaehlungMitAnzahl',
+    type: 'query',
+    data: (data) => {
+      const nodes = [...get(data, 'tpopMitStatusAnsaatversuchUndZaehlungMitAnzahl.nodes', [])]
+        .sort((a, b) => a.nr - b.nr)
+      return nodes
+        .map(n => ({
+          proj_id: n.projId,
+          ap_id: n.apId,
+          hw: 'Teilpopulation mit Status "Ansaatversuch", bei denen in der letzten Kontrolle eine Anzahl festgestellt wurde:',
+          url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.popId, 'Teil-Populationen', n.id],
+          text: [`Population: ${n.popNr || n.popId}, Teil-Population: ${n.nr || n.id}`],
+        }))
+    }
   },
   // Teilpopulation mit Status "potentieller Wuchs-/Ansiedlungsort",
   // bei der eine Massnahme des Typs "Ansiedlung" existiert:
