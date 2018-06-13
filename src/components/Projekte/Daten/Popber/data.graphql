@@ -12,6 +12,7 @@ query popberByIdQuery($id: UUID!) {
     }
     bemerkungen
     popByPopId {
+      id
       apId
     }
   }

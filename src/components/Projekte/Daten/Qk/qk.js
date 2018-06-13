@@ -57,7 +57,6 @@ export default (berichtjahr) => [
       }))
     }
   },
-  // Ziel-Bericht ohne Jahr/Entwicklung
   {
     query: 'zielberOhneJahr',
     type: 'query',
@@ -797,8 +796,42 @@ export default (berichtjahr) => [
   },
   // Pop-Bericht/Pop-Massn.-Bericht ohne Jahr/Entwicklung
   {
-    type: 'view',
-    name: 'v_qk_popber_ohnejahr'
+    query: 'popberOhneJahr',
+    type: 'query',
+    data: (data) => {
+      const projId = get(data, 'popberOhneJahr.id')
+      const apId = get(data, 'popberOhneJahr.apsByProjId.nodes[0].id')
+      const popNodes = get(data, 'popberOhneJahr.apsByProjId.nodes[0].popsByApId.nodes', [])
+      const popberNodes = flatten(
+        popNodes.map(n => get(n, 'popbersByPopId.nodes'), [])
+      )
+      return popberNodes.map(n => ({
+        proj_id: projId,
+        ap_id: apId,
+        hw: 'Populations-Bericht ohne Jahr:',
+        url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', get(n, 'popByPopId.id'), 'Kontroll-Berichte', n.id],
+        text: [`Population (Nr.): ${get(n, 'popByPopId.nr')}, Populations-Bericht (id): ${n.id}`],
+      }))
+    }
+  },
+  {
+    query: 'popberOhneEntwicklung',
+    type: 'query',
+    data: (data) => {
+      const projId = get(data, 'popberOhneEntwicklung.id')
+      const apId = get(data, 'popberOhneEntwicklung.apsByProjId.nodes[0].id')
+      const popNodes = get(data, 'popberOhneEntwicklung.apsByProjId.nodes[0].popsByApId.nodes', [])
+      const popberNodes = flatten(
+        popNodes.map(n => get(n, 'popbersByPopId.nodes'), [])
+      )
+      return popberNodes.map(n => ({
+        proj_id: projId,
+        ap_id: apId,
+        hw: 'Populations-Bericht ohne Entwicklung:',
+        url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', get(n, 'popByPopId.id'), 'Kontroll-Berichte', n.id],
+        text: [`Population (Nr.): ${get(n, 'popByPopId.nr')}, Populations-Bericht (id): ${n.id}`],
+      }))
+    }
   },
   {
     type: 'view',

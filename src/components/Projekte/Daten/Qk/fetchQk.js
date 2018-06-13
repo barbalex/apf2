@@ -16,7 +16,6 @@ const fetchQk = async ({
     // 2. Population
 
     // Pop-Bericht/Pop-Massn.-Bericht ohne Jahr/Entwicklung
-    { type: 'view', name: 'v_qk_popber_ohnejahr' },
     { type: 'view', name: 'v_qk_popber_ohneentwicklung', berichtjahr },
     { type: 'view', name: 'v_qk_popmassnber_ohnejahr' },
     { type: 'view', name: 'v_qk_popmassnber_ohneentwicklung', berichtjahr },
