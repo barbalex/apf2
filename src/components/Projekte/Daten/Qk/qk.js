@@ -1334,9 +1334,32 @@ export default (berichtjahr) => [
     }
   },
   {
-    type: 'view',
-    name: 'v_qk_massn_ohnetyp',
-    berichtjahr
+    query: 'tpopmassnOhneTyp',
+    type: 'query',
+    data: (data) => {
+      const projId = get(data, 'tpopmassnOhneTyp.id')
+      const apId = get(data, 'tpopmassnOhneTyp.apsByProjId.nodes[0].id')
+      const popNodes = get(data, 'tpopmassnOhneTyp.apsByProjId.nodes[0].popsByApId.nodes', [])
+      const tpopNodes = flatten(
+        popNodes.map(n => get(n, 'tpopsByPopId.nodes'), [])
+      )
+      const tpopmassnNodes = flatten(
+        tpopNodes.map(n => get(n, 'tpopmassnsByTpopId.nodes'), [])
+      )
+      return tpopmassnNodes.map(n => {
+        const popId = get(n, 'tpopByTpopId.popByPopId.id')
+        const popNr = get(n, 'tpopByTpopId.popByPopId.nr')
+        const tpopId = get(n, 'tpopByTpopId.id')
+        const tpopNr = get(n, 'tpopByTpopId.nr')
+        return ({
+          proj_id: projId,
+          ap_id: apId,
+          hw: 'Massnahme ohne Typ:',
+          url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', popId, 'Teil-Populationen', tpopId, 'Massnahmen', n.id],
+          text: [`Population: ${popNr || popId}, Teil-Population: ${tpopNr || tpopId}, Massnahme: ${n.jahr || n.id}`],
+        })
+      })
+    }
   },
   // Massn.-Bericht ohne Jahr/Entwicklung
   {
