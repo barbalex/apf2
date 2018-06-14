@@ -5056,40 +5056,6 @@ ORDER BY
   apflora.pop.nr,
   apflora.tpop.nr;
 
-DROP VIEW IF EXISTS apflora.v_qk_pop_popnrmehrdeutig CASCADE;
-CREATE OR REPLACE VIEW apflora.v_qk_pop_popnrmehrdeutig AS
-SELECT
-  apflora.projekt.id as proj_id,
-  apflora.ap.id as ap_id,
-  'Population: Die Nr. ist mehrdeutig:'::text AS hw,
-  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Aktionspläne', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS url,
-  ARRAY[concat('Population (Nr.): ', apflora.pop.nr)]::text[] AS text
-FROM
-  apflora.projekt
-  INNER JOIN
-    apflora.ap
-    INNER JOIN
-      apflora.pop
-      ON apflora.pop.ap_id = apflora.ap.id
-    ON apflora.projekt.id = apflora.ap.proj_id
-WHERE
-  apflora.pop.ap_id IN (
-    SELECT DISTINCT ap_id
-    FROM apflora.pop
-    GROUP BY ap_id, nr
-    HAVING COUNT(*) > 1
-  ) AND
-  apflora.pop.nr IN (
-    SELECT DISTINCT nr
-    FROM apflora.pop
-    GROUP BY ap_id, nr
-    HAVING COUNT(*) > 1
-  )
-ORDER BY
-  apflora.projekt.id,
-  apflora.ap.id,
-  apflora.pop.nr;
-
 DROP VIEW IF EXISTS apflora.v_q_pop_popnrmehrdeutig CASCADE;
 CREATE OR REPLACE VIEW apflora.v_q_pop_popnrmehrdeutig AS
 SELECT
@@ -5420,8 +5386,8 @@ FROM
 GROUP BY
   apflora.tpopber.tpop_id;
 
-DROP VIEW IF EXISTS apflora.v_qk_tpop_erloschenundrelevantaberletztebeobvor1950_maxbeobjahr CASCADE;
-CREATE OR REPLACE VIEW apflora.v_qk_tpop_erloschenundrelevantaberletztebeobvor1950_maxbeobjahr AS
+DROP VIEW IF EXISTS apflora.v_q_tpop_erloschenundrelevantaberletztebeobvor1950_maxbeobjahr CASCADE;
+CREATE OR REPLACE VIEW apflora.v_q_tpop_erloschenundrelevantaberletztebeobvor1950_maxbeobjahr AS
 SELECT
  apflora.beob.tpop_id as id,
   max(
