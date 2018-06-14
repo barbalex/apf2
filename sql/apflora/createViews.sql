@@ -6040,54 +6040,6 @@ WHERE
       AND apflora.tpopmassn.jahr > lasttpopber.jahr
   );
 
-DROP VIEW IF EXISTS apflora.v_qk_pop_statuserloschenletzterpopberunsicher CASCADE;
-CREATE OR REPLACE VIEW apflora.v_qk_pop_statuserloschenletzterpopberunsicher AS
-WITH lastpopber AS (
-  SELECT DISTINCT ON (pop_id)
-    pop_id,
-    jahr,
-    entwicklung
-  FROM
-    apflora.popber
-  WHERE
-    jahr IS NOT NULL
-  ORDER BY
-    pop_id,
-    jahr DESC
-)
-SELECT
-  apflora.projekt.id as proj_id,
-  apflora.ap.id as ap_id,
-  'Population: Status ist "erloschen" (ursprünglich oder angesiedelt) oder potentieller Wuchsort; der letzte Populations-Bericht meldet aber "unsicher" und es gab seither keine Ansiedlung:'::text AS "hw",
-  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Aktionspläne', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS "url",
-  ARRAY[concat('Population (Nr.): ', apflora.pop.nr)]::text[] AS text
-FROM
-  apflora.projekt
-  INNER JOIN
-    apflora.ap
-    INNER JOIN
-      apflora.pop
-      INNER JOIN lastpopber
-      ON apflora.pop.id = lastpopber.pop_id
-    ON apflora.ap.id = apflora.pop.ap_id
-  ON apflora.projekt.id = apflora.ap.proj_id
-WHERE
-  apflora.pop.status  IN (101, 202, 211, 300)
-  AND lastpopber.entwicklung = 4
-  AND apflora.pop.id NOT IN (
-    -- Ansiedlungen since lastpopber.jahr
-    SELECT DISTINCT
-      apflora.tpop.pop_id
-    FROM
-      apflora.tpop
-      INNER JOIN
-        apflora.tpopmassn
-        ON apflora.tpop.id = apflora.tpopmassn.tpop_id
-    WHERE
-      apflora.tpopmassn.typ BETWEEN 1 AND 3
-      AND apflora.tpopmassn.jahr > lastpopber.jahr
-  );
-
 DROP VIEW IF EXISTS apflora.v_q_pop_statuserloschenletzterpopberunsicher CASCADE;
 CREATE OR REPLACE VIEW apflora.v_q_pop_statuserloschenletzterpopberunsicher AS
 WITH lastpopber AS (
@@ -6135,44 +6087,6 @@ WHERE
       AND apflora.tpopmassn.jahr > lastpopber.jahr
   );
 
-DROP VIEW IF EXISTS apflora.v_qk_pop_ohnetpopmitgleichemstatus CASCADE;
-CREATE OR REPLACE VIEW apflora.v_qk_pop_ohnetpopmitgleichemstatus AS
-SELECT
-  apflora.projekt.id as proj_id,
-  apflora.ap.id as ap_id,
-  'Population: Keine Teil-Population hat den Status der Population:'::text AS "hw",
-  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Aktionspläne', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS "url",
-  ARRAY[concat('Population (Nr.): ', apflora.pop.nr)]::text[] AS text
-FROM
-  apflora.projekt
-  INNER JOIN
-    apflora.ap
-    INNER JOIN
-      apflora.pop
-    ON apflora.ap.id = apflora.pop.ap_id
-  ON apflora.projekt.id = apflora.ap.proj_id
-WHERE
-  --why was this here? deactivated 2017-11-03
-  --apflora.pop.status  = 210
-  apflora.pop.id NOT IN (
-    SELECT DISTINCT
-      apflora.tpop.pop_id
-    FROM
-      apflora.tpop
-    WHERE
-      apflora.tpop.pop_id = apflora.pop.id
-      AND (
-          apflora.tpop.status = apflora.pop.status 
-          -- problem: the values for erloschen and aktuell can vary
-          -- depending on bekannt seit
-          -- even though they are same value in status field of form
-          OR (apflora.tpop.status = 200 AND apflora.pop.status  = 210)
-          OR (apflora.tpop.status = 210 AND apflora.pop.status  = 200)
-          OR (apflora.tpop.status = 202 AND apflora.pop.status  = 211)
-          OR (apflora.tpop.status = 211 AND apflora.pop.status  = 202)
-      )
-  );
-
 DROP VIEW IF EXISTS apflora.v_q_pop_ohnetpopmitgleichemstatus CASCADE;
 CREATE OR REPLACE VIEW apflora.v_q_pop_ohnetpopmitgleichemstatus AS
 SELECT
@@ -6206,34 +6120,6 @@ WHERE
           OR (apflora.tpop.status = 202 AND apflora.pop.status  = 211)
           OR (apflora.tpop.status = 211 AND apflora.pop.status  = 202)
       )
-  );
-
-DROP VIEW IF EXISTS apflora.v_qk_pop_status300tpopstatusanders CASCADE;
-CREATE OR REPLACE VIEW apflora.v_qk_pop_status300tpopstatusanders AS
-SELECT
-  apflora.projekt.id as proj_id,
-  apflora.ap.id as ap_id,
-  'Population: Status ist "potentieller Wuchs-/Ansiedlungsort". Es gibt aber Teil-Populationen mit abweichendem Status:'::text AS "hw",
-  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Aktionspläne', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS "url",
-  ARRAY[concat('Population (Nr.): ', apflora.pop.nr)]::text[] AS text
-FROM
-  apflora.projekt
-  INNER JOIN
-    apflora.ap
-    INNER JOIN
-      apflora.pop
-    ON apflora.ap.id = apflora.pop.ap_id
-  ON apflora.projekt.id = apflora.ap.proj_id
-WHERE
-  apflora.pop.status  = 300
-  AND apflora.pop.id IN (
-    SELECT DISTINCT
-      apflora.tpop.pop_id
-    FROM
-      apflora.tpop
-    WHERE
-      apflora.tpop.pop_id = apflora.pop.id
-      AND apflora.tpop.status <> 300
   );
 
 DROP VIEW IF EXISTS apflora.v_q_pop_status300tpopstatusanders CASCADE;
