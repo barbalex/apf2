@@ -18,11 +18,6 @@ const fetchQk = async ({
     { type: 'function', name: 'qk_tpop_ohne_tpopber', berichtjahr },
     // TPop ohne verlangten TPop-Massn.-Bericht im Berichtjahr
     { type: 'function', name: 'qk_tpop_ohne_massnber', berichtjahr },
-
-    // 5. Kontrollen
-
-    // Zählung ohne Einheit/Methode/Anzahl
-    { type: 'view', name: 'v_qk_freiwkontrzaehlung_ohneanzahl', berichtjahr },
   ]
   let nrOfMessages = 0
 

@@ -1793,9 +1793,4 @@ export default (berichtjahr) => [
       })
     }
   },
-  {
-    type: 'view',
-    name: 'v_qk_freiwkontrzaehlung_ohneanzahl',
-    berichtjahr
-  },
 ]
