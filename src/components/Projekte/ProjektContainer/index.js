@@ -62,7 +62,6 @@ const enhance = compose(
   withState('mapFilter', 'setMapFilter', { features: [] }),
   withState('detailplaene', 'setDetailplaene', null),
   withState('markierungen', 'setMarkierungen', null),
-  withState('ktZh', 'setKtZh', null),
 )
 
 const ProjekteContainer = ({
@@ -93,8 +92,6 @@ const ProjekteContainer = ({
   setMapFilter,
   detailplaene,
   setDetailplaene,
-  ktZh,
-  setKtZh,
   markierungen,
   setMarkierungen,
 }: {
@@ -125,8 +122,6 @@ const ProjekteContainer = ({
   setMapFilter: () => void,
   detailplaene: Object,
   setDetailplaene: () => void,
-  ktZh: Object,
-  setKtZh: () => void,
   markierungen: Object,
   setMarkierungen: () => void,
 }) =>
@@ -266,8 +261,6 @@ const ProjekteContainer = ({
                               activeNode={activeNode}
                               activeNodes={activeNodes}
                               refetchTree={refetch}
-                              ktZh={ktZh}
-                              setKtZh={setKtZh}
                             />
                           </ReflexElement>
                         }

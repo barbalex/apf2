@@ -8,7 +8,7 @@ import Paper from '@material-ui/core/Paper'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 import withState from 'recompose/withState'
-import withLifecycle from '@hocs/with-lifecycle'
+//import withLifecycle from '@hocs/with-lifecycle'
 import { Query } from 'react-apollo'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
@@ -16,7 +16,6 @@ import sortBy from 'lodash/sortBy'
 import FormTitle from '../../../shared/FormTitle'
 import appBaseUrl from '../../../../modules/appBaseUrl'
 import standardQkYear from '../../../../modules/standardQkYear'
-import fetchKtZh from '../../../../modules/fetchKtZh'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import data1Gql from './data1.graphql'
 import data2Gql from './data2.graphql'
@@ -61,17 +60,32 @@ const StyledInput = styled(Input)`
 const enhance = compose(
   withState('berichtjahr', 'setBerichtjahr', standardQkYear()),
   withState('filter', 'setFilter', ''),
+  withState('messages', 'setMessages', []),
+  withState('outsideZhChecked', 'setOutsideZhChecked', false),
+  withState('checkingOutsideZh', 'setCheckingOutsideZh', false),
+  withHandlers({
+    addMessages: ({ messages, setMessages }) => newMessages =>
+      setMessages([...messages, newMessages]),
+  }),
   withHandlers({
     onChangeBerichtjahr: ({ setBerichtjahr }) => event =>
       setBerichtjahr(+event.target.value),
     onChangeFilter: ({ setFilter }) => event =>
       setFilter(event.target.value),
   }),
+  /*
   withLifecycle({
-    onDidMount({ ktZh, setKtZh, errorState }) {
-      if (!ktZh) fetchKtZh({ setKtZh, errorState })
+    onDidMount({
+      berichtjahr,
+      setBerichtjahr,
+      tree,
+      apId,
+      addMessages,
+      activeNodes,
+      errorState
+    }) {
     },
-  }),
+  }),*/
 )
 
 const Qk = ({
@@ -82,10 +96,14 @@ const Qk = ({
   onChangeFilter,
   filter,
   treeName,
+  messages,
+  addMessages,
   activeNodes,
+  outsideZhChecked,
+  setOutsideZhChecked,
+  checkingOutsideZh,
+  setCheckingOutsideZh,
   errorState,
-  ktZh,
-  setKtZh,
 }: {
   tree: Object,
   apId: String,
@@ -94,10 +112,14 @@ const Qk = ({
   onChangeFilter: () => void,
   filter: String,
   treeName: String,
+  messages: Array<Object>,
+  addMessages: () => void,
   activeNodes: Array<Object>,
+  outsideZhChecked: Boolean,
+  setOutsideZhChecked: () => void,
+  checkingOutsideZh: Boolean,
+  setCheckingOutsideZh: () => void,
   errorState: Object,
-  ktZh: Object,
-  setKtZh: () => void,
 }) =>
   <Query query={data1Gql}>
     {({ loading, error, data: data1 }) => {
@@ -107,40 +129,51 @@ const Qk = ({
       return (
           <Query
             query={data2Gql}
+            // pass berichtjahr when queries exist that actually use it
             variables={{ berichtjahr, isBerichtjahr: !!berichtjahr, apId, projId }}
+            //variables={{ apId, projId }}
           >
             {({ loading, error, data }) => {
-              const gqlMessageGroups = sortBy(
-                qk({ berichtjahr, data }),
-                'title'
-              )
-                .filter(q => !q.query)
-                .filter(q => q.messages.length)
+              console.log('QK rendering:', {berichtjahr})
+              const qks = sortBy(
+                qk(berichtjahr),
+                'query'
+              ).filter(q => !!q.query)
+              let gqlMessages = []
+              if (Object.keys(data).length > 0) {
+                gqlMessages = qks
+                  .map(q =>
+                    q.data(data)
+                  )
+              }
 
-              const messageGroups = sortBy(
-                [
-                  ...gqlMessageGroups,
-                  checkTpopOutsideZh({ data, ktZh })
-                ],
-                'title'
-              )
+              !outsideZhChecked && checkTpopOutsideZh({
+                data,
+                addMessages,
+                setOutsideZhChecked,
+                checkingOutsideZh,
+                setCheckingOutsideZh,
+                errorState,
+              })
+
+              const messageArrays = [...gqlMessages, ...messages]
               const messageArraysFiltered = filter
-                ? messageGroups.filter(messageGroup => {
+                ? messageArrays.filter(messageArray => {
                     if (
-                      messageGroup &&
-                      messageGroup.title &&
-                      messageGroup.title.toLowerCase
+                      messageArray[0] &&
+                      messageArray[0].hw &&
+                      messageArray[0].hw.toLowerCase
                     ) {
-                      return messageGroup.title.toLowerCase().includes(filter.toLowerCase())
+                      return messageArray[0].hw.toLowerCase().includes(filter.toLowerCase())
                     }
                     return false
                   })
-                : messageGroups.filter(messageGroup => {
+                : messageArrays.filter(messageArray => {
                   if (
-                    messageGroup &&
-                    messageGroup.title
+                    messageArray[0] &&
+                    messageArray[0].hw
                   ) {
-                    // only return values with title
+                    // only return values with hw
                     return true
                   }
                   return false
@@ -173,16 +206,16 @@ const Qk = ({
                       <LoadingIndicator loading={loading}>
                         {loadingMessage}
                       </LoadingIndicator>
-                      {messageArraysFiltered.map((messageGroup, index) => (
+                      {messageArraysFiltered.map((messageArray, index) => (
                         <StyledPaper key={index}>
-                          <Title>{messageGroup.title}</Title>
-                          {messageGroup.messages.map(m => (
+                          <Title>{messageArray[0].hw}</Title>
+                          {messageArray.map(m => (
                             <div key={m.url.join()}>
                               <StyledA
                                 href={`${appBaseUrl}/${m.url.join('/')}`}
                                 target="_blank"
                               >
-                                {m.text}
+                                {m.text.join('; ')}
                               </StyledA>
                             </div>
                           ))}

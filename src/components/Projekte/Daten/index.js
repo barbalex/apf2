@@ -128,18 +128,14 @@ const Daten = ({
   activeNode,
   activeNodes,
   dimensions = { width: 380 },
-  refetchTree,
-  ktZh,
-  setKtZh,
+  refetchTree
 }: {
   tree: Object,
   treeName: String,
   activeNode: Object,
   activeNodes: Array<Object>,
   dimensions: Object,
-  refetchTree: () => void,
-  ktZh: Object,
-  setKtZh: () => void,
+  refetchTree: () => void
 }) =>
   <Subscribe to={[ErrorState]}>
     {errorState =>
@@ -174,7 +170,7 @@ const Daten = ({
             tpopfreiwkontr: <Tpopfreiwkontr dimensions={dimensions} id={activeNodeArray[9]} refetchTree={refetchTree} />,
             tpopkontrzaehl: <Tpopkontrzaehl dimensions={dimensions} id={activeNodeArray[11]} refetchTree={refetchTree} />,
             exporte: <Exporte tree={tree} dimensions={dimensions} treeName={treeName} refetchTree={refetchTree} />,
-            qk: <Qk tree={tree} treeName={treeName} apId={apId} activeNodes={activeNodes} refetchTree={refetchTree} errorState={errorState} ktZh={ktZh} setKtZh={setKtZh} />,
+            qk: <Qk tree={tree} treeName={treeName} apId={apId} activeNodes={activeNodes} refetchTree={refetchTree} errorState={errorState} />,
             beobNichtZuzuordnen: <Beobzuordnung dimensions={dimensions} id={activeNodeArray[activeNodeArray.length -1]} tree={tree} refetchTree={refetchTree} type="nichtZuzuordnen" />,
             beobNichtBeurteilt: <Beobzuordnung dimensions={dimensions} id={activeNodeArray[activeNodeArray.length -1]} tree={tree} refetchTree={refetchTree} type="nichtBeurteilt" />,
             beobZugeordnet: <Beobzuordnung dimensions={dimensions} id={activeNodeArray[activeNodeArray.length -1]} tree={tree} refetchTree={refetchTree} type="zugeordnet" />,
