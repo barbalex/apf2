@@ -1388,4 +1388,74 @@ query QkQuery(
       }
     }
   }
+  tpopfeldkontrOhneZaehlung: projektById(id: $projId) {
+    id
+    apsByProjId(filter: {id: {equalTo: $apId}}) {
+      nodes {
+        id
+        popsByApId {
+          nodes {
+            id
+            tpopsByPopId {
+              nodes {
+                id
+                tpopkontrsByTpopId(filter: {typ: {notEqualTo: "Freiwilligen-Erfolgskontrolle"}}) {
+                  nodes {
+                    id
+                    jahr
+                    tpopkontrzaehlsByTpopkontrId {
+                      totalCount
+                    }
+                    tpopByTpopId {
+                      id
+                      nr
+                      popByPopId {
+                        id
+                        nr
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  tpopfreiwkontrOhneZaehlung: projektById(id: $projId) {
+    id
+    apsByProjId(filter: {id: {equalTo: $apId}}) {
+      nodes {
+        id
+        popsByApId {
+          nodes {
+            id
+            tpopsByPopId {
+              nodes {
+                id
+                tpopkontrsByTpopId(filter: {typ: {equalTo: "Freiwilligen-Erfolgskontrolle"}}) {
+                  nodes {
+                    id
+                    jahr
+                    tpopkontrzaehlsByTpopkontrId {
+                      totalCount
+                    }
+                    tpopByTpopId {
+                      id
+                      nr
+                      popByPopId {
+                        id
+                        nr
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 }

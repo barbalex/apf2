@@ -1535,9 +1535,64 @@ export default (berichtjahr) => [
     }
   },
   {
-    type: 'view',
-    name: 'v_qk_feldkontr_ohnezaehlung',
-    berichtjahr
+    query: 'tpopfeldkontrOhneZaehlung',
+    type: 'query',
+    data: (data) => {
+      const projId = get(data, 'tpopfeldkontrOhneZaehlung.id')
+      const apId = get(data, 'tpopfeldkontrOhneZaehlung.apsByProjId.nodes[0].id')
+      const popNodes = get(data, 'tpopfeldkontrOhneZaehlung.apsByProjId.nodes[0].popsByApId.nodes', [])
+      const tpopNodes = flatten(
+        popNodes.map(n => get(n, 'tpopsByPopId.nodes'), [])
+      )
+      const tpopkontrNodes = flatten(
+        tpopNodes.map(n => get(n, 'tpopkontrsByTpopId.nodes'), [])
+      )
+      return tpopkontrNodes
+        .filter(n => get(n, 'tpopkontrzaehlsByTpopkontrId.totalCount') === 0)
+        .map(n => {
+          const popId = get(n, 'tpopByTpopId.popByPopId.id')
+          const popNr = get(n, 'tpopByTpopId.popByPopId.nr')
+          const tpopId = get(n, 'tpopByTpopId.id')
+          const tpopNr = get(n, 'tpopByTpopId.nr')
+          return ({
+            proj_id: projId,
+            ap_id: apId,
+            hw: 'Feldkontrolle ohne Zählung:',
+            url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', popId, 'Teil-Populationen', tpopId, 'Feld-Kontrollen', n.id],
+            text: [`Population: ${popNr || popId}, Teil-Population: ${tpopNr || tpopId}, Kontrolle: ${n.jahr || n.id}`],
+          })
+        })
+    }
+  },
+  {
+    query: 'tpopfreiwkontrOhneZaehlung',
+    type: 'query',
+    data: (data) => {
+      const projId = get(data, 'tpopfreiwkontrOhneZaehlung.id')
+      const apId = get(data, 'tpopfreiwkontrOhneZaehlung.apsByProjId.nodes[0].id')
+      const popNodes = get(data, 'tpopfreiwkontrOhneZaehlung.apsByProjId.nodes[0].popsByApId.nodes', [])
+      const tpopNodes = flatten(
+        popNodes.map(n => get(n, 'tpopsByPopId.nodes'), [])
+      )
+      const tpopkontrNodes = flatten(
+        tpopNodes.map(n => get(n, 'tpopkontrsByTpopId.nodes'), [])
+      )
+      return tpopkontrNodes
+        .filter(n => get(n, 'tpopkontrzaehlsByTpopkontrId.totalCount') === 0)
+        .map(n => {
+          const popId = get(n, 'tpopByTpopId.popByPopId.id')
+          const popNr = get(n, 'tpopByTpopId.popByPopId.nr')
+          const tpopId = get(n, 'tpopByTpopId.id')
+          const tpopNr = get(n, 'tpopByTpopId.nr')
+          return ({
+            proj_id: projId,
+            ap_id: apId,
+            hw: 'Freiwilligen-Kontrolle ohne Zählung:',
+            url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', popId, 'Teil-Populationen', tpopId, 'Freiwilligen-Kontrollen', n.id],
+            text: [`Population: ${popNr || popId}, Teil-Population: ${tpopNr || tpopId}, Kontrolle: ${n.jahr || n.id}`],
+          })
+        })
+    }
   },
   {
     type: 'view',
