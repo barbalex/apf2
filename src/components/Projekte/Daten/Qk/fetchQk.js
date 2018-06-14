@@ -22,7 +22,6 @@ const fetchQk = async ({
     // 5. Kontrollen
 
     // Zählung ohne Einheit/Methode/Anzahl
-    { type: 'view', name: 'v_qk_freiwkontrzaehlung_ohnemethode', berichtjahr },
     { type: 'view', name: 'v_qk_feldkontrzaehlung_ohneanzahl', berichtjahr },
     { type: 'view', name: 'v_qk_freiwkontrzaehlung_ohneanzahl', berichtjahr },
   ]

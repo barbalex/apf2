@@ -1729,11 +1729,6 @@ export default (berichtjahr) => [
   },
   {
     type: 'view',
-    name: 'v_qk_freiwkontrzaehlung_ohnemethode',
-    berichtjahr
-  },
-  {
-    type: 'view',
     name: 'v_qk_feldkontrzaehlung_ohneanzahl',
     berichtjahr
   },
