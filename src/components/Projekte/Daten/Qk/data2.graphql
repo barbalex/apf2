@@ -719,6 +719,16 @@ query QkQuery(
       }
     }
   }
+  tpopOhneTpopber: qTpopOhneTpopber(berichtjahr: $berichtjahr, apid: $apId, projid: $projId) @include(if: $isBerichtjahr) {
+    nodes {
+      projId
+      apId
+      popId
+      popNr
+      id
+      nr
+    }
+  }
   tpopStatusAktuellLetzterTpopberErloschen: allVQTpopStatusaktuellletztertpopbererloschens(filter: {
       projId: {equalTo: $projId},
       apId: {equalTo: $apId}

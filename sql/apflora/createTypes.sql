@@ -36,10 +36,11 @@ CREATE TYPE apflora.qk_tpop_ohne_massnber AS (
   text text[]
 );
 
-CREATE TYPE apflora.qk_tpop_ohne_tpopber AS (
+CREATE TYPE apflora.q_tpop_ohne_tpopber AS (
   proj_id uuid,
   ap_id uuid,
-  hw text,
-  url text[],
-  text text[]
+  pop_id uuid,
+  pop_nr integer,
+  id uuid,
+  nr integer
 );

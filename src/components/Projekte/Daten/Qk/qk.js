@@ -1172,11 +1172,21 @@ export default (berichtjahr) => [
         }))
     }
   },
-  // TODO: TPop ohne verlangten TPop-Bericht im Berichtjahr
   {
-    type: 'function',
-    name: 'qk_tpop_ohne_tpopber',
-    berichtjahr
+    query: 'tpopOhneTpopber',
+    type: 'query',
+    data: (data) => {
+      const nodes = [...get(data, 'tpopOhneTpopber.nodes', [])]
+        .sort((a, b) => a.nr - b.nr)
+      return nodes
+        .map(n => ({
+          proj_id: n.projId,
+          ap_id: n.apId,
+          hw: 'Teilpopulation mit Kontrolle (im Berichtjahr) aber ohne Teilpopulations-Bericht (im Berichtjahr):',
+          url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.popId, 'Teil-Populationen', n.id],
+          text: [`Population: ${n.popNr || n.popId}, Teil-Population: ${n.nr || n.id}`],
+        }))
+    }
   },
   // TODO: TPop ohne verlangten TPop-Massn.-Bericht im Berichtjahr
   {
