@@ -28,8 +28,9 @@ create constraint trigger ensure_user_role_exists
   execute procedure auth.check_role_exists();
 
 create extension if not exists pgcrypto;
--- this does not work on windows
--- need to run pgjwt.sql
+
+-- this does not work on windows and ubuntu (?)
+-- need to run pgjwt.sql instead
 --create extension if not exists pgjwt;
 
 create or replace function auth.encrypt_pass()
