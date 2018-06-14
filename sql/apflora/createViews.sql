@@ -5746,54 +5746,6 @@ WHERE
       AND apflora.tpopmassn.jahr > lasttpopber.jahr
   );
 
-DROP VIEW IF EXISTS apflora.v_qk_pop_statuserloschenletzterpopberzunehmend CASCADE;
-CREATE OR REPLACE VIEW apflora.v_qk_pop_statuserloschenletzterpopberzunehmend AS
-WITH lastpopber AS (
-  SELECT DISTINCT ON (pop_id)
-    pop_id,
-    jahr,
-    entwicklung
-  FROM
-    apflora.popber
-  WHERE
-    jahr IS NOT NULL
-  ORDER BY
-    pop_id,
-    jahr DESC
-)
-SELECT
-  apflora.projekt.id as proj_id,
-  apflora.ap.id as ap_id,
-  'Population: Status ist "erloschen" (ursprünglich oder angesiedelt), Ansaatversuch oder potentieller Wuchsort; der letzte Populations-Bericht meldet aber "zunehmend" und es gab seither keine Ansiedlung:'::text AS "hw",
-  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Aktionspläne', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS "url",
-  ARRAY[concat('Population (Nr.): ', apflora.pop.nr)]::text[] AS text
-FROM
-  apflora.projekt
-  INNER JOIN
-    apflora.ap
-    INNER JOIN
-      apflora.pop
-      INNER JOIN lastpopber
-      ON apflora.pop.id = lastpopber.pop_id
-    ON apflora.ap.id = apflora.pop.ap_id
-  ON apflora.projekt.id = apflora.ap.proj_id
-WHERE
-  apflora.pop.status  IN (101, 201, 202, 211, 300)
-  AND lastpopber.entwicklung = 3
-  AND apflora.pop.id NOT IN (
-    -- Ansiedlungen since lastpopber.jahr
-    SELECT DISTINCT
-      apflora.tpop.pop_id
-    FROM
-      apflora.tpop
-      INNER JOIN
-        apflora.tpopmassn
-        ON apflora.tpop.id = apflora.tpopmassn.tpop_id
-    WHERE
-      apflora.tpopmassn.typ BETWEEN 1 AND 3
-      AND apflora.tpopmassn.jahr > lastpopber.jahr
-  );
-
 DROP VIEW IF EXISTS apflora.v_q_pop_statuserloschenletzterpopberzunehmend CASCADE;
 CREATE OR REPLACE VIEW apflora.v_q_pop_statuserloschenletzterpopberzunehmend AS
 WITH lastpopber AS (
@@ -5890,54 +5842,6 @@ WHERE
       AND apflora.tpopmassn.typ BETWEEN 1 AND 3
       AND apflora.tpopmassn.jahr IS NOT NULL
       AND apflora.tpopmassn.jahr > lasttpopber.jahr
-  );
-
-DROP VIEW IF EXISTS apflora.v_qk_pop_statuserloschenletzterpopberstabil CASCADE;
-CREATE OR REPLACE VIEW apflora.v_qk_pop_statuserloschenletzterpopberstabil AS
-WITH lastpopber AS (
-  SELECT DISTINCT ON (pop_id)
-    pop_id,
-    jahr,
-    entwicklung
-  FROM
-    apflora.popber
-  WHERE
-    jahr IS NOT NULL
-  ORDER BY
-    pop_id,
-    jahr DESC
-)
-SELECT
-  apflora.projekt.id as proj_id,
-  apflora.ap.id as ap_id,
-  'Population: Status ist "erloschen" (ursprünglich oder angesiedelt), Ansaatversuch oder potentieller Wuchsort; der letzte Populations-Bericht meldet aber "stabil" und es gab seither keine Ansiedlung:'::text AS "hw",
-  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Aktionspläne', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS "url",
-  ARRAY[concat('Population (Nr.): ', apflora.pop.nr)]::text[] AS text
-FROM
-  apflora.projekt
-  INNER JOIN
-    apflora.ap
-    INNER JOIN
-      apflora.pop
-      INNER JOIN lastpopber
-      ON apflora.pop.id = lastpopber.pop_id
-    ON apflora.ap.id = apflora.pop.ap_id
-  ON apflora.projekt.id = apflora.ap.proj_id
-WHERE
-  apflora.pop.status  IN (101, 201, 202, 211, 300)
-  AND lastpopber.entwicklung = 2
-  AND apflora.pop.id NOT IN (
-    -- Ansiedlungen since lastpopber.jahr
-    SELECT DISTINCT
-      apflora.tpop.pop_id
-    FROM
-      apflora.tpop
-      INNER JOIN
-        apflora.tpopmassn
-        ON apflora.tpop.id = apflora.tpopmassn.tpop_id
-    WHERE
-      apflora.tpopmassn.typ BETWEEN 1 AND 3
-      AND apflora.tpopmassn.jahr > lastpopber.jahr
   );
 
 DROP VIEW IF EXISTS apflora.v_q_pop_statuserloschenletzterpopberstabil CASCADE;
@@ -6038,54 +5942,6 @@ WHERE
       AND apflora.tpopmassn.jahr > lasttpopber.jahr
   );
 
-DROP VIEW IF EXISTS apflora.v_qk_pop_statuserloschenletzterpopberabnehmend CASCADE;
-CREATE OR REPLACE VIEW apflora.v_qk_pop_statuserloschenletzterpopberabnehmend AS
-WITH lastpopber AS (
-  SELECT DISTINCT ON (pop_id)
-    pop_id,
-    jahr,
-    entwicklung
-  FROM
-    apflora.popber
-  WHERE
-    jahr IS NOT NULL
-  ORDER BY
-    pop_id,
-    jahr DESC
-)
-SELECT
-  apflora.projekt.id as proj_id,
-  apflora.ap.id as ap_id,
-  'Population: Status ist "erloschen" (ursprünglich oder angesiedelt), Ansaatversuch oder potentieller Wuchsort; der letzte Populations-Bericht meldet aber "abnehmend" und es gab seither keine Ansiedlung:'::text AS "hw",
-  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Aktionspläne', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS "url",
-  ARRAY[concat('Population (Nr.): ', apflora.pop.nr)]::text[] AS text
-FROM
-  apflora.projekt
-  INNER JOIN
-    apflora.ap
-    INNER JOIN
-      apflora.pop
-      INNER JOIN lastpopber
-      ON apflora.pop.id = lastpopber.pop_id
-    ON apflora.ap.id = apflora.pop.ap_id
-  ON apflora.projekt.id = apflora.ap.proj_id
-WHERE
-  apflora.pop.status  IN (101, 201, 202, 211, 300)
-  AND lastpopber.entwicklung = 1
-  AND apflora.pop.id NOT IN (
-    -- Ansiedlungen since lastpopber.jahr
-    SELECT DISTINCT
-      apflora.tpop.pop_id
-    FROM
-      apflora.tpop
-      INNER JOIN
-        apflora.tpopmassn
-        ON apflora.tpop.id = apflora.tpopmassn.tpop_id
-    WHERE
-      apflora.tpopmassn.typ BETWEEN 1 AND 3
-      AND apflora.tpopmassn.jahr > lastpopber.jahr
-  );
-
 DROP VIEW IF EXISTS apflora.v_q_pop_statuserloschenletzterpopberabnehmend CASCADE;
 CREATE OR REPLACE VIEW apflora.v_q_pop_statuserloschenletzterpopberabnehmend AS
 WITH lastpopber AS (
@@ -6133,7 +5989,6 @@ WHERE
       AND apflora.tpopmassn.jahr > lastpopber.jahr
   );
 
-DROP VIEW IF EXISTS apflora.v_qk_tpop_statuserloschenletztertpopberunsicher CASCADE;
 DROP VIEW IF EXISTS apflora.v_q_tpop_statuserloschenletztertpopberunsicher CASCADE;
 CREATE OR REPLACE VIEW apflora.v_q_tpop_statuserloschenletztertpopberunsicher AS
 WITH lasttpopber AS (
