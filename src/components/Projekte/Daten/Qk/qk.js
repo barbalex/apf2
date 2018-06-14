@@ -1662,9 +1662,70 @@ export default (berichtjahr) => [
     }
   },
   {
-    type: 'view',
-    name: 'v_qk_feldkontrzaehlung_ohnemethode',
-    berichtjahr
+    query: 'feldkontrzaehlungOhneMethode',
+    type: 'query',
+    data: (data) => {
+      const projId = get(data, 'feldkontrzaehlungOhneMethode.id')
+      const apId = get(data, 'feldkontrzaehlungOhneMethode.apsByProjId.nodes[0].id')
+      const popNodes = get(data, 'feldkontrzaehlungOhneEinheit.apsByProjId.nodes[0].popsByApId.nodes', [])
+      const tpopNodes = flatten(
+        popNodes.map(n => get(n, 'tpopsByPopId.nodes'), [])
+      )
+      const tpopkontrNodes = flatten(
+        tpopNodes.map(n => get(n, 'tpopkontrsByTpopId.nodes'), [])
+      )
+      const tpopkontrzaehlNodes = flatten(
+        tpopkontrNodes.map(n => get(n, 'tpopkontrzaehlsByTpopkontrId.nodes', []))
+      )
+      return tpopkontrzaehlNodes.map(n => {
+        const popId = get(n, 'tpopkontrByTpopkontrId.tpopByTpopId.popByPopId.id')
+        const popNr = get(n, 'tpopkontrByTpopkontrId.tpopByTpopId.popByPopId.nr')
+        const tpopId = get(n, 'tpopkontrByTpopkontrId.tpopByTpopId.id')
+        const tpopNr = get(n, 'tpopkontrByTpopkontrId.tpopByTpopId.nr')
+        const tpopkontrId = get(n, 'tpopkontrByTpopkontrId.id')
+        const tpopkontrJahr = get(n, 'tpopkontrByTpopkontrId.jahr')
+        return ({
+          proj_id: projId,
+          ap_id: apId,
+          hw: 'Zählung ohne Methode (Feld-Kontrolle):',
+          url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', popId, 'Teil-Populationen', tpopId, 'Feld-Kontrollen', tpopkontrId, 'Zaehlungen', n.id],
+          text: [`Population: ${popNr || popId}, Teil-Population: ${tpopNr || tpopId}, Kontrolle: ${tpopkontrJahr || tpopkontrId}, Zählung: ${n.id}`],
+        })
+      })
+    }
+  },
+  {
+    query: 'freiwkontrzaehlungOhneMethode',
+    type: 'query',
+    data: (data) => {
+      const projId = get(data, 'freiwkontrzaehlungOhneMethode.id')
+      const apId = get(data, 'freiwkontrzaehlungOhneMethode.apsByProjId.nodes[0].id')
+      const popNodes = get(data, 'freiwkontrzaehlungOhneMethode.apsByProjId.nodes[0].popsByApId.nodes', [])
+      const tpopNodes = flatten(
+        popNodes.map(n => get(n, 'tpopsByPopId.nodes'), [])
+      )
+      const tpopkontrNodes = flatten(
+        tpopNodes.map(n => get(n, 'tpopkontrsByTpopId.nodes'), [])
+      )
+      const tpopkontrzaehlNodes = flatten(
+        tpopkontrNodes.map(n => get(n, 'tpopkontrzaehlsByTpopkontrId.nodes', []))
+      )
+      return tpopkontrzaehlNodes.map(n => {
+        const popId = get(n, 'tpopkontrByTpopkontrId.tpopByTpopId.popByPopId.id')
+        const popNr = get(n, 'tpopkontrByTpopkontrId.tpopByTpopId.popByPopId.nr')
+        const tpopId = get(n, 'tpopkontrByTpopkontrId.tpopByTpopId.id')
+        const tpopNr = get(n, 'tpopkontrByTpopkontrId.tpopByTpopId.nr')
+        const tpopkontrId = get(n, 'tpopkontrByTpopkontrId.id')
+        const tpopkontrJahr = get(n, 'tpopkontrByTpopkontrId.jahr')
+        return ({
+          proj_id: projId,
+          ap_id: apId,
+          hw: 'Zählung ohne Methode (Freiwilligen-Kontrolle):',
+          url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', popId, 'Teil-Populationen', tpopId, 'Freiwilligen-Kontrollen', tpopkontrId, 'Zaehlungen', n.id],
+          text: [`Population: ${popNr || popId}, Teil-Population: ${tpopNr || tpopId}, Kontrolle: ${tpopkontrJahr || tpopkontrId}, Zählung: ${n.id}`],
+        })
+      })
+    }
   },
   {
     type: 'view',

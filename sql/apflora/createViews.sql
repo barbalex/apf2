@@ -5123,38 +5123,6 @@ ORDER BY
   apflora.ap.id,
   apflora.pop.nr;
 
-DROP VIEW IF EXISTS apflora.v_qk_feldkontrzaehlung_ohnemethode CASCADE;
-CREATE OR REPLACE VIEW apflora.v_qk_feldkontrzaehlung_ohnemethode AS
-SELECT
-  apflora.ap.proj_id,
-  apflora.ap.id as ap_id,
-  'Zaehlung ohne Methode (Feldkontrolle):'::text AS hw,
-  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Aktionspläne', apflora.ap.id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id, 'Feld-Kontrollen', apflora.tpopkontr.id, 'Zählungen', apflora.tpopkontrzaehl.id]::text[] AS url,
-  ARRAY[concat('Population (Nr.): ', apflora.pop.nr), concat('Teil-Population (Nr.): ', apflora.tpop.nr), concat('Feld-Kontrolle (Jahr): ', apflora.tpopkontr.jahr), concat('Zählung (id): ', apflora.tpopkontrzaehl.id)]::text[] AS text,
-  apflora.tpopkontr.jahr AS "Berichtjahr"
-FROM
-  apflora.ap
-  INNER JOIN
-    (apflora.pop
-    INNER JOIN
-      (apflora.tpop
-      INNER JOIN
-        (apflora.tpopkontr
-        INNER JOIN
-          apflora.tpopkontrzaehl
-          ON apflora.tpopkontr.id = apflora.tpopkontrzaehl.tpopkontr_id)
-        ON apflora.tpop.id = apflora.tpopkontr.tpop_id)
-      ON apflora.pop.id = apflora.tpop.pop_id)
-    ON apflora.ap.id = apflora.pop.ap_id
-WHERE
-  apflora.tpopkontrzaehl.methode IS NULL
-  AND apflora.tpopkontr.jahr IS NOT NULL
-  AND apflora.tpopkontr.typ <> 'Freiwilligen-Erfolgskontrolle'
-ORDER BY
-  apflora.pop.nr,
-  apflora.tpop.nr,
-  apflora.tpopkontr.jahr;
-
 DROP VIEW IF EXISTS apflora.v_qk_freiwkontrzaehlung_ohnemethode CASCADE;
 CREATE OR REPLACE VIEW apflora.v_qk_freiwkontrzaehlung_ohnemethode AS
 SELECT
