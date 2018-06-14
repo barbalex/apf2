@@ -12,11 +12,11 @@ export default (
   polygon: {
     type: string,
     properties: Object,
-    geometry: { type: string, coordinates: Array<any> },
+    geometry: { type: String, coordinates: Array<Any> },
   },
-  x: number,
-  y: number
-): boolean => {
+  x: Number,
+  y: Number,
+): Boolean => {
   // convert koordinates to wgs84
   const koordWgs84 = epsg2056to4326(x, y)
 
@@ -28,7 +28,7 @@ export default (
       coordinates: koordWgs84,
     },
   }
-
+  //console.log('isPointInsidePolygon:', {koordPt,polygon})
   // let turf check if the point is in zh
   return inside(koordPt, polygon)
 }
