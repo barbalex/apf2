@@ -672,82 +672,123 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
       }()),
     },
     {
-      title: 'Population: Status ist "erloschen" (urspruenglich oder angesiedelt), es gibt aber eine Teilpopulation mit Status "angesiedelt, Ansaatversuch":',
+      query: 'popStatusErloschenMitTpopAnsaatversuch',
+      title: 'query:',
       messages: (function(){
+
+      }()),
+      data: (data) => {
         const nodes = [...get(data, 'popStatusErloschenMitTpopAnsaatversuch.nodes', [])]
           .sort((a, b) => a.nr - b.nr)
         return nodes
           .map(n => ({
+            proj_id: n.projId,
+            ap_id: n.apId,
+            hw: 'Population: Status ist "erloschen" (urspruenglich oder angesiedelt), es gibt aber eine Teilpopulation mit Status "angesiedelt, Ansaatversuch":',
             url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
             text: [`Population (Nr.): ${n.nr}`],
           }))
-      }()),
+      }
     },
     {
-      title: 'Population: Status ist "angesiedelt", es gibt aber eine Teilpopulation mit Status "urspruenglich":',
+      query: 'popStatusAngesiedeltMitTpopUrspruenglich',
+      title: 'query:',
       messages: (function(){
+
+      }()),
+      data: (data) => {
         const nodes = [...get(data, 'popStatusAngesiedeltMitTpopUrspruenglich.nodes', [])]
           .sort((a, b) => a.nr - b.nr)
         return nodes
           .map(n => ({
             proj_id: n.projId,
             ap_id: n.apId,
-            hw: ':',
+            hw: 'Population: Status ist "angesiedelt", es gibt aber eine Teilpopulation mit Status "urspruenglich":',
             url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
             text: [`Population (Nr.): ${n.nr}`],
           }))
-      }()),
+      }
     },
     // Vergleich Pop Status mit letztem Pop-Bericht
     {
-      title: 'Population: Status ist "aktuell" (ursprünglich oder angesiedelt) oder potentieller Wuchsort; der letzte Populations-Bericht meldet aber "erloschen" und es gab seither keine Ansiedlung:',
+      query: 'popStatusAktuellLetzterPopberErloschen',
+      title: 'query:',
       messages: (function(){
+
+      }()),
+      data: (data) => {
         const nodes = [...get(data, 'popStatusAktuellLetzterPopberErloschen.nodes', [])]
           .sort((a, b) => a.nr - b.nr)
         return nodes
           .map(n => ({
+            proj_id: n.projId,
+            ap_id: n.apId,
+            hw: 'Population: Status ist "aktuell" (ursprünglich oder angesiedelt) oder potentieller Wuchsort; der letzte Populations-Bericht meldet aber "erloschen" und es gab seither keine Ansiedlung:',
             url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
             text: [`Population (Nr.): ${n.nr}`],
           }))
-      }()),
+      }
     },
     {
-      title: 'Population: Status ist "erloschen", der letzte Populations-Bericht meldet aber "aktuell":',
+      query: 'popStatusErloschenLetzterPopberAktuell',
+      title: 'query:',
       messages: (function(){
+
+      }()),
+      data: (data) => {
         const nodes = [...get(data, 'popStatusErloschenLetzterPopberAktuell.nodes', [])]
           .sort((a, b) => a.nr - b.nr)
         return nodes
           .map(n => ({
+            proj_id: n.projId,
+            ap_id: n.apId,
+            hw: 'Population: Status ist "erloschen", der letzte Populations-Bericht meldet aber "aktuell":',
             url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
             text: [`Population (Nr.): ${n.nr}`],
           }))
-      }()),
+      }
     },
     {
-      title: 'Population: Status ist "erloschen" (ursprünglich oder angesiedelt); der letzte Populations-Bericht meldet "erloschen". Seither gab es aber eine Ansiedlung:',
+      query: 'popStatusErloschenLetzterPopberErloschenMitAnsiedlung',
+      title: 'query:',
       messages: (function(){
+
+      }()),
+      data: (data) => {
         const nodes = [...get(data, 'popStatusErloschenLetzterPopberErloschenMitAnsiedlung.nodes', [])]
           .sort((a, b) => a.nr - b.nr)
         return nodes
           .map(n => ({
+            proj_id: n.projId,
+            ap_id: n.apId,
+            hw: 'Population: Status ist "erloschen" (ursprünglich oder angesiedelt); der letzte Populations-Bericht meldet "erloschen". Seither gab es aber eine Ansiedlung:',
             url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
             text: [`Population (Nr.): ${n.nr}`],
           }))
-      }()),
+      }
     },
     // Pop-Bericht/Pop-Massn.-Bericht ohne Jahr/Entwicklung
     {
-      title: 'Populations-Bericht ohne Jahr:',
+      query: 'popberOhneJahr',
+      title: 'query:',
       messages: (function(){
+
+      }()),
+      data: (data) => {
+        const projId = get(data, 'popberOhneJahr.id')
+        const apId = get(data, 'popberOhneJahr.apsByProjId.nodes[0].id')
         const popNodes = get(data, 'popberOhneJahr.apsByProjId.nodes[0].popsByApId.nodes', [])
         const popberNodes = flatten(
           popNodes.map(n => get(n, 'popbersByPopId.nodes'), [])
         )
         return popberNodes.map(n => ({
+          proj_id: projId,
+          ap_id: apId,
+          hw: 'Populations-Bericht ohne Jahr:',
           url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', get(n, 'popByPopId.id'), 'Kontroll-Berichte', n.id],
           text: [`Population (Nr.): ${get(n, 'popByPopId.nr')}, Populations-Bericht (id): ${n.id}`],
         }))
-      }()),
+      }
     },
     {
       query: 'popberOhneEntwicklung',
