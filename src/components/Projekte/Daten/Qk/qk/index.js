@@ -750,108 +750,169 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
       }()),
     },
     {
-      title: 'Populations-Bericht ohne Entwicklung:',
+      query: 'popberOhneEntwicklung',
+      title: 'query:',
       messages: (function(){
+
+      }()),
+      data: (data) => {
+        const projId = get(data, 'popberOhneEntwicklung.id')
+        const apId = get(data, 'popberOhneEntwicklung.apsByProjId.nodes[0].id')
         const popNodes = get(data, 'popberOhneEntwicklung.apsByProjId.nodes[0].popsByApId.nodes', [])
         const popberNodes = flatten(
           popNodes.map(n => get(n, 'popbersByPopId.nodes'), [])
         )
         return popberNodes.map(n => ({
+          proj_id: projId,
+          ap_id: apId,
+          hw: 'Populations-Bericht ohne Entwicklung:',
           url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', get(n, 'popByPopId.id'), 'Kontroll-Berichte', n.id],
           text: [`Population (Nr.): ${get(n, 'popByPopId.nr')}, Populations-Bericht (id): ${n.id}`],
         }))
-      }()),
+      }
     },
     {
-      title: 'Populations-Massnahmen-Bericht ohne Jahr:',
+      query: 'popmassnberOhneJahr',
+      title: 'query:',
       messages: (function(){
+
+      }()),
+      data: (data) => {
+        const projId = get(data, 'popmassnberOhneJahr.id')
+        const apId = get(data, 'popmassnberOhneJahr.apsByProjId.nodes[0].id')
         const popNodes = get(data, 'popmassnberOhneJahr.apsByProjId.nodes[0].popsByApId.nodes', [])
         const popberNodes = flatten(
           popNodes.map(n => get(n, 'popmassnbersByPopId.nodes'), [])
         )
         return popberNodes.map(n => ({
+          proj_id: projId,
+          ap_id: apId,
+          hw: 'Populations-Massnahmen-Bericht ohne Jahr:',
           url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', get(n, 'popByPopId.id'), 'Massnahmen-Berichte', n.id],
           text: [`Population (Nr.): ${get(n, 'popByPopId.nr')}, Populations-Massnahmen-Bericht (id): ${n.id}`],
         }))
-      }()),
+      }
     },
     {
-      title: 'Populations-Massnahmen-Bericht ohne Entwicklung:',
+      query: 'popmassnberOhneEntwicklung',
+      title: 'query:',
       messages: (function(){
+
+      }()),
+      data: (data) => {
+        const projId = get(data, 'popmassnberOhneEntwicklung.id')
+        const apId = get(data, 'popmassnberOhneEntwicklung.apsByProjId.nodes[0].id')
         const popNodes = get(data, 'popmassnberOhneEntwicklung.apsByProjId.nodes[0].popsByApId.nodes', [])
         const popberNodes = flatten(
           popNodes.map(n => get(n, 'popmassnbersByPopId.nodes'), [])
         )
         return popberNodes.map(n => ({
+          proj_id: projId,
+          ap_id: apId,
+          hw: 'Populations-Massnahmen-Bericht ohne Entwicklung:',
           url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', get(n, 'popByPopId.id'), 'Massnahmen-Berichte', n.id],
           text: [`Population (Nr.): ${get(n, 'popByPopId.nr')}, Populations-Massnahmen-Bericht (id): ${n.id}`],
         }))
-      }()),
+      }
     },
 
     // 3. Teilpopulation
 
     // Stati mit letztem Bericht vergleichen
     {
-      title: 'Teilpopulation: Status ist "aktuell" (ursprünglich oder angesiedelt) oder potentieller Wuchsort; der letzte Teilpopulations-Bericht meldet aber "erloschen" und es gab seither keine Ansiedlung:',
+      query: 'tpopStatusAktuellLetzterTpopberErloschen',
+      title: 'query:',
       messages: (function(){
+
+      }()),
+      data: (data) => {
         const nodes = [...get(data, 'tpopStatusAktuellLetzterTpopberErloschen.nodes', [])]
           .sort((a, b) => a.nr - b.nr)
         return nodes
           .map(n => ({
+            proj_id: n.projId,
+            ap_id: n.apId,
+            hw: 'Teilpopulation: Status ist "aktuell" (ursprünglich oder angesiedelt) oder potentieller Wuchsort; der letzte Teilpopulations-Bericht meldet aber "erloschen" und es gab seither keine Ansiedlung:',
             url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.popId, 'Teil-Populationen', n.id],
             text: [`Population (Nr.): ${n.popNr}, Teil-Population (Nr.): ${n.nr}`],
           }))
-      }()),
+      }
     },
     {
-      title: 'Teilpopulation: Status ist "erloschen" (ursprünglich oder angesiedelt), Ansaatversuch oder potentieller Wuchsort; der letzte Teilpopulations-Bericht meldet aber "stabil" und es gab seither keine Ansiedlung:',
+      query: 'tpopStatusErloschenLetzterTpopberStabil',
+      title: 'query:',
       messages: (function(){
+
+      }()),
+      data: (data) => {
         const nodes = [...get(data, 'tpopStatusErloschenLetzterTpopberStabil.nodes', [])]
           .sort((a, b) => a.nr - b.nr)
         return nodes
           .map(n => ({
+            proj_id: n.projId,
+            ap_id: n.apId,
+            hw: 'Teilpopulation: Status ist "erloschen" (ursprünglich oder angesiedelt), Ansaatversuch oder potentieller Wuchsort; der letzte Teilpopulations-Bericht meldet aber "stabil" und es gab seither keine Ansiedlung:',
             url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.popId, 'Teil-Populationen', n.id],
             text: [`Population: ${n.popNr || n.popId}, Teil-Population: ${n.nr || n.id}`],
           }))
-      }()),
+      }
     },
     {
-      title: 'Teilpopulation: Status ist "erloschen" (ursprünglich oder angesiedelt), Ansaatversuch oder potentieller Wuchsort; der letzte Teilpopulations-Bericht meldet aber "abnehmend" und es gab seither keine Ansiedlung:',
+      query: 'tpopStatusErloschenLetzterTpopberAbnehmend',
+      title: 'query:',
       messages: (function(){
+
+      }()),
+      data: (data) => {
         const nodes = [...get(data, 'tpopStatusErloschenLetzterTpopberAbnehmend.nodes', [])]
           .sort((a, b) => a.nr - b.nr)
         return nodes
           .map(n => ({
+            proj_id: n.projId,
+            ap_id: n.apId,
+            hw: 'Teilpopulation: Status ist "erloschen" (ursprünglich oder angesiedelt), Ansaatversuch oder potentieller Wuchsort; der letzte Teilpopulations-Bericht meldet aber "abnehmend" und es gab seither keine Ansiedlung:',
             url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.popId, 'Teil-Populationen', n.id],
             text: [`Population: ${n.popNr || n.popId}, Teil-Population: ${n.nr || n.id}`],
           }))
-      }()),
+      }
     },
     {
       query: 'tpopStatusErloschenLetzterTpopberUnsicher',
-      title: 'Teilpopulation: Status ist "erloschen" (ursprünglich oder angesiedelt) oder potentieller Wuchsort; der letzte Teilpopulations-Bericht meldet aber "unsicher" und es gab seither keine Ansiedlung:',
+      title: 'query:',
       messages: (function(){
+
+      }()),
+      data: (data) => {
         const nodes = [...get(data, 'tpopStatusErloschenLetzterTpopberUnsicher.nodes', [])]
           .sort((a, b) => a.nr - b.nr)
         return nodes
           .map(n => ({
+            proj_id: n.projId,
+            ap_id: n.apId,
+            hw: 'Teilpopulation: Status ist "erloschen" (ursprünglich oder angesiedelt) oder potentieller Wuchsort; der letzte Teilpopulations-Bericht meldet aber "unsicher" und es gab seither keine Ansiedlung:',
             url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.popId, 'Teil-Populationen', n.id],
             text: [`Population: ${n.popNr || n.popId}, Teil-Population: ${n.nr || n.id}`],
           }))
-      }()),
+      }
     },
     {
-      title: 'Teilpopulation: Status ist "erloschen" (ursprünglich oder angesiedelt), Ansaatversuch oder potentieller Wuchsort; der letzte Teilpopulations-Bericht meldet aber "zunehmend" und es gab seither keine Ansiedlung:',
+      query: 'tpopStatusErloschenLetzterTpopberZunehmend',
+      title: 'query:',
       messages: (function(){
+
+      }()),
+      data: (data) => {
         const nodes = [...get(data, 'tpopStatusErloschenLetzterTpopberZunehmend.nodes', [])]
           .sort((a, b) => a.nr - b.nr)
         return nodes
           .map(n => ({
+            proj_id: n.projId,
+            ap_id: n.apId,
+            hw: 'Teilpopulation: Status ist "erloschen" (ursprünglich oder angesiedelt), Ansaatversuch oder potentieller Wuchsort; der letzte Teilpopulations-Bericht meldet aber "zunehmend" und es gab seither keine Ansiedlung:',
             url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.popId, 'Teil-Populationen', n.id],
             text: [`Population: ${n.popNr || n.popId}, Teil-Population: ${n.nr || n.id}`],
           }))
-      }()),
+      }
     },
     {
       query: 'tpopStatusErloschenLetzterTpopberAktuell',
