@@ -5375,17 +5375,6 @@ WHERE
       apflora.tpopmassn.typ < 4
   );
 
--- wozu wird das benutzt?
-DROP VIEW IF EXISTS apflora.v_qk_tpop_mitstatusaktuellundtpopbererloschen_maxtpopberjahr CASCADE;
-CREATE OR REPLACE VIEW apflora.v_qk_tpop_mitstatusaktuellundtpopbererloschen_maxtpopberjahr AS
-SELECT
-  apflora.tpopber.tpop_id,
-  max(apflora.tpopber.jahr) AS "MaxTPopBerJahr"
-FROM
-  apflora.tpopber
-GROUP BY
-  apflora.tpopber.tpop_id;
-
 DROP VIEW IF EXISTS apflora.v_q_tpop_erloschenundrelevantaberletztebeobvor1950_maxbeobjahr CASCADE;
 CREATE OR REPLACE VIEW apflora.v_q_tpop_erloschenundrelevantaberletztebeobvor1950_maxbeobjahr AS
 SELECT
@@ -5475,40 +5464,6 @@ ORDER BY
   apflora.ae_eigenschaften.artname;
 
 -- new views beginning 2017.10.04
-DROP VIEW IF EXISTS apflora.v_qk_pop_mit_ber_zunehmend_ohne_tpopber_zunehmend CASCADE;
-CREATE OR REPLACE VIEW apflora.v_qk_pop_mit_ber_zunehmend_ohne_tpopber_zunehmend AS
-SELECT DISTINCT
-  apflora.ap.proj_id,
-  apflora.ap.id as ap_id,
-  apflora.pop.id as pop_id,
-  apflora.popber.jahr AS "Berichtjahr",
-  'Populationen mit Bericht "zunehmend" ohne Teil-Population mit Bericht "zunehmend":'::text AS hw,
-  ARRAY['Projekte', apflora.ap.proj_id , 'Aktionspläne', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS url,
-  ARRAY[concat('Population (Nr.): ', apflora.pop.nr)]::text[] AS text
-FROM
-  apflora.ap
-  INNER JOIN
-  apflora.pop
-    INNER JOIN apflora.popber
-    ON apflora.pop.id = apflora.popber.pop_id
-  ON apflora.ap.id = apflora.pop.ap_id
-WHERE
-  apflora.popber.entwicklung = 3
-  AND apflora.popber.pop_id NOT IN (
-    SELECT DISTINCT apflora.tpop.pop_id
-    FROM
-      apflora.tpop
-      INNER JOIN apflora.tpopber
-      ON apflora.tpop.id = apflora.tpopber.tpop_id
-    WHERE
-      apflora.tpopber.entwicklung = 3
-      AND apflora.tpopber.jahr = apflora.popber.jahr
-  )
-ORDER BY
-  apflora.ap.proj_id,
-  apflora.ap.id,
-  apflora.pop.id,
-  apflora.popber.jahr;
 
 DROP VIEW IF EXISTS apflora.v_q_pop_mit_ber_zunehmend_ohne_tpopber_zunehmend CASCADE;
 CREATE OR REPLACE VIEW apflora.v_q_pop_mit_ber_zunehmend_ohne_tpopber_zunehmend AS
@@ -5543,42 +5498,6 @@ ORDER BY
   apflora.pop.id,
   apflora.popber.jahr;
 
-DROP VIEW IF EXISTS apflora.v_qk_pop_mit_ber_abnehmend_ohne_tpopber_abnehmend CASCADE;
-CREATE OR REPLACE VIEW apflora.v_qk_pop_mit_ber_abnehmend_ohne_tpopber_abnehmend AS
-SELECT DISTINCT
-  apflora.ap.proj_id,
-  apflora.ap.id as ap_id,
-  apflora.pop.id as pop_id,
-  apflora.popber.jahr AS "Berichtjahr",
-  'Populationen mit Bericht "abnehmend" ohne Teil-Population mit Bericht "abnehmend":'::text AS hw,
-  ARRAY['Projekte', apflora.ap.proj_id , 'Aktionspläne', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS url,
-  ARRAY[concat('Population (Nr.): ', apflora.pop.nr)]::text[] AS text
-FROM
-  apflora.ap
-  INNER JOIN
-  apflora.pop
-    INNER JOIN apflora.popber
-    ON apflora.pop.id = apflora.popber.pop_id
-  ON apflora.ap.id = apflora.pop.ap_id
-WHERE
-  apflora.popber.entwicklung = 1
-  AND apflora.popber.pop_id NOT IN (
-    SELECT DISTINCT apflora.tpop.pop_id
-    FROM
-      apflora.tpop
-      INNER JOIN apflora.tpopber
-      ON apflora.tpop.id = apflora.tpopber.tpop_id
-    WHERE
-      apflora.tpopber.entwicklung = 1
-      AND apflora.tpopber.jahr = apflora.popber.jahr
-  )
-ORDER BY
-  apflora.ap.proj_id,
-  apflora.ap.id,
-  apflora.pop.id,
-  apflora.popber.jahr;
-
-
 DROP VIEW IF EXISTS apflora.v_q_pop_mit_ber_abnehmend_ohne_tpopber_abnehmend CASCADE;
 CREATE OR REPLACE VIEW apflora.v_q_pop_mit_ber_abnehmend_ohne_tpopber_abnehmend AS
 SELECT DISTINCT
@@ -5604,41 +5523,6 @@ WHERE
       ON apflora.tpop.id = apflora.tpopber.tpop_id
     WHERE
       apflora.tpopber.entwicklung = 1
-      AND apflora.tpopber.jahr = apflora.popber.jahr
-  )
-ORDER BY
-  apflora.ap.proj_id,
-  apflora.ap.id,
-  apflora.pop.id,
-  apflora.popber.jahr;
-
-DROP VIEW IF EXISTS apflora.v_qk_pop_mit_ber_erloschen_ohne_tpopber_erloschen CASCADE;
-CREATE OR REPLACE VIEW apflora.v_qk_pop_mit_ber_erloschen_ohne_tpopber_erloschen AS
-SELECT DISTINCT
-  apflora.ap.proj_id,
-  apflora.ap.id as ap_id,
-  apflora.pop.id as pop_id,
-  apflora.popber.jahr AS "Berichtjahr",
-  'Populationen mit Bericht "erloschen" ohne Teil-Population mit Bericht "erloschen":'::text AS hw,
-  ARRAY['Projekte', apflora.ap.proj_id , 'Aktionspläne', apflora.ap.id, 'Populationen', apflora.pop.id]::text[] AS url,
-  ARRAY[concat('Population (Nr.): ', apflora.pop.nr)]::text[] AS text
-FROM
-  apflora.ap
-  INNER JOIN
-  apflora.pop
-    INNER JOIN apflora.popber
-    ON apflora.pop.id = apflora.popber.pop_id
-  ON apflora.ap.id = apflora.pop.ap_id
-WHERE
-  apflora.popber.entwicklung = 8
-  AND apflora.popber.pop_id NOT IN (
-    SELECT DISTINCT apflora.tpop.pop_id
-    FROM
-      apflora.tpop
-      INNER JOIN apflora.tpopber
-      ON apflora.tpop.id = apflora.tpopber.tpop_id
-    WHERE
-      apflora.tpopber.entwicklung = 8
       AND apflora.tpopber.jahr = apflora.popber.jahr
   )
 ORDER BY
