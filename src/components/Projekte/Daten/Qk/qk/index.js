@@ -25,12 +25,8 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
       }())
     },
     {
-      query: 'zielOhneTyp',
       title: 'Ziel ohne Typ:',
-      messages: (function(){
-
-      }()),
-      data: (data) => {
+      messages: (function() {
         const zielNodes = sortBy(
           [...get(data, 'zielOhneTyp.apsByProjId.nodes[0].zielsByApId.nodes', [])],
           ['jahr', 'id']
@@ -39,15 +35,11 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
           url: ['Projekte', projId, 'Aktionspläne', apId, 'AP-Ziele', n.jahr, n.id],
           text: [`Ziel: ${n.jahr || n.id}`],
         }))
-      }
+      }()),
     },
     {
-      query: 'zielOhneZiel',
       title: 'Ziel ohne Ziel:',
-      messages: (function(){
-
-      }()),
-      data: (data) => {
+      messages: (function() {
         const zielNodes = sortBy(
           [...get(data, 'zielOhneZiel.apsByProjId.nodes[0].zielsByApId.nodes', [])],
           ['jahr', 'id']
@@ -56,15 +48,11 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
           url: ['Projekte', projId, 'Aktionspläne', apId, 'AP-Ziele', n.jahr, n.id],
           text: [`Ziel: ${n.jahr || n.id}`],
         }))
-      }
+      }()),
     },
     {
-      query: 'zielberOhneJahr',
       title: 'Ziel-Bericht ohne Jahr:',
-      messages: (function(){
-
-      }()),
-      data: (data) => {
+      messages: (function() {
         const zielNodes = get(data, 'zielberOhneJahr.apsByProjId.nodes[0].zielsByApId.nodes', [])
         const zielberNodes = flatten(
           zielNodes.map(n => get(n, 'zielbersByZielId.nodes'), [])
@@ -77,15 +65,11 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
             text: [`Ziel: ${zielJahr || zielId}, Bericht: ${n.id}`],
           })
         })
-      }
+      }()),
     },
     {
-      query: 'zielberOhneEntwicklung',
       title: 'Ziel-Bericht ohne Entwicklung:',
-      messages: (function(){
-
-      }()),
-      data: (data) => {
+      messages: (function() {
         const zielNodes = get(data, 'zielberOhneEntwicklung.apsByProjId.nodes[0].zielsByApId.nodes', [])
         const zielberNodes = flatten(
           zielNodes.map(n => get(n, 'zielbersByZielId.nodes'), [])
@@ -94,56 +78,44 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
           url: ['Projekte', projId, 'Aktionspläne', apId, 'AP-Ziele', get(n, 'zielByZielId.jahr'), get(n, 'zielByZielId.id'), 'Berichte', n.id],
           text: [`Ziel-Bericht (id): ${n.id}`],
         }))
-      }
+      }()),
     },
     // AP-Erfolgskriterium ohne Beurteilung/Kriterien
     {
-      query: 'erfkritOhneBeurteilung',
       title: 'Erfolgskriterium ohne Beurteilung:',
-      messages: (function(){
-
-      }()),
-      data: (data) => {
+      messages: (function() {
         const erfkritNodes = get(data, 'erfkritOhneBeurteilung.apsByProjId.nodes[0].erfkritsByApId.nodes', [])
         return erfkritNodes.map(n => ({
           url: ['Projekte', projId, 'Aktionspläne', apId, 'AP-Erfolgskriterien', n.id],
           text: [`Erfolgskriterium (id): ${n.id}`],
         }))
-      }
+      }()),
     },
     {
-      query: 'erfkritOhneKriterien',
       title: 'Erfolgskriterium ohne Kriterien:',
-      messages: (function(){
-
-      }()),
-      data: (data) => {
+      messages: (function() {
         const erfkritNodes = get(data, 'erfkritOhneKriterien.apsByProjId.nodes[0].erfkritsByApId.nodes', [])
         return erfkritNodes.map(n => ({
           url: ['Projekte', projId, 'Aktionspläne', apId, 'AP-Erfolgskriterien', n.id],
           text: [`Erfolgskriterium (id): ${n.id}`],
         }))
-      }
+      }()),
     },
     // AP-Bericht ohne Jahr/Vergleich Vorjahr-Gesamtziel/Beurteilung
     {
-      query: 'apberOhneJahr',
       title: 'AP-Bericht ohne Jahr:',
-      messages: (function(){
-
-      }()),
-      data: (data) => {
+      messages: (function() {
         const erfkritNodes = get(data, 'apberOhneJahr.apsByProjId.nodes[0].apbersByApId.nodes', [])
         return erfkritNodes.map(n => ({
           url: ['Projekte', projId, 'Aktionspläne', apId, 'AP-Berichte', n.id],
           text: [`AP-Bericht (id): ${n.id}`],
         }))
-      }
+      }()),
     },
     {
       query: 'apberOhneVergleichVorjahrGesamtziel',
       title: 'AP-Bericht ohne Vergleich Vorjahr - Gesamtziel:',
-      messages: (function(){
+      messages: (function() {
 
       }()),
       data: (data) => {
@@ -157,7 +129,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     {
       query: 'apberOhneBeurteilung',
       title: 'AP-Bericht ohne Beurteilung:',
-      messages: (function(){
+      messages: (function() {
 
       }()),
       data: (data) => {
@@ -172,7 +144,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     {
       query: 'assozartOhneArt',
       title: 'Assoziierte Art ohne Art:',
-      messages: (function(){
+      messages: (function() {
 
       }()),
       data: (data) => {
@@ -190,7 +162,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     {
       query: 'popOhneNr',
       title: 'Population ohne Nr.:',
-      messages: (function(){
+      messages: (function() {
 
       }()),
       data: (data) => {
@@ -204,7 +176,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     {
       query: 'popOhneName',
       title: 'Population ohne Name:',
-      messages: (function(){
+      messages: (function() {
 
       }()),
       data: (data) => {
@@ -219,7 +191,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     {
       query: 'popOhneStatus',
       title: 'Population ohne Status:',
-      messages: (function(){
+      messages: (function() {
 
       }()),
       data: (data) => {
@@ -234,7 +206,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     {
       query: 'popOhneBekanntSeit',
       title: 'Population ohne "bekannt seit":',
-      messages: (function(){
+      messages: (function() {
 
       }()),
       data: (data) => {
@@ -249,7 +221,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     {
       query: 'popOhneKoord',
       title: 'Population: Mindestens eine Koordinate fehlt:',
-      messages: (function(){
+      messages: (function() {
 
       }()),
       data: (data) => {
@@ -264,7 +236,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     {
       query: 'popOhneTpop',
       title: 'Population ohne Teilpopulation:',
-      messages: (function(){
+      messages: (function() {
 
       }()),
       data: (data) => {
@@ -280,7 +252,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     {
       query: 'popMitStatusUnklarOhneBegruendung',
       title: 'Population mit "Status unklar", ohne Begründung:',
-      messages: (function(){
+      messages: (function() {
 
       }()),
       data: (data) => {
@@ -295,7 +267,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     {
       query: 'popMitMehrdeutigerNr',
       title: 'Population: Die Nr. ist mehrdeutig:',
-      messages: (function(){
+      messages: (function() {
 
       }()),
       data: (data) => {
@@ -311,7 +283,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     {
       query: 'popOhnePopber',
       title: 'Population mit angesiedelten Teilpopulationen (vor dem Berichtjahr), die (im Berichtjahr) kontrolliert wurden, aber ohne Populations-Bericht (im Berichtjahr):',
-      messages: (function(){
+      messages: (function() {
 
       }()),
       data: (data) => {
@@ -329,7 +301,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     {
       query: 'popMitBerZunehmendOhneTpopberZunehmend',
       title: 'Populationen mit Bericht "zunehmend" ohne Teil-Population mit Bericht "zunehmend":',
-      messages: (function(){
+      messages: (function() {
 
       }()),
       data: (data) => {
@@ -345,7 +317,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     {
       query: 'popMitBerAbnehmendOhneTpopberAbnehmend',
       title: 'Populationen mit Bericht "abnehmend" ohne Teil-Population mit Bericht "abnehmend":',
-      messages: (function(){
+      messages: (function() {
 
       }()),
       data: (data) => {
@@ -361,7 +333,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     {
       query: 'popMitBerErloschenOhneTpopberErloschen',
       title: 'Populationen mit Bericht "erloschen" ohne Teil-Population mit Bericht "erloschen":',
-      messages: (function(){
+      messages: (function() {
 
       }()),
       data: (data) => {
@@ -377,7 +349,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     {
       query: 'popMitBerErloschenUndTpopberNichtErloschen',
       title: 'Populationen mit Bericht "erloschen" und mindestens einer gemäss Bericht nicht erloschenen Teil-Population:',
-      messages: (function(){
+      messages: (function() {
 
       }()),
       data: (data) => {
@@ -396,7 +368,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     {
       query: 'popOhneTpopMitGleichemStatus',
       title: 'Population: Keine Teil-Population hat den Status der Population:',
-      messages: (function(){
+      messages: (function() {
 
       }()),
       data: (data) => {
@@ -412,7 +384,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     {
       query: 'popStatus300TpopStatusAnders',
       title: 'Population: Status ist "potentieller Wuchs-/Ansiedlungsort". Es gibt aber Teil-Populationen mit abweichendem Status:',
-      messages: (function(){
+      messages: (function() {
 
       }()),
       data: (data) => {
@@ -428,7 +400,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     {
       query: 'popStatus201TpopStatusUnzulaessig',
       title: 'Population: Status ist "Ansaatversuch". Es gibt Teil-Populationen mit nicht zulässigen Stati ("ursprünglich" oder "angesiedelt, aktuell:',
-      messages: (function(){
+      messages: (function() {
 
       }()),
       data: (data) => {
@@ -444,7 +416,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     {
       query: 'popStatus202TpopStatusAnders',
       title: 'Population: Status ist "angesiedelt nach Beginn AP, erloschen/nicht etabliert". Es gibt Teil-Populationen mit abweichendem Status:',
-      messages: (function(){
+      messages: (function() {
 
       }()),
       data: (data) => {
@@ -460,7 +432,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     {
       query: 'popStatus211TpopStatusUnzulaessig',
       title: 'Population: Status ist "angesiedelt vor Beginn AP, erloschen/nicht etabliert". Es gibt Teil-Populationen mit nicht zulässigen Stati ("ursprünglich", "angesiedelt, aktuell", "Ansaatversuch", "potentieller Wuchsort"):',
-      messages: (function(){
+      messages: (function() {
 
       }()),
       data: (data) => {
@@ -476,7 +448,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     {
       query: 'popStatus200TpopStatusUnzulaessig',
       title: 'Population: Status ist "angesiedelt nach Beginn AP, aktuell". Es gibt Teil-Populationen mit nicht zulässigen Stati ("ursprünglich", "angesiedelt vor Beginn AP, aktuell"):',
-      messages: (function(){
+      messages: (function() {
 
       }()),
       data: (data) => {
@@ -492,7 +464,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     {
       query: 'popStatus210TpopStatusUnzulaessig',
       title: 'Population: Status ist "angesiedelt vor Beginn AP, aktuell". Es gibt Teil-Populationen mit nicht zulässigen Stati ("ursprünglich"):',
-      messages: (function(){
+      messages: (function() {
 
       }()),
       data: (data) => {
@@ -508,7 +480,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     {
       query: 'popStatus101TpopStatusAnders',
       title: 'Population: Status ist "ursprünglich, erloschen". Es gibt Teil-Populationen (ausser potentiellen Wuchs-/Ansiedlungsorten) mit abweichendem Status:',
-      messages: (function(){
+      messages: (function() {
 
       }()),
       data: (data) => {
@@ -526,7 +498,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     {
       query: 'popStatusErloschenLetzterPopberZunehmend',
       title: 'Population: Status ist "erloschen" (ursprünglich oder angesiedelt), Ansaatversuch oder potentieller Wuchsort; der letzte Populations-Bericht meldet aber "zunehmend" und es gab seither keine Ansiedlung:',
-      messages: (function(){
+      messages: (function() {
 
       }()),
       data: (data) => {
@@ -542,7 +514,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     {
       query: 'popStatusErloschenLetzterPopberStabil',
       title: 'Population: Status ist "erloschen" (ursprünglich oder angesiedelt), Ansaatversuch oder potentieller Wuchsort; der letzte Populations-Bericht meldet aber "stabil" und es gab seither keine Ansiedlung:',
-      messages: (function(){
+      messages: (function() {
 
       }()),
       data: (data) => {
@@ -558,7 +530,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     {
       query: 'popStatusErloschenLetzterPopberAbnehmend',
       title: 'Population: Status ist "erloschen" (ursprünglich oder angesiedelt), Ansaatversuch oder potentieller Wuchsort; der letzte Populations-Bericht meldet aber "abnehmend" und es gab seither keine Ansiedlung:',
-      messages: (function(){
+      messages: (function() {
 
       }()),
       data: (data) => {
@@ -574,7 +546,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     {
       query: 'popStatusErloschenLetzterPopberUnsicher',
       title: 'Population: Status ist "erloschen" (ursprünglich oder angesiedelt) oder potentieller Wuchsort; der letzte Populations-Bericht meldet aber "unsicher" und es gab seither keine Ansiedlung:',
-      messages: (function(){
+      messages: (function() {
 
       }()),
       data: (data) => {
@@ -592,7 +564,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     {
       query: 'popOhnePopmassnber',
       title: 'Population mit angesiedelten Teilpopulationen (vor dem Berichtjahr), die (im Berichtjahr) kontrolliert wurden, aber ohne Massnahmen-Bericht (im Berichtjahr):',
-      messages: (function(){
+      messages: (function() {
 
       }()),
       data: (data) => {
@@ -610,7 +582,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     {
       query: 'popKoordEntsprechenKeinerTpop',
       title: 'Population: Koordinaten entsprechen keiner Teilpopulation:',
-      messages: (function(){
+      messages: (function() {
 
       }()),
       data: (data) => {
@@ -625,7 +597,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     },
     {
       title: 'Population: Status ist "angesiedelt, Ansaatversuch", es gibt aber eine aktuelle Teilpopulation oder eine ursprüngliche erloschene:',
-      messages: (function(){
+      messages: (function() {
         const nodes = [...get(data, 'popStatusAnsaatversuchTpopAktuell.nodes', [])]
           .sort((a, b) => a.nr - b.nr)
         return nodes
@@ -637,7 +609,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     },
     {
       title: 'Population: Status ist "angesiedelt, Ansaatversuch", alle Teilpopulationen sind gemäss Status erloschen:',
-      messages: (function(){
+      messages: (function() {
         const nodes = [...get(data, 'popStatusAnsaatversuchAlleTpopErloschen.nodes', [])]
           .sort((a, b) => a.nr - b.nr)
         return nodes
@@ -649,7 +621,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     },
     {
       title: 'Population: Status ist "angesiedelt, Ansaatversuch", es gibt aber eine Teilpopulation mit Status "urspruenglich, erloschen:',
-      messages: (function(){
+      messages: (function() {
         const nodes = [...get(data, 'popStatusAnsaatversuchMitTpopUrspruenglichErloschen.nodes', [])]
           .sort((a, b) => a.nr - b.nr)
         return nodes
@@ -661,7 +633,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     },
     {
       title: 'Population: Status ist "erloschen" (urspruenglich oder angesiedelt), es gibt aber eine Teilpopulation mit Status "aktuell" (urspruenglich oder angesiedelt):',
-      messages: (function(){
+      messages: (function() {
         const nodes = [...get(data, 'popStatusErloschenMitTpopAktuell.nodes', [])]
           .sort((a, b) => a.nr - b.nr)
         return nodes
@@ -674,7 +646,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     {
       query: 'popStatusErloschenMitTpopAnsaatversuch',
       title: 'query:',
-      messages: (function(){
+      messages: (function() {
 
       }()),
       data: (data) => {
@@ -693,7 +665,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     {
       query: 'popStatusAngesiedeltMitTpopUrspruenglich',
       title: 'query:',
-      messages: (function(){
+      messages: (function() {
 
       }()),
       data: (data) => {
@@ -713,7 +685,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     {
       query: 'popStatusAktuellLetzterPopberErloschen',
       title: 'query:',
-      messages: (function(){
+      messages: (function() {
 
       }()),
       data: (data) => {
@@ -732,7 +704,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     {
       query: 'popStatusErloschenLetzterPopberAktuell',
       title: 'query:',
-      messages: (function(){
+      messages: (function() {
 
       }()),
       data: (data) => {
@@ -751,7 +723,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     {
       query: 'popStatusErloschenLetzterPopberErloschenMitAnsiedlung',
       title: 'query:',
-      messages: (function(){
+      messages: (function() {
 
       }()),
       data: (data) => {
@@ -771,7 +743,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     {
       query: 'popberOhneJahr',
       title: 'query:',
-      messages: (function(){
+      messages: (function() {
 
       }()),
       data: (data) => {
@@ -793,7 +765,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     {
       query: 'popberOhneEntwicklung',
       title: 'query:',
-      messages: (function(){
+      messages: (function() {
 
       }()),
       data: (data) => {
@@ -815,7 +787,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     {
       query: 'popmassnberOhneJahr',
       title: 'query:',
-      messages: (function(){
+      messages: (function() {
 
       }()),
       data: (data) => {
@@ -837,7 +809,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     {
       query: 'popmassnberOhneEntwicklung',
       title: 'query:',
-      messages: (function(){
+      messages: (function() {
 
       }()),
       data: (data) => {
@@ -863,7 +835,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     {
       query: 'tpopStatusAktuellLetzterTpopberErloschen',
       title: 'query:',
-      messages: (function(){
+      messages: (function() {
 
       }()),
       data: (data) => {
@@ -882,7 +854,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     {
       query: 'tpopStatusErloschenLetzterTpopberStabil',
       title: 'query:',
-      messages: (function(){
+      messages: (function() {
 
       }()),
       data: (data) => {
@@ -901,7 +873,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     {
       query: 'tpopStatusErloschenLetzterTpopberAbnehmend',
       title: 'query:',
-      messages: (function(){
+      messages: (function() {
 
       }()),
       data: (data) => {
@@ -920,7 +892,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     {
       query: 'tpopStatusErloschenLetzterTpopberUnsicher',
       title: 'query:',
-      messages: (function(){
+      messages: (function() {
 
       }()),
       data: (data) => {
@@ -939,7 +911,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     {
       query: 'tpopStatusErloschenLetzterTpopberZunehmend',
       title: 'query:',
-      messages: (function(){
+      messages: (function() {
 
       }()),
       data: (data) => {
@@ -958,7 +930,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     {
       query: 'tpopStatusErloschenLetzterTpopberAktuell',
       title: 'query:',
-      messages: (function(){
+      messages: (function() {
 
       }()),
       data: (data) => {
@@ -977,7 +949,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     {
       query: 'tpopStatusErloschenLetzterTpopberErloschenMitAnsiedlung',
       title: 'query:',
-      messages: (function(){
+      messages: (function() {
 
       }()),
       data: (data) => {
@@ -997,7 +969,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     {
       query: 'tpopOhneNr',
       title: 'query:',
-      messages: (function(){
+      messages: (function() {
 
       }()),
       data: (data) => {
@@ -1019,7 +991,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     {
       query: 'tpopOhneFlurname',
       title: 'query:',
-      messages: (function(){
+      messages: (function() {
 
       }()),
       data: (data) => {
@@ -1041,7 +1013,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     {
       query: 'tpopOhneStatus',
       title: 'query:',
-      messages: (function(){
+      messages: (function() {
 
       }()),
       data: (data) => {
@@ -1063,7 +1035,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     {
       query: 'tpopOhneBekanntSeit',
       title: 'query:',
-      messages: (function(){
+      messages: (function() {
 
       }()),
       data: (data) => {
@@ -1085,7 +1057,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     {
       query: 'tpopOhneApberRelevant',
       title: 'query:',
-      messages: (function(){
+      messages: (function() {
 
       }()),
       data: (data) => {
@@ -1107,7 +1079,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     {
       query: 'tpopOhneKoord',
       title: 'query:',
-      messages: (function(){
+      messages: (function() {
 
       }()),
       data: (data) => {
@@ -1129,7 +1101,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     {
       query: 'tpopStatusPotentiellApberrelevant',
       title: 'query:',
-      messages: (function(){
+      messages: (function() {
 
       }()),
       data: (data) => {
@@ -1151,7 +1123,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     {
       query: 'tpopErloschenUndRelevantLetzteBeobVor1950',
       title: 'query:',
-      messages: (function(){
+      messages: (function() {
 
       }()),
       data: (data) => {
@@ -1170,7 +1142,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     {
       query: 'tpopStatusUnklarOhneBegruendung',
       title: 'query:',
-      messages: (function(){
+      messages: (function() {
 
       }()),
       data: (data) => {
@@ -1192,7 +1164,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     {
       query: 'tpopPopnrTponrMehrdeutig',
       title: 'query:',
-      messages: (function(){
+      messages: (function() {
 
       }()),
       data: (data) => {
@@ -1211,7 +1183,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     {
       query: 'tpopOhneTpopber',
       title: 'query:',
-      messages: (function(){
+      messages: (function() {
 
       }()),
       data: (data) => {
@@ -1230,7 +1202,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     {
       query: 'tpopOhneMassnber',
       title: 'query:',
-      messages: (function(){
+      messages: (function() {
 
       }()),
       data: (data) => {
@@ -1249,7 +1221,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     {
       query: 'tpopMitStatusAnsaatversuchUndZaehlungMitAnzahl',
       title: 'query:',
-      messages: (function(){
+      messages: (function() {
 
       }()),
       data: (data) => {
@@ -1268,7 +1240,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     {
       query: 'tpopMitStatusPotentiellUndZaehlungMitAnzahl',
       title: 'query:',
-      messages: (function(){
+      messages: (function() {
 
       }()),
       data: (data) => {
@@ -1287,7 +1259,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     {
       query: 'tpopMitStatusPotentiellUndAnsiedlung',
       title: 'query:',
-      messages: (function(){
+      messages: (function() {
 
       }()),
       data: (data) => {
@@ -1307,7 +1279,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     {
       query: 'tpopberOhneJahr',
       title: 'query:',
-      messages: (function(){
+      messages: (function() {
 
       }()),
       data: (data) => {
@@ -1338,7 +1310,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     {
       query: 'tpopberOhneEntwicklung',
       title: 'query:',
-      messages: (function(){
+      messages: (function() {
 
       }()),
       data: (data) => {
@@ -1373,7 +1345,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     {
       query: 'tpopmassnOhneJahr',
       title: 'query:',
-      messages: (function(){
+      messages: (function() {
 
       }()),
       data: (data) => {
@@ -1404,7 +1376,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     {
       query: 'tpopmassnOhneBearb',
       title: 'query:',
-      messages: (function(){
+      messages: (function() {
 
       }()),
       data: (data) => {
@@ -1435,7 +1407,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     {
       query: 'tpopmassnOhneTyp',
       title: 'query:',
-      messages: (function(){
+      messages: (function() {
 
       }()),
       data: (data) => {
@@ -1467,7 +1439,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     {
       query: 'tpopmassnberOhneJahr',
       title: 'query:',
-      messages: (function(){
+      messages: (function() {
 
       }()),
       data: (data) => {
@@ -1498,7 +1470,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     {
       query: 'tpopmassnberOhneBeurteilung',
       title: 'query:',
-      messages: (function(){
+      messages: (function() {
 
       }()),
       data: (data) => {
@@ -1533,7 +1505,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     {
       query: 'tpopfeldkontrOhneJahr',
       title: 'query:',
-      messages: (function(){
+      messages: (function() {
 
       }()),
       data: (data) => {
@@ -1564,7 +1536,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     {
       query: 'tpopfreiwkontrOhneJahr',
       title: 'query:',
-      messages: (function(){
+      messages: (function() {
 
       }()),
       data: (data) => {
@@ -1595,7 +1567,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     {
       query: 'tpopfeldkontrOhneBearb',
       title: 'query:',
-      messages: (function(){
+      messages: (function() {
 
       }()),
       data: (data) => {
@@ -1626,7 +1598,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     {
       query: 'tpopfreiwkontrOhneBearb',
       title: 'query:',
-      messages: (function(){
+      messages: (function() {
 
       }()),
       data: (data) => {
@@ -1657,7 +1629,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     {
       query: 'tpopfeldkontrOhneZaehlung',
       title: 'query:',
-      messages: (function(){
+      messages: (function() {
 
       }()),
       data: (data) => {
@@ -1690,7 +1662,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     {
       query: 'tpopfreiwkontrOhneZaehlung',
       title: 'query:',
-      messages: (function(){
+      messages: (function() {
 
       }()),
       data: (data) => {
@@ -1724,7 +1696,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     {
       query: 'feldkontrzaehlungOhneEinheit',
       title: 'query:',
-      messages: (function(){
+      messages: (function() {
 
       }()),
       data: (data) => {
@@ -1760,7 +1732,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     {
       query: 'freiwkontrzaehlungOhneEinheit',
       title: 'query:',
-      messages: (function(){
+      messages: (function() {
 
       }()),
       data: (data) => {
@@ -1796,7 +1768,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     {
       query: 'feldkontrzaehlungOhneMethode',
       title: 'query:',
-      messages: (function(){
+      messages: (function() {
 
       }()),
       data: (data) => {
@@ -1832,7 +1804,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     {
       query: 'freiwkontrzaehlungOhneMethode',
       title: 'query:',
-      messages: (function(){
+      messages: (function() {
 
       }()),
       data: (data) => {
@@ -1868,7 +1840,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     {
       query: 'feldkontrzaehlungOhneAnzahl',
       title: 'query:',
-      messages: (function(){
+      messages: (function() {
 
       }()),
       data: (data) => {
@@ -1904,7 +1876,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     {
       query: 'freiwkontrzaehlungOhneAnzahl',
       title: 'query:',
-      messages: (function(){
+      messages: (function() {
 
       }()),
       data: (data) => {
