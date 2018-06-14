@@ -1221,6 +1221,22 @@ export default (berichtjahr) => [
     }
   },
   {
+    query: 'tpopMitStatusPotentiellUndZaehlungMitAnzahl',
+    type: 'query',
+    data: (data) => {
+      const nodes = [...get(data, 'tpopMitStatusPotentiellUndZaehlungMitAnzahl.nodes', [])]
+        .sort((a, b) => a.nr - b.nr)
+      return nodes
+        .map(n => ({
+          proj_id: n.projId,
+          ap_id: n.apId,
+          hw: 'Teilpopulation mit Status "potentieller Wuchs-/Ansiedlungsort", bei denen in einer Kontrolle eine Anzahl festgestellt wurde:',
+          url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.popId, 'Teil-Populationen', n.id],
+          text: [`Population: ${n.popNr || n.popId}, Teil-Population: ${n.nr || n.id}`],
+        }))
+    }
+  },
+  {
     query: 'tpopMitStatusPotentiellUndAnsiedlung',
     type: 'query',
     data: (data) => {

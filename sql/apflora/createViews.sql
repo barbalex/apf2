@@ -5308,16 +5308,16 @@ WHERE
       AND apflora.tpopkontrzaehl.anzahl > 0
   );
 
-DROP VIEW IF EXISTS apflora.v_qk_tpop_mitstatuspotentiellundzaehlungmitanzahl CASCADE;
-CREATE OR REPLACE VIEW apflora.v_qk_tpop_mitstatuspotentiellundzaehlungmitanzahl AS
+-- This view is not in use, noticed 2018-06-14
+DROP VIEW IF EXISTS apflora.v_q_tpop_mitstatuspotentiellundzaehlungmitanzahl CASCADE;
+CREATE OR REPLACE VIEW apflora.v_q_tpop_mitstatuspotentiellundzaehlungmitanzahl AS
 SELECT DISTINCT
   apflora.projekt.id as proj_id,
   apflora.pop.ap_id,
   apflora.pop.id as pop_id,
+  apflora.pop.nr as pop_nr,
   apflora.tpop.id,
-  'Teilpopulation mit Status "potentieller Wuchs-/Ansiedlungsort", bei denen in einer Kontrolle eine Anzahl festgestellt wurde:'::text AS hw,
-  ARRAY['Projekte', '4635372c-431c-11e8-bb30-e77f6cdd35a6', 'Aktionspläne', apflora.ap.id, 'Populationen', apflora.pop.id, 'Teil-Populationen', apflora.tpop.id]::text[] AS url,
-  ARRAY[concat('Population (Nr.): ', apflora.pop.nr), concat('Teil-Population (Nr.): ', apflora.tpop.nr)]::text[] AS text
+  apflora.tpop.nr
 FROM
   apflora.projekt
   INNER JOIN

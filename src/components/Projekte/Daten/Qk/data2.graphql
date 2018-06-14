@@ -1045,6 +1045,19 @@ query QkQuery(
       nr
     }
   }
+  tpopMitStatusPotentiellUndZaehlungMitAnzahl: allVQTpopMitstatuspotentiellundzaehlungmitanzahls(filter: {
+      projId: {equalTo: $projId},
+      apId: {equalTo: $apId}
+    }) {
+    nodes {
+      projId
+      apId
+      popId
+      popNr
+      id
+      nr
+    }
+  }
   tpopMitStatusPotentiellUndAnsiedlung: allVQTpopMitstatuspotentiellundmassnansiedlungs(filter: {
       projId: {equalTo: $projId},
       apId: {equalTo: $apId}
