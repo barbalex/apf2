@@ -1,7 +1,7 @@
 // @flow
 import get from 'lodash/get'
 import flatten from 'lodash/flatten'
-//import sortBy from 'lodash/sortBy'
+import sortBy from 'lodash/sortBy'
 
 export default (berichtjahr) => [
   // 1. Art
@@ -13,7 +13,7 @@ export default (berichtjahr) => [
     data: (data) => {
       const projId = get(data, 'zielOhneJahr.id')
       const apId = get(data, 'zielOhneJahr.apsByProjId.nodes[0].id')
-      const zielNodes = get(data, 'zielOhneJahr.apsByProjId.nodes[0].zielsByApId.nodes', [])
+      const zielNodes = sortBy(get(data, 'zielOhneJahr.apsByProjId.nodes[0].zielsByApId.nodes', []), 'id')
       return zielNodes.map(n => ({
         proj_id: projId,
         ap_id: apId,
