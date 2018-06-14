@@ -57,7 +57,7 @@ export default async idb => {
     },
     user: {
       // gql needs an id?
-      name: get(users, '[0].name', null),
+      name: get(users, '[0].name', ''),
       // TODO: add freiwillig, computed from role
       // give token a temporary value to prevent login form from opening
       // before login has been fetched
