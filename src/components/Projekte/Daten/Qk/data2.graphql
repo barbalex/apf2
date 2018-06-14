@@ -1622,4 +1622,86 @@ query QkQuery(
       }
     }
   }
+  freiwkontrzaehlungOhneAnzahl: projektById(id: $projId) {
+    id
+    apsByProjId(filter: {id: {equalTo: $apId}}) {
+      nodes {
+        id
+        popsByApId {
+          nodes {
+            id
+            tpopsByPopId {
+              nodes {
+                id
+                tpopkontrsByTpopId(filter: {typ: {equalTo: "Freiwilligen-Erfolgskontrolle"}}) {
+                  nodes {
+                    id
+                    jahr
+                    tpopkontrzaehlsByTpopkontrId(filter: {anzahl: {isNull: true}}) {
+                      nodes {
+                        id
+                        tpopkontrByTpopkontrId {
+                          id
+                          jahr
+                          tpopByTpopId {
+                            id
+                            nr
+                            popByPopId {
+                              id
+                              nr
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  feldkontrzaehlungOhneAnzahl: projektById(id: $projId) {
+    id
+    apsByProjId(filter: {id: {equalTo: $apId}}) {
+      nodes {
+        id
+        popsByApId {
+          nodes {
+            id
+            tpopsByPopId {
+              nodes {
+                id
+                tpopkontrsByTpopId(filter: {typ: {notEqualTo: "Freiwilligen-Erfolgskontrolle"}}) {
+                  nodes {
+                    id
+                    jahr
+                    tpopkontrzaehlsByTpopkontrId(filter: {anzahl: {isNull: true}}) {
+                      nodes {
+                        id
+                        tpopkontrByTpopkontrId {
+                          id
+                          jahr
+                          tpopByTpopId {
+                            id
+                            nr
+                            popByPopId {
+                              id
+                              nr
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 }
