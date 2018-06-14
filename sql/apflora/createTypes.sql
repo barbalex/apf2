@@ -13,14 +13,6 @@ CREATE TYPE apflora.q_pop_ohne_popmassnber AS (
   nr integer
 );
 
-CREATE TYPE apflora.qk_pop_ohne_popber AS (
-  proj_id uuid,
-  ap_id uuid,
-  hw text,
-  url text[],
-  text text[]
-);
-
 CREATE TYPE apflora.q_pop_ohne_popber AS (
   proj_id uuid,
   ap_id uuid,
