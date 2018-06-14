@@ -12,12 +12,13 @@ CREATE TYPE apflora.q_pop_ohne_popber AS (
   nr integer
 );
 
-CREATE TYPE apflora.qk_tpop_ohne_massnber AS (
+CREATE TYPE apflora.q_tpop_ohne_massnber AS (
   proj_id uuid,
   ap_id uuid,
-  hw text,
-  url text[],
-  text text[]
+  pop_id uuid,
+  pop_nr integer,
+  id uuid,
+  nr integer
 );
 
 CREATE TYPE apflora.q_tpop_ohne_tpopber AS (

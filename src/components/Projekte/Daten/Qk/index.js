@@ -15,7 +15,6 @@ import get from 'lodash/get'
 import FormTitle from '../../../shared/FormTitle'
 import appBaseUrl from '../../../../modules/appBaseUrl'
 import standardQkYear from '../../../../modules/standardQkYear'
-//import fetchQk from './fetchQk'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import data1Gql from './data1.graphql'
 import data2Gql from './data2.graphql'
@@ -79,20 +78,6 @@ const enhance = compose(
     }) => ({ event, data }) => {
       const { value } = event.target
       setBerichtjahr(value)
-      /*
-      if (
-        (isNaN(value) && value.length === 4) ||
-        (!isNaN(value) && value > 1000)
-      ) {
-        // call fetchQk and pass it berichtjahr and apId
-        fetchQk({
-          berichtjahr: value,
-          apId,
-          addMessages,
-          activeNodes,
-          errorState,
-        })
-      }*/
     },
     onChangeFilter: ({ setFilter }) => event =>
       setFilter(event.target.value),
@@ -108,14 +93,6 @@ const enhance = compose(
       activeNodes,
       errorState
     }) {
-      // call fetchQk and pass it berichtjahr and apId
-      fetchQk({
-        berichtjahr,
-        apId,
-        addMessages,
-        activeNodes,
-        errorState
-      })
     },
   }),*/
 )

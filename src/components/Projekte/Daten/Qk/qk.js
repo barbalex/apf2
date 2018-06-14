@@ -1188,11 +1188,21 @@ export default (berichtjahr) => [
         }))
     }
   },
-  // TODO: TPop ohne verlangten TPop-Massn.-Bericht im Berichtjahr
   {
-    type: 'function',
-    name: 'qk_tpop_ohne_massnber',
-    berichtjahr
+    query: 'tpopOhneMassnber',
+    type: 'query',
+    data: (data) => {
+      const nodes = [...get(data, 'tpopOhneMassnber.nodes', [])]
+        .sort((a, b) => a.nr - b.nr)
+      return nodes
+        .map(n => ({
+          proj_id: n.projId,
+          ap_id: n.apId,
+          hw: 'Teilpopulation mit Ansiedlung (vor dem Berichtjahr) und Kontrolle (im Berichtjahr) aber ohne Massnahmen-Bericht (im Berichtjahr):',
+          url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.popId, 'Teil-Populationen', n.id],
+          text: [`Population: ${n.popNr || n.popId}, Teil-Population: ${n.nr || n.id}`],
+        }))
+    }
   },
   {
     query: 'tpopMitStatusAnsaatversuchUndZaehlungMitAnzahl',
