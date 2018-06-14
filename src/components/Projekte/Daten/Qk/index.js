@@ -11,6 +11,7 @@ import withState from 'recompose/withState'
 //import withLifecycle from '@hocs/with-lifecycle'
 import { Query } from 'react-apollo'
 import get from 'lodash/get'
+import sortBy from 'lodash/sortBy'
 
 import FormTitle from '../../../shared/FormTitle'
 import appBaseUrl from '../../../../modules/appBaseUrl'
@@ -63,22 +64,12 @@ const enhance = compose(
   withState('outsideZhChecked', 'setOutsideZhChecked', false),
   withState('checkingOutsideZh', 'setCheckingOutsideZh', false),
   withHandlers({
-    addMessages: ({ messages, setMessages }) => newMessages => {
-      setMessages([...messages, newMessages])
-    }
+    addMessages: ({ messages, setMessages }) => newMessages =>
+      setMessages([...messages, newMessages]),
   }),
   withHandlers({
-    onChangeBerichtjahr: ({
-      setBerichtjahr,
-      tree,
-      apId,
-      addMessages,
-      activeNodes,
-      errorState,
-    }) => ({ event, data }) => {
-      const { value } = event.target
-      setBerichtjahr(value)
-    },
+    onChangeBerichtjahr: ({ setBerichtjahr }) => event =>
+      setBerichtjahr(+event.target.value),
     onChangeFilter: ({ setFilter }) => event =>
       setFilter(event.target.value),
   }),
@@ -143,11 +134,14 @@ const Qk = ({
             //variables={{ apId, projId }}
           >
             {({ loading, error, data }) => {
-              const qks = qk(berichtjahr).filter(q => !!q.query)
+              console.log('QK rendering:', {berichtjahr})
+              const qks = sortBy(
+                qk(berichtjahr),
+                'query'
+              ).filter(q => !!q.query)
               let gqlMessages = []
               if (Object.keys(data).length > 0) {
                 gqlMessages = qks
-                  .filter(q => q.type === 'query')
                   .map(q =>
                     q.data(data)
                   )
@@ -200,7 +194,7 @@ const Qk = ({
                           id="berichtjahr"
                           value={berichtjahr}
                           type="number"
-                          onChange={(event) => onChangeBerichtjahr({ event, data })}
+                          onChange={onChangeBerichtjahr}
                         />
                       </FormControl>
                       <FormControl fullWidth>

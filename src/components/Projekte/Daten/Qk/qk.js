@@ -9,57 +9,64 @@ export default (berichtjahr) => [
   // Ziel ohne Jahr/Zieltyp/Ziel
   {
     query: 'zielOhneJahr',
-    type: 'query',
+    title: 'Ziel ohne Jahr:',
     data: (data) => {
       const projId = get(data, 'zielOhneJahr.id')
       const apId = get(data, 'zielOhneJahr.apsByProjId.nodes[0].id')
-      const zielNodes = sortBy(get(data, 'zielOhneJahr.apsByProjId.nodes[0].zielsByApId.nodes', []), 'id')
+      const zielNodes = sortBy(
+        get(data, 'zielOhneJahr.apsByProjId.nodes[0].zielsByApId.nodes', []),
+        'id'
+      )
       return zielNodes.map(n => ({
         proj_id: projId,
         ap_id: apId,
         hw: 'Ziel ohne Jahr:',
         url: ['Projekte', projId, 'Aktionspläne', apId, 'AP-Ziele', n.jahr, n.id],
-        text: [`Ziel (id): ${n.id}`],
+        text: [`Ziel: ${n.id}`],
       }))
     }
   },
   {
     query: 'zielOhneTyp',
-    type: 'query',
+    title: 'Ziel ohne Typ:',
     data: (data) => {
       const projId = get(data, 'zielOhneTyp.id')
       const apId = get(data, 'zielOhneTyp.apsByProjId.nodes[0].id')
-      const zielNodes = [...get(data, 'zielOhneTyp.apsByProjId.nodes[0].zielsByApId.nodes', [])]
-        .sort((a, b) => a.jahr - b.jahr)
+      const zielNodes = sortBy(
+        [...get(data, 'zielOhneTyp.apsByProjId.nodes[0].zielsByApId.nodes', [])],
+        ['jahr', 'id']
+      )
       return zielNodes.map(n => ({
         proj_id: projId,
         ap_id: apId,
         hw: 'Ziel ohne Typ:',
         url: ['Projekte', projId, 'Aktionspläne', apId, 'AP-Ziele', n.jahr, n.id],
-        text: [`Ziel (Jahr): ${n.jahr}`],
+        text: [`Ziel: ${n.jahr || n.id}`],
       }))
     }
   },
   {
     query: 'zielOhneZiel',
-    type: 'query',
+    title: 'Ziel ohne Ziel:',
     data: (data) => {
       const projId = get(data, 'zielOhneZiel.id')
       const apId = get(data, 'zielOhneZiel.apsByProjId.nodes[0].id')
-      const zielNodes = [...get(data, 'zielOhneZiel.apsByProjId.nodes[0].zielsByApId.nodes', [])]
-        .sort((a, b) => a.jahr - b.jahr)
+      const zielNodes = sortBy(
+        [...get(data, 'zielOhneZiel.apsByProjId.nodes[0].zielsByApId.nodes', [])],
+        ['jahr', 'id']
+      )
       return zielNodes.map(n => ({
         proj_id: projId,
         ap_id: apId,
         hw: 'Ziel ohne Ziel:',
         url: ['Projekte', projId, 'Aktionspläne', apId, 'AP-Ziele', n.jahr, n.id],
-        text: [`Ziel (Jahr): ${n.jahr}`],
+        text: [`Ziel: ${n.jahr || n.id}`],
       }))
     }
   },
   {
     query: 'zielberOhneJahr',
-    type: 'query',
+    title: 'Ziel-Bericht ohne Jahr:',
     data: (data) => {
       const projId = get(data, 'zielberOhneJahr.id')
       const apId = get(data, 'zielberOhneJahr.apsByProjId.nodes[0].id')
@@ -67,18 +74,22 @@ export default (berichtjahr) => [
       const zielberNodes = flatten(
         zielNodes.map(n => get(n, 'zielbersByZielId.nodes'), [])
       )
-      return zielberNodes.map(n => ({
-        proj_id: projId,
-        ap_id: apId,
-        hw: 'Ziel-Bericht ohne Jahr:',
-        url: ['Projekte', projId, 'Aktionspläne', apId, 'AP-Ziele', get(n, 'zielByZielId.jahr'), get(n, 'zielByZielId.id'), 'Berichte', n.id],
-        text: [`Ziel-Bericht (id): ${n.id}`],
-      }))
+      return zielberNodes.map(n => {
+        const zielId = get(n, 'zielByZielId.id')
+        const zielJahr = get(n, 'zielByZielId.jahr')
+        return ({
+          proj_id: projId,
+          ap_id: apId,
+          hw: 'Ziel-Bericht ohne Jahr:',
+          url: ['Projekte', projId, 'Aktionspläne', apId, 'AP-Ziele', get(n, 'zielByZielId.jahr'), zielId, 'Berichte', n.id],
+          text: [`Ziel: ${zielJahr || zielId}, Bericht: ${n.id}`],
+        })
+      })
     }
   },
   {
     query: 'zielberOhneEntwicklung',
-    type: 'query',
+    title: 'Ziel-Bericht ohne Entwicklung:',
     data: (data) => {
       const projId = get(data, 'zielberOhneEntwicklung.id')
       const apId = get(data, 'zielberOhneEntwicklung.apsByProjId.nodes[0].id')
@@ -98,7 +109,7 @@ export default (berichtjahr) => [
   // AP-Erfolgskriterium ohne Beurteilung/Kriterien
   {
     query: 'erfkritOhneBeurteilung',
-    type: 'query',
+    title: 'Erfolgskriterium ohne Beurteilung:',
     data: (data) => {
       const projId = get(data, 'erfkritOhneBeurteilung.id')
       const apId = get(data, 'erfkritOhneBeurteilung.apsByProjId.nodes[0].id')
@@ -114,7 +125,7 @@ export default (berichtjahr) => [
   },
   {
     query: 'erfkritOhneKriterien',
-    type: 'query',
+    title: 'Erfolgskriterium ohne Kriterien:',
     data: (data) => {
       const projId = get(data, 'erfkritOhneKriterien.id')
       const apId = get(data, 'erfkritOhneKriterien.apsByProjId.nodes[0].id')
@@ -131,7 +142,7 @@ export default (berichtjahr) => [
   // AP-Bericht ohne Jahr/Vergleich Vorjahr-Gesamtziel/Beurteilung
   {
     query: 'apberOhneJahr',
-    type: 'query',
+    title: 'AP-Bericht ohne Jahr:',
     data: (data) => {
       const projId = get(data, 'apberOhneJahr.id')
       const apId = get(data, 'apberOhneJahr.apsByProjId.nodes[0].id')
@@ -147,7 +158,7 @@ export default (berichtjahr) => [
   },
   {
     query: 'apberOhneVergleichVorjahrGesamtziel',
-    type: 'query',
+    title: 'AP-Bericht ohne Vergleich Vorjahr - Gesamtziel:',
     data: (data) => {
       const projId = get(data, 'apberOhneVergleichVorjahrGesamtziel.id')
       const apId = get(data, 'apberOhneVergleichVorjahrGesamtziel.apsByProjId.nodes[0].id')
@@ -163,7 +174,7 @@ export default (berichtjahr) => [
   },
   {
     query: 'apberOhneBeurteilung',
-    type: 'query',
+    title: 'AP-Bericht ohne Beurteilung:',
     data: (data) => {
       const projId = get(data, 'apberOhneBeurteilung.id')
       const apId = get(data, 'apberOhneBeurteilung.apsByProjId.nodes[0].id')
@@ -180,7 +191,7 @@ export default (berichtjahr) => [
   // assoziierte Art ohne Art
   {
     query: 'assozartOhneArt',
-    type: 'query',
+    title: 'Assoziierte Art ohne Art:',
     data: (data) => {
       const projId = get(data, 'assozartOhneArt.id')
       const apId = get(data, 'assozartOhneArt.apsByProjId.nodes[0].id')
@@ -200,7 +211,7 @@ export default (berichtjahr) => [
   // Population: ohne Nr/Name/Status/bekannt seit/Koordinaten/tpop
   {
     query: 'popOhneNr',
-    type: 'query',
+    title: 'Population ohne Nr.:',
     data: (data) => {
       const projId = get(data, 'popOhneNr.id')
       const apId = get(data, 'popOhneNr.apsByProjId.nodes[0].id')
@@ -216,7 +227,7 @@ export default (berichtjahr) => [
   },
   {
     query: 'popOhneName',
-    type: 'query',
+    title: 'Population ohne Name:',
     data: (data) => {
       const projId = get(data, 'popOhneName.id')
       const apId = get(data, 'popOhneName.apsByProjId.nodes[0].id')
@@ -233,7 +244,7 @@ export default (berichtjahr) => [
   },
   {
     query: 'popOhneStatus',
-    type: 'query',
+    title: 'Population ohne Status:',
     data: (data) => {
       const projId = get(data, 'popOhneStatus.id')
       const apId = get(data, 'popOhneStatus.apsByProjId.nodes[0].id')
@@ -250,7 +261,7 @@ export default (berichtjahr) => [
   },
   {
     query: 'popOhneBekanntSeit',
-    type: 'query',
+    title: 'Population ohne "bekannt seit":',
     data: (data) => {
       const projId = get(data, 'popOhneBekanntSeit.id')
       const apId = get(data, 'popOhneBekanntSeit.apsByProjId.nodes[0].id')
@@ -267,7 +278,7 @@ export default (berichtjahr) => [
   },
   {
     query: 'popOhneKoord',
-    type: 'query',
+    title: 'Population: Mindestens eine Koordinate fehlt:',
     data: (data) => {
       const projId = get(data, 'popOhneKoord.id')
       const apId = get(data, 'popOhneKoord.apsByProjId.nodes[0].id')
@@ -284,7 +295,7 @@ export default (berichtjahr) => [
   },
   {
     query: 'popOhneTpop',
-    type: 'query',
+    title: 'Population ohne Teilpopulation:',
     data: (data) => {
       const projId = get(data, 'popOhneTpop.id')
       const apId = get(data, 'popOhneTpop.apsByProjId.nodes[0].id')
@@ -302,7 +313,7 @@ export default (berichtjahr) => [
   },
   {
     query: 'popMitStatusUnklarOhneBegruendung',
-    type: 'query',
+    title: 'Population mit "Status unklar", ohne Begründung:',
     data: (data) => {
       const projId = get(data, 'popMitStatusUnklarOhneBegruendung.id')
       const apId = get(data, 'popMitStatusUnklarOhneBegruendung.apsByProjId.nodes[0].id')
@@ -319,7 +330,7 @@ export default (berichtjahr) => [
   },
   {
     query: 'popMitMehrdeutigerNr',
-    type: 'query',
+    title: 'Population: Die Nr. ist mehrdeutig:',
     data: (data) => {
       const nodes = [...get(data, 'popMitMehrdeutigerNr.nodes', [])]
         .sort((a, b) => a.nr - b.nr)
@@ -335,7 +346,7 @@ export default (berichtjahr) => [
   },
   {
     query: 'popOhnePopber',
-    type: 'query',
+    title: 'Population mit angesiedelten Teilpopulationen (vor dem Berichtjahr), die (im Berichtjahr) kontrolliert wurden, aber ohne Populations-Bericht (im Berichtjahr):',
     data: (data) => {
       const nodes = [...get(data, 'popOhnePopber.nodes', [])]
         .sort((a, b) => a.nr - b.nr)
@@ -353,7 +364,7 @@ export default (berichtjahr) => [
   // Bericht-Stati kontrollieren
   {
     query: 'popMitBerZunehmendOhneTpopberZunehmend',
-    type: 'query',
+    title: 'Populationen mit Bericht "zunehmend" ohne Teil-Population mit Bericht "zunehmend":',
     data: (data) => {
       const nodes = [...get(data, 'popMitBerZunehmendOhneTpopberZunehmend.nodes', [])]
         .sort((a, b) => a.nr - b.nr)
@@ -369,7 +380,7 @@ export default (berichtjahr) => [
   },
   {
     query: 'popMitBerAbnehmendOhneTpopberAbnehmend',
-    type: 'query',
+    title: 'Populationen mit Bericht "abnehmend" ohne Teil-Population mit Bericht "abnehmend":',
     data: (data) => {
       const nodes = [...get(data, 'popMitBerAbnehmendOhneTpopberAbnehmend.nodes', [])]
         .sort((a, b) => a.nr - b.nr)
@@ -385,7 +396,7 @@ export default (berichtjahr) => [
   },
   {
     query: 'popMitBerErloschenOhneTpopberErloschen',
-    type: 'query',
+    title: 'Populationen mit Bericht "erloschen" ohne Teil-Population mit Bericht "erloschen":',
     data: (data) => {
       const nodes = [...get(data, 'popMitBerErloschenOhneTpopberErloschen.nodes', [])]
         .sort((a, b) => a.nr - b.nr)
@@ -401,7 +412,7 @@ export default (berichtjahr) => [
   },
   {
     query: 'popMitBerErloschenUndTpopberNichtErloschen',
-    type: 'query',
+    title: 'Populationen mit Bericht "erloschen" und mindestens einer gemäss Bericht nicht erloschenen Teil-Population:',
     data: (data) => {
       const nodes = [...get(data, 'popMitBerErloschenUndTpopberNichtErloschen.nodes', [])]
         .sort((a, b) => a.nr - b.nr)
@@ -420,7 +431,7 @@ export default (berichtjahr) => [
   // Keine Teil-Population hat den Status der Population:
   {
     query: 'popOhneTpopMitGleichemStatus',
-    type: 'query',
+    title: 'Population: Keine Teil-Population hat den Status der Population:',
     data: (data) => {
       const nodes = [...get(data, 'popOhneTpopMitGleichemStatus.nodes', [])]
         .sort((a, b) => a.nr - b.nr)
@@ -436,7 +447,7 @@ export default (berichtjahr) => [
   },
   {
     query: 'popStatus300TpopStatusAnders',
-    type: 'query',
+    title: 'Population: Status ist "potentieller Wuchs-/Ansiedlungsort". Es gibt aber Teil-Populationen mit abweichendem Status:',
     data: (data) => {
       const nodes = [...get(data, 'popStatus300TpopStatusAnders.nodes', [])]
         .sort((a, b) => a.nr - b.nr)
@@ -452,7 +463,7 @@ export default (berichtjahr) => [
   },
   {
     query: 'popStatus201TpopStatusUnzulaessig',
-    type: 'query',
+    title: 'Population: Status ist "Ansaatversuch". Es gibt Teil-Populationen mit nicht zulässigen Stati ("ursprünglich" oder "angesiedelt, aktuell:',
     data: (data) => {
       const nodes = [...get(data, 'popStatus201TpopStatusUnzulaessig.nodes', [])]
         .sort((a, b) => a.nr - b.nr)
@@ -468,7 +479,7 @@ export default (berichtjahr) => [
   },
   {
     query: 'popStatus202TpopStatusAnders',
-    type: 'query',
+    title: 'Population: Status ist "angesiedelt nach Beginn AP, erloschen/nicht etabliert". Es gibt Teil-Populationen mit abweichendem Status:',
     data: (data) => {
       const nodes = [...get(data, 'popStatus202TpopStatusAnders.nodes', [])]
         .sort((a, b) => a.nr - b.nr)
@@ -484,7 +495,7 @@ export default (berichtjahr) => [
   },
   {
     query: 'popStatus211TpopStatusUnzulaessig',
-    type: 'query',
+    title: 'Population: Status ist "angesiedelt vor Beginn AP, erloschen/nicht etabliert". Es gibt Teil-Populationen mit nicht zulässigen Stati ("ursprünglich", "angesiedelt, aktuell", "Ansaatversuch", "potentieller Wuchsort"):',
     data: (data) => {
       const nodes = [...get(data, 'popStatus211TpopStatusUnzulaessig.nodes', [])]
         .sort((a, b) => a.nr - b.nr)
@@ -500,7 +511,7 @@ export default (berichtjahr) => [
   },
   {
     query: 'popStatus200TpopStatusUnzulaessig',
-    type: 'query',
+    title: 'Population: Status ist "angesiedelt nach Beginn AP, aktuell". Es gibt Teil-Populationen mit nicht zulässigen Stati ("ursprünglich", "angesiedelt vor Beginn AP, aktuell"):',
     data: (data) => {
       const nodes = [...get(data, 'popStatus200TpopStatusUnzulaessig.nodes', [])]
         .sort((a, b) => a.nr - b.nr)
@@ -516,7 +527,7 @@ export default (berichtjahr) => [
   },
   {
     query: 'popStatus210TpopStatusUnzulaessig',
-    type: 'query',
+    title: 'Population: Status ist "angesiedelt vor Beginn AP, aktuell". Es gibt Teil-Populationen mit nicht zulässigen Stati ("ursprünglich"):',
     data: (data) => {
       const nodes = [...get(data, 'popStatus210TpopStatusUnzulaessig.nodes', [])]
         .sort((a, b) => a.nr - b.nr)
@@ -532,7 +543,7 @@ export default (berichtjahr) => [
   },
   {
     query: 'popStatus101TpopStatusAnders',
-    type: 'query',
+    title: 'Population: Status ist "ursprünglich, erloschen". Es gibt Teil-Populationen (ausser potentiellen Wuchs-/Ansiedlungsorten) mit abweichendem Status:',
     data: (data) => {
       const nodes = [...get(data, 'popStatus101TpopStatusAnders.nodes', [])]
         .sort((a, b) => a.nr - b.nr)
@@ -550,7 +561,7 @@ export default (berichtjahr) => [
   // Stati mit letztem Bericht vergleichen
   {
     query: 'popStatusErloschenLetzterPopberZunehmend',
-    type: 'query',
+    title: 'Population: Status ist "erloschen" (ursprünglich oder angesiedelt), Ansaatversuch oder potentieller Wuchsort; der letzte Populations-Bericht meldet aber "zunehmend" und es gab seither keine Ansiedlung:',
     data: (data) => {
       const nodes = [...get(data, 'popStatusErloschenLetzterPopberZunehmend.nodes', [])]
         .sort((a, b) => a.nr - b.nr)
@@ -566,7 +577,7 @@ export default (berichtjahr) => [
   },
   {
     query: 'popStatusErloschenLetzterPopberStabil',
-    type: 'query',
+    title: 'Population: Status ist "erloschen" (ursprünglich oder angesiedelt), Ansaatversuch oder potentieller Wuchsort; der letzte Populations-Bericht meldet aber "stabil" und es gab seither keine Ansiedlung:',
     data: (data) => {
       const nodes = [...get(data, 'popStatusErloschenLetzterPopberStabil.nodes', [])]
         .sort((a, b) => a.nr - b.nr)
@@ -582,7 +593,7 @@ export default (berichtjahr) => [
   },
   {
     query: 'popStatusErloschenLetzterPopberAbnehmend',
-    type: 'query',
+    title: 'Population: Status ist "erloschen" (ursprünglich oder angesiedelt), Ansaatversuch oder potentieller Wuchsort; der letzte Populations-Bericht meldet aber "abnehmend" und es gab seither keine Ansiedlung:',
     data: (data) => {
       const nodes = [...get(data, 'popStatusErloschenLetzterPopberAbnehmend.nodes', [])]
         .sort((a, b) => a.nr - b.nr)
@@ -598,7 +609,7 @@ export default (berichtjahr) => [
   },
   {
     query: 'popStatusErloschenLetzterPopberUnsicher',
-    type: 'query',
+    title: 'Population: Status ist "erloschen" (ursprünglich oder angesiedelt) oder potentieller Wuchsort; der letzte Populations-Bericht meldet aber "unsicher" und es gab seither keine Ansiedlung:',
     data: (data) => {
       const nodes = [...get(data, 'popStatusErloschenLetzterPopberUnsicher.nodes', [])]
         .sort((a, b) => a.nr - b.nr)
@@ -616,7 +627,7 @@ export default (berichtjahr) => [
   // Stati kontrollieren
   {
     query: 'popOhnePopmassnber',
-    type: 'query',
+    title: 'Population mit angesiedelten Teilpopulationen (vor dem Berichtjahr), die (im Berichtjahr) kontrolliert wurden, aber ohne Massnahmen-Bericht (im Berichtjahr):',
     data: (data) => {
       const nodes = [...get(data, 'popOhnePopmassnber.nodes', [])]
         .sort((a, b) => a.nr - b.nr)
@@ -634,7 +645,7 @@ export default (berichtjahr) => [
   // TODO: seems only to output pops with koord but no tpop
   {
     query: 'popKoordEntsprechenKeinerTpop',
-    type: 'query',
+    title: 'query:',
     data: (data) => {
       const nodes = [...get(data, 'popKoordEntsprechenKeinerTpop.nodes', [])]
         .sort((a, b) => a.nr - b.nr)
@@ -651,7 +662,7 @@ export default (berichtjahr) => [
   },
   {
     query: 'popStatusAnsaatversuchTpopAktuell',
-    type: 'query',
+    title: 'query:',
     data: (data) => {
       const nodes = [...get(data, 'popStatusAnsaatversuchTpopAktuell.nodes', [])]
         .sort((a, b) => a.nr - b.nr)
@@ -667,7 +678,7 @@ export default (berichtjahr) => [
   },
   {
     query: 'popStatusAnsaatversuchAlleTpopErloschen',
-    type: 'query',
+    title: 'query:',
     data: (data) => {
       const nodes = [...get(data, 'popStatusAnsaatversuchAlleTpopErloschen.nodes', [])]
         .sort((a, b) => a.nr - b.nr)
@@ -683,7 +694,7 @@ export default (berichtjahr) => [
   },
   {
     query: 'popStatusAnsaatversuchMitTpopUrspruenglichErloschen',
-    type: 'query',
+    title: 'query:',
     data: (data) => {
       const nodes = [...get(data, 'popStatusAnsaatversuchMitTpopUrspruenglichErloschen.nodes', [])]
         .sort((a, b) => a.nr - b.nr)
@@ -699,7 +710,7 @@ export default (berichtjahr) => [
   },
   {
     query: 'popStatusErloschenMitTpopAktuell',
-    type: 'query',
+    title: 'query:',
     data: (data) => {
       const nodes = [...get(data, 'popStatusErloschenMitTpopAktuell.nodes', [])]
         .sort((a, b) => a.nr - b.nr)
@@ -715,7 +726,7 @@ export default (berichtjahr) => [
   },
   {
     query: 'popStatusErloschenMitTpopAnsaatversuch',
-    type: 'query',
+    title: 'query:',
     data: (data) => {
       const nodes = [...get(data, 'popStatusErloschenMitTpopAnsaatversuch.nodes', [])]
         .sort((a, b) => a.nr - b.nr)
@@ -731,7 +742,7 @@ export default (berichtjahr) => [
   },
   {
     query: 'popStatusAngesiedeltMitTpopUrspruenglich',
-    type: 'query',
+    title: 'query:',
     data: (data) => {
       const nodes = [...get(data, 'popStatusAngesiedeltMitTpopUrspruenglich.nodes', [])]
         .sort((a, b) => a.nr - b.nr)
@@ -748,7 +759,7 @@ export default (berichtjahr) => [
   // Vergleich Pop Status mit letztem Pop-Bericht
   {
     query: 'popStatusAktuellLetzterPopberErloschen',
-    type: 'query',
+    title: 'query:',
     data: (data) => {
       const nodes = [...get(data, 'popStatusAktuellLetzterPopberErloschen.nodes', [])]
         .sort((a, b) => a.nr - b.nr)
@@ -764,7 +775,7 @@ export default (berichtjahr) => [
   },
   {
     query: 'popStatusErloschenLetzterPopberAktuell',
-    type: 'query',
+    title: 'query:',
     data: (data) => {
       const nodes = [...get(data, 'popStatusErloschenLetzterPopberAktuell.nodes', [])]
         .sort((a, b) => a.nr - b.nr)
@@ -780,7 +791,7 @@ export default (berichtjahr) => [
   },
   {
     query: 'popStatusErloschenLetzterPopberErloschenMitAnsiedlung',
-    type: 'query',
+    title: 'query:',
     data: (data) => {
       const nodes = [...get(data, 'popStatusErloschenLetzterPopberErloschenMitAnsiedlung.nodes', [])]
         .sort((a, b) => a.nr - b.nr)
@@ -797,7 +808,7 @@ export default (berichtjahr) => [
   // Pop-Bericht/Pop-Massn.-Bericht ohne Jahr/Entwicklung
   {
     query: 'popberOhneJahr',
-    type: 'query',
+    title: 'query:',
     data: (data) => {
       const projId = get(data, 'popberOhneJahr.id')
       const apId = get(data, 'popberOhneJahr.apsByProjId.nodes[0].id')
@@ -816,7 +827,7 @@ export default (berichtjahr) => [
   },
   {
     query: 'popberOhneEntwicklung',
-    type: 'query',
+    title: 'query:',
     data: (data) => {
       const projId = get(data, 'popberOhneEntwicklung.id')
       const apId = get(data, 'popberOhneEntwicklung.apsByProjId.nodes[0].id')
@@ -835,7 +846,7 @@ export default (berichtjahr) => [
   },
   {
     query: 'popmassnberOhneJahr',
-    type: 'query',
+    title: 'query:',
     data: (data) => {
       const projId = get(data, 'popmassnberOhneJahr.id')
       const apId = get(data, 'popmassnberOhneJahr.apsByProjId.nodes[0].id')
@@ -854,7 +865,7 @@ export default (berichtjahr) => [
   },
   {
     query: 'popmassnberOhneEntwicklung',
-    type: 'query',
+    title: 'query:',
     data: (data) => {
       const projId = get(data, 'popmassnberOhneEntwicklung.id')
       const apId = get(data, 'popmassnberOhneEntwicklung.apsByProjId.nodes[0].id')
@@ -877,7 +888,7 @@ export default (berichtjahr) => [
   // Stati mit letztem Bericht vergleichen
   {
     query: 'tpopStatusAktuellLetzterTpopberErloschen',
-    type: 'query',
+    title: 'query:',
     data: (data) => {
       const nodes = [...get(data, 'tpopStatusAktuellLetzterTpopberErloschen.nodes', [])]
         .sort((a, b) => a.nr - b.nr)
@@ -893,7 +904,7 @@ export default (berichtjahr) => [
   },
   {
     query: 'tpopStatusErloschenLetzterTpopberStabil',
-    type: 'query',
+    title: 'query:',
     data: (data) => {
       const nodes = [...get(data, 'tpopStatusErloschenLetzterTpopberStabil.nodes', [])]
         .sort((a, b) => a.nr - b.nr)
@@ -909,7 +920,7 @@ export default (berichtjahr) => [
   },
   {
     query: 'tpopStatusErloschenLetzterTpopberAbnehmend',
-    type: 'query',
+    title: 'query:',
     data: (data) => {
       const nodes = [...get(data, 'tpopStatusErloschenLetzterTpopberAbnehmend.nodes', [])]
         .sort((a, b) => a.nr - b.nr)
@@ -925,7 +936,7 @@ export default (berichtjahr) => [
   },
   {
     query: 'tpopStatusErloschenLetzterTpopberUnsicher',
-    type: 'query',
+    title: 'query:',
     data: (data) => {
       const nodes = [...get(data, 'tpopStatusErloschenLetzterTpopberUnsicher.nodes', [])]
         .sort((a, b) => a.nr - b.nr)
@@ -941,7 +952,7 @@ export default (berichtjahr) => [
   },
   {
     query: 'tpopStatusErloschenLetzterTpopberZunehmend',
-    type: 'query',
+    title: 'query:',
     data: (data) => {
       const nodes = [...get(data, 'tpopStatusErloschenLetzterTpopberZunehmend.nodes', [])]
         .sort((a, b) => a.nr - b.nr)
@@ -957,7 +968,7 @@ export default (berichtjahr) => [
   },
   {
     query: 'tpopStatusErloschenLetzterTpopberAktuell',
-    type: 'query',
+    title: 'query:',
     data: (data) => {
       const nodes = [...get(data, 'tpopStatusErloschenLetzterTpopberAktuell.nodes', [])]
         .sort((a, b) => a.nr - b.nr)
@@ -973,7 +984,7 @@ export default (berichtjahr) => [
   },
   {
     query: 'tpopStatusErloschenLetzterTpopberErloschenMitAnsiedlung',
-    type: 'query',
+    title: 'query:',
     data: (data) => {
       const nodes = [...get(data, 'tpopStatusErloschenLetzterTpopberErloschenMitAnsiedlung.nodes', [])]
         .sort((a, b) => a.nr - b.nr)
@@ -990,7 +1001,7 @@ export default (berichtjahr) => [
   // tpop ohne gewollte Werte
   {
     query: 'tpopOhneNr',
-    type: 'query',
+    title: 'query:',
     data: (data) => {
       const projId = get(data, 'tpopOhneNr.id')
       const apId = get(data, 'tpopOhneNr.apsByProjId.nodes[0].id')
@@ -1009,7 +1020,7 @@ export default (berichtjahr) => [
   },
   {
     query: 'tpopOhneFlurname',
-    type: 'query',
+    title: 'query:',
     data: (data) => {
       const projId = get(data, 'tpopOhneFlurname.id')
       const apId = get(data, 'tpopOhneFlurname.apsByProjId.nodes[0].id')
@@ -1028,7 +1039,7 @@ export default (berichtjahr) => [
   },
   {
     query: 'tpopOhneStatus',
-    type: 'query',
+    title: 'query:',
     data: (data) => {
       const projId = get(data, 'tpopOhneStatus.id')
       const apId = get(data, 'tpopOhneStatus.apsByProjId.nodes[0].id')
@@ -1047,7 +1058,7 @@ export default (berichtjahr) => [
   },
   {
     query: 'tpopOhneBekanntSeit',
-    type: 'query',
+    title: 'query:',
     data: (data) => {
       const projId = get(data, 'tpopOhneBekanntSeit.id')
       const apId = get(data, 'tpopOhneBekanntSeit.apsByProjId.nodes[0].id')
@@ -1066,7 +1077,7 @@ export default (berichtjahr) => [
   },
   {
     query: 'tpopOhneApberRelevant',
-    type: 'query',
+    title: 'query:',
     data: (data) => {
       const projId = get(data, 'tpopOhneApberRelevant.id')
       const apId = get(data, 'tpopOhneApberRelevant.apsByProjId.nodes[0].id')
@@ -1085,7 +1096,7 @@ export default (berichtjahr) => [
   },
   {
     query: 'tpopOhneKoord',
-    type: 'query',
+    title: 'query:',
     data: (data) => {
       const projId = get(data, 'tpopOhneKoord.id')
       const apId = get(data, 'tpopOhneKoord.apsByProjId.nodes[0].id')
@@ -1104,7 +1115,7 @@ export default (berichtjahr) => [
   },
   {
     query: 'tpopStatusPotentiellApberrelevant',
-    type: 'query',
+    title: 'query:',
     data: (data) => {
       const projId = get(data, 'tpopStatusPotentiellApberrelevant.id')
       const apId = get(data, 'tpopStatusPotentiellApberrelevant.apsByProjId.nodes[0].id')
@@ -1123,7 +1134,7 @@ export default (berichtjahr) => [
   },
   {
     query: 'tpopErloschenUndRelevantLetzteBeobVor1950',
-    type: 'query',
+    title: 'query:',
     data: (data) => {
       const nodes = [...get(data, 'tpopErloschenUndRelevantLetzteBeobVor1950.nodes', [])]
         .sort((a, b) => a.nr - b.nr)
@@ -1139,7 +1150,7 @@ export default (berichtjahr) => [
   },
   {
     query: 'tpopStatusUnklarOhneBegruendung',
-    type: 'query',
+    title: 'query:',
     data: (data) => {
       const projId = get(data, 'tpopStatusUnklarOhneBegruendung.id')
       const apId = get(data, 'tpopStatusUnklarOhneBegruendung.apsByProjId.nodes[0].id')
@@ -1158,7 +1169,7 @@ export default (berichtjahr) => [
   },
   {
     query: 'tpopPopnrTponrMehrdeutig',
-    type: 'query',
+    title: 'query:',
     data: (data) => {
       const nodes = [...get(data, 'tpopPopnrTponrMehrdeutig.nodes', [])]
         .sort((a, b) => a.nr - b.nr)
@@ -1174,7 +1185,7 @@ export default (berichtjahr) => [
   },
   {
     query: 'tpopOhneTpopber',
-    type: 'query',
+    title: 'query:',
     data: (data) => {
       const nodes = [...get(data, 'tpopOhneTpopber.nodes', [])]
         .sort((a, b) => a.nr - b.nr)
@@ -1190,7 +1201,7 @@ export default (berichtjahr) => [
   },
   {
     query: 'tpopOhneMassnber',
-    type: 'query',
+    title: 'query:',
     data: (data) => {
       const nodes = [...get(data, 'tpopOhneMassnber.nodes', [])]
         .sort((a, b) => a.nr - b.nr)
@@ -1206,7 +1217,7 @@ export default (berichtjahr) => [
   },
   {
     query: 'tpopMitStatusAnsaatversuchUndZaehlungMitAnzahl',
-    type: 'query',
+    title: 'query:',
     data: (data) => {
       const nodes = [...get(data, 'tpopMitStatusAnsaatversuchUndZaehlungMitAnzahl.nodes', [])]
         .sort((a, b) => a.nr - b.nr)
@@ -1222,7 +1233,7 @@ export default (berichtjahr) => [
   },
   {
     query: 'tpopMitStatusPotentiellUndZaehlungMitAnzahl',
-    type: 'query',
+    title: 'query:',
     data: (data) => {
       const nodes = [...get(data, 'tpopMitStatusPotentiellUndZaehlungMitAnzahl.nodes', [])]
         .sort((a, b) => a.nr - b.nr)
@@ -1238,7 +1249,7 @@ export default (berichtjahr) => [
   },
   {
     query: 'tpopMitStatusPotentiellUndAnsiedlung',
-    type: 'query',
+    title: 'query:',
     data: (data) => {
       const nodes = [...get(data, 'tpopMitStatusPotentiellUndAnsiedlung.nodes', [])]
         .sort((a, b) => a.nr - b.nr)
@@ -1255,7 +1266,7 @@ export default (berichtjahr) => [
   // TPop-Bericht ohne Jahr/Entwicklung
   {
     query: 'tpopberOhneJahr',
-    type: 'query',
+    title: 'query:',
     data: (data) => {
       const projId = get(data, 'tpopberOhneJahr.id')
       const apId = get(data, 'tpopberOhneJahr.apsByProjId.nodes[0].id')
@@ -1283,7 +1294,7 @@ export default (berichtjahr) => [
   },
   {
     query: 'tpopberOhneEntwicklung',
-    type: 'query',
+    title: 'query:',
     data: (data) => {
       const projId = get(data, 'tpopberOhneEntwicklung.id')
       const apId = get(data, 'tpopberOhneEntwicklung.apsByProjId.nodes[0].id')
@@ -1315,7 +1326,7 @@ export default (berichtjahr) => [
   // Massn ohne gewollte Felder
   {
     query: 'tpopmassnOhneJahr',
-    type: 'query',
+    title: 'query:',
     data: (data) => {
       const projId = get(data, 'tpopmassnOhneJahr.id')
       const apId = get(data, 'tpopmassnOhneJahr.apsByProjId.nodes[0].id')
@@ -1343,7 +1354,7 @@ export default (berichtjahr) => [
   },
   {
     query: 'tpopmassnOhneBearb',
-    type: 'query',
+    title: 'query:',
     data: (data) => {
       const projId = get(data, 'tpopmassnOhneBearb.id')
       const apId = get(data, 'tpopmassnOhneBearb.apsByProjId.nodes[0].id')
@@ -1371,7 +1382,7 @@ export default (berichtjahr) => [
   },
   {
     query: 'tpopmassnOhneTyp',
-    type: 'query',
+    title: 'query:',
     data: (data) => {
       const projId = get(data, 'tpopmassnOhneTyp.id')
       const apId = get(data, 'tpopmassnOhneTyp.apsByProjId.nodes[0].id')
@@ -1400,7 +1411,7 @@ export default (berichtjahr) => [
   // Massn.-Bericht ohne gewollte Felder
   {
     query: 'tpopmassnberOhneJahr',
-    type: 'query',
+    title: 'query:',
     data: (data) => {
       const projId = get(data, 'tpopmassnberOhneJahr.id')
       const apId = get(data, 'tpopmassnberOhneJahr.apsByProjId.nodes[0].id')
@@ -1428,7 +1439,7 @@ export default (berichtjahr) => [
   },
   {
     query: 'tpopmassnberOhneBeurteilung',
-    type: 'query',
+    title: 'query:',
     data: (data) => {
       const projId = get(data, 'tpopmassnberOhneBeurteilung.id')
       const apId = get(data, 'tpopmassnberOhneBeurteilung.apsByProjId.nodes[0].id')
@@ -1460,7 +1471,7 @@ export default (berichtjahr) => [
   // Kontrolle ohne Jahr/Zählung/Kontrolltyp
   {
     query: 'tpopfeldkontrOhneJahr',
-    type: 'query',
+    title: 'query:',
     data: (data) => {
       const projId = get(data, 'tpopfeldkontrOhneJahr.id')
       const apId = get(data, 'tpopfeldkontrOhneJahr.apsByProjId.nodes[0].id')
@@ -1488,7 +1499,7 @@ export default (berichtjahr) => [
   },
   {
     query: 'tpopfreiwkontrOhneJahr',
-    type: 'query',
+    title: 'query:',
     data: (data) => {
       const projId = get(data, 'tpopfreiwkontrOhneJahr.id')
       const apId = get(data, 'tpopfreiwkontrOhneJahr.apsByProjId.nodes[0].id')
@@ -1516,7 +1527,7 @@ export default (berichtjahr) => [
   },
   {
     query: 'tpopfeldkontrOhneBearb',
-    type: 'query',
+    title: 'query:',
     data: (data) => {
       const projId = get(data, 'tpopfeldkontrOhneBearb.id')
       const apId = get(data, 'tpopfeldkontrOhneBearb.apsByProjId.nodes[0].id')
@@ -1544,7 +1555,7 @@ export default (berichtjahr) => [
   },
   {
     query: 'tpopfreiwkontrOhneBearb',
-    type: 'query',
+    title: 'query:',
     data: (data) => {
       const projId = get(data, 'tpopfreiwkontrOhneBearb.id')
       const apId = get(data, 'tpopfreiwkontrOhneBearb.apsByProjId.nodes[0].id')
@@ -1572,7 +1583,7 @@ export default (berichtjahr) => [
   },
   {
     query: 'tpopfeldkontrOhneZaehlung',
-    type: 'query',
+    title: 'query:',
     data: (data) => {
       const projId = get(data, 'tpopfeldkontrOhneZaehlung.id')
       const apId = get(data, 'tpopfeldkontrOhneZaehlung.apsByProjId.nodes[0].id')
@@ -1602,7 +1613,7 @@ export default (berichtjahr) => [
   },
   {
     query: 'tpopfreiwkontrOhneZaehlung',
-    type: 'query',
+    title: 'query:',
     data: (data) => {
       const projId = get(data, 'tpopfreiwkontrOhneZaehlung.id')
       const apId = get(data, 'tpopfreiwkontrOhneZaehlung.apsByProjId.nodes[0].id')
@@ -1633,7 +1644,7 @@ export default (berichtjahr) => [
   // Zählung ohne gewollte Felder
   {
     query: 'feldkontrzaehlungOhneEinheit',
-    type: 'query',
+    title: 'query:',
     data: (data) => {
       const projId = get(data, 'feldkontrzaehlungOhneEinheit.id')
       const apId = get(data, 'feldkontrzaehlungOhneEinheit.apsByProjId.nodes[0].id')
@@ -1666,7 +1677,7 @@ export default (berichtjahr) => [
   },
   {
     query: 'freiwkontrzaehlungOhneEinheit',
-    type: 'query',
+    title: 'query:',
     data: (data) => {
       const projId = get(data, 'freiwkontrzaehlungOhneEinheit.id')
       const apId = get(data, 'freiwkontrzaehlungOhneEinheit.apsByProjId.nodes[0].id')
@@ -1699,7 +1710,7 @@ export default (berichtjahr) => [
   },
   {
     query: 'feldkontrzaehlungOhneMethode',
-    type: 'query',
+    title: 'query:',
     data: (data) => {
       const projId = get(data, 'feldkontrzaehlungOhneMethode.id')
       const apId = get(data, 'feldkontrzaehlungOhneMethode.apsByProjId.nodes[0].id')
@@ -1732,7 +1743,7 @@ export default (berichtjahr) => [
   },
   {
     query: 'freiwkontrzaehlungOhneMethode',
-    type: 'query',
+    title: 'query:',
     data: (data) => {
       const projId = get(data, 'freiwkontrzaehlungOhneMethode.id')
       const apId = get(data, 'freiwkontrzaehlungOhneMethode.apsByProjId.nodes[0].id')
@@ -1765,7 +1776,7 @@ export default (berichtjahr) => [
   },
   {
     query: 'feldkontrzaehlungOhneAnzahl',
-    type: 'query',
+    title: 'query:',
     data: (data) => {
       const projId = get(data, 'feldkontrzaehlungOhneAnzahl.id')
       const apId = get(data, 'feldkontrzaehlungOhneAnzahl.apsByProjId.nodes[0].id')
@@ -1798,7 +1809,7 @@ export default (berichtjahr) => [
   },
   {
     query: 'freiwkontrzaehlungOhneAnzahl',
-    type: 'query',
+    title: 'query:',
     data: (data) => {
       const projId = get(data, 'freiwkontrzaehlungOhneAnzahl.id')
       const apId = get(data, 'freiwkontrzaehlungOhneAnzahl.apsByProjId.nodes[0].id')
