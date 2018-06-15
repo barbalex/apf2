@@ -142,7 +142,6 @@ const Qk = ({
                 return true
               }
             )
-            console.log('Qk rendering')
 
             return (
               <ErrorBoundary>
