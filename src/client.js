@@ -15,6 +15,7 @@ export default async (idb) => {
   const users = await idb.currentUser.toArray()
   const token = get(users, '[0].token', null)
   const authLink = setContext((_, { headers }) => {
+    console.log('client, authLink, setting context, token:', token)
     if (token) {
       const tokenDecoded = jwtDecode(token)
       // for unknown reason, date.now returns three more after comma

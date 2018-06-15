@@ -1,6 +1,7 @@
 query Query {
   assigningBeob @client
   user @client {
+    name
     token
   }
   tree @client {

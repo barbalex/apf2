@@ -38,11 +38,6 @@ export default async idb => {
       feldkontrTab: 'entwicklung',
       __typename: 'UrlQuery'
     },
-    login: {
-      token: '',
-      username: '',
-      __typename: 'Login',
-    },
     assigningBeob: false,
     mapMouseCoordinates: {
       x: 2683000,
@@ -54,6 +49,11 @@ export default async idb => {
       id: 'copyingBiotop',
       label: null,
       __typename: 'CopyingBiotop'
+    },
+    login: {
+      token: '',
+      username: '',
+      __typename: 'Login',
     },
     user: {
       // gql needs an id?

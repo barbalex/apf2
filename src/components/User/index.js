@@ -62,7 +62,6 @@ const enhance = compose(
           mutation: gql`
             mutation logIn($name: String, $password: String) {
               login(input: { username: $name, pass: $password }) {
-                clientMutationId
                 jwtToken
               }
             }
@@ -71,6 +70,15 @@ const enhance = compose(
             name,
             password,
           },
+          /*
+          optimisticResponse: {
+            login: {
+              username: name,
+              jwtToken: '',
+              __typename: 'Login',
+            },
+            __typename: 'Mutation',
+          },*/
         })
       } catch (error) {
         const messages = error.graphQLErrors.map(x => x.message)
@@ -85,14 +93,27 @@ const enhance = compose(
         return console.log(error)
       }
       const token = get(result, 'data.login.jwtToken')
+      // refresh currentUser in idb
+      app.db.currentUser.clear()
+      await app.db.currentUser.put({ name, token })
+      console.log('hi')
       await client.mutate({
         mutation: setUserGql,
         variables: { name, token },
+        optimisticResponse: {
+          setUser: {
+            name,
+            token,
+            __typename: 'User',
+          },
+          __typename: 'Mutation',
+        },
       })
-      initiateDataFromUrl()
-      // refresh currentUser in idb
-      app.db.currentUser.clear()
-      app.db.currentUser.put({ name, token })
+      // this is easiest way to make sure everything is correct
+      // as client is rebuilt with new settings
+      //window.location.reload(true)
+      setTimeout(() => initiateDataFromUrl())
+  
 
       setTimeout(() => {
         if (name) {
@@ -126,7 +147,6 @@ const enhance = compose(
     }) => (e, client, refetch) => {
       setPasswordErrorText('')
       const password = e.target.value
-      console.log('onBlurPassword:', {password,name})
       setPassword(password)
       if (!password) {
         setPasswordErrorText('Bitte Passwort eingeben')

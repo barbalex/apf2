@@ -140,6 +140,8 @@ const ProjekteContainer = ({
           const openNodes = get(data1, `${treeName}.openNodes`)
           const moving = get(data1, 'moving')
           const copying = get(data1, 'copying')
+          console.log('ProjektContainer rendering:', {data1})
+
           /**
            * get data based on openNodes, not activeNodes
            * reason: multiple open nodes should recieve own data
@@ -149,6 +151,8 @@ const ProjekteContainer = ({
             <Query query={data2Gql} variables={variables(openNodes, activeNodeArray)}>
               {({ loading, error, data: data2, client, refetch }) => {
                 if (error) return `Fehler: ${error.message}`
+
+                console.log('ProjektContainer rendering:', {user:get(data1, 'user')})
 
                 const data = merge(data1, data2)
                 const nodes = buildNodes({ data, treeName, loading })
