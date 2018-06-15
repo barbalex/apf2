@@ -29,7 +29,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
       messages: (function() {
         const zielNodes = sortBy(
           [...get(data, 'zielOhneTyp.apsByProjId.nodes[0].zielsByApId.nodes', [])],
-          ['jahr', 'id']
+          (n) => n.jahr || n.id
         )
         return zielNodes.map(n => ({
           url: ['Projekte', projId, 'Aktionspläne', apId, 'AP-Ziele', n.jahr, n.id],
@@ -42,7 +42,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
       messages: (function() {
         const zielNodes = sortBy(
           [...get(data, 'zielOhneZiel.apsByProjId.nodes[0].zielsByApId.nodes', [])],
-          ['jahr', 'id']
+          (n) => n.jahr || n.id
         )
         return zielNodes.map(n => ({
           url: ['Projekte', projId, 'Aktionspläne', apId, 'AP-Ziele', n.jahr, n.id],
@@ -61,8 +61,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
           zielberNodes,
           (n) =>
           [
-            get(n, 'zielByZielId.jahr'),
-            get(n, 'zielByZielId.id'),
+            get(n, 'zielByZielId.jahr') || get(n, 'zielByZielId.id'),
             n.id,
           ]
         )
@@ -85,12 +84,9 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
         )
         zielberNodes = sortBy(
           zielberNodes,
-          (n) =>
-          [
-            get(n, 'zielByZielId.jahr'),
-            get(n, 'zielByZielId.id'),
-            n.jahr,
-            n.id,
+          (n) => [
+            get(n, 'zielByZielId.jahr') || get(n, 'zielByZielId.id'),
+            n.jahr || n.id,
           ]
         )
         return zielberNodes.map(n => {
@@ -149,7 +145,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
       messages: (function() {
         const apberNodes = sortBy(
           get(data, 'apberOhneVergleichVorjahrGesamtziel.apsByProjId.nodes[0].apbersByApId.nodes', []),
-          ['jahr', 'id']
+          (n) => n.jahr || n.id
         )
         return apberNodes.map(n => ({
           url: ['Projekte', projId, 'Aktionspläne', apId, 'AP-Berichte', n.id],
@@ -162,7 +158,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
       messages: (function() {
         const apberNodes = sortBy(
           get(data, 'apberOhneBeurteilung.apsByProjId.nodes[0].apbersByApId.nodes', []),
-          ['jahr', 'id']
+          (n) => n.jahr || n.id
         )
         return apberNodes.map(n => ({
           url: ['Projekte', projId, 'Aktionspläne', apId, 'AP-Berichte', n.id],
@@ -193,7 +189,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
       messages: (function() {
         const nodes = sortBy(
           get(data, 'popOhneNr.apsByProjId.nodes[0].popsByApId.nodes', []),
-          ['name', 'id']
+          (n) => n.name || n.id
         )
         return nodes.map(n => ({
           url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', n.id],
@@ -206,7 +202,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
       messages: (function() {
         const nodes = sortBy(
           get(data, 'popOhneName.apsByProjId.nodes[0].popsByApId.nodes', []),
-          ['nr', 'id']
+          (n) => n.nr || n.id
         )
         return nodes.map(n => ({
           url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', n.id],
@@ -219,7 +215,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
       messages: (function() {
         const nodes = sortBy(
           get(data, 'popOhneStatus.apsByProjId.nodes[0].popsByApId.nodes', []),
-          ['nr', 'id']
+          (n) => n.nr || n.id
         )
         return nodes.map(n => ({
           url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', n.id],
@@ -232,7 +228,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
       messages: (function() {
         const nodes = sortBy(
           get(data, 'popOhneBekanntSeit.apsByProjId.nodes[0].popsByApId.nodes', []),
-          ['nr', 'id']
+          (n) => n.nr || n.id
         )
         return nodes.map(n => ({
           url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', n.id],
@@ -245,7 +241,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
       messages: (function() {
         const nodes = sortBy(
           get(data, 'popOhneKoord.apsByProjId.nodes[0].popsByApId.nodes', []),
-          ['nr', 'id']
+          (n) => n.nr || n.id
         )
         return nodes.map(n => ({
           url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', n.id],
@@ -260,7 +256,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
           .filter(n => get(n, 'tpopsByPopId.totalCount') === 0)
         nodes = sortBy(
           nodes,
-          ['nr', 'id']
+          (n) => n.nr || n.id
         )
         return nodes.map(n => ({
           url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', n.id],
@@ -273,7 +269,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
       messages: (function() {
         const nodes = sortBy(
           get(data, 'popMitStatusUnklarOhneBegruendung.apsByProjId.nodes[0].popsByApId.nodes', []),
-          ['nr', 'id']
+          (n) => n.nr || n.id
         )
         return nodes.map(n => ({
           url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', n.id],
@@ -286,7 +282,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
       messages: (function() {
         const nodes = sortBy(
           get(data, 'popMitMehrdeutigerNr.nodes', []),
-          ['nr', 'id']
+          (n) => n.nr || n.id
         )
         return nodes
           .map(n => ({
@@ -300,7 +296,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
       messages: (function() {
         const nodes = sortBy(
           get(data, 'popOhnePopber.nodes', []),
-          ['nr', 'id']
+          (n) => n.nr || n.id
         )
         return nodes
           .map(n => ({
@@ -316,7 +312,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
       messages: (function() {
         const nodes = sortBy(
           get(data, 'popMitBerZunehmendOhneTpopberZunehmend.nodes', []),
-          ['nr', 'id']
+          (n) => n.nr || n.id
         )
         return nodes
           .map(n => ({
@@ -330,7 +326,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
       messages: (function() {
         const nodes = sortBy(
           get(data, 'popMitBerAbnehmendOhneTpopberAbnehmend.nodes', []),
-          ['nr', 'id']
+          (n) => n.nr || n.id
         )
         return nodes
           .map(n => ({
@@ -344,7 +340,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
       messages: (function() {
         const nodes = sortBy(
           get(data, 'popMitBerErloschenOhneTpopberErloschen.nodes', []),
-          ['nr', 'id']
+          (n) => n.nr || n.id
         )
         return nodes
           .map(n => ({
@@ -358,7 +354,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
       messages: (function() {
         const nodes = sortBy(
           get(data, 'popMitBerErloschenUndTpopberNichtErloschen.nodes', []),
-          ['nr', 'id']
+          (n) => n.nr || n.id
         )
         return nodes
           .map(n => ({
@@ -374,7 +370,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
       messages: (function() {
         const nodes = sortBy(
           get(data, 'popOhneTpopMitGleichemStatus.nodes', []),
-          ['nr', 'id']
+          (n) => n.nr || n.id
         )
         return nodes
           .map(n => ({
@@ -388,7 +384,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
       messages: (function() {
         const nodes = sortBy(
           get(data, 'popStatus300TpopStatusAnders.nodes', []),
-          ['nr', 'id']
+          (n) => n.nr || n.id
         )
         return nodes
           .map(n => ({
@@ -402,7 +398,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
       messages: (function() {
         const nodes = sortBy(
           get(data, 'popStatus201TpopStatusUnzulaessig.nodes', []),
-          ['nr', 'id']
+          (n) => n.nr || n.id
         )
         return nodes
           .map(n => ({
@@ -416,7 +412,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
       messages: (function() {
         const nodes = sortBy(
           get(data, 'popStatus202TpopStatusAnders.nodes', []),
-          ['nr', 'id']
+          (n) => n.nr || n.id
         )
         return nodes
           .map(n => ({
@@ -430,7 +426,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
       messages: (function() {
         const nodes = sortBy(
           get(data, 'popStatus211TpopStatusUnzulaessig.nodes', []),
-          ['nr', 'id']
+          (n) => n.nr || n.id
         )
         return nodes
           .map(n => ({
@@ -444,7 +440,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
       messages: (function() {
         const nodes = sortBy(
           get(data, 'popStatus200TpopStatusUnzulaessig.nodes', []),
-          ['nr', 'id']
+          (n) => n.nr || n.id
         )
         return nodes
           .map(n => ({
@@ -458,7 +454,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
       messages: (function() {
         const nodes = sortBy(
           get(data, 'popStatus210TpopStatusUnzulaessig.nodes', []),
-          ['nr', 'id']
+          (n) => n.nr || n.id
         )
         return nodes
           .map(n => ({
@@ -472,7 +468,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
       messages: (function() {
         const nodes = sortBy(
           get(data, 'popStatus101TpopStatusAnders.nodes', []),
-          ['nr', 'id']
+          (n) => n.nr || n.id
         )
         return nodes
           .map(n => ({
@@ -488,7 +484,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
       messages: (function() {
         const nodes = sortBy(
           get(data, 'popStatusErloschenLetzterPopberZunehmend.nodes', []),
-          ['nr', 'id']
+          (n) => n.nr || n.id
         )
         return nodes
           .map(n => ({
@@ -502,7 +498,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
       messages: (function() {
         const nodes = sortBy(
           get(data, 'popStatusErloschenLetzterPopberStabil.nodes', []),
-          ['nr', 'id']
+          (n) => n.nr || n.id
         )
         return nodes
           .map(n => ({
@@ -516,7 +512,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
       messages: (function() {
         const nodes = sortBy(
           get(data, 'popStatusErloschenLetzterPopberAbnehmend.nodes', []),
-          ['nr', 'id']
+          (n) => n.nr || n.id
         )
         return nodes
           .map(n => ({
@@ -530,7 +526,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
       messages: (function() {
         const nodes = sortBy(
           get(data, 'popStatusErloschenLetzterPopberUnsicher.nodes', []),
-          ['nr', 'id']
+          (n) => n.nr || n.id
         )
         return nodes
           .map(n => ({
@@ -546,7 +542,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
       messages: (function() {
         const nodes = sortBy(
           get(data, 'popOhnePopmassnber.nodes', []),
-          ['nr', 'id']
+          (n) => n.nr || n.id
         )
         return nodes
           .map(n => ({
@@ -562,7 +558,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
       messages: (function() {
         const nodes = sortBy(
           get(data, 'popKoordEntsprechenKeinerTpop.nodes', []),
-          ['nr', 'id']
+          (n) => n.nr || n.id
         )
         return nodes
           .map(n => ({
@@ -576,7 +572,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
       messages: (function() {
         const nodes = sortBy(
           get(data, 'popStatusAnsaatversuchTpopAktuell.nodes', []),
-          ['nr', 'id']
+          (n) => n.nr || n.id
         )
         return nodes
           .map(n => ({
@@ -590,7 +586,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
       messages: (function() {
         const nodes = sortBy(
           get(data, 'popStatusAnsaatversuchAlleTpopErloschen.nodes', []),
-          ['nr', 'id']
+          (n) => n.nr || n.id
         )
         return nodes
           .map(n => ({
@@ -604,7 +600,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
       messages: (function() {
         const nodes = sortBy(
           get(data, 'popStatusAnsaatversuchMitTpopUrspruenglichErloschen.nodes', []),
-          ['nr', 'id']
+          (n) => n.nr || n.id
         )
         return nodes
           .map(n => ({
@@ -618,7 +614,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
       messages: (function() {
         const nodes = sortBy(
           get(data, 'popStatusErloschenMitTpopAktuell.nodes', []),
-          ['nr', 'id']
+          (n) => n.nr || n.id
         )
         return nodes
           .map(n => ({
@@ -632,7 +628,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
       messages: (function() {
         const nodes = sortBy(
           get(data, 'popStatusErloschenMitTpopAnsaatversuch.nodes', []),
-          ['nr', 'id']
+          (n) => n.nr || n.id
         )
         return nodes
           .map(n => ({
@@ -646,7 +642,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
       messages: (function() {
         const nodes = sortBy(
           get(data, 'popStatusAngesiedeltMitTpopUrspruenglich.nodes', []),
-          ['nr', 'id']
+          (n) => n.nr || n.id
         )
         return nodes
           .map(n => ({
@@ -661,7 +657,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
       messages: (function() {
         const nodes = sortBy(
           get(data, 'popStatusAktuellLetzterPopberErloschen.nodes', []),
-          ['nr', 'id']
+          (n) => n.nr || n.id
         )
         return nodes
           .map(n => ({
@@ -675,7 +671,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
       messages: (function() {
         const nodes = sortBy(
           get(data, 'popStatusErloschenLetzterPopberAktuell.nodes', []),
-          ['nr', 'id']
+          (n) => n.nr || n.id
         )
         return nodes
           .map(n => ({
@@ -689,7 +685,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
       messages: (function() {
         const nodes = sortBy(
           get(data, 'popStatusErloschenLetzterPopberErloschenMitAnsiedlung.nodes', []),
-          ['nr', 'id']
+          (n) => n.nr || n.id
         )
         return nodes
           .map(n => ({
@@ -709,14 +705,13 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
         popberNodes = sortBy(
           popberNodes,
           (n) => [
-            get(n, 'popByPopId.nr'),
-            get(n, 'popByPopId.id'),
+            get(n, 'popByPopId.nr') || get(n, 'popByPopId.id'),
             n.id,
           ]
         )
         return popberNodes.map(n => ({
           url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', get(n, 'popByPopId.id'), 'Kontroll-Berichte', n.id],
-          text: `Population: ${get(n, 'popByPopId.nr') || get(n, 'popByPopId.id')}, Populations-Bericht: ${n.id}`,
+          text: `Population: ${get(n, 'popByPopId.nr') || get(n, 'popByPopId.id')}, Bericht: ${n.id}`,
         }))
       }()),
     },
@@ -730,57 +725,55 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
         popberNodes = sortBy(
           popberNodes,
           (n) => [
-            get(n, 'popByPopId.nr'),
-            get(n, 'popByPopId.id'),
-            n.jahr,
-            n.id,
+            get(n, 'popByPopId.nr') || get(n, 'popByPopId.id'),
+            n.jahr || n.id,
           ]
         )
         return popberNodes.map(n => ({
           url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', get(n, 'popByPopId.id'), 'Kontroll-Berichte', n.id],
-          text: `Population: ${get(n, 'popByPopId.nr') || get(n, 'popByPopId.id')}, Populations-Bericht: ${n.jahr || n.id}`,
+          text: `Population: ${get(n, 'popByPopId.nr') || get(n, 'popByPopId.id')}, Bericht: ${n.jahr || n.id}`,
         }))
       }()),
     },
     {
-      query: 'popmassnberOhneJahr',
-      title: 'query:',
+      title: 'Populations-Massnahmen-Bericht ohne Jahr:',
       messages: (function() {
-
-      }()),
-      data: (data) => {
         const popNodes = get(data, 'popmassnberOhneJahr.apsByProjId.nodes[0].popsByApId.nodes', [])
-        const popberNodes = flatten(
+        let popberNodes = flatten(
           popNodes.map(n => get(n, 'popmassnbersByPopId.nodes'), [])
         )
+        popberNodes = sortBy(
+          popberNodes,
+          (n) => [
+            get(n, 'popByPopId.nr') || get(n, 'popByPopId.id'),
+            n.id,
+          ]
+        )
         return popberNodes.map(n => ({
-          proj_id: projId,
-          ap_id: apId,
-          hw: 'Populations-Massnahmen-Bericht ohne Jahr:',
           url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', get(n, 'popByPopId.id'), 'Massnahmen-Berichte', n.id],
-          text: [`Population: ${get(n, 'popByPopId.nr')}, Populations-Massnahmen-Bericht (id): ${n.id}`],
+          text: `Population: ${get(n, 'popByPopId.nr') || get(n, 'popByPopId.id')}, Bericht: ${n.id}`,
         }))
-      }
+      }()),
     },
     {
-      query: 'popmassnberOhneEntwicklung',
-      title: 'query:',
+      title: 'Populations-Massnahmen-Bericht ohne Entwicklung:',
       messages: (function() {
-
-      }()),
-      data: (data) => {
         const popNodes = get(data, 'popmassnberOhneEntwicklung.apsByProjId.nodes[0].popsByApId.nodes', [])
-        const popberNodes = flatten(
+        let popberNodes = flatten(
           popNodes.map(n => get(n, 'popmassnbersByPopId.nodes'), [])
         )
+        popberNodes = sortBy(
+          popberNodes,
+          (n) => [
+            get(n, 'popByPopId.nr') || get(n, 'popByPopId.id'),
+            n.jahr || n.id,
+          ]
+        )
         return popberNodes.map(n => ({
-          proj_id: projId,
-          ap_id: apId,
-          hw: 'Populations-Massnahmen-Bericht ohne Entwicklung:',
           url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', get(n, 'popByPopId.id'), 'Massnahmen-Berichte', n.id],
-          text: [`Population: ${get(n, 'popByPopId.nr')}, Populations-Massnahmen-Bericht (id): ${n.id}`],
+          text: `Population: ${get(n, 'popByPopId.nr') || get(n, 'popByPopId.id')}, Bericht: ${n.jahr || n.id}`,
         }))
-      }
+      }()),
     },
 
     // 3. Teilpopulation
