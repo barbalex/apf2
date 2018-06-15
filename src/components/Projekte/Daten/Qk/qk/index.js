@@ -595,7 +595,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
         return nodes
           .map(n => ({
             url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
-            text: `Population (Nr.): ${n.nr}`,
+            text: `Population: ${n.nr}`,
           }))
       }()),
     },
@@ -700,44 +700,47 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     },
     // Pop-Bericht/Pop-Massn.-Bericht ohne Jahr/Entwicklung
     {
-      query: 'popberOhneJahr',
-      title: 'query:',
+      title: 'Populations-Bericht ohne Jahr:',
       messages: (function() {
-
-      }()),
-      data: (data) => {
         const popNodes = get(data, 'popberOhneJahr.apsByProjId.nodes[0].popsByApId.nodes', [])
-        const popberNodes = flatten(
+        let popberNodes = flatten(
           popNodes.map(n => get(n, 'popbersByPopId.nodes'), [])
         )
+        popberNodes = sortBy(
+          popberNodes,
+          (n) => [
+            get(n, 'popByPopId.nr'),
+            get(n, 'popByPopId.id'),
+            n.id,
+          ]
+        )
         return popberNodes.map(n => ({
-          proj_id: projId,
-          ap_id: apId,
-          hw: 'Populations-Bericht ohne Jahr:',
           url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', get(n, 'popByPopId.id'), 'Kontroll-Berichte', n.id],
-          text: [`Population (Nr.): ${get(n, 'popByPopId.nr')}, Populations-Bericht (id): ${n.id}`],
+          text: `Population: ${get(n, 'popByPopId.nr') || get(n, 'popByPopId.id')}, Populations-Bericht: ${n.id}`,
         }))
-      }
+      }()),
     },
     {
-      query: 'popberOhneEntwicklung',
-      title: 'query:',
+      title: 'Populations-Bericht ohne Entwicklung:',
       messages: (function() {
-
-      }()),
-      data: (data) => {
         const popNodes = get(data, 'popberOhneEntwicklung.apsByProjId.nodes[0].popsByApId.nodes', [])
-        const popberNodes = flatten(
+        let popberNodes = flatten(
           popNodes.map(n => get(n, 'popbersByPopId.nodes'), [])
         )
+        popberNodes = sortBy(
+          popberNodes,
+          (n) => [
+            get(n, 'popByPopId.nr'),
+            get(n, 'popByPopId.id'),
+            n.jahr,
+            n.id,
+          ]
+        )
         return popberNodes.map(n => ({
-          proj_id: projId,
-          ap_id: apId,
-          hw: 'Populations-Bericht ohne Entwicklung:',
           url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', get(n, 'popByPopId.id'), 'Kontroll-Berichte', n.id],
-          text: [`Population (Nr.): ${get(n, 'popByPopId.nr')}, Populations-Bericht (id): ${n.id}`],
+          text: `Population: ${get(n, 'popByPopId.nr') || get(n, 'popByPopId.id')}, Populations-Bericht: ${n.jahr || n.id}`,
         }))
-      }
+      }()),
     },
     {
       query: 'popmassnberOhneJahr',
@@ -755,7 +758,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
           ap_id: apId,
           hw: 'Populations-Massnahmen-Bericht ohne Jahr:',
           url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', get(n, 'popByPopId.id'), 'Massnahmen-Berichte', n.id],
-          text: [`Population (Nr.): ${get(n, 'popByPopId.nr')}, Populations-Massnahmen-Bericht (id): ${n.id}`],
+          text: [`Population: ${get(n, 'popByPopId.nr')}, Populations-Massnahmen-Bericht (id): ${n.id}`],
         }))
       }
     },
@@ -775,7 +778,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
           ap_id: apId,
           hw: 'Populations-Massnahmen-Bericht ohne Entwicklung:',
           url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', get(n, 'popByPopId.id'), 'Massnahmen-Berichte', n.id],
-          text: [`Population (Nr.): ${get(n, 'popByPopId.nr')}, Populations-Massnahmen-Bericht (id): ${n.id}`],
+          text: [`Population: ${get(n, 'popByPopId.nr')}, Populations-Massnahmen-Bericht (id): ${n.id}`],
         }))
       }
     },
@@ -798,7 +801,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
             ap_id: n.apId,
             hw: 'Teilpopulation: Status ist "aktuell" (ursprünglich oder angesiedelt) oder potentieller Wuchsort; der letzte Teilpopulations-Bericht meldet aber "erloschen" und es gab seither keine Ansiedlung:',
             url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.popId, 'Teil-Populationen', n.id],
-            text: [`Population (Nr.): ${n.popNr}, Teil-Population (Nr.): ${n.nr}`],
+            text: [`Population: ${n.popNr}, Teil-Population: ${n.nr}`],
           }))
       }
     },

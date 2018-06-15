@@ -667,6 +667,7 @@ query QkQuery(
             popbersByPopId(filter: {entwicklung: {isNull: true}}) {
               nodes {
                 id
+                jahr
                 popByPopId {
                   id
                   nr
@@ -711,6 +712,7 @@ query QkQuery(
             popmassnbersByPopId(filter: {beurteilung: {isNull: true}}) {
               nodes {
                 id
+                jahr
                 popByPopId {
                   id
                   nr
