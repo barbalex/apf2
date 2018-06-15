@@ -1548,12 +1548,8 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
       }()),
     },
     {
-      query: 'feldkontrzaehlungOhneAnzahl',
-      title: `query:`,
+      title: `Zählung ohne Anzahl (Feld-Kontrolle):`,
       messages: (function() {
-
-      }()),
-      data: (data) => {
         const popNodes = get(data, 'feldkontrzaehlungOhneAnzahl.apsByProjId.nodes[0].popsByApId.nodes', [])
         const tpopNodes = flatten(
           popNodes.map(n => get(n, 'tpopsByPopId.nodes'), [])
@@ -1581,22 +1577,15 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
           const tpopkontrId = get(n, 'tpopkontrByTpopkontrId.id')
           const tpopkontrJahr = get(n, 'tpopkontrByTpopkontrId.jahr')
           return ({
-            proj_id: projId,
-            ap_id: apId,
-            hw: 'Zählung ohne Anzahl (Feld-Kontrolle):',
             url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', popId, 'Teil-Populationen', tpopId, 'Feld-Kontrollen', tpopkontrId, 'Zaehlungen', n.id],
             text: `Population: ${popNr || popId}, Teil-Population: ${tpopNr || tpopId}, Kontrolle: ${tpopkontrJahr || tpopkontrId}, Zählung: ${n.id}`,
           })
         })
-      }
+      }()),
     },
     {
-      query: 'freiwkontrzaehlungOhneAnzahl',
-      title: `query:`,
+      title: `Zählung ohne Anzahl (Freiwilligen-Kontrolle):`,
       messages: (function() {
-
-      }()),
-      data: (data) => {
         const popNodes = get(data, 'freiwkontrzaehlungOhneAnzahl.apsByProjId.nodes[0].popsByApId.nodes', [])
         const tpopNodes = flatten(
           popNodes.map(n => get(n, 'tpopsByPopId.nodes'), [])
@@ -1624,14 +1613,11 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
           const tpopkontrId = get(n, 'tpopkontrByTpopkontrId.id')
           const tpopkontrJahr = get(n, 'tpopkontrByTpopkontrId.jahr')
           return ({
-            proj_id: projId,
-            ap_id: apId,
-            hw: 'Zählung ohne Anzahl (Freiwilligen-Kontrolle):',
             url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', popId, 'Teil-Populationen', tpopId, 'Freiwilligen-Kontrollen', tpopkontrId, 'Zaehlungen', n.id],
             text: `Population: ${popNr || popId}, Teil-Population: ${tpopNr || tpopId}, Kontrolle: ${tpopkontrJahr || tpopkontrId}, Zählung: ${n.id}`,
           })
         })
-      }
+      }()),
     },
   ])
 }
