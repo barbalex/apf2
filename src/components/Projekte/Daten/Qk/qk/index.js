@@ -921,7 +921,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     },
     {
       title: `Teilpopulation:
-              Die TPop.-Nr. ist mehrdeutig:`,
+              Die Nummer ist mehrdeutig:`,
       messages: sortBy(
           get(data, 'tpopPopnrTponrMehrdeutig.nodes', []),
           ['popNr', 'nr']
@@ -961,7 +961,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     {
       title: `Teilpopulation
               mit Status "Ansaatversuch",
-              bei denen in der letzten Kontrolle eine Anzahl festgestellt wurde:`,
+              und in der letzten Kontrolle eine Anzahl:`,
       messages: sortBy(
           get(data, 'tpopMitStatusAnsaatversuchUndZaehlungMitAnzahl.nodes', []),
           ['popNr', 'nr']
@@ -972,57 +972,50 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
         }))
     },
     {
-      query: 'tpopMitStatusPotentiellUndZaehlungMitAnzahl',
-      title: `query:`,
-      messages: (function() {
-
-      }()),
-      data: (data) => {
-        const nodes = [...get(data, 'tpopMitStatusPotentiellUndZaehlungMitAnzahl.nodes', [])]
-          .sort((a, b) => a.nr - b.nr)
-        return nodes
-          .map(n => ({
-            proj_id: n.projId,
-            ap_id: n.apId,
-            hw: 'Teilpopulation mit Status "potentieller Wuchs-/Ansiedlungsort", bei denen in einer Kontrolle eine Anzahl festgestellt wurde:',
-            url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.popId, 'Teil-Populationen', n.id],
-            text: `Population: ${n.popNr || n.popId}, Teil-Population: ${n.nr || n.id}`,
-          }))
-      }
+      title: `Teilpopulation
+              mit Status "potentieller Wuchs-/Ansiedlungsort",
+              bei der in einer Kontrolle eine Anzahl festgestellt wurde:`,
+      messages: sortBy(
+          get(data, 'tpopMitStatusPotentiellUndZaehlungMitAnzahl.nodes', []),
+          ['popNr', 'nr']
+        )
+        .map(n => ({
+          url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.popId, 'Teil-Populationen', n.id],
+          text: `Population: ${n.popNr || n.popId}, Teil-Population: ${n.nr || n.id}`,
+        }))
     },
     {
-      query: 'tpopMitStatusPotentiellUndAnsiedlung',
-      title: `query:`,
-      messages: (function() {
-
-      }()),
-      data: (data) => {
-        const nodes = [...get(data, 'tpopMitStatusPotentiellUndAnsiedlung.nodes', [])]
-          .sort((a, b) => a.nr - b.nr)
-        return nodes
-          .map(n => ({
-            proj_id: n.projId,
-            ap_id: n.apId,
-            hw: 'Teilpopulation mit Status "potentieller Wuchs-/Ansiedlungsort", bei der eine Massnahme des Typs "Ansiedlung" existiert:',
-            url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.popId, 'Teil-Populationen', n.id],
-            text: `Population: ${n.popNr || n.popId}, Teil-Population: ${n.nr || n.id}`,
-          }))
-      }
+      title: `Teilpopulation
+              mit Status "potentieller Wuchs-/Ansiedlungsort"
+              und Massnahme des Typs "Ansiedlung":`,
+      messages: sortBy(
+          get(data, 'tpopMitStatusPotentiellUndAnsiedlung.nodes', []),
+          ['popNr', 'nr']
+        )
+        .map(n => ({
+          url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.popId, 'Teil-Populationen', n.id],
+          text: `Population: ${n.popNr || n.popId}, Teil-Population: ${n.nr || n.id}`,
+        }))
     },
     // TPop-Bericht ohne Jahr/Entwicklung
     {
-      query: 'tpopberOhneJahr',
-      title: `query:`,
+      title: `Teilpopulations-Bericht
+              ohne Jahr:`,
       messages: (function() {
-
-      }()),
-      data: (data) => {
         const popNodes = get(data, 'tpopberOhneJahr.apsByProjId.nodes[0].popsByApId.nodes', [])
         const tpopNodes = flatten(
           popNodes.map(n => get(n, 'tpopsByPopId.nodes'), [])
         )
-        const tpopberNodes = flatten(
+        let tpopberNodes = flatten(
           tpopNodes.map(n => get(n, 'tpopbersByTpopId.nodes'), [])
+        )
+        tpopberNodes = sortBy(
+          tpopberNodes,
+          (n) => [
+            get(n, 'tpopByTpopId.popByPopId.nr'),
+            get(n, 'tpopByTpopId.nr'),
+            n.id
+          ]
         )
         return tpopberNodes.map(n => {
           const popId = get(n, 'tpopByTpopId.popByPopId.id')
@@ -1030,14 +1023,11 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
           const tpopId = get(n, 'tpopByTpopId.id')
           const tpopNr = get(n, 'tpopByTpopId.nr')
           return ({
-            proj_id: projId,
-            ap_id: apId,
-            hw: 'Teilpopulations-Bericht ohne Jahr:',
             url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', popId, 'Teil-Populationen', tpopId, 'Kontroll-Berichte', n.id],
-            text: `Population: ${popNr || popId}, Teil-Population: ${tpopNr || tpopId}, Kontroll-Bericht: ${n.nr || n.id}`,
+            text: `Population: ${popNr || popId}, Teil-Population: ${tpopNr || tpopId}, Kontroll-Bericht: ${n.id}`,
           })
         })
-      }
+      }()),
     },
     {
       query: 'tpopberOhneEntwicklung',
