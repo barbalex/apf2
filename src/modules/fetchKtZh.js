@@ -1,9 +1,7 @@
 // @flow
-import axios from 'axios'
-
 import staticFilesBaseUrl from './staticFilesBaseUrl'
 
-export default ({
+export default async ({
   setKtZh,
   errorState,
 }:{
@@ -12,10 +10,12 @@ export default ({
 }): void => {
   const baseURL = staticFilesBaseUrl
   const url = `/ktZh.json`
-  axios
-    .get(url, { baseURL })
-    .then(({ data }) =>
-      setKtZh(data)
-    )
-    .catch(error => errorState.add(error))
+  const axios = await import('axios')
+  let result
+  try {
+    result = await axios.get(url, { baseURL })
+  } catch (error) {
+    errorState.add(error)
+  }
+  setKtZh(result.data)
 }

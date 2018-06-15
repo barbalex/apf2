@@ -11,7 +11,6 @@ import 'babel-polyfill'
 
 import React from 'react'
 import ReactDOM from 'react-dom'
-import axios from 'axios'
 
 import { MuiThemeProvider } from '@material-ui/core/styles'
 import theme from './theme'
@@ -36,7 +35,6 @@ import initiateDataFromUrl from './modules/initiateDataFromUrl'
 // service worker
 import registerServiceWorker from './registerServiceWorker'
 
-import apiBaseUrl from './modules/apiBaseUrl'
 import AppContainer from './components/AppContainer'
 import historyListen from './modules/historyListen'
 
@@ -67,8 +65,6 @@ import './index.css'
       },
     })
     app.init()
-
-    axios.defaults.baseURL = apiBaseUrl
 
     await initiateDataFromUrl()
 
