@@ -5,6 +5,7 @@ import InputLabel from '@material-ui/core/InputLabel'
 import FormControl from '@material-ui/core/FormControl'
 import styled from 'styled-components'
 import Paper from '@material-ui/core/Paper'
+import Button from '@material-ui/core/Button'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 import withState from 'recompose/withState'
@@ -43,19 +44,23 @@ const Title = styled.div`
 `
 const LoadingIndicator = styled.div`
   margin-bottom: 15px;
-  margin-top: 10px;
+  margin-top: -5px;
   color: ${props =>
-    props.loading ? 'rgba(0, 0, 0, 0.87)' : 'rgb(46, 125, 50)'};
+    props.loading ? '#D84315' : 'rgb(46, 125, 50)'};
 `
 const StyledA = styled.a`
   color: inherit;
   font-weight: normal;
   font-size: 12px;
 `
-const StyledInput = styled(Input)`
-  &:before {
+const StyledFormControl = styled(FormControl)`
+  padding-bottom: 19px !important;
+  > div:before {
     border-bottom-color: rgba(0, 0, 0, 0.1) !important;
   }
+`
+const LoadingLine = styled.div`
+  display: flex;
 `
 
 const enhance = compose(
@@ -109,7 +114,7 @@ const Qk = ({
           query={data2Gql}
           variables={{ berichtjahr, isBerichtjahr: !!berichtjahr, apId, projId }}
         >
-          {({ loading, error, data }) => {
+          {({ loading, error, data, refetch }) => {
             if (error) return `Fehler: ${error.message}`
             const gqlMessageGroups = sortBy(
               qk({ berichtjahr, data }),
@@ -125,47 +130,50 @@ const Qk = ({
               ],
               'title'
             )
-            const messageGroupsFiltered = filter
-              ? messageGroups.filter(messageGroup => {
-                  if (
-                    messageGroup.title &&
-                    messageGroup.title.toLowerCase
-                  ) {
-                    return messageGroup.title.toLowerCase().includes(filter.toLowerCase())
-                  }
-                  return false
-                })
-              : messageGroups.filter(messageGroup => {
-                // only return values with title
-                return !!messageGroup.title
-              })
-            const loadingMessage = loading
-              ? 'Die Daten werden analysiert...'
-              : 'Analyse abgeschlossen'
+            const messageGroupsFiltered = messageGroups.filter(
+              messageGroup => {
+                if (
+                  !!filter &&
+                  messageGroup.title &&
+                  messageGroup.title.toLowerCase
+                ) {
+                  return messageGroup.title.toLowerCase().includes(filter.toLowerCase())
+                }
+                return true
+              }
+            )
+            console.log('Qk rendering')
 
             return (
               <ErrorBoundary>
                 <Container>
                   <FormTitle title="Qualitätskontrollen" />
                   <FieldsContainer>
-                    <FormControl fullWidth>
+                    <StyledFormControl fullWidth>
                       <InputLabel htmlFor="berichtjahr">Berichtjahr</InputLabel>
-                      <StyledInput
+                      <Input
                         id="berichtjahr"
                         value={berichtjahr}
                         type="number"
                         onChange={onChangeBerichtjahr}
                       />
-                    </FormControl>
-                    <FormControl fullWidth>
+                    </StyledFormControl>
+                    <StyledFormControl fullWidth>
                       <InputLabel htmlFor="filter">
                         nach Abschnitts-Titel filtern
                       </InputLabel>
-                      <StyledInput id="filter" value={filter} onChange={onChangeFilter} />
-                    </FormControl>
-                    <LoadingIndicator loading={loading}>
-                      {loadingMessage}
-                    </LoadingIndicator>
+                      <Input id="filter" value={filter} onChange={onChangeFilter} />
+                    </StyledFormControl>
+                    <LoadingLine>
+                      <LoadingIndicator loading={loading}>
+                        {
+                          loading
+                          ? 'Die Daten werden analysiert...'
+                          : 'Analyse abgeschlossen'
+                        }
+                      </LoadingIndicator>
+                      <Button onClick={() => refetch()}>neu analysieren</Button>
+                    </LoadingLine>
                     {messageGroupsFiltered.map((messageGroup, index) => (
                       <StyledPaper key={index}>
                         <Title>{messageGroup.title}</Title>
