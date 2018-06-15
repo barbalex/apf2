@@ -105,97 +105,90 @@ const Qk = ({
       const projId = get(data1, `${treeName}.activeNodeArray[1]`)
 
       return (
-          <Query
-            query={data2Gql}
-            variables={{ berichtjahr, isBerichtjahr: !!berichtjahr, apId, projId }}
-          >
-            {({ loading, error, data }) => {
-              const gqlMessageGroups = sortBy(
-                qk({ berichtjahr, data }),
-                'title'
-              )
-                .filter(q => !q.query)
-                .filter(q => q.messages.length)
+        <Query
+          query={data2Gql}
+          variables={{ berichtjahr, isBerichtjahr: !!berichtjahr, apId, projId }}
+        >
+          {({ loading, error, data }) => {
+            if (error) return `Fehler: ${error.message}`
+            const gqlMessageGroups = sortBy(
+              qk({ berichtjahr, data }),
+              'title'
+            )
+              .filter(q => !q.query)
+              .filter(q => q.messages.length)
 
-              const messageGroups = sortBy(
-                [
-                  ...gqlMessageGroups,
-                  checkTpopOutsideZh({ data, ktZh })
-                ],
-                'title'
-              )
-              const messageArraysFiltered = filter
-                ? messageGroups.filter(messageGroup => {
-                    if (
-                      messageGroup &&
-                      messageGroup.title &&
-                      messageGroup.title.toLowerCase
-                    ) {
-                      return messageGroup.title.toLowerCase().includes(filter.toLowerCase())
-                    }
-                    return false
-                  })
-                : messageGroups.filter(messageGroup => {
+            const messageGroups = sortBy(
+              [
+                ...gqlMessageGroups,
+                checkTpopOutsideZh({ data, ktZh })
+              ],
+              'title'
+            )
+            const messageGroupsFiltered = filter
+              ? messageGroups.filter(messageGroup => {
                   if (
-                    messageGroup &&
-                    messageGroup.title
+                    messageGroup.title &&
+                    messageGroup.title.toLowerCase
                   ) {
-                    // only return values with title
-                    return true
+                    return messageGroup.title.toLowerCase().includes(filter.toLowerCase())
                   }
                   return false
                 })
-                if (error) return `Fehler: ${error.message}`
-                const loadingMessage = loading
-                  ? 'Die Daten werden analysiert...'
-                  : 'Analyse abgeschlossen'
+              : messageGroups.filter(messageGroup => {
+                // only return values with title
+                return !!messageGroup.title
+              })
+            const loadingMessage = loading
+              ? 'Die Daten werden analysiert...'
+              : 'Analyse abgeschlossen'
 
-                return (
-                  <ErrorBoundary>
-                  <Container>
-                    <FormTitle title="Qualitätskontrollen" />
-                    <FieldsContainer>
-                      <FormControl fullWidth>
-                        <InputLabel htmlFor="berichtjahr">Berichtjahr</InputLabel>
-                        <StyledInput
-                          id="berichtjahr"
-                          value={berichtjahr}
-                          type="number"
-                          onChange={onChangeBerichtjahr}
-                        />
-                      </FormControl>
-                      <FormControl fullWidth>
-                        <InputLabel htmlFor="filter">
-                          nach Abschnitts-Titel filtern
-                        </InputLabel>
-                        <StyledInput id="filter" value={filter} onChange={onChangeFilter} />
-                      </FormControl>
-                      <LoadingIndicator loading={loading}>
-                        {loadingMessage}
-                      </LoadingIndicator>
-                      {messageArraysFiltered.map((messageGroup, index) => (
-                        <StyledPaper key={index}>
-                          <Title>{messageGroup.title}</Title>
-                          {messageGroup.messages.map(m => (
-                            <div key={m.url.join()}>
-                              <StyledA
-                                href={`${appBaseUrl}/${m.url.join('/')}`}
-                                target="_blank"
-                              >
-                                {m.text}
-                              </StyledA>
-                            </div>
-                          ))}
-                        </StyledPaper>
-                      ))}
-                    </FieldsContainer>
-                  </Container>
-                </ErrorBoundary>
-              )
-            }}
-          </Query>
-        )
-      }}
-    </Query>
+            return (
+              <ErrorBoundary>
+                <Container>
+                  <FormTitle title="Qualitätskontrollen" />
+                  <FieldsContainer>
+                    <FormControl fullWidth>
+                      <InputLabel htmlFor="berichtjahr">Berichtjahr</InputLabel>
+                      <StyledInput
+                        id="berichtjahr"
+                        value={berichtjahr}
+                        type="number"
+                        onChange={onChangeBerichtjahr}
+                      />
+                    </FormControl>
+                    <FormControl fullWidth>
+                      <InputLabel htmlFor="filter">
+                        nach Abschnitts-Titel filtern
+                      </InputLabel>
+                      <StyledInput id="filter" value={filter} onChange={onChangeFilter} />
+                    </FormControl>
+                    <LoadingIndicator loading={loading}>
+                      {loadingMessage}
+                    </LoadingIndicator>
+                    {messageGroupsFiltered.map((messageGroup, index) => (
+                      <StyledPaper key={index}>
+                        <Title>{messageGroup.title}</Title>
+                        {messageGroup.messages.map(m => (
+                          <div key={m.url.join()}>
+                            <StyledA
+                              href={`${appBaseUrl}/${m.url.join('/')}`}
+                              target="_blank"
+                            >
+                              {m.text}
+                            </StyledA>
+                          </div>
+                        ))}
+                      </StyledPaper>
+                    ))}
+                  </FieldsContainer>
+                </Container>
+              </ErrorBoundary>
+            )
+          }}
+        </Query>
+      )
+    }}
+  </Query>
 
 export default enhance(Qk)
