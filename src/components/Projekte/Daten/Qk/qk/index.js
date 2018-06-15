@@ -169,7 +169,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
       title: 'Population ohne Nr.:',
       messages: sortBy(
           get(data, 'popOhneNr.apsByProjId.nodes[0].popsByApId.nodes', []),
-          'id'
+          ['name', 'id']
         )
         .map(n => ({
           url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', n.id],
@@ -291,131 +291,104 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     },
     {
       title: 'Populationen mit Bericht "erloschen" ohne Teil-Population mit Bericht "erloschen":',
-      messages: (function() {
-        const nodes = sortBy(
+      messages: sortBy(
           get(data, 'popMitBerErloschenOhneTpopberErloschen.nodes', []),
           ['nr', 'id']
         )
-        return nodes
-          .map(n => ({
-            url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
-            text: `Population: ${n.nr || n.id}`,
-          }))
-      }()),
+        .map(n => ({
+          url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
+          text: `Population: ${n.nr || n.id}`,
+        }))
     },
     {
       title: 'Populationen mit Bericht "erloschen" und mindestens einer gemäss Bericht nicht erloschenen Teil-Population:',
-      messages: (function() {
-        const nodes = sortBy(
+      messages: sortBy(
           get(data, 'popMitBerErloschenUndTpopberNichtErloschen.nodes', []),
           ['nr', 'id']
         )
-        return nodes
-          .map(n => ({
-            url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
-            text: `Population: ${n.nr || n.id}`,
-          }))
-      }()),
+        .map(n => ({
+          url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
+          text: `Population: ${n.nr || n.id}`,
+        }))
     },
 
     // Stati der Population mit den Stati der Teil-Populationen vergleichen
     {
       title: 'Population: Keine Teil-Population hat den Status der Population:',
-      messages: (function() {
-        const nodes = sortBy(
+      messages: sortBy(
           get(data, 'popOhneTpopMitGleichemStatus.nodes', []),
           ['nr', 'id']
         )
-        return nodes
-          .map(n => ({
-            url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
-            text: `Population: ${n.nr || n.id}`,
-          }))
-      }()),
+        .map(n => ({
+          url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
+          text: `Population: ${n.nr || n.id}`,
+        }))
     },
     {
       title: 'Population: Status ist "potentieller Wuchs-/Ansiedlungsort". Es gibt aber Teil-Populationen mit abweichendem Status:',
-      messages: (function() {
-        const nodes = sortBy(
+      messages: sortBy(
           get(data, 'popStatus300TpopStatusAnders.nodes', []),
           ['nr', 'id']
         )
-        return nodes
-          .map(n => ({
-            url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
-            text: `Population: ${n.nr || n.id}`,
-          }))
-      }()),
+        .map(n => ({
+          url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
+          text: `Population: ${n.nr || n.id}`,
+        }))
     },
     {
       title: 'Population: Status ist "Ansaatversuch". Es gibt Teil-Populationen mit nicht zulässigen Stati ("ursprünglich" oder "angesiedelt, aktuell:',
-      messages: (function() {
-        const nodes = sortBy(
+      messages: sortBy(
           get(data, 'popStatus201TpopStatusUnzulaessig.nodes', []),
           ['nr', 'id']
         )
-        return nodes
-          .map(n => ({
-            url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
-            text: `Population: ${n.nr || n.id}`,
-          }))
-      }()),
+        .map(n => ({
+          url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
+          text: `Population: ${n.nr || n.id}`,
+        }))
     },
     {
       title: 'Population: Status ist "angesiedelt nach Beginn AP, erloschen/nicht etabliert". Es gibt Teil-Populationen mit abweichendem Status:',
-      messages: (function() {
-        const nodes = sortBy(
+      messages: sortBy(
           get(data, 'popStatus202TpopStatusAnders.nodes', []),
           ['nr', 'id']
         )
-        return nodes
-          .map(n => ({
-            url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
-            text: `Population: ${n.nr || n.id}`,
-          }))
-      }()),
+        .map(n => ({
+          url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
+          text: `Population: ${n.nr || n.id}`,
+        }))
     },
     {
       title: 'Population: Status ist "angesiedelt vor Beginn AP, erloschen/nicht etabliert". Es gibt Teil-Populationen mit nicht zulässigen Stati ("ursprünglich", "angesiedelt, aktuell", "Ansaatversuch", "potentieller Wuchsort"):',
-      messages: (function() {
-        const nodes = sortBy(
+      messages: sortBy(
           get(data, 'popStatus211TpopStatusUnzulaessig.nodes', []),
           ['nr', 'id']
         )
-        return nodes
-          .map(n => ({
-            url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
-            text: `Population: ${n.nr || n.id}`,
-          }))
-      }()),
+        .map(n => ({
+          url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
+          text: `Population: ${n.nr || n.id}`,
+        }))
     },
     {
       title: 'Population: Status ist "angesiedelt nach Beginn AP, aktuell". Es gibt Teil-Populationen mit nicht zulässigen Stati ("ursprünglich", "angesiedelt vor Beginn AP, aktuell"):',
-      messages: (function() {
-        const nodes = sortBy(
+      messages: sortBy(
           get(data, 'popStatus200TpopStatusUnzulaessig.nodes', []),
           ['nr', 'id']
         )
-        return nodes
-          .map(n => ({
-            url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
-            text: `Population: ${n.nr || n.id}`,
-          }))
-      }()),
+        .map(n => ({
+          url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
+          text: `Population: ${n.nr || n.id}`,
+        }))
     },
     {
       title: 'Population: Status ist "angesiedelt vor Beginn AP, aktuell". Es gibt Teil-Populationen mit nicht zulässigen Stati ("ursprünglich"):',
-      messages: (function() {
-        const nodes = sortBy(
+      messages: sortBy(
           get(data, 'popStatus210TpopStatusUnzulaessig.nodes', []),
           ['nr', 'id']
         )
-        return nodes
-          .map(n => ({
-            url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
-            text: `Population: ${n.nr || n.id}`,
-          }))
-      }()),
+        .map(n => ({
+          url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
+          text: `Population: ${n.nr || n.id}`,
+        }))
     },
     {
       title: 'Population: Status ist "ursprünglich, erloschen". Es gibt Teil-Populationen (ausser potentiellen Wuchs-/Ansiedlungsorten) mit abweichendem Status:',
