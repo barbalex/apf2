@@ -269,117 +269,103 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
       }()),
     },
     {
-      query: 'popMitStatusUnklarOhneBegruendung',
       title: 'Population mit "Status unklar", ohne Begründung:',
       messages: (function() {
-
-      }()),
-      data: (data) => {
-        const nodes = [...get(data, 'popMitStatusUnklarOhneBegruendung.apsByProjId.nodes[0].popsByApId.nodes', [])]
-          .sort((a, b) => a.nr - b.nr)
+        const nodes = sortBy(
+          get(data, 'popMitStatusUnklarOhneBegruendung.apsByProjId.nodes[0].popsByApId.nodes', []),
+          ['nr', 'id']
+        )
         return nodes.map(n => ({
           url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', n.id],
           text: `Population: ${n.nr || n.id}`,
         }))
-      }
+      }()),
     },
     {
-      query: 'popMitMehrdeutigerNr',
       title: 'Population: Die Nr. ist mehrdeutig:',
       messages: (function() {
-
-      }()),
-      data: (data) => {
-        const nodes = [...get(data, 'popMitMehrdeutigerNr.nodes', [])]
-          .sort((a, b) => a.nr - b.nr)
+        const nodes = sortBy(
+          get(data, 'popMitMehrdeutigerNr.nodes', []),
+          ['nr', 'id']
+        )
         return nodes
           .map(n => ({
             url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
             text: `Population: ${n.nr || n.id}`,
           }))
-      }
+      }()),
     },
     {
-      query: 'popOhnePopber',
       title: 'Population mit angesiedelten Teilpopulationen (vor dem Berichtjahr), die (im Berichtjahr) kontrolliert wurden, aber ohne Populations-Bericht (im Berichtjahr):',
       messages: (function() {
-
-      }()),
-      data: (data) => {
-        const nodes = [...get(data, 'popOhnePopber.nodes', [])]
-          .sort((a, b) => a.nr - b.nr)
+        const nodes = sortBy(
+          get(data, 'popOhnePopber.nodes', []),
+          ['nr', 'id']
+        )
         return nodes
           .map(n => ({
             url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
             text: `Population: ${n.nr || n.id}`,
           }))
-      }
+      }()),
     },
 
     // Bericht-Stati kontrollieren
     {
-      query: 'popMitBerZunehmendOhneTpopberZunehmend',
       title: 'Populationen mit Bericht "zunehmend" ohne Teil-Population mit Bericht "zunehmend":',
       messages: (function() {
-
-      }()),
-      data: (data) => {
-        const nodes = [...get(data, 'popMitBerZunehmendOhneTpopberZunehmend.nodes', [])]
-          .sort((a, b) => a.nr - b.nr)
+        const nodes = sortBy(
+          get(data, 'popMitBerZunehmendOhneTpopberZunehmend.nodes', []),
+          ['nr', 'id']
+        )
         return nodes
           .map(n => ({
             url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
             text: `Population: ${n.nr || n.id}`,
           }))
-      }
+      }()),
     },
     {
-      query: 'popMitBerAbnehmendOhneTpopberAbnehmend',
       title: 'Populationen mit Bericht "abnehmend" ohne Teil-Population mit Bericht "abnehmend":',
       messages: (function() {
-
-      }()),
-      data: (data) => {
-        const nodes = [...get(data, 'popMitBerAbnehmendOhneTpopberAbnehmend.nodes', [])]
-          .sort((a, b) => a.nr - b.nr)
+        const nodes = sortBy(
+          get(data, 'popMitBerAbnehmendOhneTpopberAbnehmend.nodes', []),
+          ['nr', 'id']
+        )
         return nodes
           .map(n => ({
             url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
             text: `Population: ${n.nr || n.id}`,
           }))
-      }
+      }()),
     },
     {
-      query: 'popMitBerErloschenOhneTpopberErloschen',
       title: 'Populationen mit Bericht "erloschen" ohne Teil-Population mit Bericht "erloschen":',
       messages: (function() {
-
-      }()),
-      data: (data) => {
-        const nodes = [...get(data, 'popMitBerErloschenOhneTpopberErloschen.nodes', [])]
-          .sort((a, b) => a.nr - b.nr)
+        const nodes = sortBy(
+          get(data, 'popMitBerErloschenOhneTpopberErloschen.nodes', []),
+          ['nr', 'id']
+        )
         return nodes
           .map(n => ({
             url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
             text: `Population: ${n.nr || n.id}`,
           }))
-      }
+      }()),
     },
     {
-      query: 'popMitBerErloschenUndTpopberNichtErloschen',
       title: 'Populationen mit Bericht "erloschen" und mindestens einer gemäss Bericht nicht erloschenen Teil-Population:',
       messages: (function() {
-
-      }()),
-      data: (data) => {
-        const nodes = [...get(data, 'popMitBerErloschenUndTpopberNichtErloschen.nodes', [])]
-          .sort((a, b) => a.nr - b.nr)
+        const nodes = sortBy(
+          get(data, 'popMitBerErloschenUndTpopberNichtErloschen.nodes', []),
+          ['nr', 'id']
+        )
         return nodes
           .map(n => ({
             url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
             text: `Population: ${n.nr || n.id}`,
           }))
-      }
+      }()),
     },
 
     // Stati der Population mit den Stati der Teil-Populationen vergleichen
