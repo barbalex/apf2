@@ -1,6 +1,7 @@
 // @flow
 import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
+import sortBy from 'lodash/sortBy'
 
 export default ({
   data,
@@ -26,7 +27,7 @@ export default ({
   const nodeLabelFilterString = get(data, `${treeName}.nodeLabelFilter.apber`)
 
   // map through all elements and create array of nodes
-  const nodes = apbers
+  let nodes = apbers
     .filter(el => el.apId === apId)
     // filter by nodeLabelFilter
     .filter(el => {
@@ -47,12 +48,10 @@ export default ({
       url: ['Projekte', projId, 'Aktionspläne', el.apId, 'AP-Berichte', el.id],
       hasChildren: false,
     }))
-    // sort by label
-    .sort((a, b) => (a.jahr || 0) - (b.jahr || 0))
     .map((el, index) => {
       el.sort = [projIndex, 1, apIndex, 4, index]
       return el
     })
 
-  return nodes
+  return sortBy(nodes, 'label')
 }
