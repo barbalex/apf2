@@ -1301,7 +1301,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
             ap_id: apId,
             hw: 'Freiwilligen-Kontrolle ohne Jahr:',
             url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', popId, 'Teil-Populationen', tpopId, 'Freiwilligen-Kontrollen', n.id],
-            text: [`Population: ${popNr || popId}, Teil-Population: ${tpopNr || tpopId}, Kontrolle: ${n.jahr || n.id}`],
+            text: `Population: ${popNr || popId}, Teil-Population: ${tpopNr || tpopId}, Kontrolle: ${n.jahr || n.id}`,
           })
         })
       }
@@ -1330,7 +1330,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
             ap_id: apId,
             hw: 'Feldkontrolle ohne BearbeiterIn:',
             url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', popId, 'Teil-Populationen', tpopId, 'Feld-Kontrollen', n.id],
-            text: [`Population: ${popNr || popId}, Teil-Population: ${tpopNr || tpopId}, Kontrolle: ${n.jahr || n.id}`],
+            text: `Population: ${popNr || popId}, Teil-Population: ${tpopNr || tpopId}, Kontrolle: ${n.jahr || n.id}`,
           })
         })
       }
@@ -1359,7 +1359,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
             ap_id: apId,
             hw: 'Freiwilligen-Kontrolle ohne BearbeiterIn:',
             url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', popId, 'Teil-Populationen', tpopId, 'Freiwilligen-Kontrollen', n.id],
-            text: [`Population: ${popNr || popId}, Teil-Population: ${tpopNr || tpopId}, Kontrolle: ${n.jahr || n.id}`],
+            text: `Population: ${popNr || popId}, Teil-Population: ${tpopNr || tpopId}, Kontrolle: ${n.jahr || n.id}`,
           })
         })
       }
@@ -1390,7 +1390,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
               ap_id: apId,
               hw: 'Feldkontrolle ohne Zählung:',
               url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', popId, 'Teil-Populationen', tpopId, 'Feld-Kontrollen', n.id],
-              text: [`Population: ${popNr || popId}, Teil-Population: ${tpopNr || tpopId}, Kontrolle: ${n.jahr || n.id}`],
+              text: `Population: ${popNr || popId}, Teil-Population: ${tpopNr || tpopId}, Kontrolle: ${n.jahr || n.id}`,
             })
           })
       }
@@ -1421,7 +1421,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
               ap_id: apId,
               hw: 'Freiwilligen-Kontrolle ohne Zählung:',
               url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', popId, 'Teil-Populationen', tpopId, 'Freiwilligen-Kontrollen', n.id],
-              text: [`Population: ${popNr || popId}, Teil-Population: ${tpopNr || tpopId}, Kontrolle: ${n.jahr || n.id}`],
+              text: `Population: ${popNr || popId}, Teil-Population: ${tpopNr || tpopId}, Kontrolle: ${n.jahr || n.id}`,
             })
           })
       }
@@ -1456,7 +1456,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
             ap_id: apId,
             hw: 'Zählung ohne Einheit (Feld-Kontrolle):',
             url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', popId, 'Teil-Populationen', tpopId, 'Feld-Kontrollen', tpopkontrId, 'Zaehlungen', n.id],
-            text: [`Population: ${popNr || popId}, Teil-Population: ${tpopNr || tpopId}, Kontrolle: ${tpopkontrJahr || tpopkontrId}, Zählung: ${n.id}`],
+            text: `Population: ${popNr || popId}, Teil-Population: ${tpopNr || tpopId}, Kontrolle: ${tpopkontrJahr || tpopkontrId}, Zählung: ${n.id}`,
           })
         })
       }
@@ -1490,7 +1490,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
             ap_id: apId,
             hw: 'Zählung ohne Einheit (Freiwilligen-Kontrolle):',
             url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', popId, 'Teil-Populationen', tpopId, 'Freiwilligen-Kontrollen', tpopkontrId, 'Zaehlungen', n.id],
-            text: [`Population: ${popNr || popId}, Teil-Population: ${tpopNr || tpopId}, Kontrolle: ${tpopkontrJahr || tpopkontrId}, Zählung: ${n.id}`],
+            text: `Population: ${popNr || popId}, Teil-Population: ${tpopNr || tpopId}, Kontrolle: ${tpopkontrJahr || tpopkontrId}, Zählung: ${n.id}`,
           })
         })
       }
@@ -1524,7 +1524,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
             ap_id: apId,
             hw: 'Zählung ohne Methode (Feld-Kontrolle):',
             url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', popId, 'Teil-Populationen', tpopId, 'Feld-Kontrollen', tpopkontrId, 'Zaehlungen', n.id],
-            text: [`Population: ${popNr || popId}, Teil-Population: ${tpopNr || tpopId}, Kontrolle: ${tpopkontrJahr || tpopkontrId}, Zählung: ${n.id}`],
+            text: `Population: ${popNr || popId}, Teil-Population: ${tpopNr || tpopId}, Kontrolle: ${tpopkontrJahr || tpopkontrId}, Zählung: ${n.id}`,
           })
         })
       }
@@ -1558,7 +1558,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
             ap_id: apId,
             hw: 'Zählung ohne Methode (Freiwilligen-Kontrolle):',
             url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', popId, 'Teil-Populationen', tpopId, 'Freiwilligen-Kontrollen', tpopkontrId, 'Zaehlungen', n.id],
-            text: [`Population: ${popNr || popId}, Teil-Population: ${tpopNr || tpopId}, Kontrolle: ${tpopkontrJahr || tpopkontrId}, Zählung: ${n.id}`],
+            text: `Population: ${popNr || popId}, Teil-Population: ${tpopNr || tpopId}, Kontrolle: ${tpopkontrJahr || tpopkontrId}, Zählung: ${n.id}`,
           })
         })
       }
@@ -1592,7 +1592,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
             ap_id: apId,
             hw: 'Zählung ohne Anzahl (Feld-Kontrolle):',
             url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', popId, 'Teil-Populationen', tpopId, 'Feld-Kontrollen', tpopkontrId, 'Zaehlungen', n.id],
-            text: [`Population: ${popNr || popId}, Teil-Population: ${tpopNr || tpopId}, Kontrolle: ${tpopkontrJahr || tpopkontrId}, Zählung: ${n.id}`],
+            text: `Population: ${popNr || popId}, Teil-Population: ${tpopNr || tpopId}, Kontrolle: ${tpopkontrJahr || tpopkontrId}, Zählung: ${n.id}`,
           })
         })
       }
@@ -1626,7 +1626,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
             ap_id: apId,
             hw: 'Zählung ohne Anzahl (Freiwilligen-Kontrolle):',
             url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', popId, 'Teil-Populationen', tpopId, 'Freiwilligen-Kontrollen', tpopkontrId, 'Zaehlungen', n.id],
-            text: [`Population: ${popNr || popId}, Teil-Population: ${tpopNr || tpopId}, Kontrolle: ${tpopkontrJahr || tpopkontrId}, Zählung: ${n.id}`],
+            text: `Population: ${popNr || popId}, Teil-Population: ${tpopNr || tpopId}, Kontrolle: ${tpopkontrJahr || tpopkontrId}, Zählung: ${n.id}`,
           })
         })
       }
