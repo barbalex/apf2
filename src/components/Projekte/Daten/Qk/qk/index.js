@@ -392,163 +392,130 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     },
     {
       title: 'Population: Status ist "ursprünglich, erloschen". Es gibt Teil-Populationen (ausser potentiellen Wuchs-/Ansiedlungsorten) mit abweichendem Status:',
-      messages: (function() {
-        const nodes = sortBy(
+      messages: sortBy(
           get(data, 'popStatus101TpopStatusAnders.nodes', []),
           ['nr', 'id']
         )
-        return nodes
-          .map(n => ({
-            url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
-            text: `Population: ${n.nr || n.id}`,
-          }))
-      }()),
+        .map(n => ({
+          url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
+          text: `Population: ${n.nr || n.id}`,
+        }))
     },
 
     // Stati mit letztem Bericht vergleichen
     {
       title: 'Population: Status ist "erloschen" (ursprünglich oder angesiedelt), Ansaatversuch oder potentieller Wuchsort; der letzte Populations-Bericht meldet aber "zunehmend" und es gab seither keine Ansiedlung:',
-      messages: (function() {
-        const nodes = sortBy(
+      messages: sortBy(
           get(data, 'popStatusErloschenLetzterPopberZunehmend.nodes', []),
           ['nr', 'id']
         )
-        return nodes
-          .map(n => ({
-            url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
-            text: `Population: ${n.nr || n.id}`,
-          }))
-      }()),
+        .map(n => ({
+          url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
+          text: `Population: ${n.nr || n.id}`,
+        }))
     },
     {
       title: 'Population: Status ist "erloschen" (ursprünglich oder angesiedelt), Ansaatversuch oder potentieller Wuchsort; der letzte Populations-Bericht meldet aber "stabil" und es gab seither keine Ansiedlung:',
-      messages: (function() {
-        const nodes = sortBy(
+      messages: sortBy(
           get(data, 'popStatusErloschenLetzterPopberStabil.nodes', []),
           ['nr', 'id']
         )
-        return nodes
-          .map(n => ({
-            url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
-            text: `Population: ${n.nr || n.id}`,
-          }))
-      }()),
+        .map(n => ({
+          url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
+          text: `Population: ${n.nr || n.id}`,
+        }))
     },
     {
       title: 'Population: Status ist "erloschen" (ursprünglich oder angesiedelt), Ansaatversuch oder potentieller Wuchsort; der letzte Populations-Bericht meldet aber "abnehmend" und es gab seither keine Ansiedlung:',
-      messages: (function() {
-        const nodes = sortBy(
+      messages: sortBy(
           get(data, 'popStatusErloschenLetzterPopberAbnehmend.nodes', []),
           ['nr', 'id']
         )
-        return nodes
-          .map(n => ({
-            url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
-            text: `Population: ${n.nr || n.id}`,
-          }))
-      }()),
+        .map(n => ({
+          url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
+          text: `Population: ${n.nr || n.id}`,
+        }))
     },
     {
       title: 'Population: Status ist "erloschen" (ursprünglich oder angesiedelt) oder potentieller Wuchsort; der letzte Populations-Bericht meldet aber "unsicher" und es gab seither keine Ansiedlung:',
-      messages: (function() {
-        const nodes = sortBy(
+      messages: sortBy(
           get(data, 'popStatusErloschenLetzterPopberUnsicher.nodes', []),
           ['nr', 'id']
         )
-        return nodes
-          .map(n => ({
-            url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
-            text: `Population: ${n.nr || n.id}`,
-          }))
-      }()),
+        .map(n => ({
+          url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
+          text: `Population: ${n.nr || n.id}`,
+        }))
     },
 
     // Stati kontrollieren
     {
       title: 'Population mit angesiedelten Teilpopulationen (vor dem Berichtjahr), die (im Berichtjahr) kontrolliert wurden, aber ohne Massnahmen-Bericht (im Berichtjahr):',
-      messages: (function() {
-        const nodes = sortBy(
+      messages: sortBy(
           get(data, 'popOhnePopmassnber.nodes', []),
           ['nr', 'id']
         )
-        return nodes
-          .map(n => ({
-            url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
-            text: `Population: ${n.nr || n.id}`,
-          }))
-      }()),
+        .map(n => ({
+          url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
+          text: `Population: ${n.nr || n.id}`,
+        }))
     },
     // Population: Entsprechen Koordinaten der Pop einer der TPops?
     // TODO: seems only to output pops with koord but no tpop
     {
       title: 'Population: Koordinaten entsprechen keiner Teilpopulation:',
-      messages: (function() {
-        const nodes = sortBy(
+      messages: sortBy(
           get(data, 'popKoordEntsprechenKeinerTpop.nodes', []),
           ['nr', 'id']
         )
-        return nodes
-          .map(n => ({
-            url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
-            text: `Population: ${n.nr || n.id}`,
-          }))
-      }()),
+        .map(n => ({
+          url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
+          text: `Population: ${n.nr || n.id}`,
+        }))
     },
     {
       title: 'Population: Status ist "angesiedelt, Ansaatversuch", es gibt aber eine aktuelle Teilpopulation oder eine ursprüngliche erloschene:',
-      messages: (function() {
-        const nodes = sortBy(
+      messages: sortBy(
           get(data, 'popStatusAnsaatversuchTpopAktuell.nodes', []),
           ['nr', 'id']
         )
-        return nodes
-          .map(n => ({
-            url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
-            text: `Population: ${n.nr || n.id}`,
-          }))
-      }()),
+        .map(n => ({
+          url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
+          text: `Population: ${n.nr || n.id}`,
+        }))
     },
     {
       title: 'Population: Status ist "angesiedelt, Ansaatversuch", alle Teilpopulationen sind gemäss Status erloschen:',
-      messages: (function() {
-        const nodes = sortBy(
+      messages: sortBy(
           get(data, 'popStatusAnsaatversuchAlleTpopErloschen.nodes', []),
           ['nr', 'id']
         )
-        return nodes
-          .map(n => ({
-            url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
-            text: `Population: ${n.nr}`,
-          }))
-      }()),
+        .map(n => ({
+          url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
+          text: `Population: ${n.nr}`,
+        }))
     },
     {
       title: 'Population: Status ist "angesiedelt, Ansaatversuch", es gibt aber eine Teilpopulation mit Status "urspruenglich, erloschen:',
-      messages: (function() {
-        const nodes = sortBy(
+      messages: sortBy(
           get(data, 'popStatusAnsaatversuchMitTpopUrspruenglichErloschen.nodes', []),
           ['nr', 'id']
         )
-        return nodes
-          .map(n => ({
-            url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
-            text: `Population: ${n.nr || n.id}`,
-          }))
-      }()),
+        .map(n => ({
+          url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
+          text: `Population: ${n.nr || n.id}`,
+        }))
     },
     {
       title: 'Population: Status ist "erloschen" (urspruenglich oder angesiedelt), es gibt aber eine Teilpopulation mit Status "aktuell" (urspruenglich oder angesiedelt):',
-      messages: (function() {
-        const nodes = sortBy(
+      messages: sortBy(
           get(data, 'popStatusErloschenMitTpopAktuell.nodes', []),
           ['nr', 'id']
         )
-        return nodes
-          .map(n => ({
-            url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
-            text: `Population: ${n.nr || n.id}`,
-          }))
-      }()),
+        .map(n => ({
+          url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
+          text: `Population: ${n.nr || n.id}`,
+        }))
     },
     {
       title: 'Population: Status ist "erloschen" (urspruenglich oder angesiedelt), es gibt aber eine Teilpopulation mit Status "angesiedelt, Ansaatversuch":',
