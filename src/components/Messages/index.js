@@ -96,7 +96,13 @@ const UserMessages = ({
                 >
                   <DialogTitle id="dialog-title">Letzte Anpassungen:</DialogTitle>
                   <div>
-                    <AllOkButton onClick={() => onClickReadAll(unreadMessages, userName, client, refetch)}>alle o.k.</AllOkButton>
+                    <AllOkButton
+                      onClick={() =>
+                        onClickReadAll(unreadMessages, userName, client, refetch)
+                      }
+                    >
+                      alle o.k.
+                    </AllOkButton>
                     {unreadMessages.map((m, index) => {
                       const paddBottom = index < unreadMessages.length - 1
                       return (
