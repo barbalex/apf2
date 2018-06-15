@@ -170,19 +170,16 @@ const Qk = ({
                       <StyledPaper key={index}>
                         <Title>{messageGroup.title}</Title>
                         {
-                          sortBy(
-                            messageGroup.messages.map(m => (
-                              <div key={m.url.join()}>
-                                <StyledA
-                                  href={`${appBaseUrl}/${m.url.join('/')}`}
-                                  target="_blank"
-                                >
-                                  {m.text}
-                                </StyledA>
-                              </div>
-                            )),
-                            'text'
-                          )
+                          messageGroup.messages.map(m => (
+                            <div key={m.url.join()}>
+                              <StyledA
+                                href={`${appBaseUrl}/${m.url.join('/')}`}
+                                target="_blank"
+                              >
+                                {m.text}
+                              </StyledA>
+                            </div>
+                          ))
                         }
                       </StyledPaper>
                     ))}
