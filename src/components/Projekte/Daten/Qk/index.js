@@ -5,7 +5,7 @@ import InputLabel from '@material-ui/core/InputLabel'
 import FormControl from '@material-ui/core/FormControl'
 import styled from 'styled-components'
 import Paper from '@material-ui/core/Paper'
-import Button from '@material-ui/core/Button'
+//import Button from '@material-ui/core/Button'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 import withState from 'recompose/withState'
@@ -172,7 +172,7 @@ const Qk = ({
                           : 'Analyse abgeschlossen'
                         }
                       </LoadingIndicator>
-                      <Button onClick={() => refetch()}>neu analysieren</Button>
+                      {/*<Button onClick={() => refetch()}>neu analysieren</Button>*/}
                     </LoadingLine>
                     {messageGroupsFiltered.map((messageGroup, index) => (
                       <StyledPaper key={index}>
