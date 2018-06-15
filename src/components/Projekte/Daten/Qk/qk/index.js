@@ -202,80 +202,71 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
       }()),
     },
     {
-      query: 'popOhneName',
       title: 'Population ohne Name:',
       messages: (function() {
-
-      }()),
-      data: (data) => {
-        const nodes = [...get(data, 'popOhneName.apsByProjId.nodes[0].popsByApId.nodes', [])]
-          .sort((a, b) => a.nr - b.nr)
+        const nodes = sortBy(
+          get(data, 'popOhneName.apsByProjId.nodes[0].popsByApId.nodes', []),
+          ['nr', 'id']
+        )
         return nodes.map(n => ({
           url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', n.id],
-          text: [`Population (Nr.): ${n.nr}`],
+          text: `Population: ${n.nr || n.id}`,
         }))
-      }
+      }()),
     },
     {
-      query: 'popOhneStatus',
       title: 'Population ohne Status:',
       messages: (function() {
-
-      }()),
-      data: (data) => {
-        const nodes = [...get(data, 'popOhneStatus.apsByProjId.nodes[0].popsByApId.nodes', [])]
-          .sort((a, b) => a.nr - b.nr)
+        const nodes = sortBy(
+          get(data, 'popOhneStatus.apsByProjId.nodes[0].popsByApId.nodes', []),
+          ['nr', 'id']
+        )
         return nodes.map(n => ({
           url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', n.id],
-          text: [`Population (Nr.): ${n.nr}`],
+          text: `Population: ${n.nr || n.id}`,
         }))
-      }
+      }()),
     },
     {
-      query: 'popOhneBekanntSeit',
       title: 'Population ohne "bekannt seit":',
       messages: (function() {
-
-      }()),
-      data: (data) => {
-        const nodes = [...get(data, 'popOhneBekanntSeit.apsByProjId.nodes[0].popsByApId.nodes', [])]
-          .sort((a, b) => a.nr - b.nr)
+        const nodes = sortBy(
+          get(data, 'popOhneBekanntSeit.apsByProjId.nodes[0].popsByApId.nodes', []),
+          ['nr', 'id']
+        )
         return nodes.map(n => ({
           url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', n.id],
-          text: [`Population (Nr.): ${n.nr}`],
+          text: `Population: ${n.nr || n.id}`,
         }))
-      }
+      }()),
     },
     {
-      query: 'popOhneKoord',
       title: 'Population: Mindestens eine Koordinate fehlt:',
       messages: (function() {
-
-      }()),
-      data: (data) => {
-        const nodes = [...get(data, 'popOhneKoord.apsByProjId.nodes[0].popsByApId.nodes', [])]
-          .sort((a, b) => a.nr - b.nr)
+        const nodes = sortBy(
+          get(data, 'popOhneKoord.apsByProjId.nodes[0].popsByApId.nodes', []),
+          ['nr', 'id']
+        )
         return nodes.map(n => ({
           url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', n.id],
-          text: [`Population (Nr.): ${n.nr}`],
+          text: `Population: ${n.nr || n.id}`,
         }))
-      }
+      }()),
     },
     {
-      query: 'popOhneTpop',
       title: 'Population ohne Teilpopulation:',
       messages: (function() {
-
-      }()),
-      data: (data) => {
-        const nodes = [...get(data, 'popOhneTpop.apsByProjId.nodes[0].popsByApId.nodes', [])]
+        let nodes = get(data, 'popOhneTpop.apsByProjId.nodes[0].popsByApId.nodes', [])
           .filter(n => get(n, 'tpopsByPopId.totalCount') === 0)
-          .sort((a, b) => a.nr - b.nr)
+        nodes = sortBy(
+          nodes,
+          ['nr', 'id']
+        )
         return nodes.map(n => ({
           url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', n.id],
-          text: [`Population (Nr.): ${n.nr}`],
+          text: `Population: ${n.nr || n.id}`,
         }))
-      }
+      }()),
     },
     {
       query: 'popMitStatusUnklarOhneBegruendung',
@@ -288,7 +279,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
           .sort((a, b) => a.nr - b.nr)
         return nodes.map(n => ({
           url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', n.id],
-          text: [`Population (Nr.): ${n.nr}`],
+          text: `Population: ${n.nr || n.id}`,
         }))
       }
     },
@@ -304,7 +295,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
         return nodes
           .map(n => ({
             url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
-            text: [`Population (Nr.): ${n.nr}`],
+            text: `Population: ${n.nr || n.id}`,
           }))
       }
     },
@@ -320,7 +311,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
         return nodes
           .map(n => ({
             url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
-            text: [`Population (Nr.): ${n.nr}`],
+            text: `Population: ${n.nr || n.id}`,
           }))
       }
     },
@@ -338,7 +329,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
         return nodes
           .map(n => ({
             url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
-            text: [`Population (Nr.): ${n.nr}`],
+            text: `Population: ${n.nr || n.id}`,
           }))
       }
     },
@@ -354,7 +345,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
         return nodes
           .map(n => ({
             url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
-            text: [`Population (Nr.): ${n.nr}`],
+            text: `Population: ${n.nr || n.id}`,
           }))
       }
     },
@@ -370,7 +361,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
         return nodes
           .map(n => ({
             url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
-            text: [`Population (Nr.): ${n.nr}`],
+            text: `Population: ${n.nr || n.id}`,
           }))
       }
     },
@@ -386,7 +377,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
         return nodes
           .map(n => ({
             url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
-            text: [`Population (Nr.): ${n.nr}`],
+            text: `Population: ${n.nr || n.id}`,
           }))
       }
     },
@@ -405,7 +396,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
         return nodes
           .map(n => ({
             url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
-            text: [`Population (Nr.): ${n.nr}`],
+            text: `Population: ${n.nr || n.id}`,
           }))
       }
     },
@@ -421,7 +412,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
         return nodes
           .map(n => ({
             url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
-            text: [`Population (Nr.): ${n.nr}`],
+            text: `Population: ${n.nr || n.id}`,
           }))
       }
     },
@@ -437,7 +428,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
         return nodes
           .map(n => ({
             url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
-            text: [`Population (Nr.): ${n.nr}`],
+            text: `Population: ${n.nr || n.id}`,
           }))
       }
     },
@@ -453,7 +444,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
         return nodes
           .map(n => ({
             url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
-            text: [`Population (Nr.): ${n.nr}`],
+            text: `Population: ${n.nr || n.id}`,
           }))
       }
     },
@@ -469,7 +460,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
         return nodes
           .map(n => ({
             url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
-            text: [`Population (Nr.): ${n.nr}`],
+            text: `Population: ${n.nr || n.id}`,
           }))
       }
     },
@@ -485,7 +476,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
         return nodes
           .map(n => ({
             url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
-            text: [`Population (Nr.): ${n.nr}`],
+            text: `Population: ${n.nr || n.id}`,
           }))
       }
     },
@@ -501,7 +492,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
         return nodes
           .map(n => ({
             url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
-            text: [`Population (Nr.): ${n.nr}`],
+            text: `Population: ${n.nr || n.id}`,
           }))
       }
     },
@@ -517,7 +508,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
         return nodes
           .map(n => ({
             url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
-            text: [`Population (Nr.): ${n.nr}`],
+            text: `Population: ${n.nr || n.id}`,
           }))
       }
     },
@@ -535,7 +526,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
         return nodes
           .map(n => ({
             url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
-            text: [`Population (Nr.): ${n.nr}`],
+            text: `Population: ${n.nr || n.id}`,
           }))
       }
     },
@@ -551,7 +542,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
         return nodes
           .map(n => ({
             url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
-            text: [`Population (Nr.): ${n.nr}`],
+            text: `Population: ${n.nr || n.id}`,
           }))
       }
     },
@@ -567,7 +558,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
         return nodes
           .map(n => ({
             url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
-            text: [`Population (Nr.): ${n.nr}`],
+            text: `Population: ${n.nr || n.id}`,
           }))
       }
     },
@@ -583,7 +574,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
         return nodes
           .map(n => ({
             url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
-            text: [`Population (Nr.): ${n.nr}`],
+            text: `Population: ${n.nr || n.id}`,
           }))
       }
     },
@@ -601,7 +592,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
         return nodes
           .map(n => ({
             url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
-            text: [`Population (Nr.): ${n.nr}`],
+            text: `Population: ${n.nr || n.id}`,
           }))
       }
     },
@@ -619,7 +610,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
         return nodes
           .map(n => ({
             url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
-            text: [`Population (Nr.): ${n.nr}`],
+            text: `Population: ${n.nr || n.id}`,
           }))
       }
     },
@@ -631,7 +622,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
         return nodes
           .map(n => ({
             url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
-            text: [`Population (Nr.): ${n.nr}`],
+            text: `Population: ${n.nr || n.id}`,
           }))
       }()),
     },
@@ -655,7 +646,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
         return nodes
           .map(n => ({
             url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
-            text: [`Population (Nr.): ${n.nr}`],
+            text: `Population: ${n.nr || n.id}`,
           }))
       }()),
     },
@@ -667,7 +658,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
         return nodes
           .map(n => ({
             url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
-            text: [`Population (Nr.): ${n.nr}`],
+            text: `Population: ${n.nr || n.id}`,
           }))
       }()),
     },
@@ -686,7 +677,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
             ap_id: n.apId,
             hw: 'Population: Status ist "erloschen" (urspruenglich oder angesiedelt), es gibt aber eine Teilpopulation mit Status "angesiedelt, Ansaatversuch":',
             url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
-            text: [`Population (Nr.): ${n.nr}`],
+            text: `Population: ${n.nr || n.id}`,
           }))
       }
     },
@@ -705,7 +696,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
             ap_id: n.apId,
             hw: 'Population: Status ist "angesiedelt", es gibt aber eine Teilpopulation mit Status "urspruenglich":',
             url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
-            text: [`Population (Nr.): ${n.nr}`],
+            text: `Population: ${n.nr || n.id}`,
           }))
       }
     },
@@ -725,7 +716,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
             ap_id: n.apId,
             hw: 'Population: Status ist "aktuell" (ursprünglich oder angesiedelt) oder potentieller Wuchsort; der letzte Populations-Bericht meldet aber "erloschen" und es gab seither keine Ansiedlung:',
             url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
-            text: [`Population (Nr.): ${n.nr}`],
+            text: `Population: ${n.nr || n.id}`,
           }))
       }
     },
@@ -744,7 +735,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
             ap_id: n.apId,
             hw: 'Population: Status ist "erloschen", der letzte Populations-Bericht meldet aber "aktuell":',
             url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
-            text: [`Population (Nr.): ${n.nr}`],
+            text: `Population: ${n.nr || n.id}`,
           }))
       }
     },
@@ -763,7 +754,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
             ap_id: n.apId,
             hw: 'Population: Status ist "erloschen" (ursprünglich oder angesiedelt); der letzte Populations-Bericht meldet "erloschen". Seither gab es aber eine Ansiedlung:',
             url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
-            text: [`Population (Nr.): ${n.nr}`],
+            text: `Population: ${n.nr || n.id}`,
           }))
       }
     },
