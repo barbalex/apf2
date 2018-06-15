@@ -369,86 +369,75 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     },
 
     // Stati der Population mit den Stati der Teil-Populationen vergleichen
-    // Keine Teil-Population hat den Status der Population:
     {
-      query: 'popOhneTpopMitGleichemStatus',
       title: 'Population: Keine Teil-Population hat den Status der Population:',
       messages: (function() {
-
-      }()),
-      data: (data) => {
-        const nodes = [...get(data, 'popOhneTpopMitGleichemStatus.nodes', [])]
-          .sort((a, b) => a.nr - b.nr)
+        const nodes = sortBy(
+          get(data, 'popOhneTpopMitGleichemStatus.nodes', []),
+          ['nr', 'id']
+        )
         return nodes
           .map(n => ({
             url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
             text: `Population: ${n.nr || n.id}`,
           }))
-      }
+      }()),
     },
     {
-      query: 'popStatus300TpopStatusAnders',
       title: 'Population: Status ist "potentieller Wuchs-/Ansiedlungsort". Es gibt aber Teil-Populationen mit abweichendem Status:',
       messages: (function() {
-
-      }()),
-      data: (data) => {
-        const nodes = [...get(data, 'popStatus300TpopStatusAnders.nodes', [])]
-          .sort((a, b) => a.nr - b.nr)
+        const nodes = sortBy(
+          get(data, 'popStatus300TpopStatusAnders.nodes', []),
+          ['nr', 'id']
+        )
         return nodes
           .map(n => ({
             url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
             text: `Population: ${n.nr || n.id}`,
           }))
-      }
+      }()),
     },
     {
-      query: 'popStatus201TpopStatusUnzulaessig',
       title: 'Population: Status ist "Ansaatversuch". Es gibt Teil-Populationen mit nicht zulässigen Stati ("ursprünglich" oder "angesiedelt, aktuell:',
       messages: (function() {
-
-      }()),
-      data: (data) => {
-        const nodes = [...get(data, 'popStatus201TpopStatusUnzulaessig.nodes', [])]
-          .sort((a, b) => a.nr - b.nr)
+        const nodes = sortBy(
+          get(data, 'popStatus201TpopStatusUnzulaessig.nodes', []),
+          ['nr', 'id']
+        )
         return nodes
           .map(n => ({
             url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
             text: `Population: ${n.nr || n.id}`,
           }))
-      }
+      }()),
     },
     {
-      query: 'popStatus202TpopStatusAnders',
       title: 'Population: Status ist "angesiedelt nach Beginn AP, erloschen/nicht etabliert". Es gibt Teil-Populationen mit abweichendem Status:',
       messages: (function() {
-
-      }()),
-      data: (data) => {
-        const nodes = [...get(data, 'popStatus202TpopStatusAnders.nodes', [])]
-          .sort((a, b) => a.nr - b.nr)
+        const nodes = sortBy(
+          get(data, 'popStatus202TpopStatusAnders.nodes', []),
+          ['nr', 'id']
+        )
         return nodes
           .map(n => ({
             url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
             text: `Population: ${n.nr || n.id}`,
           }))
-      }
+      }()),
     },
     {
-      query: 'popStatus211TpopStatusUnzulaessig',
       title: 'Population: Status ist "angesiedelt vor Beginn AP, erloschen/nicht etabliert". Es gibt Teil-Populationen mit nicht zulässigen Stati ("ursprünglich", "angesiedelt, aktuell", "Ansaatversuch", "potentieller Wuchsort"):',
       messages: (function() {
-
-      }()),
-      data: (data) => {
-        const nodes = [...get(data, 'popStatus211TpopStatusUnzulaessig.nodes', [])]
-          .sort((a, b) => a.nr - b.nr)
+        const nodes = sortBy(
+          get(data, 'popStatus211TpopStatusUnzulaessig.nodes', []),
+          ['nr', 'id']
+        )
         return nodes
           .map(n => ({
             url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
             text: `Population: ${n.nr || n.id}`,
           }))
-      }
+      }()),
     },
     {
       query: 'popStatus200TpopStatusUnzulaessig',
