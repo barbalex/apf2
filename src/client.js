@@ -6,16 +6,36 @@ import { withClientState } from 'apollo-link-state'
 import { ApolloLink } from 'apollo-link'
 import jwtDecode from 'jwt-decode'
 import get from 'lodash/get'
+import gql from 'graphql-tag'
+import app from 'ampersand-app'
 
 import graphQlUri from './modules/graphQlUri'
 import resolvers from './store/resolvers'
 import defaults from './store/defaults'
 
 export default async (idb) => {
-  const users = await idb.currentUser.toArray()
-  const token = get(users, '[0].token', null)
-  const authLink = setContext((_, { headers }) => {
-    console.log('client, authLink, setting context, token:', token)
+  const authLink = setContext(async (_, { headers }) => {
+    const users = await idb.currentUser.toArray()
+    let token = get(users, '[0].token', null)
+    let tokenFromStore
+    let result
+    if (app.client) {
+      result = await app.client.query({
+        query: gql`
+          query Query {
+            user @client {
+              token
+            }
+          }
+        `
+      })
+      tokenFromStore = get(result, 'data.user.token')
+    }
+    /**
+     * after logging out, then logging back in
+     * token in store exists, but not yet in idb
+     */
+    if (!token && tokenFromStore) token = tokenFromStore
     if (token) {
       const tokenDecoded = jwtDecode(token)
       // for unknown reason, date.now returns three more after comma
@@ -32,6 +52,7 @@ export default async (idb) => {
     }
     return { headers }
   })
+
   const cache = new InMemoryCache({
     dataIdFromObject: object => {
       return object.id

@@ -74,7 +74,10 @@ const UserMessages = ({
       return (
         <Query query={messagesGql} variables={{ name: userName }}>
           {({ loading, error, data: messagesData, client, refetch  }) => {
-            if (error) return `Fehler: ${error.message}`
+            if (error) {
+              if (error.message.includes('keine Berechtigung')) return null
+              return `Fehler: ${error.message}`
+            }
 
             const allMessages = get(messagesData, 'allMessages.nodes', [])
             const unreadMessages = allMessages.filter(m => get(m, 'usermessagesByMessageId.nodes').length === 0)

@@ -23,7 +23,6 @@ import app from 'ampersand-app'
 
 import ErrorBoundary from '../shared/ErrorBoundary'
 import dataGql from './data.graphql'
-import initiateDataFromUrl from '../../modules/initiateDataFromUrl'
 import setUserGql from './setUser.graphql'
 
 const StyledDialog = styled(Dialog)`
@@ -96,7 +95,6 @@ const enhance = compose(
       // refresh currentUser in idb
       app.db.currentUser.clear()
       await app.db.currentUser.put({ name, token })
-      console.log('hi')
       await client.mutate({
         mutation: setUserGql,
         variables: { name, token },
@@ -111,8 +109,7 @@ const enhance = compose(
       })
       // this is easiest way to make sure everything is correct
       // as client is rebuilt with new settings
-      //window.location.reload(true)
-      setTimeout(() => initiateDataFromUrl())
+      window.location.reload(true)
   
 
       setTimeout(() => {
