@@ -519,74 +519,59 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     },
     {
       title: 'Population: Status ist "erloschen" (urspruenglich oder angesiedelt), es gibt aber eine Teilpopulation mit Status "angesiedelt, Ansaatversuch":',
-      messages: (function() {
-        const nodes = sortBy(
+      messages: sortBy(
           get(data, 'popStatusErloschenMitTpopAnsaatversuch.nodes', []),
           ['nr', 'id']
         )
-        return nodes
-          .map(n => ({
-            url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
-            text: `Population: ${n.nr || n.id}`,
-          }))
-      }()),
+        .map(n => ({
+          url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
+          text: `Population: ${n.nr || n.id}`,
+        }))
     },
     {
       title: 'Population: Status ist "angesiedelt", es gibt aber eine Teilpopulation mit Status "urspruenglich":',
-      messages: (function() {
-        const nodes = sortBy(
+      messages: sortBy(
           get(data, 'popStatusAngesiedeltMitTpopUrspruenglich.nodes', []),
           ['nr', 'id']
         )
-        return nodes
-          .map(n => ({
-            url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
-            text: `Population: ${n.nr || n.id}`,
-          }))
-      }()),
+        .map(n => ({
+          url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
+          text: `Population: ${n.nr || n.id}`,
+        }))
     },
     // Vergleich Pop Status mit letztem Pop-Bericht
     {
       title: 'Population: Status ist "aktuell" (ursprünglich oder angesiedelt) oder potentieller Wuchsort; der letzte Populations-Bericht meldet aber "erloschen" und es gab seither keine Ansiedlung:',
-      messages: (function() {
-        const nodes = sortBy(
+      messages: sortBy(
           get(data, 'popStatusAktuellLetzterPopberErloschen.nodes', []),
           ['nr', 'id']
         )
-        return nodes
-          .map(n => ({
-            url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
-            text: `Population: ${n.nr || n.id}`,
-          }))
-      }()),
+        .map(n => ({
+          url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
+          text: `Population: ${n.nr || n.id}`,
+        }))
     },
     {
       title: 'Population: Status ist "erloschen", der letzte Populations-Bericht meldet aber "aktuell":',
-      messages: (function() {
-        const nodes = sortBy(
+      messages: sortBy(
           get(data, 'popStatusErloschenLetzterPopberAktuell.nodes', []),
           ['nr', 'id']
         )
-        return nodes
-          .map(n => ({
-            url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
-            text: `Population: ${n.nr || n.id}`,
-          }))
-      }()),
+        .map(n => ({
+          url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
+          text: `Population: ${n.nr || n.id}`,
+        }))
     },
     {
       title: 'Population: Status ist "erloschen" (ursprünglich oder angesiedelt); der letzte Populations-Bericht meldet "erloschen". Seither gab es aber eine Ansiedlung:',
-      messages: (function() {
-        const nodes = sortBy(
+      messages: sortBy(
           get(data, 'popStatusErloschenLetzterPopberErloschenMitAnsiedlung.nodes', []),
           ['nr', 'id']
         )
-        return nodes
-          .map(n => ({
-            url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
-            text: `Population: ${n.nr || n.id}`,
-          }))
-      }()),
+        .map(n => ({
+          url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
+          text: `Population: ${n.nr || n.id}`,
+        }))
     },
     // Pop-Bericht/Pop-Massn.-Bericht ohne Jahr/Entwicklung
     {
@@ -599,7 +584,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
         popberNodes = sortBy(
           popberNodes,
           (n) => [
-            get(n, 'popByPopId.nr') || get(n, 'popByPopId.id'),
+            get(n, 'popByPopId.nr'),
             n.id,
           ]
         )
@@ -619,8 +604,8 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
         popberNodes = sortBy(
           popberNodes,
           (n) => [
-            get(n, 'popByPopId.nr') || get(n, 'popByPopId.id'),
-            n.jahr || n.id,
+            get(n, 'popByPopId.nr'),
+            n.jahr,
           ]
         )
         return popberNodes.map(n => ({
@@ -639,7 +624,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
         popberNodes = sortBy(
           popberNodes,
           (n) => [
-            get(n, 'popByPopId.nr') || get(n, 'popByPopId.id'),
+            get(n, 'popByPopId.nr'),
             n.id,
           ]
         )
@@ -659,8 +644,8 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
         popberNodes = sortBy(
           popberNodes,
           (n) => [
-            get(n, 'popByPopId.nr') || get(n, 'popByPopId.id'),
-            n.jahr || n.id,
+            get(n, 'popByPopId.nr'),
+            n.jahr,
           ]
         )
         return popberNodes.map(n => ({
@@ -674,222 +659,172 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
 
     // Stati mit letztem Bericht vergleichen
     {
-      query: 'tpopStatusAktuellLetzterTpopberErloschen',
-      title: 'query:',
-      messages: (function() {
-
-      }()),
-      data: (data) => {
-        const nodes = [...get(data, 'tpopStatusAktuellLetzterTpopberErloschen.nodes', [])]
-          .sort((a, b) => a.nr - b.nr)
-        return nodes
-          .map(n => ({
-            proj_id: n.projId,
-            ap_id: n.apId,
-            hw: 'Teilpopulation: Status ist "aktuell" (ursprünglich oder angesiedelt) oder potentieller Wuchsort; der letzte Teilpopulations-Bericht meldet aber "erloschen" und es gab seither keine Ansiedlung:',
-            url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.popId, 'Teil-Populationen', n.id],
-            text: [`Population: ${n.popNr}, Teil-Population: ${n.nr}`],
-          }))
-      }
+      title: 'Teilpopulation: Status ist "aktuell" (ursprünglich oder angesiedelt) oder potentieller Wuchsort; der letzte Teilpopulations-Bericht meldet aber "erloschen" und es gab seither keine Ansiedlung:',
+      messages: sortBy(
+          get(data, 'tpopStatusAktuellLetzterTpopberErloschen.nodes', []),
+          ['popNr', 'nr']
+        )
+        .map(n => ({
+          url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.popId, 'Teil-Populationen', n.id],
+          text: `Population: ${n.popNr}, Teil-Population: ${n.nr}`,
+        }))
     },
     {
-      query: 'tpopStatusErloschenLetzterTpopberStabil',
-      title: 'query:',
-      messages: (function() {
-
-      }()),
-      data: (data) => {
-        const nodes = [...get(data, 'tpopStatusErloschenLetzterTpopberStabil.nodes', [])]
-          .sort((a, b) => a.nr - b.nr)
-        return nodes
-          .map(n => ({
-            proj_id: n.projId,
-            ap_id: n.apId,
-            hw: 'Teilpopulation: Status ist "erloschen" (ursprünglich oder angesiedelt), Ansaatversuch oder potentieller Wuchsort; der letzte Teilpopulations-Bericht meldet aber "stabil" und es gab seither keine Ansiedlung:',
-            url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.popId, 'Teil-Populationen', n.id],
-            text: [`Population: ${n.popNr || n.popId}, Teil-Population: ${n.nr || n.id}`],
-          }))
-      }
+      title: 'Teilpopulation: Status ist "erloschen" (ursprünglich oder angesiedelt), Ansaatversuch oder potentieller Wuchsort; der letzte Teilpopulations-Bericht meldet aber "stabil" und es gab seither keine Ansiedlung:',
+      messages: sortBy(
+          get(data, 'tpopStatusErloschenLetzterTpopberStabil.nodes', []),
+          ['popNr', 'nr']
+        )
+        .map(n => ({
+          url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.popId, 'Teil-Populationen', n.id],
+          text: `Population: ${n.popNr || n.popId}, Teil-Population: ${n.nr || n.id}`,
+        }))
     },
     {
-      query: 'tpopStatusErloschenLetzterTpopberAbnehmend',
-      title: 'query:',
-      messages: (function() {
-
-      }()),
-      data: (data) => {
-        const nodes = [...get(data, 'tpopStatusErloschenLetzterTpopberAbnehmend.nodes', [])]
-          .sort((a, b) => a.nr - b.nr)
-        return nodes
-          .map(n => ({
-            proj_id: n.projId,
-            ap_id: n.apId,
-            hw: 'Teilpopulation: Status ist "erloschen" (ursprünglich oder angesiedelt), Ansaatversuch oder potentieller Wuchsort; der letzte Teilpopulations-Bericht meldet aber "abnehmend" und es gab seither keine Ansiedlung:',
-            url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.popId, 'Teil-Populationen', n.id],
-            text: [`Population: ${n.popNr || n.popId}, Teil-Population: ${n.nr || n.id}`],
-          }))
-      }
+      title: 'Teilpopulation: Status ist "erloschen" (ursprünglich oder angesiedelt), Ansaatversuch oder potentieller Wuchsort; der letzte Teilpopulations-Bericht meldet aber "abnehmend" und es gab seither keine Ansiedlung:',
+      messages: sortBy(
+          get(data, 'tpopStatusErloschenLetzterTpopberAbnehmend.nodes', []),
+          ['popNr', 'nr']
+        )
+        .map(n => ({
+          url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.popId, 'Teil-Populationen', n.id],
+          text: `Population: ${n.popNr || n.popId}, Teil-Population: ${n.nr || n.id}`,
+        }))
     },
     {
-      query: 'tpopStatusErloschenLetzterTpopberUnsicher',
-      title: 'query:',
-      messages: (function() {
-
-      }()),
-      data: (data) => {
-        const nodes = [...get(data, 'tpopStatusErloschenLetzterTpopberUnsicher.nodes', [])]
-          .sort((a, b) => a.nr - b.nr)
-        return nodes
-          .map(n => ({
-            proj_id: n.projId,
-            ap_id: n.apId,
-            hw: 'Teilpopulation: Status ist "erloschen" (ursprünglich oder angesiedelt) oder potentieller Wuchsort; der letzte Teilpopulations-Bericht meldet aber "unsicher" und es gab seither keine Ansiedlung:',
-            url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.popId, 'Teil-Populationen', n.id],
-            text: [`Population: ${n.popNr || n.popId}, Teil-Population: ${n.nr || n.id}`],
-          }))
-      }
+      title: 'Teilpopulation: Status ist "erloschen" (ursprünglich oder angesiedelt) oder potentieller Wuchsort; der letzte Teilpopulations-Bericht meldet aber "unsicher" und es gab seither keine Ansiedlung:',
+      messages: sortBy(
+          get(data, 'tpopStatusErloschenLetzterTpopberUnsicher.nodes', []),
+          ['popNr', 'nr']
+        )
+        .map(n => ({
+          url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.popId, 'Teil-Populationen', n.id],
+          text: `Population: ${n.popNr || n.popId}, Teil-Population: ${n.nr || n.id}`,
+        }))
     },
     {
-      query: 'tpopStatusErloschenLetzterTpopberZunehmend',
-      title: 'query:',
-      messages: (function() {
-
-      }()),
-      data: (data) => {
-        const nodes = [...get(data, 'tpopStatusErloschenLetzterTpopberZunehmend.nodes', [])]
-          .sort((a, b) => a.nr - b.nr)
-        return nodes
-          .map(n => ({
-            proj_id: n.projId,
-            ap_id: n.apId,
-            hw: 'Teilpopulation: Status ist "erloschen" (ursprünglich oder angesiedelt), Ansaatversuch oder potentieller Wuchsort; der letzte Teilpopulations-Bericht meldet aber "zunehmend" und es gab seither keine Ansiedlung:',
-            url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.popId, 'Teil-Populationen', n.id],
-            text: [`Population: ${n.popNr || n.popId}, Teil-Population: ${n.nr || n.id}`],
-          }))
-      }
+      title: `Teilpopulation:
+        Status ist "erloschen" (ursprünglich oder angesiedelt), Ansaatversuch oder potentieller Wuchsort;
+        der letzte Teilpopulations-Bericht meldet aber "zunehmend" und es gab seither keine Ansiedlung:`,
+      messages: sortBy(
+          get(data, 'tpopStatusErloschenLetzterTpopberZunehmend.nodes', []),
+          ['popNr', 'nr']
+        )
+        .map(n => ({
+          url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.popId, 'Teil-Populationen', n.id],
+          text: `Population: ${n.popNr || n.popId}, Teil-Population: ${n.nr || n.id}`,
+        }))
     },
     {
-      query: 'tpopStatusErloschenLetzterTpopberAktuell',
-      title: 'query:',
-      messages: (function() {
-
-      }()),
-      data: (data) => {
-        const nodes = [...get(data, 'tpopStatusErloschenLetzterTpopberAktuell.nodes', [])]
-          .sort((a, b) => a.nr - b.nr)
-        return nodes
-          .map(n => ({
-            proj_id: n.projId,
-            ap_id: n.apId,
-            hw: 'Teilpopulation: Status ist "erloschen", der letzte Teilpopulations-Bericht meldet aber "abnehmend", "stabil", "zunehmend" oder "unsicher":',
-            url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.popId, 'Teil-Populationen', n.id],
-            text: [`Population: ${n.popNr || n.popId}, Teil-Population: ${n.nr || n.id}`],
-          }))
-      }
+      title: `Teilpopulation:
+        Status ist "erloschen",
+        der letzte Teilpopulations-Bericht meldet aber "abnehmend", "stabil", "zunehmend" oder "unsicher":`,
+      messages: sortBy(
+          (data, 'tpopStatusErloschenLetzterTpopberAktuell.nodes', []),
+          ['popNr', 'nr']
+        )
+        .map(n => ({
+          url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.popId, 'Teil-Populationen', n.id],
+          text: `Population: ${n.popNr || n.popId}, Teil-Population: ${n.nr || n.id}`,
+        }))
     },
     {
-      query: 'tpopStatusErloschenLetzterTpopberErloschenMitAnsiedlung',
-      title: 'query:',
-      messages: (function() {
-
-      }()),
-      data: (data) => {
-        const nodes = [...get(data, 'tpopStatusErloschenLetzterTpopberErloschenMitAnsiedlung.nodes', [])]
-          .sort((a, b) => a.nr - b.nr)
-        return nodes
-          .map(n => ({
-            proj_id: n.projId,
-            ap_id: n.apId,
-            hw: 'Teilpopulation: Status ist "erloschen" (ursprünglich oder angesiedelt); der letzte Teilpopulations-Bericht meldet "erloschen". Seither gab es aber eine Ansiedlung:',
-            url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.popId, 'Teil-Populationen', n.id],
-            text: [`Population: ${n.popNr || n.popId}, Teil-Population: ${n.nr || n.id}`],
-          }))
-      }
+      title: `Teilpopulation:
+        Status ist "erloschen" (ursprünglich oder angesiedelt);
+        der letzte Teilpopulations-Bericht meldet "erloschen". Seither gab es aber eine Ansiedlung:`,
+      messages: sortBy(
+          get(data, 'tpopStatusErloschenLetzterTpopberErloschenMitAnsiedlung.nodes', []),
+          ['popNr', 'nr']
+        )
+        .map(n => ({
+          url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.popId, 'Teil-Populationen', n.id],
+          text: `Population: ${n.popNr || n.popId}, Teil-Population: ${n.nr || n.id}`,
+        }))
     },
     // tpop ohne gewollte Werte
     {
-      query: 'tpopOhneNr',
-      title: 'query:',
+      title: 'Teilpopulation ohne Nr.:',
       messages: (function() {
-
-      }()),
-      data: (data) => {
         const popNodes = get(data, 'tpopOhneNr.apsByProjId.nodes[0].popsByApId.nodes', [])
-        const tpopNodes = flatten(
+        let tpopNodes = flatten(
           popNodes.map(n => get(n, 'tpopsByPopId.nodes'), [])
         )
+        tpopNodes = sortBy(
+          tpopNodes,
+          (n) => [
+            get(n, 'popByPopId.nr'),
+            n.id
+          ]
+        )
         return tpopNodes.map(n => ({
-          proj_id: projId,
-          ap_id: apId,
-          hw: 'Teilpopulation ohne Nr.:',
           url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', get(n, 'popByPopId.id'), 'Teil-Populationen', n.id],
-          text: [`Population: ${get(n, 'popByPopId.nr') || get(n, 'popByPopId.id')}, Teil-Population: ${n.id}`],
+          text: `Population: ${get(n, 'popByPopId.nr') || get(n, 'popByPopId.id')}, Teil-Population: ${n.id}`,
         }))
-      }
+      }()),
     },
     {
-      query: 'tpopOhneFlurname',
-      title: 'query:',
+      title: `Teilpopulation ohne Flurname:`,
       messages: (function() {
-
-      }()),
-      data: (data) => {
         const popNodes = get(data, 'tpopOhneFlurname.apsByProjId.nodes[0].popsByApId.nodes', [])
-        const tpopNodes = flatten(
+        let tpopNodes = flatten(
           popNodes.map(n => get(n, 'tpopsByPopId.nodes'), [])
         )
+        tpopNodes = sortBy(
+          tpopNodes,
+          (n) => [
+            get(n, 'popByPopId.nr'),
+            n.id
+          ]
+        )
         return tpopNodes.map(n => ({
-          proj_id: projId,
-          ap_id: apId,
-          hw: 'Teilpopulation ohne Flurname:',
           url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', get(n, 'popByPopId.id'), 'Teil-Populationen', n.id],
-          text: [`Population: ${get(n, 'popByPopId.nr') || get(n, 'popByPopId.id')}, Teil-Population: ${n.nr || n.id}`],
+          text: `Population: ${get(n, 'popByPopId.nr') || get(n, 'popByPopId.id')}, Teil-Population: ${n.nr || n.id}`,
         }))
-      }
+      }()),
     },
     {
-      query: 'tpopOhneStatus',
-      title: 'query:',
+      title: `Teilpopulation ohne Status:`,
       messages: (function() {
-
-      }()),
-      data: (data) => {
         const popNodes = get(data, 'tpopOhneStatus.apsByProjId.nodes[0].popsByApId.nodes', [])
-        const tpopNodes = flatten(
+        let tpopNodes = flatten(
           popNodes.map(n => get(n, 'tpopsByPopId.nodes'), [])
         )
+        tpopNodes = sortBy(
+          tpopNodes,
+          (n) => [
+            get(n, 'popByPopId.nr'),
+            n.id
+          ]
+        )
         return tpopNodes.map(n => ({
-          proj_id: projId,
-          ap_id: apId,
-          hw: 'Teilpopulation ohne Status:',
           url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', get(n, 'popByPopId.id'), 'Teil-Populationen', n.id],
-          text: [`Population: ${get(n, 'popByPopId.nr') || get(n, 'popByPopId.id')}, Teil-Population: ${n.nr || n.id}`],
+          text: `Population: ${get(n, 'popByPopId.nr') || get(n, 'popByPopId.id')}, Teil-Population: ${n.nr || n.id}`,
         }))
-      }
+      }()),
     },
     {
-      query: 'tpopOhneBekanntSeit',
-      title: 'query:',
+      title: `Teilpopulation ohne "bekannt seit":`,
       messages: (function() {
-
-      }()),
-      data: (data) => {
         const popNodes = get(data, 'tpopOhneBekanntSeit.apsByProjId.nodes[0].popsByApId.nodes', [])
-        const tpopNodes = flatten(
+        let tpopNodes = flatten(
           popNodes.map(n => get(n, 'tpopsByPopId.nodes'), [])
         )
+        tpopNodes = sortBy(
+          tpopNodes,
+          (n) => [
+            get(n, 'popByPopId.nr'),
+            n.id
+          ]
+        )
         return tpopNodes.map(n => ({
-          proj_id: projId,
-          ap_id: apId,
-          hw: 'Teilpopulation ohne "bekannt seit":',
           url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', get(n, 'popByPopId.id'), 'Teil-Populationen', n.id],
-          text: [`Population: ${get(n, 'popByPopId.nr') || get(n, 'popByPopId.id')}, Teil-Population: ${n.nr || n.id}`],
+          text: `Population: ${get(n, 'popByPopId.nr') || get(n, 'popByPopId.id')}, Teil-Population: ${n.nr || n.id}`,
         }))
-      }
+      }()),
     },
     {
       query: 'tpopOhneApberRelevant',
-      title: 'query:',
+      title: `query:`,
       messages: (function() {
 
       }()),
@@ -903,13 +838,13 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
           ap_id: apId,
           hw: 'Teilpopulation ohne "Fuer AP-Bericht relevant":',
           url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', get(n, 'popByPopId.id'), 'Teil-Populationen', n.id],
-          text: [`Population: ${get(n, 'popByPopId.nr') || get(n, 'popByPopId.id')}, Teil-Population: ${n.nr || n.id}`],
+          text: `Population: ${get(n, 'popByPopId.nr') || get(n, 'popByPopId.id')}, Teil-Population: ${n.nr || n.id}`,
         }))
       }
     },
     {
       query: 'tpopOhneKoord',
-      title: 'query:',
+      title: `query:`,
       messages: (function() {
 
       }()),
@@ -923,13 +858,13 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
           ap_id: apId,
           hw: 'Teilpopulation: Mindestens eine Koordinate fehlt:',
           url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', get(n, 'popByPopId.id'), 'Teil-Populationen', n.id],
-          text: [`Population: ${get(n, 'popByPopId.nr') || get(n, 'popByPopId.id')}, Teil-Population: ${n.nr || n.id}`],
+          text: `Population: ${get(n, 'popByPopId.nr') || get(n, 'popByPopId.id')}, Teil-Population: ${n.nr || n.id}`,
         }))
       }
     },
     {
       query: 'tpopStatusPotentiellApberrelevant',
-      title: 'query:',
+      title: `query:`,
       messages: (function() {
 
       }()),
@@ -943,13 +878,13 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
           ap_id: apId,
           hw: 'Teilpopulation mit Status "potenzieller Wuchs-/Ansiedlungsort" und "Fuer AP-Bericht relevant?" = ja:',
           url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', get(n, 'popByPopId.id'), 'Teil-Populationen', n.id],
-          text: [`Population: ${get(n, 'popByPopId.nr') || get(n, 'popByPopId.id')}, Teil-Population: ${n.nr || n.id}`],
+          text: `Population: ${get(n, 'popByPopId.nr') || get(n, 'popByPopId.id')}, Teil-Population: ${n.nr || n.id}`,
         }))
       }
     },
     {
       query: 'tpopErloschenUndRelevantLetzteBeobVor1950',
-      title: 'query:',
+      title: `query:`,
       messages: (function() {
 
       }()),
@@ -962,13 +897,13 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
             ap_id: n.apId,
             hw: 'erloschene Teilpopulation "Fuer AP-Bericht relevant" aber letzte Beobachtung vor 1950:',
             url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.popId, 'Teil-Populationen', n.id],
-            text: [`Population: ${n.popNr || n.popId}, Teil-Population: ${n.nr || n.id}`],
+            text: `Population: ${n.popNr || n.popId}, Teil-Population: ${n.nr || n.id}`,
           }))
       }
     },
     {
       query: 'tpopStatusUnklarOhneBegruendung',
-      title: 'query:',
+      title: `query:`,
       messages: (function() {
 
       }()),
@@ -982,13 +917,13 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
           ap_id: apId,
           hw: 'Teilpopulation mit "Status unklar", ohne Begruendung:',
           url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', get(n, 'popByPopId.id'), 'Teil-Populationen', n.id],
-          text: [`Population: ${get(n, 'popByPopId.nr') || get(n, 'popByPopId.id')}, Teil-Population: ${n.nr || n.id}`],
+          text: `Population: ${get(n, 'popByPopId.nr') || get(n, 'popByPopId.id')}, Teil-Population: ${n.nr || n.id}`,
         }))
       }
     },
     {
       query: 'tpopPopnrTponrMehrdeutig',
-      title: 'query:',
+      title: `query:`,
       messages: (function() {
 
       }()),
@@ -1001,13 +936,13 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
             ap_id: n.apId,
             hw: 'Teilpopulation: Die TPop.-Nr. ist mehrdeutig:',
             url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.popId, 'Teil-Populationen', n.id],
-            text: [`Population: ${n.popNr || n.popId}, Teil-Population: ${n.nr || n.id}`],
+            text: `Population: ${n.popNr || n.popId}, Teil-Population: ${n.nr || n.id}`,
           }))
       }
     },
     {
       query: 'tpopOhneTpopber',
-      title: 'query:',
+      title: `query:`,
       messages: (function() {
 
       }()),
@@ -1020,13 +955,13 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
             ap_id: n.apId,
             hw: 'Teilpopulation mit Kontrolle (im Berichtjahr) aber ohne Teilpopulations-Bericht (im Berichtjahr):',
             url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.popId, 'Teil-Populationen', n.id],
-            text: [`Population: ${n.popNr || n.popId}, Teil-Population: ${n.nr || n.id}`],
+            text: `Population: ${n.popNr || n.popId}, Teil-Population: ${n.nr || n.id}`,
           }))
       }
     },
     {
       query: 'tpopOhneMassnber',
-      title: 'query:',
+      title: `query:`,
       messages: (function() {
 
       }()),
@@ -1039,13 +974,13 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
             ap_id: n.apId,
             hw: 'Teilpopulation mit Ansiedlung (vor dem Berichtjahr) und Kontrolle (im Berichtjahr) aber ohne Massnahmen-Bericht (im Berichtjahr):',
             url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.popId, 'Teil-Populationen', n.id],
-            text: [`Population: ${n.popNr || n.popId}, Teil-Population: ${n.nr || n.id}`],
+            text: `Population: ${n.popNr || n.popId}, Teil-Population: ${n.nr || n.id}`,
           }))
       }
     },
     {
       query: 'tpopMitStatusAnsaatversuchUndZaehlungMitAnzahl',
-      title: 'query:',
+      title: `query:`,
       messages: (function() {
 
       }()),
@@ -1058,13 +993,13 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
             ap_id: n.apId,
             hw: 'Teilpopulation mit Status "Ansaatversuch", bei denen in der letzten Kontrolle eine Anzahl festgestellt wurde:',
             url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.popId, 'Teil-Populationen', n.id],
-            text: [`Population: ${n.popNr || n.popId}, Teil-Population: ${n.nr || n.id}`],
+            text: `Population: ${n.popNr || n.popId}, Teil-Population: ${n.nr || n.id}`,
           }))
       }
     },
     {
       query: 'tpopMitStatusPotentiellUndZaehlungMitAnzahl',
-      title: 'query:',
+      title: `query:`,
       messages: (function() {
 
       }()),
@@ -1077,13 +1012,13 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
             ap_id: n.apId,
             hw: 'Teilpopulation mit Status "potentieller Wuchs-/Ansiedlungsort", bei denen in einer Kontrolle eine Anzahl festgestellt wurde:',
             url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.popId, 'Teil-Populationen', n.id],
-            text: [`Population: ${n.popNr || n.popId}, Teil-Population: ${n.nr || n.id}`],
+            text: `Population: ${n.popNr || n.popId}, Teil-Population: ${n.nr || n.id}`,
           }))
       }
     },
     {
       query: 'tpopMitStatusPotentiellUndAnsiedlung',
-      title: 'query:',
+      title: `query:`,
       messages: (function() {
 
       }()),
@@ -1096,14 +1031,14 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
             ap_id: n.apId,
             hw: 'Teilpopulation mit Status "potentieller Wuchs-/Ansiedlungsort", bei der eine Massnahme des Typs "Ansiedlung" existiert:',
             url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.popId, 'Teil-Populationen', n.id],
-            text: [`Population: ${n.popNr || n.popId}, Teil-Population: ${n.nr || n.id}`],
+            text: `Population: ${n.popNr || n.popId}, Teil-Population: ${n.nr || n.id}`,
           }))
       }
     },
     // TPop-Bericht ohne Jahr/Entwicklung
     {
       query: 'tpopberOhneJahr',
-      title: 'query:',
+      title: `query:`,
       messages: (function() {
 
       }()),
@@ -1125,14 +1060,14 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
             ap_id: apId,
             hw: 'Teilpopulations-Bericht ohne Jahr:',
             url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', popId, 'Teil-Populationen', tpopId, 'Kontroll-Berichte', n.id],
-            text: [`Population: ${popNr || popId}, Teil-Population: ${tpopNr || tpopId}, Kontroll-Bericht: ${n.nr || n.id}`],
+            text: `Population: ${popNr || popId}, Teil-Population: ${tpopNr || tpopId}, Kontroll-Bericht: ${n.nr || n.id}`,
           })
         })
       }
     },
     {
       query: 'tpopberOhneEntwicklung',
-      title: 'query:',
+      title: `query:`,
       messages: (function() {
 
       }()),
@@ -1154,7 +1089,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
             ap_id: apId,
             hw: 'Teilpopulations-Bericht ohne Entwicklung:',
             url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', popId, 'Teil-Populationen', tpopId, 'Kontroll-Berichte', n.id],
-            text: [`Population: ${popNr || popId}, Teil-Population: ${tpopNr || tpopId}, Kontroll-Bericht: ${n.nr || n.id}`],
+            text: `Population: ${popNr || popId}, Teil-Population: ${tpopNr || tpopId}, Kontroll-Bericht: ${n.nr || n.id}`,
           })
         })
       }
@@ -1165,7 +1100,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     // Massn ohne gewollte Felder
     {
       query: 'tpopmassnOhneJahr',
-      title: 'query:',
+      title: `query:`,
       messages: (function() {
 
       }()),
@@ -1187,14 +1122,14 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
             ap_id: apId,
             hw: 'Massnahme ohne Jahr:',
             url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', popId, 'Teil-Populationen', tpopId, 'Massnahmen', n.id],
-            text: [`Population: ${popNr || popId}, Teil-Population: ${tpopNr || tpopId}, Massnahme: ${n.jahr || n.id}`],
+            text: `Population: ${popNr || popId}, Teil-Population: ${tpopNr || tpopId}, Massnahme: ${n.jahr || n.id}`,
           })
         })
       }
     },
     {
       query: 'tpopmassnOhneBearb',
-      title: 'query:',
+      title: `query:`,
       messages: (function() {
 
       }()),
@@ -1216,14 +1151,14 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
             ap_id: apId,
             hw: 'Massnahme ohne BearbeiterIn:',
             url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', popId, 'Teil-Populationen', tpopId, 'Massnahmen', n.id],
-            text: [`Population: ${popNr || popId}, Teil-Population: ${tpopNr || tpopId}, Massnahme: ${n.jahr || n.id}`],
+            text: `Population: ${popNr || popId}, Teil-Population: ${tpopNr || tpopId}, Massnahme: ${n.jahr || n.id}`,
           })
         })
       }
     },
     {
       query: 'tpopmassnOhneTyp',
-      title: 'query:',
+      title: `query:`,
       messages: (function() {
 
       }()),
@@ -1245,7 +1180,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
             ap_id: apId,
             hw: 'Massnahme ohne Typ:',
             url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', popId, 'Teil-Populationen', tpopId, 'Massnahmen', n.id],
-            text: [`Population: ${popNr || popId}, Teil-Population: ${tpopNr || tpopId}, Massnahme: ${n.jahr || n.id}`],
+            text: `Population: ${popNr || popId}, Teil-Population: ${tpopNr || tpopId}, Massnahme: ${n.jahr || n.id}`,
           })
         })
       }
@@ -1253,7 +1188,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     // Massn.-Bericht ohne gewollte Felder
     {
       query: 'tpopmassnberOhneJahr',
-      title: 'query:',
+      title: `query:`,
       messages: (function() {
 
       }()),
@@ -1275,14 +1210,14 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
             ap_id: apId,
             hw: 'Massnahmen-Bericht ohne Jahr:',
             url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', popId, 'Teil-Populationen', tpopId, 'Massnahmen-Berichte', n.id],
-            text: [`Population: ${popNr || popId}, Teil-Population: ${tpopNr || tpopId}, Massnahmen-Bericht: ${n.jahr || n.id}`],
+            text: `Population: ${popNr || popId}, Teil-Population: ${tpopNr || tpopId}, Massnahmen-Bericht: ${n.jahr || n.id}`,
           })
         })
       }
     },
     {
       query: 'tpopmassnberOhneBeurteilung',
-      title: 'query:',
+      title: `query:`,
       messages: (function() {
 
       }()),
@@ -1304,7 +1239,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
             ap_id: apId,
             hw: 'Massnahmen-Bericht ohne Entwicklung:',
             url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', popId, 'Teil-Populationen', tpopId, 'Massnahmen-Berichte', n.id],
-            text: [`Population: ${popNr || popId}, Teil-Population: ${tpopNr || tpopId}, Massnahmen-Bericht: ${n.jahr || n.id}`],
+            text: `Population: ${popNr || popId}, Teil-Population: ${tpopNr || tpopId}, Massnahmen-Bericht: ${n.jahr || n.id}`,
           })
         })
       }
@@ -1315,7 +1250,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     // Kontrolle ohne Jahr/Zählung/Kontrolltyp
     {
       query: 'tpopfeldkontrOhneJahr',
-      title: 'query:',
+      title: `query:`,
       messages: (function() {
 
       }()),
@@ -1337,14 +1272,14 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
             ap_id: apId,
             hw: 'Feldkontrolle ohne Jahr:',
             url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', popId, 'Teil-Populationen', tpopId, 'Feld-Kontrollen', n.id],
-            text: [`Population: ${popNr || popId}, Teil-Population: ${tpopNr || tpopId}, Kontrolle: ${n.jahr || n.id}`],
+            text: `Population: ${popNr || popId}, Teil-Population: ${tpopNr || tpopId}, Kontrolle: ${n.jahr || n.id}`,
           })
         })
       }
     },
     {
       query: 'tpopfreiwkontrOhneJahr',
-      title: 'query:',
+      title: `query:`,
       messages: (function() {
 
       }()),
@@ -1373,7 +1308,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     },
     {
       query: 'tpopfeldkontrOhneBearb',
-      title: 'query:',
+      title: `query:`,
       messages: (function() {
 
       }()),
@@ -1402,7 +1337,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     },
     {
       query: 'tpopfreiwkontrOhneBearb',
-      title: 'query:',
+      title: `query:`,
       messages: (function() {
 
       }()),
@@ -1431,7 +1366,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     },
     {
       query: 'tpopfeldkontrOhneZaehlung',
-      title: 'query:',
+      title: `query:`,
       messages: (function() {
 
       }()),
@@ -1462,7 +1397,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     },
     {
       query: 'tpopfreiwkontrOhneZaehlung',
-      title: 'query:',
+      title: `query:`,
       messages: (function() {
 
       }()),
@@ -1494,7 +1429,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     // Zählung ohne gewollte Felder
     {
       query: 'feldkontrzaehlungOhneEinheit',
-      title: 'query:',
+      title: `query:`,
       messages: (function() {
 
       }()),
@@ -1528,7 +1463,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     },
     {
       query: 'freiwkontrzaehlungOhneEinheit',
-      title: 'query:',
+      title: `query:`,
       messages: (function() {
 
       }()),
@@ -1562,7 +1497,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     },
     {
       query: 'feldkontrzaehlungOhneMethode',
-      title: 'query:',
+      title: `query:`,
       messages: (function() {
 
       }()),
@@ -1596,7 +1531,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     },
     {
       query: 'freiwkontrzaehlungOhneMethode',
-      title: 'query:',
+      title: `query:`,
       messages: (function() {
 
       }()),
@@ -1630,7 +1565,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     },
     {
       query: 'feldkontrzaehlungOhneAnzahl',
-      title: 'query:',
+      title: `query:`,
       messages: (function() {
 
       }()),
@@ -1664,7 +1599,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     },
     {
       query: 'freiwkontrzaehlungOhneAnzahl',
-      title: 'query:',
+      title: `query:`,
       messages: (function() {
 
       }()),

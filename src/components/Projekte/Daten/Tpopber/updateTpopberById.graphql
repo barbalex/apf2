@@ -30,6 +30,7 @@ mutation updateTpopber(
       }
       bemerkungen
       tpopByTpopId {
+        id
         popByPopId {
           id
           apId
