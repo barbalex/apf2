@@ -114,6 +114,7 @@ query QkQuery(
             zielbersByZielId(filter: {erreichung: {isNull: true}}) {
               nodes {
                 id
+                jahr
                 zielByZielId {
                   id
                   jahr
@@ -130,7 +131,7 @@ query QkQuery(
     apsByProjId(filter: {id: {equalTo: $apId}}) {
       nodes {
         id
-        erfkritsByApId(filter: {erfolg: {isNull: true}}, orderBy: ID_ASC) {
+        erfkritsByApId(filter: {erfolg: {isNull: true}}) {
           nodes {
             id
           }
@@ -143,7 +144,7 @@ query QkQuery(
     apsByProjId(filter: {id: {equalTo: $apId}}) {
       nodes {
         id
-        erfkritsByApId(filter: {kriterien: {isNull: true}}, orderBy: ID_ASC) {
+        erfkritsByApId(filter: {kriterien: {isNull: true}}) {
           nodes {
             id
           }
@@ -156,7 +157,7 @@ query QkQuery(
     apsByProjId(filter: {id: {equalTo: $apId}}) {
       nodes {
         id
-        apbersByApId(filter: {jahr: {isNull: true}}, orderBy: ID_ASC) {
+        apbersByApId(filter: {jahr: {isNull: true}}) {
           nodes {
             id
           }
@@ -169,9 +170,10 @@ query QkQuery(
     apsByProjId(filter: {id: {equalTo: $apId}}) {
       nodes {
         id
-        apbersByApId(filter: {vergleichVorjahrGesamtziel: {isNull: true}}, orderBy: ID_ASC) {
+        apbersByApId(filter: {vergleichVorjahrGesamtziel: {isNull: true}}) {
           nodes {
             id
+            jahr
           }
         }
       }
@@ -182,9 +184,10 @@ query QkQuery(
     apsByProjId(filter: {id: {equalTo: $apId}}) {
       nodes {
         id
-        apbersByApId(filter: {beurteilung: {isNull: true}}, orderBy: ID_ASC) {
+        apbersByApId(filter: {beurteilung: {isNull: true}}) {
           nodes {
             id
+            jahr
           }
         }
       }

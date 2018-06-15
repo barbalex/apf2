@@ -54,8 +54,17 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
       title: 'Ziel-Bericht ohne Jahr:',
       messages: (function() {
         const zielNodes = get(data, 'zielberOhneJahr.apsByProjId.nodes[0].zielsByApId.nodes', [])
-        const zielberNodes = flatten(
+        let zielberNodes =  flatten(
           zielNodes.map(n => get(n, 'zielbersByZielId.nodes'), [])
+        )
+        zielberNodes = sortBy(
+          zielberNodes,
+          (n) =>
+          [
+            get(n, 'zielByZielId.jahr'),
+            get(n, 'zielByZielId.id'),
+            n.id,
+          ]
         )
         return zielberNodes.map(n => {
           const zielId = get(n, 'zielByZielId.id')
@@ -71,33 +80,53 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
       title: 'Ziel-Bericht ohne Entwicklung:',
       messages: (function() {
         const zielNodes = get(data, 'zielberOhneEntwicklung.apsByProjId.nodes[0].zielsByApId.nodes', [])
-        const zielberNodes = flatten(
+        let zielberNodes = flatten(
           zielNodes.map(n => get(n, 'zielbersByZielId.nodes'), [])
         )
-        return zielberNodes.map(n => ({
-          url: ['Projekte', projId, 'Aktionspläne', apId, 'AP-Ziele', get(n, 'zielByZielId.jahr'), get(n, 'zielByZielId.id'), 'Berichte', n.id],
-          text: [`Ziel-Bericht (id): ${n.id}`],
-        }))
+        zielberNodes = sortBy(
+          zielberNodes,
+          (n) =>
+          [
+            get(n, 'zielByZielId.jahr'),
+            get(n, 'zielByZielId.id'),
+            n.jahr,
+            n.id,
+          ]
+        )
+        return zielberNodes.map(n => {
+          const zielId = get(n, 'zielByZielId.id')
+          const zielJahr = get(n, 'zielByZielId.jahr')
+          return ({
+            url: ['Projekte', projId, 'Aktionspläne', apId, 'AP-Ziele', get(n, 'zielByZielId.jahr'), zielId, 'Berichte', n.id],
+            text: [`Ziel: ${zielJahr || zielId}, Bericht: ${n.jahr || n.id}`],
+          })
+        })
       }()),
     },
     // AP-Erfolgskriterium ohne Beurteilung/Kriterien
     {
       title: 'Erfolgskriterium ohne Beurteilung:',
       messages: (function() {
-        const erfkritNodes = get(data, 'erfkritOhneBeurteilung.apsByProjId.nodes[0].erfkritsByApId.nodes', [])
+        const erfkritNodes = sortBy(
+          get(data, 'erfkritOhneBeurteilung.apsByProjId.nodes[0].erfkritsByApId.nodes', []),
+          'id'
+        )
         return erfkritNodes.map(n => ({
           url: ['Projekte', projId, 'Aktionspläne', apId, 'AP-Erfolgskriterien', n.id],
-          text: [`Erfolgskriterium (id): ${n.id}`],
+          text: [`Erfolgskriterium: ${n.id}`],
         }))
       }()),
     },
     {
       title: 'Erfolgskriterium ohne Kriterien:',
       messages: (function() {
-        const erfkritNodes = get(data, 'erfkritOhneKriterien.apsByProjId.nodes[0].erfkritsByApId.nodes', [])
+        const erfkritNodes = sortBy(
+          get(data, 'erfkritOhneKriterien.apsByProjId.nodes[0].erfkritsByApId.nodes', []),
+          'id'
+        )
         return erfkritNodes.map(n => ({
           url: ['Projekte', projId, 'Aktionspläne', apId, 'AP-Erfolgskriterien', n.id],
-          text: [`Erfolgskriterium (id): ${n.id}`],
+          text: [`Erfolgskriterium: ${n.id}`],
         }))
       }()),
     },
@@ -105,73 +134,72 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
     {
       title: 'AP-Bericht ohne Jahr:',
       messages: (function() {
-        const erfkritNodes = get(data, 'apberOhneJahr.apsByProjId.nodes[0].apbersByApId.nodes', [])
-        return erfkritNodes.map(n => ({
+        const apberNodes = sortBy(
+          get(data, 'apberOhneJahr.apsByProjId.nodes[0].apbersByApId.nodes', []),
+          'id'
+        )
+        return apberNodes.map(n => ({
           url: ['Projekte', projId, 'Aktionspläne', apId, 'AP-Berichte', n.id],
-          text: [`AP-Bericht (id): ${n.id}`],
+          text: [`AP-Bericht: ${n.id}`],
         }))
       }()),
     },
     {
-      query: 'apberOhneVergleichVorjahrGesamtziel',
       title: 'AP-Bericht ohne Vergleich Vorjahr - Gesamtziel:',
       messages: (function() {
-
-      }()),
-      data: (data) => {
-        const erfkritNodes = get(data, 'apberOhneVergleichVorjahrGesamtziel.apsByProjId.nodes[0].apbersByApId.nodes', [])
-        return erfkritNodes.map(n => ({
+        const apberNodes = sortBy(
+          get(data, 'apberOhneVergleichVorjahrGesamtziel.apsByProjId.nodes[0].apbersByApId.nodes', []),
+          ['jahr', 'id']
+        )
+        return apberNodes.map(n => ({
           url: ['Projekte', projId, 'Aktionspläne', apId, 'AP-Berichte', n.id],
-          text: [`AP-Bericht (id): ${n.id}`],
+          text: [`AP-Bericht: ${n.jahr || n.id}`],
         }))
-      }
+      }()),
     },
     {
-      query: 'apberOhneBeurteilung',
       title: 'AP-Bericht ohne Beurteilung:',
       messages: (function() {
-
-      }()),
-      data: (data) => {
-        const erfkritNodes = get(data, 'apberOhneBeurteilung.apsByProjId.nodes[0].apbersByApId.nodes', [])
-        return erfkritNodes.map(n => ({
+        const apberNodes = sortBy(
+          get(data, 'apberOhneBeurteilung.apsByProjId.nodes[0].apbersByApId.nodes', []),
+          ['jahr', 'id']
+        )
+        return apberNodes.map(n => ({
           url: ['Projekte', projId, 'Aktionspläne', apId, 'AP-Berichte', n.id],
-          text: [`AP-Bericht (id): ${n.id}`],
+          text: [`AP-Bericht: ${n.jahr || n.id}`],
         }))
-      }
+      }()),
     },
     // assoziierte Art ohne Art
     {
-      query: 'assozartOhneArt',
       title: 'Assoziierte Art ohne Art:',
       messages: (function() {
-
-      }()),
-      data: (data) => {
-        const nodes = get(data, 'assozartOhneArt.apsByProjId.nodes[0].assozartsByApId.nodes', [])
+        const nodes = sortBy(
+          get(data, 'assozartOhneArt.apsByProjId.nodes[0].assozartsByApId.nodes', []),
+          'id'
+        )
         return nodes.map(n => ({
           url: ['Projekte', projId, 'Aktionspläne', apId, 'assoziierte-Arten', n.id],
-          text: [`Assoziierte Art (id): ${n.id}`],
+          text: [`Assoziierte Art: ${n.id}`],
         }))
-      }
+      }()),
     },
 
     // 2. Population
 
     // Population: ohne Nr/Name/Status/bekannt seit/Koordinaten/tpop
     {
-      query: 'popOhneNr',
       title: 'Population ohne Nr.:',
       messages: (function() {
-
-      }()),
-      data: (data) => {
-        const nodes = get(data, 'popOhneNr.apsByProjId.nodes[0].popsByApId.nodes', [])
+        const nodes = sortBy(
+          get(data, 'popOhneNr.apsByProjId.nodes[0].popsByApId.nodes', []),
+          ['name', 'id']
+        )
         return nodes.map(n => ({
           url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen', n.id],
-          text: [`Population (Name): ${n.name}`],
+          text: [`Population: ${n.name || n.id}`],
         }))
-      }
+      }()),
     },
     {
       query: 'popOhneName',
