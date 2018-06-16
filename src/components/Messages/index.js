@@ -17,22 +17,35 @@ import createUsermessage from './createUsermessage.graphql'
 const StyledDialog = styled(Dialog)`
   > div {
     max-width: ${window.innerWidth * 0.8}px !important;
+    min-width: 368px !important;
   }
   > div > div {
     overflow: auto;
   }
 `
-const MessageContainer = styled.div`
+const MessageRow = styled.div`
   display: flex;
   justify-content: space-between;
   padding-bottom: ${props => (props.paddBottom ? '24px' : 0)};
   padding-left: 24px;
   padding-right: 15px;
+  min-height: 36px;
+`
+const MessageDiv = styled.div`
+  padding-top: 8px;
+  padding-right: 15px;
+`
+const TitleRow = styled.div`
+  padding-bottom: 5px;
 `
 const AllOkButton = styled(Button)`
   position: absolute !important;
-  top: 25px;
+  top: 20px;
   right: 25px;
+`
+const OkButton = styled(Button)`
+  position: relative !important;
+  right: 12px;
 `
 
 const enhance = compose(
@@ -94,8 +107,8 @@ const UserMessages = ({
                   }
                   aria-labelledby="dialog-title"
                 >
-                  <DialogTitle id="dialog-title">Letzte Anpassungen:</DialogTitle>
-                  <div>
+                  <TitleRow>
+                    <DialogTitle id="dialog-title">Letzte Anpassungen:</DialogTitle>
                     <AllOkButton
                       onClick={() =>
                         onClickReadAll(unreadMessages, userName, client, refetch)
@@ -103,13 +116,15 @@ const UserMessages = ({
                     >
                       alle o.k.
                     </AllOkButton>
+                  </TitleRow>
+                  <div>
                     {unreadMessages.map((m, index) => {
-                      const paddBottom = index < unreadMessages.length - 1
+                      const paddBottom = index === unreadMessages.length - 1
                       return (
-                        <MessageContainer key={m.id} paddBottom={paddBottom}>
-                          <div>{m.message}</div>
-                          <Button onClick={() => onClickRead(m, userName, client, refetch)}>o.k.</Button>
-                        </MessageContainer>
+                        <MessageRow key={m.id} paddBottom={paddBottom}>
+                          <MessageDiv>{m.message}</MessageDiv>
+                          <OkButton onClick={() => onClickRead(m, userName, client, refetch)}>o.k.</OkButton>
+                        </MessageRow>
                       )
                     })}
                   </div>
