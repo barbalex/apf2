@@ -337,7 +337,6 @@ class Karte extends Component {
     const activeOverlaysSorted = sortBy(activeOverlays, activeOverlay =>
       overlays.findIndex(o => o.value === activeOverlay)
     )
-    console.log('Karte rendering')
   
     return (
       <Container>
@@ -428,7 +427,6 @@ class Karte extends Component {
             }
             <ScaleControl imperial={false} />
             <LayersControl
-              id="map1"
               data={data}
               tree={tree}
               activeNodes={activeNodes}

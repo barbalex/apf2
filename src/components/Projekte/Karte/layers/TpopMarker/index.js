@@ -39,7 +39,6 @@ const TpopMarkerMarker = ({
         .toLowerCase()
         .includes(tpopFilterString.toLowerCase())
     })
-  console.log('TpopMarker rendering:', {tpops})
 
   if (clustered) {
     const markers = buildMarkersClustered({
