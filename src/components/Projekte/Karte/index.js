@@ -6,7 +6,7 @@
  *
  */
 
-import React from 'react'
+import React, { createRef, Component } from 'react'
 import { Map, ScaleControl } from 'react-leaflet'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
@@ -88,6 +88,16 @@ const StyledMap = styled(Map)`
 const StyledMapLocalizing = styled(StyledMap)`
   cursor: crosshair !important;
 `
+const Container = styled.div`
+  border-left-color: rgb(46, 125, 50);
+  border-left-width: 1px;
+  border-left-style: solid;
+  border-right-color: rgb(46, 125, 50);
+  border-right-width: 1px;
+  border-right-style: solid;
+  height: 100%;
+  overflow: hidden;
+`
 
 /**
  * DO NOT use component state / props to track mouseCoordinates
@@ -117,79 +127,100 @@ const enhance = compose(
   debounceHandler('onMouseMove', 15),
 )
 
-const Karte = ({
-  tree,
-  activeNodes,
-  onMouseMove,
-  data,
-  activeBaseLayer,
-  setActiveBaseLayer,
-  apfloraLayers,
-  setApfloraLayers,
-  activeApfloraLayers,
-  setActiveApfloraLayers,
-  overlays,
-  setOverlays,
-  activeOverlays,
-  setActiveOverlays,
-  client,
-  refetchTree,
-  idOfTpopBeingLocalized,
-  setIdOfTpopBeingLocalized,
-  tpopLabelUsingNr,
-  popLabelUsingNr,
-  bounds,
-  setBounds,
-  mapIdsFiltered,
-  mapPopIdsFiltered,
-  mapTpopIdsFiltered,
-  mapBeobNichtBeurteiltIdsFiltered,
-  mapBeobNichtZuzuordnenIdsFiltered,
-  mapBeobZugeordnetIdsFiltered,
-  mapFilter,
-  setMapFilter,
-  detailplaene,
-  setDetailplaene,
-  markierungen,
-  setMarkierungen,
-  errorState,
-}: {
-  tree: Object,
-  activeNodes: Object,
-  onMouseMove: () => void,
-  data: Object,
-  activeBaseLayer: String,
-  setActiveBaseLayer: () => void,
-  apfloraLayers: Array<Object>,
-  setApfloraLayers: () => void,
-  activeApfloraLayers: Array<Object>,
-  setActiveApfloraLayers: () => void,
-  overlays: Array<Object>,
-  setOverlays: () => void,
-  activeOverlays: Array<String>,
-  setActiveOverlays: () => void,
-  client: Object,
-  refetchTree: () => void,
-  idOfTpopBeingLocalized: String,
-  setIdOfTpopBeingLocalized: () => void,
-  tpopLabelUsingNr: Boolean,
-  popLabelUsingNr: Boolean,
-  bounds: Array<Array<Number>>,
-  setBounds: () => void,
-  mapIdsFiltered: Array<String>,
-  mapFilter: Object,
-  setMapFilter: () => void,
-  mapPopIdsFiltered: Array<String>,
-  mapTpopIdsFiltered: Array<String>,
-  mapBeobNichtBeurteiltIdsFiltered: Array<String>,
-  mapBeobZugeordnetIdsFiltered: Array<String>,
-  mapBeobNichtZuzuordnenIdsFiltered: Array<String>,
-  detailplaene: Object,
-  setDetailplaene: () => void,
-  markierungen: Object,
-  setMarkierungen: () => void,
-  errorState: Object,
-}) => {
+class Karte extends Component {
+  props: {
+    tree: Object,
+    activeNodes: Object,
+    onMouseMove: () => void,
+    data: Object,
+    activeBaseLayer: String,
+    setActiveBaseLayer: () => void,
+    apfloraLayers: Array<Object>,
+    setApfloraLayers: () => void,
+    activeApfloraLayers: Array<Object>,
+    setActiveApfloraLayers: () => void,
+    overlays: Array<Object>,
+    setOverlays: () => void,
+    activeOverlays: Array<String>,
+    setActiveOverlays: () => void,
+    client: Object,
+    refetchTree: () => void,
+    idOfTpopBeingLocalized: String,
+    setIdOfTpopBeingLocalized: () => void,
+    tpopLabelUsingNr: Boolean,
+    popLabelUsingNr: Boolean,
+    bounds: Array<Array<Number>>,
+    setBounds: () => void,
+    mapIdsFiltered: Array<String>,
+    mapFilter: Object,
+    setMapFilter: () => void,
+    mapPopIdsFiltered: Array<String>,
+    mapTpopIdsFiltered: Array<String>,
+    mapBeobNichtBeurteiltIdsFiltered: Array<String>,
+    mapBeobZugeordnetIdsFiltered: Array<String>,
+    mapBeobNichtZuzuordnenIdsFiltered: Array<String>,
+    detailplaene: Object,
+    setDetailplaene: () => void,
+    markierungen: Object,
+    setMarkierungen: () => void,
+    errorState: Object,
+    dimensions: Object,
+  }
+
+  mapRef = createRef()
+
+  componentDidUpdate(prevProps) {
+    const prevWidth = prevProps.dimensions.width
+    const width = this.props.dimensions.width
+    if (Number.isInteger(prevWidth) && (width / prevWidth > 2)) {
+      /**
+       * TODO:
+       * if width more than doubled, need to redraw map
+       */
+      console.log('Karte, onDidUpdate, width more than doubled:', {prevWidth,width,leafletElement:this.mapRef.current.leafletElement})
+      const map = this.mapRef.current.leafletElement
+      map.invalidateSize()
+    }
+  }
+
+  render() {
+    const {
+      tree,
+      activeNodes,
+      onMouseMove,
+      data,
+      activeBaseLayer,
+      setActiveBaseLayer,
+      apfloraLayers,
+      setApfloraLayers,
+      activeApfloraLayers,
+      setActiveApfloraLayers,
+      overlays,
+      setOverlays,
+      activeOverlays,
+      setActiveOverlays,
+      client,
+      refetchTree,
+      idOfTpopBeingLocalized,
+      setIdOfTpopBeingLocalized,
+      tpopLabelUsingNr,
+      popLabelUsingNr,
+      bounds,
+      setBounds,
+      mapIdsFiltered,
+      mapPopIdsFiltered,
+      mapTpopIdsFiltered,
+      mapBeobNichtBeurteiltIdsFiltered,
+      mapBeobNichtZuzuordnenIdsFiltered,
+      mapBeobZugeordnetIdsFiltered,
+      mapFilter,
+      setMapFilter,
+      detailplaene,
+      setDetailplaene,
+      markierungen,
+      setMarkierungen,
+      errorState,
+    } = this.props
     const MapElement = !!idOfTpopBeingLocalized ? StyledMapLocalizing : StyledMap
     const assigning = get(data, 'assigningBeob')
     const clustered = !(assigning || activeApfloraLayers.includes('beobZugeordnetAssignPolylines'))
@@ -213,6 +244,7 @@ const Karte = ({
       tpop: () => (
         <Tpop
           tree={tree}
+          data={data}
           activeNodes={activeNodes}
           apfloraLayers={apfloraLayers}
           clustered={clustered}
@@ -305,131 +337,141 @@ const Karte = ({
     const activeOverlaysSorted = sortBy(activeOverlays, activeOverlay =>
       overlays.findIndex(o => o.value === activeOverlay)
     )
+    console.log('Karte rendering')
   
     return (
-      <ErrorBoundary>
-        <MapElement
-          bounds={bounds}
-          preferCanvas
-          onMouseMove={onMouseMove}
-          // need max and min zoom because otherwise
-          // something errors
-          // probably clustering function
-          maxZoom={22}
-          minZoom={0}
-          onClick={async event => {
-            /**
-             * TODO
-             * When clicking on Layertool
-             * somehow Mapelement grabs the click event
-             * although Layertool lies _over_ map element ??!!
-             * So when localizing, if user wants to change base map,
-             * click on Layertool sets new coordinates!
-             */
-            if (!!idOfTpopBeingLocalized) {
-              const { lat, lng } = event.latlng
-              const [x, y] = epsg4326to2056(lng, lat)
-              try {
-                client.mutate({
-                  mutation: updateTpopById,
-                  variables: {
-                    id: idOfTpopBeingLocalized,
-                    x,
-                    y
-                  },
-                  optimisticResponse: {
-                    __typename: 'Mutation',
-                    updateTpopById: {
-                      tpop: {
-                        id: idOfTpopBeingLocalized,
-                        x,
-                        y,
+      <Container>
+        <ErrorBoundary>
+          <MapElement
+            innerRef={this.mapRef}
+            bounds={bounds}
+            //preferCanvas
+            onMouseMove={onMouseMove}
+            // need max and min zoom because otherwise
+            // something errors
+            // probably clustering function
+            maxZoom={22}
+            minZoom={0}
+            onClick={async event => {
+              /**
+               * TODO
+               * When clicking on Layertool
+               * somehow Mapelement grabs the click event
+               * although Layertool lies _over_ map element ??!!
+               * So when localizing, if user wants to change base map,
+               * click on Layertool sets new coordinates!
+               */
+              if (!!idOfTpopBeingLocalized) {
+                const { lat, lng } = event.latlng
+                const [x, y] = epsg4326to2056(lng, lat)
+                try {
+                  await client.mutate({
+                    mutation: updateTpopById,
+                    variables: {
+                      id: idOfTpopBeingLocalized,
+                      x,
+                      y
+                    },
+                    optimisticResponse: {
+                      __typename: 'Mutation',
+                      updateTpopById: {
+                        tpop: {
+                          id: idOfTpopBeingLocalized,
+                          x,
+                          y,
+                          __typename: 'Tpop',
+                        },
                         __typename: 'Tpop',
                       },
-                      __typename: 'Tpop',
                     },
-                  },
-                })
-              } catch (error) {
-                errorState.add(error)
+                  })
+                  // refetch so it appears on map
+                  refetchTree()
+                } catch (error) {
+                  errorState.add(error)
+                }
+                setIdOfTpopBeingLocalized(null)
               }
-              setIdOfTpopBeingLocalized(null)
+            }}
+            /*
+             * turned off because caused cyclic zooming
+            onZoomlevelschange={event => {
+              // need to update bounds, otherwise map jumps back
+              // when adding new tpop
+              const mapBounds = event.target.getBounds()
+              setBounds([mapBounds._southWest, mapBounds._northEast])
+            }}
+            onZoomend={event => {
+              // need to update bounds, otherwise map jumps back
+              const mapBounds = event.target.getBounds()
+              setBounds([mapBounds._southWest, mapBounds._northEast])
+            }}
+            onMoveend={event => {
+              // need to update bounds, otherwise map jumps back
+              const mapBounds = event.target.getBounds()
+              setBounds([mapBounds._southWest, mapBounds._northEast])
+            }}*/
+          >
+            {activeBaseLayer && <BaseLayerComponent />}
+            {activeOverlaysSorted
+              .map((overlayName, index) => {
+                const OverlayComponent = OverlayComponents[overlayName]
+                return <OverlayComponent key={index} />
+              })
+              .reverse()}
+            {activeApfloraLayersSorted
+              .map((apfloraLayerName, index) => {
+                const ApfloraLayerComponent = ApfloraLayerComponents[apfloraLayerName]
+                return <ApfloraLayerComponent key={index} />
+              })
+              .reverse()
             }
-          }}
-          onZoomlevelschange={event => {
-            // need to update bounds, otherwise map jumps back
-            // when adding new tpop
-            const mapBounds = event.target.getBounds()
-            setBounds([mapBounds._southWest, mapBounds._northEast])
-          }}
-          onZoomend={event => {
-            // need to update bounds, otherwise map jumps back
-            const mapBounds = event.target.getBounds()
-            setBounds([mapBounds._southWest, mapBounds._northEast])
-          }}
-          onMoveend={event => {
-            // need to update bounds, otherwise map jumps back
-            const mapBounds = event.target.getBounds()
-            setBounds([mapBounds._southWest, mapBounds._northEast])
-          }}
-        >
-          {activeBaseLayer && <BaseLayerComponent />}
-          {activeOverlaysSorted
-            .map((overlayName, index) => {
-              const OverlayComponent = OverlayComponents[overlayName]
-              return <OverlayComponent key={index} />
-            })
-            .reverse()}
-          {activeApfloraLayersSorted
-            .map((apfloraLayerName, index) => {
-              const ApfloraLayerComponent = ApfloraLayerComponents[apfloraLayerName]
-              return <ApfloraLayerComponent key={index} />
-            })
-            .reverse()
-          }
-          <ScaleControl imperial={false} />
-          <LayersControl
-            data={data}
-            tree={tree}
-            activeNodes={activeNodes}
-            activeBaseLayer={activeBaseLayer}
-            setActiveBaseLayer={setActiveBaseLayer}
-            apfloraLayers={apfloraLayers}
-            setApfloraLayers={setApfloraLayers}
-            activeApfloraLayers={activeApfloraLayers}
-            setActiveApfloraLayers={setActiveApfloraLayers}
-            overlays={overlays}
-            setOverlays={setOverlays}
-            activeOverlays={activeOverlays}
-            setActiveOverlays={setActiveOverlays}
-            bounds={bounds}
-            setBounds={setBounds}
-            mapFilter={mapFilter}
-            mapIdsFiltered={mapIdsFiltered}
-            mapPopIdsFiltered={mapPopIdsFiltered}
-            mapTpopIdsFiltered={mapTpopIdsFiltered}
-            mapBeobNichtBeurteiltIdsFiltered={mapBeobNichtBeurteiltIdsFiltered}
-            mapBeobNichtZuzuordnenIdsFiltered={mapBeobNichtZuzuordnenIdsFiltered}
-            mapBeobZugeordnetIdsFiltered={mapBeobZugeordnetIdsFiltered}
-            // this enforces rerendering when sorting changes
-            activeOverlaysString={activeOverlays.join()}
-            activeApfloraLayersString={activeApfloraLayers.join()}
-          />
-          <MeasureControl />
-          <FullScreenControl />
-          {
-            activeApfloraLayers.includes('mapFilter') &&
-            <DrawControl setStoreMapFilter={setMapFilter} />
-            }
-          {/*
-          need to get background maps to show when printing A4
-          <PrintControl />
-          */}
-          <PngControl />
-          <CoordinatesControl />
-        </MapElement>
-      </ErrorBoundary>
+            <ScaleControl imperial={false} />
+            <LayersControl
+              id="map1"
+              data={data}
+              tree={tree}
+              activeNodes={activeNodes}
+              activeBaseLayer={activeBaseLayer}
+              setActiveBaseLayer={setActiveBaseLayer}
+              apfloraLayers={apfloraLayers}
+              setApfloraLayers={setApfloraLayers}
+              activeApfloraLayers={activeApfloraLayers}
+              setActiveApfloraLayers={setActiveApfloraLayers}
+              overlays={overlays}
+              setOverlays={setOverlays}
+              activeOverlays={activeOverlays}
+              setActiveOverlays={setActiveOverlays}
+              bounds={bounds}
+              setBounds={setBounds}
+              mapFilter={mapFilter}
+              mapIdsFiltered={mapIdsFiltered}
+              mapPopIdsFiltered={mapPopIdsFiltered}
+              mapTpopIdsFiltered={mapTpopIdsFiltered}
+              mapBeobNichtBeurteiltIdsFiltered={mapBeobNichtBeurteiltIdsFiltered}
+              mapBeobNichtZuzuordnenIdsFiltered={mapBeobNichtZuzuordnenIdsFiltered}
+              mapBeobZugeordnetIdsFiltered={mapBeobZugeordnetIdsFiltered}
+              // this enforces rerendering when sorting changes
+              activeOverlaysString={activeOverlays.join()}
+              activeApfloraLayersString={activeApfloraLayers.join()}
+            />
+            <MeasureControl />
+            <FullScreenControl />
+            {
+              activeApfloraLayers.includes('mapFilter') &&
+              <DrawControl setStoreMapFilter={setMapFilter} />
+              }
+            {/*
+            need to get background maps to show when printing A4
+            <PrintControl />
+            */}
+            <PngControl />
+            <CoordinatesControl />
+          </MapElement>
+        </ErrorBoundary>
+      </Container>
     )
   }
+}
 
 export default enhance(Karte)

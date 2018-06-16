@@ -336,6 +336,35 @@ query TreeDataQuery(
       }
     }
   }
+  # this one is used to refetch data when new tpop was localized
+  # so that the new marker appears on map
+  tpopForMap: projektById(id: $projId) {
+    id
+    apsByProjId(filter: { id: { equalTo: $apId } }) {
+      nodes {
+        id
+        popsByApId {
+          nodes {
+            id
+            tpopsByPopId(filter: {x: {isNull: false}, y: {isNull: false}}) {
+              nodes {
+                id
+                nr
+                flurname
+                x
+                y
+                popByPopId {
+                  id
+                  nr
+                  name
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
   beobNichtBeurteiltForMap: allVApbeobs(
     filter: {
       apId: { in: $ap }
@@ -395,7 +424,14 @@ query TreeDataQuery(
             artId
             aeEigenschaftenByArtId {
               id
-              beobsByArtId(filter: {tpopId: {isNull: false}, nichtZuordnen: {equalTo: false}, x: {isNull: false}, y: {isNull: false}}) {
+              beobsByArtId(
+                filter: {
+                  tpopId: { isNull: false }
+                  nichtZuordnen: { equalTo: false }
+                  x: { isNull: false }
+                  y: { isNull: false }
+                }
+              ) {
                 nodes {
                   id
                   autor

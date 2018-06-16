@@ -36,16 +36,6 @@ const Container = styled.div`
   height: 100%;
   cursor: ${props => (props['data-loading'] ? 'wait' : 'inherit')};
 `
-const KarteContainer = styled.div`
-  border-left-color: rgb(46, 125, 50);
-  border-left-width: 1px;
-  border-left-style: solid;
-  border-right-color: rgb(46, 125, 50);
-  border-right-width: 1px;
-  border-right-style: solid;
-  height: 100%;
-  overflow: hidden;
-`
 
 const enhance = compose(
   withState('apfloraLayers', 'setApfloraLayers', apfloraLayers),
@@ -286,57 +276,59 @@ const ProjekteContainer = ({
                           tabs.includes('karte') &&
                           <ReflexElement
                             className="karte"
+                            onResize={() => console.log('map resized')}
+                            propagateDimensions={true}
+                            renderOnResizeRate={200}
+                            renderOnResize={true}
                           >
-                            <KarteContainer>
-                              <Karte
-                                /**
-                                 * key of tabs is added to force mounting
-                                 * when tabs change
-                                 * without remounting grey space remains
-                                 * when daten or tree tab is removed :-(
-                                 */
-                                tree={tree}
-                                data={data}
-                                activeBaseLayer={activeBaseLayer}
-                                setActiveBaseLayer={setActiveBaseLayer}
-                                apfloraLayers={apfloraLayers}
-                                setApfloraLayers={setApfloraLayers}
-                                activeApfloraLayers={activeApfloraLayers}
-                                setActiveApfloraLayers={setActiveApfloraLayers}
-                                overlays={overlays}
-                                setOverlays={setOverlays}
-                                activeOverlays={activeOverlays}
-                                setActiveOverlays={setActiveOverlays}
-                                client={client}
-                                activeNodes={activeNodes}
-                                key={tabs.toString()}
-                                refetchTree={refetch}
-                                mapIdsFiltered={mapIdsFiltered}
-                                mapPopIdsFiltered={mapPopIdsFiltered}
-                                mapTpopIdsFiltered={mapTpopIdsFiltered}
-                                mapBeobNichtBeurteiltIdsFiltered={mapBeobNichtBeurteiltIdsFiltered}
-                                mapBeobNichtZuzuordnenIdsFiltered={mapBeobNichtZuzuordnenIdsFiltered}
-                                mapBeobZugeordnetIdsFiltered={mapBeobZugeordnetIdsFiltered}
-                                beobZugeordnetAssigning={assigning}
-                                idOfTpopBeingLocalized={idOfTpopBeingLocalized}
-                                setIdOfTpopBeingLocalized={setIdOfTpopBeingLocalized}
-                                tpopLabelUsingNr={tpopLabelUsingNr}
-                                popLabelUsingNr={popLabelUsingNr}
-                                bounds={bounds}
-                                setBounds={setBounds}
-                                mapFilter={mapFilter}
-                                setMapFilter={setMapFilter}
-                                errorState={errorState}
-                                // SortedStrings enforce rerendering when sorting or visibility changes
-                                activeOverlaysString={activeOverlays.join()}
-                                activeApfloraLayersString={activeApfloraLayers.join()}
-                                detailplaene={detailplaene}
-                                setDetailplaene={setDetailplaene}
-                                markierungen={markierungen}
-                                setMarkierungen={setMarkierungen}
-                                beobsString={beobs.toString()}
-                              />
-                            </KarteContainer>
+                            <Karte
+                              /**
+                               * key of tabs is added to force mounting
+                               * when tabs change
+                               * without remounting grey space remains
+                               * when daten or tree tab is removed :-(
+                               */
+                              tree={tree}
+                              data={data}
+                              activeBaseLayer={activeBaseLayer}
+                              setActiveBaseLayer={setActiveBaseLayer}
+                              apfloraLayers={apfloraLayers}
+                              setApfloraLayers={setApfloraLayers}
+                              activeApfloraLayers={activeApfloraLayers}
+                              setActiveApfloraLayers={setActiveApfloraLayers}
+                              overlays={overlays}
+                              setOverlays={setOverlays}
+                              activeOverlays={activeOverlays}
+                              setActiveOverlays={setActiveOverlays}
+                              client={client}
+                              activeNodes={activeNodes}
+                              key={tabs.toString()}
+                              refetchTree={refetch}
+                              mapIdsFiltered={mapIdsFiltered}
+                              mapPopIdsFiltered={mapPopIdsFiltered}
+                              mapTpopIdsFiltered={mapTpopIdsFiltered}
+                              mapBeobNichtBeurteiltIdsFiltered={mapBeobNichtBeurteiltIdsFiltered}
+                              mapBeobNichtZuzuordnenIdsFiltered={mapBeobNichtZuzuordnenIdsFiltered}
+                              mapBeobZugeordnetIdsFiltered={mapBeobZugeordnetIdsFiltered}
+                              beobZugeordnetAssigning={assigning}
+                              idOfTpopBeingLocalized={idOfTpopBeingLocalized}
+                              setIdOfTpopBeingLocalized={setIdOfTpopBeingLocalized}
+                              tpopLabelUsingNr={tpopLabelUsingNr}
+                              popLabelUsingNr={popLabelUsingNr}
+                              bounds={bounds}
+                              setBounds={setBounds}
+                              mapFilter={mapFilter}
+                              setMapFilter={setMapFilter}
+                              errorState={errorState}
+                              // SortedStrings enforce rerendering when sorting or visibility changes
+                              activeOverlaysString={activeOverlays.join()}
+                              activeApfloraLayersString={activeApfloraLayers.join()}
+                              detailplaene={detailplaene}
+                              setDetailplaene={setDetailplaene}
+                              markierungen={markierungen}
+                              setMarkierungen={setMarkierungen}
+                              beobsString={beobs.toString()}
+                            />
                           </ReflexElement>
                         }
                         {
