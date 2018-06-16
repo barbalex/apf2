@@ -81,7 +81,7 @@ const UserMessages = ({
 
             const allMessages = get(messagesData, 'allMessages.nodes', [])
             const unreadMessages = allMessages.filter(m => get(m, 'usermessagesByMessageId.nodes').length === 0)
-            const updateAvailable = get(messagesGql, 'updateAvailable')
+            const updateAvailable = get(messagesData, 'updateAvailable')
 
             return (
               <ErrorBoundary>
