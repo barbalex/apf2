@@ -58,12 +58,12 @@ const enhance = compose(
       refetch()
     },
     onClickReadAll: () => async (unreadMessages, userName, client, refetch) => {
-      await unreadMessages.forEach(message => {
+      await Promise.all(unreadMessages.map(async message => {
         client.mutate({
           mutation: createUsermessage,
           variables: { userName, id: message.id }
         })
-      })
+      }))
       refetch()
     },
   }),
