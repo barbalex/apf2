@@ -579,7 +579,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
       messages: (function() {
         const popNodes = get(data, 'popberOhneJahr.apsByProjId.nodes[0].popsByApId.nodes', [])
         let popberNodes = flatten(
-          popNodes.map(n => get(n, 'popbersByPopId.nodes'), [])
+          popNodes.map(n => get(n, 'popbersByPopId.nodes', []))
         )
         popberNodes = sortBy(
           popberNodes,
