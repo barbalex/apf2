@@ -159,6 +159,7 @@ const ProjekteContainer = ({
                                     1 :
                                       (1 / tabs.length)
                 const assigning = get(data, 'assigningBeob')
+                console.log('ProjektContainer', {mapFilter})
                 const mapPopIdsFiltered = idsInsideFeatureCollection({
                   mapFilter,
                   data: get(data, `popForMap.nodes`, []),
@@ -173,30 +174,18 @@ const ProjekteContainer = ({
                 const mapTpopIdsFiltered = idsInsideFeatureCollection({
                   mapFilter,
                   data: mapTpopsData,
-                  idKey: 'id',
-                  xKey: 'x',
-                  yKey: 'y',
                 })
                 const mapBeobNichtBeurteiltIdsFiltered = idsInsideFeatureCollection({
                   mapFilter,
                   data: get(data, `beobNichtBeurteiltForMap.nodes`, []),
-                  idKey: 'id',
-                  xKey: 'x',
-                  yKey: 'y',
                 })
                 const mapBeobNichtZuzuordnenIdsFiltered = idsInsideFeatureCollection({
                   mapFilter,
                   data: get(data, `beobNichtZuzuordnenForMap.nodes`, []),
-                  idKey: 'id',
-                  xKey: 'x',
-                  yKey: 'y',
                 })
                 const mapBeobZugeordnetIdsFiltered = idsInsideFeatureCollection({
                   mapFilter,
                   data: get(data, `beobZugeordnetForMap.nodes`, []),
-                  idKey: 'id',
-                  xKey: 'x',
-                  yKey: 'y',
                 })
                 // when no map filter exists nodes in activeNodeArray should be highlighted
                 let mapIdsFiltered = activeNodeArray

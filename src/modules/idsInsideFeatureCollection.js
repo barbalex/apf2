@@ -1,5 +1,6 @@
 // @flow
 import within from '@turf/within'
+import pointsWithinPolygon from '@turf/points-within-polygon'
 import isFinite from 'lodash/isFinite'
 
 import epsg2056to4326 from './epsg2056to4326notReverse'
@@ -7,9 +8,9 @@ import epsg2056to4326 from './epsg2056to4326notReverse'
 export default ({
   mapFilter, 
   data,
-  idKey,
-  xKey,
-  yKey,
+  idKey = 'id',
+  xKey = 'x',
+  yKey = 'y',
 }:{
   mapFilter: Object, 
   data: Array<Object>,
@@ -48,6 +49,7 @@ export default ({
 
   // let turf check what points are within filter
   const result = within(points, mapFilter)
+  console.log('idsInsideFeatureCollection, result:', result)
 
   return result.features.map(r => r.properties.id)
 }
