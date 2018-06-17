@@ -18,7 +18,6 @@ import 'proj4leaflet'
 import debounceHandler from '@hocs/debounce-handler'
 import sortBy from 'lodash/sortBy'
 import get from 'lodash/get'
-import isEqual from 'lodash/isEqual'
 import app from 'ampersand-app'
 
 import LayersControl from './LayersControl'
