@@ -14,6 +14,8 @@ export default async () => {
     window.location.pathname.replace('/', '')
   )
   let initialActiveNodeArray = [...activeNodeArrayFromPathname]
+  // fetch query here, BEFORE mutating active node array
+  const urlQuery = getUrlQuery()
 
   // forward apflora.ch to Projekte
   if (activeNodeArrayFromPathname.length === 0) {
@@ -51,7 +53,6 @@ export default async () => {
       }
     `
   })
-  const urlQuery = getUrlQuery()
   const { projekteTabs, feldkontrTab } = urlQuery
   await client.mutate({
     mutation: gql`
