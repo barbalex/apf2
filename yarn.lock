@@ -1249,6 +1249,13 @@
     "@turf/helpers" "6.x"
     "@turf/invariant" "6.x"
 
+"@turf/boolean-point-in-polygon@^5.1.5":
+  version "5.1.5"
+  resolved "https://registry.yarnpkg.com/@turf/boolean-point-in-polygon/-/boolean-point-in-polygon-5.1.5.tgz#f01cc194d1e030a548bfda981cba43cfd62941b7"
+  dependencies:
+    "@turf/helpers" "^5.1.5"
+    "@turf/invariant" "^5.1.5"
+
 "@turf/clone@6.x":
   version "6.0.2"
   resolved "https://registry.yarnpkg.com/@turf/clone/-/clone-6.0.2.tgz#7563cebbb3e2e19f361599bb244467e0dcc205c9"
@@ -1288,12 +1295,6 @@
   version "5.1.5"
   resolved "https://registry.yarnpkg.com/@turf/helpers/-/helpers-5.1.5.tgz#153405227ab933d004a5bb9641a9ed999fcbe0cf"
 
-"@turf/inside@^4.7.3":
-  version "4.7.3"
-  resolved "https://registry.yarnpkg.com/@turf/inside/-/inside-4.7.3.tgz#e4a84969f2886891b343b11b83fda3095fba542c"
-  dependencies:
-    "@turf/invariant" "^4.7.3"
-
 "@turf/invariant@6.x":
   version "6.1.2"
   resolved "https://registry.yarnpkg.com/@turf/invariant/-/invariant-6.1.2.tgz#6013ed6219f9ac2edada9b31e1dfa5918eb0a2f7"
@@ -1330,7 +1331,7 @@
   dependencies:
     "@turf/helpers" "^5.1.5"
 
-"@turf/nearest-point@^6.0.1":
+"@turf/nearest-point@6.0.1":
   version "6.0.1"
   resolved "https://registry.yarnpkg.com/@turf/nearest-point/-/nearest-point-6.0.1.tgz#9b86865300b2658ee61515eba2ff638ddcc60c3b"
   dependencies:
@@ -1345,12 +1346,13 @@
   dependencies:
     "@turf/distance" "^4.7.3"
 
-"@turf/within@4.7.3":
-  version "4.7.3"
-  resolved "https://registry.yarnpkg.com/@turf/within/-/within-4.7.3.tgz#41ab3c152f6a8c05caa5a345c97dd334d49aef13"
+"@turf/points-within-polygon@^5.1.5":
+  version "5.1.5"
+  resolved "https://registry.yarnpkg.com/@turf/points-within-polygon/-/points-within-polygon-5.1.5.tgz#2b855a5df3aada57c2ee820a0754ab94928a2337"
   dependencies:
-    "@turf/helpers" "^4.7.3"
-    "@turf/inside" "^4.7.3"
+    "@turf/boolean-point-in-polygon" "^5.1.5"
+    "@turf/helpers" "^5.1.5"
+    "@turf/meta" "^5.1.5"
 
 "@types/async@2.0.49":
   version "2.0.49"

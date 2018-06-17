@@ -1,5 +1,4 @@
 // @flow
-import within from '@turf/within'
 import pointsWithinPolygon from '@turf/points-within-polygon'
 import isFinite from 'lodash/isFinite'
 
@@ -48,8 +47,7 @@ export default ({
   }
 
   // let turf check what points are within filter
-  const result = within(points, mapFilter)
-  console.log('idsInsideFeatureCollection, result:', result)
+  const result = pointsWithinPolygon(points, mapFilter)
 
   return result.features.map(r => r.properties.id)
 }

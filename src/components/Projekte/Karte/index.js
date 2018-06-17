@@ -337,6 +337,7 @@ class Karte extends Component {
     const activeOverlaysSorted = sortBy(activeOverlays, activeOverlay =>
       overlays.findIndex(o => o.value === activeOverlay)
     )
+    console.log('Karte:', {mapFilter})
   
     return (
       <Container>
