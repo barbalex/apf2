@@ -49,7 +49,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
       messages: (function() {
         const zielNodes = get(data, 'zielberOhneJahr.apsByProjId.nodes[0].zielsByApId.nodes', [])
         let zielberNodes =  flatten(
-          zielNodes.map(n => get(n, 'zielbersByZielId.nodes'), [])
+          zielNodes.map(n => get(n, 'zielbersByZielId.nodes', []))
         )
         zielberNodes = sortBy(
           zielberNodes,
@@ -73,7 +73,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
       messages: (function() {
         const zielNodes = get(data, 'zielberOhneEntwicklung.apsByProjId.nodes[0].zielsByApId.nodes', [])
         let zielberNodes = flatten(
-          zielNodes.map(n => get(n, 'zielbersByZielId.nodes'), [])
+          zielNodes.map(n => get(n, 'zielbersByZielId.nodes', []))
         )
         zielberNodes = sortBy(
           zielberNodes,
@@ -599,7 +599,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
       messages: (function() {
         const popNodes = get(data, 'popberOhneEntwicklung.apsByProjId.nodes[0].popsByApId.nodes', [])
         let popberNodes = flatten(
-          popNodes.map(n => get(n, 'popbersByPopId.nodes'), [])
+          popNodes.map(n => get(n, 'popbersByPopId.nodes', []))
         )
         popberNodes = sortBy(
           popberNodes,
@@ -619,7 +619,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
       messages: (function() {
         const popNodes = get(data, 'popmassnberOhneJahr.apsByProjId.nodes[0].popsByApId.nodes', [])
         let popberNodes = flatten(
-          popNodes.map(n => get(n, 'popmassnbersByPopId.nodes'), [])
+          popNodes.map(n => get(n, 'popmassnbersByPopId.nodes', []))
         )
         popberNodes = sortBy(
           popberNodes,
@@ -639,7 +639,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
       messages: (function() {
         const popNodes = get(data, 'popmassnberOhneEntwicklung.apsByProjId.nodes[0].popsByApId.nodes', [])
         let popberNodes = flatten(
-          popNodes.map(n => get(n, 'popmassnbersByPopId.nodes'), [])
+          popNodes.map(n => get(n, 'popmassnbersByPopId.nodes', []))
         )
         popberNodes = sortBy(
           popberNodes,
@@ -747,7 +747,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
       messages: (function() {
         const popNodes = get(data, 'tpopOhneNr.apsByProjId.nodes[0].popsByApId.nodes', [])
         let tpopNodes = flatten(
-          popNodes.map(n => get(n, 'tpopsByPopId.nodes'), [])
+          popNodes.map(n => get(n, 'tpopsByPopId.nodes', []))
         )
         tpopNodes = sortBy(
           tpopNodes,
@@ -767,7 +767,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
       messages: (function() {
         const popNodes = get(data, 'tpopOhneFlurname.apsByProjId.nodes[0].popsByApId.nodes', [])
         let tpopNodes = flatten(
-          popNodes.map(n => get(n, 'tpopsByPopId.nodes'), [])
+          popNodes.map(n => get(n, 'tpopsByPopId.nodes', []))
         )
         tpopNodes = sortBy(
           tpopNodes,
@@ -787,7 +787,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
       messages: (function() {
         const popNodes = get(data, 'tpopOhneStatus.apsByProjId.nodes[0].popsByApId.nodes', [])
         let tpopNodes = flatten(
-          popNodes.map(n => get(n, 'tpopsByPopId.nodes'), [])
+          popNodes.map(n => get(n, 'tpopsByPopId.nodes', []))
         )
         tpopNodes = sortBy(
           tpopNodes,
@@ -807,7 +807,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
       messages: (function() {
         const popNodes = get(data, 'tpopOhneBekanntSeit.apsByProjId.nodes[0].popsByApId.nodes', [])
         let tpopNodes = flatten(
-          popNodes.map(n => get(n, 'tpopsByPopId.nodes'), [])
+          popNodes.map(n => get(n, 'tpopsByPopId.nodes', []))
         )
         tpopNodes = sortBy(
           tpopNodes,
@@ -827,7 +827,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
       messages: (function() {
         const popNodes = get(data, 'tpopOhneApberRelevant.apsByProjId.nodes[0].popsByApId.nodes', [])
         let tpopNodes = flatten(
-          popNodes.map(n => get(n, 'tpopsByPopId.nodes'), [])
+          popNodes.map(n => get(n, 'tpopsByPopId.nodes', []))
         )
         tpopNodes = sortBy(
           tpopNodes,
@@ -847,7 +847,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
       messages: (function() {
         const popNodes = get(data, 'tpopOhneKoord.apsByProjId.nodes[0].popsByApId.nodes', [])
         let tpopNodes = flatten(
-          popNodes.map(n => get(n, 'tpopsByPopId.nodes'), [])
+          popNodes.map(n => get(n, 'tpopsByPopId.nodes', []))
         )
         tpopNodes = sortBy(
           tpopNodes,
@@ -869,7 +869,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
       messages: (function() {
         const popNodes = get(data, 'tpopStatusPotentiellApberrelevant.apsByProjId.nodes[0].popsByApId.nodes', [])
         let tpopNodes = flatten(
-          popNodes.map(n => get(n, 'tpopsByPopId.nodes'), [])
+          popNodes.map(n => get(n, 'tpopsByPopId.nodes', []))
         )
         tpopNodes = sortBy(
           tpopNodes,
@@ -904,7 +904,7 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
       messages: (function() {
         const popNodes = get(data, 'tpopStatusUnklarOhneBegruendung.apsByProjId.nodes[0].popsByApId.nodes', [])
         let tpopNodes = flatten(
-          popNodes.map(n => get(n, 'tpopsByPopId.nodes'), [])
+          popNodes.map(n => get(n, 'tpopsByPopId.nodes', []))
         )
         tpopNodes = sortBy(
           tpopNodes,
@@ -1004,10 +1004,10 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
       messages: (function() {
         const popNodes = get(data, 'tpopberOhneJahr.apsByProjId.nodes[0].popsByApId.nodes', [])
         const tpopNodes = flatten(
-          popNodes.map(n => get(n, 'tpopsByPopId.nodes'), [])
+          popNodes.map(n => get(n, 'tpopsByPopId.nodes', []))
         )
         let tpopberNodes = flatten(
-          tpopNodes.map(n => get(n, 'tpopbersByTpopId.nodes'), [])
+          tpopNodes.map(n => get(n, 'tpopbersByTpopId.nodes', []))
         )
         tpopberNodes = sortBy(
           tpopberNodes,
@@ -1034,10 +1034,10 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
       messages: (function() {
         const popNodes = get(data, 'tpopberOhneEntwicklung.apsByProjId.nodes[0].popsByApId.nodes', [])
         const tpopNodes = flatten(
-          popNodes.map(n => get(n, 'tpopsByPopId.nodes'), [])
+          popNodes.map(n => get(n, 'tpopsByPopId.nodes', []))
         )
         let tpopberNodes = flatten(
-          tpopNodes.map(n => get(n, 'tpopbersByTpopId.nodes'), [])
+          tpopNodes.map(n => get(n, 'tpopbersByTpopId.nodes', []))
         )
         tpopberNodes = sortBy(
           tpopberNodes,
@@ -1068,10 +1068,10 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
       messages: (function() {
         const popNodes = get(data, 'tpopmassnOhneJahr.apsByProjId.nodes[0].popsByApId.nodes', [])
         const tpopNodes = flatten(
-          popNodes.map(n => get(n, 'tpopsByPopId.nodes'), [])
+          popNodes.map(n => get(n, 'tpopsByPopId.nodes', []))
         )
         let tpopmassnNodes = flatten(
-          tpopNodes.map(n => get(n, 'tpopmassnsByTpopId.nodes'), [])
+          tpopNodes.map(n => get(n, 'tpopmassnsByTpopId.nodes', []))
         )
         tpopmassnNodes = sortBy(
           tpopmassnNodes,
@@ -1098,10 +1098,10 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
       messages: (function() {
         const popNodes = get(data, 'tpopmassnOhneBearb.apsByProjId.nodes[0].popsByApId.nodes', [])
         const tpopNodes = flatten(
-          popNodes.map(n => get(n, 'tpopsByPopId.nodes'), [])
+          popNodes.map(n => get(n, 'tpopsByPopId.nodes', []))
         )
         let tpopmassnNodes = flatten(
-          tpopNodes.map(n => get(n, 'tpopmassnsByTpopId.nodes'), [])
+          tpopNodes.map(n => get(n, 'tpopmassnsByTpopId.nodes', []))
         )
         tpopmassnNodes = sortBy(
           tpopmassnNodes,
@@ -1128,10 +1128,10 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
       messages: (function() {
         const popNodes = get(data, 'tpopmassnOhneTyp.apsByProjId.nodes[0].popsByApId.nodes', [])
         const tpopNodes = flatten(
-          popNodes.map(n => get(n, 'tpopsByPopId.nodes'), [])
+          popNodes.map(n => get(n, 'tpopsByPopId.nodes', []))
         )
         let tpopmassnNodes = flatten(
-          tpopNodes.map(n => get(n, 'tpopmassnsByTpopId.nodes'), [])
+          tpopNodes.map(n => get(n, 'tpopmassnsByTpopId.nodes', []))
         )
         tpopmassnNodes = sortBy(
           tpopmassnNodes,
@@ -1159,10 +1159,10 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
       messages: (function() {
         const popNodes = get(data, 'tpopmassnberOhneJahr.apsByProjId.nodes[0].popsByApId.nodes', [])
         const tpopNodes = flatten(
-          popNodes.map(n => get(n, 'tpopsByPopId.nodes'), [])
+          popNodes.map(n => get(n, 'tpopsByPopId.nodes', []))
         )
         let tpopmassnberNodes = flatten(
-          tpopNodes.map(n => get(n, 'tpopmassnbersByTpopId.nodes'), [])
+          tpopNodes.map(n => get(n, 'tpopmassnbersByTpopId.nodes', []))
         )
         tpopmassnberNodes = sortBy(
           tpopmassnberNodes,
@@ -1189,10 +1189,10 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
       messages: (function() {
         const popNodes = get(data, 'tpopmassnberOhneBeurteilung.apsByProjId.nodes[0].popsByApId.nodes', [])
         const tpopNodes = flatten(
-          popNodes.map(n => get(n, 'tpopsByPopId.nodes'), [])
+          popNodes.map(n => get(n, 'tpopsByPopId.nodes', []))
         )
         let tpopmassnberNodes = flatten(
-          tpopNodes.map(n => get(n, 'tpopmassnbersByTpopId.nodes'), [])
+          tpopNodes.map(n => get(n, 'tpopmassnbersByTpopId.nodes', []))
         )
         tpopmassnberNodes = sortBy(
           tpopmassnberNodes,
@@ -1223,10 +1223,10 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
       messages: (function() {
         const popNodes = get(data, 'tpopfeldkontrOhneJahr.apsByProjId.nodes[0].popsByApId.nodes', [])
         const tpopNodes = flatten(
-          popNodes.map(n => get(n, 'tpopsByPopId.nodes'), [])
+          popNodes.map(n => get(n, 'tpopsByPopId.nodes', []))
         )
         let tpopkontrNodes = flatten(
-          tpopNodes.map(n => get(n, 'tpopkontrsByTpopId.nodes'), [])
+          tpopNodes.map(n => get(n, 'tpopkontrsByTpopId.nodes', []))
         )
         tpopkontrNodes = sortBy(
           tpopkontrNodes,
@@ -1253,10 +1253,10 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
       messages: (function() {
         const popNodes = get(data, 'tpopfreiwkontrOhneJahr.apsByProjId.nodes[0].popsByApId.nodes', [])
         const tpopNodes = flatten(
-          popNodes.map(n => get(n, 'tpopsByPopId.nodes'), [])
+          popNodes.map(n => get(n, 'tpopsByPopId.nodes', []))
         )
         let tpopkontrNodes = flatten(
-          tpopNodes.map(n => get(n, 'tpopkontrsByTpopId.nodes'), [])
+          tpopNodes.map(n => get(n, 'tpopkontrsByTpopId.nodes', []))
         )
         tpopkontrNodes = sortBy(
           tpopkontrNodes,
@@ -1283,10 +1283,10 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
       messages: (function() {
         const popNodes = get(data, 'tpopfeldkontrOhneBearb.apsByProjId.nodes[0].popsByApId.nodes', [])
         const tpopNodes = flatten(
-          popNodes.map(n => get(n, 'tpopsByPopId.nodes'), [])
+          popNodes.map(n => get(n, 'tpopsByPopId.nodes', []))
         )
         let tpopkontrNodes = flatten(
-          tpopNodes.map(n => get(n, 'tpopkontrsByTpopId.nodes'), [])
+          tpopNodes.map(n => get(n, 'tpopkontrsByTpopId.nodes', []))
         )
         tpopkontrNodes = sortBy(
           tpopkontrNodes,
@@ -1313,10 +1313,10 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
       messages: (function() {
         const popNodes = get(data, 'tpopfreiwkontrOhneBearb.apsByProjId.nodes[0].popsByApId.nodes', [])
         const tpopNodes = flatten(
-          popNodes.map(n => get(n, 'tpopsByPopId.nodes'), [])
+          popNodes.map(n => get(n, 'tpopsByPopId.nodes', []))
         )
         let tpopkontrNodes = flatten(
-          tpopNodes.map(n => get(n, 'tpopkontrsByTpopId.nodes'), [])
+          tpopNodes.map(n => get(n, 'tpopkontrsByTpopId.nodes', []))
         )
         tpopkontrNodes = sortBy(
           tpopkontrNodes,
@@ -1343,10 +1343,10 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
       messages: (function() {
         const popNodes = get(data, 'tpopfeldkontrOhneZaehlung.apsByProjId.nodes[0].popsByApId.nodes', [])
         const tpopNodes = flatten(
-          popNodes.map(n => get(n, 'tpopsByPopId.nodes'), [])
+          popNodes.map(n => get(n, 'tpopsByPopId.nodes', []))
         )
         let tpopkontrNodes = flatten(
-          tpopNodes.map(n => get(n, 'tpopkontrsByTpopId.nodes'), [])
+          tpopNodes.map(n => get(n, 'tpopkontrsByTpopId.nodes', []))
         )
         tpopkontrNodes = sortBy(
           tpopkontrNodes,
@@ -1375,10 +1375,10 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
       messages: (function() {
         const popNodes = get(data, 'tpopfreiwkontrOhneZaehlung.apsByProjId.nodes[0].popsByApId.nodes', [])
         const tpopNodes = flatten(
-          popNodes.map(n => get(n, 'tpopsByPopId.nodes'), [])
+          popNodes.map(n => get(n, 'tpopsByPopId.nodes', []))
         )
         let tpopkontrNodes = flatten(
-          tpopNodes.map(n => get(n, 'tpopkontrsByTpopId.nodes'), [])
+          tpopNodes.map(n => get(n, 'tpopkontrsByTpopId.nodes', []))
         )
         tpopkontrNodes = sortBy(
           tpopkontrNodes,
@@ -1408,10 +1408,10 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
       messages: (function() {
         const popNodes = get(data, 'feldkontrzaehlungOhneEinheit.apsByProjId.nodes[0].popsByApId.nodes', [])
         const tpopNodes = flatten(
-          popNodes.map(n => get(n, 'tpopsByPopId.nodes'), [])
+          popNodes.map(n => get(n, 'tpopsByPopId.nodes', []))
         )
         const tpopkontrNodes = flatten(
-          tpopNodes.map(n => get(n, 'tpopkontrsByTpopId.nodes'), [])
+          tpopNodes.map(n => get(n, 'tpopkontrsByTpopId.nodes', []))
         )
         let tpopkontrzaehlNodes = flatten(
           tpopkontrNodes.map(n => get(n, 'tpopkontrzaehlsByTpopkontrId.nodes', []))
@@ -1444,10 +1444,10 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
       messages: (function() {
         const popNodes = get(data, 'freiwkontrzaehlungOhneEinheit.apsByProjId.nodes[0].popsByApId.nodes', [])
         const tpopNodes = flatten(
-          popNodes.map(n => get(n, 'tpopsByPopId.nodes'), [])
+          popNodes.map(n => get(n, 'tpopsByPopId.nodes', []))
         )
         const tpopkontrNodes = flatten(
-          tpopNodes.map(n => get(n, 'tpopkontrsByTpopId.nodes'), [])
+          tpopNodes.map(n => get(n, 'tpopkontrsByTpopId.nodes', []))
         )
         let tpopkontrzaehlNodes = flatten(
           tpopkontrNodes.map(n => get(n, 'tpopkontrzaehlsByTpopkontrId.nodes', []))
@@ -1480,10 +1480,10 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
       messages: (function() {
         const popNodes = get(data, 'feldkontrzaehlungOhneMethode.apsByProjId.nodes[0].popsByApId.nodes', [])
         const tpopNodes = flatten(
-          popNodes.map(n => get(n, 'tpopsByPopId.nodes'), [])
+          popNodes.map(n => get(n, 'tpopsByPopId.nodes', []))
         )
         const tpopkontrNodes = flatten(
-          tpopNodes.map(n => get(n, 'tpopkontrsByTpopId.nodes'), [])
+          tpopNodes.map(n => get(n, 'tpopkontrsByTpopId.nodes', []))
         )
         let tpopkontrzaehlNodes = flatten(
           tpopkontrNodes.map(n => get(n, 'tpopkontrzaehlsByTpopkontrId.nodes', []))
@@ -1516,10 +1516,10 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
       messages: (function() {
         const popNodes = get(data, 'freiwkontrzaehlungOhneMethode.apsByProjId.nodes[0].popsByApId.nodes', [])
         const tpopNodes = flatten(
-          popNodes.map(n => get(n, 'tpopsByPopId.nodes'), [])
+          popNodes.map(n => get(n, 'tpopsByPopId.nodes', []))
         )
         const tpopkontrNodes = flatten(
-          tpopNodes.map(n => get(n, 'tpopkontrsByTpopId.nodes'), [])
+          tpopNodes.map(n => get(n, 'tpopkontrsByTpopId.nodes', []))
         )
         let tpopkontrzaehlNodes = flatten(
           tpopkontrNodes.map(n => get(n, 'tpopkontrzaehlsByTpopkontrId.nodes', []))
@@ -1552,10 +1552,10 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
       messages: (function() {
         const popNodes = get(data, 'feldkontrzaehlungOhneAnzahl.apsByProjId.nodes[0].popsByApId.nodes', [])
         const tpopNodes = flatten(
-          popNodes.map(n => get(n, 'tpopsByPopId.nodes'), [])
+          popNodes.map(n => get(n, 'tpopsByPopId.nodes', []))
         )
         const tpopkontrNodes = flatten(
-          tpopNodes.map(n => get(n, 'tpopkontrsByTpopId.nodes'), [])
+          tpopNodes.map(n => get(n, 'tpopkontrsByTpopId.nodes', []))
         )
         let tpopkontrzaehlNodes = flatten(
           tpopkontrNodes.map(n => get(n, 'tpopkontrzaehlsByTpopkontrId.nodes', []))
@@ -1588,10 +1588,10 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
       messages: (function() {
         const popNodes = get(data, 'freiwkontrzaehlungOhneAnzahl.apsByProjId.nodes[0].popsByApId.nodes', [])
         const tpopNodes = flatten(
-          popNodes.map(n => get(n, 'tpopsByPopId.nodes'), [])
+          popNodes.map(n => get(n, 'tpopsByPopId.nodes', []))
         )
         const tpopkontrNodes = flatten(
-          tpopNodes.map(n => get(n, 'tpopkontrsByTpopId.nodes'), [])
+          tpopNodes.map(n => get(n, 'tpopkontrsByTpopId.nodes', []))
         )
         let tpopkontrzaehlNodes = flatten(
           tpopkontrNodes.map(n => get(n, 'tpopkontrzaehlsByTpopkontrId.nodes', []))
