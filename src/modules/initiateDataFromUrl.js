@@ -1,5 +1,4 @@
 // @flow
-import clone from 'lodash/clone'
 import gql from 'graphql-tag'
 import app from 'ampersand-app'
 
@@ -14,7 +13,7 @@ export default async () => {
   const activeNodeArrayFromPathname = getActiveNodeArrayFromPathname(
     window.location.pathname.replace('/', '')
   )
-  let initialActiveNodeArray = clone(activeNodeArrayFromPathname)
+  let initialActiveNodeArray = [...activeNodeArrayFromPathname]
 
   // forward apflora.ch to Projekte
   if (activeNodeArrayFromPathname.length === 0) {
