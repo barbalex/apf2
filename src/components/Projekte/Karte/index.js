@@ -176,7 +176,6 @@ class Karte extends Component {
     if (Number.isInteger(prevWidth)) {
       const width = this.props.dimensions.width
       const widthHasChangedByOver20Percent = (prevWidth / width > 1.2) || (prevWidth / width < 0.8)
-      console.log('Karte, componentDidUpdate:', {prevWidth,width,widthHasChangedByOver20Percent})
       if (widthHasChangedByOver20Percent) {
         /**
          * need to redraw map, when tabs changed
