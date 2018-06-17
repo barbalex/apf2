@@ -2,6 +2,7 @@
 import isFinite from 'lodash/isFinite'
 import get from 'lodash/get'
 import flatten from 'lodash/flatten'
+import sortBy from 'lodash/sortBy'
 
 import isPointInsidePolygon from './isPointInsidePolygon'
 
@@ -12,7 +13,7 @@ export default ({ data, ktZh }):Array<Object> => {
   const tpops =  flatten(pops.map(p => get(p, 'tpopsByPopId.nodes', [])))
 
   // kontrolliere die Relevanz ausserkantonaler Tpop
-  const tpopsOutsideZh = tpops.filter(
+  let tpopsOutsideZh = tpops.filter(
     tpop =>
       tpop.apberRelevant === 1 &&
       !!tpop.x &&
@@ -20,6 +21,13 @@ export default ({ data, ktZh }):Array<Object> => {
       !!tpop.y &&
       isFinite(tpop.y) &&
       !isPointInsidePolygon(ktZh, tpop.x, tpop.y)
+  )
+  tpopsOutsideZh = sortBy(
+    tpopsOutsideZh,
+    (n) => [
+      get(n, 'popByPopId.nr'),
+      n.nr,
+    ]
   )
   return ({
     title: `Teilpopulation ist als 'Für AP-Bericht relevant' markiert, liegt aber ausserhalb des Kt. Zürich und sollte daher nicht relevant sein:`,

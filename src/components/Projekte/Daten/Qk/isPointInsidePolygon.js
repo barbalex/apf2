@@ -4,7 +4,7 @@
  * 'coordinates must only contain numbers'
  * see: https://github.com/Turfjs/turf/issues/940
  */
-import inside from '@turf/inside'
+import booleanPointInPolygon from '@turf/boolean-point-in-polygon'
 
 import epsg2056to4326 from '../../../../modules/epsg2056to4326notReverse'
 
@@ -30,5 +30,5 @@ export default (
   }
   //console.log('isPointInsidePolygon:', {koordPt,polygon})
   // let turf check if the point is in zh
-  return inside(koordPt, polygon)
+  return booleanPointInPolygon(koordPt, polygon)
 }
