@@ -36,6 +36,9 @@ const Container = styled.div`
   height: 100%;
   cursor: ${props => (props['data-loading'] ? 'wait' : 'inherit')};
 `
+const ErrorContainer = styled.div`
+  padding: 15px;
+`
 
 const enhance = compose(
   withState('apfloraLayers', 'setApfloraLayers', apfloraLayers),
@@ -130,6 +133,7 @@ const ProjekteContainer = ({
           const openNodes = get(data1, `${treeName}.openNodes`)
           const moving = get(data1, 'moving')
           const copying = get(data1, 'copying')
+          const token = get(data1, 'user.token')
 
           /**
            * get data based on openNodes, not activeNodes
@@ -140,8 +144,21 @@ const ProjekteContainer = ({
             <Query query={data2Gql} variables={variables(openNodes, activeNodeArray)}>
               {({ loading, error, data: data2, client, refetch }) => {
                 if (error) {
-                  if (error.message.includes('keine Berechtigung')) {
-                    return null
+                  console.log('ProjektContainer, error:', error.message)
+                  if (
+                    error.message.includes('permission denied') ||
+                    error.message.includes('keine Berechtigung')
+                  ) {
+                    console.log('ProjektContainer, token:', token)
+                    // during login don't show permission error
+                    if (!token) return null
+                    // if token is not accepted, ask user to logout
+                    return (
+                      <ErrorContainer>
+                        <div>Ihre Anmeldung ist nicht mehr gültig.</div>
+                        <div>Bitte melden Sie sich ab und wieder neu an.</div>
+                      </ErrorContainer>
+                    )
                   }
                   return `Fehler: ${error.message}`
                 }
