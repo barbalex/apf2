@@ -4,7 +4,7 @@
  * returns tpopId of nearest tpop
  */
 import nearest from '@turf/nearest'
-import nearestPoint from '@turf/nearest-point'
+//import nearestPoint from '@turf/nearest-point'
 import gql from 'graphql-tag'
 import get from 'lodash/get'
 import flatten from 'lodash/flatten'
@@ -15,11 +15,9 @@ import epsg2056to4326 from './epsg2056to4326'
 
 export default async ({
   activeNodes,
-  tree,
   latLng
 }:{
   activeNodes: Array<Object>,
-  tree: Object,
   latLng: Object
 }): String => {
   const { client } = app
@@ -79,9 +77,8 @@ export default async ({
     type: 'FeatureCollection',
     features: tpopFeatures,
   }
-  console.log('getNearestTpop:', {point,against})
-  const nearestTpopFeature = nearestPoint(point, against)
-  //const nearestTpopFeature = nearest(point, against)
-  console.log('getNearestTpop:', {nearestTpopFeature})
+  // errors out, see: https://github.com/Turfjs/turf/issues/1419
+  //const nearestTpopFeature = nearestPoint(point, against)
+  const nearestTpopFeature = nearest(point, against)
   return nearestTpopFeature.properties
 }

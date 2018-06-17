@@ -95,7 +95,6 @@ export default ({
          */
         const nearestTpop = await getNearestTpop({
           activeNodes,
-          tree,
           latLng: event.target._latlng
         })
         const newActiveNodeArray = [
