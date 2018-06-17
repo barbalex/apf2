@@ -1,9 +1,4 @@
 // @flow
-/**
- * turf between v4.2.0 and v4.7.3 creates an error:
- * 'coordinates must only contain numbers'
- * see: https://github.com/Turfjs/turf/issues/940
- */
 import booleanPointInPolygon from '@turf/boolean-point-in-polygon'
 
 import epsg2056to4326 from '../../../../modules/epsg2056to4326notReverse'

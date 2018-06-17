@@ -1249,6 +1249,19 @@
     "@turf/helpers" "6.x"
     "@turf/invariant" "6.x"
 
+"@turf/clone@6.x":
+  version "6.0.2"
+  resolved "https://registry.yarnpkg.com/@turf/clone/-/clone-6.0.2.tgz#7563cebbb3e2e19f361599bb244467e0dcc205c9"
+  dependencies:
+    "@turf/helpers" "6.x"
+
+"@turf/distance@6.x":
+  version "6.0.1"
+  resolved "https://registry.yarnpkg.com/@turf/distance/-/distance-6.0.1.tgz#0761f28784286e7865a427c4e7e3593569c2dea8"
+  dependencies:
+    "@turf/helpers" "6.x"
+    "@turf/invariant" "6.x"
+
 "@turf/distance@^4.7.3":
   version "4.7.3"
   resolved "https://registry.yarnpkg.com/@turf/distance/-/distance-4.7.3.tgz#b5ab48a09a642706d65c39b919433d5d2cc571b1"
@@ -1305,11 +1318,26 @@
     "@turf/helpers" "^5.1.5"
     "@turf/meta" "^5.1.5"
 
+"@turf/meta@6.x":
+  version "6.0.2"
+  resolved "https://registry.yarnpkg.com/@turf/meta/-/meta-6.0.2.tgz#eb92951126d24a613ac1b7b99d733fcc20fd30cf"
+  dependencies:
+    "@turf/helpers" "6.x"
+
 "@turf/meta@^5.1.5":
   version "5.2.0"
   resolved "https://registry.yarnpkg.com/@turf/meta/-/meta-5.2.0.tgz#3b1ad485ee0c3b0b1775132a32c384d53e4ba53d"
   dependencies:
     "@turf/helpers" "^5.1.5"
+
+"@turf/nearest-point@^6.0.1":
+  version "6.0.1"
+  resolved "https://registry.yarnpkg.com/@turf/nearest-point/-/nearest-point-6.0.1.tgz#9b86865300b2658ee61515eba2ff638ddcc60c3b"
+  dependencies:
+    "@turf/clone" "6.x"
+    "@turf/distance" "6.x"
+    "@turf/helpers" "6.x"
+    "@turf/meta" "6.x"
 
 "@turf/nearest@4.7.3":
   version "4.7.3"

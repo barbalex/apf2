@@ -4,6 +4,7 @@
  * returns tpopId of nearest tpop
  */
 import nearest from '@turf/nearest'
+import nearestPoint from '@turf/nearest-point'
 import gql from 'graphql-tag'
 import get from 'lodash/get'
 import flatten from 'lodash/flatten'
@@ -25,7 +26,6 @@ export default async ({
   const { lat, lng } = latLng
   const point = {
     type: 'Feature',
-    properties: {},
     geometry: {
       type: 'Point',
       coordinates: [lat, lng],
@@ -79,6 +79,9 @@ export default async ({
     type: 'FeatureCollection',
     features: tpopFeatures,
   }
-  const nearestTpopFeature = nearest(point, against)
+  console.log('getNearestTpop:', {point,against})
+  const nearestTpopFeature = nearestPoint(point, against)
+  //const nearestTpopFeature = nearest(point, against)
+  console.log('getNearestTpop:', {nearestTpopFeature})
   return nearestTpopFeature.properties
 }
