@@ -159,7 +159,6 @@ const ProjekteContainer = ({
                                     1 :
                                       (1 / tabs.length)
                 const assigning = get(data, 'assigningBeob')
-                console.log('ProjektContainer', {mapFilter})
                 const mapPopIdsFiltered = idsInsideFeatureCollection({
                   mapFilter,
                   data: get(data, `popForMap.nodes`, []),
@@ -265,7 +264,6 @@ const ProjekteContainer = ({
                           tabs.includes('karte') &&
                           <ReflexElement
                             className="karte"
-                            onResize={() => console.log('map resized')}
                             propagateDimensions={true}
                             renderOnResizeRate={200}
                             renderOnResize={true}

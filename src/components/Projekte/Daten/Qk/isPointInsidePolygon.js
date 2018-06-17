@@ -23,7 +23,6 @@ export default (
       coordinates: koordWgs84,
     },
   }
-  //console.log('isPointInsidePolygon:', {koordPt,polygon})
   // let turf check if the point is in zh
   return booleanPointInPolygon(koordPt, polygon)
 }

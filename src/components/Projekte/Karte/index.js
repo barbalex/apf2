@@ -18,6 +18,7 @@ import 'proj4leaflet'
 import debounceHandler from '@hocs/debounce-handler'
 import sortBy from 'lodash/sortBy'
 import get from 'lodash/get'
+import isEqual from 'lodash/isEqual'
 import app from 'ampersand-app'
 
 import LayersControl from './LayersControl'
@@ -171,15 +172,19 @@ class Karte extends Component {
 
   componentDidUpdate(prevProps) {
     const prevWidth = prevProps.dimensions.width
-    const width = this.props.dimensions.width
-    if (Number.isInteger(prevWidth) && (width / prevWidth > 2)) {
-      /**
-       * TODO:
-       * if width more than doubled, need to redraw map
-       */
-      console.log('Karte, onDidUpdate, width more than doubled:', {prevWidth,width,leafletElement:this.mapRef.current.leafletElement})
-      const map = this.mapRef.current.leafletElement
-      map.invalidateSize()
+    // DANGER: first width is '100%'!
+    if (Number.isInteger(prevWidth)) {
+      const width = this.props.dimensions.width
+      const widthHasChangedByOver20Percent = (prevWidth / width > 1.2) || (prevWidth / width < 0.8)
+      console.log('Karte, componentDidUpdate:', {prevWidth,width,widthHasChangedByOver20Percent})
+      if (widthHasChangedByOver20Percent) {
+        /**
+         * need to redraw map, when tabs changed
+         * unfortunately, tabs change in previous update, so can't compare tabs
+         */
+        const map = this.mapRef.current.leafletElement
+        map.invalidateSize()
+      }
     }
   }
 
@@ -337,7 +342,6 @@ class Karte extends Component {
     const activeOverlaysSorted = sortBy(activeOverlays, activeOverlay =>
       overlays.findIndex(o => o.value === activeOverlay)
     )
-    console.log('Karte:', {mapFilter})
   
     return (
       <Container>
