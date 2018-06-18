@@ -1,5 +1,5 @@
 // @flow
-import React from 'react'
+import React, { createRef, Component } from 'react'
 import styled from 'styled-components'
 import { Query } from 'react-apollo'
 import get from 'lodash/get'
@@ -17,45 +17,54 @@ const Container = styled.div`
       : 'auto'};
 `
 
-const Beob = ({
-  treeName,
-  id,
-  dimensions = { width: 380 },
-}: {
+type Props = {
   treeName: String,
   id: String,
   dimensions: Object,
-}) => (
-  <Query query={dataGql} variables={{ id }}>
-    {({ loading, error, data }) => {
-      if (loading) return <Container>Lade...</Container>
-      if (error) return `Fehler: ${error.message}`
+}
 
-      const row = get(data, 'beobById')
-      if (!row) return null
+class Beob extends Component<Props> {
+  constructor(props) {
+    super(props);
+    this.container = createRef();
+  }
 
-      const beobFields = Object.entries(JSON.parse(row.data)).filter(
-        ([key, value]) => value || value === 0
-      )
-      if (!beobFields || beobFields.length === 0) return null
+  render() {
+    const { id, dimensions = { width: 380 } } = this.props
 
-      return (
-        <ErrorBoundary>
-          <div ref={c => (this.container = c)}>
-            <Container
-              data-width={isNaN(dimensions.width) ? 380 : dimensions.width}
-            >
-              {beobFields.map(([key, value]) => (
-                <div key={key}>
-                  <TextFieldNonUpdatable label={key} value={value} />
-                </div>
-              ))}
-            </Container>
-          </div>
-        </ErrorBoundary>
-      )
-    }}
-  </Query>
-)
+    return (
+      <Query query={dataGql} variables={{ id }}>
+        {({ loading, error, data }) => {
+          if (loading) return <Container>Lade...</Container>
+          if (error) return `Fehler: ${error.message}`
+
+          const row = get(data, 'beobById')
+          if (!row) return null
+
+          const beobFields = Object.entries(JSON.parse(row.data)).filter(
+            ([key, value]) => value || value === 0
+          )
+          if (!beobFields || beobFields.length === 0) return null
+
+          return (
+            <ErrorBoundary>
+              <div ref={this.container}>
+                <Container
+                  data-width={isNaN(dimensions.width) ? 380 : dimensions.width}
+                >
+                  {beobFields.map(([key, value]) => (
+                    <div key={key}>
+                      <TextFieldNonUpdatable label={key} value={value} />
+                    </div>
+                  ))}
+                </Container>
+              </div>
+            </ErrorBoundary>
+          )
+        }}
+      </Query>
+    )
+  }
+}
 
 export default Beob
