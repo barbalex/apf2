@@ -42,7 +42,7 @@ const Tpopfreiwkontr = ({
     >
       <div className="react-contextmenu-title">Freiwilligen-Kontrolle</div>
       {
-        !userIsReadOnly(token) &&
+        !userIsReadOnly(token, 'freiw') &&
         <Fragment>
           <MenuItem
             onClick={onClick}

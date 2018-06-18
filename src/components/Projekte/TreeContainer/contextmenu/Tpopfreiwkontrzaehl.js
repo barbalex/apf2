@@ -40,7 +40,7 @@ const Tpopfreiwkontrzaehl = ({
     >
       <div className="react-contextmenu-title">Zählung</div>
       {
-        !userIsReadOnly(token) &&
+        !userIsReadOnly(token, 'freiw') &&
         <Fragment>
           <MenuItem
             onClick={onClick}

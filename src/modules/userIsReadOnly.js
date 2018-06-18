@@ -1,8 +1,12 @@
 //@flow
 import jwtDecode from 'jwt-decode'
 
-export default (token) => {
+export default (token, freiw) => {
   if (!token) return true
   const { role } = jwtDecode(token)
-  return (!role || role === 'apflora_reader')
+  if (!role) return true
+  if (role === 'apflora_reader') return true
+  if (!freiw && role === 'apflora_freiwillig') return true
+  if (!!freiw && role === 'apflora_freiwillig') return false
+  return false
 }

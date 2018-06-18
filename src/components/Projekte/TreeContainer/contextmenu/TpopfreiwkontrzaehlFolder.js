@@ -18,7 +18,7 @@ const TpopfreiwkontrzaehlFolder = ({
     <ContextMenu id={`${tree.name}tpopfreiwkontrzaehlFolder`}>
       <div className="react-contextmenu-title">Zählungen</div>
       {
-        !userIsReadOnly(token) &&
+        !userIsReadOnly(token, 'freiw') &&
         <MenuItem
           onClick={onClick}
           data={{

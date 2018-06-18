@@ -42,7 +42,7 @@ const TpopfreiwkontrFolder = ({
           alle schliessen
         </MenuItem>
         {
-          !userIsReadOnly(token) &&
+          !userIsReadOnly(token, 'freiw') &&
           <Fragment>
             <MenuItem
               onClick={onClick}
