@@ -51,7 +51,6 @@ export default async ({
       new Error('new dataset not created as no idField could be found')
     )
   }
-  console.log('insertDataset:', {id,parentId,menuType,baseUrl})
   let mutation = gql`
     mutation create${upperFirst(camelCase(table))}(
       $parentId: UUID!
