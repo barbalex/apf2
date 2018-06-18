@@ -400,7 +400,7 @@ query TreeDataQuery(
       y
     }
   }
-  beobZugeordnetForMapMarkers: projektById(id: $projId) {
+  beobZugeordnetForMapMarkers: projektById(id: $projId) @include(if: $isAp) {
     id
     apsByProjId(filter: { id: { equalTo: $apId } }) {
       nodes {
@@ -439,7 +439,7 @@ query TreeDataQuery(
       }
     }
   }
-  beobNichtBeurteiltForMapMarkers: projektById(id: $projId) {
+  beobNichtBeurteiltForMapMarkers: projektById(id: $projId) @include(if: $isAp) {
     id
     apsByProjId(filter: { id: { equalTo: $apId } }) {
       nodes {
@@ -473,7 +473,7 @@ query TreeDataQuery(
       }
     }
   }
-  beobNichtZuzuordnenForMapMarkers: projektById(id: $projId) {
+  beobNichtZuzuordnenForMapMarkers: projektById(id: $projId) @include(if: $isAp) {
     id
     apsByProjId(filter: { id: { equalTo: $apId } }) {
       nodes {
@@ -520,7 +520,7 @@ query TreeDataQuery(
       y
     }
   }
-  popForMapMarkers: projektById(id: $projId) {
+  popForMapMarkers: projektById(id: $projId) @include(if: $isAp) {
     id
     apsByProjId(filter: { id: { equalTo: $apId } }) {
       nodes {
