@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, createRef } from 'react'
 import ReactDOM from 'react-dom'
 import 'leaflet'
 import styled from 'styled-components'
@@ -153,31 +153,36 @@ const enhance = compose(
   })
 )
 
-class PanToCoordinates extends Component {
-  props: {
-    controlType: string,
-    onClickCoordinates: () => void,
-    onClickGoto: () => void,
-    onChangeX: () => void,
-    onChangeY: () => void,
-    x: string,
-    y: string,
-    xError: string,
-    yError: string,
-    onBlurX: () => void,
-    onBlurY: () => void,
-    setX: () => void,
-    setY: () => void,
-    onBlurGotoContainer: () => void,
-    onFocusGotoContainer: () => void,
-    onClickClear: () => void,
-    changeControlType: () => void,
+type Props = {
+  controlType: string,
+  onClickCoordinates: () => void,
+  onClickGoto: () => void,
+  onChangeX: () => void,
+  onChangeY: () => void,
+  x: string,
+  y: string,
+  xError: string,
+  yError: string,
+  onBlurX: () => void,
+  onBlurY: () => void,
+  setX: () => void,
+  setY: () => void,
+  onBlurGotoContainer: () => void,
+  onFocusGotoContainer: () => void,
+  onClickClear: () => void,
+  changeControlType: () => void,
+}
+
+class PanToCoordinates extends Component<Props> {
+  constructor(props) {
+    super(props)
+    this.xkoordField = createRef()
   }
 
-  xkoordField: ?HTMLDivElement
+  //xkoordField: ?HTMLDivElement
 
   componentDidMount() {
-    ReactDOM.findDOMNode(this.xkoordField)
+    ReactDOM.findDOMNode(this.xkoordField.current)
       .getElementsByTagName('input')[0]
       .focus()
   }
@@ -210,7 +215,7 @@ class PanToCoordinates extends Component {
             max="2828516"
             onChange={onChangeX}
             onBlur={onBlurX}
-            ref={c => (this.xkoordField = c)}
+            innerRef={this.xkoordField}
           />
           <FormHelperText id="xhelper">{xError}</FormHelperText>
         </FormControl>
@@ -224,7 +229,6 @@ class PanToCoordinates extends Component {
             max="1299942"
             onChange={onChangeY}
             onBlur={onBlurY}
-            ref={c => (this.ykoordField = c)}
           />
           <FormHelperText id="yhelper">{yError}</FormHelperText>
         </FormControl>
