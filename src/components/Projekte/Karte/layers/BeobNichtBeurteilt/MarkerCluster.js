@@ -17,17 +17,10 @@ class BeobMarkerCluster extends Component {
     map.addLayer(markers)
   }
 
-  componentWillReceiveProps(nextProps) {
-    const { map } = this.props
-    if (this.props.markers && this.props.markers !== nextProps.markers) {
-      map.removeLayer(this.props.markers)
-    }
-  }
-
-  componentDidUpdate() {
-    const { map, markers } = this.props
-    map.addLayer(markers)
-  }
+  /**
+   * seems that this component never updates
+   * instead it unmounts and mounts again
+   */
 
   componentWillUnmount() {
     const { map, markers } = this.props

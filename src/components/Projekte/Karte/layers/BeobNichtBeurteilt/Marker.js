@@ -16,17 +16,10 @@ class BeobMarker extends Component {
     markers.forEach(m => m.addTo(map))
   }
 
-  componentWillReceiveProps(nextProps) {
-    const { map, markers } = this.props
-    if (markers && markers !== nextProps.markers) {
-      markers.forEach(m => map.removeLayer(m))
-    }
-  }
-
-  componentDidUpdate() {
-    const { map, markers } = this.props
-    markers.forEach(m => m.addTo(map))
-  }
+  /**
+   * seems that this component never updates
+   * instead it unmounts and mounts again
+   */
 
   componentWillUnmount() {
     const { map, markers } = this.props

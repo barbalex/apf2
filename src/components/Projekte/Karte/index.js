@@ -237,6 +237,7 @@ class Karte extends Component {
       pop: () => (
         <Pop
           tree={tree}
+          data={data}
           activeNodes={activeNodes}
           apfloraLayers={apfloraLayers}
           activeApfloraLayers={activeApfloraLayers}
@@ -258,6 +259,7 @@ class Karte extends Component {
       beobNichtBeurteilt: () => (
         <BeobNichtBeurteilt
           tree={tree}
+          data={data}
           activeNodes={activeNodes}
           apfloraLayers={apfloraLayers}
           clustered={clustered}
@@ -268,6 +270,7 @@ class Karte extends Component {
       beobNichtZuzuordnen: () => (
         <BeobNichtZuzuordnen
           tree={tree}
+          data={data}
           activeNodes={activeNodes}
           apfloraLayers={apfloraLayers}
           clustered={clustered}
@@ -277,6 +280,7 @@ class Karte extends Component {
       beobZugeordnet: () => (
         <BeobZugeordnet
           tree={tree}
+          data={data}
           activeNodes={activeNodes}
           apfloraLayers={apfloraLayers}
           clustered={clustered}
