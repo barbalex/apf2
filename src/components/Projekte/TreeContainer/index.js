@@ -331,7 +331,7 @@ const enhance = compose(
           copyBiotopTo({ id, client })
         },
         copyTpopKoordToPop() {
-          copyTpopKoordToPop({ id, errorState })
+          copyTpopKoordToPop({ id, errorState, refetchTree })
         },
         createNewPopFromBeob() {
           createNewPopFromBeob({ tree, activeNodes, id, refetch: refetchTree, errorState })

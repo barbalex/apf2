@@ -94,7 +94,7 @@ export default ({
                 }`}
               </StyledH3>
               <div>
-                {`Koordinaten: ${p.x.toLocaleString('de-ch')} / ${p.y.toLocaleString('de-ch')}`}
+                {`Koordinaten: ${p.x ? p.x.toLocaleString('de-ch') : ''} / ${p.y ? p.y.toLocaleString('de-ch') : ''}`}
               </div>
               <a
                 href={`${appBaseUrl}/Projekte/${projekt}/Aktionspläne/${ap}/Populationen/${p.id}`}
