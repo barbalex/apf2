@@ -359,4 +359,12 @@ export default [
     idField: 'id',
     parentIdField: 'none',
   },
+  {
+    table: 'user',
+    parentTable: 'none',
+    label: 'User',
+    labelSingular: 'Benutzer',
+    idField: 'id',
+    parentIdField: 'none',
+  },
 ]

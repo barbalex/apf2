@@ -20,6 +20,10 @@ const Ap = Loadable({
   loader: () => import('./Ap'),
   loading: Loading,
 })
+const User = Loadable({
+  loader: () => import('./User'),
+  loading: Loading,
+})
 const Apberuebersicht = Loadable({
   loader: () => import('./Apberuebersicht'),
   loading: Loading,
@@ -178,6 +182,7 @@ const Daten = ({
             beobNichtZuzuordnen: <Beobzuordnung dimensions={dimensions} id={activeNodeArray[activeNodeArray.length -1]} tree={tree} refetchTree={refetchTree} type="nichtZuzuordnen" />,
             beobNichtBeurteilt: <Beobzuordnung dimensions={dimensions} id={activeNodeArray[activeNodeArray.length -1]} tree={tree} refetchTree={refetchTree} type="nichtBeurteilt" />,
             beobZugeordnet: <Beobzuordnung dimensions={dimensions} id={activeNodeArray[activeNodeArray.length -1]} tree={tree} refetchTree={refetchTree} type="zugeordnet" />,
+            user: <User dimensions={dimensions} treeName={treeName} refetchTree={refetchTree} />,
           }
           let key
           if (
