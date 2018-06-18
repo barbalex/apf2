@@ -1,7 +1,4 @@
 // @flow
-/**
- * need to keep class because of ref
- */
 import React from 'react'
 import styled from 'styled-components'
 import compose from 'recompose/compose'
@@ -9,9 +6,9 @@ import withHandlers from 'recompose/withHandlers'
 import Switch from '@material-ui/core/Switch'
 import get from 'lodash/get'
 import { Query } from 'react-apollo'
-import gql from 'graphql-tag'
 
 import dataGql from './data.graphql'
+import setTreeKey from './setTreeKey.graphql'
 import Label from '../../../shared/Label'
 import ErrorBoundary from '../../../shared/ErrorBoundarySingleChild'
 
@@ -29,18 +26,15 @@ const StyledSwitch = styled(Switch)`
 
 const enhance = compose(
   withHandlers({
-    onChange: ({ treeName }) => ({ client, apFilter }:{ client: Object, apFilter: Boolean }) => {
+    onChange: ({ treeName }) => ({
+      client,
+      apFilter
+    }:{
+      client: Object,
+      apFilter: Boolean
+    }) => {
       client.mutate({
-        mutation: gql`
-          mutation setTreeKey($value: Array!, $tree: String!, $key: String!) {
-            setTreeKey(tree: $tree, key: $key, value: $value) @client {
-              tree @client {
-                apFilter
-                __typename: Tree
-              }
-            }
-          }
-        `,
+        mutation: setTreeKey,
         variables: {
           value: !apFilter,
           tree: treeName,

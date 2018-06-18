@@ -42,6 +42,7 @@ const enhance = compose(
 class PrintControl extends Component {
   constructor(props) {
     super(props)
+    // ref is used to try map not to hijack click events
     this.container = React.createRef()
   }
 
