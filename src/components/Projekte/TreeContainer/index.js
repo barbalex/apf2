@@ -445,8 +445,9 @@ type Props = {
 
 class TreeContainer extends Component<Props> {
   constructor(props) {
-    super(props);
-    this.tree = React.createRef();
+    super(props)
+    // TODO: what is this ref used for?
+    this.tree = React.createRef()
   }
 
   render() {
