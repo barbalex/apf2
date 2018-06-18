@@ -25,8 +25,9 @@ type Props = {
 
 class Beob extends Component<Props> {
   constructor(props) {
-    super(props);
-    this.container = createRef();
+    super(props)
+    // TODO: what is this ref used for?
+    this.container = createRef()
   }
 
   render() {
