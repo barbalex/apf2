@@ -87,7 +87,6 @@ export default ({
   const projektNodes = [...buildProjektNodes({ data, treeName })]
   const userFolderNode = buildUserFolderNode({ data, treeName, projektNodes, loading })
 
-  //let nodes = clone(projektNodes)
   let nodes = [...projektNodes, userFolderNode]
   let apNodes
   let popNodes
@@ -96,7 +95,7 @@ export default ({
   let tpopfreiwkontrNodes
   let apzieljahrFolderNodes
   let apzielNodes
-
+  
   openNodes.forEach(nodeUrl => {
     if (
       nodeUrl.length === 1 &&
