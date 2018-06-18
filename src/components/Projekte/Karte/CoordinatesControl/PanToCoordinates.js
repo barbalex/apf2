@@ -179,7 +179,7 @@ class PanToCoordinates extends Component<Props> {
     this.xkoordField = createRef()
   }
 
-  //xkoordField: ?HTMLDivElement
+  xkoordField: ?HTMLDivElement
 
   componentDidMount() {
     ReactDOM.findDOMNode(this.xkoordField.current)
