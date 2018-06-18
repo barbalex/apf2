@@ -1,5 +1,4 @@
 // @flow
-import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
 
 import compareLabel from './compareLabel'
