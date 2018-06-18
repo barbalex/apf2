@@ -67,9 +67,7 @@ grant all on apflora.tpopkontr, apflora.tpopkontrzaehl to apflora_freiwillig;
 -- check privileges on table: \z apflora.user
 
 -- secure pass and role in apflora.user:
-revoke all on apflora.user from public;
+revoke all on apflora.user from public, apflora_reader, apflora_freiwillig, apflora_artverantwortlich;
 grant select (id, name, email) on apflora.user to anon;
-grant select (id, name, email), update (name, email, pass) on apflora.user to apflora_reader;
-grant select (id, name, email), update (name, email, pass) on apflora.user to apflora_freiwillig;
-grant select (id, name, email), update (name, email, pass) on apflora.user to apflora_artverantwortlich;
-grant select (id, name, email), insert (id, name, email, pass, role), update (id, name, email, pass, role) on apflora.user to apflora_manager;
+grant select (id, name, email), update (name, email, pass) on apflora.user to apflora_reader, apflora_freiwillig, apflora_artverantwortlich;
+grant all on apflora.user to apflora_manager;
