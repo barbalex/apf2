@@ -86,7 +86,6 @@ export default ({
 
   const projektNodes = [...buildProjektNodes({ data, treeName })]
   const userFolderNode = buildUserFolderNode({ data, treeName, projektNodes, loading })
-  //const userNodes = buildUserNodes({ data, treeName, projektNodes })
 
   //let nodes = clone(projektNodes)
   let nodes = [...projektNodes, userFolderNode]
@@ -97,217 +96,191 @@ export default ({
   let tpopfreiwkontrNodes
   let apzieljahrFolderNodes
   let apzielNodes
-  // do not process ['Projekte']
-  const nodeUrlsToProcess = openNodes.filter(n => n.length > 1)
 
-  nodeUrlsToProcess.forEach(nodeUrl => {
-    const projId = nodeUrl[1]
-    if (nodeUrl.length === 2) {
+  openNodes.forEach(nodeUrl => {
+    if (
+      nodeUrl.length === 1 &&
+      nodeUrl[0] === 'Benutzer'
+    ) {
       nodes = [
         ...nodes,
-        ...buildApFolderNodes({
+        ...buildUserNodes({
+          data,
+          treeName,
+          projektNodes
+        }),
+      ]
+    }
+    if (nodeUrl[0] === 'Projekte') {
+      // do not process ['Projekte']
+      const projId = nodeUrl[1]
+      if (
+        nodeUrl.length === 2 &&
+        nodeUrl[0] === 'Projekte'
+      ) {
+        nodes = [
+          ...nodes,
+          ...buildApFolderNodes({
+            data,
+            treeName,
+            loading,
+            projektNodes,
+            projId
+          }),
+          ...buildApberuebersichtFolderNodes({
+            data,
+            treeName,
+            loading,
+            projektNodes,
+            projId,
+          }),
+        ]
+      }
+      if (
+        nodeUrl.length === 3 &&
+        nodeUrl[2] === 'AP-Berichte' &&
+        allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
+      ) {
+        nodes = [
+          ...nodes,
+          ...buildApberuebersichtNodes({
+            data,
+            treeName,
+            loading,
+            projektNodes,
+            projId
+          }),
+        ]
+      }
+      if (
+        nodeUrl.length === 3 &&
+        nodeUrl[2] === 'Aktionspläne' &&
+        allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
+      ) {
+        apNodes = buildApNodes({
           data,
           treeName,
           loading,
           projektNodes,
           projId
-        }),
-        ...buildApberuebersichtFolderNodes({
-          data,
-          treeName,
-          loading,
-          projektNodes,
-          projId,
-        }),
-      ]
-    }
-    if (
-      nodeUrl.length === 3 &&
-      nodeUrl[2] === 'AP-Berichte' &&
-      allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
-    ) {
-      nodes = [
-        ...nodes,
-        ...buildApberuebersichtNodes({
-          data,
-          treeName,
-          loading,
-          projektNodes,
-          projId
-        }),
-      ]
-    }
-    if (
-      nodeUrl.length === 3 &&
-      nodeUrl[2] === 'Aktionspläne' &&
-      allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
-    ) {
-      apNodes = buildApNodes({
-        data,
-        treeName,
-        loading,
-        projektNodes,
-        projId
-      })
-      nodes = [...nodes, ...apNodes]
-    }
-    if (
-      nodeUrl.length === 4 &&
-      nodeUrl[2] === 'Aktionspläne' &&
-      allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
-    ) {
-      const apId = nodeUrl[3]
-      nodes = [
-        ...nodes,
-        ...buildPopFolderNodes({
-          data,
-          treeName,
-          loading,
-          projektNodes,
-          projId,
-          apNodes,
-          apId
-        }),
-        ...buildApzielFolderNodes({
-          data,
-          treeName,
-          loading,
-          apNodes,
-          projektNodes,
-          projId,
-          apId,
-        }),
-        ...buildAperfkritFolderNodes({
-          data,
-          treeName,
-          loading,
-          apNodes,
-          projektNodes,
-          projId,
-          apId,
-        }),
-        ...buildApberFolderNodes({
-          data,
-          treeName,
-          loading,
-          apNodes,
-          projektNodes,
-          projId,
-          apId,
-        }),
-        ...buildBerFolderNodes({
-          data,
-          treeName,
-          loading,
-          apNodes,
-          projektNodes,
-          projId,
-          apId,
-        }),
-        ...buildIdealbiotopFolderNodes({
-          treeName,
-          loading,
-          apNodes,
-          projektNodes,
-          projId,
-          apId,
-        }),
-        ...buildAssozartFolderNodes({
-          data,
-          treeName,
-          loading,
-          apNodes,
-          projektNodes,
-          projId,
-          apId,
-        }),
-        ...buildApartFolderNodes({
-          data,
-          treeName,
-          loading,
-          apNodes,
-          projektNodes,
-          projId,
-          apId,
-        }),
-        ...buildBeobNichtBeurteiltFolderNodes({
-          data,
-          treeName,
-          loading,
-          apNodes,
-          projektNodes,
-          projId,
-          apId,
-        }),
-        ...buildBeobNichtZuzuordnenFolderNodes({
-          data,
-          treeName,
-          loading,
-          apNodes,
-          projektNodes,
-          projId,
-          apId,
-        }),
-        ...qkFolderNodes({
-          data,
-          treeName,
-          loading,
-          apNodes,
-          projektNodes,
-          projId,
-          apId,
-        }),
-      ]
-    }
-    // if nodeUrl.length > 4, nodeUrl[2] is always 'Aktionspläne'
-    if (
-      nodeUrl.length === 5 &&
-      nodeUrl[4] === 'AP-Ziele' &&
-      allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
-    ) {
-      apzieljahrFolderNodes = buildApzieljahrFolderNodes({
-        data,
-        treeName,
-        loading,
-        apNodes,
-        projektNodes,
-        projId,
-        apId: nodeUrl[3],
-      })
-      nodes = [
-        ...nodes,
-        ...apzieljahrFolderNodes,
-      ]
-    }
-    if (
-      nodeUrl.length === 6 &&
-      nodeUrl[4] === 'AP-Ziele' &&
-      allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
-    ) {
-      apzielNodes = buildApzielNodes({
-        data,
-        treeName,
-        loading,
-        apNodes,
-        projektNodes,
-        projId,
-        apId: nodeUrl[3],
-        jahr: +nodeUrl[5],
-        apzieljahrFolderNodes
-      })
-      nodes = [
-        ...nodes,
-        ...apzielNodes,
-      ]
-    }
-    if (
-      nodeUrl.length === 7 &&
-      nodeUrl[4] === 'AP-Ziele' &&
-      allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
-    ) {
-      nodes = [
-        ...nodes,
-        ...buildApzielberFolderNodes({
+        })
+        nodes = [...nodes, ...apNodes]
+      }
+      if (
+        nodeUrl.length === 4 &&
+        nodeUrl[2] === 'Aktionspläne' &&
+        allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
+      ) {
+        const apId = nodeUrl[3]
+        nodes = [
+          ...nodes,
+          ...buildPopFolderNodes({
+            data,
+            treeName,
+            loading,
+            projektNodes,
+            projId,
+            apNodes,
+            apId
+          }),
+          ...buildApzielFolderNodes({
+            data,
+            treeName,
+            loading,
+            apNodes,
+            projektNodes,
+            projId,
+            apId,
+          }),
+          ...buildAperfkritFolderNodes({
+            data,
+            treeName,
+            loading,
+            apNodes,
+            projektNodes,
+            projId,
+            apId,
+          }),
+          ...buildApberFolderNodes({
+            data,
+            treeName,
+            loading,
+            apNodes,
+            projektNodes,
+            projId,
+            apId,
+          }),
+          ...buildBerFolderNodes({
+            data,
+            treeName,
+            loading,
+            apNodes,
+            projektNodes,
+            projId,
+            apId,
+          }),
+          ...buildIdealbiotopFolderNodes({
+            treeName,
+            loading,
+            apNodes,
+            projektNodes,
+            projId,
+            apId,
+          }),
+          ...buildAssozartFolderNodes({
+            data,
+            treeName,
+            loading,
+            apNodes,
+            projektNodes,
+            projId,
+            apId,
+          }),
+          ...buildApartFolderNodes({
+            data,
+            treeName,
+            loading,
+            apNodes,
+            projektNodes,
+            projId,
+            apId,
+          }),
+          ...buildBeobNichtBeurteiltFolderNodes({
+            data,
+            treeName,
+            loading,
+            apNodes,
+            projektNodes,
+            projId,
+            apId,
+          }),
+          ...buildBeobNichtZuzuordnenFolderNodes({
+            data,
+            treeName,
+            loading,
+            apNodes,
+            projektNodes,
+            projId,
+            apId,
+          }),
+          ...qkFolderNodes({
+            data,
+            treeName,
+            loading,
+            apNodes,
+            projektNodes,
+            projId,
+            apId,
+          }),
+        ]
+      }
+      // if nodeUrl.length > 4, nodeUrl[2] is always 'Aktionspläne'
+      if (
+        nodeUrl.length === 5 &&
+        nodeUrl[4] === 'AP-Ziele' &&
+        allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
+      ) {
+        apzieljahrFolderNodes = buildApzieljahrFolderNodes({
           data,
           treeName,
           loading,
@@ -315,22 +288,18 @@ export default ({
           projektNodes,
           projId,
           apId: nodeUrl[3],
-          zielJahr: +nodeUrl[5],
-          apzieljahrFolderNodes,
-          zielId: nodeUrl[6],
-          apzielNodes
-        }),
-      ]
-    }
-    if (
-      nodeUrl.length === 8 &&
-      nodeUrl[4] === 'AP-Ziele' &&
-      nodeUrl[7] === 'Berichte' &&
-      allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
-    ) {
-      nodes = [
-        ...nodes,
-        ...buildApzielberNodes({
+        })
+        nodes = [
+          ...nodes,
+          ...apzieljahrFolderNodes,
+        ]
+      }
+      if (
+        nodeUrl.length === 6 &&
+        nodeUrl[4] === 'AP-Ziele' &&
+        allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
+      ) {
+        apzielNodes = buildApzielNodes({
           data,
           treeName,
           loading,
@@ -338,37 +307,65 @@ export default ({
           projektNodes,
           projId,
           apId: nodeUrl[3],
-          zielJahr: +nodeUrl[5],
-          apzieljahrFolderNodes,
-          zielId: nodeUrl[6],
-          apzielNodes
-        }),
-      ]
-    }
-    if (
-      nodeUrl.length === 5 &&
-      nodeUrl[4] === 'Populationen' &&
-      allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
-    ) {
-      popNodes = buildPopNodes({
-        data,
-        treeName,
-        loading,
-        apNodes,
-        projektNodes,
-        projId,
-        apId: nodeUrl[3],
-      })
-      nodes = [...nodes, ...popNodes]
-    }
-    if (
-      nodeUrl.length === 5 &&
-      nodeUrl[4] === 'nicht-zuzuordnende-Beobachtungen' &&
-      allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
-    ) {
-      nodes = [
-        ...nodes,
-        ...buildBeobNichtZuzuordnenNodes({
+          jahr: +nodeUrl[5],
+          apzieljahrFolderNodes
+        })
+        nodes = [
+          ...nodes,
+          ...apzielNodes,
+        ]
+      }
+      if (
+        nodeUrl.length === 7 &&
+        nodeUrl[4] === 'AP-Ziele' &&
+        allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
+      ) {
+        nodes = [
+          ...nodes,
+          ...buildApzielberFolderNodes({
+            data,
+            treeName,
+            loading,
+            apNodes,
+            projektNodes,
+            projId,
+            apId: nodeUrl[3],
+            zielJahr: +nodeUrl[5],
+            apzieljahrFolderNodes,
+            zielId: nodeUrl[6],
+            apzielNodes
+          }),
+        ]
+      }
+      if (
+        nodeUrl.length === 8 &&
+        nodeUrl[4] === 'AP-Ziele' &&
+        nodeUrl[7] === 'Berichte' &&
+        allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
+      ) {
+        nodes = [
+          ...nodes,
+          ...buildApzielberNodes({
+            data,
+            treeName,
+            loading,
+            apNodes,
+            projektNodes,
+            projId,
+            apId: nodeUrl[3],
+            zielJahr: +nodeUrl[5],
+            apzieljahrFolderNodes,
+            zielId: nodeUrl[6],
+            apzielNodes
+          }),
+        ]
+      }
+      if (
+        nodeUrl.length === 5 &&
+        nodeUrl[4] === 'Populationen' &&
+        allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
+      ) {
+        popNodes = buildPopNodes({
           data,
           treeName,
           loading,
@@ -376,191 +373,228 @@ export default ({
           projektNodes,
           projId,
           apId: nodeUrl[3],
-        }),
-      ]
-    }
-    if (
-      nodeUrl.length === 5 &&
-      nodeUrl[4] === 'nicht-beurteilte-Beobachtungen' &&
-      allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
-    ) {
-      nodes = [
-        ...nodes,
-        ...buildBeobNichtBeurteiltNodes({
-          data,
-          treeName,
-          loading,
-          apNodes,
-          projektNodes,
-          projId,
-          apId: nodeUrl[3],
-        }),
-      ]
-    }
-    if (
-      nodeUrl.length === 5 &&
-      nodeUrl[4] === 'assoziierte-Arten' &&
-      allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
-    ) {
-      nodes = [
-        ...nodes,
-        ...buildAssozartNodes({
-          data,
-          treeName,
-          loading,
-          apNodes,
-          projektNodes,
-          projId,
-          apId: nodeUrl[3],
-        }),
-      ]
-    }
-    if (
-      nodeUrl.length === 5 &&
-      nodeUrl[4] === 'AP-Arten' &&
-      allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
-    ) {
-      nodes = [
-        ...nodes,
-        ...buildApartNodes({
-          data,
-          treeName,
-          loading,
-          apNodes,
-          projektNodes,
-          projId,
-          apId: nodeUrl[3],
-        }),
-      ]
-    }
-    if (
-      nodeUrl.length === 5 &&
-      nodeUrl[4] === 'Berichte' &&
-      allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
-    ) {
-      nodes = [
-        ...nodes,
-        ...buildBerNodes({
-          data,
-          treeName,
-          loading,
-          apNodes,
-          projektNodes,
-          projId,
-          apId: nodeUrl[3],
-        }),
-      ]
-    }
-    if (
-      nodeUrl.length === 5 &&
-      nodeUrl[4] === 'AP-Berichte' &&
-      allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
-    ) {
-      nodes = [
-        ...nodes,
-        ...buildApberNodes({
-          data,
-          treeName,
-          loading,
-          apNodes,
-          projektNodes,
-          projId,
-          apId: nodeUrl[3],
-        }),
-      ]
-    }
-    if (
-      nodeUrl.length === 5 &&
-      nodeUrl[4] === 'AP-Erfolgskriterien' &&
-      allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
-    ) {
-      nodes = [
-        ...nodes,
-        ...buildAperfkritNodes({
-          data,
-          treeName,
-          loading,
-          apNodes,
-          projektNodes,
-          projId,
-          apId: nodeUrl[3],
-        }),
-      ]
-    }
-    if (
-      nodeUrl.length === 6 &&
-      nodeUrl[4] === 'Populationen' &&
-      allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
-    ) {
-      const apId = nodeUrl[3]
-      const popId = nodeUrl[5]
-      nodes = [
-        ...nodes,
-        ...buildTpopFolderNodes({
-          data,
-          treeName,
-          loading,
-          projektNodes,
-          projId,
-          apNodes,
-          apId,
-          popNodes,
-          popId,
-        }),
-        ...buildPopberFolderNodes({
-          data,
-          treeName,
-          loading,
-          projektNodes,
-          projId,
-          apNodes,
-          apId,
-          popNodes,
-          popId,
-        }),
-        ...buildPopmassnberFolderNodes({
-          data,
-          treeName,
-          loading,
-          projektNodes,
-          projId,
-          apNodes,
-          apId,
-          popNodes,
-          popId,
-        }),
-      ]
-    }
-    if (
-      nodeUrl.length === 7 &&
-      nodeUrl[4] === 'Populationen' &&
-      nodeUrl[6] === 'Massnahmen-Berichte' &&
-      allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
-    ) {
-      nodes = [
-        ...nodes,
-        ...buildPopmassnberNodes({
-          data,
-          treeName,
-          loading,
-          projId,
-          projektNodes,
-          apId: nodeUrl[3],
-          apNodes,
-          popId: nodeUrl[5],
-          popNodes,
-        }),
-      ]
-    }
-    if (
-      nodeUrl.length === 7 &&
-      nodeUrl[4] === 'Populationen' &&
-      nodeUrl[6] === 'Kontroll-Berichte' &&
-      allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
-    ) {
-      nodes = [
-        ...nodes,
-        ...buildPopberNodes({
+        })
+        nodes = [...nodes, ...popNodes]
+      }
+      if (
+        nodeUrl.length === 5 &&
+        nodeUrl[4] === 'nicht-zuzuordnende-Beobachtungen' &&
+        allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
+      ) {
+        nodes = [
+          ...nodes,
+          ...buildBeobNichtZuzuordnenNodes({
+            data,
+            treeName,
+            loading,
+            apNodes,
+            projektNodes,
+            projId,
+            apId: nodeUrl[3],
+          }),
+        ]
+      }
+      if (
+        nodeUrl.length === 5 &&
+        nodeUrl[4] === 'nicht-beurteilte-Beobachtungen' &&
+        allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
+      ) {
+        nodes = [
+          ...nodes,
+          ...buildBeobNichtBeurteiltNodes({
+            data,
+            treeName,
+            loading,
+            apNodes,
+            projektNodes,
+            projId,
+            apId: nodeUrl[3],
+          }),
+        ]
+      }
+      if (
+        nodeUrl.length === 5 &&
+        nodeUrl[4] === 'assoziierte-Arten' &&
+        allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
+      ) {
+        nodes = [
+          ...nodes,
+          ...buildAssozartNodes({
+            data,
+            treeName,
+            loading,
+            apNodes,
+            projektNodes,
+            projId,
+            apId: nodeUrl[3],
+          }),
+        ]
+      }
+      if (
+        nodeUrl.length === 5 &&
+        nodeUrl[4] === 'AP-Arten' &&
+        allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
+      ) {
+        nodes = [
+          ...nodes,
+          ...buildApartNodes({
+            data,
+            treeName,
+            loading,
+            apNodes,
+            projektNodes,
+            projId,
+            apId: nodeUrl[3],
+          }),
+        ]
+      }
+      if (
+        nodeUrl.length === 5 &&
+        nodeUrl[4] === 'Berichte' &&
+        allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
+      ) {
+        nodes = [
+          ...nodes,
+          ...buildBerNodes({
+            data,
+            treeName,
+            loading,
+            apNodes,
+            projektNodes,
+            projId,
+            apId: nodeUrl[3],
+          }),
+        ]
+      }
+      if (
+        nodeUrl.length === 5 &&
+        nodeUrl[4] === 'AP-Berichte' &&
+        allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
+      ) {
+        nodes = [
+          ...nodes,
+          ...buildApberNodes({
+            data,
+            treeName,
+            loading,
+            apNodes,
+            projektNodes,
+            projId,
+            apId: nodeUrl[3],
+          }),
+        ]
+      }
+      if (
+        nodeUrl.length === 5 &&
+        nodeUrl[4] === 'AP-Erfolgskriterien' &&
+        allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
+      ) {
+        nodes = [
+          ...nodes,
+          ...buildAperfkritNodes({
+            data,
+            treeName,
+            loading,
+            apNodes,
+            projektNodes,
+            projId,
+            apId: nodeUrl[3],
+          }),
+        ]
+      }
+      if (
+        nodeUrl.length === 6 &&
+        nodeUrl[4] === 'Populationen' &&
+        allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
+      ) {
+        const apId = nodeUrl[3]
+        const popId = nodeUrl[5]
+        nodes = [
+          ...nodes,
+          ...buildTpopFolderNodes({
+            data,
+            treeName,
+            loading,
+            projektNodes,
+            projId,
+            apNodes,
+            apId,
+            popNodes,
+            popId,
+          }),
+          ...buildPopberFolderNodes({
+            data,
+            treeName,
+            loading,
+            projektNodes,
+            projId,
+            apNodes,
+            apId,
+            popNodes,
+            popId,
+          }),
+          ...buildPopmassnberFolderNodes({
+            data,
+            treeName,
+            loading,
+            projektNodes,
+            projId,
+            apNodes,
+            apId,
+            popNodes,
+            popId,
+          }),
+        ]
+      }
+      if (
+        nodeUrl.length === 7 &&
+        nodeUrl[4] === 'Populationen' &&
+        nodeUrl[6] === 'Massnahmen-Berichte' &&
+        allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
+      ) {
+        nodes = [
+          ...nodes,
+          ...buildPopmassnberNodes({
+            data,
+            treeName,
+            loading,
+            projId,
+            projektNodes,
+            apId: nodeUrl[3],
+            apNodes,
+            popId: nodeUrl[5],
+            popNodes,
+          }),
+        ]
+      }
+      if (
+        nodeUrl.length === 7 &&
+        nodeUrl[4] === 'Populationen' &&
+        nodeUrl[6] === 'Kontroll-Berichte' &&
+        allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
+      ) {
+        nodes = [
+          ...nodes,
+          ...buildPopberNodes({
+            data,
+            treeName,
+            loading,
+            projId,
+            projektNodes,
+            apId: nodeUrl[3],
+            apNodes,
+            popId: nodeUrl[5],
+            popNodes,
+          }),
+        ]
+      }
+      if (
+        nodeUrl.length === 7 &&
+        nodeUrl[4] === 'Populationen' &&
+        nodeUrl[6] === 'Teil-Populationen' &&
+        allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
+      ) {
+        tpopNodes = buildTpopNodes({
           data,
           treeName,
           loading,
@@ -570,153 +604,156 @@ export default ({
           apNodes,
           popId: nodeUrl[5],
           popNodes,
-        }),
-      ]
-    }
-    if (
-      nodeUrl.length === 7 &&
-      nodeUrl[4] === 'Populationen' &&
-      nodeUrl[6] === 'Teil-Populationen' &&
-      allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
-    ) {
-      tpopNodes = buildTpopNodes({
-        data,
-        treeName,
-        loading,
-        projId,
-        projektNodes,
-        apId: nodeUrl[3],
-        apNodes,
-        popId: nodeUrl[5],
-        popNodes,
-      })
-      nodes = [...nodes, ...tpopNodes]
-    }
-    if (
-      nodeUrl.length === 8 &&
-      nodeUrl[4] === 'Populationen' &&
-      nodeUrl[6] === 'Teil-Populationen' &&
-      allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
-    ) {
-      const apId = nodeUrl[3]
-      const popId = nodeUrl[5]
-      const tpopId = nodeUrl[7]
-      nodes = [
-        ...nodes,
-        ...tpopmassnFolderNodes({
-          data,
-          treeName,
-          loading,
-          projId,
-          projektNodes,
-          apId,
-          apNodes,
-          popId,
-          popNodes,
-          tpopId,
-          tpopNodes,
-        }),
-        ...buildTpopmassnberFolderNodes({
-          data,
-          treeName,
-          loading,
-          projId,
-          projektNodes,
-          apId,
-          apNodes,
-          popId,
-          popNodes,
-          tpopId,
-          tpopNodes,
-        }),
-        ...buildTpopfeldkontrFolderNodes({
-          data,
-          treeName,
-          loading,
-          projId,
-          projektNodes,
-          apId,
-          apNodes,
-          popId,
-          popNodes,
-          tpopId,
-          tpopNodes,
-        }),
-        ...buildTpopfreiwkontrFolderNodes({
-          data,
-          treeName,
-          loading,
-          projId,
-          projektNodes,
-          apId,
-          apNodes,
-          popId,
-          popNodes,
-          tpopId,
-          tpopNodes,
-        }),
-        ...buildTpopberFolderNodes({
-          data,
-          treeName,
-          loading,
-          projId,
-          projektNodes,
-          apId,
-          apNodes,
-          popId,
-          popNodes,
-          tpopId,
-          tpopNodes,
-        }),
-        ...buildBeobZugeordnetFolderNodes({
-          data,
-          treeName,
-          loading,
-          projId,
-          projektNodes,
-          apId,
-          apNodes,
-          popId,
-          popNodes,
-          tpopId,
-          tpopNodes,
-        }),
-      ]
-    }
-    if (
-      nodeUrl.length === 9 &&
-      nodeUrl[4] === 'Populationen' &&
-      nodeUrl[6] === 'Teil-Populationen' &&
-      nodeUrl[8] === 'Beobachtungen' &&
-      allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
-    ) {
-      nodes = [
-        ...nodes,
-        ...buildBeobZugeordnetNodes({
-          data,
-          treeName,
-          loading,
-          projId,
-          projektNodes,
-          apId: nodeUrl[3],
-          apNodes,
-          popId: nodeUrl[5],
-          popNodes,
-          tpopId: nodeUrl[7],
-          tpopNodes,
-        }),
-      ]
-    }
-    if (
-      nodeUrl.length === 9 &&
-      nodeUrl[4] === 'Populationen' &&
-      nodeUrl[6] === 'Teil-Populationen' &&
-      nodeUrl[8] === 'Kontroll-Berichte' &&
-      allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
-    ) {
-      nodes = [
-        ...nodes,
-        ...buildTpopberNodes({
+        })
+        nodes = [...nodes, ...tpopNodes]
+      }
+      if (
+        nodeUrl.length === 8 &&
+        nodeUrl[4] === 'Populationen' &&
+        nodeUrl[6] === 'Teil-Populationen' &&
+        allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
+      ) {
+        const apId = nodeUrl[3]
+        const popId = nodeUrl[5]
+        const tpopId = nodeUrl[7]
+        nodes = [
+          ...nodes,
+          ...tpopmassnFolderNodes({
+            data,
+            treeName,
+            loading,
+            projId,
+            projektNodes,
+            apId,
+            apNodes,
+            popId,
+            popNodes,
+            tpopId,
+            tpopNodes,
+          }),
+          ...buildTpopmassnberFolderNodes({
+            data,
+            treeName,
+            loading,
+            projId,
+            projektNodes,
+            apId,
+            apNodes,
+            popId,
+            popNodes,
+            tpopId,
+            tpopNodes,
+          }),
+          ...buildTpopfeldkontrFolderNodes({
+            data,
+            treeName,
+            loading,
+            projId,
+            projektNodes,
+            apId,
+            apNodes,
+            popId,
+            popNodes,
+            tpopId,
+            tpopNodes,
+          }),
+          ...buildTpopfreiwkontrFolderNodes({
+            data,
+            treeName,
+            loading,
+            projId,
+            projektNodes,
+            apId,
+            apNodes,
+            popId,
+            popNodes,
+            tpopId,
+            tpopNodes,
+          }),
+          ...buildTpopberFolderNodes({
+            data,
+            treeName,
+            loading,
+            projId,
+            projektNodes,
+            apId,
+            apNodes,
+            popId,
+            popNodes,
+            tpopId,
+            tpopNodes,
+          }),
+          ...buildBeobZugeordnetFolderNodes({
+            data,
+            treeName,
+            loading,
+            projId,
+            projektNodes,
+            apId,
+            apNodes,
+            popId,
+            popNodes,
+            tpopId,
+            tpopNodes,
+          }),
+        ]
+      }
+      if (
+        nodeUrl.length === 9 &&
+        nodeUrl[4] === 'Populationen' &&
+        nodeUrl[6] === 'Teil-Populationen' &&
+        nodeUrl[8] === 'Beobachtungen' &&
+        allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
+      ) {
+        nodes = [
+          ...nodes,
+          ...buildBeobZugeordnetNodes({
+            data,
+            treeName,
+            loading,
+            projId,
+            projektNodes,
+            apId: nodeUrl[3],
+            apNodes,
+            popId: nodeUrl[5],
+            popNodes,
+            tpopId: nodeUrl[7],
+            tpopNodes,
+          }),
+        ]
+      }
+      if (
+        nodeUrl.length === 9 &&
+        nodeUrl[4] === 'Populationen' &&
+        nodeUrl[6] === 'Teil-Populationen' &&
+        nodeUrl[8] === 'Kontroll-Berichte' &&
+        allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
+      ) {
+        nodes = [
+          ...nodes,
+          ...buildTpopberNodes({
+            data,
+            treeName,
+            loading,
+            projId,
+            projektNodes,
+            apId: nodeUrl[3],
+            apNodes,
+            popId: nodeUrl[5],
+            popNodes,
+            tpopId: nodeUrl[7],
+            tpopNodes,
+          }),
+        ]
+      }
+      if (
+        nodeUrl.length === 9 &&
+        nodeUrl[4] === 'Populationen' &&
+        nodeUrl[6] === 'Teil-Populationen' &&
+        nodeUrl[8] === 'Freiwilligen-Kontrollen' &&
+        allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
+      ) {
+        tpopfreiwkontrNodes = buildTpopfreiwkontrNodes({
           data,
           treeName,
           loading,
@@ -728,63 +765,17 @@ export default ({
           popNodes,
           tpopId: nodeUrl[7],
           tpopNodes,
-        }),
-      ]
-    }
-    if (
-      nodeUrl.length === 9 &&
-      nodeUrl[4] === 'Populationen' &&
-      nodeUrl[6] === 'Teil-Populationen' &&
-      nodeUrl[8] === 'Freiwilligen-Kontrollen' &&
-      allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
-    ) {
-      tpopfreiwkontrNodes = buildTpopfreiwkontrNodes({
-        data,
-        treeName,
-        loading,
-        projId,
-        projektNodes,
-        apId: nodeUrl[3],
-        apNodes,
-        popId: nodeUrl[5],
-        popNodes,
-        tpopId: nodeUrl[7],
-        tpopNodes,
-      })
-      nodes = [...nodes, ...tpopfreiwkontrNodes]
-    }
-    if (
-      nodeUrl.length === 9 &&
-      nodeUrl[4] === 'Populationen' &&
-      nodeUrl[6] === 'Teil-Populationen' &&
-      nodeUrl[8] === 'Feld-Kontrollen' &&
-      allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
-    ) {
-      tpopfeldkontrNodes = buildTpopfeldkontrNodes({
-        data,
-        treeName,
-        loading,
-        projId,
-        projektNodes,
-        apId: nodeUrl[3],
-        apNodes,
-        popId: nodeUrl[5],
-        popNodes,
-        tpopId: nodeUrl[7],
-        tpopNodes,
-      })
-      nodes = [...nodes, ...tpopfeldkontrNodes]
-    }
-    if (
-      nodeUrl.length === 9 &&
-      nodeUrl[4] === 'Populationen' &&
-      nodeUrl[6] === 'Teil-Populationen' &&
-      nodeUrl[8] === 'Massnahmen-Berichte' &&
-      allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
-    ) {
-      nodes = [
-        ...nodes,
-        ...buildTpopmassnberNodes({
+        })
+        nodes = [...nodes, ...tpopfreiwkontrNodes]
+      }
+      if (
+        nodeUrl.length === 9 &&
+        nodeUrl[4] === 'Populationen' &&
+        nodeUrl[6] === 'Teil-Populationen' &&
+        nodeUrl[8] === 'Feld-Kontrollen' &&
+        allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
+      ) {
+        tpopfeldkontrNodes = buildTpopfeldkontrNodes({
           data,
           treeName,
           loading,
@@ -796,136 +787,161 @@ export default ({
           popNodes,
           tpopId: nodeUrl[7],
           tpopNodes,
-        }),
-      ]
-    }
-    if (
-      nodeUrl.length === 9 &&
-      nodeUrl[4] === 'Populationen' &&
-      nodeUrl[6] === 'Teil-Populationen' &&
-      nodeUrl[8] === 'Massnahmen' &&
-      allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
-    ) {
-      nodes = [
-        ...nodes,
-        ...buildTpopmassnNodes({
-          data,
-          treeName,
-          loading,
-          projId,
-          projektNodes,
-          apId: nodeUrl[3],
-          apNodes,
-          popId: nodeUrl[5],
-          popNodes,
-          tpopId: nodeUrl[7],
-          tpopNodes,
-        }),
-      ]
-    }
-    if (
-      nodeUrl.length === 10 &&
-      nodeUrl[4] === 'Populationen' &&
-      nodeUrl[6] === 'Teil-Populationen' &&
-      nodeUrl[8] === 'Freiwilligen-Kontrollen' &&
-      allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
-    ) {
-      nodes = [
-        ...nodes,
-        ...buildTpopfreiwkontrzaehlFolderNodes({
-          data,
-          treeName,
-          loading,
-          projId,
-          projektNodes,
-          apId: nodeUrl[3],
-          apNodes,
-          popId: nodeUrl[5],
-          popNodes,
-          tpopId: nodeUrl[7],
-          tpopNodes,
-          tpopkontrId: nodeUrl[9],
-          tpopfreiwkontrNodes,
-        }),
-      ]
-    }
-    if (
-      nodeUrl.length === 10 &&
-      nodeUrl[4] === 'Populationen' &&
-      nodeUrl[6] === 'Teil-Populationen' &&
-      nodeUrl[8] === 'Feld-Kontrollen' &&
-      allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
-    ) {
-      nodes = [
-        ...nodes,
-        ...buildTpopfeldkontrzaehlFolderNodes({
-          data,
-          treeName,
-          loading,
-          projId,
-          projektNodes,
-          apId: nodeUrl[3],
-          apNodes,
-          popId: nodeUrl[5],
-          popNodes,
-          tpopId: nodeUrl[7],
-          tpopNodes,
-          tpopkontrId: nodeUrl[9],
-          tpopfeldkontrNodes,
-        }),
-      ]
-    }
-    if (
-      nodeUrl.length === 11 &&
-      nodeUrl[4] === 'Populationen' &&
-      nodeUrl[6] === 'Teil-Populationen' &&
-      nodeUrl[8] === 'Feld-Kontrollen' &&
-      allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
-    ) {
-      nodes = [
-        ...nodes,
-        ...buildTpopfeldkontrzaehlNodes({
-          data,
-          treeName,
-          loading,
-          projId,
-          projektNodes,
-          apId: nodeUrl[3],
-          apNodes,
-          popId: nodeUrl[5],
-          popNodes,
-          tpopId: nodeUrl[7],
-          tpopNodes,
-          tpopkontrId: nodeUrl[9],
-          tpopfeldkontrNodes,
-        }),
-      ]
-    }
-    if (
-      nodeUrl.length === 11 &&
-      nodeUrl[4] === 'Populationen' &&
-      nodeUrl[6] === 'Teil-Populationen' &&
-      nodeUrl[8] === 'Freiwilligen-Kontrollen' &&
-      allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
-    ) {
-      nodes = [
-        ...nodes,
-        ...buildTpopfreiwkontrzaehlNodes({
-          data,
-          treeName,
-          loading,
-          projId,
-          projektNodes,
-          apId: nodeUrl[3],
-          apNodes,
-          popId: nodeUrl[5],
-          popNodes,
-          tpopId: nodeUrl[7],
-          tpopNodes,
-          tpopkontrId: nodeUrl[9],
-          tpopfreiwkontrNodes,
-        }),
-      ]
+        })
+        nodes = [...nodes, ...tpopfeldkontrNodes]
+      }
+      if (
+        nodeUrl.length === 9 &&
+        nodeUrl[4] === 'Populationen' &&
+        nodeUrl[6] === 'Teil-Populationen' &&
+        nodeUrl[8] === 'Massnahmen-Berichte' &&
+        allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
+      ) {
+        nodes = [
+          ...nodes,
+          ...buildTpopmassnberNodes({
+            data,
+            treeName,
+            loading,
+            projId,
+            projektNodes,
+            apId: nodeUrl[3],
+            apNodes,
+            popId: nodeUrl[5],
+            popNodes,
+            tpopId: nodeUrl[7],
+            tpopNodes,
+          }),
+        ]
+      }
+      if (
+        nodeUrl.length === 9 &&
+        nodeUrl[4] === 'Populationen' &&
+        nodeUrl[6] === 'Teil-Populationen' &&
+        nodeUrl[8] === 'Massnahmen' &&
+        allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
+      ) {
+        nodes = [
+          ...nodes,
+          ...buildTpopmassnNodes({
+            data,
+            treeName,
+            loading,
+            projId,
+            projektNodes,
+            apId: nodeUrl[3],
+            apNodes,
+            popId: nodeUrl[5],
+            popNodes,
+            tpopId: nodeUrl[7],
+            tpopNodes,
+          }),
+        ]
+      }
+      if (
+        nodeUrl.length === 10 &&
+        nodeUrl[4] === 'Populationen' &&
+        nodeUrl[6] === 'Teil-Populationen' &&
+        nodeUrl[8] === 'Freiwilligen-Kontrollen' &&
+        allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
+      ) {
+        nodes = [
+          ...nodes,
+          ...buildTpopfreiwkontrzaehlFolderNodes({
+            data,
+            treeName,
+            loading,
+            projId,
+            projektNodes,
+            apId: nodeUrl[3],
+            apNodes,
+            popId: nodeUrl[5],
+            popNodes,
+            tpopId: nodeUrl[7],
+            tpopNodes,
+            tpopkontrId: nodeUrl[9],
+            tpopfreiwkontrNodes,
+          }),
+        ]
+      }
+      if (
+        nodeUrl.length === 10 &&
+        nodeUrl[4] === 'Populationen' &&
+        nodeUrl[6] === 'Teil-Populationen' &&
+        nodeUrl[8] === 'Feld-Kontrollen' &&
+        allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
+      ) {
+        nodes = [
+          ...nodes,
+          ...buildTpopfeldkontrzaehlFolderNodes({
+            data,
+            treeName,
+            loading,
+            projId,
+            projektNodes,
+            apId: nodeUrl[3],
+            apNodes,
+            popId: nodeUrl[5],
+            popNodes,
+            tpopId: nodeUrl[7],
+            tpopNodes,
+            tpopkontrId: nodeUrl[9],
+            tpopfeldkontrNodes,
+          }),
+        ]
+      }
+      if (
+        nodeUrl.length === 11 &&
+        nodeUrl[4] === 'Populationen' &&
+        nodeUrl[6] === 'Teil-Populationen' &&
+        nodeUrl[8] === 'Feld-Kontrollen' &&
+        allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
+      ) {
+        nodes = [
+          ...nodes,
+          ...buildTpopfeldkontrzaehlNodes({
+            data,
+            treeName,
+            loading,
+            projId,
+            projektNodes,
+            apId: nodeUrl[3],
+            apNodes,
+            popId: nodeUrl[5],
+            popNodes,
+            tpopId: nodeUrl[7],
+            tpopNodes,
+            tpopkontrId: nodeUrl[9],
+            tpopfeldkontrNodes,
+          }),
+        ]
+      }
+      if (
+        nodeUrl.length === 11 &&
+        nodeUrl[4] === 'Populationen' &&
+        nodeUrl[6] === 'Teil-Populationen' &&
+        nodeUrl[8] === 'Freiwilligen-Kontrollen' &&
+        allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
+      ) {
+        nodes = [
+          ...nodes,
+          ...buildTpopfreiwkontrzaehlNodes({
+            data,
+            treeName,
+            loading,
+            projId,
+            projektNodes,
+            apId: nodeUrl[3],
+            apNodes,
+            popId: nodeUrl[5],
+            popNodes,
+            tpopId: nodeUrl[7],
+            tpopNodes,
+            tpopkontrId: nodeUrl[9],
+            tpopfreiwkontrNodes,
+          }),
+        ]
+      }
     }
   })
 
