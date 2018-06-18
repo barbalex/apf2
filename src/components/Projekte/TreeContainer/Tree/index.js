@@ -1,9 +1,4 @@
 // @flow
-/*
- * Tree
- * need class because of ref and componentDidUpdate
- */
-
 import React, { Component } from 'react'
 import AutoSizer from 'react-virtualized/dist/commonjs/AutoSizer'
 import List from 'react-virtualized/dist/commonjs/List'
@@ -47,55 +42,28 @@ const LoadingDiv = styled.div`
   font-size: 14px;
 `
 
-class Tree extends Component {
-  props: {
-    client: Object,
-    treeName: String,
-    data: Object,
-    tree: Object,
-    nodes: Array<Object>,
-    loading: Boolean,
-    activeNodes: Array<Object>,
-    mapBeobZugeordnetVisible: boolean,
-    mapBeobNichtBeurteiltVisible: boolean,
-    mapBeobNichtZuzuordnenVisible: boolean,
-    mapPopVisible: boolean,
-    mapTpopVisible: boolean,
-    activeNodeArray: Array<Object>,
-    moving: Object,
-    copying: Object,
-    activeApfloraLayers: Array<String>,
-    mapIdsFiltered: Array<String>,
-    mapFilter: Object,
-  }
+type Props = {
+  client: Object,
+  treeName: String,
+  data: Object,
+  tree: Object,
+  nodes: Array<Object>,
+  loading: Boolean,
+  activeNodes: Array<Object>,
+  mapBeobZugeordnetVisible: boolean,
+  mapBeobNichtBeurteiltVisible: boolean,
+  mapBeobNichtZuzuordnenVisible: boolean,
+  mapPopVisible: boolean,
+  mapTpopVisible: boolean,
+  activeNodeArray: Array<Object>,
+  moving: Object,
+  copying: Object,
+  activeApfloraLayers: Array<String>,
+  mapIdsFiltered: Array<String>,
+  mapFilter: Object,
+}
 
-  tree: ?HTMLDivElement
-
-  componentDidUpdate(prevProps) {
-    const {
-      mapBeobZugeordnetVisible,
-      mapBeobNichtBeurteiltVisible,
-      mapBeobNichtZuzuordnenVisible,
-      mapPopVisible,
-      mapTpopVisible,
-    } = this.props
-    const {
-      mapBeobZugeordnetVisible: prevMapBeobZugeordnetVisible,
-      mapBeobNichtBeurteiltVisible: prevMapBeobNichtBeurteiltVisible,
-      mapBeobNichtZuzuordnenVisible: prevMapBeobNichtZuzuordnenVisible,
-      mapPopVisible: prevMapPopVisible,
-      mapTpopVisible: prevMapTpopVisible,
-    } = prevProps
-    const somethingHasChanged =
-      mapBeobZugeordnetVisible !== prevMapBeobZugeordnetVisible ||
-      mapBeobNichtBeurteiltVisible !== prevMapBeobNichtBeurteiltVisible ||
-      mapBeobNichtZuzuordnenVisible !== prevMapBeobNichtZuzuordnenVisible ||
-      mapPopVisible !== prevMapPopVisible ||
-      mapTpopVisible !== prevMapTpopVisible
-    if (somethingHasChanged) {
-      this.tree.forceUpdateGrid()
-    }
-  }
+class Tree extends Component<Props> {
 
   rowRenderer = ({ key, index, style }) => {
     const {
@@ -168,7 +136,6 @@ class Tree extends Component {
                   isEqual(node.url, activeNodeArray)
                 )}
                 width={width}
-                innerRef={c => (this.tree = c)}
                 // force rerender when:
                 // ...second query finisches
                 loading={loading}
