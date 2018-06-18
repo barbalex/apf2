@@ -400,6 +400,40 @@ query TreeDataQuery(
       y
     }
   }
+  beobNichtBeurteiltForMapMarkers: projektById(id: $projId) {
+    id
+    apsByProjId(filter: { id: { equalTo: $apId } }) {
+      nodes {
+        id
+        apartsByApId {
+          nodes {
+            id
+            artId
+            aeEigenschaftenByArtId {
+              id
+              beobsByArtId(filter: {tpopId: {isNull: true}, nichtZuordnen: {equalTo: false}, x: {isNull: false}, y: {isNull: false}}) {
+                nodes {
+                  id
+                  autor
+                  datum
+                  beobQuelleWerteByQuelleId {
+                    id
+                    name
+                  }
+                  x
+                  y
+                  aeEigenschaftenByArtId {
+                    id
+                    artname
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
   beobNichtZuzuordnenForMapMarkers: projektById(id: $projId) {
     id
     apsByProjId(filter: { id: { equalTo: $apId } }) {
