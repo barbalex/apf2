@@ -18,18 +18,6 @@ class PopMarkerCluster extends Component {
     map.addLayer(markers)
   }
 
-  componentWillReceiveProps(nextProps) {
-    const { map, markers } = this.props
-    if (markers && markers !== nextProps.markers) {
-      map.removeLayer(markers)
-    }
-  }
-
-  componentDidUpdate() {
-    const { map, markers } = this.props
-    map.addLayer(markers)
-  }
-
   componentWillUnmount() {
     const { map, markers } = this.props
     map.removeLayer(markers)

@@ -16,18 +16,6 @@ class Polylines extends Component {
     lines.forEach(m => m.addTo(map))
   }
 
-  componentWillReceiveProps(nextProps) {
-    const { map, lines } = this.props
-    if (lines && lines !== nextProps.lines) {
-      lines.forEach(m => map.removeLayer(m))
-    }
-  }
-
-  componentDidUpdate() {
-    const { map, lines } = this.props
-    lines.forEach(m => m.addTo(map))
-  }
-
   componentWillUnmount() {
     const { map, lines } = this.props
     lines.forEach(m => map.removeLayer(m))

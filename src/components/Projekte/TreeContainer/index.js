@@ -447,7 +447,7 @@ class TreeContainer extends Component<Props> {
   constructor(props) {
     super(props)
     // TODO: what is this ref used for?
-    this.tree = React.createRef()
+    this.tree = createRef()
   }
 
   render() {

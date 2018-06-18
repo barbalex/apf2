@@ -129,7 +129,7 @@ class Tpop extends Component<Props> {
   constructor(props) {
     super(props)
     // TODO: wozu wird ref benutzt?
-    this.container = React.createRef()
+    this.container = createRef()
   }
 
   render() {
