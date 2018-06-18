@@ -520,6 +520,23 @@ query TreeDataQuery(
       y
     }
   }
+  popForMapMarkers: projektById(id: $projId) {
+    id
+    apsByProjId(filter: { id: { equalTo: $apId } }) {
+      nodes {
+        id
+        popsByApId(filter: { x: { isNull: false }, y: { isNull: false } }) {
+          nodes {
+            id
+            nr
+            name
+            x
+            y
+          }
+        }
+      }
+    }
+  }
   beobAssignLines: projektById(id: $projId) @include(if: $isProjekt) {
     id
     apsByProjId(filter: { id: { equalTo: $apId } }) @include(if: $isAp) {
