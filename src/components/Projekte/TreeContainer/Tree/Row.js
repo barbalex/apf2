@@ -213,7 +213,7 @@ const Row = ({
     useSymbolIcon = false
   }
   const dataUrl = JSON.stringify(node.url)
-  const level = node.url.length - 1
+  const level = node.url[0] === 'Benutzer' ? node.url.length : node.url.length - 1
   const isMoving =
     node.nodeType === 'table' &&
     node.menuType === moving.table &&
