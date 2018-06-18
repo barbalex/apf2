@@ -25,6 +25,7 @@ CREATE POLICY reader_writer ON apflora.user
     name = current_user_name()
     -- TODO: this only for USING, not for CHECK?
     OR current_user = 'anon'
+    or current_user = 'apflora_manager'
   );
 
 DROP TABLE IF EXISTS _variable;
@@ -65,6 +66,15 @@ COMMENT ON COLUMN apflora.adresse.freiw_erfko IS 'Ist die Person freiwillige(r) 
 COMMENT ON COLUMN apflora.adresse.changed IS 'Wann wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.adresse.changed_by IS 'Von wem wurde der Datensatz zuletzt geändert?';
 COMMENT ON COLUMN apflora.adresse.evab_id_person IS 'Personen werden in EvAB separat und mit eigener ID erfasst. Daher muss die passende Person hier gewählt werden';
+
+ALTER TABLE apflora.adresse ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS writer ON apflora.adresse;
+CREATE POLICY writer ON apflora.adresse
+  USING (true)
+  WITH CHECK (
+    name = current_user_name()
+    or current_user = 'apflora_manager'
+  );
 
 DROP TABLE IF EXISTS apflora.ap;
 CREATE TABLE apflora.ap (

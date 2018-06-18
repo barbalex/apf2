@@ -34,6 +34,27 @@ alter default privileges in schema apflora
   grant all on functions to apflora_artverantwortlich;
 grant apflora_artverantwortlich to authenticator;
 
+-- apflora_manager can do anything
+-- as far as row-level-security allows
+-- (allows only permitted projects)
+-- plus: can edit users
+-- plus: can edit typ_werte
+drop role if exists apflora_manager;
+create role apflora_manager in group apflora_reader;
+grant connect on database apflora to apflora_manager;
+grant all on schema apflora to apflora_manager;
+grant usage on schema public, auth to apflora_manager;
+grant all on all tables in schema apflora to apflora_manager;
+grant all on all sequences in schema apflora to apflora_manager;
+grant all on all functions in schema apflora to apflora_manager;
+alter default privileges in schema apflora
+  grant all on tables to apflora_manager;
+alter default privileges in schema apflora
+  grant all on sequences to apflora_manager;
+alter default privileges in schema apflora
+  grant all on functions to apflora_manager;
+grant apflora_manager to authenticator;
+
 -- apflora_freiwillig can work on kontrollen
 -- need to enforce freiwilligen-kontrollen in ui
 drop role if exists apflora_freiwillig;
