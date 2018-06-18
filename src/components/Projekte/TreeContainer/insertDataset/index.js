@@ -122,7 +122,7 @@ export default async ({
   try {
     result = await client.mutate({ mutation, variables })
   } catch (error) {
-    errorState.add(error)
+    return errorState.add(error)
   }
   const row = get(result, `data.create${upperFirst(camelCase(table))}.${camelCase(table)}`)
   // set new url
