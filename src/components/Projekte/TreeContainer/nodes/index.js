@@ -1,10 +1,11 @@
 // @flow
-import clone from 'lodash/clone'
 import get from 'lodash/get'
 
 import allParentNodesAreOpen from '../allParentNodesAreOpen'
 import allParentNodesAreVisible from '../allParentNodesAreVisible'
 import buildProjektNodes from './projekt'
+import buildUserFolderNode from './userFolder'
+import buildUserNodes from './user'
 import buildApFolderNodes from './apFolder'
 import buildApberuebersichtFolderNodes from './apberuebersichtFolder'
 import buildApberuebersichtNodes from './apberuebersicht'
@@ -83,8 +84,12 @@ export default ({
 }): Array < Object > => {
   const openNodes = get(data, `${treeName}.openNodes`)
 
-  const projektNodes = buildProjektNodes({ data, treeName })
-  let nodes = clone(projektNodes)
+  const projektNodes = [...buildProjektNodes({ data, treeName })]
+  const userFolderNode = buildUserFolderNode({ data, treeName, projektNodes, loading })
+  //const userNodes = buildUserNodes({ data, treeName, projektNodes })
+
+  //let nodes = clone(projektNodes)
+  let nodes = [...projektNodes, userFolderNode]
   let apNodes
   let popNodes
   let tpopNodes

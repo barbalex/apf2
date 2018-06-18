@@ -462,4 +462,14 @@ query TreeDataQuery(
       }
     }
   }
+  users: allUsers {
+    nodes {
+      id
+      name
+      email
+      role
+      pass
+      
+    }
+  }
 }
