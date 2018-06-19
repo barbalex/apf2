@@ -17,7 +17,6 @@ import mapMouseCoordinates from './mapMouseCoordinates'
 import copyingBiotop from './copyingBiotop'
 import user from './user'
 import cloneTree2From1 from './cloneTree2From1'
-import errors from './errors'
 
 export default merge(
   treeKey,
@@ -36,5 +35,4 @@ export default merge(
   copyingBiotop,
   user,
   cloneTree2From1,
-  errors,
 )
