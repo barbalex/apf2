@@ -147,7 +147,6 @@ export default async ({
   if (['zielFolder', 'zieljahrFolder'].includes(menuType)) {
     const urlWithoutJahr = [...baseUrl]
     urlWithoutJahr.pop()
-    //newOpenNodes.push(urlWithoutJahr)
     newOpenNodes = [
       ...openNodes,
       urlWithoutJahr,
