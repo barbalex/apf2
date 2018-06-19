@@ -134,7 +134,6 @@ const ProjekteContainer = ({
           const moving = get(data1, 'moving')
           const copying = get(data1, 'copying')
           const token = get(data1, 'user.token')
-          console.log('ProjektContainer:', {openNodes,variables:variables(openNodes, activeNodeArray)})
 
           /**
            * get data based on openNodes, not activeNodes
