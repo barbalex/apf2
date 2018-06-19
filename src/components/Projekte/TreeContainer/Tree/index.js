@@ -120,6 +120,7 @@ class Tree extends Component<Props> {
       mapFilter,
       data,
     } = this.props
+    console.log('Tree, nodes:', nodes)
 
     return (
       <ErrorBoundary>

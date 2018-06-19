@@ -55,6 +55,7 @@ import buildTpopfeldkontrzaehlFolderNodes from './tpopfeldkontrzaehlFolder'
 import buildTpopfreiwkontrzaehlFolderNodes from './tpopfreiwkontrzaehlFolder'
 import buildTpopfeldkontrzaehlNodes from './tpopfeldkontrzaehl'
 import buildTpopfreiwkontrzaehlNodes from './tpopfreiwkontrzaehl'
+import sort from '../sort'
 
 const compare = (a, b) => {
   // sort a before, if it has no value at this index
@@ -82,8 +83,11 @@ export default ({
   treeName: String,
   loading: Boolean
 }): Array < Object > => {
-  const openNodes = get(data, `${treeName}.openNodes`)
-
+  const openNodes = [...get(data, `${treeName}.openNodes`)]
+    // need to sort so folders are added in correct order
+    // because every lower folder gets previous nodes passed
+    .sort(sort)
+    
   const projektNodes = [...buildProjektNodes({ data, treeName })]
   const userFolderNode = buildUserFolderNode({ data, treeName, projektNodes, loading })
 
@@ -98,20 +102,10 @@ export default ({
   
   openNodes.forEach(nodeUrl => {
     if (
-      nodeUrl.length === 1 &&
-      nodeUrl[0] === 'Benutzer'
-    ) {
-      nodes = [
-        ...nodes,
-        ...buildUserNodes({
-          data,
-          treeName,
-          projektNodes
-        }),
-      ]
-    }
-    if (nodeUrl[0] === 'Projekte') {
+      nodeUrl[0] === 'Projekte' &&
       // do not process ['Projekte']
+      nodeUrl.length > 1
+    ) {
       const projId = nodeUrl[1]
       if (
         nodeUrl.length === 2 &&
@@ -941,6 +935,19 @@ export default ({
           }),
         ]
       }
+    }
+    if (
+      nodeUrl.length === 1 &&
+      nodeUrl[0] === 'Benutzer'
+    ) {
+      nodes = [
+        ...nodes,
+        ...buildUserNodes({
+          data,
+          treeName,
+          projektNodes
+        }),
+      ]
     }
   })
 
