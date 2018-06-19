@@ -347,7 +347,9 @@ query TreeDataQuery(
         popsByApId {
           nodes {
             id
-            tpopsByPopId(filter: {x: {isNull: false}, y: {isNull: false}}) {
+            tpopsByPopId(
+              filter: { x: { isNull: false }, y: { isNull: false } }
+            ) {
               nodes {
                 id
                 nr
@@ -401,7 +403,8 @@ query TreeDataQuery(
       y
     }
   }
-  beobZugeordnetForMapMarkers: projektById(id: $projId) @include(if: $apIsActiveInMap) {
+  beobZugeordnetForMapMarkers: projektById(id: $projId)
+    @include(if: $apIsActiveInMap) {
     id
     apsByProjId(filter: { id: { equalTo: $apId } }) {
       nodes {
@@ -412,7 +415,14 @@ query TreeDataQuery(
             artId
             aeEigenschaftenByArtId {
               id
-              beobsByArtId(filter: {tpopId: {isNull: false}, nichtZuordnen: {equalTo: false}, x: {isNull: false}, y: {isNull: false}}) {
+              beobsByArtId(
+                filter: {
+                  tpopId: { isNull: false }
+                  nichtZuordnen: { equalTo: false }
+                  x: { isNull: false }
+                  y: { isNull: false }
+                }
+              ) {
                 nodes {
                   id
                   autor
@@ -440,7 +450,8 @@ query TreeDataQuery(
       }
     }
   }
-  beobNichtBeurteiltForMapMarkers: projektById(id: $projId) @include(if: $apIsActiveInMap) {
+  beobNichtBeurteiltForMapMarkers: projektById(id: $projId)
+    @include(if: $apIsActiveInMap) {
     id
     apsByProjId(filter: { id: { equalTo: $apId } }) {
       nodes {
@@ -451,7 +462,14 @@ query TreeDataQuery(
             artId
             aeEigenschaftenByArtId {
               id
-              beobsByArtId(filter: {tpopId: {isNull: true}, nichtZuordnen: {equalTo: false}, x: {isNull: false}, y: {isNull: false}}) {
+              beobsByArtId(
+                filter: {
+                  tpopId: { isNull: true }
+                  nichtZuordnen: { equalTo: false }
+                  x: { isNull: false }
+                  y: { isNull: false }
+                }
+              ) {
                 nodes {
                   id
                   autor
@@ -474,7 +492,8 @@ query TreeDataQuery(
       }
     }
   }
-  beobNichtZuzuordnenForMapMarkers: projektById(id: $projId) @include(if: $apIsActiveInMap) {
+  beobNichtZuzuordnenForMapMarkers: projektById(id: $projId)
+    @include(if: $apIsActiveInMap) {
     id
     apsByProjId(filter: { id: { equalTo: $apId } }) {
       nodes {
@@ -485,7 +504,14 @@ query TreeDataQuery(
             artId
             aeEigenschaftenByArtId {
               id
-              beobsByArtId(filter: {tpopId: {isNull: true}, nichtZuordnen: {equalTo: true}, x: {isNull: false}, y: {isNull: false}}) {
+              beobsByArtId(
+                filter: {
+                  tpopId: { isNull: true }
+                  nichtZuordnen: { equalTo: true }
+                  x: { isNull: false }
+                  y: { isNull: false }
+                }
+              ) {
                 nodes {
                   id
                   autor
@@ -594,7 +620,6 @@ query TreeDataQuery(
       email
       role
       pass
-      
     }
   }
 }
