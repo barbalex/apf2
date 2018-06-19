@@ -10,6 +10,5 @@ export default (
   for (let i = 1; i < node.length; i++) {
     parentNodesOpennessArray.push(isNodeOpen(openNodesToUse, node.slice(0, i)))
   }
-  console.log('allParentNodesAreOpen:', {node,openNodes,openNodesToUse,parentNodesOpennessArray})
   return !parentNodesOpennessArray.includes(false)
 }
