@@ -44,6 +44,7 @@ const MyTextField = ({
   multiLine = false,
   disabled = false,
   hintText = '',
+  helperText = '',
   error,
   saveToDb,
   onChange,
@@ -55,6 +56,7 @@ const MyTextField = ({
   multiLine: Boolean,
   disabled: Boolean,
   hintText: String,
+  helperText: String,
   error: String,
   saveToDb: () => void,
   onChange: () => void,
@@ -79,6 +81,10 @@ const MyTextField = ({
     {
       !!error &&
       <FormHelperText id={`${label}ErrorText`}>{error}</FormHelperText>
+    }
+    {
+      !!helperText &&
+      <FormHelperText id={`${label}HelperText`}>{helperText}</FormHelperText>
     }
   </StyledFormControl>
 

@@ -67,6 +67,7 @@ const RadioButtonGroup = ({
   value,
   label,
   error,
+  helperText = '',
   dataSource = [],
   onClickButton,
   onChangeGroup,
@@ -74,6 +75,7 @@ const RadioButtonGroup = ({
   value: Number | String,
   label: String,
   error: String,
+  helperText: String,
   dataSource: Array<Object>,
   onClickButton: () => void,
   onChangeGroup: () => void,
@@ -102,6 +104,10 @@ const RadioButtonGroup = ({
       {
         !!error &&
         <FormHelperText id={`${label}ErrorText`}>{error}</FormHelperText>
+      }
+      {
+        !!helperText &&
+        <FormHelperText id={`${label}HelperText`}>{helperText}</FormHelperText>
       }
     </StyledFormControl>
   )

@@ -8,6 +8,15 @@ import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 import withState from 'recompose/withState'
 import withLifecycle from '@hocs/with-lifecycle'
+import Input from '@material-ui/core/Input'
+import InputLabel from '@material-ui/core/InputLabel'
+import InputAdornment from '@material-ui/core/InputAdornment'
+import FormControl from '@material-ui/core/FormControl'
+import FormHelperText from '@material-ui/core/FormHelperText'
+import IconButton from '@material-ui/core/IconButton'
+import Visibility from '@material-ui/icons/Visibility'
+import VisibilityOff from '@material-ui/icons/VisibilityOff'
+import Button from '@material-ui/core/Button'
 
 import RadioButtonGroup from '../../../shared/RadioButtonGroup'
 import TextField from '../../../shared/TextField'
@@ -27,9 +36,21 @@ const FieldsContainer = styled.div`
   overflow: auto !important;
   height: 100%;
 `
+const StyledInput = styled(Input)`
+  &:before {
+    border-bottom-color: rgba(0, 0, 0, 0.1) !important;
+  }
+`
 
 const enhance = compose(
   withState('errors', 'setErrors', ({})),
+  withState('editPassword', 'setEditPassword', false),
+  withState('password', 'setPassword', ''),
+  withState('password2', 'setPassword2', ''),
+  withState('showPass', 'setShowPass', false),
+  withState('showPass2', 'setShowPass2', false),
+  withState('passwordErrorText', 'setPasswordErrorText', ''),
+  withState('password2ErrorText', 'setPassword2ErrorText', ''),
   withHandlers({
     saveToDb: ({
       refetchTree,
@@ -72,6 +93,45 @@ const enhance = compose(
       setErrors(({}))
       if (['artId'].includes(field)) refetchTree()
     },
+    onBlurPassword: ({
+      setPassword,
+      setPasswordErrorText,
+      setShowPass2,
+      setPassword2,
+    }) => e => {
+      setPasswordErrorText('')
+      const password = e.target.value
+      setPassword(password)
+      if (!password) {
+        setPasswordErrorText('Bitte Passwort eingeben')
+      } else {
+        setPassword2('')
+      }
+    },
+    onBlurPassword2: ({
+      password,
+      setPassword2,
+      setPassword2ErrorText,
+      setShowPass,
+      setShowPass2,
+      setEditPassword,
+    }) => (e, client, refetch) => {
+      setPassword2ErrorText('')
+      const password2 = e.target.value
+      setPassword2(password2)
+      if (!password2) {
+        setPassword2ErrorText('Bitte Passwort eingeben')
+      } else if (password !== password2) {
+        setPassword2ErrorText('Die Passwörter stimmen nicht überein')
+      } else {
+        // TODO: edit password
+        // then tell user if it worked
+        setPassword2('')
+        setShowPass(false)
+        setShowPass2(false)
+        setEditPassword(false)
+      }
+    },
   }),
   withLifecycle({
     onDidUpdate(prevProps, props) {
@@ -86,10 +146,34 @@ const User = ({
   treeName,
   saveToDb,
   errors,
+  editPassword,
+  setEditPassword,
+  showPass,
+  setShowPass,
+  showPass2,
+  setShowPass2,
+  password,
+  password2,
+  passwordErrorText,
+  password2ErrorText,
+  onBlurPassword,
+  onBlurPassword2,
 }: {
   treeName: String,
   saveToDb: () => void,
   errors: Object,
+  editPassword: Boolean,
+  setEditPassword: () => void,
+  showPass: Boolean,
+  setShowPass: () => void,
+  showPass2: Boolean,
+  setShowPass2: () => void,
+  password: String,
+  password2: String,
+  passwordErrorText: String,
+  password2ErrorText: String,
+  onBlurPassword: () => void,
+  onBlurPassword2: () => void,
 }) => (
   <Query query={data1Gql}>
     {({ loading, error, data }) => {
@@ -98,7 +182,7 @@ const User = ({
 
       return (
         <Query query={data2Gql} variables={{ id }}>
-          {({ loading, error, data }) => {
+          {({ loading, error, data, client }) => {
             if (loading)
               return (
                 <Container>
@@ -133,6 +217,7 @@ const User = ({
               ],
               'sort'
             )
+            console.log('User rendering, showPass2:', showPass2)
 
             return (
               <ErrorBoundary>
@@ -149,6 +234,7 @@ const User = ({
                             saveToDb({ row, field: 'name', value, updateUser })
                           }
                           error={errors.name}
+                          helperText="Nur von Managern veränderbar"
                         />
                         <TextField
                           key={`${row.id}email`}
@@ -158,6 +244,7 @@ const User = ({
                             saveToDb({ row, field: 'email', value, updateUser })
                           }
                           error={errors.email}
+                          helperText="Bitte aktuell halten, damit wir Sie bei Bedarf kontaktieren können"
                         />
                         <RadioButtonGroup
                           key={`${row.id}role`}
@@ -168,7 +255,97 @@ const User = ({
                           }
                           error={errors.role}
                           label="Rolle"
+                          helperText="Nur von Managern veränderbar"
                         />
+                        {
+                          !editPassword &&
+                          <div>
+                            <Button
+                              variant="outlined"
+                              color="primary"
+                              onClick={() => setEditPassword(true)}
+                            >
+                              Passwort ändern
+                            </Button>
+                          </div>
+                        }
+                        {
+                          editPassword &&
+                          <FormControl
+                            error={!!passwordErrorText}
+                            fullWidth
+                            aria-describedby="passwortHelper"
+                          >
+                            <InputLabel htmlFor="passwort">Passwort</InputLabel>
+                            <StyledInput
+                              id="passwort"
+                              type={showPass ? 'text' : 'password'}
+                              defaultValue={password}
+                              onBlur={e => onBlurPassword(e, client)}
+                              onKeyPress={e => {
+                                if (e.key === 'Enter') {
+                                  onBlurPassword(e, client)
+                                }
+                              }}
+                              autoComplete="current-password"
+                              autoCorrect="off"
+                              spellCheck="false"
+                              endAdornment={
+                                <InputAdornment position="end">
+                                  <IconButton
+                                    onClick={() => setShowPass(!showPass)}
+                                    onMouseDown={e => e.preventDefault()}
+                                    title={showPass ? 'verstecken' : 'anzeigen'}
+                                  >
+                                    {showPass ? <VisibilityOff /> : <Visibility />}
+                                  </IconButton>
+                                </InputAdornment>
+                              }
+                            />
+                            <FormHelperText id="passwortHelper">
+                              {passwordErrorText}
+                            </FormHelperText>
+                          </FormControl>
+  
+                        }
+                        {
+                          editPassword && !!password &&
+                          <FormControl
+                            error={!!password2ErrorText}
+                            fullWidth
+                            aria-describedby="passwortHelper"
+                          >
+                            <InputLabel htmlFor="passwort">Passwort wiederholen</InputLabel>
+                            <StyledInput
+                              id="passwort2"
+                              type={showPass2 ? 'text' : 'password'}
+                              defaultValue={password2}
+                              onBlur={e => onBlurPassword2(e, client)}
+                              onKeyPress={e => {
+                                if (e.key === 'Enter') {
+                                  onBlurPassword(e, client)
+                                }
+                              }}
+                              autoCorrect="off"
+                              spellCheck="false"
+                              endAdornment={
+                                <InputAdornment position="end">
+                                  <IconButton
+                                    onClick={() => setShowPass2(!showPass2)}
+                                    onMouseDown={e => e.preventDefault()}
+                                    title={showPass2 ? 'verstecken' : 'anzeigen'}
+                                  >
+                                    {showPass2 ? <VisibilityOff /> : <Visibility />}
+                                  </IconButton>
+                                </InputAdornment>
+                              }
+                            />
+                            <FormHelperText id="passwortHelper">
+                              {password2ErrorText}
+                            </FormHelperText>
+                          </FormControl>
+  
+                        }
                       </FieldsContainer>
                     )}
                   </Mutation>
