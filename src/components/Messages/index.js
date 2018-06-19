@@ -103,7 +103,9 @@ const UserMessages = ({
                     unreadMessages.length > 0 &&
                     !!userName &&
                     // do not open if update is available
-                    updateAvailable === false
+                    updateAvailable === false &&
+                    // don't show while loading data
+                    !loading
                   }
                   aria-labelledby="dialog-title"
                 >
