@@ -127,7 +127,6 @@ const enhance = compose(
     }) => async (e, row, updateUser) => {
       setPassword2ErrorText('')
       const password2 = e.target.value
-      console.log('User, onBlurPassword2:', {password2,row})
       setPassword2(password2)
       if (!password2) {
         setPassword2ErrorText('Bitte Passwort eingeben')
@@ -146,7 +145,7 @@ const enhance = compose(
         } catch (error) {
           return setPasswordMessage(error.message)
         }
-        setPasswordMessage('Passwort gespeichert')
+        setPasswordMessage('Passwort gespeichert. Ihre aktuelle Anmeldung bleibt aktiv.')
         setTimeout(() => {
           setPasswordMessage('')
         }, 5000)
