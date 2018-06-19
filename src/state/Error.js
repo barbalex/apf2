@@ -11,6 +11,7 @@ class ErrorContainer extends Container<DeleteState> {
   }
   add(error) {
     this.setState(state => ({ errors: [...state.errors, error] }))
+    console.log('Error: ', error.message)
     setTimeout(() => {
       const newErrors = [...this.state.errors]
       newErrors.pop()
