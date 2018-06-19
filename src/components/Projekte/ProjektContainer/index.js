@@ -7,7 +7,6 @@ import { ReflexContainer, ReflexSplitter, ReflexElement } from 'react-reflex'
 import { Query } from 'react-apollo'
 import get from 'lodash/get'
 import merge from 'lodash/merge'
-import clone from 'lodash/clone'
 import isEqual from 'lodash/isEqual'
 import flatten from 'lodash/flatten'
 import { Subscribe } from 'unstated'
@@ -130,10 +129,10 @@ const ProjekteContainer = ({
           if (error) return `Fehler: ${error.message}`
           const activeNodeArray = get(data1, `${treeName}.activeNodeArray`)
           const activeNodes = getActiveNodes(activeNodeArray)
-          const openNodes = get(data1, `${treeName}.openNodes`)
           const moving = get(data1, 'moving')
           const copying = get(data1, 'copying')
           const token = get(data1, 'user.token')
+          const projekteTabs = [...get(data1, 'urlQuery.projekteTabs', [])]
 
           /**
            * get data based on openNodes, not activeNodes
@@ -141,7 +140,7 @@ const ProjekteContainer = ({
            */
 
           return (
-            <Query query={data2Gql} variables={variables(openNodes, activeNodeArray)}>
+            <Query query={data2Gql} variables={variables(data1, treeName)}>
               {({ loading, error, data: data2, client, refetch }) => {
                 if (error) {
                   console.log('ProjektContainer, error:', error.message)
@@ -169,7 +168,7 @@ const ProjekteContainer = ({
                 const activeNodeArray = get(data, `${treeName}.activeNodeArray`)
                 const activeNode = nodes.find(n => isEqual(n.url, activeNodeArray))
                 // remove 2 to treat all same
-                const tabs = clone(tabsPassed).map(t => t.replace('2', ''))
+                const tabs = [...tabsPassed].map(t => t.replace('2', ''))
                 const treeFlex = (projekteTabs.length === 2 && tabs.length === 2) ?
                                   0.33 :
                                     tabs.length === 0 ?

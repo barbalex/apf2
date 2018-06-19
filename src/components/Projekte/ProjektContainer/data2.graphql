@@ -13,6 +13,7 @@ query TreeDataQuery(
   $isZiel: Boolean!
   $tpopkontr: [UUID!]
   $isTpopkontr: Boolean!
+  $apIsActiveInMap: Boolean!
 ) {
   projekts: allProjekts(orderBy: NAME_ASC) {
     nodes {
@@ -322,7 +323,7 @@ query TreeDataQuery(
   # to extract data for map layers
   popForMap: allPops(
     filter: { apId: { in: $ap }, x: { isNull: false }, y: { isNull: false } }
-  ) @include(if: $isAp) {
+  ) @include(if: $apIsActiveInMap) {
     nodes {
       id
       x
@@ -338,7 +339,7 @@ query TreeDataQuery(
   }
   # this one is used to refetch data when new tpop was localized
   # so that the new marker appears on map
-  tpopForMap: projektById(id: $projId) {
+  tpopForMap: projektById(id: $projId) @include(if: $apIsActiveInMap) {
     id
     apsByProjId(filter: { id: { equalTo: $apId } }) {
       nodes {
@@ -371,7 +372,7 @@ query TreeDataQuery(
       nichtZuordnen: { equalTo: false }
       tpopId: { isNull: true }
     }
-  ) @include(if: $isAp) {
+  ) @include(if: $apIsActiveInMap) {
     nodes {
       id
       x
@@ -380,7 +381,7 @@ query TreeDataQuery(
   }
   beobNichtZuzuordnenForMap: allVApbeobs(
     filter: { apId: { in: $ap }, nichtZuordnen: { equalTo: true } }
-  ) @include(if: $isAp) {
+  ) @include(if: $apIsActiveInMap) {
     nodes {
       id
       x
@@ -393,14 +394,14 @@ query TreeDataQuery(
       nichtZuordnen: { equalTo: false }
       tpopId: { isNull: false }
     }
-  ) @include(if: $isAp) {
+  ) @include(if: $apIsActiveInMap) {
     nodes {
       id
       x
       y
     }
   }
-  beobZugeordnetForMapMarkers: projektById(id: $projId) @include(if: $isAp) {
+  beobZugeordnetForMapMarkers: projektById(id: $projId) @include(if: $apIsActiveInMap) {
     id
     apsByProjId(filter: { id: { equalTo: $apId } }) {
       nodes {
@@ -439,7 +440,7 @@ query TreeDataQuery(
       }
     }
   }
-  beobNichtBeurteiltForMapMarkers: projektById(id: $projId) @include(if: $isAp) {
+  beobNichtBeurteiltForMapMarkers: projektById(id: $projId) @include(if: $apIsActiveInMap) {
     id
     apsByProjId(filter: { id: { equalTo: $apId } }) {
       nodes {
@@ -473,7 +474,7 @@ query TreeDataQuery(
       }
     }
   }
-  beobNichtZuzuordnenForMapMarkers: projektById(id: $projId) @include(if: $isAp) {
+  beobNichtZuzuordnenForMapMarkers: projektById(id: $projId) @include(if: $apIsActiveInMap) {
     id
     apsByProjId(filter: { id: { equalTo: $apId } }) {
       nodes {
@@ -513,14 +514,14 @@ query TreeDataQuery(
       nichtZuordnen: { equalTo: false }
       tpopId: { isNull: false }
     }
-  ) @include(if: $isAp) {
+  ) @include(if: $apIsActiveInMap) {
     nodes {
       id
       x
       y
     }
   }
-  popForMapMarkers: projektById(id: $projId) @include(if: $isAp) {
+  popForMapMarkers: projektById(id: $projId) @include(if: $apIsActiveInMap) {
     id
     apsByProjId(filter: { id: { equalTo: $apId } }) {
       nodes {

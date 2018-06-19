@@ -1,7 +1,12 @@
 // @flow
 import uniq from 'lodash/uniq'
+import get from 'lodash/get'
 
-export default (openNodes: Array<Array<mixed>>, activeNodeArray: Array<String>): Object => {
+export default (data: Object, treeName: String): Object => {
+  const activeNodeArray = get(data, `${treeName}.activeNodeArray`)
+  const openNodes = get(data, `${treeName}.openNodes`)
+  const projekteTabs = get(data, 'urlQuery.projekteTabs', [])
+  const mapIsActive = projekteTabs.includes('karte') || projekteTabs.includes('karte2')
   const projekt = uniq(
     openNodes
       .map(a => (
@@ -101,6 +106,7 @@ export default (openNodes: Array<Array<mixed>>, activeNodeArray: Array<String>):
     isTpop: tpop.length > 0,
     tpopkontr,
     isTpopkontr: tpopkontr.length > 0,
+    apIsActiveInMap: mapIsActive && ap.length > 0,
   }
 
   return variables
