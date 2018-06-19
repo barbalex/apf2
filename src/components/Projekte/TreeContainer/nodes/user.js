@@ -29,15 +29,19 @@ export default ({
       }
       return true
     })
-    .map(el => ({
-      nodeType: 'table',
-      menuType: 'user',
-      id: el.id,
-      urlLabel: el.id,
-      label: el.name || '(kein Name)',
-      url: ['Benutzer', el.id],
-      hasChildren: false,
-    }))
+    .map(el => {
+      const message = el.role ? el.role.replace('apflora_', '') : 'keine Rolle'
+      const label = el.name ? `${el.name} (${message})` : '(kein Name)'
+      return ({
+        nodeType: 'table',
+        menuType: 'user',
+        id: el.id,
+        urlLabel: el.id,
+        label,
+        url: ['Benutzer', el.id],
+        hasChildren: false,
+      })
+    })
     // sort by label
     .sort(compareLabel)
     .map((el, index) => {
