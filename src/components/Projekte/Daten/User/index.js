@@ -41,6 +41,9 @@ const StyledInput = styled(Input)`
     border-bottom-color: rgba(0, 0, 0, 0.1) !important;
   }
 `
+const PasswordMessage = styled.div`
+  padding-bottom: 10px;
+`
 
 const enhance = compose(
   withState('errors', 'setErrors', ({})),
@@ -51,6 +54,7 @@ const enhance = compose(
   withState('showPass2', 'setShowPass2', false),
   withState('passwordErrorText', 'setPasswordErrorText', ''),
   withState('password2ErrorText', 'setPassword2ErrorText', ''),
+  withState('passwordMessage', 'setPasswordMessage', ''),
   withHandlers({
     saveToDb: ({
       refetchTree,
@@ -91,8 +95,10 @@ const enhance = compose(
         return setErrors({ [field]: error.message })
       }
       setErrors(({}))
-      if (['artId'].includes(field)) refetchTree()
+      if (['name', 'role'].includes(field)) refetchTree()
     },
+  }),
+  withHandlers({
     onBlurPassword: ({
       setPassword,
       setPasswordErrorText,
@@ -110,22 +116,41 @@ const enhance = compose(
     },
     onBlurPassword2: ({
       password,
+      setPassword,
       setPassword2,
       setPassword2ErrorText,
       setShowPass,
       setShowPass2,
       setEditPassword,
-    }) => (e, client, refetch) => {
+      saveToDb,
+      setPasswordMessage,
+    }) => async (e, row, updateUser) => {
       setPassword2ErrorText('')
       const password2 = e.target.value
+      console.log('User, onBlurPassword2:', {password2,row})
       setPassword2(password2)
       if (!password2) {
         setPassword2ErrorText('Bitte Passwort eingeben')
       } else if (password !== password2) {
         setPassword2ErrorText('Die Passwörter stimmen nicht überein')
       } else {
-        // TODO: edit password
+        // edit password
         // then tell user if it worked
+        try {
+          await updateUser({
+            variables: {
+              id: row.id,
+              pass: password2,
+            },
+          })
+        } catch (error) {
+          return setPasswordMessage(error.message)
+        }
+        setPasswordMessage('Passwort gespeichert')
+        setTimeout(() => {
+          setPasswordMessage('')
+        }, 5000)
+        setPassword('')
         setPassword2('')
         setShowPass(false)
         setShowPass2(false)
@@ -158,6 +183,8 @@ const User = ({
   password2ErrorText,
   onBlurPassword,
   onBlurPassword2,
+  passwordMessage,
+  setPasswordMessage,
 }: {
   treeName: String,
   saveToDb: () => void,
@@ -174,6 +201,8 @@ const User = ({
   password2ErrorText: String,
   onBlurPassword: () => void,
   onBlurPassword2: () => void,
+  passwordMessage: String,
+  setPasswordMessage: () => void,
 }) => (
   <Query query={data1Gql}>
     {({ loading, error, data }) => {
@@ -217,7 +246,6 @@ const User = ({
               ],
               'sort'
             )
-            console.log('User rendering, showPass2:', showPass2)
 
             return (
               <ErrorBoundary>
@@ -258,12 +286,19 @@ const User = ({
                           helperText="Nur von Managern veränderbar"
                         />
                         {
-                          !editPassword &&
+                          !!passwordMessage &&
+                          <PasswordMessage>{passwordMessage}</PasswordMessage>
+                        }
+                        {
+                          !editPassword && !passwordMessage &&
                           <div>
                             <Button
                               variant="outlined"
                               color="primary"
-                              onClick={() => setEditPassword(true)}
+                              onClick={() => {
+                                setEditPassword(true)
+                                setPasswordMessage('')
+                              }}
                             >
                               Passwort ändern
                             </Button>
@@ -320,7 +355,7 @@ const User = ({
                               id="passwort2"
                               type={showPass2 ? 'text' : 'password'}
                               defaultValue={password2}
-                              onBlur={e => onBlurPassword2(e, client)}
+                              onBlur={e => onBlurPassword2(e, row, updateUser)}
                               onKeyPress={e => {
                                 if (e.key === 'Enter') {
                                   onBlurPassword(e, client)
