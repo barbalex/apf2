@@ -4,6 +4,7 @@ import app from 'ampersand-app'
 import upperFirst from 'lodash/upperFirst'
 import camelCase from 'lodash/camelCase'
 import get from 'lodash/get'
+import uuidv4 from 'uuid/v4'
 
 import tables from '../../../../modules/tables'
 import setTreeKey from './setTreeKey.graphql'
@@ -117,6 +118,31 @@ export default async ({
       }
     }`
   }
+  if (['userFolder', 'user'].includes(menuType)) {
+    const id = uuidv4()
+    console.log('insertDataset, id:', id)
+    mutation = gql`
+      mutation createUser($id: UUID!) {
+        createUser (
+          input: {
+            user: {
+              id: $id
+            }
+          }
+        ) {
+        user {
+          id
+          name
+          email
+          role
+          pass
+        }
+      }
+    }`
+    delete variables.parentId
+    variables.id = id 
+  }
+  console.log('insertDataset, variables:', variables)
 
   let result
   try {
