@@ -4,7 +4,6 @@ import app from 'ampersand-app'
 import upperFirst from 'lodash/upperFirst'
 import camelCase from 'lodash/camelCase'
 import get from 'lodash/get'
-import uuidv4 from 'uuid/v4'
 
 import tables from '../../../../modules/tables'
 import setTreeKey from './setTreeKey.graphql'
@@ -119,14 +118,12 @@ export default async ({
     }`
   }
   if (['userFolder', 'user'].includes(menuType)) {
-    const id = uuidv4()
-    console.log('insertDataset, id:', id)
     mutation = gql`
-      mutation createUser($id: UUID!) {
+      mutation createUser($role: String!) {
         createUser (
           input: {
             user: {
-              id: $id
+              role: $role
             }
           }
         ) {
@@ -135,14 +132,12 @@ export default async ({
           name
           email
           role
-          pass
         }
       }
     }`
     delete variables.parentId
-    variables.id = id 
+    variables.role = 'apflora_reader' 
   }
-  console.log('insertDataset, variables:', variables)
 
   let result
   try {

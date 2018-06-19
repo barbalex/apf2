@@ -34,7 +34,7 @@ export default ({
       menuType: 'user',
       id: el.id,
       urlLabel: el.id,
-      label: get(el, 'name', '(keine Name)'),
+      label: el.name || '(kein Name)',
       url: ['Benutzer', el.id],
       hasChildren: false,
     }))

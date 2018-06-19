@@ -1,0 +1,8 @@
+query userById($id: UUID!) {
+  userById(id: $id) {
+    id
+    name
+    role
+    email
+  }
+}
