@@ -33,7 +33,6 @@ const enhance = compose(
       client,
       tableName
     }) => {
-      console.log('LabelFilter, onChange:', {value:event.target.value,tableName})
       client.mutate({
         mutation: setTreeNodeLabelFilterKey,
         variables: {
@@ -76,13 +75,11 @@ const LabelFilter = ({
       if (activeNode) {
         tableName = activeNode.nodeType === 'table' ? activeNode.menuType : activeNode.menuType.replace('Folder', '')
       }
-      console.log('LabelFilter:', {activeNode,tableName})
 
       let labelText = 'filtern'
       let filterValue = ''
       if (tableName) {
         filterValue = get(data, `${treeName}.nodeLabelFilter.${tableName}`, '')
-        console.log('LabelFilter:', {filterValue,data})
         // make sure 0 is kept
         if (!filterValue && filterValue !== 0) filterValue = ''
         const table = tables.find(t => t.table === tableName)
