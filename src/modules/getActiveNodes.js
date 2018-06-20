@@ -1,5 +1,9 @@
 // @flow
 export default (activeNodeArray: Array<mixed>): Object => {
+  const wlFolder = activeNodeArray[0] === 'Werte-Listen'
+  const wlAdresseFolder = wlFolder && activeNodeArray[1] === 'Adressen'
+  const userFolder = activeNodeArray[0] === 'Benutzer'
+  const user = userFolder && activeNodeArray.length > 1 ? activeNodeArray[1] : null
   const projektFolder =
     (activeNodeArray.length > 0 && activeNodeArray[0] === 'Projekte') || false
   const projekt =
@@ -194,6 +198,10 @@ export default (activeNodeArray: Array<mixed>): Object => {
 
   const activeNodes = {
     exporte,
+    wlFolder,
+    wlAdresseFolder,
+    userFolder,
+    user,
     projektFolder,
     projekt,
     apberuebersichtFolder,
