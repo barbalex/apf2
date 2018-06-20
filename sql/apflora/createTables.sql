@@ -72,8 +72,7 @@ DROP POLICY IF EXISTS writer ON apflora.adresse;
 CREATE POLICY writer ON apflora.adresse
   USING (true)
   WITH CHECK (
-    name = current_user_name()
-    or current_user = 'apflora_manager'
+    current_user = 'apflora_manager'
   );
 
 DROP TABLE IF EXISTS apflora.ap;
