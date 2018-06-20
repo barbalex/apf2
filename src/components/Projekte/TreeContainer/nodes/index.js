@@ -96,7 +96,7 @@ export default ({
 
   let nodes = [...projektNodes, userFolderNode]
   if (role === 'apflora_manager') {
-    projektNodes.push(buildWlFolderNode({ projektNodes }))
+    nodes.push(buildWlFolderNode({ projektNodes }))
   }
   let apNodes
   let popNodes
