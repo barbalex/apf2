@@ -149,7 +149,7 @@ const ProjekteContainer = ({
               {({ loading, error, data: data2, client, refetch }) => {
                 if (error) {
                   console.log('ProjektContainer, error:', error.message)
-                  if ( 
+                  if (
                     error.message.includes('permission denied') ||
                     error.message.includes('keine Berechtigung')
                   ) {
