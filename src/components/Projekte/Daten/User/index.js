@@ -249,7 +249,7 @@ const User = ({
             return (
               <ErrorBoundary>
                 <Container>
-                  <FormTitle apId={id} title="Aktionsplan" />
+                  <FormTitle apId={id} title="Benutzer" />
                   <Mutation mutation={updateUserByIdGql}>
                     {(updateUser, { data }) => (
                       <FieldsContainer>
