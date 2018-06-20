@@ -1276,9 +1276,11 @@
   dependencies:
     just-debounce-it "^1.0.1"
 
-"@hocs/with-lifecycle@0.4.0":
-  version "0.4.0"
-  resolved "https://registry.yarnpkg.com/@hocs/with-lifecycle/-/with-lifecycle-0.4.0.tgz#8df9c71f4efd3d6bffe39857776c2bf7f1becbe8"
+"@hocs/with-lifecycle@0.5.0":
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/@hocs/with-lifecycle/-/with-lifecycle-0.5.0.tgz#358db86746be1ade689916a2ca0d7d5cbeef1a92"
+  dependencies:
+    react-display-name "^0.2.4"
 
 "@material-ui/core@1.2.2":
   version "1.2.2"
@@ -1470,8 +1472,8 @@
     "@types/react" "*"
 
 "@types/react@*":
-  version "16.4.0"
-  resolved "https://registry.yarnpkg.com/@types/react/-/react-16.4.0.tgz#f7f639837bf1f8635f57616b12a1b0d193b6343a"
+  version "16.4.1"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-16.4.1.tgz#c53bbfb4a78933db587da085ac60dbf5fcf73f8f"
   dependencies:
     csstype "^2.2.0"
 
@@ -1757,29 +1759,29 @@ anymatch@^2.0.0:
     micromatch "^3.1.4"
     normalize-path "^2.1.1"
 
-apollo-cache-inmemory@1.2.4:
-  version "1.2.4"
-  resolved "https://registry.yarnpkg.com/apollo-cache-inmemory/-/apollo-cache-inmemory-1.2.4.tgz#452e731a6777756d744d493a3223cf04f8e50c9b"
+apollo-cache-inmemory@1.2.5:
+  version "1.2.5"
+  resolved "https://registry.yarnpkg.com/apollo-cache-inmemory/-/apollo-cache-inmemory-1.2.5.tgz#b57951947b1db486a60db11c7dcfc6b112e5abe9"
   dependencies:
-    apollo-cache "^1.1.11"
-    apollo-utilities "^1.0.15"
-    graphql-anywhere "^4.1.13"
+    apollo-cache "^1.1.12"
+    apollo-utilities "^1.0.16"
+    graphql-anywhere "^4.1.14"
 
-apollo-cache@^1.1.11:
-  version "1.1.11"
-  resolved "https://registry.yarnpkg.com/apollo-cache/-/apollo-cache-1.1.11.tgz#998e31a4b278e2fbbbf36fef8fce39c08adc35ca"
+apollo-cache@^1.1.12:
+  version "1.1.12"
+  resolved "https://registry.yarnpkg.com/apollo-cache/-/apollo-cache-1.1.12.tgz#070015c9051b2ebb69676beb10466a9c0b259f91"
   dependencies:
-    apollo-utilities "^1.0.15"
+    apollo-utilities "^1.0.16"
 
-apollo-client@2.3.4:
-  version "2.3.4"
-  resolved "https://registry.yarnpkg.com/apollo-client/-/apollo-client-2.3.4.tgz#308fbfa95423f9bde6827376d9a85802fe93e28d"
+apollo-client@2.3.5:
+  version "2.3.5"
+  resolved "https://registry.yarnpkg.com/apollo-client/-/apollo-client-2.3.5.tgz#74b62bd7e7bd7030d01c35e2e221ed65a807af23"
   dependencies:
     "@types/zen-observable" "^0.5.3"
-    apollo-cache "^1.1.11"
+    apollo-cache "^1.1.12"
     apollo-link "^1.0.0"
     apollo-link-dedup "^1.0.0"
-    apollo-utilities "^1.0.15"
+    apollo-utilities "^1.0.16"
     symbol-observable "^1.0.2"
     zen-observable "^0.8.0"
   optionalDependencies:
@@ -1825,9 +1827,9 @@ apollo-link@1.2.2, apollo-link@^1.0.0, apollo-link@^1.2.2:
     apollo-utilities "^1.0.0"
     zen-observable-ts "^0.8.9"
 
-apollo-utilities@^1.0.0, apollo-utilities@^1.0.15, apollo-utilities@^1.0.8:
-  version "1.0.15"
-  resolved "https://registry.yarnpkg.com/apollo-utilities/-/apollo-utilities-1.0.15.tgz#8f1ba6e4ed9b92cb0de2ce7c032315a768860aae"
+apollo-utilities@^1.0.0, apollo-utilities@^1.0.16, apollo-utilities@^1.0.8:
+  version "1.0.16"
+  resolved "https://registry.yarnpkg.com/apollo-utilities/-/apollo-utilities-1.0.16.tgz#787310df4c3900a68c0beb3d351c59725a588cdb"
   dependencies:
     fast-json-stable-stringify "^2.0.0"
 
@@ -3450,8 +3452,8 @@ cssom@0.3.x, "cssom@>= 0.3.2 < 0.4.0":
     cssom "0.3.x"
 
 csstype@^2.0.0, csstype@^2.2.0, csstype@^2.5.2:
-  version "2.5.4"
-  resolved "https://registry.yarnpkg.com/csstype/-/csstype-2.5.4.tgz#93850187209b6d0a71d30a85abc95a6ae3f3e8cd"
+  version "2.5.5"
+  resolved "https://registry.yarnpkg.com/csstype/-/csstype-2.5.5.tgz#4125484a3d42189a863943f23b9e4b80fedfa106"
 
 currently-unhandled@^0.4.1:
   version "0.4.1"
@@ -4834,8 +4836,8 @@ global@~4.3.0:
     process "~0.5.1"
 
 globals@^11.0.1, globals@^11.1.0:
-  version "11.5.0"
-  resolved "https://registry.yarnpkg.com/globals/-/globals-11.5.0.tgz#6bc840de6771173b191f13d3a9c94d441ee92642"
+  version "11.7.0"
+  resolved "https://registry.yarnpkg.com/globals/-/globals-11.7.0.tgz#a583faa43055b1aca771914bf68258e2fc125673"
 
 globals@^9.18.0:
   version "9.18.0"
@@ -4921,11 +4923,11 @@ graphile-build@4.0.0-rc.1:
     lodash ">=4 <5"
     pluralize "7.0.0"
 
-graphql-anywhere@^4.1.0-alpha.0, graphql-anywhere@^4.1.13:
-  version "4.1.13"
-  resolved "https://registry.yarnpkg.com/graphql-anywhere/-/graphql-anywhere-4.1.13.tgz#5314b879b0b7066e6835ad2f5716b4dae381dc63"
+graphql-anywhere@^4.1.0-alpha.0, graphql-anywhere@^4.1.14:
+  version "4.1.14"
+  resolved "https://registry.yarnpkg.com/graphql-anywhere/-/graphql-anywhere-4.1.14.tgz#89664cb885faaec1cbc66905351fadae8cc85a04"
   dependencies:
-    apollo-utilities "^1.0.15"
+    apollo-utilities "^1.0.16"
 
 graphql-iso-date@^3.2.0:
   version "3.5.0"
@@ -6329,8 +6331,8 @@ jss-vendor-prefixer@^7.0.0:
     css-vendor "^0.3.8"
 
 jss@^9.3.3, jss@^9.7.0:
-  version "9.8.3"
-  resolved "https://registry.yarnpkg.com/jss/-/jss-9.8.3.tgz#399da571c4b2c8f4cf418ca7e8627e44fc287fc8"
+  version "9.8.6"
+  resolved "https://registry.yarnpkg.com/jss/-/jss-9.8.6.tgz#002af37da04c45ed28e2f38bbc02d2eced3803b5"
   dependencies:
     is-in-browser "^1.1.3"
     symbol-observable "^1.1.0"
@@ -8194,11 +8196,10 @@ promish@>=5.0.2:
   dependencies:
     es6-promise "^3.0.2"
 
-prop-types@15.6.1, prop-types@^15.5.0, prop-types@^15.5.10, prop-types@^15.5.4, prop-types@^15.5.6, prop-types@^15.5.7, prop-types@^15.5.8, prop-types@^15.6.0, prop-types@^15.6.1:
-  version "15.6.1"
-  resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.6.1.tgz#36644453564255ddda391191fb3a125cbdf654ca"
+prop-types@15.6.2, prop-types@^15.5.0, prop-types@^15.5.10, prop-types@^15.5.4, prop-types@^15.5.6, prop-types@^15.5.7, prop-types@^15.5.8, prop-types@^15.6.0, prop-types@^15.6.1:
+  version "15.6.2"
+  resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.6.2.tgz#05d5ca77b4453e985d60fc7ff8c859094a497102"
   dependencies:
-    fbjs "^0.8.16"
     loose-envify "^1.3.1"
     object-assign "^4.1.1"
 
@@ -8381,9 +8382,9 @@ rc@^1.0.1, rc@^1.1.6, rc@^1.1.7:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
-react-apollo@2.1.5:
-  version "2.1.5"
-  resolved "https://registry.yarnpkg.com/react-apollo/-/react-apollo-2.1.5.tgz#d41302a26bd30919d31d84a40c3a3699d8a1dfa4"
+react-apollo@2.1.6:
+  version "2.1.6"
+  resolved "https://registry.yarnpkg.com/react-apollo/-/react-apollo-2.1.6.tgz#13be92689009eda9023948c78532f4102cbc3d57"
   dependencies:
     fbjs "^0.8.16"
     hoist-non-react-statics "^2.5.0"
@@ -8447,6 +8448,10 @@ react-dev-utils@6.0.0-next.3e165448:
     sockjs-client "1.1.4"
     strip-ansi "4.0.0"
     text-table "0.2.0"
+
+react-display-name@^0.2.4:
+  version "0.2.4"
+  resolved "https://registry.yarnpkg.com/react-display-name/-/react-display-name-0.2.4.tgz#e2a670b81d79a2204335510c01246f4c92ff12cf"
 
 react-dom@16.4.1:
   version "16.4.1"
@@ -10206,8 +10211,8 @@ unique-string@^1.0.0:
     crypto-random-string "^1.0.0"
 
 universalify@^0.1.0:
-  version "0.1.1"
-  resolved "https://registry.yarnpkg.com/universalify/-/universalify-0.1.1.tgz#fa71badd4437af4c148841e3b3b165f9e9e590b7"
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/universalify/-/universalify-0.1.2.tgz#b646f69be3942dabcecc9d6639c80dc105efaa66"
 
 unpipe@1.0.0, unpipe@~1.0.0:
   version "1.0.0"
