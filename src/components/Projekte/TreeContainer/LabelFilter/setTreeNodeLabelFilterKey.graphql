@@ -36,6 +36,7 @@ mutation setTreeNodeLabelFilterKey(
         beobprojekt
         adresse
         gemeinde
+        user
         __typename: NodeLabelFilter
       }
       __typename: Tree
@@ -72,6 +73,7 @@ mutation setTreeNodeLabelFilterKey(
         beobprojekt
         adresse
         gemeinde
+        user
         __typename: NodeLabelFilter
       }
       __typename: Tree2

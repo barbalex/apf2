@@ -140,7 +140,6 @@ const ProjekteContainer = ({
           const token = get(data1, 'user.token')
           const tokenDecoded = token ? jwtDecode(token) : null
           const role = tokenDecoded ? tokenDecoded.role : null
-          console.log({tokenDecoded,role})
           const projekteTabs = [...get(data1, 'urlQuery.projekteTabs', [])]
 
           /**

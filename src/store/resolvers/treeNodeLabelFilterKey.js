@@ -46,6 +46,7 @@ export default {
                   beobprojekt
                   adresse
                   gemeinde
+                  user
                 }
               }
               tree2 @client {
@@ -80,6 +81,7 @@ export default {
                   beobprojekt
                   adresse
                   gemeinde
+                  user
                 }
               }
             }

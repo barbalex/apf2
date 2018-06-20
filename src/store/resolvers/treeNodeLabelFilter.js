@@ -36,6 +36,7 @@ export default {
       beobprojekt,
       adresse,
       gemeinde,
+      user,
     }, { cache }) => {
       const data = cache.readQuery({
         query: gql`
@@ -89,6 +90,7 @@ export default {
               beobprojekt,
               adresse,
               gemeinde,
+              user,
               __typename: 'NodeLabelFilter',
             },
             __typename: upperFirst(tree)

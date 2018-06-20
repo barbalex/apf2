@@ -5,6 +5,7 @@ import allParentNodesAreOpen from '../allParentNodesAreOpen'
 import allParentNodesAreVisible from '../allParentNodesAreVisible'
 import buildProjektNodes from './projekt'
 import buildUserFolderNode from './userFolder'
+import buildWlFolderNode from './wlFolder'
 import buildUserNodes from './user'
 import buildApFolderNodes from './apFolder'
 import buildApberuebersichtFolderNodes from './apberuebersichtFolder'
@@ -95,8 +96,7 @@ export default ({
 
   let nodes = [...projektNodes, userFolderNode]
   if (role === 'apflora_manager') {
-    // TODO: build stammdaten folder
-    // TODO: push it to nodes
+    projektNodes.push(buildWlFolderNode({ projektNodes }))
   }
   let apNodes
   let popNodes

@@ -44,6 +44,7 @@ export default {
                   beobprojekt
                   adresse
                   gemeinde
+                  user
                 }
                 map {
                   detailplaene
@@ -87,6 +88,7 @@ export default {
               beobprojekt: get(data, 'tree.nodeLabelFilter.beobprojekt'),
               adresse: get(data, 'tree.nodeLabelFilter.adresse'),
               gemeinde: get(data, 'tree.nodeLabelFilter.gemeinde'),
+              user: get(data, 'tree.nodeLabelFilter.user'),
               __typename: 'NodeLabelFilter'
             },
             map: {

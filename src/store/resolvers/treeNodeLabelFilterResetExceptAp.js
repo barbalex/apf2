@@ -67,6 +67,7 @@ export default {
               beobprojekt: null,
               adresse: null,
               gemeinde: null,
+              user: null,
               __typename: 'NodeLabelFilter',
             },
             __typename: upperFirst(tree)
