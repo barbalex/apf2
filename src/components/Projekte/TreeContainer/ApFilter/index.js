@@ -54,7 +54,16 @@ const ApFilter = ({
 }) =>
   <Query query={dataGql} >
     {({ error, data, client }) => {
-      if (error) return `Fehler: ${error.message}`
+      if (error) {
+        if (
+          error.message.includes('permission denied') ||
+          error.message.includes('keine Berechtigung')
+        ) {
+          // ProjektContainer returns helpful screen
+          return null
+        }
+        return `Fehler: ${error.message}`
+      }
 
       const apFilter = get(data, `${treeName}.apFilter`)
 

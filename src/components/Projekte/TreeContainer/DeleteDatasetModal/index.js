@@ -27,7 +27,16 @@ const DatasetDeleteModal = ({ refetchTree }:{ refetchTree: () => void }) =>
         {errorState =>
           <Query query={dataGql}>
             {({ loading, error, data, client }) => {
-              if (error) return `Fehler: ${error.message}`
+              if (error) {
+                if (
+                  error.message.includes('permission denied') ||
+                  error.message.includes('keine Berechtigung')
+                ) {
+                  // ProjektContainer returns helpful screen
+                  return null
+                }
+                return `Fehler: ${error.message}`
+              }
               const datasetToDelete = deleteState.state.toDelete
               const table = tables.find(t => t.table === datasetToDelete.table)
               let tableName = null
