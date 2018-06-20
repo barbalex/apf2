@@ -71,4 +71,5 @@ revoke all on apflora.user from public, apflora_reader, apflora_freiwillig, apfl
 grant select (id, name, email, pass, role) on apflora.user to anon;
 grant select (id, name, email, pass, role), update (id, name, email, pass) on apflora.user to apflora_reader, apflora_freiwillig, apflora_artverantwortlich;
 grant all on apflora.user to apflora_manager;
+-- even pure readers need to write to usermessage:
 grant all on apflora.usermessage to apflora_reader, apflora_freiwillig;
