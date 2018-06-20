@@ -77,11 +77,13 @@ const allParentNodesAreOpenAndVisible = (
 export default ({
   data,
   treeName,
-  loading
+  loading,
+  role,
 }: {
   data: Object,
   treeName: String,
-  loading: Boolean
+  loading: Boolean,
+  role: String,
 }): Array < Object > => {
   const openNodes = [...get(data, `${treeName}.openNodes`)]
     // need to sort so folders are added in correct order
@@ -92,6 +94,10 @@ export default ({
   const userFolderNode = buildUserFolderNode({ data, treeName, projektNodes, loading })
 
   let nodes = [...projektNodes, userFolderNode]
+  if (role === 'apflora_manager') {
+    // TODO: build stammdaten folder
+    // TODO: push it to nodes
+  }
   let apNodes
   let popNodes
   let tpopNodes

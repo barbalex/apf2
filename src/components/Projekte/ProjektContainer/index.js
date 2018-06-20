@@ -11,6 +11,7 @@ import isEqual from 'lodash/isEqual'
 import flatten from 'lodash/flatten'
 import { Subscribe } from 'unstated'
 import Button from '@material-ui/core/Button'
+import jwtDecode from 'jwt-decode'
 
 // when Karte was loaded async, it did not load,
 // but only in production!
@@ -137,6 +138,9 @@ const ProjekteContainer = ({
           const moving = get(data1, 'moving')
           const copying = get(data1, 'copying')
           const token = get(data1, 'user.token')
+          const tokenDecoded = token ? jwtDecode(token) : null
+          const role = tokenDecoded ? tokenDecoded.role : null
+          console.log({tokenDecoded,role})
           const projekteTabs = [...get(data1, 'urlQuery.projekteTabs', [])]
 
           /**
@@ -176,7 +180,7 @@ const ProjekteContainer = ({
                 }
 
                 const data = merge(data1, data2)
-                const nodes = buildNodes({ data, treeName, loading })
+                const nodes = buildNodes({ data, treeName, loading, role })
                 const tree = get(data, treeName)
                 const activeNodeArray = get(data, `${treeName}.activeNodeArray`)
                 const activeNode = nodes.find(n => isEqual(n.url, activeNodeArray))
