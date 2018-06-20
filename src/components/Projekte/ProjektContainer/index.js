@@ -10,6 +10,7 @@ import merge from 'lodash/merge'
 import isEqual from 'lodash/isEqual'
 import flatten from 'lodash/flatten'
 import { Subscribe } from 'unstated'
+import Button from '@material-ui/core/Button'
 
 // when Karte was loaded async, it did not load,
 // but only in production!
@@ -28,6 +29,7 @@ import apfloraLayers from '../Karte/apfloraLayers'
 import overlays from '../Karte/overlays'
 import idsInsideFeatureCollection from '../../../modules/idsInsideFeatureCollection'
 import ErrorState from '../../../state/Error'
+import logout from '../../../modules/logout'
 
 const Container = styled.div`
   display: flex;
@@ -37,6 +39,9 @@ const Container = styled.div`
 `
 const ErrorContainer = styled.div`
   padding: 15px;
+`
+const LogoutButton = styled(Button)`
+  margin-top: 10px !important;
 `
 
 const enhance = compose(
@@ -144,7 +149,7 @@ const ProjekteContainer = ({
               {({ loading, error, data: data2, client, refetch }) => {
                 if (error) {
                   console.log('ProjektContainer, error:', error.message)
-                  if (
+                  if ( 
                     error.message.includes('permission denied') ||
                     error.message.includes('keine Berechtigung')
                   ) {
@@ -155,7 +160,15 @@ const ProjekteContainer = ({
                     return (
                       <ErrorContainer>
                         <div>Ihre Anmeldung ist nicht mehr gültig.</div>
-                        <div>Bitte melden Sie sich ab und wieder neu an.</div>
+                        <div>Bitte melden Sie sich neu an.</div>
+                        <LogoutButton
+                          variant="outlined"
+                          onClick={() => {
+                            logout()
+                          }}
+                        >
+                          Neu anmelden
+                        </LogoutButton>
                       </ErrorContainer>
                     )
                   }
