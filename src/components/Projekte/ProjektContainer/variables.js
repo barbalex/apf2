@@ -9,9 +9,14 @@ export default (data: Object, treeName: String): Object => {
   const activeNodes = getActiveNodes(activeNodeArray)
   const openNodes = get(data, `${treeName}.openNodes`)
   const projekteTabs = get(data, 'urlQuery.projekteTabs', [])
-  const mapIsActive = projekteTabs.includes('karte') || projekteTabs.includes('karte2')
-  const isAdresse = openNodes.some(nodeArray => nodeArray[0] === 'Werte-Listen' && nodeArray[1] === 'Adressen')
-  const isWerteListen = openNodes.some((nodeArray) => nodeArray[0] === 'Werte-Listen')
+  const mapIsActive = projekteTabs.includes('karte') ||
+    projekteTabs.includes('karte2')
+  const isAdresse = openNodes.some(nodeArray =>
+    nodeArray[0] === 'Werte-Listen' && nodeArray[1] === 'Adressen'
+  )
+  const isWerteListen = openNodes.some((nodeArray) =>
+    nodeArray[0] === 'Werte-Listen'
+  )
   const projekt = uniq(
     openNodes
       .map(a => (
@@ -25,7 +30,10 @@ export default (data: Object, treeName: String): Object => {
       .filter(v => v !== null)
   )
   const projId = activeNodes.projekt || '99999999-9999-9999-9999-999999999999'
-  const isProjekt = projekt.length > 0
+  const isProjekt = openNodes.some(nArray =>
+    nArray[0] === 'Projekte' &&
+    nArray[1]
+  )
   const ap = uniq(
     openNodes
       .map(a => (
@@ -40,7 +48,9 @@ export default (data: Object, treeName: String): Object => {
       .filter(v => v !== null)
   )
   const apId = activeNodes.ap || '99999999-9999-9999-9999-999999999999'
-  const isAp = ap.length > 0
+  //const isAp = ap.length > 0
+  const isAp = isProjekt &&
+    openNodes.some(nArray => nArray[2] === 'Aktionspläne' && nArray[3])
   const ziel = uniq(
     openNodes
       .map(a => (
@@ -55,6 +65,12 @@ export default (data: Object, treeName: String): Object => {
       ))
       .filter(v => v !== null)
   )
+  const isZiel = isAp &&
+    openNodes.some(nArray =>
+      nArray[4] === 'AP-Ziele' &&
+      nArray[5] &&
+      nArray[6]
+    )
   const pop = uniq(
     openNodes
       .map(a => (
@@ -69,6 +85,8 @@ export default (data: Object, treeName: String): Object => {
       ))
       .filter(v => v !== null)
   )
+  const isPop = isAp &&
+    openNodes.some(nArray => nArray[4] === 'Populationen' && nArray[5])
   const tpop = uniq(
     openNodes
       .map(a => (
@@ -84,6 +102,8 @@ export default (data: Object, treeName: String): Object => {
       ))
       .filter(v => v !== null)
   )
+  const isTpop = isPop &&
+    openNodes.some(nArray => nArray[6] === 'Teil-Populationen' && nArray[7])
   const tpopkontr = uniq(
     openNodes
       .map(a => (
@@ -100,6 +120,11 @@ export default (data: Object, treeName: String): Object => {
       ))
       .filter(v => v !== null)
   )
+  const isTpopkontr = isTpop &&
+    openNodes.some(nArray =>
+      ['Feld-Kontrollen', 'Freiwilligen-Kontrollen'].includes(nArray[8]) &&
+      nArray[9]
+    )
   const variables = {
     projekt,
     projId,
@@ -108,14 +133,14 @@ export default (data: Object, treeName: String): Object => {
     apId,
     isAp,
     ziel,
-    isZiel: ziel.length > 0,
+    isZiel,
     pop,
-    isPop: pop.length > 0,
+    isPop,
     tpop,
-    isTpop: tpop.length > 0,
+    isTpop,
     tpopkontr,
-    isTpopkontr: tpopkontr.length > 0,
-    apIsActiveInMap: mapIsActive && ap.length > 0,
+    isTpopkontr,
+    apIsActiveInMap: mapIsActive && isAp,
     isWerteListen,
     isAdresse,
   }

@@ -293,7 +293,7 @@ export default [
   },
   {
     table: 'adresse',
-    label: 'none',
+    label: 'Adresse',
     idField: 'id',
     parentIdField: 'none',
   },
@@ -362,7 +362,7 @@ export default [
   {
     table: 'user',
     parentTable: 'none',
-    label: 'User',
+    label: 'Benutzer',
     labelSingular: 'Benutzer',
     idField: 'id',
     parentIdField: 'none',

@@ -76,7 +76,7 @@ const LabelFilter = ({
         tableName = activeNode.nodeType === 'table' ? activeNode.menuType : activeNode.menuType.replace('Folder', '')
       }
 
-      let labelText = 'filtern'
+      let labelText = '(filtern nicht möglich)'
       let filterValue = ''
       if (tableName) {
         filterValue = get(data, `${treeName}.nodeLabelFilter.${tableName}`, '')

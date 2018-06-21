@@ -23,7 +23,7 @@ import TreeContainer from '../TreeContainer'
 import Daten from '../Daten'
 import Exporte from '../Exporte'
 import getActiveNodes from '../../../modules/getActiveNodes'
-import variables from './variables'
+import buildVariables from './variables'
 import buildNodes from '../TreeContainer/nodes'
 import Deletions from './Deletions'
 import apfloraLayers from '../Karte/apfloraLayers'
@@ -141,14 +141,16 @@ const ProjekteContainer = ({
           const tokenDecoded = token ? jwtDecode(token) : null
           const role = tokenDecoded ? tokenDecoded.role : null
           const projekteTabs = [...get(data1, 'urlQuery.projekteTabs', [])]
-          //console.log('ProjektContainer:', {data1,variables:variables(data1, treeName)})
+          const variables = buildVariables(data1, treeName)
+          const {projekt,isProjekt,projId,isAp} = variables
+          console.log('ProjektContainer:', {data1,projekt,isProjekt,projId,isAp})
           /**
            * get data based on openNodes, not activeNodes
            * reason: multiple open nodes should recieve own data
            */
 
           return (
-            <Query query={data2Gql} variables={variables(data1, treeName)}>
+            <Query query={data2Gql} variables={variables}>
               {({ loading, error, data: data2, client, refetch }) => {
                 if (error) {
                   console.log('ProjektContainer, error:', error.message)
