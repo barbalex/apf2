@@ -139,7 +139,7 @@ const Pop = ({
                     popover="Dieses Feld möglichst immer ausfüllen"
                   />
                   <Status
-                    apJahr={get(data, 'tpopById.apByApId.startJahr')}
+                    apJahr={get(row, 'apByApId.startJahr')}
                     herkunftValue={row.status}
                     bekanntSeitValue={row.bekanntSeit}
                     saveToDbBekanntSeit={value =>

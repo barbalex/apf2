@@ -42,6 +42,22 @@ WHERE id IN (
     status = 211
 );
 
+-- check result
+select * from apflora.pop
+where status in (210, 211, 202, 200); -- 1874
+select * from apflora.tpop
+where status in (210, 211, 202, 200); -- 4135
+
+-- check result
+select * from apflora.pop
+where status in (210, 211);
+select * from apflora.tpop
+where status in (210, 211);
+select * from apflora.pop
+where status in (202, 200);
+select * from apflora.tpop
+where status in (202, 200);
+
 delete from apflora.pop_status_werte
 where code in (210, 211);
 

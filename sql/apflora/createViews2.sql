@@ -1836,7 +1836,7 @@ FROM
       ON apflora.pop.id = apflora.tpop.pop_id)
     ON apflora.ap.id = apflora.pop.ap_id
 WHERE
-  apflora.tpop.status IN (101, 202, 211)
+  apflora.tpop.status IN (101, 202)
   AND apflora.tpop.apber_relevant = 1
   AND apflora.tpop.id NOT IN (
     SELECT DISTINCT
@@ -1889,7 +1889,7 @@ FROM
     ON apflora.pop.ap_id = apflora.ap.id
 WHERE
   apflora.popber.entwicklung < 8
-  AND apflora.pop.status  IN (101, 202, 211)
+  AND apflora.pop.status  IN (101, 202)
   AND apflora.tpop.apber_relevant = 1;
 
 DROP VIEW IF EXISTS apflora.v_q_tpop_statuserloschenletzterpopberaktuell CASCADE;
@@ -1919,7 +1919,7 @@ FROM
     ON apflora.pop.ap_id = apflora.ap.id
 WHERE
   apflora.tpopber.entwicklung < 8
-  AND apflora.tpop.status IN (101, 202, 211)
+  AND apflora.tpop.status IN (101, 202)
   AND apflora.tpop.id NOT IN (
     -- Ansiedlungen since apflora.tpopber.jahr
     SELECT

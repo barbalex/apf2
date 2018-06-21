@@ -2322,7 +2322,7 @@ FROM
     apflora.ap
     ON apflora.pop.ap_id = apflora.ap.id
 WHERE
-  apflora.pop.status  IN (200, 210)
+  apflora.pop.status = 200
   AND apflora.tpop.apber_relevant = 1
   AND (
     apflora.pop.bekannt_seit < apflora.ap.start_jahr
@@ -2347,7 +2347,7 @@ FROM
     apflora.ap
     ON apflora.pop.ap_id = apflora.ap.id
 WHERE
-  apflora.pop.status  IN (200, 210)
+  apflora.pop.status  = 200
   AND apflora.tpop.apber_relevant = 1
   AND apflora.pop.bekannt_seit >= apflora.ap.start_jahr
 GROUP BY
@@ -2404,7 +2404,7 @@ WHERE
   (
     apflora.pop.status  = 101
     OR (
-      apflora.pop.status  = 211
+      apflora.pop.status  = 202
       AND (
         apflora.pop.bekannt_seit < apflora.ap.start_jahr
         OR apflora.pop.bekannt_seit IS NULL
@@ -2431,7 +2431,7 @@ FROM
     apflora.ap
     ON apflora.pop.ap_id = apflora.ap.id
 WHERE
-  apflora.pop.status  IN (202, 211)
+  apflora.pop.status IN (202)
   AND apflora.tpop.apber_relevant = 1
   AND apflora.pop.bekannt_seit >= apflora.ap.start_jahr
 GROUP BY
@@ -2491,7 +2491,7 @@ FROM
     ON apflora.pop.ap_id = apflora.ap.id
 WHERE
   apflora.pop.status  NOT IN (300)
-  AND apflora.tpop.status IN (200, 210)
+  AND apflora.tpop.status = 200
   AND apflora.tpop.apber_relevant = 1
   AND (
     apflora.tpop.bekannt_seit < apflora.ap.start_jahr
@@ -2517,7 +2517,7 @@ FROM
     ON apflora.pop.ap_id = apflora.ap.id
 WHERE
   apflora.pop.status  NOT IN (300)
-  AND apflora.tpop.status IN (200, 210)
+  AND apflora.tpop.status = 200
   AND apflora.tpop.apber_relevant = 1
   AND apflora.tpop.bekannt_seit >= apflora.ap.start_jahr
 GROUP BY
@@ -2575,7 +2575,7 @@ WHERE
   AND (
     apflora.tpop.status = 101
     OR (
-      apflora.tpop.status = 211
+      apflora.tpop.status = 202
       AND (
         apflora.tpop.bekannt_seit < apflora.ap.start_jahr
         OR apflora.tpop.bekannt_seit IS NULL
@@ -2602,8 +2602,8 @@ FROM
     apflora.ap
     ON apflora.pop.ap_id = apflora.ap.id
 WHERE
-  apflora.pop.status  NOT IN (300)
-  AND apflora.tpop.status IN (202, 211)
+  apflora.pop.status NOT IN (300)
+  AND apflora.tpop.status IN (202)
   AND apflora.tpop.apber_relevant = 1
   AND apflora.tpop.bekannt_seit >= apflora.ap.start_jahr
 GROUP BY
@@ -5140,7 +5140,7 @@ WHERE
     FROM
       apflora.tpop
     WHERE
-      apflora.tpop.status IN (100, 101, 200, 210)
+      apflora.tpop.status IN (100, 101, 200)
   );
 
 DROP VIEW IF EXISTS apflora.v_q_pop_statusansaatversuchalletpoperloschen CASCADE;
@@ -5164,7 +5164,7 @@ WHERE
     FROM
       apflora.tpop
     WHERE
-      apflora.tpop.status IN (101, 202, 211)
+      apflora.tpop.status IN (101, 202)
       AND apflora.tpop.pop_id = apflora.pop.id
   )
   AND NOT EXISTS (
@@ -5173,7 +5173,7 @@ WHERE
     FROM
       apflora.tpop
     WHERE
-      apflora.tpop.status NOT IN (101, 202, 211)
+      apflora.tpop.status NOT IN (101, 202)
       AND apflora.tpop.pop_id = apflora.pop.id
   );
 
@@ -5213,14 +5213,14 @@ FROM
     apflora.pop
     ON apflora.pop.ap_id = apflora.ap.id
 WHERE
-  apflora.pop.status  IN (101, 202, 211)
+  apflora.pop.status  IN (101, 202)
   AND apflora.pop.id IN (
     SELECT DISTINCT
       apflora.tpop.pop_id
     FROM
       apflora.tpop
     WHERE
-      apflora.tpop.status IN (100, 200, 210)
+      apflora.tpop.status IN (100, 200)
   );
 
 DROP VIEW IF EXISTS apflora.v_q_pop_statuserloschenmittpopansaatversuch CASCADE;
@@ -5236,7 +5236,7 @@ FROM
     apflora.pop
     ON apflora.pop.ap_id = apflora.ap.id
 WHERE
-  apflora.pop.status  IN (101, 202, 211)
+  apflora.pop.status  IN (101, 202)
   AND apflora.pop.id IN (
     SELECT DISTINCT
       apflora.tpop.pop_id
@@ -5259,7 +5259,7 @@ FROM
     apflora.pop
     ON apflora.pop.ap_id = apflora.ap.id
 WHERE
-  apflora.pop.status  IN (200, 201, 202, 210, 211)
+  apflora.pop.status  IN (200, 201, 202)
   AND apflora.pop.id IN (
     SELECT DISTINCT
       apflora.tpop.pop_id
@@ -5419,7 +5419,7 @@ SELECT
       apflora.pop
     WHERE
       apflora.pop.ap_id = apflora.ae_eigenschaften.id
-      AND apflora.pop.status IN (200, 210)
+      AND apflora.pop.status = 200
       AND apflora.pop.id IN (
         SELECT DISTINCT
           apflora.tpop.pop_id
@@ -5436,7 +5436,7 @@ SELECT
       apflora.pop
     WHERE
       apflora.pop.ap_id = apflora.ae_eigenschaften.id
-      AND apflora.pop.status IN (100, 200, 210)
+      AND apflora.pop.status IN (100, 200)
       AND apflora.pop.id IN (
         SELECT DISTINCT
           apflora.tpop.pop_id
@@ -5633,7 +5633,7 @@ FROM
     ON apflora.ap.id = apflora.pop.ap_id
   ON apflora.projekt.id = apflora.ap.proj_id
 WHERE
-  apflora.tpop.status IN (100, 200, 210, 300)
+  apflora.tpop.status IN (100, 200, 300)
   AND lasttpopber.entwicklung = 8
   AND apflora.tpop.id NOT IN (
     -- Ansiedlungen since apflora.tpopber.jahr
@@ -5679,7 +5679,7 @@ FROM
     ON apflora.ap.id = apflora.pop.ap_id
   ON apflora.projekt.id = apflora.ap.proj_id
 WHERE
-  apflora.pop.status  IN (100, 200, 210, 300)
+  apflora.pop.status  IN (100, 200, 300)
   AND lastpopber.entwicklung = 8
   AND apflora.pop.id NOT IN (
     -- Ansiedlungen since lastpopber.jahr
@@ -5731,7 +5731,7 @@ FROM
     ON apflora.ap.id = apflora.pop.ap_id
   ON apflora.projekt.id = apflora.ap.proj_id
 WHERE
-  apflora.tpop.status IN (101, 201, 202, 211, 300)
+  apflora.tpop.status IN (101, 201, 202, 300)
   AND lasttpopber.entwicklung = 3
   AND apflora.tpop.id NOT IN (
     -- Ansiedlungen since apflora.tpopber.jahr
@@ -5777,7 +5777,7 @@ FROM
     ON apflora.ap.id = apflora.pop.ap_id
   ON apflora.projekt.id = apflora.ap.proj_id
 WHERE
-  apflora.pop.status  IN (101, 201, 202, 211, 300)
+  apflora.pop.status  IN (101, 201, 202, 300)
   AND lastpopber.entwicklung = 3
   AND apflora.pop.id NOT IN (
     -- Ansiedlungen since lastpopber.jahr
@@ -5829,7 +5829,7 @@ FROM
     ON apflora.ap.id = apflora.pop.ap_id
   ON apflora.projekt.id = apflora.ap.proj_id
 WHERE
-  apflora.tpop.status IN (101, 201, 202, 211, 300)
+  apflora.tpop.status IN (101, 201, 202, 300)
   AND lasttpopber.entwicklung = 2
   AND apflora.tpop.id NOT IN (
     -- Ansiedlungen since apflora.tpopber.jahr
@@ -5875,7 +5875,7 @@ FROM
     ON apflora.ap.id = apflora.pop.ap_id
   ON apflora.projekt.id = apflora.ap.proj_id
 WHERE
-  apflora.pop.status  IN (101, 201, 202, 211, 300)
+  apflora.pop.status  IN (101, 201, 202, 300)
   AND lastpopber.entwicklung = 2
   AND apflora.pop.id NOT IN (
     -- Ansiedlungen since lastpopber.jahr
@@ -5927,7 +5927,7 @@ FROM
     ON apflora.ap.id = apflora.pop.ap_id
   ON apflora.projekt.id = apflora.ap.proj_id
 WHERE
-  apflora.tpop.status IN (101, 201, 202, 211, 300)
+  apflora.tpop.status IN (101, 201, 202, 300)
   AND lasttpopber.entwicklung = 1
   AND apflora.tpop.id NOT IN (
     -- Ansiedlungen since apflora.tpopber.jahr
@@ -5973,7 +5973,7 @@ FROM
     ON apflora.ap.id = apflora.pop.ap_id
   ON apflora.projekt.id = apflora.ap.proj_id
 WHERE
-  apflora.pop.status  IN (101, 201, 202, 211, 300)
+  apflora.pop.status  IN (101, 201, 202, 300)
   AND lastpopber.entwicklung = 1
   AND apflora.pop.id NOT IN (
     -- Ansiedlungen since lastpopber.jahr
@@ -6025,7 +6025,7 @@ FROM
     ON apflora.ap.id = apflora.pop.ap_id
   ON apflora.projekt.id = apflora.ap.proj_id
 WHERE
-  apflora.tpop.status IN (101, 202, 211, 300)
+  apflora.tpop.status IN (101, 202, 300)
   AND lasttpopber.entwicklung = 4
   AND apflora.tpop.id NOT IN (
     -- Ansiedlungen since jahr
@@ -6071,7 +6071,7 @@ FROM
     ON apflora.ap.id = apflora.pop.ap_id
   ON apflora.projekt.id = apflora.ap.proj_id
 WHERE
-  apflora.pop.status  IN (101, 202, 211, 300)
+  apflora.pop.status  IN (101, 202, 300)
   AND lastpopber.entwicklung = 4
   AND apflora.pop.id NOT IN (
     -- Ansiedlungen since lastpopber.jahr
@@ -6110,16 +6110,7 @@ WHERE
       apflora.tpop
     WHERE
       apflora.tpop.pop_id = apflora.pop.id
-      AND (
-          apflora.tpop.status = apflora.pop.status 
-          -- problem: the values for erloschen and aktuell can vary
-          -- depending on bekannt seit
-          -- even though they are same value in status field of form
-          OR (apflora.tpop.status = 200 AND apflora.pop.status  = 210)
-          OR (apflora.tpop.status = 210 AND apflora.pop.status  = 200)
-          OR (apflora.tpop.status = 202 AND apflora.pop.status  = 211)
-          OR (apflora.tpop.status = 211 AND apflora.pop.status  = 202)
-      )
+      AND apflora.tpop.status = apflora.pop.status
   );
 
 DROP VIEW IF EXISTS apflora.v_q_pop_status300tpopstatusanders CASCADE;
@@ -6173,7 +6164,7 @@ WHERE
       apflora.tpop
     WHERE
       apflora.tpop.pop_id = apflora.pop.id
-      AND apflora.tpop.status IN (100, 101, 200, 210)
+      AND apflora.tpop.status IN (100, 101, 200)
   );
 
 DROP VIEW IF EXISTS apflora.v_q_pop_status202tpopstatusanders CASCADE;
@@ -6204,31 +6195,6 @@ WHERE
   );
 
 DROP VIEW IF EXISTS apflora.v_q_pop_status211tpopstatusunzulaessig CASCADE;
-CREATE OR REPLACE VIEW apflora.v_q_pop_status211tpopstatusunzulaessig AS
-SELECT
-  apflora.projekt.id as proj_id,
-  apflora.ap.id as ap_id,
-  apflora.pop.id,
-  apflora.pop.nr
-FROM
-  apflora.projekt
-  INNER JOIN
-    apflora.ap
-    INNER JOIN
-      apflora.pop
-    ON apflora.ap.id = apflora.pop.ap_id
-  ON apflora.projekt.id = apflora.ap.proj_id
-WHERE
-  apflora.pop.status  = 211
-  AND apflora.pop.id IN (
-    SELECT DISTINCT
-      apflora.tpop.pop_id
-    FROM
-      apflora.tpop
-    WHERE
-      apflora.tpop.pop_id = apflora.pop.id
-      AND apflora.tpop.status IN (100, 101, 210, 200, 201, 300)
-  );
 
 DROP VIEW IF EXISTS apflora.v_q_pop_status200tpopstatusunzulaessig CASCADE;
 CREATE OR REPLACE VIEW apflora.v_q_pop_status200tpopstatusunzulaessig AS
@@ -6254,35 +6220,10 @@ WHERE
       apflora.tpop
     WHERE
       apflora.tpop.pop_id = apflora.pop.id
-      AND apflora.tpop.status IN (100, 101, 210)
+      AND apflora.tpop.status IN (100, 101)
   );
 
 DROP VIEW IF EXISTS apflora.v_q_pop_status210tpopstatusunzulaessig CASCADE;
-CREATE OR REPLACE VIEW apflora.v_q_pop_status210tpopstatusunzulaessig AS
-SELECT
-  apflora.projekt.id as proj_id,
-  apflora.ap.id as ap_id,
-  apflora.pop.id,
-  apflora.pop.nr
-FROM
-  apflora.projekt
-  INNER JOIN
-    apflora.ap
-    INNER JOIN
-      apflora.pop
-    ON apflora.ap.id = apflora.pop.ap_id
-  ON apflora.projekt.id = apflora.ap.proj_id
-WHERE
-  apflora.pop.status  = 210
-  AND apflora.pop.id IN (
-    SELECT DISTINCT
-      apflora.tpop.pop_id
-    FROM
-      apflora.tpop
-    WHERE
-      apflora.tpop.pop_id = apflora.pop.id
-      AND apflora.tpop.status IN (100, 101)
-  );
 
 DROP VIEW IF EXISTS apflora.v_q_pop_status101tpopstatusanders CASCADE;
 CREATE OR REPLACE VIEW apflora.v_q_pop_status101tpopstatusanders AS
@@ -6342,7 +6283,7 @@ FROM
     ON apflora.ap.id = apflora.pop.ap_id
   ON apflora.projekt.id = apflora.ap.proj_id
 WHERE
-  apflora.pop.status  IN (101, 202, 211)
+  apflora.pop.status  IN (101, 202)
   AND lastpopber.entwicklung = 8
   AND apflora.pop.id IN (
     -- Ansiedlungen since lastpopber.jahr
@@ -6394,7 +6335,7 @@ FROM
     ON apflora.ap.id = apflora.pop.ap_id
   ON apflora.projekt.id = apflora.ap.proj_id
 WHERE
-  apflora.tpop.status IN (101, 202, 211)
+  apflora.tpop.status IN (101, 202)
   AND lasttpopber.entwicklung = 8
   AND apflora.tpop.id IN (
     -- Ansiedlungen since apflora.tpopber.jahr

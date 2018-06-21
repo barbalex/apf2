@@ -103,8 +103,14 @@ const Status = ({
 }) => {
   const valueSelected =
     herkunftValue !== null && herkunftValue !== undefined ? herkunftValue : ''
-  const showNachBeginnAp =
-    !apJahr || !bekanntSeitStateValue || apJahr <= bekanntSeitStateValue
+  let angesiedeltLabel = 'angesiedelt:'
+  if (!!apJahr && !!bekanntSeitStateValue) {
+    if (apJahr <= bekanntSeitStateValue) {
+      angesiedeltLabel = 'angesiedelt (nach Beginn AP):'
+    } else {
+      angesiedeltLabel = 'angesiedelt (vor Beginn AP):'
+    }
+  }
   const disabled = !bekanntSeitStateValue && bekanntSeitStateValue !== 0
 
   return (
@@ -153,14 +159,14 @@ const Status = ({
             </RadioGroup>
           </HerkunftColumnContainer>
           <HerkunftColumnContainer>
-            <GroupLabelContainer>angesiedelt:</GroupLabelContainer>
+            <GroupLabelContainer>{angesiedeltLabel}</GroupLabelContainer>
             <RadioGroup
               aria-label="Status"
               value={valueSelected.toString()}
               onChange={onChangeStatus}
             >
               <FormControlLabel
-                value={showNachBeginnAp ? '200' : '210'}
+                value="200"
                 control={<StyledRadio color="primary" />}
                 label="aktuell"
                 disabled={disabled}
@@ -172,7 +178,7 @@ const Status = ({
                 disabled={disabled}
               />
               <FormControlLabel
-                value={showNachBeginnAp ? '202' : '211'}
+                value="202"
                 control={<StyledRadio color="primary" />}
                 label="erloschen / nicht etabliert"
                 disabled={disabled}

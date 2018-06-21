@@ -358,31 +358,9 @@ export default ({ data, berichtjahr }:{ data: Object, berichtjahr: Number }) => 
         }))
     },
     {
-      title: 'Population: Status ist "angesiedelt vor Beginn AP, erloschen/nicht etabliert". Es gibt Teil-Populationen mit nicht zulässigen Stati ("ursprünglich", "angesiedelt, aktuell", "Ansaatversuch", "potentieller Wuchsort"):',
-      messages: sortBy(
-          get(data, 'popStatus211TpopStatusUnzulaessig.nodes', []),
-          ['nr', 'id']
-        )
-        .map(n => ({
-          url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
-          text: `Population: ${n.nr || n.id}`,
-        }))
-    },
-    {
       title: 'Population: Status ist "angesiedelt nach Beginn AP, aktuell". Es gibt Teil-Populationen mit nicht zulässigen Stati ("ursprünglich", "angesiedelt vor Beginn AP, aktuell"):',
       messages: sortBy(
           get(data, 'popStatus200TpopStatusUnzulaessig.nodes', []),
-          ['nr', 'id']
-        )
-        .map(n => ({
-          url: ['Projekte', n.projId, 'Aktionspläne', n.apId, 'Populationen', n.id],
-          text: `Population: ${n.nr || n.id}`,
-        }))
-    },
-    {
-      title: 'Population: Status ist "angesiedelt vor Beginn AP, aktuell". Es gibt Teil-Populationen mit nicht zulässigen Stati ("ursprünglich"):',
-      messages: sortBy(
-          get(data, 'popStatus210TpopStatusUnzulaessig.nodes', []),
           ['nr', 'id']
         )
         .map(n => ({
