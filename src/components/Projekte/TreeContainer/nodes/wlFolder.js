@@ -15,7 +15,7 @@ export default ({
     id: wlIndex,
     urlLabel: 'Werte-Listen',
     label: `Werte-Listen`,
-    url: ['Benutzer'],
+    url: ['Werte-Listen'],
     sort: [wlIndex],
     hasChildren: true,
   })

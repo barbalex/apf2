@@ -6,6 +6,7 @@ import allParentNodesAreVisible from '../allParentNodesAreVisible'
 import buildProjektNodes from './projekt'
 import buildUserFolderNode from './userFolder'
 import buildWlFolderNode from './wlFolder'
+import buildAdresseFolderNode from './adresseFolder'
 import buildUserNodes from './user'
 import buildApFolderNodes from './apFolder'
 import buildApberuebersichtFolderNodes from './apberuebersichtFolder'
@@ -96,7 +97,10 @@ export default ({
 
   let nodes = [...projektNodes, userFolderNode]
   if (role === 'apflora_manager') {
-    nodes.push(buildWlFolderNode({ projektNodes }))
+    nodes = [
+      ...nodes,
+      buildWlFolderNode({ projektNodes }),
+    ]
   }
   let apNodes
   let popNodes
@@ -953,6 +957,22 @@ export default ({
           treeName,
           projektNodes
         }),
+      ]
+    }
+    console.log('buildNodes:',{role,nodeUrl})
+    if (
+      role === 'apflora_manager' &&
+      nodeUrl.length === 1 &&
+      nodeUrl[0] === 'Werte-Listen'
+    ) {
+      nodes = [
+        ...nodes,
+        buildAdresseFolderNode({
+          data,
+          treeName,
+          loading,
+          projektNodes,
+        })
       ]
     }
   })

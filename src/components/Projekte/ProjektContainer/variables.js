@@ -7,6 +7,8 @@ export default (data: Object, treeName: String): Object => {
   const openNodes = get(data, `${treeName}.openNodes`)
   const projekteTabs = get(data, 'urlQuery.projekteTabs', [])
   const mapIsActive = projekteTabs.includes('karte') || projekteTabs.includes('karte2')
+  const isAdresse = activeNodeArray[0] === 'Werte-Listen' && activeNodeArray[1] === 'Adressen'
+  const isWerteListen = activeNodeArray[0] === 'Werte-Listen'
   const projekt = uniq(
     openNodes
       .map(a => (
@@ -107,6 +109,8 @@ export default (data: Object, treeName: String): Object => {
     tpopkontr,
     isTpopkontr: tpopkontr.length > 0,
     apIsActiveInMap: mapIsActive && ap.length > 0,
+    isWerteListen,
+    isAdresse,
   }
 
   return variables
