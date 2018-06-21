@@ -10,7 +10,7 @@ export default (data: Object, treeName: String): Object => {
   const openNodes = get(data, `${treeName}.openNodes`)
   const projekteTabs = get(data, 'urlQuery.projekteTabs', [])
   const mapIsActive = projekteTabs.includes('karte') || projekteTabs.includes('karte2')
-  const isAdresse = activeNodeArray[0] === 'Werte-Listen' && activeNodeArray[1] === 'Adressen'
+  const isAdresse = openNodes.some(nodeArray => nodeArray[0] === 'Werte-Listen' && nodeArray[1] === 'Adressen')
   const isWerteListen = openNodes.some((nodeArray) => nodeArray[0] === 'Werte-Listen')
   const projekt = uniq(
     openNodes

@@ -2,7 +2,6 @@
 import get from 'lodash/get'
 
 import allParentNodesAreOpen from '../allParentNodesAreOpen'
-import allParentNodesAreVisible from '../allParentNodesAreVisible'
 import buildProjektNodes from './projekt'
 import buildUserFolderNode from './userFolder'
 import buildWlFolderNode from './wlFolder'
@@ -68,14 +67,6 @@ const compare = (a, b) => {
   // sort a before if its value is smaller
   return a - b
 }
-
-const allParentNodesAreOpenAndVisible = (
-    nodes: Array<Object>,
-    nodeUrl: Array<String>,
-    openNodes: Array<Array<String>>
-  ): boolean =>
-  allParentNodesAreVisible(nodes, nodeUrl) &&
-  allParentNodesAreOpen(openNodes, nodeUrl)
 
 export default ({
   data,
@@ -143,7 +134,7 @@ export default ({
       if (
         nodeUrl.length === 3 &&
         nodeUrl[2] === 'AP-Berichte' &&
-        allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
+        allParentNodesAreOpen(openNodes, nodeUrl)
       ) {
         nodes = [
           ...nodes,
@@ -159,7 +150,7 @@ export default ({
       if (
         nodeUrl.length === 3 &&
         nodeUrl[2] === 'Aktionspläne' &&
-        allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
+        allParentNodesAreOpen(openNodes, nodeUrl)
       ) {
         apNodes = buildApNodes({
           data,
@@ -173,7 +164,7 @@ export default ({
       if (
         nodeUrl.length === 4 &&
         nodeUrl[2] === 'Aktionspläne' &&
-        allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
+        allParentNodesAreOpen(openNodes, nodeUrl)
       ) {
         const apId = nodeUrl[3]
         nodes = [
@@ -282,7 +273,7 @@ export default ({
       if (
         nodeUrl.length === 5 &&
         nodeUrl[4] === 'AP-Ziele' &&
-        allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
+        allParentNodesAreOpen(openNodes, nodeUrl)
       ) {
         apzieljahrFolderNodes = buildApzieljahrFolderNodes({
           data,
@@ -301,7 +292,7 @@ export default ({
       if (
         nodeUrl.length === 6 &&
         nodeUrl[4] === 'AP-Ziele' &&
-        allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
+        allParentNodesAreOpen(openNodes, nodeUrl)
       ) {
         apzielNodes = buildApzielNodes({
           data,
@@ -322,7 +313,7 @@ export default ({
       if (
         nodeUrl.length === 7 &&
         nodeUrl[4] === 'AP-Ziele' &&
-        allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
+        allParentNodesAreOpen(openNodes, nodeUrl)
       ) {
         nodes = [
           ...nodes,
@@ -345,7 +336,7 @@ export default ({
         nodeUrl.length === 8 &&
         nodeUrl[4] === 'AP-Ziele' &&
         nodeUrl[7] === 'Berichte' &&
-        allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
+        allParentNodesAreOpen(openNodes, nodeUrl)
       ) {
         nodes = [
           ...nodes,
@@ -367,7 +358,7 @@ export default ({
       if (
         nodeUrl.length === 5 &&
         nodeUrl[4] === 'Populationen' &&
-        allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
+        allParentNodesAreOpen(openNodes, nodeUrl)
       ) {
         popNodes = buildPopNodes({
           data,
@@ -383,7 +374,7 @@ export default ({
       if (
         nodeUrl.length === 5 &&
         nodeUrl[4] === 'nicht-zuzuordnende-Beobachtungen' &&
-        allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
+        allParentNodesAreOpen(openNodes, nodeUrl)
       ) {
         nodes = [
           ...nodes,
@@ -401,7 +392,7 @@ export default ({
       if (
         nodeUrl.length === 5 &&
         nodeUrl[4] === 'nicht-beurteilte-Beobachtungen' &&
-        allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
+        allParentNodesAreOpen(openNodes, nodeUrl)
       ) {
         nodes = [
           ...nodes,
@@ -419,7 +410,7 @@ export default ({
       if (
         nodeUrl.length === 5 &&
         nodeUrl[4] === 'assoziierte-Arten' &&
-        allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
+        allParentNodesAreOpen(openNodes, nodeUrl)
       ) {
         nodes = [
           ...nodes,
@@ -437,7 +428,7 @@ export default ({
       if (
         nodeUrl.length === 5 &&
         nodeUrl[4] === 'AP-Arten' &&
-        allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
+        allParentNodesAreOpen(openNodes, nodeUrl)
       ) {
         nodes = [
           ...nodes,
@@ -455,7 +446,7 @@ export default ({
       if (
         nodeUrl.length === 5 &&
         nodeUrl[4] === 'Berichte' &&
-        allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
+        allParentNodesAreOpen(openNodes, nodeUrl)
       ) {
         nodes = [
           ...nodes,
@@ -473,7 +464,7 @@ export default ({
       if (
         nodeUrl.length === 5 &&
         nodeUrl[4] === 'AP-Berichte' &&
-        allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
+        allParentNodesAreOpen(openNodes, nodeUrl)
       ) {
         nodes = [
           ...nodes,
@@ -491,7 +482,7 @@ export default ({
       if (
         nodeUrl.length === 5 &&
         nodeUrl[4] === 'AP-Erfolgskriterien' &&
-        allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
+        allParentNodesAreOpen(openNodes, nodeUrl)
       ) {
         nodes = [
           ...nodes,
@@ -509,7 +500,7 @@ export default ({
       if (
         nodeUrl.length === 6 &&
         nodeUrl[4] === 'Populationen' &&
-        allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
+          allParentNodesAreOpen(openNodes, nodeUrl)
       ) {
         const apId = nodeUrl[3]
         const popId = nodeUrl[5]
@@ -554,7 +545,7 @@ export default ({
         nodeUrl.length === 7 &&
         nodeUrl[4] === 'Populationen' &&
         nodeUrl[6] === 'Massnahmen-Berichte' &&
-        allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
+          allParentNodesAreOpen(openNodes, nodeUrl)
       ) {
         nodes = [
           ...nodes,
@@ -575,7 +566,7 @@ export default ({
         nodeUrl.length === 7 &&
         nodeUrl[4] === 'Populationen' &&
         nodeUrl[6] === 'Kontroll-Berichte' &&
-        allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
+          allParentNodesAreOpen(openNodes, nodeUrl)
       ) {
         nodes = [
           ...nodes,
@@ -596,7 +587,7 @@ export default ({
         nodeUrl.length === 7 &&
         nodeUrl[4] === 'Populationen' &&
         nodeUrl[6] === 'Teil-Populationen' &&
-        allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
+          allParentNodesAreOpen(openNodes, nodeUrl)
       ) {
         tpopNodes = buildTpopNodes({
           data,
@@ -615,7 +606,7 @@ export default ({
         nodeUrl.length === 8 &&
         nodeUrl[4] === 'Populationen' &&
         nodeUrl[6] === 'Teil-Populationen' &&
-        allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
+          allParentNodesAreOpen(openNodes, nodeUrl)
       ) {
         const apId = nodeUrl[3]
         const popId = nodeUrl[5]
@@ -707,7 +698,7 @@ export default ({
         nodeUrl[4] === 'Populationen' &&
         nodeUrl[6] === 'Teil-Populationen' &&
         nodeUrl[8] === 'Beobachtungen' &&
-        allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
+          allParentNodesAreOpen(openNodes, nodeUrl)
       ) {
         nodes = [
           ...nodes,
@@ -731,7 +722,7 @@ export default ({
         nodeUrl[4] === 'Populationen' &&
         nodeUrl[6] === 'Teil-Populationen' &&
         nodeUrl[8] === 'Kontroll-Berichte' &&
-        allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
+          allParentNodesAreOpen(openNodes, nodeUrl)
       ) {
         nodes = [
           ...nodes,
@@ -755,7 +746,7 @@ export default ({
         nodeUrl[4] === 'Populationen' &&
         nodeUrl[6] === 'Teil-Populationen' &&
         nodeUrl[8] === 'Freiwilligen-Kontrollen' &&
-        allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
+          allParentNodesAreOpen(openNodes, nodeUrl)
       ) {
         tpopfreiwkontrNodes = buildTpopfreiwkontrNodes({
           data,
@@ -777,7 +768,7 @@ export default ({
         nodeUrl[4] === 'Populationen' &&
         nodeUrl[6] === 'Teil-Populationen' &&
         nodeUrl[8] === 'Feld-Kontrollen' &&
-        allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
+          allParentNodesAreOpen(openNodes, nodeUrl)
       ) {
         tpopfeldkontrNodes = buildTpopfeldkontrNodes({
           data,
@@ -799,7 +790,7 @@ export default ({
         nodeUrl[4] === 'Populationen' &&
         nodeUrl[6] === 'Teil-Populationen' &&
         nodeUrl[8] === 'Massnahmen-Berichte' &&
-        allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
+          allParentNodesAreOpen(openNodes, nodeUrl)
       ) {
         nodes = [
           ...nodes,
@@ -823,7 +814,7 @@ export default ({
         nodeUrl[4] === 'Populationen' &&
         nodeUrl[6] === 'Teil-Populationen' &&
         nodeUrl[8] === 'Massnahmen' &&
-        allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
+          allParentNodesAreOpen(openNodes, nodeUrl)
       ) {
         nodes = [
           ...nodes,
@@ -847,7 +838,7 @@ export default ({
         nodeUrl[4] === 'Populationen' &&
         nodeUrl[6] === 'Teil-Populationen' &&
         nodeUrl[8] === 'Freiwilligen-Kontrollen' &&
-        allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
+          allParentNodesAreOpen(openNodes, nodeUrl)
       ) {
         nodes = [
           ...nodes,
@@ -873,7 +864,7 @@ export default ({
         nodeUrl[4] === 'Populationen' &&
         nodeUrl[6] === 'Teil-Populationen' &&
         nodeUrl[8] === 'Feld-Kontrollen' &&
-        allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
+          allParentNodesAreOpen(openNodes, nodeUrl)
       ) {
         nodes = [
           ...nodes,
@@ -899,7 +890,7 @@ export default ({
         nodeUrl[4] === 'Populationen' &&
         nodeUrl[6] === 'Teil-Populationen' &&
         nodeUrl[8] === 'Feld-Kontrollen' &&
-        allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
+          allParentNodesAreOpen(openNodes, nodeUrl)
       ) {
         nodes = [
           ...nodes,
@@ -925,7 +916,7 @@ export default ({
         nodeUrl[4] === 'Populationen' &&
         nodeUrl[6] === 'Teil-Populationen' &&
         nodeUrl[8] === 'Freiwilligen-Kontrollen' &&
-        allParentNodesAreOpenAndVisible(nodes, nodeUrl, openNodes)
+          allParentNodesAreOpen(openNodes, nodeUrl)
       ) {
         nodes = [
           ...nodes,
@@ -981,11 +972,13 @@ export default ({
       nodeUrl[0] === 'Werte-Listen' &&
       nodeUrl[1] === 'Adressen' &&
       // make sure all paren node is open and visible
-      openNodes.some(n =>
+      /*openNodes.some(n =>
         n.length === 1 &&
         n[0] === 'Werte-Listen'
-      )
+      )*/
+      allParentNodesAreOpen(openNodes, nodeUrl)
     ) {
+      console.log('building adressen nodes')
       nodes = [
         ...nodes,
         ...buildAdresseNodes({

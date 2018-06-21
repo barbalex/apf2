@@ -7,7 +7,6 @@ export default (
 ): boolean => {
   if (!url) return false
   if (!openNodes) return false
-
-  const sameNodeInOpenNodes = openNodes.find(n => isEqual(n, url))
-  return !!sameNodeInOpenNodes
+  console.log('isNodeOpen:',{openNodes,url,isOpen:openNodes.some(n => isEqual(n, url))})
+  return openNodes.some(n => isEqual(n, url))
 }

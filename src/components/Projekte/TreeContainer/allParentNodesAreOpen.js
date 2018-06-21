@@ -2,13 +2,14 @@
 import isNodeOpen from './isNodeOpen'
 
 export default (
-  openNodes: Array<Array<string>>,
-  node: Array<string>
-): boolean => {
-  const parentNodesOpennessArray = []
-  const openNodesToUse = openNodes.filter((n) => n[0] === 'Projekte')
+  openNodes: Array<Array<String>>,
+  nodePassed: Array<String>
+): Boolean => {
+  const parentNodes = []
+  const node = [...nodePassed]
   for (let i = 1; i < node.length; i++) {
-    parentNodesOpennessArray.push(isNodeOpen(openNodesToUse, node.slice(0, i)))
+    parentNodes.push(node.slice(0, i))
   }
-  return !parentNodesOpennessArray.includes(false)
+  console.log('allParnetNodesAreOpen:',{parentNodes,nodePassed,openNodes})
+  return parentNodes.every(n => isNodeOpen(openNodes, n))
 }

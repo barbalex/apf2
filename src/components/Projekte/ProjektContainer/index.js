@@ -141,7 +141,7 @@ const ProjekteContainer = ({
           const tokenDecoded = token ? jwtDecode(token) : null
           const role = tokenDecoded ? tokenDecoded.role : null
           const projekteTabs = [...get(data1, 'urlQuery.projekteTabs', [])]
-
+          console.log('ProjektContainer:', {data1,variables:variables(data1, treeName)})
           /**
            * get data based on openNodes, not activeNodes
            * reason: multiple open nodes should recieve own data
