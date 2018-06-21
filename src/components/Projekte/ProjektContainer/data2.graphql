@@ -629,10 +629,6 @@ query TreeDataQuery(
     nodes @include(if: $isAdresse) {
       id
       name
-      adresse
-      telefon
-      email
-      freiwErfko
     }
   }
 }
