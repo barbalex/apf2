@@ -24,6 +24,8 @@ export default (data: Object, treeName: String): Object => {
       ))
       .filter(v => v !== null)
   )
+  const projId = activeNodes.projekt || '99999999-9999-9999-9999-999999999999'
+  const isProjekt = projekt.length > 0
   const ap = uniq(
     openNodes
       .map(a => (
@@ -37,6 +39,7 @@ export default (data: Object, treeName: String): Object => {
       ))
       .filter(v => v !== null)
   )
+  const apId = activeNodes.ap || '99999999-9999-9999-9999-999999999999'
   const ziel = uniq(
     openNodes
       .map(a => (
@@ -98,10 +101,10 @@ export default (data: Object, treeName: String): Object => {
   )
   const variables = {
     projekt,
-    projId: activeNodeArray[1] || '99999999-9999-9999-9999-999999999999',
-    isProjekt: projekt.length > 0,
+    projId,
+    isProjekt,
     ap,
-    apId: activeNodeArray[3],
+    apId,
     isAp: ap.length > 0,
     ziel,
     isZiel: ziel.length > 0,
