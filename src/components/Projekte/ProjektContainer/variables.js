@@ -2,8 +2,11 @@
 import uniq from 'lodash/uniq'
 import get from 'lodash/get'
 
+import getActiveNodes from '../../../modules/getActiveNodes'
+
 export default (data: Object, treeName: String): Object => {
   const activeNodeArray = get(data, `${treeName}.activeNodeArray`)
+  const activeNodes = getActiveNodes(activeNodeArray)
   const openNodes = get(data, `${treeName}.openNodes`)
   const projekteTabs = get(data, 'urlQuery.projekteTabs', [])
   const mapIsActive = projekteTabs.includes('karte') || projekteTabs.includes('karte2')
