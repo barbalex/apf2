@@ -20,6 +20,8 @@ import CmApFolder from './contextmenu/ApFolder'
 import CmAp from './contextmenu/Ap'
 import CmUserFolder from './contextmenu/UserFolder'
 import CmUser from './contextmenu/User'
+import CmAdresseFolder from './contextmenu/AdresseFolder'
+import CmAdresse from './contextmenu/Adresse'
 import CmApberuebersichtFolder from './contextmenu/ApberuebersichtFolder'
 import CmApberuebersicht from './contextmenu/Apberuebersicht'
 import CmAssozartFolder from './contextmenu/AssozartFolder'
@@ -780,6 +782,16 @@ class TreeContainer extends Component<Props> {
                       token={token}
                     />
                     <CmUser
+                      onClick={(e, data, element)=>handleClick({data,element,nodes,deleteState,errorState,client})}
+                      tree={tree}
+                      token={token}
+                    />
+                    <CmAdresseFolder
+                      onClick={(e, data, element)=>handleClick({data,element,nodes,deleteState,errorState,client})}
+                      tree={tree}
+                      token={token}
+                    />
+                    <CmAdresse
                       onClick={(e, data, element)=>handleClick({data,element,nodes,deleteState,errorState,client})}
                       tree={tree}
                       token={token}

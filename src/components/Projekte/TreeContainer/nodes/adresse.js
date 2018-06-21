@@ -21,7 +21,7 @@ export default ({
     // filter by nodeLabelFilter
     .filter(el => {
       if (nodeLabelFilterString) {
-        return get(el, 'name', '')
+        return get(el, 'name', '(kein Name)')
           .toLowerCase()
           .includes(nodeLabelFilterString.toLowerCase())
       }
@@ -33,7 +33,7 @@ export default ({
       id: el.id,
       parentId: 'adresseFolder',
       urlLabel: el.id,
-      label: get(el, 'name', '(kein Name)'),
+      label: el.name || '(kein Name)',
       url: ['Werte-Listen', 'Adressen', el.id],
       hasChildren: false,
     }))

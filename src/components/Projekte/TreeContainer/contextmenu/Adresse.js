@@ -4,24 +4,16 @@ import { ContextMenu, MenuItem } from 'react-contextmenu'
 
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 
-const Apfolder = ({
+const Adresse = ({
   onClick,
   tree,
 }: {
   onClick: () => void,
   tree: Object,
-}) => (
+}) => 
   <ErrorBoundary>
-    <ContextMenu id={`${tree.name}adresseFolder`}>
-      <div className="react-contextmenu-title">Adressen</div>
-      <MenuItem
-        onClick={onClick}
-        data={{
-          action: 'closeLowerNodes',
-        }}
-      >
-        alle schliessen
-      </MenuItem>
+    <ContextMenu id={`${tree.name}adresse`}>
+      <div className="react-contextmenu-title">Adresse</div>
       <MenuItem
         onClick={onClick}
         data={{
@@ -31,8 +23,16 @@ const Apfolder = ({
       >
         erstelle neue
       </MenuItem>
+      <MenuItem
+        onClick={onClick}
+        data={{
+          action: 'delete',
+          table: 'adresse',
+        }}
+      >
+        lösche
+      </MenuItem>
     </ContextMenu>
   </ErrorBoundary>
-)
 
-export default Apfolder
+export default Adresse

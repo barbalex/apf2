@@ -20,7 +20,7 @@ export default ({
     // filter by nodeLabelFilter
     .filter(el => {
       if (nodeLabelFilterString) {
-        return get(el, 'aeEigenschaftenByArtId.artname', '(keine Art gewählt)')
+        return get(el, 'name', '(kein Name)')
           .toLowerCase()
           .includes(nodeLabelFilterString.toLowerCase())
       }

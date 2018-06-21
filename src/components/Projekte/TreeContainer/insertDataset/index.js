@@ -138,10 +138,34 @@ export default async ({
     delete variables.parentId
     variables.role = 'apflora_reader' 
   }
+  if (['adresseFolder', 'adresse'].includes(menuType)) {
+    mutation = gql`
+      mutation createAdresse {
+        createAdresse (
+          input: {
+            adresse: {}
+          }
+        ) {
+        adresse {
+          id
+          name
+          adresse
+          telefon
+          email
+          freiwErfko
+        }
+      }
+    }`
+    delete variables.parentId
+  }
 
   let result
   try {
-    result = await client.mutate({ mutation, variables })
+    if (Object.keys(variables).length) {
+      result = await client.mutate({ mutation, variables })
+    } else {
+      result = await client.mutate({ mutation })
+    }
   } catch (error) {
     return errorState.add(error)
   }

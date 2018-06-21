@@ -112,7 +112,7 @@ const Adresse = ({
             return (
               <ErrorBoundary>
                 <Container>
-                  <FormTitle apId={id} title="Benutzer" />
+                  <FormTitle apId={id} title="Adresse" />
                   <Mutation mutation={updateAdresseByIdGql}>
                     {(updateAdresse, { data }) => (
                       <FieldsContainer>

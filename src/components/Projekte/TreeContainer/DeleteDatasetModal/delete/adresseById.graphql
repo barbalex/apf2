@@ -1,0 +1,10 @@
+query adresseById($id: UUID!) {
+  adresseById(id: $id) {
+    id
+    name
+    adresse
+    telefon
+    email
+    freiwErfko
+  }
+}

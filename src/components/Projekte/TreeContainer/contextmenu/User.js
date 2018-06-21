@@ -5,7 +5,7 @@ import { ContextMenu, MenuItem } from 'react-contextmenu'
 import ErrorBoundary from '../../../shared/ErrorBoundary'
 import userIsReadOnly from '../../../../modules/userIsReadOnly'
 
-const Ap = ({
+const User = ({
   onClick,
   tree,
   token,
@@ -48,4 +48,4 @@ const Ap = ({
   )
 }
 
-export default Ap
+export default User
