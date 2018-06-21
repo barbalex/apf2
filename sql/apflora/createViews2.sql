@@ -1743,6 +1743,7 @@ SELECT
   apflora.v_tpop.gemeinde,
   apflora.v_tpop.flurname,
   apflora.v_tpop.status,
+  apflora.v_tpop.status_decodiert,
   apflora.v_tpop.bekannt_seit,
   apflora.v_tpop.status_unklar,
   apflora.v_tpop.status_unklar_grund,

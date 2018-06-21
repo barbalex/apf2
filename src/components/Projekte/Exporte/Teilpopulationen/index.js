@@ -124,8 +124,26 @@ const Teilpopulationen = ({
                         const { data } = await client.query({
                           query: await import('./allVTpops.graphql')
                         })
+                        const enrichedData = get(data, 'allVTpops.nodes', [])
+                          .map(oWithout => {
+                            let o = {...oWithout}
+                            let nachBeginnAp = null
+                            if (
+                              o.ap_start_jahr &&
+                              o.bekannt_seit &&
+                              [200, 201, 202].includes(o.status)
+                            ) {
+                              if (o.ap_start_jahr <= o.bekannt_seit) {
+                                nachBeginnAp = true
+                              } else {
+                                nachBeginnAp = false
+                              }
+                            }
+                            o.angesiedelt_nach_beginn_ap = nachBeginnAp
+                            return o
+                          })
                         exportModule({
-                          data: get(data, 'allVTpops.nodes', []),
+                          data: enrichedData,
                           fileName: 'Teilpopulationen',
                           fileType,
                           mapFilter,
