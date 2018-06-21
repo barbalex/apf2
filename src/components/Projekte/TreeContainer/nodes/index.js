@@ -152,14 +152,16 @@ export default ({
         nodeUrl[2] === 'Aktionspläne' &&
         allParentNodesAreOpen(openNodes, nodeUrl)
       ) {
-        apNodes = buildApNodes({
-          data,
-          treeName,
-          loading,
-          projektNodes,
-          projId
-        })
-        nodes = [...nodes, ...apNodes]
+        nodes = [
+          ...nodes,
+          buildApNodes({
+            data,
+            treeName,
+            loading,
+            projektNodes,
+            projId
+          }),
+        ]
       }
       if (
         nodeUrl.length === 4 &&

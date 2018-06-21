@@ -48,7 +48,6 @@ export default (data: Object, treeName: String): Object => {
       .filter(v => v !== null)
   )
   const apId = activeNodes.ap || '99999999-9999-9999-9999-999999999999'
-  //const isAp = ap.length > 0
   const isAp = isProjekt &&
     openNodes.some(nArray => nArray[2] === 'Aktionspläne' && nArray[3])
   const ziel = uniq(
