@@ -5,6 +5,9 @@ mutation createUser(
   $telefon: String
   $email: String
   $freiwErfko: Boolean
+  $evabVorname: String
+  $evabNachname: String
+  $evabOrt: String
 ) {
   createUser(
     input: {
@@ -15,6 +18,9 @@ mutation createUser(
         telefon: $telefon
         email: $email
         freiwErfko: $freiwErfko
+        evabVorname: $evabVorname
+        evabNachname: $evabNachname
+        evabOrt: $evabOrt
       }
     }
   ) {
@@ -25,6 +31,9 @@ mutation createUser(
       telefon
       email
       freiwErfko
+      evabVorname
+      evabNachname
+      evabOrt
     }
   }
 }

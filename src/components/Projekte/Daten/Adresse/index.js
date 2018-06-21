@@ -60,6 +60,9 @@ const enhance = compose(
                 adresse: field === 'adresse' ? value: row.adresse,
                 telefon: field === 'telefon' ? value: row.telefon,
                 freiwErfko: field === 'freiwErfko' ? value: row.freiwErfko,
+                evabVorname: field === 'evabVorname' ? value: row.evabVorname,
+                evabNachname: field === 'evabNachname' ? value: row.evabNachname,
+                evabOrt: field === 'evabOrt' ? value: row.evabOrt,
                 __typename: 'Adresse',
               },
               __typename: 'Adresse',
@@ -160,6 +163,36 @@ const Adresse = ({
                             saveToDb({ row, field: 'freiwErfko', value, updateAdresse })
                           }
                           error={errors.freiwErfko}
+                        />
+                        <TextField
+                          key={`${row.id}evabVorname`}
+                          label="EvAB Vorname"
+                          value={row.evabVorname}
+                          saveToDb={value =>
+                            saveToDb({ row, field: 'evabVorname', value, updateAdresse })
+                          }
+                          error={errors.evabVorname}
+                          helperText="Wird für den Export in EvAB benötigt"
+                        />
+                        <TextField
+                          key={`${row.id}evabNachname`}
+                          label="EvAB Nachname"
+                          value={row.evabNachname}
+                          saveToDb={value =>
+                            saveToDb({ row, field: 'evabNachname', value, updateAdresse })
+                          }
+                          error={errors.evabNachname}
+                          helperText="Wird für den Export in EvAB benötigt"
+                        />
+                        <TextField
+                          key={`${row.id}evabOrt`}
+                          label="EvAB Ort"
+                          value={row.evabOrt}
+                          saveToDb={value =>
+                            saveToDb({ row, field: 'evabOrt', value, updateAdresse })
+                          }
+                          error={errors.evabOrt}
+                          helperText="Wird für den Export in EvAB benötigt. Muss immer einen Wert enthalten. Ist keine Ort bekannt, bitte - eintragen"
                         />
                       </FieldsContainer>
                     )}

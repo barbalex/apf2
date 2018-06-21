@@ -6,5 +6,8 @@ query adresseById($id: UUID!) {
     telefon
     email
     freiwErfko
+    evabVorname
+    evabNachname
+    evabOrt
   }
 }

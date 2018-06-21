@@ -153,6 +153,9 @@ export default async ({
           telefon
           email
           freiwErfko
+          evabVorname
+          evabNachname
+          evabOrt
         }
       }
     }`
