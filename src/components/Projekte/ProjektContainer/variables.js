@@ -40,6 +40,7 @@ export default (data: Object, treeName: String): Object => {
       .filter(v => v !== null)
   )
   const apId = activeNodes.ap || '99999999-9999-9999-9999-999999999999'
+  const isAp = ap.length > 0
   const ziel = uniq(
     openNodes
       .map(a => (
@@ -105,7 +106,7 @@ export default (data: Object, treeName: String): Object => {
     isProjekt,
     ap,
     apId,
-    isAp: ap.length > 0,
+    isAp,
     ziel,
     isZiel: ziel.length > 0,
     pop,
@@ -118,6 +119,6 @@ export default (data: Object, treeName: String): Object => {
     isWerteListen,
     isAdresse,
   }
-
+  //console.log('variables:', variables)
   return variables
 }

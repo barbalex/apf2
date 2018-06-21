@@ -971,14 +971,8 @@ export default ({
       nodeUrl.length === 2 &&
       nodeUrl[0] === 'Werte-Listen' &&
       nodeUrl[1] === 'Adressen' &&
-      // make sure all paren node is open and visible
-      /*openNodes.some(n =>
-        n.length === 1 &&
-        n[0] === 'Werte-Listen'
-      )*/
       allParentNodesAreOpen(openNodes, nodeUrl)
     ) {
-      console.log('building adressen nodes')
       nodes = [
         ...nodes,
         ...buildAdresseNodes({

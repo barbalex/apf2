@@ -7,6 +7,6 @@ export default (
 ): boolean => {
   if (!url) return false
   if (!openNodes) return false
-  console.log('isNodeOpen:',{openNodes,url,isOpen:openNodes.some(n => isEqual(n, url))})
+  //console.log('isNodeOpen:',{openNodes,url,isOpen:openNodes.some(n => isEqual(n, url))})
   return openNodes.some(n => isEqual(n, url))
 }
