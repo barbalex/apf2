@@ -7,6 +7,7 @@ import buildProjektNodes from './projekt'
 import buildUserFolderNode from './userFolder'
 import buildWlFolderNode from './wlFolder'
 import buildAdresseFolderNode from './adresseFolder'
+import buildAdresseNodes from './adresse'
 import buildUserNodes from './user'
 import buildApFolderNodes from './apFolder'
 import buildApberuebersichtFolderNodes from './apberuebersichtFolder'
@@ -959,7 +960,6 @@ export default ({
         }),
       ]
     }
-    console.log('buildNodes:',{role,nodeUrl})
     if (
       role === 'apflora_manager' &&
       nodeUrl.length === 1 &&
@@ -968,6 +968,22 @@ export default ({
       nodes = [
         ...nodes,
         buildAdresseFolderNode({
+          data,
+          treeName,
+          loading,
+          projektNodes,
+        })
+      ]
+    }
+    if (
+      role === 'apflora_manager' &&
+      nodeUrl.length === 2 &&
+      nodeUrl[0] === 'Werte-Listen' &&
+      nodeUrl[1] === 'Adressen'
+    ) {
+      nodes = [
+        ...nodes,
+        ...buildAdresseNodes({
           data,
           treeName,
           loading,
