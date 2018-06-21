@@ -142,8 +142,8 @@ const ProjekteContainer = ({
           const role = tokenDecoded ? tokenDecoded.role : null
           const projekteTabs = [...get(data1, 'urlQuery.projekteTabs', [])]
           const variables = buildVariables(data1, treeName)
-          const {projekt,isProjekt,projId,isAp} = variables
-          console.log('ProjektContainer:', {data1,projekt,isProjekt,projId,isAp})
+          //const {projekt,isProjekt,projId,isAp} = variables
+          //console.log('ProjektContainer:', {data1,projekt,isProjekt,projId,isAp})
           /**
            * get data based on openNodes, not activeNodes
            * reason: multiple open nodes should recieve own data
