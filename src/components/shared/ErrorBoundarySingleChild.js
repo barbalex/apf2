@@ -35,7 +35,7 @@ class ErrorBoundary extends Component {
           <ErrorTitle>
             Oh je, es ist ein Fehler aufgetreten! Bericht:
           </ErrorTitle>
-          {errorInfo.componentStack}
+          <div>{errorInfo.componentStack}</div>
           <ReloadButton
             variant="outlined"
             onClick={() => {
