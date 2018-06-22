@@ -10,9 +10,9 @@
   "license": "MIT",
   "private": true,
   "devDependencies": {
-    "flow-bin": "0.74.0",
+    "flow-bin": "0.75.0",
     "postgraphile": "4.0.0-rc.1",
-    "postgraphile-plugin-connection-filter": "1.0.0-beta.11",
+    "postgraphile-plugin-connection-filter": "1.0.0-beta.12",
     "react-scripts": "2.0.0-next.3e165448",
     "serve": "9.1.0",
     "source-map-explorer": "1.5.0"
