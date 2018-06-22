@@ -26,15 +26,15 @@ export default ({
         </IconStyle>
       </Style>
       ${data.map(
-        ({ Art, Label, Inhalte, Breitengrad, Laengengrad, url }) => `
+        ({ art, label, inhalte, breitengrad, laengengrad, url }) => `
         <Folder>
-          <name>${clean(Art)}</name>
+          <name>${clean(art)}</name>
           <Placemark>
-            <name>${clean(Label)}</name>
+            <name>${clean(label)}</name>
             <description>
               <![CDATA[
-                ${Art}<br><br>
-                ${clean(Inhalte)}<br><br>
+                ${art}<br><br>
+                ${clean(inhalte)}<br><br>
                 <a href='${url}'>Formular öffnen</a>
               ]]>
             </description>
@@ -43,7 +43,7 @@ export default ({
             </styleUrl>
             <Point>
               <coordinates>
-                ${Laengengrad},${Breitengrad},0
+                ${laengengrad},${breitengrad},0
               </coordinates>
             </Point>
           </Placemark>
@@ -53,5 +53,5 @@ export default ({
     </Document>
     </kml>
   `
-  fileDownload(kml, `${file}.kml`)
+  fileDownload(kml, `${file}.kml`, 'application/vnd.google-earth.kmz')
 }

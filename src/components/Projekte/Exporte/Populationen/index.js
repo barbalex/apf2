@@ -18,6 +18,7 @@ import { Subscribe } from 'unstated'
 import exportModule from '../../../../modules/export'
 import Message from '../Message'
 import ErrorState from '../../../../state/Error'
+import epsg2056to4326 from '../../../../modules/epsg2056to4326'
 
 const StyledCard = styled(Card)`
   margin: 10px 0;
@@ -137,8 +138,16 @@ const Populationen = ({
                         query: await import('./allVPopKmls.graphql')
                       })
                       // TODO: add wgs84 fields
+                      const enrichedData = get(data, 'allVPopKmls.nodes', [])
+                        .map(oWithout => {
+                          let o = {...oWithout}
+                          const [bg, lg] = epsg2056to4326(o.x, o.y)
+                          o.laengengrad = lg
+                          o.breitengrad = bg
+                          return o
+                        })
                       exportModule({
-                        data: get(data, 'allVPopKmls.nodes', []),
+                        data: enrichedData,
                         fileName: 'Populationen',
                         fileType,
                         mapFilter,
@@ -147,6 +156,7 @@ const Populationen = ({
                         xKey: 'x',
                         yKey: 'y',
                         errorState,
+                        kml: true,
                       })
                     } catch(error) {
                       errorState.add(error)

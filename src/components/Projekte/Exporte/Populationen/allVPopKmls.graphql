@@ -7,8 +7,6 @@ query view {
       id
       x
       y
-      laengengrad
-      breitengrad
       url
     }
   }
