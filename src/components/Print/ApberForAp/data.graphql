@@ -41,5 +41,22 @@ query apById(
         }
       }
     }
+    popsByApId {
+      nodes {
+        id
+        tpopsByPopId(condition: {apberRelevant: 1}) {
+          nodes {
+            id
+            apberRelevant
+          }
+        }
+      }
+    }
+  }
+  allVApberErstemassnjahrs(condition: {id: $apId}) {
+    nodes {
+      id
+      jahr
+    }
   }
 }

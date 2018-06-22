@@ -2,12 +2,17 @@
 import React, { Component, createRef } from 'react'
 import styled from 'styled-components'
 import { Query } from 'react-apollo'
-//import get from 'lodash/get'
+import get from 'lodash/get'
+import format from 'date-fns/format'
 
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import getActiveNodes from '../../../modules/getActiveNodes'
 import dataGql from './data.graphql'
 
+const LoadingContainer = styled.div`
+  padding: 15px;
+  height: 100%;
+`
 const Container = styled.div`
   /* this part is for when page preview is shown */
   /* Divide single pages with some space and center all pages horizontally */
@@ -38,9 +43,16 @@ const Container = styled.div`
     page-break-after: avoid !important;
   }
 `
-const LoadingContainer = styled.div`
-  padding: 15px;
-  height: 100%;
+const ContentContainer = styled.div`
+  padding: 1.5cm;
+  font-size: 14px;
+`
+const Header = styled.p`
+  font-size: 12px;
+`
+const Title1 = styled.h2`
+  font-size: 14px;
+  font-weight: 800;
 `
 
 type Props = {
@@ -73,12 +85,19 @@ class ApberPrint extends Component<Props> {
             )
           if (error) return `Fehler: ${error.message}`
 
-          console.log('ApberForAp:', {data})
+          console.log('ApberForAp, data:', data)
 
           return (
             <ErrorBoundary>
               <Container innerRef={this.container}>
-                <div>AP-Bericht pro AP Druckversion</div>
+                <ContentContainer>
+                  <Header>
+                    {
+                    `Jahresbericht ${get(data, 'apById.apbersByApId.nodes[0].jahr', '(kein Jahr)')}, ${get(data, 'apById.aeEigenschaftenByArtId.artname')}, ${format(new Date(), 'DD.MM.YYYY')}`
+                    }
+                  </Header>
+                  <Title1>{get(data, 'apById.aeEigenschaftenByArtId.artname')}</Title1>
+                </ContentContainer>
               </Container>
             </ErrorBoundary>
           )
