@@ -18,9 +18,7 @@ query apById(
         beurteilung
         apErfkritWerteByBeurteilung {
           id
-          code
           text
-          sort
         }
         veraenderungZumVorjahr
         apberAnalyse
@@ -49,6 +47,17 @@ query apById(
             id
             apberRelevant
           }
+        }
+      }
+    }
+    erfkritsByApId {
+      nodes {
+        id
+        kriterien
+        apErfkritWerteByErfolg {
+          id
+          text
+          sort
         }
       }
     }

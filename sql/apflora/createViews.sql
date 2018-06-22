@@ -156,6 +156,8 @@ from
       on apflora.tpop.id = apflora.tpopmassn.tpop_id
     on apflora.pop.id = apflora.tpop.pop_id
   on apflora.ap.id = apflora.pop.ap_id
+where
+  apflora.tpop.apber_relevant = 1
 group by
   apflora.ap.id;
 
