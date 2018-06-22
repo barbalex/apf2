@@ -36,6 +36,7 @@ import initiateDataFromUrl from './modules/initiateDataFromUrl'
 import registerServiceWorker from './registerServiceWorker'
 
 import AppContainer from './components/AppContainer'
+import Print from './components/Print'
 import historyListen from './modules/historyListen'
 import getActiveNodeArrayFromPathname from './modules/getActiveNodeArrayFromPathname'
 
@@ -77,6 +78,10 @@ import './index.css'
       })
     )
 
+    /**
+     * want to insert print components as high up as possible
+     * to reduce css conflicts
+     */
     const activeNodeArray = getActiveNodeArrayFromPathname(
       window.location.pathname.replace('/', '')
     )
@@ -88,7 +93,7 @@ import './index.css'
           <Fragment>
             {
               showPrint &&
-              <div>print</div>
+              <Print activeNodeArray={activeNodeArray} />
             }
             {
               !showPrint &&
