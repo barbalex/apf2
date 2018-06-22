@@ -172,9 +172,16 @@ const Populationen = ({
                       const { data } = await client.query({
                         query: await import('./allVPopKmlnamen.graphql')
                       })
-                      // TODO: add wgs84 fields
+                      const enrichedData = get(data, 'allVPopKmlnamen.nodes', [])
+                        .map(oWithout => {
+                          let o = {...oWithout}
+                          const [bg, lg] = epsg2056to4326(o.x, o.y)
+                          o.laengengrad = lg
+                          o.breitengrad = bg
+                          return o
+                        })
                       exportModule({
-                        data: get(data, 'allVPopKmlnamen.nodes', []),
+                        data: enrichedData,
                         fileName: 'PopulationenNachNamen',
                         fileType,
                         mapFilter,
@@ -183,6 +190,7 @@ const Populationen = ({
                         xKey: 'x',
                         yKey: 'y',
                         errorState,
+                        kml: true,
                       })
                     } catch(error) {
                       errorState.add(error)

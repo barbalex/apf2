@@ -4377,16 +4377,15 @@ ORDER BY
   apflora.tpop.nr,
   apflora.tpopmassnber.jahr;
 
--- ::numeric is needed or else all koordinates are same value!!!
 DROP VIEW IF EXISTS apflora.v_tpop_kml CASCADE;
 CREATE OR REPLACE VIEW apflora.v_tpop_kml AS
 SELECT
-  apflora.ae_eigenschaften.artname AS "Art",
+  apflora.ae_eigenschaften.artname AS "art",
   concat(
     apflora.pop.nr,
     '/',
     apflora.tpop.nr
-  ) AS "Label",
+  ) AS "label",
   substring(
     concat(
       'Population: ',
@@ -4401,32 +4400,11 @@ SELECT
       apflora.tpop.flurname
     )
     from 1 for 225
-  ) AS "Inhalte",
-  round(
-    (
-      (
-        2.6779094
-        + (4.728982 * ((apflora.tpop.x - 600000)::numeric / 1000000))
-        + (0.791484 * ((apflora.tpop.x - 600000)::numeric / 1000000) * ((apflora.tpop.y - 200000)::numeric / 1000000))
-        + (0.1306 * ((apflora.tpop.x - 600000)::numeric / 1000000) * ((apflora.tpop.y - 200000)::numeric / 1000000) * ((apflora.tpop.y - 200000)::numeric / 1000000))
-        - (0.0436 * ((apflora.tpop.x - 600000)::numeric / 1000000) * ((apflora.tpop.x - 600000)::numeric / 1000000) * ((apflora.tpop.x - 600000)::numeric / 1000000))
-      ) * 100 / 36
-    )::numeric, 10
-  ) AS "Laengengrad",
-  round(
-    (
-      (
-        16.9023892
-        + (3.238272 * ((apflora.tpop.y - 200000)::numeric / 1000000))
-        - (0.270978 * ((apflora.tpop.x - 600000)::numeric / 1000000) * ((apflora.tpop.x - 600000)::numeric / 1000000))
-        - (0.002528 * ((apflora.tpop.y - 200000)::numeric / 1000000) * ((apflora.tpop.y - 200000)::numeric / 1000000))
-        - (0.0447 * ((apflora.tpop.x - 600000)::numeric / 1000000) * ((apflora.tpop.x - 600000)::numeric / 1000000) * ((apflora.tpop.y - 200000)::numeric / 1000000))
-        - (0.014 * ((apflora.tpop.y - 200000)::numeric / 1000000) * ((apflora.tpop.y - 200000)::numeric / 1000000) * ((apflora.tpop.y - 200000)::numeric / 1000000))
-      ) * 100 / 36
-    )::numeric, 10
-  ) AS "Breitengrad",
+  ) AS "inhalte",
   concat(
-    'http://www.apflora.ch/Projekte/4635372c-431c-11e8-bb30-e77f6cdd35a6/Aktionspläne/',
+    'https://www.apflora.ch/Projekte/',
+    apflora.ap.proj_id,
+    '/Aktionspläne/',
     apflora.ap.id,
     '/Populationen/',
     apflora.pop.id,
@@ -4448,7 +4426,7 @@ FROM
       ON apflora.pop.id = apflora.tpop.pop_id)
     ON apflora.ap.id = apflora.pop.ap_id
 WHERE
-  apflora.tpop.y is not null
+  apflora.tpop.x is not null
   AND apflora.tpop.y is not null
 ORDER BY
   apflora.ae_eigenschaften.artname,
@@ -4458,18 +4436,17 @@ ORDER BY
   apflora.tpop.gemeinde,
   apflora.tpop.flurname;
 
--- ::numeric is needed or else all koordinates are same value!!!
 DROP VIEW IF EXISTS apflora.v_tpop_kmlnamen CASCADE;
 CREATE OR REPLACE VIEW apflora.v_tpop_kmlnamen AS
 SELECT
-  apflora.ae_eigenschaften.artname AS "Art",
+  apflora.ae_eigenschaften.artname AS "art",
   concat(
     apflora.ae_eigenschaften.artname,
     ' ',
     apflora.pop.nr,
     '/',
     apflora.tpop.nr
-  ) AS "Label",
+  ) AS "label",
   substring(
     concat(
       'Population: ',
@@ -4483,32 +4460,11 @@ SELECT
       ' ',
       apflora.tpop.flurname)
     from 1 for 225
-  ) AS "Inhalte",
-  round(
-    (
-      (
-        2.6779094
-        + (4.728982 * ((apflora.tpop.x - 600000)::numeric / 1000000))
-        + (0.791484 * ((apflora.tpop.x - 600000)::numeric / 1000000) * ((apflora.tpop.y - 200000)::numeric / 1000000))
-        + (0.1306 * ((apflora.tpop.x - 600000)::numeric / 1000000) * ((apflora.tpop.y - 200000)::numeric / 1000000) * ((apflora.tpop.y - 200000)::numeric / 1000000))
-        - (0.0436 * ((apflora.tpop.x - 600000)::numeric / 1000000) * ((apflora.tpop.x - 600000)::numeric / 1000000) * ((apflora.tpop.x - 600000)::numeric / 1000000))
-       ) * 100 / 36
-    )::numeric, 10
-  ) AS "Laengengrad",
-  round(
-    (
-      (
-        16.9023892
-        + (3.238272 * ((apflora.tpop.y - 200000)::numeric / 1000000))
-        - (0.270978 * ((apflora.tpop.x - 600000)::numeric / 1000000) * ((apflora.tpop.x - 600000)::numeric / 1000000))
-        - (0.002528 * ((apflora.tpop.y - 200000)::numeric / 1000000) * ((apflora.tpop.y - 200000)::numeric / 1000000))
-        - (0.0447 * ((apflora.tpop.x - 600000)::numeric / 1000000) * ((apflora.tpop.x - 600000)::numeric / 1000000) * ((apflora.tpop.y - 200000)::numeric / 1000000))
-        - (0.014 * ((apflora.tpop.y - 200000)::numeric / 1000000) * ((apflora.tpop.y - 200000)::numeric / 1000000) * ((apflora.tpop.y - 200000)::numeric / 1000000))
-       ) * 100 / 36
-    )::numeric, 10
-  ) AS "Breitengrad",
+  ) AS "inhalte",
   concat(
-    'http://www.apflora.ch/Projekte/4635372c-431c-11e8-bb30-e77f6cdd35a6/Aktionspläne/',
+    'https://www.apflora.ch/Projekte/',
+    apflora.ap.proj_id,
+    '/Aktionspläne/',
     apflora.ap.id,
     '/Populationen/',
     apflora.pop.id,
@@ -4530,7 +4486,7 @@ FROM
       ON apflora.pop.id = apflora.tpop.pop_id)
     ON apflora.ap.id = apflora.pop.ap_id
 WHERE
-  apflora.tpop.y is not null
+  apflora.tpop.x is not null
   AND apflora.tpop.y is not null
 ORDER BY
   apflora.ae_eigenschaften.artname,
@@ -4574,45 +4530,23 @@ ORDER BY
   apflora.pop.nr,
   apflora.pop.name;
 
--- -- ::numeric is needed or else all koordinates are same value!!!
 DROP VIEW IF EXISTS apflora.v_pop_kmlnamen CASCADE;
 CREATE OR REPLACE VIEW apflora.v_pop_kmlnamen AS
 SELECT
-  apflora.ae_eigenschaften.artname AS "Art",
+  apflora.ae_eigenschaften.artname AS "art",
   concat(
     apflora.ae_eigenschaften.artname,
     ' ',
     apflora.pop.nr
-  ) AS "Label",
+  ) AS "label",
   substring(
     concat('Population: ', apflora.pop.nr, ' ', apflora.pop.name)
     from 1 for 225
-  ) AS "Inhalte",
-  round(
-    (
-      (
-        2.6779094
-        + (4.728982 * ((apflora.pop.x - 600000)::numeric / 1000000))
-        + (0.791484 * ((apflora.pop.x - 600000)::numeric / 1000000) * ((apflora.pop.y - 200000)::numeric / 1000000))
-        + (0.1306 * ((apflora.pop.x - 600000)::numeric / 1000000) * ((apflora.pop.y - 200000)::numeric / 1000000) * ((apflora.pop.y - 200000)::numeric / 1000000))
-        - (0.0436 * ((apflora.pop.x - 600000)::numeric / 1000000) * ((apflora.pop.x - 600000)::numeric / 1000000) * ((apflora.pop.x - 600000)::numeric / 1000000))
-      ) * 100 / 36
-    )::numeric, 10
-  ) AS "Laengengrad",
-  round(
-    (
-      (
-        16.9023892
-        + (3.238272 * ((apflora.pop.y - 200000)::numeric / 1000000))
-        - (0.270978 * ((apflora.pop.x - 600000)::numeric / 1000000) * ((apflora.pop.x - 600000)::numeric / 1000000))
-        - (0.002528 * ((apflora.pop.y - 200000)::numeric / 1000000) * ((apflora.pop.y - 200000)::numeric / 1000000))
-        - (0.0447 * ((apflora.pop.x - 600000)::numeric / 1000000) * ((apflora.pop.x - 600000)::numeric / 1000000) * ((apflora.pop.y - 200000)::numeric / 1000000))
-        - (0.014 * ((apflora.pop.y - 200000)::numeric / 1000000) * ((apflora.pop.y - 200000)::numeric / 1000000) * ((apflora.pop.y - 200000)::numeric / 1000000))
-      ) * 100 / 36
-    )::numeric, 10
-  ) AS "Breitengrad",
+  ) AS "inhalte",
   concat(
-    'http://www.apflora.ch/Projekte/4635372c-431c-11e8-bb30-e77f6cdd35a6/Aktionspläne/',
+    'https://www.apflora.ch/Projekte/',
+    apflora.ap.proj_id,
+    '/Aktionspläne/',
     apflora.ap.id,
     '/Populationen/',
     apflora.pop.id
@@ -4629,7 +4563,7 @@ FROM
       ON apflora.ap.id = apflora.pop.ap_id)
     ON apflora.ae_eigenschaften.id = apflora.ap.art_id
 WHERE
-  apflora.pop.y is not null
+  apflora.pop.x is not null
   AND apflora.pop.y is not null
 ORDER BY
   apflora.ae_eigenschaften.artname,

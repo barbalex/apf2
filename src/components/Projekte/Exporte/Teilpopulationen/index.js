@@ -20,6 +20,7 @@ import exportModule from '../../../../modules/export'
 import Message from '../Message'
 import dataGql from './data.graphql'
 import ErrorState from '../../../../state/Error'
+import epsg2056to4326 from '../../../../modules/epsg2056to4326'
 
 const StyledCard = styled(Card)`
   margin: 10px 0;
@@ -194,9 +195,16 @@ const Teilpopulationen = ({
                         const { data } = await client.query({
                           query: await import('./allVTpopKmls.graphql')
                         })
-                        // TODO: add wgs84 fields
+                        const enrichedData = get(data, 'allVTpopKmls.nodes', [])
+                          .map(oWithout => {
+                            let o = {...oWithout}
+                            const [bg, lg] = epsg2056to4326(o.x, o.y)
+                            o.laengengrad = lg
+                            o.breitengrad = bg
+                            return o
+                          })
                         exportModule({
-                          data: get(data, 'allVTpopKmls.nodes', []),
+                          data: enrichedData,
                           fileName: 'Teilpopulationen',
                           fileType,
                           applyMapFilterToExport,
@@ -205,6 +213,7 @@ const Teilpopulationen = ({
                           xKey: 'x',
                           yKey: 'y',
                           errorState,
+                          kml: true,
                         })
                       } catch(error) {
                         errorState.add(error)
@@ -222,9 +231,16 @@ const Teilpopulationen = ({
                         const { data } = await client.query({
                           query: await import('./allVTpopKmlnamen.graphql')
                         })
-                        // TODO: add wgs84 fields
+                        const enrichedData = get(data, 'allVTpopKmlnamen.nodes', [])
+                          .map(oWithout => {
+                            let o = {...oWithout}
+                            const [bg, lg] = epsg2056to4326(o.x, o.y)
+                            o.laengengrad = lg
+                            o.breitengrad = bg
+                            return o
+                          })
                         exportModule({
-                          data: get(data, 'allVTpopKmlnamen.nodes', []),
+                          data: enrichedData,
                           fileName: 'TeilpopulationenNachNamen',
                           fileType,
                           applyMapFilterToExport,
@@ -233,6 +249,7 @@ const Teilpopulationen = ({
                           xKey: 'x',
                           yKey: 'y',
                           errorState,
+                          kml: true,
                         })
                       } catch(error) {
                         errorState.add(error)
