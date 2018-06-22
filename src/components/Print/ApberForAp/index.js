@@ -9,6 +9,7 @@ import format from 'date-fns/format'
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import getActiveNodes from '../../../modules/getActiveNodes'
 import dataGql from './data.graphql'
+import Ziele from './Ziele'
 
 const LoadingContainer = styled.div`
   padding: 15px;
@@ -123,8 +124,16 @@ class ApberPrint extends Component<Props> {
           //const ap = get(data, 'apById')
           const apber = get(data, 'apById.apbersByApId.nodes[0]')
           const apberDatum = get(apber, 'datum')
-          const erfkrit = sortBy(get(data, 'apById.erfkritsByApId.nodes'), e => get(e, 'apErfkritWerteByErfolg.sort'))
-          
+          const erfkrit = sortBy(
+            get(data, 'apById.erfkritsByApId.nodes'),
+            e => get(e, 'apErfkritWerteByErfolg.sort')
+          )
+          const ziele = sortBy(
+            get(data, 'apById.zielsByApId.nodes'),
+            e => get(e, 'zielTypWerteByTyp.sort')
+          ).filter(
+            e => e.jahr === apber.jahr
+          )
 
           return (
             <ErrorBoundary>
@@ -146,12 +155,13 @@ class ApberPrint extends Component<Props> {
                   <Title1>B. Bestandesentwicklung</Title1>
                   <Title1>C. Zwischenbilanz zur Wirkung von Massnahmen</Title1>
                   <Title1>D. Einschätzung der Wirkung des AP insgesamt auf die Art</Title1>
+                  <Ziele ziele={ziele} />
                   <FieldRow>
                     <FieldLabel>Beurteilungsskala</FieldLabel>
                     <Field>
                       {
                         erfkrit.map(e =>
-                          <ErfkritRow>
+                          <ErfkritRow key={e.id}>
                             <ErfkritErfolg>{`${get(e, 'apErfkritWerteByErfolg.text', '(fehlt)')}:`}</ErfkritErfolg>
                             <ErfkritKriterium>{e.kriterien || '(fehlt)'}</ErfkritKriterium>
                           </ErfkritRow>

@@ -61,6 +61,18 @@ query apById(
         }
       }
     }
+    zielsByApId {
+      nodes {
+        id
+        jahr
+        bezeichnung
+        zielTypWerteByTyp {
+          id
+          text
+          sort
+        }
+      }
+    }
   }
   allVApberErstemassnjahrs(condition: {id: $apId}) {
     nodes {
