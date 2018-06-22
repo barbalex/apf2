@@ -93,7 +93,9 @@ import './index.css'
           <Fragment>
             {
               showPrint &&
-              <Print activeNodeArray={activeNodeArray} />
+              <Print
+                activeNodeArray={activeNodeArray}
+              />
             }
             {
               !showPrint &&

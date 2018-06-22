@@ -1,46 +1,45 @@
-query apberByIdQuery($id: UUID!) {
-  apberById(id: $id) {
+query apById(
+    $apId: UUID!
+    $apberId: UUID!
+  ) {
+  apById(id: $apId) {
     id
-    jahr
-    situation
-    vergleichVorjahrGesamtziel
-    beurteilung
-    veraenderungZumVorjahr
-    apberAnalyse
-    konsequenzenUmsetzung
-    konsequenzenErfolgskontrolle
-    biotopeNeue
-    biotopeOptimieren
-    massnahmenOptimieren
-    wirkungAufArt
-    datum
-    massnahmenApBearb
-    massnahmenPlanungVsAusfuehrung
-    apId
-    bearbeiter
-    apErfkritWerteByBeurteilung {
+    startJahr
+    aeEigenschaftenByArtId {
       id
-      code
-      text
-      sort
+      artname
     }
-    adresseByBearbeiter {
-      id
-      name
-    }
-  }
-  allApErfkritWertes {
-    nodes {
-      id
-      code
-      text
-      sort
-    }
-  }
-  allAdresses {
-    nodes {
-      id
-      name
+    apbersByApId(condition: {id: $apberId}) {
+      nodes {
+        id
+        jahr
+        situation
+        vergleichVorjahrGesamtziel
+        beurteilung
+        apErfkritWerteByBeurteilung {
+          id
+          code
+          text
+          sort
+        }
+        veraenderungZumVorjahr
+        apberAnalyse
+        konsequenzenUmsetzung
+        konsequenzenErfolgskontrolle
+        biotopeNeue
+        biotopeOptimieren
+        massnahmenOptimieren
+        wirkungAufArt
+        datum
+        massnahmenApBearb
+        massnahmenPlanungVsAusfuehrung
+        apId
+        bearbeiter
+        adresseByBearbeiter {
+          id
+          name
+        }
+      }
     }
   }
 }

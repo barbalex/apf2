@@ -2,37 +2,50 @@
 import React, { Component, createRef } from 'react'
 import styled from 'styled-components'
 import { Query } from 'react-apollo'
-import get from 'lodash/get'
-import sortBy from 'lodash/sortBy'
+//import get from 'lodash/get'
 
-import RadioButtonGroup from '../../../shared/RadioButtonGroup'
-import TextField from '../../../shared/TextField'
-import AutoComplete from '../../../shared/Autocomplete'
-import DateFieldWithPicker from '../../../shared/DateFieldWithPicker'
-import FormTitle from '../../../shared/FormTitle'
-import constants from '../../../../modules/constants'
-import ErrorBoundary from '../../../shared/ErrorBoundary'
+import ErrorBoundary from '../../shared/ErrorBoundary'
+import getActiveNodes from '../../../modules/getActiveNodes'
 import dataGql from './data.graphql'
 
 const Container = styled.div`
-  height: 100%;
-  display: flex;
-  flex-direction: column;
+  /* this part is for when page preview is shown */
+  /* Divide single pages with some space and center all pages horizontally */
+  /* will be removed in @media print */
+  margin: 1cm auto;
+  /* Define a white paper background that sticks out from the darker overall background */
+  background: #fff;
+  /* Show a drop shadow beneath each page */
+  box-shadow: 0 4px 5px rgba(75, 75, 75, 0.2);
+
+  /* set dimensions */
+  height: 29.7cm;
+  width: 21cm;
+
+  overflow-y: visible;
+
+  @media print {
+    /* this is when it is actually printed */
+    height: inherit;
+    width: inherit;
+
+    margin: 0 !important;
+    padding: 0.5cm !important;
+    overflow-y: hidden !important;
+    /* try this */
+    page-break-inside: avoid !important;
+    page-break-before: avoid !important;
+    page-break-after: avoid !important;
+  }
 `
-const FieldsContainer = styled.div`
-  overflow: auto !important;
-  padding: 10px;
+const LoadingContainer = styled.div`
+  padding: 15px;
   height: 100%;
-  column-width: ${props =>
-    props.width > 2 * constants.columnWidth
-      ? `${constants.columnWidth}px`
-      : 'auto'};
 `
 
 type Props = {
-  id: String,
+  activeNodeArray: Array<String>,
   dimensions: Object,
-  saveToDb: () => void,
   errors: Object,
 }
 
@@ -43,147 +56,29 @@ class ApberPrint extends Component<Props> {
   }
 
   render() {
-    const {
-      id,
-      dimensions = { width: 380 },
-    } = this.props
+    const { activeNodeArray } = this.props
+    const { /*projekt: projId, */ap: apId, apber: apberId } = getActiveNodes(activeNodeArray)
 
     return (
-      <Query query={dataGql} variables={{ id }}>
+      <Query
+        query={dataGql}
+        variables={{ apId, apberId }}
+      >
         {({ loading, error, data }) => {
           if (loading)
             return (
               <Container>
-                <FieldsContainer>Lade...</FieldsContainer>
+                <LoadingContainer>Lade...</LoadingContainer>
               </Container>
             )
           if (error) return `Fehler: ${error.message}`
 
-          const veraenGegenVorjahrWerte = [
-            { value: '+', label: '+' },
-            { value: '-', label: '-' },
-          ]
-          const width = isNaN(dimensions.width) ? 380 : dimensions.width
-          const row = get(data, 'apberById')
-          let beurteilungWerte = get(data, 'allApErfkritWertes.nodes', [])
-          beurteilungWerte = sortBy(beurteilungWerte, 'sort')
-          beurteilungWerte = beurteilungWerte.map(el => ({
-            value: el.code,
-            label: el.text,
-          }))
-          let adressenWerte = get(data, 'allAdresses.nodes', [])
-          adressenWerte = sortBy(adressenWerte, 'name')
-          adressenWerte = adressenWerte.map(el => ({
-            id: el.id,
-            value: el.name,
-          }))
+          console.log('ApberForAp:', {data})
 
           return (
             <ErrorBoundary>
               <Container innerRef={this.container}>
-                <FormTitle apId={row.apId} title="AP-Bericht Druckversion" />
-                <FieldsContainer width={width}>
-                  <TextField
-                    key={`${row.id}jahr`}
-                    label="Jahr"
-                    value={row.jahr}
-                    type="number"
-                  />
-                  <TextField
-                    key={`${row.id}vergleichVorjahrGesamtziel`}
-                    label="Vergleich Vorjahr - Gesamtziel"
-                    value={row.vergleichVorjahrGesamtziel}
-                    type="text"
-                    multiLine
-                  />
-                  <RadioButtonGroup
-                    key={`${row.id}beurteilung`}
-                    value={row.beurteilung}
-                    label="Beurteilung"
-                    dataSource={beurteilungWerte}
-                  />
-                  <RadioButtonGroup
-                    key={`${row.id}veraenderungZumVorjahr`}
-                    value={row.veraenderungZumVorjahr}
-                    label="Veränderung zum Vorjahr"
-                    dataSource={veraenGegenVorjahrWerte}
-                  />
-                  <TextField
-                    key={`${row.id}apberAnalyse`}
-                    label="Analyse"
-                    value={row.apberAnalyse}
-                    type="text"
-                    multiLine
-                  />
-                  <TextField
-                    key={`${row.id}konsequenzenUmsetzung`}
-                    label="Konsequenzen für die Umsetzung"
-                    value={row.konsequenzenUmsetzung}
-                    type="text"
-                    multiLine
-                  />
-                  <TextField
-                    key={`${row.id}konsequenzenErfolgskontrolle`}
-                    label="Konsequenzen für die Erfolgskontrolle"
-                    value={row.konsequenzenErfolgskontrolle}
-                    type="text"
-                    multiLine
-                  />
-                  <TextField
-                    key={`${row.id}biotopeNeue`}
-                    label="A. Grundmengen: Bemerkungen/Folgerungen für nächstes Jahr: neue Biotope"
-                    value={row.biotopeNeue}
-                    type="text"
-                    multiLine
-                  />
-                  <TextField
-                    key={`${row.id}biotopeOptimieren`}
-                    label="B. Bestandesentwicklung: Bemerkungen/Folgerungen für nächstes Jahr: Optimierung Biotope"
-                    value={row.biotopeOptimieren}
-                    type="text"
-                    multiLine
-                  />
-                  <TextField
-                    key={`${row.id}massnahmenApBearb`}
-                    label="C. Zwischenbilanz zur Wirkung von Massnahmen: Weitere Aktivitäten der Aktionsplan-Verantwortlichen"
-                    value={row.massnahmenApBearb}
-                    type="text"
-                    multiLine
-                  />
-                  <TextField
-                    key={`${row.id}massnahmenPlanungVsAusfuehrung`}
-                    label="C. Zwischenbilanz zur Wirkung von Massnahmen: Vergleich Ausführung/Planung"
-                    value={row.massnahmenPlanungVsAusfuehrung}
-                    type="text"
-                    multiLine
-                  />
-                  <TextField
-                    key={`${row.id}massnahmenOptimieren`}
-                    label="C. Zwischenbilanz zur Wirkung von Massnahmen: Bemerkungen/Folgerungen für nächstes Jahr: Optimierung Massnahmen"
-                    value={row.massnahmenOptimieren}
-                    type="text"
-                    multiLine
-                  />
-                  <TextField
-                    key={`${row.id}wirkungAufArt`}
-                    label="D. Einschätzung der Wirkung des AP insgesamt auf die Art: Bemerkungen"
-                    value={row.wirkungAufArt}
-                    type="text"
-                    multiLine
-                  />
-                  <DateFieldWithPicker
-                    key={`${row.id}datum`}
-                    label="Datum"
-                    value={row.datum}
-                  />
-                  <AutoComplete
-                    key={`${row.id}bearbeiter`}
-                    label="BearbeiterIn"
-                    value={get(row, 'adresseByBearbeiter.name', '')}
-                    objects={adressenWerte}
-                    openabove
-                  />
-                </FieldsContainer>
+                <div>AP-Bericht pro AP Druckversion</div>
               </Container>
             </ErrorBoundary>
           )
