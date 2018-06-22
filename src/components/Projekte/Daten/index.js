@@ -40,6 +40,10 @@ const Apber = Loadable({
   loader: () => import('./Apber'),
   loading: Loading,
 })
+const ApberPrint = Loadable({
+  loader: () => import('./ApberPrint'),
+  loading: Loading,
+})
 const Pop = Loadable({
   loader: () => import('./Pop'),
   loading: Loading,

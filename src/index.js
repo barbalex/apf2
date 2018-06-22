@@ -9,7 +9,7 @@
 
 import 'babel-polyfill'
 
-import React from 'react'
+import React, { Fragment } from 'react'
 import ReactDOM from 'react-dom'
 
 import { MuiThemeProvider } from '@material-ui/core/styles'
@@ -37,6 +37,7 @@ import registerServiceWorker from './registerServiceWorker'
 
 import AppContainer from './components/AppContainer'
 import historyListen from './modules/historyListen'
+import getActiveNodeArrayFromPathname from './modules/getActiveNodeArrayFromPathname'
 
 import './index.css'
 
@@ -76,18 +77,32 @@ import './index.css'
       })
     )
 
+    const activeNodeArray = getActiveNodeArrayFromPathname(
+      window.location.pathname.replace('/', '')
+    )
+    const showPrint = activeNodeArray.includes('print')
+
     ReactDOM.render(
       <StateProvider>
         <ApolloProvider client={myClient}>
-          <MuiThemeProvider theme={theme}>
-            <MuiPickersUtilsProvider
-              utils={MomentUtils}
-              moment={moment}
-              locale="de-ch"
-            >
-              <AppContainer />
-            </MuiPickersUtilsProvider>
-          </MuiThemeProvider>
+          <Fragment>
+            {
+              showPrint &&
+              <div>print</div>
+            }
+            {
+              !showPrint &&
+              <MuiThemeProvider theme={theme}>
+                <MuiPickersUtilsProvider
+                  utils={MomentUtils}
+                  moment={moment}
+                  locale="de-ch"
+                >
+                  <AppContainer />
+                </MuiPickersUtilsProvider>
+              </MuiThemeProvider>
+            }
+          </Fragment>
         </ApolloProvider>
       </StateProvider>,
       document.getElementById('root')

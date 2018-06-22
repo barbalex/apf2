@@ -81,6 +81,7 @@ export default (activeNodeArray: Array<mixed>): Object => {
     false
   const apber =
     apberFolder && activeNodeArray.length > 5 ? activeNodeArray[5] : null
+  const apberPrint = !!apber && activeNodeArray[6] === 'print'
   const erfkritFolder =
     (ap &&
       activeNodeArray.length > 4 &&
@@ -224,6 +225,7 @@ export default (activeNodeArray: Array<mixed>): Object => {
     ber,
     apberFolder,
     apber,
+    apberPrint,
     erfkritFolder,
     erfkrit,
     zielFolder,
