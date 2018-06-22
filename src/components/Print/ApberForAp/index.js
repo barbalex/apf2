@@ -56,6 +56,9 @@ const Title1 = styled.h3`
   font-size: 14px;
   font-weight: 800;
 `
+const TitledLabel = styled.label`
+  text-decoration: underline;
+`
 const Row = styled.div`
   display: flex;
   justify-content: space-between;
@@ -71,8 +74,8 @@ const FieldRow = styled.div`
 const FieldRowBold = styled(FieldRow)`
   font-weight: 800;
 `
-const FieldLabel = styled.div`
-  width: 5cm;
+const FieldLabel = styled.label`
+  width: 5.5cm;
   padding-right: 0.5cm;
 `
 const Field = styled.div`
@@ -146,15 +149,30 @@ class ApberPrint extends Component<Props> {
                       ${format(new Date(), 'DD.MM.YYYY')}`
                     }
                   </Header>
+
                   <Title1>{artname}</Title1>
+
                   <Row>
                     <p>{`Start Programm: ${get(data, 'apById.startJahr', '(Start-Jahr fehlt)')}`}</p>
                     <p>{`Erste Massnahme im Jahr: ${get(data, 'allVApberErstemassnjahrs.nodes[0].jahr', '(Jahr fehlt)')}`}</p>
                   </Row>
+
                   <Title1>A. Grundmengen</Title1>
+
                   <Title1>B. Bestandesentwicklung</Title1>
+
                   <Title1>C. Zwischenbilanz zur Wirkung von Massnahmen</Title1>
+                  <TitledLabel></TitledLabel>
+
                   <Title1>D. Einschätzung der Wirkung des AP insgesamt auf die Art</Title1>
+                  <FieldRow>
+                    <FieldLabel>Einschätzung der Wirkung des AP insgesamt auf die Art</FieldLabel>
+                    <Field>{get(apber, 'wirkungAufArt', '')}</Field>
+                  </FieldRow>
+                  <FieldRow>
+                    <FieldLabel>Vergleich zu Vorjahr - Ausblick auf Gesamtziel</FieldLabel>
+                    <Field>{get(apber, 'vergleichVorjahrGesamtziel', '')}</Field>
+                  </FieldRow>
                   <Ziele ziele={ziele} />
                   <FieldRow>
                     <FieldLabel>Beurteilungsskala</FieldLabel>

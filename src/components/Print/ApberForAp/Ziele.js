@@ -1,18 +1,24 @@
 // @flow
-import React, { Fragment } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 
-
+const Container = styled.div`
+  padding: 0.2cm 0;
+`
+const Title = styled.div`
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
+`
 const Row = styled.div`
   display: flex;
-  padding: 0.1cm 0;
+  padding: 0.05cm 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
 `
 const Year = styled.div`
-  width: 1.5cm;
+  width: 1.7cm;
 `
 const Typ = styled.div`
-  width: 3.5cm;
+  width: 3.8cm;
   padding-right: 0.5cm;
 `
 const Goal = styled.div`
@@ -20,9 +26,10 @@ const Goal = styled.div`
 `
 
 const Ziele = ({ ziele }:{ziele: Array<Object>}) =>
-  <Fragment>
+  <Container>
+    <Title>Ziele:</Title>
     <Row key="head">
-      <Year>Ziel</Year><Typ>Zieltyp</Typ><Goal>Ziel</Goal>
+      <Year>Jahr</Year><Typ>Typ</Typ><Goal>Ziel</Goal>
     </Row>
     {
       ziele.map(z =>
@@ -33,7 +40,7 @@ const Ziele = ({ ziele }:{ziele: Array<Object>}) =>
         </Row>
       )
     }
-  </Fragment>
+  </Container>
   
 
 export default Ziele
