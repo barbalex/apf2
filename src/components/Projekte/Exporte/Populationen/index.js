@@ -137,7 +137,6 @@ const Populationen = ({
                       const { data } = await client.query({
                         query: await import('./allVPopKmls.graphql')
                       })
-                      // TODO: add wgs84 fields
                       const enrichedData = get(data, 'allVPopKmls.nodes', [])
                         .map(oWithout => {
                           let o = {...oWithout}
