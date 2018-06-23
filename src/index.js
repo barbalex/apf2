@@ -86,6 +86,7 @@ import './index.css'
       window.location.pathname.replace('/', '')
     )
     const showPrint = activeNodeArray.includes('print')
+    console.log('index: showPrint:', showPrint)
 
     ReactDOM.render(
       <StateProvider>

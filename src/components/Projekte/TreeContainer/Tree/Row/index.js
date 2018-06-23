@@ -9,12 +9,15 @@ import LocalFloristIcon from '@material-ui/icons/LocalFlorist'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import ChevronRightIcon from '@material-ui/icons/ChevronRight'
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
+//import PrintIcon from '@material-ui/icons/LibraryBooks'
+import PrintIcon from '@material-ui/icons/PictureAsPdf'
 import get from 'lodash/get'
 
-import isNodeInActiveNodePath from '../isNodeInActiveNodePath'
-import isNodeOpen from '../isNodeOpen'
-import toggleNode from '../toggleNode'
-import toggleNodeSymbol from '../toggleNodeSymbol'
+import isNodeInActiveNodePath from '../../isNodeInActiveNodePath'
+import isNodeOpen from '../../isNodeOpen'
+import toggleNode from '../../toggleNode'
+import toggleNodeSymbol from '../../toggleNodeSymbol'
+import setTreeKey from './setTreeKey.graphql'
 
 const singleRowHeight = 23
 const StyledNode = styled.div`
@@ -159,6 +162,13 @@ const BiotopCopyingIcon = styled(PhotoLibraryIcon)`
   height: 20px !important;
   color: rgb(255, 90, 0) !important;
 `
+const PrintIconContainer = styled.div`
+  cursor: pointer;
+  padding-left: 8px;
+  svg {
+    font-size: 19px !important;
+  }
+`
 
 const Row = ({
   index,
@@ -202,6 +212,7 @@ const Row = ({
   let useSymbolIcon = true
   let useSymbolSpan = false
   let symbolIcon
+  let showPrintIcon = false
   if (node.hasChildren && nodeIsOpen) {
     symbolIcon = 'expandMore'
   } else if (node.hasChildren) {
@@ -211,6 +222,9 @@ const Row = ({
   } else {
     useSymbolSpan = true
     useSymbolIcon = false
+  }
+  if (node.menuType === 'apber') {
+    showPrintIcon = true
   }
   const dataUrl = JSON.stringify(node.url)
   const level = node.url[0] === 'Projekte' ? node.url.length - 1 : node.url.length
@@ -412,6 +426,26 @@ const Row = ({
             <div title="Biotop kopiert, bereit zum Einfügen">
               <BiotopCopyingIcon />
             </div>
+          )}
+          {showPrintIcon && (
+            <PrintIconContainer
+              title="Druckversion"
+              onClick={() => {
+                console.log('TODO: print')
+                const newActiveNodeArray = [...node.url, 'print']
+                console.log('newActiveNodeArray:', newActiveNodeArray)
+                client.mutate({
+                  mutation: setTreeKey,
+                  variables: {
+                    value: newActiveNodeArray,
+                    tree: tree.name,
+                    key: 'activeNodeArray'
+                  }
+                })
+              }}
+            >
+              <PrintIcon />
+            </PrintIconContainer>
           )}
         </StyledNode>
       </ContextMenuTrigger>
