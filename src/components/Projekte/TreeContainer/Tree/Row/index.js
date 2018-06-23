@@ -430,19 +430,16 @@ const Row = ({
           {showPrintIcon && (
             <PrintIconContainer
               title="Druckversion"
-              onClick={() => {
-                console.log('TODO: print')
-                const newActiveNodeArray = [...node.url, 'print']
-                console.log('newActiveNodeArray:', newActiveNodeArray)
+              onClick={() =>
                 client.mutate({
                   mutation: setTreeKey,
                   variables: {
-                    value: newActiveNodeArray,
+                    value: [...node.url, 'print'],
                     tree: tree.name,
                     key: 'activeNodeArray'
                   }
                 })
-              }}
+              }
             >
               <PrintIcon />
             </PrintIconContainer>

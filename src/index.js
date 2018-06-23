@@ -78,38 +78,20 @@ import './index.css'
       })
     )
 
-    /**
-     * want to insert print components as high up as possible
-     * to reduce css conflicts
-     */
-    const activeNodeArray = getActiveNodeArrayFromPathname(
-      window.location.pathname.replace('/', '')
-    )
-    const showPrint = activeNodeArray.includes('print')
-    console.log('index: showPrint:', showPrint)
-
     ReactDOM.render(
       <StateProvider>
         <ApolloProvider client={myClient}>
           <Fragment>
-            {
-              showPrint &&
-              <Print
-                activeNodeArray={activeNodeArray}
-              />
-            }
-            {
-              !showPrint &&
-              <MuiThemeProvider theme={theme}>
-                <MuiPickersUtilsProvider
-                  utils={MomentUtils}
-                  moment={moment}
-                  locale="de-ch"
-                >
-                  <AppContainer />
-                </MuiPickersUtilsProvider>
-              </MuiThemeProvider>
-            }
+            <Print />
+            <MuiThemeProvider theme={theme}>
+              <MuiPickersUtilsProvider
+                utils={MomentUtils}
+                moment={moment}
+                locale="de-ch"
+              >
+                <AppContainer />
+              </MuiPickersUtilsProvider>
+            </MuiThemeProvider>
           </Fragment>
         </ApolloProvider>
       </StateProvider>,

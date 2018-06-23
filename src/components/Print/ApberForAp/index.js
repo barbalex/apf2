@@ -122,7 +122,6 @@ class ApberPrint extends Component<Props> {
             )
           if (error) return `Fehler: ${error.message}`
 
-          console.log('ApberForAp, data:', data)
           const artname = get(data, 'apById.aeEigenschaftenByArtId.artname', '(Art fehlt)')
           //const ap = get(data, 'apById')
           const apber = get(data, 'apById.apbersByApId.nodes[0]')

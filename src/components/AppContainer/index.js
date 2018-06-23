@@ -5,8 +5,8 @@ import compose from 'recompose/compose'
 import withState from 'recompose/withState'
 import Loadable from 'react-loadable'
 
-import ErrorBoundary from './shared/ErrorBoundary'
-import Loading from './shared/Loading'
+import ErrorBoundary from '../shared/ErrorBoundary'
+import Loading from '../shared/Loading'
 
 const Container = styled.div`
   height: 100%;
@@ -15,27 +15,27 @@ const Container = styled.div`
 `
 
 const AppBar = Loadable({
-  loader: () => import('./AppBar'),
+  loader: () => import('../AppBar'),
   loading: Loading,
 })
 const Projekte = Loadable({
-  loader: () => import('./Projekte'),
+  loader: () => import('../Projekte'),
   loading: Loading,
 })
 const User = Loadable({
-  loader: () => import('./User'),
+  loader: () => import('../User'),
   loading: Loading,
 })
 const Errors = Loadable({
-  loader: () => import('./Errors'),
+  loader: () => import('../Errors'),
   loading: Loading,
 })
 const UpdateAvailable = Loadable({
-  loader: () => import('./UpdateAvailable'),
+  loader: () => import('../UpdateAvailable'),
   loading: Loading,
 })
 const Messages = Loadable({
-  loader: () => import('./Messages'),
+  loader: () => import('../Messages'),
   loading: Loading,
 })
 
