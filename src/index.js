@@ -38,7 +38,6 @@ import registerServiceWorker from './registerServiceWorker'
 import AppContainer from './components/AppContainer'
 import Print from './components/Print'
 import historyListen from './modules/historyListen'
-import getActiveNodeArrayFromPathname from './modules/getActiveNodeArrayFromPathname'
 
 import './index.css'
 
