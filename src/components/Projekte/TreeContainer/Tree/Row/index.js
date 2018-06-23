@@ -168,6 +168,11 @@ const PrintIconContainer = styled.div`
   svg {
     font-size: 19px !important;
   }
+  &:hover {
+    svg {
+      font-size: 22px !important;
+    }
+  }
 `
 
 const Row = ({
