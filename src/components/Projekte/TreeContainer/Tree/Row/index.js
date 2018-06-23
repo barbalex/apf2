@@ -228,7 +228,10 @@ const Row = ({
     useSymbolSpan = true
     useSymbolIcon = false
   }
-  if (node.menuType === 'apber') {
+  if (
+    node.menuType === 'apber' &&
+    tree.name === 'tree'
+  ) {
     showPrintIcon = true
   }
   const dataUrl = JSON.stringify(node.url)
