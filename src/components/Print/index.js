@@ -5,6 +5,7 @@ import Loadable from 'react-loadable'
 import { Query } from 'react-apollo'
 import get from 'lodash/get'
 import Button from '@material-ui/core/Button'
+import ArrowBack from '@material-ui/icons/ArrowBack'
 import app from 'ampersand-app'
 
 import ErrorBoundary from '../shared/ErrorBoundary'
@@ -28,9 +29,17 @@ const Container = styled.div`
   }
 `
 const BackButton = styled(Button)`
-  position: absolute;
+  position: absolute !important;
   top: 10px;
   left: 10px;
+  @media print {
+    display: none;
+  }
+`
+const StyledArrowBack = styled(ArrowBack)`
+  font-size: 18px !important;
+  margin-left: -7px;
+  padding-right: 4px;
 `
 
 const ApberForAp = Loadable({
@@ -80,6 +89,7 @@ const Print = () =>
                     }
                   }}
                 >
+                  <StyledArrowBack />
                   zurück
                 </BackButton>
                 <ApberForAp
