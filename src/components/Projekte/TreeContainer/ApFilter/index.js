@@ -9,8 +9,10 @@ import { Query } from 'react-apollo'
 
 import dataGql from './data.graphql'
 import setTreeKey from './setTreeKey.graphql'
+import apById from './apById.graphql'
 import Label from '../../../shared/Label'
 import ErrorBoundary from '../../../shared/ErrorBoundarySingleChild'
+import getActiveNodes from '../../../../modules/getActiveNodes';
 
 const NurApDiv = styled.div`
   display: flex;
@@ -26,12 +28,14 @@ const StyledSwitch = styled(Switch)`
 
 const enhance = compose(
   withHandlers({
-    onChange: ({ treeName }) => ({
+    onChange: ({ treeName }) => async ({
       client,
-      apFilter
+      apFilter,
+      activeNodeArray,
     }:{
       client: Object,
-      apFilter: Boolean
+      apFilter: Boolean,
+      activeNodeArray: Array<String>,
     }) => {
       client.mutate({
         mutation: setTreeKey,
@@ -41,6 +45,33 @@ const enhance = compose(
           key: 'apFilter'
         }
       })
+      const activeNodes = getActiveNodes(activeNodeArray)
+      const { ap: apId } = activeNodes
+      let data
+      if (apId) {
+        // check if this is real ap
+        data = await client.query({
+          query: apById,
+          variables: { id: apId }
+        })
+      }
+      const isAp = [1, 2, 3].includes(get(data, 'apByApId.bearbeitung'))
+      if (!isAp) {
+        // shorten to Aktionspläne
+        const newActiveNodeArray = [
+          activeNodeArray[0],
+          activeNodeArray[1],
+          activeNodeArray[2],
+        ]
+        client.mutate({
+          mutation: setTreeKey,
+          variables: {
+            value: newActiveNodeArray,
+            tree: treeName,
+            key: 'activeNodeArray'
+          }
+        })
+      }
     },
   })
 )
@@ -66,6 +97,7 @@ const ApFilter = ({
       }
 
       const apFilter = get(data, `${treeName}.apFilter`)
+      const activeNodeArray = get(data, `${treeName}.activeNodeArray`)
 
       return (
         <ErrorBoundary>
@@ -73,7 +105,7 @@ const ApFilter = ({
             <Label label="nur AP" />
             <StyledSwitch
               checked={apFilter}
-              onChange={() => onChange({ client, apFilter })}
+              onChange={() => onChange({ client, apFilter, activeNodeArray })}
               color="primary"
             />
           </NurApDiv>
