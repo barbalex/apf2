@@ -18,14 +18,14 @@ export default ({
 }: {
   data: Object,
   treeName: String,
-  projektNodes: Array < Object > ,
-  apNodes: Array < Object > ,
+  projektNodes: Array<Object>,
+  apNodes: Array<Object>,
   projId: String,
   apId: String,
   zielJahr: Number,
   zielId: String,
-  apzieljahrFolderNodes: Array < Object > ,
-  apzielNodes: Array < Object > ,
+  apzieljahrFolderNodes: Array<Object>,
+  apzielNodes: Array<Object>,
 }): Array < Object > => {
   const zielbers = get(data, 'zielbers.nodes', [])
   // fetch sorting indexes of parents

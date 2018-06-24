@@ -16,8 +16,8 @@ export default ({
 }: {
   data: Object,
   treeName: String,
-  projektNodes: Array < Object > ,
-  apNodes: Array < Object > ,
+  projektNodes: Array<Object>,
+  apNodes: Array<Object>,
   projId: String,
   apId: String,
   jahr: Number,

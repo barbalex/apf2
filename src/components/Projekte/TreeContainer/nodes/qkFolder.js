@@ -7,9 +7,9 @@ export default ({
   apNodes,
   apId,
 }: {
-  projektNodes: Array < Object > ,
+  projektNodes: Array<Object>,
   projId: String,
-  apNodes: Array < Object > ,
+  apNodes: Array<Object>,
   apId: String,
 }): Array < Object > => {
   // fetch sorting indexes of parents

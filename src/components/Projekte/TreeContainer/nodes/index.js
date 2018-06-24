@@ -12,7 +12,7 @@ import buildApFolderNodes from './apFolder'
 import buildApberuebersichtFolderNodes from './apberuebersichtFolder'
 import buildApberuebersichtNodes from './apberuebersicht'
 import buildApNodes from './ap'
-import buildPopFolderNodes from './popFolder'
+import buildPopFolderNode from './popFolder'
 import qkFolderNodes from './qkFolder'
 import buildBeobNichtZuzuordnenFolderNodes from './beobNichtZuzuordnenFolder'
 import buildBeobNichtBeurteiltFolderNodes from './beobNichtBeurteiltFolder'
@@ -172,14 +172,14 @@ export default ({
         const apId = nodeUrl[3]
         nodes = [
           ...nodes,
-          ...buildPopFolderNodes({
+          ...buildPopFolderNode({
             data,
             treeName,
             loading,
             projektNodes,
             projId,
             apNodes,
-            apId
+            apId,
           }),
           ...buildApzielFolderNodes({
             data,
@@ -306,7 +306,7 @@ export default ({
           projId,
           apId: nodeUrl[3],
           jahr: +nodeUrl[5],
-          apzieljahrFolderNodes
+          apzieljahrFolderNodes,
         })
         nodes = [
           ...nodes,
@@ -331,7 +331,7 @@ export default ({
             zielJahr: +nodeUrl[5],
             apzieljahrFolderNodes,
             zielId: nodeUrl[6],
-            apzielNodes
+            apzielNodes,
           }),
         ]
       }
@@ -354,7 +354,7 @@ export default ({
             zielJahr: +nodeUrl[5],
             apzieljahrFolderNodes,
             zielId: nodeUrl[6],
-            apzielNodes
+            apzielNodes,
           }),
         ]
       }
@@ -503,7 +503,7 @@ export default ({
       if (
         nodeUrl.length === 6 &&
         nodeUrl[4] === 'Populationen' &&
-          allParentNodesAreOpen(openNodes, nodeUrl)
+        allParentNodesAreOpen(openNodes, nodeUrl)
       ) {
         const apId = nodeUrl[3]
         const popId = nodeUrl[5]
@@ -548,7 +548,7 @@ export default ({
         nodeUrl.length === 7 &&
         nodeUrl[4] === 'Populationen' &&
         nodeUrl[6] === 'Massnahmen-Berichte' &&
-          allParentNodesAreOpen(openNodes, nodeUrl)
+        allParentNodesAreOpen(openNodes, nodeUrl)
       ) {
         nodes = [
           ...nodes,
@@ -569,7 +569,7 @@ export default ({
         nodeUrl.length === 7 &&
         nodeUrl[4] === 'Populationen' &&
         nodeUrl[6] === 'Kontroll-Berichte' &&
-          allParentNodesAreOpen(openNodes, nodeUrl)
+        allParentNodesAreOpen(openNodes, nodeUrl)
       ) {
         nodes = [
           ...nodes,
@@ -590,7 +590,7 @@ export default ({
         nodeUrl.length === 7 &&
         nodeUrl[4] === 'Populationen' &&
         nodeUrl[6] === 'Teil-Populationen' &&
-          allParentNodesAreOpen(openNodes, nodeUrl)
+        allParentNodesAreOpen(openNodes, nodeUrl)
       ) {
         tpopNodes = buildTpopNodes({
           data,
@@ -609,7 +609,7 @@ export default ({
         nodeUrl.length === 8 &&
         nodeUrl[4] === 'Populationen' &&
         nodeUrl[6] === 'Teil-Populationen' &&
-          allParentNodesAreOpen(openNodes, nodeUrl)
+        allParentNodesAreOpen(openNodes, nodeUrl)
       ) {
         const apId = nodeUrl[3]
         const popId = nodeUrl[5]
@@ -701,7 +701,7 @@ export default ({
         nodeUrl[4] === 'Populationen' &&
         nodeUrl[6] === 'Teil-Populationen' &&
         nodeUrl[8] === 'Beobachtungen' &&
-          allParentNodesAreOpen(openNodes, nodeUrl)
+        allParentNodesAreOpen(openNodes, nodeUrl)
       ) {
         nodes = [
           ...nodes,
@@ -725,7 +725,7 @@ export default ({
         nodeUrl[4] === 'Populationen' &&
         nodeUrl[6] === 'Teil-Populationen' &&
         nodeUrl[8] === 'Kontroll-Berichte' &&
-          allParentNodesAreOpen(openNodes, nodeUrl)
+        allParentNodesAreOpen(openNodes, nodeUrl)
       ) {
         nodes = [
           ...nodes,
@@ -749,7 +749,7 @@ export default ({
         nodeUrl[4] === 'Populationen' &&
         nodeUrl[6] === 'Teil-Populationen' &&
         nodeUrl[8] === 'Freiwilligen-Kontrollen' &&
-          allParentNodesAreOpen(openNodes, nodeUrl)
+        allParentNodesAreOpen(openNodes, nodeUrl)
       ) {
         tpopfreiwkontrNodes = buildTpopfreiwkontrNodes({
           data,
@@ -771,7 +771,7 @@ export default ({
         nodeUrl[4] === 'Populationen' &&
         nodeUrl[6] === 'Teil-Populationen' &&
         nodeUrl[8] === 'Feld-Kontrollen' &&
-          allParentNodesAreOpen(openNodes, nodeUrl)
+        allParentNodesAreOpen(openNodes, nodeUrl)
       ) {
         tpopfeldkontrNodes = buildTpopfeldkontrNodes({
           data,
@@ -793,7 +793,7 @@ export default ({
         nodeUrl[4] === 'Populationen' &&
         nodeUrl[6] === 'Teil-Populationen' &&
         nodeUrl[8] === 'Massnahmen-Berichte' &&
-          allParentNodesAreOpen(openNodes, nodeUrl)
+        allParentNodesAreOpen(openNodes, nodeUrl)
       ) {
         nodes = [
           ...nodes,
@@ -817,7 +817,7 @@ export default ({
         nodeUrl[4] === 'Populationen' &&
         nodeUrl[6] === 'Teil-Populationen' &&
         nodeUrl[8] === 'Massnahmen' &&
-          allParentNodesAreOpen(openNodes, nodeUrl)
+        allParentNodesAreOpen(openNodes, nodeUrl)
       ) {
         nodes = [
           ...nodes,
@@ -841,7 +841,7 @@ export default ({
         nodeUrl[4] === 'Populationen' &&
         nodeUrl[6] === 'Teil-Populationen' &&
         nodeUrl[8] === 'Freiwilligen-Kontrollen' &&
-          allParentNodesAreOpen(openNodes, nodeUrl)
+        allParentNodesAreOpen(openNodes, nodeUrl)
       ) {
         nodes = [
           ...nodes,
@@ -867,7 +867,7 @@ export default ({
         nodeUrl[4] === 'Populationen' &&
         nodeUrl[6] === 'Teil-Populationen' &&
         nodeUrl[8] === 'Feld-Kontrollen' &&
-          allParentNodesAreOpen(openNodes, nodeUrl)
+        allParentNodesAreOpen(openNodes, nodeUrl)
       ) {
         nodes = [
           ...nodes,
@@ -893,7 +893,7 @@ export default ({
         nodeUrl[4] === 'Populationen' &&
         nodeUrl[6] === 'Teil-Populationen' &&
         nodeUrl[8] === 'Feld-Kontrollen' &&
-          allParentNodesAreOpen(openNodes, nodeUrl)
+        allParentNodesAreOpen(openNodes, nodeUrl)
       ) {
         nodes = [
           ...nodes,
@@ -919,7 +919,7 @@ export default ({
         nodeUrl[4] === 'Populationen' &&
         nodeUrl[6] === 'Teil-Populationen' &&
         nodeUrl[8] === 'Freiwilligen-Kontrollen' &&
-          allParentNodesAreOpen(openNodes, nodeUrl)
+        allParentNodesAreOpen(openNodes, nodeUrl)
       ) {
         nodes = [
           ...nodes,

@@ -18,14 +18,14 @@ export default ({
   data: Object,
   treeName: String,
   loading: Boolean,
-  projektNodes: Array < Object > ,
+  projektNodes: Array<Object>,
   projId: String,
-  apNodes: Array < Object > ,
+  apNodes: Array<Object>,
   apId: String,
   zielJahr: Number,
   zielId: String,
-  apzieljahrFolderNodes: Array < Object > ,
-  apzielNodes: Array < Object > ,
+  apzieljahrFolderNodes: Array<Object>,
+  apzielNodes: Array<Object>,
 }): Array < Object > => {
   const zielbers = get(data, 'zielbers.nodes', [])
 

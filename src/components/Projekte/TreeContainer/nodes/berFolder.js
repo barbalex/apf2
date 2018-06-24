@@ -14,9 +14,9 @@ export default ({
   data: Object,
   treeName: String,
   loading: Boolean,
-  projektNodes: Array < Object > ,
+  projektNodes: Array<Object>,
   projId: String,
-  apNodes: Array < Object > ,
+  apNodes: Array<Object>,
   apId: String,
 }): Array < Object > => {
   const bers = get(data, 'bers.nodes', [])
