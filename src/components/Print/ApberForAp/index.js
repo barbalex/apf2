@@ -165,10 +165,6 @@ class ApberPrint extends Component<Props> {
 
                   <Title1>D. Einschätzung der Wirkung des AP insgesamt auf die Art</Title1>
                   <FieldRow>
-                    <FieldLabel>Einschätzung der Wirkung des AP insgesamt auf die Art</FieldLabel>
-                    <Field>{get(apber, 'wirkungAufArt', '')}</Field>
-                  </FieldRow>
-                  <FieldRow>
                     <FieldLabel>Vergleich zu Vorjahr - Ausblick auf Gesamtziel</FieldLabel>
                     <Field>{get(apber, 'vergleichVorjahrGesamtziel', '')}</Field>
                   </FieldRow>
@@ -190,6 +186,10 @@ class ApberPrint extends Component<Props> {
                     <FieldLabel>Beurteilung</FieldLabel>
                     <Field>{get(apber, 'apErfkritWerteByBeurteilung.text', '')}</Field>
                   </FieldRowBold>
+                  <FieldRow>
+                    <FieldLabel>Bemerkungen</FieldLabel>
+                    <Field>{get(apber, 'wirkungAufArt', '')}</Field>
+                  </FieldRow>
                   <FieldRow>
                     <FieldLabel>Analyse</FieldLabel>
                     <Field>{get(apber, 'apberAnalyse', '')}</Field>
