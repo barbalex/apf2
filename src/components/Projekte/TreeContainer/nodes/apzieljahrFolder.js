@@ -3,12 +3,15 @@ import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
 import union from 'lodash/union'
 
+import allParentNodesAreOpen from '../allParentNodesAreOpen'
+
 export default ({
   data,
   treeName,
   projektNodes,
   projId,
   apNodes,
+  openNodes,
   apId,
 }: {
   data: Object,
@@ -16,6 +19,7 @@ export default ({
   projektNodes: Array<Object>,
   projId: String,
   apNodes: Array<Object>,
+  openNodes: Array<String>,
   apId: String,
 }): Array<Object> => {
   const ziels = get(data, 'ziels.nodes', [])
@@ -43,6 +47,7 @@ export default ({
       return true
     })
     .reduce((a, el, index) => union(a, [el.jahr]), [])
+    .filter(jahr => allParentNodesAreOpen(openNodes, ['Projekte', projId, 'Aktionspläne', apId, 'AP-Ziele', jahr]))
     .sort()
 
   return zieljahre.map((jahr, index) => {

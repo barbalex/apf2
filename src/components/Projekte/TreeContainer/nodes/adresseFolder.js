@@ -11,7 +11,7 @@ export default ({
   treeName: String,
   loading: Boolean,
   projektNodes: Array<Object>,
-}): Array < Object > => {
+}): Array<Object> => {
   const adresses = get(data, 'adresses.nodes', [])
   const wlIndex = projektNodes.length + 2
   const nodeLabelFilterString = get(data, `${treeName}.nodeLabelFilter.adresse`)

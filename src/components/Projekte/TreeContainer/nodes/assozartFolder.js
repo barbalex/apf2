@@ -2,6 +2,8 @@
 import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
 
+import allParentNodesAreOpen from '../allParentNodesAreOpen'
+
 export default ({
   data,
   treeName,
@@ -9,6 +11,7 @@ export default ({
   projektNodes,
   projId,
   apNodes,
+  openNodes,
   apId,
 }: {
   data: Object,
@@ -17,6 +20,7 @@ export default ({
   projektNodes: Array<Object>,
   projId: String,
   apNodes: Array<Object>,
+  openNodes: Array<String>,
   apId: String,
 }): Array<Object> => {
   const assozarts = get(data, 'assozarts.nodes', [])
@@ -46,13 +50,17 @@ export default ({
     message = `${assozartNodesLength} gefiltert`
   }
 
+  const url = ['Projekte', projId, 'Aktionspläne', apId, 'assoziierte-Arten']
+  const allParentsOpen = allParentNodesAreOpen(openNodes, url)
+  if (!allParentsOpen) return []
+
   return [{
     nodeType: 'folder',
     menuType: 'assozartFolder',
     id: apId,
     urlLabel: 'assoziierte-Arten',
     label: `assoziierte Arten (${message})`,
-    url: ['Projekte', projId, 'Aktionspläne', apId, 'assoziierte-Arten'],
+    url,
     sort: [projIndex, 1, apIndex, 8],
     hasChildren: assozartNodesLength > 0,
   }, ]

@@ -59,6 +59,10 @@ query TreeDataQuery(
       apId
       nr
       name
+      apByApId {
+        id
+        bearbeitung
+      }
     }
   }
   tpops: allTpops(filter: { popId: { in: $pop } }, orderBy: NR_ASC)

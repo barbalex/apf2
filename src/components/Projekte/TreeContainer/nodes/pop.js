@@ -2,11 +2,14 @@
 import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
 
+import allParentNodesAreOpen from '../allParentNodesAreOpen'
+
 export default ({
   data,
   treeName,
   projektNodes,
   apNodes,
+  openNodes,
   projId,
   apId,
 }: {
@@ -14,6 +17,7 @@ export default ({
   treeName: String,
   projektNodes: Array<Object>,
   apNodes: Array<Object>,
+  openNodes: Array<String>,
   projId: String,
   apId: String,
 }): Array<Object> => {
@@ -48,6 +52,7 @@ export default ({
       hasChildren: true,
       nr: el.nr || 0,
     }))
+    .filter(el => allParentNodesAreOpen(openNodes, el.url))
     // sort again to sort (keine Nr) on top
     .sort((a, b) => a.nr - b.nr)
     .map((el, index) => {

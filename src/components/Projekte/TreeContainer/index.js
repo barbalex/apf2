@@ -502,7 +502,12 @@ class TreeContainer extends Component<Props> {
                         nodes={nodes} 
                         activeNode={activeNode}
                       />
-                      {!!activeNodes.projekt && <ApFilter treeName={treeName} />}
+                      {
+                        !!activeNodes.projekt &&
+                        <ApFilter
+                          treeName={treeName}
+                        />
+                      }
                     </LabelFilterContainer>
                     <InnerTreeContainer
                       // $FlowIssue

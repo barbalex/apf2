@@ -2,6 +2,8 @@
 import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
 
+import allParentNodesAreOpen from '../allParentNodesAreOpen'
+
 export default ({
   data,
   treeName,
@@ -9,17 +11,20 @@ export default ({
   projektNodes,
   projId,
   apNodes,
+  openNodes,
   apId,
 }: {
   data: Object,
   treeName: String,
   loading: Boolean,
-  projektNodes: Array < Object > ,
+  projektNodes: Array<Object>,
   projId: String,
-  apNodes: Array < Object > ,
+  apNodes: Array<Object>,
+  openNodes: Array<String>,
   apId: String,
-}): Array < Object > => {
+}): Array<Object> => {
   const pops = get(data, 'pops.nodes', [])
+  const apFilter = get(data, `${treeName}.apFilter`)
 
   // fetch sorting indexes of parents
   const projIndex = findIndex(projektNodes, {
@@ -32,6 +37,11 @@ export default ({
 
   const popNodesLength = pops
     .filter(el => el.apId === apId)
+    // return empty if ap is not a real ap and apFilter is set
+    .filter(el => {
+      const isAp = [1, 2, 3].includes(get(el, 'apByApId.bearbeitung'))
+      return !(apFilter && !isAp)
+    })
     // filter by nodeLabelFilter
     .filter(el => {
       if (nodeLabelFilterString) {
@@ -46,14 +56,18 @@ export default ({
     message = `${popNodesLength} gefiltert`
   }
 
-  return [{
+  const url = ['Projekte', projId, 'Aktionspläne', apId, 'Populationen']
+  const allParentsOpen = allParentNodesAreOpen(openNodes, url)
+  if (!allParentsOpen) return []
+
+  return [({
     nodeType: 'folder',
     menuType: 'popFolder',
     id: apId,
     urlLabel: 'Populationen',
     label: `Populationen (${message})`,
-    url: ['Projekte', projId, 'Aktionspläne', apId, 'Populationen'],
+    url,
     sort: [projIndex, 1, apIndex, 1],
     hasChildren: popNodesLength > 0,
-  }, ]
+  })]
 }

@@ -3,11 +3,14 @@ import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 
+import allParentNodesAreOpen from '../allParentNodesAreOpen'
+
 export default ({
   data,
   treeName,
   projektNodes,
   apNodes,
+  openNodes,
   popNodes,
   tpopNodes,
   projId,
@@ -19,6 +22,7 @@ export default ({
   treeName: String,
   projektNodes: Array<Object>,
   apNodes: Array<Object>,
+  openNodes: Array<String>,
   popNodes: Array<Object>,
   tpopNodes: Array<Object>,
   projId: String,
@@ -68,6 +72,7 @@ export default ({
       ],
       hasChildren: true,
     }))
+    .filter(el => allParentNodesAreOpen(openNodes, el.url))
   nodes = sortBy(nodes, n => (n.datum ? n.datum : `${n.jahr}-01-01`)).map(
     (el, index) => {
       el.sort = [projIndex, 1, apIndex, 1, popIndex, 1, tpopIndex, 4, index]

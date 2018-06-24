@@ -18,7 +18,13 @@ export default ({
   projId: String,
   apNodes: Array<Object>,
   apId: String,
-}): Array < Object > => {
+}): Array<Object> => {
+  // return empty if ap is not a real ap and apFilter is set
+  const ap = get(data, 'aps.nodes', []).filter(n => n.id === apId)
+  const isAp = [1, 2, 3].includes(ap.bearbeitung)
+  const apFilter = get(data, `${treeName}.apFilter`)
+  if (!!apFilter && !isAp) return []
+
   const aparts = get(data, 'aparts.nodes', [])
 
   // fetch sorting indexes of parents

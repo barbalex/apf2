@@ -2,11 +2,14 @@
 import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
 
+import allParentNodesAreOpen from '../allParentNodesAreOpen'
+
 export default ({
   data,
   treeName,
   projektNodes,
   apNodes,
+  openNodes,
   projId,
   apId,
 }: {
@@ -14,9 +17,10 @@ export default ({
   treeName: String,
   projektNodes: Array<Object>,
   apNodes: Array<Object>,
+  openNodes: Array<String>,
   projId: String,
   apId: String,
-}): Array < Object > => {
+}): Array<Object> => {
   const erfkrits = get(data, 'erfkrits.nodes', [])
   // fetch sorting indexes of parents
   const projIndex = findIndex(projektNodes, {
@@ -64,6 +68,7 @@ export default ({
       ],
       hasChildren: false,
     }))
+    .filter(el => allParentNodesAreOpen(openNodes, el.url))
     // sort by label
     .sort(
       (a, b) =>

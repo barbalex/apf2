@@ -2,6 +2,8 @@
 import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
 
+import allParentNodesAreOpen from '../allParentNodesAreOpen'
+
 export default ({
   data,
   treeName,
@@ -9,6 +11,7 @@ export default ({
   projektNodes,
   projId,
   apNodes,
+  openNodes,
   apId,
   zielJahr,
   zielId,
@@ -21,12 +24,13 @@ export default ({
   projektNodes: Array<Object>,
   projId: String,
   apNodes: Array<Object>,
+  openNodes: Array<String>,
   apId: String,
   zielJahr: Number,
   zielId: String,
   apzieljahrFolderNodes: Array<Object>,
   apzielNodes: Array<Object>,
-}): Array < Object > => {
+}): Array<Object> => {
   const zielbers = get(data, 'zielbers.nodes', [])
 
   // fetch sorting indexes of parents
@@ -56,22 +60,26 @@ export default ({
     message = `${zielberNodesLength} gefiltert`
   }
 
+  const url = [
+    'Projekte',
+    projId,
+    'Aktionspläne',
+    apId,
+    'AP-Ziele',
+    zielJahr,
+    zielId,
+    'Berichte',
+  ]
+  const allParentsOpen = allParentNodesAreOpen(openNodes, url)
+  if (!allParentsOpen) return []
+
   return [{
     nodeType: 'folder',
     menuType: 'zielberFolder',
     id: zielId,
     urlLabel: 'Berichte',
     label: `Berichte (${message})`,
-    url: [
-      'Projekte',
-      projId,
-      'Aktionspläne',
-      apId,
-      'AP-Ziele',
-      zielJahr,
-      zielId,
-      'Berichte',
-    ],
+    url,
     sort: [projIndex, 1, apIndex, 2, zieljahrIndex, zielIndex, 1],
     hasChildren: zielberNodesLength > 0,
   }, ]

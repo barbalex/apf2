@@ -2,6 +2,7 @@
 import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
 
+import allParentNodesAreOpen from '../allParentNodesAreOpen'
 import compareLabel from './compareLabel'
 
 export default ({
@@ -9,6 +10,7 @@ export default ({
   treeName,
   projektNodes,
   apNodes,
+  openNodes,
   projId,
   apId,
   jahr,
@@ -18,11 +20,12 @@ export default ({
   treeName: String,
   projektNodes: Array<Object>,
   apNodes: Array<Object>,
+  openNodes: Array<String>,
   projId: String,
   apId: String,
   jahr: Number,
-  apzieljahrFolderNodes: Array < Object >
-}): Array < Object > => {
+  apzieljahrFolderNodes: Array<Object>
+}): Array<Object> => {
   const ziels = get(data, 'ziels.nodes', [])
   // fetch sorting indexes of parents
   const projIndex = findIndex(projektNodes, {
@@ -71,6 +74,7 @@ export default ({
       ],
       hasChildren: true,
     }))
+    .filter(el => allParentNodesAreOpen(openNodes, el.url))
     // sort by label
     .sort(compareLabel)
     .map((el, index) => {

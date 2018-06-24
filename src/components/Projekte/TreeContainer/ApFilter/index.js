@@ -32,11 +32,14 @@ const enhance = compose(
       client,
       apFilter,
       activeNodeArray,
+      openNodes,
     }:{
       client: Object,
       apFilter: Boolean,
       activeNodeArray: Array<String>,
+      openNodes: Array<Array<String>>,
     }) => {
+      const previousApFilter = apFilter
       client.mutate({
         mutation: setTreeKey,
         variables: {
@@ -45,32 +48,57 @@ const enhance = compose(
           key: 'apFilter'
         }
       })
-      const activeNodes = getActiveNodes(activeNodeArray)
-      const { ap: apId } = activeNodes
-      let data
-      if (apId) {
-        // check if this is real ap
-        data = await client.query({
-          query: apById,
-          variables: { id: apId }
-        })
-      }
-      const isAp = [1, 2, 3].includes(get(data, 'apByApId.bearbeitung'))
-      if (!isAp) {
-        // shorten to Aktionspläne
-        const newActiveNodeArray = [
-          activeNodeArray[0],
-          activeNodeArray[1],
-          activeNodeArray[2],
-        ]
-        client.mutate({
-          mutation: setTreeKey,
-          variables: {
-            value: newActiveNodeArray,
-            tree: treeName,
-            key: 'activeNodeArray'
-          }
-        })
+      if (!previousApFilter) {
+        // apFilter was set to true
+        const activeNodes = getActiveNodes(activeNodeArray)
+        const { ap: apId } = activeNodes
+        let result
+        if (apId) {
+          // check if this is real ap
+          result = await client.query({
+            query: apById,
+            variables: { id: apId }
+          })
+        }
+        const isAp = [1, 2, 3].includes(get(result, 'data.apById.bearbeitung'))
+        if (
+          !isAp &&
+          activeNodeArray[2] === 'Aktionspläne'
+        ) {
+          // not a real ap
+          // shorten active node array to Aktionspläne
+          const newActiveNodeArray = [
+            activeNodeArray[0],
+            activeNodeArray[1],
+            activeNodeArray[2],
+          ]
+          await client.mutate({
+            mutation: setTreeKey,
+            variables: {
+              value: newActiveNodeArray,
+              tree: treeName,
+              key: 'activeNodeArray'
+            }
+          })
+          // remove from openNodes
+          const newOpenNodes = openNodes.filter(n => {
+            if (
+              n.length > newActiveNodeArray.length &&
+              n[0] === newActiveNodeArray[0] &&
+              n[1] === newActiveNodeArray[1] &&
+              n[2] === newActiveNodeArray[2]
+            ) return false
+            return true
+          })
+          await client.mutate({
+            mutation: setTreeKey,
+            variables: {
+              value: newOpenNodes,
+              tree: treeName,
+              key: 'openNodes'
+            }
+          })
+        }
       }
     },
   })
@@ -98,6 +126,7 @@ const ApFilter = ({
 
       const apFilter = get(data, `${treeName}.apFilter`)
       const activeNodeArray = get(data, `${treeName}.activeNodeArray`)
+      const openNodes = get(data, `${treeName}.openNodes`)
 
       return (
         <ErrorBoundary>
@@ -105,7 +134,7 @@ const ApFilter = ({
             <Label label="nur AP" />
             <StyledSwitch
               checked={apFilter}
-              onChange={() => onChange({ client, apFilter, activeNodeArray })}
+              onChange={() => onChange({ client, apFilter, activeNodeArray, openNodes })}
               color="primary"
             />
           </NurApDiv>

@@ -1,12 +1,15 @@
 import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
 
+import allParentNodesAreOpen from '../allParentNodesAreOpen'
+
 export default ({
   data,
   treeName,
   loading,
   projektNodes,
   apNodes,
+  openNodes,
   popNodes,
   tpopNodes,
   tpopfreiwkontrNodes,
@@ -21,6 +24,7 @@ export default ({
   loading: Boolean,
   projektNodes: Array<Object>,
   apNodes: Array<Object>,
+  openNodes: Array<String>,
   popNodes: Array<Object>,
   tpopNodes: Array<Object>,
   tpopfreiwkontrNodes: Array<Object>,
@@ -65,6 +69,22 @@ export default ({
     message = `${childrenLength} gefiltert`
   }
 
+  const url = [
+    'Projekte',
+    projId,
+    'Aktionspläne',
+    apId,
+    'Populationen',
+    popId,
+    'Teil-Populationen',
+    tpopId,
+    'Freiwilligen-Kontrollen',
+    tpopkontrId,
+    'Zaehlungen',
+  ]
+  const allParentsOpen = allParentNodesAreOpen(openNodes, url)
+  if (!allParentsOpen) return []
+
   return [
     {
       nodeType: 'folder',
@@ -72,19 +92,7 @@ export default ({
       id: tpopkontrId,
       urlLabel: 'Zaehlungen',
       label: `Zählungen (${message})`,
-      url: [
-        'Projekte',
-        projId,
-        'Aktionspläne',
-        apId,
-        'Populationen',
-        popId,
-        'Teil-Populationen',
-        tpopId,
-        'Freiwilligen-Kontrollen',
-        tpopkontrId,
-        'Zaehlungen',
-      ],
+      url,
       sort: [
         projIndex,
         1,

@@ -3,12 +3,14 @@ import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
 
 import compareLabel from './compareLabel'
+import allParentNodesAreOpen from '../allParentNodesAreOpen'
 
 export default ({
   data,
   treeName,
   projektNodes,
   apNodes,
+  openNodes,
   projId,
   apId,
 }: {
@@ -16,6 +18,7 @@ export default ({
   treeName: String,
   projektNodes: Array<Object>,
   apNodes: Array<Object>,
+  openNodes: Array<String>,
   projId: String,
   apId: String,
 }): Array<Object> => {
@@ -49,6 +52,7 @@ export default ({
       url: ['Projekte', projId, 'Aktionspläne', apId, 'AP-Arten', el.id],
       hasChildren: false,
     }))
+    .filter(el => allParentNodesAreOpen(openNodes, el.url))
     // sort by label
     .sort(compareLabel)
     .map((el, index) => {

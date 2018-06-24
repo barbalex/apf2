@@ -3,6 +3,8 @@ import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
 import union from 'lodash/union'
 
+import allParentNodesAreOpen from '../allParentNodesAreOpen'
+
 export default ({
   data,
   treeName,
@@ -10,6 +12,7 @@ export default ({
   projektNodes,
   projId,
   apNodes,
+  openNodes,
   apId,
 }: {
   data: Object,
@@ -18,6 +21,7 @@ export default ({
   projektNodes: Array<Object>,
   projId: String,
   apNodes: Array<Object>,
+  openNodes: Array<String>,
   apId: String,
 }): Array<Object> => {
   const ziels = get(data, 'ziels.nodes', [])
@@ -54,14 +58,18 @@ export default ({
     } gefiltert`
   }
 
+  const url = ['Projekte', projId, 'Aktionspläne', apId, 'AP-Ziele']
+  const allParentsOpen = allParentNodesAreOpen(openNodes, url)
+  if (!allParentsOpen) return []
+
   return [{
     nodeType: 'folder',
     menuType: 'zielFolder',
     id: apId,
     urlLabel: 'AP-Ziele',
     label: `AP-Ziele (${message})`,
-    url: ['Projekte', projId, 'Aktionspläne', apId, 'AP-Ziele'],
+    url,
     sort: [projIndex, 1, apIndex, 2],
     hasChildren: zieljahreLength > 0,
-  }, ]
+  }]
 }

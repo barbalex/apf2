@@ -1,12 +1,15 @@
 import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
 
+import allParentNodesAreOpen from '../allParentNodesAreOpen'
+
 export default ({
   data,
   treeName,
   loading,
   projektNodes,
   apNodes,
+  openNodes,
   popNodes,
   projId,
   apId,
@@ -17,6 +20,7 @@ export default ({
   loading: Boolean,
   projektNodes: Array<Object>,
   apNodes: Array<Object>,
+  openNodes: Array<String>,
   popNodes: Array<Object>,
   projId: String,
   apId: String,
@@ -47,6 +51,18 @@ export default ({
     message = `${childrenLength} gefiltert`
   }
 
+  const url = [
+    'Projekte',
+    projId,
+    'Aktionspläne',
+    apId,
+    'Populationen',
+    popId,
+    'Teil-Populationen',
+  ]
+  const allParentsOpen = allParentNodesAreOpen(openNodes, url)
+  if (!allParentsOpen) return []
+
   return [
     {
       nodeType: 'folder',
@@ -54,15 +70,7 @@ export default ({
       id: popId,
       urlLabel: 'Teil-Populationen',
       label: `Teil-Populationen (${message})`,
-      url: [
-        'Projekte',
-        projId,
-        'Aktionspläne',
-        apId,
-        'Populationen',
-        popId,
-        'Teil-Populationen',
-      ],
+      url,
       sort: [projIndex, 1, apIndex, 1, popIndex, 1],
       hasChildren: childrenLength > 0,
     },

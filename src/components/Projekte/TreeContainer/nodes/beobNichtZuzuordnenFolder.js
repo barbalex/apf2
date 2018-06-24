@@ -3,6 +3,8 @@ import findIndex from 'lodash/findIndex'
 import get from 'lodash/get'
 import format from 'date-fns/format'
 
+import allParentNodesAreOpen from '../allParentNodesAreOpen'
+
 export default ({
   data,
   treeName,
@@ -10,6 +12,7 @@ export default ({
   projektNodes,
   projId,
   apNodes,
+  openNodes,
   apId,
 }: {
   data: Object,
@@ -18,6 +21,7 @@ export default ({
   projektNodes: Array<Object>,
   projId: String,
   apNodes: Array<Object>,
+  openNodes: Array<String>,
   apId: String,
 }): Array<Object> => {
   const beobNichtZuzuordnens = get(data, 'beobNichtZuzuordnens.nodes', [])
@@ -49,20 +53,24 @@ export default ({
     message = `${beobNichtZuzuordnenNodesLength} gefiltert`
   }
 
+  const url = [
+    'Projekte',
+    projId,
+    'Aktionspläne',
+    apId,
+    'nicht-zuzuordnende-Beobachtungen',
+  ]
+  const allParentsOpen = allParentNodesAreOpen(openNodes, url)
+  if (!allParentsOpen) return []
+
   return [{
     nodeType: 'folder',
     menuType: 'beobNichtZuzuordnenFolder',
     id: apId,
     urlLabel: 'nicht-zuzuordnende-Beobachtungen',
     label: `Beobachtungen nicht zuzuordnen (${message})`,
-    url: [
-      'Projekte',
-      projId,
-      'Aktionspläne',
-      apId,
-      'nicht-zuzuordnende-Beobachtungen',
-    ],
+    url,
     sort: [projIndex, 1, apIndex, 10],
     hasChildren: beobNichtZuzuordnenNodesLength > 0,
-  }, ]
+  }]
 }

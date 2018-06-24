@@ -2,9 +2,13 @@ query Query {
   tree @client {
     name
     apFilter
+    activeNodeArray
+    openNodes
   }
   tree2 @client {
     name
     apFilter
+    activeNodeArray
+    openNodes
   }
 }
