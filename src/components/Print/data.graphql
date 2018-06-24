@@ -2,7 +2,4 @@ query Query {
   tree @client {
     activeNodeArray
   }
-  tree2 @client {
-    activeNodeArray
-  }
 }

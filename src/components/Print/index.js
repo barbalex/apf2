@@ -53,13 +53,10 @@ const Print = () =>
       if (error) return `Fehler: ${error.message}`
 
       const activeNodeArray = get(data, 'tree.activeNodeArray')
-      const activeNodeArray2 = get(data, 'tree2.activeNodeArray')
-      const showApberForAp = (activeNodeArray.length === 7 &&
+      const showApberForAp = activeNodeArray.length === 7 &&
         activeNodeArray[4] === 'AP-Berichte' &&
-        activeNodeArray[6] === 'print') || (activeNodeArray2.length === 7 &&
-          activeNodeArray2[4] === 'AP-Berichte' &&
-          activeNodeArray2[6] === 'print'
-        )
+        activeNodeArray[6] === 'print'
+        
       if (!showApberForAp) return null
 
       return (
