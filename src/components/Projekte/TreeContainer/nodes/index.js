@@ -102,6 +102,15 @@ export default ({
   let apzieljahrFolderNodes
   let apzielNodes
   
+  /**
+   * We ALWAYS add an array of nodes,
+   * never a single one
+   * not even for folders that are never more than one
+   * because the function adding the nodes
+   * should be able to pass none as well
+   * for instance if a parent node is not open
+   * or some filter is active
+   */
   openNodes.forEach(nodeUrl => {
     if (
       nodeUrl[0] === 'Projekte' &&
