@@ -14,6 +14,7 @@ import data1Gql from './data1.graphql'
 import data2Gql from './data2.graphql'
 import Ziele from './Ziele'
 import Massnahmen from './Massnahmen'
+import AMengen from './AMengen'
 
 const LoadingContainer = styled.div`
   padding: 15px;
@@ -192,6 +193,7 @@ class ApberPrint extends Component<Props> {
                         </Row>
 
                         <Title1>A. Grundmengen</Title1>
+                        <AMengen apId={apId} jahr={jahr} />
                         <FieldRowFullWidth>
                           <TitledLabel>Bemerkungen / Folgerungen für nächstes Jahr: neue Biotope</TitledLabel>
                           <FullWidthField>{get(apber, 'biotopeNeue', '')}</FullWidthField>

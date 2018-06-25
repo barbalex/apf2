@@ -4893,7 +4893,7 @@ FROM
     ON apflora.pop.id = apflora.tpop.pop_id
 WHERE
   apflora.tpop.apber_relevant = 1
-  AND apflora.pop.status  <> 300
+  AND apflora.pop.status <> 300
 GROUP BY
   apflora.pop.ap_id,
   apflora.pop.id;

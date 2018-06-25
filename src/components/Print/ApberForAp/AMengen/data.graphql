@@ -1,30 +1,13 @@
-query apberById($apberId: UUID!) {
-  apberById(id: $apberId) {
+query apById($apId: UUID!) {
+  apById(id: $apId) {
     id
-    jahr
-    situation
-    vergleichVorjahrGesamtziel
-    beurteilung
-    apErfkritWerteByBeurteilung {
-      id
-      text
-    }
-    veraenderungZumVorjahr
-    apberAnalyse
-    konsequenzenUmsetzung
-    konsequenzenErfolgskontrolle
-    biotopeNeue
-    biotopeOptimieren
-    massnahmenOptimieren
-    wirkungAufArt
-    datum
-    massnahmenApBearb
-    massnahmenPlanungVsAusfuehrung
-    apId
-    bearbeiter
-    adresseByBearbeiter {
-      id
-      name
+    oneLPop: popsByApId(filter: {status: {notEqualTo: 300}}) {
+      nodes {
+        id
+        tpopsByPopId(condition: {apberRelevant: 1}) {
+          totalCount
+        }
+      }
     }
   }
 }
