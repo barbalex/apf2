@@ -122,7 +122,6 @@ class ApberPrint extends Component<Props> {
     const { /*projekt: projId, */ap: apId, apber: apberId } = getActiveNodes(activeNodeArray)
 
     return (
-      
       <Query
         query={data1Gql}
         variables={{ apberId }}
