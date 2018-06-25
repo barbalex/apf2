@@ -95,6 +95,20 @@ const AMengen = ({
         get(data, 'apById.fiveLTpop.nodes', [])
           .map(p => get(p, 'tpopsByPopId.totalCount'))
       )
+      const sevenLPop = get(data, 'apById.sevenLPop.nodes', [])
+        .filter(p => get(p, 'tpopsByPopId.totalCount') > 0)
+        .length
+      const sevenLTpop = sum(
+        get(data, 'apById.sevenLTpop.nodes', [])
+          .map(p => get(p, 'tpopsByPopId.totalCount'))
+      )
+      const eightLPop = get(data, 'apById.eightLPop.nodes', [])
+        .filter(p => get(p, 'tpopsByPopId.totalCount') > 0)
+        .length
+      const eightLTpop = sum(
+        get(data, 'apById.eightLTpop.nodes', [])
+          .map(p => get(p, 'tpopsByPopId.totalCount'))
+      )
 
       return (
         <Container>
@@ -151,22 +165,22 @@ const AMengen = ({
           </Row>
           <Row>
             <Label3>total</Label3>
-            <PopBerJahr>{}</PopBerJahr>
-            <TpopBerJahr>{}</TpopBerJahr>
+            <PopBerJahr>{sevenLPop + eightLPop}</PopBerJahr>
+            <TpopBerJahr>{sevenLTpop + eightLTpop}</TpopBerJahr>
             <PopSeit></PopSeit>
             <TpopSeit></TpopSeit>
           </Row>
           <Row>
             <Label3>zuvor autochthon oder vor AP angesiedelt</Label3>
-            <PopBerJahr>{}</PopBerJahr>
-            <TpopBerJahr>{}</TpopBerJahr>
+            <PopBerJahr>{sevenLPop}</PopBerJahr>
+            <TpopBerJahr>{sevenLTpop}</TpopBerJahr>
             <PopSeit></PopSeit>
             <TpopSeit></TpopSeit>
           </Row>
           <Row>
             <Label3>nach Beginn Aktionsplan angesiedelt</Label3>
-            <PopBerJahr>{}</PopBerJahr>
-            <TpopBerJahr>{}</TpopBerJahr>
+            <PopBerJahr>{eightLPop}</PopBerJahr>
+            <TpopBerJahr>{eightLTpop}</TpopBerJahr>
             <PopSeit></PopSeit>
             <TpopSeit></TpopSeit>
           </Row>
