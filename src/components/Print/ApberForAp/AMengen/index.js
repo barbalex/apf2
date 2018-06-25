@@ -15,6 +15,9 @@ const Row = styled.div`
   padding: 0.05cm 0;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
 `
+const TotalRow = styled(Row)`
+  font-weight: 600;
+`
 const LabelRow = styled(Row)`
   font-size: 12px;
 `
@@ -85,6 +88,13 @@ const AMengen = ({
         get(data, 'apById.fourLTpop.nodes', [])
           .map(p => get(p, 'tpopsByPopId.totalCount'))
       )
+      const fiveLPop = get(data, 'apById.fiveLPop.nodes', [])
+        .filter(p => get(p, 'tpopsByPopId.totalCount') > 0)
+        .length
+      const fiveLTpop = sum(
+        get(data, 'apById.fiveLTpop.nodes', [])
+          .map(p => get(p, 'tpopsByPopId.totalCount'))
+      )
 
       return (
         <Container>
@@ -108,6 +118,13 @@ const AMengen = ({
           <Row>
             <Label2>aktuell:</Label2>
           </Row>
+          <TotalRow>
+            <Label3>total</Label3>
+            <PopBerJahr>{threeLPop + fourLPop + fiveLPop}</PopBerJahr>
+            <TpopBerJahr>{threeLTpop + fourLTpop + fiveLTpop}</TpopBerJahr>
+            <PopSeit></PopSeit>
+            <TpopSeit></TpopSeit>
+          </TotalRow>
           <Row>
             <Label3>ursprünglich</Label3>
             <PopBerJahr>{threeLPop}</PopBerJahr>
@@ -119,6 +136,13 @@ const AMengen = ({
             <Label3>angesiedelt (vor Beginn AP)</Label3>
             <PopBerJahr>{fourLPop}</PopBerJahr>
             <TpopBerJahr>{fourLTpop}</TpopBerJahr>
+            <PopSeit></PopSeit>
+            <TpopSeit></TpopSeit>
+          </Row>
+          <Row>
+            <Label3>angesiedelt (nach Beginn AP)</Label3>
+            <PopBerJahr>{fiveLPop}</PopBerJahr>
+            <TpopBerJahr>{fiveLTpop}</TpopBerJahr>
             <PopSeit></PopSeit>
             <TpopSeit></TpopSeit>
           </Row>

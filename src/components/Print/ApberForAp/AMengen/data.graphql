@@ -49,5 +49,21 @@ query apById($apId: UUID!, $startJahr: Int!) {
         }
       }
     }
+    fiveLPop: popsByApId(filter: {and: [{status: {equalTo: 200}}, {bekanntSeit: {greaterThanOrEqualTo: $startJahr}}]}) {
+      nodes {
+        id
+        tpopsByPopId(filter: {apberRelevant: {equalTo: 1}}) {
+          totalCount
+        }
+      }
+    }
+    fiveLTpop: popsByApId(filter: {and: [{status: {notEqualTo: 300}}, {status: {isNull: false}}]}) {
+      nodes {
+        id
+        tpopsByPopId(filter: {and: [{status: {equalTo: 200}}, {apberRelevant: {equalTo: 1}}, {bekanntSeit: {greaterThanOrEqualTo: $startJahr}}]}) {
+          totalCount
+        }
+      }
+    }
   }
 }
