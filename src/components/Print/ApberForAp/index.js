@@ -169,8 +169,17 @@ class ApberPrint extends Component<Props> {
                 const tpops = flatten(
                   pops.map(p => get(p, 'tpopsByPopId.nodes', []))
                 )
-                const massns = flatten(
-                  tpops.map(t => get(t, 'tpopmassnsByTpopId.nodes', []))
+                const massns = sortBy(
+                  flatten(
+                    tpops.map(t => get(t, 'tpopmassnsByTpopId.nodes', []))
+                  ),
+                  (m) => [
+                    get(m, 'tpopByTpopId.popByPopId.nr'),
+                    get(m, 'tpopByTpopId.nr'),
+                    get(m, 'datum'),
+                    get(m, 'tpopmassnTypWerteByTyp.text'),
+                    get(m, 'beschreibung'),
+                  ]
                 )
                 const startJahr = get(data, 'apById.startJahr', null)
                 if (startJahr === null) return (
