@@ -18,11 +18,8 @@ const Row = styled.div`
 const TitleRow = styled(Row)`
   color: grey;
 `
-const Year = styled.div`
-  width: 1.7cm;
-`
 const Typ = styled.div`
-  width: 3.8cm;
+  width: 5.5cm;
   padding-right: 0.5cm;
 `
 const Goal = styled.div`
@@ -35,16 +32,15 @@ const Ziele = ({
   ziele: Array<Object>
 }) =>
   <Container>
-    <Title>Ziele:</Title>
+    <Title>Ziele im Berichtsjahr:</Title>
     <TitleRow>
-      <Year>Jahr</Year><Typ>Typ</Typ><Goal>Ziel</Goal>
+      <Typ>Typ</Typ><Goal>Ziel</Goal>
     </TitleRow>
     {
       ziele.map(z =>
         <Row key={z.id}>
-          <Year>{z.jahr || '(fehlt)'}</Year>
-          <Typ>{get(z, 'zielTypWerteByTyp.text', '(fehlt)')}</Typ>
-          <Goal>{z.bezeichnung || '(fehlt)'}</Goal>
+          <Typ>{get(z, 'zielTypWerteByTyp.text', '')}</Typ>
+          <Goal>{z.bezeichnung || ''}</Goal>
         </Row>
       )
     }

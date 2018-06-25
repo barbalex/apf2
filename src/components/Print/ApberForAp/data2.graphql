@@ -52,7 +52,6 @@ query apById($apId: UUID!, $jahr: Int!) {
     zielsByApId(condition: {jahr: $jahr}) {
       nodes {
         id
-        jahr
         bezeichnung
         zielTypWerteByTyp {
           id

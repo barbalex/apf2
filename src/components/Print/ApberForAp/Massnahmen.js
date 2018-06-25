@@ -2,9 +2,11 @@
 import React from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
+import format from 'date-fns/format'
 
 const Container = styled.div`
   padding: 0.2cm 0;
+  font-size: 12px;
 `
 const Title = styled.div`
   border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
@@ -16,9 +18,13 @@ const Row = styled.div`
   border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
 `
 const TitleRow = styled(Row)`
+  display: flex;
+  flex-direction: column;
   color: grey;
 `
-const TitleSubRow = styled.div``
+const TitleSubRow = styled.div`
+  display: flex;
+`
 const PopNr = styled.div`
   width: 1cm;
   padding-right: 0.2cm;
@@ -32,6 +38,14 @@ const TpopNr = styled.div`
   padding-right: 0.2cm;
 `
 const TpopFlurname = styled.div`
+  width: 4cm;
+  padding-right: 0.2cm;
+`
+const MassnDatum = styled.div`
+  width: 1cm;
+  padding-right: 0.2cm;
+`
+const MassnTyp = styled.div`
   width: 4cm;
   padding-right: 0.2cm;
 `
@@ -50,21 +64,37 @@ const Massnahmen = ({
       <TitleSubRow>
         <PopNr>Pop</PopNr>
         <PopName>Pop</PopName>
-        <TpopNr>Ziel</TpopNr>
+        <TpopNr>TPop</TpopNr>
         <TpopFlurname>TPop</TpopFlurname>
+        <MassnDatum>Massn</MassnDatum>
+        <MassnTyp>Massn</MassnTyp>
+        <MassnBeschreibung></MassnBeschreibung>
+      </TitleSubRow>
+      <TitleSubRow>
+        <PopNr>Nr.</PopNr>
+        <PopName>Name</PopName>
+        <TpopNr>Nr.</TpopNr>
+        <TpopFlurname>Flurname</TpopFlurname>
+        <MassnDatum>Datum</MassnDatum>
+        <MassnTyp>Typ</MassnTyp>
         <MassnBeschreibung>Massnahme</MassnBeschreibung>
       </TitleSubRow>
     </TitleRow>
     {
-      massns.map(m =>
-        <Row key={m.id}>
-          <PopNr>{get(m, 'tpopByTpopId.popByPopId.nr', '')}</PopNr>
-          <PopName>{get(m, 'tpopByTpopId.popByPopId.name', '')}</PopName>
-          <TpopNr>{get(m, 'tpopByTpopId.nr', '')}</TpopNr>
-          <TpopFlurname>{get(m, 'tpopByTpopId.flurname', '')}</TpopFlurname>
-          <MassnBeschreibung>{get(m, 'beschreibung', '')}</MassnBeschreibung>
-        </Row>
-      )
+      massns.map(m => {
+        const mDatum = m.datum ? format(m.datum, 'DD.MM') : ''
+        return (
+          <Row key={m.id}>
+            <PopNr>{get(m, 'tpopByTpopId.popByPopId.nr', '')}</PopNr>
+            <PopName>{get(m, 'tpopByTpopId.popByPopId.name', '')}</PopName>
+            <TpopNr>{get(m, 'tpopByTpopId.nr', '')}</TpopNr>
+            <TpopFlurname>{get(m, 'tpopByTpopId.flurname', '')}</TpopFlurname>
+            <MassnDatum>{mDatum}</MassnDatum>
+            <MassnTyp>{get(m, 'tpopmassnTypWerteByTyp.text', '')}</MassnTyp>
+            <MassnBeschreibung>{get(m, 'beschreibung', '')}</MassnBeschreibung>
+          </Row>
+        )
+      })
     }
   </Container>
   
