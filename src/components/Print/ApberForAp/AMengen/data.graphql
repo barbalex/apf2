@@ -84,11 +84,9 @@ query apById($apId: UUID!, $startJahr: Int!) {
         id
         tpopsByPopId(
           filter: {
-            and: [
-              { status: { equalTo: 200 } }
-              { apberRelevant: { equalTo: 1 } }
-              { bekanntSeit: { lessThan: $startJahr } }
-            ]
+            status: { equalTo: 200 }
+            apberRelevant: { equalTo: 1 }
+            bekanntSeit: { lessThan: $startJahr }
           }
         ) {
           totalCount
@@ -97,10 +95,8 @@ query apById($apId: UUID!, $startJahr: Int!) {
     }
     fiveLPop: popsByApId(
       filter: {
-        and: [
-          { status: { equalTo: 200 } }
-          { bekanntSeit: { greaterThanOrEqualTo: $startJahr } }
-        ]
+        status: { equalTo: 200 }
+        bekanntSeit: { greaterThanOrEqualTo: $startJahr }
       }
     ) {
       nodes {
@@ -119,11 +115,9 @@ query apById($apId: UUID!, $startJahr: Int!) {
         id
         tpopsByPopId(
           filter: {
-            and: [
-              { status: { equalTo: 200 } }
-              { apberRelevant: { equalTo: 1 } }
-              { bekanntSeit: { greaterThanOrEqualTo: $startJahr } }
-            ]
+            status: { equalTo: 200 }
+            apberRelevant: { equalTo: 1 }
+            bekanntSeit: { greaterThanOrEqualTo: $startJahr }
           }
         ) {
           totalCount
@@ -132,17 +126,13 @@ query apById($apId: UUID!, $startJahr: Int!) {
     }
     sevenLPop: popsByApId(
       filter: {
-        or: [
-          { status: { equalTo: 101 } }
+        status: { equalTo: 101 }
+        and: [
+          { status: { equalTo: 202 } }
           {
-            and: [
-              { status: { equalTo: 202 } }
-              {
-                or: [
-                  { bekanntSeit: { isNull: true } }
-                  { bekanntSeit: { lessThan: $startJahr } }
-                ]
-              }
+            or: [
+              { bekanntSeit: { isNull: true } }
+              { bekanntSeit: { lessThan: $startJahr } }
             ]
           }
         ]
@@ -168,14 +158,10 @@ query apById($apId: UUID!, $startJahr: Int!) {
             or: [
               { status: { equalTo: 101 } }
               {
-                and: [
-                  { status: { equalTo: 202 } }
-                  {
-                    or: [
-                      { bekanntSeit: { isNull: true } }
-                      { bekanntSeit: { lessThan: $startJahr } }
-                    ]
-                  }
+                status: { equalTo: 202 }
+                or: [
+                  { bekanntSeit: { isNull: true } }
+                  { bekanntSeit: { lessThan: $startJahr } }
                 ]
               }
             ]
