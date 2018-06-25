@@ -52,13 +52,15 @@ const TpopSeit = styled(Number)``
 const AMengen = ({
   apId,
   jahr,
+  startJahr,
 }:{
   apId: String,
   jahr: Number,
+  startJahr: Number,
 }) =>
   <Query
     query={dataGql}
-    variables={{ apId }}
+    variables={{ apId, startJahr }}
   >
     {({ loading, error, data }) => {
       if (error) return `Fehler: ${error.message}`
@@ -74,6 +76,13 @@ const AMengen = ({
         .length
       const threeLTpop = sum(
         get(data, 'apById.threeLTpop.nodes', [])
+          .map(p => get(p, 'tpopsByPopId.totalCount'))
+      )
+      const fourLPop = get(data, 'apById.fourLPop.nodes', [])
+        .filter(p => get(p, 'tpopsByPopId.totalCount') > 0)
+        .length
+      const fourLTpop = sum(
+        get(data, 'apById.fourLTpop.nodes', [])
           .map(p => get(p, 'tpopsByPopId.totalCount'))
       )
 
@@ -103,6 +112,13 @@ const AMengen = ({
             <Label3>ursprünglich</Label3>
             <PopBerJahr>{threeLPop}</PopBerJahr>
             <TpopBerJahr>{threeLTpop}</TpopBerJahr>
+            <PopSeit></PopSeit>
+            <TpopSeit></TpopSeit>
+          </Row>
+          <Row>
+            <Label3>angesiedelt (vor Beginn AP)</Label3>
+            <PopBerJahr>{fourLPop}</PopBerJahr>
+            <TpopBerJahr>{fourLTpop}</TpopBerJahr>
             <PopSeit></PopSeit>
             <TpopSeit></TpopSeit>
           </Row>

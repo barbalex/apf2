@@ -1,4 +1,4 @@
-query apById($apId: UUID!) {
+query apById($apId: UUID!, $startJahr: Int!) {
   apById(id: $apId) {
     id
     oneLPop: popsByApId(filter: {and: [{status: {notEqualTo: 300}}, {status: {isNull: false}}]}) {
@@ -33,10 +33,18 @@ query apById($apId: UUID!) {
         }
       }
     }
-    fourLPop: popsByApId(filter: {and: [{status: {equalTo: 200}}, {status: {isNull: false}}]}) {
+    fourLPop: popsByApId(filter: {and: [{status: {equalTo: 200}}, {bekanntSeit: {lessThan: $startJahr}}]}) {
       nodes {
         id
         tpopsByPopId(filter: {apberRelevant: {equalTo: 1}}) {
+          totalCount
+        }
+      }
+    }
+    fourLTpop: popsByApId(filter: {and: [{status: {notEqualTo: 300}}, {status: {isNull: false}}]}) {
+      nodes {
+        id
+        tpopsByPopId(filter: {and: [{status: {equalTo: 200}}, {apberRelevant: {equalTo: 1}}, {bekanntSeit: {lessThan: $startJahr}}]}) {
           totalCount
         }
       }
