@@ -4,11 +4,13 @@ import styled from 'styled-components'
 import { Query } from 'react-apollo'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
+import merge from 'lodash/merge'
 import format from 'date-fns/format'
 
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import getActiveNodes from '../../../modules/getActiveNodes'
-import dataGql from './data.graphql'
+import data1Gql from './data1.graphql'
+import data2Gql from './data2.graphql'
 import Ziele from './Ziele'
 
 const LoadingContainer = styled.div`
@@ -109,11 +111,12 @@ class ApberPrint extends Component<Props> {
     const { /*projekt: projId, */ap: apId, apber: apberId } = getActiveNodes(activeNodeArray)
 
     return (
+      
       <Query
-        query={dataGql}
-        variables={{ apId, apberId }}
+        query={data1Gql}
+        variables={{ apberId }}
       >
-        {({ loading, error, data }) => {
+        {({ loading, error, data: data1 }) => {
           if (loading)
             return (
               <Container>
@@ -122,91 +125,111 @@ class ApberPrint extends Component<Props> {
             )
           if (error) return `Fehler: ${error.message}`
 
-          const artname = get(data, 'apById.aeEigenschaftenByArtId.artname', '(Art fehlt)')
-          //const ap = get(data, 'apById')
-          const apber = get(data, 'apById.apbersByApId.nodes[0]')
-          const apberDatum = get(apber, 'datum')
-          const erfkrit = sortBy(
-            get(data, 'apById.erfkritsByApId.nodes'),
-            e => get(e, 'apErfkritWerteByErfolg.sort')
-          )
-          const ziele = sortBy(
-            get(data, 'apById.zielsByApId.nodes'),
-            e => get(e, 'zielTypWerteByTyp.sort')
-          ).filter(
-            e => e.jahr === apber.jahr
-          )
+          const jahr = get(data1, 'apberById.jahr')
 
           return (
-            <ErrorBoundary>
-              <Container innerRef={this.container}>
-                <ContentContainer>
-                  <Header>
-                    {
-                      `Jahresbericht ${get(apber, 'jahr', '(Jahr fehlt)')},
-                      ${artname},
-                      ${format(new Date(), 'DD.MM.YYYY')}`
-                    }
-                  </Header>
+            <Query
+              query={data2Gql}
+              variables={{ apId, jahr }}
+            >
+              {({ loading, error, data: data2 }) => {
+                if (loading)
+                  return (
+                    <Container>
+                      <LoadingContainer>Lade...</LoadingContainer>
+                    </Container>
+                  )
+                if (error) return `Fehler: ${error.message}`
 
-                  <Title1>{artname}</Title1>
+                const data = merge(data1, data2)
+                const artname = get(data, 'apById.aeEigenschaftenByArtId.artname', '(Art fehlt)')
+                //const ap = get(data, 'apById')
+                const apber = get(data, 'apberById')
+                const apberDatum = get(apber, 'datum')
+                const erfkrit = sortBy(
+                  get(data, 'apById.erfkritsByApId.nodes'),
+                  e => get(e, 'apErfkritWerteByErfolg.sort')
+                )
+                const ziele = sortBy(
+                  get(data, 'apById.zielsByApId.nodes'),
+                  e => get(e, 'zielTypWerteByTyp.sort')
+                ).filter(
+                  e => e.jahr === apber.jahr
+                )
 
-                  <Row>
-                    <p>{`Start Programm: ${get(data, 'apById.startJahr', '(Start-Jahr fehlt)')}`}</p>
-                    <p>{`Erste Massnahme im Jahr: ${get(data, 'allVApberErstemassnjahrs.nodes[0].jahr', '(Jahr fehlt)')}`}</p>
-                  </Row>
+                return (
+                  <ErrorBoundary>
+                    <Container innerRef={this.container}>
+                      <ContentContainer>
+                        <Header>
+                          {
+                            `Jahresbericht ${get(apber, 'jahr', '(Jahr fehlt)')},
+                            ${artname},
+                            ${format(new Date(), 'DD.MM.YYYY')}`
+                          }
+                        </Header>
 
-                  <Title1>A. Grundmengen</Title1>
+                        <Title1>{artname}</Title1>
 
-                  <Title1>B. Bestandesentwicklung</Title1>
+                        <Row>
+                          <p>{`Start Programm: ${get(data, 'apById.startJahr', '(Start-Jahr fehlt)')}`}</p>
+                          <p>{`Erste Massnahme im Jahr: ${get(data, 'allVApberErstemassnjahrs.nodes[0].jahr', '(Jahr fehlt)')}`}</p>
+                        </Row>
 
-                  <Title1>C. Zwischenbilanz zur Wirkung von Massnahmen</Title1>
-                  <TitledLabel></TitledLabel>
+                        <Title1>A. Grundmengen</Title1>
 
-                  <Title1>D. Einschätzung der Wirkung des AP insgesamt auf die Art</Title1>
-                  <FieldRow>
-                    <FieldLabel>Vergleich zu Vorjahr - Ausblick auf Gesamtziel</FieldLabel>
-                    <Field>{get(apber, 'vergleichVorjahrGesamtziel', '')}</Field>
-                  </FieldRow>
-                  <Ziele ziele={ziele} />
-                  <FieldRow>
-                    <FieldLabel>Beurteilungsskala</FieldLabel>
-                    <Field>
-                      {
-                        erfkrit.map(e =>
-                          <ErfkritRow key={e.id}>
-                            <ErfkritErfolg>{`${get(e, 'apErfkritWerteByErfolg.text', '(fehlt)')}:`}</ErfkritErfolg>
-                            <ErfkritKriterium>{e.kriterien || '(fehlt)'}</ErfkritKriterium>
-                          </ErfkritRow>
-                        )
-                      }
-                    </Field>
-                  </FieldRow>
-                  <FieldRowBold>
-                    <FieldLabel>Beurteilung</FieldLabel>
-                    <Field>{get(apber, 'apErfkritWerteByBeurteilung.text', '')}</Field>
-                  </FieldRowBold>
-                  <FieldRow>
-                    <FieldLabel>Bemerkungen</FieldLabel>
-                    <Field>{get(apber, 'wirkungAufArt', '')}</Field>
-                  </FieldRow>
-                  <FieldRow>
-                    <FieldLabel>Analyse</FieldLabel>
-                    <Field>{get(apber, 'apberAnalyse', '')}</Field>
-                  </FieldRow>
-                  <FieldRow>
-                    <FieldLabel>Konsequenzen für die Umsetzung</FieldLabel>
-                    <Field>{get(apber, 'konsequenzenUmsetzung', '')}</Field>
-                  </FieldRow>
-                  <FieldRow>
-                    <FieldLabel>Konsequenzen für die Erfolgskontrolle</FieldLabel>
-                    <Field>{get(apber, 'konsequenzenErfolgskontrolle', '')}</Field>
-                  </FieldRow>
-                  <Row>{`${apberDatum ? format(apberDatum, 'DD.MM.YYYY') : '(Datum fehlt)'} / ${get(apber, 'adresseByBearbeiter.name')}`}</Row>
+                        <Title1>B. Bestandesentwicklung</Title1>
 
-                </ContentContainer>
-              </Container>
-            </ErrorBoundary>
+                        <Title1>C. Zwischenbilanz zur Wirkung von Massnahmen</Title1>
+                        <TitledLabel></TitledLabel>
+
+                        <Title1>D. Einschätzung der Wirkung des AP insgesamt auf die Art</Title1>
+                        <FieldRow>
+                          <FieldLabel>Vergleich zu Vorjahr - Ausblick auf Gesamtziel</FieldLabel>
+                          <Field>{get(apber, 'vergleichVorjahrGesamtziel', '')}</Field>
+                        </FieldRow>
+                        <Ziele ziele={ziele} />
+                        <FieldRow>
+                          <FieldLabel>Beurteilungsskala</FieldLabel>
+                          <Field>
+                            {
+                              erfkrit.map(e =>
+                                <ErfkritRow key={e.id}>
+                                  <ErfkritErfolg>{`${get(e, 'apErfkritWerteByErfolg.text', '(fehlt)')}:`}</ErfkritErfolg>
+                                  <ErfkritKriterium>{e.kriterien || '(fehlt)'}</ErfkritKriterium>
+                                </ErfkritRow>
+                              )
+                            }
+                          </Field>
+                        </FieldRow>
+                        <FieldRowBold>
+                          <FieldLabel>Beurteilung</FieldLabel>
+                          <Field>{get(apber, 'apErfkritWerteByBeurteilung.text', '')}</Field>
+                        </FieldRowBold>
+                        <FieldRow>
+                          <FieldLabel>Bemerkungen</FieldLabel>
+                          <Field>{get(apber, 'wirkungAufArt', '')}</Field>
+                        </FieldRow>
+                        <FieldRow>
+                          <FieldLabel>Analyse</FieldLabel>
+                          <Field>{get(apber, 'apberAnalyse', '')}</Field>
+                        </FieldRow>
+                        <FieldRow>
+                          <FieldLabel>Konsequenzen für die Umsetzung</FieldLabel>
+                          <Field>{get(apber, 'konsequenzenUmsetzung', '')}</Field>
+                        </FieldRow>
+                        <FieldRow>
+                          <FieldLabel>Konsequenzen für die Erfolgskontrolle</FieldLabel>
+                          <Field>{get(apber, 'konsequenzenErfolgskontrolle', '')}</Field>
+                        </FieldRow>
+                        <Row>{`${apberDatum ? format(apberDatum, 'DD.MM.YYYY') : '(Datum fehlt)'} / ${get(apber, 'adresseByBearbeiter.name')}`}</Row>
+
+                      </ContentContainer>
+                    </Container>
+                  </ErrorBoundary>
+                )
+              }}
+            </Query>
           )
         }}
       </Query>

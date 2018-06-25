@@ -1,0 +1,71 @@
+query apById($apId: UUID!, $jahr: Int!) {
+  apById(id: $apId) {
+    id
+    startJahr
+    aeEigenschaftenByArtId {
+      id
+      artname
+    }
+    popsByApId {
+      nodes {
+        id
+        tpopsByPopId(condition: { apberRelevant: 1 }) {
+          nodes {
+            id
+            apberRelevant
+            tpopmassnsByTpopId(condition: { jahr: $jahr }) {
+              nodes {
+                id
+                datum
+                tpopmassnTypWerteByTyp {
+                  id
+                  text
+                }
+                beschreibung
+                tpopByTpopId {
+                  id
+                  nr
+                  flurname
+                  popByPopId {
+                    id
+                    nr
+                    name
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    erfkritsByApId {
+      nodes {
+        id
+        kriterien
+        apErfkritWerteByErfolg {
+          id
+          text
+          sort
+        }
+      }
+    }
+    zielsByApId {
+      nodes {
+        id
+        jahr
+        bezeichnung
+        zielTypWerteByTyp {
+          id
+          text
+          sort
+        }
+      }
+    }
+  }
+  allVApberErstemassnjahrs(condition: { id: $apId }) {
+    nodes {
+      id
+      jahr
+    }
+  }
+}
