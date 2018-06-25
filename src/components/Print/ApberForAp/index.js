@@ -78,6 +78,12 @@ const FieldRow = styled.div`
 const FieldRowBold = styled(FieldRow)`
   font-weight: 800;
 `
+const FieldRowFullWidth = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 0.2cm 0;
+`
+const FullWidthField = styled.div``
 const FieldLabel = styled.label`
   width: 5.5cm;
   padding-right: 0.5cm;
@@ -188,7 +194,10 @@ class ApberPrint extends Component<Props> {
                         <Title1>B. Bestandesentwicklung</Title1>
 
                         <Title1>C. Zwischenbilanz zur Wirkung von Massnahmen</Title1>
-                        
+                        <FieldRowFullWidth>
+                          <TitledLabel>Bemerkungen / Folgerungen für nächstes Jahr: Optimierung Massnahmen</TitledLabel>
+                          <FullWidthField>{get(apber, 'massnahmenOptimieren', '')}</FullWidthField>
+                        </FieldRowFullWidth>
                         <Massnahmen massns={massns} />
 
                         <Title1>D. Einschätzung der Wirkung des AP insgesamt auf die Art</Title1>
