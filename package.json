@@ -80,7 +80,7 @@
     "react-loadable": "5.4.0",
     "react-reflex": "2.2.7",
     "react-sortable-hoc": "0.8.3",
-    "react-virtualized": "9.19.1",
+    "react-virtualized": "9.20.0",
     "recompose": "0.27.1",
     "styled-components": "3.3.3",
     "typeface-roboto": "0.0.54",
