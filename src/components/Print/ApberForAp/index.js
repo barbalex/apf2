@@ -5,6 +5,7 @@ import { Query } from 'react-apollo'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
 import merge from 'lodash/merge'
+import flatten from 'lodash/flatten'
 import format from 'date-fns/format'
 
 import ErrorBoundary from '../../shared/ErrorBoundary'
@@ -12,6 +13,7 @@ import getActiveNodes from '../../../modules/getActiveNodes'
 import data1Gql from './data1.graphql'
 import data2Gql from './data2.graphql'
 import Ziele from './Ziele'
+import Massnahmen from './Massnahmen'
 
 const LoadingContainer = styled.div`
   padding: 15px;
@@ -152,9 +154,14 @@ class ApberPrint extends Component<Props> {
                 )
                 const ziele = sortBy(
                   get(data, 'apById.zielsByApId.nodes'),
-                  e => get(e, 'zielTypWerteByTyp.sort')
-                ).filter(
-                  e => e.jahr === apber.jahr
+                  e => [get(e, 'zielTypWerteByTyp.sort'), e.bezeichnung]
+                )
+                const pops = get(data, 'apById.popsByApId.nodes', [])
+                const tpops = flatten(
+                  pops.map(p => get(p, 'tpopsByPopId.nodes', []))
+                )
+                const massns = flatten(
+                  tpops.map(t => get(t, 'tpopmassnsByTpopId.nodes', []))
                 )
 
                 return (
@@ -181,7 +188,8 @@ class ApberPrint extends Component<Props> {
                         <Title1>B. Bestandesentwicklung</Title1>
 
                         <Title1>C. Zwischenbilanz zur Wirkung von Massnahmen</Title1>
-                        <TitledLabel></TitledLabel>
+                        
+                        <Massnahmen massns={massns} />
 
                         <Title1>D. Einschätzung der Wirkung des AP insgesamt auf die Art</Title1>
                         <FieldRow>

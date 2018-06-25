@@ -8,11 +8,15 @@ const Container = styled.div`
 `
 const Title = styled.div`
   border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
+  font-weight: 600;
 `
 const Row = styled.div`
   display: flex;
   padding: 0.05cm 0;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
+`
+const TitleRow = styled(Row)`
+  color: grey;
 `
 const Year = styled.div`
   width: 1.7cm;
@@ -25,12 +29,16 @@ const Goal = styled.div`
   width: 100%;
 `
 
-const Ziele = ({ ziele }:{ziele: Array<Object>}) =>
+const Ziele = ({
+  ziele
+}:{
+  ziele: Array<Object>
+}) =>
   <Container>
     <Title>Ziele:</Title>
-    <Row key="head">
+    <TitleRow>
       <Year>Jahr</Year><Typ>Typ</Typ><Goal>Ziel</Goal>
-    </Row>
+    </TitleRow>
     {
       ziele.map(z =>
         <Row key={z.id}>

@@ -49,7 +49,7 @@ query apById($apId: UUID!, $jahr: Int!) {
         }
       }
     }
-    zielsByApId {
+    zielsByApId(condition: {jahr: $jahr}) {
       nodes {
         id
         jahr
