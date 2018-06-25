@@ -46,10 +46,8 @@ export default ({
     .filter(el => {
       if (nodeLabelFilterString) {
         return `${el.jahr || '(kein Jahr)'}: ${get(
-          el,
-          'tpopkontrTypWerteByTyp.text',
-          '(kein Typ)'
-        )}`
+          el, 'tpopkontrTypWerteByTyp.text'
+        ) || '(kein Typ)'}`
           .toLowerCase()
           .includes(nodeLabelFilterString.toLowerCase())
       }
@@ -62,10 +60,8 @@ export default ({
       parentId: tpopId,
       urlLabel: el.id,
       label: `${el.jahr || '(kein Jahr)'}: ${get(
-        el,
-        'tpopkontrTypWerteByTyp.text',
-        '(kein Typ)'
-      )}`,
+        el, 'tpopkontrTypWerteByTyp.text'
+      ) || '(kein Typ)'}`,
       url: [
         'Projekte',
         projId,

@@ -20,7 +20,8 @@ export default ({
     // filter by nodeLabelFilter
     .filter(el => {
       if (nodeLabelFilterString) {
-        return get(el, 'name', '(kein Name)')
+        const name = el.name || '(kein Name)'
+        return name
           .toLowerCase()
           .includes(nodeLabelFilterString.toLowerCase())
       }

@@ -44,11 +44,9 @@ export default ({
     // filter by nodeLabelFilter
     .filter(el => {
       if (nodeLabelFilterString) {
-        return `${el.bezeichnung || '(kein Ziel)'} (${get(
-          el,
-          'zielTypWerteByTyp.text',
-          '(kein Typ)'
-        )})`.toLowerCase().includes(nodeLabelFilterString.toLowerCase())
+        const label = `${el.bezeichnung || '(kein Ziel)'} (${get(
+          el, 'zielTypWerteByTyp.text') || '(kein Typ)'})`
+        return label.toLowerCase().includes(nodeLabelFilterString.toLowerCase())
       }
       return true
     })

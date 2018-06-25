@@ -45,10 +45,8 @@ export default ({
     .filter(el => {
       if (nodeLabelFilterString) {
         return `${el.jahr || '(kein Jahr)'}: ${get(
-          el,
-          'tpopmassnTypWerteByTyp.text',
-          '(kein Typ)'
-        )}`
+          el, 'tpopmassnTypWerteByTyp.text'
+        ) || '(kein Typ)'}`
           .toLowerCase()
           .includes(nodeLabelFilterString.toLowerCase())
       }

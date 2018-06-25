@@ -41,7 +41,8 @@ export default ({
     // filter by nodeLabelFilter
     .filter(el => {
       if (nodeLabelFilterString) {
-        return get(el, 'aeEigenschaftenByArtId.artname', '(keine Art gewählt)')
+        const artname = get(el, 'aeEigenschaftenByArtId.artname') || '(keine Art gewählt)'
+        return artname
           .toLowerCase()
           .includes(nodeLabelFilterString.toLowerCase())
       }

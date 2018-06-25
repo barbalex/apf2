@@ -51,14 +51,10 @@ export default ({
     .filter(el => {
       if (nodeLabelFilterString) {
         return `${get(
-          el,
-          'tpopkontrzaehlEinheitWerteByEinheit.text',
-          '(keine Einheit)'
-        )}: ${el.anzahl} ${get(
-          el,
-          'tpopkontrzaehlMethodeWerteByMethode.text',
-          '(keine Methode)'
-        )}`
+          el, 'tpopkontrzaehlEinheitWerteByEinheit.text'
+        ) || '(keine Einheit)'}: ${el.anzahl} ${get(
+          el, 'tpopkontrzaehlMethodeWerteByMethode.text'
+        ) || '(keine Methode)'}`
           .toLowerCase()
           .includes(nodeLabelFilterString.toLowerCase())
       }
@@ -71,14 +67,10 @@ export default ({
       parentId: tpopkontrId,
       urlLabel: el.id,
       label: `${get(
-        el,
-        'tpopkontrzaehlEinheitWerteByEinheit.text',
-        '(keine Einheit)'
-      )}: ${el.anzahl} ${get(
-        el,
-        'tpopkontrzaehlMethodeWerteByMethode.text',
-        '(keine Methode)'
-      )}`,
+        el, 'tpopkontrzaehlEinheitWerteByEinheit.text'
+      ) || '(keine Einheit)'}: ${el.anzahl} ${get(
+        el, 'tpopkontrzaehlMethodeWerteByMethode.text'
+      ) || '(keine Methode)'}`,
       url: [
         'Projekte',
         projId,

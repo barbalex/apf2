@@ -51,14 +51,10 @@ export default ({
     .filter(el => {
       if (nodeLabelFilterString) {
         return `${get(
-          el,
-          'tpopkontrzaehlEinheitWerteByEinheit.text',
-          '(keine Einheit)'
-        )}: ${el.anzahl} ${get(
-          el,
-          'tpopkontrzaehlMethodeWerteByMethode.text',
-          '(keine Methode)'
-        )}`
+          el, 'tpopkontrzaehlEinheitWerteByEinheit.text'
+        ) || '(keine Einheit)'}: ${el.anzahl} ${get(
+          el, 'tpopkontrzaehlMethodeWerteByMethode.text'
+        ) || '(keine Methode)'}`
           .toLowerCase()
           .includes(nodeLabelFilterString.toLowerCase())
       }

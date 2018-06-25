@@ -45,10 +45,8 @@ export default ({
     .filter(el => {
       if (nodeLabelFilterString) {
         return `${el.jahr || '(kein Jahr)'}: ${get(
-          el,
-          'tpopmassnErfbeurtWerteByBeurteilung.text',
-          '(nicht beurteilt)'
-        )}`
+          el, 'tpopmassnErfbeurtWerteByBeurteilung.text'
+        ) || '(nicht beurteilt)'}`
           .toLowerCase()
           .includes(nodeLabelFilterString.toLowerCase())
       }

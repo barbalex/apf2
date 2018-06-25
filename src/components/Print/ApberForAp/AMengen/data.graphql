@@ -1,10 +1,42 @@
 query apById($apId: UUID!) {
   apById(id: $apId) {
     id
-    oneLPop: popsByApId(filter: {status: {notEqualTo: 300}}) {
+    oneLPop: popsByApId(filter: {and: [{status: {notEqualTo: 300}}, {status: {isNull: false}}]}) {
       nodes {
         id
-        tpopsByPopId(condition: {apberRelevant: 1}) {
+        tpopsByPopId(filter: {apberRelevant: {equalTo: 1}}) {
+          totalCount
+        }
+      }
+    }
+    oneLTpop: popsByApId(filter: {and: [{status: {notEqualTo: 300}}, {status: {isNull: false}}]}) {
+      nodes {
+        id
+        tpopsByPopId(filter: {and: [{status: {notEqualTo: 300}}, {status: {isNull: false}}, {apberRelevant: {equalTo: 1}}]}) {
+          totalCount
+        }
+      }
+    }
+    threeLPop: popsByApId(filter: {status: {equalTo: 100}}) {
+      nodes {
+        id
+        tpopsByPopId(filter: {apberRelevant: {equalTo: 1}}) {
+          totalCount
+        }
+      }
+    }
+    threeLTpop: popsByApId(filter: {and: [{status: {notEqualTo: 300}}, {status: {isNull: false}}]}) {
+      nodes {
+        id
+        tpopsByPopId(filter: {and: [{status: {equalTo: 100}}, {apberRelevant: {equalTo: 1}}]}) {
+          totalCount
+        }
+      }
+    }
+    fourLPop: popsByApId(filter: {and: [{status: {equalTo: 200}}, {status: {isNull: false}}]}) {
+      nodes {
+        id
+        tpopsByPopId(filter: {apberRelevant: {equalTo: 1}}) {
           totalCount
         }
       }

@@ -2488,7 +2488,7 @@ FROM
     apflora.tpop
     ON apflora.pop.id = apflora.tpop.pop_id
 WHERE
-  apflora.pop.status  NOT IN (300)
+  apflora.pop.status NOT IN (300)
   AND apflora.tpop.status = 100
   AND apflora.tpop.apber_relevant = 1
 GROUP BY

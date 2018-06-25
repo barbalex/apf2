@@ -172,6 +172,16 @@ class ApberPrint extends Component<Props> {
                 const massns = flatten(
                   tpops.map(t => get(t, 'tpopmassnsByTpopId.nodes', []))
                 )
+                const startJahr = get(data, 'apById.startJahr', null)
+                if (startJahr === null) return (
+                  <ErrorBoundary>
+                    <Container innerRef={this.container}>
+                      <ContentContainer>
+                        Bitte beim AP das Startjahr ergänzen!
+                      </ContentContainer>
+                    </Container>
+                  </ErrorBoundary>
+                )
 
                 return (
                   <ErrorBoundary>
@@ -193,7 +203,7 @@ class ApberPrint extends Component<Props> {
                         </Row>
 
                         <Title1>A. Grundmengen</Title1>
-                        <AMengen apId={apId} jahr={jahr} />
+                        <AMengen apId={apId} jahr={jahr} startJahr={get(data, 'apById.startJahr', 0)} />
                         <FieldRowFullWidth>
                           <TitledLabel>Bemerkungen / Folgerungen für nächstes Jahr: neue Biotope</TitledLabel>
                           <FullWidthField>{get(apber, 'biotopeNeue', '')}</FullWidthField>
