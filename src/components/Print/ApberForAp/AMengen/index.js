@@ -146,6 +146,37 @@ const AMengen = ({
             <PopSeit></PopSeit>
             <TpopSeit></TpopSeit>
           </Row>
+          <Row>
+            <Label2>erloschen:</Label2>
+          </Row>
+          <Row>
+            <Label3>total</Label3>
+            <PopBerJahr>{}</PopBerJahr>
+            <TpopBerJahr>{}</TpopBerJahr>
+            <PopSeit></PopSeit>
+            <TpopSeit></TpopSeit>
+          </Row>
+          <Row>
+            <Label3>zuvor autochthon oder vor AP angesiedelt</Label3>
+            <PopBerJahr>{}</PopBerJahr>
+            <TpopBerJahr>{}</TpopBerJahr>
+            <PopSeit></PopSeit>
+            <TpopSeit></TpopSeit>
+          </Row>
+          <Row>
+            <Label3>nach Beginn Aktionsplan angesiedelt</Label3>
+            <PopBerJahr>{}</PopBerJahr>
+            <TpopBerJahr>{}</TpopBerJahr>
+            <PopSeit></PopSeit>
+            <TpopSeit></TpopSeit>
+          </Row>
+          <Row>
+            <Label2>Ansaatversuche:</Label2>
+            <PopBerJahr>{}</PopBerJahr>
+            <TpopBerJahr>{}</TpopBerJahr>
+            <PopSeit></PopSeit>
+            <TpopSeit></TpopSeit>
+          </Row>
         </Container>
       )
     }}
