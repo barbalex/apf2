@@ -83,13 +83,16 @@ const FieldRowFullWidth = styled.div`
   flex-direction: column;
   padding: 0.2cm 0;
 `
-const FullWidthField = styled.div``
+const FullWidthField = styled.div`
+  hyphens: auto;
+`
 const FieldLabel = styled.label`
   width: 5.5cm;
   padding-right: 0.5cm;
 `
 const Field = styled.div`
   width: 100%;
+  hyphens: auto;
 `
 const ErfkritRow = styled.div`
   display: flex;
@@ -190,8 +193,20 @@ class ApberPrint extends Component<Props> {
                         </Row>
 
                         <Title1>A. Grundmengen</Title1>
+                        <FieldRowFullWidth>
+                          <TitledLabel>Bemerkungen / Folgerungen für nächstes Jahr: neue Biotope</TitledLabel>
+                          <FullWidthField>{get(apber, 'biotopeNeue', '')}</FullWidthField>
+                        </FieldRowFullWidth>
 
                         <Title1>B. Bestandesentwicklung</Title1>
+                        <FieldRowFullWidth>
+                          <TitledLabel>Weitere Aktivitäten der Aktionsplan-Verantwortlichen</TitledLabel>
+                          <FullWidthField>{get(apber, 'massnahmenApBearb', '')}</FullWidthField>
+                        </FieldRowFullWidth>
+                        <FieldRowFullWidth>
+                          <TitledLabel>Bemerkungen / Folgerungen für nächstes Jahr: Optimierung Biotope</TitledLabel>
+                          <FullWidthField>{get(apber, 'biotopeOptimieren', '')}</FullWidthField>
+                        </FieldRowFullWidth>
 
                         <Title1>C. Zwischenbilanz zur Wirkung von Massnahmen</Title1>
                         <FieldRowFullWidth>
