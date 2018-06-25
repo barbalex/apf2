@@ -6,6 +6,7 @@ import format from 'date-fns/format'
 
 const Container = styled.div`
   padding: 0.2cm 0;
+  max-width: 18cm;
   font-size: 12px;
 `
 const Title = styled.div`
@@ -21,32 +22,40 @@ const TitleRow = styled(Row)`
   display: flex;
   flex-direction: column;
   color: grey;
+  max-width: 18cm;
 `
 const TitleSubRow = styled.div`
   display: flex;
+  max-width: 18cm;
 `
 const PopNr = styled.div`
-  width: 1cm;
+  min-width: 0.6cm;
+  max-width: 0.6cm;
   padding-right: 0.2cm;
 `
 const PopName = styled.div`
-  width: 4cm;
+  min-width: 3.5cm;
+  max-width: 3.5cm;
   padding-right: 0.2cm;
 `
 const TpopNr = styled.div`
-  width: 1cm;
+  min-width: 0.8cm;
+  max-width: 0.8cm;
   padding-right: 0.2cm;
 `
 const TpopFlurname = styled.div`
-  width: 4cm;
+  min-width: 3.5cm;
+  max-width: 3.5cm;
   padding-right: 0.2cm;
 `
 const MassnDatum = styled.div`
-  width: 1cm;
+  min-width: 1cm;
+  max-width: 1cm;
   padding-right: 0.2cm;
 `
 const MassnTyp = styled.div`
-  width: 4cm;
+  min-width: 3.3cm;
+  max-width: 3.3cm;
   padding-right: 0.2cm;
 `
 const MassnBeschreibung = styled.div`
