@@ -23,8 +23,8 @@ query apById($apId: UUID!, $startJahr: Int!) {
         tpopsByPopId(
           filter: {
             and: [
-              { status: { notEqualTo: 300 } },
-              { status: { isNull: false } },
+              { status: { notEqualTo: 300 } }
+              { status: { isNull: false } }
               { apberRelevant: { equalTo: 1 } }
             ]
           }
@@ -189,6 +189,42 @@ query apById($apId: UUID!, $startJahr: Int!) {
             status: { equalTo: 202 }
             bekanntSeit: { greaterThanOrEqualTo: $startJahr }
             apberRelevant: { equalTo: 1 }
+          }
+        ) {
+          totalCount
+        }
+      }
+    }
+    nineLPop: popsByApId(filter: { status: { equalTo: 201 } }) {
+      nodes {
+        id
+        tpopsByPopId(filter: { apberRelevant: { equalTo: 1 } }) {
+          totalCount
+        }
+      }
+    }
+    nineLTpop: popsByApId {
+      nodes {
+        id
+        tpopsByPopId(
+          filter: {
+            status: { equalTo: 201 }
+            apberRelevant: { equalTo: 1 }
+          }
+        ) {
+          totalCount
+        }
+      }
+    }
+    tenLPop: popsByApId(filter: { status: { equalTo: 300 } }) {
+      totalCount
+    }
+    tenLTpop: popsByApId {
+      nodes {
+        id
+        tpopsByPopId(
+          filter: {
+            status: { equalTo: 300 }
           }
         ) {
           totalCount

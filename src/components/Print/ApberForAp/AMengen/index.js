@@ -18,6 +18,10 @@ const Row = styled.div`
 const TotalRow = styled(Row)`
   font-weight: 600;
 `
+const FernerRow = styled.div`
+  padding: 0.05cm 0 0 0;
+  font-size: 12px;
+`
 const LabelRow = styled(Row)`
   font-size: 12px;
 `
@@ -109,6 +113,18 @@ const AMengen = ({
         get(data, 'apById.eightLTpop.nodes', [])
           .map(p => get(p, 'tpopsByPopId.totalCount'))
       )
+      const nineLPop = get(data, 'apById.nineLPop.nodes', [])
+        .filter(p => get(p, 'tpopsByPopId.totalCount') > 0)
+        .length
+      const nineLTpop = sum(
+        get(data, 'apById.nineLTpop.nodes', [])
+          .map(p => get(p, 'tpopsByPopId.totalCount'))
+      )
+      const tenLPop = get(data, 'apById.tenLPop.totalCount', 0)
+      const tenLTpop = sum(
+        get(data, 'apById.tenLTpop.nodes', [])
+          .map(p => get(p, 'tpopsByPopId.totalCount'))
+      )
 
       return (
         <Container>
@@ -186,8 +202,16 @@ const AMengen = ({
           </Row>
           <Row>
             <Label2>Ansaatversuche:</Label2>
-            <PopBerJahr>{}</PopBerJahr>
-            <TpopBerJahr>{}</TpopBerJahr>
+            <PopBerJahr>{nineLPop}</PopBerJahr>
+            <TpopBerJahr>{nineLTpop}</TpopBerJahr>
+            <PopSeit></PopSeit>
+            <TpopSeit></TpopSeit>
+          </Row>
+          <FernerRow>Ferner:</FernerRow>
+          <Row>
+            <Label1>potentieller Wuchs-/Ansiedlungsort.:</Label1>
+            <PopBerJahr>{tenLPop}</PopBerJahr>
+            <TpopBerJahr>{tenLTpop}</TpopBerJahr>
             <PopSeit></PopSeit>
             <TpopSeit></TpopSeit>
           </Row>
