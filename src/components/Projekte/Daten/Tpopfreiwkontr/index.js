@@ -63,7 +63,6 @@ const enhance = compose(
         id: row.id,
         [field]: value,
       }
-      console.log('Tpopfreiwkontr: row:', row)
       if (field2) variables[field2] = value2
       try {
         await updateTpopkontr({
@@ -118,7 +117,6 @@ const enhance = compose(
       } catch (error) {
         return setErrors({ [field]: error.message })
       }
-      console.log('Tpopfreiwkontr: row2:', row)
       setErrors(({}))
     },
   }),
