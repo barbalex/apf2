@@ -53,6 +53,11 @@ export default ({
       }
       return true
     })
+  nodes = sortBy(nodes, n => {
+    if (n.datum) return n.datum
+    if (n.jahr) return `${n.jahr}-01-01`
+    return '(kein Jahr)'
+  })
     .map(el => ({
       nodeType: 'table',
       menuType: 'tpopfeldkontr',
@@ -77,12 +82,12 @@ export default ({
       hasChildren: true,
     }))
     .filter(el => allParentNodesAreOpen(openNodes, el.url))
-  nodes = sortBy(nodes, n => (n.datum ? n.datum : `${n.jahr}-01-01`)).map(
-    (el, index) => {
-      el.sort = [projIndex, 1, apIndex, 1, popIndex, 1, tpopIndex, 3, index]
-      return el
-    }
-  )
+    .map(
+      (el, index) => {
+        el.sort = [projIndex, 1, apIndex, 1, popIndex, 1, tpopIndex, 3, index]
+        return el
+      }
+    )
 
   return nodes
 }
