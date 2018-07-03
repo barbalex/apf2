@@ -63,6 +63,7 @@ const enhance = compose(
         id: row.id,
         [field]: value,
       }
+      console.log('Tpopfreiwkontr: row:', row)
       if (field2) variables[field2] = value2
       try {
         await updateTpopkontr({
@@ -107,7 +108,7 @@ const enhance = compose(
                     ? value
                     : row.jungpflanzenVorhanden,
                 adresseByBearbeiter: row.adresseByBearbeiter,
-                aeEigenschaftenByArtId: row.tpopByTpopId,
+                tpopByTpopId: row.tpopByTpopId,
                 __typename: 'Tpopkontr',
               },
               __typename: 'Tpopkontr',
@@ -117,6 +118,7 @@ const enhance = compose(
       } catch (error) {
         return setErrors({ [field]: error.message })
       }
+      console.log('Tpopfreiwkontr: row2:', row)
       setErrors(({}))
     },
   }),
