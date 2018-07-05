@@ -54,7 +54,7 @@ const TpopBerJahr = styled(Number)`
 const PopSeit = styled(Number)``
 const TpopSeit = styled(Number)``
 
-const AMengen = ({
+const CMengen = ({
   apId,
   jahr,
   startJahr,
@@ -134,4 +134,4 @@ const AMengen = ({
   </Query>
   
 
-export default AMengen
+export default CMengen
