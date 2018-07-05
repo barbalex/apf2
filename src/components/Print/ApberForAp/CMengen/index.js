@@ -3,7 +3,10 @@ import React from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import uniqBy from 'lodash/uniqBy'
+import min from 'lodash/min'
 import flatten from 'lodash/flatten'
+import groupBy from 'lodash/groupBy'
+import maxBy from 'lodash/maxBy'
 import { Query } from 'react-apollo'
 
 import dataGql from './data.graphql'
@@ -82,11 +85,61 @@ const CMengen = ({
       const oneLTpop = oneLTpop_tpop.length
       const oneLPop = uniqBy(oneLTpop_tpop, 'popId').length
 
+      const oneRTpop_pop = get(data, 'apById.oneRTpop.nodes', [])
+      const oneRTpop_tpop = flatten(
+        oneRTpop_pop.map(p =>
+          get(p, 'tpopsByPopId.nodes', [])
+        )
+      )
+      const massns = flatten(
+        oneRTpop_tpop.map(p =>
+          get(p, 'tpopmassnsByTpopId.nodes', [])
+        )
+      )
+      const massnbers = flatten(
+        oneRTpop_tpop.map(p =>
+          get(p, 'tpopmassnbersByTpopId.nodes', [])
+        )
+      )
+      const oneRTpop_firstYear = min(
+        massns.map(b =>
+          b.jahr
+        )
+      )
+      const oneRPop_massnbersByPopId = groupBy(massnbers, b => b.popId)
+      const oneRPop_lastMassnbers = Object.keys(oneRPop_massnbersByPopId).map(b =>
+        maxBy(oneRPop_massnbersByPopId[b], 'jahr')
+      )
+
+      // 1.
+      const oneRPop = uniqBy(massns, b =>
+        get(b, 'tpopByTpopId.popId')
+      ).length
+      const oneRTpop = uniqBy(massns, b =>
+        get(b, 'tpopByTpopId.id')
+      ).length
+
+      // 2.
+      const twoRPop = uniqBy(massnbers, b =>
+        get(b, 'tpopByTpopId.popId')
+      ).length
+      const twoRTpop = uniqBy(massnbers, b =>
+        get(b, 'tpopByTpopId.id')
+      ).length
+
+      // 3.
+      const threeRPop = oneRPop_lastMassnbers
+        .filter(b => b.entwicklung === 2)
+        .length
+      const threeRTpop = oneRTpop_lastMassnbers
+        .filter(b => b.entwicklung === 2)
+        .length
+
       return (
         <Container>
           <Row>
             <Year>{jahr}</Year>
-            <YearSince>{`Seit TODO`}</YearSince>
+            <YearSince>{`Seit ${oneRTpop_firstYear}`}</YearSince>
           </Row>
           <LabelRow>
             <Label1></Label1>
@@ -99,11 +152,15 @@ const CMengen = ({
             <Label1>Anzahl Populationen/Teilpopulationen mit Massnahmen</Label1>
             <PopBerJahr>{oneLPop}</PopBerJahr>
             <TpopBerJahr>{oneLTpop}</TpopBerJahr>
-            <PopSeit>{}</PopSeit>
-            <TpopSeit>{}</TpopSeit>
+            <PopSeit>{oneRPop}</PopSeit>
+            <TpopSeit>{oneRTpop}</TpopSeit>
           </Row>
           <Row>
             <Label2>kontrolliert</Label2>
+            <PopBerJahr></PopBerJahr>
+            <TpopBerJahr></TpopBerJahr>
+            <PopSeit>{twoRPop}</PopSeit>
+            <TpopSeit>{twoRTpop}</TpopSeit>
           </Row>
           <Row>
             <Label3>sehr erfolgreich</Label3>
