@@ -2,7 +2,8 @@
 import React from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
-import sum from 'lodash/sum'
+import uniqBy from 'lodash/uniqBy'
+import flatten from 'lodash/flatten'
 import { Query } from 'react-apollo'
 
 import dataGql from './data.graphql'
@@ -65,10 +66,21 @@ const CMengen = ({
 }) =>
   <Query
     query={dataGql}
-    variables={{ apId, startJahr }}
+    variables={{ apId, jahr }}
   >
     {({ loading, error, data }) => {
       if (error) return `Fehler: ${error.message}`
+
+      const oneLTpop_pop = get(data, 'apById.oneLTpop.nodes', [])
+      const oneLTpop_tpop = flatten(
+        oneLTpop_pop.map(p =>
+          get(p, 'tpopsByPopId.nodes', [])
+        )
+      ).filter(p =>
+        get(p, 'tpopmassnsByTpopId.totalCount', 0) > 0
+      )
+      const oneLTpop = oneLTpop_tpop.length
+      const oneLPop = uniqBy(oneLTpop_tpop, 'popId').length
 
       return (
         <Container>
@@ -85,8 +97,8 @@ const CMengen = ({
           </LabelRow>
           <Row>
             <Label1>Anzahl Populationen/Teilpopulationen mit Massnahmen</Label1>
-            <PopBerJahr>{}</PopBerJahr>
-            <TpopBerJahr>{}</TpopBerJahr>
+            <PopBerJahr>{oneLPop}</PopBerJahr>
+            <TpopBerJahr>{oneLTpop}</TpopBerJahr>
             <PopSeit>{}</PopSeit>
             <TpopSeit>{}</TpopSeit>
           </Row>
