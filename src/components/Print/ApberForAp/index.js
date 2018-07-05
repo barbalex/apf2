@@ -60,8 +60,13 @@ const Header = styled.p`
   font-size: 12px;
 `
 const Title1 = styled.h3`
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 800;
+`
+const TitleBeforeMengen = styled.h3`
+  font-size: 16px;
+  font-weight: 800;
+  margin-bottom: -26px;
 `
 const TitledLabel = styled.label`
   text-decoration: underline;
@@ -217,14 +222,14 @@ class ApberPrint extends Component<Props> {
                           <p>{`Erste Massnahme im Jahr: ${get(data, 'allVApberErstemassnjahrs.nodes[0].jahr', '(Jahr fehlt)')}`}</p>
                         </Row>
 
-                        <Title1>A. Grundmengen</Title1>
+                        <TitleBeforeMengen>A. Grundmengen</TitleBeforeMengen>
                         <AMengen apId={apId} jahr={jahr} startJahr={startJahr} />
                         <FieldRowFullWidth>
                           <TitledLabel>Bemerkungen / Folgerungen für nächstes Jahr: neue Biotope</TitledLabel>
                           <FullWidthField>{get(apber, 'biotopeNeue', '')}</FullWidthField>
                         </FieldRowFullWidth>
 
-                        <Title1>B. Bestandesentwicklung</Title1>
+                        <TitleBeforeMengen>B. Bestandesentwicklung</TitleBeforeMengen>
                         <BMengen apId={apId} jahr={jahr} startJahr={startJahr} />
                         <FieldRowFullWidth>
                           <TitledLabel>Weitere Aktivitäten der Aktionsplan-Verantwortlichen</TitledLabel>
@@ -235,7 +240,7 @@ class ApberPrint extends Component<Props> {
                           <FullWidthField>{get(apber, 'biotopeOptimieren', '')}</FullWidthField>
                         </FieldRowFullWidth>
 
-                        <Title1>C. Zwischenbilanz zur Wirkung von Massnahmen</Title1>
+                        <TitleBeforeMengen>C. Zwischenbilanz zur Wirkung von Massnahmen</TitleBeforeMengen>
                         <CMengen apId={apId} jahr={jahr} startJahr={startJahr} />
                         <FieldRowFullWidth>
                           <TitledLabel>Bemerkungen / Folgerungen für nächstes Jahr: Optimierung Massnahmen</TitledLabel>

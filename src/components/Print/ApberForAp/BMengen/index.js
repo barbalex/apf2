@@ -19,6 +19,10 @@ const Row = styled.div`
   padding: 0.05cm 0;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
 `
+const YearRow = styled.div`
+  display: flex;
+  padding: 0.05cm 0;
+`
 const NkRow = styled(Row)`
   padding: 0.3cm 0 0.05cm 0;
 `
@@ -39,10 +43,24 @@ const Label1 = styled.div`
   min-width: 10cm;
   max-width: 10cm;
 `
+const Label2Davon = styled.div`
+  font-size: 10px;
+  padding-left: 1.5cm;
+  min-width: 0.8cm;
+  max-width: 0.8cm;
+  top: 3px;
+  position: relative;
+  color: grey;
+`
 const Label3 = styled.div`
-  min-width: 7.8cm;
-  max-width: 7.8cm;
-  padding-left: 2.2cm;
+  min-width: 7.5cm;
+  max-width: 7.5cm;
+  padding-left: 2.5cm;
+`
+const Label3AfterDavon = styled.div`
+  padding-left: 0.2cm;
+  min-width: 7.5cm;
+  max-width: 7.5cm;
 `
 const Number = styled.div`
   min-width: 1cm;
@@ -231,10 +249,10 @@ const BMengen = ({
 
       return (
         <Container>
-          <Row>
+          <YearRow>
             <Year>{jahr}</Year>
             <YearSince>{`Seit ${oneRTpop_firstYear}`}</YearSince>
-          </Row>
+          </YearRow>
           <LabelRow>
             <Label1></Label1>
             <PopBerJahr>Pop</PopBerJahr>
@@ -250,7 +268,8 @@ const BMengen = ({
             <TpopSeit>{oneRTpop}</TpopSeit>
           </Row>
           <Row>
-            <Label3>zunehmend</Label3>
+            <Label2Davon>davon:</Label2Davon>
+            <Label3AfterDavon>zunehmend</Label3AfterDavon>
             <PopBerJahr>{twoLPop}</PopBerJahr>
             <TpopBerJahr>{twoLTpop}</TpopBerJahr>
             <PopSeit>{twoRPop}</PopSeit>

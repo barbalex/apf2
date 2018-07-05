@@ -15,6 +15,10 @@ const Row = styled.div`
   padding: 0.05cm 0;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
 `
+const YearRow = styled.div`
+  display: flex;
+  padding: 0.05cm 0;
+`
 const TotalRow = styled(Row)`
   font-weight: 600;
 `
@@ -39,10 +43,24 @@ const Label2 = styled.div`
   max-width: 8.8cm;
   padding-left: 1.2cm;
 `
+const Label2Davon = styled.div`
+  font-size: 10px;
+  padding-left: 1.5cm;
+  min-width: 0.8cm;
+  max-width: 0.8cm;
+  top: 3px;
+  position: relative;
+  color: grey;
+`
 const Label3 = styled.div`
-  min-width: 7.8cm;
-  max-width: 7.8cm;
-  padding-left: 2.2cm;
+  min-width: 7.5cm;
+  max-width: 7.5cm;
+  padding-left: 2.5cm;
+`
+const Label3AfterDavon = styled.div`
+  padding-left: 0.2cm;
+  min-width: 7.5cm;
+  max-width: 7.5cm;
 `
 const Number = styled.div`
   min-width: 1cm;
@@ -128,9 +146,9 @@ const AMengen = ({
 
       return (
         <Container>
-          <Row>
+          <YearRow>
             <Year>{jahr}</Year>
-          </Row>
+          </YearRow>
           <LabelRow>
             <Label1></Label1>
             <PopBerJahr>Pop</PopBerJahr>
@@ -145,18 +163,16 @@ const AMengen = ({
             <PopSeit></PopSeit>
             <TpopSeit></TpopSeit>
           </Row>
-          <Row>
-            <Label2>aktuell:</Label2>
-          </Row>
           <TotalRow>
-            <Label3>total</Label3>
+            <Label2>aktuell</Label2>
             <PopBerJahr>{threeLPop + fourLPop + fiveLPop}</PopBerJahr>
             <TpopBerJahr>{threeLTpop + fourLTpop + fiveLTpop}</TpopBerJahr>
             <PopSeit></PopSeit>
             <TpopSeit></TpopSeit>
           </TotalRow>
           <Row>
-            <Label3>ursprünglich</Label3>
+            <Label2Davon>davon:</Label2Davon>
+            <Label3AfterDavon>ursprünglich</Label3AfterDavon>
             <PopBerJahr>{threeLPop}</PopBerJahr>
             <TpopBerJahr>{threeLTpop}</TpopBerJahr>
             <PopSeit></PopSeit>
@@ -178,16 +194,14 @@ const AMengen = ({
           </Row>
           <Row>
             <Label2>erloschen:</Label2>
-          </Row>
-          <Row>
-            <Label3>total</Label3>
             <PopBerJahr>{sevenLPop + eightLPop}</PopBerJahr>
             <TpopBerJahr>{sevenLTpop + eightLTpop}</TpopBerJahr>
             <PopSeit></PopSeit>
             <TpopSeit></TpopSeit>
           </Row>
           <Row>
-            <Label3>zuvor autochthon oder vor AP angesiedelt</Label3>
+            <Label2Davon>davon:</Label2Davon>
+            <Label3AfterDavon>zuvor autochthon oder vor AP angesiedelt</Label3AfterDavon>
             <PopBerJahr>{sevenLPop}</PopBerJahr>
             <TpopBerJahr>{sevenLTpop}</TpopBerJahr>
             <PopSeit></PopSeit>
@@ -209,7 +223,7 @@ const AMengen = ({
           </Row>
           <FernerRow>Ferner:</FernerRow>
           <Row>
-            <Label1>potentieller Wuchs-/Ansiedlungsort.:</Label1>
+            <Label1>potentieller Wuchs-/Ansiedlungsort:</Label1>
             <PopBerJahr>{tenLPop}</PopBerJahr>
             <TpopBerJahr>{tenLTpop}</TpopBerJahr>
             <PopSeit></PopSeit>

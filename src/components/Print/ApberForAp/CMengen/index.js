@@ -19,6 +19,10 @@ const Row = styled.div`
   padding: 0.05cm 0;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
 `
+const YearRow = styled.div`
+  display: flex;
+  padding: 0.05cm 0;
+`
 const LabelRow = styled(Row)`
   font-size: 12px;
 `
@@ -41,10 +45,24 @@ const Label2 = styled.div`
   max-width: 8.8cm;
   padding-left: 1.2cm;
 `
+const Label2Davon = styled.div`
+  font-size: 10px;
+  padding-left: 1.5cm;
+  min-width: 0.8cm;
+  max-width: 0.8cm;
+  top: 3px;
+  position: relative;
+  color: grey;
+`
 const Label3 = styled.div`
-  min-width: 7.8cm;
-  max-width: 7.8cm;
-  padding-left: 2.2cm;
+  min-width: 7.5cm;
+  max-width: 7.5cm;
+  padding-left: 2.5cm;
+`
+const Label3AfterDavon = styled.div`
+  padding-left: 0.2cm;
+  min-width: 7.5cm;
+  max-width: 7.5cm;
 `
 const Number = styled.div`
   min-width: 1cm;
@@ -106,9 +124,13 @@ const CMengen = ({
           b.jahr
         )
       )
-      const oneRPop_massnbersByPopId = groupBy(massnbers, b => b.popId)
-      const oneRPop_lastMassnbers = Object.keys(oneRPop_massnbersByPopId).map(b =>
+      const oneRPop_massnbersByPopId = groupBy(massnbers, b => get(b, 'tpopByTpopId.popId'))
+      const oneRPop_lastMassnbersByPopId = Object.keys(oneRPop_massnbersByPopId).map(b =>
         maxBy(oneRPop_massnbersByPopId[b], 'jahr')
+      )
+      const oneRPop_massnbersByTpopId = groupBy(massnbers, b => get(b, 'tpopByTpopId.id'))
+      const oneRPop_lastMassnbersByTpopId = Object.keys(oneRPop_massnbersByTpopId).map(b =>
+        maxBy(oneRPop_massnbersByTpopId[b], 'jahr')
       )
 
       // 1.
@@ -128,19 +150,51 @@ const CMengen = ({
       ).length
 
       // 3.
-      const threeRPop = oneRPop_lastMassnbers
-        .filter(b => b.entwicklung === 2)
+      const threeRPop = oneRPop_lastMassnbersByPopId
+        .filter(b => b.beurteilung === 1)
         .length
-      const threeRTpop = oneRTpop_lastMassnbers
-        .filter(b => b.entwicklung === 2)
+      const threeRTpop = oneRPop_lastMassnbersByTpopId
+        .filter(b => b.beurteilung === 1)
+        .length
+
+      // 4.
+      const fourRPop = oneRPop_lastMassnbersByPopId
+        .filter(b => b.beurteilung === 2)
+        .length
+      const fourRTpop = oneRPop_lastMassnbersByTpopId
+        .filter(b => b.beurteilung === 2)
+        .length
+
+      // 5.
+      const fiveRPop = oneRPop_lastMassnbersByPopId
+        .filter(b => b.beurteilung === 3)
+        .length
+      const fiveRTpop = oneRPop_lastMassnbersByTpopId
+        .filter(b => b.beurteilung === 3)
+        .length
+
+      // 6.
+      const sixRPop = oneRPop_lastMassnbersByPopId
+        .filter(b => b.beurteilung === 4)
+        .length
+      const sixRTpop = oneRPop_lastMassnbersByTpopId
+        .filter(b => b.beurteilung === 4)
+        .length
+
+      // 7.
+      const sevenRPop = oneRPop_lastMassnbersByPopId
+        .filter(b => b.beurteilung === 5)
+        .length
+      const sevenRTpop = oneRPop_lastMassnbersByTpopId
+        .filter(b => b.beurteilung === 5)
         .length
 
       return (
         <Container>
-          <Row>
+          <YearRow>
             <Year>{jahr}</Year>
             <YearSince>{`Seit ${oneRTpop_firstYear}`}</YearSince>
-          </Row>
+          </YearRow>
           <LabelRow>
             <Label1></Label1>
             <PopBerJahr>Pop</PopBerJahr>
@@ -163,39 +217,40 @@ const CMengen = ({
             <TpopSeit>{twoRTpop}</TpopSeit>
           </Row>
           <Row>
-            <Label3>sehr erfolgreich</Label3>
-            <PopBerJahr>{}</PopBerJahr>
-            <TpopBerJahr>{}</TpopBerJahr>
-            <PopSeit>{}</PopSeit>
-            <TpopSeit>{}</TpopSeit>
+            <Label2Davon>davon:</Label2Davon>
+            <Label3AfterDavon>sehr erfolgreich</Label3AfterDavon>
+            <PopBerJahr></PopBerJahr>
+            <TpopBerJahr></TpopBerJahr>
+            <PopSeit>{threeRPop}</PopSeit>
+            <TpopSeit>{threeRTpop}</TpopSeit>
           </Row>
           <Row>
             <Label3>erfolgreich</Label3>
-            <PopBerJahr>{}</PopBerJahr>
-            <TpopBerJahr>{}</TpopBerJahr>
-            <PopSeit>{}</PopSeit>
-            <TpopSeit>{}</TpopSeit>
+            <PopBerJahr></PopBerJahr>
+            <TpopBerJahr></TpopBerJahr>
+            <PopSeit>{fourRPop}</PopSeit>
+            <TpopSeit>{fourRTpop}</TpopSeit>
           </Row>
           <Row>
             <Label3>weniger erfolgreich</Label3>
-            <PopBerJahr>{}</PopBerJahr>
-            <TpopBerJahr>{}</TpopBerJahr>
-            <PopSeit>{}</PopSeit>
-            <TpopSeit>{}</TpopSeit>
+            <PopBerJahr></PopBerJahr>
+            <TpopBerJahr></TpopBerJahr>
+            <PopSeit>{fiveRPop}</PopSeit>
+            <TpopSeit>{fiveRTpop}</TpopSeit>
           </Row>
           <Row>
             <Label3>nicht erfolgreich</Label3>
-            <PopBerJahr>{}</PopBerJahr>
-            <TpopBerJahr>{}</TpopBerJahr>
-            <PopSeit></PopSeit>
-            <TpopSeit></TpopSeit>
+            <PopBerJahr></PopBerJahr>
+            <TpopBerJahr></TpopBerJahr>
+            <PopSeit>{sixRPop}</PopSeit>
+            <TpopSeit>{sixRTpop}</TpopSeit>
           </Row>
           <Row>
             <Label3>mit unsicherer Wirkung</Label3>
-            <PopBerJahr>{}</PopBerJahr>
-            <TpopBerJahr>{}</TpopBerJahr>
-            <PopSeit>{}</PopSeit>
-            <TpopSeit>{}</TpopSeit>
+            <PopBerJahr></PopBerJahr>
+            <TpopBerJahr></TpopBerJahr>
+            <PopSeit>{sevenRPop}</PopSeit>
+            <TpopSeit>{sevenRTpop}</TpopSeit>
           </Row>
         </Container>
       )
