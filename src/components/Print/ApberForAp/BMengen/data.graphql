@@ -1,4 +1,4 @@
-query apById($apId: UUID!, $jahr: Int!) {
+query apById($apId: UUID!, $jahr: Int!, $startJahr: Int!) {
   apById(id: $apId) {
     id
     oneLPop: popsByApId(
@@ -33,6 +33,28 @@ query apById($apId: UUID!, $jahr: Int!) {
               totalCount
             }
           }
+        }
+      }
+    }
+    twoLPop: popsByApId(
+      filter: {
+        and: [{ status: { notEqualTo: 300 } }, { status: { isNull: false } }]
+      }
+    ) {
+      nodes {
+        id
+        tpopsByPopId(filter: { apberRelevant: { equalTo: 1 } }) {
+          totalCount
+        }
+        popbersByPopId(filter: {
+            and: [
+              { jahr: { greaterThanOrEqualTo: $startJahr } },
+              { jahr: { lessThanOrEqualTo: $jahr } },
+              { entwicklung: { in: [1, 2, 3, 4, 8]} }
+            ]
+          }
+        ) {
+          totalCount
         }
       }
     }

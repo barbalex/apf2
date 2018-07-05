@@ -60,6 +60,8 @@ const BMengen = ({
   >
     {({ loading, error, data }) => {
       if (error) return `Fehler: ${error.message}`
+
+      // 1.
       const oneLPop = get(data, 'apById.oneLPop.nodes', [])
         .filter(p => get(p, 'tpopsByPopId.totalCount') > 0)
         .filter(p => get(p, 'popbersByPopId.totalCount') > 0)
@@ -76,9 +78,29 @@ const BMengen = ({
           get(p, 'tpopbersByTpopId.totalCount', 0)
         )
       )
-        .filter(t => t > 0)
+        .filter(tpopbersCount => tpopbersCount > 0)
         .length
-      console.log('BMengen:',{oneLTpop_pop,oneLTpop_tpop,oneLTpop})
+
+        // 2.
+        const twoLPop = get(data, 'apById.twoLPop.nodes', [])
+          .filter(p => get(p, 'tpopsByPopId.totalCount') > 0)
+          .filter(p => get(p, 'popbersByPopId.totalCount') > 0)
+          .length
+        console.log('twoLPop:', twoLPop)
+  
+        const twoLTpop_pop = get(data, 'apById.twoLTpop.nodes', [])
+        const twoLTpop_tpop = flatten(
+          twoLTpop_pop.map(p =>
+            get(p, 'tpopsByPopId.nodes', [])
+          )
+        )
+        const twoLTpop = flatten(
+          twoLTpop_tpop.map(p =>
+            get(p, 'tpopbersByTpopId.totalCount', 0)
+          )
+        )
+          .filter(tpopbersCount => tpopbersCount > 0)
+          .length
 
       const threeLPop = get(data, 'apById.threeLPop.nodes', [])
         .filter(p => get(p, 'tpopsByPopId.totalCount') > 0)
