@@ -3,7 +3,7 @@ import React from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import flatten from 'lodash/flatten'
-import sum from 'lodash/sum'
+import min from 'lodash/min'
 import { Query } from 'react-apollo'
 
 import dataGql from './data.graphql'
@@ -114,7 +114,16 @@ const BMengen = ({
       )
         .filter(tpopbersCount => tpopbersCount > 0)
         .length
-
+      const oneRTpop_tpopbers = flatten(
+        oneRTpop_tpop.map(p =>
+          get(p, 'tpopbersByTpopId.nodes', [])
+        )
+      )
+      const oneRTpop_firstYear = min(
+        oneRTpop_tpopbers.map(b =>
+          b.jahr
+        )
+      )
       // 2.
       const twoLPop = oneLPop_popbers
         .filter(b => b.entwicklung === 3)
@@ -127,7 +136,7 @@ const BMengen = ({
         <Container>
           <Row>
             <Year>{jahr}</Year>
-            <YearSince>{`Seit ${startJahr}`}</YearSince>
+            <YearSince>{`Seit ${oneRTpop_firstYear}`}</YearSince>
           </Row>
           <LabelRow>
             <Label1></Label1>

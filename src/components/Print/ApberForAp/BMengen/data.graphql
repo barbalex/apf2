@@ -1,4 +1,4 @@
-query apById($apId: UUID!, $jahr: Int!, $startJahr: Int!) {
+query apById($apId: UUID!, $jahr: Int!) {
   apById(id: $apId) {
     id
     oneLPop: popsByApId(
@@ -62,11 +62,8 @@ query apById($apId: UUID!, $jahr: Int!, $startJahr: Int!) {
         }
         popbersByPopId(
           filter: {
-            and: [
-              { jahr: { greaterThanOrEqualTo: $startJahr } }
-              { jahr: { lessThanOrEqualTo: $jahr } }
-              { entwicklung: { in: [1, 2, 3, 4, 8] } }
-            ]
+            jahr: { lessThanOrEqualTo: $jahr },
+            entwicklung: { isNull: false }
           }
         ) {
           totalCount
@@ -94,14 +91,15 @@ query apById($apId: UUID!, $jahr: Int!, $startJahr: Int!) {
             id
             tpopbersByTpopId(
               filter: {
-                and: [
-                  { jahr: { greaterThanOrEqualTo: $startJahr } }
-                  { jahr: { lessThanOrEqualTo: $jahr } }
-                  { entwicklung: { in: [1, 2, 3, 4, 8] } }
-                ]
+                jahr: { lessThanOrEqualTo: $jahr },
+                entwicklung: { isNull: false }
               }
             ) {
               totalCount
+              nodes {
+                id
+                jahr
+              }
             }
           }
         }
