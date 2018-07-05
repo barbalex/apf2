@@ -13,6 +13,10 @@ query apById($apId: UUID!, $jahr: Int!, $startJahr: Int!) {
         }
         popbersByPopId(filter: { jahr: { equalTo: $jahr } }) {
           totalCount
+          nodes {
+            id
+            entwicklung
+          }
         }
       }
     }
@@ -37,6 +41,10 @@ query apById($apId: UUID!, $jahr: Int!, $startJahr: Int!) {
             id
             tpopbersByTpopId(filter: { jahr: { equalTo: $jahr } }) {
               totalCount
+              nodes {
+                id
+                entwicklung
+              }
             }
           }
         }
