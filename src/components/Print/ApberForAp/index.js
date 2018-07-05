@@ -15,6 +15,7 @@ import data2Gql from './data2.graphql'
 import Ziele from './Ziele'
 import Massnahmen from './Massnahmen'
 import AMengen from './AMengen'
+import BMengen from './BMengen'
 
 const LoadingContainer = styled.div`
   padding: 15px;
@@ -120,7 +121,7 @@ class ApberPrint extends Component<Props> {
 
   render() {
     const { activeNodeArray } = this.props
-    const { /*projekt: projId, */ap: apId, apber: apberId } = getActiveNodes(activeNodeArray)
+    const { ap: apId, apber: apberId } = getActiveNodes(activeNodeArray)
 
     return (
       <Query
@@ -223,6 +224,7 @@ class ApberPrint extends Component<Props> {
                         </FieldRowFullWidth>
 
                         <Title1>B. Bestandesentwicklung</Title1>
+                        <BMengen apId={apId} jahr={jahr} startJahr={get(data, 'apById.startJahr', 0)} />
                         <FieldRowFullWidth>
                           <TitledLabel>Weitere Aktivitäten der Aktionsplan-Verantwortlichen</TitledLabel>
                           <FullWidthField>{get(apber, 'massnahmenApBearb', '')}</FullWidthField>
