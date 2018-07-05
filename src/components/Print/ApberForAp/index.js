@@ -32,7 +32,7 @@ const Container = styled.div`
   box-shadow: 0 4px 5px rgba(75, 75, 75, 0.2);
 
   /* set dimensions */
-  height: 29.7cm;
+  /*height: 29.7cm;*/
   width: 21cm;
 
   overflow-y: visible;

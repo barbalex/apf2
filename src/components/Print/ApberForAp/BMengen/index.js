@@ -149,12 +149,67 @@ const BMengen = ({
       const twoLTpop = oneLTpop_tpopbers
         .filter(b => b.entwicklung === 3)
         .length
-      
       const twoRPop = oneRPop_lastPopbers
         .filter(b => b.entwicklung === 3)
         .length
       const twoRTpop = oneRTpop_lastTpopbers
         .filter(b => b.entwicklung === 3)
+        .length
+
+      // 3.
+      const threeLPop = oneLPop_popbers
+        .filter(b => b.entwicklung === 2)
+        .length
+      const threeLTpop = oneLTpop_tpopbers
+        .filter(b => b.entwicklung === 2)
+        .length
+      const threeRPop = oneRPop_lastPopbers
+        .filter(b => b.entwicklung === 2)
+        .length
+      const threeRTpop = oneRTpop_lastTpopbers
+        .filter(b => b.entwicklung === 2)
+        .length
+
+      // 4.
+      const fourLPop = oneLPop_popbers
+        .filter(b => b.entwicklung === 1)
+        .length
+      const fourLTpop = oneLTpop_tpopbers
+        .filter(b => b.entwicklung === 1)
+        .length
+      const fourRPop = oneRPop_lastPopbers
+        .filter(b => b.entwicklung === 1)
+        .length
+      const fourRTpop = oneRTpop_lastTpopbers
+        .filter(b => b.entwicklung === 1)
+        .length
+
+      // 5.
+      const fiveLPop = oneLPop_popbers
+        .filter(b => b.entwicklung === 4)
+        .length
+      const fiveLTpop = oneLTpop_tpopbers
+        .filter(b => b.entwicklung === 4)
+        .length
+      const fiveRPop = oneRPop_lastPopbers
+        .filter(b => b.entwicklung === 4)
+        .length
+      const fiveRTpop = oneRTpop_lastTpopbers
+        .filter(b => b.entwicklung === 4)
+        .length
+
+      // 6.
+      const sixLPop = oneLPop_popbers
+        .filter(b => b.entwicklung === 8)
+        .length
+      const sixLTpop = oneLTpop_tpopbers
+        .filter(b => b.entwicklung === 8)
+        .length
+      const sixRPop = oneRPop_lastPopbers
+        .filter(b => b.entwicklung === 8)
+        .length
+      const sixRTpop = oneRTpop_lastTpopbers
+        .filter(b => b.entwicklung === 8)
         .length
 
       return (
@@ -186,31 +241,31 @@ const BMengen = ({
           </Row>
           <Row>
             <Label3>stabil</Label3>
-            <PopBerJahr>{}</PopBerJahr>
-            <TpopBerJahr>{}</TpopBerJahr>
-            <PopSeit></PopSeit>
-            <TpopSeit></TpopSeit>
+            <PopBerJahr>{threeLPop}</PopBerJahr>
+            <TpopBerJahr>{threeLTpop}</TpopBerJahr>
+            <PopSeit>{threeRPop}</PopSeit>
+            <TpopSeit>{threeRTpop}</TpopSeit>
           </Row>
           <Row>
             <Label3>abnehmend</Label3>
-            <PopBerJahr>{}</PopBerJahr>
-            <TpopBerJahr>{}</TpopBerJahr>
-            <PopSeit></PopSeit>
-            <TpopSeit></TpopSeit>
+            <PopBerJahr>{fourLPop}</PopBerJahr>
+            <TpopBerJahr>{fourLTpop}</TpopBerJahr>
+            <PopSeit>{fourRPop}</PopSeit>
+            <TpopSeit>{fourRTpop}</TpopSeit>
           </Row>
           <Row>
             <Label3>unsicher</Label3>
-            <PopBerJahr></PopBerJahr>
-            <TpopBerJahr></TpopBerJahr>
-            <PopSeit></PopSeit>
-            <TpopSeit></TpopSeit>
+            <PopBerJahr>{fiveLPop}</PopBerJahr>
+            <TpopBerJahr>{fiveLTpop}</TpopBerJahr>
+            <PopSeit>{fiveRPop}</PopSeit>
+            <TpopSeit>{fiveRTpop}</TpopSeit>
           </Row>
           <Row>
             <Label3>erloschen</Label3>
-            <PopBerJahr>{}</PopBerJahr>
-            <TpopBerJahr>{}</TpopBerJahr>
-            <PopSeit></PopSeit>
-            <TpopSeit></TpopSeit>
+            <PopBerJahr>{sixLPop}</PopBerJahr>
+            <TpopBerJahr>{sixLTpop}</TpopBerJahr>
+            <PopSeit>{sixRPop}</PopSeit>
+            <TpopSeit>{sixRTpop}</TpopSeit>
           </Row>
         </Container>
       )
