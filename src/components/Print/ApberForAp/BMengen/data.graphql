@@ -36,7 +36,7 @@ query apById($apId: UUID!, $jahr: Int!, $startJahr: Int!) {
         }
       }
     }
-    twoLPop: popsByApId(
+    oneRPop: popsByApId(
       filter: {
         and: [{ status: { notEqualTo: 300 } }, { status: { isNull: false } }]
       }

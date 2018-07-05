@@ -24,6 +24,11 @@ const Year = styled.div`
   left: 10.9cm;
   width: 2cm;
 `
+const YearSince = styled.div`
+  position: relative;
+  left: 11.45cm;
+  width: 2cm;
+`
 const Label1 = styled.div`
   min-width: 10cm;
   max-width: 10cm;
@@ -81,26 +86,31 @@ const BMengen = ({
         .filter(tpopbersCount => tpopbersCount > 0)
         .length
 
-        // 2.
-        const twoLPop = get(data, 'apById.twoLPop.nodes', [])
-          .filter(p => get(p, 'tpopsByPopId.totalCount') > 0)
-          .filter(p => get(p, 'popbersByPopId.totalCount') > 0)
-          .length
-        console.log('twoLPop:', twoLPop)
-  
-        const twoLTpop_pop = get(data, 'apById.twoLTpop.nodes', [])
-        const twoLTpop_tpop = flatten(
-          twoLTpop_pop.map(p =>
-            get(p, 'tpopsByPopId.nodes', [])
-          )
+      const oneRPop = get(data, 'apById.oneRPop.nodes', [])
+        .filter(p => get(p, 'tpopsByPopId.totalCount') > 0)
+        .filter(p => get(p, 'popbersByPopId.totalCount') > 0)
+        .length
+
+      // 2.
+      const twoLPop = get(data, 'apById.twoLPop.nodes', [])
+        .filter(p => get(p, 'tpopsByPopId.totalCount') > 0)
+        .filter(p => get(p, 'popbersByPopId.totalCount') > 0)
+        .length
+      console.log('twoLPop:', twoLPop)
+
+      const twoLTpop_pop = get(data, 'apById.twoLTpop.nodes', [])
+      const twoLTpop_tpop = flatten(
+        twoLTpop_pop.map(p =>
+          get(p, 'tpopsByPopId.nodes', [])
         )
-        const twoLTpop = flatten(
-          twoLTpop_tpop.map(p =>
-            get(p, 'tpopbersByTpopId.totalCount', 0)
-          )
+      )
+      const twoLTpop = flatten(
+        twoLTpop_tpop.map(p =>
+          get(p, 'tpopbersByTpopId.totalCount', 0)
         )
-          .filter(tpopbersCount => tpopbersCount > 0)
-          .length
+      )
+        .filter(tpopbersCount => tpopbersCount > 0)
+        .length
 
       const threeLPop = get(data, 'apById.threeLPop.nodes', [])
         .filter(p => get(p, 'tpopsByPopId.totalCount') > 0)
@@ -142,19 +152,20 @@ const BMengen = ({
         <Container>
           <Row>
             <Year>{jahr}</Year>
+            <YearSince>{`Seit ${startJahr}`}</YearSince>
           </Row>
           <LabelRow>
             <Label1></Label1>
             <PopBerJahr>Pop</PopBerJahr>
             <TpopBerJahr>TPop</TpopBerJahr>
-            <PopSeit></PopSeit>
-            <TpopSeit></TpopSeit>
+            <PopSeit>Pop</PopSeit>
+            <TpopSeit>TPop</TpopSeit>
           </LabelRow>
           <Row>
             <Label1>kontrolliert (inkl. Ansaatversuche)</Label1>
             <PopBerJahr>{oneLPop}</PopBerJahr>
             <TpopBerJahr>{oneLTpop}</TpopBerJahr>
-            <PopSeit></PopSeit>
+            <PopSeit>{oneRPop}</PopSeit>
             <TpopSeit></TpopSeit>
           </Row>
           <Row>
