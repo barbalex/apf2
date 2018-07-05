@@ -16,6 +16,7 @@ import Ziele from './Ziele'
 import Massnahmen from './Massnahmen'
 import AMengen from './AMengen'
 import BMengen from './BMengen'
+import CMengen from './CMengen'
 
 const LoadingContainer = styled.div`
   padding: 15px;
@@ -182,12 +183,12 @@ class ApberPrint extends Component<Props> {
                     get(m, 'beschreibung'),
                   ]
                 )
-                const startJahr = get(data, 'apById.startJahr', null)
-                if (startJahr === null) return (
+                const startJahr = get(data, 'apById.startJahr', 0)
+                if (startJahr === 0) return (
                   <ErrorBoundary>
                     <Container innerRef={this.container}>
                       <ContentContainer>
-                        Bitte beim AP das Startjahr ergänzen!
+                        Bitte beim AP ein Startjahr ergänzen!
                       </ContentContainer>
                     </Container>
                   </ErrorBoundary>
@@ -217,14 +218,14 @@ class ApberPrint extends Component<Props> {
                         </Row>
 
                         <Title1>A. Grundmengen</Title1>
-                        <AMengen apId={apId} jahr={jahr} startJahr={get(data, 'apById.startJahr', 0)} />
+                        <AMengen apId={apId} jahr={jahr} startJahr={startJahr} />
                         <FieldRowFullWidth>
                           <TitledLabel>Bemerkungen / Folgerungen für nächstes Jahr: neue Biotope</TitledLabel>
                           <FullWidthField>{get(apber, 'biotopeNeue', '')}</FullWidthField>
                         </FieldRowFullWidth>
 
                         <Title1>B. Bestandesentwicklung</Title1>
-                        <BMengen apId={apId} jahr={jahr} startJahr={get(data, 'apById.startJahr', 0)} />
+                        <BMengen apId={apId} jahr={jahr} startJahr={startJahr} />
                         <FieldRowFullWidth>
                           <TitledLabel>Weitere Aktivitäten der Aktionsplan-Verantwortlichen</TitledLabel>
                           <FullWidthField>{get(apber, 'massnahmenApBearb', '')}</FullWidthField>
@@ -235,6 +236,7 @@ class ApberPrint extends Component<Props> {
                         </FieldRowFullWidth>
 
                         <Title1>C. Zwischenbilanz zur Wirkung von Massnahmen</Title1>
+                        <CMengen apId={apId} jahr={jahr} startJahr={startJahr} />
                         <FieldRowFullWidth>
                           <TitledLabel>Bemerkungen / Folgerungen für nächstes Jahr: Optimierung Massnahmen</TitledLabel>
                           <FullWidthField>{get(apber, 'massnahmenOptimieren', '')}</FullWidthField>
