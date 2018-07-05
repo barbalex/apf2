@@ -16,5 +16,25 @@ query apById($apId: UUID!, $jahr: Int!) {
         }
       }
     }
+    oneLTpop: popsByApId(
+      filter: {
+        and: [{ status: { notEqualTo: 300 } }, { status: { isNull: false } }]
+      }
+    ) {
+      nodes {
+        id
+        tpopsByPopId(filter: {
+          and: [{ status: { notEqualTo: 300 } }, { status: { isNull: false } }, { apberRelevant: { equalTo: 1 } }]
+        }) {
+          totalCount
+          nodes {
+            id
+            tpopbersByTpopId(filter: {jahr: {equalTo: $jahr}}) {
+              totalCount
+            }
+          }
+        }
+      }
+    }
   }
 }

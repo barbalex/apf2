@@ -64,11 +64,22 @@ const BMengen = ({
         .filter(p => get(p, 'tpopsByPopId.totalCount') > 0)
         .filter(p => get(p, 'popbersByPopId.totalCount') > 0)
         .length
-      //console.log('BMengen:',{oneLPopRelevant,oneLPop})
-      const oneLTpop = sum(
-        get(data, 'apById.oneLTpop.nodes', [])
-          .map(p => get(p, 'tpopsByPopId.totalCount'))
+
+      const oneLTpop_pop = get(data, 'apById.oneLTpop.nodes', [])
+      const oneLTpop_tpop = flatten(
+        oneLTpop_pop.map(p =>
+          get(p, 'tpopsByPopId.nodes', [])
+        )
       )
+      const oneLTpop = flatten(
+        oneLTpop_tpop.map(p =>
+          get(p, 'tpopbersByTpopId.totalCount', 0)
+        )
+      )
+        .filter(t => t > 0)
+        .length
+      console.log('BMengen:',{oneLTpop_pop,oneLTpop_tpop,oneLTpop})
+
       const threeLPop = get(data, 'apById.threeLPop.nodes', [])
         .filter(p => get(p, 'tpopsByPopId.totalCount') > 0)
         .length
