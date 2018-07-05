@@ -91,6 +91,20 @@ const BMengen = ({
         .filter(p => get(p, 'popbersByPopId.totalCount') > 0)
         .length
 
+      const oneRTpop_pop = get(data, 'apById.oneRTpop.nodes', [])
+      const oneRTpop_tpop = flatten(
+        oneRTpop_pop.map(p =>
+          get(p, 'tpopsByPopId.nodes', [])
+        )
+      )
+      const oneRTpop = flatten(
+        oneRTpop_tpop.map(p =>
+          get(p, 'tpopbersByTpopId.totalCount', 0)
+        )
+      )
+        .filter(tpopbersCount => tpopbersCount > 0)
+        .length
+
       // 2.
       const twoLPop = get(data, 'apById.twoLPop.nodes', [])
         .filter(p => get(p, 'tpopsByPopId.totalCount') > 0)
@@ -166,7 +180,7 @@ const BMengen = ({
             <PopBerJahr>{oneLPop}</PopBerJahr>
             <TpopBerJahr>{oneLTpop}</TpopBerJahr>
             <PopSeit>{oneRPop}</PopSeit>
-            <TpopSeit></TpopSeit>
+            <TpopSeit>{oneRTpop}</TpopSeit>
           </Row>
           <Row>
             <Label3>zunehmend</Label3>

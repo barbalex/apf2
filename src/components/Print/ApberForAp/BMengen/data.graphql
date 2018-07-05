@@ -11,7 +11,7 @@ query apById($apId: UUID!, $jahr: Int!, $startJahr: Int!) {
         tpopsByPopId(filter: { apberRelevant: { equalTo: 1 } }) {
           totalCount
         }
-        popbersByPopId(filter: {jahr: {equalTo: $jahr}}) {
+        popbersByPopId(filter: { jahr: { equalTo: $jahr } }) {
           totalCount
         }
       }
@@ -23,13 +23,19 @@ query apById($apId: UUID!, $jahr: Int!, $startJahr: Int!) {
     ) {
       nodes {
         id
-        tpopsByPopId(filter: {
-          and: [{ status: { notEqualTo: 300 } }, { status: { isNull: false } }, { apberRelevant: { equalTo: 1 } }]
-        }) {
+        tpopsByPopId(
+          filter: {
+            and: [
+              { status: { notEqualTo: 300 } }
+              { status: { isNull: false } }
+              { apberRelevant: { equalTo: 1 } }
+            ]
+          }
+        ) {
           totalCount
           nodes {
             id
-            tpopbersByTpopId(filter: {jahr: {equalTo: $jahr}}) {
+            tpopbersByTpopId(filter: { jahr: { equalTo: $jahr } }) {
               totalCount
             }
           }
@@ -46,15 +52,50 @@ query apById($apId: UUID!, $jahr: Int!, $startJahr: Int!) {
         tpopsByPopId(filter: { apberRelevant: { equalTo: 1 } }) {
           totalCount
         }
-        popbersByPopId(filter: {
+        popbersByPopId(
+          filter: {
             and: [
-              { jahr: { greaterThanOrEqualTo: $startJahr } },
-              { jahr: { lessThanOrEqualTo: $jahr } },
-              { entwicklung: { in: [1, 2, 3, 4, 8]} }
+              { jahr: { greaterThanOrEqualTo: $startJahr } }
+              { jahr: { lessThanOrEqualTo: $jahr } }
+              { entwicklung: { in: [1, 2, 3, 4, 8] } }
             ]
           }
         ) {
           totalCount
+        }
+      }
+    }
+    oneRTpop: popsByApId(
+      filter: {
+        and: [{ status: { notEqualTo: 300 } }, { status: { isNull: false } }]
+      }
+    ) {
+      nodes {
+        id
+        tpopsByPopId(
+          filter: {
+            and: [
+              { status: { notEqualTo: 300 } }
+              { status: { isNull: false } }
+              { apberRelevant: { equalTo: 1 } }
+            ]
+          }
+        ) {
+          totalCount
+          nodes {
+            id
+            tpopbersByTpopId(
+              filter: {
+                and: [
+                  { jahr: { greaterThanOrEqualTo: $startJahr } }
+                  { jahr: { lessThanOrEqualTo: $jahr } }
+                  { entwicklung: { in: [1, 2, 3, 4, 8] } }
+                ]
+              }
+            ) {
+              totalCount
+            }
+          }
         }
       }
     }
