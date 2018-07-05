@@ -4,6 +4,8 @@ import styled from 'styled-components'
 import get from 'lodash/get'
 import flatten from 'lodash/flatten'
 import min from 'lodash/min'
+import maxBy from 'lodash/maxBy'
+import groupBy from 'lodash/groupBy'
 import { Query } from 'react-apollo'
 
 import dataGql from './data.graphql'
@@ -100,6 +102,17 @@ const BMengen = ({
         .filter(p => get(p, 'tpopsByPopId.totalCount') > 0)
         .filter(p => get(p, 'popbersByPopId.totalCount') > 0)
         .length
+      const oneRPop_pop = get(data, 'apById.oneRPop.nodes', [])
+        .filter(p => get(p, 'tpopsByPopId.totalCount') > 0)
+      const oneRPop_popbers = flatten(
+        oneRPop_pop.map(p =>
+          get(p, 'popbersByPopId.nodes', [])
+        )
+      )
+      const oneRPop_popbersByPopId = groupBy(oneRPop_popbers, b => b.popId)
+      const oneRPop_lastPopbers = Object.keys(oneRPop_popbersByPopId).map(b =>
+        maxBy(oneRPop_popbersByPopId[b], 'jahr')
+      )
 
       const oneRTpop_pop = get(data, 'apById.oneRTpop.nodes', [])
       const oneRTpop_tpop = flatten(
@@ -119,16 +132,28 @@ const BMengen = ({
           get(p, 'tpopbersByTpopId.nodes', [])
         )
       )
+      const oneRTpop_tpopbersByTpopId = groupBy(oneRTpop_tpopbers, b => b.tpopId)
+      const oneRTpop_lastTpopbers = Object.keys(oneRTpop_tpopbersByTpopId).map(b =>
+        maxBy(oneRTpop_tpopbersByTpopId[b], 'jahr')
+      )
       const oneRTpop_firstYear = min(
         oneRTpop_tpopbers.map(b =>
           b.jahr
         )
       )
+
       // 2.
       const twoLPop = oneLPop_popbers
         .filter(b => b.entwicklung === 3)
         .length
       const twoLTpop = oneLTpop_tpopbers
+        .filter(b => b.entwicklung === 3)
+        .length
+      
+      const twoRPop = oneRPop_lastPopbers
+        .filter(b => b.entwicklung === 3)
+        .length
+      const twoRTpop = oneRTpop_lastTpopbers
         .filter(b => b.entwicklung === 3)
         .length
 
@@ -156,8 +181,8 @@ const BMengen = ({
             <Label3>zunehmend</Label3>
             <PopBerJahr>{twoLPop}</PopBerJahr>
             <TpopBerJahr>{twoLTpop}</TpopBerJahr>
-            <PopSeit></PopSeit>
-            <TpopSeit></TpopSeit>
+            <PopSeit>{twoRPop}</PopSeit>
+            <TpopSeit>{twoRTpop}</TpopSeit>
           </Row>
           <Row>
             <Label3>stabil</Label3>
