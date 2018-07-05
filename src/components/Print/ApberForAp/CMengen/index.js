@@ -15,19 +15,17 @@ const Row = styled.div`
   padding: 0.05cm 0;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
 `
-const TotalRow = styled(Row)`
-  font-weight: 600;
-`
-const FernerRow = styled.div`
-  padding: 0.05cm 0 0 0;
-  font-size: 12px;
-`
 const LabelRow = styled(Row)`
   font-size: 12px;
 `
 const Year = styled.div`
   position: relative;
   left: 10.9cm;
+  width: 2cm;
+`
+const YearSince = styled.div`
+  position: relative;
+  left: 11.45cm;
   width: 2cm;
 `
 const Label1 = styled.div`
@@ -71,149 +69,64 @@ const AMengen = ({
   >
     {({ loading, error, data }) => {
       if (error) return `Fehler: ${error.message}`
-      const oneLPop = get(data, 'apById.oneLPop.nodes', [])
-        .filter(p => get(p, 'tpopsByPopId.totalCount') > 0)
-        .length
-      const oneLTpop = sum(
-        get(data, 'apById.oneLTpop.nodes', [])
-          .map(p => get(p, 'tpopsByPopId.totalCount'))
-      )
-      const threeLPop = get(data, 'apById.threeLPop.nodes', [])
-        .filter(p => get(p, 'tpopsByPopId.totalCount') > 0)
-        .length
-      const threeLTpop = sum(
-        get(data, 'apById.threeLTpop.nodes', [])
-          .map(p => get(p, 'tpopsByPopId.totalCount'))
-      )
-      const fourLPop = get(data, 'apById.fourLPop.nodes', [])
-        .filter(p => get(p, 'tpopsByPopId.totalCount') > 0)
-        .length
-      const fourLTpop = sum(
-        get(data, 'apById.fourLTpop.nodes', [])
-          .map(p => get(p, 'tpopsByPopId.totalCount'))
-      )
-      const fiveLPop = get(data, 'apById.fiveLPop.nodes', [])
-        .filter(p => get(p, 'tpopsByPopId.totalCount') > 0)
-        .length
-      const fiveLTpop = sum(
-        get(data, 'apById.fiveLTpop.nodes', [])
-          .map(p => get(p, 'tpopsByPopId.totalCount'))
-      )
-      const sevenLPop = get(data, 'apById.sevenLPop.nodes', [])
-        .filter(p => get(p, 'tpopsByPopId.totalCount') > 0)
-        .length
-      const sevenLTpop = sum(
-        get(data, 'apById.sevenLTpop.nodes', [])
-          .map(p => get(p, 'tpopsByPopId.totalCount'))
-      )
-      const eightLPop = get(data, 'apById.eightLPop.nodes', [])
-        .filter(p => get(p, 'tpopsByPopId.totalCount') > 0)
-        .length
-      const eightLTpop = sum(
-        get(data, 'apById.eightLTpop.nodes', [])
-          .map(p => get(p, 'tpopsByPopId.totalCount'))
-      )
-      const nineLPop = get(data, 'apById.nineLPop.nodes', [])
-        .filter(p => get(p, 'tpopsByPopId.totalCount') > 0)
-        .length
-      const nineLTpop = sum(
-        get(data, 'apById.nineLTpop.nodes', [])
-          .map(p => get(p, 'tpopsByPopId.totalCount'))
-      )
-      const tenLPop = get(data, 'apById.tenLPop.totalCount', 0)
-      const tenLTpop = sum(
-        get(data, 'apById.tenLTpop.nodes', [])
-          .map(p => get(p, 'tpopsByPopId.totalCount'))
-      )
 
       return (
         <Container>
           <Row>
             <Year>{jahr}</Year>
+            <YearSince>{`Seit TODO`}</YearSince>
           </Row>
           <LabelRow>
             <Label1></Label1>
             <PopBerJahr>Pop</PopBerJahr>
             <TpopBerJahr>TPop</TpopBerJahr>
-            <PopSeit></PopSeit>
-            <TpopSeit></TpopSeit>
+            <PopSeit>Pop</PopSeit>
+            <TpopSeit>TPop</TpopSeit>
           </LabelRow>
           <Row>
-            <Label1>Anzahl bekannt</Label1>
-            <PopBerJahr>{oneLPop}</PopBerJahr>
-            <TpopBerJahr>{oneLTpop}</TpopBerJahr>
+            <Label1>Anzahl Populationen/Teilpopulationen mit Massnahmen</Label1>
+            <PopBerJahr>{}</PopBerJahr>
+            <TpopBerJahr>{}</TpopBerJahr>
+            <PopSeit>{}</PopSeit>
+            <TpopSeit>{}</TpopSeit>
+          </Row>
+          <Row>
+            <Label2>kontrolliert</Label2>
+          </Row>
+          <Row>
+            <Label3>sehr erfolgreich</Label3>
+            <PopBerJahr>{}</PopBerJahr>
+            <TpopBerJahr>{}</TpopBerJahr>
+            <PopSeit>{}</PopSeit>
+            <TpopSeit>{}</TpopSeit>
+          </Row>
+          <Row>
+            <Label3>erfolgreich</Label3>
+            <PopBerJahr>{}</PopBerJahr>
+            <TpopBerJahr>{}</TpopBerJahr>
+            <PopSeit>{}</PopSeit>
+            <TpopSeit>{}</TpopSeit>
+          </Row>
+          <Row>
+            <Label3>weniger erfolgreich</Label3>
+            <PopBerJahr>{}</PopBerJahr>
+            <TpopBerJahr>{}</TpopBerJahr>
+            <PopSeit>{}</PopSeit>
+            <TpopSeit>{}</TpopSeit>
+          </Row>
+          <Row>
+            <Label3>nicht erfolgreich</Label3>
+            <PopBerJahr>{}</PopBerJahr>
+            <TpopBerJahr>{}</TpopBerJahr>
             <PopSeit></PopSeit>
             <TpopSeit></TpopSeit>
           </Row>
           <Row>
-            <Label2>aktuell:</Label2>
-          </Row>
-          <TotalRow>
-            <Label3>total</Label3>
-            <PopBerJahr>{threeLPop + fourLPop + fiveLPop}</PopBerJahr>
-            <TpopBerJahr>{threeLTpop + fourLTpop + fiveLTpop}</TpopBerJahr>
-            <PopSeit></PopSeit>
-            <TpopSeit></TpopSeit>
-          </TotalRow>
-          <Row>
-            <Label3>ursprünglich</Label3>
-            <PopBerJahr>{threeLPop}</PopBerJahr>
-            <TpopBerJahr>{threeLTpop}</TpopBerJahr>
-            <PopSeit></PopSeit>
-            <TpopSeit></TpopSeit>
-          </Row>
-          <Row>
-            <Label3>angesiedelt (vor Beginn AP)</Label3>
-            <PopBerJahr>{fourLPop}</PopBerJahr>
-            <TpopBerJahr>{fourLTpop}</TpopBerJahr>
-            <PopSeit></PopSeit>
-            <TpopSeit></TpopSeit>
-          </Row>
-          <Row>
-            <Label3>angesiedelt (nach Beginn AP)</Label3>
-            <PopBerJahr>{fiveLPop}</PopBerJahr>
-            <TpopBerJahr>{fiveLTpop}</TpopBerJahr>
-            <PopSeit></PopSeit>
-            <TpopSeit></TpopSeit>
-          </Row>
-          <Row>
-            <Label2>erloschen:</Label2>
-          </Row>
-          <Row>
-            <Label3>total</Label3>
-            <PopBerJahr>{sevenLPop + eightLPop}</PopBerJahr>
-            <TpopBerJahr>{sevenLTpop + eightLTpop}</TpopBerJahr>
-            <PopSeit></PopSeit>
-            <TpopSeit></TpopSeit>
-          </Row>
-          <Row>
-            <Label3>zuvor autochthon oder vor AP angesiedelt</Label3>
-            <PopBerJahr>{sevenLPop}</PopBerJahr>
-            <TpopBerJahr>{sevenLTpop}</TpopBerJahr>
-            <PopSeit></PopSeit>
-            <TpopSeit></TpopSeit>
-          </Row>
-          <Row>
-            <Label3>nach Beginn Aktionsplan angesiedelt</Label3>
-            <PopBerJahr>{eightLPop}</PopBerJahr>
-            <TpopBerJahr>{eightLTpop}</TpopBerJahr>
-            <PopSeit></PopSeit>
-            <TpopSeit></TpopSeit>
-          </Row>
-          <Row>
-            <Label2>Ansaatversuche:</Label2>
-            <PopBerJahr>{nineLPop}</PopBerJahr>
-            <TpopBerJahr>{nineLTpop}</TpopBerJahr>
-            <PopSeit></PopSeit>
-            <TpopSeit></TpopSeit>
-          </Row>
-          <FernerRow>Ferner:</FernerRow>
-          <Row>
-            <Label1>potentieller Wuchs-/Ansiedlungsort.:</Label1>
-            <PopBerJahr>{tenLPop}</PopBerJahr>
-            <TpopBerJahr>{tenLTpop}</TpopBerJahr>
-            <PopSeit></PopSeit>
-            <TpopSeit></TpopSeit>
+            <Label3>mit unsicherer Wirkung</Label3>
+            <PopBerJahr>{}</PopBerJahr>
+            <TpopBerJahr>{}</TpopBerJahr>
+            <PopSeit>{}</PopSeit>
+            <TpopSeit>{}</TpopSeit>
           </Row>
         </Container>
       )
