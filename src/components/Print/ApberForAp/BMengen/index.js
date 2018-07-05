@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import get from 'lodash/get'
 import flatten from 'lodash/flatten'
 import min from 'lodash/min'
+import sum from 'lodash/sum'
 import maxBy from 'lodash/maxBy'
 import groupBy from 'lodash/groupBy'
 import { Query } from 'react-apollo'
@@ -17,6 +18,9 @@ const Row = styled.div`
   display: flex;
   padding: 0.05cm 0;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
+`
+const NkRow = styled(Row)`
+  padding: 0.3cm 0 0.05cm 0;
 `
 const LabelRow = styled(Row)`
   font-size: 12px;
@@ -211,6 +215,19 @@ const BMengen = ({
       const sixRTpop = oneRTpop_lastTpopbers
         .filter(b => b.entwicklung === 8)
         .length
+      
+        // 7.
+        const sevenLPop_allPops = get(data, 'apById.sevenLPop.nodes', [])
+          .filter(p => get(p, 'tpopsByPopId.totalCount') > 0)
+          .length
+        const sevenLPop = sevenLPop_allPops - oneLPop
+        const sevenLTpop_allTpops = sum(
+          get(data, 'apById.sevenLTpop.nodes', [])
+            .map(p => get(p, 'tpopsByPopId.totalCount'))
+        )
+        const sevenLTpop = sevenLTpop_allTpops - oneLTpop
+        const sevenRPop = sevenLPop_allPops - oneRPop
+        const sevenRTpop = sevenLTpop_allTpops - oneRTpop
 
       return (
         <Container>
@@ -267,6 +284,13 @@ const BMengen = ({
             <PopSeit>{sixRPop}</PopSeit>
             <TpopSeit>{sixRTpop}</TpopSeit>
           </Row>
+          <NkRow>
+            <Label1>nicht kontrolliert (inkl. Ansaatversuche)</Label1>
+            <PopBerJahr>{sevenLPop}</PopBerJahr>
+            <TpopBerJahr>{sevenLTpop}</TpopBerJahr>
+            <PopSeit>{sevenRPop}</PopSeit>
+            <TpopSeit>{sevenRTpop}</TpopSeit>
+          </NkRow>
         </Container>
       )
     }}

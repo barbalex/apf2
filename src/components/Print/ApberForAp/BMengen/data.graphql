@@ -119,5 +119,37 @@ query apById($apId: UUID!, $jahr: Int!) {
         }
       }
     }
+    sevenLPop: popsByApId(
+      filter: {
+        and: [{ status: { notEqualTo: 300 } }, { status: { isNull: false } }]
+      }
+    ) {
+      nodes {
+        id
+        tpopsByPopId(filter: { apberRelevant: { equalTo: 1 } }) {
+          totalCount
+        }
+      }
+    }
+    sevenLTpop: popsByApId(
+      filter: {
+        and: [{ status: { notEqualTo: 300 } }, { status: { isNull: false } }]
+      }
+    ) {
+      nodes {
+        id
+        tpopsByPopId(
+          filter: {
+            and: [
+              { status: { notEqualTo: 300 } }
+              { status: { isNull: false } }
+              { apberRelevant: { equalTo: 1 } }
+            ]
+          }
+        ) {
+          totalCount
+        }
+      }
+    }
   }
 }
