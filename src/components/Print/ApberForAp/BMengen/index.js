@@ -261,7 +261,7 @@ const BMengen = ({
           <Title>B. Bestandesentwicklung</Title>
           <YearRow>
             <Year>{jahr}</Year>
-            <YearSince>{`Seit ${oneRTpop_firstYear}`}</YearSince>
+            <YearSince>{`Seit ${loading ? '...' : oneRTpop_firstYear}`}</YearSince>
           </YearRow>
           <LabelRow>
             <Label1></Label1>
@@ -272,53 +272,53 @@ const BMengen = ({
           </LabelRow>
           <Row>
             <Label1>kontrolliert (inkl. Ansaatversuche)</Label1>
-            <PopBerJahr>{oneLPop}</PopBerJahr>
-            <TpopBerJahr>{oneLTpop}</TpopBerJahr>
-            <PopSeit>{oneRPop}</PopSeit>
-            <TpopSeit>{oneRTpop}</TpopSeit>
+            <PopBerJahr>{loading ? '...' : oneLPop}</PopBerJahr>
+            <TpopBerJahr>{loading ? '...' : oneLTpop}</TpopBerJahr>
+            <PopSeit>{loading ? '...' : oneRPop}</PopSeit>
+            <TpopSeit>{loading ? '...' : oneRTpop}</TpopSeit>
           </Row>
           <Row>
             <Label2Davon>davon:</Label2Davon>
             <Label3AfterDavon>zunehmend</Label3AfterDavon>
-            <PopBerJahr>{twoLPop}</PopBerJahr>
-            <TpopBerJahr>{twoLTpop}</TpopBerJahr>
-            <PopSeit>{twoRPop}</PopSeit>
-            <TpopSeit>{twoRTpop}</TpopSeit>
+            <PopBerJahr>{loading ? '...' : twoLPop}</PopBerJahr>
+            <TpopBerJahr>{loading ? '...' : twoLTpop}</TpopBerJahr>
+            <PopSeit>{loading ? '...' : twoRPop}</PopSeit>
+            <TpopSeit>{loading ? '...' : twoRTpop}</TpopSeit>
           </Row>
           <Row>
             <Label3>stabil</Label3>
-            <PopBerJahr>{threeLPop}</PopBerJahr>
-            <TpopBerJahr>{threeLTpop}</TpopBerJahr>
-            <PopSeit>{threeRPop}</PopSeit>
-            <TpopSeit>{threeRTpop}</TpopSeit>
+            <PopBerJahr>{loading ? '...' : threeLPop}</PopBerJahr>
+            <TpopBerJahr>{loading ? '...' : threeLTpop}</TpopBerJahr>
+            <PopSeit>{loading ? '...' : threeRPop}</PopSeit>
+            <TpopSeit>{loading ? '...' : threeRTpop}</TpopSeit>
           </Row>
           <Row>
             <Label3>abnehmend</Label3>
-            <PopBerJahr>{fourLPop}</PopBerJahr>
-            <TpopBerJahr>{fourLTpop}</TpopBerJahr>
-            <PopSeit>{fourRPop}</PopSeit>
-            <TpopSeit>{fourRTpop}</TpopSeit>
+            <PopBerJahr>{loading ? '...' : fourLPop}</PopBerJahr>
+            <TpopBerJahr>{loading ? '...' : fourLTpop}</TpopBerJahr>
+            <PopSeit>{loading ? '...' : fourRPop}</PopSeit>
+            <TpopSeit>{loading ? '...' : fourRTpop}</TpopSeit>
           </Row>
           <Row>
             <Label3>unsicher</Label3>
-            <PopBerJahr>{fiveLPop}</PopBerJahr>
-            <TpopBerJahr>{fiveLTpop}</TpopBerJahr>
-            <PopSeit>{fiveRPop}</PopSeit>
-            <TpopSeit>{fiveRTpop}</TpopSeit>
+            <PopBerJahr>{loading ? '...' : fiveLPop}</PopBerJahr>
+            <TpopBerJahr>{loading ? '...' : fiveLTpop}</TpopBerJahr>
+            <PopSeit>{loading ? '...' : fiveRPop}</PopSeit>
+            <TpopSeit>{loading ? '...' : fiveRTpop}</TpopSeit>
           </Row>
           <Row>
             <Label3>erloschen</Label3>
-            <PopBerJahr>{sixLPop}</PopBerJahr>
-            <TpopBerJahr>{sixLTpop}</TpopBerJahr>
-            <PopSeit>{sixRPop}</PopSeit>
-            <TpopSeit>{sixRTpop}</TpopSeit>
+            <PopBerJahr>{loading ? '...' : sixLPop}</PopBerJahr>
+            <TpopBerJahr>{loading ? '...' : sixLTpop}</TpopBerJahr>
+            <PopSeit>{loading ? '...' : sixRPop}</PopSeit>
+            <TpopSeit>{loading ? '...' : sixRTpop}</TpopSeit>
           </Row>
           <NkRow>
             <Label1>nicht kontrolliert (inkl. Ansaatversuche)</Label1>
-            <PopBerJahr>{sevenLPop}</PopBerJahr>
-            <TpopBerJahr>{sevenLTpop}</TpopBerJahr>
-            <PopSeit>{sevenRPop}</PopSeit>
-            <TpopSeit>{sevenRTpop}</TpopSeit>
+            <PopBerJahr>{loading ? '...' : sevenLPop}</PopBerJahr>
+            <TpopBerJahr>{loading ? '...' : sevenLTpop}</TpopBerJahr>
+            <PopSeit>{loading ? '...' : sevenRPop}</PopSeit>
+            <TpopSeit>{loading ? '...' : sevenRTpop}</TpopSeit>
           </NkRow>
         </Container>
       )

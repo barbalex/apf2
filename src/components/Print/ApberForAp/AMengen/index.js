@@ -165,74 +165,74 @@ const AMengen = ({
           </LabelRow>
           <Row>
             <Label1>Anzahl bekannt</Label1>
-            <PopBerJahr>{oneLPop}</PopBerJahr>
-            <TpopBerJahr>{oneLTpop}</TpopBerJahr>
+            <PopBerJahr>{loading ? '...' : oneLPop}</PopBerJahr>
+            <TpopBerJahr>{loading ? '...' : oneLTpop}</TpopBerJahr>
             <PopSeit></PopSeit>
             <TpopSeit></TpopSeit>
           </Row>
           <TotalRow>
             <Label2>aktuell</Label2>
-            <PopBerJahr>{threeLPop + fourLPop + fiveLPop}</PopBerJahr>
-            <TpopBerJahr>{threeLTpop + fourLTpop + fiveLTpop}</TpopBerJahr>
+            <PopBerJahr>{loading ? '...' : threeLPop + fourLPop + fiveLPop}</PopBerJahr>
+            <TpopBerJahr>{loading ? '...' : threeLTpop + fourLTpop + fiveLTpop}</TpopBerJahr>
             <PopSeit></PopSeit>
             <TpopSeit></TpopSeit>
           </TotalRow>
           <Row>
             <Label2Davon>davon:</Label2Davon>
             <Label3AfterDavon>ursprünglich</Label3AfterDavon>
-            <PopBerJahr>{threeLPop}</PopBerJahr>
-            <TpopBerJahr>{threeLTpop}</TpopBerJahr>
+            <PopBerJahr>{loading ? '...' : threeLPop}</PopBerJahr>
+            <TpopBerJahr>{loading ? '...' : threeLTpop}</TpopBerJahr>
             <PopSeit></PopSeit>
             <TpopSeit></TpopSeit>
           </Row>
           <Row>
             <Label3>angesiedelt (vor Beginn AP)</Label3>
-            <PopBerJahr>{fourLPop}</PopBerJahr>
-            <TpopBerJahr>{fourLTpop}</TpopBerJahr>
+            <PopBerJahr>{loading ? '...' : fourLPop}</PopBerJahr>
+            <TpopBerJahr>{loading ? '...' : fourLTpop}</TpopBerJahr>
             <PopSeit></PopSeit>
             <TpopSeit></TpopSeit>
           </Row>
           <Row>
             <Label3>angesiedelt (nach Beginn AP)</Label3>
-            <PopBerJahr>{fiveLPop}</PopBerJahr>
-            <TpopBerJahr>{fiveLTpop}</TpopBerJahr>
+            <PopBerJahr>{loading ? '...' : fiveLPop}</PopBerJahr>
+            <TpopBerJahr>{loading ? '...' : fiveLTpop}</TpopBerJahr>
             <PopSeit></PopSeit>
             <TpopSeit></TpopSeit>
           </Row>
           <Row>
             <Label2>erloschen:</Label2>
-            <PopBerJahr>{sevenLPop + eightLPop}</PopBerJahr>
-            <TpopBerJahr>{sevenLTpop + eightLTpop}</TpopBerJahr>
+            <PopBerJahr>{loading ? '...' : sevenLPop + eightLPop}</PopBerJahr>
+            <TpopBerJahr>{loading ? '...' : sevenLTpop + eightLTpop}</TpopBerJahr>
             <PopSeit></PopSeit>
             <TpopSeit></TpopSeit>
           </Row>
           <Row>
             <Label2Davon>davon:</Label2Davon>
             <Label3AfterDavon>zuvor autochthon oder vor AP angesiedelt</Label3AfterDavon>
-            <PopBerJahr>{sevenLPop}</PopBerJahr>
-            <TpopBerJahr>{sevenLTpop}</TpopBerJahr>
+            <PopBerJahr>{loading ? '...' : sevenLPop}</PopBerJahr>
+            <TpopBerJahr>{loading ? '...' : sevenLTpop}</TpopBerJahr>
             <PopSeit></PopSeit>
             <TpopSeit></TpopSeit>
           </Row>
           <Row>
             <Label3>nach Beginn Aktionsplan angesiedelt</Label3>
-            <PopBerJahr>{eightLPop}</PopBerJahr>
-            <TpopBerJahr>{eightLTpop}</TpopBerJahr>
+            <PopBerJahr>{loading ? '...' : eightLPop}</PopBerJahr>
+            <TpopBerJahr>{loading ? '...' : eightLTpop}</TpopBerJahr>
             <PopSeit></PopSeit>
             <TpopSeit></TpopSeit>
           </Row>
           <Row>
             <Label2>Ansaatversuche:</Label2>
-            <PopBerJahr>{nineLPop}</PopBerJahr>
-            <TpopBerJahr>{nineLTpop}</TpopBerJahr>
+            <PopBerJahr>{loading ? '...' : nineLPop}</PopBerJahr>
+            <TpopBerJahr>{loading ? '...' : nineLTpop}</TpopBerJahr>
             <PopSeit></PopSeit>
             <TpopSeit></TpopSeit>
           </Row>
           <FernerRow>Ferner:</FernerRow>
           <Row>
             <Label1>potentieller Wuchs-/Ansiedlungsort:</Label1>
-            <PopBerJahr>{tenLPop}</PopBerJahr>
-            <TpopBerJahr>{tenLTpop}</TpopBerJahr>
+            <PopBerJahr>{loading ? '...' : tenLPop}</PopBerJahr>
+            <TpopBerJahr>{loading ? '...' : tenLTpop}</TpopBerJahr>
             <PopSeit></PopSeit>
             <TpopSeit></TpopSeit>
           </Row>

@@ -200,7 +200,7 @@ const CMengen = ({
           <Title>C. Zwischenbilanz zur Wirkung von Massnahmen</Title>
           <YearRow>
             <Year>{jahr}</Year>
-            <YearSince>{`Seit ${oneRTpop_firstYear}`}</YearSince>
+            <YearSince>{`Seit ${loading ? '...' : oneRTpop_firstYear}`}</YearSince>
           </YearRow>
           <LabelRow>
             <Label1></Label1>
@@ -211,53 +211,53 @@ const CMengen = ({
           </LabelRow>
           <Row>
             <Label1>Anzahl Populationen/Teilpopulationen mit Massnahmen</Label1>
-            <PopBerJahr>{oneLPop}</PopBerJahr>
-            <TpopBerJahr>{oneLTpop}</TpopBerJahr>
-            <PopSeit>{oneRPop}</PopSeit>
-            <TpopSeit>{oneRTpop}</TpopSeit>
+            <PopBerJahr>{loading ? '...' : oneLPop}</PopBerJahr>
+            <TpopBerJahr>{loading ? '...' : oneLTpop}</TpopBerJahr>
+            <PopSeit>{loading ? '...' : oneRPop}</PopSeit>
+            <TpopSeit>{loading ? '...' : oneRTpop}</TpopSeit>
           </Row>
           <Row>
             <Label2>kontrolliert</Label2>
             <PopBerJahr></PopBerJahr>
             <TpopBerJahr></TpopBerJahr>
-            <PopSeit>{twoRPop}</PopSeit>
-            <TpopSeit>{twoRTpop}</TpopSeit>
+            <PopSeit>{loading ? '...' : twoRPop}</PopSeit>
+            <TpopSeit>{loading ? '...' : twoRTpop}</TpopSeit>
           </Row>
           <Row>
             <Label2Davon>davon:</Label2Davon>
             <Label3AfterDavon>sehr erfolgreich</Label3AfterDavon>
             <PopBerJahr></PopBerJahr>
             <TpopBerJahr></TpopBerJahr>
-            <PopSeit>{threeRPop}</PopSeit>
-            <TpopSeit>{threeRTpop}</TpopSeit>
+            <PopSeit>{loading ? '...' : threeRPop}</PopSeit>
+            <TpopSeit>{loading ? '...' : threeRTpop}</TpopSeit>
           </Row>
           <Row>
             <Label3>erfolgreich</Label3>
             <PopBerJahr></PopBerJahr>
             <TpopBerJahr></TpopBerJahr>
-            <PopSeit>{fourRPop}</PopSeit>
-            <TpopSeit>{fourRTpop}</TpopSeit>
+            <PopSeit>{loading ? '...' : fourRPop}</PopSeit>
+            <TpopSeit>{loading ? '...' : fourRTpop}</TpopSeit>
           </Row>
           <Row>
             <Label3>weniger erfolgreich</Label3>
             <PopBerJahr></PopBerJahr>
             <TpopBerJahr></TpopBerJahr>
-            <PopSeit>{fiveRPop}</PopSeit>
-            <TpopSeit>{fiveRTpop}</TpopSeit>
+            <PopSeit>{loading ? '...' : fiveRPop}</PopSeit>
+            <TpopSeit>{loading ? '...' : fiveRTpop}</TpopSeit>
           </Row>
           <Row>
             <Label3>nicht erfolgreich</Label3>
             <PopBerJahr></PopBerJahr>
             <TpopBerJahr></TpopBerJahr>
-            <PopSeit>{sixRPop}</PopSeit>
-            <TpopSeit>{sixRTpop}</TpopSeit>
+            <PopSeit>{loading ? '...' : sixRPop}</PopSeit>
+            <TpopSeit>{loading ? '...' : sixRTpop}</TpopSeit>
           </Row>
           <Row>
             <Label3>mit unsicherer Wirkung</Label3>
             <PopBerJahr></PopBerJahr>
             <TpopBerJahr></TpopBerJahr>
-            <PopSeit>{sevenRPop}</PopSeit>
-            <TpopSeit>{sevenRTpop}</TpopSeit>
+            <PopSeit>{loading ? '...' : sevenRPop}</PopSeit>
+            <TpopSeit>{loading ? '...' : sevenRTpop}</TpopSeit>
           </Row>
         </Container>
       )
