@@ -311,7 +311,7 @@ query QkQuery(
       }
     }
   }
-  popMitMehrdeutigerNr: allVQPopPopnrmehrdeutigs {
+  popMitMehrdeutigerNr: allVQPopPopnrmehrdeutigs(filter: {apId: {equalTo: $apId}}) {
     nodes {
       projId
       apId
