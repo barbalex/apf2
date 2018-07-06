@@ -127,6 +127,15 @@ class ApberPrint extends Component<Props> {
   constructor(props) {
     super(props)
     this.container = createRef()
+    this.state = {
+      yearOfFirstTpopber: null
+    }
+  }
+
+  setYearOfFirstTpopber = (year) => {
+    if (year !== this.state.yearOfFirstTpopber) {
+      this.setState({ yearOfFirstTpopber: year })
+    }
   }
 
   render() {
@@ -219,7 +228,8 @@ class ApberPrint extends Component<Props> {
 
                         <Row>
                           <p>{`Start Programm: ${get(data, 'apById.startJahr', '(Start-Jahr fehlt)')}`}</p>
-                          <p>{`Erste Massnahme im Jahr: ${get(data, 'allVApberErstemassnjahrs.nodes[0].jahr', '(Jahr fehlt)')}`}</p>
+                          <p>{`Erste Massnahme: ${get(data, 'allVApberErstemassnjahrs.nodes[0].jahr', '(Jahr fehlt)')}`}</p>
+                          <p>{`Erste Kontrolle: ${this.state.yearOfFirstTpopber || '...'}`}</p>
                         </Row>
 
                         <AMengen apId={apId} jahr={jahr} startJahr={startJahr} />
@@ -228,7 +238,7 @@ class ApberPrint extends Component<Props> {
                           <FullWidthField>{get(apber, 'biotopeNeue', '')}</FullWidthField>
                         </FieldRowFullWidth>
 
-                        <BMengen apId={apId} jahr={jahr} startJahr={startJahr} />
+                        <BMengen apId={apId} jahr={jahr} startJahr={startJahr} setYearOfFirstTpopber={this.setYearOfFirstTpopber} />
                         <FieldRowFullWidth>
                           <TitledLabel>Weitere Aktivitäten der Aktionsplan-Verantwortlichen</TitledLabel>
                           <FullWidthField>{get(apber, 'massnahmenApBearb', '')}</FullWidthField>
