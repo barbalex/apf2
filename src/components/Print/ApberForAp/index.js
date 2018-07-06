@@ -82,6 +82,7 @@ const Row = styled.div`
   p {
     margin: 0;
   }
+  break-inside: avoid;
 `
 const FieldRow = styled.div`
   display: flex;
@@ -94,6 +95,7 @@ const FieldRowFullWidth = styled.div`
   display: flex;
   flex-direction: column;
   padding: 0.2cm 0;
+  break-inside: avoid;
 `
 const FullWidthField = styled.div`
   hyphens: auto;
@@ -233,68 +235,109 @@ class ApberPrint extends Component<Props> {
                         </Row>
 
                         <AMengen apId={apId} jahr={jahr} startJahr={startJahr} />
-                        <FieldRowFullWidth>
-                          <TitledLabel>Bemerkungen / Folgerungen für nächstes Jahr: neue Biotope</TitledLabel>
-                          <FullWidthField>{get(apber, 'biotopeNeue', '')}</FullWidthField>
-                        </FieldRowFullWidth>
+                        {
+                          !!apber.biotopeNeue &&
+                          <FieldRowFullWidth>
+                            <TitledLabel>Bemerkungen / Folgerungen für nächstes Jahr: neue Biotope</TitledLabel>
+                            <FullWidthField>{get(apber, 'biotopeNeue', '')}</FullWidthField>
+                          </FieldRowFullWidth>
+                        }
 
                         <BMengen apId={apId} jahr={jahr} startJahr={startJahr} setYearOfFirstTpopber={this.setYearOfFirstTpopber} />
-                        <FieldRowFullWidth>
-                          <TitledLabel>Weitere Aktivitäten der Aktionsplan-Verantwortlichen</TitledLabel>
-                          <FullWidthField>{get(apber, 'massnahmenApBearb', '')}</FullWidthField>
-                        </FieldRowFullWidth>
-                        <FieldRowFullWidth>
-                          <TitledLabel>Bemerkungen / Folgerungen für nächstes Jahr: Optimierung Biotope</TitledLabel>
-                          <FullWidthField>{get(apber, 'biotopeOptimieren', '')}</FullWidthField>
-                        </FieldRowFullWidth>
+                        {
+                          !!apber.massnahmenApBearb &&
+                          <FieldRowFullWidth>
+                            <TitledLabel>Weitere Aktivitäten der Aktionsplan-Verantwortlichen</TitledLabel>
+                            <FullWidthField>{get(apber, 'massnahmenApBearb', '')}</FullWidthField>
+                          </FieldRowFullWidth>
+                        }
+                        {
+                          !!apber.StringbiotopeOptimieren &&
+                          <FieldRowFullWidth>
+                            <TitledLabel>Bemerkungen / Folgerungen für nächstes Jahr: Optimierung Biotope</TitledLabel>
+                            <FullWidthField>{get(apber, 'biotopeOptimieren', '')}</FullWidthField>
+                          </FieldRowFullWidth>
+                        }
 
                         <CMengen apId={apId} jahr={jahr} startJahr={startJahr} />
-                        <FieldRowFullWidth>
-                          <TitledLabel>Bemerkungen / Folgerungen für nächstes Jahr: Optimierung Massnahmen</TitledLabel>
-                          <FullWidthField>{get(apber, 'massnahmenOptimieren', '')}</FullWidthField>
-                        </FieldRowFullWidth>
-                        <Massnahmen massns={massns} />
+                        {
+                          !!apber.massnahmenOptimieren &&
+                          <FieldRowFullWidth>
+                            <TitledLabel>Bemerkungen / Folgerungen für nächstes Jahr: Optimierung Massnahmen</TitledLabel>
+                            <FullWidthField>{get(apber, 'massnahmenOptimieren', '')}</FullWidthField>
+                          </FieldRowFullWidth>
+                        }
+                        {
+                          !!massns.length &&
+                          <Massnahmen massns={massns} />
+                        }
 
                         <Title1>D. Einschätzung der Wirkung des AP insgesamt auf die Art</Title1>
-                        <FieldRow>
-                          <FieldLabel>Vergleich zu Vorjahr - Ausblick auf Gesamtziel</FieldLabel>
-                          <Field>{get(apber, 'vergleichVorjahrGesamtziel', '')}</Field>
-                        </FieldRow>
-                        <Ziele ziele={ziele} />
-                        <FieldRow>
-                          <FieldLabel>Beurteilungsskala</FieldLabel>
-                          <Field>
-                            {
-                              erfkrit.map(e =>
-                                <ErfkritRow key={e.id}>
-                                  <ErfkritErfolg>{`${get(e, 'apErfkritWerteByErfolg.text', '(fehlt)')}:`}</ErfkritErfolg>
-                                  <ErfkritKriterium>{e.kriterien || '(fehlt)'}</ErfkritKriterium>
-                                </ErfkritRow>
-                              )
-                            }
-                          </Field>
-                        </FieldRow>
-                        <FieldRowBold>
-                          <FieldLabel>Beurteilung</FieldLabel>
-                          <Field>{get(apber, 'apErfkritWerteByBeurteilung.text', '')}</Field>
-                        </FieldRowBold>
-                        <FieldRow>
-                          <FieldLabel>Bemerkungen</FieldLabel>
-                          <Field>{get(apber, 'wirkungAufArt', '')}</Field>
-                        </FieldRow>
-                        <FieldRow>
-                          <FieldLabel>Analyse</FieldLabel>
-                          <Field>{get(apber, 'apberAnalyse', '')}</Field>
-                        </FieldRow>
-                        <FieldRow>
-                          <FieldLabel>Konsequenzen für die Umsetzung</FieldLabel>
-                          <Field>{get(apber, 'konsequenzenUmsetzung', '')}</Field>
-                        </FieldRow>
-                        <FieldRow>
-                          <FieldLabel>Konsequenzen für die Erfolgskontrolle</FieldLabel>
-                          <Field>{get(apber, 'konsequenzenErfolgskontrolle', '')}</Field>
-                        </FieldRow>
-                        <Row>{`${apberDatum ? format(apberDatum, 'DD.MM.YYYY') : '(Datum fehlt)'} / ${get(apber, 'adresseByBearbeiter.name')}`}</Row>
+                        {
+                          !!apber.vergleichVorjahrGesamtziel &&
+                          <FieldRow>
+                            <FieldLabel>Vergleich zu Vorjahr - Ausblick auf Gesamtziel</FieldLabel>
+                            <Field>{get(apber, 'vergleichVorjahrGesamtziel', '')}</Field>
+                          </FieldRow>
+                        }
+                        {
+                          !!ziele.length &&
+                          <Ziele ziele={ziele} />
+                        }
+                        {
+                          !!erfkrit.length &&
+                          <FieldRow>
+                            <FieldLabel>Beurteilungsskala</FieldLabel>
+                            <Field>
+                              {
+                                erfkrit.map(e =>
+                                  <ErfkritRow key={e.id}>
+                                    <ErfkritErfolg>{`${get(e, 'apErfkritWerteByErfolg.text', '(fehlt)')}:`}</ErfkritErfolg>
+                                    <ErfkritKriterium>{e.kriterien || '(fehlt)'}</ErfkritKriterium>
+                                  </ErfkritRow>
+                                )
+                              }
+                            </Field>
+                          </FieldRow>
+                        }
+                        {
+                          !!apber.apErfkritWerteByBeurteilung &&
+                          <FieldRowBold>
+                            <FieldLabel>Beurteilung</FieldLabel>
+                            <Field>{get(apber, 'apErfkritWerteByBeurteilung.text', '')}</Field>
+                          </FieldRowBold>
+                        }
+                        {
+                          !!apber.wirkungAufArt &&
+                          <FieldRow>
+                            <FieldLabel>Bemerkungen</FieldLabel>
+                            <Field>{get(apber, 'wirkungAufArt', '')}</Field>
+                          </FieldRow>
+                        }
+                        {
+                          !!apber.apberAnalyse &&
+                          <FieldRow>
+                            <FieldLabel>Analyse</FieldLabel>
+                            <Field>{get(apber, 'apberAnalyse', '')}</Field>
+                          </FieldRow>
+                        }
+                        {
+                          !!apber.konsequenzenUmsetzung &&
+                          <FieldRow>
+                            <FieldLabel>Konsequenzen für die Umsetzung</FieldLabel>
+                            <Field>{get(apber, 'konsequenzenUmsetzung', '')}</Field>
+                          </FieldRow>
+                        }
+                        {
+                          !!apber.konsequenzenErfolgskontrolle &&
+                          <FieldRow>
+                            <FieldLabel>Konsequenzen für die Erfolgskontrolle</FieldLabel>
+                            <Field>{get(apber, 'konsequenzenErfolgskontrolle', '')}</Field>
+                          </FieldRow>
+                        }
+                        <Row>
+                          {`${apberDatum ? format(apberDatum, 'DD.MM.YYYY') : '(Datum fehlt)'} / ${get(apber, 'adresseByBearbeiter.name', '(kein Bearbeiter)')}`}
+                        </Row>
 
                       </ContentContainer>
                     </Container>
