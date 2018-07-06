@@ -9,6 +9,12 @@ import dataGql from './data.graphql'
 
 const Container = styled.div`
   padding: 0.2cm 0;
+  break-inside: avoid;
+`
+const Title = styled.h3`
+  font-size: 16px;
+  font-weight: 800;
+  margin-bottom: -18px;
 `
 const Row = styled.div`
   display: flex;
@@ -146,6 +152,7 @@ const AMengen = ({
 
       return (
         <Container>
+          <Title>A. Grundmengen</Title>
           <YearRow>
             <Year>{jahr}</Year>
           </YearRow>

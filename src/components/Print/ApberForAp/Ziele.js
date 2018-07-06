@@ -5,6 +5,7 @@ import get from 'lodash/get'
 
 const Container = styled.div`
   padding: 0.2cm 0;
+  break-inside: avoid;
 `
 const Title = styled.div`
   border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;

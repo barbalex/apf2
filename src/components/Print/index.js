@@ -26,6 +26,8 @@ const Container = styled.div`
   @media print {
     /* remove grey backgrond set for nice UI */
     background-color: #fff;
+    height: auto;
+    overflow: visible;
   }
 `
 const BackButton = styled(Button)`
@@ -33,7 +35,7 @@ const BackButton = styled(Button)`
   top: 10px;
   left: 10px;
   @media print {
-    display: none;
+    display: none !important;
   }
 `
 const StyledArrowBack = styled(ArrowBack)`

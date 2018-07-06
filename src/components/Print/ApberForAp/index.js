@@ -50,11 +50,18 @@ const Container = styled.div`
     page-break-inside: avoid !important;
     page-break-before: avoid !important;
     page-break-after: avoid !important;
+    
+    box-shadow: unset;
+    overflow: hidden;
   }
 `
 const ContentContainer = styled.div`
   padding: 1.5cm;
   font-size: 14px;
+  @media print {
+    padding: 0;
+    overflow: hidden;
+  }
 `
 const Header = styled.p`
   font-size: 12px;
@@ -62,11 +69,8 @@ const Header = styled.p`
 const Title1 = styled.h3`
   font-size: 16px;
   font-weight: 800;
-`
-const TitleBeforeMengen = styled.h3`
-  font-size: 16px;
-  font-weight: 800;
-  margin-bottom: -26px;
+  break-after: avoid;
+  page-break-after: avoid;
 `
 const TitledLabel = styled.label`
   text-decoration: underline;
@@ -222,14 +226,12 @@ class ApberPrint extends Component<Props> {
                           <p>{`Erste Massnahme im Jahr: ${get(data, 'allVApberErstemassnjahrs.nodes[0].jahr', '(Jahr fehlt)')}`}</p>
                         </Row>
 
-                        <TitleBeforeMengen>A. Grundmengen</TitleBeforeMengen>
                         <AMengen apId={apId} jahr={jahr} startJahr={startJahr} />
                         <FieldRowFullWidth>
                           <TitledLabel>Bemerkungen / Folgerungen für nächstes Jahr: neue Biotope</TitledLabel>
                           <FullWidthField>{get(apber, 'biotopeNeue', '')}</FullWidthField>
                         </FieldRowFullWidth>
 
-                        <TitleBeforeMengen>B. Bestandesentwicklung</TitleBeforeMengen>
                         <BMengen apId={apId} jahr={jahr} startJahr={startJahr} />
                         <FieldRowFullWidth>
                           <TitledLabel>Weitere Aktivitäten der Aktionsplan-Verantwortlichen</TitledLabel>
@@ -240,7 +242,6 @@ class ApberPrint extends Component<Props> {
                           <FullWidthField>{get(apber, 'biotopeOptimieren', '')}</FullWidthField>
                         </FieldRowFullWidth>
 
-                        <TitleBeforeMengen>C. Zwischenbilanz zur Wirkung von Massnahmen</TitleBeforeMengen>
                         <CMengen apId={apId} jahr={jahr} startJahr={startJahr} />
                         <FieldRowFullWidth>
                           <TitledLabel>Bemerkungen / Folgerungen für nächstes Jahr: Optimierung Massnahmen</TitledLabel>
