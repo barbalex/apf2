@@ -18,7 +18,7 @@ const Container = styled.div`
 const Title = styled.h3`
   font-size: 16px;
   font-weight: 800;
-  margin-bottom: -18px;
+  margin-bottom: 0;
 `
 const Row = styled.div`
   display: flex;
