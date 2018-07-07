@@ -218,10 +218,12 @@ const MyAppBar = ({
                             setAnchorEl(null)
                             logout()
                           }}
-                        >{`${get(data, 'user.name')} abmelden`}</MenuItem>
+                        >
+                          {`${get(data, 'user.name')} abmelden`}
+                        </MenuItem>
+                        <Version>Version: 1.1.0 vom 8.7.2018</Version>
                       </Menu>
                     </div>
-                    <Version>Version: 1.0.0 vom 8.7.2018</Version>
                   </MenuDiv>
                 </StyledToolbar>
               </StyledAppBar>
