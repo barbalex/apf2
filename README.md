@@ -55,7 +55,7 @@ Web-Applikation zur Verwaltung des [Aktionsplans Flora der Fachstelle Naturschut
 - Keine Installation, automatische Updates
 - Von ausserhalb (Auftragnehmer) und innerhalb der Fachstelle Naturschutz arbeiten
 - Ein moderner Browser wird vorausgesetzt. Entwickelt für Google Chrome. Funktioniert auch auf Firefox und Safari für PC sowie Chrome für Android und Safari auf iOS
-- Wer lieber will oder über keinen modernen Browser einsetzen darf (wie z.B. die Fachstelle Naturschutz Kt. Zürich selbst), kann [hier](https://www.dropbox.com/sh/5ar4f0fu5uqvhar/AADJmUo_9pakOnjL_U27EpQMa?dl=0) die lokal installierbare Version beziehen. Für die Installation den aktuellsten `apflora-win32-x64`-Ordner in den eigenen Benutzer-Ordner kopieren (oder irgendwo sonst, wo Sie über die Rechte verfügen, eine .exe-Datei auszuführen). Dann die darin enthaltene `apflora.exe` doppelklicken.
+- Wer keinen modernen Browser einsetzen darf (wie z.B. die Fachstelle Naturschutz Kt. Zürich selbst) oder aus einem anderen Grund lieber will, kann [hier](https://www.dropbox.com/sh/5ar4f0fu5uqvhar/AADJmUo_9pakOnjL_U27EpQMa?dl=0) die lokal installierbare Version beziehen. Für die Installation den aktuellsten `apflora-win32-x64`-Ordner in den eigenen Benutzer-Ordner kopieren (oder irgendwo sonst, wo Sie über die Rechte verfügen, eine .exe-Datei auszuführen). Dann die darin enthaltene `apflora.exe` doppelklicken.
 
 **Sich rasch zurechtfinden:**
 
