@@ -48,6 +48,11 @@ const MenuDiv = styled.div`
 const StyledMoreVertIcon = styled(MoreVertIcon)`
   color: white !important;
 `
+const Version = styled.div`
+  padding: 12px 16px;
+  color: rgba(0, 0, 0, 0.87);
+  user-select: none;
+`
 
 const enhance = compose(
   withState('anchorEl', 'setAnchorEl', null),
@@ -216,6 +221,7 @@ const MyAppBar = ({
                         >{`${get(data, 'user.name')} abmelden`}</MenuItem>
                       </Menu>
                     </div>
+                    <Version>Version: 1.0.0 vom 8.7.2018</Version>
                   </MenuDiv>
                 </StyledToolbar>
               </StyledAppBar>
