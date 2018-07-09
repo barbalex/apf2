@@ -161,7 +161,11 @@ class ApberForYear extends Component<Props> {
                 const data = merge(data1, data2)
                 const apberuebersicht = get(data, 'apberuebersichtById')
                 const aps = sortBy(
-                  get(data, 'projektById.apsByProjId.nodes', []),
+                  get(data, 'projektById.apsByProjId.nodes', [])
+                    .filter(ap =>
+                      !!get(ap, 'apbersByApId.nodes[0]', null) &&
+                      !!get(ap, 'apbersByApId.nodes[0].id')
+                    ),
                   ap => get(ap, 'aeEigenschaftenByArtId.artname')
                 )
 
@@ -184,7 +188,14 @@ class ApberForYear extends Component<Props> {
                         }
                         <AvList data={data} />
                         {
-                          aps.map(ap => <ApberForAp ap={ap} apber={get(ap, 'apbersByApId.nodes[0].id')} />)
+                          aps.map(ap =>
+                            <ApberForAp
+                              key={ap.id}
+                              apId={ap.id}
+                              apberId={get(ap, 'apbersByApId.nodes[0].id')}
+                              activeNodeArray={activeNodeArray}
+                            />
+                          )
                         }
                       </ContentContainer>
                     </Container>

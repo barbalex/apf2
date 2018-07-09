@@ -4,6 +4,7 @@ query apberuebersichtById($projektId: UUID!, $jahr: Int!) {
     name
     apsByProjId(filter: { bearbeitung: { in: [1, 2, 3] } }) {
       nodes {
+        id
         startJahr
         aeEigenschaftenByArtId {
           id

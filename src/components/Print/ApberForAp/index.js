@@ -26,11 +26,12 @@ const Container = styled.div`
   /* this part is for when page preview is shown */
   /* Divide single pages with some space and center all pages horizontally */
   /* will be removed in @media print */
-  margin: 1cm auto;
+  margin: ${props => props.issubreport ? '0' : '1cm auto'};
+  margin-left: ${props => props.issubreport ? '-0.75cm !important' : '1cm auto'};
   /* Define a white paper background that sticks out from the darker overall background */
-  background: #fff;
+  background: ${props => props.issubreport ? 'rgba(0, 0, 0, 0)' : '#fff'};
   /* Show a drop shadow beneath each page */
-  box-shadow: 0 4px 5px rgba(75, 75, 75, 0.2);
+  box-shadow: ${props => props.issubreport ? 'unset' : '0 4px 5px rgba(75, 75, 75, 0.2)'};
 
   /* set dimensions */
   /*height: 29.7cm;*/
@@ -44,7 +45,7 @@ const Container = styled.div`
     width: inherit;
 
     margin: 0 !important;
-    padding: 0.5cm !important;
+    padding: ${props => props.issubreport ? '0' : '0.5cm !important'};
     overflow-y: hidden !important;
     /* try this */
     page-break-inside: avoid !important;
@@ -123,6 +124,12 @@ type Props = {
   activeNodeArray: Array<String>,
   dimensions: Object,
   errors: Object,
+  /**
+   * when ApberForAp is called from ApberForYear
+   * apberId and apId are passed
+   */
+  apberId: String,
+  apId: String,
 }
 
 class ApberForAp extends Component<Props> {
@@ -142,7 +149,10 @@ class ApberForAp extends Component<Props> {
 
   render() {
     const { activeNodeArray } = this.props
-    const { ap: apId, apber: apberId } = getActiveNodes(activeNodeArray)
+    const { ap: apIdFromActiveNodes, apber: apberIdFromActiveNodes } = getActiveNodes(activeNodeArray)
+    const apberId = this.props.apberId || apberIdFromActiveNodes
+    const apId = this.props.apId || apIdFromActiveNodes
+    const issubreport = !!this.props.apId
 
     return (
       <Query
@@ -168,7 +178,7 @@ class ApberForAp extends Component<Props> {
               {({ loading, error, data: data2 }) => {
                 if (loading)
                   return (
-                    <Container>
+                    <Container issubreport={issubreport}>
                       <LoadingContainer>Lade...</LoadingContainer>
                     </Container>
                   )
@@ -206,7 +216,7 @@ class ApberForAp extends Component<Props> {
                 const startJahr = get(data, 'apById.startJahr', 0)
                 if (startJahr === 0) return (
                   <ErrorBoundary>
-                    <Container innerRef={this.container}>
+                    <Container innerRef={this.container} issubreport={issubreport}>
                       <ContentContainer>
                         Bitte beim AP ein Startjahr ergänzen!
                       </ContentContainer>
@@ -216,7 +226,7 @@ class ApberForAp extends Component<Props> {
 
                 return (
                   <ErrorBoundary>
-                    <Container innerRef={this.container}>
+                    <Container innerRef={this.container} issubreport={issubreport}>
                       <ContentContainer>
                         <Header>
                           {

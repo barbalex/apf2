@@ -65,8 +65,6 @@ const Print = () =>
       const showApberForYear = activeNodeArray.length === 5 &&
         activeNodeArray[2] === 'AP-Berichte' &&
         activeNodeArray[4] === 'print'
-
-        showApberForYear && console.log('showApberForYear')
         
       if (!showApberForAp && !showApberForYear) return null
 
