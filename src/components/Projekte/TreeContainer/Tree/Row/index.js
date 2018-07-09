@@ -229,11 +229,12 @@ const Row = ({
     useSymbolIcon = false
   }
   if (
-    node.menuType === 'apber' &&
+    (node.menuType === 'apber' || node.menuType === 'apberuebersicht') &&
     tree.name === 'tree'
   ) {
     showPrintIcon = true
   }
+  const printIconTitle = node.menuType === 'apberuebersicht' ? 'Druckversion. Achtung: braucht Minuten, um vollständig zu laden' : 'Druckversion'
   const dataUrl = JSON.stringify(node.url)
   const level = node.url[0] === 'Projekte' ? node.url.length - 1 : node.url.length
   const isMoving =
@@ -437,7 +438,7 @@ const Row = ({
           )}
           {showPrintIcon && (
             <PrintIconContainer
-              title="Druckversion"
+              title={printIconTitle}
               onClick={() =>
                 client.mutate({
                   mutation: setTreeKey,
