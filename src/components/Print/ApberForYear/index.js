@@ -9,6 +9,7 @@ import ErrorBoundary from '../../shared/ErrorBoundary'
 import getActiveNodes from '../../../modules/getActiveNodes'
 import data1Gql from './data1.graphql'
 import data2Gql from './data2.graphql'
+import fnslogo from './fnslogo.png'
 
 const LoadingContainer = styled.div`
   padding: 15px;
@@ -54,6 +55,21 @@ const ContentContainer = styled.div`
     padding: 0;
     overflow: hidden;
   }
+`
+const MainTitle = styled.p`
+  font-size: 22px;
+  font-weight: 700;
+  text-align: center;
+`
+const MainSubTitle = styled.p`
+  font-size: 18px;
+  font-weight: 700;
+  text-align: center;
+`
+const FnsLogo = styled.img`
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
 `
 
 
@@ -111,22 +127,14 @@ class ApberForYear extends Component<Props> {
                 if (error) return `Fehler: ${error.message}`
 
                 const data = merge(data1, data2)
-                const startJahr = get(data, 'apById.startJahr', 0)
-                if (startJahr === 0) return (
-                  <ErrorBoundary>
-                    <Container innerRef={this.container}>
-                      <ContentContainer>
-                        Bitte beim AP ein Startjahr ergänzen!
-                      </ContentContainer>
-                    </Container>
-                  </ErrorBoundary>
-                )
 
                 return (
                   <ErrorBoundary>
                     <Container innerRef={this.container}>
                       <ContentContainer>
-                        ApberForYear
+                        <MainTitle>Umsetzung der Aktionspläne Flora<br/>im Kanton Zürich</MainTitle>
+                        <MainSubTitle>{`Jahresbericht ${get(data, 'apberuebersichtById.jahr')}`}</MainSubTitle>
+                        <FnsLogo src={fnslogo} alt="FNS" width="400" />
                       </ContentContainer>
                     </Container>
                   </ErrorBoundary>
