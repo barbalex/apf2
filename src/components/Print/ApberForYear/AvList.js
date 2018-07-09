@@ -1,5 +1,5 @@
 // @flow
-import React, { Fragment } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import groupBy from 'lodash/groupBy'
@@ -7,6 +7,15 @@ import sortBy from 'lodash/sortBy'
 
 import ErrorBoundary from '../../shared/ErrorBoundary'
 
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  break-before: page;
+  font-size: 12px;
+  @media screen {
+    margin-top: 3cm;
+  }
+`
 const AvRow = styled.div`
   display: flex;
   padding: 0.05cm 0;
@@ -17,40 +26,50 @@ const NonAvRow = styled.div`
   padding: 0.05cm 0;
 `
 const Av = styled.div`
-  min-width: 7cm;
-  max-width: 7cm;
+  min-width: 5cm;
+  max-width: 5cm;
 `
 const Art = styled.div``
+const Title = styled.p`
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 4px;
+`
 
-const AvList = ({
-  data,
-}:{
-  data: Object,
-}) => {
+const AvList = ({ data }:{ data: Object }) => {
   const avGrouped = groupBy(
-    sortBy(
-      get(data, 'projektById.apsByProjId.nodes', []).map(ap => ({
-        av: get(ap, 'adresseByBearbeiter.name', '(kein Wert)'),
-        art: get(ap, 'aeEigenschaftenByArtId.artname', '(keine Art gewählt)')
-      })),
-      'av'
-    ),
+    get(data, 'projektById.apsByProjId.nodes', []).map(ap => ({
+      av: get(ap, 'adresseByBearbeiter.name', '(kein Wert)'),
+      art: get(ap, 'aeEigenschaftenByArtId.artname', '(keine Art gewählt)')
+    })),
     'av'
   )
-  console.log('avGrouped:',avGrouped)
+  const avs = Object.keys(avGrouped).sort()
 
   return (
     <ErrorBoundary>
-      {
-        Object.keys(avGrouped).map(av =>
-          <Fragment key={av}>
-            <AvRow>
-              <Av>{avGrouped[av].av}</Av>
-              <Art>{avGrouped[av].art}</Art>
-            </AvRow>
-          </Fragment>
-        )
-      }
+      <Container>
+        <Title>Artverantwortliche</Title>
+        {
+          avs.map(av => {
+            const array = sortBy(avGrouped[av], 'art')
+            return array.map((o, i) => {
+              if (i ===  0) return (
+                <AvRow key={o.art}>
+                  <Av>{o.av}</Av>
+                  <Art>{o.art}</Art>
+                </AvRow>
+              )
+              return (
+                <NonAvRow key={o.art}>
+                  <Av>{}</Av>
+                  <Art>{o.art}</Art>
+                </NonAvRow>
+              )
+            })
+          })
+        }
+      </Container>
     </ErrorBoundary>
   )
 }

@@ -1,5 +1,5 @@
 // @flow
-import React, { Component, createRef, Fragment } from 'react'
+import React, { Component, createRef } from 'react'
 import styled from 'styled-components'
 import { Query } from 'react-apollo'
 import get from 'lodash/get'
@@ -86,6 +86,9 @@ const FirstPageBearbeiter = styled.p`
 const SecondPageTop = styled.div`
   padding-top: 2cm;
 `
+const SecondPage = styled.div`
+  break-after: page;
+`
 const SecondPageTitle = styled.label`
   padding-top: 2cm;
   font-size: 18px;
@@ -93,7 +96,6 @@ const SecondPageTitle = styled.label`
 `
 const SecondPageText = styled.p`
   hyphens: auto;
-  break-after: page;
 `
 
 
@@ -149,11 +151,11 @@ class ApberForYear extends Component<Props> {
                   <FirstPageBearbeiter>Karin Marti, topos</FirstPageBearbeiter>
                   {
                     !!apberuebersicht.bemerkungen &&
-                    <Fragment>
+                    <SecondPage>
                       <SecondPageTop />
                       <SecondPageTitle>Zusammenfassung</SecondPageTitle>
                       <SecondPageText>{apberuebersicht.bemerkungen}</SecondPageText>
-                    </Fragment>
+                    </SecondPage>
                   }
                   <AvList data={data} />
                 </ContentContainer>
