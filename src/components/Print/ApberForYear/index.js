@@ -3,13 +3,11 @@ import React, { Component, createRef, Fragment } from 'react'
 import styled from 'styled-components'
 import { Query } from 'react-apollo'
 import get from 'lodash/get'
-import merge from 'lodash/merge'
 import format from 'date-fns/format'
 
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import getActiveNodes from '../../../modules/getActiveNodes'
-import data1Gql from './data1.graphql'
-import data2Gql from './data2.graphql'
+import dataGql from './data.graphql'
 import fnslogo from './fnslogo.png'
 
 const LoadingContainer = styled.div`
@@ -125,10 +123,10 @@ class ApberForYear extends Component<Props> {
 
     return (
       <Query
-        query={data1Gql}
+        query={dataGql}
         variables={{ projektId, apberuebersichtId }}
       >
-        {({ loading, error, data: data1 }) => {
+        {({ loading, error, data }) => {
           if (loading)
             return (
               <Container>
@@ -137,46 +135,28 @@ class ApberForYear extends Component<Props> {
             )
           if (error) return `Fehler: ${error.message}`
 
+          const apberuebersicht = get(data, 'apberuebersichtById')
+
           return (
-            <Query
-              query={data2Gql}
-              variables={{ projektId }}
-            >
-              {({ loading, error, data: data2 }) => {
-                if (loading)
-                  return (
-                    <Container>
-                      <LoadingContainer>Lade...</LoadingContainer>
-                    </Container>
-                  )
-                if (error) return `Fehler: ${error.message}`
-
-                const data = merge(data1, data2)
-                const apberuebersicht = get(data, 'apberuebersichtById')
-
-                return (
-                  <ErrorBoundary>
-                    <Container innerRef={this.container}>
-                      <ContentContainer>
-                        <FirstPageTitle>Umsetzung der Aktionspläne Flora<br/>im Kanton Zürich</FirstPageTitle>
-                        <FirstPageSubTitle>{`Jahresbericht ${get(data, 'apberuebersichtById.jahr')}`}</FirstPageSubTitle>
-                        <FirstPageFnsLogo src={fnslogo} alt="FNS" width="350" />
-                        <FirstPageDate>{format(new Date(), 'DD.MM.YYYY')}</FirstPageDate>
-                        <FirstPageBearbeiter>Karin Marti, topos</FirstPageBearbeiter>
-                        {
-                          !!apberuebersicht.bemerkungen &&
-                          <Fragment>
-                            <SecondPageTop />
-                            <SecondPageTitle>Zusammenfassung</SecondPageTitle>
-                            <SecondPageText>{apberuebersicht.bemerkungen}</SecondPageText>
-                          </Fragment>
-                        }
-                      </ContentContainer>
-                    </Container>
-                  </ErrorBoundary>
-                )
-              }}
-            </Query>
+            <ErrorBoundary>
+              <Container innerRef={this.container}>
+                <ContentContainer>
+                  <FirstPageTitle>Umsetzung der Aktionspläne Flora<br/>im Kanton Zürich</FirstPageTitle>
+                  <FirstPageSubTitle>{`Jahresbericht ${get(data, 'apberuebersichtById.jahr')}`}</FirstPageSubTitle>
+                  <FirstPageFnsLogo src={fnslogo} alt="FNS" width="350" />
+                  <FirstPageDate>{format(new Date(), 'DD.MM.YYYY')}</FirstPageDate>
+                  <FirstPageBearbeiter>Karin Marti, topos</FirstPageBearbeiter>
+                  {
+                    !!apberuebersicht.bemerkungen &&
+                    <Fragment>
+                      <SecondPageTop />
+                      <SecondPageTitle>Zusammenfassung</SecondPageTitle>
+                      <SecondPageText>{apberuebersicht.bemerkungen}</SecondPageText>
+                    </Fragment>
+                  }
+                </ContentContainer>
+              </Container>
+            </ErrorBoundary>
           )
         }}
       </Query>

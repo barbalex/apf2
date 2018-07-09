@@ -1,4 +1,14 @@
-query apById($projektId: UUID!) {
+query apberuebersichtById($apberuebersichtId: UUID!, $projektId: UUID!) {
+  apberuebersichtById(id: $apberuebersichtId) {
+    id
+    jahr
+    bemerkungen
+    projId
+    projektByProjId {
+      id
+      name
+    }
+  }
   projektById(id: $projektId) {
     id
     name
@@ -8,6 +18,10 @@ query apById($projektId: UUID!) {
         aeEigenschaftenByArtId {
           id
           artname
+        }
+        adresseByBearbeiter {
+          id
+          name
         }
         popsByApId {
           nodes {
