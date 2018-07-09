@@ -3,13 +3,17 @@ import React, { Component, createRef } from 'react'
 import styled from 'styled-components'
 import { Query } from 'react-apollo'
 import get from 'lodash/get'
+import sortBy from 'lodash/sortBy'
+import merge from 'lodash/merge'
 import format from 'date-fns/format'
 
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import getActiveNodes from '../../../modules/getActiveNodes'
-import dataGql from './data.graphql'
+import data1Gql from './data1.graphql'
+import data2Gql from './data2.graphql'
 import fnslogo from './fnslogo.png'
 import AvList from './AvList'
+import ApberForAp from '../ApberForAp'
 
 const LoadingContainer = styled.div`
   padding: 15px;
@@ -126,10 +130,10 @@ class ApberForYear extends Component<Props> {
 
     return (
       <Query
-        query={dataGql}
-        variables={{ projektId, apberuebersichtId }}
+        query={data1Gql}
+        variables={{ apberuebersichtId }}
       >
-        {({ loading, error, data }) => {
+        {({ loading, error, data: data1 }) => {
           if (loading)
             return (
               <Container>
@@ -138,29 +142,56 @@ class ApberForYear extends Component<Props> {
             )
           if (error) return `Fehler: ${error.message}`
 
-          const apberuebersicht = get(data, 'apberuebersichtById')
+          const jahr = get(data1, 'apberuebersichtById.jahr', 0)
 
           return (
-            <ErrorBoundary>
-              <Container innerRef={this.container}>
-                <ContentContainer>
-                  <FirstPageTitle>Umsetzung der Aktionspläne Flora<br/>im Kanton Zürich</FirstPageTitle>
-                  <FirstPageSubTitle>{`Jahresbericht ${get(data, 'apberuebersichtById.jahr')}`}</FirstPageSubTitle>
-                  <FirstPageFnsLogo src={fnslogo} alt="FNS" width="350" />
-                  <FirstPageDate>{format(new Date(), 'DD.MM.YYYY')}</FirstPageDate>
-                  <FirstPageBearbeiter>Karin Marti, topos</FirstPageBearbeiter>
-                  {
-                    !!apberuebersicht.bemerkungen &&
-                    <SecondPage>
-                      <SecondPageTop />
-                      <SecondPageTitle>Zusammenfassung</SecondPageTitle>
-                      <SecondPageText>{apberuebersicht.bemerkungen}</SecondPageText>
-                    </SecondPage>
-                  }
-                  <AvList data={data} />
-                </ContentContainer>
-              </Container>
-            </ErrorBoundary>
+            <Query
+              query={data2Gql}
+              variables={{ projektId, jahr }}
+            >
+              {({ loading, error, data: data2 }) => {
+                if (loading)
+                  return (
+                    <Container>
+                      <LoadingContainer>Lade...</LoadingContainer>
+                    </Container>
+                  )
+                if (error) return `Fehler: ${error.message}`
+
+                const data = merge(data1, data2)
+                const apberuebersicht = get(data, 'apberuebersichtById')
+                const aps = sortBy(
+                  get(data, 'projektById.apsByProjId.nodes', []),
+                  ap => get(ap, 'aeEigenschaftenByArtId.artname')
+                )
+
+                return (
+                  <ErrorBoundary>
+                    <Container innerRef={this.container}>
+                      <ContentContainer>
+                        <FirstPageTitle>Umsetzung der Aktionspläne Flora<br/>im Kanton Zürich</FirstPageTitle>
+                        <FirstPageSubTitle>{`Jahresbericht ${get(data, 'apberuebersichtById.jahr')}`}</FirstPageSubTitle>
+                        <FirstPageFnsLogo src={fnslogo} alt="FNS" width="350" />
+                        <FirstPageDate>{format(new Date(), 'DD.MM.YYYY')}</FirstPageDate>
+                        <FirstPageBearbeiter>Karin Marti, topos</FirstPageBearbeiter>
+                        {
+                          !!apberuebersicht.bemerkungen &&
+                          <SecondPage>
+                            <SecondPageTop />
+                            <SecondPageTitle>Zusammenfassung</SecondPageTitle>
+                            <SecondPageText>{apberuebersicht.bemerkungen}</SecondPageText>
+                          </SecondPage>
+                        }
+                        <AvList data={data} />
+                        {
+                          aps.map(ap => <ApberForAp ap={ap} apber={get(ap, 'apbersByApId.nodes[0].id')} />)
+                        }
+                      </ContentContainer>
+                    </Container>
+                  </ErrorBoundary>
+                )
+              }}
+            </Query>
           )
         }}
       </Query>

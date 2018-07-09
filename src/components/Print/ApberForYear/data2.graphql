@@ -1,18 +1,8 @@
-query apberuebersichtById($apberuebersichtId: UUID!, $projektId: UUID!) {
-  apberuebersichtById(id: $apberuebersichtId) {
-    id
-    jahr
-    bemerkungen
-    projId
-    projektByProjId {
-      id
-      name
-    }
-  }
+query apberuebersichtById($projektId: UUID!, $jahr: Int!) {
   projektById(id: $projektId) {
     id
     name
-    apsByProjId(filter: {bearbeitung: {in: [1, 2, 3]}}) {
+    apsByProjId(filter: { bearbeitung: { in: [1, 2, 3] } }) {
       nodes {
         startJahr
         aeEigenschaftenByArtId {
@@ -32,6 +22,11 @@ query apberuebersichtById($apberuebersichtId: UUID!, $projektId: UUID!) {
                 apberRelevant
               }
             }
+          }
+        }
+        apbersByApId(filter: { jahr: {equalTo: $jahr} }) {
+          nodes {
+            id
           }
         }
       }
