@@ -125,7 +125,7 @@ type Props = {
   errors: Object,
 }
 
-class ApberPrint extends Component<Props> {
+class ApberForAp extends Component<Props> {
   constructor(props) {
     super(props)
     this.container = createRef()
@@ -352,4 +352,4 @@ class ApberPrint extends Component<Props> {
   }
 }
 
-export default ApberPrint
+export default ApberForAp

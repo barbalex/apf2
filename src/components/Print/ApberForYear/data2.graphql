@@ -1,0 +1,26 @@
+query apById($projektId: UUID!) {
+  projektById(id: $projektId) {
+    id
+    name
+    apsByProjId {
+      nodes {
+        startJahr
+        aeEigenschaftenByArtId {
+          id
+          artname
+        }
+        popsByApId {
+          nodes {
+            id
+            tpopsByPopId(condition: { apberRelevant: 1 }) {
+              nodes {
+                id
+                apberRelevant
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

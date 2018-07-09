@@ -48,6 +48,10 @@ const ApberForAp = Loadable({
   loader: () => import('./ApberForAp'),
   loading: Loading,
 })
+const ApberForYear = Loadable({
+  loader: () => import('./ApberForYear'),
+  loading: Loading,
+})
 
 const Print = () =>
   <Query query={dataGql} >
@@ -58,14 +62,19 @@ const Print = () =>
       const showApberForAp = activeNodeArray.length === 7 &&
         activeNodeArray[4] === 'AP-Berichte' &&
         activeNodeArray[6] === 'print'
+      const showApberForYear = activeNodeArray.length === 5 &&
+        activeNodeArray[2] === 'AP-Berichte' &&
+        activeNodeArray[4] === 'print'
+
+        showApberForYear && console.log('showApberForYear')
         
-      if (!showApberForAp) return null
+      if (!showApberForAp && !showApberForYear) return null
 
       return (
         <ErrorBoundary>
           <Container>
             {
-              showApberForAp &&
+              (showApberForAp || showApberForYear) &&
               <Fragment>
                 <BackButton
                   variant="outlined"
@@ -91,9 +100,18 @@ const Print = () =>
                   <StyledArrowBack />
                   zurück
                 </BackButton>
-                <ApberForAp
-                  activeNodeArray={activeNodeArray}
-                />
+                {
+                  showApberForAp &&
+                  <ApberForAp
+                    activeNodeArray={activeNodeArray}
+                  />
+                }
+                {
+                  showApberForYear &&
+                  <ApberForYear
+                    activeNodeArray={activeNodeArray}
+                  />
+                }
               </Fragment>
             }
           </Container>
