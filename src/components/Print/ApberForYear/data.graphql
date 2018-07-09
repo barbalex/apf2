@@ -12,7 +12,7 @@ query apberuebersichtById($apberuebersichtId: UUID!, $projektId: UUID!) {
   projektById(id: $projektId) {
     id
     name
-    apsByProjId {
+    apsByProjId(filter: {bearbeitung: {in: [1, 2, 3]}}) {
       nodes {
         startJahr
         aeEigenschaftenByArtId {
