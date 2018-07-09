@@ -9,6 +9,7 @@ import ErrorBoundary from '../../shared/ErrorBoundary'
 import getActiveNodes from '../../../modules/getActiveNodes'
 import dataGql from './data.graphql'
 import fnslogo from './fnslogo.png'
+import AvList from './AvList'
 
 const LoadingContainer = styled.div`
   padding: 15px;
@@ -154,6 +155,7 @@ class ApberForYear extends Component<Props> {
                       <SecondPageText>{apberuebersicht.bemerkungen}</SecondPageText>
                     </Fragment>
                   }
+                  <AvList data={data} />
                 </ContentContainer>
               </Container>
             </ErrorBoundary>
