@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { Query } from 'react-apollo'
 import get from 'lodash/get'
 import merge from 'lodash/merge'
+import format from 'date-fns/format'
 
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import getActiveNodes from '../../../modules/getActiveNodes'
@@ -56,20 +57,29 @@ const ContentContainer = styled.div`
     overflow: hidden;
   }
 `
-const MainTitle = styled.p`
+const FirstPageTitle = styled.p`
+  margin-top: 3cm;
   font-size: 22px;
   font-weight: 700;
   text-align: center;
 `
-const MainSubTitle = styled.p`
+const FirstPageSubTitle = styled.p`
+  margin-top: 2cm;
   font-size: 18px;
   font-weight: 700;
   text-align: center;
 `
-const FnsLogo = styled.img`
+const FirstPageFnsLogo = styled.img`
+  margin-top: 4cm;
   margin-left: auto;
   margin-right: auto;
   display: block;
+`
+const FirstPageDate = styled.p`
+  margin-top: 10cm;
+`
+const FirstPageBearbeiter = styled.p`
+  break-after: page;
 `
 
 
@@ -132,9 +142,11 @@ class ApberForYear extends Component<Props> {
                   <ErrorBoundary>
                     <Container innerRef={this.container}>
                       <ContentContainer>
-                        <MainTitle>Umsetzung der Aktionspläne Flora<br/>im Kanton Zürich</MainTitle>
-                        <MainSubTitle>{`Jahresbericht ${get(data, 'apberuebersichtById.jahr')}`}</MainSubTitle>
-                        <FnsLogo src={fnslogo} alt="FNS" width="400" />
+                        <FirstPageTitle>Umsetzung der Aktionspläne Flora<br/>im Kanton Zürich</FirstPageTitle>
+                        <FirstPageSubTitle>{`Jahresbericht ${get(data, 'apberuebersichtById.jahr')}`}</FirstPageSubTitle>
+                        <FirstPageFnsLogo src={fnslogo} alt="FNS" width="350" />
+                        <FirstPageDate>{format(new Date(), 'DD.MM.YYYY')}</FirstPageDate>
+                        <FirstPageBearbeiter>Karin Marti, topos</FirstPageBearbeiter>
                       </ContentContainer>
                     </Container>
                   </ErrorBoundary>
