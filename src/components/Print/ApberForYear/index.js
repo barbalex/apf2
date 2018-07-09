@@ -1,5 +1,5 @@
 // @flow
-import React, { Component, createRef } from 'react'
+import React, { Component, createRef, Fragment } from 'react'
 import styled from 'styled-components'
 import { Query } from 'react-apollo'
 import get from 'lodash/get'
@@ -79,6 +79,21 @@ const FirstPageDate = styled.p`
   margin-top: 10cm;
 `
 const FirstPageBearbeiter = styled.p`
+  @media screen {
+    margin-bottom: 3cm;
+  }
+  break-after: page;
+`
+const SecondPageTop = styled.div`
+  padding-top: 2cm;
+`
+const SecondPageTitle = styled.label`
+  padding-top: 2cm;
+  font-size: 18px;
+  font-weight: 700;
+`
+const SecondPageText = styled.p`
+  hyphens: auto;
   break-after: page;
 `
 
@@ -137,6 +152,7 @@ class ApberForYear extends Component<Props> {
                 if (error) return `Fehler: ${error.message}`
 
                 const data = merge(data1, data2)
+                const apberuebersicht = get(data, 'apberuebersichtById')
 
                 return (
                   <ErrorBoundary>
@@ -147,6 +163,14 @@ class ApberForYear extends Component<Props> {
                         <FirstPageFnsLogo src={fnslogo} alt="FNS" width="350" />
                         <FirstPageDate>{format(new Date(), 'DD.MM.YYYY')}</FirstPageDate>
                         <FirstPageBearbeiter>Karin Marti, topos</FirstPageBearbeiter>
+                        {
+                          !!apberuebersicht.bemerkungen &&
+                          <Fragment>
+                            <SecondPageTop />
+                            <SecondPageTitle>Zusammenfassung</SecondPageTitle>
+                            <SecondPageText>{apberuebersicht.bemerkungen}</SecondPageText>
+                          </Fragment>
+                        }
                       </ContentContainer>
                     </Container>
                   </ErrorBoundary>
