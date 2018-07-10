@@ -169,7 +169,6 @@ class ApberForYear extends Component<Props> {
                   ap => get(ap, 'aeEigenschaftenByArtId.artname')
                 )
                 const jahr = get(data, 'apberuebersichtById.jahr')
-                console.log('ApberForYear, data:', data)
 
                 return (
                   <ErrorBoundary>
@@ -195,7 +194,8 @@ class ApberForYear extends Component<Props> {
                               key={ap.id}
                               apId={ap.id}
                               jahr={jahr}
-                              apData={get(data, 'apById.nodes').find(d => d.id === ap.id)}
+                              apData={ap}
+                              isSubReport={true}
                             />
                           )
                         }

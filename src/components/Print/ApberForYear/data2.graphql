@@ -21,7 +21,10 @@ query projektById($projektId: UUID!, $jahr: Int!) {
               nodes {
                 id
                 apberRelevant
-                firstTpopmassn: tpopmassnsByTpopId(orderBy: DATUM_ASC, first: 1) {
+                firstTpopmassn: tpopmassnsByTpopId(
+                  orderBy: DATUM_ASC
+                  first: 1
+                ) {
                   nodes {
                     id
                     datum
@@ -46,6 +49,12 @@ query projektById($projektId: UUID!, $jahr: Int!) {
                         name
                       }
                     }
+                  }
+                }
+                firstTpopber: tpopbersByTpopId(orderBy: JAHR_ASC, first: 1) {
+                  nodes {
+                    id
+                    jahr
                   }
                 }
               }
@@ -102,12 +111,6 @@ query projektById($projektId: UUID!, $jahr: Int!) {
               id
               name
             }
-          }
-        }
-        allVApberErstemassnjahrs {
-          nodes {
-            id
-            jahr
           }
         }
       }

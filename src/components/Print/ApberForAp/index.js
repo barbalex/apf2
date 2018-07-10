@@ -6,9 +6,6 @@ import sortBy from 'lodash/sortBy'
 import minBy from 'lodash/minBy'
 import flatten from 'lodash/flatten'
 import format from 'date-fns/format'
-import compose from 'recompose/compose'
-import withState from 'recompose/withState'
-import withHandlers from 'recompose/withHandlers'
 
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import Ziele from './Ziele'
@@ -114,26 +111,10 @@ const ErfkritKriterium = styled.div`
   width: 100%;
 `
 
-const enhance = compose(
-  withState('yearOfFirstTpopber', 'setYearOfFirstTpopber', null),
-  withHandlers({
-    onSetYearOfFirstTpopber: ({
-      yearOfFirstTpopber,
-      setYearOfFirstTpopber
-    }) => year => {
-      if (year !== yearOfFirstTpopber) {
-        setYearOfFirstTpopber(year)
-      }
-    }
-  }),
-)
-
 const ApberForAp = ({
   apId,
   jahr,
-  apData,
-  yearOfFirstTpopber,
-  onSetYearOfFirstTpopber,
+  apData: apDataPassed,
   /**
    * when ApberForAp is called from ApberForYear
    * isSubReport is passed
@@ -143,21 +124,21 @@ const ApberForAp = ({
   apId: String,
   jahr: Number,
   apData: Object,
-  yearOfFirstTpopber: Number,
-  onSetYearOfFirstTpopber: () => void,
+  isSubReport: Boolean,
 }) => {
-  const artname = get(apData, 'apById.aeEigenschaftenByArtId.artname', '(Art fehlt)')
-  const apber = get(apData, 'apById.apbersByApId.nodes[0]', {})
+  const apData = isSubReport ? apDataPassed : apDataPassed.apById
+  const artname = get(apData, 'aeEigenschaftenByArtId.artname', '(Art fehlt)')
+  const apber = get(apData, 'apbersByApId.nodes[0]', {})
   const apberDatum = get(apber, 'datum')
   const erfkrit = sortBy(
-    get(apData, 'apById.erfkritsByApId.nodes'),
+    get(apData, 'erfkritsByApId.nodes'),
     e => get(e, 'apErfkritWerteByErfolg.sort')
   )
   const ziele = sortBy(
-    get(apData, 'apById.zielsByApId.nodes'),
+    get(apData, 'zielsByApId.nodes'),
     e => [get(e, 'zielTypWerteByTyp.sort'), e.bezeichnung]
   )
-  const pops = get(apData, 'apById.popsByApId.nodes', [])
+  const pops = get(apData, 'popsByApId.nodes', [])
   const tpops = flatten(
     pops.map(p => get(p, 'tpopsByPopId.nodes', []))
   )
@@ -179,7 +160,13 @@ const ApberForAp = ({
     ), 'datum'
   )
   const yearOfFirstMassn = !!firstMassn ? format(firstMassn.datum, 'YYYY') : 0
-  const startJahr = get(apData, 'apById.startJahr', 0)
+  const firstTpopber = minBy(
+    flatten(
+      tpops.map(t => get(t, 'firstTpopber.nodes[0]', []))
+    ), 'jahr'
+  )
+  const yearOfFirstTpopber = !!firstTpopber ? firstTpopber.jahr : 0
+  const startJahr = get(apData, 'startJahr', 0)
   if (startJahr === 0) return (
     <ErrorBoundary>
       <Container issubreport={isSubReport}>
@@ -205,9 +192,9 @@ const ApberForAp = ({
           <Title1>{artname}</Title1>
 
           <Row>
-            <p>{`Start Programm: ${get(apData, 'apById.startJahr', '(Start-Jahr fehlt)')}`}</p>
+            <p>{`Start Programm: ${get(apData, 'startJahr', '(Start-Jahr fehlt)')}`}</p>
             <p>{`Erste Massnahme: ${yearOfFirstMassn}`}</p>
-            <p>{`Erste Kontrolle: ${yearOfFirstTpopber || '...'}`}</p>
+            <p>{`Erste Kontrolle: ${yearOfFirstTpopber}`}</p>
           </Row>
 
           <AMengen apId={apId} jahr={jahr} startJahr={startJahr} />
@@ -219,7 +206,7 @@ const ApberForAp = ({
             </FieldRowFullWidth>
           }
 
-          <BMengen apId={apId} jahr={jahr} startJahr={startJahr} setYearOfFirstTpopber={onSetYearOfFirstTpopber} />
+          <BMengen apId={apId} jahr={jahr} startJahr={startJahr} />
           {
             !!apber.massnahmenApBearb &&
             <FieldRowFullWidth>
@@ -321,4 +308,4 @@ const ApberForAp = ({
   )
 }
 
-export default enhance(ApberForAp)
+export default ApberForAp

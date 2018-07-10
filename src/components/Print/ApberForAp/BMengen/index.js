@@ -84,12 +84,10 @@ const BMengen = ({
   apId,
   jahr,
   startJahr,
-  setYearOfFirstTpopber,
 }:{
   apId: String,
   jahr: Number,
   startJahr: Number,
-  setYearOfFirstTpopber: () => void,
 }) =>
   <Query
     query={dataGql}
@@ -171,7 +169,6 @@ const BMengen = ({
           b.jahr
         )
       )
-      setYearOfFirstTpopber(oneRTpop_firstYear)
 
       // 2.
       const twoLPop = oneLPop_popbers

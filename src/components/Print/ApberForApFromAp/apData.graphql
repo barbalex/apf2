@@ -40,6 +40,12 @@ query apById($apId: UUID!, $jahr: Int!) {
                 }
               }
             }
+            firstTpopber: tpopbersByTpopId(orderBy: JAHR_ASC, first: 1) {
+              nodes {
+                id
+                jahr
+              }
+            }
           }
         }
       }
