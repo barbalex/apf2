@@ -44,8 +44,8 @@ const StyledArrowBack = styled(ArrowBack)`
   padding-right: 4px;
 `
 
-const ApberForAp = Loadable({
-  loader: () => import('./ApberForAp'),
+const ApberForApFromAp = Loadable({
+  loader: () => import('./ApberForApFromAp'),
   loading: Loading,
 })
 const ApberForYear = Loadable({
@@ -100,7 +100,7 @@ const Print = () =>
                 </BackButton>
                 {
                   showApberForAp &&
-                  <ApberForAp
+                  <ApberForApFromAp
                     activeNodeArray={activeNodeArray}
                   />
                 }

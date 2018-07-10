@@ -2,10 +2,10 @@
 import { graphql } from 'react-apollo'
 import get from 'lodash/get'
 
-import data2 from './data2.graphql'
+import apData from './apData.graphql'
 import getActiveNodes from '../../../modules/getActiveNodes'
 
-export default graphql(data2, {
+export default graphql(apData, {
   options: ({
     apberData,
     activeNodeArray,
@@ -26,7 +26,7 @@ export default graphql(data2, {
     const variables = { apId, jahr }
     return { variables }
   },
-  name: 'data2',
+  name: 'apData',
 }
 )
 

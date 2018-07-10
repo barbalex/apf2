@@ -3,7 +3,6 @@ import React from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
-import merge from 'lodash/merge'
 import flatten from 'lodash/flatten'
 import format from 'date-fns/format'
 import compose from 'recompose/compose'
@@ -11,19 +10,12 @@ import withState from 'recompose/withState'
 import withHandlers from 'recompose/withHandlers'
 
 import ErrorBoundary from '../../shared/ErrorBoundary'
-import getActiveNodes from '../../../modules/getActiveNodes'
-import data2 from './data2'
-import apberData from './apberData'
 import Ziele from './Ziele'
 import Massnahmen from './Massnahmen'
 import AMengen from './AMengen'
 import BMengen from './BMengen'
 import CMengen from './CMengen'
 
-const LoadingContainer = styled.div`
-  padding: 15px;
-  height: 100%;
-`
 const Container = styled.div`
   /* this part is for when page preview is shown */
   /* Divide single pages with some space and center all pages horizontally */
@@ -133,61 +125,38 @@ const enhance = compose(
       }
     }
   }),
-  apberData,
-  data2,
 )
 
 const ApberForAp = ({
-  activeNodeArray,
-  dimensions,
-  errors,
-  apberData,
-  data2,
+  apId,
+  jahr,
+  apData,
   yearOfFirstTpopber,
   onSetYearOfFirstTpopber,
   /**
    * when ApberForAp is called from ApberForYear
-   * apberId and apId are passed
+   * isSubReport is passed
    */
-  apberId,
-  apId: apIdPassedIn,
+  isSubReport,
 }:{
-  activeNodeArray: Array<String>,
-  dimensions: Object,
-  errors: Object,
-  apberData: Object,
-  data2: Object,
+  apId: String,
+  jahr: Number,
+  apData: Object,
   yearOfFirstTpopber: Number,
   onSetYearOfFirstTpopber: () => void,
-  apberId: String,
-  apId: String,
 }) => {
-  const { ap: apIdFromActiveNodes } = getActiveNodes(activeNodeArray)
-  const apId = apIdPassedIn || apIdFromActiveNodes
-  const issubreport = !!apIdPassedIn
-
-  if (apberData.loading || data2.loading)
-    return (
-      <Container issubreport={issubreport}>
-        <LoadingContainer>Lade...</LoadingContainer>
-      </Container>
-    )
-  if (apberData.error) return `Fehler: ${apberData.error.message}`
-  if (data2.error) return `Fehler: ${data2.error.message}`
-
-  const data = merge(apberData, data2)
-  const artname = get(data, 'apById.aeEigenschaftenByArtId.artname', '(Art fehlt)')
-  const apber = get(data, 'apById.apbersByApId.nodes[0]', {})
+  const artname = get(apData, 'apById.aeEigenschaftenByArtId.artname', '(Art fehlt)')
+  const apber = get(apData, 'apById.apbersByApId.nodes[0]', {})
   const apberDatum = get(apber, 'datum')
   const erfkrit = sortBy(
-    get(data, 'apById.erfkritsByApId.nodes'),
+    get(apData, 'apById.erfkritsByApId.nodes'),
     e => get(e, 'apErfkritWerteByErfolg.sort')
   )
   const ziele = sortBy(
-    get(data, 'apById.zielsByApId.nodes'),
+    get(apData, 'apById.zielsByApId.nodes'),
     e => [get(e, 'zielTypWerteByTyp.sort'), e.bezeichnung]
   )
-  const pops = get(data, 'apById.popsByApId.nodes', [])
+  const pops = get(apData, 'apById.popsByApId.nodes', [])
   const tpops = flatten(
     pops.map(p => get(p, 'tpopsByPopId.nodes', []))
   )
@@ -203,21 +172,20 @@ const ApberForAp = ({
       get(m, 'beschreibung'),
     ]
   )
-  const startJahr = get(data, 'apById.startJahr', 0)
+  const startJahr = get(apData, 'apById.startJahr', 0)
   if (startJahr === 0) return (
     <ErrorBoundary>
-      <Container issubreport={issubreport}>
+      <Container issubreport={isSubReport}>
         <ContentContainer>
           Bitte beim AP ein Startjahr ergänzen!
         </ContentContainer>
       </Container>
     </ErrorBoundary>
   )
-  const jahr = get(apberData, 'apberById.jahr')
 
   return (
     <ErrorBoundary>
-      <Container issubreport={issubreport}>
+      <Container issubreport={isSubReport}>
         <ContentContainer>
           <Header>
             {
@@ -230,8 +198,8 @@ const ApberForAp = ({
           <Title1>{artname}</Title1>
 
           <Row>
-            <p>{`Start Programm: ${get(data, 'apById.startJahr', '(Start-Jahr fehlt)')}`}</p>
-            <p>{`Erste Massnahme: ${get(data, 'allVApberErstemassnjahrs.nodes[0].jahr', '(Jahr fehlt)')}`}</p>
+            <p>{`Start Programm: ${get(apData, 'apById.startJahr', '(Start-Jahr fehlt)')}`}</p>
+            <p>{`Erste Massnahme: ${get(apData, 'allVApberErstemassnjahrs.nodes[0].jahr', '(Jahr fehlt)')}`}</p>
             <p>{`Erste Kontrolle: ${yearOfFirstTpopber || '...'}`}</p>
           </Row>
 
