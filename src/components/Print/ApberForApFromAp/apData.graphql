@@ -13,6 +13,12 @@ query apById($apId: UUID!, $jahr: Int!) {
           nodes {
             id
             apberRelevant
+            firstTpopmassn: tpopmassnsByTpopId(orderBy: DATUM_ASC, first: 1) {
+              nodes {
+                id
+                datum
+              }
+            }
             tpopmassnsByTpopId(condition: { jahr: $jahr }) {
               nodes {
                 id
@@ -60,7 +66,7 @@ query apById($apId: UUID!, $jahr: Int!) {
         }
       }
     }
-    apbersByApId(filter: { jahr: {equalTo: $jahr }}) {
+    apbersByApId(filter: { jahr: { equalTo: $jahr } }) {
       nodes {
         id
         jahr
@@ -89,12 +95,6 @@ query apById($apId: UUID!, $jahr: Int!) {
           name
         }
       }
-    }
-  }
-  allVApberErstemassnjahrs(condition: { id: $apId }) {
-    nodes {
-      id
-      jahr
     }
   }
 }

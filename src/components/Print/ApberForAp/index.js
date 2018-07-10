@@ -3,6 +3,7 @@ import React from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
+import minBy from 'lodash/minBy'
 import flatten from 'lodash/flatten'
 import format from 'date-fns/format'
 import compose from 'recompose/compose'
@@ -172,6 +173,12 @@ const ApberForAp = ({
       get(m, 'beschreibung'),
     ]
   )
+  const firstMassn = minBy(
+    flatten(
+      tpops.map(t => get(t, 'firstTpopmassn.nodes[0]', []))
+    ), 'datum'
+  )
+  const yearOfFirstMassn = !!firstMassn ? format(firstMassn.datum, 'YYYY') : 0
   const startJahr = get(apData, 'apById.startJahr', 0)
   if (startJahr === 0) return (
     <ErrorBoundary>
@@ -199,7 +206,7 @@ const ApberForAp = ({
 
           <Row>
             <p>{`Start Programm: ${get(apData, 'apById.startJahr', '(Start-Jahr fehlt)')}`}</p>
-            <p>{`Erste Massnahme: ${get(apData, 'allVApberErstemassnjahrs.nodes[0].jahr', '(Jahr fehlt)')}`}</p>
+            <p>{`Erste Massnahme: ${yearOfFirstMassn}`}</p>
             <p>{`Erste Kontrolle: ${yearOfFirstTpopber || '...'}`}</p>
           </Row>
 

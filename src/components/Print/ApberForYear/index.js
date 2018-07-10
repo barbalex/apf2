@@ -168,13 +168,15 @@ class ApberForYear extends Component<Props> {
                     ),
                   ap => get(ap, 'aeEigenschaftenByArtId.artname')
                 )
+                const jahr = get(data, 'apberuebersichtById.jahr')
+                console.log('ApberForYear, data:', data)
 
                 return (
                   <ErrorBoundary>
                     <Container innerRef={this.container}>
                       <ContentContainer>
                         <FirstPageTitle>Umsetzung der Aktionspläne Flora<br/>im Kanton Zürich</FirstPageTitle>
-                        <FirstPageSubTitle>{`Jahresbericht ${get(data, 'apberuebersichtById.jahr')}`}</FirstPageSubTitle>
+                        <FirstPageSubTitle>{`Jahresbericht ${jahr}`}</FirstPageSubTitle>
                         <FirstPageFnsLogo src={fnslogo} alt="FNS" width="350" />
                         <FirstPageDate>{format(new Date(), 'DD.MM.YYYY')}</FirstPageDate>
                         <FirstPageBearbeiter>Karin Marti, topos</FirstPageBearbeiter>
@@ -192,8 +194,8 @@ class ApberForYear extends Component<Props> {
                             <ApberForAp
                               key={ap.id}
                               apId={ap.id}
-                              apberId={get(ap, 'apbersByApId.nodes[0].id')}
-                              activeNodeArray={activeNodeArray}
+                              jahr={jahr}
+                              apData={get(data, 'apById.nodes').find(d => d.id === ap.id)}
                             />
                           )
                         }

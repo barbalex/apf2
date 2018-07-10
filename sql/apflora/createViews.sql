@@ -144,22 +144,6 @@ GROUP BY
   apflora.ap.id;
 
 drop view if exists apflora.v_apber_erstemassnjahr cascade;
-create or replace view apflora.v_apber_erstemassnjahr as
-select
-  apflora.ap.id as id,
-  min(apflora.tpopmassn.jahr) AS jahr
-from
-  apflora.ap
-  inner join apflora.pop
-    inner join apflora.tpop
-      inner join apflora.tpopmassn
-      on apflora.tpop.id = apflora.tpopmassn.tpop_id
-    on apflora.pop.id = apflora.tpop.pop_id
-  on apflora.ap.id = apflora.pop.ap_id
-where
-  apflora.tpop.apber_relevant = 1
-group by
-  apflora.ap.id;
 
 DROP VIEW IF EXISTS apflora.v_massn CASCADE;
 CREATE OR REPLACE VIEW apflora.v_massn AS
