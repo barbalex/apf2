@@ -49,7 +49,7 @@ query apById($apId: UUID!, $jahr: Int!) {
         }
       }
     }
-    zielsByApId(condition: {jahr: $jahr}) {
+    zielsByApId(condition: { jahr: $jahr }) {
       nodes {
         id
         bezeichnung
@@ -57,6 +57,36 @@ query apById($apId: UUID!, $jahr: Int!) {
           id
           text
           sort
+        }
+      }
+    }
+    apbersByApId(filter: { jahr: {equalTo: $jahr }}) {
+      nodes {
+        id
+        jahr
+        situation
+        vergleichVorjahrGesamtziel
+        beurteilung
+        apErfkritWerteByBeurteilung {
+          id
+          text
+        }
+        veraenderungZumVorjahr
+        apberAnalyse
+        konsequenzenUmsetzung
+        konsequenzenErfolgskontrolle
+        biotopeNeue
+        biotopeOptimieren
+        massnahmenOptimieren
+        wirkungAufArt
+        datum
+        massnahmenApBearb
+        massnahmenPlanungVsAusfuehrung
+        apId
+        bearbeiter
+        adresseByBearbeiter {
+          id
+          name
         }
       }
     }

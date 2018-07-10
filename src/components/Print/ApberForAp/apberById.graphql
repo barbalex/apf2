@@ -2,29 +2,5 @@ query apberById($apberId: UUID!) {
   apberById(id: $apberId) {
     id
     jahr
-    situation
-    vergleichVorjahrGesamtziel
-    beurteilung
-    apErfkritWerteByBeurteilung {
-      id
-      text
-    }
-    veraenderungZumVorjahr
-    apberAnalyse
-    konsequenzenUmsetzung
-    konsequenzenErfolgskontrolle
-    biotopeNeue
-    biotopeOptimieren
-    massnahmenOptimieren
-    wirkungAufArt
-    datum
-    massnahmenApBearb
-    massnahmenPlanungVsAusfuehrung
-    apId
-    bearbeiter
-    adresseByBearbeiter {
-      id
-      name
-    }
   }
 }

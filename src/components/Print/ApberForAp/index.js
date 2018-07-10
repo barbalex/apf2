@@ -1,5 +1,5 @@
 // @flow
-import React, { Component, createRef } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import get from 'lodash/get'
 import sortBy from 'lodash/sortBy'
@@ -177,7 +177,7 @@ const ApberForAp = ({
 
   const data = merge(apberData, data2)
   const artname = get(data, 'apById.aeEigenschaftenByArtId.artname', '(Art fehlt)')
-  const apber = get(data, 'apberById')
+  const apber = get(data, 'apById.apbersByApId.nodes[0]', {})
   const apberDatum = get(apber, 'datum')
   const erfkrit = sortBy(
     get(data, 'apById.erfkritsByApId.nodes'),
