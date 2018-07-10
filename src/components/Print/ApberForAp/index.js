@@ -7,6 +7,8 @@ import merge from 'lodash/merge'
 import flatten from 'lodash/flatten'
 import format from 'date-fns/format'
 import compose from 'recompose/compose'
+import withState from 'recompose/withState'
+import withHandlers from 'recompose/withHandlers'
 
 import ErrorBoundary from '../../shared/ErrorBoundary'
 import getActiveNodes from '../../../modules/getActiveNodes'
@@ -120,224 +122,228 @@ const ErfkritKriterium = styled.div`
 `
 
 const enhance = compose(
+  withState('yearOfFirstTpopber', 'setYearOfFirstTpopber', null),
+  withHandlers({
+    onSetYearOfFirstTpopber: ({
+      yearOfFirstTpopber,
+      setYearOfFirstTpopber
+    }) => year => {
+      if (year !== yearOfFirstTpopber) {
+        setYearOfFirstTpopber(year)
+      }
+    }
+  }),
   apberData,
   data2,
 )
 
-type Props = {
+const ApberForAp = ({
+  activeNodeArray,
+  dimensions,
+  errors,
+  apberData,
+  data2,
+  yearOfFirstTpopber,
+  onSetYearOfFirstTpopber,
+  /**
+   * when ApberForAp is called from ApberForYear
+   * apberId and apId are passed
+   */
+  apberId,
+  apId: apIdPassedIn,
+}:{
   activeNodeArray: Array<String>,
   dimensions: Object,
   errors: Object,
   apberData: Object,
   data2: Object,
-  /**
-   * when ApberForAp is called from ApberForYear
-   * apberId and apId are passed
-   */
+  yearOfFirstTpopber: Number,
+  onSetYearOfFirstTpopber: () => void,
   apberId: String,
   apId: String,
-}
+}) => {
+  const { ap: apIdFromActiveNodes } = getActiveNodes(activeNodeArray)
+  const apId = apIdPassedIn || apIdFromActiveNodes
+  const issubreport = !!apIdPassedIn
 
-class ApberForAp extends Component<Props> {
-  constructor(props) {
-    super(props)
-    this.container = createRef()
-    this.state = {
-      yearOfFirstTpopber: null
-    }
-  }
-
-  setYearOfFirstTpopber = (year) => {
-    if (year !== this.state.yearOfFirstTpopber) {
-      this.setState({ yearOfFirstTpopber: year })
-    }
-  }
-
-  render() {
-    const { activeNodeArray, apberData, data2 } = this.props
-    const { ap: apIdFromActiveNodes } = getActiveNodes(activeNodeArray)
-    const apId = this.props.apId || apIdFromActiveNodes
-    const issubreport = !!this.props.apId
-
-    if (apberData.loading || data2.loading)
-      return (
-        <Container issubreport={issubreport}>
-          <LoadingContainer>Lade...</LoadingContainer>
-        </Container>
-      )
-    if (apberData.error) return `Fehler: ${apberData.error.message}`
-    if (data2.error) return `Fehler: ${data2.error.message}`
-
-    const data = merge(apberData, data2)
-    const artname = get(data, 'apById.aeEigenschaftenByArtId.artname', '(Art fehlt)')
-    const apber = get(data, 'apberById')
-    const apberDatum = get(apber, 'datum')
-    const erfkrit = sortBy(
-      get(data, 'apById.erfkritsByApId.nodes'),
-      e => get(e, 'apErfkritWerteByErfolg.sort')
-    )
-    const ziele = sortBy(
-      get(data, 'apById.zielsByApId.nodes'),
-      e => [get(e, 'zielTypWerteByTyp.sort'), e.bezeichnung]
-    )
-    const pops = get(data, 'apById.popsByApId.nodes', [])
-    const tpops = flatten(
-      pops.map(p => get(p, 'tpopsByPopId.nodes', []))
-    )
-    const massns = sortBy(
-      flatten(
-        tpops.map(t => get(t, 'tpopmassnsByTpopId.nodes', []))
-      ),
-      (m) => [
-        get(m, 'tpopByTpopId.popByPopId.nr'),
-        get(m, 'tpopByTpopId.nr'),
-        get(m, 'datum'),
-        get(m, 'tpopmassnTypWerteByTyp.text'),
-        get(m, 'beschreibung'),
-      ]
-    )
-    const startJahr = get(data, 'apById.startJahr', 0)
-    if (startJahr === 0) return (
-      <ErrorBoundary>
-        <Container innerRef={this.container} issubreport={issubreport}>
-          <ContentContainer>
-            Bitte beim AP ein Startjahr ergänzen!
-          </ContentContainer>
-        </Container>
-      </ErrorBoundary>
-    )
-    const jahr = get(apberData, 'apberById.jahr')
-
+  if (apberData.loading || data2.loading)
     return (
-      <ErrorBoundary>
-        <Container innerRef={this.container} issubreport={issubreport}>
-          <ContentContainer>
-            <Header>
-              {
-                `Jahresbericht ${get(apber, 'jahr', '(Jahr fehlt)')},
-                ${artname},
-                ${format(new Date(), 'DD.MM.YYYY')}`
-              }
-            </Header>
-
-            <Title1>{artname}</Title1>
-
-            <Row>
-              <p>{`Start Programm: ${get(data, 'apById.startJahr', '(Start-Jahr fehlt)')}`}</p>
-              <p>{`Erste Massnahme: ${get(data, 'allVApberErstemassnjahrs.nodes[0].jahr', '(Jahr fehlt)')}`}</p>
-              <p>{`Erste Kontrolle: ${this.state.yearOfFirstTpopber || '...'}`}</p>
-            </Row>
-
-            <AMengen apId={apId} jahr={jahr} startJahr={startJahr} />
-            {
-              !!apber.biotopeNeue &&
-              <FieldRowFullWidth>
-                <TitledLabel>Bemerkungen / Folgerungen für nächstes Jahr: neue Biotope</TitledLabel>
-                <FullWidthField>{get(apber, 'biotopeNeue', '')}</FullWidthField>
-              </FieldRowFullWidth>
-            }
-
-            <BMengen apId={apId} jahr={jahr} startJahr={startJahr} setYearOfFirstTpopber={this.setYearOfFirstTpopber} />
-            {
-              !!apber.massnahmenApBearb &&
-              <FieldRowFullWidth>
-                <TitledLabel>Weitere Aktivitäten der Aktionsplan-Verantwortlichen</TitledLabel>
-                <FullWidthField>{get(apber, 'massnahmenApBearb', '')}</FullWidthField>
-              </FieldRowFullWidth>
-            }
-            {
-              !!apber.StringbiotopeOptimieren &&
-              <FieldRowFullWidth>
-                <TitledLabel>Bemerkungen / Folgerungen für nächstes Jahr: Optimierung Biotope</TitledLabel>
-                <FullWidthField>{get(apber, 'biotopeOptimieren', '')}</FullWidthField>
-              </FieldRowFullWidth>
-            }
-
-            <CMengen apId={apId} jahr={jahr} startJahr={startJahr} />
-            {
-              !!apber.massnahmenOptimieren &&
-              <FieldRowFullWidth>
-                <TitledLabel>Bemerkungen / Folgerungen für nächstes Jahr: Optimierung Massnahmen</TitledLabel>
-                <FullWidthField>{get(apber, 'massnahmenOptimieren', '')}</FullWidthField>
-              </FieldRowFullWidth>
-            }
-            {
-              !!massns.length &&
-              <Massnahmen massns={massns} />
-            }
-
-            <Title1>D. Einschätzung der Wirkung des AP insgesamt auf die Art</Title1>
-            {
-              !!apber.vergleichVorjahrGesamtziel &&
-              <FieldRow>
-                <FieldLabel>Vergleich zu Vorjahr - Ausblick auf Gesamtziel</FieldLabel>
-                <Field>{get(apber, 'vergleichVorjahrGesamtziel', '')}</Field>
-              </FieldRow>
-            }
-            {
-              !!ziele.length &&
-              <Ziele ziele={ziele} />
-            }
-            {
-              !!erfkrit.length &&
-              <FieldRow>
-                <FieldLabel>Beurteilungsskala</FieldLabel>
-                <Field>
-                  {
-                    erfkrit.map(e =>
-                      <ErfkritRow key={e.id}>
-                        <ErfkritErfolg>{`${get(e, 'apErfkritWerteByErfolg.text', '(fehlt)')}:`}</ErfkritErfolg>
-                        <ErfkritKriterium>{e.kriterien || '(fehlt)'}</ErfkritKriterium>
-                      </ErfkritRow>
-                    )
-                  }
-                </Field>
-              </FieldRow>
-            }
-            {
-              !!apber.apErfkritWerteByBeurteilung &&
-              <FieldRowBold>
-                <FieldLabel>Beurteilung</FieldLabel>
-                <Field>{get(apber, 'apErfkritWerteByBeurteilung.text', '')}</Field>
-              </FieldRowBold>
-            }
-            {
-              !!apber.wirkungAufArt &&
-              <FieldRow>
-                <FieldLabel>Bemerkungen</FieldLabel>
-                <Field>{get(apber, 'wirkungAufArt', '')}</Field>
-              </FieldRow>
-            }
-            {
-              !!apber.apberAnalyse &&
-              <FieldRow>
-                <FieldLabel>Analyse</FieldLabel>
-                <Field>{get(apber, 'apberAnalyse', '')}</Field>
-              </FieldRow>
-            }
-            {
-              !!apber.konsequenzenUmsetzung &&
-              <FieldRow>
-                <FieldLabel>Konsequenzen für die Umsetzung</FieldLabel>
-                <Field>{get(apber, 'konsequenzenUmsetzung', '')}</Field>
-              </FieldRow>
-            }
-            {
-              !!apber.konsequenzenErfolgskontrolle &&
-              <FieldRow>
-                <FieldLabel>Konsequenzen für die Erfolgskontrolle</FieldLabel>
-                <Field>{get(apber, 'konsequenzenErfolgskontrolle', '')}</Field>
-              </FieldRow>
-            }
-            <Row>
-              {`${apberDatum ? format(apberDatum, 'DD.MM.YYYY') : '(Datum fehlt)'} / ${get(apber, 'adresseByBearbeiter.name', '(kein Bearbeiter)')}`}
-            </Row>
-
-          </ContentContainer>
-        </Container>
-      </ErrorBoundary>
+      <Container issubreport={issubreport}>
+        <LoadingContainer>Lade...</LoadingContainer>
+      </Container>
     )
-  }
+  if (apberData.error) return `Fehler: ${apberData.error.message}`
+  if (data2.error) return `Fehler: ${data2.error.message}`
+
+  const data = merge(apberData, data2)
+  const artname = get(data, 'apById.aeEigenschaftenByArtId.artname', '(Art fehlt)')
+  const apber = get(data, 'apberById')
+  const apberDatum = get(apber, 'datum')
+  const erfkrit = sortBy(
+    get(data, 'apById.erfkritsByApId.nodes'),
+    e => get(e, 'apErfkritWerteByErfolg.sort')
+  )
+  const ziele = sortBy(
+    get(data, 'apById.zielsByApId.nodes'),
+    e => [get(e, 'zielTypWerteByTyp.sort'), e.bezeichnung]
+  )
+  const pops = get(data, 'apById.popsByApId.nodes', [])
+  const tpops = flatten(
+    pops.map(p => get(p, 'tpopsByPopId.nodes', []))
+  )
+  const massns = sortBy(
+    flatten(
+      tpops.map(t => get(t, 'tpopmassnsByTpopId.nodes', []))
+    ),
+    (m) => [
+      get(m, 'tpopByTpopId.popByPopId.nr'),
+      get(m, 'tpopByTpopId.nr'),
+      get(m, 'datum'),
+      get(m, 'tpopmassnTypWerteByTyp.text'),
+      get(m, 'beschreibung'),
+    ]
+  )
+  const startJahr = get(data, 'apById.startJahr', 0)
+  if (startJahr === 0) return (
+    <ErrorBoundary>
+      <Container issubreport={issubreport}>
+        <ContentContainer>
+          Bitte beim AP ein Startjahr ergänzen!
+        </ContentContainer>
+      </Container>
+    </ErrorBoundary>
+  )
+  const jahr = get(apberData, 'apberById.jahr')
+
+  return (
+    <ErrorBoundary>
+      <Container issubreport={issubreport}>
+        <ContentContainer>
+          <Header>
+            {
+              `Jahresbericht ${get(apber, 'jahr', '(Jahr fehlt)')},
+              ${artname},
+              ${format(new Date(), 'DD.MM.YYYY')}`
+            }
+          </Header>
+
+          <Title1>{artname}</Title1>
+
+          <Row>
+            <p>{`Start Programm: ${get(data, 'apById.startJahr', '(Start-Jahr fehlt)')}`}</p>
+            <p>{`Erste Massnahme: ${get(data, 'allVApberErstemassnjahrs.nodes[0].jahr', '(Jahr fehlt)')}`}</p>
+            <p>{`Erste Kontrolle: ${yearOfFirstTpopber || '...'}`}</p>
+          </Row>
+
+          <AMengen apId={apId} jahr={jahr} startJahr={startJahr} />
+          {
+            !!apber.biotopeNeue &&
+            <FieldRowFullWidth>
+              <TitledLabel>Bemerkungen / Folgerungen für nächstes Jahr: neue Biotope</TitledLabel>
+              <FullWidthField>{get(apber, 'biotopeNeue', '')}</FullWidthField>
+            </FieldRowFullWidth>
+          }
+
+          <BMengen apId={apId} jahr={jahr} startJahr={startJahr} setYearOfFirstTpopber={onSetYearOfFirstTpopber} />
+          {
+            !!apber.massnahmenApBearb &&
+            <FieldRowFullWidth>
+              <TitledLabel>Weitere Aktivitäten der Aktionsplan-Verantwortlichen</TitledLabel>
+              <FullWidthField>{get(apber, 'massnahmenApBearb', '')}</FullWidthField>
+            </FieldRowFullWidth>
+          }
+          {
+            !!apber.StringbiotopeOptimieren &&
+            <FieldRowFullWidth>
+              <TitledLabel>Bemerkungen / Folgerungen für nächstes Jahr: Optimierung Biotope</TitledLabel>
+              <FullWidthField>{get(apber, 'biotopeOptimieren', '')}</FullWidthField>
+            </FieldRowFullWidth>
+          }
+
+          <CMengen apId={apId} jahr={jahr} startJahr={startJahr} />
+          {
+            !!apber.massnahmenOptimieren &&
+            <FieldRowFullWidth>
+              <TitledLabel>Bemerkungen / Folgerungen für nächstes Jahr: Optimierung Massnahmen</TitledLabel>
+              <FullWidthField>{get(apber, 'massnahmenOptimieren', '')}</FullWidthField>
+            </FieldRowFullWidth>
+          }
+          {
+            !!massns.length &&
+            <Massnahmen massns={massns} />
+          }
+
+          <Title1>D. Einschätzung der Wirkung des AP insgesamt auf die Art</Title1>
+          {
+            !!apber.vergleichVorjahrGesamtziel &&
+            <FieldRow>
+              <FieldLabel>Vergleich zu Vorjahr - Ausblick auf Gesamtziel</FieldLabel>
+              <Field>{get(apber, 'vergleichVorjahrGesamtziel', '')}</Field>
+            </FieldRow>
+          }
+          {
+            !!ziele.length &&
+            <Ziele ziele={ziele} />
+          }
+          {
+            !!erfkrit.length &&
+            <FieldRow>
+              <FieldLabel>Beurteilungsskala</FieldLabel>
+              <Field>
+                {
+                  erfkrit.map(e =>
+                    <ErfkritRow key={e.id}>
+                      <ErfkritErfolg>{`${get(e, 'apErfkritWerteByErfolg.text', '(fehlt)')}:`}</ErfkritErfolg>
+                      <ErfkritKriterium>{e.kriterien || '(fehlt)'}</ErfkritKriterium>
+                    </ErfkritRow>
+                  )
+                }
+              </Field>
+            </FieldRow>
+          }
+          {
+            !!apber.apErfkritWerteByBeurteilung &&
+            <FieldRowBold>
+              <FieldLabel>Beurteilung</FieldLabel>
+              <Field>{get(apber, 'apErfkritWerteByBeurteilung.text', '')}</Field>
+            </FieldRowBold>
+          }
+          {
+            !!apber.wirkungAufArt &&
+            <FieldRow>
+              <FieldLabel>Bemerkungen</FieldLabel>
+              <Field>{get(apber, 'wirkungAufArt', '')}</Field>
+            </FieldRow>
+          }
+          {
+            !!apber.apberAnalyse &&
+            <FieldRow>
+              <FieldLabel>Analyse</FieldLabel>
+              <Field>{get(apber, 'apberAnalyse', '')}</Field>
+            </FieldRow>
+          }
+          {
+            !!apber.konsequenzenUmsetzung &&
+            <FieldRow>
+              <FieldLabel>Konsequenzen für die Umsetzung</FieldLabel>
+              <Field>{get(apber, 'konsequenzenUmsetzung', '')}</Field>
+            </FieldRow>
+          }
+          {
+            !!apber.konsequenzenErfolgskontrolle &&
+            <FieldRow>
+              <FieldLabel>Konsequenzen für die Erfolgskontrolle</FieldLabel>
+              <Field>{get(apber, 'konsequenzenErfolgskontrolle', '')}</Field>
+            </FieldRow>
+          }
+          <Row>
+            {`${apberDatum ? format(apberDatum, 'DD.MM.YYYY') : '(Datum fehlt)'} / ${get(apber, 'adresseByBearbeiter.name', '(kein Bearbeiter)')}`}
+          </Row>
+
+        </ContentContainer>
+      </Container>
+    </ErrorBoundary>
+  )
 }
 
 export default enhance(ApberForAp)
