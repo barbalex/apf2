@@ -12,6 +12,7 @@ const Container = styled.div`
   flex-direction: column;
   break-before: page;
   font-size: 12px;
+  line-height: 1.1em;
   @media screen {
     margin-top: 3cm;
   }

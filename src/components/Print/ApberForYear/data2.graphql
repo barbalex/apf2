@@ -17,7 +17,9 @@ query projektById($projektId: UUID!, $jahr: Int!) {
         popsByApId {
           nodes {
             id
+            status
             tpopsByPopId(condition: { apberRelevant: 1 }) {
+              totalCount
               nodes {
                 id
                 apberRelevant
