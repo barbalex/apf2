@@ -9,6 +9,8 @@ query projektById($projektId: UUID!, $jahr: Int!) {
         aeEigenschaftenByArtId {
           id
           artname
+          kefart
+          kefkontrolljahr
         }
         adresseByBearbeiter {
           id
