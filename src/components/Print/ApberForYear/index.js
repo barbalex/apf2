@@ -1,5 +1,5 @@
 // @flow
-import React, { Component, createRef } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import { Query } from 'react-apollo'
 import get from 'lodash/get'
@@ -102,114 +102,98 @@ const SecondPageText = styled.p`
   hyphens: auto;
 `
 
-
-type Props = {
+const ApberForYear = ({
+  activeNodeArray,
+  dimensions,
+  errors,
+}:{
   activeNodeArray: Array<String>,
   dimensions: Object,
   errors: Object,
-}
+}) => {
+  const { projekt: projektId, apberuebersicht: apberuebersichtId } = getActiveNodes(activeNodeArray)
 
-class ApberForYear extends Component<Props> {
-  constructor(props) {
-    super(props)
-    this.container = createRef()
-    this.state = {
-      yearOfFirstTpopber: null
-    }
-  }
-
-  setYearOfFirstTpopber = (year) => {
-    if (year !== this.state.yearOfFirstTpopber) {
-      this.setState({ yearOfFirstTpopber: year })
-    }
-  }
-
-  render() {
-    const { activeNodeArray } = this.props
-    const { projekt: projektId, apberuebersicht: apberuebersichtId } = getActiveNodes(activeNodeArray)
-
-    return (
-      <Query
-        query={data1Gql}
-        variables={{ apberuebersichtId }}
-      >
-        {({ loading, error, data: data1 }) => {
-          if (loading)
-            return (
-              <Container>
-                <LoadingContainer>Lade...</LoadingContainer>
-              </Container>
-            )
-          if (error) return `Fehler: ${error.message}`
-
-          const jahr = get(data1, 'apberuebersichtById.jahr', 0)
-
+  return (
+    <Query
+      query={data1Gql}
+      variables={{ apberuebersichtId }}
+    >
+      {({ loading, error, data: data1 }) => {
+        if (loading)
           return (
-            <Query
-              query={data2Gql}
-              variables={{ projektId, jahr }}
-            >
-              {({ loading, error, data: data2 }) => {
-                if (loading)
-                  return (
-                    <Container>
-                      <LoadingContainer>Lade...</LoadingContainer>
-                    </Container>
-                  )
-                if (error) return `Fehler: ${error.message}`
-
-                const data = merge(data1, data2)
-                const apberuebersicht = get(data, 'apberuebersichtById')
-                const aps = sortBy(
-                  get(data, 'projektById.apsByProjId.nodes', [])
-                    .filter(ap =>
-                      !!get(ap, 'apbersByApId.nodes[0]', null) &&
-                      !!get(ap, 'apbersByApId.nodes[0].id')
-                    ),
-                  ap => get(ap, 'aeEigenschaftenByArtId.artname')
-                )
-                const jahr = get(data, 'apberuebersichtById.jahr')
-
-                return (
-                  <ErrorBoundary>
-                    <Container innerRef={this.container}>
-                      <ContentContainer>
-                        <FirstPageTitle>Umsetzung der Aktionspläne Flora<br/>im Kanton Zürich</FirstPageTitle>
-                        <FirstPageSubTitle>{`Jahresbericht ${jahr}`}</FirstPageSubTitle>
-                        <FirstPageFnsLogo src={fnslogo} alt="FNS" width="350" />
-                        <FirstPageDate>{format(new Date(), 'DD.MM.YYYY')}</FirstPageDate>
-                        <FirstPageBearbeiter>Karin Marti, topos</FirstPageBearbeiter>
-                        {
-                          !!apberuebersicht.bemerkungen &&
-                          <SecondPage>
-                            <SecondPageTop />
-                            <SecondPageTitle>Zusammenfassung</SecondPageTitle>
-                            <SecondPageText>{apberuebersicht.bemerkungen}</SecondPageText>
-                          </SecondPage>
-                        }
-                        <AvList data={data} />
-                        {
-                          aps.map(ap =>
-                            <ApberForAp
-                              key={ap.id}
-                              apId={ap.id}
-                              jahr={jahr}
-                              apData={ap}
-                              isSubReport={true}
-                            />
-                          )
-                        }
-                      </ContentContainer>
-                    </Container>
-                  </ErrorBoundary>
-                )
-              }}
-            </Query>
+            <Container>
+              <LoadingContainer>Lade...</LoadingContainer>
+            </Container>
           )
-        }}
-      </Query>
-    )
-  }
+        if (error) return `Fehler: ${error.message}`
+
+        const jahr = get(data1, 'apberuebersichtById.jahr', 0)
+
+        return (
+          <Query
+            query={data2Gql}
+            variables={{ projektId, jahr }}
+          >
+            {({ loading, error, data: data2 }) => {
+              if (loading)
+                return (
+                  <Container>
+                    <LoadingContainer>Lade...</LoadingContainer>
+                  </Container>
+                )
+              if (error) return `Fehler: ${error.message}`
+
+              const data = merge(data1, data2)
+              const apberuebersicht = get(data, 'apberuebersichtById')
+              const aps = sortBy(
+                get(data, 'projektById.apsByProjId.nodes', [])
+                  .filter(ap =>
+                    !!get(ap, 'apbersByApId.nodes[0]', null) &&
+                    !!get(ap, 'apbersByApId.nodes[0].id')
+                  ),
+                ap => get(ap, 'aeEigenschaftenByArtId.artname')
+              )
+              const jahr = get(data, 'apberuebersichtById.jahr')
+
+              return (
+                <ErrorBoundary>
+                  <Container>
+                    <ContentContainer>
+                      <FirstPageTitle>Umsetzung der Aktionspläne Flora<br/>im Kanton Zürich</FirstPageTitle>
+                      <FirstPageSubTitle>{`Jahresbericht ${jahr}`}</FirstPageSubTitle>
+                      <FirstPageFnsLogo src={fnslogo} alt="FNS" width="350" />
+                      <FirstPageDate>{format(new Date(), 'DD.MM.YYYY')}</FirstPageDate>
+                      <FirstPageBearbeiter>Karin Marti, topos</FirstPageBearbeiter>
+                      {
+                        !!apberuebersicht.bemerkungen &&
+                        <SecondPage>
+                          <SecondPageTop />
+                          <SecondPageTitle>Zusammenfassung</SecondPageTitle>
+                          <SecondPageText>{apberuebersicht.bemerkungen}</SecondPageText>
+                        </SecondPage>
+                      }
+                      <AvList data={data} />
+                      {
+                        aps.map(ap =>
+                          <ApberForAp
+                            key={ap.id}
+                            apId={ap.id}
+                            jahr={jahr}
+                            apData={ap}
+                            isSubReport={true}
+                          />
+                        )
+                      }
+                    </ContentContainer>
+                  </Container>
+                </ErrorBoundary>
+              )
+            }}
+          </Query>
+        )
+      }}
+    </Query>
+  )
 }
 
 export default ApberForYear
