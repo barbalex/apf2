@@ -104,12 +104,8 @@ const SecondPageText = styled.p`
 
 const ApberForYear = ({
   activeNodeArray,
-  dimensions,
-  errors,
 }:{
   activeNodeArray: Array<String>,
-  dimensions: Object,
-  errors: Object,
 }) => {
   const { projekt: projektId, apberuebersicht: apberuebersichtId } = getActiveNodes(activeNodeArray)
 
