@@ -14,6 +14,7 @@ import data2Gql from './data2.graphql'
 import fnslogo from './fnslogo.png'
 import AvList from './AvList'
 import AktPopList from './AktPopList'
+import ErfolgList from './ErfolgList'
 import ApberForAp from '../ApberForAp'
 
 const LoadingContainer = styled.div`
@@ -170,6 +171,7 @@ const ApberForYear = ({
                         </SecondPage>
                       }
                       <AvList data={data} />
+                      <ErfolgList jahr={jahr} data={data} />
                       <AktPopList data={data} />
                       {
                         aps.map(ap =>
