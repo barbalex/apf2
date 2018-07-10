@@ -84,7 +84,6 @@ const AktPopList = ({ data }:{ data: Object }) => {
     })),
     'ap'
   )
-  console.log({apRows})
 
   return (
     <ErrorBoundary>
