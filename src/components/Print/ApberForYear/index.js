@@ -173,7 +173,7 @@ const ApberForYear = ({
                       <AvList data={data} />
                       <ErfolgList jahr={jahr} data={data} />
                       <AktPopList data={data} />
-                      {
+                      {/*
                         aps.map(ap =>
                           <ApberForAp
                             key={ap.id}
@@ -183,7 +183,7 @@ const ApberForYear = ({
                             isSubReport={true}
                           />
                         )
-                      }
+                      */}
                     </ContentContainer>
                   </Container>
                 </ErrorBoundary>

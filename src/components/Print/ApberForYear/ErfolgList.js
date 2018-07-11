@@ -10,19 +10,29 @@ import ErrorBoundary from '../../shared/ErrorBoundary'
 const Container = styled.div`
   break-before: page;
   font-size: 11px;
-  line-height: 1.1em;
   @media screen {
     margin-top: 3cm;
   }
 `
 const Table = styled.div`
   display: grid;
-  grid-template-columns: 9cm repeat(11, 1fr);
-  grid-column-gap: 1px;
-  grid-row-gap: 1px;
+  grid-template-columns: 11fr repeat(11, 1fr);
+  grid-column-gap: 0;
+  grid-row-gap: 0;
   justify-items: stretch;
   align-items: stretch;
   justify-content: stretch;
+  box-sizing: border-box;
+  border-collapse: collapse;
+  border: 1px solid rgba(0,0,0,0.1);
+  margin-left: -1px;
+  margin-right: -1px;
+}
+  > div { 
+    border: 1px solid rgba(0,0,0,0.1);
+    box-sizing: border-box;
+    border-collapse: collapse;
+  }
 `
 const OverallTitle = styled.p`
   font-size: 12px;
@@ -35,73 +45,121 @@ const Title = styled.div`
 const ApTitle = styled(Title)`
   grid-column: 1 / span 1;
   grid-row: 1 / span 2;
+  padding-top: 4px;
 `
-const Ap = styled.div`
+const Cell = styled.div`
+  display: inline-block;
+`
+const Ap = styled(Cell)`
   grid-column: 1 / span 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 `
 const ErfolgSpanningTitle = styled(Title)`
   grid-column: 2 / span 7;
   grid-row: 1 / span 1;
-  justify-self: center;
+  text-align: center;
+  padding-top: 4px;
 `
-const ErfolgNicht = styled.div`
+const ErfolgNicht = styled(Cell)`
   grid-column: 2 / span 1;
-  justify-self: center;
+  text-align: center;
+  background-color: ${props => props.val ? 'red' : 'unset'};
 `
-const ErfolgWenig = styled.div`
+const ErfolgWenig = styled(Cell)`
   grid-column: 3 / span 1;
-  justify-self: center;
+  text-align: center;
+  background-color: ${props => props.val ? 'orange' : 'unset'};
 `
-const ErfolgMaessig = styled.div`
+const ErfolgMaessig = styled(Cell)`
   grid-column: 4 / span 1;
-  justify-self: center;
+  text-align: center;
+  background-color: ${props => props.val ? 'yellow' : 'unset'};
 `
-const ErfolgGut = styled.div`
+const ErfolgGut = styled(Cell)`
   grid-column: 5 / span 1;
-  justify-self: center;
+  text-align: center;
+  background-color: ${props => props.val ? '#00f6ff' : 'unset'};
 `
-const ErfolgSehr = styled.div`
+const ErfolgSehr = styled(Cell)`
   grid-column: 6 / span 1;
-  justify-self: center;
+  text-align: center;
+  background-color: ${props => props.val ? '#00ff00' : 'unset'};
 `
-const ErfolgVeraenderung = styled.div`
+const ErfolgVeraenderung = styled(Cell)`
   grid-column: 7 / span 1;
-  justify-self: center;
+  text-align: center;
 `
-const ErfolgUnsicher = styled.div`
+const ErfolgUnsicher = styled(Cell)`
   grid-column: 8 / span 1;
-  justify-self: center;
+  text-align: center;
+  background-color: ${props => props.val ? '#afafaf' : 'unset'};
 `
-const ErfolgNichtBeurteilt = styled.div`
+const ErfolgNichtBeurteilt = styled(Cell)`
   grid-column: 9 / span 1;
-  justify-self: center;
+  text-align: center;
 `
-const KeineMassnahme = styled.div`
+const KeineMassnahme = styled(Cell)`
   grid-column: 10 / span 1;
-  justify-self: center;
+  text-align: center;
 `
-const KefArt = styled.div`
+const KefArt = styled(Cell)`
   grid-column: 11 / span 1;
-  justify-self: center;
+  text-align: center;
 `
-const KefKontrolle = styled.div`
+const KefKontrolle = styled(Cell)`
   grid-column: 12 / span 1;
-  justify-self: center;
+  text-align: center;
 `
 const KefSpanningTitle = styled(Title)`
   grid-column: 11 / span 2;
   grid-row: 1 / span 1;
-  justify-self: center;
+  text-align: center;
+  padding-top: 4px;
 `
 const KeineMassnTitle = styled(Title)`
   grid-column: 10 / span 1;
   grid-row: 1 / span 2;
-  transform: rotate(270deg);
-	transform-origin: center bottom 0;
+  writing-mode: vertical-lr;
+  padding-bottom: 3px;
+  padding-top: 3px;
+  /* needed because of bug (?) in print mode
+   * where not full height is taken */
+  height: 98px;
+  > div {
+    transform: rotate(180deg);
+    transform-origin: center center 0;
+    line-height: 2.6em;
+  }
+`
+const ErfolgNichtBeurteiltTitle = styled(Title)`
+  grid-column: 9 / span 1;
+  grid-row: 1 / span 2;
+  writing-mode: vertical-lr;
+  padding-bottom: 3px;
+  padding-top: 3px;
+  /* needed because of bug (?) in print mode
+   * where not full height is taken */
+  height: 98px;
+  > div {
+    transform: rotate(180deg);
+    transform-origin: center center 0;
+    line-height: 2.6em;
+  }
 `
 const ErfolgTitle = styled(Title)`
-  transform: rotate(270deg);
-  transform-origin: center bottom 0;
+  writing-mode: vertical-lr;
+  padding-bottom: 3px;
+  padding-top: 3px;
+  /* needed because of bug (?) in print mode
+   * where not full height is taken */
+  height: 79px;
+  > div {
+    transform: rotate(180deg);
+    transform-origin: center center 0;
+    line-height: 2.6em;
+  }
 `
 const ErfolgNichtTitle = styled(ErfolgTitle)`
   grid-column: 2 / span 1;
@@ -135,11 +193,7 @@ const ErfolgAenderungTitle = styled(ErfolgTitle)`
 const ErfolgUnsicherTitle = styled(ErfolgTitle)`
   grid-column: 8 / span 1;
   grid-row: 2 / span 1;
-  background-color: grey;
-`
-const ErfolgNichtBeurteiltTitle = styled(ErfolgTitle)`
-  grid-column: 9 / span 1;
-  grid-row: 2 / span 1;
+  background-color: #afafaf;
 `
 const KefArtTitle = styled(ErfolgTitle)`
   grid-column: 11 / span 1;
@@ -195,33 +249,33 @@ const ErfolgList = ({
         <Table>
           <ApTitle>Art</ApTitle>
           <ErfolgSpanningTitle>Erfolg</ErfolgSpanningTitle>
-          <KeineMassnTitle>keine Massnahme</KeineMassnTitle>
+          <KeineMassnTitle><div>keine Massnahme</div></KeineMassnTitle>
           <KefSpanningTitle>KEF</KefSpanningTitle>
-          <ErfolgNichtTitle>nicht</ErfolgNichtTitle>
-          <ErfolgWenigTitle>wenig</ErfolgWenigTitle>
-          <ErfolgMaessigTitle>mässig</ErfolgMaessigTitle>
-          <ErfolgGutTitle>gut</ErfolgGutTitle>
-          <ErfolgSehrTitle>sehr</ErfolgSehrTitle>
-          <ErfolgAenderungTitle>Veränderung</ErfolgAenderungTitle>
-          <ErfolgUnsicherTitle>unsicher</ErfolgUnsicherTitle>
-          <ErfolgNichtBeurteiltTitle>nicht beurteilt</ErfolgNichtBeurteiltTitle>
-          <KefArtTitle>Art</KefArtTitle>
-          <KefKontrolleTitle>Kontrolle</KefKontrolleTitle>
+          <ErfolgNichtTitle><div>nicht</div></ErfolgNichtTitle>
+          <ErfolgWenigTitle><div>wenig</div></ErfolgWenigTitle>
+          <ErfolgMaessigTitle><div>mässig</div></ErfolgMaessigTitle>
+          <ErfolgGutTitle><div>gut</div></ErfolgGutTitle>
+          <ErfolgSehrTitle><div>sehr</div></ErfolgSehrTitle>
+          <ErfolgAenderungTitle><div>Veränderung</div></ErfolgAenderungTitle>
+          <ErfolgUnsicherTitle><div>unsicher</div></ErfolgUnsicherTitle>
+          <ErfolgNichtBeurteiltTitle><div>nicht beurteilt</div></ErfolgNichtBeurteiltTitle>
+          <KefArtTitle><div>Art</div></KefArtTitle>
+          <KefKontrolleTitle><div>Kontrolle</div></KefKontrolleTitle>
           {
             apRows.map(row =>
               <Fragment key={row.ap}>
                 <Ap>{row.ap}</Ap>
-                <ErfolgNicht>{row.erfolgNicht}</ErfolgNicht>
-                <ErfolgWenig>{row.erfolgWenig}</ErfolgWenig>
-                <ErfolgMaessig>{row.erfolgMaessig}</ErfolgMaessig>
-                <ErfolgGut>{row.erfolgGut}</ErfolgGut>
-                <ErfolgSehr>{row.erfolgSehr}</ErfolgSehr>
+                <ErfolgNicht val={!!row.erfolgNicht}>{row.erfolgNicht}</ErfolgNicht>
+                <ErfolgWenig val={!!row.erfolgWenig}>{row.erfolgWenig}</ErfolgWenig>
+                <ErfolgMaessig val={!!row.erfolgMaessig}>{row.erfolgMaessig}</ErfolgMaessig>
+                <ErfolgGut val={!!row.erfolgGut}>{row.erfolgGut}</ErfolgGut>
+                <ErfolgSehr val={!!row.erfolgSehr}>{row.erfolgSehr}</ErfolgSehr>
                 <ErfolgVeraenderung>{row.veraenderung}</ErfolgVeraenderung>
-                <ErfolgUnsicher>{row.erfolgUnsicher}</ErfolgUnsicher>
-                <ErfolgNichtBeurteilt>{row.nichtBeurteilt}</ErfolgNichtBeurteilt>
-                <KeineMassnahme>{row.keineMassnahme}</KeineMassnahme>
-                <KefArt>{row.kefArt}</KefArt>
-                <KefKontrolle>{row.kefKontrolle}</KefKontrolle>
+                <ErfolgUnsicher val={!!row.erfolgUnsicher}>{row.erfolgUnsicher}</ErfolgUnsicher>
+                <ErfolgNichtBeurteilt val={!!row.nichtBeurteilt}>{row.nichtBeurteilt}</ErfolgNichtBeurteilt>
+                <KeineMassnahme val={!!row.keineMassnahme}>{row.keineMassnahme}</KeineMassnahme>
+                <KefArt val={!!row.kefArt}>{row.kefArt}</KefArt>
+                <KefKontrolle val={!!row.kefKontrolle}>{row.kefKontrolle}</KefKontrolle>
               </Fragment>
             )
           }
