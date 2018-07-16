@@ -113,6 +113,9 @@ const BearbLabel = styled(Label)`
 `
 const BearbVal = styled.div`
   grid-area: bearbVal;
+  > div {
+    margin-top: -5px;
+  }
 `
 const StatusLabel = styled(Label)`
   grid-area: statusVal;
@@ -140,6 +143,9 @@ const DateLabel = styled(Label)`
 `
 const DateVal = styled.div`
   grid-area: dateVal;
+  > div {
+    margin-top: 5px;
+  }
 `
 const Map = styled(Area)`
   grid-area: map;
@@ -176,6 +182,9 @@ const DeckApArtLabel = styled(Label)`
 `
 const DeckApArtVal = styled.div`
   grid-area: deckApArtVal;
+  > div {
+    margin-top: -25px;
+  }
 `
 const DeckApArtMass = styled.div`
   grid-area: deckApArtMass;
@@ -185,6 +194,9 @@ const DeckNaBoLabel = styled(Label)`
 `
 const DeckNaBoVal = styled.div`
   grid-area: deckNaBoVal;
+  > div {
+    margin-top: -25px;
+  }
 `
 const DeckNaBoMass = styled.div`
   grid-area: deckNaBoMass;
@@ -389,7 +401,6 @@ const Tpopfreiwkontr = ({
                   <DateVal>
                     <DateFieldWithPicker
                       key={`${row.id}datum`}
-                      label="Datum"
                       value={row.datum}
                       saveToDb={value => {
                         saveToDb({
@@ -484,7 +495,6 @@ const Tpopfreiwkontr = ({
                     }
                     error={errors.flaecheUeberprueft}
                   />
-
                   <RadioButtonGroup
                     label="Auch junge Pflanzen vorhanden"
                     value={row.jungpflanzenVorhanden}
