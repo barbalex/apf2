@@ -18,12 +18,17 @@ import StringToCopy from '../../../shared/StringToCopy'
 import DateFieldWithPicker from '../../../shared/DateFieldWithPicker'
 import dataGql from './data.graphql'
 import updateTpopkontrByIdGql from './updateTpopkontrById.graphql'
+import anteilImg from './anteil.png'
 
 const LadeContainer = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
   padding: 10px;
+`
+const Img = styled.img`
+  max-width: 100%;
+  height: auto;
 `
 const Container = styled.div`
   padding: 10px;
@@ -114,12 +119,39 @@ const StatusLabel = styled(Label)`
 `
 const Besttime = styled(Area)`
   grid-area: besttime;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-areas: 'besttimeLabel besttimeVal besttimeVal';
+`
+const BesttimeLabel = styled(Label)`
+  grid-area: besttimeLabel;
+`
+const BesttimeVal = styled.div`
+  grid-area: besttimeVal;
 `
 const Date = styled(Area)`
   grid-area: date;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-areas: 'dateLabel dateVal dateVal';
+`
+const DateLabel = styled(Label)`
+  grid-area: dateLabel;
+`
+const DateVal = styled.div`
+  grid-area: dateVal;
 `
 const Map = styled(Area)`
   grid-area: map;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-areas: 'mapLabel mapVal';
+`
+const MapLabel = styled(Label)`
+  grid-area: mapLabel;
+`
+const MapVal = styled.div`
+  grid-area: mapVal;
 `
 const Count1 = styled(Area)`
   grid-area: count1;
@@ -132,6 +164,33 @@ const Count3 = styled(Area)`
 `
 const Cover = styled(Area)`
   grid-area: cover;
+  display: grid;
+  grid-template-columns: 4fr 3fr 1fr;
+  grid-template-areas:
+    'deckApArtLabel deckApArtVal deckApArtMass'
+    'deckNaBoLabel deckNaBoVal deckNaBoMass'
+    'deckImage deckImage deckImage';
+`
+const DeckApArtLabel = styled(Label)`
+  grid-area: deckApArtLabel;
+`
+const DeckApArtVal = styled.div`
+  grid-area: deckApArtVal;
+`
+const DeckApArtMass = styled.div`
+  grid-area: deckApArtMass;
+`
+const DeckNaBoLabel = styled(Label)`
+  grid-area: deckNaBoLabel;
+`
+const DeckNaBoVal = styled.div`
+  grid-area: deckNaBoVal;
+`
+const DeckNaBoMass = styled.div`
+  grid-area: deckNaBoMass;
+`
+const DeckImage = styled.div`
+  grid-area: deckImage;
 `
 const More = styled(Area)`
   grid-area: more;
@@ -321,76 +380,93 @@ const Tpopfreiwkontr = ({
                   </BearbVal>
                   <StatusLabel>{status}</StatusLabel>
                 </Headdata>
-                <Besttime>August</Besttime>
+                <Besttime>
+                  <BesttimeLabel>bester Beobachtungs-Zeitpunkt</BesttimeLabel>
+                  <BesttimeVal>August</BesttimeVal>
+                </Besttime>
                 <Date>
-                  <DateFieldWithPicker
-                    key={`${row.id}datum`}
-                    label="Datum"
-                    value={row.datum}
-                    saveToDb={value => {
-                      saveToDb({
-                        row,
-                        field: 'datum',
-                        value,
-                        field2: 'jahr',
-                        value2: !!value ? format(value, 'YYYY') : null,
-                        updateTpopkontr,
-                      })
-                    }}
-                    error={errors.datum}
-                  />
+                  <DateLabel>Aufnahme-datum</DateLabel>
+                  <DateVal>
+                    <DateFieldWithPicker
+                      key={`${row.id}datum`}
+                      label="Datum"
+                      value={row.datum}
+                      saveToDb={value => {
+                        saveToDb({
+                          row,
+                          field: 'datum',
+                          value,
+                          field2: 'jahr',
+                          value2: !!value ? format(value, 'YYYY') : null,
+                          updateTpopkontr,
+                        })
+                      }}
+                      error={errors.datum}
+                    />
+                  </DateVal>
                 </Date>
                 <Map>
-                  <RadioButton
-                    key={`${row.id}planVorhanden`}
-                    label="Auf Plan eingezeichnet"
-                    value={row.planVorhanden}
-                    saveToDb={value =>
-                      saveToDb({
-                        row,
-                        field: 'planVorhanden',
-                        value,
-                        updateTpopkontr,
-                      })
-                    }
-                    error={errors.planVorhanden}
-                  />
+                  <MapLabel>Plan ergänzt</MapLabel>
+                  <MapVal>
+                    <RadioButton
+                      key={`${row.id}planVorhanden`}
+                      value={row.planVorhanden}
+                      saveToDb={value =>
+                        saveToDb({
+                          row,
+                          field: 'planVorhanden',
+                          value,
+                          updateTpopkontr,
+                        })
+                      }
+                      error={errors.planVorhanden}
+                    />
+                  </MapVal>
                 </Map>
                 <Image>Image</Image>
                 <Count1>count1</Count1>
                 <Count2>count2</Count2>
                 <Count3>count3</Count3>
                 <Cover>
-                  <TextField
-                    key={`${row.id}deckungApArt`}
-                    label="Deckung überprüfte Art (%)"
-                    value={row.deckungApArt}
-                    type="number"
-                    saveToDb={value =>
-                      saveToDb({
-                        row,
-                        field: 'deckungApArt',
-                        value,
-                        updateTpopkontr,
-                      })
-                    }
-                    error={errors.deckungApArt}
-                  />
-                  <TextField
-                    key={`${row.id}deckungNackterBoden`}
-                    label="Deckung nackter Boden (%)"
-                    value={row.deckungNackterBoden}
-                    type="number"
-                    saveToDb={value =>
-                      saveToDb({
-                        row,
-                        field: 'deckungNackterBoden',
-                        value,
-                        updateTpopkontr,
-                      })
-                    }
-                    error={errors.deckungNackterBoden}
-                  />
+                  <DeckApArtLabel>Deckung üperprüfte Art</DeckApArtLabel>
+                  <DeckApArtVal>
+                    <TextField
+                      key={`${row.id}deckungApArt`}
+                      value={row.deckungApArt}
+                      type="number"
+                      saveToDb={value =>
+                        saveToDb({
+                          row,
+                          field: 'deckungApArt',
+                          value,
+                          updateTpopkontr,
+                        })
+                      }
+                      error={errors.deckungApArt}
+                    />
+                  </DeckApArtVal>
+                  <DeckApArtMass>%</DeckApArtMass>
+                  <DeckNaBoLabel>Flächenanteil nackter Boden</DeckNaBoLabel>
+                  <DeckNaBoVal>
+                    <TextField
+                      key={`${row.id}deckungNackterBoden`}
+                      value={row.deckungNackterBoden}
+                      type="number"
+                      saveToDb={value =>
+                        saveToDb({
+                          row,
+                          field: 'deckungNackterBoden',
+                          value,
+                          updateTpopkontr,
+                        })
+                      }
+                      error={errors.deckungNackterBoden}
+                    />
+                  </DeckNaBoVal>
+                  <DeckNaBoMass>%</DeckNaBoMass>
+                  <DeckImage>
+                    <Img src={anteilImg} alt="Flächen-Anteile" />
+                  </DeckImage>
                 </Cover>
                 <More>
                   <TextField
