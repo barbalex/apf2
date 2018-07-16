@@ -34,18 +34,16 @@ const Section = styled.div`
   padding-top: 20px;
   padding-bottom: 7px;
   font-weight: bold;
+  break-after: avoid;
   &:after {
     content: ':';
   }
 `
 
 const enhance = compose(
-  withState('errors', 'setErrors', ({})),
+  withState('errors', 'setErrors', {}),
   withHandlers({
-    saveToDb: ({
-      setErrors,
-      errors,
-    }) => async ({
+    saveToDb: ({ setErrors, errors }) => async ({
       row,
       field,
       value,
@@ -67,7 +65,8 @@ const enhance = compose(
               idealbiotop: {
                 id: row.id,
                 apId: field === 'apId' ? value : row.apId,
-                erstelldatum: field === 'erstelldatum' ? value : row.erstelldatum,
+                erstelldatum:
+                  field === 'erstelldatum' ? value : row.erstelldatum,
                 hoehenlage: field === 'hoehenlage' ? value : row.hoehenlage,
                 region: field === 'region' ? value : row.region,
                 exposition: field === 'exposition' ? value : row.exposition,
@@ -89,7 +88,8 @@ const enhance = compose(
                   field === 'wasserhaushalt' ? value : row.wasserhaushalt,
                 konkurrenz: field === 'konkurrenz' ? value : row.konkurrenz,
                 moosschicht: field === 'moosschicht' ? value : row.moosschicht,
-                krautschicht: field === 'krautschicht' ? value : row.krautschicht,
+                krautschicht:
+                  field === 'krautschicht' ? value : row.krautschicht,
                 strauchschicht:
                   field === 'strauchschicht' ? value : row.strauchschicht,
                 baumschicht: field === 'baumschicht' ? value : row.baumschicht,
@@ -103,16 +103,16 @@ const enhance = compose(
       } catch (error) {
         return setErrors({ [field]: error.message })
       }
-      setErrors(({}))
+      setErrors({})
     },
   }),
   withLifecycle({
     onDidUpdate(prevProps, props) {
       if (prevProps.id !== props.id) {
-        props.setErrors(({}))
+        props.setErrors({})
       }
     },
-  }),
+  })
 )
 
 type Props = {
@@ -129,12 +129,7 @@ class Idealbiotop extends Component<Props> {
   }
 
   render() {
-    const {
-      id,
-      saveToDb,
-      dimensions = { width: 380 },
-      errors,
-    } = this.props
+    const { id, saveToDb, dimensions = { width: 380 }, errors } = this.props
 
     return (
       <Query query={dataGql} variables={{ id }}>
@@ -156,7 +151,9 @@ class Idealbiotop extends Component<Props> {
                 <Mutation mutation={updateIdealbiotopByIdGql}>
                   {(updateIdealbiotop, { data }) => (
                     <FieldsContainer
-                      data-width={isNaN(dimensions.width) ? 380 : dimensions.width}
+                      data-width={
+                        isNaN(dimensions.width) ? 380 : dimensions.width
+                      }
                     >
                       <DateFieldWithPicker
                         key={`${row.id}erstelldatum`}

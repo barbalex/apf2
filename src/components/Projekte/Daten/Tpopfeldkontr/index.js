@@ -47,6 +47,7 @@ const Section = styled.div`
   padding-top: 20px;
   padding-bottom: 5px;
   font-weight: bold;
+  break-after: avoid;
   &:after {
     content: ':';
   }
