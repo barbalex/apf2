@@ -16,7 +16,6 @@ import TextField from '../../../shared/TextField'
 import AutoComplete from '../../../shared/Autocomplete'
 import StringToCopy from '../../../shared/StringToCopy'
 import DateFieldWithPicker from '../../../shared/DateFieldWithPicker'
-import ErrorBoundary from '../../../shared/ErrorBoundary'
 import dataGql from './data.graphql'
 import updateTpopkontrByIdGql from './updateTpopkontrById.graphql'
 
@@ -27,6 +26,9 @@ const LadeContainer = styled.div`
   padding: 10px;
 `
 const Container = styled.div`
+  padding: 10px;
+`
+const GridContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(6, 1fr);
   grid-template-areas:
@@ -45,48 +47,95 @@ const Container = styled.div`
   justify-content: stretch;
   box-sizing: border-box;
   border-collapse: collapse;
-  border: 1px solid rgba(0, 0, 0, 0.1);
 `
-const Title = styled.div`
+const Area = styled.div`
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  border-radius: 6px;
+  padding: 10px;
+`
+const Title = styled(Area)`
   grid-area: title;
+  font-weight: 700;
+  font-size: 22px;
 `
-const Image = styled.div`
+const Image = styled(Area)`
   grid-area: image;
 `
-const Headdata = styled.div`
+const Headdata = styled(Area)`
   grid-area: headdata;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-areas:
+    'popLabel popVal popVal'
+    'tpopLabel tpopVal tpopVal'
+    'koordLabel koordVal koordVal'
+    'tpopNrLabel tpopNrVal statusVal'
+    'bearbLabel bearbVal bearbVal';
 `
-const Besttime = styled.div`
+const Label = styled.div`
+  font-weight: 700;
+`
+const PopLabel = styled(Label)`
+  grid-area: popLabel;
+`
+const PopVal = styled.div`
+  grid-area: popVal;
+`
+const TpopLabel = styled(Label)`
+  grid-area: tpopLabel;
+`
+const TpopVal = styled.div`
+  grid-area: tpopVal;
+`
+const KoordLabel = styled(Label)`
+  grid-area: koordLabel;
+`
+const KoordVal = styled.div`
+  grid-area: koordVal;
+`
+const TpopNrLabel = styled(Label)`
+  grid-area: tpopNrLabel;
+`
+const TpopNrVal = styled.div`
+  grid-area: tpopNrVal;
+`
+const BearbLabel = styled(Label)`
+  grid-area: bearbLabel;
+`
+const BearbVal = styled.div`
+  grid-area: bearbVal;
+`
+const Besttime = styled(Area)`
   grid-area: besttime;
 `
-const Date = styled.div`
+const Date = styled(Area)`
   grid-area: date;
 `
-const Map = styled.div`
+const Map = styled(Area)`
   grid-area: map;
 `
-const Count1 = styled.div`
+const Count1 = styled(Area)`
   grid-area: count1;
 `
-const Count2 = styled.div`
+const Count2 = styled(Area)`
   grid-area: count2;
 `
-const Count3 = styled.div`
+const Count3 = styled(Area)`
   grid-area: count3;
 `
-const Cover = styled.div`
+const Cover = styled(Area)`
   grid-area: cover;
 `
-const More = styled.div`
+const More = styled(Area)`
   grid-area: more;
 `
-const Danger = styled.div`
+const Danger = styled(Area)`
   grid-area: danger;
 `
-const Remarks = styled.div`
+const Remarks = styled(Area)`
   grid-area: remarks;
 `
-const CopyId = styled.div`
+const CopyId = styled(Area)`
   grid-area: copyId;
 `
 
@@ -221,197 +270,199 @@ const Tpopfreiwkontr = ({
         <Mutation mutation={updateTpopkontrByIdGql}>
           {(updateTpopkontr, { data }) => (
             <Container>
-              <Title>Erfolgskontrolle Artenschutz Flora</Title>
-              <Headdata>
-                <div>Population: Flaach</div>
-                <AutoComplete
-                  key={`${row.id}bearbeiter`}
-                  label="BearbeiterIn"
-                  value={get(row, 'adresseByBearbeiter.name')}
-                  objects={adressenWerte}
-                  saveToDb={value =>
-                    saveToDb({
-                      row,
-                      field: 'bearbeiter',
-                      value,
-                      updateTpopkontr,
-                    })
-                  }
-                  error={errors.bearbeiter}
-                />
-              </Headdata>
-              <Besttime>August</Besttime>
-              <Date>
-                <DateFieldWithPicker
-                  key={`${row.id}datum`}
-                  label="Datum"
-                  value={row.datum}
-                  saveToDb={value => {
-                    saveToDb({
-                      row,
-                      field: 'datum',
-                      value,
-                      field2: 'jahr',
-                      value2: !!value ? format(value, 'YYYY') : null,
-                      updateTpopkontr,
-                    })
-                  }}
-                  error={errors.datum}
-                />
-              </Date>
-              <Map>
-                <RadioButton
-                  key={`${row.id}planVorhanden`}
-                  label="Auf Plan eingezeichnet"
-                  value={row.planVorhanden}
-                  saveToDb={value =>
-                    saveToDb({
-                      row,
-                      field: 'planVorhanden',
-                      value,
-                      updateTpopkontr,
-                    })
-                  }
-                  error={errors.planVorhanden}
-                />
-              </Map>
-              <Image>Image</Image>
-              <Count1>count1</Count1>
-              <Count2>count2</Count2>
-              <Count3>count3</Count3>
-              <Cover>
-                <TextField
-                  key={`${row.id}deckungApArt`}
-                  label="Deckung überprüfte Art (%)"
-                  value={row.deckungApArt}
-                  type="number"
-                  saveToDb={value =>
-                    saveToDb({
-                      row,
-                      field: 'deckungApArt',
-                      value,
-                      updateTpopkontr,
-                    })
-                  }
-                  error={errors.deckungApArt}
-                />
-                <TextField
-                  key={`${row.id}deckungNackterBoden`}
-                  label="Deckung nackter Boden (%)"
-                  value={row.deckungNackterBoden}
-                  type="number"
-                  saveToDb={value =>
-                    saveToDb({
-                      row,
-                      field: 'deckungNackterBoden',
-                      value,
-                      updateTpopkontr,
-                    })
-                  }
-                  error={errors.deckungNackterBoden}
-                />
-              </Cover>
-              <More>
-                <TextField
-                  key={`${row.id}flaecheUeberprueft`}
-                  label="Überprüfte Fläche in m2"
-                  value={row.flaecheUeberprueft}
-                  type="number"
-                  saveToDb={value =>
-                    saveToDb({
-                      row,
-                      field: 'flaecheUeberprueft',
-                      value,
-                      updateTpopkontr,
-                    })
-                  }
-                  error={errors.flaecheUeberprueft}
-                />
+              <GridContainer>
+                <Title>Erfolgskontrolle Artenschutz Flora</Title>
+                <Headdata>
+                  <PopLabel>Population</PopLabel>
+                  <PopVal>{get(row, 'tpopByTpopId.popByPopId.name')}</PopVal>
+                  <TpopLabel>Teilpopulation</TpopLabel>
+                  <TpopVal>{get(row, 'tpopByTpopId.flurname')}</TpopVal>
+                  <KoordLabel>Koordinaten</KoordLabel>
+                  <KoordVal>{`${get(row, 'tpopByTpopId.x')} / ${get(
+                    row,
+                    'tpopByTpopId.y'
+                  )}`}</KoordVal>
+                  <TpopNrLabel>Teilpop.Nr.</TpopNrLabel>
+                  <TpopNrVal>{`${get(row, 'tpopByTpopId.popByPopId.nr')}.${get(
+                    row,
+                    'tpopByTpopId.nr'
+                  )}`}</TpopNrVal>
+                  <BearbLabel>BeobachterIn</BearbLabel>
+                  <BearbVal>{get(row, 'adresseByBearbeiter.name')}</BearbVal>
+                </Headdata>
+                <Besttime>August</Besttime>
+                <Date>
+                  <DateFieldWithPicker
+                    key={`${row.id}datum`}
+                    label="Datum"
+                    value={row.datum}
+                    saveToDb={value => {
+                      saveToDb({
+                        row,
+                        field: 'datum',
+                        value,
+                        field2: 'jahr',
+                        value2: !!value ? format(value, 'YYYY') : null,
+                        updateTpopkontr,
+                      })
+                    }}
+                    error={errors.datum}
+                  />
+                </Date>
+                <Map>
+                  <RadioButton
+                    key={`${row.id}planVorhanden`}
+                    label="Auf Plan eingezeichnet"
+                    value={row.planVorhanden}
+                    saveToDb={value =>
+                      saveToDb({
+                        row,
+                        field: 'planVorhanden',
+                        value,
+                        updateTpopkontr,
+                      })
+                    }
+                    error={errors.planVorhanden}
+                  />
+                </Map>
+                <Image>Image</Image>
+                <Count1>count1</Count1>
+                <Count2>count2</Count2>
+                <Count3>count3</Count3>
+                <Cover>
+                  <TextField
+                    key={`${row.id}deckungApArt`}
+                    label="Deckung überprüfte Art (%)"
+                    value={row.deckungApArt}
+                    type="number"
+                    saveToDb={value =>
+                      saveToDb({
+                        row,
+                        field: 'deckungApArt',
+                        value,
+                        updateTpopkontr,
+                      })
+                    }
+                    error={errors.deckungApArt}
+                  />
+                  <TextField
+                    key={`${row.id}deckungNackterBoden`}
+                    label="Deckung nackter Boden (%)"
+                    value={row.deckungNackterBoden}
+                    type="number"
+                    saveToDb={value =>
+                      saveToDb({
+                        row,
+                        field: 'deckungNackterBoden',
+                        value,
+                        updateTpopkontr,
+                      })
+                    }
+                    error={errors.deckungNackterBoden}
+                  />
+                </Cover>
+                <More>
+                  <TextField
+                    key={`${row.id}flaecheUeberprueft`}
+                    label="Überprüfte Fläche in m2"
+                    value={row.flaecheUeberprueft}
+                    type="number"
+                    saveToDb={value =>
+                      saveToDb({
+                        row,
+                        field: 'flaecheUeberprueft',
+                        value,
+                        updateTpopkontr,
+                      })
+                    }
+                    error={errors.flaecheUeberprueft}
+                  />
 
-                <RadioButtonGroup
-                  label="Auch junge Pflanzen vorhanden"
-                  value={row.jungpflanzenVorhanden}
-                  dataSource={jungpflanzenVorhandenDataSource}
-                  saveToDb={value =>
-                    saveToDb({
-                      row,
-                      field: 'jungpflanzenVorhanden',
-                      value,
-                      updateTpopkontr,
-                    })
-                  }
-                  error={errors.jungpflanzenVorhanden}
-                />
-                <TextField
-                  key={`${row.id}vegetationshoeheMaximum`}
-                  label="Maximum der Vegetationshöhe in cm"
-                  value={row.vegetationshoeheMaximum}
-                  type="number"
-                  saveToDb={value =>
-                    saveToDb({
-                      row,
-                      field: 'vegetationshoeheMaximum',
-                      value,
-                      updateTpopkontr,
-                    })
-                  }
-                  error={errors.vegetationshoeheMaximum}
-                />
-                <TextField
-                  key={`${row.id}vegetationshoeheMittel`}
-                  label="Mittelwert der Vegetationshöhe in cm"
-                  value={row.vegetationshoeheMittel}
-                  type="number"
-                  saveToDb={value =>
-                    saveToDb({
-                      row,
-                      field: 'vegetationshoeheMittel',
-                      value,
-                      updateTpopkontr,
-                    })
-                  }
-                  error={errors.vegetationshoeheMittel}
-                />
-              </More>
-              <Danger>
-                <TextField
-                  key={`${row.id}gefaehrdung`}
-                  label="Gefährdung"
-                  value={row.gefaehrdung}
-                  type="text"
-                  multiLine
-                  saveToDb={value =>
-                    saveToDb({
-                      row,
-                      field: 'gefaehrdung',
-                      value,
-                      updateTpopkontr,
-                    })
-                  }
-                  error={errors.gefaehrdung}
-                />
-              </Danger>
-              <Remarks>
-                <TextField
-                  key={`${row.id}bemerkungen`}
-                  label="Bemerkungen"
-                  value={row.bemerkungen}
-                  type="text"
-                  multiLine
-                  saveToDb={value =>
-                    saveToDb({
-                      row,
-                      field: 'bemerkungen',
-                      value,
-                      updateTpopkontr,
-                    })
-                  }
-                  error={errors.bemerkungen}
-                />
-              </Remarks>
-              <CopyId>
-                <StringToCopy text={row.id} label="GUID" />
-              </CopyId>
+                  <RadioButtonGroup
+                    label="Auch junge Pflanzen vorhanden"
+                    value={row.jungpflanzenVorhanden}
+                    dataSource={jungpflanzenVorhandenDataSource}
+                    saveToDb={value =>
+                      saveToDb({
+                        row,
+                        field: 'jungpflanzenVorhanden',
+                        value,
+                        updateTpopkontr,
+                      })
+                    }
+                    error={errors.jungpflanzenVorhanden}
+                  />
+                  <TextField
+                    key={`${row.id}vegetationshoeheMaximum`}
+                    label="Maximum der Vegetationshöhe in cm"
+                    value={row.vegetationshoeheMaximum}
+                    type="number"
+                    saveToDb={value =>
+                      saveToDb({
+                        row,
+                        field: 'vegetationshoeheMaximum',
+                        value,
+                        updateTpopkontr,
+                      })
+                    }
+                    error={errors.vegetationshoeheMaximum}
+                  />
+                  <TextField
+                    key={`${row.id}vegetationshoeheMittel`}
+                    label="Mittelwert der Vegetationshöhe in cm"
+                    value={row.vegetationshoeheMittel}
+                    type="number"
+                    saveToDb={value =>
+                      saveToDb({
+                        row,
+                        field: 'vegetationshoeheMittel',
+                        value,
+                        updateTpopkontr,
+                      })
+                    }
+                    error={errors.vegetationshoeheMittel}
+                  />
+                </More>
+                <Danger>
+                  <TextField
+                    key={`${row.id}gefaehrdung`}
+                    label="Gefährdung"
+                    value={row.gefaehrdung}
+                    type="text"
+                    multiLine
+                    saveToDb={value =>
+                      saveToDb({
+                        row,
+                        field: 'gefaehrdung',
+                        value,
+                        updateTpopkontr,
+                      })
+                    }
+                    error={errors.gefaehrdung}
+                  />
+                </Danger>
+                <Remarks>
+                  <TextField
+                    key={`${row.id}bemerkungen`}
+                    label="Bemerkungen"
+                    value={row.bemerkungen}
+                    type="text"
+                    multiLine
+                    saveToDb={value =>
+                      saveToDb({
+                        row,
+                        field: 'bemerkungen',
+                        value,
+                        updateTpopkontr,
+                      })
+                    }
+                    error={errors.bemerkungen}
+                  />
+                </Remarks>
+                <CopyId>
+                  <StringToCopy text={row.id} label="GUID" />
+                </CopyId>
+              </GridContainer>
             </Container>
           )}
         </Mutation>
