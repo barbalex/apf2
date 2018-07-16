@@ -14,7 +14,7 @@ import RadioButton from '../../../shared/RadioButton'
 import RadioButtonGroup from '../../../shared/RadioButtonGroup'
 import TextField from '../../../shared/TextField'
 import AutoComplete from '../../../shared/Autocomplete'
-import StringToCopy from '../../../shared/StringToCopy'
+import StringToCopy from '../../../shared/StringToCopyOnlyButton'
 import DateFieldWithPicker from '../../../shared/DateFieldWithPicker'
 import dataGql from './data.graphql'
 import updateTpopkontrByIdGql from './updateTpopkontrById.graphql'
@@ -44,7 +44,7 @@ const GridContainer = styled.div`
     'count1 count1 count2 count2 count3 count3'
     'cover cover cover more more more'
     'danger danger danger danger danger danger'
-    'remarks remarks remarks remarks remarks copyId';
+    'remarks remarks remarks remarks remarks remarks';
   grid-column-gap: 10px;
   grid-row-gap: 10px;
   justify-items: stretch;
@@ -212,9 +212,6 @@ const Danger = styled(Area)`
 `
 const Remarks = styled(Area)`
   grid-area: remarks;
-`
-const CopyId = styled(Area)`
-  grid-area: copyId;
 `
 
 const enhance = compose(
@@ -576,10 +573,8 @@ const Tpopfreiwkontr = ({
                     error={errors.bemerkungen}
                   />
                 </Remarks>
-                <CopyId>
-                  <StringToCopy text={row.id} label="GUID" />
-                </CopyId>
               </GridContainer>
+              <StringToCopy text={row.id} label="GUID" />
             </Container>
           )}
         </Mutation>
