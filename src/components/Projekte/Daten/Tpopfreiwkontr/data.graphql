@@ -26,6 +26,7 @@ query tpopkontrByIdQuery($id: UUID!) {
       flurname
       x
       y
+      status
       popByPopId {
         id
         apId

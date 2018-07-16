@@ -71,9 +71,13 @@ const Headdata = styled(Area)`
     'koordLabel koordVal koordVal'
     'tpopNrLabel tpopNrVal statusVal'
     'bearbLabel bearbVal bearbVal';
+  div:nth-child(n + 3) {
+    padding-top: 10px;
+  }
 `
 const Label = styled.div`
   font-weight: 700;
+  padding-right: 4px;
 `
 const PopLabel = styled(Label)`
   grid-area: popLabel;
@@ -104,6 +108,9 @@ const BearbLabel = styled(Label)`
 `
 const BearbVal = styled.div`
   grid-area: bearbVal;
+`
+const StatusLabel = styled(Label)`
+  grid-area: statusVal;
 `
 const Besttime = styled(Area)`
   grid-area: besttime;
@@ -265,6 +272,10 @@ const Tpopfreiwkontr = ({
         id: el.id,
         value: el.name,
       }))
+      const statusValue = get(row, 'tpopByTpopId.status', '')
+      const status = [200, 201, 202].includes(statusValue)
+        ? 'angesiedelt'
+        : 'natürlich'
 
       return (
         <Mutation mutation={updateTpopkontrByIdGql}>
@@ -274,21 +285,41 @@ const Tpopfreiwkontr = ({
                 <Title>Erfolgskontrolle Artenschutz Flora</Title>
                 <Headdata>
                   <PopLabel>Population</PopLabel>
-                  <PopVal>{get(row, 'tpopByTpopId.popByPopId.name')}</PopVal>
+                  <PopVal>
+                    {get(row, 'tpopByTpopId.popByPopId.name', '')}
+                  </PopVal>
                   <TpopLabel>Teilpopulation</TpopLabel>
-                  <TpopVal>{get(row, 'tpopByTpopId.flurname')}</TpopVal>
+                  <TpopVal>{get(row, 'tpopByTpopId.flurname', '')}</TpopVal>
                   <KoordLabel>Koordinaten</KoordLabel>
-                  <KoordVal>{`${get(row, 'tpopByTpopId.x')} / ${get(
+                  <KoordVal>{`${get(row, 'tpopByTpopId.x', '')} / ${get(
                     row,
                     'tpopByTpopId.y'
                   )}`}</KoordVal>
                   <TpopNrLabel>Teilpop.Nr.</TpopNrLabel>
-                  <TpopNrVal>{`${get(row, 'tpopByTpopId.popByPopId.nr')}.${get(
+                  <TpopNrVal>{`${get(
                     row,
-                    'tpopByTpopId.nr'
-                  )}`}</TpopNrVal>
+                    'tpopByTpopId.popByPopId.nr',
+                    ''
+                  )}.${get(row, 'tpopByTpopId.nr')}`}</TpopNrVal>
                   <BearbLabel>BeobachterIn</BearbLabel>
-                  <BearbVal>{get(row, 'adresseByBearbeiter.name')}</BearbVal>
+                  <BearbVal>
+                    <AutoComplete
+                      key={`${row.id}bearbeiter`}
+                      label=""
+                      value={get(row, 'adresseByBearbeiter.name', '')}
+                      objects={adressenWerte}
+                      saveToDb={value =>
+                        saveToDb({
+                          row,
+                          field: 'bearbeiter',
+                          value,
+                          updateTpopkontr,
+                        })
+                      }
+                      error={errors.bearbeiter}
+                    />
+                  </BearbVal>
+                  <StatusLabel>{status}</StatusLabel>
                 </Headdata>
                 <Besttime>August</Besttime>
                 <Date>
