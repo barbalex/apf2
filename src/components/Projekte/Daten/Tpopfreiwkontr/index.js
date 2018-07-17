@@ -1,15 +1,16 @@
 // @flow
 import React from 'react'
 import styled from 'styled-components'
-import { Query, Mutation } from 'react-apollo'
-import get from 'lodash/get'
+import { Mutation } from 'react-apollo'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
 import withState from 'recompose/withState'
 import withLifecycle from '@hocs/with-lifecycle'
+import get from 'lodash/get'
+import app from 'ampersand-app'
 
 import StringToCopy from '../../../shared/StringToCopyOnlyButton'
-import dataGql from './data.graphql'
+import data from './data'
 import updateTpopkontrByIdGql from './updateTpopkontrById.graphql'
 import Headdata from './Headdata'
 import Besttime from './Besttime'
@@ -20,12 +21,6 @@ import More from './More'
 import Danger from './Danger'
 import Remarks from './Remarks'
 
-const LadeContainer = styled.div`
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  padding: 10px;
-`
 const Container = styled.div`
   padding: 10px;
 `
@@ -80,6 +75,7 @@ const Count3 = styled(Area)`
  * then refetch data
  */
 const enhance = compose(
+  data,
   withState('errors', 'setErrors', {}),
   withHandlers({
     saveToDb: ({ setErrors, errors }) => async ({
@@ -170,6 +166,21 @@ const enhance = compose(
   }),
   withLifecycle({
     onDidUpdate(prevProps, props) {
+      if (prevProps.data.loading && !props.data.loading) {
+        // loading data just finished
+        // check if tpopkontr exist
+        const tpopkontrCount = get(
+          props.data,
+          'tpopkontrById.tpopkontrzaehlsByTpopkontrId.nodes',
+          []
+        ).length
+        if (tpopkontrCount === 0) {
+          console.log(
+            'Tpopfreiwkontr onDidUpdate: TODO: need to create tpopkontrzaehl with:',
+            { tpopkontrId: props.id, client: app.client }
+          )
+        }
+      }
       if (prevProps.id !== props.id) {
         props.setErrors({})
       }
@@ -179,89 +190,80 @@ const enhance = compose(
 
 const Tpopfreiwkontr = ({
   id,
+  data,
   // TODO: use dimensions to show in one row on narrow screens
   dimensions,
   saveToDb,
   errors,
 }: {
   id: String,
+  data: Object,
   dimensions: Object,
   saveToDb: () => void,
   errors: Object,
 }) => (
-  <Query query={dataGql} variables={{ id }}>
-    {({ loading, error, data }) => {
-      if (loading) return <LadeContainer>Lade...</LadeContainer>
-      if (error) return `Fehler: ${error.message}`
-
-      const row = get(data, 'tpopkontrById')
-
-      return (
-        <Mutation mutation={updateTpopkontrByIdGql}>
-          {updateTpopkontr => (
-            <Container>
-              <GridContainer>
-                <Title>Erfolgskontrolle Artenschutz Flora</Title>
-                <Headdata
-                  saveToDb={saveToDb}
-                  errors={errors}
-                  data={data}
-                  updateTpopkontr={updateTpopkontr}
-                />
-                <Besttime
-                  saveToDb={saveToDb}
-                  errors={errors}
-                  data={data}
-                  updateTpopkontr={updateTpopkontr}
-                />
-                <Date
-                  saveToDb={saveToDb}
-                  errors={errors}
-                  data={data}
-                  updateTpopkontr={updateTpopkontr}
-                />
-                <Map
-                  saveToDb={saveToDb}
-                  errors={errors}
-                  data={data}
-                  updateTpopkontr={updateTpopkontr}
-                />
-                <Image>Image</Image>
-                <Count1>count1</Count1>
-                <Count2>count2</Count2>
-                <Count3>count3</Count3>
-                <Cover
-                  saveToDb={saveToDb}
-                  errors={errors}
-                  data={data}
-                  updateTpopkontr={updateTpopkontr}
-                />
-                <More
-                  saveToDb={saveToDb}
-                  errors={errors}
-                  data={data}
-                  updateTpopkontr={updateTpopkontr}
-                />
-                <Danger
-                  saveToDb={saveToDb}
-                  errors={errors}
-                  data={data}
-                  updateTpopkontr={updateTpopkontr}
-                />
-                <Remarks
-                  saveToDb={saveToDb}
-                  errors={errors}
-                  data={data}
-                  updateTpopkontr={updateTpopkontr}
-                />
-              </GridContainer>
-              <StringToCopy text={row.id} label="GUID" />
-            </Container>
-          )}
-        </Mutation>
-      )
-    }}
-  </Query>
+  <Mutation mutation={updateTpopkontrByIdGql}>
+    {updateTpopkontr => (
+      <Container>
+        <GridContainer>
+          <Title>Erfolgskontrolle Artenschutz Flora</Title>
+          <Headdata
+            saveToDb={saveToDb}
+            errors={errors}
+            data={data}
+            updateTpopkontr={updateTpopkontr}
+          />
+          <Besttime
+            saveToDb={saveToDb}
+            errors={errors}
+            data={data}
+            updateTpopkontr={updateTpopkontr}
+          />
+          <Date
+            saveToDb={saveToDb}
+            errors={errors}
+            data={data}
+            updateTpopkontr={updateTpopkontr}
+          />
+          <Map
+            saveToDb={saveToDb}
+            errors={errors}
+            data={data}
+            updateTpopkontr={updateTpopkontr}
+          />
+          <Image>Image</Image>
+          <Count1>count1</Count1>
+          <Count2>count2</Count2>
+          <Count3>count3</Count3>
+          <Cover
+            saveToDb={saveToDb}
+            errors={errors}
+            data={data}
+            updateTpopkontr={updateTpopkontr}
+          />
+          <More
+            saveToDb={saveToDb}
+            errors={errors}
+            data={data}
+            updateTpopkontr={updateTpopkontr}
+          />
+          <Danger
+            saveToDb={saveToDb}
+            errors={errors}
+            data={data}
+            updateTpopkontr={updateTpopkontr}
+          />
+          <Remarks
+            saveToDb={saveToDb}
+            errors={errors}
+            data={data}
+            updateTpopkontr={updateTpopkontr}
+          />
+        </GridContainer>
+        <StringToCopy text={id} label="GUID" />
+      </Container>
+    )}
+  </Mutation>
 )
 
 export default enhance(Tpopfreiwkontr)

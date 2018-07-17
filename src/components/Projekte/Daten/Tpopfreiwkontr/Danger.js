@@ -43,7 +43,7 @@ const Danger = ({
   data: Object,
   updateTpopkontr: () => void,
 }) => {
-  const row = get(data, 'tpopkontrById')
+  const row = get(data, 'tpopkontrById', {})
 
   return (
     <Container>
