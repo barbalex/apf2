@@ -145,6 +145,7 @@ const DateVal = styled.div`
   grid-area: dateVal;
   > div {
     margin-top: 5px;
+    padding-bottom: 0 !important;
   }
 `
 const Map = styled(Area)`
@@ -209,8 +210,19 @@ const More = styled(Area)`
 `
 const Danger = styled(Area)`
   grid-area: danger;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-column-gap: 8px;
+  grid-template-areas: 'dangerLabel dangerVal dangerVal';
+  align-items: center;
+`
+const DangerLabel = styled(Label)`
+  grid-area: dangerLabel;
+`
+const DangerVal = styled.div`
+  grid-area: dangerVal;
   > div {
-    margin-bottom: -20px;
+    margin-bottom: -15px;
   }
 `
 const RemarksLabel = styled.div`
@@ -553,22 +565,26 @@ const Tpopfreiwkontr = ({
                   />
                 </More>
                 <Danger>
-                  <TextField
-                    key={`${row.id}gefaehrdung`}
-                    label="Gefährdung"
-                    value={row.gefaehrdung}
-                    type="text"
-                    multiLine
-                    saveToDb={value =>
-                      saveToDb({
-                        row,
-                        field: 'gefaehrdung',
-                        value,
-                        updateTpopkontr,
-                      })
-                    }
-                    error={errors.gefaehrdung}
-                  />
+                  <DangerLabel>
+                    Andere Gefährdung (Verbuschung, Tritt, Hunde, ...), welche?
+                  </DangerLabel>
+                  <DangerVal>
+                    <TextField
+                      key={`${row.id}gefaehrdung`}
+                      value={row.gefaehrdung}
+                      type="text"
+                      multiLine
+                      saveToDb={value =>
+                        saveToDb({
+                          row,
+                          field: 'gefaehrdung',
+                          value,
+                          updateTpopkontr,
+                        })
+                      }
+                      error={errors.gefaehrdung}
+                    />
+                  </DangerVal>
                 </Danger>
                 <Remarks>
                   <RemarksLabel>Spezielle Bemerkungen</RemarksLabel>
