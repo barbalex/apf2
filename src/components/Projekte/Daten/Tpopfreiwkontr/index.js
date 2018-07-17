@@ -151,11 +151,25 @@ const DateVal = styled.div`
 const Map = styled(Area)`
   grid-area: map;
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-template-areas: 'mapLabel mapVal';
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-areas:
+    'mapLabel0 mapLabel1 mapVal1'
+    'mapLabel0 mapLabel2 mapVal2';
 `
-const MapLabel = styled(Label)`
-  grid-area: mapLabel;
+const MapLabel0 = styled(Label)`
+  grid-area: mapLabel0;
+`
+const MapLabel1 = styled(Label)`
+  grid-area: mapLabel1;
+`
+const MapLabel2 = styled(Label)`
+  grid-area: mapLabel2;
+`
+const MapVal1 = styled(Label)`
+  grid-area: mapVal1;
+`
+const MapVal2 = styled(Label)`
+  grid-area: mapVal2;
 `
 const MapVal = styled.div`
   grid-area: mapVal;
@@ -441,8 +455,9 @@ const Tpopfreiwkontr = ({
                   </DateVal>
                 </Date>
                 <Map>
-                  <MapLabel>Plan ergänzt</MapLabel>
-                  <MapVal>
+                  <MapLabel0>Plan ergänzt</MapLabel0>
+                  <MapLabel1>ja</MapLabel1>
+                  <MapVal1>
                     <RadioButton
                       key={`${row.id}planVorhanden`}
                       value={row.planVorhanden}
@@ -456,7 +471,9 @@ const Tpopfreiwkontr = ({
                       }
                       error={errors.planVorhanden}
                     />
-                  </MapVal>
+                  </MapVal1>
+                  <MapLabel2>nein</MapLabel2>
+                  <MapVal2 />
                 </Map>
                 <Image>Image</Image>
                 <Count1>count1</Count1>
