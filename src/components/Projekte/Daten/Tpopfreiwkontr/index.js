@@ -12,6 +12,7 @@ import app from 'ampersand-app'
 import StringToCopy from '../../../shared/StringToCopyOnlyButton'
 import data from './data'
 import updateTpopkontrByIdGql from './updateTpopkontrById.graphql'
+import createTpopkontrzaehl from './createTpopkontrzaehl.graphql'
 import Headdata from './Headdata'
 import Besttime from './Besttime'
 import Date from './Date'
@@ -20,6 +21,7 @@ import Cover from './Cover'
 import More from './More'
 import Danger from './Danger'
 import Remarks from './Remarks'
+import Count from './Count'
 
 const Container = styled.div`
   padding: 10px;
@@ -175,10 +177,12 @@ const enhance = compose(
           []
         ).length
         if (tpopkontrCount === 0) {
-          console.log(
-            'Tpopfreiwkontr onDidUpdate: TODO: need to create tpopkontrzaehl with:',
-            { tpopkontrId: props.id, client: app.client }
-          )
+          app.client
+            .mutate({
+              mutation: createTpopkontrzaehl,
+              variables: { tpopkontrId: props.id },
+            })
+            .then(() => props.data.refetch())
         }
       }
       if (prevProps.id !== props.id) {
@@ -201,69 +205,115 @@ const Tpopfreiwkontr = ({
   dimensions: Object,
   saveToDb: () => void,
   errors: Object,
-}) => (
-  <Mutation mutation={updateTpopkontrByIdGql}>
-    {updateTpopkontr => (
-      <Container>
-        <GridContainer>
-          <Title>Erfolgskontrolle Artenschutz Flora</Title>
-          <Headdata
-            saveToDb={saveToDb}
-            errors={errors}
-            data={data}
-            updateTpopkontr={updateTpopkontr}
-          />
-          <Besttime
-            saveToDb={saveToDb}
-            errors={errors}
-            data={data}
-            updateTpopkontr={updateTpopkontr}
-          />
-          <Date
-            saveToDb={saveToDb}
-            errors={errors}
-            data={data}
-            updateTpopkontr={updateTpopkontr}
-          />
-          <Map
-            saveToDb={saveToDb}
-            errors={errors}
-            data={data}
-            updateTpopkontr={updateTpopkontr}
-          />
-          <Image>Image</Image>
-          <Count1>count1</Count1>
-          <Count2>count2</Count2>
-          <Count3>count3</Count3>
-          <Cover
-            saveToDb={saveToDb}
-            errors={errors}
-            data={data}
-            updateTpopkontr={updateTpopkontr}
-          />
-          <More
-            saveToDb={saveToDb}
-            errors={errors}
-            data={data}
-            updateTpopkontr={updateTpopkontr}
-          />
-          <Danger
-            saveToDb={saveToDb}
-            errors={errors}
-            data={data}
-            updateTpopkontr={updateTpopkontr}
-          />
-          <Remarks
-            saveToDb={saveToDb}
-            errors={errors}
-            data={data}
-            updateTpopkontr={updateTpopkontr}
-          />
-        </GridContainer>
-        <StringToCopy text={id} label="GUID" />
-      </Container>
-    )}
-  </Mutation>
-)
+}) => {
+  const zaehls = get(
+    data,
+    'tpopkontrById.tpopkontrzaehlsByTpopkontrId.nodes',
+    []
+  )
+  const zaehls1 = zaehls[0]
+  const zaehls2 = zaehls[1]
+  const zaehls3 = zaehls[2]
+  zaehls.length &&
+    console.log('Tpopfreiwkontr, render, zaehls:', {
+      zaehls1,
+      zaehls2,
+      zaehls3,
+    })
+  return (
+    <Mutation mutation={updateTpopkontrByIdGql}>
+      {updateTpopkontr => (
+        <Container>
+          <GridContainer>
+            <Title>Erfolgskontrolle Artenschutz Flora</Title>
+            <Headdata
+              saveToDb={saveToDb}
+              errors={errors}
+              data={data}
+              updateTpopkontr={updateTpopkontr}
+            />
+            <Besttime
+              saveToDb={saveToDb}
+              errors={errors}
+              data={data}
+              updateTpopkontr={updateTpopkontr}
+            />
+            <Date
+              saveToDb={saveToDb}
+              errors={errors}
+              data={data}
+              updateTpopkontr={updateTpopkontr}
+            />
+            <Map
+              saveToDb={saveToDb}
+              errors={errors}
+              data={data}
+              updateTpopkontr={updateTpopkontr}
+            />
+            <Image>Image</Image>
+            {zaehls1 ? (
+              <Count
+                id={zaehls1.id}
+                nr="1"
+                saveToDb={saveToDb}
+                errors={errors}
+                updateTpopkontr={updateTpopkontr}
+              />
+            ) : (
+              <Count1>count1</Count1>
+            )}
+            {zaehls2 ? (
+              <Count
+                id={zaehls2.id}
+                nr="2"
+                saveToDb={saveToDb}
+                errors={errors}
+                updateTpopkontr={updateTpopkontr}
+              />
+            ) : (
+              <Count2>count2</Count2>
+            )}
+            {zaehls3 ? (
+              <Count
+                id={zaehls3.id}
+                nr="3"
+                saveToDb={saveToDb}
+                errors={errors}
+                updateTpopkontr={updateTpopkontr}
+              />
+            ) : (
+              <Count3>count3</Count3>
+            )}
+            <Cover
+              saveToDb={saveToDb}
+              errors={errors}
+              data={data}
+              updateTpopkontr={updateTpopkontr}
+            />
+            <More
+              saveToDb={saveToDb}
+              errors={errors}
+              data={data}
+              updateTpopkontr={updateTpopkontr}
+            />
+            <Danger
+              saveToDb={saveToDb}
+              errors={errors}
+              data={data}
+              updateTpopkontr={updateTpopkontr}
+            />
+            <Remarks
+              saveToDb={saveToDb}
+              errors={errors}
+              data={data}
+              updateTpopkontr={updateTpopkontr}
+            />
+          </GridContainer>
+          <StringToCopy text={id} label="GUID" />
+        </Container>
+      )}
+    </Mutation>
+  )
+}
 
 export default enhance(Tpopfreiwkontr)

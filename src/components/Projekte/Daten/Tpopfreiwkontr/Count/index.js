@@ -9,7 +9,7 @@ import withHandlers from 'recompose/withHandlers'
 import withState from 'recompose/withState'
 import withLifecycle from '@hocs/with-lifecycle'
 
-import AutoComplete from '../../../shared/Autocomplete'
+import AutoComplete from '../../../../shared/Autocomplete'
 import updateTpopkontrzaehlByIdGql from './updateTpopkontrzaehlById.graphql'
 import dataGql from './data.graphql'
 
