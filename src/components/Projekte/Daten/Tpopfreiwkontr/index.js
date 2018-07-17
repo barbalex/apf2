@@ -3,7 +3,6 @@ import React from 'react'
 import styled from 'styled-components'
 import { Query, Mutation } from 'react-apollo'
 import get from 'lodash/get'
-import sortBy from 'lodash/sortBy'
 import format from 'date-fns/format'
 import compose from 'recompose/compose'
 import withHandlers from 'recompose/withHandlers'
@@ -12,13 +11,13 @@ import withLifecycle from '@hocs/with-lifecycle'
 
 import RadioButton from '../../../shared/RadioButton'
 import TextField from '../../../shared/TextField'
-import AutoComplete from '../../../shared/Autocomplete'
 import StringToCopy from '../../../shared/StringToCopyOnlyButton'
 import DateFieldWithPicker from '../../../shared/DateFieldWithPicker'
 import dataGql from './data.graphql'
 import updateTpopkontrByIdGql from './updateTpopkontrById.graphql'
 import anteilImg from './anteil.png'
 import veghoeheImg from './veghoehe.png'
+import Headdata from './Headdata'
 
 const LadeContainer = styled.div`
   height: 100%;
@@ -66,60 +65,9 @@ const Title = styled(Area)`
 const Image = styled(Area)`
   grid-area: image;
 `
-const Headdata = styled(Area)`
-  grid-area: headdata;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-areas:
-    'popLabel popVal popVal'
-    'tpopLabel tpopVal tpopVal'
-    'koordLabel koordVal koordVal'
-    'tpopNrLabel tpopNrVal statusVal'
-    'bearbLabel bearbVal bearbVal';
-  div:nth-child(n + 3) {
-    padding-top: 10px;
-  }
-`
 const Label = styled.div`
   font-weight: 700;
   padding-right: 4px;
-`
-const PopLabel = styled(Label)`
-  grid-area: popLabel;
-`
-const PopVal = styled.div`
-  grid-area: popVal;
-`
-const TpopLabel = styled(Label)`
-  grid-area: tpopLabel;
-`
-const TpopVal = styled.div`
-  grid-area: tpopVal;
-`
-const KoordLabel = styled(Label)`
-  grid-area: koordLabel;
-`
-const KoordVal = styled.div`
-  grid-area: koordVal;
-`
-const TpopNrLabel = styled(Label)`
-  grid-area: tpopNrLabel;
-`
-const TpopNrVal = styled.div`
-  grid-area: tpopNrVal;
-`
-const BearbLabel = styled(Label)`
-  grid-area: bearbLabel;
-`
-const BearbVal = styled.div`
-  grid-area: bearbVal;
-  > div {
-    margin-top: -5px;
-    padding-bottom: 0;
-  }
-`
-const StatusLabel = styled(Label)`
-  grid-area: statusVal;
 `
 const Besttime = styled(Area)`
   grid-area: besttime;
@@ -441,13 +389,14 @@ const enhance = compose(
 
 const Tpopfreiwkontr = ({
   id,
-  saveToDb,
+  // TODO: use dimensions to show in one row on narrow screens
   dimensions,
+  saveToDb,
   errors,
 }: {
   id: String,
+  dimensions: Object,
   saveToDb: () => void,
-  dimensions: Number,
   errors: Object,
 }) => (
   <Query query={dataGql} variables={{ id }}>
@@ -456,61 +405,19 @@ const Tpopfreiwkontr = ({
       if (error) return `Fehler: ${error.message}`
 
       const row = get(data, 'tpopkontrById')
-      let adressenWerte = get(data, 'allAdresses.nodes', [])
-      adressenWerte = sortBy(adressenWerte, 'name')
-      adressenWerte = adressenWerte.map(el => ({
-        id: el.id,
-        value: el.name,
-      }))
-      const statusValue = get(row, 'tpopByTpopId.status', '')
-      const status = [200, 201, 202].includes(statusValue)
-        ? 'angesiedelt'
-        : 'natürlich'
 
       return (
         <Mutation mutation={updateTpopkontrByIdGql}>
-          {(updateTpopkontr, { data }) => (
+          {updateTpopkontr => (
             <Container>
               <GridContainer>
                 <Title>Erfolgskontrolle Artenschutz Flora</Title>
-                <Headdata>
-                  <PopLabel>Population</PopLabel>
-                  <PopVal>
-                    {get(row, 'tpopByTpopId.popByPopId.name', '')}
-                  </PopVal>
-                  <TpopLabel>Teilpopulation</TpopLabel>
-                  <TpopVal>{get(row, 'tpopByTpopId.flurname', '')}</TpopVal>
-                  <KoordLabel>Koordinaten</KoordLabel>
-                  <KoordVal>{`${get(row, 'tpopByTpopId.x', '')} / ${get(
-                    row,
-                    'tpopByTpopId.y'
-                  )}`}</KoordVal>
-                  <TpopNrLabel>Teilpop.Nr.</TpopNrLabel>
-                  <TpopNrVal>{`${get(
-                    row,
-                    'tpopByTpopId.popByPopId.nr',
-                    ''
-                  )}.${get(row, 'tpopByTpopId.nr')}`}</TpopNrVal>
-                  <BearbLabel>BeobachterIn</BearbLabel>
-                  <BearbVal>
-                    <AutoComplete
-                      key={`${row.id}bearbeiter`}
-                      label=""
-                      value={get(row, 'adresseByBearbeiter.name', '')}
-                      objects={adressenWerte}
-                      saveToDb={value =>
-                        saveToDb({
-                          row,
-                          field: 'bearbeiter',
-                          value,
-                          updateTpopkontr,
-                        })
-                      }
-                      error={errors.bearbeiter}
-                    />
-                  </BearbVal>
-                  <StatusLabel>{status}</StatusLabel>
-                </Headdata>
+                <Headdata
+                  saveToDb={saveToDb}
+                  errors={errors}
+                  data={data}
+                  updateTpopkontr={updateTpopkontr}
+                />
                 <Besttime>
                   <BesttimeLabel>bester Beobachtungs-Zeitpunkt</BesttimeLabel>
                   <BesttimeVal>August</BesttimeVal>
