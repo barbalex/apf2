@@ -54,7 +54,7 @@ const MapVal2 = styled(Label)`
   }
 `
 
-const Date = ({
+const Map = ({
   saveToDb,
   errors,
   data,
@@ -106,4 +106,4 @@ const Date = ({
   )
 }
 
-export default Date
+export default Map
