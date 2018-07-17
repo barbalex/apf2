@@ -209,9 +209,24 @@ const More = styled(Area)`
 `
 const Danger = styled(Area)`
   grid-area: danger;
+  > div {
+    margin-bottom: -20px;
+  }
+`
+const RemarksLabel = styled.div`
+  font-weight: 700;
+`
+const RemarksSubLabel = styled.div`
+  padding-top: 10px;
+  font-weight: 700;
+  font-size: 14px;
 `
 const Remarks = styled(Area)`
   grid-area: remarks;
+  > div {
+    margin-top: 10px;
+    margin-bottom: -20px;
+  }
 `
 
 const enhance = compose(
@@ -556,9 +571,13 @@ const Tpopfreiwkontr = ({
                   />
                 </Danger>
                 <Remarks>
+                  <RemarksLabel>Spezielle Bemerkungen</RemarksLabel>
+                  <RemarksSubLabel>
+                    (z.B. allgemeiner Eindruck, Zunahme / Abnahme Begründung,
+                    spezielle Begebenheiten)
+                  </RemarksSubLabel>
                   <TextField
                     key={`${row.id}bemerkungen`}
-                    label="Bemerkungen"
                     value={row.bemerkungen}
                     type="text"
                     multiLine
