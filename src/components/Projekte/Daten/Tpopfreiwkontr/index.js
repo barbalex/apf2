@@ -13,12 +13,12 @@ import TextField from '../../../shared/TextField'
 import StringToCopy from '../../../shared/StringToCopyOnlyButton'
 import dataGql from './data.graphql'
 import updateTpopkontrByIdGql from './updateTpopkontrById.graphql'
-import anteilImg from './anteil.png'
 import veghoeheImg from './veghoehe.png'
 import Headdata from './Headdata'
 import Besttime from './Besttime'
 import Date from './Date'
 import Map from './Map'
+import Cover from './Cover'
 
 const LadeContainer = styled.div`
   height: 100%;
@@ -78,42 +78,6 @@ const Count2 = styled(Area)`
 `
 const Count3 = styled(Area)`
   grid-area: count3;
-`
-const Cover = styled(Area)`
-  grid-area: cover;
-  display: grid;
-  grid-template-columns: 4fr 3fr 1fr;
-  grid-template-areas:
-    'deckApArtLabel deckApArtVal deckApArtMass'
-    'deckNaBoLabel deckNaBoVal deckNaBoMass'
-    'deckImage deckImage deckImage';
-`
-const DeckApArtLabel = styled(Label)`
-  grid-area: deckApArtLabel;
-`
-const DeckApArtVal = styled.div`
-  grid-area: deckApArtVal;
-  > div {
-    margin-top: -25px;
-  }
-`
-const DeckApArtMass = styled.div`
-  grid-area: deckApArtMass;
-`
-const DeckNaBoLabel = styled(Label)`
-  grid-area: deckNaBoLabel;
-`
-const DeckNaBoVal = styled.div`
-  grid-area: deckNaBoVal;
-  > div {
-    margin-top: -25px;
-  }
-`
-const DeckNaBoMass = styled.div`
-  grid-area: deckNaBoMass;
-`
-const DeckImage = styled.div`
-  grid-area: deckImage;
 `
 const More = styled(Area)`
   grid-area: more;
@@ -372,47 +336,12 @@ const Tpopfreiwkontr = ({
                 <Count1>count1</Count1>
                 <Count2>count2</Count2>
                 <Count3>count3</Count3>
-                <Cover>
-                  <DeckApArtLabel>Deckung üperprüfte Art</DeckApArtLabel>
-                  <DeckApArtVal>
-                    <TextField
-                      key={`${row.id}deckungApArt`}
-                      value={row.deckungApArt}
-                      type="number"
-                      saveToDb={value =>
-                        saveToDb({
-                          row,
-                          field: 'deckungApArt',
-                          value,
-                          updateTpopkontr,
-                        })
-                      }
-                      error={errors.deckungApArt}
-                    />
-                  </DeckApArtVal>
-                  <DeckApArtMass>%</DeckApArtMass>
-                  <DeckNaBoLabel>Flächenanteil nackter Boden</DeckNaBoLabel>
-                  <DeckNaBoVal>
-                    <TextField
-                      key={`${row.id}deckungNackterBoden`}
-                      value={row.deckungNackterBoden}
-                      type="number"
-                      saveToDb={value =>
-                        saveToDb({
-                          row,
-                          field: 'deckungNackterBoden',
-                          value,
-                          updateTpopkontr,
-                        })
-                      }
-                      error={errors.deckungNackterBoden}
-                    />
-                  </DeckNaBoVal>
-                  <DeckNaBoMass>%</DeckNaBoMass>
-                  <DeckImage>
-                    <Img src={anteilImg} alt="Flächen-Anteile" />
-                  </DeckImage>
-                </Cover>
+                <Cover
+                  saveToDb={saveToDb}
+                  errors={errors}
+                  data={data}
+                  updateTpopkontr={updateTpopkontr}
+                />
                 <More>
                   <MoreFlLabel>Überprüfte Fläche</MoreFlLabel>
                   <MoreFlVal>
