@@ -10,6 +10,7 @@ import withState from 'recompose/withState'
 import withLifecycle from '@hocs/with-lifecycle'
 
 import AutoComplete from '../../../../shared/Autocomplete'
+import TextField from '../../../../shared/TextField'
 import updateTpopkontrzaehlByIdGql from './updateTpopkontrzaehlById.graphql'
 import dataGql from './data.graphql'
 
@@ -21,11 +22,11 @@ const Area = styled.div`
 const Container = styled(Area)`
   grid-area: ${props => `count${props.nr}`};
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(8, 1fr);
   grid-template-areas:
-    'einheitLabel einheitVal einheitVal einheitVal'
-    'gezaehltLabel gezaehltLabel geschaetztLabel geschaetztLabel'
-    'gezaehltVal gezaehltVal geschaetztVal geschaetztVal';
+    'einheitLabel einheitLabel einheitLabel einheitVal einheitVal einheitVal einheitVal einheitVal'
+    'gezaehltLabel gezaehltLabel gezaehltLabel gezaehltLabel geschaetztLabel geschaetztLabel geschaetztLabel geschaetztLabel'
+    'gezaehltVal gezaehltVal gezaehltVal gezaehltVal geschaetztVal geschaetztVal geschaetztVal geschaetztVal';
 `
 const Label = styled.div`
   font-weight: 700;
@@ -33,6 +34,7 @@ const Label = styled.div`
 `
 const EinheitLabel = styled(Label)`
   grid-area: einheitLabel;
+  hyphens: auto;
 `
 const EinheitVal = styled.div`
   grid-area: einheitVal;
@@ -41,17 +43,37 @@ const EinheitVal = styled.div`
     padding-bottom: 0;
   }
 `
-const GezaehltLabel = styled(Label)`
+const GezaehltLabel = styled.div`
   grid-area: gezaehltLabel;
+  justify-self: center;
+  align-self: end;
+  padding-top: 8px;
 `
 const GezaehltVal = styled.div`
   grid-area: gezaehltVal;
+  > div {
+    margin-top: -15px;
+    padding-bottom: 0 !important;
+  }
+  > div > div > input {
+    text-align: center;
+  }
 `
-const GeschaetztLabel = styled(Label)`
+const GeschaetztLabel = styled.div`
   grid-area: geschaetztLabel;
+  justify-self: center;
+  align-self: end;
+  padding-top: 8px;
 `
 const GeschaetztVal = styled.div`
   grid-area: geschaetztVal;
+  > div {
+    margin-top: -15px;
+    padding-bottom: 0 !important;
+  }
+  > div > div > input {
+    text-align: center;
+  }
 `
 
 const enhance = compose(
@@ -160,6 +182,38 @@ const Count = ({
               </EinheitVal>
               <GezaehltLabel>gezählt</GezaehltLabel>
               <GeschaetztLabel>geschätzt</GeschaetztLabel>
+              <GezaehltVal>
+                <TextField
+                  key={`${row.id}anzahl`}
+                  value={row.anzahl}
+                  type="number"
+                  saveToDb={value =>
+                    saveToDb({
+                      row,
+                      field: 'anzahl',
+                      value,
+                      updateTpopkontrzaehl,
+                    })
+                  }
+                  error={errors.anzahl}
+                />
+              </GezaehltVal>
+              <GeschaetztVal>
+                <TextField
+                  key={`${row.id}anzahl`}
+                  value={row.anzahl}
+                  type="number"
+                  saveToDb={value =>
+                    saveToDb({
+                      row,
+                      field: 'anzahl',
+                      value,
+                      updateTpopkontrzaehl,
+                    })
+                  }
+                  error={errors.anzahl}
+                />
+              </GeschaetztVal>
             </Container>
           )}
         </Mutation>

@@ -12,7 +12,6 @@ import ErrorBoundary from '../shared/ErrorBoundary'
 import dataGql from './data.graphql'
 import ProjektContainer from './ProjektContainer'
 
-
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -24,10 +23,10 @@ const tree2TabValues = ['tree2', 'daten2', 'karte2', 'exporte2']
 const Projekte = ({
   showDeletions,
   setShowDeletions,
-}:{
+}: {
   showDeletions: Boolean,
   setShowDeletions: () => void,
-}) => 
+}) => (
   <Query query={dataGql}>
     {({ loading, error, data, client }) => {
       if (error) return `Fehler: ${error.message}`
@@ -51,7 +50,7 @@ const Projekte = ({
         <Container>
           <ErrorBoundary>
             <ReflexContainer orientation="vertical">
-              <ReflexElement flex={treeTabs.length / projekteTabs.length} >
+              <ReflexElement flex={treeTabs.length / projekteTabs.length}>
                 <ProjektContainer
                   treeName="tree"
                   tabs={treeTabs}
@@ -61,7 +60,7 @@ const Projekte = ({
                 />
               </ReflexElement>
               <ReflexSplitter />
-              <ReflexElement >
+              <ReflexElement>
                 <ProjektContainer
                   treeName="tree2"
                   tabs={tree2Tabs}
@@ -76,5 +75,6 @@ const Projekte = ({
       )
     }}
   </Query>
+)
 
 export default Projekte
