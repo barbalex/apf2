@@ -50,16 +50,18 @@ const RadioButton = ({
     aria-describedby={`${label}ErrorText`}
   >
     <StyledFormLabel component="legend">{label}</StyledFormLabel>
-    <RadioGroup aria-label={label} value={value.toString()}>
+    <RadioGroup
+      aria-label={label}
+      value={value === null ? 'false' : value.toString()}
+    >
       <FormControlLabel
         value="true"
         control={<StyledRadio onClick={onClickButton} color="primary" />}
       />
     </RadioGroup>
-    {
-      !!error &&
+    {!!error && (
       <FormHelperText id={`${label}ErrorText`}>{error}</FormHelperText>
-    }
+    )}
   </StyledFormControl>
 )
 
