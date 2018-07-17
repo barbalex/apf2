@@ -18,6 +18,8 @@ import updateTpopkontrByIdGql from './updateTpopkontrById.graphql'
 import anteilImg from './anteil.png'
 import veghoeheImg from './veghoehe.png'
 import Headdata from './Headdata'
+import Besttime from './Besttime'
+import Date from './Date'
 
 const LadeContainer = styled.div`
   height: 100%;
@@ -68,36 +70,6 @@ const Image = styled(Area)`
 const Label = styled.div`
   font-weight: 700;
   padding-right: 4px;
-`
-const Besttime = styled(Area)`
-  grid-area: besttime;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-areas: 'besttimeLabel besttimeVal besttimeVal';
-  align-items: center;
-`
-const BesttimeLabel = styled(Label)`
-  grid-area: besttimeLabel;
-`
-const BesttimeVal = styled.div`
-  grid-area: besttimeVal;
-`
-const Date = styled(Area)`
-  grid-area: date;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-areas: 'dateLabel dateVal dateVal';
-  align-items: center;
-`
-const DateLabel = styled(Label)`
-  grid-area: dateLabel;
-`
-const DateVal = styled.div`
-  grid-area: dateVal;
-  > div {
-    margin-top: 5px;
-    padding-bottom: 0 !important;
-  }
 `
 const Map = styled(Area)`
   grid-area: map;
@@ -418,30 +390,18 @@ const Tpopfreiwkontr = ({
                   data={data}
                   updateTpopkontr={updateTpopkontr}
                 />
-                <Besttime>
-                  <BesttimeLabel>bester Beobachtungs-Zeitpunkt</BesttimeLabel>
-                  <BesttimeVal>August</BesttimeVal>
-                </Besttime>
-                <Date>
-                  <DateLabel>Aufnahme-datum</DateLabel>
-                  <DateVal>
-                    <DateFieldWithPicker
-                      key={`${row.id}datum`}
-                      value={row.datum}
-                      saveToDb={value => {
-                        saveToDb({
-                          row,
-                          field: 'datum',
-                          value,
-                          field2: 'jahr',
-                          value2: !!value ? format(value, 'YYYY') : null,
-                          updateTpopkontr,
-                        })
-                      }}
-                      error={errors.datum}
-                    />
-                  </DateVal>
-                </Date>
+                <Besttime
+                  saveToDb={saveToDb}
+                  errors={errors}
+                  data={data}
+                  updateTpopkontr={updateTpopkontr}
+                />
+                <Date
+                  saveToDb={saveToDb}
+                  errors={errors}
+                  data={data}
+                  updateTpopkontr={updateTpopkontr}
+                />
                 <Map>
                   <MapLabel0>Plan ergänzt</MapLabel0>
                   <MapLabel1>ja</MapLabel1>
