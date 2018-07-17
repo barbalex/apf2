@@ -1,0 +1,20 @@
+query TpopkontrzaehlQuery($id: UUID!) {
+  tpopkontrzaehlById(id: $id) {
+    id
+    anzahl
+    einheit
+    methode
+    tpopkontrzaehlEinheitWerteByEinheit {
+      id
+      text
+    }
+  }
+  allTpopkontrzaehlEinheitWertes {
+    nodes {
+      id
+      code
+      text
+      sort
+    }
+  }
+}

@@ -27,6 +27,12 @@ query tpopkontrByIdQuery($id: UUID!) {
       x
       y
       status
+      tpopkontrsByTpopId {
+        totalCount
+        nodes {
+          id
+        }
+      }
       popByPopId {
         id
         apId
@@ -39,6 +45,14 @@ query tpopkontrByIdQuery($id: UUID!) {
     nodes {
       id
       name
+    }
+  }
+  allTpopkontrzaehlEinheitWertes {
+    nodes {
+      id
+      code
+      text
+      sort
     }
   }
 }

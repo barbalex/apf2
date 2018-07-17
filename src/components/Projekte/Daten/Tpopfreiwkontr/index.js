@@ -72,6 +72,13 @@ const Count3 = styled(Area)`
   grid-area: count3;
 `
 
+/**
+ * TODO
+ * on componentDidMount
+ * check number of tpopkontrzaehl
+ * if none: create one
+ * then refetch data
+ */
 const enhance = compose(
   withState('errors', 'setErrors', {}),
   withHandlers({
