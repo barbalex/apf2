@@ -180,7 +180,7 @@ const enhance = compose(
           app.client
             .mutate({
               mutation: createTpopkontrzaehl,
-              variables: { tpopkontrId: props.id },
+              variables: { tpopkontrId: props.id, einheit: 1 },
             })
             .then(() => props.data.refetch())
         }

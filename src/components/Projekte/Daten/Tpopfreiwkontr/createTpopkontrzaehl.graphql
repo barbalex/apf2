@@ -1,6 +1,6 @@
-mutation createTpopkontrzaehl($tpopkontrId: UUID) {
+mutation createTpopkontrzaehl($tpopkontrId: UUID, $einheit: Int) {
   createTpopkontrzaehl(
-    input: { tpopkontrzaehl: { tpopkontrId: $tpopkontrId } }
+    input: { tpopkontrzaehl: { tpopkontrId: $tpopkontrId, einheit: $einheit } }
   ) {
     tpopkontrzaehl {
       id
